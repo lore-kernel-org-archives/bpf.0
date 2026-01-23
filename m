@@ -1,242 +1,214 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out28-130.mail.aliyun.com (out28-130.mail.aliyun.com [115.124.28.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082DF34F461
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 00:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769129637; cv=pass; b=hISxqvpKoI/gFRHSZCNiw2aDwiGUigS5qX5jFhcFCKcQXFtlv/5E3AqOacL3XsQoyE6fbMObHZPjkLdEixafHYSAaPgkL6uIGljrvcRteouW/00EGJZRxw3o+JirW6uB/EqOfqTg7l7T+cvn98BzYSQ+uK7HX4FWOKB/EMGrU9w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769129637; c=relaxed/simple;
-	bh=yBMXOwcpjCZoufdlj1pFQsMJaO1vK6MgX5cAbS0lKxY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pjq0yhouSF4wECt3YuehnetOnw9JbUF1cFdvrK+ujra86aYBxfrJZE6iOO5EHN94Or64h6Yckbt3Mbiw0OR3okWo8YdSmAtXQRYK3Z5kw5YUowjCfb3+CvYlaOR5K70wbAzTR6VcVPCP9RQGEBfCgSzuaDmyVm3paXXpZnvKyx8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mn0kQ2YS; arc=pass smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mn0kQ2YS"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2a09d981507so10849795ad.1
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:53:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769129628; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Z1LIiRG/8anVmx6bWum4mLf4ku0MQdThnvCxG595IYtbv+ZNHajw/foGWZcdruX+XM
-         P8MjWOb7JGTp57tut2SyI0l2wJIjmm8Tth67MHpWk4HzCu7BaYooOzKOoNTh84IRpK/W
-         TGCqoLffhq/PZNF2erQ5u3ArL7fzqq8ZFiQglMBIpC6r3VpZBG6zg73LaS/W7yanSBz1
-         +6T9Crqejqv1s1o2RP6kMJcAgQ0qxGXDSwo4rC9SiIxy056fyl2/TctwpBVO9KUz8I8z
-         zZ98YQm9rB7sGiQl/Wgjyg3iSiIrGkgESFI7vpVp0+TuYq6ghCxfHMLVkXwsLK4esZTy
-         KCWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0udLKwql0iZ1SIidaCEnZjm9GhWInp/dfA55RalANy8=;
-        fh=iyIh3tiaN/pTCZHwzDN2Emw2Zfr0RZtTUCw7DgIPD2U=;
-        b=OhWoJx4kJdi5YATLyUahjorW+oQFrZQDKYLHYCMpJ7utml6WHS94JaHJZWaFiAs8L7
-         iy4c5OeXW1B0Q4BaC2l/J9paN1vmzLtMVzB3IQSVii8GbidPHHp7gNl1fQD0GoWAZLKG
-         1L0Cny310t6Ok26VSsVwLjzHZ9zYwD9frgZ4OQsToVL/809PDRJK5SED4sEkYsgfozXS
-         VU62N7XBF0/GJ+FwPrHho2aKfJ4fzfkZSsMp09+YoQHVRihhxZJNLl0PDvdjFwd1InhB
-         hcvBNYdfcChllVsG0SsO96gqzQKuy4vkqgWNhnrH6sc4a3A2FqRwxqIY61wozP3sfUCw
-         nWiQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769129628; x=1769734428; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0udLKwql0iZ1SIidaCEnZjm9GhWInp/dfA55RalANy8=;
-        b=Mn0kQ2YSe+Cnxf4NF5MddlWv1GorlD3WUAVEN2eT8o9DjsAFWLEMladCbDtKpMkKjE
-         aXe2OOaOlK6H3G/vdqmWwevrjzgZmsYyUQXIamHW+xtMFt5R14gBOdOOokd4OTL0gbL4
-         pDf2/+tKC8LDVU8IlVPRf/IWMAx+HMqLPn5QkUXXwtOYn0PWh4MRL2P8wzINscIwjweK
-         SZg8cOBhXa2UTCkXgsgzZEtKy8H9EZF4oGUaTxlrsguWlMyscc8U8lzuybAKr6weNLiK
-         WaufEs8h9KlAlopbrv/wGvltSd/MwK4ICnIw96tP3NQeEAzfkQKI5KC3aHk9qDAu4K//
-         QNtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769129628; x=1769734428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0udLKwql0iZ1SIidaCEnZjm9GhWInp/dfA55RalANy8=;
-        b=T4ZFZ5C2zvQYn+OPgiX1+WN04Vn79ToIMYNtteBw2h/lwHVFUXPtciEnN89DiTrW2j
-         aemCuPOd2+Bzg9AUJmQLhYU22/kx/sWyUqUazFzXWPYTm6l4sXv5V7CNRnE3HchLX8Os
-         m7zScKlWiGaoyLbg9oHSG9dqppSxAxzcFRiIcwk/RIOtZ0lV4KCxByZVGGOrvEB4vIyM
-         ++Nif5ACcq6+RvsSHKGVZ9K4fx7BGmpkRSDhymsxUq6eFvmG5PI+UZRhmqBIr69UUH7g
-         YmEkr6yBG7pA0+yv2JeUP5QLPgGQOnD2R/3tRCSGQyoRbboLOPY2b7iupqJIQZ93jMdO
-         MxHA==
-X-Gm-Message-State: AOJu0YwnrfhxygHM6EjOda9izAs1sqso9A6eMoE1YWKjOM1+GugPKrw2
-	4D8eyJXiGpxYSvq+3R1DTba0Ugk5piPL4FQE5naN3J4JzRXSC1k9PwvteU07bCNcXe3iB4i2UI/
-	s2Np69atSbz/E2jTr78SaibCd4XZUcBU=
-X-Gm-Gg: AZuq6aIFroy+W/8c8OW5YzYlT8XIr2E7S3u7xYATP7yINkIKXFxO9fsn7ITMx2NLy5i
-	krpHITgD4KVI0PKnGE1wl+Usz6yaiYwWw1ptuRTBVVuXf29PQR81mlOU/dnREduv30i6eUzab9h
-	MKZ1zc0TVVgem9b/yoZBmzl1wpPfuESrpyX7hzAaLf7xQmcaEnu38O8c8KHdO/2u8LgjxkgscUD
-	w9ymbJDWMD90XIHNWXYY9fbQ86Li/eo5ROo3x3dk+6YkiUX20KX9qsiGqQhB4KsHo7kSJXkHRm1
-	Bz161SbI9ZM=
-X-Received: by 2002:a17:903:f8e:b0:2a7:9163:8e60 with SMTP id
- d9443c01a7336-2a7fe80fddfmr9079865ad.23.1769129627880; Thu, 22 Jan 2026
- 16:53:47 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87A731A579;
+	Fri, 23 Jan 2026 01:18:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.130
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769131133; cv=none; b=SMdHZmyd6/AJyJopU2l6jKx/ywlZ/fos4mkYzRqVR7C3vySWvZ1xmb2XgHu2crdIiUfVBdFPRUpkulFSjNBJVtqzBaxIcWuNGnYlF1YOE5opdE7iFEqSWpGLUZwiw8PzQDXZkQxgM7Fwm98qDHaUnmp4ftB8/tGfE+2r07G+1kI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769131133; c=relaxed/simple;
+	bh=MeSh+vAteVf4kOdL3k7B7vIsfyeY5mKjbxKzFhuUjEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=MC8tyG5sZo0Aw7fxslovpCIf/ixIzBmThdpisYF90Fs/D0VVrADuMz5EKX+b7WV1PnRiJPTv3Truxd9bO8u3lVQteOXDFqOAPpjHchJyKZIjFlHm/vYspndBUOLfgnsjA7mAXinf4Dwc0G31qfEHKl5C2qlTJfY3G1Wg46LEhks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nebula-matrix.com; spf=pass smtp.mailfrom=nebula-matrix.com; arc=none smtp.client-ip=115.124.28.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nebula-matrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebula-matrix.com
+Received: from localhost.localdomain(mailfrom:illusion.wang@nebula-matrix.com fp:SMTPD_---.gDSYVlh_1769131114 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Fri, 23 Jan 2026 09:18:35 +0800
+From: "illusion.wang" <illusion.wang@nebula-matrix.com>
+To: dimon.zhao@nebula-matrix.com,
+	illusion.wang@nebula-matrix.com,
+	alvin.wang@nebula-matrix.com,
+	sam.chen@nebula-matrix.com,
+	netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
+	corbet@lwn.net,
+	kuba@kernel.org,
+	linux-doc@vger.kernel.org,
+	lorenzo@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	vadim.fedorenko@linux.dev,
+	lukas.bulwahn@redhat.com,
+	hawk@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	sdf@fomichev.me,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	edumazet@google.com,
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH v3 net-next 00/15] nbl driver for Nebulamatrix NICs
+Date: Fri, 23 Jan 2026 09:17:37 +0800
+Message-ID: <20260123011804.31263-1-illusion.wang@nebula-matrix.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120152424.40766-1-leon.hwang@linux.dev> <20260120152424.40766-3-leon.hwang@linux.dev>
-In-Reply-To: <20260120152424.40766-3-leon.hwang@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 22 Jan 2026 16:53:34 -0800
-X-Gm-Features: AZwV_QhVQ3_tmlZbyi2JgIuf-ozS36BC6ziWbq4VPwpzBkySzzimkp-0gd_aROE
-Message-ID: <CAEf4BzYuZsFC-DPhhzLcyFTahucHP59+6kAc0sooY2g+SqgrEA@mail.gmail.com>
-Subject: Re: [RESEND PATCH bpf-next v6 2/9] libbpf: Add support for extended
- bpf syscall
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
-	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
-	Rong Tao <rongtao@cestc.cn>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 20, 2026 at 7:26=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> To support the extended BPF syscall introduced in the previous commit,
-> introduce the following internal APIs:
->
-> * 'sys_bpf_ext()'
-> * 'sys_bpf_ext_fd()'
->   They wrap the raw 'syscall()' interface to support passing extended
->   attributes.
-> * 'probe_sys_bpf_ext()'
->   Check whether current kernel supports the BPF syscall common attributes=
-.
->
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  tools/lib/bpf/bpf.c             | 32 ++++++++++++++++++++++++++++++++
->  tools/lib/bpf/features.c        |  8 ++++++++
->  tools/lib/bpf/libbpf_internal.h |  3 +++
->  3 files changed, 43 insertions(+)
->
-> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> index 21b57a629916..ed9c6eaeb656 100644
-> --- a/tools/lib/bpf/bpf.c
-> +++ b/tools/lib/bpf/bpf.c
-> @@ -69,6 +69,38 @@ static inline __u64 ptr_to_u64(const void *ptr)
->         return (__u64) (unsigned long) ptr;
->  }
->
-> +static inline int sys_bpf_ext(enum bpf_cmd cmd, union bpf_attr *attr,
-> +                             unsigned int size,
-> +                             struct bpf_common_attr *attr_common,
-> +                             unsigned int size_common)
-> +{
-> +       cmd =3D attr_common ? (cmd | BPF_COMMON_ATTRS) : (cmd & ~BPF_COMM=
-ON_ATTRS);
-> +       return syscall(__NR_bpf, cmd, attr, size, attr_common, size_commo=
-n);
-> +}
-> +
-> +static inline int sys_bpf_ext_fd(enum bpf_cmd cmd, union bpf_attr *attr,
-> +                                unsigned int size,
-> +                                struct bpf_common_attr *attr_common,
-> +                                unsigned int size_common)
-> +{
-> +       int fd;
-> +
-> +       fd =3D sys_bpf_ext(cmd, attr, size, attr_common, size_common);
-> +       return ensure_good_fd(fd);
-> +}
-> +
-> +int probe_sys_bpf_ext(void)
-> +{
-> +       const size_t attr_sz =3D offsetofend(union bpf_attr, prog_token_f=
-d);
-> +       union bpf_attr attr;
-> +
-> +       memset(&attr, 0, attr_sz);
-> +       /* This syscall() will return error always. */
+The patch series add the nbl driver, which will support nebula-matrix
+18100 and 18110 series of network cards.
+This submission is the first phase. which only supports the PF-based 
+Ethernet transmit and receive functionality. Once this is merged.
+will submit addition patches to implement support for other
+features. such as ethtool support, flow management, adminq msg, vf
+support, debugfs support and etc.
 
-I'll cite myself from the last review:
+chanages v2 →v3
+Link to v2: https://lore.kernel.org/netdev/20260109100146.63569-1-illusion.wang@nebula-matrix.com/
+1.cut down to a mini driver:
+    delete vf support
+    use promisc mode to cut down flow management
+    drop patch15 in v2
+    delete adminq msg
+    delete abnormal handling
+    delete some unimportant interfaces
+2.modify issues found by ai review
+Changes v1->v2
+Link to v1: https://lore.kernel.org/netdev/20251223035113.31122-1-illusion.wang@nebula-matrix.com/
+1.Format Issues and Compilation Issues
+- Paolo Abeni
+2.add sysfs patch and drop coexisting patch
+- Andrew Lunn
+3.delete some unimportant ndo operations
+4.add machine generated headers patch
+5.Modify the issues found in patch1-2 and apply the same fixes to other
+patches
+6.modify issues found by nipa
 
-> But fd should really not be >=3D 0, and if it is -- it's some problem,
-> so I'd return an error in that case to keep us aware, which is why I'm
-> saying I'd just return inside if (fd >=3D 0) { }
+illusion.wang (15):
+  net/nebula-matrix: add minimum nbl build framework
+  net/nebula-matrix: add our driver architecture
+  net/nebula-matrix: add machine-generated headers and chip definitions
+  net/nebula-matrix: add channel layer implementation and the
+    corresponding hw interfaces
+  net/nebula-matrix: add resource layer common part implementation
+  net/nebula-matrix: add intr resource implementation
+  net/nebula-matrix: add queue resource implementation
+  net/nebula-matrix: add vsi resource implementation
+  net/nebula-matrix: add txrx resource interfaces and tx func
+  net/nebula-matrix: add txrx interrupt handling logic
+  net/nebula-matrix: add Dispatch layer implementation
+  net/nebula-matrix: add common/ctrl dev init/reinit operation
+  net/nebula-matrix: add net dev init/reinit operation
+  net/nebula-matrix: add common dev start/stop operation
+  net/nebula-matrix: add net dev start/stop operation
 
-I didn't say let's just ignore syscall return with (void) cast and
-happily check errno no matter what, did I? Drop the comment, and
-handle fd >=3D 0 case explicitly, please.
+ .../ethernet/nebula-matrix/m18100.rst         |   47 +
+ MAINTAINERS                                   |   10 +
+ drivers/net/ethernet/Kconfig                  |    1 +
+ drivers/net/ethernet/Makefile                 |    1 +
+ drivers/net/ethernet/nebula-matrix/Kconfig    |   37 +
+ drivers/net/ethernet/nebula-matrix/Makefile   |    6 +
+ .../net/ethernet/nebula-matrix/nbl/Makefile   |   26 +
+ .../nbl/nbl_channel/nbl_channel.c             | 1289 ++++++
+ .../nbl/nbl_channel/nbl_channel.h             |  177 +
+ .../nebula-matrix/nbl/nbl_common/nbl_common.c |  302 ++
+ .../nebula-matrix/nbl/nbl_common/nbl_common.h |   29 +
+ .../net/ethernet/nebula-matrix/nbl/nbl_core.h |  130 +
+ .../nebula-matrix/nbl/nbl_core/nbl_dev.c      | 1369 ++++++
+ .../nebula-matrix/nbl/nbl_core/nbl_dev.h      |  131 +
+ .../nebula-matrix/nbl/nbl_core/nbl_dispatch.c | 1977 +++++++++
+ .../nebula-matrix/nbl/nbl_core/nbl_dispatch.h |   76 +
+ .../nebula-matrix/nbl/nbl_core/nbl_service.c  | 1256 ++++++
+ .../nebula-matrix/nbl/nbl_core/nbl_service.h  |  132 +
+ .../nebula-matrix/nbl/nbl_hw/nbl_hw.h         |  172 +
+ .../nbl_hw/nbl_hw_leonis/base/nbl_datapath.h  |   11 +
+ .../nbl_hw_leonis/base/nbl_datapath_dped.h    | 2152 +++++++++
+ .../nbl_hw_leonis/base/nbl_datapath_dstore.h  |  929 ++++
+ .../nbl_hw_leonis/base/nbl_datapath_ucar.h    |  414 ++
+ .../nbl/nbl_hw/nbl_hw_leonis/base/nbl_ppe.h   |   10 +
+ .../nbl_hw/nbl_hw_leonis/base/nbl_ppe_epro.h  |  665 +++
+ .../nbl_hw/nbl_hw_leonis/base/nbl_ppe_ipro.h  | 1397 ++++++
+ .../nbl/nbl_hw/nbl_hw_leonis/nbl_hw_leonis.c  | 1882 ++++++++
+ .../nbl/nbl_hw/nbl_hw_leonis/nbl_hw_leonis.h  | 1142 +++++
+ .../nbl_hw/nbl_hw_leonis/nbl_hw_leonis_regs.c | 3903 +++++++++++++++++
+ .../nbl_hw/nbl_hw_leonis/nbl_hw_leonis_regs.h |   12 +
+ .../nbl_hw/nbl_hw_leonis/nbl_queue_leonis.c   | 1129 +++++
+ .../nbl_hw/nbl_hw_leonis/nbl_queue_leonis.h   |   15 +
+ .../nbl_hw_leonis/nbl_resource_leonis.c       |  582 +++
+ .../nbl_hw_leonis/nbl_resource_leonis.h       |   25 +
+ .../nebula-matrix/nbl/nbl_hw/nbl_hw_reg.h     |  139 +
+ .../nebula-matrix/nbl/nbl_hw/nbl_interrupt.c  |  314 ++
+ .../nebula-matrix/nbl/nbl_hw/nbl_interrupt.h  |   13 +
+ .../nebula-matrix/nbl/nbl_hw/nbl_queue.c      |   60 +
+ .../nebula-matrix/nbl/nbl_hw/nbl_queue.h      |   11 +
+ .../nebula-matrix/nbl/nbl_hw/nbl_resource.c   |  299 ++
+ .../nebula-matrix/nbl/nbl_hw/nbl_resource.h   |  439 ++
+ .../nebula-matrix/nbl/nbl_hw/nbl_txrx.c       | 1984 +++++++++
+ .../nebula-matrix/nbl/nbl_hw/nbl_txrx.h       |  184 +
+ .../nebula-matrix/nbl/nbl_hw/nbl_vsi.c        |  120 +
+ .../nebula-matrix/nbl/nbl_hw/nbl_vsi.h        |   12 +
+ .../nbl/nbl_include/nbl_def_channel.h         |  481 ++
+ .../nbl/nbl_include/nbl_def_common.h          |  165 +
+ .../nbl/nbl_include/nbl_def_dev.h             |   28 +
+ .../nbl/nbl_include/nbl_def_dispatch.h        |   92 +
+ .../nbl/nbl_include/nbl_def_hw.h              |  105 +
+ .../nbl/nbl_include/nbl_def_resource.h        |   93 +
+ .../nbl/nbl_include/nbl_def_service.h         |   80 +
+ .../nbl/nbl_include/nbl_include.h             |  326 ++
+ .../nbl/nbl_include/nbl_product_base.h        |   20 +
+ .../net/ethernet/nebula-matrix/nbl/nbl_main.c |  352 ++
+ 55 files changed, 26753 insertions(+)
+ create mode 100644 Documentation/networking/device_drivers/ethernet/nebula-matrix/m18100.rst
+ create mode 100644 drivers/net/ethernet/nebula-matrix/Kconfig
+ create mode 100644 drivers/net/ethernet/nebula-matrix/Makefile
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/Makefile
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_channel/nbl_channel.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_channel/nbl_channel.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_common/nbl_common.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_common/nbl_common.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_core.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_core/nbl_dev.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_core/nbl_dev.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_core/nbl_dispatch.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_core/nbl_dispatch.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_core/nbl_service.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_core/nbl_service.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/base/nbl_datapath.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/base/nbl_datapath_dped.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/base/nbl_datapath_dstore.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/base/nbl_datapath_ucar.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/base/nbl_ppe.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/base/nbl_ppe_epro.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/base/nbl_ppe_ipro.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/nbl_hw_leonis.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/nbl_hw_leonis.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/nbl_hw_leonis_regs.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/nbl_hw_leonis_regs.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/nbl_queue_leonis.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/nbl_queue_leonis.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/nbl_resource_leonis.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_leonis/nbl_resource_leonis.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_hw_reg.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_interrupt.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_interrupt.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_queue.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_queue.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_resource.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_resource.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_txrx.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_txrx.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_vsi.c
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_hw/nbl_vsi.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_include/nbl_def_channel.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_include/nbl_def_common.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_include/nbl_def_dev.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_include/nbl_def_dispatch.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_include/nbl_def_hw.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_include/nbl_def_resource.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_include/nbl_def_service.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_include/nbl_include.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_include/nbl_product_base.h
+ create mode 100644 drivers/net/ethernet/nebula-matrix/nbl/nbl_main.c
 
-pw-bot: cr
+-- 
+2.47.3
 
-> +       (void) syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS, &attr,=
- attr_sz, NULL,
-> +                      sizeof(struct bpf_common_attr));
-> +       return errno =3D=3D EFAULT;
-> +}
-> +
->  static inline int sys_bpf(enum bpf_cmd cmd, union bpf_attr *attr,
->                           unsigned int size)
->  {
-> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-> index b842b83e2480..e0d646a9e233 100644
-> --- a/tools/lib/bpf/features.c
-> +++ b/tools/lib/bpf/features.c
-> @@ -506,6 +506,11 @@ static int probe_kern_arg_ctx_tag(int token_fd)
->         return probe_fd(prog_fd);
->  }
->
-> +static int probe_bpf_syscall_common_attrs(int token_fd)
-> +{
-> +       return probe_sys_bpf_ext();
-> +}
-> +
->  typedef int (*feature_probe_fn)(int /* token_fd */);
->
->  static struct kern_feature_cache feature_cache;
-> @@ -581,6 +586,9 @@ static struct kern_feature_desc {
->         [FEAT_BTF_QMARK_DATASEC] =3D {
->                 "BTF DATASEC names starting from '?'", probe_kern_btf_qma=
-rk_datasec,
->         },
-> +       [FEAT_BPF_SYSCALL_COMMON_ATTRS] =3D {
-> +               "BPF syscall common attributes support", probe_bpf_syscal=
-l_common_attrs,
-> +       },
->  };
->
->  bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_=
-id feat_id)
-> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
-nal.h
-> index fc59b21b51b5..aa16be869c4f 100644
-> --- a/tools/lib/bpf/libbpf_internal.h
-> +++ b/tools/lib/bpf/libbpf_internal.h
-> @@ -392,6 +392,8 @@ enum kern_feature_id {
->         FEAT_ARG_CTX_TAG,
->         /* Kernel supports '?' at the front of datasec names */
->         FEAT_BTF_QMARK_DATASEC,
-> +       /* Kernel supports BPF syscall common attributes */
-> +       FEAT_BPF_SYSCALL_COMMON_ATTRS,
->         __FEAT_CNT,
->  };
->
-> @@ -757,4 +759,5 @@ int probe_fd(int fd);
->  #define SHA256_DWORD_SIZE SHA256_DIGEST_LENGTH / sizeof(__u64)
->
->  void libbpf_sha256(const void *data, size_t len, __u8 out[SHA256_DIGEST_=
-LENGTH]);
-> +int probe_sys_bpf_ext(void);
->  #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
-> --
-> 2.52.0
->
