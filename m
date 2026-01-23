@@ -1,62 +1,40 @@
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBF833CEBC
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 06:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FC7132937E
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 06:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769151209; cv=none; b=HYWlgsM88QzOw5BqQowhBt+v1AirG9f42aKANvmC75P/JI7yFQUpre5B/zuqCb/8AccM4XswTp+e42ootgqBg8ocpjlpoh5YCUh3FGBuHMBjcJOjVrSRsLS5ehDtIWVUhzNDimEda6sfV5GpIQwhEIzVfe8+IXLivXCGvmgPKwg=
+	t=1769151214; cv=none; b=YWaxzEKIaCg5SezLrfAMBCLzURb8G9kmmcNnUC+hIMZ+iMJttkl6aW/H/ryYUJo8ZyJNJdi/TS6av6J4rdHc/KDCKN7OGUONQJCUUqEU79AaEJ0BK7v8eJWI1hwEx+ryjvZAGZKHH9vQYBNCJ5zNHaCyXrCYdovfLxJa7/GJtWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769151209; c=relaxed/simple;
-	bh=2dxN373nd33A36HYKm5zAqxbXMPp7koH+IgdNry5g9s=;
+	s=arc-20240116; t=1769151214; c=relaxed/simple;
+	bh=1sIYXomChyE7LIVmIqeKCKeMmWHWJvhIg/GZFOjLsSM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Fg6f+FJF3uySpbExgEc+Z0pD8UhXxeZmfDFXkSV/BwNTMxG8SuvVE+2JxthDwLJzyJ0K0T/tFLeSRCLD6Y7FrubV+MemoArg3Rm4I4GN+S1T2g3inpJGvI7AnwUf3NaJ0uHpD6VfUi1DCb9UAtAAMvj6+VWdOae5MVDUCwqYG9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=TwaNSJ22; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=SNEpdW+c; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:To:Cc; b=XRSJlL72zfRNPw7ZL8WsYzQyojES0vwZCyyGiMSXVrFrXQNgCoUU2d8omhfwP+iRQy1MgJyRHn54ktFxeo5Z8bs6m7c9eKO9so8mz5mN6RTo1XRCMJSYvAtie1DXI0M1/a/EjdxIahvZmV5rvYaKVOucT8apo4JEXh25k5MOjj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="TwaNSJ22";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="SNEpdW+c"
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 5590D5BCC7;
-	Fri, 23 Jan 2026 06:53:09 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id ACE3E5BCCF;
+	Fri, 23 Jan 2026 06:53:10 +0000 (UTC)
 Authentication-Results: smtp-out2.suse.de;
 	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769151189; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N3DPRc87aFtnpwc8583i8li1YmCTDsn4GBRi/xoPavM=;
-	b=TwaNSJ22lUVkujoTIcvlmVUlFpzLKghPixm3xazahkIhiI/v4TrTd+WtWioUyaylUhhp7T
-	FRbngh8djjheSnvOCQ6NZhq46zfaMkyu/7bpHDVUruTcSaryiQM9w+Ug1fc7wqbN7O6Mrp
-	E6bNPUFcj3w4jWxip5wq5q8xY6i26Ls=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769151189;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N3DPRc87aFtnpwc8583i8li1YmCTDsn4GBRi/xoPavM=;
-	b=SNEpdW+ctprfZkkprEqg/5KnB8JO8nS631UuFA1jSQ0f0vyJgC0E2/s9y3iaX05lqkGrNb
-	bJ9qxNkxCKfWBwCw==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 277A7139E8;
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 96A26139EC;
 	Fri, 23 Jan 2026 06:53:09 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 0O5fCdUac2k4YgAAD6G6ig
+	id KGCAJNUac2k4YgAAD6G6ig
 	(envelope-from <vbabka@suse.cz>); Fri, 23 Jan 2026 06:53:09 +0000
 From: Vlastimil Babka <vbabka@suse.cz>
-Date: Fri, 23 Jan 2026 07:52:39 +0100
-Subject: [PATCH v4 01/22] mm/slab: add rcu_barrier() to
- kvfree_rcu_barrier_on_cache()
+Date: Fri, 23 Jan 2026 07:52:43 +0100
+Subject: [PATCH v4 05/22] mm/slab: make caches with sheaves mergeable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -65,7 +43,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260123-sheaves-for-all-v4-1-041323d506f7@suse.cz>
+Message-Id: <20260123-sheaves-for-all-v4-5-041323d506f7@suse.cz>
 References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
 In-Reply-To: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
 To: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
@@ -79,78 +57,73 @@ Cc: Hao Li <hao.li@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
  Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, 
  linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, 
  bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
- Vlastimil Babka <vbabka@suse.cz>, kernel test robot <oliver.sang@intel.com>, 
- stable@vger.kernel.org
+ Vlastimil Babka <vbabka@suse.cz>
 X-Mailer: b4 0.14.3
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLfsjnp7neds983g95ihcnuzgq)]
-X-Spam-Flag: NO
+X-Rspamd-Pre-Result: action=no action;
+	module=replies;
+	Message is reply to one we originated
 X-Spam-Score: -4.00
-X-Rspamd-Queue-Id: 5590D5BCC7
 X-Rspamd-Pre-Result: action=no action;
 	module=replies;
 	Message is reply to one we originated
 X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Queue-Id: ACE3E5BCCF
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
 X-Spam-Level: 
+X-Spamd-Result: default: False [-4.00 / 50.00];
+	REPLY(-4.00)[];
+	R_RATELIMIT(0.00)[to_ip_from(RLfsjnp7neds983g95ihcnuzgq)]
+X-Spam-Flag: NO
 
-After we submit the rcu_free sheaves to call_rcu() we need to make sure
-the rcu callbacks complete. kvfree_rcu_barrier() does that via
-flush_all_rcu_sheaves() but kvfree_rcu_barrier_on_cache() doesn't. Fix
-that.
+Before enabling sheaves for all caches (with automatically determined
+capacity), their enablement should no longer prevent merging of caches.
+Limit this merge prevention only to caches that were created with a
+specific sheaf capacity, by adding the SLAB_NO_MERGE flag to them.
 
-This currently causes no issues because the caches with sheaves we have
-are never destroyed. The problem flagged by kernel test robot was
-reported for a patch that enables sheaves for (almost) all caches, and
-occurred only with CONFIG_KASAN. Harry Yoo found the root cause [1]:
-
-  It turns out the object freed by sheaf_flush_unused() was in KASAN
-  percpu quarantine list (confirmed by dumping the list) by the time
-  __kmem_cache_shutdown() returns an error.
-
-  Quarantined objects are supposed to be flushed by kasan_cache_shutdown(),
-  but things go wrong if the rcu callback (rcu_free_sheaf_nobarn()) is
-  processed after kasan_cache_shutdown() finishes.
-
-  That's why rcu_barrier() in __kmem_cache_shutdown() didn't help,
-  because it's called after kasan_cache_shutdown().
-
-  Calling rcu_barrier() in kvfree_rcu_barrier_on_cache() guarantees
-  that it'll be added to the quarantine list before kasan_cache_shutdown()
-  is called. So it's a valid fix!
-
-[1] https://lore.kernel.org/all/aWd6f3jERlrB5yeF@hyeyoo/
-
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202601121442.c530bed3-lkp@intel.com
-Fixes: 0f35040de593 ("mm/slab: introduce kvfree_rcu_barrier_on_cache() for cache destruction")
-Cc: stable@vger.kernel.org
 Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
-Tested-by: Harry Yoo <harry.yoo@oracle.com>
-Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- mm/slab_common.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ mm/slab_common.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
 diff --git a/mm/slab_common.c b/mm/slab_common.c
-index eed7ea556cb1..ee994ec7f251 100644
+index ee245a880603..5c15a4ce5743 100644
 --- a/mm/slab_common.c
 +++ b/mm/slab_common.c
-@@ -2133,8 +2133,11 @@ EXPORT_SYMBOL_GPL(kvfree_rcu_barrier);
-  */
- void kvfree_rcu_barrier_on_cache(struct kmem_cache *s)
- {
+@@ -162,9 +162,6 @@ int slab_unmergeable(struct kmem_cache *s)
+ 		return 1;
+ #endif
+ 
 -	if (s->cpu_sheaves)
-+	if (s->cpu_sheaves) {
- 		flush_rcu_sheaves_on_cache(s);
-+		rcu_barrier();
-+	}
-+
+-		return 1;
+-
  	/*
- 	 * TODO: Introduce a version of __kvfree_rcu_barrier() that works
- 	 * on a specific slab cache.
+ 	 * We may have set a slab to be unmergeable during bootstrap.
+ 	 */
+@@ -189,9 +186,6 @@ static struct kmem_cache *find_mergeable(unsigned int size, slab_flags_t flags,
+ 	if (IS_ENABLED(CONFIG_HARDENED_USERCOPY) && args->usersize)
+ 		return NULL;
+ 
+-	if (args->sheaf_capacity)
+-		return NULL;
+-
+ 	flags = kmem_cache_flags(flags, name);
+ 
+ 	if (flags & SLAB_NEVER_MERGE)
+@@ -336,6 +330,13 @@ struct kmem_cache *__kmem_cache_create_args(const char *name,
+ 	flags &= ~SLAB_DEBUG_FLAGS;
+ #endif
+ 
++	/*
++	 * Caches with specific capacity are special enough. It's simpler to
++	 * make them unmergeable.
++	 */
++	if (args->sheaf_capacity)
++		flags |= SLAB_NO_MERGE;
++
+ 	mutex_lock(&slab_mutex);
+ 
+ 	err = kmem_cache_sanity_check(name, object_size);
 
 -- 
 2.52.0
