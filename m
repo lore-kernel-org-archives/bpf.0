@@ -1,166 +1,95 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6D22F3636;
-	Fri, 23 Jan 2026 03:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 423FC36D508;
+	Fri, 23 Jan 2026 04:07:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769140720; cv=none; b=DRs/h8TZit7iytaLAbGiPbgUqip1IyQ7QxKP4Cp6GejWfbphOZ2H4ZZ/Y5x6tzg5F0WXwNp9JMuH+XstGbpecmshkQyiH9wcgRfhoG5I3RbDrUfS3KGYjjdhQ2tHZz+QhThUlvQ8hcuyFe6Q3hcfMaECVusJI/S2xcaHmbqPWgo=
+	t=1769141236; cv=none; b=P/hBQSJ8Rb6iFEI7V7Z4x7LQoYv1FbVfLM1oEZviXbWDL4Agg19V33OA1zYJ2qDk7v1T91eK2eNnj91VipoYBsuJw5SRwQ2HMJCm0hbiSCOchXC2jfC/cSRa67+rTnmNhmGoXA0bu6HDIqg3guT4t4o2dHRfIdUaBxX7Abc05Bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769140720; c=relaxed/simple;
-	bh=BAI+EjaSfxcJvZxjB7J+YyaGw88SdVkkLWVtadPgy2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FOM8Qh8NM/TU32YoNoRItqvUAw2fQcdLqMmRkoqw94sKhDlagFr/yQ37ldJxpf+8YacvPAw2WL65sDHxcTQ5xPdoB9Qe75qis+WXW+QMJMlvX3hm4fxrFcQAzY0k3B2KDO6dZMYvK5x4cLN/cxLKAcoaNENKCUHqFN4WbcgPKo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=OZJRFM+m; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1769141236; c=relaxed/simple;
+	bh=v6kZZe7ybcJOjR9F1ZeiyHnchWeMvm5tLOBTEA5FXpI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i4k+KR9d4Q4EJKQmrnpUQJQ+jTdPozA9laHdEvL7/q1KRZUiwH6XDqU7bher49uyLYiz4MBO92mhE8p4OFLzulI4R6xTTPetl2FS2IRlOwDvvl8QtYw8Qd/X8ij25vMMFbH+2zZCsczigWU8NWjukNLkjZWEsYhnO6qO4JJ3TpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cPxbhWJP; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="OZJRFM+m"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=wyEqaKQNSoyNzMdCqVbM+n+7F7wWHIRNo+JawxvUS6o=; b=OZJRFM+mQAt3LONy9Cv72cYlIS
-	BWltBftnBT1OL2DGpGa+QcXpGm/5sF/fMCX1tRXmfYgkv4fWwDR6ofDnUMmhrskaX8XfF15NsPwps
-	mLTI1fjjSFlWznnhx4j2SHdmnEDHqSvy3m+ljVtXg63YyOhqpLAV8p4bo1aFSNuNStuY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1vj8J3-0044CJ-Ll; Fri, 23 Jan 2026 04:57:57 +0100
-Date: Fri, 23 Jan 2026 04:57:57 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: "illusion.wang" <illusion.wang@nebula-matrix.com>
-Cc: dimon.zhao@nebula-matrix.com, alvin.wang@nebula-matrix.com,
-	sam.chen@nebula-matrix.com, netdev@vger.kernel.org,
-	andrew+netdev@lunn.ch, corbet@lwn.net, kuba@kernel.org,
-	linux-doc@vger.kernel.org, lorenzo@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, vadim.fedorenko@linux.dev,
-	lukas.bulwahn@redhat.com, hawk@kernel.org, ast@kernel.org,
-	bpf@vger.kernel.org, sdf@fomichev.me, daniel@iogearbox.net,
-	john.fastabend@gmail.com, edumazet@google.com,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 net-next 02/15] net/nebula-matrix: add our driver
- architecture
-Message-ID: <c6d37ecd-7dc6-4f83-b76c-2735a5f116fd@lunn.ch>
-References: <20260123011804.31263-1-illusion.wang@nebula-matrix.com>
- <20260123011804.31263-3-illusion.wang@nebula-matrix.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cPxbhWJP"
+Message-ID: <a0ce1dab-7d7e-4b04-a033-4f0611090d34@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769141227;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=/UdGSl1zFpyYo7ZLism+9vO/YeG3Eo+vsrATosec5nQ=;
+	b=cPxbhWJPP5B2CyugGIqAuhz8oDEcxXLVkBcTMAYNhDWaNyc4IBpuNcwyu9xHAR5/66xOAn
+	VnIPu6PvOBzokmE1gkoZCHpSmqOR6xzbaosA4w5U46YP19U45z8FyVR/AW0Qed6XS5F6GJ
+	0qh+UnZQImb4WBhZ6DzaJeky9Ws4sio=
+Date: Fri, 23 Jan 2026 12:06:45 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260123011804.31263-3-illusion.wang@nebula-matrix.com>
+Subject: Re: [PATCH bpf-next v7 2/9] libbpf: Add support for extended bpf
+ syscall
+Content-Language: en-US
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
+ Andrey Albershteyn <aalbersh@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
+ Mykyta Yatsenko <yatsenko@meta.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
+ LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com
+References: <20260123032445.125259-1-leon.hwang@linux.dev>
+ <20260123032445.125259-3-leon.hwang@linux.dev>
+ <CAADnVQJLz+nMHCZXUgy2MOxwFczEHNbG8ZUgfZeUY4yXFUKcNw@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAADnVQJLz+nMHCZXUgy2MOxwFczEHNbG8ZUgfZeUY4yXFUKcNw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-> +	NBL_CHAN_MGT_TO_COMMON(&(*chan_mgt_leonis)->chan_mgt) = common;
 
-Macros on the left hand side is pretty unusual. Why is it needed?
 
-The cast suggests your types are messed up. You should not need casts.
+On 23/1/26 11:55, Alexei Starovoitov wrote:
+> On Thu, Jan 22, 2026 at 7:25 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>>
+>> +static int probe_bpf_syscall_common_attrs(int token_fd)
+>> +{
+>> +       int ret;
+>> +
+>> +       ret = probe_sys_bpf_ext();
+>> +       return ret > 0;
+>> +}
+> 
+> When you look at the above, what thoughts come to mind?
+> 
+> ... and please don't use ai for answers.
 
-> +#define nbl_err(common, fmt, ...)					\
-> +do {									\
-> +	typeof(common) _common = (common);				\
-> +		dev_err(NBL_COMMON_TO_DEV(_common), fmt, ##__VA_ARGS__);\
-> +} while (0)
+My initial thought was whether probe_fd() is needed here to handle and
+close a returned fd, since the return value of probe_sys_bpf_ext() isn’t
+obvious from the call site.
 
-You should probably remove these and just use dev_err() or
-netdev_err() directly.
+Thanks,
+Leon
 
-> +#define NBL_COMMON_TO_PDEV(common)		((common)->pdev)
-> +#define NBL_COMMON_TO_DEV(common)		((common)->dev)
-> +#define NBL_COMMON_TO_DMA_DEV(common)		((common)->dma_dev)
-> +#define NBL_COMMON_TO_VSI_ID(common)		((common)->vsi_id)
-> +#define NBL_COMMON_TO_ETH_ID(common)		((common)->eth_id)
-> +#define NBL_COMMON_TO_ETH_MODE(common)		((common)->eth_mode)
-> +#define NBL_COMMON_TO_DEBUG_LVL(common)		((common)->debug_lvl)
-> +
-> +#define NBL_COMMON_TO_OCP_CAP(common)		((common)->is_ocp)
-> +#define NBL_COMMON_TO_PCI_USING_DAC(common)	((common)->pci_using_dac)
-> +#define NBL_COMMON_TO_MGT_PF(common)		((common)->mgt_pf)
-> +#define NBL_COMMON_TO_PCI_FUNC_ID(common)	((common)->function)
-> +#define NBL_COMMON_TO_LOGIC_ETH_ID(common)	((common)->logic_eth_id)
-
-These are all just obfuscation. Please remove them. And not just
-these. All of them. Such macros don't help.
-
-> +int nbl_dev_init(void *p, struct nbl_init_param *param);
-> +void nbl_dev_remove(void *p);
-> +int nbl_dev_start(void *p, struct nbl_init_param *param);
-> +void nbl_dev_stop(void *p);
-
-Using a void * as a parameter for something like nbl_dev_start() and
-nbl_dev_stop() is a red flag. You should know they type you are
-passing to functions like this. In general, you want the compiler to
-be doing type checking for you, so you need real types.
-
-> +struct nbl_adapter *nbl_core_init(struct pci_dev *pdev,
-> +				  struct nbl_init_param *param)
-> +{
-> +	struct nbl_adapter *adapter;
-> +	struct nbl_common_info *common;
-> +	struct nbl_product_base_ops *product_base_ops;
-> +	int ret = 0;
-
-Reverse Christmas tree. That applies to all functions.
-
-> +
-> +	if (!pdev)
-> +		return NULL;
-
-Can that happen? Don't have defensive code. If there is a real reason
-this could be NULL then fine, but you might want to add a comment why
-it can happen. But if this is not actually expected let pdev be
-dereferenced, get the Opps, so you can debug your driver. And i don't
-mean this one instance. I mean all similar tests in the driver. No
-defensive code, it just hides bugs.
-
-> +void nbl_core_remove(struct nbl_adapter *adapter)
-> +{
-> +	struct nbl_product_base_ops *product_base_ops;
-> +	struct device *dev;
-> +
-> +	dev = NBL_ADAP_TO_DEV(adapter);
-> +	product_base_ops = NBL_ADAP_TO_RPDUCT_BASE_OPS(adapter);
-> +	nbl_dev_remove(adapter);
-> +	nbl_serv_remove(adapter);
-> +	nbl_disp_remove(adapter);
-> +	product_base_ops->res_remove(adapter);
-> +	product_base_ops->chan_remove(adapter);
-> +	product_base_ops->hw_remove(adapter);
-> +	devm_kfree(dev, adapter);
-
-Calling devm_kfree() is unusual. Why do you do this? I suggests you
-don't understand what devm_ actually does. Which is pretty scary if
-you have such a basic thing wrong for a driver this size.
-
->  static int nbl_probe(struct pci_dev *pdev,
->  		     const struct pci_device_id __always_unused *id)
->  {
->  	struct device *dev = &pdev->dev;
-> +	struct nbl_adapter *adapter = NULL;
-> +	struct nbl_init_param param = {{0}};
-> +	int err;
->  
-> +	if (pci_enable_device(pdev)) {
-> +		dev_err(&pdev->dev, "Failed to enable PCI device\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	param.pci_using_dac = true;
-> +	nbl_get_func_param(pdev, id->driver_data, &param);
-> +
-> +	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
-> +	if (err) {
-> +		dev_err(dev, "Configure DMA 64 bit mask failed, err = %d\n",
-> +			err);
-
-dev_err() is usually for a fatal error. Here you just keep going, so
-it is not really an error. dev_dbg()?
-
-    Andrew
-
----
-pw-bot: cr
