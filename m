@@ -1,94 +1,108 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86773312828;
-	Fri, 23 Jan 2026 09:08:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 365C930DD38;
+	Fri, 23 Jan 2026 09:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769159288; cv=none; b=fnxkj3ng9GUdwg912dKOWhmku4vhsRy397dLhntvf6mMt4r2R5BLYaMibLal8Y/67PjTkW87CuqEDyzvbrxsUGM7Er5sXssgF7ygljmlQuY1p3zRS0u6/4V9z2h4q5NpQkAycpZ3y0kf5eWY3fgDVEhE76Lsqm0yAYVPDl6OkeY=
+	t=1769159939; cv=none; b=VuTugaWKxMyLeDd1/ySSLu7InJZKj0RV0UCFb/PS5dJ0uyInpSPxhwwUPTy6oovRVBA7C03o71UP5yCdaIXo+hBYJ4p26XROGz7UoMRsyU9QKeqgKX4Rea4CS7Fmv3wJZpY0lXO7ifwOoUTbUw7ghagOjB6fp3V7KJGCo7Ev3pE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769159288; c=relaxed/simple;
-	bh=D7GcmOXu7mBIlEAjTlL930gifEzDmeHbdUPti2mJGRA=;
+	s=arc-20240116; t=1769159939; c=relaxed/simple;
+	bh=Yj/0342sqfLBIPiqehTF1fNxuPJu6F+hRc2WRAQWcuA=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Us4LTt9rZ3KaZg+wQITcVvYxXe8xjbf0IKEfRONh7U6w0b1UrC411jCzHV0dbSidCLlOJildBiOZ+gOp+qbI+pfZuMwP40D7/yEbfIpm9UkTkMWwARBeQ0qiImNUl4JgC7XRP1mqPNrA2VGw+pMuy0NlGLePILOsWZSDwfCZlKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PoH4yTTt; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=Z6biVbITpMU8gOaJ0M3IFpLhbB+366vhYz4Yvn4em5cFQixtTf6QJ60gAniPEsVCwJ66GWTQ2z4eJvc5GzcJ08YN58u4gaJxOgIvVHRd9wbsFNh/i7ISt2QD8pqnAAHaWUH5gVQAi1/b/p+dciXkjOOxgxIYW+OoNAIr4VPjDwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o4KhXs3I; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PoH4yTTt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72401C4CEF1;
-	Fri, 23 Jan 2026 09:08:07 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o4KhXs3I"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00317C4CEF1;
+	Fri, 23 Jan 2026 09:18:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769159287;
-	bh=D7GcmOXu7mBIlEAjTlL930gifEzDmeHbdUPti2mJGRA=;
+	s=k20201202; t=1769159938;
+	bh=Yj/0342sqfLBIPiqehTF1fNxuPJu6F+hRc2WRAQWcuA=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=PoH4yTTtWjUqJctPonbBvOVJHJzzGlePEpDv9b9HB89iVcSuoH03ZbAFVfyanm77U
-	 oT1j9clsItTKYLkHSM+4ohBYIurnM/wRq9ANa/Ue0zcbPfvXKHiAcfXMgvIVaPQgG/
-	 DEswT1xB8kh1LYRCf4nGvM0kk5nyi0lBxOHBLzjzLEiXGnxfSlk7JZuP/mEhtvrroJ
-	 gV/255OY7MbNpqiHyr1OgOrPhyTVP/qXwb1iDJ6LeU5h8LaKq/FMN+wKvbHz94GDrY
-	 RKp+JP8MMofE9FaqqYGHXXINwBpowE7/TAQII1g/Cq8uNN+phEuq/tGbrZAecdmDz4
-	 Nc7jQFi8qb4Fg==
-Content-Type: multipart/mixed; boundary="===============2950745961147967484=="
+	b=o4KhXs3IAcxW1VHcGUecCF0/Sd7ez/fIAyJCNmpzuKqaaLt4qW5en1ElzlA4OJbJE
+	 +aAmUlTDGNVZI3jZkb0+DXyxqDTqjDszWBJkqewICLJTj+zHBVzoi9gvNjnAO70BXW
+	 1HCZfTQjLTUqc5WZxtjXU7kD8RoGWCHn6oO/Ps6Luo2dj1GLKwuDboFQTpqeRHCVRA
+	 BfEt6HkYtr+gh1Qj6OUQR72ELqo3q+KUOkC53xoZBwbwYtGkq87mmerADXL4iK4QJR
+	 lT8eojQQ5dLFc8JseAMWYZuwuqcHgi1o1QsY82a6qbTcmTfJfmAmXonS2Oe2VrsA1f
+	 crOk4bVvC5+Lw==
+Content-Type: multipart/mixed; boundary="===============1550164231886997435=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <109e6caa10a260b0f02b2595fb021db560daf0b77e9b3d1db61ee57191d6fd25@mail.kernel.org>
-In-Reply-To: <20260123084248.259278-3-changwoo@igalia.com>
-References: <20260123084248.259278-3-changwoo@igalia.com>
-Subject: Re: [PATCH bpf-next v1 2/2] selftests/bpf: Add tests for execution context kfuncs
+Message-Id: <806d3538bf542f23b9b89c35199996f195e82b2cdde50c40ca8478cbbe6af3fb@mail.kernel.org>
+In-Reply-To: <db8b80a445a61b437c35c71ec2edb573002656fc.1769157382.git.zhuhui@kylinos.cn>
+References: <db8b80a445a61b437c35c71ec2edb573002656fc.1769157382.git.zhuhui@kylinos.cn>
+Subject: Re: [RFC PATCH bpf-next v3 11/12] selftests/bpf: Add test for memcg_bpf_ops hierarchies
 From: bot+bpf-ci@kernel.org
-To: changwoo@igalia.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,kernel-dev@igalia.com,bpf@vger.kernel.org,sched-ext@lists.linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,changwoo@igalia.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 23 Jan 2026 09:08:07 +0000 (UTC)
+To: hui.zhu@linux.dev,akpm@linux-foundation.org,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,peterz@infradead.org,ojeda@kernel.org,nathan@kernel.org,kees@kernel.org,tj@kernel.org,jeffxu@chromium.org,mkoutny@suse.com,kernel@jfarr.cc,brauner@kernel.org,rdunlap@infradead.org,brgerst@gmail.com,masahiroy@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,inwardvessel@gmail.com,willemb@google.com,kerneljasonxing@gmail.com,paul.chaignon@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,chenridong@huaweicloud.com,lance.yang@linux.dev,jiayuan.chen@linux.dev,linux-kernel@vger.kernel.org,linux-mm@kvack.org,cgroups@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org
+Cc: zhuhui@kylinos.cn,geliang@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 23 Jan 2026 09:18:57 +0000 (UTC)
 
---===============2950745961147967484==
+--===============1550164231886997435==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> index 77a81fa8ec6a..8c7add48e447 100644
-> --- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-> +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> index 9a8d16296f2d..bab9f3094f59 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
 
 [ ... ]
 
-> +/* IRQ Work for HardIRQ context */
-> +static void ctx_check_irq_fn(struct irq_work *work)
+> +void test_memcg_ops_hierarchies(void)
 > +{
-> +	bpf_testmod_test_hardirq_fn();
-> +	tasklet_schedule(&ctx_check_tasklet);
-> +}
+> +	int ret, first = -1, second = -1, third = -1;
+> +	struct memcg_ops *skel;
+> +	struct bpf_map *map;
+> +	struct bpf_link *link1 = NULL, *link2 = NULL, *link3 = NULL;
 
 [ ... ]
 
-> @@ -1844,6 +1872,10 @@ static void bpf_testmod_exit(void)
->  	while (refcount_read(&prog_test_struct.cnt) > 1)
->  		msleep(20);
->
-> +	/* Clean up tasklet and irqwork */
-> +	tasklet_kill(&ctx_check_tasklet);
-> +	irq_work_sync(&ctx_check_irq);
+> +	opts.relative_fd = second;
+> +	opts.flags = 0;
+> +	link2 = bpf_map__attach_struct_ops_opts(map, &opts);
+> +	if (!ASSERT_OK_PTR(link2, "bpf_map__attach_struct_ops_opts"))
+> +		goto cleanup;
+> +
+> +	opts.relative_fd = third;
+> +	opts.flags = 0;
+> +	link2 = bpf_map__attach_struct_ops_opts(map, &opts);
+> +	if (!ASSERT_ERR_PTR(link3, "bpf_map__attach_struct_ops_opts"))
+                          ^^^^^
 
-Should the cleanup order be reversed here? The irq_work handler
-ctx_check_irq_fn() calls tasklet_schedule(&ctx_check_tasklet). If the
-irq_work is still pending when tasklet_kill() is called, the subsequent
-irq_work_sync() may trigger the irq_work to run, which would then re-schedule
-the already-killed tasklet.
+The result of the third bpf_map__attach_struct_ops_opts() call is stored in
+link2, but the assertion checks link3. Since link3 is initialized to NULL
+and never modified, the ASSERT_ERR_PTR check does not validate the actual
+return value of the third attachment.
 
-This could lead to a use-after-free if the module unload completes while a
-newly scheduled tasklet is still pending, since ctx_check_tasklet_fn() would
-point to freed module code.
+Should this be assigning to link3 instead of link2?
 
-Would swapping these to call irq_work_sync() first ensure the irq_work cannot
-schedule any more tasklets before tasklet_kill() runs?
+> +		goto cleanup;
+> +
+> +cleanup:
+> +	bpf_link__destroy(link1);
+> +	bpf_link__destroy(link2);
+
+If the fix is to use link3 for the third attachment result, should
+bpf_link__destroy(link3) be added here as well?
+
+> +	memcg_ops__detach(skel);
+> +	close(first);
+> +	close(second);
+> +	close(third);
+> +	cleanup_cgroup_environment();
+> +}
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21280227502
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21280790825
 
---===============2950745961147967484==--
+--===============1550164231886997435==--
