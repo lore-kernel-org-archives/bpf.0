@@ -1,123 +1,108 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E06B1B78F3
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 17:31:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769189476; cv=pass; b=FulRXkODQHttj4SeWemf/0up8FcSkMwl320q1EkH4whSQR/2rSYjKtiMHKEvnSBrQ5e4/mLWLPKFu+PvgFjE8GkPVGfO5ZPosnkuXfq+SnAxj824u+0WrQ0X/1UdOf8ooSYYjDfjyrBPei0GSHQDzGyoLCHGUoFI3bEA2anXdis=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769189476; c=relaxed/simple;
-	bh=//l0nEjTNRiO6ok8x5R3UO9HJXdIVnzS4jZFSqDgDdg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=UTaVUDXCZS6XHMprCz3A10wXSWyke5dLBsFfTERGXIIhicUB6QtKpe6bAoKetW+lmaosB3EIPXsLULEgkMA3VYCOlHdp8ulEgpNgbSKJU7yVJ2yN2VlJ3aPUF4JGnIaeV48Iq0TU20frN1jaoKnO909BOTFVOgZsznq0w9fcqvo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DKTZUymO; arc=pass smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2663EBF00;
+	Fri, 23 Jan 2026 17:33:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769189617; cv=none; b=Dzc7SWsemshi4nM1wlM2UOnRNRg1TexnS0czHOH0ZaDOdtYI/sn53Yb3EAcLuNcd+S/0Uvr0vKRxj+fLc0RknZVMgLv1WsliJfkbEMCYVdgh9irFY251kNTLX5iksDveT3i6JX1J37NHredIhdwj0yBVirXIC0KJ5HgMyWsIHRE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769189617; c=relaxed/simple;
+	bh=QOYVt8e/lNugpEsLMp6/WTZBmgTGIqKY2TiLxeHbyvU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kx166YtyGTJLYlR7RIU0mzwOCRMcs1vFcSCVQqufvBJ3l/fHcvWm3fuCfuV/ZYfYXEr6nrPcj6o5U1ztmxrJcex8BqNOunEohSwwJPKYPeTnqNCATp3wX3w6X7gVZKSJpVBspkMIJ1YAX1tKeDDXOyMarkoaonpH2DrihctC36k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Hjr0bARw; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DKTZUymO"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-42fb5810d39so1569205f8f.2
-        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 09:31:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769189474; cv=none;
-        d=google.com; s=arc-20240605;
-        b=D0uivqaxAyP45TE1idyFlrqw6mncv7VG9ZoSkcuDJq3QcIm2Rok8U3pfaSvVHvgSJi
-         iky++eA1plX9bi6Lty05XAW+qxKv/QWHfjCIgbv4bCGgBGrA1HrXviwnO5Tb8g8JI18F
-         4lHWS+AaEiXRfqQnpF5U3hf9S5GB2KiefLarkKQbBjhTJ1zXk4Yt8wukcu+MNwh8EV0g
-         bmLQUFI2FFHZ8iDenMoxjv2MBgE4Pje8nYAbIT4L5ZcBs+it6g+pVWP8qb1Nt21cd00f
-         VslJs1gER3oCTV0ZijAO4oI0Xo/dYtnxNZzEXj/LIlnYvhhrUKpdMmOdaW2sXtTUsLgO
-         dGLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=//l0nEjTNRiO6ok8x5R3UO9HJXdIVnzS4jZFSqDgDdg=;
-        fh=DG6kTPG9/6L7r8czFaa0oHi1L1x9ncD1HCEhBGT4YnI=;
-        b=CwZbYOZHdGV/PKeD3kAEOIDSQk4Bi0b8GyUx2jD+enVNJDg9z2ldd1mf6xTsr3bZ0A
-         H50o/dwbYl8/gDWveEzvym7+vKHCdtpRS5XsWIhSybwnijANelSJQj982h/kLUhsEYHn
-         lP8aVise8T5PZRCN3A9m8aqY30HLmK9ze5cFUlMLX2qwsTKSutQCbD/izIS4TRm33XTx
-         f+cVOqBIZZGGMnj/+DQZ/R373QI6heMvnzk1gTN+aGuNL6nUyGv/+QssYgg+B8xVh2kN
-         Ji9uv2rAI0W2S0mOWFHufiukXl4q6AJiy680Efh9dFv9gjdCxtKhYDY62f3wajKcIPEs
-         hVlQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769189474; x=1769794274; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=//l0nEjTNRiO6ok8x5R3UO9HJXdIVnzS4jZFSqDgDdg=;
-        b=DKTZUymOi/0GfjM3jV9TPxvcTGLXrMh+Hs89MEtzQVUAxpR2HlhJv4CaYJbZtK40PE
-         7yYC9GY1c69HAi4IqsLyAthUOQgSiiGRjvU4cA2iquAIy6WMYfyDW8gyZEcm1oGCSd9+
-         2mjllmfB/gJQ+4Gw25drZt/Xv1f9NRL4fLGO2KT125Tp4qZGb8A30KP90cWaZH/7fxgJ
-         Izhf3GJMLQKpSlFIs1FxSVPK968qFJRkLKX0vRM2Saf+qUk3CqYKzfQ0oUvMdGgxzR1l
-         1RmLEoGaxru/E9HACSF/nneQEi/0K1G4zvzDoFUkREOWCNG96ej0ScYupDiB77ZvaDr2
-         3VmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769189474; x=1769794274;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=//l0nEjTNRiO6ok8x5R3UO9HJXdIVnzS4jZFSqDgDdg=;
-        b=mKSAPfjrG26x3VuhkO0W2oHUrmkXCy88Y9Z+lBOB+XC2qj192ZHhmGqG+Vvt1dCUyu
-         FtF2rgy5vAyQXlaLmVMTLoyPg3YQ2zStpQtcnVySj/OvMzsHYiEp4nKAp0buSEuy+YrM
-         fNBaPPKNHMGHtyBcPpXP2fwXq2Xx+ihwTu2An3DksZEnHMa5cssNmlr0Ty//H5ld0XV1
-         CHptsKMJ7Vtj93BjSYeAIv4k4FlId+AFYeWj/5SRvLpCoagoaUQs3wYURBgnQifhrsqb
-         9ADir2VpjmABj9T/KWyYXVF2pHCt3RKYv+4VHAEf2iLCXGOYBsnY+3LBVmljSaw5n3pM
-         RlWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUK0PpXJ57bCLimzK+34aUtapIvXVSyLEOpsqxkWuVSIYfTNoe6ZYL1mxG1P6TfohXkFR8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRzyNA5s/YbGENofVnbH9AnLBk2TcjFmITqVEAzVd6Y5Vz3W7+
-	kkC6hKHoD/86HSewvQL15qhZ0D4Ptxe+wDAlgioGAP53nwALPl+ri7zxA4dIapqX/X9wGPOJzXn
-	upOq5T+HacK00TlRgqF7bS74eXWs0ZjE=
-X-Gm-Gg: AZuq6aJDcpK0RVG8BiSOLIA7FtM5MTMYdrRGJfiamGeH3vp9mwz7JzNKudVcGRpju0A
-	OVaXoY6KgbI/mMmiWKIsYW+xkSSGCVfAdaAKgoaQN6mOYUDUCw+fLTyq9fzRd8tQq7PLRQ0X3U0
-	5qis9tgZL0ZvYHVkt16o2SjZOFjhYRAvykQ53zJt2lhKhj1f2Sa8LUfg0M2OzmnM6UUz6tWLCaE
-	I7X6b3wWIwoiZMEpC0TwGiROc3Xyyd7TMXVYUillRW98MaQ/URZR7pp7hbkrF1G1hpG2jRI4+kl
-	jLRQyhRUJMPUn8g6P4Nx6wu+iKkuS8z5ZBW0FZgn53JLAtaaZeO1V0nRqG2ip/atoh/sViNe
-X-Received: by 2002:a05:6000:2dc4:b0:429:b751:7935 with SMTP id
- ffacd0b85a97d-435b16280damr6748411f8f.56.1769189473665; Fri, 23 Jan 2026
- 09:31:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Hjr0bARw"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1vjL2H-00FKU7-8l; Fri, 23 Jan 2026 18:33:29 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=f8Lh5bMo8TR792aKYfrMvKafH1vRBqOQKGUa3YEqhLc=; b=Hjr0bARw/KHP88JNS/WmZiynEe
+	F159QqgCghTccEAxlAvF8Kk7aUQ4Qirf6C3mNOJsDQDHYVL0VQIdZgM718ZUZDcnbl3NkySX23gXa
+	9krLOiJb3v3k+Gtn3ncd8y6Fd2btRTigvBLr5LczsIU2+KwyvHtLODHZBVluFpEvItV86Vd6txd2b
+	4FkkapMYTFMREFce4knaecYOJCLmi3Ggl6wiO/VhBOS0zxNwmPs2sGhQ2Oikgn/Y4IK5iKoZ7jr42
+	sZGNjiCGpW5rfj4WVnSQP+nwn3Kjz3T+yUNnEkfsiaNQEQofIFa7ih34rTjBRjTF1aPvtSpKj6fuN
+	Ibxzvx2A==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1vjL2G-0000cN-OF; Fri, 23 Jan 2026 18:33:28 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vjL2F-004IwG-Jl; Fri, 23 Jan 2026 18:33:27 +0100
+Message-ID: <19ba918f-d8de-4aa6-881b-47f7e0e10b7a@rbox.co>
+Date: Fri, 23 Jan 2026 18:33:25 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz> <20260123-sheaves-for-all-v4-14-041323d506f7@suse.cz>
-In-Reply-To: <20260123-sheaves-for-all-v4-14-041323d506f7@suse.cz>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 23 Jan 2026 09:31:01 -0800
-X-Gm-Features: AZwV_QgSD9SUVQI9Y0Yihip1NN5Dune2qBBleSwBNI5G1-MsD4RlJ98R8TtLbTY
-Message-ID: <CAADnVQJi09vC6Y-jb8mCRfj-OrECvSTMQ_XL2OE8W-B4zPwGSw@mail.gmail.com>
-Subject: Re: [PATCH v4 14/22] slab: remove defer_deactivate_slab()
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>, linux-mm <linux-mm@kvack.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:Real-time Linux (PREEMPT_RT):Keyword:PREEMPT_RT" <linux-rt-devel@lists.linux.dev>, bpf <bpf@vger.kernel.org>, 
-	kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add test for connect() racing
+ sockmap update and signal
+To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ kuniyu@google.com
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260123-selftest-signal-on-connect-v1-2-b0256e7025b6@rbox.co>
+ <45de7914fd90da6c4940d1c299282eb40d5921ab1f3b9953a120e59a7a9f907c@mail.kernel.org>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <45de7914fd90da6c4940d1c299282eb40d5921ab1f3b9953a120e59a7a9f907c@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 22, 2026 at 10:53=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> w=
-rote:
->
-> There are no more cpu slabs so we don't need their deferred
-> deactivation. The function is now only used from places where we
-> allocate a new slab but then can't spin on node list_lock to put it on
-> the partial list. Instead of the deferred action we can free it directly
-> via __free_slab(), we just need to tell it to use _nolock() freeing of
-> the underlying pages and take care of the accounting.
->
-> Since free_frozen_pages_nolock() variant does not yet exist for code
-> outside of the page allocator, create it as a trivial wrapper for
-> __free_frozen_pages(..., FPI_TRYLOCK).
->
-> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
-> Reviewed-by: Hao Li <hao.li@linux.dev>
-> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+On 1/23/26 18:09, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_interrupted_connect.c b/tools/testing/selftests/bpf/prog_tests/sockmap_interrupted_connect.c
+>> new file mode 100644
+>> index 000000000000..aa48ae483dab
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_interrupted_connect.c
+>> @@ -0,0 +1,200 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+> 
+> [ ... ]
+> 
+>> +#include "sockmap_helpers.h"
+> 
+> [ ... ]
+> 
+>> +void serial_test_sockmap_interrupted_connect(void)
+>> +{
+>> +	sighandler_t orig_handler;
+>> +	struct context ctx = {0};
+>> +	pthread_t tid;
+>> +
+>> +	orig_handler = signal(SIGUSR1, handler);
+>> +	if (!ASSERT_NEQ(orig_handler, SIG_ERR, "signal"))
+>> +		return;
+>> +
+>> +	if (xpthread_create(&tid, NULL, racer, &ctx))
+>> +		goto restore;
+>> +
+>> +	test_map(&ctx, BPF_MAP_TYPE_SOCKMAP);
+>> +
+>> +	if (!xpthread_cancel(tid))
+>               ^^^^^^^^^^^^^^^^
+> 
+> Is xpthread_cancel() defined somewhere? I see sockmap_helpers.h defines
+> xpthread_create() and xpthread_join(), but there does not appear to be a
+> definition for xpthread_cancel(). This would cause a compilation failure.
 
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+xpthread_cancel() is defined in patch 1/2 of this series.
+But apparently patch 1/2 is still missing from https://lore.kernel.org/bpf.
+FWIW, it's already here:
+https://lore.kernel.org/lkml/20260123-selftest-signal-on-connect-v1-1-b0256e7025b6@rbox.co/
+
