@@ -1,63 +1,63 @@
-Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
+Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 138FC30E0E7
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 07:36:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 132B822127A
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 07:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769153813; cv=none; b=sg3gpUq3h6P2tnPTwbA1Z6h0RqW6KbyEoPfMSvJzp4thO0g5PMucqOwGsIJpIhed8zO2PHlkfRhGuM3kaPbFqwl9JqoMDtv4ek8D4ySSpiBF5sFW7hWYP+gYwyMC8qNKT5JC923AA2eTpt3uz/2SDe9n8NsIwyo7bZu9Fu87FtA=
+	t=1769153822; cv=none; b=sNhvRqddY1T4A1MRZKhnpI/VvFSVfaP2HIsruWpe0A3C4FU4+OV3F5yTaR0KibjMOE/2JDq60Voew8fsDFEPYyyzudloA/o+HaWlLd7YPUAzYOwP94is8CoPJTYFjrqtEJAKscy4gUL85Cl3vdZ6f3gD57+jGAZYr+UV1f8N7ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769153813; c=relaxed/simple;
-	bh=7cC1ms5ub9SS0bly7QzzdjNJghADRqDQHVSuwXZiOkM=;
+	s=arc-20240116; t=1769153822; c=relaxed/simple;
+	bh=pPH6IGYSvT73W3XnsSk5F+V+bv692q4Zq0EDWpqk/mQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IfucARCHR3BiTmYUuyrGew/ffbHD+j99TwC4oCQTp+57M05XVAePL5rBL8/XqvLbaYtbWi9KCmXTh/J81X0QwhG636bnaRUBP55qSJ/jJZPJlVa8H8qWW44i8j1AT0MW1EOg1YNFfXYfXzIh9qcSkS9/zdVxM2pTsM4YyFFtd2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HQhrHOIK; arc=none smtp.client-ip=209.85.210.193
+	 MIME-Version; b=svHpPHkeeJImjhTpP2Dh+dg3yGN3YIGU5TtdmPVytPCsBex1q7Jjd5WO9zGHq0HiAi6yNzdkue6ULVbYoBNj8yivY1POT0Iiv0g//fvAm9ey+fHUaFpE6PpmWb8cM+vQ3OzYtu4bxWF04R0xUBScPBY9ZZ2NgJ3Vc1w9dYVU5no=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vm0+fqpH; arc=none smtp.client-ip=209.85.210.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HQhrHOIK"
-Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-823081bb15fso922466b3a.3
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 23:36:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vm0+fqpH"
+Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-8217f2ad01eso1960279b3a.2
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 23:37:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769153811; x=1769758611; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769153820; x=1769758620; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=TG3OIJ4OsXGkuiYroAWEp+caX5ZqVGcvi7JJxvZjj6c=;
-        b=HQhrHOIKI1HpgGhW1C4/hYqk+pyPGbib312/colf0oNZeKvi2aQrTu4AkNjQIGya5T
-         L2pQKJAwNp/ZGzSiKgNUlC0WxQsvUdug/WpuIVLPeOM4rHxUo6WcHGA5x09wTy7/sYCb
-         wfA283H6WygQN0YXvlZWrSarIC3XXdnABrlozPgvzzzyJwvHNhhxnzqzLJ6amIoQirza
-         yyiTcWRg/5v12paT9ZR4o70CItBrh5qKe8urBxBIf/QeCFGSD4g9ksp1ae2epKMG7wmT
-         3K6Mw62EMRq1S3huYMw8turGLvf72GienPWTgplc9pvMiEGdJHBLPsAeNY3/G+ECPCM4
-         8wFA==
+        bh=BGHQu6mG6lMqPEadRM+ZfBOS3CsIq7QGGssQ90tpvv4=;
+        b=Vm0+fqpHWlEa2M1hAWoc9wyZcQl+HMEfYOUmXMKu/0JcRr/8K92M2mH9/A+O3FfeHm
+         moFr8zJZgMZLQOP3uH0OppnTFpsVWGMV3qCgDUb7otpHQJ6gy4JDMPlp3ucLeVbVk2lg
+         J8nZnxX5a/+7+QNkXtJKNX7HORm2gkiygY1LfofMVgFsSxRZAv9UGHKTscqCGclkHu9H
+         atp+gRwiHrtbtArlApz7oxhleB4h9HE53LORlO5syHT9wx2XsQUZOPhaCBavdRzLME5a
+         1hybaCeuKmtcZnIlOpmbN1gFJxtARI5UPYMWNgN3sOXwPMsxMyIsGO382ggec3+6yXnH
+         dnaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769153811; x=1769758611;
+        d=1e100.net; s=20230601; t=1769153820; x=1769758620;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=TG3OIJ4OsXGkuiYroAWEp+caX5ZqVGcvi7JJxvZjj6c=;
-        b=CuBVOpx33cJj7TUk6dnszGcWWgewgAt05/54UJn/42d3uCWsr7DYyBRGp+NUkWLyFB
-         0pD1MAedGxToqKpi/dFNHTX8DxG++JUbntsDVEd6maf4b7ymptWA5LVyyQv4hYHAHbcQ
-         EnAjyxcy3rRj3m0miep3qZ42Es3i4mpMnOZgzyN7QrJQ1ueHWjWh952W0W+Zp8gLLT2c
-         +/E/ctZK0tSMNaXYFVwHL9jaAhESA9H3Cbb1woKFhrWgE32hohnFbro3X/BViQwr1EKh
-         ThKP2xAIzx5xCMbs3qyCEl7uppVgjhoXPrhMD21belvW8K9JqLQHZU7016MsKBCeyRSk
-         OQAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVtKDeF5Cno00hd36fpDaALHKyEBsml+T9XKhPO0HdIfzaUghQOn+O5at3sJ+0sPk/DfqE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygoKeIU6gBCcHq6523oH7vDRfK4RQ2OlvuFdNo+oJKzBHrM4kB
-	1KmUXNMTDJ3NEDNeEaQSuI9GTjJtJ41aZxii8igagWZ4VhWrLnGo1Iw/
-X-Gm-Gg: AZuq6aLAZKw7olposqvd5ZKDtU52xWcglTJ+/YQDOpE21Lu3ERgi/mKB6Cblz2byDAj
-	pRQae0mwPrGUbrYsPMmtn6U0BDcuR5D0rGgqFhLKc65MqOU3xLOBTvg5+nag6hAhBi20ZdHf02j
-	EYVrA4iQxbPbfC0JPUhJ94fLy8A2+vt+Gbxj1KOtD1M1TingenGSqqNXOBtJvZ4jhTIF/1Cr8/M
-	pat3QcbzrpTIwdxHg+xOzrPCZFcQmA/u1r9u+o4nEI8Na/wg3bZca0QvqUXAaqudJr4YqgReb6K
-	4JDyS7g4B4FZt15FleCnQGy68kGq9SQ7zt5GSltZ5IRk7g32y9l6ajeKj07sATW3+pDDrT4u8S1
-	SHiznJAZ/E+lwbYDLKsL3X3YFPQMKlje0YdEFt3aGS2RzgftefJuxl0c18MgGzAtYYGRN0b1qfu
-	xZKREFKKC+
-X-Received: by 2002:a05:6a00:3cd6:b0:823:8a5:297f with SMTP id d2e1a72fcca58-82317da469cmr1995656b3a.16.1769153811409;
-        Thu, 22 Jan 2026 23:36:51 -0800 (PST)
+        bh=BGHQu6mG6lMqPEadRM+ZfBOS3CsIq7QGGssQ90tpvv4=;
+        b=Awz20QekRAPz+sXEXETk/9EOzxJyWJm5LFa0xVQXDXbJ4gbGqSbrD2zv1qHGCld+rM
+         Wy99h4kewXarODAiL3j0RGdLS/4D95Rp/wh97WdQeTHuX5FIPCo14OGTWu4Ufm7ejBKH
+         mcOgEB28AxFDATh04JVDleEijRajspQNtKqSrJfi7yWuF1E6lqOE+MOfKGzOnbVjgPZT
+         2fCnrQCbiLcGX08RUZI9wWCkgR9Q29Fs22ggyua7Mhr6xKL1hUu/iZya0ileWXcx8WUU
+         sxOEDpuNBr3/sW+0/W5febUZHftCJXTxNM8ShXhjp4g8IX1sIHDMv9VXSO1g556T5MNE
+         tbhg==
+X-Forwarded-Encrypted: i=1; AJvYcCVQTX+UCvAyzJbRW+MTVhg2oMXxLOihm50NsrcP9wCo28RffZl7L+IQ6Ck0A94U7MmCnLs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpIHLugez+MRV7CT1jdQ9WIx8GcOPeZtb2P33ESB4eK2I6cu1+
+	ye/zKTBn09YvUC/MTN0BLzdlwDm6ugVbRL8WX6K0SxLuB3Y9YqeF58Q7
+X-Gm-Gg: AZuq6aLGW98/fHy9oCwNZN729cquCVcpe7+N+6LnsddDybdxlofjUUvVeldz4zvTz4z
+	zdX4SvSCcagU7i5IBdqYfxFfPd/TzLMqQ55oPU3FUDRP+DJtNteSkqVxRPWTRj5WTUM3AwbDTNu
+	o4zGF25MiwktqRxxz6e07l9VG2q4O0AepSPn8UQ0JFVD+Dxzz7om1yjAvbHPbl7hXhIJHbtX9gy
+	EYKsvjp0FXpjafuFPRCiPrQ5cCtyecRQE8eb9dWP+ywt285eDDWoATzwdN4Dn9lDh8xssK8VyCf
+	wuXm/2W4T8tH9GqeBem4Szq7+IeCgCG1u85Nl9Zk+fITAmPNXzVDtA6LJGFrFgh+vQqO2Ia9cRP
+	rk0p7gGtX81it7Lh3Hv0lPiAq5250mfsMK+5EUx8DMwj3lsTA+iNzARYwA2IMoNOnNcOTw3dlWc
+	j2edCdUVH+
+X-Received: by 2002:a05:6a00:3c87:b0:823:bbb:76fb with SMTP id d2e1a72fcca58-82317ecf202mr1711766b3a.46.1769153820320;
+        Thu, 22 Jan 2026 23:37:00 -0800 (PST)
 Received: from 7940hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231876fd1fsm1334205b3a.69.2026.01.22.23.36.42
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231876fd1fsm1334205b3a.69.2026.01.22.23.36.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 23:36:50 -0800 (PST)
+        Thu, 22 Jan 2026 23:36:59 -0800 (PST)
 From: Menglong Dong <menglong8.dong@gmail.com>
 X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: andrii@kernel.org
@@ -83,9 +83,9 @@ Cc: daniel@iogearbox.net,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v11 08/12] libbpf: add fsession support
-Date: Fri, 23 Jan 2026 15:35:28 +0800
-Message-ID: <20260123073532.238985-9-dongml2@chinatelecom.cn>
+Subject: [PATCH bpf-next v11 09/12] bpftool: add fsession support
+Date: Fri, 23 Jan 2026 15:35:29 +0800
+Message-ID: <20260123073532.238985-10-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260123073532.238985-1-dongml2@chinatelecom.cn>
 References: <20260123073532.238985-1-dongml2@chinatelecom.cn>
@@ -97,55 +97,25 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add BPF_TRACE_FSESSION to libbpf.
+Add BPF_TRACE_FSESSION to bpftool.
 
 Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 ---
-v10:
-- split the modification to bpftool to a separate patch
+ tools/bpf/bpftool/common.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-v5:
-- remove the handling of BPF_TRACE_SESSION in legacy fallback path for
-  BPF_RAW_TRACEPOINT_OPEN
-- use fsession terminology consistently
----
- tools/lib/bpf/bpf.c    | 1 +
- tools/lib/bpf/libbpf.c | 3 +++
- 2 files changed, 4 insertions(+)
-
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 21b57a629916..5846de364209 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -794,6 +794,7 @@ int bpf_link_create(int prog_fd, int target_fd,
- 	case BPF_TRACE_FENTRY:
- 	case BPF_TRACE_FEXIT:
- 	case BPF_MODIFY_RETURN:
-+	case BPF_TRACE_FSESSION:
- 	case BPF_LSM_MAC:
- 		attr.link_create.tracing.cookie = OPTS_GET(opts, tracing.cookie, 0);
- 		if (!OPTS_ZEROED(opts, tracing))
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index bbcfd72b07d5..0c8bf0b5cce4 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -115,6 +115,7 @@ static const char * const attach_type_name[] = {
- 	[BPF_TRACE_FENTRY]		= "trace_fentry",
- 	[BPF_TRACE_FEXIT]		= "trace_fexit",
- 	[BPF_MODIFY_RETURN]		= "modify_return",
-+	[BPF_TRACE_FSESSION]		= "trace_fsession",
- 	[BPF_LSM_MAC]			= "lsm_mac",
- 	[BPF_LSM_CGROUP]		= "lsm_cgroup",
- 	[BPF_SK_LOOKUP]			= "sk_lookup",
-@@ -9859,6 +9860,8 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("fentry.s+",		TRACING, BPF_TRACE_FENTRY, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
- 	SEC_DEF("fmod_ret.s+",		TRACING, BPF_MODIFY_RETURN, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
- 	SEC_DEF("fexit.s+",		TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
-+	SEC_DEF("fsession+",		TRACING, BPF_TRACE_FSESSION, SEC_ATTACH_BTF, attach_trace),
-+	SEC_DEF("fsession.s+",		TRACING, BPF_TRACE_FSESSION, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
- 	SEC_DEF("freplace+",		EXT, 0, SEC_ATTACH_BTF, attach_trace),
- 	SEC_DEF("lsm+",			LSM, BPF_LSM_MAC, SEC_ATTACH_BTF, attach_lsm),
- 	SEC_DEF("lsm.s+",		LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_lsm),
+diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+index e8daf963ecef..8bfcff9e2f63 100644
+--- a/tools/bpf/bpftool/common.c
++++ b/tools/bpf/bpftool/common.c
+@@ -1191,6 +1191,7 @@ const char *bpf_attach_type_input_str(enum bpf_attach_type t)
+ 	case BPF_TRACE_FENTRY:			return "fentry";
+ 	case BPF_TRACE_FEXIT:			return "fexit";
+ 	case BPF_MODIFY_RETURN:			return "mod_ret";
++	case BPF_TRACE_FSESSION:		return "fsession";
+ 	case BPF_SK_REUSEPORT_SELECT:		return "sk_skb_reuseport_select";
+ 	case BPF_SK_REUSEPORT_SELECT_OR_MIGRATE:	return "sk_skb_reuseport_select_or_migrate";
+ 	default:	return libbpf_bpf_attach_type_str(t);
 -- 
 2.52.0
 
