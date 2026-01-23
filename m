@@ -1,245 +1,247 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906833EBF38
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 22:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769206937; cv=none; b=BfvpKNDiFQHBAl2pWWFR/Qgx/1hKyV0FWK1nTnAVRnexPCdb6219mubMYZl3H6J/aMDRkrXiez74sFzocPPPvFYRRgJxQL5Pem6C+gGod5O/4vTxc4R2V46AI4Ksk++/+TjTgdQEg9Sm60ymoixx+5XULwjZDZ/VtusPyFs3Ksk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769206937; c=relaxed/simple;
-	bh=z8IlIXh47dOFdPn/7YG8QvPpbpmFtqMaCCfJQd7NMlI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HMRDJ3yRk8fHFU+3Pf1wIaDe3wHsm7S1pK7d2EN/WEgA3Ok8nRXUTJB6lZDKBORB/l5lb0HW7EXVKtZfp+7pMK04NWMXkxPScADhHjAx/+KxhXixi08SFicTKU47zAHohmU+t5EzVak+qeNmgh9ZlV/wLdAA7PgJB2tlVbW8lxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eYShzJ0N; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAD1256C70
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 22:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769209056; cv=pass; b=CjJ4Ok8h03SX3csnOMMv60KBlp7jVXza01BRiGmB8e7fBPgAteaSYTA1rbffvH3BQisjiXE4IQNUdjonyz71PV/cax4WvmfXnUMOHunQQYwwXuV1rPkqq6QCLQsHF9X4epeFycgMaM2VzqrPO/OR7TutXw0pOpAC9NbhWMxI2qY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769209056; c=relaxed/simple;
+	bh=6v4rZ9oJpz8LUKiLodEbEuxsY/ZrUiOquPogvNms0iM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ww5yHxF7j57DmegEPJ5YehSFGAP0cm2C8VhTybkRa/9om6MSlYPM9VkXsM0uCA97vtJJaMbj3NoZv0fd3BDAiFqIpUGs67EtZNFCuMhl45s77lHe2VZYJfyvC1UpmFVaKThzLeuZrNaLuZpW3XUWVkv0Rv3Tg+r97qnfGPOhgYI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XW7fHD/w; arc=pass smtp.client-ip=209.85.215.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eYShzJ0N"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2b6fd5bec41so6414781eec.1
-        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 14:22:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XW7fHD/w"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c46d68f2b4eso1719076a12.2
+        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 14:57:34 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769209054; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lDhjkcf92Ji/xUYzs3jJuOVa2O52dX+RtVDmxsY8HJi//s0V/xaIZWV9a+NrXV27sF
+         L7HylgOFhGtCU6TO8iSvgBSP+0CJ3Yq9ShQZWN4kMUhCBAuOrRSIes36VDCEnYoublXd
+         gLgJsscHVBmWa5Rw0UeNShUp7vL2DH7hKYFoQGA6/h8HU9JiNWjivfdQB3hTPMpRmXYj
+         TgNDLzehqO/pMgbhXDKEFfza/w9cKfYbxh40c5fMfaZ6cRNCbEsPk7M6LzgQ3u94ELnA
+         rUxIsorvmfs5v+m1bz3jQUmYNRU2U+66Y1i7HuhDg2qhjuqvwHMBDLmKZWesjqnw4AXl
+         kSdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4j31uslQqJ9kDCp8Ht1kV/SN1veEZSVwfHGiVKs76y8=;
+        fh=H01VLxbrqcy8mprO7lU4+jp9vUzqwQgRL4MzmsWHtDA=;
+        b=dDTZru7yHNjJUiaoslreIue8cRCEEjVENf6n4ajfpCt3jywiNxeteF6WUwz5zzj/1M
+         dMA6QLvBO/Oh9oCjqOUDVw14e6ZY0UI49ViaXGSNHtGCnSJfmU+ZtIBuVBEK8gX3qwCD
+         KXj8YSXPHh6yv9YAuLKbDjfmhS4vHECxqij20S5usO399W6z/6AQeQxkQgblgcnXNrDO
+         UfkVPwHYs6W5zkCUs6iGeo60eOmpvT1x10HN7biuwVenXkeBWMdLPvVZj4poF7800kDK
+         4hzQJePUEjPqw4N4uZRVmu+gk4a5H9R0K1OdAgg2btzBANwd/tnqTqZRCWnuFyXLu9pY
+         pESA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769206936; x=1769811736; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6q7jSvteo768fX3RDKijF3HLXLbv8PUQY59d7KtxMqQ=;
-        b=eYShzJ0NKYgqmKJALOSfLBdWjGBqv+JK3M3Rw92rVnjsX6iXd1mxenFMNXMmxPNDFf
-         0lP2HD8YTS3Mxjmekwfp9Zi1qNjBkuk/XqciWcHhmXJc6PlRsvQIARuPhW7F67OCW9dF
-         FnZAxN8XBzfZSrX2q+hrd6Yl8J9dKe2uIUJP4B8sbkzvIP98Ow+MPku8UvsY3rcSVjBI
-         B9bWCbybxKgFsB63uc7MkBdFFCRTvzvkKMG10xO9I2zL36DpfiJOp06gQTtjk80/f+rS
-         ofhVnsa052tTWgx/4nHrs2QwoeUrrTxOcYRaJK7NwhY49Za/kLr9NYu99X1z0s0vW6F0
-         lCdQ==
+        d=gmail.com; s=20230601; t=1769209054; x=1769813854; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4j31uslQqJ9kDCp8Ht1kV/SN1veEZSVwfHGiVKs76y8=;
+        b=XW7fHD/wk8H98YWft98bmxnvQdkfV3uYiQVlHQaL+kL9Kn+SAlKGgLMCZY+vOqncT2
+         c7sEQ/ZFPXH8G3eyIRTkxWjXQdxQNgfpXVaqXvj56B3hoTl9i9WMjJD0CL+Eocmx7Wl0
+         SYWQXhLSj7WwsuBwbGGEWeJZcXJgMJVCVeaEBPl9A22KoDX+ynkHX2vE/0WqDEV8HN69
+         7wJvt4SwMxcJa0ZOjnLfWIaLDCSaK5kzVlv4WzXmY2vsT34ezyNQsXu6spI0K5MO9YnZ
+         u9JklG2P9TTavpHWaPUHA4Licl63Kf6QKi0igUo22fIEmoyCSn2NKZWGyoX2QuaCGow2
+         zVbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769206936; x=1769811736;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6q7jSvteo768fX3RDKijF3HLXLbv8PUQY59d7KtxMqQ=;
-        b=fr/JekdVQMtc1VqTJ/Z9cxS8Tl1vEuXRthC5ENRWrUXmFXOgDjGaKOxrpebcG1uSyR
-         ouOT1wRTp/1EINP+TjDUGskU+lOlucccwgiGc5IxD5QKheaaoDyr3t4NFYUUtCmsmrBa
-         oNNQEBBTQ4EcMpnQpZK82qCDrEaFA1mx6XmgjtgBUISg/2J7LcTvSCPLotygoCFCM73t
-         Gttx0ydxqCDp+OLea78/nEJHwg45qP7rfodQ4MugScMUNY0Tu111awDAkC/tmZLMWt27
-         PNS+z+L8LwbiB8Awu4leFFgJOFUdWql4Nud6lCFuXXxq7OgB2voNQrEg+isngprJeQeX
-         T0uw==
-X-Forwarded-Encrypted: i=1; AJvYcCX2MSs+aPugyq+7fmSxBihZgKuYuNSi81cPRNQaNBXveR2jYIwT5+N8q0TaHYyG1OFZoBQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy1F6uH8rhKK0P+VxXjaq2pWvzVm3mn0WLG6mBTzyWX2UE5N1yj
-	TCbVomvRlPwH4DLOLJkMJAAxWFAmHMeKppgljt0899WfqDdmJO+zwNM9X3vpFA==
-X-Gm-Gg: AZuq6aL/Nw8ritlDwN3Zs9IAjPaym2bx3zhtF7Z3hNa2sbUkUQtaR4awf8lgc3lgz/p
-	XvU6OnDhj3e09pF2xKZQ9ffxjfrxITmhX1fRkbFDmsWtRUjvx/1RnFekTHoJgz3vzRghSprpslc
-	UhbqnjLKSgP7W4RZmoUl2xPaiFsk2HiF+/B3fkYmCHTrDAatdTrQhCOu9YqP1jVpq0NbQW3Sy0h
-	jIrulCCh/0BbtzXH80lGidonArdUO1urWRdvJxshPvLWx133cxpj/D9TsRlrgT6wnBssjtJujpB
-	TO0l2Quhsb+wpCCyNZ1eE3vvJomhRqAUrvhCTEI22q3AEjUhg+Os6qxI8eL4z544lTXuaTjqs1J
-	X41eM1grB+iDPVmlffBKf7mj2uh37Y5QF4F/DwT8RCQFQqboFmcyxZL0WNY9uZ58Esny/zkrpao
-	IGHHGaDby3PzSQW4dHdWnC
-X-Received: by 2002:a05:7300:230a:b0:2af:674e:bc73 with SMTP id 5a478bee46e88-2b74274cff4mr1359399eec.7.1769201226027;
-        Fri, 23 Jan 2026 12:47:06 -0800 (PST)
-Received: from [192.168.4.196] ([73.222.117.172])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b73a691b1esm4476320eec.3.2026.01.23.12.47.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 23 Jan 2026 12:47:05 -0800 (PST)
-Message-ID: <b90069a3-86b4-4fba-9ff3-fe5f6c4e425d@gmail.com>
-Date: Fri, 23 Jan 2026 12:47:02 -0800
+        d=1e100.net; s=20230601; t=1769209054; x=1769813854;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4j31uslQqJ9kDCp8Ht1kV/SN1veEZSVwfHGiVKs76y8=;
+        b=CX164GHUCM1lmEiArtcmsXdhKQ9OkSbCnRnz8aBALrIMBY32jSVKbILHZYrvt5wxcg
+         PrvX/dyqIvgO3H5P1YM0+2TDIxAznZeFsZvq5c6PuSvSUqXgXje7IM620DM2aGx0rTXb
+         vnSgrYFLRQc3nEVkQC4jq1AQB0jEL1pxy1xoTy2V6fML5scoh7tHc0Cj4ORm/XFUVRXA
+         //wWpTCBYvRaL3ySuri+FMjU/We81zuYkCqz/Y9S1gIBkCiK0t4G+ML2Auw11F+dTQcS
+         IMfSAxEuAsecCoa/vBuqeS4HBPaJiv8GBL7I9RKL/ZagJJ/sP5ki/hEWe0hubtKXTmql
+         xI3A==
+X-Forwarded-Encrypted: i=1; AJvYcCU8rE7/1gcyqBrAj+lqt2xJF1pv9DVJca9hYjq6VDc1K8GNRcsM7LqDodCYBzlEWmjgAuo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg7T3qQI+brbcDixiXtp1fmgtSSipFBEmlkhzVqiSy9fH+KMI7
+	756dF9yzks1FubpGy+GzGQIKm6Ou6aOcgzAmSRyOA0UwXRam8ZvjjI5c0D2ScI6Zp4NCVegWmL0
+	cXFkzIMvQpyRYCOzAZnlRvUMqM69ood4=
+X-Gm-Gg: AZuq6aLzfSmGZuJ7hOkRyJUwJsbyEMv6z4JBf+W9f8jj71hNjiq0u9lnT6o2nI06kMu
+	KNI9oz/y2ZOXMvA5BnbujO5FU6sqxRWsgNClw3PkBgzDrO5cNKMC4QyjwZfxml+9xIWsmr08rTq
+	Q5apDT5Qx8uf1fvo5pEvfdKGQARBIAQfhp+FjHtZeHYxCgE70tikHnqfDEEukIpSU7gKeGGbcAR
+	Hq8SpiTHx97cAbryeOQaLgCXkkRnFwKY86FzhOQuyUF25HFIZS+PLFwB3fGNpzA2uGijhcChg6w
+	0iikfCSUWCQ=
+X-Received: by 2002:a17:90b:57e6:b0:349:9d63:8511 with SMTP id
+ 98e67ed59e1d1-35368c42f49mr3571701a91.25.1769209054201; Fri, 23 Jan 2026
+ 14:57:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next v3 09/12] selftests/bpf: Add tests for
- memcg_bpf_ops
-To: Hui Zhu <hui.zhu@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Michal Hocko <mhocko@kernel.org>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Miguel Ojeda <ojeda@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>, Kees Cook <kees@kernel.org>,
- Tejun Heo <tj@kernel.org>, Jeff Xu <jeffxu@chromium.org>, mkoutny@suse.com,
- Jan Hendrik Farr <kernel@jfarr.cc>, Christian Brauner <brauner@kernel.org>,
- Randy Dunlap <rdunlap@infradead.org>, Brian Gerst <brgerst@gmail.com>,
- Masahiro Yamada <masahiroy@kernel.org>, davem@davemloft.net,
- Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
- Willem de Bruijn <willemb@google.com>, Jason Xing
- <kerneljasonxing@gmail.com>, Paul Chaignon <paul.chaignon@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Chen Ridong <chenridong@huaweicloud.com>,
- Lance Yang <lance.yang@linux.dev>, Jiayuan Chen <jiayuan.chen@linux.dev>,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, cgroups@vger.kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>, Geliang Tang <geliang@kernel.org>
-References: <cover.1769157382.git.zhuhui@kylinos.cn>
- <c44accaaaebfc32be13234f82b501a3852ba3f0f.1769157382.git.zhuhui@kylinos.cn>
-Content-Language: en-US
-From: JP Kobryn <inwardvessel@gmail.com>
-In-Reply-To: <c44accaaaebfc32be13234f82b501a3852ba3f0f.1769157382.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260123073532.238985-3-dongml2@chinatelecom.cn>
+ <d91544bd4b513290bf468386c0261f913b59b761c34405839c424f8eaf8b1d04@mail.kernel.org>
+ <2250332.irdbgypaU6@7940hx> <8632406.T7Z3S40VBb@7940hx>
+In-Reply-To: <8632406.T7Z3S40VBb@7940hx>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 23 Jan 2026 14:57:21 -0800
+X-Gm-Features: AZwV_QgjtKbg3xcVVs0fXgYTWRVrke_V4VqsUfD77JrusnPTgbwxconkivavg84
+Message-ID: <CAEf4BzabUj0APqROb7ibkEovoXVmxbiHq0kNAPWExpEfRmQwiw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v11 02/12] bpf: use the least significant byte
+ for the nr_args in trampoline
+To: Menglong Dong <menglong.dong@linux.dev>
+Cc: menglong8.dong@gmail.com, andrii@kernel.org, bot+bpf-ci@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com, 
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, 
+	davem@davemloft.net, dsahern@kernel.org, tglx@linutronix.de, mingo@redhat.com, 
+	jiang.biao@linux.dev, bp@alien8.de, dave.hansen@linux.intel.com, 
+	x86@kernel.org, hpa@zytor.com, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, ast@kernel.org, martin.lau@kernel.org, 
+	clm@meta.com, ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Hui,
+On Fri, Jan 23, 2026 at 1:21=E2=80=AFAM Menglong Dong <menglong.dong@linux.=
+dev> wrote:
+>
+> On 2026/1/23 16:29 Menglong Dong <menglong.dong@linux.dev> write:
+> > On 2026/1/23 16:07 bot+bpf-ci@kernel.org write:
+> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > index 41bbed6418b5..b3f912ad18ba 100644
+> > > > --- a/kernel/bpf/verifier.c
+> > > > +++ b/kernel/bpf/verifier.c
+> > >
+> > > [ ... ]
+> > >
+> > > > @@ -23779,12 +23781,13 @@ static int do_misc_fixups(struct bpf_veri=
+fier_env *env)
+> > > >                       eatype =3D=3D BPF_MODIFY_RETURN) {
+> > > >                           /* Load nr_args from ctx - 8 */
+> > > >                           insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF_R=
+EG_0, BPF_REG_1, -8);
+> > > > -                         insn_buf[1] =3D BPF_ALU64_IMM(BPF_LSH, BP=
+F_REG_0, 3);
+> > > > +                         insn_buf[1] =3D BPF_ALU64_IMM(BPF_AND, BP=
+F_REG_0, 0xFF);
+> > > > +                         insn_buf[2] =3D BPF_ALU64_IMM(BPF_LSH, BP=
+F_REG_0, 3);
+> > >
+> > > [ ... ]
+> > >
+> > > > -                         cnt =3D 6;
+> > > > +                         cnt =3D 7;
+> > > >                   } else {
+> > > >                           insn_buf[0] =3D BPF_MOV64_IMM(BPF_REG_0, =
+-EOPNOTSUPP);
+> > > >                           cnt =3D 1;
+> > > >                   }
+> > > >
+> > > >                   new_prog =3D bpf_patch_insn_data(env, i + delta, =
+insn_buf, cnt);
+> > >
+> > > [ ... ]
+> > >
+> > > >                   delta    +=3D cnt - 1;
+> > >
+> > > Note that the bpf_get_func_ret block above correctly updates delta af=
+ter
+> > > patching.
+> > >
+> > > > @@ -23808,12 +23811,15 @@ static int do_misc_fixups(struct bpf_veri=
+fier_env *env)
+> > > >
+> > > >                           /* skip 'void *__data' in btf_trace_##nam=
+e() and save to reg0 */
+> > > >                           insn_buf[0] =3D BPF_MOV64_IMM(BPF_REG_0, =
+nr_args - 1);
+> > > > +                         cnt =3D 1;
+> > > >                   } else {
+> > > >                           /* Load nr_args from ctx - 8 */
+> > > >                           insn_buf[0] =3D BPF_LDX_MEM(BPF_DW, BPF_R=
+EG_0, BPF_REG_1, -8);
+> > > > +                         insn_buf[1] =3D BPF_ALU64_IMM(BPF_AND, BP=
+F_REG_0, 0xFF);
+> > > > +                         cnt =3D 2;
+> > > >                   }
+> > > >
+> > > > -                 new_prog =3D bpf_patch_insn_data(env, i + delta, =
+insn_buf, 1);
+> > > > +                 new_prog =3D bpf_patch_insn_data(env, i + delta, =
+insn_buf, cnt);
+> > > >                   if (!new_prog)
+> > > >                           return -ENOMEM;
+> > > >
+> > > >                   env->prog =3D prog =3D new_prog;
+> > > >                   insn      =3D new_prog->insnsi + i + delta;
+> > > >                   goto next_insn;
+> > > >           }
+> > >
+> > > Should there be a "delta +=3D cnt - 1;" before assigning env->prog in=
+ this
+> > > bpf_get_func_arg_cnt block? When cnt is 2 (non-RAW_TP path), the prog=
+ram
+> > > grows by one instruction, but delta is not updated. This could cause
+> > > subsequent bpf_patch_insn_data() calls to use incorrect offsets.
+> > >
+> > > The bpf_get_func_arg block at the beginning of this patch has:
+> > >
+> > >     delta    +=3D cnt - 1;
+> > >     env->prog =3D prog =3D new_prog;
+> > >
+> > > And the bpf_get_func_ret block similarly has delta updated. But this
+> > > bpf_get_func_arg_cnt block goes directly to env->prog assignment with=
+out
+> > > updating delta.
+> >
+> > Ah, good point, I think this is a valid problem. The selftests didn't c=
+over
+> > this case, and I think I'd better to use bpf_get_func_arg() and bpf_get=
+_func_ret()
+> > in the exit path of fsession to cover it.
+>
+> Oh, the problem doesn't have much impact. The only impact
+> is that the verifier will check the "r0 &=3D 0xFF" instruction redundantl=
+y.
+>
+> I'll see if there is more comment before I send next version.
+>
 
-On 1/23/26 1:00 AM, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
-> 
-> Add a comprehensive selftest suite for the `memcg_bpf_ops`
-> functionality. These tests validate that BPF programs can correctly
-> influence memory cgroup throttling behavior by implementing the new
-> hooks.
-> 
-> The test suite is added in `prog_tests/memcg_ops.c` and covers
-> several key scenarios:
-> 
-> 1. `test_memcg_ops_over_high`:
->     Verifies that a BPF program can trigger throttling on a low-priority
->     cgroup by returning a delay from the `get_high_delay_ms` hook when a
->     high-priority cgroup is under pressure.
-> 
-> 2. `test_memcg_ops_below_low_over_high`:
->     Tests the combination of the `below_low` and `get_high_delay_ms`
->     hooks, ensuring they work together as expected.
-> 
-> 3. `test_memcg_ops_below_min_over_high`:
->     Validates the interaction between the `below_min` and
->     `get_high_delay_ms` hooks.
-> 
-> The test framework sets up a cgroup hierarchy with high and low
-> priority groups, attaches BPF programs, runs memory-intensive
-> workloads, and asserts that the observed throttling (measured by
-> workload execution time) matches expectations.
-> 
-> The BPF program (`progs/memcg_ops.c`) uses a tracepoint on
-> `memcg:count_memcg_events` (specifically PGFAULT) to detect memory
-> pressure and trigger the appropriate hooks in response. This test
-> suite provides essential validation for the new memory control
-> mechanisms.
-> 
-> Signed-off-by: Geliang Tang <geliang@kernel.org>
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> ---
-[..]
-> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
-> new file mode 100644
-> index 000000000000..9a8d16296f2d
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
-> @@ -0,0 +1,537 @@
-[..]
-> +
-> +static void
-> +real_test_memcg_ops_child_work(const char *cgroup_path,
-> +			       char *data_filename,
-> +			       char *time_filename,
-> +			       int read_times)
-> +{
-> +	struct timeval start, end;
-> +	double elapsed;
-> +	FILE *fp;
-> +
-> +	if (!ASSERT_OK(join_parent_cgroup(cgroup_path), "join_parent_cgroup"))
-> +		goto out;
-> +
-> +	if (env.verbosity >= VERBOSE_NORMAL)
-> +		printf("%s %d begin\n", __func__, getpid());
-> +
-> +	gettimeofday(&start, NULL);
-> +
-> +	if (!ASSERT_OK(write_file(data_filename), "write_file"))
-> +		goto out;
-> +
-> +	if (env.verbosity >= VERBOSE_NORMAL)
-> +		printf("%s %d write_file done\n", __func__, getpid());
-> +
-> +	if (!ASSERT_OK(read_file(data_filename, read_times), "read_file"))
-> +		goto out;
-> +
-> +	gettimeofday(&end, NULL);
-> +
-> +	elapsed = (end.tv_sec - start.tv_sec) +
-> +		  (end.tv_usec - start.tv_usec) / 1000000.0;
-> +
-> +	if (env.verbosity >= VERBOSE_NORMAL)
-> +		printf("%s %d end %.6f\n", __func__, getpid(), elapsed);
-> +
-> +	fp = fopen(time_filename, "w");
-> +	if (!ASSERT_OK_PTR(fp, "fopen"))
-> +		goto out;
-> +	fprintf(fp, "%.6f", elapsed);
-> +	fclose(fp);
-> +
-> +out:
-> +	exit(0);
-> +}
-> +
+Let's still fix the problem. Just go ahead and resubmit (with the fix
+and improved test).
 
-[..]
+pw-bot: cr
 
-> +static void real_test_memcg_ops(int read_times)
-> +{
-> +	int ret;
-> +	char data_file1[] = "/tmp/test_data_XXXXXX";
-> +	char data_file2[] = "/tmp/test_data_XXXXXX";
-> +	char time_file1[] = "/tmp/test_time_XXXXXX";
-> +	char time_file2[] = "/tmp/test_time_XXXXXX";
-> +	pid_t pid1, pid2;
-> +	double time1, time2;
-> +
-> +	ret = mkstemp(data_file1);
-> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
-> +		return;
-> +	close(ret);
-> +	ret = mkstemp(data_file2);
-> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
-> +		goto cleanup_data_file1;
-> +	close(ret);
-> +	ret = mkstemp(time_file1);
-> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
-> +		goto cleanup_data_file2;
-> +	close(ret);
-> +	ret = mkstemp(time_file2);
-> +	if (!ASSERT_GT(ret, 0, "mkstemp"))
-> +		goto cleanup_time_file1;
-> +	close(ret);
-> +
-> +	pid1 = fork();
-> +	if (!ASSERT_GE(pid1, 0, "fork"))
-> +		goto cleanup;
-> +	if (pid1 == 0)
-> +		real_test_memcg_ops_child_work(CG_LOW_DIR,
-> +					       data_file1,
-> +					       time_file1,
-> +					       read_times);
 
-Would it be better to call exit() after real_test_memcg_ops_child_work()
-instead of within it? This way the fork/exit/wait logic is contained in
-the same scope making the lifetimes easier to track. I had to go back
-and search for the call to exit() since at a glance this function
-appears to proceed to call fork() and waitpid() from within both parent
-and child procs (though it really does not).
+> Thanks!
+> Menglong Dong
+>
+> >
+> > Will fix it in the next version.
+> >
+> > Thanks!
+> > Menglong Dong
+> >
+> > >
+> > >
+> > > ---
+> > > AI reviewed your patch. Please fix the bug or email reply why it's no=
+t a bug.
+> > > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/R=
+EADME.md
+> > >
+> > > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21=
+278745581
+> > >
+> >
+> >
+> >
+> >
+> >
+> >
+>
+>
+>
+>
