@@ -1,319 +1,242 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A904A336EC6
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 00:38:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082DF34F461
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 00:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769128719; cv=pass; b=af7BkM7xAK5Dp5a3Sqvl3C9iy8l08cxyprgmJ5BwBFNUHjIqzvKTAgUDPviq9qtnyhigcM18aQdYPrTCGQHu/VBjQ+7jAStBPGMv8y16wCZqOqmbLVf9fIFdP5aHHsnvJSN53SSaTa9fToSvofgWX51W5AS93DhrLw3c/K11RZs=
+	t=1769129637; cv=pass; b=hISxqvpKoI/gFRHSZCNiw2aDwiGUigS5qX5jFhcFCKcQXFtlv/5E3AqOacL3XsQoyE6fbMObHZPjkLdEixafHYSAaPgkL6uIGljrvcRteouW/00EGJZRxw3o+JirW6uB/EqOfqTg7l7T+cvn98BzYSQ+uK7HX4FWOKB/EMGrU9w=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769128719; c=relaxed/simple;
-	bh=EQN+iIM8+dm37iZHB7GD4DOloPZVK3vMmDu9SRdIhIQ=;
+	s=arc-20240116; t=1769129637; c=relaxed/simple;
+	bh=yBMXOwcpjCZoufdlj1pFQsMJaO1vK6MgX5cAbS0lKxY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bVmEdU+8eJANCtcsYtV0v8OnN46AK+bryzjdKEEWNGBcFz/lZn2rYa62FMA4ya+uvjhQqbGgRhCzUEwZ3kf4Jsh136lSgg+xSYwnjQgYy8Vi7ln+4Os0g+X4IhFlYEe5YjoyxcPVeehMGIWe65iRTkXlbmmjZ9y6b1LxdYic3YA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fofY/QnG; arc=pass smtp.client-ip=209.85.215.178
+	 To:Cc:Content-Type; b=pjq0yhouSF4wECt3YuehnetOnw9JbUF1cFdvrK+ujra86aYBxfrJZE6iOO5EHN94Or64h6Yckbt3Mbiw0OR3okWo8YdSmAtXQRYK3Z5kw5YUowjCfb3+CvYlaOR5K70wbAzTR6VcVPCP9RQGEBfCgSzuaDmyVm3paXXpZnvKyx8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mn0kQ2YS; arc=pass smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fofY/QnG"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c2dc870e194so668316a12.2
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:38:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769128709; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mn0kQ2YS"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2a09d981507so10849795ad.1
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 16:53:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769129628; cv=none;
         d=google.com; s=arc-20240605;
-        b=gJuasu54JMNsituDNRU3hH3PYMK/ziOYn8uUWjY48c0496iXLjfz/BTNCa6ExRj9F0
-         9QMBgF0H/DP76H+AaSJc+fbvg191dFhQhB2vtnd2GJMEQmLI8CebdKVvPyhFya9gpBVx
-         kRJwMQt3nU6igqNe0nWsxG11dNbTRHiIJdA9WE0EFjtdPb8cmIE7hyZRVITnHCchEonq
-         kiJXGSrZKpV9p3gm6q0hcwf1qfOhbrA4/dKcn3tsVsHNBhs3ct1dDgu5hyPzBZ/zg++i
-         MSlJztqHj5C0ytsa1J3MI7y4Yq5zL7ltkjPjqbs47IekKlmsqkoTphKSA6I5nGB6/h1z
-         jlJg==
+        b=Z1LIiRG/8anVmx6bWum4mLf4ku0MQdThnvCxG595IYtbv+ZNHajw/foGWZcdruX+XM
+         P8MjWOb7JGTp57tut2SyI0l2wJIjmm8Tth67MHpWk4HzCu7BaYooOzKOoNTh84IRpK/W
+         TGCqoLffhq/PZNF2erQ5u3ArL7fzqq8ZFiQglMBIpC6r3VpZBG6zg73LaS/W7yanSBz1
+         +6T9Crqejqv1s1o2RP6kMJcAgQ0qxGXDSwo4rC9SiIxy056fyl2/TctwpBVO9KUz8I8z
+         zZ98YQm9rB7sGiQl/Wgjyg3iSiIrGkgESFI7vpVp0+TuYq6ghCxfHMLVkXwsLK4esZTy
+         KCWw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=rnmdPKuoPhsIINyfYoC1nWb1eqqRXOyPg3w53hnHIow=;
-        fh=sDIk7vPsBCVo3MfwDcALPAcy+FaACR0PI9K73Zkvkvc=;
-        b=UlASBXSNzBZXmqiXk7xBpHrs+7TDZI+hfA86oSHeV03ZczRDkH4VJokShmHHfvaO1J
-         6A/VLN2f5d9Xl7lQS7AuG9pTblO0ZH+N0YUVLeYyYRpxsKmXly71RZ05S8M5XjqcHEyf
-         WVkEfX389b5LABt9BTmc7aiuRUbLTvTlriXDaVpU+GkGDlS9LU9LWzs1iFiA5zo/Isky
-         5wQefwpptB76SfzL9T2tl8mkQcnzrF7p+QcZSVHVqQZwUfBsHVDNN11i41tpYPpHV3Ta
-         j5+QZ64onfvZEcYT2ra9F85T65+rj9UF3OfEYFHLxyTIFK252dVG2a2esjsNbDHUb/tg
-         bd/A==;
+        bh=0udLKwql0iZ1SIidaCEnZjm9GhWInp/dfA55RalANy8=;
+        fh=iyIh3tiaN/pTCZHwzDN2Emw2Zfr0RZtTUCw7DgIPD2U=;
+        b=OhWoJx4kJdi5YATLyUahjorW+oQFrZQDKYLHYCMpJ7utml6WHS94JaHJZWaFiAs8L7
+         iy4c5OeXW1B0Q4BaC2l/J9paN1vmzLtMVzB3IQSVii8GbidPHHp7gNl1fQD0GoWAZLKG
+         1L0Cny310t6Ok26VSsVwLjzHZ9zYwD9frgZ4OQsToVL/809PDRJK5SED4sEkYsgfozXS
+         VU62N7XBF0/GJ+FwPrHho2aKfJ4fzfkZSsMp09+YoQHVRihhxZJNLl0PDvdjFwd1InhB
+         hcvBNYdfcChllVsG0SsO96gqzQKuy4vkqgWNhnrH6sc4a3A2FqRwxqIY61wozP3sfUCw
+         nWiQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769128709; x=1769733509; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769129628; x=1769734428; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rnmdPKuoPhsIINyfYoC1nWb1eqqRXOyPg3w53hnHIow=;
-        b=fofY/QnGXNsqtldx8i0PKqpGn0kWgvRy7lQ2ypKQQidxYauRWp5ma/aQD3iftcf0ub
-         iXTKggjUQP6ht4pXkJEYmNXM7Y5sSjGtSjyL5sJGukZxUPy86m4gOHhocThbyOEHoeP4
-         02RJKDbC9Z43VhUL779lFZcNiUGfwHfrrTdovZQh3a6EwhZcRU6fKAT7uHMQaeCBzU/X
-         p31cyGfi+x0NeuOj4Z7qR9aUpHBmuchRrirg+BduRKZ3m1tgAoXS/QyZFjp7aJ8usT7t
-         CYfgc8grDgnbGV0rMZP4YDBdiSEjvX8zwQynRhoyyY39ed8ISduwQ4lwyvn4ZdMX1Lu2
-         2Zbg==
+        bh=0udLKwql0iZ1SIidaCEnZjm9GhWInp/dfA55RalANy8=;
+        b=Mn0kQ2YSe+Cnxf4NF5MddlWv1GorlD3WUAVEN2eT8o9DjsAFWLEMladCbDtKpMkKjE
+         aXe2OOaOlK6H3G/vdqmWwevrjzgZmsYyUQXIamHW+xtMFt5R14gBOdOOokd4OTL0gbL4
+         pDf2/+tKC8LDVU8IlVPRf/IWMAx+HMqLPn5QkUXXwtOYn0PWh4MRL2P8wzINscIwjweK
+         SZg8cOBhXa2UTCkXgsgzZEtKy8H9EZF4oGUaTxlrsguWlMyscc8U8lzuybAKr6weNLiK
+         WaufEs8h9KlAlopbrv/wGvltSd/MwK4ICnIw96tP3NQeEAzfkQKI5KC3aHk9qDAu4K//
+         QNtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769128709; x=1769733509;
+        d=1e100.net; s=20230601; t=1769129628; x=1769734428;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rnmdPKuoPhsIINyfYoC1nWb1eqqRXOyPg3w53hnHIow=;
-        b=hZzc+zn865m/wVMIFlgcpnA8dPrhs8AovQ/Rf5jread2Z4u8xMTlkbOojGJa0Du21n
-         xUbsd714JChSaNCZpn6KsBTZfOKBqDjr4Uf092Dw3wezUt8C18b9xzzT1F3JzYXfkFis
-         qai+dQ/Oo72BnLMYxTxWOIDSh8d++HLj2agCjiS2ohCh9QRNt4BeSCoQ+gaoRNRBZptX
-         6Zhl00x7+xkX6nRNzBqb29J5qK8a9rFBq4kwtbOA6NFrCzV5RwbFu3L3z3L9qUOguMK+
-         95Bct/JTQB9XHqgM47/kv7kpTJaYjPSoiPK9PmZfhnLeFQp3VeYrclkl4ZfJXS/caT2Z
-         rOJg==
-X-Forwarded-Encrypted: i=1; AJvYcCW10WixWwpxl3xlMEZwBLh0bh2uT54dRgjhhLEMoBxndyJdWfNbz1NmRU8pe38y4wu453E=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyx5o6pGjIFHBsOJDvadhuQBIWlOUk2xjD0Q6hSN22rnG+FDxqt
-	OSuZ41+jDn/2giQXdowJafOYJjN4XRhxqLcZNv7vF7ZvhoKOA/in1zBMZ3/uXn1jNMckXN/sMWi
-	km7qTe+PATn/XkVlB//wVPewvowKdOjw=
-X-Gm-Gg: AZuq6aJZLzRJcMc4mA523k+h4QlzCv/+gp9AfLlwhg6cVH0wKnMPXH7anX/g4nVxLU0
-	PX04YcYzEeLmwpAuaNGV2jfPO9tWF8eeVzNcAEV8y5fvYZC/4QO9A6Cm98BPsq8RQ08KCYc6Ek6
-	jYgexMWjnkxJbTnQ/exXWk3P0VC4tvpIiSGMd9K0geuxg1yVJugKtMuPWulRB++EoMJLkzzFjqF
-	pWDFCH/rsoiSxediGgsKBsxHJISuV68T/OBUcEA7BlrAMWY+0gTCnHSY6vfUptjXfB8bTBYX37P
-	NFhjgmuTaCc=
-X-Received: by 2002:a05:6a20:9d94:b0:35e:3d4b:4cfe with SMTP id
- adf61e73a8af0-38e6f7be6ccmr1138557637.39.1769128708578; Thu, 22 Jan 2026
- 16:38:28 -0800 (PST)
+        bh=0udLKwql0iZ1SIidaCEnZjm9GhWInp/dfA55RalANy8=;
+        b=T4ZFZ5C2zvQYn+OPgiX1+WN04Vn79ToIMYNtteBw2h/lwHVFUXPtciEnN89DiTrW2j
+         aemCuPOd2+Bzg9AUJmQLhYU22/kx/sWyUqUazFzXWPYTm6l4sXv5V7CNRnE3HchLX8Os
+         m7zScKlWiGaoyLbg9oHSG9dqppSxAxzcFRiIcwk/RIOtZ0lV4KCxByZVGGOrvEB4vIyM
+         ++Nif5ACcq6+RvsSHKGVZ9K4fx7BGmpkRSDhymsxUq6eFvmG5PI+UZRhmqBIr69UUH7g
+         YmEkr6yBG7pA0+yv2JeUP5QLPgGQOnD2R/3tRCSGQyoRbboLOPY2b7iupqJIQZ93jMdO
+         MxHA==
+X-Gm-Message-State: AOJu0YwnrfhxygHM6EjOda9izAs1sqso9A6eMoE1YWKjOM1+GugPKrw2
+	4D8eyJXiGpxYSvq+3R1DTba0Ugk5piPL4FQE5naN3J4JzRXSC1k9PwvteU07bCNcXe3iB4i2UI/
+	s2Np69atSbz/E2jTr78SaibCd4XZUcBU=
+X-Gm-Gg: AZuq6aIFroy+W/8c8OW5YzYlT8XIr2E7S3u7xYATP7yINkIKXFxO9fsn7ITMx2NLy5i
+	krpHITgD4KVI0PKnGE1wl+Usz6yaiYwWw1ptuRTBVVuXf29PQR81mlOU/dnREduv30i6eUzab9h
+	MKZ1zc0TVVgem9b/yoZBmzl1wpPfuESrpyX7hzAaLf7xQmcaEnu38O8c8KHdO/2u8LgjxkgscUD
+	w9ymbJDWMD90XIHNWXYY9fbQ86Li/eo5ROo3x3dk+6YkiUX20KX9qsiGqQhB4KsHo7kSJXkHRm1
+	Bz161SbI9ZM=
+X-Received: by 2002:a17:903:f8e:b0:2a7:9163:8e60 with SMTP id
+ d9443c01a7336-2a7fe80fddfmr9079865ad.23.1769129627880; Thu, 22 Jan 2026
+ 16:53:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251217093326.1745307-1-chen.dylane@linux.dev> <20251217093326.1745307-3-chen.dylane@linux.dev>
-In-Reply-To: <20251217093326.1745307-3-chen.dylane@linux.dev>
+References: <20260120152424.40766-1-leon.hwang@linux.dev> <20260120152424.40766-3-leon.hwang@linux.dev>
+In-Reply-To: <20260120152424.40766-3-leon.hwang@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 22 Jan 2026 16:38:15 -0800
-X-Gm-Features: AZwV_QifoUzy0XFoMYGDQsg9TBiqXuPA6VKirh7287oD12DKmY7OOfbENLMadiI
-Message-ID: <CAEf4BzYEsKQxT--=oQELZ7g402FWpEuDEmxcovZXkck+k2U8HQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 2/2] bpf: Hold the perf callchain entry until
- used completely
-To: Tao Chen <chen.dylane@linux.dev>
-Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
-	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
-	kan.liang@linux.intel.com, song@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
+Date: Thu, 22 Jan 2026 16:53:34 -0800
+X-Gm-Features: AZwV_QhVQ3_tmlZbyi2JgIuf-ozS36BC6ziWbq4VPwpzBkySzzimkp-0gd_aROE
+Message-ID: <CAEf4BzYuZsFC-DPhhzLcyFTahucHP59+6kAc0sooY2g+SqgrEA@mail.gmail.com>
+Subject: Re: [RESEND PATCH bpf-next v6 2/9] libbpf: Add support for extended
+ bpf syscall
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
+	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
+	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
+	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
+	Rong Tao <rongtao@cestc.cn>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 17, 2025 at 1:34=E2=80=AFAM Tao Chen <chen.dylane@linux.dev> wr=
-ote:
+On Tue, Jan 20, 2026 at 7:26=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> As Alexei noted, get_perf_callchain() return values may be reused
-> if a task is preempted after the BPF program enters migrate disable
-> mode. The perf_callchain_entres has a small stack of entries, and
-> we can reuse it as follows:
+> To support the extended BPF syscall introduced in the previous commit,
+> introduce the following internal APIs:
 >
-> 1. get the perf callchain entry
-> 2. BPF use...
-> 3. put the perf callchain entry
+> * 'sys_bpf_ext()'
+> * 'sys_bpf_ext_fd()'
+>   They wrap the raw 'syscall()' interface to support passing extended
+>   attributes.
+> * 'probe_sys_bpf_ext()'
+>   Check whether current kernel supports the BPF syscall common attributes=
+.
 >
-> And Peter suggested that get_recursion_context used with preemption
-> disabled, so we should disable preemption at BPF side.
->
-> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 > ---
->  kernel/bpf/stackmap.c | 68 +++++++++++++++++++++++++++++++++++--------
->  1 file changed, 56 insertions(+), 12 deletions(-)
+>  tools/lib/bpf/bpf.c             | 32 ++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/features.c        |  8 ++++++++
+>  tools/lib/bpf/libbpf_internal.h |  3 +++
+>  3 files changed, 43 insertions(+)
 >
+> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+> index 21b57a629916..ed9c6eaeb656 100644
+> --- a/tools/lib/bpf/bpf.c
+> +++ b/tools/lib/bpf/bpf.c
+> @@ -69,6 +69,38 @@ static inline __u64 ptr_to_u64(const void *ptr)
+>         return (__u64) (unsigned long) ptr;
+>  }
+>
+> +static inline int sys_bpf_ext(enum bpf_cmd cmd, union bpf_attr *attr,
+> +                             unsigned int size,
+> +                             struct bpf_common_attr *attr_common,
+> +                             unsigned int size_common)
+> +{
+> +       cmd =3D attr_common ? (cmd | BPF_COMMON_ATTRS) : (cmd & ~BPF_COMM=
+ON_ATTRS);
+> +       return syscall(__NR_bpf, cmd, attr, size, attr_common, size_commo=
+n);
+> +}
+> +
+> +static inline int sys_bpf_ext_fd(enum bpf_cmd cmd, union bpf_attr *attr,
+> +                                unsigned int size,
+> +                                struct bpf_common_attr *attr_common,
+> +                                unsigned int size_common)
+> +{
+> +       int fd;
+> +
+> +       fd =3D sys_bpf_ext(cmd, attr, size, attr_common, size_common);
+> +       return ensure_good_fd(fd);
+> +}
+> +
+> +int probe_sys_bpf_ext(void)
+> +{
+> +       const size_t attr_sz =3D offsetofend(union bpf_attr, prog_token_f=
+d);
+> +       union bpf_attr attr;
+> +
+> +       memset(&attr, 0, attr_sz);
+> +       /* This syscall() will return error always. */
 
-I took a bit closer look at these changes and I'm a fan of the
-particular implementation, tbh. It's a bit of a maze how all these
-different call chain cases are handled, so I might be missing
-something, but I'd address this a bit differently.
+I'll cite myself from the last review:
 
-First, instead of manipulating this obscure rctx as part of interface,
-I'd record rctx inside the perf_callchain_entry itself, and make sure
-that get_callchain_entry does have any output arguments.
-put_callchain_entry() would then accept perf_callchain_entry reference
-and just fetch rctx from inside it.
+> But fd should really not be >=3D 0, and if it is -- it's some problem,
+> so I'd return an error in that case to keep us aware, which is why I'm
+> saying I'd just return inside if (fd >=3D 0) { }
 
-Then instead of open-coding get_perf_callchain by exposing
-__init_perf_callchain_ctx, __get_perf_callchain_kernel, and
-__get_perf_callchain_user, can't we have __get_perf_callchain() which
-will accept perf_callchain_entry as an input and won't do get/put
-internally. And then existing get_perf_callchain() will just do get +
-__get_perf_callchain + put, while BPF-side code will do it's own get
-(with preemption temporarily disabled), will fetch callstack in one of
-a few possible ways, and then put it (unless callchain_entry is coming
-from outside, that trace_in thing).
-
-It's close to what you are doing, but I don't think anyone likes those
-exposed __init_perf_callchain_ctx + __get_perf_callchain_kernel +
-__get_perf_callchain_user. Can't we avoid that? (and also not sure we
-need add_mark inside the ctx itself, do we?)
+I didn't say let's just ignore syscall return with (void) cast and
+happily check errno no matter what, did I? Drop the comment, and
+handle fd >=3D 0 case explicitly, please.
 
 pw-bot: cr
 
-
-
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index da3d328f5c1..3bdd99a630d 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -210,13 +210,14 @@ static void stack_map_get_build_id_offset(struct bp=
-f_stack_build_id *id_offs,
->  }
->
->  static struct perf_callchain_entry *
-> -get_callchain_entry_for_task(struct task_struct *task, u32 max_depth)
-> +get_callchain_entry_for_task(int *rctx, struct task_struct *task, u32 ma=
-x_depth)
->  {
->  #ifdef CONFIG_STACKTRACE
->         struct perf_callchain_entry *entry;
-> -       int rctx;
->
-> -       entry =3D get_callchain_entry(&rctx);
-> +       preempt_disable();
-> +       entry =3D get_callchain_entry(rctx);
-> +       preempt_enable();
->
->         if (!entry)
->                 return NULL;
-> @@ -238,8 +239,6 @@ get_callchain_entry_for_task(struct task_struct *task=
-, u32 max_depth)
->                         to[i] =3D (u64)(from[i]);
->         }
->
-> -       put_callchain_entry(rctx);
-> -
->         return entry;
->  #else /* CONFIG_STACKTRACE */
->         return NULL;
-> @@ -320,6 +319,34 @@ static long __bpf_get_stackid(struct bpf_map *map,
->         return id;
->  }
->
-> +static struct perf_callchain_entry *
-> +bpf_get_perf_callchain(int *rctx, struct pt_regs *regs, bool kernel, boo=
-l user,
-> +                      int max_stack, bool crosstask)
-> +{
-> +       struct perf_callchain_entry_ctx ctx;
-> +       struct perf_callchain_entry *entry;
-> +
-> +       preempt_disable();
-> +       entry =3D get_callchain_entry(rctx);
-> +       preempt_enable();
-> +
-> +       if (unlikely(!entry))
-> +               return NULL;
-> +
-> +       __init_perf_callchain_ctx(&ctx, entry, max_stack, false);
-> +       if (kernel)
-> +               __get_perf_callchain_kernel(&ctx, regs);
-> +       if (user && !crosstask)
-> +               __get_perf_callchain_user(&ctx, regs, 0);
-> +
-> +       return entry;
+> +       (void) syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS, &attr,=
+ attr_sz, NULL,
+> +                      sizeof(struct bpf_common_attr));
+> +       return errno =3D=3D EFAULT;
 > +}
 > +
-> +static void bpf_put_perf_callchain(int rctx)
-> +{
-> +       put_callchain_entry(rctx);
-> +}
-> +
->  BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, ma=
-p,
->            u64, flags)
+>  static inline int sys_bpf(enum bpf_cmd cmd, union bpf_attr *attr,
+>                           unsigned int size)
 >  {
-> @@ -328,20 +355,25 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs,=
- struct bpf_map *, map,
->         struct perf_callchain_entry *trace;
->         bool kernel =3D !user;
->         u32 max_depth;
-> +       int rctx, ret;
->
->         if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
->                                BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID=
-)))
->                 return -EINVAL;
->
->         max_depth =3D stack_map_calculate_max_depth(map->value_size, elem=
-_size, flags);
-> -       trace =3D get_perf_callchain(regs, kernel, user, max_depth,
-> -                                  false, false, 0);
-> +
-> +       trace =3D bpf_get_perf_callchain(&rctx, regs, kernel, user, max_d=
-epth,
-> +                                      false);
->
->         if (unlikely(!trace))
->                 /* couldn't fetch the stack trace */
->                 return -EFAULT;
->
-> -       return __bpf_get_stackid(map, trace, flags);
-> +       ret =3D __bpf_get_stackid(map, trace, flags);
-> +       bpf_put_perf_callchain(rctx);
-> +
-> +       return ret;
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b842b83e2480..e0d646a9e233 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
+> @@ -506,6 +506,11 @@ static int probe_kern_arg_ctx_tag(int token_fd)
+>         return probe_fd(prog_fd);
 >  }
 >
->  const struct bpf_func_proto bpf_get_stackid_proto =3D {
-> @@ -435,6 +467,7 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
-uct task_struct *task,
->         bool kernel =3D !user;
->         int err =3D -EINVAL;
->         u64 *ips;
-> +       int rctx;
->
->         if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
->                                BPF_F_USER_BUILD_ID)))
-> @@ -467,18 +500,26 @@ static long __bpf_get_stack(struct pt_regs *regs, s=
-truct task_struct *task,
->                 trace =3D trace_in;
->                 trace->nr =3D min_t(u32, trace->nr, max_depth);
->         } else if (kernel && task) {
-> -               trace =3D get_callchain_entry_for_task(task, max_depth);
-> +               trace =3D get_callchain_entry_for_task(&rctx, task, max_d=
-epth);
->         } else {
-> -               trace =3D get_perf_callchain(regs, kernel, user, max_dept=
-h,
-> -                                          crosstask, false, 0);
-> +               trace =3D bpf_get_perf_callchain(&rctx, regs, kernel, use=
-r, max_depth,
-> +                                              crosstask);
->         }
->
-> -       if (unlikely(!trace) || trace->nr < skip) {
-> +       if (unlikely(!trace)) {
->                 if (may_fault)
->                         rcu_read_unlock();
->                 goto err_fault;
->         }
->
-> +       if (trace->nr < skip) {
-> +               if (may_fault)
-> +                       rcu_read_unlock();
-> +               if (!trace_in)
-> +                       bpf_put_perf_callchain(rctx);
-> +               goto err_fault;
-> +       }
+> +static int probe_bpf_syscall_common_attrs(int token_fd)
+> +{
+> +       return probe_sys_bpf_ext();
+> +}
 > +
->         trace_nr =3D trace->nr - skip;
->         copy_len =3D trace_nr * elem_size;
+>  typedef int (*feature_probe_fn)(int /* token_fd */);
 >
-> @@ -497,6 +538,9 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
-uct task_struct *task,
->         if (may_fault)
->                 rcu_read_unlock();
+>  static struct kern_feature_cache feature_cache;
+> @@ -581,6 +586,9 @@ static struct kern_feature_desc {
+>         [FEAT_BTF_QMARK_DATASEC] =3D {
+>                 "BTF DATASEC names starting from '?'", probe_kern_btf_qma=
+rk_datasec,
+>         },
+> +       [FEAT_BPF_SYSCALL_COMMON_ATTRS] =3D {
+> +               "BPF syscall common attributes support", probe_bpf_syscal=
+l_common_attrs,
+> +       },
+>  };
 >
-> +       if (!trace_in)
-> +               bpf_put_perf_callchain(rctx);
-> +
->         if (user_build_id)
->                 stack_map_get_build_id_offset(buf, trace_nr, user, may_fa=
-ult);
+>  bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_=
+id feat_id)
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+> index fc59b21b51b5..aa16be869c4f 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+> @@ -392,6 +392,8 @@ enum kern_feature_id {
+>         FEAT_ARG_CTX_TAG,
+>         /* Kernel supports '?' at the front of datasec names */
+>         FEAT_BTF_QMARK_DATASEC,
+> +       /* Kernel supports BPF syscall common attributes */
+> +       FEAT_BPF_SYSCALL_COMMON_ATTRS,
+>         __FEAT_CNT,
+>  };
 >
+> @@ -757,4 +759,5 @@ int probe_fd(int fd);
+>  #define SHA256_DWORD_SIZE SHA256_DIGEST_LENGTH / sizeof(__u64)
+>
+>  void libbpf_sha256(const void *data, size_t len, __u8 out[SHA256_DIGEST_=
+LENGTH]);
+> +int probe_sys_bpf_ext(void);
+>  #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 > --
-> 2.48.1
+> 2.52.0
 >
