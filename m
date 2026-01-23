@@ -1,262 +1,94 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED272389DF3
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 03:27:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8B928488F;
+	Fri, 23 Jan 2026 03:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769138890; cv=none; b=p8spyl0vChvB+DbrtYlMILe1y66Na56bT0WyJieWlStt6uWnSEkzlsJbGJnzQ2btqNbkW8zDbN2PUf4y6SVmZapAPmygN8UVFm3OFnSPJGxkdtZ5BVNCeZhdTNqfVplHoZh6Vbm+17/NBWQS/+E2p8GB3RYRlmOUhqPmm0pWqgk=
+	t=1769138893; cv=none; b=txJuKtLYBTNjJSSyzRBsHl+D194DzbycScsP88DQ0N9HQPD/9bx3brZKU1Cl5fWrcsnZiIYqutXLRvM2+f0UgdVqyOS56MKMeL+mNQ3ZZEtlGwroplnBzV0eUFvy6PIC+IpcOrL9yCy483An6PZZ0AAKn2ltqehfuS+/AOiMj4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769138890; c=relaxed/simple;
-	bh=lRMaXBCmuroYEA8EMWnl7dKsDl+uPc5spkCIVT8MdKg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mxS2tWrcrcNEnnLD99/i8891jPN0OpsAv/bhbtjAbBDHbQ2XlUv2x1VkUqoemAWLp/JbIYooZXgirC+pOB0eTN7xY4nFExjzsjgqvzeKHHyyZT5T3vWiz5bggSosrfhFMRTbEqM1/y0iymHwbUhJrWMFY2tsa7IjW73NdAWXcoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p3de64NB; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769138893; c=relaxed/simple;
+	bh=TF9xwVDzdSE4dVujx0IYpy0EXeCsIdFwgvfICNgQ8TQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZSyQbgTcG7ZYEQ6Gua1122lTyfBADYp23YwS3DqoUZpFXPNdkiSrZiyK3oAm8UW5Uani3gEs1pPucGbNAwUOT0HL6NGc4ILH20GvzJSiy6+RJIvOWV7euurgrE8Ffam2+ZypS8pV2nAOgi0JMuelJdYbZujfkiuERSOAtQiDRL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=mEEvkfU3; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p3de64NB"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769138874;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bTUbEhqHJLhG8hIlAVdEqIlik/ffHI3gpe+iOi5xJpk=;
-	b=p3de64NBo2GuBRMd8KI4UxCOh+2YfnvYNe1smjLLhMzjySQVECbxFRrEvkT/Ivm7RgT6h7
-	rJYLy3Tiw28Ui7bSSWKouw7Fz/tgLDxraDifeneDUWFjrdrVZEfvAORXKsBaqra2j1Z7KK
-	mnWNIGhFVKfKsCAeoDd9PTgrn921kUQ=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Seth Forshee <sforshee@kernel.org>,
-	Yuichiro Tsuji <yuichtsu@amazon.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Tao Chen <chen.dylane@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Rong Tao <rongtao@cestc.cn>,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v7 9/9] selftests/bpf: Add tests to verify map create failure log
-Date: Fri, 23 Jan 2026 11:24:45 +0800
-Message-ID: <20260123032445.125259-10-leon.hwang@linux.dev>
-In-Reply-To: <20260123032445.125259-1-leon.hwang@linux.dev>
-References: <20260123032445.125259-1-leon.hwang@linux.dev>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="mEEvkfU3"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=edhtLOg1x6VOOaFWLxD4NbGr1OUxUi82yheN+qEaVtc=; b=mEEvkfU3LpfqvGui+Y41Fk+psP
+	8yg5siRLrVTc++1GaGRAfSklGR2e3OasaHCzdZs2xRmBB/GGgFfj1fjOfJHWRFnyHAD/zePxPiksY
+	Iy4eDnXWk7OCnwjOu+XtILlJ3O3yEx//8D5Jdt/x/lP/y+aiFDYwt7UgeR/SWDqo0rkc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vj7pi-00440V-V1; Fri, 23 Jan 2026 04:27:38 +0100
+Date: Fri, 23 Jan 2026 04:27:38 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: "illusion.wang" <illusion.wang@nebula-matrix.com>, y@lunn.ch
+Cc: dimon.zhao@nebula-matrix.com, alvin.wang@nebula-matrix.com,
+	sam.chen@nebula-matrix.com, netdev@vger.kernel.org,
+	andrew+netdev@lunn.ch, corbet@lwn.net, kuba@kernel.org,
+	linux-doc@vger.kernel.org, lorenzo@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, vadim.fedorenko@linux.dev,
+	lukas.bulwahn@redhat.com, hawk@kernel.org, ast@kernel.org,
+	bpf@vger.kernel.org, sdf@fomichev.me, daniel@iogearbox.net,
+	john.fastabend@gmail.com, edumazet@google.com,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 net-next 01/15] net/nebula-matrix: add minimum nbl
+ build framework
+Message-ID: <88c7e349-f941-4216-89ca-70a49e82b378@lunn.ch>
+References: <20260123011804.31263-1-illusion.wang@nebula-matrix.com>
+ <20260123011804.31263-2-illusion.wang@nebula-matrix.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260123011804.31263-2-illusion.wang@nebula-matrix.com>
 
-Add tests to verify that the kernel reports the expected error messages
-when map creation fails.
+> +config NBL_CORE
+> +    tristate "Nebula-matrix Ethernet Controller m18100 Family support"
+> +    depends on 64BIT && PCI
+> +    default m
+> +    select PAGE_POOL
+> +    help
+> +      This driver supports Nebula-matrix Ethernet Controller m18100 Family of
+> +      devices.  For more information about this product, go to the product
+> +      description with smart NIC:
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+_CORE is a bit unusual for a driver. CORE is generally a library which
+is shared by a number of drivers. It does not have a tristate string,
+it is just selected by the drivers which need it.
+
+> +static int nbl_probe(struct pci_dev *pdev,
+> +		     const struct pci_device_id __always_unused *id)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +
+> +	dev_dbg(dev, "nbl probe ok!\n");
+
+Please don't have pointless debug messages. If your driver does not
+even probe, you should not be submitting it.
+
+> +	return 0;
+> +}
+> +
+> +static void nbl_remove(struct pci_dev *pdev)
+> +{
+> +	dev_dbg(&pdev->dev, "nbl remove OK!\n");
+> +}
+> +
+> +#define NBL_VENDOR_ID			(0x1F0F)
+
+    Andrew
+
 ---
- .../selftests/bpf/prog_tests/map_init.c       | 168 ++++++++++++++++++
- 1 file changed, 168 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_init.c b/tools/testing/selftests/bpf/prog_tests/map_init.c
-index 14a31109dd0e..89e6daf2fcfd 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_init.c
-@@ -212,3 +212,171 @@ void test_map_init(void)
- 	if (test__start_subtest("pcpu_lru_map_init"))
- 		test_pcpu_lru_map_init();
- }
-+
-+#define BPF_LOG_FIXED	8
-+
-+static void test_map_create(enum bpf_map_type map_type, const char *map_name,
-+			    struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	const int key_size = 4, value_size = 4, max_entries = 1;
-+	char log_buf[128];
-+	int fd;
-+	LIBBPF_OPTS(bpf_log_opts, log_opts);
-+
-+	log_buf[0] = '\0';
-+	log_opts.log_buf = log_buf;
-+	log_opts.log_size = sizeof(log_buf);
-+	log_opts.log_level = BPF_LOG_FIXED;
-+	opts->log_opts = &log_opts;
-+	fd = bpf_map_create(map_type, map_name, key_size, value_size, max_entries, opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_create")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_STREQ(log_buf, exp_msg, "log_buf");
-+	ASSERT_EQ(log_opts.log_true_size, strlen(exp_msg) + 1, "log_true_size");
-+}
-+
-+static void test_map_create_array(struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test_map_create", opts, exp_msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_struct_ops(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id can only be used with struct_ops maps.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_kv_type_id(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id is mutually exclusive with btf_key_type_id and btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create(BPF_MAP_TYPE_STRUCT_OPS, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_value_type_id(void)
-+{
-+	const char *msg = "Invalid btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_extra(void)
-+{
-+	const char *msg = "Invalid map_extra.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_extra = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_numa_node(void)
-+{
-+	const char *msg = "Invalid numa_node.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_NUMA_NODE,
-+		    .numa_node = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_type(void)
-+{
-+	const char *msg = "Invalid map_type.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(__MAX_BPF_MAP_TYPE, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_token_fd(void)
-+{
-+	const char *msg = "Invalid map_token_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_TOKEN_FD,
-+		    .token_fd = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_name(void)
-+{
-+	const char *msg = "Invalid map_name.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test-!@#", &opts, msg);
-+}
-+
-+static void test_invalid_btf_fd(void)
-+{
-+	const char *msg = "Invalid btf_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_fd = -1,
-+		    .btf_key_type_id = 1,
-+		    .btf_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_1(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	const char *hash = "DEADCODE";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash = hash,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_2(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash_size = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+void test_map_create_failure(void)
-+{
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_struct_ops"))
-+		test_invalid_vmlinux_value_type_id_struct_ops();
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_kv_type_id"))
-+		test_invalid_vmlinux_value_type_id_kv_type_id();
-+	if (test__start_subtest("invalid_value_type_id"))
-+		test_invalid_value_type_id();
-+	if (test__start_subtest("invalid_map_extra"))
-+		test_invalid_map_extra();
-+	if (test__start_subtest("invalid_numa_node"))
-+		test_invalid_numa_node();
-+	if (test__start_subtest("invalid_map_type"))
-+		test_invalid_map_type();
-+	if (test__start_subtest("invalid_token_fd"))
-+		test_invalid_token_fd();
-+	if (test__start_subtest("invalid_map_name"))
-+		test_invalid_map_name();
-+	if (test__start_subtest("invalid_btf_fd"))
-+		test_invalid_btf_fd();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_1"))
-+		test_excl_prog_hash_size_1();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_2"))
-+		test_excl_prog_hash_size_2();
-+}
--- 
-2.52.0
-
+pw-bot: cr
