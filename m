@@ -1,187 +1,233 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD09C222575;
-	Fri, 23 Jan 2026 12:18:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CCB11A9FA4;
+	Fri, 23 Jan 2026 12:46:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769170731; cv=none; b=pA82xaKM3qKA0ziHtbhB27LG6taeUeRIFcQni2hzOXTjaF6Fi2qB3LcxnzjUV6yrYLB6xIjIpDCXhnbJ9f6FOCUPbqHkqS0LyousCTWbrnHSnQuqwFvPAYGqfzckmCRS641FXeGh5WQIrmotrP4IUqclIdT7D7eErGlsGgL1vA8=
+	t=1769172398; cv=none; b=AxFhs8q6nPdKHuQMRmEly0paCLKjLDR6XXB/mazzQWpy1Nw90V4HFYwgS9jNFRtv1LhBmFguAxbG4y4BJoKvZHHuAAjNopDbvWURfjVcLWtXON+3Pi21cJ/qjoHqBzvcsqNlC77EyJYhRT+u6d/RngGif3EfaA+uWt0UT0scieo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769170731; c=relaxed/simple;
-	bh=RI7LGH0pvlSUbNfW4+4aeCZh8WWmVQu6y5LjvxFd9HM=;
-	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=mz5Fk2DKhy2E7CqwKDqnbXtG/5HJqvt88ZjKGpc52jSNSJnR6hW9Lxgt8raLQGnpYm65ABiGsf8hgnXRNXMv0/QXKn18l/530tm4LgpsAIhIMih+hnWoLL41+2HbdxLUfyAmry/TBHeXyXjFKVog9qBPcvc+RjjDJKn0thpP584=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfIeo99t; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769172398; c=relaxed/simple;
+	bh=pwKwOOaWXNy+ioxlgpS/J+MKIYqV1Foy+S0WkPORwCc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HlMII3RCyqdg5H6BC92pNDIsYBACxTqTWfxFCRazOqDRN6b+KVjzJ6XaNetWzU1/kNiIxFfafjM6Piv3WCzALSTc7figNNFzRC/bf0kAKF5dy+2wEOogxV3t+LchprSIGbFd88ixO9vlH1rNOFPXxzOjDPPwuwWzuSidCPGB+Xc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UVVSEQRA; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfIeo99t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55043C4CEF1;
-	Fri, 23 Jan 2026 12:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769170731;
-	bh=RI7LGH0pvlSUbNfW4+4aeCZh8WWmVQu6y5LjvxFd9HM=;
-	h=Subject:From:To:Cc:Date:From;
-	b=VfIeo99tMICRoLwFLK76V+fpUxMsLyoV0pnVvzfaT8FcxwUvgBrwTojA3Rg3DSPOP
-	 vu/2//Y0TvinVOHMU5zyjBh2i0y9cH8hLhBaDqBATWix+36aR57/4oEWA/yMH9HPqt
-	 OccGU+b+9N0Eai2keSHt49O/OY7gplXwa3NZ8qpw1GbXbfvu8GQ0CPFtHP1Cldo4Yv
-	 9xN/6hBlW4GXXoC7kLpRY26A2Rm9Bk1kV8/FjnLTN+YxRe5bm2gf85LPGgNsvT9cgX
-	 SZfqRL4u/WoV78ndqR9cZCRSlBbd0djncMLxcehrsSfVZeJYb9mdzC0mB3AQs4jwgF
-	 k8n5OrQhec55Q==
-Subject: [PATCH net-next v3] net: sched: sfq: add detailed drop reasons for
- monitoring
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-To: netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
- Jakub Kicinski <kuba@kernel.org>,
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
- horms@kernel.org, jiri@resnulli.us, edumazet@google.com,
- xiyou.wangcong@gmail.com, jhs@mojatatu.com, carges@cloudflare.com,
- kernel-team@cloudflare.com
-Date: Fri, 23 Jan 2026 13:18:46 +0100
-Message-ID: <176917072608.1186611.11185920960590396939.stgit@firesoul>
-User-Agent: StGit/1.5
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UVVSEQRA"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60N6AERS006759;
+	Fri, 23 Jan 2026 12:46:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Q6LZsj
+	Rf2mHlo3Zv/3wsml5VUp4tXZZjqVcWkZZduQ4=; b=UVVSEQRAqY3PyKwsOBvL/6
+	p0SCLtKOomFEctFH87fkZELnVgpqrM4+RYooXk/NhHl+m2OmT/rUI0v9sel2HbXr
+	989i6Yznu4a0XZvQSWTwDKtJs8W3W7dn6kB3m8fwfdEwGWAKhF0KxehyHAdHLUGz
+	Hj51bbe2phynZ3PjY7Tr0u9dwT0krOZAbQBRH+f89J0z3QFebmUWR6C+cPY2j9qG
+	ntYPqTWJducdPGM0DEkOgSRhTnv9Nqad6h/Qwg43jeb/L1yR25dEB/BARxAL31UM
+	PcUeCxu1ypbhQHt7NFrXUlmbJKbEvptQW+h+scMhgSZe78A9ejDKSFzIsLjQWeeg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bus1pv70d-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Jan 2026 12:46:02 +0000 (GMT)
+Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60NCfNwj005887;
+	Fri, 23 Jan 2026 12:46:01 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bus1pv709-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Jan 2026 12:46:01 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60NBtHMJ001171;
+	Fri, 23 Jan 2026 12:46:00 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4brpyk8uyp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Jan 2026 12:46:00 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60NCjugw49545604
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 23 Jan 2026 12:45:57 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D398F20043;
+	Fri, 23 Jan 2026 12:45:56 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D8D1720040;
+	Fri, 23 Jan 2026 12:45:51 +0000 (GMT)
+Received: from [9.78.106.105] (unknown [9.78.106.105])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 23 Jan 2026 12:45:51 +0000 (GMT)
+Message-ID: <67d49ba7-876c-4cb6-a34d-772e4fd331a0@linux.ibm.com>
+Date: Fri, 23 Jan 2026 18:15:50 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/6] powerpc64/bpf: Moving tail_call_cnt to bottom of
+ frame
+To: adubey@linux.ibm.com, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
+        iii@linux.ibm.com, shuah@kernel.org
+References: <20260122211854.5508-1-adubey@linux.ibm.com>
+ <20260122211854.5508-2-adubey@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <20260122211854.5508-2-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: NjonBlZ9my3uzPNE9oiFmQ7uJIhoXfBs
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIzMDEwMSBTYWx0ZWRfX/u7GxI1j2IWK
+ AL+2oq3Dz0NTBbfg3YaAKVAv4Z5zElAeL2OfiDt/GOQsEaQWXTXgU/cHJXd1Z9kZZEDUeseZlEV
+ xL6BtHiGeuDMSME4OC8TUMNY6DX82YfK92GLVZ4LY5SZugXtQ9LIH9MMNfss5qQjdAG+udhlrur
+ agyBR97MZfpQirE1P6GaDlC3ahROH6whvziehRGmmWv22UtS+EJB8FYjKjMndsMGem2uTER3Iii
+ a17DO+mAQeTAxxlwbJIft6TzP6YBDkrmh3P2a/jL5dCl8fijtkNCARw9MnmvHDnnABDn3nYgdzr
+ 5keK3NYaeDO9JiAq1RWNea08Bc7GrBpbJW6tMC1gx8prD2GlDENRr/hk6X78ymwx4pZBSUXey8O
+ 134PLtr4t8XArJGiNnkdLtaxVcVwOcgtt+keLaLAGLI2+NwcIueDrvtd7xP72p3/tQJH4O3yqXJ
+ 1R7uNMe+jsVutBokmoQ==
+X-Proofpoint-GUID: gsd5nJXCcHpjB5AEwzWU3GFKcBcHMJCO
+X-Authority-Analysis: v=2.4 cv=GY8aXAXL c=1 sm=1 tr=0 ts=69736d8a cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VnNF1IyMAAAA:8 a=8L1OQ1Sa3sCk1MEWLCMA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-23_02,2026-01-22_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 impostorscore=0 phishscore=0 lowpriorityscore=0 spamscore=0
+ malwarescore=0 priorityscore=1501 bulkscore=0 adultscore=0 clxscore=1015
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2601230101
 
-Add specific drop reasons to SFQ qdisc to improve packet drop
-observability and monitoring capabilities. This change replaces
-generic qdisc_drop() calls with qdisc_drop_reason() to provide
-granular metrics about different drop scenarios in production
-environments.
 
-Two new drop reasons are introduced:
 
-- SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS: Used when a new flow cannot
-  be created because the maximum number of flows (flows parameter)
-  has been reached and no free flow slots are available.
+On 23/01/26 2:48 am, adubey@linux.ibm.com wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
+> In the conventional stack frame, the position of tail_call_cnt
+> is after the NVR save area (BPF_PPC_STACK_SAVE). Whereas, the
+> offset of tail_call_cnt in the trampoline frame is after the
+> stack alignment padding. BPF JIT logic could become complex
+> when dealing with frame-sensitive offset calculation of
+> tail_call_cnt. Having the same offset in both frames is the
+> desired objective.
+> 
+> The trampoline frame does not have a BPF_PPC_STACK_SAVE area.
+> Introducing it leads to under-utilization of extra memory meant
+> only for the offset alignment of tail_call_cnt.
+> Another challenge is the variable alignment padding sitting at
+> the bottom of the trampoline frame, which requires additional
+> handling to compute tail_call_cnt offset.
+> 
+> This patch addresses the above issues by moving tail_call_cnt
+> to the bottom of the stack frame at offset 0 for both types
+> of frames. This saves additional bytes required by BPF_PPC_STACK_SAVE
+> in trampoline frame, and a common offset computation for
+> tail_call_cnt serves both frames.
+> 
+> The changes in this patch are required by the second patch in the
+> series, where the 'reference to tail_call_info' of the main frame
+> is copied into the trampoline frame from the previous frame.
 
-- SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH: Used when a flow's queue
-  length exceeds the per-flow depth limit (depth parameter),
-  triggering either tail drop or head drop depending on headdrop
-  configuration.
+The changelog needs to be simplified. Something like below:
 
-The existing SKB_DROP_REASON_QDISC_OVERLIMIT is used in sfq_drop()
-when the overall qdisc limit is exceeded and packets are dropped
-from the longest queue.
+To support tailcalls in subprogs, tail_call_cnt needs to be on the BPF
+trampoline stack frame. In a regular BPF program or subprog stack
+frame, the position of tail_call_cnt is after the NVR save area
+(BPF_PPC_STACK_SAVE). To avoid complex logic in deducing offset for
+tail_call_cnt, it has to be kept at the same offset on the trampoline
+frame as well. But doing that wastes nearly all of BPF_PPC_STACK_SAVE
+bytes on the BPF trampoline stack frame as the NVR save area is not
+the same for BPF trampoline and regular BPF programs. Address this by
+moving tail_call_cnt to the bottom of the frame.
 
-The naming uses qdisc-specific drop reasons tied to SFQ tunables,
-following the pattern established by Eric's FQ commit 5765c7f6e317
-("net_sched: sch_fq: add three drop_reason") which introduced
-FQ_BAND_LIMIT, FQ_HORIZON_LIMIT, and FQ_FLOW_LIMIT.
+This change avoids the need to account for BPF_PPC_STACK_SAVE bytes
+in the BPF trampoline stack frame when support for tailcalls in BPF
+subprogs is added later. Also, this change makes offset calculation
+of tail_call_cnt field simpler all across.
 
-The new drop reasons are inserted in the middle of the enum after
-SKB_DROP_REASON_QDISC_CONGESTED to group all qdisc-related reasons
-together. While drop reason enum values are not UAPI, the enum
-names implicitly become UAPI as userspace tools rely on BTF to
-resolve names to values. This makes middle-insertion safe as long
-as names remain stable.
+> 
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit.h        |  1 +
+>   arch/powerpc/net/bpf_jit_comp.c   | 15 ++++++++++++---
+>   arch/powerpc/net/bpf_jit_comp64.c | 31 ++++++++++++++++++++-----------
+>   3 files changed, 33 insertions(+), 14 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index 8334cd667bba..9f6ec00bd02e 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -24,6 +24,7 @@
+>   
+>   #define SZL			sizeof(unsigned long)
+>   #define BPF_INSN_SAFETY		64
+> +#define BPF_PPC_TAILCALL	8
+>   
+>   #define PLANT_INSTR(d, idx, instr)					      \
+>   	do { if (d) { (d)[idx] = instr; } idx++; } while (0)
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 5e976730b2f5..d51c696221d7 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -604,8 +604,8 @@ static void bpf_trampoline_setup_tail_call_cnt(u32 *image, struct codegen_contex
+>   					       int func_frame_offset, int r4_off)
+>   {
+>   	if (IS_ENABLED(CONFIG_PPC64)) {
+> -		/* See bpf_jit_stack_tailcallcnt() */
+> -		int tailcallcnt_offset = 7 * 8;
+> +		/* See Generated stack layout */
+> +		int tailcallcnt_offset = BPF_PPC_TAILCALL;
+>   
+>   		EMIT(PPC_RAW_LL(_R3, _R1, func_frame_offset - tailcallcnt_offset));
+>   		EMIT(PPC_RAW_STL(_R3, _R1, -tailcallcnt_offset));
+> @@ -620,7 +620,7 @@ static void bpf_trampoline_restore_tail_call_cnt(u32 *image, struct codegen_cont
+>   {
+>   	if (IS_ENABLED(CONFIG_PPC64)) {
+>   		/* See bpf_jit_stack_tailcallcnt() */
+> -		int tailcallcnt_offset = 7 * 8;
+> +		int tailcallcnt_offset = BPF_PPC_TAILCALL;
+>   
+>   		EMIT(PPC_RAW_LL(_R3, _R1, -tailcallcnt_offset));
+>   		EMIT(PPC_RAW_STL(_R3, _R1, func_frame_offset - tailcallcnt_offset));
 
-These detailed drop reasons enable production monitoring systems
-to distinguish between different SFQ drop scenarios and generate
-specific metrics for:
-- Flow table exhaustion (flows exceeded)
-- Per-flow congestion (depth limit exceeded)
-- Global qdisc congestion (overall limit exceeded)
 
-This granular visibility allows operators to identify capacity
-planning needs, detect traffic patterns, and optimize SFQ
-configuration based on real-world drop patterns.
+> @@ -714,6 +714,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+>   	 * LR save area                 [ r0 save (64-bit)  ]   | header
+>   	 *                              [ r0 save (32-bit)  ]   |
+>   	 * dummy frame for unwind       [ back chain 1      ] --
+> +	 *                              [ tail_call_cnt     ] optional - 64-bit powerpc
+>   	 *                              [ padding           ] align stack frame
+>   	 *       r4_off                 [ r4 (tailcallcnt)  ] optional - 32-bit powerpc
+>   	 *       alt_lr_off             [ real lr (ool stub)] optional - actual lr
+> @@ -795,6 +796,14 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+>   		}
+>   	}
+>   
+> +	/*
+> +	 * Save tailcall count pointer at the same offset on the
+> +	 * stack where subprogs expect it
+> +	 */
+> +	if ((flags & BPF_TRAMP_F_CALL_ORIG) &&
+> +		(flags & BPF_TRAMP_F_TAIL_CALL_CTX))
+> +		bpf_frame_size += BPF_PPC_TAILCALL;
+> +
 
-Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
----
-v3:
-- Removed SFQ_DR() macro per upstream feedback
-- Use full drop reason names (SKB_DROP_REASON_QDISC_SFQ_*) for easier grepping
-- Split long lines to stay under 80 characters
+The above hunk is relevant in the next patch where tailcalls support
+in subprogs is added. Drop it here and move it to patch#2.
 
-v2:
-- Changed to hierarchical naming: QDISC_SFQ_MAXFLOWS and QDISC_SFQ_MAXDEPTH
-- Added QDISC_ prefix for pattern matching across qdisc subsystems
-- Added rationale paragraph explaining userspace monitoring benefits
-
-v1:
-- Initial submission with QDISC_MAXFLOWS and QDISC_MAXDEPTH
----
- include/net/dropreason-core.h |   12 ++++++++++++
- net/sched/sch_sfq.c           |   11 +++++++----
- 2 files changed, 19 insertions(+), 4 deletions(-)
-
-diff --git a/include/net/dropreason-core.h b/include/net/dropreason-core.h
-index a7b7abd66e21..92c99169bb97 100644
---- a/include/net/dropreason-core.h
-+++ b/include/net/dropreason-core.h
-@@ -70,6 +70,8 @@
- 	FN(QDISC_BURST_DROP)		\
- 	FN(QDISC_OVERLIMIT)		\
- 	FN(QDISC_CONGESTED)		\
-+	FN(QDISC_SFQ_MAXFLOWS)		\
-+	FN(QDISC_SFQ_MAXDEPTH)		\
- 	FN(CAKE_FLOOD)			\
- 	FN(FQ_BAND_LIMIT)		\
- 	FN(FQ_HORIZON_LIMIT)		\
-@@ -390,6 +392,16 @@ enum skb_drop_reason {
- 	 * due to congestion.
- 	 */
- 	SKB_DROP_REASON_QDISC_CONGESTED,
-+	/**
-+	 * @SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS: dropped by SFQ qdisc when the
-+	 * maximum number of flows is exceeded.
-+	 */
-+	SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS,
-+	/**
-+	 * @SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH: dropped by SFQ qdisc when a flow
-+	 * exceeds its maximum queue depth limit.
-+	 */
-+	SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH,
- 	/**
- 	 * @SKB_DROP_REASON_CAKE_FLOOD: dropped by the flood protection part of
- 	 * CAKE qdisc AQM algorithm (BLUE).
-diff --git a/net/sched/sch_sfq.c b/net/sched/sch_sfq.c
-index 96eb2f122973..ecc1028bdac8 100644
---- a/net/sched/sch_sfq.c
-+++ b/net/sched/sch_sfq.c
-@@ -302,7 +302,7 @@ static unsigned int sfq_drop(struct Qdisc *sch, struct sk_buff **to_free)
- 		sfq_dec(q, x);
- 		sch->q.qlen--;
- 		qdisc_qstats_backlog_dec(sch, skb);
--		qdisc_drop(skb, sch, to_free);
-+		qdisc_drop_reason(skb, sch, to_free, SKB_DROP_REASON_QDISC_OVERLIMIT);
- 		return len;
- 	}
- 
-@@ -363,7 +363,8 @@ sfq_enqueue(struct sk_buff *skb, struct Qdisc *sch, struct sk_buff **to_free)
- 	if (x == SFQ_EMPTY_SLOT) {
- 		x = q->dep[0].next; /* get a free slot */
- 		if (x >= SFQ_MAX_FLOWS)
--			return qdisc_drop(skb, sch, to_free);
-+			return qdisc_drop_reason(skb, sch, to_free,
-+						 SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS);
- 		q->ht[hash] = x;
- 		slot = &q->slots[x];
- 		slot->hash = hash;
-@@ -420,14 +421,16 @@ sfq_enqueue(struct sk_buff *skb, struct Qdisc *sch, struct sk_buff **to_free)
- 	if (slot->qlen >= q->maxdepth) {
- congestion_drop:
- 		if (!sfq_headdrop(q))
--			return qdisc_drop(skb, sch, to_free);
-+			return qdisc_drop_reason(skb, sch, to_free,
-+					 SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH);
- 
- 		/* We know we have at least one packet in queue */
- 		head = slot_dequeue_head(slot);
- 		delta = qdisc_pkt_len(head) - qdisc_pkt_len(skb);
- 		sch->qstats.backlog -= delta;
- 		slot->backlog -= delta;
--		qdisc_drop(head, sch, to_free);
-+		qdisc_drop_reason(head, sch, to_free,
-+				  SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH);
- 
- 		slot_queue_add(slot, skb);
- 		qdisc_tree_reduce_backlog(sch, 0, delta);
-
+- Hari
 
