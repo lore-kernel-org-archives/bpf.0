@@ -1,28 +1,27 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010064.outbound.protection.outlook.com [52.101.84.64])
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012064.outbound.protection.outlook.com [52.101.66.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1F3F343D8A;
-	Fri, 23 Jan 2026 10:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20AFC36C5A3;
+	Fri, 23 Jan 2026 10:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.64
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769162874; cv=fail; b=JGYRTDiMw3vkoHgxjgQlz5DEFFfk+ix73HVgour6U4jlU5igyG90b4yAgdhW9VQ49rRQ3iipqlyvM2tQ2sJWIxm3T7Y4I0ypQQhNDwUq/GvZ4XHcuMleU7a7yBmN2QEEG/EI37iYTnRhgs44q+6sLOiXualtY8FO+bYAgdPQGoc=
+	t=1769162876; cv=fail; b=XZzXfK1IORvBOuKqezasOnNB0unv9GSWzocy9RDeRMW0bpNTa3Pf8Nn6s5Wkyk84TNj8aBJ7l/gZMORMX2WH1MTCYejZVkbR+JIEEEdNnDqDdPregDvR1wNE9YyhlyrBUVtq18nLMzEB6gFJxp2D1ub+153uEcEXuF9114VF1Sk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769162874; c=relaxed/simple;
-	bh=+auiPovcMDl4S5mwHcVKCJFJy7tYD8JG2gFJo/6wsQ4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=i2JeGWHRyXwxMY76hqEGh89tmMkDbZ5etFeGgvnK9TSYG6QPHdk9Sh/Fxku4oT1oT4I/mF48ydBNX5LcAeKoiOc0xy/paxwcXjX/bOc75iIBb1URnsNxukVVvsdsjpiBhl2OXzVoKH53mr0+IMyWDZbylP31Nl9nxhD4CvnVv1U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=YWK5XN5j; arc=fail smtp.client-ip=52.101.84.64
+	s=arc-20240116; t=1769162876; c=relaxed/simple;
+	bh=XhSD7sbLg+s26YHRJBafUmt3NkgHcuaPlhthpzW4jHI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=mzYMnntzjOtHX96zCeF3oOIwJQIk1S17su2CWTWhQlufNUl+uIgnmFUuTQY+Kyr5ZbNc4DZDmsNoeriWsEBSRubCoYrG+NFeSDR3OeHlLeX/UiWh7NgRhLfw7xhSayCi9cYrvT76CMPYnytfU2ude0r5KCESE2P0khpbCywWMIU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=UNbaxTVB; arc=fail smtp.client-ip=52.101.66.64
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="YWK5XN5j"
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="UNbaxTVB"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=LNShfnQ4wGLbeWSeGU8hNDkB68x23waY1diaKFm+qTVRrAXmIdGR8GN/c4VwcohtVkNwb9YUZ8LIko+tlMNDhtTcv8VBr6AvX2DdG/SQXOnODmCdKI43fQBfbP3NZM5h3R+F/48MgcWNtlzfNODId8WlbGNTXVRbG9lQypbyKMRMC3YtbQuBszo78VI0Ev1P4gFaKODxVTgcDWZpZpGpCnWfrQ/y8Sr37TwSjQLcqgUG9J91tN2gnwMqCzVtYxBVjX49jMxaM18QTt1yj1M0M5NY1dlF3/0H9Y7fTuMwAlN9igNM9s7JtRi0i27LvzBpJsmkASNvC/qOTjIFOmjL9Q==
+ b=c598AzSf5BTPur1t13g38RJrrgAhub+kAJSO+7AFfU55ukNEXsR+k+QzSfDqVU/ZE1eEZZ2HfQcqq0UaP78ToNRCGj9cIni/XLfNc/3ndjRTWbChgcs/c7yav5dEdmEr9bgVZvv1PXsDxb4snO3Hs4Zwj6mNU8T1eMm6sXaoGUpcl+XT8+7NbBtGcgfQ01vOTko2RaHgoni86OcjFPy9TtUTtzalgMBLClOyqfAd6jhXCxcIsbStvNWkTIrS1EgPNGHW7LuU7eJ3UBHWP24Vu2sSJ+srbiMFnwseGg2x/GAaCVio+5+HbdPaHG1iUniPH9cPsTPw+yE6k3depW+trg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d1VlfliBpC4goVo6bP5WxhRaldxfKZE1wbrH2C2bv+w=;
- b=tr+10N5gllctEXEZIRS5SzZBBaR6GVhMkiBTi7CIVXyrFcskhJ4iwPa6Cp5hRCwJb2vRAWrvl6mywcb4kWRo2qnWJak3Sj4OaFtnNK82myIvkxxz8ABY5+e+b3zbwJMVg74eMX0EtH9PYbUFxJClPb/CH230T7rqJpnW9rcN4JpxYIQHlbv8Bf77B9Yb6t3PQce3UUnmtTRQs+kLdsqv4JH1pxmm6VwYqkhONAnHomDgykm1qUnl/pZkKOCjjPF45evfZv7tRj89iStmi53/FQIjjbL0xHegEty+lmN8dFYsb2FdmmE8QEsD2KmqzYdMEFkiHxLCv6BPghFmTHjbcQ==
+ bh=PdQuke5vAkEXscSinzji/dUPaVbt5AKpW+6/eM1Bscw=;
+ b=ezbNtI2nZoHOkNYuLWizpF3fzlH/HXZgD/c8MjuSwfF6JF5UZe74sxYHq2cSNt4BCelrY74QS6vXQlBk9U65Srzg6HE/FL5/Zg7DY9Wx9occn3rGsL1gj6GNFcxJkoxA4piiKpXvwdXqDnJino7Dzvk5phjMJmQbdGp+2qcBjqba48W7Ykvh3P7hcc1toL5FF6LEpZnrpAd9JnjyEX6mo+QhsUDqZWlwBxnXxee9T0I2323VCP/Cujsd1qWUtCReGxQuprvKA8JtJBrIpWtZz8kNE3xB7jPX6xqx54KDf/ZGpil4N7VysMhDs95nOOYFCZqjZCSNi5B/wiI50DTDvw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  131.228.6.101) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none
@@ -30,18 +29,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=d1VlfliBpC4goVo6bP5WxhRaldxfKZE1wbrH2C2bv+w=;
- b=YWK5XN5jQgvGfgDGngT4te+Tu5kCr5Z7OkH52AOTiEpvSvpFS3N1EjNpguT7db2J2guqojrSCUQVMei8dRMn+garZSoC+0IZHy+g5y5twTls2RsQSyeXJCuYoPXxkIhMbO1E9RUNWMZ5W/TApy7bNrWn5NYUxGBdIots9bnvZ9DNJ9AShvruRgdrKH36WA8A5v2Gt+uIqgqmKBgGKwFVRyXZzJSfawF9R/GkT43nvXJKUIphYRqFIpHcQOto7nAqSa64t2WCDNpaXDzbbYjjs36GqhR04mJrwcrsMcWhTWhu7eptfn/SMp2AQtZZNSkCbiLTeO4wtWR0R23KVGfJ5A==
-Received: from AS4P192CA0001.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:5da::15)
- by VI1PR0701MB6847.eurprd07.prod.outlook.com (2603:10a6:800:190::13) with
+ bh=PdQuke5vAkEXscSinzji/dUPaVbt5AKpW+6/eM1Bscw=;
+ b=UNbaxTVBXCQvOQifAS/IqEhqRlg5aXT7B2LMNG4QcMXVASOU5lgcFpz4LXEw7r3VDNVD1FVq+L16BVC+0NLbkYxeYhHw69XQBoNib0xQjy4cZbJYWAWXFLj2QwWE3AWfriTmYHS90Q7pErRTNmBrhyaqVutlir6/ywNcndDfru4L4mJg4ulWaoLbWdlCUJj5Wb33wTjHEKlu53QXCYL6g+CY3CUoE7T+8Kte4In8TpBI53CVFxQl+ZZhSNRv7XSUsxJFysm/uPXQCY0w67+jPyh980e+IBxLYDwFIfprEBRbulTY8SgwaWYIDGubC6LcPcPJuDczATICHPKMsw2BRw==
+Received: from DB8PR04CA0012.eurprd04.prod.outlook.com (2603:10a6:10:110::22)
+ by AS4PR07MB9657.eurprd07.prod.outlook.com (2603:10a6:20b:4f7::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.11; Fri, 23 Jan
- 2026 10:07:38 +0000
-Received: from AMS0EPF000001A8.eurprd05.prod.outlook.com
- (2603:10a6:20b:5da:cafe::29) by AS4P192CA0001.outlook.office365.com
- (2603:10a6:20b:5da::15) with Microsoft SMTP Server (version=TLS1_3,
+ 2026 10:07:24 +0000
+Received: from DB1PEPF000509F3.eurprd02.prod.outlook.com
+ (2603:10a6:10:110:cafe::12) by DB8PR04CA0012.outlook.office365.com
+ (2603:10a6:10:110::22) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.20.9542.12 via Frontend Transport; Fri,
- 23 Jan 2026 10:07:35 +0000
+ 23 Jan 2026 10:07:21 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.101)
  smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
@@ -50,12 +49,12 @@ Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
  receiver=protection.outlook.com; client-ip=131.228.6.101;
  helo=fr712usmtp1.zeu.alcatel-lucent.com; pr=C
 Received: from fr712usmtp1.zeu.alcatel-lucent.com (131.228.6.101) by
- AMS0EPF000001A8.mail.protection.outlook.com (10.167.16.148) with Microsoft
+ DB1PEPF000509F3.mail.protection.outlook.com (10.167.242.149) with Microsoft
  SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9564.3
- via Frontend Transport; Fri, 23 Jan 2026 10:07:38 +0000
+ via Frontend Transport; Fri, 23 Jan 2026 10:07:24 +0000
 Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fr712usmtp1.zeu.alcatel-lucent.com (Postfix) with ESMTP id D245C1C0030;
-	Fri, 23 Jan 2026 12:07:36 +0200 (EET)
+	by fr712usmtp1.zeu.alcatel-lucent.com (Postfix) with ESMTP id EB5231C003B;
+	Fri, 23 Jan 2026 12:07:22 +0200 (EET)
 From: chia-yu.chang@nokia-bell-labs.com
 To: pabeni@redhat.com,
 	edumazet@google.com,
@@ -91,125 +90,715 @@ To: pabeni@redhat.com,
 	Jason_Livingood@comcast.com,
 	vidhi_goel@apple.com
 Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v11 net-next 07/15] tcp: accecn: retransmit downgraded SYN in AccECN negotiation
-Date: Fri, 23 Jan 2026 11:07:13 +0100
-Message-Id: <20260123100721.42451-8-chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v11 net-next 00/15] AccECN protocol case handling series
+Date: Fri, 23 Jan 2026 11:07:06 +0100
+Message-Id: <20260123100721.42451-1-chia-yu.chang@nokia-bell-labs.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260123100721.42451-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20260123100721.42451-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMS0EPF000001A8:EE_|VI1PR0701MB6847:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 4b314580-6054-45f5-b9fa-08de5a673d04
+X-MS-TrafficTypeDiagnostic: DB1PEPF000509F3:EE_|AS4PR07MB9657:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2837f6e0-f861-44ff-e462-08de5a6734d2
 X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
- BCL:0;ARA:13230040|36860700013|1800799024|82310400026|7416014|376014|921020;
+ BCL:0;ARA:13230040|7416014|376014|1800799024|36860700013|82310400026|921020|18082099003;
 X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?v50FyA1XZ8T9M6Y8Lon48q90LxI98x7HCG6N1oiP8BMgLt4mP5RWM2obI/v0?=
- =?us-ascii?Q?OPYZ9G6Yf1rTZlt4C8s4tt2XaZNoj5H1yAiDh9oI5ekafWQPJBGknsMSIM4h?=
- =?us-ascii?Q?jdcdq+zQG9nv1TMZBUR+aoAQdYwFHuWqopeb6ZuCtFKsyzyNQHvxfSKEZ+rj?=
- =?us-ascii?Q?rHMYjD60JfyrLAAddVl1O36DficHG2EgoI6/4fnrAimWYAZAY5NrbAAMBcec?=
- =?us-ascii?Q?lCgMzwmUs1JwaBv7uBZQcQjYpwf4wXwJ3dqliVDURcxIA02UbF/jIIezE0C2?=
- =?us-ascii?Q?Xm5Ym7OZRciKYwJzP8wLF7OAFIqq+An+fjMqzfVKxWSO1E576Wzp5YWFua+Q?=
- =?us-ascii?Q?UWbQMqNiGLV71Cxa1kG8U8w+jPBE8znZ4Ibb2Bkq2XQzpBsLOBE+RQGih0LM?=
- =?us-ascii?Q?a3m5B5bliiCHDTPRVvDtMHszcxkiFuKNEvhDwMdLDeBuo+aoMruvJ8mEqleJ?=
- =?us-ascii?Q?/8gvqe3AOrvud2YhKLwN1pDnsB9K2/ke2e43YNMyqQtt4GwtKcnCKmRjCRJo?=
- =?us-ascii?Q?FEJl+eZscn6aJE/5EMTa9kDclU4ey09R4YAYW/Dqif2/yqAXvhhNDAxT9h8F?=
- =?us-ascii?Q?egqKYD4Gzfs3j0dKIxzjdIPTWiopC7AE2HSFaYYX2kyya+OFyMrCN4dmEW8j?=
- =?us-ascii?Q?IzqI5aSq3vF85T5KGuFIFfVy4eqxabrMYr+sSvKUeHdPX/o4MnMlg1XtCU5L?=
- =?us-ascii?Q?1PpxZOwP9ajsr2cHwTz5c4hRKXzZibU96H3HeKg8OFC5aX0PizosbaQw0rLp?=
- =?us-ascii?Q?YP8tjTHdLjlRSoDJgT7AwxYf5c8jcrocKay8cUtQSl8cEsAoZyzkZmEbCOg1?=
- =?us-ascii?Q?pHQOfJejAXzQ7EIn8xgP4Lgkh/VNi8QM6844Rp4Qa2X8RSmuUWlbOU5HkDDM?=
- =?us-ascii?Q?h+fljRMrtkXvd8VyClgQNyPf/eb9c4q3dq1OTdxbt6FdMpCSDywK6mJs2QvV?=
- =?us-ascii?Q?T0Hj9U9n5xlrsliMrMVSb1ojgAMD9ly7ozXNdlp1kGFCryRaLS8kFJeQcG6h?=
- =?us-ascii?Q?IH2JL+w4KUFUFWhylE44KP8twCtrkllLxJ/4jsO/FSU7Y13FspRYQI1FkGmA?=
- =?us-ascii?Q?YuqcyKMP3KopizIZv8safWcOH4BupRmZIiEB12dJKL6duDnRR8CRKjKxbaPw?=
- =?us-ascii?Q?xXfO69Z3wx79p0QPL5F0ltk/NrtFIxt17swey+sy7nMIye6VMfqPZgqaiEhg?=
- =?us-ascii?Q?okslI2Txjloe2mwjig9eJQNnALTIU+4gPAzz+Ak6nRXD0P0qCKxq9WiYlm/N?=
- =?us-ascii?Q?NFRjtme+FsTB71/HgvBktcL1363e7xv6V+IizNsZuMh4aLS48lt0WESB6lp6?=
- =?us-ascii?Q?MJ6iqzT4JG8XTIgDR0ep6QTgJYYMfOU5PklX8VaanGTaasDaArLryVNVXEhb?=
- =?us-ascii?Q?7ApHEE6em0bTxnuAY0sxMoRjogUOQczn8OHppJPKvXfLGpA1s6W4mKzkjwYb?=
- =?us-ascii?Q?yKNvAUBbUYeck5b/HW/wO8CwCqKUOTE9kOYIwuqEaOiE0IP+kUvhCZeXxtZj?=
- =?us-ascii?Q?7uFA7T5GuDwwNaFOTuTrKoKm8zfALTq2m8Kg33lCwbVDuZOVoaWQnCDi9zQn?=
- =?us-ascii?Q?mtQ/5qHuHLN5zUlG25zyYP+Vm6tAKLpRtLhGbN6Sx2bmiHFzF2wXS3k1kN0C?=
- =?us-ascii?Q?DhCeBy8NcNLTrJupr/O2b1uS5a1gDBzMUwGnUv72cLjT0YxrR+xTs4Yy6Hkp?=
- =?us-ascii?Q?tplZ5JSDTHah4R49VTyPqqXNluY=3D?=
+ =?utf-8?B?SzFsdnZ2VDRlTDJnNFh2aHp0d3ZYWS9vWEUyeUsrTnlWVmtRYmFPeG5za2N6?=
+ =?utf-8?B?cE1qc0Y2dWIwcytHNkNxNTVwNkN3bkVQNHllTTI4bmJPUGNYR21MTXRIcFFT?=
+ =?utf-8?B?M2RVQ0J1czkyQ0hYV1F1QytGQUZjQit2TWxNU3BWaTFKMytyaEV2Y2NlT2F6?=
+ =?utf-8?B?S2JlMTVzVkJZbWg1UkttNU5mZStnT3BwUzJlZDVMM1ZPdXpGVGRKTzRTRkR1?=
+ =?utf-8?B?a0Vpd1V5S09TYkVkcm40dHliSFJOL3F5a2ZYdVhqV1lNekoxSHF2ZXdTOFVz?=
+ =?utf-8?B?K2h5d0VHRFRVYzhOVXlnRGpDait0MlhsMWZ5SDBoVDB4NjZObDJXcnBNdk4v?=
+ =?utf-8?B?bmpoOGlKdmRuRUQrT1kvUDBxUGwvK29yd0IzRE1US2RaYmNDbFA2czRUVXhp?=
+ =?utf-8?B?dk02c01uMVZrK1Jid3RBTE1DbXMvRVllUzRVcFYxNjlqdTlNaDZxSVR4NllB?=
+ =?utf-8?B?USt4U09qNnoxbnFaYmdQNGpSTlJDWHhsS2pOQU9RNVBaZXYwOEVKUjYxS1hs?=
+ =?utf-8?B?bjBMT0ttekRMVTZmYzNGRzVFWnVUWmc3ZW1vLzY2VnBPNytNUjBMbCtXbWpD?=
+ =?utf-8?B?ZFNFcW1JbTIrRHhVU2hydXB1ZUtwcFhoVkYvUFZIem5PL2h6V2hTQjR3Mi9G?=
+ =?utf-8?B?aXFDQmtoQ3VWUkMwZ09qVjJocmxVaUUrb0YwR3BxUlAzV3VoMk1UanRDQU1u?=
+ =?utf-8?B?NVJPb2pSbENCUDdDTHp4TXhYOE9QS3hNYkprcWdtSndXaGw3S0NZeStBcmxT?=
+ =?utf-8?B?bTZoZ3E0S25MSzlMREhSa0xqYkEyMTlBQk81b2lOMTFXcDVJb2JwZ1owU050?=
+ =?utf-8?B?dm83Y3hRM2VZTzdsVm8zNU1rNE1hMUNpTTZIb3NNcmt0TTQrQms5bFhFWksv?=
+ =?utf-8?B?RXcyc05aSUs2ZHB3MnljdnNaN1k4RlFRcXlBWTlveXpPV2R3NnhwU1BqZjhy?=
+ =?utf-8?B?QnhpY2NqenMvdWJBV0h1ZHJZU3ZvR3dlZENMWm9DSTcySlFUNlE5R2hJYjhT?=
+ =?utf-8?B?U3hHbGJ4Z2pEYXFiK05KeUlKMzZlNXdXUDFpeC9TcTArWWIwRTBMaGgzZ2FH?=
+ =?utf-8?B?UUhFdFo3SFg0UWVhWHFPYmh1T0RoRUZlUENmUXdhL1U5Nld2aEpVUlNVSWs4?=
+ =?utf-8?B?SHRzb1lqaDVRUTVIQ09DUjNPYUxxRjdxWjFjNGtQQzFmWDlBaWtyQWNGQTlv?=
+ =?utf-8?B?TUlBZXB5bEZFcm90eUlwYlBWNys1R2d5Y2VxaVJZcHh2aEdrUy9JQ3R6OE5C?=
+ =?utf-8?B?YWVtdHQ5S1BxUVcvaytSWlFzTHVpTWFTcThaL0w3UGcyRVY1YTM2Sjh2WUZj?=
+ =?utf-8?B?V01TUHFRcTBLaDNwdUZGeStzY0FwM1hJbjFMQnl4REVLSC84ajE2bU9CTXdx?=
+ =?utf-8?B?QWRMYUQ0ZkFNMnptQzA4QW5NZ2JtalJ6STR6SktNbDEwQVliQVpGeWFoRDlT?=
+ =?utf-8?B?eHRLcGVlMFVDdWowSnpLMi8zckovYTA1TGZvL1A3TWZLVERVKzI3KzEyT0JG?=
+ =?utf-8?B?am5HemNkM3UwTzBYMWdjb1RSZGFLZmppcEdSdndEMDEySU5XeDB2WHVKTTRQ?=
+ =?utf-8?B?RlgyLzUzZ1hldjgrRXRaQ2VFZGt2cVRzUytHSlQ4ams5NjRlUFNEMmh0bGdh?=
+ =?utf-8?B?ZnMwN1pWS1YzcDZzajhONXExUjNldjU2YS9McFNtQjRQQmo4VHRVUXJoVnd5?=
+ =?utf-8?B?dXdCMlkyK3NGd0Fwb0tLbXRoUmJ5QjNQT3Q3bXJ3ZzBwdGlvbTBZVXY5WGp4?=
+ =?utf-8?B?V1FTZTVNWjJoaFdUaGsxTDlNRW1VUnZ6WDhHZjUrYjlsMmxJUzAzRDJtb3ZB?=
+ =?utf-8?B?S3I4QjZRUFBnN1NoMjJiNUUyazFCRjFmV203YW5WN1pCd3lTNjhXYVZsQ2R4?=
+ =?utf-8?B?UmJkZWFYeXVoQ1V4STV6R0ZKdm9aa21MaG1iUVlMRmV4U05JTUc4ZUhpRVBx?=
+ =?utf-8?B?SjNpaWY1Um5iRjRrM09aZ1ROWFBQeG15Y1NMMFVCKytFMVZ6MzljRzFieEI5?=
+ =?utf-8?B?MlNuRmhWUkpLYUFQWXFvR3pqbWo1NXp0OFh6WWE0cHh6SFhSTlhnQjZXRGM5?=
+ =?utf-8?B?cEh0dmxuL0czb0hBQ1A4VjJkSlVsVGc0b3RqMGxQK04vbXhYNjA2aXY0VkFl?=
+ =?utf-8?B?eHZQeGRjZStxTDBxZUlBOENQQmhveDlMTXZRMUVIdDVpYW1pUEFJMkNOb3pK?=
+ =?utf-8?B?cUdWTWhIWk5yV1BXOVpPVnV5eDIyNVIwb1ZIeXMxUTdlSmN5TTV4bklCekhC?=
+ =?utf-8?Q?CC4AC8EqxNv7IBM/LI2RVaF+EhoIlVsBgpZRqY30J8=3D?=
 X-Forefront-Antispam-Report:
- CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(7416014)(376014)(921020);DIR:OUT;SFP:1101;
+ CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(36860700013)(82310400026)(921020)(18082099003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2026 10:07:38.4337
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Jan 2026 10:07:24.6502
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b314580-6054-45f5-b9fa-08de5a673d04
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2837f6e0-f861-44ff-e462-08de5a6734d2
 X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.101];Helo=[fr712usmtp1.zeu.alcatel-lucent.com]
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AMS0EPF000001A8.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-DB1PEPF000509F3.eurprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR0701MB6847
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR07MB9657
 
 From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-Based on AccECN spec (RFC9768) Section 3.1.4.1, if the sender of an
-AccECN SYN (the TCP Client) times out before receiving the SYN/ACK, it
-SHOULD attempt to negotiate the use of AccECN at least one more time
-by continuing to set all three TCP ECN flags (AE,CWR,ECE) = (1,1,1) on
-the first retransmitted SYN (using the usual retransmission time-outs).
+Hello,
 
-If this first retransmission also fails to be acknowledged, in
-deployment scenarios where AccECN path traversal might be problematic,
-the TCP Client SHOULD send subsequent retransmissions of the SYN with
-the three TCP-ECN flags cleared (AE,CWR,ECE) = (0,0,0).
+Plesae find the v10 AccECN case handling patch series, which covers
+several excpetional case handling of Accurate ECN spec (RFC9768),
+adds new identifiers to be used by CC modules, adds ecn_delta into
+rate_sample, and keeps the ACE counter for computation, etc.
 
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+This patch series is part of the full AccECN patch series, which is at
+https://github.com/L4STeam/linux-net-next/commits/upstream_l4steam/
+
+Best regards,
+Chia-Yu
 
 ---
+All 58 packetdrill are passed, please find below logs:
+
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_2nd_data_as_first_connect.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_2nd_data_as_first.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_3rd_ack_after_synack_rxmt.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_3rd_ack_ce_updates_received_ce.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_3rd_ack_lost_data_ce.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_3rd_dups.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_acc_ecn_disabled.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_accecn_then_notecn_syn.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_accecn_to_rfc3168.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_client_accecn_options_drop.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_client_accecn_options_lost.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_clientside_disabled.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_close_local_close_then_remote_fin.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_delivered_2ndlargeack.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_delivered_falseoverflow_detect.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_delivered_largeack2.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_delivered_largeack.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_delivered_maxack.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_delivered_updates.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_ecn3.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_ecn_field_updates_opt.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_ipflags_drop.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_listen_opt_drop.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_multiple_syn_ack_drop.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_multiple_syn_drop.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_negotiation_bleach.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_negotiation_connect.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_negotiation_listen.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_negotiation_noopt_connect.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_negotiation_optenable.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_no_ecn_after_accecn.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_noopt.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_noprogress.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_notecn_then_accecn_syn.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_rfc3168_to_fallback.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_rfc3168_to_rfc3168.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_sack_space_grab.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_sack_space_grab_with_ts.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_serverside_accecn_disabled1.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_serverside_accecn_disabled2.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_serverside_broken.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_serverside_ecn_disabled.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_serverside_only.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_syn_ace_flags_acked_after_retransmit.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_syn_ace_flags_drop.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_syn_ack_ace_flags_acked_after_retransmit.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_syn_ack_ace_flags_drop.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_synack_ce.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_synack_ce_updates_delivered_ce.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_synack_ect0.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_synack_ect1.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_synack_rexmit.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_synack_rxmt.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_syn_ce.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_syn_ect0.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_syn_ect1.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_tsnoprogress.pkt
+-----------------------------------
+TAP version 13
+1..2
+ok 1 ipv4
+ok 2 ipv6
+# Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
+[PASS] tcp_accecn_tsprogress.pkt
+-----------------------------------
+Total: 58 cases, 58 passed, 0 failed.
+
+---
+v11:
+- Modify accecn_opt_sent_w_dsack to indicate valid prior D-SACK info in #12 (Eric Dumazet <edumazet@google.com>)
+- Update timing in tcp_accecn_client_accecn_options_lost.pkt (Jakub Kicinski <kuba@kernel.org>, Neal Cardwell <ncardwell@google.com>)
+
 v10:
-- Update commit message
+- Update commit message in #4, #6, #7 (Eric Dumazet <edumazet@google.com>)
+- Set AccECN error flag on request itself via tcp_rsk() to avoid directly chaning on listener (Eric Dumazet <edumazet@google.com>)
+- Mover new tcp_info fields at the end of struct (Eric Dumazet <edumazet@google.com>)
+- Update timing in tcp_accecn_client_accecn_options_lost.pkt (Jakub Kicinski <kuba@kernel.org>, Neal Cardwell <ncardwell@google.com>)
+
+v9:
+- Add 1 patch for 2-bit tcpi_ecn_mode and 24-bit tcpi_options by reducing bits used by tcpi_accecn_fail_mode and tcpi_accecn_opt_seen in tcp_info (Neal Cardwell <ncardwell@google.com>)
+- Add missing comma in patch #3 (Jakub Kicinski <kuba@kernel.org>)
+- Update patch message of patch #15
+
+v8:
+- Add apcketdrill patch #14 into this series (Paolo Abeni <pabeni@redhat.com> & Jakub Kicinski <kuba@kernel.org>)
+- Add helper function in patch #10 (Paolo Abeni <pabeni@redhat.com>)
+
+v7:
+- Update comments in #3 (Paolo Abeni <pabeni@redhat.com>)
+- Update comments and use synack_type TCP_SYNACK_RETRANS and num_timeout in #9. (Paolo Abeni <pabeni@redhat.com>)
+
+v6:
+- Update comment in #3 to highlight RX path is only used for virtio-net (Paolo Abeni <pabeni@redhat.com>)
+- Rename TCP_CONG_WANTS_ECT_1 to TCP_CONG_ECT_1_NEGOTIATION to distiguish from TCP_CONG_ECT_1_ESTABLISH (Paolo Abeni <pabeni@redhat.com>)
+- Move TCP_CONG_ECT_1_ESTABLISH in #6 to latter patch series (Paolo Abeni <pabeni@redhat.com>)
+- Add new synack_type instead of moving the increment of num_retran in #9 (Paolo Abeni <pabeni@redhat.com>)
+- Use new synack_type TCP_SYNACK_RETRANS and num_retrans for SYN/ACK retx fallbackk for AccECN in #10 (Paolo Abeni <pabeni@redhat.com>)
+- Do not cast const struct into non-const in #11, and set AccECN fail mode after tcp_rtx_synack() (Paolo Abeni <pabeni@redhat.com>)
 
 v5:
-- Update commit message and the if condition statement.
----
- net/ipv4/tcp_output.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
+- Move previous #11 in v4 in latter patch after discussion with RFC author.
+- Add #3 to update the comments for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN. (Parav Pandit <parav@nvidia.com>)
+- Add gro self-test for TCP CWR flag in #4. (Eric Dumazet <edumazet@google.com>)
+- Add fixes: tag into #7 (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message of #8 and if condition check (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #13 (Paolo Abeni <pabeni@redhat.com>)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 256b669e8d3b..d5d695a501f8 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3606,12 +3606,15 @@ int __tcp_retransmit_skb(struct sock *sk, struct sk_buff *skb, int segs)
- 			tcp_retrans_try_collapse(sk, skb, avail_wnd);
- 	}
- 
--	/* RFC3168, section 6.1.1.1. ECN fallback
--	 * As AccECN uses the same SYN flags (+ AE), this check covers both
--	 * cases.
--	 */
--	if ((TCP_SKB_CB(skb)->tcp_flags & TCPHDR_SYN_ECN) == TCPHDR_SYN_ECN)
--		tcp_ecn_clear_syn(sk, skb);
-+	if (!tcp_ecn_mode_pending(tp) || icsk->icsk_retransmits > 1) {
-+		/* RFC3168, section 6.1.1.1. ECN fallback
-+		 * As AccECN uses the same SYN flags (+ AE), this check
-+		 * covers both cases.
-+		 */
-+		if ((TCP_SKB_CB(skb)->tcp_flags & TCPHDR_SYN_ECN) ==
-+		    TCPHDR_SYN_ECN)
-+			tcp_ecn_clear_syn(sk, skb);
-+	}
- 
- 	/* Update global and local TCP statistics. */
- 	segs = tcp_skb_pcount(skb);
+v4:
+- Add previous #13 in v2 back after dicussion with the RFC author.
+- Add TCP_ACCECN_OPTION_PERSIST to tcp_ecn_option sysctl to ignore AccECN fallback policy on sending AccECN option.
+
+v3:
+- Add additional min() check if pkts_acked_ewma is not initialized in #1. (Paolo Abeni <pabeni@redhat.com>)
+- Change TCP_CONG_WANTS_ECT_1 into individual flag add helper function INET_ECN_xmit_wants_ect_1() in #3. (Paolo Abeni <pabeni@redhat.com>)
+- Add empty line between variable declarations and code in #4. (Paolo Abeni <pabeni@redhat.com>)
+- Update commit message to fix old AccECN commits in #5. (Paolo Abeni <pabeni@redhat.com>)
+- Remove unnecessary brackets in #10. (Paolo Abeni <pabeni@redhat.com>)
+- Move patch #3 in v2 to a later Prague patch serise and remove patch #13 in v2. (Paolo Abeni <pabeni@redhat.com>)
+
+---
+Chia-Yu Chang (13):
+  selftests/net: gro: add self-test for TCP CWR flag
+  tcp: ECT_1_NEGOTIATION and NEEDS_ACCECN identifiers
+  tcp: disable RFC3168 fallback identifier for CC modules
+  tcp: accecn: handle unexpected AccECN negotiation feedback
+  tcp: accecn: retransmit downgraded SYN in AccECN negotiation
+  tcp: add TCP_SYNACK_RETRANS synack_type
+  tcp: accecn: retransmit SYN/ACK without AccECN option or non-AccECN
+    SYN/ACK
+  tcp: accecn: unset ECT if receive or send ACE=0 in AccECN negotiaion
+  tcp: accecn: fallback outgoing half link to non-AccECN
+  tcp: accecn: detect loss ACK w/ AccECN option and add
+    TCP_ACCECN_OPTION_PERSIST
+  tcp: accecn: add tcpi_ecn_mode and tcpi_option2 in tcp_info
+  tcp: accecn: enable AccECN
+  selftests/net: packetdrill: add TCP Accurate ECN cases
+
+Ilpo Järvinen (2):
+  tcp: try to avoid safer when ACKs are thinned
+  gro: flushing when CWR is set negatively affects AccECN
+
+ Documentation/networking/ip-sysctl.rst        |   4 +-
+ .../networking/net_cachelines/tcp_sock.rst    |   1 +
+ include/linux/tcp.h                           |   4 +-
+ include/net/inet_ecn.h                        |  20 +++-
+ include/net/tcp.h                             |  32 +++++-
+ include/net/tcp_ecn.h                         | 108 ++++++++++++------
+ include/uapi/linux/tcp.h                      |  26 ++++-
+ net/ipv4/inet_connection_sock.c               |   3 +
+ net/ipv4/sysctl_net_ipv4.c                    |   4 +-
+ net/ipv4/tcp.c                                |  10 ++
+ net/ipv4/tcp_cong.c                           |   5 +-
+ net/ipv4/tcp_input.c                          |  40 ++++++-
+ net/ipv4/tcp_minisocks.c                      |  45 +++++---
+ net/ipv4/tcp_offload.c                        |   3 +-
+ net/ipv4/tcp_output.c                         |  32 ++++--
+ net/ipv4/tcp_timer.c                          |   2 +
+ tools/testing/selftests/drivers/net/gro.c     |  81 +++++++++----
+ tools/testing/selftests/drivers/net/gro.py    |   3 +-
+ .../tcp_accecn_2nd_data_as_first.pkt          |  24 ++++
+ .../tcp_accecn_2nd_data_as_first_connect.pkt  |  30 +++++
+ .../tcp_accecn_3rd_ack_after_synack_rxmt.pkt  |  19 +++
+ ..._accecn_3rd_ack_ce_updates_received_ce.pkt |  18 +++
+ .../tcp_accecn_3rd_ack_lost_data_ce.pkt       |  22 ++++
+ .../net/packetdrill/tcp_accecn_3rd_dups.pkt   |  26 +++++
+ .../tcp_accecn_acc_ecn_disabled.pkt           |  14 +++
+ .../tcp_accecn_accecn_then_notecn_syn.pkt     |  28 +++++
+ .../tcp_accecn_accecn_to_rfc3168.pkt          |  18 +++
+ .../tcp_accecn_client_accecn_options_drop.pkt |  34 ++++++
+ .../tcp_accecn_client_accecn_options_lost.pkt |  38 ++++++
+ .../tcp_accecn_clientside_disabled.pkt        |  12 ++
+ ...cecn_close_local_close_then_remote_fin.pkt |  25 ++++
+ .../tcp_accecn_delivered_2ndlargeack.pkt      |  25 ++++
+ ..._accecn_delivered_falseoverflow_detect.pkt |  31 +++++
+ .../tcp_accecn_delivered_largeack.pkt         |  24 ++++
+ .../tcp_accecn_delivered_largeack2.pkt        |  25 ++++
+ .../tcp_accecn_delivered_maxack.pkt           |  25 ++++
+ .../tcp_accecn_delivered_updates.pkt          |  70 ++++++++++++
+ .../net/packetdrill/tcp_accecn_ecn3.pkt       |  12 ++
+ .../tcp_accecn_ecn_field_updates_opt.pkt      |  35 ++++++
+ .../packetdrill/tcp_accecn_ipflags_drop.pkt   |  14 +++
+ .../tcp_accecn_listen_opt_drop.pkt            |  16 +++
+ .../tcp_accecn_multiple_syn_ack_drop.pkt      |  28 +++++
+ .../tcp_accecn_multiple_syn_drop.pkt          |  18 +++
+ .../tcp_accecn_negotiation_bleach.pkt         |  23 ++++
+ .../tcp_accecn_negotiation_connect.pkt        |  23 ++++
+ .../tcp_accecn_negotiation_listen.pkt         |  26 +++++
+ .../tcp_accecn_negotiation_noopt_connect.pkt  |  23 ++++
+ .../tcp_accecn_negotiation_optenable.pkt      |  23 ++++
+ .../tcp_accecn_no_ecn_after_accecn.pkt        |  20 ++++
+ .../net/packetdrill/tcp_accecn_noopt.pkt      |  27 +++++
+ .../net/packetdrill/tcp_accecn_noprogress.pkt |  27 +++++
+ .../tcp_accecn_notecn_then_accecn_syn.pkt     |  28 +++++
+ .../tcp_accecn_rfc3168_to_fallback.pkt        |  18 +++
+ .../tcp_accecn_rfc3168_to_rfc3168.pkt         |  18 +++
+ .../tcp_accecn_sack_space_grab.pkt            |  28 +++++
+ .../tcp_accecn_sack_space_grab_with_ts.pkt    |  39 +++++++
+ ...tcp_accecn_serverside_accecn_disabled1.pkt |  20 ++++
+ ...tcp_accecn_serverside_accecn_disabled2.pkt |  20 ++++
+ .../tcp_accecn_serverside_broken.pkt          |  19 +++
+ .../tcp_accecn_serverside_ecn_disabled.pkt    |  19 +++
+ .../tcp_accecn_serverside_only.pkt            |  18 +++
+ ...n_syn_ace_flags_acked_after_retransmit.pkt |  18 +++
+ .../tcp_accecn_syn_ace_flags_drop.pkt         |  16 +++
+ ...n_ack_ace_flags_acked_after_retransmit.pkt |  27 +++++
+ .../tcp_accecn_syn_ack_ace_flags_drop.pkt     |  27 +++++
+ .../net/packetdrill/tcp_accecn_syn_ce.pkt     |  13 +++
+ .../net/packetdrill/tcp_accecn_syn_ect0.pkt   |  13 +++
+ .../net/packetdrill/tcp_accecn_syn_ect1.pkt   |  13 +++
+ .../net/packetdrill/tcp_accecn_synack_ce.pkt  |  28 +++++
+ ..._accecn_synack_ce_updates_delivered_ce.pkt |  22 ++++
+ .../packetdrill/tcp_accecn_synack_ect0.pkt    |  24 ++++
+ .../packetdrill/tcp_accecn_synack_ect1.pkt    |  24 ++++
+ .../packetdrill/tcp_accecn_synack_rexmit.pkt  |  15 +++
+ .../packetdrill/tcp_accecn_synack_rxmt.pkt    |  25 ++++
+ .../packetdrill/tcp_accecn_tsnoprogress.pkt   |  26 +++++
+ .../net/packetdrill/tcp_accecn_tsprogress.pkt |  25 ++++
+ 76 files changed, 1688 insertions(+), 101 deletions(-)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_2nd_data_as_first.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_2nd_data_as_first_connect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_ack_after_synack_rxmt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_ack_ce_updates_received_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_ack_lost_data_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_3rd_dups.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_acc_ecn_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_accecn_then_notecn_syn.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_accecn_to_rfc3168.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_client_accecn_options_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_client_accecn_options_lost.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_clientside_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_close_local_close_then_remote_fin.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_2ndlargeack.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_falseoverflow_detect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_largeack.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_largeack2.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_maxack.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_delivered_updates.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_ecn3.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_ecn_field_updates_opt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_ipflags_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_listen_opt_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_multiple_syn_ack_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_multiple_syn_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_bleach.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_connect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_listen.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_noopt_connect.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_negotiation_optenable.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_no_ecn_after_accecn.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_noopt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_noprogress.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_notecn_then_accecn_syn.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_rfc3168_to_fallback.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_rfc3168_to_rfc3168.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_sack_space_grab.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_sack_space_grab_with_ts.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_accecn_disabled1.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_accecn_disabled2.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_broken.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_ecn_disabled.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_serverside_only.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ace_flags_acked_after_retransmit.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ace_flags_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ack_ace_flags_acked_after_retransmit.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ack_ace_flags_drop.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ect0.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_syn_ect1.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ce_updates_delivered_ce.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ect0.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_ect1.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_rexmit.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_synack_rxmt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_tsnoprogress.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_accecn_tsprogress.pkt
+
 -- 
 2.34.1
 
