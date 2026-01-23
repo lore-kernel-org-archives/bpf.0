@@ -1,42 +1,41 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E80C330667;
-	Fri, 23 Jan 2026 08:43:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6568031A571
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 08:56:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769157814; cv=none; b=SYlucM/Wu4/HwydsguxJP7oY9uvvrbwJ7YEEmnF6V+HCdXPt7lJih4u19H4xOndR6XsRbx2j5MXGwU6jUwhP/1u7Q5UoD1vIrV/G/41INMu9qZ23B//BNUaW8iKsFchJ6av3skLTtXLm38zlQiXYdowUsMxLjBs6DxUde0eIga8=
+	t=1769158581; cv=none; b=DDQhftHs7ikmBw9Kx9IeE8hct6Oj5oqgLj6YyxglgKqAmMsDYGbHoY+kJMQI7vqvqhZwhGz1uMuDudNJIrvREvRYvCYBOJ8XCCK8zc7IUmoyVBIMQcFDhIvvmlge/Ji6QHf7CxTsF2PePQmJtxhxlCx4Dluc69K6Ows1GMaVomQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769157814; c=relaxed/simple;
-	bh=2v5meYzri1t7UAmFUiDyqkq4lZPsVw8Aj3KqgoRP3JY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=DGDjWioQ7X+VcxDekyx8eqBozTji0LAaH5eecgHc8TGsHd4A1kkAzgpQ//iGa8L9oN5G3UfVJYr5DB5OBcdUWOENAu8uev6fRbVpsJ2VbFQPhRz2JEVOj3Xa+n9J2NGfjjIj5ocUOmaIKI7d4GJ/YNkhWv57E6l27fPIjqOxKG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=TvOcYYo0; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1769158581; c=relaxed/simple;
+	bh=S+dNoeiKWsfnahf1LVNuEebUTHOk0zdlvsmApHCZqfU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LXiX2ELh7K0ZjYnAcrLKBUX0x0ZLSh0i1DLqHmo1o1Bi5IEd/Oo7qjysJ/IrpdfMEleEuU3/mdXDDg/uo3jpRER8bIrCHMBPwNd9DSQVuLWzoNKm2dDGSNzcvz7Ff6FDHSDxTT5are7gCX8KE/4/lCveVsnT7UAvPeF/EegOWyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G2kxOYlq; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="TvOcYYo0"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
-	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=H25gfTD6SGj8Et+cZUgXMMu8x6DlPO1yFi8tCGTyu8g=; b=TvOcYYo0uKfkN+Ar1y+0gM3qJo
-	Z/9ebmg//6daHO4+ooaSHoz6olyzF41UGQ7M+BnSEQyJMSIHabDILi9G3paxQAb4m+RyuhGb9OsAS
-	tV/Zm0YnsldqCGOUlDDV5eN7Jw77OPI3wzkpiuh7nit5Ijt1ULuoBjrafBV3MjR4rUlSwDPvenORg
-	4PhJyFbg0ytXbBUIfq1+jYVlAGO0yW72P6/IdsUF2dZvaiFwHiuKKAZkeKsZDMnmzv6hlaNPuycT0
-	wRa3X7u+q3LYM/btBV3+m6c+lEZLlOUStdHZF04JGjmK1B6Cd7YtW5ERxzwREUi+dTyI8AICZ+s8U
-	D0FlTvNQ==;
-Received: from [58.29.143.236] (helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vjClE-008nSZ-OU; Fri, 23 Jan 2026 09:43:21 +0100
-From: Changwoo Min <changwoo@igalia.com>
-To: Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G2kxOYlq"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769158567;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VHVcltg7sXM9YHXZeqtOF/cnuVJD3lLW8h1Hwnn5+GY=;
+	b=G2kxOYlqLgoZhYicZ+yBDSfHBa/FeyiUPBI2mNQdN/KDdkkrnSIWMbmXssiLjxP3072+gq
+	1tJMRXB8t8etMAMcHk02RXwGdhha8qLQtUSpG0Yhh5qZr82kxUKR9BPMqcf3joedpoAfsN
+	FXjD6PEeNuaFjwaUgHOvLtXUq20AiTA=
+From: Hui Zhu <hui.zhu@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
@@ -46,250 +45,287 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
 	Shuah Khan <shuah@kernel.org>,
-	kernel-dev@igalia.com,
-	bpf@vger.kernel.org,
-	sched-ext@lists.linux.dev,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	davem@davemloft.net,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Chen Ridong <chenridong@huaweicloud.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Add tests for execution context kfuncs
-Date: Fri, 23 Jan 2026 17:42:48 +0900
-Message-ID: <20260123084248.259278-3-changwoo@igalia.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260123084248.259278-1-changwoo@igalia.com>
-References: <20260123084248.259278-1-changwoo@igalia.com>
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [RFC PATCH bpf-next v3 00/12] mm: memcontrol: Add BPF hooks for memory controller
+Date: Fri, 23 Jan 2026 16:55:18 +0800
+Message-ID: <cover.1769157382.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add a new selftest suite `ctx_kfunc` to verify the accuracy of the
-bpf_in_task(), bpf_in_hardirq(), and bpf_in_serving_softirq() kfuncs.
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Testing these execution contexts deterministically requires crossing
-context boundaries within a single CPU. To achieve this, the test
-implements a "Trigger-Observer" pattern using bpf_testmod:
+eBPF infrastructure provides rich visibility into system performance
+metrics through various tracepoints and statistics.
+This patch series introduces BPF struct_ops for the memory controller.
+Then the eBPF program can help the system control the memory controller
+based on system performance metrics, thereby improving the utilization
+of system memory resources while ensuring memory limits are respected.
 
-1. Trigger: A BPF syscall program calls a new bpf_testmod kfunc
-   bpf_kfunc_trigger_ctx_check().
-2. Task to HardIRQ: The kfunc uses irq_work_queue() to trigger a
-   self-IPI on the local CPU.
-3. HardIRQ to SoftIRQ: The irq_work handler calls a dummy function
-   (observed by BPF fentry) and then schedules a tasklet to
-   transition into SoftIRQ context.
+The following example illustrates how memcg eBPF can improve memory
+utilization in some scenarios.
+The example running on x86_64 QEMU (10 CPUs, 4GB RAM), using a
+file in tmpfs on the host as a swap device to reduce I/O impact.
+root@ubuntu:~# cat /proc/sys/vm/swappiness
+60
+This the high priority memcg.
+root@ubuntu:~# mkdir /sys/fs/cgroup/high
+This the low priority memcg.
+root@ubuntu:~# mkdir /sys/fs/cgroup/low
+root@ubuntu:~# free
+               total        used        free      shared  buff/cache   available
+Mem:         4007276      392320     3684940         908      101476     3614956
+Swap:       10485756           0    10485756
 
-The user-space runner ensures determinism by pinning itself to CPU 0
-before execution, forcing the entire interrupt chain to remain on a
-single core. Dummy noinline functions with compiler barriers are
-added to bpf_testmod.c to serve as stable attachment points for
-fentry programs. A retry loop is used in user-space to wait for the
-asynchronous SoftIRQ to complete.
+First, The following test uses memory.low to reduce the likelihood of tasks in
+high-priority memory cgroups being reclaimed.
+root@ubuntu:~# echo $((3 * 1024 * 1024 * 1024)) > /sys/fs/cgroup/high/memory.low
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60
+[1] 1176
+stress-ng: info:  [1177] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1176] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1177] dispatching hogs: 4 vm
+stress-ng: info:  [1176] dispatching hogs: 4 vm
+stress-ng: metrc: [1177] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1177]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1177] vm             27047770     60.07    217.79      8.87    450289.91      119330.63        94.34        886936
+stress-ng: info:  [1177] skipped: 0
+stress-ng: info:  [1177] passed: 4: vm (4)
+stress-ng: info:  [1177] failed: 0
+stress-ng: info:  [1177] metrics untrustworthy: 0
+stress-ng: info:  [1177] successful run completed in 1 min, 0.07 secs
+stress-ng: metrc: [1176] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1176]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1176] vm               679754     60.12     11.82     72.78     11307.18        8034.42        35.18        469884
+stress-ng: info:  [1176] skipped: 0
+stress-ng: info:  [1176] passed: 4: vm (4)
+stress-ng: info:  [1176] failed: 0
+stress-ng: info:  [1176] metrics untrustworthy: 0
+stress-ng: info:  [1176] successful run completed in 1 min, 0.13 secs
+[1]+  Done                    cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes $((3 * 1024 * 1024 * 1024)) --vm-method all --seed 2025 --metrics -t 60
 
-Signed-off-by: Changwoo Min <changwoo@igalia.com>
----
- .../selftests/bpf/prog_tests/ctx_kfunc.c      | 59 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_ctx.c  | 51 ++++++++++++++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    | 32 ++++++++++
- .../bpf/test_kmods/bpf_testmod_kfunc.h        |  4 ++
- 4 files changed, 146 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/ctx_kfunc.c
- create mode 100644 tools/testing/selftests/bpf/progs/test_ctx.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/ctx_kfunc.c b/tools/testing/selftests/bpf/prog_tests/ctx_kfunc.c
-new file mode 100644
-index 000000000000..64c3d61b92b3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/ctx_kfunc.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2026 Valve Corporation.
-+ * Author: Changwoo Min <changwoo@igalia.com>
-+ */
-+
-+#include <test_progs.h>
-+#include <sys/syscall.h>
-+#include "test_ctx.skel.h"
-+
-+void test_ctx_kfunc(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	cpu_set_t old_cpuset, target_cpuset;
-+	struct test_ctx *skel;
-+	int err, prog_fd;
-+
-+	/* 1. Pin the current process to CPU 0. */
-+	if (sched_getaffinity(0, sizeof(old_cpuset), &old_cpuset) == 0) {
-+		CPU_ZERO(&target_cpuset);
-+		CPU_SET(0, &target_cpuset);
-+		ASSERT_OK(sched_setaffinity(0, sizeof(target_cpuset),
-+					    &target_cpuset), "setaffinity");
-+	}
-+
-+	skel = test_ctx__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_load"))
-+		goto restore_affinity;
-+
-+	err = test_ctx__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach"))
-+		goto cleanup;
-+
-+	/* 2. When we run this, the kernel will execute the BPF prog on CPU 0. */
-+	prog_fd = bpf_program__fd(skel->progs.trigger_all_contexts);
-+	err = bpf_prog_test_run_opts(prog_fd, &opts);
-+	ASSERT_OK(err, "test_run_trigger");
-+
-+	/* 3. Wait for the local CPU's softirq/tasklet to finish. */
-+	for (int i = 0; i < 1000; i++) {
-+		if (skel->bss->count_task > 0 &&
-+		    skel->bss->count_hardirq > 0 &&
-+		    skel->bss->count_softirq > 0)
-+			break;
-+		usleep(1000); /* Wait 1ms per iteration, up to 1 sec total */
-+	}
-+
-+	/* On CPU 0, these should now all be non-zero. */
-+	ASSERT_GT(skel->bss->count_task, 0, "task_ok");
-+	ASSERT_GT(skel->bss->count_hardirq, 0, "hardirq_ok");
-+	ASSERT_GT(skel->bss->count_softirq, 0, "softirq_ok");
-+
-+cleanup:
-+	test_ctx__destroy(skel);
-+
-+restore_affinity:
-+	ASSERT_OK(sched_setaffinity(0, sizeof(old_cpuset), &old_cpuset),
-+		  "restore_affinity");
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_ctx.c b/tools/testing/selftests/bpf/progs/test_ctx.c
-new file mode 100644
-index 000000000000..b962b3b263e4
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_ctx.c
-@@ -0,0 +1,51 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2026 Valve Corporation.
-+ * Author: Changwoo Min <changwoo@igalia.com>
-+ */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+extern bool bpf_in_nmi(void) __ksym;
-+extern bool bpf_in_hardirq(void) __ksym;
-+extern bool bpf_in_serving_softirq(void) __ksym;
-+extern bool bpf_in_task(void) __ksym;
-+extern void bpf_kfunc_trigger_ctx_check(void) __ksym;
-+
-+int count_hardirq;
-+int count_softirq;
-+int count_task;
-+
-+/* Triggered via bpf_prog_test_run from user-space */
-+SEC("syscall")
-+int trigger_all_contexts(void *ctx)
-+{
-+	if (bpf_in_task())
-+		__sync_fetch_and_add(&count_task, 1);
-+
-+	/* Trigger the firing of a hardirq and softirq for test. */
-+	bpf_kfunc_trigger_ctx_check();
-+	return 0;
-+}
-+
-+/* Observer for HardIRQ */
-+SEC("fentry/bpf_testmod_test_hardirq_fn")
-+int BPF_PROG(on_hardirq)
-+{
-+	if (bpf_in_hardirq())
-+		__sync_fetch_and_add(&count_hardirq, 1);
-+	return 0;
-+}
-+
-+/* Observer for SoftIRQ */
-+SEC("fentry/bpf_testmod_test_softirq_fn")
-+int BPF_PROG(on_softirq)
-+{
-+	if (bpf_in_serving_softirq())
-+		__sync_fetch_and_add(&count_softirq, 1);
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index d425034b72d3..29eaf5596f8a 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -1164,6 +1164,33 @@ __bpf_kfunc int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux);
- __bpf_kfunc int bpf_kfunc_implicit_arg_legacy(int a, int b, struct bpf_prog_aux *aux);
- __bpf_kfunc int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux);
- 
-+/* hook targets */
-+noinline void bpf_testmod_test_hardirq_fn(void) { barrier(); }
-+noinline void bpf_testmod_test_softirq_fn(void) { barrier(); }
-+
-+/* Tasklet for SoftIRQ context */
-+static void ctx_check_tasklet_fn(struct tasklet_struct *t)
-+{
-+	bpf_testmod_test_softirq_fn();
-+}
-+
-+DECLARE_TASKLET(ctx_check_tasklet, ctx_check_tasklet_fn);
-+
-+/* IRQ Work for HardIRQ context */
-+static void ctx_check_irq_fn(struct irq_work *work)
-+{
-+	bpf_testmod_test_hardirq_fn();
-+	tasklet_schedule(&ctx_check_tasklet);
-+}
-+
-+static struct irq_work ctx_check_irq = IRQ_WORK_INIT_HARD(ctx_check_irq_fn);
-+
-+/* The kfunc trigger */
-+__bpf_kfunc void bpf_kfunc_trigger_ctx_check(void)
-+{
-+	irq_work_queue(&ctx_check_irq);
-+}
-+
- BTF_KFUNCS_START(bpf_testmod_check_kfunc_ids)
- BTF_ID_FLAGS(func, bpf_testmod_test_mod_kfunc)
- BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
-@@ -1209,6 +1236,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_multi_st_ops_test_1_assoc, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy_impl)
-+BTF_ID_FLAGS(func, bpf_kfunc_trigger_ctx_check)
- BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
- 
- static int bpf_testmod_ops_init(struct btf *btf)
-@@ -1840,6 +1868,10 @@ static void bpf_testmod_exit(void)
- 	while (refcount_read(&prog_test_struct.cnt) > 1)
- 		msleep(20);
- 
-+	/* Clean up tasklet and irqwork */
-+	tasklet_kill(&ctx_check_tasklet);
-+	irq_work_sync(&ctx_check_irq);
-+
- 	bpf_kfunc_close_sock();
- 	sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
- 	unregister_bpf_testmod_uprobe();
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-index 10f89f06245f..d5c5454e257e 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
-@@ -169,4 +169,8 @@ extern int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args) __weak
- struct prog_test_member *bpf_kfunc_get_default_trusted_ptr_test(void) __ksym;
- void bpf_kfunc_put_default_trusted_ptr_test(struct prog_test_member *trusted_ptr) __ksym;
- 
-+void bpf_testmod_test_hardirq_fn(void);
-+void bpf_testmod_test_softirq_fn(void);
-+void bpf_kfunc_trigger_ctx_check(void) __ksym;
-+
- #endif /* _BPF_TESTMOD_KFUNC_H */
+The following test continues to use memory.low to reduce the likelihood
+of tasks in high-priority memory cgroups (memcg) being reclaimed.
+In this scenario, a Python script within the high-priority memcg simulates
+a low-load task.
+As a result, the Python script's performance is not affected by memory
+reclamation (as it sleeps after allocating memory).
+However, the performance of stress-ng is still impacted due to
+the memory.low setting.
+
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high python3 -c \
+"import time; a = bytearray(3*1024*1024*1024); time.sleep(62)"
+[1] 1196
+stress-ng: info:  [1196] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1196] dispatching hogs: 4 vm
+stress-ng: metrc: [1196] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1196]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1196] vm               886893     60.10     17.76     56.61     14756.92       11925.69        30.94        788676
+stress-ng: info:  [1196] skipped: 0
+stress-ng: info:  [1196] passed: 4: vm (4)
+stress-ng: info:  [1196] failed: 0
+stress-ng: info:  [1196] metrics untrustworthy: 0
+stress-ng: info:  [1196] successful run completed in 1 min, 0.10 secs
+[1]+  Done                    cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes $((3 * 1024 * 1024 * 1024)) --vm-method all --seed 2025 --metrics -t 60
+root@ubuntu:~# echo 0 > /sys/fs/cgroup/high/memory.low
+
+Now, we switch to using the memcg eBPF program for memory priority control.
+memcg is a test program added to samples/bpf in this patch series.
+It loads memcg.bpf.c into the kernel.
+memcg.bpf.c monitors PGFAULT events in the high-priority memory cgroup.
+When the number of events triggered within one second exceeds a predefined
+threshold, the eBPF hook for the memory cgroup activates its control for
+one second.
+
+The following command configures the high-priority memory cgroup to
+return below_min during memory reclamation if the number of PGFAULT
+events per second exceeds one.
+root@ubuntu:~# ./memcg --low_path=/sys/fs/cgroup/low \
+     --high_path=/sys/fs/cgroup/high \
+     --threshold=1 --use_below_min
+Successfully attached!
+
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60
+[1] 1220
+stress-ng: info:  [1220] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1221] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1220] dispatching hogs: 4 vm
+stress-ng: info:  [1221] dispatching hogs: 4 vm
+stress-ng: metrc: [1221] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1221]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1221] vm             24295240     60.08    221.36      7.64    404392.49      106095.60        95.29        886684
+stress-ng: info:  [1221] skipped: 0
+stress-ng: info:  [1221] passed: 4: vm (4)
+stress-ng: info:  [1221] failed: 0
+stress-ng: info:  [1221] metrics untrustworthy: 0
+stress-ng: info:  [1221] successful run completed in 1 min, 0.11 secs
+stress-ng: metrc: [1220] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1220]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1220] vm               685732     60.13     11.69     75.98     11403.88        7822.30        36.45        496496
+stress-ng: info:  [1220] skipped: 0
+stress-ng: info:  [1220] passed: 4: vm (4)
+stress-ng: info:  [1220] failed: 0
+stress-ng: info:  [1220] metrics untrustworthy: 0
+stress-ng: info:  [1220] successful run completed in 1 min, 0.14 secs
+[1]+  Done                    cgexec -g memory:low stress-ng --vm 4 --vm-keep --vm-bytes $((3 * 1024 * 1024 * 1024)) --vm-method all --seed 2025 --metrics -t 60
+
+This test demonstrates that because the Python process within the
+high-priority memory cgroup is sleeping after memory allocation, 
+no page fault events occur.
+As a result, the stress-ng process in the low-priority memory cgroup
+achieves normal memory performance.
+root@ubuntu:~# cgexec -g memory:low stress-ng --vm 4 --vm-keep \
+--vm-bytes $((3 * 1024 * 1024 * 1024)) \
+--vm-method all --seed 2025 --metrics -t 60 \
+& cgexec -g memory:high python3 -c \
+"import time; a = bytearray(3*1024*1024*1024); time.sleep(62)"
+[1] 1238
+stress-ng: info:  [1238] setting to a 1 min, 0 secs run per stressor
+stress-ng: info:  [1238] dispatching hogs: 4 vm
+stress-ng: metrc: [1238] stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s CPU used per       RSS Max
+stress-ng: metrc: [1238]                           (secs)    (secs)    (secs)   (real time) (usr+sys time) instance (%)          (KB)
+stress-ng: metrc: [1238] vm             33107485     60.08    205.41     13.19    551082.91      151448.44        90.97        886064
+stress-ng: info:  [1238] skipped: 0
+stress-ng: info:  [1238] passed: 4: vm (4)
+stress-ng: info:  [1238] failed: 0
+stress-ng: info:  [1238] metrics untrustworthy: 0
+stress-ng: info:  [1238] successful run completed in 1 min, 0.09 secs
+
+In this patch series, I've incorporated a portion of Roman's patch in
+[1] to ensure the entire series can be compiled cleanly with bpf-next.
+I made some modifications to bpf_struct_ops_link_create
+in "bpf: Pass flags in bpf_link_create for struct_ops" and
+"libbpf: Support passing user-defined flags for struct_ops" to allow
+the flags parameter to be passed into the kernel.
+With this change, patch "mm/bpf: Add BPF_F_ALLOW_OVERRIDE support for
+memcg_bpf_ops" enables BPF_F_ALLOW_OVERRIDE support for memcg_bpf_ops.
+
+Patch "mm: memcontrol: Add BPF struct_ops for memory controller"
+introduces BPF struct_ops support to the memory controller, enabling
+custom and dynamic control over memory pressure. This is achieved
+through a new struct_ops type, `memcg_bpf_ops`.
+The `memcg_bpf_ops` struct provides the following hooks:
+- `get_high_delay_ms`: Returns a custom throttling delay in
+  milliseconds for a cgroup that has breached its `memory.high`
+  limit. This is the primary mechanism for BPF-driven throttling.
+- `below_low`: Overrides the `memory.low` protection check. If this
+  hook returns true, the cgroup is considered to be protected by its
+  `memory.low` setting, regardless of its actual usage.
+- `below_min`: Similar to `below_low`, this overrides the `memory.min`
+  protection check.
+- `handle_cgroup_online`/`offline`: Callbacks invoked when a cgroup
+  with an attached program comes online or goes offline, allowing for
+  state management.
+
+Patch "samples/bpf: Add memcg priority control example" introduces
+the programs memcg.c and memcg.bpf.c that were used in the previous
+examples.
+
+Changelog:
+v3:
+According to the comments of Michal Koutný and Chen Ridong, update hooks
+to get_high_delay_ms, below_low, below_min, handle_cgroup_online and
+handle_cgroup_offline.
+According to the comments of Michal Koutný, add BPF_F_ALLOW_OVERRIDE
+support to memcg_bpf_ops.
+v2:
+According to the comments of Tejun Heo, rebased on Roman Gushchin's BPF
+OOM patch series [1] and added hierarchical delegation support.
+According to the comments of Roman Gushchin and Michal Hocko, Designed
+concrete use case scenarios and provided test results.
+
+[1] https://lore.kernel.org/lkml/20251027231727.472628-1-roman.gushchin@linux.dev/
+
+Hui Zhu (7):
+  bpf: Pass flags in bpf_link_create for struct_ops
+  libbpf: Support passing user-defined flags for struct_ops
+  mm: memcontrol: Add BPF struct_ops for memory controller
+  selftests/bpf: Add tests for memcg_bpf_ops
+  mm/bpf: Add BPF_F_ALLOW_OVERRIDE support for  memcg_bpf_ops
+  selftests/bpf: Add test for memcg_bpf_ops hierarchies
+  samples/bpf: Add memcg priority control example
+
+Roman Gushchin (5):
+  bpf: move bpf_struct_ops_link into bpf.h
+  bpf: initial support for attaching struct ops to cgroups
+  bpf: mark struct oom_control's memcg field as TRUSTED_OR_NULL
+  mm: define mem_cgroup_get_from_ino() outside of CONFIG_SHRINKER_DEBUG
+  libbpf: introduce bpf_map__attach_struct_ops_opts()
+
+ MAINTAINERS                                   |   4 +
+ include/linux/bpf.h                           |   8 +
+ include/linux/memcontrol.h                    | 111 +++-
+ kernel/bpf/bpf_struct_ops.c                   |  20 +-
+ kernel/bpf/verifier.c                         |   5 +
+ mm/bpf_memcontrol.c                           | 274 +++++++-
+ mm/memcontrol.c                               |  34 +-
+ samples/bpf/.gitignore                        |   1 +
+ samples/bpf/Makefile                          |   9 +-
+ samples/bpf/memcg.bpf.c                       | 129 ++++
+ samples/bpf/memcg.c                           | 327 ++++++++++
+ tools/include/uapi/linux/bpf.h                |   2 +-
+ tools/lib/bpf/bpf.c                           |   8 +
+ tools/lib/bpf/libbpf.c                        |  19 +-
+ tools/lib/bpf/libbpf.h                        |  14 +
+ tools/lib/bpf/libbpf.map                      |   2 +-
+ .../selftests/bpf/prog_tests/memcg_ops.c      | 606 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/memcg_ops.c | 129 ++++
+ 18 files changed, 1674 insertions(+), 28 deletions(-)
+ create mode 100644 samples/bpf/memcg.bpf.c
+ create mode 100644 samples/bpf/memcg.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_ops.c
+
 -- 
-2.52.0
+2.43.0
 
