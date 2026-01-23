@@ -1,160 +1,98 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D96C30BF75
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 17:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213E930DEB7;
+	Fri, 23 Jan 2026 17:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769187950; cv=none; b=jYXb5TP+sCiQ7311ltDlFWThsR6AAqQv3/XJbxkfFeEmHvaySh7F4QQkmSKLFsJ/tIfQd1rdkBHojFolIL+e6yRbBnuYKK88T5hN/p2K1RZ9qnvqrpmZJ+Bk+CiBWYXeGl7lMe5o7b2v5SYyeR5DgvhzmWxPcV6Evf2ThO+DDqs=
+	t=1769188170; cv=none; b=Z0Wjmy2TbWMLYWrSC6cRwOo5sZIYz7UT30CSwUD2AmGlOMYOzDKL4Rj20mssnWnfVRcO7Ai2beBcN+2a22nUculOKkqH1owagZAb/iUe0dE5dv9dhU4d+oNz+vSNM+Aa5oLUcp3r5Crq6S9WRtNvVyMt+ryI7+fwCiHfV2pCQ9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769187950; c=relaxed/simple;
-	bh=gvMdbX+icg3dbCnUJIuH0NKGuBkPVhNimUGLo6psQUo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jICcRFkmQn3dDcn/Tj67xeir/lTEwZCnqKUeSgcSisguJBfuo7S7xEFa9XX316cyIobNfIlesjhqrtKwjQpItwYdLs4D8Nf1SZ7bVq8esddwB6fuf+mKpwWAsEPG1/E/zr1/CNclxbutDmXjNoGdI1a+yX2m6enU8haORLqYpg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=EMsksjct; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1769188170; c=relaxed/simple;
+	bh=CeNHOSkJEdn6xvj+Hw0timIRReycFapyLFz3DHpdds0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=UYhqx+ZzFd03gLMXfN89T2WEcJw/HY2bZ06DnIisyCCIUZBqu9+cS/qIm0WjLtes93nS94izaGQYs2ZSpCycTrmCOsQBOapza34zyupVEvgEEahpMoPhwK0LmqdWMlaQT11XJbjvBgQjMV4V2SU5MUqH5lWs9SjgHoEKgNxhgpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SxsSx0+n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="EMsksjct"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6581327d6baso3771314a12.3
-        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 09:05:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1769187937; x=1769792737; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lfhpj3sesnQM8iPrv156X7I9lkAuKOzp/WiXCsy1IVQ=;
-        b=EMsksjctoQqgLu685d4nuKSEJniJM1INUwuh9/4x5lcEe9XGFyjifdv+2bMKeMyzza
-         JjxBXgIdiMIhrAx7vf0pEimHhbOBXsxwNQhHgfiEKK/9EEM8yt1MIhLDB/PVs6x99z8d
-         eYyvBBTUqFFP+BiLoU52Bydkr9QvGrpaEdK+tOMx7TgOmCwtX5WkNWE5+Tt2K2SAJEwZ
-         XhZJGyGwNjpK/6e9cFQeyFu0qKjFvhqq9P/I92dWG9bZ5/8vkt/s6hV+cpH+laJGj943
-         Kdy2P1/hbaY4UaNXN+aXjj5kg3xlBOtnSYSeAqebu9pQofN36gnMafjrJvZM0AsYLUo+
-         /47w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769187937; x=1769792737;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lfhpj3sesnQM8iPrv156X7I9lkAuKOzp/WiXCsy1IVQ=;
-        b=gOWsM6fhpHhVbh4XmnQ6u/jaVUnULFfWpaRlz41RAhxH/o5LZCNyecKCxG3qTRs49A
-         jgAc/lKiAP/2eNEOkBsMk7oRl4h/CTZuxcPBV/7q2Gpyon1oVxsIznrMVxsY/q/XKdCV
-         Ts3FJoELbVe4NGJGaMnp0WXFMcJSp/m95cpRHqkTL8hQBiCBdvlWL2aMu7VpYx5PNKZV
-         q2rs0nTdvYM74G90M/UvZNcwA5BScTFpp2esTmplW4BRDOloQNGpsRnARljy4IKyPvEu
-         04Fr5I2ojNCP/WyS/xf7jU/2xAj2H5HNeQvEcOYMcJzfPC0vOAe492aqYetiTiPKAqHy
-         5VUw==
-X-Gm-Message-State: AOJu0YwVzaRjitrlFg5uqxeRgZd+v7SHrtx+gBxe0XMscucmEkeGThR1
-	ozaP+NvR6N4l1BaUZoUlOOLk0Ljk6cG9EVhef5xWj8paG4JAtD8G/wN6PSBX70oo1M4=
-X-Gm-Gg: AZuq6aJP/NqvvcKFYaO14T1rYiqEoHRip/emZvvrbwGmv1Drl2xoLTiLHbJLFWCBEAs
-	lnFDLF8ULqflYJz/weJtka1n15a0IeIrxf9HtzgnFIoNPGdff0d+i5qMXO/iscQmpxlRotWntcr
-	JqSBMfLlg5/Vd2OxEJLz918ubNTTEhH8vNvSqdb1iU4dxnG8A2zUrPmbOTGHk2QfMbRH3zuy6RQ
-	86SFhzldY0414X52xmyewvEbRq4+97CAk/pCvydT9BuqPbfDdIrrzr3IgALAOVpZ6SI16XeO3Uu
-	BIXFG6uYWJOsf3CsCdKKmaTGJib3cWP7swZgF9TQAUaXUp7PmqOsgq4izfC1A7UHPboY9ycJU2h
-	p2d+t12vAqHEe3KkyaGt96qOyRkSt0IO68yVLQVnzarq8Iqhwb4EvdDd/PvMxIgA/9ZfpW6QndG
-	UpDzoEwTVCPvHlhBLkTEVPRp8uZ8MP12RgPCVY+A3NLQYEaa309Ho=
-X-Received: by 2002:a17:906:4796:b0:b87:2780:1b2d with SMTP id a640c23a62f3a-b885ae9e6dbmr264270966b.56.1769187936849;
-        Fri, 23 Jan 2026 09:05:36 -0800 (PST)
-Received: from cloudflare.com (79.191.62.3.ipv4.supernova.orange.pl. [79.191.62.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b885b418494sm137107866b.21.2026.01.23.09.05.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Jan 2026 09:05:36 -0800 (PST)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-Date: Fri, 23 Jan 2026 18:05:21 +0100
-Subject: [PATCH bpf-next v2 4/4] bpf: Remove kfunc support in prologue and
- epilogue
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SxsSx0+n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56037C19421;
+	Fri, 23 Jan 2026 17:09:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769188169;
+	bh=CeNHOSkJEdn6xvj+Hw0timIRReycFapyLFz3DHpdds0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=SxsSx0+n7xFHrUo+/nHJiNZAvHx8biTivOYcfBLp/lH4ogI4S2BrWqsgj914uaLMw
+	 JbI/0nlENNqWUF+454DkmZZfJ9TALo0zg4XFDWrHkjgI5KWRX3M4663AhzQFlrJvUz
+	 0MRee9svnvGHnUDhdYb9BvG4DVPbI4p+PgqH/gurByQ/Gjj/B/TjuLvjGA6jymnoy3
+	 B8WDknHqfWbuMOUJgYKXLItF1N7vcZNdJEiOpA8MM+4gkLyHZCOl3ZPRdXlrPLYPSh
+	 F0QG7mbtn9pLD8k3CCDmzxZr7tMhxps8EtQx2lTjmxW7CSutCDkKeKHGjLk2OT2isr
+	 szKGewJwhyuWA==
+Content-Type: multipart/mixed; boundary="===============1026584712408285938=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Message-Id: <45de7914fd90da6c4940d1c299282eb40d5921ab1f3b9953a120e59a7a9f907c@mail.kernel.org>
+In-Reply-To: <20260123-selftest-signal-on-connect-v1-2-b0256e7025b6@rbox.co>
+References: <20260123-selftest-signal-on-connect-v1-2-b0256e7025b6@rbox.co>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add test for connect() racing sockmap update and signal
+From: bot+bpf-ci@kernel.org
+To: mhal@rbox.co,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,kuniyu@google.com
+Cc: bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,mhal@rbox.co,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 23 Jan 2026 17:09:29 +0000 (UTC)
+
+--===============1026584712408285938==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260123-skb-meta-bpf-emit-call-from-prologue-v2-4-0e50db4d4663@cloudflare.com>
-References: <20260123-skb-meta-bpf-emit-call-from-prologue-v2-0-0e50db4d4663@cloudflare.com>
-In-Reply-To: <20260123-skb-meta-bpf-emit-call-from-prologue-v2-0-0e50db4d4663@cloudflare.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
- netdev@vger.kernel.org, kernel-team@cloudflare.com
-X-Mailer: b4 0.15-dev-07fe9
 
-Remove add_kfunc_in_insns() and its call sites in convert_ctx_accesses().
-This function was used to register kfuncs found in prologue and epilogue
-instructions, but is no longer needed now that we use direct helper calls
-via BPF_EMIT_CALL instead.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_interrupted_connect.c b/tools/testing/selftests/bpf/prog_tests/sockmap_interrupted_connect.c
+> new file mode 100644
+> index 000000000000..aa48ae483dab
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_interrupted_connect.c
+> @@ -0,0 +1,200 @@
+> +// SPDX-License-Identifier: GPL-2.0
 
-Reviewed-by: Eduard Zingerman <eddyz87@gmail.com>
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
+[ ... ]
+
+> +#include "sockmap_helpers.h"
+
+[ ... ]
+
+> +void serial_test_sockmap_interrupted_connect(void)
+> +{
+> +	sighandler_t orig_handler;
+> +	struct context ctx = {0};
+> +	pthread_t tid;
+> +
+> +	orig_handler = signal(SIGUSR1, handler);
+> +	if (!ASSERT_NEQ(orig_handler, SIG_ERR, "signal"))
+> +		return;
+> +
+> +	if (xpthread_create(&tid, NULL, racer, &ctx))
+> +		goto restore;
+> +
+> +	test_map(&ctx, BPF_MAP_TYPE_SOCKMAP);
+> +
+> +	if (!xpthread_cancel(tid))
+              ^^^^^^^^^^^^^^^^
+
+Is xpthread_cancel() defined somewhere? I see sockmap_helpers.h defines
+xpthread_create() and xpthread_join(), but there does not appear to be a
+definition for xpthread_cancel(). This would cause a compilation failure.
+
+> +		xpthread_join(tid, NULL);
+> +restore:
+> +	ASSERT_NEQ(signal(SIGUSR1, orig_handler), SIG_ERR, "handler restore");
+> +}
+
+
 ---
- kernel/bpf/verifier.c | 25 +------------------------
- 1 file changed, 1 insertion(+), 24 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 0b4feedc14c9..41ff0c459a66 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -3543,21 +3543,6 @@ bpf_jit_find_kfunc_model(const struct bpf_prog *prog,
- 	return res ? &res->func_model : NULL;
- }
- 
--static int add_kfunc_in_insns(struct bpf_verifier_env *env,
--			      struct bpf_insn *insn, int cnt)
--{
--	int i, ret;
--
--	for (i = 0; i < cnt; i++, insn++) {
--		if (bpf_pseudo_kfunc_call(insn)) {
--			ret = add_kfunc_call(env, insn->imm, insn->off);
--			if (ret < 0)
--				return ret;
--		}
--	}
--	return 0;
--}
--
- static int add_subprog_and_kfunc(struct bpf_verifier_env *env)
- {
- 	struct bpf_subprog_info *subprog = env->subprog_info;
-@@ -22223,7 +22208,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- {
- 	struct bpf_subprog_info *subprogs = env->subprog_info;
- 	const struct bpf_verifier_ops *ops = env->ops;
--	int i, cnt, size, ctx_field_size, ret, delta = 0, epilogue_cnt = 0;
-+	int i, cnt, size, ctx_field_size, delta = 0, epilogue_cnt = 0;
- 	const int insn_cnt = env->prog->len;
- 	struct bpf_insn *epilogue_buf = env->epilogue_buf;
- 	struct bpf_insn *insn_buf = env->insn_buf;
-@@ -22252,10 +22237,6 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 				return -ENOMEM;
- 			env->prog = new_prog;
- 			delta += cnt - 1;
--
--			ret = add_kfunc_in_insns(env, epilogue_buf, epilogue_cnt - 1);
--			if (ret < 0)
--				return ret;
- 		}
- 	}
- 
-@@ -22277,10 +22258,6 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
- 			env->prog = new_prog;
- 			delta += cnt - 1;
- 
--			ret = add_kfunc_in_insns(env, insn_buf, cnt - 1);
--			if (ret < 0)
--				return ret;
--
- 			mark_helper_calls_finalized(env, 0, cnt - 1);
- 		}
- 	}
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21294285592
 
--- 
-2.43.0
-
+--===============1026584712408285938==--
