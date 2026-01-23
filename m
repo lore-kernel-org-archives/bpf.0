@@ -1,217 +1,143 @@
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 794CC1F419F
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 18:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59555208994
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 18:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769194494; cv=pass; b=ABHNTgtq9nR3oaO9DN4uz40CEn8e17E2dYS0s6GIWuEDAvhjufMhWsMi6VK4G/hCLn6l6feoS0bTcFfCzSG3XRhhiK+q4+QXasjRSpHDwhVoJr9OhJGFaQg/tQeRYDZWbAywlM0PHTDOt/z2Y5gWt0pyAjCQzTu/toVrhV2Zg9E=
+	t=1769194670; cv=pass; b=DwyxWmbrrcHMz+Fio3iIalk2a8Gi6w2EDPtVBl2gtycJYJMylNIxLK+xy96Fy+EG9yzQqdknY5aO7HNo9D1DFPCB4X8HWw0EixXBJpfw+dUPA34+pOUlWzpu6dUW673jUiOG3hbnq0FG1xE9V5ndjpWcU3LGIP5dup9QdJiL55o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769194494; c=relaxed/simple;
-	bh=mogKnU+/3Gpm3+TCKIivbq94eYQH9qfmDATkiFrBSF0=;
+	s=arc-20240116; t=1769194670; c=relaxed/simple;
+	bh=rWDQCp15baqJ4aAP8bX3vbVpR/UO3uYWRgULkeu55iA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qv+zCHGp7dZzrQYFkL+1XkFup/FgxdEaZ60Jr12Nus9BaxkPU1m+kEEXtphL08Pro/MdKxxbdUP1Y3Zbs9w7NKz440b6y/CXb/2t54c+bA1q2t4kdDBQWbdW7ZCG+Hon84/ExWX6jvhzsn8SnYOGYxaPyE8rdX0cByNnRz+MHho=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=azPsTssj; arc=pass smtp.client-ip=209.85.216.41
+	 To:Cc:Content-Type; b=s046K2STAVBF75x+KR/xS13CsUVoL9UJlm5g87YQk2mhPvo1Zkgff3s/EwpnGMKwigKL7X27tpvu2nn2EdNbN82jQfF8/XRD9do4uxfCUkbw7CmLUK+yiF1oee+ZvNY0qZkWGAcjUkMSIZe/3qm1jqLwDgYy3fcQZpJF7pJndYc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T1BPEHB2; arc=pass smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="azPsTssj"
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-3530715386cso2372049a91.2
-        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 10:54:52 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769194492; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T1BPEHB2"
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42fbc305882so1554165f8f.0
+        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 10:57:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769194666; cv=none;
         d=google.com; s=arc-20240605;
-        b=NRg8tgNA5rQP2tHS4N4py8MEDWC1UqccuMGguKdVnPZZ2p25cb/qT3hExUI7BbplCD
-         HiJjnUiaUHVaHtAU6pAapbOtDnm37SnE0PH2TZoOJdA5HQjBCjIozBLCxmxZ0DlFHWIk
-         VxUwBm+qyLPuNXC+C+sfjNNmGWZS8tZWvECFQGOqxZf0KZHfMgY6M3x70UYOg0BBPAf+
-         JIQu3KZypiFGPaVMkJ3sTFyvGUlP8gqk/8scLaGt8lYDM6GtbpNgjr7TtLlDvSCIMXep
-         57bqPWLCxLmUkU47hm6deEosXqwpnNS9gGMr2g1QlLJohbqe0zOj+Bvf6hmqvrokzxKa
-         BUWw==
+        b=FD2W43uJOPdfGCOyGYHtGYxq1MGt+oxuPKju8dcWui2ZIdj75ZRrxnJnucuN1HOVa6
+         PSPk5MyTiz/5zvk4QaAV7ahMPMYk6vGPsKtuwTkNHMuANs88QhMZztGDuUswPriOEcSu
+         W7mY/ZbTgYepWU0FhVjoZ5EvEGXuXWqPE994ZNh7fR2A23VbNtrpwXKR2poUDANnQMbD
+         8w+0cS+n7p4Qvl8jCu4qbIEJZ2ey9kW15WFZaZ5mXefxZFEu93FZjldJ54J3T77AZ/jE
+         t2g3yXEtr9kaZO1H0gE2EmA6b1AiqZQ2taVBdA4WygJAbWkQciSlS8vFjFtH7yIcr+GR
+         Rvzg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=gYmPiHRJ1VjBncSc3bQynnNatD06b0uPrSBt7EelaoA=;
-        fh=iyIh3tiaN/pTCZHwzDN2Emw2Zfr0RZtTUCw7DgIPD2U=;
-        b=GXSLOunrA1D9ltsnDo4mMKwN54G5vAfM5MDjdBdkO5IApEWQifq4zctj/uji5CuTC3
-         RdxuRNC5hZbmQGSRhq14aWP55eRWc5AhXBhni2gC5ZSzUBTOX6hLOQAlaS8XTI3M/TvK
-         35tZIQ9NmTpDN57a+fqEpdg3hbCj1WmEavvjIPEipfcfIzDc36JvjhaRfr1pCud45J6i
-         jHaqy97bjTkJYKXgFvwLwj1Ov0KzdSPwXdVOigbtInYhO5XASqZBJCf2udhmng4DxC3x
-         3c9N198LuLfdDVr7Oo1dHWZ79qDIdj6bmtZyfDd9+B84DkLNNxC85ty0MctZqQ7uB7UX
-         i4+A==;
+        bh=rWDQCp15baqJ4aAP8bX3vbVpR/UO3uYWRgULkeu55iA=;
+        fh=omZrD48Gs/de/ahoxs7dj0o7gkd1e4k9chRizYazdYw=;
+        b=UBLQeFderV6UeT23wKtMfyOJE3X449FNTUxT5fbGwt1RPIcgtgIF057kxF/+nhuS8E
+         644KZeOkuuThSsGs8IYXfqjWQqTL2xnw/9tddiDZKJGFs0hhkXR8BXTcZLfPXvtQZ/iN
+         Gr2RPPmZJBJmWxUYiR8jr1TUpHpSGZnKNPdgbp1MEmUg9a34bEtZ0LVkmGxlNKgHcHWR
+         USoM4zMcSucls9C0t3gZSj8JIFRD7JpBMYFiG5oGzyh/DpIqdGS3ARmeWZ9sZUOIAmPW
+         +uIyW/Fh2VqgmxI3CZX/Qp6y8rVjk+fb6UBweSi1bT+tNaf78l54l87OCWlvMk+DJygL
+         6lDA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769194492; x=1769799292; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769194666; x=1769799466; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gYmPiHRJ1VjBncSc3bQynnNatD06b0uPrSBt7EelaoA=;
-        b=azPsTssjg29Vs4wLIzjZFP/Nk7GTIgAVC6iGTmAsj/Hdad1VkjZOiD40/raEvsR7EQ
-         m1C7G0U/VR6gnEK/XAVgODZv5CtipRqMWBH/w8zyhzclos3II7dZcU9Puf1q1bp4My5e
-         My8iN39aZW4dAKY2ZsGrpdZX2Ggana5AXE5ZVrMo+nsoAu4sXr+TSG0egBc75vzUc4Wb
-         /H3VHK2+pqTWROAiKWmxAXRQr4q4PbpyTZg/XN0olDw6myZhQ3+7tp0mFdGYOBDpeSL/
-         9EtbtSPoxvC62QfRyNwm6RT1b+7gk/k/IMNM7f0c+cFrVX5GJVVmHikkGT4db04ufPnJ
-         iZZg==
+        bh=rWDQCp15baqJ4aAP8bX3vbVpR/UO3uYWRgULkeu55iA=;
+        b=T1BPEHB2aOOg4+qvDonPfcdNegNgItGJI6is1ZerCvddTMbjxh5clncqiO7r30VzLq
+         AqWUF+kuQl3ygR+vp49nrZLipvkhxC73lwKnJQQJFqWYxt63DoScsBGbARUldTMyBHUv
+         vcM2t8gMK3eFFOzcIUA+gd2umspfPHaWQKMQ3WJ4OF29C0omnX2kbfbBFABqxxa6bxF9
+         S3siO4HIsfbVzeU2hSUzPc7aFHHbCCeMbpIjIxf9hGH53S5nSved2ySDOBtD0jfFyFTl
+         Hb4vUDTCuwD0aL4B23QzPrYs0JKR0Qj3a/clza+uqCRpaGPfgxULqywAqjIuNheOQvOx
+         7ikg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769194492; x=1769799292;
+        d=1e100.net; s=20230601; t=1769194666; x=1769799466;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=gYmPiHRJ1VjBncSc3bQynnNatD06b0uPrSBt7EelaoA=;
-        b=fDGiAX3kEv/SGuZVp/W/blXugaVQxp9CF5ETlLkIxGRgs3OMTUvIQUW5vT4GEZ4zN2
-         nuHVHQ4h2LfP9H0G8T0BtOUZxhtC/u5E9gOPmr5TvosJ4QGiyig4BIyHp4dutP/9WC17
-         uAdC+ICy9hTq1zvje2Vij0yw06QR+xNx4Zk/M8pb841GpLXugP5si/wOFWxyOrQ1Cyut
-         0m3UVf3NWGn5UVg22RzNTrG0yFfrkpLM+YWBjAcsYbm5A8ag99ANLGuepfXXvqf3Wzue
-         ien69tq41wi0YBXJxRJ/qgdB5NOzWf+jP5kpfkQ2wo/nlmrEzhYwoLVQsLFoy7helmOo
-         BP9Q==
-X-Gm-Message-State: AOJu0YwjTascZQavdmn+XRMfAfAJd1WVVqYwE7TYX7LqnDAoOxsE5B5U
-	zE0ojTS6/Vv/2Yi0UOBSB/bIvm1mXkN+eFylY5q7cpXU2Dp2A8nVmaG8kq2oYTN1rkeBOSJlM5Q
-	P/wthlk/qJwlcP0/aLTJXqNq934KRt0E=
-X-Gm-Gg: AZuq6aICqOkDMglJzbeEUBGV51wWuDWG3NOEzyJUxT0Cw0yECTwg1Q32/8AvbKQf6JK
-	qbN/FGaJf9NezTyzPq4DuxYLnx4OIgpqjNMRxMmtrdTW+nHMi4pVXFpRy+mO+CrdruBO0PTs6vA
-	PgymKCXDAfUgjg/K3ZTyhsLHem/MTx0D1pBSZJ7zMQgDNwIi0SLVhu2lf8bH9KiQMgh6G3hbVHZ
-	zqkuf0ajRaIa1d5IoEPLt6I1k2My3smESkZ/dxPjZkFSstTwWV9w2zPOUaLQ1z+0LV2IPibewWJ
-	xZm/hn9T1Ck=
-X-Received: by 2002:a17:90a:e185:b0:349:5b1b:78be with SMTP id
- 98e67ed59e1d1-353688574b1mr3895164a91.17.1769194491806; Fri, 23 Jan 2026
- 10:54:51 -0800 (PST)
+        bh=rWDQCp15baqJ4aAP8bX3vbVpR/UO3uYWRgULkeu55iA=;
+        b=iQkCusezx41gVDNHqWC+ttYhCBHGFYZqK+PcebbvcCTGnz62nPncUGmBoC/qtt+CHU
+         Ojdxl3OQDwj8CoWia4usywQOf3OLkRKggdLjTs+fOgDDOxPFZC6t5NypjuNxKsEIYxeE
+         UC5kjclwB5dNwzIYypBDwDCuJS35rOyBynxQz8SqutsGoy3BCIsnYFRqQ+DGF3uuzrXG
+         gURBTjbFE4s0HX35M1EE1pDNtpTYYGfh/tay0qijLs1VGxa03QGK/U5MJ2/w6iOa8Akn
+         Odz05Xe8l8hp58Z9am9ZNFK1EMzs5kKHtI8HHUGuZ4UEYgq4O7ekM2mWC0twnAvPOu2Q
+         GlbA==
+X-Forwarded-Encrypted: i=1; AJvYcCWV9pJfv6yT6/WEo82/cRy/jFovm5lTeKraQM0c9KWV7n5S8/nTsjFzbHDCDeqXzxJr84A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcfL54OW1IlcmpPmgfMQSAVm0aTgsoG3fBRFNQCHixGGwOxQZI
+	bV5QIi6pe06dd9GLhm/MrwqcUJN1Ho9K+3KZ3lJBQ8U/aC4+W2EUHMy85piKLMGL/g4jlsZncFq
+	I2/P0M7trbRuisIFZdnYSRRdEi0MwMK8=
+X-Gm-Gg: AZuq6aLzeZImIQTJNo3HWvmICpkQLfY6pIP8ZBz1kwYD/zf0n/plz+YiDTKLx8xGAxp
+	XzUZUNbyVVcAa0VV5+jdRvbV6UWFb8kWbgloQUhZdruX4yiB8kNdZjeo2jPyGY/0RpvKZUstFMa
+	6IOuYoe7xVMGaJr13FrilsRfbMNsTafRKJpoc9QChE7sKULK+tLRl3QW5T8yvfjsL0+Mmq5Jmni
+	+lzcg1teE4aDBppNZttQ/cYCsNUrhFnGDJrcIMnrLd31jg3VSdGUymZohN4jsLTcHXWg3ktRjsg
+	1Wrz2U996vTocGL+UaRNcIOi22S1ySbJtlJHRWpEh0gvOYm5o5aT4MV+SQK1dY5gFUwaTEOy
+X-Received: by 2002:a05:6000:178c:b0:435:9690:f056 with SMTP id
+ ffacd0b85a97d-435b15fafe2mr6917717f8f.35.1769194665619; Fri, 23 Jan 2026
+ 10:57:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260120152424.40766-1-leon.hwang@linux.dev> <20260120152424.40766-3-leon.hwang@linux.dev>
- <CAEf4BzYuZsFC-DPhhzLcyFTahucHP59+6kAc0sooY2g+SqgrEA@mail.gmail.com> <d8f37588-2b7d-447a-ae4f-dc81e1b573c5@linux.dev>
-In-Reply-To: <d8f37588-2b7d-447a-ae4f-dc81e1b573c5@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 23 Jan 2026 10:54:37 -0800
-X-Gm-Features: AZwV_Qi3JozEFDMkX_Qj_HRM7VamKhm_b4P9yeRYSoUDV7xr3lmnoWFfgWxKG6U
-Message-ID: <CAEf4Bzb_V4p7XvE6e2CUfbKhfjh96i-_mCYa-osWiSGwWObmrQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH bpf-next v6 2/9] libbpf: Add support for extended
- bpf syscall
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
-	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
-	Rong Tao <rongtao@cestc.cn>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <5be1a66a-2594-404c-9c6f-cd36e1eaf684@gmail.com> <a46cfa94-fbc4-4fc1-8042-230055af412e@gmail.com>
+In-Reply-To: <a46cfa94-fbc4-4fc1-8042-230055af412e@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 23 Jan 2026 10:57:34 -0800
+X-Gm-Features: AZwV_QiXcmZBYVXUxNEnBOv8YsYh6rzr6Qjp1uOUfFHnVT-n777FDYNLOqnUNB8
+Message-ID: <CAADnVQJ_JQGWRMW3LxsHiEKOf3on11XVeRLgtMv4VjUNM0pjew@mail.gmail.com>
+Subject: Re: [Bpf] Re: Undefined behavior in eBPF RFC
+To: Tristan Itschner <tristan.itschner@gmail.com>, bpf <bpf@vger.kernel.org>
+Cc: bpf@ietf.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 22, 2026 at 5:41=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
+On Sat, Dec 20, 2025 at 6:43=E2=80=AFPM Tristan Itschner
+<tristan.itschner@gmail.com> wrote:
 >
+> Hi there again,
 >
+> first of all, I would like to apologize for the unprofessional tune in
+> my initial message. Sorry for realizing that only in retrospect.
 >
-> On 23/1/26 08:53, Andrii Nakryiko wrote:
-> > On Tue, Jan 20, 2026 at 7:26=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
-v> wrote:
-> >>
-> >> To support the extended BPF syscall introduced in the previous commit,
-> >> introduce the following internal APIs:
-> >>
-> >> * 'sys_bpf_ext()'
-> >> * 'sys_bpf_ext_fd()'
-> >>   They wrap the raw 'syscall()' interface to support passing extended
-> >>   attributes.
-> >> * 'probe_sys_bpf_ext()'
-> >>   Check whether current kernel supports the BPF syscall common attribu=
-tes.
-> >>
-> >> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> >> ---
-> >>  tools/lib/bpf/bpf.c             | 32 ++++++++++++++++++++++++++++++++
-> >>  tools/lib/bpf/features.c        |  8 ++++++++
-> >>  tools/lib/bpf/libbpf_internal.h |  3 +++
-> >>  3 files changed, 43 insertions(+)
-> >>
-> >> diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-> >> index 21b57a629916..ed9c6eaeb656 100644
-> >> --- a/tools/lib/bpf/bpf.c
-> >> +++ b/tools/lib/bpf/bpf.c
-> >> @@ -69,6 +69,38 @@ static inline __u64 ptr_to_u64(const void *ptr)
-> >>         return (__u64) (unsigned long) ptr;
-> >>  }
-> >>
-> >> +static inline int sys_bpf_ext(enum bpf_cmd cmd, union bpf_attr *attr,
-> >> +                             unsigned int size,
-> >> +                             struct bpf_common_attr *attr_common,
-> >> +                             unsigned int size_common)
-> >> +{
-> >> +       cmd =3D attr_common ? (cmd | BPF_COMMON_ATTRS) : (cmd & ~BPF_C=
-OMMON_ATTRS);
-> >> +       return syscall(__NR_bpf, cmd, attr, size, attr_common, size_co=
-mmon);
-> >> +}
-> >> +
-> >> +static inline int sys_bpf_ext_fd(enum bpf_cmd cmd, union bpf_attr *at=
-tr,
-> >> +                                unsigned int size,
-> >> +                                struct bpf_common_attr *attr_common,
-> >> +                                unsigned int size_common)
-> >> +{
-> >> +       int fd;
-> >> +
-> >> +       fd =3D sys_bpf_ext(cmd, attr, size, attr_common, size_common);
-> >> +       return ensure_good_fd(fd);
-> >> +}
-> >> +
-> >> +int probe_sys_bpf_ext(void)
-> >> +{
-> >> +       const size_t attr_sz =3D offsetofend(union bpf_attr, prog_toke=
-n_fd);
-> >> +       union bpf_attr attr;
-> >> +
-> >> +       memset(&attr, 0, attr_sz);
-> >> +       /* This syscall() will return error always. */
-> >
-> > I'll cite myself from the last review:
-> >
-> >> But fd should really not be >=3D 0, and if it is -- it's some problem,
-> >> so I'd return an error in that case to keep us aware, which is why I'm
-> >> saying I'd just return inside if (fd >=3D 0) { }
-> >
-> > I didn't say let's just ignore syscall return with (void) cast and
-> > happily check errno no matter what, did I? Drop the comment, and
-> > handle fd >=3D 0 case explicitly, please.
-> >
+> My concern was as follows: In pipelined RTL CPU implementations, it
+> makes a significant difference, whether unaligned or only aligned loads
+> and stores are allowed. Implementing unaligned loads requires quite a
+> bit more logic, especially when optimizing certain fast cases. Knowing
+> from my background that cBPF requires unaligned loads, I assumed that
+> eBPF does the same in principle. My concern was that someone only
+> implements aligned loads and stores in an eBPF hardware implementation,
+> because it is not explicitly stated. In fact, the word alignment does
+> not appear at all in the RFC. This would break jitting cBPF programs to
+> eBPF programs, because then the behavior of unaligned loads is
+> undefined. But you would not notice it in practice if you were only
+> using C programs, because the compiler only generates aligned loads and
+> store (unless you tell it to do otherwise). This is only an issue in the
+> context of processing packets with variable header length, such as is
+> done with cBPF. But cBPF is enough for that of course.
 >
-> My mistake =E2=80=94 sorry for the misunderstanding.
+> However, I have realized now by re-reading the spec, that eBPF allows
+> only aligned loads at all (I misread the C-like syntax), which of course
+> makes a lot more sense for the actual use-cases of eBPF.
 >
-> You=E2=80=99re right; the return value should not be ignored. In the next
-> revision, I=E2=80=99ll handle the fd >=3D 0 case explicitly and drop the =
-comment.
-> The logic will be updated along the lines of:
+> I hope you do understand now where I was initial coming from. I'm a big
+> fan of both BPF implementations, so please don't get me wrong. But my
+> concern is unfounded besides being understood as a suggestion to clarify
+> that behavior in the RFC.
 >
-> fd =3D syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS,
->              &attr, attr_sz, NULL, sizeof(struct bpf_common_attr));
-> if (fd >=3D 0) {
->         close(fd);
->         return 0;
-> }
-> return errno =3D=3D EFAULT;
->
+> Best regards, Tristan Itschner
 
-well no, it should be
+Hey,
+Sorry for the delay.
 
-fd =3D syscall(...);
-if (fd >=3D 0) {
-    close(fd);
-    return -EINVAL;
-}
+eBPF actually allows unaligned loads.
+See
+https://docs.ebpf.io/linux/syscall/BPF_PROG_LOAD/#bpf_f_any_alignment
 
-return errno =3D=3D EFAULT ? 1 : 0;
+BPF_F_ANY_ALIGNMENT and BPF_F_STRICT_ALIGNMENT flags.
 
-> Thanks,
-> Leon
->
->
+It's not documented explicitly in the spec, but any new HW or SW
+implementing support for eBPF must support unaligned load/store
+without heavy penalty like a trap. Otherwise it will break
+performance expectations of eBPF programs.
