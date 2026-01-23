@@ -1,149 +1,229 @@
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6054D37F8D4
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 03:10:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769137833; cv=pass; b=PYwI1Py+g9Vs1bQckIXqsbm3TwXy+BlbGivGQpokxriebt6saH5F29sz5bSaPh+UbRwNpQySOC8LJWsqH/dFjFZCy6xK1ddf89T+tOvqpzuhN9zOuYOOm53ChMkrIFFllNeCh9ave64/rvSNnsfusChYKYipH+NFQ9UrP7Wkdvo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769137833; c=relaxed/simple;
-	bh=26QD3iTEBUcMQlUM4uGsxaAqXs+lqxOOleJfn0vUbw0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=giyYrzb5OGhLYeYXAZOcblGEO714871XiIGm81UXvYzY5MTUKIVf/2OIWJUwQWOgA1Hn94agFKR7BM9EmkMHqxz9aew6iDc/LJztKF3r73GyKqIIe5jRetrvuPfpZLiVDukghNN8fOYYbGPTs5UCvX3W8u6ZVLrL1DOExtVs/Aw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WrmStthW; arc=pass smtp.client-ip=74.125.224.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1634F29BD87
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 03:25:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769138755; cv=none; b=cPFXBWCUuXk5N92xndt42mzlEJ4Nq7I2HkhPk0f+VwPIDlbKrlmNR+0eMLhBM2xdQOoeLr6V1DXMk0yoQ64PsVA7WLZXAB5iMxvw7+y8olJRVbL19kQ57Dd8h+OqwPFbU4NIIaclIWB/no+GFaq2RvysPBOgg7LKpgpJPz6GcwY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769138755; c=relaxed/simple;
+	bh=Vgg+A0HbBP3zzBVE4DqTFe6MGreP/T+yPlzVnIkw0f0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ak88CbvAcffuL85/hRAXMe9CJrJe9RQuqh7+h234xydemtdZxqpSmhonxZQPG4wNs0txXoUPHCjn8V10wTzTUsvjqT4dRcxfbWNlnMRY9YXvWvz8eyqyBrxKquMbMSO3RFIy7WwFTp791YZEKnEfkKpx7x05Ba8ov8ebW2nzxIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Vhu9vWus; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WrmStthW"
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-6455a60c12bso1557959d50.3
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 19:10:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769137824; cv=none;
-        d=google.com; s=arc-20240605;
-        b=HQRfAKI3LPawbhbi7B+6b1ZRpCwSdxZ4bi8ZHI1Ab9SLPaRuRhD+VWaPzEZwI9dHZH
-         jK4E+41YmCeDegc+Fwso3FVFb4KNKsfTZ9F6zbZv4FyvBYk92m3JO91LAQhlbkwHgjGv
-         Y8aKq1RExYtOICl1YwBHVh5uKmWztoyNW1ogJMkhWkF6rgmJU3hlbapvPX8pu5ESH/nF
-         Ep9MvKli+jPzK38X0TTy8k/jIobRO/5AL42HZPBmECCt/alz/DPNwDWmSXYPj/1rlNUZ
-         Jwwmz5ml9ebUnswqauNt3L7TzT+J/mZjFuzqu80bvUh46T5PgBrdu0a8KbNngp+xFKsL
-         B0aA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=bX1eLwl5u7TS2HDINLkaf1NGNyaQKDoaIks4eZ+myeo=;
-        fh=fVsx0UgQkf9X9vRZMCSFCVUry9MqeCZOScww6dvKfQU=;
-        b=AR5v0z4hL4MV/Q5yAg4N4pMWmCnUWnvmwDoikr7cTSxBwZhHJM5esqDjVE6WD7AKw9
-         +ymSBd+SwJNWvxQQO/e14+HvgDuCWRUcLwKKbbcP6zZsqo/w487MyVx0xbtQ9SXLmxrp
-         Jgs/dTp2lxLjec++aWMBHrHqi63sRUZM/jSAQuKbGonRsOKHuQlwt9SIjMdEBQnyV5Y/
-         xtJckBDTNX2WQZi125rMJssoGRULr7twkSpbRjuEZXucHSsuAvvalS1KBldF9X+qLV+D
-         2LHOePZ4U5akM0gRIbMZPuaXrXuT0IaBsAfwvqrwM4KnGSck+dMxLEWiRW6j+hKI1I7+
-         PXpg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769137824; x=1769742624; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bX1eLwl5u7TS2HDINLkaf1NGNyaQKDoaIks4eZ+myeo=;
-        b=WrmStthWThcsnnFzlJFa/ZybjEF5RrnBtgrJrCnOa2BLKM41/BixiSic4iohwaxsty
-         2s0u0fbQbPimECkEHXpFHfN6PDoMBpc9s5E7RQoIlbn+5NdDlIUBWTmPWhshTEQVuJBP
-         Lx5/YOk7oBF3x+YLhZVtjP2bp92KulL9khE/AJzaOAg50gdlacfUT1ytt4fPmSfwR4ov
-         B1Gmn3/PiElBvHwHB6SKJoFvCjFvndr9Lw7bT6sA9jyKBZ7pvGUmxgBCv+lvZjK8RWAY
-         CbHxODaI4yZ77ZcI6Iy9JTbrppkrmNqVIKmKkyZH0xC3tmYHddGTaQXAmWxxIbEnc5xL
-         fIFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769137824; x=1769742624;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bX1eLwl5u7TS2HDINLkaf1NGNyaQKDoaIks4eZ+myeo=;
-        b=tYyseSgVq8TPjIWtn5tYvnquA4cme8oUfWW3rEy6VinhkmZ3XBWSEUmVa/vPJqDZJ/
-         FMhj3kKIjXWxRm2zvXc3Hg3mHVcFY64VcOi9ZL2AeD/V4787Pihg4fgstqxrXPoFh8Uk
-         VaO5YbzTtYbwXzUNGkHqz3VWd1jyt43AokBQikoSEDrMRhgBPfP0zttQK2aWlL6YBarq
-         kvEb33CfpuQuXIGb00BALMR1PN0u/Wc3P8iFUGQJjoSiakvb9Q/67uD+BiReUvM+cMv7
-         4ft2s8vKjbIvVonwJpImlQosOaZF2Jdi4CJwT3v3TjkD1SZZCnLVw6u20owSPQKC0RFJ
-         O5HA==
-X-Gm-Message-State: AOJu0YzlVj8mvEpzTZ1BaxVJH3PMTQSC29Xt3V1qGhtj9Zptc1H/lNCd
-	+9Sr3sQO0a9cT+bsO3yehXRNevHdYlIhkCiI3yKgUJBMpTszoqCnJ5h627JCtYh8MfjR4XUB6Bs
-	zeUdmxSi9dVNJ8dwuPhDLZVWxfzLzx04=
-X-Gm-Gg: AZuq6aLFzCeGuYL0Pp6uooRbfV37KwuXar5EZ8UxGn6j6eo/dZAfz6DR/xmyHfH9gj/
-	44FHJx+cOASWBd5wA/KX7JOXjBOaJnTgtcVv43xtVp2SVJwKfOkLHbBPu508lD7s+p+uP54F+6e
-	sLM8D/oUgBbyJm6vghtKLD8C1YcJlIe36hqqsRBiBKoFsOeNPiwzNq6MfToxFdWOo4VnVM/3oew
-	mlCAVPuGg1h4VxNOqLJVXFwvdzIr/xDssC3hWVmRuGND5aMTcK/W5c2PwOur/ppBWvfpeI=
-X-Received: by 2002:a05:690e:4104:b0:644:78ac:4b18 with SMTP id
- 956f58d0204a3-6495bee629emr1188670d50.9.1769137824172; Thu, 22 Jan 2026
- 19:10:24 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Vhu9vWus"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769138741;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sxYCK5TeXJjlRyHC8Xd7OAEQILqAVW/X/B15MOR30rM=;
+	b=Vhu9vWuslMW7+IZG1lMQ0J8RG3FWMvY/EiG9fa3DCmwsTDzXlzCKyuLLQnZgFLAfF4lFkN
+	nZ+AsQh+Ksfqotq8atNJ/yr01ozZtPQWlR27NbUqoTzKOQR6gtmo4nm2h6giuc72Ae7/ms
+	ZtfkOflfGEtMLPUK+xV55yoR0NEN26k=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v7 1/9] bpf: Extend BPF syscall with common attributes support
+Date: Fri, 23 Jan 2026 11:24:37 +0800
+Message-ID: <20260123032445.125259-2-leon.hwang@linux.dev>
+In-Reply-To: <20260123032445.125259-1-leon.hwang@linux.dev>
+References: <20260123032445.125259-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260119-skb-meta-bpf-emit-call-from-prologue-v1-0-e8b88d6430d8@cloudflare.com>
-In-Reply-To: <20260119-skb-meta-bpf-emit-call-from-prologue-v1-0-e8b88d6430d8@cloudflare.com>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Thu, 22 Jan 2026 19:10:13 -0800
-X-Gm-Features: AZwV_Qh9PgdUM-Ak3f4CvTCtCy-8sG_yS3plcc5xh6mUH9ThYE24CxevaPzQTFQ
-Message-ID: <CAMB2axNQxpJUiz7uE+pAV8uV0fye36OyAJ4qQqO-4Pdkb61=0Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/4] Switch from kfuncs to direct helper calls in prologue/epilogue
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	netdev@vger.kernel.org, kernel-team@cloudflare.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jan 19, 2026 at 11:53=E2=80=AFAM Jakub Sitnicki <jakub@cloudflare.c=
-om> wrote:
->
-> This series enables direct helper calls using BPF_EMIT_CALL from prologue
-> and epilogue code generated by verifier ops. The goal is to simplify the
-> calling convention and remove kfunc support from prologue/epilogue, as
-> suggested by Alexei [1].
->
-> Patch 1 adds the infrastructure to mark direct helper calls as finalized
-> (already resolved) so the verifier skips the imm fixup.
->
-> Patch 2 converts bpf_qdisc to use BPF_EMIT_CALL instead of BPF_CALL_KFUNC
-> for the init prologue and reset/destroy epilogue helpers.
->
-> Patch 3 removes the now-unused kfunc support code from prologue/epilogue
-> handling in the verifier.
->
-> Patch 4 removes the corresponding selftests that exercised kfuncs in
-> prologue/epilogue.
->
+Extend the BPF syscall to support a set of common attributes shared
+across all BPF commands:
 
-Thanks for converting bpf qdisc to using BPF_EMIT_CALL. The patchset
-looks good to me.
+1. 'log_buf': User-provided buffer for storing logs.
+2. 'log_size': Size of the log buffer.
+3. 'log_level': Log verbosity level.
+4. 'log_true_size': The size of log reported by kernel.
 
-Reviewed-by: Amery Hung <ameryhung@gmail.com>
+These common attributes are passed as the 4th argument to the BPF
+syscall, with the 5th argument specifying the size of this structure.
 
-> [1] https://lore.kernel.org/bpf/CAADnVQJ=3DkmVAZsgkG9P2nEBTUG3E4PrDG=3DYz=
-8tfeFysH4ZBqVw@mail.gmail.com/
->
-> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
-> ---
-> Jakub Sitnicki (4):
->       bpf, verifier: Support direct helper calls from prologue/epilogue
->       bpf: net_sched: Use direct helper calls instead of kfuncs in pro/ep=
-ilogue
->       bpf: Remove kfunc support in prologue and epilogue
->       selftests/bpf: Remove tests for prologue/epilogue with kfuncs
->
->  include/linux/bpf_verifier.h                       |  1 +
->  kernel/bpf/verifier.c                              | 47 +++++------
->  net/core/filter.c                                  |  3 +-
->  net/sched/bpf_qdisc.c                              | 76 ++++++++--------=
---
->  .../selftests/bpf/prog_tests/pro_epilogue.c        |  2 -
->  .../selftests/bpf/progs/pro_epilogue_with_kfunc.c  | 88 ----------------=
------
->  .../testing/selftests/bpf/test_kmods/bpf_testmod.c | 92 ----------------=
-------
->  7 files changed, 61 insertions(+), 248 deletions(-)
->
+To indicate the use of these common attributes from userspace, a new flag
+'BPF_COMMON_ATTRS' ('1 << 16') is introduced. This flag is OR-ed into the
+'cmd' field of the syscall.
+
+When 'cmd & BPF_COMMON_ATTRS' is set, the kernel will copy the common
+attributes from userspace into kernel space for use.
+
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ include/linux/syscalls.h       |  3 ++-
+ include/uapi/linux/bpf.h       |  8 ++++++++
+ kernel/bpf/syscall.c           | 25 +++++++++++++++++++++----
+ tools/include/uapi/linux/bpf.h |  8 ++++++++
+ 4 files changed, 39 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
+index cf84d98964b2..729659202d77 100644
+--- a/include/linux/syscalls.h
++++ b/include/linux/syscalls.h
+@@ -937,7 +937,8 @@ asmlinkage long sys_seccomp(unsigned int op, unsigned int flags,
+ asmlinkage long sys_getrandom(char __user *buf, size_t count,
+ 			      unsigned int flags);
+ asmlinkage long sys_memfd_create(const char __user *uname_ptr, unsigned int flags);
+-asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned int size);
++asmlinkage long sys_bpf(int cmd, union bpf_attr __user *attr, unsigned int size,
++			struct bpf_common_attr __user *attr_common, unsigned int size_common);
+ asmlinkage long sys_execveat(int dfd, const char __user *filename,
+ 			const char __user *const __user *argv,
+ 			const char __user *const __user *envp, int flags);
+diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+index 2a2ade4be60f..814bd2debd5b 100644
+--- a/include/uapi/linux/bpf.h
++++ b/include/uapi/linux/bpf.h
+@@ -986,6 +986,7 @@ enum bpf_cmd {
+ 	BPF_PROG_STREAM_READ_BY_FD,
+ 	BPF_PROG_ASSOC_STRUCT_OPS,
+ 	__MAX_BPF_CMD,
++	BPF_COMMON_ATTRS = 1 << 16, /* Indicate carrying syscall common attrs. */
+ };
+ 
+ enum bpf_map_type {
+@@ -1491,6 +1492,13 @@ struct bpf_stack_build_id {
+ 	};
+ };
+ 
++struct bpf_common_attr {
++	__u64 log_buf;
++	__u32 log_size;
++	__u32 log_level;
++	__u32 log_true_size;
++};
++
+ #define BPF_OBJ_NAME_LEN 16U
+ 
+ enum {
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 3c5c03d43f5f..3564b5bf3689 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -6163,8 +6163,10 @@ static int prog_assoc_struct_ops(union bpf_attr *attr)
+ 	return ret;
+ }
+ 
+-static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
++static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size,
++		     bpfptr_t uattr_common, unsigned int size_common)
+ {
++	struct bpf_common_attr attr_common;
+ 	union bpf_attr attr;
+ 	int err;
+ 
+@@ -6178,6 +6180,20 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
+ 	if (copy_from_bpfptr(&attr, uattr, size) != 0)
+ 		return -EFAULT;
+ 
++	memset(&attr_common, 0, sizeof(attr_common));
++	if (cmd & BPF_COMMON_ATTRS) {
++		err = bpf_check_uarg_tail_zero(uattr_common, sizeof(attr_common), size_common);
++		if (err)
++			return err;
++
++		cmd &= ~BPF_COMMON_ATTRS;
++		size_common = min_t(u32, size_common, sizeof(attr_common));
++		if (copy_from_bpfptr(&attr_common, uattr_common, size_common) != 0)
++			return -EFAULT;
++	} else {
++		size_common = 0;
++	}
++
+ 	err = security_bpf(cmd, &attr, size, uattr.is_kernel);
+ 	if (err < 0)
+ 		return err;
+@@ -6313,9 +6329,10 @@ static int __sys_bpf(enum bpf_cmd cmd, bpfptr_t uattr, unsigned int size)
+ 	return err;
+ }
+ 
+-SYSCALL_DEFINE3(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size)
++SYSCALL_DEFINE5(bpf, int, cmd, union bpf_attr __user *, uattr, unsigned int, size,
++		struct bpf_common_attr __user *, uattr_common, unsigned int, size_common)
+ {
+-	return __sys_bpf(cmd, USER_BPFPTR(uattr), size);
++	return __sys_bpf(cmd, USER_BPFPTR(uattr), size, USER_BPFPTR(uattr_common), size_common);
+ }
+ 
+ static bool syscall_prog_is_valid_access(int off, int size,
+@@ -6346,7 +6363,7 @@ BPF_CALL_3(bpf_sys_bpf, int, cmd, union bpf_attr *, attr, u32, attr_size)
+ 	default:
+ 		return -EINVAL;
+ 	}
+-	return __sys_bpf(cmd, KERNEL_BPFPTR(attr), attr_size);
++	return __sys_bpf(cmd, KERNEL_BPFPTR(attr), attr_size, KERNEL_BPFPTR(NULL), 0);
+ }
+ 
+ 
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index b816bc53d2e1..c14f9c6a275c 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -986,6 +986,7 @@ enum bpf_cmd {
+ 	BPF_PROG_STREAM_READ_BY_FD,
+ 	BPF_PROG_ASSOC_STRUCT_OPS,
+ 	__MAX_BPF_CMD,
++	BPF_COMMON_ATTRS = 1 << 16, /* Indicate carrying syscall common attrs. */
+ };
+ 
+ enum bpf_map_type {
+@@ -1491,6 +1492,13 @@ struct bpf_stack_build_id {
+ 	};
+ };
+ 
++struct bpf_common_attr {
++	__u64 log_buf;
++	__u32 log_size;
++	__u32 log_level;
++	__u32 log_true_size;
++};
++
+ #define BPF_OBJ_NAME_LEN 16U
+ 
+ enum {
+-- 
+2.52.0
+
