@@ -1,63 +1,63 @@
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7D93033C1
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 02:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E463624C8
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 02:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769137006; cv=none; b=UoL+PX7UfrFZHLLjpyVTLIdxETtE/Nrd3zyaPmXd84BEYP9ub6aASDJO2cZa+OxnhDv8g+J3TXcVS3FdYxf7EN+wk5bV/8IU9TWq4N2t2zsJQOm7rCPSgqb2s1nCUw8cwyyui0dxwnRN19GLOxL1ZzDlOXwTlmiLfCFhEt3qSNQ=
+	t=1769137187; cv=none; b=AltQQq/wEXh4OmNCpMAMLkV4p9Ith1mi/wvdXNF/P9SpXoSJ6YuYniOkfTU/FIxCrktQ15f/dUSTe7BhVHGm/RxsotS7rNDDxAMI+uKOA8v/GsiYJVXpEf+5ueX+laGD16Nvw8XhlQ+rtULZ2vtsY0331qIqFHrc93IC6/qTDwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769137006; c=relaxed/simple;
-	bh=MqGqMyWtIZIROs//UB9ry7kOeWqArIb6NE7EBt3/nY4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
-	 References:In-Reply-To; b=Wlyrm1/JYW+Lfk3Y+FIJ+o61LSY0hLo+QHIsaGmRSwOCGIeADfIirCnt5SiPVtGx2NlBp6HijhWzPawcWR6p3mvw1UNYE6Viw4Rs7VV8vTMkSPpeCF+2wmko3U8vnJ+/ptddfZjctc+CKNlQwPFNYk2ARKELaQ9Ak5qBfckIGjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=S674R+w3; arc=none smtp.client-ip=209.85.219.45
+	s=arc-20240116; t=1769137187; c=relaxed/simple;
+	bh=PIMW/GB8Cp/eJevJJ6KFcdE8cQ1dDAXqZRTb/ssVzt0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
+	 References:In-Reply-To; b=XscidVSbrHcPWld21oRvcgKPbpGunk7TwLPu5KOsflPd6atmySTeEzdh2blzOas3Dka5PhiM3fKaQT3ayiUONZuaX3Mb+2XC7/FxK7aOsVwDpZB9ue3NDnkDzlje4C6KixUM6viwKwRsoqpjdFUHmSwPMdbedxHHHoOm9p5lvZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=aTgEv+lp; arc=none smtp.client-ip=209.85.222.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="S674R+w3"
-Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-8946f12b1cfso25312606d6.0
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:56:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="aTgEv+lp"
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-8c6af798a83so204030685a.0
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:59:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769136989; x=1769741789; darn=vger.kernel.org;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769137173; x=1769741973; darn=vger.kernel.org;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SAJOvsqeVt/BO+ea4ZRDUP6mA4G1S6VR0+hvji6Vcog=;
-        b=S674R+w3z75QXedF1Qpp0UA+E6U31FsKJQnEeY7HG1GTm+vDCe4uZSBpTEu3RWo7il
-         qYtx+C/8PaiNCh95OSuk9xTihGjRcjTlIaVtcaDfE8HyNZetVu+KXt98T58O8P0S9Dxl
-         rf0u2n6dX7gqyIVc1j7htddnmMdHKYM98jXw1PrfoaWcWa2zJDDi4DpoVVnREBGp4RyU
-         hRC3ad33slrY4zJYyhvBx1FHezgYCILyjMYjnImNhikIqGLK85kAm/HxbO3TpdRPeLgj
-         K8gwfW4XiNMpG9/9kdeEiaGhooDZXwRvIVTJNf6QiXATHZItsObWG+xrXw9K6w2juq/0
-         knNw==
+        bh=92KE4s8ChJGbDVX7FzqVEbEMPgtvKgI3ShsoU+Depuw=;
+        b=aTgEv+lpPuLzWvWbg4e+wa/K3pwXbpZXaSHXvTP5MKIa5XBnRJcCvObbIArKpl9MOZ
+         /3ltcuRZAyK87F8iM44HDXEP05hJWsh+uelDUXwmpdPQX2dIpC8dkVgUwXpsCPEkZUOV
+         pUBUV/bmlyU383xkc9b5Z2x44oGvEYPtQHrzpNCwU2QXvpmMzC1nK4LAorQBqr6phm8m
+         gZz/7QwoXW98m8NSevQP/O72Uc47B2yvJBZ32EJ59xLAgN/zu3HuATvZNrCI0lcNdjrm
+         uXJyz3HC7PVDJwy7Y3V0Sfa1LSK1oUbsCcUSbDCXjxDT7HEeWSCaaZmC/Q1F4LbV6RsI
+         Exfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769136989; x=1769741789;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
+        d=1e100.net; s=20230601; t=1769137173; x=1769741973;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SAJOvsqeVt/BO+ea4ZRDUP6mA4G1S6VR0+hvji6Vcog=;
-        b=Zvt7UX1cEgFMUougOzXtT/2oBGG23kJTxmusxwkZfvEJd1TSb2kRsQmqJH3fWaOynJ
-         olQWr2RDmhFvJ3mmTyz+D7/hCDAKxqkciHVcpQY/1CGZIryYy6aiIZAihu9nYDeh+ZfT
-         QcFtzF2HDyTje7TBfAt+ueflR8z1YR47Pxk2r/CyFshRpBs3kxuoOZ6clMeNATY3WLfN
-         WPsilPg5wBLmzqLK31FC8gZtx4arjmq1oHq28gDK5QWm420eF330ZrLrCvAByd9M7Shi
-         Vp/9OnWLBKgWiZtvuHvhF/p/Cg/G3GkrK4BNLXmHaGvJkAI0S9vRLIi9feSJ8ztzXBkA
-         68/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXYUeq0EcbrXPpzjGSBoBMpgIUJ2QcIlhd9IXwSo+5C3h9ixBuDUIxr059RFAiIa9Guvd0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw37CBbe8Nm7KcK6fafGv9UvzYAY9NFjrfTAA7bic9ifrCj2qYJ
-	se7sStKd5sKHDgd8bjdBA+j2CgwPj+TnWdMYrJeYIwFRLH/KyCQUo5d2H0N1GkuyCrU=
-X-Gm-Gg: AZuq6aI0FA9xumQFc9QhX3Zvsce/b96Is88i6BUkqmMW+o2GNDtmdp2bveuiH8BsXkH
-	Ht9ieOx/IjJbdXT08FrT5A7xbN2kuyu6e+S8+zP1JAt70uQuYLJ2SQSLWy007/qejk3nFCJHVcz
-	AXG8PDB9XKQ2AP4NMV5zOeMnetJsCGEQjPzbCJr7CKtBZDhEx6egdeZxjnmU+iJDdnRKp8btqME
-	ywxURy/ZL+oPIY/6rel9N6I3AhaxjdSk2NenteQfFYV59gq21DRUpxXTQfGWEO+Bvkx+uBwT24m
-	edQBxoFM7mrHu7tVEkyUD9ofIpIdGNcfdZ9Eg/iiiKeeRd4oq4Ud5mLEin3wgID6LPlMyovgQOx
-	PLjGc+whjsbcfkqQWUyRRth1WUViKuFKH7hKC2o8wu1NBjuLjXt9cB8nZdqDRLeQzlQVCLro1pD
-	BuSsYpCEHoVhw=
-X-Received: by 2002:a05:6214:301e:b0:882:3759:9158 with SMTP id 6a1803df08f44-8949022b8ddmr23557836d6.61.1769136989234;
-        Thu, 22 Jan 2026 18:56:29 -0800 (PST)
+        bh=92KE4s8ChJGbDVX7FzqVEbEMPgtvKgI3ShsoU+Depuw=;
+        b=LJ1wJPn8ohhAX5Zn+BSExNnEWd7LZD0WXh+S5kpDXHdtjbjSjSkCxHlJpRkWeX7VhA
+         8cnbV1krfFwbcfpNcvxNkCS6eH+1fU+wadP58+CGt1PtbNVllVPBqNOjwPnbVmtBFqJS
+         /M/qhc3qGo63zQZ2Y73JYNov2wyMJvj5cXjrX6rs50d29lLwJuf5XVdy67D3FId+qtSR
+         NGFdddFADbzif+kBy5M+eUrJsYPeGf67EO9ST3ppx/0H6gaYix8Ii16hucUFVChbMwkn
+         1aMkp0UENZzE0OQjGjmEY8Nvj99wEY/F7fNPHo5HgnZNKxZnHkeMx/+FnaiQHpgDshBD
+         w1PA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSwnLmvxVF17qX4VNISXvz84oPwYdEcGytGOWcSC+Z85fy7W1WkrCN7CTmncF8X9c17i8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqT2xHzoGxU1mMPu+ETGvDU08XWCegDPHzmrh16IfNcsrA9j4t
+	RQADDy6QQ/33p0w1vMXQ6hQJ8v1RK1Hf6G81lw5aPh/4FgwuhbFt9+nsxLEMaASipYI=
+X-Gm-Gg: AZuq6aIKZ7/z0KJzrc4NXdv1dyR81GsSH/1b3ktTyHhvE3Iu/bAir6OJKcNkVqxt8gq
+	9DmjKlZMWKORMJWbDylnNT3a2PJ0/LvUuWxd1LJt1T+QQ9tpUZexP+kScDKb+auTcRS38peixz/
+	uY+IP3cgzdMeBQOVuK1IoKdoDHFFgOvIOdKMcicBckvMfilDl0S+vRCNTm5Uolp2wIpJf1KewiD
+	7WrBcCVb3DCkfI3ktzjt6GVFOiKlxZFZuR6BgrwfLUDWQpVLunAG4vVaRz0YKPvqE8nnpM38vAT
+	ZMFgx6CsxPvPiFtETpJ3KQE8IdPJp2MTA9z8hwKQ5tiolPqsm4EiYgjdLjkeYH8UKcktGlKmX7G
+	iwzc+9ynzjMjgb03nyo/VTqs+90lcvQYj29nrFlsLmN6QB4WoEHdnhFHOQVtv6jFHcRsMmBlBuf
+	fcgiB/8xEs5tU=
+X-Received: by 2002:a05:620a:4445:b0:8bb:a037:fd94 with SMTP id af79cd13be357-8c6e2dc0f12mr212556985a.38.1769137172825;
+        Thu, 22 Jan 2026 18:59:32 -0800 (PST)
 Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c6e3854a6csm75303985a.41.2026.01.22.18.56.28
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89491939567sm8527306d6.48.2026.01.22.18.59.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jan 2026 18:56:29 -0800 (PST)
+        Thu, 22 Jan 2026 18:59:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,62 +66,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 22 Jan 2026 21:56:27 -0500
-Message-Id: <DFVMQ08L200J.2UTQGHB63QPOK@etsalapatis.com>
-Subject: Re: [PATCH 06/13] selftests: bpf: Add arena ASAN runtime to
- libarena
+Date: Thu, 22 Jan 2026 21:59:30 -0500
+Message-Id: <DFVMSCH5VD8Z.1WQ9I01GBNCQW@etsalapatis.com>
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
 To: <bot+bpf-ci@kernel.org>, <etsal@meta.com>, <bpf@vger.kernel.org>
 Cc: <ast@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
  <daniel@iogearbox.net>, <memxor@gmail.com>, <puranjay@kernel.org>,
  <song@kernel.org>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
  <clm@meta.com>, <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH 10/13] selftest: bpf: Add libarena stack allocator
 X-Mailer: aerc 0.20.1
-References: <20260122160131.2238331-7-etsal@meta.com>
- <fc73fe661a977aa87f21e92e96bfd4e63bcaa54c5356627257a8d485dc515821@mail.kernel.org>
-In-Reply-To: <fc73fe661a977aa87f21e92e96bfd4e63bcaa54c5356627257a8d485dc515821@mail.kernel.org>
+References: <20260122160131.2238331-11-etsal@meta.com>
+ <3079ef68368b1d573cd997363987554e24d444405c0d9765f073df1827d6eb32@mail.kernel.org>
+In-Reply-To: <3079ef68368b1d573cd997363987554e24d444405c0d9765f073df1827d6eb32@mail.kernel.org>
 
-On Thu Jan 22, 2026 at 11:58 AM EST, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools=
-/testing/selftests/bpf/libarena/src/asan.bpf.c
+On Thu Jan 22, 2026 at 12:12 PM EST, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/libarena/src/stack.bpf.c b/tool=
+s/testing/selftests/bpf/libarena/src/stack.bpf.c
 >> new file mode 100644
->> index 000000000000..7d39ee7b68bd
+>> index 000000000000..37f8ce43e0f8
 >> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+>> +++ b/tools/testing/selftests/bpf/libarena/src/stack.bpf.c
 >
 > [ ... ]
 >
->> +static __always_inline int asan_report(s8a __arg_arena *addr, size_t sz=
-,
->> +				       bool write)
+>> +static int stk_fill_new_elems(struct stk *stack)
 >> +{
->> +	/* Only report the first ASAN violation. */
->> +	if (asan_reported && asan_report_once)
+>> +	stk_seg_t *data_seg, *stk_seg;
+>> +	bool need_stk_seg;
+>> +	__u64 nr_pages;
+>> +	size_t nelems;
+>> +	int ret, i;
+>> +	u64 mem;
+>> +
+>> +	nr_pages =3D stack->nr_pages_per_alloc;
+>> +	nelems =3D (nr_pages * __PAGE_SIZE) / stack->data_size;
+>> +	if (nelems > STK_SEG_MAX) {
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	/*
+>> +	 * If we have more than two empty segments available,
+>> +	 * try to repurpose one of them into an allocation.
+>> +	 */
+>> +	ret =3D stk_seg_to_data(stack, nelems);
+>> +	if (!ret)
 >> +		return 0;
 >> +
->> +	asan_reported =3D true;
->> +
->> +	asan_violated =3D (u64)addr;
->> +
->> +	if (asan_emit_stack) {
->> +		arena_stderr("Memory violation for address %p (0x%lx) for %s of size =
-%ld",
->> +				addr, write ? "write" : "read", sz);
+>> +	need_stk_seg =3D !stack->capacity;
+>                        ^^^^^^^^^^^^^^^^
 >
-> The format string has four format specifiers (%p, %lx, %s, %ld) but only
-> three arguments are provided (addr, write?"write":"read", sz). Is there
-> a missing argument for the (0x%lx) specifier, or should that part of the
-> format string be removed?
+> Can the data_seg memory be leaked when capacity is non-zero but less than
+> nelems? The check here only allocates a new stack segment when capacity
+> is exactly zero. If, for example, capacity is 5 but nelems is 16, the
+> loop below will fail partway through stk_push() with -ENOSPC after
+> pushing only 5 elements. The remaining chunks from data_seg would never
+> be tracked.
+>
+> Consider this scenario:
+>   1. Stack has one segment with capacity=3D5 (few free slots)
+>   2. stk_seg_to_data() fails since only one segment exists
+>   3. need_stk_seg =3D false since capacity > 0
+>   4. stk_get_arena_memory() allocates only data_seg (no stk_seg)
+>   5. Loop tries to push nelems (say 16) chunks
+>   6. After 5 pushes, stk_push() returns -ENOSPC
+>   7. Remaining 11 chunks from data_seg are lost
+>
+> Should this be checking capacity < nelems instead of !capacity?
 >
 
-Ack, there is a missing argument - the scalar representation of the
-arena address. Will add.
+Ack, the AI's explanation holds. The bug was introduced during
+refactoring - will fix.
 
->> +		bpf_stream_print_stack();
+>> +
+>> +	/* Get memory for a new data segment, and possibly a stack segment if =
+necessary. */
+>> +	ret =3D stk_get_arena_memory(stack, nr_pages, &data_seg, need_stk_seg =
+? &stk_seg : NULL);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	if (need_stk_seg)
+>> +		stk_extend(stack, stk_seg);
+>> +
+>> +	mem =3D (u64)data_seg;
+>> +	for (i =3D zero; i < nelems && can_loop; i++) {
+>> +		ret =3D stk_push(stack, (void __arena *)mem);
+>> +		if (ret)
+>> +			return ret;
+>> +		mem +=3D stack->data_size;
 >> +	}
 >> +
 >> +	return 0;
 >> +}
+>
+> [ ... ]
 >
 >
 > ---
