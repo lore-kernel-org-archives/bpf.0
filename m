@@ -1,183 +1,186 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f68.google.com (mail-ej1-f68.google.com [209.85.218.68])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F5E824BD;
-	Fri, 23 Jan 2026 13:18:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65309334688
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 14:59:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769174318; cv=none; b=cnpZxdj2N3qYB8qnuz7Joqh4/OX6wh7ofySgrbfPfqTfoad8DojiAZRbmcF+yENKPDYEocKdVYHc822ULjdi2E4cQa7JXDbeRGFA7/1RmIHY4vWT2PnP29aAt4+N//oZNCGeHyroVuN0wZfsUrRwPS1YAPrV5IF4e8XVPn0wSB4=
+	t=1769180384; cv=none; b=iF5wPo8fmNCjfY1ePqT+HqeYpyx3tgFpI5CCecjVO9gdJy+0ZUcdKUgi1MqbiCG35dEUA8uCaC7PSoQ4Rey0zzXWrc3Bcgq4hIYLgxW12IpyS8ScLX6cjQKoBQ+w9BYrYv2VPEB7efWfpUmm6uxWik4mQgVT4KfrZsFL9JdwXSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769174318; c=relaxed/simple;
-	bh=Dwt483dSgBzyl2lAeymCgmfrHhiBOhwXOY+7s0VkvM8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S9gHaejXupLxHwqcGogxfhO4TaldBNUdHk7h2vkY+yDJm1bDeSNcTnwyjqCoNhh6oZvEWd+KwGlfYJPxSTsTj69irOthwLofO828pU9RWZ6HJe3/hDl6jAs0KCtOtglob3k2mM7Rmi83L/GI4Q3TDGAJTeKdPh4aB4eF+hooEJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=XiJNlOD8; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1769180384; c=relaxed/simple;
+	bh=OiiQ6NpHryNtjGVVPD22cyeUNTIH8+XUUWiFi1FnLh8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=GSI3V2v4GrHBKOezi7FGoedNaski0uDi2WzmkW1BmEholcsWwsbwGwFbM3kuJUIGncMXi50W/Mr+v8XG3QhZM2ZD9ZfuEKfrYoDVE3TfzsNLiCcwFpRuLhdRsTuFBAAzvqbCvVAePL9JolYDE8Uxe294+maI+H25BuwvLIZ+LEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=VupZkdig; arc=none smtp.client-ip=209.85.218.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="XiJNlOD8"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60N2ViAl022452;
-	Fri, 23 Jan 2026 13:18:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=gHWv12
-	A8Rwtfmk9fkYlXoxMiX6wio5VUiEJpUX3KQVE=; b=XiJNlOD8anlJAbJZJd7Qrw
-	/CcDMVMiYjwX/ZkYqUlJ0MO8K3aVmkBRxxn8oWSqkc9Vth5g9Xll1s3AIfAtHsJb
-	dyrHUEaM+uMm59u8bdH4SCsi04tP4xZsqxb8T9Tj0sb/EP8dsW7q+vCxYDPIq07h
-	pCQs0UHvhNJ88LU95EwrQ4Swi8FH14Nqwb3XrApRqkmEZimpASTtUZ9KwIESFMFf
-	mxSLlwqKRWqrqM9sZWCIEJmvHqjb0zxz/9eEntJc2sFQPQBLWBljMXMpfu3vj0i0
-	2AQd+zbs4h7m7uQfrgRzB5ipXDFA5yV3YTUzv2f9tqbZlQUa8tup8kPwcnzRpquQ
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bt612jnv4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Jan 2026 13:18:04 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60NDI34Q014813;
-	Fri, 23 Jan 2026 13:18:03 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bt612jnux-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Jan 2026 13:18:03 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60NDBuK6024583;
-	Fri, 23 Jan 2026 13:18:02 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4brxas7h4r-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Jan 2026 13:18:02 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60NDHw7044499212
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 23 Jan 2026 13:17:58 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7EA0520043;
-	Fri, 23 Jan 2026 13:17:58 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A5FD720040;
-	Fri, 23 Jan 2026 13:17:52 +0000 (GMT)
-Received: from [9.78.106.105] (unknown [9.78.106.105])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 23 Jan 2026 13:17:52 +0000 (GMT)
-Message-ID: <b35dab8c-7e6b-4b7a-ac77-b85e33051e95@linux.ibm.com>
-Date: Fri, 23 Jan 2026 18:47:51 +0530
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="VupZkdig"
+Received: by mail-ej1-f68.google.com with SMTP id a640c23a62f3a-b8842e5a2a1so280026266b.2
+        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 06:59:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1769180375; x=1769785175; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jkIl7dS+mkiKgOTH9bgq3/o2+8pPlzP+BKaLvYWO3Zs=;
+        b=VupZkdigAVADoCnmxfFHhdPVfxedK8utn3d5xY71hhKpK4cDXVOoM4C5+X/EWd17lD
+         YCa+8J/fT2asK14qObzGjC/pEURnemMM8DlghYwX7xKeueJo3XW3nM4CdygS46ftt9lo
+         KEBL2+ydeppjIMTWQrlzgLDaAH4elXF//0PYB7nh1hXaeoHjY68BVFqMmpSP2tNoyQH9
+         cpvMn2297CMaWurdqFOwk1vaYg7w1DUVtZqmZaMTCjc4N+NLZCLrF14lg676BMsIqrIf
+         YC+3ZouZBtTa6bT0dqAosXGb/NjlI7FN/EOdsx46u0utCcrq9VaOwAD0YfR0Is3YLxpv
+         uVeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769180375; x=1769785175;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jkIl7dS+mkiKgOTH9bgq3/o2+8pPlzP+BKaLvYWO3Zs=;
+        b=mZMAucpfM+cddlQ6yxWKJ/aEZcVzKRo3Dk8e1TWUCIpV3Rp9MgTEK0tNi3ETAwF9B7
+         ToxsBPNuNFt4dXSDZmxHhkBxplmBLtZiHznZR1Qiojd2waf30DSJPKZlkXTcleEfekTe
+         kHee5ffZRsUZczdlGMxwG9UtBPhHYVZ00rGuX0sTgBTK+tJzdm6Pm2NzEELBX5E7GmC9
+         P5GcLH2JQBfRanpynYgDeDnJJi5gFXddeH5b66m+lXN8GmIv+e55sypry/75gFdppzqK
+         ZtwthyER4gnPbMFD5W/5zZQQLiX37OrXNSkANJGHp9chiutBOjdiYzFhJmyDLJAftTrl
+         89mA==
+X-Gm-Message-State: AOJu0YyyvEwa4Rb/QqutOH5c6LWiinSSF9vMURiuOw5B8NkX3i2lAIVW
+	fegHvAekipC8PVsGKBs4VCkZhhPnRj+zCNr9Yl+yPWOGji+18Wk+48KqgAYZb8vReTY=
+X-Gm-Gg: AZuq6aLGjUUeyuHTp5OPEZoDW9Q/paKhInWXwwelVnYsFoY5WZXYKVkLYBFqDmhxH/J
+	liklE/6ay7SRjOQFRYBOJ7Rv75su/LnprPWRa+HEvpZaA0f5Rxxhq1bUhNzzkjM1eKqpCXw0GNg
+	0nyCttLE4R0ViM8IcDn4YpR4FKI9kwDmNHgnAOdRhMtaiixkR7HLQ4AhagrRpkEGQgJ6Nku+m/d
+	PIBN3i+iqdj0wHBol2wdG8GMCd7Uc6rJKJnAEOvhPTQ4NAPGGpU3Ho8JidyryiD4r8S5FYBctyj
+	1Wt5zbMP5pN2czX6AwGWTp5YO7GCsquwLTxP4SrQy+sEBwYyGWt2b4nin4UXtFyJv14UG7CCRRM
+	Q4OOhbG4phNCLVDtQtug+XbkOQbIP2K9HTrNZkin0S7ps1bnOPGltIPtjUslc32tsIFj9h7niPH
+	i6Bb0=
+X-Received: by 2002:a17:907:9616:b0:b87:d92a:f71 with SMTP id a640c23a62f3a-b885aea1336mr201953666b.62.1769180374748;
+        Fri, 23 Jan 2026 06:59:34 -0800 (PST)
+Received: from cloudflare.com ([2a09:bac5:5063:2432::39b:d2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b885b6ff176sm115832466b.32.2026.01.23.06.59.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Jan 2026 06:59:34 -0800 (PST)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org,  "John Fastabend" <john.fastabend@gmail.com>,
+  "David S. Miller" <davem@davemloft.net>,  "Eric Dumazet"
+ <edumazet@google.com>,  "Jakub Kicinski" <kuba@kernel.org>,  "Paolo Abeni"
+ <pabeni@redhat.com>,  "Simon Horman" <horms@kernel.org>,  "Neal Cardwell"
+ <ncardwell@google.com>,  "Kuniyuki Iwashima" <kuniyu@google.com>,  "David
+ Ahern" <dsahern@kernel.org>,  "Andrii Nakryiko" <andrii@kernel.org>,
+  "Eduard Zingerman" <eddyz87@gmail.com>,  "Alexei Starovoitov"
+ <ast@kernel.org>,  "Daniel Borkmann" <daniel@iogearbox.net>,  "Martin
+ KaFai Lau" <martin.lau@linux.dev>,  "Song Liu" <song@kernel.org>,
+  "Yonghong Song" <yonghong.song@linux.dev>,  "KP Singh"
+ <kpsingh@kernel.org>,  "Stanislav Fomichev" <sdf@fomichev.me>,  "Hao Luo"
+ <haoluo@google.com>,  "Jiri Olsa" <jolsa@kernel.org>,  "Shuah Khan"
+ <shuah@kernel.org>,  "Michal Luczaj" <mhal@rbox.co>,  "Cong Wang"
+ <cong.wang@bytedance.com>,  netdev@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v7 2/3] bpf, sockmap: Fix FIONREAD for sockmap
+In-Reply-To: <d8c440c1255979b5120eed985f7d156f68cd7a3f@linux.dev> (Jiayuan
+	Chen's message of "Thu, 22 Jan 2026 03:56:50 +0000")
+References: <20260113025121.197535-1-jiayuan.chen@linux.dev>
+	<20260113025121.197535-3-jiayuan.chen@linux.dev>
+	<87a4y8uy67.fsf@cloudflare.com> <871pjjux2u.fsf@cloudflare.com>
+	<60a0c463ef6dbe38d836c773c5256706c163311c@linux.dev>
+	<d8c440c1255979b5120eed985f7d156f68cd7a3f@linux.dev>
+Date: Fri, 23 Jan 2026 15:59:33 +0100
+Message-ID: <87cy30tlwq.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 6/6] powerpc64/bpf: Additional NVR handling for
- bpf_throw
-To: bot+bpf-ci@kernel.org, adubey@linux.ibm.com, bpf@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc: sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
-        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
-        iii@linux.ibm.com, shuah@kernel.org, martin.lau@kernel.org,
-        clm@meta.com, ihor.solodrai@linux.dev
-References: <20260122211854.5508-7-adubey@linux.ibm.com>
- <e63a916bd44b8352aace4fd47fdeb459dc75cceb71615f44e6234cc1b6ffbd69@mail.kernel.org>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <e63a916bd44b8352aace4fd47fdeb459dc75cceb71615f44e6234cc1b6ffbd69@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FverhG7n2ipJFykCroDbxcgwoNg173KD
-X-Authority-Analysis: v=2.4 cv=LaIxKzfi c=1 sm=1 tr=0 ts=6973750c cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=a6oNqCRM0GkQNCNu6D0A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: IUP3nXrbXDeNT2c92xXTVbhi32ZFiBxO
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIzMDEwOSBTYWx0ZWRfX+60DBRAuh8jH
- bTu2r3OmvZNtZ8b29pApv4prW+AjbbMPcAafdvV9LOcm3tn2B81sd5rt8XtgJjgmiAyYABH5c0F
- YbbuuE7qGr5pLi5moCEgBWI5yaYnCKfmhfrg5Gmo6eM2f+rKJa0kNZRbMl508gBNY78qRgTt12q
- iLBa43vZVwKN+t8XlLdcEVpN10LXgDdo1nVzqOjoegmtyJTMQRGm3VN5vbAjOB9d86DZvWKK2dQ
- BOe3mcXT79QmkQxFc5oq2hBCDDZYNUmzTB4a6F1pc/oM+AnMmoSELwAeJ1dSrw6V7kYfMDjtwuQ
- d8Hu/HaxB2LjFx3ImZTefCgEW0gkROtRUgpxrnJpKtYIyqnWvE8H63NPjt3cFD2d/nvmf3Rc6HY
- W3n5pCfF64g3gTQ5Z/4ocdgsTURYy+3yuiYHb3AibLmgpiH4PTaTZ3NPaFJii9Ifa5ls9HutBZi
- ezV/L4lpcGFrDsFH2ow==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
- definitions=2026-01-23_02,2026-01-22_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 adultscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0
- suspectscore=0 clxscore=1015 impostorscore=0 spamscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2601230109
+Content-Type: text/plain
 
-
-
-On 23/01/26 3:10 am, bot+bpf-ci@kernel.org wrote:
->> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
->> index c284a12fce6e..98780a15fc69 100644
->> --- a/arch/powerpc/net/bpf_jit_comp64.c
->> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-> 
-> [ ... ]
-> 
->> @@ -125,9 +149,19 @@ int bpf_jit_stack_tailcallinfo_offset(struct codegen_context *ctx)
+On Thu, Jan 22, 2026 at 03:56 AM GMT, Jiayuan Chen wrote:
+> January 21, 2026 at 20:55, "Jiayuan Chen" <jiayuan.chen@linux.dev
+> mailto:jiayuan.chen@linux.dev?to=%22Jiayuan%20Chen%22%20%3Cjiayuan.chen%40linux.dev%3E
+>> wrote:
+>> January 21, 2026 at 17:36, "Jakub Sitnicki" <jakub@cloudflare.com
+>> mailto:jakub@cloudflare.com?to=%22Jakub%20Sitnicki%22%20%3Cjakub%40cloudflare.com%3E
+>> >  I've been thinking about this some more and came to the conclusion that
+>> >  this udp_bpf_ioctl implementation is actually what we want, while
+>> >  tcp_bpf_ioctl *should not* be checking if the sk_receive_queue is
+>> >  non-empty.
+>> >  
+>> >  Why? Because the verdict prog might redirect or drop the skbs from
+>> >  sk_receive_queue once it actually runs. The messages might never appear
+>> >  on the msg_ingress queue.
+>> >  
+>> >  What I think we should be doing, in the end, is kicking the
+>> >  sk_receive_queue processing on bpf_map_update_elem, if there's data
+>> >  ready.
+>> >  
+>> >  The API semantics I'm proposing is:
+>> >  
+>> >  1. ioctl(FIONREAD) -> reports N bytes
+>> >  2. bpf_map_update_elem(sk) -> socket inserted into sockmap
+>> >  3. poll() for POLLIN -> wait for socket to be ready to read
+>> >  5. ioctl(FIONREAD) -> report N bytes if verdict prog didn't
+>> >  redirect or drop it
+>> >  
+>> >  We don't have to add the the queue kick on map update in this series.
+>> >  
+>> >  If you decide to leave it for later, can I ask that you open an issue at
+>> >  our GH project [1]?
+>> >  
+>> >  I don't want it to fall through the cracks. And I sometimes have people
+>> >  asking what they could help with in sockmap.
+>> >  
+>> >  Thanks,
+>> >  -jkbs
+>> >  
+>> >  [1] https://github.com/sockmap-project/sockmap-project/issues
+>> > 
+>> Hi Jakub,
+>> 
+>> Thanks for taking the time to think through this carefully. I agree with your
+>> analysis - reporting sk_receive_queue length is misleading since the verdict
+>> prog might redirect or drop those skbs.
+>> 
+>> There's no rush to merge this patch.
+>> 
+>> Since the kick queue on bpf_map_update_elem addresses a closely related issue,
+>> I think it makes sense to include it in this patchset for easier tracking rather
+>> than splitting it out.
+>> 
+>> I'll spend more time looking into this and come back with an updated version.
+>> 
+>> Thanks,
+>> Jiayuan
 >>
->>   static int bpf_jit_stack_offsetof(struct codegen_context *ctx, int reg)
->>   {
->> -	if (reg >= BPF_PPC_NVR_MIN && reg < 32)
->> +	int min_valid_nvreg = BPF_PPC_NVR_MIN;
->> +	/* Default frame size for all cases except exception boundary */
->> +	int frame_nvr_size = BPF_PPC_STACKFRAME;
->> +
->> +	/* Consider all nv regs for handling exceptions */
->> +	if (ctx->exception_boundary || ctx->exception_cb) {
->> +		min_valid_nvreg = _R14;
->> +		frame_nvr_size = BPF_PPC_EXC_STACKFRAME;
->> +	}
->> +
->> +	if (reg >= min_valid_nvreg && reg < 32)
->>   		return (bpf_has_stack_frame(ctx) ?
->> -			(BPF_PPC_STACKFRAME + ctx->stack_size) : 0)
->> +			(frame_nvr_size + ctx->stack_size) : 0)
->>   				- (8 * (32 - reg)) - BPF_PPC_TAILCALL;
-> 
-> For the redzone case (no stack frame) with exception_boundary, this
-> formula computes R23 at offset -80 and R24 at offset -72 from R1.
-> 
-> However, bpf_stf_barrier() uses hardcoded offsets -80(1) and -72(1) to
-> temporarily save R21 and R22 during STF barrier execution:
-> 
->      asm (
->      "	bpf_stf_barrier:		;"
->      "		std	21,-80(1)	;"
->      "		std	22,-72(1)	;"
->      "		sync			;"
->      "		ld	21,-80(1)	;"
->      "		ld	22,-72(1)	;"
->      ...
->      );
-> 
-> When an exception_boundary program without its own stack frame executes a
-> memory load that triggers STF_BARRIER_FALLBACK, can bpf_stf_barrier()
-> corrupt the saved R23 and R24 values? The hardcoded offsets would overlap
-> with the extended NVR save area.
-> 
-> If exception_cb later restores these registers, it would get R21/R22 values
-> instead of the original R23/R24 values.
-> 
-That is practically not possible as exception_boundary would mean
-at least bpf_throw() is in the program (SEEN_FUNC) and SEEN_FUNC
-would setup a frame for the exception_boundary program. Also, 
-bpf_stf_barrier() always uses the redzone. So, it never stomps
-on the stack of exception_boundary program...
+>
+>
+> Hi Jakub,
+>
+>   I've been thinking about this more, and I realize the problem is not as simple as it seems.
+>
+>   Regarding kicking the sk_receive_queue on bpf_map_update_elem: the BPF
+>   program may not be fully initialized at that point. For example, with a
+>   redirect program, the destination fd might not yet be inserted into the
+>   map. If we kick the data through the BPF program immediately, the
+>   redirect lookup would fail, leading to unexpected behavior (data being
+>   dropped or passed to the wrong socket).
 
-@abhishek, better add the above comment and probably
-also make bpf_has_stack_frame() return true explicitly for
-exception_boundary as well (though SEEN_FUNC can't be false
-in case of exception_boundary)..
+I reckon there is not much we can do about it because we have no control
+over when inserts/removes sockets from sockmap. It can happen at any
+time.
 
-- Hari
+Also, a newly received segment can trigger sk_data_ready callback,
+and that would also cause the skbs to get processed. We don't have
+control of that either.
+
+Does this change break any of our existing tests/benchmarks or some
+other setup of yours?
+
+>   I also considered triggering the kick in poll/select via
+>   sk_msg_is_readable(). However, this approach doesn't work for TCP
+>   because tcp_poll() -> tcp_stream_is_readable() -> tcp_epollin_ready()
+>   will return early when sk_receive_queue has data, before ever calling
+>   sk_is_readable().
+>
+>   In the next version, I'll address your other nits and remove the
+>   sk_receive_queue check from tcp_bpf_ioctl. I'll also open an issue on
+>   the GH project to track this problem so we can continue exploring
+>   better solutions.
+
+Sounds like a plan. Thanks!
