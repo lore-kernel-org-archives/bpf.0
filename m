@@ -1,89 +1,89 @@
-Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0069280A58
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 19:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E101DC9B3;
+	Fri, 23 Jan 2026 19:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769195372; cv=none; b=Rk5Zql9/hUxg9NIZcu7OWkwUDboVy7mxceytyWGYPGtMM42sZcvP0Xr1WTG07MHzXRcuRt1Ju0w0lmiu5YJiCo40RthF4049oLcg2DolJrQuJFVG1fSdp3DTz8IvB22hslYi58maa/XVTxya5IDHee9FSDdUwWTA30WZQgGO/1M=
+	t=1769196615; cv=none; b=B45Qyo+uH4WsNfrViezNG1o6ryt723g5XZWeHB77nbbwQA7ZYDIVs/ISik92QPX/Fqi7KwtP33wUycxN05zc8sO8+cnk2adWzYnNEd4vgCwvdMEuaRD+DmTqXMz3Llylna03tP12O4bIVTC4Hqkb0csdbLqdlvJD7IwoRdsLi5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769195372; c=relaxed/simple;
-	bh=rHyoHYiJe1NSSbI9wKgeFZFr/60HKWlObMZBZd0MZbE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IUr/urNX/kS53U4XJfXYVid7RshBGfG5dpvJ1ltcryvRlcijUYoHKZlaaql7bJYWSSZlzBvK3EJ5NzaMPo57sl3/UriBhqJU4AHZNmqWJxZQHDju//7xB9SFyJoeOnn+PXKMomYRjP4OMNrTT3fCLMQRbxoOLViGCJqJStzMyVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MfAIRmb5; arc=none smtp.client-ip=91.218.175.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769196615; c=relaxed/simple;
+	bh=xfEXE2AnAULfW4hnvD3/ovp+1hD4RRxgZ5foUg2C1qA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=FqtyJbY9F8uMWIK2zO5vLgyP/bDxWBA0uyWv9oLC3BvaOZoZUgKKz6BvfcUvEAf8IN4gezymBEwBWfYTuCAomPLUkPWfaGoZeejDzWS/fbPlVMgHyUS44EZZewcAKMFBmAOShMS6KHLolPtyKaYZZdZmdJINsY+knpiZJ24elYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nn5JleeW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MfAIRmb5"
-Message-ID: <c647240e-26c6-4d6b-8218-d3c0e17d9b00@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769195355;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=rHyoHYiJe1NSSbI9wKgeFZFr/60HKWlObMZBZd0MZbE=;
-	b=MfAIRmb5Jwl+3OJ3+LKsNgeke9b/IVfms1CgovK3jQ2GLj1KT6s+w62VWnMSByIUDwe67D
-	6c6Ao5hswOYvAp30Z0LA3qYLebb9+SgsqXWUQTkgvYLKXlOdAthVhjGeT9Hs1MUi60X6oa
-	IEm+exGW6vzq44v6fTNr8msbDmRqi7I=
-Date: Fri, 23 Jan 2026 11:09:11 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nn5JleeW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C501C4CEF1;
+	Fri, 23 Jan 2026 19:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769196614;
+	bh=xfEXE2AnAULfW4hnvD3/ovp+1hD4RRxgZ5foUg2C1qA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Nn5JleeWFff5zKRN7TamPwmxyCeLn27G250ZLSMFstpOn3RIN2V8Wx5zZsLlOO4hY
+	 xAR4oEku07H3yBhFpuv/uXpBOqUnLvJbghPiuMEE34IAiVtnd5FDihQjO3IVEkB1T7
+	 wrZuhO5tRhwSvFziMSnYoDvdIx35GQ/HN7HdWuToKcNLTooUucQ6U+Xbe+4lv+xi4X
+	 K6HiaD4KqnABcyuPmxVm/fMOcLpF+2FSAm9ghLjFCvE+ZoEeUcUZbzS8jJ5QHj8kws
+	 QURVmDXFf5l1Nj+XDJq3Uv1jaNuyJSnZB4Hz0gK8vWJ+uAx8AeQxb9MvI7D8g1384g
+	 SRm4RSSQxHc+w==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BD813808200;
+	Fri, 23 Jan 2026 19:30:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 dwarves 5/5] btf_encoder: Prefer strong function
- definitions for BTF generation
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>, mattbobrowski@google.com
-Cc: ihor.solodrai@linux.dev, eddyz87@gmail.com, jolsa@kernel.org,
- andrii@kernel.org, ast@kernel.org, david.faust@oracle.com,
- dwarves@vger.kernel.org, bpf@vger.kernel.org
-References: <20260123172650.4062362-1-alan.maguire@oracle.com>
- <20260123172650.4062362-6-alan.maguire@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20260123172650.4062362-6-alan.maguire@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 0/4] Switch from kfuncs to direct helper calls
+ in prologue/epilogue
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176919661035.2689746.16918451024463235457.git-patchwork-notify@kernel.org>
+Date: Fri, 23 Jan 2026 19:30:10 +0000
+References: 
+ <20260123-skb-meta-bpf-emit-call-from-prologue-v2-0-0e50db4d4663@cloudflare.com>
+In-Reply-To: 
+ <20260123-skb-meta-bpf-emit-call-from-prologue-v2-0-0e50db4d4663@cloudflare.com>
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ ameryhung@gmail.com, netdev@vger.kernel.org, kernel-team@cloudflare.com,
+ martin.lau@kernel.org
 
+Hello:
 
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-On 1/23/26 9:26 AM, Alan Maguire wrote:
-> From: Matt Bobrowski <mattbobrowski@google.com>
->
-> Currently, when a function has both a weak and a strong definition
-> across different compilation units (CUs), the BTF encoder arbitrarily
-> selects one to generate the BTF entry. This selection fundamentally is
-> dependent on the order in which pahole processes the CUs.
->
-> This indifference often leads to a mismatch where the generated BTF
-> reflects the weak definition's prototype, even though the linker
-> selected the strong definition for the final vmlinux binary.
->
-> A notable example described in [0] involving function
-> bpf_lsm_mmap_file(). Both weak and strong definitions exist,
-> distinguished only by parameter names (e.g., file vs
-> file__nullable). While the strong definition is linked into the
-> vmlinux object, the generated BTF contained the prototype for the weak
-> definition. This causes issues for BPF verifier (e.g., __nullable
-> annotation semantics), or tools relying on accurate type information.
->
-> To fix this, ensure the BTF encoder selects the function definition
-> corresponding to the actual code linked into the binary. This is
-> achieved by comparing the DWARF function address (DW_AT_low_pc) with
-> the ELF symbol address (st_value). Only the DWARF entry for the strong
-> definition will match the final resolved ELF symbol address.
->
-> [0] https://lore.kernel.org/all/aVJY9H-e83T7ivT4@google.com/
->
-> Link: https://lore.kernel.org/all/aVJY9H-e83T7ivT4@google.com/
-> Signed-off-by: Matt Bobrowski <mattbobrowski@google.com>
+On Fri, 23 Jan 2026 18:05:17 +0100 you wrote:
+> This series enables direct helper calls using BPF_EMIT_CALL from prologue
+> and epilogue code generated by verifier ops. The goal is to simplify the
+> calling convention and remove kfunc support from prologue/epilogue, as
+> suggested by Alexei [1].
+> 
+> Patch 1 adds the infrastructure to mark direct helper calls as finalized
+> (already resolved) so the verifier skips the imm fixup.
+> 
+> [...]
 
-I have checked and verified that the logic is sound.
+Here is the summary with links:
+  - [bpf-next,v2,1/4] bpf, verifier: Support direct helper calls from prologue/epilogue
+    https://git.kernel.org/bpf/bpf-next/c/af46ae41da7c
+  - [bpf-next,v2,2/4] bpf: net_sched: Use direct helper calls instead of kfuncs in pro/epilogue
+    https://git.kernel.org/bpf/bpf-next/c/5c2106d44168
+  - [bpf-next,v2,3/4] selftests/bpf: Remove tests for prologue/epilogue with kfuncs
+    https://git.kernel.org/bpf/bpf-next/c/d3ddc749df28
+  - [bpf-next,v2,4/4] bpf: Remove kfunc support in prologue and epilogue
+    https://git.kernel.org/bpf/bpf-next/c/68d23a660c4f
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
