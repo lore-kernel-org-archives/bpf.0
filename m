@@ -1,63 +1,63 @@
 Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739B331619B
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 07:36:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DE0314A95
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 07:36:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769153780; cv=none; b=DwHi4x9B8FnrQwxPh2AbZZFoZ8jwKJ8n8ar0rb/xLg5IZB9ryhcVyezzt1x246Pynxh0nyBNpOwnIyW7Enhr/cYyefXfWsZPdrziffwGkhrNofbPGx+cmsXunAAXz7cYlr+xgdGdXJ8UZAJZjR9SciTHN563Ru6HeERq0jFLJjM=
+	t=1769153789; cv=none; b=dkShhsG14gP04J/SOpOqe4xqQF1NWZEdT8gu+pEO8IBNW/NGQKgk/UNYNLNopyvJHcikcEDLKjyK7wXjkyusT/sWsrFE+PREPj9w7qOZ4h8Mv2KDWn8KhGg+NZKAR+jMDY2WgOug28hMkO9hXioWPJizjdP1K/6mquCvZHbRalc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769153780; c=relaxed/simple;
-	bh=+LohW/5iZ/BTA3wEhODcalmnhVN7Hw9KbOPLybwo5cM=;
+	s=arc-20240116; t=1769153789; c=relaxed/simple;
+	bh=vSkpBZEvrCOR8Y3iysu/OMLokt70OFbWQweW9dndaB0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EvJxdrTiDQoRPsUHmaE4ezui07gTG8pmTzzVmPIs9tSSfR32nrq349bxRmyKq7wzia70ur9F0j/XPT/D06atYUcvhOssZcTUczbUXHo35Qr4GdNdEwpCeEJb9XekCTnPlsfEL9+2EXO5KLuvcMKwt0XKlNKCM6v/jlL9LPDh4Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cyc0wtaZ; arc=none smtp.client-ip=209.85.210.194
+	 MIME-Version; b=PCzrSE8+bNnYLHzyDvmJ42rlYH6OWpYaIpvdB6v8AbCIBif/eVKKoNLCYCY2jEBSnf5mVffBOOmac9pLjzmyxGzFQc4ok81AAG1ocFjV1JIk9754wE1MaMB48CckEmD8ykHG75ZSOTlSg09BK92SeActtpfceQWZoNG/r9MtNzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mzg9M5MZ; arc=none smtp.client-ip=209.85.210.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cyc0wtaZ"
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-81f39438187so1047131b3a.2
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 23:36:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mzg9M5MZ"
+Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-81df6a302b1so1935283b3a.2
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 23:36:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769153777; x=1769758577; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769153786; x=1769758586; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zK61mrn2X2UJzXm7UaRNg+WFPm1j9ZsyaLN3K5LWzAA=;
-        b=Cyc0wtaZTD6fQ+1bxDnH6I3L1JM32xAsnbfDk1pO3HPQ29OSS0Hsv1sBzCadgpN+tJ
-         1U36eNY6l6qviNYwUYZ/ldOWSwfs0FVc6vHVXUeA6pLnT19O87xdc6+/+im9HmsuEiEj
-         tqn63851rBCO/U24NHXgGA77DoEQKhYbU3YwGLxPlVhdy4C3bxmdo5NcRqXrf+3hYX/b
-         oDZWTD/XMN0xZt+N0wY20eNtwMsjIPob2kQhtGyOOSq8dkK0XUZJzQD3gHSl6742rhq8
-         uGA1NwkG7GFf9d+xKISs741cQoBDDZ6GntKkwEElhinNhl71QJSsL3+aszXzdKcmq32U
-         ZD5w==
+        bh=9lQ/Jj/JIfTtpegaG4Os883WpJ5VAXhTKAEFAxgFaVs=;
+        b=Mzg9M5MZ34pGJVUO9nHsRxwSCCm5gGfGmfAkS/6FM2mmAFSRD2dtoYJBUsY+CGXCzj
+         TrNMI6FQoqt79RLmgjUWwkPWw7GMZ3vCSbGvJna/1x8Zyk+UqWHSca5Gl34GecLDQ+uX
+         0XINjbUhWVWgrguaegI6adDaujdRkF9HsBe+gX+SQN9iXJxeXDew4ftN5eBvYGy+ITDR
+         WnG+jwgcrTjZhU/BFaciG+ipklJQZiCqd12Is/jJvSxvbjNz4/GAn/qv4sejNcvWojus
+         OMGxwFCFv952kDC6EvwwWIRKWaEfNBn8XR1hPt0yip77NMfUKdJ2tCgTlbqkCJZENvk3
+         ZhAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769153777; x=1769758577;
+        d=1e100.net; s=20230601; t=1769153786; x=1769758586;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=zK61mrn2X2UJzXm7UaRNg+WFPm1j9ZsyaLN3K5LWzAA=;
-        b=v0oZ1uwZgb0Vn3cumHDIvIfUttOwnTSVFScTRe5/bS442NI9Q5MfwY8LnTOC1u8Nwl
-         VHhvm2kHiJrWk7o739Df+T4IIrWv2QX0gdhSvWLWblevhzuS9OpXfwpTxRZ3/HAu4gbZ
-         qZQkSOFmpvMCIIquNaua+h4BQvodwTbPuDjDuPWSTjJlrQE11ROeEbPBPA+VvwOIOMqY
-         rAstSErm1TJ82kWSGTiqVbb7J8971ba+dnmiYBLupYEJlJRywY5v0ag4akJ7LSrNQiD0
-         KweEP5PvqZzlpAQvJbvD3xwIFHVvAAM7YqbpC5bWqPROmKo3EgCk34OwBHnCVG41zGdF
-         RXzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW22p7tkquz58LJfPNiTZl1aRYek+lPRDswOu3nWXcU9VuZuw9idcWyB1jkn3q6/Z5rhG0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkA8R0+hsFvlFqZOgmeNlC6LAI0Y0W2XtNfyHtVLI97mlXBwTX
-	y4qtFcm80xcL1zW9hqq9oN/VnaAYyUZpABhmaf6zxGI11gA22Su8mNhV
-X-Gm-Gg: AZuq6aJ2F6prgAiT88IMSLBmyv5hMas93D006YftbH29gni8rZ5mZwUkFgMp9naTx/i
-	NT9IkmSPVzwz+P48hO3yAHaNhNMBPXbp1mf+qC0kViSEm7GwpZt/iBm+P+MaAtO0sEz57rJMR97
-	zqS+xkjuRBTLv6WTF7bXINXNvjsVUBvrClj3JnfoScAdU5VR4DC8kERNG5KYX4eSf5u34I02jAe
-	N6RKugC9RuuAsvz90Ynfw7PoXn9Ai/XelMl2God4U+cdxIDTYf4RKdmdV/pG2z14UxFZdd0fLod
-	d+3IYVVClfoEDB7Z+caG55J+10bAdOi5rCVnLO1jOEkRE+JEH7ro36FL2oN/2+W4/m24OKnY9fh
-	Zwf5GOkzy/e0SDZwHICUnqzfMWs/RDyGK9BN5/rwbs6qSsKlMiaZEXpVLvlFJUplcZbJ1o+On2m
-	BYgWhzyWeO
-X-Received: by 2002:a05:6a00:ad1:b0:81f:3a05:8a7a with SMTP id d2e1a72fcca58-82317d23940mr1878480b3a.19.1769153777539;
-        Thu, 22 Jan 2026 23:36:17 -0800 (PST)
+        bh=9lQ/Jj/JIfTtpegaG4Os883WpJ5VAXhTKAEFAxgFaVs=;
+        b=aSHChl2FGqEE2nl+kJU+USyoT+XFv9De8YXZYIvjr2TWEaN5fO6de95vvlApAUeZfk
+         BqQQpqGKjk/JZnccxoSy9CQRKl7ksNwYmrt6dMqgj42SZaowx1/2YuA6jSmVdPjOZsQy
+         sldvipPJXfbrA2WwRseZLqvU3ZYe8URjbI6xHaD/JDjoRe7UA8MwJkI+1q5YcG3k/gJE
+         ZBj3bSMApmcdNEfR7wZpBMkHirYs7KXkyIJGPJWIkmua9C3SVCfGEcHg7+D4LfOXW6Uk
+         hWBqLjDFkfBucmT8WKJVijPXGlzY6/+F9qCr1i5I6DhdcyfOTX/QQWWPeHyyQ2XZvfUD
+         2yHw==
+X-Forwarded-Encrypted: i=1; AJvYcCWMv62fIie9vhqgkKLxtDV25u6gx5NdKNFDreA5RhE4jj1SYplSExPDfV43MDaQV9yrdn0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+/q9qoNUFxck5qP6/bIyuHLyexoR91nilAHplLECRgiHXYJNB
+	WI4nLjpQXuU8+3bAGLlROp3lVCgNL5IV7/8etz16cTAz4IesotUXtwXx
+X-Gm-Gg: AZuq6aIqD+Whg0PjkBuVLnhiKrVqb0OrJJ9DrBXNZaPR3+BZvGHBaY35eXQAyGL9ttE
+	vxSQgODhzGbMCVj5xEgIw+hyVdhPetmtoDESc7T8xPQ14Jiehn7+qKn7N7ni4WRF3lRPbJ3Osyu
+	Stqabn378iGgCn+BCz7Bbu2nW5nsQo/6ZvzYh3k7K1/BAG8E4hXcAUGuZWpa0+di3Z9lBz5rs5t
+	t2zJpciP9UYiAC1goD/cOL15WcF2wH5EI7AnHTnm4GyfkNGxAU1ihD8igAvvfyKe1LTuQ31GxX2
+	H0kxxboJNIv6F+tKD+cjLkXzPjL3E/+8DDyx79eLQjaW6iCJyeB7YVCFXr9UefYQC6bAzwJ4/No
+	RneVdmpchUWsVJ5MdDZthveIfz2HdTDGhooq1HgYhaYHEeT5WHhnDWX1KcTQvW6ctnJ/xbJ3Om7
+	fk3ddYBnRM
+X-Received: by 2002:a05:6a00:2d2a:b0:7ef:3f4e:9176 with SMTP id d2e1a72fcca58-82317ee84f2mr1955826b3a.49.1769153786089;
+        Thu, 22 Jan 2026 23:36:26 -0800 (PST)
 Received: from 7940hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231876fd1fsm1334205b3a.69.2026.01.22.23.36.09
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231876fd1fsm1334205b3a.69.2026.01.22.23.36.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jan 2026 23:36:17 -0800 (PST)
+        Thu, 22 Jan 2026 23:36:25 -0800 (PST)
 From: Menglong Dong <menglong8.dong@gmail.com>
 X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: andrii@kernel.org
@@ -83,9 +83,9 @@ Cc: daniel@iogearbox.net,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v11 04/12] bpf: support fsession for bpf_session_is_return
-Date: Fri, 23 Jan 2026 15:35:24 +0800
-Message-ID: <20260123073532.238985-5-dongml2@chinatelecom.cn>
+Subject: [PATCH bpf-next v11 05/12] bpf: support fsession for bpf_session_cookie
+Date: Fri, 23 Jan 2026 15:35:25 +0800
+Message-ID: <20260123073532.238985-6-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260123073532.238985-1-dongml2@chinatelecom.cn>
 References: <20260123073532.238985-1-dongml2@chinatelecom.cn>
@@ -97,172 +97,130 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-If fsession exists, we will use the bit (1 << BPF_TRAMP_IS_RETURN_SHIFT)
-in ((u64 *)ctx)[-1] to store the "is_return" flag.
+Implement session cookie for fsession. The session cookies will be stored
+in the stack, and the layout of the stack will look like this:
+  return value	-> 8 bytes
+  argN		-> 8 bytes
+  ...
+  arg1		-> 8 bytes
+  nr_args	-> 8 bytes
+  ip (optional)	-> 8 bytes
+  cookie2	-> 8 bytes
+  cookie1	-> 8 bytes
 
-The logic of bpf_session_is_return() for fsession is implemented in the
-verifier by inline following code:
+The offset of the cookie for the current bpf program, which is in 8-byte
+units, is stored in the
+"(((u64 *)ctx)[-1] >> BPF_TRAMP_COOKIE_INDEX_SHIFT) & 0xFF". Therefore, we
+can get the session cookie with ((u64 *)ctx)[-offset].
 
-  bool bpf_session_is_return(void *ctx)
-  {
-      return (((u64 *)ctx)[-1] >> BPF_TRAMP_IS_RETURN_SHIFT) & 1;
-  }
+Implement and inline the bpf_session_cookie() for the fsession in the
+verifier.
 
 Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-Co-developed-by: Leon Hwang <leon.hwang@linux.dev>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
 v11:
-- rename BPF_TRAMP_SHIFT_IS_RETURN to BPF_TRAMP_IS_RETURN_SHIFT
+- rename BPF_TRAMP_SHIFT_COOKIE to BPF_TRAMP_COOKIE_INDEX_SHIFT
 
 v10:
-- fix the wrong description of bpf_session_is_return() in commit log and
-  comment
-- rename the prefix from BPF_TRAMP_M_ tp BPF_TRAMP_SHIFT_
-- remove the definition of BPF_TRAMP_M_NR_ARGS
-- use 63 for the shift of BPF_TRAMP_SHIFT_IS_RETURN
-- check the program type in bpf_session_filter()
+- describe the offset of the session cookie more explicit
+- make 8 as the bit shift of session cookie
+- remove the session cookie count limitation
 
 v9:
-- remove the definition of bpf_fsession_is_return()
+- remove the definition of bpf_fsession_cookie()
 
 v7:
-- reuse the kfunc bpf_session_is_return() instead of introduce new kfunc
+- reuse bpf_session_cookie() instead of introduce new kfunc
+
+v5:
+- remove "cookie_cnt" in struct bpf_trampoline
 
 v4:
-- split out the bpf_fsession_cookie() to another patch
-
-v3:
-- merge the bpf_tracing_is_exit and bpf_fsession_cookie into a single
-  patch
-
-v2:
-- store the session flags after return value, instead of before nr_args
-- inline the bpf_tracing_is_exit, as Jiri suggested
+- limit the maximum of the cookie count to 4
+- store the session cookies before nr_regs in stack
 ---
- include/linux/bpf.h      |  2 ++
- kernel/bpf/verifier.c    | 13 +++++++++++++
- kernel/trace/bpf_trace.c | 39 ++++++++++++++++++++++++++-------------
- 3 files changed, 41 insertions(+), 13 deletions(-)
+ include/linux/bpf.h   | 15 +++++++++++++++
+ kernel/bpf/verifier.c | 20 ++++++++++++++++++++
+ 2 files changed, 35 insertions(+)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 41228b0add52..29eecd79352e 100644
+index 29eecd79352e..4427c6e98331 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -1229,6 +1229,8 @@ enum {
+@@ -1229,6 +1229,7 @@ enum {
  #endif
  };
  
-+#define BPF_TRAMP_IS_RETURN_SHIFT	63
-+
++#define BPF_TRAMP_COOKIE_INDEX_SHIFT	8
+ #define BPF_TRAMP_IS_RETURN_SHIFT	63
+ 
  struct bpf_tramp_links {
- 	struct bpf_tramp_link *links[BPF_MAX_TRAMP_LINKS];
- 	int nr_links;
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 19fd16697262..2ae8f29b854f 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -23011,6 +23011,19 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 		   desc->func_id == special_kfunc_list[KF_bpf_rdonly_cast]) {
- 		insn_buf[0] = BPF_MOV64_REG(BPF_REG_0, BPF_REG_1);
- 		*cnt = 1;
-+	} else if (desc->func_id == special_kfunc_list[KF_bpf_session_is_return] &&
-+		   env->prog->expected_attach_type == BPF_TRACE_FSESSION) {
-+		/*
-+		 * inline the bpf_session_is_return() for fsession:
-+		 *   bool bpf_session_is_return(void *ctx)
-+		 *   {
-+		 *       return (((u64 *)ctx)[-1] >> BPF_TRAMP_IS_RETURN_SHIFT) & 1;
-+		 *   }
-+		 */
-+		insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
-+		insn_buf[1] = BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, BPF_TRAMP_IS_RETURN_SHIFT);
-+		insn_buf[2] = BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 1);
-+		*cnt = 3;
- 	}
- 
- 	if (env->insn_aux_data[insn_idx].arg_prog) {
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index 13f0a2de33b7..f7baeb8278ca 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -1286,7 +1286,8 @@ static bool is_kprobe_multi(const struct bpf_prog *prog)
- 
- static inline bool is_kprobe_session(const struct bpf_prog *prog)
- {
--	return prog->expected_attach_type == BPF_TRACE_KPROBE_SESSION;
-+	return prog->type == BPF_PROG_TYPE_KPROBE &&
-+	       prog->expected_attach_type == BPF_TRACE_KPROBE_SESSION;
+@@ -1782,6 +1783,7 @@ struct bpf_prog {
+ 				enforce_expected_attach_type:1, /* Enforce expected_attach_type checking at attach time */
+ 				call_get_stack:1, /* Do we call bpf_get_stack() or bpf_get_stackid() */
+ 				call_get_func_ip:1, /* Do we call get_func_ip() */
++				call_session_cookie:1, /* Do we call bpf_session_cookie() */
+ 				tstamp_type_access:1, /* Accessed __sk_buff->tstamp_type */
+ 				sleepable:1;	/* BPF program is sleepable */
+ 	enum bpf_prog_type	type;		/* Type of BPF program */
+@@ -2190,6 +2192,19 @@ static inline int bpf_fsession_cnt(struct bpf_tramp_links *links)
+ 	return cnt;
  }
  
- static inline bool is_uprobe_multi(const struct bpf_prog *prog)
-@@ -1297,7 +1298,14 @@ static inline bool is_uprobe_multi(const struct bpf_prog *prog)
- 
- static inline bool is_uprobe_session(const struct bpf_prog *prog)
- {
--	return prog->expected_attach_type == BPF_TRACE_UPROBE_SESSION;
-+	return prog->type == BPF_PROG_TYPE_KPROBE &&
-+	       prog->expected_attach_type == BPF_TRACE_UPROBE_SESSION;
++static inline int bpf_fsession_cookie_cnt(struct bpf_tramp_links *links)
++{
++	struct bpf_tramp_links fentries = links[BPF_TRAMP_FENTRY];
++	int cnt = 0;
++
++	for (int i = 0; i < links[BPF_TRAMP_FENTRY].nr_links; i++) {
++		if (fentries.links[i]->link.prog->call_session_cookie)
++			cnt++;
++	}
++
++	return cnt;
 +}
 +
-+static inline bool is_trace_fsession(const struct bpf_prog *prog)
-+{
-+	return prog->type == BPF_PROG_TYPE_TRACING &&
-+	       prog->expected_attach_type == BPF_TRACE_FSESSION;
- }
+ int bpf_prog_ctx_arg_info_init(struct bpf_prog *prog,
+ 			       const struct bpf_ctx_arg_aux *info, u32 cnt);
  
- static const struct bpf_func_proto *
-@@ -3341,34 +3349,39 @@ __bpf_kfunc __u64 *bpf_session_cookie(void *ctx)
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 2ae8f29b854f..1f171ac3462e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -14406,6 +14406,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			return err;
+ 	}
  
- __bpf_kfunc_end_defs();
- 
--BTF_KFUNCS_START(kprobe_multi_kfunc_set_ids)
-+BTF_KFUNCS_START(session_kfunc_set_ids)
- BTF_ID_FLAGS(func, bpf_session_is_return)
- BTF_ID_FLAGS(func, bpf_session_cookie)
--BTF_KFUNCS_END(kprobe_multi_kfunc_set_ids)
-+BTF_KFUNCS_END(session_kfunc_set_ids)
- 
--static int bpf_kprobe_multi_filter(const struct bpf_prog *prog, u32 kfunc_id)
-+static int bpf_session_filter(const struct bpf_prog *prog, u32 kfunc_id)
- {
--	if (!btf_id_set8_contains(&kprobe_multi_kfunc_set_ids, kfunc_id))
-+	if (!btf_id_set8_contains(&session_kfunc_set_ids, kfunc_id))
- 		return 0;
- 
--	if (!is_kprobe_session(prog) && !is_uprobe_session(prog))
-+	if (!is_kprobe_session(prog) && !is_uprobe_session(prog) && !is_trace_fsession(prog))
- 		return -EACCES;
- 
++	if (meta.func_id == special_kfunc_list[KF_bpf_session_cookie])
++		env->prog->call_session_cookie = true;
++
  	return 0;
  }
  
--static const struct btf_kfunc_id_set bpf_kprobe_multi_kfunc_set = {
-+static const struct btf_kfunc_id_set bpf_session_kfunc_set = {
- 	.owner = THIS_MODULE,
--	.set = &kprobe_multi_kfunc_set_ids,
--	.filter = bpf_kprobe_multi_filter,
-+	.set = &session_kfunc_set_ids,
-+	.filter = bpf_session_filter,
- };
+@@ -23024,6 +23027,23 @@ static int fixup_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		insn_buf[1] = BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, BPF_TRAMP_IS_RETURN_SHIFT);
+ 		insn_buf[2] = BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 1);
+ 		*cnt = 3;
++	} else if (desc->func_id == special_kfunc_list[KF_bpf_session_cookie] &&
++		   env->prog->expected_attach_type == BPF_TRACE_FSESSION) {
++		/*
++		 * inline bpf_session_cookie() for fsession:
++		 *   __u64 *bpf_session_cookie(void *ctx)
++		 *   {
++		 *       u64 off = (((u64 *)ctx)[-1] >> BPF_TRAMP_COOKIE_INDEX_SHIFT) & 0xFF;
++		 *       return &((u64 *)ctx)[-off];
++		 *   }
++		 */
++		insn_buf[0] = BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_1, -8);
++		insn_buf[1] = BPF_ALU64_IMM(BPF_RSH, BPF_REG_0, BPF_TRAMP_COOKIE_INDEX_SHIFT);
++		insn_buf[2] = BPF_ALU64_IMM(BPF_AND, BPF_REG_0, 0xFF);
++		insn_buf[3] = BPF_ALU64_IMM(BPF_LSH, BPF_REG_0, 3);
++		insn_buf[4] = BPF_ALU64_REG(BPF_SUB, BPF_REG_0, BPF_REG_1);
++		insn_buf[5] = BPF_ALU64_IMM(BPF_NEG, BPF_REG_0, 0);
++		*cnt = 6;
+ 	}
  
--static int __init bpf_kprobe_multi_kfuncs_init(void)
-+static int __init bpf_trace_kfuncs_init(void)
- {
--	return register_btf_kfunc_id_set(BPF_PROG_TYPE_KPROBE, &bpf_kprobe_multi_kfunc_set);
-+	int err = 0;
-+
-+	err = err ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_KPROBE, &bpf_session_kfunc_set);
-+	err = err ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING, &bpf_session_kfunc_set);
-+
-+	return err;
- }
- 
--late_initcall(bpf_kprobe_multi_kfuncs_init);
-+late_initcall(bpf_trace_kfuncs_init);
- 
- typedef int (*copy_fn_t)(void *dst, const void *src, u32 size, struct task_struct *tsk);
- 
+ 	if (env->insn_aux_data[insn_idx].arg_prog) {
 -- 
 2.52.0
 
