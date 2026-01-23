@@ -1,30 +1,32 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DA8439F8A0
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 05:58:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479A037AA9A
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 05:58:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769147902; cv=none; b=SLl7WfzhuUM2YgsHg/87O58ccmJvorKCfcAC0t4ldTfCH7g1jJpROLgnAk7Z8EUX7yzemVZNRc0BRrlqA2cmlVaKRu7//yWv9IFQcAfU6H0eQ38tqyjQcjQiLNYWLX4SREpvAGa0hrq5KPpLL0Ggq0qe9fT7fNKfOX+vKjqp8UE=
+	t=1769147904; cv=none; b=BFJ1kl7KYJa4Lpg+Nz+BegVTQC7mxDPqTP2SOkmrQSEaudo8IN9dhjT6FGu3BliqU+eGuyY30o2ju0JeNR9LrLssDoH2k0NMpqNhuwTtT9wkN+k/bf26+cr3wlTa9fZiAISgH90xIdFsc7p3kDc1XY856Cyxh/E2xCrvKocFRO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769147902; c=relaxed/simple;
-	bh=TCl7BhzQBbCsnY5l3o/WXYJUkdGYEXIPu5Fwe/8SYRo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mc+D2ZweB0EsVSOmDxx7/0hYwTJWYwe0NHLZjqhy1c0uqPFS8XqcNB5qWtx+P30mwLBjYFJMCkxvAq1A8l+2MdrRtxntQmJyGjaBRh2LAzqHR2y1vvKocpOAA7V/QAsvIJJ++nVTG7vMG9dwWFxsT47NJPQYijK5TF4grSBMTIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Nlt3RCPi; arc=none smtp.client-ip=95.215.58.172
+	s=arc-20240116; t=1769147904; c=relaxed/simple;
+	bh=VeK4ExRXCh+3B3ipuqifOQCvQneCr/2OWhViUuULlKU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=DMLkmPulDJBLaFOrqyk6J95JPMi38YKMOu6MIp0LcTtmvFNnLnYW47gfigHAtjdGg7a/7RVMMJs141Ic6eUxegAbYYygZmgkMhxHvJjB/NiCifx5CVbVZDCk7s91dRjDgUiCKuz5al5ioX8SF2x9j2butiqKFjsnq1EQ6SicGM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JAn6TW8k; arc=none smtp.client-ip=95.215.58.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Nlt3RCPi"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JAn6TW8k"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769147880;
+	t=1769147894;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Rmfqlows6e91jpPk0/FW9KCyzMfQvrkQ0b/7PZSyhy8=;
-	b=Nlt3RCPiygZsD8xzXrzBZTjVLR8Nzc/xsnSmcl6L9nP7155Q12nCVEUkShcyb17baLVif6
-	v+Uy/66BnQLpg7T3wkg7zA71qAy5g21BGx6vLph8uEVVX8+bFB/3IAvbQ+/0jymx2gitwU
-	dV5JPC1RfmA3jNmm2D2mnI87GwNLBhg=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CGFs8iwFD+3Bos+er5vmVWRRN6I8GRLoMxxtNzEogAM=;
+	b=JAn6TW8k3Oib/XsW0BlW7UXjRv15UGJH+LTKa/PeLQWc2yoQzPdzUEoki3Xyy5yNjL+WPw
+	gKh+q/eDriaVUkjHTlj7rjxiwdobAzLQuAU5WrD/LJRPOfNuEixyIUe1B4HVOMaj+AxDzN
+	/r0Wg1/qUkuBhdgvD3BYo9DBBiFzqZA=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -44,9 +46,11 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 0/2] bpf: Disallow BPF_F_LOCK with mixed special fields
-Date: Fri, 23 Jan 2026 13:56:56 +0800
-Message-ID: <20260123055658.372869-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add tests to verify BPF_F_LOCK restrictions
+Date: Fri, 23 Jan 2026 13:56:58 +0800
+Message-ID: <20260123055658.372869-3-leon.hwang@linux.dev>
+In-Reply-To: <20260123055658.372869-1-leon.hwang@linux.dev>
+References: <20260123055658.372869-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -56,35 +60,151 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Disallow combining BPF_F_LOCK with map values that mix bpf_spin_lock and
-other special BTF fields, which may lead to undefined behavior. Such cases
-are now rejected with -EOPNOTSUPP.
+Add a tc-based helper program that updates a map value containing both
+bpf_spin_lock and bpf_timer and records errors for invalid flag
+combinations.
 
-Map update flag validation is centralized in
-bpf_map_check_op_flags() and reused across array, hash, local-storage,
-and task-storage update paths, with selftests added to verify the new
-behavior.
+Extend the existing map_lock tests to cover array and hash maps. Verify
+that BPF_NOEXIST|BPF_EXIST is rejected with -EINVAL/-EEXIST, and that
+BPF_F_LOCK returns -EOPNOTSUPP when mixed with other special fields.
 
-Changes:
-v1 -> v2:
-* Reject any unknown flag bits in map_flags when updating maps (per AI review).
-* v1: https://lore.kernel.org/bpf/20260122153120.69249-1-leon.hwang@linux.dev/
-
-Leon Hwang (2):
-  bpf: Disallow BPF_F_LOCK with mixed special fields and centralize flag
-    checks
-  selftests/bpf: Add tests to verify BPF_F_LOCK restrictions
-
- include/linux/bpf.h                           |  7 ++
- kernel/bpf/arraymap.c                         | 11 ++-
- kernel/bpf/bpf_local_storage.c                |  7 --
- kernel/bpf/bpf_task_storage.c                 |  3 -
- kernel/bpf/hashtab.c                          |  8 +--
- kernel/bpf/syscall.c                          |  4 +-
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
  .../selftests/bpf/prog_tests/map_lock.c       | 70 +++++++++++++++++++
  .../selftests/bpf/progs/test_map_lock.c       | 31 +++++++-
- 8 files changed, 117 insertions(+), 24 deletions(-)
+ 2 files changed, 100 insertions(+), 1 deletion(-)
 
---
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_lock.c b/tools/testing/selftests/bpf/prog_tests/map_lock.c
+index 1d6726f01dd2..aafae8d02e1d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_lock.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_lock.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <test_progs.h>
+ #include <network_helpers.h>
++#include "test_map_lock.skel.h"
+ 
+ static void *spin_lock_thread(void *arg)
+ {
+@@ -90,3 +91,72 @@ void test_map_lock(void)
+ close_prog:
+ 	bpf_object__close(obj);
+ }
++
++struct map_value {
++	struct bpf_spin_lock lock;
++	struct bpf_timer timer;
++	__u64 payload;
++};
++
++static void test_map_lock_update_elem(enum bpf_map_type map_type, int err_exist)
++{
++	struct map_value val = {};
++	struct test_map_lock *skel;
++	int prog_fd, err;
++	u32 key = 0;
++	char buff[128] = {};
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		    .data_in = buff,
++		    .data_size_in = sizeof(buff),
++		    .repeat = 1,
++	);
++
++	skel = test_map_lock__open();
++	if (!ASSERT_OK_PTR(skel, "test_map_lock__open"))
++		return;
++
++	bpf_map__set_type(skel->maps.map, map_type);
++
++	err = test_map_lock__load(skel);
++	if (!ASSERT_OK(err, "test_map_lock__load"))
++		goto out;
++
++	err = bpf_map__update_elem(skel->maps.map, &key, sizeof(key), &val, sizeof(val),
++				   BPF_NOEXIST | BPF_EXIST);
++	if (!ASSERT_EQ(err, -EINVAL, "err_exist"))
++		goto out;
++
++	err = bpf_map__update_elem(skel->maps.map, &key, sizeof(key), &val, sizeof(val),
++				   BPF_F_LOCK);
++	if (!ASSERT_EQ(err, -EOPNOTSUPP, "err_lock"))
++		goto out;
++
++	prog_fd = bpf_program__fd(skel->progs.map_update);
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
++		goto out;
++
++	ASSERT_EQ(skel->bss->err_exist, err_exist, "err_exist");
++	ASSERT_EQ(skel->bss->err_lock, -EOPNOTSUPP, "err_lock");
++
++out:
++	test_map_lock__destroy(skel);
++}
++
++static void test_array_map_lock_update_elem(void)
++{
++	test_map_lock_update_elem(BPF_MAP_TYPE_ARRAY, -EEXIST);
++}
++
++static void test_hash_map_lock_update_elem(void)
++{
++	test_map_lock_update_elem(BPF_MAP_TYPE_HASH, -EINVAL);
++}
++
++void test_map_lock_flag(void)
++{
++	if (test__start_subtest("array_map"))
++		test_array_map_lock_update_elem();
++	if (test__start_subtest("hash_map"))
++		test_hash_map_lock_update_elem();
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_map_lock.c b/tools/testing/selftests/bpf/progs/test_map_lock.c
+index 1c02511b73cd..f1b7b741795c 100644
+--- a/tools/testing/selftests/bpf/progs/test_map_lock.c
++++ b/tools/testing/selftests/bpf/progs/test_map_lock.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ // Copyright (c) 2019 Facebook
+-#include <linux/bpf.h>
++#include "vmlinux.h"
+ #include <linux/version.h>
+ #include <bpf/bpf_helpers.h>
+ 
+@@ -59,4 +59,33 @@ int bpf_map_lock_test(struct __sk_buff *skb)
+ err:
+ 	return err;
+ }
++
++int err_exist;
++int err_lock;
++
++struct map_value {
++	struct bpf_spin_lock lock;
++	struct bpf_timer timer;
++	__u64 payload;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__type(key, u32);
++	__type(value, struct map_value);
++	__uint(max_entries, 1);
++} map SEC(".maps");
++
++SEC("tc")
++int map_update(struct __sk_buff *skb)
++{
++	struct map_value val = {};
++	u32 key = 0;
++
++	val.payload = 0xDEADBEEF;
++	err_exist = bpf_map_update_elem(&map, &key, &val, BPF_NOEXIST | BPF_EXIST);
++	err_lock = bpf_map_update_elem(&map, &key, &val, BPF_F_LOCK);
++	return BPF_OK;
++}
++
+ char _license[] SEC("license") = "GPL";
+-- 
 2.52.0
 
