@@ -1,125 +1,312 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E76282494F0
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 18:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769191563; cv=pass; b=fGpxCHuPJ6IfXf7eoTPtmBPHFHlObZox2w8UiqOjhyOw3r0i+XVAHrwRMDQvDeYjbrHYlDBsoHzCi7RuFfzo/iN/JsQTrhNuMMhVPwmvPh6eJ4pjsrAc1ebu4frMcuXelh4PxEwj4zAzb0pDosQb84AVbbr8Ffc8d2Xwhhyh3Mg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769191563; c=relaxed/simple;
-	bh=FcLGkCfuB/sIPTdRBcsJjPn4bR/XfGlb046z63lGRwk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MyZO2ACnGNrto0X1bkfViyvh4yKpFNGL2CXMqISzHcth27Qm07aBtLp7uZh2q7wRhedS++1S82gWS0mmXGDp5V7C+8Luo/a7ezM6ZxuHkRQ3dfhMnSKOppvELlXZyUA8pc3OYUIGZoCmCfLxCK9ZOxcEVcPm9srJ7g1Lp9DtvJ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SsZO5qEF; arc=pass smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA223EBF07;
+	Fri, 23 Jan 2026 18:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769192071; cv=none; b=G2fYjZ9YIqIMPJynGnMF7hKo60ozGHvIXKKLgxi1GTIvWmhKdRPldTjq9eyed6tkbAvsFDuGWvRn45kyXu+5M+Q/7AlPzfoJU9o0n9lqaGMhGVRtTf/HlX+uh85Ilobw8Y/pmnAYaHjR1cC3UtTrOz7xTEJZBYWYZGEVs/q3wmY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769192071; c=relaxed/simple;
+	bh=9g++3MPg23VyHj9xhCQy16d83gXruq+S+u68A2Q+6CI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Df0ElmTjm3EPoXndqIMgvffqnJbqxH9KlSU9gZ2lm8Rx/KejXt5elrMGX0epxvWbEDSrZMMCz95sGfAXA4352cCyAVBQH3XBbFa25F6fUbPqevMycoflPJuEOYdUr+e38pFW294XmlkQcNe5O17wspz2Tfg8uxdHb8RWNZogIiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EranB1qt; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SsZO5qEF"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-47ee3a63300so28381855e9.2
-        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 10:06:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769191560; cv=none;
-        d=google.com; s=arc-20240605;
-        b=JTBZUHWmLlxh8XsXgWwNyGSmBdPgZzRx2VVoNBxs8FyMP8dHvCKlU429H0LHITC5Zo
-         bfvcPB1ebhZnBD9Npn/rdr7eC03nTywSeD4h+Ijc9W57GM2INwFoNQwkbHtIvuY/OApD
-         bsaVZWapOIw4+FcjgcxrlkWc41O5jZ4EUb/syvSb5a3vcH43f01NAmTYSj7UEZJcJ8+d
-         Ltrqkvec61P6PPeRjHd8QxOiHhrzx3EqEud3cL2VJfwA0yW8q1+WIhKbECdfhsVBQnd7
-         eE1zJOLvKK7HQq/FCdiK7orOvW98rkG9bxYz+zR9nLbf1z32E5AThYLZNDlTA/RffD5F
-         mjvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FcLGkCfuB/sIPTdRBcsJjPn4bR/XfGlb046z63lGRwk=;
-        fh=UGlA0nwkL8NkpqnqVroLYEh3Qbl9LvsWCGZRUJb9Kaw=;
-        b=klrO4x3kwv6tD+fWMzhyMlJHR2IEVnCZFRWci9FVk23PThXm5CDOKqMbu/Kr8uc1lA
-         L5dcTVcjYn61DCyDEzWPNCmtqka+Wemk1FJY5Okg6kkNolzjjhESBFbQX21mTdW3iZim
-         Q6+B8MZCc+NSA1zdxDg1HnIp1FGRUU7+3zJhUzl0PtRQ1IWesD5N/yZiEpAFKda0kz7n
-         yKj9o8hPQvKBmHkPfu7uzbw5TuKlewAUZs8ww/iuSb4I/fWzvyUo7hUqZggHr7i9OxQF
-         QLunxpEZWzFjb69Q6BmsNoxSeRigryCrK7a0HfqF6tNkGDJiju2wuHEWzO6mspEdmo2/
-         yFpg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769191560; x=1769796360; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FcLGkCfuB/sIPTdRBcsJjPn4bR/XfGlb046z63lGRwk=;
-        b=SsZO5qEFM0nALChMkEi2p9ZATcjTr5HTxbYzAnRie6x4E5G4uUomhl2EAucw4kba9o
-         llXEqsadVqEDPvXoGyebXn4D/qQq1jG+P1lKXrVAUPQrN6PNWYf50FKXH7PgH5zf5j6m
-         ZYHiRCZiCDyNZWFXawDkCS7bhWiPjEIOhBOow6UizK7AOE2wQW9J1RQxQgaHWo8knIoc
-         98tfzgeilcYII/YN6Y8Pj7dFzCt97QtmKopCUS8/018wYNIeBVisr38zetITPCXoGVpM
-         /vpfIiuarYkN5KSsvulQhpu/E+RYP/yFtyTOyyJvH2YH8tvd0fHUVLwf4J15kAUAyngT
-         IVug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769191560; x=1769796360;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FcLGkCfuB/sIPTdRBcsJjPn4bR/XfGlb046z63lGRwk=;
-        b=ZudaDdUIcpKf1QWbO15cXYgKaPWCW0C9ufUt/jlQLyhSgR3WWc3hgaSJiJlhlrhBSg
-         PXBGsqH6Gutx+NuT4CQn5QcgYUBAia+54t/ABNoKb2/2eYBgSIRZhFH/L9PMlvo2Aj6V
-         Ua3Wro7dZSM2MawipZbivmiMEX/mwkrw68FM8gF+tic9g37eq6YdS/gCGeKFtUq/dD5G
-         bwEYQZVdtMDt7KL11HprlzhFnmgXNgUIKrw+LA/D7IzD3qU0xVdhDNPli+MYX/Wx65T5
-         j4m5MTLN0YwaoAWgoH/+/6AmYp8km+sc6XeB1mCr6SbtQoKlRGm1XBNKvKbGAVK+ZlYP
-         gR0w==
-X-Forwarded-Encrypted: i=1; AJvYcCXfXsKJBz+gazePewQkhJ4ZpNKLaj1VeKcBjvwGtpAFl7Fq3XG4j8uVoY0aVdSXYSik4jU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdwYJnpJgxRs/reDq4zliT/B6Jz0xxMdFacxhsMaqbHBLnqzSP
-	zwl4z5/0wSoPUihvvId0qJ26PHqLeO4mhl9MBjXtFzaD2bJTYdv3/mEt8f8lXml1PsoJ+NiyRVa
-	5/z2jK8gicRjgSwoN0yI5Tm+y/flwUZ8=
-X-Gm-Gg: AZuq6aK7SKBWrK0Vx1h+0+KpKCVLIJZNtR1yowiJ5o69EZE5HjIidyI6L6GS/TBS+lK
-	23EuAbMSPHZoSSAGk1UWtvwTyFGJ4VXOPqpqAQts4lJRLRcd1tJfB//SC5NtTxzMqnWNY9w9kUn
-	qsYX4x2GLHbMAZuPYX5wh4kPOxGfbp/CMfDTPbUGQjnJTUy4UUtBmdSFmwQrNO7EnmsTgp7CirV
-	EHnbGGPwtYkrMvy0p+govsPHcMmb+6wt2YHcGjTa40pT/fW01cLJN4gNAlS0u5hsQLB0f9ANlZz
-	/giCE62nS83/FeIcvblsTcuEToVFZqG2xW51nwhxZqn7Vcrojm7QHLgoIn402e3V++QGqpEX
-X-Received: by 2002:a05:600c:621a:b0:47e:e076:c7a2 with SMTP id
- 5b1f17b1804b1-4804c95e12dmr71414205e9.15.1769191560210; Fri, 23 Jan 2026
- 10:06:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EranB1qt"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60NDE5ZY006262;
+	Fri, 23 Jan 2026 18:13:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=fOIOBL
+	g4MYGWqHiBMPJ4Clc4Tb1gOD4SbOr28RKnm/I=; b=EranB1qtErwu+/xtayJwI7
+	mCQ2ALYPdXTGbvfP8tJM2oLw2dI66/iYLU69tmS/2c+WLEmDzfGdVf3XXClZ5Mm8
+	6mbsf03ezvcsz1vmKpTONV0VjULQiHBf+HY6pTjhjC+VkwJOznUY3RcJ73uaNOM2
+	HqO17wSpLlJuwKnQNVnUxa5KSJsS8LKZmxjgfTnDMKUjFJ99RWeF/kniNIGWPNS5
+	n6JzFyqwfL6gZSWJny1o9JnRpFQ25c9LmbjPaX2tsW/3WBtJNfdahumsPf0sORIc
+	Dm2NmsFCpaA1EN1EybXzCHm51kjDR+4gErVA0YOU5ofSKkAijL/57Fiw3hjNSSlQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4br23shq49-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Jan 2026 18:13:47 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60NI4uGf001299;
+	Fri, 23 Jan 2026 18:13:47 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4br23shq45-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Jan 2026 18:13:47 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60NI1NPL001162;
+	Fri, 23 Jan 2026 18:13:46 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4brpykadux-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Jan 2026 18:13:46 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60NIDgV243712846
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 23 Jan 2026 18:13:42 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 108F620043;
+	Fri, 23 Jan 2026 18:13:42 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 78B9020040;
+	Fri, 23 Jan 2026 18:13:36 +0000 (GMT)
+Received: from [9.43.50.125] (unknown [9.43.50.125])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 23 Jan 2026 18:13:36 +0000 (GMT)
+Message-ID: <ef0c9d64-1742-4ae9-af4e-868287328c06@linux.ibm.com>
+Date: Fri, 23 Jan 2026 23:43:35 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz> <20260123-sheaves-for-all-v4-8-041323d506f7@suse.cz>
-In-Reply-To: <20260123-sheaves-for-all-v4-8-041323d506f7@suse.cz>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 23 Jan 2026 10:05:48 -0800
-X-Gm-Features: AZwV_QjSjoenDUCyXmvsb5KH8Pd0BwP5NV53NJnMQ1RHDoaNt4mnnL7gEc0SK7E
-Message-ID: <CAADnVQKW2Z62+xC5NUsx4ynqbwPh5yn_EJJrQ4kcPab6KWUK-A@mail.gmail.com>
-Subject: Re: [PATCH v4 08/22] slab: make percpu sheaves compatible with kmalloc_nolock()/kfree_nolock()
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>, linux-mm <linux-mm@kvack.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:Real-time Linux (PREEMPT_RT):Keyword:PREEMPT_RT" <linux-rt-devel@lists.linux.dev>, bpf <bpf@vger.kernel.org>, 
-	kasan-dev <kasan-dev@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/6] powerpc64/bpf: Support exceptions
+To: adubey <adubey@imap.linux.ibm.com>
+Cc: adubey@linux.ibm.com, bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
+        iii@linux.ibm.com, shuah@kernel.org
+References: <20260122211854.5508-1-adubey@linux.ibm.com>
+ <20260122211854.5508-6-adubey@linux.ibm.com>
+ <b805a1c1-58fc-4d76-b26c-542c1285ba4a@linux.ibm.com>
+ <9f35f6799b0b27866259582a2eefecb3@imap.linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <9f35f6799b0b27866259582a2eefecb3@imap.linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: IvIBoCe_iNsiTEEfrBenIHWgFPPUYPRM
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTIzMDEzNSBTYWx0ZWRfX2B9SmrLNKkDT
+ 5fsdYMV08tEiboG+/KQB9io9BuVI1B55a5y62fbSPFc23HxnKmfNLs1x9JW4Utt8x0ZOAX4eoxP
+ 9jRUblPl6MP98QwJ/qXaCGoWhvNF0TpQY2p4hBe4/I/Y2h4NfctYov1egqaZO47n0SI8bU5bnJR
+ G+CHVqVbbIFgnjaR0lwouoS4dBqju46ybRHqs6tF6JESrQb80KsrFhfDAK5XfdyOEiLGV0HPG5U
+ d21+t9aAMn4Jp7lm/flvYiuHepZkbZzaIqpxNfW8fjJwLS8WLFIBK2nulE9EwFv0z9DiaL0uSYa
+ wSQiQcRKOQk8bARWsSwR1cm4RfvTPWEVtNgskDY4+xmsr17x+GtEqKKPw42EGH9u+1hBvFXMVGQ
+ fQJWRWE1Y2B0M8l1ceJ6v+16J5mB0JMPoT+qtVu4xSjBuvQ0fTyIjeyIS3RHxFplBzCkSXBDcd+
+ 97j3/tXkbSveOGI2xMQ==
+X-Authority-Analysis: v=2.4 cv=J9SnLQnS c=1 sm=1 tr=0 ts=6973ba5b cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=DU0EyFXtAAAA:8 a=VnNF1IyMAAAA:8 a=lR2fIWztgbcTg5UndXMA:9 a=3ZKOabzyN94A:10
+ a=QEXdDO2ut3YA:10 a=UCR5be5CC-YrbG9FbbB0:22
+X-Proofpoint-ORIG-GUID: dtidgtl6CeJ3wLKyS6s7l0VwpT0jTY6s
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-23_03,2026-01-22_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ priorityscore=1501 impostorscore=0 adultscore=0 suspectscore=0 spamscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 bulkscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2601230135
 
-On Thu, Jan 22, 2026 at 10:53=E2=80=AFPM Vlastimil Babka <vbabka@suse.cz> w=
-rote:
->
-> Before we enable percpu sheaves for kmalloc caches, we need to make sure
-> kmalloc_nolock() and kfree_nolock() will continue working properly and
-> not spin when not allowed to.
->
-> Percpu sheaves themselves use local_trylock() so they are already
-> compatible. We just need to be careful with the barn->lock spin_lock.
-> Pass a new allow_spin parameter where necessary to use
-> spin_trylock_irqsave().
->
-> In kmalloc_nolock_noprof() we can now attempt alloc_from_pcs() safely,
-> for now it will always fail until we enable sheaves for kmalloc caches
-> next. Similarly in kfree_nolock() we can attempt free_to_pcs().
->
-> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
-> Reviewed-by: Hao Li <hao.li@linux.dev>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
-Acked-by: Alexei Starovoitov <ast@kernel.org>
+
+On 23/01/26 7:23 pm, adubey wrote:
+> On 2026-01-23 18:24, Hari Bathini wrote:
+>> On 23/01/26 2:48 am, adubey@linux.ibm.com wrote:
+>>> From: Abhishek Dubey <adubey@linux.ibm.com>
+>>>
+>>> The modified prologue/epilogue generation code now
+>>> enables exception-callback to use the stack frame of
+>>> the program marked as exception boundary, where callee
+>>> saved registers are stored.
+>>>
+>>> As per ppc64 ABIv2 documentation[1], r14-r31 are callee
+>>> saved registers. BPF programs on ppc64 already saves
+>>> r26-r31 registers. Saving the remaining set of callee
+>>> saved registers(r14-r25) is handled in the next patch.
+>>>
+>>> [1] https://ftp.rtems.org/pub/rtems/people/sebh/ 
+>>> ABI64BitOpenPOWERv1.1_16July2015_pub.pdf
+>>>
+>>> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+>>> ---
+>>>   arch/powerpc/net/bpf_jit.h        |  2 ++
+>>>   arch/powerpc/net/bpf_jit_comp.c   |  7 ++++
+>>>   arch/powerpc/net/bpf_jit_comp64.c | 58 +++++++++++++++++++++----------
+>>>   3 files changed, 48 insertions(+), 19 deletions(-)
+>>>
+>>> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+>>> index 56f56fdd4969..82bbf63f0e57 100644
+>>> --- a/arch/powerpc/net/bpf_jit.h
+>>> +++ b/arch/powerpc/net/bpf_jit.h
+>>> @@ -179,6 +179,8 @@ struct codegen_context {
+>>>       u64 arena_vm_start;
+>>>       u64 user_vm_start;
+>>>       bool is_subprog;
+>>> +    bool exception_boundary;
+>>> +    bool exception_cb;
+>>>   };
+>>>     #define bpf_to_ppc(r)    (ctx->b2p[r])
+>>> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/ 
+>>> bpf_jit_comp.c
+>>> index 1a305f0fed27..2607ea0bedef 100644
+>>> --- a/arch/powerpc/net/bpf_jit_comp.c
+>>> +++ b/arch/powerpc/net/bpf_jit_comp.c
+>>> @@ -207,6 +207,8 @@ struct bpf_prog *bpf_int_jit_compile(struct 
+>>> bpf_prog *fp)
+>>>       cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux- 
+>>> >arena);
+>>>       cgctx.user_vm_start = bpf_arena_get_user_vm_start(fp->aux->arena);
+>>>       cgctx.is_subprog = bpf_is_subprog(fp);
+>>> +    cgctx.exception_boundary = fp->aux->exception_boundary;
+>>> +    cgctx.exception_cb = fp->aux->exception_cb;
+>>>         /* Scouting faux-generate pass 0 */
+>>>       if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+>>> @@ -436,6 +438,11 @@ void bpf_jit_free(struct bpf_prog *fp)
+>>>       bpf_prog_unlock_free(fp);
+>>>   }
+>>>   +bool bpf_jit_supports_exceptions(void)
+>>> +{
+>>> +    return IS_ENABLED(CONFIG_PPC64);
+>>> +}
+>>> +
+>>>   bool bpf_jit_supports_subprog_tailcalls(void)
+>>>   {
+>>>       return IS_ENABLED(CONFIG_PPC64);
+>>> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/ 
+>>> bpf_jit_comp64.c
+>>> index c25ba1ad587a..d7cd8ab6559c 100644
+>>> --- a/arch/powerpc/net/bpf_jit_comp64.c
+>>> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+>>> @@ -89,7 +89,9 @@ static inline bool bpf_has_stack_frame(struct 
+>>> codegen_context *ctx)
+>>>        * - the bpf program uses its stack area
+>>>        * The latter condition is deduced from the usage of BPF_REG_FP
+>>>        */
+>>> -    return ctx->seen & SEEN_FUNC || bpf_is_seen_register(ctx, 
+>>> bpf_to_ppc(BPF_REG_FP));
+>>> +    return ctx->seen & SEEN_FUNC ||
+>>> +           bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)) ||
+>>> +           ctx->exception_cb;
+>>>   }
+>>>     /*
+>>
+>>
+>>> @@ -161,8 +163,13 @@ void bpf_jit_build_prologue(u32 *image, struct 
+>>> codegen_context *ctx)
+>>
+>>
+>>
+>>>           EMIT(PPC_RAW_LI(bpf_to_ppc(TMP_REG_1), 0));
+>>>           /* this goes in the redzone */
+>>>           EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, - 
+>>> (BPF_PPC_TAILCALL)));
+>>> -    } else {
+>>> +    } else if (!ctx->exception_cb) {
+>>>           /*
+>>> +         * Tailcall jitting for non exception_cb progs only.
+>>> +         * exception_cb won't require tail_call_info to be setup.
+>>> +         *
+>>> +         * tail_call_info interpretation logic:
+>>> +         *
+>>>            * if tail_call_info < MAX_TAIL_CALL_CNT
+>>>            *      main prog calling first subprog -> copy reference
+>>>            * else
+>>> @@ -177,8 +184,12 @@ void bpf_jit_build_prologue(u32 *image, struct 
+>>> codegen_context *ctx)
+>>>           EMIT(PPC_RAW_STD(bpf_to_ppc(TMP_REG_1), _R1, - 
+>>> (BPF_PPC_TAILCALL)));
+>>>       }
+>>>   -    if (bpf_has_stack_frame(ctx)) {
+>>> +    if (bpf_has_stack_frame(ctx) && !ctx->exception_cb) {
+>>>           /*
+>>> +         * exception_cb uses boundary frame after stack walk.
+>>> +         * It can simply use redzone, this optimization reduces
+>>> +         * stack walk loop by one level.
+>>> +         *
+>>>            * We need a stack frame, but we don't necessarily need to
+>>>            * save/restore LR unless we call other functions
+>>>            */
+>>> @@ -190,23 +201,32 @@ void bpf_jit_build_prologue(u32 *image, struct 
+>>> codegen_context *ctx)
+>>>           EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_STACKFRAME + ctx- 
+>>> >stack_size)));
+>>>       }
+>>>   -    /*
+>>> -     * Back up non-volatile regs -- BPF registers 6-10
+>>> -     * If we haven't created our own stack frame, we save these
+>>> -     * in the protected zone below the previous stack frame
+>>> -     */
+>>> -    for (i = BPF_REG_6; i <= BPF_REG_10; i++)
+>>> -        if (bpf_is_seen_register(ctx, bpf_to_ppc(i)))
+>>> -            EMIT(PPC_RAW_STD(bpf_to_ppc(i), _R1, 
+>>> bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+>>> +    if (!ctx->exception_cb) {
+>>> +        /*
+>>> +         * Back up non-volatile regs -- BPF registers 6-10
+>>> +         * If we haven't created our own stack frame, we save these
+>>> +         * in the protected zone below the previous stack frame
+>>> +         */
+>>> +        for (i = BPF_REG_6; i <= BPF_REG_10; i++)
+>>> +            if (ctx->exception_boundary || bpf_is_seen_register(ctx, 
+>>> bpf_to_ppc(i)))
+>>> +                EMIT(PPC_RAW_STD(bpf_to_ppc(i), _R1,
+>>> +                    bpf_jit_stack_offsetof(ctx, bpf_to_ppc(i))));
+>>>   -    if (ctx->arena_vm_start)
+>>> -        EMIT(PPC_RAW_STD(bpf_to_ppc(ARENA_VM_START), _R1,
+>>> +        if (ctx->exception_boundary || ctx->arena_vm_start)
+>>> +            EMIT(PPC_RAW_STD(bpf_to_ppc(ARENA_VM_START), _R1,
+>>>                    bpf_jit_stack_offsetof(ctx, 
+>>> bpf_to_ppc(ARENA_VM_START))));
+>>>   -    /* Setup frame pointer to point to the bpf stack area */
+>>> -    if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+>>> -        EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+>>> +        /* Setup frame pointer to point to the bpf stack area */
+>>> +        if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+>>> +            EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+>>>                   STACK_FRAME_MIN_SIZE + ctx->stack_size));
+>>> +    } else {
+>>> +        /*
+>>> +         * Exception callback receives Frame Pointer of main
+>>> +         * program as third arg
+>>> +         */
+>>> +        EMIT(PPC_RAW_MR(_R1, _R5));
+>>> +    }
+>>>         if (ctx->arena_vm_start)
+>>>           PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
+>>
+>> For all practical purposes, the only thing that matters for the prologue
+>> of execption_cb subprog seems to be, to set r1 and move on. The below
+>> snippet before tailcall setup in the prologue should live the rest of
+>> the prologue code unchanged?
+>>
+>> if (ctx->exception_cb) {
+>>     /*
+>>      * Exception callback receives Frame Pointer of main
+>>
+>>      * program as third arg
+>>
+>>      */
+>>     EMIT(PPC_RAW_MR(_R1, _R5));
+>>     return;
+>> }
+> This approach could work, but it may be fragile. If future changes to the
+> callback logic start accessing fields from the active boundary frame, this
+> could lead to incorrect memory access or corruption. Other archs have 
+> kept it.
+> Shall we keep it?
+
+True. In fact, exception_cb isn't seem to be restricted from using
+the BPF stack or arena...
+
+So, the "Setup frame pointer to point to the bpf stack area" part
+may also have to come out of that !exception_cb condition..
+
+- Hari
