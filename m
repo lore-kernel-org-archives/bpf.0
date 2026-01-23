@@ -1,89 +1,90 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E101DC9B3;
-	Fri, 23 Jan 2026 19:30:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D2322D9ECD
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 20:23:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769196615; cv=none; b=B45Qyo+uH4WsNfrViezNG1o6ryt723g5XZWeHB77nbbwQA7ZYDIVs/ISik92QPX/Fqi7KwtP33wUycxN05zc8sO8+cnk2adWzYnNEd4vgCwvdMEuaRD+DmTqXMz3Llylna03tP12O4bIVTC4Hqkb0csdbLqdlvJD7IwoRdsLi5s=
+	t=1769199834; cv=none; b=J3zVvvk4/EeD7kpYzS3wqmBljWTWs9n0oRI/uGnL/+NjJcpv3WXy4xlbltws3XvYls07iu9S482VSbfisfqN0fqXuFHhkMaOm0ilzFfExuGojlP/jJOTGvq84lUzPvozrOfJ3K9wlncTwFX13f5eGwbffgZ2ZzyQplHqNARWzBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769196615; c=relaxed/simple;
-	bh=xfEXE2AnAULfW4hnvD3/ovp+1hD4RRxgZ5foUg2C1qA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=FqtyJbY9F8uMWIK2zO5vLgyP/bDxWBA0uyWv9oLC3BvaOZoZUgKKz6BvfcUvEAf8IN4gezymBEwBWfYTuCAomPLUkPWfaGoZeejDzWS/fbPlVMgHyUS44EZZewcAKMFBmAOShMS6KHLolPtyKaYZZdZmdJINsY+knpiZJ24elYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nn5JleeW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769199834; c=relaxed/simple;
+	bh=TCYJ9pm4u9pY8XA2MVmsOObmE6D7jsYdHa39/d5HMcc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rr7V2Dt1plI/ZmpgOI3wovAIyNwN6gsokRaba+CLSgiQmjBKpA70SCCHi5FMj4NKgCTSIlBObemZn4gWxCXx4IYMwQ9L9HA4nTjwQeiQeNkTnl/hFxe5ZEqXz988WXcDIbKMU/U6FFrcH1Ir7yNOonwjNU1d7ebLaTjgcOP3gkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SF+opV+g; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nn5JleeW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C501C4CEF1;
-	Fri, 23 Jan 2026 19:30:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SF+opV+g"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7ACD4C2BC86
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 20:23:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769196614;
-	bh=xfEXE2AnAULfW4hnvD3/ovp+1hD4RRxgZ5foUg2C1qA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Nn5JleeWFff5zKRN7TamPwmxyCeLn27G250ZLSMFstpOn3RIN2V8Wx5zZsLlOO4hY
-	 xAR4oEku07H3yBhFpuv/uXpBOqUnLvJbghPiuMEE34IAiVtnd5FDihQjO3IVEkB1T7
-	 wrZuhO5tRhwSvFziMSnYoDvdIx35GQ/HN7HdWuToKcNLTooUucQ6U+Xbe+4lv+xi4X
-	 K6HiaD4KqnABcyuPmxVm/fMOcLpF+2FSAm9ghLjFCvE+ZoEeUcUZbzS8jJ5QHj8kws
-	 QURVmDXFf5l1Nj+XDJq3Uv1jaNuyJSnZB4Hz0gK8vWJ+uAx8AeQxb9MvI7D8g1384g
-	 SRm4RSSQxHc+w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BD813808200;
-	Fri, 23 Jan 2026 19:30:11 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1769199834;
+	bh=TCYJ9pm4u9pY8XA2MVmsOObmE6D7jsYdHa39/d5HMcc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=SF+opV+gFpElpTEh5dma1Eqc4cd2BEVKbsd1ucMgZXsVvZkwYMxw12y67TwcT416k
+	 G7pAyXs3qgWL5pYemOAEW/+DdPJBAivrosXeIIGFoULmCKta1RNVokMDrM9nk9xYHR
+	 tGWoAVRdDhFPwOD8y+jvyB6vkDFon31QT1fcN3FiLzs0rVDfpRUSSuHGRydHrWJeEx
+	 q4LtYid2aCM0SpFBS9Zn6r2joNSLUkCvzY5kA/gZno4TJfAbYDUR2z57SnlpfwxkrZ
+	 QanPVyPwBeTHvb/42HPUQBmjwQuK+M6FsHAhZVOOR0RnuXxIDTfMv7pwRdAKJVvr7g
+	 U0mSvlWc5z7hQ==
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-89478e429afso24379926d6.1
+        for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 12:23:54 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXmKfIomG87cA0B+Dp4yFUayJEVyRnPfgQXZABxjGYzUb86aK7y/LilzFrSafcPvB+jqU0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygubBeJIIJTT+6waoK5RiruZ5hxNBete5MUrENk/zPEiwEWaRe
+	eOL3xS7MpLtmz75MYhfmU7OpvXIH/q/is3XTE0zd4odSbLCxltvRqNi/llu9dvwwJuS/5iAGqXq
+	O0GiobHGUALzV6zOTrmoCzkfqndI6+iQ=
+X-Received: by 2002:a05:6214:cc1:b0:894:3c57:dbc0 with SMTP id
+ 6a1803df08f44-8949020dac1mr58981856d6.39.1769199833659; Fri, 23 Jan 2026
+ 12:23:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v2 0/4] Switch from kfuncs to direct helper calls
- in prologue/epilogue
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176919661035.2689746.16918451024463235457.git-patchwork-notify@kernel.org>
-Date: Fri, 23 Jan 2026 19:30:10 +0000
-References: 
- <20260123-skb-meta-bpf-emit-call-from-prologue-v2-0-0e50db4d4663@cloudflare.com>
-In-Reply-To: 
- <20260123-skb-meta-bpf-emit-call-from-prologue-v2-0-0e50db4d4663@cloudflare.com>
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, andrii@kernel.org, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- ameryhung@gmail.com, netdev@vger.kernel.org, kernel-team@cloudflare.com,
- martin.lau@kernel.org
+References: <CAPhsuW4=heDwYEkmRzSnLHDdW=da71qDd1KqUj9sYUOT5uOx3w@mail.gmail.com>
+ <CAHC9VhRU_vtN4oXHVuT4Tt=WFP=4FrKc=i8t=xDz+bamUG7r6g@mail.gmail.com>
+ <CAPhsuW6vCrN=k6xEuPf+tJr6ikH_RwfyaU_Q9DvGg2r2U9y+UA@mail.gmail.com>
+ <94bf50cb-cea7-48c1-9f88-073c969eb211@schaufler-ca.com> <CAPhsuW7xi+PP9OnkpBoh96aQyf3C82S1cZY4NJro-FKp0i719Q@mail.gmail.com>
+ <633aa038-4356-4db3-b61f-191cf56c73b4@schaufler-ca.com>
+In-Reply-To: <633aa038-4356-4db3-b61f-191cf56c73b4@schaufler-ca.com>
+From: Song Liu <song@kernel.org>
+Date: Fri, 23 Jan 2026 12:23:42 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5-m9oVraESqht_OMwOf-b80LBC0w+DSKk9Kru7sF8d4Q@mail.gmail.com>
+X-Gm-Features: AZwV_Qil2W6hJzceDSRZxA4srphedhZgK-8wrWEE_IAEq6nCZVjDWj78lZ3LHwg
+Message-ID: <CAPhsuW5-m9oVraESqht_OMwOf-b80LBC0w+DSKk9Kru7sF8d4Q@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] Refactor LSM hooks for VFS mount operations
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Paul Moore <paul@paul-moore.com>, bpf <bpf@vger.kernel.org>, 
+	Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, lsf-pc@lists.linux-foundation.org, 
+	linux-security-module <linux-security-module@vger.kernel.org>, 
+	Christian Brauner <brauner@kernel.org>, Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Hi Casey,
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+On Thu, Jan 22, 2026 at 6:38=E2=80=AFPM Casey Schaufler <casey@schaufler-ca=
+.com> wrote:
+[...]
+> > Could you please share more information about this issue?
+>
+> LSMs assume that any mount options passed to them are options
+> they provide. If an option isn't recognized, it's an error. If
+> two LSMs provide mount options the first will report an error for
+> a mount option recognized by the second. Since hook processing
+> uses a "bail on fail" model, the second LSM will never be called
+> to process its options and the mount operation will fail.
+>
+> The option processing needs to change to allow option processing
+> in an LSM to differentiate between a failure in processing its
+> options from finding an unrecognized option. The infrastructure
+> needs to be changed to allow for multiple LSMs to look at the
+> options and only fail if none of them handle the options.
 
-On Fri, 23 Jan 2026 18:05:17 +0100 you wrote:
-> This series enables direct helper calls using BPF_EMIT_CALL from prologue
-> and epilogue code generated by verifier ops. The goal is to simplify the
-> calling convention and remove kfunc support from prologue/epilogue, as
-> suggested by Alexei [1].
-> 
-> Patch 1 adds the infrastructure to mark direct helper calls as finalized
-> (already resolved) so the verifier skips the imm fixup.
-> 
-> [...]
+Thanks for the explanation!
 
-Here is the summary with links:
-  - [bpf-next,v2,1/4] bpf, verifier: Support direct helper calls from prologue/epilogue
-    https://git.kernel.org/bpf/bpf-next/c/af46ae41da7c
-  - [bpf-next,v2,2/4] bpf: net_sched: Use direct helper calls instead of kfuncs in pro/epilogue
-    https://git.kernel.org/bpf/bpf-next/c/5c2106d44168
-  - [bpf-next,v2,3/4] selftests/bpf: Remove tests for prologue/epilogue with kfuncs
-    https://git.kernel.org/bpf/bpf-next/c/d3ddc749df28
-  - [bpf-next,v2,4/4] bpf: Remove kfunc support in prologue and epilogue
-    https://git.kernel.org/bpf/bpf-next/c/68d23a660c4f
+This issue is indeed tricky. Since we are talking about to major
+refactoring of LSM hooks around mount operations, it is good
+timing to also solve this issue. I will look more into this.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Song
