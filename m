@@ -1,124 +1,166 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC159346AC1
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 03:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769140553; cv=pass; b=sFg2shSZDANF6dKrDKxuzJ9ouKZ3ZdrmiF7X3+/hOw30w2iGsIB0+16n/AV0Nw5AwM2x1+Nho7/kbLibCqnhkpDXXvFqfkIFrxBpqnOayRv1NGMgRKiGf8n9tYMtbuCt8Q7K/7FPgxVVzi5amkcNvBA2kTwsc4N51diY/i1i2+Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769140553; c=relaxed/simple;
-	bh=r9jHNWMSvfTiZP6TKyMQXs/9znXBmvFyE7ShBNFhg68=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DW/SFK85dsbirUQON8+qxF+r1fe596npd9X655E3RbNzf4vUDRH8XjSIAYM/qyktOHUTS3PgWnppHmmh1ogcSKPyw9/9DWng3AABeYlAvn9kaVemQy2xPiqNNIaE8h1VBJqRuRHrGdBJMpgULNPr+k+BeZKgnhdAxmNvSTTIaaI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wr283itV; arc=pass smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E6D22F3636;
+	Fri, 23 Jan 2026 03:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769140720; cv=none; b=DRs/h8TZit7iytaLAbGiPbgUqip1IyQ7QxKP4Cp6GejWfbphOZ2H4ZZ/Y5x6tzg5F0WXwNp9JMuH+XstGbpecmshkQyiH9wcgRfhoG5I3RbDrUfS3KGYjjdhQ2tHZz+QhThUlvQ8hcuyFe6Q3hcfMaECVusJI/S2xcaHmbqPWgo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769140720; c=relaxed/simple;
+	bh=BAI+EjaSfxcJvZxjB7J+YyaGw88SdVkkLWVtadPgy2k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FOM8Qh8NM/TU32YoNoRItqvUAw2fQcdLqMmRkoqw94sKhDlagFr/yQ37ldJxpf+8YacvPAw2WL65sDHxcTQ5xPdoB9Qe75qis+WXW+QMJMlvX3hm4fxrFcQAzY0k3B2KDO6dZMYvK5x4cLN/cxLKAcoaNENKCUHqFN4WbcgPKo4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=OZJRFM+m; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wr283itV"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-43591b55727so1578129f8f.3
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 19:55:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769140541; cv=none;
-        d=google.com; s=arc-20240605;
-        b=P3nAlU31m43zRf/DeclHI4l4wzld7G7w/Puq1kVQir4Z8epXbGFCogOytM582VIRBu
-         gpFG8JJd6PrNJoeyDgntyOLGwzFBF2nbSkHxulaIspnSwjNfz7q2drOLLiMuBoxRHIyo
-         Gb6yNzb+l6uYo3NcTBN8mDw3OUmZdwdpvCnNwJaTmnfYJjiPuMmKdY5pszus6oadnEkG
-         SlsP0QsD/L4rpQSXtzDIGOX8UWV+xHTmVIj3u4lj//lxUcwr9KrSfBskubIETmnEbOfb
-         68TCxSyxMjKzJihLpMjhdC0qxkG5QBEehFI9YLXvjJz9AQL9P/facna/sBWcxIZkKiDn
-         MwiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=oLUC+i+ADen7EDXOxfQZCpoTM8xhG1CfD72IdTQT+yM=;
-        fh=Qwi4bkM/TcZNakyBIOP2hHL6j49r9ebjziY5QnZErxA=;
-        b=Uns/OyLLemrj54ZjxGe/hVsDrtZG2WPbDotLN4xOZ4O6hMm2KgJt/rpILArzAsswQG
-         fn6CDHIoDrtzcSQkXgf8LDCh7+U7e3XIyQPQ5NOHv8k8BrE9OUqwelI4uudjKKh/94hz
-         +5k0i+tuOniHtGpgjwyYiDq5qTLSbyjQCFxT+f+khoK7syxV2YkonjxpwE9BLkX0EaNl
-         edNy6LOpHHAzQ1aZ/KFyIKOUs7GFbM3pqEk7GL5R1860J8igSEQZ+Qq+uoOrwTt0m3v8
-         b8qQGsKNi6N+uTouLaYPR6MyKBEHNI1fbdCfPQ1WYXGceJxBEuIN8B8s6zk3OeA/KC8v
-         veXQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769140541; x=1769745341; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oLUC+i+ADen7EDXOxfQZCpoTM8xhG1CfD72IdTQT+yM=;
-        b=Wr283itVQA/08aWtrCdvA/5rHxNYisE4bHuEllFQE4LnL1o+9MCovBMtwrEw1sCY4g
-         hcsizIuKM6VKVLrCnRsq8fKb+9o4MTonWjtmRHcX5Yd9rjS3eAJUqv3ldWQ8PNQHfrb9
-         Y3tNVZTTQVDtrpnR8SxgaAoJclF+UgMDmmpqNIOOVljRDNUcIN6c70tJvLPGsgXToAl1
-         4eJI8X5TfcS6qB3RNr0FdTh1IzB1RAxkiipzlUZUqkIRrs1Dvz1z4Xeda0lU1gpjkGUR
-         Y6qmptXFtnLTUQkmr8fWXs+/YUndG1jsTxSVFlmzmlvWMaSDSIIGn2x77KxUtOPOm/SR
-         RzGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769140541; x=1769745341;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=oLUC+i+ADen7EDXOxfQZCpoTM8xhG1CfD72IdTQT+yM=;
-        b=TJHVX/6P+NZy2fftm+bKFvDVAYRo8aSl4BHH19BtJJeem37yoOtDh5gBfndKDTWe+m
-         qspid/Dem/dPOal/h/9G8sj7DyClN2pNeh8f1cfOTZ4UUyn+1UGEOnIwXtnewxeeR1Zl
-         hnycsdFr/h8Fb9SerPCEpzOn3OhBsGscmYXPQ6ZNb5u0XfmtXVKRs6K5/stDw27zYY6I
-         vIN9CQZdOU7l4Gs0bYIZIWZX5L85WaXHc7s6eyjlxg1k0v2FXVEWEfI5ZGSqGj6PMtHy
-         ZcEbpn9LK9qMpAImn4h2MNI81MNhbrKxvGi08WE2jer+ZF/9ZLWJPu2FtFohB/HKmY+/
-         SxOw==
-X-Gm-Message-State: AOJu0YyT8k62N5ZeeZ/o4odDnKJcSGV2CU8h0XmWzW4qJ+swfx5DdAS1
-	+tlZZX5/eIOSGApbPn6UqQkl6bi/NYmnqdWMtsnmmoTh3l7YSjFsX2MUejcAIPgeeX1BU3qnBOI
-	y8S0vJ1R3ngAh+TmZpgNjzjh1SVvI3mw=
-X-Gm-Gg: AZuq6aKMEBdua3k3MEGUUCYiGLY/k4WHk9HHqtWYG0xpqurSr0QZdXIYmelPJFrkeqo
-	kIj47nVWY7gqsPppS+qy4BEqSWxjIMRoGYvFwsZEDtDCp6qgcIwemU+15oew6DS34zUQjn2S7Xb
-	LJ96oIXpJQZbLn+52yfe2RSgvqWpDVpapLxlcZoxEVb0jhbKzNKn+WyzRHOcF2FNmsciA/NBoKf
-	T3sGalkwTnGa8fumw0hDlFP7o7i4bXzutoQ8w8yG9wrefU1smbnTRag7l0OwdSs2FPrjMETVzRi
-	fEbKZSq2S1n8b3LS+QTSMecK8OTs7qj9MBEUysEm6fbT2M8E+8elQ5FUXCFxQe7kooLdkigXNF5
-	E0HxQXBQSDPkRow==
-X-Received: by 2002:a5d:64c5:0:b0:435:a0ca:bdc9 with SMTP id
- ffacd0b85a97d-435b161bf3cmr2680572f8f.44.1769140541425; Thu, 22 Jan 2026
- 19:55:41 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="OZJRFM+m"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=wyEqaKQNSoyNzMdCqVbM+n+7F7wWHIRNo+JawxvUS6o=; b=OZJRFM+mQAt3LONy9Cv72cYlIS
+	BWltBftnBT1OL2DGpGa+QcXpGm/5sF/fMCX1tRXmfYgkv4fWwDR6ofDnUMmhrskaX8XfF15NsPwps
+	mLTI1fjjSFlWznnhx4j2SHdmnEDHqSvy3m+ljVtXg63YyOhqpLAV8p4bo1aFSNuNStuY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vj8J3-0044CJ-Ll; Fri, 23 Jan 2026 04:57:57 +0100
+Date: Fri, 23 Jan 2026 04:57:57 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: "illusion.wang" <illusion.wang@nebula-matrix.com>
+Cc: dimon.zhao@nebula-matrix.com, alvin.wang@nebula-matrix.com,
+	sam.chen@nebula-matrix.com, netdev@vger.kernel.org,
+	andrew+netdev@lunn.ch, corbet@lwn.net, kuba@kernel.org,
+	linux-doc@vger.kernel.org, lorenzo@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, vadim.fedorenko@linux.dev,
+	lukas.bulwahn@redhat.com, hawk@kernel.org, ast@kernel.org,
+	bpf@vger.kernel.org, sdf@fomichev.me, daniel@iogearbox.net,
+	john.fastabend@gmail.com, edumazet@google.com,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 net-next 02/15] net/nebula-matrix: add our driver
+ architecture
+Message-ID: <c6d37ecd-7dc6-4f83-b76c-2735a5f116fd@lunn.ch>
+References: <20260123011804.31263-1-illusion.wang@nebula-matrix.com>
+ <20260123011804.31263-3-illusion.wang@nebula-matrix.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260123032445.125259-1-leon.hwang@linux.dev> <20260123032445.125259-3-leon.hwang@linux.dev>
-In-Reply-To: <20260123032445.125259-3-leon.hwang@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 22 Jan 2026 19:55:30 -0800
-X-Gm-Features: AZwV_QgqHod6Vo7nyP7nHa4qnphQWjyMdvjVdCTjYDN8Z6Yuxj1TGy-HCaBPn3c
-Message-ID: <CAADnVQJLz+nMHCZXUgy2MOxwFczEHNbG8ZUgfZeUY4yXFUKcNw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 2/9] libbpf: Add support for extended bpf syscall
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
-	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
-	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
-	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
-	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
-	Rong Tao <rongtao@cestc.cn>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux API <linux-api@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260123011804.31263-3-illusion.wang@nebula-matrix.com>
 
-On Thu, Jan 22, 2026 at 7:25=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
->
-> +static int probe_bpf_syscall_common_attrs(int token_fd)
-> +{
-> +       int ret;
+> +	NBL_CHAN_MGT_TO_COMMON(&(*chan_mgt_leonis)->chan_mgt) = common;
+
+Macros on the left hand side is pretty unusual. Why is it needed?
+
+The cast suggests your types are messed up. You should not need casts.
+
+> +#define nbl_err(common, fmt, ...)					\
+> +do {									\
+> +	typeof(common) _common = (common);				\
+> +		dev_err(NBL_COMMON_TO_DEV(_common), fmt, ##__VA_ARGS__);\
+> +} while (0)
+
+You should probably remove these and just use dev_err() or
+netdev_err() directly.
+
+> +#define NBL_COMMON_TO_PDEV(common)		((common)->pdev)
+> +#define NBL_COMMON_TO_DEV(common)		((common)->dev)
+> +#define NBL_COMMON_TO_DMA_DEV(common)		((common)->dma_dev)
+> +#define NBL_COMMON_TO_VSI_ID(common)		((common)->vsi_id)
+> +#define NBL_COMMON_TO_ETH_ID(common)		((common)->eth_id)
+> +#define NBL_COMMON_TO_ETH_MODE(common)		((common)->eth_mode)
+> +#define NBL_COMMON_TO_DEBUG_LVL(common)		((common)->debug_lvl)
 > +
-> +       ret =3D probe_sys_bpf_ext();
-> +       return ret > 0;
-> +}
+> +#define NBL_COMMON_TO_OCP_CAP(common)		((common)->is_ocp)
+> +#define NBL_COMMON_TO_PCI_USING_DAC(common)	((common)->pci_using_dac)
+> +#define NBL_COMMON_TO_MGT_PF(common)		((common)->mgt_pf)
+> +#define NBL_COMMON_TO_PCI_FUNC_ID(common)	((common)->function)
+> +#define NBL_COMMON_TO_LOGIC_ETH_ID(common)	((common)->logic_eth_id)
 
-When you look at the above, what thoughts come to mind?
+These are all just obfuscation. Please remove them. And not just
+these. All of them. Such macros don't help.
 
-... and please don't use ai for answers.
+> +int nbl_dev_init(void *p, struct nbl_init_param *param);
+> +void nbl_dev_remove(void *p);
+> +int nbl_dev_start(void *p, struct nbl_init_param *param);
+> +void nbl_dev_stop(void *p);
+
+Using a void * as a parameter for something like nbl_dev_start() and
+nbl_dev_stop() is a red flag. You should know they type you are
+passing to functions like this. In general, you want the compiler to
+be doing type checking for you, so you need real types.
+
+> +struct nbl_adapter *nbl_core_init(struct pci_dev *pdev,
+> +				  struct nbl_init_param *param)
+> +{
+> +	struct nbl_adapter *adapter;
+> +	struct nbl_common_info *common;
+> +	struct nbl_product_base_ops *product_base_ops;
+> +	int ret = 0;
+
+Reverse Christmas tree. That applies to all functions.
+
+> +
+> +	if (!pdev)
+> +		return NULL;
+
+Can that happen? Don't have defensive code. If there is a real reason
+this could be NULL then fine, but you might want to add a comment why
+it can happen. But if this is not actually expected let pdev be
+dereferenced, get the Opps, so you can debug your driver. And i don't
+mean this one instance. I mean all similar tests in the driver. No
+defensive code, it just hides bugs.
+
+> +void nbl_core_remove(struct nbl_adapter *adapter)
+> +{
+> +	struct nbl_product_base_ops *product_base_ops;
+> +	struct device *dev;
+> +
+> +	dev = NBL_ADAP_TO_DEV(adapter);
+> +	product_base_ops = NBL_ADAP_TO_RPDUCT_BASE_OPS(adapter);
+> +	nbl_dev_remove(adapter);
+> +	nbl_serv_remove(adapter);
+> +	nbl_disp_remove(adapter);
+> +	product_base_ops->res_remove(adapter);
+> +	product_base_ops->chan_remove(adapter);
+> +	product_base_ops->hw_remove(adapter);
+> +	devm_kfree(dev, adapter);
+
+Calling devm_kfree() is unusual. Why do you do this? I suggests you
+don't understand what devm_ actually does. Which is pretty scary if
+you have such a basic thing wrong for a driver this size.
+
+>  static int nbl_probe(struct pci_dev *pdev,
+>  		     const struct pci_device_id __always_unused *id)
+>  {
+>  	struct device *dev = &pdev->dev;
+> +	struct nbl_adapter *adapter = NULL;
+> +	struct nbl_init_param param = {{0}};
+> +	int err;
+>  
+> +	if (pci_enable_device(pdev)) {
+> +		dev_err(&pdev->dev, "Failed to enable PCI device\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	param.pci_using_dac = true;
+> +	nbl_get_func_param(pdev, id->driver_data, &param);
+> +
+> +	err = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
+> +	if (err) {
+> +		dev_err(dev, "Configure DMA 64 bit mask failed, err = %d\n",
+> +			err);
+
+dev_err() is usually for a fatal error. Here you just keep going, so
+it is not really an error. dev_dbg()?
+
+    Andrew
+
+---
+pw-bot: cr
