@@ -1,346 +1,273 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-pf1-f195.google.com (mail-pf1-f195.google.com [209.85.210.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE4836EAB3
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 06:54:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0460B2ED843
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 07:35:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769151274; cv=none; b=awpTCnF0dV0T++5oBm/ecaZAaIzWHnKaUTUcSWtPOvPXG1NWkecL0Wb0DSMSUms1zl9T56gYPcZgTjcEHdTmzlpME6Gh9f7cvoJHf6opUVKj139Kv1yhbteoStCSZ02pHgJJg/EACf9Fxo73O+lSFxBXw0Tzl/ne6/6BemEPecE=
+	t=1769153747; cv=none; b=DP/TbOUQIHW/VTl7XTfBL/+zfHG6kZZq8PdkHbxJchP1EGYIpDCAeG+Wk3H6D6WrJaIOw/8aDQ+Z7ZWQ7kFszIOOjtWZevu4CmIs60yHThjrpbFYkSzdi5ohh1ZF3OK5kbyTBzweWSreIVr00cDbgAfN5ZTTsbWla13QA+NJS4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769151274; c=relaxed/simple;
-	bh=Um3gfSK2PbcPoX7F+IaIrqBdWXlDG7moCu40gurNncA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aw1+gRTwz08Us8p3F+qprpTrg1VeQlZw1GHR+ZeD2IHEaUIPPpze+iEnKWeJmwDF2ODr96wEng/Cq9An3WS7Xs+sYIg6DLgzPf2sk4v/AqvHlTVycyHTFE2UOsKLmUjiqhwLof7vYICZy+121CGNitxZ68M8jzbyzojGbl9dM4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 92DD43377C;
-	Fri, 23 Jan 2026 06:53:11 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6BECD139E9;
-	Fri, 23 Jan 2026 06:53:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id EHITGtcac2k4YgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Fri, 23 Jan 2026 06:53:11 +0000
-From: Vlastimil Babka <vbabka@suse.cz>
-Date: Fri, 23 Jan 2026 07:53:00 +0100
-Subject: [PATCH v4 22/22] mm/slub: cleanup and repurpose some stat items
+	s=arc-20240116; t=1769153747; c=relaxed/simple;
+	bh=IIywgjkMC9eqbw9rC0HyEr06ynE2YeurqmcObpG0GOU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Y3aLggV7D9WTBbHxUisT5L+ij3OpraA6dZ1RnTA9byPhsA3xcYDqCctfbjpBiCB1oHuCY7CmbsLRD/+Fz87cDB5LpW5Qs7Q06cB8W6R+H97GQp+HmRMqYFLDU11JdzbgXjIqgYCE2Ii4YLvwgBj46EqL7NytSCJYFbv9j8GMBbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B0mDaVfs; arc=none smtp.client-ip=209.85.210.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B0mDaVfs"
+Received: by mail-pf1-f195.google.com with SMTP id d2e1a72fcca58-823210d1d8eso73066b3a.1
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 23:35:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769153745; x=1769758545; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fAB/7HVJCG/sTMtuKVDS52s4Pq0JlJT4Mf/3agprN40=;
+        b=B0mDaVfsNdogqwyhMdYpLN5p8FoPC6KNfOQNrVsMqNrnRIPDmRUP7zq0B7b3qFtYUx
+         UrEfpLB5P6Xo+THDtVQfHmL2jCiob2VH8axd5LIsUyF8PyEZLD/Hrbxpz0ZP+mozhDxg
+         EyxIXGxphhSdu/mhIFPd6RFSqRXy2nFxKCGvIa1n8QvviOQfkqSWEKA6/SbTYNi2e6HG
+         sEOo1ScwQP0EAkIcrwz2Dc88BJ4wshYOQU7FVv82Z6vHrLujeEiWQOZU3Il+eYGMK4rY
+         wZvuY9enRvEjwShcWyr3OYbo7KppDCTGyDRWfLC1CkapIw2DubMuYAN7BH3hHb9Udxcf
+         9AKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769153745; x=1769758545;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fAB/7HVJCG/sTMtuKVDS52s4Pq0JlJT4Mf/3agprN40=;
+        b=jvPCs18gcbbctXwoBhI0K6iZ5p1Pap/1rbx5TMMoSgFftKNERoyssiQ7hGhPXqoP/E
+         K+l7QNzVYX+9g58iQTkfFVhxyBHUWojobmO1ahpwjBO1Re7kcD2w5yXx8mL8N5e94auW
+         3RtxyuaYWa5RguLJ8THt10BgF6EHh5nrmqpqRB+C16PEpcMtsTcEXKlHYaspG0kwqkuZ
+         6nremL+ci5ktr7ZotuUhJAKnk77uB/P5rrVc6uZ6m5cE0W8ID1DbBGhhz1b8TW1BDmdC
+         4q0SUBdUQaL1fXfG4ppvfYLRr7t6Pc1cwvsiH5g0tZw73PJSl+1NSsGJEyNb9mQQlmZJ
+         w1gg==
+X-Forwarded-Encrypted: i=1; AJvYcCX8XhZ9N9VMDEiKF+gVi0p5vv4TXxtji7nideG7xkZTMk9VsaRNAPmADicuKN7xSPB9mN4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzS67hPBMAwWPQ/Sivvig54E+KaPeMysoO0AlFE6QwSU9X5e4kt
+	WlNwwH6dNvFv6H3rX5Dq7l1CSLeNMGEXaIGYjx0Cy/6BAQ4bUqxvuKNz
+X-Gm-Gg: AZuq6aJ9Kr+i/FvL7jRSNsrQe7bx6zVUz9gVsqREfS2sTtXdrQMrM1IP8uR+t6x5028
+	0lXiddyjWf8kLEv4Gz/uCLwSSgGC8Jx+L8TMJ7c5i4nY7AepBbJKXtMo78o+kgvQIqNljdL99T/
+	ZKItGysajOWM3DA27cTn3Hp7A17BOlAangLt7bpoIPPw8fDG6oIb1NFk3J3t7hVCDhnDDs/fIKk
+	QUwJG54p4MI7XrXKOzgVhtVcFz1Wbo+EJ+9o82RIbjcT731Ry/aSGpJDxNcAYBZI+sFbpSO/udQ
+	5WUAMID2urFaD4WCAyw6gkmrRsk6O73zEUSze/MC3T8889Pb6pXwcky6k6xygs3tww+Gur+hnN1
+	q7Q15WTEnQruC/TssGEKWfE82TCzSIu/1f7iKUeKBp7ukWZs2tyHWGunPFpn6QBHcT/Dp7MIB0t
+	2YwygKMOUN
+X-Received: by 2002:a05:6a00:3e03:b0:81f:4999:ae46 with SMTP id d2e1a72fcca58-82317eb1529mr1812648b3a.48.1769153745313;
+        Thu, 22 Jan 2026 23:35:45 -0800 (PST)
+Received: from 7940hx ([103.173.155.241])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-8231876fd1fsm1334205b3a.69.2026.01.22.23.35.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jan 2026 23:35:44 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: andrii@kernel.org
+Cc: daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	davem@davemloft.net,
+	dsahern@kernel.org,
+	tglx@linutronix.de,
+	mingo@redhat.com,
+	jiang.biao@linux.dev,
+	bp@alien8.de,
+	dave.hansen@linux.intel.com,
+	x86@kernel.org,
+	hpa@zytor.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v11 00/12] bpf: fsession support
+Date: Fri, 23 Jan 2026 15:35:20 +0800
+Message-ID: <20260123073532.238985-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260123-sheaves-for-all-v4-22-041323d506f7@suse.cz>
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
-In-Reply-To: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
-To: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
- Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Hao Li <hao.li@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
- Uladzislau Rezki <urezki@gmail.com>, 
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Suren Baghdasaryan <surenb@google.com>, 
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
- Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, 
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, 
- bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
- Vlastimil Babka <vbabka@suse.cz>
-X-Mailer: b4 0.14.3
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Spam-Score: -4.00
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 92DD43377C
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLfsjnp7neds983g95ihcnuzgq)]
-X-Spam-Flag: NO
+Content-Transfer-Encoding: 8bit
 
-A number of stat items related to cpu slabs became unused, remove them.
+overall
+-------
+Sometimes, we need to hook both the entry and exit of a function with
+TRACING. Therefore, we need define a FENTRY and a FEXIT for the target
+function, which is not convenient.
 
-Two of those were ALLOC_FASTPATH and FREE_FASTPATH. But instead of
-removing those, use them instead of ALLOC_PCS and FREE_PCS, since
-sheaves are the new (and only) fastpaths, Remove the recently added
-_PCS variants instead.
+Therefore, we add a tracing session support for TRACING. Generally
+speaking, it's similar to kprobe session, which can hook both the entry
+and exit of a function with a single BPF program.
 
-Change where FREE_SLOWPATH is counted so that it only counts freeing of
-objects by slab users that (for whatever reason) do not go to a percpu
-sheaf, and not all (including internal) callers of __slab_free(). Thus
-sheaf flushing (already counted by SHEAF_FLUSH) does not affect
-FREE_SLOWPATH anymore. This matches how ALLOC_SLOWPATH doesn't count
-sheaf refills (counted by SHEAF_REFILL).
+We allow the usage of bpf_get_func_ret() to get the return value in the
+fentry of the tracing session, as it will always get "0", which is safe
+enough and is OK.
 
-Reviewed-by: Hao Li <hao.li@linux.dev>
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
----
- mm/slub.c | 83 ++++++++++++++++++++-------------------------------------------
- 1 file changed, 26 insertions(+), 57 deletions(-)
+Session cookie is also supported with the kfunc bpf_session_cookie().
+In order to limit the stack usage, we limit the maximum number of cookies
+to 4.
 
-diff --git a/mm/slub.c b/mm/slub.c
-index 369fb9bbdb75..b07a27a3ca28 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -335,33 +335,19 @@ enum add_mode {
- };
- 
- enum stat_item {
--	ALLOC_PCS,		/* Allocation from percpu sheaf */
--	ALLOC_FASTPATH,		/* Allocation from cpu slab */
--	ALLOC_SLOWPATH,		/* Allocation by getting a new cpu slab */
--	FREE_PCS,		/* Free to percpu sheaf */
-+	ALLOC_FASTPATH,		/* Allocation from percpu sheaves */
-+	ALLOC_SLOWPATH,		/* Allocation from partial or new slab */
- 	FREE_RCU_SHEAF,		/* Free to rcu_free sheaf */
- 	FREE_RCU_SHEAF_FAIL,	/* Failed to free to a rcu_free sheaf */
--	FREE_FASTPATH,		/* Free to cpu slab */
--	FREE_SLOWPATH,		/* Freeing not to cpu slab */
-+	FREE_FASTPATH,		/* Free to percpu sheaves */
-+	FREE_SLOWPATH,		/* Free to a slab */
- 	FREE_ADD_PARTIAL,	/* Freeing moves slab to partial list */
- 	FREE_REMOVE_PARTIAL,	/* Freeing removes last object */
--	ALLOC_FROM_PARTIAL,	/* Cpu slab acquired from node partial list */
--	ALLOC_SLAB,		/* Cpu slab acquired from page allocator */
--	ALLOC_REFILL,		/* Refill cpu slab from slab freelist */
--	ALLOC_NODE_MISMATCH,	/* Switching cpu slab */
-+	ALLOC_SLAB,		/* New slab acquired from page allocator */
-+	ALLOC_NODE_MISMATCH,	/* Requested node different from cpu sheaf */
- 	FREE_SLAB,		/* Slab freed to the page allocator */
--	CPUSLAB_FLUSH,		/* Abandoning of the cpu slab */
--	DEACTIVATE_FULL,	/* Cpu slab was full when deactivated */
--	DEACTIVATE_EMPTY,	/* Cpu slab was empty when deactivated */
--	DEACTIVATE_REMOTE_FREES,/* Slab contained remotely freed objects */
--	DEACTIVATE_BYPASS,	/* Implicit deactivation */
- 	ORDER_FALLBACK,		/* Number of times fallback was necessary */
--	CMPXCHG_DOUBLE_CPU_FAIL,/* Failures of this_cpu_cmpxchg_double */
- 	CMPXCHG_DOUBLE_FAIL,	/* Failures of slab freelist update */
--	CPU_PARTIAL_ALLOC,	/* Used cpu partial on alloc */
--	CPU_PARTIAL_FREE,	/* Refill cpu partial on free */
--	CPU_PARTIAL_NODE,	/* Refill cpu partial from node partial */
--	CPU_PARTIAL_DRAIN,	/* Drain cpu partial to node partial */
- 	SHEAF_FLUSH,		/* Objects flushed from a sheaf */
- 	SHEAF_REFILL,		/* Objects refilled to a sheaf */
- 	SHEAF_ALLOC,		/* Allocation of an empty sheaf */
-@@ -4350,8 +4336,10 @@ void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, int node)
- 	 * We assume the percpu sheaves contain only local objects although it's
- 	 * not completely guaranteed, so we verify later.
- 	 */
--	if (unlikely(node_requested && node != numa_mem_id()))
-+	if (unlikely(node_requested && node != numa_mem_id())) {
-+		stat(s, ALLOC_NODE_MISMATCH);
- 		return NULL;
-+	}
- 
- 	if (!local_trylock(&s->cpu_sheaves->lock))
- 		return NULL;
-@@ -4374,6 +4362,7 @@ void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, int node)
- 		 */
- 		if (page_to_nid(virt_to_page(object)) != node) {
- 			local_unlock(&s->cpu_sheaves->lock);
-+			stat(s, ALLOC_NODE_MISMATCH);
- 			return NULL;
- 		}
- 	}
-@@ -4382,7 +4371,7 @@ void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, int node)
- 
- 	local_unlock(&s->cpu_sheaves->lock);
- 
--	stat(s, ALLOC_PCS);
-+	stat(s, ALLOC_FASTPATH);
- 
- 	return object;
- }
-@@ -4454,7 +4443,7 @@ unsigned int alloc_from_pcs_bulk(struct kmem_cache *s, gfp_t gfp, size_t size,
- 
- 	local_unlock(&s->cpu_sheaves->lock);
- 
--	stat_add(s, ALLOC_PCS, batch);
-+	stat_add(s, ALLOC_FASTPATH, batch);
- 
- 	allocated += batch;
- 
-@@ -5117,8 +5106,6 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
- 	unsigned long flags;
- 	bool on_node_partial;
- 
--	stat(s, FREE_SLOWPATH);
--
- 	if (IS_ENABLED(CONFIG_SLUB_TINY) || kmem_cache_debug(s)) {
- 		free_to_partial_list(s, slab, head, tail, cnt, addr);
- 		return;
-@@ -5422,7 +5409,7 @@ bool free_to_pcs(struct kmem_cache *s, void *object, bool allow_spin)
- 
- 	local_unlock(&s->cpu_sheaves->lock);
- 
--	stat(s, FREE_PCS);
-+	stat(s, FREE_FASTPATH);
- 
- 	return true;
- }
-@@ -5687,7 +5674,7 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
- 
- 	local_unlock(&s->cpu_sheaves->lock);
- 
--	stat_add(s, FREE_PCS, batch);
-+	stat_add(s, FREE_FASTPATH, batch);
- 
- 	if (batch < size) {
- 		p += batch;
-@@ -5709,10 +5696,12 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
- 	 */
- fallback:
- 	__kmem_cache_free_bulk(s, size, p);
-+	stat_add(s, FREE_SLOWPATH, size);
- 
- flush_remote:
- 	if (remote_nr) {
- 		__kmem_cache_free_bulk(s, remote_nr, &remote_objects[0]);
-+		stat_add(s, FREE_SLOWPATH, remote_nr);
- 		if (i < size) {
- 			remote_nr = 0;
- 			goto next_remote_batch;
-@@ -5766,6 +5755,7 @@ static void free_deferred_objects(struct irq_work *work)
- 		set_freepointer(s, x, NULL);
- 
- 		__slab_free(s, slab, x, x, 1, _THIS_IP_);
-+		stat(s, FREE_SLOWPATH);
- 	}
- }
- 
-@@ -5807,6 +5797,7 @@ void slab_free(struct kmem_cache *s, struct slab *slab, void *object,
- 	}
- 
- 	__slab_free(s, slab, object, object, 1, addr);
-+	stat(s, FREE_SLOWPATH);
- }
- 
- #ifdef CONFIG_MEMCG
-@@ -5829,8 +5820,10 @@ void slab_free_bulk(struct kmem_cache *s, struct slab *slab, void *head,
- 	 * With KASAN enabled slab_free_freelist_hook modifies the freelist
- 	 * to remove objects, whose reuse must be delayed.
- 	 */
--	if (likely(slab_free_freelist_hook(s, &head, &tail, &cnt)))
-+	if (likely(slab_free_freelist_hook(s, &head, &tail, &cnt))) {
- 		__slab_free(s, slab, head, tail, cnt, addr);
-+		stat_add(s, FREE_SLOWPATH, cnt);
-+	}
- }
- 
- #ifdef CONFIG_SLUB_RCU_DEBUG
-@@ -5855,8 +5848,10 @@ static void slab_free_after_rcu_debug(struct rcu_head *rcu_head)
- 		return;
- 
- 	/* resume freeing */
--	if (slab_free_hook(s, object, slab_want_init_on_free(s), true))
-+	if (slab_free_hook(s, object, slab_want_init_on_free(s), true)) {
- 		__slab_free(s, slab, object, object, 1, _THIS_IP_);
-+		stat(s, FREE_SLOWPATH);
-+	}
- }
- #endif /* CONFIG_SLUB_RCU_DEBUG */
- 
-@@ -5864,6 +5859,7 @@ static void slab_free_after_rcu_debug(struct rcu_head *rcu_head)
- void ___cache_free(struct kmem_cache *cache, void *x, unsigned long addr)
- {
- 	__slab_free(cache, virt_to_slab(x), x, x, 1, addr);
-+	stat(cache, FREE_SLOWPATH);
- }
- #endif
- 
-@@ -6733,6 +6729,7 @@ int __kmem_cache_alloc_bulk(struct kmem_cache *s, gfp_t flags, size_t size,
- 		i = refill_objects(s, p, flags, size, size);
- 		if (i < size)
- 			goto error;
-+		stat_add(s, ALLOC_SLOWPATH, i);
- 	}
- 
- 	return i;
-@@ -8736,33 +8733,19 @@ static ssize_t text##_store(struct kmem_cache *s,		\
- }								\
- SLAB_ATTR(text);						\
- 
--STAT_ATTR(ALLOC_PCS, alloc_cpu_sheaf);
- STAT_ATTR(ALLOC_FASTPATH, alloc_fastpath);
- STAT_ATTR(ALLOC_SLOWPATH, alloc_slowpath);
--STAT_ATTR(FREE_PCS, free_cpu_sheaf);
- STAT_ATTR(FREE_RCU_SHEAF, free_rcu_sheaf);
- STAT_ATTR(FREE_RCU_SHEAF_FAIL, free_rcu_sheaf_fail);
- STAT_ATTR(FREE_FASTPATH, free_fastpath);
- STAT_ATTR(FREE_SLOWPATH, free_slowpath);
- STAT_ATTR(FREE_ADD_PARTIAL, free_add_partial);
- STAT_ATTR(FREE_REMOVE_PARTIAL, free_remove_partial);
--STAT_ATTR(ALLOC_FROM_PARTIAL, alloc_from_partial);
- STAT_ATTR(ALLOC_SLAB, alloc_slab);
--STAT_ATTR(ALLOC_REFILL, alloc_refill);
- STAT_ATTR(ALLOC_NODE_MISMATCH, alloc_node_mismatch);
- STAT_ATTR(FREE_SLAB, free_slab);
--STAT_ATTR(CPUSLAB_FLUSH, cpuslab_flush);
--STAT_ATTR(DEACTIVATE_FULL, deactivate_full);
--STAT_ATTR(DEACTIVATE_EMPTY, deactivate_empty);
--STAT_ATTR(DEACTIVATE_REMOTE_FREES, deactivate_remote_frees);
--STAT_ATTR(DEACTIVATE_BYPASS, deactivate_bypass);
- STAT_ATTR(ORDER_FALLBACK, order_fallback);
--STAT_ATTR(CMPXCHG_DOUBLE_CPU_FAIL, cmpxchg_double_cpu_fail);
- STAT_ATTR(CMPXCHG_DOUBLE_FAIL, cmpxchg_double_fail);
--STAT_ATTR(CPU_PARTIAL_ALLOC, cpu_partial_alloc);
--STAT_ATTR(CPU_PARTIAL_FREE, cpu_partial_free);
--STAT_ATTR(CPU_PARTIAL_NODE, cpu_partial_node);
--STAT_ATTR(CPU_PARTIAL_DRAIN, cpu_partial_drain);
- STAT_ATTR(SHEAF_FLUSH, sheaf_flush);
- STAT_ATTR(SHEAF_REFILL, sheaf_refill);
- STAT_ATTR(SHEAF_ALLOC, sheaf_alloc);
-@@ -8838,33 +8821,19 @@ static struct attribute *slab_attrs[] = {
- 	&remote_node_defrag_ratio_attr.attr,
- #endif
- #ifdef CONFIG_SLUB_STATS
--	&alloc_cpu_sheaf_attr.attr,
- 	&alloc_fastpath_attr.attr,
- 	&alloc_slowpath_attr.attr,
--	&free_cpu_sheaf_attr.attr,
- 	&free_rcu_sheaf_attr.attr,
- 	&free_rcu_sheaf_fail_attr.attr,
- 	&free_fastpath_attr.attr,
- 	&free_slowpath_attr.attr,
- 	&free_add_partial_attr.attr,
- 	&free_remove_partial_attr.attr,
--	&alloc_from_partial_attr.attr,
- 	&alloc_slab_attr.attr,
--	&alloc_refill_attr.attr,
- 	&alloc_node_mismatch_attr.attr,
- 	&free_slab_attr.attr,
--	&cpuslab_flush_attr.attr,
--	&deactivate_full_attr.attr,
--	&deactivate_empty_attr.attr,
--	&deactivate_remote_frees_attr.attr,
--	&deactivate_bypass_attr.attr,
- 	&order_fallback_attr.attr,
- 	&cmpxchg_double_fail_attr.attr,
--	&cmpxchg_double_cpu_fail_attr.attr,
--	&cpu_partial_alloc_attr.attr,
--	&cpu_partial_free_attr.attr,
--	&cpu_partial_node_attr.attr,
--	&cpu_partial_drain_attr.attr,
- 	&sheaf_flush_attr.attr,
- 	&sheaf_refill_attr.attr,
- 	&sheaf_alloc_attr.attr,
+kfunc design
+------------
+In order to keep consistency with existing kfunc, we don't introduce new
+kfunc for fsession. Instead, we reuse the existing kfunc
+bpf_session_cookie() and bpf_session_is_return().
+
+The prototype of bpf_session_cookie() and bpf_session_is_return() don't
+satisfy our needs, so we change their prototype by adding the argument
+"void *ctx" to them.
+
+We inline bpf_session_cookie() and bpf_session_is_return() for fsession
+in the verifier directly. Therefore, we don't need to introduce new
+functions for them.
+
+architecture
+------------
+The fsession stuff is arch related, so the -EOPNOTSUPP will be returned if
+it is not supported yet by the arch. In this series, we only support
+x86_64. And later, other arch will be implemented.
+
+Changes v10 -> v11:
+* rebase and fix the conflicts in the 2nd patch
+* use "volatile" in the 11th patch
+* rename BPF_TRAMP_SHIFT_* to BPF_TRAMP_*_SHIFT
+* v10: https://lore.kernel.org/bpf/20260115112246.221082-1-dongml2@chinatelecom.cn/
+
+Changes v9 -> v10:
+* 1st patch: some small adjustment, such as use switch in
+  bpf_prog_has_trampoline()
+* 2nd patch: some adjustment to the commit log and comment
+* 3rd patch:
+  - drop the declaration of bpf_session_is_return() and
+    bpf_session_cookie()
+  - use vmlinux.h instead of bpf_kfuncs.h in uprobe_multi_session.c,
+    kprobe_multi_session_cookie.c and uprobe_multi_session_cookie.c
+* 4th patch:
+  - some adjustment to the comment and commit log
+  - rename the prefix from BPF_TRAMP_M_ to BPF_TRAMP_SHIFT_
+  - remove the definition of BPF_TRAMP_M_NR_ARGS
+  - check the program type in bpf_session_filter()
+* 5th patch: some adjustment to the commit log
+* 6th patch:
+  - add the "reg" to the function arguments of emit_store_stack_imm64()
+  - use the positive offset in emit_store_stack_imm64()
+* 7th patch:
+  - use "|" for func_meta instead of "+"
+  - pass the "func_meta_off" to invoke_bpf() explicitly, instead of
+    computing it with "stack_size + 8"
+  - pass the "cookie_off" to invoke_bpf() instead of computing the current
+    cookie index with "func_meta"
+* 8th patch:
+  - split the modification to bpftool to a separate patch
+* v9: https://lore.kernel.org/bpf/20260110141115.537055-1-dongml2@chinatelecom.cn/
+
+Changes v8 -> v9:
+* remove the definition of bpf_fsession_cookie and bpf_fsession_is_return
+  in the 4th and 5th patch
+* rename emit_st_r0_imm64() to emit_store_stack_imm64() in the 6th patch
+* v8: https://lore.kernel.org/bpf/20260108022450.88086-1-dongml2@chinatelecom.cn/
+
+Changes v7 -> v8:
+* use the last byte of nr_args for bpf_get_func_arg_cnt() in the 2nd patch
+* v7: https://lore.kernel.org/bpf/20260107064352.291069-1-dongml2@chinatelecom.cn/
+
+Changes v6 -> v7:
+* change the prototype of bpf_session_cookie() and bpf_session_is_return(),
+  and reuse them instead of introduce new kfunc for fsession.
+* v6: https://lore.kernel.org/bpf/20260104122814.183732-1-dongml2@chinatelecom.cn/
+
+Changes v5 -> v6:
+* No changes in this version, just a rebase to deal with conflicts.
+* v5: https://lore.kernel.org/bpf/20251224130735.201422-1-dongml2@chinatelecom.cn/
+
+Changes v4 -> v5:
+* use fsession terminology consistently in all patches
+* 1st patch:
+  - use more explicit way in __bpf_trampoline_link_prog()
+* 4th patch:
+  - remove "cookie_cnt" in struct bpf_trampoline
+* 6th patch:
+  - rename nr_regs to func_md
+  - define cookie_off in a new line
+* 7th patch:
+  - remove the handling of BPF_TRACE_SESSION in legacy fallback path for
+    BPF_RAW_TRACEPOINT_OPEN
+* v4: https://lore.kernel.org/bpf/20251217095445.218428-1-dongml2@chinatelecom.cn/
+
+Changes v3 -> v4:
+* instead of adding a new hlist to progs_hlist in trampoline, add the bpf
+  program to both the fentry hlist and the fexit hlist.
+* introduce the 2nd patch to reuse the nr_args field in the stack to
+  store all the information we need(except the session cookies).
+* limit the maximum number of cookies to 4.
+* remove the logic to skip fexit if the fentry return non-zero.
+* v3: https://lore.kernel.org/bpf/20251026030143.23807-1-dongml2@chinatelecom.cn/
+
+Changes v2 -> v3:
+* squeeze some patches:
+  - the 2 patches for the kfunc bpf_tracing_is_exit() and
+    bpf_fsession_cookie() are merged into the second patch.
+  - the testcases for fsession are also squeezed.
+* fix the CI error by move the testcase for bpf_get_func_ip to
+  fsession_test.c
+* v2: https://lore.kernel.org/bpf/20251022080159.553805-1-dongml2@chinatelecom.cn/
+
+Changes v1 -> v2:
+* session cookie support.
+  In this version, session cookie is implemented, and the kfunc
+  bpf_fsession_cookie() is added.
+* restructure the layout of the stack.
+  In this version, the session stuff that stored in the stack is changed,
+  and we locate them after the return value to not break
+  bpf_get_func_ip().
+* testcase enhancement.
+  Some nits in the testcase that suggested by Jiri is fixed. Meanwhile,
+  the testcase for get_func_ip and session cookie is added too.
+* v1: https://lore.kernel.org/bpf/20251018142124.783206-1-dongml2@chinatelecom.cn/
+
+Menglong Dong (12):
+  bpf: add fsession support
+  bpf: use the least significant byte for the nr_args in trampoline
+  bpf: change prototype of bpf_session_{cookie,is_return}
+  bpf: support fsession for bpf_session_is_return
+  bpf: support fsession for bpf_session_cookie
+  bpf,x86: introduce emit_store_stack_imm64() for trampoline
+  bpf,x86: add fsession support for x86_64
+  libbpf: add fsession support
+  bpftool: add fsession support
+  selftests/bpf: add testcases for fsession
+  selftests/bpf: add testcases for fsession cookie
+  selftests/bpf: test fsession mixed with fentry and fexit
+
+ arch/x86/net/bpf_jit_comp.c                   |  76 +++++---
+ include/linux/bpf.h                           |  36 ++++
+ include/uapi/linux/bpf.h                      |   1 +
+ kernel/bpf/btf.c                              |   2 +
+ kernel/bpf/syscall.c                          |  18 +-
+ kernel/bpf/trampoline.c                       |  53 +++++-
+ kernel/bpf/verifier.c                         |  89 +++++++--
+ kernel/trace/bpf_trace.c                      |  49 +++--
+ net/bpf/test_run.c                            |   1 +
+ net/core/bpf_sk_storage.c                     |   1 +
+ tools/bpf/bpftool/common.c                    |   1 +
+ tools/include/uapi/linux/bpf.h                |   1 +
+ tools/lib/bpf/bpf.c                           |   1 +
+ tools/lib/bpf/libbpf.c                        |   3 +
+ tools/testing/selftests/bpf/bpf_kfuncs.h      |   3 -
+ .../selftests/bpf/prog_tests/fsession_test.c  |  90 +++++++++
+ .../bpf/prog_tests/tracing_failure.c          |   2 +-
+ .../selftests/bpf/progs/fsession_test.c       | 179 ++++++++++++++++++
+ .../bpf/progs/kprobe_multi_session_cookie.c   |  15 +-
+ .../bpf/progs/uprobe_multi_session.c          |   7 +-
+ .../bpf/progs/uprobe_multi_session_cookie.c   |  15 +-
+ .../progs/uprobe_multi_session_recursive.c    |  11 +-
+ 22 files changed, 554 insertions(+), 100 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/fsession_test.c
+ create mode 100644 tools/testing/selftests/bpf/progs/fsession_test.c
 
 -- 
 2.52.0
