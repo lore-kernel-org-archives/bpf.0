@@ -1,138 +1,149 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 306D7347FFE
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 03:00:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769137268; cv=none; b=gYZGdfobTcPe/5oKVkUpNWdQLN3I3jrNJJqHSS+woR+mety8/OoWDR4Hjw/TjdvvI74EMhzYd9x+SpPQbXDrlpunktd6TTUoV1XiyunHyl0cCxXZd+LE4yP1cPk46ZFCXwRZiQGC6f7uEqQ36Y30i43nA0gWCRP+uHeIcmMRp4g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769137268; c=relaxed/simple;
-	bh=42ZPnYjBOMS4VlfUBCHT88TFqcupYnGssEakPXecMcc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=mi0lT2HiwB+q5RtvOloRHqlpD9oYAp+56YXs86EMykiHuOcJgqhsho2QtzOn9gBuB8cccwKCdC0h1tW/PBjq0cxDBSyRx4hunp2f1VXhI+B0jFeoZohh58JZwZFhSeOWewFUk32cTw+x3bHB1VPX/uNtVEn7SDE8qOREglT8wt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=XIhFAHNQ; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6054D37F8D4
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 03:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769137833; cv=pass; b=PYwI1Py+g9Vs1bQckIXqsbm3TwXy+BlbGivGQpokxriebt6saH5F29sz5bSaPh+UbRwNpQySOC8LJWsqH/dFjFZCy6xK1ddf89T+tOvqpzuhN9zOuYOOm53ChMkrIFFllNeCh9ave64/rvSNnsfusChYKYipH+NFQ9UrP7Wkdvo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769137833; c=relaxed/simple;
+	bh=26QD3iTEBUcMQlUM4uGsxaAqXs+lqxOOleJfn0vUbw0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=giyYrzb5OGhLYeYXAZOcblGEO714871XiIGm81UXvYzY5MTUKIVf/2OIWJUwQWOgA1Hn94agFKR7BM9EmkMHqxz9aew6iDc/LJztKF3r73GyKqIIe5jRetrvuPfpZLiVDukghNN8fOYYbGPTs5UCvX3W8u6ZVLrL1DOExtVs/Aw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WrmStthW; arc=pass smtp.client-ip=74.125.224.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="XIhFAHNQ"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-5029af2b4bcso9122441cf.0
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 19:00:54 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WrmStthW"
+Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-6455a60c12bso1557959d50.3
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 19:10:27 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769137824; cv=none;
+        d=google.com; s=arc-20240605;
+        b=HQRfAKI3LPawbhbi7B+6b1ZRpCwSdxZ4bi8ZHI1Ab9SLPaRuRhD+VWaPzEZwI9dHZH
+         jK4E+41YmCeDegc+Fwso3FVFb4KNKsfTZ9F6zbZv4FyvBYk92m3JO91LAQhlbkwHgjGv
+         Y8aKq1RExYtOICl1YwBHVh5uKmWztoyNW1ogJMkhWkF6rgmJU3hlbapvPX8pu5ESH/nF
+         Ep9MvKli+jPzK38X0TTy8k/jIobRO/5AL42HZPBmECCt/alz/DPNwDWmSXYPj/1rlNUZ
+         Jwwmz5ml9ebUnswqauNt3L7TzT+J/mZjFuzqu80bvUh46T5PgBrdu0a8KbNngp+xFKsL
+         B0aA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bX1eLwl5u7TS2HDINLkaf1NGNyaQKDoaIks4eZ+myeo=;
+        fh=fVsx0UgQkf9X9vRZMCSFCVUry9MqeCZOScww6dvKfQU=;
+        b=AR5v0z4hL4MV/Q5yAg4N4pMWmCnUWnvmwDoikr7cTSxBwZhHJM5esqDjVE6WD7AKw9
+         +ymSBd+SwJNWvxQQO/e14+HvgDuCWRUcLwKKbbcP6zZsqo/w487MyVx0xbtQ9SXLmxrp
+         Jgs/dTp2lxLjec++aWMBHrHqi63sRUZM/jSAQuKbGonRsOKHuQlwt9SIjMdEBQnyV5Y/
+         xtJckBDTNX2WQZi125rMJssoGRULr7twkSpbRjuEZXucHSsuAvvalS1KBldF9X+qLV+D
+         2LHOePZ4U5akM0gRIbMZPuaXrXuT0IaBsAfwvqrwM4KnGSck+dMxLEWiRW6j+hKI1I7+
+         PXpg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769137251; x=1769742051; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1769137824; x=1769742624; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DibzgHm6COr/0ycruy3r18Vg6zacv3Z1kXkaYCk+9Pc=;
-        b=XIhFAHNQ3eyB2FvXr7C96+M9TQmteOR+Mo2VoYeyhOWen/Y+vm+IShO7cVcvJX8iwv
-         YmGMNAUo9+QuyucD3DGLOD/LQOHmszY98oGSgmlCVjNo9bEi34sYBgXrFkEAZ5T0Dej+
-         ktPJ29qG/6Xy03YukKBG6JMTuYMJjgVk66hg5zIjxOUe6BNSEjU9TpJF7dXLRiEh71cg
-         VwlmVEjcN2qC/EXrLm6VfzIyEt9PRAetFo7afBqiiQxwHWg1DpsccJMqbVbEs/xpIEKm
-         nAkma3Ukcxdyk2cWybdXO5faY2FbVbnA65O3J/wKlDcmDivgSjmrcmPTFZ5MvOZYGvfz
-         ZeVA==
+        bh=bX1eLwl5u7TS2HDINLkaf1NGNyaQKDoaIks4eZ+myeo=;
+        b=WrmStthWThcsnnFzlJFa/ZybjEF5RrnBtgrJrCnOa2BLKM41/BixiSic4iohwaxsty
+         2s0u0fbQbPimECkEHXpFHfN6PDoMBpc9s5E7RQoIlbn+5NdDlIUBWTmPWhshTEQVuJBP
+         Lx5/YOk7oBF3x+YLhZVtjP2bp92KulL9khE/AJzaOAg50gdlacfUT1ytt4fPmSfwR4ov
+         B1Gmn3/PiElBvHwHB6SKJoFvCjFvndr9Lw7bT6sA9jyKBZ7pvGUmxgBCv+lvZjK8RWAY
+         CbHxODaI4yZ77ZcI6Iy9JTbrppkrmNqVIKmKkyZH0xC3tmYHddGTaQXAmWxxIbEnc5xL
+         fIFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769137251; x=1769742051;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DibzgHm6COr/0ycruy3r18Vg6zacv3Z1kXkaYCk+9Pc=;
-        b=M/vhxAQdyg3sNX31oBA6AH9igLfP43s5jm6H3aP1PCL8kQ6Z3Yadbs0f+v/ZFsw0QQ
-         yeDfvzjf7JrACFPG6P6O5OCul7xDCYyOFGbG7tIJKKEYjlX6PuRRPk7XFwym/UqnG4Jx
-         D17TXd0S+ejrSRv8GrJwqEMaPPfsnknGg3WOpUNnlDZMpYcynX/MALHPDz2VFjKDOa7C
-         +nur0etQk+bqshMZLUW/8xU9yHqd2wIiyYR1vgCdDWV2XDL9aiXKKq7AcSCiU9PzRaWW
-         9ZPUqTafA4dyT7N7BtY6LZkbeX5bbOziUoa2SQ5x4NkaqOLepqQAmr7qilXRLvATHr1d
-         ZrIg==
-X-Forwarded-Encrypted: i=1; AJvYcCX4xQavNiA2oVfNVu60bPjBGBYTfRh322MY3DRDZk3brYhSy78u2eOIOBVtPwgCYWtbOLQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR2x3SlsAu9+OjTuE/5cGf9zx5It+LM7zvftjC2wJzXoBPCTDR
-	bv5wM/b0vn3zt3YjdFhnNhd13U8xdem448oXv9fsDVyzkFKt1okSn/Ixas6XyBs6bc4=
-X-Gm-Gg: AZuq6aJHTCCkXmBx7VzKrGKjK2eEZSE9pS6+tz6wolRgeT9ddri8letQ3rRGiRD/alL
-	jls7xJfQwfFEdVlFn7P76G4/uXtV2VyZU7TH7S4gFy80msT0RoBh20qwhTmbLDc4O5KrKaYMCtg
-	ztzNdpwpaUXBgkiCz4OsUzU/cIlJoMEHh6Dto94MSgHSe4chwJ9Kt2dTn6MfEKR2uIw7b1PTste
-	JL2yb56FGrNpGk+pJe4ktgT2/vU1J9XxZKhTrU85PEyOo2NORE6//97kZdZUcHtXgFpFP2pvJdW
-	1CLGrQQE6j4aOx3CN2Q9IbDMEnVO1/yb9748+c7IWbzXj7WxrSFhdB51SxPGNXxHVvbJGgl5yQt
-	QNRDZXhctn0GSkzT+Y5DNkRgI8jycjU01N56y1UYG11jk1QbfsIM0IKXW1V3PdCQQqMWpBoooqJ
-	eQA+z1vL4oqlQ=
-X-Received: by 2002:ac8:5716:0:b0:4f4:d92a:7be9 with SMTP id d75a77b69052e-502f770bbb8mr26927421cf.16.1769137250923;
-        Thu, 22 Jan 2026 19:00:50 -0800 (PST)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502f7ec4f7fsm9479781cf.8.2026.01.22.19.00.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jan 2026 19:00:50 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769137824; x=1769742624;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bX1eLwl5u7TS2HDINLkaf1NGNyaQKDoaIks4eZ+myeo=;
+        b=tYyseSgVq8TPjIWtn5tYvnquA4cme8oUfWW3rEy6VinhkmZ3XBWSEUmVa/vPJqDZJ/
+         FMhj3kKIjXWxRm2zvXc3Hg3mHVcFY64VcOi9ZL2AeD/V4787Pihg4fgstqxrXPoFh8Uk
+         VaO5YbzTtYbwXzUNGkHqz3VWd1jyt43AokBQikoSEDrMRhgBPfP0zttQK2aWlL6YBarq
+         kvEb33CfpuQuXIGb00BALMR1PN0u/Wc3P8iFUGQJjoSiakvb9Q/67uD+BiReUvM+cMv7
+         4ft2s8vKjbIvVonwJpImlQosOaZF2Jdi4CJwT3v3TjkD1SZZCnLVw6u20owSPQKC0RFJ
+         O5HA==
+X-Gm-Message-State: AOJu0YzlVj8mvEpzTZ1BaxVJH3PMTQSC29Xt3V1qGhtj9Zptc1H/lNCd
+	+9Sr3sQO0a9cT+bsO3yehXRNevHdYlIhkCiI3yKgUJBMpTszoqCnJ5h627JCtYh8MfjR4XUB6Bs
+	zeUdmxSi9dVNJ8dwuPhDLZVWxfzLzx04=
+X-Gm-Gg: AZuq6aLFzCeGuYL0Pp6uooRbfV37KwuXar5EZ8UxGn6j6eo/dZAfz6DR/xmyHfH9gj/
+	44FHJx+cOASWBd5wA/KX7JOXjBOaJnTgtcVv43xtVp2SVJwKfOkLHbBPu508lD7s+p+uP54F+6e
+	sLM8D/oUgBbyJm6vghtKLD8C1YcJlIe36hqqsRBiBKoFsOeNPiwzNq6MfToxFdWOo4VnVM/3oew
+	mlCAVPuGg1h4VxNOqLJVXFwvdzIr/xDssC3hWVmRuGND5aMTcK/W5c2PwOur/ppBWvfpeI=
+X-Received: by 2002:a05:690e:4104:b0:644:78ac:4b18 with SMTP id
+ 956f58d0204a3-6495bee629emr1188670d50.9.1769137824172; Thu, 22 Jan 2026
+ 19:10:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260119-skb-meta-bpf-emit-call-from-prologue-v1-0-e8b88d6430d8@cloudflare.com>
+In-Reply-To: <20260119-skb-meta-bpf-emit-call-from-prologue-v1-0-e8b88d6430d8@cloudflare.com>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Thu, 22 Jan 2026 19:10:13 -0800
+X-Gm-Features: AZwV_Qh9PgdUM-Ak3f4CvTCtCy-8sG_yS3plcc5xh6mUH9ThYE24CxevaPzQTFQ
+Message-ID: <CAMB2axNQxpJUiz7uE+pAV8uV0fye36OyAJ4qQqO-4Pdkb61=0Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 0/4] Switch from kfuncs to direct helper calls in prologue/epilogue
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	netdev@vger.kernel.org, kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 22 Jan 2026 22:00:48 -0500
-Message-Id: <DFVMTC754CLG.13D4ZT20QISO2@etsalapatis.com>
-To: <bot+bpf-ci@kernel.org>, <etsal@meta.com>, <bpf@vger.kernel.org>
-Cc: <ast@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <daniel@iogearbox.net>, <memxor@gmail.com>, <puranjay@kernel.org>,
- <song@kernel.org>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
- <clm@meta.com>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH 07/13] selftests: bpf: Add ASAN support for libarena
- selftests
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.20.1
-References: <20260122160131.2238331-8-etsal@meta.com>
- <161065237f7ad567f93be5052ac9f15673909e5089388f71fbdf8ddd5dbed49e@mail.kernel.org>
-In-Reply-To: <161065237f7ad567f93be5052ac9f15673909e5089388f71fbdf8ddd5dbed49e@mail.kernel.org>
 
-On Thu Jan 22, 2026 at 11:58 AM EST, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b=
-/tools/testing/selftests/bpf/libarena/selftests/selftest.c
->> index 2e4c0830fed9..4d7db66e75ed 100644
->> --- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
->> +++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
+On Mon, Jan 19, 2026 at 11:53=E2=80=AFAM Jakub Sitnicki <jakub@cloudflare.c=
+om> wrote:
 >
-> [ ... ]
+> This series enables direct helper calls using BPF_EMIT_CALL from prologue
+> and epilogue code generated by verifier ops. The goal is to simplify the
+> calling convention and remove kfunc support from prologue/epilogue, as
+> suggested by Alexei [1].
 >
->> @@ -211,8 +269,17 @@ static void
->>  banner(const char *progpath)
->>  {
->>  	char *name =3D basename(progpath);
->> +	bool is_asan;
->> +
->> +	/*
->> +	 * Check if our BPF programs are ASAN-capable by inspecting the prog n=
-ame.
->> +	 * Command line arguments are guaranteed to be NULL-terminated, use st=
-rlen.
->> +	 * Calculate the hardcoded name's length at compile time.
->> +	 */
->> +	printf("%s\n", name);
->> +	is_asan =3D strlen(name) > (sizeof("selftest") - 1);
+> Patch 1 adds the infrastructure to mark direct helper calls as finalized
+> (already resolved) so the verifier skips the imm fixup.
 >
-> The ASAN detection logic compares against "selftest" (8 chars), but
-> the actual binary names are "test_libarena" (13 chars) and
-> "test_libarena_asan" (18 chars). Since strlen("test_libarena") > 8
-> evaluates to true, the non-ASAN binary will also be detected as
-> ASAN-enabled.
+> Patch 2 converts bpf_qdisc to use BPF_EMIT_CALL instead of BPF_CALL_KFUNC
+> for the init prologue and reset/destroy epilogue helpers.
 >
-> Should the comparison be against "test_libarena" instead of "selftest"?
-> Or perhaps using strstr(name, "_asan") would be more robust?
+> Patch 3 removes the now-unused kfunc support code from prologue/epilogue
+> handling in the verifier.
+>
+> Patch 4 removes the corresponding selftests that exercised kfuncs in
+> prologue/epilogue.
 >
 
-Ack, test_libarena was initially called "selftest" and was renamed for unif=
-ormity.
-strstr() is the better idea, will add in the revision.
+Thanks for converting bpf qdisc to using BPF_EMIT_CALL. The patchset
+looks good to me.
 
->> +
->> -	printf("=3D=3D=3D %s =3D=3D=3D\n", "libarena selftests");
->> +	printf("=3D=3D=3D %s %s=3D=3D=3D\n", "libarena selftests", is_asan ? "=
-(asan) " : "");
->>  }
+Reviewed-by: Amery Hung <ameryhung@gmail.com>
+
+> [1] https://lore.kernel.org/bpf/CAADnVQJ=3DkmVAZsgkG9P2nEBTUG3E4PrDG=3DYz=
+8tfeFysH4ZBqVw@mail.gmail.com/
 >
->
+> Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
 > ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
+> Jakub Sitnicki (4):
+>       bpf, verifier: Support direct helper calls from prologue/epilogue
+>       bpf: net_sched: Use direct helper calls instead of kfuncs in pro/ep=
+ilogue
+>       bpf: Remove kfunc support in prologue and epilogue
+>       selftests/bpf: Remove tests for prologue/epilogue with kfuncs
 >
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/212569=
-73563
-
+>  include/linux/bpf_verifier.h                       |  1 +
+>  kernel/bpf/verifier.c                              | 47 +++++------
+>  net/core/filter.c                                  |  3 +-
+>  net/sched/bpf_qdisc.c                              | 76 ++++++++--------=
+--
+>  .../selftests/bpf/prog_tests/pro_epilogue.c        |  2 -
+>  .../selftests/bpf/progs/pro_epilogue_with_kfunc.c  | 88 ----------------=
+-----
+>  .../testing/selftests/bpf/test_kmods/bpf_testmod.c | 92 ----------------=
+------
+>  7 files changed, 61 insertions(+), 248 deletions(-)
+>
