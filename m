@@ -1,86 +1,75 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85D4B3164D3;
-	Fri, 23 Jan 2026 09:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A65C33FE36;
+	Fri, 23 Jan 2026 09:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769159946; cv=none; b=JxsVbiJz189epFbCcOSiwc91QNe9RXe2kmLsKBl5xC347L3CIwQCy9o1AHav4z/rIraaa7oh7jnAi4eRMf8Bw/dU0netSZRCWzHbWgIRdcc2GKzMireZXmOgDS1//NuZb4vvC3Th8WPvIlVzZcW5gCrqRV5yQRe/Pex9+Qf9rT8=
+	t=1769159949; cv=none; b=cpIiQai7X8efslQ0Pox+36Y6gY4+NyTXeAvpPbdDxhhhKFeQ/bTQMivzegS4vPfuel+1jUq9TTkXWU7hi4iBiKtrpbe7PiwxHPhWt5Ujg4VmTi49trSGB10jEoJbBsEZy8S384iBwSXljXgni46ABff4tAj4LLxFQKdRYsgks4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769159946; c=relaxed/simple;
-	bh=++ck5HBZpMPSGGpoonSSzPKOjTBgq1xO2oJuGzY5lWE=;
+	s=arc-20240116; t=1769159949; c=relaxed/simple;
+	bh=sxaiTV/qjZ9OJLWuPUm5lpJHeVnyKAH5pIqR5axWKB8=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=kh9df3Cxw3l5ZxN+Ohjod6jJfJkF2xTf8aP/BNAEVdlf5g6vUZSG0Jkoqy9Lz8ISs4yuJHCZSyoQ15RI0HC4yj8UiJBwOV7htFT++MzcAkW2/ROg3T2V1U8Xfzujpch3uQ5l+FBeiWM6kvM38FvwNhEeHNLOxry2Jnd4m13bD9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=InW/yky3; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=J3fuQ9i1AXeDENuSC8vZu1NoruhuDy5Q0tE+JYH22dQJNqBwffnls9BEsIjfmiTZm5OCkJPycWTfPBCetNSvnsovX2yKzKwdxBQTX3+gr3Eu2d6gLj7ax3ijzjC0fVt8WP7bkKmggAuYdIIogpNJ2q3O8lAqoPIoABB4p2CVTWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kiwWVxqw; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="InW/yky3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67D6FC19422;
-	Fri, 23 Jan 2026 09:19:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kiwWVxqw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B4B0C116D0;
+	Fri, 23 Jan 2026 09:19:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769159946;
-	bh=++ck5HBZpMPSGGpoonSSzPKOjTBgq1xO2oJuGzY5lWE=;
+	s=k20201202; t=1769159943;
+	bh=sxaiTV/qjZ9OJLWuPUm5lpJHeVnyKAH5pIqR5axWKB8=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=InW/yky3spHD+VBL/Qubq9HdIWp1bq9AGY9a5aZ2YmU+pKqOnipVCfNDJt14vOnFo
-	 9Ft2oZDTviiR/bowI6zlIWddMT8I5Ul7/TZjzSq3JSZd1SYjENW4vkO7jIvqbMaawn
-	 ZibHjAyS5VJ3/jb4FYoyWyCYRBVcqkQs1KNNTLluXVTdzOG+9IifYB1/nsbs00FAEO
-	 4ubr6fqhaf0Ta0LmzkjnYVMYIyxIE8RQaBGp9BoMpXuBsCGu5egLFcs/4p21F10B67
-	 jBlGYrsbfePzLz78Gmx5Qsgj6QPP10wXwijDTMui34uAx8ZMNJVrrAfd8OWAU3eX0T
-	 cQcdYe91kgOwA==
-Content-Type: multipart/mixed; boundary="===============0725732639387219158=="
+	b=kiwWVxqwhLtICIYNAcF3V6WIubpaoam1UBgKy1c2x3txZXWC6q/CUSDTEEgAIWnSk
+	 KXT8Dfsl3g+fQTcj94wL+fWM2u3jZ+5yLtLVsPdtlBrnoX57qVIjJizC7LlhxREbHT
+	 x2USTPdVOG0S2IAJPc4BQnNEkGTBLTEfKce5lBHI1nRyFBGI6UqYtkurROa0l8JFD8
+	 gyqpPZwgCw4cJEyO+prp7szjajg5CiSXvHZ7geqQGSFMMxg8yVs7rwhv28gEDMRUNj
+	 v9rjQiJ1HImsMMOLlPkKxHg7gD4JcfQuCeGjIlq9QebL7CahgT/cSaNgLXTQnrxb9L
+	 H8CcOpfVl2dYQ==
+Content-Type: multipart/mixed; boundary="===============6020917005380425134=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <b0f009e6e0f8ec688597c5c3954b3335069f3aa60441a7c3f44246af7a9c4629@mail.kernel.org>
-In-Reply-To: <e34da0fc270eb7cc41f6b388026f503799541675.1769157382.git.zhuhui@kylinos.cn>
-References: <e34da0fc270eb7cc41f6b388026f503799541675.1769157382.git.zhuhui@kylinos.cn>
-Subject: Re: [RFC PATCH bpf-next v3 02/12] bpf: initial support for attaching struct ops to cgroups
+Message-Id: <30378be80fdf3abf59019b02fe9dd351d63e9d71b9f074a9dd79de1b6a9bd6c9@mail.kernel.org>
+In-Reply-To: <03bf6aafe30def690c63e454d76e733f27dff4b3.1769157382.git.zhuhui@kylinos.cn>
+References: <03bf6aafe30def690c63e454d76e733f27dff4b3.1769157382.git.zhuhui@kylinos.cn>
+Subject: Re: [RFC PATCH bpf-next v3 05/12] libbpf: introduce bpf_map__attach_struct_ops_opts()
 From: bot+bpf-ci@kernel.org
 To: hui.zhu@linux.dev,akpm@linux-foundation.org,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,peterz@infradead.org,ojeda@kernel.org,nathan@kernel.org,kees@kernel.org,tj@kernel.org,jeffxu@chromium.org,mkoutny@suse.com,kernel@jfarr.cc,brauner@kernel.org,rdunlap@infradead.org,brgerst@gmail.com,masahiroy@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,inwardvessel@gmail.com,willemb@google.com,kerneljasonxing@gmail.com,paul.chaignon@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,chenridong@huaweicloud.com,lance.yang@linux.dev,jiayuan.chen@linux.dev,linux-kernel@vger.kernel.org,linux-mm@kvack.org,cgroups@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org
 Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 23 Jan 2026 09:19:05 +0000 (UTC)
+Date: Fri, 23 Jan 2026 09:19:02 +0000 (UTC)
 
---===============0725732639387219158==
+--===============6020917005380425134==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-> index de01cf3025b3..f575c5cd0dc8 100644
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index d18fbcea7578..2bf514462045 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -453,5 +453,5 @@ LIBBPF_1.7.0 {
+>  		bpf_map__exclusive_program;
+>  		bpf_prog_assoc_struct_ops;
+>  		bpf_program__assoc_struct_ops;
+> -		btf__permute;
+> +		bpf_map__attach_struct_ops_opts;
+>  } LIBBPF_1.6.0;
 
-[ ... ]
+Was the removal of btf__permute from the symbol map intentional? The function
+is still implemented in btf.c and declared with LIBBPF_API in btf.h.
 
-> @@ -1377,6 +1378,18 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
->  	}
->  	bpf_link_init(&link->link, BPF_LINK_TYPE_STRUCT_OPS, &bpf_struct_ops_map_lops, NULL,
->  		      attr->link_create.attach_type);
-> +#ifdef CONFIG_CGROUPS
-> +	if (attr->link_create.cgroup.relative_fd) {
-> +		struct cgroup *cgrp;
-> +
-> +		cgrp = cgroup_get_from_fd(attr->link_create.cgroup.relative_fd);
-> +		if (IS_ERR(cgrp))
-> +			return PTR_ERR(cgrp);
-                        ^^^^^^^^^^^^^^^^^
+It looks like the line was replaced instead of having a new line added. This
+would break applications using btf__permute() with link-time or runtime errors.
 
-When cgroup_get_from_fd() fails, this returns directly without cleaning
-up. At this point in bpf_struct_ops_link_create(), link has already been
-allocated via kzalloc() and map has a reference from bpf_map_get().
+Perhaps this should be:
 
-Should this use goto err_out instead? The err_out label calls
-bpf_map_put(map) and kfree(link), which would be needed here but are
-bypassed by the direct return.
-
-> +
-> +		link->cgroup_id = cgroup_id(cgrp);
-> +		cgroup_put(cgrp);
-> +	}
-> +#endif /* CONFIG_CGROUPS */
->
->  	err = bpf_link_prime(&link->link, &link_primer);
->  	if (err)
+  bpf_program__assoc_struct_ops;
+  bpf_map__attach_struct_ops_opts;
+  btf__permute;
 
 
 ---
@@ -89,4 +78,4 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21280790825
 
---===============0725732639387219158==--
+--===============6020917005380425134==--
