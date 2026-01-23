@@ -1,63 +1,63 @@
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9E463624C8
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 02:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 306D7347FFE
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 03:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769137187; cv=none; b=AltQQq/wEXh4OmNCpMAMLkV4p9Ith1mi/wvdXNF/P9SpXoSJ6YuYniOkfTU/FIxCrktQ15f/dUSTe7BhVHGm/RxsotS7rNDDxAMI+uKOA8v/GsiYJVXpEf+5ueX+laGD16Nvw8XhlQ+rtULZ2vtsY0331qIqFHrc93IC6/qTDwM=
+	t=1769137268; cv=none; b=gYZGdfobTcPe/5oKVkUpNWdQLN3I3jrNJJqHSS+woR+mety8/OoWDR4Hjw/TjdvvI74EMhzYd9x+SpPQbXDrlpunktd6TTUoV1XiyunHyl0cCxXZd+LE4yP1cPk46ZFCXwRZiQGC6f7uEqQ36Y30i43nA0gWCRP+uHeIcmMRp4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769137187; c=relaxed/simple;
-	bh=PIMW/GB8Cp/eJevJJ6KFcdE8cQ1dDAXqZRTb/ssVzt0=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=XscidVSbrHcPWld21oRvcgKPbpGunk7TwLPu5KOsflPd6atmySTeEzdh2blzOas3Dka5PhiM3fKaQT3ayiUONZuaX3Mb+2XC7/FxK7aOsVwDpZB9ue3NDnkDzlje4C6KixUM6viwKwRsoqpjdFUHmSwPMdbedxHHHoOm9p5lvZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=aTgEv+lp; arc=none smtp.client-ip=209.85.222.180
+	s=arc-20240116; t=1769137268; c=relaxed/simple;
+	bh=42ZPnYjBOMS4VlfUBCHT88TFqcupYnGssEakPXecMcc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=mi0lT2HiwB+q5RtvOloRHqlpD9oYAp+56YXs86EMykiHuOcJgqhsho2QtzOn9gBuB8cccwKCdC0h1tW/PBjq0cxDBSyRx4hunp2f1VXhI+B0jFeoZohh58JZwZFhSeOWewFUk32cTw+x3bHB1VPX/uNtVEn7SDE8qOREglT8wt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=XIhFAHNQ; arc=none smtp.client-ip=209.85.160.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="aTgEv+lp"
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-8c6af798a83so204030685a.0
-        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 18:59:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="XIhFAHNQ"
+Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-5029af2b4bcso9122441cf.0
+        for <bpf@vger.kernel.org>; Thu, 22 Jan 2026 19:00:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769137173; x=1769741973; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769137251; x=1769742051; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=92KE4s8ChJGbDVX7FzqVEbEMPgtvKgI3ShsoU+Depuw=;
-        b=aTgEv+lpPuLzWvWbg4e+wa/K3pwXbpZXaSHXvTP5MKIa5XBnRJcCvObbIArKpl9MOZ
-         /3ltcuRZAyK87F8iM44HDXEP05hJWsh+uelDUXwmpdPQX2dIpC8dkVgUwXpsCPEkZUOV
-         pUBUV/bmlyU383xkc9b5Z2x44oGvEYPtQHrzpNCwU2QXvpmMzC1nK4LAorQBqr6phm8m
-         gZz/7QwoXW98m8NSevQP/O72Uc47B2yvJBZ32EJ59xLAgN/zu3HuATvZNrCI0lcNdjrm
-         uXJyz3HC7PVDJwy7Y3V0Sfa1LSK1oUbsCcUSbDCXjxDT7HEeWSCaaZmC/Q1F4LbV6RsI
-         Exfg==
+        bh=DibzgHm6COr/0ycruy3r18Vg6zacv3Z1kXkaYCk+9Pc=;
+        b=XIhFAHNQ3eyB2FvXr7C96+M9TQmteOR+Mo2VoYeyhOWen/Y+vm+IShO7cVcvJX8iwv
+         YmGMNAUo9+QuyucD3DGLOD/LQOHmszY98oGSgmlCVjNo9bEi34sYBgXrFkEAZ5T0Dej+
+         ktPJ29qG/6Xy03YukKBG6JMTuYMJjgVk66hg5zIjxOUe6BNSEjU9TpJF7dXLRiEh71cg
+         VwlmVEjcN2qC/EXrLm6VfzIyEt9PRAetFo7afBqiiQxwHWg1DpsccJMqbVbEs/xpIEKm
+         nAkma3Ukcxdyk2cWybdXO5faY2FbVbnA65O3J/wKlDcmDivgSjmrcmPTFZ5MvOZYGvfz
+         ZeVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769137173; x=1769741973;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
+        d=1e100.net; s=20230601; t=1769137251; x=1769742051;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=92KE4s8ChJGbDVX7FzqVEbEMPgtvKgI3ShsoU+Depuw=;
-        b=LJ1wJPn8ohhAX5Zn+BSExNnEWd7LZD0WXh+S5kpDXHdtjbjSjSkCxHlJpRkWeX7VhA
-         8cnbV1krfFwbcfpNcvxNkCS6eH+1fU+wadP58+CGt1PtbNVllVPBqNOjwPnbVmtBFqJS
-         /M/qhc3qGo63zQZ2Y73JYNov2wyMJvj5cXjrX6rs50d29lLwJuf5XVdy67D3FId+qtSR
-         NGFdddFADbzif+kBy5M+eUrJsYPeGf67EO9ST3ppx/0H6gaYix8Ii16hucUFVChbMwkn
-         1aMkp0UENZzE0OQjGjmEY8Nvj99wEY/F7fNPHo5HgnZNKxZnHkeMx/+FnaiQHpgDshBD
-         w1PA==
-X-Forwarded-Encrypted: i=1; AJvYcCWSwnLmvxVF17qX4VNISXvz84oPwYdEcGytGOWcSC+Z85fy7W1WkrCN7CTmncF8X9c17i8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwqT2xHzoGxU1mMPu+ETGvDU08XWCegDPHzmrh16IfNcsrA9j4t
-	RQADDy6QQ/33p0w1vMXQ6hQJ8v1RK1Hf6G81lw5aPh/4FgwuhbFt9+nsxLEMaASipYI=
-X-Gm-Gg: AZuq6aIKZ7/z0KJzrc4NXdv1dyR81GsSH/1b3ktTyHhvE3Iu/bAir6OJKcNkVqxt8gq
-	9DmjKlZMWKORMJWbDylnNT3a2PJ0/LvUuWxd1LJt1T+QQ9tpUZexP+kScDKb+auTcRS38peixz/
-	uY+IP3cgzdMeBQOVuK1IoKdoDHFFgOvIOdKMcicBckvMfilDl0S+vRCNTm5Uolp2wIpJf1KewiD
-	7WrBcCVb3DCkfI3ktzjt6GVFOiKlxZFZuR6BgrwfLUDWQpVLunAG4vVaRz0YKPvqE8nnpM38vAT
-	ZMFgx6CsxPvPiFtETpJ3KQE8IdPJp2MTA9z8hwKQ5tiolPqsm4EiYgjdLjkeYH8UKcktGlKmX7G
-	iwzc+9ynzjMjgb03nyo/VTqs+90lcvQYj29nrFlsLmN6QB4WoEHdnhFHOQVtv6jFHcRsMmBlBuf
-	fcgiB/8xEs5tU=
-X-Received: by 2002:a05:620a:4445:b0:8bb:a037:fd94 with SMTP id af79cd13be357-8c6e2dc0f12mr212556985a.38.1769137172825;
-        Thu, 22 Jan 2026 18:59:32 -0800 (PST)
+        bh=DibzgHm6COr/0ycruy3r18Vg6zacv3Z1kXkaYCk+9Pc=;
+        b=M/vhxAQdyg3sNX31oBA6AH9igLfP43s5jm6H3aP1PCL8kQ6Z3Yadbs0f+v/ZFsw0QQ
+         yeDfvzjf7JrACFPG6P6O5OCul7xDCYyOFGbG7tIJKKEYjlX6PuRRPk7XFwym/UqnG4Jx
+         D17TXd0S+ejrSRv8GrJwqEMaPPfsnknGg3WOpUNnlDZMpYcynX/MALHPDz2VFjKDOa7C
+         +nur0etQk+bqshMZLUW/8xU9yHqd2wIiyYR1vgCdDWV2XDL9aiXKKq7AcSCiU9PzRaWW
+         9ZPUqTafA4dyT7N7BtY6LZkbeX5bbOziUoa2SQ5x4NkaqOLepqQAmr7qilXRLvATHr1d
+         ZrIg==
+X-Forwarded-Encrypted: i=1; AJvYcCX4xQavNiA2oVfNVu60bPjBGBYTfRh322MY3DRDZk3brYhSy78u2eOIOBVtPwgCYWtbOLQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzR2x3SlsAu9+OjTuE/5cGf9zx5It+LM7zvftjC2wJzXoBPCTDR
+	bv5wM/b0vn3zt3YjdFhnNhd13U8xdem448oXv9fsDVyzkFKt1okSn/Ixas6XyBs6bc4=
+X-Gm-Gg: AZuq6aJHTCCkXmBx7VzKrGKjK2eEZSE9pS6+tz6wolRgeT9ddri8letQ3rRGiRD/alL
+	jls7xJfQwfFEdVlFn7P76G4/uXtV2VyZU7TH7S4gFy80msT0RoBh20qwhTmbLDc4O5KrKaYMCtg
+	ztzNdpwpaUXBgkiCz4OsUzU/cIlJoMEHh6Dto94MSgHSe4chwJ9Kt2dTn6MfEKR2uIw7b1PTste
+	JL2yb56FGrNpGk+pJe4ktgT2/vU1J9XxZKhTrU85PEyOo2NORE6//97kZdZUcHtXgFpFP2pvJdW
+	1CLGrQQE6j4aOx3CN2Q9IbDMEnVO1/yb9748+c7IWbzXj7WxrSFhdB51SxPGNXxHVvbJGgl5yQt
+	QNRDZXhctn0GSkzT+Y5DNkRgI8jycjU01N56y1UYG11jk1QbfsIM0IKXW1V3PdCQQqMWpBoooqJ
+	eQA+z1vL4oqlQ=
+X-Received: by 2002:ac8:5716:0:b0:4f4:d92a:7be9 with SMTP id d75a77b69052e-502f770bbb8mr26927421cf.16.1769137250923;
+        Thu, 22 Jan 2026 19:00:50 -0800 (PST)
 Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-89491939567sm8527306d6.48.2026.01.22.18.59.31
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502f7ec4f7fsm9479781cf.8.2026.01.22.19.00.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jan 2026 18:59:32 -0800 (PST)
+        Thu, 22 Jan 2026 19:00:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,101 +66,65 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 22 Jan 2026 21:59:30 -0500
-Message-Id: <DFVMSCH5VD8Z.1WQ9I01GBNCQW@etsalapatis.com>
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
+Date: Thu, 22 Jan 2026 22:00:48 -0500
+Message-Id: <DFVMTC754CLG.13D4ZT20QISO2@etsalapatis.com>
 To: <bot+bpf-ci@kernel.org>, <etsal@meta.com>, <bpf@vger.kernel.org>
 Cc: <ast@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
  <daniel@iogearbox.net>, <memxor@gmail.com>, <puranjay@kernel.org>,
  <song@kernel.org>, <martin.lau@kernel.org>, <yonghong.song@linux.dev>,
  <clm@meta.com>, <ihor.solodrai@linux.dev>
-Subject: Re: [PATCH 10/13] selftest: bpf: Add libarena stack allocator
+Subject: Re: [PATCH 07/13] selftests: bpf: Add ASAN support for libarena
+ selftests
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
 X-Mailer: aerc 0.20.1
-References: <20260122160131.2238331-11-etsal@meta.com>
- <3079ef68368b1d573cd997363987554e24d444405c0d9765f073df1827d6eb32@mail.kernel.org>
-In-Reply-To: <3079ef68368b1d573cd997363987554e24d444405c0d9765f073df1827d6eb32@mail.kernel.org>
+References: <20260122160131.2238331-8-etsal@meta.com>
+ <161065237f7ad567f93be5052ac9f15673909e5089388f71fbdf8ddd5dbed49e@mail.kernel.org>
+In-Reply-To: <161065237f7ad567f93be5052ac9f15673909e5089388f71fbdf8ddd5dbed49e@mail.kernel.org>
 
-On Thu Jan 22, 2026 at 12:12 PM EST, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/libarena/src/stack.bpf.c b/tool=
-s/testing/selftests/bpf/libarena/src/stack.bpf.c
->> new file mode 100644
->> index 000000000000..37f8ce43e0f8
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/libarena/src/stack.bpf.c
+On Thu Jan 22, 2026 at 11:58 AM EST, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b=
+/tools/testing/selftests/bpf/libarena/selftests/selftest.c
+>> index 2e4c0830fed9..4d7db66e75ed 100644
+>> --- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
+>> +++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
 >
 > [ ... ]
 >
->> +static int stk_fill_new_elems(struct stk *stack)
->> +{
->> +	stk_seg_t *data_seg, *stk_seg;
->> +	bool need_stk_seg;
->> +	__u64 nr_pages;
->> +	size_t nelems;
->> +	int ret, i;
->> +	u64 mem;
->> +
->> +	nr_pages =3D stack->nr_pages_per_alloc;
->> +	nelems =3D (nr_pages * __PAGE_SIZE) / stack->data_size;
->> +	if (nelems > STK_SEG_MAX) {
->> +		return -EINVAL;
->> +	}
+>> @@ -211,8 +269,17 @@ static void
+>>  banner(const char *progpath)
+>>  {
+>>  	char *name =3D basename(progpath);
+>> +	bool is_asan;
 >> +
 >> +	/*
->> +	 * If we have more than two empty segments available,
->> +	 * try to repurpose one of them into an allocation.
+>> +	 * Check if our BPF programs are ASAN-capable by inspecting the prog n=
+ame.
+>> +	 * Command line arguments are guaranteed to be NULL-terminated, use st=
+rlen.
+>> +	 * Calculate the hardcoded name's length at compile time.
 >> +	 */
->> +	ret =3D stk_seg_to_data(stack, nelems);
->> +	if (!ret)
->> +		return 0;
->> +
->> +	need_stk_seg =3D !stack->capacity;
->                        ^^^^^^^^^^^^^^^^
+>> +	printf("%s\n", name);
+>> +	is_asan =3D strlen(name) > (sizeof("selftest") - 1);
 >
-> Can the data_seg memory be leaked when capacity is non-zero but less than
-> nelems? The check here only allocates a new stack segment when capacity
-> is exactly zero. If, for example, capacity is 5 but nelems is 16, the
-> loop below will fail partway through stk_push() with -ENOSPC after
-> pushing only 5 elements. The remaining chunks from data_seg would never
-> be tracked.
+> The ASAN detection logic compares against "selftest" (8 chars), but
+> the actual binary names are "test_libarena" (13 chars) and
+> "test_libarena_asan" (18 chars). Since strlen("test_libarena") > 8
+> evaluates to true, the non-ASAN binary will also be detected as
+> ASAN-enabled.
 >
-> Consider this scenario:
->   1. Stack has one segment with capacity=3D5 (few free slots)
->   2. stk_seg_to_data() fails since only one segment exists
->   3. need_stk_seg =3D false since capacity > 0
->   4. stk_get_arena_memory() allocates only data_seg (no stk_seg)
->   5. Loop tries to push nelems (say 16) chunks
->   6. After 5 pushes, stk_push() returns -ENOSPC
->   7. Remaining 11 chunks from data_seg are lost
->
-> Should this be checking capacity < nelems instead of !capacity?
+> Should the comparison be against "test_libarena" instead of "selftest"?
+> Or perhaps using strstr(name, "_asan") would be more robust?
 >
 
-Ack, the AI's explanation holds. The bug was introduced during
-refactoring - will fix.
+Ack, test_libarena was initially called "selftest" and was renamed for unif=
+ormity.
+strstr() is the better idea, will add in the revision.
 
 >> +
->> +	/* Get memory for a new data segment, and possibly a stack segment if =
-necessary. */
->> +	ret =3D stk_get_arena_memory(stack, nr_pages, &data_seg, need_stk_seg =
-? &stk_seg : NULL);
->> +	if (ret)
->> +		return ret;
->> +
->> +	if (need_stk_seg)
->> +		stk_extend(stack, stk_seg);
->> +
->> +	mem =3D (u64)data_seg;
->> +	for (i =3D zero; i < nelems && can_loop; i++) {
->> +		ret =3D stk_push(stack, (void __arena *)mem);
->> +		if (ret)
->> +			return ret;
->> +		mem +=3D stack->data_size;
->> +	}
->> +
->> +	return 0;
->> +}
->
-> [ ... ]
+>> -	printf("=3D=3D=3D %s =3D=3D=3D\n", "libarena selftests");
+>> +	printf("=3D=3D=3D %s %s=3D=3D=3D\n", "libarena selftests", is_asan ? "=
+(asan) " : "");
+>>  }
 >
 >
 > ---
