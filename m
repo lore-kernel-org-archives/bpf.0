@@ -1,82 +1,82 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16407350D65
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 06:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9679635D613
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 06:54:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769151253; cv=none; b=pBqfvrxoifb7aQkrS3uvvKeLy+l/eHx66Pp4vcYxebwwpfJWmCToDOKiXH9kO1vz2HwQDqAAqShG+XrCAZNFT+qW+5BW9VrH+ZmSWBp33gR5G/vJ8iFwSgZ9ydsFduoGVtDEfVmBkbMEE9WR1yewOEvypEOPcc/9mymDURCTayI=
+	t=1769151256; cv=none; b=gZDBuEwN0z6mHt0RNAVb79lMWuFmLftP5tqxJozSgwjlqfO9zSC2NrrvvCSDbCCXnQMaCew3S6oJ53AM8UuCazv1gjIoBhhv2eRjyK+Wx+fqhNZadULqpIdEN79SP2od26WnyuHLbjbCMxEfDxCsn7RrgB9prT4mgJ5JFKgbyDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769151253; c=relaxed/simple;
-	bh=NnfHUsrqpTNSHrkuxSVT6BkgFcuUwewUSVlPJ7we430=;
+	s=arc-20240116; t=1769151256; c=relaxed/simple;
+	bh=OFj95S/K2FAPlyl585935MsVlYYLr4XZmAEwxn0S/Cs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GAth2ta4X12I3GaSiOT9qx+pyTyu1RKqdFsXaTCBkUaQ/JrA1iIlH18BFGOYMpKgd2DhwG5GDex5rM61M1zlzhvirI4BNaSu1/oL3SIBnRJ4EI0I3/BDaQQ3A0TKGlbwgy1PLcoRGREWBVopAQFm9Lga051VkwB0e2oeVvW2PH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=AenYz2Wq; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=2jAD4uRN; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=AenYz2Wq; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=2jAD4uRN; arc=none smtp.client-ip=195.135.223.130
+	 In-Reply-To:To:Cc; b=HXQPdgRxxWdppFDFRNUVfrgLrVsvhP0+LGCfJAvA5Y/KuMwo0uzKkS3NroPyW70wEUewye8q+ggH8FddFjJOOnmC3YfBQ2gMGS+V+YGk1lljvGSiPnpx3jGhEl0qjd0jTaWB60IzUjBVZXgtNlVRdAbhYBcmXBpqcDYmRKXwPr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=27Uk3vvZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JtJZs1kb; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=27Uk3vvZ; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JtJZs1kb; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="AenYz2Wq";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="2jAD4uRN";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="AenYz2Wq";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="2jAD4uRN"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="27Uk3vvZ";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JtJZs1kb";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="27Uk3vvZ";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JtJZs1kb"
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id C13383376E;
-	Fri, 23 Jan 2026 06:53:10 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 600B95BCD7;
+	Fri, 23 Jan 2026 06:53:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769151190; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769151191; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rV01kHooLadLBYTqNh94OxZ2PfqtzMHrFv9yp7Y7yLs=;
-	b=AenYz2WqR3hKBS9aBpv7ivOXMmyu4wNyqUZbqps1NSt+kGHN+Hg4CM8nbtrz/G0/EMGZ0S
-	vRpMKgc0Np/hDHEYd/KCQs7N0AU3Xkw5B4rJWPDFkBNNZuAGNPGW7JJLK7sVtloXKSAbUS
-	GsjlCQpbQYItiBMXcTIDWjfRR+vPRPE=
+	bh=xSBhOPdL5sebK+aDhtX6/iV+qHkNH9ah4WZSL6is/IE=;
+	b=27Uk3vvZIfiU/vSZ3nJW8pVCR0fwz18zznV7LcWuQYal1NmYlXiuIfjC981V6w04AS+ZKo
+	3RFrrcR1KfnAiENMeYDFuX2JeFwX5/8uLt7JZbcaoRAb5oILHpCAIffRy75R72JX2hzlBU
+	phrUxg732baj/ER2XQSIo1in2EjJMn8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769151190;
+	s=susede2_ed25519; t=1769151191;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rV01kHooLadLBYTqNh94OxZ2PfqtzMHrFv9yp7Y7yLs=;
-	b=2jAD4uRN7yVkafUmQ6e2z6pai0Yh+Rxx1wcA+rdjuphJZY6YSliIksLbgBtXQJl+yDpbh3
-	VBY6BcesMhKRusBQ==
-Authentication-Results: smtp-out1.suse.de;
+	bh=xSBhOPdL5sebK+aDhtX6/iV+qHkNH9ah4WZSL6is/IE=;
+	b=JtJZs1kbHObd8fveITzrAnKn7NAI6Um7nVyW5cvUinKDkh+dIor6PZNDiltOxli1IrMjqX
+	R2dWEhOl/JyrKBCw==
+Authentication-Results: smtp-out2.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769151190; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769151191; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rV01kHooLadLBYTqNh94OxZ2PfqtzMHrFv9yp7Y7yLs=;
-	b=AenYz2WqR3hKBS9aBpv7ivOXMmyu4wNyqUZbqps1NSt+kGHN+Hg4CM8nbtrz/G0/EMGZ0S
-	vRpMKgc0Np/hDHEYd/KCQs7N0AU3Xkw5B4rJWPDFkBNNZuAGNPGW7JJLK7sVtloXKSAbUS
-	GsjlCQpbQYItiBMXcTIDWjfRR+vPRPE=
+	bh=xSBhOPdL5sebK+aDhtX6/iV+qHkNH9ah4WZSL6is/IE=;
+	b=27Uk3vvZIfiU/vSZ3nJW8pVCR0fwz18zznV7LcWuQYal1NmYlXiuIfjC981V6w04AS+ZKo
+	3RFrrcR1KfnAiENMeYDFuX2JeFwX5/8uLt7JZbcaoRAb5oILHpCAIffRy75R72JX2hzlBU
+	phrUxg732baj/ER2XQSIo1in2EjJMn8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769151190;
+	s=susede2_ed25519; t=1769151191;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=rV01kHooLadLBYTqNh94OxZ2PfqtzMHrFv9yp7Y7yLs=;
-	b=2jAD4uRN7yVkafUmQ6e2z6pai0Yh+Rxx1wcA+rdjuphJZY6YSliIksLbgBtXQJl+yDpbh3
-	VBY6BcesMhKRusBQ==
+	bh=xSBhOPdL5sebK+aDhtX6/iV+qHkNH9ah4WZSL6is/IE=;
+	b=JtJZs1kbHObd8fveITzrAnKn7NAI6Um7nVyW5cvUinKDkh+dIor6PZNDiltOxli1IrMjqX
+	R2dWEhOl/JyrKBCw==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E6A43139EF;
-	Fri, 23 Jan 2026 06:53:09 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 38A441395E;
+	Fri, 23 Jan 2026 06:53:11 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id sH8GONUac2k4YgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Fri, 23 Jan 2026 06:53:09 +0000
+	id wC+KDdcac2k4YgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Fri, 23 Jan 2026 06:53:11 +0000
 From: Vlastimil Babka <vbabka@suse.cz>
-Date: Fri, 23 Jan 2026 07:52:46 +0100
-Subject: [PATCH v4 08/22] slab: make percpu sheaves compatible with
- kmalloc_nolock()/kfree_nolock()
+Date: Fri, 23 Jan 2026 07:52:58 +0100
+Subject: [PATCH v4 20/22] slab: remove frozen slab checks from
+ __slab_free()
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -85,7 +85,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260123-sheaves-for-all-v4-8-041323d506f7@suse.cz>
+Message-Id: <20260123-sheaves-for-all-v4-20-041323d506f7@suse.cz>
 References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
 In-Reply-To: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
 To: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
@@ -124,299 +124,100 @@ X-Spamd-Result: default: False [-8.30 / 50.00];
 	RCVD_COUNT_TWO(0.00)[2];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.cz:mid,suse.cz:email,oracle.com:email]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:mid,suse.cz:email,imap1.dmz-prg2.suse.org:helo]
 X-Spam-Level: 
 X-Spam-Flag: NO
 
-Before we enable percpu sheaves for kmalloc caches, we need to make sure
-kmalloc_nolock() and kfree_nolock() will continue working properly and
-not spin when not allowed to.
-
-Percpu sheaves themselves use local_trylock() so they are already
-compatible. We just need to be careful with the barn->lock spin_lock.
-Pass a new allow_spin parameter where necessary to use
-spin_trylock_irqsave().
-
-In kmalloc_nolock_noprof() we can now attempt alloc_from_pcs() safely,
-for now it will always fail until we enable sheaves for kmalloc caches
-next. Similarly in kfree_nolock() we can attempt free_to_pcs().
+Currently slabs are only frozen after consistency checks failed. This
+can happen only in caches with debugging enabled, and those use
+free_to_partial_list() for freeing. The non-debug operation of
+__slab_free() can thus stop considering the frozen field, and we can
+remove the FREE_FROZEN stat.
 
 Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
 Reviewed-by: Hao Li <hao.li@linux.dev>
 Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 ---
- mm/slub.c | 82 ++++++++++++++++++++++++++++++++++++++++++++++-----------------
- 1 file changed, 60 insertions(+), 22 deletions(-)
+ mm/slub.c | 22 ++++------------------
+ 1 file changed, 4 insertions(+), 18 deletions(-)
 
 diff --git a/mm/slub.c b/mm/slub.c
-index 41e1bf35707c..4ca6bd944854 100644
+index d9fc56122975..3009eb7bd8d2 100644
 --- a/mm/slub.c
 +++ b/mm/slub.c
-@@ -2889,7 +2889,8 @@ static void pcs_destroy(struct kmem_cache *s)
- 	s->cpu_sheaves = NULL;
- }
+@@ -338,7 +338,6 @@ enum stat_item {
+ 	FREE_RCU_SHEAF_FAIL,	/* Failed to free to a rcu_free sheaf */
+ 	FREE_FASTPATH,		/* Free to cpu slab */
+ 	FREE_SLOWPATH,		/* Freeing not to cpu slab */
+-	FREE_FROZEN,		/* Freeing to frozen slab */
+ 	FREE_ADD_PARTIAL,	/* Freeing moves slab to partial list */
+ 	FREE_REMOVE_PARTIAL,	/* Freeing removes last object */
+ 	ALLOC_FROM_PARTIAL,	/* Cpu slab acquired from node partial list */
+@@ -5109,7 +5108,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 			unsigned long addr)
  
--static struct slab_sheaf *barn_get_empty_sheaf(struct node_barn *barn)
-+static struct slab_sheaf *barn_get_empty_sheaf(struct node_barn *barn,
-+					       bool allow_spin)
  {
- 	struct slab_sheaf *empty = NULL;
+-	bool was_frozen, was_full;
++	bool was_full;
+ 	struct freelist_counters old, new;
+ 	struct kmem_cache_node *n = NULL;
  	unsigned long flags;
-@@ -2897,7 +2898,10 @@ static struct slab_sheaf *barn_get_empty_sheaf(struct node_barn *barn)
- 	if (!data_race(barn->nr_empty))
- 		return NULL;
+@@ -5132,7 +5131,6 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 		old.counters = slab->counters;
  
--	spin_lock_irqsave(&barn->lock, flags);
-+	if (likely(allow_spin))
-+		spin_lock_irqsave(&barn->lock, flags);
-+	else if (!spin_trylock_irqsave(&barn->lock, flags))
-+		return NULL;
+ 		was_full = (old.freelist == NULL);
+-		was_frozen = old.frozen;
  
- 	if (likely(barn->nr_empty)) {
- 		empty = list_first_entry(&barn->sheaves_empty,
-@@ -2974,7 +2978,8 @@ static struct slab_sheaf *barn_get_full_or_empty_sheaf(struct node_barn *barn)
-  * change.
-  */
- static struct slab_sheaf *
--barn_replace_empty_sheaf(struct node_barn *barn, struct slab_sheaf *empty)
-+barn_replace_empty_sheaf(struct node_barn *barn, struct slab_sheaf *empty,
-+			 bool allow_spin)
- {
- 	struct slab_sheaf *full = NULL;
- 	unsigned long flags;
-@@ -2982,7 +2987,10 @@ barn_replace_empty_sheaf(struct node_barn *barn, struct slab_sheaf *empty)
- 	if (!data_race(barn->nr_full))
- 		return NULL;
+ 		set_freepointer(s, tail, old.freelist);
  
--	spin_lock_irqsave(&barn->lock, flags);
-+	if (likely(allow_spin))
-+		spin_lock_irqsave(&barn->lock, flags);
-+	else if (!spin_trylock_irqsave(&barn->lock, flags))
-+		return NULL;
- 
- 	if (likely(barn->nr_full)) {
- 		full = list_first_entry(&barn->sheaves_full, struct slab_sheaf,
-@@ -3003,7 +3011,8 @@ barn_replace_empty_sheaf(struct node_barn *barn, struct slab_sheaf *empty)
-  * barn. But if there are too many full sheaves, reject this with -E2BIG.
-  */
- static struct slab_sheaf *
--barn_replace_full_sheaf(struct node_barn *barn, struct slab_sheaf *full)
-+barn_replace_full_sheaf(struct node_barn *barn, struct slab_sheaf *full,
-+			bool allow_spin)
- {
- 	struct slab_sheaf *empty;
- 	unsigned long flags;
-@@ -3014,7 +3023,10 @@ barn_replace_full_sheaf(struct node_barn *barn, struct slab_sheaf *full)
- 	if (!data_race(barn->nr_empty))
- 		return ERR_PTR(-ENOMEM);
- 
--	spin_lock_irqsave(&barn->lock, flags);
-+	if (likely(allow_spin))
-+		spin_lock_irqsave(&barn->lock, flags);
-+	else if (!spin_trylock_irqsave(&barn->lock, flags))
-+		return ERR_PTR(-EBUSY);
- 
- 	if (likely(barn->nr_empty)) {
- 		empty = list_first_entry(&barn->sheaves_empty, struct slab_sheaf,
-@@ -5008,7 +5020,8 @@ __pcs_replace_empty_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
- 		return NULL;
- 	}
- 
--	full = barn_replace_empty_sheaf(barn, pcs->main);
-+	full = barn_replace_empty_sheaf(barn, pcs->main,
-+					gfpflags_allow_spinning(gfp));
- 
- 	if (full) {
- 		stat(s, BARN_GET);
-@@ -5025,7 +5038,7 @@ __pcs_replace_empty_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
- 			empty = pcs->spare;
- 			pcs->spare = NULL;
- 		} else {
--			empty = barn_get_empty_sheaf(barn);
-+			empty = barn_get_empty_sheaf(barn, true);
- 		}
- 	}
- 
-@@ -5165,7 +5178,8 @@ void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, int node)
- }
- 
- static __fastpath_inline
--unsigned int alloc_from_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
-+unsigned int alloc_from_pcs_bulk(struct kmem_cache *s, gfp_t gfp, size_t size,
-+				 void **p)
- {
- 	struct slub_percpu_sheaves *pcs;
- 	struct slab_sheaf *main;
-@@ -5199,7 +5213,8 @@ unsigned int alloc_from_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
- 			return allocated;
- 		}
- 
--		full = barn_replace_empty_sheaf(barn, pcs->main);
-+		full = barn_replace_empty_sheaf(barn, pcs->main,
-+						gfpflags_allow_spinning(gfp));
- 
- 		if (full) {
- 			stat(s, BARN_GET);
-@@ -5700,7 +5715,7 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node)
- 	gfp_t alloc_gfp = __GFP_NOWARN | __GFP_NOMEMALLOC | gfp_flags;
- 	struct kmem_cache *s;
- 	bool can_retry = true;
--	void *ret = ERR_PTR(-EBUSY);
-+	void *ret;
- 
- 	VM_WARN_ON_ONCE(gfp_flags & ~(__GFP_ACCOUNT | __GFP_ZERO |
- 				      __GFP_NO_OBJ_EXT));
-@@ -5731,6 +5746,12 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node)
+@@ -5145,7 +5143,7 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 		 * to (due to not being full anymore) the partial list.
+ 		 * Unless it's frozen.
  		 */
- 		return NULL;
+-		if ((!new.inuse || was_full) && !was_frozen) {
++		if (!new.inuse || was_full) {
  
-+	ret = alloc_from_pcs(s, alloc_gfp, node);
-+	if (ret)
-+		goto success;
-+
-+	ret = ERR_PTR(-EBUSY);
-+
- 	/*
- 	 * Do not call slab_alloc_node(), since trylock mode isn't
- 	 * compatible with slab_pre_alloc_hook/should_failslab and
-@@ -5767,6 +5788,7 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node)
- 		ret = NULL;
- 	}
+ 			n = get_node(s, slab_nid(slab));
+ 			/*
+@@ -5164,20 +5162,10 @@ static void __slab_free(struct kmem_cache *s, struct slab *slab,
+ 	} while (!slab_update_freelist(s, slab, &old, &new, "__slab_free"));
  
-+success:
- 	maybe_wipe_obj_freeptr(s, ret);
- 	slab_post_alloc_hook(s, NULL, alloc_gfp, 1, &ret,
- 			     slab_want_init_on_alloc(alloc_gfp, s), size);
-@@ -6087,7 +6109,8 @@ static void __pcs_install_empty_sheaf(struct kmem_cache *s,
-  * unlocked.
-  */
- static struct slub_percpu_sheaves *
--__pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
-+__pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
-+			bool allow_spin)
- {
- 	struct slab_sheaf *empty;
- 	struct node_barn *barn;
-@@ -6111,7 +6134,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
- 	put_fail = false;
- 
- 	if (!pcs->spare) {
--		empty = barn_get_empty_sheaf(barn);
-+		empty = barn_get_empty_sheaf(barn, allow_spin);
- 		if (empty) {
- 			pcs->spare = pcs->main;
- 			pcs->main = empty;
-@@ -6125,7 +6148,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
- 		return pcs;
- 	}
- 
--	empty = barn_replace_full_sheaf(barn, pcs->main);
-+	empty = barn_replace_full_sheaf(barn, pcs->main, allow_spin);
- 
- 	if (!IS_ERR(empty)) {
- 		stat(s, BARN_PUT);
-@@ -6133,7 +6156,8 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
- 		return pcs;
- 	}
- 
--	if (PTR_ERR(empty) == -E2BIG) {
-+	/* sheaf_flush_unused() doesn't support !allow_spin */
-+	if (PTR_ERR(empty) == -E2BIG && allow_spin) {
- 		/* Since we got here, spare exists and is full */
- 		struct slab_sheaf *to_flush = pcs->spare;
- 
-@@ -6158,6 +6182,14 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
- alloc_empty:
- 	local_unlock(&s->cpu_sheaves->lock);
- 
-+	/*
-+	 * alloc_empty_sheaf() doesn't support !allow_spin and it's
-+	 * easier to fall back to freeing directly without sheaves
-+	 * than add the support (and to sheaf_flush_unused() above)
-+	 */
-+	if (!allow_spin)
-+		return NULL;
-+
- 	empty = alloc_empty_sheaf(s, GFP_NOWAIT);
- 	if (empty)
- 		goto got_empty;
-@@ -6200,7 +6232,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
-  * The object is expected to have passed slab_free_hook() already.
-  */
- static __fastpath_inline
--bool free_to_pcs(struct kmem_cache *s, void *object)
-+bool free_to_pcs(struct kmem_cache *s, void *object, bool allow_spin)
- {
- 	struct slub_percpu_sheaves *pcs;
- 
-@@ -6211,7 +6243,7 @@ bool free_to_pcs(struct kmem_cache *s, void *object)
- 
- 	if (unlikely(pcs->main->size == s->sheaf_capacity)) {
- 
--		pcs = __pcs_replace_full_main(s, pcs);
-+		pcs = __pcs_replace_full_main(s, pcs, allow_spin);
- 		if (unlikely(!pcs))
- 			return false;
- 	}
-@@ -6333,7 +6365,7 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj)
- 			goto fail;
- 		}
- 
--		empty = barn_get_empty_sheaf(barn);
-+		empty = barn_get_empty_sheaf(barn, true);
- 
- 		if (empty) {
- 			pcs->rcu_free = empty;
-@@ -6453,7 +6485,7 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
- 		goto no_empty;
- 
- 	if (!pcs->spare) {
--		empty = barn_get_empty_sheaf(barn);
-+		empty = barn_get_empty_sheaf(barn, true);
- 		if (!empty)
- 			goto no_empty;
- 
-@@ -6467,7 +6499,7 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
- 		goto do_free;
- 	}
- 
--	empty = barn_replace_full_sheaf(barn, pcs->main);
-+	empty = barn_replace_full_sheaf(barn, pcs->main, true);
- 	if (IS_ERR(empty)) {
- 		stat(s, BARN_PUT_FAIL);
- 		goto no_empty;
-@@ -6719,7 +6751,7 @@ void slab_free(struct kmem_cache *s, struct slab *slab, void *object,
- 
- 	if (likely(!IS_ENABLED(CONFIG_NUMA) || slab_nid(slab) == numa_mem_id())
- 	    && likely(!slab_test_pfmemalloc(slab))) {
--		if (likely(free_to_pcs(s, object)))
-+		if (likely(free_to_pcs(s, object, true)))
- 			return;
- 	}
- 
-@@ -6980,6 +7012,12 @@ void kfree_nolock(const void *object)
- 	 * since kasan quarantine takes locks and not supported from NMI.
- 	 */
- 	kasan_slab_free(s, x, false, false, /* skip quarantine */true);
-+
-+	if (likely(!IS_ENABLED(CONFIG_NUMA) || slab_nid(slab) == numa_mem_id())) {
-+		if (likely(free_to_pcs(s, x, false)))
-+			return;
-+	}
-+
- 	do_slab_free(s, slab, x, x, 0, _RET_IP_);
- }
- EXPORT_SYMBOL_GPL(kfree_nolock);
-@@ -7532,7 +7570,7 @@ int kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags, size_t size,
- 		size--;
- 	}
- 
--	i = alloc_from_pcs_bulk(s, size, p);
-+	i = alloc_from_pcs_bulk(s, flags, size, p);
- 
- 	if (i < size) {
+ 	if (likely(!n)) {
+-
+-		if (likely(was_frozen)) {
+-			/*
+-			 * The list lock was not taken therefore no list
+-			 * activity can be necessary.
+-			 */
+-			stat(s, FREE_FROZEN);
+-		}
+-
  		/*
+-		 * In other cases we didn't take the list_lock because the slab
+-		 * was already on the partial list and will remain there.
++		 * We didn't take the list_lock because the slab was already on
++		 * the partial list and will remain there.
+ 		 */
+-
+ 		return;
+ 	}
+ 
+@@ -8753,7 +8741,6 @@ STAT_ATTR(FREE_RCU_SHEAF, free_rcu_sheaf);
+ STAT_ATTR(FREE_RCU_SHEAF_FAIL, free_rcu_sheaf_fail);
+ STAT_ATTR(FREE_FASTPATH, free_fastpath);
+ STAT_ATTR(FREE_SLOWPATH, free_slowpath);
+-STAT_ATTR(FREE_FROZEN, free_frozen);
+ STAT_ATTR(FREE_ADD_PARTIAL, free_add_partial);
+ STAT_ATTR(FREE_REMOVE_PARTIAL, free_remove_partial);
+ STAT_ATTR(ALLOC_FROM_PARTIAL, alloc_from_partial);
+@@ -8858,7 +8845,6 @@ static struct attribute *slab_attrs[] = {
+ 	&free_rcu_sheaf_fail_attr.attr,
+ 	&free_fastpath_attr.attr,
+ 	&free_slowpath_attr.attr,
+-	&free_frozen_attr.attr,
+ 	&free_add_partial_attr.attr,
+ 	&free_remove_partial_attr.attr,
+ 	&alloc_from_partial_attr.attr,
 
 -- 
 2.52.0
