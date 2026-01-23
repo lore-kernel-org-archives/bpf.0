@@ -1,20 +1,21 @@
-Received: from 66-220-155-179.mail-mxout.facebook.com (66-220-155-179.mail-mxout.facebook.com [66.220.155.179])
+Received: from 69-171-232-181.mail-mxout.facebook.com (69-171-232-181.mail-mxout.facebook.com [69.171.232.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392CA34F476
-	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 05:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=66.220.155.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291563321D8
+	for <bpf@vger.kernel.org>; Fri, 23 Jan 2026 05:51:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.171.232.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769147501; cv=none; b=C5pVBT1d+L4CWPHifVSrONWpaYe0pHvD3JpR/h65+7g1q/s7kgRdBuMZh2uLNYJOClEzQVfJR9K2urf4UkzCWyhYKyoMGaZYTGP1VJytVfwhuq1ru0bcWiHmwVBkKONVGoMd9U0wkg1z8xpfGlx0MeJwp0tvlvm60q8szA3O+bY=
+	t=1769147507; cv=none; b=TJov4r9QSt10olgNL+siz6XDDboHnrC+uXhNt2j3aSKkV6eodu2Qdg3YKyMPBxOHl6aED6Fae4F70TuPa5JHiCgMTYywZWHP+kCWiMpIGi7GfCReEIEpZgfNTbPjoPHFoT7x/Lzay5xZBR3wiCKwAj5L47ZJ6br4jzy/EFHKXjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769147501; c=relaxed/simple;
-	bh=2Iwg3dvvNS5YrfokKTArdg63njkcnR3E5QcdBdOzszQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PNinBMuOHARHKg+FRlKI7I808LZMLLo8MHRXZj/kSQoqAjMJyBtHan/vD9DHpzgmvPsVhMN9uBDDpGILNGrItIHk3s5dZrmnKbJUndhNeEYAs9ZNsbSUtJluGkm6nF6iBTEwMIjD1Oc9FsI0EwpCmbYDb5y2eP/dAlMbSSsbGIw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=66.220.155.179
+	s=arc-20240116; t=1769147507; c=relaxed/simple;
+	bh=uQ+8MuRvPU3xdXMoMpS/PQrUS9u9S3jUrtlY6aNSX68=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=MU2zgewT9Z4QAXaFIBH8hbZWVlSDkqQJUwfHE8Xbfyn/jCx9Sd5TEfrC+Y3XfvqGafwx4PxHsam4HDZBHJzVQyjPLzZsTRnL7t/kykcJpAMGrS/jN80XpqtZWBf70CFUgctZ36J77ay93gXdz6HTV3ilEQZSli/CDTUHM3gQVlc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev; spf=fail smtp.mailfrom=linux.dev; arc=none smtp.client-ip=69.171.232.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linux.dev
 Received: by devvm16039.vll0.facebook.com (Postfix, from userid 128203)
-	id EE69819739C17; Thu, 22 Jan 2026 21:51:22 -0800 (PST)
+	id 16F9619739CAB; Thu, 22 Jan 2026 21:51:28 -0800 (PST)
 From: Yonghong Song <yonghong.song@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -24,10 +25,12 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Amery Hung <ameryhung@gmail.com>
-Subject: [PATCH bpf-next v4 1/2] selftests/bpf: Fix task_local_data failure with 64K page
-Date: Thu, 22 Jan 2026 21:51:22 -0800
-Message-ID: <20260123055122.494352-1-yonghong.song@linux.dev>
+Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Fix xdp_pull_data failure with 64K page
+Date: Thu, 22 Jan 2026 21:51:28 -0800
+Message-ID: <20260123055128.495265-1-yonghong.song@linux.dev>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260123055122.494352-1-yonghong.song@linux.dev>
+References: <20260123055122.494352-1-yonghong.song@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -36,110 +39,97 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-On arm64 systems with 64K pages, the selftest task_local_data has the fol=
-lowing
-failures:
-  ...
-  test_task_local_data_basic:PASS:tld_create_key 0 nsec
-  test_task_local_data_basic:FAIL:tld_create_key unexpected tld_create_ke=
-y: actual 0 !=3D expected -28
-  ...
-  test_task_local_data_basic_thread:PASS:run task_main 0 nsec
-  test_task_local_data_basic_thread:FAIL:task_main retval unexpected erro=
-r: 2 (errno 0)
-  test_task_local_data_basic_thread:FAIL:tld_get_data value0 unexpected t=
-ld_get_data value0: actual 0 !=3D expected 6268
-  ...
-  #447/1   task_local_data/task_local_data_basic:FAIL
-  ...
-  #447/2   task_local_data/task_local_data_race:FAIL
-  #447     task_local_data:FAIL
+If the argument 'pull_len' of run_test() is 'PULL_MAX' or
+'PULL_MAX | PULL_PLUS_ONE', the eventual pull_len size
+will close to the page size. On arm64 systems with 64K pages,
+the pull_len size will be close to 64K. But the existing buffer
+will be close to 9000 which is not enough to pull.
 
-When TLD_DYN_DATA_SIZE is 64K page size, for
-  struct tld_meta_u {
-       _Atomic __u8 cnt;
-       __u16 size;
-        struct tld_metadata metadata[];
-  };
-field 'cnt' would overflow. For example, for 4K page, 'cnt' will
-be 4096/64 =3D 64. But for 64K page, 'cnt' will be 65536/64 =3D 1024
-and 'cnt' is not enough for 1024. To accommodate 64K page,
-'_Atomic __u8 cnt' becomes '_Atomic __u16 cnt'. A few other places
-are adjusted accordingly.
+For those failed run_tests(), make buff size to
+  pg_sz + (pg_sz / 2)
+This way, there will be enough buffer space to pull
+regardless of page size.
 
-In test_task_local_data.c, the value for TLD_DYN_DATA_SIZE is changed
-from 4096 to (getpagesize() - 8) since the maximum buffer size for
-TLD_DYN_DATA_SIZE is (getpagesize() - 8).
-
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
 Tested-by: Alan Maguire <alan.maguire@oracle.com>
 Cc: Amery Hung <ameryhung@gmail.com>
 Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
 ---
- tools/testing/selftests/bpf/prog_tests/task_local_data.h      | 4 ++--
- tools/testing/selftests/bpf/prog_tests/test_task_local_data.c | 2 +-
- tools/testing/selftests/bpf/progs/task_local_data.bpf.h       | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/xdp_pull_data.c     | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
 Changelog:
- v1 -> v4:
+ v2 -> v3:
+   - v2: https://lore.kernel.org/bpf/20260122162621.3579387-1-yonghong.so=
+ng@linux.dev/
+   - Reduce buff_len size and cover the remaining two run_test()'s with P=
+ULL_MAX.
+ v1 -> v2:
    - v1: https://lore.kernel.org/bpf/20260120210930.2544950-1-yonghong.so=
 ng@linux.dev/
-   - Restore '__u16 size' with adjusted TLD_DYN_DATA_SIZE (smaller than g=
-etpagesize())
+   - Use pg_sz to simplify buff_len calculation.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/t=
-ools/testing/selftests/bpf/prog_tests/task_local_data.h
-index 2de38776a2d4..0f86b9275cf9 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-+++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-@@ -94,7 +94,7 @@ struct tld_metadata {
- };
-=20
- struct tld_meta_u {
--	_Atomic __u8 cnt;
-+	_Atomic __u16 cnt;
- 	__u16 size;
- 	struct tld_metadata metadata[];
- };
-@@ -217,7 +217,7 @@ static int __tld_init_data_p(int map_fd)
- static tld_key_t __tld_create_key(const char *name, size_t size, bool dy=
-n_data)
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c b/too=
+ls/testing/selftests/bpf/prog_tests/xdp_pull_data.c
+index efa350d04ec5..910dabe95afd 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_pull_data.c
+@@ -114,12 +114,14 @@ static void test_xdp_pull_data_basic(void)
  {
- 	int err, i, sz, off =3D 0;
--	__u8 cnt;
-+	__u16 cnt;
+ 	u32 pg_sz, max_meta_len, max_data_len;
+ 	struct test_xdp_pull_data *skel;
++	int buff_len;
 =20
- 	if (!TLD_READ_ONCE(tld_meta_p)) {
- 		err =3D __tld_init_meta_p();
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.=
-c b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-index 9fd6306b455c..9556ad3d986f 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_task_local_data.c
-@@ -4,7 +4,7 @@
- #include <test_progs.h>
+ 	skel =3D test_xdp_pull_data__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "test_xdp_pull_data__open_and_load"))
+ 		return;
 =20
- #define TLD_FREE_DATA_ON_THREAD_EXIT
--#define TLD_DYN_DATA_SIZE 4096
-+#define TLD_DYN_DATA_SIZE (getpagesize() - 8)
- #include "task_local_data.h"
+ 	pg_sz =3D sysconf(_SC_PAGE_SIZE);
++	buff_len =3D pg_sz + pg_sz / 2;
 =20
- struct test_tld_struct {
-diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/to=
-ols/testing/selftests/bpf/progs/task_local_data.bpf.h
-index 432fff2af844..fed53d63a7e5 100644
---- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-+++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-@@ -80,7 +80,7 @@ struct tld_metadata {
- };
+ 	if (find_xdp_sizes(skel, pg_sz))
+ 		goto out;
+@@ -140,13 +142,13 @@ static void test_xdp_pull_data_basic(void)
+ 	run_test(skel, XDP_PASS, pg_sz, 9000, 0, 1025, 1025);
 =20
- struct tld_meta_u {
--	__u8 cnt;
-+	__u16 cnt;
- 	__u16 size;
- 	struct tld_metadata metadata[TLD_MAX_DATA_CNT];
- };
+ 	/* multi-buf pkt, empty linear data area, pull requires memmove */
+-	run_test(skel, XDP_PASS, pg_sz, 9000, 0, 0, PULL_MAX);
++	run_test(skel, XDP_PASS, pg_sz, buff_len, 0, 0, PULL_MAX);
+=20
+ 	/* multi-buf pkt, no headroom */
+-	run_test(skel, XDP_PASS, pg_sz, 9000, max_meta_len, 1024, PULL_MAX);
++	run_test(skel, XDP_PASS, pg_sz, buff_len, max_meta_len, 1024, PULL_MAX)=
+;
+=20
+ 	/* multi-buf pkt, no tailroom, pull requires memmove */
+-	run_test(skel, XDP_PASS, pg_sz, 9000, 0, max_data_len, PULL_MAX);
++	run_test(skel, XDP_PASS, pg_sz, buff_len, 0, max_data_len, PULL_MAX);
+=20
+ 	/* Test cases with invalid pull length */
+=20
+@@ -154,18 +156,18 @@ static void test_xdp_pull_data_basic(void)
+ 	run_test(skel, XDP_DROP, pg_sz, 2048, 0, 2048, 2049);
+=20
+ 	/* multi-buf pkt with no space left in linear data area */
+-	run_test(skel, XDP_DROP, pg_sz, 9000, max_meta_len, max_data_len,
++	run_test(skel, XDP_DROP, pg_sz, buff_len, max_meta_len, max_data_len,
+ 		 PULL_MAX | PULL_PLUS_ONE);
+=20
+ 	/* multi-buf pkt, empty linear data area */
+-	run_test(skel, XDP_DROP, pg_sz, 9000, 0, 0, PULL_MAX | PULL_PLUS_ONE);
++	run_test(skel, XDP_DROP, pg_sz, buff_len, 0, 0, PULL_MAX | PULL_PLUS_ON=
+E);
+=20
+ 	/* multi-buf pkt, no headroom */
+-	run_test(skel, XDP_DROP, pg_sz, 9000, max_meta_len, 1024,
++	run_test(skel, XDP_DROP, pg_sz, buff_len, max_meta_len, 1024,
+ 		 PULL_MAX | PULL_PLUS_ONE);
+=20
+ 	/* multi-buf pkt, no tailroom */
+-	run_test(skel, XDP_DROP, pg_sz, 9000, 0, max_data_len,
++	run_test(skel, XDP_DROP, pg_sz, buff_len, 0, max_data_len,
+ 		 PULL_MAX | PULL_PLUS_ONE);
+=20
+ out:
 --=20
 2.47.3
 
