@@ -1,97 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C161A4A35;
-	Sat, 24 Jan 2026 01:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008449443
+	for <bpf@vger.kernel.org>; Sat, 24 Jan 2026 02:59:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769219438; cv=none; b=ZtcmDpK99R9GeL2XU8UHgHctbEkdhiK/ciKEyWf2kol5Ta6VTKprzgH/wuAgl1+Gwa7oPV0+3JWN4xj/nqXsq/UKGovy6hZb1Zubt95X73rRI+LWzIBmPn4Y66WdcMfML6yZcNSN4zgvgBdUZC7eUjlD+CmXumUIvHueXjbqDhA=
+	t=1769223597; cv=none; b=mEPjdEK3imyNIHVENH3YjdeUUFZOh+BQYZQRmHhNnF524wubAC/a27RfAorsE77tJm5Uqs0f388pd/+6XEUYfysRD+1JvfE6ot+0FZwyw+fV861yGo707VXiwVuF5sAt2oBzMp+vL1jm+s8wrGWGBPbveDAGtWPgabmLYOeJRCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769219438; c=relaxed/simple;
-	bh=aLWsCue89i59IEHy79VKTEMC5w1S92QQkAmfyPmhXVQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=dJouZPcMMPzOeOznBp3P9Ti0X4hboHNLPqGD+o8e7XXDMbyUGFSJms7N5/af8NXiiLAmHm8g1EX5kJlJm+tgO82Fbme5okXB6GBAinpxj7GVd/h0IgFmF2a8FR6gbDcwzqHlZCDGI/Bji4iL3kYpTgHgKercnyN6BtpXgR69yGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QBHnO15J; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769223597; c=relaxed/simple;
+	bh=xzEq0+JXleMIrq/JCyWSi3Hfiw7RjJVzGUYmO0KSAyQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=eEsPmPECu8pTMFZxYeI8prrqvKXjD4UWQYzMasA0DSJcgFdeVGfBsRlaHa9UxZpo703w2E7TbNF0ZsfPkTZvDaEf/fL/YW7AOW5iH4uDb9GWnNhWoTZrFLVCdgCSYgH7plhi5n+3Z3+VHQLi3MGID95/0Xx6gsMCD6OG2xb9wtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=n7jZAJck; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QBHnO15J"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3598C4CEF1;
-	Sat, 24 Jan 2026 01:50:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769219438;
-	bh=aLWsCue89i59IEHy79VKTEMC5w1S92QQkAmfyPmhXVQ=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=QBHnO15Js1+od95cgo6dWN70nz4ysH3h9szIJRNJ1ra2oNVj6cM2w4BGBEsVac5tA
-	 p5OT7ckHiYBroGgRUBQ4ewFnCcwIMGF626b8SGppBRuuEvvUDXkwJNc73RtYlxx0uk
-	 NDTPpCP6hINMKMsevYFrTHheEHUcvHwRoB5iEQhKrHsInNxwQhohWEVsG+zagjCmXP
-	 TpuisB3oGzL9TkIaVe3SMQ9IK3nuzh+VaOMlJOCbJpbf7IrX32bKIjoiBrKevOdQxE
-	 qFJ5K05cow1wQY6Ep31xecjmsXLzBdTq0+2km2Zza93p4qNxekq41xaa1GlH35JFrT
-	 mtEuPoB+2Qnuw==
-Content-Type: multipart/mixed; boundary="===============1421871514063265094=="
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="n7jZAJck"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=dTYjO+jN971PBs8HsMn0m/JgIi551dOZTssrhOegW1Q=;
+	b=n7jZAJckgopw/9lcV7lpAAodRT8XxobJ8q3tAj7b8ZfhTLBAoDlBF0o509euB6f2moU58aySu
+	SLqCUFk8WOfdgV0WBv87XFaIvEmHC+VjogeK5HLZ68mZYOJuEqFrAqMmcKLCpZ8XlLi63/8GIh5
+	Ijryj4JRA7azDR9g0SOwWXE=
+Received: from mail.maildlp.com (unknown [172.19.162.197])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4dyfZ42F9wzpSth;
+	Sat, 24 Jan 2026 10:55:56 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id F2E9640569;
+	Sat, 24 Jan 2026 10:59:46 +0800 (CST)
+Received: from [10.67.110.198] (10.67.110.198) by
+ kwepemf100007.china.huawei.com (7.202.181.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Sat, 24 Jan 2026 10:59:46 +0800
+Message-ID: <b5d75a0b-965b-41fc-b34b-9069959309f5@huawei.com>
+Date: Sat, 24 Jan 2026 10:59:46 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <baead0e0a77a98f1f54703a05fcc861f40d8f9eec0a24f96cf26df249dd1cd1f@mail.kernel.org>
-In-Reply-To: <20260124012133.2451708-3-wusamuel@google.com>
-References: <20260124012133.2451708-3-wusamuel@google.com>
-Subject: Re: [PATCH bpf-next v3 2/3] bpf: Add wakeup_source iterator
-From: bot+bpf-ci@kernel.org
-To: wusamuel@google.com,rafael@kernel.org,lenb@kernel.org,pavel@kernel.org,gregkh@linuxfoundation.org,dakr@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org
-Cc: wusamuel@google.com,kernel-team@android.com,linux-kernel@vger.kernel.org,linux-pm@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 24 Jan 2026 01:50:37 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 1/2] bpf: Make sure all tail call callers use
+ cgroup storage if the owner does
+Content-Language: en-US
+To: Amery Hung <ameryhung@gmail.com>, <bpf@vger.kernel.org>
+CC: <alexei.starovoitov@gmail.com>, <andrii@kernel.org>,
+	<daniel@iogearbox.net>, <martin.lau@kernel.org>, <eddyz87@gmail.com>,
+	<kernel-team@meta.com>
+References: <20251203195050.3215728-1-ameryhung@gmail.com>
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20251203195050.3215728-1-ameryhung@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
---===============1421871514063265094==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi Amery, we’ve encountered the same issue, and the current patch works 
+for us. Do you have any plans to upstream it at a later time, or might 
+there be additional updates in the future?
 
-> diff --git a/kernel/bpf/wakeup_source_iter.c b/kernel/bpf/wakeup_source_iter.c
-> new file mode 100644
-> index 000000000000..ab83d212a1f9
-> --- /dev/null
-> +++ b/kernel/bpf/wakeup_source_iter.c
-
-[ ... ]
-
-> +static void wakeup_source_iter_seq_stop(struct seq_file *seq, void *v)
-> +{
-> +	int *srcuidx = seq->private;
-> +
-> +	if (*srcuidx >= 0)
-> +		wakeup_sources_read_unlock(*srcuidx);
-> +	*srcuidx = -1;
-> +}
-
-Should this function call __wakeup_source_seq_show(seq, v, true) when v is
-NULL to notify the BPF program that iteration has completed?
-
-Looking at other BPF iterators like map_iter, prog_iter, link_iter,
-task_iter, and kmem_cache_iter, they all invoke the BPF program with
-in_stop=true when the stop callback receives a NULL pointer. For example,
-map_iter does:
-
-    static void bpf_map_seq_stop(struct seq_file *seq, void *v)
-    {
-        if (!v)
-            (void)__bpf_map_seq_show(seq, v, true);
-        ...
-    }
-
-The bpf_seq_read() function in kernel/bpf/bpf_iter.c has this comment at
-the stop label: "/* bpf program called if !p */", which suggests this
-callback is expected.
-
-The __wakeup_source_seq_show() function already accepts an in_stop
-parameter but is never called with true. Without this callback, BPF
-programs using this iterator cannot detect when iteration has finished.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21306880863
-
---===============1421871514063265094==--
+On 2025/12/4 3:50, Amery Hung wrote:
+> Mitigate a possible NULL pointer dereference in bpf_get_local_storage()
+> by requiring all callers to use cgroup storage if the owner does.
+> 
+> Cgroup storage is allocated lazily when attaching a cgroup bpf program.
+> With tail call, it is possible for a callee BPF program to see a NULL
+> storage pointer if the caller prorgam does not use cgroup storage.
+> 
+> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+> Reported-by: Dongliang Mu <dzm91@hust.edu.cn>
+> Closes: https://lore.kernel.org/bpf/c9ac63d7-73be-49c5-a4ac-eb07f7521adb@hust.edu.cn/
+> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+> ---
+>   kernel/bpf/core.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> index c8ae6ab31651..e249ea98f55d 100644
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
+> @@ -2403,8 +2403,7 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>   				break;
+>   			cookie = aux->cgroup_storage[i] ?
+>   				 aux->cgroup_storage[i]->cookie : 0;
+> -			ret = map->owner->storage_cookie[i] == cookie ||
+> -			      !cookie;
+> +			ret = map->owner->storage_cookie[i] == cookie;
+>   		}
+>   		if (ret &&
+>   		    map->owner->attach_func_proto != aux->attach_func_proto) {
