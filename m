@@ -1,37 +1,37 @@
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE51319617;
-	Sat, 24 Jan 2026 13:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC7930EF65;
+	Sat, 24 Jan 2026 13:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769261260; cv=none; b=n91t57XW6BGeIl1JTqCtxQDczGguyu+UfDo5QtnxXEexPFWcUEOUGbQLZ4Jvfd9zuC6PYPKJ1znXhQ9irF6GEK2+KPlAaKr9QnRBU+fhCNoxbetARNtJAzVUesGjWWJlkvPA2WZQ4gDpZUJ3uL9JgsSQtCwIu8YYFaqIoSAJcF4=
+	t=1769261267; cv=none; b=aSMD3puG5NkRmALwvOjO0/NmTrgUnF4+q+iWYXPV95FI6uh8ayykoTz/rZN6PkWTx5aLz9BR1BskbDCs2EMX4ScFoNGWgWW4uHBtp1jy8542EKpD+fNwwzYHJz5U40WpjeLuSvwnUsJkJ3BQyp8ZuFJWui0rgkvvG8/HQrdkoDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769261260; c=relaxed/simple;
-	bh=aph4bN+h6Du3wkXa2Ge6qFDIwoSnf9wzR/wJFGFjJDY=;
+	s=arc-20240116; t=1769261267; c=relaxed/simple;
+	bh=WcV+3KXQ5Iq8VZy1Ph6A1jDks5VwRVnksx+G4amE9Bg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ca3W+M6TCjU/H6lS4T+2jb6ub5w4PK0MmN/E8yELavTnGzkqjmk6wXMX/tR+aV34LhUfTckY1tdaHXhwmtogvKwxXdgsi85OcJWKNh6EQP103D1MX0+iIbvFR85Vtf4sX9U7Atbe1o+EuoqS6P7gk/3sIEd0+nVvOm6asfzmZeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=KOqKg/7Q; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=e5B48MooHyP4mVbxi3yfZth2QTMV19MF8NDujdGpdLahDmKWhYy7qMw2vm+dHeUjzgR6TfRQrd8Mbrg/4iEnW3kpnnwagO3AZPrtBOOiRsB5z/qFqWaY3ru9DtPQW4ReVX4zzgDDpMgS+RWJjfmJw+Yunor6DPnJAqh4+pxZyC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=nvvtU4D0; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="KOqKg/7Q"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="nvvtU4D0"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	s=20170329; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
 	Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
 	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
 	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
 	List-Post:List-Owner:List-Archive;
-	bh=hYQKTmNL3usHkDODv+v2CqzvPFVZMn8b05MkXsnAs9M=; b=KOqKg/7QNaR/7oJjP02Urrb9l3
-	kx1GIWcR4/+mVBZhUtYH4OafAOeGh+SiuqBhRpOp48Xbaf/Yunrf8vNr1Y6+DL6PdW6pBNcm825dY
-	SuYAb8ieOOOGBUjk+KZQgCBxGLuyhCedt6vBobI9K/PQ8tYiDLuuw8adzkgLS/dHQ0SFaRb6xa/jF
-	2KFt1FFcCaWtNcQkjVYCyHtEvCb/bg6yUhWkum8ZfDaGd/bJefkFSjyFCFDqkCEf86aRSZvkvSYeE
-	qKa42nQSWLYEhThHAcRSrrlN/eq5TmhvEiTorZSrMdu2LmiAAuapzSaNAV0PAThFL49xjalWEp8vG
-	kkePJquA==;
+	bh=MOr3CRVvstkhy6HHmCfcxtMPEyaN0J8DP7VnU2WkzBo=; b=nvvtU4D0ZFfUM+dhHRQdJWGOMX
+	vkb8gBdEDO/FWCm5izNVwLOvsEKO8FKwRrTPBt8a6R9DOf88XeNLhYyhEqWGdbj4IP7tfVW22xlBG
+	uQndcl1Q/JnOgLGMrjlMgtAWJ0bXwKR+KlpN9MQdmz0NRbSg/gC3aZYGkncUqtvNl4lT1qIDWdUVB
+	YVeihHhvy3llpXMrV8Su0276l8zLwhv+4CSTmO3zxYyuahcuhk9VM+Dnzaky2aNJWy6ZusO3fWvbg
+	aLnvOR7XIO09xSTCpNkrHgIwL24+A4CGJJfYdxW9oRpzkw06zsvr81xZgKY5J7AYtTGbGvzwe9j6C
+	XK7ntCLw==;
 Received: from [175.114.83.198] (helo=localhost)
 	by fanzine2.igalia.com with esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vjdfh-009OAw-58; Sat, 24 Jan 2026 14:27:26 +0100
+	id 1vjdfn-009OB8-BW; Sat, 24 Jan 2026 14:27:32 +0100
 From: Changwoo Min <changwoo@igalia.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -52,9 +52,9 @@ Cc: Martin KaFai Lau <martin.lau@linux.dev>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH bpf-next v2 1/2] selftests/bpf: Introduce execution context detection helpers
-Date: Sat, 24 Jan 2026 22:27:05 +0900
-Message-ID: <20260124132706.183681-2-changwoo@igalia.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add tests for execution context helpers
+Date: Sat, 24 Jan 2026 22:27:06 +0900
+Message-ID: <20260124132706.183681-3-changwoo@igalia.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260124132706.183681-1-changwoo@igalia.com>
 References: <20260124132706.183681-1-changwoo@igalia.com>
@@ -66,81 +66,228 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce bpf_in_nmi(), bpf_in_hardirq(), bpf_in_serving_softirq(), and
-bpf_in_task() inline helpers in bpf_experimental.h. These allow BPF
-programs to query the current execution context with higher granularity
-than the existing bpf_in_interrupt() helper.
+Add a new selftest suite `exe_ctx` to verify the accuracy of the
+bpf_in_task(), bpf_in_hardirq(), and bpf_in_serving_softirq() helpers
+introduced in bpf_experimental.h.
 
-While BPF programs can often infer their context from attachment points,
-subsystems like sched_ext may call the same BPF logic from multiple
-contexts (e.g., task-to-task wake-ups vs. interrupt-to-task wake-ups).
-These helpers provide a reliable way for logic to branch based on
-the current CPU execution state.
+Testing these execution contexts deterministically requires crossing
+context boundaries within a single CPU. To achieve this, the test
+implements a "Trigger-Observer" pattern using bpf_testmod:
 
-Implementing these as BPF-native inline helpers wrapping
-get_preempt_count() allows the compiler and JIT to inline the logic. The
-implementation accounts for differences in preempt_count layout between
-standard and PREEMPT_RT kernels.
+1. Trigger: A BPF syscall program calls a new bpf_testmod kfunc
+   bpf_kfunc_trigger_ctx_check().
+2. Task to HardIRQ: The kfunc uses irq_work_queue() to trigger a
+   self-IPI on the local CPU.
+3. HardIRQ to SoftIRQ: The irq_work handler calls a dummy function
+   (observed by BPF fentry) and then schedules a tasklet to
+   transition into SoftIRQ context.
+
+The user-space runner ensures determinism by pinning itself to CPU 0
+before execution, forcing the entire interrupt chain to remain on a
+single core. Dummy noinline functions with compiler barriers are
+added to bpf_testmod.c to serve as stable attachment points for
+fentry programs. A retry loop is used in user-space to wait for the
+asynchronous SoftIRQ to complete.
 
 Signed-off-by: Changwoo Min <changwoo@igalia.com>
 ---
- .../testing/selftests/bpf/bpf_experimental.h  | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ .../selftests/bpf/prog_tests/exe_ctx.c        | 59 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_ctx.c  | 48 +++++++++++++++
+ .../selftests/bpf/test_kmods/bpf_testmod.c    | 32 ++++++++++
+ .../bpf/test_kmods/bpf_testmod_kfunc.h        |  4 ++
+ 4 files changed, 143 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/exe_ctx.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_ctx.c
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 68a49b1f77ae..30abdc08366f 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -610,6 +610,8 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__str,
- #define HARDIRQ_MASK	(__IRQ_MASK(HARDIRQ_BITS) << HARDIRQ_SHIFT)
- #define NMI_MASK	(__IRQ_MASK(NMI_BITS)     << NMI_SHIFT)
+diff --git a/tools/testing/selftests/bpf/prog_tests/exe_ctx.c b/tools/testing/selftests/bpf/prog_tests/exe_ctx.c
+new file mode 100644
+index 000000000000..aed6a6ef0876
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/exe_ctx.c
+@@ -0,0 +1,59 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2026 Valve Corporation.
++ * Author: Changwoo Min <changwoo@igalia.com>
++ */
++
++#include <test_progs.h>
++#include <sys/syscall.h>
++#include "test_ctx.skel.h"
++
++void test_exe_ctx(void)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	cpu_set_t old_cpuset, target_cpuset;
++	struct test_ctx *skel;
++	int err, prog_fd;
++
++	/* 1. Pin the current process to CPU 0. */
++	if (sched_getaffinity(0, sizeof(old_cpuset), &old_cpuset) == 0) {
++		CPU_ZERO(&target_cpuset);
++		CPU_SET(0, &target_cpuset);
++		ASSERT_OK(sched_setaffinity(0, sizeof(target_cpuset),
++					    &target_cpuset), "setaffinity");
++	}
++
++	skel = test_ctx__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_load"))
++		goto restore_affinity;
++
++	err = test_ctx__attach(skel);
++	if (!ASSERT_OK(err, "skel_attach"))
++		goto cleanup;
++
++	/* 2. When we run this, the kernel will execute the BPF prog on CPU 0. */
++	prog_fd = bpf_program__fd(skel->progs.trigger_all_contexts);
++	err = bpf_prog_test_run_opts(prog_fd, &opts);
++	ASSERT_OK(err, "test_run_trigger");
++
++	/* 3. Wait for the local CPU's softirq/tasklet to finish. */
++	for (int i = 0; i < 1000; i++) {
++		if (skel->bss->count_task > 0 &&
++		    skel->bss->count_hardirq > 0 &&
++		    skel->bss->count_softirq > 0)
++			break;
++		usleep(1000); /* Wait 1ms per iteration, up to 1 sec total */
++	}
++
++	/* On CPU 0, these should now all be non-zero. */
++	ASSERT_GT(skel->bss->count_task, 0, "task_ok");
++	ASSERT_GT(skel->bss->count_hardirq, 0, "hardirq_ok");
++	ASSERT_GT(skel->bss->count_softirq, 0, "softirq_ok");
++
++cleanup:
++	test_ctx__destroy(skel);
++
++restore_affinity:
++	ASSERT_OK(sched_setaffinity(0, sizeof(old_cpuset), &old_cpuset),
++		  "restore_affinity");
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_ctx.c b/tools/testing/selftests/bpf/progs/test_ctx.c
+new file mode 100644
+index 000000000000..7d4995506717
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_ctx.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2026 Valve Corporation.
++ * Author: Changwoo Min <changwoo@igalia.com>
++ */
++
++#include "vmlinux.h"
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "bpf_experimental.h"
++
++char _license[] SEC("license") = "GPL";
++
++extern void bpf_kfunc_trigger_ctx_check(void) __ksym;
++
++int count_hardirq;
++int count_softirq;
++int count_task;
++
++/* Triggered via bpf_prog_test_run from user-space */
++SEC("syscall")
++int trigger_all_contexts(void *ctx)
++{
++	if (bpf_in_task())
++		__sync_fetch_and_add(&count_task, 1);
++
++	/* Trigger the firing of a hardirq and softirq for test. */
++	bpf_kfunc_trigger_ctx_check();
++	return 0;
++}
++
++/* Observer for HardIRQ */
++SEC("fentry/bpf_testmod_test_hardirq_fn")
++int BPF_PROG(on_hardirq)
++{
++	if (bpf_in_hardirq())
++		__sync_fetch_and_add(&count_hardirq, 1);
++	return 0;
++}
++
++/* Observer for SoftIRQ */
++SEC("fentry/bpf_testmod_test_softirq_fn")
++int BPF_PROG(on_softirq)
++{
++	if (bpf_in_serving_softirq())
++		__sync_fetch_and_add(&count_softirq, 1);
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+index d425034b72d3..1b04022859b7 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
+@@ -1164,6 +1164,33 @@ __bpf_kfunc int bpf_kfunc_implicit_arg(int a, struct bpf_prog_aux *aux);
+ __bpf_kfunc int bpf_kfunc_implicit_arg_legacy(int a, int b, struct bpf_prog_aux *aux);
+ __bpf_kfunc int bpf_kfunc_implicit_arg_legacy_impl(int a, int b, struct bpf_prog_aux *aux);
  
-+#define SOFTIRQ_OFFSET	(1UL << SOFTIRQ_SHIFT)
++/* hook targets */
++noinline void bpf_testmod_test_hardirq_fn(void) { barrier(); }
++noinline void bpf_testmod_test_softirq_fn(void) { barrier(); }
 +
- extern bool CONFIG_PREEMPT_RT __kconfig __weak;
- #ifdef bpf_target_x86
- extern const int __preempt_count __ksym;
-@@ -648,4 +650,40 @@ static inline int bpf_in_interrupt(void)
- 	       (tsk->softirq_disable_cnt & SOFTIRQ_MASK);
- }
++/* Tasklet for SoftIRQ context */
++static void ctx_check_tasklet_fn(struct tasklet_struct *t)
++{
++	bpf_testmod_test_softirq_fn();
++}
++
++DECLARE_TASKLET(ctx_check_tasklet, ctx_check_tasklet_fn);
++
++/* IRQ Work for HardIRQ context */
++static void ctx_check_irq_fn(struct irq_work *work)
++{
++	bpf_testmod_test_hardirq_fn();
++	tasklet_schedule(&ctx_check_tasklet);
++}
++
++static struct irq_work ctx_check_irq = IRQ_WORK_INIT_HARD(ctx_check_irq_fn);
++
++/* The kfunc trigger */
++__bpf_kfunc void bpf_kfunc_trigger_ctx_check(void)
++{
++	irq_work_queue(&ctx_check_irq);
++}
++
+ BTF_KFUNCS_START(bpf_testmod_check_kfunc_ids)
+ BTF_ID_FLAGS(func, bpf_testmod_test_mod_kfunc)
+ BTF_ID_FLAGS(func, bpf_kfunc_call_test1)
+@@ -1209,6 +1236,7 @@ BTF_ID_FLAGS(func, bpf_kfunc_multi_st_ops_test_1_assoc, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_kfunc_implicit_arg_legacy_impl)
++BTF_ID_FLAGS(func, bpf_kfunc_trigger_ctx_check)
+ BTF_KFUNCS_END(bpf_testmod_check_kfunc_ids)
  
-+static inline int bpf_in_nmi(void)
-+{
-+	return get_preempt_count() & NMI_MASK;
-+}
+ static int bpf_testmod_ops_init(struct btf *btf)
+@@ -1840,6 +1868,10 @@ static void bpf_testmod_exit(void)
+ 	while (refcount_read(&prog_test_struct.cnt) > 1)
+ 		msleep(20);
+ 
++	/* Clean up irqwork and tasklet */
++	irq_work_sync(&ctx_check_irq);
++	tasklet_kill(&ctx_check_tasklet);
 +
-+static inline int bpf_in_hardirq(void)
-+{
-+	return get_preempt_count() & HARDIRQ_MASK;
-+}
+ 	bpf_kfunc_close_sock();
+ 	sysfs_remove_bin_file(kernel_kobj, &bin_attr_bpf_testmod_file);
+ 	unregister_bpf_testmod_uprobe();
+diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+index 10f89f06245f..d5c5454e257e 100644
+--- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
++++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_kfunc.h
+@@ -169,4 +169,8 @@ extern int bpf_kfunc_multi_st_ops_test_1_assoc(struct st_ops_args *args) __weak
+ struct prog_test_member *bpf_kfunc_get_default_trusted_ptr_test(void) __ksym;
+ void bpf_kfunc_put_default_trusted_ptr_test(struct prog_test_member *trusted_ptr) __ksym;
+ 
++void bpf_testmod_test_hardirq_fn(void);
++void bpf_testmod_test_softirq_fn(void);
++void bpf_kfunc_trigger_ctx_check(void) __ksym;
 +
-+static inline int bpf_in_serving_softirq(void)
-+{
-+	struct task_struct___preempt_rt *tsk;
-+	int pcnt;
-+
-+	pcnt = get_preempt_count();
-+	if (!CONFIG_PREEMPT_RT)
-+		return (pcnt & SOFTIRQ_MASK) & SOFTIRQ_OFFSET;
-+
-+	tsk = (void *) bpf_get_current_task_btf();
-+	return (tsk->softirq_disable_cnt & SOFTIRQ_MASK) & SOFTIRQ_OFFSET;
-+}
-+
-+static inline int bpf_in_task(void)
-+{
-+	struct task_struct___preempt_rt *tsk;
-+	int pcnt;
-+
-+	pcnt = get_preempt_count();
-+	if (!CONFIG_PREEMPT_RT)
-+		return !(pcnt & (NMI_MASK | HARDIRQ_MASK | SOFTIRQ_OFFSET));
-+
-+	tsk = (void *) bpf_get_current_task_btf();
-+	return !((pcnt & (NMI_MASK | HARDIRQ_MASK)) |
-+		 ((tsk->softirq_disable_cnt & SOFTIRQ_MASK) & SOFTIRQ_OFFSET));
-+}
- #endif
+ #endif /* _BPF_TESTMOD_KFUNC_H */
 -- 
 2.52.0
 
