@@ -1,137 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538212773EE;
-	Sat, 24 Jan 2026 08:23:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37E551A9F88
+	for <bpf@vger.kernel.org>; Sat, 24 Jan 2026 10:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769243020; cv=none; b=fh56sjCwhnTvKdB50lZIe6TZQW8/3vlTx5UYBM3XmexqSTjWtvzjkLqMD3kpO95NOouGcXDjb8YWTS4mUvQB5Gs7SChQWV4VdVWHFNGA7Gj2YNCGGjOJ0cEQArWZ2VILkMgqqH7G8XSSm8HPjC9WknW+PhSZnXT1JP6ZbgdTrf4=
+	t=1769251693; cv=none; b=qdsNm1f7ozNuZFXQBdug0fBUN4wt9OpfoOeJ4BtVS3hKx5l48NEcobnwm5a6aogDtzeiTsDvgwpSoe3CPztVg9IF+ny4PrWIkNcJDtM1Q1yo4foXaEqSaAXmrVksrkrWhgchHz2EkrI0a7wG/UmaXAf7NP3t/pJmIXxB/Ouk1vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769243020; c=relaxed/simple;
-	bh=KpG6/0cTWVmMn8PUAbjuUFccMtoHKtkLDwvs+w3tA30=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=nkruhukGSUnta6HPDV+HzYyRb6in/PbzpxKg4CcXmN6VW+T7iwTvdsgX4+iJxaVPvR0WMF+kxBEmAcyKlQBuQ0zY+8fj70u1BW3Pi3lPXU80rurgza0oQeJtycc5dBEUu5rkRhdyNrLUG60VazhOGoX6cWye5vgidRBluZVZ0X0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gQ4FHDzF; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769251693; c=relaxed/simple;
+	bh=47VAx5ZacdJ8aWPizoNgKSZ2gS6fvZEIp/N80TMPtLM=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=K8RrFEKVVQYfh8QUph3kZ+tDZpXPzE2j4DNcEuEMvvops7sL1YZpQnBZVex+tTF8c8acqWAoB3UpU1kWT3MMUm5vbdNl45Q0zTvfJ3PorZa1n2CWNkhvAYw3y4e556oLg7nHowQe9hdxUXNFrffqVwYyHwiOnszdwgo/m23crU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oe4i6iQF; arc=none smtp.client-ip=91.218.175.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gQ4FHDzF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4084FC116D0;
-	Sat, 24 Jan 2026 08:23:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769243019;
-	bh=KpG6/0cTWVmMn8PUAbjuUFccMtoHKtkLDwvs+w3tA30=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gQ4FHDzFkZAci3RjPSeRlUv/3hGiShStmoyUEcn9ch2bEwIMcMY8jYI35vBB1rmsu
-	 BsCy1xiJv+3hgS5i0koPdW75R3U/28Y+Z46TkwGi5RuyNqUrdvdv9VpscwsBDLfZ3N
-	 iw7ggIgKw+0KbixPnVGP6VL9Pueil7PtE+bxMxY3SApM5BPhuyL0o/umE0GKiysZHE
-	 xBJ7j4Qfe4TlFNKB1zR/v8tUTfYzH38wi9v+mDUQFroI61DwO47kahuO1xVqmrED3P
-	 yMf7y2mIxtjFyYJhebTa1vYWrxKQLxjmVSkhw+1pMmkM43o6FjMt3uHyrWi1c1YkGc
-	 hLMCZOrxEAbEQ==
-Content-Type: multipart/mixed; boundary="===============0520039389324384177=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oe4i6iQF"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org>
-In-Reply-To: <20260124075223.6033-7-adubey@linux.ibm.com>
-References: <20260124075223.6033-7-adubey@linux.ibm.com>
-Subject: Re: [PATCH v5 6/6] powerpc64/bpf: Additional NVR handling for bpf_throw
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org
-Cc: hbathini@linux.ibm.com,sachinpb@linux.ibm.com,venkat88@linux.ibm.com,andrii@kernel.org,eddyz87@gmail.com,mykolal@fb.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,christophe.leroy@csgroup.eu,naveen@kernel.org,maddy@linux.ibm.com,mpe@ellerman.id.au,npiggin@gmail.com,memxor@gmail.com,iii@linux.ibm.com,shuah@kernel.org,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 24 Jan 2026 08:23:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769251679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=X157f6edi9qZZ/l+AyW1kCRowa/qQVlZyK7G3GoioL0=;
+	b=oe4i6iQFz0xWIvjzlHY4GRoEJjM+4sH2hXTZlqQJUolKB//bI+M7qulvXc2ajJjha8jqJa
+	BFiHUL2sIGNUH7lH2AlcI3HFAaTorof1dhO7nk92me3D3rCyqJ9ORvWW+UvVO5A1vcC0/e
+	TiUbGSAEvFTUgcUghnwT8y0HwdoG314=
+Date: Sat, 24 Jan 2026 10:47:51 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <56db5e4bb54678e0615501693a5eee0b88e2bf3e@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH bpf-next v8 3/3] bpf, selftest: Add tests for FIONREAD
+ and copied_seq
+To: bpf@vger.kernel.org
+Cc: "John Fastabend" <john.fastabend@gmail.com>, "Jakub Sitnicki"
+ <jakub@cloudflare.com>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
+ "Neal Cardwell" <ncardwell@google.com>, "Kuniyuki Iwashima"
+ <kuniyu@google.com>, "David Ahern" <dsahern@kernel.org>, "Andrii
+ Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
+ Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "KP
+ Singh" <kpsingh@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>, "Hao
+ Luo" <haoluo@google.com>, "Jiri Olsa" <jolsa@kernel.org>, "Shuah Khan"
+ <shuah@kernel.org>, "Stefano Garzarella" <sgarzare@redhat.com>, "Michal
+ Luczaj" <mhal@rbox.co>, "Cong Wang" <cong.wang@bytedance.com>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+In-Reply-To: <20260124061502.24350-4-jiayuan.chen@linux.dev>
+References: <20260124061502.24350-1-jiayuan.chen@linux.dev>
+ <20260124061502.24350-4-jiayuan.chen@linux.dev>
+X-Migadu-Flow: FLOW_OUT
 
---===============0520039389324384177==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+January 24, 2026 at 14:14, "Jiayuan Chen" <jiayuan.chen@linux.dev mailto:=
+jiayuan.chen@linux.dev?to=3D%22Jiayuan%20Chen%22%20%3Cjiayuan.chen%40linu=
+x.dev%3E > wrote:
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> index db121b1404fe..17de8b53a962 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
 
-[ ... ]
-
-> +/*
-> + * For exception boundary & exception_cb progs:
-> + *     return increased size to accommodate additional NVRs.
-> + */
-> +static int bpf_jit_stack_size(struct codegen_context *ctx)
+[...]
+> +
+> +/* it is used to send data to via native stack and BPF redirecting */
+> +static void test_sockmap_multi_channels(int sotype)
 > +{
-> +	return ctx->exception_boundary || ctx->exception_cb ?
-> +					BPF_PPC_EXC_STACKFRAME :
-> +					BPF_PPC_STACKFRAME;
+> + int map, err, sent, recvd, zero =3D 0, one =3D 1, avail =3D 0;
+> + struct test_sockmap_pass_prog *skel =3D NULL;
+> + int c0 =3D -1, p0 =3D -1, c1 =3D -1, p1 =3D -1;
+> + char buf[10] =3D "0123456789", rcv[11];
+> + struct bpf_program *prog;
+> +
+> + skel =3D test_sockmap_pass_prog__open_and_load();
+> + if (!ASSERT_OK_PTR(skel, "open_and_load"))
+> + return;
+> +
+> + err =3D create_socket_pairs(AF_INET, sotype, &c0, &c1, &p0, &p1);
+> + if (err)
+> + goto end;
+> +
+> + prog =3D skel->progs.prog_skb_verdict_ingress;
+> + map =3D bpf_map__fd(skel->maps.sock_map_rx);
+> +
+> + err =3D bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM=
+_VERDICT, 0);
+> + if (!ASSERT_OK(err, "bpf_prog_attach verdict"))
+> + goto end;
+> +
+> + err =3D bpf_map_update_elem(map, &zero, &p0, BPF_ANY);
+> + if (!ASSERT_OK(err, "bpf_map_update_elem(p0)"))
+> + goto end;
+> +
+> + err =3D bpf_map_update_elem(map, &one, &p1, BPF_ANY);
+> + if (!ASSERT_OK(err, "bpf_map_update_elem"))
+> + goto end;
+> +
+> + /* send data to p1 via native stack */
+> + sent =3D xsend(c1, buf, 2, 0);
+> + if (!ASSERT_EQ(sent, 2, "xsend(2)"))
+> + goto end;
+> +
+> + poll_read(p1, IO_TIMEOUT_SEC);
+> + err =3D ioctl(p1, FIONREAD, &avail);
+> + ASSERT_OK(err, "ioctl(FIONREAD) partial call");
+> + ASSERT_EQ(avail, 2, "ioctl(FIONREAD) partial return");
+> +
+> + /* send data to p1 via bpf redirecting */
+> + sent =3D xsend(c0, buf + 2, sizeof(buf) - 2, 0);
+> + if (!ASSERT_EQ(sent, sizeof(buf) - 2, "xsend(remain-data)"))
+> + goto end;
+> +
+> + poll_read(p1, IO_TIMEOUT_SEC);
+
+
+It's a race in the test - poll_read() returns early because the first 2 b=
+ytes are
+already in the queue, but the second send hasn't been processed yet.
+Will fix with a polling wait for FIONREAD.
+
+pw-bot: cr
+
+> + err =3D ioctl(p1, FIONREAD, &avail);
+> + ASSERT_OK(err, "ioctl(FIONREAD) full call");
+> + ASSERT_EQ(avail, sotype =3D=3D SOCK_DGRAM ? 2 : sizeof(buf), "ioctl(F=
+IONREAD) full return");
+> +
+> + recvd =3D recv_timeout(p1, rcv, sizeof(rcv), MSG_DONTWAIT, 1);
+> + if (!ASSERT_EQ(recvd, sizeof(buf), "recv_timeout(p1)") ||
+> + !ASSERT_OK(memcmp(buf, rcv, recvd), "data mismatch"))
+> + goto end;
+> +end:
+> + if (c0 >=3D 0)
+> + close(c0);
+> + if (p0 >=3D 0)
+> + close(p0);
+> + if (c1 >=3D 0)
+> + close(c1);
+> + if (p1 >=3D 0)
+> + close(p1);
+> + test_sockmap_pass_prog__destroy(skel);
 > +}
-
-[ ... ]
-
-> @@ -198,7 +249,19 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
->  			EMIT(PPC_RAW_STD(_R0, _R1, PPC_LR_STKOFF));
->  		}
->
-> -		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_STACKFRAME + ctx->stack_size)));
-> +		EMIT(PPC_RAW_STDU(_R1, _R1,
-> +				-(bpf_jit_stack_size(ctx) + ctx->stack_size)));
-> +	}
-
-[ ... ]
-
-> @@ -248,9 +311,19 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx)
->  		EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
->  				bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
->
-> +	if (ctx->exception_cb) {
-> +		/*
-> +		 * Recover additionally saved non volatile registers from stack
-> +		 * frame of exception boundary program.
-> +		 */
-> +		for (i = _R14; i <= _R25; i++)
-> +			EMIT(PPC_RAW_LD(i, _R1, bpf_jit_stack_offsetof(ctx, i)));
-> +	}
 > +
->  	/* Tear down our stack frame */
->  	if (bpf_has_stack_frame(ctx)) {
-> -		EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME + ctx->stack_size));
-> +		EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_jit_stack_size(ctx) + ctx->stack_size));
-
-For the exception callback case, doesn't this use the wrong stack_size?
-
-In bpf_jit_build_prologue(), the exception callback does not create its own
-frame - it sets R1 to the boundary's frame pointer via EMIT(PPC_RAW_MR(_R1,
-_R5)). However here in the epilogue, the frame teardown uses ctx->stack_size
-which is the callback's stack depth, not the boundary's.
-
-The boundary program creates its frame with:
-    STDU R1, R1, -(bpf_jit_stack_size(boundary_ctx) + boundary_stack_size)
-
-But the callback tears it down with:
-    ADDI R1, R1, bpf_jit_stack_size(callback_ctx) + callback_stack_size
-
-Since each BPF subprogram can have a different stack_depth (set per-subprog
-in kernel/bpf/verifier.c via func[i]->aux->stack_depth), if the exception
-callback has a different stack depth than the boundary, R1 will end up at
-the wrong location after this ADDI.
-
-After the wrong R1 adjustment, the LR restore below loads from R1+16 which
-is now pointing to the wrong memory location, potentially causing a return
-to an invalid address.
-
-Would it be correct to store the boundary's stack_size somewhere accessible
-to the callback, or ensure the callback uses the same stack layout as the
-boundary?
-
+>  void test_sockmap_basic(void)
+>  {
+>  if (test__start_subtest("sockmap create_update_free"))
+> @@ -1108,4 +1363,14 @@ void test_sockmap_basic(void)
+>  test_sockmap_skb_verdict_vsock_poll();
+>  if (test__start_subtest("sockmap vsock unconnected"))
+>  test_sockmap_vsock_unconnected();
+> + if (test__start_subtest("sockmap with zc"))
+> + test_sockmap_zc();
+> + if (test__start_subtest("sockmap recover"))
+> + test_sockmap_copied_seq(false);
+> + if (test__start_subtest("sockmap recover with strp"))
+> + test_sockmap_copied_seq(true);
+> + if (test__start_subtest("sockmap tcp multi channels"))
+> + test_sockmap_multi_channels(SOCK_STREAM);
+> + if (test__start_subtest("sockmap udp multi channels"))
+> + test_sockmap_multi_channels(SOCK_DGRAM);
+>  }
+> diff --git a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c=
+ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
+> index 69aacc96db36..ef9edca184ea 100644
+> --- a/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
+> +++ b/tools/testing/selftests/bpf/progs/test_sockmap_pass_prog.c
+> @@ -44,4 +44,18 @@ int prog_skb_parser(struct __sk_buff *skb)
+>  return SK_PASS;
+>  }
+>=20=20
+>=20+SEC("sk_skb/stream_verdict")
+> +int prog_skb_verdict_ingress(struct __sk_buff *skb)
+> +{
+> + int one =3D 1;
 > +
->  		if (ctx->seen & SEEN_FUNC || ctx->exception_cb) {
->  			EMIT(PPC_RAW_LD(_R0, _R1, PPC_LR_STKOFF));
->  			EMIT(PPC_RAW_MTLR(_R0));
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21311936056
-
---===============0520039389324384177==--
+> + return bpf_sk_redirect_map(skb, &sock_map_rx, one, BPF_F_INGRESS);
+> +}
+> +
+> +SEC("sk_skb/stream_parser")
+> +int prog_skb_verdict_ingress_strp(struct __sk_buff *skb)
+> +{
+> + return skb->len;
+> +}
+> +
+>  char _license[] SEC("license") =3D "GPL";
+> --=20
+>=202.43.0
+>
