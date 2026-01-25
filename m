@@ -1,142 +1,121 @@
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C625023EA88
-	for <bpf@vger.kernel.org>; Sun, 25 Jan 2026 20:37:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15ACA946C;
+	Sun, 25 Jan 2026 21:45:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769373425; cv=none; b=CfKPj8CSnM07lKx5xQUcZi64ja1Oq1m5QvWew45pnSy101I5SJYKzitvwVQTIJrifI8CN3gD0+ho80jMrfyb1a54Uw+qmr2shwnj3y4TO+OZKz2XfsxM/gCb7pt6Z2IFtd/iXnij8T5MA4T4uR6fF+rfuvyLSIJkBlmn5JSd8Q0=
+	t=1769377517; cv=none; b=nOa3pR6nLZJzO7b5NQ4jQDph1G7BmMpyushXdaBMG6sJfRCNiQyL3hjXc3ZX5Ugb1ff2tBMv4273w3yCuNchnSjdoSHn0my2NEETNGmANWHvna+BijnnXma9p+TiH6cN5IaIWqKJO2bO2WOS2eMe5j2IsRTuW1oPu3oZRqF+uBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769373425; c=relaxed/simple;
-	bh=KaPXS/Z/c7D152Q/n61SaHtWw2eblop+3/kEWHmsHuo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=AN0cdCorgMyH4OVll4iaROFvMf2XBpjZ65AyKk+H6kJWRc8afhGN1qfvKx/ehJMkXe81jWpeagGXLCncxSl0A3fpGmmZLPs0/uS6c2FU7AgB9Qr1M0CbBs9B2oEuRHYtPBy25xXnXMJZP6L/Ep06zJsXJyfnlWVQ4BuWXqP2YxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Qw1IPWmY; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1769377517; c=relaxed/simple;
+	bh=4Hs7D0jZtzJiVBb2yTBmS1/1dpXXOED2Kmh7/H708XY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bhCj1BOUOL1AfB6rZaSZVU9e3GFK/XtnUdnWwDlL00byka8cIk0LCBSkRtja3uXjzHTtElpdCwUIJUxOz00+7P6MlQEVITwUmcqL3k91RddzCowp0G87vRwJrIPwPWTMmvTotaJQTKAXhdrP6VY1DDTXz9gUxURk6RGGS+HW2VQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NJJ2I41Y; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Qw1IPWmY"
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-658034ce0e3so6559142a12.3
-        for <bpf@vger.kernel.org>; Sun, 25 Jan 2026 12:37:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1769373422; x=1769978222; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=f6PV7Aw1GuCHemjI6CRSwhEaXuqwDH59s8evm2BBYZE=;
-        b=Qw1IPWmYFB0+6h6ZiIm1fa/iOlZvllRVg2MaAEL9LvX9K/MFR9g6U0XdPt+ryrh9bl
-         lKztIaNpPX4LJ5oDo95onJVbHxbhvaD9uqJjwdE35dax7Ntlfo8OgeACgBEUI07EBUcu
-         d3OzZzEX+mflDNDEBFdJmUZvemHRFn4STY36xFBwteF/8sQ8/AtKA2avzowRW+2NKCzs
-         qpqjCpdmdGYKWNlEO0zhUrQRaIApPpKG6ZeA9ePa2CvkbYdFdL+UOOlDyWxE3uVIGqJW
-         QQXEUS4vfO+OLX0e0VXuP45Je25lMkrcy5qZ6LBCCHTk/93h6/HImBfz35aXNw/qyORU
-         OcXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769373422; x=1769978222;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f6PV7Aw1GuCHemjI6CRSwhEaXuqwDH59s8evm2BBYZE=;
-        b=oGVfqxu0JUqML/OZdMX9B+rtaFf5zVhP/8MmXO3dxIMobYJCbHoc33gaTmvuPXaa1r
-         pNypW+Cwsdj6wT7ZXcTDdVPuUhEl/G1nKfw1burnv39vS0R2/04zDRkDlL1JlMYuy+ZO
-         /eZSkLpH3+TnAZbReqTuY6mOsk7Hx+BHiBvOBKz/Ac7h3mFpUkOK+WRULpgoj3yVnMot
-         lyQjuJJonGIfGCaczcE3pBkw1zLaQFCvtBdjb0GQnc/7FJfqQU+r5fa6IzzHJEg3WI4v
-         g68u5X9c7hK1B5JC/9r1wnE6cb3Q6+GlHBkfgsyTD7LVPRRZJJZ71BujZcVvLH5glUS/
-         Nq3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUp1gP8J9or/kU/Xwc5k0BQoO3ENSK9jADV0HyL6F4Cn8uIIjHKjTGk5+spxuJ4Rb3qkcs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuyfNwSiJh8Au63kpeadiqFObkP4+RFLg1y1FPnKQH3c3mZOlU
-	sfC/6q4NwFy8XuKnHN6csmE3d9uzkSpwd/0Ga9xeG9/Cy7rMA2nphDGSj3xO4wzLRwI=
-X-Gm-Gg: AZuq6aKAv0srv7YvfTBpO7dTrsFJpLIHTK8IHrXDj6gbEICiU3HwjC8tl+sfGd4Gvvq
-	gXjNQMnZpL1ebh0fEf6xpYRTJghsrvktHLQd5tZZyWbcWI3aWHGXxQF9O+KYRGIpLdZhrOCd0p/
-	d9SJV3jlEtj0lCDiIDn5HJE0FZCDQH8DzAsmoQXzjlVq02+Sen53E9PZMKTzWYqtu44RWmuaB4c
-	V91Fi59+Vh/342UauxPt2NTiNHJTClBwgmvlHHG/FEEm4ayRpdrpqFi1MR/zH88pCC4Z4upUfzI
-	yhiqZEdytjG+t01Tf3dbmVs3kRlhyyv6uq6RJUZTQuyTd9PNCmxXkxLRNtpaIhrSIGS1unyZLV8
-	mVia17D5N6CFNqC2uJ11YjfG/fRt7yquYYZnQY0odL99hXS3jpooRcWveTNHcSb2Z0kai9UBXbN
-	A3j8U=
-X-Received: by 2002:a17:907:9710:b0:b87:206a:a241 with SMTP id a640c23a62f3a-b8cfedfc951mr173619466b.11.1769373421994;
-        Sun, 25 Jan 2026 12:37:01 -0800 (PST)
-Received: from cloudflare.com ([2a09:bac5:5063:2432::39b:b1])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b885b6fc4d7sm507309066b.45.2026.01.25.12.37.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jan 2026 12:37:01 -0800 (PST)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>,  John Fastabend <john.fastabend@gmail.com>,
-  Andrii Nakryiko <andrii@kernel.org>,  Eduard Zingerman
- <eddyz87@gmail.com>,  Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>,  KP Singh <kpsingh@kernel.org>,  Stanislav
- Fomichev <sdf@fomichev.me>,  Hao Luo <haoluo@google.com>,  Jiri Olsa
- <jolsa@kernel.org>,  Amery Hung <ameryhung@gmail.com>,
-  netdev@vger.kernel.org,  kernel-team@cloudflare.com,
-  ihor.solodrai@linux.dev,  bpf@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 1/4] bpf, verifier: Support direct helper
- calls from prologue/epilogue
-In-Reply-To: <bbbf1b30-dfc9-4206-9285-0ce96e934e54@linux.dev> (Martin KaFai
-	Lau's message of "Fri, 23 Jan 2026 15:49:34 -0800")
-References: <20260123-skb-meta-bpf-emit-call-from-prologue-v2-0-0e50db4d4663@cloudflare.com>
-	<20260123-skb-meta-bpf-emit-call-from-prologue-v2-1-0e50db4d4663@cloudflare.com>
-	<bbbf1b30-dfc9-4206-9285-0ce96e934e54@linux.dev>
-Date: Sun, 25 Jan 2026 21:37:00 +0100
-Message-ID: <874io9tonn.fsf@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NJJ2I41Y"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF658C4CEF1;
+	Sun, 25 Jan 2026 21:45:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769377516;
+	bh=4Hs7D0jZtzJiVBb2yTBmS1/1dpXXOED2Kmh7/H708XY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=NJJ2I41Y4BI5+qnS++v44VnEqj0Ah43Yehhnp2aZGhb/q7yC3Gjmn+ui80/Y1jvkO
+	 PZvjFr2tsv5lH8bCKrhfUQUb/I/JrxnufSO/Utx2Sj/+PxEDw03lPQ+Y4QY9pnHrb8
+	 0IN5SZB17WrcHmFZeEgoqmmh9gS1g3GSVtn5Vy1P2giwHbfuRL7xFYXEUK4zPFh2YP
+	 crbTSxVUP/4X9tWBv/F+m1TaocZtIHTRUaieVftR/FU0tGcRd87NFrwsUycFTS55Lf
+	 GOhpNWXXzP+eO9suspQQosDfo86R3H4XBaxLtpVTVCdczJ2VTXKlV5zotVDswo5dLD
+	 auamaCz6PoCuQ==
+From: Jakub Kicinski <kuba@kernel.org>
+To: wei.fang@nxp.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	john.fastabend@gmail.com,
+	linux-kernel@vger.kernel.org,
+	shenwei.wang@nxp.com,
+	daniel@iogearbox.net,
+	frank.li@nxp.com,
+	netdev@vger.kernel.org,
+	xiaoning.wang@nxp.com,
+	ast@kernel.org,
+	sdf@fomichev.me,
+	imx@lists.linux.dev,
+	davem@davemloft.net,
+	edumazet@google.com,
+	hawk@kernel.org,
+	bpf@vger.kernel.org,
+	pabeni@redhat.com,
+	andrew+netdev@lunn.ch
+Subject: Re: [v4,net-next,06/15] net: fec: add fec_enet_rx_queue_xdp() for XDP path
+Date: Sun, 25 Jan 2026 13:44:46 -0800
+Message-ID: <20260125214446.3383999-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260123022143.4121797-7-wei.fang@nxp.com>
+References: <20260123022143.4121797-7-wei.fang@nxp.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 23, 2026 at 03:49 PM -08, Martin KaFai Lau wrote:
-> On 1/23/26 9:05 AM, Jakub Sitnicki wrote:
->> @@ -23909,6 +23928,9 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
->>   			goto next_insn;
->>   		}
->>   patch_call_imm:
->> +		if (env->insn_aux_data[i + delta].finalized_call)
->> +			goto next_insn;
->> +
->>   		fn = env->ops->get_func_proto(insn->imm, env->prog);
->>   		/* all functions that have prototype and verifier allowed
->>   		 * programs to call them, must be real in-kernel functions
->> @@ -23920,6 +23942,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
->>   			return -EFAULT;
->>   		}
->>   		insn->imm = fn->func - __bpf_call_base;
->> +		env->insn_aux_data[i + delta].finalized_call = true;
->>   next_insn:
->>   		if (subprogs[cur_subprog + 1].start == i + delta + 1) {
->>   			subprogs[cur_subprog].stack_depth += stack_depth_extra;
->> diff --git a/net/core/filter.c b/net/core/filter.c
->> index d14401193b01..cb39388f69a9 100644
->> --- a/net/core/filter.c
->> +++ b/net/core/filter.c
->> @@ -9082,8 +9082,7 @@ static int bpf_unclone_prologue(struct bpf_insn *insn_buf, bool direct_write,
->>   	/* ret = bpf_skb_pull_data(skb, 0); */
->>   	*insn++ = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
->>   	*insn++ = BPF_ALU64_REG(BPF_XOR, BPF_REG_2, BPF_REG_2);
->> -	*insn++ = BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
->> -			       BPF_FUNC_skb_pull_data);
->> +	*insn++ = BPF_EMIT_CALL(bpf_skb_pull_data);
->
-> Ihor reported that the test_map has started failing on arm64.
->
-> https://github.com/kernel-patches/bpf/actions/runs/21298510237/job/61311053284
-> https://github.com/kernel-patches/bpf/actions/runs/21298505282/job/61312363930
-> https://github.com/kernel-patches/bpf/actions/runs/21301695907/job/61321375157
->
-> For BPF_PROG_TYPE_SK_SKB, the BPF_FUNC_skb_pull_data has a different
-> func_proto. It is sk_skb_pull_data instead of bpf_skb_pull_data.
-> A different func needs to be emitted here based on prog type.
-> Not sure why it only fails on arm64.
->
-> The set has been reverted to get the CI going.
-> Please address the issue, add a test for this case, and
-> then respin. Thanks.
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
 
-Sorry for this oversight.
+For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+---
+net: fec: add fec_enet_rx_queue_xdp() for XDP path
 
-I see now that sk_skb_pull_data doesn't bpf_compute_data_pointers which
-writes over skb->cb. Perhaps that has something to do with the failure.
+This commit separates XDP path packet processing from protocol stack
+packet processing by adding a new fec_enet_rx_queue_xdp() function.
+The goal is to optimize XDP path logic and improve XDP performance.
 
-Will get this sorted.
+> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+> index 0529dc91c981..86447a7cb963 100644
+> --- a/drivers/net/ethernet/freescale/fec_main.c
+> +++ b/drivers/net/ethernet/freescale/fec_main.c
 
-Expect some delay. This is a pre-conferece week (FOSDEM).
+[ ... ]
+
+> +static int fec_enet_rx_queue_xdp(struct fec_enet_private *fep, int queue,
+> +				 int budget, struct bpf_prog *prog)
+> +{
+
+[ ... ]
+
+> +		switch (act) {
+> +		case XDP_PASS:
+> +			rxq->stats[RX_XDP_PASS]++;
+> +			/* The packet length includes FCS, but we don't want to
+> +			 * include that when passing upstream as it messes up
+> +			 * bridging applications.
+> +			 */
+> +			skb = fec_build_skb(fep, rxq, bdp, page, pkt_len);
+> +			if (!skb) {
+> +				fec_xdp_drop(rxq, &xdp, sync);
+> +				trace_xdp_exception(ndev, prog, XDP_PASS);
+> +			} else {
+> +				napi_gro_receive(&fep->napi, skb);
+> +			}
+> +			break;
+
+On platforms with FEC_QUIRK_SWAP_FRAME (like i.MX28), the old code path
+would call swap_buffer() after XDP_PASS before building the skb. In the
+old fec_enet_rx_queue(), the flow was:
+
+    fec_enet_run_xdp() returns FEC_ENET_XDP_PASS
+    -> if (ret != FEC_ENET_XDP_PASS) goto done; // continues
+    -> if (need_swap) swap_buffer(data, pkt_len);
+    -> fec_build_skb()
+
+With this change, XDP_PASS goes directly to fec_build_skb() without
+calling swap_buffer(). Does this break XDP_PASS on i.MX28 where the DMA
+delivers data in wrong byte order? On such platforms, packets passed to
+the network stack would have incorrect byte order, causing protocol
+parsing failures.
+
+The commit message says "XDP path does not support swap_buffer()" but the
+previous code did support it for XDP_PASS - the swap happened after the
+XDP program returned PASS but before the packet was handed to the stack.
+-- 
+pw-bot: cr
