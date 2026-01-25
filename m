@@ -1,87 +1,82 @@
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94B8C2F3612
-	for <bpf@vger.kernel.org>; Sun, 25 Jan 2026 19:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C625023EA88
+	for <bpf@vger.kernel.org>; Sun, 25 Jan 2026 20:37:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769368516; cv=none; b=VRtIVrpd05NTh9Dbl6hMYEf1bAr67nXyPjz8CpmYbee2yxFt0TgQaAwN66RNw6Z5Bc54PoeIMXjWeuS9lNUw9Ppqekx6VEVbK15TBxT9qp5TNNjEcdnLyfsTXkVw6gWOH6J6+SvEs+Ppo+qQWWQP47q6z9LkdPJ1s06F59EdqL8=
+	t=1769373425; cv=none; b=CfKPj8CSnM07lKx5xQUcZi64ja1Oq1m5QvWew45pnSy101I5SJYKzitvwVQTIJrifI8CN3gD0+ho80jMrfyb1a54Uw+qmr2shwnj3y4TO+OZKz2XfsxM/gCb7pt6Z2IFtd/iXnij8T5MA4T4uR6fF+rfuvyLSIJkBlmn5JSd8Q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769368516; c=relaxed/simple;
-	bh=UaFiLGY06az2o1UrEU9VzuHGzBsf5ccZhhq1L8W6OO8=;
+	s=arc-20240116; t=1769373425; c=relaxed/simple;
+	bh=KaPXS/Z/c7D152Q/n61SaHtWw2eblop+3/kEWHmsHuo=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=IUVUgcS0ceIlNBnoCENk8EF1nEuL4u4d6oRaYNhTwKzIDz3UwJT0EaXigPFQfpaTEqGCJQvEcbS8CbwME/eCYNNL5kUV/3ptxLUN3nLLPQI9bDqBbYA+7Mc3tgkWnp04rAPlFcpvBX896uQxSwi0L5q9b8j7M08n7WRPpSwJ94M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=bNEOW6Sq; arc=none smtp.client-ip=209.85.218.49
+	 MIME-Version:Content-Type; b=AN0cdCorgMyH4OVll4iaROFvMf2XBpjZ65AyKk+H6kJWRc8afhGN1qfvKx/ehJMkXe81jWpeagGXLCncxSl0A3fpGmmZLPs0/uS6c2FU7AgB9Qr1M0CbBs9B2oEuRHYtPBy25xXnXMJZP6L/Ep06zJsXJyfnlWVQ4BuWXqP2YxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Qw1IPWmY; arc=none smtp.client-ip=209.85.208.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="bNEOW6Sq"
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b8871718b05so316368366b.2
-        for <bpf@vger.kernel.org>; Sun, 25 Jan 2026 11:15:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Qw1IPWmY"
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-658034ce0e3so6559142a12.3
+        for <bpf@vger.kernel.org>; Sun, 25 Jan 2026 12:37:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1769368513; x=1769973313; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1769373422; x=1769978222; darn=vger.kernel.org;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UaFiLGY06az2o1UrEU9VzuHGzBsf5ccZhhq1L8W6OO8=;
-        b=bNEOW6SqIW4z4rSTU5lnCtnQJ/VUy2Za4PDQOTpVhD/4kvGocIsBSvtcRZUykt8HNe
-         lf9RgQUiGfABnfVawmSaXXHtvHwFNuL9qZkIBbyjalKrVxcHKI7C0jfdeaXVkeoCZdvH
-         pfLfMy+DuSp43rQ614YJn2FNB8HWVziu1Z2pg0AOBdSuNPjJ8QAacWrJuafaZL0de/R3
-         OOiG55Hsp0d7YUsyATJRrGqUzEG9bdtmb7SxScg4iKPCV1IquZG/c7wM2gfqg3SW9zxR
-         HBqRpj8E9diSsNwY8/zIjAhr3WFRCYzrk3Ha6G+F/p1G+klMi/FU5/Uf1JSr0b/eqksh
-         Ts7Q==
+        bh=f6PV7Aw1GuCHemjI6CRSwhEaXuqwDH59s8evm2BBYZE=;
+        b=Qw1IPWmYFB0+6h6ZiIm1fa/iOlZvllRVg2MaAEL9LvX9K/MFR9g6U0XdPt+ryrh9bl
+         lKztIaNpPX4LJ5oDo95onJVbHxbhvaD9uqJjwdE35dax7Ntlfo8OgeACgBEUI07EBUcu
+         d3OzZzEX+mflDNDEBFdJmUZvemHRFn4STY36xFBwteF/8sQ8/AtKA2avzowRW+2NKCzs
+         qpqjCpdmdGYKWNlEO0zhUrQRaIApPpKG6ZeA9ePa2CvkbYdFdL+UOOlDyWxE3uVIGqJW
+         QQXEUS4vfO+OLX0e0VXuP45Je25lMkrcy5qZ6LBCCHTk/93h6/HImBfz35aXNw/qyORU
+         OcXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769368513; x=1769973313;
+        d=1e100.net; s=20230601; t=1769373422; x=1769978222;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UaFiLGY06az2o1UrEU9VzuHGzBsf5ccZhhq1L8W6OO8=;
-        b=JliQc9eokcztrf6aQ5f29dZ5JcGWR/FKYq+qsuS2wNSN0Ew54TdYgvMO2mLC7rM9zr
-         +B8t89LSrmc6FoQedagtmuKibltEgugGuRJCjnKcDvw0as5W0yhiZHhBiEAf+L5Y9N0W
-         FsvC4tA/kejuf6naCDf2OKsdjec3bKjRGDLOPb6OgALpd6c5x6PPf7Tk5CH89bTQzleQ
-         /95BfulI9W+uuu5HGENxgmAcrIhfPNA2Y259jFsA5ODGR59yjE12+M4wNV8ks3k0P4CN
-         UGHFMqH+FioL02Y108F3JM5u6QDJWYYwniDNW/Td8qJpQOO8uNf0Tysejs1vcdhxAhnI
-         ndRw==
-X-Forwarded-Encrypted: i=1; AJvYcCWVscZDm0Z2Yf/4vJiXF2F3p7FSr/4ev90tsW6NiOhcEJhNaGsXvJrlk4O0ssvxmac2xGM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydgrrbH8p/1Qc7vyvoH54dtc9zPAhYT/muA2u8Q8iFl62y/DW+
-	Wp66rf4hTZNBOyyphzgW+T3wlDB5/PRp9X+DiSlLe7zUEPZE5OBP7uwWKKqN3tDR+OA=
-X-Gm-Gg: AZuq6aIEcUVQ38H7zWDR6aBGckT2DnT6tyeuMtuiwycjofUmjZ53FmgBOvZBdXptDRu
-	t96BMaj1cwkfzEI6vx6Lx1+0jE6qVoBYz7GFqubNeXkRCX9ia0UhP0qotjr6+qfjnAuf7Xm9mpj
-	N16Jy+FiEfHJbDbGX0wDUlNZ3nwl2awHl+GNLLs6VcNKzJqIDKuJoST1RcQSbNZfF6Sl/mXM4qF
-	ylzlyTMwbuKbitVd84vfWlJ9XES8Pfi0LEM3+MrCsQMvZM9PugpbtO7VhBMw5BEnDCHxsb0C2ez
-	gv4X0X4tgeGZcDUHWr9A02Cav67trnGKE/OjIolsKUSSABRehlG+zdq2ugWFxio1Uz1UkDyugQV
-	8/E7g8MQ/qDUhjQSNisQqXDZgJPUYT7KdzbDtYBtmKx0XkX82nbvus7PrNavH2w7BfZWeM2cJkl
-	5qOPM=
-X-Received: by 2002:a17:907:96a9:b0:b88:60d2:11b8 with SMTP id a640c23a62f3a-b8d0a83048dmr155054466b.4.1769368512869;
-        Sun, 25 Jan 2026 11:15:12 -0800 (PST)
+        bh=f6PV7Aw1GuCHemjI6CRSwhEaXuqwDH59s8evm2BBYZE=;
+        b=oGVfqxu0JUqML/OZdMX9B+rtaFf5zVhP/8MmXO3dxIMobYJCbHoc33gaTmvuPXaa1r
+         pNypW+Cwsdj6wT7ZXcTDdVPuUhEl/G1nKfw1burnv39vS0R2/04zDRkDlL1JlMYuy+ZO
+         /eZSkLpH3+TnAZbReqTuY6mOsk7Hx+BHiBvOBKz/Ac7h3mFpUkOK+WRULpgoj3yVnMot
+         lyQjuJJonGIfGCaczcE3pBkw1zLaQFCvtBdjb0GQnc/7FJfqQU+r5fa6IzzHJEg3WI4v
+         g68u5X9c7hK1B5JC/9r1wnE6cb3Q6+GlHBkfgsyTD7LVPRRZJJZ71BujZcVvLH5glUS/
+         Nq3w==
+X-Forwarded-Encrypted: i=1; AJvYcCUp1gP8J9or/kU/Xwc5k0BQoO3ENSK9jADV0HyL6F4Cn8uIIjHKjTGk5+spxuJ4Rb3qkcs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuyfNwSiJh8Au63kpeadiqFObkP4+RFLg1y1FPnKQH3c3mZOlU
+	sfC/6q4NwFy8XuKnHN6csmE3d9uzkSpwd/0Ga9xeG9/Cy7rMA2nphDGSj3xO4wzLRwI=
+X-Gm-Gg: AZuq6aKAv0srv7YvfTBpO7dTrsFJpLIHTK8IHrXDj6gbEICiU3HwjC8tl+sfGd4Gvvq
+	gXjNQMnZpL1ebh0fEf6xpYRTJghsrvktHLQd5tZZyWbcWI3aWHGXxQF9O+KYRGIpLdZhrOCd0p/
+	d9SJV3jlEtj0lCDiIDn5HJE0FZCDQH8DzAsmoQXzjlVq02+Sen53E9PZMKTzWYqtu44RWmuaB4c
+	V91Fi59+Vh/342UauxPt2NTiNHJTClBwgmvlHHG/FEEm4ayRpdrpqFi1MR/zH88pCC4Z4upUfzI
+	yhiqZEdytjG+t01Tf3dbmVs3kRlhyyv6uq6RJUZTQuyTd9PNCmxXkxLRNtpaIhrSIGS1unyZLV8
+	mVia17D5N6CFNqC2uJ11YjfG/fRt7yquYYZnQY0odL99hXS3jpooRcWveTNHcSb2Z0kai9UBXbN
+	A3j8U=
+X-Received: by 2002:a17:907:9710:b0:b87:206a:a241 with SMTP id a640c23a62f3a-b8cfedfc951mr173619466b.11.1769373421994;
+        Sun, 25 Jan 2026 12:37:01 -0800 (PST)
 Received: from cloudflare.com ([2a09:bac5:5063:2432::39b:b1])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b885b75d669sm494078966b.51.2026.01.25.11.15.11
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b885b6fc4d7sm507309066b.45.2026.01.25.12.37.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 25 Jan 2026 11:15:12 -0800 (PST)
+        Sun, 25 Jan 2026 12:37:01 -0800 (PST)
 From: Jakub Sitnicki <jakub@cloudflare.com>
 To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: netdev@vger.kernel.org,  "David S. Miller" <davem@davemloft.net>,  Eric
- Dumazet <edumazet@google.com>,  Paolo Abeni <pabeni@redhat.com>,  Simon
- Horman <horms@kernel.org>,  Michael Chan <michael.chan@broadcom.com>,
-  Pavan Chebbi <pavan.chebbi@broadcom.com>,  Andrew Lunn
- <andrew+netdev@lunn.ch>,  Tony Nguyen <anthony.l.nguyen@intel.com>,
-  Przemek Kitszel <przemyslaw.kitszel@intel.com>,  Saeed Mahameed
- <saeedm@nvidia.com>,  Leon Romanovsky <leon@kernel.org>,  Tariq Toukan
- <tariqt@nvidia.com>,  Mark Bloch <mbloch@nvidia.com>,  Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Jesper
- Dangaard Brouer <hawk@kernel.org>,  John Fastabend
- <john.fastabend@gmail.com>,  Stanislav Fomichev <sdf@fomichev.me>,
-  intel-wired-lan@lists.osuosl.org,  bpf@vger.kernel.org,
-  kernel-team@cloudflare.com,  Jakub Kicinski <kuba@kernel.org>,  Amery
- Hung <ameryhung@gmail.com>
-Subject: Re: [PATCH net-next 00/10] Call skb_metadata_set when skb->data
- points past metadata
-In-Reply-To: <ad835a9b-e544-48d3-b6e2-ffe172fcfa6d@linux.dev> (Martin KaFai
-	Lau's message of "Thu, 22 Jan 2026 12:21:21 -0800")
-References: <20260110-skb-meta-fixup-skb_metadata_set-calls-v1-0-1047878ed1b0@cloudflare.com>
-	<20260112190856.3ff91f8d@kernel.org> <87bjixwv41.fsf@cloudflare.com>
-	<ad835a9b-e544-48d3-b6e2-ffe172fcfa6d@linux.dev>
-Date: Sun, 25 Jan 2026 20:15:11 +0100
-Message-ID: <878qdltsg0.fsf@cloudflare.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
+ <daniel@iogearbox.net>,  John Fastabend <john.fastabend@gmail.com>,
+  Andrii Nakryiko <andrii@kernel.org>,  Eduard Zingerman
+ <eddyz87@gmail.com>,  Song Liu <song@kernel.org>,  Yonghong Song
+ <yonghong.song@linux.dev>,  KP Singh <kpsingh@kernel.org>,  Stanislav
+ Fomichev <sdf@fomichev.me>,  Hao Luo <haoluo@google.com>,  Jiri Olsa
+ <jolsa@kernel.org>,  Amery Hung <ameryhung@gmail.com>,
+  netdev@vger.kernel.org,  kernel-team@cloudflare.com,
+  ihor.solodrai@linux.dev,  bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 1/4] bpf, verifier: Support direct helper
+ calls from prologue/epilogue
+In-Reply-To: <bbbf1b30-dfc9-4206-9285-0ce96e934e54@linux.dev> (Martin KaFai
+	Lau's message of "Fri, 23 Jan 2026 15:49:34 -0800")
+References: <20260123-skb-meta-bpf-emit-call-from-prologue-v2-0-0e50db4d4663@cloudflare.com>
+	<20260123-skb-meta-bpf-emit-call-from-prologue-v2-1-0e50db4d4663@cloudflare.com>
+	<bbbf1b30-dfc9-4206-9285-0ce96e934e54@linux.dev>
+Date: Sun, 25 Jan 2026 21:37:00 +0100
+Message-ID: <874io9tonn.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,49 +85,58 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
-On Thu, Jan 22, 2026 at 12:21 PM -08, Martin KaFai Lau wrote:
-> On 1/13/26 4:33 AM, Jakub Sitnicki wrote:
->> Good point. I'm hoping we don't have to allocate from
->> skb_metadata_set(), which does sound prohibitively expensive. Instead
->> we'd allocate the extension together with the skb if we know upfront
->> that metadata will be used.
+On Fri, Jan 23, 2026 at 03:49 PM -08, Martin KaFai Lau wrote:
+> On 1/23/26 9:05 AM, Jakub Sitnicki wrote:
+>> @@ -23909,6 +23928,9 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+>>   			goto next_insn;
+>>   		}
+>>   patch_call_imm:
+>> +		if (env->insn_aux_data[i + delta].finalized_call)
+>> +			goto next_insn;
+>> +
+>>   		fn = env->ops->get_func_proto(insn->imm, env->prog);
+>>   		/* all functions that have prototype and verifier allowed
+>>   		 * programs to call them, must be real in-kernel functions
+>> @@ -23920,6 +23942,7 @@ static int do_misc_fixups(struct bpf_verifier_env *env)
+>>   			return -EFAULT;
+>>   		}
+>>   		insn->imm = fn->func - __bpf_call_base;
+>> +		env->insn_aux_data[i + delta].finalized_call = true;
+>>   next_insn:
+>>   		if (subprogs[cur_subprog + 1].start == i + delta + 1) {
+>>   			subprogs[cur_subprog].stack_depth += stack_depth_extra;
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index d14401193b01..cb39388f69a9 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>> @@ -9082,8 +9082,7 @@ static int bpf_unclone_prologue(struct bpf_insn *insn_buf, bool direct_write,
+>>   	/* ret = bpf_skb_pull_data(skb, 0); */
+>>   	*insn++ = BPF_MOV64_REG(BPF_REG_6, BPF_REG_1);
+>>   	*insn++ = BPF_ALU64_REG(BPF_XOR, BPF_REG_2, BPF_REG_2);
+>> -	*insn++ = BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
+>> -			       BPF_FUNC_skb_pull_data);
+>> +	*insn++ = BPF_EMIT_CALL(bpf_skb_pull_data);
 >
-> [ Sorry for being late. Have been catching up after holidays. ]
+> Ihor reported that the test_map has started failing on arm64.
 >
-> For the sk local storage (which was mentioned in other replies as making skb
-> metadata to look more like sk local storage), there is a plan (Amery has been
-> looking into it) to allocate the storage together with sk for performance
-> reason. This means allocating a larger 'struct sock'. The extra space will be at
-> the front of sk instead of the end of sk because of how the 'struct sock' is
-> embedded in tcp_sock/udp_sock/... If skb is going in the same direction, it
-> should be useful to have a similar scheme on: upfront allocation and then shared
-> by multiple BPF progs.
+> https://github.com/kernel-patches/bpf/actions/runs/21298510237/job/61311053284
+> https://github.com/kernel-patches/bpf/actions/runs/21298505282/job/61312363930
+> https://github.com/kernel-patches/bpf/actions/runs/21301695907/job/61321375157
 >
-> The current thinking is to built upon the existing bpf_sk_local_storage usage. A
-> boot param decides how much BPF space should be allocated for 'struct
-> sock'. When a bpf_sk_storage_map is created (with a new use_reserve flag), the
-> space will be allocated permanently from the head space of every sk for this
-> map. The read (from a BPF prog) will be at one stable offset before a sk. If
-> there is no more head space left, the map creation will fail. User can decide if
-> it wants to retry without the 'use_reserve' flag.
+> For BPF_PROG_TYPE_SK_SKB, the BPF_FUNC_skb_pull_data has a different
+> func_proto. It is sk_skb_pull_data instead of bpf_skb_pull_data.
+> A different func needs to be emitted here based on prog type.
+> Not sure why it only fails on arm64.
+>
+> The set has been reverted to get the CI going.
+> Please address the issue, add a test for this case, and
+> then respin. Thanks.
 
-Thanks for sharing the plans.
+Sorry for this oversight.
 
-We will definitely be looking into ways of eliminating allocations in
-the long run. With one allocation for skb_ext, one for
-bpf_local_storage, and one for the actual map, it seems unlikely we will
-be able to attach metadata this way to every packet. Which is something
-we wanted for our "label packet once, use label everywhere" use case.
+I see now that sk_skb_pull_data doesn't bpf_compute_data_pointers which
+writes over skb->cb. Perhaps that has something to do with the failure.
 
-I'm not sure how much we can squeeze in together with the sk_buff.
-Hopefully at least skb_ext plus a pointer to bpf_local_storage.
+Will get this sorted.
 
-I'm also hoping we can allocate memory for bpf_local_storage together
-with the backing space for the map, which update triggers the skb
-extension activation.
-
-Finally, bpf_local_storage itself has a pretty generous cache which
-blows it up. Maybe the cache could be a flexible array, which could be
-smaller for skb local storage.
-
-All just ideas ATM. Initial RFC won't have any of these optimizations.
+Expect some delay. This is a pre-conferece week (FOSDEM).
