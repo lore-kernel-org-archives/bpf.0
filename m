@@ -1,46 +1,35 @@
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992F12741A0;
-	Sun, 25 Jan 2026 13:54:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220C1185E4A;
+	Sun, 25 Jan 2026 16:40:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769349283; cv=none; b=Y/A7bbJJDl8Pg5vhf2CoR9vj571rg/fssj1t3L+BCHNuuqMIkYcsy/YvODrV78AA0D7fVsa0oUhg9NafhqSrYPgmX16yMtPupBOClNt2vAwp5WCQlOzl2I1UYTiPBQWcXdcAoWPhR9Krn6EvR57UlRogXREpe53ATSjOVisjwdM=
+	t=1769359213; cv=none; b=hgRRHm1Dqk3ToPKLjMkIY89jsyz8s5Vx3tekKYaZQ2mgIgbcOWNh/+Wc5n/k1cuxskGXqrX2GgOX7Fseu0h8GbvZyWAUAMwd/u/oy3gpls6gyoAw8gKwYvDyOVcYa5mb0wKWXSky0jzPL6KSz9rR36ZYp/DYdj/R1LJv4HounTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769349283; c=relaxed/simple;
-	bh=zcROzgu/7aDchbNG5QLNl5UGJBX13jos71p+rtTOFOU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Jp0nnqeJj39hLNJl0fr+jJgW06vXQRu/Z8MzUHTtnKoCYrM5FoYBWq9WRKvvQpMRaj9OCa58LkH5F/ZmnP/y1A550e3wTK+uOdSqlhoHh+DqVqLlkKVfMFlyzh+sGJrp+lPtyg9qlZ8SKGG1mRQc04g0oNSs16QV8hZmGcX70ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn; spf=pass smtp.mailfrom=isrc.iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=isrc.iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isrc.iscas.ac.cn
-Received: from localhost.localdomain (unknown [36.112.3.223])
-	by APP-03 (Coremail) with SMTP id rQCowAAnDOOFIHZp7ZOsBg--.946S2;
-	Sun, 25 Jan 2026 21:54:13 +0800 (CST)
-From: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	andrew+netdev@lunn.ch,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com,
-	boon.leong.ong@intel.com
-Cc: netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>,
-	stable@vger.kernel.org
-Subject: [PATCH] fix a potential memory leak in stmmac_xdp_enable_pool()
-Date: Sun, 25 Jan 2026 21:54:12 +0800
-Message-Id: <20260125135412.2070798-1-lihaoxiang@isrc.iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1769359213; c=relaxed/simple;
+	bh=ztkJkvxbbBlJoVNZzef1/Cknb9VB0P+lMZABO+II6BU=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ijF0Id40ygGlc0tFo6fbJZjd17cdLu5ru/7SO6a5oTT/PeXqNXZ8kWT2yo5fOcIz3EV37KEcPttLzsrxlz6c+mG/f5HWnES/0bLLPsqGW/8OWRO3whTBLmzfs+yyl6ts+Lq8gbijWAr9PSZtiKJyLm773zSU523gfYMOE3u+MXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HNzULG8F; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HNzULG8F"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5222C4CEF1;
+	Sun, 25 Jan 2026 16:40:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769359212;
+	bh=ztkJkvxbbBlJoVNZzef1/Cknb9VB0P+lMZABO+II6BU=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=HNzULG8Ftdbp6g+y6RjYe0s4FJHsr/9fXa28rSvZv0BNn7MuH0jGze7PAA4yOOgcw
+	 7EV+k4DwVFzECf0qM1A5ty16zApXf5cF74AuBOZtZn0lbm4SaTGF9PjTPP8HnElH5V
+	 yG7qPIC24Fte5NbT09ChXO/qp9DEkAGNGLu20lvv5wtB9R6PCqu9+3A/+sCXTLsiRT
+	 YMZRKCWh5pIlpddp+vRTq1S9Ko+yEqoa4MxbA0DuzPvx6XIBJJtmmW876Jr4LcS1Q5
+	 wekzTmVv32cXpYMezq4VtCyQkMLTokXq7e5xnaK8Xl/Z2r8BhyBIu42sD9cYPlDknd
+	 nmNy7+Mxg/HFQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C8BE83809A0D;
+	Sun, 25 Jan 2026 16:40:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,52 +37,50 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowAAnDOOFIHZp7ZOsBg--.946S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF43Xw4kWFWUJrWkAr4ruFg_yoWDZFX_Ka
-	12vrnxXa15JF4jkw45Gr43ZryI9F1kur1v9F42va9xCFZYgFZxXFZ8ur95AF13W34rZFyD
-	Gws7A34xA347tjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUb3xFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-	Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr
-	1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-	jxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-	1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
-	n2IY04v7MxkF7I0En4kS14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-	AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-	17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-	IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4l
-	IxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvf
-	C2KfnxnUUI43ZEXa7sRRKZX5UUUUU==
-X-CM-SenderInfo: 5olkt0x0ld0ww6lv2u4olvutnvoduhdfq/1tbiCRASE2l1qZiRLwAAsL
+Subject: Re: [PATCH bpf-next v3 0/2] selftests/bpf: Introduce execution
+ context
+ detection helpers
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176935920760.3538157.15856817944846369498.git-patchwork-notify@kernel.org>
+Date: Sun, 25 Jan 2026 16:40:07 +0000
+References: <20260125115413.117502-1-changwoo@igalia.com>
+In-Reply-To: <20260125115413.117502-1-changwoo@igalia.com>
+To: Changwoo Min <changwoo@igalia.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ kernel-dev@igalia.com, bpf@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-In stmmac_xdp_enable_pool(), if stmmac_xsk_wakeup() fails,
-the memory allocated by xsk_pool_dma_map() should be released.
-Add xsk_pool_dma_unmap() to do so.
+Hello:
 
-Fixes: bba2556efad6 ("net: stmmac: Enable RX via AF_XDP zero-copy")
-Cc: stable@vger.kernel.org
-Signed-off-by: Haoxiang Li <lihaoxiang@isrc.iscas.ac.cn>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-index d7e4db7224b0..7d89d6066ea3 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-@@ -48,8 +48,10 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *priv,
- 		napi_enable(&ch->rxtx_napi);
- 
- 		err = stmmac_xsk_wakeup(priv->dev, queue, XDP_WAKEUP_RX);
--		if (err)
-+		if (err) {
-+			xsk_pool_dma_unmap(pool, STMMAC_RX_DMA_ATTR);
- 			return err;
-+		}
- 	}
- 
- 	return 0;
+On Sun, 25 Jan 2026 20:54:11 +0900 you wrote:
+> This series introduces four new BPF-native inline helpers -- bpf_in_nmi(),
+> bpf_in_hardirq(), bpf_in_serving_softirq(), and bpf_in_task() -- to allow
+> BPF programs to query the current execution context.
+> 
+> Following the feedback on v1, these are implemented in bpf_experimental.h
+> as inline helpers wrapping get_preempt_count(). This approach allows the
+> logic to be JIT-inlined for better performance compared to a kfunc call,
+> while providing the granular context detection (e.g., hardirq vs. softirq)
+> required by subsystems like sched_ext.
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf-next,v3,1/2] selftests/bpf: Introduce execution context detection helpers
+    https://git.kernel.org/bpf/bpf-next/c/c31df36bd26a
+  - [bpf-next,v3,2/2] selftests/bpf: Add tests for execution context helpers
+    https://git.kernel.org/bpf/bpf-next/c/221b5e76c1c6
+
+You are awesome, thank you!
 -- 
-2.25.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
