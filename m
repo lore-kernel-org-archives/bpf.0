@@ -1,48 +1,45 @@
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661FD13AA2F;
-	Mon, 26 Jan 2026 04:57:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.95.11.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357042550D7
+	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 06:14:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769403441; cv=none; b=lvQIFRyyhdghuNMcadxuoCRvA9IUdWbimwQI5rrq+JyYFJfnV1Q7f7PN9yio6cKvjL+chUvsFhdsL/4tTvhxUvpTXOc3BB8JridV5MotZ+FTxpfW2JiNLmViH99KH1s4gINDWaPr7LeV3UAmO6GePqFyeCJtosQdaCYnbpKujUs=
+	t=1769408056; cv=none; b=kBhp3TS3Xnu0AeB4VNZhY7a6iQiSwppE/y6t0ZCFVZR5dBLjzRK9bM2k3NTLOJE7KhGj+byU7EWMd/ZnJjO+xOm/+XxS6cjaVkRQx6bm4vl6vvClLkFr8V2xjy5KB8/O+WWbIf+NGTouUPn1CSIf++HDJ/d2bhjE6bZATVud+MM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769403441; c=relaxed/simple;
-	bh=ajjpzkKmQYBaJ5yLJSgX4W0nod+etg3s5TaDWX1PUss=;
+	s=arc-20240116; t=1769408056; c=relaxed/simple;
+	bh=v2NEwIUksdnOFxX0GH1tRRbz2NTaKdBLX86HppfXIxA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FNlYCmwSNAZR2WM6rVhDgzv3HK8rPLFVWeQEHPezlfnULKZrCvjd2GyMNHI93h3fuv9JCFu5eFhYrEPKtv8/Br5si5Tx2GiRE7ILAaCLOczUNGabMUuu6J7tBJkqSNX4A1zwg6TL7VsN9Dqur1zFVMSwwvk4wMWjVdLvZ9+4fw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de; spf=pass smtp.mailfrom=lst.de; arc=none smtp.client-ip=213.95.11.211
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lst.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lst.de
-Received: by verein.lst.de (Postfix, from userid 2407)
-	id F3EC3227A88; Mon, 26 Jan 2026 05:57:16 +0100 (CET)
-Date: Mon, 26 Jan 2026 05:57:16 +0100
-From: "hch@lst.de" <hch@lst.de>
-To: Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc: Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-	"axboe@kernel.dk" <axboe@kernel.dk>,
-	"agk@redhat.com" <agk@redhat.com>,
-	"snitzer@kernel.org" <snitzer@kernel.org>,
-	"mpatocka@redhat.com" <mpatocka@redhat.com>,
-	"song@kernel.org" <song@kernel.org>,
-	"yukuai@fnnas.com" <yukuai@fnnas.com>, "hch@lst.de" <hch@lst.de>,
-	"sagi@grimberg.me" <sagi@grimberg.me>,
-	"jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-	"chao@kernel.org" <chao@kernel.org>,
-	"cem@kernel.org" <cem@kernel.org>,
-	"linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"dm-devel@lists.linux.dev" <dm-devel@lists.linux.dev>,
-	"linux-raid@vger.kernel.org" <linux-raid@vger.kernel.org>,
-	"linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
-	"linux-f2fs-devel@lists.sourceforge.net" <linux-f2fs-devel@lists.sourceforge.net>,
-	"linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Johannes Thumshirn <johannes.thumshirn@wdc.com>
-Subject: Re: [PATCH V3 4/6] nvmet: ignore discard return value
-Message-ID: <20260126045716.GA31683@lst.de>
-References: <20251124234806.75216-1-ckulkarnilinux@gmail.com> <20251124234806.75216-5-ckulkarnilinux@gmail.com> <942ad29c-cff3-458f-b175-0111de821970@nvidia.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qLGpqx19N0b1LGWgWLFffZwcEoWRhdHG79QHB/ssiUlKDSXmX1S5U/YuVMU+488DH5bexq3AuNR0V3vM4JNRO9/M8BzzkbxXMcp9jPnvFinUOeX9q442mo0AK2abQMLR1HP2NH2FlQuitfxJW8j68XnmlJZprdh1m8jt5VYx9fQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pmKuYWar; arc=none smtp.client-ip=95.215.58.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pmKuYWar"
+Date: Mon, 26 Jan 2026 14:13:51 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769408042;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fRkLP4BJZeXuj/pQ6WlXqQb5hFaywSSeMSj8bpxWqBU=;
+	b=pmKuYWarxQVGBmbrGyx+AIbSk7QyLVpDVeYsyHv71m/qtrh+9UwB0Q44cC21P4FGhUyW9H
+	uEE9U9BQ67bvF03/yRwaeGlBmpOEVdX9UFKDAwiaFU8e7PVcG3e4N0/jWVF221cNf11SsV
+	scA6aa3AZfL4OecVK1El6ZGfRc+HDa4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Hao Li <hao.li@linux.dev>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
+	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v4 07/22] slab: introduce percpu sheaves bootstrap
+Message-ID: <qrekwm7js5t4kmahu3toqnrepnvk7ve5h624f6hm262mmybvtx@rewwd4rbvf3b>
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+ <20260123-sheaves-for-all-v4-7-041323d506f7@suse.cz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -51,27 +48,48 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <942ad29c-cff3-458f-b175-0111de821970@nvidia.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
+In-Reply-To: <20260123-sheaves-for-all-v4-7-041323d506f7@suse.cz>
+X-Migadu-Flow: FLOW_OUT
 
-On Sat, Jan 24, 2026 at 09:35:16PM +0000, Chaitanya Kulkarni wrote:
-> On 11/24/25 15:48, Chaitanya Kulkarni wrote:
-> > __blkdev_issue_discard() always returns 0, making the error checking
-> > in nvmet_bdev_discard_range() dead code.
-> >
-> > Kill the function nvmet_bdev_discard_range() and call
-> > __blkdev_issue_discard() directly from nvmet_bdev_execute_discard(),
-> > since no error handling is needed anymore for __blkdev_issue_discard()
-> > call.
-> >
-> > Reviewed-by: Martin K. Petersen <martin.petersen@oracle.com>
-> > Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-> > Reviewed-by: Christoph Hellwig <hch@lst.de>
-> > Signed-off-by: Chaitanya Kulkarni <ckulkarnilinux@gmail.com>
-> > ---
+On Fri, Jan 23, 2026 at 07:52:45AM +0100, Vlastimil Babka wrote:
+> Until now, kmem_cache->cpu_sheaves was !NULL only for caches with
+> sheaves enabled. Since we want to enable them for almost all caches,
+> it's suboptimal to test the pointer in the fast paths, so instead
+> allocate it for all caches in do_kmem_cache_create(). Instead of testing
+> the cpu_sheaves pointer to recognize caches (yet) without sheaves, test
+> kmem_cache->sheaf_capacity for being 0, where needed, using a new
+> cache_has_sheaves() helper.
 > 
-> Gentle ping on this, can we apply this patch ?
+> However, for the fast paths sake we also assume that the main sheaf
+> always exists (pcs->main is !NULL), and during bootstrap we cannot
+> allocate sheaves yet.
+> 
+> Solve this by introducing a single static bootstrap_sheaf that's
+> assigned as pcs->main during bootstrap. It has a size of 0, so during
+> allocations, the fast path will find it's empty. Since the size of 0
+> matches sheaf_capacity of 0, the freeing fast paths will find it's
+> "full". In the slow path handlers, we use cache_has_sheaves() to
+> recognize that the cache doesn't (yet) have real sheaves, and fall back.
+> Thus sharing the single bootstrap sheaf like this for multiple caches
+> and cpus is safe.
+> 
+> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+>  mm/slab.h        |  12 ++++++
+>  mm/slab_common.c |   2 +-
+>  mm/slub.c        | 123 ++++++++++++++++++++++++++++++++++++-------------------
+>  3 files changed, 95 insertions(+), 42 deletions(-)
 
-Are we down to three patches now?  Maybe resend the whole series and
-get ACKs to merge everything through the block layer?
+Tiny consistency nit: in kfree_rcu_sheaf(), there's a remaining "if
+(s->cpu_sheaves)" that could be replaced with "if (cache_has_sheaves(s))" for
+consistency. It's trivial, so no need to respin - happy to have it addressed
+opportunistically.
 
+The rest looks great to me!
+
+Reviewed-by: Hao Li <hao.li@linux.dev>
+
+-- 
+Thanks,
+Hao
