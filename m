@@ -1,216 +1,97 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA43630AD02;
-	Mon, 26 Jan 2026 22:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57C523F42D;
+	Mon, 26 Jan 2026 23:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769467410; cv=none; b=NmzkMR4UVGyrQQThZxRGs9bPM9RWdIewzMcvJ40Ole8yZk3dNCJhhGrPMKc7YjJO2oDML6tZwYcCINgecw2y8htxMJIYmUEeLdpE0WvEooIrmE8Lnr0lK2e7nnrFCZNk+JcOd1/y3Je0nkajgrHcqenS3XdY1HDsGFnG7Jy3mhk=
+	t=1769469173; cv=none; b=pzb8Pim46Q/pPBo5MSzQ3Vimz/MRvnuEKpisAqqCvIRevLO1W7hcTlOCgunMVxdOsG3CdKym+h/9KU1PuumuWLxc1k/e/F+lP5IvTkLjwHTZtON2F/p0kHF8VKG65dQGhOuvUgge+eKnD64TImod36dVsqc34gE0g2MSX5O7VQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769467410; c=relaxed/simple;
-	bh=5q1Wf9vuZXDeyI1+7XA5Y6Y1giwsGPq1AGESntabpvI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Zu69EIS9EUm8uD3o46GslfwlNOxh54IrKue68gaPVRUpvoT3YudDEe8BmFT3RB+sxWFjwqrY7F9I3qlaR+/K6A2LaBRwQj//NLZ49hl2F7nw8ID69opJdfsELsTnwM49FPxKcvTD+bS4XCQaknRW7AgsyrwsUTzI+SRauWarl0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g23y7XMj; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1769469173; c=relaxed/simple;
+	bh=mQXwCuGIROQD6rXZM8amVwlvI+IZR5slrw7/8WPVRw8=;
+	h=Message-ID:Date:From:To:Cc:Subject; b=GPJz4DMelW/IhotqPyk6oClKDiwc1YrrtZRAKZ4cyifwt2QAg8zJJtKVRyXrZYeAVBfB9KLODTYRAN/Q2vpmKGvmu3TBIyrTx3mFW0m7oOhVukHeL0jwCmkxeRpPoNC2JvLkl3K6G/i2CfI+nzqVlKdJOMSsnsr2x1DBA+9Sjx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l8pisTiO; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g23y7XMj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769467405; x=1801003405;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=5q1Wf9vuZXDeyI1+7XA5Y6Y1giwsGPq1AGESntabpvI=;
-  b=g23y7XMj3iif20IbNbxlSzEhf2P6vtd07q7rsVGPhRsm1UxKQ4l78RYk
-   awMFIpGpZvFnapm48iceQoRlYS6MByI9J7qQ/S84VFLoc19WMr8OTOEZ3
-   s3Pm9nPc3CNGfjd3pDD1xaVmRzJzmJBcIh6z9rdg+MA3vCBavjNfDunQQ
-   BHSPKG8pCid9c9BDUVHjLuUGoZxQAYZn4hwySJFneegFEgnBN3u86Hafr
-   xCUVKesH+T061jhcEDETOY+TxiMLya/piHNspzVMtWqNqOZAsB1QN4OdG
-   oo2VQuQX4tUrewD0X0cezKzDQIj/G1iaWOsfgV5bh5mZ/KCeYn6OxIHMO
-   w==;
-X-CSE-ConnectionGUID: e6Fw5nLSQhKxe/VE+9Ytxg==
-X-CSE-MsgGUID: tjQ556e8R3GMMHl1sSgHRg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11683"; a="70369420"
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="70369420"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 14:43:25 -0800
-X-CSE-ConnectionGUID: yJQW2NxWSWmpmYmTerAmHA==
-X-CSE-MsgGUID: McfdtltMTA2mjLRQG4wiqA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,256,1763452800"; 
-   d="scan'208";a="230754311"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by fmviesa002.fm.intel.com with ESMTP; 26 Jan 2026 14:43:23 -0800
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: YiFei Zhu <zhuyifei@google.com>,
-	anthony.l.nguyen@intel.com,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	Mina Almasry <almasrymina@google.com>,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Simon Horman <horms@kernel.org>
-Subject: [PATCH net-next 7/7] idpf: export RX hardware timestamping information to XDP
-Date: Mon, 26 Jan 2026 14:43:11 -0800
-Message-ID: <20260126224313.3847849-8-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260126224313.3847849-1-anthony.l.nguyen@intel.com>
-References: <20260126224313.3847849-1-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l8pisTiO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6C0DC116C6;
+	Mon, 26 Jan 2026 23:12:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769469172;
+	bh=mQXwCuGIROQD6rXZM8amVwlvI+IZR5slrw7/8WPVRw8=;
+	h=Date:From:To:Cc:Subject:From;
+	b=l8pisTiO7IyqKjWkwLCkKRAdADpf0uz94ZIgfwQUMiE0ZNO4j9NA+8aOW4Prc4nR9
+	 NhFpoizNBYthaLfF3nAZjQJo6RTj72JBkcV+GqtlJTuFptEgoUi56j0wLV3NSU361e
+	 jo9jb28oLUJxaB9fZN1ocn97bgG4KStKDN6XFKqrGzYO5tPOZNAr+3W9SUM7aYZUGt
+	 N7XQjtw49vP1DX4ISv7w7KcI2NS42sEchDPyq1rJ/ALim5MCycbzIStrQB8p5WhEpO
+	 DTipuh+kaIHBnHuF38fM8MNdTCZDUJOBSCKKl3ExyMFRilSnbOsrpp+Oac41pbJBOc
+	 xRFtbhe1cHe0A==
+Received: from rostedt by gandalf with local (Exim 4.99.1)
+	(envelope-from <rostedt@kernel.org>)
+	id 1vkVlQ-00000000Bzm-0cZK;
+	Mon, 26 Jan 2026 18:12:56 -0500
+Message-ID: <20260126231145.728172709@kernel.org>
+User-Agent: quilt/0.68
+Date: Mon, 26 Jan 2026 18:11:45 -0500
+From: Steven Rostedt <rostedt@kernel.org>
+To: linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: Masami Hiramatsu <mhiramat@kernel.org>,
+ Mark Rutland <mark.rutland@arm.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>,
+ Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>
+Subject: [PATCH v6 0/3] tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-From: YiFei Zhu <zhuyifei@google.com>
 
-The logic is similar to idpf_rx_hwtstamp, but the data is exported
-as a BPF kfunc instead of appended to an skb to support grabbing
-timestamps in xsk packets.
+The current use of guard(preempt_notrace)() within __DECLARE_TRACE()
+to protect invocation of __DO_TRACE_CALL() means that BPF programs
+attached to tracepoints are non-preemptible.  This is unhelpful in
+real-time systems, whose users apparently wish to use BPF while also
+achieving low latencies.
 
-A idpf_queue_has(PTP, rxq) condition is added to check the queue
-supports PTP similar to idpf_rx_process_skb_fields.
+Change the protection of tracepoints to use fast_srcu() instead.
+This will allow the callbacks to be able to be preempted. This also
+means that the callbacks themselves need to be able to handle this
+new found preemption ability.
 
-Tested using an xsk connection and checking xdp timestamps are
-retrievable in received packets.
+For perf, add a guard(preempt) inside its handler too keep the old behavior
+of perf events being called with preemption disabled.
 
-Cc: intel-wired-lan@lists.osuosl.org
-Signed-off-by: YiFei Zhu <zhuyifei@google.com>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Reviewed-by: Simon Horman <horms@kernel.org>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/idpf/xdp.c | 31 +++++++++++++++++++++++++++
- drivers/net/ethernet/intel/idpf/xdp.h | 20 +++++++++++++++++
- 2 files changed, 51 insertions(+)
+For BPF, add a migrate_disable() to its handler. Actually, just replace
+the rcu_read_lock() with rcu_read_lock_dont_migrate() and make it
+cover more of the BPF callback handler.
 
-diff --git a/drivers/net/ethernet/intel/idpf/xdp.c b/drivers/net/ethernet/intel/idpf/xdp.c
-index 0fe435fdbb6c..2b60f2a78684 100644
---- a/drivers/net/ethernet/intel/idpf/xdp.c
-+++ b/drivers/net/ethernet/intel/idpf/xdp.c
-@@ -2,6 +2,7 @@
- /* Copyright (C) 2025 Intel Corporation */
- 
- #include "idpf.h"
-+#include "idpf_ptp.h"
- #include "idpf_virtchnl.h"
- #include "xdp.h"
- #include "xsk.h"
-@@ -398,8 +399,38 @@ static int idpf_xdpmo_rx_hash(const struct xdp_md *ctx, u32 *hash,
- 				    pt);
- }
- 
-+static int idpf_xdpmo_rx_timestamp(const struct xdp_md *ctx, u64 *timestamp)
-+{
-+	const struct libeth_xdp_buff *xdp = (typeof(xdp))ctx;
-+	struct idpf_xdp_rx_desc desc __uninitialized;
-+	const struct idpf_rx_queue *rxq;
-+	u64 cached_time, ts_ns;
-+	u32 ts_high;
-+
-+	rxq = libeth_xdp_buff_to_rq(xdp, typeof(*rxq), xdp_rxq);
-+
-+	if (!idpf_queue_has(PTP, rxq))
-+		return -ENODATA;
-+
-+	idpf_xdp_get_qw1(&desc, xdp->desc);
-+
-+	if (!(idpf_xdp_rx_ts_low(&desc) & VIRTCHNL2_RX_FLEX_TSTAMP_VALID))
-+		return -ENODATA;
-+
-+	cached_time = READ_ONCE(rxq->cached_phc_time);
-+
-+	idpf_xdp_get_qw3(&desc, xdp->desc);
-+
-+	ts_high = idpf_xdp_rx_ts_high(&desc);
-+	ts_ns = idpf_ptp_tstamp_extend_32b_to_64b(cached_time, ts_high);
-+
-+	*timestamp = ts_ns;
-+	return 0;
-+}
-+
- static const struct xdp_metadata_ops idpf_xdpmo = {
- 	.xmo_rx_hash		= idpf_xdpmo_rx_hash,
-+	.xmo_rx_timestamp	= idpf_xdpmo_rx_timestamp,
- };
- 
- void idpf_xdp_set_features(const struct idpf_vport *vport)
-diff --git a/drivers/net/ethernet/intel/idpf/xdp.h b/drivers/net/ethernet/intel/idpf/xdp.h
-index 7ffc6955dfae..63e56f7d43e0 100644
---- a/drivers/net/ethernet/intel/idpf/xdp.h
-+++ b/drivers/net/ethernet/intel/idpf/xdp.h
-@@ -112,11 +112,13 @@ struct idpf_xdp_rx_desc {
- 	aligned_u64		qw1;
- #define IDPF_XDP_RX_BUF		GENMASK_ULL(47, 32)
- #define IDPF_XDP_RX_EOP		BIT_ULL(1)
-+#define IDPF_XDP_RX_TS_LOW	GENMASK_ULL(31, 24)
- 
- 	aligned_u64		qw2;
- #define IDPF_XDP_RX_HASH	GENMASK_ULL(31, 0)
- 
- 	aligned_u64		qw3;
-+#define IDPF_XDP_RX_TS_HIGH	GENMASK_ULL(63, 32)
- } __aligned(4 * sizeof(u64));
- static_assert(sizeof(struct idpf_xdp_rx_desc) ==
- 	      sizeof(struct virtchnl2_rx_flex_desc_adv_nic_3));
-@@ -128,6 +130,8 @@ static_assert(sizeof(struct idpf_xdp_rx_desc) ==
- #define idpf_xdp_rx_buf(desc)	FIELD_GET(IDPF_XDP_RX_BUF, (desc)->qw1)
- #define idpf_xdp_rx_eop(desc)	!!((desc)->qw1 & IDPF_XDP_RX_EOP)
- #define idpf_xdp_rx_hash(desc)	FIELD_GET(IDPF_XDP_RX_HASH, (desc)->qw2)
-+#define idpf_xdp_rx_ts_low(desc)	FIELD_GET(IDPF_XDP_RX_TS_LOW, (desc)->qw1)
-+#define idpf_xdp_rx_ts_high(desc)	FIELD_GET(IDPF_XDP_RX_TS_HIGH, (desc)->qw3)
- 
- static inline void
- idpf_xdp_get_qw0(struct idpf_xdp_rx_desc *desc,
-@@ -149,6 +153,9 @@ idpf_xdp_get_qw1(struct idpf_xdp_rx_desc *desc,
- 	desc->qw1 = ((const typeof(desc))rxd)->qw1;
- #else
- 	desc->qw1 = ((u64)le16_to_cpu(rxd->buf_id) << 32) |
-+		    ((u64)rxd->ts_low << 24) |
-+		    ((u64)rxd->fflags1 << 16) |
-+		    ((u64)rxd->status_err1 << 8) |
- 		    rxd->status_err0_qw1;
- #endif
- }
-@@ -166,6 +173,19 @@ idpf_xdp_get_qw2(struct idpf_xdp_rx_desc *desc,
- #endif
- }
- 
-+static inline void
-+idpf_xdp_get_qw3(struct idpf_xdp_rx_desc *desc,
-+		 const struct virtchnl2_rx_flex_desc_adv_nic_3 *rxd)
-+{
-+#ifdef __LIBETH_WORD_ACCESS
-+	desc->qw3 = ((const typeof(desc))rxd)->qw3;
-+#else
-+	desc->qw3 = ((u64)le32_to_cpu(rxd->ts_high) << 32) |
-+		    ((u64)le16_to_cpu(rxd->fmd6) << 16) |
-+		    le16_to_cpu(rxd->l2tag1);
-+#endif
-+}
-+
- void idpf_xdp_set_features(const struct idpf_vport *vport);
- 
- int idpf_xdp(struct net_device *dev, struct netdev_bpf *xdp);
--- 
-2.47.1
+[ I would have sent this out earlier, but had a death in the family
+  which cause everything to be postponed ]
 
+Changes since v5: https://patch.msgid.link/20260108220550.2f6638f3@fedora
+
+- Add separate patch for perf to call preempt_disable()
+
+- Add patch that has bpf call migrate_disable() directly.
+
+- Just change from preempt_disable() to srcu_fast() always
+  Do not do anything different for PREEMPT_RT.
+  Now that BPF disables migration directly, do not have tracepoints
+  disable migration in its code.
+
+Steven Rostedt (3):
+      tracing: perf: Have perf tracepoint callbacks always disable preemption
+      bpf: Have __bpf_trace_run() use rcu_read_lock_dont_migrate()
+      tracing: Guard __DECLARE_TRACE() use of __DO_TRACE_CALL() with SRCU-fast
+
+----
+ include/linux/tracepoint.h   |  9 +++++----
+ include/trace/perf.h         |  4 ++--
+ include/trace/trace_events.h |  4 ++--
+ kernel/trace/bpf_trace.c     |  5 ++---
+ kernel/tracepoint.c          | 18 ++++++++++++++----
+ 5 files changed, 25 insertions(+), 15 deletions(-)
