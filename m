@@ -1,110 +1,181 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D5034DB4A
-	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 18:13:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28FB234D910;
+	Mon, 26 Jan 2026 18:14:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769451207; cv=none; b=TrRvaI1FR+vO+sBJ+WC1BbS61aD/uLT7yDA+tHnLPMMMIz/0l7K3KU4KJyUWl1R81QXVMimjXlVJnkKSYpOwmfK20+WMZ9zlZnAkVB2GClSA7eKGrco6IDfsWS8mdpTsuGZq8swI9m9ofe1nH8nhIPBQcCi2ypYTqF7wgnKXCh4=
+	t=1769451246; cv=none; b=ED8BaevKStI7OGKlrrw8+ovt7RT9DaiESycXWFqZry9stBFpD8ePuVLD1g4RFO+otFIikkfiQKjKt+isgbQgwUh7bTJFvoeIOg09a0M/mw8vAttk6NdHM1dxFwtfhh/ZmiAPRRIDLQ3SAvQgzQC9WFZ6OjAMYZejH3MABIxjafU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769451207; c=relaxed/simple;
-	bh=mlM32ToavdKphI896CsqTXp+LAG2zRBHOIShcQw9RZM=;
+	s=arc-20240116; t=1769451246; c=relaxed/simple;
+	bh=jhr9a6cgDBi4L/Y/fqNnkSWD4mZrTD0Td1Kjc0FE7d4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LWUPqb7BFOyzSsHG0U1fpnKoZn5rlC9NJEx69F/DIpbiAUlcvgXp1h0MLBoGZI3Er0AJ7fNBs0MQjGksjo64ntRwsMWuNQF2z1Ms8OBzDxNGjhzUgx/2SQPVikNeZI8AN0ZdeLEPGK46IT5m+NPNWoCHGyzOR/xUzIzl7xIKfeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v7TCiNjo; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=bXin7mABzqZwt6gsvO80zr9Wdd0f2kJoPUUE2h6N8CtsnVVQ3JW+7rQcOPbdMriM4SgwuBUhEXn2Z0+o02liFkFTwnVpKMV6nhUtRkDmHIhut488uVLGo0Y4xlxqDLo/AYlBcK0lGChXCNDqldiUgHXvV1Z4e5PTFXeMODGTNao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVgoIJgT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v7TCiNjo"
-Message-ID: <63b833ba-2f10-490e-b27e-45891207f904@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769451202;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mf7N/POOAn258EtbR14IyzX7m+xTanbWv2g1tfzfKPw=;
-	b=v7TCiNjoRaoSHtyMX4vI6NRwJqyYQuuG6oJp+g1H2knGvm/88r0yddh+qFdU/4L0tPc9tr
-	nQEwemELCJgakPm3iudeTrvO63+UBH+l7QyOeezv97TZiTkaIchYIH9sx85jY1RNpvpqDQ
-	JO3haHHe33WLSlG8HCP40mfNCpJwrgY=
-Date: Mon, 26 Jan 2026 10:13:16 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nVgoIJgT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78E27C116C6;
+	Mon, 26 Jan 2026 18:13:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769451245;
+	bh=jhr9a6cgDBi4L/Y/fqNnkSWD4mZrTD0Td1Kjc0FE7d4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=nVgoIJgTaMtZXe7vJx91AIult5bczODnhPAwNvlhgpWv9/zxDR9iqiytQ/4FLN947
+	 pwwrkH5t65DpbcC2Ndjsc3y8aLEOhS0YcPTP/zE9t8jPah+veeX4QBoyt1kmvAWrY+
+	 zRwMXcdzKZtNmnovqWUmBKzDbk9OAYTgK+9DolDd9fVf3ecNbeyx+YBmZX/4TxAWSB
+	 wqRZlkumamMI/9hdPN88aJwNDn2vHU20e79cjnY/MZArxLERLAkk/9E4ucbO4XBing
+	 XS9aPsA9kPCFc1v/sOkFQgZ7s+hN5AxNLT2q9/XSNFJhI7WnNpPfb4LEcMYEAXUTHV
+	 2++X9k5uMy7nA==
+Message-ID: <4e673f7f-c49c-46b0-85b4-bae6e4efcb3a@kernel.org>
+Date: Mon, 26 Jan 2026 19:13:50 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 dwarves 4/5] man-pages: document true_signature
- btf_feature
-Content-Language: en-GB
-To: Alan Maguire <alan.maguire@oracle.com>,
- Matt Bobrowski <mattbobrowski@google.com>
-Cc: ihor.solodrai@linux.dev, eddyz87@gmail.com, jolsa@kernel.org,
- andrii@kernel.org, ast@kernel.org, david.faust@oracle.com,
- dwarves@vger.kernel.org, bpf@vger.kernel.org
-References: <20260123172650.4062362-1-alan.maguire@oracle.com>
- <20260123172650.4062362-5-alan.maguire@oracle.com>
- <aXc7uFtOhE7bSZnw@google.com>
- <e7345200-ce29-4077-9d2f-7d7e4b47ca79@oracle.com>
- <aXdOIBvo9rZLGn-f@google.com>
- <61ae18d7-30e6-494e-a0e1-f5bf7dfa2758@oracle.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <61ae18d7-30e6-494e-a0e1-f5bf7dfa2758@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 1/4] selftests: net: Move some UAPI header
+ inclusions after libc ones
+Content-Language: en-GB, fr-BE
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+ libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Rich Felker <dalias@libc.org>, klibc@zytor.com,
+ Florian Weimer <fweimer@redhat.com>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+ =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+ <20260120-uapi-sockaddr-v2-1-63c319111cf6@linutronix.de>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20260120-uapi-sockaddr-v2-1-63c319111cf6@linutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Hi Thomas,
 
+On 20/01/2026 15:10, Thomas Weißschuh wrote:
+> Interleaving inclusions of UAPI headers and libc headers is problematic.
+> Both sets of headers define conflicting symbols. To enable their
+> coexistence a compatibility-mechanism is in place.
+> 
+> An upcoming change will define 'struct sockaddr' from linux/socket.h.
+> However sys/socket.h from libc does not yet handle this case and a
+> symbol conflict will arise.
+> 
+> Furthermore libc-compat.h evaluates the state of the libc
+> inclusions only once, at the point it is included first. If another
+> problematic header from libc is included later, symbol conflicts arise.
+> This will trigger other duplicate definitions when linux/libc-compat.h
+> is added to linux/socket.h
+> 
+> Move the inclusion of UAPI headers after the inclusion of the glibc
+> ones, so the libc-compat.h continues to work correctly.
 
-On 1/26/26 9:10 AM, Alan Maguire wrote:
-> On 26/01/2026 11:21, Matt Bobrowski wrote:
->> On Mon, Jan 26, 2026 at 10:51:31AM +0000, Alan Maguire wrote:
->>> On 26/01/2026 10:02, Matt Bobrowski wrote:
->>>> On Fri, Jan 23, 2026 at 05:26:49PM +0000, Alan Maguire wrote:
->>>>> Ensure non-default "true_signature" feature is documented in
->>>>> the manual page.
->>>>>
->>>>> Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
->>>> Acked-by: Matt Bobrowski <mattbobrowski@google.com>
->>>>
->>>>> ---
->>>>>   man-pages/pahole.1 | 5 +++++
->>>>>   1 file changed, 5 insertions(+)
->>>>>
->>>>> diff --git a/man-pages/pahole.1 b/man-pages/pahole.1
->>>>> index 3125de3..90a8f45 100644
->>>>> --- a/man-pages/pahole.1
->>>>> +++ b/man-pages/pahole.1
->>>>> @@ -337,6 +337,11 @@ Supported non-standard features (not enabled for 'default')
->>>>>   	                   of split BTF with a possibly changed base, storing
->>>>>   	                   it in a .BTF.base ELF section.
->>>>>   	global_var         Encode all global variables using BTF_KIND_VAR in BTF.
->>>>> +	true_signature     Encode functions ensuring that binary-level
->>>>> +	                   (rather than source-level) signatures are used;
->>>> 									 ^
->>>> 									 within the generated BTF.
->>>> 									
->>>>> +                           for gcc these are ".isra.0" and ".costprop.0"
->>>>> +                           optimized functions
->>>> For BTF generation, would there ever be a situation whereby we
->>>> wouldn't want true signature support? I'm just trying to understand
->>>> why this isn't defaulted to true.
->>> The key reason is the "." in the name for gcc-optimized functions
->>> "function.isra.0" ; older kernels will reject BTF function names with
->>> a "." in them, so we have to guard against new pahole with the feature
->>> enabled by default being run on older kernels. So by having the newer
->>> kernels request the feature only we avoid this.
->> Oh, yes, that makes sense. Once a new pahole version is released with
->> true_signature support available, will you also be looking to update
->> scripts/Makefile.btf and conditionally enable it based on
->> availability?
-> Yep, we're hoping to get some support on the LLVM side for true signatures, but
-> absolutely, that's the plan. Because the --btf_features option will simply
-> ignore features that it does not know about, this approach works with older
-> pahole too without erroring out.
+Thank you for looking at this!
 
-I actually have started to work on this from llvm side. Once Alan's patch
-lands (which has true_signature infrastructure implemented), I should be
-able to send some patch to address true_signature for llvm-built kernel.
+Here is my (late, sorry) review for the modifications related to MPTCP:
+> diff --git a/tools/testing/selftests/net/mptcp/mptcp_diag.c b/tools/testing/selftests/net/mptcp/mptcp_diag.c
+> index 8e0b1b8d84b6..af25ebfd2915 100644
+> --- a/tools/testing/selftests/net/mptcp/mptcp_diag.c
+> +++ b/tools/testing/selftests/net/mptcp/mptcp_diag.c
+> @@ -1,11 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  /* Copyright (c) 2025, Kylin Software */
+>  
+> -#include <linux/sock_diag.h>
+> -#include <linux/rtnetlink.h>
+> -#include <linux/inet_diag.h>
+> -#include <linux/netlink.h>
+> -#include <linux/compiler.h>
+>  #include <sys/socket.h>
+>  #include <netinet/in.h>
+>  #include <linux/tcp.h>
+
+There is a remaining one (linux/tcp.h) here that you might want to move
+below too.
+
+> @@ -17,6 +12,12 @@
+>  #include <errno.h>
+>  #include <stdio.h>
+>  
+> +#include <linux/sock_diag.h>
+> +#include <linux/rtnetlink.h>
+> +#include <linux/inet_diag.h>
+> +#include <linux/netlink.h>
+> +#include <linux/compiler.h>
+
+Note that I just noticed this is the only file from this directory where
+the "includes" are not sorted by type and alphabetical order, see
+pm_nl_ctl.c as an example. A bit of a detail, but if you plan to send a
+v2, do you mind doing that too here while at it, please?
+
+If not, I can look at that later, but better to avoid doing that in
+parallel.
+
+Cheers,
+Matt
+-- 
+Sponsored by the NGI0 Core fund.
 
