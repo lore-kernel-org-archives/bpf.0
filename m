@@ -1,204 +1,272 @@
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+Received: from fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.64.237.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BBE33DEE0;
-	Mon, 26 Jan 2026 15:21:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2DD348458;
+	Mon, 26 Jan 2026 16:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.64.237.68
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769440897; cv=none; b=SkhLVjg6G3BPbuNCKgh1ML2nYoffr69qCJQPBlGgwtJq/QRgxs65XyDx69RECz8y5GMuMuVYAFRKcOuvlOEeIBYUiHbVdjGXqc5LTbL5wtGWIVmJ8mjveOjFGNCqFwZV/42ElCUyzS774B6ea91eQ0h/O1jHH30sIGa+b/5zEmY=
+	t=1769446033; cv=none; b=XF+MSj8zoB1MeJZ61T6uVXhLnbXiofQmLU2aCAM9Eny/kd8OtrCbkW4Eii0gmIljUiY0Oa3/zds+d66Z28I5yvtwCMgkHjYz1x/GgEbrc6FX8ziScj5K6cE20dLGP5cz4SDozys98PQWZV0NPrZKLYnhgK39yqzV9J003wagatc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769440897; c=relaxed/simple;
-	bh=l9alNzLtbKf/N5wbrT78rj1ZCgxuxNdCfWh18n8WqEA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UnVWTEJMbyhXKbT8F/29AkbLRIZzTPkk/ubkYnXFDf93xqDayk1jiw/c52lzFTDSZIP7p9EQUQJdNNXtf7ZDwdWStqyshh1+vCZ5sY02gyBdIGF/9IZ0pZ6sWIEEKHgV66lGFxDM7SR5AsaxTNhR42w7TdWFHzl7GydXIo/OJF8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=iN87vqpQ; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+	s=arc-20240116; t=1769446033; c=relaxed/simple;
+	bh=Jj2MWM7REKjQ3mCzvIc3KbcDhzOgxwLiYIXs/egsra4=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=V+pS8v09uCEwYEEd6eWYHtNt3fsVKPnlCEWhSlXw37iZ/YBOqtrMXX2l6zv6LlB+cB9eJrGlux3ziDw67MagTAAbkBf5xmnwGDBx92t90QuphiB+A5akj6FL5FqLliZqOR3azAYaHE5jg9vbb+cneiFa1BOBHeDeKB3KweDr4d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=pKcZSazx; arc=none smtp.client-ip=3.64.237.68
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="iN87vqpQ"
-X-UUID: ac239e02faca11f0b7fc4fdb8733b2bc-20260126
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=/KO48sLcc1Pw1/EXPTPJ/6Em+9GtVtY6da5KGjQjsQs=;
-	b=iN87vqpQPRNVbGVSX8BHLXFSkWeRvW4JqTOMTjLLL+ZwQ84kYdzOERhSROifFOI8ryRRfOFULk8XJHBhCZ8WajkevyjC2BGWCoweXvj812lgilj4QSrzuSTvnimQrBcHRGYM9hj1fahjgMsClmc1t5x1eIafhtVfy2Z0WuNmY+w=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.11,REQID:8c5965e4-d5d2-4bef-babf-7080bd9be116,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:89c9d04,CLOUDID:27903c7a-8c8a-4fc4-88c0-3556e7711556,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102|836|888|898,TC:-5,Content:0|15|5
-	0,EDM:-3,IP:nil,URL:1,File:130,RT:0,Bulk:nil,QS:nil,BEC:-1,COL:0,OSI:0,OSA
-	:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: ac239e02faca11f0b7fc4fdb8733b2bc-20260126
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-	(envelope-from <jibin.zhang@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 354293242; Mon, 26 Jan 2026 23:21:22 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs13n1.mediatek.inc (172.21.101.193) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Mon, 26 Jan 2026 23:21:17 +0800
-Received: from mbjsdccf07.gcn.mediatek.inc (10.15.20.246) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.2562.29 via Frontend Transport; Mon, 26 Jan 2026 23:21:16 +0800
-From: Jibin Zhang <jibin.zhang@mediatek.com>
-To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
-	<daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
-	<martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
-	<song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
-	<john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav Fomichev
-	<sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon
- Horman <horms@kernel.org>, Neal Cardwell <ncardwell@google.com>, Kuniyuki
- Iwashima <kuniyu@google.com>, David Ahern <dsahern@kernel.org>, Matthias
- Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <bpf@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>
-CC: <wsd_upstream@mediatek.com>, Jibin Zhang <jibin.zhang@mediatek.com>
-Subject: [PATCH v4] net: fix segmentation of forwarding fraglist GRO
-Date: Mon, 26 Jan 2026 23:21:11 +0800
-Message-ID: <20260126152114.1211-1-jibin.zhang@mediatek.com>
-X-Mailer: git-send-email 2.45.2
+	dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="pKcZSazx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazoncorp2; t=1769446029; x=1800982029;
+  h=from:to:cc:subject:date:message-id:
+   content-transfer-encoding:mime-version;
+  bh=tbv/MTwQoTKHu7Ejd3vLaiU5iszGht/IvO/yWSvhW4o=;
+  b=pKcZSazxJzC/PmBxPNy6WOccDoCCl86D+PPFANf66eX1ot6JC5ZZ76P/
+   0Afi8x3WN4r/rI3rhAtg/63BPEsUQUcczIUS4WOCcJJhQubt0L6O/tn22
+   u/70/x7BSITn6XzNwe72ZQTkLjfZ1utaje3KrMMAgkX2xwVkqJyIQEUJ9
+   psA5rwV4M7nvrvwOPse+EefGt9obsagTfBrHLx58Ck8/OR/rRsPfIvy/J
+   b6T74DiPssvwgHhcfa0zyudTOj6tsbsHZc+s0oDUEDfnmID+8gKkO0qNs
+   NsLVzfAw5lx/dhUJqa1qdQJpermH+w7SGgA41bYeZVvr+6E6zTOb5S1gZ
+   w==;
+X-CSE-ConnectionGUID: 6IHftKH7SsOlKU7AyD1EnA==
+X-CSE-MsgGUID: kMm4jjHORlWTkE3xuKVThA==
+X-IronPort-AV: E=Sophos;i="6.21,255,1763424000"; 
+   d="scan'208";a="8361622"
+Received: from ip-10-6-6-97.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.6.97])
+  by internal-fra-out-009.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 16:46:49 +0000
+Received: from EX19MTAEUC001.ant.amazon.com [54.240.197.233:30081]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.13.191:2525] with esmtp (Farcaster)
+ id 867ddae6-4aab-4228-9189-c90a4ffe3bcf; Mon, 26 Jan 2026 16:46:48 +0000 (UTC)
+X-Farcaster-Flow-ID: 867ddae6-4aab-4228-9189-c90a4ffe3bcf
+Received: from EX19D005EUB004.ant.amazon.com (10.252.51.126) by
+ EX19MTAEUC001.ant.amazon.com (10.252.51.193) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
+ Mon, 26 Jan 2026 16:46:48 +0000
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19D005EUB004.ant.amazon.com (10.252.51.126) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
+ Mon, 26 Jan 2026 16:46:48 +0000
+Received: from EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c]) by
+ EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c%3]) with mapi id
+ 15.02.2562.035; Mon, 26 Jan 2026 16:46:48 +0000
+From: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
+To: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
+	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
+	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
+	<willy@infradead.org>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "vbabka@suse.cz"
+	<vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com"
+	<surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org"
+	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev"
+	<martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
+	"song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev"
+	<yonghong.song@linux.dev>, "john.fastabend@gmail.com"
+	<john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
+	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
+	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com"
+	<peterx@redhat.com>, "jannh@google.com" <jannh@google.com>,
+	"pfalcato@suse.de" <pfalcato@suse.de>, "shuah@kernel.org" <shuah@kernel.org>,
+	"riel@surriel.com" <riel@surriel.com>, "ryan.roberts@arm.com"
+	<ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>,
+	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org"
+	<kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "ackerleytng@google.com"
+	<ackerleytng@google.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
+	"prsampat@amd.com" <prsampat@amd.com>, "mlevitsk@redhat.com"
+	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
+	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
+	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
+	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
+	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
+	<urezki@gmail.com>, "zhengqi.arch@bytedance.com"
+	<zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
+	<gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
+	<jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
+	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org"
+	<pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
+	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
+	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
+	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
+	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
+	"Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
+	<xmarcalx@amazon.co.uk>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
+Subject: [PATCH v10 00/15] Direct Map Removal Support for guest_memfd
+Thread-Topic: [PATCH v10 00/15] Direct Map Removal Support for guest_memfd
+Thread-Index: AQHcjuMVKu9EzWzx90GD17TC625r+Q==
+Date: Mon, 26 Jan 2026 16:46:47 +0000
+Message-ID: <20260126164445.11867-1-kalyazin@amazon.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 
-This patch enhances GSO segment handling by properly checking
-the SKB_GSO_DODGY flag for frag_list GSO packets, addressing
-low throughput issues observed when a station accesses IPv4
-servers via hotspots with an IPv6-only upstream interface.
-
-Specifically, it fixes a bug in GSO segmentation when forwarding
-GRO packets containing a frag_list. The function skb_segment_list
-cannot correctly process GRO skbs that have been converted by XLAT,
-since XLAT only translates the header of the head skb. Consequently,
-skbs in the frag_list may remain untranslated, resulting in protocol
-inconsistencies and reduced throughput.
-
-To address this, the patch explicitly sets the SKB_GSO_DODGY flag
-for GSO packets in XLAT's IPv4/IPv6 protocol translation helpers
-(bpf_skb_proto_4_to_6 and bpf_skb_proto_6_to_4). This marks GSO
-packets as potentially modified after protocol translation. As a
-result, GSO segmentation will avoid using skb_segment_list and
-instead falls back to skb_segment for packets with the SKB_GSO_DODGY
-flag. This ensures that only safe and fully translated frag_list
-packets are processed by skb_segment_list, resolving protocol
-inconsistencies and improving throughput when forwarding GRO packets
-converted by XLAT.
-
-Signed-off-by: Jibin Zhang <jibin.zhang@mediatek.com>
----
-v4: Change according to Willem de Bruijn's suggestions
-    1. Set SKB_GSO_DODGY when XLAT modifies headers for GSO packets.
-    2. GSO segmentation is downgraded to use skb_segment instead of
-       skb_segment_list to ensure robust handling of potentially
-       modified packets when the SKB_GSO_DODGY flag is set on a
-       GSO packet.
-
-v3: Apply the same fix to tcp6_gso_segment(), as suggested.
-
-v2: To apply the added condition to a narrower scop
-
-  In this version, the condition (skb_has_frag_list(gso_skb) &&
-(gso_skb->protocol == skb_shinfo(gso_skb)->frag_list->protocol))
-is moved into inner 'if' statement to a narrower scope.
-
-  Send out the patch again for further discussion because:
-
-1. This issue has a significant impact and has occurred in many
-countries and regions.
-2. Currently, modifying BPF is not a good option, because BPF code
-cannot access the header of skb on the fraglist, and the required
-changes would affect a wide range of code.
-3. Directly disabling GRO aggregation for XLAT flows is also not a
-good solution, as this change would disable GRO even when forwarding
-is not needed, and it would also require cooperation from all device
-drivers.
-
-[3]: https://patchwork.kernel.org/patch/14397344
-
-[2]: https://patchwork.kernel.org/patch/14375646
-
-[1]: https://patchwork.kernel.org/patch/14350844
-
----
- net/core/filter.c        | 2 ++
- net/ipv4/tcp_offload.c   | 3 ++-
- net/ipv4/udp_offload.c   | 3 ++-
- net/ipv6/tcpv6_offload.c | 3 ++-
- 4 files changed, 8 insertions(+), 3 deletions(-)
-
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 616e0520a0bb..bcd73d9bd764 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -3353,6 +3353,7 @@ static int bpf_skb_proto_4_to_6(struct sk_buff *skb)
- 			shinfo->gso_type &= ~SKB_GSO_TCPV4;
- 			shinfo->gso_type |=  SKB_GSO_TCPV6;
- 		}
-+		shinfo->gso_type |=  SKB_GSO_DODGY;
- 	}
- 
- 	bpf_skb_change_protocol(skb, ETH_P_IPV6);
-@@ -3383,6 +3384,7 @@ static int bpf_skb_proto_6_to_4(struct sk_buff *skb)
- 			shinfo->gso_type &= ~SKB_GSO_TCPV6;
- 			shinfo->gso_type |=  SKB_GSO_TCPV4;
- 		}
-+		shinfo->gso_type |=  SKB_GSO_DODGY;
- 	}
- 
- 	bpf_skb_change_protocol(skb, ETH_P_IP);
-diff --git a/net/ipv4/tcp_offload.c b/net/ipv4/tcp_offload.c
-index fdda18b1abda..942a948f1a31 100644
---- a/net/ipv4/tcp_offload.c
-+++ b/net/ipv4/tcp_offload.c
-@@ -107,7 +107,8 @@ static struct sk_buff *tcp4_gso_segment(struct sk_buff *skb,
- 	if (skb_shinfo(skb)->gso_type & SKB_GSO_FRAGLIST) {
- 		struct tcphdr *th = tcp_hdr(skb);
- 
--		if (skb_pagelen(skb) - th->doff * 4 == skb_shinfo(skb)->gso_size)
-+		if ((skb_pagelen(skb) - th->doff * 4 == skb_shinfo(skb)->gso_size) &&
-+		    !(skb_shinfo(skb)->gso_type & SKB_GSO_DODGY))
- 			return __tcp4_gso_segment_list(skb, features);
- 
- 		skb->ip_summed = CHECKSUM_NONE;
-diff --git a/net/ipv4/udp_offload.c b/net/ipv4/udp_offload.c
-index 19d0b5b09ffa..589456bd8b5f 100644
---- a/net/ipv4/udp_offload.c
-+++ b/net/ipv4/udp_offload.c
-@@ -514,7 +514,8 @@ struct sk_buff *__udp_gso_segment(struct sk_buff *gso_skb,
- 
- 	if (skb_shinfo(gso_skb)->gso_type & SKB_GSO_FRAGLIST) {
- 		 /* Detect modified geometry and pass those to skb_segment. */
--		if (skb_pagelen(gso_skb) - sizeof(*uh) == skb_shinfo(gso_skb)->gso_size)
-+		if ((skb_pagelen(gso_skb) - sizeof(*uh) == skb_shinfo(gso_skb)->gso_size) &&
-+		    !(skb_shinfo(gso_skb)->gso_type & SKB_GSO_DODGY))
- 			return __udp_gso_segment_list(gso_skb, features, is_ipv6);
- 
- 		ret = __skb_linearize(gso_skb);
-diff --git a/net/ipv6/tcpv6_offload.c b/net/ipv6/tcpv6_offload.c
-index effeba58630b..5670d32c27f8 100644
---- a/net/ipv6/tcpv6_offload.c
-+++ b/net/ipv6/tcpv6_offload.c
-@@ -170,7 +170,8 @@ static struct sk_buff *tcp6_gso_segment(struct sk_buff *skb,
- 	if (skb_shinfo(skb)->gso_type & SKB_GSO_FRAGLIST) {
- 		struct tcphdr *th = tcp_hdr(skb);
- 
--		if (skb_pagelen(skb) - th->doff * 4 == skb_shinfo(skb)->gso_size)
-+		if ((skb_pagelen(skb) - th->doff * 4 == skb_shinfo(skb)->gso_size) &&
-+		    !(skb_shinfo(skb)->gso_type & SKB_GSO_DODGY))
- 			return __tcp6_gso_segment_list(skb, features);
- 
- 		skb->ip_summed = CHECKSUM_NONE;
--- 
-2.45.2
-
+[ based on kvm/next ]=0A=
+=0A=
+Unmapping virtual machine guest memory from the host kernel's direct map=0A=
+is a successful mitigation against Spectre-style transient execution=0A=
+issues: if the kernel page tables do not contain entries pointing to=0A=
+guest memory, then any attempted speculative read through the direct map=0A=
+will necessarily be blocked by the MMU before any observable=0A=
+microarchitectural side-effects happen.  This means that Spectre-gadgets=0A=
+and similar cannot be used to target virtual machine memory.  Roughly=0A=
+60% of speculative execution issues fall into this category [1, Table=0A=
+1].=0A=
+=0A=
+This patch series extends guest_memfd with the ability to remove its=0A=
+memory from the host kernel's direct map, to be able to attain the above=0A=
+protection for KVM guests running inside guest_memfd.=0A=
+=0A=
+Additionally, a Firecracker branch with support for these VMs can be=0A=
+found on GitHub [2].=0A=
+=0A=
+For more details, please refer to the v5 cover letter.  No substantial=0A=
+changes in design have taken place since.=0A=
+=0A=
+See also related write() syscall support in guest_memfd [3] where=0A=
+the interoperation between the two features is described.=0A=
+=0A=
+Changes since v9:=0A=
+ - Huacai/Ackerley: formatting and error handling fixes=0A=
+ - Heiko: remove TLB flushing from folio_zap_direct_map() on s390=0A=
+ - Willy: set_direct_map_valid_noflush() to take const void * instead of=0A=
+   struct page *page=0A=
+ - Ackerley: remove reject_file_backed variable in=0A=
+   gup_fast_folio_allowed()=0A=
+ - Ackerley: avoid referencing memfd_secret in doc=0A=
+ - Ackerley: make calls to kvm_gmem_folio_zap_direct_map() conditional=0A=
+   to GUEST_MEMFD_FLAG_NO_DIRECT_MAP=0A=
+ - Rick: Exclude TDX from direct map removal=0A=
+ - Rick: Add a comment about current impossibility of zapping at=0A=
+   non-base page granularity.=0A=
+=0A=
+v9: https://lore.kernel.org/kvm/20260114134510.1835-1-kalyazin@amazon.com=
+=0A=
+v8: https://lore.kernel.org/kvm/20251205165743.9341-1-kalyazin@amazon.com=
+=0A=
+v7: https://lore.kernel.org/kvm/20250924151101.2225820-1-patrick.roy@campus=
+.lmu.de=0A=
+v6: https://lore.kernel.org/kvm/20250912091708.17502-1-roypat@amazon.co.uk=
+=0A=
+v5: https://lore.kernel.org/kvm/20250828093902.2719-1-roypat@amazon.co.uk=
+=0A=
+v4: https://lore.kernel.org/kvm/20250221160728.1584559-1-roypat@amazon.co.u=
+k=0A=
+RFCv3: https://lore.kernel.org/kvm/20241030134912.515725-1-roypat@amazon.co=
+.uk=0A=
+RFCv2: https://lore.kernel.org/kvm/20240910163038.1298452-1-roypat@amazon.c=
+o.uk=0A=
+RFCv1: https://lore.kernel.org/kvm/20240709132041.3625501-1-roypat@amazon.c=
+o.uk=0A=
+=0A=
+[1] https://download.vusec.net/papers/quarantine_raid23.pdf=0A=
+[2] https://github.com/firecracker-microvm/firecracker/tree/feature/secret-=
+hiding=0A=
+[3] https://lore.kernel.org/kvm/20251114151828.98165-1-kalyazin@amazon.com=
+=0A=
+=0A=
+Nikita Kalyazin (3):=0A=
+  set_memory: set_direct_map_* to take address=0A=
+  set_memory: add folio_{zap,restore}_direct_map helpers=0A=
+  mm/gup: drop local variable in gup_fast_folio_allowed=0A=
+=0A=
+Patrick Roy (12):=0A=
+  mm/gup: drop secretmem optimization from gup_fast_folio_allowed=0A=
+  mm: introduce AS_NO_DIRECT_MAP=0A=
+  KVM: guest_memfd: Add stub for kvm_arch_gmem_invalidate=0A=
+  KVM: x86: define kvm_arch_gmem_supports_no_direct_map()=0A=
+  KVM: arm64: define kvm_arch_gmem_supports_no_direct_map()=0A=
+  KVM: guest_memfd: Add flag to remove from direct map=0A=
+  KVM: selftests: load elf via bounce buffer=0A=
+  KVM: selftests: set KVM_MEM_GUEST_MEMFD in vm_mem_add() if guest_memfd=0A=
+    !=3D -1=0A=
+  KVM: selftests: Add guest_memfd based vm_mem_backing_src_types=0A=
+  KVM: selftests: cover GUEST_MEMFD_FLAG_NO_DIRECT_MAP in existing=0A=
+    selftests=0A=
+  KVM: selftests: stuff vm_mem_backing_src_type into vm_shape=0A=
+  KVM: selftests: Test guest execution from direct map removed gmem=0A=
+=0A=
+ Documentation/virt/kvm/api.rst                | 21 +++--=0A=
+ arch/arm64/include/asm/kvm_host.h             | 13 +++=0A=
+ arch/arm64/include/asm/set_memory.h           |  9 +-=0A=
+ arch/arm64/mm/pageattr.c                      | 31 ++++---=0A=
+ arch/loongarch/include/asm/set_memory.h       |  9 +-=0A=
+ arch/loongarch/mm/pageattr.c                  | 37 +++++---=0A=
+ arch/riscv/include/asm/set_memory.h           |  9 +-=0A=
+ arch/riscv/mm/pageattr.c                      | 29 +++++--=0A=
+ arch/s390/include/asm/set_memory.h            |  9 +-=0A=
+ arch/s390/mm/pageattr.c                       | 25 ++++--=0A=
+ arch/x86/include/asm/kvm_host.h               |  6 ++=0A=
+ arch/x86/include/asm/set_memory.h             |  9 +-=0A=
+ arch/x86/kvm/x86.c                            |  5 ++=0A=
+ arch/x86/mm/pat/set_memory.c                  | 43 +++++++---=0A=
+ include/linux/kvm_host.h                      | 14 ++++=0A=
+ include/linux/pagemap.h                       | 16 ++++=0A=
+ include/linux/secretmem.h                     | 18 ----=0A=
+ include/linux/set_memory.h                    | 19 ++++-=0A=
+ include/uapi/linux/kvm.h                      |  1 +=0A=
+ kernel/power/snapshot.c                       |  4 +-=0A=
+ lib/buildid.c                                 |  4 +-=0A=
+ mm/execmem.c                                  |  6 +-=0A=
+ mm/gup.c                                      | 37 +++-----=0A=
+ mm/mlock.c                                    |  2 +-=0A=
+ mm/secretmem.c                                | 14 ++--=0A=
+ mm/vmalloc.c                                  | 11 ++-=0A=
+ .../testing/selftests/kvm/guest_memfd_test.c  | 17 +++-=0A=
+ .../testing/selftests/kvm/include/kvm_util.h  | 37 ++++++--=0A=
+ .../testing/selftests/kvm/include/test_util.h |  8 ++=0A=
+ tools/testing/selftests/kvm/lib/elf.c         |  8 +-=0A=
+ tools/testing/selftests/kvm/lib/io.c          | 23 +++++=0A=
+ tools/testing/selftests/kvm/lib/kvm_util.c    | 59 +++++++------=0A=
+ tools/testing/selftests/kvm/lib/test_util.c   |  8 ++=0A=
+ tools/testing/selftests/kvm/lib/x86/sev.c     |  1 +=0A=
+ .../selftests/kvm/pre_fault_memory_test.c     |  1 +=0A=
+ .../selftests/kvm/set_memory_region_test.c    | 52 +++++++++++-=0A=
+ .../kvm/x86/private_mem_conversions_test.c    |  7 +-=0A=
+ virt/kvm/guest_memfd.c                        | 84 +++++++++++++++++--=0A=
+ 38 files changed, 511 insertions(+), 195 deletions(-)=0A=
+=0A=
+=0A=
+base-commit: 0499add8efd72456514c6218c062911ccc922a99=0A=
+-- =0A=
+2.50.1=0A=
+=0A=
