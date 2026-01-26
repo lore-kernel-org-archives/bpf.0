@@ -1,84 +1,205 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A8833B6DC;
-	Mon, 26 Jan 2026 13:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58A6233C509
+	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 15:14:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769435999; cv=none; b=U3fbe4bH7bcRMigM5mGOESgQ9MY0ofUBuprfp+Hy3dJCG//FPE4Mm1LdRY7DmrwZjS8gG1HSuuUdBpyXtscEb7nD0SMJFOLKeFxYpOUDfUKiwyCb6xa2J2ubnJ8n+Kn7/sW4ewd0ZMLfo477Y8BugQOelUgG1g09hl4KLYwdPd4=
+	t=1769440491; cv=none; b=jw+ycA+3LgAr3UwiBMr9u/t9zngt/QEQre98VniyslXvOAUAb4LYU0scUR6visWpPWKA23mECc8KPtQoMX0wkAQizykcX6ejqlHY7Q5D74Q2Gv2mrm5FYgkAEv9uRUcaC/CVWPj0jBEqVnSXQ3uZwojyvJAVqX4zb42EamlgFas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769435999; c=relaxed/simple;
-	bh=Jk058962S/z+UfR591wadY2ouZ+hkgMaDC0o0U/B/+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mvy/Q2D0PsIvFL6LO21vXmRhksiUJmdeZRoT3sktUl478YiS75DvGY42384HggsgBA3VjhTaZzcCxYClwxY8LP3bIAOuG8KBJgzSz1pR9ppXNPXh5F7S6JVZBK5CPlgsoOQbBoveyYg0iqrPFpa+MZzx4p8sUpZ/iRJnokhvcC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Q7sbxvHC; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
+	s=arc-20240116; t=1769440491; c=relaxed/simple;
+	bh=NVE4PZaDrUMrEMKJDsONnoLmskItsh4FrwJ0yF3S6mI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iVP+hY3LW/wX3Ref/dlRQRH+e5mhY+sp/ZPz87fFJMaUD67NUMe7Cb8eBx616AF5NIWazi2zzZrqG4jurkcDhJkdxkPg7zWl/LaUCjY1HLeh9x4xCT2mocSAVu75zFBv/yYYnTqEb/vWRwDeUENT9W+LEqgIA4jJj6irPhnixF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M1JJObsD; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Q7sbxvHC"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=CA7ZM6arGeM7G5r4XYd+i+HkxrAcrO5ouJ48DYGWkxk=; b=Q7sbxvHCpdJlOA8+0uz3927nIV
-	KNaaEpbu0uDEYOC7QS+Zsyy5x2BGTRKzrowzUL3FKnt5t/IUy9oI/eDR5hKyY71LyrAPNfoCM6Pi8
-	4N+4PiyYyDXCiRBrYAZnlsG2H2PofaRBU1DaJiOdtIumZ6/XHerpclx/I9lBDhVhrcavjvUTglMGM
-	Aa2ychCEXyVFuE1KrRmDjZgSzJC1T8VHtw8tHRGvVdgGHHCnPG3AWncsMuyJ+Dzz139qym9F7UrdT
-	tX77nPTY9Tl6MFne75lIndVhuZjUdk03NffssHw7WyF2nJZbOyytPo1c2eJeozzpZKtOlfBbITWJv
-	BYbM6vVA==;
-Received: from authenticated user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.94.2)
-	(envelope-from <leitao@debian.org>)
-	id 1vkN7t-00GDx9-Lb; Mon, 26 Jan 2026 13:59:33 +0000
-Date: Mon, 26 Jan 2026 05:59:28 -0800
-From: Breno Leitao <leitao@debian.org>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, 
-	kasan-dev@googlegroups.com
-Subject: Re: [PATCH v4 06/22] slab: add sheaves to most caches
-Message-ID: <aXdzLk010qbTNbUh@gmail.com>
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <20260123-sheaves-for-all-v4-6-041323d506f7@suse.cz>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M1JJObsD"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769440476;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=SGN/g/bAEXn5CE/fvL4L6rx4ufAM6HoidF9O/Ra4r5o=;
+	b=M1JJObsD6NHZnBeeEi0briIT7Y4rEOnYAEXM6AFgYMZ0p6vwyzA9xK39lDLjzdK8WbSBPu
+	SmywPEc5ILETEwzE8wrTJyZxk0K0nE7Kn8W5B1/t46yy8S31TFH3LgdHtA6kF7DVoo9ik2
+	NvvBrXZVDgTwFqOXfJO0Ezn1s5yXftE=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v8 0/9] bpf: Extend BPF syscall with common attributes support
+Date: Mon, 26 Jan 2026 23:14:00 +0800
+Message-ID: <20260126151409.52072-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260123-sheaves-for-all-v4-6-041323d506f7@suse.cz>
-X-Debian-User: leitao
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jan 23, 2026 at 07:52:44AM +0100, Vlastimil Babka wrote:
-> In the first step to replace cpu (partial) slabs with sheaves, enable
-> sheaves for almost all caches. Treat args->sheaf_capacity as a minimum,
-> and calculate sheaf capacity with a formula that roughly follows the
-> formula for number of objects in cpu partial slabs in set_cpu_partial().
-> 
-> This should achieve roughly similar contention on the barn spin lock as
-> there's currently for node list_lock without sheaves, to make
-> benchmarking results comparable. It can be further tuned later.
-> 
-> Don't enable sheaves for bootstrap caches as that wouldn't work. In
-> order to recognize them by SLAB_NO_OBJ_EXT, make sure the flag exists
-> even for !CONFIG_SLAB_OBJ_EXT.
-> 
-> This limitation will be lifted for kmalloc caches after the necessary
-> bootstrapping changes.
-> 
-> Also do not enable sheaves for SLAB_NOLEAKTRACE caches to avoid
-> recursion with kmemleak tracking (thanks to Breno Leitao).
-> 
-> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+This patch series builds upon the discussion in
+"[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
 
-Tested-by: Breno Leitao <leitao@debian.org>
+This patch series introduces support for *common attributes* in the BPF
+syscall, providing a unified mechanism for passing shared metadata across
+all BPF commands.
+
+The initial set of common attributes includes:
+
+1. 'log_buf': User-provided buffer for storing log output.
+2. 'log_size': Size of the provided log buffer.
+3. 'log_level': Verbosity level for logging.
+4. 'log_true_size': The size of log reported by kernel.
+
+With this extension, the BPF syscall will be able to return meaningful
+error messages (e.g., failures of creating map), improving debuggability
+and user experience.
+
+Links:
+[1] https://lore.kernel.org/bpf/20250224153352.64689-1-leon.hwang@linux.dev/
+
+Changes:
+v7 -> v8:
+* Return 0 when fd < 0 and errno != EFAULT in probe_sys_bpf_ext(), then simplify
+  probe_bpf_syscall_common_attrs() (per Alexei and Andrii).
+* v7: https://lore.kernel.org/bpf/20260123032445.125259-1-leon.hwang@linux.dev/
+
+v6 -> v7:
+* Return -errno when fd < 0 and errno != EFAULT in probe_sys_bpf_ext().
+* Convert return value of probe_sys_bpf_ext() to bool in
+  probe_bpf_syscall_common_attrs().
+* Address comments from Andrii:
+  * Drop the comment, and handle fd >= 0 case explicitly in
+    probe_sys_bpf_ext().
+  * Return an error when fd >= 0 in probe_sys_bpf_ext().
+* v6: https://lore.kernel.org/bpf/20260120152424.40766-1-leon.hwang@linux.dev/
+
+v5 -> v6:
+* Address comments from Andrii:
+  * Update some variables' name.
+  * Drop unnecessary 'close(fd)' in libbpf.
+  * Rename FEAT_EXTENDED_SYSCALL to FEAT_BPF_SYSCALL_COMMON_ATTRS with
+    updated description in libbpf.
+  * Use EINVAL instead of EUSERS, as EUSERS is not used in bpf yet.
+  * Rename struct bpf_syscall_common_attr_opts to bpf_log_opts in libbpf.
+  * Add 'OPTS_SET(log_opts, log_true_size, 0);' in libbpf's 'bpf_map_create()'.
+* v5: https://lore.kernel.org/bpf/20260112145616.44195-1-leon.hwang@linux.dev/
+
+v4 -> v5:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create
+  (per Alexei).
+* v4: https://lore.kernel.org/bpf/20260106172018.57757-1-leon.hwang@linux.dev/
+
+RFC v3 -> v4:
+* Drop RFC.
+* Address comments from Andrii:
+  * Add parentheses in 'sys_bpf_ext()'.
+  * Avoid creating new fd in 'probe_sys_bpf_ext()'.
+  * Add a new struct to wrap log fields in libbpf.
+* Address comments from Alexei:
+  * Do not skip writing to user space when log_true_size is zero.
+  * Do not use 'bool' arguments.
+  * Drop the adding WARN_ON_ONCE()'s.
+* v3: https://lore.kernel.org/bpf/20251002154841.99348-1-leon.hwang@linux.dev/
+
+RFC v2 -> RFC v3:
+* Rename probe_sys_bpf_extended to probe_sys_bpf_ext.
+* Refactor reporting 'log_true_size' for prog_load.
+* Refactor reporting 'btf_log_true_size' for btf_load.
+* Add warnings for internal bugs in map_create.
+* Check log_true_size in test cases.
+* Address comment from Alexei:
+  * Change kvzalloc/kvfree to kzalloc/kfree.
+* Address comments from Andrii:
+  * Move BPF_COMMON_ATTRS to 'enum bpf_cmd' alongside brief comment.
+  * Add bpf_check_uarg_tail_zero() for extra checks.
+  * Rename sys_bpf_extended to sys_bpf_ext.
+  * Rename sys_bpf_fd_extended to sys_bpf_ext_fd.
+  * Probe the new feature using NULL and -EFAULT.
+  * Move probe_sys_bpf_ext to libbpf_internal.h and drop LIBBPF_API.
+  * Return -EUSERS when log attrs are conflict between bpf_attr and
+    bpf_common_attr.
+  * Avoid touching bpf_vlog_init().
+  * Update the reason messages in map_create.
+  * Finalize the log using __cleanup().
+  * Report log size to users.
+  * Change type of log_buf from '__u64' to 'const char *' and cast type
+    using ptr_to_u64() in bpf_map_create().
+  * Do not return -EOPNOTSUPP when kernel doesn't support this feature
+    in bpf_map_create().
+  * Add log_level support for map creation for consistency.
+* Address comment from Eduard:
+  * Use common_attrs->log_level instead of BPF_LOG_FIXED.
+* v2: https://lore.kernel.org/bpf/20250911163328.93490-1-leon.hwang@linux.dev/
+
+RFC v1 -> RFC v2:
+* Fix build error reported by test bot.
+* Address comments from Alexei:
+  * Drop new uapi for freplace.
+  * Add common attributes support for prog_load and btf_load.
+  * Add common attributes support for map_create.
+* v1: https://lore.kernel.org/bpf/20250728142346.95681-1-leon.hwang@linux.dev/
+
+Leon Hwang (9):
+  bpf: Extend BPF syscall with common attributes support
+  libbpf: Add support for extended bpf syscall
+  bpf: Refactor reporting log_true_size for prog_load
+  bpf: Add syscall common attributes support for prog_load
+  bpf: Refactor reporting btf_log_true_size for btf_load
+  bpf: Add syscall common attributes support for btf_load
+  bpf: Add syscall common attributes support for map_create
+  libbpf: Add common attr support for map_create
+  selftests/bpf: Add tests to verify map create failure log
+
+ include/linux/bpf.h                           |  19 +-
+ include/linux/bpf_verifier.h                  |  17 ++
+ include/linux/btf.h                           |   3 +-
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/btf.c                              |  32 +---
+ kernel/bpf/log.c                              | 103 +++++++++++
+ kernel/bpf/syscall.c                          | 122 ++++++++++---
+ kernel/bpf/verifier.c                         |  19 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/bpf.c                           |  52 +++++-
+ tools/lib/bpf/bpf.h                           |  17 +-
+ tools/lib/bpf/features.c                      |   8 +
+ tools/lib/bpf/libbpf_internal.h               |   3 +
+ .../selftests/bpf/prog_tests/map_init.c       | 168 ++++++++++++++++++
+ 15 files changed, 521 insertions(+), 61 deletions(-)
+
+--
+2.52.0
+
