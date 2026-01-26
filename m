@@ -1,232 +1,170 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1255F1684B4
-	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 01:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046CD1E5B73;
+	Mon, 26 Jan 2026 02:04:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769391631; cv=none; b=GqbGj/yFhVqvfrg4Um7kDW1o/1B++aV38m6w+hNnQcbqC412QwRwRGS7TYk5ON7IPMoAaPmRXnAFhJUwUa45zFW1eFZMpaoJzEEMeSkLOd5kDYloJG+BRT0vQyIqh5HORX7sLuYkTTsRuG9II+CPz6V+LzvnBQtPxeBHMfKSHJw=
+	t=1769393067; cv=none; b=OQ/xVpjJIbisAzxiQMsSGqPR92TPWK5+AaAdxoF7WO7kMJaKeDTiMgkfSbgaG9SroWv7VhZ3DvZBmhe5V1YYi6BE13QduL0sogayS0OUE6U1VFE9KW49JLJtKWPkjGy+b73OiHYz5SInVVh7zjKysPYO+PXG/6UlQXsLHquzOrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769391631; c=relaxed/simple;
-	bh=st4oG32XzB15pUzcYQ7SBJEdkYV85I4fNj6S9F09L7I=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=CAeTfXhQbn5p+aFrzkQ+VK82kjGS1LB/qlH5V3xUAIPxS6dVpdCiFRkntGWNYuoaeuApCTC3oDhCkMNeJyykGjXzhy/MZdOECzx7cd4oWhgDJWO3Enc35rOlE+UwI3Z8CYqh5Q+U9XgJeZsE9AUZt4R2zQTRBV5IhE4SRuY3g+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JtIvEjky; arc=none smtp.client-ip=91.218.175.172
+	s=arc-20240116; t=1769393067; c=relaxed/simple;
+	bh=Qho4rFAhh+NNqe9GgWpu1b9P3YLzTlEjhXB2mMkvjIg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dB/zcB8jZlpI5TEXO7S3SRu3hPFQpzJjBK18uC3+6w/tXWCbkvKuNf8JHh63pv6rFyRYpQoLPPGRhoAPdlgiDe2PNQ8gj3nqfvPi+GXRJH9Cu7acZyvY98dArVq5C1Zn8Zm6GOhbVWT04au6ynSKhhUTgUrx3vuQ+LqUChonKgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aG+yVF1i; arc=none smtp.client-ip=95.215.58.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JtIvEjky"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aG+yVF1i"
+Message-ID: <541db2c8-7a96-4cc3-835e-b0eac64d4e3e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769393053;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YU2NlokWChX+w+wYFtB0VNNjx1y0MJTSqOSPtiMrZJc=;
+	b=aG+yVF1iuAkfFXb5QrSJdMFLtW8l+pRkmAMZl5JX5LKO+N9E3qDxLqUg7xTYdEwZZ7B8yc
+	gEJ3tsqciT1taB9oDsHk5PJvxedvZVnF9PwLtRRepoc5ThIVM8DBuXXjN3lH3MOc8D78uS
+	JTWZky/knscIsOLdIbMRc4I6UyfcA/g=
+Date: Mon, 26 Jan 2026 10:03:54 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769391617;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qOS/I3qY1vByTUV0rzQTBMazz/yNAmJFWVeZH3R10+Y=;
-	b=JtIvEjkyz6fJcB1qcAm9UeGr45TrQiuC4U97SwoSQWERAEd26ARBHVe7+Pw+4xl7KifCNB
-	9NYXe7CylOwE4gcUYajwfyysJZAzkYijiu3765UOhj/R84ibbkDA0AHNiazLN02H6fY7JY
-	Q2NWiGJKpBl1suunAWTwKhLgjyy1ZxU=
-Date: Mon, 26 Jan 2026 01:40:13 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next v7 2/9] libbpf: Add support for extended bpf
+ syscall
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
+ Andrey Albershteyn <aalbersh@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
+ Mykyta Yatsenko <yatsenko@meta.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
+ LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com
+References: <20260123032445.125259-1-leon.hwang@linux.dev>
+ <20260123032445.125259-3-leon.hwang@linux.dev>
+ <CAADnVQJLz+nMHCZXUgy2MOxwFczEHNbG8ZUgfZeUY4yXFUKcNw@mail.gmail.com>
+ <a0ce1dab-7d7e-4b04-a033-4f0611090d34@linux.dev>
+ <CAADnVQ+HJkOikzE3KPhOkd1KNugs7=1dZKY1mfog-ez8noyrDA@mail.gmail.com>
+ <419976da-f296-4418-8dfe-8ad50a9f8cb5@linux.dev>
+ <CAEf4BzYhhf7Jd6DDr2XVf=3gKeMMmrkWW9Sr49QxuW6QudSKig@mail.gmail.com>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: hui.zhu@linux.dev
-Message-ID: <8ee851c5676facd43c45cdd5d434d92d85628e43@linux.dev>
-TLS-Required: No
-Subject: Re: [RFC PATCH bpf-next v3 09/12] selftests/bpf: Add tests for
- memcg_bpf_ops
-To: "JP Kobryn" <inwardvessel@gmail.com>, "Andrew Morton"
- <akpm@linux-foundation.org>, "Johannes Weiner" <hannes@cmpxchg.org>,
- "Michal Hocko" <mhocko@kernel.org>, "Roman Gushchin"
- <roman.gushchin@linux.dev>, "Shakeel Butt" <shakeel.butt@linux.dev>,
- "Muchun Song" <muchun.song@linux.dev>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "KP Singh" <kpsingh@kernel.org>, "Stanislav
- Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
- <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Peter Zijlstra"
- <peterz@infradead.org>, "Miguel Ojeda" <ojeda@kernel.org>, "Nathan
- Chancellor" <nathan@kernel.org>, "Kees Cook" <kees@kernel.org>, "Tejun
- Heo" <tj@kernel.org>, "Jeff Xu" <jeffxu@chromium.org>, mkoutny@suse.com,
- "Jan Hendrik Farr" <kernel@jfarr.cc>, "Christian Brauner"
- <brauner@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>, "Brian
- Gerst" <brgerst@gmail.com>, "Masahiro Yamada" <masahiroy@kernel.org>,
- davem@davemloft.net, "Jakub Kicinski" <kuba@kernel.org>, "Jesper Dangaard
- Brouer" <hawk@kernel.org>, "Willem de Bruijn" <willemb@google.com>,
- "Jason Xing" <kerneljasonxing@gmail.com>, "Paul Chaignon"
- <paul.chaignon@gmail.com>, "Anton Protopopov" <a.s.protopopov@gmail.com>,
- "Amery Hung" <ameryhung@gmail.com>, "Chen Ridong"
- <chenridong@huaweicloud.com>, "Lance Yang" <lance.yang@linux.dev>,
- "Jiayuan Chen" <jiayuan.chen@linux.dev>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, cgroups@vger.kernel.org, bpf@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: "Hui Zhu" <zhuhui@kylinos.cn>, "Geliang Tang" <geliang@kernel.org>
-In-Reply-To: <b90069a3-86b4-4fba-9ff3-fe5f6c4e425d@gmail.com>
-References: <cover.1769157382.git.zhuhui@kylinos.cn>
- <c44accaaaebfc32be13234f82b501a3852ba3f0f.1769157382.git.zhuhui@kylinos.cn>
- <b90069a3-86b4-4fba-9ff3-fe5f6c4e425d@gmail.com>
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzYhhf7Jd6DDr2XVf=3gKeMMmrkWW9Sr49QxuW6QudSKig@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-2026=E5=B9=B41=E6=9C=8824=E6=97=A5 04:47, "JP Kobryn" <inwardvessel@gmail=
-.com mailto:inwardvessel@gmail.com?to=3D%22JP%20Kobryn%22%20%3Cinwardvess=
-el%40gmail.com%3E > =E5=86=99=E5=88=B0:
 
 
->=20
->=20Hi Hui,
->=20
->=20On 1/23/26 1:00 AM, Hui Zhu wrote:
->=20
->=20>=20
->=20> From: Hui Zhu <zhuhui@kylinos.cn>
-> >  Add a comprehensive selftest suite for the `memcg_bpf_ops`
-> >  functionality. These tests validate that BPF programs can correctly
-> >  influence memory cgroup throttling behavior by implementing the new
-> >  hooks.
-> >  The test suite is added in `prog_tests/memcg_ops.c` and covers
-> >  several key scenarios:
-> >  1. `test_memcg_ops_over_high`:
-> >  Verifies that a BPF program can trigger throttling on a low-priority
-> >  cgroup by returning a delay from the `get_high_delay_ms` hook when a
-> >  high-priority cgroup is under pressure.
-> >  2. `test_memcg_ops_below_low_over_high`:
-> >  Tests the combination of the `below_low` and `get_high_delay_ms`
-> >  hooks, ensuring they work together as expected.
-> >  3. `test_memcg_ops_below_min_over_high`:
-> >  Validates the interaction between the `below_min` and
-> >  `get_high_delay_ms` hooks.
-> >  The test framework sets up a cgroup hierarchy with high and low
-> >  priority groups, attaches BPF programs, runs memory-intensive
-> >  workloads, and asserts that the observed throttling (measured by
-> >  workload execution time) matches expectations.
-> >  The BPF program (`progs/memcg_ops.c`) uses a tracepoint on
-> >  `memcg:count_memcg_events` (specifically PGFAULT) to detect memory
-> >  pressure and trigger the appropriate hooks in response. This test
-> >  suite provides essential validation for the new memory control
-> >  mechanisms.
-> >  Signed-off-by: Geliang Tang <geliang@kernel.org>
-> >  Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> >  ---
-> >=20
->=20[..]
->=20
->=20>=20
->=20> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c b/t=
-ools/testing/selftests/bpf/prog_tests/memcg_ops.c
-> >  new file mode 100644
-> >  index 000000000000..9a8d16296f2d
-> >  --- /dev/null
-> >  +++ b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
-> >  @@ -0,0 +1,537 @@
-> >=20
->=20[..]
->=20
->=20>=20
->=20> +
-> >  +static void
-> >  +real_test_memcg_ops_child_work(const char *cgroup_path,
-> >  + char *data_filename,
-> >  + char *time_filename,
-> >  + int read_times)
-> >  +{
-> >  + struct timeval start, end;
-> >  + double elapsed;
-> >  + FILE *fp;
-> >  +
-> >  + if (!ASSERT_OK(join_parent_cgroup(cgroup_path), "join_parent_cgrou=
-p"))
-> >  + goto out;
-> >  +
-> >  + if (env.verbosity >=3D VERBOSE_NORMAL)
-> >  + printf("%s %d begin\n", __func__, getpid());
-> >  +
-> >  + gettimeofday(&start, NULL);
-> >  +
-> >  + if (!ASSERT_OK(write_file(data_filename), "write_file"))
-> >  + goto out;
-> >  +
-> >  + if (env.verbosity >=3D VERBOSE_NORMAL)
-> >  + printf("%s %d write_file done\n", __func__, getpid());
-> >  +
-> >  + if (!ASSERT_OK(read_file(data_filename, read_times), "read_file"))
-> >  + goto out;
-> >  +
-> >  + gettimeofday(&end, NULL);
-> >  +
-> >  + elapsed =3D (end.tv_sec - start.tv_sec) +
-> >  + (end.tv_usec - start.tv_usec) / 1000000.0;
-> >  +
-> >  + if (env.verbosity >=3D VERBOSE_NORMAL)
-> >  + printf("%s %d end %.6f\n", __func__, getpid(), elapsed);
-> >  +
-> >  + fp =3D fopen(time_filename, "w");
-> >  + if (!ASSERT_OK_PTR(fp, "fopen"))
-> >  + goto out;
-> >  + fprintf(fp, "%.6f", elapsed);
-> >  + fclose(fp);
-> >  +
-> >  +out:
-> >  + exit(0);
-> >  +}
-> >  +
-> >=20
->=20[..]
->=20
->=20>=20
->=20> +static void real_test_memcg_ops(int read_times)
-> >  +{
-> >  + int ret;
-> >  + char data_file1[] =3D "/tmp/test_data_XXXXXX";
-> >  + char data_file2[] =3D "/tmp/test_data_XXXXXX";
-> >  + char time_file1[] =3D "/tmp/test_time_XXXXXX";
-> >  + char time_file2[] =3D "/tmp/test_time_XXXXXX";
-> >  + pid_t pid1, pid2;
-> >  + double time1, time2;
-> >  +
-> >  + ret =3D mkstemp(data_file1);
-> >  + if (!ASSERT_GT(ret, 0, "mkstemp"))
-> >  + return;
-> >  + close(ret);
-> >  + ret =3D mkstemp(data_file2);
-> >  + if (!ASSERT_GT(ret, 0, "mkstemp"))
-> >  + goto cleanup_data_file1;
-> >  + close(ret);
-> >  + ret =3D mkstemp(time_file1);
-> >  + if (!ASSERT_GT(ret, 0, "mkstemp"))
-> >  + goto cleanup_data_file2;
-> >  + close(ret);
-> >  + ret =3D mkstemp(time_file2);
-> >  + if (!ASSERT_GT(ret, 0, "mkstemp"))
-> >  + goto cleanup_time_file1;
-> >  + close(ret);
-> >  +
-> >  + pid1 =3D fork();
-> >  + if (!ASSERT_GE(pid1, 0, "fork"))
-> >  + goto cleanup;
-> >  + if (pid1 =3D=3D 0)
-> >  + real_test_memcg_ops_child_work(CG_LOW_DIR,
-> >  + data_file1,
-> >  + time_file1,
-> >  + read_times);
-> >=20
->=20Would it be better to call exit() after real_test_memcg_ops_child_wor=
-k()
-> instead of within it? This way the fork/exit/wait logic is contained in
-> the same scope making the lifetimes easier to track. I had to go back
-> and search for the call to exit() since at a glance this function
-> appears to proceed to call fork() and waitpid() from within both parent
-> and child procs (though it really does not).
->
+On 24/1/26 02:52, Andrii Nakryiko wrote:
+> On Thu, Jan 22, 2026 at 8:19 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>>
+>>
+>> On 23/1/26 12:12, Alexei Starovoitov wrote:
+>>> On Thu, Jan 22, 2026 at 8:07 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>>>
+>>>>
+>>>>
+>>>> On 23/1/26 11:55, Alexei Starovoitov wrote:
+>>>>> On Thu, Jan 22, 2026 at 7:25 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>>>>>
+>>>>>>
+>>>>>> +static int probe_bpf_syscall_common_attrs(int token_fd)
+>>>>>> +{
+>>>>>> +       int ret;
+>>>>>> +
+>>>>>> +       ret = probe_sys_bpf_ext();
+>>>>>> +       return ret > 0;
+>>>>>> +}
+>>>>>
+>>>>> When you look at the above, what thoughts come to mind?
+>>>>>
+>>>>> ... and please don't use ai for answers.
+>>>>
+>>>> My initial thought was whether probe_fd() is needed here to handle and
+>>>> close a returned fd, since the return value of probe_sys_bpf_ext() isn’t
+>>>> obvious from the call site.
+> 
+> Have you looked at how probes are called (in feat_supported()?) They
+> all follow the same contract: > 0 (normally just 1) means feature is
+> supported, 0 means feature is not supported, and <0 means something
+> went wrong. Libbpf will log an error and will assume feature is not
+> supported.
+> 
 
-I will fix it.
+I’ve looked at feat_supported().
 
-Best,
-Hui
+Even though I was aware of the probe contract, I should have thought it
+through more carefully in the context of feat_supported() and
+probe_sys_bpf_ext(). With that in mind, your suggestion makes sense now.
+
+> probe_sys_bpf_ext() should either follow that convention or drop the
+> probe_ prefix altogether to avoid confusion. And then
+> probe_bpf_syscall_common_attrs() is necessary only as a wrapper around
+> probe_sys_bpf_ext() to ignore mandatory (but unused) token_fd argument
+> (so to make it "pluggable" into feat_supported() framework).
+> 
+> So, just make probe_sys_bpf_ext() follow probe contract as described,
+> and then just:
+> 
+> static int probe_bpf_syscall_common_attr(int token_fd)
+> {
+>     return probe_sys_bpf_ext();
+> }
+> 
+
+I’ll make probe_sys_bpf_ext() follow the standard probe convention, and
+keep probe_bpf_syscall_common_attrs() as a thin wrapper to ignore the
+mandatory (but unused) token_fd argument, so it plugs cleanly into
+feat_supported() framework.
+
+> Alternatively, just make probe_sys_bpf_ext() take token_fd (but ignore
+> it), and just use probe_sys_bpf_ext() directly for feat_supported().
+> 
+> 
+> probe_fd() is not suitable here because it's for a common case when we
+> expect syscall to succeed and create fd, in which case that successful
+> fd represents successful feature detection. This is not the case here,
+> so probe_fd() is not what you should use.
+> 
+
+Agreed as well that probe_fd() is not suitable here, since this probe is
+not expected to return a successful FD.
+
+Thanks for the detailed explanation.
+
+Thanks,
+Leon
+
+>>>
+>>> Fair enough, but then collapse it into one helper if FD is a concern.
+>>> My question was about stylistic/taste preferences.
+>>
+>> Understood, thanks for the clarification.
+>>
+>> I’ll rework it with the stylistic preference in mind.
+>>
+>> Thanks,
+>> Leon
+>>
+
