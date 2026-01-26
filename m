@@ -1,66 +1,77 @@
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29CB426B755
-	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 19:21:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D6CC2D73AE
+	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 20:39:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769455288; cv=none; b=Imbb2I0pW57YP58C9yfWkJGF0NtUf6wCLxD6FcaOvT6a8QRg4AAWdPqDmCJGNip4Wc12wR1438vlfYFBA//0CQIT0QGFkPMRKu9i6lSW53F69pNSQM2VTeIssXmBNvoAqXSoDKdLC7o6QV+CEx476attuIqEhdXcMRXSUVB8VrM=
+	t=1769459987; cv=none; b=M0AuSzH/UIcUlhARwdo28+qr62OkU7r/VDL+evDY91tbHwM7Paw/So2M6zPWCylFExbEAGTVxDA4+Qdq61mL/d2dnm0XxOD9vY+q7WWvbwHqET4Q1zezKo1xMeDX5el6iwYDDobotPY+CrghhWeDsiDp3+os/ry3kb2mckQ973g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769455288; c=relaxed/simple;
-	bh=2QlQekbh+u92By5NEIGvxSV8tsD4aPXS5MlZNCRyjVQ=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type; b=Lo0eG8q2la7hkrvQgZB3jfTxp3AtELycVLs2VWjti9v9h+4qigIJe0T/ghNZ+OxlniZtgGL4lSz/qk1GuqncN2fC/js2ORp5dzburtEUc7RXfwcb9d91u59/HPjyYE6y6eyfRDx1oA/1NwJzMdelRTsGM2lCcM+yhondNewoFho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay10.hostedemail.com (Postfix) with ESMTP id 916CDC2A59;
-	Mon, 26 Jan 2026 19:21:18 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf16.hostedemail.com (Postfix) with ESMTPA id E2E682000E;
-	Mon, 26 Jan 2026 19:21:16 +0000 (UTC)
-Date: Mon, 26 Jan 2026 14:21:18 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Ian Rogers <irogers@google.com>, Blake Jones
- <blakejones@google.com>
-Subject: BPF with deferred stacktrace and sframes?
-Message-ID: <20260126142118.2ea3cf13@gandalf.local.home>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1769459987; c=relaxed/simple;
+	bh=kkf7NqrkjU5TqFeW2lMIJ5TO7CcGz101l1cH1huc2G4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G178/S+y/n03y1uvwX0kR1Tl2DQwYEU2eX8sdj506qOQWf9+NKXUlJFYTAmRaFeQUPScOCoj4yaXTa7QvEYtAfk605mgET2oVCGHCJp2E6DawyDKJVNx3l6TwppAWCLs/JFeKG+vQb3ibuIqIfjJqboKlURfyFqF+T8Af4kPnRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=N4v70e8w; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="N4v70e8w"
+Message-ID: <0575e8ab-7a70-48a4-b316-ef22fd8cece5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769459973;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=e79RITJIhc5qxeAFI/7Q2nKmsRKOeygwd2fSS3l+wYs=;
+	b=N4v70e8wAa1xE9p+MYmVOYUx8y/9DRJZNscSuHvn7Mbcv0tIm/+jnB504vC80ZClRhxYUH
+	jRQiJIEsmD9Pl4F4LMiDb2YFKY6fKwQHwpgqvBo2E0lfbQQtn0tywn8M6hV2FevDysLFcL
+	DU0Qom1hL2Aopvvc1aKh0h/VLazJiGE=
+Date: Mon, 26 Jan 2026 12:39:27 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH bpf-next] selftests/bpf: Harden cpu flags test for
+ lru_percpu_hash map
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-patches-bot@fb.com, bpf@vger.kernel.org
+References: <20260119133417.19739-1-leon.hwang@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260119133417.19739-1-leon.hwang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout06
-X-Rspamd-Queue-Id: E2E682000E
-X-Stat-Signature: r7d7d1ew1ctndos95iehqjfx7if4w63k
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX19IqM20lkpCauxiBnL2XYh3+QSu5SvUGLg=
-X-HE-Tag: 1769455276-326256
-X-HE-Meta: U2FsdGVkX18eJKYTXWxqVEhhZ+4qzMoGoNlQc1lVXaWpV8Wkxtze3k1GXucFpElsgWELedpSp9AGk72hC6dEgfAWEq5+A6NpPdj6VOOJjergZu/C8O3T1XsU2obGsGvA4Nl7Bvu3S9WSQF9E9nNUM3alG+md7q7hCxQbwMVB7ySpji9S8E4hioCqGdagsyyaUBHs4rOtHTrDJv7HclQY+MjpRR92hbDzA5v8nHTgvTJCLeRT5XwV5Rs8KFtEd9MH/xnG8NWFE6PH2YiakOLiT40YW4DD6MFdevlx+uqIRg7GrQYZzv82C+nEjpPE274U
+X-Migadu-Flow: FLOW_OUT
 
-Hi folks,
+On 1/19/26 5:34 AM, Leon Hwang wrote:
+> Harden the test against this behavior by provisioning sufficient spare
+> elements. Set max_entries to 'nr_cpus * 2' and restrict the test to using
+> the first nr_cpus entries, ensuring that updates do not spuriously trigger
+> LRU eviction.
 
-Now that deferred stacktrace is upstream and hopefully sframes will soon
-follow, is there any plans to integrate BPF with this facility?
+[ ... ]
 
-Would there be a way to register a BPF program to request and receive a
-user space backtrace when the task goes back to user space?
+@ -300,7 +307,7 @@ static void test_percpu_map_cpu_flag(enum 
+bpf_map_type map_type)
+>   	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
+>   		return;
+>   
+> -	max_entries = nr_cpus + 1;
+> +	max_entries = nr_cpus * 2;
+>   	keys = calloc(max_entries, key_sz);
 
-Basically the API would require a program to register a callback function
-that retrieves the backtrace at a later time, and then during runtime (in
-any context) request that function to be called when the currently running
-task goes back to user space.
-
-I've been Cc'ing the BPF list (and maintainers) on the deferred stack trace
-work and did get a few comments. But I haven't heard anything about BPF
-utilizing the feature yet. So I'm asking now if that's in the works?
-
-If not, perhaps this would be a good topic to bring up at LSFMMBPF?
-
-Cheers,
-
--- Steve
+Does it need to allocate "nr_cpus * 2" number of keys while only first 
+nr_cpus entries are used? This can be a followup if it's needed. Applied 
+to start getting signal from CI.
