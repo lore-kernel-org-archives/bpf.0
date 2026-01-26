@@ -1,146 +1,84 @@
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C860A3112A5
-	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 13:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12A8833B6DC;
+	Mon, 26 Jan 2026 13:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769434470; cv=none; b=ON8h6j0qRezee3dcS0bEqU/LfBMWTmcQ3TIoeFA1Try4T2/i965Oy2HF/FDuDTzk965/v5HnszV+Bd0rrpJs+8BDSAyDT6Vg74Cek8T32o1pdsd2EOCd9Bmee6JN+62lYV3gCXIi0VGekYgETyLhdbSAwWIkNHnMdda2lAtsRYo=
+	t=1769435999; cv=none; b=U3fbe4bH7bcRMigM5mGOESgQ9MY0ofUBuprfp+Hy3dJCG//FPE4Mm1LdRY7DmrwZjS8gG1HSuuUdBpyXtscEb7nD0SMJFOLKeFxYpOUDfUKiwyCb6xa2J2ubnJ8n+Kn7/sW4ewd0ZMLfo477Y8BugQOelUgG1g09hl4KLYwdPd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769434470; c=relaxed/simple;
-	bh=f53timH0np4bz+gztyV/dfAq6Ha3g4qBItMHfYuFoN4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lGP1pnZRQ+bWxDBUQcgnyfnEU/LG7tx2oS1gqV8mly4cHGXyPbk7quhfw+21+koJSlYuePBTpCLGFrJDuvGsTmDvHLoqmP9hlf179hLbmzCZfS9SmYJJAvys3+sAJqtRZqCrlEhjonOHtIfpSTGnor9L/hViB4MGzWnsQU/HegM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BpeAceir; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769435999; c=relaxed/simple;
+	bh=Jk058962S/z+UfR591wadY2ouZ+hkgMaDC0o0U/B/+I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Mvy/Q2D0PsIvFL6LO21vXmRhksiUJmdeZRoT3sktUl478YiS75DvGY42384HggsgBA3VjhTaZzcCxYClwxY8LP3bIAOuG8KBJgzSz1pR9ppXNPXh5F7S6JVZBK5CPlgsoOQbBoveyYg0iqrPFpa+MZzx4p8sUpZ/iRJnokhvcC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=none smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=Q7sbxvHC; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BpeAceir"
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8c53421cdbfso553024385a.0
-        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 05:34:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769434468; x=1770039268; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iQxwi2pFUZR+UAlToTQBrAAHIAjqCBSvDHQE8e6QSYI=;
-        b=BpeAceirIB3MafojmiIC4MtwwBsxINPhSrZWWX+7ErMsX5ep4n2ZPvRn86xJsbivLv
-         gXF5PJLCX8ZoPbjF3Vx27CXvGLQDnlwiFj9uFgDR8KLzZm/ZULVzscsFhg23SmGy0F1J
-         uw4t53M4VcXNA4E1SH7C8Kq3VUUMBpH6Q8KlgWszh7fSiNcR7gzsS7887/gVaYV1gfwU
-         jP6l4N3YDg+g2JALwXRP+p3DI0Vz9eq9lji5z8WdQREZiD8HjlpjJyc4j73+uBogGNe2
-         2g2SnzkNxTYa+P0rJpNTbPNBvgpEK8gbea74QdE84mHO5HNdx0gdZLt30LZdY0cRR/8F
-         eeXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769434468; x=1770039268;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=iQxwi2pFUZR+UAlToTQBrAAHIAjqCBSvDHQE8e6QSYI=;
-        b=tryRd1V7qJ8ajxw3BJ98AWi4vm9EFqo7tJFbD9mcvnt4VeRij3VB6CiPVBNlm247zB
-         uFF4dTlIGKyWOscfKiSKkyA9VDe5v2/cqZkY6Tm7vuuKer2BPm7VVQ43H6F0ryKvjKBG
-         Tr0nSjN5o0MMVxDyWZdjZanzNc8SXEC5hxfwb/VhhCfqccUxOaal+0TT8sBPJO6JJLuN
-         +/M8iqeb/esDMty4ijuLpis/H6r7usB8HAWvpt3GlO8lQJQGnuZ1aq84p93DntQYmSTU
-         jdn5QNgKTqYNbvGNEqyldx56NHgFMk6zO2UW2dPlqeSL5j2iCDD6nEATicHSl3I3rxlU
-         9u6A==
-X-Forwarded-Encrypted: i=1; AJvYcCXLisOfmrUqrWbG/pwMtYlX4It4hfCHtk4KmUjtuymNDfIIqCsiN/Qg7Ile+XwWG/8IJpA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2vxHD25SifDtYGgP/5HAGv9NEfDOXxFR/+5g2sk95+LE4+qBt
-	c/Jsm4T8DAw3cpBikACpMMEuCpv5P0YFZHX6YOQVsV32vmGF8fqGeEA4
-X-Gm-Gg: AZuq6aItaC4tnC9pYG4vijX9oodsoaWf+F2EI4BP3ilh+mNJwZLkZHVY7RIeu2JknZV
-	lj5tMWOO/8BBSsRvtSupwPoyU2sk7J/iSsYlANazUli1JGVg0LuFqjoryzJm0t4sHfd+b6UXZ7x
-	JrIDhNxx2ZnujbTdVb4Io3P84r/QLU3Qc6l0YKKluDagC7KGfEF5UBeLI6da+dEyDXWqrgy/jDD
-	LsuHBc8Ck1nBB23Jf0KjOoRHl2hiasNiPal3ifuJjf75A76d1MxdFfhS+Cw/98WDom1178TYqQk
-	jEpFsL1cJnoZpb5HBwm5IZ531PX0PnA2K9O/PdGAY5DR3xqqS6pM0C1TnPOGLq0Osy/QwM002/i
-	GGEdFum7k6SjA30t39uGli/OmA8W2uLktg59pwMv8loPrV+qr5XLEDQEYdaZ1Tz45mE/n4SrytU
-	0nkltGJx78mnA3Ty+ZtVg=
-X-Received: by 2002:a05:6a00:22d3:b0:81f:4c37:7647 with SMTP id d2e1a72fcca58-823412dbea7mr4104835b3a.68.1769427926560;
-        Mon, 26 Jan 2026 03:45:26 -0800 (PST)
-Received: from soham-laptop.. ([103.182.158.109])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82318648dd7sm9086663b3a.3.2026.01.26.03.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jan 2026 03:45:26 -0800 (PST)
-From: Soham Metha <sohammetha01@gmail.com>
-To: linux-kernel-mentees@lists.linuxfoundation.org
-Cc: shuah@kernel.org,
-	skhan@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	martin.lau@linux.dev,
-	sdf@fomichev.me,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	Soham Metha <sohammetha01@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Jason Xing <kernelxing@tencent.com>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Michal Luczaj <mhal@rbox.co>,
-	Mina Almasry <almasrymina@google.com>,
-	Eric Biggers <ebiggers@google.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	netdev@vger.kernel.org
-Subject: [PATCH v2] net: skbuff: fix uninitialized memory use in pskb_expand_head()
-Date: Mon, 26 Jan 2026 17:13:30 +0530
-Message-Id: <20260126114332.23955-1-sohammetha01@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <6954bc70.050a0220.a1b6.0310.GAE@google.com>
-References: <6954bc70.050a0220.a1b6.0310.GAE@google.com>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="Q7sbxvHC"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=CA7ZM6arGeM7G5r4XYd+i+HkxrAcrO5ouJ48DYGWkxk=; b=Q7sbxvHCpdJlOA8+0uz3927nIV
+	KNaaEpbu0uDEYOC7QS+Zsyy5x2BGTRKzrowzUL3FKnt5t/IUy9oI/eDR5hKyY71LyrAPNfoCM6Pi8
+	4N+4PiyYyDXCiRBrYAZnlsG2H2PofaRBU1DaJiOdtIumZ6/XHerpclx/I9lBDhVhrcavjvUTglMGM
+	Aa2ychCEXyVFuE1KrRmDjZgSzJC1T8VHtw8tHRGvVdgGHHCnPG3AWncsMuyJ+Dzz139qym9F7UrdT
+	tX77nPTY9Tl6MFne75lIndVhuZjUdk03NffssHw7WyF2nJZbOyytPo1c2eJeozzpZKtOlfBbITWJv
+	BYbM6vVA==;
+Received: from authenticated user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.94.2)
+	(envelope-from <leitao@debian.org>)
+	id 1vkN7t-00GDx9-Lb; Mon, 26 Jan 2026 13:59:33 +0000
+Date: Mon, 26 Jan 2026 05:59:28 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
+	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>, 
+	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, 
+	kasan-dev@googlegroups.com
+Subject: Re: [PATCH v4 06/22] slab: add sheaves to most caches
+Message-ID: <aXdzLk010qbTNbUh@gmail.com>
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+ <20260123-sheaves-for-all-v4-6-041323d506f7@suse.cz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260123-sheaves-for-all-v4-6-041323d506f7@suse.cz>
+X-Debian-User: leitao
 
-pskb_expand_head() allocates a new skb data buffer using
-kmalloc_reserve(), which does not initialize memory. skb helpers may
-later copy or move padding bytes from the buffer.
+On Fri, Jan 23, 2026 at 07:52:44AM +0100, Vlastimil Babka wrote:
+> In the first step to replace cpu (partial) slabs with sheaves, enable
+> sheaves for almost all caches. Treat args->sheaf_capacity as a minimum,
+> and calculate sheaf capacity with a formula that roughly follows the
+> formula for number of objects in cpu partial slabs in set_cpu_partial().
+> 
+> This should achieve roughly similar contention on the barn spin lock as
+> there's currently for node list_lock without sheaves, to make
+> benchmarking results comparable. It can be further tuned later.
+> 
+> Don't enable sheaves for bootstrap caches as that wouldn't work. In
+> order to recognize them by SLAB_NO_OBJ_EXT, make sure the flag exists
+> even for !CONFIG_SLAB_OBJ_EXT.
+> 
+> This limitation will be lifted for kmalloc caches after the necessary
+> bootstrapping changes.
+> 
+> Also do not enable sheaves for SLAB_NOLEAKTRACE caches to avoid
+> recursion with kmemleak tracking (thanks to Breno Leitao).
+> 
+> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
-Initialize the newly allocated skb buffer to avoid propagating
-uninitialized memory.
-
-Reported-by: syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=619b9ef527f510a57cfc
-Tested-by: syzbot+619b9ef527f510a57cfc@syzkaller.appspotmail.com
-Signed-off-by: Soham Metha <sohammetha01@gmail.com>
----
-
-v2:
-- No code changes
-- Resent to netdev list
-- Added Closes tag
-- Added Tested-by tag
-
- net/core/skbuff.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index a56133902c0d..b0f0d3a0310b 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -2282,6 +2282,9 @@ int pskb_expand_head(struct sk_buff *skb, int nhead, int ntail,
- 	data = kmalloc_reserve(&size, gfp_mask, NUMA_NO_NODE, NULL);
- 	if (!data)
- 		goto nodata;
-+
-+	memset(data, 0, size);
-+
- 	size = SKB_WITH_OVERHEAD(size);
- 
- 	/* Copy only real data... and, alas, header. This should be
--- 
-2.34.1
-
+Tested-by: Breno Leitao <leitao@debian.org>
