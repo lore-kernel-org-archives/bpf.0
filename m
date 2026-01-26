@@ -1,157 +1,131 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26DB4346791
-	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 17:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31291DE8BE
+	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 17:48:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769448878; cv=none; b=gafFeyC2WdeRU2Y8HGHdSsw5TnbLcrzSU0PrBw/b3zSHJ4H/h2e9mqXZpBHIoeM5B5Ppvat/Tv3fnUVFA+zBWUz64GJ6JBlL3nmQEtEwrbJY4CjpU5NYqkyV8XrsQjMqlvM2mV7ZwPjGdlgzwFz8ls0ereEZEpq1WJ6JxMjtEzE=
+	t=1769449697; cv=none; b=ZIxnZSd81fF4iv5qyMlP+PMXmF4++QqhUVWa0qQ9bcIH2QrFKkk3/tTH4mHlRr39ktozW3vlkKVLGcaKi+ZcYZ1fQdeMGIEUxEpe1FRfQifhTgUDmiS03BYud1zitTOgPgghHspUsxGF8/LC15JWRSp7qKB3IoYOcursUZAwcyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769448878; c=relaxed/simple;
-	bh=faMkRSzEjxFmP50TijL884C8Ef9w8hRvv2mBg1bU/Fk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uTQzigMfNpNV8E9Se3KTJQ07nkGrxaxkFZqVzhRkwtGegcQPsgeszUQlG7Izjl7Pqdzh/+y1jwas0Y1uMP/U9HhQQYwd3GE1v0+Ux3JjfoY2ocSP02i2ktd6kzPKUflQsC+isofjzriNWe3U4XKU6CWouCP/LOkznnF9WDAtFdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UzlwpufA; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769449697; c=relaxed/simple;
+	bh=8QUKLjcJoYO7sCM/57dJoQiVQoYSajS8wltgIq3uias=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Qhdt0rryV1NpP5bgFi7VVjXJ9wBMTqmgjtARYv7iUgYKvjZpFQ01dFEI9CT01HHWVUlTNdrUIEvkqhKTFdXSvY/PVDQMmJbU4DCnfgRwTPTx2sianLAd+7t0NX/bBcka4K7Hn+5UjrGvHbA7Yon1dOVfe9zvYpWfFZSNcLO/+PU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=AGtq7+Fv; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UzlwpufA"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4801bc328easo54051055e9.3
-        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 09:34:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769448875; x=1770053675; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=68PX3ZBzTGWm1jfWmkk8jKDkPQItWhCtTlzGy5B7vQo=;
-        b=UzlwpufA4RvSukOFCMgXjwZwqcUN1n3ZtQfhi1zYOWPfl4t3yzF31tMGEuSeSEvYHz
-         9Ot7gFAAXAu0CzhP2Ibq5pXdktpHlJ4isvQ7tCWAh4QKb0ns8EBkiHWNIiCfVIHW2Z0q
-         sc1Q8l6WsgIomDoapbRwJxt1Ukk6xrFCKcOE8MRh6MzmfQKY0YQ7T1NxPeVHM87MLqjc
-         8dd7ZpqHjr/8LUmkdvZCX4gxccnAvcCAwIYW8pxhjlAtY5YubP+uKI++sZRpDftCjzi4
-         v0otUzavDRMpFnEj+IBEtFbil0NAmGi0unPOAmIPStLtVUXfL9Z55vkOiGxonam9xGlV
-         309g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769448875; x=1770053675;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=68PX3ZBzTGWm1jfWmkk8jKDkPQItWhCtTlzGy5B7vQo=;
-        b=sMxcyaMwWEFrcslBIZiJSMS7vLjPOylkrBoZXJdgFEEQ8e5WkMeK17Ai/5kUsk7QDW
-         vdSWDV15yKlMZpMNDxLIk+RgemegRGOfne7kb3/GPo4lgTSc6Ag5ueHuDoTZf7PZcMTC
-         ud3HcznhBAMUkPLJK7VCQIVZTFpSUTqfn9v8Te1mZeDuTBJj4e+o/FF+pkTHAaeTPqxC
-         q/vYUdBYHZtRs2gYBUI5kSIpUNhqKPPKCI/0v1JmtIo026/4BV9adr/4jMqm1kjukjkg
-         +pxcHj9t+pN3lgSdakRug/tGFw2w40cBARACt3U9P3lBNJXohR6IeMVp94FQYEZurjh9
-         VRhw==
-X-Forwarded-Encrypted: i=1; AJvYcCW8WkRpw173mzNPC2ZY8x5iQI/H6B9BiqHdXnhlAEbvs8cGdn9FY678hVKvRtXwn28eCts=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJOZTCvHZQNjZVomGYb46jvzSawo5SKvR8Z44CX10j2LH4UxsF
-	uWHaFrVIlJkRVRWOtWHNH5QG1zWNsafDUmYH9fgnyMZmao2YqXT+6TnF
-X-Gm-Gg: AZuq6aL0aFH2jcir7HSBGyfIdYUl4/jSBMBYykwFq9DlOdNdAKKA5Y/Xge5TpFSOKS2
-	2J9i0Bg4CKNnmXDhFNXGtHcj6fkHwcKrsIAcqaARxuvC3w7cuNmMTRDRz7aUIeMesIFlnn/BOl8
-	7/gqEnATAPcB7AHtv+1Iae3hKdnZaWgHXRnDK6BDco++vArNrDu/euEWJ/Erx8wQeSp5YHeXrid
-	ypH7wbe/4pKsgUXP7iYARl5PNhi7uBU+M7y4k13pl6UP1FGvCjkpb2dL5fzj4hYiR13lWvs4wHU
-	oYrrMSvkZTVvilzIA7cDFnB9aP31VGqfM8ZAwjh/GX7SPI4xCaUojvHjDA0CK9cW9gStz6H6aHT
-	SYs02Zi+UPYXWAy9A7CgWHu59H6Jeq3pqwuuX0bbKtIA/Au2u39y7LqYUxJjmM74DX+GM8OceED
-	fK3Yb8SabrFX0JHZpT1hJPP0w=
-X-Received: by 2002:a05:600c:46ca:b0:480:1a3a:5ce6 with SMTP id 5b1f17b1804b1-4805ce4eb3cmr80288115e9.14.1769448875346;
-        Mon, 26 Jan 2026 09:34:35 -0800 (PST)
-Received: from LT2202712.. ([2a01:cb16:3013:f686:9880:33dc:3c70:30df])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4804d3ab9a7sm118335555e9.0.2026.01.26.09.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jan 2026 09:34:34 -0800 (PST)
-From: Guillaume GONNET <ggonnet.linux@gmail.com>
-To: daniel@iogearbox.net
-Cc: ast@kernel.org,
-	bpf@vger.kernel.org,
-	ggonnet.linux@gmail.com,
-	john.fastabend@gmail.com,
-	martin.lau@linux.dev
-Subject: [PATCH] bpf: fix TCX/netkit detach permissions when prog FD isn't given
-Date: Mon, 26 Jan 2026 18:34:31 +0100
-Message-Id: <20260126173431.19825-1-ggonnet.linux@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <d269a9b8946d21a9f93724baa6ed06e9873e8c13890902ff09e201a89c727804@mail.kernel.org>
-References: <d269a9b8946d21a9f93724baa6ed06e9873e8c13890902ff09e201a89c727804@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="AGtq7+Fv"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=0ScXa7gonoBkrLB4F5/qarnqXDiZvhmhjHL25BHr3cg=; b=AGtq7+FvLpWkBzJeVQl/kjdCi5
+	6wid0/Ck5+qA9roGp7Zk/mLWIyNspz/XbJoek1VfekMXrfbcBPTw6cVa+1uOHBUnR6RX3nVOJB6NI
+	k8ihS/edCmlhelXXjhx+bj0e5sKnCASkW5Xzelx28qJ/9gIDwSohGByL4q+hk5xHA2gtL1Brhryxa
+	TKSWdw6AnwRgiY9XERBb62XIO6HBx8rLcKjOcoes+6iJm6xImEOOsVbxghiMv7W3noni2kxu1yMfs
+	fAmk1Ure/vdmyiMGqm1Xrp07VEeaqCanwVuI5uIXUziZ/7utDDK41zKVnmp0Oj65I9WmdYFbTTV25
+	tgcQ0Q1A==;
+Received: from sslproxy08.your-server.de ([78.47.166.52])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vkQh1-0002ma-0h;
+	Mon, 26 Jan 2026 18:48:03 +0100
+Received: from localhost ([127.0.0.1])
+	by sslproxy08.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vkQgR-000AB7-0S;
+	Mon, 26 Jan 2026 18:48:02 +0100
+Message-ID: <bb94fc81-ff85-493d-9e42-09e05c1a4eb9@iogearbox.net>
+Date: Mon, 26 Jan 2026 18:48:01 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf] bpf: fix TCX/netkit detach permissions when prog FD
+ isn't given
+To: bot+bpf-ci@kernel.org, ggonnet.linux@gmail.com
+Cc: ast@kernel.org, bpf@vger.kernel.org, john.fastabend@gmail.com,
+ martin.lau@linux.dev, andrii@kernel.org, martin.lau@kernel.org,
+ eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260126170731.16321-1-ggonnet.linux@gmail.com>
+ <d269a9b8946d21a9f93724baa6ed06e9873e8c13890902ff09e201a89c727804@mail.kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ xsFNBGNAkI0BEADiPFmKwpD3+vG5nsOznvJgrxUPJhFE46hARXWYbCxLxpbf2nehmtgnYpAN
+ 2HY+OJmdspBntWzGX8lnXF6eFUYLOoQpugoJHbehn9c0Dcictj8tc28MGMzxh4aK02H99KA8
+ VaRBIDhmR7NJxLWAg9PgneTFzl2lRnycv8vSzj35L+W6XT7wDKoV4KtMr3Szu3g68OBbp1TV
+ HbJH8qe2rl2QKOkysTFRXgpu/haWGs1BPpzKH/ua59+lVQt3ZupePpmzBEkevJK3iwR95TYF
+ 06Ltpw9ArW/g3KF0kFUQkGXYXe/icyzHrH1Yxqar/hsJhYImqoGRSKs1VLA5WkRI6KebfpJ+
+ RK7Jxrt02AxZkivjAdIifFvarPPu0ydxxDAmgCq5mYJ5I/+BY0DdCAaZezKQvKw+RUEvXmbL
+ 94IfAwTFA1RAAuZw3Rz5SNVz7p4FzD54G4pWr3mUv7l6dV7W5DnnuohG1x6qCp+/3O619R26
+ 1a7Zh2HlrcNZfUmUUcpaRPP7sPkBBLhJfqjUzc2oHRNpK/1mQ/+mD9CjVFNz9OAGD0xFzNUo
+ yOFu/N8EQfYD9lwntxM0dl+QPjYsH81H6zw6ofq+jVKcEMI/JAgFMU0EnxrtQKH7WXxhO4hx
+ 3DFM7Ui90hbExlFrXELyl/ahlll8gfrXY2cevtQsoJDvQLbv7QARAQABzSZEYW5pZWwgQm9y
+ a21hbm4gPGRhbmllbEBpb2dlYXJib3gubmV0PsLBkQQTAQoAOxYhBCrUdtCTcZyapV2h+93z
+ cY/jfzlXBQJjQJCNAhsDBQkHhM4ACAsJCAcNDAsKBRUKCQgLAh4BAheAAAoJEN3zcY/jfzlX
+ dkUQAIFayRgjML1jnwKs7kvfbRxf11VI57EAG8a0IvxDlNKDcz74mH66HMyhMhPqCPBqphB5
+ ZUjN4N5I7iMYB/oWUeohbuudH4+v6ebzzmgx/EO+jWksP3gBPmBeeaPv7xOvN/pPDSe/0Ywp
+ dHpl3Np2dS6uVOMnyIsvmUGyclqWpJgPoVaXrVGgyuer5RpE/a3HJWlCBvFUnk19pwDMMZ8t
+ 0fk9O47HmGh9Ts3O8pGibfdREcPYeGGqRKRbaXvcRO1g5n5x8cmTm0sQYr2xhB01RJqWrgcj
+ ve1TxcBG/eVMmBJefgCCkSs1suriihfjjLmJDCp9XI/FpXGiVoDS54TTQiKQinqtzP0jv+TH
+ 1Ku+6x7EjLoLH24ISGyHRmtXJrR/1Ou22t0qhCbtcT1gKmDbTj5TcqbnNMGWhRRTxgOCYvG0
+ 0P2U6+wNj3HFZ7DePRNQ08bM38t8MUpQw4Z2SkM+jdqrPC4f/5S8JzodCu4x80YHfcYSt+Jj
+ ipu1Ve5/ftGlrSECvy80ZTKinwxj6lC3tei1bkI8RgWZClRnr06pirlvimJ4R0IghnvifGQb
+ M1HwVbht8oyUEkOtUR0i0DMjk3M2NoZ0A3tTWAlAH8Y3y2H8yzRrKOsIuiyKye9pWZQbCDu4
+ ZDKELR2+8LUh+ja1RVLMvtFxfh07w9Ha46LmRhpCzsFNBGNAkI0BEADJh65bNBGNPLM7cFVS
+ nYG8tqT+hIxtR4Z8HQEGseAbqNDjCpKA8wsxQIp0dpaLyvrx4TAb/vWIlLCxNu8Wv4W1JOST
+ wI+PIUCbO/UFxRy3hTNlb3zzmeKpd0detH49bP/Ag6F7iHTwQQRwEOECKKaOH52tiJeNvvyJ
+ pPKSKRhmUuFKMhyRVK57ryUDgowlG/SPgxK9/Jto1SHS1VfQYKhzMn4pWFu0ILEQ5x8a0RoX
+ k9p9XkwmXRYcENhC1P3nW4q1xHHlCkiqvrjmWSbSVFYRHHkbeUbh6GYuCuhqLe6SEJtqJW2l
+ EVhf5AOp7eguba23h82M8PC4cYFl5moLAaNcPHsdBaQZznZ6NndTtmUENPiQc2EHjHrrZI5l
+ kRx9hvDcV3Xnk7ie0eAZDmDEbMLvI13AvjqoabONZxra5YcPqxV2Biv0OYp+OiqavBwmk48Z
+ P63kTxLddd7qSWbAArBoOd0wxZGZ6mV8Ci/ob8tV4rLSR/UOUi+9QnkxnJor14OfYkJKxot5
+ hWdJ3MYXjmcHjImBWplOyRiB81JbVf567MQlanforHd1r0ITzMHYONmRghrQvzlaMQrs0V0H
+ 5/sIufaiDh7rLeZSimeVyoFvwvQPx5sXhjViaHa+zHZExP9jhS/WWfFE881fNK9qqV8pi+li
+ 2uov8g5yD6hh+EPH6wARAQABwsF8BBgBCgAmFiEEKtR20JNxnJqlXaH73fNxj+N/OVcFAmNA
+ kI0CGwwFCQeEzgAACgkQ3fNxj+N/OVfFMhAA2zXBUzMLWgTm6iHKAPfz3xEmjtwCF2Qv/TT3
+ KqNUfU3/0VN2HjMABNZR+q3apm+jq76y0iWroTun8Lxo7g89/VDPLSCT0Nb7+VSuVR/nXfk8
+ R+OoXQgXFRimYMqtP+LmyYM5V0VsuSsJTSnLbJTyCJVu8lvk3T9B0BywVmSFddumv3/pLZGn
+ 17EoKEWg4lraXjPXnV/zaaLdV5c3Olmnj8vh+14HnU5Cnw/dLS8/e8DHozkhcEftOf+puCIl
+ Awo8txxtLq3H7KtA0c9kbSDpS+z/oT2S+WtRfucI+WN9XhvKmHkDV6+zNSH1FrZbP9FbLtoE
+ T8qBdyk//d0GrGnOrPA3Yyka8epd/bXA0js9EuNknyNsHwaFrW4jpGAaIl62iYgb0jCtmoK/
+ rCsv2dqS6Hi8w0s23IGjz51cdhdHzkFwuc8/WxI1ewacNNtfGnorXMh6N0g7E/r21pPeMDFs
+ rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
+ DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
+ owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
+In-Reply-To: <d269a9b8946d21a9f93724baa6ed06e9873e8c13890902ff09e201a89c727804@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27892/Mon Jan 26 08:24:15 2026)
 
-This commit fixes a security issue where BPF_PROG_DETACH on TCX or netkit
-devices could be executed by any user when no program FD was provided,
-bypassing permission checks. The fix adds a capability check for
-CAP_NET_ADMIN or CAP_SYS_ADMIN in this case.
+On 1/26/26 6:23 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+>> index 4ff82144f885..9796fe5b9ab5 100644
+>> --- a/kernel/bpf/syscall.c
+>> +++ b/kernel/bpf/syscall.c
+> 
+> [ ... ]
+> 
+>> @@ -4565,6 +4560,8 @@ static int bpf_prog_detach(const union bpf_attr *attr)
+>>   			prog = bpf_prog_get_type(attr->attach_bpf_fd, ptype);
+>>   			if (IS_ERR(prog))
+>>   				return PTR_ERR(prog);
+>> +		} else if (!bpf_mprog_detach_empty(ptype))
+>> +			return -EPERM;
+>>   		}
 
-Fixes: e420bed02507 ("bpf: Add fd-based tcx multi-prog infra with link support")
-Signed-off-by: Guillaume GONNET <ggonnet.linux@gmail.com>
----
- include/linux/bpf.h       |  5 +++++
- include/linux/bpf_mprog.h | 10 ++++++++++
- kernel/bpf/syscall.c      |  7 ++-----
- 3 files changed, 17 insertions(+), 5 deletions(-)
+Please never send untested code. I saw you sent a new version already so
+I'll toss this one - in future please properly label with [PATCH bpf v3]
+if you send a new revision.
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4427c6e98331..5f59d1f173a2 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -2742,6 +2742,11 @@ static inline bool bpf_bypass_spec_v4(const struct bpf_token *token)
- 		bpf_token_capable(token, CAP_PERFMON);
- }
- 
-+static inline bool bpf_net_capable(void)
-+{
-+	return capable(CAP_NET_ADMIN) || capable(CAP_SYS_ADMIN);
-+}
-+
- int bpf_map_new_fd(struct bpf_map *map, int flags);
- int bpf_prog_new_fd(struct bpf_prog *prog);
- 
-diff --git a/include/linux/bpf_mprog.h b/include/linux/bpf_mprog.h
-index 929225f7b095..0b9f4caeeb0a 100644
---- a/include/linux/bpf_mprog.h
-+++ b/include/linux/bpf_mprog.h
-@@ -340,4 +340,14 @@ static inline bool bpf_mprog_supported(enum bpf_prog_type type)
- 		return false;
- 	}
- }
-+
-+static inline bool bpf_mprog_detach_empty(enum bpf_prog_type type)
-+{
-+	switch (type) {
-+	case BPF_PROG_TYPE_SCHED_CLS:
-+		return bpf_net_capable();
-+	default:
-+		return false;
-+	}
-+}
- #endif /* __BPF_MPROG_H */
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index b9184545c3fd..5f59dd47a5b1 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -1363,11 +1363,6 @@ static int map_check_btf(struct bpf_map *map, struct bpf_token *token,
- 	return ret;
- }
- 
--static bool bpf_net_capable(void)
--{
--	return capable(CAP_NET_ADMIN) || capable(CAP_SYS_ADMIN);
--}
--
- #define BPF_MAP_CREATE_LAST_FIELD excl_prog_hash_size
- /* called via syscall */
- static int map_create(union bpf_attr *attr, bpfptr_t uattr)
-@@ -4579,6 +4574,8 @@ static int bpf_prog_detach(const union bpf_attr *attr)
- 			prog = bpf_prog_get_type(attr->attach_bpf_fd, ptype);
- 			if (IS_ERR(prog))
- 				return PTR_ERR(prog);
-+		} else if (!bpf_mprog_detach_empty(ptype)) {
-+			return -EPERM;
- 		}
- 	} else if (is_cgroup_prog_type(ptype, 0, false)) {
- 		if (attr->attach_flags || attr->relative_fd)
--- 
-2.34.1
-
+Thanks,
+Daniel
