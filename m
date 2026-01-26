@@ -1,138 +1,214 @@
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com (fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com [3.72.182.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C444F348477
-	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 16:49:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5B3347FD9;
+	Mon, 26 Jan 2026 16:50:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=3.72.182.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769446172; cv=none; b=DhQgBuS//w4KLWnujHNhy2g5clbYXkzkPvltTEY3LmxpDPBNbn3diS6FBIQAuoWPgfwuB9helJiB+Y0KdfUlTldggdQkObY1Hvkav8NMncEffDQvalhXdeHTn4g/G+fbqxE1ICqPCF+ftaTQT9MOeqqRY3qiC/aVupAdGarqm5I=
+	t=1769446204; cv=none; b=fxMmRIJmTnhHIDVYa8efttT2mJK7yZpKhWK9JYmjzGtOqCnYCk9RdJS+5n9Tvx4aQwGjZjlvUdh8YS0a9eGk7QlCBk2E+Qm+m25NEzzrH0BjSe80AhGjgvJQX+cGJGSoNoAi4QfC5cYdySdrz2aZy3eTUHerNwIs4M3js9epJt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769446172; c=relaxed/simple;
-	bh=uHcXECLSgsppVhP+AhoOZulbAbBN77UIUBU86+28NXw=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=PfEUsLy315PYZyzQ4qX94M4ylJEjxFex2hTVUD2SZLF8hlsYje9LxbHhxk3POBiRrSG8FcJVGM+oykRw4Fnpa88Pi7H25pABACDgu5T0k7QQVBJlG2sSH2z7ut1GosQo9besrIdP2kdrnJ6z+xenQE2ZQrHmkz2YqISsmAqYt7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C3VpYOpB; arc=none smtp.client-ip=209.85.128.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769446204; c=relaxed/simple;
+	bh=IF0M2E3DvBck4mJzE9fKs+UtPNVKjEegmU1qWrF5i78=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=S5/vtP+UnQOqxX8ChdzRXwAZRGRWRINIugCq98TSz5m28ARTTUHfpCOMtF+TDM5Rnez886w9M0J0B2HEgBDXhpLXZCSW5vKZkDfKuh/R6B/LPfx9J4uP/P6sxiVsrDoB1Rbwfnpa2VuY5liLKS2uxLjsCTgGUglG70JZZKek1dY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=rdRWsjzJ; arc=none smtp.client-ip=3.72.182.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C3VpYOpB"
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-7927b1620ddso69028157b3.0
-        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 08:49:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="rdRWsjzJ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769446167; x=1770050967; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CzIM5S1aosasnRgv4fpJy7hXx99GJuvBk4X/AumVJ6E=;
-        b=C3VpYOpBYH6j/6Ogy6nYwz33PkgKdn7zoo8DV+MsAPUKDOmRisXtm82KK7zpBFotFd
-         KG3HZbVdskGhXmgESjGv3ZEUogwzPyjOLe09etNtZJ5I8ENxG4Ec0XpevpkO8s6eIY23
-         Fq6bTrTjdxopBy4riRctLA/JUZn/LDLgm6ZFBGlSFzBLyjwAMr1fropAWpbywCnFobiX
-         iYZDQxhrGKe8lXj9io+A/YUJTF2bXqxIlBtuPKe5oOzv7txsBTp4sXpGtj/phpq2Rc2H
-         evXJsR49xTGdyULmbJqghynRdYxVPEfMLhE0EwS8/l05HSzQ5WHjvdXNqUsz25vXCCmL
-         bhIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769446167; x=1770050967;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CzIM5S1aosasnRgv4fpJy7hXx99GJuvBk4X/AumVJ6E=;
-        b=Fa5+0cUNeblAM9eHHQq7hVoilAWlsevFVzv64ukKjW3/WoNal5u0vy61pdC7KWupTe
-         l7RvbByJllEOFF5gOxzI3TK6hVUWaqHw73/WArFCV1b6IvR2pJrbcig9Zjz+aRe3odlS
-         rnJfP0FHrmP84nCm6gKnD8Y24xFyCVfKsx69ENX7OD9k5CnahwQqiU7ecjgmk9cRY10Q
-         U0oBUrs/gaijDFB5R1occ0LTzI9kl5jQQyRPynC8ZchX8nsxEhlJsS0JqIQArhK7Jhi3
-         THZlLZKZ0eOqzvqurAJ+5guhnygBAUk8BxxINDnH/U8cSIbk/19Yf9zukJrMzSpszsr2
-         U8KQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVh99dvIlIsRxHL/ESS0fg7NSFhmsHpjdg3Yenf6CdPrz0ATAlC+nuHbMs9eQAm6vS53LY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywne8sZLRDyLExSI8sMEE+Ucc2I+q2iP8ubdT47c95H96RYOIMK
-	qjwjIdwOjqHY1AZjzdS2ptHJH18jm6Y2KkIqms+w24vE8hb4aGBbhPcx
-X-Gm-Gg: AZuq6aLsjq87djP2gJZ4fQWccsOg7oeGwIhIq/zY4wGA1GGOoC15CS5L0zg9dOJUj63
-	jOxfa0VJ2q2mBeANF5eJPB0C8QsnZSu/t+/dcqY4TwEXhxd0WyTSYiQvLFlTX6wYXtwo+WghqKO
-	kNgER/Gn0fmInnucWTj/6yQIcM6St4ASH08bUFSZ2tdpDhujHt8FADR8jgxfXdAzmYRCq+nRuEL
-	dICE4Q+GXNviEWl0HNF44nxKuJhTvCbgFI1+ITbN3Uui1Qi5H6VONIikpKTclmTwgVY3NcrZYut
-	2h7z5cNbIOaUX/rNc8z1dC6jaF0BG+7KX0ebAN1zgrWs9C10dvYh3mh6AQqRnmaRCvmzRNEU3jY
-	0As/xn6f0Pill1K1wcN5kDSF5eebwiJqOWHNq/q/XJ7zkgvh7pjc8s/ho5cH4q38hsqiLsRTn4D
-	isU0L6eS4YrBtJNQPmYAp4QXOSplvTG29eiBrzUNvelaz6G3C7xsM/j0OLxc4=
-X-Received: by 2002:a05:690c:6809:b0:794:107f:12b8 with SMTP id 00721157ae682-7945abe5d41mr35771317b3.10.1769446167253;
-        Mon, 26 Jan 2026 08:49:27 -0800 (PST)
-Received: from gmail.com (21.33.48.34.bc.googleusercontent.com. [34.48.33.21])
-        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-7943b2b9bfcsm49990507b3.38.2026.01.26.08.49.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 26 Jan 2026 08:49:26 -0800 (PST)
-Date: Mon, 26 Jan 2026 11:49:26 -0500
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jibin Zhang <jibin.zhang@mediatek.com>, 
- Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, 
- KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, 
- Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- "David S . Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, 
- Neal Cardwell <ncardwell@google.com>, 
- Kuniyuki Iwashima <kuniyu@google.com>, 
- David Ahern <dsahern@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- bpf@vger.kernel.org, 
- netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, 
- steffen.klassert@secunet.com
-Cc: wsd_upstream@mediatek.com, 
- Jibin Zhang <jibin.zhang@mediatek.com>
-Message-ID: <willemdebruijn.kernel.11a4b80935127@gmail.com>
-In-Reply-To: <20260126152114.1211-1-jibin.zhang@mediatek.com>
-References: <20260126152114.1211-1-jibin.zhang@mediatek.com>
-Subject: Re: [PATCH v4] net: fix segmentation of forwarding fraglist GRO
+  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
+  s=amazoncorp2; t=1769446202; x=1800982202;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=YM73eY307YaRwo6+pc3v4qdEPN5NgqCcavRDYEf/Quc=;
+  b=rdRWsjzJGW0okKk4NADGNvyYwVBgWoX7d+GEkj3lXZdmpuxlspzCYXEU
+   vtT2u6xWwKtNHlaKmPsYkLlkAi4TdFA5AewpHYrq5TKxcSSM17lmJqKdO
+   uLgkGNz1sUd9v4CA8Cx8fMEe6NDO6LlPvnavbAkvFRBaluHX+uWK88BjX
+   WC00IQp9vr7Bv2fjRoVVyYDDJoDGPZJKZK12cwtx8wCuKr4TOhtntoBVo
+   MiHMFvgQVj6DOTQ2no4Pi1D3WSoVy1ydDBL9n+onukfvuu/DFLFbxv93x
+   h+iomg6QpBbW7crKlWNRM3L1s5D6XNZ4mL2AHiwi8zIYGQMLszxQwCz2Y
+   Q==;
+X-CSE-ConnectionGUID: tsOMHVQVRZ65NfTX5SQhRg==
+X-CSE-MsgGUID: naQRpPAmQfq37MsuRHHn/w==
+X-IronPort-AV: E=Sophos;i="6.21,255,1763424000"; 
+   d="scan'208";a="8451376"
+Received: from ip-10-6-11-83.eu-central-1.compute.internal (HELO smtpout.naws.eu-central-1.prod.farcaster.email.amazon.dev) ([10.6.11.83])
+  by internal-fra-out-003.esa.eu-central-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Jan 2026 16:49:59 +0000
+Received: from EX19MTAEUB001.ant.amazon.com [54.240.197.234:21144]
+ by smtpin.naws.eu-central-1.prod.farcaster.email.amazon.dev [10.0.9.185:2525] with esmtp (Farcaster)
+ id 54af3da5-7ca2-4763-b9d2-1af04fc03c99; Mon, 26 Jan 2026 16:49:59 +0000 (UTC)
+X-Farcaster-Flow-ID: 54af3da5-7ca2-4763-b9d2-1af04fc03c99
+Received: from EX19D005EUB002.ant.amazon.com (10.252.51.103) by
+ EX19MTAEUB001.ant.amazon.com (10.252.51.28) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
+ Mon, 26 Jan 2026 16:49:57 +0000
+Received: from EX19D005EUB003.ant.amazon.com (10.252.51.31) by
+ EX19D005EUB002.ant.amazon.com (10.252.51.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
+ Mon, 26 Jan 2026 16:49:57 +0000
+Received: from EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c]) by
+ EX19D005EUB003.ant.amazon.com ([fe80::b825:becb:4b38:da0c%3]) with mapi id
+ 15.02.2562.035; Mon, 26 Jan 2026 16:49:57 +0000
+From: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
+To: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "kvmarm@lists.linux.dev"
+	<kvmarm@lists.linux.dev>, "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>, "linux-riscv@lists.infradead.org"
+	<linux-riscv@lists.infradead.org>, "linux-s390@vger.kernel.org"
+	<linux-s390@vger.kernel.org>, "loongarch@lists.linux.dev"
+	<loongarch@lists.linux.dev>
+CC: "pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+	<corbet@lwn.net>, "maz@kernel.org" <maz@kernel.org>, "oupton@kernel.org"
+	<oupton@kernel.org>, "joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, "yuzenghui@huawei.com"
+	<yuzenghui@huawei.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>, "seanjc@google.com" <seanjc@google.com>,
+	"tglx@kernel.org" <tglx@kernel.org>, "mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>, "dave.hansen@linux.intel.com"
+	<dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>, "luto@kernel.org" <luto@kernel.org>,
+	"peterz@infradead.org" <peterz@infradead.org>, "willy@infradead.org"
+	<willy@infradead.org>, "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>, "david@kernel.org" <david@kernel.org>,
+	"lorenzo.stoakes@oracle.com" <lorenzo.stoakes@oracle.com>, "vbabka@suse.cz"
+	<vbabka@suse.cz>, "rppt@kernel.org" <rppt@kernel.org>, "surenb@google.com"
+	<surenb@google.com>, "mhocko@suse.com" <mhocko@suse.com>, "ast@kernel.org"
+	<ast@kernel.org>, "daniel@iogearbox.net" <daniel@iogearbox.net>,
+	"andrii@kernel.org" <andrii@kernel.org>, "martin.lau@linux.dev"
+	<martin.lau@linux.dev>, "eddyz87@gmail.com" <eddyz87@gmail.com>,
+	"song@kernel.org" <song@kernel.org>, "yonghong.song@linux.dev"
+	<yonghong.song@linux.dev>, "john.fastabend@gmail.com"
+	<john.fastabend@gmail.com>, "kpsingh@kernel.org" <kpsingh@kernel.org>,
+	"sdf@fomichev.me" <sdf@fomichev.me>, "haoluo@google.com" <haoluo@google.com>,
+	"jolsa@kernel.org" <jolsa@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+	"jhubbard@nvidia.com" <jhubbard@nvidia.com>, "peterx@redhat.com"
+	<peterx@redhat.com>, "jannh@google.com" <jannh@google.com>,
+	"pfalcato@suse.de" <pfalcato@suse.de>, "shuah@kernel.org" <shuah@kernel.org>,
+	"riel@surriel.com" <riel@surriel.com>, "ryan.roberts@arm.com"
+	<ryan.roberts@arm.com>, "jgross@suse.com" <jgross@suse.com>,
+	"yu-cheng.yu@intel.com" <yu-cheng.yu@intel.com>, "kas@kernel.org"
+	<kas@kernel.org>, "coxu@redhat.com" <coxu@redhat.com>,
+	"kevin.brodsky@arm.com" <kevin.brodsky@arm.com>, "ackerleytng@google.com"
+	<ackerleytng@google.com>, "maobibo@loongson.cn" <maobibo@loongson.cn>,
+	"prsampat@amd.com" <prsampat@amd.com>, "mlevitsk@redhat.com"
+	<mlevitsk@redhat.com>, "jmattson@google.com" <jmattson@google.com>,
+	"jthoughton@google.com" <jthoughton@google.com>, "agordeev@linux.ibm.com"
+	<agordeev@linux.ibm.com>, "alex@ghiti.fr" <alex@ghiti.fr>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, "borntraeger@linux.ibm.com"
+	<borntraeger@linux.ibm.com>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
+	"dev.jain@arm.com" <dev.jain@arm.com>, "gor@linux.ibm.com"
+	<gor@linux.ibm.com>, "hca@linux.ibm.com" <hca@linux.ibm.com>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "pjw@kernel.org" <pjw@kernel.org>,
+	"shijie@os.amperecomputing.com" <shijie@os.amperecomputing.com>,
+	"svens@linux.ibm.com" <svens@linux.ibm.com>, "thuth@redhat.com"
+	<thuth@redhat.com>, "wyihan@google.com" <wyihan@google.com>,
+	"yang@os.amperecomputing.com" <yang@os.amperecomputing.com>,
+	"Jonathan.Cameron@huawei.com" <Jonathan.Cameron@huawei.com>,
+	"Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>, "urezki@gmail.com"
+	<urezki@gmail.com>, "zhengqi.arch@bytedance.com"
+	<zhengqi.arch@bytedance.com>, "gerald.schaefer@linux.ibm.com"
+	<gerald.schaefer@linux.ibm.com>, "jiayuan.chen@shopee.com"
+	<jiayuan.chen@shopee.com>, "lenb@kernel.org" <lenb@kernel.org>,
+	"osalvador@suse.de" <osalvador@suse.de>, "pavel@kernel.org"
+	<pavel@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
+	"vannapurve@google.com" <vannapurve@google.com>, "jackmanb@google.com"
+	<jackmanb@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>,
+	"patrick.roy@linux.dev" <patrick.roy@linux.dev>, "Thomson, Jack"
+	<jackabt@amazon.co.uk>, "Itazuri, Takahiro" <itazur@amazon.co.uk>,
+	"Manwaring, Derek" <derekmn@amazon.com>, "Cali, Marco"
+	<xmarcalx@amazon.co.uk>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>
+Subject: [PATCH v10 06/15] KVM: guest_memfd: Add stub for
+ kvm_arch_gmem_invalidate
+Thread-Topic: [PATCH v10 06/15] KVM: guest_memfd: Add stub for
+ kvm_arch_gmem_invalidate
+Thread-Index: AQHcjuOFjtfKI2gu60qkE1RI1hTM5Q==
+Date: Mon, 26 Jan 2026 16:49:57 +0000
+Message-ID: <20260126164445.11867-7-kalyazin@amazon.com>
+References: <20260126164445.11867-1-kalyazin@amazon.com>
+In-Reply-To: <20260126164445.11867-1-kalyazin@amazon.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
 
-[PATCH net v4]
-
-Jibin Zhang wrote:
-> This patch enhances GSO segment handling by properly checking
-> the SKB_GSO_DODGY flag for frag_list GSO packets, addressing
-> low throughput issues observed when a station accesses IPv4
-> servers via hotspots with an IPv6-only upstream interface.
-> 
-> Specifically, it fixes a bug in GSO segmentation when forwarding
-> GRO packets containing a frag_list. The function skb_segment_list
-> cannot correctly process GRO skbs that have been converted by XLAT,
-> since XLAT only translates the header of the head skb. Consequently,
-> skbs in the frag_list may remain untranslated, resulting in protocol
-> inconsistencies and reduced throughput.
-> 
-> To address this, the patch explicitly sets the SKB_GSO_DODGY flag
-> for GSO packets in XLAT's IPv4/IPv6 protocol translation helpers
-> (bpf_skb_proto_4_to_6 and bpf_skb_proto_6_to_4). This marks GSO
-> packets as potentially modified after protocol translation. As a
-> result, GSO segmentation will avoid using skb_segment_list and
-> instead falls back to skb_segment for packets with the SKB_GSO_DODGY
-> flag. This ensures that only safe and fully translated frag_list
-> packets are processed by skb_segment_list, resolving protocol
-> inconsistencies and improving throughput when forwarding GRO packets
-> converted by XLAT.
-
-Fixes: 9fd1ff5d2ac7 ("udp: Support UDP fraglist GRO/GSO.")
-Cc: stable@vger.kernel.org
-
-
-
+From: Patrick Roy <patrick.roy@linux.dev>=0A=
+=0A=
+Add a no-op stub for kvm_arch_gmem_invalidate if=0A=
+CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE=3Dn. This allows defining=0A=
+kvm_gmem_free_folio without ifdef-ery, which allows more cleanly using=0A=
+guest_memfd's free_folio callback for non-arch-invalidation related=0A=
+code.=0A=
+=0A=
+Acked-by: David Hildenbrand (Red Hat) <david@kernel.org>=0A=
+Signed-off-by: Patrick Roy <patrick.roy@linux.dev>=0A=
+Acked-by: Vlastimil Babka <vbabka@suse.cz>=0A=
+Reviewed-by: Ackerley Tng <ackerleytng@google.com>=0A=
+Signed-off-by: Nikita Kalyazin <kalyazin@amazon.com>=0A=
+---=0A=
+ include/linux/kvm_host.h | 2 ++=0A=
+ virt/kvm/guest_memfd.c   | 4 ----=0A=
+ 2 files changed, 2 insertions(+), 4 deletions(-)=0A=
+=0A=
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h=0A=
+index d93f75b05ae2..27796a09d29b 100644=0A=
+--- a/include/linux/kvm_host.h=0A=
++++ b/include/linux/kvm_host.h=0A=
+@@ -2589,6 +2589,8 @@ long kvm_gmem_populate(struct kvm *kvm, gfn_t gfn, vo=
+id __user *src, long npages=0A=
+ =0A=
+ #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE=0A=
+ void kvm_arch_gmem_invalidate(kvm_pfn_t start, kvm_pfn_t end);=0A=
++#else=0A=
++static inline void kvm_arch_gmem_invalidate(kvm_pfn_t start, kvm_pfn_t end=
+) { }=0A=
+ #endif=0A=
+ =0A=
+ #ifdef CONFIG_KVM_GENERIC_PRE_FAULT_MEMORY=0A=
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c=0A=
+index fdaea3422c30..92e7f8c1f303 100644=0A=
+--- a/virt/kvm/guest_memfd.c=0A=
++++ b/virt/kvm/guest_memfd.c=0A=
+@@ -527,7 +527,6 @@ static int kvm_gmem_error_folio(struct address_space *m=
+apping, struct folio *fol=0A=
+ 	return MF_DELAYED;=0A=
+ }=0A=
+ =0A=
+-#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE=0A=
+ static void kvm_gmem_free_folio(struct folio *folio)=0A=
+ {=0A=
+ 	struct page *page =3D folio_page(folio, 0);=0A=
+@@ -536,15 +535,12 @@ static void kvm_gmem_free_folio(struct folio *folio)=
+=0A=
+ =0A=
+ 	kvm_arch_gmem_invalidate(pfn, pfn + (1ul << order));=0A=
+ }=0A=
+-#endif=0A=
+ =0A=
+ static const struct address_space_operations kvm_gmem_aops =3D {=0A=
+ 	.dirty_folio =3D noop_dirty_folio,=0A=
+ 	.migrate_folio	=3D kvm_gmem_migrate_folio,=0A=
+ 	.error_remove_folio =3D kvm_gmem_error_folio,=0A=
+-#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_INVALIDATE=0A=
+ 	.free_folio =3D kvm_gmem_free_folio,=0A=
+-#endif=0A=
+ };=0A=
+ =0A=
+ static int kvm_gmem_setattr(struct mnt_idmap *idmap, struct dentry *dentry=
+,=0A=
+-- =0A=
+2.50.1=0A=
+=0A=
