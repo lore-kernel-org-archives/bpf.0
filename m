@@ -1,81 +1,80 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58BFF2AF1D
-	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 08:39:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFD9B2F691F
+	for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 08:42:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769416765; cv=none; b=u7SK2zuF3HapliMo8XWrXJl1rWRYnNO/cV9kiFW05rI03z2RUtXrnUzY5ogT4QJ1ham9Sy7khHF/a6w64S3LuYKZJUgWwDJDNp9inxIgHRFSNKPSvYcBRfNpsyMPnBvgqZ6QiHErWITqhrC/lmLPvD1QUyU/iAM+qC9NqhuHojE=
+	t=1769416974; cv=none; b=keVKq1ICafCo7PO+yXdqDMWY6ZwYSmbNIKwJka+zQIF8GE2echr1tmtZ7ZDhzkgfvm3wYPYmrwiXSGDa32mFUPuMw88PLaEeXr4tSGR6K57Yxt+H6j1H1oGiBzqy7/jRrF7mmI+MfhCQPYrLilYTmi6LAPrWWQBmSTWTH7493r8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769416765; c=relaxed/simple;
-	bh=fIzUQRtLJ5Hd4K1FTZnjO5H+usaXomy6JD2G69SWG3A=;
+	s=arc-20240116; t=1769416974; c=relaxed/simple;
+	bh=tJ1VAnZS2fPGBmoY19VOgWu3fpTD1Fepy15kPSM83v0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S9eBc3uzInd3hgR/SD45foGa8iB1LaYFHgBEbJW/ti90GKkodW3yZe2GWJR7YoVnRkh5P01GDGF8WOTVBUY1kh6tRa30Ld+ibfq2RGsNx/3qOLd8VkwIVo5X27cBDyPO0q9uzttAb+VTC0P/sr8CFsqVyTByIkuxUO0/5wt/JoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=t/waB+j2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=KAJM9FFC; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=CSkTefY0; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=Ay+WlyzK; arc=none smtp.client-ip=195.135.223.130
+	 In-Reply-To:Content-Type; b=MsCkf8Jex5W2Q8Op1C/CtYWhr1G3zHsOFgmuEfedwGfzqa8dBAWHsSrmntP7Tkf8fwfA+v6SWVaQzFmGjTkAeEc90lcM+TD65+z0oaHL6oWXWmGddPIlvhY9faC8KcK1AqSss90vbaGnJGzeqV/DdrYOlw2VH9ulOltejtFAaI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=ODTiACZL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3eoJyxz6; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Q/cm50UY; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=syvRJnAc; arc=none smtp.client-ip=195.135.223.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="t/waB+j2";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="KAJM9FFC";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="CSkTefY0";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="Ay+WlyzK"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="ODTiACZL";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3eoJyxz6";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Q/cm50UY";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="syvRJnAc"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 9CCB9336CE;
-	Mon, 26 Jan 2026 08:39:21 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 3F3005BCD6;
+	Mon, 26 Jan 2026 08:42:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769416762; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769416971; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C8apTRjaXyVloWrbPyJGXpF6txJlbz3ZAwUoAcFkvk4=;
-	b=t/waB+j2ugV/tWl5MMCbqMEiDGV2/8OWeqP1lMsNsoyr7XYYrabD1q63Qrt+YzS/xntYLp
-	uqmzDOPOpm4CcZpVQTNKq5eY6EpB5060+fNL85HPvmq6O/jedg8OixvM0LNGk3qv8sHqNT
-	oiAExgQgiqLT7+XZ92wosPyJHoqtieg=
+	bh=Sgs+T/VXcMnUbDMuJnWkmVFhshs/1VjbTRgWWbUlNSI=;
+	b=ODTiACZLdjWU/NKFrVlZTOd78tm2M6equbgI88o8GJOcS1WYMGRRX7Y+GFDun+5IVQh1Kn
+	FamPiV7y4vbfQF7lnhTOZ4ePJHuwIql5n8R98FxxxA0kRsJ1tVcYxBFUIStXHX7k1EtPd1
+	eDyQcwggibt/FIy2GyDsnXo3983alW4=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769416762;
+	s=susede2_ed25519; t=1769416971;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C8apTRjaXyVloWrbPyJGXpF6txJlbz3ZAwUoAcFkvk4=;
-	b=KAJM9FFCbjI3pCIjlEWM4MdjpYMCIfm/y9cM/AqSHhRHzFZ7xEt7yu59sjIHqNuundCHvW
-	qGYN2b6wDG+kQ6Bg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=CSkTefY0;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=Ay+WlyzK
+	bh=Sgs+T/VXcMnUbDMuJnWkmVFhshs/1VjbTRgWWbUlNSI=;
+	b=3eoJyxz6xwVZMAgQiNRAxWq6PH42RpoDbabjX+VoIWWUJmH1wfkTO1PnaJIF6JTiNf38kF
+	rYS870eTgWJiO9AQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769416761; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769416970; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C8apTRjaXyVloWrbPyJGXpF6txJlbz3ZAwUoAcFkvk4=;
-	b=CSkTefY0MtsKYl/YIoaFrr3CrzzcmiqngjVEdMT0IfdKG8vyVRZP11B/IWxSeS/9wUGSK/
-	fwoQkmi9GlscBcA2n9l8MidPVBEZxmGVCAJVm2lDx2tQMapyA2El+/50h2DC0AL32XEuTM
-	Oin6fzOlpiijum3Q7CzT/Smxqy2Ydjw=
+	bh=Sgs+T/VXcMnUbDMuJnWkmVFhshs/1VjbTRgWWbUlNSI=;
+	b=Q/cm50UYhKvzCvdLmnBKU8IiLLdHlGalaEVaTVBsUfPf1vbsMYU3dT3BduUL2AcarGg88R
+	059V/6OyIn3Wsokd/PvZTmYuq+Ycr44EblqlAk97ltbRq50lqyIpby0AXWbjJuVvCxnHbo
+	5XDclO2BRX+RSAhSAN9X9ePx8tSeIKs=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769416761;
+	s=susede2_ed25519; t=1769416970;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C8apTRjaXyVloWrbPyJGXpF6txJlbz3ZAwUoAcFkvk4=;
-	b=Ay+WlyzKYc6OzkOkBiej4kLCmNO4otuwfsO4hlMvmj2poBFHgU950+6yktW12kS1VkJH/U
-	BY/VJOSO/yGv8KAg==
+	bh=Sgs+T/VXcMnUbDMuJnWkmVFhshs/1VjbTRgWWbUlNSI=;
+	b=syvRJnAckSZKqDLh6yNNSYu1u2O+hYTxnWToo71MaVS1n2AjMIY2lIwdiDGfk/6qOJH5L9
+	Oi86gPnzwJMETSDg==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 729C6139F0;
-	Mon, 26 Jan 2026 08:39:21 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0BEAB139F0;
+	Mon, 26 Jan 2026 08:42:50 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id XSH7Gjkod2kQJwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Mon, 26 Jan 2026 08:39:21 +0000
-Message-ID: <ff10180f-0b9e-43c0-93ff-b421ff1454c6@suse.cz>
-Date: Mon, 26 Jan 2026 09:39:21 +0100
+	id J4x7Agopd2ltKwAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 26 Jan 2026 08:42:50 +0000
+Message-ID: <0c337f99-98b3-4955-b9aa-6a5e9bacb041@suse.cz>
+Date: Mon, 26 Jan 2026 09:42:49 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,7 +82,7 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 06/22] slab: add sheaves to most caches
+Subject: Re: [PATCH v4 07/22] slab: introduce percpu sheaves bootstrap
 Content-Language: en-US
 To: Hao Li <hao.li@linux.dev>
 Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
@@ -98,8 +97,8 @@ Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
  linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
  bpf@vger.kernel.org, kasan-dev@googlegroups.com
 References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <20260123-sheaves-for-all-v4-6-041323d506f7@suse.cz>
- <7tds765fsicczreeqckiuwpny2tolotfrnbz6jhpjrch6x5pg3@5irfwnohvsli>
+ <20260123-sheaves-for-all-v4-7-041323d506f7@suse.cz>
+ <qrekwm7js5t4kmahu3toqnrepnvk7ve5h624f6hm262mmybvtx@rewwd4rbvf3b>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -140,75 +139,77 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <7tds765fsicczreeqckiuwpny2tolotfrnbz6jhpjrch6x5pg3@5irfwnohvsli>
+In-Reply-To: <qrekwm7js5t4kmahu3toqnrepnvk7ve5h624f6hm262mmybvtx@rewwd4rbvf3b>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-4.51 / 50.00];
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
 	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
 	RCPT_COUNT_TWELVE(0.00)[17];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TO_DN_SOME(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	FROM_HAS_DN(0.00)[];
 	FREEMAIL_CC(0.00)[oracle.com,suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
-	RCVD_TLS_ALL(0.00)[];
+	TO_DN_SOME(0.00)[];
 	FROM_EQ_ENVFROM(0.00)[];
 	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	RCVD_COUNT_TWO(0.00)[2];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Flag: NO
-X-Spam-Score: -4.51
-X-Rspamd-Queue-Id: 9CCB9336CE
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email]
 X-Spam-Level: 
+X-Spam-Flag: NO
 
-On 1/26/26 07:36, Hao Li wrote:
-> On Fri, Jan 23, 2026 at 07:52:44AM +0100, Vlastimil Babka wrote:
->> In the first step to replace cpu (partial) slabs with sheaves, enable
->> sheaves for almost all caches. Treat args->sheaf_capacity as a minimum,
->> and calculate sheaf capacity with a formula that roughly follows the
->> formula for number of objects in cpu partial slabs in set_cpu_partial().
+On 1/26/26 07:13, Hao Li wrote:
+> On Fri, Jan 23, 2026 at 07:52:45AM +0100, Vlastimil Babka wrote:
+>> Until now, kmem_cache->cpu_sheaves was !NULL only for caches with
+>> sheaves enabled. Since we want to enable them for almost all caches,
+>> it's suboptimal to test the pointer in the fast paths, so instead
+>> allocate it for all caches in do_kmem_cache_create(). Instead of testing
+>> the cpu_sheaves pointer to recognize caches (yet) without sheaves, test
+>> kmem_cache->sheaf_capacity for being 0, where needed, using a new
+>> cache_has_sheaves() helper.
 >> 
->> This should achieve roughly similar contention on the barn spin lock as
->> there's currently for node list_lock without sheaves, to make
->> benchmarking results comparable. It can be further tuned later.
+>> However, for the fast paths sake we also assume that the main sheaf
+>> always exists (pcs->main is !NULL), and during bootstrap we cannot
+>> allocate sheaves yet.
 >> 
->> Don't enable sheaves for bootstrap caches as that wouldn't work. In
->> order to recognize them by SLAB_NO_OBJ_EXT, make sure the flag exists
->> even for !CONFIG_SLAB_OBJ_EXT.
+>> Solve this by introducing a single static bootstrap_sheaf that's
+>> assigned as pcs->main during bootstrap. It has a size of 0, so during
+>> allocations, the fast path will find it's empty. Since the size of 0
+>> matches sheaf_capacity of 0, the freeing fast paths will find it's
+>> "full". In the slow path handlers, we use cache_has_sheaves() to
+>> recognize that the cache doesn't (yet) have real sheaves, and fall back.
+>> Thus sharing the single bootstrap sheaf like this for multiple caches
+>> and cpus is safe.
 >> 
->> This limitation will be lifted for kmalloc caches after the necessary
->> bootstrapping changes.
->> 
->> Also do not enable sheaves for SLAB_NOLEAKTRACE caches to avoid
->> recursion with kmemleak tracking (thanks to Breno Leitao).
->> 
->> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 >> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
 >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+>> ---
+>>  mm/slab.h        |  12 ++++++
+>>  mm/slab_common.c |   2 +-
+>>  mm/slub.c        | 123 ++++++++++++++++++++++++++++++++++++-------------------
+>>  3 files changed, 95 insertions(+), 42 deletions(-)
 > 
-> Also, looks good to me.
-> 
-> As a side node, while looking into the test results reported by Zhao Liu [1], I
-> ran a quick test of the current patchset with the will-it-scale mmap2 workload.
-> In my runs, tuning capacity up or down did indeed have a noticeable impact on
-> performance. Hopefully we can make this tuning even smarter in follow-up work.
+> Tiny consistency nit: in kfree_rcu_sheaf(), there's a remaining "if
+> (s->cpu_sheaves)" that could be replaced with "if (cache_has_sheaves(s))" for
 
-Right, thanks for checking that.
+Ah thanks.
 
-> [1] https://lore.kernel.org/linux-mm/aWi9nAbIkTfYFoMM@intel.com/
+> consistency. It's trivial, so no need to respin - happy to have it addressed
+> opportunistically.
+
+Actually we should remove it completely from the fastpath per the design, as
+__kfree_rcu_sheaf() checks that. Will do.
+
+> The rest looks great to me!
 > 
 > Reviewed-by: Hao Li <hao.li@linux.dev>
 
