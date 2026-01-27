@@ -1,65 +1,66 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB8A23C503
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92FBE33BBDF
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769540826; cv=none; b=kCdoGS781mi1BEK/Pz7cGIWKlabgKo+479XwaF+DQ7BFwyfYedeorWPQq4exr3pYkTdN9Ha8ZDaeK6O7atpZ2Y90l/0Iin8YC3ye50rxifaunLda+SV+DCpU0OlCpu7HNz3YClZf10RH1qTBIG4iagaDXLv/mTPS+wdYiyacUPg=
+	t=1769541475; cv=none; b=hXgl5ShBg3PiYYmu3zJdtsyo3FOBZSw6obOusTJ52+r5glq1f+yyjOtS7dQoIBe5JbEQJGPEQz3TGv4WkzsfJUJnPzG0VCRUZSiFHF1IUGTNJmrttgSp0gA8b/2SPIUjAmS66+IJgqD8i3mMFbcm2IaQo5SQeNfdVMxj7IgUXnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769540826; c=relaxed/simple;
-	bh=FqVkiqS9rd727usiavtaBldcChihlNxSJdQkx5eLni4=;
+	s=arc-20240116; t=1769541475; c=relaxed/simple;
+	bh=YaIfLo9ayy6pxGCXftDAbp7ELUaCXBerTOE/3Y1pkYM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O4w3scO7JIdrBG9w3MOnQ+W2K9IJ0PW+mbWf5HvulcHrQxI52YiNbK4FKbBsIiw/58BcnrbK9jwlAHMfOrNpiT1hBK8U7Dk5bFtiRHALSofuvXpzICHKiW2/AMhhkg9xujaKy6hT0qXWcyQ8KF1N0dl29cqdQ6ZBSv+nL6VPxgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2rgn1Cr; arc=none smtp.client-ip=209.85.221.43
+	 In-Reply-To:Content-Type; b=i+u4Mqs/mlqAg4ld6Cczp6SWl+V001e3OlVfPjA2dGASaMnq4wvzpiRUA6+opw62WHYSsAQsB0vQ75Xy8V6pGpohd5UEcKBAZcgKQmz0n0gQdbcpXdOUTyExuWsH8m5ej1z+5opiCuyfcnAMB/KMxOGBwG8ic4AHOFxVP+20XzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KvmS8f1j; arc=none smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2rgn1Cr"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43246af170aso102647f8f.0
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 11:07:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KvmS8f1j"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b86ed375d37so697546066b.3
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 11:17:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769540823; x=1770145623; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769541472; x=1770146272; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=hUGAgqQ38zIXAYKYCeaxIKZeDwSnTqOgRfXtiSfl/WE=;
-        b=P2rgn1CrJ1Jvf8TFmEwEzeoWY9JroTdgp99iP3XmJ/FVY49rZyOH7T4nfufsVCbZJa
-         IT9WenAKfbnOeB9yMXjl9R40L8N38kpAvsd2fxYywOWMhzH1G6EyQBsgDWnzBfr8XFkp
-         TPVOMrTLijnlP1ojl2MQWH9MqQbIdjdV5y4QgAu1g4U0XbFCd902wkDqS8PHjtBr9+wk
-         E9GRx41gmtgmgzWk/dc3+y5BL1wLS38C2RfLjUwvJ2bAHdJofMwocnR3lZv3Sb0+cC3m
-         1bfbR4OAbJdYZPH1+tjrULUUu88QnYgwq9mIb3eKcWPv7Dgwneo1p85PuEY9HNfMLbbP
-         g+yg==
+        bh=dwpQ7AjDYbeZasLmNdJ7h0STwQ7k4AUlLz6dn/p1720=;
+        b=KvmS8f1jPZSs2G9bReV1tX0DRX+JN1BdX+y1Eg9/IQ1XyVOUF0knz3My2v6s26C/TV
+         y991k9rFGt6DKztOfJSeJCA9q0oXB8eg7P3TJR09PqNh0sWR2gVLuVdoVfG4u30q6NaZ
+         FDixSGaspILUGi3BwRQUAyS8M9fPRrj1DuRL23Vn09X2ZGZOfzOM87zjNkPXK6daqlaZ
+         SW79yq0U5q/D+n0xCbKoy2EpW2XCERSLBmkBeox++XRN2wTFzRBJ1Ibik5ZPaKcIEMRq
+         dKjWq2Dhsz5BHbvdqgtnDkr9KOKdfYfUbJOZCcyf15nNvw3Hk0UVFPD0/hGwl52E/WRk
+         PN9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769540823; x=1770145623;
+        d=1e100.net; s=20230601; t=1769541472; x=1770146272;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hUGAgqQ38zIXAYKYCeaxIKZeDwSnTqOgRfXtiSfl/WE=;
-        b=JbdsgpS0sd76HFTyehoUpl92CIS4zah5mKV6DMFJb73DEZG3MB0Uy/+JpBreLo9Qfe
-         UKmOkXI+9YYEIbrazMc6+Z1gfzomuGpWEVje1Ook8MoIDtn1673EnQzdh39KZH9fczgS
-         v4k+KI+AOW+Yg0MWjJAlaQMk+JkgjEebtmvQmghD8hqrlpUSERiJJP4ziFLkxkAQFzOe
-         XFI56OhOxcEFa9jPGhISNWK9vXR/3KG72ua28I/CG+ylPH9QRAFKesVcf70aFtSBvU6p
-         hrpdQ3Sn1W4sCy670pDweqt2perfy5eGkv5I7srOZUvO5wk6lpRYmXhxBn+KRd9Hf7/F
-         U2Cg==
-X-Gm-Message-State: AOJu0YxqRcEkJc2EPq4EnsJRCu7brRerp63yCKwmKAPZFWhj41Zf7ttR
-	SRz7TBImOTA0V0OUhDdNJPvM4r8VQcwemQzaooVn2G94Vo7P4ZMOgfN1
-X-Gm-Gg: AZuq6aJ8cb0a+iTBEP0OxIH9H6lF8nQPM4kIy9xX0iWlywhFHLfpdjVF8mxm0Hog1n4
-	UgsQ9TYmbMcCEFVOWOaHDyjlcN9TLB0R6uNs/boCvWRnvCzOzRKUHGZDsYcElBxvcaz3kn8t2oJ
-	Y9ukrrRtnRhSyjR2juaQboe1xbubmmkvkAYjg7Xid0cuXX7zhngrUBvhwq1vF32IQcFDi9o4yN1
-	u8bLl1zUKN8NaC0SKWOs3LH0bPJJrpGCowsqk8QCuan2URxIJ0gpWuJHEqlZ6J6YEss/qzH+Kpf
-	p1hJEfRb/rkgyAJ/onQ23voSkta+BNEH0bPhdZnM0HnUmuHCDmFIYa91WnWcN+sTiiuOICNd/iW
-	sXZ7vp9MACzLbPncVYILz2aioBdoWve2HrUIvzatfbI6Sf6w6oXxiF97GJa1blQyP5d4Nrd4up7
-	sC8jPLTlPG1VAI6r+KSJju8MnDGepG22GzSKP6HgW69A5iTeM=
-X-Received: by 2002:a05:6000:2483:b0:429:cb8b:b58e with SMTP id ffacd0b85a97d-435dd22fc21mr4840759f8f.28.1769540823271;
-        Tue, 27 Jan 2026 11:07:03 -0800 (PST)
+        bh=dwpQ7AjDYbeZasLmNdJ7h0STwQ7k4AUlLz6dn/p1720=;
+        b=PzU9oqIt9MV2ow3o150bu1ox280/x+M0WZfk+305VzUTrngJIFwugt86/iFOQoMhE4
+         LTqMoAXZyDyPA7C8c5lAR/58Zyzj2VnCO4Ds1MUXBiGz27zE5j95Fs1jTsxnbOEYpEX3
+         K9rCE+bK5UjP49exTiJIK+PtEk7ieUZCtBrnTvpY1faLw9TsdPQ0fwLb3jGc5PCTmBjd
+         yqzydPp/xe8+pldbDxPj3aX//cSeILMzyzs05+5iiMCB+HXRphhCFhd+LzHRXF007PsR
+         dJpAVtPCZHmqVdZCxF3NTRtEljuMOilceKcgSMvP3/oppJdy8vGxSb4NYUvDjcTMh3a6
+         czNg==
+X-Forwarded-Encrypted: i=1; AJvYcCW4CcAiSeuw3SNXKq+mDntEJBbrOwy6pY6T7y++YifP6S9mIxFim8zfJT0Tos9wn/yM90o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvX03KeUELBjHxjExZ0mY6sqDbWrt/nirxHR5OaB98rgJfX0Uy
+	xBODVvIjWp0kfFePhIN/lCr+hKkLB7SplycEjnQqfzDgLOruIdXmXVdI
+X-Gm-Gg: AZuq6aJhVNE6+kRbsx893dsiFxQp9boa4IFyooW5sG5Rjs0fVz0Gau3fvz9oS9Bq/W7
+	7b5wrfDG30eM69eXodVRLA6v4IbcPbeYjnWsM/T7KOeknvxMZuPxBefGWfAtQSdxqC0Jkn9fOON
+	GvVzNLlFaNuULiw7THr7cb2yu+VvQFJxKzbg/0PB4zu/MQL+VGLm0NSR/vgIl/F9w8zXgwiEo/8
+	xBxqlOmE0g6EbTuwvNA7OHVXeMb8nf556AKX9pf6MWM3ZKNSNp16zpie2T3/Igrrsy++u5ClpIK
+	M4WC41j+Zkr3NQVDPhMJZ6xHRVElJG8NQjuxKqMgQ/W44PLpnB36GhqhM/SbrCay028OJPHkRJZ
+	tDkc61mt0iu4LWsxTG49sai5tW5AK1MTz4YMwNlhwTPfgI/99cm4CHwuq1IFpPMj04HA2qYNk1c
+	hVRW7faSpfCwUusA/aVLqHeE++m7GXYyMtz+QZ9+tp4xleCyw=
+X-Received: by 2002:a17:907:7207:b0:b87:206a:a241 with SMTP id a640c23a62f3a-b8dab13028fmr195151466b.11.1769541471594;
+        Tue, 27 Jan 2026 11:17:51 -0800 (PST)
 Received: from [172.16.1.11] (i68975BB5.versanet.de. [104.151.91.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10e476dsm906954f8f.4.2026.01.27.11.07.01
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8dbf1847f9sm21168566b.42.2026.01.27.11.17.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jan 2026 11:07:02 -0800 (PST)
-Message-ID: <7689224e-6cf4-4be9-b8b1-686dc689fd5a@gmail.com>
-Date: Tue, 27 Jan 2026 19:07:01 +0000
+        Tue, 27 Jan 2026 11:17:51 -0800 (PST)
+Message-ID: <8fa34825-ea90-48e7-82c8-00cf4c7375de@gmail.com>
+Date: Tue, 27 Jan 2026 19:17:49 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,115 +68,86 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 1/8] bpf: Enable bpf timer and workqueue use
- in NMI
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- eddyz87@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260122-timer_nolock-v7-0-04a45c55c2e2@meta.com>
- <20260122-timer_nolock-v7-1-04a45c55c2e2@meta.com>
- <CAP01T74WHyfVvtb8E+f7=B-yTHjJ+4qxDpO_RDdOZj6LW275pQ@mail.gmail.com>
+Subject: Re: [PATCH v2 01/13] bpf: Add bpf_stream_print_stack stack dumping
+ kfunc
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, etsal@meta.com, ihor.solodrai@linux.dev,
+ martin.lau@kernel.org, memxor@gmail.com, puranjay@kernel.org,
+ song@kernel.org, yonghong.song@linux.dev
+References: <20260127181610.86376-1-emil@etsalapatis.com>
+ <20260127181610.86376-2-emil@etsalapatis.com>
 Content-Language: en-US
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CAP01T74WHyfVvtb8E+f7=B-yTHjJ+4qxDpO_RDdOZj6LW275pQ@mail.gmail.com>
+In-Reply-To: <20260127181610.86376-2-emil@etsalapatis.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 1/27/26 17:45, Kumar Kartikeya Dwivedi wrote:
-> Resending because I screwed up formatting.
+On 1/27/26 18:15, Emil Tsalapatis wrote:
+> From: Emil Tsalapatis <etsal@meta.com>
 >
-> On Thu, 22 Jan 2026 at 19:03, Mykyta Yatsenko
-> <mykyta.yatsenko5@gmail.com> wrote:
->> From: Mykyta Yatsenko <yatsenko@meta.com>
->>
->> Refactor bpf timer and workqueue helpers to allow calling them from NMI
->> context by making all operations lock-free and deferring NMI-unsafe
->> work to irq_work.
->>
->> Previously, bpf_timer_start(), and bpf_wq_start()
->> could not be called from NMI context because they acquired
->> bpf_spin_lock and called hrtimer/schedule_work APIs directly. This
->> patch removes these limitations.
->>
->> Key changes:
->>   * Remove bpf_spin_lock from struct bpf_async_kern.
->>   * Initialize/Destroy via setting/unsetting bpf_async_cb pointer
->>     atomically.
->>   * Add per-bpf_async_cb irq_work to defer NMI-unsafe
->>     operations (hrtimer_start, hrtimer_try_to_cancel, schedule_work) from
->>     NMI to softirq context.
->>   * Use the lock-free seqcount_latch_t to pass operation
->>     commands (start/cancel/free) and parameters
->>     from NMI-safe callers to the irq_work handler.
->>   * Add reference counting to bpf_async_cb to ensure the object stays
->>     alive until all scheduled irq_work completes.
->>   * Move bpf_prog_put() to RCU callback to handle races between
->>     set_callback() and cancel_and_free().
->>   * Modify cancel_and_free() path:
->>     * Detach bpf_async_cb.
->>     * Signal destruction to irq_work side via setting last_seq to
->>       BPF_ASYNC_DESTROY.
->>     * On receiving BPF_ASYNC_DESTROY, cancel timer/wq.
->>   * Free bpf_async_cb on refcnt reaching 0, wait for both rcu and rcu
->>     task trace grace periods before freeing the bpf_async_cb. Removed
->>     unnecessary rcu locks, as kfunc/helper allways assumes rcu or rcu
->>     task trace lock.
->>
->> This enables BPF programs attached to NMI-context hooks (perf
->> events) to use timers and workqueues for deferred processing.
->>
->> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->> ---
-> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Add a new kfunc called bpf_stream_print_stack to be used by programs
+> that need to print out their current BPF stack. The kfunc is essentially
+> a wrapper around the existing bpf_stream_dump_stack functionality used
+> to generate stack traces for error events like may_goto violations and
+> BPF-side arena page faults.
 >
->>   [...]
->> +
->> +static int bpf_async_read_op(struct bpf_async_cb *cb, enum bpf_async_op *op,
->> +                            u64 *nsec, u32 *flags)
->> +{
->> +       u32 seq, idx;
->> +       s64 last_seq;
->> +
->> +       while (true) {
->> +               last_seq = atomic64_read_acquire(&cb->last_seq);
->> +               if (unlikely(last_seq > U32_MAX)) { /* Check if terminal seq num has been set */
->> +                       s64 expected = BPF_ASYNC_DESTROY;
->> +
->> +                       if (last_seq != BPF_ASYNC_DESTROY)
->> +                               return -EBUSY;
->> +
->> +                       if (!atomic64_try_cmpxchg_release(&cb->last_seq,
->> +                                                         &expected,
->> +                                                         BPF_ASYNC_DESTROYED))
->> +                               return -EBUSY; /* Someone else set it to DESTROYED, bail */
->> +
->> +                       *op = BPF_ASYNC_CANCEL;
->> +                       return 0;
->> +               }
->> +
->> +               seq = raw_read_seqcount_latch(&cb->latch);
->> +
->> +               /* Return -EBUSY if current seq is consumed by another reader */
->> +               if (seq == last_seq)
->> +                       return -EBUSY;
->> +
->> +               idx = seq & 1;
->> +               *nsec = cb->cmd[idx].nsec;
->> +               *flags = cb->cmd[idx].mode;
->> +               *op = cb->cmd[idx].op;
->> +
->> +               if (raw_read_seqcount_latch_retry(&cb->latch, seq))
->> +                       continue;
->> +
->> +               /* Commit read sequence number, own snapshot exclusively */
->> +               if (atomic64_try_cmpxchg_release(&cb->last_seq, &last_seq, seq))
->> +                       break;
-> I guess you could fold in the change we discussed offline here:
+> Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
+> ---
+>   kernel/bpf/helpers.c        |  1 +
+>   kernel/bpf/stream.c         | 13 +++++++++++++
+>   tools/lib/bpf/bpf_helpers.h |  2 ++
+>   3 files changed, 16 insertions(+)
 >
-> return atomic64_try_cmpxchg_release(&cb->last_seq, &last_seq, seq) ? 0 : -EBUSY;
-yes, thanks for help with the stress testing!
->
->> [...]
->>
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index b54ec0e945aa..c30a9f68af6b 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -4562,6 +4562,7 @@ BTF_ID_FLAGS(func, bpf_strncasestr);
+>   BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
+>   #endif
+>   BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_IMPLICIT_ARGS)
+> +BTF_ID_FLAGS(func, bpf_stream_print_stack, KF_IMPLICIT_ARGS)
+>   BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_IMPLICIT_ARGS)
+>   BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
+>   BTF_ID_FLAGS(func, bpf_dynptr_from_file)
+> diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+> index 24730df55e69..6e2cbe5f34e7 100644
+> --- a/kernel/bpf/stream.c
+> +++ b/kernel/bpf/stream.c
+> @@ -245,6 +245,19 @@ __bpf_kfunc int bpf_stream_vprintk(int stream_id, const char *fmt__str, const vo
+>   	return ret;
+>   }
+>   
+> +/* Directly trigger a stack dump from the program. */
+> +__bpf_kfunc void bpf_stream_print_stack(struct bpf_prog_aux *aux)
+> +{
+> +	struct bpf_stream_stage ss;
+> +	struct bpf_prog *prog;
+> +
+> +	prog = aux->main_prog_aux->prog;
+> +
+> +	bpf_stream_stage(ss, prog, BPF_STDERR, ({
+> +		bpf_stream_dump_stack(ss);
+> +	}));
+> +}
+> +
+>   __bpf_kfunc_end_defs();
+>   
+>   /* Added kfunc to common_btf_ids */
+> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
+> index c145da05a67c..6d8ae3887618 100644
+> --- a/tools/lib/bpf/bpf_helpers.h
+> +++ b/tools/lib/bpf/bpf_helpers.h
+> @@ -343,6 +343,8 @@ extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *a
+>   /* Helper macro to print out debug messages */
+>   #define bpf_printk(fmt, args...) ___bpf_pick_printk(args)(fmt, ##args)
+>   
+> +extern void bpf_stream_print_stack(void) __weak __ksym;
+> +
+Is this needed? bpf_stream_print_stack() should be available via 
+vmlinux.h, shouldn't it?
+>   struct bpf_iter_num;
+>   
+>   extern int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end) __weak __ksym;
 
