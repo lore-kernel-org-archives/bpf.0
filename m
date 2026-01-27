@@ -1,145 +1,110 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050A02FD1DC
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 22:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769551822; cv=pass; b=b+wB7MdFS3yc6dBlDQx1FlnbMCLCkKrqQvehhRGbw6WXWlJUwAvg+OaNdqn+hlm6JYoJKBh9/Qy/FCscPg7MucozzTBHaMzvFK8XJn/j7Pxs9FI4Ufx0rsNpfV50CCLj4/sefvIXTOhhfR7x0Nv+FlJBskaIiwUwbFCYXLVrvf4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769551822; c=relaxed/simple;
-	bh=2igPjrmSmxOZqXAz/2IGESBsIQPmX2WXNrQd96+8pbE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R//Nz/pGu4D9KGxeobpNQSTmoOzrL3c47VBsO+z/q2s6T3h30MhqGQkU/7rn3y8IGM3ZHreoan5rBLcQmeDOnPJbSbgWgzTlhsMIYvy23Ese5spO4bWmUpdzkCp1wZ1lLMMcjCfKL0dfmEBCNIApuXRShcoHmhmooFO6QJzcIIY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CVe27ha2; arc=pass smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9A23570C8
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 22:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769552486; cv=none; b=bZ509Phmt3DuhzrSjdLFPWUUh0LTeL02kOKcASDsq0fT1+WDDbH/q1ny4/UxGz8I0jPuKy6/wnt6m4ZEOpIvfT/yM/cNwHiRuQIcUvfmb6q61KhSIohncLpMtpXktXtIV4XK2yAWJgqUzIwqPHyh9wlW78ikAmXXKN/WcA6YXPs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769552486; c=relaxed/simple;
+	bh=0bm1KvZ9RZh+xJqSgyXeAsRJGQKVVQZF2EVdIgQxwkI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Md2zcJsU3HOGnxKBEaLg8ik0GpMVPSTk2pR/0L1Vo8aYIS1hVkwyUg4khNvQnixWxe6AOW81HOetwTEOL+2mUifGxtzefG3CW6qWaO0NWM+Wq9BvquiRiqWKhSWayAfnxEOin+9Lz1R9CvQZ1V6Yq86oPygepvwlR1R0vESr/LA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org; spf=pass smtp.mailfrom=networkplumber.org; dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b=lIsE0a8v; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CVe27ha2"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2a7bceb6cd0so48353145ad.1
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 14:10:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769551820; cv=none;
-        d=google.com; s=arc-20240605;
-        b=VsdlVkZFswyiBQgXZBr95v3kvArcnHLasz6a38B53GwsZ+iR67EaOaXSg8mbLkv284
-         mfdnOvrZbXYd3ZXyXgGrKCYti2pMFU+PYud23yonCyLDC7VOEivVzAE/ejHJTzCn2uaL
-         L5O0+yO349kphnGAl5pzx31t30Xd99eglMuYQNc8GMbV3fRSopABfp1jg4rzHBlqZUEO
-         cPS17YNv5b9Nj5RGCHof2364UnkM59yeT4+3vcLzJt1QzS/9sSGqCQ9FNgiRv3hPjhEZ
-         t0cGp5ygk8/ch8Ke303zmf9oqO2uPWWTPySfveEdNf84Z2me+n09SJwhsd06HrGqtLDJ
-         i5iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=2igPjrmSmxOZqXAz/2IGESBsIQPmX2WXNrQd96+8pbE=;
-        fh=V30d9EXvxT7qKJKX2frpmmYzaqXgQZ0GWaNK/mWBiCA=;
-        b=KOHgv7zjPS6i9nPW4CLzZq99/ci+Ne4FpWs2rz9MIk7D59BaxpVvdcGBUhrHNdA2Q+
-         gm1zJyt4sj0yCBunKZ1achi7AfzlrWLt4ALuDFPmolzgFWpg1DgzKoiqLoJCHYYXofZ+
-         cCRNXiQIIpwoDOLycMdj12RI76o9EMptzayymEpbRoY2Y+Vlm0SHbD4fNJnC4Xr3qGo1
-         fKhFTpuqi/PzDvq/dojqky+wVCiRGYTV5BvVJgYssF0pYpRoj+ANwQH1g51mBr3o6ShQ
-         s3wRSrcKKcKJCZ8ScbEAMFagK4+4TJ22n7QOUr/zDD+moi+N1NCtOP6JqdYPxfA5hty8
-         AOgA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="lIsE0a8v"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-432d2c96215so5404550f8f.3
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 14:21:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769551820; x=1770156620; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1769552484; x=1770157284; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2igPjrmSmxOZqXAz/2IGESBsIQPmX2WXNrQd96+8pbE=;
-        b=CVe27ha2D3rmmMZ5sqYdS8cbOvLaWDWbHtxiT3/x+cC96RkcLkbr5vMxGyrybF21pd
-         iBR3PLkVl6GmxnF8HW7zDVs6IIA2ILZlu7DjJvuEb6hNuT+MQI/qnrqP4pQa25YnzSBg
-         1K1uNR6Cbpj/M/wMDGMCmetEA8MlHiiqIP8Ii3555pA0iNlR7EVVxtMb1WsN783cyKeU
-         xx1M8NoXk7lYTt7Ew8KKW4/hq9l+UhLkf5TBDftMQV6GnEwlMHQVR9r4AnkMut+9maNg
-         b4bzeeKWYF+PUhqYPitQXAXvUElaDIBSotk1ns2vbV0YodEQVDduH7J6B4BzCN4qsxcu
-         0SPg==
+        bh=10rIsxSqD2RcmvyIQ1g7gwllyOY4QtznnQ8CJGOxXHQ=;
+        b=lIsE0a8vtGfxgWhJd2XCOu0CqTKG292Z6LSsyne/BmKtMXaYiZhyHvqFG+DuQtxvgp
+         8Csf31JXsDroMezDJkym0SqWE4C+DD3WXG8AJt5PC082N+egd5CPtazXFUgMLbWZIVov
+         Xt7o1cX4nab6/AwGsO08pRs5UXLCB/FJTGo9sbamjZfEHM4GzF8AJzonchjSPv73UBgy
+         P6ydSG2T2V80Sz94q2StwQ1uNDHiC3VePWMZh6RlAsSCBhEOBXa6mrGtX9NokyREcqmf
+         nEAG+ToR5Hj31CHK1nhDn7buC2nIAA1bngGo1Ic374EI5ShexxaWFy0/6IwlbMKm1AXk
+         P6jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769551820; x=1770156620;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1769552484; x=1770157284;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=2igPjrmSmxOZqXAz/2IGESBsIQPmX2WXNrQd96+8pbE=;
-        b=hCAQ9269yvR+stUjztoRSZQpc4JfR8Am8AKct8bylRElt5Oz69yEBXzcfl/ZEooVwA
-         HvbMSM7RJkN3l9pHJtYpQ8aPOADgHsDOoQlX5+VRJY6whKtz59U5/t+igF5TVOZlqTny
-         ArZgKrTbrn2faf9Gb9LBP3fQzvpmOclGCYNOiIql9vzFOQhDgaaKabmFsiQ5/LKRYHYx
-         ODBcxNoG2ouvUg01NilKZxp8mvbUJVjDgvvx3lcq+yehTF6HQctSW1SCik8bg9zPbZM2
-         1EE+SHIChWqPn7eshMvNOenlwj85HqAgU5/KFrAxPTh7FKj4f/QEg0rpO/HBM9Wl4XN9
-         3igQ==
-X-Gm-Message-State: AOJu0Yy7IfBa4oRB0Xzy0vrzLwA7WJyNtn3ZlztLBd3cioL0Yjxr+Qgm
-	MYUkdBUTELjNssD/BymZkOi69o/8h0JHafAbeLgqczskCrznMHGJOZ187mdghoMR7zCLhtG7wRV
-	6IdDD+Fnj2LesCP54WxhBHBJf6oH9bgg=
-X-Gm-Gg: AZuq6aLmzoSJKGC/sHztSj9dUFgGq9YKmB6kFFn56rICca8RYIqgda8qMt3cRYSzoLm
-	9t30ufFEbX2leLfoqwHaknLRDe2wW+6o6Ti4e2ICsGIBMdnlN0RkrqRS55LIdU8WkDXtHR0skCl
-	FpNWvZbYCsozXdZxg1AyN1ieub2rNIKOjNYTfvC2IKhEJyUxvReaT31yzf2NNAjOPjwOxAcB9pT
-	r/Ecz1yuGWVlo/QnJ+Ca+onfOKwYlchQcxfSt/plmzAasmaQcG/5qREGx0oLpgNndPaTiHE9kYG
-	EXr+iy8n2J0=
-X-Received: by 2002:a17:902:f684:b0:2a1:4c31:335 with SMTP id
- d9443c01a7336-2a870d64f9fmr36415125ad.26.1769551820018; Tue, 27 Jan 2026
- 14:10:20 -0800 (PST)
+        bh=10rIsxSqD2RcmvyIQ1g7gwllyOY4QtznnQ8CJGOxXHQ=;
+        b=iE2eTTzuqPWzJFPbUzs1GC2smw0xKQEbBTavjVtVqfxpLeFdm4EECgsIJz+qXqZW5f
+         iNLfNLvHgI24rT0Ll4c9lh4nstfjAnLgtuoxGFII5BTDUruoRKcquWg4ra5dqa8nCCZ0
+         VcraDZXyLhoZ4zct4jlwu+Jx20HUY5ZTGfOttOrUY62fCfotrJAG3O4l8bgxCXqbG8vr
+         AQOoJiBN9cVpJY0WdFZ4eXzipBTI4+/p9iFU89GfZoo3eq66kcsf4HRf5DGkVkNs778W
+         Y/+RVBn8zr1ZnqXm0EHRLKhI7sagxmonTbLsQ2yOnJTeJFG628QEP3z2+x/IKtOsF10X
+         jTnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUlHjtk+uPFKOvrrqgwgyjGSHNJbwvzx+bGxZSED/GrC6eWS29M6tZ4s8YYzsdndG8BWRo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxb/eIrAD+HX21tisP1d/7zpPwp55otOjB1TH3EdTOJL90NhKJm
+	IYINMRTSPKdFFNDzQDKIvgPvnZyfa8CJM23fjBltv0cqsZ4qaB0+mOVJjaBm3qHn5uM=
+X-Gm-Gg: AZuq6aIr5XzpBYIiylMU9DKdFieC1lTFjPkYHtdmTc9KSzEAfINrha2oOeNBvBF9zWo
+	v20PLmHmefrdURbDBEFb/0MVrrEclpNJ0u7s36j/fFvlk4lcTv8jDgon/RpoYz11w0HqiCqoSBe
+	CzIQoUXIu1l3/nn5LQwimoXtdAhap4L6CyBM/bRqZMloMrBPmRvImqAblC4M6TDVD/B2E76zYkQ
+	mPdBvK/mo7Byw65pNKMcnmIKOJNt/vb5ZY6kVVl3YC/Atnqdu/rwDBwssMPnSuQugo/IQXWx5QX
+	lZ+hp56jrdABC7ApJcmbYVwOw3d3URp0OxEZIxuk/JIeUTgSlnJuCnycohvjG9SKcaMJVFpW5xx
+	ImwaBPCXvJfeaxFLrhskDFSFRT7WHh5Jz/0NCW8bwCqShwBHqYU95xLRsXsBfXlkgFCsCsEsLvr
+	E47U89EQGZMfaiwOKkvvW9DHl+IJoaD0FJnDl04UMSl11N3Zj4V69p
+X-Received: by 2002:a05:6000:22c9:b0:435:bd00:3978 with SMTP id ffacd0b85a97d-435dd1d3268mr4741687f8f.60.1769552483523;
+        Tue, 27 Jan 2026 14:21:23 -0800 (PST)
+Received: from phoenix.local (204-195-96-226.wavecable.com. [204.195.96.226])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10e483asm1844349f8f.3.2026.01.27.14.21.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jan 2026 14:21:23 -0800 (PST)
+Date: Tue, 27 Jan 2026 14:21:13 -0800
+From: Stephen Hemminger <stephen@networkplumber.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Simon Horman <horms@kernel.org>, "illusion.wang"
+ <illusion.wang@nebula-matrix.com>, dimon.zhao@nebula-matrix.com,
+ alvin.wang@nebula-matrix.com, sam.chen@nebula-matrix.com,
+ netdev@vger.kernel.org, andrew+netdev@lunn.ch, corbet@lwn.net,
+ linux-doc@vger.kernel.org, lorenzo@kernel.org, pabeni@redhat.com,
+ vadim.fedorenko@linux.dev, lukas.bulwahn@redhat.com, hawk@kernel.org,
+ ast@kernel.org, bpf@vger.kernel.org, sdf@fomichev.me, daniel@iogearbox.net,
+ john.fastabend@gmail.com, edumazet@google.com, open list
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 net-next 00/15] nbl driver for Nebulamatrix NICs
+Message-ID: <20260127142113.3309fc99@phoenix.local>
+In-Reply-To: <20260127105304.21279cc2@kernel.org>
+References: <20260123011804.31263-1-illusion.wang@nebula-matrix.com>
+	<aXj-uam1HodC0851@horms.kernel.org>
+	<20260127105304.21279cc2@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260126142118.2ea3cf13@gandalf.local.home> <CAEf4Bzax24jJVDs2bBiJuz1ZuuDihsb5Xq8pGcy18vLUMMLxbg@mail.gmail.com>
- <20260126192010.4f14bcb9@gandalf.local.home>
-In-Reply-To: <20260126192010.4f14bcb9@gandalf.local.home>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 27 Jan 2026 14:10:07 -0800
-X-Gm-Features: AZwV_QgAMpwdi6vnx5r9uMVQgv8akXjIQ0yBaldhR15yHy1c0U4XSXNJcMja_fY
-Message-ID: <CAEf4BzZ0cYkJ-3Kt-O+2FTvTEirS7cSuea2swgaom18Q_sve4A@mail.gmail.com>
-Subject: Re: BPF with deferred stacktrace and sframes?
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Blake Jones <blakejones@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jan 26, 2026 at 4:20=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
->
-> On Mon, 26 Jan 2026 16:02:10 -0800
-> Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> > So what we will need from kernel's sframe support side is just an
-> > internal API to get stack trace, similar to get_perf_callchain(). But
-> > it will be guaranteed to be called in a nice task context. No NMI, no
-> > irq disabled, no nothing.
-> >
-> > This shouldn't be a problem, right?
->
-> Not at all. The unwind interface already has a method to get a stack trac=
-e
-> at any time, but it's up to the caller to make sure it's safe to do so.
->
-> See unwind_user_faultable()
->
-> I guess all we need to do is add a perf API to call that?
+On Tue, 27 Jan 2026 10:53:04 -0800
+Jakub Kicinski <kuba@kernel.org> wrote:
 
-Yep, unwind_user_faultable() should work. There is that
-current->unwind_info use, so we should be careful about nested
-sleepable BPF programs, but I don't think that's possible right now.
+> On Tue, 27 Jan 2026 18:06:49 +0000 Simon Horman wrote:
+> > As per Jakub's advice in his review of v1 [*],
+> > Please try to create a minimal driver in the order of ~5kLoC.  
+> 
+> Perhaps other maintainers will disagree, but for ease of review
+> and to avoid the huge reposts perhaps we should consider merging
+> something like patches 1 and 3* first, as the initial series.
+> And then you can build up the driver from there in reasonable,
+> 5kLoC-at-a-time series?
+> 
+>  * patch 3 currently includes things which do not seem machine
+>    generated / like register descriptors like structs added to
+>    nbl_def_channel.h and nbl_include.h
+> 
 
-I don't really think we need another API, we should be able to call
-into this directly. I'm not 100% sure on the best way to expose this
-through the BPF-specific API, but that's minor.
+Part of the size problem is that the driver has multiple layers:
+resources, channels, etc and lots of code that tries to be common
+across OS's. This can lead to bloat.  Very few drivers have done
+that successfully. 
 
->
-> >
-> > >
-> > > I've been Cc'ing the BPF list (and maintainers) on the deferred stack=
- trace
-> > > work and did get a few comments. But I haven't heard anything about B=
-PF
-> > > utilizing the feature yet. So I'm asking now if that's in the works?
-> > >
-> > > If not, perhaps this would be a good topic to bring up at LSFMMBPF?
-> >
-> > Yeah, we definitely can sync up on this during LSFMMBPF.
->
-> Awesome, I was looking for an excuse to go to Croatia ;-)
-
-heh, you are welcome ;)
-
->
-> -- Steve
