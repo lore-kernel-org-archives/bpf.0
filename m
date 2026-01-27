@@ -1,65 +1,65 @@
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE89F35D603
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB8A23C503
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769540736; cv=none; b=FYv9h6Hr2yHJXYsvbvC7YNUbNEdab6W1utTCQfqTowmL3V2Fqx6W75mezw3APDjBccYw1MkISSep4MOcAUbuabAwOfnBV/m1jwt21T+Clq4KFOXIMM1k9nToBjBK2QH5A10ofv3fbvS6eTrXjmuIarXY4vu6dQ3CiUMoxBJ7UwM=
+	t=1769540826; cv=none; b=kCdoGS781mi1BEK/Pz7cGIWKlabgKo+479XwaF+DQ7BFwyfYedeorWPQq4exr3pYkTdN9Ha8ZDaeK6O7atpZ2Y90l/0Iin8YC3ye50rxifaunLda+SV+DCpU0OlCpu7HNz3YClZf10RH1qTBIG4iagaDXLv/mTPS+wdYiyacUPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769540736; c=relaxed/simple;
-	bh=dyoiYlwiKh6Oq+csguON2OA08paYrtbwwvWsc5VCNqo=;
+	s=arc-20240116; t=1769540826; c=relaxed/simple;
+	bh=FqVkiqS9rd727usiavtaBldcChihlNxSJdQkx5eLni4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LDA5gr9iKldZ5uUzLrMW6RCiamEc016onEQtb1qhQjJFccR4T9buSDS1HrQ9mmnNmwuRUdezOJXZWsWy2fEvjeHpp5cdqa4xjwM/EbNkPvGGIlgNHIHQ1Jr2RADP8N9MargVD29kwJeGAK/cFfTS2cp+qL9aAtndTI4dXrbbIzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjogrxwB; arc=none smtp.client-ip=209.85.221.54
+	 In-Reply-To:Content-Type; b=O4w3scO7JIdrBG9w3MOnQ+W2K9IJ0PW+mbWf5HvulcHrQxI52YiNbK4FKbBsIiw/58BcnrbK9jwlAHMfOrNpiT1hBK8U7Dk5bFtiRHALSofuvXpzICHKiW2/AMhhkg9xujaKy6hT0qXWcyQ8KF1N0dl29cqdQ6ZBSv+nL6VPxgM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P2rgn1Cr; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjogrxwB"
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-435903c4040so3733477f8f.3
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 11:05:33 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P2rgn1Cr"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43246af170aso102647f8f.0
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 11:07:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769540732; x=1770145532; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769540823; x=1770145623; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=QrUU/ICJyLkGqH8GYzQ9Okzx4VLNgaUCILpUTLrLqtA=;
-        b=XjogrxwBIP9oqV1DN1143yuwwdi8FayxykJtxZiYkeTd0CIgRrbmDg7nv2qHDacghJ
-         xty10HM27d3WcS0wORfvtk7m06gqxM8QGw/QldJUFj2L/Far3wSuS1/69wc0KDw4XkYf
-         pF73urFwEuMlkI88ME8CF/dLXPMDNtfntGylnlPJDWJ5JNTMS4kkXgkE3HPChGFTGyNx
-         R/u2ssnFxhHRC4YJcrtpqmhF6grdWCexavk5DYG63mRfcIILV2L2nlx6FoDoKh3udiJz
-         Hh4TROCRFA0/0BlS740mld6VxoHBDoxBtmVdq3C7Xoo7TsEkLbz6/IEGCeJ6hn95DVwk
-         9S6g==
+        bh=hUGAgqQ38zIXAYKYCeaxIKZeDwSnTqOgRfXtiSfl/WE=;
+        b=P2rgn1CrJ1Jvf8TFmEwEzeoWY9JroTdgp99iP3XmJ/FVY49rZyOH7T4nfufsVCbZJa
+         IT9WenAKfbnOeB9yMXjl9R40L8N38kpAvsd2fxYywOWMhzH1G6EyQBsgDWnzBfr8XFkp
+         TPVOMrTLijnlP1ojl2MQWH9MqQbIdjdV5y4QgAu1g4U0XbFCd902wkDqS8PHjtBr9+wk
+         E9GRx41gmtgmgzWk/dc3+y5BL1wLS38C2RfLjUwvJ2bAHdJofMwocnR3lZv3Sb0+cC3m
+         1bfbR4OAbJdYZPH1+tjrULUUu88QnYgwq9mIb3eKcWPv7Dgwneo1p85PuEY9HNfMLbbP
+         g+yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769540732; x=1770145532;
+        d=1e100.net; s=20230601; t=1769540823; x=1770145623;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QrUU/ICJyLkGqH8GYzQ9Okzx4VLNgaUCILpUTLrLqtA=;
-        b=LR7eS062zXTX3IS/LdQ3stv2kiKg6ciERCrNmRQic2s1C2DtO/s3pRyzXjtUn+VymC
-         8paakwysDUVstewE1a94YmUE0y+WvrZi4G9ed9XsscOmsTy1ANXE3Supsdfn8OD18bzY
-         PYgeCv0+264Dhw6oywu5ao2y11+M4MY/TVdEw2QH7Z/U7eRRuULYFKrn0eNQ+QKoe0bY
-         GCf7QVr/fAQjtlIwe5J5ivK8iK+jnnqcAXfzJ9sfpnV9Y7iLfwPcF8+RLkYVCx2s5Dm6
-         3JbBQEflWemVr1SiPFcNAGrnrMOdv24m4EcQEAenjnsMEjpkINnFxuDBUVP96zGDCe8w
-         AzhQ==
-X-Gm-Message-State: AOJu0Yybg+OJGzU42eh91zjb3ds/xLHxvCRBZ4avYMODAwOJfWHSXLxK
-	0uh2gtkuJ9OWRMwkJqH9ex6lMpMhfFR/G0J8rI/mz3G90KqrJ6qKgxld
-X-Gm-Gg: AZuq6aK35mhQJvNNmxAY5P3WXyvJoU+mf9/lvhGYjjhHmAvfjZKm25n1RZMEonW8l4N
-	ni2wbhR0cHSg4Hd6Q8jkvRW0WBUdTTKcEcI1rMt5ylMpCqHqJdyAtvyQ0vWA3uszqLuXP4WorLg
-	ydtm5iEjPwa7lnTZuiHL2sEQJUcCjUN+tI6QyouwmYBt48rTKwBehF28cni0xLn+6K01KM+titL
-	gK8U8SxijBDemMnBbrHen8hUBnkPeopcjGg81dbZescG2NP6ndjOY5eosrmzgNxIaLszBRVwmgu
-	kPTNjkG74qLnzYr306FlmHcTYppMUM4J5f5G3AO15JLGR2ai4xZel+oYpVbUMdxTERY26otcyzP
-	N3i6ySb0jeyN5M8RVX7rRDsU87Grf5UPimsM7WL2x0fUbR1LWufkNu5ooiVbmwozsyEg0xmjnw+
-	YM0C4lw1kIIHLbRA6o4FfEiRWuSm61XY++EI3NmpAHYJv9Ck8=
-X-Received: by 2002:a05:6000:2689:b0:431:488:b9bc with SMTP id ffacd0b85a97d-435dd029a22mr4241591f8f.10.1769540731698;
-        Tue, 27 Jan 2026 11:05:31 -0800 (PST)
+        bh=hUGAgqQ38zIXAYKYCeaxIKZeDwSnTqOgRfXtiSfl/WE=;
+        b=JbdsgpS0sd76HFTyehoUpl92CIS4zah5mKV6DMFJb73DEZG3MB0Uy/+JpBreLo9Qfe
+         UKmOkXI+9YYEIbrazMc6+Z1gfzomuGpWEVje1Ook8MoIDtn1673EnQzdh39KZH9fczgS
+         v4k+KI+AOW+Yg0MWjJAlaQMk+JkgjEebtmvQmghD8hqrlpUSERiJJP4ziFLkxkAQFzOe
+         XFI56OhOxcEFa9jPGhISNWK9vXR/3KG72ua28I/CG+ylPH9QRAFKesVcf70aFtSBvU6p
+         hrpdQ3Sn1W4sCy670pDweqt2perfy5eGkv5I7srOZUvO5wk6lpRYmXhxBn+KRd9Hf7/F
+         U2Cg==
+X-Gm-Message-State: AOJu0YxqRcEkJc2EPq4EnsJRCu7brRerp63yCKwmKAPZFWhj41Zf7ttR
+	SRz7TBImOTA0V0OUhDdNJPvM4r8VQcwemQzaooVn2G94Vo7P4ZMOgfN1
+X-Gm-Gg: AZuq6aJ8cb0a+iTBEP0OxIH9H6lF8nQPM4kIy9xX0iWlywhFHLfpdjVF8mxm0Hog1n4
+	UgsQ9TYmbMcCEFVOWOaHDyjlcN9TLB0R6uNs/boCvWRnvCzOzRKUHGZDsYcElBxvcaz3kn8t2oJ
+	Y9ukrrRtnRhSyjR2juaQboe1xbubmmkvkAYjg7Xid0cuXX7zhngrUBvhwq1vF32IQcFDi9o4yN1
+	u8bLl1zUKN8NaC0SKWOs3LH0bPJJrpGCowsqk8QCuan2URxIJ0gpWuJHEqlZ6J6YEss/qzH+Kpf
+	p1hJEfRb/rkgyAJ/onQ23voSkta+BNEH0bPhdZnM0HnUmuHCDmFIYa91WnWcN+sTiiuOICNd/iW
+	sXZ7vp9MACzLbPncVYILz2aioBdoWve2HrUIvzatfbI6Sf6w6oXxiF97GJa1blQyP5d4Nrd4up7
+	sC8jPLTlPG1VAI6r+KSJju8MnDGepG22GzSKP6HgW69A5iTeM=
+X-Received: by 2002:a05:6000:2483:b0:429:cb8b:b58e with SMTP id ffacd0b85a97d-435dd22fc21mr4840759f8f.28.1769540823271;
+        Tue, 27 Jan 2026 11:07:03 -0800 (PST)
 Received: from [172.16.1.11] (i68975BB5.versanet.de. [104.151.91.181])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10ed952sm909060f8f.10.2026.01.27.11.05.30
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10e476dsm906954f8f.4.2026.01.27.11.07.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jan 2026 11:05:31 -0800 (PST)
-Message-ID: <58e46dfe-b17a-4683-a7cf-a0b20236ad62@gmail.com>
-Date: Tue, 27 Jan 2026 19:05:24 +0000
+        Tue, 27 Jan 2026 11:07:02 -0800 (PST)
+Message-ID: <7689224e-6cf4-4be9-b8b1-686dc689fd5a@gmail.com>
+Date: Tue, 27 Jan 2026 19:07:01 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -67,81 +67,115 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: Add hexdump fallback when xxd
- is unavailable
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Subject: Re: [PATCH bpf-next v7 1/8] bpf: Enable bpf timer and workqueue use
+ in NMI
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com,
- kpsingh@kernel.org, Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260127163408.1991583-1-mykyta.yatsenko5@gmail.com>
- <CAEf4BzY48PKYcUU9sQ+g9CXd69Xuf1Js6Ow0TtTSt8m9SC353Q@mail.gmail.com>
+ eddyz87@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260122-timer_nolock-v7-0-04a45c55c2e2@meta.com>
+ <20260122-timer_nolock-v7-1-04a45c55c2e2@meta.com>
+ <CAP01T74WHyfVvtb8E+f7=B-yTHjJ+4qxDpO_RDdOZj6LW275pQ@mail.gmail.com>
 Content-Language: en-US
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CAEf4BzY48PKYcUU9sQ+g9CXd69Xuf1Js6Ow0TtTSt8m9SC353Q@mail.gmail.com>
+In-Reply-To: <CAP01T74WHyfVvtb8E+f7=B-yTHjJ+4qxDpO_RDdOZj6LW275pQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 1/27/26 18:53, Andrii Nakryiko wrote:
-> On Tue, Jan 27, 2026 at 8:34 AM Mykyta Yatsenko
+On 1/27/26 17:45, Kumar Kartikeya Dwivedi wrote:
+> Resending because I screwed up formatting.
+>
+> On Thu, 22 Jan 2026 at 19:03, Mykyta Yatsenko
 > <mykyta.yatsenko5@gmail.com> wrote:
 >> From: Mykyta Yatsenko <yatsenko@meta.com>
 >>
->> The verification signature header generation requires converting a
->> binary certificate to a C array. Previously this only worked with
->> xxd (part of vim-common package). Add a fallback using
->> hexdump (available on most Unix systems) to generate equivalent C array
->> output when xxd is not found. The XXD variable is auto-detected at
->> Makefile parse time.
-> why not always use hexdump then?
-I thought about that, not sure, it looks like xxd creates dump in a 
-certain format,
-I did my best to replicate it with the hexdump, but not sure how 
-reliable this is.
-I think most of the users going to have xxd anyways, so I'm trying to 
-make this less
-risky.
->
->> Fixes: b720903e2b14d ("selftests/bpf: Enable signature verification for some lskel tests")
+>> Refactor bpf timer and workqueue helpers to allow calling them from NMI
+>> context by making all operations lock-free and deferring NMI-unsafe
+>> work to irq_work.
+>>
+>> Previously, bpf_timer_start(), and bpf_wq_start()
+>> could not be called from NMI context because they acquired
+>> bpf_spin_lock and called hrtimer/schedule_work APIs directly. This
+>> patch removes these limitations.
+>>
+>> Key changes:
+>>   * Remove bpf_spin_lock from struct bpf_async_kern.
+>>   * Initialize/Destroy via setting/unsetting bpf_async_cb pointer
+>>     atomically.
+>>   * Add per-bpf_async_cb irq_work to defer NMI-unsafe
+>>     operations (hrtimer_start, hrtimer_try_to_cancel, schedule_work) from
+>>     NMI to softirq context.
+>>   * Use the lock-free seqcount_latch_t to pass operation
+>>     commands (start/cancel/free) and parameters
+>>     from NMI-safe callers to the irq_work handler.
+>>   * Add reference counting to bpf_async_cb to ensure the object stays
+>>     alive until all scheduled irq_work completes.
+>>   * Move bpf_prog_put() to RCU callback to handle races between
+>>     set_callback() and cancel_and_free().
+>>   * Modify cancel_and_free() path:
+>>     * Detach bpf_async_cb.
+>>     * Signal destruction to irq_work side via setting last_seq to
+>>       BPF_ASYNC_DESTROY.
+>>     * On receiving BPF_ASYNC_DESTROY, cancel timer/wq.
+>>   * Free bpf_async_cb on refcnt reaching 0, wait for both rcu and rcu
+>>     task trace grace periods before freeing the bpf_async_cb. Removed
+>>     unnecessary rcu locks, as kfunc/helper allways assumes rcu or rcu
+>>     task trace lock.
+>>
+>> This enables BPF programs attached to NMI-context hooks (perf
+>> events) to use timers and workqueues for deferred processing.
 >>
 >> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 >> ---
->>   tools/testing/selftests/bpf/Makefile | 13 ++++++++++++-
->>   1 file changed, 12 insertions(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
->> index 9488d076c740..820816257590 100644
->> --- a/tools/testing/selftests/bpf/Makefile
->> +++ b/tools/testing/selftests/bpf/Makefile
->> @@ -31,6 +31,7 @@ SAN_CFLAGS    ?=
->>   SAN_LDFLAGS    ?= $(SAN_CFLAGS)
->>   RELEASE                ?=
->>   OPT_FLAGS      ?= $(if $(RELEASE),-O2,-O0)
->> +XXD            ?= $(shell command -v xxd;)
->>
->>   LIBELF_CFLAGS  := $(shell $(PKG_CONFIG) libelf --cflags 2>/dev/null)
->>   LIBELF_LIBS    := $(shell $(PKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
->> @@ -722,9 +723,19 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
->>          $(Q)mkdir -p $(BUILD_DIR)
->>          $(Q)$(VERIFY_SIG_SETUP) genkey $(BUILD_DIR)
->>
->> +ifneq ($(XXD),)
->>   $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
->>          $(Q)ln -fs $< test_progs_verification_cert && \
->> -       xxd -i test_progs_verification_cert > $@
->> +       $(XXD) -i test_progs_verification_cert > $@
->> +else
->> +# Fallback when xxd is not available: use hexdump to generate C array
->> +$(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
->> +       $(Q)ln -fs $< test_progs_verification_cert && \
->> +       (echo "unsigned char test_progs_verification_cert[] = {"; \
->> +        hexdump -v -e '12/1 "  0x%02x," "\n"' test_progs_verification_cert | sed 's/0x  ,//g; $$s/,$$//'; \
->> +        echo "};"; \
->> +        echo "unsigned int test_progs_verification_cert_len = $$(wc -c < test_progs_verification_cert);") > $@
->> +endif
->>
->>   # Define test_progs test runner.
->>   TRUNNER_TESTS_DIR := prog_tests
->> --
->> 2.52.0
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+>
+>>   [...]
+>> +
+>> +static int bpf_async_read_op(struct bpf_async_cb *cb, enum bpf_async_op *op,
+>> +                            u64 *nsec, u32 *flags)
+>> +{
+>> +       u32 seq, idx;
+>> +       s64 last_seq;
+>> +
+>> +       while (true) {
+>> +               last_seq = atomic64_read_acquire(&cb->last_seq);
+>> +               if (unlikely(last_seq > U32_MAX)) { /* Check if terminal seq num has been set */
+>> +                       s64 expected = BPF_ASYNC_DESTROY;
+>> +
+>> +                       if (last_seq != BPF_ASYNC_DESTROY)
+>> +                               return -EBUSY;
+>> +
+>> +                       if (!atomic64_try_cmpxchg_release(&cb->last_seq,
+>> +                                                         &expected,
+>> +                                                         BPF_ASYNC_DESTROYED))
+>> +                               return -EBUSY; /* Someone else set it to DESTROYED, bail */
+>> +
+>> +                       *op = BPF_ASYNC_CANCEL;
+>> +                       return 0;
+>> +               }
+>> +
+>> +               seq = raw_read_seqcount_latch(&cb->latch);
+>> +
+>> +               /* Return -EBUSY if current seq is consumed by another reader */
+>> +               if (seq == last_seq)
+>> +                       return -EBUSY;
+>> +
+>> +               idx = seq & 1;
+>> +               *nsec = cb->cmd[idx].nsec;
+>> +               *flags = cb->cmd[idx].mode;
+>> +               *op = cb->cmd[idx].op;
+>> +
+>> +               if (raw_read_seqcount_latch_retry(&cb->latch, seq))
+>> +                       continue;
+>> +
+>> +               /* Commit read sequence number, own snapshot exclusively */
+>> +               if (atomic64_try_cmpxchg_release(&cb->last_seq, &last_seq, seq))
+>> +                       break;
+> I guess you could fold in the change we discussed offline here:
+>
+> return atomic64_try_cmpxchg_release(&cb->last_seq, &last_seq, seq) ? 0 : -EBUSY;
+yes, thanks for help with the stress testing!
+>
+>> [...]
 >>
 
