@@ -1,111 +1,92 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157122EBBB2;
-	Tue, 27 Jan 2026 03:05:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46F151DFE22;
+	Tue, 27 Jan 2026 03:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769483118; cv=none; b=pFnNwSMk7x03k/BQQSbxRaMSaUgF4934iAqA7R4pw+4TvaNLI3eo6nc6/MHwn4V1MH2ngLjNFIZLx47614LZCrSHLPnI0XHbH/d0jJJC/oeQBqCZXcAu+MC1NyM8h/KrLFG+RzqJ3q2UMWOS9BPhAWoBsPYkzCPPgdbnXvnFeEg=
+	t=1769483327; cv=none; b=O1rZx1q3yZAjb4xtze6qoUI11DtPprKMXk1PYUzcA/E0KTPawBdnZvSh3mblI6hLHsffasq7BLm8YxI6wLs+Wt9O+brD5f4dQulJPATz0b0gXiDs+ddiDuZR53lHCuUCp/M/9unPwAMHREolL+RMbIMJknGPAy3Q85w22HoZ5to=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769483118; c=relaxed/simple;
-	bh=0eIazrYKt2H5dVz7aR3WwR1CWkD2A4VVVnLg5inRWCo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tUrFJw0420cz8lznJ3c/gwvFOzGFG3PDIK52IQAWQP/31h2iUa2+VvnoArkf46GIe9elsMLSUMv6q5LwjzNkpFznUbsQo255Nm77T3P2JLqGJEKSTF/9qSH96unrzD6tAodYiYVomi05ZhZearGQc46i04qztbaV3cDpOXm5Tks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsteKB38; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769483327; c=relaxed/simple;
+	bh=r2VRHW3WxWnawAiIF9XP8PHtMz4QMDWUBEXOXvY8H2U=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=ogFJfaa0Ti7AyQFrBT1vB+RDaAAliWuKONquygyQilyUyk7f2xRfuiXBXv4gO4LLwuvZC+wK5EloirKNt2MD6g10DPpnme5lDo+Bhs6i2+d1Dt5lWtR1eNVYZVadtlbFcCnoFdopwpaEDvs97EuMfmWOX9p7Sf2x6hw3mwfl+uE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EWYFjNUg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bsteKB38"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4736C116C6;
-	Tue, 27 Jan 2026 03:05:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EWYFjNUg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B66FC116C6;
+	Tue, 27 Jan 2026 03:08:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769483117;
-	bh=0eIazrYKt2H5dVz7aR3WwR1CWkD2A4VVVnLg5inRWCo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bsteKB38Vgdxvn6fjaonze1NGEu4h/x6dfnvShLEL5ZXBp6d78jL3+k0oIrPtrL+W
-	 JHpww+J6XLaI8onnyqSBQJVjRb12xmCEaS4TMyuDwq6K2tOQz+pRYNQmAR58Kvkxek
-	 kKKnilR3gJVsaXrW6PD0/KWxsNcOw1a91QXE8cNlprmiTDGns7cfmc66XiiN/ax1cJ
-	 JofwEocyUtpkGH3rPHgThSTr8DSpgIUhh+CgrHJb0JUbKA5oHdKB2XWFdgj/OlnTgA
-	 r+98poQyyjsQVifmEX6PEfHp1XmeQNa+NCJQ+shpBhFekKHzv20ZVeVRhh2KGrjnfn
-	 S5XJNivEjJjqg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: lihaoxiang@isrc.iscas.ac.cn
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	andrew+netdev@lunn.ch,
-	linux-kernel@vger.kernel.org,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	ast@kernel.org,
-	stable@vger.kernel.org,
-	netdev@vger.kernel.org,
-	john.fastabend@gmail.com,
-	mcoquelin.stm32@gmail.com,
-	linux-arm-kernel@lists.infradead.org,
-	daniel@iogearbox.net,
-	linux-stm32@st-md-mailman.stormreply.com,
-	boon.leong.ong@intel.com,
-	hawk@kernel.org,
-	davem@davemloft.net,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	alexandre.torgue@foss.st.com
-Subject: Re: fix a potential memory leak in stmmac_xdp_enable_pool()
-Date: Mon, 26 Jan 2026 19:04:47 -0800
-Message-ID: <20260127030447.3838706-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260125135412.2070798-1-lihaoxiang@isrc.iscas.ac.cn>
-References: <20260125135412.2070798-1-lihaoxiang@isrc.iscas.ac.cn>
+	s=k20201202; t=1769483326;
+	bh=r2VRHW3WxWnawAiIF9XP8PHtMz4QMDWUBEXOXvY8H2U=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=EWYFjNUg75mYuAauRKChhRpUjAEjA+2PP0uoHx+vXt9zaOPOzFiGq7Dv2dntKzOn5
+	 AqKQnuKIa0oj6WLjNNHdhfmSptSHipYNrlTLhbMZOhBvYynMdlYOa/QHukZJv0l1iy
+	 mtdAJ96k6bZ8QvNEwJVhfAlOOgG99x3aWbS6ztRUaeIsHlzb2WGskT27+p4welYoKB
+	 VZZPS0mMvmehf8Q3Wwjdv6tARtahUqmREThO3MaR2Haybg7Sb6+dmiUQEKRN2yxH6z
+	 oByMCB6gH9W9DYUuiw+WP1OMLhJB0rhPeSslPGmKe6Emm3G4eb61YhoTBzHPrmIqVy
+	 m+cjo2vtu1pYQ==
+Content-Type: multipart/mixed; boundary="===============1477226859959415716=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <11e47e72d311eb7a7a69fd74e1701c3563ac2f9d7e4fd4f7a94d49e83885ff22@mail.kernel.org>
+In-Reply-To: <20260127024421.494929-12-roman.gushchin@linux.dev>
+References: <20260127024421.494929-12-roman.gushchin@linux.dev>
+Subject: Re: [PATCH bpf-next v3 11/17] bpf: selftests: introduce read_cgroup_file() helper
+From: bot+bpf-ci@kernel.org
+To: roman.gushchin@linux.dev,bpf@vger.kernel.org
+Cc: mhocko@suse.com,ast@kernel.org,mattbobrowski@google.com,shakeel.butt@linux.dev,inwardvessel@gmail.com,linux-kernel@vger.kernel.org,linux-mm@kvack.org,surenb@google.com,hannes@cmpxchg.org,akpm@linux-foundation.org,roman.gushchin@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 27 Jan 2026 03:08:46 +0000 (UTC)
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
+--===============1477226859959415716==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+> diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+> index 20cede4db3ce..fc5f22409ce5 100644
+> --- a/tools/testing/selftests/bpf/cgroup_helpers.c
+> +++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+
+[ ... ]
+
+> +/**
+> + * read_cgroup_file() - Read from a cgroup file
+> + * @relative_path: The cgroup path, relative to the workdir
+> + * @file: The name of the file in cgroupfs to read from
+> + * @buf: Buffer to read from the file
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+
+This isn't a bug, but should this say "Buffer to store data read from the
+file" or "Buffer to read into"? The current wording suggests data is read
+from the buffer, but the code reads from the file into the buffer. Compare
+with write_cgroup_file() which says "Buffer to write to the file" - that
+phrasing works for writes but the inverse doesn't quite work for reads.
+
+> + * @size: Size of the buffer
+> + *
+> + * Read from a file in the given cgroup's directory.
+> + *
+> + * If successful, the number of read bytes is returned.
+> + */
+
+[ ... ]
+
+
 ---
-fix a potential memory leak in stmmac_xdp_enable_pool()
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-This patch adds xsk_pool_dma_unmap() to the error path when
-stmmac_xsk_wakeup() fails, to release the DMA mapping allocated
-earlier by xsk_pool_dma_map().
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21382620878
 
-> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> index d7e4db7224b0..7d89d6066ea3 100644
-> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
-> @@ -48,8 +48,10 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *priv,
->  		napi_enable(&ch->rxtx_napi);
->
->  		err = stmmac_xsk_wakeup(priv->dev, queue, XDP_WAKEUP_RX);
-> -		if (err)
-> +		if (err) {
-> +			xsk_pool_dma_unmap(pool, STMMAC_RX_DMA_ATTR);
->  			return err;
-> +		}
+AI-authorship-score: low
+AI-authorship-explanation: The code closely follows existing patterns in the file with a minor documentation error typical of copy-paste adaptation, suggesting human authorship.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Minor documentation error in test code where @buf description says the opposite of what the code does.
 
-Is the error cleanup here complete? Looking at stmmac_xdp_enable_pool(),
-before this point the code has already executed:
-
-  set_bit(queue, priv->af_xdp_zc_qps);
-  stmmac_enable_rx_queue(priv, queue);
-  stmmac_enable_tx_queue(priv, queue);
-  napi_enable(&ch->rxtx_napi);
-
-When stmmac_xsk_wakeup() fails, the patch unmaps the DMA pool but does not
-appear to reverse these other state changes. Comparing with the cleanup
-sequence in stmmac_xdp_disable_pool(), should the error path also:
-
-  - call clear_bit(queue, priv->af_xdp_zc_qps)
-  - disable the queues and NAPI that were just enabled
-
-The DMA descriptors allocated by stmmac_enable_rx_queue() and
-stmmac_enable_tx_queue() would also be leaked on this error path.
-
->  	}
->
->  	return 0;
--- 
-pw-bot: cr
+--===============1477226859959415716==--
