@@ -1,211 +1,82 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57A1362128
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 17:01:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDFBA3624CA
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 17:10:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769533322; cv=none; b=DZOpdA0J0qodgPcsWLKoY2ehhVtbfWky1WmNJLi9/g4cbOjUkNQ8wguvttvEuts4nxB4qh63j1JdtQooCPCxzRn/1fA2iZBav1AhSZ9Jw+zuYfVD9ztbguSZ44LCk/wuQ/pKWDGrket14rkyKII7PFH+lvhpIWMIbBNnY3S2H1s=
+	t=1769533812; cv=none; b=Zcq4NV+kgSlI6dlYauOnjyj60M2MwYi8cWWjvbxe8/JvjA9D5CXi5gFr9M1olfBeLSCQxpfNnquZZQR3WwauU6dZuEkwqatLBjRneu/0Il9hn+7X0ZoVkCPRzyAsGDMcqDSA6EpWp4V9ON41Z48Wu1yt3zbJ1V/rBE28FMnI9Dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769533322; c=relaxed/simple;
-	bh=fGEMN94p5pcI5Fg0SWpsQe5CEhERVB7hUSpwH3TECYw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Ar0mWMWG/yJl0vWu1W7Icwgc7D50T1b5xODZ8v5dHbk+oI2SrJspT/C7VvaDdQjXNAEMsz66mriEICUZ0c5oMxGfNpxCrlRiHhvhVQ3e94DBSIvwbDK1gv1IwBIpbF3IMcuWszTUzhppiStgs4glXDE+vEVuee7up2VFiR9sSBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KsX4eWvK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4xSd2MZv; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KsX4eWvK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4xSd2MZv; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1769533812; c=relaxed/simple;
+	bh=+9pcbos8Bo8QN7vKTs8K3I3dKd1VPnLvNKqd0/e25Fk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=baFONkl6OAjKzkULwBLZPLHylczZm8epWl8ei3dYcIyCCGHvCTAmr2+5Ajx94NOU2tea4BdEXhKE0xAGKYPpWTyJVwjM/R5oR2VIII6ccOy1oBoM92gwMjz+vNWgOwr7UEQUNuq4AmIUVQlw2wxJeL+w38a2JOB2h+spN6Of5tI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uz6oCPCq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KsX4eWvK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4xSd2MZv";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KsX4eWvK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4xSd2MZv"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id CEAED337E6;
-	Tue, 27 Jan 2026 17:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769533317; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=6VzosSxBHLNs4vZ2mzLFRG099l7jrsWQvS9jypSwPAQ=;
-	b=KsX4eWvK3US2CuC9SheihY3dpMf3pUSXB4wszy89D+uPRIA9Va2BufLM+RqGEYKmx4Nfdm
-	iJlfjrhetBgE2iPDTrxGgRqfBvRlMQbrDM6KfNPObbQ1hcGaLJCKFrVESyhXBDIFlAyQGg
-	LcLmquOt0akAreRWGlzcS1GVEO5/Dfs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769533317;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=6VzosSxBHLNs4vZ2mzLFRG099l7jrsWQvS9jypSwPAQ=;
-	b=4xSd2MZvPUOu84tcRppkllQIONTsXuIC1PVOQLuZMyWKQAxFy3Ir1KitvFCj/mk7W+k2dH
-	jYuzes8BFMGNANDQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769533317; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=6VzosSxBHLNs4vZ2mzLFRG099l7jrsWQvS9jypSwPAQ=;
-	b=KsX4eWvK3US2CuC9SheihY3dpMf3pUSXB4wszy89D+uPRIA9Va2BufLM+RqGEYKmx4Nfdm
-	iJlfjrhetBgE2iPDTrxGgRqfBvRlMQbrDM6KfNPObbQ1hcGaLJCKFrVESyhXBDIFlAyQGg
-	LcLmquOt0akAreRWGlzcS1GVEO5/Dfs=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769533317;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=6VzosSxBHLNs4vZ2mzLFRG099l7jrsWQvS9jypSwPAQ=;
-	b=4xSd2MZvPUOu84tcRppkllQIONTsXuIC1PVOQLuZMyWKQAxFy3Ir1KitvFCj/mk7W+k2dH
-	jYuzes8BFMGNANDQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9F9283EA61;
-	Tue, 27 Jan 2026 17:01:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 9FaSJoXveGmdWQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 27 Jan 2026 17:01:57 +0000
-Message-ID: <a9c34ec4-936c-4386-9624-662561f87b84@suse.cz>
-Date: Tue, 27 Jan 2026 18:01:57 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uz6oCPCq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64AF2C116C6;
+	Tue, 27 Jan 2026 17:10:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769533812;
+	bh=+9pcbos8Bo8QN7vKTs8K3I3dKd1VPnLvNKqd0/e25Fk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=uz6oCPCqZy8nKjxhKEvNSoHL0tw2LelgLNiXs3gFoMMFdYVsZ32HPe6Hqs9VCL1Px
+	 nvXmOwtBY5nvj2aqNg/UvxuyJhLoIT2XvftC668JreXMtWhyhf3IQsVDSRzp6lPDDR
+	 fFzRAhPCUs0NwvctVjQrhrv12X4hLcudx1kVEBDrue2IWaA9GSkJnsbqz4m0h7Rqaj
+	 rTh6jlb6E1X8Y5WfEpwsID5USc5dNN1T+7xa9vlpVJo4jaDgPmY2pXA0/F8w5HplmN
+	 zYClI38X7dViUIJQ25bb8j3f32V8ProUSTANTI/qWwz10tuo6lG5MkOWS7iw1swRy7
+	 Z1pSEWMLFnYRw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BBFD380AA58;
+	Tue, 27 Jan 2026 17:10:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 06/22] slab: add sheaves to most caches
-Content-Language: en-US
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
- Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Uladzislau Rezki <urezki@gmail.com>, Suren Baghdasaryan <surenb@google.com>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
- bpf@vger.kernel.org, kasan-dev@googlegroups.com
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <20260123-sheaves-for-all-v4-6-041323d506f7@suse.cz>
- <r3qfus4j6awmixdbcopgva3lx2l3lrvlvuoqqns64q6qp33qep@2hsrrvfsojsm>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
- KxRWDHX0R2tgpFDXHnzZcQywawu8eSq0LxzxFNYMvtB7sV1pxYwej2qx9B75qW2plBs+7+YB
- 87tMFA+u+L4Z5xAzIimfLD5EKC56kJ1CsXlM8S/LHcmdD9Ctkn3trYDNnat0eoAcfPIP2OZ+
- 9oe9IF/R28zmh0ifLXyJQQz5ofdj4bPf8ecEW0rhcqHfTD8k4yK0xxt3xW+6Exqp9n9bydiy
- tcSAw/TahjW6yrA+6JhSBv1v2tIm+itQc073zjSX8OFL51qQVzRFr7H2UQG33lw2QrvHRXqD
- Ot7ViKam7v0Ho9wEWiQOOZlHItOOXFphWb2yq3nzrKe45oWoSgkxKb97MVsQ+q2SYjJRBBH4
- 8qKhphADYxkIP6yut/eaj9ImvRUZZRi0DTc8xfnvHGTjKbJzC2xpFcY0DQbZzuwsIZ8OPJCc
- LM4S7mT25NE5kUTG/TKQCk922vRdGVMoLA7dIQrgXnRXtyT61sg8PG4wcfOnuWf8577aXP1x
- 6mzw3/jh3F+oSBHb/GcLC7mvWreJifUL2gEdssGfXhGWBo6zLS3qhgtwjay0Jl+kza1lo+Cv
- BB2T79D4WGdDuVa4eOrQ02TxqGN7G0Biz5ZLRSFzQSQwLn8fbwARAQABzSBWbGFzdGltaWwg
- QmFia2EgPHZiYWJrYUBzdXNlLmN6PsLBlAQTAQoAPgIbAwULCQgHAwUVCgkICwUWAgMBAAIe
- AQIXgBYhBKlA1DSZLC6OmRA9UCJPp+fMgqZkBQJnyBr8BQka0IFQAAoJECJPp+fMgqZkqmMQ
- AIbGN95ptUMUvo6aAdhxaOCHXp1DfIBuIOK/zpx8ylY4pOwu3GRe4dQ8u4XS9gaZ96Gj4bC+
- jwWcSmn+TjtKW3rH1dRKopvC07tSJIGGVyw7ieV/5cbFffA8NL0ILowzVg8w1ipnz1VTkWDr
- 2zcfslxJsJ6vhXw5/npcY0ldeC1E8f6UUoa4eyoskd70vO0wOAoGd02ZkJoox3F5ODM0kjHu
- Y97VLOa3GG66lh+ZEelVZEujHfKceCw9G3PMvEzyLFbXvSOigZQMdKzQ8D/OChwqig8wFBmV
- QCPS4yDdmZP3oeDHRjJ9jvMUKoYODiNKsl2F+xXwyRM2qoKRqFlhCn4usVd1+wmv9iLV8nPs
- 2Db1ZIa49fJet3Sk3PN4bV1rAPuWvtbuTBN39Q/6MgkLTYHb84HyFKw14Rqe5YorrBLbF3rl
- M51Dpf6Egu1yTJDHCTEwePWug4XI11FT8lK0LNnHNpbhTCYRjX73iWOnFraJNcURld1jL1nV
- r/LRD+/e2gNtSTPK0Qkon6HcOBZnxRoqtazTU6YQRmGlT0v+rukj/cn5sToYibWLn+RoV1CE
- Qj6tApOiHBkpEsCzHGu+iDQ1WT0Idtdynst738f/uCeCMkdRu4WMZjteQaqvARFwCy3P/jpK
- uvzMtves5HvZw33ZwOtMCgbpce00DaET4y/UzsBNBFsZNTUBCACfQfpSsWJZyi+SHoRdVyX5
- J6rI7okc4+b571a7RXD5UhS9dlVRVVAtrU9ANSLqPTQKGVxHrqD39XSw8hxK61pw8p90pg4G
- /N3iuWEvyt+t0SxDDkClnGsDyRhlUyEWYFEoBrrCizbmahOUwqkJbNMfzj5Y7n7OIJOxNRkB
- IBOjPdF26dMP69BwePQao1M8Acrrex9sAHYjQGyVmReRjVEtv9iG4DoTsnIR3amKVk6si4Ea
- X/mrapJqSCcBUVYUFH8M7bsm4CSxier5ofy8jTEa/CfvkqpKThTMCQPNZKY7hke5qEq1CBk2
- wxhX48ZrJEFf1v3NuV3OimgsF2odzieNABEBAAHCwXwEGAEKACYCGwwWIQSpQNQ0mSwujpkQ
- PVAiT6fnzIKmZAUCZ8gcVAUJFhTonwAKCRAiT6fnzIKmZLY8D/9uo3Ut9yi2YCuASWxr7QQZ
- lJCViArjymbxYB5NdOeC50/0gnhK4pgdHlE2MdwF6o34x7TPFGpjNFvycZqccSQPJ/gibwNA
- zx3q9vJT4Vw+YbiyS53iSBLXMweeVV1Jd9IjAoL+EqB0cbxoFXvnjkvP1foiiF5r73jCd4PR
- rD+GoX5BZ7AZmFYmuJYBm28STM2NA6LhT0X+2su16f/HtummENKcMwom0hNu3MBNPUOrujtW
- khQrWcJNAAsy4yMoJ2Lw51T/5X5Hc7jQ9da9fyqu+phqlVtn70qpPvgWy4HRhr25fCAEXZDp
- xG4RNmTm+pqorHOqhBkI7wA7P/nyPo7ZEc3L+ZkQ37u0nlOyrjbNUniPGxPxv1imVq8IyycG
- AN5FaFxtiELK22gvudghLJaDiRBhn8/AhXc642/Z/yIpizE2xG4KU4AXzb6C+o7LX/WmmsWP
- Ly6jamSg6tvrdo4/e87lUedEqCtrp2o1xpn5zongf6cQkaLZKQcBQnPmgHO5OG8+50u88D9I
- rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
- dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
- m6M14QORSWTLRg==
-In-Reply-To: <r3qfus4j6awmixdbcopgva3lx2l3lrvlvuoqqns64q6qp33qep@2hsrrvfsojsm>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	FREEMAIL_TO(0.00)[oracle.com,suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -4.30
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: add new BPF_CGROUP_ITER_CHILDREN
+ control
+ option
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176953380636.941142.15593390985177857041.git-patchwork-notify@kernel.org>
+Date: Tue, 27 Jan 2026 17:10:06 +0000
+References: <20260127085112.3608687-1-mattbobrowski@google.com>
+In-Reply-To: <20260127085112.3608687-1-mattbobrowski@google.com>
+To: Matt Bobrowski <mattbobrowski@google.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, jolsa@kernel.org, roman.gushchin@linux.dev,
+ zhouchuyi@bytedance.com, tj@kernel.org
 
-On 1/27/26 17:34, Liam R. Howlett wrote:
-> * Vlastimil Babka <vbabka@suse.cz> [260123 01:53]:
->> In the first step to replace cpu (partial) slabs with sheaves, enable
->> sheaves for almost all caches. Treat args->sheaf_capacity as a minimum,
->> and calculate sheaf capacity with a formula that roughly follows the
->> formula for number of objects in cpu partial slabs in set_cpu_partial().
->> 
->> This should achieve roughly similar contention on the barn spin lock as
->> there's currently for node list_lock without sheaves, to make
->> benchmarking results comparable. It can be further tuned later.
->> 
->> Don't enable sheaves for bootstrap caches as that wouldn't work. In
->> order to recognize them by SLAB_NO_OBJ_EXT, make sure the flag exists
->> even for !CONFIG_SLAB_OBJ_EXT.
->> 
->> This limitation will be lifted for kmalloc caches after the necessary
->> bootstrapping changes.
->> 
->> Also do not enable sheaves for SLAB_NOLEAKTRACE caches to avoid
->> recursion with kmemleak tracking (thanks to Breno Leitao).
->> 
->> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
->> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
->> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Tue, 27 Jan 2026 08:51:10 +0000 you wrote:
+> Currently, the BPF cgroup iterator supports walking descendants in
+> either pre-order (BPF_CGROUP_ITER_DESCENDANTS_PRE) or post-order
+> (BPF_CGROUP_ITER_DESCENDANTS_POST). These modes perform an exhaustive
+> depth-first search (DFS) of the hierarchy. In scenarios where a BPF
+> program may need to inspect only the direct children of a given parent
+> cgroup, a full DFS is unnecessarily expensive.
 > 
-> Is there a way to force a specific limit to the sheaf capacity if you
-> want a lower number than what is calculated in
-> calculate_sheaf_capacity()?
+> [...]
 
-No.
+Here is the summary with links:
+  - [bpf-next,v2,1/2] bpf: add new BPF_CGROUP_ITER_CHILDREN control option
+    https://git.kernel.org/bpf/bpf-next/c/752b807028e6
+  - [bpf-next,v2,2/2] bpf/selftests: cover BPF_CGROUP_ITER_CHILDREN control option
+    https://git.kernel.org/bpf/bpf-next/c/1456ebb291dd
 
-> That is, it seems your code always decides
-> if the specified sheaf number is smaller right now.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-That's right. It shouldn't break anything, AFAICS.
-
-> I'm not sure it's
-> practical to want a smaller number though.
-
-Yeah I found no such reason, so until we stumble upon one, we don't need
-such support I think?
-
-> Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-
-Thanks!
 
