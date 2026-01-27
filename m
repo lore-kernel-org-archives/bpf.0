@@ -1,100 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954813358CA;
-	Tue, 27 Jan 2026 10:08:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03B9F33710E
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 10:14:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769508517; cv=none; b=dFzdED9D7VUKK7j/y6dCxCLTfWDTBuL2pyiB9EGSziHJhfy0VM4JvtPHB59Ep1HYIruloU179K/fHXXQaWm6kKpLiWMH4W7a812aOjY6l+Xmjx8EQp572A+zH4ly+kI+EAQhq6p9CE1KT3tBh1MXnrfF7nP/7ialKRSTjEgtoNY=
+	t=1769508876; cv=none; b=oNF1hnIQTh4TE5/fyXOoA8pNdkgdrP6NjeoLYBngzSUDt+5GVRhshVhbq6M9a5kj/IIWd0f2HHpHZKP3YEf/DiN08/qZp8NmZNfqibtk2iKg1b91v1nbZ24et6P3XSSee8at3HVT3dR0EgdyyWbaCQ59143UIbu1ymi3eYiQPU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769508517; c=relaxed/simple;
-	bh=5stgSFPOFTFIULArixFeHkYV56tWc18IJxdLX0dDglY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RPvwNuFyQPHA2NI9T4WnIMNI8lCEInCa8fkbTXmSSCl+2K3h4woM8AnEnsd/Mx1mjQSUxxOQoRZ9hQdG/bY4iGPKbDzk+IFSHYpyyuwZ1PKiC1/S7oBxwsE5HcMrdLf4aBYWPytywZi0SWw9XznEIXx9+59LKx0wDffkZ1e0czw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NV3uG0II; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769508876; c=relaxed/simple;
+	bh=XWK1oThC0G1bvogR6IPv7QqDq36y7THv6q7Ut2sS4Ag=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XSzT7cDIyLXnnz2ahWTEgPwm24l/rJAwwp10DBOIp3knW19bN2FWAa0L+IF3znEtFTwSVipLc6c0bhZZMDKOiJsJWyNovwoR5bxI5Ib/HPnbC8+NmxYJnfqwSxMpgpDG9uLq4xkpGzuhcNyYVKkFd4Vfx2VXEDkCfUS8iLzkPSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fpcI1XBN; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NV3uG0II"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88634C116C6;
-	Tue, 27 Jan 2026 10:08:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769508517;
-	bh=5stgSFPOFTFIULArixFeHkYV56tWc18IJxdLX0dDglY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=NV3uG0IIJ6oSlguw1ZOHGTXtX0nknoen7oyTS8zTEgfLxcLcEXtD4qakjZdS+GRDN
-	 m/iMbO0lg+p37/K4dLa4XKE/hjJWpm7tTOpi+ndk9g64uAZDiw7gXbWFhKVHyvI7fO
-	 N9Dd9ZbQbIMC5rO1zWbIt3ZFZ1ARRxKSqZdp/SejHNvFxXCWHQl0v9TgiD9otDZ388
-	 ypdzcpuHPEWW1mOZF60Aan+OvKkWE0pYm4UcReG1RH+fTqE9qxWp611DJfQBcShTs6
-	 MlaGeAKzvdLhhZwxWiiTXlvTt8fD+2pcZncfLOhT9+en3swcxHqgm4KxDgl8rYJqPd
-	 6SrdFZVC+e2Yg==
-Content-Type: multipart/mixed; boundary="===============4752217963743545921=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fpcI1XBN"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48049955f7fso47193555e9.0
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:14:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769508873; x=1770113673; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/4FvQHRBiEhUoBzRtCERgLc1sLFVyEqoxyKjPKRtz5A=;
+        b=fpcI1XBNemcUWQuhNS0nozTC5nkFU41tKcu63cnLofjHQEYQPpvVXDGEi/EwUM5r+0
+         OBVw5w4dmX8uXj4kYruaNcLqhe2mBRBjUsikixNKJXHpp88x4c+d3iHqHPe53win2z4Z
+         iw0RrqDC/Lj+fCquFNyrH4/uiq3cPxJKqzry6HLbO7xKHVLYH+VXWvsRsPkOkL+JzkOs
+         Bv5NBeyJoft49NM20GstmaShEahpuxryBMJECslA/RqdGLOQRXuxA7YZOrl/pTM+KCvD
+         2bb40CAqNPDzb8wQ21g0r5xvpTIjb/fgL2z9pToB0wKFmcxGDH6r4g63XfJ4reD8hoNg
+         aLZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769508873; x=1770113673;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/4FvQHRBiEhUoBzRtCERgLc1sLFVyEqoxyKjPKRtz5A=;
+        b=NP5AYUyPAhIIwzB22wlp/PnZcHbw53BSVWNxXs8AQEG2cUhB26a0AsYhhGP9bK27gJ
+         hhObK+MjUD4hyEcjtiAKDAKqKlFkuWovMI9BIlSeLeRSXOFNqFRvOBai5RuhPTQEnAEq
+         +hT1XF+Q9soHdFznvi6lIVvzd/xbecbUaKQF6+Wv0yI3vKN+sgLaFOY5QmvyQbng3J0n
+         xGU0QTNwjckRkeuhIBs1ocpAN57GS6sy8i6iw62v9QqF/8AHmiBrcNdrBdlgvstKtD/x
+         jLKOjyv7K/Z6Uni8wWj7eZGhmHSSTSVXPYFiqDMZnStsSTNogeOOD6yCioItjYetdEMR
+         hmeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXvEygznvh8UCl30SYM7Jd/Tk7Y9/nSTQ2Q7ixgBTrJ2AZ9XIwJec2veCPfSQEVMRs/kAk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywpq1HPRFxM2doxxz1QAp0a+hAc6Aq3LVXs15r9BSNavWjwU5Fr
+	RG0WmxqXRSFA/Bz2OZuaGAdR34QMN5krKrIw6BWiCm734LWOZPDFyxSa
+X-Gm-Gg: AZuq6aJ9PiKxFwPWfCW728YDXxgexNDCTw1wi0O8xatvynY5yFAuGFSo9wbRhURJ3KW
+	5NpDCyXgkugRZlyM32tghRstZhu2KPSIsVRbblD+ecEDj41qlK8CGZXotCaG0aL9jM6/Poj1/n2
+	EAZL+eSGG7iBYytte4lWjb6bUZNjA+k+5B/32i4/oOZHE5Eg7/kQ5XtfF8IYuas8yNa5viNK+Jh
+	GWjvNRjzW4+TVhvPbewpRd6r0MlTDL8Vymz5XLYOUxTJQplxOponGZa7O6LIMdtPh1MJstjhgI5
+	9axAA7EV9/6OBrFamAmnCZgn1YGwNE3zzh3KuC80vzawW5T9HGcEwRbn4C02SPTLmPBmevriuDS
+	I5i574F6T+F+fK6QGMTEcGmTb0A+GYLLfjaq++V7FsSwozqp1WvYnaeq9j84lOj4jzGGnwK0jqc
+	zYuN6kJOik0mLRxI8Z/WSdbRdl/y1ag2aCq0xlI6Q0xXZkmFI8acWFPZgw48kPWGjsi5dKmHd1U
+	YkFiAsIpy2b66bcig==
+X-Received: by 2002:a05:600c:3113:b0:480:1c75:407c with SMTP id 5b1f17b1804b1-48069bfaaf6mr15553245e9.2.1769508872871;
+        Tue, 27 Jan 2026 02:14:32 -0800 (PST)
+Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1c24acdsm38190407f8f.13.2026.01.27.02.14.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jan 2026 02:14:32 -0800 (PST)
+From: Pavel Begunkov <asml.silence@gmail.com>
+To: io-uring@vger.kernel.org
+Cc: asml.silence@gmail.com,
+	bpf@vger.kernel.org
+Subject: [PATCH v4 0/6] BPF controlled io_uring
+Date: Tue, 27 Jan 2026 10:14:04 +0000
+Message-ID: <cover.1769470552.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6173f32708a0a1401350ac03dfeb0c3a6b212331b233b3269ff708dfc74dcffe@mail.kernel.org>
-In-Reply-To: <f14f1ad53f742f993a7ac5cb5ba6eaee26bebd91.1769506741.git.zhuhui@kylinos.cn>
-References: <f14f1ad53f742f993a7ac5cb5ba6eaee26bebd91.1769506741.git.zhuhui@kylinos.cn>
-Subject: Re: [RFC PATCH bpf-next v5 08/12] mm: memcontrol: Add BPF struct_ops for memory controller
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,akpm@linux-foundation.org,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,peterz@infradead.org,ojeda@kernel.org,nathan@kernel.org,kees@kernel.org,tj@kernel.org,jeffxu@chromium.org,mkoutny@suse.com,kernel@jfarr.cc,brauner@kernel.org,rdunlap@infradead.org,brgerst@gmail.com,masahiroy@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,inwardvessel@gmail.com,willemb@google.com,kerneljasonxing@gmail.com,paul.chaignon@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,chenridong@huaweicloud.com,lance.yang@linux.dev,jiayuan.chen@linux.dev,linux-kernel@vger.kernel.org,linux-mm@kvack.org,cgroups@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: zhuhui@kylinos.cn,geliang@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 27 Jan 2026 10:08:36 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============4752217963743545921==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Note: I'll be targeting 7.1 as it's rc7 and it can use some
+time to settle down.
 
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 1f74fce27677..8d90575aa77d 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
+This series introduces a way to override the standard io_uring_enter
+syscall execution with an extendible event loop, which can be controlled
+by BPF via new io_uring struct_ops or from within the kernel.
 
-[ ... ]
+There are multiple use cases I want to cover with this:
 
-> @@ -2530,10 +2537,14 @@ static int try_charge_memcg(struct mem_cgroup *memcg, gfp_t gfp_mask,
->  	 * kernel. If this is successful, the return path will see it
->  	 * when it rechecks the overage and simply bail out.
->  	 */
-> -	if (current->memcg_nr_pages_over_high > MEMCG_CHARGE_BATCH &&
-> -	    !(current->flags & PF_MEMALLOC) &&
-> -	    gfpflags_allow_blocking(gfp_mask))
-> -		__mem_cgroup_handle_over_high(gfp_mask);
-> +	if (gfpflags_allow_blocking(gfp_mask)) {
-> +		unsigned long bpf_high_delay;
-> +
-> +		bpf_high_delay = bpf_memcg_get_high_delay(orig_memcg);
-> +		if (bpf_high_delay ||
-> +		    current->memcg_nr_pages_over_high > MEMCG_CHARGE_BATCH)
-> +			__mem_cgroup_handle_over_high(gfp_mask, bpf_high_delay);
-> +	}
+- Syscall avoidance. Instead of returning to the userspace for
+  CQE processing, a part of the logic can be moved into BPF to
+  avoid excessive number of syscalls.
 
-The old code checked !(current->flags & PF_MEMALLOC) before calling
-__mem_cgroup_handle_over_high(). This check appears to be missing in the
-new code.
+- Access to in-kernel io_uring resources. For example, there are
+  registered buffers that can't be directly accessed by the userspace,
+  however we can give BPF the ability to peek at them. It can be used
+  to take a look at in-buffer app level headers to decide what to do
+  with data next and issuing IO using it.
 
-When PF_MEMALLOC is set, the task is already in the memory reclaim context.
-Calling __mem_cgroup_handle_over_high() from such a context would invoke
-reclaim_high() -> try_to_free_mem_cgroup_pages(), potentially causing
-reclaim recursion.
+- Smarter request ordering and linking. Request links are pretty
+  limited and inflexible as they can't pass information from one
+  request to another. With BPF we can peek at CQEs and memory and
+  compile a subsequent request.
 
-Was the removal of the PF_MEMALLOC check intentional? If a BPF program
-returns a non-zero delay from get_high_delay_ms while the task is in a
-reclaim context, could this lead to recursive reclaim or deadlock?
+- Feature semi-deprecation. It can be used to simplify handling
+  of deprecated features by moving it into the callback out core
+  io_uring. For example, it should be trivial to simulate
+  IOSQE_IO_DRAIN. Another target could be request linking logic.
 
+- It can serve as a base for custom algorithms and fine tuning.
+  Often, it'd be impractical to introduce a generic feature because
+  it's either niche or requires a lot of configuration. For example,
+  there is support min-wait, however BPF can help to further fine tune
+  it by doing it in multiple steps with different number of CQEs /
+  timeouts. Another feature people were asking about is allowing
+  to over queue SQEs but make the kernel to maintain a given QD.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+- Smarter polling. Napi polling is performed only once per syscall
+  and then it switches to waiting. We can do smarter and intermix
+  polling with waiting using the hook.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21392729810
+It might need more specialised kfuncs in the future, but the core
+functionality is implemented with just two simple functions. One
+returns region memory, which gives BPF access to CQ/SQ/etc. And
+the second is for submitting requests. It's also given a structure
+as an argument, which is used to pass waiting parameters.
 
-AI-authorship-score: low
-AI-authorship-explanation: The code shows typical human characteristics including a refactoring oversight that AI would likely not make; the commit follows standard kernel conventions and has multiple human authors.
-issues-found: 1
-issue-severity-score: medium
-issue-severity-explanation: Missing PF_MEMALLOC check could cause memory reclaim recursion when BPF programs are attached, potentially leading to system instability.
+It showed good numbers in a test that sequentially executes N nop
+requests, where BPF was more than twice as fast than a 2-nop
+request link implementation.
 
---===============4752217963743545921==--
+Pavel Begunkov (6):
+  io_uring: introduce callback driven main loop
+  io_uring/bpf-ops: add basic bpf struct_ops boilerplate
+  io_uring/bpf-ops: add loop_step struct_ops callback
+  io_uring/bpf-ops: add kfunc helpers
+  io_uring/bpf-ops: add bpf struct ops registration
+  selftests/io_uring: add a bpf io_uring selftest
+
+ include/linux/io_uring_types.h               |  10 +
+ io_uring/Kconfig                             |   5 +
+ io_uring/Makefile                            |   3 +-
+ io_uring/bpf-ops.c                           | 265 +++++++++++++++++++
+ io_uring/bpf-ops.h                           |  28 ++
+ io_uring/io_uring.c                          |   8 +
+ io_uring/loop.c                              |  88 ++++++
+ io_uring/loop.h                              |  27 ++
+ tools/testing/selftests/Makefile             |   3 +-
+ tools/testing/selftests/io_uring/Makefile    | 143 ++++++++++
+ tools/testing/selftests/io_uring/basic.bpf.c | 116 ++++++++
+ tools/testing/selftests/io_uring/common.h    |   6 +
+ tools/testing/selftests/io_uring/runner.c    | 107 ++++++++
+ tools/testing/selftests/io_uring/types.bpf.h | 131 +++++++++
+ 14 files changed, 938 insertions(+), 2 deletions(-)
+ create mode 100644 io_uring/bpf-ops.c
+ create mode 100644 io_uring/bpf-ops.h
+ create mode 100644 io_uring/loop.c
+ create mode 100644 io_uring/loop.h
+ create mode 100644 tools/testing/selftests/io_uring/Makefile
+ create mode 100644 tools/testing/selftests/io_uring/basic.bpf.c
+ create mode 100644 tools/testing/selftests/io_uring/common.h
+ create mode 100644 tools/testing/selftests/io_uring/runner.c
+ create mode 100644 tools/testing/selftests/io_uring/types.bpf.h
+
+-- 
+2.52.0
+
