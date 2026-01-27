@@ -1,101 +1,140 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D3F12248B9
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:44:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C53F35F8B7
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769539467; cv=none; b=ZhbtngdbRdj3alNfPMP9nRdnOBKhzHgLOHLKrnNZDfUvHhdxcSZv5MB9TUvJ96CBhqxK0e1smphto2OLP0AN+25/v+iY00WxjzlRwbOx59u1K98Suse9jNAGaabLATp39UlilhUp6+Vxmut2OTyB9/duHHkzVhC5gWrKXy6Pyag=
+	t=1769539539; cv=none; b=l0jRK6HsFPsh3+Nls8Y/SejgdROA997xduG62qEMGJOz0D36I4RR3JcVN3mH0V7lApelV8PPq90UMM+MVNmuNFcK6xv3x5V3qdEgXsoOFYgpdzrC2mK0nxVH2rPq6jZ7jA/1MODjgHv837GMqaN043ad+Y9FWY55P/PfvxFboiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769539467; c=relaxed/simple;
-	bh=Puce/Y2uoOhkmXAnyMr90G2Ehk1ZPgymehgrzrUE1uw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SdRvp4QvHIqiX05EpBhRiC8Qelog8x1+XRbQeZH1jrsPannP/zF9btXXXPz6xSUYVVzzcMuJ161Djj3s9A70+dVs6hlhJy+lLvnBr1+eC0jISnxkR5I4n2z2mV4LoGgupYdvUoCSbPbT6x4jnHmnDjQVipW1n4Ht+L2MKwObu4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Aqg/B/M8; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+	s=arc-20240116; t=1769539539; c=relaxed/simple;
+	bh=FEgtaVo1fZFg2EuUcwRPQAmBOP9NsfcGWcYkeoclp5Y=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=T+r61w1TFkwnFEIY4R018zUuCIJ7Ot4ZctTXdq22dCRftg4QNG4KOVqy1GF8dyZXf1ceL4Cib5vBR1zbDWnaWnhHOsjrf3FlOOaN0o8WdN7PNZHfbYEpC4uSO4NsS231Y1LmJUq38ig3KbVKL99We04DkL5gz7QdnoKhH93kJIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=TXD4HOQm; arc=none smtp.client-ip=209.85.222.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Aqg/B/M8"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-59de66fda55so5211834e87.3
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 10:44:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="TXD4HOQm"
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-8c70daf9c94so77814485a.0
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 10:45:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1769539464; x=1770144264; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IB3BhFyIjodZhUGQQ41xIA4/U0Zmh362p3tEBCm/trs=;
-        b=Aqg/B/M8xo/IziRc0ULFjlHqPkOIHnCQXTmylhOeeo+lGhU+VH2QEfmHV9J8Q/IVC3
-         pWKUWRM47RZH4hz7cZK3hz/LkEq/+b4zEqdh6CqTI10ptZ5O0Z6KJ8wyy2niXK3QHikh
-         PdDhq8R+9rUjfyKOF3phb6ebQLVeGVJAVl1b4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769539464; x=1770144264;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769539537; x=1770144337; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IB3BhFyIjodZhUGQQ41xIA4/U0Zmh362p3tEBCm/trs=;
-        b=jOvV1CFd/Nphsffc8/VDF6K7bybti1F5xkBXG1/x7RI+9sSS+rxI2sYfGOrI/Eje73
-         k8MnH94gqgZkEmkDA0HI3Vv3Z6AtkTyBojjTFnmKowNpM5pBX+OMW9n3uqCYNpGDQTE4
-         cGbISlCWDrW6fQc0DyuBfic8zudXctoEeuez7KugY0EvjOgGAv2Tp+evVl6CmD4tbAVf
-         OGPkdEXAeOdM5kuz0IznglGAOFiyGUM//LCeelM5i0OhbsudfIrsa0ita1RHRbwL4xyM
-         XICSwG1Ny66nBe7V+Ytp33lhfbd3rRkFvh/AL0UNSnoHjo0MWBR/ODnojQ2tfV/rhJoV
-         9zzg==
-X-Forwarded-Encrypted: i=1; AJvYcCXSJGKL+fDOdK7Dx0GB56JZrmwYuZcMYTs81d+Rg6MCfxh562WKKCJ+OA+SB8bQ+lXxjZ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztL0VeHdrYIcQhSXxQYpEoQ04+OfF7O/ZRtbpa0xyA+2H3iIcA
-	ilb6Mkg74sg/3xRYEdj+ERAthbaQes/DnR8rBxRSg6KdyjzWXY06YUDZQ1GNqj3oHFHj85AreVS
-	q5csW8Bk=
-X-Gm-Gg: AZuq6aLyxbaPl7q8+30oWLBzVR7LFu28TPspOZMDES9U9HSVEZ7sPcK8Vw+zZm3c4f8
-	IowMEAMvOg/ZWHPhJGaDmyAIC/Eh66z9pCljtOcAvl2bF+wQmoRpYeEI9eC1BYURY6tbHc0KeeO
-	T7ltm4+XD2JJVwpfKfFKnOT9EhDS6p5yeuzyfcM0dAMtG6XVabGOeLClFGwRhr+mfhTwKLq+Gjh
-	IfZ8BXofhy3iMQ8uF1hMiWfXCvtU9exphcTLrb+kI4C/KuAJFwwL+rRrKI0uhujDZeBj01ADh7n
-	1wV2aVRUETm001OMaFMySuCTs95KkOvH2LD3Owvy4ML+GT0OAqHeaXZ+hiN8vpyZaadF+jHHtCK
-	IJW8O+xq4cWjMocA7GxNmOXh6/ZqBEK6+lyMkvJUM/nwtXxtk59mH8kngp4lVdo2mwT6CB3cM8v
-	UDciz6SItn69OVZWhGjwPwDoeFkwY7Tzi2CSKPcq0iq3RdUMYi9mrxCKvRRPxn
-X-Received: by 2002:a05:6512:4003:b0:59d:f273:9cc7 with SMTP id 2adb3069b0e04-59e0402470bmr1101815e87.29.1769539464265;
-        Tue, 27 Jan 2026 10:44:24 -0800 (PST)
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com. [209.85.167.44])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e074bbf76sm91416e87.87.2026.01.27.10.44.23
-        for <bpf@vger.kernel.org>
+        bh=gd28Q7mBb92UgK0u2k9ZSWCozvWb4RHDUvvHPuD1jPY=;
+        b=TXD4HOQmUcct0YrBWMpTHtCj3mjShjUq8n+TU+mc4O/iIblNCqoSI+xI/wf2TAtify
+         KLcpx0/AfKMZ5H02X3iobJvsNznAK50W8aVW0hMQXP5x9oh15PXUq1iqvl8dBxMk/aCP
+         YcuzxHDobS9NR3/C6Mdk6sYmWCK+WOYZ2XHM+CwZpScB9+j9XBLNWoJBhTw2nywQid5P
+         MDDbGxTn7Yc94zQQ403I7QIN/71T35QiaTA6DLeUeOoPqj1q1glt97Vru4Dj14wJJxni
+         p1wie0gdmBMMI6wsEwAgNPVXYELml9TfdsjUp0feV8dOton3nXTH+M0Gh+wEgbdQirM5
+         FjRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769539537; x=1770144337;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gd28Q7mBb92UgK0u2k9ZSWCozvWb4RHDUvvHPuD1jPY=;
+        b=Zv/27St2zcGxSxKV6DoNPD3cHj4VpZ87GRz1WxCmTwKFuoezs33uOguMidzk+15Jua
+         k9TsICg4gpGPAunafRFGpBvWgb4HrOV9/YnjWDD4ndg5Ah6brXd/rHoBlS8q2dh7xOvF
+         sNzGB+SRNQUAXLx/JZK1Z5aznuyCZlvYQx+nn3hnGT8ZKdvRNDDbC0/YIQWDgnpcy9vS
+         9/b58BlmEpS3zoGFddcfl0fSgPaqUC4NRWpUo1VKsqVJeUyPO0HWnYy8muIW13X9h8A/
+         +NDbYEv9tye2pDkb8O41WgvLXZFihPdMWDLp8DQ17qmT3n3tKsrg4A9T91BUg/1GIBbz
+         EAAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVl3pxtQc/zb1KvGmtA0kPpu+ggayis9DDzE6y6sXPX1CAGqJWHutmKaNVaHfNo6k8oVQw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiEz3dhjUA7dSPg6SblxPGYlV1HO+j4BGkFidMFtK2XszlU3ay
+	1UZA3kvQsbBxbrI2Ll6oAw6Ybb5xJ+1r1v+LUv2gM/9/fMjk05KtQ7vOF1B7UVe3XFI=
+X-Gm-Gg: AZuq6aIYqqs7WtKEk2ELx8/JCSFfzA0CKFaLmvJvez8hGEoRjZX0TmROu/WonVR0ELM
+	g0Y/+Map+podswSHN+Rpu4jDwzRUcnKSohTiBjZjhUPn19f/l3tUAiaABfV1dmq/J1dwXfF+2rN
+	4IdUaEwrFWJofp8H7suPjqihT6qgj8FyVeCgHxof2xkFMX1owIy9VsqSL5+jyzomaE63aJkjRIO
+	YCNXFFy7xG/MLBzrkEg34Uyol70Mbi2SJteWdd+8Vkl44PpEf8Vsx1O0lx5MjYWiw4UIaBZbj8G
+	kuegZMUYb7aHWxzkohDxOakWarlBsjTDuMJeYU5lyT5rD7af9myYOnf//ffcDYA+GuHAUCwj6d4
+	kTYR3irbjq/c+MnIaz/IcTN3yAtEYs+zXicnnig9d15KYcMBxABSjRWW7GhV6f8M304NwLMIY48
+	BkismdLpJNp/4=
+X-Received: by 2002:a05:620a:2995:b0:8b3:16c:1a79 with SMTP id af79cd13be357-8c70b8e6013mr318992185a.53.1769539536938;
+        Tue, 27 Jan 2026 10:45:36 -0800 (PST)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c711d5b663sm25382085a.49.2026.01.27.10.45.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jan 2026 10:44:24 -0800 (PST)
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59b6f267721so5700846e87.2
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 10:44:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXdhNi5QjSRuBpxLLhsywbmxlOrfQEgegNgRJgui6OhcExVNIQ5tK5zvfZ1IpznGPan79I=@vger.kernel.org
-X-Received: by 2002:a05:6402:27c6:b0:64b:9d9b:f0f7 with SMTP id
- 4fb4d7f45d1cf-658a60c5513mr1939607a12.33.1769539160812; Tue, 27 Jan 2026
- 10:39:20 -0800 (PST)
+        Tue, 27 Jan 2026 10:45:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
- <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com> <2026012715-mantra-pope-9431@gregkh>
-In-Reply-To: <2026012715-mantra-pope-9431@gregkh>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 27 Jan 2026 10:39:04 -0800
-X-Gmail-Original-Message-ID: <CAHk-=whME4fu2Gn+W7MPiFHqwn51VByhpttf-wHdhAqQAQXpqw@mail.gmail.com>
-X-Gm-Features: AZwV_QjTvEFSmpHcnOP1NJLVZBe5xlcj-dD5ZtjcNC__rjqudIVF0E_rBxSpQA4
-Message-ID: <CAHk-=whME4fu2Gn+W7MPiFHqwn51VByhpttf-wHdhAqQAQXpqw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Samuel Wu <wusamuel@google.com>, Al Viro <viro@zeniv.linux.org.uk>, 
-	linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz, 
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org, 
-	linux-mm@kvack.org, linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, 
-	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org, 
-	paul@paul-moore.com, casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
-	john.johansen@canonical.com, selinux@vger.kernel.org, 
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com, 
-	android-kernel-team <android-kernel-team@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 27 Jan 2026 13:45:35 -0500
+Message-Id: <DFZLEW55QIGU.VTQKPNOP181D@etsalapatis.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <eddyz87@gmail.com>, <etsal@meta.com>, <ihor.solodrai@linux.dev>,
+ <martin.lau@kernel.org>, <memxor@gmail.com>, <puranjay@kernel.org>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <clm@meta.com>
+Subject: Re: [PATCH v2 07/13] selftests: bpf: Add ASAN support for libarena
+ selftests
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260127181610.86376-8-emil@etsalapatis.com>
+ <c754c6bb656d78e6ab566d3308a9a261cab980c622adab5213127e8d729efb03@mail.kernel.org>
+In-Reply-To: <c754c6bb656d78e6ab566d3308a9a261cab980c622adab5213127e8d729efb03@mail.kernel.org>
 
-On Mon, 26 Jan 2026 at 23:42, Greg KH <gregkh@linuxfoundation.org> wrote:
+On Tue Jan 27, 2026 at 1:38 PM EST, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b=
+/tools/testing/selftests/bpf/libarena/selftests/selftest.c
+>> index 5b8d8b94323e..f63324a1cdde 100644
+>> --- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
+>> +++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
 >
-> Note that I had to revert commit e5bf5ee26663 ("functionfs: fix the
-> open/removal races") from the stable backports, as it was causing issues
-> on the pixel devices it got backported to.  So perhaps look there?
+> [ ... ]
+>
+>> @@ -211,8 +269,17 @@ static void
+>>  banner(const char *progpath)
+>>  {
+>>  	char *name =3D basename(progpath);
+>> +	bool is_asan;
+>> +
+>> +	/*
+>> +	 * Check if our BPF programs are ASAN-capable by inspecting the prog n=
+ame.
+>> +	 * Command line arguments are guaranteed to be NULL-terminated, use st=
+rlen.
+>> +	 * Calculate the hardcoded name's length at compile time.
+>> +	 */
+>> +	printf("%s\n", name);
+>> +	is_asan =3D strstr(name, "_asan");
+>
+> This isn't a bug, but the comment mentions strlen and compile-time length
+> calculation, while the actual code uses strstr(). Should the comment be
+> updated to match the implementation?
+>
 
-Hmm. That commit is obviously still upstream, do we understand why it
-caused problems in the backports?
+Ack, will update.
 
-                 Linus
+>> +
+>> +	printf("=3D=3D=3D %s %s=3D=3D=3D\n", "libarena selftests", is_asan ? "=
+(asan) " : "");
+>>  }
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/214092=
+86496
+>
+> AI-authorship-score: low
+> AI-authorship-explanation: Code follows standard kernel patterns with a c=
+omment/code mismatch typical of iterative human development rather than AI =
+generation.
+> issues-found: 1
+> issue-severity-score: low
+> issue-severity-explanation: Minor documentation issue where comment menti=
+ons strlen and compile-time calculation but code uses strstr; does not affe=
+ct functionality.
+
