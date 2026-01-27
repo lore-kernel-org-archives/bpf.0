@@ -1,167 +1,145 @@
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
+Received: from mail-wr1-f65.google.com (mail-wr1-f65.google.com [209.85.221.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8897C2D879F
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 23:54:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BB4418FC86
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 23:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.65
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769558078; cv=pass; b=uoRrNGGoehE3G7ANFyH0KO1uvjknZzNl8Bni59XVRWgYrEJakFfesUmkT/yKvSKUdzMu/vy09ndSgQd2tE9JyBvBZodKUOzFkeka0LfO9gvoScibyOUtKNCgeHz73heZd1dT6wEU4WsHOyaNQDchVg4THG0KWapboxtGV7fPzY4=
+	t=1769558250; cv=pass; b=Fl1hGv/ubpwxCvqBcM5WiGO67eGm06WMx7vBXC+bZApa7TEsPbew7RfiW6/jlIGUxOpCDtJQ4+SeoPfWSDy7d99MKwqBNiw49gJehUMKgFuEUcF/bU8uM+jQqwknR0caSVTHwBzdHY1LYk3PiCT1U+50q0JSfrmvVdr991Om33o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769558078; c=relaxed/simple;
-	bh=OrYKPpShGXGBoIlbDfsmIHIsB6wvX3Jk/MeIi73VMrk=;
+	s=arc-20240116; t=1769558250; c=relaxed/simple;
+	bh=tEnXDpEDuQUul8LMOlQka3HH8W7KL7acGpNS7NAdTUQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dSRuMagdiDZcUO8r759HdRTLvtGztu60Xt7AIUh8hcJj+r0RR0bg7hcawpO3QVQ1ujt8j+Zk1yTA+Gb0oCLv14gK5gcUPihwT/ufAOWMUdwrHdIXZ8JZUiHcxQUdJMx8lhlNbSkS2Ej3SdXIfsLUWRu6xHwpbMzmGihGOMP+c+k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fN8z2p5f; arc=pass smtp.client-ip=209.85.128.68
+	 To:Cc:Content-Type; b=dydmzEH3+U1eD3wg+rf3Av1cwTd7RCu6sqV5zs1ZgfZD5g1XXYZwMNSb9ajuAKZrJ9SZYofalpQ7dYWIYSNC0rvg6bJH7YJzloZFwg7rBNLXAHxdU0gjZsq51rry0T4xLaHqXobJDKgl7WA0PYlyEG8AmXgZVOpQ+Br47B/7Y6c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BZsr0Lq/; arc=pass smtp.client-ip=209.85.221.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fN8z2p5f"
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-4801bc32725so48304355e9.0
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 15:54:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769558076; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BZsr0Lq/"
+Received: by mail-wr1-f65.google.com with SMTP id ffacd0b85a97d-4327790c4e9so4051569f8f.2
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 15:57:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769558247; cv=none;
         d=google.com; s=arc-20240605;
-        b=SsS6p6Ii9zWmkecrlTX5KxdIUC7Y9rPPV0sfU3nefY0aI0nOQ8d27MywG7ASrpoJ2P
-         EDk2mh0PQd8ed82HiJ5FNRbXIJDhrhwKpl6OWodvVENJXqFGFvMBnVJE5XJMnmMJb8cW
-         4U8xQx/gsp7XT5Y2NOIavtKGwPq2Jrk4L/m5fkaY2TFySjIpubaFXDRDuQRVo23yWISp
-         2lbRbh0oDg/8f5LI960nMwOxwe+OA9+N0FP9LbS0EP31M2fxNPXPKA20GqCzQCsS/smh
-         VdMU+6+iLfGpq8U8lPWw0PsGZwRlMxcLR7JEh3wUIZvl86k1aA9phcLbIq3X0XD3+XC+
-         wHPQ==
+        b=iPJ1IKL6S4/fa4OGbDKA8ctAZwAhRSAEzycPBhmeHmw0zBehYhH1umYKlSIxuCql5w
+         ekQOzPOrVhXjE2MTwBm1+vD3QV+Ee2Bmdj6cFFG/qMzJpKOtvAEr/n0acQksagATmTUg
+         oyO8tULQ+jdosUhheJMa0nl6TOKpWfLEmdTX8++YW4wIBh7AFV74kFApJSmZpz3DthyS
+         KyytU/RKSmc8a+l+4/2SLMD0IzlVqFyij7A+nYsHBFhlltIY+ypHewivAfgpo7p7Hm2a
+         xhElLj3qNLRXPREVYj0MadBzTPVbcVK8lFe+FHVc6UQd0DcDD+SjIGJsgJtJApbgrpOn
+         vOSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=sMeo3s0zo0l7evDIkb9+7ayZwDW0pzxo5+M76gV1+Gg=;
-        fh=QFCKBz+bFHUY0exaAOG6K9Mhs13GMv1YfVf4ZOBvWic=;
-        b=E68iYUUE+B4Uxv1y8s6yO9IlZG7xgU80LKzyV6fnvp1XhY4q5ViGFG9U+lviJLQg06
-         RK/992+iptlPOEoPRKkEquEeqT27D0KX3gtMPOIyiRlASHkrfZtqSb8UVL+hIKGMSf6d
-         m8mO7ONU5dFm/RLHsHLo6XEaE/gvd1mVEuxDSrC1VNbpr3lCPnCygNtsplktTY12lqUt
-         J6NdsSKsrd6tlaNKwZkhjIt/9bEwoPzZOmlNImdVlcmS1SAcEBtwlzPIP3/oBCuuHuV2
-         +G4Jz0b56f/Crxr4ZIqtT3OpZYnBrf3kESXX47obBJkLcuQB0h+khmWBpTYufm4wj5Ay
-         0RcQ==;
+        bh=Wuhs8mK4ZEi2WjVMB9DtaGZVfrakfl2lYnCKR047AnI=;
+        fh=PJbsLSJX8dcQKAy2XHfUHAsKfnjgMACdo4w/+okrX4I=;
+        b=Zl5n4Cg314ex3YwrY1JOp5yAd/AjjNkx+1W4SM35Rg1jCFycCkqqXnpCirWqWY8mVv
+         aXp0HPHqacQrlxVMlb+yNviCeFaXyYrLq9yrIEx3RO2oD2t+iMgXeL/aZkQs17X2dgnu
+         FClOrUNQU1NgPUb2ULdlx5w1UMTFxVRGU7vMv2+HuWFq87p7+RQ2q4fJ5xmFPsCUVcUD
+         NZmX4bI991iiOe+p13XoyRBgxO6PdYYBbkf4k0mPk7fhpMhUXj0sidliJvQebfNr3ttH
+         8nGKRGx3mVGrr9wYEjOUyxpgzMJcccYDfizbuzO970DOYv9MhV+PlBxta/ypLI3/Va0K
+         7MNQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769558076; x=1770162876; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769558247; x=1770163047; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sMeo3s0zo0l7evDIkb9+7ayZwDW0pzxo5+M76gV1+Gg=;
-        b=fN8z2p5fpBTr9amTw61E45AFnnMbUGaGlzW7+2eINJix5MBTuDot3ChZuAVLKdGmUs
-         JSWv6bN2LBpyZwJ1itXweTgjCxV/3BXcbngC+yNJLDJZjKjwRb0fFTh2vmw61Afnj+pE
-         k5oTOWgyMwkuVUD3jEwjU56Wzc75IiEonLxq0VKLqWBcIgnNClfQRDpBRDGspXz/AgiD
-         fkZDNGGlQhyUExWoxjStfJro61kdbRqjXqNreJxKxmb8TLuikbzYRcragt/YRA0GHsG6
-         gikHJpQrpiQ+IcFSE3/MPuUz16NEI0OcILJeGm8dZa+dilMs4zmasZLLOc/QnM6KymZ3
-         wHvg==
+        bh=Wuhs8mK4ZEi2WjVMB9DtaGZVfrakfl2lYnCKR047AnI=;
+        b=BZsr0Lq/QILNSVSc4SLRMZlwV9RnBgiKdmklPTRooan6oFndrNMbf+NMugaN3s86sh
+         9nVbXfe0MfaGugYUCKLl6qg2TInpQdVmiiQw2Lf6+3+9Hbi/LyIwmHZyOUjg/FzaJ/il
+         c4JkQ0E1Xm0ON38ETW0QJX1wWe1k741w5ruzVr3G5adXKAckl+jSOMptaAh8LGv99N57
+         MYtGccZbx7tKfFwUqIITR8wA8CREOY1LFhauIu+BxSQ/pkt0vJfDtKSaVRjtx+MlgFWC
+         z+Dal4QNWVmLuVXvcSUGC2FRFEdwPAIf3fFRRyE0bWxBqMGM8uEnXDhGOnONBua8724n
+         lVRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769558076; x=1770162876;
+        d=1e100.net; s=20230601; t=1769558247; x=1770163047;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sMeo3s0zo0l7evDIkb9+7ayZwDW0pzxo5+M76gV1+Gg=;
-        b=PsTYVU1dYyEIJvajdjqFBBGNMlz6AKLPRzBMHiObeTqWY1WgvJI2nW7F7J/qZ0kXFS
-         jJQAPR9IAjujtTHU6wy6uLqnzp1v6/OmrRI7zCtxzOx0TjRuXvTuwspoDKzQtPuQjW5U
-         vnymvDzoXPP/kCFrgxiXIjOJmWlrxUYdzFh/vn1lW1cw2t+miHZNIBdRc9I+sXDC22PX
-         1i7qVKra6Ikktuf1hE1CUoNhZPDMbXNmlfgP0TyQbmdTNYU/w3IHYdDEylKgwb2yXY/C
-         IUtw6ombkM2JylRZmiRYc4HZSHOVjCmPnnVp178/z8ciGkMnnohnXYr80JpnIXy3X59y
-         KTpQ==
-X-Gm-Message-State: AOJu0YyJk6a7U659F3jZ8KxsT+YeS54qmwEXFaF/YyFXLGG4wwgVJUdi
-	LXJ8++3ga1xszrcqcAV2KcXtNRDX38Dwmn8bbgCFvv3/ETb5irf7koy+Wcd29XpY+9G5t8aVs5V
-	JeNYWiwC4Eyjw29Y0wKreknzIjMD2uEo=
-X-Gm-Gg: AZuq6aJkhXjN0JbmLho7wdACAkLXEcmZ1FCmzwDm/ABPXQNgIZ+sYyAXwh3KhJ7a8XB
-	j0jSjxon/GK3zxzbLf3Duvop2ah2PWUUbaNyeJdDbdIiIxT7n/8cc6T0Xb16sJcBg9ej6MTV+kC
-	XzbwHEwZ5N2mkLsaAbpmPW9aCoL0XBYdcgJA7qNPKbFI4jF+dKPdq/HY/WH5j+1hjuuea2Iwj80
-	WSzf8KF4lKgomHQGnzcYwj/oYUitY4ZX/7iAoizZunWmW3rfj3jLDL/rrvA/Nc8xAjZ6gHyZY7C
-	uW+0RMGrgZcIEzOCags3ZsC/bg/s
-X-Received: by 2002:a05:600c:3b96:b0:475:dcbb:7903 with SMTP id
- 5b1f17b1804b1-48069c37e2dmr48433035e9.9.1769558075894; Tue, 27 Jan 2026
- 15:54:35 -0800 (PST)
+        bh=Wuhs8mK4ZEi2WjVMB9DtaGZVfrakfl2lYnCKR047AnI=;
+        b=RmCjQuWZKo0z+sxcEwUlDBHMgaRHwLa8FDBHSjwJFIp+jInw9mevL7ZLqp+10zRd3o
+         4fBzQMSB9a8WD/N1khWTIAbdIq71F35zGffOZ+mAoYkupk3dePIUPCQ+N6PHWFqhVNic
+         N6TpsRf9C6u65s0RN9ls7gAAFrJOelga1SRZdjdVDkCAi1RTSEbNH2lRB4LKA2mNhBJi
+         IhjNH/bjQMZoAw0NRz5WWmxKuta2uxiIhlppK2HrnYZsK/f2KGFfWBrLXkQBMZxpuFkd
+         ZSObwMGf7+mUhexfpXxQF52yYAmzotPH2DmvoZ+QjTcJlPhuJ+k5labk7VmviS1d7RCh
+         tiHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUgCQB4/3hu8Gl+zp8pG5TjZ0w4k8b0BqAHeLsblX0T6MffVLOMtil2F1Yy6WhhE0wbsdM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9a43aD9vaTssJxIB+HEZ5GQz1GRH1buv3nJAro/yzsodS2DLQ
+	yzhwJpDv+iJTaGX+gQRvdZjMhXRnZnNfhDL/Sv7Z+kXLlzzxp6Bz7QBspbh2KULNQWTx2edaXcv
+	93A41Ou3qKo2CcmaByV3LylXF5HOk7/w=
+X-Gm-Gg: AZuq6aLkGQ2b6x73uNbGa5V7Vds6qZU9JzwE+xwCJOzB/NGMvPp6qZYKpvpVFU+d0LZ
+	WARvt5nlNJmHZolvgui8+93LaBaKQTHPV6QKRFM++aUpiRwX6MFIs8jbX9r76a1uW9tq+MMxBVD
+	gO2i7OghArih/M3+3Csy8+RrmITDXxwG/OrGk+5iEPcOz02Th6+ws0yFTHmCkoAPXCNMOPjzdif
+	PWnHljEEodAu66gRc6t1MqO212AxtpY+wQCM8mQl+cMjzI9ZZok3caDK/oEvBJzY3MNCBVEc5IY
+	19zc6g9XxtguqoOZnQaEK5fWUHb9
+X-Received: by 2002:a05:6000:1843:b0:432:a9db:f99b with SMTP id
+ ffacd0b85a97d-435dcf6bb08mr4233980f8f.0.1769558246862; Tue, 27 Jan 2026
+ 15:57:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260127181610.86376-1-emil@etsalapatis.com> <20260127181610.86376-2-emil@etsalapatis.com>
-In-Reply-To: <20260127181610.86376-2-emil@etsalapatis.com>
+References: <20260127181610.86376-1-emil@etsalapatis.com> <20260127181610.86376-5-emil@etsalapatis.com>
+ <92fcc97e-1313-424e-b67d-d86effda3481@gmail.com> <DFZRP6TI6K6B.12EQ0UD7QO4N3@etsalapatis.com>
+In-Reply-To: <DFZRP6TI6K6B.12EQ0UD7QO4N3@etsalapatis.com>
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 28 Jan 2026 00:53:58 +0100
-X-Gm-Features: AZwV_QjgFjV-9UWWtS5yuAgE2_mEHdC1i_HbynSHhHl_68Om0XHWr7k4nPNgh_I
-Message-ID: <CAP01T76gi=xQf2jL8gM2nKCULy8HopufkHsy_A00iMwz_7J3mw@mail.gmail.com>
-Subject: Re: [PATCH v2 01/13] bpf: Add bpf_stream_print_stack stack dumping kfunc
+Date: Wed, 28 Jan 2026 00:56:50 +0100
+X-Gm-Features: AZwV_Qiy21yCwAmoN-Ji1BlpEwvl-oOFrY9XJzEDIeh7Zq7Mg2opISL0D2P86a4
+Message-ID: <CAP01T754eOs2DCjMmkK=CppEwfk5EX84tc70ZqS0_OxTfgxE=w@mail.gmail.com>
+Subject: Re: [PATCH v2 04/13] selftests: bpf: Make WRITE_ONCE macro in
+ bpf_atomic.h conditional
 To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, etsal@meta.com, 
+Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, andrii@kernel.org, 
+	ast@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, etsal@meta.com, 
 	ihor.solodrai@linux.dev, martin.lau@kernel.org, puranjay@kernel.org, 
 	song@kernel.org, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 27 Jan 2026 at 19:16, Emil Tsalapatis <emil@etsalapatis.com> wrote:
+On Wed, 28 Jan 2026 at 00:41, Emil Tsalapatis <emil@etsalapatis.com> wrote:
 >
-> From: Emil Tsalapatis <etsal@meta.com>
+> On Tue Jan 27, 2026 at 2:26 PM EST, Mykyta Yatsenko wrote:
+> > On 1/27/26 18:16, Emil Tsalapatis wrote:
+> >> From: Emil Tsalapatis <etsal@meta.com>
+> >>
+> >> The WRITE_ONCE macro is identically defined both in bpf_atomic.h
+> >> and in bpf_arena_common.h. The bpf_arena_common.h definition is
+> >> guarded with an ifndef to allow for inclusion after bpf_atomic.h,
+> >> but the opposite does not hold. Add an extra guard to avoid requiring
+> >> a specific order for the headers.
+> >>
+> >> Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
+> >> ---
+> >>   tools/testing/selftests/bpf/bpf_atomic.h | 2 ++
+> >>   1 file changed, 2 insertions(+)
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/bpf_atomic.h b/tools/testing/selftests/bpf/bpf_atomic.h
+> >> index c550e5711967..d89a22d63c1c 100644
+> >> --- a/tools/testing/selftests/bpf/bpf_atomic.h
+> >> +++ b/tools/testing/selftests/bpf/bpf_atomic.h
+> >> @@ -42,7 +42,9 @@ extern bool CONFIG_X86_64 __kconfig __weak;
+> >>
+> >>   #define READ_ONCE(x) (*(volatile typeof(x) *)&(x))
+> >>
+> >> +#ifndef WRITE_ONCE
+> >>   #define WRITE_ONCE(x, val) ((*(volatile typeof(x) *)&(x)) = (val))
+> >> +#endif
+> > I wonder if we can avoid duplicating this macros, for example by
+> > including bpf_atomic.h in the bpf_arena_common.h.
 >
-> Add a new kfunc called bpf_stream_print_stack to be used by programs
-> that need to print out their current BPF stack. The kfunc is essentially
-> a wrapper around the existing bpf_stream_dump_stack functionality used
-> to generate stack traces for error events like may_goto violations and
-> BPF-side arena page faults.
->
-> Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
-> ---
->  kernel/bpf/helpers.c        |  1 +
->  kernel/bpf/stream.c         | 13 +++++++++++++
->  tools/lib/bpf/bpf_helpers.h |  2 ++
->  3 files changed, 16 insertions(+)
->
-> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-> index b54ec0e945aa..c30a9f68af6b 100644
-> --- a/kernel/bpf/helpers.c
-> +++ b/kernel/bpf/helpers.c
-> @@ -4562,6 +4562,7 @@ BTF_ID_FLAGS(func, bpf_strncasestr);
->  BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
->  #endif
->  BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_IMPLICIT_ARGS)
-> +BTF_ID_FLAGS(func, bpf_stream_print_stack, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
->  BTF_ID_FLAGS(func, bpf_dynptr_from_file)
-> diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-> index 24730df55e69..6e2cbe5f34e7 100644
-> --- a/kernel/bpf/stream.c
-> +++ b/kernel/bpf/stream.c
-> @@ -245,6 +245,19 @@ __bpf_kfunc int bpf_stream_vprintk(int stream_id, const char *fmt__str, const vo
->         return ret;
->  }
->
-> +/* Directly trigger a stack dump from the program. */
-> +__bpf_kfunc void bpf_stream_print_stack(struct bpf_prog_aux *aux)
-> +{
-> +       struct bpf_stream_stage ss;
-> +       struct bpf_prog *prog;
-> +
-> +       prog = aux->main_prog_aux->prog;
-> +
-> +       bpf_stream_stage(ss, prog, BPF_STDERR, ({
+> I kept both definitions because the headers correspond to unrelated
+> features (atomics and arenas). Including bpf_atomic.h in
+> bpf_arena_common.h would work, and we'd need to update just a single
+> test that includes bpf_atomic.h directly (lpm_trie_bench). However,
+> any program that wanted to include atomics would also have to include
+> arena-related definitions. If that sounds reasonable I'll update the
+> diff on the next version.
 
-I think it would be better not to hardcode the stream, and take an argument.
++1 to reusing bpf_atomic.h, it's supposed to work fine regardless of
+arena or normal memory.
 
-> +               bpf_stream_dump_stack(ss);
-> +       }));
-> +}
-> +
->  __bpf_kfunc_end_defs();
 >
->  /* Added kfunc to common_btf_ids */
-> diff --git a/tools/lib/bpf/bpf_helpers.h b/tools/lib/bpf/bpf_helpers.h
-> index c145da05a67c..6d8ae3887618 100644
-> --- a/tools/lib/bpf/bpf_helpers.h
-> +++ b/tools/lib/bpf/bpf_helpers.h
-> @@ -343,6 +343,8 @@ extern int bpf_stream_vprintk(int stream_id, const char *fmt__str, const void *a
->  /* Helper macro to print out debug messages */
->  #define bpf_printk(fmt, args...) ___bpf_pick_printk(args)(fmt, ##args)
->
-> +extern void bpf_stream_print_stack(void) __weak __ksym;
-> +
->  struct bpf_iter_num;
->
->  extern int bpf_iter_num_new(struct bpf_iter_num *it, int start, int end) __weak __ksym;
-> --
-> 2.49.0
+> >>
+> >>   #define cmpxchg(p, old, new) __sync_val_compare_and_swap((p), old, new)
+> >>
 >
