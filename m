@@ -1,63 +1,63 @@
-Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039002264AB
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:16:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C03A7326D4A
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769537793; cv=none; b=OVHMwbDj5R7FVUvrZnporl2vR+6PPlKE2ry5edJ6sj6f1YcdfjxsEdg3t4SCg8PMT8s+nGr6pa6xvqWAdA4c7NUKEdPPnNJYlBmzouEagQswzykvU5dYPylfARYfVTj5K1yjx/uB5y7Q5FNdm62ooZpz79aDaFbpTsIYISaAchg=
+	t=1769537794; cv=none; b=ip24MlccuwX26G3+xQ2n/h883tKeJCp/RsvxERDfuVvBNGp8JulwLd/7XHLztk2uHAZJ2sl2xABro7uyVLCb/MsoWvHeEpxa6+zUUNrlVUfQlLyZ40l/TUD+pgpxidufEe76KLMoiZ74Xm/WfswA55I1AD2MNTswi6U/pdN9GHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769537793; c=relaxed/simple;
-	bh=PuvgkxkrSvF3P74YGbhFkuREEA9yVdstLjqtvKChAUQ=;
+	s=arc-20240116; t=1769537794; c=relaxed/simple;
+	bh=TVxA1zVPh7pAWY/yJthLuFbkjRPu2RZ6GnU11x2xflE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VzEC3im6n/alBYTfizP/wLWrFGe8XmHR9u4p6zKPWVNW8hnzLSj5ZcwVz1xKOWvJ0zpskYVGrKYm58JseR8flcEeCgJYwSqTAeFtHPgZrnAu4hVgWg0ao9rTJ+VjIkOtZmAsWWD4Jxk46hVr5btTkaGfaWVU/kliVq/z6XDQgVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=PHcIUOX2; arc=none smtp.client-ip=209.85.160.176
+	 MIME-Version; b=OTO14Gb7zALwCDIaJplBFrTfFGEQcEHac9cxAYdE6FQ5nyz4pUCdl5S72D0w86xiWz+dG8yOwFQ8UuWLn0cxBv3Cn3UwyV2vFdmpFHVY31VNF4wZeSVDeWMsR15Bv+dE8KMrs6F+tP2a/HM/c26chyCgvZM3rD+a6G0Y6OC70Lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=SvBQZBXE; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="PHcIUOX2"
-Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-5032e15525aso10392411cf.3
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 10:16:31 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="SvBQZBXE"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-5014b7de222so71633951cf.0
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 10:16:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769537791; x=1770142591; darn=vger.kernel.org;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769537792; x=1770142592; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ya4h/O0GXgJhSW22PucmH1ln4afrj40Q3ecYaRAvzhw=;
-        b=PHcIUOX2ZyG/qOl67n16zCTHLqu8ui8h1xDHHRyGBvPdAbazabnFy7Zm1R/cxorvr/
-         p9i5YcmbrXjdxYcQstZWeJeM0XIP3EbEMQSU6cg5G2BZ8bk8pzmU0BCFdrgJgj8QV5LP
-         igg5nFspiOsivf5LQi+6Pvnf9GYA6QzcqBJdMEXsY6BzaG2Tn7np9vKtbBnVTlqDFbor
-         Bo2EOgsKCDlcAbQQE48VW1faoLeFZM+IbPA3TZiOzlVMFIFQ98FWMrHgechm6BPM9Ucm
-         1CLWP5cnjvsjBm/9brS7qDkLrEa7LBq/xj3+uqwHVIZ8jenSJeIXRbJB4sIi0Sru0f3b
-         wfHQ==
+        bh=QBXgdNU4llk0PoM8RqUonAjvoQo+wl+GZJGs/1U3yqY=;
+        b=SvBQZBXEK7OHI/8ltPnQk+wRhEMAbLGQSCjDgyK06A8KXiQBV9fWOhqH0E4yZB/7le
+         g5zb0b7F+8ecrtTJNSGSfNK8Dj/rBU4MFiFvZfVrM1fCgDyaY/i9MwPCHoKeaT46wflS
+         +R5CYfurS0z0CHyTFiyiW/WxjtikKvfS+gK1eBjbu/wA/BfEzo0JQ8eiBgKCo3xkaSCC
+         QaIefEUOxLqarTICwtijH2k+G5TmkCNrLQ1by2prfg0NMDyCg7MvjBIOoOy0SeCo79VB
+         aThROlKDqiiDev2fCxCsjA7LX/0rzegFb41hFzf9mvkL4haM2TLA2MrzcVnAJc4ysuZ1
+         YsNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769537791; x=1770142591;
+        d=1e100.net; s=20230601; t=1769537792; x=1770142592;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ya4h/O0GXgJhSW22PucmH1ln4afrj40Q3ecYaRAvzhw=;
-        b=a7PCQN3qTdCo3e/bi2ESml5H9tIb/Po4B58N0GIAFvDC+FAp1ANqAChNQSGTFwsrfX
-         yXva7HCGnxNE+4lp+Fi3yzBP5xkgh32VF5W6QWmW8o+ZG6pBSQnDqHzQPcyZ7E8DFvDJ
-         0DsJhx0NLZ9kax7VFOTnXL4Gwk7i2PmzX0UvRRfWuasHacI+XFS0lICQv/02ACwpkRD9
-         Eh5ZIuEuWtG+xXCoTgCagTU8IE5reii3IdUTo7dsaeLSQKG8PaEq4ditvHMqZv7AEo0m
-         a91eVw8xPqFkbiw8Uu5nza9zVmUYMHRA/9dwObDx1HVWaumuWKHGKoQsa13vUfNBQr+V
-         dVlw==
-X-Gm-Message-State: AOJu0YzkZRL2uHW4Cs2UTNY1AIjMAJPP0SnVT+D3DdmIwj0hDmNFyLde
-	tEdLCgNGWC3qW937JAY3GupT2qM6zIi7yXzsWrsOicUhOL8WgqhxhcFp7jxtavoRIJm7iyIkTNY
-	twsjw
-X-Gm-Gg: AZuq6aLlEKZH2yR6arjzu+Bzm8VZ+5oCOTDntNbSy7QE5scBckJbgc9B0uma+2np6aL
-	g5whF4/cvci5nRDjoB4MeYSeYOJroQmhAolHzdsOaKKtDkzUKUe2H+q8OBHLJtkHu45YWjWHkFi
-	rUBVhelPcLn5TgqPoUV6eUarGTqrABMrUrdfk6zwiADsEDhiRgT0ZEDPHLOur7ZSeAYOEaglSX2
-	fwt9kgbEE28Ux9k6PuuGfTSxOMhWzVDPigEhBoqDI6DBRIr0f8BHxRHWTatZWZ77zrr7egdUnFW
-	JhvljS6/+9Ce3pIvesDAXLJL9vsGFbs7Wsgiyyk9JuuORZ42VpSCtlHU9UNRMY3T+nXSlaizpGx
-	OemM9BIChDGOzkSQ2ZsqIoo1rIH/jaeaA8lo/Fq1fi0QD0Q8938AKrCW6osjt+JuDiiIvzscLj/
-	2IWcdpQW97vQ==
-X-Received: by 2002:ac8:5ad3:0:b0:501:1796:b10e with SMTP id d75a77b69052e-5032f76d867mr32874561cf.12.1769537790748;
-        Tue, 27 Jan 2026 10:16:30 -0800 (PST)
+        bh=QBXgdNU4llk0PoM8RqUonAjvoQo+wl+GZJGs/1U3yqY=;
+        b=G+uEnVW5RpRbCUNTRxsb8wcUYeQNetC+12ywExYKJTdEkkrO1eO08AHnDr1YxpshBb
+         pGvI8B/xkNuiv/zZd3S7aFWOwRbKrPv5B9VtINwlGbgBOL8fqSeH4whkE7D0yg+5zTd+
+         xlUkmg2QFJ2gvLdLbMmH7OGG9M8qmPdSmYHlmT5oLiDA38Ii7I5KFxgDgDWG5GE4UX1r
+         O5rlmqVwitCyI67MrR4vhIpMPzgO/OkNEU0IvR8vlECFuZLYkpok3OJ6Ai9Z936MDZsU
+         CBak/0fBNRPhJyYHuoV62h/z9MvZMrP7caL0Bbyg7fBqAWo3H16ynfnvcMl473AdCC6O
+         kxaw==
+X-Gm-Message-State: AOJu0Yz3RESHLe8yuTudFfC23UO8QBiHwWAxgCxXkLMb/zCf0NTB9qB5
+	wuoB/TQv9p7TtAAp2ouSW7IQngR0twdUSR37vE3f7AdWqzm7ndt4DyBnmYTOrKy3wA7XqvRIsGs
+	pZYTg
+X-Gm-Gg: AZuq6aIA0r9vIiR0+YF7PAI33pPl+t2IpQFCOoI6ZFLGS6JinKgGoifeOWwC541fm2r
+	dqzuqrzFfkeXiyyc2n5p3tL1fk2zIC5J7Vxa/sn9F6jT1ThzYr4jTDEThNJAvedyU68WaRqO3eM
+	GUzDejBETz40Mio6HvFq0T11VXrxv0ZPDBwmAr5OdQMh97sRtRX9LFTfBPla8UmPrCG4IWs1UF8
+	dwlYdSRr0s5eOJRnuGr6vhFgqiRu1Jd5gyxq7m2TOHNbtB256OIh6jvlrT7aMs5cGRsP9TcZZ3o
+	FeyVB1ue4e0PD8R15AU+G/f/oI868WBSck7FuFG0cpCa2TZtRDQUJi/BgpCYH5f7ktscgH0c73v
+	vuua5k2hP2etOJOhARYRrMmWAw0YeUJ02k1ptDwbDOz6081Ely+vbg3oyHcMUIgjCAG0Ga2G3xz
+	6JATzkX6q7PQ==
+X-Received: by 2002:ac8:5dc6:0:b0:501:4a4a:c249 with SMTP id d75a77b69052e-5032f883cc0mr34458611cf.23.1769537791449;
+        Tue, 27 Jan 2026 10:16:31 -0800 (PST)
 Received: from boreas.. ([140.174.219.137])
         by smtp.gmail.com with ESMTPSA id d75a77b69052e-5033745c4f0sm988181cf.1.2026.01.27.10.16.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 10:16:30 -0800 (PST)
+        Tue, 27 Jan 2026 10:16:31 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
@@ -72,9 +72,9 @@ Cc: andrii@kernel.org,
 	puranjay@kernel.org,
 	song@kernel.org,
 	yonghong.song@linux.dev
-Subject: [PATCH v2 07/13] selftests: bpf: Add ASAN support for libarena selftests
-Date: Tue, 27 Jan 2026 13:16:03 -0500
-Message-ID: <20260127181610.86376-8-emil@etsalapatis.com>
+Subject: [PATCH v2 08/13] selftest: bpf: Add bump allocator for libarena
+Date: Tue, 27 Jan 2026 13:16:04 -0500
+Message-ID: <20260127181610.86376-9-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20260127181610.86376-1-emil@etsalapatis.com>
 References: <20260127181610.86376-1-emil@etsalapatis.com>
@@ -88,279 +88,253 @@ Content-Transfer-Encoding: 8bit
 
 From: Emil Tsalapatis <etsal@meta.com>
 
-Expand the arena library selftest infrastructure to support
-address sanitization. Add the compiler flags necessary to
-compile the library under ASAN when supported.
+Add an arena-based bump allocator to the arenalib. The allocator
+is aimed towards data allocated at program startup whose lifetime
+is that of the BPF program. An example is CPU-related information
+for sched-ext scheduler.
 
 Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
 ---
- tools/testing/selftests/bpf/Makefile          | 14 +++-
- tools/testing/selftests/bpf/libarena/Makefile | 26 ++++++-
- .../selftests/bpf/libarena/include/userapi.h  |  1 +
- .../bpf/libarena/selftests/selftest.c         | 69 ++++++++++++++++++-
- .../bpf/libarena/selftests/st_asan_common.h   | 49 +++++++++++++
- 5 files changed, 155 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
+ .../selftests/bpf/libarena/include/bump.h     |  26 +++
+ .../selftests/bpf/libarena/src/bump.bpf.c     | 196 ++++++++++++++++++
+ 2 files changed, 222 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/libarena/include/bump.h
+ create mode 100644 tools/testing/selftests/bpf/libarena/src/bump.bpf.c
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 49b275a7bfa1..2b59a5c2235b 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -917,7 +917,19 @@ override define INSTALL_RULE
- endef
- 
- test_libarena: $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ)
--	+$(MAKE) -C libarena all \
-+	+$(MAKE) -C libarena $@ \
-+		BPFTOOL="$(BPFTOOL)" \
-+		INCLUDE_DIR="$(HOST_INCLUDE_DIR)" \
-+		LIBBPF_INCLUDE="$(HOST_INCLUDE_DIR)" \
-+		BPFOBJ="$(BPFOBJ)" \
-+		LDLIBS="$(LDLIBS) -lzstd" \
-+		CLANG="$(CLANG)" \
-+		BPF_CFLAGS="$(BPF_CFLAGS) $(CLANG_CFLAGS)" \
-+		BPF_TARGET_ENDIAN="$(BPF_TARGET_ENDIAN)" \
-+		Q="$(Q)"
+diff --git a/tools/testing/selftests/bpf/libarena/include/bump.h b/tools/testing/selftests/bpf/libarena/include/bump.h
+new file mode 100644
+index 000000000000..ac643f29acc0
+--- /dev/null
++++ b/tools/testing/selftests/bpf/libarena/include/bump.h
+@@ -0,0 +1,26 @@
++#pragma once
 +
-+test_libarena_asan: $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ)
-+	+$(MAKE) -C libarena $@ \
- 		BPFTOOL="$(BPFTOOL)" \
- 		INCLUDE_DIR="$(HOST_INCLUDE_DIR)" \
- 		LIBBPF_INCLUDE="$(HOST_INCLUDE_DIR)" \
-diff --git a/tools/testing/selftests/bpf/libarena/Makefile b/tools/testing/selftests/bpf/libarena/Makefile
-index 70901bb5237f..1ec1a83c0c04 100644
---- a/tools/testing/selftests/bpf/libarena/Makefile
-+++ b/tools/testing/selftests/bpf/libarena/Makefile
-@@ -5,6 +5,7 @@ LIBARENA=$(abspath .)
- 
- LIBARENA_SOURCES = $(wildcard $(LIBARENA)/src/*.bpf.c) $(wildcard $(LIBARENA)/selftests/*.bpf.c)
- LIBARENA_OBJECTS = $(notdir $(LIBARENA_SOURCES:.bpf.c=.bpf.o))
-+LIBARENA_OBJECTS_ASAN = $(notdir $(LIBARENA_SOURCES:.bpf.c=_asan.bpf.o))
- 
- INCLUDES = -I$(LIBARENA)/include -I$(LIBARENA)/..
- ifneq ($(INCLUDE_DIR),)
-@@ -14,6 +15,13 @@ ifneq ($(LIBBPF_INCLUDE),)
- INCLUDES += -I$(LIBBPF_INCLUDE)
- endif
- 
-+ASAN_FLAGS = -fsanitize=kernel-address -fno-stack-protector -fno-builtin
-+ASAN_FLAGS += -mllvm -asan-instrument-address-spaces=1 -mllvm -asan-shadow-addr-space=1
-+ASAN_FLAGS += -mllvm -asan-use-stack-safety=0 -mllvm -asan-stack=0
-+ASAN_FLAGS += -mllvm -asan-kernel=1
-+ASAN_FLAGS += -mllvm -asan-constructor-kind=none
-+ASAN_FLAGS += -mllvm -asan-destructor-kind=none
++#ifdef __BPF__
 +
- # ENABLE_ATOMICS_TESTS required because we use arena spinlocks
- override BPF_CFLAGS += -DENABLE_ATOMICS_TESTS
- override BPF_CFLAGS += -O2 -Wno-incompatible-pointer-types-discards-qualifiers
-@@ -25,23 +33,37 @@ CFLAGS += $(INCLUDES)
- vpath %.bpf.c $(LIBARENA)/src $(LIBARENA)/selftests
- vpath %.c $(LIBARENA)/src $(LIBARENA)/selftests
- 
--all: test_libarena
-+test_libarena_asan: selftest.c $(BPFOBJ) selftest_asan.skel.h
-+	$(call msg,BINARY,libarena,$@)
-+	$(Q)$(CLANG) $(LDLIBS) $(CFLAGS) -DBPF_ARENA_ASAN $< $(BPFOBJ) -o $@
- 
- test_libarena: selftest.c $(BPFOBJ) selftest.skel.h
- 	$(call msg,BINARY,libarena,$@)
- 	$(Q)$(CLANG) $(LDLIBS) $(CFLAGS) $< $(BPFOBJ) -o $@
- 
-+selftest_asan.skel.h: main_asan.bpf.o
-+	$(call msg,GEN-SKEL,libarena,$@)
-+	$(Q)$(BPFTOOL) gen skeleton $< name "selftest_asan" > $@
++u64 bump_alloc_internal(size_t bytes, size_t alignment);
++#define bump_alloc(bytes, alignment) ((void __arena *)bump_alloc_internal((bytes), (alignment)))
++int bump_init(size_t contig_pages);
++int bump_destroy(void);
++int bump_memlimit(u64 lim_memusage);
 +
- selftest.skel.h: main.bpf.o
- 	$(call msg,GEN-SKEL,libarena,$@)
- 	$(Q)$(BPFTOOL) gen skeleton $< name "selftest" > $@
- 
-+main_asan.bpf.o: $(LIBARENA_OBJECTS_ASAN)
-+	$(call msg,GEN-OBJ,libarena,$@)
-+	$(Q)$(BPFTOOL) gen object $@ $^
++#endif /* __BPF__ */
 +
- main.bpf.o: $(LIBARENA_OBJECTS)
- 	$(call msg,GEN-OBJ,libarena,$@)
- 	$(Q)$(BPFTOOL) gen object $@ $^
- 
-+%_asan.bpf.o: %.bpf.c
-+	$(call msg,CLNG-BPF,libarena,$@)
-+	$(Q)$(CLANG) $(BPF_CFLAGS) $(ASAN_FLAGS) -DBPF_ARENA_ASAN $(BPF_TARGET_ENDIAN) -c $< -mcpu=v3 -o $@
++#define BUMP_ALLOCS_MAX (64)
 +
- %.bpf.o: %.bpf.c
- 	$(call msg,CLNG-BPF,libarena,$@)
- 	$(Q)$(CLANG) $(BPF_CFLAGS) $(BPF_TARGET_ENDIAN) -c $< -o $@
- 
- clean:
--	$(Q)rm -f *.skel.h *.bpf.o test_libarena
-+	$(Q)rm -f *.skel.h *.bpf.o test_libarena test_libarena_asan
-diff --git a/tools/testing/selftests/bpf/libarena/include/userapi.h b/tools/testing/selftests/bpf/libarena/include/userapi.h
-index bd5e7042a44f..c294b6818bed 100644
---- a/tools/testing/selftests/bpf/libarena/include/userapi.h
-+++ b/tools/testing/selftests/bpf/libarena/include/userapi.h
-@@ -20,3 +20,4 @@ typedef int64_t s64;
- #define arena_spinlock_t u64
- 
- #include "common.h"
-+#include "asan.h"
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-index 5b8d8b94323e..f63324a1cdde 100644
---- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-+++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-@@ -22,8 +22,20 @@
- 
- #include "selftest.h"
- 
++struct bump {
++	size_t max_contig_bytes;
++	void __arena *memory;
++	size_t off;
++	size_t lim_memusage;
++	size_t cur_memusage;
++
++	void __arena *past_allocs[BUMP_ALLOCS_MAX];
++
++	size_t past_allocs_ind;
++};
++
+diff --git a/tools/testing/selftests/bpf/libarena/src/bump.bpf.c b/tools/testing/selftests/bpf/libarena/src/bump.bpf.c
+new file mode 100644
+index 000000000000..721c668475a6
+--- /dev/null
++++ b/tools/testing/selftests/bpf/libarena/src/bump.bpf.c
+@@ -0,0 +1,196 @@
++/*
++ * SPDX-License-Identifier: GPL-2.0
++ * Copyright (c) 2024-2025 Meta Platforms, Inc. and affiliates.
++ * Copyright (c) 2024-2025 Tejun Heo <tj@kernel.org>
++ * Copyright (c) 2024-2025 Emil Tsalapatis <etsal@meta.com>
++ */
++
++/*
++ * Static allocation module used to allocate arena memory for
++ * whose lifetime is that of the BPF program. Data is rarely
++ * allocated, mostly at program init, and never freed. The
++ * memory returned by this code is typeless so it avoids us
++ * having to define an allocator for each type.
++ */
++
++#include <common.h>
 +#include <asan.h>
++#include <bump.h>
 +
-+#ifdef BPF_ARENA_ASAN
-+#include "../selftest_asan.skel.h"
-+typedef struct selftest_asan selftest;
-+#define selftest__open selftest_asan__open
-+#define selftest__open_and_load selftest_asan__open_and_load
-+#define selftest__load selftest_asan__load
-+#define selftest__attach selftest_asan__attach
-+#define selftest__destroy selftest_asan__destroy
-+#else
- #include "../selftest.skel.h"
- typedef struct selftest selftest;
-+#endif
- 
- static bool verbose = false;
- static int testno = 1;
-@@ -155,6 +167,48 @@ selftest_globals_pages(selftest *skel, size_t arena_all_pages, u64 *globals_page
- 	return 0;
- }
- 
-+#if BPF_ARENA_ASAN
-+static int
-+selftest_asan_init(selftest *skel)
++/* Maximum memory that can be allocated by the arena. */
++#define ARENA_MAX_MEMORY (1ULL << 20)
++
++private(STATIC_ALLOC_LOCK) struct bpf_spin_lock static_lock;
++
++private(STATIC_ALLOC) struct bump bump;
++
++const s8 STATIC_POISON_UNINIT = 0xff;
++
++__weak u64 bump_alloc_internal(size_t bytes, size_t alignment)
 +{
-+	struct bpf_test_run_opts opts;
-+	size_t arena_all_pages = 1ULL << 20;
-+	struct asan_init_args args;
-+	u64 globals_pages;
-+	int prog_fd;
-+	int ret;
++	void __arena *memory;
++	size_t	alloc_bytes;
++	size_t	alloc_pages;
++	void __arena *ptr;
++	size_t padding;
++	size_t ind;
++	u64 addr;
 +
-+	ret = selftest_globals_pages(skel, arena_all_pages, &globals_pages);
-+	if (ret)
-+		return ret;
++	/* 
++	 * Allocated addresses must be aligned to the nearest granule,
++	 * and since we're stack allocating this implies that allocations
++	 * sizes are also aligned.
++	 */
++	alignment = round_up(alignment, 1 << ASAN_SHADOW_SHIFT);
 +
-+	/* Taken from the arena map header. */
-+	args = (struct asan_init_args) {
-+		.arena_all_pages = arena_all_pages,
-+		.arena_globals_pages = globals_pages,
-+	};
++	bpf_spin_lock(&static_lock);
 +
-+	opts = (struct bpf_test_run_opts) {
-+		.sz = sizeof(opts),
-+		.ctx_in = &args,
-+		.ctx_size_in = sizeof(args),
-+	};
++	/* Round up the current offset. */
++	addr = (__u64)bump.memory + bump.off;
 +
-+	prog_fd = bpf_program__fd(skel->progs.asan_init);
-+	assert(prog_fd >= 0 && "no program found");
-+	return selftest_fd(prog_fd, &opts);
++	padding	= round_up(addr, alignment) - addr;
++	alloc_bytes = bytes + padding;
++
++	if (alloc_bytes > bump.max_contig_bytes) {
++		bpf_spin_unlock(&static_lock);
++		bpf_printk("invalid request %ld, max is %ld\n", alloc_bytes,
++			   bump.max_contig_bytes);
++		return (u64)NULL;
++	}
++
++	/*
++	 * The code assumes that the maximum static allocation
++	 * size is significantly larger than the typical allocation
++	 * size, so it does not attempt to alleviate memory
++	 * fragmentation.
++	 */
++	if (bump.off + alloc_bytes > bump.max_contig_bytes) {
++		if (bump.cur_memusage + bump.max_contig_bytes >
++		    bump.lim_memusage) {
++			bpf_spin_unlock(&static_lock);
++			bpf_printk("allocator memory limit exceeded");
++			return (u64)NULL;
++		}
++
++		alloc_pages = bump.max_contig_bytes / __PAGE_SIZE;
++
++		memory = bpf_arena_alloc_pages(&arena, NULL, alloc_pages,
++						    NUMA_NO_NODE, 0);
++		if (!memory) {
++			bpf_spin_unlock(&static_lock);
++			bpf_printk("failed to allocate memory");
++			return (u64)NULL;
++		}
++
++		/* Keep a list of allocated blocks to free on allocator destruction. */
++		ind = bump.past_allocs_ind++ % BUMP_ALLOCS_MAX;
++		bump.past_allocs[ind] = memory;
++
++		asan_poison(memory, STATIC_POISON_UNINIT, bump.max_contig_bytes);
++
++		/*
++		 * Switch to new memory block, reset offset,
++		 * and recalculate base address.
++		 */
++		bump.memory = memory;
++		bump.off = 0;
++		addr = (__u64)bump.memory;
++
++		/*
++		 * We changed the base address. Recompute the padding.
++		 */
++		padding	= round_up(addr, alignment) - addr;
++		alloc_bytes = bytes + padding;
++
++		bump.cur_memusage += bump.max_contig_bytes;
++	}
++
++	ptr = (void __arena *)(addr + padding);
++	asan_unpoison(ptr, bytes);
++
++	bump.off += alloc_bytes;
++
++	bpf_spin_unlock(&static_lock);
++
++	return (u64)ptr;
 +}
 +
-+#else /* BPF_ARENA_ASAN */
-+
-+static int
-+selftest_asan_init(selftest *skel)
++__weak int bump_destroy(void)
 +{
++	size_t alloc_pages = bump.max_contig_bytes / __PAGE_SIZE;
++	void __arena *mem;
++	size_t lim;
++	int i;
++
++	/* Free all allocated blocks. */
++
++	lim = bump.past_allocs_ind < BUMP_ALLOCS_MAX ? 
++		bump.past_allocs_ind : BUMP_ALLOCS_MAX;
++
++	for (i = 0; i < lim && can_loop; i++) {
++		mem = bump.past_allocs[i];
++		asan_unpoison(mem, bump.max_contig_bytes);
++		bpf_arena_free_pages(&arena, mem, alloc_pages);
++	}
++
 +	return 0;
 +}
 +
-+#endif /* BPF_ARENA_ASAN */
++__weak int bump_init(size_t contig_pages)
++{
++	size_t contig_bytes = contig_pages * __PAGE_SIZE;
++	void __arena *memory;
++	size_t ind;
++	int ret;
 +
- static int libbpf_print_fn(enum libbpf_print_level level,
- 		const char *format, va_list args)
- {
-@@ -172,6 +226,10 @@ int run_test(selftest *skel, const struct bpf_program *prog)
- 	if (ret)
- 		return ret;
- 
-+	ret = selftest_asan_init(skel);
++	memory = bpf_arena_alloc_pages(&arena, NULL, contig_pages, NUMA_NO_NODE,
++				       0);
++	if (!memory) {
++		bpf_printk("Failed to allocate %d pages", contig_pages);
++		return -ENOMEM;
++	}
++
++	ret = asan_poison(memory, STATIC_POISON_UNINIT, contig_bytes);
 +	if (ret)
-+		return ret;
++		bpf_printk("Error %d: by poisoning", ret);
 +
- 	prog_fd = bpf_program__fd(prog);
- 	if (!prog_fd)
- 		return -ENOENT;
-@@ -211,8 +269,17 @@ static void
- banner(const char *progpath)
- {
- 	char *name = basename(progpath);
-+	bool is_asan;
++	bump.max_contig_bytes = contig_bytes;
++	bump.off = 0;
++	bump.memory = memory;
++	bump.lim_memusage = ARENA_MAX_MEMORY;
++	bump.cur_memusage = contig_bytes;
 +
-+	/* 
-+	 * Check if our BPF programs are ASAN-capable by inspecting the prog name.
-+	 * Command line arguments are guaranteed to be NULL-terminated, use strlen. 
-+	 * Calculate the hardcoded name's length at compile time.
-+	 */
-+	printf("%s\n", name);
-+	is_asan = strstr(name, "_asan");
- 
--	printf("=== %s ===\n", "libarena selftests");
-+	printf("=== %s %s===\n", "libarena selftests", is_asan ? "(asan) " : "");
- }
- 
- int main(int argc, char *argv[])
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h b/tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
-new file mode 100644
-index 000000000000..d8a6316bba47
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/selftests/st_asan_common.h
-@@ -0,0 +1,49 @@
-+/*
-+ * SPDX-License-Identifier: GPL-2.0
-+ * Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2025 Emil Tsalapatis <etsal@meta.com>
-+ */
++	ind = bump.past_allocs_ind++ % BUMP_ALLOCS_MAX;
++	bump.past_allocs[ind] = memory;
 +
-+#pragma once
++	return 0;
++}
 +
-+#define ST_PAGES 64
++__weak int bump_memlimit(u64 lim_memusage)
++{
++	bpf_spin_lock(&static_lock);
 +
-+#define ASAN_MAP_STATE(addr)                                                 \
-+	do {                                                                 \
-+		bpf_printk("%s:%d ASAN %lx -> (val: %x gran: %x set: [%s])", \
-+			   __func__, __LINE__, addr,                         \
-+			   asan_shadow_value((addr)), ASAN_GRANULE(addr),    \
-+			   asan_shadow_set((addr)) ? "yes" : "no");          \
-+	} while (0)
++	if (lim_memusage > BUMP_ALLOCS_MAX * bump.max_contig_bytes)
++		goto error;
 +
-+/*
-+ * Emit an error and force the current function to exit if the ASAN
-+ * violation state is unexpected. Reset the violation state after.
-+ */
-+#define ASAN_VALIDATE_ADDR(cond, addr)                                       \
-+	do {                                                                 \
-+		asm volatile("" ::: "memory");                               \
-+		if ((asan_violated != 0) != (cond)) {                        \
-+			bpf_printk("%s:%d ASAN asan_violated %lx", __func__, \
-+				   __LINE__, (u64)asan_violated);            \
-+			ASAN_MAP_STATE((addr));                              \
-+			return -EINVAL;                                      \
-+		}                                                            \
-+		asan_violated = 0;                                           \
-+	} while (0)
++	/* We always allocate at a page granularity. */
++	if (lim_memusage % __PAGE_SIZE)
++		goto error;
 +
-+#define ASAN_VALIDATE()                                                 \
-+	do {                                                            \
-+		if ((asan_violated)) {                                  \
-+			bpf_printk("%s:%d Found ASAN violation at %lx", \
-+				   __func__, __LINE__, asan_violated);  \
-+			return -EINVAL;                                 \
-+		}                                                       \
-+	} while (0)
++	/* Have we already overshot the limit? */
++	if (lim_memusage < bump.cur_memusage)
++		goto error;
 +
-+struct blob {
-+	volatile u8 mem[59];
-+	u8 oob;
-+};
++	bump.lim_memusage = lim_memusage;
 +
++	bpf_spin_unlock(&static_lock);
 +
++	return 0;
++
++error:
++	bpf_spin_unlock(&static_lock);
++
++	return -EINVAL;
++}
++
++__weak char _license[] SEC("license") = "GPL";
 -- 
 2.49.0
 
