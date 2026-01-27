@@ -1,35 +1,58 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F470238D27;
-	Tue, 27 Jan 2026 03:00:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157122EBBB2;
+	Tue, 27 Jan 2026 03:05:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769482815; cv=none; b=XEDzYNLrxXjx4ChlHPTFkZALE78+xWV9arVfc3m10M5GhxW0e3hJKVax3oTN3SZweeSPz4JK7zkLWgwrhYh4BZD65ki0J/9oJ2b+zHZSc4es4iS02odHUv3c0+M6LoPHPfWi2GiSUzqatFG2JkvUmSvWCO05KM2ZjfkDxESuLTU=
+	t=1769483118; cv=none; b=pFnNwSMk7x03k/BQQSbxRaMSaUgF4934iAqA7R4pw+4TvaNLI3eo6nc6/MHwn4V1MH2ngLjNFIZLx47614LZCrSHLPnI0XHbH/d0jJJC/oeQBqCZXcAu+MC1NyM8h/KrLFG+RzqJ3q2UMWOS9BPhAWoBsPYkzCPPgdbnXvnFeEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769482815; c=relaxed/simple;
-	bh=c6kL4sggAnCSzCthVsGyutQO93o0GVpDQKfymnoRdjg=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=XzYGMpfE7XHJBWV1djRqXslNVf6sg9xhgF+Cav+Et3Ou4M1Dra8UG04MU7GQd/bckmyyxrDdoZ0RNQphuIfke+LtVgXdMkhf1zvhg5tZhONBXOkib9gUQxEQNTc509DOPiCtn9+dnd/i0f9vZm9QtfVNAog4c2nEcSJKD/QZuKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T2vAp3f2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769483118; c=relaxed/simple;
+	bh=0eIazrYKt2H5dVz7aR3WwR1CWkD2A4VVVnLg5inRWCo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tUrFJw0420cz8lznJ3c/gwvFOzGFG3PDIK52IQAWQP/31h2iUa2+VvnoArkf46GIe9elsMLSUMv6q5LwjzNkpFznUbsQo255Nm77T3P2JLqGJEKSTF/9qSH96unrzD6tAodYiYVomi05ZhZearGQc46i04qztbaV3cDpOXm5Tks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bsteKB38; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T2vAp3f2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D105CC116C6;
-	Tue, 27 Jan 2026 03:00:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bsteKB38"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4736C116C6;
+	Tue, 27 Jan 2026 03:05:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769482814;
-	bh=c6kL4sggAnCSzCthVsGyutQO93o0GVpDQKfymnoRdjg=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=T2vAp3f2oK41Mas+JsI3fXYzGfYbmBuHqR0uLn+yN1PFqO6XPSSEcgVRU5ePrJZV6
-	 sEmJZwFo7Fm4pCmYvDHFDx+cOpzJfu6xYTpSIc40wgao1/6aMXX6CMtV1YGKCHeNjD
-	 7QNZa+tYoIksXuLlIDXLm3GcY8xjZbDm4lUYpL3LhwoaUPIrxqYTEbGQjzratk9EP+
-	 JHfuIP+iE//pxQYd6Eyc99kGnR6Yo3QGwvwkrqVOse8VMNve3lnMo95xQV5HG9pbIz
-	 iUqpFsv8vZhIRhim/epdMx+u6NI71+F71F59Im3BYrQ3M+CMazda4ZSjGlYDbjgrM8
-	 noTdsL6cWVayA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4EB80380A961;
-	Tue, 27 Jan 2026 03:00:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1769483117;
+	bh=0eIazrYKt2H5dVz7aR3WwR1CWkD2A4VVVnLg5inRWCo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bsteKB38Vgdxvn6fjaonze1NGEu4h/x6dfnvShLEL5ZXBp6d78jL3+k0oIrPtrL+W
+	 JHpww+J6XLaI8onnyqSBQJVjRb12xmCEaS4TMyuDwq6K2tOQz+pRYNQmAR58Kvkxek
+	 kKKnilR3gJVsaXrW6PD0/KWxsNcOw1a91QXE8cNlprmiTDGns7cfmc66XiiN/ax1cJ
+	 JofwEocyUtpkGH3rPHgThSTr8DSpgIUhh+CgrHJb0JUbKA5oHdKB2XWFdgj/OlnTgA
+	 r+98poQyyjsQVifmEX6PEfHp1XmeQNa+NCJQ+shpBhFekKHzv20ZVeVRhh2KGrjnfn
+	 S5XJNivEjJjqg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: lihaoxiang@isrc.iscas.ac.cn
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	andrew+netdev@lunn.ch,
+	linux-kernel@vger.kernel.org,
+	sdf@fomichev.me,
+	bpf@vger.kernel.org,
+	ast@kernel.org,
+	stable@vger.kernel.org,
+	netdev@vger.kernel.org,
+	john.fastabend@gmail.com,
+	mcoquelin.stm32@gmail.com,
+	linux-arm-kernel@lists.infradead.org,
+	daniel@iogearbox.net,
+	linux-stm32@st-md-mailman.stormreply.com,
+	boon.leong.ong@intel.com,
+	hawk@kernel.org,
+	davem@davemloft.net,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	alexandre.torgue@foss.st.com
+Subject: Re: fix a potential memory leak in stmmac_xdp_enable_pool()
+Date: Mon, 26 Jan 2026 19:04:47 -0800
+Message-ID: <20260127030447.3838706-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260125135412.2070798-1-lihaoxiang@isrc.iscas.ac.cn>
+References: <20260125135412.2070798-1-lihaoxiang@isrc.iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,53 +60,52 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/3] selftests/bpf: migrate a few bpftool
- testing scripts
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176948280903.660450.14105248730273486887.git-patchwork-notify@kernel.org>
-Date: Tue, 27 Jan 2026 03:00:09 +0000
-References: <20260123-bpftool-tests-v4-0-a6653a7f28e7@bootlin.com>
-In-Reply-To: <20260123-bpftool-tests-v4-0-a6653a7f28e7@bootlin.com>
-To: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29_=3Calexis=2Elothore=40bo?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org,
-	=?utf-8?q?otlin=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
-Cc: andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
- daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- qmo@kernel.org, ebpf@linuxfoundation.org, bastien.curutchet@bootlin.com,
- thomas.petazzoni@bootlin.com, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Hello:
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+---
+fix a potential memory leak in stmmac_xdp_enable_pool()
 
-On Fri, 23 Jan 2026 09:30:07 +0100 you wrote:
-> Hello,
-> this is the v4 for some bpftool tests conversion. The new tests are
-> being integrated in test_progs so that they can be executed on each CI
-> run.
-> 
-> - First commit introduces a few dedicated helpers to execute bpftool
->   commands, with or without retrieving the generated stdout output
-> - Second commit integrates test_bpftool_metadata.sh into test_progs
-> - Third commit integrates test_bpftool_map.sh into test_progs
-> 
-> [...]
+This patch adds xsk_pool_dma_unmap() to the error path when
+stmmac_xsk_wakeup() fails, to release the DMA mapping allocated
+earlier by xsk_pool_dma_map().
 
-Here is the summary with links:
-  - [bpf-next,v4,1/3] bpf/selftests: add a few helpers for bpftool testing
-    https://git.kernel.org/bpf/bpf-next/c/f21fae577446
-  - [bpf-next,v4,2/3] selftests/bpf: convert test_bpftool_metadata.sh into test_progs framework
-    https://git.kernel.org/bpf/bpf-next/c/1c0b505908a2
-  - [bpf-next,v4,3/3] selftests/bpf: convert test_bpftool_map_access.sh into test_progs framework
-    https://git.kernel.org/bpf/bpf-next/c/2d96bbdfd3b5
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+> index d7e4db7224b0..7d89d6066ea3 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_xdp.c
+> @@ -48,8 +48,10 @@ static int stmmac_xdp_enable_pool(struct stmmac_priv *priv,
+>  		napi_enable(&ch->rxtx_napi);
+>
+>  		err = stmmac_xsk_wakeup(priv->dev, queue, XDP_WAKEUP_RX);
+> -		if (err)
+> +		if (err) {
+> +			xsk_pool_dma_unmap(pool, STMMAC_RX_DMA_ATTR);
+>  			return err;
+> +		}
 
-You are awesome, thank you!
+Is the error cleanup here complete? Looking at stmmac_xdp_enable_pool(),
+before this point the code has already executed:
+
+  set_bit(queue, priv->af_xdp_zc_qps);
+  stmmac_enable_rx_queue(priv, queue);
+  stmmac_enable_tx_queue(priv, queue);
+  napi_enable(&ch->rxtx_napi);
+
+When stmmac_xsk_wakeup() fails, the patch unmaps the DMA pool but does not
+appear to reverse these other state changes. Comparing with the cleanup
+sequence in stmmac_xdp_disable_pool(), should the error path also:
+
+  - call clear_bit(queue, priv->af_xdp_zc_qps)
+  - disable the queues and NAPI that were just enabled
+
+The DMA descriptors allocated by stmmac_enable_rx_queue() and
+stmmac_enable_tx_queue() would also be leaked on this error path.
+
+>  	}
+>
+>  	return 0;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
