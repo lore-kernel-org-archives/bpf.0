@@ -1,178 +1,167 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FC8B28727D
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 21:02:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715CE29B200
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 21:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769547732; cv=pass; b=nip9Zx5ZuqMCRHhwmH7CZAlWeL0yX82pKPQqUA+JqBWR+sJN3flzSwgYk7FsT3pcgoJt1gaSa3n+r19+GbRAaXQVxhmDjprJECPEGbjJGfy+CipeyIiwDLYDMClX/my3BwbvVE93cjLBj9ekc9R4CVGDzDU5Xlez2hlzJHtPwWA=
+	t=1769548095; cv=pass; b=NwBHslYU8UNpy5rgTaMhS1ILTIaD8cb/6Z3h6g53J/nYeEVvhPw+MOvDaPElOXgryQ1NMK1J0bhLmRs05luJWP95itQg1BQDsObhsjcLo2k9oN6U3SYnb58yAWx02AGcXdMvPiHF6+xQHo5x+rwHgN3FleuiYulGc7QxjaX0zsc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769547732; c=relaxed/simple;
-	bh=KNHweNGDpGm4ZnN7aPhScDNOmJdoPwpco4xhVuTp8Bs=;
+	s=arc-20240116; t=1769548095; c=relaxed/simple;
+	bh=P9HSiKttuCPVxcJklWQQg6SJzfTFCS1PCaCrH+OZM6A=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jPmKbQ+e4dfGm2hv0+88e1M4sCMxjrhxUXxQWVLz85k8kkvmlE0xTOGiEScb0HfCDktGJONCTMPxIEDeULTeHY6nab0adTRDhhnR9iEc+omDXYywxLnnJPXfL5z6Zzk5NCAaX+GFA6R/viHXGasfEVNWdPSw/V8PN1rAEEAq140=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kW8G5L6O; arc=pass smtp.client-ip=209.85.214.182
+	 To:Cc:Content-Type; b=tRnnsHWPxL6L8dou5n2QpNFL2fS/cvfJtPWgKBHz2jaPxHie590u1hZJ/bPfRr04Mdp0u7N0NbVmlUm4xDdB/o8P5Fstfs1Sb59KvD1nLJuQb9/IL/NePS3UDPKdCyEbkkXlNlZCmvMdTreWe7U5PUtaOX7jO17qTY9iUazxGHY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gu3W5wcw; arc=pass smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kW8G5L6O"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2a7786d7895so41014735ad.1
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 13:02:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769547730; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gu3W5wcw"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c2dd0c24e5cso2027416a12.3
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 13:08:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769548092; cv=none;
         d=google.com; s=arc-20240605;
-        b=bx6hxG72xtM3WfNXEIyI4AIIyD32HXsrMAkl4qTFXgz0d8fGP6rTR4b621Ofg8OA66
-         Wz7I/Tu+10jUMVJX+/Rg6AyJ9zpEUOJjodKyH/NpEopXy/gJIR8I5eoQ57q+KZTQyba0
-         7PZUnudddsxQPYrI5PQmqpNOSTab1bM4PipqHmcXDzGlu7+zwIbAk3joKl4tc2rcxLTY
-         qEgX8md5PPyehb5H2DMp8kkOOdwb/yGZgjyzeVMZQ0sS7PTHd2JL453yEkMWnOUIk0lp
-         gVCRYrJZz2z4ZKuCGyiRxjGPauScGTcEg7RbWfAtu694YgQOdECv8iF7AFvqrtS7DoAD
-         7BCQ==
+        b=XWBRMWlxpRQTsQFEh1fqtIMzyY0NalBZPTHvGoRZXtte1fiEfNZxj8vL/KMHm5stUp
+         f52DXvdaZAw4TpUU05GM50lG2RMD89QaD/YKSu7S0dY4iy0gEgQ+9K7kF/3ipfu8WiWi
+         ZYjc1D4mr6AoJ+V5WYz6NMyhknojjMI2x2dMwHzZJ/1ML5NAgbG0UGrAeky+eYPw5SKF
+         cANlz1rLVbREYj5vxj3J0Ej+XIZ5Cbd1fPwNZTk+lPf/4CaLw1fvVncvYi5aUn3VWGru
+         hK2wwu4VjeBFb8P2j8SQp/HQMWKGsYvWg3VRQIh/toHeW8a4y2vwqM+EFPt32HMmgFjC
+         F1tQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=w7j3CPHQIsc5Yl3UjDGx4jct6io3dDzxCr4YX/1yUAg=;
-        fh=UTrsxEaUQGcin+Cp+ATSD4K8JuyvKScrL+ZHSi6h/7o=;
-        b=jARU8sHpeShfzj8AB4QV7jDN26NSZKp4ANLzDjur8a96MUqnxTUB7Hso8ALIbahvOj
-         zwb3DCsTS/FClYUDD6sKjP3ll4cWx/rGCncGu+0/q5tOi++4gyLfAtTb7KWT/7sV1fqv
-         G2jBBe9qIdgO9TlETNeozs8D+5BzT0OGygUVcqNStePGFNKAtS/lxwqQt9A2HVtsIUmv
-         ChuP79NKzqvvC7nNxn0wavER9vA0qcjZiUQ2FdVhcZSfsBK/ifPFk5Y6dCPe2mqCWfbc
-         CiAyagJKLlSD88zxDQcGoNjxOvJZsOYdh7ilgF7wQnAhgANLgye5nO/WoGXpwXDUQhDW
-         AOHg==;
+        bh=eQdjtSgPmBAOitqfbEbhL0KWe6W19d0ewiZmP+b4tqo=;
+        fh=A3QYb3UDZvzrTiLFlDZXlH2tW05ywda1rTphic3ou3Y=;
+        b=G41MU6etfKn/Ygxpq8oVXTbju/mWXczvSsmVifkgLIfsiyyabGsQPXnwRe14FCjIJx
+         hHz491i9wrsKwX3Kix/qBmMpOCtZPRbgDQXhDrcOG0QWgSTg3zWVTJiwGn2TAugV0RHf
+         awiOHofVAS3GY+uI9wLaRxZBWulAgqHbkZHmApDP66HkiXaFmmcutP/dD/A2kFTUOYde
+         P+Taqb+vEEwiUsr8ruX9eROBms+3Oq4+vIft5AXZ8GB1vlsoKAIPd1+6w03O4Cs0iQoM
+         LxFByxbhSLRb4rP9m741fySylf4femntVLAgHk9Mu7EG7rSpbRCMZAYxlK3f7JEB/z5L
+         QTVw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769547730; x=1770152530; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769548092; x=1770152892; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=w7j3CPHQIsc5Yl3UjDGx4jct6io3dDzxCr4YX/1yUAg=;
-        b=kW8G5L6OGTDC2fT71IgmhdQlmnnY3WcCSBJi7VMyPbyjSH5XIPCRpgP5LnigLZiJnv
-         Sb540/QrLr9BIGVr5sOQVPsh5uPqPEpP+earoA6vsAWFAEB9a1kH2hG7dWY/IhWJhYdf
-         /Dxt5bE4uz1FkEE+eK9oLSIX+KAuOmRFpLS2L1RErGyTqnc+ymNSd7Wy3WgQpdWfx9U0
-         tM/AlVZ9sQKFbCkLd28siJg9gJ5au2jG3133nd0TysVxHormt2DnDC3FYxEDIcPI3s+n
-         u9n6VWH1D73oElT3zWB7W2dYejeo+pCT+mXauqTqMjhc+0LL++qCy+bW43TUIP1p3rYG
-         Jnhw==
+        bh=eQdjtSgPmBAOitqfbEbhL0KWe6W19d0ewiZmP+b4tqo=;
+        b=Gu3W5wcwaEqpdFrYhCYOQ9yVsThK5wvVFos7uFLyRYKN5fbGbY3ZY1xf4KYYXkyICF
+         IpvwgqRsxRnvl961IuF+MRvxD2qKVCng4J1XVAyISHIanA3yXulfz7C/Gu/TiYeKLtL8
+         QilaLHcX8+luNe1oJR+NIyr72ebxfXrDfJ47A4A7XnVXy3Kt8azFluomnepPyGQfWJJ8
+         9/NeluIzRQrJGTb6ZY7GLl0n9BwXQWX7HoC8Fx5rjkX55Mq0hgi31MlVy/MJga8OvFLk
+         e/QFsNrT2+ja1OovufQF2O+eeWNMxnSNKQrCX9r8awEsLss6LR+7s9Tyt3xXmzGGwO76
+         TS4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769547730; x=1770152530;
+        d=1e100.net; s=20230601; t=1769548092; x=1770152892;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=w7j3CPHQIsc5Yl3UjDGx4jct6io3dDzxCr4YX/1yUAg=;
-        b=q8Ys2sOtox4+KIngnNhxi8MTefcgyJuTDNOAGdBiyf1hUNaljvAb2WM3Tgj54rLKlR
-         gXdSTst7aZ3zReT9ZFHje01el1mB20l3DcRGLh7FW9/Gd5EQV1cu2y7mvxwBmtClEiMJ
-         xJyc7CP4XfI7CxVuGnkT/HbLeznUp+EIklw3ijAGEp0SzT4+zG5oBT65bhCM7Ouimh0T
-         RpLOQuOYmx2iBvRI6+Qv3F1c86VEpxCQ6uAeSmIGwe26GN6F2llOZMJrEels/8flBJH1
-         m3DstvCmAoEOuWGQ5QS+FTpmzWMYnLfRwUG97GvII1qLyafYTUj/Sgslz3+1xZRjV17Q
-         2sKg==
-X-Forwarded-Encrypted: i=1; AJvYcCXA4cN271dbWA9BeOHwI5ZliystOAoddapJQ4nfh8XRvfEMZiVzSYM2X3WxjeYEBEKpOtI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyvCiq8H1xRRWop29RGxwNW6MMjQBewVZJqbPQKz8lv7eTgDZH
-	CTsNilqrsA+icNqvGsvIPFMhlPrOvD1YupstoD65p9fh51Ek5guaAvaUitQ0W3cjY69E+lUV3tL
-	b/KTKeoI23JCAg5ndVpePePoy2EOHtSU=
-X-Gm-Gg: AZuq6aIcJLquWmsqnDDNsc5czxdA46H12Iv8SnskwApPwvM7lY2bbN3eDcBHuIdmJAc
-	313CuW4Z3KEX1+MhrvxOxZmF59t1rS8XK6jP7Gs1LrAOv1Pm5Tg5gkCgoNKWu0l6m0czXkBh9pM
-	rcohbHEhgx+/leWId1Zw4Bfh947vlSlAsFl6SXEodkqalVV4cfUW1LCirS8hFMHIhi+rcoUQm2J
-	KITxtyg0w2/IiX1ff459hvf97ldf/+o5jIukrEzToPlrcTqHee/+i01CKicX3Ejc6RpYd4EVaBU
-	FK6g/87KOic=
-X-Received: by 2002:a17:902:e552:b0:2a7:683c:afd0 with SMTP id
- d9443c01a7336-2a870d64dcdmr28661495ad.14.1769547729520; Tue, 27 Jan 2026
- 13:02:09 -0800 (PST)
+        bh=eQdjtSgPmBAOitqfbEbhL0KWe6W19d0ewiZmP+b4tqo=;
+        b=jDFlg0fJFwMLCI5j8x7L7khS7rI77u28YKV2sqjQEnMDnISc22pPrN7edwgp/YTe5H
+         FqqNRS2VLDrLxqbpaf8TNZCQ7o2DbQWssG9yv/3B+1aRr1Lfcv/oDbkSgaiXmsyl7I3+
+         3wh9zeye/P1jz+ahM0bift7h0cIFpNWuVPNarC9xQ24WekJ3FNGMPyyJUuv7JHtchYmz
+         rXchT55cIcnVVZjAtkmwLWbzXijQiepJtjeiCcSuy4rpvHl6ePV4Pia5PiCOB4I6pOdi
+         kfhHgOy3BvY5hij+udCsVdXZkS1SagEq3Q3W9GiQuXnEvmNYFVZVjkuvPMlVUrLJzRek
+         jiFg==
+X-Forwarded-Encrypted: i=1; AJvYcCURp14Vo42nr/knNvDO+vMhvWldn1hiLmUeFzw1ewghNEpkityPQn/M+fF0fo65yLKkUKk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi491k7YIpcmypuiL5uUPkl0mzw8TIlEDvd+aRiBMc/A5DM+WZ
+	vokRhRvU9QZxnJVon12nyXkm+XUJ7ruY9iGu6Mlfg4aZBas/uJmzDuYWL+bOxpOtVM3zBGhZAxK
+	C5PIPWuUtx/OD5UsrowZIWUpWtTiXH1c=
+X-Gm-Gg: AZuq6aKe+o1IVarCOBH1S19oYEAUPYF7ZqHUEDhGUoWrXjJVPKRhCMgM6O/QfI3gaMV
+	tN/6QRganykHHfEkJQ3+9V9JBH7PCfEl9j4nxxlqdM3sbZyOopsydZP79RhhYU1ufEDrnLagNq8
+	2gEPmcyKgQkBwh3fpjYU5t93k5XCBwjL0zYuglivpB3aRa3LyiK4SNi1qTvdeBmyoXDnkg6E8Ty
+	fPXLZPoCveYZGnmMWgM2/CFhiUjc8hnl3U+miOuTVG4z/B35xKUXV4ma6B0mFOrCEnP7P7MYkWq
+	ADAdTGH9vHy+2FV2bpQYBw==
+X-Received: by 2002:a17:90a:ee88:b0:353:3f04:1b78 with SMTP id
+ 98e67ed59e1d1-353fecd096emr1923735a91.4.1769548091806; Tue, 27 Jan 2026
+ 13:08:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260126074331.815684-2-chen.dylane@linux.dev>
- <89d94076412b6fc7e05e4d4884f3830601b390d3dcbee91aff2ec214117411fb@mail.kernel.org>
- <0b02943b-4ec7-4be3-b0e2-6c77531c4cbe@linux.dev>
-In-Reply-To: <0b02943b-4ec7-4be3-b0e2-6c77531c4cbe@linux.dev>
+References: <20260126074331.815684-1-chen.dylane@linux.dev> <20260126074331.815684-3-chen.dylane@linux.dev>
+In-Reply-To: <20260126074331.815684-3-chen.dylane@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 27 Jan 2026 13:01:57 -0800
-X-Gm-Features: AZwV_Qiafbe3wvAF3yuuyiNfBzRGkFBNphWOyUKpFvlJjyIdmXRufFUurygsAkg
-Message-ID: <CAEf4Bzb776Sc7ByYF=AEFYw7mXoXVJTGAD-3QY49yBtuqrchuw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 1/3] perf: Add rctx in perf_callchain_entry
+Date: Tue, 27 Jan 2026 13:07:58 -0800
+X-Gm-Features: AZwV_QgA8I1tZ-9gW_jo_xgJ3AGB6q-m9rfSy7EoPH9GLYmxOLzle356wwR0nM0
+Message-ID: <CAEf4BzZq8g_BciT3JNXuYZpzq9zphaVsvOTuOVnqjDS=9w73Gw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 2/3] perf: Refactor get_perf_callchain
 To: Tao Chen <chen.dylane@linux.dev>
-Cc: bot+bpf-ci@kernel.org, peterz@infradead.org, mingo@redhat.com, 
-	acme@kernel.org, namhyung@kernel.org, mark.rutland@arm.com, 
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com, 
-	adrian.hunter@intel.com, kan.liang@linux.intel.com, song@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
+	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
+	kan.liang@linux.intel.com, song@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
 	eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com, 
 	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
 	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org, martin.lau@kernel.org, clm@meta.com, 
-	ihor.solodrai@linux.dev
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 26, 2026 at 12:51=E2=80=AFAM Tao Chen <chen.dylane@linux.dev> w=
+On Sun, Jan 25, 2026 at 11:45=E2=80=AFPM Tao Chen <chen.dylane@linux.dev> w=
 rote:
 >
-> =E5=9C=A8 2026/1/26 16:03, bot+bpf-ci@kernel.org =E5=86=99=E9=81=93:
-> >> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> >> index 9ded2e582c60..0330f265173d 100644
-> >> --- a/include/linux/perf_event.h
-> >> +++ b/include/linux/perf_event.h
-> >> @@ -57,6 +57,7 @@
-> >>   #include <asm/local.h>
-> >>
-> >>   struct perf_callchain_entry {
-> >> +    int                             rctx;
-> >>      u64                             nr;
-> >>      u64                             ip[]; /* /proc/sys/kernel/perf_ev=
-ent_max_stack */
-> >>   };
-> >
-> > Adding rctx before nr changes the structure layout in a way that
-> > appears to break the perf userspace ABI.
-> >
-> > In perf_output_sample() in kernel/events/core.c, when PERF_SAMPLE_CALLC=
-HAIN
-> > is set, the code does:
-> >
-> >      int size =3D 1;
-> >      size +=3D data->callchain->nr;
-> >      size *=3D sizeof(u64);
-> >      __output_copy(handle, data->callchain, size);
-> >
-> > This copies (1 + nr) * 8 bytes starting from the beginning of the
-> > structure. Before this patch, offset 0 contained nr (u64), followed
-> > by ip[]. After this patch, offset 0 contains rctx (int) + 4 bytes
-> > padding, then nr at offset 8, then ip[] at offset 16.
-> >
-> > With the new layout, this copy sends the following to userspace:
-> > - First 8 bytes: rctx + padding (kernel-internal data) instead of nr
-> > - Remaining bytes: nr + ip[0..nr-2] instead of ip[0..nr-1]
-> >
-> > This means the callchain data sent to userspace is shifted by 8 bytes,
-> > the last IP is truncated, and the rctx value is leaked to userspace.
-> >
-> > Is there a plan to update perf_output_sample() to output starting from
-> > &entry->nr instead of the structure start? Or am I missing something
-> > about how this structure is used for userspace output?
-> >
+> From BPF stack map, we want to ensure that the callchain buffer
+> will not be overwritten by other preemptive tasks and we also aim
+> to reduce the preempt disable interval, Based on the suggestions from Pet=
+er
+> and Andrrii, export new API __get_perf_callchain and the usage scenarios
+> are as follows from BPF side:
 >
-> As AI said, this change shifts the memory layout, which effectively
-> breaks the userspace ABI.
+> preempt_disable()
+> entry =3D get_callchain_entry()
+> preempt_enable()
+> __get_perf_callchain(entry)
+> put_callchain_entry(entry)
 >
-> Maybe we can use __output_copy(handle, &data->callchain->nr, size);
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
+> ---
+>  include/linux/perf_event.h |  5 +++++
+>  kernel/events/callchain.c  | 34 ++++++++++++++++++++++------------
+>  2 files changed, 27 insertions(+), 12 deletions(-)
 
-yep, very impressive for AI to notice this. I agree that
-&data->callchain->nr seems like the best way forward.
+[...]
 
+> +struct perf_callchain_entry *
+> +get_perf_callchain(struct pt_regs *regs, bool kernel, bool user,
+> +                  u32 max_stack, bool crosstask, bool add_mark, u64 defe=
+r_cookie)
+> +{
+> +       struct perf_callchain_entry *entry;
+> +       int ret;
+> +
+> +       entry =3D get_callchain_entry();
+> +       if (!entry)
+> +               return NULL;
 >
-> > [ ... ]
-> >
-> >
-> > ---
-> > AI reviewed your patch. Please fix the bug or email reply why it's not =
-a bug.
-> > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/REA=
-DME.md
-> >
-> > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/2135=
-0234831
+> -exit_put:
+> +       ret =3D __get_perf_callchain(entry, regs, kernel, user, max_stack=
+, crosstask, add_mark,
+> +                                  defer_cookie);
+>         put_callchain_entry(entry);
+> +       if (ret)
+> +               entry =3D NULL;
 >
->
+
+purely stylistical nit, so this can be ignored if you disagree, but I
+find code that modifies some variable before returning it slightly
+less preferable to more explicit:
+
+
+if (__get_perf_callchain(...)) {
+    put_callchain_entry(entry);
+    return NULL;
+}
+
+return entry;
+
+>         return entry;
+>  }
+
 > --
-> Best Regards
-> Tao Chen
+> 2.48.1
+>
