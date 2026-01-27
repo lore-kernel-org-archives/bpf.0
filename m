@@ -1,32 +1,32 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D4C334C18
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 09:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 994643346BF
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 09:43:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769507027; cv=none; b=Zrm6p/9Uye3EQIY9uBiO7nFWPsmGCX1CY2D58JcstjHGTzOmaH5PNu7jcoBWgoHtf6xqnh99Uqa8a3MHCzFgCm80EnnrR9XOLfjsrHJWeT2oADRbw14TX5MBS7EO13DallCTTR8Qyk4/jXiI/H8JvXWEk2ZVD0vt2Qmiqxpsr3Y=
+	t=1769507038; cv=none; b=Fer4ud/ojXjOKR/8V5CzmsJ2HW47qmOEgJ76i+anPuSPikbR85mvafVcYY3C3be+SqKuh0xBpG9Yv0a3q6Hk5IUPJH6Aw/d+/Y/4hM6zPrgz5HP6H/94vd3qOaHrAPhzWzmEvDVJpNc3+sXMrah8Fj6cyZIkUwETtjb/fcVYxkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769507027; c=relaxed/simple;
-	bh=ICuHoMZgwyeQHMZZvgMtyo6q66wG5W6MOEIDq951aKE=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pJbDUpgCCtebfUYNSSjpvKHxIuG0vxlvV02YonjTeO4VkuSvE0Lvwbfv9H//DN1tT5h1AzuTgQR4Uuyb5IduOy3NcD2WmveOQ1y0oezAx6qtnzQ7484e3B1kpDxoWyXMbf6fr+IfQZMLFl14eT52yOGQ24u5sC/5CBmcqJ9NTV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vUqg2TQG; arc=none smtp.client-ip=95.215.58.177
+	s=arc-20240116; t=1769507038; c=relaxed/simple;
+	bh=N8uerXNrtYXAXsXSofx5ACpCyBePZpfRxoCGMF6fYG0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=eACVgiDozGAQzbTsWe9/1PzlJ8jEvytXlFtb4gVsfmaJ1wFgMrU/1zM9Saoxf59yLxDgZQpjhX/7PzS65uzKp4MjGThm8b/lCnERImKK5e0ZDrTwDcacpSCGpGGwHJKvHANk2rGTNRxhE8cpYMbAa8lftPXsuw1Iy0oZP3ZLoGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V6EVuU79; arc=none smtp.client-ip=95.215.58.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vUqg2TQG"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V6EVuU79"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769507010;
+	t=1769507034;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=RkVeShES4B2VgCiXTgzhTlETaaAj+olyI2gU3ClsRew=;
-	b=vUqg2TQGgleAvGPxg6XpPWj0hk+VX3LBsQJb5GxaEMooMNP/ieKchFW14UMkjxRPh0Q6a+
-	r1cWOTF9Zw4grH9/KRuvlSn+G1E4enTMa1Zz7X/x7mCHk+mujGKmLYodR2iDlRzqHsXUHV
-	e2hnU95tejeSh9IVMOfF/K+2v8LQ8k0=
+	bh=R9sBuFUW725uaUgAoHBNUzbcXyyILwwKmBSUQhglIbE=;
+	b=V6EVuU79vNgGvQDc4EYR6qMx3zOUY5408Nxax8gbmUwfgPseSVeEcTfzDsDZA+SxLgBG6J
+	ycTWpG/K3bX4xhq8fUTlLKDdUJxgXGL6eIAo8yRqRAlHFGOXBPt92DhC+LCgp+5XL20gxh
+	89thHaGUOr0HUEDMOXYU5iX25cLsrI8=
 From: Hui Zhu <hui.zhu@linux.dev>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
@@ -77,9 +77,10 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 	bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH bpf-next v5 01/12] bpf: move bpf_struct_ops_link into bpf.h
-Date: Tue, 27 Jan 2026 17:42:38 +0800
-Message-ID: <3a6694566eedbf17f84dbe5ffafe9aa0aa32108c.1769506741.git.zhuhui@kylinos.cn>
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [RFC PATCH bpf-next v5 03/12] bpf: mark struct oom_control's memcg field as TRUSTED_OR_NULL
+Date: Tue, 27 Jan 2026 17:42:40 +0800
+Message-ID: <8c6d6d4751f1ad12582d3d9eabd549d5fd8925b0.1769506741.git.zhuhui@kylinos.cn>
 In-Reply-To: <cover.1769506741.git.zhuhui@kylinos.cn>
 References: <cover.1769506741.git.zhuhui@kylinos.cn>
 Precedence: bulk
@@ -93,53 +94,42 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Roman Gushchin <roman.gushchin@linux.dev>
 
-Move struct bpf_struct_ops_link's definition into bpf.h,
-where other custom bpf links definitions are.
-
-It's necessary to access its members from outside of generic
-bpf_struct_ops implementation, which will be done by following
-patches in the series.
+Struct oom_control is used to describe the OOM context.
+It's memcg field defines the scope of OOM: it's NULL for global
+OOMs and a valid memcg pointer for memcg-scoped OOMs.
+Teach bpf verifier to recognize it as trusted or NULL pointer.
+It will provide the bpf OOM handler a trusted memcg pointer,
+which for example is required for iterating the memcg's subtree.
 
 Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- include/linux/bpf.h         | 6 ++++++
- kernel/bpf/bpf_struct_ops.c | 6 ------
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ kernel/bpf/verifier.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 4427c6e98331..899dd911dc82 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -1891,6 +1891,12 @@ struct bpf_raw_tp_link {
- 	u64 cookie;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c2f2650db9fd..cca36edb460d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7242,6 +7242,10 @@ BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct vm_area_struct) {
+ 	struct file *vm_file;
  };
  
-+struct bpf_struct_ops_link {
-+	struct bpf_link link;
-+	struct bpf_map __rcu *map;
-+	wait_queue_head_t wait_hup;
++BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct oom_control) {
++	struct mem_cgroup *memcg;
 +};
 +
- struct bpf_link_primer {
- 	struct bpf_link *link;
- 	struct file *file;
-diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
-index c43346cb3d76..de01cf3025b3 100644
---- a/kernel/bpf/bpf_struct_ops.c
-+++ b/kernel/bpf/bpf_struct_ops.c
-@@ -55,12 +55,6 @@ struct bpf_struct_ops_map {
- 	struct bpf_struct_ops_value kvalue;
- };
+ static bool type_is_rcu(struct bpf_verifier_env *env,
+ 			struct bpf_reg_state *reg,
+ 			const char *field_name, u32 btf_id)
+@@ -7284,6 +7288,7 @@ static bool type_is_trusted_or_null(struct bpf_verifier_env *env,
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct socket));
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct dentry));
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct vm_area_struct));
++	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct oom_control));
  
--struct bpf_struct_ops_link {
--	struct bpf_link link;
--	struct bpf_map __rcu *map;
--	wait_queue_head_t wait_hup;
--};
--
- static DEFINE_MUTEX(update_mutex);
- 
- #define VALUE_PREFIX "bpf_struct_ops_"
+ 	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id,
+ 					  "__safe_trusted_or_null");
 -- 
 2.43.0
 
