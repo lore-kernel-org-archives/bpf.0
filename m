@@ -1,107 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289F230DD31;
-	Mon, 26 Jan 2026 23:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769469173; cv=none; b=A942lV2DjJ4D1gAzwAeGWA2t+r6XCR7e7EiDDbcbk/g/U2CVFb6GF3RiJdheubfST/hARXU7ZABrfw8wscO0m3BpeRc2cEkF6ZkYv7152Sa8VDNR7BLzCG9xqcdJoH7XSaYTxyZ2btKKtjO0QnZJv6mnCqqVR9G/Zrx/kUOzn/k=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769469173; c=relaxed/simple;
-	bh=Btlf+O4AfMiaH+Tpkc8CIcpEHiL8iAmq3ZoEmAb2gv0=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type; b=fouRd2ciIBiLvdjZ7kX8dP9YE4NjP8sHwrTQR2tPIFWQs42tTJ51V62Sg8DWBHKATT/XozMOAEf6mn4r+aH7nzEWvNFJg/PFTRgOqa28f4it6kpbL5y12tI6JeZy0D7MsDqX73AaL8eEjvCWdM4kgKBoaOQS8aOwiE5Ypc80oAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ukLTe/M6; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD223C2F
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 00:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769472144; cv=pass; b=X/juiQwYbBkUYZAeRWIHjDZbQtR/LKgSOKaOjNEYZzbzBOsbaQuHpfPd6K0MKL/cYKhRd0VYfgUlGEeH4z10DIFLsY+cr03KjxvOSBsVKRiY8qogqO0UhdauzmWWLoYQ9eTy6Hht43Z/M0Pnpqo6Y/iq6mBVoKKUbbX87cvVV+w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769472144; c=relaxed/simple;
+	bh=IIPXp/9TPKFTm3hZW6w44g+x65gkTeld/Y8DdUHzhBw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oMrxW5YcKAOwvO7UJyAQpxVKe7dDqjTQnHaYRw8/6qawtZX1jUSym1reABpeFBpayrxEGBtYKatitLTy0HXabSejiOgdjfVlmNjmAyNnlgJALyXwkFhIoWYTikzD7Z+gT1vnSlRxDTTsH6Sg+KL/FiHCopwejq+UnLe/AlHTBbk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GGgKarFA; arc=pass smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ukLTe/M6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D41CBC2BCB2;
-	Mon, 26 Jan 2026 23:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769469172;
-	bh=Btlf+O4AfMiaH+Tpkc8CIcpEHiL8iAmq3ZoEmAb2gv0=;
-	h=Date:From:To:Cc:Subject:References:From;
-	b=ukLTe/M6RA57QeBDYaGRFsS143CWJq9ZGx48JoI8CVHjJteczIcE3WXi0CoUgstg3
-	 Mnd2ec/rv4VJ0r3u945EMlW2uFrZ261gRp6uDLrHr7lu1jLxOvV2cK2F43/dKijglA
-	 nPXbBL02c6ygNQRzcgg5kC3m2zxvV/X9n9dPtUtOvimHIxA8r9WNgt/mMgats1Oy4+
-	 1asLUClDXL3XStu10IJ77j7aNyqB76rnuj0WaWU3SI0Iz1501QmbVx1USrxCdNEOc5
-	 wxFDLql+p/zKj4EoIW3L8V3TRDUMjYHQOMhmlYfouDSfbduhyNqa/l5xfiHQyzVjZM
-	 NnTT6IjD7o3RA==
-Received: from rostedt by gandalf with local (Exim 4.99.1)
-	(envelope-from <rostedt@kernel.org>)
-	id 1vkVlQ-00000000C0m-20cu;
-	Mon, 26 Jan 2026 18:12:56 -0500
-Message-ID: <20260126231256.335034877@kernel.org>
-User-Agent: quilt/0.68
-Date: Mon, 26 Jan 2026 18:11:47 -0500
-From: Steven Rostedt <rostedt@kernel.org>
-To: linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Paul E. McKenney" <paulmck@kernel.org>,
- Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Alexei Starovoitov <ast@kernel.org>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH v6 2/3] bpf: Have __bpf_trace_run() use rcu_read_lock_dont_migrate()
-References: <20260126231145.728172709@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GGgKarFA"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c2dd0c24e5cso1641599a12.3
+        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 16:02:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769472143; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Mu8n2hv0MmVmh27eKMdqw8Rns9ZELCaRAZUYOoZ/uzX2Pta3rWF5mC2oAHd1KlLHEI
+         UKh0879S/cgvj6Skk3mNKxi7yz6nYOA0norp03apeh9T/MCjXEBkpMkkd746K/mQ1Rru
+         Sa1Z/RMgMQx2JRU9nCtl2qtrZImPo8410p73i+5NS+NF0O6fPtEprpXzEKElYeUtWjlS
+         HVyQ78lywLkS9AlfSYByNeB5z9p5DDMvHz98lFaUOvf7h9p08nBpiCNg7lgNUjmSqdJb
+         YiZU7xNHpWPQ2iErKzb1OTzbUmVu7yiATWDvUO2dm6VHD7MgG+Vq2Xs4SNuC+Q/3zCxO
+         AP1A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=IIPXp/9TPKFTm3hZW6w44g+x65gkTeld/Y8DdUHzhBw=;
+        fh=V30d9EXvxT7qKJKX2frpmmYzaqXgQZ0GWaNK/mWBiCA=;
+        b=aHC2RLi1VWydv0nMN29tvhwrZjM9lf4OVqw34TUOOoR/oZIe2B53pX/KyJMn3c2EEy
+         81QNnb86eCM73jGWZGPXQeq9TzcsIDfWzpQiTi1+MUdHrMtQVsYNSGffHVLhzxGUr5pW
+         xII8Ntndx1iSsMc22jxvgDzl0yWUdZRruQtx3jpuChyGKLpcWlrPSPQVPEov9PvddaAO
+         Y5KLMv2BqpDflEq0mdeNKs1AjfpO3c04/8fQq5IyJPNQn621Qj3V9/XCtz9tak4Q8ljh
+         ExlfXHsvQcR5I8c3WZFnfDo/iBjzrURuezv0Sh8B0nVeKQtcPWZ/CGa9I3ubVgM5syYa
+         1MdA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769472143; x=1770076943; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IIPXp/9TPKFTm3hZW6w44g+x65gkTeld/Y8DdUHzhBw=;
+        b=GGgKarFAZEdKX4xMtQJ1cNsNbxku88lDMAlK+xWvC7urIgqNYcaqZ4nDJHU2Kw6F4w
+         92/lXFdiaZu/HUZv7YcEcgSowGSiwajoHxhV0FRX8/jHvwqEdT+bGpEXCFc7ovqYyI1t
+         srwsRVH7Ky6kwwAIbFgdAA2zEQY+tZpKJRBsUSI8frxOqnu4BSLpdoIMHzMbkL7+Mrks
+         FXy4C4gseijhSS8HGA81bzdailMhG8t+a43uO3iCgj4yO3yhFjqsgd8tNp1zZXUcInZR
+         HqVCGaHyN7uR3BvBh55jvcZ4y3lEJmyFqL5SyCq9MAiZUWn9QSJGSv/Lk3EN9NYRSOjK
+         AlxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769472143; x=1770076943;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IIPXp/9TPKFTm3hZW6w44g+x65gkTeld/Y8DdUHzhBw=;
+        b=MzuzaQMXTCMvzudR49Rj2AT/gSYROM0vZQrqJQ4lHUfn/vPrUTTnRjvcx3UDjaJUZ6
+         zbaa32RltMX32W0Ob+ZI5DjukQ8B3NmLO30QKzpZ2m7BPyXFe5ikhFpB4qinSbZtrRah
+         4nr9qU/dIFlcr3M/l69w6Nw3R2ZkpCS1EBSvapi/gfahxe6OXpvg1BlT3NIrK5Lp0YeH
+         cGWkQx287gOy/7wUAb69667daZc0olL0G9sOysdo8XHs6l9kqsI4jebtewoK5eP0V6W2
+         55OwxgRrToAcClGhWYRcT0h+MJqMXorpMmAkde/5x0ziSpZ+6ff8SP/lvyMJ7tLPm853
+         GXyA==
+X-Gm-Message-State: AOJu0YzTyOSPLbWwQpMOkrtiGKl+Fh8K+gJufPYax8Ro38JZmV6T4FCB
+	ZdoaUOGUQYyGLmwPMx9JOggWErJtDvx8xGarHF64LPb4baPbfJfGmvB/0RHhdl7yx5pdAIDIL5x
+	XhWfcIROX86U3wVcJrHxBg3FXsOZ+q1E=
+X-Gm-Gg: AZuq6aLL7B4rQSCD4yOnM3G67ez+NklluFrS8KHjUtQ+VAzvRd7+15aBZ9Qv/dG9wV3
+	U3ld8Rk9Wgsd/w0d43n1dnXNpQkGUjq8CLyNV2a34YlFkttdBy1ifRoxQ0SlFoRHeg3aBsOollb
+	+fMABLUejuCgy+Te/wO00U4nuUzj7LtugqB8j8EvAOOFp2wAenNPEgRQSiohH8vkkaBdrEu2DK+
+	H+qSOGA9N4K/gR/cwMhEKp+hp1TqsNKIcidQyg4gtZiv/yV4Kw3LZ9FrfG7JXXejcwI0OBiBB2W
+	/0VgIhcZ
+X-Received: by 2002:a17:90a:c2ce:b0:33b:dec9:d9aa with SMTP id
+ 98e67ed59e1d1-353c417d7d1mr4175053a91.25.1769472142603; Mon, 26 Jan 2026
+ 16:02:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20260126142118.2ea3cf13@gandalf.local.home>
+In-Reply-To: <20260126142118.2ea3cf13@gandalf.local.home>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 26 Jan 2026 16:02:10 -0800
+X-Gm-Features: AZwV_Qh_jrIpsCqz8qC4iF5N5xmk3OFIs7X-uIf6Ubcoe0q7vEvCtBelVa9SucQ
+Message-ID: <CAEf4Bzax24jJVDs2bBiJuz1ZuuDihsb5Xq8pGcy18vLUMMLxbg@mail.gmail.com>
+Subject: Re: BPF with deferred stacktrace and sframes?
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Blake Jones <blakejones@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Steven Rostedt <rostedt@goodmis.org>
+On Mon, Jan 26, 2026 at 11:21=E2=80=AFAM Steven Rostedt <rostedt@goodmis.or=
+g> wrote:
+>
+> Hi folks,
+>
+> Now that deferred stacktrace is upstream and hopefully sframes will soon
+> follow, is there any plans to integrate BPF with this facility?
+>
+> Would there be a way to register a BPF program to request and receive a
+> user space backtrace when the task goes back to user space?
+>
+> Basically the API would require a program to register a callback function
+> that retrieves the backtrace at a later time, and then during runtime (in
+> any context) request that function to be called when the currently runnin=
+g
+> task goes back to user space.
 
-In order to switch the protection of tracepoint callbacks from
-preempt_disable() to srcu_read_lock_fast() the BPF callback from
-tracepoints needs to have migration prevention as the BPF programs expect
-to stay on the same CPU as they execute. Put together the RCU protection
-with migration prevention and use rcu_read_lock_dont_migrate() in
-__bpf_trace_run(). This will allow tracepoints callbacks to be
-preemptible.
+Hey Steven,
 
-Link: https://lore.kernel.org/all/CAADnVQKvY026HSFGOsavJppm3-Ajm-VsLzY-OeFUe+BaKMRnDg@mail.gmail.com/
+So I've been thinking about this on and off, and over the last year my
+view on how to integrate SFrame stack traces into BPF changed
+significantly. It now is actually much simpler, IMO, which also means
+much less complexity for the rest of the kernel.
 
-Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/bpf_trace.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+In short, I think we should only provide a synchronous way to fetch
+SFrame-based stack traces. We will only allow this to be called from
+so-called sleepable BPF programs which can take page faults and wait
+for whatever file contents are necessary to parse SFrame data.
 
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index fe28d86f7c35..abbf0177ad20 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -2062,7 +2062,7 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
- 	struct bpf_run_ctx *old_run_ctx;
- 	struct bpf_trace_run_ctx run_ctx;
- 
--	cant_sleep();
-+	rcu_read_lock_dont_migrate();
- 	if (unlikely(this_cpu_inc_return(*(prog->active)) != 1)) {
- 		bpf_prog_inc_misses_counter(prog);
- 		goto out;
-@@ -2071,13 +2071,12 @@ void __bpf_trace_run(struct bpf_raw_tp_link *link, u64 *args)
- 	run_ctx.bpf_cookie = link->cookie;
- 	old_run_ctx = bpf_set_run_ctx(&run_ctx.run_ctx);
- 
--	rcu_read_lock();
- 	(void) bpf_prog_run(prog, args);
--	rcu_read_unlock();
- 
- 	bpf_reset_run_ctx(old_run_ctx);
- out:
- 	this_cpu_dec(*(prog->active));
-+	rcu_read_unlock_migrate();
- }
- 
- #define UNPACK(...)			__VA_ARGS__
--- 
-2.51.0
+The reason this is sufficient (and even preferable) for BPF is that we
+now have the ability to utilize task_work_add() infrastructure from
+the BPF program from any context (including NMI). So even though
+SFrame-based stack unwinding can only happen from sleepable context,
+it is possible for the BPF program to set up an asynchronous callback
+that will run (through task_work "framework") right before the kernel
+returns to user space. That callback will run in a task context where
+we can wait for SFrame data to be faulted in, and then we can
+synchronously do stack unwinding. We return data to the BPF program,
+and that BPF program will use whatever means necessary to do something
+useful with that stack trace. This all simplifies API design
+significantly and we don't need to worry about any caching concerns
+either.
 
+So what we will need from kernel's sframe support side is just an
+internal API to get stack trace, similar to get_perf_callchain(). But
+it will be guaranteed to be called in a nice task context. No NMI, no
+irq disabled, no nothing.
 
+This shouldn't be a problem, right?
+
+>
+> I've been Cc'ing the BPF list (and maintainers) on the deferred stack tra=
+ce
+> work and did get a few comments. But I haven't heard anything about BPF
+> utilizing the feature yet. So I'm asking now if that's in the works?
+>
+> If not, perhaps this would be a good topic to bring up at LSFMMBPF?
+
+Yeah, we definitely can sync up on this during LSFMMBPF.
+
+>
+> Cheers,
+>
+> -- Steve
