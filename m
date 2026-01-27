@@ -1,91 +1,91 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C819921B192
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 05:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3843EBF3A
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 05:51:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.179
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769492997; cv=pass; b=b//iGzuJ6fOH/9Wag1+3HW2Ugl+vco6G6U+Mod+9O1J7jVeiHGXvPfXbzfgYPsaSEjKWUwjNJIwIL3mRjbeKcx0SybJrTkiCUFBqlOxc5Le3kAFsAD69AYPAW8YsNYjoeRJWZCvTgGIaUrc9SxyHYs7LQx9TsKp2xA73LWbNPUg=
+	t=1769493070; cv=pass; b=RVU9rhsgX0yGcUC+pwfYFDMVO0p1vDIg5m4NQf7JRH8iRxdCBPvPjqrKkQN3w3Jgam6n6ZGrdzzhyG5fpl6bmAGar/SC8WS6Nj7pM2d8j/d3oDW/KO2M9MIFq0U6J8cRxaWx9Ceux7KlELN1f37EVWAM8G0J8oyyHlSd3qC+9zc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769492997; c=relaxed/simple;
-	bh=1gVxj1jUaeC34UWQ2bzWBOtqZMPf0nq4coXO9xLn+Js=;
+	s=arc-20240116; t=1769493070; c=relaxed/simple;
+	bh=w/wM6wDIGeziOkyzEu6ilh30xwonS3F9zPHMvi9vw4c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aSqP34SyQ+nYT20YW04cSsVudcmrUc1G+v13Yno4FiZXwhXmmZcGtORNTeEIZItVAPwDelLZDMG3PvEzFd1YbDiPEsD2Nr52jbKcyLBT+5TCvXutPtdc16fDMbzO31DvI/BysZ5WmLm+hzwBNlMGj4kv3slwl2gB5YVHuNJuVz4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MdLI6o8V; arc=pass smtp.client-ip=209.85.128.182
+	 To:Cc:Content-Type; b=aVchMfKmNDKvKwFJ0/8kd0J+CB7TCOlpnKL2MUiOOIxQ8fJrOjnaHkxa1JSPZEqv/9AFFfFfzZAvumna0o6SN2j0nzYbJU5mL6SGqkUtM0n7KQqrdPq24MyPALyD+kKnOwJxFJKgtSXxfgNGVlIvtMJLRo4tbOjzxtw/zbQhMQc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WdqjVSQs; arc=pass smtp.client-ip=209.85.128.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MdLI6o8V"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-7942b9663f8so47054657b3.2
-        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 21:49:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769492995; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WdqjVSQs"
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-7942fca0da6so36291617b3.3
+        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 21:51:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769493068; cv=none;
         d=google.com; s=arc-20240605;
-        b=QUN7T7Ouyo+8dVZ5n9ejbV8zn+qNum7uuVfBg1SztBSo1mcjsQmI8jNqqjPSg5WBbe
-         mxt0DOLrXWHCEYqFTA36S/9/C9JkiCmvTJss53XlyWWb6NBCsVybbE6/J9zaec9ZLKK+
-         OjCFBgZwx3R2cV8b5Gkz8meZlMekdiscsXiN60lb0TK1HahyeJNTQ0XmZ8asr2vdTDe2
-         uqcQZNg42PLCXfq7gq3p67RkcE+pLZ5Xmj5vFTyd6s6tzpR4rceYkLxVXseAn9nfPAKN
-         6/3uKJyt5c7iDxeeuxQwvWoXunjBawB1PrZFZmX03TGIpgZoPEc/6DYk/ehY179DIde3
-         SFVw==
+        b=X4ZczKWtnrY4+RIbDj+nCh4x4PTW78d9a1ENvIF1rOtJBkEEXe3jv2EJ9QMPdBMB/I
+         +S9ftP+ZxeMm5eXYBuokgM1K03y/gZ08bp5CqN+duilpHWfu3fSSDEoiZh/R1SF91v4v
+         RjHWVyJrnUNi1Hj5exHmzm9YJ0nVzHfhSd8lWMgFF7m5qG5uZeWXEEYXPSMxKSoX1eSn
+         q6a5zrnqaRedCcMjk5WgbO92C6UXecWB8wVN6bSzmA1y7h3sOmrJC6zKp6wzoUZ7ztOR
+         NJB4xBeSlvuxOEmsxm08hAc9T0UdkGaGqYNkmHQQsfQQc1zKPF3jcZs6OX/idCqN6L3d
+         o+BQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=9HzgsJ827sC2LhFGy7sDRVcx3B1Tf/7PzhkQBFCLMF0=;
+        bh=An7SHoxFNQVMVrQg+cVoi49+jQE1PDn2o0N/47lH2vw=;
         fh=S28IKLljYO5ribukOX+7btu0mmxV7tW1bx2QZ2d+1I4=;
-        b=bsFZDyDSB9p3UzaZMqXrYow/YeSAl6y4e7zybHnUjtQUmTgTKeJXhNN9QtBoBQzVFe
-         W/HkTezpVoC7NYeH/Nvrb0IApmXgVxYgHMPhQi/6/iTIhnYtvER5p5JuY4M1GnElJbur
-         hvhOCJdbQbWgrmknuhn72qNlokMj3R4VWmAkmfEQsUZFzOFVXAfECTmdIIWzhWcPbb5S
-         YW4qrkWwPyL5oBLB7g6oxIiVxS0blkl1cqUtJTR29OlxNbWoXedG1p37Gizo68d5Lm2H
-         eX4D61TqSF4iEShjjFjPfUWcr1V8XsrjnGgQWSNlfRyTbzelhnesWc8Ue8PW2M73Ltfh
-         iAhg==;
+        b=dJtZULyEBjURKgFV3YQI/O6f8A3dwcZ2QO7toynPOwt/qoNCzzQ9a/wWKKbvWiUesT
+         WN988EwGvEqNSSITQRyMuc37nk8ZkoiUWmjbD+bm2JHhSpyzStolqgqpQOIKb324Q0Zg
+         2BiNpXJUn3xRHnqNcka6mLZCWabl0XG1GTgQu1lsYXBDpHHiQJNDL310vKJxhPfruBbW
+         GIWbBjYk3PsJvU6YBsu1ldoUOOXb3FWPjDpY6mcM50D0U6YuSzVh/tkP2+oYQptARK2Z
+         Qr+thE5Xe4RnfdPtsfMMW8/2zIqd/bPDI1K600Rqzitxc5acInS1o/larbInPIgBOE9F
+         umlw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769492995; x=1770097795; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769493068; x=1770097868; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9HzgsJ827sC2LhFGy7sDRVcx3B1Tf/7PzhkQBFCLMF0=;
-        b=MdLI6o8V58V7Z1qX+tmBpzAnYq7WJZMiG501ITBZAAeq7fIv2RcQz4SMXZa2Lt7JiN
-         957iaAV9XEDXX5e9q3hUjKNE9jDQ6NM9gP3vBxKtZAMGfnMb+W3z0kVCnf4vb2gpALAR
-         z+WIm/o5Xs5OJa6e2qN/Aq3qBybK5kcOSwkL2RSJgcC/X28IKh+vYQ2NLo3roKfjntL1
-         CjTB0kxozhRXTacNDJoqkjHI+l747Muyc65cN4RkhvzK6DssDBDEEny3f38Q7Uf7z8Jd
-         SbUI0ib6eKPnDKW7GqxXY7C5A3Q4Xugrx0vIsobXaBWZ+xZs0DpLQ/Ma2bwMheeXRbSa
-         xB9w==
+        bh=An7SHoxFNQVMVrQg+cVoi49+jQE1PDn2o0N/47lH2vw=;
+        b=WdqjVSQsjinjo2vGfMwggTl5K5wHtlCJMBlL2gUX4rhwHNOOMcCvIzm73VEpukvtRV
+         AHGwZDKi+KP4VCdqwTOrfAlsW1iJMbMCOqDslWeiyAuxUj61oSPKzHIFMPhjV8XnpiQl
+         SgA4/lg/z19uo4fVNO+QbtsKOqwtUQdUa+94nu6ihyFc4imOnXpK5kbA+y1moooHsvRV
+         s9XVUcNnz6o6kJ3m01+0RbmkMM9FWC1BvPzw7PGkeBy3FLGLgZc4fKCel9DXAm9PmeBf
+         7fOU0hhotE/cN8K7QWmlEBIkGr2xknDTPTsZAAsjb54Bpk0XRmSwuS3MUAcGPMjRqckU
+         zrlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769492995; x=1770097795;
+        d=1e100.net; s=20230601; t=1769493068; x=1770097868;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=9HzgsJ827sC2LhFGy7sDRVcx3B1Tf/7PzhkQBFCLMF0=;
-        b=SHJOqC7fuJfYyo5sP6MWHeuOczdw7Iig8TwqZ1DtlUyrgvPpeO/AgwaBC1TPWS0yQU
-         gNFJCHW2MZN7jzHP/EiR6xb7HRhWqpjGK2kfHjyEobBWiVGwYk0GadIdyJnNJI4gLLAB
-         YDuJYtcP5w++ovSRZ+1DSThyYY5YZ8HG2LOKTb/wF4K6Y7QV9Z9T9R1hwWDgMeqsGaO1
-         ioYyo+wgb8uCnMiXJpNzfBkWZEM2r8WF5PifBAFPQxyYwvoeIvI7pGeHIq2ntvYL23Gx
-         PpRFYmboiyfjCSrH8xopk3CO6C6GBnrV86Qn5T/BulKu1H4v6GRR1v5JONJabsDbQFKf
-         69lQ==
-X-Gm-Message-State: AOJu0Yzs9ZgDoNkmMVLCynYbzbFs5WrxgPWf1uMdV2+e17lOuz1BZajL
-	LN9391OJ1d+/uF7OdR1uL7Hgkf88MoMKZ4NPe+EAATcUouZU5N/rHDADtOE9f/Zj2JLw+Rx2Xds
-	xCTzcY3AUrv5qzpAlrnUZiTY3BECoJ+Y=
-X-Gm-Gg: AZuq6aI0HBiM+eXvEN9C6IZ1TNJLxcE2Vmbi7OSIst3vtuplaFk8CoTkUH95bDGZz9D
-	kWoIj7yuiCg6WAEuoSSKDWH6OS64WnrvpatWRaXFxzEkGwq2/hw4b2bAJnJ3OvENnTm+q96a7dN
-	UOxCRttMSPw3yZnbxqkS3JUH3Q/eTRFqoOlY44vb9zbKgMATWhLke33vQepyDutX2ePoGBgrcD0
-	dn7xREyEj+xs0Gaa/Sp+8I6E5+xvMLZsG13eQ9A4yZ3hOID+g53mgpBdqNFoSlMmpwMhGe6
-X-Received: by 2002:a05:690c:c4fa:b0:78c:32fc:d3c8 with SMTP id
- 00721157ae682-7947ac9b9d8mr3193427b3.61.1769492994629; Mon, 26 Jan 2026
- 21:49:54 -0800 (PST)
+        bh=An7SHoxFNQVMVrQg+cVoi49+jQE1PDn2o0N/47lH2vw=;
+        b=wMKecK8tNmhbGjkos+Zh5NnlbZwEU8D2gVALcI1ca1TMSaSd0DkbcP38c9uN/i/d7y
+         x+r8oZFsfq9QHxdmfp3LqFXmoAcyhAL6/Sa9D8iadDqcxpy30xMkxiN+fbjO0KIUn7Ad
+         4+bMzMwPQP+7TR+uUJL5D1q5KhQKaav3w2NkB/B1Jdu/oxVxbLqgIUwji+2EbAlze8Ob
+         6LqhWMnj3v7/l63I2RTy1INlW2ghWseqB6kiu96XiqeKqZ+XsgJ56fSeB9SEhb2z7Vkm
+         KukEWU6UL+ue3Wu0f4IIAg+5onC8RWkbGoOLWBH2AFZvoMbqzQZW55zeDHRGyxRqt1xW
+         UcUQ==
+X-Gm-Message-State: AOJu0YwSRIZYoRpOcSJvGkhCtgUTyYos7h4IA3oKZbURqFDr3sgYOHid
+	KJy1rdTnVFj2WeAwtukBDIWAcH4S5XAX/FGVzIJGLlE0Li24xsd/ZQ4nsoIbSF3/sTTAqiGaMb3
+	uNcYyd4B3WjVrENP0FvoTOoIyhHLxdVU=
+X-Gm-Gg: AZuq6aILuwOwl6TB6/hbKsOHq0QdLnbh8CizNzR1GjHufNqzhzBtg8y1DWqpfPSptn+
+	/KlnAVt3/I9lu45Zkhb6WPPGmqUrEaByqfyy/0m8Pu7SX9G9oTaXYl3ahx/D9F2GHXr6o4UVysH
+	DnsPRhYsi1IYUPJhksXllmooJ5KQ/9W/8OhMurqLAMVlYuJm9+KYZDbvefpGnmjPYVJWo/mAaVl
+	inYAoP7f5Fe3w0qgKU7CO1uUEKpIeyBbw/17uKuKyC20REt8U9EQ6fipfuaGy2oICZqSBvZ
+X-Received: by 2002:a05:690c:6287:b0:78c:3320:9c5d with SMTP id
+ 00721157ae682-7947abfcb88mr3717107b3.42.1769493068454; Mon, 26 Jan 2026
+ 21:51:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260127024421.494929-1-roman.gushchin@linux.dev> <20260127024421.494929-3-roman.gushchin@linux.dev>
-In-Reply-To: <20260127024421.494929-3-roman.gushchin@linux.dev>
+References: <20260127024421.494929-1-roman.gushchin@linux.dev> <20260127024421.494929-2-roman.gushchin@linux.dev>
+In-Reply-To: <20260127024421.494929-2-roman.gushchin@linux.dev>
 From: Yafang Shao <laoar.shao@gmail.com>
-Date: Tue, 27 Jan 2026 13:49:18 +0800
-X-Gm-Features: AZwV_Qj3kyuk2DA9gge5_s9cvrRhNp_WPMd2pfEpoGaEHp1boZC6Dh8UH00fl4U
-Message-ID: <CALOAHbDXmgi=yeB1c2zzQ7-Lz2+MEZvtbxQp1=mWXMJSsg3sgQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 02/17] bpf: allow attaching struct_ops to cgroups
+Date: Tue, 27 Jan 2026 13:50:31 +0800
+X-Gm-Features: AZwV_QjGmr9RumY3gWub6eVfLg0tOiVjCPC6kXyGcnKB2ouGmo-C9UpBzlDTXJU
+Message-ID: <CALOAHbBt8Gf0ObNiBRcC2_7rx=Lo2ZytLmqk-J0=9bg1hsOskA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 01/17] bpf: move bpf_struct_ops_link into bpf.h
 To: Roman Gushchin <roman.gushchin@linux.dev>
 Cc: bpf@vger.kernel.org, Michal Hocko <mhocko@suse.com>, 
 	Alexei Starovoitov <ast@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
@@ -96,115 +96,66 @@ Cc: bpf@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 27, 2026 at 10:47=E2=80=AFAM Roman Gushchin
+On Tue, Jan 27, 2026 at 10:46=E2=80=AFAM Roman Gushchin
 <roman.gushchin@linux.dev> wrote:
 >
-> Introduce an ability to attach bpf struct_ops'es to cgroups.
+> Move struct bpf_struct_ops_link's definition into bpf.h,
+> where other custom bpf links definitions are.
 >
-> From user's standpoint it works in the following way:
-> a user passes a BPF_F_CGROUP_FD flag and specifies the target cgroup
-
-Since both fdinfo and link_info show the cgroup ID, why not use
-BPF_F_CGROUP_ID for better alignment?
-
-> fd while creating a struct_ops link. As the result, the bpf struct_ops
-> link will be created and attached to a cgroup.
->
-> The cgroup.bpf structure maintains a list of attached struct ops links.
-> If the cgroup is getting deleted, attached struct ops'es are getting
-> auto-detached and the userspace program gets a notification.
->
-> This change doesn't answer the question how bpf programs belonging
-> to these struct ops'es will be executed. It will be done individually
-> for every bpf struct ops which supports this.
->
-> Please, note that unlike "normal" bpf programs, struct ops'es
-> are not propagated to cgroup sub-trees.
+> It's necessary to access its members from outside of generic
+> bpf_struct_ops implementation, which will be done by following
+> patches in the series.
 >
 > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+
+Feel free to add:
+
+Acked-by: Yafang Shao <laoar.shao@gmail.com>
+
 > ---
->  include/linux/bpf-cgroup-defs.h |  3 ++
->  include/linux/bpf-cgroup.h      | 16 +++++++++
->  include/linux/bpf.h             |  3 ++
->  include/uapi/linux/bpf.h        |  3 ++
->  kernel/bpf/bpf_struct_ops.c     | 59 ++++++++++++++++++++++++++++++---
->  kernel/bpf/cgroup.c             | 46 +++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h  |  1 +
->  7 files changed, 127 insertions(+), 4 deletions(-)
+>  include/linux/bpf.h         | 6 ++++++
+>  kernel/bpf/bpf_struct_ops.c | 6 ------
+>  2 files changed, 6 insertions(+), 6 deletions(-)
 >
-> diff --git a/include/linux/bpf-cgroup-defs.h b/include/linux/bpf-cgroup-d=
-efs.h
-> index c9e6b26abab6..6c5e37190dad 100644
-> --- a/include/linux/bpf-cgroup-defs.h
-> +++ b/include/linux/bpf-cgroup-defs.h
-> @@ -71,6 +71,9 @@ struct cgroup_bpf {
->         /* temp storage for effective prog array used by prog_attach/deta=
-ch */
->         struct bpf_prog_array *inactive;
->
-> +       /* list of bpf struct ops links */
-> +       struct list_head struct_ops_links;
-> +
->         /* reference counter used to detach bpf programs after cgroup rem=
-oval */
->         struct percpu_ref refcnt;
->
-> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> index 2f535331f926..a6c327257006 100644
-> --- a/include/linux/bpf-cgroup.h
-> +++ b/include/linux/bpf-cgroup.h
-> @@ -423,6 +423,11 @@ int cgroup_bpf_link_attach(const union bpf_attr *att=
-r, struct bpf_prog *prog);
->  int cgroup_bpf_prog_query(const union bpf_attr *attr,
->                           union bpf_attr __user *uattr);
->
-> +int cgroup_bpf_attach_struct_ops(struct cgroup *cgrp,
-> +                                struct bpf_struct_ops_link *link);
-> +void cgroup_bpf_detach_struct_ops(struct cgroup *cgrp,
-> +                                 struct bpf_struct_ops_link *link);
-> +
->  const struct bpf_func_proto *
->  cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog=
- *prog);
->  #else
-> @@ -451,6 +456,17 @@ static inline int cgroup_bpf_link_attach(const union=
- bpf_attr *attr,
->         return -EINVAL;
->  }
->
-> +static inline int cgroup_bpf_attach_struct_ops(struct cgroup *cgrp,
-> +                                              struct bpf_struct_ops_link=
- *link)
-> +{
-> +       return -EINVAL;
-> +}
-> +
-> +static inline void cgroup_bpf_detach_struct_ops(struct cgroup *cgrp,
-> +                                               struct bpf_struct_ops_lin=
-k *link)
-> +{
-> +}
-> +
->  static inline int cgroup_bpf_prog_query(const union bpf_attr *attr,
->                                         union bpf_attr __user *uattr)
->  {
 > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> index 899dd911dc82..391888eb257c 100644
+> index 4427c6e98331..899dd911dc82 100644
 > --- a/include/linux/bpf.h
 > +++ b/include/linux/bpf.h
-> @@ -1894,6 +1894,9 @@ struct bpf_raw_tp_link {
->  struct bpf_struct_ops_link {
->         struct bpf_link link;
->         struct bpf_map __rcu *map;
-> +       struct cgroup *cgroup;
-> +       bool cgroup_removed;
-> +       struct list_head list;
+> @@ -1891,6 +1891,12 @@ struct bpf_raw_tp_link {
+>         u64 cookie;
+>  };
+>
+> +struct bpf_struct_ops_link {
+> +       struct bpf_link link;
+> +       struct bpf_map __rcu *map;
+> +       wait_queue_head_t wait_hup;
+> +};
+> +
+>  struct bpf_link_primer {
+>         struct bpf_link *link;
+>         struct file *file;
+> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+> index c43346cb3d76..de01cf3025b3 100644
+> --- a/kernel/bpf/bpf_struct_ops.c
+> +++ b/kernel/bpf/bpf_struct_ops.c
+> @@ -55,12 +55,6 @@ struct bpf_struct_ops_map {
+>         struct bpf_struct_ops_value kvalue;
+>  };
+>
+> -struct bpf_struct_ops_link {
+> -       struct bpf_link link;
+> -       struct bpf_map __rcu *map;
+> -       wait_queue_head_t wait_hup;
+> -};
+> -
+>  static DEFINE_MUTEX(update_mutex);
+>
+>  #define VALUE_PREFIX "bpf_struct_ops_"
+> --
+> 2.52.0
+>
+>
 
-We may need to support other structs in the future.
-Could we implement a more generic solution, such as:
-
-           int type;  // cgroup, task, etc
-           void *private;  // ptr to type-specific data
 
 --=20
 Regards
