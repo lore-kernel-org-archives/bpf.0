@@ -1,67 +1,66 @@
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578BC33BBDF
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1171325722
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769541651; cv=none; b=QZoOxZnfGHLaqJkrMiesKXjsl8aNx2CA8aDLOglhgK9XZdRB+n7X8UY48dplddD+H2Qh9dhKnNah0kMfFUKEEL2aMs8Y3gTQrXeub4Bf7E95cbJ3uElRV6JQeyYGwRUWTzAGkq30pu7j0WP2iCAssSLcjlbqVx/lM/1qegYBjqU=
+	t=1769541995; cv=none; b=nz5omKm3l5unMvncl067LMRFwWVPQ2kLvSpYZvouMimfCcsEBTdjknsVX/u7VlsjMmxBeB6HOEVAmZHNZzTetCRnytqtyrho+nzxzNBonT2ekoxWnvGsJEnx3n4rLjP/I6OqunOyo1SnS7vMQj1RuzwHs7Aot5p/4KL974hS9d0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769541651; c=relaxed/simple;
-	bh=WN4/nLcSn14d8v7TmB2eqmEF6NNK9K6jkUkRBsCZoLA=;
+	s=arc-20240116; t=1769541995; c=relaxed/simple;
+	bh=fzXP5ARMmZvpyvpN/SiOXKnrNxldRDPrgqo84dFdYG4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J/T8vRB8BDk4Tx3ieE1dtg782GjTf9yk87I2NoaLE4AXsdiwzd3bAXRkFy74s+8o92gIJoQZUKWIqxpTWbc2V1Zp/pkqCUsEWLJhcIrdrZK1FjjM0QDk2grL0FuAZAbN5h2AkZg8DkimS8YCeH6d3LhrrZqfuVYp0YEbgDYMTfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b7OGg9bL; arc=none smtp.client-ip=209.85.128.44
+	 In-Reply-To:Content-Type; b=F8Zd/Bpbroct/IKZNmIOH9do6jGqntP+m+eiyp4xrMYyHDz9x3L023T2+UN2Oie72gdXql21QOqdfXu4AqgdiQUlB59iYjFhfspcbSkgxQwHQAdU2SAcrqm4PZUqXiyODbrm3Ne0hcRgocowcVsFzCe1HJm0RFpG0b4Ira88fT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mbgHT3h6; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b7OGg9bL"
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4806dffc64cso202585e9.1
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 11:20:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mbgHT3h6"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48068ed1eccso9764155e9.2
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 11:26:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769541649; x=1770146449; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769541992; x=1770146792; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RNNELjmA7t4CjhlGrI7qDPRy51rdXa6xjB2ziKOJD6M=;
-        b=b7OGg9bLbnNkgSEkbJdeWscFZ2EbVaVMTZONFcvdwgNPN9PvH8xHUZKzGFk2HTchmI
-         nM/+KHLjT5a5/DX0noQjy1liHCvbVOs+9vAL0oHXRp3id3ESJyP2+7GXTxCPd2H5VLz1
-         tzW1qh2mNX3G1FBYkOU5MCak45ymD3X4FBLPVy/X39I/BjtrQaPBEfkevJKDwhOL24dZ
-         H1IzXiGcK2qbPuLWockS7o9C/gLZZtngQW8Nm7M3S99toY5VxK3d0zB8K37NvCvL6axF
-         Emk3v6mArQb8OosaQnr+U8eX+NgJ2dOnsIO40BAyjYhwnZ3+SeKFOS75+bt2/6b1G/lp
-         uuaw==
+        bh=Nxq5Ny1ONESd3T5tuyz2htEwSHUw396RXNXjhPDaohU=;
+        b=mbgHT3h6Qh2WuXyBqdmzItSbbQeBQm5AGH/3mRSEEiT8uZR2svFtts9fjt5agK834f
+         AKqf8qNN35bS9aWGaACGL3icgLiALcyWtTBACirSH0dgkDefY2jGiIRw1drt8STr56i9
+         POC9WA2JHxcz2X/L5Nt6X27FqIN2pWD/G3j4vol3u4g8tAj513I16v2noT9lsL90R2ML
+         Ni2oeQP+zzOz7tMT/7Gv/3fQpWPEJ2aFND6g4hvTlqk4QDsoim6RmK9gmLx87bX4wgPa
+         RjfBKaMiDh1nXkHYdWdo9DYwql9t/rvZhoD2oKpTu7pgOVsVUXbRifJLYXeylvhI8I7L
+         YS1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769541649; x=1770146449;
+        d=1e100.net; s=20230601; t=1769541992; x=1770146792;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RNNELjmA7t4CjhlGrI7qDPRy51rdXa6xjB2ziKOJD6M=;
-        b=DCoFJr4bfq7bTqsj9Efioa76IUtBe7D2pHErzC55q0Ilzz77+Jl6Oa1L0nAXHYFv/U
-         rjJ86NP71W/pOngD7jCo2TajqucFtkkc9eCRWqv+ewRtwgbdGuBBIMS4RAMAIaKW06Vo
-         W6MNgDRKA/UYIzkgg0ehjiWyqsY52f+EGXrIDd/HnJDg/a9xnroOfJGMi5vy2fj9i1iX
-         H9lyW3OqXnyOhvOM6kq0KuQrFRy8DYGqlHs7JgHbc6Ktj1lSeWY/NSqn9vQmxFuvWa77
-         aCuA9bbO6mUCfDt3kl6TahsqzNY0tsHvGiR+D5a8w+1yW9rManYMo9uwltCraTajob0K
-         bG3w==
-X-Forwarded-Encrypted: i=1; AJvYcCX4QLhGVrVMZR52TPBlSQ+hI4Dq1Xws7oiSAUlHa7Eb+EejqFg1loZbpkav8TEngcOD0/k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxY/CWbLc8PBTh8uzbrJyIkVAaxhKtl0MNv7FrSUxVGhK8wWZvy
-	VJCbCoML/u4yCo0Vi0Yb+ofPEtFq3t5j92tZBO2Zg2iDw55VPxLxvAol
-X-Gm-Gg: AZuq6aJuwOVNrNb9ja6hgX61fKHUqVaFymSwfulJwzyvOiC7Pntkc6bPzeoK23Apjnd
-	chy983hSqH0YUkaM5zClHPQmbOHRlbOD8gMkxsiMBQhtrg+MuPckKNJeCxBhGsodBPGwQ6iV02o
-	7uh8VhbAPhO1VVfCY5WS2/bXlhMlyBoEAreeaowCtAYfgt+AEf0vuVdeVJI+jvDFrwDSMy3UQlO
-	plOUxM5qF89tF4CDTBH4P1lqnyz8ZHOBzISY97+Crm8KP/9LG7OfgjUACRimgiYtm/2HMwbUqUc
-	JbnP102imk5j/WVaTnQwcZcTiFo7Rv4SiQSqXj17+oRYTBYC1bcf0iaWa3TpIZzzRDa3BPBGrwG
-	NNkI9xZBgxW6MCYG2kJd7iTtBnPpHnH/ChQ2zxX7w4QFhtF7IEpYmTeZOkpKxxiW/N30uEZGyFW
-	zr7wbZtCTejFDx2k5SXQgiG4zQ4E1yPEsVQqzGVfA7Pi45hNoAjK6V0k0Y5rFygsOTaCqZnlm5i
-	xZ66Vu2G2zoJCO6PRHZNaGiw8fsdh8Bx8pIO34XcwW/BBkfX/w0qWr2PzjGu6YDQQ==
-X-Received: by 2002:a05:600c:3b96:b0:47e:e4ff:e2ac with SMTP id 5b1f17b1804b1-48069c60317mr42538605e9.33.1769541648637;
-        Tue, 27 Jan 2026 11:20:48 -0800 (PST)
-Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066c37420sm87008175e9.9.2026.01.27.11.20.47
+        bh=Nxq5Ny1ONESd3T5tuyz2htEwSHUw396RXNXjhPDaohU=;
+        b=hDOoNwKsCtuqXM4B8hx3HRlGn66UM5aA3IPuE6zeAtAwp36NWH6FksQ7YzfAQsTVT4
+         RuxbVnkzpMIXmFZOBWshPJuuVN8Rc+Ctgu89APj36fRl4AgKZES7uIJxH0oONDDoPQ6V
+         JvfJlNfIF58LfHbK/RM59giAWB/91qJHKZeeGMT7sNGimR8+hsVey1mKnW3hro+skzyd
+         PsFeux7HS5F2aOJ/TsSOTlLTRiSEYqvsEg6/PEPJikdm/JzEg0nsiOQ2hafFwV+OfBoe
+         AK2YRxgqZo3jAc/1+Qzee5HW2V7umoEP9v1PiVPNN/2b6NzGQtXzh+VeAwKwPoKmaYb5
+         V16w==
+X-Forwarded-Encrypted: i=1; AJvYcCXqWxOArZj6x8bxPdWa/XuDEYtwpJzF2VpViLQQpTo/10ZG/pByxWJ79rtnZGq4ffhLZzI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjXkHyrQsdNLDpHSlt2vjqhHrADloGURZ6pglF1a8CNd2RSLzZ
+	F8Mq/zu6a/s2FpI+fTWav+0xQnuygsiwhuH5eetUggvLDSuQsip27nK4ElHn3OSh
+X-Gm-Gg: AZuq6aJKCEIvwtd1KTvYmrwLOV6MoY2p0qiMSwwIWMDJ1LGx1lEhSlRLyR84CidcvP1
+	OVNpdlj0o76SRcxP1ITXZkuSuBW4o26QOMKF/jCnWb1lgp6E/o71WrEcohln2+P2FZZi6U5Dm/p
+	nFpEB6mfVg0DKImkhmvyHQq5AKUyr7mJCjTdt5YxtZqX2YfOGkmb21O4w4VfJ/g4+k215JPshgN
+	Fj5rgWfS2/gsTjxLBoLL0qY8zMQPnJosY4s7xsHIzCZnXYDE7q03sjOVookbL9CmuwwH+yfSjcC
+	u9zldX7O575g+PzqnrN0jUbJFCMRXhLS28Jkitarw55K0FZVT93SQE7a/EOiwNL59keV7X+DpUm
+	GBddcH1BRvbJafSraGds7TMUtmKH62VJtKmnWqM2wD6sUe1hgvva1TNe8dBE9jmF/K+LGt0/Nu4
+	UZJcRIdV2DlOMU5H/yqXoLy8RWfVzp0v2kCSd1EjdkN7Vnm81k+o13bivSLg==
+X-Received: by 2002:a05:600c:3105:b0:480:3a72:5238 with SMTP id 5b1f17b1804b1-48069c6098bmr38679265e9.30.1769541992192;
+        Tue, 27 Jan 2026 11:26:32 -0800 (PST)
+Received: from [172.16.1.11] (i68975BB5.versanet.de. [104.151.91.181])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4806cddffe9sm23847985e9.4.2026.01.27.11.26.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 27 Jan 2026 11:20:48 -0800 (PST)
-Message-ID: <8b2cee27-e6ac-42fa-bf9a-38a1af39b0dd@gmail.com>
-Date: Tue, 27 Jan 2026 19:20:38 +0000
+        Tue, 27 Jan 2026 11:26:31 -0800 (PST)
+Message-ID: <92fcc97e-1313-424e-b67d-d86effda3481@gmail.com>
+Date: Tue, 27 Jan 2026 19:26:30 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,68 +68,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 6/6] selftests/io_uring: add a bpf io_uring selftest
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: io-uring <io-uring@vger.kernel.org>, bpf <bpf@vger.kernel.org>
-References: <cover.1769470552.git.asml.silence@gmail.com>
- <b766b428ec90862d69c9ab843dc89b6d0a017628.1769470552.git.asml.silence@gmail.com>
- <CAADnVQJcoyJ1hmU_oUcjj=8ewPAPTOZ8eccTutSJWHFy2Xza=w@mail.gmail.com>
- <a61a73b4-01bc-4547-89de-7d70b0c86477@gmail.com>
- <CAADnVQ+w1OEm7gFb04u6V=5LVw6VefNr_V2FuczBjtaOioH=Cw@mail.gmail.com>
+Subject: Re: [PATCH v2 04/13] selftests: bpf: Make WRITE_ONCE macro in
+ bpf_atomic.h conditional
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, etsal@meta.com, ihor.solodrai@linux.dev,
+ martin.lau@kernel.org, memxor@gmail.com, puranjay@kernel.org,
+ song@kernel.org, yonghong.song@linux.dev
+References: <20260127181610.86376-1-emil@etsalapatis.com>
+ <20260127181610.86376-5-emil@etsalapatis.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAADnVQ+w1OEm7gFb04u6V=5LVw6VefNr_V2FuczBjtaOioH=Cw@mail.gmail.com>
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260127181610.86376-5-emil@etsalapatis.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 1/27/26 18:53, Alexei Starovoitov wrote:
-> On Tue, Jan 27, 2026 at 10:42 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>
->> On 1/27/26 17:32, Alexei Starovoitov wrote:
->>> On Tue, Jan 27, 2026 at 2:15 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>>>
->>>> index 000000000000..7a170cb2f388
->>>> --- /dev/null
->>>> +++ b/tools/testing/selftests/io_uring/types.bpf.h
->>>> @@ -0,0 +1,131 @@
->>>> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
->>>> +#include <linux/types.h>
->>>> +#include <bpf/bpf_helpers.h>
->>>> +
->>>> +struct io_ring_ctx {
->>>> +};
->>>> +
->>>> +struct io_uring_sqe {
->>>> +       __u8    opcode;         /* type of operation for this sqe */
->>>> +       __u8    flags;          /* IOSQE_ flags */
->>>> +       __u16   ioprio;         /* ioprio for the request */
->>>> +       __s32   fd;             /* file descriptor to do IO on */
->>>
->>> 1.
->>> No need to copy paste. Just include vmlinux.h. It's there.
->>>
->>> 2.
->>> drop KF_TRUSTED_ARGS from kfunc. It's a default now and this flag
->>> was removed.
->>
->> Got it, will change both, thanks
->>
->>> 3.
->>> add a runtime logic to check that the return value is either IOU_LOOP_CONTINUE
->>> or IOU_LOOP_STOP or instruct the verifier do it statically.
->>> Otherwise it will be less convenient to extend to other commands,
->>> since the way I read it IOU_LOOP_CONTINUE == 0 aliases to any value > 1.
->>
->> Is there a struct_ops hook that can help with that? check_return_code()
->> has some hard-coded checks, but I can't find anything customizable for
->> struct_ops.
-> 
-> yep. check_return_code() is the one and you're correct. It's not
-> customizable atm. Much simpler to do a runtime check for now and
-> improve through the verifier support later.
-
-Makes sense, thanks!
-
--- 
-Pavel Begunkov
+On 1/27/26 18:16, Emil Tsalapatis wrote:
+> From: Emil Tsalapatis <etsal@meta.com>
+>
+> The WRITE_ONCE macro is identically defined both in bpf_atomic.h
+> and in bpf_arena_common.h. The bpf_arena_common.h definition is
+> guarded with an ifndef to allow for inclusion after bpf_atomic.h,
+> but the opposite does not hold. Add an extra guard to avoid requiring
+> a specific order for the headers.
+>
+> Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
+> ---
+>   tools/testing/selftests/bpf/bpf_atomic.h | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_atomic.h b/tools/testing/selftests/bpf/bpf_atomic.h
+> index c550e5711967..d89a22d63c1c 100644
+> --- a/tools/testing/selftests/bpf/bpf_atomic.h
+> +++ b/tools/testing/selftests/bpf/bpf_atomic.h
+> @@ -42,7 +42,9 @@ extern bool CONFIG_X86_64 __kconfig __weak;
+>   
+>   #define READ_ONCE(x) (*(volatile typeof(x) *)&(x))
+>   
+> +#ifndef WRITE_ONCE
+>   #define WRITE_ONCE(x, val) ((*(volatile typeof(x) *)&(x)) = (val))
+> +#endif
+I wonder if we can avoid duplicating this macros, for example by
+including bpf_atomic.h in the bpf_arena_common.h.
+>   
+>   #define cmpxchg(p, old, new) __sync_val_compare_and_swap((p), old, new)
+>   
 
