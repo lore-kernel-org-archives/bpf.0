@@ -1,32 +1,32 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7BBB30E0FB
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10CF930FC1D
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:45:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769481906; cv=none; b=qrnblNeUxnl3ZL/RQ27plOFlUBJlgO7woD1X6HM0oyqXh4cM13a7MQiXqh1zca30TeDTOytCWhIu2he0YgaqY8ya6eVG1QeUjWQvuh3NRt0M3e1SAlQ9QX8IuCHJlnPxfTSjm0z0C9A2QP8kYsnO9sTblw6ZWQmf2WHkncZWht4=
+	t=1769481909; cv=none; b=ik7nlFUHJVZm1cwkxRg3/ecbVm9Y56SahxxItpopMuVpD2Sw3sDX4mTN8e/voVJKHEsxQ/Gz8UNNgXzO2ll/VqDhL7wqeXdjzrb2I9TI9EHHo3B0Yn9iqslcLO5HdP9WON1VxPiIq+GntMZTjyH4k4yHJsAk7Q+DQujiSyjMhSM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769481906; c=relaxed/simple;
-	bh=X3zboxeJAOms020zMMLXsjZSmbwOolqLIY8+jYjPq3k=;
+	s=arc-20240116; t=1769481909; c=relaxed/simple;
+	bh=yo2AA63J/CrZd0KKpYjpWSjREQRN37J8XoT/k5k6NEI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JDr2sWxzD1XYf+eQZCrkEbVOJ67pmzSWkfwVPv2dNNxj2Tz3gMzrVWNIl6P+N9gUFD7FNc4f5QuF3FmTN9VuIkX3HJimLys7auC1O8OdxZapokU8EMgCBZT+S8hXPJ4kcND/P8VlkWhRySUAkeOOBjoMfAPmn1n1N+Ck8haZI/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QbI4wHPQ; arc=none smtp.client-ip=91.218.175.183
+	 MIME-Version; b=m9zHB8Lb15x+HlKhZJxUNfuzFf95tKWpz4u1f2CKQgMlx0XxoBPpw4v+nf3un+fv0xxVz6wMCAsXXdlbola89CljuOxkhBYUreS7VOIAtEcJOJhiFv5ZE1wtciCinHtosCCRcGb99Eb6VE8AmQ8W+IkqwD2xfvs7k4jHvkGBpmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MVYbxj8b; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QbI4wHPQ"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MVYbxj8b"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769481903;
+	t=1769481906;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=c1BqMEOY9X0l6L8QNWTbBYeaa++beJxlVBc9vvQg0ZY=;
-	b=QbI4wHPQfRxt8LfCF+viV3xkrlBU6NP5bBWY35N/NkqWng0zJlvecrQMEa1z3u7pww2PWr
-	Tv5enAhdzVLQfRrxGb4aYKamVhrbRnhLb2bC3PaWMu7jqL3WSp44XVhQf5aLobBHS07fRT
-	yO6H6ZRa3Mi6o/210cWpFLKHLzbagDY=
+	bh=5kycmWS+Mn50NTNG9vDPdXnOmThXS8tkuWasjOZWHyE=;
+	b=MVYbxj8bguPU/jWUxphCtMV2M4pyasjfYogGFJ2vNcT1KF2goib3pEeYc8kLCil+Me1cqA
+	A+YE5JjAKsshrTPbuVZ0E9j1WggR0qhRanDpJE3AsiU2VhodIOexFViw0YdvUqPvkcyoBD
+	IpQB4/liQnnBeuM18rgJmTEtSMseg/k=
 From: Roman Gushchin <roman.gushchin@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Michal Hocko <mhocko@suse.com>,
@@ -40,9 +40,9 @@ Cc: Michal Hocko <mhocko@suse.com>,
 	Johannes Weiner <hannes@cmpxchg.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH bpf-next v3 10/17] mm: introduce bpf_task_is_oom_victim() kfunc
-Date: Mon, 26 Jan 2026 18:44:13 -0800
-Message-ID: <20260127024421.494929-11-roman.gushchin@linux.dev>
+Subject: [PATCH bpf-next v3 11/17] bpf: selftests: introduce read_cgroup_file() helper
+Date: Mon, 26 Jan 2026 18:44:14 -0800
+Message-ID: <20260127024421.494929-12-roman.gushchin@linux.dev>
 In-Reply-To: <20260127024421.494929-1-roman.gushchin@linux.dev>
 References: <20260127024421.494929-1-roman.gushchin@linux.dev>
 Precedence: bulk
@@ -54,44 +54,92 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Export tsk_is_oom_victim() helper as a BPF kfunc.
-It's very useful to avoid redundant oom kills.
+Implement read_cgroup_file() helper to read from cgroup control files,
+e.g. statistics.
 
 Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-Suggested-by: Michal Hocko <mhocko@suse.com>
 ---
- mm/oom_kill.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ tools/testing/selftests/bpf/cgroup_helpers.c | 45 ++++++++++++++++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h |  3 ++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index 8f63a370b8f5..53f9f9674658 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -1381,10 +1381,24 @@ __bpf_kfunc int bpf_out_of_memory(struct mem_cgroup *memcg__nullable,
- 	return ret;
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 20cede4db3ce..fc5f22409ce5 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -126,6 +126,51 @@ int enable_controllers(const char *relative_path, const char *controllers)
+ 	return __enable_controllers(cgroup_path, controllers);
  }
  
-+/**
-+ * bpf_task_is_oom_victim - Check if the task has been marked as an OOM victim
-+ * @task: task to check
-+ *
-+ * Returns true if the task has been previously selected by the OOM killer
-+ * to be killed. It's expected that the task will be destroyed soon and some
-+ * memory will be freed, so maybe no additional actions required.
-+ */
-+__bpf_kfunc bool bpf_task_is_oom_victim(struct task_struct *task)
++static ssize_t __read_cgroup_file(const char *cgroup_path, const char *file,
++				 char *buf, size_t size)
 +{
-+	return tsk_is_oom_victim(task);
++	char file_path[PATH_MAX + 1];
++	ssize_t ret;
++	int fd;
++
++	snprintf(file_path, sizeof(file_path), "%s/%s", cgroup_path, file);
++	fd = open(file_path, O_RDONLY);
++	if (fd < 0) {
++		log_err("Opening %s", file_path);
++		return -1;
++	}
++
++	ret = read(fd, buf, size);
++	if (ret < 0) {
++		close(fd);
++		log_err("Reading %s", file_path);
++		return -1;
++	}
++
++	close(fd);
++	return ret;
 +}
 +
- __bpf_kfunc_end_defs();
++/**
++ * read_cgroup_file() - Read from a cgroup file
++ * @relative_path: The cgroup path, relative to the workdir
++ * @file: The name of the file in cgroupfs to read from
++ * @buf: Buffer to read from the file
++ * @size: Size of the buffer
++ *
++ * Read from a file in the given cgroup's directory.
++ *
++ * If successful, the number of read bytes is returned.
++ */
++ssize_t read_cgroup_file(const char *relative_path, const char *file,
++			 char *buf, size_t size)
++{
++	char cgroup_path[PATH_MAX - 24];
++
++	format_cgroup_path(cgroup_path, relative_path);
++	return __read_cgroup_file(cgroup_path, file, buf, size);
++}
++
+ static int __write_cgroup_file(const char *cgroup_path, const char *file,
+ 			       const char *buf)
+ {
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.h b/tools/testing/selftests/bpf/cgroup_helpers.h
+index 3857304be874..66a08b64838b 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.h
++++ b/tools/testing/selftests/bpf/cgroup_helpers.h
+@@ -4,6 +4,7 @@
  
- BTF_KFUNCS_START(bpf_oom_kfuncs)
- BTF_ID_FLAGS(func, bpf_oom_kill_process, KF_SLEEPABLE)
-+BTF_ID_FLAGS(func, bpf_task_is_oom_victim)
- BTF_KFUNCS_END(bpf_oom_kfuncs)
+ #include <errno.h>
+ #include <string.h>
++#include <sys/types.h>
  
- BTF_ID_LIST_SINGLE(bpf_oom_ops_ids, struct, bpf_oom_ops)
+ #define clean_errno() (errno == 0 ? "None" : strerror(errno))
+ #define log_err(MSG, ...) fprintf(stderr, "(%s:%d: errno: %s) " MSG "\n", \
+@@ -11,6 +12,8 @@
+ 
+ /* cgroupv2 related */
+ int enable_controllers(const char *relative_path, const char *controllers);
++ssize_t read_cgroup_file(const char *relative_path, const char *file,
++			char *buf, size_t size);
+ int write_cgroup_file(const char *relative_path, const char *file,
+ 		      const char *buf);
+ int write_cgroup_file_parent(const char *relative_path, const char *file,
 -- 
 2.52.0
 
