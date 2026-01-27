@@ -1,80 +1,80 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34CDA3612F9
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 16:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A57A1362128
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 17:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769533145; cv=none; b=ceI3xWouv3Zh7pLwID0H1tSJTfe2BK7GjuOiilarWNfMAK0wdr5pFcIEXPpRac45KjJYW5udrYLTjwTpeUwX8c7KK4sYHOiSHEwQyMJdufRyDmNFZBbPXNoFlZb4a7kvQp8fkk8r0UdZtGaUqx2uB3Hb3E4J9zUDeWvXXffpv1o=
+	t=1769533322; cv=none; b=DZOpdA0J0qodgPcsWLKoY2ehhVtbfWky1WmNJLi9/g4cbOjUkNQ8wguvttvEuts4nxB4qh63j1JdtQooCPCxzRn/1fA2iZBav1AhSZ9Jw+zuYfVD9ztbguSZ44LCk/wuQ/pKWDGrket14rkyKII7PFH+lvhpIWMIbBNnY3S2H1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769533145; c=relaxed/simple;
-	bh=xjSg5aG0pKz4WbiaGBD7ZfBbOscpfU23Kc6wmUCCWDI=;
+	s=arc-20240116; t=1769533322; c=relaxed/simple;
+	bh=fGEMN94p5pcI5Fg0SWpsQe5CEhERVB7hUSpwH3TECYw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=GIeTG3kLe37LSqLPIBmAOtg7k8RVI/fYFcWcQ217xD815qj920uWt2+OBMXQYv0Wm7D112JI7Ecl+LHdjQAbVUYzruCrK1cL5nafsDu/e2T5RlAyN+RX9qDYB1OfGR+iCcPgJA5a6Ls7+qAEVd9UKKsdsL4AahX5pyliaXRJ2y4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=wclOPg1p; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4NrdL5lA; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=gyv8sEDj; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=FfYEy5mb; arc=none smtp.client-ip=195.135.223.131
+	 In-Reply-To:Content-Type; b=Ar0mWMWG/yJl0vWu1W7Icwgc7D50T1b5xODZ8v5dHbk+oI2SrJspT/C7VvaDdQjXNAEMsz66mriEICUZ0c5oMxGfNpxCrlRiHhvhVQ3e94DBSIvwbDK1gv1IwBIpbF3IMcuWszTUzhppiStgs4glXDE+vEVuee7up2VFiR9sSBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KsX4eWvK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4xSd2MZv; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=KsX4eWvK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=4xSd2MZv; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="wclOPg1p";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4NrdL5lA";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="gyv8sEDj";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="FfYEy5mb"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KsX4eWvK";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4xSd2MZv";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="KsX4eWvK";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="4xSd2MZv"
 Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 7BC585BCEE;
-	Tue, 27 Jan 2026 16:59:01 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id CEAED337E6;
+	Tue, 27 Jan 2026 17:01:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769533142; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	t=1769533317; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WljwI07n2+POd5G3jOFC1Ra4Hx+nfwNNAlR4m7oDBUQ=;
-	b=wclOPg1pp24mnxrxFgHXJx4YOYJ4KYEQzv6aSLWVtEGC/zM2OQfuBQnsVPy8c35YVLX8x3
-	ZHKc6DED1OjbQdwAScYZvGXk1cP7nAAQTlINoq+9mwYlSVG5/BHXLBAhwEo6MJvXUdkeau
-	ykyUoD7bV/fwB2MJkX6727GCDMOWCdg=
+	bh=6VzosSxBHLNs4vZ2mzLFRG099l7jrsWQvS9jypSwPAQ=;
+	b=KsX4eWvK3US2CuC9SheihY3dpMf3pUSXB4wszy89D+uPRIA9Va2BufLM+RqGEYKmx4Nfdm
+	iJlfjrhetBgE2iPDTrxGgRqfBvRlMQbrDM6KfNPObbQ1hcGaLJCKFrVESyhXBDIFlAyQGg
+	LcLmquOt0akAreRWGlzcS1GVEO5/Dfs=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769533142;
+	s=susede2_ed25519; t=1769533317;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WljwI07n2+POd5G3jOFC1Ra4Hx+nfwNNAlR4m7oDBUQ=;
-	b=4NrdL5lAiHURuttbPkkPdPrtbZJF1usezAvMgvbYul+v+pm1MBGGuzcZM0cJlMbZ7Px53b
-	AmAsYOmq2BxT6uDQ==
-Authentication-Results: smtp-out2.suse.de;
+	bh=6VzosSxBHLNs4vZ2mzLFRG099l7jrsWQvS9jypSwPAQ=;
+	b=4xSd2MZvPUOu84tcRppkllQIONTsXuIC1PVOQLuZMyWKQAxFy3Ir1KitvFCj/mk7W+k2dH
+	jYuzes8BFMGNANDQ==
+Authentication-Results: smtp-out1.suse.de;
 	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769533141; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
+	t=1769533317; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WljwI07n2+POd5G3jOFC1Ra4Hx+nfwNNAlR4m7oDBUQ=;
-	b=gyv8sEDjoBdKWF6uAEAPHVl/yaIG3YNnycYw3LJkS6RfOj7cTSYkta/agXutI4uyItIVgu
-	9yzvlcRmKM2GA/bdGh5HWfCIpR5l4M+A7D8MM/WtnbAPeEQ2Y3c8eIL4FwFap3nK4MprTZ
-	pRBMgn+p/mUz5aUX9IqouQQMKqQZEQc=
+	bh=6VzosSxBHLNs4vZ2mzLFRG099l7jrsWQvS9jypSwPAQ=;
+	b=KsX4eWvK3US2CuC9SheihY3dpMf3pUSXB4wszy89D+uPRIA9Va2BufLM+RqGEYKmx4Nfdm
+	iJlfjrhetBgE2iPDTrxGgRqfBvRlMQbrDM6KfNPObbQ1hcGaLJCKFrVESyhXBDIFlAyQGg
+	LcLmquOt0akAreRWGlzcS1GVEO5/Dfs=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769533141;
+	s=susede2_ed25519; t=1769533317;
 	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=WljwI07n2+POd5G3jOFC1Ra4Hx+nfwNNAlR4m7oDBUQ=;
-	b=FfYEy5mb7cyZZavjKh0+k9XKucMuT10QiqGK+I0P3FQCvwyZhT8FwqahkNEaT9QBmC4EOa
-	JRnvs5sJp2DiVKAQ==
+	bh=6VzosSxBHLNs4vZ2mzLFRG099l7jrsWQvS9jypSwPAQ=;
+	b=4xSd2MZvPUOu84tcRppkllQIONTsXuIC1PVOQLuZMyWKQAxFy3Ir1KitvFCj/mk7W+k2dH
+	jYuzes8BFMGNANDQ==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 51F9A3EA61;
-	Tue, 27 Jan 2026 16:59:01 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 9F9283EA61;
+	Tue, 27 Jan 2026 17:01:57 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id RFauE9XueGmgVgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 27 Jan 2026 16:59:01 +0000
-Message-ID: <0c7b552f-c494-4d0e-b956-38b5e235917c@suse.cz>
-Date: Tue, 27 Jan 2026 17:59:00 +0100
+	id 9FaSJoXveGmdWQAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Tue, 27 Jan 2026 17:01:57 +0000
+Message-ID: <a9c34ec4-936c-4386-9624-662561f87b84@suse.cz>
+Date: Tue, 27 Jan 2026 18:01:57 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,7 +82,7 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 04/22] mm/slab: move and refactor __kmem_cache_alias()
+Subject: Re: [PATCH v4 06/22] slab: add sheaves to most caches
 Content-Language: en-US
 To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
  Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
@@ -95,8 +95,8 @@ To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
  linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
  bpf@vger.kernel.org, kasan-dev@googlegroups.com
 References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <20260123-sheaves-for-all-v4-4-041323d506f7@suse.cz>
- <xvdhietnpfl6ait3kjwxu3nrrzdpwvt3zp5ui4l6o7t7yps55g@wygbtepochfg>
+ <20260123-sheaves-for-all-v4-6-041323d506f7@suse.cz>
+ <r3qfus4j6awmixdbcopgva3lx2l3lrvlvuoqqns64q6qp33qep@2hsrrvfsojsm>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -137,76 +137,75 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <xvdhietnpfl6ait3kjwxu3nrrzdpwvt3zp5ui4l6o7t7yps55g@wygbtepochfg>
+In-Reply-To: <r3qfus4j6awmixdbcopgva3lx2l3lrvlvuoqqns64q6qp33qep@2hsrrvfsojsm>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spamd-Result: default: False [-4.30 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
 	MIME_GOOD(-0.10)[text/plain];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_TO(0.00)[oracle.com,suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	ARC_NA(0.00)[];
-	FREEMAIL_TO(0.00)[oracle.com,suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
-	MIME_TRACE(0.00)[0:+];
 	MID_RHS_MATCH_FROM(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_ENVRCPT(0.00)[gmail.com];
 	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
 	FROM_HAS_DN(0.00)[];
 	RCPT_COUNT_TWELVE(0.00)[17];
-	RCVD_TLS_ALL(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
 	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_TLS_ALL(0.00)[];
 	TO_DN_SOME(0.00)[]
 X-Spam-Flag: NO
 X-Spam-Score: -4.30
 X-Spam-Level: 
 
-On 1/27/26 17:17, Liam R. Howlett wrote:
+On 1/27/26 17:34, Liam R. Howlett wrote:
 > * Vlastimil Babka <vbabka@suse.cz> [260123 01:53]:
->> Move __kmem_cache_alias() to slab_common.c since it's called by
->> __kmem_cache_create_args() and calls find_mergeable() that both
->> are in this file. We can remove two slab.h declarations and make
->> them static. Instead declare sysfs_slab_alias() from slub.c so
->> that __kmem_cache_alias() can keep calling it.
+>> In the first step to replace cpu (partial) slabs with sheaves, enable
+>> sheaves for almost all caches. Treat args->sheaf_capacity as a minimum,
+>> and calculate sheaf capacity with a formula that roughly follows the
+>> formula for number of objects in cpu partial slabs in set_cpu_partial().
 >> 
->> Add args parameter to __kmem_cache_alias() and find_mergeable() instead
->> of align and ctor. With that we can also move the checks for usersize
->> and sheaf_capacity there from __kmem_cache_create_args() and make the
->> result more symmetric with slab_unmergeable().
+>> This should achieve roughly similar contention on the barn spin lock as
+>> there's currently for node list_lock without sheaves, to make
+>> benchmarking results comparable. It can be further tuned later.
 >> 
->> No functional changes intended.
+>> Don't enable sheaves for bootstrap caches as that wouldn't work. In
+>> order to recognize them by SLAB_NO_OBJ_EXT, make sure the flag exists
+>> even for !CONFIG_SLAB_OBJ_EXT.
 >> 
->> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+>> This limitation will be lifted for kmalloc caches after the necessary
+>> bootstrapping changes.
+>> 
+>> Also do not enable sheaves for SLAB_NOLEAKTRACE caches to avoid
+>> recursion with kmemleak tracking (thanks to Breno Leitao).
+>> 
 >> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+>> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
 >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 > 
-> One nit.
-> 
+> Is there a way to force a specific limit to the sheaf capacity if you
+> want a lower number than what is calculated in
+> calculate_sheaf_capacity()?
+
+No.
+
+> That is, it seems your code always decides
+> if the specified sheaf number is smaller right now.
+
+That's right. It shouldn't break anything, AFAICS.
+
+> I'm not sure it's
+> practical to want a smaller number though.
+
+Yeah I found no such reason, so until we stumble upon one, we don't need
+such support I think?
+
 > Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-Thanks.
+Thanks!
 
->> ---
->>  mm/slab.h        |  8 +++-----
->>  mm/slab_common.c | 44 +++++++++++++++++++++++++++++++++++++-------
->>  mm/slub.c        | 30 +-----------------------------
->>  3 files changed, 41 insertions(+), 41 deletions(-)
->> 
->> diff --git a/mm/slab.h b/mm/slab.h
->> index e767aa7e91b0..cb48ce5014ba 100644
->> --- a/mm/slab.h
->> +++ b/mm/slab.h
->> @@ -281,9 +281,12 @@ struct kmem_cache {
->>  #define SLAB_SUPPORTS_SYSFS 1
->>  void sysfs_slab_unlink(struct kmem_cache *s);
->>  void sysfs_slab_release(struct kmem_cache *s);
->> +int sysfs_slab_alias(struct kmem_cache *, const char *);
-> 
-> nit: the names of the variables are missing.  I guess because they were
-> missing before.  *s and *name,  I guess, although they are *s and *p
-> in the other declaration.
-
-Yeah will change both to s and name, thanks.
