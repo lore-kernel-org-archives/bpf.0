@@ -1,229 +1,141 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FEA636EA82
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D4236CDE3
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769542346; cv=none; b=Fkn9WBzFTev+hXF85LncRCxCuMaayYLZ0jAO4g+fJnQ8jnMLL9SO2c/j2hsDOimDxvWIV8UfISLS8UOHjEFoakpMB39/s70RspfR5kiI5ya8bQJVAfrWfIfEe1q8GdcsGVZLTIJz7f0ymTI6sKI0sxlho5hGhjAqTP8Rs9mwX9M=
+	t=1769542429; cv=none; b=InCsZcor4DPhip0yuGli8hAiS4xy6jotRlGV2mx/7K6rYN11K4+Cw0nBnbp7hCvdLjM2qwn91AIUdpPG/zjKltz8MNGCagk5XUkpJvVtsXlLc3gjeiAxMuyg0fMTNDhjyfmi3jnVbUMLxIQGd5Hq028iYs6IALNBRWBJDWMJXOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769542346; c=relaxed/simple;
-	bh=5jRdTuwUhZAaumSNEYufeFsADb6/Se/xnS3/U7B4ubc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WUcQryyFmptHiC8J0lU4XrzUV4aNHRTJZiRQBEpUPXSx4+U7Pp/6aGV9uQKokjaVG9C7LoHqAY3coXtbQqRKYsZ0hdCpsyNVYcmAFrhtHZQ6jL746kRzGHkZ500Zl9RWwU6hEVdY42l7IZlM50lkKNEhChalIQCZAfpB8zcXjkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i9PU7DDZ; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769542429; c=relaxed/simple;
+	bh=iYAxyduA0s22PkYnL2nakuErPqp1U9iyFl2fdqR+s7w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZRLj+Ef3xu7BL8bnxwR4v6VkIsCN4R67i1ERYKeseaLAF7JALCrRwfqmcexJVFGQ/38xlW2HD5NDBcsDXhd2IX+nViCbHRs6crBmXgxEjJ1R0kp9yYmqkxISmp8jpZAR36A+M1T6YruITkczf0p5kaimbMSqlMK2f84Kx9FxR+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MvrHHE4A; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i9PU7DDZ"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47fedb7c68dso62074475e9.2
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 11:32:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769542343; x=1770147143; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S6IoQXN3Ba2g08NHbMeHbZAWe3CwXy2tKRnxNnDKDv0=;
-        b=i9PU7DDZEnGV2aUwJMubQ44MlAb3wHsB2lLu4MM78HXfbHTyp2NgwOloCLQ5vWNdtG
-         C2hq3uLrLC75tMYikG4DZvBgZlnHGuUO5SvQeXedJ+qqO6PxxpTGQEhvG7qS2cpCpdg6
-         +PzJN0cNyB9DkALdBNA/pqKsveuieN+bSuMYCfTf+ye7TIukTdLVdMGBBvFbqmC+Ho41
-         EaUlFYG86f/okuWYf9Ttm4iXAsr2ic+jw3j6+aPx8W37F7HFyEozIRkU6p66A10MzPaF
-         zKSaHSGcVDZXjOuTzvPJCgSOqBGTtXTSjpWSyxCHbSzglW2TYUz1XtiIzyAMSPVzULyY
-         f49w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769542343; x=1770147143;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=S6IoQXN3Ba2g08NHbMeHbZAWe3CwXy2tKRnxNnDKDv0=;
-        b=d3YxaSEaXlILFo4acuz0yUOk+n2EYP+QxukEGovhKm7Tr+6a/YhpZbVpNhcj+iYmu4
-         4HxvFlECZjKS0MwgqgTIUhZc6ne5z3RBXBYEpN2DnU00o+VMivZBn+PsWlta1i82/fGX
-         05WyBOnEsGfnB0xNK032aBfsOmKRe50ktVmMYHtea5U1V574gW0S2hmsun+vmYk6RU/v
-         W84C3nW1TYnHypxPmHH9B6WL1+KqAoUmreejxGsyk2S8snZ/k5mkbUfQZFhehucVCHhn
-         Mn2rGeRboBu+cpdtILFxWGoX07Jm1/2wS15LG72iut68IbA+O0sw4HI2+0V2sxxU0NJl
-         moBA==
-X-Gm-Message-State: AOJu0Yw/DFOKFZv1hVYHrLpt84DlIfbW0Gf1sFrh+FmoyW7+rIPfRpPJ
-	cjiEql6Cc152xKi1GTU0PExEJ13BseGjIo5DVrVUDR5Qb0SUQCcp/WxQ5zh7yLMQ
-X-Gm-Gg: AZuq6aLNgryeLKeqlr2YG63T4DjRN43/2gZHu7QpM/z8ZnZes43FhiduykubabiN5xI
-	X2FvVQzGRRxYfL04V2yBJUchbmfcQdMjh+MfLCVmQGJrbyj0wuQi887/8ghdb4UI5ftAmgH8xHM
-	zBYsjSEVPAPd5DLaWplphGoo9YiF9Z+NbIksbFlCAM+5ksjfZkAcpo+K2RFf4/YDH8HA901qPM4
-	up069Z8Nm0lAMIy5/uQlPHcPwVCFw2kWU3S/UvOCg/9lZIEMdmjhgPocllTFdBw6e/FIF9C0Ra9
-	RVUc17oU6lYc/lLtSawEjt5PZuLM4zyosk0gV4mvESP0DXY9FM+yZ1PluUzqxkJQdnPWmydnCBa
-	5X4OUAXUmPDicu4ZZ4I3kLdUAr4E2zDnb8Y4JH8RT1yBLfWsb6G+kSZlf8R6oNpdk5h3VLyaVfg
-	lhTPnFs9MgKufXzHJHXCwfs7Onje48Vw==
-X-Received: by 2002:a05:600c:6095:b0:479:3a89:121d with SMTP id 5b1f17b1804b1-48069c6223cmr35083345e9.36.1769542343496;
-        Tue, 27 Jan 2026 11:32:23 -0800 (PST)
-Received: from localhost (i68975BB5.versanet.de. [104.151.91.181])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066bee7d0sm83043945e9.4.2026.01.27.11.32.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 11:32:23 -0800 (PST)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Tue, 27 Jan 2026 19:31:25 +0000
-Subject: [PATCH bpf-next v8 8/8] selftests/bpf: Removed obsolete tests
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MvrHHE4A"
+Message-ID: <243ea894-3bf3-4c10-b012-d4451e7ec17e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769542424;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3DrtAfvaeBV+P4A9wsocJoQ3hSxFzimNThzq0s5w4qU=;
+	b=MvrHHE4ASs7vyavoa/VJYmmAgD8AXEib483PbIUj8Wfu4x3AbgWNmAhBaTECcOEBPlkqyQ
+	hX2Qrh0Ed5+eio9mr+Lvqn1CEkaYDkn8zsTP3NMUkU63UGwNXtVcLaCWelx3QVmeV4DJS3
+	DdRZaR6KpstVb5JsZSQ9U3iu1iaRCRM=
+Date: Tue, 27 Jan 2026 11:33:30 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Subject: Re: [PATCH net-next 00/10] Call skb_metadata_set when skb->data
+ points past metadata
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Michael Chan <michael.chan@broadcom.com>,
+ Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, Tony Nguyen <anthony.l.nguyen@intel.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+ Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+ Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, intel-wired-lan@lists.osuosl.org,
+ bpf@vger.kernel.org, kernel-team@cloudflare.com,
+ Jakub Kicinski <kuba@kernel.org>, Amery Hung <ameryhung@gmail.com>
+References: <20260110-skb-meta-fixup-skb_metadata_set-calls-v1-0-1047878ed1b0@cloudflare.com>
+ <20260112190856.3ff91f8d@kernel.org> <87bjixwv41.fsf@cloudflare.com>
+ <ad835a9b-e544-48d3-b6e2-ffe172fcfa6d@linux.dev>
+ <878qdltsg0.fsf@cloudflare.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <878qdltsg0.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260127-timer_nolock-v8-8-5a29a9571059@meta.com>
-References: <20260127-timer_nolock-v8-0-5a29a9571059@meta.com>
-In-Reply-To: <20260127-timer_nolock-v8-0-5a29a9571059@meta.com>
-To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
- daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
- memxor@gmail.com, eddyz87@gmail.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769542292; l=4020;
- i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=fl4T2+GC7fB/8ww4SfQYQIu2HzHZsOIJ5LkoKve9x0Y=;
- b=kCGoED38mf99lzOIaUhmTBRt70aMCSgINZ0DeEVny20qRTHTwkjgFQ09a9Kd7K0NbSauqSc1z
- atyYCG/YmkUAo/Q5WeMFpjz/QmFKO4sLe7c+jSevjo8nWABIymipqx/
-X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
- pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
+X-Migadu-Flow: FLOW_OUT
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Now bpf_timer can be used in tracepoints, so these tests are no longer
-relevant.
 
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- .../bpf/progs/verifier_helper_restricted.c         | 111 ---------------------
- 1 file changed, 111 deletions(-)
+On 1/25/26 11:15 AM, Jakub Sitnicki wrote:
+> On Thu, Jan 22, 2026 at 12:21 PM -08, Martin KaFai Lau wrote:
+>> On 1/13/26 4:33 AM, Jakub Sitnicki wrote:
+>>> Good point. I'm hoping we don't have to allocate from
+>>> skb_metadata_set(), which does sound prohibitively expensive. Instead
+>>> we'd allocate the extension together with the skb if we know upfront
+>>> that metadata will be used.
+>>
+>> [ Sorry for being late. Have been catching up after holidays. ]
+>>
+>> For the sk local storage (which was mentioned in other replies as making skb
+>> metadata to look more like sk local storage), there is a plan (Amery has been
+>> looking into it) to allocate the storage together with sk for performance
+>> reason. This means allocating a larger 'struct sock'. The extra space will be at
+>> the front of sk instead of the end of sk because of how the 'struct sock' is
+>> embedded in tcp_sock/udp_sock/... If skb is going in the same direction, it
+>> should be useful to have a similar scheme on: upfront allocation and then shared
+>> by multiple BPF progs.
+>>
+>> The current thinking is to built upon the existing bpf_sk_local_storage usage. A
+>> boot param decides how much BPF space should be allocated for 'struct
+>> sock'. When a bpf_sk_storage_map is created (with a new use_reserve flag), the
+>> space will be allocated permanently from the head space of every sk for this
+>> map. The read (from a BPF prog) will be at one stable offset before a sk. If
+>> there is no more head space left, the map creation will fail. User can decide if
+>> it wants to retry without the 'use_reserve' flag.
+> 
+> Thanks for sharing the plans.
+> 
+> We will definitely be looking into ways of eliminating allocations in
+> the long run. With one allocation for skb_ext, one for
+> bpf_local_storage, and one for the actual map, it seems unlikely we will
+> be able to attach metadata this way to every packet. Which is something
+> we wanted for our "label packet once, use label everywhere" use case.
+> 
+> I'm not sure how much we can squeeze in together with the sk_buff.
+> Hopefully at least skb_ext plus a pointer to bpf_local_storage.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c b/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
-index 059aa716e3d0badba8a62ff3c957ce0847e72001..889c9b78b912e444d22b92eef5d524a35fe9e595 100644
---- a/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_helper_restricted.c
-@@ -17,17 +17,6 @@ struct {
- 	__type(value, struct val);
- } map_spin_lock SEC(".maps");
- 
--struct timer {
--	struct bpf_timer t;
--};
--
--struct {
--	__uint(type, BPF_MAP_TYPE_ARRAY);
--	__uint(max_entries, 1);
--	__type(key, int);
--	__type(value, struct timer);
--} map_timer SEC(".maps");
--
- SEC("kprobe")
- __description("bpf_ktime_get_coarse_ns is forbidden in BPF_PROG_TYPE_KPROBE")
- __failure __msg("program of this type cannot use helper bpf_ktime_get_coarse_ns")
-@@ -84,106 +73,6 @@ __naked void bpf_prog_type_raw_tracepoint_1(void)
- 	: __clobber_all);
- }
- 
--SEC("kprobe")
--__description("bpf_timer_init isn restricted in BPF_PROG_TYPE_KPROBE")
--__failure __msg("tracing progs cannot use bpf_timer yet")
--__naked void in_bpf_prog_type_kprobe_2(void)
--{
--	asm volatile ("					\
--	r2 = r10;					\
--	r2 += -8;					\
--	r1 = 0;						\
--	*(u64*)(r2 + 0) = r1;				\
--	r1 = %[map_timer] ll;				\
--	call %[bpf_map_lookup_elem];			\
--	if r0 == 0 goto l0_%=;				\
--	r1 = r0;					\
--	r2 = %[map_timer] ll;				\
--	r3 = 1;						\
--l0_%=:	call %[bpf_timer_init];				\
--	exit;						\
--"	:
--	: __imm(bpf_map_lookup_elem),
--	  __imm(bpf_timer_init),
--	  __imm_addr(map_timer)
--	: __clobber_all);
--}
--
--SEC("perf_event")
--__description("bpf_timer_init is forbidden in BPF_PROG_TYPE_PERF_EVENT")
--__failure __msg("tracing progs cannot use bpf_timer yet")
--__naked void bpf_prog_type_perf_event_2(void)
--{
--	asm volatile ("					\
--	r2 = r10;					\
--	r2 += -8;					\
--	r1 = 0;						\
--	*(u64*)(r2 + 0) = r1;				\
--	r1 = %[map_timer] ll;				\
--	call %[bpf_map_lookup_elem];			\
--	if r0 == 0 goto l0_%=;				\
--	r1 = r0;					\
--	r2 = %[map_timer] ll;				\
--	r3 = 1;						\
--l0_%=:	call %[bpf_timer_init];				\
--	exit;						\
--"	:
--	: __imm(bpf_map_lookup_elem),
--	  __imm(bpf_timer_init),
--	  __imm_addr(map_timer)
--	: __clobber_all);
--}
--
--SEC("tracepoint")
--__description("bpf_timer_init is forbidden in BPF_PROG_TYPE_TRACEPOINT")
--__failure __msg("tracing progs cannot use bpf_timer yet")
--__naked void in_bpf_prog_type_tracepoint_2(void)
--{
--	asm volatile ("					\
--	r2 = r10;					\
--	r2 += -8;					\
--	r1 = 0;						\
--	*(u64*)(r2 + 0) = r1;				\
--	r1 = %[map_timer] ll;				\
--	call %[bpf_map_lookup_elem];			\
--	if r0 == 0 goto l0_%=;				\
--	r1 = r0;					\
--	r2 = %[map_timer] ll;				\
--	r3 = 1;						\
--l0_%=:	call %[bpf_timer_init];				\
--	exit;						\
--"	:
--	: __imm(bpf_map_lookup_elem),
--	  __imm(bpf_timer_init),
--	  __imm_addr(map_timer)
--	: __clobber_all);
--}
--
--SEC("raw_tracepoint")
--__description("bpf_timer_init is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT")
--__failure __msg("tracing progs cannot use bpf_timer yet")
--__naked void bpf_prog_type_raw_tracepoint_2(void)
--{
--	asm volatile ("					\
--	r2 = r10;					\
--	r2 += -8;					\
--	r1 = 0;						\
--	*(u64*)(r2 + 0) = r1;				\
--	r1 = %[map_timer] ll;				\
--	call %[bpf_map_lookup_elem];			\
--	if r0 == 0 goto l0_%=;				\
--	r1 = r0;					\
--	r2 = %[map_timer] ll;				\
--	r3 = 1;						\
--l0_%=:	call %[bpf_timer_init];				\
--	exit;						\
--"	:
--	: __imm(bpf_map_lookup_elem),
--	  __imm(bpf_timer_init),
--	  __imm_addr(map_timer)
--	: __clobber_all);
--}
--
- SEC("kprobe")
- __description("bpf_spin_lock is forbidden in BPF_PROG_TYPE_KPROBE")
- __failure __msg("tracing progs cannot use bpf_spin_lock yet")
+yeah, only a bpf_local_storage pointer is needed in skb (or in skb_ext). 
+It is the same for the bpf sk/task/... storage.
 
--- 
-2.52.0
+To be clear, for allocation in skb, I was thinking more about Paolo's 
+comment on "...increasing struct sk_buff size as an alternative to the 
+mptcp skb extension...".
+
+> 
+> I'm also hoping we can allocate memory for bpf_local_storage together
+> with the backing space for the map, which update triggers the skb
+> extension activation.
+
+Allocate the actual storage at the end of bpf_local_storage? Hmm... off 
+the top of my head, I don't have a good idea how to do it without 
+trading off flexibility. If trading off flexibility, may as well 
+allocate fixed extra space at the sk (/skb) and get a performance 
+benefit (which would need to be measured).
+
+> 
+> Finally, bpf_local_storage itself has a pretty generous cache which
+> blows it up. Maybe the cache could be a flexible array, which could be
+> smaller for skb local storage.
+
+For our usage, the cache has been slowly filling up, so we actually have 
+another side of the issue. Improvements on bpf_local_storage is always 
+welcomed.
+
+I am currently more interested in getting the extra memory/headroom 
+allocated for an sk. Eventually, the storage(s) that will be needed for 
+all (or most) sk will use the extra headroom of sk. The current 
+bpf_local_storage (pointer) in sk will be more for testing/ad-hoc 
+purpose or for performance-insensitive usage.
+
+It is probably off topic now. It seems having extra tail space in a skb 
+is not in your current plan for the next respin.
 
