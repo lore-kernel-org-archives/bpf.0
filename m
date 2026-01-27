@@ -1,32 +1,32 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAC992FFDFA
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F253009F6
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769481916; cv=none; b=L2ddX1q8WAuIy0k8hYt6rSmjogU4byKdf51eOGy/nAiC5UK/Dcx+xYmWlQt1MTobd9JrkqgchW6fJ3z5X6098uN5ouBehOByPUlW1hBfzPp1lN3quRrtOc14OfqVnKlDxPQD35hHQ907ynEAv4aSCuWbe7+M68tjbx+qKAQNrcE=
+	t=1769481920; cv=none; b=srRIdUZ8hSm3UilF6vxrZoDqYryfqf61RmVVqkXs7AFqMm3RtSFnlRX326RyFVjMU89r6beF2Uq1ESkJ8rOmE67jCsn8d4PQl+GBcWDNyhnj41KCRDET8/Qj3F+bEaMRMOJ8JGVhcfgOgg56OTC14AalGa3q2QwSq14gv3lnB0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769481916; c=relaxed/simple;
-	bh=y+6fHome163PVdqshh0yMJG0Od8tfpk7TfqEd7GB9pU=;
+	s=arc-20240116; t=1769481920; c=relaxed/simple;
+	bh=6TPxpQSxNTPIxifYGyRlgcf4glO1k8ahw2h8kr+hhCU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MvO0okBw7qJRXACneLyRmTiDBm2g7W5aejDa+SKqXqFOIqVKRt85vzlEPH1GbDTkY4JWJa4XRgEQu8NpywSPQZCawxrJnHruzaPSTTwh8mmCt5deOmP4iSQORoiTNwlTqxAQiNS5Aw4lYM3CZGS2pX02xofNX72BxFCxcPvGPew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=TLpEx4wa; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=sEigpYXU3j24jLDw/IKI0StEpgIsBTivhTmIp/+GkYX5YK6AOVzXpV8+yTD4I9zyZws5tjmOeaeH1INDXQOCEEYZDTIJxTkbSBhMxtjTC0dHmb6fhs+blyncYJsVJ0UxP6CE4rDJYVEtG/yh0DUc4i7QAkWWEczFgYxu2VdINVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KMfJCSSQ; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="TLpEx4wa"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KMfJCSSQ"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769481913;
+	t=1769481916;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=z3nsZCHloDjEFT63wrJPNHkkbtPu1NO+p+ag9oOS/4s=;
-	b=TLpEx4waOFjLCEtMyKYbSF7YnojCZxnLYrXP50WDo8bqSLwGFx/HZiKKsCkbSGJDWbHBeu
-	x9hp2U81qFGa0LwaEVL+Y6HlGMaqxJCmDlfoIAvobc8Box8efuEi1XBeRL8orFcrYoTtr5
-	qO+DZmBfWe2+lrYYtWn3/FpwVcs1lgQ=
+	bh=FEVQFK1CrN96TOQDcyO6X4A15QdAoRxZUpYERHQ3KZk=;
+	b=KMfJCSSQf2P4ZrLUijVUpTvZRdY8hJlZWg5fUctzU6XA6R1FwG/I3xdXLLAANwqQTt/t36
+	GGuU0FtZ13SPc7efjbHnzSqGimTuBtLyBvAMBKNvtYrc1v1hyaFCZNEz+RlmguXGZFbCgi
+	ZX/9xw+Dj0mu/vZh5Y1XMhlXp4j9vi0=
 From: Roman Gushchin <roman.gushchin@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Michal Hocko <mhocko@suse.com>,
@@ -40,9 +40,9 @@ Cc: Michal Hocko <mhocko@suse.com>,
 	Johannes Weiner <hannes@cmpxchg.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH bpf-next v3 13/17] sched: psi: add a trace point to psi_avgs_work()
-Date: Mon, 26 Jan 2026 18:44:16 -0800
-Message-ID: <20260127024421.494929-14-roman.gushchin@linux.dev>
+Subject: [PATCH bpf-next v3 14/17] sched: psi: add cgroup_id field to psi_group structure
+Date: Mon, 26 Jan 2026 18:44:17 -0800
+Message-ID: <20260127024421.494929-15-roman.gushchin@linux.dev>
 In-Reply-To: <20260127024421.494929-1-roman.gushchin@linux.dev>
 References: <20260127024421.494929-1-roman.gushchin@linux.dev>
 Precedence: bulk
@@ -54,76 +54,43 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add a trace point to psi_avgs_work().
-
-It can be used to attach a bpf handler which can monitor
-PSI values system-wide or for specific cgroup(s) and
-potentially perform some actions, e.g. declare an OOM.
+To allow a more efficient filtering of cgroups in the psi work
+tracepoint handler, let's add a u64 cgroup_id field to the psi_group
+structure. For system PSI, 0 will be used.
 
 Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
 ---
- include/trace/events/psi.h | 27 +++++++++++++++++++++++++++
- kernel/sched/psi.c         |  6 ++++++
- 2 files changed, 33 insertions(+)
- create mode 100644 include/trace/events/psi.h
+ include/linux/psi_types.h | 4 ++++
+ kernel/sched/psi.c        | 1 +
+ 2 files changed, 5 insertions(+)
 
-diff --git a/include/trace/events/psi.h b/include/trace/events/psi.h
-new file mode 100644
-index 000000000000..57c46de18616
---- /dev/null
-+++ b/include/trace/events/psi.h
-@@ -0,0 +1,27 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#undef TRACE_SYSTEM
-+#define TRACE_SYSTEM psi
+diff --git a/include/linux/psi_types.h b/include/linux/psi_types.h
+index dd10c22299ab..749a08d48abd 100644
+--- a/include/linux/psi_types.h
++++ b/include/linux/psi_types.h
+@@ -159,6 +159,10 @@ struct psi_trigger {
+ 
+ struct psi_group {
+ 	struct psi_group *parent;
 +
-+#if !defined(_TRACE_PSI_H) || defined(TRACE_HEADER_MULTI_READ)
-+#define _TRACE_PSI_H
++	/* Cgroup id for cgroup PSI, 0 for system PSI */
++	u64 cgroup_id;
 +
-+#include <linux/tracepoint.h>
-+
-+TRACE_EVENT(psi_avgs_work,
-+	TP_PROTO(struct psi_group *group),
-+	TP_ARGS(group),
-+	TP_STRUCT__entry(
-+		__field(struct psi_group *, group)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->group = group;
-+	),
-+
-+	TP_printk("group=%p", __entry->group)
-+);
-+
-+#endif /* _TRACE_PSI_H */
-+
-+/* This part must be outside protection */
-+#include <trace/define_trace.h>
+ 	bool enabled;
+ 
+ 	/* Protects data used by the aggregator */
 diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
-index 59fdb7ebbf22..72757ba2ed96 100644
+index 72757ba2ed96..cf1ec4dc242b 100644
 --- a/kernel/sched/psi.c
 +++ b/kernel/sched/psi.c
-@@ -141,6 +141,10 @@
- #include <linux/psi.h>
- #include "sched.h"
+@@ -1124,6 +1124,7 @@ int psi_cgroup_alloc(struct cgroup *cgroup)
+ 	if (!cgroup->psi)
+ 		return -ENOMEM;
  
-+#define CREATE_TRACE_POINTS
-+#include <trace/events/psi.h>
-+#undef CREATE_TRACE_POINTS
-+
- static int psi_bug __read_mostly;
- 
- DEFINE_STATIC_KEY_FALSE(psi_disabled);
-@@ -607,6 +611,8 @@ static void psi_avgs_work(struct work_struct *work)
- 				group->avg_next_update - now) + 1);
- 	}
- 
-+	trace_psi_avgs_work(group);
-+
- 	mutex_unlock(&group->avgs_lock);
- }
- 
++	cgroup->psi->cgroup_id = cgroup_id(cgroup);
+ 	cgroup->psi->pcpu = alloc_percpu(struct psi_group_cpu);
+ 	if (!cgroup->psi->pcpu) {
+ 		kfree(cgroup->psi);
 -- 
 2.52.0
 
