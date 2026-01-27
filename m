@@ -1,32 +1,32 @@
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E75E12FFDF9
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:44:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C31F3033DD
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769481885; cv=none; b=OFfe3DnfR1H8qb7S3mqDL+lUe2QgoG6DsY5tnQ+4LjV67QmBilTJGjWJQinRe05xx4uDaXFZxM9PFaEiIRNGM16ETYj5AX3/a90frBiKyv9Pr3dm4FR6sqApk1qUHXesE+zMS3yshS468neYuNk1KWvw10Yhmw6y9Sk1tCFheL8=
+	t=1769481889; cv=none; b=D/9+n4AKILD/Ft0XfGCpkka2o4sKC7cR/Nq0owlEKw96UsoBAAGLRsOneXb0Djjwo9QYD9FJbc7FQnu3C22S81ltQ51N9xcoct9BqRe5w2+ght6gdFa6vj1c84+bbCNSHPM2sdxoD5idGu7oBRvlWn4eGyuEkJDoOXkiTwxPGMM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769481885; c=relaxed/simple;
-	bh=xOjuTZvumBrmVqF75DrxfH0PS7pKBXc26/7k0t8ExcQ=;
+	s=arc-20240116; t=1769481889; c=relaxed/simple;
+	bh=z0RVkCmdJdDDNrCdseww54S96faJsbAvjQEyWF1866s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ca7OwbqOv8+NzN/BJ6kUyHxkhWJrRqioT0MIz02MjEwhMT5aJOhlZl9jJ3njgcF3fUcGd6c3yuZoo/g4eE7unRVX5VCm/u+oj9DzRs28ivZNitz4rrpwBksiNsNeYgDTlo8LaSpWcjHVGifaMqreu9euJnN4bSnbCJykOgFAYuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BLsJjuWS; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=rxLcwmOzpqXPHMEgkueOALpLsVmvsiMkwNbpSaW9Ki5Xpz030ZM35Wr6ELgEnl7wvsxBAYHpJjZoLqXF4y2xnU3trlMEhV1gQh5vd9pWQmqWUWwrgTaRa/oPvs5KY5JPo5W7jRt39wazcBVEBqXOBVLvaKpRgenzP7X/ku25DlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=e7K+ACi9; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BLsJjuWS"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="e7K+ACi9"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769481882;
+	t=1769481885;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=u7imLFfuAi3d5czpJBeftkB1+iXAr0ET28s+m3ASpKc=;
-	b=BLsJjuWSrZAeA6+hu7z9J776nYczyrnKh2sStU6XHulLXlX/4mCr3tPkIWnz4Bev2dSY7q
-	MVdPnLFFN0qRD6fUNXdBBg51UgzC1fwhtd87EVu2w1eDN9FLHPeOjbnPkocJmyTBxbQEhV
-	0g5pJ6sFZpF2weoyt2JxQtxOc/XQM68=
+	bh=p7vIbktSHcqXA79Byy9E+tFFPUOD4j27CypvW5n/XGM=;
+	b=e7K+ACi9n83DQDrLs2gEyZxviqSCTioKtYK/6R2Y1KGkxiJq+PltmgZRjD4uPP2dmip1bI
+	5902E3TbHB9SilvMJ5/obvDx/18kyu4hDGILzd0QyuPZgSHy2rJZ3wkN4vN0jsDOwK+s+p
+	Y0PamNzRWNBsZqAdHYuRvLH9MSXAFkA=
 From: Roman Gushchin <roman.gushchin@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Michal Hocko <mhocko@suse.com>,
@@ -39,10 +39,11 @@ Cc: Michal Hocko <mhocko@suse.com>,
 	Suren Baghdasaryan <surenb@google.com>,
 	Johannes Weiner <hannes@cmpxchg.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>
-Subject: [PATCH bpf-next v3 04/17] libbpf: introduce bpf_map__attach_struct_ops_opts()
-Date: Mon, 26 Jan 2026 18:44:07 -0800
-Message-ID: <20260127024421.494929-5-roman.gushchin@linux.dev>
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: [PATCH bpf-next v3 05/17] bpf: mark struct oom_control's memcg field as TRUSTED_OR_NULL
+Date: Mon, 26 Jan 2026 18:44:08 -0800
+Message-ID: <20260127024421.494929-6-roman.gushchin@linux.dev>
 In-Reply-To: <20260127024421.494929-1-roman.gushchin@linux.dev>
 References: <20260127024421.494929-1-roman.gushchin@linux.dev>
 Precedence: bulk
@@ -54,103 +55,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Introduce bpf_map__attach_struct_ops_opts(), an extended version of
-bpf_map__attach_struct_ops(), which takes additional struct
-bpf_struct_ops_opts argument.
-
-This allows to pass a target_fd argument and the BPF_F_CGROUP_FD flag
-and attach the struct ops to a cgroup as a result.
+Struct oom_control is used to describe the OOM context.
+It's memcg field defines the scope of OOM: it's NULL for global
+OOMs and a valid memcg pointer for memcg-scoped OOMs.
+Teach bpf verifier to recognize it as trusted or NULL pointer.
+It will provide the bpf OOM handler a trusted memcg pointer,
+which for example is required for iterating the memcg's subtree.
 
 Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- tools/lib/bpf/libbpf.c   | 20 +++++++++++++++++---
- tools/lib/bpf/libbpf.h   | 14 ++++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 32 insertions(+), 3 deletions(-)
+ kernel/bpf/verifier.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 46d2762f5993..9ba67089bf9d 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -13462,11 +13462,18 @@ static int bpf_link__detach_struct_ops(struct bpf_link *link)
- 	return close(link->fd);
- }
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index c2f2650db9fd..cca36edb460d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7242,6 +7242,10 @@ BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct vm_area_struct) {
+ 	struct file *vm_file;
+ };
  
--struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
-+struct bpf_link *bpf_map__attach_struct_ops_opts(const struct bpf_map *map,
-+						 const struct bpf_struct_ops_opts *opts)
- {
-+	DECLARE_LIBBPF_OPTS(bpf_link_create_opts, link_opts);
- 	struct bpf_link_struct_ops *link;
-+	int err, fd, target_fd;
- 	__u32 zero = 0;
--	int err, fd;
-+
-+	if (!OPTS_VALID(opts, bpf_struct_ops_opts)) {
-+		pr_warn("map '%s': invalid opts\n", map->name);
-+		return libbpf_err_ptr(-EINVAL);
-+	}
- 
- 	if (!bpf_map__is_struct_ops(map)) {
- 		pr_warn("map '%s': can't attach non-struct_ops map\n", map->name);
-@@ -13503,7 +13510,9 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
- 		return &link->link;
- 	}
- 
--	fd = bpf_link_create(map->fd, 0, BPF_STRUCT_OPS, NULL);
-+	link_opts.flags = OPTS_GET(opts, flags, 0);
-+	target_fd = OPTS_GET(opts, target_fd, 0);
-+	fd = bpf_link_create(map->fd, target_fd, BPF_STRUCT_OPS, &link_opts);
- 	if (fd < 0) {
- 		free(link);
- 		return libbpf_err_ptr(fd);
-@@ -13515,6 +13524,11 @@ struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
- 	return &link->link;
- }
- 
-+struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map)
-+{
-+	return bpf_map__attach_struct_ops_opts(map, NULL);
-+}
-+
- /*
-  * Swap the back struct_ops of a link with a new struct_ops map.
-  */
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index dfc37a615578..2c28cf80e7fe 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -920,6 +920,20 @@ bpf_program__attach_cgroup_opts(const struct bpf_program *prog, int cgroup_fd,
- struct bpf_map;
- 
- LIBBPF_API struct bpf_link *bpf_map__attach_struct_ops(const struct bpf_map *map);
-+
-+struct bpf_struct_ops_opts {
-+	/* size of this struct, for forward/backward compatibility */
-+	size_t sz;
-+	__u32 flags;
-+	__u32 target_fd;
-+	__u64 expected_revision;
-+	size_t :0;
++BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct oom_control) {
++	struct mem_cgroup *memcg;
 +};
-+#define bpf_struct_ops_opts__last_field expected_revision
 +
-+LIBBPF_API struct bpf_link *
-+bpf_map__attach_struct_ops_opts(const struct bpf_map *map,
-+				const struct bpf_struct_ops_opts *opts);
- LIBBPF_API int bpf_link__update_map(struct bpf_link *link, const struct bpf_map *map);
+ static bool type_is_rcu(struct bpf_verifier_env *env,
+ 			struct bpf_reg_state *reg,
+ 			const char *field_name, u32 btf_id)
+@@ -7284,6 +7288,7 @@ static bool type_is_trusted_or_null(struct bpf_verifier_env *env,
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct socket));
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct dentry));
+ 	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct vm_area_struct));
++	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct oom_control));
  
- struct bpf_iter_attach_opts {
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index d18fbcea7578..4779190c97b6 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -454,4 +454,5 @@ LIBBPF_1.7.0 {
- 		bpf_prog_assoc_struct_ops;
- 		bpf_program__assoc_struct_ops;
- 		btf__permute;
-+		bpf_map__attach_struct_ops_opts;
- } LIBBPF_1.6.0;
+ 	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id,
+ 					  "__safe_trusted_or_null");
 -- 
 2.52.0
 
