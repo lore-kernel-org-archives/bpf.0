@@ -1,64 +1,63 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811E135EDAD;
-	Tue, 27 Jan 2026 15:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FBF1369972;
+	Tue, 27 Jan 2026 15:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769526429; cv=none; b=Ewe4ng8eCKBA7ROjAKmsSQbwz0zJKMIO0GSAUrdcjChepK/3K3tjW/PCTcnGI6SuwvF2i0v9ehSvyjwrZCGFMVeIgYL6XkkvheeQ2DJ3EGzEtcPh+qYBoUWPx4C2Kz5QeR4EgJmef4k9KPT8AqjS8gJDswY5jVS/YONPe0t6FCo=
+	t=1769526431; cv=none; b=MXGrg9D/MUzwl3eTEDZzy4YzsWXGg6BREtt5Fn3alZrS/3HoWZqqUwUFZxWCisSuMknUEbLeuO8sniaP9ImaVKOrT4/tfYcSaIxgMst/Dy4YvN5gFqDIeljFhlJVI7fyPXXqJfjMLCdepQRNUKx97OPSpgXk2Ssz6cneeyu5N2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769526429; c=relaxed/simple;
-	bh=9X2/xoSWm0kTAN+EQEhyKe/HxHnBxpCeX4ZwQ8F7j5Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HO+Y74e8GDghVgZuGJkhVFBtgPVLvjlVAk7h+CUoQ2zX87Gk2Mx1zIQBknT2FIz7lPlqDH5wmaEvWkReg2vBrQncS21uNDZocjlFy1najbj4ROoOdplPVecNX3H8z9eu43gCky8jBlfbSsUf+1AGr9le096UuD2w/SgJ4kJBZx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JRPfsCvi; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1769526431; c=relaxed/simple;
+	bh=dmI73RMN1LNW1AvWALkMsx/MmB6JIlNTdTBEPRFMHGc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qep7YR/ERIrEfs+O1lKA43WNPKFZjFJftJ2F7tBtYuymUgDDnrLv12nhNReCXp4eeMYq6T6OaGG0iJ7G4ljwagdqoSFePCWJKrJrrWKwKM0kT1kGZihDCLJT6GZ9lZ9UOCk9Is/B2viN4AMgJgIAEY6fRNIZCEwFAidQT/0YEH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Fr558ciq; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JRPfsCvi"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60R6bs2q011850;
-	Tue, 27 Jan 2026 15:06:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=s8yD6zQnCi2VjhbmM
-	KBe6rWarjh0LI+Iy4NKcZSO5P0=; b=JRPfsCviGf2wItF2wOmIZ3Q5v2KPBdTl4
-	IaaZAzW3SbUM0PpNfFdLOpGBraHkRd5WJw8TGj/Bi8RdrLaTi6fzKTzIafSy07JX
-	tsK4Nps1fMvX5NTRf+PY2jpTUsJDh7fiLoUhrg4FgXTsNydBf4ZBiu6dSTZK2bqW
-	IiA9JkkJOYH6EdYEQ0h3qebYDP2fwcZA+xr80yu1bJEVZ7iLMhUt9U82XNDCj8Bf
-	QicwsZ2hgqrlxJCnBYjD61uUZOX3W5gil5z3kPcEaUekthP/lRPLwdmAQTBo4sMy
-	eFCNG9dmMc8A7aRZg33ZBPe9GVIfoitt9UZu6LEzyBymKq3zCgAoA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvkgmmhhv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 15:06:05 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60RF15BX026039;
-	Tue, 27 Jan 2026 15:06:04 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvkgmmhhr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 15:06:04 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60RDxiae019733;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Fr558ciq"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60R53102015526;
 	Tue, 27 Jan 2026 15:06:03 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bw9dn13qg-1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=jLRo5dWQOH/PXS2/HPYSVLJpM/ceW9sy18PSHcPjk
+	r4=; b=Fr558ciqPqwWIGFX1x0Mzd3ZFIKBntnf1/Xcz5N6In7QPtx9ylxFv6D9o
+	cK4J2JP5Y8JzHPArHbw/BcJPyDpGKgDJSOY5FfBqcnMXb0iEiDQyn33BQWVoMjvh
+	EkNVbsap+UYsom4RG7FoT3dxuItFFlTOTRLy9X69fBQbtuWt20KUGWckx/P+YkUG
+	trGPNzSX3qeb7fRPGQ6BhXb+Xg1Eos/Gr3rjUsC3g1/ABq77Unbao/Qb3JDT1irV
+	UgYQ0wMYSXqNgkISNRjPCL7lzeC6hm1nHEifZ7hGe+AnnMz3N8GVPUjTGGQ1MtgB
+	qmqN/IlZeDjNbu/lYKQHVNQ/fGPzA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnr646q9-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 15:06:03 +0000
+	Tue, 27 Jan 2026 15:06:02 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60REknqZ027971;
+	Tue, 27 Jan 2026 15:06:01 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnr646q4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Jan 2026 15:06:01 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60REgU5d023624;
+	Tue, 27 Jan 2026 15:06:00 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bwamjrwhn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Jan 2026 15:06:00 +0000
 Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60RF5xEY50397512
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60RF5uQK27328946
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 27 Jan 2026 15:05:59 GMT
+	Tue, 27 Jan 2026 15:05:57 GMT
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BBCDD2004F;
-	Tue, 27 Jan 2026 15:05:59 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id D065E2004D;
+	Tue, 27 Jan 2026 15:05:56 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5C7952004B;
-	Tue, 27 Jan 2026 15:05:59 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 6A19020049;
+	Tue, 27 Jan 2026 15:05:56 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 27 Jan 2026 15:05:59 +0000 (GMT)
+	Tue, 27 Jan 2026 15:05:56 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         bpf@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org,
@@ -88,12 +87,10 @@ Cc: Jens Remus <jremus@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>,
         Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>
-Subject: [PATCH v13 07/18] unwind_user: Stop when reaching an outermost frame
-Date: Tue, 27 Jan 2026 16:05:42 +0100
-Message-ID: <20260127150554.2760964-8-jremus@linux.ibm.com>
+Subject: [PATCH v13 00/18] unwind_deferred: Implement sframe handling
+Date: Tue, 27 Jan 2026 16:05:35 +0100
+Message-ID: <20260127150554.2760964-1-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260127150554.2760964-1-jremus@linux.ibm.com>
-References: <20260127150554.2760964-1-jremus@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -102,118 +99,183 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=Gr1PO01C c=1 sm=1 tr=0 ts=6978d45d cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=7d_E57ReAAAA:8
- a=JfrnYn6hAAAA:8 a=yPCof4ZbAAAA:8 a=mDV3o1hIAAAA:8 a=yMhMjlubAAAA:8
- a=VnNF1IyMAAAA:8 a=Z4Rwk6OoAAAA:8 a=20KFwNOVAAAA:8 a=7mOBRU54AAAA:8
- a=_1qlYuAciRtwIPuEvDgA:9 a=jhqOcbufqs7Y1TYCrUUU:22 a=1CNFftbPRP8L7MoqJWF3:22
- a=HkZW87K1Qel5hWWM3VKY:22 a=wa9RWnbW_A1YIeRBVszw:22
-X-Proofpoint-GUID: Yw30ofjYvy8yVTEj7Cr__KxhMse0QOAk
-X-Proofpoint-ORIG-GUID: YvUxJJmHnkqwmkKr8zAyE1qA-LQB89ro
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDEyMSBTYWx0ZWRfX/7FotBWprXgZ
- biwo8FtHSXqaJzBJFIv8UYyr2c4GphiWUFtNtvN39wBUDBcDU2rR92g08b7Bbp0hvkKW9ru77mS
- e55eqDl1WOqARysSdOPyPD8TvPyoX7HLZaDbSAvLAU2Esqw3qbHp/aUipF9GgTrVQoR4bsyRiZl
- KOKa7Mgvz/TCDTynGAt/O9BO9evBB8kOmpBzZog/6u99c9xlP/Hf77QZp7k0fb1we+isuNLXMKN
- SVXew722i2Fdfn0Yew6eKD/4oPmOSMHxNjVL2DDpJNqCZsL68n+vlcPXKKuqbSaiezEH/XI0FH3
- 7VFB4/9/kd4l/4wtuVxGkPMNHQSgF1aHJn86h/mRTP/7p3c8ihNd2aTlxXlknOwB3zrOnn7IBOK
- 8EVpzCGoi1E5TvPzq6Q1GFoG/bLmCdxKrZr1qdFC7CXZSymYoN8uTK7WN7VeIgG23mphn4LZsak
- kXRzLa9qghCRBH/QVVA==
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDEyMSBTYWx0ZWRfX7qcpMQXHZrCz
+ PJDHpcN9CMWtPiFxoQ2uYjYvStMx/x7IrXGTbCzzJxlJISHpQPpQTaIRatPScBGb25OmQBDISKl
+ ZsJvW1BCfmWS/59bh65URFDXa1xFDfigc5VBrLzZ7voV7PuzqQypCXGyKPUhuvfWD1HUXKGIp2X
+ ZPNx6uco2W3q4Wi33j2IM1A2EWuFC8ZHKL+dUxNcwNSpHuOgcbxR/PVqUVW2nAykQnNj/XEqpOz
+ o/x5WEKMZNo2ZQDSp02A1eXMgdJzih2kpuoQTbomsesKZsez1YCdF+f5/0ZijV/GBz6NV5yS0Wy
+ Z6Qcm/XGcq3mxx3tPhhEl6EFthgEzuG4yfmhSNEo1W7toPF2YdHuHll+Zo3n+FaJy+2F0O3TaTl
+ zUFxPHi57PayA0Ae7vP5x8uKIiNN/XxVSUalmVi182X6osY4Di+51NWjl4hMbtck9Xs2uJhiPvn
+ 3WHYzx3MCiRJ4WzAxng==
+X-Proofpoint-GUID: Cnghv0JLFjVoOT4Cw5u3lEHG0lpNgECq
+X-Proofpoint-ORIG-GUID: lk9wg6AvcZr5GoAnEkF26dxZ3DFbx60e
+X-Authority-Analysis: v=2.4 cv=X+Vf6WTe c=1 sm=1 tr=0 ts=6978d45a cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=CCpqsmhAAAAA:8
+ a=98J7bzRMxkTV7QTXyM4A:9 a=ul9cdbp4aOFLsgKbc677:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-01-27_03,2026-01-27_02,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1011 lowpriorityscore=0 suspectscore=0
- impostorscore=0 phishscore=0 malwarescore=0 adultscore=0 spamscore=0
- bulkscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2601150000
+ priorityscore=1501 suspectscore=0 impostorscore=0 lowpriorityscore=0
+ clxscore=1011 spamscore=0 adultscore=0 malwarescore=0 bulkscore=0
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2601150000
  definitions=main-2601270121
 
-Add an indication for an outermost frame to the unwind user frame
-structure and stop unwinding when reaching an outermost frame.
+This is the implementation of parsing the SFrame V3 stack trace information
+from an .sframe section in an ELF file.  It's a continuation of Josh's and
+Steve's work that can be found here:
 
-This will be used by unwind user sframe, as SFrame may represent an
-undefined return address as indication for an outermost frame.
+   https://lore.kernel.org/all/cover.1737511963.git.jpoimboe@kernel.org/
+   https://lore.kernel.org/all/20250827201548.448472904@kernel.org/
 
-Cc: Steven Rostedt <rostedt@kernel.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Indu Bhagat <indu.bhagat@oracle.com>
-Cc: "Jose E. Marchesi" <jemarch@gnu.org>
-Cc: Beau Belgrave <beaub@linux.microsoft.com>
-Cc: Jens Remus <jremus@linux.ibm.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Florian Weimer <fweimer@redhat.com>
-Cc: Sam James <sam@gentoo.org>
-Cc: Kees Cook <kees@kernel.org>
-Cc: "Carlos O'Donell" <codonell@redhat.com>
-Signed-off-by: Jens Remus <jremus@linux.ibm.com>
----
- arch/x86/include/asm/unwind_user.h | 6 ++++--
- include/linux/unwind_user_types.h  | 1 +
- kernel/unwind/user.c               | 6 ++++++
- 3 files changed, 11 insertions(+), 2 deletions(-)
+Currently the only way to get a user space stack trace from a stack
+walk (and not just copying large amount of user stack into the kernel
+ring buffer) is to use frame pointers. This has a few issues. The biggest
+one is that compiling frame pointers into every application and library
+has been shown to cause performance overhead.
 
-diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
-index 6e469044e4de..2dfb5ef11e36 100644
---- a/arch/x86/include/asm/unwind_user.h
-+++ b/arch/x86/include/asm/unwind_user.h
-@@ -23,13 +23,15 @@ static inline int unwind_user_word_size(struct pt_regs *regs)
- 	.cfa_off	=  2*(ws),			\
- 	.ra_off		= -1*(ws),			\
- 	.fp_off		= -2*(ws),			\
--	.use_fp		= true,
-+	.use_fp		= true,				\
-+	.outermost	= false,
- 
- #define ARCH_INIT_USER_FP_ENTRY_FRAME(ws)		\
- 	.cfa_off	=  1*(ws),			\
- 	.ra_off		= -1*(ws),			\
- 	.fp_off		= 0,				\
--	.use_fp		= false,
-+	.use_fp		= false,			\
-+	.outermost	= false,
- 
- static inline bool unwind_user_at_function_start(struct pt_regs *regs)
- {
-diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
-index 43e4b160883f..616cc5ee4586 100644
---- a/include/linux/unwind_user_types.h
-+++ b/include/linux/unwind_user_types.h
-@@ -32,6 +32,7 @@ struct unwind_user_frame {
- 	s32 ra_off;
- 	s32 fp_off;
- 	bool use_fp;
-+	bool outermost;
- };
- 
- struct unwind_user_state {
-diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-index 1fb272419733..fdb1001e3750 100644
---- a/kernel/unwind/user.c
-+++ b/kernel/unwind/user.c
-@@ -32,6 +32,12 @@ static int unwind_user_next_common(struct unwind_user_state *state,
- {
- 	unsigned long cfa, fp, ra;
- 
-+	/* Stop unwinding when reaching an outermost frame. */
-+	if (frame->outermost) {
-+		state->done = true;
-+		return 0;
-+	}
-+
- 	/* Get the Canonical Frame Address (CFA) */
- 	if (frame->use_fp) {
- 		if (state->fp < state->sp)
+Another issue is that the format of the frames may not always be consistent
+between different compilers and some architectures (s390) has no defined
+format to do a reliable stack walk. The only way to perform user space
+profiling on these architectures is to copy the user stack into the kernel
+buffer.
+
+SFrame [1] is now supported in binutils (x86-64, ARM64, and s390). There is
+discussions going on about supporting SFrame in LLVM. SFrame acts more like
+ORC, and lives in the ELF executable file as its own section. Like ORC it
+has two tables where the first table is sorted by instruction pointers (IP)
+and using the current IP and finding it's entry in the first table, it will
+take you to the second table which will tell you where the return address
+of the current function is located and then you can use that address to
+look it up in the first table to find the return address of that function,
+and so on. This performs a user space stack walk.
+
+Now because the .sframe section lives in the ELF file it needs to be faulted
+into memory when it is used. This means that walking the user space stack
+requires being in a faultable context. As profilers like perf request a stack
+trace in interrupt or NMI context, it cannot do the walking when it is
+requested. Instead it must be deferred until it is safe to fault in user
+space. One place this is known to be safe is when the task is about to return
+back to user space.
+
+This series makes the deferred unwind user code implement SFrame format V3
+and enables it on x86-64.
+
+[1]: https://sourceware.org/binutils/wiki/sframe
+
+
+This series applies on top of the tip perf/core branch:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git  perf/core
+
+The to be stack-traced user space programs (and libraries) need to be
+built with the recent SFrame stack trace information format V3, as
+generated by the upcoming binutils 2.46 with assembler option --gsframe.
+It can be built from source from the binutils-2_46-branch branch:
+
+  git://sourceware.org/git/binutils-gdb.git  binutils-2_46-branch
+
+Namhyung Kim's related perf tools deferred callchain support can be used
+for testing ("perf record --call-graph fp,defer" and "perf report/script").
+
+
+Changes since v12 (see patch notes for details):
+- Rebase on tip perf/core branch (d55c571e4333).
+- Add support for SFrame V3, including its new flexible FDEs.  SFrame V2
+  is not supported.
+
+Changes since v11 (see patch notes for details):
+- Rebase on tip master branch (f8fdee44bf2f) with Namhyung Kim's
+  perf/defer-callchain-v4 branch merged on top.
+- Adjust to Peter's latest undwind user enhancements.
+- Simplify logic by using an internal SFrame FDE representation, whose
+  FDE function start address field is an address instead of a PC-relative
+  offset (from FDE).
+- Rename struct sframe_fre to sframe_fre_internal to align with
+  struct sframe_fde_internal.
+- Remove unused pt_regs from unwind_user_next_common() and its
+  callers. (Peter)
+- Simplify unwind_user_next_sframe(). (Peter)
+- Fix a few checkpatch errors and warnings.
+- Minor cleanups (e.g. move includes, fix indentation).
+
+Changes since v10:
+- Support for SFrame V2 PC-relative FDE function start address.
+- Support for SFrame V2 representing RA undefined as indication for
+  outermost frames.
+
+
+Patches 1, 4, 11, and 17 have been updated to exclusively support the
+latest SFrame V3 stack trace information format, that is generated by
+the upcoming binutils 2.46 release.  Old SFrame V2 sections get rejected
+with dynamic debug message "bad/unsupported sframe header".
+
+Patches 7 and 8 add support to unwind user (sframe) for outermost frames.
+
+Patches 12-15 add support to unwind user (sframe) for the new SFrame V3
+flexible FDEs.
+
+Patch 16 improves the performance of searching the SFrame FRE for an IP.
+
+Regards,
+Jens
+
+
+Jens Remus (7):
+  unwind_user: Stop when reaching an outermost frame
+  unwind_user/sframe: Add support for outermost frame indication
+  unwind_user: Enable archs that pass RA in a register
+  unwind_user: Flexible FP/RA recovery rules
+  unwind_user: Flexible CFA recovery rules
+  unwind_user/sframe: Add support for SFrame V3 flexible FDEs
+  unwind_user/sframe: Separate reading of FRE from reading of FRE data
+    words
+
+Josh Poimboeuf (11):
+  unwind_user/sframe: Add support for reading .sframe headers
+  unwind_user/sframe: Store .sframe section data in per-mm maple tree
+  x86/uaccess: Add unsafe_copy_from_user() implementation
+  unwind_user/sframe: Add support for reading .sframe contents
+  unwind_user/sframe: Detect .sframe sections in executables
+  unwind_user/sframe: Wire up unwind_user to sframe
+  unwind_user/sframe: Remove .sframe section on detected corruption
+  unwind_user/sframe: Show file name in debug output
+  unwind_user/sframe: Add .sframe validation option
+  unwind_user/sframe/x86: Enable sframe unwinding on x86
+  unwind_user/sframe: Add prctl() interface for registering .sframe
+    sections
+
+ MAINTAINERS                               |   1 +
+ arch/Kconfig                              |  23 +
+ arch/x86/Kconfig                          |   1 +
+ arch/x86/include/asm/mmu.h                |   2 +-
+ arch/x86/include/asm/uaccess.h            |  39 +-
+ arch/x86/include/asm/unwind_user.h        |  69 +-
+ arch/x86/include/asm/unwind_user_sframe.h |  12 +
+ fs/binfmt_elf.c                           |  48 +-
+ include/linux/mm_types.h                  |   3 +
+ include/linux/sframe.h                    |  60 ++
+ include/linux/unwind_user.h               |  18 +
+ include/linux/unwind_user_types.h         |  46 +-
+ include/uapi/linux/elf.h                  |   1 +
+ include/uapi/linux/prctl.h                |   6 +-
+ kernel/fork.c                             |  10 +
+ kernel/sys.c                              |   9 +
+ kernel/unwind/Makefile                    |   3 +-
+ kernel/unwind/sframe.c                    | 840 ++++++++++++++++++++++
+ kernel/unwind/sframe.h                    |  87 +++
+ kernel/unwind/sframe_debug.h              |  68 ++
+ kernel/unwind/user.c                      | 105 ++-
+ mm/init-mm.c                              |   2 +
+ 22 files changed, 1414 insertions(+), 39 deletions(-)
+ create mode 100644 arch/x86/include/asm/unwind_user_sframe.h
+ create mode 100644 include/linux/sframe.h
+ create mode 100644 kernel/unwind/sframe.c
+ create mode 100644 kernel/unwind/sframe.h
+ create mode 100644 kernel/unwind/sframe_debug.h
+
 -- 
 2.51.0
 
