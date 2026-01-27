@@ -1,206 +1,167 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E9AE149E17
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:27:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9168729D267
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:29:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769480830; cv=pass; b=EC+VzQuto5QEoBFa+nY/xqtrHYDYDZefjJNtwOsAvl6yNPbIVkRKunYN7596xFYTOWgmANErYpfAVkoQvbAIX9SezUe1C+CYJbNsu/2PdjyxkdAFv/rDMRazQlaWT1bCECoQ8/zJRjOjQI646GGCC7JJMnnEUgCUopQRMiw5M8M=
+	t=1769480971; cv=pass; b=OhZpfai1XISWFKy7h7J2up/uAGlcHO5MXhnFgqhOpTLIxmJ3cqBGvoVcAkxO+ro16d0dEtYv17MiXFwh4As+coR+SPl4rvnZRTUAXFXzpV4dMd5q7wsTwifR3o1i1FfoJdKzxXfUXtunT1TcMsq6UgAfK1oNQ3sLrjAHKEKWeFg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769480830; c=relaxed/simple;
-	bh=DHhWwA9WXZv5VCDDG8Ki1OXw02p+ulk0/1MfMhwP/eQ=;
+	s=arc-20240116; t=1769480971; c=relaxed/simple;
+	bh=yPX2UxWW7N4/r7e8BpNoc0/2oNDWfidjBmr6JaklJzU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YLv74CzTtrvQhT0+f4VdRXrIZFguqY18I9leDjVqL1ISJyerH+Go7cVcP2bFlsJOcyYz2fwkTJer4WSM0HvqmGWmieXFK38J7uIjvS8bfg5A00gnvA/q3E7LGR9N1t6nWIbGwWTQ8TNkD2/USbBJC+gR8drmJ8qypdzpY2uQH9I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MqG+MJ7y; arc=pass smtp.client-ip=209.85.221.45
+	 To:Cc:Content-Type; b=Z9pBzzH8qQvKwiB+wLyeGWNcSstMCO+lteVjU1hDD5JQ/tZkK6sbJUzkiOltZcdReX4ewk78+J2ncYK1++/is67pxWSVKmIP/mpslf1+zZqZGREbyQZv2HiWekoA72Hd+1XFZaDuLUIKcXJmP+oPL1hsm+enWKcunqnnxdu8//8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CK0bjd+C; arc=pass smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MqG+MJ7y"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-432d2670932so4721036f8f.2
-        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 18:27:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769480827; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CK0bjd+C"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4359249bbacso3907659f8f.0
+        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 18:29:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769480967; cv=none;
         d=google.com; s=arc-20240605;
-        b=jTCKl0ziCJiNOUcwhHlwsvyX9tu7GwNGyhS6YRyU2/8UeFt0I/39/VCgSHXmTx6olR
-         RzuMW2L+Au8fc7fAWRl4SABuD3FuyvNQ9WhvORDscOELRr1N0tk3l0q14Ezo4X+mF9n/
-         WSAnJQe1tXtg6CVtb32joYv663W2WwpWBdEnIft8NBdwlIpXRUHpw1N4dAzB2pn/EbmX
-         K3rHFFh3MXiPsk/NCGAOLn33W75RDS2sKwn32aB1wia+1IqXiwzc2AaDsjhu9ZDruXPU
-         cJ3zRK7Su9uFIZdBFrZo+VvJ2WovfPq2lXIbaFJ5h6M20k0DyhIyTJgnIVCbdFSrvMyO
-         98Jg==
+        b=Fhw6jc32Lu90kXPyN+T/7aSzHTJxKLBg4dfIGsadFUwqRacSjQqohs+WoK+IdkqohH
+         N35IvsVE9joPsI6r4YpQ6FwLeqvHOX5J5BpBh9KBNRHgJpuAeYEDlOzhwGcKV4I+xXN1
+         Y4iX3odNRb8rHqGwr5bD1slYKiJhoS4fOUi9Ym/1lYYzK0m7bhfKiaK375XDpAgogds4
+         zDYZtXMaFNdlVGu6solDONix886oLfEjlGdebz2Hnf0MtJs8i04nhyQt5O8anpAo6jw3
+         d+PlOen8v06ygeY6DroEH+7uAidqVfJ0XodHyVOqz0gZrGaqju8In6wdz8GUtgmGndHB
+         ovWw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=rAP7UibDzwrBBbLv0zTVdstEX/VNmCNyFjVLWLRqkAs=;
-        fh=fgKuWAwrPA93AAgmAid+ntX61zo5emBWKaUHorOCgYM=;
-        b=bN8p2gK69dFKiGAxYwg2h3gnboVUvmfWqFy6afuVQUJ3Sv9/prbiCD/atb4rLVM21s
-         APSETN2Dx5CXISNBMM2fHWokQzr4Sr8gwppOQ6Oy3lnZVmI8Vfz0XTfY3qA2BdZP6pCi
-         +3Ce8jbzjuPHIc771Obe4fiS7RVjTuYkL1JEBCpLx9qZfXGsf3M1oguNtoEgrdouLlJz
-         Fi2PZsGSpOwuhMW5AuiJcx24qk7MS1cNLvNXIcDmAfCL6i+xKdr3Th1jvLn740nup5p0
-         DIQgnojZBXGi2Uxzqp3wgVtgK9VAFRO2HzDnTvA9E+6fFO/jOa8pzDczMAyuV776i94q
-         VsZw==;
+        bh=zC2j0Jfkmlqo+I0JfCWbANnbTnMT3Wh8bohHZbF81zg=;
+        fh=07BTDdF2UaNE6zhSlY+pZbr00r3LKHX33/cE/TDbpLs=;
+        b=MXbmjXLj8nlTCyLEY+smEGW5sU/lXI66RxyJ7Bcnl0+urUcm0jKuHO7bn6YNWf9b5r
+         yONxDBaVyY3LYQmQoZDWqvmRTrJOn5G9kYmS5rZi3Af7Y9No2PrhyNZ5wEI/zIn6PkQZ
+         CK08Fm8us2AdcctIWD8VHMSVZzzy4os0U1olaNj5wziTvnKNuIfNSrKkPlKsYBA/YpRZ
+         uuS9VzA5VPWXBkduxRii9m2rr4U7ZL8U7aXdzsHOXPZ+H1dWoso7DhsNrmlw0y0cqHhe
+         pj5m2sU+2Rwb3g5FaqpsvojT55WzLcrtmRfD5Z7J7qiLhOUl2Ris89OuQuc/Xc1+b1Eu
+         v8LQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769480827; x=1770085627; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769480967; x=1770085767; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rAP7UibDzwrBBbLv0zTVdstEX/VNmCNyFjVLWLRqkAs=;
-        b=MqG+MJ7yqauIwJUgbVmk5eGEgudgQFfoU0cAD1IXV/yU+vvpNJZAdQHUoQymbeGH5q
-         E+r30h2yXxHlLcLe9ROd1GRxp9LrtO7xk7UZzt9BlM7nGuJfUooBcybblBvsvyktzLBI
-         CbUAwRkptcMhwWeS572J4ShXHTOD8+uLDcSNjfwJuSdcz4ICoBW3ydHVkfwpCl0flGCA
-         A1dveOLW2eUiBPM5P8WaI8vcLgkTEIe75jZEeuM/jtVLBqOvkG9tlM/iM5MpLvK69B1C
-         gM5ewnq3LBfGsRKr+MtI6YtMEoEMipc+nXGN86qaeqNvZlWNhyexxVr9TENgLmqG9Vaq
-         6ydA==
+        bh=zC2j0Jfkmlqo+I0JfCWbANnbTnMT3Wh8bohHZbF81zg=;
+        b=CK0bjd+C6XNjOsN/hYQ1T+8/RN5loGRzlOWLriQt9Gfvv5eVr1pv9c62wR6Hvq7JeH
+         pYCKKC6S/lwuyYcAom6d9Jj/PR30T2bAcniUIqd6phSrPPw6kql1ILQ2u1zF8xNA2aVE
+         yMCdFZTJV+nSRch8v+iE8kIgVL1gdx0zzKeBE36ZxB4y3B5/1QRo2OrBQeZ3OT3iOuNT
+         DgJEZuxBMxRJmavAG6UuHRMW0Ow7KCXHnaPL5F2APGCgbu4hd9pUOgDqTk6TnpBYIdjV
+         Qo+SLfnVZhKiTTP2Ue7d72kPJFSqnmECj6q+a1WiDIELRDlOq2UQANJu1PtOQRQNKyY8
+         0nbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769480827; x=1770085627;
+        d=1e100.net; s=20230601; t=1769480967; x=1770085767;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rAP7UibDzwrBBbLv0zTVdstEX/VNmCNyFjVLWLRqkAs=;
-        b=p4ZPpNjqX3YlfKmpnGT1ilD53BTlHGvO5FvMNTCkdeJjrJbIvfGXI2y5navO2TXoMg
-         JLa+5LMPABDIulgbcCIzyUDsWUiYSodYKtVRJcjvsjI5Q/LXuHLN6ELPAvNQ3fdfBxAW
-         ZrWCCKtwxpGlMSHKabK3YwYOKkz/zSNB3I79TPzp1yMREJnF2vSJnpsT0rDmchh86RcL
-         Zcmif8cPnbtY+ZoeC/3N9a9scHj0SRRFOcFvukV+odlbBp/mtyFVgCh3apKI8xthGnlw
-         Dcr9UKPROFgecDVovUoAyoUlRylQv0yrq/qqh/shoTe6dsCEMBK8GBbgcTKY6KQVBMHx
-         LY3w==
-X-Gm-Message-State: AOJu0YxxcBhrZW5Op2uSXBNgioETUMlonN6QUOBIVlOLvU5+bk01eFdL
-	GwxO8UHoyzomlNxGvMDgmMGgcNQDmRvrjfF+lh0ksPUzOI1DW4aE348LBnZ+CZiCPYbsd3DMjq8
-	NKbiSL5j+INlGar+fhEFCC0NdCyTl/gs=
-X-Gm-Gg: AZuq6aIhP50JHBPiox2H1B40VZCHhicf57+8RpuyxVz4LJI1n4gDvKFWoYsCdBLmks+
-	4QlO4Ux/ARg0pumOyRcu9/PNXxVt30LR3E0LJhWz2WnwTLKifwJDE7vYkUnGTxMvvgvddfHKOMM
-	xFU4OTBzCsqQhC2n4znq8ESDyUnvyNg18hBZ9Nw1k+Fkq1l8ana9RwaDBRD0VvFHzwYw9J9q59+
-	NgGHYPW+PLrt2GX2RH+2drUet8KA7kLc/MrvzuiiuPd7sBnm8FofpLK1WtYmjFqPtp2JxZCOef8
-	ZU80p4IwPlZwVoqNV1/MPf64+0ccoPrZ7Gd9fynCHJeYGFJQ/o0j4ID7ewEGmcHWFObUZZ/9q4e
-	z66fs5Uthq+UWfQ==
-X-Received: by 2002:a05:6000:22c9:b0:435:bd00:3978 with SMTP id
- ffacd0b85a97d-435dd1d3268mr125604f8f.60.1769480826720; Mon, 26 Jan 2026
- 18:27:06 -0800 (PST)
+        bh=zC2j0Jfkmlqo+I0JfCWbANnbTnMT3Wh8bohHZbF81zg=;
+        b=QYBTZqt7eI69cC3JrjZnkSfR3cqsXtiWC3GYQAUObwm438EUO7uE+gdHsSZO3C5Mf1
+         5wp3RQvU1JCj360eQtjlVh9V6G1LfEF9zmQv/sZRTjRcYOi4BaKW0mJ9tQq0SnJLaWKX
+         FP6fOfBShbuw7dOwFb0loMxZcn1AXYJ7ktu+v1dvhRNavVgg2bumaJWQxqQFzDTMpPyE
+         uriq1Zf+jNZjXGniViiIvfNw1wXtr5DvH6KdVtXteg3vMpcFYuFEJXm6pFuamExoz861
+         divTsE6+OVinykeSU7un/8oXMlrfoMQvQBoO0FLiypbPDcraHznrKXOBZyDR263UaTol
+         p1iQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWrovhldGjwmFMJMako+O2gc/bkpwKCPv4VGYFDk1MIG9q9bY9y5KW16ePZ/S27xiKAi94=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMAUkj2mWs3ljO8xo1/pojUpI+ueocMQZaTX+hJQqqmBfoUt0y
+	J6RIh3cJG0iPL35AUL6j2VyS21OAQR4Ve0MEfHx61BmP71UUYfXpwbE9jSvUpuhOErvXL5Zm5WA
+	LavaM0eRefXpFLu0uIFhf8x06jruu5lU=
+X-Gm-Gg: AZuq6aKHN7vBIv7aRUOZ+KHj3Jza9vKCTvrFQgb6ZmvT80nFPqNJ3GgE3F+phkgjGhB
+	2iJU2SHta/m7ccfKuKUkUu3kbjL68FP5eJWwc9p2+JHaxCdKXl6+BkO51LNGKv2pVL5DoDEzp8o
+	BNm2Dn1IlLKVO8RlB+EmPtGIivfapsxg/D66qt0eN9guOFdsW0x4AAEgIzM+EbZx26fP4S1MmC3
+	XLlwA5TY4hYDyzLz2G/ow4Tn3qvWdg06F5wV5kZd5k9dhDUXRWTA3daCaAzU76IRDnnz2/3X3QP
+	sbMI0xozIP++C9ab1DcxXkqaiEFU9zbGaMJH87OFPw2+FktRX5yoPZnIIajvE/Cdd7rvXsy9+N1
+	kfVKZy1crHQwLtA==
+X-Received: by 2002:a05:6000:2c0e:b0:435:9a50:bbc8 with SMTP id
+ ffacd0b85a97d-435dd1f7abdmr108303f8f.18.1769480966854; Mon, 26 Jan 2026
+ 18:29:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260121135444.187001-1-mattbobrowski@google.com>
- <CAADnVQ+8f1mK1+L9S6uDbo0n53zs9VeUhZr5eTg0+jXppRAhcg@mail.gmail.com>
- <aXNWLU7ay1HHmg6S@google.com> <CAADnVQKHuj1snSOBh+VEJrcW82OW2zNOEd1=Dqe-m+kuOV7MWw@mail.gmail.com>
- <aXct9XxD43eBZs-H@google.com>
-In-Reply-To: <aXct9XxD43eBZs-H@google.com>
+References: <20260126173431.19825-1-ggonnet.linux@gmail.com>
+ <202601270903.NBB1BD47-lkp@intel.com> <CAADnVQJNvx34irz6JYbmZvmaYU0AGRDcu8znsKjA_di798RisA@mail.gmail.com>
+In-Reply-To: <CAADnVQJNvx34irz6JYbmZvmaYU0AGRDcu8znsKjA_di798RisA@mail.gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 26 Jan 2026 18:26:55 -0800
-X-Gm-Features: AZwV_Qj-w5tgoF1KlXBHZVM11wgviD6JZPe2r_9dhWIHKkb6GE4A_sOu0Vu_a8c
-Message-ID: <CAADnVQJXs1NinaahP-uKOrqKUHEZ4PgwOAAVpWkHDWkapBZ2YA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] bpf: add new BPF_CGROUP_ITER_CHILDREN_ONLY
- control option
-To: Matt Bobrowski <mattbobrowski@google.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, ohn Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Chuyi Zhou <zhouchuyi@bytedance.com>, 
-	Tejun Heo <tj@kernel.org>
+Date: Mon, 26 Jan 2026 18:29:15 -0800
+X-Gm-Features: AZwV_QgGJ_z96uCfVOYhpG9WlUFldQomgN8ann-MUm7tE6c5sB77qAxilutzk7A
+Message-ID: <CAADnVQ++Bx+xZ1jmeM6rLC7xeLHfsSUNizzMtw0=zOcPfLcc6g@mail.gmail.com>
+Subject: Re: [PATCH] bpf: fix TCX/netkit detach permissions when prog FD isn't given
+To: kernel test robot <lkp@intel.com>
+Cc: Guillaume GONNET <ggonnet.linux@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 26, 2026 at 1:03=E2=80=AFAM Matt Bobrowski <mattbobrowski@googl=
-e.com> wrote:
+On Mon, Jan 26, 2026 at 6:11=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Fri, Jan 23, 2026 at 09:17:03AM -0800, Alexei Starovoitov wrote:
-> > On Fri, Jan 23, 2026 at 3:06=E2=80=AFAM Matt Bobrowski <mattbobrowski@g=
-oogle.com> wrote:
-> > >
-> > > On Thu, Jan 22, 2026 at 08:26:49PM -0800, Alexei Starovoitov wrote:
-> > > > On Wed, Jan 21, 2026 at 5:54=E2=80=AFAM Matt Bobrowski <mattbobrows=
-ki@google.com> wrote:
-> > > > >
-> > > > >                 break;
-> > > > > +       case BPF_CGROUP_ITER_CHILDREN_ONLY:
-> > > > > +               kit->pos =3D css_next_child(kit->pos, kit->start)=
-;
-> > > > > +               break;
-> > > >
-> > > > There are no users of css_next_child() outside of cgroup
-> > > > internals. It's a red flag for me.
-> > >
-> > > Hm, I can see the slight hesitation here. However, until somewhat
-> > > recently, the same argument could have been applied to functions like
-> > > css_next_descendant_post(), right?
-> > >
-> > > css_next_descendant_post() has rather recently started seeing usage i=
-n
-> > > other subsystems (block/, kernel/sched/, kernel/bpf), despite
-> > > remaining internal-only since its inception over a decade ago. Given
-> > > that css_next_descendant_post() continues to remain unexported, in al=
-l
-> > > fairness, I don't see css_next_child() being all that different in
-> > > this context.
-> > >
-> > > Would your stance change if Tejun agreed to mark css_next_child() as
-> > > exportable, or simply agreed to it being used from BPF cgroup
-> > > iterators?
-> > >
-> > > Both css_next_child() and css_for_each_child() have remained virtuall=
-y
-> > > unchanged - and therefore inherently stable - since their
-> > > introduction. I should also mention that functions like
-> > > css_next_child() and css_next_descendant_post() were originally marke=
-d
-> > > as exported, and only later unmarked. This presumably was done as par=
-t
-> > > of a symbol cleanup, not because the functions were unstable
-> > > primitives.
-> > >
-> > > > I feel there is something wrong with the use case. It should have
-> > > > been handled by the primitives we have.
-> > >
-> > > Right, arguably it could be handled with the current set of
-> > > primitives, but it isn't nice and certainly not as efficient as I'd
-> > > like.
+>
+>
+> On Mon, Jan 26, 2026 at 5:57=E2=80=AFPM kernel test robot <lkp@intel.com>=
+ wrote:
 > >
-> > Why is it? Just descdant_pre and break out of the loop if not immediate=
-.
+> > Hi Guillaume,
+> >
+> > kernel test robot noticed the following build errors:
+> >
+> > [auto build test ERROR on bpf-next/net]
+> > [also build test ERROR on bpf/master linus/master v6.19-rc7 next-202601=
+26]
+> > [cannot apply to bpf-next/master]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Guillaume-GONNET=
+/bpf-fix-TCX-netkit-detach-permissions-when-prog-FD-isn-t-given/20260127-01=
+3722
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.gi=
+t net
+> > patch link:    https://lore.kernel.org/r/20260126173431.19825-1-ggonnet=
+.linux%40gmail.com
+> > patch subject: [PATCH] bpf: fix TCX/netkit detach permissions when prog=
+ FD isn't given
+> > config: sh-defconfig (https://download.01.org/0day-ci/archive/20260127/=
+202601270903.NBB1BD47-lkp@intel.com/config)
+> > compiler: sh4-linux-gcc (GCC) 15.2.0
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20260127/202601270903.NBB1BD47-lkp@intel.com/reproduce)
+> >
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202601270903.NBB1BD47-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> >    In file included from include/net/tcx.h:7,
+> >                     from net/core/dev.c:114:
+> >    include/linux/bpf_mprog.h: In function 'bpf_mprog_detach_empty':
+> > >> include/linux/bpf_mprog.h:348:24: error: implicit declaration of fun=
+ction 'bpf_net_capable'; did you mean 'sk_net_capable'? [-Wimplicit-functio=
+n-declaration]
+> >      348 |                 return bpf_net_capable();
+> >          |                        ^~~~~~~~~~~~~~~
+> >          |                        sk_net_capable
+> >
+> >
+> > vim +348 include/linux/bpf_mprog.h
+> >
+> >    343
+> >    344  static inline bool bpf_mprog_detach_empty(enum bpf_prog_type ty=
+pe)
+> >    345  {
+> >    346          switch (type) {
+> >    347          case BPF_PROG_TYPE_SCHED_CLS:
+> >  > 348                  return bpf_net_capable();
 >
-> If I use a break when I hit a grandchild in pre-order traversal, I
-> will still terminate the loop early and miss all the subsequent
-> immediate children?
->
-> I do understand that using css_next_descendant_post() (without a
-> break) could allow me to logically filter for children in the
-> loop. However, my concern is purely about algorithmic complexity and
-> scalability.
->
-> css_next_descendant_post() performs a full subtree walk
-> (O(Descendants)). If I have a top-level cgroup with only a few
-> children but a massive hierarchy underneath (hundreds/thousands of
-> grandchildren), using the descendant based iterator requires me to
-> literally visit every single node in that subtree.
->
-> In contrast, iterating immediate children is just a linked-list walk
-> (O(Children)). For deep hierarchies, the performance difference is not
-> constant - it's orders of magnitude.
->
-> For example, if I have 5 children under a given root/parent with each
-> of those 5 children having 500 nested descedants each:
-> - A pre-order traversal would lead me to visiting 2505 nodes.
-> - A linear traversal would lead me to visting 5 nodes.
->
-> > The thought process should be to use what's available as much as possib=
-le.
->
-> Well, I get that and it was my initial idea. But, I quickly realized
-> that we have a gap in the current iterators capabilities, and this
-> patch is meant to address this gap.
->
-> > Adding UAPI for specific use cases isn't great.
-> > If it was a new kfunc that's one thing, but here you're touching uapi/b=
-pf.h
-> > So acceptance bar is much much higher.
->
-> OK, but now that Tejun confirmed [0] that he's fine with exposing
-> css_next_child(), how does this weigh up?
 
-ok. let's add it.
-Maybe shorten the name to
-BPF_CGROUP_ITER_CHILDREN
-"_ONLY" looks unnecessary.
+I dropped the patch from bpf-next.
+Pls fix and resubmit.
