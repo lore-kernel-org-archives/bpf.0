@@ -1,449 +1,234 @@
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-oo1-f78.google.com (mail-oo1-f78.google.com [209.85.161.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4A21DF27F
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 00:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769475419; cv=pass; b=ZqgpE1m72wVn3H/B/J5C1kFk6CAAKX1HiJzimdC3SEnf9UM6cinUYqV7fEzy6JZEpFqfCvHisv6Uq3uuv/tD/GsI9yhz83Jv7qBJR0HmUB3vCuGoKikUVW/s1ZAxoOjeDLVwZhoUfr+DgmKfw6EtLjZcInzDXmZ0EI0O0uVezFY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769475419; c=relaxed/simple;
-	bh=M7AIuDgpfxm84BpjBY6Y6bq5K2LBOrKkxU4MJnN61LQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sKbJevSfKPMJgNDW+bMLrzbpo6ww5FSASa5ei2RGfws55sNMAj9Wbvwr4GgsatUm9SK+wTqpMMKH//mBIWKUgAyUJOgC7w31OC83U6cYCa8i7RyxXuaS8BNzj5Dw4YtnzbwzIPRLr89PzkWh2KWDeYnJIdHMZ7pzjGH4Tz7bBuo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=embVdrFC; arc=pass smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="embVdrFC"
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b884cb1e717so718014766b.0
-        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 16:56:55 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769475414; cv=none;
-        d=google.com; s=arc-20240605;
-        b=NEQG4StNtx5iN0jhu1F1XePQLGSL7CfPfaWBqn5bBxgs16FMkQJybSRS62H4rSQNkA
-         7iuvpQfQKQNI+5rqYqmEeLWttlm0STJYOVz67Bq7QnHM2Jlt+9A3AUZ1gj7kjAt/MFV4
-         rrrU0MKNyVSe4/x6/Iozh8V1ZJhqd2XR9cyL7+ePPnQjoPJNTxextkV87TRDYA5uH8s6
-         OlFG6QzgXkW9aOIBr8EcZ871jee3qVX4g0QtC0bVpDUccN4HaRFncIP1RLGUAAApXAfF
-         9a4X/yP1rDh7R3+ovBe/lZd1lJPzyzSsn/mqSDmzNNez3kdgXoqnZQuGoaH8tLt7w22T
-         TnDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3zLfNFu5Ej89ae2FOVFTz6sNNJ0wH6QKfxg5HAX5ASo=;
-        fh=GVntwQ9AvpMTf4PnXvzIdM/DaFfIALzavTZp/cCf100=;
-        b=HkpUg0QbZYdatRqUCm61VOFYx+aIqF9cBHWxn3PR2q99+UEa5ToQOD7GZr17nX9DTv
-         0V27vxOQzGiGz4lgRhSRCaICI+BC2fCRCjHQ8D2I36eIjBT3ThhtyW/6YgiLc7CoA/3Q
-         1VWJaRb8sUDlFBakUeLycZYQbIq0IBO6x3a/3DPuHOaBKT2QSfb0yxkfXd0jVqCLQkhG
-         TGVIzLJcf7X7xe0DjW+YfJp8I9plUWHEQaVRPJ4RikU2eUsXFkiD1qS6kadUpuIOgGI9
-         nhYa/hh2slMGOl4uW1mnBQBkc5LxX/seIWvBSmhgKrhuJgQbwY3M+XFUEixa7iFMHql/
-         U6gA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769475414; x=1770080214; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3zLfNFu5Ej89ae2FOVFTz6sNNJ0wH6QKfxg5HAX5ASo=;
-        b=embVdrFC4ARjZMr01Zmfeu9GQ49LWmv4z83m9kXj1N93UsFHIjGBUYy2kWbtxQ7USt
-         ODrw8bRkz77T39ygIZp7YSzvFE5bSyQM7lpLRq3NpsrFDx0UCFpXoekOBfRlEsKlgMMP
-         /rc/hg3b3FtR+gbFUZwnf4eIqECk9usfOsEEVHsPW2pQ1+GxtLjf5w9PRlsGrp8fv+c3
-         7iQG9kuepCxHodbFk0t4c9X09H8lLvWX8C/06X1wn8nhpuppDVEMM0WSOrTKVjB4Viu9
-         vjR+81f6j+Qx53/gR+dC+RMQ1zcs7/SXHVZjB9P+70eBOdilhNEJVbqv3K7k+cpc8Fy1
-         UpXg==
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F3511FF1B4
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 01:07:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.78
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769476053; cv=none; b=jZgTSJZUsPbcSc3HLCuNoXFMzeXzOOcugRrjbY71O6M3YY9GgHry6yyMmIG2diJqegTHVnVDlnNWIuiJIDIDjHAFxqhbQdb2eJys8qrB8ttb3AwI88xRkfIdNA9zL5QRn/WmKzQRWuywx5Jti7TMj7How+uCI7Ui/3ZrGtTSkgs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769476053; c=relaxed/simple;
+	bh=yS8BMLsG/HCKSZSySlbUl4sQSa00TQyXgiSxjUua8rk=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=rwol5wx53ZwOx4I/fIwKfNymXTpCtXwu3midKaMre7gy9o2Vz3rf46vytvOn5I6eAUgG194HxcDjmDbjVoM1jxBfsyZYH+AUJZ1J6py1qI/UFqZ94juoXdk++5tdgbByMYY1adkZ8T32THmkVF8wvUrmDgCEnIp8gAbqyd+hEe4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f78.google.com with SMTP id 006d021491bc7-662c0f7c3c0so17533724eaf.1
+        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 17:07:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769475414; x=1770080214;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3zLfNFu5Ej89ae2FOVFTz6sNNJ0wH6QKfxg5HAX5ASo=;
-        b=hvzLTr6Udt4SHFAIRQxzKD+JSyMOA0yE6HNosA/E7vGi9KFm07SSQ82jLYWfyu65NY
-         36xmPFKqT9S4YvHrtlnZJdRN+1o715ULHFVPri97ptGDGxZSb3bzDbY0RfVN6UQsMcfK
-         3zCsB7G6X82wGwJO+AWgRXpqf5KHqZR5KLj0RhhMikluh7uQRuMHhfM8TdOhap+YBybk
-         M33c88HvZCk9EJffgAnys3RRnktn24CfzCbCfopvx+jeH2ewxq7EVgGfKq+hCiZxfaZq
-         9ig7fp0IAlbweC1TiA1/NZPSSEReIh48M4RqWkRR18Ed7Sl47lPm+cn6TNeTpOxIfzRM
-         g25w==
-X-Forwarded-Encrypted: i=1; AJvYcCWC5qFZz6moZv84sdZkGUkU/zsxUdXBMyweQ/3cB50lZr2WrkX81MC/CPYODBJX8e12jh4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7fxbosD9aNVKAv9vHzrqhoCWmSwGqzx638iUqiXRpxslA5+m/
-	PCXgTV997Mn3FX4owwnB7irVPqcvSNLe3ylJ3BnJTrufwDUfuKVWGPUdIxllPNd2P6JqzJ9o257
-	/DO8uztMM9TRDmeofKi7tm3WKcCR0JOEHQ0/E5Kq7
-X-Gm-Gg: AZuq6aJCdL2dwTOzorTq9mrRZEwuUFu9nrrd9Xq5yUVvcbW/Drisushg1OMG8WDbxUL
-	+JZfImteyO+dOX+Q0/Gt3seTZOl107BxSA21c/qeIKlPVXhOon56Z6WHXZfj1pq0fUl8UerJfyq
-	oU7mVg10nVReuHzwJASPkSHHxDxQQUXS0nLKBaqPntqJFe/FgcpyHYHTg0k5+eSk5N5Evkag+0U
-	I1WJ0cAPr6fzNmcyT2QVPzvyY6K9aZ9msH7yLN4nsFz4s/XMFyXWGyfmoUOqplRjBUnLWMQnC5y
-	qEZYLFQYLNOoBH3bE34B2dIeWJ4pNA==
-X-Received: by 2002:a17:907:3e1f:b0:b70:4f7d:24f8 with SMTP id
- a640c23a62f3a-b8ceef90390mr472102366b.22.1769475414121; Mon, 26 Jan 2026
- 16:56:54 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769476051; x=1770080851;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rKSYZckqUpjWqoIFliWHkkvKDuE2akDced1pYzXocyU=;
+        b=ml2DT69TOXeTNTSypSKDGCDMq2hnaPGmlsB577R7oiZJB+QmsNaZj94vUCJSutUVql
+         ++/JXYSuPeozCqWahZTziFwa0b9STKSq6O39leTnTFuDysXuIDU0qD6xCeTngfpE4TFt
+         K9kpXoHfMDF4leAs5hvb5NqKbzdRiGc5e7oIhVJDs+rxiTb5d1+vEZxdaech9ogdw2mn
+         8F9iy7Tw6KaO9Y2YlxeEw7oA13x2sV5t4MHBX+1hyfAQ1diZJhk+WZJ6+WExiI+xsvrV
+         pDRpcVYUGvC3s9mBoTLsaqxYW4lyLXj269YS69TX11CmHPnCiNMbLwJjE2vcfWQfJ0MB
+         dBFA==
+X-Forwarded-Encrypted: i=1; AJvYcCVNqYt7KWrbHlh5JZOv+vxynfsSUrtuWtREWWNKUVxJkGtyuPsHWdKFfUNEx7rOPR0hrE0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPD5yNpMY1XoMEAjaCBAKGWR0Bx5N5WPYkAIG0HbxhdjtidiqD
+	xCoGmiH7lpIFzg8jGdy36gn+DDTA5FClF1S3hb9hUoTxmiJxIu4+2C1bx1zIO9Ja5H8xOXtUJGG
+	FcZ9U0RR7CGYofSL+d0Oc0P0t/fdX9UiOve8KfapKiO+MPMg9L8MWX/ez2CU=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
-In-Reply-To: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
-From: Samuel Wu <wusamuel@google.com>
-Date: Mon, 26 Jan 2026 16:56:42 -0800
-X-Gm-Features: AZwV_QiBMrJYd91OXm8P7lUFLNbyvK6EaRwh_3htJKxjg87yoCQ5TeewXmGGNPs
-Message-ID: <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: linux-fsdevel@vger.kernel.org, torvalds@linux-foundation.org, 
-	brauner@kernel.org, jack@suse.cz, raven@themaw.net, miklos@szeredi.hu, 
-	neil@brown.name, a.hindborg@kernel.org, linux-mm@kvack.org, 
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, kees@kernel.org, 
-	rostedt@goodmis.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	paul@paul-moore.com, casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
-	john.johansen@canonical.com, selinux@vger.kernel.org, 
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com, 
-	android-kernel-team <android-kernel-team@google.com>
+X-Received: by 2002:a05:6820:c90:b0:659:9a49:8ec1 with SMTP id
+ 006d021491bc7-662e04a56abmr3303587eaf.69.1769476051142; Mon, 26 Jan 2026
+ 17:07:31 -0800 (PST)
+Date: Mon, 26 Jan 2026 17:07:31 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69780fd3.050a0220.c9109.000b.GAE@google.com>
+Subject: [syzbot] [bpf?] INFO: rcu detected stall in vma_merge_new_range (3)
+From: syzbot <syzbot+316c0070a0341d2661a2@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@fomichev.me, 
+	song@kernel.org, syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 17, 2025 at 9:15=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
-rote:
->
-> Some filesystems use a kinda-sorta controlled dentry refcount leak to pin
-> dentries of created objects in dcache (and undo it when removing those).
-> Reference is grabbed and not released, but it's not actually _stored_
-> anywhere.  That works, but it's hard to follow and verify; among other
-> things, we have no way to tell _which_ of the increments is intended
-> to be an unpaired one.  Worse, on removal we need to decide whether
-> the reference had already been dropped, which can be non-trivial if
-> that removal is on umount and we need to figure out if this dentry is
-> pinned due to e.g. unlink() not done.  Usually that is handled by using
-> kill_litter_super() as ->kill_sb(), but there are open-coded special
-> cases of the same (consider e.g. /proc/self).
->
-> Things get simpler if we introduce a new dentry flag (DCACHE_PERSISTENT)
-> marking those "leaked" dentries.  Having it set claims responsibility
-> for +1 in refcount.
->
-> The end result this series is aiming for:
->
-> * get these unbalanced dget() and dput() replaced with new primitives tha=
-t
->   would, in addition to adjusting refcount, set and clear persistency fla=
-g.
-> * instead of having kill_litter_super() mess with removing the remaining
->   "leaked" references (e.g. for all tmpfs files that hadn't been removed
->   prior to umount), have the regular shrink_dcache_for_umount() strip
->   DCACHE_PERSISTENT of all dentries, dropping the corresponding
->   reference if it had been set.  After that kill_litter_super() becomes
->   an equivalent of kill_anon_super().
->
-> Doing that in a single step is not feasible - it would affect too many pl=
-aces
-> in too many filesystems.  It has to be split into a series.
->
-> This work has really started early in 2024; quite a few preliminary piece=
-s
-> have already gone into mainline.  This chunk is finally getting to the
-> meat of that stuff - infrastructure and most of the conversions to it.
->
-> Some pieces are still sitting in the local branches, but the bulk of
-> that stuff is here.
->
-> Compared to v3:
->         * fixed a functionfs braino around ffs_epfiles_destroy() (in #40/=
-54,
-> used to be #36/50).
->         * added fixes for a couple of UAF in functionfs (##36--39); that
-> does *NOT* include any fixes for dmabuf bugs Chris posted last week, thou=
-gh.
->
-> The branch is -rc5-based; it lives in
-> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.persiste=
-ncy
-> individual patches in followups.
->
-> Please, help with review and testing.  If nobody objects, in a few days i=
-t
-> goes into #for-next.
->
-> Shortlog:
->       fuse_ctl_add_conn(): fix nlink breakage in case of early failure
->       tracefs: fix a leak in eventfs_create_events_dir()
->       new helper: simple_remove_by_name()
->       new helper: simple_done_creating()
->       introduce a flag for explicitly marking persistently pinned dentrie=
-s
->       primitives for maintaining persisitency
->       convert simple_{link,unlink,rmdir,rename,fill_super}() to new primi=
-tives
->       convert ramfs and tmpfs
->       procfs: make /self and /thread_self dentries persistent
->       configfs, securityfs: kill_litter_super() not needed
->       convert xenfs
->       convert smackfs
->       convert hugetlbfs
->       convert mqueue
->       convert bpf
->       convert dlmfs
->       convert fuse_ctl
->       convert pstore
->       convert tracefs
->       convert debugfs
->       debugfs: remove duplicate checks in callers of start_creating()
->       convert efivarfs
->       convert spufs
->       convert ibmasmfs
->       ibmasmfs: get rid of ibmasmfs_dir_ops
->       convert devpts
->       binderfs: use simple_start_creating()
->       binderfs_binder_ctl_create(): kill a bogus check
->       convert binderfs
->       autofs_{rmdir,unlink}: dentry->d_fsdata->dentry =3D=3D dentry there
->       convert autofs
->       convert binfmt_misc
->       selinuxfs: don't stash the dentry of /policy_capabilities
->       selinuxfs: new helper for attaching files to tree
->       convert selinuxfs
->       functionfs: don't abuse ffs_data_closed() on fs shutdown
->       functionfs: don't bother with ffs->ref in ffs_data_{opened,closed}(=
-)
->       functionfs: need to cancel ->reset_work in ->kill_sb()
->       functionfs: fix the open/removal races
->       functionfs: switch to simple_remove_by_name()
->       convert functionfs
->       gadgetfs: switch to simple_remove_by_name()
->       convert gadgetfs
->       hypfs: don't pin dentries twice
->       hypfs: switch hypfs_create_str() to returning int
->       hypfs: swich hypfs_create_u64() to returning int
->       convert hypfs
->       convert rpc_pipefs
->       convert nfsctl
->       convert rust_binderfs
->       get rid of kill_litter_super()
->       convert securityfs
->       kill securityfs_recursive_remove()
->       d_make_discardable(): warn if given a non-persistent dentry
->
-> Diffstat:
->  Documentation/filesystems/porting.rst     |   7 ++
->  arch/powerpc/platforms/cell/spufs/inode.c |  17 ++-
->  arch/s390/hypfs/hypfs.h                   |   6 +-
->  arch/s390/hypfs/hypfs_diag_fs.c           |  60 ++++------
->  arch/s390/hypfs/hypfs_vm_fs.c             |  21 ++--
->  arch/s390/hypfs/inode.c                   |  82 +++++--------
->  drivers/android/binder/rust_binderfs.c    | 121 ++++++-------------
->  drivers/android/binderfs.c                |  82 +++----------
->  drivers/base/devtmpfs.c                   |   2 +-
->  drivers/misc/ibmasm/ibmasmfs.c            |  24 ++--
->  drivers/usb/gadget/function/f_fs.c        | 144 +++++++++++++----------
->  drivers/usb/gadget/legacy/inode.c         |  49 ++++----
->  drivers/xen/xenfs/super.c                 |   2 +-
->  fs/autofs/inode.c                         |   2 +-
->  fs/autofs/root.c                          |  11 +-
->  fs/binfmt_misc.c                          |  69 ++++++-----
->  fs/configfs/dir.c                         |  10 +-
->  fs/configfs/inode.c                       |   3 +-
->  fs/configfs/mount.c                       |   2 +-
->  fs/dcache.c                               | 111 +++++++++++-------
->  fs/debugfs/inode.c                        |  32 ++----
->  fs/devpts/inode.c                         |  57 ++++-----
->  fs/efivarfs/inode.c                       |   7 +-
->  fs/efivarfs/super.c                       |   5 +-
->  fs/fuse/control.c                         |  38 +++---
->  fs/hugetlbfs/inode.c                      |  12 +-
->  fs/internal.h                             |   1 -
->  fs/libfs.c                                |  52 +++++++--
->  fs/nfsd/nfsctl.c                          |  18 +--
->  fs/ocfs2/dlmfs/dlmfs.c                    |   8 +-
->  fs/proc/base.c                            |   6 +-
->  fs/proc/internal.h                        |   1 +
->  fs/proc/root.c                            |  14 +--
->  fs/proc/self.c                            |  10 +-
->  fs/proc/thread_self.c                     |  11 +-
->  fs/pstore/inode.c                         |   7 +-
->  fs/ramfs/inode.c                          |   8 +-
->  fs/super.c                                |   8 --
->  fs/tracefs/event_inode.c                  |   7 +-
->  fs/tracefs/inode.c                        |  13 +--
->  include/linux/dcache.h                    |   4 +-
->  include/linux/fs.h                        |   6 +-
->  include/linux/proc_fs.h                   |   2 -
->  include/linux/security.h                  |   2 -
->  init/do_mounts.c                          |   2 +-
->  ipc/mqueue.c                              |  12 +-
->  kernel/bpf/inode.c                        |  15 +--
->  mm/shmem.c                                |  38 ++----
->  net/sunrpc/rpc_pipe.c                     |  27 ++---
->  security/apparmor/apparmorfs.c            |  13 ++-
->  security/inode.c                          |  35 +++---
->  security/selinux/selinuxfs.c              | 185 +++++++++++++-----------=
-------
->  security/smack/smackfs.c                  |   2 +-
->  53 files changed, 649 insertions(+), 834 deletions(-)
->
->         Overview:
->
-> First two commits are bugfixes (fusectl and tracefs resp.)
->
-> [1/54] fuse_ctl_add_conn(): fix nlink breakage in case of early failure
-> [2/54] tracefs: fix a leak in eventfs_create_events_dir()
->
-> Next, two commits adding a couple of useful helpers, the next three addin=
-g
-> the infrastructure and the rest consists of per-filesystem conversions.
->
-> [3/54] new helper: simple_remove_by_name()
-> [4/54] new helper: simple_done_creating()
->         end_creating_path() analogue for internal object creation; unlike
-> end_creating_path() no mount is passed to it (or guaranteed to exist, for
-> that matter - it might be used during the filesystem setup, before the
-> superblock gets attached to any mounts).
->
-> Infrastructure:
-> [5/54] introduce a flag for explicitly marking persistently pinned dentri=
-es
->         * introduce the new flag
->         * teach shrink_dcache_for_umount() to handle it (i.e. remove
-> and drop refcount on anything that survives to umount with that flag
-> still set)
->         * teach kill_litter_super() that anything with that flag does
-> *not* need to be unpinned.
-> [6/54] primitives for maintaining persisitency
->         * d_make_persistent(dentry, inode) - bump refcount, mark persiste=
-nt
-> and make hashed positive.  Return value is a borrowed reference to dentry=
-;
-> it can be used until something removes persistency (at the very least,
-> until the parent gets unlocked, but some filesystems may have stronger
-> exclusion).
->         * d_make_discardable() - remove persistency mark and drop referen=
-ce.
->
-> NOTE: at that stage d_make_discardable() does not reject dentries not
-> marked persistent - it acts as if the mark been set.
->
-> Rationale: less noise in series splitup that way.  We want (and on the
-> next commit will get) simple_unlink() to do the right thing - remove
-> persistency, if it's there.  However, it's used by many filesystems.
-> We would have either to convert them all at once or split simple_unlink()
-> into "want persistent" and "don't want persistent" versions, the latter
-> being the old one.  In the course of the series almost all callers
-> would migrate to the replacement, leaving only two pathological cases
-> with the old one.  The same goes for simple_rmdir() (two callers left in
-> the end), simple_recursive_removal() (all callers gone in the end), etc.
-> That's a lot of noise and it's easier to start with d_make_discardable()
-> quietly accepting non-persistent dentries, then, in the end, add private
-> copies of simple_unlink() and simple_rmdir() for two weird users (configf=
-s
-> and apparmorfs) and have those use dput() instead of d_make_discardable()=
-.
-> At that point we'd be left with all callers of d_make_discardable()
-> always passing persistent dentries, allowing to add a warning in it.
->
-> [7/54] convert simple_{link,unlink,rmdir,rename,fill_super}() to new prim=
-itives
->         See above re quietly accepting non-peristent dentries in
-> simple_unlink(), simple_rmdir(), etc.
->
->         Converting filesystems:
-> [8/54] convert ramfs and tmpfs
-> [9/54] procfs: make /self and /thread_self dentries persistent
-> [10/54] configfs, securityfs: kill_litter_super() not needed
-> [11/54] convert xenfs
-> [12/54] convert smackfs
-> [13/54] convert hugetlbfs
-> [14/54] convert mqueue
-> [15/54] convert bpf
-> [16/54] convert dlmfs
-> [17/54] convert fuse_ctl
-> [18/54] convert pstore
-> [19/54] convert tracefs
-> [20/54] convert debugfs
-> [21/54] debugfs: remove duplicate checks in callers of start_creating()
-> [22/54] convert efivarfs
-> [23/54] convert spufs
-> [24/54] convert ibmasmfs
-> [25/54] ibmasmfs: get rid of ibmasmfs_dir_ops
-> [26/54] convert devpts
-> [27/54] binderfs: use simple_start_creating()
-> [28/54] binderfs_binder_ctl_create(): kill a bogus check
-> [29/54] convert binderfs
-> [30/54] autofs_{rmdir,unlink}: dentry->d_fsdata->dentry =3D=3D dentry the=
-re
-> [31/54] convert autofs
-> [32/54] convert binfmt_misc
-> [33/54] selinuxfs: don't stash the dentry of /policy_capabilities
-> [34/54] selinuxfs: new helper for attaching files to tree
-> [35/54] convert selinuxfs
->
->         Several functionfs fixes, before converting it, to make life
-> simpler for backporting:
-> [36/54] functionfs: don't abuse ffs_data_closed() on fs shutdown
-> [37/54] functionfs: don't bother with ffs->ref in ffs_data_{opened,closed=
-}()
-> [38/54] functionfs: need to cancel ->reset_work in ->kill_sb()
-> [39/54] functionfs: fix the open/removal races
->
->         ... and back to filesystems conversions:
->
-> [40/54] functionfs: switch to simple_remove_by_name()
-> [41/54] convert functionfs
-> [42/54] gadgetfs: switch to simple_remove_by_name()
-> [43/54] convert gadgetfs
-> [44/54] hypfs: don't pin dentries twice
-> [45/54] hypfs: switch hypfs_create_str() to returning int
-> [46/54] hypfs: swich hypfs_create_u64() to returning int
-> [47/54] convert hypfs
-> [48/54] convert rpc_pipefs
-> [49/54] convert nfsctl
-> [50/54] convert rust_binderfs
->
->         ... and no kill_litter_super() callers remain, so we
-> can take it out:
-> [51/54] get rid of kill_litter_super()
->
->         Followups:
-> [52/54] convert securityfs
->         That was the last remaining user of simple_recursive_removal()
-> that did *not* mark things persistent.  Now the only places where
-> d_make_discardable() is still called for dentries that are not marked
-> persistent are the calls of simple_{unlink,rmdir}() in configfs and
-> apparmorfs.
->
-> [53/54] kill securityfs_recursive_remove()
->         Unused macro...
->
-> [54/54] d_make_discardable(): warn if given a non-persistent dentry
->
-> At this point there are very few call chains that might lead to
-> d_make_discardable() on a dentry that hadn't been made persistent:
-> calls of simple_unlink() and simple_rmdir() in configfs and
-> apparmorfs.
->
-> Both filesystems do pin (part of) their contents in dcache, but
-> they are currently playing very unusual games with that.  Converting
-> them to more usual patterns might be possible, but it's definitely
-> going to be a long series of changes in both cases.
->
-> For now the easiest solution is to have both stop using simple_unlink()
-> and simple_rmdir() - that allows to make d_make_discardable() warn
-> when given a non-persistent dentry.
->
-> Rather than giving them full-blown private copies (with calls of
-> d_make_discardable() replaced with dput()), let's pull the parts of
-> simple_unlink() and simple_rmdir() that deal with timestamps and link
-> counts into separate helpers (__simple_unlink() and __simple_rmdir()
-> resp.) and have those used by configfs and apparmorfs.
->
+Hello,
 
-Hi Al, when I apply this patchset my Pixel 6 no longer enumerates on
-lsusb or ADB. It was quite hard to bisect to this point, as this is
-non-deterministic and seems to be setup specific. Note, I am using
-android-mainline, but my understanding is that this build does not
-have any out-of-tree USB patches, and that there are no vendor hooks
-in the build.
+syzbot found the following issue on:
 
-My apologies as I can't offer any other clues; there are no obviously
-bad dmesg logs and I'm still working on narrowing down the exact
-commit(s) that started this, but just wanted to send a FYI in case
-something stands out as obvious.
+HEAD commit:    62085877ae65 Merge tag 'kbuild-fixes-6.19-2' of git://git...
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14702ffc580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f1fac0919970b671
+dashboard link: https://syzkaller.appspot.com/bug?extid=316c0070a0341d2661a2
+compiler:       gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13ece05a580000
 
-Thanks!
-Sam
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ac88c4a42b92/disk-62085877.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/65aa8ae919a4/vmlinux-62085877.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/07d015936518/bzImage-62085877.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+316c0070a0341d2661a2@syzkaller.appspotmail.com
+
+rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+rcu: 	Tasks blocked on level-0 rcu_node (CPUs 0-1): P6397/1:b..l
+rcu: 	(detected by 0, t=10503 jiffies, g=12021, q=830 ncpus=2)
+task:sed             state:R  running task     stack:25736 pid:6397  tgid:6397  ppid:6396   task_flags:0x400000 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5260 [inline]
+ __schedule+0xfe4/0x5e10 kernel/sched/core.c:6867
+ preempt_schedule_irq+0x50/0x90 kernel/sched/core.c:7194
+ irqentry_exit+0x17b/0x670 kernel/entry/common.c:216
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+RIP: 0010:lock_release+0x19e/0x2e0 kernel/locking/lockdep.c:5893
+Code: ff 65 0f c1 05 5b 5d 01 12 83 f8 01 0f 85 f7 00 00 00 9c 58 f6 c4 02 0f 85 0c 01 00 00 41 f7 c6 00 02 00 00 0f 85 99 00 00 00 <48> 8b 44 24 10 65 48 2b 05 ed 15 01 12 0f 85 0f 01 00 00 48 83 c4
+RSP: 0018:ffffc9000454eec8 EFLAGS: 00000206
+RAX: 0000000000000046 RBX: ffffffff8e5e3360 RCX: ffffc9000454eed4
+RDX: 0000000000000001 RSI: ffffffff8dc1f455 RDI: ffffffff8bfa35a0
+RBP: ffffffff821833aa R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88802ff00000
+R13: ffffc9000454f028 R14: 0000000000000206 R15: 0000000000000002
+ rcu_lock_release include/linux/rcupdate.h:341 [inline]
+ rcu_read_unlock include/linux/rcupdate.h:897 [inline]
+ is_bpf_text_address+0x8f/0x1a0 kernel/bpf/core.c:746
+ kernel_text_address kernel/extable.c:125 [inline]
+ kernel_text_address+0x8d/0x100 kernel/extable.c:94
+ __kernel_text_address+0xd/0x30 kernel/extable.c:79
+ unwind_get_return_address+0x59/0xa0 arch/x86/kernel/unwind_orc.c:385
+ arch_stack_walk+0xa6/0xf0 arch/x86/kernel/stacktrace.c:26
+ stack_trace_save+0x8e/0xc0 kernel/stacktrace.c:122
+ kasan_save_stack+0x30/0x50 mm/kasan/common.c:57
+ kasan_save_track+0x14/0x30 mm/kasan/common.c:78
+ unpoison_slab_object mm/kasan/common.c:340 [inline]
+ __kasan_slab_alloc+0x89/0x90 mm/kasan/common.c:366
+ kasan_slab_alloc include/linux/kasan.h:253 [inline]
+ slab_post_alloc_hook mm/slub.c:4953 [inline]
+ slab_alloc_node mm/slub.c:5263 [inline]
+ kmem_cache_alloc_noprof+0x2ad/0x780 mm/slub.c:5270
+ mt_alloc_one lib/maple_tree.c:174 [inline]
+ mas_alloc_nodes+0x280/0x390 lib/maple_tree.c:1110
+ mas_preallocate+0x39c/0xf10 lib/maple_tree.c:5194
+ vma_iter_prealloc mm/vma.h:505 [inline]
+ commit_merge+0x3e3/0xbd0 mm/vma.c:751
+ vma_expand+0x7c3/0xd50 mm/vma.c:1200
+ vma_merge_new_range+0x2ce/0xa30 mm/vma.c:1099
+ __mmap_region+0x85d/0x2820 mm/vma.c:2747
+ mmap_region+0x180/0x3e0 mm/vma.c:2830
+ do_mmap+0xc63/0x12f0 mm/mmap.c:558
+ vm_mmap_pgoff+0x29e/0x470 mm/util.c:581
+ ksys_mmap_pgoff+0x328/0x5b0 mm/mmap.c:604
+ __do_sys_mmap arch/x86/kernel/sys_x86_64.c:89 [inline]
+ __se_sys_mmap arch/x86/kernel/sys_x86_64.c:82 [inline]
+ __x64_sys_mmap+0x125/0x190 arch/x86/kernel/sys_x86_64.c:82
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xc9/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f3f299f3242
+RSP: 002b:00007ffdac2ae3a8 EFLAGS: 00000206 ORIG_RAX: 0000000000000009
+RAX: ffffffffffffffda RBX: 00007f3f2989b000 RCX: 00007f3f299f3242
+RDX: 0000000000000001 RSI: 0000000000057000 RDI: 00007f3f2989b000
+RBP: 0000000000000812 R08: 0000000000000003 R09: 0000000000176000
+R10: 0000000000000812 R11: 0000000000000206 R12: 00007ffdac2ae430
+R13: 00007f3f299c75f0 R14: 00007ffdac2aebe0 R15: 00000fffb5855c78
+ </TASK>
+rcu: rcu_preempt kthread starved for 10551 jiffies! g12021 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x0 ->cpu=0
+rcu: 	Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
+rcu: RCU grace-period kthread stack dump:
+task:rcu_preempt     state:R  running task     stack:29112 pid:16    tgid:16    ppid:2      task_flags:0x208040 flags:0x00080000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5260 [inline]
+ __schedule+0xfe4/0x5e10 kernel/sched/core.c:6867
+ __schedule_loop kernel/sched/core.c:6949 [inline]
+ schedule+0xdd/0x390 kernel/sched/core.c:6964
+ schedule_timeout+0x127/0x280 kernel/time/sleep_timeout.c:99
+ rcu_gp_fqs_loop+0x1a9/0xb00 kernel/rcu/tree.c:2083
+ rcu_gp_kthread+0x21e/0x320 kernel/rcu/tree.c:2285
+ kthread+0x3b3/0x730 kernel/kthread.c:463
+ ret_from_fork+0x754/0xaf0 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+ </TASK>
+rcu: Stack dump where RCU GP kthread last ran:
+CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/13/2026
+RIP: 0010:mac80211_hwsim_tx_frame_no_nl.isra.0+0x3e6/0x1370 drivers/net/wireless/virtual/mac80211_hwsim.c:1814
+Code: fc ff df 48 89 fa 48 c1 ea 03 0f b6 14 02 48 89 f8 83 e0 07 83 c0 03 38 d0 7c 08 84 d2 0f 85 23 0f 00 00 41 02 9d 4c 01 00 00 <88> 9c 24 e6 00 00 00 e8 ce f5 f2 fa 49 8d bc 24 b8 3e 00 00 48 b8
+RSP: 0018:ffffc90000007b18 EFLAGS: 00000296
+RAX: 0000000000000007 RBX: 00000000ffffffe2 RCX: ffffffff87140972
+RDX: 0000000000000000 RSI: ffffffff871409ee RDI: ffff888030b16bac
+RBP: ffff888032dfe500 R08: 0000000000000003 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff8880333c3100
+R13: ffff888030b16a60 R14: ffff8880333c3398 R15: 0000000000070000
+FS:  0000000000000000(0000) GS:ffff8881245dc000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f77ff200000 CR3: 0000000028289000 CR4: 00000000003526f0
+Call Trace:
+ <IRQ>
+ mac80211_hwsim_tx_frame+0x1f6/0x2a0 drivers/net/wireless/virtual/mac80211_hwsim.c:2264
+ __mac80211_hwsim_beacon_tx drivers/net/wireless/virtual/mac80211_hwsim.c:2281 [inline]
+ mac80211_hwsim_beacon_tx+0x57e/0xa00 drivers/net/wireless/virtual/mac80211_hwsim.c:2365
+ __iterate_interfaces+0x2e6/0x650 net/mac80211/util.c:761
+ ieee80211_iterate_active_interfaces_atomic+0x71/0x1b0 net/mac80211/util.c:797
+ mac80211_hwsim_beacon+0x105/0x1b0 drivers/net/wireless/virtual/mac80211_hwsim.c:2395
+ __run_hrtimer kernel/time/hrtimer.c:1777 [inline]
+ __hrtimer_run_queues+0x516/0x990 kernel/time/hrtimer.c:1841
+ hrtimer_run_softirq+0x17d/0x350 kernel/time/hrtimer.c:1858
+ handle_softirqs+0x1ea/0x910 kernel/softirq.c:622
+ __do_softirq kernel/softirq.c:656 [inline]
+ invoke_softirq kernel/softirq.c:496 [inline]
+ __irq_exit_rcu+0xef/0x150 kernel/softirq.c:723
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:739
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1056 [inline]
+ sysvec_apic_timer_interrupt+0xa3/0xc0 arch/x86/kernel/apic/apic.c:1056
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+RIP: 0010:pv_native_safe_halt+0xf/0x20 arch/x86/kernel/paravirt.c:82
+Code: 76 78 02 c3 cc cc cc cc 0f 1f 00 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 66 90 0f 00 2d 83 cc 14 00 fb f4 <e9> fc 31 03 00 66 2e 0f 1f 84 00 00 00 00 00 66 90 90 90 90 90 90
+RSP: 0018:ffffffff8e207e00 EFLAGS: 00000242
+RAX: 000000000015e0e3 RBX: ffffffff8e297ac0 RCX: ffffffff8b76b4b5
+RDX: 0000000000000000 RSI: ffffffff8dc45440 RDI: ffffffff8bfa35a0
+RBP: 0000000000000000 R08: 0000000000000001 R09: ffffed101708673d
+R10: ffff8880b84339eb R11: 0000000000000000 R12: fffffbfff1c52f58
+R13: 0000000000000000 R14: ffffffff90b737d0 R15: 0000000000000000
+ arch_safe_halt arch/x86/include/asm/paravirt.h:107 [inline]
+ default_idle+0x9/0x10 arch/x86/kernel/process.c:767
+ default_idle_call+0x6c/0xb0 kernel/sched/idle.c:122
+ cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+ do_idle+0x35b/0x4b0 kernel/sched/idle.c:332
+ cpu_startup_entry+0x4f/0x60 kernel/sched/idle.c:430
+ rest_init+0x251/0x260 init/main.c:757
+ start_kernel+0x47a/0x480 init/main.c:1206
+ x86_64_start_reservations+0x24/0x30 arch/x86/kernel/head64.c:310
+ x86_64_start_kernel+0x122/0x130 arch/x86/kernel/head64.c:291
+ common_startup_64+0x13e/0x148
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
