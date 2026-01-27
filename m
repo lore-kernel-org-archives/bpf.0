@@ -1,141 +1,182 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D4236CDE3
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:33:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769542429; cv=none; b=InCsZcor4DPhip0yuGli8hAiS4xy6jotRlGV2mx/7K6rYN11K4+Cw0nBnbp7hCvdLjM2qwn91AIUdpPG/zjKltz8MNGCagk5XUkpJvVtsXlLc3gjeiAxMuyg0fMTNDhjyfmi3jnVbUMLxIQGd5Hq028iYs6IALNBRWBJDWMJXOE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769542429; c=relaxed/simple;
-	bh=iYAxyduA0s22PkYnL2nakuErPqp1U9iyFl2fdqR+s7w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZRLj+Ef3xu7BL8bnxwR4v6VkIsCN4R67i1ERYKeseaLAF7JALCrRwfqmcexJVFGQ/38xlW2HD5NDBcsDXhd2IX+nViCbHRs6crBmXgxEjJ1R0kp9yYmqkxISmp8jpZAR36A+M1T6YruITkczf0p5kaimbMSqlMK2f84Kx9FxR+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MvrHHE4A; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7065C311C1D
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 19:34:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769542458; cv=pass; b=ovGiriT4vRWtclONVepko8rmWcahdqq8ehOq8E4bIlwRlRZ+8IbSVL/VJd/80avKyhL86hCthLBjpkU4C71KbYEZWrAmO16HD9uD+VNUc0fxA9ylHV0h03eegvBQ+PSNqXUt5A0WZ+yOhPDo6yA6qTZ9EBpWN6Nm6yF2oOjHSHw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769542458; c=relaxed/simple;
+	bh=zdcyGx+PcCniJuAuyXsgthrfxQ3sgFQZK+eF/Mocblg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Xd5Fx6HzmGuF7C8kVGas+K061IEC5W8W4VhTVIvyzXV4jP06+WpqFxMbaWCOFXiDe4ann4wmpoXyQrD1tw0lTldIkta+985k4gLBWtV1L6Ho3DqerP38y3Vttg+t/cmM/yqyglvyhtTalLRYmhCIth8vAC+V6KeMaSCsf9J+xS4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CR1WIMaO; arc=pass smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MvrHHE4A"
-Message-ID: <243ea894-3bf3-4c10-b012-d4451e7ec17e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769542424;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3DrtAfvaeBV+P4A9wsocJoQ3hSxFzimNThzq0s5w4qU=;
-	b=MvrHHE4ASs7vyavoa/VJYmmAgD8AXEib483PbIUj8Wfu4x3AbgWNmAhBaTECcOEBPlkqyQ
-	hX2Qrh0Ed5+eio9mr+Lvqn1CEkaYDkn8zsTP3NMUkU63UGwNXtVcLaCWelx3QVmeV4DJS3
-	DdRZaR6KpstVb5JsZSQ9U3iu1iaRCRM=
-Date: Tue, 27 Jan 2026 11:33:30 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CR1WIMaO"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a2ea96930cso38103425ad.2
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 11:34:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769542457; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Ke+8bX87AjufGWFLwzTD1KV2g0RudZ1yp3mB/EGl1NcwKAu3YE1iEzVRHyuLVLs6xW
+         dH9bgS7Ti1cVrIZh3MqpHFzcX9phLDmzPsdd8eAZi5ZgZ1Y30webQEk1xIb7ZQoPepTm
+         YYx8KGRL1kAu4PuxuNH2blheZWpmfj41KRzaSJX69fMs9zRD2TD2RV94mvHUZ39n7ogR
+         edQz08u965RCjxrKSfphs1PkgrJpNKGu9f+OO7yh5UW0w64J7MJLOWw902/YSuXJeudq
+         X2E7JNICSM8GFUEv1O+7yIK8hBqn6gTxjeyPI6DcwIms413kXXlkwlBOQYJ5aOg34IfX
+         d3Fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=UKOseiznsTrZqeJbis69qVcn3O87zlhWxNMY1ap4lBQ=;
+        fh=afqtdvjCksjM+sFbTjIqgTNP6PY46hPOoOpghAXPXCQ=;
+        b=CJ1HvUvdWrHkuH0VaeIwTBbK0NIH/OPiscY/tPjWhwBS8NUwGfU9umUgV+cBvOHmfL
+         1IvkSTVWyLgT5i2Zh3sFXPevIjNwA0UPwbh/Hnhsb3Q5OLLQtDcjtaQMz5lC6YbqmI2T
+         1tsbt7vH7svKnRby/1HMPZJL5JcHlvlzoH9w/g7yIoclMGtEadOMfu2O9mmR7/U9p71m
+         Gsd1jMARvWrnbJJnjhhNHgzMz5i+I+1W6dNihiPaU0e0kd/XBIlkZBbu9Knd2oNfuBra
+         eqtGT/A+ZovUnVB1mkXxBgcMKKaPmM2DdMk0mN4RtvVGtZYmPMZgaj4hZOufczxplpP2
+         ddzw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769542457; x=1770147257; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UKOseiznsTrZqeJbis69qVcn3O87zlhWxNMY1ap4lBQ=;
+        b=CR1WIMaOP32QnfGj03g743WO7NmDqYImNraMUM470Vu5JdP38HN+jgQi/6zKFAj5Wk
+         2TvxcLoIswZGa00O3vtIKVPr3wzBFPwvbTItTs/bn1oDCJ14OnxiVrsxD1W9KbaTpHTc
+         Ryfc2ng2XCq1Vyz2jbcnJuUfoFtUjg0paRpDzlzvAGzW99SwiMjocIFqDdEmvLt547rP
+         pRnGNGiJiWKczMDDe38yHUX/FssEmQ+VLlwsl8XDnorg6G1bBxqr4kOzuuzzhKUsQx+7
+         9fkPCqn3yxsSsco0cfwyMOLRB5PqKi/+TxevHLoPu6xx4KLfVEeNpRS6aW0TgvEljFHr
+         PngA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769542457; x=1770147257;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UKOseiznsTrZqeJbis69qVcn3O87zlhWxNMY1ap4lBQ=;
+        b=jv/FG3p4aM1sskXFZM+F1dNzMmrlDvSdgZvXwH3TjNRerV3Tn5Q3uujgK7RJmIL0hS
+         om08p3sYXd4lQn1nTpNTOatX+Q3JWBi3rJbImyN9YGUlLjm29jW/URH2IrC/5qdzrO+k
+         29cMKk0C9S1wYETjQhovfva1bKAYu80FE9w6+lTXTSXyUugSCSmvGCyvYR8ODwLqxPjd
+         jiinCy/jnwH4kkJb9FhNRdXgMcu99/qRDgkcsTaG2pIbm/AAaj0br4uE6sEo7FCT0Bcu
+         mpEflUmAHHDxKMP4zHa4jYjascBi0JeOc0pnUzTOlx1Cz2ojy3BQ9tbDgm8GTCKWu2rq
+         uomg==
+X-Gm-Message-State: AOJu0Yyi6nK5943/1e4HZe/H4P6wyfE6/vGKRJs9kFr6GzrRpPWx0Gud
+	hAObwhOQBBNSJkLIv9vhbBm5DvrApcCp6Tq0stTJ10MPYWL2mtbJfY86rtYUWfVVcLaFqkmkadG
+	i9tOWkQGEDaEw/vh8Pg+wOgf/KI9eqlI=
+X-Gm-Gg: AZuq6aIkV+6GdcOEYKiVOet87GQD7NxcrbFQQ2P3bSa4ZIIIr+YHCSjsIzreN4WCq61
+	8+XhFeLX0gnp8atSE/EHZcsm8PCmELpIk/bitV5OPYfN/seW9kDWH9SeIGM+CPxFHSmzS0GvFAT
+	8Fp/YPLhUBo0alL4Ch4HOkiFkmiZXQjuLMRM2VdazpMXMqoD2UdCDJBWkZ2y3+v7fu0dY2Qbt08
+	GEg3yMf+iSCjmeak3O6JQq1ev6HXXw0huzW4C6kFnBzkxHOi7FpbKvlUw4oCkh9c6Y4rlUUwsPr
+	Wd1esGbUwqo=
+X-Received: by 2002:a17:903:1249:b0:299:e215:f62d with SMTP id
+ d9443c01a7336-2a870d57808mr25389795ad.5.1769542456703; Tue, 27 Jan 2026
+ 11:34:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net-next 00/10] Call skb_metadata_set when skb->data
- points past metadata
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Michael Chan <michael.chan@broadcom.com>,
- Pavan Chebbi <pavan.chebbi@broadcom.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
- Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, intel-wired-lan@lists.osuosl.org,
- bpf@vger.kernel.org, kernel-team@cloudflare.com,
- Jakub Kicinski <kuba@kernel.org>, Amery Hung <ameryhung@gmail.com>
-References: <20260110-skb-meta-fixup-skb_metadata_set-calls-v1-0-1047878ed1b0@cloudflare.com>
- <20260112190856.3ff91f8d@kernel.org> <87bjixwv41.fsf@cloudflare.com>
- <ad835a9b-e544-48d3-b6e2-ffe172fcfa6d@linux.dev>
- <878qdltsg0.fsf@cloudflare.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <878qdltsg0.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260127163408.1991583-1-mykyta.yatsenko5@gmail.com>
+ <CAEf4BzY48PKYcUU9sQ+g9CXd69Xuf1Js6Ow0TtTSt8m9SC353Q@mail.gmail.com> <58e46dfe-b17a-4683-a7cf-a0b20236ad62@gmail.com>
+In-Reply-To: <58e46dfe-b17a-4683-a7cf-a0b20236ad62@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 27 Jan 2026 11:34:04 -0800
+X-Gm-Features: AZwV_QihE17hTAzlPRpDQmgYh4ryp7rNn8r0Yp5MgWNyLrhUA-mwoF68mktpuXc
+Message-ID: <CAEf4BzZgkSA1BX0Fjr=1dr28wJZ1t+iNLaXQJTjYjTg3H057JQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Add hexdump fallback when xxd
+ is unavailable
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+	kpsingh@kernel.org, Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Jan 27, 2026 at 11:05=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> On 1/27/26 18:53, Andrii Nakryiko wrote:
+> > On Tue, Jan 27, 2026 at 8:34=E2=80=AFAM Mykyta Yatsenko
+> > <mykyta.yatsenko5@gmail.com> wrote:
+> >> From: Mykyta Yatsenko <yatsenko@meta.com>
+> >>
+> >> The verification signature header generation requires converting a
+> >> binary certificate to a C array. Previously this only worked with
+> >> xxd (part of vim-common package). Add a fallback using
+> >> hexdump (available on most Unix systems) to generate equivalent C arra=
+y
+> >> output when xxd is not found. The XXD variable is auto-detected at
+> >> Makefile parse time.
+> > why not always use hexdump then?
+> I thought about that, not sure, it looks like xxd creates dump in a
+> certain format,
+> I did my best to replicate it with the hexdump, but not sure how
+> reliable this is.
+> I think most of the users going to have xxd anyways, so I'm trying to
+> make this less
+> risky.
+
+but now we will have two different ways to generate the same snippet
+of C code. If your hexdump-based thing works right now, I don't see
+why it should suddenly stop breaking. Let's converge on one more
+generic way of doing this.
+
+pw-bot: cr
 
 
-
-On 1/25/26 11:15 AM, Jakub Sitnicki wrote:
-> On Thu, Jan 22, 2026 at 12:21 PM -08, Martin KaFai Lau wrote:
->> On 1/13/26 4:33 AM, Jakub Sitnicki wrote:
->>> Good point. I'm hoping we don't have to allocate from
->>> skb_metadata_set(), which does sound prohibitively expensive. Instead
->>> we'd allocate the extension together with the skb if we know upfront
->>> that metadata will be used.
->>
->> [ Sorry for being late. Have been catching up after holidays. ]
->>
->> For the sk local storage (which was mentioned in other replies as making skb
->> metadata to look more like sk local storage), there is a plan (Amery has been
->> looking into it) to allocate the storage together with sk for performance
->> reason. This means allocating a larger 'struct sock'. The extra space will be at
->> the front of sk instead of the end of sk because of how the 'struct sock' is
->> embedded in tcp_sock/udp_sock/... If skb is going in the same direction, it
->> should be useful to have a similar scheme on: upfront allocation and then shared
->> by multiple BPF progs.
->>
->> The current thinking is to built upon the existing bpf_sk_local_storage usage. A
->> boot param decides how much BPF space should be allocated for 'struct
->> sock'. When a bpf_sk_storage_map is created (with a new use_reserve flag), the
->> space will be allocated permanently from the head space of every sk for this
->> map. The read (from a BPF prog) will be at one stable offset before a sk. If
->> there is no more head space left, the map creation will fail. User can decide if
->> it wants to retry without the 'use_reserve' flag.
-> 
-> Thanks for sharing the plans.
-> 
-> We will definitely be looking into ways of eliminating allocations in
-> the long run. With one allocation for skb_ext, one for
-> bpf_local_storage, and one for the actual map, it seems unlikely we will
-> be able to attach metadata this way to every packet. Which is something
-> we wanted for our "label packet once, use label everywhere" use case.
-> 
-> I'm not sure how much we can squeeze in together with the sk_buff.
-> Hopefully at least skb_ext plus a pointer to bpf_local_storage.
-
-yeah, only a bpf_local_storage pointer is needed in skb (or in skb_ext). 
-It is the same for the bpf sk/task/... storage.
-
-To be clear, for allocation in skb, I was thinking more about Paolo's 
-comment on "...increasing struct sk_buff size as an alternative to the 
-mptcp skb extension...".
-
-> 
-> I'm also hoping we can allocate memory for bpf_local_storage together
-> with the backing space for the map, which update triggers the skb
-> extension activation.
-
-Allocate the actual storage at the end of bpf_local_storage? Hmm... off 
-the top of my head, I don't have a good idea how to do it without 
-trading off flexibility. If trading off flexibility, may as well 
-allocate fixed extra space at the sk (/skb) and get a performance 
-benefit (which would need to be measured).
-
-> 
-> Finally, bpf_local_storage itself has a pretty generous cache which
-> blows it up. Maybe the cache could be a flexible array, which could be
-> smaller for skb local storage.
-
-For our usage, the cache has been slowly filling up, so we actually have 
-another side of the issue. Improvements on bpf_local_storage is always 
-welcomed.
-
-I am currently more interested in getting the extra memory/headroom 
-allocated for an sk. Eventually, the storage(s) that will be needed for 
-all (or most) sk will use the extra headroom of sk. The current 
-bpf_local_storage (pointer) in sk will be more for testing/ad-hoc 
-purpose or for performance-insensitive usage.
-
-It is probably off topic now. It seems having extra tail space in a skb 
-is not in your current plan for the next respin.
-
+> >
+> >> Fixes: b720903e2b14d ("selftests/bpf: Enable signature verification fo=
+r some lskel tests")
+> >>
+> >> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> >> ---
+> >>   tools/testing/selftests/bpf/Makefile | 13 ++++++++++++-
+> >>   1 file changed, 12 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/self=
+tests/bpf/Makefile
+> >> index 9488d076c740..820816257590 100644
+> >> --- a/tools/testing/selftests/bpf/Makefile
+> >> +++ b/tools/testing/selftests/bpf/Makefile
+> >> @@ -31,6 +31,7 @@ SAN_CFLAGS    ?=3D
+> >>   SAN_LDFLAGS    ?=3D $(SAN_CFLAGS)
+> >>   RELEASE                ?=3D
+> >>   OPT_FLAGS      ?=3D $(if $(RELEASE),-O2,-O0)
+> >> +XXD            ?=3D $(shell command -v xxd;)
+> >>
+> >>   LIBELF_CFLAGS  :=3D $(shell $(PKG_CONFIG) libelf --cflags 2>/dev/nul=
+l)
+> >>   LIBELF_LIBS    :=3D $(shell $(PKG_CONFIG) libelf --libs 2>/dev/null =
+|| echo -lelf)
+> >> @@ -722,9 +723,19 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG=
+_SETUP)
+> >>          $(Q)mkdir -p $(BUILD_DIR)
+> >>          $(Q)$(VERIFY_SIG_SETUP) genkey $(BUILD_DIR)
+> >>
+> >> +ifneq ($(XXD),)
+> >>   $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+> >>          $(Q)ln -fs $< test_progs_verification_cert && \
+> >> -       xxd -i test_progs_verification_cert > $@
+> >> +       $(XXD) -i test_progs_verification_cert > $@
+> >> +else
+> >> +# Fallback when xxd is not available: use hexdump to generate C array
+> >> +$(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+> >> +       $(Q)ln -fs $< test_progs_verification_cert && \
+> >> +       (echo "unsigned char test_progs_verification_cert[] =3D {"; \
+> >> +        hexdump -v -e '12/1 "  0x%02x," "\n"' test_progs_verification=
+_cert | sed 's/0x  ,//g; $$s/,$$//'; \
+> >> +        echo "};"; \
+> >> +        echo "unsigned int test_progs_verification_cert_len =3D $$(wc=
+ -c < test_progs_verification_cert);") > $@
+> >> +endif
+> >>
+> >>   # Define test_progs test runner.
+> >>   TRUNNER_TESTS_DIR :=3D prog_tests
+> >> --
+> >> 2.52.0
+> >>
+>
