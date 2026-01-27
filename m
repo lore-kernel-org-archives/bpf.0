@@ -1,86 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA433245031;
-	Tue, 27 Jan 2026 23:31:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1B6421CC44
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 23:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769556692; cv=none; b=PsmrN3b+rS0m5bEQzlOihHnLiEHoW1tY8xVom4irGo89bhh6bJFL6rdl9ZW3sv0NWS+vm2u1M1nI6RhEpeUMDP3eD9qGblV9hF0gvPeNi+uhX5h1/lHshaOj/oz5cirXORykpoZpCy8kWyQOb6gnomxtezhoOaElTqCwEfnYfn8=
+	t=1769557273; cv=none; b=nhhSZT9ZChZ93cocJDAwW7ENGdGlTn181Agvp1jpOzf9JEE5VKJoo6JNJ7DnKBKWMa2za5JL2whF+rkRgLDrpg3LH1ENIZxoYJYJg8pjNrw84AdLIE6vir+ltnEgxPhvPDe0X/haO1OJn70gB1ckagsvuwp453HgwbUtq1y3iy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769556692; c=relaxed/simple;
-	bh=UBN3NOPFd85zheM/xL5AgOtZaOFrFdo5tpzL1YxcB7Q=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=suARuOZo7PbsBA//Fh1s7P3LPa0pSUtCnRA3qMhgtdqN3x5tZsEEs4koi8Tz9Uax/mF/JxuAj+72xja0abJqCrMgxzJ0dQIlukYcey2C9L6UgbhyS0sL+AzDruX0ct4mD5L7pS9lJY6WgmWsQfrbL+Uprslt86QSYd0LX8lOe1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=eHqGwJnV; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769557273; c=relaxed/simple;
+	bh=S/hd0ZVqJ5fFLanFj4NeEbHlzgdQc8L3/bdB5D20wZs=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=O1AhoQULdL0d9bKfZDD3/I+EUSzppvb2n4hDFwLALNA4ZdKDum48klvdiDieN/V6tyRLn0BN/1x4ffn8NR2Wd43c9cCrPPjLqdi0mhbWgpQMq0i5ZhuCtpoVWxrEJj14ACXM+Cs3cWLduv/4UGk5QJ68zXLoaJWKEznxP7oF65I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=EtF4IN7q; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="eHqGwJnV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E1BFC116C6;
-	Tue, 27 Jan 2026 23:31:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1769556691;
-	bh=UBN3NOPFd85zheM/xL5AgOtZaOFrFdo5tpzL1YxcB7Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=eHqGwJnV1EQEhnkOrvVHX9jrufBbyrq5CI07GU4V6mlMf9v9hAn/+cL/Q8MP9UTXG
-	 3MNuHytU8/GjS1cij72Gz3cN1hjHI2OaKn0YKNad2DCFiHh6mktkk85JJniGFZKJtQ
-	 G590jVQ4GkEtCDCULZ6yqWs75qI01JYwX/eR7PMw=
-Date: Tue, 27 Jan 2026 15:31:29 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Marco Elver <elver@google.com>
-Cc: Alan Maguire <alan.maguire@oracle.com>, kees@kernel.org,
- nathan@kernel.org, peterz@infradead.org, ojeda@kernel.org,
- ubizjak@gmail.com, Jason@zx2c4.com, Marc.Herbert@linux.intel.com,
- hca@linux.ibm.com, hpa@zytor.com, namjain@linux.microsoft.com,
- paulmck@kernel.org, linux-kernel@vger.kernel.org,
- andrii.nakryiko@gmail.com, yonghong.song@linux.dev, ast@kernel.org,
- jolsa@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, bvanassche@acm.org,
- nilay@linux.ibm.com, bpf@vger.kernel.org
-Subject: Re: [PATCH] kcsan, compiler_types: avoid duplicate type issues in
- BPF Type Format
-Message-Id: <20260127153129.2ca728a4550375a4172e1351@linux-foundation.org>
-In-Reply-To: <CANpmjNNoDHQOfH+bUqjpHdzYDxLwG7wA9qEywfWFNamt66Ziyg@mail.gmail.com>
-References: <20260116091730.324322-1-alan.maguire@oracle.com>
-	<CANpmjNM=w46BDuLsvAW6oM7JbPvrhN1ddaEUNSvsfZVU-514cQ@mail.gmail.com>
-	<CANpmjNNoDHQOfH+bUqjpHdzYDxLwG7wA9qEywfWFNamt66Ziyg@mail.gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="EtF4IN7q"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-88a2fe9e200so62199986d6.0
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 15:41:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769557270; x=1770162070; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/TvMeHacoUQlGIVwuEEJNjoJSg984dXoTcAnn4mER90=;
+        b=EtF4IN7qb+zYN2uKY8oRStShnt6UlgC0c6IPqcZQcRYdK4pV7wH7yyv0Ac+K+4st6S
+         aw8g/cmflw+4owh/NvRolNk4NnnsIteZhVFR7ICGjWSHmk3aRzqkPthLLUzut3YSkzte
+         kedYdEJ46ahm7IFLFcgtdN5RQ/sAhbZ/jbU6p3ineC/uAR5FqfHwuWu6B4CvEg048tlx
+         Fg4nwgO3xIIi9yMTQiiLPTfOtiH9Mizrhl4KmHQgCyyNAiG2DP4inAlC/ewq5KQ9r4sC
+         Sx+sWb4r+YtSxWpYV/EAECzC6rGQwQBAr7f333iexLwvgCu/L2K/eSOkqgGUJYZgI1up
+         +ayw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769557270; x=1770162070;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/TvMeHacoUQlGIVwuEEJNjoJSg984dXoTcAnn4mER90=;
+        b=j9Z3GV6DtMUPc0IIrKaud7A6pWcNAuu110CfQKISTfl0VoDtLIjCRCtGcjswVhMDjJ
+         xCRAFJXuznHDH1ZqQ8J+Y6oBrysewjjWZMY8i/D07omQpmEjNW+0Kw0mTC1R4RPyyJ5K
+         bNkU8ZfMjRnosZ3VvosUmRNsHVxfdkjUOGg3RHw/NbjxT9nXo8AGjUazTFVUh6zdebXQ
+         8zH26yyW2fbDXoImEY/igIO9c8bxNzShUQ5G9azUbjN0ngIJiN1hHbbu8XmSpQ6XSAIe
+         e61NFJSzT3vlxhqdwiUbAV0zOGHZR1kMoJUig6nKp2f/wbNVnYAM34TCI3E5cj3S3sBL
+         8H6g==
+X-Forwarded-Encrypted: i=1; AJvYcCU3SqqCIcdVHk6jByHnlUb29F4PIdRhpodI0BJ4ggN/2NFz41KCECxb6+62HLqjMDLbUEQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwZ5NPQ+Szjvp30WVfZRkqStcTubTvVuGE1zs2sBj0ULou1v+0k
+	D3Z3tHDPmOB7FFQLUpcuhu+wRpZ8AaD/qEQ4rJJsZBU6NlnuF7OGGfpe4Zan1X0Lpdc=
+X-Gm-Gg: AZuq6aIOU2y6LyyIUXPJMKD+UAANk1/Nu4OGqqSxGABuqbbTIZNWEZmgpQGFsQe8DMi
+	dmxlG29ZZ/1Z7z0TnIbvZ7jCdY/QidZ+QbvHBO/6PrmrEZuAtwLsU4bml1B1P/yjJjnmNTbMY2i
+	+p3Hrseuv0k1jPHuz84uoxyAiZMZv+hCacyindglFA1i00nBIjHjI04lJbkT9yY8TWbZoecPEdX
+	uuHkF24Ek6rWkTjBx8e6oe9/o1dPlI1cN+N5/EY3haR+ZUiMcBcC0tuMCALzCkNRTgWFlA/rmyV
+	3vqmsy/jXYrKuUOHCkDnyw/GUwiGM3WEKE8IRIpqMNEAtSwxjdmayd0or8u5Gx/xbx7FekvWO2F
+	5v5m8nmzVk0pU+OxlFBKvIPcRyzQ+kWlpM4V7LghwSb7sw+SgLFo9BLg9Rw1e/KmnY95cZ/5dj8
+	Y7lR2BgK+RGEYVwTo1sWL0ZA==
+X-Received: by 2002:a05:6214:765:b0:894:71b0:6afd with SMTP id 6a1803df08f44-894cc93f7f8mr51886666d6.59.1769557270589;
+        Tue, 27 Jan 2026 15:41:10 -0800 (PST)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-894d3741252sm6354286d6.33.2026.01.27.15.41.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Jan 2026 15:41:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 27 Jan 2026 18:41:08 -0500
+Message-Id: <DFZRP6TI6K6B.12EQ0UD7QO4N3@etsalapatis.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <eddyz87@gmail.com>, <etsal@meta.com>, <ihor.solodrai@linux.dev>,
+ <martin.lau@kernel.org>, <memxor@gmail.com>, <puranjay@kernel.org>,
+ <song@kernel.org>, <yonghong.song@linux.dev>
+Subject: Re: [PATCH v2 04/13] selftests: bpf: Make WRITE_ONCE macro in
+ bpf_atomic.h conditional
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260127181610.86376-1-emil@etsalapatis.com>
+ <20260127181610.86376-5-emil@etsalapatis.com>
+ <92fcc97e-1313-424e-b67d-d86effda3481@gmail.com>
+In-Reply-To: <92fcc97e-1313-424e-b67d-d86effda3481@gmail.com>
 
-On Wed, 28 Jan 2026 00:08:10 +0100 Marco Elver <elver@google.com> wrote:
+On Tue Jan 27, 2026 at 2:26 PM EST, Mykyta Yatsenko wrote:
+> On 1/27/26 18:16, Emil Tsalapatis wrote:
+>> From: Emil Tsalapatis <etsal@meta.com>
+>>
+>> The WRITE_ONCE macro is identically defined both in bpf_atomic.h
+>> and in bpf_arena_common.h. The bpf_arena_common.h definition is
+>> guarded with an ifndef to allow for inclusion after bpf_atomic.h,
+>> but the opposite does not hold. Add an extra guard to avoid requiring
+>> a specific order for the headers.
+>>
+>> Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
+>> ---
+>>   tools/testing/selftests/bpf/bpf_atomic.h | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/bpf/bpf_atomic.h b/tools/testing/se=
+lftests/bpf/bpf_atomic.h
+>> index c550e5711967..d89a22d63c1c 100644
+>> --- a/tools/testing/selftests/bpf/bpf_atomic.h
+>> +++ b/tools/testing/selftests/bpf/bpf_atomic.h
+>> @@ -42,7 +42,9 @@ extern bool CONFIG_X86_64 __kconfig __weak;
+>>  =20
+>>   #define READ_ONCE(x) (*(volatile typeof(x) *)&(x))
+>>  =20
+>> +#ifndef WRITE_ONCE
+>>   #define WRITE_ONCE(x, val) ((*(volatile typeof(x) *)&(x)) =3D (val))
+>> +#endif
+> I wonder if we can avoid duplicating this macros, for example by
+> including bpf_atomic.h in the bpf_arena_common.h.
 
-> > "KCSAN and KCSAN_SANITIZE objects" doesn't make sense.
-> > "KCSAN_SANITIZE.. := n" objects?
-> > Or just "instrumented and uninstrumented source files".
-> > Anyway, I know what you mean, but others might not. :-)
-> >
-> > > Fixes: 31f605a308e6 ("kcsan, compiler_types: Introduce __data_racy type qualifier")
-> > > Reported-by: Nilay Shroff <nilay@linux.ibm.com>
-> > > Suggested-by: Marco Elver <elver@google.com>
-> > > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
-> >
-> > Reviewed-by: Marco Elver <elver@google.com>
-> 
-> Which tree do compiler_types.h changes go through these days?
+I kept both definitions because the headers correspond to unrelated
+features (atomics and arenas). Including bpf_atomic.h in
+bpf_arena_common.h would work, and we'd need to update just a single
+test that includes bpf_atomic.h directly (lpm_trie_bench). However,
+any program that wanted to include atomics would also have to include
+arena-related definitions. If that sounds reasonable I'll update the
+diff on the next version.
 
-Thanks for poking.
+>>  =20
+>>   #define cmpxchg(p, old, new) __sync_val_compare_and_swap((p), old, new=
+)
+>>  =20
 
-compiler_types.h appears to be a free-for-all.  It's best to view such
-a thing as a KCSAN patch rather than a compiler_types.h patch - that
-the patch affects compiler_types.h is incidental.
-
-31f605a308e6 came in via paulmck so convention (which perhaps only I
-maintain) says "Paul", but whatever - getting the fix merged is the
-important part.
-
-So I'll grab Alan's patch, shall drop if it pops up in -next via a
-different route.   Aiming for upstreaming in the next merge window.
-
-It's unclear whether a -stable backport is required.  Thoughts on this
-are sought.
