@@ -1,63 +1,63 @@
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC2CD325735
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDA4F309F1B
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:16:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769537790; cv=none; b=reeWQc1tU0bGxgoNNrUlXxMC5zHmjVUMx5qMAvC7MMzDmD32wFc32YUp9kRHNTuijhcuvNyHAHM8g+lVgc+f9j0RdDHw2Tk4ytm+b3DKXovlZwrnrBi3BY773kqX02n9eTSVR2y+bRAUDcgUQnTwukJ+EQ1wEHv6KKxLSsOD1B4=
+	t=1769537791; cv=none; b=s+/UR9lc2+Vfk5l+YnVJz6LbX46dmMPhcgWf+CHZoRomZsQxtdEAxz5A9TVXHUlX+J0DBqKMgf+sAUMXZMwa51+wzD1SlFe6A0BVBCAbxXOADrG2DfgPI1x+2wLhcTHHGrfmai3qE32hLu2t9JzJEsdv52S5n7gE9B/o0XkvACQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769537790; c=relaxed/simple;
-	bh=cOQhmYuTWxPfKp0Y0ZNK0H2Z44mvMLjMEh281Ag7q5Y=;
+	s=arc-20240116; t=1769537791; c=relaxed/simple;
+	bh=ghPmD8GgjAwRtDOxDBNUkJKDFG/xaafztQsutLa4gxM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LeZMSAHBIZM+mpbOerzR0gbYJ9Mh+CxIpUiRb53aDJzrhbKtoPUufmCJTei9b3Wel1DbwqNFfsmkAFfSkiaEdHyZd+iRP/btFZjZSN44UORpKUfDqLm3caMieKd9aVn6FaiuRiOxmHuPq3buPRiddnvYjYoxr5I3bq/gfwPdAO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=ML03lO3p; arc=none smtp.client-ip=209.85.160.181
+	 MIME-Version; b=C1yYZ+f87iUG73e6e/DkwWF7xgoXH4xRNxkZJQvQnE4Whhirr41X50kOQ8BQTdnrhKqsr4NJZVIuBcW7jH3iQ807UBBEV+J9NWtnHk2nUKb6vbc3YlFa2n0Z3W7IBJfKGZmtAtxmlifgaLV+fU6/a/Eixm4epM8JN3ieHIolQPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=1BEKDhp2; arc=none smtp.client-ip=209.85.219.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="ML03lO3p"
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-501488a12cbso79098191cf.3
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 10:16:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="1BEKDhp2"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-894770e34afso99636886d6.0
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 10:16:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769537788; x=1770142588; darn=vger.kernel.org;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769537789; x=1770142589; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EhQy4YBt5STqxJHFB1/TP8YaKIdvTw9R6JrZKycFDsQ=;
-        b=ML03lO3pzDKCctEqN/LRzp9pwQ16LMf8DEwI++ZIfom/gewRytNufWiEWVQEPbcG7a
-         m6elaU+0yZPntk+LcEedat0U5VigAri1JxL1JztoYgu0HHI8Q26CPhYiYKFM0e39IefV
-         hPEu2D0AGozZ5oornfo/1nrgZN+wmXpvYbxf+os7eeApumCIetti8LIS0wWU+bmHlkBg
-         KuNiyoDAzImBHcILG8yaVYASUmz57bu4U2lHnjp5i+M7mhmd+dn/maS0ZxNUNlNda1Zs
-         hdympnUOcZ7AubOhG2clh06kHk/TejTiCttwNU1EAxrFlOI2sX20FWh13Khmx4mazShI
-         f2Og==
+        bh=W0DBzHUK982E+T5YVoHJXumJlhN2/Z7MNEuOxJjgCTo=;
+        b=1BEKDhp2av4Lm5T3ufN8fdaVh1tS5Bb48JjF+wnDyPFKhefn2Y0A6eslmR8NyTMcGd
+         sYwJC4PqDUDySio3NHDGf0cq82TYuxYJUqhb/xi8EmLWbs9WrzMfqVGLEXQ+7Ivkia+x
+         xasRZHBuPHgw1i/IKNhUPWYCtqHBPjc/VvnoH3LZEp0gWVPtmn6pWH3Pu3FkFfuCk3v7
+         AbpdJxeDWkzO4HoUD29DNR12yJ9t7j5h7BFZT1dGWOHCVYNoRmrwJua3AbgDpKtRvbb+
+         cgPn9B5h7MC9a3R5YSbZMgoemnZQfAG8tKwuwO2Bw9Jm5lmWuFAxNk2AOuPgUYAMWlse
+         /xFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769537788; x=1770142588;
+        d=1e100.net; s=20230601; t=1769537789; x=1770142589;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=EhQy4YBt5STqxJHFB1/TP8YaKIdvTw9R6JrZKycFDsQ=;
-        b=IsZuzuSK+wuocOanwC9FHXDTVhMeLxFWXD6SqGM5caGfib86rIVvIj7AS6JINAkgoP
-         uEIIllsuKtdLNOWbB7gG1IlfuOE6wjgP5AwtRgEYcMIzPZJ26IuDTWkqjs+euIKloEmt
-         ho4B/ynlElpsZbge2M+RF6n4RXdtyJ8pE6pKsLt1iXfbcn0eodmgFoozLKu+cCercEg9
-         yxtcDrcQoedBPZcUSdVm0OwL/94eBnhfatxb5+daszrrwNko0Nh0FEzxXSisWn+FOY2W
-         W2PDGdh7eDElkzUjp+FdAlha7K4ytvBP5rqUleDhJ0gRRDODIDQJK/NXLUuUrCNuS7Il
-         Trkg==
-X-Gm-Message-State: AOJu0YxWkLBdK+0twzdxH9Sus9Vso/qYN3S+Ryu8jzJqj6EWITa3TLAy
-	C0iJ2ybnIMQi+U0Qu008wwi3df+u7ySOT6Kd0Cy72K6nDUoGL6yH5e1hJoz6p4CyYcRgQb7Txn3
-	D+YPU
-X-Gm-Gg: AZuq6aLpXMPVMYs6l2kI5wmgxnKeKnqo4Gm9MZ6qd5/7ptQVoWK5yK1OX8sDV3Y9ZCG
-	mnCtDWsCi1TrXytoHOUDAu97WoAu+uGHWLC0CdhUxIyLHDJfzzEpyQC0kUwgpdFWJHyWqJc27Wb
-	WcSlWyZrDc+68jDqOZx/nGuIR2USU74jNqVdabOTtSsIb+rReUUsUA20sYRwr/vmZypSKFJ8x6n
-	5hknVsKA5SR30fKZ9hpFHmA01OacvAtClnN2ORcrrZd4sEbfRR6apzWqnvzwf4AMACHdluwIQnd
-	8exoJoUtv7rLeBz4kFBss3VlInJuJRfMVBRKChdBdhA7lp+zUKmzmRjOIGJUn81ahvPxRY0dCjB
-	zls7z0VX+F6cBlyiMUb6oo72VLM/iKK0/pDNK2noxEO6WGy8Tej3Mum7xfeRU/vigkml6ixASBh
-	C6MUXwLfDkgkyz/pZ97VA9
-X-Received: by 2002:ac8:5902:0:b0:4ee:2074:4b6e with SMTP id d75a77b69052e-5032fa034e6mr33329351cf.45.1769537787963;
-        Tue, 27 Jan 2026 10:16:27 -0800 (PST)
+        bh=W0DBzHUK982E+T5YVoHJXumJlhN2/Z7MNEuOxJjgCTo=;
+        b=QLwuHXjMyWkXn7M/LzsEGQek7wuxd1QLJVOdwxZ5urIG/FI1EL13D7t5E8vZBjfebj
+         Aw6G87zIK8I1Q6hviyFX+Dd3VWWYtykEO0eFNjCQu2ubWU+VPhkD/1r/yQctz/bd1Ilw
+         mkACFmwe2MMstKOkZ29ijj2nJgMiaNp5HRYM1QRD7rZFi2BV0B2IFLlDv1QLF3tO6i8X
+         Y/3OczQXTcVQ7eCXFNzknsshfigNCI7MIRbvRfczpAd8Vmnp0pC1UaVyGyGLAJZW2fFG
+         wpIFL+CLr/pfqxPHyjUoi5yJhe5yq5pbSLxUlx8IuM+pojKLwWZsokBhGlgsbMKX/Pz5
+         92xg==
+X-Gm-Message-State: AOJu0YzcpiW0j0C5Giv3QqPdQQton1NCLQ92fq7SdFxPW52HecvM8PYv
+	CYERwGp9E1jlxhgSkrMoXq6HmnptmTBztVyHYvEo75hH20irlS/oPTMN4x+RkVyD15kYaS9BnNg
+	N0D8Q
+X-Gm-Gg: AZuq6aKTvDiXlj0QJn4JRLOdzA/o6ZwiH2JtK2xe5Sbo660/K+HP31TUOI488YAfa49
+	aqfNuMcUZT0ZA7W2JfVmgd6fcJAgL8ZGq/joow7IiUzFcpyuGQPNDuOMbesHCWkHAmz/P1TEfaQ
+	0K9JP/63GTgLrXlrVyBSDyAVCQ0JsLzJ8QaBYhIUHZN/Jq6CwGwU9Ddp6OU6eYe4qAdvaQjOVmu
+	SISOdtAeLka3DFVUFyN9a1qJnqoEOOothgOT3jwA338zkEyE8oC+JwAX5qihPCnYO2O2YZBwX4M
+	jlxqHbQAm34kX6wS4cj2k/nVw3k8tIkSRmTnORxu2RyGY30Ajkw7ZyH81YBgPVqEAxF3mbibr6e
+	MbPQdk98O2Zn83Z1qOjQh35JFltE3uKNdchAThWr4zCsXS5L/eK/Qna48e1HgE3o5qD1wPSVBNp
+	jRwlho0PrzEw==
+X-Received: by 2002:a05:6214:21e3:b0:880:4eac:8689 with SMTP id 6a1803df08f44-894cc956056mr39602076d6.57.1769537788581;
+        Tue, 27 Jan 2026 10:16:28 -0800 (PST)
 Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5033745c4f0sm988181cf.1.2026.01.27.10.16.27
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5033745c4f0sm988181cf.1.2026.01.27.10.16.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 10:16:27 -0800 (PST)
+        Tue, 27 Jan 2026 10:16:28 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
@@ -72,9 +72,9 @@ Cc: andrii@kernel.org,
 	puranjay@kernel.org,
 	song@kernel.org,
 	yonghong.song@linux.dev
-Subject: [PATCH v2 03/13] selftests: bpf: Move bpf_arena_spin_lock.h to the top level
-Date: Tue, 27 Jan 2026 13:15:59 -0500
-Message-ID: <20260127181610.86376-4-emil@etsalapatis.com>
+Subject: [PATCH v2 04/13] selftests: bpf: Make WRITE_ONCE macro in bpf_atomic.h conditional
+Date: Tue, 27 Jan 2026 13:16:00 -0500
+Message-ID: <20260127181610.86376-5-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20260127181610.86376-1-emil@etsalapatis.com>
 References: <20260127181610.86376-1-emil@etsalapatis.com>
@@ -88,55 +88,31 @@ Content-Transfer-Encoding: 8bit
 
 From: Emil Tsalapatis <etsal@meta.com>
 
-The bpf_arena_spin_lock.h header is useful for all programs and not
-just the selftests. Move it to the top level of the BPF selftests
-to make it more readily accessible.
+The WRITE_ONCE macro is identically defined both in bpf_atomic.h
+and in bpf_arena_common.h. The bpf_arena_common.h definition is
+guarded with an ifndef to allow for inclusion after bpf_atomic.h,
+but the opposite does not hold. Add an extra guard to avoid requiring
+a specific order for the headers.
 
 Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
 ---
- tools/testing/selftests/bpf/{progs => }/bpf_arena_spin_lock.h | 4 ++--
- tools/testing/selftests/bpf/progs/arena_spin_lock.c           | 2 +-
- 2 files changed, 3 insertions(+), 3 deletions(-)
- rename tools/testing/selftests/bpf/{progs => }/bpf_arena_spin_lock.h (99%)
+ tools/testing/selftests/bpf/bpf_atomic.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-similarity index 99%
-rename from tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
-rename to tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-index f90531cf3ee5..680c9e6cb35d 100644
---- a/tools/testing/selftests/bpf/progs/bpf_arena_spin_lock.h
-+++ b/tools/testing/selftests/bpf/bpf_arena_spin_lock.h
-@@ -107,7 +107,7 @@ struct arena_qnode {
- #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
- #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
+diff --git a/tools/testing/selftests/bpf/bpf_atomic.h b/tools/testing/selftests/bpf/bpf_atomic.h
+index c550e5711967..d89a22d63c1c 100644
+--- a/tools/testing/selftests/bpf/bpf_atomic.h
++++ b/tools/testing/selftests/bpf/bpf_atomic.h
+@@ -42,7 +42,9 @@ extern bool CONFIG_X86_64 __kconfig __weak;
  
--struct arena_qnode __arena qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
-+struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
+ #define READ_ONCE(x) (*(volatile typeof(x) *)&(x))
  
- static inline u32 encode_tail(int cpu, int idx)
- {
-@@ -240,7 +240,7 @@ static __always_inline int arena_spin_trylock(arena_spinlock_t __arena *lock)
- 	return likely(atomic_try_cmpxchg_acquire(&lock->val, &val, _Q_LOCKED_VAL));
- }
++#ifndef WRITE_ONCE
+ #define WRITE_ONCE(x, val) ((*(volatile typeof(x) *)&(x)) = (val))
++#endif
  
--__noinline
-+__noinline __weak
- int arena_spin_lock_slowpath(arena_spinlock_t __arena __arg_arena *lock, u32 val)
- {
- 	struct arena_mcs_spinlock __arena *prev, *next, *node0, *node;
-diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-index 086b57a426cf..6c04e7707644 100644
---- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-+++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-@@ -4,7 +4,7 @@
- #include <bpf/bpf_tracing.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
--#include "bpf_arena_spin_lock.h"
-+#include "../bpf_arena_spin_lock.h"
+ #define cmpxchg(p, old, new) __sync_val_compare_and_swap((p), old, new)
  
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARENA);
 -- 
 2.49.0
 
