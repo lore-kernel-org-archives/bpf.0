@@ -1,151 +1,176 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A186C35B137
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 14:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71C3366826
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 14:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769524146; cv=none; b=FwWAcxTj6DGQWcS6LfPKgeHzXdGtqLu5Pipuh+XZVu+C7IESAhyl2ewbmJ07Zw4qKcYzJdvhyrPwxXNBDZPQzwrP0Luw3W7U/ZCu0H2q8UjHEbW4xn9lQMuyRtMejTsniiTCNNjio5ohacylLFu3CsFEMBucIS97s0mLK7CVUEc=
+	t=1769524873; cv=none; b=KJ0RgPG+i8Z9pjG0GJcl/cid7T4rNsdXyi8Baj+TmW0GTxMxUytXE30CfXsIwVFvc4FiZKX2Tj/ViqHnL2ls7FNLpV40KphUa2mtV2zSqZgRor5Ve+C4lYjhR04XU4HM++TNGuxXfKc8GIp7llwnjsq5wrP3tI0tmq/VcKhSk9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769524146; c=relaxed/simple;
-	bh=qSm0alfl5BI5F+EUqVMRslKei9mFJ679Do3KWYLs6MA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HyHlDytcvv+OzBO9ce9i0oxIZHuoCaoq7/Lg31r7y4yzssmdhAHui61WH7jUJWyQbIdNMoZ+q9ddZdC2+Alj1mWpR1xvzNd/NNgtaCs5h3FK6gTBR7ihntsE8CATFyLGWxaLr2twKT+zVrO/eR0LiU8euOtrbmAdAq+Ga/5hZz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VrHSWp8P; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769524873; c=relaxed/simple;
+	bh=OpssTI3KgwuE1Jlbg+tmdEftyNSaPFzf4uR1yEOaLWg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BTW8Nm4l7jXDuoJMT7I0sB2q7nEWG93bdvonvdhn4PuTaZzwQ8WSuMpZDd3zAqFYBIYD8bwW6aHhWNGyzYSnbXNZsJx19F9h68MASfZyzh7Bj8bNqQW+Gst8gAPs6m7QY4UjAPfnJXnpIqeLVaSrfq3YylDnbfTNUv45MJGiDr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Xlzz6S/T; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrHSWp8P"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-42fbc305914so4930793f8f.0
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 06:29:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769524143; x=1770128943; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RzsSYm6I8uueV/iFR6SlAY5cx6+4mIHkGt73AMjJd/E=;
-        b=VrHSWp8PgNWNokYHwoI4AIIZH9hza5XpURCRTZNbCXuXVBc/DJKboqdXb/7q6gbvv8
-         MC/RJwHg4k449Ks4YbCvox8sALQ6IfhjHLWJBz/AiFbj1Coc8k43qxm/I+jku9q0oIZ8
-         lpeoSXJQHoTZD+D5UllwFFoLfUaRNpXjXTimSZ5CH1sineNNSeXnLw3fghPW98tVJhgZ
-         b8WvmdMbmiuGIa7DKbwF+gIKCKknd+3HokJ1B2WrZXzcU6gfhG76Lm411xF6MYm6rMWK
-         8rcCHoDmxJRhlCzeIBI3+b3IgxQZZMDrGod8YENGARCAbM9m8tK8dZHCZqWdN/FpHUs2
-         BnCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769524143; x=1770128943;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RzsSYm6I8uueV/iFR6SlAY5cx6+4mIHkGt73AMjJd/E=;
-        b=hQy3COZL0swyEq57nAd63Mz6Gjk0T41ZRGgFITvA+ziqnpzHX9NvIzNAvPjdkr5HeO
-         aRPOqD5rk8h8c9/ehTlkznUvapSeXCXY4XA14w+zuJaUue1GBUAErdDwwVXHpy0Elc34
-         St/S4QZ8hhOqMO8qvJfOJfugJ7j1NdtzjCuier/RvqivWiSlvyh+C4+BMr9JZfKNd6B4
-         CvxyNFAk4XeyJiaUHh993LnI6IQoaS8ILlg2gyacwUZikmWBChXdVtOcHjHqRrepqMhv
-         IMHpvB9xLOcDSA/uYXdJgusLbO/6fRrT1OeV86+P5dW3V5K3PVJdm/Arcx8UWN1APXY7
-         dJpg==
-X-Forwarded-Encrypted: i=1; AJvYcCUkkS2+78A8XwgW8VzrRRDug/sehjnrcOD7C9G0Elud+Y3RL8+3xUqpS/qFNPLzCE4jT0A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yysq8fbOAVxV02KIrWEcKO2n2Gd50qcJNIuCCC/yduAIqh7jgsN
-	Mrqrr8SYnM069M65uHX1YdSclNDy573QgUwBCkqm3QalczSrYEAIYNgn
-X-Gm-Gg: AZuq6aKX8k9HanoFxWWp29PERlkR7r1QSx6oB3gox88FeyMNWDHaant1D5LrRh6Q2n3
-	FdmC1aMJYo8S74PmzjObfwVTetTxei2s0OjD0Xa+qb8pBMl1rSiq/eWSIEDXpmuOI5kovt3gGsk
-	emuzsR4ighMzRgq5EM9qmGYBjimtw7BBywJ7Od1y0aMRVcFOav6qYqjjMGZwkxXz99WfxeS5sWM
-	wvufJMG2ms+rluaAfFWDkEWyzY7My13AnG0ROG928TIx3lQnEXLgZBfDpSYJqTLA8f1r+oEyPvW
-	G4yS491N/B9FCXV5Uq1PkF2R2PRp23ruXuHWGwqxb+Th4ABv1P8T/H/X2mfDJzCN2pQDsHCFGPf
-	B3Ab+7ky2nFF9djt6rVgNIcSz/A0cQAmuKpi6qbguNONhXBWDFF2BK1pVuXNanuLFfIWvJRMxB2
-	8ruoDoJJUgJhgfZ9adhAj8fWUQB3SGF+IKLeFv3gJstzYZbdrpOv9ywDQY1aM=
-X-Received: by 2002:a05:6000:2082:b0:435:a9c9:159 with SMTP id ffacd0b85a97d-435dd05aba3mr2633501f8f.18.1769524142351;
-        Tue, 27 Jan 2026 06:29:02 -0800 (PST)
-Received: from f (cst-prg-85-136.cust.vodafone.cz. [46.135.85.136])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1c02ba3sm37600235f8f.2.2026.01.27.06.28.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 06:29:01 -0800 (PST)
-Date: Tue, 27 Jan 2026 15:28:53 +0100
-From: Mateusz Guzik <mjguzik@gmail.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>, 
-	Andrew Morton <akpm@linux-foundation.org>, Uladzislau Rezki <urezki@gmail.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, 
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, 
-	kasan-dev@googlegroups.com
-Subject: Re: [PATCH v4 18/22] slab: refill sheaves from all nodes
-Message-ID: <cburjqy3r73ojiaathpxwayvq7up263m3lvrikicrkkybdj2iz@vefohvamiqr4>
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <20260123-sheaves-for-all-v4-18-041323d506f7@suse.cz>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Xlzz6S/T"
+Message-ID: <941cd39c-1358-4823-9fe3-17cffd099eca@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769524859;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nE0kyu5tR04zFg2spcEjdioih9fpsoCl95ouCV6d5Ew=;
+	b=Xlzz6S/T7STaVFAZh42LQKaE57LwmF2UFgCFvnC4keP/7C3vBIMr6IeEK4Z+G6EAx6kdsM
+	SVogx4Fg8wbBKUZKXFFijNh19WFI3lzMjTZGeWQlfCoOq1uovx1njsviSMAqHeH0viwQ2M
+	ekKrdzle8qK7+RNHht4l7YAmOBQ9790=
+Date: Tue, 27 Jan 2026 22:40:41 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Subject: Re: [PATCH bpf-next v8 4/9] bpf: Add syscall common attributes
+ support for prog_load
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
+ Andrey Albershteyn <aalbersh@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
+ Mykyta Yatsenko <yatsenko@meta.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
+ LKML <linux-kernel@vger.kernel.org>, Linux API <linux-api@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com
+References: <20260126151409.52072-1-leon.hwang@linux.dev>
+ <20260126151409.52072-5-leon.hwang@linux.dev>
+ <CAADnVQ+PDCV=YrFhxG3gXPC3jDPdbTmsaAOKBsFceKgEware0Q@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAADnVQ+PDCV=YrFhxG3gXPC3jDPdbTmsaAOKBsFceKgEware0Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260123-sheaves-for-all-v4-18-041323d506f7@suse.cz>
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Jan 23, 2026 at 07:52:56AM +0100, Vlastimil Babka wrote:
-> __refill_objects() currently only attempts to get partial slabs from the
-> local node and then allocates new slab(s). Expand it to trying also
-> other nodes while observing the remote node defrag ratio, similarly to
-> get_any_partial().
+
+
+On 2026/1/27 10:43, Alexei Starovoitov wrote:
+> ,
 > 
-> This will prevent allocating new slabs on a node while other nodes have
-> many free slabs. It does mean sheaves will contain non-local objects in
-> that case. Allocations that care about specific node will still be
-> served appropriately, but might get a slowpath allocation.
+> 
+> On Mon, Jan 26, 2026 at 7:15 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> The log buffer of common attributes would be confusing with the one in
+>> 'union bpf_attr' for BPF_PROG_LOAD.
+>>
+>> In order to clarify the usage of these two log buffers, they both can be
+>> used for logging if:
+>>
+>> * They are same, including 'log_buf', 'log_level' and 'log_size'.
+>> * One of them is missing, then another one will be used for logging.
+>>
+>> If they both have 'log_buf' but they are not same totally, return -EINVAL.
+>>
+>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+>> ---
+>>  include/linux/bpf_verifier.h |  4 +++-
+>>  kernel/bpf/log.c             | 29 ++++++++++++++++++++++++++---
+>>  kernel/bpf/syscall.c         |  9 ++++++---
+>>  3 files changed, 35 insertions(+), 7 deletions(-)
+>>
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index 4a0c5ef296b9..7eb024e83d2d 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -637,9 +637,11 @@ struct bpf_log_attr {
+>>         u32 log_level;
+>>         struct bpf_attrs *attrs;
+>>         u32 offsetof_log_true_size;
+>> +       struct bpf_attrs *attrs_common;
+>>  };
+>>
+>> -int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_attrs *attrs);
+>> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_attrs *attrs,
+>> +                               struct bpf_attrs *attrs_common);
+>>  int bpf_log_attr_finalize(struct bpf_log_attr *log_attr, struct bpf_verifier_log *log);
+>>
+>>  #define BPF_MAX_SUBPROGS 256
+>> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+>> index 457b724c4176..c0b816e84384 100644
+>> --- a/kernel/bpf/log.c
+>> +++ b/kernel/bpf/log.c
+>> @@ -865,23 +865,41 @@ void print_insn_state(struct bpf_verifier_env *env, const struct bpf_verifier_st
+>>  }
+>>
+>>  static int bpf_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_attrs *attrs, u64 log_buf,
+>> -                            u32 log_size, u32 log_level, int offsetof_log_true_size)
+>> +                            u32 log_size, u32 log_level, int offsetof_log_true_size,
+>> +                            struct bpf_attrs *attrs_common)
+>>  {
+>> +       const struct bpf_common_attr *common = attrs_common ? attrs_common->attr : NULL;
+>> +
+> 
+> It seems the only point of struct bpf_attrs is to pass the attrs
+> here and remember them in bpf_log_attr.
+> It looks unnecessary. Also the cast to void and back to actual
+> type doesn't look pretty.
+> It seems all of it is to do two copy_to_bpfptr_offset() of log_true_size
+> in different places,
+> but libbpf will use only one, so let's do only one
+> copy_to_bpfptr_offset() and simply the whole thing.
+> struct bpf_log_attr only needs
+>   u32 offsetof_true_size;
+>   bpfptr_t uattr;
+> 
+> No need to introduce bpf_attrs and bpf_attrs_init() either.
+> When bpf_log_attr is inited make the choice of uattr and offset.
+> uattr will point at either new bpf_common_attr or old bpf_attr,
+> and offsetof_true_size will have 3 possible offsets.
+> 
+That makes sense.
 
-While I can agree pulling memory from other nodes is necessary in some
-cases, I believe the patch as proposed is way too agressive and the
-commit message does not justify it.
+Then struct bpf_log_attr can be simplified to:
 
-Interestingly there were already reports concerning this, for example:
-https://lore.kernel.org/oe-lkp/202601132136.77efd6d7-lkp@intel.com/T/#u
+struct bpf_log_attr {
+        u32 offsetof_true_size;
+        u32 size;
+        bpfptr_t uattr;
+};
 
-quoting:
-* [vbabka:b4/sheaves-for-all-rebased] [slab]  aa8fdb9e25: will-it-scale.per_process_ops 46.5% regression
+And bpf_log_attr_finalize() would become:
 
-The system at hand has merely 2 nodes and it already got:
+int bpf_log_attr_finalize(struct bpf_log_attr *attr, struct
+bpf_verifier_log *log)
+{
+        ...
 
-         %stddev     %change         %stddev
-             \          |                \  
-      7274 ± 13%     -27.0%       5310 ± 16%  perf-c2c.DRAM.local
-      1458 ± 14%    +272.3%       5431 ± 10%  perf-c2c.DRAM.remote
-     77502 ±  9%     -58.6%      32066 ± 11%  perf-c2c.HITM.local
-    150.83 ± 12%   +2150.3%       3394 ± 12%  perf-c2c.HITM.remote
-     77653 ±  9%     -54.3%      35460 ± 10%  perf-c2c.HITM.total
+        err = bpf_vlog_finalize(log, &log_true_size);
 
-As in a significant increase in traffic.
+        size = sizeof(log_true_size);
+        if (attr->size >= off + size &&
+            copy_to_bpfptr_offset(attr->uattr, attr->offsetof_true_size,
+&log_true_size, size))
+                err = -EFAULT;
 
-Things have to be way worse on systems with 4 and more nodes.
+        return err;
+}
 
-This is not a microbenchmark-specific problem either -- any cache miss
-on memory allocated like that induces interconnect traffic. That's a
-real slowdown in real workloads.
+Thanks,
+Leon
 
-Admittedly I don't know what the policy is at the moment, it may be
-things already suck.
-
-A basic test for sanity is this: suppose you have a process whose all
-threads are bound to one node. absent memory shortage in the local
-node and allocations which somehow explicitly request a different node,
-is it going to get local memory from kmalloc et al?
-
-To my understanding with the patch at hand the answer is no.
-
-Then not only this particular process is penalized for its lifetime, but
-everything else is penalized on top -- even ignoring straight up penalty
-for interconnect traffic, there is only so much it can handle to begin
-with.
-
-Readily usable slabs in other nodes should be of no significance as long
-as there are enough resources locally.
-
-If you are looking to reduce total memory usage, I would instead check
-how things work out for resuing the same backing pages for differently
-sizes objects (I mean is it even implemented?) and would investigate if
-additional kmalloc slab sizes would help -- there are power-of-2 jumps
-all the way to 8k. Chances are decent sizes like 384 and 768 bytes would
-in fact drop real memory requirement.
-
-iow, I think this patch should be dropped at least for the time being
