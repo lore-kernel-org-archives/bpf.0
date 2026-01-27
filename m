@@ -1,383 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACAA278E63;
-	Tue, 27 Jan 2026 07:42:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8586725A33A
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 08:26:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769499773; cv=none; b=jmStQjqrWbpOVTXaQBskgRVJ2cOW9tyJ5R+virENHSMMn6FLPm7Aes0OOaF/0VUchD7xiggdHRIoWRdCldHBSL2qwHfd5CDnARcle/u+RUkDoRcXvxjU+gVm0RTmYKz9CrRLNUoDB2DyllbXJZJfHuJGxDreD+Ul07Hxg1ZeIMo=
+	t=1769502421; cv=none; b=jeNJz5rEHywAaSd0J05ggazjgkOnYLm4hqVwxcc14lGrQdiF1UQKxJ0vy5GSFoU38MgSwWIc3q6k/KEvOeKFSZxoflVqa/SZdV560Bm2QVCZdZ0xRHa/aD8kdG8kT+fohBm2jDYrQGFAhG2072mnSRZAgvfeLdApl6cjngxYoXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769499773; c=relaxed/simple;
-	bh=ikQcR87yl+GoM9FcMFnkrg0jZI4+AeTioVcdiBeKjEo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sLNXsF9VCGi/NauFWh0c4EzfbxgCDgmGuRZZoIDBtkIscKvBYPzJHwOCHfe5SCk3DEUTtcVc+28lwZpii8FOgcO4Fr33AGHH9VkatdjWYntB6n+nqDzQ3k0wiW31R9kvhjfhDbnfXfhlg8x+eY9li/V+dP7SxJxE3wOLxy3emmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gD2FZ48F; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769502421; c=relaxed/simple;
+	bh=qxsb9XL4M3phRf5Ar6Kb6Ai2gYXxa3plCXx+k6p0Kc0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=uxq4+uL7AxAMIgnHQ2zaN3NuaUCulniWImSTljLti6MRVAkyOSvMmNb45+va1P38SYrRd5PLoD6RnP6EWoDz0GK+pwssWoRGuAfGm+XYqFdrzuW0MkpsJzPpRjXD3JRwOXAuUqcKX1jVSBcuFG13HQK/HpJfVQHBxUzl6y98FqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DThwOOgs; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gD2FZ48F"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBC89C116C6;
-	Tue, 27 Jan 2026 07:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1769499773;
-	bh=ikQcR87yl+GoM9FcMFnkrg0jZI4+AeTioVcdiBeKjEo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gD2FZ48FJPvi7t/psx/HALGN/uZFOf3AhJtiZANeDXFi2C/lZm/CgH20rka87o0fd
-	 5vDMhti0sCNGoMz1k/ShZSdEFYf1yEk0SvAsfjXTH7FmmbBK+p8vrnCzcNkHYSxz2O
-	 DYQ3Lr8e1TJKhviH1CIRD5w5GuZv0R6SCjkw3mAI=
-Date: Tue, 27 Jan 2026 08:42:50 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org,
-	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
-	a.hindborg@kernel.org, linux-mm@kvack.org,
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
-	paul@paul-moore.com, casey@schaufler-ca.com,
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
-	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
-	bpf@vger.kernel.org, clm@meta.com,
-	android-kernel-team <android-kernel-team@google.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-Message-ID: <2026012715-mantra-pope-9431@gregkh>
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
- <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DThwOOgs"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-47ee807a4c5so55863555e9.2
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 00:26:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769502418; x=1770107218; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Icrufma3P9QCbYveOQElssQZt0wniN7qPDaqatBryd8=;
+        b=DThwOOgsirdPEVF5bTsqPSZsJ1iMrLZtUxdTpdJww+hoC8pv/QMhvPDshW4ylqEeuR
+         s/GA8JTapQTJ4oVW2aPJvRs3JycLp+lceJ9TiGgfUXzMJI9dVP82lMZLeYHBFe0rT1h8
+         PQ57mSeYHsGgFxGAKkSwx82VdRVYIcEmzBE/S6Rnnt9jGqduRPa1JHcBhT2nr2KTWVAM
+         RcCpBDrdLYNequOJIno5vTv2ijJjYcCZuyz9kMdbC8yIgq0Pw3rjcYc/rqhkGAbxjYgO
+         NjsepRNKwbIri3xHiPuhtcM9yk6upFQ/GeGlDX9/7SWuVUeSHfqmyCdeQJG5lrAzTigw
+         w4fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769502418; x=1770107218;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Icrufma3P9QCbYveOQElssQZt0wniN7qPDaqatBryd8=;
+        b=r8kAmgcUASBC9dyuBFTN25bsAna9RQXLUKQv3c1EHZIx5541FLHUWDDoCb3BUoxS5t
+         MYAVbKBbIi1v6qLr9MWSQo9IxsArK+I7F3Z7JKn5HpRvqWEko3k/+cXVqDtmv7oQfzNm
+         V/2gmKfoGkAjOkiqkVCHDHJtVKxziOzFkFtDPSUECXf0KwpMfBa5o+yQhjHTHt/bfhap
+         YO8181Uv/HkwpZgQPwVRVvA/Beqe4VFqTsx7jEHPMDFrZN4ZISA2UIU1PezgDxZ5rMK5
+         U28IazrzYvHtIgpLnD4WpKZn06i87AdNzn8pXkRXy1HzbEbTAOIyBGaPDqqe3NQ3ScKM
+         1Y0g==
+X-Forwarded-Encrypted: i=1; AJvYcCVUsIiKN27Wh05mFIYueOE4JSflpNWxD2YLAyRSATN1KASnFo8/nRBWv3nkOzKRRPgEFV0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYQYtXJFhtOoEwGjEORp/F/x7Abuj0sMUz0lkvu18G1A026Y9n
+	ZlUqT7Uo8b3ddBlX20eXghMtUReM+vRSkFMzJjza5YuwII0U12Ti9UuSIIZ8p/2Fj1M=
+X-Gm-Gg: AZuq6aK1jSGDbVjO6ApTAje238A8hkSxUZVnD6LVlItfC6y91fbvLb32cH8V5ab/WGK
+	qAJVvgD01pqyy7w1uZOlUByAeZG2WJ7w+YbI7YR41xYEZiSBp7VHdxVJaW2MBE4sSNo+vtbDLge
+	9tQUe/8QHlsQXY9qoSqEib+K9XM3JCkViNKf33B7u53gv0Hlu8d0rA/tmvfyAaDIBCEMlAtnJmc
+	Bk4nnHdG+K+X4bU/Ra18YsMtKKQyoGZ85CHK08YarQLA6gflPDaXdfPcNHlVnhtVBxJlj9lypQE
+	7PH1bdkvJxm6YYz68b84SZOhazm/zmFZNGoRQKbD27FNHzQqVT47YH6aUumn9q84iFlJgurvnWE
+	78M8Bi8cxNZ7ZursqQSP6voxFSDCKC9kOORyRJz+GBQAt+sawl7HmoZDkrB4pxWY12ll/gPgngi
+	7iir13x9/gAAaDNbGHXEbHfi8jZQ==
+X-Received: by 2002:a05:600c:c173:b0:475:dd89:acb with SMTP id 5b1f17b1804b1-48069c54b96mr10296075e9.22.1769502417701;
+        Tue, 27 Jan 2026 00:26:57 -0800 (PST)
+Received: from LT2202712.home ([2a01:cb14:322:b900:bee8:7a1:a58e:8b0e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066c428basm46670385e9.12.2026.01.27.00.26.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jan 2026 00:26:57 -0800 (PST)
+From: Guillaume Gonnet <ggonnet.linux@gmail.com>
+To: alexei.starovoitov@gmail.com
+Cc: ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	ggonnet.linux@gmail.com,
+	john.fastabend@gmail.com,
+	martin.lau@linux.dev
+Subject: [PATCH bpf v4] bpf: Fix tcx/netkit detach permissions when prog fd isn't given
+Date: Tue, 27 Jan 2026 09:26:16 +0100
+Message-Id: <20260127082616.28850-1-ggonnet.linux@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <CAADnVQ++Bx+xZ1jmeM6rLC7xeLHfsSUNizzMtw0=zOcPfLcc6g@mail.gmail.com>
+References: <CAADnVQ++Bx+xZ1jmeM6rLC7xeLHfsSUNizzMtw0=zOcPfLcc6g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
 
-On Mon, Jan 26, 2026 at 04:56:42PM -0800, Samuel Wu wrote:
-> On Mon, Nov 17, 2025 at 9:15 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> >
-> > Some filesystems use a kinda-sorta controlled dentry refcount leak to pin
-> > dentries of created objects in dcache (and undo it when removing those).
-> > Reference is grabbed and not released, but it's not actually _stored_
-> > anywhere.  That works, but it's hard to follow and verify; among other
-> > things, we have no way to tell _which_ of the increments is intended
-> > to be an unpaired one.  Worse, on removal we need to decide whether
-> > the reference had already been dropped, which can be non-trivial if
-> > that removal is on umount and we need to figure out if this dentry is
-> > pinned due to e.g. unlink() not done.  Usually that is handled by using
-> > kill_litter_super() as ->kill_sb(), but there are open-coded special
-> > cases of the same (consider e.g. /proc/self).
-> >
-> > Things get simpler if we introduce a new dentry flag (DCACHE_PERSISTENT)
-> > marking those "leaked" dentries.  Having it set claims responsibility
-> > for +1 in refcount.
-> >
-> > The end result this series is aiming for:
-> >
-> > * get these unbalanced dget() and dput() replaced with new primitives that
-> >   would, in addition to adjusting refcount, set and clear persistency flag.
-> > * instead of having kill_litter_super() mess with removing the remaining
-> >   "leaked" references (e.g. for all tmpfs files that hadn't been removed
-> >   prior to umount), have the regular shrink_dcache_for_umount() strip
-> >   DCACHE_PERSISTENT of all dentries, dropping the corresponding
-> >   reference if it had been set.  After that kill_litter_super() becomes
-> >   an equivalent of kill_anon_super().
-> >
-> > Doing that in a single step is not feasible - it would affect too many places
-> > in too many filesystems.  It has to be split into a series.
-> >
-> > This work has really started early in 2024; quite a few preliminary pieces
-> > have already gone into mainline.  This chunk is finally getting to the
-> > meat of that stuff - infrastructure and most of the conversions to it.
-> >
-> > Some pieces are still sitting in the local branches, but the bulk of
-> > that stuff is here.
-> >
-> > Compared to v3:
-> >         * fixed a functionfs braino around ffs_epfiles_destroy() (in #40/54,
-> > used to be #36/50).
-> >         * added fixes for a couple of UAF in functionfs (##36--39); that
-> > does *NOT* include any fixes for dmabuf bugs Chris posted last week, though.
-> >
-> > The branch is -rc5-based; it lives in
-> > git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.persistency
-> > individual patches in followups.
-> >
-> > Please, help with review and testing.  If nobody objects, in a few days it
-> > goes into #for-next.
-> >
-> > Shortlog:
-> >       fuse_ctl_add_conn(): fix nlink breakage in case of early failure
-> >       tracefs: fix a leak in eventfs_create_events_dir()
-> >       new helper: simple_remove_by_name()
-> >       new helper: simple_done_creating()
-> >       introduce a flag for explicitly marking persistently pinned dentries
-> >       primitives for maintaining persisitency
-> >       convert simple_{link,unlink,rmdir,rename,fill_super}() to new primitives
-> >       convert ramfs and tmpfs
-> >       procfs: make /self and /thread_self dentries persistent
-> >       configfs, securityfs: kill_litter_super() not needed
-> >       convert xenfs
-> >       convert smackfs
-> >       convert hugetlbfs
-> >       convert mqueue
-> >       convert bpf
-> >       convert dlmfs
-> >       convert fuse_ctl
-> >       convert pstore
-> >       convert tracefs
-> >       convert debugfs
-> >       debugfs: remove duplicate checks in callers of start_creating()
-> >       convert efivarfs
-> >       convert spufs
-> >       convert ibmasmfs
-> >       ibmasmfs: get rid of ibmasmfs_dir_ops
-> >       convert devpts
-> >       binderfs: use simple_start_creating()
-> >       binderfs_binder_ctl_create(): kill a bogus check
-> >       convert binderfs
-> >       autofs_{rmdir,unlink}: dentry->d_fsdata->dentry == dentry there
-> >       convert autofs
-> >       convert binfmt_misc
-> >       selinuxfs: don't stash the dentry of /policy_capabilities
-> >       selinuxfs: new helper for attaching files to tree
-> >       convert selinuxfs
-> >       functionfs: don't abuse ffs_data_closed() on fs shutdown
-> >       functionfs: don't bother with ffs->ref in ffs_data_{opened,closed}()
-> >       functionfs: need to cancel ->reset_work in ->kill_sb()
-> >       functionfs: fix the open/removal races
-> >       functionfs: switch to simple_remove_by_name()
-> >       convert functionfs
-> >       gadgetfs: switch to simple_remove_by_name()
-> >       convert gadgetfs
-> >       hypfs: don't pin dentries twice
-> >       hypfs: switch hypfs_create_str() to returning int
-> >       hypfs: swich hypfs_create_u64() to returning int
-> >       convert hypfs
-> >       convert rpc_pipefs
-> >       convert nfsctl
-> >       convert rust_binderfs
-> >       get rid of kill_litter_super()
-> >       convert securityfs
-> >       kill securityfs_recursive_remove()
-> >       d_make_discardable(): warn if given a non-persistent dentry
-> >
-> > Diffstat:
-> >  Documentation/filesystems/porting.rst     |   7 ++
-> >  arch/powerpc/platforms/cell/spufs/inode.c |  17 ++-
-> >  arch/s390/hypfs/hypfs.h                   |   6 +-
-> >  arch/s390/hypfs/hypfs_diag_fs.c           |  60 ++++------
-> >  arch/s390/hypfs/hypfs_vm_fs.c             |  21 ++--
-> >  arch/s390/hypfs/inode.c                   |  82 +++++--------
-> >  drivers/android/binder/rust_binderfs.c    | 121 ++++++-------------
-> >  drivers/android/binderfs.c                |  82 +++----------
-> >  drivers/base/devtmpfs.c                   |   2 +-
-> >  drivers/misc/ibmasm/ibmasmfs.c            |  24 ++--
-> >  drivers/usb/gadget/function/f_fs.c        | 144 +++++++++++++----------
-> >  drivers/usb/gadget/legacy/inode.c         |  49 ++++----
-> >  drivers/xen/xenfs/super.c                 |   2 +-
-> >  fs/autofs/inode.c                         |   2 +-
-> >  fs/autofs/root.c                          |  11 +-
-> >  fs/binfmt_misc.c                          |  69 ++++++-----
-> >  fs/configfs/dir.c                         |  10 +-
-> >  fs/configfs/inode.c                       |   3 +-
-> >  fs/configfs/mount.c                       |   2 +-
-> >  fs/dcache.c                               | 111 +++++++++++-------
-> >  fs/debugfs/inode.c                        |  32 ++----
-> >  fs/devpts/inode.c                         |  57 ++++-----
-> >  fs/efivarfs/inode.c                       |   7 +-
-> >  fs/efivarfs/super.c                       |   5 +-
-> >  fs/fuse/control.c                         |  38 +++---
-> >  fs/hugetlbfs/inode.c                      |  12 +-
-> >  fs/internal.h                             |   1 -
-> >  fs/libfs.c                                |  52 +++++++--
-> >  fs/nfsd/nfsctl.c                          |  18 +--
-> >  fs/ocfs2/dlmfs/dlmfs.c                    |   8 +-
-> >  fs/proc/base.c                            |   6 +-
-> >  fs/proc/internal.h                        |   1 +
-> >  fs/proc/root.c                            |  14 +--
-> >  fs/proc/self.c                            |  10 +-
-> >  fs/proc/thread_self.c                     |  11 +-
-> >  fs/pstore/inode.c                         |   7 +-
-> >  fs/ramfs/inode.c                          |   8 +-
-> >  fs/super.c                                |   8 --
-> >  fs/tracefs/event_inode.c                  |   7 +-
-> >  fs/tracefs/inode.c                        |  13 +--
-> >  include/linux/dcache.h                    |   4 +-
-> >  include/linux/fs.h                        |   6 +-
-> >  include/linux/proc_fs.h                   |   2 -
-> >  include/linux/security.h                  |   2 -
-> >  init/do_mounts.c                          |   2 +-
-> >  ipc/mqueue.c                              |  12 +-
-> >  kernel/bpf/inode.c                        |  15 +--
-> >  mm/shmem.c                                |  38 ++----
-> >  net/sunrpc/rpc_pipe.c                     |  27 ++---
-> >  security/apparmor/apparmorfs.c            |  13 ++-
-> >  security/inode.c                          |  35 +++---
-> >  security/selinux/selinuxfs.c              | 185 +++++++++++++-----------------
-> >  security/smack/smackfs.c                  |   2 +-
-> >  53 files changed, 649 insertions(+), 834 deletions(-)
-> >
-> >         Overview:
-> >
-> > First two commits are bugfixes (fusectl and tracefs resp.)
-> >
-> > [1/54] fuse_ctl_add_conn(): fix nlink breakage in case of early failure
-> > [2/54] tracefs: fix a leak in eventfs_create_events_dir()
-> >
-> > Next, two commits adding a couple of useful helpers, the next three adding
-> > the infrastructure and the rest consists of per-filesystem conversions.
-> >
-> > [3/54] new helper: simple_remove_by_name()
-> > [4/54] new helper: simple_done_creating()
-> >         end_creating_path() analogue for internal object creation; unlike
-> > end_creating_path() no mount is passed to it (or guaranteed to exist, for
-> > that matter - it might be used during the filesystem setup, before the
-> > superblock gets attached to any mounts).
-> >
-> > Infrastructure:
-> > [5/54] introduce a flag for explicitly marking persistently pinned dentries
-> >         * introduce the new flag
-> >         * teach shrink_dcache_for_umount() to handle it (i.e. remove
-> > and drop refcount on anything that survives to umount with that flag
-> > still set)
-> >         * teach kill_litter_super() that anything with that flag does
-> > *not* need to be unpinned.
-> > [6/54] primitives for maintaining persisitency
-> >         * d_make_persistent(dentry, inode) - bump refcount, mark persistent
-> > and make hashed positive.  Return value is a borrowed reference to dentry;
-> > it can be used until something removes persistency (at the very least,
-> > until the parent gets unlocked, but some filesystems may have stronger
-> > exclusion).
-> >         * d_make_discardable() - remove persistency mark and drop reference.
-> >
-> > NOTE: at that stage d_make_discardable() does not reject dentries not
-> > marked persistent - it acts as if the mark been set.
-> >
-> > Rationale: less noise in series splitup that way.  We want (and on the
-> > next commit will get) simple_unlink() to do the right thing - remove
-> > persistency, if it's there.  However, it's used by many filesystems.
-> > We would have either to convert them all at once or split simple_unlink()
-> > into "want persistent" and "don't want persistent" versions, the latter
-> > being the old one.  In the course of the series almost all callers
-> > would migrate to the replacement, leaving only two pathological cases
-> > with the old one.  The same goes for simple_rmdir() (two callers left in
-> > the end), simple_recursive_removal() (all callers gone in the end), etc.
-> > That's a lot of noise and it's easier to start with d_make_discardable()
-> > quietly accepting non-persistent dentries, then, in the end, add private
-> > copies of simple_unlink() and simple_rmdir() for two weird users (configfs
-> > and apparmorfs) and have those use dput() instead of d_make_discardable().
-> > At that point we'd be left with all callers of d_make_discardable()
-> > always passing persistent dentries, allowing to add a warning in it.
-> >
-> > [7/54] convert simple_{link,unlink,rmdir,rename,fill_super}() to new primitives
-> >         See above re quietly accepting non-peristent dentries in
-> > simple_unlink(), simple_rmdir(), etc.
-> >
-> >         Converting filesystems:
-> > [8/54] convert ramfs and tmpfs
-> > [9/54] procfs: make /self and /thread_self dentries persistent
-> > [10/54] configfs, securityfs: kill_litter_super() not needed
-> > [11/54] convert xenfs
-> > [12/54] convert smackfs
-> > [13/54] convert hugetlbfs
-> > [14/54] convert mqueue
-> > [15/54] convert bpf
-> > [16/54] convert dlmfs
-> > [17/54] convert fuse_ctl
-> > [18/54] convert pstore
-> > [19/54] convert tracefs
-> > [20/54] convert debugfs
-> > [21/54] debugfs: remove duplicate checks in callers of start_creating()
-> > [22/54] convert efivarfs
-> > [23/54] convert spufs
-> > [24/54] convert ibmasmfs
-> > [25/54] ibmasmfs: get rid of ibmasmfs_dir_ops
-> > [26/54] convert devpts
-> > [27/54] binderfs: use simple_start_creating()
-> > [28/54] binderfs_binder_ctl_create(): kill a bogus check
-> > [29/54] convert binderfs
-> > [30/54] autofs_{rmdir,unlink}: dentry->d_fsdata->dentry == dentry there
-> > [31/54] convert autofs
-> > [32/54] convert binfmt_misc
-> > [33/54] selinuxfs: don't stash the dentry of /policy_capabilities
-> > [34/54] selinuxfs: new helper for attaching files to tree
-> > [35/54] convert selinuxfs
-> >
-> >         Several functionfs fixes, before converting it, to make life
-> > simpler for backporting:
-> > [36/54] functionfs: don't abuse ffs_data_closed() on fs shutdown
-> > [37/54] functionfs: don't bother with ffs->ref in ffs_data_{opened,closed}()
-> > [38/54] functionfs: need to cancel ->reset_work in ->kill_sb()
-> > [39/54] functionfs: fix the open/removal races
-> >
-> >         ... and back to filesystems conversions:
-> >
-> > [40/54] functionfs: switch to simple_remove_by_name()
-> > [41/54] convert functionfs
-> > [42/54] gadgetfs: switch to simple_remove_by_name()
-> > [43/54] convert gadgetfs
-> > [44/54] hypfs: don't pin dentries twice
-> > [45/54] hypfs: switch hypfs_create_str() to returning int
-> > [46/54] hypfs: swich hypfs_create_u64() to returning int
-> > [47/54] convert hypfs
-> > [48/54] convert rpc_pipefs
-> > [49/54] convert nfsctl
-> > [50/54] convert rust_binderfs
-> >
-> >         ... and no kill_litter_super() callers remain, so we
-> > can take it out:
-> > [51/54] get rid of kill_litter_super()
-> >
-> >         Followups:
-> > [52/54] convert securityfs
-> >         That was the last remaining user of simple_recursive_removal()
-> > that did *not* mark things persistent.  Now the only places where
-> > d_make_discardable() is still called for dentries that are not marked
-> > persistent are the calls of simple_{unlink,rmdir}() in configfs and
-> > apparmorfs.
-> >
-> > [53/54] kill securityfs_recursive_remove()
-> >         Unused macro...
-> >
-> > [54/54] d_make_discardable(): warn if given a non-persistent dentry
-> >
-> > At this point there are very few call chains that might lead to
-> > d_make_discardable() on a dentry that hadn't been made persistent:
-> > calls of simple_unlink() and simple_rmdir() in configfs and
-> > apparmorfs.
-> >
-> > Both filesystems do pin (part of) their contents in dcache, but
-> > they are currently playing very unusual games with that.  Converting
-> > them to more usual patterns might be possible, but it's definitely
-> > going to be a long series of changes in both cases.
-> >
-> > For now the easiest solution is to have both stop using simple_unlink()
-> > and simple_rmdir() - that allows to make d_make_discardable() warn
-> > when given a non-persistent dentry.
-> >
-> > Rather than giving them full-blown private copies (with calls of
-> > d_make_discardable() replaced with dput()), let's pull the parts of
-> > simple_unlink() and simple_rmdir() that deal with timestamps and link
-> > counts into separate helpers (__simple_unlink() and __simple_rmdir()
-> > resp.) and have those used by configfs and apparmorfs.
-> >
-> 
-> Hi Al, when I apply this patchset my Pixel 6 no longer enumerates on
-> lsusb or ADB. It was quite hard to bisect to this point, as this is
-> non-deterministic and seems to be setup specific. Note, I am using
-> android-mainline, but my understanding is that this build does not
-> have any out-of-tree USB patches, and that there are no vendor hooks
-> in the build.
-> 
-> My apologies as I can't offer any other clues; there are no obviously
-> bad dmesg logs and I'm still working on narrowing down the exact
-> commit(s) that started this, but just wanted to send a FYI in case
-> something stands out as obvious.
+This commit fixes a security issue where BPF_PROG_DETACH on tcx or
+netkit devices could be executed by any user when no program fd was
+provided, bypassing permission checks. The fix adds a capability
+check for CAP_NET_ADMIN or CAP_SYS_ADMIN in this case.
 
-Note that I had to revert commit e5bf5ee26663 ("functionfs: fix the
-open/removal races") from the stable backports, as it was causing issues
-on the pixel devices it got backported to.  So perhaps look there?
+Fixes: e420bed02507 ("bpf: Add fd-based tcx multi-prog infra with link support")
+Signed-off-by: Guillaume Gonnet <ggonnet.linux@gmail.com>
+---
+ include/linux/bpf.h       |  5 +++++
+ include/linux/bpf_mprog.h | 12 ++++++++++++
+ kernel/bpf/syscall.c      |  7 ++-----
+ 3 files changed, 19 insertions(+), 5 deletions(-)
 
-thanks,
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 4427c6e98331..5f59d1f173a2 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2742,6 +2742,11 @@ static inline bool bpf_bypass_spec_v4(const struct bpf_token *token)
+ 		bpf_token_capable(token, CAP_PERFMON);
+ }
+ 
++static inline bool bpf_net_capable(void)
++{
++	return capable(CAP_NET_ADMIN) || capable(CAP_SYS_ADMIN);
++}
++
+ int bpf_map_new_fd(struct bpf_map *map, int flags);
+ int bpf_prog_new_fd(struct bpf_prog *prog);
+ 
+diff --git a/include/linux/bpf_mprog.h b/include/linux/bpf_mprog.h
+index 929225f7b095..18d26ae6a5b6 100644
+--- a/include/linux/bpf_mprog.h
++++ b/include/linux/bpf_mprog.h
+@@ -340,4 +340,16 @@ static inline bool bpf_mprog_supported(enum bpf_prog_type type)
+ 		return false;
+ 	}
+ }
++
++#ifdef CONFIG_BPF_SYSCALL
++static inline bool bpf_mprog_detach_empty(enum bpf_prog_type type)
++{
++	switch (type) {
++	case BPF_PROG_TYPE_SCHED_CLS:
++		return bpf_net_capable();
++	default:
++		return false;
++	}
++}
++#endif /* CONFIG_BPF_SYSCALL */
+ #endif /* __BPF_MPROG_H */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index b9184545c3fd..5f59dd47a5b1 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1363,11 +1363,6 @@ static int map_check_btf(struct bpf_map *map, struct bpf_token *token,
+ 	return ret;
+ }
+ 
+-static bool bpf_net_capable(void)
+-{
+-	return capable(CAP_NET_ADMIN) || capable(CAP_SYS_ADMIN);
+-}
+-
+ #define BPF_MAP_CREATE_LAST_FIELD excl_prog_hash_size
+ /* called via syscall */
+ static int map_create(union bpf_attr *attr, bpfptr_t uattr)
+@@ -4579,6 +4574,8 @@ static int bpf_prog_detach(const union bpf_attr *attr)
+ 			prog = bpf_prog_get_type(attr->attach_bpf_fd, ptype);
+ 			if (IS_ERR(prog))
+ 				return PTR_ERR(prog);
++		} else if (!bpf_mprog_detach_empty(ptype)) {
++			return -EPERM;
+ 		}
+ 	} else if (is_cgroup_prog_type(ptype, 0, false)) {
+ 		if (attr->attach_flags || attr->relative_fd)
+-- 
+2.34.1
 
-greg k-h
