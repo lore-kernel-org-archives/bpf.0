@@ -1,81 +1,96 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB8032ED38;
-	Tue, 27 Jan 2026 20:13:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59601DE8AE
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 20:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769544796; cv=none; b=mnopJc4JIlq9BLo8zlBLcK+4MlggSPRN3aIDTjTGl+HmKT5B4ticu8fDA/pvAMBX/yh5QNV4T0czxZhZvtbJDGIa3nXeBfBMFT8MTAl3JQh/8PFEfnnzaDd0KqDF1jmO6qGjwOiD5YTUsuR9pvNAuvaOX49oq3fcLc6HW3BPT10=
+	t=1769545271; cv=none; b=Kj7osjwaTjylABDCcBGcVX+kiPDcZQ3V20QjKsLcqbYdhzklA5aC5CR5VfgKY0luRpsmEztHsMylIPoRub/NXTMpLNS7zGVwXrXCUfgQtX+r7cyBf/OUaplPqWyJvMXzG+2+nXy/NzvK452AUmfO/G3+nGEvZIA1uuP1LMUY4qs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769544796; c=relaxed/simple;
-	bh=DkWAjAr3ro/0362KFmc8W3ZifYIfv/tTjACTZ8M1odA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GVaBXhmxj66ON2s+v2Dc3szyVc/CaH00pgUouBo4Safsu7tgxT93pxOd+ns943FR+Zq8viA8Mlnpz1gPBijQCI/X6JwldXbXqMrWQw3I/vILfS17Nl/sEITUV1Y8VXZ7ho1ahkr4vklTlOpav6w+o7vrsSH0DykQZkW5QLjRc74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=HEJ8AHlZ; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1769545271; c=relaxed/simple;
+	bh=XFHULvI9Ru40wthBvjelLrasYy/5aArCPZEZW4a/JiI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WVa4A+uFtGM4UE3e9Zg7zLFsuiSHoQJym1zLHgRj9IJawc5F/kaYaPe8s4K1wOvaiTCX/yUk67VZvW8oKVg4cglRpi2d4GXmMJKYOLXFlu+F9s47en8xf1gjTJ3DEnoxW2wrpLIBKg3PEzPCfIg8waejUwtlhHVbk5t7leKa/TU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Dq+jIiFi; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="HEJ8AHlZ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=BThmTYQxvIJzQkA/L/WO0umKgcoH0NckbPSOFRkaDt4=; b=HEJ8AHlZg14JJPbg8QtNWS1ji2
-	tJT/2Fs1T5x5ADAyCAF83hSNvt9o3z0K3RSxk2gUB8Da5/tSbaBFKwqw22nB9KSBEdLXuDL7FqPew
-	7Y+0P4xYkRhvZjXTFdCSvNynNniJgE6ZN0ESEh44Vc7Ehkj50lCswNvXEYERPQvdfeH75yQduHjQN
-	Pq05K/lmA3+K8RokHDK11A0sXSW/FfXFcjSMTd9/8b2Gfp8Iz6ORbZwkKjtp/91tEjK8DcKs1Smzh
-	pMHt05iiq6RxHZG8nxYrYmxa8r2p827g4+Rly5OrSWZkh9CWcaNv1tRLRrbeWiJeWu+s2oV5wvc/f
-	Bx+2nTwQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1vkpSg-00000001D3Z-2Fqa;
-	Tue, 27 Jan 2026 20:14:54 +0000
-Date: Tue, 27 Jan 2026 20:14:54 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Greg KH <gregkh@linuxfoundation.org>, Samuel Wu <wusamuel@google.com>,
-	linux-fsdevel@vger.kernel.org, brauner@kernel.org, jack@suse.cz,
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
-	a.hindborg@kernel.org, linux-mm@kvack.org,
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
-	paul@paul-moore.com, casey@schaufler-ca.com,
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
-	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
-	bpf@vger.kernel.org, clm@meta.com,
-	android-kernel-team <android-kernel-team@google.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-Message-ID: <20260127201454.GQ3183987@ZenIV>
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
- <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
- <2026012715-mantra-pope-9431@gregkh>
- <CAHk-=whME4fu2Gn+W7MPiFHqwn51VByhpttf-wHdhAqQAQXpqw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Dq+jIiFi"
+Message-ID: <9a2c5f29-b45c-4ff3-a8f4-51d207a82d38@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769545266;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YUP+BUUh/kupPGgyR6A9Wup/rhNgbndAT0lTSWXG59k=;
+	b=Dq+jIiFiFSLuZJ96MCgtUz37FFhowjkA6JRgG9tjp1VHCsmGbRbyaX2Sof35A0H7AwXK5n
+	a+Ku4rb5MSPNs1Gm+aKO9/eTWRKzDUqsnnOQXwB3exWZxwJt5+f+vDK2gKhcpi3iEoCvmm
+	k3OP4uXSsZ2Z1MADJO8Uq0laIp7aoFc=
+Date: Tue, 27 Jan 2026 12:21:03 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=whME4fu2Gn+W7MPiFHqwn51VByhpttf-wHdhAqQAQXpqw@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Subject: Re: [PATCH bpf-next v3 08/17] mm: introduce bpf_oom_kill_process()
+ bpf kfunc
+To: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Michal Hocko <mhocko@suse.com>, Alexei Starovoitov <ast@kernel.org>,
+ Matt Bobrowski <mattbobrowski@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, JP Kobryn <inwardvessel@gmail.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ Suren Baghdasaryan <surenb@google.com>, Johannes Weiner
+ <hannes@cmpxchg.org>, Andrew Morton <akpm@linux-foundation.org>,
+ bpf@vger.kernel.org
+References: <20260127024421.494929-1-roman.gushchin@linux.dev>
+ <20260127024421.494929-9-roman.gushchin@linux.dev>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260127024421.494929-9-roman.gushchin@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Jan 27, 2026 at 10:39:04AM -0800, Linus Torvalds wrote:
-> On Mon, 26 Jan 2026 at 23:42, Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > Note that I had to revert commit e5bf5ee26663 ("functionfs: fix the
-> > open/removal races") from the stable backports, as it was causing issues
-> > on the pixel devices it got backported to.  So perhaps look there?
-> 
-> Hmm. That commit is obviously still upstream, do we understand why it
-> caused problems in the backports?
+On 1/26/26 6:44 PM, Roman Gushchin wrote:
+> +static int bpf_oom_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
 
-This is all I've seen:
+The filter callback is registered for BPF_PROG_TYPE_STRUCT_OPS. It is 
+checking if a kfunc_id is allowed for other struct_ops progs also, e.g. 
+the bpf-tcp-cc struct_ops progs.
 
-| It has been reported to cause test problems in Android devices.  As the
-| other functionfs changes were not also backported at the same time,
-| something is out of sync.  So just revert this one for now and it can
-| come back in the future as a patch series if it is tested.
 
-My apologies for not following up on that one; Greg, could you give some
-references to those reports?
+> +{
+> +	if (prog->type != BPF_PROG_TYPE_STRUCT_OPS ||
+> +	    prog->aux->attach_btf_id != bpf_oom_ops_ids[0])
+> +		return -EACCES;
+
+The 'return -EACCES' should be the cause of the "calling kernel function 
+XXX is not allowed" error reported by the CI. Take a look at 
+btf_kfunc_is_allowed().
+
+Take a look at bpf_qdisc_kfunc_filter(). I suspect it should be 
+something like this, untested:
+
+         if (btf_id_set8_contains(&bpf_oom_kfuncs, kfunc_id) &&
+	    prog->aux->st_ops != &bpf_oom_bpf_ops)
+                 return -EACCES;
+
+         return 0;
+
+> +
+> +static const struct btf_kfunc_id_set bpf_oom_kfunc_set = {
+> +	.owner          = THIS_MODULE,
+> +	.set            = &bpf_oom_kfuncs,
+> +	.filter         = bpf_oom_kfunc_filter,
+> +};
+> +
+> +static int __init bpf_oom_init(void)
+> +{
+> +	int err;
+> +
+> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
+> +					&bpf_oom_kfunc_set);
+
