@@ -1,108 +1,193 @@
-Received: from relay.hostedemail.com (smtprelay0011.hostedemail.com [216.40.44.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA7D4F5E0;
-	Tue, 27 Jan 2026 02:39:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769481569; cv=none; b=o5QwcSyZ0TjnhGYhU1qc+aNL29WDl5ly+cAq/H/DuMQ+9J4dbpxCaiMbUkkec25/CGT7Md4pQWu+SYMb3PT4a48PwFhlROr0mFj024M7aPwdEj9ctlXH5MFkoHgKP66NFXA/DEOHGau+pV0m8zIfQcXO2fn6qeiklIOertvPzOs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769481569; c=relaxed/simple;
-	bh=7CfqkjoWSIlMwdQDSZr22ADv0dhvJYGVyt5CTXpPOvM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A87wts0dKQVlxTgbGB9CAvE0HC4qQz8PJCZItie7wTVBpJfvRSN7TqLCZWjq9ta3IEZW1VRmaVSDnrqFXKMMQQg/ow49ipZeBvnxBf0K90kdIHAtKDtmuj+4M8bC0hnz3V8/NvKGSFKZEcmWYG3hYuEBoqcApe4ai2j5oOF3X44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf14.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay07.hostedemail.com (Postfix) with ESMTP id D4D3D16074F;
-	Tue, 27 Jan 2026 02:39:25 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf14.hostedemail.com (Postfix) with ESMTPA id A24282F;
-	Tue, 27 Jan 2026 02:39:23 +0000 (UTC)
-Date: Mon, 26 Jan 2026 21:39:22 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- bpf@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Andrew Morton <akpm@linux-foundation.org>, "Paul E. McKenney"
- <paulmck@kernel.org>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
- Alexei Starovoitov <ast@kernel.org>
-Subject: Re: [PATCH v6 0/3] tracing: Guard __DECLARE_TRACE() use of
- __DO_TRACE_CALL() with SRCU-fast
-Message-ID: <20260126213922.0a91bfac@robin>
-In-Reply-To: <20260126231145.728172709@kernel.org>
-References: <20260126231145.728172709@kernel.org>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9925B2D7BF
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 02:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769481828; cv=pass; b=lz20tpUOazb4EjN1e5sNrYrmOR6abCouWPvPOkM85629on8v7s/aLKFhpetqrvAoFTUJhElasmwHzHfD+H1LjEmfF3PMgSqwpfTgAL17JM41d5DEkbKbTQRQpU/H090CEPu89pS71hnJJw0xQkUTpOssDNNKkx5vDzkGJJMwqFk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769481828; c=relaxed/simple;
+	bh=BvbEr7o+FAIoZ+8+sAFL5GGnCQGVrASlVNUsngs9qy0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jqPEyGm0Nd/G9BQh0spHuFlIwe3oqE92U+Laom+s8nwNz5h48dp7vCWSkGC2nLITDf5/aNsV/1Fm8iWE7Hb98eO5u+69Sdu0oKLp2FVP9zLmxuDwEbhD+jRtNCAKp2bx4Y1Dzruu+gpxukyS0vgQ59oL1SL6d7K1QY0y3PiADgE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mmYFXohr; arc=pass smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mmYFXohr"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4359a302794so3177440f8f.1
+        for <bpf@vger.kernel.org>; Mon, 26 Jan 2026 18:43:46 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769481825; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NThloQV+FuOLigK5Db0Ftpgn/gzO6kkk7/VGTdHh9MBf9rbze7xAxOBtg6DsPipWmX
+         jKkZeNGGnYeJSrCWejgSIif82U7Kkg5LoTX1ccXNR4Gccdg2KQoRoHJfk12CfnRwxvf+
+         8bRooQHDwu+ITa1qm1uyr0gub5OrOab8o/WH3IqNDnpvGkHDmuybq8GcfcijMislj6sx
+         r7egb5H37AvFfuOx+l5z1ubOygCsrKErBeIJfFun/CztBN/HgvzHc2tRFX7+nEbFHUWb
+         Lijkn71od2Xok/8VKI69iv0XSBVFZGecBnCc2AkplEl9dP4lT232lXOppMQm6HB15R0C
+         znWw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=sNWYftb3y5oZnnbsPB6EKKeLAdQS5y4v0pCFC0lgynQ=;
+        fh=Qwi4bkM/TcZNakyBIOP2hHL6j49r9ebjziY5QnZErxA=;
+        b=j2hU8O4mqvHR3DU4weYVrWUXR8357w7vwyD3baet7fiBE5HH+ldyA3U17tf3Spl9sL
+         f73iq/af+bhRuksr9Ktor+gwVjLRBcOvkKYYJm4M7PLaHbT+kBaOcqzH7tRYbvdhJvvi
+         hNCzzcwmhg7YRuW1bO86ihpWyWlctZEMTXBAvShZDjs4mGW6m0P0C3oGqQEh35cLq6PL
+         vQQQxxZypKMIzV81fY7R5LT07BHMw1bBYOJbIfjEVZ8/Y9yPwX24UG8QLBGx9JSoiXcv
+         +26c9j+PDmeFeagnzC5vdJ/LrrYYARKUO/Zdyim2B0Ag+soTGrrXRLcNOuEXsW3ssrPA
+         nK6g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769481825; x=1770086625; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sNWYftb3y5oZnnbsPB6EKKeLAdQS5y4v0pCFC0lgynQ=;
+        b=mmYFXohrl4Wb8lb3KVBWlYEjhtkt6DQAYXgiZEeYsgQb8Q7d5KKbgZnL0b5dids1hh
+         HcF6B5chDd1sgwqXinDQGS22V24TpJNDauCMwztWln3V9ad6UJD+KUaZjT9aAqrlkMd4
+         OA1yQ+IBK58EAaVFs8IiR1hVqbjDU5kf+om+Udkd/CYiYuIFzTfN8BcefAfzfQmmQiJL
+         vhWJjO9tQnu9sXnrCBD4GnR4dyeki0Te2Qyojyan2s9qHXmDqa4GES234LPRTLcHm6gp
+         eZGdf42XjAMSa3osUk5fDNzzlZwH9mI8gAGZDagbVfSQc3faP0mJ8o33dKr6ApXMcUCu
+         pYwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769481825; x=1770086625;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sNWYftb3y5oZnnbsPB6EKKeLAdQS5y4v0pCFC0lgynQ=;
+        b=Yzk0M3ZlFUAb1DQE1XXtWFAhnxzYN//Tz4z4ruiuJf/DNENCyCROCCGLqhRDXrLOLy
+         fi0pU3srQc/3jDweiQTfB6yUpYLBgoO7pzXYvd0+7/lJ0MJE5E8K74FoA/a9D9QotnUS
+         41IssJSlM1ca5jQWX1FReegPayzARBSc4Oxwiof8LHl9LRP/Cm6Rn7lHyQ9hBRIPpYJB
+         Ls0UyGaF8wKdvJLaxgu4LGOcn0tZu6OaGl+fr+aSdVTA2dvtgJ0rqezcUjUo8G3ws1FF
+         JjUzHnO1Tjvofp8FJmuzLLN2WyH77sBMvPK2It1tGAKwgdMJfztiMkZmmh1wxs8TobY2
+         jKBQ==
+X-Gm-Message-State: AOJu0YwnbbjSX0E/coZXPy8G0MADaEwzrQJEW1r9ubNgYEyo3WBEAJ6f
+	IETdaJJPFvME9lciudkr5p2O5UJP6n51MMXW2qlDosqsx6k++fe6dqoCpibZ+mSWcSpNHIJLOUx
+	i93mlPNrqz/rgo7QDF0LDoy+HCwzWksg=
+X-Gm-Gg: AZuq6aI7I3UhAlgfoRzmst5gdSA01dTp24mcaPz1ltKmbHpuiUZ1TcY1rDUDThAQLgA
+	IYrLiMbUyQSSxJZswyH2n1vZsTjzTmGi6bEgPfJ8RG4K/8xFcmNMb6/dmOr1aYmhDya9eD95Qqv
+	1Y9Pz8UQUjO+129SBniQo85aoRVQ1zna0x/EI92M2zA1B4ziKzQbIqsl9ru7YbCJGbG5ehMRteB
+	LdE8uhL5y4YBcRVBKmzCgT+Adkx8UFmS3hoel0yEjgvnq4IPQe9SwxXSBPZiUnp0FsVo5h7TZTD
+	KikZlFQ0btnIEZjgcAn4trIcdHgIdMNK5JyypaY8LzNs5M8gu9hDLlEmlQDr39uI1vpvzFvAPyA
+	MCCmyprnrJY7vHuxr3VRnSTCh
+X-Received: by 2002:a05:6000:a8c:b0:435:bbd7:185f with SMTP id
+ ffacd0b85a97d-435dd029a52mr105023f8f.9.1769481824811; Mon, 26 Jan 2026
+ 18:43:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: 7b1m1rfaohq6xc4srpn69zd8hofd1gb8
-X-Rspamd-Server: rspamout01
-X-Rspamd-Queue-Id: A24282F
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/fvltJp8bzf64BBXmkNAqXP1jQ3xEvOLs=
-X-HE-Tag: 1769481563-654622
-X-HE-Meta: U2FsdGVkX1/iO+LNUz/N44ce5O9o55BWn6+LPYVCJFRLrrBowhlrfKsat41CZwymfqvVX1rvcrJqNDoKn83MCOQeidwiBoU5diExKDl2Hda3sQbES2IC7wtcSi2b++ye390TGbVXtxEfIMfWgS5gyzWGFLVeS8gNlEu8bOqeqiB/DtxRbSr+pBzW9I1HJwUFauWoEnR7a8QX3vNYAYgeF0LG/Rq0j/YTxnuhzSFy9zbiNjh9pxnEu9tFjq0USaA1NEPpzhJmHi1KwsqFa6J5DVZgUTDfJxFZwpUTgat1v4O8PvKjSmsNjZ0ka9lgeuSj++g+VLUewD8BUgSLcgoroBrMUS0fjecG
+References: <20260126151409.52072-1-leon.hwang@linux.dev> <20260126151409.52072-5-leon.hwang@linux.dev>
+In-Reply-To: <20260126151409.52072-5-leon.hwang@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 26 Jan 2026 18:43:33 -0800
+X-Gm-Features: AZwV_Qjob0hpI61E7bKlmlYJJVAtwCwP_z812BtK6il96WSFPg5NoRPUSzKlj9k
+Message-ID: <CAADnVQ+PDCV=YrFhxG3gXPC3jDPdbTmsaAOKBsFceKgEware0Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 4/9] bpf: Add syscall common attributes
+ support for prog_load
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>, 
+	Andrey Albershteyn <aalbersh@redhat.com>, Willem de Bruijn <willemb@google.com>, 
+	Jason Xing <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>, 
+	Mykyta Yatsenko <yatsenko@meta.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung <ameryhung@gmail.com>, 
+	Rong Tao <rongtao@cestc.cn>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux API <linux-api@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 26 Jan 2026 18:11:45 -0500
-Steven Rostedt <rostedt@kernel.org> wrote:
-
-> The current use of guard(preempt_notrace)() within __DECLARE_TRACE()
-> to protect invocation of __DO_TRACE_CALL() means that BPF programs
-> attached to tracepoints are non-preemptible.  This is unhelpful in
-> real-time systems, whose users apparently wish to use BPF while also
-> achieving low latencies.
-> 
-> Change the protection of tracepoints to use fast_srcu() instead.
-> This will allow the callbacks to be able to be preempted. This also
-> means that the callbacks themselves need to be able to handle this
-> new found preemption ability.
-> 
-> For perf, add a guard(preempt) inside its handler too keep the old behavior
-> of perf events being called with preemption disabled.
-> 
-> For BPF, add a migrate_disable() to its handler. Actually, just replace
-> the rcu_read_lock() with rcu_read_lock_dont_migrate() and make it
-> cover more of the BPF callback handler.
-
-My tests just triggered this, so I'm removing them from my queue for now.
-
--- Steve
+,
 
 
-[  204.194772] ------------[ cut here ]------------
-[  204.194789] WARNING: kernel/rcu/srcutree.c:792 at __srcu_check_read_flavor+0x5c/0xb0, CPU#1: swapper/1/0
-[  204.194800] Modules linked in:
-[  204.194817] CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted 6.19.0-rc7-test-00018-g2c774d6ad074-dirty #32 PREEMPT(voluntary) 
-[  204.194821] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.17.0-debian-1.17.0-1 04/01/2014
-[  204.194824] RIP: 0010:__srcu_check_read_flavor+0x5c/0xb0
-[  204.194829] Code: 84 c9 74 19 39 f1 74 45 0f 0b 85 c0 74 2e 39 c1 74 45 0f 0b 39 f0 75 3f c3 cc cc cc cc 85 c0 74 16 83 fe 04 75 ee 0f 0b eb ea <0f> 0b 8d 46 ff 85 f0 74 ba 0f 0b eb b6 83
- fe 04 74 3a 31 c0 f0 0f
-[  204.194832] RSP: 0018:fffffe4c48325b50 EFLAGS: 00010002
-[  204.194835] RAX: 0000000000000001 RBX: ffffffff8791e5a0 RCX: 0000000000000000
-[  204.194836] RDX: 00000000ffffffff RSI: 0000000000000004 RDI: ffffffff879f1180
-[  204.194838] RBP: ffff8e6453fd2000 R08: 0000000000000001 R09: 0000000000000000
-[  204.194839] R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000001
-[  204.194840] R13: fffffe4c48325ef8 R14: ffffffff85eeae93 R15: ffff8e6453906900
-[  204.194842] FS:  0000000000000000(0000) GS:ffff8e6533593000(0000) knlGS:0000000000000000
-[  204.194844] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  204.194845] CR2: 000055d1e7cf8cc0 CR3: 000000010b0cc004 CR4: 0000000000172ef0
-[  204.194850] Call Trace:
-[  204.194866]  <NMI>
-[  204.194868]  lock_release+0x215/0x320
-[  204.194886]  ? arch_perf_update_userpage+0x6c/0xf0
-[  204.195214]  perf_event_update_userpage+0x158/0x2e0
-[  204.195538]  x86_perf_event_set_period+0xc1/0x180
-[  204.195811]  handle_pmi_common+0x1ac/0x450
-[  204.198605]  ? __get_next_timer_interrupt+0x185/0x370
-[  204.198914]  intel_pmu_handle_irq+0x10e/0x510
-[  204.199032]  ? nmi_handle.part.0+0x30/0x270
-[  204.199197]  ? __get_next_timer_interrupt+0x185/0x370
-[  204.199404]  perf_event_nmi_handler+0x34/0x60
-[  204.199523]  nmi_handle.part.0+0xc9/0x270
+On Mon, Jan 26, 2026 at 7:15=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
+>
+> The log buffer of common attributes would be confusing with the one in
+> 'union bpf_attr' for BPF_PROG_LOAD.
+>
+> In order to clarify the usage of these two log buffers, they both can be
+> used for logging if:
+>
+> * They are same, including 'log_buf', 'log_level' and 'log_size'.
+> * One of them is missing, then another one will be used for logging.
+>
+> If they both have 'log_buf' but they are not same totally, return -EINVAL=
+.
+>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  include/linux/bpf_verifier.h |  4 +++-
+>  kernel/bpf/log.c             | 29 ++++++++++++++++++++++++++---
+>  kernel/bpf/syscall.c         |  9 ++++++---
+>  3 files changed, 35 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index 4a0c5ef296b9..7eb024e83d2d 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -637,9 +637,11 @@ struct bpf_log_attr {
+>         u32 log_level;
+>         struct bpf_attrs *attrs;
+>         u32 offsetof_log_true_size;
+> +       struct bpf_attrs *attrs_common;
+>  };
+>
+> -int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bp=
+f_attrs *attrs);
+> +int bpf_prog_load_log_attr_init(struct bpf_log_attr *log_attr, struct bp=
+f_attrs *attrs,
+> +                               struct bpf_attrs *attrs_common);
+>  int bpf_log_attr_finalize(struct bpf_log_attr *log_attr, struct bpf_veri=
+fier_log *log);
+>
+>  #define BPF_MAX_SUBPROGS 256
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index 457b724c4176..c0b816e84384 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
+> @@ -865,23 +865,41 @@ void print_insn_state(struct bpf_verifier_env *env,=
+ const struct bpf_verifier_st
+>  }
+>
+>  static int bpf_log_attr_init(struct bpf_log_attr *log_attr, struct bpf_a=
+ttrs *attrs, u64 log_buf,
+> -                            u32 log_size, u32 log_level, int offsetof_lo=
+g_true_size)
+> +                            u32 log_size, u32 log_level, int offsetof_lo=
+g_true_size,
+> +                            struct bpf_attrs *attrs_common)
+>  {
+> +       const struct bpf_common_attr *common =3D attrs_common ? attrs_com=
+mon->attr : NULL;
+> +
+
+It seems the only point of struct bpf_attrs is to pass the attrs
+here and remember them in bpf_log_attr.
+It looks unnecessary. Also the cast to void and back to actual
+type doesn't look pretty.
+It seems all of it is to do two copy_to_bpfptr_offset() of log_true_size
+in different places,
+but libbpf will use only one, so let's do only one
+copy_to_bpfptr_offset() and simply the whole thing.
+struct bpf_log_attr only needs
+  u32 offsetof_true_size;
+  bpfptr_t uattr;
+
+No need to introduce bpf_attrs and bpf_attrs_init() either.
+When bpf_log_attr is inited make the choice of uattr and offset.
+uattr will point at either new bpf_common_attr or old bpf_attr,
+and offsetof_true_size will have 3 possible offsets.
+
+pw-bot: cr
