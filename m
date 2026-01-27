@@ -1,229 +1,208 @@
-Received: from iad-out-010.esa.us-east-1.outbound.mail-perimeter.amazon.com (iad-out-010.esa.us-east-1.outbound.mail-perimeter.amazon.com [34.197.254.9])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE69729B78F;
-	Tue, 27 Jan 2026 06:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=34.197.254.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769496049; cv=fail; b=Cuq8yqgCwPSnTi0wJvgCnD2MXHCgqtF0ndOquiXoe0rvudh4tEbSFtgWqGQSPrx+pzJqdkb9PI0M4cXEpvq1ISqYfLrVX/E6Jc8QD3qA/slMJkIvna0+s9kihUXAHkfIMS4MiHxOJ55/I/+YjySMUGnhbZFg0V9VBXRmvccqD24=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769496049; c=relaxed/simple;
-	bh=6QHvYN3wp7Wa3iHub6/ewArSyI+cS2LRBHPC/mSIOvI=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=S3HbwrMaJbRz3098e97sugRvxldpLHXL3mp+BH93KHZun37V4x64zWtsXnzlWuzykUG5l1qWPWmO8cy744C8P58eVb3Pt66vlMOiJtrzAjLcNbCKStqISHikvxgWeZuuUFMUnLGuOxdw1OxYKJw4eJGoBJ5bh/2TBl90LQrpAqU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=lwiKF+Iw; arc=fail smtp.client-ip=34.197.254.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FC4E32BF43;
+	Tue, 27 Jan 2026 06:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769496860; cv=none; b=ApdMbP5pHy7ylNwvQI/s4PQRmxuXRg+U2IWCfUKMY/Xrh+ugMkcVDmwN8HMSE4NcL5ntYHn4s2EmySjGVVPGt0S8/iX/NMZ1LJwOtLopSBCAlXtaFVDeE51SRMODellBnkuwaSfVS6PhtOD88a882gecLUngz7oPu2lcyHglqcQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769496860; c=relaxed/simple;
+	bh=kghSbUBTJHHuIs7gcwu2kewIAHnML8RFagmQRZisVmY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K0sSMcnTOdwdsbNPgsJfK/AQygQNLt/JM0gFBs5nKiahCufvLYW0k8cly6c4q6PF1RlmF3eq5tIKbd4+4GCa1GetrM/Xi1lLtcDcZHc3LFrHyyJE5QYxCdpQWWSbvvcf/3UvvhnLY3+F44Q/fNWTvlnT5AdL8B16HVoz9qH99t4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MHjDObsF; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="lwiKF+Iw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1769496048; x=1801032048;
-  h=from:to:cc:subject:date:message-id:content-id:
-   content-transfer-encoding:mime-version;
-  bh=6QHvYN3wp7Wa3iHub6/ewArSyI+cS2LRBHPC/mSIOvI=;
-  b=lwiKF+IwN3RAPUlhN2ckXZ50uxcKKA2LhREwaAzACTOeGbJ/VJw4uUql
-   +znQoWZHsOgg7Lk8kQNJz/8j5NPs+8Yw+Z5/G2EnQJZfchqxng0ZZlxY7
-   SKgWhKfKNGsezdZkYorDXfs2pHB08RTsN2brq1GhBB8h5dcExK2B56En5
-   kZGDe0yr1+ygY8irgwB2+r1C+0144Lt78C04eY0cEopSI0ikl+ZyuRU8Q
-   je1MdHQ577qbCtHMvXBb6eYkQpjM7MXUKvblS0P/qKpT6A3kEw/DjAPVB
-   k/EtkN1bmpyOsUmIIh1R1pyFk+mMMHlzywKtFSHe/oZnIQTMMeReiZiFd
-   w==;
-X-CSE-ConnectionGUID: cup87IV8QFWlkvPqIP5GuQ==
-X-CSE-MsgGUID: rR7B9VRmRICf4zddzQJ1ug==
-X-IronPort-AV: E=Sophos;i="6.21,256,1763424000"; 
-   d="scan'208";a="10513790"
-Received: from ip-10-4-3-150.ec2.internal (HELO smtpout.naws.us-east-1.prod.farcaster.email.amazon.dev) ([10.4.3.150])
-  by internal-iad-out-010.esa.us-east-1.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2026 06:40:44 +0000
-Received: from EX19MTAUEC001.ant.amazon.com [52.94.133.134:12313]
- by smtpin.naws.us-east-1.prod.farcaster.email.amazon.dev [10.0.43.130:2525] with esmtp (Farcaster)
- id cbc05ac5-6b72-4980-adcc-76edfe9ecacd; Tue, 27 Jan 2026 06:40:44 +0000 (UTC)
-X-Farcaster-Flow-ID: cbc05ac5-6b72-4980-adcc-76edfe9ecacd
-Received: from EX19EXOUEB002.ant.amazon.com (10.252.135.74) by
- EX19MTAUEC001.ant.amazon.com (10.252.135.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
- Tue, 27 Jan 2026 06:40:44 +0000
-Received: from EX19EXOUEB001.ant.amazon.com (10.252.135.46) by
- EX19EXOUEB002.ant.amazon.com (10.252.135.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35;
- Tue, 27 Jan 2026 06:40:44 +0000
-Received: from DM2PR0701CU001.outbound.protection.outlook.com (10.252.134.239)
- by EX19EXOUEB001.ant.amazon.com (10.252.135.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.35
- via Frontend Transport; Tue, 27 Jan 2026 06:40:44 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VTrOlTgQvlaMdl/chPdIOtNUr4KO+5moIw0wzUUDmtXb9k9iUKv1g29iP81KMbm2BkC9AnVN92t75V1kpSd6iI89RJFA8vjaW8PKFr0Q8QfcVRY+8G4swx7pE4BiM0uUZ6HvS7rY/19hDL8fQsMT6YtwhuVuG+KJLdT5cvoeo8JgEmSvLnLRHRLuAC2B1NfN/osz+3T+CoytyvR/+KA2xUKNnBODiwjd/v7X7RZC5CWinwTD7LYzWPTvuqGLbSg8mciGaF+mpo/cg+83aAuCDhn8aAudF5ir92YdNXE4tMQQ58oDBPcgry00PV/XFqvRCp2bz95M8yzTyHc6kfWYKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6QHvYN3wp7Wa3iHub6/ewArSyI+cS2LRBHPC/mSIOvI=;
- b=h1YAucOFW7Sa0JY6Gs54SKDKwqFEDHHNj+jha2xAOwgQfruAgPr0nAbgLQ5+Tnn0fQsLtf6MJXbyD2mWULW95TbFjVtwwyxEn8INoZQDsk0qXdpCOJomi07iB0GJLLzFiTktSPUR9QYAeCLEZK6BIphikdc76/RuJK3AVZF1iJzCbAJ4WJnv+rQ8gTfm6KWZFJWhkTSMd8cru0ZPrWXHPjNsp3EdfhWmXpKP/Rm2EMY8FPBAtkAFUVgmzAKroi2exTchPuNf2h3Nl5ncYERb7r8D07+pi1DeNuGadtr5FWSNQyRxdxYqGZkJlYhPTjbyh2RVPcFj+W6X9R6Z05WqeQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amazon.com; dmarc=pass action=none header.from=amazon.com;
- dkim=pass header.d=amazon.com; arc=none
-Received: from MN2PR18MB3685.namprd18.prod.outlook.com (2603:10b6:208:26b::7)
- by MW3PR18MB3689.namprd18.prod.outlook.com (2603:10b6:303:5e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.6; Tue, 27 Jan
- 2026 06:40:34 +0000
-Received: from MN2PR18MB3685.namprd18.prod.outlook.com
- ([fe80::b80a:2a8b:75a9:7e85]) by MN2PR18MB3685.namprd18.prod.outlook.com
- ([fe80::b80a:2a8b:75a9:7e85%6]) with mapi id 15.20.9564.006; Tue, 27 Jan 2026
- 06:40:34 +0000
-From: "Arinzon, David" <darinzon@amazon.com>
-To: "mmyangfl@gmail.com" <mmyangfl@gmail.com>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>
-CC: "mmyangfl@gmail.com" <mmyangfl@gmail.com>, "Allen, Neil"
-	<shayagr@amazon.com>, "Kiyanovski, Arthur" <akiyano@amazon.com>, "Bshara,
- Saeed" <saeedb@amazon.com>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
-	"davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
-	<edumazet@google.com>, "kuba@kernel.org" <kuba@kernel.org>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "ast@kernel.org" <ast@kernel.org>,
-	"daniel@iogearbox.net" <daniel@iogearbox.net>, "hawk@kernel.org"
-	<hawk@kernel.org>, "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"sdf@fomichev.me" <sdf@fomichev.me>, "Bernstein, Amit" <amitbern@amazon.com>,
-	"horms@kernel.org" <horms@kernel.org>, "bhelgaas@google.com"
-	<bhelgaas@google.com>, "leitao@debian.org" <leitao@debian.org>, "Enju, Kohei"
-	<enjuk@amazon.co.jp>, "ahmed.zaki@intel.com" <ahmed.zaki@intel.com>,
-	"mingo@kernel.org" <mingo@kernel.org>, "tglx@kernel.org" <tglx@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: RE: [RFC net-next] net: ena: Use u64_stats_t with u64_stats_sync
- properly
-Thread-Topic: [RFC net-next] net: ena: Use u64_stats_t with u64_stats_sync
- properly
-Thread-Index: AQHcj1fWH27CYFZt50m4r6LqZqeegA==
-Date: Tue, 27 Jan 2026 06:40:34 +0000
-Message-ID: <FFDD6CD9-5100-49E6-B3B8-F38099043E87@amazon.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels: MSIP_Label_19e68092-05df-4271-8e3e-b2a4c82ba797_Enabled=true;MSIP_Label_19e68092-05df-4271-8e3e-b2a4c82ba797_SetDate=2026-01-27T06:33:58Z;MSIP_Label_19e68092-05df-4271-8e3e-b2a4c82ba797_ContentBits=0;MSIP_Label_19e68092-05df-4271-8e3e-b2a4c82ba797_Enabled=true;MSIP_Label_19e68092-05df-4271-8e3e-b2a4c82ba797_Tag=50,
- 3, 0,
- 1;MSIP_Label_19e68092-05df-4271-8e3e-b2a4c82ba797_Name=Confidential;MSIP_Label_19e68092-05df-4271-8e3e-b2a4c82ba797_ActionId=1a5dec78-16bc-4394-9635-0d984b828aff;MSIP_Label_19e68092-05df-4271-8e3e-b2a4c82ba797_SiteId=5280104a-472d-4538-9ccf-1e1d0efe8b1b;MSIP_Label_19e68092-05df-4271-8e3e-b2a4c82ba797_Method=Standard;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amazon.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MN2PR18MB3685:EE_|MW3PR18MB3689:EE_
-x-ms-office365-filtering-correlation-id: d1cbbfde-2367-4a69-7322-08de5d6ef946
-x-ld-processed: 5280104a-472d-4538-9ccf-1e1d0efe8b1b,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|7416014|366016|1800799024|376014|38070700021;
-x-microsoft-antispam-message-info: =?utf-8?B?WjR1R0gyM290bGQ2UmtqdmRJOTFXR2txaTg1eWJqemk1TFBkZTAwT3JmejBv?=
- =?utf-8?B?Zlp1ZWtJeFgwMGN4cFVpSko5d0JCdmdnSk9UcXpMcVlYWTFwWWJ1dmd2aU8z?=
- =?utf-8?B?UXJUV3hFVGdoSCtTZXFwbWFveHJpU2dSQWdJK2J1U01idktqNzBXNWVGN3Bm?=
- =?utf-8?B?TWVycHJmcjhwZFhNb1U5TmpxelZIREdGT1AxRm81eGJoTUp1Y3hWTC9QdWJS?=
- =?utf-8?B?VHpTOEZQN1ZSRUw1NDlJd1dxWk40QzcvdEJLL2VWMDlOeGtWUFlmSGIvWlIw?=
- =?utf-8?B?eXo4TUpSSGUrSGZDOG5seHIxTmxOR1R1N0l5OUQ3Tm1ScnVoRExIRXByWkVj?=
- =?utf-8?B?REhOV1o2SmZYY21QTy96WDM5Wm1JTVBnR0g0alpVVzVhemsrcVl3dTE5QjNo?=
- =?utf-8?B?L1A3WFJOLzdqVmVYMDRPWStaM2FucmppUU1FYS9JNWdRRTdTeDEwc3dDN2Vi?=
- =?utf-8?B?dzYvWWdxOEkyQ3lzRkdpYktKT3hHK1JOTXhXakVmMFpBWmIveDltN0cvWUZG?=
- =?utf-8?B?dERwK1Q3KzBMcEVjM0VLNXFYQllhbHl0Zm5HNkxYYVM1L2p1SDNmS0N1U0h3?=
- =?utf-8?B?K0J5d2hmVmVhNjFsSytpeXhDZCtzU2h2T0dEazlKK3F0MlJlV0N3TDY2SWIw?=
- =?utf-8?B?VlJVZVRSaGVmSDJENm1MY2dObEJlcDZjYkpJK0tEekQ0dUJEYVV2SVF4OFhq?=
- =?utf-8?B?SDJhaUI3ckhpWExpSHdwakFTeWRmdjY2ZFRDb3dmT2pHV2w3aUpNL0lxTEU1?=
- =?utf-8?B?ZGkvanJ1R2RFNHRBUUc5UythdEJ2MmJ4djVXZFBrbWVjNDdoSVhpWjBneFRC?=
- =?utf-8?B?bUJEWkFja0pqL3p4UnlTV1dNa2RlL1ZqaVdmTVM3aXorSXRGbGVVQm1KSTdt?=
- =?utf-8?B?OGI3akpjdDA2TUxRWXp0NWZEQVk5NHdEQ2NTSjBjbGh2Ujdjbld2RmZBdlNE?=
- =?utf-8?B?QzhrS1RwK3JVN2Fxak9VRWEzbGh0TWdpbDNPYUFETHp5Z3BEYTB3S2FZUmM2?=
- =?utf-8?B?VnV0ajZaYk9SdjNpdlBqcmFUOW8yeFR0bW82WGc2b2NXbk92UHk2UHZOVVZp?=
- =?utf-8?B?YVh2R2NObU95ZDREbkRWeVBFZE1wMEEzVHMyd1E4RURacFJtdDVleFg2dmZH?=
- =?utf-8?B?eks1UVVhVkRoNmVtWmk0VWRqS01IZUVnRlJqdjI0QlJGeWZsdnljdlR6d01s?=
- =?utf-8?B?SWxDR3hHaE03Z1pXMlgyT2lzV0tWbmJ1TFJXcTV3SFF4NmFZa1ZQOXNYR3Na?=
- =?utf-8?B?aStwaCtadlpSVWpzZ3BCWHRYNGxXQnFJMWNxTXZxWno5MHpMczUreFBrcitx?=
- =?utf-8?B?dWdQSXplV0hROGRYUlVISjZ1OWZOYVdiSlNicEh5Z00vTHBXQjFnSW5ka09L?=
- =?utf-8?B?MDkrMjYzbzNqZUpDeTRmMDVqTHJEM1ppL28wdXY4VHYyTTYreGxFeFJDMXR1?=
- =?utf-8?B?eTRPTXRZOW1IdWo5VktpNW1JalVMcWJrOHpEWEp1OGNyd3RsSk9pck05eUlw?=
- =?utf-8?B?YWlDUGZsY0FxeHJCN1lMU2lmWGNueTJGNW8yd2lKYkJXMzljLzlzWERaVUts?=
- =?utf-8?B?dlYwVTFXWG5Ydm1JcjNpTzF0a0Rlcjk3VTE1MFZBWCtmSU5DVEZQbzFWaWMy?=
- =?utf-8?B?WjVRKzFkcUtYUngwNmF3TGw4czA4eDIxVk9IM0hEWElteGtaK2VYMWM2WWlv?=
- =?utf-8?B?azJ4Nno5Y2g5aTdvNDcwTUZzc1dkdkVCUHdDR205TUNPdTlITXBTaDBvREds?=
- =?utf-8?B?aU9QK2h1em9uNnNyMXRhRDB2Ky9CQ3NvZnlzUW5yaEs3ZkVFeGt5cmlLRFE2?=
- =?utf-8?B?bHhPaWUwL0RUczQwQVUrZTdIZ2dWZjlMZXFXZDdkMFB3R0huc1p0K1pOMlh6?=
- =?utf-8?B?Y2dpSWhINiswSVRTYUloOWQzM3d2anpNRmpzQm9ZYXBFdVRWSjlwTDA4dnhz?=
- =?utf-8?B?T2V3TTR3OGR3c1Z1bmRsbGhqM1ZIaGQrY3RIT2Z1a3d5RnYzcGZmNTZ4YVRy?=
- =?utf-8?B?VHl2NVRmbFZxVEtWb0FkSzJCT21pR1BxK1QyVkQxaGE5ellmTE5aS0dtV0Ni?=
- =?utf-8?B?L09oZVZlMnNjTm9VaTFUd3ZEU2lqNWFwYUwxbDNjWGVxSWROQUMwT3hSK2JP?=
- =?utf-8?B?bzJ1RFF2aGI4UDk2aTlPRFRxUzVxRUpEaVZsRGNaNlFMNmdIMU9hSU1NZlEv?=
- =?utf-8?Q?lfT7cT3qvuSOQ/rhbkDr9tU=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR18MB3685.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(1800799024)(376014)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TWRpT0NzbWh4bkszQXlNM1pEUjV4RVE5STE3cVZsSWdmV0ZYMWF4YW0vMG93?=
- =?utf-8?B?UWJhSlRjc0I0TzBhMm5qRkU2eE95Wk94bWZaSythQWQ5WmpySkdUSjRzckg3?=
- =?utf-8?B?MjdGQUZYQ1lhc3BLbWlBZ1JJRWczWDR1UkNCclBJdFVDbFFxNEZxL0luS04z?=
- =?utf-8?B?SDNzYWNNMDVOZDJBQTdJYUJCK1NhNFZpTlVybHRvdnczcVNmNHNRSUphVHBj?=
- =?utf-8?B?a3pFT0svcExFTjY5dkQySTJnejJrTW11Q3hac0pNbUxhQU5XQWo0YkxGTU53?=
- =?utf-8?B?eTlHdWFUdnJTT3Vaekp4aUdUbjRETE5LT0FJN3ZRcVhqYitlRGNubTEwSFVY?=
- =?utf-8?B?dDdMYzlHaFd4UDJ6ald4YTlWendqSkxyeStUay93VDVMOWxPVkFCRjJVSEFK?=
- =?utf-8?B?M0VBcXFrQnA2bS9nNTlmN2lxaHJmY2RwYTdPRlZWdkRhR3g5UVVONFhDREVK?=
- =?utf-8?B?THJlaU9vSmZkNGlZTmY0czNyQkRaWEorQ2o1SnpjUUJLa1NMRXQ0b21QREJN?=
- =?utf-8?B?TFY2NDBOSlVPREMvWGhjdGtFYWt1L0lnb3pLK2NGQ01NOWtNNHpDOWJiRGR6?=
- =?utf-8?B?VkpPdlVOYnBjazExMHBORk1zTnhvQTNqV2EwL3NIM0ZqT25XY0g1cW4zaG1p?=
- =?utf-8?B?aFd3OWxWTzI5bGtMdDlwQnp3cHBDU28veXdKd1pOb01nQmVCN1pGOTZUUnl5?=
- =?utf-8?B?TXVUU0loMitNcDl5NytEWEpzVGkrRnhIWXJHb0plMnMvL3prUnJORnk2SFRR?=
- =?utf-8?B?aHVWeUROR2FmRlFmNzFjRGFsTWNVQnpURWdOV0dNdjJJdEYvYXlkaDV3YnpG?=
- =?utf-8?B?Y0JsMlVZdWdML1FlR1ZqeWoyUkJ3ZUdpQm0xb0JkWmY3Y1czSHAwR0d3MjUv?=
- =?utf-8?B?Rm1oUTRKb1NlZ3lyTHlSYVdIRTdoZDhKcFozWDYxY2ljSnhDYmJVTSs3QVpB?=
- =?utf-8?B?bjNEUUl5bXp5dlNQVHpyaTE3bUlDV3BqbzZ3b1A0NzBENUQwZGRMcWl5UDMw?=
- =?utf-8?B?dmpQZ2QvZjIySTJpbkN6RHMxQ3V4M2o2RVZnRzZWZ3VVSnpna1ZiUWkvNi9N?=
- =?utf-8?B?ZVpkMHJ6WkRNVUNZR1ZUb091dlIzZGxna0M1dCtmcmVUdlRXdmdpalBsUENp?=
- =?utf-8?B?Y095bWR4VjVncUV1bXp4MHl4M0ZsRzZiUXMrR2tzZ0ZyMkVTaHRpbTh0TzNY?=
- =?utf-8?B?Y1FBUmlLNXpsc0J3Y2dBQmg4OXNrOTQwTjNHSU5CZnRyVHNPdmJLcktaU0J4?=
- =?utf-8?B?S1grdVk3dDd5bWd6T00ycDlJZXo5WjU2cU1GOSs2N1NkR3k5cW1tcU5hSGhQ?=
- =?utf-8?B?ZWpVakdkdklLZjNoVDVsbENqVk1oVjJVbVZQM3lNcU5vNnZRazhYSWw1Q0NT?=
- =?utf-8?B?ZjlVMXBrZ2NHTHUvSy9xNVgrNzBUWUR4N3pteC9sZW9hcXIrM1VJcktTT0l3?=
- =?utf-8?B?aDdVcVp4QlhiSXUzR2RTSUd5Rjk4ZXVNV2RLSGhLbzdpMzF1eUhuSXNodUha?=
- =?utf-8?B?QkNDMzBKc0ZZVjVSK09jelJRRVZIalJJUVJtbWhTQWFvR051OEF6TVNUSlZM?=
- =?utf-8?B?bEhJT2NRYWUwUlE1Vk5MK1VJWUhCVVNCVEF0RVcyWnBvRVlzdGkxbnlrQS96?=
- =?utf-8?B?WHpqSmVPaDB3NnlZZVk3MFZyVkMyL2NjRkViK3NubTNPZjBXdkh3NGNrSUdY?=
- =?utf-8?B?N0pxNnJ3TW9nYTRwUDFrdlFZZytxSEtRSGFWV3RIc0tWVGhtVkRWREwzS3R5?=
- =?utf-8?B?bFlZemRzdngwa0lQU29ZSmNIekw4ZXBkMTVLTGxzUlhqdGM3WHRIaElVbDhB?=
- =?utf-8?B?S3cwWFlucTVFeEIxN3pZYnp2UVdtZTMrOUhJUlJudTQzaVhHRWpYVFlQKzJh?=
- =?utf-8?B?bkJtSU9SMTRnWG5LaXo5VkhtNUNwN3A1UzcxWG9JR0lRZkt1QWErV0RmMDlY?=
- =?utf-8?B?SVdia3I5S29vOFR0VzI3cU04UmRDVGtCL1lwMTJsdE9saWo4b0ZTQjlqbFUz?=
- =?utf-8?B?dDZadXBuTzNWaU04Q0FVREtOVDlHbTI1eVBtV01nQTZPU2dibXp5c2FMazNt?=
- =?utf-8?B?c1JSaHFyZ01HUklNejBKMVFCdkdYdE52dDNSS2VGaDFWajFxZEdlL2NzWnN5?=
- =?utf-8?B?MG9EVXU2cWdVeU94ZTk1dnpya0VkNEhORG5kOC96UkppZVBUWnFLa1phTkh4?=
- =?utf-8?B?WVp0bTVGMER1L2RhYjVPM1FXMVJjelVlVUpBSWEzSnZWOHFyL3h6UlVOTlVS?=
- =?utf-8?B?Q042R1QxZjNscE51OWtBV25QZnE4b3l4bm5BcnBhdm1TS0lBcUtzeDEzTk0y?=
- =?utf-8?B?ZXRjV2VtdllPTnRqdE1rVVZRTnRUZUxIQkticzN2OVV3NzkvcWoxUT09?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3342D397FF547543952C3F4CA88A8D00@namprd18.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MHjDObsF"
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60QFcQPc023414;
+	Tue, 27 Jan 2026 06:53:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=2vKyuY
+	Px1Jq1ekbrT4IzHP+v9xXysPIOpGFFOnvpWoI=; b=MHjDObsFUocpXTiOJ4FkIH
+	pN5rcvsjOpbt8u4T4+d7nM9NeoYxToKC4IDqydh2gb8tTcZAiQ7zqNzlZXjNo4Ui
+	inQ/b9mfiH/A0uDDOwrdbXQjwofOH6I440R8F2vyykGCooIH7wG+ogQV927a2KqH
+	Ad87Z5KP0nTVfrUF3CnbY7QRUsuSX9Grlsn2CiKEBobISXeT+CTBkV+oK6vr6lcF
+	/kz2U+YibqcAmstUBDzTLK4uPqI1knDINIMt0nPphvP3Mx+tPgJh4H20MkSBVO5F
+	LA0Jl3SSM8Smi+XQlYY/Np2Rz6Gq64W2LlPGehMhGacmoNg8hXhyLHhVWpZass3Q
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnk6uxdb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Jan 2026 06:53:45 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60R6rikb030787;
+	Tue, 27 Jan 2026 06:53:44 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnk6uxd9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Jan 2026 06:53:44 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60R3vTD3023625;
+	Tue, 27 Jan 2026 06:53:43 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bwamjqf9b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 27 Jan 2026 06:53:43 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60R6rdu253608772
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 27 Jan 2026 06:53:39 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4D51120043;
+	Tue, 27 Jan 2026 06:53:39 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 83F5B20040;
+	Tue, 27 Jan 2026 06:53:34 +0000 (GMT)
+Received: from [9.78.106.105] (unknown [9.78.106.105])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 27 Jan 2026 06:53:34 +0000 (GMT)
+Message-ID: <91a1246a-44d7-4f39-b7a5-2de1865e7415@linux.ibm.com>
+Date: Tue, 27 Jan 2026 12:23:33 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR18MB3685.namprd18.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d1cbbfde-2367-4a69-7322-08de5d6ef946
-X-MS-Exchange-CrossTenant-originalarrivaltime: 27 Jan 2026 06:40:34.2898
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5280104a-472d-4538-9ccf-1e1d0efe8b1b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ndJLmF6wSUiDlrCB16oxm90RCBxKWxDO6DVxos6EcXhBOsPSyzGXi34RfAj2daDAbftbO06dkSIYz4DVVKtthw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR18MB3689
-X-OriginatorOrg: amazon.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 6/6] powerpc64/bpf: Additional NVR handling for
+ bpf_throw
+To: bot+bpf-ci@kernel.org, adubey@linux.ibm.com, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc: sachinpb@linux.ibm.com, venkat88@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
+        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
+        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
+        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
+        iii@linux.ibm.com, shuah@kernel.org, martin.lau@kernel.org,
+        clm@meta.com, ihor.solodrai@linux.dev
+References: <20260124075223.6033-7-adubey@linux.ibm.com>
+ <2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: PFbibNarOBqJkas2DMGTEou_bb19UzBW
+X-Proofpoint-ORIG-GUID: 9D4Ah6Cb63jonCAn6hbYlOYL6sVvYXd6
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDA1NCBTYWx0ZWRfX92YmP9olsmk7
+ ifu2d0hXdJlzQ/tVU8Ue7Aeym88Q9H0TKK0m9XsiWDeh2FQtCRR32Rl75Nu1XWlSzMyu0gRG7ek
+ HuDq+VHNPDUg3jtdx/zn2Kho70vhOpazchYYqVvccMOBCsUp5K4+iu40FYdBdIl90LbgLZIhX6A
+ 7fU13Trb8v7KUiCfrWy2OFFVGUoVotOXIjf86qp9f2/POe5yIRagdjze/t56UQTPFpVDE38wfeP
+ Lf9va1A6UeUkXsEILvDeXRkJhhqSvrlWum0Mp/RcbBwcRkaUxIyCE2ZZ/z58XuJaKkWHre0YrUM
+ nRg4H1g6+0JB9p2stZVKug/6v4Ez++140RyvZG1KDZuiB9nxqHOVUuOhyVbh4Vo1skUuP48aEUC
+ w37PSFcFkDE/7gPaRv6JtbDM3wCqUgX6mg2hMfqpmmX3dOBb+g+Cmx+vKhRBSANsxr86VhlfHdv
+ EQEewlDpy8umq+1DWSA==
+X-Authority-Analysis: v=2.4 cv=AMiVTGgp c=1 sm=1 tr=0 ts=697860f9 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=VwQbUJbxAAAA:8 a=DLj6BFq7CkYCEiYtZIMA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.20,FMLib:17.12.100.49
+ definitions=2026-01-27_01,2026-01-26_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 spamscore=0 phishscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 clxscore=1015 priorityscore=1501 lowpriorityscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2601150000
+ definitions=main-2601270054
 
-SGkgRGF2aWQsDQoNClRoYW5rIHlvdSBmb3Igc3VibWl0dGluZyB0aGUgcGF0Y2guDQoNCj4gT24g
-NjRiaXQgYXJjaGVzLCBzdHJ1Y3QgdTY0X3N0YXRzX3N5bmMgaXMgZW1wdHkgYW5kIHByb3ZpZGVz
-IG5vIGhlbHANCj4gYWdhaW5zdCBsb2FkL3N0b3JlIHRlYXJpbmcuIENvbnZlcnQgdG8gdTY0X3N0
-YXRzX3QgdG8gZW5zdXJlIGF0b21pYw0KPiBvcGVyYXRpb25zLg0KPiANCg0KV2Ugd291bGQgbGlr
-ZSB0byBydW4gc29tZSBxdWljayBwZXJmb3JtYW5jZSB0ZXN0cyBpbnRlcm5hbGx5IGJlZm9yZSBz
-aWduaW5nIG9mZi4NCg0KPiBTaWduZWQtb2ZmLWJ5OiBEYXZpZCBZYW5nIDxtbXlhbmdmbEBnbWFp
-bC5jb20+DQo+IC0tLQ0KPiBSRkMgQ29tbWVudDoNCj4gDQo+IFRoZSB3cml0ZSBzaWRlIG9mIHU2
-NF9zdGF0cyBzaG91bGQgZW5zdXJlIG11dHVhbCBleGNsdXNpb24sIGhvd2V2ZXIgSSBjb3VsZG4n
-dA0KPiBmaW5kIHRoZSBzeW5jaHJvbml6YXRpb24gbWVjaGFuaXNtIGluIHVzZSAoZm9yIGV4YW1w
-bGUsIGVuYV91cCAvIGVuYV9pb19wb2xsIC8NCj4gZW5hX3N0YXJ0X3htaXQpLiBTaG91bGQgdGhp
-cyBiZSBjb25zaWRlcmVkIGFuIGlzc3VlPw0KDQpXZSByZXZpZXdlZCBvdGhlciBkcml2ZXJzIGFu
-ZCBpdCBsb29rcyBsaWtlIG5vbmUgYWRkIGV4dHJhIHN5bmNocm9uaXphdGlvbiBvbiB0aGUgd3Jp
-dGUgc2lkZS4NCkFkZGluZyBleHRyYSBzeW5jaHJvbml6YXRpb24gd291bGQgZGVncmFkZSBkYXRh
-cGF0aCBwZXJmb3JtYW5jZSB0byBmaXggZXh0cmVtZWx5IHJhcmUgbWlzc2VkIGNvdW50cy4NCg0K
-WW91J3ZlIHN1Ym1pdHRlZCBzaW1pbGFyIHBhdGNoZXMgZm9yIG90aGVyIGRyaXZlcnMgYnV0IG9u
-bHkgY29tbWVudGVkIG9uIHdyaXRlLXNpZGUNCnN5bmNocm9uaXphdGlvbiBmb3IgRU5BLiBJcyB0
-aGVyZSBzb21ldGhpbmcgc3BlY2lmaWMgdG8gRU5BIHRoYXQgZGlmZmVycyBmcm9tIG90aGVyIGRy
-aXZlcnM/DQoNCg==
+
+
+On 24/01/26 1:53 pm, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+>> index db121b1404fe..17de8b53a962 100644
+>> --- a/arch/powerpc/net/bpf_jit_comp64.c
+>> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> 
+> [ ... ]
+> 
+>> +/*
+>> + * For exception boundary & exception_cb progs:
+>> + *     return increased size to accommodate additional NVRs.
+>> + */
+>> +static int bpf_jit_stack_size(struct codegen_context *ctx)
+>> +{
+>> +	return ctx->exception_boundary || ctx->exception_cb ?
+>> +					BPF_PPC_EXC_STACKFRAME :
+>> +					BPF_PPC_STACKFRAME;
+>> +}
+> 
+> [ ... ]
+> 
+>> @@ -198,7 +249,19 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+>>   			EMIT(PPC_RAW_STD(_R0, _R1, PPC_LR_STKOFF));
+>>   		}
+>>
+>> -		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_STACKFRAME + ctx->stack_size)));
+>> +		EMIT(PPC_RAW_STDU(_R1, _R1,
+>> +				-(bpf_jit_stack_size(ctx) + ctx->stack_size)));
+>> +	}
+> 
+> [ ... ]
+> 
+>> @@ -248,9 +311,19 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx)
+>>   		EMIT(PPC_RAW_LD(bpf_to_ppc(ARENA_VM_START), _R1,
+>>   				bpf_jit_stack_offsetof(ctx, bpf_to_ppc(ARENA_VM_START))));
+>>
+>> +	if (ctx->exception_cb) {
+>> +		/*
+>> +		 * Recover additionally saved non volatile registers from stack
+>> +		 * frame of exception boundary program.
+>> +		 */
+>> +		for (i = _R14; i <= _R25; i++)
+>> +			EMIT(PPC_RAW_LD(i, _R1, bpf_jit_stack_offsetof(ctx, i)));
+>> +	}
+>> +
+>>   	/* Tear down our stack frame */
+>>   	if (bpf_has_stack_frame(ctx)) {
+>> -		EMIT(PPC_RAW_ADDI(_R1, _R1, BPF_PPC_STACKFRAME + ctx->stack_size));
+>> +		EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_jit_stack_size(ctx) + ctx->stack_size));
+> 
+> For the exception callback case, doesn't this use the wrong stack_size?
+> 
+> In bpf_jit_build_prologue(), the exception callback does not create its own
+> frame - it sets R1 to the boundary's frame pointer via EMIT(PPC_RAW_MR(_R1,
+> _R5)). However here in the epilogue, the frame teardown uses ctx->stack_size
+> which is the callback's stack depth, not the boundary's.
+> 
+> The boundary program creates its frame with:
+>      STDU R1, R1, -(bpf_jit_stack_size(boundary_ctx) + boundary_stack_size)
+> 
+> But the callback tears it down with:
+>      ADDI R1, R1, bpf_jit_stack_size(callback_ctx) + callback_stack_size
+> 
+> Since each BPF subprogram can have a different stack_depth (set per-subprog
+> in kernel/bpf/verifier.c via func[i]->aux->stack_depth), if the exception
+> callback has a different stack depth than the boundary, R1 will end up at
+> the wrong location after this ADDI.
+> 
+> After the wrong R1 adjustment, the LR restore below loads from R1+16 which
+> is now pointing to the wrong memory location, potentially causing a return
+> to an invalid address.
+> 
+> Would it be correct to store the boundary's stack_size somewhere accessible
+> to the callback, or ensure the callback uses the same stack layout as the
+> boundary?
+> 
+>> +
+>>   		if (ctx->seen & SEEN_FUNC || ctx->exception_cb) {
+>>   			EMIT(PPC_RAW_LD(_R0, _R1, PPC_LR_STKOFF));
+>>   			EMIT(PPC_RAW_MTLR(_R0));
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+
+I will post the fix for this issue as a follow-up.
+
+Thanks
+Hari
