@@ -1,154 +1,113 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+Received: from mail-wr1-f68.google.com (mail-wr1-f68.google.com [209.85.221.68])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999122F5A32
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 23:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DB792F5A12
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 23:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.68
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769557933; cv=pass; b=bIEALm2MW0aarwHUga2ynOtU6d3IKwquAkxCOhXG0KmEdYjF3rAP0oqUXcFySIMX7GllayC9UkftN6BVOh4w9K1hWOV6x86quiWKsJTBgZtXDpfShDJ6V3rJAymHUfrd8wfBSq9hPWXTqHxikPSQRjGyIPPt1+e2Elkg94mG2tY=
+	t=1769558037; cv=pass; b=CtY1b10C16v84nd7l9F0zlIGcDLPESJAUNvXyjmEVEbRu3aye18EV8nF1JEDBM+DtFn/DdYeHlTHIACp362uvjjTf0xNw1Pc7Iw8QnzDqE1rxvbIPHztAxgvmK2hRGpeFl03Py3Z03k5QdoDM8mkM1crgDoKeCEikZDDn8r8J34=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769557933; c=relaxed/simple;
-	bh=NhnT/ji7+oQRyOV0mWwJFQwLdEov06y+2OWQovcxYj8=;
+	s=arc-20240116; t=1769558037; c=relaxed/simple;
+	bh=gQolxqMVHHjTQT8v4gvW/K8k31HxXy37p0cquffi42w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=esjYh2rIHT1u4O2jMO7VuF2JqC1+6l0PeXN2Te1wGZuIvz3gBNJ1X3WAWuzTlFUU/WvhJo587Mf7bEcdg40RtxL7HNvzANaTrL6Z9QEsFmrpkf6QkVa1RhXlSp/fDsRN+AoNCfALdXSeCLrAzpDW+QYd4tv4UODh0yB0I1LSgdQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j64eVFsn; arc=pass smtp.client-ip=209.85.221.67
+	 To:Cc:Content-Type; b=XlcIg+0lGY6r6PoH5cQyKlJ5vdZPcXBBoA3jpvjz7FUr2gYzBnz5g9zBrLslPPiczV04zv1UDKg5ex5V7dPoM2hWctYUJTS+gtBf8vu1n8pbzJn/jDzVLRzWDP3t6/lTqRMKEpMmKH2DQXl+2mGmf4IxZ/Kx1LLJqW8zv0Rx6l8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kY8xyltk; arc=pass smtp.client-ip=209.85.221.68
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j64eVFsn"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-43596062728so164643f8f.1
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 15:52:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769557930; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kY8xyltk"
+Received: by mail-wr1-f68.google.com with SMTP id ffacd0b85a97d-43591b55727so5943786f8f.3
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 15:53:55 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769558034; cv=none;
         d=google.com; s=arc-20240605;
-        b=MbfadVu/Ap/fIu9taxRZotBeoARtGfxjkwuq3QR2z4Jtd9BBcz89mV4+6Rf64wUeLB
-         TXLF8V/eu9N3rmA4AA3yg14bl5jZSKHaOow41TmD5pFHRFztHkHgtt1qvKf3Di6vFbla
-         sBu203a6TQ8GItFclxIvlA0xoJwQdgkg8YyHAHVwqx+nHeajmFUXWcUtQqN3brxAiv/D
-         FGdNJiCGvxgTN4xRyjcCANv0f4Z3oZf2pSLYHPc2a9gXqBaNonYuyZpMDZP3padzvj8+
-         def9PbNYUaHCyeYKsCRv6Arjwk9Gvnf8t6VVc4GK7TAvL7s2P9zHcQXWOUSTCRaQUi4C
-         0jCA==
+        b=hG0Cw8UQ6zvIiN3MN0i6aakUP3yhMPaAxBXMGbu4qRrH1xmOBiNqiiIg91blAs45o0
+         IRNAZDzHvqDW+HotDaCCLm283h5hJ9tiw6D7ZxA5WpFN+dyZSYNsLPosCakijfRA7fLG
+         5mMQwxne81dDU4wbQcqJSkuXMTjk861kn+N4gL2gbpEFznSeqOOUx1b4ZzGXRlZe/VdG
+         +bXSHSWAZ/g2Y0qL5cV44X+U3skv51TeNAZYG3sf/HUUf6moO89WgUks/E69anYAbupK
+         Apo1ykA9IwMcvraUxyhRxkWSwrW6v3oxpUqjUxkwnxJEQyvIq+f3mUXWtMJLBsWi/Av1
+         AY/Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=y7DOQSWvnqGAxWKVxaZOP89CHlW7MaJa/JJ8QRTqFLk=;
-        fh=HCvnn86q0evGxzdkauvOFHK+jUDtefgOolHlalBAnjs=;
-        b=RxQwpIhhySQ9prosE1Xxoa20KBf+OJfHHB1zb5WjDwHWSH6B9lBLoGX5d8+N7CAFCF
-         vbF+06gNfnk4zclISV40HuMqBEeIsrTzE2oiTjO4GFUMuxWfkZUFJXg2sgqn3jNeHrHs
-         b3LGvNkZqNAlmjhEBQKQJp6Cve//SIA8JDvWO/wuWdwImmYNAJbKWBboDp4gbXM0DwiG
-         LqVqlF4AfcQa3rJZlc23dvN98JptJZrZXUGK7+jVLIelANOSZynsjPWLq4fFN643bVsz
-         rIB6RVQqKwY3HuRH+4vgSrNgPiDMn3qHd++yIeMSTS/ZTjRS8GRrn//cqS9Ea7FrHNTe
-         MfRQ==;
+        bh=gI2kZbIH0S2QQYxtE47yNqwWX21DVfbCqSw7iEkLvxs=;
+        fh=eWvt/84dv8gmoSBLGziAOnKgz0jBtwgGZiZYG1EQXXA=;
+        b=aL4030fOXGphr/rQldnEDR/HHg8r/vdUt1bmfTV6RcYmibyvnuF3LkqZFn6hHC9+m+
+         c4/p3cMFKXdQU/bn3autGLMcE27XG6I92imE2dux+U/wtLr1fOdqW0pMqI8Sfgdc3HoN
+         ldbe3uFUfA0rIquyxy+zV0fo+g45KuSrfic6fAuXYoKjdHsTjrdJfgzUREcgij9kEt3e
+         HdwlanHkg7zap+HIwZovFYFGlYS14hcTDZQxbQQAGZSgZWDGFBQ+k4Da/Y70qaXVtWwk
+         cXXoRo1EOzljbeMJU1m8h2iog4jK55piiNw2BCwrPrS+VUTCrZfX5fjOXQWS/NxVIm3W
+         MZkQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769557930; x=1770162730; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769558034; x=1770162834; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y7DOQSWvnqGAxWKVxaZOP89CHlW7MaJa/JJ8QRTqFLk=;
-        b=j64eVFsnb8AYVL7GBHwms/lH39EoJ4Da09H08klr89UPzko/ER7sYuvfku1FkBw4j1
-         MYHKsMAWtz7tw5VAPbk5eVSYLBGx0RuzHy9i7WIGsoy7zN8XFwKvI3Oz+cO7l8/XI+5w
-         hsb6VohoKH3TRFaF4H9ptjEUs0Y6ijl+eY+X+Dsv1LN6pxfuSXfoPcEGBM4IMMP8XyOU
-         WhDHGS0l1156pZqTosQ90VpuBhSqp8bp45xIIFApGlPQdBV24vbkPpEizkURBoG+qHHg
-         h6VPkxZrbiLuXJoCzo90jxH9MQCwQDNKcvKQKexggWjcHcN68LqF2rkpdRnqQH3jlYuJ
-         GVFA==
+        bh=gI2kZbIH0S2QQYxtE47yNqwWX21DVfbCqSw7iEkLvxs=;
+        b=kY8xyltkZn3c7T157jwVnhJz4vzlkS2BExJzr8Ni8aaZZ3vaZO747Qmo6fD+spVex7
+         BdaeCiT8MZR49PBP3R9kTnUbEPzhemJ2qt4tA/V81XZR/s5shC5gIx3uFi3iPX7OQg4S
+         TKtZDaKzK31TI8FYzu9axzsx0C6Xjl7P7qcd5eHEqlEFFm7HPImFx5K3G1YO+W22In7D
+         jMjkSZ4g001wMq4D7OL4jPtRXdtkUBqWHEk3A2Gv16wyyv2/kPP1SQFE+mUAvuepYFUF
+         N4AQ5yCEykI8qvLrvZyVHi2evORhvaFmlCBPRh1qHNliqGP9nKbQymqUWefNbkNKdBnT
+         Zskg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769557930; x=1770162730;
+        d=1e100.net; s=20230601; t=1769558034; x=1770162834;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y7DOQSWvnqGAxWKVxaZOP89CHlW7MaJa/JJ8QRTqFLk=;
-        b=G+kuTi3ptM/gIpXdP0eUQKTIxVU9OBfCPXZxGtlEVKOWw18Ym45Aoe5StSlV+e+D1P
-         0gRNebQDWAm0jKcvAAfpmdvjEnOCim5pXGssPqFlRYBpRLsAh+xmfJNerhYrOyDvw+zb
-         IQvIVcH4Feb7D6qBV9mjDckQkGjNfG9RH6BdXrOJwUzT9uItSTdFOaFRdumGPo8DPllU
-         U/hBUwFf3H7U7wHP9vW8MZqW1BAfdzSeJJfe+grj4dqW10mVx1as63urreqzz4q4UoUn
-         dG6UzgjL2igZnQe3Q5X1TxAKGcRq3xGqC5uW6hPpj+Pt0oK3jIyQ5TFFb2je3NG2mpN0
-         wf7g==
-X-Forwarded-Encrypted: i=1; AJvYcCVhz+pHocZa7yQNleOIKlR682hA3MXYkOu9r5pexYma2gGunEdhEZmQv7S9SFDCkQ0E7D0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSkdjat2XXV3ebg9sdyL7t7MA+G17bwtd23SSYBozRXi6UQAF+
-	hocdHBBhHHLfuvcoFQ1M+cZs0JOeGqVAzuEOs0SZe8E5FmNW/Ar1dZ0rN7z3uWNJx6Eppa2ioHQ
-	uyXNQMYGpn/QrCF1WZVcl9c9hj03h6kA=
-X-Gm-Gg: AZuq6aLSmpWvFISFjrUHUCD/AoNQpoHpkf42mee1fxpWk0N5EQe2SsiZMVJ0TqmW27R
-	yjq+1f8OW/FltzlFpe3dZECaIrPCudLKAf1djQsdrqVMg2SZ17/rEsXKVzVv3MSiYZS8xoHDxPJ
-	4fpGRk4vgo1ePbFS378P2RWD+xfj9Q3pmMRIWyK61sKxZ/Hvm1UnoL0Z5qB6weLtGG5300Ug49g
-	WGNrLcorKHsOrLPb+Y1T7uQiEpjV00HXRbso7kK9taoraGTJWk5jhJzreB6jxZUmB1Gg4zQv6wL
-	fqKFb2699BFDFZQVkkYYTaaCv3aKcxI6jelWeQc=
-X-Received: by 2002:a05:6000:2906:b0:425:7e33:b4a9 with SMTP id
- ffacd0b85a97d-435dcfda96bmr5438530f8f.0.1769557929737; Tue, 27 Jan 2026
- 15:52:09 -0800 (PST)
+        bh=gI2kZbIH0S2QQYxtE47yNqwWX21DVfbCqSw7iEkLvxs=;
+        b=OfIyfvbWbSu8acBtdp9ZFcvrTCSUK3kJGmXcl6sMvj6Wco0oVTcD3NMJjBNzj4u8nC
+         DjclFYbVRTnbhjSdcWymthtqkmZoovd/HZ2GTx3nsValwUw0UA2ki6y085CVNY7IVO9x
+         eppzpVEgO6x0xaTuSz9Db3tfV1bEi8dC6Dx/fkO78uzjaJzCC1NArhVUnRkFG+cTdWS1
+         tiKT0oAy0yx+7utw4FYETzLDStWRozXW8OXSo1b0fNNDZbWq418+AdqNj0Y10UbYWPzl
+         pvJc5xhLT7aYfOfWQsbKh/Uu7/2KR6HZa6LTDnJCCxMn9QAkSjlPYuraVvXgn5dfRJML
+         Dyjw==
+X-Gm-Message-State: AOJu0YyVHvzAXTbVBHouyv63ptShdceWj+bqy0mq2+eRsOED8i19hJ88
+	JWrG0nabqG7bgSCgt+YOq2VO2KmEpOHzRMNAKH7J/ylC3P8U7+jwBImjPywFxLCIlRYsRrRIaFy
+	fp5oxye5IpGefCJX0f713TfbPBaFNBNE=
+X-Gm-Gg: AZuq6aKOvyrTmrX0g+Ycs784oX0+v7XiMoTlze5wTNgv3FBr6eRJ9cSPLw6O2GT7U0N
+	VhpdRsvZzUOtstnoDN0zG8Akyva0b9HUY+8S2mTXfinjyHtdQWEjsdvfrrQCq+zbfFg0UhgFIMU
+	nomBc2R47/+C7dI1QdHBGhmTuHM+/CiYnUqWQLBolPsxbeZynZoEssXzY2avkhRl0u89GVtDG4U
+	e2F4CZ6EizIp3ll4ngwDPMJXMf6CNOC1tLNTiSXIY1E+KRl340B7PIB243fxFVwQ7xM3mN7btXq
+	hPMUsDFqVivaVxqhiPRmz0tmt4lj
+X-Received: by 2002:a05:6000:2310:b0:435:a21c:f946 with SMTP id
+ ffacd0b85a97d-435dd1c401dmr4838964f8f.49.1769558034443; Tue, 27 Jan 2026
+ 15:53:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260127231414.359283-1-emil@etsalapatis.com> <85a0ec6ff812bfcd7e648a36edb28517817fe05a0b5b164d4b3c269d365e1562@mail.kernel.org>
- <DFZRULJI9RA6.EAYA8GNER4RY@etsalapatis.com>
-In-Reply-To: <DFZRULJI9RA6.EAYA8GNER4RY@etsalapatis.com>
+References: <20260127231414.359283-1-emil@etsalapatis.com>
+In-Reply-To: <20260127231414.359283-1-emil@etsalapatis.com>
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 28 Jan 2026 00:51:33 +0100
-X-Gm-Features: AZwV_QhylpVHC7zK5_c9eWd-Dr2s3RFBJOlYZbaWntI0O8wQ7cME3vE7G0atiOw
-Message-ID: <CAP01T77qJOdOVkqDORHULzsaGZ4cdsqoJS06Bf7FOWze2G5fPw@mail.gmail.com>
+Date: Wed, 28 Jan 2026 00:53:18 +0100
+X-Gm-Features: AZwV_Qjvbho7UFyx6XLrrSboqXW6HJnV50h7eFm5N9veXFG52J_aMSvGMsLT_uc
+Message-ID: <CAP01T77Bp7T7fq_zyhqFLsnY=791VF2JLyU+zxZchEO5Yq=5cg@mail.gmail.com>
 Subject: Re: [PATCH bpf-next] bpf: Allow void return type for global subprogs
 To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, andrii@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
-	martin.lau@kernel.org, song@kernel.org, yonghong.song@linux.dev, clm@meta.com, 
-	ihor.solodrai@linux.dev
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, martin.lau@kernel.org, 
+	song@kernel.org, yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 28 Jan 2026 at 00:48, Emil Tsalapatis <emil@etsalapatis.com> wrote:
+On Wed, 28 Jan 2026 at 00:14, Emil Tsalapatis <emil@etsalapatis.com> wrote:
 >
-> On Tue Jan 27, 2026 at 6:45 PM EST, bot+bpf-ci wrote:
-> >> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> >> index c2f2650db9..2cc7404954 100644
-> >> --- a/kernel/bpf/verifier.c
-> >> +++ b/kernel/bpf/verifier.c
-> >
-> > [ ... ]
-> >
-> >> @@ -10875,7 +10898,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
-> >>              subprog_aux(env, subprog)->called = true;
-> >>              clear_caller_saved_regs(env, caller->regs);
-> >>
-> >> -            /* All global functions return a 64-bit SCALAR_VALUE */
-> >> +            /* All non-void global functions return a 64-bit SCALAR_VALUE. */
-> >>              mark_reg_unknown(env, caller->regs, BPF_REG_0);
-> >>              caller->regs[BPF_REG_0].subreg_def = DEF_NOT_SUBREG;
-> >
-> > The comment was updated to say "non-void" but mark_reg_unknown() is still
-> > called unconditionally for all global functions.  Should this skip marking
-> > R0 as SCALAR_VALUE when the callee is a void function?
-> >
-> > As written, after calling a void global function, R0 is marked as a valid
-> > scalar that the caller can use, even though the callee never set it.
-> >
-> > The new subprog_is_void() helper is used in check_return_code() to bypass
-> > the R0 validation at the callee's exit, but check_func_call() does not use
-> > it to avoid marking R0 at the call site.
-> >
-> > Something like this might be needed here:
-> >
-> >     if (!subprog_is_void(env, subprog)) {
+> Global subprogs are currently not allowed to return void. Adjust
+> verifier logic to allow global functions with a void return type.
+>
+> Also adjust existing selftests that were ensuring that global subprogs
+> with void return types fail to verify. These tests should now load
+> successfully.
+>
+> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
 
-I would also change the name of this function to something like
-"subprog_returns_void".
+Looks sane, apart from the renaming nit, could you also incorporate a
+test to ensure freplace logic fails when return types for global
+functions don't match?
+We didn't have global functions with void returns before.
 
-> >         mark_reg_unknown(env, caller->regs, BPF_REG_0);
-> >         caller->regs[BPF_REG_0].subreg_def = DEF_NOT_SUBREG;
-> >     }
-> >
->
-> The comment update is inaccurate, will undo the change.
->
-> >
-> > ---
-> > AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> >
-> > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21418326339
-> >
-> > AI-authorship-score: low
-> > AI-authorship-explanation: The code follows standard kernel conventions with appropriate use of existing patterns and helper functions, showing familiarity with the BPF verifier internals.
-> > issues-found: 1
-> > issue-severity-score: medium
-> > issue-severity-explanation: The verifier incorrectly marks R0 as a valid scalar after calling a void global function, allowing programs to use an undefined value, though it does not directly cause crashes or security issues.
->
+>  [...]
