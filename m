@@ -1,616 +1,378 @@
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BE3326D62
-	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:16:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769537798; cv=none; b=uaX9y7Sig+CjhhKQ/8mATk8jWwo2KCQ3cH/Uw8LJLvdupRAXn5y9gcE3Ep8a7x97PNdMphK6LBHcD2cMPLTc18Bcy43PY6HNtF/IGfkKcgZ+I++xhe20t4bJa4j9QaxnHNy5o0MP6dKcJ4LjDQyiGQBiJqTgWMWDkm+++6oBTHc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769537798; c=relaxed/simple;
-	bh=VWeh4vlumF++6ONb77bWv81FTfS7J6oQ96YTx8izrU0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fRAli9pP13y3iicrt9PYGNSI7We7bkaLC+zFgMFrLlH/Ej1KeXHadn24+5VvnyJgzXH5A7LjcaTIeIrwC8i3muxVSpwAl5T0YjZuQxsi8pn5nnfVlkF/MtwvM0vf/xtiXqmDNeAgUbl+pNjimIjOL2v2Y5bgicSv6ZCNTcD/kyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=LykkmEBm; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568A2192B75;
+	Tue, 27 Jan 2026 18:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769538690; cv=fail; b=Se3l7NacB4UrWQ0VxXLqFIlJZkebygur+3Znn1+SKRQdusDXZL5eFn7xp6kk+CGOwdgRZsZZvIXSg8cN7+OxxJLe4Z/lBmbmwfpBS/CIyrZm6qOWIYiPw6VzqTAUJ210/3hlv4BifXUdzlc+JN7iDdWPLwKKnvDnY/7ElDdcjts=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769538690; c=relaxed/simple;
+	bh=kqtQ49NqOWTzbTSRjLFn6lr+5lUhcMaZTbpPimN/hyM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bsgJpxuItTnqN9pUKGWxp8D+uCxagFBL2XjgU5QBdQgrK0dQX7ZJblSMEGJ06rYUPnMYZkcsO2CzmktQN6IGUdYq+PipQJldX9ulidOc+sUAR5pYXasJD0V4qUOXOC0WA+FHFz6NpNVOazzJyBlTTkmEnW3spj4Xj+K4SlkDFsU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Zq4xDYE2; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=bzn7YJpv; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="LykkmEBm"
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-50336cffef9so1119891cf.0
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 10:16:36 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Zq4xDYE2";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="bzn7YJpv"
+Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60RBIHK73545592;
+	Tue, 27 Jan 2026 18:31:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=2/8dm5W9FrtsuLbIC5
+	/UKPy4boFvXMPqDEXBuUp24PI=; b=Zq4xDYE2F8WWqSO+ej+fx/H1xFczGmrpKt
+	tx8mKuqHo4JU9RMuuMQkyahwoyoHmJVHAOtNiWmsx4oiJJqrq9Afi3Eb3pPUvR3q
+	QVEAzuVpZTZnhIHpAXqK/eL/hlHbu0KY184f/BrUge0Qr9jVWqc4C3h3fDIUzads
+	6IUsjnL2wzH4e48qvZZEhZpSUfqeS7mQtprUUBbsnU6J0OSuAhYm1WEY0FlFmZMy
+	X1zuX2vTE5ONNsRBJogsDsppeXRw7Ug9Cb4sXe4VwEWpl0slzWfHp7QsHS0GSd8j
+	yO7AiRHEfMRTIJjiYvLdrvG6LTAbZFd+3xl/RdXaodIg8Wd/+gqA==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bvn09mkub-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 27 Jan 2026 18:31:00 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60RI2gKo036020;
+	Tue, 27 Jan 2026 18:30:59 GMT
+Received: from cy7pr03cu001.outbound.protection.outlook.com (mail-westcentralusazon11010010.outbound.protection.outlook.com [40.93.198.10])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4bvmhp393c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 27 Jan 2026 18:30:59 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=JuTLExDZPzw53oqNZUrFzskGmDdJxT7SGCNWOcB6Ok26v1U+d2iUbbpOjVRV4uNfQAjuXcpqZlzpyGJSikh0voz2gl1NcUM2ud1AHr03CDJUIsKc0Bop+LQXbbjH13337GHExJHOgNeeYCpotwQMPz/8I3LEjxOCUJmndG0E/rhmi8lDcp0qsJOXFHYa7ETMzjaMDZhdwwhLGqFMlhanBCl6K2ADWc2qnRb176zA6QLDlm/K4hwv6H9pKKgMZXSBteHoGtPA4JMI1EUzWjEKr4QledZdbP7ZyYWH8IfGZBeOYw5Y8cqfSXKGW5+z9Ly91i51nUBd0b8wR6gPwyWvlQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2/8dm5W9FrtsuLbIC5/UKPy4boFvXMPqDEXBuUp24PI=;
+ b=ih6zZu1oH/Fe5Ba1gF2SA/6oRF6LD9OD3wPGyathfSLjfOsC4UwyOCY5GcHIwh+phv5SIGcmcNtenT+zjDWeiykPxFZMsiRB7Ak+iA7253NemnUglk2GL169pEzjMO572dVrEAU/fq66ltuavC+RSEb17ZiimqEz30MztIqcV8VTkPzhpwQ9lJRPaXPPisA31jqxgyEFhvDZpn0Mknp0jVMTKBty4ISuKryu4ZhhjufT5iuW6wVLgnuflIJ82IyqDBDMepQy39t4G2wOCrk/BB1dckpgl/pO2J/gKRHwry9MMU0UF13nyfEbjFdDXacmRMsZg6VMsAsOOUQhJeLiPw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1769537796; x=1770142596; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3FStNvZ89uWamYl9YJOKs07jNcrbsFJQuC7eAQC5G3I=;
-        b=LykkmEBmlIHuqR0f3lps0fBSC8iWTH4vbnNUB+ZFBUF/sTifCklJGs2S8lXYAop3j8
-         cCinF2l44AxDiG8Jn5MK43g2P7V7XMgjhEg3qJdX+1M2BQ/AVRdODZ9fwglSHMDPhvgB
-         b4ShIc9f3ROtqYX4SBPtBZWw2DI/YPKGOD3ShnwhhRRhz8KIfbJi5IOvW5AWzxOZu9Yx
-         Xucspqwf0/oNPboGNAtDHVH6ZUXeASW4dTATmBOgtu4IRACZsjcs/DFGb8MtySettlUk
-         QJ6A9pt7sZKU36eq2KZ1ZdniKFaLNkIlCoISA3fU1pzorDGZDesTPOHKRuOdY2rlBDMv
-         rNkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769537796; x=1770142596;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3FStNvZ89uWamYl9YJOKs07jNcrbsFJQuC7eAQC5G3I=;
-        b=RuOj7Bt50TGR09lJB7NHIc4q5B9NrG2Xxci5IUmxRGwCl1YBT6zkvJNXNcfvOIGtFD
-         ngqRdsz0oc0myL++yupuAY3QSifsKfa9Wkta2F2npC7lhnnLifUWjEfarbt4RJACyXzz
-         Oy8mP83HXrd1xaj3xlFOJm7l69ZalpUG5QyozK+kEDs+LLmdXrtJpfCEZMK4JZd3YqrB
-         RYVFd7BMAxHIReWXPyxN+tcn6s/ENJ4vhN2GDF7RcOJEnAoXWFfwbdeeornj15FYt+Hy
-         f1p/4QmTYsXH8Ns6IkrX3pnNr8MlFkzXiEEl4hZDKGDS+c15dweSfHStZlwPHmJ9L4Jp
-         m5vg==
-X-Gm-Message-State: AOJu0Yx+yL/Pyfo+4OSSTMj56PB+XXICuR1LfTah9YIHB6i7FFyB/WFQ
-	sW7+nsFLfabU86oS7EETOdXF/uATV+ZZc+5RdpLcDfGnbffPeJHkEWCkFSuFlfrQmmmPzGaxnND
-	a3Cbb
-X-Gm-Gg: AZuq6aKioKCQ9biHi6ICWyBd2EV8e7Fktsty42JGzE8TbPDr2sudPBH+pWsELcwj/Tr
-	XZS10wULUCtBuAcTuidwtHfgaPBCMFKPYQuU7WbvkoDN7s1UeOnzikshrEEj6csONS8xfjik/rr
-	ePpDtsxcdtng7frg4z/0hfJqtifxp75wvUi/ZiUi+qOlS1FBXUYA6xSDDzSKx+coG8caPyIJk7X
-	+LzeziX+JdNe/NQd+aPtZ3P5g0/6bvtsnFhSwFp660UhqMePUB6fRd3wNnUBjV4nH5KbA7ukrqo
-	aFCfwQ95tNC9RcROfhtb0aySNVker+wRQPzzqmVuqiWxUV3c19Jah9FoOObce6XCKMS52dxiPBn
-	0IWJdrTOmx9ZPzTH6tK0NmdisCKM5dZP0PgkbMy26C5povSG5pricigl92lvkvtZcOYST7SV1C5
-	7qmyY2Q4w7U8jHiWrEgkXM
-X-Received: by 2002:a05:622a:343:b0:4f4:c104:8e9f with SMTP id d75a77b69052e-5032fc28cdbmr30991131cf.75.1769537795659;
-        Tue, 27 Jan 2026 10:16:35 -0800 (PST)
-Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5033745c4f0sm988181cf.1.2026.01.27.10.16.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 10:16:35 -0800 (PST)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	emil@etsalapatis.com,
-	etsal@meta.com,
-	ihor.solodrai@linux.dev,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	puranjay@kernel.org,
-	song@kernel.org,
-	yonghong.song@linux.dev
-Subject: [PATCH v2 13/13] selftests: bpf: Add selftests for the libarena buddy allocator
-Date: Tue, 27 Jan 2026 13:16:09 -0500
-Message-ID: <20260127181610.86376-14-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20260127181610.86376-1-emil@etsalapatis.com>
-References: <20260127181610.86376-1-emil@etsalapatis.com>
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2/8dm5W9FrtsuLbIC5/UKPy4boFvXMPqDEXBuUp24PI=;
+ b=bzn7YJpvBbDq2ucUJk9GevYBQ1YFdiCl5uoFWqYU0H8wa60p2bGQWqc5nCicvk7UfeT6eXksbZPv+sGvm00IGpTn5/NwnMZ+V2RTIZHMg9vMWvpsCZlpRVVeOAJPsOedVTKJFMvkH4l/OxqWmo4PoLof8gTOUB32U0A9JiJHk+w=
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com (2603:10b6:510:128::16)
+ by CH4PR10MB8172.namprd10.prod.outlook.com (2603:10b6:610:239::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.15; Tue, 27 Jan
+ 2026 18:30:56 +0000
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::4b84:e58d:c708:c8ce]) by PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::4b84:e58d:c708:c8ce%4]) with mapi id 15.20.9542.015; Tue, 27 Jan 2026
+ 18:30:56 +0000
+Date: Tue, 27 Jan 2026 13:30:52 -0500
+From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
+        Christoph Lameter <cl@gentwo.org>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
+        bpf@vger.kernel.org, kasan-dev@googlegroups.com
+Subject: Re: [PATCH v4 09/22] slab: handle kmalloc sheaves bootstrap
+Message-ID: <tm7yjp4phbf24quv5vdjw3juhusvzk7dyassrtrejqyhbieie7@ml5okfvozh6j>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Harry Yoo <harry.yoo@oracle.com>, 
+	Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>, 
+	David Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Hao Li <hao.li@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, 
+	kasan-dev@googlegroups.com
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+ <20260123-sheaves-for-all-v4-9-041323d506f7@suse.cz>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260123-sheaves-for-all-v4-9-041323d506f7@suse.cz>
+User-Agent: NeoMutt/20250905
+X-ClientProxiedBy: YT4PR01CA0234.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:eb::6) To PH0PR10MB5777.namprd10.prod.outlook.com
+ (2603:10b6:510:128::16)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5777:EE_|CH4PR10MB8172:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a06c56b-8148-48f9-12d6-08de5dd235c8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|1800799024|366016|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?OJufz3IDmjNYb3PGA3P7OaHMlfEDST+/7o9qIOBjYjl9cVnBvxntD6c3xD6T?=
+ =?us-ascii?Q?rZ9+PH9yCfCxOnb5mhTdz4W44W/d8WZeopQuVBpPjIGlSM1Mbdm69HCF6d9d?=
+ =?us-ascii?Q?iwPdiA7aGCgJNR+3v44TVrM4aKV+Z0CAiyBJNVT58aetRU6W5wCn2yJJ1THp?=
+ =?us-ascii?Q?6wVDoqD8ratArKP6ZnYhhgxHkbqD70IcgJQRTcD2SiFZQPTDREVjZobJIvdm?=
+ =?us-ascii?Q?4KmCaOarnHrPAx06ko7zAUeAfrhLd6oMGtI++icO8SaF5yFpnE+t6fnRljPB?=
+ =?us-ascii?Q?zAPpxMZqSk7JKnRAyhAdmXbjxJUQE6BtFkz/KoM/C8wjqqdovnVgJZReQUxl?=
+ =?us-ascii?Q?nT3NlsOxyLjjItrK8MBEDjfR/nCnO1m/j1epf8tVrAKQ0b3Q5DxtQXJ4YvSV?=
+ =?us-ascii?Q?0czXTbZoJDY6G9RtwkJ8Zrkn7Q8lFtNm8X/2Hpkh161IpoZ6RMloGfrfPzvP?=
+ =?us-ascii?Q?IfIFGcJl2z9fLfFnAFnysqB0kF7sMQCJXLQIJF2Mxjw5rsquZwdkm75bClhn?=
+ =?us-ascii?Q?cTHhmDYxaL1bVpBX3BPWu0GAiDsORrgnjrap/UGRzK77mWZFQZc0hEwAqLfw?=
+ =?us-ascii?Q?0juB/U+zo81vgpueauSDoqyRPXXe/q/ws6t5UZPSyMrX2QgLRcQzT3UmrU9M?=
+ =?us-ascii?Q?XO7PPkXVPV7U5ckGmmQVzBVz67QPfE6n0hlA5SGX77nROjykl86mcgf1+LLq?=
+ =?us-ascii?Q?pSV0IU95GkiVNogTj+zhRsd/DwKYbaKDiOfyCp3nIZhJn5H1Ihif4sihxv8B?=
+ =?us-ascii?Q?eM82jLpZXKvE8OcDoidt8mmTyGuNHJduwePzdlHPMK/wgmbg9L1JdSGPkL4+?=
+ =?us-ascii?Q?pTXAmYnxrBdGeoUpUnrrpiCF1QtCHgztPECT2tdNpIxSzHOpKU/ZqZwndteq?=
+ =?us-ascii?Q?ESQLLeCihpfhZxQmdOHaavoENxeUk6osZL9+GnQQtQDT8EMxrJ10fuGXrH1v?=
+ =?us-ascii?Q?XMxXd+Xr8Wn4a1tw3oi/MoxsAmtZZkwPhsjxlKOiUMHuP0ihzqVm/Du1da94?=
+ =?us-ascii?Q?Wj7MjyFyOAmsAc3Ee0/L3bmlv8iWfnHAFHd9VT6VRnuk5KWNKKvGDV5+8sIp?=
+ =?us-ascii?Q?qQsBlnN4RfW+UjBUHo4+dquTy5XouE+rDAhB1ID9KvB6CW+M+79U6dUwd0ty?=
+ =?us-ascii?Q?eHMWeKT9KHB3ZzKG9AAV8mxcRALiofBUNQ+wtVrU6GFpAoZELDRd9ZnB6Qf3?=
+ =?us-ascii?Q?cnZ84aYGKGVNr+cPLX8xY4le2pZo66JAQZ25u3HD48dC4+KF4/UNS7pl5w2h?=
+ =?us-ascii?Q?arO4HLJ3qJCZKYdEW65DIA+NHawjqQwePrNOKcA/6k+aCrVbiv1ExZcWxz0X?=
+ =?us-ascii?Q?VnIl9edu6l06t2mlk1oSTWW46AiiPd5s2UrmsVyEBur+klynDV14v2BYw9jZ?=
+ =?us-ascii?Q?TwI2R/8zo0lQfOKPGqfNLJREoEGT8oZ9KkV2hMJIp5uX5UEDu+hPS1fUkmSQ?=
+ =?us-ascii?Q?r0Sk8OgMOHaBLGBSyzPHIbzNCcsRTrHewj4ZXE0TG2mBSV2Y2lUJ0wnZktB6?=
+ =?us-ascii?Q?XqukILvRc73AX+VoQuBmiXinRqem6jqFn0Gyi6gd7EPOMRZItEahY2/4ILCk?=
+ =?us-ascii?Q?GaRcaGceN9oS8JaBMWw=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5777.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?Uz+5Ktj9Xo/3+VuDG3T+4QndCCrbnfsvwh0tgpXBqil2aU38KdcZKEwJ5/tD?=
+ =?us-ascii?Q?JHqG7DgMGx/t8tFnBWSEH2uDiYGB8sU+1HKZEmm26tIvA4MJhOz+bK/UrGsC?=
+ =?us-ascii?Q?WMxn4sF4hi0FDJ0ZPu3WcBGtXjw49W1Ix/jEDTZomATEAONxDElY/QANq6bB?=
+ =?us-ascii?Q?45IUQBMt0FFbZ9l3mr8+pylW85NGoxqbFLfnldrc3l0X2BS3TpCf3Sgfpx50?=
+ =?us-ascii?Q?kpP1+Hrj6TUqvnBOfWG4AFpg1AOdma0tn+vK1bjWsPQNX1hN2rJT8GnqBM+R?=
+ =?us-ascii?Q?1gPrzQlGICeaNZlLaGT5oaAfotFVAlG6ny0xUeLZ/D/qK67o21riXWGA/RLe?=
+ =?us-ascii?Q?Ywi8+WKgJeKxfhm1tbvZzGCBciRvC4b6YvH9zFfh9ouz6a0fsbA3wpOGbdT0?=
+ =?us-ascii?Q?E/rj38DlQbf8AU3yauh/xeoid7kwrQkOJA/AsW5J4D2SexdksfogX30UEB5k?=
+ =?us-ascii?Q?mHngnvhGiVRA/dPQ1FKcMqkd9rx2Pd8EjmdfBbf2S+rVZmQ5jMA5YzNKxutM?=
+ =?us-ascii?Q?cbZzH4V+HxKSQmbUyrE0YSmS1e3iZZ+rpUWgUOOwXbYqONJ4C5JcpjRnyRyv?=
+ =?us-ascii?Q?I56KsYQ+HF9wWXCU4353gIKS56FV2IknraBxskZTYovrj+3KK708RqhJPZfm?=
+ =?us-ascii?Q?Gnci2+yMM2OLkLJuWUqF+XEtjCIPRhOiXgpQyZ8W6iJIqklR+iZgHBq2c/qf?=
+ =?us-ascii?Q?+GgbQNj1cEx/UaP6R6W6fz/MjdGw98HS/nM4NsX/jcKQ4YJvkWCIOPUyO3Qc?=
+ =?us-ascii?Q?IGtE4f4M7/GZMTt6BdzuN3JqQaBHjw2wE2JGwl6oOqZIRPk0vxlgBvdr+qYr?=
+ =?us-ascii?Q?b0U9h3cSlkSpm2woYWSERJxdIYR6+m2NNmBXSjihScpvMCv9Nh6zHtWmjZy/?=
+ =?us-ascii?Q?aUo1HQLpg6L8JoDNTyVuslsMM5KFV4QXn20FmsGA1jhwv/xBwGK9dUu+GZL3?=
+ =?us-ascii?Q?EpcUEmUAG3TpswNYR7w9Ur04irGl6aEVbhLPQ/khgcE90s61oLXsSdzHCyL/?=
+ =?us-ascii?Q?wm1qrEtBdXWu51/u4c6PDSARqrAbscWY/xua2RWV89n+kMZEaCJFaZ8mJ0T4?=
+ =?us-ascii?Q?CcyNo/q1s0gn3O8MVj+ehuB/A/TE2y4+LsZfRfBbTKhwhT1oc2cjPkc+l9ZF?=
+ =?us-ascii?Q?XDP958RyS8fMAEMYHRxu0ykXj+jO7HopXB8iVK+j0MpNa7jRez/VE0IU6lgv?=
+ =?us-ascii?Q?+8x5aXBRdSi2oIq0LevEu4E+4gf/uLUKrE4qxXxtOUHTx5VTJIA2cEOzgB+4?=
+ =?us-ascii?Q?gA/dEsdxAdOqEhD9/98M+8DwBa9xp8l1swYp5uRAhE8OAOnvAKZzRr3RH09R?=
+ =?us-ascii?Q?0XEbWP6hW/RLcDOSVurw1nHTDHW2QwjbrKvweqjHM4/yo353etkffwyI1vZ0?=
+ =?us-ascii?Q?p4fNtTO/pQoc3d7LRXYra02w0LROSibseverdbEYX3RzNziVknjw4y3+sfSl?=
+ =?us-ascii?Q?oM3vMsSXx743hfldIAn2HzlC0ThO/XtxCi8gfdaqxRmIr/LsQcC15+v+6zWS?=
+ =?us-ascii?Q?/7S3FhEiPv3cJeBhvLbWQo6zyoBqd5hTmW8BSTb9y9CKgYU6t97oRpC4CQkB?=
+ =?us-ascii?Q?hl97QTqFKp/1o/rjv686OXyVOf8Rg0NxM1yPrWrquacJQmFtM3gU5LZBBqIx?=
+ =?us-ascii?Q?V/UiEunmkRMan/jkILMd5CsDOcHVsTqMxCTVqeWGrAemFfGzb0/AF0lPhg85?=
+ =?us-ascii?Q?/cgyKEpVKPShxgPaCwrqO2xEtbANxvqrQt7nSysEjdyxIgNiXJa0whd9gXJ+?=
+ =?us-ascii?Q?Gfuah6aiLw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	Xb8sLvUSPiN8HFMk/Y7Wq7SrA+hp3WEHvs/TZF79xJscqJZtAGDkgnysbDmNf41CWTU+2Oj4rUcQSHKXF3DKmw9JMjEoZVGu3TDzZS16uV2JzwoiOnt9oazD1SDkdVSOfdTpAzU7wOGnJRdtyNojEpti75xZeN0AwB8YxAoiqQsu4VJ/tIwiXU0iJjbHb2RdzJo29o2CQVrXUY+J+HxJYWncSyl8iyl3vKh6jpUTKyZPZQ9kjhi9XZ2PmT7apZKF9WbQuI1CS7PWGyL42eFeNANqWuGYEHN+8wvqI1Ampd6CU5uNM+Uu+o/mu5EyV+NXHZT9BO8BZkmY7Pt53+sS56e8GmYfAgtfjW1kcOoDWzhtxDIcXPdsu7DTcgW9C30B9fVuGr+NUvRzbKq4aXfTYuG3IifCRcSSOvgEoBQ5l5x4X14/K2JwKYDfn93HxLra0J+FsewBXb/B0gIXJl7uqikgYhestz6cKAZvR6W6Gp6MoY8ovkvt+gJqNFlLkLjvju4o4zkYGha6co9XaOYe3VVxdEOqyRScCruPuFmAgjKSeGsDK1Hyg6obcZXYMU7BKEaE5P7D7sjJIZlQsE4rWDKyD2TrWx3DVQv7sIYA4cI=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a06c56b-8148-48f9-12d6-08de5dd235c8
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5777.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2026 18:30:56.1283
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ou/SK34sTrUK/LQ10mzFEXEDhDqU3uyC8OPiylWuqzqTwyWC2GHEAdZgel7SsgtAtKlNCWaTtZ8u8E1zUloMUA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH4PR10MB8172
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-01-27_04,2026-01-27_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 bulkscore=0
+ mlxscore=0 mlxlogscore=999 phishscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
+ definitions=main-2601270150
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDE1MSBTYWx0ZWRfXxpsE2lwQPc3D
+ DPJOg0/ePLjPuw9wv+UCoOgCllMovcGOkvxKLqtdly10wdvp3iITmQpvETSs5+bcdeVYoDEfexy
+ WAJw5K0Oc67cfEB4JMIScBYKcRIilfdXKEkarwhzXwbpaY+oySmd2Mjzb4gaj068DKbFgOHxq4a
+ Q7KqJl1xPs9hiNEDBcy0sp1ZDdz/j5nYQJq63mgTivx3dDUYbsvKECg0UKDQw6CYWiHoiFbBazA
+ 3HTbI500Qn/PA1DhMC1N/egVoR4B6Ji28V8avd6amIASmw6UTZPs6l5vIADwl/kcq0E11h7B5FE
+ jrR0+vpGba75TKMIQa+WsKRDzw1Ts5VeuY5roEOglJ1Z0Yhufk6h+HA3GggMCXzCV9M65rxReme
+ 58U4PQCWrfstXx8wH63pEdb+ZWf80Q5FTI05pYooTFPtZj8R9Gq1jNACKofdmAIVI+64admPUj/
+ DXqxypvS/1/4boCI+ydOQo6cIUHyWykXCXFmy3Fg=
+X-Proofpoint-ORIG-GUID: bq9MMIxTlz4wuLNKnBGZE86XYthXMhb9
+X-Authority-Analysis: v=2.4 cv=Rp7I7SmK c=1 sm=1 tr=0 ts=69790464 b=1 cx=c_pps
+ a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
+ a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
+ a=vUbySO9Y5rIA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=yPCof4ZbAAAA:8 a=dcaMh4N4r9lwndKBsE4A:9 a=CjuIK1q_8ugA:10 cc=ntf
+ awl=host:12104
+X-Proofpoint-GUID: bq9MMIxTlz4wuLNKnBGZE86XYthXMhb9
 
-From: Emil Tsalapatis <etsal@meta.com>
+* Vlastimil Babka <vbabka@suse.cz> [260123 01:53]:
+> Enable sheaves for kmalloc caches. For other types than KMALLOC_NORMAL,
+> we can simply allow them in calculate_sizes() as they are created later
+> than KMALLOC_NORMAL caches and can allocate sheaves and barns from
+> those.
+> 
+> For KMALLOC_NORMAL caches we perform additional step after first
+> creating them without sheaves. Then bootstrap_cache_sheaves() simply
+> allocates and initializes barns and sheaves and finally sets
+> s->sheaf_capacity to make them actually used.
+> 
+> Afterwards the only caches left without sheaves (unless SLUB_TINY or
+> debugging is enabled) are kmem_cache and kmem_cache_node. These are only
+> used when creating or destroying other kmem_caches. Thus they are not
+> performance critical and we can simply leave it that way.
+> 
+> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+> Reviewed-by: Hao Li <hao.li@linux.dev>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
 
-Add regular and ASAN testing for the buddy allocator. This tests
-the allocator's correctness by itself and its integration with ASAN.
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
----
- .../bpf/libarena/selftests/selftest.c         |   4 +
- .../libarena/selftests/st_asan_buddy.bpf.c    | 238 ++++++++++++++++++
- .../bpf/libarena/selftests/st_buddy.bpf.c     | 231 +++++++++++++++++
- 3 files changed, 473 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
- create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
-
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-index 3e4b8754889f..268749c687a1 100644
---- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-+++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-@@ -266,10 +266,12 @@ error:							\
- }
- 
- TEST(bump_selftest);
-+TEST(buddy_selftest);
- 
- #ifdef BPF_ARENA_ASAN
- TEST(asan_test_bump);
- TEST(asan_test_stack);
-+TEST(asan_test_buddy);
- #endif
- 
- static void
-@@ -314,10 +316,12 @@ int main(int argc, char *argv[])
- 	libbpf_set_print(libbpf_print_fn);
- 
- 	run_bump_selftest();
-+	run_buddy_selftest();
- 
- #ifdef BPF_ARENA_ASAN
- 	run_asan_test_bump();
- 	run_asan_test_stack();
-+	run_asan_test_buddy();
- #endif
- 
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
-new file mode 100644
-index 000000000000..e3887a7c5d93
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/selftests/st_asan_buddy.bpf.c
-@@ -0,0 +1,238 @@
-+/*
-+ * SPDX-License-Identifier: GPL-2.0
-+ * Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2025 Emil Tsalapatis <etsal@meta.com>
-+ */
-+
-+#include <common.h>
-+
-+#include <asan.h>
-+#include <buddy.h>
-+
-+#include "selftest.h"
-+
-+#ifdef BPF_ARENA_ASAN
-+
-+#include "st_asan_common.h"
-+
-+private(ST_BUDDY) struct buddy st_buddy_asan;
-+
-+u64 __arena st_asan_buddy_lock;
-+
-+static __always_inline int asan_test_buddy_oob_single(size_t alloc_size)
-+{
-+	u8 __arena *mem;
-+	int i;
-+
-+	ASAN_VALIDATE();
-+
-+	mem = buddy_alloc(&st_buddy_asan, alloc_size);
-+	if (!mem) {
-+		bpf_printk("buddy_alloc failed for size %lu", alloc_size);
-+		return -ENOMEM;
-+	}
-+
-+	ASAN_VALIDATE();
-+
-+	bpf_for(i, 0, alloc_size) {
-+		mem[i] = 0xba;
-+		ASAN_VALIDATE_ADDR(false, &mem[i]);
-+	}
-+
-+	mem[alloc_size] = 0xba;
-+	ASAN_VALIDATE_ADDR(true, &mem[alloc_size]);
-+
-+	buddy_free(&st_buddy_asan, mem);
-+
-+	return 0;
-+}
-+
-+static __always_inline int asan_test_buddy_uaf_single(size_t alloc_size)
-+{
-+	u8 __arena *mem;
-+	int i;
-+
-+	mem = buddy_alloc(&st_buddy_asan, alloc_size);
-+	if (!mem) {
-+		bpf_printk("buddy_alloc failed for size %lu", alloc_size);
-+		return -ENOMEM;
-+	}
-+
-+	ASAN_VALIDATE();
-+
-+	bpf_for(i, 0, alloc_size) {
-+		mem[i] = 0xba;
-+		ASAN_VALIDATE_ADDR(false, &mem[i]);
-+	}
-+
-+	ASAN_VALIDATE();
-+
-+	buddy_free(&st_buddy_asan, mem);
-+
-+	bpf_for(i, 0, alloc_size) {
-+		/* The header doesn't get poisoned. */
-+		if (BUDDY_HEADER_OFF <= i &&
-+		    i < BUDDY_HEADER_OFF + sizeof(struct buddy_header))
-+			continue;
-+
-+		mem[i] = 0xba;
-+		ASAN_VALIDATE_ADDR(true, &mem[i]);
-+	}
-+
-+	return 0;
-+}
-+
-+struct buddy_blob {
-+	volatile u8 mem[48];
-+	u8 oob;
-+};
-+
-+static __always_inline int asan_test_buddy_blob_single(void)
-+{
-+	volatile struct buddy_blob __arena *blob;
-+	const size_t alloc_size = sizeof(struct buddy_blob) - 1;
-+
-+	blob = buddy_alloc(&st_buddy_asan, alloc_size);
-+	if (!blob)
-+		return -ENOMEM;
-+
-+	blob->mem[0] = 0xba;
-+	ASAN_VALIDATE_ADDR(false, &blob->mem[0]);
-+
-+	blob->mem[47] = 0xba;
-+	ASAN_VALIDATE_ADDR(false, &blob->mem[47]);
-+
-+	blob->oob = 0;
-+	ASAN_VALIDATE_ADDR(true, &blob->oob);
-+
-+	buddy_free(&st_buddy_asan, (void __arena *)blob);
-+
-+	return 0;
-+}
-+
-+static __always_inline int asan_test_buddy_oob(void)
-+{
-+	size_t sizes[] = {
-+		7, 8, 17, 18, 64, 256, 317, 512, 1024,
-+	};
-+	int ret, i;
-+
-+	ret = buddy_init(&st_buddy_asan,
-+			     (arena_spinlock_t __arena *)&st_asan_buddy_lock);
-+	if (ret) {
-+		bpf_printk("buddy_init failed with %d", ret);
-+		return ret;
-+	}
-+
-+	bpf_for(i, 0, 7) {
-+		ret = asan_test_buddy_oob_single(sizes[i]);
-+		if (ret) {
-+			bpf_printk("%s:%d Failed for size %lu", __func__,
-+				   __LINE__, sizes[i]);
-+			buddy_destroy(&st_buddy_asan);
-+			return ret;
-+		}
-+	}
-+
-+	buddy_destroy(&st_buddy_asan);
-+
-+	ASAN_VALIDATE();
-+
-+	return 0;
-+}
-+
-+static __always_inline int asan_test_buddy_uaf(void)
-+{
-+	size_t sizes[] = { 16, 32, 64, 128, 256, 512, 128, 1024, 16384 };
-+	int ret, i;
-+
-+	ret = buddy_init(&st_buddy_asan,
-+			     (arena_spinlock_t __arena *)&st_asan_buddy_lock);
-+	if (ret) {
-+		bpf_printk("buddy_init failed with %d", ret);
-+		return ret;
-+	}
-+
-+	bpf_for(i, 0, 7) {
-+		ret = asan_test_buddy_uaf_single(sizes[i]);
-+		if (ret) {
-+			bpf_printk("%s:%d Failed for size %lu", __func__,
-+				   __LINE__, sizes[i]);
-+			buddy_destroy(&st_buddy_asan);
-+			return ret;
-+		}
-+	}
-+
-+	buddy_destroy(&st_buddy_asan);
-+
-+	ASAN_VALIDATE();
-+
-+	return 0;
-+}
-+
-+static __always_inline int asan_test_buddy_blob(void)
-+{
-+	const int iters = 10;
-+	int ret, i;
-+
-+	ret = buddy_init(&st_buddy_asan,
-+			     (arena_spinlock_t __arena *)&st_asan_buddy_lock);
-+	if (ret) {
-+		bpf_printk("buddy_init failed with %d", ret);
-+		return ret;
-+	}
-+
-+	for (i = 0; i < iters && can_loop; i++) {
-+		ret = asan_test_buddy_blob_single();
-+		if (ret) {
-+			bpf_printk("%s:%d Failed on iteration %d", __func__,
-+				   __LINE__, i);
-+			buddy_destroy(&st_buddy_asan);
-+			return ret;
-+		}
-+	}
-+
-+	buddy_destroy(&st_buddy_asan);
-+
-+	ASAN_VALIDATE();
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int asan_test_buddy(void)
-+{
-+	int ret;
-+
-+	ret = asan_test_buddy_oob();
-+	if (ret) {
-+		bpf_printk("%s:%d OOB test failed", __func__, __LINE__);
-+		return ret;
-+	}
-+
-+	ret = asan_test_buddy_uaf();
-+	if (ret) {
-+		bpf_printk("%s:%d UAF test failed", __func__, __LINE__);
-+		return ret;
-+	}
-+
-+	ret = asan_test_buddy_blob();
-+	if (ret) {
-+		bpf_printk("%s:%d blob test failed", __func__, __LINE__);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+#else
-+
-+SEC("syscall")
-+int asan_test_buddy(void)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
-+#endif /* BPF_ARENA_ASAN */
-+
-+__weak char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
-new file mode 100644
-index 000000000000..256d9a865647
---- /dev/null
-+++ b/tools/testing/selftests/bpf/libarena/selftests/st_buddy.bpf.c
-@@ -0,0 +1,231 @@
-+/*
-+ * SPDX-License-Identifier: GPL-2.0
-+ * Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
-+ * Copyright (c) 2025 Emil Tsalapatis <etsal@meta.com>
-+ */
-+
-+#include <common.h>
-+
-+#include <asan.h>
-+#include <buddy.h>
-+
-+#include "selftest.h"
-+
-+private(ST_BUDDY) struct buddy st_buddy;
-+static u64 __arena st_buddy_lock;
-+
-+struct segarr_entry {
-+	u8 __arena *block;
-+	size_t sz;
-+	u8 poison;
-+};
-+
-+typedef struct segarr_entry __arena segarr_entry_t;
-+
-+#define SEGARRLEN (512)
-+static struct segarr_entry __arena segarr[SEGARRLEN];
-+static void __arena *ptrs[17];
-+size_t __arena alloc_sizes[] = { 3, 17, 1025, 129, 16350, 333, 9, 517 };
-+size_t __arena alloc_multiple_sizes[] = { 3, 17, 1025, 129, 16350, 333, 9, 517, 2099 };
-+size_t __arena alloc_free_sizes[] = { 3, 17, 64, 129, 256, 333, 512, 517 };
-+size_t __arena alignment_sizes[] = { 1, 3, 7, 8, 9, 15, 16, 17, 31,
-+				     32, 64, 100, 128, 255, 256, 512, 1000 };
-+
-+static int buddy_selftest_create()
-+{
-+	const int iters = 10;
-+	int ret, i;
-+
-+	for (i = 0; i < iters && can_loop; i++) {
-+		ret = buddy_init(
-+			&st_buddy, (arena_spinlock_t __arena *)&st_buddy_lock);
-+		if (ret)
-+			return ret;
-+
-+		ret = buddy_destroy(&st_buddy);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int buddy_selftest_alloc()
-+{
-+	void __arena *mem;
-+	int ret, i;
-+
-+	for (i = 0; i < 8 && can_loop; i++) {
-+		ret = buddy_init(
-+			&st_buddy, (arena_spinlock_t __arena *)&st_buddy_lock);
-+		if (ret)
-+			return ret;
-+
-+		mem = buddy_alloc(&st_buddy, alloc_sizes[i]);
-+		if (!mem) {
-+			buddy_destroy(&st_buddy);
-+			return -ENOMEM;
-+		}
-+
-+		buddy_destroy(&st_buddy);
-+	}
-+
-+	return 0;
-+}
-+
-+static int buddy_selftest_alloc_free()
-+{
-+	const int iters = 800;
-+	void __arena *mem;
-+	int ret, i;
-+
-+	ret = buddy_init(&st_buddy,
-+			     (arena_spinlock_t __arena *)&st_buddy_lock);
-+	if (ret)
-+		return ret;
-+
-+	bpf_for(i, 0, iters) {
-+		mem = buddy_alloc(&st_buddy, alloc_free_sizes[(i * 5) % 8]);
-+		if (!mem) {
-+			buddy_destroy(&st_buddy);
-+			return -ENOMEM;
-+		}
-+
-+		buddy_free(&st_buddy, mem);
-+	}
-+
-+	buddy_destroy(&st_buddy);
-+
-+	return 0;
-+}
-+
-+static int buddy_selftest_alloc_multiple()
-+{
-+	int ret, j;
-+	u32 i, idx;
-+	u8 __arena *mem;
-+	size_t sz;
-+	u8 poison;
-+
-+	ret = buddy_init(&st_buddy,
-+			     (arena_spinlock_t __arena *)&st_buddy_lock);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Cycle through each size, allocating an entry in the
-+	 * segarr. Continue for SEGARRLEN iterations. For every
-+	 * allocation write down the size, use the current index
-+	 * as a poison value, and log it with the pointer in the
-+	 * segarr entry. Use the poison value to poison the entire
-+	 * allocated memory according to the size given.
-+	 */
-+	idx = 0;
-+	bpf_for(i, 0, SEGARRLEN) {
-+		sz = alloc_multiple_sizes[idx % 9];
-+		poison = (u8)i;
-+
-+		mem = buddy_alloc(&st_buddy, sz);
-+		if (!mem) {
-+			buddy_destroy(&st_buddy);
-+			bpf_printk("%s:%d", __func__, __LINE__);
-+			return -ENOMEM;
-+		}
-+
-+		segarr[i].block = mem;
-+		segarr[i].sz = sz;
-+		segarr[i].poison = poison;
-+
-+		bpf_for(j, 0, sz) {
-+			mem[j] = poison;
-+			if (mem[j] != poison) {
-+				buddy_destroy(&st_buddy);
-+				return -EINVAL;
-+			}
-+		}
-+	}
-+
-+	/*
-+	 * For SEGARRLEN iterations, go to (i * 17) % SEGARRLEN, and free
-+	 * the block pointed to. Before freeing, check all bytes have the
-+	 * poisoned value corresponding to the element. If any values
-+	 * are unexpected, return an error.
-+	 */
-+	bpf_for(i, 10, SEGARRLEN) {
-+		idx = (i * 17) % SEGARRLEN;
-+
-+		mem = segarr[idx].block;
-+		sz = segarr[idx].sz;
-+		poison = segarr[idx].poison;
-+
-+		bpf_for(j, 0, sz) {
-+			if (mem[j] != poison) {
-+				buddy_destroy(&st_buddy);
-+				bpf_printk("%s:%d %lx %u vs %u", __func__,
-+					   __LINE__, &mem[j], mem[j], poison);
-+				return -EINVAL;
-+			}
-+		}
-+
-+		buddy_free(&st_buddy, mem);
-+	}
-+
-+	buddy_destroy(&st_buddy);
-+
-+	return 0;
-+}
-+
-+static int buddy_selftest_alignment()
-+{
-+	int ret, i;
-+
-+	ret = buddy_init(&st_buddy,
-+			     (arena_spinlock_t __arena *)&st_buddy_lock);
-+	if (ret)
-+		return ret;
-+
-+	/* Allocate various sizes and check alignment */
-+	bpf_for(i, 0, 17) {
-+		ptrs[i] = buddy_alloc(&st_buddy, alignment_sizes[i]);
-+		if (!ptrs[i]) {
-+			bpf_printk("alignment test: alloc failed for size %lu",
-+				   alignment_sizes[i]);
-+			buddy_destroy(&st_buddy);
-+			return -ENOMEM;
-+		}
-+
-+		/* Check 8-byte alignment */
-+		if ((u64)ptrs[i] & 0x7) {
-+			bpf_printk(
-+				"alignment test: ptr %llx not 8-byte aligned (size %lu)",
-+				(u64)ptrs[i], alignment_sizes[i]);
-+			buddy_destroy(&st_buddy);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	/* Free all allocations */
-+	bpf_for(i, 0, 17) {
-+		buddy_free(&st_buddy, ptrs[i]);
-+	}
-+
-+	buddy_destroy(&st_buddy);
-+
-+	return 0;
-+}
-+
-+#define BUDDY_ALLOC_SELFTEST(suffix) ALLOC_SELFTEST(buddy_selftest_##suffix)
-+
-+SEC("syscall")
-+__weak int buddy_selftest(void)
-+{
-+	BUDDY_ALLOC_SELFTEST(create);
-+	BUDDY_ALLOC_SELFTEST(alloc);
-+	BUDDY_ALLOC_SELFTEST(alloc_free);
-+	BUDDY_ALLOC_SELFTEST(alloc_multiple);
-+	BUDDY_ALLOC_SELFTEST(alignment);
-+
-+	return 0;
-+}
-+
-+__weak char _license[] SEC("license") = "GPL";
--- 
-2.49.0
-
+> ---
+>  mm/slub.c | 88 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++---
+>  1 file changed, 84 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 4ca6bd944854..22acc249f9c0 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2593,7 +2593,8 @@ static void *setup_object(struct kmem_cache *s, void *object)
+>  	return object;
+>  }
+>  
+> -static struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s, gfp_t gfp)
+> +static struct slab_sheaf *__alloc_empty_sheaf(struct kmem_cache *s, gfp_t gfp,
+> +					      unsigned int capacity)
+>  {
+>  	struct slab_sheaf *sheaf;
+>  	size_t sheaf_size;
+> @@ -2611,7 +2612,7 @@ static struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s, gfp_t gfp)
+>  	if (s->flags & SLAB_KMALLOC)
+>  		gfp |= __GFP_NO_OBJ_EXT;
+>  
+> -	sheaf_size = struct_size(sheaf, objects, s->sheaf_capacity);
+> +	sheaf_size = struct_size(sheaf, objects, capacity);
+>  	sheaf = kzalloc(sheaf_size, gfp);
+>  
+>  	if (unlikely(!sheaf))
+> @@ -2624,6 +2625,12 @@ static struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s, gfp_t gfp)
+>  	return sheaf;
+>  }
+>  
+> +static inline struct slab_sheaf *alloc_empty_sheaf(struct kmem_cache *s,
+> +						   gfp_t gfp)
+> +{
+> +	return __alloc_empty_sheaf(s, gfp, s->sheaf_capacity);
+> +}
+> +
+>  static void free_empty_sheaf(struct kmem_cache *s, struct slab_sheaf *sheaf)
+>  {
+>  	kfree(sheaf);
+> @@ -8144,8 +8151,11 @@ static int calculate_sizes(struct kmem_cache_args *args, struct kmem_cache *s)
+>  	if (s->flags & SLAB_RECLAIM_ACCOUNT)
+>  		s->allocflags |= __GFP_RECLAIMABLE;
+>  
+> -	/* kmalloc caches need extra care to support sheaves */
+> -	if (!is_kmalloc_cache(s))
+> +	/*
+> +	 * For KMALLOC_NORMAL caches we enable sheaves later by
+> +	 * bootstrap_kmalloc_sheaves() to avoid recursion
+> +	 */
+> +	if (!is_kmalloc_normal(s))
+>  		s->sheaf_capacity = calculate_sheaf_capacity(s, args);
+>  
+>  	/*
+> @@ -8640,6 +8650,74 @@ static struct kmem_cache * __init bootstrap(struct kmem_cache *static_cache)
+>  	return s;
+>  }
+>  
+> +/*
+> + * Finish the sheaves initialization done normally by init_percpu_sheaves() and
+> + * init_kmem_cache_nodes(). For normal kmalloc caches we have to bootstrap it
+> + * since sheaves and barns are allocated by kmalloc.
+> + */
+> +static void __init bootstrap_cache_sheaves(struct kmem_cache *s)
+> +{
+> +	struct kmem_cache_args empty_args = {};
+> +	unsigned int capacity;
+> +	bool failed = false;
+> +	int node, cpu;
+> +
+> +	capacity = calculate_sheaf_capacity(s, &empty_args);
+> +
+> +	/* capacity can be 0 due to debugging or SLUB_TINY */
+> +	if (!capacity)
+> +		return;
+> +
+> +	for_each_node_mask(node, slab_nodes) {
+> +		struct node_barn *barn;
+> +
+> +		barn = kmalloc_node(sizeof(*barn), GFP_KERNEL, node);
+> +
+> +		if (!barn) {
+> +			failed = true;
+> +			goto out;
+> +		}
+> +
+> +		barn_init(barn);
+> +		get_node(s, node)->barn = barn;
+> +	}
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		struct slub_percpu_sheaves *pcs;
+> +
+> +		pcs = per_cpu_ptr(s->cpu_sheaves, cpu);
+> +
+> +		pcs->main = __alloc_empty_sheaf(s, GFP_KERNEL, capacity);
+> +
+> +		if (!pcs->main) {
+> +			failed = true;
+> +			break;
+> +		}
+> +	}
+> +
+> +out:
+> +	/*
+> +	 * It's still early in boot so treat this like same as a failure to
+> +	 * create the kmalloc cache in the first place
+> +	 */
+> +	if (failed)
+> +		panic("Out of memory when creating kmem_cache %s\n", s->name);
+> +
+> +	s->sheaf_capacity = capacity;
+> +}
+> +
+> +static void __init bootstrap_kmalloc_sheaves(void)
+> +{
+> +	enum kmalloc_cache_type type;
+> +
+> +	for (type = KMALLOC_NORMAL; type <= KMALLOC_RANDOM_END; type++) {
+> +		for (int idx = 0; idx < KMALLOC_SHIFT_HIGH + 1; idx++) {
+> +			if (kmalloc_caches[type][idx])
+> +				bootstrap_cache_sheaves(kmalloc_caches[type][idx]);
+> +		}
+> +	}
+> +}
+> +
+>  void __init kmem_cache_init(void)
+>  {
+>  	static __initdata struct kmem_cache boot_kmem_cache,
+> @@ -8683,6 +8761,8 @@ void __init kmem_cache_init(void)
+>  	setup_kmalloc_cache_index_table();
+>  	create_kmalloc_caches();
+>  
+> +	bootstrap_kmalloc_sheaves();
+> +
+>  	/* Setup random freelists for each cache */
+>  	init_freelist_randomization();
+>  
+> 
+> -- 
+> 2.52.0
+> 
