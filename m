@@ -1,94 +1,77 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97EAA35CB9A;
-	Tue, 27 Jan 2026 15:34:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B7251DF963
+	for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 16:02:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769528043; cv=none; b=pkWyQ6FseYvnWq9OZVJPOf+ddUQc5RxktjWP0U1059/Il4hSbuTW9dTyOo1YeNlQszWz/VmYCm2wO3GoRnBkANjqcTlGrPzURcpDGX6qVsV0OAIBz0ZfUj2ojJomVHe+bmdMpsZdVRWbhMcnBVqoaCuZq72vV9sjAvyFfaUUS4k=
+	t=1769529747; cv=none; b=VOVRj4sfIek7TIDTrMvGgApm4uV809sXIw2ltAs3+FDb5kargepEUL7Ty8Jcl4klZDC+dX3RommI81eN3HdlSi60gDV+LbsSM64+qg1oHv2xegfDmSruTi+0H605zDUoWJb+oraAsFOHs+5pT3E9elX9dp7qvzFADbjS5Omos4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769528043; c=relaxed/simple;
-	bh=9DLKdTXoFCuhtc89mZMGllNE0yoAFFhZ91M2fyML8lA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bzpIOw1IAZyPB3mXgAbKtB5mYwde+dFKvz/6FQ13GNrec1eanp1hvRJ3f5jWmVfziIAagRzDecjw6MHz9ckTT+8GD7bCvdNTq2Wqzyte2ovdVvi9nyJjZV+JUL+VMcvdQn1N50sI+90JwvccEFq+zGoisN5E96+liCIWiTUs9zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=izXTh/Qc; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1769529747; c=relaxed/simple;
+	bh=80QA2qKhdqd81GTUrLd8NbmxdcrAHMEH0Wzeroi9kx8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Yf7VE9RTmLUZmQNEAepe4ooTW/G5OBmkoh28ITJJmRebZVP/34nYmOhUuAr2n87I3ZLZ4dWuEyh8wC8W1S2fOsRAB8RweMjKR0ws7oIoYy7tYe2hS3pd/uxhDfwARjAKJBDKY8QiJ6NV+UBnzERugKPODrAhY/1th2iPIQdn7dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MP4xeHHD; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="izXTh/Qc"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60R4dY1S032521;
-	Tue, 27 Jan 2026 15:33:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=hwRBNCHKaC4Z+b+Og
-	bDactYuIMHhkLAQK6b65sb5zKo=; b=izXTh/QcsYomxXLC4BtdhecoibANGmhkA
-	C+6PKlpGI+DQ2EGGRQkGSG1oEUvflg6u2xhYk+Q675l6NyYIxdLV7hZ48w0J95Kv
-	yEPo2yW3UsovnDXaA8+EA/7coLEn5VT1IT6LF30XWa7+7tg/zks1gJyejmqx02C7
-	OlmWc90acwqZJRRx98VKcHqjikEIv+D0/DvfmvIdxr6wBnwUI/8wpXmxgszg8TsI
-	kDILB14f7xt7cvfRCl4BPCL+2378qOHl9G6FQ6QFwFgdWjmHfnONKa5YjeS/TZCI
-	9MwU8eDSX/A4XhSdAGn/2QNKNVOIOD2hC3a+rLAqm9qlT7UysR1eA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnrte42u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 15:33:39 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60RErwEA017974;
-	Tue, 27 Jan 2026 15:33:38 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnrte42q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 15:33:38 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60RF0BC6018303;
-	Tue, 27 Jan 2026 15:33:37 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4bwb41rx1t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 27 Jan 2026 15:33:37 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60RFXXZ044499356
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 27 Jan 2026 15:33:33 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BAACE20040;
-	Tue, 27 Jan 2026 15:33:33 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7352D2004E;
-	Tue, 27 Jan 2026 15:33:33 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 27 Jan 2026 15:33:33 +0000 (GMT)
-From: Jens Remus <jremus@linux.ibm.com>
-To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, bpf@vger.kernel.org, x86@kernel.org,
-        Steven Rostedt <rostedt@kernel.org>
-Cc: Jens Remus <jremus@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
-        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
-        Dylan Hatch <dylanbhatch@google.com>
-Subject: [RFC PATCH v1 1/5] unwind_user: Enable arch-specific signal frame unwinders
-Date: Tue, 27 Jan 2026 16:33:27 +0100
-Message-ID: <20260127153331.2902504-2-jremus@linux.ibm.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260127153331.2902504-1-jremus@linux.ibm.com>
-References: <20260127153331.2902504-1-jremus@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MP4xeHHD"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4805ef35864so21348115e9.0
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 08:02:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769529745; x=1770134545; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=olTpw0u/jlN4U7IPiGAMV8xXkk0tzTQoqqLiwZiF8XM=;
+        b=MP4xeHHDgpcB7GB0+ymMWHiEBIG4psm0da5gyFKeUxQu0lHHKA0Sxv7JJdEoQyUjfL
+         jzoA/f8KWibmmcgB7ELnEpAceZvaATlPjeoSrMAEuf3ozQdeTnQWDrn6BSsW/p8+ryoz
+         npJOGVxsLuOr6Ey2VRrSiN2zUtfd2ZymQDKATKzq7/cP5CeOgQtnM1IT/iUMUh9CVDqX
+         F+vf7BpMjY2972I50hR4nfc/QU9PKVmZIXd0qDNGNpOiLzQLD2nbXKK4I62rsBsLVIuz
+         GvygKTjVsxcwWsM10btW+hQNq6C9ZxKBdZFVeMQwnCMmnwonluQUU+nBKI/g0Y5GCgcE
+         Vp3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769529745; x=1770134545;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=olTpw0u/jlN4U7IPiGAMV8xXkk0tzTQoqqLiwZiF8XM=;
+        b=MYHqMRvQw8jeINdCJQ3+0Q5aJFs4PjTX0BwfqD9hKVu7VNIAWri2WEdRVbNt7pXKtR
+         aQoGdheaV7kmtSNErMBel3jMbef+UC4qBGBR0WjmFSCNhPurJStBbgNicHRbl6T6f3zM
+         JY2Kiklo91y9t42naU5d1CqGg3aJRTq2k7+lvkmgkTSz6Vk5WYcUOB9C6QcnDW8hiroq
+         0MwmVgIIu3nr6/SYW4kpl+kA0h707KhA48PgrIuPo5xvd+hMpw8HISHVdZPDIcPeYZpn
+         q2FFcilLUhD7RYUQLVATb6Va/8SGSDGiHf2tLtDCw5zNDgTWZITLQ3++IRAOpX7rbCFn
+         Lq9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUlDGfv4EZZiUCIjVcTUGn+ezxZpZGx8wM/0lHTqSICn1PPZf+zLWO1l5mW/hQiYmvHc2A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdPQm7ik05Cgwp3JiUfLs5A0mjLaSOqsiKNeP5VeUP3P53nxmJ
+	bn8wh6wLQzCqA1FFFyuJ2NavK5CXLzp5UUH9EkGSMdghatMIWwqAW3Yv
+X-Gm-Gg: AZuq6aJGupZ4NvBi/Pcxybsy7cHPDhsIIHjaytEFha0/3u5DUtiQab3AVTmXIeQpeEq
+	NEg+I0nbCad8wyLspmDUHOJC7WaXGpLL4WmRpBL1s8lCM+E8j+3HvVBNpxT958tksKsIULbIXo+
+	d8eT1HCGW3eUeAvrcUtq/3Zu7KusNiI14Xnj+8Pawytp0QXClm4UobrYnTydW6T696iHYxd6T7C
+	d/kE0sfdYo1jvBayXxAqf52SSAtiyQagbYAv1rbaM6WOsXP/d4vsBs3aIOfSxM6vYCDn+v4b2iF
+	ReI8UJqvu2yNgKTaM6SZ0pQOXV08AMMLoQLxIpULmIgAss6jyd5TIgX0Zrnv13GREqgoh2JtRvu
+	GrRezTV8Q3AEb/qqXXTNQpSAnett2lfLlY9/6qybC6jWJTLjoYLBfa9Iv83fAfz1WmG9751djmY
+	GVc8EEQLyTezHIBRvB/Nm74w==
+X-Received: by 2002:a05:6000:2401:b0:435:97b2:a9b with SMTP id ffacd0b85a97d-435dd1c0cb9mr3260437f8f.37.1769529744405;
+        Tue, 27 Jan 2026 08:02:24 -0800 (PST)
+Received: from LT2202712.. ([2a01:cb16:3054:f7b5:be78:2d38:beb9:75b6])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1f74b15sm38709404f8f.35.2026.01.27.08.02.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Jan 2026 08:02:23 -0800 (PST)
+From: Guillaume Gonnet <ggonnet.linux@gmail.com>
+To: daniel@iogearbox.net
+Cc: alexei.starovoitov@gmail.com,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	ggonnet.linux@gmail.com,
+	john.fastabend@gmail.com,
+	martin.lau@linux.dev
+Subject: [PATCH bpf v5] bpf: Fix tcx/netkit detach permissions when prog fd isn't given
+Date: Tue, 27 Jan 2026 17:02:00 +0100
+Message-Id: <20260127160200.10395-1-ggonnet.linux@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <8ae6e34c-3c6d-4777-ba21-34a525728b3c@iogearbox.net>
+References: <8ae6e34c-3c6d-4777-ba21-34a525728b3c@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -96,118 +79,80 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nVRWLN5-QqZctx4hlKVy5MA3mvaUNbQl
-X-Authority-Analysis: v=2.4 cv=Uptu9uwB c=1 sm=1 tr=0 ts=6978dad3 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VnNF1IyMAAAA:8
- a=6XKp6n-VjBup7wJUbcIA:9
-X-Proofpoint-ORIG-GUID: 6sOBiRvTAc1dmvB3im-sLZpbTwqraB4L
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI3MDEyMSBTYWx0ZWRfXwjafthCE2cNu
- XyFru7ZdTZDpYjOWbD8UWXKLbpDd+hNrKJ/8WIFYZJzrS7JsktTkpW0/oOWdxgJbd1rmkhuHbeE
- mSy6Tqj+oBx6zUyyXej//O9E6ixZ53BSGh9V7L+pQ+EiD3opKCvXV3ZDpVY0ob3GifIUsflsTPx
- 5dM2UpdzocmM5hxebPev/9lJjFceK5uQEJf7+1KGCXJVtVjG8RlAX6uO1pYuljsclllIuh15rqJ
- e9LGN/E5cw6EZDNzQjfmaOzpoD2KT+mjfohMxH8mo04oULyiYyd/bTGP2HbsUG9ph3iLZc+rc0x
- FDsOmwQXO8sBhVW3cWC9ctMmPOrkGzepRPH8qVurfBE+Xhei/jmKeQB4NR0mvmYvn9oHmpjtgQn
- zKx0aS7cVNgwDzVVFv9fBx+8KBbdZpxUOAiMPmTq107+vm4Q0vOGtDvYMLkg0s7XxIyQf8v5B49
- TpFEnto+p7TLqH4vn2A==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-27_03,2026-01-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 priorityscore=1501 clxscore=1015 lowpriorityscore=0
- phishscore=0 adultscore=0 impostorscore=0 bulkscore=0 spamscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2601150000
- definitions=main-2601270121
 
-Add a signal flag to struct unwind_user_frame, which indicates whether
-the frame is a signal frame.  If set unwind_user_common_next() uses an
-architecture-specific unwind_user_signal_next() implementation to
-unwind the frame.
+This commit fixes a security issue where BPF_PROG_DETACH on tcx or
+netkit devices could be executed by any user when no program fd was
+provided, bypassing permission checks. The fix adds a capability
+check for CAP_NET_ADMIN or CAP_SYS_ADMIN in this case.
 
-user unwind sframe will make use of the signal flag in a subsequent
-commit.
-
-Signed-off-by: Jens Remus <jremus@linux.ibm.com>
+Fixes: e420bed02507 ("bpf: Add fd-based tcx multi-prog infra with link support")
+Signed-off-by: Guillaume Gonnet <ggonnet.linux@gmail.com>
 ---
- arch/x86/include/asm/unwind_user.h | 6 ++++--
- include/linux/unwind_user.h        | 9 +++++++++
- include/linux/unwind_user_types.h  | 1 +
- kernel/unwind/user.c               | 4 ++++
- 4 files changed, 18 insertions(+), 2 deletions(-)
+ include/linux/bpf.h       |  5 +++++
+ include/linux/bpf_mprog.h | 10 ++++++++++
+ kernel/bpf/syscall.c      |  7 ++-----
+ 3 files changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/unwind_user.h b/arch/x86/include/asm/unwind_user.h
-index f5e9fbcdae28..21cb9eeb2503 100644
---- a/arch/x86/include/asm/unwind_user.h
-+++ b/arch/x86/include/asm/unwind_user.h
-@@ -67,7 +67,8 @@ static inline int unwind_user_get_reg(unsigned long *val, unsigned int regnum)
- 		.offset		= -2*(ws),		\
- 			},				\
- 	.sp_off		= 0,				\
--	.outermost	= false,
-+	.outermost	= false,			\
-+	.signal		= false,
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 4427c6e98331..9272a237cced 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -3362,6 +3362,11 @@ static inline void bpf_prog_report_arena_violation(bool write, unsigned long add
+ }
+ #endif /* CONFIG_BPF_SYSCALL */
  
- #define ARCH_INIT_USER_FP_ENTRY_FRAME(ws)		\
- 	.cfa		= {				\
-@@ -82,7 +83,8 @@ static inline int unwind_user_get_reg(unsigned long *val, unsigned int regnum)
- 		.rule		= UNWIND_USER_RULE_RETAIN,\
- 			},				\
- 	.sp_off		= 0,				\
--	.outermost	= false,
-+	.outermost	= false,			\
-+	.signal		= false,
- 
- static inline int unwind_user_fp_get_frame(struct unwind_user_state *state,
- 					   struct unwind_user_frame *frame)
-diff --git a/include/linux/unwind_user.h b/include/linux/unwind_user.h
-index f65b0573b3a5..eb5de4cb5bd6 100644
---- a/include/linux/unwind_user.h
-+++ b/include/linux/unwind_user.h
-@@ -34,6 +34,15 @@ static inline int unwind_user_get_reg(unsigned long *val, unsigned int regnum)
- #define unwind_user_get_reg unwind_user_get_reg
- #endif
- 
-+#ifndef unwind_user_signal_next
-+static inline int unwind_user_signal_next(struct unwind_user_state *state)
++static inline bool bpf_net_capable(void)
 +{
-+	WARN_ON_ONCE(1);
-+	return -EINVAL;
++	return capable(CAP_NET_ADMIN) || capable(CAP_SYS_ADMIN);
 +}
-+#define unwind_user_signal_next unwind_user_signal_next
-+#endif
 +
- int unwind_user(struct unwind_stacktrace *trace, unsigned int max_entries);
- 
- #endif /* _LINUX_UNWIND_USER_H */
-diff --git a/include/linux/unwind_user_types.h b/include/linux/unwind_user_types.h
-index fac8f470b597..3985706d7851 100644
---- a/include/linux/unwind_user_types.h
-+++ b/include/linux/unwind_user_types.h
-@@ -68,6 +68,7 @@ struct unwind_user_frame {
- 	struct unwind_user_rule_data fp;
- 	s32 sp_off;
- 	bool outermost;
-+	bool signal;
- };
- 
- struct unwind_user_state {
-diff --git a/kernel/unwind/user.c b/kernel/unwind/user.c
-index a64ceb4a2bf6..b9a3b59e8282 100644
---- a/kernel/unwind/user.c
-+++ b/kernel/unwind/user.c
-@@ -32,6 +32,10 @@ static int unwind_user_next_common(struct unwind_user_state *state,
+ static __always_inline int
+ bpf_probe_read_kernel_common(void *dst, u32 size, const void *unsafe_ptr)
  {
- 	unsigned long cfa, sp, fp, ra;
- 
-+	/* Use signal frame unwinder for signal frames. */
-+	if (frame->signal)
-+		return unwind_user_signal_next(state);
+diff --git a/include/linux/bpf_mprog.h b/include/linux/bpf_mprog.h
+index 929225f7b095..0b9f4caeeb0a 100644
+--- a/include/linux/bpf_mprog.h
++++ b/include/linux/bpf_mprog.h
+@@ -340,4 +340,14 @@ static inline bool bpf_mprog_supported(enum bpf_prog_type type)
+ 		return false;
+ 	}
+ }
 +
- 	/* Stop unwinding when reaching an outermost frame. */
- 	if (frame->outermost) {
- 		state->done = true;
++static inline bool bpf_mprog_detach_empty(enum bpf_prog_type type)
++{
++	switch (type) {
++	case BPF_PROG_TYPE_SCHED_CLS:
++		return bpf_net_capable();
++	default:
++		return false;
++	}
++}
+ #endif /* __BPF_MPROG_H */
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index b9184545c3fd..5f59dd47a5b1 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -1363,11 +1363,6 @@ static int map_check_btf(struct bpf_map *map, struct bpf_token *token,
+ 	return ret;
+ }
+ 
+-static bool bpf_net_capable(void)
+-{
+-	return capable(CAP_NET_ADMIN) || capable(CAP_SYS_ADMIN);
+-}
+-
+ #define BPF_MAP_CREATE_LAST_FIELD excl_prog_hash_size
+ /* called via syscall */
+ static int map_create(union bpf_attr *attr, bpfptr_t uattr)
+@@ -4579,6 +4574,8 @@ static int bpf_prog_detach(const union bpf_attr *attr)
+ 			prog = bpf_prog_get_type(attr->attach_bpf_fd, ptype);
+ 			if (IS_ERR(prog))
+ 				return PTR_ERR(prog);
++		} else if (!bpf_mprog_detach_empty(ptype)) {
++			return -EPERM;
+ 		}
+ 	} else if (is_cgroup_prog_type(ptype, 0, false)) {
+ 		if (attr->attach_flags || attr->relative_fd)
 -- 
-2.51.0
+2.34.1
 
