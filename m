@@ -1,95 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18737230BF6;
-	Wed, 28 Jan 2026 17:17:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D23D322C73;
+	Wed, 28 Jan 2026 17:28:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769620663; cv=none; b=oypIaBmAj0lLmjj5tDTDU2rFEsUN6412/bihjU0/fKLvWLp03g584wSRihK8K0h2vip1fQW4dp/Q+CSj7i/CTU7fasCwmPQiPnkPsuwGuq1r+OwnlRs8QeYEVCCJkQH/XdC5ZvCKAsrJg5B5Qn4rLVeouy0GH1+ThiU3We8UXZs=
+	t=1769621281; cv=none; b=N07MCE6fqkLdQ1xgUoZ+dNvG/k0pAIil65FO7jOuu3OTN1Dth71zFeRpUtzbBwZSs5F7ZuYJAki+0nAjK9ydicLYaj1oPvl2splL0fysuQQiHLAQ8UhrJl1cOTUP3w3Kf+8CctK1PR2PdEtlc6XzDRpHCZP2JUCgse90rTnvsok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769620663; c=relaxed/simple;
-	bh=ANTjixZkXhjfEXZHVJOVnZ6wtyrPwuI6BH+sQY3XRDY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E+pmJMVOnIeibx62ve2tTnA2Ie8gMbY7VXaSXqZ7/snwehY7xPZ+JLh82mnxcQn+sDJkCF9+HBMNpsKNQjhOhBmCJoTRx95sfjETR1fOC01qcVIKsi+okrWY/LiJvyFRO3VV+uUPSUmuPfwOYsuzagO1hd0n3dNHFfh4q8TBCKc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jfz/d2EP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769621281; c=relaxed/simple;
+	bh=hoQ7f8O0ifvxslF9leeAjp1rd/O058g0+Im1NYwp96k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=bVvDcY+ukv7npIK37JYEJQLXYUr1VOowtCvUDHcf48AmlmdDZjZK9pxyYrOMrv1HZJaU1Bj4U8thSZIN6SQCitVGnUNcaUWNcLvCuHu3W6QazvfJUBm8lNf9HPI1Llwzc467VHtY5LpukcgZivxtBGcUwHmSqvf5MOglYSL6LTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=FvvmNFLx; arc=none smtp.client-ip=45.79.88.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jfz/d2EP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C852DC4CEF7;
-	Wed, 28 Jan 2026 17:17:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769620662;
-	bh=ANTjixZkXhjfEXZHVJOVnZ6wtyrPwuI6BH+sQY3XRDY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Jfz/d2EPfEfEFSwxM75CsatguEfliiHE/4PaQGlLTfUwy1Uh9eZrb98Taq97Qv/jP
-	 cJBvDa5uSiq7rM1YMawbMbu53LfmyMcTN+iugV/ld829vY17c1pACLKs8vRPawUqSm
-	 rQb/Vm3wb50pO8F/JtHBocxmTEMdHoOdt/mAAMoNra0bR5azYbhYLmt+zbYNIF0p7C
-	 gdbavaoLYW0d2mp1G0ZuTtBPJQ7FV/cbo9v8Mjfrsd+lbATvxsTUi4tcLmCDPDh2UE
-	 6zWY+7g/lOoDyMJ+AISad5F63MsZKGXH7akyw8BAjjAfICsrMq9oc3Xi8irMVQuKPO
-	 1H2F1jeB+OcHw==
-Date: Wed, 28 Jan 2026 18:17:35 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>, Linux Doc Mailing List
- <linux-doc@vger.kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc: bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, Peter Zijlstra
- <peterz@infradead.org>, Randy Dunlap <rdunlap@infradead.org>, Shuah Khan
- <skhan@linuxfoundation.org>, Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v2 23/25] tools/lib/python/unittest_helper.py
-Message-ID: <20260128181735.32201f69@foz.lan>
-In-Reply-To: <f370f2a0dfcaa679c9969488c908eaac82026031.1769617841.git.mchehab+huawei@kernel.org>
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="FvvmNFLx"
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 7611940C89
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1769621279; bh=9oqJ9si/9jKjG6XLNNme1EVuvBefXUOVtMWR2s7pbuo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=FvvmNFLxw5Ixj5K56aynw58anknAfhai2s7OzYhzSWz+WqCBGTcPjmRYlUU8Ur18G
+	 RJbtmjQ/aPzgrX5oRxL1CQsunZTEoNLfXH0GZ7M1S+QjSVgifNiVDWYe4aCAEG+dgB
+	 oAWhO03n415iJQ9OvoiMClOgu2EUrzvAP2c4ZKjzBjezPFP0Xnbq/k2X0wQsfEpOm+
+	 hfCw2xwJilzVMBQhq7IIOiB7zJ9l/B2WDFXNBe4mgzGhoQp1T8XcL0CafkebwxmbaL
+	 F55T2oCjglGqFPiei9xUqE+NK0BcPNAl+b/Pf8KPmTXfd11jJs9DUGAI7z8B6QG1q6
+	 F5Fn+En/4i0lw==
+Received: from localhost (unknown [IPv6:2601:280:4600:27b::1fe])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 7611940C89;
+	Wed, 28 Jan 2026 17:27:59 +0000 (UTC)
+From: Jonathan Corbet <corbet@lwn.net>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Mauro
+ Carvalho Chehab <mchehab@kernel.org>, Richard Cochran
+ <richardcochran@gmail.com>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, bpf@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, Randy Dunlap
+ <rdunlap@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>, Stanislav
+ Fomichev <sdf@fomichev.me>
+Subject: Re: [PATCH v2 00/25] kernel-doc: make it parse new functions and
+ structs
+In-Reply-To: <cover.1769617841.git.mchehab+huawei@kernel.org>
 References: <cover.1769617841.git.mchehab+huawei@kernel.org>
-	<f370f2a0dfcaa679c9969488c908eaac82026031.1769617841.git.mchehab+huawei@kernel.org>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+Date: Wed, 28 Jan 2026 10:27:58 -0700
+Message-ID: <87ecn97ild.fsf@trenco.lwn.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On Wed, 28 Jan 2026 17:50:21 +0100
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> wrote:
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> Hi Jon,
+>
+> It is impressive how a single patch became a series with 25 ones ;-)
 
-This is obviously wrong... it should have been merged with patch 21, after
-a cleanup I did on it to remove some dead code.
+*sigh*
 
-> ---
->  tools/lib/python/unittest_helper.py | 16 +---------------
->  1 file changed, 1 insertion(+), 15 deletions(-)
-> 
-> diff --git a/tools/lib/python/unittest_helper.py b/tools/lib/python/unittest_helper.py
-> index e438472fa704..3cf1075b1de4 100755
-> --- a/tools/lib/python/unittest_helper.py
-> +++ b/tools/lib/python/unittest_helper.py
-> @@ -8,21 +8,7 @@
->  Helper class to better display unittest results.
->  
->  Those help functions provide a nice colored output summary of each
-> -executed test and, when a test fails, it shows the different in diff
-> -format when running in verbose mode, like::
-> -
-> -    $ tools/unittests/nested_match.py -v
-> -    ...
-> -    Traceback (most recent call last):
-> -    File "/new_devel/docs/tools/unittests/nested_match.py", line 69, in test_count_limit
-> -        self.assertEqual(replaced, "bar(a); bar(b); foo(c)")
-> -        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> -    AssertionError: 'bar(a) foo(b); foo(c)' != 'bar(a); bar(b); foo(c)'
-> -    - bar(a) foo(b); foo(c)
-> -    ?       ^^^^
-> -    + bar(a); bar(b); foo(c)
-> -    ?       ^^^^^
-> -    ...
-> +executed test.
->  
->  It also allows filtering what tests will be executed via ``-k`` parameter.
->  
+I will try to have a good look at these shortly.  It seems pretty clear
+that this isn't 7.0 material at this point, though.
 
+One thing that jumped at me:
 
+> Ah, due to the complexity of NestedMatch, I opted to write
+> some unit tests to verify that the logic there is correct.
+> We can use it to add other border cases.
+>
+> Using it is as easy as running:
+>
+> 	$ tools/unittests/nested_match.py
+>
+> (I opted to create a separate directory for it, as this
+> is not really documentation)
+
+Do we really need another unit-testing setup in the kernel?  I can't say
+I'm familiar enough with kunit to say whether it would work for
+non-kernel code; have you looked and verified that it isn't suitable?
 
 Thanks,
-Mauro
+
+jon
