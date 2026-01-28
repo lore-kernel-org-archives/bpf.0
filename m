@@ -1,160 +1,142 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6C436F435
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 18:56:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4BE372B34
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 18:59:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769626568; cv=pass; b=MtN+gvb/0CfjGH4KfZsbsT0PQwrNnfR6QOwYbBmKiU2/na3x5E8FPqQ47v3W1f4e/UdpHhQRjAaEO5MCSzUZNKSeMuUQ/EsQhJXsn0Pz9qWwA4kl0NlK5/pGGql4Xh03G+HjUB64zcL0TK+fUOrpdm4Y5S00cEZts0q1X++NIGU=
+	t=1769626773; cv=pass; b=cc9wCgKstJptiRMaA3vjAWvyryhjXgBwAwQQBz5/C8dVKwhrj+SPs67RWxM2/FWicQLJoakDe90UGRmFkoWI2w0npGGTCt0THckNIv8PL9X+OxYYP3O2r2mRZI4yiaPY/N6Q138MW7zdq98/GvxVoXQLGftcnaYtsRLCRxcsWr4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769626568; c=relaxed/simple;
-	bh=GbjJME/nuQhCEQ+372mh5xTEDtjGu1hRDbZuxX2zZ2M=;
+	s=arc-20240116; t=1769626773; c=relaxed/simple;
+	bh=ZUuhuB/0J2fpvmMoXKZsjO3MnD0BmMp/y5PlorPBH+o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=phUzc6iucS/l2L9euM5/O5sq7NettV4GZdRmjSmuPdfW2FtelEO1a+nWjW5/FWNnOZJq4LE5sy31a9t3z1ZZH4gfVhsGlPpYV6Uar2QRobH24yxsH2XYbKbZsUA/xVnu5ZitRTO4UYHKmIYMBp8V5M5zMuGsSkSYuIbDQvKRfNU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P5WKa7Pe; arc=pass smtp.client-ip=209.85.216.43
+	 To:Cc:Content-Type; b=ZJoQJKxw/kmpWxz4z4x0vvVVYo+wIinPnGV0ZC9lhFflR+XWW/3qVyKbYNk7yvPfBwOrN8eBbM6w74BGN9akXRWeKVWU8X35Y/GqKOJyDAEpkyciou6zAdMYxXzyeYo6WQDO5IwmO0EOEf70/12orOEAfaOu1UHKVvcUyqoT8yk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nTqFHXD1; arc=pass smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P5WKa7Pe"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-34c3259da34so73628a91.2
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 10:56:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769626567; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nTqFHXD1"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-34c363eb612so78483a91.0
+        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 10:59:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769626771; cv=none;
         d=google.com; s=arc-20240605;
-        b=G2OIjEat1kEUNV06Npq0e+CrEgwJK99iS1OunxM/F/EcBKhDkrK6e2QckBK3ViMtaZ
-         KC6GZgCmhK4lSmq2acFpCxSKLpcXFXnXomoV8gGlK/DBFkIkEdn56rXoypRg6iK4H6xA
-         Uw45uLuCQAocQCSo2hRT72MkWREugV8ri1umlh4CVQfyFkmONAmVnh9nFf4LC38V2xTf
-         SESqjzq1clPl915/s8tPTjaob/K+lz352FnQrMhOJAtsw4dJKOVGv+q4vrsJ2TpX5H4T
-         T7Skce8x9CVz3NnHeinwA+lncva6UvX1N3owsTPSoBXZcePBY5E0jXP9xH59aW0fPj13
-         IMZw==
+        b=QQgim/db/AZCWHPDf0qV7I1jU7jr1uqbJDQqHFHoCqSZnIOMQGSRKKioG/2O4wy3fo
+         TuHWta9xvSLEdm12OT3kpHiWlQoDyJU3qavNnoTuOkQ4Bg8Ild3dDWl3BzOU/+dHNFiz
+         9E9ATTAfLk/Qc41aKsznFjRgho0dqLpX5r+bGsGoF0dbaDEbfOgDkT5qmGQT5l8qvkIK
+         VAjGF8ZAQEr0ZPM/PKYEquVi3waGaVODAb1LNgjLuPY1yJxgN78u2LMdYvuexmPa4tHy
+         4JlQhwrw/zY5vqihsqsVaWIRoc99/mMJBz5TWOdqKgYfxtV7UU1tSbOX+TMml6W1fwDu
+         1FLg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=GbjJME/nuQhCEQ+372mh5xTEDtjGu1hRDbZuxX2zZ2M=;
-        fh=GADw2PuDHmMAX+f2KEaMBnXYoqfsIvq0WAsitInVS/E=;
-        b=lX5MMYc3hLFi3qXkz4ZQoD5sXWjl0TbUPmEpvTea2AEpekGNs77/+CW7oY65e4PFL9
-         2+KdMdDaJoEAlnOkepSitDKU4SJbMr1LGk+3cHMuQq6eUJ+YN9h0I2u4mwl09gz6bQJF
-         LvgnQm/fabHGJVy7xyfgkWGeYkDgea6muIcZHYJ1UTOasXxqMT6YMpDDGPq1pXUk0aek
-         Ps2xZOZwQFfW9tXKz3iimQdjpG5Ma/0FYWnLIVu083eTk8VK6w1JcD2gsxCWpcueITpF
-         HVvhyCxWhPMlKqv9wHlBb61k6kPEozx468XtYVFi9pyOdcwL9VOe17xaGQ/GKdHD6ber
-         4XkA==;
+        bh=ZUuhuB/0J2fpvmMoXKZsjO3MnD0BmMp/y5PlorPBH+o=;
+        fh=k0Ce2MkaDb51sPaAMperxY08hsdZuuGTlP7b4MbW9PM=;
+        b=XM69Bpn/3EX/MCLuGBo9vBQyI3mnO9Uw8s4TGf6Qom8/wmTTIBwKUEJXyG6xGNjOzA
+         JgOmQIGzjcicuTO0Amn8p+itWdzzzxklzjscbUW71Hs+ZzITl/yCCMn7rYt0XvE07ss/
+         W1hHXwg/4Zrp94nDybK0GdaOOgrFgYuafyBZt16Ed7GQ48L3MSArSxbUxoh/wENv6T+Z
+         bYj76VXPUFOiRPBWN4RyzQ4yg+AhPNtxrIHsGnsqkIhtNOz466TsLBkrsWN7EpUB3zhD
+         Qat2/jFmCZWwcns6cNIcj80ub9wiqqPNSfy9Jknuw6IKDsADFBwW03tEHqt5nxgdgfPy
+         x2qQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769626567; x=1770231367; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769626771; x=1770231571; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GbjJME/nuQhCEQ+372mh5xTEDtjGu1hRDbZuxX2zZ2M=;
-        b=P5WKa7PeIEq0XSFVsKndKWeqbSw/opIgiPQYOwK3Lg9WFhoYrmpQXLR5Is8yuOvMej
-         NQ3l9qcC2yyvCVedJXPqJV2mSRyHl1dfQ5+WxQvGYy9iECxXwfeDe8uSUyrZN1Gmz5fH
-         PAJx6PpqMm++cXMC/yNrNUW6rlDErLb8ovWBFld+acPBb/5hG+MZbZMdEY+uVUm4P7IJ
-         Ja7EwTfjrt2XUBa+VrQrGQxfD2G2zGBiyFUbmBT9z0q6hOMrkIm5OimoAjYqLsp3+hK7
-         UeybD8d2aDBpFYzkOO1nFymofT+5IGea1XjFrZ/eHzmj5JmehWnDbbWhFSjQYtC1qCWo
-         gPyQ==
+        bh=ZUuhuB/0J2fpvmMoXKZsjO3MnD0BmMp/y5PlorPBH+o=;
+        b=nTqFHXD1cRx5d/aaLdS0n+I1BvN+k0KWXXGjtiu4Nz9crenqITcJXU92RHD7O/xilG
+         K9ku6egzSdptIgiDu+shAxgUM7taeGpvXyMLHhyjlcv4Upu7YaOItfFHg8cGd0ui4Nl6
+         B0oGDZYf0sBi3MMKtJ19qxlmAhWwmGZg5et95P+86KK0lPdR/bLMi3uQz9A2EgPLKbqt
+         TGy462kiLSPd28Gzdj7dYX8gR3RkPNlyZ5+lTT0ma3QJcXqgLFRSJH0tfOK3YFd5ECvI
+         y31Lg0srioe1ngh0Wz66k2duZxSwZChbVUZQOdTmNwH/HZl3H51aLiaKakAQ3clGgtxT
+         4xIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769626567; x=1770231367;
+        d=1e100.net; s=20230601; t=1769626771; x=1770231571;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=GbjJME/nuQhCEQ+372mh5xTEDtjGu1hRDbZuxX2zZ2M=;
-        b=gY2v7wVP3i15ljSqfvfSOkFcCxZ3JO6lpoa2E/Y6ICuIVVIVZYtNmIZ6bIFbsZAckI
-         KusOhTr0YiDhKmN7mCoevMz39FqAPcoyXAKfbP7otJfFUsHxHH+y6ts4CAQ+xldTERa2
-         h1AgkAvUNeuvN0RZlcdrhSUcizX8+RGCuylRuMyoimNAZ6XwOcA8yy9Wt/5BmqtgnnKF
-         nZrhNc9UQqoH42higOE2DPdCHW2ZYJ4Ea+iKHxrg9Z1oNYGm5t1WqkY5N0H1T4ucBNIH
-         fliRmBJqcZeNA+VRmymQdOa1yfUzifoACDB8EVEmop7KbcygS/miZKAZnHUkDi5ekzyo
-         nGiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU6UoO1T6ut1E4y3FUAPSFRXsDT6jlip6ckhzp9ueCciK0Ax7JQBPmUp3p4hup2YFQmQf8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbqHDL2hTatjRtIrK3HTIdQrYCQha2VU7jTzvc/Yj/t9/CZKRU
-	R+FS0EVo8DpRScfHfapVf43abb7GJXNqnCLsH3iqpLwC7I9ffr3xb/g/QWYiTi8YhuneTk+vePq
-	AzHeq5qiofgSLO/K7t5Zrheg32cjHAgRw+A==
-X-Gm-Gg: AZuq6aIWza0sAHkx/aokeAh84WQSMOziJkrBsn/V6/NHtBB4MkyzfYYJ3NcGqkT59W0
-	2bBbk/inNs+Fxi/GZvlpjtU9gdkGSbEa2dtwJ3kHWXwDYknbMS/8gr+vzm8p9W19szvAImwnoZ/
-	C+vN0SuSTnH7XCfAf1sOlYeRkFOmJSFVqmEQfJyGi4eglwCfuwNfTbY6j1euN7BzmHFVk4NgiM0
-	ZS5W9CqMYvq+DZ7YzswE/N6B76h1NbAdU6tuIqzrbD8i9nXRDT7Kd8bQTpcW1mIwAVoV0zLGsiM
-	byKKTShpFVM=
-X-Received: by 2002:a17:90b:3a4f:b0:352:e27e:79c5 with SMTP id
- 98e67ed59e1d1-353feda98damr4965562a91.31.1769626566865; Wed, 28 Jan 2026
- 10:56:06 -0800 (PST)
+        bh=ZUuhuB/0J2fpvmMoXKZsjO3MnD0BmMp/y5PlorPBH+o=;
+        b=kbgbrSzZ4bwWMj29ET+W9EfcxEAR4Zct8R+K+vrbIWU+3FZJBAZvcOd6wtLLiTxjOf
+         N6Klk7/TuME/7nLcI18MXrz592NejTv6heFnNQD8FITWjYVMrUwWMBFD033YXb/8rAtf
+         4aTFcWhvT8UABmTqPqhK+953JsQphOrc8IpNjgg0pFaHwY2F/w88vWERaB7l8sqewbZQ
+         w7zaTCMNqb4aqllPkb3oe1cNYL9zX5OPOejb+PCmWrXi0p9/OyTtU76gxB0vz4th/wej
+         4Za1a/SbdYG+1kRYu592wsrsBMq5LSIPpU68On+jb/XRYLIgh3OtcdohSYg6qgHKtGPE
+         Ug4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV8gnIxiTsmxXqikxyyioObuir1NhGvCAe/ZU/2FOPZ4KpgCcUeoajJty3UR9qQd4jglSo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yywj8GGBxivCPBJ27EJuKSbWeztoWfysmbtBA61ZiQK0Al9x9uV
+	IRU/Ez++zXbwBhhuyn0N5B/uWb94QNyrb4R0E7of3sdXTPjZa15myaq0F6CktGjm1oCHx5cWTMj
+	DNWm89fGL+0lZ5Gs0fcs+jg9Fa2v93C8=
+X-Gm-Gg: AZuq6aKmI3+mFQKjVWaa/kcHk4RncaF3EUWb4vTmxsq5ucy1sM9GnpFLERJjwKnBEuP
+	0D8VwjvnxjfKiYaVvQhjrAD91Gi3y0jgToXn9yxkj1WtdY6+RyAP6WmsFwnNdfIgScThkSvizx1
+	bn8LzeZnj8m5HpiXjQDS5nipmeRgcK3FsfBY1ebZy5EiJ0fNgDh85FtF7EfX+3rcPhnHSnnG94S
+	Y69KUMPTZYDjzQrrezu5lg5nIjMSpIutUUwTkN/ddp84ViGJY63DtRuTsb/pGprilZSizqPVdtn
+	7JDgPLGGghXNYvun9/9+FA==
+X-Received: by 2002:a17:90b:3c88:b0:340:ac7c:6387 with SMTP id
+ 98e67ed59e1d1-353fecc6756mr6041046a91.7.1769626771524; Wed, 28 Jan 2026
+ 10:59:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260126142118.2ea3cf13@gandalf.local.home> <CAEf4Bzax24jJVDs2bBiJuz1ZuuDihsb5Xq8pGcy18vLUMMLxbg@mail.gmail.com>
- <20260126192010.4f14bcb9@gandalf.local.home> <CAEf4BzZ0cYkJ-3Kt-O+2FTvTEirS7cSuea2swgaom18Q_sve4A@mail.gmail.com>
- <CAP_z_CgozbHejsuKeLRQHN-bz5jPA+C+c0GBNitgEvwOucm8TQ@mail.gmail.com>
-In-Reply-To: <CAP_z_CgozbHejsuKeLRQHN-bz5jPA+C+c0GBNitgEvwOucm8TQ@mail.gmail.com>
+References: <20260126074331.815684-1-chen.dylane@linux.dev>
+ <20260126074331.815684-2-chen.dylane@linux.dev> <20260128085945.GF3372621@noisy.programming.kicks-ass.net>
+ <00fd7c67-dffa-4647-8370-59a195a41deb@linux.dev>
+In-Reply-To: <00fd7c67-dffa-4647-8370-59a195a41deb@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 28 Jan 2026 10:55:54 -0800
-X-Gm-Features: AZwV_QhZFUtlKhhmh1Fki3mfmzOSzwbZ9cKOopflLchM185a3ebkdwBRJU__k_0
-Message-ID: <CAEf4Bza91wTWzESxAyz5qP4e8siwGn=rvm-Few6xT_VpW9oJzw@mail.gmail.com>
-Subject: Re: BPF with deferred stacktrace and sframes?
-To: Blake Jones <blakejones@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Ian Rogers <irogers@google.com>
+Date: Wed, 28 Jan 2026 10:59:18 -0800
+X-Gm-Features: AZwV_QjkUNRJR2Sau_L0ou-dN1plaIysd0UYjWytfNzLKLYwjuh8FIQT8Px8kog
+Message-ID: <CAEf4BzY5tQYSnn4Jwg+cwypnwG6BLLOu6e6=f938d33eSCDObg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 1/3] perf: Add rctx in perf_callchain_entry
+To: Tao Chen <chen.dylane@linux.dev>
+Cc: Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com, acme@kernel.org, 
+	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
+	kan.liang@linux.intel.com, song@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 27, 2026 at 5:11=E2=80=AFPM Blake Jones <blakejones@google.com>=
- wrote:
+On Wed, Jan 28, 2026 at 8:53=E2=80=AFAM Tao Chen <chen.dylane@linux.dev> wr=
+ote:
 >
-> Hi Andrii,
+> =E5=9C=A8 2026/1/28 16:59, Peter Zijlstra =E5=86=99=E9=81=93:
+> > On Mon, Jan 26, 2026 at 03:43:29PM +0800, Tao Chen wrote:
+> >> Record rctx inside the perf_callchain_entry itself, when callers of
+> >> get_callchain_entry no longer care about the assignment of rctx, and
+> >> will be used in the next patch.
+> >
+> > Sorry, what?
+> >
+> > The recursion context is very much about the caller, and very much not
+> > about the data. This just doesn't make sense.
 >
-> > > On Mon, 26 Jan 2026 16:02:10 -0800
-> > > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> > > > So what we will need from kernel's sframe support side is just an
-> > > > internal API to get stack trace, similar to get_perf_callchain(). B=
-ut
-> > > > it will be guaranteed to be called in a nice task context. No NMI, =
-no
-> > > > irq disabled, no nothing.
-> > > >
-> > > > This shouldn't be a problem, right?
->
-> I raised this concern with Steve last week, in the context of off-CPU
-> profiling (e.g. https://www.brendangregg.com/offcpuanalysis.html). I
-> maintain a BPF-based off-CPU profiler that runs out of the
-> sched_switch tracepoint. It acquires both user and kernel stack traces
-> via bpf_get_stackid(), stores their stack trace IDs in task-local
-> storage until that task is rescheduled, and then uses those IDs as
-> parts of a key into another BPF map to store the off-CPU data.
->
-> The context switch handler is of course not a safe place to block or
-> page fault, so it wouldn't be able to acquire a synchronous stack
-> trace anymore. (It's possible that my profiler is missing some user
-> stack frames today due to some text being paged out, but presumably
-> paged-out text isn't too performance-relevant anyway.)
->
-> So, as far as I can tell, my profiler would need to hook into this new
-> task_work framework to acquire the user stack trace before storing the
-> results into the final BPF map. But a profiled thread might block
-> several times in the kernel before returning to userland - I saw one
-> block 53 times, just looking through one day's profiling data - and I
-> don't see a straightforward way to store data about an unbounded
-> number of blocking events in task-local storage until the thread can
-> wait for a user stack trace.
->
+> Well, Andrii, it seems we have to go back to the original way.
 
-I'm not quite clear on why blocking 53 times in the kernel before
-returning to user space matters for capturing user space stack trace?
-Given we haven't returned to user space, its stack trace will remain
-the same. You'll need to schedule task_work (see
-bpf_task_work_schedule_resume()) just once and capture stack trace
-just once. How you join that asynchronously (from the perspective of
-the point where you called bpf_task_work_schedule_resume()) captured
-stack traces will be up to you. You can send it through ringbuf, or
-store in some map, or whatever makes most sense for how exactly you
-structured your BPF logic.
+Huh, why? Peter is confused by your wording, he didn't say that what
+you are doing is broken.
 
-This, of course, is not going to be as convenient as synchronous
-stackmap approach you are using with bpf_get_stackid() (or, similarly,
-bpf_get_stack() that doesn't rely on BPF map, but is still
-synchronous), but there is no way to avoid complications due to
-asynchronous nature of all of this new SFrame-based stack trace
-capture.
+The point is to couple rctx with the exact perf_callchain_entry
+returned to the caller in that recursion context. There is no
+contradiction.
 
+It's purely about simplifying the interface. While previously the
+caller would have to juggle perf_callchain_entry and rctx separately
+(but still ensure that entry and rctx do match each other when calling
+put_callchain_entry), now it's more convenient and less error-prone
+because returned entry will record rctx it was retrieved with.
 
-> Do you have advice for how I could handle this under your new proposal?
+That perf_callchain_entry should not be reused by anyone else between
+successful get_callchain_entry and put_callchain_entry, so there is no
+problem here.
+
 >
-> Blake
+> --
+> Best Regards
+> Tao Chen
