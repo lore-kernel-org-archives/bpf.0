@@ -1,251 +1,166 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59151328257
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 20:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769631722; cv=none; b=TavAs1ioC7hZl0rLUCI41rUVc/Zp/qKKj9FO6g6/t1cZ3feqqdmpGDSPQDQ62eYo86x0DnGN6v8z7IlqBnLjRESbOS++j9ifeLZtsI01LTVROy62lJ9or0G0KKSSFx3+yVhdVn87wKL6udKwfBHUnfpiUJsIrgO3UfWRGDEEmjA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769631722; c=relaxed/simple;
-	bh=vSINIHv0wXmSOsXcQbjzgCh5vZoXfWzVsCZuQlEilAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N18JBYc74BtjggiMz79rmSEZ6LZjhOha2oIGcKfZFNnBug7UV1atT7cz5I+c6UHn5soCzt9E+H6am4HVp6EIieMNToRnayH6wbupYAheqjbDTzP8nUon7KdmjoLi/QpacZ3btXGXtpNzmnc9HnhIhrkMrH0fgsV7vwQcLP81MtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZGPVj7rS; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B45237418D
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 20:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769632328; cv=pass; b=pXsfw3Px0vceu5wzjM9NLhUgIL+Jdd30AqXm3YkCFMVoJ78CEUbcuefzQJ1jMOKJrD2Eta5yMI2i1UIKjKl6DzUUJCuzi28Th58hr8ApVq7Xb1yl2FDOQVTVyipV7qdpuxRNxjYW1HOfvlohHXQFwgrl7kmnLOMgNZk8HBKtqLA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769632328; c=relaxed/simple;
+	bh=808hQIDw8HXuF8zg34i2s1I0VMLdN4AzGhcnwG8lblQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Yl2QZZTzk0/WFG9nnpJssFPRZa8V3SPfHWI1S2z/50SA9dpEPhWkwRaPBLKAOMB2FPxJTkunpD3xsDuiTdbd5h9fEKifKhrr/MLrcr8Qu8kBN/Tti4BFGeh3blaT4ZyYfLfu/RZBiUstaIpmMLGx6JSSqZElr5Vz7BZpVziiTjI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUTgv8V3; arc=pass smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZGPVj7rS"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b8845cb5862so37842066b.3
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 12:22:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUTgv8V3"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-43284ed32a0so150418f8f.3
+        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 12:32:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769632325; cv=none;
+        d=google.com; s=arc-20240605;
+        b=f5zNLx1wWZFTJybxN6JGyWXyP8Xxe2ySM6RFvYCOqXH0uvjzjJOxf4B0G4W+Jcls5x
+         JdEm3jSGAWYp8rKdw+pCu3L/dOx/ceDDkSjUtRka/zcF3nB4eum12bOD0UF1VDW3ny7r
+         9/EOjECupbqCaQT0FfKPOSat+0Z+7h/YBQXn7vyOIYS3tVK3/9Y1WAvrQLX/p+7ij3Tu
+         FMm/FVZlq3L+R63Fq4NDz3pXVGyC+x3HEa2KJSKQTOSQNYL9gcLj195ZSsgxAclojAlJ
+         zyHIKDRNz7G6GzzYkKybZqFxncLiD8FszpUiVbxEBfOuYdpMOCaemt9B845TxFsonTEK
+         G4EQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=07rf/uTuwqt/mx7z+xU8g3Kvog0c3ZDUc5m6W+iA6DE=;
+        fh=z/MqJcPtlJEHbfUbPIEB2YZvPHdw8fKU8dtSobkgSjs=;
+        b=Gi1RH/IgyWbA8yBfqUazNd0Md1+Y4y067pN/mdzuO5kkeWWEwocFlse0687N2DnL6m
+         62lu5TqAeWNHpgLBy4057F0BoJt6l2NYBQ/7dBYVyNJ8Y2RoZ/VHBCQrSrHgTsaqIlsw
+         g5Hq5RoHDCDSVzhvHFp5ITJ96ewpOcFPjeSvStvKkV/2a5Jktwk+orA/2YCH59jvIM0Z
+         Wf2VWN6jRBifjRU0Z75CftgBKAh02EbxoqQP9SYHPlp/Yj2aFk8pfi3OA5ZlPtB3x+Z5
+         +8ZMgjPqc6Z3clrcYnVelaPE62edyCM6+25YgZzZMms3j/x5Eg0GBxda4704zB5r7hzz
+         6EyA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769631719; x=1770236519; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MOneaQwgm5r1vQWLDH+rGl4A5aPHuLzm9ueYQTD0ies=;
-        b=ZGPVj7rSaaKSOU4KX681gKn2DGrFUSIw59BuY0qTJyxd6ms3U2YzsGeA3PGxVkVqGY
-         wJkBio2aDdZKi1+eihg1wgtoMqvmxCGmmR+t1Zd64R9nKol5jeXlsSSkGYOEUlEooUuw
-         VYqPclpMtw2wiTcFDWAqicK5n4xvhzrzzKMqWW4k8wy8rEqHKkgAkhL9iXZk0QJ0XH/M
-         JPjCmmAV+PfVq/SSdSvSmc9IvJ1P//caw6sfgRE5ENdAK6E7iHjvTc3DAlc3qkek0lY5
-         YrFv1AcgyaKziRYEe8RjZL+NFtQ2Xy+bBkZa1VdaRAM+pesj0OWgWhWVwzMFefVNEeJi
-         dWDQ==
+        d=gmail.com; s=20230601; t=1769632325; x=1770237125; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=07rf/uTuwqt/mx7z+xU8g3Kvog0c3ZDUc5m6W+iA6DE=;
+        b=MUTgv8V3qcslf2OJAwqMbqAa5Wc0GJYvnYwhfsYuSMreQAuFL1wkJElStmcg6+JqWW
+         ZjJbhceLwllEP89QvD2JTFcvQyh0H1kNEp8dMUnZBouQoYkGac2l9RV1eyNOBQYWMRUw
+         8V8mfsk6A7KTkN1dULpd0cnzMAF6M7xNkm+8nywZdBXlqfCsShOWCJym70VPz7EliIwA
+         rYxEJNvGt2tlyrM+KIzQHLdVZ3wsZtRQI9nI8qVLhiWENd1tFlPHZ77Re6/jMWYjTzlc
+         i65MrWoWBhvlHqNhsE6Fup6vgaQO4IU1eB1a8L7KPg6nxWtdMnEA3JnnjcRMoe30h/BT
+         /0YA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769631719; x=1770236519;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MOneaQwgm5r1vQWLDH+rGl4A5aPHuLzm9ueYQTD0ies=;
-        b=bD2RBOUs/63Mdob6rFFQjtI/JDRpwjfVU6bI48EaJVYpGBES+5oG61VaRWPB9b0ffS
-         dwUEImHfFUx3SPiuXdqdoGNxxaiZSz2kwFKCz9VaZl+9tOBJfmfcMUQYCmrlCM66Eh9F
-         u6xIsT6K/n0o8Cx9jXOD/kZXe6yA9tYctOSdPHRWprBn3UQ5ywblCInzxhm9EKpjHRXc
-         RZFK7k5qzfDhYZZevylu6WmkymBbl6F3Irz+qrgkl2JSnSoSblPbtk4iP8aL5BGUezxm
-         v0kj7hMJcJLOj0t1qBiQ354YKghIwiG85TnOJGcy/NNOUlJ/eDTmP5aTEwA9oBSrUHqL
-         j8dw==
-X-Gm-Message-State: AOJu0YxMS1QCTNwbTNFBA2MPq9GVAQAxgdNXpDzsTGezvspvRgiWQ18+
-	nGxsfjpZO02B5yRtsPQFxUaXAXa6g80PxmZ8SvFppBtD3aGtwHwDElx8J+ALn4ekug==
-X-Gm-Gg: AZuq6aKiGQlEe0t+w0fKI0q7w6ieou41McTzpqT17/uuOxccnXIo6/WGmFxGM9xhFrv
-	yYysRToqY4Qp4cxXbBct52yyTy8uRkTRI07AI1vNtZQuZ1wrRxjMCjic1OaQayq78tI39jSl3Xq
-	ckW+WpWvxGTipFC5MSifNz1mWbuoz40QZ1bMv7xWU8mAZPU17U9YkbYy0XFfdhKyE2jKYRVKPKq
-	oewDD4BHzEaCop6kzVHN43fVcK+jcUTx8y/UkUgzQ9GpHT6lAKHytsC48Rk2Oj9xmhyTDEvOTOd
-	iCfThIdo54coYeshVl4bcvDoXJTGcj6Tkp1IhJNS8rlgLK95o1napMA/PvQ2wfKZmD834tQ9K0j
-	XanpHRhd16B8FxR6NsTCyVSywizbkGPTXzm9uo003f9AWvyAIcZyvOBFqQEgrDW4N669DHM9ps0
-	jDW6TwJM73qp7ft1Yg6xy6i3cb+DcXvC9RNduSatNs07q3wU0I1kCzMbMDf0jlTQ==
-X-Received: by 2002:a17:907:7f8c:b0:b86:f558:ecc0 with SMTP id a640c23a62f3a-b8dab1c8bc7mr433016666b.29.1769631718213;
-        Wed, 28 Jan 2026 12:21:58 -0800 (PST)
-Received: from google.com (93.50.90.34.bc.googleusercontent.com. [34.90.50.93])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8dbef86deesm171812666b.3.2026.01.28.12.21.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 12:21:57 -0800 (PST)
-Date: Wed, 28 Jan 2026 20:21:54 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: bpf@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, Suren Baghdasaryan <surenb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH bpf-next v3 09/17] mm: introduce bpf_out_of_memory() BPF
- kfunc
-Message-ID: <aXpv4r_3L0UWzAQn@google.com>
-References: <20260127024421.494929-1-roman.gushchin@linux.dev>
- <20260127024421.494929-10-roman.gushchin@linux.dev>
+        d=1e100.net; s=20230601; t=1769632325; x=1770237125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=07rf/uTuwqt/mx7z+xU8g3Kvog0c3ZDUc5m6W+iA6DE=;
+        b=juHgLl/ndJ9dwBO/yOGwVXK1o/K0ei3mtqgakDLI0YQBBwnvZH4f+9NlC5p2ugyzMO
+         IU24BzHlsgFiEQUTng1V4nHIbAm057tCgCSTL/A+KBn67Q6Y8c+ZQ4Q+7EEuq05sQvGD
+         tcUx2HTPcsNMqpPEsnb/23UHm8+ap5ngCfifRnV9djIyf8LZRsxPJv31dcnb6cJVLCvc
+         qGwA0h1+wVb9/SLBkKeWHBEBhqu6ApZTSSSBRzB5+IJ3VBszRF7xF8g9dA/eQimnHPT7
+         HL74t2A/vNBOzvAHOqgrge2k9ZPYc/UF+hLRPIWGoFtzAFdP2ki1B4Yd8yVvyeKax2qu
+         bMGg==
+X-Forwarded-Encrypted: i=1; AJvYcCXzTzM+F/qfDHVgQNH8iY2jk8IKTzCPIWIv02kNUPZFi1U3LeIQn2BkuIJYZW2ny+ZyId0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeJNjyWgarsyj4a8muDvgTezkhiiOzjChA/ctAKEsCwTr3wwIZ
+	bhuTuvtq6l9nk3sJwLdiGh8nshEMlL9XqfE0g6p5WIiItVs9CodyVmJupzCA90PixHjNZv1E2YI
+	W0GOpdVgzcxUnuWQiWli+jaQDDi1P+qQ=
+X-Gm-Gg: AZuq6aIaz47y/zJiy8EujVFjMnzEdv2FwHvjX0o9kl0DID+p4LPTEwoNHWsrua8mS+K
+	PpCHHhBWTUhS7oaqSmFfgW7UGL3im3KDjLOBKMtcF09gMYz48tdX8262bzbB1VcJgmJm/l59NC+
+	j3l0khx7uVsqn4OeOJGkujZ/bszoX7tZCXAcLlp+o7AvWD8Y0XIev9FsF5FyOP76EyMAm7h83dd
+	5A2Vt3mh12uJFiMJb/tiS1VmkzuvXXfnrwFQmfK3dP7gu5sHVriOXlA+4YlEa42fnshB3BN5dWN
+	6kXgtWiOEeL36vBFr5mpCjy4ldNjwA2ipQdkj2augxGQj8U6LDpg9I7LBk/htgOjLO5MG8wNguA
+	8uUCCEcN1siNk+w==
+X-Received: by 2002:a05:6000:2404:b0:435:9653:e154 with SMTP id
+ ffacd0b85a97d-435dd074b2bmr9812358f8f.27.1769632325304; Wed, 28 Jan 2026
+ 12:32:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260127024421.494929-10-roman.gushchin@linux.dev>
+References: <20260128150112.8873-2-leon.hwang@linux.dev> <e64c4137e7f262e6fdab272e8ee44c8a129a36eb6d0186914375d6ba20d88474@mail.kernel.org>
+ <65231eeb-1f00-4af2-9234-a290ea3f6585@meta.com> <a10afa70-29b7-48ab-b241-8b0f602abe2f@linux.dev>
+ <CAADnVQJV=e2VgQzkpsUQwexhaVZMs7uXHCe1Fa6VwbVNUMPghA@mail.gmail.com> <7dbcc5d5-476b-46e5-9e4b-b260d24a51a1@linux.dev>
+In-Reply-To: <7dbcc5d5-476b-46e5-9e4b-b260d24a51a1@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 28 Jan 2026 12:31:54 -0800
+X-Gm-Features: AZwV_QieHaFto3G-1e8bEUtCESnVn4_ZZwARjehTdXUH1XxE0kv7X3Eh3iZgKp8
+Message-ID: <CAADnVQKdZo4Qm0z-qedkfQHZhq+tW4MuRSzM5-zAGYX-ZQTiaQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Add bpf_arch_supports_fsession()
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Chris Mason <clm@meta.com>, bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Puranjay Mohan <puranjay@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Menglong Dong <menglong8.dong@gmail.com>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com, 
+	Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 26, 2026 at 06:44:12PM -0800, Roman Gushchin wrote:
-> Introduce bpf_out_of_memory() bpf kfunc, which allows to declare
-> an out of memory events and trigger the corresponding kernel OOM
-> handling mechanism.
-> 
-> It takes a trusted memcg pointer (or NULL for system-wide OOMs)
-> as an argument, as well as the page order.
-> 
-> If the BPF_OOM_FLAGS_WAIT_ON_OOM_LOCK flag is not set, only one OOM
-> can be declared and handled in the system at once, so if the function
-> is called in parallel to another OOM handling, it bails out with -EBUSY.
-> This mode is suited for global OOM's: any concurrent OOMs will likely
-> do the job and release some memory. In a blocking mode (which is
-> suited for memcg OOMs) the execution will wait on the oom_lock mutex.
-> 
-> The function is declared as sleepable. It guarantees that it won't
-> be called from an atomic context. It's required by the OOM handling
-> code, which shouldn't be called from a non-blocking context.
-> 
-> Handling of a memcg OOM almost always requires taking of the
-> css_set_lock spinlock. The fact that bpf_out_of_memory() is sleepable
-> also guarantees that it can't be called with acquired css_set_lock,
-> so the kernel can't deadlock on it.
-> 
-> To avoid deadlocks on the oom lock, the function is filtered out for
-> bpf oom struct ops programs and all tracing programs.
-> 
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> ---
->  include/linux/oom.h |  5 +++
->  mm/oom_kill.c       | 85 +++++++++++++++++++++++++++++++++++++++++++--
->  2 files changed, 88 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/oom.h b/include/linux/oom.h
-> index c2dce336bcb4..851dba9287b5 100644
-> --- a/include/linux/oom.h
-> +++ b/include/linux/oom.h
-> @@ -21,6 +21,11 @@ enum oom_constraint {
->  	CONSTRAINT_MEMCG,
->  };
->  
-> +enum bpf_oom_flags {
-> +	BPF_OOM_FLAGS_WAIT_ON_OOM_LOCK = 1 << 0,
-> +	BPF_OOM_FLAGS_LAST = 1 << 1,
-> +};
-> +
->  /*
->   * Details of the page allocation that triggered the oom killer that are used to
->   * determine what should be killed.
-> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> index 09897597907f..8f63a370b8f5 100644
-> --- a/mm/oom_kill.c
-> +++ b/mm/oom_kill.c
-> @@ -1334,6 +1334,53 @@ __bpf_kfunc int bpf_oom_kill_process(struct oom_control *oc,
->  	return 0;
->  }
->  
-> +/**
-> + * bpf_out_of_memory - declare Out Of Memory state and invoke OOM killer
-> + * @memcg__nullable: memcg or NULL for system-wide OOMs
-> + * @order: order of page which wasn't allocated
-> + * @flags: flags
-> + *
-> + * Declares the Out Of Memory state and invokes the OOM killer.
-> + *
-> + * OOM handlers are synchronized using the oom_lock mutex. If wait_on_oom_lock
-> + * is true, the function will wait on it. Otherwise it bails out with -EBUSY
-> + * if oom_lock is contended.
-> + *
-> + * Generally it's advised to pass wait_on_oom_lock=false for global OOMs
-> + * and wait_on_oom_lock=true for memcg-scoped OOMs.
-> + *
-> + * Returns 1 if the forward progress was achieved and some memory was freed.
-> + * Returns a negative value if an error occurred.
-> + */
-> +__bpf_kfunc int bpf_out_of_memory(struct mem_cgroup *memcg__nullable,
-> +				  int order, u64 flags)
-> +{
-> +	struct oom_control oc = {
-> +		.memcg = memcg__nullable,
-> +		.gfp_mask = GFP_KERNEL,
-> +		.order = order,
-> +	};
-> +	int ret;
-> +
-> +	if (flags & ~(BPF_OOM_FLAGS_LAST - 1))
-> +		return -EINVAL;
-> +
-> +	if (oc.order < 0 || oc.order > MAX_PAGE_ORDER)
-> +		return -EINVAL;
-> +
-> +	if (flags & BPF_OOM_FLAGS_WAIT_ON_OOM_LOCK) {
-> +		ret = mutex_lock_killable(&oom_lock);
+On Wed, Jan 28, 2026 at 11:09=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux=
+.dev> wrote:
+>
+> On 1/28/26 10:49 AM, Alexei Starovoitov wrote:
+> > On Wed, Jan 28, 2026 at 9:34=E2=80=AFAM Ihor Solodrai <ihor.solodrai@li=
+nux.dev> wrote:
+> >>
+> >> On 1/28/26 7:35 AM, Chris Mason wrote:
+> >>>
+> >>>
+> >>> On 1/28/26 10:26 AM, bot+bpf-ci@kernel.org wrote:
+> >>>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_com=
+p.c
+> >>>>> index 5a075e06cf..070ba80e39 100644
+> >>>>> --- a/arch/x86/net/bpf_jit_comp.c
+> >>>>> +++ b/arch/x86/net/bpf_jit_comp.c
+> >>>>> @@ -4112,3 +4112,8 @@ bool bpf_jit_supports_timed_may_goto(void)
+> >>>>>  {
+> >>>>>     return true;
+> >>>>>  }
+> >>>>> +
+> >>>>> +bool bpf_jit_supports_fsession(void)
+> >>>>        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+> >>>> This is the actual function name in the code.
+> >>>
+> >>> Ihor, I think the script parsing review-inline.txt chopped off the
+> >>> part of the review where AI was complaining about the commit message?
+> >>
+> >> This is the email body pre-processing in KPD, yes.
+> >>
+> >> At some point we decided to remove the commit message before sending
+> >> an email, but now that AI reviews the messages too, I think we should
+> >> just send the generated review-inline.txt as is.
+> >>
+> >> Alexei, wdyt?
+> >
+> > I think KPD is only supposed to trim the header until 'diff ..' line.
+> > In this case there is no 'diff', so I'm not sure why it trimmed so much=
+.
+>
+> There is. Here is the PR comment with the review:
+> https://github.com/kernel-patches/bpf/pull/10868#issuecomment-3811930805
+>
+> KPD trimmed everything before the first "> diff" occurrence, as expected.
+>
+> I'll try to fix this up in KPD. We should probably search for the first
+> line starting with "> " (a quote start) to trim the header correctly.
+>
+> Alternatively, AI can be prompted to avoid generating the header in
+> review-inline.txt, but that's probably less reliable. And maybe it is
+> useful for local runs, idk.
 
-If contended and we end up waiting here, some forward progress could
-have been made in the interim. Enough such that this pending OOM event
-initiated by the call into bpf_out_of_memory() may no longer even be
-warranted. What do you think about adding an escape hatch here, which
-could simply be in the form of a user-defined function callback?
+I see. let's then strip the first 4 lines ?
+(commit, author, subj) ?
 
-> +		if (ret)
-> +			return ret;
-> +	} else if (!mutex_trylock(&oom_lock))
-> +		return -EBUSY;
-> +
-> +	ret = out_of_memory(&oc);
-> +
-> +	mutex_unlock(&oom_lock);
-> +	return ret;
-> +}
-> +
->  __bpf_kfunc_end_defs();
->  
->  BTF_KFUNCS_START(bpf_oom_kfuncs)
-> @@ -1356,14 +1403,48 @@ static const struct btf_kfunc_id_set bpf_oom_kfunc_set = {
->  	.filter         = bpf_oom_kfunc_filter,
->  };
->  
-> +BTF_KFUNCS_START(bpf_declare_oom_kfuncs)
-> +BTF_ID_FLAGS(func, bpf_out_of_memory, KF_SLEEPABLE)
-> +BTF_KFUNCS_END(bpf_declare_oom_kfuncs)
-> +
-> +static int bpf_declare_oom_kfunc_filter(const struct bpf_prog *prog, u32 kfunc_id)
-> +{
-> +	if (!btf_id_set8_contains(&bpf_declare_oom_kfuncs, kfunc_id))
-> +		return 0;
-> +
-> +	if (prog->type == BPF_PROG_TYPE_STRUCT_OPS &&
-> +	    prog->aux->attach_btf_id == bpf_oom_ops_ids[0])
-> +		return -EACCES;
-> +
-> +	if (prog->type == BPF_PROG_TYPE_TRACING)
-> +		return -EACCES;
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct btf_kfunc_id_set bpf_declare_oom_kfunc_set = {
-> +	.owner          = THIS_MODULE,
-> +	.set            = &bpf_declare_oom_kfuncs,
-> +	.filter         = bpf_declare_oom_kfunc_filter,
-> +};
-> +
->  static int __init bpf_oom_init(void)
->  {
->  	int err;
->  
->  	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
->  					&bpf_oom_kfunc_set);
-> -	if (err)
-> -		pr_warn("error while registering bpf oom kfuncs: %d", err);
-> +	if (err) {
-> +		pr_warn("error while registering struct_ops bpf oom kfuncs: %d", err);
-> +		return err;
-> +	}
-> +
-> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
-> +					&bpf_declare_oom_kfunc_set);
-> +	if (err) {
-> +		pr_warn("error while registering unspec bpf oom kfuncs: %d", err);
-> +		return err;
-> +	}
->  
->  	return err;
->  }
-> -- 
-> 2.52.0
-> 
+tbh this one was unusual. If it repeats then yeah '> diff' is a wrong marke=
+r.
