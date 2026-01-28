@@ -1,93 +1,93 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179182BB13
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 02:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B690A1CAA6C
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 02:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769567719; cv=pass; b=U2NsRSJeNSP8SaWbsOkRkE8cn7DGoSAQcarBN2TARl//2dg0ZVNxvvh36yb1ev9oEweH6OnNBTPiQDeeM8iG6nB+uuSLas+FQ2DzbQv+QApnKQ6t6TfH05k8TNwme0JGvpvHzzCuaRIHWaY46V2yjm2MyGfEmmlLIwvCbIO6lkM=
+	t=1769567777; cv=pass; b=fC0L6jbaOiiM75o7rPVlX0WaBDemvpyZMx0U0XEi4d7zITLe/530pen46VFSoGxoKVvGA8Cw1s04qJcEMvFOwvR2ISFAJjKRWe6d/MkTP/1qBC6AjBlhaWJy7Q0NrHfj9B7w3Tq69zwns7Tg529K2bt8imPHmRiAi32XRf15bo0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769567719; c=relaxed/simple;
-	bh=uQfFX2WgXngo34tR0wcAgYlOAZ6WxU69A6EJT+fTGKw=;
+	s=arc-20240116; t=1769567777; c=relaxed/simple;
+	bh=hUus9C0267LZStjqLKtTofMulhJeWMqsPZPiOivDLIU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OLcv8am4wPvdEkJVtJnKL63rTKvj6nwQA0rwyEmGRMbuO+AVKFKNpLXXZSsXIqFxqk3Becv/sKD3Ka3k7p44b3AwJ8aXNqfKXBHM2zzEBOxgW4jATiutKXY3wnP4h5vRyR8sZRXbyNoftISSK2qRGhDMrA9y1Q4eRLRFYvfFJVs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L0BzCqKT; arc=pass smtp.client-ip=209.85.221.42
+	 To:Cc:Content-Type; b=k8sXmURO4Enm0+Uf7EU9xyLBXh/NECJF7DJDOXObIwCEIkaRGcFc2Uua+uTWeu+AOS9wLsX3x2ZGFSuOf6DkURdcQjstH8dxveBvphSgiMiYjx+lVLjooiEUF9/s3KWnh/B3yx6KCsUOFIkVu0nulHnABXPw8fC5lHdyoXIJNLc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LvlBS7FW; arc=pass smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L0BzCqKT"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-42fbc305552so5678444f8f.0
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:35:17 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769567716; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LvlBS7FW"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-4359228b7c6so4149767f8f.2
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:36:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769567774; cv=none;
         d=google.com; s=arc-20240605;
-        b=jiZbFALfyu0TaKdA2f5QgE32gAvx717xpYNBmmluqjHc9lVD4C3TbNbG3esogt/VmE
-         FqRYIQkEkhKFKM8dH6tWUuUQIBJOSu9FlFW3PG/cQbdtSeRoCHR2NWNDYW9gOQPGWNZX
-         uMC/mW/mn7jCt2anbBTPi4+E4Rv0k6So1OvbCdh4VVd+XpLjS/SHEVeo8kLTUVTmboN4
-         rr8wiUQgvhbQJtM8VY98yFDtIacXInTam5K11tRS+JAuPRQy+kiEQWtrRxqC3P6XVLjB
-         NP6BSg8jKfDjdOecTvVt79kEeMwlne56Z2ItAezVsLhzVlQOkT3MBPUxzVKtPJg/5urf
-         jOZA==
+        b=f38VxmybUrbE/aqFCd1SN1N8sx94tkz8n21+TAvehs6DAUSyjeKhh7taHECSnatTZI
+         D1iMRlGf1Udl9rBmxUUHGVBppGHE+pScNpaYfPG21qDeXOvdsjC5hPyE/tfBvShsLz5c
+         uqAAXdklcUbXz5yvcB0Uk/d5Z6Kroh44WfKxEJFhUUWcK3PMqMbWtefuxqTuU3qYA/bu
+         9VwITVUccp/pgMpL6x3xUYP3+Eskn/+1G5vpbwjFPQlHZny81839NnCDIEPHyRdYLfI2
+         0/hrpW66CNaUlIfhA9qRm1o2XVPN7ytjPmE6M7jZw0JQjWss+BYJga/VSYd+v5tIWNuI
+         lHaw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=VxijQVuetwZXKnziNFUfprZSmHJi9803to6KY+wGTEA=;
+        bh=UM5XhBWmfUqpAQYNQqZNI0zZryhWS/7N2GjKKzGnDKY=;
         fh=07919j3mEGtUJ+mScCnPzO16vurW6cKq9ZaYr312Wzs=;
-        b=N2J1+gVFlUp5nPOHxCRQgKJvsbiO4YKluQEmcW8SzosvC/8Xr/htf5Uwdd5of2bjF/
-         RwKfMHZZ3L/PytnIYqUn/j/XxmImGbQqFtR5eLty+or6n3VBlJQ4Juk60BrK6FEncNA+
-         XUtkhoqD1K8I+kOZwtwdIv8LZPwsoYUAgumGhUTyGjcwGmxSQcspiTTDw824fmqEo5RT
-         1XyoO5JzIZ3SulZg/8xqklQhQuEZjE4jBx/rDAAu7nIGzVFc04qpePTiCsg+dcjRMSO/
-         3r8++nwnqj0ZrGjNul38Hp4LEMmfgLJAUVsH82Dntom8b5LsknmmrzGlj6UT//bUGlB0
-         UheA==;
+        b=N65jEVCHD/8V+zQGcdJ4QO/pyXTKAqM7g6mrU7s2o/q5NYKUSW2wT1tOP9447MekQF
+         R2sJJ+LGC2Zaj4ux1PqHIB8qP9XwfyO9lU8GLsEMSF8Jt0a8MijGQ/v8ZU+zyPf5RMjB
+         qASe3NGfQnbpDfEN7mgOxg1EQJWmMynriusosYIwRhr4BZ0SeUPUxrL4WAragBtI/kdg
+         yax1Q62etivboyENBjMkh93nPJKMbTUTCItNEsyJ7aW0XXBby75dXb9Xokme+DDiPLNF
+         mExHZQ2F52VFCxc24qgr3C2Gafllplhg3KZZvkMIHt5meimDGa/0L31DTf+XOZpXiS1p
+         t9yQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769567716; x=1770172516; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769567774; x=1770172574; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VxijQVuetwZXKnziNFUfprZSmHJi9803to6KY+wGTEA=;
-        b=L0BzCqKTy6YlAHU6X+2D7QHcck2LyiW2aqOowoJvnj8LwDhcZoBcN3X10CbAbygh44
-         pFuWgA5/9gpMJqJEDZ4LLW7ODk1ov6R3FQmwavR9hNI3PugDtA0nfjE9MYV3IVWKyl8c
-         Mb3Fb5qJTKcwzcuFYUqGzf3QmAcXXMyOE7SXOX84J8mylwTcMCveUW/DebNd+RISf2B9
-         cJwVL07kDbEgeqt7yj5s4k8OvnZUmJC1FyLiwjFMWxsELXekaRO/4yUflCDwle8maXWj
-         dOaT90Qom1EciAErCNvnzw/xAiwxq9hY0Ev3OEFXkXbcOyLeQA7b4fotJJTaf0mqBy0n
-         U+yg==
+        bh=UM5XhBWmfUqpAQYNQqZNI0zZryhWS/7N2GjKKzGnDKY=;
+        b=LvlBS7FWwQ1Hc7kKy4NuhzizhQcVtBder8n9T4rIg4T0yFTEFv/aP5p8VWkaim8/uK
+         dTZZg0vHsb5PD5SwC+gDOVEcIL9Lz4wnQwgEPFUyNSMO8vnV1dtVIAdPwjl4qhif0xB8
+         CY+H3Ctm69tHQxpmYiYhtAUbm5z5HORcQ/t1HXMlOHEcLT18m6PszoCVVZaDH3OS+bId
+         wM9Nm4CvKkY7FipXA1yJLeIWZtpLm+LcY6H0WGmBHIIe7aqrSmGWDo3zBgDs8jNrnyam
+         l0TxKNAMmAOKj1TA/REe9/G0PAVEmkjmTTamX4CS/dGUS9E3DtLWcgxwg22GmrhCfrWn
+         B35g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769567716; x=1770172516;
+        d=1e100.net; s=20230601; t=1769567774; x=1770172574;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=VxijQVuetwZXKnziNFUfprZSmHJi9803to6KY+wGTEA=;
-        b=nsh4vrKPpuJs4JEH91PKJQa4uNQTvcSTWWeWORvujAaHiSIxHX/G/B8zXhnv/bWRfV
-         6G77yA1BynvE071l7lSnakbElIxhSECC/A6RcE1XBRV+ozqu4irWY12WRN+uG42RJh5p
-         7T4UrtoCzvwVigM2DFwAXCBFlF3Fa02vNw62SQHUyAr7H3fYRz1j11i6HEd4iA8H4qT1
-         +zQibRWg7z7ZEi941TFYemQyNqLeBGoU6qmQfbCVM93NPqnW5gPJmhAbHyWZXz8MB6HT
-         6ykizb8iH9vfx77v1TYZ609WW9Va34+irIEmWd3kb0h/YB13C+l4TBjhw1tvsejgg36Q
-         Gk3w==
-X-Gm-Message-State: AOJu0YyenaX0QW/aSPsArQT1V7lwenmnxX+JOWydPjTQatqjmf6xwr3n
-	tllddKSwmksYQc92YYchSpnwYckLW7rI3g3DRQ7t74Eb/ZnoH1eRpHI5zvUX6e3zBmP5schK7B3
-	4BLSE9M9qdcgt3WFCVCb99GW86r3xMJA=
-X-Gm-Gg: AZuq6aK4NrxQCEb/18Cl94Iq1XDDjuJmFnpoRN6KXiQcVntFFY1B6baabFoeiygt7wR
-	NvGJosCNN4b3QLYOV9ZZ7iwyHm+43QVa7HKoqyepcDaXmcF9gOQ6ae48CHcmsciHKsDCyfTKQ4E
-	kxI9m9tgw3ZiBt8bY0xCLXT5c9Mc5WGgJGgpf00/Rhph2ulQPlSbof8uFLEwa4gkggmgWHf4V9S
-	Rj2Xa9li844oqUmbtw+mb3tSA9eAs6t67B1sNvlS+9VaY4XF71ORoG6nYGS07OBpBhBiLAWD+ed
-	QC1gNtSDmn4rbihUw3VDfc4Gc4btIl7toOH//4DLiCjlqEL8wEkP6W2R+V/HbVQsYddJSF5XlZs
-	hXSJmpQpJO8uzRg==
-X-Received: by 2002:a5d:5d0a:0:b0:431:369:e7b with SMTP id ffacd0b85a97d-435dd032bc5mr4639515f8f.18.1769567716055;
- Tue, 27 Jan 2026 18:35:16 -0800 (PST)
+        bh=UM5XhBWmfUqpAQYNQqZNI0zZryhWS/7N2GjKKzGnDKY=;
+        b=fC03irAxlzmfTeG+Fcwz0OKF0dRbXYZFr1leuKhhov+Cw4Ka5WBNKh0xLNbIvNrrMh
+         nqQcHEl1hboDuEWv+qIb4QtSaBdHINuEx74IlihEMQErFqJe0/cJGL93lQXq7ezw0kMX
+         v6laH/fmJY+MfypOWEXy3qPwA1OjbzukPN6ZbMlLfBTWDKpmOUYumufJiWmwjJZ0GPNi
+         0LJHZ3oBQSRMqyCUfld40bO3958xszAj/7Yz3u07B9T+2EFtzt4U/IKHeWAVw3PFtvDH
+         qNkpl6PKRpT9JBZpqeqeUrrKJp7Znah41V+jY7sHcouHQc818m58OFY9vfxV70j3r/7X
+         CacQ==
+X-Gm-Message-State: AOJu0YzoJMWRf7qJGABgre1J/jm3714dhVEMNp6I96uQ0xWp8ZJbLcAd
+	A9uRwYuGq0s9j/yXu6jTeV97sJzKr1SvbCEYlNzwPbWA+7mxNOjgK2XHvDhzvpHwDJDvTLF2Oun
+	LwtuhC7rupl2SEGFArDgcSbxdU5J8QFM=
+X-Gm-Gg: AZuq6aLE/+MPVQesxTCsnl4ATk4tJGza7osSdgbJpLiWb93ghC8ZzaRpGgP8j1AYA93
+	yVAjuUdGUoNuLDRYOGu21qhBcpfj7SiM69YB2aVIVz5DWUnpl4goHmlF4ag/wmaiJY7VwIeHatK
+	C8aqYAJMTSRiBkBvHUZgJlxud1M5mAz9KWMbfZuutLGQ1TW/Pe2agPGtXAp14u4cKcjBmE5jsox
+	HVymLUPxQ9iv2puwSHq0LCetVNThlHFD515S2/14t9YEc+h77L1pynQelZpJDt1+EKKLeoJI0oj
+	/bsoGT5e+QqHH6DpGJb6atxTyXmxG1Dmk7wtgmq/C8gfvwZFv1oWjwHBXZey3m3hoL/+v6ePpbK
+	VKnlVyL6355PmZA==
+X-Received: by 2002:a5d:4090:0:b0:435:e3fe:7409 with SMTP id
+ ffacd0b85a97d-435e3fe7613mr424501f8f.44.1769567773748; Tue, 27 Jan 2026
+ 18:36:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260127181610.86376-1-emil@etsalapatis.com> <20260127181610.86376-12-emil@etsalapatis.com>
-In-Reply-To: <20260127181610.86376-12-emil@etsalapatis.com>
+References: <20260127181610.86376-1-emil@etsalapatis.com> <20260127181610.86376-9-emil@etsalapatis.com>
+In-Reply-To: <20260127181610.86376-9-emil@etsalapatis.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 27 Jan 2026 18:35:05 -0800
-X-Gm-Features: AZwV_QhgnKcyD7tBl2oRCVgQe6-CPjuREzJAVHZnFHF4s8tebnASRJVaM2vryBw
-Message-ID: <CAADnVQJ8WPQg5+GBj-+1E+YdPQkv2A=XeeryqgQE8th5qf7+=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 11/13] selftests: bpf: Add selftests for the libarena
- stack allocator
+Date: Tue, 27 Jan 2026 18:36:02 -0800
+X-Gm-Features: AZwV_Qjr1yB9i8Lq2MOE2y3RKda6tsXy51DqTI8BjD0X2b3ZKN_U0AkHDm99N0o
+Message-ID: <CAADnVQLi7uKnqsR16mggQm2KBn2z+mZ_kYVyo94giGK6LgZ9fg@mail.gmail.com>
+Subject: Re: [PATCH v2 08/13] selftest: bpf: Add bump allocator for libarena
 To: Emil Tsalapatis <emil@etsalapatis.com>
 Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
 	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
@@ -100,136 +100,31 @@ Content-Transfer-Encoding: quoted-printable
 
 On Tue, Jan 27, 2026 at 10:16=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.=
 com> wrote:
->
-> From: Emil Tsalapatis <etsal@meta.com>
->
-> Add ASAN selftests for the stack allocators to ensure proper
-> ASAN integration.
->
-> Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
-> ---
->  .../bpf/libarena/selftests/selftest.c         |   2 +
->  .../libarena/selftests/st_asan_stack.bpf.c    | 253 ++++++++++++++++++
->  2 files changed, 255 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/libarena/selftests/st_asa=
-n_stack.bpf.c
->
-> diff --git a/tools/testing/selftests/bpf/libarena/selftests/selftest.c b/=
-tools/testing/selftests/bpf/libarena/selftests/selftest.c
-> index a0fd7a2e6c46..3e4b8754889f 100644
-> --- a/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-> +++ b/tools/testing/selftests/bpf/libarena/selftests/selftest.c
-> @@ -269,6 +269,7 @@ TEST(bump_selftest);
->
->  #ifdef BPF_ARENA_ASAN
->  TEST(asan_test_bump);
-> +TEST(asan_test_stack);
->  #endif
->
->  static void
-> @@ -316,6 +317,7 @@ int main(int argc, char *argv[])
->
->  #ifdef BPF_ARENA_ASAN
->         run_asan_test_bump();
-> +       run_asan_test_stack();
->  #endif
->
->         return 0;
-> diff --git a/tools/testing/selftests/bpf/libarena/selftests/st_asan_stack=
-.bpf.c b/tools/testing/selftests/bpf/libarena/selftests/st_asan_stack.bpf.c
-> new file mode 100644
-> index 000000000000..a4c1780e4247
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/libarena/selftests/st_asan_stack.bpf.c
-> @@ -0,0 +1,253 @@
-> +/*
-> + * SPDX-License-Identifier: GPL-2.0
-> + * Copyright (c) 2025 Meta Platforms, Inc. and affiliates.
-> + * Copyright (c) 2025 Emil Tsalapatis <etsal@meta.com>
-> + */
 > +
-> +#include <common.h>
+> +private(STATIC_ALLOC_LOCK) struct bpf_spin_lock static_lock;
 > +
-> +#include <asan.h>
-> +#include <stack.h>
+> +private(STATIC_ALLOC) struct bump bump;
 > +
-> +#include "selftest.h"
+> +const s8 STATIC_POISON_UNINIT =3D 0xff;
 > +
-> +#ifdef BPF_ARENA_ASAN
-> +
-> +#include "st_asan_common.h"
-> +
-> +#define STACK_PAGES_PER_ALLOC (4)
-> +#define STACK_ALLOCS (4)
-> +
-> +/*
-> + * Keep this test-related array in BSS to avoid
-> + * overly burdening the function stack.
-> + */
-> +u64 __arena stk_blks[STACK_ALLOCS];
-> +
-> +/*
-> + * Spinlock used by the stack allocator.
-> + */
-> +private(ST_STACK) struct stk st_stack;
-> +u64 __arena st_asan_stack_lock;
-> +
-> +static __maybe_unused void stk_blks_dump(void)
+> +__weak u64 bump_alloc_internal(size_t bytes, size_t alignment)
 > +{
-> +       int i;
+> +       void __arena *memory;
+> +       size_t  alloc_bytes;
+> +       size_t  alloc_pages;
+> +       void __arena *ptr;
+> +       size_t padding;
+> +       size_t ind;
+> +       u64 addr;
 > +
-> +       for (i =3D 0; i < STACK_ALLOCS && can_loop; i++)
-> +               bpf_printk("[%d] 0x%lx", i, stk_blks[i]);
-> +}
+> +       /*
+> +        * Allocated addresses must be aligned to the nearest granule,
+> +        * and since we're stack allocating this implies that allocations
+> +        * sizes are also aligned.
+> +        */
+> +       alignment =3D round_up(alignment, 1 << ASAN_SHADOW_SHIFT);
 > +
-> +struct qsort_limits {
-> +       int lo;
-> +       int hi;
-> +};
-> +
-> +__always_inline void swap(unsigned int i, unsigned int j)
-> +{
-> +       u64 tmp;
-> +
-> +       tmp =3D stk_blks[i];
-> +       stk_blks[i] =3D stk_blks[j];
-> +       stk_blks[j] =3D tmp;
-> +}
-> +
-> +static __always_inline int qsort_partition(unsigned int lo, unsigned hi)
-> +{
-> +       unsigned int i;
-> +       u64 pivotval;
-> +       int pivot;
-> +
-> +       if (lo >=3D STACK_ALLOCS || hi >=3D STACK_ALLOCS) {
-> +               bpf_printk("%s:%d invalid lo/hi indices %d/%d", __func__,
-> +                          __LINE__, lo, hi);
-> +               return 0;
-> +       }
-> +
-> +       pivotval =3D stk_blks[hi];
-> +       pivot =3D lo;
-> +
-> +       for (i =3D lo; i < hi && can_loop; i++) {
-> +               if (stk_blks[i] > pivotval)
-> +                       continue;
-> +
-> +               swap(i, pivot);
-> +               pivot +=3D 1;
-> +       }
-> +
-> +       swap(pivot, hi);
-> +
-> +       return pivot;
-> +}
-> +
-> +static __always_inline int qsort_stack_blocks(void)
+> +       bpf_spin_lock(&static_lock);
 
-Amount of always_inline here and throughout looks excessive.
-Especially for a heavy function like qsort.
-
-Try removing all of them and add only where it's absolutely
-necessary and add a comment why.
-Like in core asan_loadN() functions it's clear why you want
-full inline there, but in selftest... ?
+In the stack allocator you're using arena_spin_lock and I'm
+assuming it works fine there. Why use the old one here?
