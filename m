@@ -1,49 +1,53 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872F229A1;
-	Wed, 28 Jan 2026 08:54:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2D63382D6;
+	Wed, 28 Jan 2026 09:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769590442; cv=none; b=pqODf9Fr+XwzPgBCc/en9dsuZEdm0QnSwto1QI4kDdobsk3omjigA08sbGWdyv0VTcclu39tehcynIdyFJHYeKOPWpVynZPQMq/DZ5ls3gNpmBUDMGDnbmhDZGGs7CS9HlQ94OlLcKvRhfz51hf9gWlbQ0Kriw4cvOj16x0jbbA=
+	t=1769590806; cv=none; b=JvI7N97mXTfGUBwrlloK59RTWtPibyULbLVRZ/TZSpAFtOUQENAjfQ5EUVAdYIaKUWN3r1QZ7QLegcA+wyhIzeJn4lFKgKfSoA9HgFQALvVvfplBT28PgzMFARVIzXXAU4uQVCGajM/EBtaleYYU3i9HkVHPj+b4l4oPDYrgLwY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769590442; c=relaxed/simple;
-	bh=sp8ZzgKfLYBf6n5dvtaPV7JJtZoVmZtARJEfnOlvgnA=;
+	s=arc-20240116; t=1769590806; c=relaxed/simple;
+	bh=crey8mIG8QmvtfanDANRbzsdoCQTckd9ZdZwYdVc/gQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R6ZvZr/5mQrosxadFsrLddvF4Vd1H49DEwSoGAr7XYrgEqQnyUbvBpkGWsWfYDxqvrTCXEyU1qUSyIV3vKOpz2WEFSHu0rgrgl56Zuy9kQvOHDqtKpnSBUXhya0AJ9MwrFCtCxl3JAeBBcHacgTynSBnpZh7F1Rf8v61DV6Q68o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IiNsTsjt; arc=none smtp.client-ip=10.30.226.201
+	 Content-Type:Content-Disposition:In-Reply-To; b=lj2NlrRVAawWmYKfvwPDrSFlH3pDL/utm0v+B3i1di374x3DH3d8YTOR4m0H3hfsCvMAvpMpvRPa7ZVZbbNl5OoLZB2jA09Ns8P/+YZ/haLanLXRj6LK+Wglr1I+gfhJ4XoRxGLbae49oe3PhDbRr/ZmLrXQ4z8fy1XgWYFVlxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=p8cCxakM; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IiNsTsjt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B35C4CEF1;
-	Wed, 28 Jan 2026 08:54:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1769590442;
-	bh=sp8ZzgKfLYBf6n5dvtaPV7JJtZoVmZtARJEfnOlvgnA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IiNsTsjt7/JJEy7yHNve/JooAIlH0pnM87ZGvmgdHepEWko5EVz56NLPJSRbmXI8w
-	 sxKEPaOCpGXqDtQ0OHpQYWN7Mt9VjqvMvARm+eLYaHLPTNohEerYQif5fI9Qezgjy+
-	 G4XDfI/hst0WjbqQ1xzHMsJI6EzUETgPfOt5Yvr0=
-Date: Wed, 28 Jan 2026 09:53:58 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>,
-	Samuel Wu <wusamuel@google.com>, linux-fsdevel@vger.kernel.org,
-	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
-	miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org,
-	linux-mm@kvack.org, linux-efi@vger.kernel.org,
-	ocfs2-devel@lists.linux.dev, kees@kernel.org, rostedt@goodmis.org,
-	linux-usb@vger.kernel.org, paul@paul-moore.com,
-	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
-	john.johansen@canonical.com, selinux@vger.kernel.org,
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com,
-	android-kernel-team <android-kernel-team@google.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-Message-ID: <2026012812-jurist-whoops-0ef5@gregkh>
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
- <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
- <2026012715-mantra-pope-9431@gregkh>
- <CAHk-=whME4fu2Gn+W7MPiFHqwn51VByhpttf-wHdhAqQAQXpqw@mail.gmail.com>
- <20260127201454.GQ3183987@ZenIV>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="p8cCxakM"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=crey8mIG8QmvtfanDANRbzsdoCQTckd9ZdZwYdVc/gQ=; b=p8cCxakM3b3zuniN2dc+FBkWPl
+	f5N9Xb3O3JrFmumiDGGmGz1Vjfji6mXkLzbv6jGBXZW0VQwNukpotBgVTnn58VzxqSOur3bcGqugq
+	UX17sJegMhdaqnHgxJCyTTNEKm0wPqDEm8mLLWimNWPfpR5fp5iMGRzy/iyw9WCX6QdCyL+NYYBGS
+	TJS1tuI2pZ7WyO5PCe8dopIWY+FJBh4gZZDF/2IrmR6z3gHpAKbIAX6Cj8BxwBgLMZgLdqJqYTtHk
+	glgkytXC214Ezg6WgV1Eu9WTCUzZZnQiM7/yIQVbfRrwbSNCaw5bHh83DHlF8/RV5dwh0nW89Uw8O
+	6aJPPKLA==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vl1Ot-00000008BwG-10ou;
+	Wed, 28 Jan 2026 08:59:47 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5B4E4300754; Wed, 28 Jan 2026 09:59:45 +0100 (CET)
+Date: Wed, 28 Jan 2026 09:59:45 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Tao Chen <chen.dylane@linux.dev>
+Cc: mingo@redhat.com, acme@kernel.org, namhyung@kernel.org,
+	mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, song@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	eddyz87@gmail.com, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+	haoluo@google.com, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v8 1/3] perf: Add rctx in perf_callchain_entry
+Message-ID: <20260128085945.GF3372621@noisy.programming.kicks-ass.net>
+References: <20260126074331.815684-1-chen.dylane@linux.dev>
+ <20260126074331.815684-2-chen.dylane@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,32 +56,14 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260127201454.GQ3183987@ZenIV>
+In-Reply-To: <20260126074331.815684-2-chen.dylane@linux.dev>
 
-On Tue, Jan 27, 2026 at 08:14:54PM +0000, Al Viro wrote:
-> On Tue, Jan 27, 2026 at 10:39:04AM -0800, Linus Torvalds wrote:
-> > On Mon, 26 Jan 2026 at 23:42, Greg KH <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > Note that I had to revert commit e5bf5ee26663 ("functionfs: fix the
-> > > open/removal races") from the stable backports, as it was causing issues
-> > > on the pixel devices it got backported to.  So perhaps look there?
-> > 
-> > Hmm. That commit is obviously still upstream, do we understand why it
-> > caused problems in the backports?
-> 
-> This is all I've seen:
-> 
-> | It has been reported to cause test problems in Android devices.  As the
-> | other functionfs changes were not also backported at the same time,
-> | something is out of sync.  So just revert this one for now and it can
-> | come back in the future as a patch series if it is tested.
-> 
-> My apologies for not following up on that one; Greg, could you give some
-> references to those reports?
+On Mon, Jan 26, 2026 at 03:43:29PM +0800, Tao Chen wrote:
+> Record rctx inside the perf_callchain_entry itself, when callers of
+> get_callchain_entry no longer care about the assignment of rctx, and
+> will be used in the next patch.
 
-Sorry, all I got was a "this commit caused devices to fail" and was
-found from bisection, on the 6.18.y tree.  Samuel has much more
-information as to exactly what is happening here as he can see the test
-results properly, I'll let him work through this, thanks!
+Sorry, what?
 
-greg k-h
+The recursion context is very much about the caller, and very much not
+about the data. This just doesn't make sense.
