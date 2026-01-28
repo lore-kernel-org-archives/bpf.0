@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C07C37417E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3EB5376461;
 	Wed, 28 Jan 2026 16:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769619035; cv=none; b=spVQ3NuysFmWIGEv/JtwE2uYQvnUOcBVKCHNXqDJRfClfrKEjoHL4A302dfNJQRv8xjSd5Yqe2XA8O5phm99Gl/asv6Px/wEXH6itRlh6B4ItXopeVlULHJMPrYrFnu0M5bztf0MN8SRokVg05JEFPeV/1NiG+psepNxDdWB/0M=
+	t=1769619036; cv=none; b=jqVMTu4/CrdtJ8r1VC752Z7MT4N/E+UATJbkmXnvkiSm7xwGQA7zkpiGgidhmXmB0f3QzcKR3ZK6jTUY9Ft1l7CZbVbsWfwbi/ODcGDTV/dXMcyBdJYtBOELEsrOo9oiZT85OzwNiuSKmsh4iYEE8WPXlASv0UlQNV/4gvs191g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769619035; c=relaxed/simple;
-	bh=ARtXC1+LQ3gRcThfqj9ksV0v7BRfUWm6DuW6ltrwGzE=;
+	s=arc-20240116; t=1769619036; c=relaxed/simple;
+	bh=gkns4e3uFG3waqW3gYcl7M5Q1Ru6AdLSMlaBiCnqdQM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hHpHsX1MfvQdVQ4WXSYV3p/UpZnLqV4zj8279GfE5GiPm3RvYLDIgbybJ4EL0gpjAwfLA3Y1KI4WD1wyILdKtIkp4bfQTICBUKGhdAZRvBXFRUYTtMm0tnujqGIiL3xzjg/Q9R6tu5ktrNZK2rBfM4lK3Ae0GCSBRLtt64y6wtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rBNzgPTj; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=Lb9bl36EwAwC+YXYacS4C7nujjsZM6cyGq0RTeNl3J2+Brk2/Cs+GpzjyYUnUaiMYMLyUMggTfJLWSMIOqFctKTye9jlKoWwZXqxyWcW4NL+PPenO/FLRrCtbiDE+IYP4UUZ26rVli7Wfo2kGTtorFsCwz+0zS+kiV01NwYerSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JeZbi13G; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rBNzgPTj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DA6AC4CEF1;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JeZbi13G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C06C4CEF1;
 	Wed, 28 Jan 2026 16:50:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1769619035;
-	bh=ARtXC1+LQ3gRcThfqj9ksV0v7BRfUWm6DuW6ltrwGzE=;
+	bh=gkns4e3uFG3waqW3gYcl7M5Q1Ru6AdLSMlaBiCnqdQM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rBNzgPTjrZhoGqDIQIiY+NXA39lbLYyqKMf9BI0t9Jy5mZjv+t55LMKg6QSQKbgCg
-	 3WrUkbkcvzxmimjvvXVS/hkiCDaAP1MmUsI4T3hXXIWv/cve1RHlKBK1uuBTSNeXl8
-	 ZvwZfmubafYJBzaYiP0MEbTExnpWUTQpxtjiC/U6JWcZ05AzOhv9S0Yl42rPLPK/ZL
-	 nNcIefSmEVlMiEe03yazL/NGpkoOHi3nYktqRngA3UF6Khf0UAx+FRMUX3lR6jALOq
-	 mByAd4NZ3XkyE1KcAtbhNvJTjMLlbMR8CojwlgwBFg1Jwcx6zgqaEwWXOclSv/L0DA
-	 mOxCKsbId+Etw==
+	b=JeZbi13GwrgsGYtpPX4XumjmqUTcWoMbNC7coPCjBC++DdYd/ZIjEs7oPtwtCD2ec
+	 iYu85X20yNh9re5IieGZfJ+0PelHr0Nb3Wom0j3Ccf9JTjXOswoeGSOOX2rB5o2wm2
+	 bQPS9/SaJm1it19zLoXOgibNlG8BrlWgZM4HQ3xxQoBZPp/gZNOeLQg8HhsiX8RZff
+	 fW9uP635BswyPr/K4OGEpjqIOO3utDH/V7FsZwlS+72TXrxJE1l/l/KRXLes8ad9wf
+	 msDFRZuixzV66dpXFw8NXVEcnNstAaeF1AeNBpT9jiHlENNEDnWGhiUT2c1Z1m9KNE
+	 3Yut7q0em1qEQ==
 Received: from mchehab by mail.kernel.org with local (Exim 4.99.1)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1vl8kT-0000000DB2b-1Xnf;
+	id 1vl8kT-0000000DB3p-2pLf;
 	Wed, 28 Jan 2026 17:50:33 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: Jonathan Corbet <corbet@lwn.net>,
@@ -41,9 +41,9 @@ Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Randy Dunlap <rdunlap@infradead.org>,
 	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH v2 16/25] docs: kdoc_re: better show KernRe() at documentation
-Date: Wed, 28 Jan 2026 17:50:14 +0100
-Message-ID: <56e007be74d8572c7c695d811e72e70447c466aa.1769617841.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 17/25] docs: kdoc_re: don't recompile NextMatch regex every time
+Date: Wed, 28 Jan 2026 17:50:15 +0100
+Message-ID: <0eabdd8b9c895230b98b289ab3352303b816858e.1769617841.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1769617841.git.mchehab+huawei@kernel.org>
 References: <cover.1769617841.git.mchehab+huawei@kernel.org>
@@ -57,32 +57,91 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-the __repr__() function is used by autodoc to document macro
-initialization.
-
-Add a better representation for them.
+Store delimiters and its regex-compiled version as const vars.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- tools/lib/python/kdoc/kdoc_re.py | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ tools/lib/python/kdoc/kdoc_re.py | 35 ++++++++++++++++++++------------
+ 1 file changed, 22 insertions(+), 13 deletions(-)
 
 diff --git a/tools/lib/python/kdoc/kdoc_re.py b/tools/lib/python/kdoc/kdoc_re.py
-index 1861799f1966..f082f82bad67 100644
+index f082f82bad67..b6e11ee0be21 100644
 --- a/tools/lib/python/kdoc/kdoc_re.py
 +++ b/tools/lib/python/kdoc/kdoc_re.py
-@@ -52,7 +52,10 @@ class KernRe:
-         return self.regex.pattern
+@@ -81,6 +81,13 @@ class KernRe:
+         self.last_match = self.regex.search(string)
+         return self.last_match
  
-     def __repr__(self):
--        return f're.compile("{self.regex.pattern}")'
-+        if self.regex.flags:
-+            return f'KernRe("{self.regex.pattern}", {self.regex.flags})'
-+        else:
-+            return f'KernRe("{self.regex.pattern}")'
- 
-     def __add__(self, other):
++    def finditer(self,  string):
++        """
++        Alias to re.finditer.
++        """
++
++        return self.regex.finditer(string)
++
+     def findall(self, string):
          """
+         Alias to re.findall.
+@@ -116,6 +123,16 @@ class KernRe:
+ 
+         return self.last_match.groups()
+ 
++#: Nested delimited pairs (brackets and parenthesis)
++DELIMITER_PAIRS = {
++    '{': '}',
++    '(': ')',
++    '[': ']',
++}
++
++#: compiled delimiters
++RE_DELIM = KernRe(r'[\{\}\[\]\(\)]')
++
+ 
+ class NestedMatch:
+     """
+@@ -165,14 +182,6 @@ class NestedMatch:
+     #
+     #   FOO(arg1, arg2, arg3)
+ 
+-    DELIMITER_PAIRS = {
+-        '{': '}',
+-        '(': ')',
+-        '[': ']',
+-    }
+-
+-    RE_DELIM = re.compile(r'[\{\}\[\]\(\)]')
+-
+     def _search(self, regex, line):
+         """
+         Finds paired blocks for a regex that ends with a delimiter.
+@@ -202,13 +211,13 @@ class NestedMatch:
+             escape = False
+ 
+             d = line[offset - 1]
+-            if d not in self.DELIMITER_PAIRS:
++            if d not in DELIMITER_PAIRS:
+                 continue
+ 
+-            end = self.DELIMITER_PAIRS[d]
++            end = DELIMITER_PAIRS[d]
+             stack.append(end)
+ 
+-            for match in self.RE_DELIM.finditer(line[offset:]):
++            for match in RE_DELIM.finditer(line[offset:]):
+                 pos = match.start() + offset
+ 
+                 d = line[pos]
+@@ -229,8 +238,8 @@ class NestedMatch:
+                     string_char = d
+                     continue
+ 
+-                if d in self.DELIMITER_PAIRS:
+-                    end = self.DELIMITER_PAIRS[d]
++                if d in DELIMITER_PAIRS:
++                    end = DELIMITER_PAIRS[d]
+ 
+                     stack.append(end)
+                     continue
 -- 
 2.52.0
 
