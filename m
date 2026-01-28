@@ -1,126 +1,142 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC0337107C
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 19:03:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71583155A5D
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 19:05:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769627008; cv=none; b=aqaLvhV9zRp8Ibd88LoXuKz+I2R2FWOYQELVQ8xQ1o0Kk0oDz7U0VW86lYaE0ZT4OKzAkNREq5S5XyEFx8Szj0btrcAYnsEfaWnrsItEWAK6o2LUqiyb9gMu+1PvKsVgux2Wv5MnlI/oEwsXCgp4bpGL+G4Ib0S7GtJX3pADHJk=
+	t=1769627159; cv=none; b=GHaUQXBqz1eB9CVQmGw+qEn+pKoon8/xsSSKLQ6t6P29txOuYQDbHWHArpv1FZFex9AYeRJmZ49eCdW/nSgK9IfnCYqjKQ4/r9Kq1dLLgiVaNUzJ+Ssd9qlLE8rGq0qJD2q/JBsp0HzPEMUtlSWEfrwNFzYq3d9vLvS+n2svJjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769627008; c=relaxed/simple;
-	bh=k4fj+zI7nQkJZQ6PE8/AEWq1DD9fwwCHAdD0i/dHo2U=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=eSbewYlA8RnwOVkR0ZtYiUlOYImN0cJIAiQ6OzKUTW+3Z6mu0/wTvJr+K131SMn/2ZbiB4H3BiCd5EImz6n55BIsCtsOEIxUKTB7IsdHvdWs7kRmAo8DpfN6t1RxhnSVwPWa1cUeW6IPKQvOF+05BldVWOSaFRkFmShb5ICQiS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=C6gp1MPX; arc=none smtp.client-ip=95.215.58.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769627159; c=relaxed/simple;
+	bh=10WvIMs4qilNWXFFA7Hd0GcumtOOS0qIwm/JfVJ+bV0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OR02Y+Vy4HpvkoevsCM67rVWN1sSxcWpbNZ0DERi9jhbu4X5DNAl/nDP5cL6HPVED4doUBKMLX5e/NBWXPdidcMoh/CNimkg27/08s/PRxMnwvDH5NG50aWmli8ZlDd2UKiqX2GuchWNfbQVJjZtaKk5v0+ijVNI5XIhvbTINro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BhcX0hK3; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="C6gp1MPX"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769627002;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4NayTqK6ydu31eZz8Rz8GMezBVcxg1OL2qPKc9sxAYY=;
-	b=C6gp1MPXOXBOyUaULt7xIiQQq9atvXBscBI7+zuY5sWgavBkmdnsEqBxaDsObhlyHb83Lf
-	WinP/QWVMuQOC2Gl36aiP7atmDPAthGEuudtxX54DkJ1OB0wSE3drjvs9kgjhEzT7Sk6tE
-	o2iKyHxpcm3KJzQ6GnzUspUbQXcBdT8=
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: Josh Don <joshdon@google.com>
-Cc: bpf@vger.kernel.org,  Michal Hocko <mhocko@suse.com>,  Alexei
- Starovoitov <ast@kernel.org>,  Matt Bobrowski <mattbobrowski@google.com>,
-  Shakeel Butt <shakeel.butt@linux.dev>,  JP Kobryn
- <inwardvessel@gmail.com>,  linux-kernel@vger.kernel.org,
-  linux-mm@kvack.org,  Suren Baghdasaryan <surenb@google.com>,  Johannes
- Weiner <hannes@cmpxchg.org>,  Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH bpf-next v3 07/17] mm: introduce BPF OOM struct ops
-In-Reply-To: <CABk29NvSku-zb5sodOYjWhW253EHGu52VNQ6+pQ8QuvEoVQYRA@mail.gmail.com>
-	(Josh Don's message of "Tue, 27 Jan 2026 19:26:57 -0800")
-References: <20260127024421.494929-1-roman.gushchin@linux.dev>
-	<20260127024421.494929-8-roman.gushchin@linux.dev>
-	<CABk29NvSku-zb5sodOYjWhW253EHGu52VNQ6+pQ8QuvEoVQYRA@mail.gmail.com>
-Date: Wed, 28 Jan 2026 11:03:16 -0800
-Message-ID: <87jyx1zhjf.fsf@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BhcX0hK3"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-480706554beso1819075e9.1
+        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 11:05:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769627157; x=1770231957; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=olyOkzWsmiHrpXBIg8l71W8Ioi+kPoRgo/TkeEywMrU=;
+        b=BhcX0hK3odurYS7oqsRSJMBy2oV/JhgwDaqmaD+e8EwderhdbWXLsI3oxb0qzNUF9K
+         huOGXcEeC9efevoh51kw/Ovs6PKkhsQ1YqBoNMh4NYYtmGEolLlEqYYEzVDEWWWG6hqj
+         KVDefMInnewiVigM7y9H2nBpeyNdtGZQPe9Y6MimFd3fnBeRnKb9zHs55TpuktBaHnmw
+         INOH8+lfHA3Q1x3KS5lwsfb2KhPYeF3Ui81sl1juKEHWdR8AUjzRzNwn2ltWYMfAsiDa
+         UxAFojLqxuruP6/X4Q0qJbDrJgCwB2NUdhTm95Mm7nETRCbysioeueGuTScrsy0ggw/8
+         1/JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769627157; x=1770231957;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=olyOkzWsmiHrpXBIg8l71W8Ioi+kPoRgo/TkeEywMrU=;
+        b=Cj31gDbbA4Tvlsf0zK1kXCGcUFSnp3Snr3q2FGLvOK/27EAdc7cI62HUYnKQwiW6BE
+         VqcaMh+YAGxKC9Gq+5WzWerp8HlMIc4P4cyDuYZJaDS3yfPiyaSLHMpHscOdiwvMJ15T
+         92j7ebURNiuAKE2/QFzPu2lCFfu6Iu+nivzpvTaFGFPSfeIJmTxw6dBYqFKDmrszhN3O
+         GB0rfIJLx1Qhmv9Ld+qZk4twBrrFzdhA1M7aw4OGwi6GelX3hGrmsWA1q7HsTQ+v2XJw
+         cw9pdpsoxaeWgu11NpAkRkYHd5TVQ88cljdYnpeXgo8Ov7fmAuE45KChM7TB9idAJ4Rf
+         rCuQ==
+X-Gm-Message-State: AOJu0YzsjW+rQt7KbDGo8d6Ro+ZnmapehDflS8o3vNC8Hrbpe426TDU6
+	dhAwLb666uoh8MXC+J3frIMaKsL3Qh1Wmn8VQ+uSg25dJS3e3D9ZZiTU8f1D+zV5
+X-Gm-Gg: AZuq6aL3jRQ1NiiAJKSzm7HxH9uzZuS9LyaIvKoU+2GdycZ+EXJfjq1M3PFB09skAwi
+	Y8ui49VEybMCTKGaYJBsRWx8tf3G38Amjp1xe5I5VrPPsDbR56rQmADwSEoIkIqKwdciyDKub4G
+	AAbAYMuVpc++iM/PD6B8n7pSPXIt/tznCDen1DudXIP0/4nWhF9lLQ14TrHu39tepd5HIzZPKRY
+	heYW3M9HaA5W9MvToGh56Ej2LGkWkn6VB7rn/n65XYt58skrRbFMxWjbgIkokNxq1QZ4//cKpMb
+	cznXQCIS1Y7xk5RbXyBOeE0e8K0K4A4+3fnvpLtIMZ/liFlInsFnG0V6P8M1x9yw56onLAKobzs
+	QK9SoSFzyWDzSDmUbIAp8PjKOvw1ZxxjPYidfHDfVqdRmvfouAYQtEvX/1MYtoqcgBtcJl8Mvxg
+	2TPEM8tw==
+X-Received: by 2002:a05:600c:620a:b0:480:1d16:2538 with SMTP id 5b1f17b1804b1-48069c54113mr78595245e9.23.1769627156568;
+        Wed, 28 Jan 2026 11:05:56 -0800 (PST)
+Received: from localhost ([2620:10d:c092:500::6:f1cc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e1322f40sm8478482f8f.34.2026.01.28.11.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jan 2026 11:05:55 -0800 (PST)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: bpf@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	kafai@meta.com,
+	kernel-team@meta.com,
+	alan.maguire@oracle.com,
+	kpsingh@kernel.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+Subject: [PATCH bpf-next v3] selftests/bpf: Remove xxd util dependency
+Date: Wed, 28 Jan 2026 19:05:51 +0000
+Message-ID: <20260128190552.242335-1-mykyta.yatsenko5@gmail.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-Josh Don <joshdon@google.com> writes:
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-> Thanks Roman!
->
-> On Mon, Jan 26, 2026 at 6:51=E2=80=AFPM Roman Gushchin <roman.gushchin@li=
-nux.dev> wrote:
->>
->> Introduce a bpf struct ops for implementing custom OOM handling
->> policies.
->>
->> +bool bpf_handle_oom(struct oom_control *oc)
->> +{
->> +       struct bpf_struct_ops_link *st_link;
->> +       struct bpf_oom_ops *bpf_oom_ops;
->> +       struct mem_cgroup *memcg;
->> +       struct bpf_map *map;
->> +       int ret =3D 0;
->> +
->> +       /*
->> +        * System-wide OOMs are handled by the struct ops attached
->> +        * to the root memory cgroup
->> +        */
->> +       memcg =3D oc->memcg ? oc->memcg : root_mem_cgroup;
->> +
->> +       rcu_read_lock_trace();
->> +
->> +       /* Find the nearest bpf_oom_ops traversing the cgroup tree upwar=
-ds */
->> +       for (; memcg; memcg =3D parent_mem_cgroup(memcg)) {
->> +               st_link =3D rcu_dereference_check(memcg->css.cgroup->bpf=
-.bpf_oom_link,
->> +                                               rcu_read_lock_trace_held=
-());
->> +               if (!st_link)
->> +                       continue;
->> +
->> +               map =3D rcu_dereference_check((st_link->map),
->> +                                           rcu_read_lock_trace_held());
->> +               if (!map)
->> +                       continue;
->> +
->> +               /* Call BPF OOM handler */
->> +               bpf_oom_ops =3D bpf_struct_ops_data(map);
->> +               ret =3D bpf_ops_handle_oom(bpf_oom_ops, st_link, oc);
->> +               if (ret && oc->bpf_memory_freed)
->> +                       break;
->> +               ret =3D 0;
->> +       }
->> +
->> +       rcu_read_unlock_trace();
->> +
->> +       return ret && oc->bpf_memory_freed;
->
-> If bpf claims to have freed memory but didn't actually do so, that
-> seems like something potentially worth alerting to. Perhaps something
-> to add to the oom header output?
+The verification signature header generation requires converting a
+binary certificate to a C array. Previously this only worked with
+xxd (part of vim-common package).
+As xxd may not be available on some systems building selftests, it makes
+sense to substitute it with more common utils: hexdump, wc, sed to
+generate equivalent C array output.
 
-Michal pointed at a more fundamental problem: if a bpf handler performed
-some actions (e.g. killed a program), how to safely allow other bpf
-handlers to exit without performing redundant destructive operations?
-Now it works on marking victim processes, so that subsequent kernel
-oom handlers just bail out if they see a marked process.
+Tested by generating header with both xxd and hexdump and comparing
+them.
 
-I don't know to extend it to generic actions. E.g. we can have an atomic
-counter attached to the bpf oom instance (link), we can bump it on
-performing a destructive operation, but it's not clear when to clear it.
+Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+---
+ tools/testing/selftests/bpf/.gitignore |  1 -
+ tools/testing/selftests/bpf/Makefile   | 10 ++++++----
+ 2 files changed, 6 insertions(+), 5 deletions(-)
 
-So maybe it's not worth it at all and it's better to drop this
-protection mechanism altogether.
+diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+index b8bf51b7a0b0..a3ea98211ea6 100644
+--- a/tools/testing/selftests/bpf/.gitignore
++++ b/tools/testing/selftests/bpf/.gitignore
+@@ -23,7 +23,6 @@ test_tcpnotify_user
+ test_libbpf
+ xdping
+ test_cpp
+-test_progs_verification_cert
+ *.d
+ *.subskel.h
+ *.skel.h
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 2c2f68a171ed..c6bf4dfb1495 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -720,9 +720,12 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
+ 	$(Q)mkdir -p $(BUILD_DIR)
+ 	$(Q)$(VERIFY_SIG_SETUP) genkey $(BUILD_DIR)
+ 
++# Generates a header with C array declaration, containing test_progs_verification_cert bytes
+ $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+-	$(Q)ln -fs $< test_progs_verification_cert && \
+-	xxd -i test_progs_verification_cert > $@
++	$(Q)(echo "unsigned char test_progs_verification_cert[] = {"; \
++	 hexdump -v -e '12/1 "  0x%02x," "\n"' $< | sed 's/0x  ,//g; $$s/,$$//'; \
++	 echo "};"; \
++	 echo "unsigned int test_progs_verification_cert_len = $$(wc -c < $<);") > $@
+ 
+ # Define test_progs test runner.
+ TRUNNER_TESTS_DIR := prog_tests
+@@ -898,8 +901,7 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
+ 			       *.BTF *.BTF_ids *.BTF.base		\
+ 			       no_alu32 cpuv4 bpf_gcc			\
+ 			       liburandom_read.so)			\
+-	$(OUTPUT)/FEATURE-DUMP.selftests				\
+-	test_progs_verification_cert
++	$(OUTPUT)/FEATURE-DUMP.selftests
+ 
+ .PHONY: docs docs-clean
+ 
+-- 
+2.52.0
 
-Thanks!
