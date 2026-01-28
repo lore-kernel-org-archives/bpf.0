@@ -1,100 +1,137 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF1D35FF68;
-	Wed, 28 Jan 2026 13:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9326A360746
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 14:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769608615; cv=none; b=HgU8yb9ze59+wnCIMethfzXyzYQn9TedWk+Unft5P0DQ/472mKghsObunQs9xY2m1dVUFX2oDjfFLk57zVXFBWMPN1MPoXKHLy4yPR+hP4Tny/sYgQ12VxVgC/ovfUhiUX3/tu2Jc/bI3TnVuq8l+atsspi0FHlVtKVfG1Fo3RQ=
+	t=1769609430; cv=none; b=cdMqmqDIyeIn+Zw6plQZyuJ+dZMd8VJGTgQfZ8P0Pp0nHYUetR/VTbdBhRO+SSdGEN2NCr6FdHjp5ROSefOtFvxJKVGJ+Ysu7W4E7T9/Afb7nIqD9y1eNKzM9yNb3BFKTZkOMQ8qEcnUClrpOARzEhr9fYN5nfdCuo6SOtlP5JQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769608615; c=relaxed/simple;
-	bh=gmQ5tFpfhM0FBX1l+SJSMl+GseRfiifShHW6tOR4FFo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=BOKyApV417TrlC6ppVyQISzA57XDMoDO2DSNoIiHfxMYFuMSDdtUUaz1VqiZboBPhMtREoeAA5ikDT7cp12hVeixKkBNuInkhni0m2SG7A846fkQV6glKOg50cNHYWGv2CE81OQPmFIOrImAIc9LKcYQYc1qqJj64YkDZKUEpuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JEu8SXMl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769609430; c=relaxed/simple;
+	bh=THyzkYNiA5RTUK9YKP7lt4PaxlMYqQzmPF+ejfi7aHM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p3WcIAobQ1LpFQARs3xXL+UC3kQ2Lni0cY5xdNJbb95LrnPUUtCpDVrou9gXHEVheP3scbhNTCrJzTlvd1dKi5vBghVJzsFBfy0y0A5kXchHPRAgl2PVC3UWHZG9E5XVLfGBVwnr6SV6hzPTCjFb6TrlhMBMP4hDYNAPRWXeSW8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=koiK4S9f; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JEu8SXMl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69F68C4CEF7;
-	Wed, 28 Jan 2026 13:56:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769608615;
-	bh=gmQ5tFpfhM0FBX1l+SJSMl+GseRfiifShHW6tOR4FFo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=JEu8SXMlxPgwC/nUeHc1pBON7D2YloibI7NwXoNqFJK/U0b6A7VKSMEQsq0wxCMn8
-	 sYSgGky+M69nLIU8MvaXQ3ddSnIiN6c2bQJ9R3kTO5PHUhIAE9d/xLUe8Tz/PaqcQh
-	 4McscJKNehIztn74b6KojxS5S7E9FzELRnVxZC+Bw3TCx/ubuI0/DzHPAcpO9cdiiK
-	 732kLEyua/0Ms7UB0ku3BsTyt7Dr99ffydrw3WG7/0YHLdQGLm08xTmptv5bRSw2qJ
-	 X3Cto3v++a3Qz8rGZzIIf2qcLUuJAOG9NDD0RAP7DNkv69q9s4TBdNhbu2wCLCDuMi
-	 Q6RFDL/uik7BA==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Shrikanth Hegde <sshegde@linux.ibm.com>, Peter Zijlstra
- <peterz@infradead.org>, Ihor Solodrai <ihor.solodrai@linux.dev>, LKML
- <linux-kernel@vger.kernel.org>
-Cc: Gabriele Monaco <gmonaco@redhat.com>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, Michael Jeanson <mjeanson@efficios.com>,
- Jens Axboe <axboe@kernel.dk>, "Paul E. McKenney" <paulmck@kernel.org>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Florian Weimer
- <fweimer@redhat.com>, Tim Chen <tim.c.chen@intel.com>, Yury Norov
- <yury.norov@gmail.com>, bpf <bpf@vger.kernel.org>,
- sched-ext@lists.linux.dev, Kernel Team <kernel-team@meta.com>, Alexei
- Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Puranjay Mohan <puranjay@kernel.org>,
- Tejun Heo <tj@kernel.org>
-Subject: Re: [patch V5 00/20] sched: Rewrite MM CID management
-In-Reply-To: <bdfea828-4585-40e8-8835-247c6a8a76b0@linux.ibm.com>
-References: <20251119171016.815482037@linutronix.de>
- <2b7463d7-0f58-4e34-9775-6e2115cfb971@linux.dev> <877bt29cgv.ffs@tglx>
- <bdfea828-4585-40e8-8835-247c6a8a76b0@linux.ibm.com>
-Date: Wed, 28 Jan 2026 14:56:51 +0100
-Message-ID: <87y0lh96xo.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="koiK4S9f"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4806bf03573so8546445e9.2
+        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 06:10:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769609427; x=1770214227; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5N/dLnDP7ZNeMr/qwDSyiaL36LDhsQe2QSv+3xSbKhs=;
+        b=koiK4S9f4t2sZ+hxMz7eG9lX7AIcTGVNhhXtayxl/PaKD/SqOSrA3bXWG+VE9bBgTd
+         5FakKGnzOBxZZkBVShYaSQTAU7K75BeEzTD5x+Ym3sF9aWCUR8OdMTjEtcr+JebzWLQ+
+         2TdRMPNAe5jPLZrfzjTHB8Iss9C4NPIzRF1XraQJm4JlGr6IQa6me+TcqlN2GF2WsMNk
+         PkZpdCFbSujjd9jQw9XjJ4ZuRMNlJfRDDCBEG7ysbuiXcnBADnGBfociwqqpk9Mdmoyz
+         +qKb/yShAdWSxPanf5DnRtG7Slo8FDjPie9PpLreMcnz3sviSgwtMCyR74YPQQzMUNB9
+         Dt5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769609427; x=1770214227;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5N/dLnDP7ZNeMr/qwDSyiaL36LDhsQe2QSv+3xSbKhs=;
+        b=gnogke1iNjzsN8KUoFT5DHjwGWKgZ1q56OWO/ePAT9OS27tiMOsVeYCDT+YjMtp3dN
+         +EytrsxlHGPGTMntVDUatqW5wR7xSMu4WVBLBd2BwqGGv6y5RP74q25LQ2vUyZjiuPqh
+         gdWqfFBUFykLAX+NoRXoL7pNE75op+kPb5b8XNs5rMezWsNr9+sGBsGKPZWthtOuhV7V
+         /NYUD0sdxUL0mkwyfswnugmUsYnhj9bkwLujT/lwCzWqBQNvu8kMct8oQ6qyuR758xWw
+         J9gdNH80WL4v8ejhMd5Dld6L9MmkA6G3EdlOLJ5VFYgEHrBUZMg5y9TKINB9ApH2nvQB
+         90RQ==
+X-Gm-Message-State: AOJu0Yx4YR29CyvuXYysWSvTbJbuk8O50FYzrb0XsJOiQhHWOchykobp
+	fhTOtCBERAGizQ3EQSlM8pv0KhJiYpXxJfhOeSzyJhvDd/0aL6fYE3KN
+X-Gm-Gg: AZuq6aI80d8qwmAciBtcydJDF8BAB1DIIB+39wRKRc4h974CnGfrf/2zkmmRtnaaEiL
+	Y9/c29FbO6xXPHX1WYVsy7Zn/8RoRvgI46NpJT5t4Bz/4jUM65Db7eJc3WQq0wANnIomuqJ4DF7
+	0gzujFk2LurQoXk8L9VF/O1Veu4cW1aSphoMVohr/SCwFCci+I+pU7CQT8PES2XNdfPHGxfKcAL
+	DRyQRnTm+v8HpQBJ570C/NANNI+IQuoUUuRTANsT/hH7HZOtAD2W5OUTSrRqP33OpKeB161LFhj
+	+nxynUNXtRbRtcIS4zRSKntY3CjKmX07G9y9vDbZrfkaeeMD5paM6RQNQGh9a+oqodgI9rLNtZi
+	XUCK7mDFAKrHv/HCORYlDZhazmB6M77TSS1gjnXjyHRt0mQbS1EAUopB5XY2coC45OU1+wgPhAW
+	6/CTmDqqHfzaHtUjgLueBBPKpyJ2SwslJwowiOsZrMUjpood4=
+X-Received: by 2002:a05:600c:64ce:b0:475:dd8d:2f52 with SMTP id 5b1f17b1804b1-48069c92cacmr56536475e9.32.1769609426544;
+        Wed, 28 Jan 2026 06:10:26 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1126:4:c307:95a:6dc8:83a5? ([2620:10d:c092:500::6:f1cc])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48066bee7d0sm141733965e9.4.2026.01.28.06.10.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jan 2026 06:10:25 -0800 (PST)
+Message-ID: <750db7bc-2cc5-4a53-8bb6-30e702fa0989@gmail.com>
+Date: Wed, 28 Jan 2026 14:10:24 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next] bpf: Add the missing types in the logs
+To: Feng Yang <yangfeng59949@163.com>, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260128085842.145057-1-yangfeng59949@163.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260128085842.145057-1-yangfeng59949@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 28 2026 at 18:28, Shrikanth Hegde wrote:
-> On 1/28/26 5:27 PM, Thomas Gleixner wrote:
->   watchdog: CPU 23 self-detected hard LOCKUP @ mm_get_cid+0xe8/0x188
->   watchdog: CPU 23 TB:1434903268401795, last heartbeat TB:1434897252302837 (11750ms ago)
->   NIP [c0000000001b7134] mm_get_cid+0xe8/0x188
->   LR [c0000000001b7154] mm_get_cid+0x108/0x188
->   Call Trace:
->   [c000000004c37db0] [c000000001145d84] cpuidle_enter_state+0xf8/0x6a4 (unreliable)
->   [c000000004c37e00] [c0000000001b95ac] mm_cid_switch_to+0x3c4/0x52c
->   [c000000004c37e60] [c000000001147264] __schedule+0x47c/0x700
+On 1/28/26 08:58, Feng Yang wrote:
+> From: Feng Yang <yangfeng@kylinos.cn>
+>
+> Add the missing types to avoid such uninformative errors as shown below:
+> R1 type=ptr_ expected=ptr_
+>
+> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+> ---
+>   kernel/bpf/log.c | 16 ++++++++++++++--
+>   1 file changed, 14 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+> index a0c3b35de2ce..6fee3d8b3703 100644
+> --- a/kernel/bpf/log.c
+> +++ b/kernel/bpf/log.c
+> @@ -473,14 +473,26 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
+>   			strscpy(postfix, "_or_null");
+>   	}
+>   
+> -	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
+> +	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+>   		 type & MEM_RDONLY ? "rdonly_" : "",
+>   		 type & MEM_RINGBUF ? "ringbuf_" : "",
+>   		 type & MEM_USER ? "user_" : "",
+>   		 type & MEM_PERCPU ? "percpu_" : "",
+>   		 type & MEM_RCU ? "rcu_" : "",
+>   		 type & PTR_UNTRUSTED ? "untrusted_" : "",
+> -		 type & PTR_TRUSTED ? "trusted_" : ""
+> +		 type & PTR_TRUSTED ? "trusted_" : "",
+> +		 type & MEM_UNINIT ? "uninit_" : "",
+> +		 type & DYNPTR_TYPE_LOCAL ? "dynptr_local_" : "",
+> +		 type & DYNPTR_TYPE_RINGBUF ? "dynptr_ringbuf_" : "",
+> +		 type & MEM_FIXED_SIZE ? "fixed_size_" : "",
+> +		 type & MEM_ALLOC ? "alloc_" : "",
+> +		 type & NON_OWN_REF ? "non_own_ref_" : "",
+> +		 type & DYNPTR_TYPE_SKB ? "dynptr_skb_" : "",
+> +		 type & DYNPTR_TYPE_XDP ? "dynptr_xdp_" : "",
+> +		 type & MEM_ALIGNED ? "aligned_" : "",
+> +		 type & MEM_WRITE ? "write_" : "",
+> +		 type & DYNPTR_TYPE_SKB_META ? "dynptr_skb_meta_" : "",
+> +		 type & DYNPTR_TYPE_FILE ? "dynptr_file_" : ""
+>   	);
+Maybe it'll be good to decrease the number of the %s
+and also group up the strings, for example:
+const char *dynptr_reg_type(...)
+{
+     if (type & DYNPTR_TYPE_SKB) return "dynptr_skb_"; if (type & 
+DYNPTR_TYPE_XDP) return "dynptr_xdp_";} so later we can substitute 
+multiple %s with just one, corresponding to the dynptr type, this also 
+ensures dynptr type is always in the same place, relative to other 
+things. This can also be applied to (MEM_RDONLY, MEM_WRITE), 
+(PTR_TRUSTED, PTR_UNTRUSTED) and so on.
+>   
+>   	snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s%s%s",
 
-So if the above spins in mm_get_cid() then the below is just a consequence.
-
->   watchdog: CPU 11 self-detected hard LOCKUP @ plpar_hcall_norets_notrace+0x18/0x2c
->   watchdog: CPU 11 TB:1434903340004919, last heartbeat TB:1434897249749892 (11895ms ago)
->   NIP [c0000000000f84fc] plpar_hcall_norets_notrace+0x18/0x2c
->   LR [c000000001152588] queued_spin_lock_slowpath+0xd88/0x15d0
->   Call Trace:
->   [c00000056b69fb10] [c00000056b69fba0] 0xc00000056b69fba0 (unreliable)
->   [c00000056b69fc30] [c000000001153ce0] _raw_spin_lock+0x80/0xa0
->   [c00000056b69fc50] [c0000000001b9a34] raw_spin_rq_lock_nested+0x3c/0xf8
->   [c00000056b69fc80] [c0000000001b9bb8] mm_cid_fixup_cpus_to_tasks+0xc8/0x28c
->   [c00000056b69fd00] [c0000000001bff34] sched_mm_cid_exit+0x108/0x22c
->   [c00000056b69fd40] [c000000000167b08] do_exit+0xf4/0x5d0
->   [c00000056b69fdf0] [c00000000016800c] make_task_dead+0x0/0x178
->   [c00000056b69fe10] [c0000000000316c8] system_call_exception+0x128/0x390
->   [c00000056b69fe50] [c00000000000cedc] system_call_vectored_common+0x15c/0x2ec
-
-> I am wondering if it this loop in mm_get_cid, which may not be getting a cid
-> for a long time? Is that possible?
-
-It shouldn't be possible by design, but it seems there is a corner case
-lurking somewhere which hasn't been covered. Let me stare at the logic
-in the transition functions once more. That's where CPU11 comes from:
-
->   [c00000056b69fc80] [c0000000001b9bb8] mm_cid_fixup_cpus_to_tasks+0xc8/0x28c
-
-The exiting it initiated a transition back from per CPU to per task mode
-and that seems to make things unhappy for mysterious reasons.
-
-Thanks,
-
-        tglx
