@@ -1,97 +1,78 @@
-Received: from out28-169.mail.aliyun.com (out28-169.mail.aliyun.com [115.124.28.169])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7DF279917;
-	Wed, 28 Jan 2026 02:47:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CB787080E
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 02:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769568426; cv=none; b=Sv4tP42kUrL3wlgMJmUrZT2Rz83Mc3dlGLEFqNW++bMCuPt63SbwpBWNp1H5vUG4csGli4xvd+k9EGAG/mgF6eqEPaWK4PtiuGq57ELXKqgOjjes3V9H/7JqGGAOTkwkUnAIJcjNjKR60rjzcXauoKIdjvs7heF/rx/oId5BJUk=
+	t=1769568611; cv=none; b=LUGVPIJX8RxcsKyI79IxS5aiUHOv8TkNyg4YHEA7Szz0i9ofg4Z1bDYw3ScX7Y+4I0qN0vSK+1+m4ep2qAbtfZk/GW/RXOP4YwrnKNISsggH0WVjM3lVjHZuRmeovRek/N3kI2I6Gmg3vMmMyutBNhx1cEen9o+tc4HUeJRzTJk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769568426; c=relaxed/simple;
-	bh=P5BHOGekwZzlYDtEGgu0HdjH4GgUy82l02WJdkLG3Ik=;
-	h=Date:From:To:Cc:Message-ID:Subject:MIME-Version:References:
-	 In-Reply-To:Content-Type; b=kfwfdbDWQGc/M2/Ibj1LyEXl760YsDRTjUPXxlox0VfQBihzcEmrIazDW5fAMd2i1ytGltFYh3bVnKMSMKVaVMCBkQCusLBDguONS4eackP4p+a+1q+kkw5O6oQcsa+DDwlpqg2xxEk7v8T3X5JvCgIZWZNw/v0tl35B1FiPB1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nebula-matrix.com; spf=pass smtp.mailfrom=nebula-matrix.com; arc=none smtp.client-ip=115.124.28.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nebula-matrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebula-matrix.com
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07953744|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.00691617-0.00073375-0.99235;FP=7305816914113108162|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033045220102;MF=illusion.wang@nebula-matrix.com;NM=1;PH=DW;RN=21;RT=21;SR=0;TI=W4_0.2.3_211683ED_1769567779326_o7001c1223;
-Received: from WS-web (illusion.wang@nebula-matrix.com[W4_0.2.3_211683ED_1769567779326_o7001c1223] cluster:ay29) at Wed, 28 Jan 2026 10:46:51 +0800
-Date: Wed, 28 Jan 2026 10:46:51 +0800
-From: "Illusion Wang" <illusion.wang@nebula-matrix.com>
-To: "Jakub Kicinski" <kuba@kernel.org>,
-  "Simon Horman" <horms@kernel.org>
-Cc: "Dimon" <dimon.zhao@nebula-matrix.com>,
-  "Alvin" <alvin.wang@nebula-matrix.com>,
-  "Sam" <sam.chen@nebula-matrix.com>,
-  "netdev" <netdev@vger.kernel.org>,
-  "andrew+netdev" <andrew+netdev@lunn.ch>,
-  "corbet" <corbet@lwn.net>,
-  "linux-doc" <linux-doc@vger.kernel.org>,
-  "lorenzo" <lorenzo@kernel.org>,
-  "pabeni" <pabeni@redhat.com>,
-  "vadim.fedorenko" <vadim.fedorenko@linux.dev>,
-  "lukas.bulwahn" <lukas.bulwahn@redhat.com>,
-  "hawk" <hawk@kernel.org>,
-  "ast" <ast@kernel.org>,
-  "bpf" <bpf@vger.kernel.org>,
-  "sdf" <sdf@fomichev.me>,
-  "daniel" <daniel@iogearbox.net>,
-  "john.fastabend" <john.fastabend@gmail.com>,
-  "edumazet" <edumazet@google.com>,
-  "open list" <linux-kernel@vger.kernel.org>
-Reply-To: "Illusion Wang" <illusion.wang@nebula-matrix.com>
-Message-ID: <17b1ca50-a9e4-499c-b84b-b8223c313491.illusion.wang@nebula-matrix.com>
-Subject: =?UTF-8?B?5Zue5aSN77yaW1BBVENIIHYzIG5ldC1uZXh0IDAwLzE1XSBuYmwgZHJpdmVyIGZvciBOZWJ1?=
-  =?UTF-8?B?bGFtYXRyaXggTklDcw==?=
-X-Mailer: [Alimail-Mailagent revision 24734][W4_0.2.3][null][Chrome]
+	s=arc-20240116; t=1769568611; c=relaxed/simple;
+	bh=WN4MiNMcYwJITJb2FccQtbpUs2P3Z12MW1kM6pDkVHI=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PC6vRtZE2YBH1zshzkreBFp0gE5Hs3lVaYTO/XP9uoxt5Kwd9M/SAJQBiEc6HFobgYZHaUBYUHl3Fxy7ZnoxSn7FMD8IQuS8s445GSCOXwYTfkB/LU4xE/vyNlIiZfiOnWtFsGb+dUGatv/PHgt3E4WQCw/xiRfkE4xg1bqao0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tMMO96Gd; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tMMO96Gd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D374EC116C6;
+	Wed, 28 Jan 2026 02:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769568610;
+	bh=WN4MiNMcYwJITJb2FccQtbpUs2P3Z12MW1kM6pDkVHI=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=tMMO96Gdt2aRhCu5KPAYzEYLh5C3z1ppfEBfxBrWZV4CjXZ3SU3Y+u+strVerlAhk
+	 8VLHBBV1jhS8R27rsWq5VW5LQQKFWMioR/9rKRIX7KZqGz3NiLGZrl4x7OOyn7KXJW
+	 V50J2FBShW8YCPgKgrVqMHf1ekBftPl8/T81+S07dkRc9xsM8s+Z6fBBwRpi/jG3Ll
+	 fOqXGdkFJXYtneF380+DqUsKt9ogZ5KfgCSSl7AdB0GWJoXKQiAUbrpL3SGp8zdxiC
+	 nTZXXFd+3ia0FJsM9PHROkTZjf9KGg7iDMvmYmYFqsXN2sua9iwCm4uvasl9VhZUOc
+	 N6CPiLAEEsauQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id C8B2C3809A15;
+	Wed, 28 Jan 2026 02:50:05 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-x-aliyun-im-through: {"version":"v1.0"}
-References: <20260123011804.31263-1-illusion.wang@nebula-matrix.com>	<aXj-uam1HodC0851@horms.kernel.org>,<20260127105304.21279cc2@kernel.org>
-x-aliyun-mail-creator: W4_0.2.3_null_EuMTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEzMy4wLjY5NDMuMTQyIFNhZmFyaS81MzcuMzYgZGluZ3RhbGstd2luLzEuMC4wIG53KDAuMTQuNykgRGluZ1RhbGsoOC4yLjAtUmVsZWFzZS4yNTEyMjIwMTkpIE1vam8vMS4wLjAgTmF0aXZlIEFwcFR5cGUocmVsZWFzZSkgQ2hhbm5lbC8yMDEyMDAgQXJjaGl0ZWN0dXJlL3g4Nl82NCB3ZWJEdC9QQw==uL
-In-Reply-To: <20260127105304.21279cc2@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v5] bpf: Fix tcx/netkit detach permissions when prog
+ fd
+ isn't given
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176956860461.1489558.7025980277858474466.git-patchwork-notify@kernel.org>
+Date: Wed, 28 Jan 2026 02:50:04 +0000
+References: <20260127160200.10395-1-ggonnet.linux@gmail.com>
+In-Reply-To: <20260127160200.10395-1-ggonnet.linux@gmail.com>
+To: Guillaume Gonnet <ggonnet.linux@gmail.com>
+Cc: daniel@iogearbox.net, alexei.starovoitov@gmail.com, ast@kernel.org,
+ bpf@vger.kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev
 
-ClRoYW5rIHlvdSBmb3IgeW91ciBmZWVkYmFjawoKcGF0Y2gzIHByaW1hcmlseSBpbmNsdWRlcyBj
-b2RlIHRoYXQgZG9lcyBub3QgcmVxdWlyZSBleHRlbnNpdmUgcmV2aWV3LApzdWNoIGFzIHRoZSBt
-ZXNzYWdlIGNvZGVzIGFuZCBtZXNzYWdlIGJvZHkgc3RydWN0dXJlcyBkZWZpbmVkIGluCm5ibF9k
-ZWZfY2hhbm5lbC5oLiBUaGVzZSBjb21wb25lbnRzIGFyZSBnZW5lcmFsbHkgc3RhYmxlIGFuZAp1
-c2VkIGZvciBQRi9WRiBjb21tdW5pY2F0aW9uLCB3aGljaCBpcyB3aHkgdGhleSB3ZXJlIGluaXRp
-YWxseQppbmNsdWRlZCBpbiBQYXRjaCAzLiBIb3dldmVyLCBiYXNlZCBvbiByZXZpZXcgZmVlZGJh
-Y2ssIEkgd2lsbApleHRyYWN0IHRoZXNlIG1hbnVhbGx5IHdyaXR0ZW4gY29tbXVuaWNhdGlvbiBw
-cm90b2NvbCBkZWZpbml0aW9ucy4KCkFkZGl0aW9uYWxseSwgSSB3aWxsIG1ha2UgYW5vdGhlciBy
-b3VuZCBvZiBjb21wcmVoZW5zaXZlIGNvZGUKcmVkdWN0aW9uIHRvIG1lZXQgdGhlIHN1Ym1pc3Np
-b24gcmVxdWlyZW1lbnRzIGFzIG11Y2ggYXMgcG9zc2libGUuCgoKLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCuWPkeS7tuS6
-uu+8mkpha3ViIEtpY2luc2tpIDxrdWJhQGtlcm5lbC5vcmc+CuWPkemAgeaXtumXtO+8mjIwMjbl
-ubQx5pyIMjjml6Uo5ZGo5LiJKSAwMjo1MwrmlLbku7bkurrvvJpTaW1vbiBIb3JtYW48aG9ybXNA
-a2VybmVsLm9yZz47IElsbHVzaW9uIFdhbmc8aWxsdXNpb24ud2FuZ0BuZWJ1bGEtbWF0cml4LmNv
-bT4K5oqE44CA6YCB77yaRGltb248ZGltb24uemhhb0BuZWJ1bGEtbWF0cml4LmNvbT47IEFsdmlu
-PGFsdmluLndhbmdAbmVidWxhLW1hdHJpeC5jb20+OyBTYW08c2FtLmNoZW5AbmVidWxhLW1hdHJp
-eC5jb20+OyBuZXRkZXY8bmV0ZGV2QHZnZXIua2VybmVsLm9yZz47ICJhbmRyZXcrbmV0ZGV2Ijxh
-bmRyZXcrbmV0ZGV2QGx1bm4uY2g+OyBjb3JiZXQ8Y29yYmV0QGx3bi5uZXQ+OyAibGludXgtZG9j
-IjxsaW51eC1kb2NAdmdlci5rZXJuZWwub3JnPjsgbG9yZW56bzxsb3JlbnpvQGtlcm5lbC5vcmc+
-OyBwYWJlbmk8cGFiZW5pQHJlZGhhdC5jb20+OyAidmFkaW0uZmVkb3JlbmtvIjx2YWRpbS5mZWRv
-cmVua29AbGludXguZGV2PjsgImx1a2FzLmJ1bHdhaG4iPGx1a2FzLmJ1bHdhaG5AcmVkaGF0LmNv
-bT47IGhhd2s8aGF3a0BrZXJuZWwub3JnPjsgYXN0PGFzdEBrZXJuZWwub3JnPjsgYnBmPGJwZkB2
-Z2VyLmtlcm5lbC5vcmc+OyBzZGY8c2RmQGZvbWljaGV2Lm1lPjsgZGFuaWVsPGRhbmllbEBpb2dl
-YXJib3gubmV0PjsgImpvaG4uZmFzdGFiZW5kIjxqb2huLmZhc3RhYmVuZEBnbWFpbC5jb20+OyBl
-ZHVtYXpldDxlZHVtYXpldEBnb29nbGUuY29tPjsgb3BlbiBsaXN0PGxpbnV4LWtlcm5lbEB2Z2Vy
-Lmtlcm5lbC5vcmc+CuS4u+OAgOmimO+8mlJlOiBbUEFUQ0ggdjMgbmV0LW5leHQgMDAvMTVdIG5i
-bCBkcml2ZXIgZm9yIE5lYnVsYW1hdHJpeCBOSUNzCgoKT24gVHVlLCAyNyBKYW4gMjAyNiAxODow
-Njo0OSArMDAwMCBTaW1vbiBIb3JtYW4gd3JvdGU6Cj4gQXMgcGVyIEpha3ViJ3MgYWR2aWNlIGlu
-IGhpcyByZXZpZXcgb2YgdjEgWypdLAo+IFBsZWFzZSB0cnkgdG8gY3JlYXRlIGEgbWluaW1hbCBk
-cml2ZXIgaW4gdGhlIG9yZGVyIG9mIH41a0xvQy4KClBlcmhhcHMgb3RoZXIgbWFpbnRhaW5lcnMg
-d2lsbCBkaXNhZ3JlZSwgYnV0IGZvciBlYXNlIG9mIHJldmlldwphbmQgdG8gYXZvaWQgdGhlIGh1
-Z2UgcmVwb3N0cyBwZXJoYXBzIHdlIHNob3VsZCBjb25zaWRlciBtZXJnaW5nCnNvbWV0aGluZyBs
-aWtlIHBhdGNoZXMgMSBhbmQgMyogZmlyc3QsIGFzIHRoZSBpbml0aWFsIHNlcmllcy4KQW5kIHRo
-ZW4geW91IGNhbiBidWlsZCB1cCB0aGUgZHJpdmVyIGZyb20gdGhlcmUgaW4gcmVhc29uYWJsZSwK
-NWtMb0MtYXQtYS10aW1lIHNlcmllcz8KCiAqIHBhdGNoIDMgY3VycmVudGx5IGluY2x1ZGVzIHRo
-aW5ncyB3aGljaCBkbyBub3Qgc2VlbSBtYWNoaW5lCiDCoCBnZW5lcmF0ZWQgLyBsaWtlIHJlZ2lz
-dGVyIGRlc2NyaXB0b3JzIGxpa2Ugc3RydWN0cyBhZGRlZCB0bwogwqAgbmJsX2RlZl9jaGFubmVs
-LmggYW5kIG5ibF9pbmNsdWRlLmgK
+Hello:
+
+This patch was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Tue, 27 Jan 2026 17:02:00 +0100 you wrote:
+> This commit fixes a security issue where BPF_PROG_DETACH on tcx or
+> netkit devices could be executed by any user when no program fd was
+> provided, bypassing permission checks. The fix adds a capability
+> check for CAP_NET_ADMIN or CAP_SYS_ADMIN in this case.
+> 
+> Fixes: e420bed02507 ("bpf: Add fd-based tcx multi-prog infra with link support")
+> Signed-off-by: Guillaume Gonnet <ggonnet.linux@gmail.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v5] bpf: Fix tcx/netkit detach permissions when prog fd isn't given
+    https://git.kernel.org/bpf/bpf-next/c/ae23bc81ddf7
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
