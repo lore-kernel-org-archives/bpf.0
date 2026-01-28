@@ -1,105 +1,95 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0D2037107C
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 19:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A3845038;
+	Wed, 28 Jan 2026 20:00:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769628747; cv=none; b=a1eNJAH8JmBclJsj3rvnuyamMxiF16ANnm3IK38bb4Tu/GGjU9BL2DotpCKVFWMTZctzqqjsCNGZMckuGzCdjTdQ/Cp8vWhH8Td3Sv4wFWbyhkhrMMeR2JNVqRBO8HGmZvzGA+OQe7cFd4dmfPXH2cTkYQY6C7fDRx4NdN7HOfg=
+	t=1769630424; cv=none; b=NBzXZ7wwaOjRARJcfwhTWqjlk0snIIpJv7GigfOt/717lxfZGMB99WQ+3fVKjDgYuFU4ihI78uDORL/WsjTHawk40qy+o8BFvKnLUaN38fPXxo/4WKPF5/BCB766co4Wu6C20EUx2qhLjwoIKTV+a8yqg0VC53oBmGIHvxTzuIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769628747; c=relaxed/simple;
-	bh=IiwbjnmVlSFLLrr2f6Lv3b3fMnBrMPaG/Tsycyd1dhw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m7NGrjlpugBjmquU1CGg6/H3KO6LSo89nKyEZFP6vzylbhAZAv6uGFjcOViPCStSgMHenNHcvndN8nDyxNqAUy/+JMMZMH7yi4S6/Zg2SPHw6ZVcwpKulBq+bsCEeB+Yf4VTLCt/3LDblHXSuKdKqdFsHn2Um18W3KBlzyUtQWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kb+HaArR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769630424; c=relaxed/simple;
+	bh=AFqUHU1rA8CNlD68xMlcxHEwkgyEguVM4+WYNpslnL8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=c86b0l3A71SPwozvTHW9DZyIOvDfi3TOHI5HMprz+qxkkSFOd7bf42CLIAXjsspSnpsjZQAT1ejYKL6K0NP0MY1G9qYyMfDHmRixYPDYlsFHbqNofge+9+tw4DTLy8MPTknCpVoHUkWatSl3KMlMH14SqzDJ1giYo67a+euww8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eLrJOdVK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kb+HaArR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6029DC4CEF7
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 19:32:27 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eLrJOdVK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6F4CC4CEF1;
+	Wed, 28 Jan 2026 20:00:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769628747;
-	bh=IiwbjnmVlSFLLrr2f6Lv3b3fMnBrMPaG/Tsycyd1dhw=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Kb+HaArR3As0IcZgqbCe+RnxV2EHO9zDCjJVspz1Gyu8t4fLAV2MFdEME3Q/jLAzI
-	 J2XxBHPZ8ZIEEA0kSvX7Sc5LcHqQyrW8TZMOI+m+fsQ7P3SFRW0GLznGSyRHnO8poP
-	 0fNHarOjwQgy3kYg406g817vo5xceHtpKf8TqEAcaqK7TtR58CkSx73TdRNsebqbpt
-	 shc6ulsSEgK9+P9OhmItB9cOT+1uTw+8QQqSH9LnN8xNqRCepVOaNY2CgS/IcIT8C7
-	 VUN9pE/7ZlSActDkW/xSdbij3TvhsOdarYoXTeM1ejfREh4Z/NQrRuxTnbNYzzR/O2
-	 g/r3xB72zmNdw==
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-6581af9c94aso495241a12.1
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 11:32:27 -0800 (PST)
-X-Gm-Message-State: AOJu0YzQ4FLJtHct3Tmq1ojojjjFYugt5IyhOOMktdqVaYmqHtl8ugwu
-	RioWnMa2wJIHBSO9WE2ZOprOPYiOJooPp5yf2JHhMwnAJnClmSp67PVK973LspTLN0wIFyFCxGW
-	8SbAwLkGGGnM8b02RLL3mAPWumPKLG/c=
-X-Received: by 2002:a05:6402:3481:b0:653:9849:df10 with SMTP id
- 4fb4d7f45d1cf-658a60a2a1fmr3733526a12.26.1769628745986; Wed, 28 Jan 2026
- 11:32:25 -0800 (PST)
+	s=k20201202; t=1769630424;
+	bh=AFqUHU1rA8CNlD68xMlcxHEwkgyEguVM4+WYNpslnL8=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=eLrJOdVKSNhQQAqknu9fmSA4t/SDXSgyskjpSQ1kgFsE466LlQcCnWqO6b+tM9ByL
+	 jbzEr9x/wTQS4L5RTRcVlpURKY/Bu63yGyqvMBO03kYLK5h2gBb+VkdsaYeOa/5HSa
+	 tKVHqK0n6M3ng59L+cla/LClZLSFaPlOWaqpbfXc3tETjwlWKh5UY5l0CYpn847816
+	 m7V3W1px8rOS/EprUfFNDGkb3GB6iguv2y9ELNFm96lauF4QICcLUdxMlaYocL9O9T
+	 5zN2znGEWNlTT4TbV7yeeml8SaOz2iN8/EbIgKV0weS96u5EXgbkagh17slo8IR5DT
+	 3WXX7ZI/OnSQQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 8BCB539EF96A;
+	Wed, 28 Jan 2026 20:00:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260128150112.8873-1-leon.hwang@linux.dev>
-In-Reply-To: <20260128150112.8873-1-leon.hwang@linux.dev>
-From: Puranjay Mohan <puranjay@kernel.org>
-Date: Wed, 28 Jan 2026 19:32:12 +0000
-X-Gmail-Original-Message-ID: <CANk7y0j-RYyRRGOe+twJxebtW+mW1bPPWjR32FFQwtLZYgqbMQ@mail.gmail.com>
-X-Gm-Features: AZwV_Qiswo9Qd3heR-XulOgpYmPZU3b8UEXHtqM39bOgPFTkq8gNQ7vCrLWrxoc
-Message-ID: <CANk7y0j-RYyRRGOe+twJxebtW+mW1bPPWjR32FFQwtLZYgqbMQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/3] bpf, arm64: Add fsession support
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Menglong Dong <menglong8.dong@gmail.com>, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCHv6 bpf-next 0/9] ftrace,bpf: Use single direct ops for bpf
+ trampolines
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176963041735.2209200.7611804745942755088.git-patchwork-notify@kernel.org>
+Date: Wed, 28 Jan 2026 20:00:17 +0000
+References: <20251230145010.103439-1-jolsa@kernel.org>
+In-Reply-To: <20251230145010.103439-1-jolsa@kernel.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: rostedt@kernel.org, revest@google.com, mark.rutland@arm.com,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ menglong8.dong@gmail.com, song@kernel.org
 
-On Wed, Jan 28, 2026 at 3:01=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
-> Similar to commit 98770bd4e6df ("bpf,x86: add fsession support for x86_64=
-"),
-> add fsession support on arm64.
->
-> Patch #1 adds bpf_arch_supports_fsession() to prevent fsession loading
-> on architectures that do not implement fsession support.
->
-> Patch #2 implements fsession support in the arm64 BPF JIT trampoline.
->
-> Patch #3 enables the relevant selftests on arm64, including get_func_ip,
-> and get_func_args.
->
-> All enabled tests pass on arm64:
->
->  cd tools/testing/selftests/bpf
->  ./test_progs -t fsession
->  #135/1   fsession_test/fsession_test:OK
->  #135/2   fsession_test/fsession_reattach:OK
->  #135/3   fsession_test/fsession_cookie:OK
->  #135     fsession_test:OK
->  Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
->
->  ./test_progs -t get_func
->  #138     get_func_args_test:OK
->  #139     get_func_ip_test:OK
->  Summary: 2/0 PASSED, 0 SKIPPED, 0 FAILED
->
-> Changes:
-> v1 -> v2:
-> * Add bpf_arch_supports_fsession().
->
+Hello:
 
-Please fix the commit message issue detected by AI and then
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-For the series:
+On Tue, 30 Dec 2025 15:50:01 +0100 you wrote:
+> hi,
+> while poking the multi-tracing interface I ended up with just one ftrace_ops
+> object to attach all trampolines.
+> 
+> This change allows to use less direct API calls during the attachment changes
+> in the future code, so in effect speeding up the attachment.
+> 
+> [...]
 
-Acked-by: Puranjay Mohan <puranjay@kernel.org>
-Tested-by: Puranjay Mohan <puranjay@kernel.org>
+Here is the summary with links:
+  - [PATCHv6,bpf-next,1/9] ftrace,bpf: Remove FTRACE_OPS_FL_JMP ftrace_ops flag
+    https://git.kernel.org/bpf/bpf-next/c/4be42c922201
+  - [PATCHv6,bpf-next,2/9] ftrace: Make alloc_and_copy_ftrace_hash direct friendly
+    https://git.kernel.org/bpf/bpf-next/c/676bfeae7bd5
+  - [PATCHv6,bpf-next,3/9] ftrace: Export some of hash related functions
+    https://git.kernel.org/bpf/bpf-next/c/0e860d07c29d
+  - [PATCHv6,bpf-next,4/9] ftrace: Add update_ftrace_direct_add function
+    https://git.kernel.org/bpf/bpf-next/c/05dc5e9c1fe1
+  - [PATCHv6,bpf-next,5/9] ftrace: Add update_ftrace_direct_del function
+    https://git.kernel.org/bpf/bpf-next/c/8d2c1233f371
+  - [PATCHv6,bpf-next,6/9] ftrace: Add update_ftrace_direct_mod function
+    https://git.kernel.org/bpf/bpf-next/c/e93672f770d7
+  - [PATCHv6,bpf-next,7/9] bpf: Add trampoline ip hash table
+    https://git.kernel.org/bpf/bpf-next/c/7d0452497c29
+  - [PATCHv6,bpf-next,8/9] ftrace: Factor ftrace_ops ops_func interface
+    https://git.kernel.org/bpf/bpf-next/c/956747efd82a
+  - [PATCHv6,bpf-next,9/9] bpf,x86: Use single ftrace_ops for direct calls
+    https://git.kernel.org/bpf/bpf-next/c/424f6a361096
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
