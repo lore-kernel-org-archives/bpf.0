@@ -1,384 +1,488 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA0231ED62
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 19:14:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.175
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769627653; cv=pass; b=QECOUqiuX/JAg0yH0d1du7L/HXCyPFSoUo05ir950nGHjtmly3e2B/BjQoFAQaEw+c8nMjyrb2krPNwgX8UMeVC8MTkaNZedqzzTgOO/6POZrDs6DDyp9OB0/eBbJfFgJfMZ/AIU1ZqsKb+/DY2kLudg/YdI2SbAqbHTvsSuimM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769627653; c=relaxed/simple;
-	bh=P6HEuBQxmuKtnE3EhHBmItjZrwzt7HkpbH1ok9WvfRw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GKgmkcglJj7ykrD1bwPa3tv6/VIHEHJuKeF5HXoIkdrAdW3nRXix4/xuceG9xHGECI/Rz1PlmvcM2kBrJmghE2YFSIBxr5TYQxYAZOVGbnjIGPfuuXuJSxRnp4QN5JqULhzpMQkIxov7US8ZIGbcgxTo+SsMVoV/+hWpIsxiCUg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d2FCixth; arc=pass smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 458EC322B79
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 19:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769627941; cv=none; b=TpG2isGSWPXx7HjRGc6rQbKAjskVBVxzCDh1g4Lm7w9DGhAJ1Xz5gBwtD8hja/4vMUoVOetfsMS3Ve+slMFt1LsjYlhK7HglsBJNpJTUDgm74kM+W6jO0n3tPAM/Wv9HF/OuDsrWJbCxqdL9iOp4tkjOmDnIQKJefaOD7ODghNc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769627941; c=relaxed/simple;
+	bh=PlVmnvDFONIv8PCfkULdjSEBmY8D2r3ZetSd/HdjmN4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ZmPYyWgNFjEdCU8vCXVI6exhjmlM+0m6D6v5YvknqygHtwxu5r5Pmed9i/r+dp5+kZB3JqocwpYQg476yfew2O4nGN0KYRTwqbHA1UJ54uZ6CU+wAeRoNc6/X24hLR2+NRCnDm17H3yEr9dN7wXQnJTQXlJZJKclpYa1cY23wQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=w8CN0m3J; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d2FCixth"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c5e051a47ddso85129a12.1
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 11:14:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769627650; cv=none;
-        d=google.com; s=arc-20240605;
-        b=RktrdKNwNi0S2FgtMSG+oJlDMa9GJ0UlnS4+7Ns2IW5ny6eo7IGnk3nndmjn9QSWYs
-         J4uBTRPsxU8pxcOioq8+UfdAbiFRmhYHxGk413wgnwujQ7IvHPnTBr7ZiYH9FKAn2SyG
-         lFoAWmuzgsW8qUyB331V3781wqZl1vy266miM4zZVcJTAqCXYcPtq40ImvV90nzRwBDn
-         MIEld2ruuJCNXLQ1rIwPjwpMolosoWj3aAWHeSDNxkAVrdl72RCQdFEQcYO/J+XXmeEO
-         pEEe2SAq0GhkyuomYmv/SrWsRJB+D+NpiCNXX2FATig+sh7rv8pmQxgvJWRgFweZXn6F
-         TPqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=n3s6Xpuqm/dKJ10t/Qed8QDZ5dDaFZI+uj1WgSJ0/QM=;
-        fh=SHV6Ulpm7lFG5MiZwbwtC/zO2Bd8KXtIOhzwlCjym+U=;
-        b=XjHkU00tS9E8W49lUOq2KQZTJXRBGzsFMLRmWQtUMcVchbtI6DVB26RAnTfR9V9CWb
-         ztrJIRlg+AqqAgBjUlyLv6Tb716oN6DHwAFSmiwYQhtej/mZX1LVroZMP29Q0/Jssfmi
-         4MEM2eTgYMxJNR3zOxTFc97VjiUcEbwvaF+R5p6VouTZ2/CAaETVr+SB6HaoXmps2cPw
-         c8/dfTXZsEzRmawBEiNItgTCrzAR2Va/nA1b5jpqvHZ2/FswxOxFozgisVVoLBP1zkE+
-         MBtmcWPFURA4hyuZo4jYx/7XgxMPc8b/WPwVuOCHrbXU6d+CWbKW70lOooiyPBLjiXyk
-         44yg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769627650; x=1770232450; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n3s6Xpuqm/dKJ10t/Qed8QDZ5dDaFZI+uj1WgSJ0/QM=;
-        b=d2FCixthQQ/2J5DVI/NGS5rgPbAiV4LcLalUW3qgGprY98CdVd2he5s5v5Ub7c37g1
-         4myBYJEd6JaHn4mkCeS4izYwHHX7O/yELzD1hPBMKjAIaYpdd7edNfbmKxyL7GXlX9AX
-         mxzIsk/b+FqVojKHBs5Iib02Ra6I4rClB6J7cEZOdlZYENH5Hnio4jXNvsNHcSOYby1e
-         cgtWUbIitVTryeGsc53OcJ2m9MvsWVMGyIVgjnH4pgjS6SpfULsH7PKXuSPR1lORSOAd
-         Sr192Jl7ZCCFPObaDY2AfGyk9lhfhtYyAD3FlX5hYEwhqBokBoM+TyyAO4gFgcE/jrDG
-         mZpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769627650; x=1770232450;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=n3s6Xpuqm/dKJ10t/Qed8QDZ5dDaFZI+uj1WgSJ0/QM=;
-        b=bQYBln2gmz4yfJ7ol60OGzLRTDT9F80r1FM7ArMdLxVhgAupIPs4BIafzNeOe9q70I
-         BYfSX7/Cg+HhSsE8rmZxI3j8Uke5goXJhSD7ZXtdvmAwq/b4DFhWNuCRTn/LHfdlHyQb
-         YqXXz9tNniZkaoKsIIwNSbdYOMRfmJesr+W4NJS0oN8iepdG98d5dOD0Z6QrcWBuS5X1
-         A09CjMmhdosT14XNnmLRvdv1Fl/STtrPQp4kaQP2olRdzfotFHf8TX/HPYfoTTVZHmxo
-         j+a9VpzrT7g1csk/Wn2a5AN0rNP49661rZdNLN+jf60HMqF+EwsIKiXufneoHNxAlzJR
-         U37w==
-X-Forwarded-Encrypted: i=1; AJvYcCUIPIpWxcK5x+iefvBNGKm5JCkuvFlndqxXjCYTG80ZkmPDmcNMAHtGkULZFo+5GfaLjEQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7FrjUEBQw59iNYnGfeQX7U0f6wYUPQf8BjmDX6FWr+/hjUNgg
-	1B9QktkOH4I8wJ2ATzILOcrlhNaN8h3zLcTUvToH7efbEm00Rkv6BEZtAFpLNT9NG8P3Cas4YZQ
-	jYMYidWnO03NlEgYcT2VHjLVPjZAWXVk=
-X-Gm-Gg: AZuq6aJ0ovxHuZgXZoiXj0LmOIUp9I4FYY1AMZni4MnG+5aeN/9XjhYqoFYbnGJSoW5
-	y0IuzFlQj7R4xJmOpnW0TmToAIt39nAD07b2bUgSQUr3BbiXrjs3PlLsFSe4DV+bvEeUuyoXDIK
-	wIAAEs9CqBJeBFo2XHeDAN0mxsLCnES+TrRiAHxJp2d26yc1A7PxUrHBSFEXx3KKuxyRLaWzSPA
-	yOm2j4IoPNSzimnsgl+wLHhLmLzw2XP3/XsOLNrr+eVj91Qfyxdn4feIXvkpsRxRjOtwvAmWqNx
-	O7LVLI6h3To=
-X-Received: by 2002:a17:90b:50c8:b0:340:b908:9665 with SMTP id
- 98e67ed59e1d1-353fed94929mr5916568a91.37.1769627649465; Wed, 28 Jan 2026
- 11:14:09 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="w8CN0m3J"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769627927;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=WlevcV+s/Akx87IZT0lp1ZcnLiIY5tgyZl3WZ+5t1Bg=;
+	b=w8CN0m3Ju240SyX0s68sp64BVQ7qbMjsgdzT4R0XLdDqgi+es2vRzkfCFkf58/hI2VWQk6
+	h6vjyoAzx2SVJKgfSd9aEBK/Sn/6AnVrx+LgNcSCAXu/BBk2BvFsvhLIBwYXzWLUJBfRL+
+	YZ9Byu9GXWh1VQNU4IZvmBD/pRqi2a8=
+From: Roman Gushchin <roman.gushchin@linux.dev>
+To: Matt Bobrowski <mattbobrowski@google.com>
+Cc: bpf@vger.kernel.org,  Michal Hocko <mhocko@suse.com>,  Alexei
+ Starovoitov <ast@kernel.org>,  Shakeel Butt <shakeel.butt@linux.dev>,  JP
+ Kobryn <inwardvessel@gmail.com>,  linux-kernel@vger.kernel.org,
+  linux-mm@kvack.org,  Suren Baghdasaryan <surenb@google.com>,  Johannes
+ Weiner <hannes@cmpxchg.org>,  Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH bpf-next v3 02/17] bpf: allow attaching struct_ops to
+ cgroups
+In-Reply-To: <aXnyKw5sRt_MB-8A@google.com> (Matt Bobrowski's message of "Wed,
+	28 Jan 2026 11:25:31 +0000")
+References: <20260127024421.494929-1-roman.gushchin@linux.dev>
+	<20260127024421.494929-3-roman.gushchin@linux.dev>
+	<aXnyKw5sRt_MB-8A@google.com>
+Date: Wed, 28 Jan 2026 11:18:36 -0800
+Message-ID: <87tsw5y29f.fsf@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260126074331.815684-1-chen.dylane@linux.dev>
- <20260126074331.815684-4-chen.dylane@linux.dev> <CAEf4BzbubXxLHsO_2aVBG_oYE1Sc9iafLyvcX-PEjcQ7EXWCqA@mail.gmail.com>
- <e609a4d6-1b28-4858-8a46-a95f0794bb33@linux.dev>
-In-Reply-To: <e609a4d6-1b28-4858-8a46-a95f0794bb33@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 28 Jan 2026 11:13:57 -0800
-X-Gm-Features: AZwV_QgcPA1FPxVdEnNMUDxdbDYjl6yxuwre2AG95wokrOq3iwNZ6wcvnzUI1dw
-Message-ID: <CAEf4BzZw=E_fP77HT_jSUXxCho4zBPGED0_YbvjxHHGZFvbcsw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v8 3/3] bpf: Hold ther perf callchain entry until
- used completely
-To: Tao Chen <chen.dylane@linux.dev>
-Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org, 
-	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
-	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
-	kan.liang@linux.intel.com, song@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
-	eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com, 
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
-	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Jan 27, 2026 at 8:21=E2=80=AFPM Tao Chen <chen.dylane@linux.dev> wr=
-ote:
->
-> =E5=9C=A8 2026/1/28 05:35, Andrii Nakryiko =E5=86=99=E9=81=93:
-> > On Sun, Jan 25, 2026 at 11:46=E2=80=AFPM Tao Chen <chen.dylane@linux.de=
-v> wrote:
-> >>
-> >> As Alexei noted, get_perf_callchain() return values may be reused
-> >> if a task is preempted after the BPF program enters migrate disable
-> >> mode. The perf_callchain_entres has a small stack of entries, and
-> >> we can reuse it as follows:
-> >>
-> >> 1. get the perf callchain entry
-> >> 2. BPF use...
-> >> 3. put the perf callchain entry
-> >>
-> >> And Peter suggested that get_recursion_context used with preemption
-> >> disabled, so we should disable preemption at BPF side.
-> >>
-> >> Acked-by: Yonghong Song <yonghong.song@linux.dev>
-> >> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
-> >> ---
-> >>   kernel/bpf/stackmap.c | 55 ++++++++++++++++++++++++++++++++++++-----=
---
-> >>   1 file changed, 47 insertions(+), 8 deletions(-)
-> >>
-> >> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> >> index e77dcdc2164..6bdee6cc05f 100644
-> >> --- a/kernel/bpf/stackmap.c
-> >> +++ b/kernel/bpf/stackmap.c
-> >> @@ -215,7 +215,9 @@ get_callchain_entry_for_task(struct task_struct *t=
-ask, u32 max_depth)
-> >>   #ifdef CONFIG_STACKTRACE
-> >>          struct perf_callchain_entry *entry;
-> >>
-> >> +       preempt_disable();
-> >>          entry =3D get_callchain_entry();
-> >> +       preempt_enable();
-> >
-> > pass perf_callchain_entry as input argument, to keep similar approach
-> > to __get_perf_callchain, see below
-> >
-> >>
-> >>          if (!entry)
-> >>                  return NULL;
-> >> @@ -237,14 +239,40 @@ get_callchain_entry_for_task(struct task_struct =
-*task, u32 max_depth)
-> >>                          to[i] =3D (u64)(from[i]);
-> >>          }
-> >>
-> >> -       put_callchain_entry(entry);
-> >> -
-> >>          return entry;
-> >>   #else /* CONFIG_STACKTRACE */
-> >>          return NULL;
-> >>   #endif
-> >>   }
-> >>
-> >> +static struct perf_callchain_entry *
-> >> +bpf_get_perf_callchain(struct pt_regs *regs, bool kernel, bool user, =
-int max_stack,
-> >> +                      bool crosstask)
-> >> +{
-> >
-> > I don't really like having this wrapper, it feels like the flow will
-> > be cleaner and easier to follow if we modify the code as suggested
-> > below
-> >
->
-> Ok, will use it directly.
-> >> +       struct perf_callchain_entry *entry;
-> >> +       int ret;
-> >> +
-> >> +       preempt_disable();
-> >> +       entry =3D get_callchain_entry();
-> >> +       preempt_enable();
-> >
-> > I'd actually consider having __get_callchain_entry() that does what
-> > get_callchain_entry() does right now under assumption that
-> > preemption/migration is disabled, and then make get_callchain_entry do
-> > preempt_disable + fetch entry + preevent_enable + return entry dance.
-> >
->
-> in v4, YongHong suggested add preempt_disable in get_callchain_entry,
-> but Peter suggested that do it from BPF side, so maybe keeping the
-> existing method is a compromise.
+Matt Bobrowski <mattbobrowski@google.com> writes:
 
-yeah, I guess perf's own usage of this is happening under constant
-preempt_disable(), so this would be unnecessary for them. That's fine,
-let's keep it outside
+> On Mon, Jan 26, 2026 at 06:44:05PM -0800, Roman Gushchin wrote:
+>> Introduce an ability to attach bpf struct_ops'es to cgroups.
+>> 
+>> From user's standpoint it works in the following way:
+>> a user passes a BPF_F_CGROUP_FD flag and specifies the target cgroup
+>> fd while creating a struct_ops link. As the result, the bpf struct_ops
+>> link will be created and attached to a cgroup.
+>> 
+>> The cgroup.bpf structure maintains a list of attached struct ops links.
+>> If the cgroup is getting deleted, attached struct ops'es are getting
+>> auto-detached and the userspace program gets a notification.
+>> 
+>> This change doesn't answer the question how bpf programs belonging
+>> to these struct ops'es will be executed. It will be done individually
+>> for every bpf struct ops which supports this.
+>> 
+>> Please, note that unlike "normal" bpf programs, struct ops'es
+>> are not propagated to cgroup sub-trees.
+>> 
+>> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+>> ---
+>>  include/linux/bpf-cgroup-defs.h |  3 ++
+>>  include/linux/bpf-cgroup.h      | 16 +++++++++
+>>  include/linux/bpf.h             |  3 ++
+>>  include/uapi/linux/bpf.h        |  3 ++
+>>  kernel/bpf/bpf_struct_ops.c     | 59 ++++++++++++++++++++++++++++++---
+>>  kernel/bpf/cgroup.c             | 46 +++++++++++++++++++++++++
+>>  tools/include/uapi/linux/bpf.h  |  1 +
+>>  7 files changed, 127 insertions(+), 4 deletions(-)
+>> 
+>> diff --git a/include/linux/bpf-cgroup-defs.h b/include/linux/bpf-cgroup-defs.h
+>> index c9e6b26abab6..6c5e37190dad 100644
+>> --- a/include/linux/bpf-cgroup-defs.h
+>> +++ b/include/linux/bpf-cgroup-defs.h
+>> @@ -71,6 +71,9 @@ struct cgroup_bpf {
+>>  	/* temp storage for effective prog array used by prog_attach/detach */
+>>  	struct bpf_prog_array *inactive;
+>>  
+>> +	/* list of bpf struct ops links */
+>> +	struct list_head struct_ops_links;
+>> +
+>>  	/* reference counter used to detach bpf programs after cgroup removal */
+>>  	struct percpu_ref refcnt;
+>>  
+>> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
+>> index 2f535331f926..a6c327257006 100644
+>> --- a/include/linux/bpf-cgroup.h
+>> +++ b/include/linux/bpf-cgroup.h
+>> @@ -423,6 +423,11 @@ int cgroup_bpf_link_attach(const union bpf_attr *attr, struct bpf_prog *prog);
+>>  int cgroup_bpf_prog_query(const union bpf_attr *attr,
+>>  			  union bpf_attr __user *uattr);
+>>  
+>> +int cgroup_bpf_attach_struct_ops(struct cgroup *cgrp,
+>> +				 struct bpf_struct_ops_link *link);
+>> +void cgroup_bpf_detach_struct_ops(struct cgroup *cgrp,
+>> +				  struct bpf_struct_ops_link *link);
+>> +
+>>  const struct bpf_func_proto *
+>>  cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog);
+>>  #else
+>> @@ -451,6 +456,17 @@ static inline int cgroup_bpf_link_attach(const union bpf_attr *attr,
+>>  	return -EINVAL;
+>>  }
+>>  
+>> +static inline int cgroup_bpf_attach_struct_ops(struct cgroup *cgrp,
+>> +					       struct bpf_struct_ops_link *link)
+>> +{
+>> +	return -EINVAL;
+>> +}
+>> +
+>> +static inline void cgroup_bpf_detach_struct_ops(struct cgroup *cgrp,
+>> +						struct bpf_struct_ops_link *link)
+>> +{
+>> +}
+>> +
+>>  static inline int cgroup_bpf_prog_query(const union bpf_attr *attr,
+>>  					union bpf_attr __user *uattr)
+>>  {
+>> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+>> index 899dd911dc82..391888eb257c 100644
+>> --- a/include/linux/bpf.h
+>> +++ b/include/linux/bpf.h
+>> @@ -1894,6 +1894,9 @@ struct bpf_raw_tp_link {
+>>  struct bpf_struct_ops_link {
+>>  	struct bpf_link link;
+>>  	struct bpf_map __rcu *map;
+>> +	struct cgroup *cgroup;
+>> +	bool cgroup_removed;
+>> +	struct list_head list;
+>>  	wait_queue_head_t wait_hup;
+>>  };
+>>  
+>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>> index 44e7dbc278e3..28544e8af1cd 100644
+>> --- a/include/uapi/linux/bpf.h
+>> +++ b/include/uapi/linux/bpf.h
+>> @@ -1237,6 +1237,7 @@ enum bpf_perf_event_type {
+>>  #define BPF_F_AFTER		(1U << 4)
+>>  #define BPF_F_ID		(1U << 5)
+>>  #define BPF_F_PREORDER		(1U << 6)
+>> +#define BPF_F_CGROUP_FD		(1U << 7)
+>>  #define BPF_F_LINK		BPF_F_LINK /* 1 << 13 */
+>>  
+>>  /* If BPF_F_STRICT_ALIGNMENT is used in BPF_PROG_LOAD command, the
+>> @@ -6775,6 +6776,8 @@ struct bpf_link_info {
+>>  		} xdp;
+>>  		struct {
+>>  			__u32 map_id;
+>> +			__u32 :32;
+>> +			__u64 cgroup_id;
+>>  		} struct_ops;
+>>  		struct {
+>>  			__u32 pf;
+>> diff --git a/kernel/bpf/bpf_struct_ops.c b/kernel/bpf/bpf_struct_ops.c
+>> index de01cf3025b3..2e361e22cfa0 100644
+>> --- a/kernel/bpf/bpf_struct_ops.c
+>> +++ b/kernel/bpf/bpf_struct_ops.c
+>> @@ -13,6 +13,8 @@
+>>  #include <linux/btf_ids.h>
+>>  #include <linux/rcupdate_wait.h>
+>>  #include <linux/poll.h>
+>> +#include <linux/bpf-cgroup.h>
+>> +#include <linux/cgroup.h>
+>>  
+>>  struct bpf_struct_ops_value {
+>>  	struct bpf_struct_ops_common_value common;
+>> @@ -1220,6 +1222,10 @@ static void bpf_struct_ops_map_link_dealloc(struct bpf_link *link)
+>>  		st_map->st_ops_desc->st_ops->unreg(&st_map->kvalue.data, link);
+>>  		bpf_map_put(&st_map->map);
+>>  	}
+>> +
+>> +	if (st_link->cgroup)
+>> +		cgroup_bpf_detach_struct_ops(st_link->cgroup, st_link);
+>> +
+>>  	kfree(st_link);
+>>  }
+>>  
+>> @@ -1228,6 +1234,7 @@ static void bpf_struct_ops_map_link_show_fdinfo(const struct bpf_link *link,
+>>  {
+>>  	struct bpf_struct_ops_link *st_link;
+>>  	struct bpf_map *map;
+>> +	u64 cgrp_id = 0;
+>
+> Assigning 0 to cgrp_id would technically be incorrect, right? Like,
+> cgroup_id() for !CONFIG_CGROUPS default to returning 1, and for
+> CONFIG_CGROUPS the ID allocation is done via the idr_alloc_cyclic()
+> API using a range between 1 and INT_MAX. Perhaps here it serves as a
+> valid sentinel value? Is that the rationale?
+
+Yes. Idk, maybe (u64)-1 works better here, I don't have a strong
+opinion. Realistically I doubt there are too many bpf users with
+!CONFIG_CGROUPS. Alexei even suggested in the past to make CONFIG_MEMCG
+mandatory, which implies CONFIG_CGROUPS.
+
+> In general, shouldn't all the cgroup related logic within this source
+> file be protected by a CONFIG_CGROUPS ifdef? For example, both
+> cgroup_get_from_fd() and cgroup_put() lack stubs when building with
+> !CONFIG_CGROUPS.
+>
+>>  	st_link = container_of(link, struct bpf_struct_ops_link, link);
+>>  	rcu_read_lock();
+>> @@ -1235,6 +1242,14 @@ static void bpf_struct_ops_map_link_show_fdinfo(const struct bpf_link *link,
+>>  	if (map)
+>>  		seq_printf(seq, "map_id:\t%d\n", map->id);
+>>  	rcu_read_unlock();
+>> +
+>> +	cgroup_lock();
+>> +	if (st_link->cgroup)
+>> +		cgrp_id = cgroup_id(st_link->cgroup);
+>> +	cgroup_unlock();
+>> +
+>> +	if (cgrp_id)
+>> +		seq_printf(seq, "cgroup_id:\t%llu\n", cgrp_id);
+>
+> Probably could introduce a simple inline helper for the
+> cgroup_lock()/cgroup_id()/cgroup_unlock() dance that's going on in
+> here and bpf_struct_ops_map_link_fill_link_info() below.
+
+I'll try, thanks!
 
 >
-> > This will simplify the flow here to just with no explicit
-> > preempt_{disable,enable} visible. Either way all of this has
-> > assumption that we are staying on the same CPU throughout (so at the
-> > very least we need to have migration disabled)
-> >
-> > entry =3D get_callchain_entry();
-> > __get_perf_callchain(entry, ...);
-> > put_callchain_entry();
-> >
-> >
-> > BTW, is there a way to assert that either preemption or migration is
-> > currently disabled? I think both get_callchain_entry and
-> > put_callchain_entry would benefit from that
-> >
-> > pw-bot: cr
-> >
-> >
-> >> +
-> >> +       if (unlikely(!entry))
-> >> +               return NULL;
-> >> +
-> >> +       ret =3D __get_perf_callchain(entry, regs, kernel, user, max_st=
-ack, crosstask, false, 0);
-> >> +       if (ret) {
-> >> +               put_callchain_entry(entry);
-> >> +               return NULL;
-> >> +       }
-> >> +
-> >> +       return entry;
-> >> +}
-> >> +
-> >> +static void bpf_put_perf_callchain(struct perf_callchain_entry *entry=
-)
-> >> +{
-> >> +       put_callchain_entry(entry);
-> >> +}
-> >> +
-> >>   static long __bpf_get_stackid(struct bpf_map *map,
-> >>                                struct perf_callchain_entry *trace, u64=
- flags)
-> >>   {
-> >> @@ -327,20 +355,23 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, re=
-gs, struct bpf_map *, map,
-> >>          struct perf_callchain_entry *trace;
-> >>          bool kernel =3D !user;
-> >>          u32 max_depth;
-> >> +       int ret;
-> >>
-> >>          if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STA=
-CK |
-> >>                                 BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STA=
-CKID)))
-> >>                  return -EINVAL;
-> >>
-> >>          max_depth =3D stack_map_calculate_max_depth(map->value_size, =
-elem_size, flags);
-> >> -       trace =3D get_perf_callchain(regs, kernel, user, max_depth,
-> >> -                                  false, false, 0);
-> >> +       trace =3D bpf_get_perf_callchain(regs, kernel, user, max_depth=
-, false);
-> >>
-> >>          if (unlikely(!trace))
-> >>                  /* couldn't fetch the stack trace */
-> >>                  return -EFAULT;
-> >>
-> >> -       return __bpf_get_stackid(map, trace, flags);
-> >> +       ret =3D __bpf_get_stackid(map, trace, flags);
-> >> +       bpf_put_perf_callchain(trace);
-> >
-> > Just as above, I think get_callchain_entry + __get_perf_callchain +
-> > put_callchain_entry is better, IMO
-> >
-> >> +
-> >> +       return ret;
-> >>   }
-> >>
-> >>   const struct bpf_func_proto bpf_get_stackid_proto =3D {
-> >> @@ -468,13 +499,19 @@ static long __bpf_get_stack(struct pt_regs *regs=
-, struct task_struct *task,
-> >>          } else if (kernel && task) {
-> >>                  trace =3D get_callchain_entry_for_task(task, max_dept=
-h);
-> >>          } else {
-> >> -               trace =3D get_perf_callchain(regs, kernel, user, max_d=
-epth,
-> >> -                                          crosstask, false, 0);
-> >> +               trace =3D bpf_get_perf_callchain(regs, kernel, user, m=
-ax_depth, crosstask);
-> >>          }
-> >
-> > with the above suggestions this will be a pretty streamlined:
-> >
-> > trace =3D trace_in ?: get_callchain_entry();
-> > if (!trace)
-> >      goto err_fault;
-> >
-> > if (trace_in) {
-> >      trace->nr =3D ...
-> >      err =3D 0
-> > } else if (kernel && task) {
-> >      err =3D get_callchain_entry_for_task(trace, ...);
-> > } else {
-> >      err =3D __get_perf_callchain(trace, ...);
-> > }
-> > if (err)
-> >      goto clear;
-> >
+>>  }
+>>  
+>>  static int bpf_struct_ops_map_link_fill_link_info(const struct bpf_link *link,
+>> @@ -1242,6 +1257,7 @@ static int bpf_struct_ops_map_link_fill_link_info(const struct bpf_link *link,
+>>  {
+>>  	struct bpf_struct_ops_link *st_link;
+>>  	struct bpf_map *map;
+>> +	u64 cgrp_id = 0;
+>>  
+>>  	st_link = container_of(link, struct bpf_struct_ops_link, link);
+>>  	rcu_read_lock();
+>> @@ -1249,6 +1265,13 @@ static int bpf_struct_ops_map_link_fill_link_info(const struct bpf_link *link,
+>>  	if (map)
+>>  		info->struct_ops.map_id = map->id;
+>>  	rcu_read_unlock();
+>> +
+>> +	cgroup_lock();
+>> +	if (st_link->cgroup)
+>> +		cgrp_id = cgroup_id(st_link->cgroup);
+>> +	cgroup_unlock();
+>> +
+>> +	info->struct_ops.cgroup_id = cgrp_id;
 >
-> This code looks much cleaner, i will change it, thanks.
+> As mentioned above a simple inline helper could simply yield the
+> following here:
 >
-> > ... proceed as before, we have our stack trace inside trace ...
-> >
-> > for successful and failed paths (you'll have to duplicate this logic):
-> >
-> > if (trace !=3D trace_in)
-> >      put_callchain_entry(trace);
-> >
-> >>
-> >> -       if (unlikely(!trace) || trace->nr < skip) {
-> >> +       if (unlikely(!trace)) {
-> >
-> > this condition cannot happen: we either get trace_in !=3D NULL or we ge=
-t
-> > it using __get_callchain_entry and then validate it's not NULL
-> > earlier, so drop this condition
-> >
+> ...
+> 	  info->struct_ops.cgroup_id = bpf_struct_ops_lin_cgroup_id();
+> ...
 >
-> will remove it.
+>>  	return 0;
+>>  }
+>>  
+>> @@ -1327,6 +1350,9 @@ static int bpf_struct_ops_map_link_detach(struct bpf_link *link)
+>>  
+>>  	mutex_unlock(&update_mutex);
+>>  
+>> +	if (st_link->cgroup)
+>> +		cgroup_bpf_detach_struct_ops(st_link->cgroup, st_link);
+>> +
+>>  	wake_up_interruptible_poll(&st_link->wait_hup, EPOLLHUP);
+>>  
+>>  	return 0;
+>> @@ -1339,6 +1365,9 @@ static __poll_t bpf_struct_ops_map_link_poll(struct file *file,
+>>  
+>>  	poll_wait(file, &st_link->wait_hup, pts);
+>>  
+>> +	if (st_link->cgroup_removed)
+>> +		return EPOLLHUP;
+>> +
+>>  	return rcu_access_pointer(st_link->map) ? 0 : EPOLLHUP;
+>>  }
+>>  
+>> @@ -1357,8 +1386,12 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
+>>  	struct bpf_link_primer link_primer;
+>>  	struct bpf_struct_ops_map *st_map;
+>>  	struct bpf_map *map;
+>> +	struct cgroup *cgrp;
+>>  	int err;
+>>  
+>> +	if (attr->link_create.flags & ~BPF_F_CGROUP_FD)
+>> +		return -EINVAL;
+>> +
 >
-> >> +               if (may_fault)
-> >> +                       rcu_read_unlock();
-> >> +               goto err_fault;
-> >> +       }
-> >> +       if (trace->nr < skip) {
-> >>                  if (may_fault)
-> >>                          rcu_read_unlock();
-> >> +               if (!trace_in)
-> >> +                       bpf_put_perf_callchain(trace);
-> >
-> > do this clean up in one place, behind the new goto label? it's a bit
-> > too easy to miss this, IMO
-> >
+> BPF_F_CGROUP_FD is dependent on the cgroup subsystem, therefore it
+> probably makes some sense to only accept BPF_F_CGROUP_FD when
+> CONFIG_BPF_CGROUP is enabled, otherwise -EOPNOTSUPP?
 >
-> ok, will do.
+> I'd also probably rewrite this such that we do:
 >
-> >>                  goto err_fault;
-> >>          }
-> >>
-> >> @@ -495,6 +532,8 @@ static long __bpf_get_stack(struct pt_regs *regs, =
-struct task_struct *task,
-> >>          /* trace/ips should not be dereferenced after this point */
-> >>          if (may_fault)
-> >>                  rcu_read_unlock();
-> >
-> > now that I looked at this code, I feel like we don't really need this
-> > rcu_read_{lock,unlock}() dance (even though I added it in the first
-> > place). I this RCU was supposed to be need to keep
-> > perf_callchain_entry alive long enough, but for BPF this is guaranteed
-> > because either BPF stack map will keep them alive by delaying
-> > put_callchain_buffer() until freeing time (after RCU Tasks Trace + RCU
-> > grace periods), or for bpf_get_stack/bpf_get_task_stack, BPF program
-> > itself will hold these buffers alive again, until freeing time which
-> > is delayed until after RCU Tasks Trace + RCU grace period.
+> ...
+> 	struct cgroup *cgrp = NULL;
+> 	...
+> 	if (attr->link_create.flags & ~BPF_F_CGROUP_FD) {
+> #if IS_ENABLED(CONFIG_CGROUP_BPF)
+> 	cgrp = cgroup_get_from_fd(attr->link_create.target_fd);
+> 	if (IS_ERR(cgrp))
+> 		return PTR_ERR(cgrp);
+> #else
+> 	return -EOPNOTSUPP;
+> #endif
+> 	}
+> ...
+> 	if (cgrp) {
+> 		link->cgroup = cgrp;
+> 		if (cgroup_bpf_attach_struct_ops(cgrp, link)) {
+> 		   cgroup_put(cgrp);
+> 		   goto err_out;
+> 		}
+> 	}
 >
-> It seems so, for both, put_callchain_buffer is always called at the end,
-> which ensures it won't be released during use, i will remove it as a new
-> patch.
+> IMO the code is cleaner and reads better too.
 >
-> >
-> > Please send this clean up as the first patch in the series so we can
-> > review and ack this separately. Thanks!
-> >
-> >> +       if (!trace_in)
-> >> +               bpf_put_perf_callchain(trace);
-> >>
-> >>          if (user_build_id)
-> >>                  stack_map_get_build_id_offset(buf, trace_nr, user, ma=
-y_fault);
-> >> --
-> >> 2.48.1
-> >>
+>>  	map = bpf_map_get(attr->link_create.map_fd);
+>>  	if (IS_ERR(map))
+>>  		return PTR_ERR(map);
+>> @@ -1378,11 +1411,26 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
+>>  	bpf_link_init(&link->link, BPF_LINK_TYPE_STRUCT_OPS, &bpf_struct_ops_map_lops, NULL,
+>>  		      attr->link_create.attach_type);
+>>  
+>> +	init_waitqueue_head(&link->wait_hup);
+>> +
+>> +	if (attr->link_create.flags & BPF_F_CGROUP_FD) {
+>> +		cgrp = cgroup_get_from_fd(attr->link_create.target_fd);
+>> +		if (IS_ERR(cgrp)) {
+>> +			err = PTR_ERR(cgrp);
+>> +			goto err_out;
+>> +		}
+>> +		link->cgroup = cgrp;
+>> +		err = cgroup_bpf_attach_struct_ops(cgrp, link);
+>> +		if (err) {
+>> +			cgroup_put(cgrp);
+>> +			link->cgroup = NULL;
+>> +			goto err_out;
+>> +		}
+>> +	}
+>> +
+>>  	err = bpf_link_prime(&link->link, &link_primer);
+>>  	if (err)
+>> -		goto err_out;
+>> -
+>> -	init_waitqueue_head(&link->wait_hup);
+>> +		goto err_put_cgroup;
+>>  
+>>  	/* Hold the update_mutex such that the subsystem cannot
+>>  	 * do link->ops->detach() before the link is fully initialized.
+>> @@ -1393,13 +1441,16 @@ int bpf_struct_ops_link_create(union bpf_attr *attr)
+>>  		mutex_unlock(&update_mutex);
+>>  		bpf_link_cleanup(&link_primer);
+>>  		link = NULL;
+>> -		goto err_out;
+>> +		goto err_put_cgroup;
+>>  	}
+>>  	RCU_INIT_POINTER(link->map, map);
+>>  	mutex_unlock(&update_mutex);
+>>  
+>>  	return bpf_link_settle(&link_primer);
+>>  
+>> +err_put_cgroup:
+>> +	if (link && link->cgroup)
+>> +		cgroup_bpf_detach_struct_ops(link->cgroup, link);
+>>  err_out:
+>>  	bpf_map_put(map);
+>>  	kfree(link);
+>> diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+>> index 69988af44b37..7b1903be6f69 100644
+>> --- a/kernel/bpf/cgroup.c
+>> +++ b/kernel/bpf/cgroup.c
+>> @@ -16,6 +16,7 @@
+>>  #include <linux/bpf-cgroup.h>
+>>  #include <linux/bpf_lsm.h>
+>>  #include <linux/bpf_verifier.h>
+>> +#include <linux/poll.h>
+>>  #include <net/sock.h>
+>>  #include <net/bpf_sk_storage.h>
+>>  
+>> @@ -307,12 +308,23 @@ static void cgroup_bpf_release(struct work_struct *work)
+>>  					       bpf.release_work);
+>>  	struct bpf_prog_array *old_array;
+>>  	struct list_head *storages = &cgrp->bpf.storages;
+>> +	struct bpf_struct_ops_link *st_link, *st_tmp;
+>>  	struct bpf_cgroup_storage *storage, *stmp;
+>> +	LIST_HEAD(st_links);
+>>  
+>>  	unsigned int atype;
+>>  
+>>  	cgroup_lock();
+>>  
+>> +	list_splice_init(&cgrp->bpf.struct_ops_links, &st_links);
+>> +	list_for_each_entry_safe(st_link, st_tmp, &st_links, list) {
+>> +		st_link->cgroup = NULL;
+>> +		st_link->cgroup_removed = true;
+>> +		cgroup_put(cgrp);
+>> +		if (IS_ERR(bpf_link_inc_not_zero(&st_link->link)))
+>> +			list_del(&st_link->list);
+>> +	}
+>> +
+>>  	for (atype = 0; atype < ARRAY_SIZE(cgrp->bpf.progs); atype++) {
+>>  		struct hlist_head *progs = &cgrp->bpf.progs[atype];
+>>  		struct bpf_prog_list *pl;
+>> @@ -346,6 +358,11 @@ static void cgroup_bpf_release(struct work_struct *work)
+>>  
+>>  	cgroup_unlock();
+>>  
+>> +	list_for_each_entry_safe(st_link, st_tmp, &st_links, list) {
+>> +		st_link->link.ops->detach(&st_link->link);
+>> +		bpf_link_put(&st_link->link);
+>> +	}
+>> +
+>>  	for (p = cgroup_parent(cgrp); p; p = cgroup_parent(p))
+>>  		cgroup_bpf_put(p);
+>>  
+>> @@ -525,6 +542,7 @@ static int cgroup_bpf_inherit(struct cgroup *cgrp)
+>>  		INIT_HLIST_HEAD(&cgrp->bpf.progs[i]);
+>>  
+>>  	INIT_LIST_HEAD(&cgrp->bpf.storages);
+>> +	INIT_LIST_HEAD(&cgrp->bpf.struct_ops_links);
+>>  
+>>  	for (i = 0; i < NR; i++)
+>>  		if (compute_effective_progs(cgrp, i, &arrays[i]))
+>> @@ -2759,3 +2777,31 @@ cgroup_common_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
+>>  		return NULL;
+>>  	}
+>>  }
+>> +
+>> +int cgroup_bpf_attach_struct_ops(struct cgroup *cgrp,
+>> +				 struct bpf_struct_ops_link *link)
+>> +{
+>> +	int ret = 0;
+>> +
+>> +	cgroup_lock();
+>> +	if (percpu_ref_is_zero(&cgrp->bpf.refcnt)) {
+>> +		ret = -EBUSY;
 >
+> If the cgroup is dying, then perhaps -EINVAL would be more appropriate
+> here, no? I'd argue that -EBUSY implies a temporary or transient
+> state.
+
+Idk, I thought about it and settled on -EBUSY to highlight the
+transient nature of the issue. ENOENT is another option.
+I don't really think EINVAL is the best choice here.
+
 >
-> --
-> Best Regards
-> Tao Chen
+>> +		goto out;
+>> +	}
+>> +	list_add_tail(&link->list, &cgrp->bpf.struct_ops_links);
+>> +out:
+>> +	cgroup_unlock();
+>> +	return ret;
+>> +}
+>> +
+>> +void cgroup_bpf_detach_struct_ops(struct cgroup *cgrp,
+>> +				  struct bpf_struct_ops_link *link)
+>> +{
+>> +	cgroup_lock();
+>> +	if (link->cgroup == cgrp) {
+>> +		list_del(&link->list);
+>> +		link->cgroup = NULL;
+>> +		cgroup_put(cgrp);
+>> +	}
+>> +	cgroup_unlock();
+>> +}
+>
+> Within cgroup_bpf_attach_struct_ops() and
+> cgroup_bpf_detach_struct_ops() the cgrp pointer appears to be
+> superfluous? Both should probably only operate on link->cgroup
+> instead? A !link->cgroup when calling either should be considered as
+> -EINVAL.
+
+Ack.
+
+Thank you for the review!
