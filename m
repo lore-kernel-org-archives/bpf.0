@@ -1,125 +1,102 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1E626A1CF
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 08:19:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91652275AE3
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 08:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769588365; cv=none; b=gW5wGvJxi+DFgbrlhcvpWNnYeRrSIDLk6thJAdZDg0+t5UA1rXrilPn/yrrKwLzyrK9vzFkqrQ3Ct75fbYJy+OKK5shO2MJABOcXrNQXalJZMtg49Gso+f81Uch6LzqysoWWaMbCqQg6G1zjrxDgXznHlUx//SU7NjY99/8fYuQ=
+	t=1769589950; cv=none; b=BpTNtwIue+H8xtGgZW2WJg1d9mEqDKKzQC43aVWwdKzSO0+QdrI7goeew/dNciNwaR+EAzBoE8fSXQmx5IQykeG4237vlbeb4aWufOWg1sK6yyrh2Qvuw0Btcm6wX/XGN/Rdn7NJLGM0qAJmZKuA53hGzjgat2g4ynYRvMjZanE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769588365; c=relaxed/simple;
-	bh=I3RR4mkzvl3vrE7xdB+EXcNPHaVK9jeMfWJtpB2Cb/A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sPPOLcaUmMC2SYscqBkDGkK8V91Ciomao1+SP/wuFBfQgOzfF5xvUM/e+nPZhgfR2M+KEgol4CgQsHhEFTCE5OBUitt8B0+TEtyPHoWnJaGh3b92fbbZK9Tj7+CSFXBa0mZHvTinINvrSdeWoWHah++nz7MN/+dpePpmfRG7Sr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YektZVu0; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1769589950; c=relaxed/simple;
+	bh=iafuYqSmgzl67w4L8S669bTJDaKIv567Cp/r80sNvek=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=BnyLcA+MjtkXKxFxtis5Xzd2U1jXZaeTn2JYatCPSQyIoY5b0Tq2aiiAh8hdtdm2Er5oZZYosAYlupj0UGpbQFzcTD4n/kz0Tdt44d051mledgJ3S0YeGfkfh6qK/jOClyl5FaNBf7j2N/vIpQtIUBMxDugiFnlTW4wSfsY27xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LiRed8KB; arc=none smtp.client-ip=209.85.214.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YektZVu0"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c3e921afad1so2427196a12.1
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 00:19:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LiRed8KB"
+Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2a79998d35aso42596835ad.0
+        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 00:45:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769588364; x=1770193164; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1769589949; x=1770194749; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=syby8oeFyZiDA53Kg1ApA4RRxVSYxXfIUH/FGHxf7A4=;
-        b=YektZVu06aPh2N57E9Reg7Bg5oXylj8Cs/Ww/9s/CT+T6rVCNDqF43ogxGpcIAzcsD
-         UhTb7+HLeLnZ08xeyCEIZoukDhPhkpoEhT3bgfR8nqGRGPaHzI9ryqQ6Y09OyXEC+TgU
-         +FWz5K/tA5lmQqSoJ7vjKmFzeWViN2rhQjPwfPSFDi1h353cOYQg8ZF82rBh6X6hW9LA
-         xWkiAmKgflCRHG8dCinaF3nYtJiAZrVMqZhClbhFPgWW+XzYQ51sBrxQsZ9lH2UaRTnG
-         naowKAMfrFkUnAo5UmI1+nTPCeTSmkTmznzXHlfg0FwqNnu62+h53G627UDTKXsn1d83
-         KaGQ==
+        bh=FBiC0Ga9PNqkTYY+QPAQfS35mNItKw6OX3nueD/z0VI=;
+        b=LiRed8KBj72URvu2BHj6236YYVF2zXyk0U7E4S1u2kM2WyRjENUHUSc4pyhPN1V4Rj
+         RoMdxyGekta1RDpzd920y+wk6hsSEYhNsBOn//0kc2rnUYnTUGQUXy81N2AHjrwv40Wr
+         89aLmyQy/sF4deRiXX9deQE3K395Xsg6S4ks2Qv2poRV+RG/zkUEdgg8JHB8FrtsU/b1
+         RRVioM2os4bGQWDdvGbHaYWYKfZFKGewEIa9ahVpEfiUYNllW6oxLlG/QVLT5PKNoH3M
+         uNdkfeyDnx5pBjrX7aD4lp+XH2nRIp/6WLF+mTa9paAmkvaSB9ALREgvyuJJG1P8GHbF
+         rJuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769588364; x=1770193164;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=syby8oeFyZiDA53Kg1ApA4RRxVSYxXfIUH/FGHxf7A4=;
-        b=gFk9yroGHSmSJg8pYRrxFNFWsEu79jBb3K++RnMukrtoeM6neJD1w59NA4qmNh6bsu
-         C10uta6HO4imo35neqoJkGMxtV2d2IzEl+xHgx50we0fHjHN890xveylFjJkQyImCKPZ
-         oF/9f0r5q+byRaLtIZYo4NLPlEdqfiXekhYf9zdytliCQnWkgUfi/CQOqKDlro9SaHM7
-         GdLIn4LGOQDd37170B7Yc40BSBEWaySQEPU3I0kgkokGsM1vmhvGbRwMfu1GvfGvLMCH
-         cFHS23ZJ7Fj7rsx2XlaAwn9FsUD5wg9W7vmooBE0MfGqCScgRs81KMPQ+mnuLBAATifg
-         o5cg==
-X-Forwarded-Encrypted: i=1; AJvYcCUnq5lvmIP+txlLg+G7mn1hwS68KbHV+aTgwHjScomWFHwIQvW8atNZ5mv4sRhL242bvRg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeBl/lEUG1tyTBdA3ehvFOQHL/XlaNV6lmUBWQ/sWBsx1s8MYn
-	gIbRQxHPeob2UPxT6dz9CLGCvI2OCjlToT1gfMCdEfHpCxS1x4V+3E0u
-X-Gm-Gg: AZuq6aJQ713PBVfeMBQM+i+k+mb1gpHO2JZ6bCsFNlZeUgibWr+gTd/F8NzWeaXEdbm
-	u8bBSgh+HmtTd7pSkd/V380L1Obn20N6sXGOZaDi4M8IYTvBAVokupWPv1u2kKIsMVKfQ+F4iKf
-	KhpobXMMefqL4RdgITutMyrjfp1p6DwFmKUvYS9FTC8N89kje8aplQOQp+HoG9kFgY2QW/Dwr2l
-	i/Wj94TWaq9Pao5cNIxTD5jyJ6JCLU0lGjzaZTrv6D6T8UmFKb45RHhL15J7xWfKCe0mFKFMB2d
-	MaSprPAlCXZ6sJcvrVKWXTFHK0jvbYLaM4OrCZD/ru6AnH+ughr1lgCaukf2BZlgciCvJwqNRAl
-	f5YkhHixjL+sZCFHzbr7WwvmVLJu5CcPZ1kIqE4Cs3zRMEXWkjp7WecX2ccjnf8x0A0Fv87aHzN
-	yZazhCdw1NnSErBxrN8eY=
-X-Received: by 2002:a17:90a:e183:b0:34c:37b8:db34 with SMTP id 98e67ed59e1d1-353fedb153fmr3633477a91.32.1769588363583;
-        Wed, 28 Jan 2026 00:19:23 -0800 (PST)
-Received: from [0.0.0.0] ([188.253.4.252])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3540f17955asm1664437a91.0.2026.01.28.00.19.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 28 Jan 2026 00:19:23 -0800 (PST)
-Message-ID: <874829ba-00b9-49cd-8f67-a4c33a8f409f@gmail.com>
-Date: Wed, 28 Jan 2026 16:19:14 +0800
+        d=1e100.net; s=20230601; t=1769589949; x=1770194749;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=FBiC0Ga9PNqkTYY+QPAQfS35mNItKw6OX3nueD/z0VI=;
+        b=eSuD+Ub/osyVU87MHe+z7kaQmQTJF8/jxJD30nsaVSz2c3p6feUqikDekkIHHoaDBg
+         0CcHSHZi9UM5gtbtkeafVJFXlaOoJ9uJP/s1//e7D3EguBOvrfdQB247sBZO+Xhz9ao/
+         EZf5bvTGiIBJCDrnOBNMqbKA6IfrXa+SvDiDkME+Xk9CTR9t7nxVgkZTwWEdRfVhRxoE
+         1YdT2S3JsDfF+zOn8CcFSVmwh1AsH+TTR3SYHo5dWV/DbgeA12qrDzXB9jDmBH01QSjW
+         vbD5/tpLdC2e7gB7aMAcHbARBMrn5ISxsk5X5AeTFPbLJKTIMtRTQwFsOiIQ26Hcx2IA
+         AI4A==
+X-Forwarded-Encrypted: i=1; AJvYcCVjudCfKnsSFMPlY/wdM1ToWcXbvhtSxJ83CtIJOfSKrZRtLfuzIOaqrRfMhfQH6qiA8RY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6TxMz/Mvjq6hF1fzxcmzmhuE1mK2JEktmhXiNQWAS9zmGGECl
+	WEDNZGjazjbJ+H9TWof3HPT4N1hO6JPNWvv8o7SWWpSglxG9ei5QATEs
+X-Gm-Gg: AZuq6aLVKRNicTuRWVAgT9eYMQEAnmhCrf4A9cHGHTmoFbte5cWzaxLbkza/i458a3G
+	h/1pVXRTqFHkU32u4nDsSn2s+BcnWeOesPPCQYXENYJhnjzpUh5L7jPEdhsrthMqSNTi+3Pl2ZQ
+	2kX7t5H4gKgMlot+60WeifCYwr7ptQdkymzNGQFkL6RCrkgBKt0zMm40qABUs444/DdYDVUIK3N
+	B/CJXlBeEXd/maHcjjmrAlL0puNyhu2onNiKNqumThPSR7mYanO35BVb7OpXuy18vYKsvBINvKH
+	TA6XeakpLiJwtDfGoS4YYx+CvWf22AieyUFXE0RbtxeZMCtKKolKAkC14tuC+aCuCqCTaVbccxW
+	H50/48FFs85HYxupjOsuitMWxgZsbJz6nKCkDjTMC1aD7gNg3CgRI9EDHMp+/mi2k8IwnvJYavz
+	CAWTtGAVLHSERPLPDy1OZYAVMgcB3Ql60m14H9FA==
+X-Received: by 2002:a17:903:1a6f:b0:2a7:5095:c92a with SMTP id d9443c01a7336-2a870dc6c2bmr50103835ad.31.1769589948880;
+        Wed, 28 Jan 2026 00:45:48 -0800 (PST)
+Received: from lima-ubuntu.hz.ali.com ([47.246.98.220])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b4c3d4csm16177195ad.56.2026.01.28.00.45.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Jan 2026 00:45:48 -0800 (PST)
+From: Qing Wang <wangqing7171@gmail.com>
+To: chen.dylane@gmail.com
+Cc: acme@kernel.org,
+	adrian.hunter@intel.com,
+	alexander.shishkin@linux.intel.com,
+	andrii.nakryiko@gmail.com,
+	bpf@vger.kernel.org,
+	irogers@google.com,
+	jolsa@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	mark.rutland@arm.com,
+	mingo@redhat.com,
+	namhyung@kernel.org,
+	peterz@infradead.org,
+	radoslaw.zielonek@gmail.com,
+	syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com,
+	wangqing7171@gmail.com
+Subject: Re: [PATCH] perf callchain: Fix suspicious RCU usage in get_callchain_entry()
+Date: Wed, 28 Jan 2026 16:45:38 +0800
+Message-Id: <20260128084538.1889001-1-wangqing7171@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <874829ba-00b9-49cd-8f67-a4c33a8f409f@gmail.com>
+References: <874829ba-00b9-49cd-8f67-a4c33a8f409f@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] perf callchain: Fix suspicious RCU usage in
- get_callchain_entry()
-To: Qing Wang <wangqing7171@gmail.com>, andrii.nakryiko@gmail.com
-Cc: acme@kernel.org, adrian.hunter@intel.com,
- alexander.shishkin@linux.intel.com, bpf@vger.kernel.org, irogers@google.com,
- jolsa@kernel.org, linux-kernel@vger.kernel.org,
- linux-perf-users@vger.kernel.org, mark.rutland@arm.com, mingo@redhat.com,
- namhyung@kernel.org, peterz@infradead.org, radoslaw.zielonek@gmail.com,
- syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com
-References: <CAEf4BzaYL9zZN8TZyRHW3_O3vbHc7On+NSunrkDvDQx2=wwyRw@mail.gmail.com>
- <20260128062656.1860201-1-wangqing7171@gmail.com>
-From: Tao Chen <chen.dylane@gmail.com>
-In-Reply-To: <20260128062656.1860201-1-wangqing7171@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-在 2026/1/28 14:26, Qing Wang 写道:
-> On Fri, 19 Jul 2024 at 01:41, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->> Which is what I'm doing in [0]. Radoslaw, can you please help
->> validating if those changes are enough to fix this issue or we need to
->> do some more?
->>
->>    [0] https://patchwork.kernel.org/project/netdevbpf/patch/20240709204245.3=
->> 847811-10-andrii@kernel.org/
->>
->>>
->>>> ---
->>>>   kernel/events/callchain.c | 11 +++++++++--
->>>>   1 file changed, 9 insertions(+), 2 deletions(-)
->>>>
-> 
-> Hi,
-> 
-> I found this issue still exists after your patch in upstream and I have a
-> patch to fix it.
-> 
-> Patch here: https://lore.kernel.org/all/20260128061753.1857803-1-wangqing7171@gmail.com/T/
-> 
-> Looking forward to your review.
-> 
-> --
-> Best regards,
-> Qing
-> 
+On Wed, 28 Jan 2026 at 16:19, Tao Chen <chen.dylane@gmail.com> wrote:
+> I have a change that will remove RCU. As Andrii pointed out, using 
+> get_callchain_entry without RCU lock in BPF appears to be safe for now. 
+> Please point out if I've missed anything.
 
-Hi Qing,
+Oh, that's a great way. Thank you for reminding me.
 
-I have a change that will remove RCU. As Andrii pointed out, using 
-get_callchain_entry without RCU lock in BPF appears to be safe for now. 
-Please point out if I've missed anything.
-
-https://lore.kernel.org/bpf/fb745675-e25c-4dcc-be4b-4a4411056755@linux.dev/T/#mc0fc5e0fec2e6456f72f402308fd4e397ba19d09
-
--- 
-Best Regards
-Tao Chen
+--
+Best regards,
+Qing
