@@ -1,60 +1,49 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2114923EAB3;
-	Wed, 28 Jan 2026 08:46:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872F229A1;
+	Wed, 28 Jan 2026 08:54:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769590014; cv=none; b=Qgg4DzK3umf3zm9EIqz9xi6S6sbeuC4u2S6bA+6Eixnpv3ZHSLV/mAumaAniHkJadObiCm7OJNRajWrEt5RMLt3QT3J/ZKCqsI4PtFaHV7FLIfjoiIwkYmw1U9cu6fVl7TisCiqtusbXg53r2Eu3xGxhmcmtOOO/FZ4LpTuHZCA=
+	t=1769590442; cv=none; b=pqODf9Fr+XwzPgBCc/en9dsuZEdm0QnSwto1QI4kDdobsk3omjigA08sbGWdyv0VTcclu39tehcynIdyFJHYeKOPWpVynZPQMq/DZ5ls3gNpmBUDMGDnbmhDZGGs7CS9HlQ94OlLcKvRhfz51hf9gWlbQ0Kriw4cvOj16x0jbbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769590014; c=relaxed/simple;
-	bh=+XP7TKLKMP2iI43Cq419V2HCtzSjoQCGqsdjvG4LxYs=;
+	s=arc-20240116; t=1769590442; c=relaxed/simple;
+	bh=sp8ZzgKfLYBf6n5dvtaPV7JJtZoVmZtARJEfnOlvgnA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lXEhv46VFucex/a64MrPWOk0k5U7+E8XBqfhhcGrZ6NO85+WYe97/WKzPXM7rDJRrkgJB35Q1IBNhfrJzVZavqZNdLPEQbP6w1zytACBJA8tTmB0UFVH0ksNj/+yqqW447LqFdV14VW203JUV56LmYnT3P2BjOMuoWDoR4xtUsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CTaO7UHu; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=R6ZvZr/5mQrosxadFsrLddvF4Vd1H49DEwSoGAr7XYrgEqQnyUbvBpkGWsWfYDxqvrTCXEyU1qUSyIV3vKOpz2WEFSHu0rgrgl56Zuy9kQvOHDqtKpnSBUXhya0AJ9MwrFCtCxl3JAeBBcHacgTynSBnpZh7F1Rf8v61DV6Q68o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IiNsTsjt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CTaO7UHu"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ayBrCzFssGZ1vK+gQhCWjuWjGXFaXI8f7cM+Qt4R5zg=; b=CTaO7UHu4vz4tlMZz6OZSKzlPg
-	S3vYo3dGdgqKxi5K4mPUVmGAOQxGWbO/dCV6LnAPXY2SMghsnAF+3ggFSLDA9knn7A+fd2M7NYLat
-	QEhJnPeGjQwz3xD67uBPNpaskHSttt+jA5c//UJYwe3fIBH6hglP+RHwfLf21rHgZxk/qoKXthKan
-	1sAiF51BWxAGWg9i3fEUTCjr1e9caKh6vgIlxF9l9wL5d+shmx2O8sbnGjRgDel9pUmqPSh6Il9FA
-	NvxTt6CADDqg9z1UeHJ5jY2fTldO6RyBHoWObdcq+7esGgTY90QT3Lz39qnSwj1uWwpmK7/kDBb9Q
-	dmioE3vw==;
-Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vl1Bz-00000008lvA-42T7;
-	Wed, 28 Jan 2026 08:46:28 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 51C8E300754; Wed, 28 Jan 2026 09:46:16 +0100 (CET)
-Date: Wed, 28 Jan 2026 09:46:16 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Gabriele Monaco <gmonaco@redhat.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Jeanson <mjeanson@efficios.com>,
-	Jens Axboe <axboe@kernel.dk>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Tim Chen <tim.c.chen@intel.com>, Yury Norov <yury.norov@gmail.com>,
-	Shrikanth Hegde <sshegde@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
-	sched-ext@lists.linux.dev, Kernel Team <kernel-team@meta.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Puranjay Mohan <puranjay@kernel.org>, Tejun Heo <tj@kernel.org>
-Subject: Re: [patch V5 00/20] sched: Rewrite MM CID management
-Message-ID: <20260128084616.GD3372621@noisy.programming.kicks-ass.net>
-References: <20251119171016.815482037@linutronix.de>
- <2b7463d7-0f58-4e34-9775-6e2115cfb971@linux.dev>
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IiNsTsjt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75B35C4CEF1;
+	Wed, 28 Jan 2026 08:54:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1769590442;
+	bh=sp8ZzgKfLYBf6n5dvtaPV7JJtZoVmZtARJEfnOlvgnA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IiNsTsjt7/JJEy7yHNve/JooAIlH0pnM87ZGvmgdHepEWko5EVz56NLPJSRbmXI8w
+	 sxKEPaOCpGXqDtQ0OHpQYWN7Mt9VjqvMvARm+eLYaHLPTNohEerYQif5fI9Qezgjy+
+	 G4XDfI/hst0WjbqQ1xzHMsJI6EzUETgPfOt5Yvr0=
+Date: Wed, 28 Jan 2026 09:53:58 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Samuel Wu <wusamuel@google.com>, linux-fsdevel@vger.kernel.org,
+	brauner@kernel.org, jack@suse.cz, raven@themaw.net,
+	miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org,
+	linux-mm@kvack.org, linux-efi@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev, kees@kernel.org, rostedt@goodmis.org,
+	linux-usb@vger.kernel.org, paul@paul-moore.com,
+	casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org,
+	john.johansen@canonical.com, selinux@vger.kernel.org,
+	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <2026012812-jurist-whoops-0ef5@gregkh>
+References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+ <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh>
+ <CAHk-=whME4fu2Gn+W7MPiFHqwn51VByhpttf-wHdhAqQAQXpqw@mail.gmail.com>
+ <20260127201454.GQ3183987@ZenIV>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,34 +52,32 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2b7463d7-0f58-4e34-9775-6e2115cfb971@linux.dev>
+In-Reply-To: <20260127201454.GQ3183987@ZenIV>
 
-On Tue, Jan 27, 2026 at 04:01:11PM -0800, Ihor Solodrai wrote:
-> On 11/19/25 9:26 AM, Thomas Gleixner wrote:
-> > This is a follow up on the V4 series which can be found here:
+On Tue, Jan 27, 2026 at 08:14:54PM +0000, Al Viro wrote:
+> On Tue, Jan 27, 2026 at 10:39:04AM -0800, Linus Torvalds wrote:
+> > On Mon, 26 Jan 2026 at 23:42, Greg KH <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > Note that I had to revert commit e5bf5ee26663 ("functionfs: fix the
+> > > open/removal races") from the stable backports, as it was causing issues
+> > > on the pixel devices it got backported to.  So perhaps look there?
 > > 
-> >     https://lore.kernel.org/20251104075053.700034556@linutronix.de
-> > 
-> > The V1 cover letter contains a detailed analyisis of the issues:
-> > 
-> >     https://lore.kernel.org/20251015164952.694882104@linutronix.de
-> > 
-> > TLDR: The CID management is way to complex and adds significant overhead
-> > into scheduler hotpaths.
-> > 
-> > The series rewrites MM CID management in a more simplistic way which
-> > focusses on low overhead in the scheduler while maintaining per task CIDs
-> > as long as the number of threads is not exceeding the number of possible
-> > CPUs.
+> > Hmm. That commit is obviously still upstream, do we understand why it
+> > caused problems in the backports?
 > 
-> Hello Thomas, everyone.
+> This is all I've seen:
 > 
-> BPF CI caught a deadlock on current bpf-next tip (35538dba51b4).
-> Job: https://github.com/kernel-patches/bpf/actions/runs/21417415035/job/61670254640
+> | It has been reported to cause test problems in Android devices.  As the
+> | other functionfs changes were not also backported at the same time,
+> | something is out of sync.  So just revert this one for now and it can
+> | come back in the future as a patch series if it is tested.
 > 
-> It appears to be related to this series. Pasting a splat below.
-> 
-> Any ideas what might be going on?
+> My apologies for not following up on that one; Greg, could you give some
+> references to those reports?
 
-That splat is only CPU2, that's not typically very useful in a lockup
-scenario.
+Sorry, all I got was a "this commit caused devices to fail" and was
+found from bisection, on the 6.18.y tree.  Samuel has much more
+information as to exactly what is happening here as he can see the test
+results properly, I'll let him work through this, thanks!
+
+greg k-h
