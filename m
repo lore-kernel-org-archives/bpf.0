@@ -1,157 +1,73 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE15724291E
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 04:28:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769574513; cv=pass; b=jjY9W+cINmfn/PPvAKiBcBdrQwJcYzxfOuzccFimZA6bkThNOk3nBkIegb7o9uPyCYiP4t9afcAvJEihDDUazFsb0uw00j0r0iRPNx/AZG/TTWd9Uw9kgycenFICK/HatbLaMQvmnMzvhP9nrysQavEprA+Zvis5TLLlQyyZxu8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769574513; c=relaxed/simple;
-	bh=j7hShYPeO1N9+zbQK+hb51NpB2ihGqVur4xeazfb+IQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f+jg++YaKdDdZiCoNZDsPvigSWdCOq+YhjoW2BdrOsWtBuEyOyWyThYfW8AChroU5LyXBDCBjXr3EgL/q0BByUwzAST8ni+6gIKTJh29EMjQ2TDQ2pzlvGI/td4J1ceFnkyIfXhIrmiA5NPZrN2HiyXZLzp5NDkf7GzZo0atX0o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c2O0fzxw; arc=pass smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 199A72144D7;
+	Wed, 28 Jan 2026 04:58:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769576292; cv=none; b=SUfviBpWro2a8QNRL50Wig6XK8Q1IXe7qu2CYwT1Lzt3eUDJdfXksvZMtvvfc3chHjpchJNmqaL1oS52QnGy7RUsv02qvVLeVmWl0Svq9RTzQ1Qa47Dvtm97EgPn+ljajNRDc2FWg3VmrX4gpXSs6phSGiAO+nfs/gzr1wqezl0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769576292; c=relaxed/simple;
+	bh=HPTDEhsdkkZGj61ILgUyYDUIsm4tG50xsMeSLWhJykw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bE4b0m0lVKQPg/bCSd1Gzx5EB3eigSx89jAzFBNFfv8dHF/lR2OI8GBOJju4QLQsmvaNtz4iukb3F3gvE2i2fcIcmpm7OGvCipY4v03S09jelZqaJG4M3urF0BhUYK9goJi8gTW9Omz8g5KySB7n0JcSNxADp9Gya1L2vDx3008=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=PKJoiaAI; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c2O0fzxw"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4801d7c72a5so49369785e9.0
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 20:28:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769574510; cv=none;
-        d=google.com; s=arc-20240605;
-        b=OhsX/+bI9oowc1zds6Dorf+tdZbXofwJfag0HIlWx7Ox9z513stx3+xzUclm2Yo2ee
-         gim/R01p33yg8AKj5BQ21y8JiNaBoTEO7jQyqe8KtRMC5CYQ/gHUDUryoLEgRkKM+BLz
-         0zqOZ2hqau1EGDBAJmPsXbfgSfgDxcuHidM4bPse3l/uqHbRwMtlUf7rGbgIifKGWm93
-         oGEU4GAa6M8qlGI7CETvYvPpF+GXelnniB/vEkEa0KrC2yamMB1KNk+XtTLRYqFiSNzm
-         c2S9PXMStFdgDguWJQLEDtF6yIDhr5LiVR/Zeu2iBsy8JYWCRIHM77N8kBbi7Yv8EIk+
-         QwYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=j7hShYPeO1N9+zbQK+hb51NpB2ihGqVur4xeazfb+IQ=;
-        fh=rsduFLXL9tI37J7Qy0ELhraHmEs7X+vW+3cgjBY5QlE=;
-        b=F3/ROXnmMUTuqJs1RJ8HYwIuA5YZSc0W7tHY5YwrF5opqUzhccwzuMZd/Anp6ynDA+
-         NRoH1x8Ljj3tWXCnZ/wZ1+Azu22obkvIWhYce3u/AzBNmRL/hzL2l53qoItMT3olKakP
-         Q2Q0P9bCXLn0R1/00vKgZRstuiHB8NWInZY7JnIl6Tpg9INIajzuokiIKzoFvj7StV/X
-         Af6WkZFQebEaAZs602Yrsnb0uCdOFdy0TsK7yA1hbiGPPPSohz6k/CfBKhZt9iyoaRxi
-         Kd0LNmuZ7etToir4a+FDD2/A7qkzT6tzzcDJOFPPA15L4RBOWL1AiifG8kEKEJrigg1j
-         STQw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769574510; x=1770179310; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j7hShYPeO1N9+zbQK+hb51NpB2ihGqVur4xeazfb+IQ=;
-        b=c2O0fzxwOis0wfJ4iVtve3ZHMupXRRPMEYFWISdLg0l/GuSQuiTZgP7IzvWBxb+HYk
-         1HBhdm4lwHRPdd+Gij/a6REta2mpz/AH9f3WxNa7ZsESFaoQ4bUv2zgrVl029k5arVlY
-         hYZK49LR5ob19BXR8iSouG7PsPhC4KZTJM7k9tUh2arhonsuLUZyFPGk2+XfxUjez4kN
-         vlZcZlaKtDUcPaXj4CAHsuqpEnylRWKBqIv17G5twPqnSkysMK2NVGQ6Qwub4TrkP+VQ
-         cRpG+P4Zxeex4EDxSLLoqa6xrN8NiyRbK2e50OlOxiCafDSrm3ixi0eoS5H5aiZMVjLf
-         0NMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769574510; x=1770179310;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=j7hShYPeO1N9+zbQK+hb51NpB2ihGqVur4xeazfb+IQ=;
-        b=AkLcu97TOVzO0omFLdBI5mRKjhQmAr2NPfUBjJfBbgmdxdt93PfLRgROo9y0hYLll5
-         PJ5LLUzo+YK+UVPz4AcaIsGQ4Z8uFWcNOqp9oGIuwenwZcrbFcC2jdaKF/f541nX+EyO
-         gTcQckRnxUq84mfRPEqgaypd+m1DzMGAbbTa3oZMcAbx6MskS0FXW1xsinurKLVZQ34i
-         uT1trm2xt2mHXD2DTyRqXoq1n9jMGpUj6dCRF6cQgSowcPl0LD2jg2/ncKTZX6YPIHS5
-         WR3e/Xs5rfMDWJjGWUmzYt4D6wWEn5QV2m11sxapU3c/SLtMc9CbTTt1fEgojV3VY4ui
-         F+mg==
-X-Forwarded-Encrypted: i=1; AJvYcCWkYdKri+RmKjShYCPtwAzN2bGdr7apMm+2W3C8SelFX0RR3AbcL/DLTLjR9lwdBSPy3GU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmSxTdBiiMveXf1ZGqYHaPZtQexg9+UL4ySd1KxnLrn57+PtFp
-	IQn5g0cCVRYW8MdO6wmmLqh01ossrElsvFoI6pDJwtWGAKdFDK2F7NE1uTgPFbU/0GAbJ+6+yrj
-	4Yn5VIR10MdZ1AL3LW6aKo90F7BQbs7Y=
-X-Gm-Gg: AZuq6aKqZLG227b4Dc9mTPUVHhgnkDxAZH/ltzzZycFZiEazF7C5vKdXrJgWIgYMorc
-	zMG2zmF4YtC7uG8mZYUSb2EcANtiYFIOSF5bXZSRuzuowdYbj0zn7zJKi5ppbm/vwISi0YuYsJA
-	tAiHeMorpGao8PDw69lQk1AloGYPs8Er8MoEJEMhSybGRSmcM5IYMW4JA8q5rxFPlDzIO/GyQbN
-	5Vm+mq8z7AqDLRkKR1mnF1spGBTajDkVYkzV5cmaBnJEQRCNR5Z2N+qH6hBcf8QWjZi6V0fmXAy
-	udqpjAaHnHV6AqiCZeBCuMyQg5NBxQdMkjk3v59ny4NZr0XgAlTnIfAHK+IiyLa/7T9Ybqm+5YF
-	mzAwdadUnPNezVQ==
-X-Received: by 2002:a05:600c:154c:b0:477:b734:8c41 with SMTP id
- 5b1f17b1804b1-48069c3f021mr54274985e9.1.1769574509966; Tue, 27 Jan 2026
- 20:28:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="PKJoiaAI"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=daXjtGTfmlVfqWEsV/tKRDwuwZG19vc4O33UsaVuyC4=; b=PKJoiaAIeJUIezjpIUvwLfhLOU
+	ljSMzyiy8niSruUOPj8Yhae/1tEMXXOfdDkBPWvk228fa+x3gT5ziOetsoIlPS6qPOcomc49/VYEg
+	TXRw9lJUhkDbPABnmZAwnrgsKAmLUH7AQ4AnGZOBwiLlkTJITaGg5cRexxsqxsIPyy0pfvevgI10V
+	EkVCPliHzrpbNBjpdQZtf8BtLMu9Kcsy7J4hQT6WtNuW7LYoAAzyuI/C3HY4Xp5Pm7lL1/zj5aQ3N
+	KpLYJej9U/8afrfofjKQFQuivnbtyPIWzjnE64luVJY6SlrAo9HkNbF8Ew4ypXGp7RUjQj7TvDxC5
+	7aSVGjaw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1vkxek-00000007aLd-3OJ0;
+	Wed, 28 Jan 2026 04:59:54 +0000
+Date: Wed, 28 Jan 2026 04:59:54 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Samuel Wu <wusamuel@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <20260128045954.GS3183987@ZenIV>
+References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+ <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh>
+ <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260122090404.15553-1-chensong_2000@189.cn>
-In-Reply-To: <20260122090404.15553-1-chensong_2000@189.cn>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 27 Jan 2026 20:28:19 -0800
-X-Gm-Features: AZwV_QhD1w-OAF47igZx-CBdBxyMwEcMdyteSlPLOA4DuDwHNBlCzI4bC9Iejr0
-Message-ID: <CAADnVQLVQW-Mb_d+zT+aSpPOZ042erPVcSHVBx9PMGET+a754Q@mail.gmail.com>
-Subject: Re: [PATCH v2] kernel/bpf/btf.c: reject to register duplicated kfunc
-To: chensong_2000@189.cn
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On Thu, Jan 22, 2026 at 1:04=E2=80=AFAM <chensong_2000@189.cn> wrote:
->
-> From: Song Chen <chensong_2000@189.cn>
->
-> I had an ebpf program which calls a kfunc defined and
-> implemented in one of my kernel modules, they were working
-> fine in 6.16, but was broken by libbpf in 6.19, the error
-> message was:
->
-> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
-> incompatible with vmlinux [94389]
->
-> yes, the reason is there is a new added kfunc in kernel 6.19
-> which happens to be the same name with my kfunc. However the
-> error message is not obvious enough to address problem
-> immediately.
+On Tue, Jan 27, 2026 at 06:02:25PM -0800, Samuel Wu wrote:
 
-I don't quite understand what you're trying to say.
-"broken by libbpf"?! You mean that kernel 6.19 got
-new kfunc bpf_strstr() ?
-Why libbpf error is relevant?
-You mean you had your own custom .h file where
-you defined your own kfunc from a custom module
-and libbpf complained that your bpf_strstr() kfunc
-definition doesn't match the kernel 6.19 ?
+> Thanks for the suggestion. I tried a few different setups, and now I'm
+> fairly confident e5bf5ee26663 ("functionfs: fix the open/removal
+> races") is the culprit. I did have to revert 6ca67378d0e7 ("convert
+> functionfs") and c7747fafaba0 ("functionfs: switch to
+> simple_remove_by_name()") to successfully build, but reverting only
+> those two in isolation did not fix the issue.
 
-and your proposed solution is ...
-
-> Therefore, this patches searches duplicated kfunc in
-> btf_vmlinux before a kernel module attempts to register kfuncs
-> through register_btf_kfunc_id_set, it prints clear error message
-> and returns error code if same name kfunc has already implemented
-> and registered, then developer knows at the first place.
-
-Are you saying that the kernel module that supplied bpf_strstr
-shouldn't be allowed to register its kfunc if kfunc with
-the same name exists in vmlinux. So insmod will fail?
-
-This is debatable. I guess we can add such sanity check,
-but what about kfunc in module A with the same name as kfunc
-in module B?
-Currently libbpf tells kernel both btf FD and kfunc btf ID,
-though there is a single namespace for all kfuncs from bpf
-program pov the kernel and libbpf api-s allow a selection.
-
-Technically we can hack something in bpf.c to "namespace" kfuncs
-and say that the kfunc "foo" is in the module "bar".
-It won't be pretty in C, but possible in principle.
-
-Maybe a kfunc with the same name in the module should be allowed
-to override a kfunc in the kernel.
-It can be seen as livepatching of kfuncs.
-imo that's a more interesting use case than helping
-out-of-tree module to produce nicier error.
-
-pw-bot: cr
+Very interesting...  Does 1544775687f0 (parent of e5bf5ee26663)
+demonstrate that behaviour?
