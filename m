@@ -1,356 +1,216 @@
-Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013010.outbound.protection.outlook.com [40.107.159.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33D48361DA7;
-	Wed, 28 Jan 2026 14:44:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769611491; cv=fail; b=ljrdkZGDonC/EW4jmh/DaPnoQYbNd1vLJUQ+XNYF9Uw5rDd9pzzyGL1U8zTpX0hbR05S7JGEsMHoCryAzakgcI876NrMGFFeWur7LfttjIe2qt7euc+I1rxBToz/IGaYuCCv1cVPI8adSLJ6rjo7q32d0e8b5UBt1XhdRWk1Lcw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769611491; c=relaxed/simple;
-	bh=KVqH9baNfJcxxOKBmrhVwBsytfdkub67wQ/rnwUxTto=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=hzRcNj9BF4GZVUdse4PFiIMVSSL+BA76MmePRATjulSbLdbYzV15C8kQNSBThJK5kEcyjYcIVN1rpaN63X+jE62Mk6zMZYWxQktpd7Nf5o9mgTOJbhnDPzuBCnjTzcNeelMrvG9u1SHN8adVv0e0UgZ5062y3l5OGgGpdsR+kZk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=WhkXGyqH; arc=fail smtp.client-ip=40.107.159.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A4B28C5B1;
+	Wed, 28 Jan 2026 14:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769611550; cv=none; b=F5bxNH799D4ZMPZ1lKtjQnDKexKJZpkqMN98RM5V4uwuN0kPLHJmKfNbb8qxohlkQtWqqzqarOuvRr5uhj9JIRCxUiGrArL745JePzsAKYs9/j9PVI1dgiK8nQVP3pMKUZx1nSCB+r06ZfpUev2BL9jrE8amOuJKZAsoc+QRnlo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769611550; c=relaxed/simple;
+	bh=+eH8C9zSuGZKQtATqOlIcM1L0qnOfOH4Q1w1uWBpTVk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ga1avgodkjHkoGszx3bGt1hv/viV2BAJbrK//J46iwLVlpPFPjtdRLheu7nySmaXXCrxvfcc5BH0xNIOyCN7F4yc64v05tbEIyIHl1+zb4wZhLaH4nT1uHQdSRxqVAIc7iySUyFlmzsKcbDv5kmfAK5ZOtWv6jBpElJYMuuhHNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J0LgYgLo; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="WhkXGyqH"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=linVsnboBUWLj/9ne85PgBwvZEsoPqa+yCLwCeVJLHYpOATwm/5dM7VrLejCvplQTKdMQKI+lw7zphQp/kZkrH7PzkyykLR/WGBX4GWxGC/KDBK6AyINZj2qSMYfjdbnfHHsyOruxptt0faJ/lQL6Hu07dG6iJWdClpKiDmbLUPmOoWgCWXFuxj6Vs+v3sZURFW/s5pfo7p10O5rECaD9Zz63tl1chn/kDHTpelp2tghT1kpL9y225g38eTKaUJzsorTkV+a7NzTyQGd9V1YexaGbjMP7jANAdyv1XHqRdMqP/VktM6wJ5a/romnCGWjqqXiIuyrjDrkfh60WLAMXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=f+RXSyAkgIraAhc/97tVhNHajm+iZ3GOhMi5SV4phUE=;
- b=ynbN9ygjtLNOj4ZvizhfQ1TxUilj2SRNbIec2Uuy7p3O1XBuZ380TaGKEDGlUVckMBvUcXaKLXuXGpkcGH+1r1ajQLSLmDVuKccbFyfiGEfbxBm8THwHfVbAybxJFJPMgb6UwxZ07/Zt6p7w8CgJA/so5BzUffTVYBoyu0kZuCDAtChfmIz+zdlfXTfQxTQI1UpKwuQhne38I7IqxYZ/AdXnMrPguB4P76sU+Agjkiw5nKhPoTsPrJs2d6DAjqKsg7y1nwhXYRDveg+jVXutCSmro82bbkzrALg9jyXeOYOsrzGp2DZZtGzhDEyz7JQ+CWSSaGOSKVq7cRvK9WW3Qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.2.241) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=f+RXSyAkgIraAhc/97tVhNHajm+iZ3GOhMi5SV4phUE=;
- b=WhkXGyqHaIMSknUU582or5AzryUUhlZtQ/a7NsAwsZvgYxec4S05nJloT/VkRiWw2V48QPb277QJU5KtmcGzTcDlCpS0/l2BbePX29k3S6mF49QGcsz6+Z5Pstx+KHQPBjAeBz9zmvxqKKBJxqiC6otodQ0vjHaqvjN/CelDEM/6jkf/9rxWXJASu80R7ffVwXSJWWw+3y3zN7S5dyKLJecFq8aGVpIWh7R2qh1+rbuOwvqV0a12dDqD4I4aMtpKf5iX5aIP4gNeHPaXkpYymena6kia78tLx7xyfwKfJOkkhpkBP50mMvPMqq3tWfGymZtnB2n1aMZy9dRfM3D9Pg==
-Received: from AM0PR02CA0120.eurprd02.prod.outlook.com (2603:10a6:20b:28c::17)
- by VI0PR07MB11578.eurprd07.prod.outlook.com (2603:10a6:800:307::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.7; Wed, 28 Jan
- 2026 14:44:39 +0000
-Received: from AMS0EPF000001AE.eurprd05.prod.outlook.com
- (2603:10a6:20b:28c:cafe::d2) by AM0PR02CA0120.outlook.office365.com
- (2603:10a6:20b:28c::17) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9564.7 via Frontend Transport; Wed,
- 28 Jan 2026 14:44:35 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.241)
- smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
- designates 131.228.2.241 as permitted sender)
- receiver=protection.outlook.com; client-ip=131.228.2.241;
- helo=fihe3nok0734.emea.nsn-net.net; pr=C
-Received: from fihe3nok0734.emea.nsn-net.net (131.228.2.241) by
- AMS0EPF000001AE.mail.protection.outlook.com (10.167.16.154) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9564.3
- via Frontend Transport; Wed, 28 Jan 2026 14:44:38 +0000
-Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fihe3nok0734.emea.nsn-net.net (Postfix) with ESMTP id 18E8A203D6;
-	Wed, 28 Jan 2026 16:44:37 +0200 (EET)
-From: chia-yu.chang@nokia-bell-labs.com
-To: pabeni@redhat.com,
-	edumazet@google.com,
-	parav@nvidia.com,
-	linux-doc@vger.kernel.org,
-	corbet@lwn.net,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	kuniyu@google.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	dave.taht@gmail.com,
-	jhs@mojatatu.com,
-	kuba@kernel.org,
-	stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	davem@davemloft.net,
-	andrew+netdev@lunn.ch,
-	donald.hunter@gmail.com,
-	ast@fiberby.net,
-	liuhangbin@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ij@kernel.org,
-	ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com,
-	rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag in virtio_net_hdr
-Date: Wed, 28 Jan 2026 15:44:26 +0100
-Message-Id: <20260128144426.15870-4-chia-yu.chang@nokia-bell-labs.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260128144426.15870-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20260128144426.15870-1-chia-yu.chang@nokia-bell-labs.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J0LgYgLo"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769611549; x=1801147549;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+eH8C9zSuGZKQtATqOlIcM1L0qnOfOH4Q1w1uWBpTVk=;
+  b=J0LgYgLoZsESAVpH7N/1UktQ1yMWVeCwqxmL8VKYsPLoHr85ESO9F6sm
+   S6t6GKyzcVyD7/+NB8rYSEIypvo0G6CNUMn1W8X+GRSoUDW2GW2cApWoH
+   N84Gsva3aHd/4vtn3eA5t93rJbosMxirNtnN9/Zce+G24QiAZaXV8yUvK
+   dAPq98rrGwWZQapzBZlLZddk3jQDD1wgLrH5Ek0gBfckPNcdEeUcqfh9Z
+   +Iidb9GN5kPUd6fI7gnOJ+DNcpHvsmHkmfzKJd+XwOUnI8elEPkUZoz95
+   /G0HY2vguNd0kBVPWb/Tq6YnifsYhVc+fzOjntQgxULn4Vh13iz9DFqUL
+   w==;
+X-CSE-ConnectionGUID: mIe9u2OkTQ+y0gq09Vy34g==
+X-CSE-MsgGUID: V1FUQxIIShefEicAYs6dUw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="58405199"
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="58405199"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 06:45:48 -0800
+X-CSE-ConnectionGUID: eeaYUYVPTS+pfSiR37CUhQ==
+X-CSE-MsgGUID: H+qkhrBkRd2KCqtMMuhg2w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="208348253"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 28 Jan 2026 06:45:43 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vl6nd-00000000Zm4-1T9i;
+	Wed, 28 Jan 2026 14:45:41 +0000
+Date: Wed, 28 Jan 2026 22:45:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Feng Yang <yangfeng59949@163.com>, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
+	jolsa@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] bpf: Add the missing types in the logs
+Message-ID: <202601282215.BONmLaMY-lkp@intel.com>
+References: <20260128085842.145057-1-yangfeng59949@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AMS0EPF000001AE:EE_|VI0PR07MB11578:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 2d22aa25-0361-4692-123f-08de5e7bc377
-X-LD-Processed: 5d471751-9675-428d-917b-70f44f9630b0,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014|7416014|921020;
-X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?qU3Eh1sR5UoCYNqZjpwdKqd6e71f0rtF0eA47S666yN4dla0TGhbdjxO5p+B?=
- =?us-ascii?Q?lsGHykDDqIh8TAds4z49SpfpYYvsXuKI0lEU6yVCk8BwKGLnQDEXpHImN9ST?=
- =?us-ascii?Q?LHWhwjBP8IHSfGyGG20o1E+kJeML3Wk3bI/6up4Quk5rVxJn5SV6bYEQtuIB?=
- =?us-ascii?Q?PvlHjvhNONBKWDCLlf6Lm8u3PDhSXNppdyqN3y0xL+kfNeDcbYSs+d4b5XQe?=
- =?us-ascii?Q?b9kKmX2QrGsyO/bPyFM2Hpxcxc8Om1yJiPfDO1TwcOYgNRD/caTVpkzdafGX?=
- =?us-ascii?Q?n5zNwHgxFdEYevY9bk5Y8Bpc8CAY9PjRVhrfJ2Gcr7ZM4KSTm25PV6cZLB7J?=
- =?us-ascii?Q?WUhn1kvlR2FVUr9kxp3KHRB8hpQVMjmrqYfaR9j8gllDwI/YaR/AVvYBP5Gp?=
- =?us-ascii?Q?1ols00rsirKYaYqRXpYr2KYmSQ7bSkrmcSj4HpwJKUBCKFSF3S2smSTRi0VH?=
- =?us-ascii?Q?wocaUqRkfxnBIoukKfW8PXH7ILleI1OwThFCJoSScAu2/uDZqN1TpxxvmG2r?=
- =?us-ascii?Q?hIlTiN24NEgE8Fy5Rkd8BbvrhE5gXLFyJFkY2dwXOyOzHAIBOixDBfi8w8cs?=
- =?us-ascii?Q?vdTRPwN/kE0m1W2a+IXjakajgdrsq1plgqA8hBbqkMrlify38Gs0ekdHdeoO?=
- =?us-ascii?Q?26Hto5NGDo6cONWsPJOV7OzpVMz5oKn5WBIfz6JPI+zRPDzHSF1PTbdP17El?=
- =?us-ascii?Q?3wwPBoQArUpGTzWFmJviP/0JtwrIIKIg4Pxn8xd4O865HHRY8lp2I4xPe0Ky?=
- =?us-ascii?Q?pDn26jb4xQckDWqo6oycrF6Duv+M6XE1/tSHInv0IA4BlRk2Iy1vDCWCevpN?=
- =?us-ascii?Q?1yUmqkav0a2kBN0878Q2wy9t4UUogVOdkZCcPCY1o3XhzF30/lZXQi0Et4sr?=
- =?us-ascii?Q?rVxkYBpnqrO3vQuLSCZn+bux69EHdDUmPRmipD/5cXSn/ZQBScSKKjsdgY/Y?=
- =?us-ascii?Q?hEX0VzmI9uueCYkKz8etST1PseWEtJt5BnfzlGpb0t39aFHmawx+LoKL64N5?=
- =?us-ascii?Q?9KDla0yVlGDrfibQoqkizh0A95IySHim2xZ6MTs2fqGRkinn1ompySMRZmkp?=
- =?us-ascii?Q?cw8y4+OFC1BUCNiD+lN+OjsWmGKwsrxFqrSPr4QZlAr0vawJOjjThK5lK0+f?=
- =?us-ascii?Q?dnD7UFmKbc2Dyla++f9c1RFc8xQ8eXx7IENhrWwClfn+iw+7HtutR4a+hde3?=
- =?us-ascii?Q?CVCGl2PlDOyUuqu1765IVU6xqP99DYyw6uNCTPTlwWSs9Oucqa2kSzcHEI0o?=
- =?us-ascii?Q?35udL9d9Rpi+TjkvPZpwzIKPGe+Vq5WKsrotJiO60GpBlNfwpQ0OHyTaP4ou?=
- =?us-ascii?Q?D2jHPD7uTV0u0JiX3ZhEiJxUoSboA39eYY6GnZD5DHZc/oV6Osf6IDhTG4vG?=
- =?us-ascii?Q?2hZZgbfv7RFGPVjOAaFXjAWPIC2bxs+2ZlLcctdAcuExj117KnL8x00NKWWy?=
- =?us-ascii?Q?PWTkZJ/ksbN1vbuH4EeIduXUcTwou7Vybl/6XpoF1guZCLwiYkOSgzyqDK7I?=
- =?us-ascii?Q?aV+1ipTR6HhnF+3wRo+rlzRWr6DpXVOukvLi/yHbfertNX6kk/ZVk80+fUL6?=
- =?us-ascii?Q?rLqPjoj8+ARGY0aYEx7KvX97GaaNO6bTqNqOQLEP/w3Zg7lx7+2nAxB1fZ3b?=
- =?us-ascii?Q?1Iy0ugYffPypY0QYArxAUhAw6oOUbuG3Kno7IOWEVxLW1rQqpZaMy84CBZ0e?=
- =?us-ascii?Q?BSiis3K9P9iKw2BqcHfdx/f7go4=3D?=
-X-Forefront-Antispam-Report:
- CIP:131.228.2.241;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0734.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- G0FADuej1NBs9IiTBMNj0QUh4CAq7Kg4G3+m8vjB5p0R6wNd2i7XjMMiK0cuXVEn8i98ELceknPcghtdDUYo+iUxsZxNCxXl1J6Wl8QX33nnM7RXY36F1bXcdTb2GxuNMcJNwqYvSigBNGphD6t0hZNupbyunPxUovTzC77/GTEwLA4H1nqR4phcZwEfznNqXtEoDoriDpbqWqz+UdvwzgSVPOZR5LVbPKUvYpfkWrXvbKBT0DW5D3sfrrq7IB7jkvQcentoUW8F/DJiKn6LCQofBt+wTcutftB8vYo9YyZiYGr3fJVNsRYsqYPKIgPJu4QInuB770wE94HXQRgHCvrrubyl4eEY3Oj97IHjptc1X23YVjrmJCWWhczL8Lnmr/LP9l5dPaNanXCiw0LJSi6Y2U0rrg70/QwzVXs8XzT85Zky8iFPBr/QBhcqOcfT
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Jan 2026 14:44:38.5811
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2d22aa25-0361-4692-123f-08de5e7bc377
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.241];Helo=[fihe3nok0734.emea.nsn-net.net]
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AMS0EPF000001AE.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR07MB11578
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260128085842.145057-1-yangfeng59949@163.com>
 
-From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Hi Feng,
 
-Unlike RFC 3168 ECN, accurate ECN uses the CWR flag as part of the ACE
-field to count new packets with CE mark; however, it will be corrupted
-by the RFC 3168 ECN-aware TSO. Therefore, fallback shall be applied by
-seting NETIF_F_GSO_ACCECN to ensure that the CWR flag should not be
-changed within a super-skb.
+kernel test robot noticed the following build warnings:
 
-To apply the aforementieond new AccECN GSO for virtio, new featue bits
-for host and guest are added for feature negotiation between driver and
-device. And the translation of Accurate ECN GSO flag between
-virtio_net_hdr and skb header for NETIF_F_GSO_ACCECN is also added to
-avoid CWR flag corruption due to RFC3168 ECN TSO.
+[auto build test WARNING on bpf-next/master]
 
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
----
- drivers/net/virtio_net.c        | 14 +++++++++++---
- drivers/vdpa/pds/debugfs.c      |  6 ++++++
- include/linux/virtio_net.h      | 16 ++++++++++------
- include/uapi/linux/virtio_net.h |  5 +++++
- 4 files changed, 32 insertions(+), 9 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Feng-Yang/bpf-Add-the-missing-types-in-the-logs/20260128-170535
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260128085842.145057-1-yangfeng59949%40163.com
+patch subject: [PATCH bpf-next] bpf: Add the missing types in the logs
+config: x86_64-buildonly-randconfig-003-20260128 (https://download.01.org/0day-ci/archive/20260128/202601282215.BONmLaMY-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601282215.BONmLaMY-lkp@intel.com/reproduce)
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index db88dcaefb20..103fb87c690e 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -75,6 +75,7 @@ static const unsigned long guest_offloads[] = {
- 	VIRTIO_NET_F_GUEST_TSO4,
- 	VIRTIO_NET_F_GUEST_TSO6,
- 	VIRTIO_NET_F_GUEST_ECN,
-+	VIRTIO_NET_F_GUEST_ACCECN,
- 	VIRTIO_NET_F_GUEST_UFO,
- 	VIRTIO_NET_F_GUEST_CSUM,
- 	VIRTIO_NET_F_GUEST_USO4,
-@@ -87,6 +88,7 @@ static const unsigned long guest_offloads[] = {
- #define GUEST_OFFLOAD_GRO_HW_MASK ((1ULL << VIRTIO_NET_F_GUEST_TSO4) | \
- 			(1ULL << VIRTIO_NET_F_GUEST_TSO6) | \
- 			(1ULL << VIRTIO_NET_F_GUEST_ECN)  | \
-+			(1ULL << VIRTIO_NET_F_GUEST_ACCECN) | \
- 			(1ULL << VIRTIO_NET_F_GUEST_UFO)  | \
- 			(1ULL << VIRTIO_NET_F_GUEST_USO4) | \
- 			(1ULL << VIRTIO_NET_F_GUEST_USO6) | \
-@@ -5976,6 +5978,7 @@ static int virtnet_xdp_set(struct net_device *dev, struct bpf_prog *prog,
- 	    && (virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO4) ||
- 	        virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO6) ||
- 	        virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ECN) ||
-+		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ACCECN) ||
- 		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_UFO) ||
- 		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_CSUM) ||
- 		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_USO4) ||
-@@ -6635,6 +6638,7 @@ static bool virtnet_check_guest_gso(const struct virtnet_info *vi)
- 	return virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO4) ||
- 		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_TSO6) ||
- 		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ECN) ||
-+		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_ACCECN) ||
- 		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_UFO) ||
- 		(virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_USO4) &&
- 		virtio_has_feature(vi->vdev, VIRTIO_NET_F_GUEST_USO6));
-@@ -6749,6 +6753,8 @@ static int virtnet_probe(struct virtio_device *vdev)
- 			dev->hw_features |= NETIF_F_TSO6;
- 		if (virtio_has_feature(vdev, VIRTIO_NET_F_HOST_ECN))
- 			dev->hw_features |= NETIF_F_TSO_ECN;
-+		if (virtio_has_feature(vdev, VIRTIO_NET_F_HOST_ACCECN))
-+			dev->hw_features |= NETIF_F_GSO_ACCECN;
- 		if (virtio_has_feature(vdev, VIRTIO_NET_F_HOST_USO))
- 			dev->hw_features |= NETIF_F_GSO_UDP_L4;
- 
-@@ -7169,9 +7175,11 @@ static struct virtio_device_id id_table[] = {
- 	VIRTIO_NET_F_CSUM, VIRTIO_NET_F_GUEST_CSUM, \
- 	VIRTIO_NET_F_MAC, \
- 	VIRTIO_NET_F_HOST_TSO4, VIRTIO_NET_F_HOST_UFO, VIRTIO_NET_F_HOST_TSO6, \
--	VIRTIO_NET_F_HOST_ECN, VIRTIO_NET_F_GUEST_TSO4, VIRTIO_NET_F_GUEST_TSO6, \
--	VIRTIO_NET_F_GUEST_ECN, VIRTIO_NET_F_GUEST_UFO, \
--	VIRTIO_NET_F_HOST_USO, VIRTIO_NET_F_GUEST_USO4, VIRTIO_NET_F_GUEST_USO6, \
-+	VIRTIO_NET_F_HOST_ECN, VIRTIO_NET_F_HOST_ACCECN, \
-+	VIRTIO_NET_F_GUEST_TSO4, VIRTIO_NET_F_GUEST_TSO6, \
-+	VIRTIO_NET_F_GUEST_ECN, VIRTIO_NET_F_GUEST_ACCECN, \
-+	VIRTIO_NET_F_GUEST_UFO, VIRTIO_NET_F_HOST_USO, \
-+	VIRTIO_NET_F_GUEST_USO4, VIRTIO_NET_F_GUEST_USO6, \
- 	VIRTIO_NET_F_MRG_RXBUF, VIRTIO_NET_F_STATUS, VIRTIO_NET_F_CTRL_VQ, \
- 	VIRTIO_NET_F_CTRL_RX, VIRTIO_NET_F_CTRL_VLAN, \
- 	VIRTIO_NET_F_GUEST_ANNOUNCE, VIRTIO_NET_F_MQ, \
-diff --git a/drivers/vdpa/pds/debugfs.c b/drivers/vdpa/pds/debugfs.c
-index c328e694f6e7..90bd95db0245 100644
---- a/drivers/vdpa/pds/debugfs.c
-+++ b/drivers/vdpa/pds/debugfs.c
-@@ -78,6 +78,9 @@ static void print_feature_bits_all(struct seq_file *seq, u64 features)
- 		case BIT_ULL(VIRTIO_NET_F_GUEST_ECN):
- 			seq_puts(seq, " VIRTIO_NET_F_GUEST_ECN");
- 			break;
-+		case BIT_ULL(VIRTIO_NET_F_GUEST_ACCECN):
-+			seq_puts(seq, " VIRTIO_NET_F_GUEST_ACCECN");
-+			break;
- 		case BIT_ULL(VIRTIO_NET_F_GUEST_UFO):
- 			seq_puts(seq, " VIRTIO_NET_F_GUEST_UFO");
- 			break;
-@@ -90,6 +93,9 @@ static void print_feature_bits_all(struct seq_file *seq, u64 features)
- 		case BIT_ULL(VIRTIO_NET_F_HOST_ECN):
- 			seq_puts(seq, " VIRTIO_NET_F_HOST_ECN");
- 			break;
-+		case BIT_ULL(VIRTIO_NET_F_HOST_ACCECN):
-+			seq_puts(seq, " VIRTIO_NET_F_HOST_ACCECN");
-+			break;
- 		case BIT_ULL(VIRTIO_NET_F_HOST_UFO):
- 			seq_puts(seq, " VIRTIO_NET_F_HOST_UFO");
- 			break;
-diff --git a/include/linux/virtio_net.h b/include/linux/virtio_net.h
-index 75dabb763c65..bbf6fc212259 100644
---- a/include/linux/virtio_net.h
-+++ b/include/linux/virtio_net.h
-@@ -11,7 +11,7 @@
- 
- static inline bool virtio_net_hdr_match_proto(__be16 protocol, __u8 gso_type)
- {
--	switch (gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
-+	switch (gso_type & ~VIRTIO_NET_HDR_GSO_ECN_FLAGS) {
- 	case VIRTIO_NET_HDR_GSO_TCPV4:
- 		return protocol == cpu_to_be16(ETH_P_IP);
- 	case VIRTIO_NET_HDR_GSO_TCPV6:
-@@ -31,7 +31,7 @@ static inline int virtio_net_hdr_set_proto(struct sk_buff *skb,
- 	if (skb->protocol)
- 		return 0;
- 
--	switch (hdr->gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
-+	switch (hdr->gso_type & ~VIRTIO_NET_HDR_GSO_ECN_FLAGS) {
- 	case VIRTIO_NET_HDR_GSO_TCPV4:
- 	case VIRTIO_NET_HDR_GSO_UDP:
- 	case VIRTIO_NET_HDR_GSO_UDP_L4:
-@@ -58,7 +58,7 @@ static inline int __virtio_net_hdr_to_skb(struct sk_buff *skb,
- 	unsigned int ip_proto;
- 
- 	if (hdr_gso_type != VIRTIO_NET_HDR_GSO_NONE) {
--		switch (hdr_gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
-+		switch (hdr_gso_type & ~VIRTIO_NET_HDR_GSO_ECN_FLAGS) {
- 		case VIRTIO_NET_HDR_GSO_TCPV4:
- 			gso_type = SKB_GSO_TCPV4;
- 			ip_proto = IPPROTO_TCP;
-@@ -84,7 +84,9 @@ static inline int __virtio_net_hdr_to_skb(struct sk_buff *skb,
- 			return -EINVAL;
- 		}
- 
--		if (hdr_gso_type & VIRTIO_NET_HDR_GSO_ECN)
-+		if (hdr_gso_type & VIRTIO_NET_HDR_GSO_ACCECN)
-+			gso_type |= SKB_GSO_TCP_ACCECN;
-+		else if (hdr_gso_type & VIRTIO_NET_HDR_GSO_ECN)
- 			gso_type |= SKB_GSO_TCP_ECN;
- 
- 		if (hdr->gso_size == 0)
-@@ -159,7 +161,7 @@ static inline int __virtio_net_hdr_to_skb(struct sk_buff *skb,
- 		unsigned int nh_off = p_off;
- 		struct skb_shared_info *shinfo = skb_shinfo(skb);
- 
--		switch (gso_type & ~SKB_GSO_TCP_ECN) {
-+		switch (gso_type & ~(SKB_GSO_TCP_ECN | SKB_GSO_TCP_ACCECN)) {
- 		case SKB_GSO_UDP:
- 			/* UFO may not include transport header in gso_size. */
- 			nh_off -= thlen;
-@@ -231,7 +233,9 @@ static inline int virtio_net_hdr_from_skb(const struct sk_buff *skb,
- 			hdr->gso_type = VIRTIO_NET_HDR_GSO_UDP_L4;
- 		else
- 			return -EINVAL;
--		if (sinfo->gso_type & SKB_GSO_TCP_ECN)
-+		if (sinfo->gso_type & SKB_GSO_TCP_ACCECN)
-+			hdr->gso_type |= VIRTIO_NET_HDR_GSO_ACCECN;
-+		else if (sinfo->gso_type & SKB_GSO_TCP_ECN)
- 			hdr->gso_type |= VIRTIO_NET_HDR_GSO_ECN;
- 	} else
- 		hdr->gso_type = VIRTIO_NET_HDR_GSO_NONE;
-diff --git a/include/uapi/linux/virtio_net.h b/include/uapi/linux/virtio_net.h
-index 1db45b01532b..af5bfe45aa1f 100644
---- a/include/uapi/linux/virtio_net.h
-+++ b/include/uapi/linux/virtio_net.h
-@@ -56,6 +56,8 @@
- #define VIRTIO_NET_F_MQ	22	/* Device supports Receive Flow
- 					 * Steering */
- #define VIRTIO_NET_F_CTRL_MAC_ADDR 23	/* Set MAC address */
-+#define VIRTIO_NET_F_HOST_ACCECN 25	/* Host can handle GSO of AccECN */
-+#define VIRTIO_NET_F_GUEST_ACCECN 26	/* Guest can handle GSO of AccECN */
- #define VIRTIO_NET_F_DEVICE_STATS 50	/* Device can provide device-level statistics. */
- #define VIRTIO_NET_F_VQ_NOTF_COAL 52	/* Device supports virtqueue notification coalescing */
- #define VIRTIO_NET_F_NOTF_COAL	53	/* Device supports notifications coalescing */
-@@ -165,6 +167,9 @@ struct virtio_net_hdr_v1 {
- #define VIRTIO_NET_HDR_GSO_UDP_TUNNEL (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV4 | \
- 				       VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV6)
- #define VIRTIO_NET_HDR_GSO_ECN		0x80	/* TCP has ECN set */
-+#define VIRTIO_NET_HDR_GSO_ACCECN	0x10	/* TCP AccECN segmentation */
-+#define VIRTIO_NET_HDR_GSO_ECN_FLAGS	(VIRTIO_NET_HDR_GSO_ECN | \
-+					 VIRTIO_NET_HDR_GSO_ACCECN)
- 	__u8 gso_type;
- 	__virtio16 hdr_len;	/* Ethernet + IP + tcp/udp hdrs */
- 	__virtio16 gso_size;	/* Bytes to append to hdr_len per frame */
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601282215.BONmLaMY-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   kernel/bpf/log.c: In function 'reg_type_str':
+>> kernel/bpf/log.c:476:59: warning: '%s' directive output may be truncated writing up to 13 bytes into a region of size between 8 and 64 [-Wformat-truncation=]
+     476 |         snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+         |                                                           ^~
+   kernel/bpf/log.c:476:9: note: 'snprintf' output between 1 and 178 bytes into a destination of size 64
+     476 |         snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     477 |                  type & MEM_RDONLY ? "rdonly_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     478 |                  type & MEM_RINGBUF ? "ringbuf_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     479 |                  type & MEM_USER ? "user_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     480 |                  type & MEM_PERCPU ? "percpu_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     481 |                  type & MEM_RCU ? "rcu_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     482 |                  type & PTR_UNTRUSTED ? "untrusted_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     483 |                  type & PTR_TRUSTED ? "trusted_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     484 |                  type & MEM_UNINIT ? "uninit_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     485 |                  type & DYNPTR_TYPE_LOCAL ? "dynptr_local_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     486 |                  type & DYNPTR_TYPE_RINGBUF ? "dynptr_ringbuf_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     487 |                  type & MEM_FIXED_SIZE ? "fixed_size_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     488 |                  type & MEM_ALLOC ? "alloc_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     489 |                  type & NON_OWN_REF ? "non_own_ref_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     490 |                  type & DYNPTR_TYPE_SKB ? "dynptr_skb_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     491 |                  type & DYNPTR_TYPE_XDP ? "dynptr_xdp_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     492 |                  type & MEM_ALIGNED ? "aligned_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     493 |                  type & MEM_WRITE ? "write_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     494 |                  type & DYNPTR_TYPE_SKB_META ? "dynptr_skb_meta_" : "",
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     495 |                  type & DYNPTR_TYPE_FILE ? "dynptr_file_" : ""
+         |                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+     496 |         );
+         |         ~
+
+
+vim +476 kernel/bpf/log.c
+
+   434	
+   435	/* string representation of 'enum bpf_reg_type'
+   436	 *
+   437	 * Note that reg_type_str() can not appear more than once in a single verbose()
+   438	 * statement.
+   439	 */
+   440	const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
+   441	{
+   442		char postfix[16] = {0}, prefix[64] = {0};
+   443		static const char * const str[] = {
+   444			[NOT_INIT]		= "?",
+   445			[SCALAR_VALUE]		= "scalar",
+   446			[PTR_TO_CTX]		= "ctx",
+   447			[CONST_PTR_TO_MAP]	= "map_ptr",
+   448			[PTR_TO_MAP_VALUE]	= "map_value",
+   449			[PTR_TO_STACK]		= "fp",
+   450			[PTR_TO_PACKET]		= "pkt",
+   451			[PTR_TO_PACKET_META]	= "pkt_meta",
+   452			[PTR_TO_PACKET_END]	= "pkt_end",
+   453			[PTR_TO_FLOW_KEYS]	= "flow_keys",
+   454			[PTR_TO_SOCKET]		= "sock",
+   455			[PTR_TO_SOCK_COMMON]	= "sock_common",
+   456			[PTR_TO_TCP_SOCK]	= "tcp_sock",
+   457			[PTR_TO_TP_BUFFER]	= "tp_buffer",
+   458			[PTR_TO_XDP_SOCK]	= "xdp_sock",
+   459			[PTR_TO_BTF_ID]		= "ptr_",
+   460			[PTR_TO_MEM]		= "mem",
+   461			[PTR_TO_ARENA]		= "arena",
+   462			[PTR_TO_BUF]		= "buf",
+   463			[PTR_TO_FUNC]		= "func",
+   464			[PTR_TO_INSN]		= "insn",
+   465			[PTR_TO_MAP_KEY]	= "map_key",
+   466			[CONST_PTR_TO_DYNPTR]	= "dynptr_ptr",
+   467		};
+   468	
+   469		if (type & PTR_MAYBE_NULL) {
+   470			if (base_type(type) == PTR_TO_BTF_ID)
+   471				strscpy(postfix, "or_null_");
+   472			else
+   473				strscpy(postfix, "_or_null");
+   474		}
+   475	
+ > 476		snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
+   477			 type & MEM_RDONLY ? "rdonly_" : "",
+   478			 type & MEM_RINGBUF ? "ringbuf_" : "",
+   479			 type & MEM_USER ? "user_" : "",
+   480			 type & MEM_PERCPU ? "percpu_" : "",
+   481			 type & MEM_RCU ? "rcu_" : "",
+   482			 type & PTR_UNTRUSTED ? "untrusted_" : "",
+   483			 type & PTR_TRUSTED ? "trusted_" : "",
+   484			 type & MEM_UNINIT ? "uninit_" : "",
+   485			 type & DYNPTR_TYPE_LOCAL ? "dynptr_local_" : "",
+   486			 type & DYNPTR_TYPE_RINGBUF ? "dynptr_ringbuf_" : "",
+   487			 type & MEM_FIXED_SIZE ? "fixed_size_" : "",
+   488			 type & MEM_ALLOC ? "alloc_" : "",
+   489			 type & NON_OWN_REF ? "non_own_ref_" : "",
+   490			 type & DYNPTR_TYPE_SKB ? "dynptr_skb_" : "",
+   491			 type & DYNPTR_TYPE_XDP ? "dynptr_xdp_" : "",
+   492			 type & MEM_ALIGNED ? "aligned_" : "",
+   493			 type & MEM_WRITE ? "write_" : "",
+   494			 type & DYNPTR_TYPE_SKB_META ? "dynptr_skb_meta_" : "",
+   495			 type & DYNPTR_TYPE_FILE ? "dynptr_file_" : ""
+   496		);
+   497	
+   498		snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s%s%s",
+   499			 prefix, str[base_type(type)], postfix);
+   500		return env->tmp_str_buf;
+   501	}
+   502	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
