@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FDE30C60D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0F6030BF4F;
 	Wed, 28 Jan 2026 16:50:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769619031; cv=none; b=gcv593hYuuBEMbdwn3EDkruSd6e1eBjw2XzYkPjZnN0LC/7uHhKBSXUioNMqjxXISdCo8u5CwxtHAA4pqlo0GgFztgI2L9T1fLAXTApraO/C/EP8M1MZ7v7LoDxYTpGZs/WIncsuElYJujqEndU5uzmIM1pwM8RGTjW18sT7xTQ=
+	t=1769619031; cv=none; b=IVI42wVNz9uq89QSE/oB9WqKJ3F+4zMPjNkiKZtJ7ZX1ABaotZ+E1EUBB3qCDT1zzwB3MZMmA1pGf1mPGioBTFws7XIHbzBbiGJLn4C9/fuec/8TxYAaX5vFx8ESfeIXERg8qirwBvxNgXcCE7mXLGcb6qx+zdo0o6Y3r7Dg0V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769619031; c=relaxed/simple;
-	bh=Mtp3U2b4BAZhIQ5Am742/0g+jFDD4JwsLEBjzPmmPH0=;
+	bh=1OHigLaB0I9Gr4pd6M4Zc3FWOaEqquAXFRRO/Gxw3CM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S9m4AF/fryQdEb1njxsDV9LH/O+SP6sn+S4yMhx4YJy7MUT+fibaJmvLqQ89EKo1k5655HEcXHG8FBAIGXE2d+RKTf/Fy4JS3wWeJeGMaL6VL8Er6uyBVyWMSyr/XUjaf/uA7cmJpFFNUYJwca0MfSIkxSlJRPndo9cNwAZTjeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nmixZLGV; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=NOMki0x03rCpl/PMz7iaMApdLBt5k5N6uCu8Wncl02TO5Uw0iuiAArGfynuERVWBBJVNMzg+XGs3SwIhclhSMggbN/0rA8rDxXWveK/s56bZraGVAL+0iNT2reY/CYvoBD49uoJNlXRyVOyE0xNGhKKVRYi0hJ3r9MYo4KOUIGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TjfXEptm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nmixZLGV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 753C3C4CEF1;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TjfXEptm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA2BC2BC86;
 	Wed, 28 Jan 2026 16:50:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1769619031;
-	bh=Mtp3U2b4BAZhIQ5Am742/0g+jFDD4JwsLEBjzPmmPH0=;
+	bh=1OHigLaB0I9Gr4pd6M4Zc3FWOaEqquAXFRRO/Gxw3CM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nmixZLGVxxndMEUPOHEcC/ljHC7OcOHdhG+qCVStSGMa2pJuMpU+5U6vYAA0Rado9
-	 7/BBAD1SmTMSLtmcV2BWclNTvWNUGWklzQ+UvMzyNMdZ9pI6VgTyAgNAROUzJVnmGf
-	 fnAntSedfmRPvM70thFn/o1Rsv12zu2a6NycKT3pzy+85fMrF4AycL0Sd5Zblrya5o
-	 x9X6XiVPTKxFhU8iwjiaAO3pTF6l4HuHpP1Wd9q6SpH1wXr2zB37UAhGG7YUaeyspf
-	 2CHq5z8GI+DBlIT2SmgLxmUotLFzm1ZlykGEa+dJLoETKe0HGJ0pj1/Gabbn4uJbB+
-	 7258GfjWTox0g==
+	b=TjfXEptm0ADY3ifgqaYHKezKdvmZ0vdiu4HJLMBS7TERWWChwTE1Xzyeiuawdcaau
+	 7989W1/+LpY6k5kTjByO0/pedG+2Fau/rP7VQrEFfnNa21MOP98mp6x+tpR/0t8g1F
+	 ZZUyM2fgjTeBFBBGeu53u1D/WrM7HHTeTKuNF32yRhacr0ydl40FC6ViV+OKZfx9Cp
+	 cVe49eQdgNKHSOAJr+sb8eo5n6T5Le49xwuw8FTQrCTdAbEUDlwa9IwlwPQZLTaOdC
+	 zEw58RSxgeWu+Nrfi6iiYe0ALr0VH7//l/jWCLXmAZRGQXl/rrV9BkB0gorneZ3QFh
+	 fMboor8w+ReGw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.99.1)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1vl8kO-0000000DAkj-3zTj;
-	Wed, 28 Jan 2026 17:50:28 +0100
+	id 1vl8kP-0000000DAn7-2H9M;
+	Wed, 28 Jan 2026 17:50:29 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: Jonathan Corbet <corbet@lwn.net>,
 	Linux Doc Mailing List <linux-doc@vger.kernel.org>
@@ -41,9 +41,9 @@ Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	Peter Zijlstra <peterz@infradead.org>,
 	Randy Dunlap <rdunlap@infradead.org>,
 	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH v2 01/25] docs: kdoc_re: add support for groups()
-Date: Wed, 28 Jan 2026 17:49:59 +0100
-Message-ID: <e1ba55866b3a8ce7fe95535981fa3c22bdaf9785.1769617841.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v2 03/25] docs: kdoc_parser: move var transformers to the beginning
+Date: Wed, 28 Jan 2026 17:50:01 +0100
+Message-ID: <ee823af3eebc4ece0278c9859f4d109dd0de54ab.1769617841.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1769617841.git.mchehab+huawei@kernel.org>
 References: <cover.1769617841.git.mchehab+huawei@kernel.org>
@@ -57,34 +57,67 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-Add an equivalent to re groups() method.
-This is useful on debug messages.
+Just like functions and structs had their transform variables
+placed at the beginning, move variable transforms to there
+as well.
+
+No functional changes.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 Acked-by: Randy Dunlap <rdunlap@infradead.org>
 Tested-by: Randy Dunlap <rdunlap@infradead.org>
 ---
- tools/lib/python/kdoc/kdoc_re.py | 7 +++++++
- 1 file changed, 7 insertions(+)
+ tools/lib/python/kdoc/kdoc_parser.py | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/tools/lib/python/kdoc/kdoc_re.py b/tools/lib/python/kdoc/kdoc_re.py
-index 2816bd9f90f8..19e777e2c97e 100644
---- a/tools/lib/python/kdoc/kdoc_re.py
-+++ b/tools/lib/python/kdoc/kdoc_re.py
-@@ -106,6 +106,13 @@ class KernRe:
+diff --git a/tools/lib/python/kdoc/kdoc_parser.py b/tools/lib/python/kdoc/kdoc_parser.py
+index fd57944ae907..0b68b140cd02 100644
+--- a/tools/lib/python/kdoc/kdoc_parser.py
++++ b/tools/lib/python/kdoc/kdoc_parser.py
+@@ -191,6 +191,18 @@ function_xforms  = [
+     (KernRe(r"__attribute__\s*\(\((?:[\w\s]+(?:\([^)]*\))?\s*,?)+\)\)\s+"), ""),
+ ]
  
-         return self.last_match.group(num)
- 
-+    def groups(self):
-+        """
-+        Returns the group results of the last match
-+        """
++#
++# Transforms for variable prototypes
++#
++var_xforms = [
++    (KernRe(r"__read_mostly"), ""),
++    (KernRe(r"__ro_after_init"), ""),
++    (KernRe(r"(?://.*)$"), ""),
++    (KernRe(r"(?:/\*.*\*/)"), ""),
++    (KernRe(r";$"), ""),
++    (KernRe(r"=.*"), ""),
++]
 +
-+        return self.last_match.groups()
-+
+ #
+ # Ancillary functions
+ #
+@@ -971,15 +983,6 @@ class KernelDoc:
+         ]
+         OPTIONAL_VAR_ATTR = "^(?:" + "|".join(VAR_ATTRIBS) + ")?"
  
- class NestedMatch:
-     """
+-        sub_prefixes = [
+-            (KernRe(r"__read_mostly"), ""),
+-            (KernRe(r"__ro_after_init"), ""),
+-            (KernRe(r"(?://.*)$"), ""),
+-            (KernRe(r"(?:/\*.*\*/)"), ""),
+-            (KernRe(r";$"), ""),
+-            (KernRe(r"=.*"), ""),
+-        ]
+-
+         #
+         # Store the full prototype before modifying it
+         #
+@@ -1003,7 +1006,7 @@ class KernelDoc:
+         # Drop comments and macros to have a pure C prototype
+         #
+         if not declaration_name:
+-            for r, sub in sub_prefixes:
++            for r, sub in var_xforms:
+                 proto = r.sub(sub, proto)
+ 
+         proto = proto.rstrip()
 -- 
 2.52.0
 
