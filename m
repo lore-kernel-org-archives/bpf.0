@@ -1,142 +1,119 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71583155A5D
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 19:05:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEB61371068
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 19:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769627159; cv=none; b=GHaUQXBqz1eB9CVQmGw+qEn+pKoon8/xsSSKLQ6t6P29txOuYQDbHWHArpv1FZFex9AYeRJmZ49eCdW/nSgK9IfnCYqjKQ4/r9Kq1dLLgiVaNUzJ+Ssd9qlLE8rGq0qJD2q/JBsp0HzPEMUtlSWEfrwNFzYq3d9vLvS+n2svJjg=
+	t=1769627361; cv=none; b=gEp2VtMebLyBhSQWFmd6Cz2/cG4GdROYFNYcT761Fd5Ea3ZHKZc5u8mpOQ5Heg2aub9HP3lTyLCTh2khUh/k8TSvcR/nwdbpQJarcVbdKcUq19GZ8M0ngAM+WyashopzLsVb0KUP8IXUJPhfCutelAylZnHOKOIUcwpd+0xV5VQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769627159; c=relaxed/simple;
-	bh=10WvIMs4qilNWXFFA7Hd0GcumtOOS0qIwm/JfVJ+bV0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OR02Y+Vy4HpvkoevsCM67rVWN1sSxcWpbNZ0DERi9jhbu4X5DNAl/nDP5cL6HPVED4doUBKMLX5e/NBWXPdidcMoh/CNimkg27/08s/PRxMnwvDH5NG50aWmli8ZlDd2UKiqX2GuchWNfbQVJjZtaKk5v0+ijVNI5XIhvbTINro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BhcX0hK3; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769627361; c=relaxed/simple;
+	bh=4F1TG6+WlGTBF/WCPp6MXY9LYYj2ZXbTcfmFt02NhMk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cEMtvRxvnKvLznAgvnZICnE14q4lp9mvrlp6IfrHTN6xmKHBHgCnJC4YPOo6LILsvxd18zYrKtfafBAl9LHhqXOVWOyvOfunABM7AiSfnWoViF/nkCwXqptlbccoJvpD7F5xD1+qUR+6rXuaxAFR0dpCKcFHdfv/J9d7ZHrUaPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=QQfkmD5l; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BhcX0hK3"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-480706554beso1819075e9.1
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 11:05:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769627157; x=1770231957; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=olyOkzWsmiHrpXBIg8l71W8Ioi+kPoRgo/TkeEywMrU=;
-        b=BhcX0hK3odurYS7oqsRSJMBy2oV/JhgwDaqmaD+e8EwderhdbWXLsI3oxb0qzNUF9K
-         huOGXcEeC9efevoh51kw/Ovs6PKkhsQ1YqBoNMh4NYYtmGEolLlEqYYEzVDEWWWG6hqj
-         KVDefMInnewiVigM7y9H2nBpeyNdtGZQPe9Y6MimFd3fnBeRnKb9zHs55TpuktBaHnmw
-         INOH8+lfHA3Q1x3KS5lwsfb2KhPYeF3Ui81sl1juKEHWdR8AUjzRzNwn2ltWYMfAsiDa
-         UxAFojLqxuruP6/X4Q0qJbDrJgCwB2NUdhTm95Mm7nETRCbysioeueGuTScrsy0ggw/8
-         1/JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769627157; x=1770231957;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=olyOkzWsmiHrpXBIg8l71W8Ioi+kPoRgo/TkeEywMrU=;
-        b=Cj31gDbbA4Tvlsf0zK1kXCGcUFSnp3Snr3q2FGLvOK/27EAdc7cI62HUYnKQwiW6BE
-         VqcaMh+YAGxKC9Gq+5WzWerp8HlMIc4P4cyDuYZJaDS3yfPiyaSLHMpHscOdiwvMJ15T
-         92j7ebURNiuAKE2/QFzPu2lCFfu6Iu+nivzpvTaFGFPSfeIJmTxw6dBYqFKDmrszhN3O
-         GB0rfIJLx1Qhmv9Ld+qZk4twBrrFzdhA1M7aw4OGwi6GelX3hGrmsWA1q7HsTQ+v2XJw
-         cw9pdpsoxaeWgu11NpAkRkYHd5TVQ88cljdYnpeXgo8Ov7fmAuE45KChM7TB9idAJ4Rf
-         rCuQ==
-X-Gm-Message-State: AOJu0YzsjW+rQt7KbDGo8d6Ro+ZnmapehDflS8o3vNC8Hrbpe426TDU6
-	dhAwLb666uoh8MXC+J3frIMaKsL3Qh1Wmn8VQ+uSg25dJS3e3D9ZZiTU8f1D+zV5
-X-Gm-Gg: AZuq6aL3jRQ1NiiAJKSzm7HxH9uzZuS9LyaIvKoU+2GdycZ+EXJfjq1M3PFB09skAwi
-	Y8ui49VEybMCTKGaYJBsRWx8tf3G38Amjp1xe5I5VrPPsDbR56rQmADwSEoIkIqKwdciyDKub4G
-	AAbAYMuVpc++iM/PD6B8n7pSPXIt/tznCDen1DudXIP0/4nWhF9lLQ14TrHu39tepd5HIzZPKRY
-	heYW3M9HaA5W9MvToGh56Ej2LGkWkn6VB7rn/n65XYt58skrRbFMxWjbgIkokNxq1QZ4//cKpMb
-	cznXQCIS1Y7xk5RbXyBOeE0e8K0K4A4+3fnvpLtIMZ/liFlInsFnG0V6P8M1x9yw56onLAKobzs
-	QK9SoSFzyWDzSDmUbIAp8PjKOvw1ZxxjPYidfHDfVqdRmvfouAYQtEvX/1MYtoqcgBtcJl8Mvxg
-	2TPEM8tw==
-X-Received: by 2002:a05:600c:620a:b0:480:1d16:2538 with SMTP id 5b1f17b1804b1-48069c54113mr78595245e9.23.1769627156568;
-        Wed, 28 Jan 2026 11:05:56 -0800 (PST)
-Received: from localhost ([2620:10d:c092:500::6:f1cc])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e1322f40sm8478482f8f.34.2026.01.28.11.05.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 11:05:55 -0800 (PST)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	kafai@meta.com,
-	kernel-team@meta.com,
-	alan.maguire@oracle.com,
-	kpsingh@kernel.org
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-Subject: [PATCH bpf-next v3] selftests/bpf: Remove xxd util dependency
-Date: Wed, 28 Jan 2026 19:05:51 +0000
-Message-ID: <20260128190552.242335-1-mykyta.yatsenko5@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="QQfkmD5l"
+Message-ID: <7dbcc5d5-476b-46e5-9e4b-b260d24a51a1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769627347;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Uoce2O4bq+uQodOB69TrcPt+OZtvkCKYOFmKW88WqjE=;
+	b=QQfkmD5lsHJq3o87CYC128K2gTqM8Je0n3mmDb7+VkG836yXHnF3KY7huFJiwuXOFZwF6+
+	84fkXG22+popIKJZno2KmoEGOUfWcQ8vQiZtngJ54CILBc359vKQ7gzGPFZ8B1BKhImMSl
+	PryoO/gGwx1UTolmy4wP1qSn/KnXi4E=
+Date: Wed, 28 Jan 2026 11:08:54 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH bpf-next v2 1/3] bpf: Add bpf_arch_supports_fsession()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Chris Mason <clm@meta.com>
+Cc: bot+bpf-ci@kernel.org, bpf <bpf@vger.kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+ Xu Kuohai <xukuohai@huaweicloud.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Menglong Dong <menglong8.dong@gmail.com>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260128150112.8873-2-leon.hwang@linux.dev>
+ <e64c4137e7f262e6fdab272e8ee44c8a129a36eb6d0186914375d6ba20d88474@mail.kernel.org>
+ <65231eeb-1f00-4af2-9234-a290ea3f6585@meta.com>
+ <a10afa70-29b7-48ab-b241-8b0f602abe2f@linux.dev>
+ <CAADnVQJV=e2VgQzkpsUQwexhaVZMs7uXHCe1Fa6VwbVNUMPghA@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <CAADnVQJV=e2VgQzkpsUQwexhaVZMs7uXHCe1Fa6VwbVNUMPghA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+On 1/28/26 10:49 AM, Alexei Starovoitov wrote:
+> On Wed, Jan 28, 2026 at 9:34 AM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
+>>
+>> On 1/28/26 7:35 AM, Chris Mason wrote:
+>>>
+>>>
+>>> On 1/28/26 10:26 AM, bot+bpf-ci@kernel.org wrote:
+>>>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+>>>>> index 5a075e06cf..070ba80e39 100644
+>>>>> --- a/arch/x86/net/bpf_jit_comp.c
+>>>>> +++ b/arch/x86/net/bpf_jit_comp.c
+>>>>> @@ -4112,3 +4112,8 @@ bool bpf_jit_supports_timed_may_goto(void)
+>>>>>  {
+>>>>>     return true;
+>>>>>  }
+>>>>> +
+>>>>> +bool bpf_jit_supports_fsession(void)
+>>>>        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>> This is the actual function name in the code.
+>>>
+>>> Ihor, I think the script parsing review-inline.txt chopped off the
+>>> part of the review where AI was complaining about the commit message?
+>>
+>> This is the email body pre-processing in KPD, yes.
+>>
+>> At some point we decided to remove the commit message before sending
+>> an email, but now that AI reviews the messages too, I think we should
+>> just send the generated review-inline.txt as is.
+>>
+>> Alexei, wdyt?
+> 
+> I think KPD is only supposed to trim the header until 'diff ..' line.
+> In this case there is no 'diff', so I'm not sure why it trimmed so much.
 
-The verification signature header generation requires converting a
-binary certificate to a C array. Previously this only worked with
-xxd (part of vim-common package).
-As xxd may not be available on some systems building selftests, it makes
-sense to substitute it with more common utils: hexdump, wc, sed to
-generate equivalent C array output.
+There is. Here is the PR comment with the review:
+https://github.com/kernel-patches/bpf/pull/10868#issuecomment-3811930805
 
-Tested by generating header with both xxd and hexdump and comparing
-them.
+KPD trimmed everything before the first "> diff" occurrence, as expected.
 
-Tested-by: Alan Maguire <alan.maguire@oracle.com>
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- tools/testing/selftests/bpf/.gitignore |  1 -
- tools/testing/selftests/bpf/Makefile   | 10 ++++++----
- 2 files changed, 6 insertions(+), 5 deletions(-)
+I'll try to fix this up in KPD. We should probably search for the first
+line starting with "> " (a quote start) to trim the header correctly.
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index b8bf51b7a0b0..a3ea98211ea6 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -23,7 +23,6 @@ test_tcpnotify_user
- test_libbpf
- xdping
- test_cpp
--test_progs_verification_cert
- *.d
- *.subskel.h
- *.skel.h
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 2c2f68a171ed..c6bf4dfb1495 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -720,9 +720,12 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
- 	$(Q)mkdir -p $(BUILD_DIR)
- 	$(Q)$(VERIFY_SIG_SETUP) genkey $(BUILD_DIR)
- 
-+# Generates a header with C array declaration, containing test_progs_verification_cert bytes
- $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
--	$(Q)ln -fs $< test_progs_verification_cert && \
--	xxd -i test_progs_verification_cert > $@
-+	$(Q)(echo "unsigned char test_progs_verification_cert[] = {"; \
-+	 hexdump -v -e '12/1 "  0x%02x," "\n"' $< | sed 's/0x  ,//g; $$s/,$$//'; \
-+	 echo "};"; \
-+	 echo "unsigned int test_progs_verification_cert_len = $$(wc -c < $<);") > $@
- 
- # Define test_progs test runner.
- TRUNNER_TESTS_DIR := prog_tests
-@@ -898,8 +901,7 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
- 			       *.BTF *.BTF_ids *.BTF.base		\
- 			       no_alu32 cpuv4 bpf_gcc			\
- 			       liburandom_read.so)			\
--	$(OUTPUT)/FEATURE-DUMP.selftests				\
--	test_progs_verification_cert
-+	$(OUTPUT)/FEATURE-DUMP.selftests
- 
- .PHONY: docs docs-clean
- 
--- 
-2.52.0
+Alternatively, AI can be prompted to avoid generating the header in
+review-inline.txt, but that's probably less reliable. And maybe it is
+useful for local runs, idk.
+
+> 
+> commit sha...
+> Author: ...
+> 
+> are useless in email reply, so we should still trim them.
 
