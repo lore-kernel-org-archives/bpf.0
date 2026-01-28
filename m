@@ -1,136 +1,116 @@
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DBD328B78
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 20:36:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769632619; cv=pass; b=Mpa0ovUlVjg1+nfUSxh5fZpm+ZDHkaBkJFi0ZToIQL44E3WeVSPYc+4k5KV+Cu8yMgsKWd5HwVhO0gzPw/n+EChoqDaQyvzkQovWq3NjvZGVXdvVOuSmzc9OWL5jaM1kZgf1M2H8QqN/djTQOPUvOLk4uBc2DLxm85jl7K4hvk0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769632619; c=relaxed/simple;
-	bh=T+rq7UOj7d+8qPf87RUCeDaUi1y9MEc8reKBqX50G1w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TsLB9Z9XBPQhD+27QsgrqZ9STt6REQQoeueE1+u12BdYDjOkNAaR4jcnoYxzrVPWwLgRsY6GQayD7JGr+hJGM2ag9mGZfYQJ9T2XKj+SUVLJT+O6pcEz3rFoiLkX0fQFNeqISR10m9mzavNq8J5nVFoe//RsyNYlzatXvO8tY1M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1gJ6D6F4; arc=pass smtp.client-ip=209.85.222.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C477528642D;
+	Wed, 28 Jan 2026 21:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769634173; cv=none; b=M22KiEoWX8hFjA9+TydzQnNPCG5fZaDRvJnXZNFnFqDTQ8YfQG4MDgiYPlwf6la02jj4hXsaoDP3uIP2k4qdST9gytLdwqHZyZUp7fO7nzEpD8NqUcayo5iEynAl2TeSan6F2FiLJdNcM5XCsvutv40hPa22cOKwZ4k2BARaZR4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769634173; c=relaxed/simple;
+	bh=Em+1CFVsGAsUe/PMauooL4Cb4HFJrPLZWLtlAhkW/CA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=elDRcheAB02fdeW0Fhcreqb1CmlEGHJcpdkeaCekyu1oIZRpbibeizHjTAhoIdo3GGwRhsN/Wb9Q2G1DXW4+q91MQ+8Nq7Yi+Bg4irPKmFfF7U7UkTelX12Oy7zHXh8Am0UV7SgsPOExl8AwJOmJ86YPQClpFKWPrG7bgmFuFg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L9sud/Oj; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1gJ6D6F4"
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-9480ad2029aso75374241.0
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 12:36:57 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769632617; cv=none;
-        d=google.com; s=arc-20240605;
-        b=UzYMsGXOhAUH493Oa153nfhyH4SglWsqHgRF5GyMPIOK1Q23zRIstQdajTPK2819Ha
-         Y6Wn0J+cKxtEA45zs3prMS9Rx8F/jlrnEVqMxrSLFDHeZPbJnWCZ3e7CzA4poFnAM8MU
-         cASETmXtOFaL3aBUJFpGfbSorcsbbmBYjrhV6G1adP9HHX0PEOFnqODXd8FkPeAAwOha
-         QlpnAa3pwCuMCKaFck1vUe7XpQzigZkQrFfRA0PzXyaE3rIMDT1vrxWh5X7iOSqm7Iz2
-         3KKwFzheAgLTZUo51Af1SjuMvJevlySaMa1JHKV2bdfLyZH4kdaVyTpoidre+Q2vqFpj
-         mE/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=SkiRjmckn2/8oWbFlJ/uLcOGnBa/tFh8Xiihp/LmEpk=;
-        fh=at129HCtBLvYuOemyc8sd90VPb8ok717Q3vBPFx21xg=;
-        b=CE2Hn3RT8UR2ZfuSBUVMourfJmhoZKt+RO9bjJAkk+eI9WJWvm8uSi5MMVWXUw0fOM
-         rXugXQlDzj3CcNlHeH5ePS9CwkT8D+PofJ8F5T/dke22yfICBMoykaM5+3ovKb5dHu2e
-         oqOhMWXaafdGtgdUnu4wiDMrA4UjjznDoPE8fPTd3JYBWCQ4gfsxMrU9+xjkm9+War0P
-         3GtTJylul11rtZKgh+D/ppKS3PJsk1fewDdcoYKbt4NYQPqkA0u7pVXx+/w7I0PtUuPb
-         hvzlr12eflSG+N47Aaou0xsfUIC1fuXYKCjGFAyHmeVg3CGo5a5OM2ya7zh6YHXF68nb
-         RNpg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769632617; x=1770237417; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SkiRjmckn2/8oWbFlJ/uLcOGnBa/tFh8Xiihp/LmEpk=;
-        b=1gJ6D6F49aJsUPpsodSJ+Eq4lhlZIW1HC6bdE9JEMqPj0zqIQDpJ3OmZQTe8fTKQCW
-         2IqDbHqUNCiT0FOaatyFJcFfboPmu6978IRPUuG/Ho0WH315WdVWEV62kJ2a1TKweAdh
-         THbuSWw7eDyLAbD5IJ59CJy7DPCs2Sre00iRxl0x1MCxzKoVCBeHFI1RxWiekbBJhU+D
-         5tN7B28uc26u5VhK6vQryvrewJqseY7ZbxQZKoo+6U7gReSJRSSvsYYXxf8s8fus0f9h
-         0oIRPV0MDav6FkCucjwq64ko47te/lHJ0T4FvvaetESIWe4h+aF1UWm0qazQycdfAYoQ
-         oCpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769632617; x=1770237417;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SkiRjmckn2/8oWbFlJ/uLcOGnBa/tFh8Xiihp/LmEpk=;
-        b=GjdNxyAUO/bMISvijjnox9yLIl3+V33i8Ikt6j38RXfP87z5JYFtaKFv/7ix9moAuK
-         CyKRpdJJmrZg1Pd6/hTPnbKKusVnyVgPz7SOTrMUkNBGh7duSPNE3thuuYOKv4zzpHU5
-         Nw/D8mPUnuJrMUKCiH+uWcE+mmO3eHEEGqOP3nZydWzSAJiEcjH7yr1pIcEl5sDGErmb
-         w4HF0n6is09K50wtj3MWGxxRemci5Qbjs6fukhTpdnNxR3I+ow6Aft6N16XFuju1D/l3
-         Oo+EBVKMkETdEiOwekXlIO9bSuQc21x34ZLcRNaFP9RcQcjD2BTYIjdMVUz9UMk2vfNN
-         KOOA==
-X-Forwarded-Encrypted: i=1; AJvYcCXu+hsi+DwPa2e5Ad96sgqA4sWt8Sf5CwIUQWKftVtSC/RM0NSWtp3fWRJm7t40vF5IWnA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6geleC1WmQpc9KnCGMYWJnOSNobXOXVDBFBPWKaSyEU89vIRl
-	klutxQOCIJ5K61K9Aoff+50Cr7gbvatfmgH5tsoT7Hl4gTegq8j4K2nQ4qfEWpmWlnEW/uBp5rb
-	sQxPuDsx9KJM50pKArH0cHntKGBlFJckA3jl7OpB3
-X-Gm-Gg: AZuq6aJr0+E9dd+rDNjOLaMXnpGxgQwXjzLTgvKB633oZcrofBmPtjLZJSK7WGWQRwS
-	+r8v/eIAIBjs3fHnv8H/bM22PmnL7SO+v/LYzYzRb5z3AntkIS1HE6ifDZEtUleLZjhBzj2ZG0u
-	a434xFRtisECLnE+FcfIyGfHKyMvk77Hi3SwT5lXIwkoMOBs5yxOH0BQDkUrMe6IE18brP0NTVt
-	Tvtj3wXCffT3RgDtBwaQZAXAEXQV9vS6+Hh1ikIP1OA7hdOyVu7LxZEZ2pzslKv91QJ7p4sTv//
-	kO6jfyY6zrcur9xYeyG8CserTQ==
-X-Received: by 2002:a05:6102:948:b0:5f1:72a7:f879 with SMTP id
- ada2fe7eead31-5f72378e7a1mr2305450137.28.1769632616747; Wed, 28 Jan 2026
- 12:36:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L9sud/Oj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9049C4CEF1;
+	Wed, 28 Jan 2026 21:02:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769634173;
+	bh=Em+1CFVsGAsUe/PMauooL4Cb4HFJrPLZWLtlAhkW/CA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=L9sud/OjQlo/A8mfYVJG4RYoCHr0nhu15eOZV8viCBJwMyvP70iv5PR2+yhazk3UH
+	 8r9nOrBDvFeEtCKI0Pxd7lB4HmSf9Y4kCqCaF2uyICd/VipWRTepNSW3SVTtgmKRSg
+	 9jlyZD3nNL/djj9ed/Ic1JMP32OVh/NddE/JTxt5zzrSOsRiWA1XugXm8DYPde+73e
+	 4HgePSHGO0Peu97Z1U/vMnJ6/KZs5aKjw3G5m9oM/GnRs8f1Yu/1la43tFdlHnevBp
+	 FPLBMoFxCIFt2CJuj7me5PshlVjXA+mGBCyQfySrEZjO3R9ZeqLzGIRwjXAG1ZLNu1
+	 mNF9JwPDdqq7A==
+Date: Wed, 28 Jan 2026 22:02:48 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Jacob Keller <jacob.e.keller@intel.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Linux Doc Mailing List
+ <linux-doc@vger.kernel.org>, "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+ <bpf@vger.kernel.org>, <intel-wired-lan@lists.osuosl.org>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>, Peter Zijlstra
+ <peterz@infradead.org>, Randy Dunlap <rdunlap@infradead.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [Intel-wired-lan] [PATCH v2 23/25]
+ tools/lib/python/unittest_helper.py
+Message-ID: <20260128220248.7a0d5b9f@foz.lan>
+In-Reply-To: <5b8fe4ae-25a2-4967-bb83-a52dd5907951@intel.com>
+References: <cover.1769617841.git.mchehab+huawei@kernel.org>
+	<f370f2a0dfcaa679c9969488c908eaac82026031.1769617841.git.mchehab+huawei@kernel.org>
+	<5b8fe4ae-25a2-4967-bb83-a52dd5907951@intel.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260126142118.2ea3cf13@gandalf.local.home> <CAEf4Bzax24jJVDs2bBiJuz1ZuuDihsb5Xq8pGcy18vLUMMLxbg@mail.gmail.com>
- <20260126192010.4f14bcb9@gandalf.local.home> <CAEf4BzZ0cYkJ-3Kt-O+2FTvTEirS7cSuea2swgaom18Q_sve4A@mail.gmail.com>
- <CAP_z_CgozbHejsuKeLRQHN-bz5jPA+C+c0GBNitgEvwOucm8TQ@mail.gmail.com> <CAEf4Bza91wTWzESxAyz5qP4e8siwGn=rvm-Few6xT_VpW9oJzw@mail.gmail.com>
-In-Reply-To: <CAEf4Bza91wTWzESxAyz5qP4e8siwGn=rvm-Few6xT_VpW9oJzw@mail.gmail.com>
-From: Blake Jones <blakejones@google.com>
-Date: Wed, 28 Jan 2026 12:36:45 -0800
-X-Gm-Features: AZwV_QicKm5Rky0hM2dQo5VX2OWvxNVv1BVwejzondR-3e4VRt2ziWlizyXCCFQ
-Message-ID: <CAP_z_ChhkA1W_5Bd0GQYpo2Vb-p-zP+Lbdp1cZw8Fr_WHQ=TcQ@mail.gmail.com>
-Subject: Re: BPF with deferred stacktrace and sframes?
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jan 28, 2026 at 10:56=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
-> I'm not quite clear on why blocking 53 times in the kernel before
-> returning to user space matters for capturing user space stack trace?
-> Given we haven't returned to user space, its stack trace will remain
-> the same. You'll need to schedule task_work (see
-> bpf_task_work_schedule_resume()) just once and capture stack trace
-> just once. How you join that asynchronously (from the perspective of
-> the point where you called bpf_task_work_schedule_resume()) captured
-> stack traces will be up to you. You can send it through ringbuf, or
-> store in some map, or whatever makes most sense for how exactly you
-> structured your BPF logic.
+Hi Jacob,
 
-Yeah, it's exactly this async joining that I'm referring to.
+On Wed, 28 Jan 2026 10:09:18 -0800
+Jacob Keller <jacob.e.keller@intel.com> wrote:
 
-If the thread blocked just once before returning to userland, I could
-capture a synchronous kernel stack trace and store its ID (along with
-the amount of time blocked there and the number of times it blocked
-there) in a simple structure in task-local storage, e.g.:
+> On 1/28/2026 8:50 AM, Mauro Carvalho Chehab wrote:
+> > Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+> > ---  
+> 
+> What is this patch trying to do? the title is not descriptive, and its 
+> contents don't make sense.
+> 
+> >   tools/lib/python/unittest_helper.py | 16 +---------------
+> >   1 file changed, 1 insertion(+), 15 deletions(-)
+> > 
+> > diff --git a/tools/lib/python/unittest_helper.py b/tools/lib/python/unittest_helper.py
+> > index e438472fa704..3cf1075b1de4 100755
+> > --- a/tools/lib/python/unittest_helper.py
+> > +++ b/tools/lib/python/unittest_helper.py
+> > @@ -8,21 +8,7 @@
+> >   Helper class to better display unittest results.
+> >   
+> >   Those help functions provide a nice colored output summary of each
+> > -executed test and, when a test fails, it shows the different in diff
+> > -format when running in verbose mode, like::
+> > -
+> > -    $ tools/unittests/nested_match.py -v
+> > -    ...
+> > -    Traceback (most recent call last):
+> > -    File "/new_devel/docs/tools/unittests/nested_match.py", line 69, in test_count_limit
+> > -        self.assertEqual(replaced, "bar(a); bar(b); foo(c)")
+> > -        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> > -    AssertionError: 'bar(a) foo(b); foo(c)' != 'bar(a); bar(b); foo(c)'
+> > -    - bar(a) foo(b); foo(c)
+> > -    ?       ^^^^
+> > -    + bar(a); bar(b); foo(c)
+> > -    ?       ^^^^^
+> > -    ...
+> > +executed test.
+> >     
+> 
+> You delete a bunch of the output here, but don't explain why. If this 
+> part of the doc is no longer valid this should be squashed into whatever 
+> patch made it invalid. I suspect this is the result of the new wrapper 
+> you added?
 
-struct block_info {
-    __u32 kstackid;
-    __u64 sleep_nsec;
-    __u64 sleep_count;
-};
+This patch came from a tool I wrote about one year ago for my own
+personal usage. 
 
-and then once the user stack trace ID had been captured via task_work,
-I could merge it along with the data from "block_info" into the final
-BPF map. The final BPF map's key is { kstackid, ustackid }, and its
-value is { sleep_nsec, sleep_count }.
+It was meant to be merged with patch 21/25, as it cleans up
+the module description. I ended removing a function that was
+requiring:
 
-But a thread that blocks multiple times before returning to userland
-would have to track multiple distinct kernel stack trace IDs and
-multiple distinct blocking durations before it can join them with the
-user stack trace ID. And the fixed-size structure used with task-local
-storage wouldn't be ... up to the task, as it were.
+	from difflib import unified_diff
 
-Blake
+as it was unused, but, a second look at it, I guess we can just
+drop this patch, as this is plain unittest output.
+
+Anyway, I'll handle it either way at the next version.
+
+Thanks,
+Mauro
