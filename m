@@ -1,109 +1,180 @@
-Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E3116DC28
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 18:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7B9525742F
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 18:31:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769624636; cv=none; b=cj20VoQcbppHE7jygs+yvNhjnW4A8qdDQkk9d1m3Apgu6VOMEpKCyfRsUG2ubfC6S4Hebs5E2QbDoW2rlvI/F5Vb/+z09S/XkbfZImP8UzHHYDSQclRtmYy6AiBU2atP7OeHhr6Mj3VNdSPp6mwd1yGb7yooNl8aT6lPRFTnKXg=
+	t=1769625121; cv=none; b=hAwGFORS9AbzPhFuySS1rmQajFkzHgamiiKCvmQrUfmOUyJuFvbthnishJ0FZoEqeRVfL+sU9TsceTpzpgU+G6DxSGnoWKjwxCoxkL9QsHrhiWCV/gwi7JmoQpQk+XYMoBWF3dT9ZnpQsWBfI/JpLWBZCvTGSYwNRYihfzG86iA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769624636; c=relaxed/simple;
-	bh=Dks1n+tLn9aMw/JnuP0H2rQMs66fm3ChmT9gGdwBgv8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=VKr3KA+tC4h6vf6NiLTx2URvbAuogIdRzAvqtEtS69bNv4eJj4SVj3FnIBtWqpK11j9QThnjQDYigZMvHCsmLB/40gSym/xQ9vXdik6WBc38g8XeyZ/1qamuYE+y4TW6tlebO8Bq+qC6DVvZLtyObRMRmlR/PJUFU2j2Hed2XKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=T/TKcIBB; arc=none smtp.client-ip=91.218.175.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769625121; c=relaxed/simple;
+	bh=3dWg42ZrPACJiyNOeDxatkh0EH8GzeFbVbMY2uhpCMU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NLOAMKGcJ0IrwmA++drRyiKPG8zg37FEbC0lhKHKIxzsyl1nG7Tyc3mWd++YOM/1e2rZ9JxnhFlrCrdMF1OWTIFe98+KHZd/4iVPtAvyPAnwKnOLhdCvW134VvIbPWnL3N4hhpbdVyVsf9APmMTzMIc/ufvSpyO82LG3bawG+Z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C/4W7Cnh; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="T/TKcIBB"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769624622;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Dks1n+tLn9aMw/JnuP0H2rQMs66fm3ChmT9gGdwBgv8=;
-	b=T/TKcIBBphm5L5F1YLVql/At3jjPNegsOzmM1WMurTi7yjSmsV2Y9xwPoMRDFqjcOfKsRh
-	8AiAMlGX1VQVdl5A3uXFHwubzIUTIs7jIhK4tkO+fjPvOGixtvzt82coITpwonDzRMOJ15
-	/fSTu/hou6lTRkk6Om9Cv9fjNhEMbWI=
-From: Roman Gushchin <roman.gushchin@linux.dev>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Michal Hocko <mhocko@suse.com>,  bpf <bpf@vger.kernel.org>,  Alexei
- Starovoitov <ast@kernel.org>,  Matt Bobrowski <mattbobrowski@google.com>,
-  Shakeel Butt <shakeel.butt@linux.dev>,  JP Kobryn
- <inwardvessel@gmail.com>,  LKML <linux-kernel@vger.kernel.org>,  linux-mm
- <linux-mm@kvack.org>,  Suren Baghdasaryan <surenb@google.com>,  Johannes
- Weiner <hannes@cmpxchg.org>,  Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH bpf-next v3 00/17] mm: BPF OOM
-In-Reply-To: <CAADnVQ+ghTc5FtJCjm4ya3y3xVpSuJe-7ctdT-thowqWguc1pA@mail.gmail.com>
-	(Alexei Starovoitov's message of "Wed, 28 Jan 2026 08:59:34 -0800")
-References: <20260127024421.494929-1-roman.gushchin@linux.dev>
-	<aXh_LpTzDhvv20uB@tiehlicka> <7ia44io6kbwj.fsf@castle.c.googlers.com>
-	<aXnDdkYmtipGwSjK@tiehlicka>
-	<CAADnVQ+ghTc5FtJCjm4ya3y3xVpSuJe-7ctdT-thowqWguc1pA@mail.gmail.com>
-Date: Wed, 28 Jan 2026 10:23:34 -0800
-Message-ID: <87zf5x1tqx.fsf@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C/4W7Cnh"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-432d256c2e6so166738f8f.3
+        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 10:31:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769625118; x=1770229918; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pOpcbsJqzx5BFg4CCMHidiY0+KPvr9io+iqkXaknWDA=;
+        b=C/4W7CnhZDXZ0VyuM0dpyoHJzObJ1flBKqhdfMxHy6EGNCO2PrtBnqDB1YIX+FB8YG
+         ZyNu1VC9vy+M1JJz3Azy8hfYGDBLEe00oslFq963gZUbZhFb2Tr2cFkKrC6ReIpXXQMT
+         lWewgoHPpoBUf22uuusOfyPY5Uzn4mpgukXtIoMYTa48oEOWomNDmnimRJ6hD7+gr68C
+         AP6GrzzJl5mvrsSy40MFNdE8NcGo3xvxW5FOnYeCKXQg1n6RLx32qjr6dooqfCxoYzRh
+         pFjwrfc7vcRKQrOW6sd4zWR3qSbfg/e8hv6UIxRFu8M8nOdbJkw7F1Z7yz65RobuoIFK
+         Obcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769625118; x=1770229918;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pOpcbsJqzx5BFg4CCMHidiY0+KPvr9io+iqkXaknWDA=;
+        b=aeNfE0WjQpLmbf87xNZfbV2clQyssTSsWwR679eSNA43LtnxqdRkQ7uk3q+X1eYAJm
+         1hCGd6V62arO3R6RKUFW973Gt7JFlkZhC5kwxJLlbs6+1zKxRadwm9JaJqnvt64F8kkF
+         uYGZuOV5l7JaYz+r76sscaB/abP3CZ87p0NJqeUjHRxBoSUp3lcmkDykJmKN5x/+SGog
+         9ilEsnqgUfMotjagrR2mOpWS3DitIvQ8xT4FwrER2xKs43Gl4G9HUHDO0NdBl8wiNbX/
+         Qg4c5UadPQ3BzkC9zVzKYSucWcwdetCi6ze+qndvUKWjrZqPEVHoQ5Y6GeprU7m3Pgqe
+         nMvw==
+X-Forwarded-Encrypted: i=1; AJvYcCV6uObSOzG//j/nyiYYhi0ZlY/uNkqiw6U/M9kdfWFw9/0SfK2+aGTprrzJNBxVfus2Dn8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLAXr/GZmYwfUURicaT0ZJDfl9mDjKJUNEmk7f/91ypMkdPhoy
+	fVUotbxobmHWvP9GHL2DFyET33S43hxAQm7p0Iko19HBEli5LyyExIOS
+X-Gm-Gg: AZuq6aJxPerFNbnV+nlksGl/heXGSMCEXmcehrfChgBTo3IwV4ER0yOz2rQRI1zEG/r
+	eUC9KEMX2LZORPHQKv7UQ6rR/qkvfr4nCvlzJ2a4XHJPGGov0EBfeOgyZ3zWaRh4xuyzDm6yuMn
+	AozrBegMbdOWRLd1RtmEGeeHTiKyq55nbRiNwY/EkXo3Ew2Iy+5WPM15YBFLU+t2Y59w/TKbh83
+	1r0Ci3pKNT9gACB6NmlHCQUJSiFqT/APTGpiSf2QC0ncHPr/kNJK7rnk0gJtQYHKyJbrwAD4ETb
+	YNVs1++yAtYejiPQ0zpWF/avr4MzPhXNPuxcZJRKs73/ffJQe2eqLWsGgTxzGLL8zVe1TvBg39V
+	OxBAny7vMWRcwNdYCotQJk6543mMGnwZWLY6TiRIZo56lXXbwJqCovR2tTeEZzs7qrAPBBgXHZv
+	298uA8MT983N6Nq1X1FDCX3f5/eLzGucXdvDmhwfnBRFtqUKM8oeg=
+X-Received: by 2002:a05:6000:22c9:b0:435:9882:234e with SMTP id ffacd0b85a97d-435dd1d8e62mr7603797f8f.59.1769625118064;
+        Wed, 28 Jan 2026 10:31:58 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1126:4:c307:95a:6dc8:83a5? ([2620:10d:c092:500::6:f1cc])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10e4762sm8554622f8f.6.2026.01.28.10.31.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 28 Jan 2026 10:31:57 -0800 (PST)
+Message-ID: <344199c5-b5f8-4032-8457-a18b62581806@gmail.com>
+Date: Wed, 28 Jan 2026 18:31:56 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Remove xxd util dependency
+To: Alan Maguire <alan.maguire@oracle.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
+ kernel-team@meta.com, kpsingh@kernel.org
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260128150435.85074-1-mykyta.yatsenko5@gmail.com>
+ <44ec77f8-0d77-4ec8-b225-f58307fea951@oracle.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <44ec77f8-0d77-4ec8-b225-f58307fea951@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-
-> On Wed, Jan 28, 2026 at 12:06=E2=80=AFAM Michal Hocko <mhocko@suse.com> w=
-rote:
+On 1/28/26 17:29, Alan Maguire wrote:
+> On 28/01/2026 15:04, Mykyta Yatsenko wrote:
+>> From: Mykyta Yatsenko <yatsenko@meta.com>
 >>
+>> The verification signature header generation requires converting a
+>> binary certificate to a C array. Previously this only worked with
+>> xxd (part of vim-common package).
+>> As xxd may not be available on some systems building selftests, it makes
+>> sense to substitute it with more common utils: hexdump, wc, sed to
+>> generate equivalent C array output.
 >>
->> > Another viable idea (also suggested by Andrew Morton) is to develop
->> > a production ready memcg-aware OOM killer in BPF, put the source code
->> > into the kernel tree and make it loadable by default (obviously under a
->> > config option). Myself or one of my colleagues will try to explore it a
->> > bit later: the tricky part is this by-default loading because there are
->> > no existing precedents.
+>> Tested by generating header with both xxd and hexdump and comparing
+>> them.
 >>
->> It certainly makes sense to have trusted implementation of a commonly
->> requested oom policy that we couldn't implement due to specific nature
->> that doesn't really apply to many users. And have that in the tree. I am
->> not thrilled about auto-loading because this could be easily done by a
->> simple tooling.
+>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> ---
+>>   tools/testing/selftests/bpf/Makefile | 6 +++++-
+>>   1 file changed, 5 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+>> index 2c2f68a171ed..bbcd2101c3d7 100644
+>> --- a/tools/testing/selftests/bpf/Makefile
+>> +++ b/tools/testing/selftests/bpf/Makefile
+>> @@ -720,9 +720,13 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
+>>   	$(Q)mkdir -p $(BUILD_DIR)
+>>   	$(Q)$(VERIFY_SIG_SETUP) genkey $(BUILD_DIR)
+>>   
+>> +# Generates a header with C array declaration, containing test_progs_verification_cert bytes
+>>   $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+>>   	$(Q)ln -fs $< test_progs_verification_cert && \
+> I think we can remove the symlinking here too. It was a workaround for the fact that
+> xxd derived the name of the variable to assign from the filename, so we could not
+> use $< directly as a result. It would use underscores etc when
+> representing the path; i.e. something like path_2_test_progs_verification_cert.
 >
-> Production ready bpf-oom program(s) must be part of this set.
-> We've seen enough attempts to add bpf st_ops in various parts of
-> the kernel without providing realistic bpf progs that will drive
-> those hooks. It's great to have flexibility and people need
-> to have a freedom to develop their own bpf-oom policy, but
-> the author of the patch set who's advocating for the new
-> bpf hooks must provide their real production progs and
-> share their real use case with the community.
-> It's not cool to hide it.
+> Newer xxd had an option to provide an explicit name, but we needed a workaround there
+> since we couldn't rely on the fact xxd was new enough.
+>
+> Now since we don't care about xxd we can dispense with the symlinking step.
+>
+>> -	xxd -i test_progs_verification_cert > $@
+>> +	(echo "unsigned char test_progs_verification_cert[] = {"; \
+>> +	 hexdump -v -e '12/1 "  0x%02x," "\n"' test_progs_verification_cert | sed 's/0x  ,//g'; \
+>> +	 echo "};"; \
+>> +	 echo "unsigned int test_progs_verification_cert_len = $$(wc -c < test_progs_verification_cert);") > $@
+>>
+> After removing symlinking we would just need to change to using $< above instead
+> of test_progs_verification_cert I think; following changes on top of your patch
+> seem to do the trick in tidying this up:
+>
+> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
+> index b8bf51b7a0b0..a3ea98211ea6 100644
+> --- a/tools/testing/selftests/bpf/.gitignore
+> +++ b/tools/testing/selftests/bpf/.gitignore
+> @@ -23,7 +23,6 @@ test_tcpnotify_user
+>   test_libbpf
+>   xdping
+>   test_cpp
+> -test_progs_verification_cert
+>   *.d
+>   *.subskel.h
+>   *.skel.h
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index bbcd2101c3d7..f559f792c1be 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -722,11 +722,10 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
+>   
+>   # Generates a header with C array declaration, containing test_progs_verification_cert bytes
+>   $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+> -       $(Q)ln -fs $< test_progs_verification_cert && \
+> -       (echo "unsigned char test_progs_verification_cert[] = {"; \
+> -        hexdump -v -e '12/1 "  0x%02x," "\n"' test_progs_verification_cert | sed 's/0x  ,//g'; \
+> +       $(Q)(echo "unsigned char test_progs_verification_cert[] = {"; \
+> +        hexdump -v -e '12/1 "  0x%02x," "\n"' $< | sed 's/0x  ,//g'; \
+>           echo "};"; \
+> -        echo "unsigned int test_progs_verification_cert_len = $$(wc -c < test_progs_verification_cert);") > $@
+> +        echo "unsigned int test_progs_verification_cert_len = $$(wc -c < $<);") > $@
+>   
+>   # Define test_progs test runner.
+>   TRUNNER_TESTS_DIR := prog_tests
+> @@ -902,8 +901,7 @@ EXTRA_CLEAN := $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)                   \
+>                                 *.BTF *.BTF_ids *.BTF.base               \
+>                                 no_alu32 cpuv4 bpf_gcc                   \
+>                                 liburandom_read.so)                      \
+> -       $(OUTPUT)/FEATURE-DUMP.selftests                                \
+> -       test_progs_verification_cert
+> +       $(OUTPUT)/FEATURE-DUMP.selftests
+>   
+>   .PHONY: docs docs-clean
+>   
+> I'd suggest doing something like the above, but I tested both ways and it works
+> well so
+>
+> Tested-by: Alan Maguire <alan.maguire@oracle.com>
+Thanks for taking a look, you suggestions make sense, I'll apply them.
 
-In my case it's not about hiding, it's a chicken and egg problem:
-the upstream first model contradicts with the idea to include the
-production results into the patchset. In other words, I want to settle
-down the interface before shipping something to prod.
-
-I guess the compromise here is to initially include a bpf oom policy
-inspired by what systemd-oomd does and what is proven to work for a
-broad range of users. Policies suited for large datacenters can be
-added later, but also their generic usefulness might be limited by the
-need of proprietary userspace orchestration engines.
-
-> In that sense enabling auto-loading without requiring an end user
-> to install the toolchain and build bpf programs/rust/whatnot
-> is necessary too.
-> bpf-oom can be a self contained part of vmlinux binary.
-> We already have a mechanism to do that.
-> This way the end user doesn't need to be a bpf expert, doesn't need
-> to install clang, build the tools, etc.
-> They can just enable fancy new bpf-oom policy and see whether
-> it's helping their apps or not while knowing nothing about bpf.
-
-Fully agree here. Will implement in v4.
-
-Thanks!
