@@ -1,106 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D4925485A;
-	Wed, 28 Jan 2026 11:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DADFA20125F;
+	Wed, 28 Jan 2026 12:18:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769601444; cv=none; b=gn2grEPNR0ezeFg04j1CTEcQmdWRL5JCWk2o9ymmJW8kYRaiFpLoI7/j816zYQrqyn1ANEwXasto1BHJm+2yb3CD1+AdPpRiX5Tu00E1X1+A9/8rX1zc7uTXcDfecTlhMa2/Dr9DVBgofQQiS2+XsVJt+TxStk1ylTi1s5kLn7k=
+	t=1769602724; cv=none; b=AhChG77u/DmFJSDKJKuQ2HiTalYHiXVVhOY6rcPv49DJYhwSrsqinyB0niJWvxSDPGnqcVrL11SvvZchL2B/KA+R/haxcmOUyNnwOItyNTSPBhTdElGne16CzA56k/VRodK4nlA7+rrNy1jhyvZ+Tbqpo+NfPyBmJIu2SawgtNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769601444; c=relaxed/simple;
-	bh=hQDBvjcN2GTZgu7CN2zBOx4sBb6h79x7UGonvI29DMI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=KbrfXwEw42AWG2cNl9QLmUz9gyovCFM75W1e/iNdetDwZ41LJwWMYrli6JdOmlLcCkOA0A8ciEn1LrvTWYsZztjo6MSxD99mTeCwbBgja9sESc2FlIaUJLoVZTv81kpiJbMp0XBWpGejHi8yk6bvqIPV08/ZrfUuGRSKXmny+ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=io/yDQkD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769602724; c=relaxed/simple;
+	bh=irHF387VhKHjsOnpsnW9NUk3sxxbxWzln/uy9xgtwqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=awkHM1aP4xodEhPeiEM8aN85iNxQ3jt2azKUTCmW2qnmc8HjM6PWRiB43xi2VEpHkb/MQ73nskNgWNAagvetip7B/aQYPU2knFMXvAJfUeQHZRA+h3bcL7MQrSTa0Lq2uWI+WtQMIaSJpmH9/06TJ9jFYeMMlkH5mmuZyHxxZtc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TGlHRR6F; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="io/yDQkD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8910BC4CEF1;
-	Wed, 28 Jan 2026 11:57:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769601444;
-	bh=hQDBvjcN2GTZgu7CN2zBOx4sBb6h79x7UGonvI29DMI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=io/yDQkDuOQGnRm/bD2p7s4MRxz85pN6gMBKMTxDs2gMhip0wDyemYBsVwrkqqlVg
-	 NPblZ88moSATcE7yh6jfvNZacUfsLMRvTm0pjZwum0T1kTYk8rpeG613v0bCWLLQs2
-	 derufY3AUE+ZqneoInGYld0cgCvVjkYJfiQlTjt2oFxrtMDf1oTl9Yz/NI2XJw/+K8
-	 EViMkVD6FTC4+Cix0D/Gf50fEo7gq43MbKX4o1ZEYBpI4O20Czjuu0ov/A/emlLACm
-	 JuoVxNID+na2lhW5QgwRkHTZaCgYzGALJCLqa5YKCxUiBIc+fXMXaNefOeRVB8Jo1l
-	 iybTPz8Tdht/w==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, LKML
- <linux-kernel@vger.kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>, Gabriele Monaco
- <gmonaco@redhat.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Michael Jeanson <mjeanson@efficios.com>, Jens Axboe <axboe@kernel.dk>,
- "Paul E. McKenney" <paulmck@kernel.org>, "Gautham R. Shenoy"
- <gautham.shenoy@amd.com>, Florian Weimer <fweimer@redhat.com>, Tim Chen
- <tim.c.chen@intel.com>, Yury Norov <yury.norov@gmail.com>, Shrikanth Hegde
- <sshegde@linux.ibm.com>, bpf <bpf@vger.kernel.org>,
- sched-ext@lists.linux.dev, Kernel Team <kernel-team@meta.com>, Alexei
- Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Puranjay Mohan <puranjay@kernel.org>,
- Tejun Heo <tj@kernel.org>
-Subject: Re: [patch V5 00/20] sched: Rewrite MM CID management
-In-Reply-To: <2b7463d7-0f58-4e34-9775-6e2115cfb971@linux.dev>
-References: <20251119171016.815482037@linutronix.de>
- <2b7463d7-0f58-4e34-9775-6e2115cfb971@linux.dev>
-Date: Wed, 28 Jan 2026 12:57:20 +0100
-Message-ID: <877bt29cgv.ffs@tglx>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TGlHRR6F"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769602723; x=1801138723;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=irHF387VhKHjsOnpsnW9NUk3sxxbxWzln/uy9xgtwqM=;
+  b=TGlHRR6F94rKBRysVGoeJUVVWNt0zxHcxUUHuGMVDEqG6cxjzZLmjTVh
+   zigjLlb+2U1wBFRVoTfL3919JzOQG/KyWzA3jTIUOyz58xeQBP0FdLJ+z
+   spzvXvY2wrp4kTwZD+hxyWWnzz6JXZWYzzqjcZAe2oGIZPXJspe6r+RvC
+   BJbktKaB0UGBZtPrNs2Z3M5R+ROzLzeE0qXwcvh3yz9xw4S+kCAnAPVlM
+   nVNfUL7B3UrEtVrHcp902Qq2ykB+vNPTTbEvSVuNxGVpxPlLTkb/OWSQ8
+   sivcrokU6gFz9flZablWyus71nF16DvcXnceFNs9VIDfN1LwwbItjmn74
+   Q==;
+X-CSE-ConnectionGUID: BeKq8/W3QImhw2GFekEqtA==
+X-CSE-MsgGUID: yBW1TNNqRJGfBg1J7jsj5Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="93469830"
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="93469830"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 04:18:43 -0800
+X-CSE-ConnectionGUID: Q7Z5V0R1RjCKaaK9/1JSxA==
+X-CSE-MsgGUID: tIAdhHReTWOiiIA7g/WWbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="212353797"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 28 Jan 2026 04:18:35 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vl4VE-00000000ZeC-2fMW;
+	Wed, 28 Jan 2026 12:18:32 +0000
+Date: Wed, 28 Jan 2026 20:18:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Kalyazin, Nikita" <kalyazin@amazon.co.uk>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel@xen0n.name" <kernel@xen0n.name>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	"pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"maz@kernel.org" <maz@kernel.org>,
+	"oupton@kernel.org" <oupton@kernel.org>,
+	"joey.gouly@arm.com" <joey.gouly@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"yuzenghui@huawei.com" <yuzenghui@huawei.com>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"seanjc@google.com" <seanjc@google.com>,
+	"tglx@kernel.org" <tglx@kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+	"luto@kernel.org" <luto@kernel.org>
+Subject: Re: [PATCH v10 01/15] set_memory: set_direct_map_* to take address
+Message-ID: <202601282023.vzRHJBfU-lkp@intel.com>
+References: <20260126164445.11867-2-kalyazin@amazon.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260126164445.11867-2-kalyazin@amazon.com>
 
-On Tue, Jan 27 2026 at 16:01, Ihor Solodrai wrote:
-> BPF CI caught a deadlock on current bpf-next tip (35538dba51b4).
-> Job: https://github.com/kernel-patches/bpf/actions/runs/21417415035/job/61670254640
->
-> It appears to be related to this series. Pasting a splat below.
+Hi Nikita,
 
-The deadlock splat is completely unrelated as it is a consequence of the
-panic which is triggered by the watchdog:
+kernel test robot noticed the following build errors:
 
-> [   45.009755] watchdog: CPU2: Watchdog detected hard LOCKUP on cpu 2
+[auto build test ERROR on 0499add8efd72456514c6218c062911ccc922a99]
 
-...
+url:    https://github.com/intel-lab-lkp/linux/commits/Kalyazin-Nikita/set_memory-set_direct_map_-to-take-address/20260127-005641
+base:   0499add8efd72456514c6218c062911ccc922a99
+patch link:    https://lore.kernel.org/r/20260126164445.11867-2-kalyazin%40amazon.com
+patch subject: [PATCH v10 01/15] set_memory: set_direct_map_* to take address
+config: loongarch-allnoconfig (https://download.01.org/0day-ci/archive/20260128/202601282023.vzRHJBfU-lkp@intel.com/config)
+compiler: clang version 22.0.0git (https://github.com/llvm/llvm-project 9b8addffa70cee5b2acc5454712d9cf78ce45710)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260128/202601282023.vzRHJBfU-lkp@intel.com/reproduce)
 
-> [   46.053170]   lock(&nmi_desc[NMI_LOCAL].lock);
-> [   46.053172]   <Interrupt>
-> [   46.053173]     lock(&nmi_desc[NMI_LOCAL].lock);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601282023.vzRHJBfU-lkp@intel.com/
 
-...
+All errors (new ones prefixed by >>):
 
-> Any ideas what might be going on?
+>> arch/loongarch/mm/pageattr.c:211:16: error: redefinition of 'addr' with a different type: 'unsigned long' vs 'const void *'
+     211 |         unsigned long addr = (unsigned long)addr;
+         |                       ^
+   arch/loongarch/mm/pageattr.c:209:48: note: previous definition is here
+     209 | int set_direct_map_invalid_noflush(const void *addr)
+         |                                                ^
+   1 error generated.
 
-Without a full backtrace of all CPUs it's hard to tell because it's
-unclear what is holding the runqueue lock of CPU2 long enough to trigger
-the hard lockup watchdog.
 
-I'm pretty sure the CID changes are unrelated, that new code just happen
-to show up as the messenger which gets stuck on the lock forever.
+vim +211 arch/loongarch/mm/pageattr.c
 
-> [   46.053209] CPU: 2 UID: 0 PID: 126 Comm: test_progs Tainted: G           OE       6.19.0-rc5-g748c6d52700a-dirty #1 PREEMPT(full)
-> [   46.053214] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
-> [   46.053215] Hardware name: QEMU Ubuntu 24.04 PC (i440FX + PIIX, 1996), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [   46.053217] Call Trace:
-> [   46.053220]  <NMI>
-> [   46.053223]  dump_stack_lvl+0x5d/0x80
-> [   46.053227]  print_usage_bug.part.0+0x22b/0x2c0
-> [   46.053231]  lock_acquire+0x272/0x2b0
-> [   46.053235]  ? __register_nmi_handler+0x83/0x350
-> [   46.053240]  _raw_spin_lock_irqsave+0x39/0x60
-> [   46.053242]  ? __register_nmi_handler+0x83/0x350
-> [   46.053246]  __register_nmi_handler+0x83/0x350
-> [   46.053250]  native_stop_other_cpus+0x31c/0x460
-> [   46.053255]  ? __pfx_native_stop_other_cpus+0x10/0x10
-> [   46.053260]  vpanic+0x1c5/0x3f0
+   208	
+   209	int set_direct_map_invalid_noflush(const void *addr)
+   210	{
+ > 211		unsigned long addr = (unsigned long)addr;
+   212	
+   213		if ((unsigned long)addr < vm_map_base)
+   214			return 0;
+   215	
+   216		return __set_memory((unsigned long)addr, 1, __pgprot(0),
+   217				    __pgprot(_PAGE_PRESENT | _PAGE_VALID));
+   218	}
+   219	
 
-vpanic() really should disable lockdep here before taking that lock in
-NMI context. The resulting lockdep splat is not really useful.
-
-Thanks.
-
-        tglx
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
