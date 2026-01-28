@@ -1,308 +1,157 @@
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E176C2FD7B3
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 04:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769574119; cv=none; b=JUtXoAIhxWDsZwSyf7QNgQVIqRuRd94r7WBb8LZ5iIptSJv6sd//IXlT/6jti1/P/rnHaErO35dE3BNi20YJ92B3CyD6OmnxI07ETP0YfBX+dGeS3HoFEKVQX6gOOmv/QU/6YVjyNrU/kdGEVcufacCwzRjSWk2LqZa22wOXNQo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769574119; c=relaxed/simple;
-	bh=fnfSexX3nTY4kLO+8MDEEy+q/XQ/vKO+lDDb4iCUqUY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dRs0SjSAANeq73iXrPzZ+VZ9G3UcTis+n1MJca0K6grFxeNhSNoMkbVz+fElBH4J8bAE1+OPx/h+WSflMnkY5SIuHeQYh5cKPr8DtiWNvgozhBSZZhTyW45oMg3YlmYuUnWJFnXJRWGTseaEhvoJA8QSrIWt6H68FVZuXszloWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pnpPYZM/; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE15724291E
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 04:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769574513; cv=pass; b=jjY9W+cINmfn/PPvAKiBcBdrQwJcYzxfOuzccFimZA6bkThNOk3nBkIegb7o9uPyCYiP4t9afcAvJEihDDUazFsb0uw00j0r0iRPNx/AZG/TTWd9Uw9kgycenFICK/HatbLaMQvmnMzvhP9nrysQavEprA+Zvis5TLLlQyyZxu8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769574513; c=relaxed/simple;
+	bh=j7hShYPeO1N9+zbQK+hb51NpB2ihGqVur4xeazfb+IQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f+jg++YaKdDdZiCoNZDsPvigSWdCOq+YhjoW2BdrOsWtBuEyOyWyThYfW8AChroU5LyXBDCBjXr3EgL/q0BByUwzAST8ni+6gIKTJh29EMjQ2TDQ2pzlvGI/td4J1ceFnkyIfXhIrmiA5NPZrN2HiyXZLzp5NDkf7GzZo0atX0o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c2O0fzxw; arc=pass smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pnpPYZM/"
-Message-ID: <e609a4d6-1b28-4858-8a46-a95f0794bb33@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769574105;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8iLSt35krLeyCU2JfA78lW6/p0Uk0QktVVx4ZqWTJpg=;
-	b=pnpPYZM/U4UdfdB0arNcrdbHGEGWUE5OZ6/Je5NY1d0dilTyNRiNqknd1b67oVC70MYezX
-	vXqUwqmNKReHfigiJoUCNoOv8Z2ZyvWdbwPrBJZuaJvAv986JqFtXFaQi4P1X1cc5CDrPl
-	ZjhusiSky0mKw1OUGm0xVtWV24+18Nk=
-Date: Wed, 28 Jan 2026 12:21:30 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c2O0fzxw"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4801d7c72a5so49369785e9.0
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 20:28:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769574510; cv=none;
+        d=google.com; s=arc-20240605;
+        b=OhsX/+bI9oowc1zds6Dorf+tdZbXofwJfag0HIlWx7Ox9z513stx3+xzUclm2Yo2ee
+         gim/R01p33yg8AKj5BQ21y8JiNaBoTEO7jQyqe8KtRMC5CYQ/gHUDUryoLEgRkKM+BLz
+         0zqOZ2hqau1EGDBAJmPsXbfgSfgDxcuHidM4bPse3l/uqHbRwMtlUf7rGbgIifKGWm93
+         oGEU4GAa6M8qlGI7CETvYvPpF+GXelnniB/vEkEa0KrC2yamMB1KNk+XtTLRYqFiSNzm
+         c2S9PXMStFdgDguWJQLEDtF6yIDhr5LiVR/Zeu2iBsy8JYWCRIHM77N8kBbi7Yv8EIk+
+         QwYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=j7hShYPeO1N9+zbQK+hb51NpB2ihGqVur4xeazfb+IQ=;
+        fh=rsduFLXL9tI37J7Qy0ELhraHmEs7X+vW+3cgjBY5QlE=;
+        b=F3/ROXnmMUTuqJs1RJ8HYwIuA5YZSc0W7tHY5YwrF5opqUzhccwzuMZd/Anp6ynDA+
+         NRoH1x8Ljj3tWXCnZ/wZ1+Azu22obkvIWhYce3u/AzBNmRL/hzL2l53qoItMT3olKakP
+         Q2Q0P9bCXLn0R1/00vKgZRstuiHB8NWInZY7JnIl6Tpg9INIajzuokiIKzoFvj7StV/X
+         Af6WkZFQebEaAZs602Yrsnb0uCdOFdy0TsK7yA1hbiGPPPSohz6k/CfBKhZt9iyoaRxi
+         Kd0LNmuZ7etToir4a+FDD2/A7qkzT6tzzcDJOFPPA15L4RBOWL1AiifG8kEKEJrigg1j
+         STQw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769574510; x=1770179310; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j7hShYPeO1N9+zbQK+hb51NpB2ihGqVur4xeazfb+IQ=;
+        b=c2O0fzxwOis0wfJ4iVtve3ZHMupXRRPMEYFWISdLg0l/GuSQuiTZgP7IzvWBxb+HYk
+         1HBhdm4lwHRPdd+Gij/a6REta2mpz/AH9f3WxNa7ZsESFaoQ4bUv2zgrVl029k5arVlY
+         hYZK49LR5ob19BXR8iSouG7PsPhC4KZTJM7k9tUh2arhonsuLUZyFPGk2+XfxUjez4kN
+         vlZcZlaKtDUcPaXj4CAHsuqpEnylRWKBqIv17G5twPqnSkysMK2NVGQ6Qwub4TrkP+VQ
+         cRpG+P4Zxeex4EDxSLLoqa6xrN8NiyRbK2e50OlOxiCafDSrm3ixi0eoS5H5aiZMVjLf
+         0NMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769574510; x=1770179310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=j7hShYPeO1N9+zbQK+hb51NpB2ihGqVur4xeazfb+IQ=;
+        b=AkLcu97TOVzO0omFLdBI5mRKjhQmAr2NPfUBjJfBbgmdxdt93PfLRgROo9y0hYLll5
+         PJ5LLUzo+YK+UVPz4AcaIsGQ4Z8uFWcNOqp9oGIuwenwZcrbFcC2jdaKF/f541nX+EyO
+         gTcQckRnxUq84mfRPEqgaypd+m1DzMGAbbTa3oZMcAbx6MskS0FXW1xsinurKLVZQ34i
+         uT1trm2xt2mHXD2DTyRqXoq1n9jMGpUj6dCRF6cQgSowcPl0LD2jg2/ncKTZX6YPIHS5
+         WR3e/Xs5rfMDWJjGWUmzYt4D6wWEn5QV2m11sxapU3c/SLtMc9CbTTt1fEgojV3VY4ui
+         F+mg==
+X-Forwarded-Encrypted: i=1; AJvYcCWkYdKri+RmKjShYCPtwAzN2bGdr7apMm+2W3C8SelFX0RR3AbcL/DLTLjR9lwdBSPy3GU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmSxTdBiiMveXf1ZGqYHaPZtQexg9+UL4ySd1KxnLrn57+PtFp
+	IQn5g0cCVRYW8MdO6wmmLqh01ossrElsvFoI6pDJwtWGAKdFDK2F7NE1uTgPFbU/0GAbJ+6+yrj
+	4Yn5VIR10MdZ1AL3LW6aKo90F7BQbs7Y=
+X-Gm-Gg: AZuq6aKqZLG227b4Dc9mTPUVHhgnkDxAZH/ltzzZycFZiEazF7C5vKdXrJgWIgYMorc
+	zMG2zmF4YtC7uG8mZYUSb2EcANtiYFIOSF5bXZSRuzuowdYbj0zn7zJKi5ppbm/vwISi0YuYsJA
+	tAiHeMorpGao8PDw69lQk1AloGYPs8Er8MoEJEMhSybGRSmcM5IYMW4JA8q5rxFPlDzIO/GyQbN
+	5Vm+mq8z7AqDLRkKR1mnF1spGBTajDkVYkzV5cmaBnJEQRCNR5Z2N+qH6hBcf8QWjZi6V0fmXAy
+	udqpjAaHnHV6AqiCZeBCuMyQg5NBxQdMkjk3v59ny4NZr0XgAlTnIfAHK+IiyLa/7T9Ybqm+5YF
+	mzAwdadUnPNezVQ==
+X-Received: by 2002:a05:600c:154c:b0:477:b734:8c41 with SMTP id
+ 5b1f17b1804b1-48069c3f021mr54274985e9.1.1769574509966; Tue, 27 Jan 2026
+ 20:28:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v8 3/3] bpf: Hold ther perf callchain entry until
- used completely
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
- namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com, song@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260126074331.815684-1-chen.dylane@linux.dev>
- <20260126074331.815684-4-chen.dylane@linux.dev>
- <CAEf4BzbubXxLHsO_2aVBG_oYE1Sc9iafLyvcX-PEjcQ7EXWCqA@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Tao Chen <chen.dylane@linux.dev>
-In-Reply-To: <CAEf4BzbubXxLHsO_2aVBG_oYE1Sc9iafLyvcX-PEjcQ7EXWCqA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260122090404.15553-1-chensong_2000@189.cn>
+In-Reply-To: <20260122090404.15553-1-chensong_2000@189.cn>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 27 Jan 2026 20:28:19 -0800
+X-Gm-Features: AZwV_QhD1w-OAF47igZx-CBdBxyMwEcMdyteSlPLOA4DuDwHNBlCzI4bC9Iejr0
+Message-ID: <CAADnVQLVQW-Mb_d+zT+aSpPOZ042erPVcSHVBx9PMGET+a754Q@mail.gmail.com>
+Subject: Re: [PATCH v2] kernel/bpf/btf.c: reject to register duplicated kfunc
+To: chensong_2000@189.cn
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-在 2026/1/28 05:35, Andrii Nakryiko 写道:
-> On Sun, Jan 25, 2026 at 11:46 PM Tao Chen <chen.dylane@linux.dev> wrote:
->>
->> As Alexei noted, get_perf_callchain() return values may be reused
->> if a task is preempted after the BPF program enters migrate disable
->> mode. The perf_callchain_entres has a small stack of entries, and
->> we can reuse it as follows:
->>
->> 1. get the perf callchain entry
->> 2. BPF use...
->> 3. put the perf callchain entry
->>
->> And Peter suggested that get_recursion_context used with preemption
->> disabled, so we should disable preemption at BPF side.
->>
->> Acked-by: Yonghong Song <yonghong.song@linux.dev>
->> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
->> ---
->>   kernel/bpf/stackmap.c | 55 ++++++++++++++++++++++++++++++++++++-------
->>   1 file changed, 47 insertions(+), 8 deletions(-)
->>
->> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
->> index e77dcdc2164..6bdee6cc05f 100644
->> --- a/kernel/bpf/stackmap.c
->> +++ b/kernel/bpf/stackmap.c
->> @@ -215,7 +215,9 @@ get_callchain_entry_for_task(struct task_struct *task, u32 max_depth)
->>   #ifdef CONFIG_STACKTRACE
->>          struct perf_callchain_entry *entry;
->>
->> +       preempt_disable();
->>          entry = get_callchain_entry();
->> +       preempt_enable();
-> 
-> pass perf_callchain_entry as input argument, to keep similar approach
-> to __get_perf_callchain, see below
-> 
->>
->>          if (!entry)
->>                  return NULL;
->> @@ -237,14 +239,40 @@ get_callchain_entry_for_task(struct task_struct *task, u32 max_depth)
->>                          to[i] = (u64)(from[i]);
->>          }
->>
->> -       put_callchain_entry(entry);
->> -
->>          return entry;
->>   #else /* CONFIG_STACKTRACE */
->>          return NULL;
->>   #endif
->>   }
->>
->> +static struct perf_callchain_entry *
->> +bpf_get_perf_callchain(struct pt_regs *regs, bool kernel, bool user, int max_stack,
->> +                      bool crosstask)
->> +{
-> 
-> I don't really like having this wrapper, it feels like the flow will
-> be cleaner and easier to follow if we modify the code as suggested
-> below
-> 
-
-Ok, will use it directly.
->> +       struct perf_callchain_entry *entry;
->> +       int ret;
->> +
->> +       preempt_disable();
->> +       entry = get_callchain_entry();
->> +       preempt_enable();
-> 
-> I'd actually consider having __get_callchain_entry() that does what
-> get_callchain_entry() does right now under assumption that
-> preemption/migration is disabled, and then make get_callchain_entry do
-> preempt_disable + fetch entry + preevent_enable + return entry dance.
-> 
-
-in v4, YongHong suggested add preempt_disable in get_callchain_entry,
-but Peter suggested that do it from BPF side, so maybe keeping the 
-existing method is a compromise.
-
-> This will simplify the flow here to just with no explicit
-> preempt_{disable,enable} visible. Either way all of this has
-> assumption that we are staying on the same CPU throughout (so at the
-> very least we need to have migration disabled)
-> 
-> entry = get_callchain_entry();
-> __get_perf_callchain(entry, ...);
-> put_callchain_entry();
-> 
-> 
-> BTW, is there a way to assert that either preemption or migration is
-> currently disabled? I think both get_callchain_entry and
-> put_callchain_entry would benefit from that
-> 
-> pw-bot: cr
-> 
-> 
->> +
->> +       if (unlikely(!entry))
->> +               return NULL;
->> +
->> +       ret = __get_perf_callchain(entry, regs, kernel, user, max_stack, crosstask, false, 0);
->> +       if (ret) {
->> +               put_callchain_entry(entry);
->> +               return NULL;
->> +       }
->> +
->> +       return entry;
->> +}
->> +
->> +static void bpf_put_perf_callchain(struct perf_callchain_entry *entry)
->> +{
->> +       put_callchain_entry(entry);
->> +}
->> +
->>   static long __bpf_get_stackid(struct bpf_map *map,
->>                                struct perf_callchain_entry *trace, u64 flags)
->>   {
->> @@ -327,20 +355,23 @@ BPF_CALL_3(bpf_get_stackid, struct pt_regs *, regs, struct bpf_map *, map,
->>          struct perf_callchain_entry *trace;
->>          bool kernel = !user;
->>          u32 max_depth;
->> +       int ret;
->>
->>          if (unlikely(flags & ~(BPF_F_SKIP_FIELD_MASK | BPF_F_USER_STACK |
->>                                 BPF_F_FAST_STACK_CMP | BPF_F_REUSE_STACKID)))
->>                  return -EINVAL;
->>
->>          max_depth = stack_map_calculate_max_depth(map->value_size, elem_size, flags);
->> -       trace = get_perf_callchain(regs, kernel, user, max_depth,
->> -                                  false, false, 0);
->> +       trace = bpf_get_perf_callchain(regs, kernel, user, max_depth, false);
->>
->>          if (unlikely(!trace))
->>                  /* couldn't fetch the stack trace */
->>                  return -EFAULT;
->>
->> -       return __bpf_get_stackid(map, trace, flags);
->> +       ret = __bpf_get_stackid(map, trace, flags);
->> +       bpf_put_perf_callchain(trace);
-> 
-> Just as above, I think get_callchain_entry + __get_perf_callchain +
-> put_callchain_entry is better, IMO
-> 
->> +
->> +       return ret;
->>   }
->>
->>   const struct bpf_func_proto bpf_get_stackid_proto = {
->> @@ -468,13 +499,19 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
->>          } else if (kernel && task) {
->>                  trace = get_callchain_entry_for_task(task, max_depth);
->>          } else {
->> -               trace = get_perf_callchain(regs, kernel, user, max_depth,
->> -                                          crosstask, false, 0);
->> +               trace = bpf_get_perf_callchain(regs, kernel, user, max_depth, crosstask);
->>          }
-> 
-> with the above suggestions this will be a pretty streamlined:
-> 
-> trace = trace_in ?: get_callchain_entry();
-> if (!trace)
->      goto err_fault;
-> 
-> if (trace_in) {
->      trace->nr = ...
->      err = 0
-> } else if (kernel && task) {
->      err = get_callchain_entry_for_task(trace, ...);
-> } else {
->      err = __get_perf_callchain(trace, ...);
-> }
-> if (err)
->      goto clear;
-> 
-
-This code looks much cleaner, i will change it, thanks.
-
-> ... proceed as before, we have our stack trace inside trace ...
-> 
-> for successful and failed paths (you'll have to duplicate this logic):
-> 
-> if (trace != trace_in)
->      put_callchain_entry(trace);
-> 
->>
->> -       if (unlikely(!trace) || trace->nr < skip) {
->> +       if (unlikely(!trace)) {
-> 
-> this condition cannot happen: we either get trace_in != NULL or we get
-> it using __get_callchain_entry and then validate it's not NULL
-> earlier, so drop this condition
+On Thu, Jan 22, 2026 at 1:04=E2=80=AFAM <chensong_2000@189.cn> wrote:
 >
+> From: Song Chen <chensong_2000@189.cn>
+>
+> I had an ebpf program which calls a kfunc defined and
+> implemented in one of my kernel modules, they were working
+> fine in 6.16, but was broken by libbpf in 6.19, the error
+> message was:
+>
+> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
+> incompatible with vmlinux [94389]
+>
+> yes, the reason is there is a new added kfunc in kernel 6.19
+> which happens to be the same name with my kfunc. However the
+> error message is not obvious enough to address problem
+> immediately.
 
-will remove it.
+I don't quite understand what you're trying to say.
+"broken by libbpf"?! You mean that kernel 6.19 got
+new kfunc bpf_strstr() ?
+Why libbpf error is relevant?
+You mean you had your own custom .h file where
+you defined your own kfunc from a custom module
+and libbpf complained that your bpf_strstr() kfunc
+definition doesn't match the kernel 6.19 ?
 
->> +               if (may_fault)
->> +                       rcu_read_unlock();
->> +               goto err_fault;
->> +       }
->> +       if (trace->nr < skip) {
->>                  if (may_fault)
->>                          rcu_read_unlock();
->> +               if (!trace_in)
->> +                       bpf_put_perf_callchain(trace);
-> 
-> do this clean up in one place, behind the new goto label? it's a bit
-> too easy to miss this, IMO
-> 
+and your proposed solution is ...
 
-ok, will do.
+> Therefore, this patches searches duplicated kfunc in
+> btf_vmlinux before a kernel module attempts to register kfuncs
+> through register_btf_kfunc_id_set, it prints clear error message
+> and returns error code if same name kfunc has already implemented
+> and registered, then developer knows at the first place.
 
->>                  goto err_fault;
->>          }
->>
->> @@ -495,6 +532,8 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
->>          /* trace/ips should not be dereferenced after this point */
->>          if (may_fault)
->>                  rcu_read_unlock();
-> 
-> now that I looked at this code, I feel like we don't really need this
-> rcu_read_{lock,unlock}() dance (even though I added it in the first
-> place). I this RCU was supposed to be need to keep
-> perf_callchain_entry alive long enough, but for BPF this is guaranteed
-> because either BPF stack map will keep them alive by delaying
-> put_callchain_buffer() until freeing time (after RCU Tasks Trace + RCU
-> grace periods), or for bpf_get_stack/bpf_get_task_stack, BPF program
-> itself will hold these buffers alive again, until freeing time which
-> is delayed until after RCU Tasks Trace + RCU grace period.
+Are you saying that the kernel module that supplied bpf_strstr
+shouldn't be allowed to register its kfunc if kfunc with
+the same name exists in vmlinux. So insmod will fail?
 
-It seems so, for both, put_callchain_buffer is always called at the end, 
-which ensures it won't be released during use, i will remove it as a new
-patch.
+This is debatable. I guess we can add such sanity check,
+but what about kfunc in module A with the same name as kfunc
+in module B?
+Currently libbpf tells kernel both btf FD and kfunc btf ID,
+though there is a single namespace for all kfuncs from bpf
+program pov the kernel and libbpf api-s allow a selection.
 
-> 
-> Please send this clean up as the first patch in the series so we can
-> review and ack this separately. Thanks!
-> 
->> +       if (!trace_in)
->> +               bpf_put_perf_callchain(trace);
->>
->>          if (user_build_id)
->>                  stack_map_get_build_id_offset(buf, trace_nr, user, may_fault);
->> --
->> 2.48.1
->>
+Technically we can hack something in bpf.c to "namespace" kfuncs
+and say that the kfunc "foo" is in the module "bar".
+It won't be pretty in C, but possible in principle.
 
+Maybe a kfunc with the same name in the module should be allowed
+to override a kfunc in the kernel.
+It can be seen as livepatching of kfuncs.
+imo that's a more interesting use case than helping
+out-of-tree module to produce nicier error.
 
--- 
-Best Regards
-Tao Chen
+pw-bot: cr
