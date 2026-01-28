@@ -1,160 +1,160 @@
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D27D3451CF
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 18:54:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6C436F435
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 18:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769626444; cv=pass; b=RkbknkluMFpDMCXTLZxfQjw8qgDSK+ZVzdl/OT7nKZCHkcC9Zd8eMvUP56XGOnyGg2ndBJiNJmMFbgCMZ9gm/6AF3VJC7vI4AxlHzy3spi4o8t+BZg3tIJS+Lgi+2zYnGn1wjkKi1sFlDd+8lgWRZjv6aGdasyhpHHmZBQZy+xQ=
+	t=1769626568; cv=pass; b=MtN+gvb/0CfjGH4KfZsbsT0PQwrNnfR6QOwYbBmKiU2/na3x5E8FPqQ47v3W1f4e/UdpHhQRjAaEO5MCSzUZNKSeMuUQ/EsQhJXsn0Pz9qWwA4kl0NlK5/pGGql4Xh03G+HjUB64zcL0TK+fUOrpdm4Y5S00cEZts0q1X++NIGU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769626444; c=relaxed/simple;
-	bh=LDXvP5WKDhQN8oAnNb90witoZNuPCkybcm+/Z1oKNmM=;
+	s=arc-20240116; t=1769626568; c=relaxed/simple;
+	bh=GbjJME/nuQhCEQ+372mh5xTEDtjGu1hRDbZuxX2zZ2M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mWX68/fzJJMGDrpc9kh7eDeE3zVrvYemadxXzbiovknvgiinmfhJAufoez/9R6MDIqmhmeYLMe1pbNBarH2fGM39bX/bU8hQou88/xS5jjuIxFWdzQuaj9WKtWMjAi+aR/eEA42Kkt1quLkv685IEmfr4ANvngkb1MaLVpxf/YA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PDeY7lRu; arc=pass smtp.client-ip=209.85.221.47
+	 To:Cc:Content-Type; b=phUzc6iucS/l2L9euM5/O5sq7NettV4GZdRmjSmuPdfW2FtelEO1a+nWjW5/FWNnOZJq4LE5sy31a9t3z1ZZH4gfVhsGlPpYV6Uar2QRobH24yxsH2XYbKbZsUA/xVnu5ZitRTO4UYHKmIYMBp8V5M5zMuGsSkSYuIbDQvKRfNU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P5WKa7Pe; arc=pass smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PDeY7lRu"
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4327790c4e9so124815f8f.2
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 10:54:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769626442; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P5WKa7Pe"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-34c3259da34so73628a91.2
+        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 10:56:07 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769626567; cv=none;
         d=google.com; s=arc-20240605;
-        b=fwnH9jbN+F82mTCAIx3PBY6zrpPI+gE9zIC7GfjvqnoqvB+jKgybn7W7vhJGBLWGRh
-         wRlmMzCGc03/DQd58yyjdESsHqY2uhggwkUJ2Ws69mTTGeGt9Tpl+wm2pWLr6NW6JOAZ
-         jZCmoyyC0AFn8vrVE8U2XrHsIvJZPnBzGqsCNzOXUv/5leBvV6a+6vSxcKWRBTkpLm7w
-         pM/BBYxTu2Cv550tWWPfXUrH5ys8riHskDBrPV4ojFxjHo8b65s9M2yfyyMg9sLydvcL
-         ASGPYjXjK1Dk1MrUCIrmCJqSnnHcEoHrEYbXN5/7DDSqYU/Kk/Gt1CBhvB93fhangtij
-         IqMg==
+        b=G2OIjEat1kEUNV06Npq0e+CrEgwJK99iS1OunxM/F/EcBKhDkrK6e2QckBK3ViMtaZ
+         KC6GZgCmhK4lSmq2acFpCxSKLpcXFXnXomoV8gGlK/DBFkIkEdn56rXoypRg6iK4H6xA
+         Uw45uLuCQAocQCSo2hRT72MkWREugV8ri1umlh4CVQfyFkmONAmVnh9nFf4LC38V2xTf
+         SESqjzq1clPl915/s8tPTjaob/K+lz352FnQrMhOJAtsw4dJKOVGv+q4vrsJ2TpX5H4T
+         T7Skce8x9CVz3NnHeinwA+lncva6UvX1N3owsTPSoBXZcePBY5E0jXP9xH59aW0fPj13
+         IMZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=LDXvP5WKDhQN8oAnNb90witoZNuPCkybcm+/Z1oKNmM=;
-        fh=BlB/3jAKGjYOnONIekUkuduvPtp9jfh3tTdmipkTu3Y=;
-        b=VYoX9gs/jXOoU29hBQvlvyV4c+5qz6s8YrqNv4EwKnUX8rYuEyOVPMJ9iVOeeNIduM
-         ijdYlNxW4QLKeyiVw1fgpdH3mN92Cnd9gA+qYWJ5tb6jI0igipJqkQqN7twD022k/7+T
-         ms3NQcordSOxVHy4kysSg+Yals5clnIjkqI+dWGTof2nbGW4RdY5CrdPJe0I5C5cwEJ3
-         JxDY7/vkTH4clJ6iGKGniDoyuVTPIq6avEFpPu0wRNT2AyzNXdJZf3J3aa3xesF3xSu4
-         TeTc0NkqEw4F7tU06saVbKlOk7LvJqRYEtODZOohM34PtU+3re3xzKyG0LxEl+hDsb0N
-         gqEA==;
+        bh=GbjJME/nuQhCEQ+372mh5xTEDtjGu1hRDbZuxX2zZ2M=;
+        fh=GADw2PuDHmMAX+f2KEaMBnXYoqfsIvq0WAsitInVS/E=;
+        b=lX5MMYc3hLFi3qXkz4ZQoD5sXWjl0TbUPmEpvTea2AEpekGNs77/+CW7oY65e4PFL9
+         2+KdMdDaJoEAlnOkepSitDKU4SJbMr1LGk+3cHMuQq6eUJ+YN9h0I2u4mwl09gz6bQJF
+         LvgnQm/fabHGJVy7xyfgkWGeYkDgea6muIcZHYJ1UTOasXxqMT6YMpDDGPq1pXUk0aek
+         Ps2xZOZwQFfW9tXKz3iimQdjpG5Ma/0FYWnLIVu083eTk8VK6w1JcD2gsxCWpcueITpF
+         HVvhyCxWhPMlKqv9wHlBb61k6kPEozx468XtYVFi9pyOdcwL9VOe17xaGQ/GKdHD6ber
+         4XkA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769626442; x=1770231242; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769626567; x=1770231367; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LDXvP5WKDhQN8oAnNb90witoZNuPCkybcm+/Z1oKNmM=;
-        b=PDeY7lRuPxbzMj54KzpI1j5F+gWSa/pm751Zl9BLbpreNpqLzGjVp2ONEXsEdXGcNW
-         N9aSFW4NLtPeeXmYm0WW5wlddAYJapfjs+zMU6x45l8gEHlzmz4bvIu/DDNu1TV2x54N
-         O1vEKgH4AJRPzT0Vq5gQ7YqPM+cIwYvauH5f7JFSN3YpUuEmt3eA0FM7J0T/aiRLdOUt
-         +cEvUD/pwDp3bToAg1XudX1oO6wrNilMWD+cQN4K9WBvX3ZEYaw/MTdMmnop6DnEuStj
-         ovQkg1rWX0Y9Wx6NUX7pLnV+9t5YzpSsQLPqSIBydNakUmaymKe7SqyHYz5VxZAduatl
-         Qzow==
+        bh=GbjJME/nuQhCEQ+372mh5xTEDtjGu1hRDbZuxX2zZ2M=;
+        b=P5WKa7PeIEq0XSFVsKndKWeqbSw/opIgiPQYOwK3Lg9WFhoYrmpQXLR5Is8yuOvMej
+         NQ3l9qcC2yyvCVedJXPqJV2mSRyHl1dfQ5+WxQvGYy9iECxXwfeDe8uSUyrZN1Gmz5fH
+         PAJx6PpqMm++cXMC/yNrNUW6rlDErLb8ovWBFld+acPBb/5hG+MZbZMdEY+uVUm4P7IJ
+         Ja7EwTfjrt2XUBa+VrQrGQxfD2G2zGBiyFUbmBT9z0q6hOMrkIm5OimoAjYqLsp3+hK7
+         UeybD8d2aDBpFYzkOO1nFymofT+5IGea1XjFrZ/eHzmj5JmehWnDbbWhFSjQYtC1qCWo
+         gPyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769626442; x=1770231242;
+        d=1e100.net; s=20230601; t=1769626567; x=1770231367;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=LDXvP5WKDhQN8oAnNb90witoZNuPCkybcm+/Z1oKNmM=;
-        b=NXo4KennmL5mUwgkCRrMAZARRjz9T2tPvqjGgPkz0x09CZOfEPBtWMK+rT6bSvNeMZ
-         +MJOIpXX5dTLNYIgLDy9VfZnTZy4muOYVa3rUQ5rHie75StHHQpT7EcTFn7Sp0z+Ibjx
-         WMyko3Ht7E02gAuhjm0ndsR7Jxehiqx3zGk3YQtts1oLGkjSwj9aBVTK9i9IlphOZ1W1
-         +AXPrjhwfzoBPgJRO25JHttq/zm3iGZI8GJgqeZGyWygv+B6pZ8LdXb4aEU+jmyJNw91
-         0QbxqgIhrRz4ttb6oLCus/FU+dO4YJ8d798DOyG4dp0M5g7OA3cBrfcPQ9tZUP7exqdi
-         WOFw==
-X-Forwarded-Encrypted: i=1; AJvYcCUipoPGB7vmC0n2omYVuT98IaHR3dfae0hu4YU82yxi0/fG699tWCN5KjIjHZp5iy/wlZA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyawIUmimSHzXMJEFXJbDGQZESz8gOM3Aa0QNK3Xxf8lGwO7jGI
-	negxXcDlz08J46XBw3E1ZMf8JDtHB+QRemNG/ftSMgbVEALR2DL1JSuwMnrkB6qGVwr9OSp27XW
-	m3fBeXQuEHslXkKcyD8ouNGzLsw59NYI=
-X-Gm-Gg: AZuq6aL1eBghWWcB59u0o/L7A83fBEMm4Qak5RrykKZnlNCOezJozGaaTOIsA6dcSWN
-	bQfNcf1Yg+xsG0+fdKZblmbxiEZ9wi1rasf1z27uc19jmJl6aJr0KgSokvvsQB3KB8sLCl6V+hE
-	yAF8lbb7ZtO4+COYzYk72KjGa3eRTJ5dmX9mjjfY8+1jToFj8mArBz7tbYGmm/aLbam6cSpK5pT
-	UIx2t5CR6V0toepXt4zA0kBFlz0TOY/7AO+BXffBCV37EB4y20T8xmF8m18C7E2iQIX657hIlzF
-	VWFgeEiJ4x+HM4QQCP+H8XvaDL+fEdp05xAhyOtIiozPj3CN6Yqy6oKk8g4/Kz8OkBgHIjKVzW1
-	XJkuTd4LLZy8fCg==
-X-Received: by 2002:a05:6000:4023:b0:431:a33:d87c with SMTP id
- ffacd0b85a97d-435dd02da7dmr9821021f8f.11.1769626441887; Wed, 28 Jan 2026
- 10:54:01 -0800 (PST)
+        bh=GbjJME/nuQhCEQ+372mh5xTEDtjGu1hRDbZuxX2zZ2M=;
+        b=gY2v7wVP3i15ljSqfvfSOkFcCxZ3JO6lpoa2E/Y6ICuIVVIVZYtNmIZ6bIFbsZAckI
+         KusOhTr0YiDhKmN7mCoevMz39FqAPcoyXAKfbP7otJfFUsHxHH+y6ts4CAQ+xldTERa2
+         h1AgkAvUNeuvN0RZlcdrhSUcizX8+RGCuylRuMyoimNAZ6XwOcA8yy9Wt/5BmqtgnnKF
+         nZrhNc9UQqoH42higOE2DPdCHW2ZYJ4Ea+iKHxrg9Z1oNYGm5t1WqkY5N0H1T4ucBNIH
+         fliRmBJqcZeNA+VRmymQdOa1yfUzifoACDB8EVEmop7KbcygS/miZKAZnHUkDi5ekzyo
+         nGiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6UoO1T6ut1E4y3FUAPSFRXsDT6jlip6ckhzp9ueCciK0Ax7JQBPmUp3p4hup2YFQmQf8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbqHDL2hTatjRtIrK3HTIdQrYCQha2VU7jTzvc/Yj/t9/CZKRU
+	R+FS0EVo8DpRScfHfapVf43abb7GJXNqnCLsH3iqpLwC7I9ffr3xb/g/QWYiTi8YhuneTk+vePq
+	AzHeq5qiofgSLO/K7t5Zrheg32cjHAgRw+A==
+X-Gm-Gg: AZuq6aIWza0sAHkx/aokeAh84WQSMOziJkrBsn/V6/NHtBB4MkyzfYYJ3NcGqkT59W0
+	2bBbk/inNs+Fxi/GZvlpjtU9gdkGSbEa2dtwJ3kHWXwDYknbMS/8gr+vzm8p9W19szvAImwnoZ/
+	C+vN0SuSTnH7XCfAf1sOlYeRkFOmJSFVqmEQfJyGi4eglwCfuwNfTbY6j1euN7BzmHFVk4NgiM0
+	ZS5W9CqMYvq+DZ7YzswE/N6B76h1NbAdU6tuIqzrbD8i9nXRDT7Kd8bQTpcW1mIwAVoV0zLGsiM
+	byKKTShpFVM=
+X-Received: by 2002:a17:90b:3a4f:b0:352:e27e:79c5 with SMTP id
+ 98e67ed59e1d1-353feda98damr4965562a91.31.1769626566865; Wed, 28 Jan 2026
+ 10:56:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260127024421.494929-1-roman.gushchin@linux.dev>
- <aXh_LpTzDhvv20uB@tiehlicka> <7ia44io6kbwj.fsf@castle.c.googlers.com>
- <aXnDdkYmtipGwSjK@tiehlicka> <CAADnVQ+ghTc5FtJCjm4ya3y3xVpSuJe-7ctdT-thowqWguc1pA@mail.gmail.com>
- <87zf5x1tqx.fsf@linux.dev>
-In-Reply-To: <87zf5x1tqx.fsf@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 28 Jan 2026 10:53:50 -0800
-X-Gm-Features: AZwV_Qht682-qa0CwwhMy_omOTG7GEYdXbcd_NxkHoacsbR6UpkvnSNThpQfUGk
-Message-ID: <CAADnVQ+vQFndDdgDBwLSRcdqrsyE_gU1Wx7STy0Qa=6MFnHSHg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 00/17] mm: BPF OOM
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: Michal Hocko <mhocko@suse.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Andrew Morton <akpm@linux-foundation.org>
+References: <20260126142118.2ea3cf13@gandalf.local.home> <CAEf4Bzax24jJVDs2bBiJuz1ZuuDihsb5Xq8pGcy18vLUMMLxbg@mail.gmail.com>
+ <20260126192010.4f14bcb9@gandalf.local.home> <CAEf4BzZ0cYkJ-3Kt-O+2FTvTEirS7cSuea2swgaom18Q_sve4A@mail.gmail.com>
+ <CAP_z_CgozbHejsuKeLRQHN-bz5jPA+C+c0GBNitgEvwOucm8TQ@mail.gmail.com>
+In-Reply-To: <CAP_z_CgozbHejsuKeLRQHN-bz5jPA+C+c0GBNitgEvwOucm8TQ@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 28 Jan 2026 10:55:54 -0800
+X-Gm-Features: AZwV_QhZFUtlKhhmh1Fki3mfmzOSzwbZ9cKOopflLchM185a3ebkdwBRJU__k_0
+Message-ID: <CAEf4Bza91wTWzESxAyz5qP4e8siwGn=rvm-Few6xT_VpW9oJzw@mail.gmail.com>
+Subject: Re: BPF with deferred stacktrace and sframes?
+To: Blake Jones <blakejones@google.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Ian Rogers <irogers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 28, 2026 at 10:23=E2=80=AFAM Roman Gushchin
-<roman.gushchin@linux.dev> wrote:
->
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
->
-> > On Wed, Jan 28, 2026 at 12:06=E2=80=AFAM Michal Hocko <mhocko@suse.com>=
+On Tue, Jan 27, 2026 at 5:11=E2=80=AFPM Blake Jones <blakejones@google.com>=
  wrote:
-> >>
-> >>
-> >> > Another viable idea (also suggested by Andrew Morton) is to develop
-> >> > a production ready memcg-aware OOM killer in BPF, put the source cod=
-e
-> >> > into the kernel tree and make it loadable by default (obviously unde=
-r a
-> >> > config option). Myself or one of my colleagues will try to explore i=
-t a
-> >> > bit later: the tricky part is this by-default loading because there =
-are
-> >> > no existing precedents.
-> >>
-> >> It certainly makes sense to have trusted implementation of a commonly
-> >> requested oom policy that we couldn't implement due to specific nature
-> >> that doesn't really apply to many users. And have that in the tree. I =
-am
-> >> not thrilled about auto-loading because this could be easily done by a
-> >> simple tooling.
-> >
-> > Production ready bpf-oom program(s) must be part of this set.
-> > We've seen enough attempts to add bpf st_ops in various parts of
-> > the kernel without providing realistic bpf progs that will drive
-> > those hooks. It's great to have flexibility and people need
-> > to have a freedom to develop their own bpf-oom policy, but
-> > the author of the patch set who's advocating for the new
-> > bpf hooks must provide their real production progs and
-> > share their real use case with the community.
-> > It's not cool to hide it.
 >
-> In my case it's not about hiding, it's a chicken and egg problem:
-> the upstream first model contradicts with the idea to include the
-> production results into the patchset. In other words, I want to settle
-> down the interface before shipping something to prod.
+> Hi Andrii,
 >
-> I guess the compromise here is to initially include a bpf oom policy
-> inspired by what systemd-oomd does and what is proven to work for a
-> broad range of users.
+> > > On Mon, 26 Jan 2026 16:02:10 -0800
+> > > Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+> > > > So what we will need from kernel's sframe support side is just an
+> > > > internal API to get stack trace, similar to get_perf_callchain(). B=
+ut
+> > > > it will be guaranteed to be called in a nice task context. No NMI, =
+no
+> > > > irq disabled, no nothing.
+> > > >
+> > > > This shouldn't be a problem, right?
+>
+> I raised this concern with Steve last week, in the context of off-CPU
+> profiling (e.g. https://www.brendangregg.com/offcpuanalysis.html). I
+> maintain a BPF-based off-CPU profiler that runs out of the
+> sched_switch tracepoint. It acquires both user and kernel stack traces
+> via bpf_get_stackid(), stores their stack trace IDs in task-local
+> storage until that task is rescheduled, and then uses those IDs as
+> parts of a key into another BPF map to store the off-CPU data.
+>
+> The context switch handler is of course not a safe place to block or
+> page fault, so it wouldn't be able to acquire a synchronous stack
+> trace anymore. (It's possible that my profiler is missing some user
+> stack frames today due to some text being paged out, but presumably
+> paged-out text isn't too performance-relevant anyway.)
+>
+> So, as far as I can tell, my profiler would need to hook into this new
+> task_work framework to acquire the user stack trace before storing the
+> results into the final BPF map. But a profiled thread might block
+> several times in the kernel before returning to userland - I saw one
+> block 53 times, just looking through one day's profiling data - and I
+> don't see a straightforward way to store data about an unbounded
+> number of blocking events in task-local storage until the thread can
+> wait for a user stack trace.
+>
 
-Works for me.
+I'm not quite clear on why blocking 53 times in the kernel before
+returning to user space matters for capturing user space stack trace?
+Given we haven't returned to user space, its stack trace will remain
+the same. You'll need to schedule task_work (see
+bpf_task_work_schedule_resume()) just once and capture stack trace
+just once. How you join that asynchronously (from the perspective of
+the point where you called bpf_task_work_schedule_resume()) captured
+stack traces will be up to you. You can send it through ringbuf, or
+store in some map, or whatever makes most sense for how exactly you
+structured your BPF logic.
 
-> Policies suited for large datacenters can be
-> added later, but also their generic usefulness might be limited by the
-> need of proprietary userspace orchestration engines.
+This, of course, is not going to be as convenient as synchronous
+stackmap approach you are using with bpf_get_stackid() (or, similarly,
+bpf_get_stack() that doesn't rely on BPF map, but is still
+synchronous), but there is no way to avoid complications due to
+asynchronous nature of all of this new SFrame-based stack trace
+capture.
 
-Agree. That's the flexibility part that makes the whole thing worth
-while and the reason to do such oom policy as bpf progs.
-But something tangible and useful needs to be there from day one.
-systmed-oomd-like sounds very reasonable.
+
+> Do you have advice for how I could handle this under your new proposal?
+>
+> Blake
