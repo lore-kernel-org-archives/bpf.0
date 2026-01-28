@@ -1,505 +1,698 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC80A13959D
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 02:02:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BD6280331
+	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 02:27:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769565762; cv=pass; b=NEoZsnk1FGkgkGwnyGkT6G+sMzw/UR7EJKGOWyBj5xkr7ZB+nZrXTVH14j/CsMuewcF1TwQawDI+DcG+HtKtxjT4/oqCE+md9bKqessnBGhSfIVrgI+GeY8BO3o9Ckp+IUAEBNLMuGVfBJkoiAGpDy5MfEt2XSiwpDucEMPcZUA=
+	t=1769567257; cv=pass; b=j9AQzqqwBIlFbl4SdNKVieau1ZymAaCpqdey3CI5mgZJ1gh4jiy3ov73Mx7BvLi2RSSN0I9daIIsOiHAGtzGebgXgjVcAIKzmc+4iukMBALyxsG45SGbv2plnwgvoIwhFMrgECRNGJGl2GFEBwso//iuXDSKGEK1AB/cW5Km4GA=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769565762; c=relaxed/simple;
-	bh=frJFq5JHfDTwXFsl9OJcZpcCnMjli+INfmKHx7mzeG8=;
+	s=arc-20240116; t=1769567257; c=relaxed/simple;
+	bh=Z4Q3HZh8f4WhsbyZSOXDGdsA4LJDtLlMul2VOmmrkUM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VtjJs79e6R/cjhITYKpTjplgxjWJQ8AA0AHEFmGho9B/GKIarYXVV2rJZCRSmLjb9QhzMS0WX2QCH6VvhLcgHnEcIlCj/+U9OB1lGd30fr7qxOLSuCP6UuOrpOtroETkAZtXU0h7Oxf6YJ7vD+fr0eXfOt/r9iy3/450lXElIi4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MbXWSPy5; arc=pass smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=bo8vMjZzesZ7DkT58EyPiFsXfK4RYRncadwQ1jyHqx5OX9fL0sgEc7qiTyWn3YLpASerfmw8ctEliSqzstHDkZwiMT092olEL1tRVTwi291812RveCYdYC5Jx8RKnh1iFxk/jZJ41ymu1csN4p8IKj08HYFytPSpvyaMF4sfe3o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Upcje++P; arc=pass smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MbXWSPy5"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b8845cb5862so985262866b.3
-        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:02:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769565757; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Upcje++P"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4806e0f6b69so1716005e9.3
+        for <bpf@vger.kernel.org>; Tue, 27 Jan 2026 18:27:35 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769567254; cv=none;
         d=google.com; s=arc-20240605;
-        b=Qeu/OLtPKYlbm0AEO+8TUuv9/JOp072thzRNlNFxV6NYxe97vRjXovXOqcrcmJDfWv
-         OLUoJTqJW9m03/dRJhXJJZWXmy3NpSe6YY8bXR2JUYOU88Ci09tLL40vOMnE0g7T9+fK
-         uUkBHXf2onJyX/GTLwGPQbpjDl635g65KfSymaxwTraD9x94EonAj5zDdZEP7ahlsQ9r
-         ff2f7kYDpXcY3/xnBgntjF4vUEPEw8Zo0Plr6XOSJfW0Idl0/OrYGW4p3/YOPYQepIzd
-         HxpuJ5yZS47JQkocmiX0fhwvzewGtWSv/KttZDzDvV4f3bgSmrfP7z8/6e/Nky1tgIJ8
-         9dRg==
+        b=dABFxglgnO1oVL0HECLjga6CNUF2QIEUHl3yZziOzfkGRcCtAPykyrp9jxU9jRjzbc
+         sjk1ngWWdSlt2LRnp+pd0AHvqCAu9v+D+FU+fN1is6JXv61TfzatD8XK6PBGwwg81YWA
+         0NhXSgLReJY5WUmfu8HlqsPZogkICc0vQ9UoBMIgqE2mZGXqNGJt/CBUPlHh3M0U6gCS
+         eIKTMRGYRgPcrtAqPheTQctwRNm0uxG9BaUfAXoXYAkN0oa5jtC9Tx9DXTxxYApNLqU7
+         j7jm6egl4UqwNENHddZMH56TsNnjoTF4GuF4YxHCzSdfZ2K8fqJnv/MV2+gTqVe+dTnj
+         JNqg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Xjs7REJ/WW1grWbDrI+yGSmGQ7BvuQU3ORny1k3JZHE=;
-        fh=9YKev0p9Mq8plVkMB7oohFSbRO4NKCwmz7CXu3qReHs=;
-        b=iroQVNlcOUm7uC170F+4/W/1mv8iESJyljYsnX8CYAX18FQyTuK3QTlBPYUTzxNpBS
-         tPIKxPNWMVtTnaDuofHWJDg/KS+t17AKEnbRAjAOCElnqR6CCcMbI+mwODoJKs6em6KM
-         NbMCYZcCYJ9VZSapsVA6t8F1YJYba/RpJqD2QW+lJlPJxOHpKj2VMBgX0ZOJGWgmyMF3
-         HZeNoL+QGmNuJX3QNc0u3anrx708XxlUuzCvZrJc/AD3lCo+iv+FMryYGSsBq9J/Jd9R
-         mPOMHU1J2rLQP80uNfyU68nCY0Nsfk73BbqGungJcwYYUGLt1Xm49+9fWZRFu5iQBZuy
-         Vw8A==;
+        bh=Gov23pzdl7hI2wHgOIFiQFVk6nsJ7fj6VSSOhXFOsaw=;
+        fh=07919j3mEGtUJ+mScCnPzO16vurW6cKq9ZaYr312Wzs=;
+        b=IT85WeYXmbGEsbPDImkvGxHu+gejUs31/TTi1P29w6J/Kdwcql9EIzNYDDpnGKuO5E
+         darxPvjArnm1WIvYYahsRqAfT42/A4wbfwa8c74yH63tC8tO6KM9LuK0Cwnw1RW+kvZI
+         KXHbRoI11a37pSURcjsDiM9nFRzOFqI6rS8yw3zL9cCLBtTDQa/WQKxygIkQJqgUelcs
+         Nvde7InFIOiWppwk97hJL77JIT3/PfHiJH+mjdoNHHBSSGNAxkQ5JKwPtzkTxlnbyVzR
+         9mBOCY9uyBSGvDeh3sM0g3oVzuyGJWljLDMTtDAxkJ4FmCvhc1ZrVLxkdphgKCKnpbWX
+         ajyg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769565757; x=1770170557; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769567254; x=1770172054; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Xjs7REJ/WW1grWbDrI+yGSmGQ7BvuQU3ORny1k3JZHE=;
-        b=MbXWSPy5VH/af1CHy6msnmpWXwCQ6pIw+jc+jzHMyOttJrDp5M443HeEGjeIzcxSwl
-         pLdgcKwdFYqQQ7YuvmydixDO4Bm91vud7EFZabYfU/q5e9vuE0jgHkZgs0DBa0Yq0ylU
-         XXAUAMjCBjjBXfjeEGh1t4mN1PFpncnOJHlf+y4dusJUT0U6hckGNfsZSUZ8Z2IywUEQ
-         3fPNAdyQaI8DffV4tUFgeegBiMXelmFvBgUPLwhWfG06Dx0X/bKVGdetotmevLOu0aTK
-         4yqYOvp+HnIEF2kyQGeSu1kDqtUAffE5lxU5S1+z1GJAS/5CaNoYXyMdtx3/UzBus4Og
-         4Tww==
+        bh=Gov23pzdl7hI2wHgOIFiQFVk6nsJ7fj6VSSOhXFOsaw=;
+        b=Upcje++PHYpvVJUwDC6DolZv6iOXvZMhuwQXAc5aWUixO44Mk29epcdlNBKAr+RX7Y
+         vF25C2K59nZHNaRTt+s4Bz+iKv15x8N55cHxxbMyYmu832tW+P2huYcfd0dnWXz/wIDr
+         cPZQLDAzfACh7aIVwmkh4DcZoNBZ3/SMF0fyY8lgb5eFjGCgZda2iT9Vh/Oa2PbxD7p3
+         x65VMoUz+t/1wWB+HFJ1VmXwmeHvm6gIs3wrwiMaZO5Of+UHAMretlW5g6LjYUsLSLi0
+         V7zV5rQZ98XZguxWbBdmSMdyv1lTPKxGInT12XIDnML6JP4A2Ade9NS0AfuwoF6bJ+Tq
+         aAiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769565757; x=1770170557;
+        d=1e100.net; s=20230601; t=1769567254; x=1770172054;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Xjs7REJ/WW1grWbDrI+yGSmGQ7BvuQU3ORny1k3JZHE=;
-        b=dZvK4nXb4CR1v2vd+o3a+e+vhaIMEcvbF91/z+eFMuo7xHRIVCGm9Q8KOc3CewvIB5
-         XUo7FNafqImSqJ/ABEwZwGqpRg9u11az7e2FFRA6ONYb9GzvfTQ0CJy4ngDIyXlaVZLc
-         /hQrPk2ttlfvxA8CVCCpqKRb7LOgN/sDAOLl14qy812iO0Gyw1Zrbbc2z9UtTMMSJcGd
-         Wv6pvMpTZ5BZR6XDUV+NkU6P/bAOWanmQQs+uD2YsKk6Tuj5DCF3eCd8EJnjbwg93O/I
-         ziisQ2cQYfgfauiSA9t7A31aLEyq8tgIddr4dLdfn0aI4oDG3jVjRk5sv0eum2GMXcO7
-         v17w==
-X-Forwarded-Encrypted: i=1; AJvYcCWtQCA1V7R5rq7rn3/CmxwEmXNzGT8zPYF6KUfvwYi28Bi0Q+vAgpJzLW2FRZh1L5suPWY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSIh68ONNGZeeHLYFiQrWZ6ynvlGPLT0zCKlbutrq9kyW/O/TO
-	8XMvP5qVlX84Z0w8IIa761lcVkKbpa8y28gjLvYBvomgMAM/3wEDyI8KqA51JI+9ag8uskhtTHr
-	W8voDZ+7qhtIgr0LkSkziQDr5GczstZDqFZ2DM4eP
-X-Gm-Gg: AZuq6aKSWyCxL+H/nnL1jdUOdeB3tMVF/jjywT0nPHFZ4U1yvDggWVdGVf8DOdmrqaX
-	y8xHCyKBG+c901tCzbUBov+ainzan1uJmLmP1j1gwYr5UUwq6sraGo4p0/qFZ3H/fRVj/VL7dl0
-	Oqkx/oTS/+eak5mdsINriRg7CqjuUDYc7375zyOC9brd5Qs8HLtZ5I78OPm1zGLRjiSAzJkSczg
-	7OGr+15Ms6b2O7jxx5jXC1KvbqeUb4mJFD6w2RcR+fnVjPbPc1JPYuv1kJBSQ6OE/sdOXvpsEpZ
-	9zJ2xcx536WnqAUHt3zVwEJJyQ==
-X-Received: by 2002:a17:907:1c95:b0:b87:7419:d3a8 with SMTP id
- a640c23a62f3a-b8dab330fc4mr281957066b.34.1769565756791; Tue, 27 Jan 2026
- 18:02:36 -0800 (PST)
+        bh=Gov23pzdl7hI2wHgOIFiQFVk6nsJ7fj6VSSOhXFOsaw=;
+        b=FT1JdwEOY3X1b9A0BSJ1qOZjj513BIJNQqyyaemYSorXDnTgivh7ByNz2DegvwpncO
+         gr/TjkP/ZphUE0f6LZ/txEZ9LW6bPjZ0fr2iJBTh6uKI2moqBZcQVW02ZRwapUNvIxpL
+         8pxVE4ORtwQ9V4Hhs2ePEBRq67J8N6FuB/W7aD0dnTIS+Cxs5UPDTYyfhaKgLKK4OdX7
+         8Qdmp7X8fUo9cdeD1FdFnc+kbrfg6/8369kd4r2Qg75AdHMZWmXljRC9V51mtxtV+yFk
+         WU1ZYghHG/wuxLFXGlpV57yy6bn6xX8jAvt6xdAyFhd+jSeLz/waIYlQEJfOQ7tJtM1g
+         ZO6A==
+X-Gm-Message-State: AOJu0Yz3YRtFyjU7bP6FzIMxCKIKIGP2rgcEuLwV8rgSZtTUUthVIF81
+	r22jwjG/3m7c2dwXXpQDOdLfVB27k1hKRxazfWabdfIUXKLDs4QRs9wlx86W+2W5ZzYp5fMOENJ
+	snJ7+CMPW6jmemM9mUxhCGaHwDi4sypA=
+X-Gm-Gg: AZuq6aKl2VkZdLTkHgvWEWhg8IbPmwH+YWQuuGydY/cVP3cTKJsvqiZSisgdi60evto
+	I6zOK3umMD91ZA+BrtkhzcdCfKuFSez8XaybPxp+Jci1Yx18q7jHpiwUYkOUs3j19S8zYhbOKDS
+	GEtNlBD3Ym83FdkLbKm7ndZkII/xeaql6krgD/pXVaAm7PaRGLU0MbKujgbZvqRB+3SXcJkyiEs
+	v+nqD2v+ia+o9JAc9+HGcRdoz3/vLeA0o70OEkCVjJlqLz9Mb9IKDUtc2LqHVUMFR+jik6YQHE+
+	znD5jD9ydhmBG5mqIgotHWoSKWqjq8HwpUvyZ+D89OEv7C0AYFCV0YrbVPgkPepHJmRgE2bkAHC
+	LDnk4S7gECs03yMse6QWg9geC
+X-Received: by 2002:a05:600c:4507:b0:477:9dc1:b706 with SMTP id
+ 5b1f17b1804b1-48069c47cabmr42098505e9.19.1769567253766; Tue, 27 Jan 2026
+ 18:27:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
- <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com> <2026012715-mantra-pope-9431@gregkh>
-In-Reply-To: <2026012715-mantra-pope-9431@gregkh>
-From: Samuel Wu <wusamuel@google.com>
-Date: Tue, 27 Jan 2026 18:02:25 -0800
-X-Gm-Features: AZwV_QjNxLKzH4SWKEB4t-7rNY8Sc7_QUT5_wgx9ZFwlSN8bjQfsTOxnH38Kjmw
-Message-ID: <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org, 
-	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz, 
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org, 
-	linux-mm@kvack.org, linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, 
-	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org, 
-	paul@paul-moore.com, casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
-	john.johansen@canonical.com, selinux@vger.kernel.org, 
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com, 
-	android-kernel-team <android-kernel-team@google.com>
+References: <20260127181610.86376-1-emil@etsalapatis.com> <20260127181610.86376-7-emil@etsalapatis.com>
+In-Reply-To: <20260127181610.86376-7-emil@etsalapatis.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 27 Jan 2026 18:27:22 -0800
+X-Gm-Features: AZwV_QgJmrIWMlM70UYg7GFl8IbKEc7X5lLLrwevCmzB0UZ_OBTNYFavoa-6lgI
+Message-ID: <CAADnVQJfsRxjE1Znoh-BQf6JZG2AmWra=1+zn0PFm+OqMogcqA@mail.gmail.com>
+Subject: Re: [PATCH v2 06/13] selftests: bpf: Add arena ASAN runtime to libarena
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Eduard <eddyz87@gmail.com>, 
+	etsal@meta.com, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Puranjay Mohan <puranjay@kernel.org>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 26, 2026 at 11:42=E2=80=AFPM Greg KH <gregkh@linuxfoundation.or=
-g> wrote:
+On Tue, Jan 27, 2026 at 10:16=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.=
+com> wrote:
 >
-> On Mon, Jan 26, 2026 at 04:56:42PM -0800, Samuel Wu wrote:
-> > On Mon, Nov 17, 2025 at 9:15=E2=80=AFPM Al Viro <viro@zeniv.linux.org.u=
-k> wrote:
-> > >
-> > > Some filesystems use a kinda-sorta controlled dentry refcount leak to=
- pin
-> > > dentries of created objects in dcache (and undo it when removing thos=
-e).
-> > > Reference is grabbed and not released, but it's not actually _stored_
-> > > anywhere.  That works, but it's hard to follow and verify; among othe=
-r
-> > > things, we have no way to tell _which_ of the increments is intended
-> > > to be an unpaired one.  Worse, on removal we need to decide whether
-> > > the reference had already been dropped, which can be non-trivial if
-> > > that removal is on umount and we need to figure out if this dentry is
-> > > pinned due to e.g. unlink() not done.  Usually that is handled by usi=
-ng
-> > > kill_litter_super() as ->kill_sb(), but there are open-coded special
-> > > cases of the same (consider e.g. /proc/self).
-> > >
-> > > Things get simpler if we introduce a new dentry flag (DCACHE_PERSISTE=
-NT)
-> > > marking those "leaked" dentries.  Having it set claims responsibility
-> > > for +1 in refcount.
-> > >
-> > > The end result this series is aiming for:
-> > >
-> > > * get these unbalanced dget() and dput() replaced with new primitives=
- that
-> > >   would, in addition to adjusting refcount, set and clear persistency=
- flag.
-> > > * instead of having kill_litter_super() mess with removing the remain=
-ing
-> > >   "leaked" references (e.g. for all tmpfs files that hadn't been remo=
-ved
-> > >   prior to umount), have the regular shrink_dcache_for_umount() strip
-> > >   DCACHE_PERSISTENT of all dentries, dropping the corresponding
-> > >   reference if it had been set.  After that kill_litter_super() becom=
-es
-> > >   an equivalent of kill_anon_super().
-> > >
-> > > Doing that in a single step is not feasible - it would affect too man=
-y places
-> > > in too many filesystems.  It has to be split into a series.
-> > >
-> > > This work has really started early in 2024; quite a few preliminary p=
-ieces
-> > > have already gone into mainline.  This chunk is finally getting to th=
-e
-> > > meat of that stuff - infrastructure and most of the conversions to it=
-.
-> > >
-> > > Some pieces are still sitting in the local branches, but the bulk of
-> > > that stuff is here.
-> > >
-> > > Compared to v3:
-> > >         * fixed a functionfs braino around ffs_epfiles_destroy() (in =
-#40/54,
-> > > used to be #36/50).
-> > >         * added fixes for a couple of UAF in functionfs (##36--39); t=
-hat
-> > > does *NOT* include any fixes for dmabuf bugs Chris posted last week, =
-though.
-> > >
-> > > The branch is -rc5-based; it lives in
-> > > git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git #work.pers=
-istency
-> > > individual patches in followups.
-> > >
-> > > Please, help with review and testing.  If nobody objects, in a few da=
-ys it
-> > > goes into #for-next.
-> > >
-> > > Shortlog:
-> > >       fuse_ctl_add_conn(): fix nlink breakage in case of early failur=
-e
-> > >       tracefs: fix a leak in eventfs_create_events_dir()
-> > >       new helper: simple_remove_by_name()
-> > >       new helper: simple_done_creating()
-> > >       introduce a flag for explicitly marking persistently pinned den=
-tries
-> > >       primitives for maintaining persisitency
-> > >       convert simple_{link,unlink,rmdir,rename,fill_super}() to new p=
-rimitives
-> > >       convert ramfs and tmpfs
-> > >       procfs: make /self and /thread_self dentries persistent
-> > >       configfs, securityfs: kill_litter_super() not needed
-> > >       convert xenfs
-> > >       convert smackfs
-> > >       convert hugetlbfs
-> > >       convert mqueue
-> > >       convert bpf
-> > >       convert dlmfs
-> > >       convert fuse_ctl
-> > >       convert pstore
-> > >       convert tracefs
-> > >       convert debugfs
-> > >       debugfs: remove duplicate checks in callers of start_creating()
-> > >       convert efivarfs
-> > >       convert spufs
-> > >       convert ibmasmfs
-> > >       ibmasmfs: get rid of ibmasmfs_dir_ops
-> > >       convert devpts
-> > >       binderfs: use simple_start_creating()
-> > >       binderfs_binder_ctl_create(): kill a bogus check
-> > >       convert binderfs
-> > >       autofs_{rmdir,unlink}: dentry->d_fsdata->dentry =3D=3D dentry t=
-here
-> > >       convert autofs
-> > >       convert binfmt_misc
-> > >       selinuxfs: don't stash the dentry of /policy_capabilities
-> > >       selinuxfs: new helper for attaching files to tree
-> > >       convert selinuxfs
-> > >       functionfs: don't abuse ffs_data_closed() on fs shutdown
-> > >       functionfs: don't bother with ffs->ref in ffs_data_{opened,clos=
-ed}()
-> > >       functionfs: need to cancel ->reset_work in ->kill_sb()
-> > >       functionfs: fix the open/removal races
-> > >       functionfs: switch to simple_remove_by_name()
-> > >       convert functionfs
-> > >       gadgetfs: switch to simple_remove_by_name()
-> > >       convert gadgetfs
-> > >       hypfs: don't pin dentries twice
-> > >       hypfs: switch hypfs_create_str() to returning int
-> > >       hypfs: swich hypfs_create_u64() to returning int
-> > >       convert hypfs
-> > >       convert rpc_pipefs
-> > >       convert nfsctl
-> > >       convert rust_binderfs
-> > >       get rid of kill_litter_super()
-> > >       convert securityfs
-> > >       kill securityfs_recursive_remove()
-> > >       d_make_discardable(): warn if given a non-persistent dentry
-> > >
-> > > Diffstat:
-> > >  Documentation/filesystems/porting.rst     |   7 ++
-> > >  arch/powerpc/platforms/cell/spufs/inode.c |  17 ++-
-> > >  arch/s390/hypfs/hypfs.h                   |   6 +-
-> > >  arch/s390/hypfs/hypfs_diag_fs.c           |  60 ++++------
-> > >  arch/s390/hypfs/hypfs_vm_fs.c             |  21 ++--
-> > >  arch/s390/hypfs/inode.c                   |  82 +++++--------
-> > >  drivers/android/binder/rust_binderfs.c    | 121 ++++++-------------
-> > >  drivers/android/binderfs.c                |  82 +++----------
-> > >  drivers/base/devtmpfs.c                   |   2 +-
-> > >  drivers/misc/ibmasm/ibmasmfs.c            |  24 ++--
-> > >  drivers/usb/gadget/function/f_fs.c        | 144 +++++++++++++-------=
----
-> > >  drivers/usb/gadget/legacy/inode.c         |  49 ++++----
-> > >  drivers/xen/xenfs/super.c                 |   2 +-
-> > >  fs/autofs/inode.c                         |   2 +-
-> > >  fs/autofs/root.c                          |  11 +-
-> > >  fs/binfmt_misc.c                          |  69 ++++++-----
-> > >  fs/configfs/dir.c                         |  10 +-
-> > >  fs/configfs/inode.c                       |   3 +-
-> > >  fs/configfs/mount.c                       |   2 +-
-> > >  fs/dcache.c                               | 111 +++++++++++-------
-> > >  fs/debugfs/inode.c                        |  32 ++----
-> > >  fs/devpts/inode.c                         |  57 ++++-----
-> > >  fs/efivarfs/inode.c                       |   7 +-
-> > >  fs/efivarfs/super.c                       |   5 +-
-> > >  fs/fuse/control.c                         |  38 +++---
-> > >  fs/hugetlbfs/inode.c                      |  12 +-
-> > >  fs/internal.h                             |   1 -
-> > >  fs/libfs.c                                |  52 +++++++--
-> > >  fs/nfsd/nfsctl.c                          |  18 +--
-> > >  fs/ocfs2/dlmfs/dlmfs.c                    |   8 +-
-> > >  fs/proc/base.c                            |   6 +-
-> > >  fs/proc/internal.h                        |   1 +
-> > >  fs/proc/root.c                            |  14 +--
-> > >  fs/proc/self.c                            |  10 +-
-> > >  fs/proc/thread_self.c                     |  11 +-
-> > >  fs/pstore/inode.c                         |   7 +-
-> > >  fs/ramfs/inode.c                          |   8 +-
-> > >  fs/super.c                                |   8 --
-> > >  fs/tracefs/event_inode.c                  |   7 +-
-> > >  fs/tracefs/inode.c                        |  13 +--
-> > >  include/linux/dcache.h                    |   4 +-
-> > >  include/linux/fs.h                        |   6 +-
-> > >  include/linux/proc_fs.h                   |   2 -
-> > >  include/linux/security.h                  |   2 -
-> > >  init/do_mounts.c                          |   2 +-
-> > >  ipc/mqueue.c                              |  12 +-
-> > >  kernel/bpf/inode.c                        |  15 +--
-> > >  mm/shmem.c                                |  38 ++----
-> > >  net/sunrpc/rpc_pipe.c                     |  27 ++---
-> > >  security/apparmor/apparmorfs.c            |  13 ++-
-> > >  security/inode.c                          |  35 +++---
-> > >  security/selinux/selinuxfs.c              | 185 +++++++++++++-------=
-----------
-> > >  security/smack/smackfs.c                  |   2 +-
-> > >  53 files changed, 649 insertions(+), 834 deletions(-)
-> > >
-> > >         Overview:
-> > >
-> > > First two commits are bugfixes (fusectl and tracefs resp.)
-> > >
-> > > [1/54] fuse_ctl_add_conn(): fix nlink breakage in case of early failu=
-re
-> > > [2/54] tracefs: fix a leak in eventfs_create_events_dir()
-> > >
-> > > Next, two commits adding a couple of useful helpers, the next three a=
-dding
-> > > the infrastructure and the rest consists of per-filesystem conversion=
-s.
-> > >
-> > > [3/54] new helper: simple_remove_by_name()
-> > > [4/54] new helper: simple_done_creating()
-> > >         end_creating_path() analogue for internal object creation; un=
-like
-> > > end_creating_path() no mount is passed to it (or guaranteed to exist,=
- for
-> > > that matter - it might be used during the filesystem setup, before th=
-e
-> > > superblock gets attached to any mounts).
-> > >
-> > > Infrastructure:
-> > > [5/54] introduce a flag for explicitly marking persistently pinned de=
-ntries
-> > >         * introduce the new flag
-> > >         * teach shrink_dcache_for_umount() to handle it (i.e. remove
-> > > and drop refcount on anything that survives to umount with that flag
-> > > still set)
-> > >         * teach kill_litter_super() that anything with that flag does
-> > > *not* need to be unpinned.
-> > > [6/54] primitives for maintaining persisitency
-> > >         * d_make_persistent(dentry, inode) - bump refcount, mark pers=
-istent
-> > > and make hashed positive.  Return value is a borrowed reference to de=
-ntry;
-> > > it can be used until something removes persistency (at the very least=
-,
-> > > until the parent gets unlocked, but some filesystems may have stronge=
-r
-> > > exclusion).
-> > >         * d_make_discardable() - remove persistency mark and drop ref=
-erence.
-> > >
-> > > NOTE: at that stage d_make_discardable() does not reject dentries not
-> > > marked persistent - it acts as if the mark been set.
-> > >
-> > > Rationale: less noise in series splitup that way.  We want (and on th=
-e
-> > > next commit will get) simple_unlink() to do the right thing - remove
-> > > persistency, if it's there.  However, it's used by many filesystems.
-> > > We would have either to convert them all at once or split simple_unli=
-nk()
-> > > into "want persistent" and "don't want persistent" versions, the latt=
-er
-> > > being the old one.  In the course of the series almost all callers
-> > > would migrate to the replacement, leaving only two pathological cases
-> > > with the old one.  The same goes for simple_rmdir() (two callers left=
- in
-> > > the end), simple_recursive_removal() (all callers gone in the end), e=
-tc.
-> > > That's a lot of noise and it's easier to start with d_make_discardabl=
-e()
-> > > quietly accepting non-persistent dentries, then, in the end, add priv=
-ate
-> > > copies of simple_unlink() and simple_rmdir() for two weird users (con=
-figfs
-> > > and apparmorfs) and have those use dput() instead of d_make_discardab=
-le().
-> > > At that point we'd be left with all callers of d_make_discardable()
-> > > always passing persistent dentries, allowing to add a warning in it.
-> > >
-> > > [7/54] convert simple_{link,unlink,rmdir,rename,fill_super}() to new =
-primitives
-> > >         See above re quietly accepting non-peristent dentries in
-> > > simple_unlink(), simple_rmdir(), etc.
-> > >
-> > >         Converting filesystems:
-> > > [8/54] convert ramfs and tmpfs
-> > > [9/54] procfs: make /self and /thread_self dentries persistent
-> > > [10/54] configfs, securityfs: kill_litter_super() not needed
-> > > [11/54] convert xenfs
-> > > [12/54] convert smackfs
-> > > [13/54] convert hugetlbfs
-> > > [14/54] convert mqueue
-> > > [15/54] convert bpf
-> > > [16/54] convert dlmfs
-> > > [17/54] convert fuse_ctl
-> > > [18/54] convert pstore
-> > > [19/54] convert tracefs
-> > > [20/54] convert debugfs
-> > > [21/54] debugfs: remove duplicate checks in callers of start_creating=
-()
-> > > [22/54] convert efivarfs
-> > > [23/54] convert spufs
-> > > [24/54] convert ibmasmfs
-> > > [25/54] ibmasmfs: get rid of ibmasmfs_dir_ops
-> > > [26/54] convert devpts
-> > > [27/54] binderfs: use simple_start_creating()
-> > > [28/54] binderfs_binder_ctl_create(): kill a bogus check
-> > > [29/54] convert binderfs
-> > > [30/54] autofs_{rmdir,unlink}: dentry->d_fsdata->dentry =3D=3D dentry=
- there
-> > > [31/54] convert autofs
-> > > [32/54] convert binfmt_misc
-> > > [33/54] selinuxfs: don't stash the dentry of /policy_capabilities
-> > > [34/54] selinuxfs: new helper for attaching files to tree
-> > > [35/54] convert selinuxfs
-> > >
-> > >         Several functionfs fixes, before converting it, to make life
-> > > simpler for backporting:
-> > > [36/54] functionfs: don't abuse ffs_data_closed() on fs shutdown
-> > > [37/54] functionfs: don't bother with ffs->ref in ffs_data_{opened,cl=
-osed}()
-> > > [38/54] functionfs: need to cancel ->reset_work in ->kill_sb()
-> > > [39/54] functionfs: fix the open/removal races
-> > >
-> > >         ... and back to filesystems conversions:
-> > >
-> > > [40/54] functionfs: switch to simple_remove_by_name()
-> > > [41/54] convert functionfs
-> > > [42/54] gadgetfs: switch to simple_remove_by_name()
-> > > [43/54] convert gadgetfs
-> > > [44/54] hypfs: don't pin dentries twice
-> > > [45/54] hypfs: switch hypfs_create_str() to returning int
-> > > [46/54] hypfs: swich hypfs_create_u64() to returning int
-> > > [47/54] convert hypfs
-> > > [48/54] convert rpc_pipefs
-> > > [49/54] convert nfsctl
-> > > [50/54] convert rust_binderfs
-> > >
-> > >         ... and no kill_litter_super() callers remain, so we
-> > > can take it out:
-> > > [51/54] get rid of kill_litter_super()
-> > >
-> > >         Followups:
-> > > [52/54] convert securityfs
-> > >         That was the last remaining user of simple_recursive_removal(=
+> From: Emil Tsalapatis <etsal@meta.com>
+>
+> Add an address sanitizer (ASAN) runtime to the arena library. The
+> ASAN runtime implements the functions injected into BPF binaries
+> by LLVM sanitization is supported and enabled.
+>
+> The runtime also includes functions called explicitly by memory
+> allocation code to mark memory as poisoned/unpoisoned to ASAN.
+> This code is a no-op when sanitization is turned off.
+>
+> Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
+> ---
+>  tools/testing/selftests/bpf/.gitignore        |   1 +
+>  .../selftests/bpf/libarena/include/asan.h     | 133 +++++
+>  .../selftests/bpf/libarena/src/asan.bpf.c     | 463 ++++++++++++++++++
+>  3 files changed, 597 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/libarena/include/asan.h
+>  create mode 100644 tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+>
+> diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selft=
+ests/bpf/.gitignore
+> index 96b4a7e37427..3d176d3b2cc1 100644
+> --- a/tools/testing/selftests/bpf/.gitignore
+> +++ b/tools/testing/selftests/bpf/.gitignore
+> @@ -49,3 +49,4 @@ verification_cert.h
+>  *.BTF_ids
+>  *.BTF.base
+>  libarena/test_libarena
+> +libarena/test_libarena_asan
+> diff --git a/tools/testing/selftests/bpf/libarena/include/asan.h b/tools/=
+testing/selftests/bpf/libarena/include/asan.h
+> new file mode 100644
+> index 000000000000..be50b23fb491
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/libarena/include/asan.h
+> @@ -0,0 +1,133 @@
+> +#pragma once
+> +
+> +struct asan_init_args {
+> +       u64 arena_all_pages;
+> +       u64 arena_globals_pages;
+> +};
+> +
+> +int asan_init(struct asan_init_args *args);
+> +
+> +/* Parameters usable by userspace. */
+> +extern volatile u64 __asan_shadow_memory_dynamic_address;
+> +extern volatile bool asan_reported;
+> +extern volatile bool asan_inited;
+> +extern volatile bool asan_report_once;
+> +extern volatile bool asan_emit_stack;
+> +
+> +#ifdef __BPF__
+> +
+> +#define ASAN_SHADOW_SHIFT 3
+> +#define ASAN_SHADOW_SCALE (1ULL << ASAN_SHADOW_SHIFT)
+> +#define ASAN_GRANULE_MASK ((1ULL << ASAN_SHADOW_SHIFT) - 1)
+> +#define ASAN_GRANULE(addr) ((s8)((u32)(u64)((addr)) & ASAN_GRANULE_MASK)=
 )
-> > > that did *not* mark things persistent.  Now the only places where
-> > > d_make_discardable() is still called for dentries that are not marked
-> > > persistent are the calls of simple_{unlink,rmdir}() in configfs and
-> > > apparmorfs.
-> > >
-> > > [53/54] kill securityfs_recursive_remove()
-> > >         Unused macro...
-> > >
-> > > [54/54] d_make_discardable(): warn if given a non-persistent dentry
-> > >
-> > > At this point there are very few call chains that might lead to
-> > > d_make_discardable() on a dentry that hadn't been made persistent:
-> > > calls of simple_unlink() and simple_rmdir() in configfs and
-> > > apparmorfs.
-> > >
-> > > Both filesystems do pin (part of) their contents in dcache, but
-> > > they are currently playing very unusual games with that.  Converting
-> > > them to more usual patterns might be possible, but it's definitely
-> > > going to be a long series of changes in both cases.
-> > >
-> > > For now the easiest solution is to have both stop using simple_unlink=
-()
-> > > and simple_rmdir() - that allows to make d_make_discardable() warn
-> > > when given a non-persistent dentry.
-> > >
-> > > Rather than giving them full-blown private copies (with calls of
-> > > d_make_discardable() replaced with dput()), let's pull the parts of
-> > > simple_unlink() and simple_rmdir() that deal with timestamps and link
-> > > counts into separate helpers (__simple_unlink() and __simple_rmdir()
-> > > resp.) and have those used by configfs and apparmorfs.
-> > >
-> >
-> > Hi Al, when I apply this patchset my Pixel 6 no longer enumerates on
-> > lsusb or ADB. It was quite hard to bisect to this point, as this is
-> > non-deterministic and seems to be setup specific. Note, I am using
-> > android-mainline, but my understanding is that this build does not
-> > have any out-of-tree USB patches, and that there are no vendor hooks
-> > in the build.
-> >
-> > My apologies as I can't offer any other clues; there are no obviously
-> > bad dmesg logs and I'm still working on narrowing down the exact
-> > commit(s) that started this, but just wanted to send a FYI in case
-> > something stands out as obvious.
->
-> Note that I had to revert commit e5bf5ee26663 ("functionfs: fix the
-> open/removal races") from the stable backports, as it was causing issues
-> on the pixel devices it got backported to.  So perhaps look there?
->
-> thanks,
->
-> greg k-h
+> +
+> +#define __noasan __attribute__((no_sanitize("address")))
+> +
+> +#ifdef BPF_ARENA_ASAN
+> +
+> +/*
+> + * Defined as char * to get 1-byte granularity for pointer arithmetic.
+> + */
+> +typedef s8 __arena s8a;
+> +
+> +/*
+> + * Address to shadow map translation.
+> + */
+> +static inline
+> +s8a *mem_to_shadow(void __arena __arg_arena *addr)
+> +{
+> +       return (s8a *)(((u32)(u64)addr >> ASAN_SHADOW_SHIFT) + __asan_sha=
+dow_memory_dynamic_address);
+> +}
+> +
+> +/*
+> + * Helper for directly reading the shadow map.
+> + */
+> +static inline __noasan
+> +s8 asan_shadow_value(void __arena __arg_arena *addr)
+> +{
+> +       return *(s8a *)mem_to_shadow(addr);
+> +}
+> +
+> +__weak __noasan
+> +bool asan_ready(void)
+> +{
+> +       return __asan_shadow_memory_dynamic_address;
+> +}
+> +
+> +/*
+> + * Shadow map manipulation helpers.
+> + */
+> +int asan_poison(void __arena *addr, s8 val, size_t size);
+> +int asan_unpoison(void __arena *addr, size_t size);
+> +bool asan_shadow_set(void __arena *addr);
+> +s8 asan_shadow_value(void __arena *addr);
+> +
+> +/*
+> + * Dummy calls to ensure the ASAN runtime's BTF information is present
+> + * in every object file when compiling the runtime and local BPF code
+> + * separately. The runtime calls are injected into the LLVM IR file
+> + */
+> +#define DECLARE_ASAN_LOAD_STORE_SIZE(size)                             \
+> +       void __asan_store##size(void *addr);                            \
+> +       void __asan_store##size##_noabort(void *addr);  \
+> +       void __asan_load##size(void *addr);                             \
+> +       void __asan_load##size##_noabort(void *addr);   \
+> +       void __asan_report_store##size(void *addr);                     \
+> +       void __asan_report_store##size##_noabort(void *addr);           \
+> +       void __asan_report_load##size(void *addr);                      \
+> +       void __asan_report_load##size##_noabort(void *addr);
+> +
+> +DECLARE_ASAN_LOAD_STORE_SIZE(1);
+> +DECLARE_ASAN_LOAD_STORE_SIZE(2);
+> +DECLARE_ASAN_LOAD_STORE_SIZE(4);
+> +DECLARE_ASAN_LOAD_STORE_SIZE(8);
+> +
+> +#define DECLARE_ASAN_LOAD_STORE(size)                          \
+> +       void __asan_store##size(void *addr);                    \
+> +       void __asan_store##size##_noabort(void *addr);          \
+> +       void __asan_load##size(void *addr);                     \
+> +       void __asan_load##size##_noabort(void *addr);           \
+> +       void __asan_report_store##size(void *addr);             \
+> +       void __asan_report_store##size##_noabort(void *addr);   \
+> +       void __asan_report_load##size(void *addr);              \
+> +       void __asan_report_load##size##_noabort(void *addr);
+> +
+> +#define ASAN_DUMMY_CALLS_SIZE(size, arg)               \
+> +do {                                                   \
+> +       __asan_store##size((arg));                      \
+> +       __asan_store##size##_noabort((arg));            \
+> +       __asan_load##size((arg));                       \
+> +       __asan_load##size##_noabort((arg));             \
+> +       __asan_report_store##size((arg));               \
+> +       __asan_report_store##size##_noabort((arg));     \
+> +       __asan_report_load##size((arg));                \
+> +       __asan_report_load##size##_noabort((arg));      \
+> +} while (0)
+> +
+> +#define ASAN_DUMMY_CALLS_ALL(arg)      \
+> +do {                                   \
+> +       ASAN_DUMMY_CALLS_SIZE(1, (arg));        \
+> +       ASAN_DUMMY_CALLS_SIZE(2, (arg));        \
+> +       ASAN_DUMMY_CALLS_SIZE(4, (arg));        \
+> +       ASAN_DUMMY_CALLS_SIZE(8, (arg));        \
+> +} while (0)
+> +
+> +__weak __attribute__((no_sanitize_address))
+> +int asan_dummy_call() {
+> +       /* Use the shadow map base to prevent it from being optimized out=
+. */
+> +       if (__asan_shadow_memory_dynamic_address)
+> +               ASAN_DUMMY_CALLS_ALL(NULL);
+> +
+> +       return 0;
+> +}
+> +#else /* BPF_ARENA_ASAN */
+> +
+> +static inline int asan_poison(void __arena *addr, s8 val, size_t size) {=
+ return 0; }
+> +static inline int asan_unpoison(void __arena *addr, size_t size) { retur=
+n 0; }
+> +static inline bool asan_shadow_set(void __arena *addr) { return 0; }
+> +static inline s8 asan_shadow_value(void __arena *addr) { return 0; }
+> +__weak bool asan_ready(void) { return true; }
+> +
+> +#endif /* BPF_ARENA_ASAN */
+> +
+> +#endif /* __BPF__ */
+> diff --git a/tools/testing/selftests/bpf/libarena/src/asan.bpf.c b/tools/=
+testing/selftests/bpf/libarena/src/asan.bpf.c
+> new file mode 100644
+> index 000000000000..34b62c6e0aae
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/libarena/src/asan.bpf.c
+> @@ -0,0 +1,463 @@
+> +/*
+> + * SPDX-License-Identifier: GPL-2.0
+> + * Copyright (c) 2024-2025 Meta Platforms, Inc. and affiliates.
+> + * Copyright (c) 2024-2025 Emil Tsalapatis <etsal@meta.com>
+> + */
+> +#include <common.h>
+> +#include <asan.h>
+> +
+> +#ifdef BPF_ARENA_ASAN
+> +
+> +#pragma clang attribute push(__attribute__((no_sanitize("address"))), \
+> +                            apply_to =3D function)
+> +
+> +#define SHADOW_ALL_ZEROES ((u64)-1)
+> +
+> +/*
+> + * Canary variable for ASAN violations. Set to the offending address.
+> + */
+> +volatile u64 asan_violated =3D 0;
+> +
+> +/*
+> + * Shadow map occupancy map.
+> + */
+> +volatile u64 __asan_shadow_memory_dynamic_address;
+> +
+> +volatile bool asan_reported =3D false;
+> +volatile bool asan_inited =3D false;
+> +
+> +/*
+> + * Set during program load.
+> + */
+> +volatile bool asan_report_once =3D false;
+> +volatile bool asan_emit_stack =3D false;
+> +
+> +/*
+> + * BPF does not currently support the memset/memcpy/memcmp intrinsics.
+> + */
+> +__always_inline int asan_memset(s8a __arg_arena *dst, s8 val, size_t siz=
+e)
+> +{
+> +       int i;
+> +
+> +       /*
+> +        * Switching this to a may_goto confuses the verifier and
+> +        * prevents verification on bpf-next as of late December 2025.
+> +        */
+> +       bpf_for(i, 0, size) {
+> +               dst[i] =3D val;
+> +       }
 
-Thanks for the suggestion. I tried a few different setups, and now I'm
-fairly confident e5bf5ee26663 ("functionfs: fix the open/removal
-races") is the culprit. I did have to revert 6ca67378d0e7 ("convert
-functionfs") and c7747fafaba0 ("functionfs: switch to
-simple_remove_by_name()") to successfully build, but reverting only
-those two in isolation did not fix the issue.
+Have you tried
+int zero =3D 0;
+for (int i =3D zero; i < size; i++)
 
-Al, please let me know if you have any other variant of the patch(s)
-that you want tested, otherwise feel free to add these tags as
-appropriate:
-Reported-by: Samuel Wu <wusamuel@google.com>
-Tested-by: Samuel Wu <wusamuel@google.com>
+like existing arena selftest do?
 
-Thanks!
+> +       return 0;
+> +}
+> +
+> +/* Validate a 1-byte access, always within a single byte. */
+> +static __always_inline bool memory_is_poisoned_1(s8a *addr)
+> +{
+> +       s8 shadow_value =3D asan_shadow_value(addr);
+> +
+> +       /* Byte is 0, access is valid. */
+> +       if (likely(!shadow_value))
+> +               return false;
+> +
+> +       /*
+> +        * Byte is non-zero. Access is valid if granule offset in [0, sha=
+dow_value),
+> +        * so the memory is poisoned if shadow_value is negative or small=
+er than
+> +        * the granule's value.
+> +        */
+> +
+> +       return ASAN_GRANULE(addr) >=3D shadow_value;
+> +}
+> +
+> +/* Validate a 2- 4-, 8-byte access, spans up to 2 bytes. */
+> +static __always_inline bool memory_is_poisoned_2_4_8(s8a *addr, u64 size=
+)
+> +{
+> +       u64 end =3D (u64)addr + size - 1;
+> +
+> +       /*
+> +        * Region fully within a single byte (addition didn't
+> +        * overflow above ASAN_GRANULE).
+> +        */
+> +       if (likely(ASAN_GRANULE(end) >=3D size - 1))
+> +               return memory_is_poisoned_1((s8a *)end);
+> +
+> +       /*
+> +        * Otherwise first byte must be fully unpoisoned, and second byte
+> +        * must be unpoisoned up to the end of the accessed region.
+> +        */
+> +
+> +       return asan_shadow_value(addr) || memory_is_poisoned_1((s8a *)end=
+);
+> +}
+> +
+> +/*
+> + * Explicit ASAN check.
+> + */
+> +__weak bool asan_shadow_set(void __arena __arg_arena *addr)
+> +{
+> +       return memory_is_poisoned_1(addr);
+> +}
+> +
+> +static __always_inline u64 first_nonzero_byte(u64 addr, size_t size)
+> +{
+
+I'd think this one and asan_report() can weak noinline instead
+to reduce the load on the verifier.
+Have you tried making some of them global?
+
+> +       while (size && can_loop) {
+> +               if (unlikely(*(s8a *)addr))
+> +                       return addr;
+> +               addr +=3D 1;
+> +               size -=3D 1;
+> +       }
+> +
+> +       return SHADOW_ALL_ZEROES;
+> +}
+> +
+> +static __always_inline bool memory_is_poisoned_n(s8a *addr, u64 size)
+> +{
+> +       u64 ret;
+> +       u64 start;
+> +       u64 end;
+> +
+> +       /* Size of [start, end] is end - start + 1. */
+> +       start =3D (u64)mem_to_shadow(addr);
+> +       end =3D (u64)mem_to_shadow(addr + size - 1);
+> +
+> +       ret =3D first_nonzero_byte(start, (end - start) + 1);
+> +       if (likely(ret =3D=3D SHADOW_ALL_ZEROES))
+> +               return false;
+> +
+> +       return __builtin_expect(ret !=3D end || ASAN_GRANULE(addr + size =
+- 1) >=3D
+> +                                                     *(s8a *)end, false)=
+;
+
+that's the same as unlikely(), right? Why open code?
+
+> +
+> +static __always_inline int asan_report(s8a __arg_arena *addr, size_t sz,
+> +                                      bool write)
+> +{
+> +       /* Only report the first ASAN violation. */
+> +       if (asan_reported && asan_report_once)
+> +               return 0;
+> +
+> +       asan_reported =3D true;
+> +
+> +       asan_violated =3D (u64)addr;
+> +
+> +       if (asan_emit_stack) {
+> +               arena_stderr("Memory violation for address %p (0x%lx) for=
+ %s of size %ld",
+> +                               addr, (u64)addr, write ? "write" : "read"=
+, sz);
+> +               bpf_stream_print_stack();
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static __always_inline bool check_asan_args(s8a *addr, size_t size,
+> +                                           bool *result)
+> +{
+> +       bool valid =3D true;
+> +
+> +       /* Size 0 accesses are valid even if the address is invalid. */
+> +       if (unlikely(size =3D=3D 0))
+> +               goto confirmed_valid;
+> +
+> +       /*
+> +        * Wraparound is possible for extremely high size. Possible if th=
+e size
+> +        * is a misinterpreted negative number.
+> +        */
+> +       if (unlikely(addr + size < addr))
+> +               goto confirmed_invalid;
+> +
+> +       return false;
+> +
+> +confirmed_invalid:
+> +       valid =3D false;
+> +
+> +       /* FALLTHROUGH */
+> +confirmed_valid:
+> +       *result =3D valid;
+> +
+> +       return true;
+> +}
+> +
+> +static __always_inline bool check_region_inline(void *ptr, size_t size,
+> +                                               bool write)
+> +{
+> +       s8a *addr =3D (s8a *)(u64)ptr;
+> +       bool is_poisoned, is_valid;
+> +
+> +       if (check_asan_args(addr, size, &is_valid)) {
+> +               if (!is_valid)
+> +                       asan_report(addr, size, write);
+> +               return is_valid;
+> +       }
+> +
+> +       switch (size) {
+> +       case 1:
+> +               is_poisoned =3D memory_is_poisoned_1(addr);
+> +               break;
+> +       case 2:
+> +       case 4:
+> +       case 8:
+> +               is_poisoned =3D memory_is_poisoned_2_4_8(addr, size);
+> +               break;
+> +       default:
+> +               is_poisoned =3D memory_is_poisoned_n(addr, size);
+> +       }
+> +
+> +       if (is_poisoned) {
+> +               asan_report(addr, size, write);
+> +               return false;
+> +       }
+> +
+> +       return true;
+> +}
+> +
+> +/*
+> + * __alias is not supported for BPF so define *__noabort() variants as w=
+rappers.
+> + */
+> +#define DEFINE_ASAN_LOAD_STORE(size)                                    =
+       \
+> +       __hidden void __asan_store##size(void *addr)                     =
+      \
+> +       {                                                                =
+      \
+> +               check_region_inline(addr, size, true);                   =
+      \
+> +       }                                                                =
+      \
+> +       __hidden void __always_inline __asan_store##size##_noabort(void *=
+addr) \
+> +       {                                                                =
+      \
+> +               check_region_inline(addr, size, true);                   =
+      \
+> +       }                                                                =
+      \
+> +       __hidden void __asan_load##size(void *addr)                      =
+      \
+> +       {                                                                =
+      \
+> +               check_region_inline(addr, size, false);                  =
+      \
+> +       }                                                                =
+      \
+> +       __hidden void __asan_load##size##_noabort(void *addr)            =
+      \
+> +       {                                                                =
+      \
+> +               check_region_inline(addr, size, false);                  =
+      \
+> +       }                                                                =
+      \
+> +       __hidden void __asan_report_store##size(void *addr)              =
+      \
+> +       {                                                                =
+      \
+> +               asan_report((s8a *)addr, size, true);                    =
+      \
+> +       }                                                                =
+      \
+> +       __hidden void __asan_report_store##size##_noabort(void *addr)    =
+      \
+> +       {                                                                =
+      \
+> +               asan_report((s8a *)addr, size, true);                    =
+      \
+> +       }                                                                =
+      \
+> +       __hidden void __asan_report_load##size(void *addr)               =
+      \
+> +       {                                                                =
+      \
+> +               asan_report((s8a *)addr, size, false);                   =
+      \
+> +       }                                                                =
+      \
+> +       __hidden void __asan_report_load##size##_noabort(void *addr)     =
+      \
+> +       {                                                                =
+      \
+> +               asan_report((s8a *)addr, size, false);                   =
+      \
+> +       }
+> +
+> +DEFINE_ASAN_LOAD_STORE(1);
+> +DEFINE_ASAN_LOAD_STORE(2);
+> +DEFINE_ASAN_LOAD_STORE(4);
+> +DEFINE_ASAN_LOAD_STORE(8);
+> +
+> +void __asan_storeN(void *addr, ssize_t size)
+> +{
+> +       check_region_inline(addr, size, true);
+> +}
+> +
+> +void __asan_loadN(void *addr, ssize_t size)
+> +{
+> +       check_region_inline(addr, size, false);
+> +}
+> +
+> +/*
+> + * We currently do not sanitize globals.
+> + */
+> +void __asan_register_globals(void *globals, size_t n)
+> +{
+> +}
+> +
+> +void __asan_unregister_globals(void *globals, size_t n)
+> +{
+> +}
+> +
+> +/*
+> + * We do not currently have memcpy/memmove/memset intrinsics
+> + * in LLVM. Do not implement sanitization.
+> + */
+> +void *__asan_memcpy(void *d, const void *s, size_t n)
+> +{
+> +       return NULL;
+> +}
+> +
+> +void *__asan_memmove(void *d, const void *s, size_t n)
+> +{
+> +       return NULL;
+> +}
+> +
+> +void *__asan_memset(void *p, int c, size_t n)
+> +{
+> +       return NULL;
+> +}
+> +
+> +/*
+> + * Poisoning code, used when we add more freed memory to the allocator b=
+y:
+> + *     a) pulling memory from the arena segment using bpf_arena_alloc_pa=
+ges()
+> + *     b) freeing memory from application code
+> + */
+> +__hidden __noasan int asan_poison(void __arena *addr, s8 val, size_t siz=
+e)
+> +{
+> +       s8a *shadow;
+> +       size_t len;
+> +
+> +       /*
+> +        * Poisoning from a non-granule address makes no sense: We can on=
+ly allocate
+> +        * memory to the application that with a granule-aligned starting=
+ address,
+> +        * and bpf_arena_alloc_pages returns page-aligned memory. A non-a=
+ligned
+> +        * addr then implies we're freeing a different address than the o=
+ne we
+> +        * allocated.
+> +        */
+> +       if (unlikely((u64)addr & ASAN_GRANULE_MASK))
+> +               return -EINVAL;
+> +
+> +       /*
+> +        * We cannot free an unaligned region because it'd be possible th=
+at we
+> +        * cannot describe the resulting poisoning state of the granule i=
+n
+> +        * the ASAN encoding.
+> +        *
+> +        * Every granule represents a region of memory that looks like th=
+e
+> +        * following (P for poisoned bytes, C for clear):
+> +        *
+> +        * <Clear>  <Poisoned>
+> +        * [ C C C ... P P ]
+> +        *
+> +        * The value of the granule's shadow map is the number of clear b=
+ytes in
+> +        * it. We cannot represent granules with the following state:
+> +        *
+> +        * [ P P ... C C ... P P ]
+> +        *
+> +        * That would be possible if we could free unaligned regions, so =
+prevent that.
+> +        *
+> +        */
+> +       if (unlikely(size & ASAN_GRANULE_MASK))
+> +               return -EINVAL;
+
+kasan_poison() in the kernel has the same logic without the comments.
+The comments are nice, but please make a big comment somewhere
+that the algorithm is the same as KASAN. Is it actually?
+So reviewers don't need to triple check the bit math.
+
+> +
+> +       shadow =3D mem_to_shadow(addr);
+> +       len =3D size >> ASAN_SHADOW_SHIFT;
+> +
+> +       asan_memset(shadow, val, len);
+> +
+> +       return 0;
+> +}
