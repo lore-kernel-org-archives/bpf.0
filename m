@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D4037C0F1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7197E37C0EC;
 	Thu, 29 Jan 2026 08:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769674111; cv=none; b=u6jgVqeeCvwfGYnHtuHw73Swd1owHmwIBECta1BXvsIh9FeVznQIWep+X+PSBJReoHf28jEaoknVDy3PtRd3E2/1Qg5lKjlQNIc2CNqo5AZ94K9rPo1gNFeKWWh9z/5g/zuWXEK5XdP+rs0o/TzU+Lv/MFb797+AAlH4hv6DrnY=
+	t=1769674111; cv=none; b=sNP3/Fgmm063FsZBevEIiKYpcxmduTbaJi1UP5+/HlLnzCt75S13epP4yxJLCfiOu4O7DPgwXymbjZWmqURBZIvCxvAGmwxDovC8SMJkx9A3K0qaA1o/v8+SeEsONH5BW3VkViao/E2oDT4zL/bN3NFdbzelvhQ0Hgd9f7AwdpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769674111; c=relaxed/simple;
-	bh=jXKyTJKBXMc1s7NB0MjWyQ30waz0m2moRL2HWFXUGcQ=;
+	bh=IMy+0Ya2RXQo7v/hj8y/wU7iFOGEnBMPK5mE8t6wErI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dBrkRFGrqQpg6Gtya8LRDlsBrSDmrIt4Se4p1CWFF3cGhD7tqzU94uw49mKNSNq5PjKpwg2lLtiO/wChJsEN67QGNR8PLA013IGoL0bUqDEa9CX7+KeYMijf0TLAj38ztRzmfSjBvyMm/AVOevJQPOJAcYrF5NhMPryeShxaeA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J7PkFnqw; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=DscttxlNwnsTzvA4h2BiRC48zCbRBv8EiBj7estSen0luyJyfxFwlkeAPn/LBrrDFnkvJAjM7AMqEyYsr2WksDzpFBDmhEoxdWTNV+MXrEGdVnXH7+Y3OHeevq4/sgjXXIWeeGbRL8M8fjKVRtddnSz76JrKzIqWiRBMCSr5XUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CVDoK7RV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J7PkFnqw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1810FC4AF0B;
-	Thu, 29 Jan 2026 08:08:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CVDoK7RV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F06D0C4AF10;
+	Thu, 29 Jan 2026 08:08:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1769674111;
-	bh=jXKyTJKBXMc1s7NB0MjWyQ30waz0m2moRL2HWFXUGcQ=;
+	bh=IMy+0Ya2RXQo7v/hj8y/wU7iFOGEnBMPK5mE8t6wErI=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=J7PkFnqwl2NyEeDLu1PjLukhjjtiF+Ro2e05fbSOt0bbYe/La5snvMsV/XSZp0/kW
-	 7tRFxouHgJdH9LNlXIjiRrXisPkCjbjbWU9X1TqnPD/6OWGeQnW+BE9DSIENFTYMF/
-	 4S4+ZvgncMp8Y9a3LrLSBQnR6jUE4VacgREmd58LhtEpvytSPSjgZrw9MvJVRAzHad
-	 bdu1aKJI4bLQ8C59UsWBAeaFD3L1LyrHoTj93SSsJE3mrYLitlkoBHoa4XSIJKmrm/
-	 6a0A8riOd4DXnNvl8SDpJ06A4ULLZT/BFl63zJyP1oHt86G3GO6DqRXRFLKKrrHh2a
-	 QuIqETItOATxQ==
+	b=CVDoK7RV2De5lMoh9xFIjFW36Xn4xiO+ZCn9lNN83XJWKr7vlvmzvYVCvMc3GUAld
+	 Sdy6KYa7nHzCbYjuu3w7YHbw3wLoyozY1UZl54hlwCKezmMqqJOlI2qxgGz4ZSVBeG
+	 G8KIqX5PzQEHuN2F7JQkrV3i/C+dWyfps/nxxrvOrtSb5DawA0t0/NiGcO0MXaLN5F
+	 L50AO1wMZ8tzN3wUOjqebmi6TU8FtVXhg45aHHOlm41GiPQe/RxP84iS7eQY3qR/1F
+	 oWaekbBFNJHH8DERwfqpBkLqh46fyrhbBKkVfEed0EJZS1T/VyShSIBy1u14nqB4AU
+	 TEs0JQjjqrNEw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.99.1)
 	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1vlN4n-0000000ERO5-1O5T;
+	id 1vlN4n-0000000ERNp-0t7G;
 	Thu, 29 Jan 2026 09:08:29 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 To: Jonathan Corbet <corbet@lwn.net>,
@@ -41,9 +41,9 @@ Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
 	netdev@vger.kernel.org,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
 	Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v3 24/30] docs: kdoc_re: fix a parse bug on struct page_pool_params
-Date: Thu, 29 Jan 2026 09:08:15 +0100
-Message-ID: <053367b7bf66f07444b45790db0e2b1998d3a3fe.1769673038.git.mchehab+huawei@kernel.org>
+Subject: [PATCH v3 20/30] docs: kdoc_re: add support on NestedMatch for argument replacement
+Date: Thu, 29 Jan 2026 09:08:11 +0100
+Message-ID: <fe4539f5573c62301fd1a94af5126266b023d4b8.1769673038.git.mchehab+huawei@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1769673038.git.mchehab+huawei@kernel.org>
 References: <cover.1769673038.git.mchehab+huawei@kernel.org>
@@ -57,67 +57,126 @@ Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-The struct page_pool_params definition has a private
-definition on it:
+Currently, NestedMatch has very limited support for aguments
+replacement: it is all or nothing.
 
-    struct page_pool_params {
-	struct_group_tagged(page_pool_params_fast, fast,
-		unsigned int	order;
-		unsigned int	pool_size;
-		int		nid;
-		struct device	*dev;
-		struct napi_struct *napi;
-		enum dma_data_direction dma_dir;
-		unsigned int	max_len;
-		unsigned int	offset;
-	);
-	struct_group_tagged(page_pool_params_slow, slow,
-		struct net_device *netdev;
-		unsigned int queue_idx;
-		unsigned int	flags;
-    /* private: used by test code only */
-		void (*init_callback)(netmem_ref netmem, void *arg);
-		void *init_arg;
-	);
-   };
-
-This makes kernel-doc parser to miss the end parenthesis of
-the second struct_group_tagged, causing documentation issues.
-
-Address it by ensuring that, if are there anything at the stack,
-it will be placed as the last part of the argument.
+Add support to allow replacing individual arguments as well.
 
 Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 ---
- tools/lib/python/kdoc/kdoc_re.py | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/lib/python/kdoc/kdoc_re.py | 84 ++++++++++++++++++++++----------
+ 1 file changed, 59 insertions(+), 25 deletions(-)
 
 diff --git a/tools/lib/python/kdoc/kdoc_re.py b/tools/lib/python/kdoc/kdoc_re.py
-index 858cc688a58f..5f455ffff7b2 100644
+index e34d55c25680..858cc688a58f 100644
 --- a/tools/lib/python/kdoc/kdoc_re.py
 +++ b/tools/lib/python/kdoc/kdoc_re.py
-@@ -201,6 +201,9 @@ class NestedMatch:
-         """
+@@ -177,29 +177,6 @@ class NestedMatch:
+     will ignore the search string.
+     """
  
-         stack = []
-+        start = 0
-+        offset = 0
-+        pos = 0
+-    # TODO: make NestedMatch handle multiple match groups
+-    #
+-    # Right now, regular expressions to match it are defined only up to
+-    #       the start delimiter, e.g.:
+-    #
+-    #       \bSTRUCT_GROUP\(
+-    #
+-    # is similar to: STRUCT_GROUP\((.*)\)
+-    # except that the content inside the match group is delimiter-aligned.
+-    #
+-    # The content inside parentheses is converted into a single replace
+-    # group (e.g. r`\1').
+-    #
+-    # It would be nice to change such definition to support multiple
+-    # match groups, allowing a regex equivalent to:
+-    #
+-    #   FOO\((.*), (.*), (.*)\)
+-    #
+-    # it is probably easier to define it not as a regular expression, but
+-    # with some lexical definition like:
+-    #
+-    #   FOO(arg1, arg2, arg3)
+-
+     def __init__(self, regex):
+         self.regex = KernRe(regex)
  
-         for match_re in self.regex.finditer(line):
-             start = match_re.start()
-@@ -250,6 +253,11 @@ class NestedMatch:
-                         yield start, offset, pos + 1
-                         break
+@@ -285,6 +262,59 @@ class NestedMatch:
  
-+        # When /* private */ is used, it may end the end delimiterq
-+        if stack:
-+            stack.pop()
-+            yield start, offset, len(line) + 1
+             yield line[t[0]:t[2]]
+ 
++    @staticmethod
++    def _split_args(all_args, delim=","):
++        """
++        Helper method to split comma-separated function arguments
++        or struct elements, if delim is set to ";".
 +
-     def search(self, line):
++        It returns a list of arguments that can be used later on by
++        the sub() method.
++        """
++        args = [all_args]
++        stack = []
++        arg_start = 0
++        string_char = None
++        escape = False
++
++        for idx, d in enumerate(all_args):
++            if escape:
++                escape = False
++                continue
++
++            if string_char:
++                if d == '\\':
++                    escape = True
++                elif d == string_char:
++                    string_char = None
++
++                continue
++
++            if d in ('"', "'"):
++                string_char = d
++                continue
++
++            if d in DELIMITER_PAIRS:
++                end = DELIMITER_PAIRS[d]
++
++                stack.append(end)
++                continue
++
++            if stack and d == stack[-1]:
++                stack.pop()
++                continue
++
++            if d == delim and not stack:
++                args.append(all_args[arg_start:idx].strip())
++                arg_start = idx + 1
++
++        # Add the last argument (if any)
++        last = all_args[arg_start:].strip()
++        if last:
++            args.append(last)
++
++        return args
++
+     def sub(self, sub, line, count=0):
          """
-         This is similar to re.search:
+         This is similar to re.sub:
+@@ -310,9 +340,13 @@ class NestedMatch:
+             # Value, ignoring start/end delimiters
+             value = line[end:pos - 1]
+ 
+-            # replaces \0 at the sub string, if \0 is used there
++            # replace arguments
+             new_sub = sub
+-            new_sub = new_sub.replace(r'\0', value)
++            if "\\" in sub:
++                args = self._split_args(value)
++
++                new_sub = re.sub(r'\\(\d+)',
++                                 lambda m: args[int(m.group(1))], new_sub)
+ 
+             out += new_sub
+ 
 -- 
 2.52.0
 
