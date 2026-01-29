@@ -1,230 +1,112 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B429536BCCC;
-	Thu, 29 Jan 2026 22:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DEC312821;
+	Thu, 29 Jan 2026 22:52:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769725758; cv=none; b=eroEsRce2kGz3Dne8uylV+pnfxfN3UuaKVeFW4GUhV/1o6Csum7Z4MTkoY7rCHcjWFN+5AXL18ly1X0xYZRamEeObOO4TCZ5QNy4aCb9LxmEQ1vxcUKiDLOp7TFRWkUp4B9YbKqDptungmrAT0wMKwvPVaxREg25yPAMAsr2c+w=
+	t=1769727170; cv=none; b=kKJ931DHzk2Qtjhj0j5m+M58pYR+zekcb/nvSOLMv3epNKvb9YLdlGDbw1LWtkp4Ppbvak9Epa677intNAtuHSiJGW7/te98RoiO7PM1/ZwJvqNUEaoIXQeJJH0a+mD04VIh7Tb7camqVILHx1ScBTtCuytRKKxE9ts9DNs8ky0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769725758; c=relaxed/simple;
-	bh=dcQEHf+ceGfcmp0SuXhzcEeMTAF6Frc5PZKOaTDasx0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=U6gT+BVhsM0M+r9F0IdjCaNaqg3OmVb2poXlV+ZtA+hQFH26vDWu+zHfLLPTWncGI/lyDAClRfYrcTAwGwnQKp3KGWFFCYJkRuLStW/tJjq0cT+/NmNq4Ul+BXqcTeloDw9GDniZJ2S/2LZ8+tTE8k+Zom5rZPirJnmPPjfh+Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=mSPYQYIY; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1769727170; c=relaxed/simple;
+	bh=a+uuu1UU4KTBHLlqRmYyRypp9XGFjSD6Z3KeUdDHXDw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qsq4Wkxvo8ZViy70tHOYjIkqZ+/GRW7TPqNSpX0dI/QEDxTfC0EZ39eS3PYmuyFPCC1azWMf8GHGv1ucvK5XMdmsShKTyFhqz/9mEmbsj/KMLLJk5ZRvN1vXeKOamcVpdt9zPRVR42MpAHwswY3mx9N4/x3CgKS+ixfXWw5iiv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Xd3s3aE8; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="mSPYQYIY"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Xd3s3aE8"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Ug54kLSMTm1GYkRBJVp2T5IsaYxEeg+1ou2sFG41k/0=; b=mSPYQYIYru/+p8ODBQJvPbY4W4
-	WPSRmuxbIvtWdC5OLTX+BBeQGyIkICa/LTsXx8pRo945ZXiVmezwauDmobuI0KsD0+ehfMvVzi6Rx
-	NtmWihJYjYZs9nE+awLk81QI3Uslce+zYh7TRUDC6eGsQ0O4yKji+kIYpcyDoyZwLC00Grnr3L2Ti
-	YoMSClbgkgY0yzk3B+WHXVNxb0HIHZeQSxZdOtUQ5J6KRKvhKKU8XtchnEtIhT4lhALo399K603Lx
-	RXOJcajte3SR/uKiwbQK9Lq2lUok+O41QCFm7zBZp6fM5M9rXSRCTCkPDbk44CQepTdRJf3yGDt7j
-	h0epJh8A==;
-Received: from localhost ([127.0.0.1])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vlaVN-0008qq-23;
-	Thu, 29 Jan 2026 23:28:49 +0100
-From: Daniel Borkmann <daniel@iogearbox.net>
-To: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	razor@blackwall.org,
-	pabeni@redhat.com,
-	willemb@google.com,
-	sdf@fomichev.me,
-	john.fastabend@gmail.com,
-	martin.lau@kernel.org,
-	jordan@jrife.io,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	dw@davidwei.uk,
-	toke@redhat.com,
-	yangzhenze@bytedance.com,
-	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v8 16/16] selftests/net: Add netkit container tests
-Date: Thu, 29 Jan 2026 23:28:30 +0100
-Message-ID: <20260129222830.439687-17-daniel@iogearbox.net>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260129222830.439687-1-daniel@iogearbox.net>
-References: <20260129222830.439687-1-daniel@iogearbox.net>
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=NzC4ieMh6vmoXuGrRF8AJfVTPzFDIVwsq0W+97NeH6I=; b=Xd3s3aE8lP0Iuf76XmQmTqyylY
+	kyjYtmWz3WE5Wp7qeyPuSNsrn7VnrFKLBLvg1QeejST/l0HFm8A1qmVzFffJgrhLWXrFqbyf6a33e
+	/22zqtNz8ozygjvj4by61/hPWVbdmEB1InvlYHMIf70seSv2TGIK6fBViv/wS7HAbDGRBmDvmj2ZB
+	JntUzR5O2yOGBeO5kVkWDZ996QY77yEhYaT27vlMP0zpBJ3x2kyXvwFS0IvjUmVIU8AbZJaqR0rdb
+	wrNWss8rPX4hfCo90x1Ou0DJDoWZBnnF+jopJxNrM5FqeIqToCi5KntAUvJccM6KN/Cc2/WSy2jpw
+	jyJAcUeA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1vlauH-00000007wty-0EGP;
+	Thu, 29 Jan 2026 22:54:33 +0000
+Date: Thu, 29 Jan 2026 22:54:33 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Samuel Wu <wusamuel@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <20260129225433.GU3183987@ZenIV>
+References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+ <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh>
+ <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
+ <20260128045954.GS3183987@ZenIV>
+ <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
+ <20260129032335.GT3183987@ZenIV>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27896/Thu Jan 29 08:24:11 2026)
+In-Reply-To: <20260129032335.GT3183987@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-From: David Wei <dw@davidwei.uk>
+On Thu, Jan 29, 2026 at 03:23:35AM +0000, Al Viro wrote:
+> On Wed, Jan 28, 2026 at 04:58:57PM -0800, Samuel Wu wrote:
+> > On Tue, Jan 27, 2026 at 8:58 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > 
+> > > Very interesting...  Does 1544775687f0 (parent of e5bf5ee26663)
+> > > demonstrate that behaviour?
+> > 
+> > Reverting only 1544775687f0 (functionfs: need to cancel ->reset_work
+> > in ->kill_sb()) does not fix the issue. With 6.19-rc7 as baseline, the
+> > simplest working recipe at the moment is with 6ca67378d0e7,
+> > c7747fafaba0, and e5bf5ee26663 reverted.
+> 
+> Sorry, I hadn't been clear enough: if you do
+> git switch --detach 1544775687f0 
+> and build the resulting tree, does the breakage reproduce?  What I want
+> to do is to split e5bf5ee26663 into smaller steps and see which one
+> introduces the breakage, but the starting point would be verify that
+> there's no breakage prior to that.
+> 
+> 
+> PS: v6.19-rc7 contains fc45aee66223 ("get rid of kill_litter_super()"),
+> and reverting 6ca67378d0e7 ("convert functionfs") would reintroduce
+> the call of that function in ffs_fs_kill_sb(), so the resulting tree
+> won't even build on any configs with functionfs enabledd; are you sure
+> that you'd been testing v6.19-rc7 + reverts of just these 3 commits?
 
-Add two tests using NetDrvContEnv. One basic test that sets up a netkit
-pair, with one end in a netns. Use LOCAL_PREFIX_V6 and nk_forward BPF
-program to ping from a remote host to the netkit in netns.
+Could you try your reproducer on mainline with the following delta applied?
 
-Second is a selftest for netkit queue leasing, using io_uring zero copy
-test binary inside of a netns with netkit. This checks that memory
-providers can be bound against virtual queues in a netkit within a
-netns that are leasing from a physical netdev in the default netns.
-
-Signed-off-by: David Wei <dw@davidwei.uk>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
----
- .../testing/selftests/drivers/net/hw/Makefile |  2 +
- .../selftests/drivers/net/hw/nk_netns.py      | 23 +++++
- .../selftests/drivers/net/hw/nk_qlease.py     | 90 +++++++++++++++++++
- 3 files changed, 115 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/hw/nk_netns.py
- create mode 100755 tools/testing/selftests/drivers/net/hw/nk_qlease.py
-
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 9c163ba6feee..39ad86d693b3 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -32,6 +32,8 @@ TEST_PROGS = \
- 	irq.py \
- 	loopback.sh \
- 	nic_timestamp.py \
-+	nk_netns.py \
-+	nk_qlease.py \
- 	pp_alloc_fail.py \
- 	rss_api.py \
- 	rss_ctx.py \
-diff --git a/tools/testing/selftests/drivers/net/hw/nk_netns.py b/tools/testing/selftests/drivers/net/hw/nk_netns.py
-new file mode 100755
-index 000000000000..afa8638195d8
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/nk_netns.py
-@@ -0,0 +1,23 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from lib.py import ksft_run, ksft_exit
-+from lib.py import NetDrvContEnv
-+from lib.py import cmd
-+
-+
-+def test_ping(cfg) -> None:
-+    cfg.require_ipver("6")
-+
-+    cmd(f"ping -c 1 -W5 {cfg.nk_guest_ipv6}", host=cfg.remote)
-+    cmd(f"ping -c 1 -W5 {cfg.remote_addr_v['6']}", ns=cfg.netns)
-+
-+
-+def main() -> None:
-+    with NetDrvContEnv(__file__) as cfg:
-+        ksft_run([test_ping], args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
-diff --git a/tools/testing/selftests/drivers/net/hw/nk_qlease.py b/tools/testing/selftests/drivers/net/hw/nk_qlease.py
-new file mode 100755
-index 000000000000..85db7c358a95
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/hw/nk_qlease.py
-@@ -0,0 +1,90 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+import re
-+from os import path
-+from lib.py import ksft_run, ksft_exit
-+from lib.py import NetDrvContEnv, NetNSEnter, EthtoolFamily, NetdevFamily
-+from lib.py import bkg, cmd, defer, ethtool, rand_port, wait_port_listen, ip
-+
-+
-+def create_rss_ctx(cfg):
-+    output = ethtool(f"-X {cfg.ifname} context new start {cfg.src_queue} equal 1").stdout
-+    values = re.search(r'New RSS context is (\d+)', output).group(1)
-+    return int(values)
-+
-+
-+def set_flow_rule(cfg):
-+    output = ethtool(f"-N {cfg.ifname} flow-type tcp6 dst-port {cfg.port} action {cfg.src_queue}").stdout
-+    values = re.search(r'ID (\d+)', output).group(1)
-+    return int(values)
-+
-+
-+def set_flow_rule_rss(cfg, rss_ctx_id):
-+    output = ethtool(f"-N {cfg.ifname} flow-type tcp6 dst-port {cfg.port} context {rss_ctx_id}").stdout
-+    values = re.search(r'ID (\d+)', output).group(1)
-+    return int(values)
-+
-+
-+def test_iou_zcrx(cfg) -> None:
-+    cfg.require_ipver('6')
-+    ethnl = EthtoolFamily()
-+
-+    channels = ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    channels = channels['combined-count']
-+    if channels < 2:
-+        raise KsftSkipEx('Test requires NETIF with at least 2 combined channels')
-+
-+    rings = ethnl.rings_get({'header': {'dev-index': cfg.ifindex}})
-+    rx_rings = rings['rx']
-+    hds_thresh = rings.get('hds-thresh', 0)
-+
-+    ethnl.rings_set({'header': {'dev-index': cfg.ifindex},
-+                         'tcp-data-split': 'enabled',
-+                         'hds-thresh': 0,
-+                         'rx': 64})
-+    defer(ethnl.rings_set, {'header': {'dev-index': cfg.ifindex},
-+                                'tcp-data-split': 'unknown',
-+                                'hds-thresh': hds_thresh,
-+                                'rx': rx_rings})
-+
-+    cfg.src_queue = channels - 1
-+    ethtool(f"-X {cfg.ifname} equal {cfg.src_queue}")
-+    defer(ethtool, f"-X {cfg.ifname} default")
-+
-+    flow_rule_id = set_flow_rule(cfg)
-+    defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
-+
-+    with NetNSEnter(str(cfg.netns)):
-+        netdevnl = NetdevFamily()
-+        bind_result = netdevnl.queue_create(
-+            {
-+                "ifindex": cfg.nk_guest_ifindex,
-+                "type": "rx",
-+                "lease": {
-+                    "ifindex": cfg.ifindex,
-+                    "queue": {"id": cfg.src_queue, "type": "rx"},
-+                    "netns-id": 0,
-+                },
-+            }
-+        )
-+        cfg.nk_queue = bind_result['id']
-+
-+    rx_cmd = f"ip netns exec {cfg.netns.name} {cfg.bin_local} -s -p {cfg.port} -i {cfg._nk_guest_ifname} -q {cfg.nk_queue}"
-+    tx_cmd = f"{cfg.bin_remote} -c -h {cfg.nk_guest_ipv6} -p {cfg.port} -l 12840"
-+    with bkg(rx_cmd, exit_wait=True):
-+        wait_port_listen(cfg.port, proto="tcp", ns=cfg.netns)
-+        cmd(tx_cmd, host=cfg.remote)
-+
-+
-+def main() -> None:
-+    with NetDrvContEnv(__file__, rxqueues=2) as cfg:
-+        cfg.bin_local = path.abspath(path.dirname(__file__) + "/../../../drivers/net/hw/iou-zcrx")
-+        cfg.bin_remote = cfg.remote.deploy(cfg.bin_local)
-+        cfg.port = rand_port()
-+        ksft_run([test_iou_zcrx], args=(cfg,))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.43.0
-
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 05c6750702b6..6c6d55ba0749 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -646,12 +646,11 @@ static int ffs_ep0_open(struct inode *inode, struct file *file)
+ 	if (ret < 0)
+ 		return ret;
+ 
+-	ffs_data_opened(ffs);
+ 	if (ffs->state == FFS_CLOSING) {
+-		ffs_data_closed(ffs);
+ 		mutex_unlock(&ffs->mutex);
+ 		return -EBUSY;
+ 	}
++	ffs_data_opened(ffs);
+ 	mutex_unlock(&ffs->mutex);
+ 	file->private_data = ffs;
+ 
