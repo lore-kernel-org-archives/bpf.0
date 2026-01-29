@@ -1,142 +1,84 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0012.hostedemail.com [216.40.44.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E354749C;
-	Thu, 29 Jan 2026 00:13:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB13327B357;
+	Thu, 29 Jan 2026 00:49:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769645635; cv=none; b=Ybqo7CYRnc2ogA7Ro5OZ7EDTQP3lQUdJJ7KTa4f0W8p+uJzMcWmB4bnIAP3bGj2BVWTEtxb3jKAdD/D2IqIPRdH90g+Q99wBZV/N5LZw+eB0MMyx6UZC6tK3hU1EV6LQxQJ6JhUpluq/PxLAw/hbuT1r/NdBVbGywkSSOemiWxs=
+	t=1769647790; cv=none; b=WssJE/n0RZaYpLOxauwtKyAuaWu0DPjtY43xpyWshFD3OjMeqxWfnTmJJqaNtGo+GKdXn/syYsOjey6IhKACpx3DolFOY8cJxz+Cs1N3+cI2yWWSKqm62zSDQURbOwWBOHhYSbr6hgjx2nyeYvs7a133fKF0oG6yWE9k24JExgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769645635; c=relaxed/simple;
-	bh=QMY5VhDr13qrK5klyZc+O0AvB6eLS0h6Y2IbLGJESHQ=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=bdlcTxi6AxLMmqOmWrQCmzAIVnII+jUMJ7W9VmPWcIKW6CI8CwLlSNu491+AFpvHykS8iqoYbXZcMbo0DUzMSYTvK/M0REvSR0/jeX4FUotToW18KEbgR7VgIXHNr5+PrroAwDwWNb7+9ybuCBEOd8nsRurUZ09GqtGn60dTRt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=COlU+WAX; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="COlU+WAX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2620AC4CEF1;
-	Thu, 29 Jan 2026 00:13:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769645634;
-	bh=QMY5VhDr13qrK5klyZc+O0AvB6eLS0h6Y2IbLGJESHQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=COlU+WAXp1Bq6C7gDzAJ53zNC99nQGKd04z1Od5Z3g2nC1XVRT2R22B4Y3dL4ydfV
-	 NwG7RZHdNjEJaShoggNHurkzFnIYcIRg14RO0ENNFhnJL2vfBlgOi2eKIzy4gDzJYE
-	 SU6vtBUrap9ZqEoY//PRWc7azTLSDxhvyeLipqUFGTxUTBHInUVcYYJHvaf44y8yfH
-	 iKcIo3feDWIywDDwJTFt1qiQXDQTCoEmSVTgjABNzh8a0LZ4kckJ6e5SD7YLrdi+y4
-	 OzXWPL60C7NMiPWgaFahJrl4q+bAFNok1/yP6hmX5Mr9Bqybqvqgqn5RBrMhDBRXNh
-	 dt1PmNEFdxBeQ==
-Date: Thu, 29 Jan 2026 09:13:46 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: bot+bpf-ci@kernel.org
-Cc: liujing.root@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, liujing40@xiaomi.com,
- martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH 2/2] bpf: Implement kretprobe fallback for kprobe multi
- link
-Message-Id: <20260129091346.0744de91bb053b24ba679438@kernel.org>
-In-Reply-To: <4ee5b08b6cebfc87b552a0fde1f09fd5a2c190813760aa7e68f1e6d060f15ccd@mail.kernel.org>
-References: <20251218130629.365398-3-liujing40@xiaomi.com>
-	<4ee5b08b6cebfc87b552a0fde1f09fd5a2c190813760aa7e68f1e6d060f15ccd@mail.kernel.org>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1769647790; c=relaxed/simple;
+	bh=WN/4Wr9P50tM0mA4R7iX2P5i86rDQL/HPokHp26+QV8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cQszZlAzmIXAIJc2UIHfTMbJ5AkrEa6jT4tPG8toJECTMGhJ/dyZfQC0fOaHJHWm2LXOU/Uiw9sIDobq8Gex3h+Rm/XbZSCRYUf+dq74bPMcvNlzYz4qT1TuYvNt+Ldou4+swUN+iTEqjJg4Ru1azSM6GrdytwVOLcSHIXyOumA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id 16836BA3C3;
+	Thu, 29 Jan 2026 00:49:47 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf01.hostedemail.com (Postfix) with ESMTPA id B919F60009;
+	Thu, 29 Jan 2026 00:49:44 +0000 (UTC)
+Date: Wed, 28 Jan 2026 19:49:54 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>, Josh Poimboeuf
+ <jpoimboe@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+ Yonghong Song <yhs@fb.com>, Song Liu <songliubraving@fb.com>, Andrii
+ Nakryiko <andrii@kernel.org>, Mahe Tardy <mahe.tardy@gmail.com>
+Subject: Re: [PATCHv2 bpf-next 1/6] x86/fgraph: Fix return_to_handler
+ regs.rsp value
+Message-ID: <20260128194954.571477b6@gandalf.local.home>
+In-Reply-To: <20260126211837.472802-2-jolsa@kernel.org>
+References: <20260126211837.472802-1-jolsa@kernel.org>
+	<20260126211837.472802-2-jolsa@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Stat-Signature: ehhni4b8powk3mispn1qnzkascgcg98y
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: B919F60009
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX183/qJHRN/3JOF+vtZyDebdKCU4LRVxQ0A=
+X-HE-Tag: 1769647784-824431
+X-HE-Meta: U2FsdGVkX187lKsxZMMKDpJXkv/fDgl8jQIzSQmMoUMTRuX4/A4u7nj8OIi5tA4Y9oWx2xxzQFkYEJY2UvvMhfiN3cnOLmjctMeSBSLlByxahVdZ/m80cDVU1w7SiQjPkT/+DgsHHbS+TQK60JTiMY17qMBGMK2vLfd5uZwp2OoEIzvx/Gub7f54pBKes6C2D3kUTLvXJoGZ9qWGb+ozqL3f0HDVd7V5DFEdWrgAp/4tW6BpsUP2OuI8NVbN4gEx9HMWW+017cvnFOLc5r8G/hFUCRSwOToZGY8Q/XO74r8nPL8uVVOIvRx/d+oXZWSckcY1ub2fFBrCC8y64cp+XczqWUOgU6GyJICea8pT9Y4ExxTmyY1HP4Vy12TbEbMaRayc4kMAb24zCqX/wMbkWg==
 
-On Thu, 18 Dec 2025 13:33:31 +0000 (UTC)
-bot+bpf-ci@kernel.org wrote:
+On Mon, 26 Jan 2026 22:18:32 +0100
+Jiri Olsa <jolsa@kernel.org> wrote:
 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index 1fd07c10378f..426a1c627508 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
+> The previous change (Fixes commit) messed up the rsp register value,
+> which is wrong because it's already adjusted with FRAME_SIZE, we need
+> the original rsp value.
 > 
-> [ ... ]
+> This change does not affect fprobe current kernel unwind, the !perf_hw_regs
+> path perf_callchain_kernel:
 > 
-> > +int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
-> > +{
-> > +	struct bpf_kprobe_multi_link *link = NULL;
-> > +	struct bpf_link_primer link_primer;
-> > +	struct bpf_kprobe *kprobes = NULL;
-> > +	u32 flags, cnt;
-> > +	u64 __user *ucookies;
-> > +	unsigned long __user *uaddrs;
-> > +	unsigned long __user *usyms;
-> > +	int err, i;
+>         if (perf_hw_regs(regs)) {
+>                 if (perf_callchain_store(entry, regs->ip))
+>                         return;
+>                 unwind_start(&state, current, regs, NULL);
+>         } else {
+>                 unwind_start(&state, current, NULL, (void *)regs->sp);
+>         }
 > 
-> [ ... ]
+> which uses pt_regs.sp as first_frame boundary (FRAME_SIZE shift makes
+> no difference, unwind stil stops at the right frame).
 > 
-> > +	for (i = 0; i < cnt; i++) {
-> > +		unsigned long addr;
-> > +
-> > +		if (uaddrs) {
-> > +			if (__get_user(addr, uaddrs + i)) {
-> > +				err = -EFAULT;
-> > +				goto error;
-> > +			}
-> > +		} else {
-> > +			unsigned long __user usymbol;
-> > +			char buf[KSYM_NAME_LEN];
-> > +
-> > +			if (__get_user(usymbol, usyms + i)) {
-> > +				err = -EFAULT;
-> > +				goto error;
-> > +			}
-> > +			err = strncpy_from_user(buf, (const char __user *) usymbol, KSYM_NAME_LEN);
-> > +			if (err == KSYM_NAME_LEN)
-> > +				err = -E2BIG;
-> > +			if (err < 0)
-> > +				goto error;
-> > +
-> > +			addr = kallsyms_lookup_name(buf);
-> > +			if (!addr)
-> > +				goto error;
+> This change fixes the other path when we want to unwind directly from
+> pt_regs sp/fp/ip state, which is coming in following change.
 > 
-> When kallsyms_lookup_name() returns 0 (symbol not found), is err being set
-> to an error code before jumping to the error label? It looks like err will
-> still hold the positive return value from strncpy_from_user() (the string
-> length), which would be returned to the caller as a success indication.
+> Fixes: 20a0bc10272f ("x86/fgraph,bpf: Fix stack ORC unwind from kprobe_multi return probe")
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-Good catch. It should set err = -ENOENT.
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Thanks,
+(it passed all my tests too)
 
-> 
-> The error label at the end of the function does:
-> 
->     error:
->         kvfree(kprobes);
->         kfree(link);
->         return err;
-> 
-> This could cause the syscall to return a positive value to userspace instead
-> of an error, and also leak a prog reference since link_create() only calls
-> bpf_prog_put() when ret < 0.
-> 
-> > +		}
-> > +		if (prog->kprobe_override && !within_error_injection_list(addr)) {
-> > +			err = -EINVAL;
-> > +			goto error;
-> > +		}
-> 
-> [ ... ]
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20338242683
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+-- Steve
