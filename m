@@ -1,221 +1,188 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72B0736F411;
-	Thu, 29 Jan 2026 07:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769671305; cv=fail; b=vAFAPrUzkkyvWX/V2n2g1KsDUIV7MD1XWpxJht80/6dPnR7TDG0jy0Ku40ZGBget3dbtfjs1WdfYJpK+F3yXNfchqZHhkxjzYPP+7mQyuJ7CXZhgG4g49fbOZM1xj8+rnONLtTrWRaHTWGK0RiRUzqfc1WhAqX5Jt+e/4aslrCg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769671305; c=relaxed/simple;
-	bh=HsAljEkJrR3pHLVBmBvI3gAiVUQeFYPC0F2Ur9Q8UFc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=IHZOs+pxoTuWXkRh4AcjrDHBBWq158/45HVWHrNYiAWEDGHQzQtK+XzDqBBU68TA1/F+I7H1bAieE3jQu8qGF04XxOxe3s9NudBa6W/hpGgNmKu/TXY6gdbXW2RI8FN6IwXPN6AVksL89hieBkbU04DncIjk9+wlxtpizc2gooo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=O/mZLoag; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=autX06CZ; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="O/mZLoag";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="autX06CZ"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 60T56okT1337323;
-	Thu, 29 Jan 2026 07:21:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=b2Temcw+yMYlK99d3V
-	sDqesBinZkWsuJl7w8QHN8zHU=; b=O/mZLoagHr8sCI/3I9jXwZuOFJ4moLJtNT
-	bc2qFYV1tkN1YJSCMj+9qNn7uPH2dm1sW68DpgETMVqWRiZOlPGWz4W7yjBwNQAB
-	NT1v/e4xSzi/6dT4wlIINiF6BY/1HXwENWGI9AGJVhDVqN3/C0k+yzvc38hpXR7A
-	CH/1a+EEuLAQBvw+FQjwqXBJCXZsR5UBnt0aHB3ZIU2fZFIyJYC9qpRKHSCr2qyW
-	NKPw4LRh6jDBMUUx8hWkA22YEPElTqlIGKnz16jBlWcnkt9LclzplbGrJYT1Fn9S
-	T3PUguf6awjy3/CoMPWwF+yMX+JIPkQ5vW3rs+5xBO2SX+yRf8cQ==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bxx09kddk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 29 Jan 2026 07:21:21 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 60T5L4ND036037;
-	Thu, 29 Jan 2026 07:21:20 GMT
-Received: from bn1pr04cu002.outbound.protection.outlook.com (mail-eastus2azon11010064.outbound.protection.outlook.com [52.101.56.64])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4bvmhr8tr8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 29 Jan 2026 07:21:20 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=eUYRn+yogGNxcb7yOpM58n9FCcKIl1IjmVXi6ri+8kvgIZ2TL3ZPQcLWnvkrN+eFiMF0tgWLyk/41g5+hQgVQCBJD8vQQGEWMzBYOcrSc92DvTYIw7GlDxG1HiMqewuH36VwUlM4vdeeEealWKm9dz/B2nss3fvfy3sCwmXMr28DsTdoTMf3l8QslYXbk3HHGERUNNyblAoxbZNIGpBOJopDrYliw8rODhHAMnbSMklmVCfMzH1RwfZiyo/oNipCGsFCI4YVp36AJNd7funUPWxnWzROdfJ87EOYHXoXFd+fbfvxu271cr15DEtfie8wD4bKgOqIk4ogVeu09z9bsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b2Temcw+yMYlK99d3VsDqesBinZkWsuJl7w8QHN8zHU=;
- b=TGTZma5Ma9lt7/Fba6bRtYaBMjwHgHCPjZrB98lV6VA2+391JnUNjUViYBaHWWr0gcmuesfXQgS13LgVSlF10FgSRr7qE3EaZzRtu1S8rrSOUbL1+uZ1rjHJR9w7SvZpmp4eHPVIH9fdmXVpmeIEzRiM0Cj/Fa9DN6B4CSteOyIq/AkOJ6ME3Twal0tKFZ0Ul57y7buS2ncOWN9fXwQw3pjP5aZEEkVHDHPi99gYCJHUutwK6rinCNqA0+RXq/AUaY7JP5UMYpYBWeG2t0IFxIeG+8uon8RLdPfIq0w1c5NUW71c3+adJI19psIFIjYwSJPX1K2iXnGjAGshXriLyQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b2Temcw+yMYlK99d3VsDqesBinZkWsuJl7w8QHN8zHU=;
- b=autX06CZQAae1P/vAnY50c+ZiOmI+zqLy1Sgt8jN2DdmJz4at0M04jEWnjVDErzzv2Ano4Kcnf5+naJ/Vxmz4OTFLnNy9k/GBsKthkDx2d//wOD7iPpmVYe+k18qX1AxF5ohdJAPGBnUOhks8yPTfVIZedmvaICdgIePwNuvO0E=
-Received: from CH3PR10MB7329.namprd10.prod.outlook.com (2603:10b6:610:12c::16)
- by DM3PPFEACE3F2B7.namprd10.prod.outlook.com (2603:10b6:f:fc00::c54) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9542.12; Thu, 29 Jan
- 2026 07:21:17 +0000
-Received: from CH3PR10MB7329.namprd10.prod.outlook.com
- ([fe80::c2a4:fdda:f0c2:6f71]) by CH3PR10MB7329.namprd10.prod.outlook.com
- ([fe80::c2a4:fdda:f0c2:6f71%7]) with mapi id 15.20.9564.006; Thu, 29 Jan 2026
- 07:21:17 +0000
-Date: Thu, 29 Jan 2026 16:21:09 +0900
-From: Harry Yoo <harry.yoo@oracle.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Petr Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-        bpf@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v4 21/22] mm/slub: remove DEACTIVATE_TO_* stat items
-Message-ID: <aXsKZStTX9oGHVyf@hyeyoo>
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <20260123-sheaves-for-all-v4-21-041323d506f7@suse.cz>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260123-sheaves-for-all-v4-21-041323d506f7@suse.cz>
-X-ClientProxiedBy: SEWP216CA0004.KORP216.PROD.OUTLOOK.COM
- (2603:1096:101:2b4::17) To CH3PR10MB7329.namprd10.prod.outlook.com
- (2603:10b6:610:12c::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92F3336ECD
+	for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 07:33:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769671999; cv=none; b=GTD9HFXzLpSDRXXUychvvhhLUPJ8/gL4Xu3WYYZwqs915ZDefDVPjyiHgMUSgcqOtylGy5P8x6nISQnA0ypQU62fsnFOjON+RMz4cvlFh2BRlYd5k90cM0DNYVh4Xq+nf8AOf5R2CJezIe631++EXa8sTySJOoPTNtjn3H2bfIY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769671999; c=relaxed/simple;
+	bh=hVAKgzj940kwyxl/7tP5cGh/eb/SthiQ1kE6kqhF2dI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=RRSUetqbs0uLSzvq01A496ibZSR9UhdOPSkIB+Vnnmpgs7cHoLgYqY+ev8NqB6m4TeUzOvDp+19F4CjzdLfrqjgZGcpTDCWBYozH7Tsh5SQLBGt0Gqkr1Np6t6cX2/lRf7JTm3rV6DYfg4pGgFkEx00vGie730Rtebpkdj7gauA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com; spf=pass smtp.mailfrom=h-partners.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=h-partners.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h-partners.com
+Received: from mail.maildlp.com (unknown [172.18.224.150])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4f1rSx6yrvzJ46jy;
+	Thu, 29 Jan 2026 15:32:33 +0800 (CST)
+Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
+	by mail.maildlp.com (Postfix) with ESMTPS id C85DC40539;
+	Thu, 29 Jan 2026 15:33:12 +0800 (CST)
+Received: from [10.81.199.98] (10.81.199.98) by mscpeml500003.china.huawei.com
+ (7.188.49.51) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 29 Jan
+ 2026 10:33:11 +0300
+Message-ID: <f7b0a9ae-d53d-4bb3-89c9-2a0b56a99170@h-partners.com>
+Date: Thu, 29 Jan 2026 10:33:09 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR10MB7329:EE_|DM3PPFEACE3F2B7:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b506cc6-32ea-491f-4b2c-08de5f06fe1d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|7416014|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?2KnE0+9UuXCMWQLWLJ9vQo7ZO57uyi+0n37xZMUU49RuWVKr7Vy6HIUm7nHp?=
- =?us-ascii?Q?D+rwXeLLslG4biRvcRoBFRfg63cg3mZAHURAzSU8BFmbGJoZGXRs0UXo8t92?=
- =?us-ascii?Q?tlHlq/07KFyOIj5JMYHOzRJgVKFF9oUUuuAaVlFAzdybBfvKwlg5JqE1H1du?=
- =?us-ascii?Q?tnH5OoiMETVDH0VauKAtqapoHVjw6MKvgQId5jJO3beDg6DdHQ0RSPcORoir?=
- =?us-ascii?Q?yrb5g66VEzPlhhBFYkWuQk6tnw2ADofXG6x2WXuUOEc1IIgA3I31LEdudOkW?=
- =?us-ascii?Q?BhrQCudLK3cUkvOaMoBMFhDOvB3dbTxx9Iqli1sUP8qutt/7uSdg7vqlb80n?=
- =?us-ascii?Q?xMttEzdYv8lgR1JH+ebvb2ToI355IscbHvkznMM4ZzbYcpkUD5iKHbpN3uhA?=
- =?us-ascii?Q?Jb/zkgLVqz+4yck2MQfPAxHJ3VT8Z97nzPj8tRn3XC9bjPCQKDX/GsRwfqFm?=
- =?us-ascii?Q?X6k/euz7ur+e4Z+gFW1Wyjkg0TA1MMs3nSlWptR4B/rFPFSpHhIsrJNsiO2F?=
- =?us-ascii?Q?6Mcd2XDMKQMvQwC1rIoV3w+1jSBma7tEY62NsWiz3YpJ8D+b4nT0c0Gu6VIY?=
- =?us-ascii?Q?DOaNPmMB9GaSYd5dkSymU+Z/DbAPJe+RGaNhxxdS5IP2yuvh9PN81rdFf0g+?=
- =?us-ascii?Q?cQWkNezmqZ5ep6xAJLbajHtbyPnVshLHSI/cSZzbB0c40H2QUYl1T45xuic3?=
- =?us-ascii?Q?/f5uuHWgaL/NtuW7/q1yD7h/YaUFopZe29E7jmc4ASPP+d82c8qXGUAeDC5O?=
- =?us-ascii?Q?kSJsFX9ztc/cwhrmz02CeGFkQGp0sA79Fv82o8NoEMQRLx5JWD0Nuhg/NI14?=
- =?us-ascii?Q?8Z+7exs1dvygOZUPUfqomW6zjTsBd2LkrVHbZpXIHWR2y/lgmZJVval8b/8R?=
- =?us-ascii?Q?brha24DC21l97NwQbXAX9YA5UgupZxDufvP9APED+c9kH6yiL++KjRk5kEvD?=
- =?us-ascii?Q?sWI/pBnPgov4X7MBEnFVoL5I5xsql1PityoRY9Ym5T58YYcibhnWM3dzkxVZ?=
- =?us-ascii?Q?B4CBvFZ/uhC19CeV1UPj/Y2SR+8yyjHn5qtHUchYjUrbx6pNCz+WZzdAcXBI?=
- =?us-ascii?Q?Jp+I849aWtH2GTQ4VxF73LpLlJR/+9Xbf/JaFXLSiLs5EFc5fyrpMFpLKC7s?=
- =?us-ascii?Q?wjGNuAkxRzMz58XKB763oHeeglWzAW5fPzzK9hxWRVs8CWh4P/5d6w+LdWN/?=
- =?us-ascii?Q?r//9QVXbPxaFFe/CHgQ1eROhokQkbS0dIkZrYlo1DlUiWBnvLf9NELnMTrx9?=
- =?us-ascii?Q?sgQToYIwNgnqvYbn2Qv4RKeVeEic4E4rs4HwazaiOevfXAPPrt9E4gErA6Lf?=
- =?us-ascii?Q?/Tpgmh0BqvvKgJ3w5BAmz370RvnIAyE4+U3YJ/efemTEJyvz0RWUzac87yal?=
- =?us-ascii?Q?Cne6SYbjBip7fm8aSPwmojI2wpNAcr85Glc7vy9X/5NhrIckOqBA37+I9OvA?=
- =?us-ascii?Q?O9RVaBI9IpMfJk10G/dqlESNHxrIiU0SshM+kJa8qzfJGiHKqSLtu453ng+2?=
- =?us-ascii?Q?IDQFFmZ+KRq8rk6OyFXctNAtvxqAXrEpbOqnPpNJfZYmnr6s28a7Najk4M6u?=
- =?us-ascii?Q?L/NtADpBr0lwlne/K3I=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR10MB7329.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?yuRDA1Pt5zWzXS8V1eeAcFvUWrc9fdYDKRxGpLu81wPOmI72hVon8LKn1UFK?=
- =?us-ascii?Q?13BO5JR/PwCFW5jHKUoQ+tCDaEPGYzjf5yw89WYIsOnO9FQxHaW0G2R417ay?=
- =?us-ascii?Q?x1gPMOfQMwNn9g8xG8kMUxAz8DIpBannEHtytFUB+lrCCM/5M+Xy7TpbuAza?=
- =?us-ascii?Q?MSUlD0Fx17k4PsDfD/xivQM/OQTJzwz/GQPuS0j54gozz6HT9DXLomUdSO2p?=
- =?us-ascii?Q?KmEVY2GeDVoSvPsOYAXSczv1alE4DRf3HmeQCmhKJZjch+vjLbM+MMfuVLnc?=
- =?us-ascii?Q?KbKqJ5/Aq0FS1Juxz/TGezFmlrrTtwx7aeiAcjftagQFNNj+KOD96iYLH5l3?=
- =?us-ascii?Q?8S04PLH8ChryT4xRns7fFxxhdR8Xef4OwIuKz01cToWq6gsktvkaVEhSVX2z?=
- =?us-ascii?Q?ve2yPAMHTffyGjnSYUbLozzokfb94Xc+ObAhWY4ytQuV7yhIzcJJZ0Rfwpwz?=
- =?us-ascii?Q?SIdphAq5sv8xhczQr3sQEfRMc99TdKNkcn4cCLn4kkOhOLNcyM2SnM97Wh60?=
- =?us-ascii?Q?LWceB5QU+w4wPbC8RCqcsL6dkVOdqGjln7+mc+I2U5smAbakzDbdaPGKeVmB?=
- =?us-ascii?Q?Ru8X+joLs6W056gsUCVZqmhmtFjkTmaF87tRU8uksz58t9CNwWN4d73fny1U?=
- =?us-ascii?Q?zCEskvVuvriWdA6wDCLFw7OiksNDDtfQ0VczsqzSQdaLTyEdtAlxX7ajL4ab?=
- =?us-ascii?Q?/PLsiG0JJHmn/Hd3qG4aP8KklQRcDtJpuFlhuBEXOGMm+COwZht8DYqMlnfJ?=
- =?us-ascii?Q?Ooqgh/MU7nq7HM/4ZfiT41mRO/j84ZRmCiGTAPZKnvsRt7baWyM9ME880UOG?=
- =?us-ascii?Q?mMqPI2MLT3I8yXdKgTQZhQgjEGNyNyo5T97CaePp+DA9IdnKS4jpPFBBmj/V?=
- =?us-ascii?Q?16xAMOklPs5bxKDdG1YtOyGZs5FsLNqs2piAz9UrGe7Ta9le3Zt2ecStiuuC?=
- =?us-ascii?Q?UZirHDo0FBopGCne36ASD1EMndjnSs/5a9aI4xiLyHMi7VHGyliU6OJJm/jw?=
- =?us-ascii?Q?TMIW+6wUDC7rDgrJUEeqnBxCdOi+xDQa/dIixqAZBrvfbP5Q9/gnl4OqSGmh?=
- =?us-ascii?Q?S+K+qXbcTL+lIsxGa2wTp9HbXD76MaiZat0Fm1SJKT3dEZAbexFmVq9+/QuC?=
- =?us-ascii?Q?S7YV4VZntoWM8lAQRNacG1evz4IBf3xKvvEcM+5jeq7q27q0lk6lDYYY7DOE?=
- =?us-ascii?Q?PHxeyeDrkHpegxCsG4vOrBQhDog8XPZ1DVK2rg6E/YxF63g8xZt2DWlDSybq?=
- =?us-ascii?Q?1X9wNvmf2NHF9ejd6huRvP3tFjkqi/qJ/gEB5saixcx7rSRMCllJjLqM1EKK?=
- =?us-ascii?Q?4NYwJpVQRKwz1LzJomzyCopMda9ZJeJrI8r7J4Da/H7UYde07iNBweFwlVAe?=
- =?us-ascii?Q?Zg3EhP9AwAOS8chE3Q/UjcYBxWjr8WFA2kZ7dI2PRxjPinJuYlYMMqvrAD+E?=
- =?us-ascii?Q?qHuzrwZdWc5+jT/SpwK5Vvigo6St0lm5k1l+w5drJ08vN6tBF3YmggLehkqj?=
- =?us-ascii?Q?uVu7WmIZ3iK5ydo2nR4c6qXeEGbd85XUWQdvqlXyYFN/Ak8VE1QlDzm0C5ho?=
- =?us-ascii?Q?4d0Hv5Cr3joQsNrsebcLP6AlJnPrk9+wd9p0hMBCZ4JS/BDW+Rzv1gAaCNF7?=
- =?us-ascii?Q?1zcx68Na+eGwJMKpx1K3yWXXE058X99I3Ib/y5l5lKh23nu9erlfwigE9oNn?=
- =?us-ascii?Q?ruNso7WA1QeOce1MBbdcnVN8YIFCf3LHB4mizMsIOgANqZI2Aie0MEDUqjno?=
- =?us-ascii?Q?8SX4n7Xzqg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	ah7fGxkpb/6oh2TlhQEjiYbEoFBS0n5GePaJzxe/P2Ma3YOkoAwF/e3BmmlsstB/CzTnyq84+iuNQAy9g+8qCjvxFf6zRhKIs0avI3U9qUWOxtzAPwhMNq0qdETJ8VjxFfyGJ4Qds1Ejln7DrRkEXchTwCgvsk5XF5Ka4z1oVNZ4ehjHW/H7L1kxlTpROfZx0pBu6PV9CH3Wj8v2A83nww3Toa300JMCMxRod+/+tauI7XAv6KxvJdK4Eihrk/hJlcf7LS684e1wXcZ1uKn7wBI71P3pHSIJVGaJfg3Cf0bnnkuU/hAKXOdV3ln5b42Pc30cfhqDdKoU8l24IpTRZFZ9cA7dO9lMAZrgGg9KyjDdVjbbts6s17ICeO3dJP4TyNkIwQ8cqzEl0ZGANbLU6sVBZt/snMUyvrG5/pnFt21GnurC4q+PbyaSZ8MXsNx8STRmn/rTdhq7VW8tA+IYbNYR6mB/kfOfG47APccMD9ibRaQ/UrPS+88JLblL1y/phJOEOSuiz3EHfgPiy5ySkOtPV+F00K8qUIooYA6GlL+4m9HHTPOZFOSTtmPl4c0H+y/JIstZba7gGUZ/t9UgDwsTH0xiCJ7pLRkBrUuxRqI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b506cc6-32ea-491f-4b2c-08de5f06fe1d
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR10MB7329.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2026 07:21:17.2572
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: R1TadAEk23bGlMwNdip7u5i89XNKIV5B5K1M95cWCyxCDV16Tj0YxVaapcHH+wiquQTftup8VwWRvYlxelP5cw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPFEACE3F2B7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-29_01,2026-01-28_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 bulkscore=0
- mlxscore=0 mlxlogscore=999 phishscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
- definitions=main-2601290042
-X-Proofpoint-ORIG-GUID: s9Ma2VTffzKnFPixOp7s1gm3a7XVAcEK
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI5MDA0MSBTYWx0ZWRfX6Br51AbcQVMj
- HM3vgz6PhQrWwpwanhJG+1p7JtxrEQQ+ni+FhVK4eUeF5bUoNHLCRNmnmy+QEqvOfbJIYGxIqKk
- wOuS0TXKuS4qSgEf2W4sFChFnfPVmyh1M20lENwRsWshMT+lpVFBFIO+/WXHWNvlfc2/1teErai
- 1qZ18TJtHJ52eMHqlpr2le9C9UZwH1tSRl3V2/EmrLtpujoKfZ6NEICNHgN+XtM1qjvoeHC9J82
- ium+iEi8qgbVb0KQzsFJOvuYRVBPkjcVZ7dN7WvHynM0oAXF+MHSqJe5jrks37ZJddxpWcCLLxk
- /5fOl2E6pLGkWwN3KxVF7RQZXZMq1LPEO5Y5V/s8537WQIIDSTuBgVvf1F26yr4fGt2B4x3DY0U
- 2G3iHfibTBvFrnHalWH05G3tCor7j3whKFi7mF8v6imc0q1oAODWj4O+GdMNWwgybNrR0Kcqlyc
- kgpBhcvdBDvsrIxhMLixICxL+PJYuM8HCenLXNBE=
-X-Authority-Analysis: v=2.4 cv=Qe5rf8bv c=1 sm=1 tr=0 ts=697b0a71 b=1 cx=c_pps
- a=qoll8+KPOyaMroiJ2sR5sw==:117 a=qoll8+KPOyaMroiJ2sR5sw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10
- a=vUbySO9Y5rIA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=1XWaLZrsAAAA:8 a=yPCof4ZbAAAA:8 a=mAjCH3kBFYbhTdjNtgEA:9 a=CjuIK1q_8ugA:10
- cc=ntf awl=host:12104
-X-Proofpoint-GUID: s9Ma2VTffzKnFPixOp7s1gm3a7XVAcEK
+User-Agent: Mozilla Thunderbird
+Subject: Re: [LSF/MM/BPF TOPIC] Userspace JIT for eBPF
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+CC: lsf-pc <lsf-pc@lists.linux-foundation.org>, bpf <bpf@vger.kernel.org>
+References: <ca43be24-6f54-4689-aa8e-23573e83ca5b@h-partners.com>
+ <CAADnVQJCYsA6b_DSZEZMRMyt4cADEvX90KkJf6h2fBpep4z8Vg@mail.gmail.com>
+Content-Language: en-US
+From: Gladyshev Ilya <gladyshev.ilya1@h-partners.com>
+In-Reply-To: <CAADnVQJCYsA6b_DSZEZMRMyt4cADEvX90KkJf6h2fBpep4z8Vg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
+ mscpeml500003.china.huawei.com (7.188.49.51)
 
-On Fri, Jan 23, 2026 at 07:52:59AM +0100, Vlastimil Babka wrote:
-> The cpu slabs and their deactivations were removed, so remove the unused
-> stat items. Weirdly enough the values were also used to control
-> __add_partial() adding to head or tail of the list, so replace that with
-> a new enum add_mode, which is cleaner.
+On 1/29/2026 6:00 AM, Alexei Starovoitov wrote:
+> On Thu, Jan 22, 2026 at 10:43 AM Gladyshev Ilya
+> <gladyshev.ilya1@h-partners.com> wrote:
+>>
+>>
+>> I'd like to propose the idea of adding support for optional userspace
+>> JIT engines to the eBPF subsystem. I have a promising prototype already,
+>> but I’d like to discuss the broader implications and open questions
+>> around this idea before moving forward.
+>>
+>> Motivation
+>> ==========
+>> In modern systems, eBPF is often used as a robust and easy-to-use
+>> extension mechanism. However, the verifier that provides this robustness
+>> also introduces several issues:
+>> - It requires a unified intermediate representation (eBPF bytecode) that
+>> limits the expressiveness of underlying architectures.
+>> - It can’t verify some sophisticated compiler transformations, which
+>> leads to either disabling them or using inline eBPF assembly as a
+>> workaround.
+>>
+>> And while verifier has some basic optimizations like dead code
+>> elimination and map access inlining, without register reallocation and
+>> other rewrites these optimizations do not provide significant benefit.
+>> Furthermore, current JIT implementations translate eBPF code
+>> instruction-by-instruction, so generated code is far from optimal (7
+>> instructions with push/pop for DIV on x86) and can't fully utilize CPU
+>> capabilities (extended ISA like cmov, extra registers available on ARM
+>> or even amd64).
 > 
-> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
-> Reviewed-by: Hao Li <hao.li@linux.dev>
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
+> The work on a register allocator has already started. It's very early,
+> but yeah we do expect nice performance benefits on arm64.
+For any performance gains you will also need stack maps for memory to 
+register promotion. Also see below
 
-Looks good to me,
-Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+>>
+>> But reinventing yet another sophisticated compiler inside the kernel
+>> doesn’t make sense.
+> 
+> That's actually what was happening for years now.
 
--- 
-Cheers,
-Harry / Hyeonggon
+Right now in-kernel compiler is sophisticated only in terms of code 
+complexity...
+
+To replicate LLVM, you would need to perform very complex control-flow 
+analysis, and right now, the only existing intermediate representation 
+is non-SSA bytecode with a very limited instruction set. I doubt that 
+even implementing something as simple as common subexpression 
+optimization would be reasonably possible in the eBPF verifier... For 
+something like cmov, you would end up reinventing the same optimization 
+in each architecture-specific JIT.
+
+The main problem is that eBPF is already compiled to a passable degree, 
+so any remaining optimizations that could boost its performance are not 
+that easy (and often heuristic).
+
+Implementing modern compiler isn't something simple. Look at Go compiler 
+and their codegen after all these years :).  Additionally, many bugs 
+would likely appear during the process, and I doubt that there would be 
+large enough userbase to debug miscompilations / poor codegen...
+
+>> Instead, I propose an optional userspace JIT engine
+>> with a fallback to the existing in-kernel translators.
+> 
+> There are several issues with external JIT.
+> 1. It's hard to extend the trust into user space.
+> Currently there is no mechanism at all.
+> There were proposals to send proof-check into the kernel, but that's
+> not trivial either and not compatible with JITing.
+
+That's why this feature is proposed as _optional_. We can relax trust 
+model a little bit, and if someone isn't OK with it -- they will just 
+use existing in-kernel JIT.
+
+For similar security model see Rex extensions [1]
+
+> 2. JITs have to conform to BPF and kernel memory model.
+> The barrier() doesn't exist as an instruction in BPF ISA.
+> So any kind of instruction scheduling by JIT (whether in kernel
+> or external) might break memory model and break concurrent programs.
+> JITs have to follow Documentation/memory-barriers.txt
+> We added bpf_load_acquire() insn recently, but it's not enough.
+Isn't lack of barrier() trivially fixable via additional pseudo-helper 
+function?
+
+>> Overview
+>> ========
+>> Kernel side is very simple: it only sends eBPF code to userspace and
+>> then integrates resulting binary blob into eBPF subsystem -- or falls
+>> back to in-kernel translation in case of any error. While this does
+>> introduce new code, the integration itself is non-invasive and very small.
+>>
+>> Userspace side is responsible for correctly compiling eBPF bytecode into
+>> binary blob and writing it back to the kernel.  In my implementation,
+>> this is an LLVM-based compiler (single statically linked binary)
+>> designed to be as simple as possible, offloading all the hard work to
+>> LLVM. In the future, some reference compiler can reside in linux/tools
+>> as part of the infrastructure.
+> 
+> LLVM and any other compiler will break concurrent bpf program.
+This is solvabe and I don't see any challenges here
+
+>> Because every loaded eBPF program still passes through verifier before
+>> JITing, this approach maintains bug-free execution and other eBPF's
+> 
+> ... maybe bug-free.
+Just like any code, including in-kernel JIT :)
+
+>>
+>> Performance
+>> ===========
+>> I ran performance tests on amd64 (Xeon E5-2690 v3) using sched_ext’s
+>> eBPF programs, along with a few others. Timing measurements had some
+>> skew, but as a pessimistic estimate LLVM-generated code was ~10-20%
+>> faster [2] than in-kernel JIT, and produced assembly had 40% less
+>> instructions. The most noticeable optimizations were:
+>> 1. Re-allocating registers, inlining "DCEd" subfunctions, and cleaning
+>> up code after verifier’s DCE [3].
+>> 2. Removing leftovers after verifier's inlining (uneeded register
+>> shuffles and spills).
+>> 3. Using specific instructions like cmov, imulq, seta, mov(8*reg+reg +
+>> const) and other.
+>> 4. Using jump table (though not for sched_ext).
+>> 5. Lots of other small optimizations.
+> 
+> Would be great if you can contribute these optimizations to the kernel.
+There is no infrastructure for them right now and there won't be in the 
+foreseeable future.
+> 
+>> Discussion
+>> ==========
+>> I’m currently improving existing prototype for an RFC submission and
+>> will try to collect more reliable performance data. However, there are
+>> several discussion points that require community feedback:
+>> - Overall design
+> 
+> Sorry. no go.
+
+[1]: https://lpc.events/event/19/contributions/2190/
+
