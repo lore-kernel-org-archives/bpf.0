@@ -1,145 +1,116 @@
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7159C2DEA6B;
-	Thu, 29 Jan 2026 00:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769647840; cv=none; b=YkN33KBTNbLlVmQW9Tl6UQZq7WPdj1uaPRjYX1e0DnFJSQuJq3s6zaLERntamLi310+0YMHJlIRO7qoX8GvrkymwNCHkZcBIhBsISvTbUmFy541lOXdtt44anRK4OPbuRJc5jLLaiwSOmfVki4RnpxOr1wR9xf7Ayng2kE1Qcuo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769647840; c=relaxed/simple;
-	bh=CJRMCzrnLuyYZ++FHBMD9+P3uHEYuJe/NBsshsqugWE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=choJ4CuqVVjPWw6RMoLlBXawX9Ift0zNkx2hBqLp99u6hSpDvb6iewNmOwjSmkg+XoNqRm+p7h5xa4cnBeqRqytNzedAJIzMouOtEBiCt2WZfZ4TGFtYmzS8XCpXZLobGGcFOc/KmCQRYiqARYYjI+UGHf6EXBtFC9IkM1y/pgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf06.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay06.hostedemail.com (Postfix) with ESMTP id AA5911B14CA;
-	Thu, 29 Jan 2026 00:50:35 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf06.hostedemail.com (Postfix) with ESMTPA id 6730020012;
-	Thu, 29 Jan 2026 00:50:33 +0000 (UTC)
-Date: Wed, 28 Jan 2026 19:50:43 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Josh Poimboeuf
- <jpoimboe@kernel.org>, Mahe Tardy <mahe.tardy@gmail.com>, Peter Zijlstra
- <peterz@infradead.org>, bpf@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, x86@kernel.org, Yonghong Song
- <yhs@fb.com>, Song Liu <songliubraving@fb.com>, Andrii Nakryiko
- <andrii@kernel.org>
-Subject: Re: [PATCHv2 bpf-next 2/6] x86/fgraph,bpf: Switch kprobe_multi
- program stack unwind to hw_regs path
-Message-ID: <20260128195043.4ac5187f@gandalf.local.home>
-In-Reply-To: <20260126211837.472802-3-jolsa@kernel.org>
-References: <20260126211837.472802-1-jolsa@kernel.org>
-	<20260126211837.472802-3-jolsa@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5A52FC890
+	for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 00:59:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769648352; cv=pass; b=hQbUCLDsuMCBuLNRRKyuDs3UGxRVBDGuReYa2d/+XWlXDOKtqGrUHJ5myPe3bJJeMgdrmgg2WXJjscTo6wdNxkml0cDNcF3V+F+k3lQmEkuXvHnvOwDZgklqM4XfmBE+qwXBzGZ+7UVr1jNmsUbdKw90YSyfS0O1tjbJFKy71hk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769648352; c=relaxed/simple;
+	bh=+L+EqsxFGbq9nKKnaprPm9Ir3tOy0vr3+xqa2zLh1T0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Gi0/QvzcPDJxyoO7qcyEMmqTC3AfGE37qsQmYQ5Z8xC/rp1gFoeb9IKOH/KLa3H2u0tuugMUVddRKss8SZuqJ+P3r0IyjV6eHuuK2L2Vq0dJp0DHhw4qkTybff2nRb9bOT+4qRZ0UZwkHmRBb2Q8X4H3m2QcpyJnzXt0MvuTFdc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kgiTQEnp; arc=pass smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kgiTQEnp"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b872f1c31f1so62394766b.0
+        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 16:59:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769648348; cv=none;
+        d=google.com; s=arc-20240605;
+        b=N2B6otuMSsmNNxRldZz2XihMvXqRvmtL2yUsq7NmZmXb9GZsfPMuBeg+zDGXv1eiEI
+         8HRuVVjiTHVFETIOSZlWS7GMTHZpcbeQLaqr1HUyEut4CsrbsyejHRyYMWc7GM29i6Cm
+         CCM7KfYJmkJH5DWbnQoe7UGWchzoS/9aF33DGoP5WI2YiFanA3at+iLrthQKv56BadRB
+         caiK6o8AamPE4d0SEK+on2luJYSpy6HykhphiTN3I575ewwYXf1/g0gLVpwx97uWm/VZ
+         5Nbat4RulKfkVgxG1IXAaEN3sSSh5NTvILob4isuNTFKuyW3zViEgCqat+JaQGxVReTB
+         aqAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Ho5qTXSu2PZYffnzQVL+2Xc6poCFB6UxCVa5s6rbRlA=;
+        fh=t1OVqlnPfHurr2PR1Fqva27vE8z5ERHK229RCyWzi/E=;
+        b=RRAAGt4M6IqMUYo38gCDwW9eacRGd4nYbxrl4MaUh2TEYjYjAxoJqir1WPoxXI30yr
+         y0gXK0o2oJvco5jm3xCIcgTPW3+G1Zx+p7quTMPmgpaceNPgBpRO/Igi4MOUtYtmb3dl
+         G7wyCCfx0as+ds1Oqb9+v/BGERKY7fDaUPJjiBQU5f+Pn1UAsywwSjvlwtvlXoGboD6v
+         3eQ4d98RPFKuvhaW7J7SPoJb3KA2/qau2ck4Ux/0qhVnLzuWWayHMCrm1T7mVPB6Vf+x
+         tNfSKmK25rUGQLYMDZjAUqnCgH+SjHqUN3EpP9IjCOhvhrK/G/pkCevvUq9UN3CP7Fpw
+         ht7Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1769648348; x=1770253148; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ho5qTXSu2PZYffnzQVL+2Xc6poCFB6UxCVa5s6rbRlA=;
+        b=kgiTQEnpKJp/pjWzH8UIBoZE2prYNeOdPAmDcSgp2w5aKDPBJN5uF6sIQ17O5EEcaN
+         ACyLVBvVNlwDDlteA0YIqufuqAY74ZjqMbYJ4tJU9NEEZn94CcJXo/9Epjd/HQczmXSw
+         oQ68UlJ+ysPe1pwWStyhBRWb1KgBhwrl8ect/5mMeMeC2LbIGU2krUo3qleFHZZcB5UL
+         oZIcbiABabn8ZJ0AByRhAkYpLWueJfg6OQRWhq9Hw7bnfLKCMVArAe1ksTnsKICVRJSs
+         d5Dacf8qFkgg7Xd+y+e6WdzSOZLhxyO4qtDTDvpFsyFA0L760P9y01OOVPtjLx3ifnCU
+         1Xlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769648348; x=1770253148;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Ho5qTXSu2PZYffnzQVL+2Xc6poCFB6UxCVa5s6rbRlA=;
+        b=k8QJDImz49OSWkK8js0sDIDH4S2ajEGgFQJsQKmX6CPBlDUxv8IxCFJs0lFV4CIkQe
+         RJC3A0djhoaTFrPSGVBj3xdaSr2JKcyCdntlVjGiYcsTzaKyWr+sWi5+PdH/o4tUjvGM
+         lNY39jnxXtafiDgyCXxQawSSXnqZkp3PevWZF8sXa66HjqUZX3V+xN5hnCD6JAAqE+Zp
+         HUmEHp5f1EnGZQ4RKcoiPB7uc5Fyd+P0XCi3mzbCnbMEdK9lmqMSeSL27G8f78UJkftf
+         3D35l57k4LD7CtpQo90RjHSYxGi9mzk9m3APmwon3iR+JtLG6o6VoInrevp9HQom1WTf
+         CRrA==
+X-Forwarded-Encrypted: i=1; AJvYcCXB6Yu945EpDIQvjBsATDIVCjaq86YSWO2LusvdJnuzRQaeZ+u0jGY2SylbmVUZDgo3QA8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydJo4iJSPbkEIskZfpXoRtmDPZ/OF+rGJcmO5TCG4s0eX5DHt1
+	5LRsXCMkrTfpvcHOmzTXBmVghrI81qPqR47x9F8MLwgDiCC/+rgPbJWGa65axfATExidp69AJ0F
+	631iP1xBvTv6XgvlOzi3wxAotlAdeZ2Q/5tVTXMwE
+X-Gm-Gg: AZuq6aIJxIR7fF2u0rc0kpuc5TS/5XmO3Knih4wridj+A6BjfzpHJX7Hp6drIe7umDB
+	dwizkhopFnQWK0I+Gg4zm9mnQuRbPVvB0gh0/wDlkyKt1f99IysgA+ULfBybg+hK6bCkUXIts4Y
+	kM71lCEIqQsLUAqR+9CSBThnPKKy1PzZt9maun6xruvdd4oq0YDFxeg5Qs59UyRp3SVdNzzBJDT
+	3HLKM4O9gCtH0HbtzQBpahjBKe5Z1j8xdTXPT9I+0KMnnZRRef/R/3YGUrzi6Thy/n15Fr41CrE
+	Q/ixEb4ObVyvr3aFgP/Gr8A7uHEMtw==
+X-Received: by 2002:a17:906:f585:b0:b87:d722:f824 with SMTP id
+ a640c23a62f3a-b8dab3cf66amr455166566b.63.1769648348337; Wed, 28 Jan 2026
+ 16:59:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+ <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh> <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
+ <20260128045954.GS3183987@ZenIV>
+In-Reply-To: <20260128045954.GS3183987@ZenIV>
+From: Samuel Wu <wusamuel@google.com>
+Date: Wed, 28 Jan 2026 16:58:57 -0800
+X-Gm-Features: AZwV_Qg5mDXEWLmzjtDFHSng8MB2HQLUBKHQ6Wr860X_lRTmL3Z_ZmvOjLnN07o
+Message-ID: <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+To: Al Viro <viro@zeniv.linux.org.uk>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org, 
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz, 
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org, 
+	linux-mm@kvack.org, linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, 
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org, 
+	paul@paul-moore.com, casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
+	john.johansen@canonical.com, selinux@vger.kernel.org, 
+	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com, 
+	android-kernel-team <android-kernel-team@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 6730020012
-X-Stat-Signature: eesqx6cdcebfafgrm9fgoeonfdcso36w
-X-Rspamd-Server: rspamout08
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1/R9v32MNDW0xNNrvfM5B0fBvffkSOfThI=
-X-HE-Tag: 1769647833-345789
-X-HE-Meta: U2FsdGVkX18u271zeS/+bFkUd6P07QbScJLBXEvsxw6yIueB4cIP4Gp1ueHntkHj5r3kZZych1+9LvUk2hp19a3DKF9wyesv/OzlrrOVYgRTiHfRCjDU+u+K0ZYXeszkIw2qU04VAVmdeCi7wc2ssuEvrh/XSlLg40adgz7hbYfq+7MU0d7JrnnqSP056VaLT2/ESJHKxH9C1haEveUKMPLgGVO5+j4W3pHOdQ9Bo7NineLDzvrh/8Qcu8jcvp0Rpj3byJDkfcOwE+ldvJeyGV0VUUdU7WUJ9h8y7SLHammcB4qMkCBabIB+YA25EcuPfBSAjQentsvdA59H8Zk5HGYhRwppnTelEp1/+jVIZQrK/stNgMls3FFBJUHN21EQC8wSMgQi0ImBU6HAPzsHAKNA5A4NlaVWa0Y5gJ8xB/M=
 
-On Mon, 26 Jan 2026 22:18:33 +0100
-Jiri Olsa <jolsa@kernel.org> wrote:
+On Tue, Jan 27, 2026 at 8:58=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
+rote:
 
-> Mahe reported missing function from stack trace on top of kprobe
-> multi program. The missing function is the very first one in the
-> stacktrace, the one that the bpf program is attached to.
->=20
->   # bpftrace -e 'kprobe:__x64_sys_newuname* { print(kstack)}'
->   Attaching 1 probe...
->=20
->         do_syscall_64+134
->         entry_SYSCALL_64_after_hwframe+118
->=20
->   ('*' is used for kprobe_multi attachment)
->=20
-> The reason is that the previous change (the Fixes commit) fixed
-> stack unwind for tracepoint, but removed attached function address
-> from the stack trace on top of kprobe multi programs, which I also
-> overlooked in the related test (check following patch).
->=20
-> The tracepoint and kprobe_multi have different stack setup, but use
-> same unwind path. I think it's better to keep the previous change,
-> which fixed tracepoint unwind and instead change the kprobe multi
-> unwind as explained below.
->=20
-> The bpf program stack unwind calls perf_callchain_kernel for kernel
-> portion and it follows two unwind paths based on X86_EFLAGS_FIXED
-> bit in pt_regs.flags.
->=20
-> When the bit set we unwind from stack represented by pt_regs argument,
-> otherwise we unwind currently executed stack up to 'first_frame'
-> boundary.
->=20
-> The 'first_frame' value is taken from regs.rsp value, but ftrace_caller
-> and ftrace_regs_caller (ftrace trampoline) functions set the regs.rsp
-> to the previous stack frame, so we skip the attached function entry.
->=20
-> If we switch kprobe_multi unwind to use the X86_EFLAGS_FIXED bit,
-> we set the start of the unwind to the attached function address.
-> As another benefit we also cut extra unwind cycles needed to reach
-> the 'first_frame' boundary.
->=20
-> The speedup can be measured with trigger bench for kprobe_multi
-> program and stacktrace support.
->=20
-> - trigger bench with stacktrace on current code:
->=20
->         kprobe-multi   :     0.810 =C2=B1 0.001M/s
->         kretprobe-multi:     0.808 =C2=B1 0.001M/s
->=20
-> - and with the fix:
->=20
->         kprobe-multi   :     1.264 =C2=B1 0.001M/s
->         kretprobe-multi:     1.401 =C2=B1 0.002M/s
->=20
-> With the fix, the entry probe stacktrace:
->=20
->   # bpftrace -e 'kprobe:__x64_sys_newuname* { print(kstack)}'
->   Attaching 1 probe...
->=20
->         __x64_sys_newuname+9
->         do_syscall_64+134
->         entry_SYSCALL_64_after_hwframe+118
->=20
-> The return probe skips the attached function, because it's no longer
-> on the stack at the point of the unwind and this way is the same how
-> standard kretprobe works.
->=20
->   # bpftrace -e 'kretprobe:__x64_sys_newuname* { print(kstack)}'
->   Attaching 1 probe...
->=20
->         do_syscall_64+134
->         entry_SYSCALL_64_after_hwframe+118
->=20
-> Fixes: 6d08340d1e35 ("Revert "perf/x86: Always store regs->ip in perf_cal=
-lchain_kernel()"")
-> Reported-by: Mahe Tardy <mahe.tardy@gmail.com>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> ---
->  arch/x86/include/asm/ftrace.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/x86/include/asm/ftrace.h b/arch/x86/include/asm/ftrace.h
-> index b08c95872eed..c56e1e63b893 100644
-> --- a/arch/x86/include/asm/ftrace.h
-> +++ b/arch/x86/include/asm/ftrace.h
+> Very interesting...  Does 1544775687f0 (parent of e5bf5ee26663)
+> demonstrate that behaviour?
 
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
-(it passed all my tests too)
-
--- Steve
+Reverting only 1544775687f0 (functionfs: need to cancel ->reset_work
+in ->kill_sb()) does not fix the issue. With 6.19-rc7 as baseline, the
+simplest working recipe at the moment is with 6ca67378d0e7,
+c7747fafaba0, and e5bf5ee26663 reverted.
