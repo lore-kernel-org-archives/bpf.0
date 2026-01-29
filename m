@@ -1,81 +1,80 @@
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B1237BE60
-	for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 08:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886592D660E
+	for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 08:25:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769674864; cv=none; b=M8hPHkT/tyMVPtl6hx7YfNDkHoUa0D6V1KKGVIgNTCV8wQTb8bxg6EyNoSH70QxyOPcQ5og9IgT8Ero6fWxOuoQlzEc+uevh5T0Q99iouoWt7H+sHPBhmDYiKBGQVBWMsPprqZcuDU5O7hvTzMOV+cQpjrjETqLd2qms9mDHv70=
+	t=1769675125; cv=none; b=VunJlWdvENVCXy0KoPdoy4POHL3tZx//NWNYQxpR4SDrh4Z/GnPegpra96NCSDiM6qoVDcKFOVJFeDcZdJo8KGEaOoVXXv/nhzNdpIPpZb39+k9S8ed3SPX5Tj867uOIXsd6CWiHZY/+DCc81xJqy/Hwe0wWDhrW42IxL70AHD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769674864; c=relaxed/simple;
-	bh=rbIU201krzyDWD4yU34bOj+TvjixRgAu80mgYS137fA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UuYyNAam9HP5CbJALZSbjGal2OzWgNUz9E5i53atnx1CD4fENQYrXVSkiB/59amZuG+GZxkoKxlE7gGcbqmV2/HoJrVgyaZYusNmjwvLPwYl2u4z8u+Y+SdA96tojme3YuNb+qzbbIDECaGlE8gCwZJIdcMW8XjRs51iy6DZrI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xR/0RAzK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mSJYd8uk; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xR/0RAzK; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=mSJYd8uk; arc=none smtp.client-ip=195.135.223.130
+	s=arc-20240116; t=1769675125; c=relaxed/simple;
+	bh=yh0GQfP7wZfjVl+bghBtaQeYCKUK9LkWejqr8a3KEGo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=lqwVgMHw5INDlRhcOShqQtT/YKnFbb4fyQWs8DlGSD7jcwaOGJCx8mxInjoG303XlEQLIHyOvzSvc9PzXENG8FCPCsG7Mn2b8CBt1pCtAO9IRmgTgxrEFcGPfHXo6Vkbq5mUkpYKDFa/D5k9b1+MhweMxbkf0WSj95g9z0WjELY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=FmjRXzo1; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=o3oFo3+g; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=bBRYT+tH; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=8rjM4Lsj; arc=none smtp.client-ip=195.135.223.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xR/0RAzK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mSJYd8uk";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xR/0RAzK";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="mSJYd8uk"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="FmjRXzo1";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="o3oFo3+g";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="bBRYT+tH";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="8rjM4Lsj"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 95ECA3402F;
-	Thu, 29 Jan 2026 08:21:00 +0000 (UTC)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 01C403402B;
+	Thu, 29 Jan 2026 08:25:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769674860; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769675120; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bnoAjIEBZE3yHj9Uu6+mVva3GLy2AXgvwJcLgSTdq2E=;
-	b=xR/0RAzKnFqnWlruxbJVJvad6opNrHcevj67zWV6VPMoX9jVYIeTlswHXjFJwv9VAt6+pj
-	3t71YrVfzR1V/0zcu0tT+aUS0ss/aA7wQyOe99xOkqEZResS7HTTIKsGhtKnMP5nQrCU9A
-	ujhOO4ydpwqAvLhRDbj8sQItQaefcBI=
+	bh=CMS5emY52BtnPbbiJqj2WVHvnKPATN/p7rC618G6cXU=;
+	b=FmjRXzo1wDOV/B5aFUs7XaHaqH1dJz/4U1KvfOE7aSgtgBHGTAFknLzd5EdYYFGxrEJXb+
+	Sj3r1gbG/4lrzsLd9vda0WqbXbCWe3IuHbPdc3cLqtYdUfAgMiuqBnRcBdDh8MmkKxTubb
+	8UyKCBuaobYrkHPcDSs9mEIlkUgQ+8k=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769674860;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	s=susede2_ed25519; t=1769675120;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bnoAjIEBZE3yHj9Uu6+mVva3GLy2AXgvwJcLgSTdq2E=;
-	b=mSJYd8ukTSAUKe6oOB64FId+oEIgns3dvXQjzbQwwSL7gh2lcc7GwScRux0d5XrVmIRI1B
-	Qp2b0Xv+Lqf2FCDQ==
+	bh=CMS5emY52BtnPbbiJqj2WVHvnKPATN/p7rC618G6cXU=;
+	b=o3oFo3+gGwYGr8zY1+kbr3FcYMcFlrPO1DxtQZQiYalIpfVgIynAguV/81MYlQUzQulp9I
+	6KfG6fuffYvyulBw==
 Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="xR/0RAzK";
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=mSJYd8uk
+	none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1769674860; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	t=1769675119; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bnoAjIEBZE3yHj9Uu6+mVva3GLy2AXgvwJcLgSTdq2E=;
-	b=xR/0RAzKnFqnWlruxbJVJvad6opNrHcevj67zWV6VPMoX9jVYIeTlswHXjFJwv9VAt6+pj
-	3t71YrVfzR1V/0zcu0tT+aUS0ss/aA7wQyOe99xOkqEZResS7HTTIKsGhtKnMP5nQrCU9A
-	ujhOO4ydpwqAvLhRDbj8sQItQaefcBI=
+	bh=CMS5emY52BtnPbbiJqj2WVHvnKPATN/p7rC618G6cXU=;
+	b=bBRYT+tH7bPSf52Ur+3FfDsk5sVxk1AzPIpP5uH6esgdVvs8VgLw0u4eKVX7Bzj0cEoTDO
+	FhjdpCGe27u08VpvTpZeVrHhmAXt4fywLKJQY2t+amUNviScoV3xfa5lZ6dKwEfB2WLXlw
+	kUiW0QaYz78gax4vB7O7Opf7v/6br+U=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1769674860;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	s=susede2_ed25519; t=1769675119;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
 	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=bnoAjIEBZE3yHj9Uu6+mVva3GLy2AXgvwJcLgSTdq2E=;
-	b=mSJYd8ukTSAUKe6oOB64FId+oEIgns3dvXQjzbQwwSL7gh2lcc7GwScRux0d5XrVmIRI1B
-	Qp2b0Xv+Lqf2FCDQ==
+	bh=CMS5emY52BtnPbbiJqj2WVHvnKPATN/p7rC618G6cXU=;
+	b=8rjM4LsjtxxPTqr7R9cfk1bclBJ33YakLLmTqDlhAhBDtvYnbSrR+QgCp7lGAok+Mb6nuU
+	4KPnbWWzZyagt6Bw==
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6A90E3EA61;
-	Thu, 29 Jan 2026 08:21:00 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C8D0A3EA61;
+	Thu, 29 Jan 2026 08:25:18 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id BxCwGWwYe2mbWgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 29 Jan 2026 08:21:00 +0000
-Message-ID: <2cd89ed5-0c8e-43f8-896d-1b7dee047fef@suse.cz>
-Date: Thu, 29 Jan 2026 09:21:00 +0100
+	id HwewMG4Ze2n/XgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Thu, 29 Jan 2026 08:25:18 +0000
+Message-ID: <effcb710-122b-44b8-91d3-5cef727ad4fa@suse.cz>
+Date: Thu, 29 Jan 2026 09:25:18 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -83,23 +82,22 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 06/22] slab: add sheaves to most caches
+Subject: Re: [PATCH v4 08/22] slab: make percpu sheaves compatible with
+ kmalloc_nolock()/kfree_nolock()
 Content-Language: en-US
-To: Zhao Liu <zhao1.liu@intel.com>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
  Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
  Roman Gushchin <roman.gushchin@linux.dev>, Hao Li <hao.li@linux.dev>,
  Andrew Morton <akpm@linux-foundation.org>,
- Uladzislau Rezki <urezki@gmail.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Suren Baghdasaryan <surenb@google.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Suren Baghdasaryan <surenb@google.com>,
  Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
  Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
  linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
  bpf@vger.kernel.org, kasan-dev@googlegroups.com
 References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <20260123-sheaves-for-all-v4-6-041323d506f7@suse.cz>
- <aXsLKxukv60p3QWF@intel.com>
+ <20260123-sheaves-for-all-v4-8-041323d506f7@suse.cz>
+ <7dk5q3mbusqlklpk3ja57upbhkhhg3bpueh4nemuthesmwpgnk@zkk4fqug3cwx>
 From: Vlastimil Babka <vbabka@suse.cz>
 Autocrypt: addr=vbabka@suse.cz; keydata=
  xsFNBFZdmxYBEADsw/SiUSjB0dM+vSh95UkgcHjzEVBlby/Fg+g42O7LAEkCYXi/vvq31JTB
@@ -140,108 +138,67 @@ Autocrypt: addr=vbabka@suse.cz; keydata=
  rywqgzTUhHFKKF6/9L/lYtrNcHU8Z6Y4Ju/MLUiNYkmtrGIMnkjKCiRqlRrZE/v5YFHbayRD
  dJKXobXTtCBYpLJM4ZYRpGZXne/FAtWNe4KbNJJqxMvrTOrnIatPj8NhBVI0RSJRsbilh6TE
  m6M14QORSWTLRg==
-In-Reply-To: <aXsLKxukv60p3QWF@intel.com>
+In-Reply-To: <7dk5q3mbusqlklpk3ja57upbhkhhg3bpueh4nemuthesmwpgnk@zkk4fqug3cwx>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Score: -4.51
-X-Spamd-Result: default: False [-4.51 / 50.00];
+X-Spamd-Result: default: False [-4.30 / 50.00];
 	BAYES_HAM(-3.00)[100.00%];
 	NEURAL_HAM_LONG(-1.00)[-1.000];
 	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	ARC_NA(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
 	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[17];
+	FREEMAIL_TO(0.00)[oracle.com,suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
 	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
 	FROM_EQ_ENVFROM(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[oracle.com,suse.com,gentwo.org,google.com,linux.dev,linux-foundation.org,gmail.com,linutronix.de,kernel.org,kvack.org,vger.kernel.org,lists.linux.dev,googlegroups.com];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,suse.cz:dkim,suse.cz:mid,suse.cz:email]
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 95ECA3402F
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,imap1.dmz-prg2.suse.org:helo,suse.cz:mid,suse.cz:email,linux.dev:email]
 X-Spam-Flag: NO
+X-Spam-Score: -4.30
+X-Spam-Level: 
 
-On 1/29/26 08:24, Zhao Liu wrote:
-> On Fri, Jan 23, 2026 at 07:52:44AM +0100, Vlastimil Babka wrote:
->> Date: Fri, 23 Jan 2026 07:52:44 +0100
->> From: Vlastimil Babka <vbabka@suse.cz>
->> Subject: [PATCH v4 06/22] slab: add sheaves to most caches
->> X-Mailer: b4 0.14.3
+On 1/27/26 18:36, Liam R. Howlett wrote:
+> * Vlastimil Babka <vbabka@suse.cz> [260123 01:54]:
+>> Before we enable percpu sheaves for kmalloc caches, we need to make sure
+>> kmalloc_nolock() and kfree_nolock() will continue working properly and
+>> not spin when not allowed to.
 >> 
->> In the first step to replace cpu (partial) slabs with sheaves, enable
->> sheaves for almost all caches. Treat args->sheaf_capacity as a minimum,
->> and calculate sheaf capacity with a formula that roughly follows the
->> formula for number of objects in cpu partial slabs in set_cpu_partial().
+>> Percpu sheaves themselves use local_trylock() so they are already
+>> compatible. We just need to be careful with the barn->lock spin_lock.
+>> Pass a new allow_spin parameter where necessary to use
+>> spin_trylock_irqsave().
 >> 
->> This should achieve roughly similar contention on the barn spin lock as
->> there's currently for node list_lock without sheaves, to make
->> benchmarking results comparable. It can be further tuned later.
->> 
->> Don't enable sheaves for bootstrap caches as that wouldn't work. In
->> order to recognize them by SLAB_NO_OBJ_EXT, make sure the flag exists
->> even for !CONFIG_SLAB_OBJ_EXT.
->> 
->> This limitation will be lifted for kmalloc caches after the necessary
->> bootstrapping changes.
->> 
->> Also do not enable sheaves for SLAB_NOLEAKTRACE caches to avoid
->> recursion with kmemleak tracking (thanks to Breno Leitao).
+>> In kmalloc_nolock_noprof() we can now attempt alloc_from_pcs() safely,
+>> for now it will always fail until we enable sheaves for kmalloc caches
+>> next. Similarly in kfree_nolock() we can attempt free_to_pcs().
 >> 
 >> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
 >> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+>> Reviewed-by: Hao Li <hao.li@linux.dev>
 >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
->> ---
->>  include/linux/slab.h |  6 ------
->>  mm/slub.c            | 56 ++++++++++++++++++++++++++++++++++++++++++++++++----
->>  2 files changed, 52 insertions(+), 10 deletions(-)
 > 
-> vm_area_cachep's capacity seems to be adjusted to 60 and
-> maple_node_cache keeps 32 as the args setting.
+> I'd rather have a helper that _mayspin() or something.  That way, when
+> we know we need to or don't want to, we avoid extra instructions.  We
+> can also avoid passing true/false and complicating the interface when
+> it's not necessary.
 
-Good to know. It is a bit larger.
-Hm I could have probably applied the args capacity before doing the roundup
-to make sheaf fill whole kmalloc size. Would add a few object for maple node
-I guess.
+Can you elaborate a bit more how the helper looks like and it's used? I
+don't follow immediately. We do have the helper for checking gfp flags to
+extract mayspin, but that wouldn't avoid extra instructions so you must be
+thinking of something else.
 
-> I still use will-it-scale to evaluate the impact of this patch, and
-> performance results appear to be on par with previous ones (*) - doesn't
-> have regression on my cases.
+> The way it is written works as well, though.
 > 
-> Based on the results of previous capacity adjustments testing, I think
-> it shows that the capacity of the maple_node_cache appears to have the
-> significant impact.
-> 
-> There may still be room for optimization in maple_node_cache. As a
-> general-purpose algorithm at present, I think it has achieved its
-> intended purpose based on my test results. So,
-> 
-> Tested-by: Zhao Liu <zhao1.liu@intel.com>
+> Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
 Thanks!
-
-> 
-> 
-> (*): The previous ones include 2 cases:
->   1) w/o this series, and directly based on the previous commit ("slub:
->      keep empty main sheaf as spare in __pcs_replace_empty_main()").
->   2) w/o this single patch, and based on the previous patch 5.
-> 
-> Regards,
-> Zhao
-> 
-> 
 
