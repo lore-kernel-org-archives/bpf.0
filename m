@@ -1,116 +1,119 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5A52FC890
-	for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 00:59:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769648352; cv=pass; b=hQbUCLDsuMCBuLNRRKyuDs3UGxRVBDGuReYa2d/+XWlXDOKtqGrUHJ5myPe3bJJeMgdrmgg2WXJjscTo6wdNxkml0cDNcF3V+F+k3lQmEkuXvHnvOwDZgklqM4XfmBE+qwXBzGZ+7UVr1jNmsUbdKw90YSyfS0O1tjbJFKy71hk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769648352; c=relaxed/simple;
-	bh=+L+EqsxFGbq9nKKnaprPm9Ir3tOy0vr3+xqa2zLh1T0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gi0/QvzcPDJxyoO7qcyEMmqTC3AfGE37qsQmYQ5Z8xC/rp1gFoeb9IKOH/KLa3H2u0tuugMUVddRKss8SZuqJ+P3r0IyjV6eHuuK2L2Vq0dJp0DHhw4qkTybff2nRb9bOT+4qRZ0UZwkHmRBb2Q8X4H3m2QcpyJnzXt0MvuTFdc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kgiTQEnp; arc=pass smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE5A3148A6
+	for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 01:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769649257; cv=none; b=cIvzWTHT2tppBaQ9SLHJbwFcb5rDJTKSXosqFXLrM9hhFvBhpVdLDk8sfhg4zSm6c2sH2rAZfbEIzMloXtkpNlQlk1AkpqkOijCQOvSczv1jziJYjT1hztY5sUKas4BNdKR2zOJTownz4yE7rOIjRAjonpHLektvz4S5Fiab0H4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769649257; c=relaxed/simple;
+	bh=JwUKXO1Ia8RWi17FWbKEtvJ2PKaprLgYC/IMbu+JgtA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kJWbsEV/Kbh5afq9//tzs4QeTSrBy2gMlJm+YCf5A4m94kP6Y7jguPcvcxUaAdXIhe9So3r3XNW8yDD8Ix1ezyXu0zM1JVo6z0vXQco16tTP1CSwHXlU+/kclAMNhKOKj6zBL2DJcAIkq4GbZi3fqF8OysYg/nmgH7GWy0y0zFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hvtxWaio; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kgiTQEnp"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b872f1c31f1so62394766b.0
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 16:59:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769648348; cv=none;
-        d=google.com; s=arc-20240605;
-        b=N2B6otuMSsmNNxRldZz2XihMvXqRvmtL2yUsq7NmZmXb9GZsfPMuBeg+zDGXv1eiEI
-         8HRuVVjiTHVFETIOSZlWS7GMTHZpcbeQLaqr1HUyEut4CsrbsyejHRyYMWc7GM29i6Cm
-         CCM7KfYJmkJH5DWbnQoe7UGWchzoS/9aF33DGoP5WI2YiFanA3at+iLrthQKv56BadRB
-         caiK6o8AamPE4d0SEK+on2luJYSpy6HykhphiTN3I575ewwYXf1/g0gLVpwx97uWm/VZ
-         5Nbat4RulKfkVgxG1IXAaEN3sSSh5NTvILob4isuNTFKuyW3zViEgCqat+JaQGxVReTB
-         aqAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Ho5qTXSu2PZYffnzQVL+2Xc6poCFB6UxCVa5s6rbRlA=;
-        fh=t1OVqlnPfHurr2PR1Fqva27vE8z5ERHK229RCyWzi/E=;
-        b=RRAAGt4M6IqMUYo38gCDwW9eacRGd4nYbxrl4MaUh2TEYjYjAxoJqir1WPoxXI30yr
-         y0gXK0o2oJvco5jm3xCIcgTPW3+G1Zx+p7quTMPmgpaceNPgBpRO/Igi4MOUtYtmb3dl
-         G7wyCCfx0as+ds1Oqb9+v/BGERKY7fDaUPJjiBQU5f+Pn1UAsywwSjvlwtvlXoGboD6v
-         3eQ4d98RPFKuvhaW7J7SPoJb3KA2/qau2ck4Ux/0qhVnLzuWWayHMCrm1T7mVPB6Vf+x
-         tNfSKmK25rUGQLYMDZjAUqnCgH+SjHqUN3EpP9IjCOhvhrK/G/pkCevvUq9UN3CP7Fpw
-         ht7Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769648348; x=1770253148; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ho5qTXSu2PZYffnzQVL+2Xc6poCFB6UxCVa5s6rbRlA=;
-        b=kgiTQEnpKJp/pjWzH8UIBoZE2prYNeOdPAmDcSgp2w5aKDPBJN5uF6sIQ17O5EEcaN
-         ACyLVBvVNlwDDlteA0YIqufuqAY74ZjqMbYJ4tJU9NEEZn94CcJXo/9Epjd/HQczmXSw
-         oQ68UlJ+ysPe1pwWStyhBRWb1KgBhwrl8ect/5mMeMeC2LbIGU2krUo3qleFHZZcB5UL
-         oZIcbiABabn8ZJ0AByRhAkYpLWueJfg6OQRWhq9Hw7bnfLKCMVArAe1ksTnsKICVRJSs
-         d5Dacf8qFkgg7Xd+y+e6WdzSOZLhxyO4qtDTDvpFsyFA0L760P9y01OOVPtjLx3ifnCU
-         1Xlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769648348; x=1770253148;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Ho5qTXSu2PZYffnzQVL+2Xc6poCFB6UxCVa5s6rbRlA=;
-        b=k8QJDImz49OSWkK8js0sDIDH4S2ajEGgFQJsQKmX6CPBlDUxv8IxCFJs0lFV4CIkQe
-         RJC3A0djhoaTFrPSGVBj3xdaSr2JKcyCdntlVjGiYcsTzaKyWr+sWi5+PdH/o4tUjvGM
-         lNY39jnxXtafiDgyCXxQawSSXnqZkp3PevWZF8sXa66HjqUZX3V+xN5hnCD6JAAqE+Zp
-         HUmEHp5f1EnGZQ4RKcoiPB7uc5Fyd+P0XCi3mzbCnbMEdK9lmqMSeSL27G8f78UJkftf
-         3D35l57k4LD7CtpQo90RjHSYxGi9mzk9m3APmwon3iR+JtLG6o6VoInrevp9HQom1WTf
-         CRrA==
-X-Forwarded-Encrypted: i=1; AJvYcCXB6Yu945EpDIQvjBsATDIVCjaq86YSWO2LusvdJnuzRQaeZ+u0jGY2SylbmVUZDgo3QA8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydJo4iJSPbkEIskZfpXoRtmDPZ/OF+rGJcmO5TCG4s0eX5DHt1
-	5LRsXCMkrTfpvcHOmzTXBmVghrI81qPqR47x9F8MLwgDiCC/+rgPbJWGa65axfATExidp69AJ0F
-	631iP1xBvTv6XgvlOzi3wxAotlAdeZ2Q/5tVTXMwE
-X-Gm-Gg: AZuq6aIJxIR7fF2u0rc0kpuc5TS/5XmO3Knih4wridj+A6BjfzpHJX7Hp6drIe7umDB
-	dwizkhopFnQWK0I+Gg4zm9mnQuRbPVvB0gh0/wDlkyKt1f99IysgA+ULfBybg+hK6bCkUXIts4Y
-	kM71lCEIqQsLUAqR+9CSBThnPKKy1PzZt9maun6xruvdd4oq0YDFxeg5Qs59UyRp3SVdNzzBJDT
-	3HLKM4O9gCtH0HbtzQBpahjBKe5Z1j8xdTXPT9I+0KMnnZRRef/R/3YGUrzi6Thy/n15Fr41CrE
-	Q/ixEb4ObVyvr3aFgP/Gr8A7uHEMtw==
-X-Received: by 2002:a17:906:f585:b0:b87:d722:f824 with SMTP id
- a640c23a62f3a-b8dab3cf66amr455166566b.63.1769648348337; Wed, 28 Jan 2026
- 16:59:08 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hvtxWaio"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769649243;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Dl/DTgnR2LWZ4WWPq9bsPwP22gj/Iby75/e7ptvtrsk=;
+	b=hvtxWaioRsELgv1IwyJU6puKmtAvyQMj4OSLRY2L32HSM1UQfDRs0nQHSXKsnMJxOM4nKW
+	mtUGgnKGS+jMfQJ2IAwfsiU/jkNrd/8M9cBlJpQrZiOy+uOk47up35mqf7/9UaPimaHqw3
+	Ml1BJn6Dp6m+/leKr496oZi1r8RS1FM=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: bpf@vger.kernel.org, Leon Hwang <leon.hwang@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+ Xu Kuohai <xukuohai@huaweicloud.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Menglong Dong <menglong8.dong@gmail.com>,
+ Leon Hwang <leon.hwang@linux.dev>, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-patches-bot@fb.com
+Subject:
+ Re: [PATCH bpf-next v2 3/3] bpf/selftests: Enable get_func_args and
+ get_func_ip tests on arm64
+Date: Thu, 29 Jan 2026 09:13:49 +0800
+Message-ID: <6233558.lOV4Wx5bFT@7940hx>
+In-Reply-To: <20260128150112.8873-4-leon.hwang@linux.dev>
+References:
+ <20260128150112.8873-1-leon.hwang@linux.dev>
+ <20260128150112.8873-4-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
- <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
- <2026012715-mantra-pope-9431@gregkh> <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
- <20260128045954.GS3183987@ZenIV>
-In-Reply-To: <20260128045954.GS3183987@ZenIV>
-From: Samuel Wu <wusamuel@google.com>
-Date: Wed, 28 Jan 2026 16:58:57 -0800
-X-Gm-Features: AZwV_Qg5mDXEWLmzjtDFHSng8MB2HQLUBKHQ6Wr860X_lRTmL3Z_ZmvOjLnN07o
-Message-ID: <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org, 
-	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz, 
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org, 
-	linux-mm@kvack.org, linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, 
-	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org, 
-	paul@paul-moore.com, casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
-	john.johansen@canonical.com, selinux@vger.kernel.org, 
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com, 
-	android-kernel-team <android-kernel-team@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Jan 27, 2026 at 8:58=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> w=
-rote:
+On 2026/1/28 23:01 Leon Hwang <leon.hwang@linux.dev> write:
+> Allow get_func_args, and get_func_ip selftests to run on arm64.
 
-> Very interesting...  Does 1544775687f0 (parent of e5bf5ee26663)
-> demonstrate that behaviour?
+Hi, Leon.
 
-Reverting only 1544775687f0 (functionfs: need to cancel ->reset_work
-in ->kill_sb()) does not fix the issue. With 6.19-rc7 as baseline, the
-simplest working recipe at the moment is with 6ca67378d0e7,
-c7747fafaba0, and e5bf5ee26663 reverted.
+I think you missed the fsession_test.c, right? You need to
+enable the test_fsession_test() for arm64 too. Therefore,
+the title of this patch maybe:
+    bpf/selftests: Enable fsession tests on arm64
+
+Thanks!
+Menglong Dong
+
+> 
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  tools/testing/selftests/bpf/progs/get_func_args_test.c | 2 +-
+>  tools/testing/selftests/bpf/progs/get_func_ip_test.c   | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/progs/get_func_args_test.c b/tools/testing/selftests/bpf/progs/get_func_args_test.c
+> index 0a3236a7a109..180ba5098ca1 100644
+> --- a/tools/testing/selftests/bpf/progs/get_func_args_test.c
+> +++ b/tools/testing/selftests/bpf/progs/get_func_args_test.c
+> @@ -167,7 +167,7 @@ int BPF_PROG(tp_test2)
+>  }
+>  
+>  __u64 test7_result = 0;
+> -#ifdef __TARGET_ARCH_x86
+> +#if defined(bpf_target_x86) || defined(bpf_target_arm64)
+>  SEC("fsession/bpf_fentry_test1")
+>  int BPF_PROG(test7)
+>  {
+> diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> index 65f7e1f182bf..43ff836a8ed8 100644
+> --- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> +++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
+> @@ -106,7 +106,7 @@ int BPF_URETPROBE(test8, int ret)
+>  
+>  __u64 test9_entry_result = 0;
+>  __u64 test9_exit_result = 0;
+> -#ifdef __TARGET_ARCH_x86
+> +#if defined(bpf_target_x86) || defined(bpf_target_arm64)
+>  SEC("fsession/bpf_fentry_test1")
+>  int BPF_PROG(test9, int a)
+>  {
+> -- 
+> 2.52.0
+> 
+> 
+> 
+
+
+
+
