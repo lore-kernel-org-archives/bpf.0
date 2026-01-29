@@ -1,145 +1,142 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EEA81531C1
-	for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 23:34:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E354749C;
+	Thu, 29 Jan 2026 00:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769643274; cv=none; b=rHufbAcfGE35oO4PcMlPNnjM3oYaXLi3XruiIoAprZo3AVrZgQ6ODoSpGF+Qewxrm5mztArisETDjaPIy+S4np56HRGUZ3AmzNe6d+4wmjG61O2Dz/6r42S1Bl869kPsOnTofiAkyKj65mGexurNmoP1Xxi3VoeP5hXdOZXW04o=
+	t=1769645635; cv=none; b=Ybqo7CYRnc2ogA7Ro5OZ7EDTQP3lQUdJJ7KTa4f0W8p+uJzMcWmB4bnIAP3bGj2BVWTEtxb3jKAdD/D2IqIPRdH90g+Q99wBZV/N5LZw+eB0MMyx6UZC6tK3hU1EV6LQxQJ6JhUpluq/PxLAw/hbuT1r/NdBVbGywkSSOemiWxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769643274; c=relaxed/simple;
-	bh=mlKwL7TBGkUvL6dUgMoz6K88R0yB1USJrBznkiFY+I4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HE6xFrjM4K7tNhWBHtyMtWPnwI0KwQYN/RjT4ZCazYwVRlRAbg44WaPSpOZaHGf08VHck8Vb5KrSbuYLF0kQNP/dafkMmxEidOPEXW04iPuZQSpNaW8ql5AZ/rNJ9BokjNCt89cySnI6KIYYBQOXTl7r+oisPHZx4tOV29D8abk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MyWfc3GZ; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769645635; c=relaxed/simple;
+	bh=QMY5VhDr13qrK5klyZc+O0AvB6eLS0h6Y2IbLGJESHQ=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=bdlcTxi6AxLMmqOmWrQCmzAIVnII+jUMJ7W9VmPWcIKW6CI8CwLlSNu491+AFpvHykS8iqoYbXZcMbo0DUzMSYTvK/M0REvSR0/jeX4FUotToW18KEbgR7VgIXHNr5+PrroAwDwWNb7+9ybuCBEOd8nsRurUZ09GqtGn60dTRt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=COlU+WAX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MyWfc3GZ"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-480142406b3so2415465e9.1
-        for <bpf@vger.kernel.org>; Wed, 28 Jan 2026 15:34:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769643272; x=1770248072; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=b3XsPPPqeG4FfwyI1rslc9pOlhMBsOpjNHNlNsRN5KQ=;
-        b=MyWfc3GZEDdwzGw4arBD+ZMnaBP10DNflPO58WSE7MGplPE0uO6nomJegWazN5pYQg
-         4tkL6f2kMgq1Y8ZpTgszUyXRCbWCeTZMbMBsG/PbFKQHJs+Cj5BuEDplc+4nWNccFUvZ
-         8gfJb9+/wN6DgUgr4RAg/SX9BwsN2gGlrGrL/pTPbAmt5RDTJR3qZmlHZ8u215Sto9ND
-         K/pUwOROe9UUlL5uSJrFum80lMUKDfK10Ogy2vDrkVinQONN3Njuzg8xikVaYcEYtG3s
-         FQTWJe1WgXEKM9IxiTN9LGvnKJdQOZBP9iwth22qR+o+F4vTslcvbf9j9v0Dmmkau5R+
-         U8Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769643272; x=1770248072;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b3XsPPPqeG4FfwyI1rslc9pOlhMBsOpjNHNlNsRN5KQ=;
-        b=TciPVEHY20Jwa2tWjLCwK657lCVNf3f8wckbkNhqYl3ifKS0AMzlR7AKCVJ3ADHa1P
-         UXSmSZ0O1rgVECft9U6D+CMOUbAEl3lVPkGIR35KfyipoXea4FFIj8FTqqhn5ohcYkGE
-         E1y1zRE8uG+bS5vKjXIvpS/cO9Dhe4O37pKTZ3Cw/RGZAVpKQekAbxddM8A1MjZYmu6x
-         8HB6SGR6ERFKCIMJcH93RASmqqedI444V/xQn/GvbnkbnKb5hRfJm8YOYOetFUlu++VL
-         ZkwfvAJSmLElfbPzBnubXXB/fuhAkajPFQrl7vEJb2ev/TqZKro6jduzhXePWuFxiC2H
-         XbSA==
-X-Gm-Message-State: AOJu0YybPPgQg3Bbq+VVMuK8T0gCtW48oceVhO4migT+6Th3h/MBAiB3
-	RLYkKRXnUz0vZ6SeLFHqzmiLht1nKEgjpe/FVsgWft9Z8cSEb79XQTBNpGcL7g==
-X-Gm-Gg: AZuq6aK8pRlpY47SNL3pXC1L0H9HcVLsoKhp0NtQrJzPN8rffRhuUbBdInf1ByD1WlV
-	8IN5okEpwbQdVTthhb4JsGXDvxZM2/bDZu8q3eplW1WYwSHbzR+11HFrh+AZWFYRwM9OtUk5kYC
-	BIoYMMlCs8JdjVL5/y0KlXZztgk+oI7HhgC7e7ESpG7QE7s+cs6gnts9urc8n5dYBScNATHHhzj
-	3ycDo/i2Rd9SjBHxsFHfi/AYdEmOHrLSGgfEYgey4PpXEgLsNmjNadL30CF6vs2KAv5wArsbePP
-	JJaCQuZg3M2tc9dKaK3F82F20nTCxMGf/WZ9pyzRW/0ATmPNY6+ami+KNG4OnZUdCYnjZoHcemg
-	Qac+5dI4VIzSj35gSdu/kiFH4pSOF6AzCjmPxRtPlv+KRFHNJsYZeGwFCxSb5oc337afyl51XJa
-	MvhSaiT7K+wnIEfw==
-X-Received: by 2002:a05:600c:4f0c:b0:477:9cdb:e337 with SMTP id 5b1f17b1804b1-48069bfaa18mr103564255e9.7.1769643271652;
-        Wed, 28 Jan 2026 15:34:31 -0800 (PST)
-Received: from localhost ([2a01:4b00:bd1f:f500:e85d:a828:282d:d5c7])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-481a5d582d3sm1462305e9.7.2026.01.28.15.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 15:34:31 -0800 (PST)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: bpf@vger.kernel.org,
-	ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	kafai@meta.com,
-	kernel-team@meta.com,
-	qmo@kernel.org
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-Subject: [PATCH bpf-next v2] bpftool: Allow explicitly skip llvm dependency
-Date: Wed, 28 Jan 2026 23:34:25 +0000
-Message-ID: <20260128233425.374535-1-mykyta.yatsenko5@gmail.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="COlU+WAX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2620AC4CEF1;
+	Thu, 29 Jan 2026 00:13:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769645634;
+	bh=QMY5VhDr13qrK5klyZc+O0AvB6eLS0h6Y2IbLGJESHQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=COlU+WAXp1Bq6C7gDzAJ53zNC99nQGKd04z1Od5Z3g2nC1XVRT2R22B4Y3dL4ydfV
+	 NwG7RZHdNjEJaShoggNHurkzFnIYcIRg14RO0ENNFhnJL2vfBlgOi2eKIzy4gDzJYE
+	 SU6vtBUrap9ZqEoY//PRWc7azTLSDxhvyeLipqUFGTxUTBHInUVcYYJHvaf44y8yfH
+	 iKcIo3feDWIywDDwJTFt1qiQXDQTCoEmSVTgjABNzh8a0LZ4kckJ6e5SD7YLrdi+y4
+	 OzXWPL60C7NMiPWgaFahJrl4q+bAFNok1/yP6hmX5Mr9Bqybqvqgqn5RBrMhDBRXNh
+	 dt1PmNEFdxBeQ==
+Date: Thu, 29 Jan 2026 09:13:46 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: bot+bpf-ci@kernel.org
+Cc: liujing.root@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, liujing40@xiaomi.com,
+ martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCH 2/2] bpf: Implement kretprobe fallback for kprobe multi
+ link
+Message-Id: <20260129091346.0744de91bb053b24ba679438@kernel.org>
+In-Reply-To: <4ee5b08b6cebfc87b552a0fde1f09fd5a2c190813760aa7e68f1e6d060f15ccd@mail.kernel.org>
+References: <20251218130629.365398-3-liujing40@xiaomi.com>
+	<4ee5b08b6cebfc87b552a0fde1f09fd5a2c190813760aa7e68f1e6d060f15ccd@mail.kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-From: Mykyta Yatsenko <yatsenko@meta.com>
+On Thu, 18 Dec 2025 13:33:31 +0000 (UTC)
+bot+bpf-ci@kernel.org wrote:
 
-BPF selftests depend on the bpftool. In some environments we may link
-bpftool to llvm dynamically and then try to run somewhere where llvm
-library is not available.
-It's simpler to avoid llvm linking altogether in those cases, this
-change allows to do it.
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 1fd07c10378f..426a1c627508 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> 
+> [ ... ]
+> 
+> > +int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+> > +{
+> > +	struct bpf_kprobe_multi_link *link = NULL;
+> > +	struct bpf_link_primer link_primer;
+> > +	struct bpf_kprobe *kprobes = NULL;
+> > +	u32 flags, cnt;
+> > +	u64 __user *ucookies;
+> > +	unsigned long __user *uaddrs;
+> > +	unsigned long __user *usyms;
+> > +	int err, i;
+> 
+> [ ... ]
+> 
+> > +	for (i = 0; i < cnt; i++) {
+> > +		unsigned long addr;
+> > +
+> > +		if (uaddrs) {
+> > +			if (__get_user(addr, uaddrs + i)) {
+> > +				err = -EFAULT;
+> > +				goto error;
+> > +			}
+> > +		} else {
+> > +			unsigned long __user usymbol;
+> > +			char buf[KSYM_NAME_LEN];
+> > +
+> > +			if (__get_user(usymbol, usyms + i)) {
+> > +				err = -EFAULT;
+> > +				goto error;
+> > +			}
+> > +			err = strncpy_from_user(buf, (const char __user *) usymbol, KSYM_NAME_LEN);
+> > +			if (err == KSYM_NAME_LEN)
+> > +				err = -E2BIG;
+> > +			if (err < 0)
+> > +				goto error;
+> > +
+> > +			addr = kallsyms_lookup_name(buf);
+> > +			if (!addr)
+> > +				goto error;
+> 
+> When kallsyms_lookup_name() returns 0 (symbol not found), is err being set
+> to an error code before jumping to the error label? It looks like err will
+> still hold the positive return value from strncpy_from_user() (the string
+> length), which would be returned to the caller as a success indication.
 
-Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
----
- tools/bpf/bpftool/Makefile           | 12 +++++++++++-
- tools/testing/selftests/bpf/Makefile |  2 ++
- 2 files changed, 13 insertions(+), 1 deletion(-)
+Good catch. It should set err = -ENOENT.
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 5442073a2e42..f2448e247c5d 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -97,6 +97,11 @@ RM ?= rm -f
- 
- FEATURE_USER = .bpftool
- 
-+# Set SKIP_LLVM=1 to build bpftool without LLVM dependency. When set,
-+# bpftool will fall back to libbfd for JIT disassembly (if available),
-+# or build without disassembly support.
-+SKIP_LLVM ?=
-+
- FEATURE_TESTS := clang-bpf-co-re
- FEATURE_TESTS += llvm
- FEATURE_TESTS += libcap
-@@ -150,7 +155,12 @@ all: $(OUTPUT)bpftool
- SRCS := $(wildcard *.c)
- 
- ifeq ($(feature-llvm),1)
--  # If LLVM is available, use it for JIT disassembly
-+ifneq ($(SKIP_LLVM),1)
-+HAS_LLVM := 1
-+endif
-+endif
-+
-+ifeq ($(HAS_LLVM),1)
-   CFLAGS  += -DHAVE_LLVM_SUPPORT
-   LLVM_CONFIG_LIB_COMPONENTS := mcdisassembler all-targets
-   # llvm-config always adds -D_GNU_SOURCE, however, it may already be in CFLAGS
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index c6bf4dfb1495..4dfff1cfacb6 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -331,6 +331,7 @@ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
- 		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/			       \
- 		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/		       \
- 		    LIBBPF_DESTDIR=$(HOST_SCRATCH_DIR)/			       \
-+		    SKIP_LLVM=$(SKIP_LLVM)				       \
- 		    prefix= DESTDIR=$(HOST_SCRATCH_DIR)/ install-bin
- 
- ifneq ($(CROSS_COMPILE),)
-@@ -343,6 +344,7 @@ $(CROSS_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
- 		    OUTPUT=$(BUILD_DIR)/bpftool/				\
- 		    LIBBPF_OUTPUT=$(BUILD_DIR)/libbpf/				\
- 		    LIBBPF_DESTDIR=$(SCRATCH_DIR)/				\
-+		    SKIP_LLVM=$(SKIP_LLVM)					\
- 		    prefix= DESTDIR=$(SCRATCH_DIR)/ install-bin
- endif
- 
+Thanks,
+
+> 
+> The error label at the end of the function does:
+> 
+>     error:
+>         kvfree(kprobes);
+>         kfree(link);
+>         return err;
+> 
+> This could cause the syscall to return a positive value to userspace instead
+> of an error, and also leak a prog reference since link_create() only calls
+> bpf_prog_put() when ret < 0.
+> 
+> > +		}
+> > +		if (prog->kprobe_override && !within_error_injection_list(addr)) {
+> > +			err = -EINVAL;
+> > +			goto error;
+> > +		}
+> 
+> [ ... ]
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/20338242683
+
+
 -- 
-2.52.0
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
