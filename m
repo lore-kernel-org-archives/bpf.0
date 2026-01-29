@@ -1,112 +1,64 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DEC312821;
-	Thu, 29 Jan 2026 22:52:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F102A3451C6;
+	Thu, 29 Jan 2026 23:28:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769727170; cv=none; b=kKJ931DHzk2Qtjhj0j5m+M58pYR+zekcb/nvSOLMv3epNKvb9YLdlGDbw1LWtkp4Ppbvak9Epa677intNAtuHSiJGW7/te98RoiO7PM1/ZwJvqNUEaoIXQeJJH0a+mD04VIh7Tb7camqVILHx1ScBTtCuytRKKxE9ts9DNs8ky0=
+	t=1769729324; cv=none; b=ICmTLZ6wRz5RxQz6guotIwGOUECoiJF9sNpw5cV71k5a6hBQQT6uwYHB86tRsFjmc87qyQkN/OSMBe1c2LIEKmo6GYDldSbENr+zm0qURgS1W+en5BQFQ+auMnxrdHOlWqmy5iUop7btVz+ruCvCR/b9xnLwRau+aZ56/dktNA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769727170; c=relaxed/simple;
-	bh=a+uuu1UU4KTBHLlqRmYyRypp9XGFjSD6Z3KeUdDHXDw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qsq4Wkxvo8ZViy70tHOYjIkqZ+/GRW7TPqNSpX0dI/QEDxTfC0EZ39eS3PYmuyFPCC1azWMf8GHGv1ucvK5XMdmsShKTyFhqz/9mEmbsj/KMLLJk5ZRvN1vXeKOamcVpdt9zPRVR42MpAHwswY3mx9N4/x3CgKS+ixfXWw5iiv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=Xd3s3aE8; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1769729324; c=relaxed/simple;
+	bh=ojRwdMLSrrBWmMXuxJk6n5g2aDFomjtXt0utnZnuoOg=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=gQCr6YN+1FEfMZcSig1UpKjaJ9OR4Tr3Hgo1xUpVEfx4lnBBxsp1gbeCRmSRssB+DZCYxoqNSNp0MYmSHLMezJ7JA/Mgh8p0n6Jp4W5joX/KaNIC/IIiybE1YrqKwDkH00EZQl+mdyztYgRb5yhiH49NwIk16dcsS800yYtcvJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=mVe3dmCT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="Xd3s3aE8"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-	bh=NzC4ieMh6vmoXuGrRF8AJfVTPzFDIVwsq0W+97NeH6I=; b=Xd3s3aE8lP0Iuf76XmQmTqyylY
-	kyjYtmWz3WE5Wp7qeyPuSNsrn7VnrFKLBLvg1QeejST/l0HFm8A1qmVzFffJgrhLWXrFqbyf6a33e
-	/22zqtNz8ozygjvj4by61/hPWVbdmEB1InvlYHMIf70seSv2TGIK6fBViv/wS7HAbDGRBmDvmj2ZB
-	JntUzR5O2yOGBeO5kVkWDZ996QY77yEhYaT27vlMP0zpBJ3x2kyXvwFS0IvjUmVIU8AbZJaqR0rdb
-	wrNWss8rPX4hfCo90x1Ou0DJDoWZBnnF+jopJxNrM5FqeIqToCi5KntAUvJccM6KN/Cc2/WSy2jpw
-	jyJAcUeA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1vlauH-00000007wty-0EGP;
-	Thu, 29 Jan 2026 22:54:33 +0000
-Date: Thu, 29 Jan 2026 22:54:33 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org,
-	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
-	a.hindborg@kernel.org, linux-mm@kvack.org,
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
-	paul@paul-moore.com, casey@schaufler-ca.com,
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
-	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
-	bpf@vger.kernel.org, clm@meta.com,
-	android-kernel-team <android-kernel-team@google.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-Message-ID: <20260129225433.GU3183987@ZenIV>
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
- <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
- <2026012715-mantra-pope-9431@gregkh>
- <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
- <20260128045954.GS3183987@ZenIV>
- <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
- <20260129032335.GT3183987@ZenIV>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="mVe3dmCT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C4D7C4CEF7;
+	Thu, 29 Jan 2026 23:28:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1769729323;
+	bh=ojRwdMLSrrBWmMXuxJk6n5g2aDFomjtXt0utnZnuoOg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=mVe3dmCTBLR14n9/74xX4bc7BSBr2vwbK2vjDTENpIgH0e8hbbxfPAsiZwWDdyM3Z
+	 JTKM9fuBfeh/1RvHJRoaZ50mLBwrJJIbXa8spURqcGBGZ3F2WB6iy9cjDTwJEXlf63
+	 KicKYKY264Dwv7xBR5lbX1SjA+k6o5r9DlOcTCVU=
+Date: Thu, 29 Jan 2026 15:28:42 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, linux-mm@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, bpf@vger.kernel.org, surenb@google.com,
+ syzbot+4e70c8e0a2017b432f7a@syzkaller.appspotmail.com
+Subject: Re: [PATCH mm-stable] procfs: avoid fetching build ID while holding
+ VMA lock
+Message-Id: <20260129152842.b8db6be6aa9e4fa93e69cc5b@linux-foundation.org>
+In-Reply-To: <CAEf4BzZJSuc0AH1Hio-DVpgR9S-KZsMNqU7tb--c4=mPZJ5dcA@mail.gmail.com>
+References: <20260128183232.2854138-1-andrii@kernel.org>
+	<20260128105054.dc5a7e4ff5d201e52b1edf85@linux-foundation.org>
+	<CAEf4BzZJSuc0AH1Hio-DVpgR9S-KZsMNqU7tb--c4=mPZJ5dcA@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260129032335.GT3183987@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 29, 2026 at 03:23:35AM +0000, Al Viro wrote:
-> On Wed, Jan 28, 2026 at 04:58:57PM -0800, Samuel Wu wrote:
-> > On Tue, Jan 27, 2026 at 8:58 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> > 
-> > > Very interesting...  Does 1544775687f0 (parent of e5bf5ee26663)
-> > > demonstrate that behaviour?
-> > 
-> > Reverting only 1544775687f0 (functionfs: need to cancel ->reset_work
-> > in ->kill_sb()) does not fix the issue. With 6.19-rc7 as baseline, the
-> > simplest working recipe at the moment is with 6ca67378d0e7,
-> > c7747fafaba0, and e5bf5ee26663 reverted.
-> 
-> Sorry, I hadn't been clear enough: if you do
-> git switch --detach 1544775687f0 
-> and build the resulting tree, does the breakage reproduce?  What I want
-> to do is to split e5bf5ee26663 into smaller steps and see which one
-> introduces the breakage, but the starting point would be verify that
-> there's no breakage prior to that.
-> 
-> 
-> PS: v6.19-rc7 contains fc45aee66223 ("get rid of kill_litter_super()"),
-> and reverting 6ca67378d0e7 ("convert functionfs") would reintroduce
-> the call of that function in ffs_fs_kill_sb(), so the resulting tree
-> won't even build on any configs with functionfs enabledd; are you sure
-> that you'd been testing v6.19-rc7 + reverts of just these 3 commits?
+On Wed, 28 Jan 2026 13:30:37 -0800 Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-Could you try your reproducer on mainline with the following delta applied?
+> > To provide for additional review and test time I'll queue the fix for
+> > the upcoming merge window (Feb 18 upstream merge) with a cc:stable.
+> 
+> This seems to be exacerbated (as we haven't seen these syzbot reports
+> before that) by more recent:
+> 
+> 777a8560fd29 ("lib/buildid: use __kernel_read() for sleepable context")
+> 
+> which is in mm-stable. So I'm not sure, probably would be best to have
+> both of them together.
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index 05c6750702b6..6c6d55ba0749 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -646,12 +646,11 @@ static int ffs_ep0_open(struct inode *inode, struct file *file)
- 	if (ret < 0)
- 		return ret;
- 
--	ffs_data_opened(ffs);
- 	if (ffs->state == FFS_CLOSING) {
--		ffs_data_closed(ffs);
- 		mutex_unlock(&ffs->mutex);
- 		return -EBUSY;
- 	}
-+	ffs_data_opened(ffs);
- 	mutex_unlock(&ffs->mutex);
- 	file->private_data = ffs;
- 
+777a8560fd29 is actually in mainline.  I'll move this fix into mm.git's
+mm-hotfixes queue so it should be present in 6.19.
+
