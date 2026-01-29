@@ -1,113 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8525537C105;
-	Thu, 29 Jan 2026 08:08:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27CB523F26A;
+	Thu, 29 Jan 2026 08:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769674111; cv=none; b=sQGDUrcR4Cfq9oYfe8RDvtqjRat/IqKTXj0WDLf+UhGUQr3gkRj814rHtDfmczsYvjDjEOr9jYj3Kznely1g581hbDb24Z726winwadgDUmpeowM5qSCpQm5gwrR8g+MsoUCCrw2I4P89kK/uwAGmmyrU07Pflu0aWLspQ1FJqA=
+	t=1769674449; cv=none; b=ZHuLd9sfl+OWskA4XhpEl94vk9QYon8qyuJ/CfI+nAnPkdx1EEYEiomlMnUMZNok6rUTvmdgnFjN6oYYAolB6R0IO9d6zeThqAYcmg7gyMObGbBD6CRMdwdiUuxBPWKgUOfbd7ZyaWT7ajTULEPXUbE3+SrDidliPGHWpWwuM1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769674111; c=relaxed/simple;
-	bh=aAYr/rdf8rPhk+DzwcPpBGhnCkODn024mb+J5zDgPZA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tcacPTVsdrDSLe0lZKA0ISnQuTxnRI7PJ7ngTechVgjUa09WqE9NepeDydISynU6k8np2ewizL/KiGUzPuOCcZ5MRNy/KwR5lYMxsmm9Uvb2WLyf29maS8ey3Az2P2cqIPdIdECGTlJziFgzmCNxT62jHt0QpE+kpF0dQk4SOWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HxEvSNHQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769674449; c=relaxed/simple;
+	bh=7IsBi6ODhtIKV2zts0kTXbGdo6yrQVlVFdfuQtskjHs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lhhDwbNT2OFaexdtGPb/F2AUhu+R5fiU0pJFzIAR1TG5CHqzoq5gVdDCiaMLtRQqQfB5vmnwfagBuWvsfDtcgABOj/9gLuF+W3awKKkS1WRNx7998rOgT0Oy4mxMj2EN3mGiPuR7OmJVd3L4aJP2x4aKyQXPPBMh+TH5qMMXqSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+5FPY3q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HxEvSNHQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C2EAC2BCB6;
-	Thu, 29 Jan 2026 08:08:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+5FPY3q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC4FC4CEF7;
+	Thu, 29 Jan 2026 08:14:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769674111;
-	bh=aAYr/rdf8rPhk+DzwcPpBGhnCkODn024mb+J5zDgPZA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=HxEvSNHQEtL0D59ODsnQi0p3l8kMpRAIJaWt8HUV5lvtVPe2caGw5Z0eLuIIQN8Cr
-	 4xRaxDBGT+igKQhlHOaxNvX+eFQ6ZA82YxsTv0FjkNdeBvTBYl+iYm50wea3VTsOcQ
-	 fKt6u+LN7F4u4p4Zx30THYRuTvRzoAHmjiH9PlcAVFT47GW9CKIqfpogm1q0jwt9b3
-	 7RjMh3jWaL0T1izR+e8ryofdpsfSH4aWF1PVlipelfiqJLjpGEWRmXNp90sSw+dIzh
-	 /5erIn2XU+qhq6rfbrfcgR33uPNecU9q3U2RZybpjFOVd8oICaZfNpY9xMZj77zvIS
-	 xM/EStNmmUzQA==
-Received: from mchehab by mail.kernel.org with local (Exim 4.99.1)
-	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1vlN4n-0000000EROH-1jpG;
-	Thu, 29 Jan 2026 09:08:29 +0100
+	s=k20201202; t=1769674448;
+	bh=7IsBi6ODhtIKV2zts0kTXbGdo6yrQVlVFdfuQtskjHs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=C+5FPY3qcPpvkQ9sAaI2KNUJHnl83VGZFBDJDwDqIxgZA02L660cmx1Bm60xYV5nI
+	 vLffxok4X+HFiGw38gYgNDtCo6rTyKmILPzk6tjTbFEq4sL+ZiBeZFPYzSeLS7zvSr
+	 T9Bswk/yR6F1zuJZGGV7KknByLqYDwRy2toSG9q2jSiuyKPCdQppZzOwZHeSdbNRBU
+	 YnsRZMqb+PDlrBYnNu+Hj+0C04QyP9qDiReu20XMjtg7q7LGddB3aFrPJngmTy9Dbv
+	 KdmASKroZhC8GdqGF1TXcPoDY9vVaWFqZrM1taeoMwYCIi9wlsCCEUJ0eb9cynsyux
+	 5kMDjD7DORw5w==
+Date: Thu, 29 Jan 2026 09:14:01 +0100
 From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Linux Doc Mailing List <linux-doc@vger.kernel.org>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	linux-hardening@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>
-Subject: [PATCH v3 27/30] docs: kdoc_parser: minimize differences with struct_group_tagged
-Date: Thu, 29 Jan 2026 09:08:18 +0100
-Message-ID: <50ef80ed8a1a638d08974e55a7828371bab09c0d.1769673038.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1769673038.git.mchehab+huawei@kernel.org>
-References: <cover.1769673038.git.mchehab+huawei@kernel.org>
+To: Jacob Keller <jacob.e.keller@intel.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, "David S. Miller"
+ <davem@davemloft.net>, Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Mauro
+ Carvalho Chehab <mchehab@kernel.org>, Richard Cochran
+ <richardcochran@gmail.com>, <bpf@vger.kernel.org>,
+ <intel-wired-lan@lists.osuosl.org>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>, Randy Dunlap
+ <rdunlap@infradead.org>, Shuah Khan <skhan@linuxfoundation.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>
+Subject: Re: [PATCH v2 00/25] kernel-doc: make it parse new functions and
+ structs
+Message-ID: <20260129091401.0b86926c@foz.lan>
+In-Reply-To: <09681668-57ca-4294-afa8-95af7eebe630@intel.com>
+References: <cover.1769617841.git.mchehab+huawei@kernel.org>
+	<87ecn97ild.fsf@trenco.lwn.net>
+	<fced629d-2470-4673-ab0b-80de11f0e4c5@intel.com>
+	<20260128230045.781937b5@foz.lan>
+	<09681668-57ca-4294-afa8-95af7eebe630@intel.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-While the previous version does a better job representing
-the actual struct, it ends losing documentation from each
-member.
+On Wed, 28 Jan 2026 14:08:50 -0800
+Jacob Keller <jacob.e.keller@intel.com> wrote:
 
-Change the replacements to minimize such changes. With that,
-the only differences before/after using NestedMatch new
-replacement logic are (at man page output):
+> On 1/28/2026 2:00 PM, Mauro Carvalho Chehab wrote:
+> > On Wed, 28 Jan 2026 10:15:51 -0800
+> > Jacob Keller <jacob.e.keller@intel.com> wrote:  
+> >> On 1/28/2026 9:27 AM, Jonathan Corbet wrote:  
+> >>> Do we really need another unit-testing setup in the kernel?  I can't say
+> >>> I'm familiar enough with kunit to say whether it would work for
+> >>> non-kernel code; have you looked and verified that it isn't suitable?
+> >>>      
+> >>
+> >> I'm not sure kunit would be suitable here, since its meant for running
+> >> kernel code and does a lot of stuff to make that possible. It might be
+> >> able to be extended, but.. this is python code. Why *shouldn't* we use
+> >> one of the python unit test frameworks for it?  
+> > 
+> > This is not using kunit. It is using standard "import unittest" from
+> > Python internal lib.
+> >   
+> 
+> Right. I think it makes perfect sense to use unittest for python files. 
+> That was the point of my reply above :D
+> 
+> >> We have other python code in tree. Does any of that code have unit tests?  
+> > 
+> > Good question. On a quick grep, it sounds so:
+> > 
+> > 	$ git grep "import unittest" tools scripts
+> > 	scripts/rust_is_available_test.py:import unittest
+> > 	tools/crypto/ccp/test_dbc.py:import unittest
+> > 	tools/perf/pmu-events/metric_test.py:import unittest
+> > 	tools/testing/kunit/kunit_tool_test.py:import unittest
+> > 	tools/testing/selftests/bpf/test_bpftool.py:import unittest
+> > 	tools/testing/selftests/tpm2/tpm2.py:import unittest
+> > 	tools/testing/selftests/tpm2/tpm2_tests.py:import unittest
+> >   
+> >> I agree that it doesn't make sense to build new bespoke unit tests
+> >> different or unique per each python module, so if we want to adopt
+> >> python unit tests we should try to pick something that works for the
+> >> python tools in the kernel.
+> >>
+> >> Perhaps finding a way to integrate this with kunit so that you can use
+> >> "kunit run" and get python tests executed as well would make sense?
+> >> But.. then again this isn't kernel code so I'm not sure it makes sense
+> >> to conflate the tests with kernel unit tests.  
+> > 
+> > It shouldn't be hard to add it there - or to have a separate script
+> > to run python unittests.
+> >   
+> 
+> Right. Some way to have all unit tests run is nice so that its easy to 
+> hook up into various CI processes. Sounds like you have a solid idea on 
+> that.
+> 
+> > That's said, some integration with kunit can be interesting
+> > to have it producing a KTAP output if needed by some CI.
+> >   
+> That could also be interesting, as it would make it easier for other 
+> tooling to work with all the tests.
+> 
+> Personally I am not sure how useful that would be vs just making use of 
+> the unittest stuff provided as-is with python.
 
-    --- before.log  2026-01-29 06:14:20.163592584 +0100
-    +++ after.log   2026-01-29 06:32:04.811370234 +0100
-    @@ -1573701 +1573701 @@
-    -.BI "    struct ice_health_tx_hang_buf  tx_hang_buf;"
-    +.BI "    struct ice_health_tx_hang_buf tx_hang_buf;"
-    @@ -4156451 +4156451 @@
-    -.BI "    struct libeth_fq_fp  fp;"
-    +.BI "    struct libeth_fq_fp fp;"
-    @@ -4164041 +4164041 @@
-    -.BI "    struct libeth_xskfq_fp  fp;"
-    +.BI "    struct libeth_xskfq_fp fp;"
-    @@ -4269434 +4269434 @@
-    -.BI "    struct page_pool_params_fast  fast;"
-    +.BI "    struct page_pool_params_fast fast;"
-    @@ -4269452 +4269452 @@
-    -.BI "    struct page_pool_params_slow  slow;"
-    +.BI "    struct page_pool_params_slow slow;"
-    @@ -4269454 +4269454 @@
-    -.BI "    STRUCT_GROUP( struct net_device *netdev;"
-    +.BI "    struct net_device *netdev;"
+I'd say that, for now, we don't need a KTAP output, but as things go
+more complex and more parts of the tools get unittests added, it 
+could make sense to add it.
 
-e.g. basically whitespaces, plus a fix NestedMatch to
-better handle /* private */ comments.
+Adding proper support for it shouldn't be hard with the definitions
+inside unittest_helper. All we need to do would be to write a new
+inherited class from unittest.TestResult, placing there a 
+printResults() method that would generate the KTAP format. We may
+add a new "--ktap" argparse argument that, if enabled, it would
+use the newer class instead of the Summary class.
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
----
- tools/lib/python/kdoc/kdoc_parser.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/lib/python/kdoc/kdoc_parser.py b/tools/lib/python/kdoc/kdoc_parser.py
-index 50d57c6799bb..1e8e156e2a9e 100644
---- a/tools/lib/python/kdoc/kdoc_parser.py
-+++ b/tools/lib/python/kdoc/kdoc_parser.py
-@@ -126,7 +126,7 @@ struct_xforms = [
-     #
-     (CFunction('struct_group'), r'\2'),
-     (CFunction('struct_group_attr'), r'\3'),
--    (CFunction('struct_group_tagged'), r'struct \1 { \3 } \2;'),
-+    (CFunction('struct_group_tagged'), r'struct \1 \2; \3'),
-     (CFunction('__struct_group'), r'\4'),
- 
-     #
--- 
-2.52.0
-
+Thanks,
+Mauro
