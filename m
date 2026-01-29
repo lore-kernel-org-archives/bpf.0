@@ -1,77 +1,115 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901D8227563
-	for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 15:19:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66DD221F03
+	for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 15:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769699974; cv=none; b=t3uHlnxt9r3nJCpHD5SjSui1qOhXjdZ8pyvsXraLS3dOoz2PuOlHazv9yeXYTJCnUGTzofr/yguzPcXlDaDETTee7ooXNB23DYG3KgeXBoOiwBwqVpQGTfU+xb8OazqeCKTqs3GW/1oVa+7OyrBF/4d4cB0bilPq9kfUwmuZcfA=
+	t=1769699978; cv=none; b=pEiHNXJ7CGygIYeOfB4CIcYwxsSASI9Vw6xZf6/4UKV3forEtYMKv/OIzGV4xulsrxZsO6eV0CkfJ8gUqPJEbeZOi/hd4AUjmPbETCvAPI/1wHhe9TnsJpBlvXdGIyrpJMk8fZpHDLg5/2ypCNsC7IuR3SjMcaI2bjgihx0mH38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769699974; c=relaxed/simple;
-	bh=sLtHdOPZztY4e0NwfEVYdctcdwCqoMwIh1kfiu9s+Oo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rynuOQkSZ3OYhNSmJ+NqXI+LoeUAtERQ4UgRg6ofaaoWqvVJAzdXKavXYXdOYHb5zB3U3o69Szy0jC6py0ScBWJbQwjVyrk4FyBjPyf2w5GZLH57R2y7d1vwxu0qD6OeXngmfKSdnzARwNyfvv+bAWWu/9JzflEYVqXhOJhngG4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BR3wjJrj; arc=none smtp.client-ip=91.218.175.172
+	s=arc-20240116; t=1769699978; c=relaxed/simple;
+	bh=wf9E53pS+pa+ZiyOt5s2q1+5OrQHBtyxnOCqcXwUAEY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=KHJSIK62ZR+1PPG+kNmZvkinwnlobupzHY+MaU15hjTegSrh6Sr3kv2dHTISdfuQhxMkuuLmlYHOj/Oq+2ezv4j2Eljra2+QRkDtu5oP3/2i0Pdp9gspZ5zU87A2pVCCpR1ZhvgwmZoENh5yIiksjnmworjygtIbDNfjzs96CwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OUq4eMJc; arc=none smtp.client-ip=91.218.175.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BR3wjJrj"
-Date: Thu, 29 Jan 2026 23:18:54 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769699960;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lIp7jKuWgekJy97efthM5741IP+QBaVVTDcUYnJ8gmc=;
-	b=BR3wjJrjPKCxj1WTCO2atJ6c6xqeJZCHHAHnVxrrsNappdgMNM2Go+lK2KrNlOlVgs299P
-	oZhPnGnOqwLwpBuoUG6n2Z0RWXCNsafIuazWIOwOqHD4ZqkYeLD13uMZvUk6bOafpPn9f0
-	u3t212KDl63dQDbYx+n11Mhvf4k1u18=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Hao Li <hao.li@linux.dev>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	Uladzislau Rezki <urezki@gmail.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
-	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
-	kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: Re: [PATCH v4 00/22] slab: replace cpu (partial) slabs with sheaves
-Message-ID: <imzzlzuzjmlkhxc7hszxh5ba7jksvqcieg5rzyryijkkdhai5q@l2t4ye5quozb>
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OUq4eMJc"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+Mime-Version: 1.0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769699974;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=DVbbNBM8h2hLry9+PjA9Xnf//1plR69ceWUdZQzpcN8=;
+	b=OUq4eMJc8eAdZ74vls9q8VxZhtpQjlW71HAqe06bfYZVmfblin6PvTAr9ovnnwAOqy2SHM
+	24swlbe1CfBBQ96jm4P6At9i0DMhjw3nRRxbO665shByg8zcgEDx90niAclRdqcXz0KwLW
+	/Khir5oloAjBwkPM0mh1F9tQ6FLJ5xo=
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 29 Jan 2026 23:19:19 +0800
+Message-Id: <DG16A1T5EJWO.D9L79G1ZE8H9@linux.dev>
+Cc: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+ <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
+ <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
+ <jolsa@kernel.org>, <puranjay@kernel.org>, <xukuohai@huaweicloud.com>,
+ <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
+ <menglong8.dong@gmail.com>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <kernel-patches-bot@fb.com>, <martin.lau@kernel.org>, <clm@meta.com>,
+ <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next v3 1/3] bpf: Add bpf_jit_supports_fsession()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Leon Hwang" <leon.hwang@linux.dev>
+To: <bot+bpf-ci@kernel.org>, <leon.hwang@linux.dev>, <bpf@vger.kernel.org>
+References: <20260129142536.48637-2-leon.hwang@linux.dev>
+ <97fd7e67669f887badde4e276fc501a5969ff9dac703a6dccedda386dacd25f1@mail.kernel.org>
+In-Reply-To: <97fd7e67669f887badde4e276fc501a5969ff9dac703a6dccedda386dacd25f1@mail.kernel.org>
 X-Migadu-Flow: FLOW_OUT
 
-Hi Vlastimil,
+On Thu Jan 29, 2026 at 10:54 PM +08, bot+bpf-ci wrote:
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index e7ff8394e0..6e0693ac72 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -24874,6 +24874,9 @@ int bpf_check_attach_target(struct bpf_verifier_=
+log *log,
+>>  	case BPF_TRACE_FENTRY:
+>>  	case BPF_TRACE_FEXIT:
+>>  	case BPF_TRACE_FSESSION:
+>> +		if (prog->expected_attach_type =3D=3D BPF_TRACE_FSESSION &&
+>> +		    !bpf_jit_supports_fsession())
+>> +			return -EOPNOTSUPP;
+>
+> This isn't a bug, but other similar bpf_jit_supports_*() checks in
+> this file include a bpf_log() message before returning an error. For
+> example:
+>
+>   bpf_jit_supports_kfunc_call() -> "JIT does not support calling kernel f=
+unction"
+>   bpf_jit_supports_exceptions() -> "JIT does not support calling kfunc...=
+"
+>   bpf_jit_supports_arena()      -> "JIT doesn't support arena"
+>   bpf_jit_supports_private_stack() -> "Private stack not supported by jit=
+"
+>
+> Should this check also include a message like "JIT does not support
+> fsession" for consistency with other similar checks in the verifier?
+>
 
-I conducted a detailed performance evaluation of the each patch on my setup.
+That makes sense.
 
-During my tests, I observed two points in the series where performance
-regressions occurred:
+Let me add the log message.
 
-    Patch 10: I noticed a ~16% regression in my environment. My hypothesis is
-    that with this patch, the allocation fast path bypasses the percpu partial
-    list, leading to increased contention on the node list.
-
-    Patch 12: This patch seems to introduce an additional ~9.7% regression. I
-    suspect this might be because the free path also loses buffering from the
-    percpu partial list, further exacerbating node list contention.
-
-These are the only two patches in the series where I observed noticeable
-regressions. The rest of the patches did not show significant performance
-changes in my tests.
-
-I hope these test results are helpful.
-
--- 
 Thanks,
-Hao
+Leon
+
+
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/214822=
+97342
+>
+> AI-authorship-score: low
+> AI-authorship-explanation: The commit demonstrates specific debugging con=
+text with actual test output and errno values, correct understanding of ker=
+nel BPF conventions, and follows established patterns - typical of experien=
+ced human kernel developers.
+> issues-found: 1
+> issue-severity-score: low
+> issue-severity-explanation: Minor consistency issue - missing bpf_log() e=
+rror message compared to similar checks in the same file; does not affect f=
+unctionality or stability.
