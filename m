@@ -1,103 +1,89 @@
-Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23682EBBB8
-	for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 03:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB9C935293C;
+	Thu, 29 Jan 2026 03:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769655807; cv=none; b=fBtDx3I18VRidho8swWxXN+s086FUHL5dKRvFd/jxfIDxt1XUg1n2b1LLsgFTu28qRowvyAD1KFiB9h6gsx+ICLZ0jcVCK7ZzzC1DuBPRVXbiMd0O/AEJhJnUAQVyGietNkce5MEyuUAVWq1h/GV7TsalQxZVzegLyYJGdXeimk=
+	t=1769656914; cv=none; b=itfCAgUc0UDa/g6N/c4aAecMtPvcWbxKdVMD7hGNgJ1iUVJAfeM7uoZ24I1fqJjMy5yfF3TR0i7BUdswstRX4xQn9VoVUIE618F7+f7yQOpor3zy53RCywd6STAt8qxtj84CsK0uOw38MgsbkM/F9NGl3MGOvSb4D34Nh0gNA/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769655807; c=relaxed/simple;
-	bh=P6xf8lFB1hTmPq1NVVLE+dooHI5xqpYcpXWYE5P0BAQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=c1QpWzl+PkJ52snZJVcktQuskGIW0lJEyBqX4ya1ZzTXIYxmQFnNuG+mmCIu/BmarJgR5XNYhrr6DQAX7APO7JTlnK+22VaU00YGG/OSsjexn83av7v9VOKkACTOMaUOmwAn1U+0n24JQfDvw0eRUts5F+Lr19oj6Ssf1A96FLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=S+gvwAXH; arc=none smtp.client-ip=95.215.58.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769656914; c=relaxed/simple;
+	bh=h2+N60GFIxy4GfrJ4czr9PMcmHEhojycurGHNf+1bLY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=be7oPxAUucRSbbe0UpK+GntJN6FuSqY24fC2OdqCJFITUXf1hwZHM0GCe/T0yxYKbVOsaFA0flHRoX3enE09FbLDCzIC6eLaxABIRD/qVuH0WPYI1sVNWOt1u5W9Nbizu/vK4eB15hc+XC1Xb7HG/oyZq0OI0NaqEoag3At88v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=eifTeQz9; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="S+gvwAXH"
-Message-ID: <459af099-540f-4ce3-945e-fdf38896d03c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769655792;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=evNmSKHBc95d34h6t/+bPmvmGHn/9tXbG9cMw4fwkfU=;
-	b=S+gvwAXHrPnOF5+rIrYovEQTKjWbvgM6EJNzkx9LlNL1KmYBAKRjgZTu1rqzWjXfyTNhru
-	VHCGh2WhT0zt5uWXtv8ifqlhCd7giUFNWtzQ3lCEtFHht48+8nvC01+HJAQbi7WPQ5i44k
-	d9Jo4jvvvgUIG2TjodmEk2q1G4eC+1k=
-Date: Thu, 29 Jan 2026 11:03:02 +0800
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="eifTeQz9"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=BGsU9GobbaGgoU5iMsb2Tj/ECBvPozp242GaUSp9zUU=; b=eifTeQz9MUGgKqDQsKzmHBzB2j
+	+CtwHru4Xvc8D5sL9AdjDiqJWwNUFLA4+enSb3HA8EGGjQ/KpTmT7gakB7E0zhfXtSQ15zpP5lBBg
+	e6odg/oBWcZoX5HZCZc2eYHerpWACeqgAgw7ymX0/SYyrZbo9XVT/WadmSYd1IjR3qee35vapbO3p
+	gJkrrQD+C4GjLabtBWnvoQ+eYIrU3CzT0XUAwBsyq/vYVwiKdr0hgb0eOuEsdsjQ5NMnVRQwtSI9G
+	c+nAwH3W7Gnm3mac+MbhcepOrQ8lFKBi3dX17MkNJavZ/NQqs1fFtM/bhJVq1XDSm3DzyYjCgs6Ro
+	NcMMDueg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1vlId5-0000000HVLd-0y2U;
+	Thu, 29 Jan 2026 03:23:35 +0000
+Date: Thu, 29 Jan 2026 03:23:35 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Samuel Wu <wusamuel@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <20260129032335.GT3183987@ZenIV>
+References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+ <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh>
+ <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
+ <20260128045954.GS3183987@ZenIV>
+ <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v8 1/3] perf: Add rctx in perf_callchain_entry
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, mingo@redhat.com, acme@kernel.org,
- namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com, song@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260126074331.815684-1-chen.dylane@linux.dev>
- <20260126074331.815684-2-chen.dylane@linux.dev>
- <20260128085945.GF3372621@noisy.programming.kicks-ass.net>
- <00fd7c67-dffa-4647-8370-59a195a41deb@linux.dev>
- <CAEf4BzY5tQYSnn4Jwg+cwypnwG6BLLOu6e6=f938d33eSCDObg@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Tao Chen <chen.dylane@linux.dev>
-In-Reply-To: <CAEf4BzY5tQYSnn4Jwg+cwypnwG6BLLOu6e6=f938d33eSCDObg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-在 2026/1/29 02:59, Andrii Nakryiko 写道:
-> On Wed, Jan 28, 2026 at 8:53 AM Tao Chen <chen.dylane@linux.dev> wrote:
->>
->> 在 2026/1/28 16:59, Peter Zijlstra 写道:
->>> On Mon, Jan 26, 2026 at 03:43:29PM +0800, Tao Chen wrote:
->>>> Record rctx inside the perf_callchain_entry itself, when callers of
->>>> get_callchain_entry no longer care about the assignment of rctx, and
->>>> will be used in the next patch.
->>>
->>> Sorry, what?
->>>
->>> The recursion context is very much about the caller, and very much not
->>> about the data. This just doesn't make sense.
->>
->> Well, Andrii, it seems we have to go back to the original way.
+On Wed, Jan 28, 2026 at 04:58:57PM -0800, Samuel Wu wrote:
+> On Tue, Jan 27, 2026 at 8:58 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 > 
-> Huh, why? Peter is confused by your wording, he didn't say that what
-> you are doing is broken.
->
+> > Very interesting...  Does 1544775687f0 (parent of e5bf5ee26663)
+> > demonstrate that behaviour?
+> 
+> Reverting only 1544775687f0 (functionfs: need to cancel ->reset_work
+> in ->kill_sb()) does not fix the issue. With 6.19-rc7 as baseline, the
+> simplest working recipe at the moment is with 6ca67378d0e7,
+> c7747fafaba0, and e5bf5ee26663 reverted.
 
-I see, will update the changelog, thanks.
-> The point is to couple rctx with the exact perf_callchain_entry
-> returned to the caller in that recursion context. There is no
-> contradiction.
-> 
-> It's purely about simplifying the interface. While previously the
-> caller would have to juggle perf_callchain_entry and rctx separately
-> (but still ensure that entry and rctx do match each other when calling
-> put_callchain_entry), now it's more convenient and less error-prone
-> because returned entry will record rctx it was retrieved with.
-> 
-> That perf_callchain_entry should not be reused by anyone else between
-> successful get_callchain_entry and put_callchain_entry, so there is no
-> problem here.
-> 
->>
->> --
->> Best Regards
->> Tao Chen
+Sorry, I hadn't been clear enough: if you do
+git switch --detach 1544775687f0 
+and build the resulting tree, does the breakage reproduce?  What I want
+to do is to split e5bf5ee26663 into smaller steps and see which one
+introduces the breakage, but the starting point would be verify that
+there's no breakage prior to that.
 
 
--- 
-Best Regards
-Tao Chen
+PS: v6.19-rc7 contains fc45aee66223 ("get rid of kill_litter_super()"),
+and reverting 6ca67378d0e7 ("convert functionfs") would reintroduce
+the call of that function in ffs_fs_kill_sb(), so the resulting tree
+won't even build on any configs with functionfs enabledd; are you sure
+that you'd been testing v6.19-rc7 + reverts of just these 3 commits?
