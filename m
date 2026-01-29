@@ -1,38 +1,38 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1657036A013;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8561836AB5B;
 	Thu, 29 Jan 2026 22:29:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769725748; cv=none; b=Xz6UyxIyzpefkQ96RthJzhQftRy0cyxue9ZFPMmU9cV9g7rtfisUF/BrTEJ+HcgJiA9ODG+ACWuwO37OpRPPo2Hrngz2/EeTrPNzyRgB7C8J4x0LD1wVXbSnS1JRk+ZIHg0EM1Npy02hKOGFVjiPbInVPkKDrwW94KrXtftSHFI=
+	t=1769725748; cv=none; b=OgwT7xjKsxptipZse/xtkTZiJSDrZL6eNgxYexM0kM/qx9WL4v0SR6kwLuwYRTUwqqb/A9KFFPIuyZWD4gdIm73pn8ryMbokjMoH2dZ+4X+wDVE6ZVQ1M/R6xRks2FMJNkFj2z6h4NbfZ7auo+cmsdMt9UiBY4P0iiTxEgpNLNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1769725748; c=relaxed/simple;
-	bh=5s8ljem1ixOuo3XX9jiyakzHc2Hsr8635Tv+GzX9e64=;
+	bh=E3jsxAVNeZSfgTtFklMaaHFG10U0cjvc/vVHRzsxTII=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PYiJfMTvvbjWDjwM7Pvz0cvmOcL72qu6juPCBeGZ4+0wVTdFnhIp8Z6QSU3Hkgo2gaMcoIo2rjdLycZcy1AUm/dQjdlx4wt/RmfEPkZv65nvmCQqFpPU6lrXH969N+Nv8uFohtyv7EWdcyGivajqe1AOI/xPrklSzBF8e0tCGV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=RcTfjnLz; arc=none smtp.client-ip=213.133.104.62
+	 MIME-Version; b=Ih5M8PYQoH9nuhKFqQw5VxSebKxbwIusYQOlAApP9OKIK1QjEafY61GSwY+SLH3PzbEsBxKiLwS+Dumo+YAkCP+QPfqBwp6CRwcoLDvcRho0wynaNE4IoJRUor/RLiQeRAg0roBs7ozIylSM7wfdGH6WolFUvJ4lhNQalMqR3eI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=bJghZvj8; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="RcTfjnLz"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="bJghZvj8"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=JOntBvIGVg7HMjtYwEoXs00v0KJhh9RNnSDrm4ZPvjU=; b=RcTfjnLz1y2eIB2q3kGGL79q8x
-	EJ2Z+WJf/nUiRdzxP6CAHtrM8KKTxzVj6zXHSqZqa4jH9xUB7hjhCZngZB5BmFdt8rH/ed4JA1MBl
-	nEFI1qu9qjbfjThSW0oqKk7uETSCV2jjBwN5E8v24q8FdKTOHm/RQFReo2wx60f8kHsQbAuSan1NN
-	163MSL8E6TtsWL73CkV3dHOZ/mzE6Ua099SqHcOI9T7iTUeCeCYYAbRtc2lZF8Uxw8QB/tl044Qgz
-	6tNaKiYymMoNq/6x2srscpLizGUPcTdoILZeRIlT+o+9+2MsZ57nvydB8FoHPWecNLAQTaq9GNaCd
-	9zibQq0Q==;
+	bh=4vsXr21Dw5AR4BQltiiGQybsEiHISrGXtdOR4TKZxSI=; b=bJghZvj8/jGVJdY22t4aaTDliF
+	M6ZurtA5XiJXFpClZLjFfSosmEFhjKa0XIW1aVD+T7ZNw8daFUMsBYsV3N9Mo85n3Wbi1mm1BjGo+
+	ShAAo85cP0ljzglj40V9qcVe3qjp8J5Krp7O5JVPWGm65ZRppo4J1PvI9BnQ/4SNRUlJ/jfAjDc59
+	5ceICwsKZrZ2qODWbTc6ewrEVdz0NTTsZFNiikSsMHvn184fW0V+1iacDeuKPsbV/aOhU5I3DmlKV
+	kRTXDRnYeeCZLEVV7DBPAE/+wktKhBnwbi/LETatrowW1EUXj987dGxVmOdkIY7JKX3qYJB4/YhLM
+	SwUA0R5Q==;
 Received: from localhost ([127.0.0.1])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vlaVM-0008qa-1u;
-	Thu, 29 Jan 2026 23:28:48 +0100
+	id 1vlaVK-0008pr-1a;
+	Thu, 29 Jan 2026 23:28:46 +0100
 From: Daniel Borkmann <daniel@iogearbox.net>
 To: netdev@vger.kernel.org
 Cc: bpf@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc: bpf@vger.kernel.org,
 	toke@redhat.com,
 	yangzhenze@bytedance.com,
 	wangdongdong.6@bytedance.com
-Subject: [PATCH net-next v8 15/16] selftests/net: Add env for container based tests
-Date: Thu, 29 Jan 2026 23:28:29 +0100
-Message-ID: <20260129222830.439687-16-daniel@iogearbox.net>
+Subject: [PATCH net-next v8 13/16] netkit: Add xsk support for af_xdp applications
+Date: Thu, 29 Jan 2026 23:28:27 +0100
+Message-ID: <20260129222830.439687-14-daniel@iogearbox.net>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260129222830.439687-1-daniel@iogearbox.net>
 References: <20260129222830.439687-1-daniel@iogearbox.net>
@@ -66,249 +66,197 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27896/Thu Jan 29 08:24:11 2026)
 
-From: David Wei <dw@davidwei.uk>
+Enable support for AF_XDP applications to operate on a netkit device.
+The goal is that AF_XDP applications can natively consume AF_XDP
+from network namespaces. The use-case from Cilium side is to support
+Kubernetes KubeVirt VMs through QEMU's AF_XDP backend. KubeVirt is a
+virtual machine management add-on for Kubernetes which aims to provide
+a common ground for virtualization. KubeVirt spawns the VMs inside
+Kubernetes Pods which reside in their own network namespace just like
+regular Pods.
 
-Add an env NetDrvContEnv for container based selftests. This automates
-the setup of a netns, netkit pair with one inside the netns, and a BPF
-program that forwards skbs from the NETIF host inside the container.
+Raw QEMU AF_XDP backend example with eth0 being a physical device with
+16 queues where netkit is bound to the last queue (for multi-queue RSS
+context can be used if supported by the driver):
 
-Currently only netkit is used, but other virtual netdevs e.g. veth can
-be used too.
+  # ethtool -X eth0 start 0 equal 15
+  # ethtool -X eth0 start 15 equal 1 context new
+  # ethtool --config-ntuple eth0 flow-type ether \
+            src 00:00:00:00:00:00 \
+            src-mask ff:ff:ff:ff:ff:ff \
+            dst $mac dst-mask 00:00:00:00:00:00 \
+            proto 0 proto-mask 0xffff action 15
+  [ ... setup BPF/XDP prog on eth0 to steer into shared xsk map ... ]
+  # ip netns add foo
+  # ip link add numrxqueues 2 nk type netkit single
+  # ./pyynl/cli.py --spec ~/netlink/specs/netdev.yaml \
+                   --do queue-create \
+                   --json "{"ifindex": $(ifindex nk), "type": "rx", \
+                            "lease": { "ifindex": $(ifindex eth0), \
+                                       "queue": { "type": "rx", "id": 15 } } }"
+  {'id': 1}
+  # ip link set nk netns foo
+  # ip netns exec foo ip link set lo up
+  # ip netns exec foo ip link set nk up
+  # ip netns exec foo qemu-system-x86_64 \
+          -kernel $kernel \
+          -drive file=${image_name},index=0,media=disk,format=raw \
+          -append "root=/dev/sda rw console=ttyS0" \
+          -cpu host \
+          -m $memory \
+          -enable-kvm \
+          -device virtio-net-pci,netdev=net0,mac=$mac \
+          -netdev af-xdp,ifname=nk,id=net0,mode=native,queues=1,start-queue=1,inhibit=on,map-path=$dir/xsks_map \
+          -nographic
 
-Expect netkit container datapath selftests to have a publicly routable
-IP prefix to assign to netkit in a container, such that packets will
-land on eth0. The BPF skb forward program will then forward such packets
-from the host netns to the container netns.
+We have tested the above against a dual-port Nvidia ConnectX-6 (mlx5)
+100G NIC with successful network connectivity out of QEMU. An earlier
+iteration of this work was presented at LSF/MM/BPF [0] and more
+recently at LPC [1].
 
-Signed-off-by: David Wei <dw@davidwei.uk>
+For getting to a first starting point to connect all things with
+KubeVirt, bind mounting the xsk map from Cilium into the VM launcher
+Pod which acts as a regular Kubernetes Pod while not perfect, is not
+a big problem given its out of reach from the application sitting
+inside the VM (and some of the control plane aspects are baked in
+the launcher Pod already), so the isolation barrier is still the VM.
+Eventually the goal is to have a XDP/XSK redirect extension where
+there is no need to have the xsk map, and the BPF program can just
+derive the target xsk through the queue where traffic was received
+on.
+
+The exposure through netkit is because Cilium should not act as a
+proxy handing out xsk sockets. Existing applications expect a netdev
+from kernel side and should not need to rewrite just to implement
+against a CNI's protocol. Also, all the memory should not be accounted
+against Cilium but rather the application Pod itself which is consuming
+AF_XDP. Further, on up/downgrades we expect the data plane to being
+completely decoupled from the control plane; if Cilium would own the
+sockets that would be disruptive. Another use-case which opens up and
+is regularly asked from users would be to have DPDK applications on
+top of AF_XDP in regular Kubernetes Pods.
+
 Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
+Co-developed-by: David Wei <dw@davidwei.uk>
+Signed-off-by: David Wei <dw@davidwei.uk>
+Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+Link: https://bpfconf.ebpf.io/bpfconf2025/bpfconf2025_material/lsfmmbpf_2025_netkit_borkmann.pdf [0]
+Link: https://lpc.events/event/19/contributions/2275/ [1]
 ---
- .../testing/selftests/drivers/net/README.rst  |   7 +
- .../drivers/net/hw/lib/py/__init__.py         |   7 +-
- .../selftests/drivers/net/lib/py/__init__.py  |   7 +-
- .../selftests/drivers/net/lib/py/env.py       | 120 ++++++++++++++++++
- 4 files changed, 135 insertions(+), 6 deletions(-)
+ drivers/net/netkit.c | 76 +++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 75 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/README.rst b/tools/testing/selftests/drivers/net/README.rst
-index eb838ae94844..b94e81c2e030 100644
---- a/tools/testing/selftests/drivers/net/README.rst
-+++ b/tools/testing/selftests/drivers/net/README.rst
-@@ -62,6 +62,13 @@ LOCAL_V4, LOCAL_V6, REMOTE_V4, REMOTE_V6
+diff --git a/drivers/net/netkit.c b/drivers/net/netkit.c
+index 5c417c6055d8..0519f855d062 100644
+--- a/drivers/net/netkit.c
++++ b/drivers/net/netkit.c
+@@ -12,6 +12,7 @@
+ #include <net/netdev_lock.h>
+ #include <net/netdev_queues.h>
+ #include <net/netdev_rx_queue.h>
++#include <net/xdp_sock_drv.h>
+ #include <net/netkit.h>
+ #include <net/dst.h>
+ #include <net/tcx.h>
+@@ -235,6 +236,76 @@ static void netkit_get_stats(struct net_device *dev,
+ 	stats->tx_dropped = DEV_STATS_READ(dev, tx_dropped);
+ }
  
- Local and remote endpoint IP addresses.
++static bool netkit_xsk_supported_at_phys(const struct net_device *dev)
++{
++	if (!dev->netdev_ops->ndo_bpf ||
++	    !dev->netdev_ops->ndo_xdp_xmit ||
++	    !dev->netdev_ops->ndo_xsk_wakeup)
++		return false;
++	if ((dev->xdp_features & NETDEV_XDP_ACT_XSK) != NETDEV_XDP_ACT_XSK)
++		return false;
++	return true;
++}
++
++static int netkit_xsk(struct net_device *dev, struct netdev_bpf *xdp)
++{
++	struct netkit *nk = netkit_priv(dev);
++	struct netdev_bpf xdp_lower;
++	struct netdev_rx_queue *rxq;
++	struct net_device *phys;
++	int ret = -EBUSY;
++
++	switch (xdp->command) {
++	case XDP_SETUP_XSK_POOL:
++		if (nk->pair == NETKIT_DEVICE_PAIR)
++			return -EOPNOTSUPP;
++		if (xdp->xsk.queue_id >= dev->real_num_rx_queues)
++			return -EINVAL;
++
++		rxq = __netif_get_rx_queue(dev, xdp->xsk.queue_id);
++		if (!rxq->lease)
++			return -EOPNOTSUPP;
++
++		phys = rxq->lease->dev;
++		if (!netkit_xsk_supported_at_phys(phys))
++			return -EOPNOTSUPP;
++
++		memcpy(&xdp_lower, xdp, sizeof(xdp_lower));
++		xdp_lower.xsk.queue_id = get_netdev_rx_queue_index(rxq->lease);
++		break;
++	case XDP_SETUP_PROG:
++		return -EPERM;
++	default:
++		return -EINVAL;
++	}
++
++	netdev_lock(phys);
++	if (!dev_get_min_mp_channel_count(phys))
++		ret = phys->netdev_ops->ndo_bpf(phys, &xdp_lower);
++	netdev_unlock(phys);
++	return ret;
++}
++
++static int netkit_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
++{
++	struct netdev_rx_queue *rxq;
++	struct net_device *phys;
++
++	if (queue_id >= dev->real_num_rx_queues)
++		return -EINVAL;
++
++	rxq = __netif_get_rx_queue(dev, queue_id);
++	if (!rxq->lease)
++		return -EOPNOTSUPP;
++
++	phys = rxq->lease->dev;
++	if (!netkit_xsk_supported_at_phys(phys))
++		return -EOPNOTSUPP;
++
++	return phys->netdev_ops->ndo_xsk_wakeup(phys,
++			get_netdev_rx_queue_index(rxq->lease), flags);
++}
++
+ static int netkit_init(struct net_device *dev)
+ {
+ 	netdev_lockdep_set_classes(dev);
+@@ -255,6 +326,8 @@ static const struct net_device_ops netkit_netdev_ops = {
+ 	.ndo_get_peer_dev	= netkit_peer_dev,
+ 	.ndo_get_stats64	= netkit_get_stats,
+ 	.ndo_uninit		= netkit_uninit,
++	.ndo_bpf		= netkit_xsk,
++	.ndo_xsk_wakeup		= netkit_xsk_wakeup,
+ 	.ndo_features_check	= passthru_features_check,
+ };
  
-+LOCAL_PREFIX_V4, LOCAL_PREFIX_V6
-+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-+
-+Local IP prefix/subnet which can be used to allocate extra IP addresses (for
-+network name spaces behind macvlan, veth, netkit devices). DUT must be
-+reachable using these addresses from the endpoint.
-+
- REMOTE_TYPE
- ~~~~~~~~~~~
+@@ -381,10 +454,11 @@ static void netkit_setup(struct net_device *dev)
+ 	dev->hw_enc_features = netkit_features;
+ 	dev->mpls_features = NETIF_F_HW_CSUM | NETIF_F_GSO_SOFTWARE;
+ 	dev->vlan_features = dev->features & ~netkit_features_hw_vlan;
+-
+ 	dev->needs_free_netdev = true;
  
-diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-index d5d247eca6b7..022008249313 100644
---- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-@@ -3,6 +3,7 @@
- """
- Driver test environment (hardware-only tests).
- NetDrvEnv and NetDrvEpEnv are the main environment classes.
-+NetDrvContEnv extends NetDrvEpEnv with netkit container support.
- Former is for local host only tests, latter creates / connects
- to a remote endpoint. See NIPA wiki for more information about
- running and writing driver tests.
-@@ -29,7 +30,7 @@ try:
-     from net.lib.py import ksft_eq, ksft_ge, ksft_in, ksft_is, ksft_lt, \
-         ksft_ne, ksft_not_in, ksft_raises, ksft_true, ksft_gt, ksft_not_none
-     from drivers.net.lib.py import GenerateTraffic, Remote, Iperf3Runner
--    from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv
-+    from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv, NetDrvContEnv
+ 	netif_set_tso_max_size(dev, GSO_MAX_SIZE);
++
++	xdp_set_features_flag(dev, NETDEV_XDP_ACT_XSK);
+ }
  
-     __all__ = ["NetNS", "NetNSEnter", "NetdevSimDev",
-                "EthtoolFamily", "NetdevFamily", "NetshaperFamily",
-@@ -44,8 +45,8 @@ try:
-                "ksft_eq", "ksft_ge", "ksft_in", "ksft_is", "ksft_lt",
-                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
-                "ksft_not_none", "ksft_not_none",
--               "NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote",
--               "Iperf3Runner"]
-+               "NetDrvEnv", "NetDrvEpEnv", "NetDrvContEnv", "GenerateTraffic",
-+               "Remote", "Iperf3Runner"]
- except ModuleNotFoundError as e:
-     print("Failed importing `net` library from kernel sources")
-     print(str(e))
-diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-index 8b75faa9af6d..be3a8a936882 100644
---- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
-@@ -3,6 +3,7 @@
- """
- Driver test environment.
- NetDrvEnv and NetDrvEpEnv are the main environment classes.
-+NetDrvContEnv extends NetDrvEpEnv with netkit container support.
- Former is for local host only tests, latter creates / connects
- to a remote endpoint. See NIPA wiki for more information about
- running and writing driver tests.
-@@ -43,12 +44,12 @@ try:
-                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
-                "ksft_not_none", "ksft_not_none"]
- 
--    from .env import NetDrvEnv, NetDrvEpEnv
-+    from .env import NetDrvEnv, NetDrvEpEnv, NetDrvContEnv
-     from .load import GenerateTraffic, Iperf3Runner
-     from .remote import Remote
- 
--    __all__ += ["NetDrvEnv", "NetDrvEpEnv", "GenerateTraffic", "Remote",
--                "Iperf3Runner"]
-+    __all__ += ["NetDrvEnv", "NetDrvEpEnv", "NetDrvContEnv", "GenerateTraffic",
-+                "Remote", "Iperf3Runner"]
- except ModuleNotFoundError as e:
-     print("Failed importing `net` library from kernel sources")
-     print(str(e))
-diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-index 41cc248ac848..d13fd9128c1f 100644
---- a/tools/testing/selftests/drivers/net/lib/py/env.py
-+++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-@@ -1,6 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+import ipaddress
- import os
-+import re
- import time
- from pathlib import Path
- from lib.py import KsftSkipEx, KsftXfailEx
-@@ -8,6 +10,7 @@ from lib.py import ksft_setup, wait_file
- from lib.py import cmd, ethtool, ip, CmdExitFailure
- from lib.py import NetNS, NetdevSimDev
- from .remote import Remote
-+from . import bpftool
- 
- 
- class NetDrvEnvBase:
-@@ -289,3 +292,120 @@ class NetDrvEpEnv(NetDrvEnvBase):
-                 data.get('stats-block-usecs', 0) / 1000 / 1000
- 
-         time.sleep(self._stats_settle_time)
-+
-+
-+class NetDrvContEnv(NetDrvEpEnv):
-+    """
-+    Class for an environment with a netkit pair setup for forwarding traffic
-+    between the physical interface and a network namespace.
-+    """
-+
-+    def __init__(self, src_path, rxqueues=1, **kwargs):
-+        super().__init__(src_path, **kwargs)
-+
-+        self.require_ipver("6")
-+        local_prefix = self.env.get("LOCAL_PREFIX_V6")
-+        if not local_prefix:
-+            raise KsftSkipEx("LOCAL_PREFIX_V6 required")
-+
-+        local_prefix = local_prefix.rstrip("/64").rstrip("::").rstrip(":")
-+        self.ipv6_prefix = f"{local_prefix}::"
-+        self.nk_host_ipv6 = f"{local_prefix}::2:1"
-+        self.nk_guest_ipv6 = f"{local_prefix}::2:2"
-+
-+        self.netns = None
-+        self._nk_host_ifname = None
-+        self._nk_guest_ifname = None
-+        self._tc_attached = False
-+        self._bpf_prog_pref = None
-+        self._bpf_prog_id = None
-+        self._init_ns_attached = False
-+
-+        ip(f"link add type netkit mode l2 forward peer forward numrxqueues {rxqueues}")
-+
-+        all_links = ip("-d link show", json=True)
-+        netkit_links = [link for link in all_links
-+                        if link.get('linkinfo', {}).get('info_kind') == 'netkit'
-+                        and 'UP' not in link.get('flags', [])]
-+
-+        if len(netkit_links) != 2:
-+            raise KsftSkipEx("Failed to create netkit pair")
-+
-+        netkit_links.sort(key=lambda x: x['ifindex'])
-+        self._nk_host_ifname = netkit_links[1]['ifname']
-+        self._nk_guest_ifname = netkit_links[0]['ifname']
-+        self.nk_host_ifindex = netkit_links[1]['ifindex']
-+        self.nk_guest_ifindex = netkit_links[0]['ifindex']
-+
-+        self._setup_ns()
-+        self._attach_bpf()
-+
-+    def __del__(self):
-+        if self._tc_attached:
-+            cmd(f"tc filter del dev {self.ifname} ingress pref {self._bpf_prog_pref}")
-+            self._tc_attached = False
-+
-+        if self._nk_host_ifname:
-+            cmd(f"ip link del dev {self._nk_host_ifname}")
-+            self._nk_host_ifname = None
-+            self._nk_guest_ifname = None
-+
-+        if self._init_ns_attached:
-+            cmd("ip netns del init", fail=False)
-+            self._init_ns_attached = False
-+
-+        if self.netns:
-+            del self.netns
-+            self.netns = None
-+
-+        super().__del__()
-+
-+    def _setup_ns(self):
-+        self.netns = NetNS()
-+        cmd("ip netns attach init 1")
-+        self._init_ns_attached = True
-+        ip("netns set init 0", ns=self.netns)
-+        ip(f"link set dev {self._nk_guest_ifname} netns {self.netns.name}")
-+        ip(f"link set dev {self._nk_host_ifname} up")
-+        ip(f"-6 addr add fe80::1/64 dev {self._nk_host_ifname} nodad")
-+        ip(f"-6 route add {self.nk_guest_ipv6}/128 via fe80::2 dev {self._nk_host_ifname}")
-+
-+        ip("link set lo up", ns=self.netns)
-+        ip(f"link set dev {self._nk_guest_ifname} up", ns=self.netns)
-+        ip(f"-6 addr add fe80::2/64 dev {self._nk_guest_ifname}", ns=self.netns)
-+        ip(f"-6 addr add {self.nk_guest_ipv6}/64 dev {self._nk_guest_ifname} nodad", ns=self.netns)
-+        ip(f"-6 route add default via fe80::1 dev {self._nk_guest_ifname}", ns=self.netns)
-+
-+    def _attach_bpf(self):
-+        bpf_obj = self.test_dir / "nk_forward.bpf.o"
-+        if not bpf_obj.exists():
-+            raise KsftSkipEx("BPF prog not found")
-+
-+        cmd(f"tc filter add dev {self.ifname} ingress bpf obj {bpf_obj} sec tc/ingress direct-action")
-+        self._tc_attached = True
-+
-+        tc_info = cmd(f"tc filter show dev {self.ifname} ingress").stdout
-+        match = re.search(r'pref (\d+).*nk_forward\.bpf.*id (\d+)', tc_info)
-+        if not match:
-+            raise Exception("Failed to get BPF prog ID")
-+        self._bpf_prog_pref = int(match.group(1))
-+        self._bpf_prog_id = int(match.group(2))
-+
-+        prog_info = bpftool(f"prog show id {self._bpf_prog_id}", json=True)
-+        map_ids = prog_info.get("map_ids", [])
-+
-+        bss_map_id = None
-+        for map_id in map_ids:
-+            map_info = bpftool(f"map show id {map_id}", json=True)
-+            if map_info.get("name").endswith("bss"):
-+                bss_map_id = map_id
-+
-+        if bss_map_id is None:
-+            raise Exception("Failed to find .bss map")
-+
-+        ipv6_addr = ipaddress.IPv6Address(self.ipv6_prefix)
-+        ipv6_bytes = ipv6_addr.packed
-+        ifindex_bytes = self.nk_host_ifindex.to_bytes(4, byteorder='little')
-+        value = ipv6_bytes + ifindex_bytes
-+        value_hex = ' '.join(f'{b:02x}' for b in value)
-+        bpftool(f"map update id {bss_map_id} key hex 00 00 00 00 value hex {value_hex}")
+ static struct net *netkit_get_link_net(const struct net_device *dev)
 -- 
 2.43.0
 
