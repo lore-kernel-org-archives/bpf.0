@@ -1,255 +1,105 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F6F3876A4;
-	Thu, 29 Jan 2026 11:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBA01946C8;
+	Thu, 29 Jan 2026 13:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769686103; cv=none; b=P7gyGrGrHzw8jhSAF0RZsnNJKOU0oQ2Rb58zOjHmZLcExxc46o+FM3wnBm7crepU5nyyy5hKnUf8yEE7iol3w5BNYeyZQz/PDSMsl42dF2voEu4mZrzbTgy89YfKYm/1qNgIPpxuVtGAChQts0XNJWpwAKwvJX58JDOv0vSKdN0=
+	t=1769692744; cv=none; b=BhNdZ4T3Bb0jnff8JBbmpKL8UcWltLKdMbnWHs3A0ChiG0P2zaeNgOm6xzjURd1OdR22Tio1WqeJ0RNpvzCSxFPKK1tqKMHN8KvlDbT62EWS6Kl4nYjs6vSv9VPPW+tm+LiY4gpuXQW8IbBQaJcdqhYF//WiI3Q8chMGJXJkoic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769686103; c=relaxed/simple;
-	bh=WBgYfkqNQ1dslyszSMDPyenRthaMZpzi540oDpwLY0s=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LD6s6KtlWa9FS9KNFNY5je8Ph6BbtVPV07sQdyb5o3jrPLqs+O/pepx//9ypzmezFVMQM5S5aaC1VJWrsePy8QssTTXr7BBhv8FApRjaK9beD3tWlN13M44HVx1FEAUVJSZYmvMR9ijQQXwLm5jZOu6bLm4OghxJYNlRwXN5CBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qjVdr/ie; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1769692744; c=relaxed/simple;
+	bh=BHpv39mFINsX0KbaHZhCLr0SNAvBeNLzSbm1eXXTpvk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PPTROUwR3FyY3wDSMJ/zn4BQEEdUY+/Za4yBainpxyNUu7ToP91CNqgqLtf6gPKOxYFuO/Uisfd4mPyoMq78Drvv+SAxMTnsXb8Nz38ZLnIV1yDR0MvoVJSPMWxotneLApO9UlEw27QV3qCXJaguv5IWyWypT02Lrg/OtDd1vPk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Fatg20IU; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qjVdr/ie"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 60SLbExu029402;
-	Thu, 29 Jan 2026 11:27:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=+WS183iDiP/nMxD+i
-	OR/QQgvkFj3ADjsGmYllgfRw9Y=; b=qjVdr/ieMEvTG7Y7/Q5cjxhJguSg/X4UP
-	D5EGulcCJIx9eIkolk408Yk58ryP9zCiUgWdEXlXS5wDejRHTVpRGQfT2iqHRgHz
-	U6tx8mh1Nhf2VGrNN7es7w2op81AoVmniC9DLTNIWp9U/XdUCKlRkrk1idMJy+aY
-	OTeMtYwS++c9zzS9TbdilrzdvmboR4Psd4t6MD8cWLox2qB89xlCR4x6FTK+N16q
-	cj/6th7EiR2hy3ps8YwD+Pja8omhpjNVXY3ZdwpoXwHoCIPZ92jaJZ9adLOaDlhr
-	0yCxiSsIyzayTLGwyeAxjb0blSWNXG3vIHlU+sdCuMsplaWcaNYNw==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnt80b0k-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Jan 2026 11:27:39 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 60TBRc5F029845;
-	Thu, 29 Jan 2026 11:27:38 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4bvnt80b0b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Jan 2026 11:27:38 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 60T7uk1h019733;
-	Thu, 29 Jan 2026 11:27:37 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4bw9dn9ed6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 29 Jan 2026 11:27:37 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 60TBRWj950790804
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 29 Jan 2026 11:27:32 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2CE0E2004D;
-	Thu, 29 Jan 2026 11:27:32 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 923822004E;
-	Thu, 29 Jan 2026 11:27:31 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 29 Jan 2026 11:27:31 +0000 (GMT)
-From: Jens Remus <jremus@linux.ibm.com>
-To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org,
-        Steven Rostedt <rostedt@kernel.org>
-Cc: Jens Remus <jremus@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
-        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
-        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH v6 6/6] x86/vdso: Enable sframe generation in VDSO
-Date: Thu, 29 Jan 2026 12:27:26 +0100
-Message-ID: <20260129112726.892340-7-jremus@linux.ibm.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20260129112726.892340-1-jremus@linux.ibm.com>
-References: <20260129112726.892340-1-jremus@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Fatg20IU"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=wYRI7quE870vDDzkPJ2HhpVjS23jDJ+DDwWwJTT3RUs=; b=Fatg20IUGQW/b4mTpHp3jcfpVy
+	jeReeYW6WVOv1mSX9DpAZmgjmYGZ22zm065xdcPLz+6zNxbNx9rgR27pSMyQmSahq/8PPN9RziOKD
+	y7tJfQZBEBVDOQ4SH9btyPfbolC16EVgyUA68XgylutOyi50nIDNAzxlowHBCRVzCGVo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1vlRv2-005Mt9-5q; Thu, 29 Jan 2026 14:18:44 +0100
+Date: Thu, 29 Jan 2026 14:18:44 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Illusion Wang <illusion.wang@nebula-matrix.com>
+Cc: y <y@lunn.ch>, Dimon <dimon.zhao@nebula-matrix.com>,
+	Alvin <alvin.wang@nebula-matrix.com>,
+	Sam <sam.chen@nebula-matrix.com>, netdev <netdev@vger.kernel.org>,
+	andrew+netdev <andrew+netdev@lunn.ch>, corbet <corbet@lwn.net>,
+	kuba <kuba@kernel.org>, linux-doc <linux-doc@vger.kernel.org>,
+	lorenzo <lorenzo@kernel.org>, pabeni <pabeni@redhat.com>,
+	horms <horms@kernel.org>,
+	"vadim.fedorenko" <vadim.fedorenko@linux.dev>,
+	"lukas.bulwahn" <lukas.bulwahn@redhat.com>, hawk <hawk@kernel.org>,
+	ast <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+	sdf <sdf@fomichev.me>, daniel <daniel@iogearbox.net>,
+	"john.fastabend" <john.fastabend@gmail.com>,
+	edumazet <edumazet@google.com>,
+	open list <linux-kernel@vger.kernel.org>
+Subject: Re: =?utf-8?B?5Zue5aSN77yaW1BBVENIIHYzIG5l?= =?utf-8?Q?t-nex?=
+ =?utf-8?Q?t?= 01/15] net/nebula-matrix: add minimum nbl build framework
+Message-ID: <c1536b51-f441-45ca-8bfb-d5f7d8230713@lunn.ch>
+References: <20260123011804.31263-1-illusion.wang@nebula-matrix.com>
+ <20260123011804.31263-2-illusion.wang@nebula-matrix.com>
+ <88c7e349-f941-4216-89ca-70a49e82b378@lunn.ch>
+ <ad0a6f0f-3ce3-4f38-b27d-2f121511d6e3.illusion.wang@nebula-matrix.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: uTa8eSSN46EPfpW7hKzrsKBZp5iZuGKI
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTI5MDA3NiBTYWx0ZWRfX4mXlQtZtf/7S
- bTyrWr5bZvPKSOhpHdcVVeu9bA0g3qsJ5+tNJ8wN/aOAje5GeCzyj3aqizAui5ueSqhPBY/QdiS
- TwqsijJymF9GLe1vW9u/GTfioPlaXsZqEjKTn2P262/LRpFbljL+Lbz6dU5dHRMebbACL6Rb16z
- /7Sa6GLU12zR1z/ImcM/hsliI3PurGu1PJY3lnOyJQK9u+va3a73sJkRxqwPUpPNbvUWpzBY0HG
- NPQGe5V3fgwjX77iyaXCqHILY5yCix4LWXHspv2a8EikAnkkG9LKb0bvVz0QTimlk6B9QWuy1a4
- sSKOhiF4bL2QcbYvgJMQ8yOEiBsORTiFP7iYw6t8TE0v3tlMaRpt4R4n4LbHlVRKgSMy7+KOY+c
- /1mVmXXBrnrs3k4f21TeclxNH6tgMb7pxLTYgksd9iOwGo0GW4vFBbAQ61hmYzucCoRWCVOFl6e
- 2TSjOmAeI5YnaLPZr0w==
-X-Authority-Analysis: v=2.4 cv=Zs3g6t7G c=1 sm=1 tr=0 ts=697b442b cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=vUbySO9Y5rIA:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8
- a=VnNF1IyMAAAA:8 a=6um0ROA3cFbXW2b5GMEA:9 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-ORIG-GUID: PsbsJ1Wq2W19p2SJZWUmsrKQMcbbGAFf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-01-29_02,2026-01-28_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 lowpriorityscore=0 adultscore=0 phishscore=0 suspectscore=0
- bulkscore=0 impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2601290076
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ad0a6f0f-3ce3-4f38-b27d-2f121511d6e3.illusion.wang@nebula-matrix.com>
 
-From: Josh Poimboeuf <jpoimboe@kernel.org>
+On Mon, Jan 26, 2026 at 10:18:52AM +0800, Illusion Wang wrote:
+> 
+> >_CORE is a bit unusual for a driver. CORE is generally a library which
+> >is shared by a number of drivers. It does not have a tristate string,
+> >it is just selected by the drivers which need it.
+> 
+> Thank you for your feedback on the NBL_CORE configuration option. We appreciate
+> your guidance on adhering to Linux kernel naming conventions.
+> 
+> Why NBL_CORE?
+> The driver is designed to support two distinct functionalities for the
+> Nebula-matrix m18100 Ethernet controller:
+> 
+> 1.Standard Ethernet/NIC functionality (via the main driver module).
+> 2.Auxiliary device (auxiliary driver) for RDMA (exposed through
+> auxiliary_device).
+> 4.MDEV-based SR-IOV/VF emulation (for native device splitting).
+> Since shared logic (e.g., PCIe resource management, MMIO access, interrupt
+> handling, and common hardware abstractions) is required across both the main
+> driver and auxiliary/RDMA driver, we opted for a _CORE suffix to indicate:
 
-Enable sframe generation in the VDSO library so kernel and user space
-can unwind through it.
+You can split this two ways:
 
-[ Jens Remus: Add support for SFrame V3.  Prevent GNU_SFRAME program
-table entry to empty .sframe section. ]
+A true core, which does not provide any devices, just core functions
+to access the hardware. Then layered on top if this you have kernel
+modules with provide Ethernet, RDMA, MDEV etc. Such kernel modules
+would then depend on the core, using Kconfig primitives. And the core
+itself would not have a tri-state string, since on its own it is
+useless.
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Jens Remus <jremus@linux.ibm.com>
----
- arch/Kconfig                          |  7 +++++++
- arch/x86/entry/vdso/Makefile          | 10 +++++++---
- arch/x86/entry/vdso/vdso-layout.lds.S |  7 +++++++
- arch/x86/include/asm/dwarf2.h         |  5 ++++-
- 4 files changed, 25 insertions(+), 4 deletions(-)
+Or
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index dcb553136e0c..b5b3a83072f7 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -479,6 +479,13 @@ config HAVE_HARDLOCKUP_DETECTOR_ARCH
- 	  It uses the same command line parameters, and sysctl interface,
- 	  as the generic hardlockup detectors.
- 
-+config AS_SFRAME
-+	bool
-+
-+config AS_SFRAME3
-+	def_bool $(as-instr,.cfi_startproc\n.cfi_endproc,-Wa$(comma)--gsframe-3)
-+	select AS_SFRAME
-+
- config UNWIND_USER
- 	bool
- 
-diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-index f247f5f5cb44..748e0a630e81 100644
---- a/arch/x86/entry/vdso/Makefile
-+++ b/arch/x86/entry/vdso/Makefile
-@@ -47,13 +47,17 @@ quiet_cmd_vdso2c = VDSO2C  $@
- $(obj)/vdso-image-%.c: $(obj)/vdso%.so.dbg $(obj)/vdso%.so $(obj)/vdso2c FORCE
- 	$(call if_changed,vdso2c)
- 
-+ifeq ($(CONFIG_AS_SFRAME3),y)
-+  SFRAME_CFLAGS := -Wa,--gsframe-3
-+endif
-+
- #
- # Don't omit frame pointers for ease of userspace debugging, but do
- # optimize sibling calls.
- #
- CFL := $(PROFILING) -mcmodel=small -fPIC -O2 -fasynchronous-unwind-tables -m64 \
-        $(filter -g%,$(KBUILD_CFLAGS)) -fno-stack-protector \
--       -fno-omit-frame-pointer -foptimize-sibling-calls \
-+       -fno-omit-frame-pointer $(SFRAME_CFLAGS) -foptimize-sibling-calls \
-        -DDISABLE_BRANCH_PROFILING -DBUILD_VDSO
- 
- ifdef CONFIG_MITIGATION_RETPOLINE
-@@ -63,7 +67,7 @@ endif
- endif
- 
- $(vobjs): KBUILD_CFLAGS := $(filter-out $(PADDING_CFLAGS) $(CC_FLAGS_LTO) $(CC_FLAGS_CFI) $(RANDSTRUCT_CFLAGS) $(KSTACK_ERASE_CFLAGS) $(GCC_PLUGINS_CFLAGS) $(RETPOLINE_CFLAGS),$(KBUILD_CFLAGS)) $(CFL)
--$(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO
-+$(vobjs): KBUILD_AFLAGS += -DBUILD_VDSO $(SFRAME_CFLAGS)
- 
- #
- # vDSO code runs in userspace and -pg doesn't help with profiling anyway.
-@@ -104,7 +108,7 @@ $(obj)/%-x32.o: $(obj)/%.o FORCE
- 
- targets += vdsox32.lds $(vobjx32s-y)
- 
--$(obj)/%.so: OBJCOPYFLAGS := -S --remove-section __ex_table
-+$(obj)/%.so: OBJCOPYFLAGS := -g --remove-section __ex_table
- $(obj)/%.so: $(obj)/%.so.dbg FORCE
- 	$(call if_changed,objcopy)
- 
-diff --git a/arch/x86/entry/vdso/vdso-layout.lds.S b/arch/x86/entry/vdso/vdso-layout.lds.S
-index 60747905de2b..acdc55435d99 100644
---- a/arch/x86/entry/vdso/vdso-layout.lds.S
-+++ b/arch/x86/entry/vdso/vdso-layout.lds.S
-@@ -59,6 +59,9 @@ SECTIONS
- 	.eh_frame_hdr	: { *(.eh_frame_hdr) }		:text	:eh_frame_hdr
- 	.eh_frame	: { KEEP (*(.eh_frame)) }	:text
- 
-+#ifdef CONFIG_AS_SFRAME
-+	.sframe		: { *(.sframe) }		:text	:sframe
-+#endif
- 
- 	/*
- 	 * Text is well-separated from actual data: there's plenty of
-@@ -87,6 +90,7 @@ SECTIONS
-  * Very old versions of ld do not recognize this name token; use the constant.
-  */
- #define PT_GNU_EH_FRAME	0x6474e550
-+#define PT_GNU_SFRAME	0x6474e554
- 
- /*
-  * We must supply the ELF program headers explicitly to get just one
-@@ -98,4 +102,7 @@ PHDRS
- 	dynamic		PT_DYNAMIC	FLAGS(4);		/* PF_R */
- 	note		PT_NOTE		FLAGS(4);		/* PF_R */
- 	eh_frame_hdr	PT_GNU_EH_FRAME;
-+#ifdef CONFIG_AS_SFRAME
-+	sframe		PT_GNU_SFRAME;
-+#endif
- }
-diff --git a/arch/x86/include/asm/dwarf2.h b/arch/x86/include/asm/dwarf2.h
-index 65d958ef1178..ce294e6c9017 100644
---- a/arch/x86/include/asm/dwarf2.h
-+++ b/arch/x86/include/asm/dwarf2.h
-@@ -12,8 +12,11 @@
- 	 * For the vDSO, emit both runtime unwind information and debug
- 	 * symbols for the .dbg file.
- 	 */
--
-+#if defined(__x86_64__) && defined(CONFIG_AS_SFRAME)
-+	.cfi_sections .eh_frame, .debug_frame, .sframe
-+#else
- 	.cfi_sections .eh_frame, .debug_frame
-+#endif
- 
- #define CFI_STARTPROC		.cfi_startproc
- #define CFI_ENDPROC		.cfi_endproc
--- 
-2.51.0
+If the core always provides Ethernet, call it an Ethernet driver, not
+core. The other kernel modules would then depends on having the
+Ethernet driver, using Kconfig primitives.
+
+This all about naming, not architecture. Splitting it up into multiple
+kernel modules is good, but your naming and descriptions of what these
+modules do matters.
+
+	Andrew
 
