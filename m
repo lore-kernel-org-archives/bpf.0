@@ -1,79 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5BF12FDC27;
-	Fri, 30 Jan 2026 20:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9673334EF11
+	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 20:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769804416; cv=none; b=Yk931eOhef8nSp5agX967nAqYYbSHRSBtkNeE1BWa5lBqePv6kAQ46zc7BYkKc7AJuhCrmuuZTWzK3z71nhv9QXhTNSOKllCTeoYOsadQnxATlE3s7GhKpu107YoY/MP4KY2nn1+oFQNSQmvjzCG/YpaemjgpFmTZ07V0em680U=
+	t=1769804629; cv=none; b=e+7i/vovkbl2YVlBsDu/7OrpGSzIdpaZMnPh9cNxoks7+CHuQwiIp019AeHP3LltoObcEGX3MOaUNqnLiXMgq37PW40BtsHmKjqM+z3n/lqabB9YYHmrjbEE4yA1AdYDwSiI0bAT0Ph7Xx4L0DA+8wd8TwRLGhQLV1e3ORfSR1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769804416; c=relaxed/simple;
-	bh=GI0K1SyFWaUJzRajqwO+gWSLkcETu3gM/nIXMfnLFlY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=j4fMJisg2dSGgR9MlsTxucR8Nodm0b/kPrVz1KPqR+F1GfMZmIBxp9QDviy29t/AuJE9qkmWkb6ZLd78xeknaf+kHngOh/jsqcwopvpz2zbf0FavW085EJwh9YFR2F+nM3UIzylWwZPjioWCEQu6mVgzYgasuU/LcStDxsVXdF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ekVLnh4a; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ekVLnh4a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B751C4CEF7;
-	Fri, 30 Jan 2026 20:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769804415;
-	bh=GI0K1SyFWaUJzRajqwO+gWSLkcETu3gM/nIXMfnLFlY=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=ekVLnh4aowIzbb0QZKWSJY00r1yUPkbxtN4ISqqGJlPNs5bbk5yYd0kzlsbCAwJ9Z
-	 Ihh+62OObqxo13SiMU67d2D/1iE16lSMqc8gnNdpugWprVxSnLfhw066VC+rurWJmk
-	 Vo+gq8Y2sw1ANX7Hv1cZfb7F/b+emHeIFjFYPETEMSXc4CkQmd1UZ1/ZTSl/tSumKi
-	 ycl5r37QUHqICL10dzWWXoYSGWwMSxs9IjDnLDfAtkpvjquhDtEFGruNWJd5cwB8yG
-	 nCliAWJULOYLIFnHkZIpn6SjTXFRRqUssi/3PPlGrlfNg91XgOAvcZr9WjVJyxfxWO
-	 GKAszaYdPHe+g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 11950380CFEF;
-	Fri, 30 Jan 2026 20:20:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1769804629; c=relaxed/simple;
+	bh=ZjPyLSoSl5jKeP970aGv1eLYndAF9mj4WgowxDUtICo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=pjdu2jlm6fwBjDpiHl3oz/hMXdlpJ4NOiOyUwaE3waJrOUrwmWsqgZWftrs+1MOyVuadqL1d/9sYUUE3n0feiBdM2I4D5NHlV6hy+4SKR8J4JrpFLV6eUsSfxk74vVnQSChi/YTshA+/SCB2zOkRT8+eeAaaOWn6hjc4SBGM2cQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 341D28C330;
+	Fri, 30 Jan 2026 20:23:46 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id 6095E80011;
+	Fri, 30 Jan 2026 20:23:44 +0000 (UTC)
+Date: Fri, 30 Jan 2026 15:24:00 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Blake Jones <blakejones@google.com>, bpf@vger.kernel.org, Alexei
+ Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Ian
+ Rogers <irogers@google.com>
+Subject: Re: BPF with deferred stacktrace and sframes?
+Message-ID: <20260130152400.6a71abb8@gandalf.local.home>
+In-Reply-To: <CAEf4BzaEiQ8FApp1KMrCvsBVs+xLrk_mtQFUCfXZ3co2D6Oayg@mail.gmail.com>
+References: <20260126142118.2ea3cf13@gandalf.local.home>
+	<CAEf4Bzax24jJVDs2bBiJuz1ZuuDihsb5Xq8pGcy18vLUMMLxbg@mail.gmail.com>
+	<20260126192010.4f14bcb9@gandalf.local.home>
+	<CAEf4BzZ0cYkJ-3Kt-O+2FTvTEirS7cSuea2swgaom18Q_sve4A@mail.gmail.com>
+	<CAP_z_CgozbHejsuKeLRQHN-bz5jPA+C+c0GBNitgEvwOucm8TQ@mail.gmail.com>
+	<CAEf4Bza91wTWzESxAyz5qP4e8siwGn=rvm-Few6xT_VpW9oJzw@mail.gmail.com>
+	<CAP_z_ChhkA1W_5Bd0GQYpo2Vb-p-zP+Lbdp1cZw8Fr_WHQ=TcQ@mail.gmail.com>
+	<CAEf4BzaSgmgzqfjToDx-O3BRKNZECJeeLpN81yNNWGF+N_uMNQ@mail.gmail.com>
+	<CAP_z_Choy4Pe_VgdxwFzkUo4P71+TA=xAM8kov8QacGpRS5irg@mail.gmail.com>
+	<CAEf4BzaEiQ8FApp1KMrCvsBVs+xLrk_mtQFUCfXZ3co2D6Oayg@mail.gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next 0/2] bpf: tail calls in sleepable programs
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176980440785.3880814.15917626921872259763.git-patchwork-notify@kernel.org>
-Date: Fri, 30 Jan 2026 20:20:07 +0000
-References: <20260130081208.1130204-1-jolsa@kernel.org>
-In-Reply-To: <20260130081208.1130204-1-jolsa@kernel.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- bpf@vger.kernel.org, linux-perf-users@vger.kernel.org, kafai@fb.com,
- eddyz87@gmail.com, songliubraving@fb.com, yhs@fb.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 6095E80011
+X-Stat-Signature: 7a9tnx1tpbb3ow4jtanq9rk8zijgnnow
+X-Rspamd-Server: rspamout08
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+50cSypQi16vJ/muFzakZ6ifpewbfcCCw=
+X-HE-Tag: 1769804624-105672
+X-HE-Meta: U2FsdGVkX1+I1vQqqR3izLvXa0ncoEmQHgbb2zFuJCrkT118NGur+BL0yqFjOZdhqtpMIbHesqjrF2HQnaqX8TYFTLCyLFwM57gmumP2gxWUbw/Rr1Z1Jt4zQIDHA15NJGAQADiiILeINcn5odR7BqUhaqw21j1r5+Mt5u75Xz5d+bqdkqCBbSIMvthJz7wGYwTEZQCmpBHCudRb2h6XlfyyNGtiOY5t0bEL7JF5XYfMejpnbPDbCh0+85dAUBxR+AloBPha+AkroRrP82y7BCp8nlXiASaT6KM/7emo3X8GR3Mav/J/hgQWL9lxQKb/U/BJVLH2hu7s2iA8JrpAolkaLoHM8rdi
 
-Hello:
+On Fri, 30 Jan 2026 11:50:16 -0800
+Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> I'm not really proposing anything. You have a baked-in assumption that
+> you will have a user stack available *synchronously* and that you can
+> use that as some sort of lookup key. This is simply not true with
+> SFrame (and asynchronously captured user space stack traces in
+> general), so you'll have to redesign your approach (or you just say
+> that you only support frame pointer-based synchronous stack traces).
 
-On Fri, 30 Jan 2026 09:12:06 +0100 you wrote:
-> hi,
-> this patchset allows sleepable programs to use tail calls.
-> 
-> At the moment we need to have separate sleepable uprobe program
-> to retrieve user space data and pass it to complex program with
-> tail calls. It'd be great if the program with tail calls could
-> be sleepable and do the data retrieval directly.
-> 
-> [...]
+=46rom my understanding of what Blake's tools are doing is that it records
+stacktraces (both kernel and user space) when a task schedules out and for
+how long. This shows how long tasks were off the CPU due to being blocked,
+or sleeping, and even preemption.
 
-Here is the summary with links:
-  - [bpf-next,1/2] bpf: Allow sleepable programs to use tail calls
-    https://git.kernel.org/bpf/bpf-next/c/0f0c332992b8
-  - [bpf-next,2/2] selftests/bpf: Add test for sleepable program tailcalls
-    https://git.kernel.org/bpf/bpf-next/c/15ac1adf0f84
+Currently, when a task schedules out and comes back on the CPU, the kernel
+stack is combined with the user stack and it's put into a hash table where
+the time off the CPU is added to the hash entry's time. I'm not sure of the
+details here, but this could be updating BPF maps and such here.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+The issue that Blake has is that this cannot be recorded when waking up
+because only the kernel's stack is known. The user stack isn't known yet.
 
+One solution we discussed was to make the hash key of the kernel tasks and
+save it in a small array that also stores the time it was off the kernel.
+If the task schedules out in the same location multiple times before going
+back to user space, only one entry needs to be updated as the hash of the
+kernel stack would be the same. When the task goes back to user space, the
+kernel key is attached to the user stack trace hash key and added to the
+main table that associates both the kernel and user stacktrace.
 
+But if the task were to schedule out in many locations (Blake has recorded
+over 50 unique locations where a task could schedule out in the same system
+call), then it would need to save the time off the CPU for each of those
+locations. When going back to user space, each of those locations would
+need to be attached to the current user stacktrace hash key and added to
+the main table individually.
+
+Note, these temporary kernel hash keys are unique per task, as they haven't
+been associated with a user stacktrace yet, whereas the global table is for
+the entire system. That means any storage of these temporary kernel
+stacktrace keys needs to be done per task.
+
+Blake, did I explain that correctly?
+
+Now the question is, is there a way to easily store these unique kernel
+stacktraces along with the time the task was off the CPU for those
+locations and be able to attach them each to the user stacktrace when going
+back to user space?
+
+-- Steve
