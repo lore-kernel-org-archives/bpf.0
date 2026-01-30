@@ -1,108 +1,170 @@
-Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9673334EF11
-	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 20:23:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.13
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769804629; cv=none; b=e+7i/vovkbl2YVlBsDu/7OrpGSzIdpaZMnPh9cNxoks7+CHuQwiIp019AeHP3LltoObcEGX3MOaUNqnLiXMgq37PW40BtsHmKjqM+z3n/lqabB9YYHmrjbEE4yA1AdYDwSiI0bAT0Ph7Xx4L0DA+8wd8TwRLGhQLV1e3ORfSR1c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769804629; c=relaxed/simple;
-	bh=ZjPyLSoSl5jKeP970aGv1eLYndAF9mj4WgowxDUtICo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pjdu2jlm6fwBjDpiHl3oz/hMXdlpJ4NOiOyUwaE3waJrOUrwmWsqgZWftrs+1MOyVuadqL1d/9sYUUE3n0feiBdM2I4D5NHlV6hy+4SKR8J4JrpFLV6eUsSfxk74vVnQSChi/YTshA+/SCB2zOkRT8+eeAaaOWn6hjc4SBGM2cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf02.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 341D28C330;
-	Fri, 30 Jan 2026 20:23:46 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf02.hostedemail.com (Postfix) with ESMTPA id 6095E80011;
-	Fri, 30 Jan 2026 20:23:44 +0000 (UTC)
-Date: Fri, 30 Jan 2026 15:24:00 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Blake Jones <blakejones@google.com>, bpf@vger.kernel.org, Alexei
- Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Ian
- Rogers <irogers@google.com>
-Subject: Re: BPF with deferred stacktrace and sframes?
-Message-ID: <20260130152400.6a71abb8@gandalf.local.home>
-In-Reply-To: <CAEf4BzaEiQ8FApp1KMrCvsBVs+xLrk_mtQFUCfXZ3co2D6Oayg@mail.gmail.com>
-References: <20260126142118.2ea3cf13@gandalf.local.home>
-	<CAEf4Bzax24jJVDs2bBiJuz1ZuuDihsb5Xq8pGcy18vLUMMLxbg@mail.gmail.com>
-	<20260126192010.4f14bcb9@gandalf.local.home>
-	<CAEf4BzZ0cYkJ-3Kt-O+2FTvTEirS7cSuea2swgaom18Q_sve4A@mail.gmail.com>
-	<CAP_z_CgozbHejsuKeLRQHN-bz5jPA+C+c0GBNitgEvwOucm8TQ@mail.gmail.com>
-	<CAEf4Bza91wTWzESxAyz5qP4e8siwGn=rvm-Few6xT_VpW9oJzw@mail.gmail.com>
-	<CAP_z_ChhkA1W_5Bd0GQYpo2Vb-p-zP+Lbdp1cZw8Fr_WHQ=TcQ@mail.gmail.com>
-	<CAEf4BzaSgmgzqfjToDx-O3BRKNZECJeeLpN81yNNWGF+N_uMNQ@mail.gmail.com>
-	<CAP_z_Choy4Pe_VgdxwFzkUo4P71+TA=xAM8kov8QacGpRS5irg@mail.gmail.com>
-	<CAEf4BzaEiQ8FApp1KMrCvsBVs+xLrk_mtQFUCfXZ3co2D6Oayg@mail.gmail.com>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 902F734FF4E
+	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 20:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769804640; cv=pass; b=GnYMAyCz9+Qj0eJJ4MnZ2liy0fb1Ya2Dq29nXk4p+wpTPFHAJJBCJ2S11hrIwhWs8MF5R7QHHTe1S39u2otFghjWZ1y1nds/S36LpCN1mYqVB6/QZCkaUq5yR/DaieJ/0s5e+l7r94RlmrvZLmirOLC5YsgtEvfIeYAJGMvrabQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769804640; c=relaxed/simple;
+	bh=LSbCuEWjDyxHHbdfWPZfE+rO0gwrV/np3QjQSXS/U6w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WoHaKLclxMRxTvjQtyAEbDZjuc25sHXld8EA9YNtHFTj66TnoGNR6iG2+sfc94OpDXpsSX/WEG7eGGgykTy7jC6GPAAMJbqoozYHEZNVzYEsF1MJPYrVTv9hrUdtov4IVMoxIy35qbobGepIQQgkYDyyzpTW06EI7a7v/U/S7Ow=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PLEsjyh7; arc=pass smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PLEsjyh7"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-432d256c2e6so2221989f8f.3
+        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 12:23:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769804637; cv=none;
+        d=google.com; s=arc-20240605;
+        b=PoV/fOvuB8Yozp8ItPYl9RH/fZnnmFnl5Ydoy3KcosSSO7ma8pFN1hkvx1SLpMZqHi
+         PSNDkhjCfHBhppxIlJR57O4xC01VFFo9Mpknn/mvLL20uBVAO875+T91f2zkyvcBHv1w
+         JZoc24IKrz5SxPLpx9eIXxMbY+mLgCCMGYjhm1m3hEkUzrirhfiOyhRx3dP4XlLQwGy4
+         ssXj5LLjPvBQb+M02oLbB7Bwai6000c0BSPsEVVDjbLlyUM2d+NOEW+v1bh1UNtVsCx+
+         uGg7l76/VJjU5urEBvpZmclgt3kFU16Q2eI3bVoR2cO7c44l4FJjk68PHVag74r80fnn
+         aIgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=bBwlax1uJEe2vt97vaL600iF1Si6VhncixuT6qdHH8w=;
+        fh=EsmXJcEL6WsMHdjvcObSm5HE156IJjTfIl7ps6QUCYk=;
+        b=fbvZUjPL1mfe8d/KlshsSTjfX/kPgYvfZvfPVSsB87tLKvBihjwvroMAVk9dqeatTY
+         OJYcVm+jNT2Y5Cq6ahLb/4a3a25uLbQ526Fy4jabpqCOqVP40q3YZ7vnjg1OXg/6UZde
+         5svpUfAsw+FXQutDEtIsYbdZuG1uoASnGaieAkWo3nkysZl5KhexyHJ7dqAqOYKydSvt
+         yoKkAk1+yjK8I7jyp5Xh6QabOLg/2egpxi1/vCGCO1zPO8RpNKD4vZtjgnQOeTTGeuoE
+         o9L9GVu1KCB0exDdCMlwoFYU/Hv8zpQyBDj9VQB8iVOIVyUA9CmQBei00sJMZ2R/XzkX
+         cVLw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769804637; x=1770409437; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bBwlax1uJEe2vt97vaL600iF1Si6VhncixuT6qdHH8w=;
+        b=PLEsjyh7YjlSS0F899rtagL2ikqRtbELz+YHhT0yeAVmVuV0p8O4qLA+X18scWUqZ2
+         657TrGV9wNXSUcrtyY2PzFz3/w9wYboKvuOebx82PwNfVYbYh6zLkw2E56+JvfSeJiX/
+         8f2N/nIRh1MNEmSEUwNvKqV7zxljhq8IQHOcH866kYaDyFjfWQHILs2ovQUZ6FNQQDjj
+         PhbX/GufOmz/xK6eYwK5IIbPfWVvYGtUEblSRW/iVQjsGIWnVHzleTSJ56QlSuBxc+M5
+         GbLMywtldptg1ZA4Kjxuy/FbLF4EhJcoFWs/TWEYlWYpaObgyqbLKvnRUgZLkYxlXelT
+         5zXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769804637; x=1770409437;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=bBwlax1uJEe2vt97vaL600iF1Si6VhncixuT6qdHH8w=;
+        b=c9zkE/fDDNI5o3szbuaqRsojUAFepOcVFc9Iz8Rs/xC3PdaOCewqN1wL1VgkwDWHcm
+         z+yuyN120IhoFGBR57ExzKKx7TGmfRRuzlP8J98CmwKi3tb0jdfbnXN5yxp6YoJ6H4oq
+         nl+iotBt5/zs3ZwB2SSexXjqprJgtoqmLFAWdZBXWgK19XDZ3uExJWTBABwQFobdmpqP
+         sM27yt2reuixoGTsy45hPifNVABcISpGQMDTK7bKFIqhroMvyj8CnVxvzgtSD+a+fXaV
+         Rzd0nI9Uq0dstD+xuyB5RzZZGxnltNuJCsIMzOaYnHd8iyORQNsNOefb6+TBrWypZmxH
+         epGg==
+X-Forwarded-Encrypted: i=1; AJvYcCVEEQph/GdjElhL/HPTqrykyr7rqXzdk+TlQdxvq1ORqEBBMa1nbb6yhxkzRUjpx4O1a7Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvNeI/GN15XIaLwz1+9ddu7H9S6mOT8NMQq7Zv9gXkg/dGkpNV
+	/vdIfTmG/nOzDOwWsq28BRwMxp3bNTGNfAhzO7wgVpp/LpDEyPAWjND13D+TyPTg0d9+ISOcsVi
+	c5ot/jDPbu7hZUJJ5Ygq1zgjnLUft1pk=
+X-Gm-Gg: AZuq6aLJQ1W8w555CyuNCbXDMYXOQUT23At+x/UBgwl6F9gDZUBte6ryyBVCbxVTxm3
+	V6QW+UL9JoctA6v9tlsjMG955VW2AJGayGiwLEIUgaQHJ5qfOHG3w3hUntA5oIg4Zq0C3pDoZei
+	OuWvECtIBpemZAqq1M9+oZ4eNOx6ulAl4lxT40zkH1HcaVrUzx5iPPFMjwdh22yU4zYnUHVKclz
+	WNr6YBYLTOPxnSXU1YlMF8J9ek24wj3yV3dJFnsZhPj4pSiQT1TPPwd3qx1e6IsMRbyPKxSS8x5
+	NasPQLa6aIx6/cAHj89bUkiVRZOS0mx6AzMuHjwx/GQoq+ujzFg1taciIzeNwrcIV8Ue1JA2XAi
+	EGFYw4XIIwBbwFw==
+X-Received: by 2002:a5d:5f88:0:b0:42f:b9c6:c89a with SMTP id
+ ffacd0b85a97d-435f3abc68cmr6202323f8f.49.1769804636726; Fri, 30 Jan 2026
+ 12:23:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20260130021843.154885-1-changwoo@igalia.com>
+In-Reply-To: <20260130021843.154885-1-changwoo@igalia.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 30 Jan 2026 12:23:44 -0800
+X-Gm-Features: AZwV_QgVIyfECQMmhpFdjuibFf6ud4d60AK0JQfLZpsdvQJ-mBanXyhqw-cL-f4
+Message-ID: <CAADnVQJKguqUD0bYh=tHnrGXOUOMrSk9_72HDFVcuMsv7=S_nQ@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/bpf: Make x86 preempt_count access
+ compatible across v6.14+
+To: Changwoo Min <changwoo@igalia.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, kernel-dev@igalia.com, 
+	bpf <bpf@vger.kernel.org>, sched-ext@lists.linux.dev, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Rspamd-Queue-Id: 6095E80011
-X-Stat-Signature: 7a9tnx1tpbb3ow4jtanq9rk8zijgnnow
-X-Rspamd-Server: rspamout08
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+50cSypQi16vJ/muFzakZ6ifpewbfcCCw=
-X-HE-Tag: 1769804624-105672
-X-HE-Meta: U2FsdGVkX1+I1vQqqR3izLvXa0ncoEmQHgbb2zFuJCrkT118NGur+BL0yqFjOZdhqtpMIbHesqjrF2HQnaqX8TYFTLCyLFwM57gmumP2gxWUbw/Rr1Z1Jt4zQIDHA15NJGAQADiiILeINcn5odR7BqUhaqw21j1r5+Mt5u75Xz5d+bqdkqCBbSIMvthJz7wGYwTEZQCmpBHCudRb2h6XlfyyNGtiOY5t0bEL7JF5XYfMejpnbPDbCh0+85dAUBxR+AloBPha+AkroRrP82y7BCp8nlXiASaT6KM/7emo3X8GR3Mav/J/hgQWL9lxQKb/U/BJVLH2hu7s2iA8JrpAolkaLoHM8rdi
 
-On Fri, 30 Jan 2026 11:50:16 -0800
-Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
+On Thu, Jan 29, 2026 at 6:19=E2=80=AFPM Changwoo Min <changwoo@igalia.com> =
+wrote:
+>
+> Recent x86 kernels export __preempt_count as a ksym, while some old kerne=
+ls
+> between v6.1 and v6.14 expose the preemption counter via
+> pcpu_hot.preempt_count. The existing selftest helper unconditionally
+> dereferenced __preempt_count, which breaks BPF program loading on such ol=
+d
+> kernels.
+>
+> Make the x86 preemption count lookup version-agnostic by:
+> - Marking __preempt_count and pcpu_hot as weak ksyms.
+> - Introducing a BTF-described pcpu_hot___local layout with
+>   preserve_access_index.
+> - Selecting the appropriate access path at runtime using ksym availabilit=
+y
+>   and bpf_ksym_exists() and bpf_core_field_exists().
+>
+> This allows a single BPF binary to run correctly across kernel versions
+> (e.g., v6.18 vs. v6.13) without relying on compile-time version checks.
+>
+> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+> ---
+>  .../testing/selftests/bpf/bpf_experimental.h  | 21 +++++++++++++++++--
+>  1 file changed, 19 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testi=
+ng/selftests/bpf/bpf_experimental.h
+> index a39576c8ba04..acabf869d2c4 100644
+> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> @@ -614,7 +614,13 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgro=
+up, const char *name__str,
+>
+>  extern bool CONFIG_PREEMPT_RT __kconfig __weak;
+>  #ifdef bpf_target_x86
+> -extern const int __preempt_count __ksym;
+> +extern const int __preempt_count __ksym __weak;
+> +
+> +struct pcpu_hot___local {
+> +       int preempt_count;
+> +} __attribute__((preserve_access_index));
+> +
+> +extern struct pcpu_hot___local pcpu_hot __ksym __weak;
+>  #endif
+>
+>  struct task_struct___preempt_rt {
+> @@ -624,7 +630,18 @@ struct task_struct___preempt_rt {
+>  static inline int get_preempt_count(void)
+>  {
+>  #if defined(bpf_target_x86)
+> -       return *(int *) bpf_this_cpu_ptr(&__preempt_count);
+> +       /* By default, read the per-CPU __preempt_count. */
+> +       if (bpf_ksym_exists(&__preempt_count))
+> +               return *(int *) bpf_this_cpu_ptr(&__preempt_count);
+> +
+> +       /* If __preempt_count does not exist, try to read preempt_count u=
+nder
 
-> I'm not really proposing anything. You have a baked-in assumption that
-> you will have a user stack available *synchronously* and that you can
-> use that as some sort of lookup key. This is simply not true with
-> SFrame (and asynchronously captured user space stack traces in
-> general), so you'll have to redesign your approach (or you just say
-> that you only support frame pointer-based synchronous stack traces).
+Please use proper kernel comment style in the future.
+We don't use old networking style in bpf anymore.
+I fixed it up while applying.
 
-=46rom my understanding of what Blake's tools are doing is that it records
-stacktraces (both kernel and user space) when a task schedules out and for
-how long. This shows how long tasks were off the CPU due to being blocked,
-or sleeping, and even preemption.
-
-Currently, when a task schedules out and comes back on the CPU, the kernel
-stack is combined with the user stack and it's put into a hash table where
-the time off the CPU is added to the hash entry's time. I'm not sure of the
-details here, but this could be updating BPF maps and such here.
-
-The issue that Blake has is that this cannot be recorded when waking up
-because only the kernel's stack is known. The user stack isn't known yet.
-
-One solution we discussed was to make the hash key of the kernel tasks and
-save it in a small array that also stores the time it was off the kernel.
-If the task schedules out in the same location multiple times before going
-back to user space, only one entry needs to be updated as the hash of the
-kernel stack would be the same. When the task goes back to user space, the
-kernel key is attached to the user stack trace hash key and added to the
-main table that associates both the kernel and user stacktrace.
-
-But if the task were to schedule out in many locations (Blake has recorded
-over 50 unique locations where a task could schedule out in the same system
-call), then it would need to save the time off the CPU for each of those
-locations. When going back to user space, each of those locations would
-need to be attached to the current user stacktrace hash key and added to
-the main table individually.
-
-Note, these temporary kernel hash keys are unique per task, as they haven't
-been associated with a user stacktrace yet, whereas the global table is for
-the entire system. That means any storage of these temporary kernel
-stacktrace keys needs to be done per task.
-
-Blake, did I explain that correctly?
-
-Now the question is, is there a way to easily store these unique kernel
-stacktraces along with the time the task was off the CPU for those
-locations and be able to attach them each to the user stacktrace when going
-back to user space?
-
--- Steve
+Also use [PATCH bpf-next] in the subject to help CI identify the tree.
