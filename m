@@ -1,134 +1,103 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 205AC3FF1;
-	Fri, 30 Jan 2026 03:38:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792A7221FCD;
+	Fri, 30 Jan 2026 03:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769744312; cv=none; b=u953u4FjTh+YQwPIQzlcolhmASBSM/IKDJyuEaDIy4u2GHSyzwu//aRA1WpLvzpcQZqi+YV21IKXJMTNVCjjipT0tipMIXeT3diL5McDeu5lCwRRUPd657HEj9QehhPl0bR/UURDT5o4sS7j4uhkDFIwvN/d6T/NRk7fKxRfjrA=
+	t=1769745333; cv=none; b=jbrBDI4uuiGDld1QyozaAvLMa86ld0bXyYMxBQp3XReAS2ECmOwIXm1c4a+VVroS6atX86bsp8U31vWFhGZyk5KxlKdg3RPBSwspYAp7K5tKnN2Pk/O8j1G+ashH+VIo0o2tA+eZVX6/AtP4gQsVrcNysbXNlfuJVMovsz/yd30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769744312; c=relaxed/simple;
-	bh=IF1Wqx2TIJcC5YIyg8xCcU6RmGU8W2yyLN215CmEcns=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GwCDkuQZ+o0RIplktQixgF9r0MGDlRFUlETAKNJwpKJklGQ/6lsFcTrYpNu99VPuC+z7RVvalj1TbBbDZs04ePNf0TFLcLzS6jHddUVQMOyAkuZHqE5ryZ7EmCliIsbQoUxTK/hemhWSbIgXzSvcxOcsl/udccQuAgBgNHV6vLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N3P5Wun2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769745333; c=relaxed/simple;
+	bh=lCApoAs780KvAuXMjci54Pk5bdt1ic49wr2Ha4ZQ0NI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YdTn3BBXqMMf5Drnns4f+Qt0uFwjAv+3xp3lo3w1SrKiE0RQ7G8nlaeSUlXCtesK6BD1y4KNNEXY1fCFdAQ7LhFhMl9Z6vsmkr+0SwixI2+Hi+furbn5jH7L5A/N+wAPxUyVtQHfPFf24mXWwjYPPBby/UCHYbCr5nME4qtH8pY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EHB8lySj; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N3P5Wun2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19E1C4CEF7;
-	Fri, 30 Jan 2026 03:38:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769744311;
-	bh=IF1Wqx2TIJcC5YIyg8xCcU6RmGU8W2yyLN215CmEcns=;
-	h=From:To:Cc:Subject:Date:From;
-	b=N3P5Wun2RJzScLVeaMRsq72ND7Q4wbWzJWbHJYRvPyt803dvY5vYBgVp0cXRWUbmd
-	 rzEQqYSjqp6ulP4WOpIUxXkDSK5eoQPE6K3Vu+7+S1xE0aEztmx0vlOOF2nguR+8a0
-	 AyCXzoBuq5PkIJTxC4Lkn0iaHNJFRIWoL282tiqO8WA26upAQM6P/GSA3USxeZqcbx
-	 7j0vC8qzl5LMW4O/bDFj1bM7xKkQ38YTm0Hvmzot7Gpn5lDFCbEWHdCQSRBK0Ed6NB
-	 GpiCI6YfWobFOySnDTGdZXHmE7bX3YkzwBt6EHry4i2L6W9wHhH5YePVC9SNL5iOSL
-	 leY7iKwXYpXHw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Gal Pressman <gal@nvidia.com>,
-	ast@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	dsahern@gmail.com,
-	bpf@vger.kernel.org
-Subject: [PATCH net v2] net: don't touch dev->stats in BPF redirect paths
-Date: Thu, 29 Jan 2026 19:38:27 -0800
-Message-ID: <20260130033827.698841-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EHB8lySj"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769745331; x=1801281331;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lCApoAs780KvAuXMjci54Pk5bdt1ic49wr2Ha4ZQ0NI=;
+  b=EHB8lySjUio5eD44dwImH+w9gokm3QnJqaWpTRvjjwDLdyFU9OLes5ak
+   ZiXHfWXClzp2kMdkyTf4fv2+f8EEwCo3h/8ndAdbqzdbGZ8rd2/YCcoqO
+   zz2sfaiS7/I4Agka49sAfcnCVHgNO98XMOmTasjdLC59B21EK/ELxhvlE
+   4QVsJInP6gTJg2A5N+3q2EBoWdyETTHLfwASwbNwEUHudV52S9UQSu5z+
+   cLGEJk3Tv2eNJ6ASY2GnSaOAqV5Rkeh2pSbU5+qnGk1acgUQ8BHmDSRUS
+   ekSZFbeUvO5uXZzCTZwGgAv8PlQkWul3sYqdhpI6JebdydNG06EbxMWQO
+   Q==;
+X-CSE-ConnectionGUID: YpWM/CK/Rmub9WvxGiE3AA==
+X-CSE-MsgGUID: h2P3IDGQRNuwvPpWzwJ9iw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="71048411"
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="71048411"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 19:55:30 -0800
+X-CSE-ConnectionGUID: 5JwofcPES8yhw6zqynO64Q==
+X-CSE-MsgGUID: 9GWOSkM7TeqVnLGsYipAuQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
+   d="scan'208";a="240005118"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 29 Jan 2026 19:55:28 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vlfbR-00000000c96-3Iqw;
+	Fri, 30 Jan 2026 03:55:25 +0000
+Date: Fri, 30 Jan 2026 11:54:52 +0800
+From: kernel test robot <lkp@intel.com>
+To: Andrii Nakryiko <andrii@kernel.org>, akpm@linux-foundation.org,
+	linux-mm@kvack.org
+Cc: oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	bpf@vger.kernel.org, surenb@google.com, shakeel.butt@linux.dev,
+	Andrii Nakryiko <andrii@kernel.org>,
+	syzbot+4e70c8e0a2017b432f7a@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 mm-stable] procfs: avoid fetching build ID while
+ holding VMA lock
+Message-ID: <202601301121.zr5U6ixA-lkp@intel.com>
+References: <20260129215340.3742283-1-andrii@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260129215340.3742283-1-andrii@kernel.org>
 
-Gal reports that BPF redirect increments dev->stats.tx_errors
-on failure. This is not correct, most modern drivers completely
-ignore dev->stats so these drops will be invisible to the user.
-Core code should use the dedicated core stats which are folded
-into device stats in dev_get_stats().
+Hi Andrii,
 
-Note that we're switching from tx_errors to tx_dropped.
-Core only has tx_dropped, hence presumably users already expect
-that counter to increment for "stack" Tx issues.
+kernel test robot noticed the following build warnings:
 
-Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
-Reported-by: Gal Pressman <gal@nvidia.com>
-Link: https://lore.kernel.org/c5df3b60-246a-4030-9c9a-0a35cd1ca924@nvidia.com
-Fixes: b4ab31414970 ("bpf: Add redirect_neigh helper as redirect drop-in")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-v2:
- - add note on tx_dropped to the commit msg
-v1: https://lore.kernel.org/20260128161030.39870-1-kuba@kernel.org
+[auto build test WARNING on bpf-next/net]
+[also build test WARNING on bpf-next/master bpf/master linus/master v6.19-rc7]
+[cannot apply to akpm-mm/mm-everything next-20260129]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-CC: ast@kernel.org
-CC: eddyz87@gmail.com
-CC: song@kernel.org
-CC: yonghong.song@linux.dev
-CC: john.fastabend@gmail.com
-CC: kpsingh@kernel.org
-CC: sdf@fomichev.me
-CC: haoluo@google.com
-CC: jolsa@kernel.org
-CC: dsahern@gmail.com
-CC: bpf@vger.kernel.org
----
- net/core/filter.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Andrii-Nakryiko/procfs-avoid-fetching-build-ID-while-holding-VMA-lock/20260130-055639
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
+patch link:    https://lore.kernel.org/r/20260129215340.3742283-1-andrii%40kernel.org
+patch subject: [PATCH v2 mm-stable] procfs: avoid fetching build ID while holding VMA lock
+config: nios2-allnoconfig (https://download.01.org/0day-ci/archive/20260130/202601301121.zr5U6ixA-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 11.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260130/202601301121.zr5U6ixA-lkp@intel.com/reproduce)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 616e0520a0bb..2c21735798a5 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -2289,12 +2289,12 @@ static int __bpf_redirect_neigh_v6(struct sk_buff *skb, struct net_device *dev,
- 
- 	err = bpf_out_neigh_v6(net, skb, dev, nh);
- 	if (unlikely(net_xmit_eval(err)))
--		DEV_STATS_INC(dev, tx_errors);
-+		dev_core_stats_tx_dropped_inc(dev);
- 	else
- 		ret = NET_XMIT_SUCCESS;
- 	goto out_xmit;
- out_drop:
--	DEV_STATS_INC(dev, tx_errors);
-+	dev_core_stats_tx_dropped_inc(dev);
- 	kfree_skb(skb);
- out_xmit:
- 	return ret;
-@@ -2396,12 +2396,12 @@ static int __bpf_redirect_neigh_v4(struct sk_buff *skb, struct net_device *dev,
- 
- 	err = bpf_out_neigh_v4(net, skb, dev, nh);
- 	if (unlikely(net_xmit_eval(err)))
--		DEV_STATS_INC(dev, tx_errors);
-+		dev_core_stats_tx_dropped_inc(dev);
- 	else
- 		ret = NET_XMIT_SUCCESS;
- 	goto out_xmit;
- out_drop:
--	DEV_STATS_INC(dev, tx_errors);
-+	dev_core_stats_tx_dropped_inc(dev);
- 	kfree_skb(skb);
- out_xmit:
- 	return ret;
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202601301121.zr5U6ixA-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> Warning: lib/buildid.c:348 This comment starts with '/**', but isn't a kernel-doc comment. Refer to Documentation/doc-guide/kernel-doc.rst
+    * Parse build ID of ELF file
+
 -- 
-2.52.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
