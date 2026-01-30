@@ -1,317 +1,182 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 815AB2F693D;
-	Fri, 30 Jan 2026 08:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BA5334C3C
+	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 08:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769760985; cv=none; b=B2v0mHxTsUkMiLHYj76NBoW/B3htJ0jgj9TqCK43xQIxaG9GYo6UVvvLU2vS3ic5MEIm7Tl0zbuthFPv7FRLiK0roRbz85Iu1jCpEjEySDiJLcQQuo46x4SAgiu4SBgr0MzVSXchmYJnLTCP6DzCBV/mvCksq3YS2N8UvCUwLsI=
+	t=1769762432; cv=none; b=f5BK72fGwTEfYIBmZV4l8qbLjQt7CMP3O9Wb4CPbVkluCB5iuA1Ie8xg27Jtb9y8qzdJlfgcG8z1rCZ1IXGrZEqlKoz9cmTdfR6VIg8egMW5GwGwhxXKkAORnZ9PfCRkdV9TQt2lK5y2pQ9YbEieQjWvPGYSu8TmnbSh6wbYFMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769760985; c=relaxed/simple;
-	bh=bQgJs7xXB9wJEWGv0DCOwRjYBdIIvmuBsk1OUdnj5OE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MB/YrBkQSx5ZYeR32xR2eA9RgW+LlVPEcXHNQ/veBlN3YPLRLETo++6SzM3giG1KJ0qjIEjqGrV96rW7ungWepMf8n20goKKr5CvEsZ+A04JsK+PDd9K0FQu4RryP8f5XwVJY4/CDzRHbYhbayNt25QgFatdyfM9CGtSFlGXykU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=VFTjrjD/; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1769762432; c=relaxed/simple;
+	bh=n0jMgmG40z2H2jzTNOqElovXskshLnu1xJ/LSjnyAdw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ekJpPN8l0TE1CJb9LdFo5xtP8s3gXMVaO5OrxVTzIBfAIyMxnchqXKTdDlXQz6UHHAESh5mjM52a/dIMix++TYCAkjdSRDf4BMk5ei7Cg55T3qej0+p+85GTlp3khoGAE8xmBLCfW6Isd1PBfQUe62KEybSoDgDS50fwODhCCec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aYgd/7Nv; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=sdPG76Y+; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="VFTjrjD/"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=I9
-	cXRVbYTYQg+Wkpqq+koy9h/2i/DlkR8kash0wToOs=; b=VFTjrjD/c48xU0MdAr
-	Op2GnauYTOSqrUF1NW+dJHgtqfrwBJOtPAI7p4wAfNEvsv7O54NYROGqu1KBPLEO
-	2aDNsYeWaqDkxfWqGmVgQbeypKW8U+/PwGolL7ktpHHpI8S7QVMsaca/dtrbel9H
-	4kZFjC6apktD5dyu15/qIp4V4=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wCXfeiYaHxpkfQXJQ--.7978S2;
-	Fri, 30 Jan 2026 16:15:22 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykyta.yatsenko5@gmail.com
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 bpf-next] bpf: Add the missing types in the logs
-Date: Fri, 30 Jan 2026 16:15:20 +0800
-Message-Id: <20260130081520.59713-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aYgd/7Nv";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="sdPG76Y+"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769762430;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AOMBl30iiqU2hb1KDZ3dhT/0NSn9OSG50CGfaIcYpoA=;
+	b=aYgd/7NvepxZvOb8ba5U0wBpn9GcDoAPxp7sdRUz2dynSRuACAmXN4I2eBrO0kFbhqKBDU
+	+IeE4x64s662xgbXRn76iUey/JZOc2bqOjYMgXhf3OBnIPn42jM9T0cO6GO/ScxSV/ndJE
+	XJm6uuUH4dxjoDpRb9L5MYcHPEMK9MY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-133-6dqDNbliPpej7rY6r011-A-1; Fri, 30 Jan 2026 03:40:28 -0500
+X-MC-Unique: 6dqDNbliPpej7rY6r011-A-1
+X-Mimecast-MFC-AGG-ID: 6dqDNbliPpej7rY6r011-A_1769762427
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-47ee1fe7b24so16090185e9.1
+        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 00:40:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1769762427; x=1770367227; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AOMBl30iiqU2hb1KDZ3dhT/0NSn9OSG50CGfaIcYpoA=;
+        b=sdPG76Y+dX1alSnDTMlGOzIuZfZ1M85L1/HphcpkaAMBxbYd7ETA6cRs/KktCYJsum
+         AoB+xCwsSIjCZ4QasXCNJA9zXm1dvV58JwPer0HRl22rIQl4ncMXYwXFnlM5DZreB4NL
+         BHBnXKD/XgRHhqp9WE8eOJSnPDagqd00LRzTxUVnYc8dpApXlYrOq7c0eSCMQC8qMxev
+         mCCR5b3O8yMClD+V7QokDNlByI1cHTo0JZZLXx8UBd4BHTKbqgwvzmIwkWwUe3Y+A5HG
+         8H1vxoDWXdjvkIxNI1cwSheyi28RVoRAju7lCXJOCICE+aQX2HkPtWE0ZXedIy0uSdrx
+         mGog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769762427; x=1770367227;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AOMBl30iiqU2hb1KDZ3dhT/0NSn9OSG50CGfaIcYpoA=;
+        b=vGPEooFgAkBYQUoiRdku3vUpLyRSYWbi8nDcwccOwrYF0b+vzhU0Fq7PZYUzGIQoiX
+         Yt1wpUAxmPkFfLDrPVh2eYKKCEgglE6AdCKjI/kGEH60fx8yfl+f2uEwO5YbdCiALw2s
+         GN6P5+H5z4ZNc7SIHxeTcQbGJtWnEeg+oRvTaJpQzvFbsQOlYhpu0fVLfo1HQ89Fve5F
+         NSiIHJJGAWn1HtsnEx0VgXmb0BV4U7NpvcUy6pt7Yh1hB/wVdXVKC7pSyYkBXLgl3l0F
+         2A8AS1o4qUIvyTHXRbi1R04wviZ8s8chvZFuZZ4eIIB2e2R6oA+PJeOh56HGbWOIVAeN
+         v1/w==
+X-Forwarded-Encrypted: i=1; AJvYcCWvLY+uI47o8NQhA6jINs+JJYXjswSWxdoVoBSxKOW3OHSyFYsqIDFKUie9/sZ0U2YZIFE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzo555hMvrtEV7079EJtL7YjZTO8AvTVrdewIprquFIfFdoiWs1
+	mZ+uRS64sn+RGCchvVve89BtY5mYzKxWJdxADOq7lwMVM/0xXsau7x0eXFPWYLBxpTko1DL+D4t
+	AfP3Fu7jQm1Kfrf4PD1I4RopAllR60jFT63kHRdFYfVPgETMiHZq14g==
+X-Gm-Gg: AZuq6aKhHl5ltE6Ic3LH+sAzW4j6XXyRnOxNiLXGIIaVY+0HzPNEx2Mp89n9UIMIVYz
+	UJ3oC0Y/WGsPkY2rUCSLcQVfwBXII9csXlh3DgTs4qnXyzcmvh21OTA0wHMWXhIn0pNbPMefcfp
+	QSAZ/3aQRY8Fj9+Xs6Q8oYrTRAU+lW9ct4P0myNchiX4Clzs3Vvqtu5XJkRXtvs9b1PEWVjTzzI
+	m7PY3j7h9tkco4M0NmdZRVBbqymEvzUrLkqt4leZJ5/D0L/e9qLQ5QffyHyOd7u+xffJW1kMEh3
+	u+Q9lPGijF+MhULgZDXzAXvBx2ZjG+W7+R8JiUBVWbMbf7ofbeQYuygdw2v1bubH1A4Nqs2jyRl
+	Mg/UtDCK690PpAHAeiYlZetozr6lSbPukxg==
+X-Received: by 2002:a05:600c:474a:b0:46e:35a0:3587 with SMTP id 5b1f17b1804b1-482db48e828mr21216725e9.27.1769762426681;
+        Fri, 30 Jan 2026 00:40:26 -0800 (PST)
+X-Received: by 2002:a05:600c:474a:b0:46e:35a0:3587 with SMTP id 5b1f17b1804b1-482db48e828mr21216445e9.27.1769762426296;
+        Fri, 30 Jan 2026 00:40:26 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482e2545026sm7562755e9.11.2026.01.30.00.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jan 2026 00:40:25 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 085C34D0734; Fri, 30 Jan 2026 09:40:25 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org, Eric
+ Dumazet <eric.dumazet@gmail.com>, "David S. Miller" <davem@davemloft.net>,
+ Paolo Abeni <pabeni@redhat.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org, Jakub
+ Kicinski <kuba@kernel.org>, horms@kernel.org, jiri@resnulli.us,
+ edumazet@google.com, xiyou.wangcong@gmail.com, jhs@mojatatu.com,
+ carges@cloudflare.com, kernel-team@cloudflare.com
+Subject: Re: [PATCH net-next v3] net: sched: sfq: add detailed drop reasons
+ for monitoring
+In-Reply-To: <176917072608.1186611.11185920960590396939.stgit@firesoul>
+References: <176917072608.1186611.11185920960590396939.stgit@firesoul>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Fri, 30 Jan 2026 09:40:24 +0100
+Message-ID: <87zf5v3347.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wCXfeiYaHxpkfQXJQ--.7978S2
-X-Coremail-Antispam: 1Uf129KBjvAXoWfJF4DCw1xXFyxCrWxJr4kCrg_yoW8JrykCo
-	Z7KF98ZF13C3yxA39rAw4rtryxW34DCryrW3Z3WFW5u3WUCr1Yyry8Cw4fXry2vrWFqa4D
-	Zas2k3yFvF97Gry5n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxU76wZDUUUU
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8hu5Mml8aJvMwgAA3K
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Feng Yang <yangfeng@kylinos.cn>
+Jesper Dangaard Brouer <hawk@kernel.org> writes:
 
-Add the missing types to avoid such uninformative errors as shown below:
-R1 type=ptr_ expected=ptr_
+> Add specific drop reasons to SFQ qdisc to improve packet drop
+> observability and monitoring capabilities. This change replaces
+> generic qdisc_drop() calls with qdisc_drop_reason() to provide
+> granular metrics about different drop scenarios in production
+> environments.
+>
+> Two new drop reasons are introduced:
+>
+> - SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS: Used when a new flow cannot
+>   be created because the maximum number of flows (flows parameter)
+>   has been reached and no free flow slots are available.
+>
+> - SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH: Used when a flow's queue
+>   length exceeds the per-flow depth limit (depth parameter),
+>   triggering either tail drop or head drop depending on headdrop
+>   configuration.
+>
+> The existing SKB_DROP_REASON_QDISC_OVERLIMIT is used in sfq_drop()
+> when the overall qdisc limit is exceeded and packets are dropped
+> from the longest queue.
+>
+> The naming uses qdisc-specific drop reasons tied to SFQ tunables,
+> following the pattern established by Eric's FQ commit 5765c7f6e317
+> ("net_sched: sch_fq: add three drop_reason") which introduced
+> FQ_BAND_LIMIT, FQ_HORIZON_LIMIT, and FQ_FLOW_LIMIT.
+>
+> The new drop reasons are inserted in the middle of the enum after
+> SKB_DROP_REASON_QDISC_CONGESTED to group all qdisc-related reasons
+> together. While drop reason enum values are not UAPI, the enum
+> names implicitly become UAPI as userspace tools rely on BTF to
+> resolve names to values. This makes middle-insertion safe as long
+> as names remain stable.
+>
+> These detailed drop reasons enable production monitoring systems
+> to distinguish between different SFQ drop scenarios and generate
+> specific metrics for:
+> - Flow table exhaustion (flows exceeded)
+> - Per-flow congestion (depth limit exceeded)
+> - Global qdisc congestion (overall limit exceeded)
+>
+> This granular visibility allows operators to identify capacity
+> planning needs, detect traffic patterns, and optimize SFQ
+> configuration based on real-world drop patterns.
+>
+> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
 
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
-Changes in v4:
-- Added a part that was accidentally omitted before, please ignore the v3 version.
-Changes in v3:
-- Fix the self-test failures caused by this patch.
-- Link to v2: https://lore.kernel.org/all/20260129073614.113380-1-yangfeng59949@163.com/
-Changes in v2:
-- Group together those for which only 0 or 1 can be selected. thanks, Mykyta Yatsenko.
-- Link to v1: https://lore.kernel.org/all/20260128085842.145057-1-yangfeng59949@163.com/
----
- kernel/bpf/log.c                              | 53 +++++++++++++++++--
- .../selftests/bpf/prog_tests/linked_list.c    |  6 +--
- .../selftests/bpf/prog_tests/spin_lock.c      |  6 +--
- .../testing/selftests/bpf/progs/dynptr_fail.c |  4 +-
- .../selftests/bpf/progs/linked_list_peek.c    |  2 +-
- .../bpf/progs/local_kptr_stash_fail.c         |  2 +-
- .../selftests/bpf/progs/percpu_alloc_fail.c   |  4 +-
- .../selftests/bpf/progs/rbtree_search.c       |  4 +-
- .../struct_ops_kptr_return_fail__local_kptr.c |  2 +-
- 9 files changed, 63 insertions(+), 20 deletions(-)
+Okay, so I went looking for ways to get the information (which qdisc did
+the drop come from) with a generic drop reason and... it's not exactly
+trivial?
 
-diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index a0c3b35de2ce..c7d08b1ba96f 100644
---- a/kernel/bpf/log.c
-+++ b/kernel/bpf/log.c
-@@ -432,6 +432,44 @@ static const char *btf_type_name(const struct btf *btf, u32 id)
- 	return btf_name_by_offset(btf, btf_type_by_id(btf, id)->name_off);
- }
- 
-+static const char *dynptr_reg_type(enum bpf_reg_type type)
-+{
-+	if (type & DYNPTR_TYPE_LOCAL)
-+		return "dynptr_local_";
-+	if (type & DYNPTR_TYPE_RINGBUF)
-+		return "dynptr_ringbuf_";
-+	if (type & DYNPTR_TYPE_SKB)
-+		return "dynptr_skb_";
-+	if (type & DYNPTR_TYPE_XDP)
-+		return "dynptr_xdp_";
-+	if (type & DYNPTR_TYPE_SKB_META)
-+		return "dynptr_skb_meta_";
-+	if (type & DYNPTR_TYPE_FILE)
-+		return "dynptr_file_";
-+
-+	return "";
-+}
-+
-+static const char *trusted_reg_type(enum bpf_reg_type type)
-+{
-+	if (type & PTR_TRUSTED)
-+		return "trusted_";
-+	if (type & PTR_UNTRUSTED)
-+		return "untrusted_";
-+
-+	return "";
-+}
-+
-+static const char *rw_reg_type(enum bpf_reg_type type)
-+{
-+	if (type & MEM_RDONLY)
-+		return "rdonly_";
-+	if (type & MEM_WRITE)
-+		return "write_";
-+
-+	return "";
-+}
-+
- /* string representation of 'enum bpf_reg_type'
-  *
-  * Note that reg_type_str() can not appear more than once in a single verbose()
-@@ -439,7 +477,7 @@ static const char *btf_type_name(const struct btf *btf, u32 id)
-  */
- const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
- {
--	char postfix[16] = {0}, prefix[64] = {0};
-+	char postfix[16] = {0}, prefix[128] = {0};
- 	static const char * const str[] = {
- 		[NOT_INIT]		= "?",
- 		[SCALAR_VALUE]		= "scalar",
-@@ -473,14 +511,19 @@ const char *reg_type_str(struct bpf_verifier_env *env, enum bpf_reg_type type)
- 			strscpy(postfix, "_or_null");
- 	}
- 
--	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s",
--		 type & MEM_RDONLY ? "rdonly_" : "",
-+	snprintf(prefix, sizeof(prefix), "%s%s%s%s%s%s%s%s%s%s%s%s",
-+		 rw_reg_type(type),
-+		 trusted_reg_type(type),
-+		 dynptr_reg_type(type),
- 		 type & MEM_RINGBUF ? "ringbuf_" : "",
- 		 type & MEM_USER ? "user_" : "",
- 		 type & MEM_PERCPU ? "percpu_" : "",
- 		 type & MEM_RCU ? "rcu_" : "",
--		 type & PTR_UNTRUSTED ? "untrusted_" : "",
--		 type & PTR_TRUSTED ? "trusted_" : ""
-+		 type & MEM_UNINIT ? "uninit_" : "",
-+		 type & MEM_FIXED_SIZE ? "fixed_size_" : "",
-+		 type & MEM_ALLOC ? "alloc_" : "",
-+		 type & NON_OWN_REF ? "non_own_ref_" : "",
-+		 type & MEM_ALIGNED ? "aligned_" : ""
- 	);
- 
- 	snprintf(env->tmp_str_buf, TMP_STR_BUF_LEN, "%s%s%s",
-diff --git a/tools/testing/selftests/bpf/prog_tests/linked_list.c b/tools/testing/selftests/bpf/prog_tests/linked_list.c
-index 14c5a7ef0e87..141c611de1cf 100644
---- a/tools/testing/selftests/bpf/prog_tests/linked_list.c
-+++ b/tools/testing/selftests/bpf/prog_tests/linked_list.c
-@@ -69,7 +69,7 @@ static struct {
- 	{ "obj_new_no_composite", "bpf_obj_new/bpf_percpu_obj_new type ID argument must be of a struct" },
- 	{ "obj_new_no_struct", "bpf_obj_new/bpf_percpu_obj_new type ID argument must be of a struct" },
- 	{ "obj_drop_non_zero_off", "R1 must have zero offset when passed to release func" },
--	{ "new_null_ret", "R0 invalid mem access 'ptr_or_null_'" },
-+	{ "new_null_ret", "R0 invalid mem access 'alloc_ptr_or_null_'" },
- 	{ "obj_new_acq", "Unreleased reference id=" },
- 	{ "use_after_drop", "invalid mem access 'scalar'" },
- 	{ "ptr_walk_scalar", "type=rdonly_untrusted_mem expected=percpu_ptr_" },
-@@ -87,12 +87,12 @@ static struct {
- 	{ "incorrect_value_type",
- 	  "operation on bpf_list_head expects arg#1 bpf_list_node at offset=48 in struct foo, "
- 	  "but arg is at offset=0 in struct bar" },
--	{ "incorrect_node_var_off", "variable ptr_ access var_off=(0x0; 0xffffffff) disallowed" },
-+	{ "incorrect_node_var_off", "variable alloc_ptr_ access var_off=(0x0; 0xffffffff) disallowed" },
- 	{ "incorrect_node_off1", "bpf_list_node not found at offset=49" },
- 	{ "incorrect_node_off2", "arg#1 offset=0, but expected bpf_list_node at offset=48 in struct foo" },
- 	{ "no_head_type", "bpf_list_head not found at offset=0" },
- 	{ "incorrect_head_var_off1", "R1 doesn't have constant offset" },
--	{ "incorrect_head_var_off2", "variable ptr_ access var_off=(0x0; 0xffffffff) disallowed" },
-+	{ "incorrect_head_var_off2", "variable alloc_ptr_ access var_off=(0x0; 0xffffffff) disallowed" },
- 	{ "incorrect_head_off1", "bpf_list_head not found at offset=25" },
- 	{ "incorrect_head_off2", "bpf_list_head not found at offset=1" },
- 	{ "pop_front_off", "off 48 doesn't point to 'struct bpf_spin_lock' that is at 40" },
-diff --git a/tools/testing/selftests/bpf/prog_tests/spin_lock.c b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-index 254fbfeab06a..b365010e47c6 100644
---- a/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/spin_lock.c
-@@ -13,9 +13,9 @@ static struct {
- 	const char *err_msg;
- } spin_lock_fail_tests[] = {
- 	{ "lock_id_kptr_preserve",
--	  "5: (bf) r1 = r0                       ; R0=ptr_foo(id=2,ref_obj_id=2) "
--	  "R1=ptr_foo(id=2,ref_obj_id=2) refs=2\n6: (85) call bpf_this_cpu_ptr#154\n"
--	  "R1 type=ptr_ expected=percpu_ptr_" },
-+	  "5: (bf) r1 = r0                       ; R0=alloc_ptr_foo(id=2,ref_obj_id=2) "
-+	  "R1=alloc_ptr_foo(id=2,ref_obj_id=2) refs=2\n6: (85) call bpf_this_cpu_ptr#154\n"
-+	  "R1 type=alloc_ptr_ expected=percpu_ptr_, percpu_rcu_ptr_, trusted_percpu_ptr_" },
- 	{ "lock_id_global_zero",
- 	  "; R1=map_value(map=.data.A,ks=4,vs=4)\n2: (85) call bpf_this_cpu_ptr#154\n"
- 	  "R1 type=map_value expected=percpu_ptr_" },
-diff --git a/tools/testing/selftests/bpf/progs/dynptr_fail.c b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-index 8f2ae9640886..b497e61a3224 100644
---- a/tools/testing/selftests/bpf/progs/dynptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/dynptr_fail.c
-@@ -1090,7 +1090,7 @@ int dynptr_read_into_slot(void *ctx)
- 
- /* bpf_dynptr_slice()s are read-only and cannot be written to */
- SEC("?tc")
--__failure __msg("R{{[0-9]+}} cannot write into rdonly_mem")
-+__failure __msg("R{{[0-9]+}} cannot write into rdonly_dynptr_skb_mem")
- int skb_invalid_slice_write(struct __sk_buff *skb)
- {
- 	struct bpf_dynptr ptr;
-@@ -1111,7 +1111,7 @@ int skb_invalid_slice_write(struct __sk_buff *skb)
- 
- /* bpf_dynptr_slice()s are read-only and cannot be written to */
- SEC("?tc")
--__failure __msg("R{{[0-9]+}} cannot write into rdonly_mem")
-+__failure __msg("R{{[0-9]+}} cannot write into rdonly_dynptr_skb_meta_mem")
- int skb_meta_invalid_slice_write(struct __sk_buff *skb)
- {
- 	struct bpf_dynptr meta;
-diff --git a/tools/testing/selftests/bpf/progs/linked_list_peek.c b/tools/testing/selftests/bpf/progs/linked_list_peek.c
-index 264e81bfb287..60f3f9e4d3a8 100644
---- a/tools/testing/selftests/bpf/progs/linked_list_peek.c
-+++ b/tools/testing/selftests/bpf/progs/linked_list_peek.c
-@@ -100,7 +100,7 @@ long test_##op##_spinlock_##dolock(void *ctx)			\
- 	return !!jiffies;					\
- }
- 
--#define MSG "call bpf_list_{{(front|back).+}}; R0{{(_w)?}}=ptr_or_null_node_data(id={{[0-9]+}},non_own_ref"
-+#define MSG "call bpf_list_{{(front|back).+}}; R0{{(_w)?}}=alloc_non_own_ref_ptr_or_null_node_data(id={{[0-9]+}},non_own_ref"
- TEST_FB(front, true)
- TEST_FB(back, true)
- #undef MSG
-diff --git a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c b/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
-index fcf7a7567da2..ae6cf9efab5f 100644
---- a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
-+++ b/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
-@@ -40,7 +40,7 @@ struct {
- } some_nodes SEC(".maps");
- 
- SEC("tc")
--__failure __msg("invalid kptr access, R2 type=ptr_node_data2 expected=ptr_node_data")
-+__failure __msg("invalid kptr access, R2 type=alloc_ptr_node_data2 expected=ptr_node_data")
- long stash_rb_nodes(void *ctx)
- {
- 	struct map_value *mapval;
-diff --git a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-index f2b8eb2ff76f..87154ca70bb4 100644
---- a/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-+++ b/tools/testing/selftests/bpf/progs/percpu_alloc_fail.c
-@@ -60,7 +60,7 @@ int BPF_PROG(test_array_map_1)
- }
- 
- SEC("?fentry/bpf_fentry_test1")
--__failure __msg("invalid kptr access, R2 type=percpu_ptr_val2_t expected=ptr_val_t")
-+__failure __msg("invalid kptr access, R2 type=percpu_alloc_ptr_val2_t expected=ptr_val_t")
- int BPF_PROG(test_array_map_2)
- {
- 	struct val2_t __percpu_kptr *p2;
-@@ -84,7 +84,7 @@ int BPF_PROG(test_array_map_2)
- }
- 
- SEC("?fentry.s/bpf_fentry_test1")
--__failure __msg("R1 type=scalar expected=percpu_ptr_, percpu_rcu_ptr_, percpu_trusted_ptr_")
-+__failure __msg("R1 type=scalar expected=percpu_ptr_, percpu_rcu_ptr_, trusted_percpu_ptr_")
- int BPF_PROG(test_array_map_3)
- {
- 	struct val_t __percpu_kptr *p, *p1;
-diff --git a/tools/testing/selftests/bpf/progs/rbtree_search.c b/tools/testing/selftests/bpf/progs/rbtree_search.c
-index b05565d1db0d..f060d7ae22fa 100644
---- a/tools/testing/selftests/bpf/progs/rbtree_search.c
-+++ b/tools/testing/selftests/bpf/progs/rbtree_search.c
-@@ -189,10 +189,10 @@ long test_##op##_spinlock_##dolock(void *ctx)		\
-  * Otherwise, the test_loader will incorrectly match the prog lineinfo
-  * instead of the log generated by the verifier.
-  */
--#define MSG "call bpf_rbtree_root{{.+}}; R0{{(_w)?}}=rcu_ptr_or_null_node_data(id={{[0-9]+}},non_own_ref"
-+#define MSG "call bpf_rbtree_root{{.+}}; R0{{(_w)?}}=rcu_alloc_non_own_ref_ptr_or_null_node_data(id={{[0-9]+}},non_own_ref"
- TEST_ROOT(true)
- #undef MSG
--#define MSG "call bpf_rbtree_{{(left|right).+}}; R0{{(_w)?}}=rcu_ptr_or_null_node_data(id={{[0-9]+}},non_own_ref"
-+#define MSG "call bpf_rbtree_{{(left|right).+}}; R0{{(_w)?}}=rcu_alloc_non_own_ref_ptr_or_null_node_data(id={{[0-9]+}},non_own_ref"
- TEST_LR(left,  true)
- TEST_LR(right, true)
- #undef MSG
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_kptr_return_fail__local_kptr.c b/tools/testing/selftests/bpf/progs/struct_ops_kptr_return_fail__local_kptr.c
-index b8b4f05c3d7f..f9836e8fd100 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_kptr_return_fail__local_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_kptr_return_fail__local_kptr.c
-@@ -13,7 +13,7 @@ void bpf_task_release(struct task_struct *p) __ksym;
-  * reject programs returning a local kptr.
-  */
- SEC("struct_ops/test_return_ref_kptr")
--__failure __msg("At program exit the register R0 is not a known value (ptr_or_null_)")
-+__failure __msg("At program exit the register R0 is not a known value (alloc_ptr_or_null_)")
- struct task_struct *BPF_PROG(kptr_return_fail__local_kptr, int dummy,
- 			     struct task_struct *task, struct cgroup *cgrp)
- {
--- 
-2.43.0
+My thought was that you could get it from the location, but that ends up
+being in the generic __dev_queue_xmit:
+
+           ping-117101  [017] b.s2. 155651.231372: kfree_skb: skbaddr=3D000=
+0000019495eb6 rx_sk=3D0000000000000000 protocol=3D34525 location=3D__dev_qu=
+eue_xmit+0xcbd/0xee0 reason: QDISC_DROP
+
+So you can't actually use the kfree_skb trace point to go backwards to
+the qdisc.
+
+Given that we have a sometimes-NULL socket parameter to the kfree_skb
+tracepoint, I think it would make sense to augment it with a 'dev'
+parameter as well, but that would require some restructuring of the drop
+code, I guess.
+
+Another option would be to add new stats members to sfq for each of
+these drop reasons? Assuming you're only after the counts, that would
+allow you to get those without adding new drop reasons to the core code?
+
+OTOH, since we already have per-qdisc specific drop reasons for FQ and
+CAKE, and adding more enums is cheap, I am also OK with adding these; so
+with that in mind:
+
+Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
