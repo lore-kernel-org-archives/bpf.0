@@ -1,128 +1,148 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6C52367B3;
-	Fri, 30 Jan 2026 02:19:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+Received: from mail.189.cn (189sx01-ptr.21cn.com [14.18.100.240])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05160311967;
+	Fri, 30 Jan 2026 02:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.18.100.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769739554; cv=none; b=WxBT0kUnWhXoJt292bwwinmjX3ZjAUySPj6ehu4KPyJ+Fx/6XklObxT5icf2bu17CJuehch62AcKFr8Hwlrx5KTK5SkojhwcvTcThR5ZK1RkqX/x5tCTIgKyLCSvTQkqKJoCis0DsItayRNP7eIuWTIwLrglh9ZFq921AH2WAKA=
+	t=1769739732; cv=none; b=nYG+621QNL9Z9N0Syzh16g9tw4fmyKqCHwFepiH/Lt+kAJljaq+B45B8OilimhYiaycvu2QqajsZv8UHG94XZ643eabIjGqFLKZK5oz7/O4ShpsB0IpO6I+Tsppsd8jDssaTI41/FYGT5ldlE+bXfaldA9RderIwCzYnJFRSUm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769739554; c=relaxed/simple;
-	bh=NjAPpTosY3lQ/p5rWHNPACXIr5Op02TX2xJmv0zDkJg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xf+e4QebrGnzBpE88/0TAKcHHWDYEh09s5hez0z4lV3/lW4+vxaqtjYy/hJXA70lhIbh2cuJ1SxSDYGS3i2Djwiwk6nzUFmDbWoQ2eySYH5Su4w2gai8p7Ryh/LZY+HGumHL2uqkHpwQeRcwdOmyRWt3KCeYq5Al6VXSKyQXwF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=Zhfkr5FS; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="Zhfkr5FS"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-	Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-	In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=3L37Kj1YVepV8t0MrIFTs10YaampH61jAKZipBMOzSE=; b=Zhfkr5FSsKS6i2wo+F5XavtYDH
-	xg3DwLF1DdhEnfuB0B3ON84vr4bwXY6a7RNjYPLMkpMFjne9sNBCpa6JFN+PtEGoImqCAAxuRcoTm
-	wtKo3sDReLSoGyA/IApEJv19Lfdjg9Cj9jh9vpx0vhCL09sluxgA9WenxeG+yZ3rwkE1Jm4f/yO5g
-	jNLxC4VFBydjkOLMTK5lO5i2+e7iwml5e5xcl1edOoudud1dMi14yFEQCxuWYu9za2cRgDiSjJoS8
-	gBCAwJ2yc/GiFvS+0AJ8rs0KtGDZsTkSwpUqf7JqhzkVkiTyPlvQ3pkfee7W3z4JTalGvAveiDyw3
-	jqGnsb4g==;
-Received: from [58.29.143.236] (helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1vle5x-00BZgk-Ly; Fri, 30 Jan 2026 03:18:50 +0100
-From: Changwoo Min <changwoo@igalia.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	kernel-dev@igalia.com,
-	bpf@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Changwoo Min <changwoo@igalia.com>
-Subject: [PATCH v2] selftests/bpf: Make x86 preempt_count access compatible across v6.14+
-Date: Fri, 30 Jan 2026 11:18:43 +0900
-Message-ID: <20260130021843.154885-1-changwoo@igalia.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1769739732; c=relaxed/simple;
+	bh=y43Lp50OTrgRWlWv6bseXRRLByi+2SLqklJWTij5TAE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c9z6UXWvH37v7C+8w3tHShmeT1a8mwSm++qWbSUvvha8RVJo710MTu/5v3lbgkWBS0WAZA1OQ5j6V5Uz+x8v/tZd/Fhq4ddZBr6BJ8g2EFbOFWgBlNobg/kzmB0mKcp4KJVu5Ecv0dffI107zqeGiRjEw5kzXFY1IM8PtOXmSSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn; spf=pass smtp.mailfrom=189.cn; arc=none smtp.client-ip=14.18.100.240
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=189.cn
+HMM_SOURCE_IP:10.158.242.145:0.738707711
+HMM_ATTACHE_NUM:0000
+HMM_SOURCE_TYPE:SMTP
+Received: from clientip-221.238.56.48 (unknown [10.158.242.145])
+	by mail.189.cn (HERMES) with SMTP id 995D6400357;
+	Fri, 30 Jan 2026 10:17:54 +0800 (CST)
+Received: from  ([221.238.56.48])
+	by gateway-153622-dep-76cc7bc9cd-r45x9 with ESMTP id 06410c8c7865490d9a3f4121cbe216e4 for alexei.starovoitov@gmail.com;
+	Fri, 30 Jan 2026 10:17:55 CST
+X-Transaction-ID: 06410c8c7865490d9a3f4121cbe216e4
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 221.238.56.48
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <bb4a868d-d4e2-40dc-aed4-4788b159a7f6@189.cn>
+Date: Fri, 30 Jan 2026 10:17:53 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] kernel/bpf/btf.c: reject to register duplicated kfunc
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>
+References: <20260122090404.15553-1-chensong_2000@189.cn>
+ <CAADnVQLVQW-Mb_d+zT+aSpPOZ042erPVcSHVBx9PMGET+a754Q@mail.gmail.com>
+Content-Language: en-US
+From: Song Chen <chensong_2000@189.cn>
+In-Reply-To: <CAADnVQLVQW-Mb_d+zT+aSpPOZ042erPVcSHVBx9PMGET+a754Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Recent x86 kernels export __preempt_count as a ksym, while some old kernels
-between v6.1 and v6.14 expose the preemption counter via
-pcpu_hot.preempt_count. The existing selftest helper unconditionally
-dereferenced __preempt_count, which breaks BPF program loading on such old
-kernels.
+hi,
 
-Make the x86 preemption count lookup version-agnostic by:
-- Marking __preempt_count and pcpu_hot as weak ksyms.
-- Introducing a BTF-described pcpu_hot___local layout with
-  preserve_access_index.
-- Selecting the appropriate access path at runtime using ksym availability
-  and bpf_ksym_exists() and bpf_core_field_exists().
+my comments are in line, thanks.
 
-This allows a single BPF binary to run correctly across kernel versions
-(e.g., v6.18 vs. v6.13) without relying on compile-time version checks.
+Song
 
-Signed-off-by: Changwoo Min <changwoo@igalia.com>
----
- .../testing/selftests/bpf/bpf_experimental.h  | 21 +++++++++++++++++--
- 1 file changed, 19 insertions(+), 2 deletions(-)
+在 2026/1/28 12:28, Alexei Starovoitov 写道:
+> On Thu, Jan 22, 2026 at 1:04 AM <chensong_2000@189.cn> wrote:
+>>
+>> From: Song Chen <chensong_2000@189.cn>
+>>
+>> I had an ebpf program which calls a kfunc defined and
+>> implemented in one of my kernel modules, they were working
+>> fine in 6.16, but was broken by libbpf in 6.19, the error
+>> message was:
+>>
+>> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
+>> incompatible with vmlinux [94389]
+>>
+>> yes, the reason is there is a new added kfunc in kernel 6.19
+>> which happens to be the same name with my kfunc. However the
+>> error message is not obvious enough to address problem
+>> immediately.
+> 
+> I don't quite understand what you're trying to say.
+> "broken by libbpf"?! You mean that kernel 6.19 got
+> new kfunc bpf_strstr() ?
+> Why libbpf error is relevant?
+> You mean you had your own custom .h file where
+> you defined your own kfunc from a custom module
+> and libbpf complained that your bpf_strstr() kfunc
+> definition doesn't match the kernel 6.19 ?
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index a39576c8ba04..acabf869d2c4 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -614,7 +614,13 @@ extern int bpf_cgroup_read_xattr(struct cgroup *cgroup, const char *name__str,
- 
- extern bool CONFIG_PREEMPT_RT __kconfig __weak;
- #ifdef bpf_target_x86
--extern const int __preempt_count __ksym;
-+extern const int __preempt_count __ksym __weak;
-+
-+struct pcpu_hot___local {
-+	int preempt_count;
-+} __attribute__((preserve_access_index));
-+
-+extern struct pcpu_hot___local pcpu_hot __ksym __weak;
- #endif
- 
- struct task_struct___preempt_rt {
-@@ -624,7 +630,18 @@ struct task_struct___preempt_rt {
- static inline int get_preempt_count(void)
- {
- #if defined(bpf_target_x86)
--	return *(int *) bpf_this_cpu_ptr(&__preempt_count);
-+	/* By default, read the per-CPU __preempt_count. */
-+	if (bpf_ksym_exists(&__preempt_count))
-+		return *(int *) bpf_this_cpu_ptr(&__preempt_count);
-+
-+	/* If __preempt_count does not exist, try to read preempt_count under
-+	 * struct pcpu_hot. Between v6.1 and v6.14 -- more specifically,
-+	 * [64701838bf057, 46e8fff6d45fe), preempt_count had been managed
-+	 * under struct pcpu_hot.
-+	 */
-+	if (bpf_core_field_exists(pcpu_hot.preempt_count))
-+		return ((struct pcpu_hot___local *)
-+			bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
- #elif defined(bpf_target_arm64)
- 	return bpf_get_current_task_btf()->thread_info.preempt.count;
- #endif
--- 
-2.52.0
+let me explain:
+
+I had a module, defined a kfunc(bpf_strstr) in its c file and register 
+it through register_btf_kfunc_id_set.I also had a ebpf program to use 
+bpf_strstr in this module.
+
+They were working fine in kernel 6.16, but kernel 6.19 has its own 
+bpf_strstr, so when i ran my ebpf program in kernel 6.19, libbpf broke 
+it here:
+
+bpf_object__resolve_ksym_func_btf_id
+   --bpf_core_types_are_compat
+     --__bpf_core_types_are_compat
+
+yes, your understanding is pretty much correct.
+
+> 
+> and your proposed solution is ...
+> 
+>> Therefore, this patches searches duplicated kfunc in
+>> btf_vmlinux before a kernel module attempts to register kfuncs
+>> through register_btf_kfunc_id_set, it prints clear error message
+>> and returns error code if same name kfunc has already implemented
+>> and registered, then developer knows at the first place.
+> 
+> Are you saying that the kernel module that supplied bpf_strstr
+> shouldn't be allowed to register its kfunc if kfunc with
+> the same name exists in vmlinux. So insmod will fail?
+
+yes, two kfuncs of bpf_strstr are registered in the system and one of 
+them is never used, this is a problem.
+
+> 
+> This is debatable. I guess we can add such sanity check,
+
+agree, even it's not a big deal.
+
+> but what about kfunc in module A with the same name as kfunc
+> in module B?
+
+It's in my plan, also go through "list_for_each_entry_safe(btf_mod, tmp, 
+&btf_modules, list)", but i haven't gone that far yet, i can add it.
+
+> Currently libbpf tells kernel both btf FD and kfunc btf ID,
+> though there is a single namespace for all kfuncs from bpf
+> program pov the kernel and libbpf api-s allow a selection.
+> 
+> Technically we can hack something in bpf.c to "namespace" kfuncs
+> and say that the kfunc "foo" is in the module "bar".
+> It won't be pretty in C, but possible in principle.
+> 
+> Maybe a kfunc with the same name in the module should be allowed
+> to override a kfunc in the kernel.
+> It can be seen as livepatching of kfuncs.
+> imo that's a more interesting use case than helping
+> out-of-tree module to produce nicier error.
+> 
+> pw-bot: cr
+> 
 
