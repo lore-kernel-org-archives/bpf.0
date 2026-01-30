@@ -1,182 +1,117 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15BA5334C3C
-	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 08:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27B529C351
+	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 08:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769762432; cv=none; b=f5BK72fGwTEfYIBmZV4l8qbLjQt7CMP3O9Wb4CPbVkluCB5iuA1Ie8xg27Jtb9y8qzdJlfgcG8z1rCZ1IXGrZEqlKoz9cmTdfR6VIg8egMW5GwGwhxXKkAORnZ9PfCRkdV9TQt2lK5y2pQ9YbEieQjWvPGYSu8TmnbSh6wbYFMk=
+	t=1769763133; cv=none; b=Sut0PomOVWIP5JAzA+VLyZnOIgy7l5absd4zUlAi9n1F0sHFrZ55drLRAJz32vUyoQaOjivXUOQtXdGZsqFpsOOTwduZYANG5FKab6m1Iz5QsRwVDeUkzcBYe57GZj8Avh683lf2HyFQDoZJj/T9ftvi/uRi6ERqGNwXgkIj9is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769762432; c=relaxed/simple;
-	bh=n0jMgmG40z2H2jzTNOqElovXskshLnu1xJ/LSjnyAdw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ekJpPN8l0TE1CJb9LdFo5xtP8s3gXMVaO5OrxVTzIBfAIyMxnchqXKTdDlXQz6UHHAESh5mjM52a/dIMix++TYCAkjdSRDf4BMk5ei7Cg55T3qej0+p+85GTlp3khoGAE8xmBLCfW6Isd1PBfQUe62KEybSoDgDS50fwODhCCec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aYgd/7Nv; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=sdPG76Y+; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1769763133; c=relaxed/simple;
+	bh=ZyE6q8qaCwA1cnQxLUqeWB4clV9Esbr7QZdGKH29Ql8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rKvS+vcU77DM5WEfoDtnMWKYt/TenCYqsgkErb31CTPXhPTRjcflhFhECpnJY9wEf8XzEUlwNaHg/koIfXwxgEISdLU3YZjXkDIhl2uIe4OD8IVgON7U8bKcQs/DKY74Xg72SKEnNTlFc5GBV6hsnjJ23Atz3gOh46Pr8QN56d8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DzUO0nyQ; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aYgd/7Nv";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="sdPG76Y+"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769762430;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DzUO0nyQ"
+Message-ID: <d41c3d60-09e8-4f49-a8f4-5fe4f7db37e1@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769763127;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AOMBl30iiqU2hb1KDZ3dhT/0NSn9OSG50CGfaIcYpoA=;
-	b=aYgd/7NvepxZvOb8ba5U0wBpn9GcDoAPxp7sdRUz2dynSRuACAmXN4I2eBrO0kFbhqKBDU
-	+IeE4x64s662xgbXRn76iUey/JZOc2bqOjYMgXhf3OBnIPn42jM9T0cO6GO/ScxSV/ndJE
-	XJm6uuUH4dxjoDpRb9L5MYcHPEMK9MY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-133-6dqDNbliPpej7rY6r011-A-1; Fri, 30 Jan 2026 03:40:28 -0500
-X-MC-Unique: 6dqDNbliPpej7rY6r011-A-1
-X-Mimecast-MFC-AGG-ID: 6dqDNbliPpej7rY6r011-A_1769762427
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-47ee1fe7b24so16090185e9.1
-        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 00:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769762427; x=1770367227; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AOMBl30iiqU2hb1KDZ3dhT/0NSn9OSG50CGfaIcYpoA=;
-        b=sdPG76Y+dX1alSnDTMlGOzIuZfZ1M85L1/HphcpkaAMBxbYd7ETA6cRs/KktCYJsum
-         AoB+xCwsSIjCZ4QasXCNJA9zXm1dvV58JwPer0HRl22rIQl4ncMXYwXFnlM5DZreB4NL
-         BHBnXKD/XgRHhqp9WE8eOJSnPDagqd00LRzTxUVnYc8dpApXlYrOq7c0eSCMQC8qMxev
-         mCCR5b3O8yMClD+V7QokDNlByI1cHTo0JZZLXx8UBd4BHTKbqgwvzmIwkWwUe3Y+A5HG
-         8H1vxoDWXdjvkIxNI1cwSheyi28RVoRAju7lCXJOCICE+aQX2HkPtWE0ZXedIy0uSdrx
-         mGog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769762427; x=1770367227;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AOMBl30iiqU2hb1KDZ3dhT/0NSn9OSG50CGfaIcYpoA=;
-        b=vGPEooFgAkBYQUoiRdku3vUpLyRSYWbi8nDcwccOwrYF0b+vzhU0Fq7PZYUzGIQoiX
-         Yt1wpUAxmPkFfLDrPVh2eYKKCEgglE6AdCKjI/kGEH60fx8yfl+f2uEwO5YbdCiALw2s
-         GN6P5+H5z4ZNc7SIHxeTcQbGJtWnEeg+oRvTaJpQzvFbsQOlYhpu0fVLfo1HQ89Fve5F
-         NSiIHJJGAWn1HtsnEx0VgXmb0BV4U7NpvcUy6pt7Yh1hB/wVdXVKC7pSyYkBXLgl3l0F
-         2A8AS1o4qUIvyTHXRbi1R04wviZ8s8chvZFuZZ4eIIB2e2R6oA+PJeOh56HGbWOIVAeN
-         v1/w==
-X-Forwarded-Encrypted: i=1; AJvYcCWvLY+uI47o8NQhA6jINs+JJYXjswSWxdoVoBSxKOW3OHSyFYsqIDFKUie9/sZ0U2YZIFE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzo555hMvrtEV7079EJtL7YjZTO8AvTVrdewIprquFIfFdoiWs1
-	mZ+uRS64sn+RGCchvVve89BtY5mYzKxWJdxADOq7lwMVM/0xXsau7x0eXFPWYLBxpTko1DL+D4t
-	AfP3Fu7jQm1Kfrf4PD1I4RopAllR60jFT63kHRdFYfVPgETMiHZq14g==
-X-Gm-Gg: AZuq6aKhHl5ltE6Ic3LH+sAzW4j6XXyRnOxNiLXGIIaVY+0HzPNEx2Mp89n9UIMIVYz
-	UJ3oC0Y/WGsPkY2rUCSLcQVfwBXII9csXlh3DgTs4qnXyzcmvh21OTA0wHMWXhIn0pNbPMefcfp
-	QSAZ/3aQRY8Fj9+Xs6Q8oYrTRAU+lW9ct4P0myNchiX4Clzs3Vvqtu5XJkRXtvs9b1PEWVjTzzI
-	m7PY3j7h9tkco4M0NmdZRVBbqymEvzUrLkqt4leZJ5/D0L/e9qLQ5QffyHyOd7u+xffJW1kMEh3
-	u+Q9lPGijF+MhULgZDXzAXvBx2ZjG+W7+R8JiUBVWbMbf7ofbeQYuygdw2v1bubH1A4Nqs2jyRl
-	Mg/UtDCK690PpAHAeiYlZetozr6lSbPukxg==
-X-Received: by 2002:a05:600c:474a:b0:46e:35a0:3587 with SMTP id 5b1f17b1804b1-482db48e828mr21216725e9.27.1769762426681;
-        Fri, 30 Jan 2026 00:40:26 -0800 (PST)
-X-Received: by 2002:a05:600c:474a:b0:46e:35a0:3587 with SMTP id 5b1f17b1804b1-482db48e828mr21216445e9.27.1769762426296;
-        Fri, 30 Jan 2026 00:40:26 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482e2545026sm7562755e9.11.2026.01.30.00.40.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jan 2026 00:40:25 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 085C34D0734; Fri, 30 Jan 2026 09:40:25 +0100 (CET)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org, Eric
- Dumazet <eric.dumazet@gmail.com>, "David S. Miller" <davem@davemloft.net>,
- Paolo Abeni <pabeni@redhat.com>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org, Jakub
- Kicinski <kuba@kernel.org>, horms@kernel.org, jiri@resnulli.us,
- edumazet@google.com, xiyou.wangcong@gmail.com, jhs@mojatatu.com,
- carges@cloudflare.com, kernel-team@cloudflare.com
-Subject: Re: [PATCH net-next v3] net: sched: sfq: add detailed drop reasons
- for monitoring
-In-Reply-To: <176917072608.1186611.11185920960590396939.stgit@firesoul>
-References: <176917072608.1186611.11185920960590396939.stgit@firesoul>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Fri, 30 Jan 2026 09:40:24 +0100
-Message-ID: <87zf5v3347.fsf@toke.dk>
+	bh=vzebeRHNp1eoG2TGXuhH+wS5qx/tkXDfLd7wIqfPoHI=;
+	b=DzUO0nyQ4D6Ry9YyRaYB6DuR9NoLU0nTDvJEX+KMRDVVtVZug9WXKFwAf3SrSvBBOsn68h
+	jXN9X1pbdSMVi6J+0GCyCxltGpvq4g7/HJxtx8Y+ic4hd7rBarm1tDYR8y5p9weHjsCSoI
+	AgsT6ucJKlBZ55VxdmTYu+4CUDZg9l4=
+Date: Fri, 30 Jan 2026 16:51:58 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH bpf-next] bpf: Remove RCU lock for perf callchain buffer
+To: song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260128165710.928294-1-chen.dylane@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Tao Chen <chen.dylane@linux.dev>
+In-Reply-To: <20260128165710.928294-1-chen.dylane@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Jesper Dangaard Brouer <hawk@kernel.org> writes:
+在 2026/1/29 00:57, Tao Chen 写道:
+> As Andrii suggested, BPF can guarantee perf callchain buffer won't
+> be released during use, for bpf_get_stack_id, BPF stack map will
+> keep them alive by delaying put_callchain_buffer() until freeing time
+> or for bpf_get_stack/bpf_get_task_stack, BPF program itself will hold
+> these buffers alive again, until freeing time which is delayed until
+> after RCU Tasks Trace + RCU grace period.
+> 
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
+> ---
+>   kernel/bpf/stackmap.c | 12 +-----------
+>   1 file changed, 1 insertion(+), 11 deletions(-)
+> 
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index da3d328f5c1..2e682d8697b 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -460,9 +460,6 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+>   
+>   	max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
+>   
+> -	if (may_fault)
+> -		rcu_read_lock(); /* need RCU for perf's callchain below */
+> -
+>   	if (trace_in) {
+>   		trace = trace_in;
+>   		trace->nr = min_t(u32, trace->nr, max_depth);
+> @@ -473,11 +470,8 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+>   					   crosstask, false, 0);
+>   	}
+>   
+> -	if (unlikely(!trace) || trace->nr < skip) {
+> -		if (may_fault)
+> -			rcu_read_unlock();
+> +	if (unlikely(!trace) || trace->nr < skip)
+>   		goto err_fault;
+> -	}
+>   
+>   	trace_nr = trace->nr - skip;
+>   	copy_len = trace_nr * elem_size;
+> @@ -493,10 +487,6 @@ static long __bpf_get_stack(struct pt_regs *regs, struct task_struct *task,
+>   		memcpy(buf, ips, copy_len);
+>   	}
+>   
+> -	/* trace/ips should not be dereferenced after this point */
+> -	if (may_fault)
+> -		rcu_read_unlock();
+> -
+>   	if (user_build_id)
+>   		stack_map_get_build_id_offset(buf, trace_nr, user, may_fault);
+>   
 
-> Add specific drop reasons to SFQ qdisc to improve packet drop
-> observability and monitoring capabilities. This change replaces
-> generic qdisc_drop() calls with qdisc_drop_reason() to provide
-> granular metrics about different drop scenarios in production
-> environments.
->
-> Two new drop reasons are introduced:
->
-> - SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS: Used when a new flow cannot
->   be created because the maximum number of flows (flows parameter)
->   has been reached and no free flow slots are available.
->
-> - SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH: Used when a flow's queue
->   length exceeds the per-flow depth limit (depth parameter),
->   triggering either tail drop or head drop depending on headdrop
->   configuration.
->
-> The existing SKB_DROP_REASON_QDISC_OVERLIMIT is used in sfq_drop()
-> when the overall qdisc limit is exceeded and packets are dropped
-> from the longest queue.
->
-> The naming uses qdisc-specific drop reasons tied to SFQ tunables,
-> following the pattern established by Eric's FQ commit 5765c7f6e317
-> ("net_sched: sch_fq: add three drop_reason") which introduced
-> FQ_BAND_LIMIT, FQ_HORIZON_LIMIT, and FQ_FLOW_LIMIT.
->
-> The new drop reasons are inserted in the middle of the enum after
-> SKB_DROP_REASON_QDISC_CONGESTED to group all qdisc-related reasons
-> together. While drop reason enum values are not UAPI, the enum
-> names implicitly become UAPI as userspace tools rely on BTF to
-> resolve names to values. This makes middle-insertion safe as long
-> as names remain stable.
->
-> These detailed drop reasons enable production monitoring systems
-> to distinguish between different SFQ drop scenarios and generate
-> specific metrics for:
-> - Flow table exhaustion (flows exceeded)
-> - Per-flow congestion (depth limit exceeded)
-> - Global qdisc congestion (overall limit exceeded)
->
-> This granular visibility allows operators to identify capacity
-> planning needs, detect traffic patterns, and optimize SFQ
-> configuration based on real-world drop patterns.
->
-> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+Hi Andrii,
 
-Okay, so I went looking for ways to get the information (which qdisc did
-the drop come from) with a generic drop reason and... it's not exactly
-trivial?
+I send this patch as a separate submission, and I'm not sure when the 
+patchset will be merged. After this merged, i will update v9. Is it ok?
 
-My thought was that you could get it from the location, but that ends up
-being in the generic __dev_queue_xmit:
+The previous patchset:
+https://lore.kernel.org/bpf/CAEf4BzbubXxLHsO_2aVBG_oYE1Sc9iafLyvcX-PEjcQ7EXWCqA@mail.gmail.com/
 
-           ping-117101  [017] b.s2. 155651.231372: kfree_skb: skbaddr=3D000=
-0000019495eb6 rx_sk=3D0000000000000000 protocol=3D34525 location=3D__dev_qu=
-eue_xmit+0xcbd/0xee0 reason: QDISC_DROP
+And i also saw Qing reported a syzbot issue recently.
+https://lore.kernel.org/bpf/20260128084538.1889001-1-wangqing7171@gmail.com/
 
-So you can't actually use the kfree_skb trace point to go backwards to
-the qdisc.
-
-Given that we have a sometimes-NULL socket parameter to the kfree_skb
-tracepoint, I think it would make sense to augment it with a 'dev'
-parameter as well, but that would require some restructuring of the drop
-code, I guess.
-
-Another option would be to add new stats members to sfq for each of
-these drop reasons? Assuming you're only after the counts, that would
-allow you to get those without adding new drop reasons to the core code?
-
-OTOH, since we already have per-qdisc specific drop reasons for FQ and
-CAKE, and adding more enums is cheap, I am also OK with adding these; so
-with that in mind:
-
-Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
-
+-- 
+Best Regards
+Tao Chen
