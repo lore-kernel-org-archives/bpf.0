@@ -1,283 +1,109 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44718D515;
-	Fri, 30 Jan 2026 04:50:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FA828D830
+	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 04:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769748612; cv=none; b=EcNk06Af/uM4Zh2qzuoy+8esB3L0dxa+zOGIYkcDJ//Y4g4Y6Pf16L5zPkX6z9OqmTEdlNsjFo4oqGC964CDU1inFkZo5c/iOv9859JwJypOYIkUM7QqTb2f1hM2AVIkBIsqeUp6W3Or+7/ySQe4z6/6F8/96hW8sf4al3nElYU=
+	t=1769748639; cv=none; b=QyOU2LsgA4EB/fR2EWlEzFGefAsqCembWhnEA//k0r6/qdVCUtpgpTlL81ZD34MyGwTAUdYgR6rFiWUCTmfKNhtI/M36BYFhaYiWpBPgfgFsrYd3uc2ceeFdWRTGzhoFs3iVLCIFwXFmRwO6CW6a5hg4Ifqbs6+fO0NuAsddv4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769748612; c=relaxed/simple;
-	bh=JF6FXLSQF6Tm36QElrQo+xLZq9jhNkO3ZXXK6Fi0K/E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=kyb0dM2IBWEpHfQwE2UdGA1YbHMcA5Z5cTUoIsKR3LHsANF9NOExCm0s+3D2G48bX23IOKlPEqgsoLJ6PzxmfpTTkgPeEx+6Ijk6XUsp/v4orWgx1M7f1C5Ki9HIuKwb+OVcHL+Qs/yEt/7o1BpAA5BIlxy+PfZ0E3couvOMjW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nUHilQoK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769748639; c=relaxed/simple;
+	bh=7K/XRomBO5tGOJNCNL9IdnL/8/ejIP4nyJZzLwfzat4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b8c9w9V93cbG6fsTWiVYh8DiTdO7uH4urWok23uif/asdyyKISgJtcESXsqeV0IR1d+x+udnbuJW13oZAui0MsJWgf4gJA9p6g5A+itS3m5iWytbI0uO8Q1Irr7aN7KfI6SQKJmczi4Lx643+x8ZeLKLlGOElYkDH2cdJAh9GDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MTZFazTp; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nUHilQoK"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 906EFC4CEF7;
-	Fri, 30 Jan 2026 04:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769748611;
-	bh=JF6FXLSQF6Tm36QElrQo+xLZq9jhNkO3ZXXK6Fi0K/E=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=nUHilQoKnOH1J7PN14uJk0U29EK0XOYaRTMoOw8oG+iOfbc5LK7Y9RncmXej/z29u
-	 6gnzN8R8LdljRWrVc8tZt6ItjfxBhzbpflkjyZIxjWuiTQx/SQIufRlc16TTWBurbu
-	 ageqM31iiHAEns+2Op7aBcNFyAU5p9fPutLt+TTGRtKsJmxHCdu+ehcPOTXJP7KPRt
-	 3Y/cDQJCPdaekkPpYJnxB0jUTt4uUWJjr6lvEu0aA6pdQ7nYWP/vEaperV0W09naUK
-	 YkbxXCKe7fAehJxol6FyyhYBY3kag7o+FibHjGTqx7JW6hAGq8XpH9crmLR0u1kMsd
-	 CRcDJW3Xq4pKA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7AC77D73E9F;
-	Fri, 30 Jan 2026 04:50:11 +0000 (UTC)
-From: Ivan Babrou via B4 Relay <devnull+ivan.cloudflare.com@kernel.org>
-Date: Thu, 29 Jan 2026 20:50:09 -0800
-Subject: [PATCH] kallsyms: cache bpf symbols to avoid quadratic iteration
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MTZFazTp"
+Date: Fri, 30 Jan 2026 12:50:14 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769748624;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=o0LolDkIeVgydx+lUvvnJuU5rTPe49ECMjoBW0cqVvs=;
+	b=MTZFazTpwQLBt1p5zzHs+rma+lbyv5QWgJkSiS9D4crkD4svGk6zMNRkBBOlfbtGIM7EBl
+	x3t9H03Th8ZE0Qej3gyM1d7zBQMDVKS4xaOXnWVv32LGA+bR+zq9bmeU3zks099YfXMfZN
+	kTbWJy/VQ4TwieXIANt3LxLHCreyKqM=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Hao Li <hao.li@linux.dev>
+To: Vlastimil Babka <vbabka@suse.cz>
+Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>, 
+	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	Uladzislau Rezki <urezki@gmail.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Sebastian Andrzej Siewior <bigeasy@linutronix.de>, 
+	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
+	kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH v4 00/22] slab: replace cpu (partial) slabs with sheaves
+Message-ID: <pdmjsvpkl5nsntiwfwguplajq27ak3xpboq3ab77zrbu763pq7@la3hyiqigpir>
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+ <imzzlzuzjmlkhxc7hszxh5ba7jksvqcieg5rzyryijkkdhai5q@l2t4ye5quozb>
+ <390d6318-08f3-403b-bf96-4675a0d1fe98@suse.cz>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260129-ivan-bpf-ksym-cache-v1-1-ca503070dcc0@cloudflare.com>
-X-B4-Tracking: v=1; b=H4sIAIA4fGkC/x3MMQqAMAxA0atIZgOaoaJXEYdYUxvEKi2IIr27x
- fEN/7+QJKokGKoXolya9AgFbV2B9RxWQV2KgRoyTUs96sUB59Phlp4dLVsv2HNnFnZEzhKU8oz
- i9P6v45TzB35OvodlAAAA
-X-Change-ID: 20260129-ivan-bpf-ksym-cache-9a76daf22fc2
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel-team@cloudflare.com, Ivan Babrou <ivan@cloudflare.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1769748610; l=6130;
- i=ivan@cloudflare.com; s=20260129; h=from:subject:message-id;
- bh=avRlwtbPUTu7O0+jWkoiT910bjkizQeh0wXWXc3nVW4=;
- b=N1IWMxMUHHUnVd74gRQtqU90xbq8LlA5QNfBpYnRDcSJeDfy0/LzjPA3aUcsvjjMXcnVNUvVA
- LvOtv03yHXTBJDElP+93zIL3yRyP0Bb8R8YpGtMJ1mmWTtg0BAJoDiS
-X-Developer-Key: i=ivan@cloudflare.com; a=ed25519;
- pk=QuczbiE/RJ0pw+SbDTjDyQUEsdy0dZym4mt+5Rp7PtA=
-X-Endpoint-Received: by B4 Relay for ivan@cloudflare.com/20260129 with
- auth_id=621
-X-Original-From: Ivan Babrou <ivan@cloudflare.com>
-Reply-To: ivan@cloudflare.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <390d6318-08f3-403b-bf96-4675a0d1fe98@suse.cz>
+X-Migadu-Flow: FLOW_OUT
 
-From: Ivan Babrou <ivan@cloudflare.com>
+On Thu, Jan 29, 2026 at 04:28:01PM +0100, Vlastimil Babka wrote:
+> 
+> So previously those would become kind of double
+> cached by both sheaves and cpu (partial) slabs (and thus hopefully benefited
+> more than they should) since sheaves introduction in 6.18, and now they are
+> not double cached anymore?
+> 
 
-The existing code iterates the whole list of bpf ksyms until the right
-one is found, which means quadratic complexity on top of linked list
-pointer chasing under rcu. This is't noticeable for most installations,
-but when one has 10000 bpf programs loaded, things start to add up and
-reading from `/proc/kallsyms` slows down a lot.
+I've conducted new tests, and here are the details of three scenarios:
 
-Instead of doing that, we can cache the list of bpf symbols in linear
-time when `/proc/kallsyms` is opened, which makes the whole thing fast.
+  1. Checked out commit 9d4e6ab865c4, which represents the state before the
+     introduction of the sheaves mechanism.
+  2. Tested with 6.19-rc5, which includes sheaves but does not yet apply the
+     "sheaves for all" patchset.
+  3. Applied the "sheaves for all" patchset and also included the "avoid
+     list_lock contention" patch.
 
-Reading `/proc/kallsyms` on Apple M3 Pro in a VM and measuring system time:
 
-Before:
-* 15 bpf symbols: ~35ms
-* 10015 bpf symbols: ~1250ms
+Results:
 
-After:
-* 15 bpf symbols: ~35ms
-* 10015 bpf symbols: ~50ms
+For scenario 2 (with sheaves but without "sheaves for all"), there is a
+noticeable performance improvement compared to scenario 1:
 
-Testing in production on v6.12 series (with ~10000 bpf ksyms as well):
+will-it-scale.128.processes +34.3%
+will-it-scale.192.processes +35.4%
+will-it-scale.64.processes +31.5%
+will-it-scale.per_process_ops +33.7%
 
-* On AMD EPYC 9684X (Zen4): ~870ms -> ~100ms
-* On Ampere Altra Max M128-30: ~4650ms -> ~70ms
+For scenario 3 (after applying "sheaves for all"), performance slightly
+regressed compared to scenario 1:
 
-Signed-off-by: Ivan Babrou <ivan@cloudflare.com>
----
- include/linux/filter.h | 16 ++++++++++++++++
- kernel/bpf/core.c      | 46 ++++++++++++++++++++++++++++++++++++++++++++++
- kernel/kallsyms.c      | 34 ++++++++++++++++++++++++++++++++--
- 3 files changed, 94 insertions(+), 2 deletions(-)
+will-it-scale.128.processes -1.3%
+will-it-scale.192.processes -4.2%
+will-it-scale.64.processes -1.2%
+will-it-scale.per_process_ops -2.1%
 
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 973233b82dc1..bbeef2d1b7f4 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -648,6 +648,11 @@ static inline bool insn_is_cast_user(const struct bpf_insn *insn)
- 		offsetof(TYPE, MEMBER);						\
- 	})
- 
-+struct bpf_ksym_cache_entry {
-+	unsigned long value;
-+	char name[KSYM_NAME_LEN];
-+};
-+
- /* A struct sock_filter is architecture independent. */
- struct compat_sock_fprog {
- 	u16		len;
-@@ -1378,6 +1383,9 @@ int __bpf_address_lookup(unsigned long addr, unsigned long *size,
- bool is_bpf_text_address(unsigned long addr);
- int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 		    char *sym);
-+
-+int bpf_get_all_kallsyms(struct bpf_ksym_cache_entry **cache_ptr,
-+			 unsigned int *count_ptr);
- struct bpf_prog *bpf_prog_ksym_find(unsigned long addr);
- 
- static inline int
-@@ -1446,6 +1454,14 @@ static inline int bpf_get_kallsym(unsigned int symnum, unsigned long *value,
- 	return -ERANGE;
- }
- 
-+static inline int bpf_get_all_kallsyms(struct bpf_ksym_cache_entry **cache_ptr,
-+				       unsigned int *count_ptr)
-+{
-+	*cache_ptr = NULL;
-+	*count_ptr = 0;
-+	return 0;
-+}
-+
- static inline struct bpf_prog *bpf_prog_ksym_find(unsigned long addr)
- {
- 	return NULL;
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index d595fe512498..4b04865441e0 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -806,6 +806,52 @@ int bpf_get_kallsym(unsigned int symnum, unsigned long *value, char *type,
- 	return ret;
- }
- 
-+int bpf_get_all_kallsyms(struct bpf_ksym_cache_entry **cache_ptr,
-+			 unsigned int *count_ptr)
-+{
-+	struct bpf_ksym_cache_entry *cache;
-+	struct bpf_ksym *ksym;
-+	unsigned int count = 0;
-+	unsigned int i = 0;
-+
-+	if (!bpf_jit_kallsyms_enabled()) {
-+		*cache_ptr = NULL;
-+		*count_ptr = 0;
-+		return 0;
-+	}
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(ksym, &bpf_kallsyms, lnode)
-+		count++;
-+	rcu_read_unlock();
-+
-+	if (count == 0) {
-+		*cache_ptr = NULL;
-+		*count_ptr = 0;
-+		return 0;
-+	}
-+
-+	cache = kvmalloc_array(count, sizeof(*cache), GFP_KERNEL);
-+	if (!cache)
-+		return -ENOMEM;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(ksym, &bpf_kallsyms, lnode) {
-+		if (i >= count) {
-+			/* List grew since we counted, oh well */
-+			break;
-+		}
-+		strscpy(cache[i].name, ksym->name, KSYM_NAME_LEN);
-+		cache[i].value = ksym->start;
-+		i++;
-+	}
-+	rcu_read_unlock();
-+
-+	*cache_ptr = cache;
-+	*count_ptr = i;
-+	return 0;
-+}
-+
- int bpf_jit_add_poke_descriptor(struct bpf_prog *prog,
- 				struct bpf_jit_poke_descriptor *poke)
- {
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 1e7635864124..a41706a0b298 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -563,6 +563,8 @@ struct kallsym_iter {
- 	char module_name[MODULE_NAME_LEN];
- 	int exported;
- 	int show_value;
-+	struct bpf_ksym_cache_entry *bpf_cache;
-+	unsigned int bpf_cache_count;
- };
- 
- static int get_ksymbol_mod(struct kallsym_iter *iter)
-@@ -600,11 +602,27 @@ static int get_ksymbol_ftrace_mod(struct kallsym_iter *iter)
- 
- static int get_ksymbol_bpf(struct kallsym_iter *iter)
- {
-+	unsigned int index = iter->pos - iter->pos_ftrace_mod_end;
- 	int ret;
- 
-+	if (iter->bpf_cache) {
-+		if (index >= iter->bpf_cache_count) {
-+			iter->pos_bpf_end = iter->pos;
-+			return 0;
-+		}
-+
-+		strscpy(iter->module_name, "bpf", MODULE_NAME_LEN);
-+		iter->exported = 0;
-+		strscpy(iter->name, iter->bpf_cache[index].name, KSYM_NAME_LEN);
-+		iter->value = iter->bpf_cache[index].value;
-+		iter->type = BPF_SYM_ELF_TYPE;
-+
-+		return 1;
-+	}
-+
- 	strscpy(iter->module_name, "bpf", MODULE_NAME_LEN);
- 	iter->exported = 0;
--	ret = bpf_get_kallsym(iter->pos - iter->pos_ftrace_mod_end,
-+	ret = bpf_get_kallsym(index,
- 			      &iter->value, &iter->type,
- 			      iter->name);
- 	if (ret < 0) {
-@@ -859,9 +877,21 @@ static int kallsyms_open(struct inode *inode, struct file *file)
- 	 * the result here at open time.
- 	 */
- 	iter->show_value = kallsyms_show_value(file->f_cred);
-+
-+	bpf_get_all_kallsyms(&iter->bpf_cache, &iter->bpf_cache_count);
-+
- 	return 0;
- }
- 
-+static int kallsyms_release(struct inode *inode, struct file *file)
-+{
-+	struct seq_file *m = file->private_data;
-+	struct kallsym_iter *iter = m->private;
-+
-+	kvfree(iter->bpf_cache);
-+	return seq_release_private(inode, file);
-+}
-+
- #ifdef	CONFIG_KGDB_KDB
- const char *kdb_walk_kallsyms(loff_t *pos)
- {
-@@ -886,7 +916,7 @@ static const struct proc_ops kallsyms_proc_ops = {
- 	.proc_open	= kallsyms_open,
- 	.proc_read	= seq_read,
- 	.proc_lseek	= seq_lseek,
--	.proc_release	= seq_release_private,
-+	.proc_release	= kallsyms_release,
- };
- 
- static int __init kallsyms_init(void)
+Analysis:
 
----
-base-commit: 7d0a66e4bb9081d75c82ec4957c50034cb0ea449
-change-id: 20260129-ivan-bpf-ksym-cache-9a76daf22fc2
+So when the sheaf size for maple nodes is set to 32 by default, the performance
+of fully adopting the sheaves mechanism roughly matches the performance of the
+previous approach that relied solely on the percpu slab partial list.
 
-Best regards,
+The performance regression observed with the "sheaves for all" patchset can
+actually be explained as follows: moving from scenario 1 to scenario 2
+introduces an additional cache layer, which boosts performance temporarily.
+When moving from scenario 2 to scenario 3, this additional cache layer is
+removed, then performance reverted to its original level.
+
+So I think the performance of the percpu partial list and the sheaves mechanism
+is roughly the same, which is consistent with our expectations.
+
 -- 
-Ivan Babrou <ivan@cloudflare.com>
-
-
+Thanks,
+Hao
