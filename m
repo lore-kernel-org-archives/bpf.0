@@ -1,159 +1,137 @@
-Received: from mail-yx1-f48.google.com (mail-yx1-f48.google.com [74.125.224.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB3D352C3F
-	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 09:12:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9FEE35C193;
+	Fri, 30 Jan 2026 10:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769764377; cv=none; b=Akb/b2fVYx1QIhQndDkONOwVclxzj1/oI1luLLAZrAZht8wGdSEMWNNDyYUXvXFQ+pUCll6a5hizcsIrImeWoyENnsF+mcreQrfvIoDSRSrAVGT9riQycMKzusWEd4RVzY4m6WXlDH0uZNlWqW6taJSzo9ei16hGZSuSsr0k5TA=
+	t=1769768544; cv=none; b=Ma/qliDGP9oGEsrf+EGzi4QUajjiyDssDRuX/f1Anh0RT4DZJAndhoRcAWKd1RFolCjy8O1hAv6+9DN+7FVZv/qaVbUaWnp0vR1GgY/sLh+BDW8rwMDZhXCBc0W1G/963HXrSBC47MyliRIxFjTTXj5XTz1QeMSxDAF16dO7L3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769764377; c=relaxed/simple;
-	bh=tVSU1w5x5sqFlUfPefz5QPNvQ7ShmBvFI0HEu15jk9I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BcA1Wsymdj6+M266FQ/+TUtQClCy4Ls8iaXTGMheWycoC0wATw31epy6wXuS43kxg/Jj7iZiZRGHE9ieASQbMzhiu3RivZK2eaFwCt4FJqK0hpD8mSxoGbLkWBmKlrJClFz31gvFdiIF7mss+suSl4M2F8ww5h+X5Hjrn0Tgy3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hHkYlsOJ; arc=none smtp.client-ip=74.125.224.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769768544; c=relaxed/simple;
+	bh=Eq2G7Xi3OimnQOM/OPf23yrh0oiEwbP1aeWoGbFDTqM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k2pHs5JD4ViBns+UTLs2nNOIPHNR7wt0zghHZnUXmEZCnfNu9V0uu241GsTvnK2tmYkDtOrnmrr7wvDT/9iZ3wkvaRrOgruh2sGrxvIi0f94ci/EWSn108mbdf+UxduwjGo/A+BnNu2xXsnQ6ZP8CRZJFgj+9nXuveaZPFPpg+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=i5nWeqU4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FHbe7Nps; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hHkYlsOJ"
-Received: by mail-yx1-f48.google.com with SMTP id 956f58d0204a3-649278a69c5so2015276d50.3
-        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 01:12:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769764375; x=1770369175; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BqsnWikU7Lohq8AD8p2s7XQz/GMEbrveKNhDBDZTgGs=;
-        b=hHkYlsOJkVN2yOPWTIzxlQSqBnib6rCkTSb9hSkp7dQ9iaqChv44lPVraJsUrvh439
-         WsIHIGSIjVBtrjwHolr4GnjmP9mqOsB3s2mW7rYa/i6u4cBRaYeDMHFk+UabTcL13sbN
-         Y1sm4628cS93WkafOwCiZr0s5z7+3JY2XAaSG3gx6Nwm/Fwc4t1i6MmEbyMdtTkuhHvn
-         3EOyAeQlxkZsqDAfCMKwpeaiv5zybwtZ+o6OUtl6pQdDK7ntX+frTfv4KaorL+fAFRso
-         TW/fla1ecuWSG15jCp/H/af7DdoGuCaOIr+mJZqf7kjWM6uC7II28H++6R/gXfLKeyzo
-         zKcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769764375; x=1770369175;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BqsnWikU7Lohq8AD8p2s7XQz/GMEbrveKNhDBDZTgGs=;
-        b=YSvsu7D/ICwWiVEc74EZcb5GpfsaqcLiLeZTsE87+952Llpk5F1TzXLLXtZjzBdX7S
-         9Qh4Nbjm2YH8LvOvst7byOcpJ8wDvVkhmiSsjT2xtnGJ4WMJR1UjW7CX//PXLqqTe7DJ
-         wEgflbQd39m+yWIM5XO+Aerm+xERw9CCNo9UWS7sDldbPqC2MulGJs5HlqJ4wuJ146eo
-         nXv7VcBrjvv4yD3ms/iDgUssvtu4cgLegSvRJveid0Lqj8P1Sly1NPvYUrdE7FwrrZT4
-         sEjq7XVn6I6BWDvw8Xiw+RJpkMOOXpliR6QLG5QtdEhHiIcbkZmg9h6amBYbcuBkZ96U
-         qnng==
-X-Forwarded-Encrypted: i=1; AJvYcCW3MwiAlbtS1/slQYi+ZxcKYDkJsn2CtacUv4HebhjZEnuhF53YucJHJUSB3Y4moPKzIHo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNIHL95caILeVEPqIQ2gx+vtOqTJLVa37hvxQOGdEm1pNYX+xF
-	+MQ41WfzL/xUbPswzyFWjKlPAzGG61wKgSW8tkDB03poFSWP5anGrh7j
-X-Gm-Gg: AZuq6aLsQ5HkHnNR+y6ySRUsirsTeZArqoT4fGGCrx3f1Ort29+ZKyaRF3i+D2aYvJL
-	RCBafGrtB5tI0zWYQNmxZxuvO3B11kp2BxJOWIaDUwvM/maAOQ0Ub+VV3YTLJQW1OJFebB1TriM
-	DK4iZG0lUJDzGZ4cgLgRiRVbdgi8RCQ5hfEHX5nvR/jQ6XJMmZloRAen480hyX7BWIAnlZ3BCbr
-	y3OK/Nr7933jh7nBe1Qrz7Or61AVKM6sJXB6vpqLdX3+D1ONaTBtXFoIa1UAwTuLySHuAxZXgBg
-	YuA2IALJTNY0CRlRRuzW+S74Eo3pHSphCgA86mE+Tq592hVwoYTJMycEq/cHZ7L5eeRh2CyS8Wh
-	KRzNzHYytv1mVkMUpNbY+WqygV4sxPnlHFsZ3fe2ytsdh84/VYkuSl84RRQr4HrsTm8fDGbeTOE
-	WXj2kYgmyKxDeacI3m0yfakz0PSgI/PO+EtLs8Xf9/a8B+GslZsIrmgeysAW9KvYOz2AO5xSsC+
-	6kyZb1Be7qa+Ffa3BOT3SCiyiFJPlJ4li5/LaetDXXfJZc=
-X-Received: by 2002:a05:690e:1688:b0:644:6ad4:fdfd with SMTP id 956f58d0204a3-649a84ee166mr1735838d50.71.1769764374801;
-        Fri, 30 Jan 2026 01:12:54 -0800 (PST)
-Received: from u2404-VMware-Virtual-Platform.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64996063f90sm3436470d50.2.2026.01.30.01.12.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Jan 2026 01:12:54 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net
-Cc: andrii@kernel.org,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH] selftests/bpf: skip deny_namespace when bpf LSM is not enabled
-Date: Fri, 30 Jan 2026 17:12:45 +0800
-Message-ID: <20260130091245.3824029-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="i5nWeqU4";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FHbe7Nps"
+Date: Fri, 30 Jan 2026 11:22:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1769768540;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SfQHnA2BmBI6ftm9auzvWJDnwuKHz7JY0ERZmZ33OkI=;
+	b=i5nWeqU4DrtCSygkhNXk0clW9sdJeYUn+nu/Lp14hRLsdOkRPW/to9G74aQNkjj8/JTbn+
+	EVuWx+CmaVxnH53spKOTa7yTwq+7Tl5lbIaIOm6gfGtyYUgNE6YFmOkXoVoKgF7DIPCyUf
+	y1lAx0HgGSDiub5A9zPaedO1HVcaiXfp8sro3/sdIma6WQfHSaspq9hNO8iPB5ZcgcMbe7
+	NHxgCPJn4K4WRfNe8JCnTOItY+RoBL8mYl7doxD5VtpmDXKdPBP/9LsAR9z4WEYm+EfAXY
+	56WuhmuxkZV0tie3qdFvjlHPysRbMXP1CcsyWmgKLMDJcorskgLzg36usAwFSg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1769768540;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SfQHnA2BmBI6ftm9auzvWJDnwuKHz7JY0ERZmZ33OkI=;
+	b=FHbe7NpszOxXo2LOeb2aDyUedizHq4EKWZVTWJo3btpIoSScU03CQEk/9T3wpc7XZUEEHy
+	j7CSY3+NgBT2CcBA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
+	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	libc-alpha@sourceware.org
+Subject: Re: [PATCH net-next v2 1/4] selftests: net: Move some UAPI header
+ inclusions after libc ones
+Message-ID: <20260130111949-4b4eb870-6df7-4026-a48c-730fa8660ad6@linutronix.de>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+ <20260120-uapi-sockaddr-v2-1-63c319111cf6@linutronix.de>
+ <4e673f7f-c49c-46b0-85b4-bae6e4efcb3a@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <4e673f7f-c49c-46b0-85b4-bae6e4efcb3a@kernel.org>
 
-deny_namespace/userns_create_bpf relies on BPF LSM being active in the LSM
-chain. When /sys/kernel/security/lsm does not contain "bpf" (e.g. virtme-ng
-default), this test can't validate the expected EPERM behavior. Reporting
-FAIL in that case is misleading noise for CI.
+(trimmed the recipient list)
 
-Detect missing bpf in the active LSM list and skip the test with a short
-hint to boot with lsm=...,bpf.
+Hi Matt,
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- .../selftests/bpf/prog_tests/deny_namespace.c | 38 +++++++++++++++++++
- 1 file changed, 38 insertions(+)
+On Mon, Jan 26, 2026 at 07:13:50PM +0100, Matthieu Baerts wrote:
+> On 20/01/2026 15:10, Thomas Weißschuh wrote:
+> > Interleaving inclusions of UAPI headers and libc headers is problematic.
+> > Both sets of headers define conflicting symbols. To enable their
+> > coexistence a compatibility-mechanism is in place.
+> > 
+> > An upcoming change will define 'struct sockaddr' from linux/socket.h.
+> > However sys/socket.h from libc does not yet handle this case and a
+> > symbol conflict will arise.
+> > 
+> > Furthermore libc-compat.h evaluates the state of the libc
+> > inclusions only once, at the point it is included first. If another
+> > problematic header from libc is included later, symbol conflicts arise.
+> > This will trigger other duplicate definitions when linux/libc-compat.h
+> > is added to linux/socket.h
+> > 
+> > Move the inclusion of UAPI headers after the inclusion of the glibc
+> > ones, so the libc-compat.h continues to work correctly.
+> 
+> Thank you for looking at this!
+> 
+> Here is my (late, sorry) review for the modifications related to MPTCP:
+> > diff --git a/tools/testing/selftests/net/mptcp/mptcp_diag.c b/tools/testing/selftests/net/mptcp/mptcp_diag.c
+> > index 8e0b1b8d84b6..af25ebfd2915 100644
+> > --- a/tools/testing/selftests/net/mptcp/mptcp_diag.c
+> > +++ b/tools/testing/selftests/net/mptcp/mptcp_diag.c
+> > @@ -1,11 +1,6 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> >  /* Copyright (c) 2025, Kylin Software */
+> >  
+> > -#include <linux/sock_diag.h>
+> > -#include <linux/rtnetlink.h>
+> > -#include <linux/inet_diag.h>
+> > -#include <linux/netlink.h>
+> > -#include <linux/compiler.h>
+> >  #include <sys/socket.h>
+> >  #include <netinet/in.h>
+> >  #include <linux/tcp.h>
+> 
+> There is a remaining one (linux/tcp.h) here that you might want to move
+> below too.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/deny_namespace.c b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
-index 1bc6241b755b..5fb31912dd98 100644
---- a/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
-+++ b/tools/testing/selftests/bpf/prog_tests/deny_namespace.c
-@@ -5,6 +5,7 @@
- #include <sched.h>
- #include "cap_helpers.h"
- #include <stdio.h>
-+#include <string.h>
- 
- static int wait_for_pid(pid_t pid)
- {
-@@ -46,6 +47,36 @@ static int create_user_ns(void)
- 	return wait_for_pid(pid);
- }
- 
-+static bool bpf_lsm_enabled(void)
-+{
-+	FILE *f;
-+	char buf[512];
-+	bool enabled = false;
-+
-+	f = fopen("/sys/kernel/security/lsm", "r");
-+	if (!f)
-+		return false;
-+
-+	if (!fgets(buf, sizeof(buf), f)) {
-+		fclose(f);
-+		return false;
-+	}
-+	fclose(f);
-+
-+	buf[strcspn(buf, "\n")] = '\0';
-+
-+	for (char *saveptr = NULL, *tok = strtok_r(buf, ",", &saveptr);
-+		tok;
-+		tok = strtok_r(NULL, ",", &saveptr)) {
-+		if (!strcmp(tok, "bpf")) {
-+			enabled = true;
-+			break;
-+		}
-+	}
-+
-+	return enabled;
-+}
-+
- static void test_userns_create_bpf(void)
- {
- 	__u32 cap_mask = 1ULL << CAP_SYS_ADMIN;
-@@ -88,6 +119,13 @@ void test_deny_namespace(void)
- 	if (!ASSERT_OK_PTR(skel, "skel load"))
- 		goto close_prog;
- 
-+	if (!bpf_lsm_enabled()) {
-+		printf("%s:SKIP:bpf LSM not enabled (boot with lsm=...,bpf)\n",
-+		       __func__);
-+		test__skip();
-+		goto close_prog;
-+	}
-+
- 	err = test_deny_namespace__attach(skel);
- 	if (!ASSERT_OK(err, "attach"))
- 		goto close_prog;
--- 
-2.43.0
+Good point.
 
+> > @@ -17,6 +12,12 @@
+> >  #include <errno.h>
+> >  #include <stdio.h>
+> >  
+> > +#include <linux/sock_diag.h>
+> > +#include <linux/rtnetlink.h>
+> > +#include <linux/inet_diag.h>
+> > +#include <linux/netlink.h>
+> > +#include <linux/compiler.h>
+> 
+> Note that I just noticed this is the only file from this directory where
+> the "includes" are not sorted by type and alphabetical order, see
+> pm_nl_ctl.c as an example. A bit of a detail, but if you plan to send a
+> v2, do you mind doing that too here while at it, please?
+
+I'll send a v3 during the next cycle.
+
+> If not, I can look at that later, but better to avoid doing that in
+> parallel.
+
+If you want to fix this up already during this cycle,
+that would also be most welcome.
+
+
+Thomas
