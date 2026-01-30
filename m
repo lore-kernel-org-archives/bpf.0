@@ -1,95 +1,117 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from out28-145.mail.aliyun.com (out28-145.mail.aliyun.com [115.124.28.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C282D7384;
-	Fri, 30 Jan 2026 03:05:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C7E18BBAE;
+	Fri, 30 Jan 2026 03:31:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769742310; cv=none; b=r/KmPB9YKNmKH14qGIBONGAxlHrcO7ail4EzpS438PwRY5c1/Cx1rvhlz3eZhbs5B1gKIMreHe4qaLaiPL7qva2N57bubf7PFUZYLG+TybPzEyJy/Nc1hGjNM3bOno2cajarpR6vitFEFWXqldRcCRFK4I6eMULaxTmWXiNtP5A=
+	t=1769743894; cv=none; b=tDr0nH89u4flSa1GZyVrcyRl+fQtEFSIq71me0h+KZy5MJGl8+zkeZruLw7M0yiZPA3SWfmP0ouvWJqbCMEEx0HOVHy5HJYwcOfIf3ByY1nEOYQnjSadQ5fTrYiwPWbacY/Ei9dm8/BEHa1oLIBd4KZB52j2Z+9xJ9M76m3d/64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769742310; c=relaxed/simple;
-	bh=fIrJc6V38Gm1Xzp831y0qUcjo7su1xHPtmVZvEaRb+4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D65v80qK5uOFpMFmRYaUrMS6/EuOmfR8chODL7jMrR9DOMA/U+0xh5ZShZbGRy8WcF/Vdeej1750ki9lWWqVRXuIJa6XQKgOjlTcT9Y9gQbaiTmq+QESEit2r+ZUSg86ZaXG+8ULsrl6Y0xc8VvqS/B+8IT78kpSIQMRxzY2KW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=KlwQV+TS; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="KlwQV+TS"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=1B1BFi/8fLCjDIghQMyCqBsdwfNOBaYQ5QhAovF8jkQ=; b=KlwQV+TSwfw4pV4qL7mbq8CuOo
-	E97ZOuJxvR6aaj3Apx8scwubXOzPpgAToaQFhGDPEtDaLLRzz7tjj5KjEpTH7gRmFZ6jqZikW3OT6
-	LEnMLwGSzKWW0XquTB8mJQNH+jcFayqYyCMhuOG1J+nZ8kwiT/U/gu3aoyocewI16B/A=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1vleoB-005R2o-6Z; Fri, 30 Jan 2026 04:04:31 +0100
-Date: Fri, 30 Jan 2026 04:04:31 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Sam <sam.chen@nebula-matrix.com>
-Cc: Illusion Wang <illusion.wang@nebula-matrix.com>,
-	Dimon <dimon.zhao@nebula-matrix.com>,
-	Alvin <alvin.wang@nebula-matrix.com>,
-	netdev <netdev@vger.kernel.org>,
-	andrew+netdev <andrew+netdev@lunn.ch>, corbet <corbet@lwn.net>,
-	kuba <kuba@kernel.org>, linux-doc <linux-doc@vger.kernel.org>,
-	lorenzo <lorenzo@kernel.org>, pabeni <pabeni@redhat.com>,
-	horms <horms@kernel.org>,
-	"vadim.fedorenko" <vadim.fedorenko@linux.dev>,
-	"lukas.bulwahn" <lukas.bulwahn@redhat.com>, hawk <hawk@kernel.org>,
-	ast <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-	sdf <sdf@fomichev.me>, daniel <daniel@iogearbox.net>,
-	"john.fastabend" <john.fastabend@gmail.com>,
-	edumazet <edumazet@google.com>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: =?utf-8?B?5Zue5aSN77ya5Zue5aSN77yaW1BB?=
- =?utf-8?Q?TCH_v3_net-nex?= =?utf-8?Q?t?= 01/15] net/nebula-matrix: add
- minimum nbl build framework
-Message-ID: <ecbf1ba5-6ef9-4d94-8240-518852050f03@lunn.ch>
-References: <20260123011804.31263-1-illusion.wang@nebula-matrix.com>
- <20260123011804.31263-2-illusion.wang@nebula-matrix.com>
- <88c7e349-f941-4216-89ca-70a49e82b378@lunn.ch>
- <ad0a6f0f-3ce3-4f38-b27d-2f121511d6e3.illusion.wang@nebula-matrix.com>
- <c1536b51-f441-45ca-8bfb-d5f7d8230713@lunn.ch>
- <152750cb-ab8c-4f08-9c6a-6b69ec185f30.sam.chen@nebula-matrix.com>
+	s=arc-20240116; t=1769743894; c=relaxed/simple;
+	bh=27yybq+avVH2XtAjsD74kux4Qf/z/5pQwP4wOaT/gHo=;
+	h=Date:From:To:Cc:Message-ID:Subject:MIME-Version:References:
+	 In-Reply-To:Content-Type; b=tEuevrEk6Xsazrbyd5tTvifawWNHMldKPAH8GUWo/4e9/4S6x62fH+KrxLlUiFOtmB8x9xpnwJNS5LZYzPHnpe74pJxboHZ0Vm3AWpWoUS91xbjaUBUlG0BBhXtJs5gljuxZVK23OLb61JT5AXPsQJT205GtnLVx16MbnLY8urk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nebula-matrix.com; spf=pass smtp.mailfrom=nebula-matrix.com; arc=none smtp.client-ip=115.124.28.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nebula-matrix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebula-matrix.com
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07416409|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.569133-0.00336644-0.427501;FP=5473539915353087302|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033045220102;MF=sam.chen@nebula-matrix.com;NM=1;PH=DW;RN=22;RT=22;SR=0;TI=W4_0.2.3_212505AD_1769743879611_o7001c409;
+Received: from WS-web (sam.chen@nebula-matrix.com[W4_0.2.3_212505AD_1769743879611_o7001c409] cluster:ay29) at Fri, 30 Jan 2026 11:31:27 +0800
+Date: Fri, 30 Jan 2026 11:31:27 +0800
+From: "Sam" <sam.chen@nebula-matrix.com>
+To: "Andrew Lunn" <andrew@lunn.ch>
+Cc: "Illusion Wang" <illusion.wang@nebula-matrix.com>,
+  "Dimon" <dimon.zhao@nebula-matrix.com>,
+  "Alvin" <alvin.wang@nebula-matrix.com>,
+  "netdev" <netdev@vger.kernel.org>,
+  "andrew+netdev" <andrew+netdev@lunn.ch>,
+  "corbet" <corbet@lwn.net>,
+  "kuba" <kuba@kernel.org>,
+  "linux-doc" <linux-doc@vger.kernel.org>,
+  "lorenzo" <lorenzo@kernel.org>,
+  "pabeni" <pabeni@redhat.com>,
+  "horms" <horms@kernel.org>,
+  "vadim.fedorenko" <vadim.fedorenko@linux.dev>,
+  "lukas.bulwahn" <lukas.bulwahn@redhat.com>,
+  "hawk" <hawk@kernel.org>,
+  "ast" <ast@kernel.org>,
+  "bpf" <bpf@vger.kernel.org>,
+  "sdf" <sdf@fomichev.me>,
+  "daniel" <daniel@iogearbox.net>,
+  "john.fastabend" <john.fastabend@gmail.com>,
+  "edumazet" <edumazet@google.com>,
+  "open list" <linux-kernel@vger.kernel.org>
+Reply-To: "Sam" <sam.chen@nebula-matrix.com>
+Message-ID: <17d3aa72-23a8-4ea8-9721-bc20fe39fdf4.sam.chen@nebula-matrix.com>
+Subject: =?UTF-8?B?5Zue5aSN77ya5Zue5aSN77ya5Zue5aSN77yaW1BBVENIIHYzIG5ldC1uZXh0IDAxLzE1XSBu?=
+  =?UTF-8?B?ZXQvbmVidWxhLW1hdHJpeDogYWRkIG1pbmltdW0gbmJsIGJ1aWxkIGZyYW1ld29yaw==?=
+X-Mailer: [Alimail-Mailagent][W4_0.2.3][null][Chrome]
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <152750cb-ab8c-4f08-9c6a-6b69ec185f30.sam.chen@nebula-matrix.com>
+x-aliyun-im-through: {"version":"v1.0"}
+References: <20260123011804.31263-1-illusion.wang@nebula-matrix.com> <20260123011804.31263-2-illusion.wang@nebula-matrix.com> <88c7e349-f941-4216-89ca-70a49e82b378@lunn.ch> <ad0a6f0f-3ce3-4f38-b27d-2f121511d6e3.illusion.wang@nebula-matrix.com> <c1536b51-f441-45ca-8bfb-d5f7d8230713@lunn.ch> <152750cb-ab8c-4f08-9c6a-6b69ec185f30.sam.chen@nebula-matrix.com>,<ecbf1ba5-6ef9-4d94-8240-518852050f03@lunn.ch>
+x-aliyun-mail-creator: W4_0.2.3_null_EuMTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEzMy4wLjY5NDMuMTQyIFNhZmFyaS81MzcuMzYgZGluZ3RhbGstd2luLzEuMC4wIG53KDAuMTQuNykgRGluZ1RhbGsoOC4yLjUtUmVsZWFzZS4yNjAxMTMwMDYpIE1vam8vMS4wLjAgTmF0aXZlIEFwcFR5cGUocmVsZWFzZSkgQ2hhbm5lbC8yMDEyMDAgQXJjaGl0ZWN0dXJlL3g4Nl82NCB3ZWJEdC9QQw==uL
+In-Reply-To: <ecbf1ba5-6ef9-4d94-8240-518852050f03@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-On Fri, Jan 30, 2026 at 10:23:50AM +0800, Sam wrote:
-> Thank you for your feedback. I understand what you mean.The reasons why
-> we cannot change the module name now are as follows:
-> Our driver has already been integrated into multiple communities, and
-> the module name is nbl_core. Many customers have already deployed it. If
-> we change the name, there will be a critical problem of conflict between
-> the two modules during subsequent online driver upgrades.
-
-To a large extent, mainline does not care about your vendor driver,
-and it does not care about any compatibility issues between your
-vendor driver and mainline.
-
-I've not looked at your driver in detail yet so i cannot comment on
-your driver in particular. But we often see vendor drivers do things
-mainline does not allow. Custom ioctl handlers, files in /sys, write
-APIs in debugfs, statistic counters wrongly grouped, etc. In a vendor
-driver this is O.K, this is all open source, you are free to do what
-you want. But when it comes to mainline, you have to keep to the
-mainline rules. Such code will need to be removed, or reworked,
-breaking compatibility with your vendor driver.
-
-So it can be advantages to have different names, it then become clear
-if a customer is using the vendor driver, or is using mainline.
-
-   Andrew
-
-
-
+VGhhbmsgeW91IGZvciB5b3VyIGZlZWRiYWNrLiBZb3UgbWlnaHQgaGF2ZSBtaXN1bmRlcnN0b29k
+IG1lLgpPdXIgZGlmZmljdWx0aWVzIGxpZSBpbiB0aGUgZm9sbG93aW5nOgoxLiBBc3N1bWluZyBv
+bmx5IHRoZSBtYWlubGluZSB2ZXJzaW9uIGNoYW5nZXMgdGhlIG5hbWUgKEFzc3VtZSBuYW1lICJu
+YmwiKSwKIMKgIGFuZCBvdXIgcmVndWxhcmx5IHJlbGVhc2VkIGRyaXZlciBkb2Vzbid0IGNoYW5n
+ZSBpdHMgbmFtZSwgdGhlbiB3aGVuCiDCoCBjdXN0b21lcnMgdXBncmFkZSB0byBhIG5ldyBrZXJu
+ZWwgKGNvbnRhaW5pbmcgdGhlICJuYmwiIGRyaXZlciksCiDCoCBhbmQgdGhlbiB3YW50IHRvIHVw
+ZGF0ZSBvdXIgcmVndWxhcmx5IHJlbGVhc2VkIGRyaXZlciAobmFtZWQgIm5ibF9jb3JlIiksCiDC
+oCB0aGUgbW9kdWxlIChrbykgY29uZmxpY3Qgd2lsbCBvY2N1ci4KMi4gSWYgYm90aCBvdXIgbWFp
+bmxpbmUgYW5kIHJlZ3VsYXJseSByZWxlYXNlZCBkcml2ZXJzIGNoYW5nZSB0aGVpciBuYW1lcywK
+IMKgIHRoZW4gY3VzdG9tZXJzIHdobyBhcmUgYWxyZWFkeSB1c2luZyB0aGUgIm5ibF9jb3JlIiBk
+cml2ZXIgd2lsbCBhbHNvCiDCoCBlbmNvdW50ZXIgY29uZmxpY3QgaXNzdWVzIHdoZW4gdXBkYXRp
+bmcgdG8gdGhlIG5ldyBkcml2ZXIgIm5ibCIuCgpJcyBpdCBwb3NzaWJsZSB0byBkbyB0aGlzOiBv
+dXIgbmV0IGRyaXZlciBpcyBhbHNvIG1vZGlmaWVkIHRvIGJlIGEgZHJpdmVyIGJhc2VkCm9uIHRo
+ZSBhdXhpbGlhcnkgYnVzLCB3aGlsZSB0aGUgUENJZSBkcml2ZXIgb25seSBoYW5kbGVzIFBDSWUt
+cmVsYXRlZCBwcm9jZXNzaW5nLAphbmQgdGhlc2UgdHdvIGRyaXZlcnMgc2hhcmUgYSBzaW5nbGUg
+a2VybmVsIG1vZHVsZSAoa28pLCBuYW1lbHkgIm5ibF9jb3JlIj8KLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCuWPkeS7tuS6
+uu+8mkFuZHJldyBMdW5uIDxhbmRyZXdAbHVubi5jaD4K5Y+R6YCB5pe26Ze077yaMjAyNuW5tDHm
+nIgzMOaXpSjlkajkupQpIDExOjA0CuaUtuS7tuS6uu+8mlNhbTxzYW0uY2hlbkBuZWJ1bGEtbWF0
+cml4LmNvbT4K5oqE44CA6YCB77yaSWxsdXNpb24gV2FuZzxpbGx1c2lvbi53YW5nQG5lYnVsYS1t
+YXRyaXguY29tPjsgRGltb248ZGltb24uemhhb0BuZWJ1bGEtbWF0cml4LmNvbT47IEFsdmluPGFs
+dmluLndhbmdAbmVidWxhLW1hdHJpeC5jb20+OyBuZXRkZXY8bmV0ZGV2QHZnZXIua2VybmVsLm9y
+Zz47ICJhbmRyZXcrbmV0ZGV2IjxhbmRyZXcrbmV0ZGV2QGx1bm4uY2g+OyBjb3JiZXQ8Y29yYmV0
+QGx3bi5uZXQ+OyBrdWJhPGt1YmFAa2VybmVsLm9yZz47ICJsaW51eC1kb2MiPGxpbnV4LWRvY0B2
+Z2VyLmtlcm5lbC5vcmc+OyBsb3JlbnpvPGxvcmVuem9Aa2VybmVsLm9yZz47IHBhYmVuaTxwYWJl
+bmlAcmVkaGF0LmNvbT47IGhvcm1zPGhvcm1zQGtlcm5lbC5vcmc+OyAidmFkaW0uZmVkb3Jlbmtv
+Ijx2YWRpbS5mZWRvcmVua29AbGludXguZGV2PjsgImx1a2FzLmJ1bHdhaG4iPGx1a2FzLmJ1bHdh
+aG5AcmVkaGF0LmNvbT47IGhhd2s8aGF3a0BrZXJuZWwub3JnPjsgYXN0PGFzdEBrZXJuZWwub3Jn
+PjsgYnBmPGJwZkB2Z2VyLmtlcm5lbC5vcmc+OyBzZGY8c2RmQGZvbWljaGV2Lm1lPjsgZGFuaWVs
+PGRhbmllbEBpb2dlYXJib3gubmV0PjsgImpvaG4uZmFzdGFiZW5kIjxqb2huLmZhc3RhYmVuZEBn
+bWFpbC5jb20+OyBlZHVtYXpldDxlZHVtYXpldEBnb29nbGUuY29tPjsgb3BlbiBsaXN0PGxpbnV4
+LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc+CuS4u+OAgOmimO+8mlJlOiDlm57lpI3vvJrlm57lpI3v
+vJpbUEFUQ0ggdjMgbmV0LW5leHQgMDEvMTVdIG5ldC9uZWJ1bGEtbWF0cml4OiBhZGQgbWluaW11
+bSBuYmwgYnVpbGQgZnJhbWV3b3JrCgoKT24gRnJpLCBKYW4gMzAsIDIwMjYgYXQgMTA6MjM6NTBB
+TSArMDgwMCwgU2FtIHdyb3RlOgo+IFRoYW5rIHlvdSBmb3IgeW91ciBmZWVkYmFjay4gSSB1bmRl
+cnN0YW5kIHdoYXQgeW91IG1lYW4uVGhlIHJlYXNvbnMgd2h5Cj4gd2UgY2Fubm90IGNoYW5nZSB0
+aGUgbW9kdWxlIG5hbWUgbm93IGFyZSBhcyBmb2xsb3dzOgo+IE91ciBkcml2ZXIgaGFzIGFscmVh
+ZHkgYmVlbiBpbnRlZ3JhdGVkIGludG8gbXVsdGlwbGUgY29tbXVuaXRpZXMsIGFuZAo+IHRoZSBt
+b2R1bGUgbmFtZSBpcyBuYmxfY29yZS4gTWFueSBjdXN0b21lcnMgaGF2ZSBhbHJlYWR5IGRlcGxv
+eWVkIGl0LiBJZgo+IHdlIGNoYW5nZSB0aGUgbmFtZSwgdGhlcmUgd2lsbCBiZSBhIGNyaXRpY2Fs
+IHByb2JsZW0gb2YgY29uZmxpY3QgYmV0d2Vlbgo+IHRoZSB0d28gbW9kdWxlcyBkdXJpbmcgc3Vi
+c2VxdWVudCBvbmxpbmUgZHJpdmVyIHVwZ3JhZGVzLgoKVG8gYSBsYXJnZSBleHRlbnQsIG1haW5s
+aW5lIGRvZXMgbm90IGNhcmUgYWJvdXQgeW91ciB2ZW5kb3IgZHJpdmVyLAphbmQgaXQgZG9lcyBu
+b3QgY2FyZSBhYm91dCBhbnkgY29tcGF0aWJpbGl0eSBpc3N1ZXMgYmV0d2VlbiB5b3VyCnZlbmRv
+ciBkcml2ZXIgYW5kIG1haW5saW5lLgoKSSd2ZSBub3QgbG9va2VkIGF0IHlvdXIgZHJpdmVyIGlu
+IGRldGFpbCB5ZXQgc28gaSBjYW5ub3QgY29tbWVudCBvbgp5b3VyIGRyaXZlciBpbiBwYXJ0aWN1
+bGFyLiBCdXQgd2Ugb2Z0ZW4gc2VlIHZlbmRvciBkcml2ZXJzIGRvIHRoaW5ncwptYWlubGluZSBk
+b2VzIG5vdCBhbGxvdy4gQ3VzdG9tIGlvY3RsIGhhbmRsZXJzLCBmaWxlcyBpbiAvc3lzLCB3cml0
+ZQpBUElzIGluIGRlYnVnZnMsIHN0YXRpc3RpYyBjb3VudGVycyB3cm9uZ2x5IGdyb3VwZWQsIGV0
+Yy4gSW4gYSB2ZW5kb3IKZHJpdmVyIHRoaXMgaXMgTy5LLCB0aGlzIGlzIGFsbCBvcGVuIHNvdXJj
+ZSwgeW91IGFyZSBmcmVlIHRvIGRvIHdoYXQKeW91IHdhbnQuIEJ1dCB3aGVuIGl0IGNvbWVzIHRv
+IG1haW5saW5lLCB5b3UgaGF2ZSB0byBrZWVwIHRvIHRoZQptYWlubGluZSBydWxlcy4gU3VjaCBj
+b2RlIHdpbGwgbmVlZCB0byBiZSByZW1vdmVkLCBvciByZXdvcmtlZCwKYnJlYWtpbmcgY29tcGF0
+aWJpbGl0eSB3aXRoIHlvdXIgdmVuZG9yIGRyaXZlci4KClNvIGl0IGNhbiBiZSBhZHZhbnRhZ2Vz
+IHRvIGhhdmUgZGlmZmVyZW50IG5hbWVzLCBpdCB0aGVuIGJlY29tZSBjbGVhcgppZiBhIGN1c3Rv
+bWVyIGlzIHVzaW5nIHRoZSB2ZW5kb3IgZHJpdmVyLCBvciBpcyB1c2luZyBtYWlubGluZS4KCiDC
+oCBBbmRyZXcKCgo=
