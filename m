@@ -1,31 +1,31 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5FA828D830
-	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 04:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085AE24BBEB
+	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 06:17:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769748639; cv=none; b=QyOU2LsgA4EB/fR2EWlEzFGefAsqCembWhnEA//k0r6/qdVCUtpgpTlL81ZD34MyGwTAUdYgR6rFiWUCTmfKNhtI/M36BYFhaYiWpBPgfgFsrYd3uc2ceeFdWRTGzhoFs3iVLCIFwXFmRwO6CW6a5hg4Ifqbs6+fO0NuAsddv4E=
+	t=1769753876; cv=none; b=HM0ZVgIkPWYYvCJMXlr5S9ZBoEftRZ5vPlYKy3aXJnIUKwgfoBFSX8Rgmz17ExaRBPsav4VpotcGUxsYq9q0TnAaXqZg9PBSxSynAF9CSiQd24+NKFmKxkcXoDSxJYfcQUOqLQygJhUS8h2PsU6XIBLJZiUzWzPJo9chQ0k6Zq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769748639; c=relaxed/simple;
-	bh=7K/XRomBO5tGOJNCNL9IdnL/8/ejIP4nyJZzLwfzat4=;
+	s=arc-20240116; t=1769753876; c=relaxed/simple;
+	bh=gi56fCFxndmZS3u5rZn7lLKjCFP6jws0mcuR3jguaLw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b8c9w9V93cbG6fsTWiVYh8DiTdO7uH4urWok23uif/asdyyKISgJtcESXsqeV0IR1d+x+udnbuJW13oZAui0MsJWgf4gJA9p6g5A+itS3m5iWytbI0uO8Q1Irr7aN7KfI6SQKJmczi4Lx643+x8ZeLKLlGOElYkDH2cdJAh9GDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MTZFazTp; arc=none smtp.client-ip=95.215.58.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=MXZ0QthRgGJWtWkIqzk5q2DKoxSVa1bfhaFlkhd/WMhJKaXlasUg3JRlHMHt1m/nsjwWFOfcbqkb9HG6ORTniqs/eoC8uTyIHWQbkU6zvYT8d91C/owWOOhwGtsphLP9hpwckgpGI/DEhUjeI37T0OgnL7EylDecu1lZZOnrmUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uh/m2RGZ; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MTZFazTp"
-Date: Fri, 30 Jan 2026 12:50:14 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uh/m2RGZ"
+Date: Fri, 30 Jan 2026 14:17:32 +0800
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769748624;
+	t=1769753863;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=o0LolDkIeVgydx+lUvvnJuU5rTPe49ECMjoBW0cqVvs=;
-	b=MTZFazTpwQLBt1p5zzHs+rma+lbyv5QWgJkSiS9D4crkD4svGk6zMNRkBBOlfbtGIM7EBl
-	x3t9H03Th8ZE0Qej3gyM1d7zBQMDVKS4xaOXnWVv32LGA+bR+zq9bmeU3zks099YfXMfZN
-	kTbWJy/VQ4TwieXIANt3LxLHCreyKqM=
+	bh=Oc43I2XjtgSCW/lhB/Z+tW4u7IMzTAGJYJqdI4VSEG8=;
+	b=uh/m2RGZONlBv4grhrNFYxpeBB+mzaqQU52VLKVj8SSwhbfi1jnn0JW0X+4pOg5bJL5MqN
+	o46QNk0LCfDriaEtLad5Vrtq/JHJ+bpLCNRk7tPdv48NALYk4ZsqIe55oErjRhM1dOsD5P
+	+OEXEBCY2GU8MBZBsUmCb2GAq6Khez4=
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Hao Li <hao.li@linux.dev>
 To: Vlastimil Babka <vbabka@suse.cz>
@@ -38,10 +38,11 @@ Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
 	linux-rt-devel@lists.linux.dev, bpf@vger.kernel.org, kasan-dev@googlegroups.com, 
 	kernel test robot <oliver.sang@intel.com>, stable@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>
 Subject: Re: [PATCH v4 00/22] slab: replace cpu (partial) slabs with sheaves
-Message-ID: <pdmjsvpkl5nsntiwfwguplajq27ak3xpboq3ab77zrbu763pq7@la3hyiqigpir>
+Message-ID: <oj5ossmsvybogs5fr2fjdmms66usoh7pdpkuxwlkagxniscrrb@vghtzkxauvix>
 References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
  <imzzlzuzjmlkhxc7hszxh5ba7jksvqcieg5rzyryijkkdhai5q@l2t4ye5quozb>
  <390d6318-08f3-403b-bf96-4675a0d1fe98@suse.cz>
+ <pdmjsvpkl5nsntiwfwguplajq27ak3xpboq3ab77zrbu763pq7@la3hyiqigpir>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,60 +51,204 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <390d6318-08f3-403b-bf96-4675a0d1fe98@suse.cz>
+In-Reply-To: <pdmjsvpkl5nsntiwfwguplajq27ak3xpboq3ab77zrbu763pq7@la3hyiqigpir>
 X-Migadu-Flow: FLOW_OUT
 
-On Thu, Jan 29, 2026 at 04:28:01PM +0100, Vlastimil Babka wrote:
+On Fri, Jan 30, 2026 at 12:50:25PM +0800, Hao Li wrote:
+> On Thu, Jan 29, 2026 at 04:28:01PM +0100, Vlastimil Babka wrote:
+> > 
+> > So previously those would become kind of double
+> > cached by both sheaves and cpu (partial) slabs (and thus hopefully benefited
+> > more than they should) since sheaves introduction in 6.18, and now they are
+> > not double cached anymore?
+> > 
 > 
-> So previously those would become kind of double
-> cached by both sheaves and cpu (partial) slabs (and thus hopefully benefited
-> more than they should) since sheaves introduction in 6.18, and now they are
-> not double cached anymore?
+> I've conducted new tests, and here are the details of three scenarios:
 > 
+>   1. Checked out commit 9d4e6ab865c4, which represents the state before the
+>      introduction of the sheaves mechanism.
+>   2. Tested with 6.19-rc5, which includes sheaves but does not yet apply the
+>      "sheaves for all" patchset.
+>   3. Applied the "sheaves for all" patchset and also included the "avoid
+>      list_lock contention" patch.
 
-I've conducted new tests, and here are the details of three scenarios:
+Here is my testing environment information and the raw test data.
 
-  1. Checked out commit 9d4e6ab865c4, which represents the state before the
-     introduction of the sheaves mechanism.
-  2. Tested with 6.19-rc5, which includes sheaves but does not yet apply the
-     "sheaves for all" patchset.
-  3. Applied the "sheaves for all" patchset and also included the "avoid
-     list_lock contention" patch.
+Command:
 
+cd will-it-scale/
+python3 ./runtest.py mmap2 25 process 0 0 64 128 192
 
-Results:
+Env:
 
-For scenario 2 (with sheaves but without "sheaves for all"), there is a
-noticeable performance improvement compared to scenario 1:
+CPU(s):                                  192
+Thread(s) per core:                      1
+Core(s) per socket:                      96
+Socket(s):                               2
+NUMA node(s):                            4
+NUMA node0 CPU(s):                       0-47
+NUMA node1 CPU(s):                       48-95
+NUMA node2 CPU(s):                       96-143
+NUMA node3 CPU(s):                       144-191
+Memory:                                  1.5T
 
-will-it-scale.128.processes +34.3%
-will-it-scale.192.processes +35.4%
-will-it-scale.64.processes +31.5%
-will-it-scale.per_process_ops +33.7%
+Raw data:
 
-For scenario 3 (after applying "sheaves for all"), performance slightly
-regressed compared to scenario 1:
+1. Checked out commit 9d4e6ab865c4, which represents the state before the
+   introduction of the sheaves mechanism.
 
-will-it-scale.128.processes -1.3%
-will-it-scale.192.processes -4.2%
-will-it-scale.64.processes -1.2%
-will-it-scale.per_process_ops -2.1%
+{
+  "time.elapsed_time": 93.88,
+  "time.elapsed_time.max": 93.88,
+  "time.file_system_inputs": 2640,
+  "time.file_system_outputs": 128,
+  "time.involuntary_context_switches": 417738,
+  "time.major_page_faults": 54,
+  "time.maximum_resident_set_size": 90012,
+  "time.minor_page_faults": 80569,
+  "time.page_size": 4096,
+  "time.percent_of_cpu_this_job_got": 5707,
+  "time.system_time": 5272.97,
+  "time.user_time": 85.59,
+  "time.voluntary_context_switches": 2436,
+  "will-it-scale.128.processes": 28445014,
+  "will-it-scale.128.processes_idle": 33.89,
+  "will-it-scale.192.processes": 39899678,
+  "will-it-scale.192.processes_idle": 1.29,
+  "will-it-scale.64.processes": 15645502,
+  "will-it-scale.64.processes_idle": 66.75,
+  "will-it-scale.per_process_ops": 224832,
+  "will-it-scale.time.elapsed_time": 93.88,
+  "will-it-scale.time.elapsed_time.max": 93.88,
+  "will-it-scale.time.file_system_inputs": 2640,
+  "will-it-scale.time.file_system_outputs": 128,
+  "will-it-scale.time.involuntary_context_switches": 417738,
+  "will-it-scale.time.major_page_faults": 54,
+  "will-it-scale.time.maximum_resident_set_size": 90012,
+  "will-it-scale.time.minor_page_faults": 80569,
+  "will-it-scale.time.page_size": 4096,
+  "will-it-scale.time.percent_of_cpu_this_job_got": 5707,
+  "will-it-scale.time.system_time": 5272.97,
+  "will-it-scale.time.user_time": 85.59,
+  "will-it-scale.time.voluntary_context_switches": 2436,
+  "will-it-scale.workload": 83990194
+}
 
-Analysis:
+2. Tested with 6.19-rc5, which includes sheaves but does not yet apply the
+   "sheaves for all" patchset.
 
-So when the sheaf size for maple nodes is set to 32 by default, the performance
-of fully adopting the sheaves mechanism roughly matches the performance of the
-previous approach that relied solely on the percpu slab partial list.
+{
+  "time.elapsed_time": 93.86000000000001,
+  "time.elapsed_time.max": 93.86000000000001,
+  "time.file_system_inputs": 1952,
+  "time.file_system_outputs": 160,
+  "time.involuntary_context_switches": 766225,
+  "time.major_page_faults": 50.666666666666664,
+  "time.maximum_resident_set_size": 90012,
+  "time.minor_page_faults": 80635,
+  "time.page_size": 4096,
+  "time.percent_of_cpu_this_job_got": 5738,
+  "time.system_time": 5251.88,
+  "time.user_time": 134.57666666666665,
+  "time.voluntary_context_switches": 2539,
+  "will-it-scale.128.processes": 38223543.333333336,
+  "will-it-scale.128.processes_idle": 33.833333333333336,
+  "will-it-scale.192.processes": 54039039,
+  "will-it-scale.192.processes_idle": 1.26,
+  "will-it-scale.64.processes": 20579207.666666668,
+  "will-it-scale.64.processes_idle": 66.74333333333334,
+  "will-it-scale.per_process_ops": 300541,
+  "will-it-scale.time.elapsed_time": 93.86000000000001,
+  "will-it-scale.time.elapsed_time.max": 93.86000000000001,
+  "will-it-scale.time.file_system_inputs": 1952,
+  "will-it-scale.time.file_system_outputs": 160,
+  "will-it-scale.time.involuntary_context_switches": 766225,
+  "will-it-scale.time.major_page_faults": 50.666666666666664,
+  "will-it-scale.time.maximum_resident_set_size": 90012,
+  "will-it-scale.time.minor_page_faults": 80635,
+  "will-it-scale.time.page_size": 4096,
+  "will-it-scale.time.percent_of_cpu_this_job_got": 5738,
+  "will-it-scale.time.system_time": 5251.88,
+  "will-it-scale.time.user_time": 134.57666666666665,
+  "will-it-scale.time.voluntary_context_switches": 2539,
+  "will-it-scale.workload": 112841790
+}
 
-The performance regression observed with the "sheaves for all" patchset can
-actually be explained as follows: moving from scenario 1 to scenario 2
-introduces an additional cache layer, which boosts performance temporarily.
-When moving from scenario 2 to scenario 3, this additional cache layer is
-removed, then performance reverted to its original level.
+3. Applied the "sheaves for all" patchset and also included the "avoid
+   list_lock contention" patch.
 
-So I think the performance of the percpu partial list and the sheaves mechanism
-is roughly the same, which is consistent with our expectations.
+{
+  "time.elapsed_time": 93.86666666666667,
+  "time.elapsed_time.max": 93.86666666666667,
+  "time.file_system_inputs": 1800,
+  "time.file_system_outputs": 149.33333333333334,
+  "time.involuntary_context_switches": 421120,
+  "time.major_page_faults": 37,
+  "time.maximum_resident_set_size": 90016,
+  "time.minor_page_faults": 80645,
+  "time.page_size": 4096,
+  "time.percent_of_cpu_this_job_got": 5714.666666666667,
+  "time.system_time": 5256.176666666667,
+  "time.user_time": 108.88333333333333,
+  "time.voluntary_context_switches": 2513,
+  "will-it-scale.128.processes": 28067051.333333332,
+  "will-it-scale.128.processes_idle": 33.82,
+  "will-it-scale.192.processes": 38232965.666666664,
+  "will-it-scale.192.processes_idle": 1.2733333333333334,
+  "will-it-scale.64.processes": 15464041.333333334,
+  "will-it-scale.64.processes_idle": 66.76333333333334,
+  "will-it-scale.per_process_ops": 220009.33333333334,
+  "will-it-scale.time.elapsed_time": 93.86666666666667,
+  "will-it-scale.time.elapsed_time.max": 93.86666666666667,
+  "will-it-scale.time.file_system_inputs": 1800,
+  "will-it-scale.time.file_system_outputs": 149.33333333333334,
+  "will-it-scale.time.involuntary_context_switches": 421120,
+  "will-it-scale.time.major_page_faults": 37,
+  "will-it-scale.time.maximum_resident_set_size": 90016,
+  "will-it-scale.time.minor_page_faults": 80645,
+  "will-it-scale.time.page_size": 4096,
+  "will-it-scale.time.percent_of_cpu_this_job_got": 5714.666666666667,
+  "will-it-scale.time.system_time": 5256.176666666667,
+  "will-it-scale.time.user_time": 108.88333333333333,
+  "will-it-scale.time.voluntary_context_switches": 2513,
+  "will-it-scale.workload": 81764058.33333333
+}
 
--- 
-Thanks,
-Hao
+> 
+> 
+> Results:
+> 
+> For scenario 2 (with sheaves but without "sheaves for all"), there is a
+> noticeable performance improvement compared to scenario 1:
+> 
+> will-it-scale.128.processes +34.3%
+> will-it-scale.192.processes +35.4%
+> will-it-scale.64.processes +31.5%
+> will-it-scale.per_process_ops +33.7%
+> 
+> For scenario 3 (after applying "sheaves for all"), performance slightly
+> regressed compared to scenario 1:
+> 
+> will-it-scale.128.processes -1.3%
+> will-it-scale.192.processes -4.2%
+> will-it-scale.64.processes -1.2%
+> will-it-scale.per_process_ops -2.1%
+> 
+> Analysis:
+> 
+> So when the sheaf size for maple nodes is set to 32 by default, the performance
+> of fully adopting the sheaves mechanism roughly matches the performance of the
+> previous approach that relied solely on the percpu slab partial list.
+> 
+> The performance regression observed with the "sheaves for all" patchset can
+> actually be explained as follows: moving from scenario 1 to scenario 2
+> introduces an additional cache layer, which boosts performance temporarily.
+> When moving from scenario 2 to scenario 3, this additional cache layer is
+> removed, then performance reverted to its original level.
+> 
+> So I think the performance of the percpu partial list and the sheaves mechanism
+> is roughly the same, which is consistent with our expectations.
+> 
+> -- 
+> Thanks,
+> Hao
