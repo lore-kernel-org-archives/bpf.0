@@ -1,163 +1,196 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6C422541C
-	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 19:50:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B203130B536
+	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 20:04:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769802632; cv=pass; b=C0v5VOUgXfByscLcR9GUCF4264IZK/Zg5wMgoFHviLLtTcn2Keo/MLmeIa2kcyhcBOpFvyzig6aqIcYwEUqX4G7gCO0G0L4QJzzu1ibtah3yvPoWTaQKnJpXIBqGivD+0PUuLqOB3kjePceF5eioPuaAXzHNShPVaeiaPGqO3eU=
+	t=1769803500; cv=pass; b=j+x8ML+CVUhdel6AzsNYCjTBXJdU8QbEDxkTmA0z4rKZQyjOfl6cef7JqWPyHa+uI0sHwuTAz1TZRoJJV8gO8iXJOWDtOex53btmCK4ceD2Jb9wbgZ8L3ZrGwAciGpiR/Sz4S2ZArw9Jf2ANHsuoSvA+z3QEQSDvnke2599QYmQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769802632; c=relaxed/simple;
-	bh=gQjcSjlbpKalBZ5Z62dAnhtosnjzzG4RrydexSnDwH4=;
+	s=arc-20240116; t=1769803500; c=relaxed/simple;
+	bh=oGoBRgPPoitzO+sWNnImbteEFTL97pD/pkLJ6YZ87Q8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sdERLBgw1Z520RTGfXR+pyyRFIVlMTNKxB72OUcX0jDX7PKfN7UWGWsVj1h0a8jginVlBp1DUsxgTMeqn293ZDQ1Sd9bNW1FrvJOuQ1k2fLnaacgg7a2tciB1VPCA0kINvybGUVue6j5sKAPlK5xQ3npykyM9iryM356EEiwlA4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c8wxmIN/; arc=pass smtp.client-ip=209.85.215.178
+	 To:Cc:Content-Type; b=UhemEOIoy2fZUNcy2ol4aCtRtszvfIp1A5PPbCyCVDbU/YzF+xK4FROhGb4RfixuChi+6F+SJvPpk4odmSOWh+E11GjUzGklsm5UCPSw4kwQGC8z5duQewYYIQTlNm2o13tpdfwfnPMw2Hh/1kSZLdnM+gPjyAUpPwkrkT6biwo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ae/z5pIP; arc=pass smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c8wxmIN/"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-c54f700b5b1so1526869a12.0
-        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 11:50:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769802631; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ae/z5pIP"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c47ee987401so1054450a12.1
+        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 12:04:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769803498; cv=none;
         d=google.com; s=arc-20240605;
-        b=iB5nVFlt+X+5n6T10ABbPdQEQrgDFrTGEhQztJdT2rCyAKHqnbep/JGPjeFkLqNdSE
-         B+bxYkOCNd/usZEnbapTMya1jtF0oI0Ftu2HM3LZe7F2lT8gchMtMq+1QWJ7/VEcFsIJ
-         Q5tEj9zy3WoEmaSrnPY3o4UfQMDMEAPlmSSJeSN++r4pxawBxn08ztqFp8Y8hSv7gHux
-         UMNwKW2WcQdNpMF7JlP88ydjK9ZteOZoYOHI0IZTWa8sR+onNQQB/RGzChNJMM0WRoN8
-         SE5VAb7gwVmHXueNaZ6TggeggYuNTzoOrd6MIf6CJ/fftX/c+SB7FCUhzrVsfYy7+AS2
-         3P8A==
+        b=Tdg727Q9RQB5DRMM+hTf4yXVoECDmYl4HqUjeqqUuwWFOHPGCj4Z2gwqTPnxpYC5b0
+         NpPFmXXakIl74Ae5GCvtWXY3G3b56qIN/SvfDb59OozIKk5HWOR8Wdk8/gkwNfYTORqK
+         BNcUIBKS37VBGjlT7vXRzTa6ihyKy8cGWCaO8tM9zvwKbnMMU8SqLUAdASEk9xaTCJc6
+         Acd4V/i1iZsokRJikvSF2FJdOtc7c2JcHYl+/zvigzjs1+KjC/0btfPeuA4/XpL3GOTZ
+         ZPTMO9mf599x0CxJQL+IbbRCKjTefZz/T7ngmBt2hdrRn7tQqNWd0HcGDWaKVJRDzwcu
+         syag==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=iJW87ItPtnhQxFUy6EMS2HWMqA32zGvL0mHIWccRN1M=;
-        fh=bexlN/6/SCupOEjnnLsnO0DlyJjrPrIiih6x7XE7MV4=;
-        b=bn3YSG+Gr3qiwsbfDcNIekRO+tFNlVvk81eEl/TcK9jT2nirVMO1I57qmqyHCnjIrp
-         RVdCq/pgYDW0UqSOnN4z1s9QjNgPtgI/7gl/BxdcYdSkmKH5CuYLD47OvD8TFa4ptycN
-         RpNFVzxPvzjp0LWvRacKmuui9MQn4wF9e2s316XGx2cVcJqb8niQsHQShsToCwXC02II
-         iCdbElpfiOqU4KRq9d1T2LLTgrcAJGu01iVr9WzQfP9yARf5OTOseERnbP0X+h1l4oqI
-         WCIXZ20I7luQ9YnBT7jpRUDh/edDnC6KPq2++UXyAy6Visw6Rt+UMY9q7teq5nUZDfyV
-         S8dg==;
+        bh=oGoBRgPPoitzO+sWNnImbteEFTL97pD/pkLJ6YZ87Q8=;
+        fh=X2V7HkvyMlL85Fo8zncZMX7wuauc3N33RFlu/RTDIf0=;
+        b=aWxSJK7F0qXMUIh3NHF5p2CFfLzVUNHZbaxVW3eu4a7XzsX3QoxFCOY0O7PrHOEeav
+         NooMNPxeJ7OMJrkz+wgmdBx70SvR9naA/ybyxbjOSGc48Akt+4tekakrKeJ3XsCsqLbS
+         sU9fD30RPS+TAbAVhPvlyKtwB2y5Ktiq8IlMIUEO975tfL/Rgc7ah9KNfuaPhnHMdJS4
+         botlw9TuqhLEPx4z1oou82/mCThqAEtDFsA2nPoHr5SyFMXmD4FfBPufXfzJdjJFo0Ts
+         WjDVb/is7/y+C2tq58jEnzROHOKQeAARsE8wevPsjYnHu9CJ5TlDxARAs8+45JRKRBbd
+         zp+Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769802631; x=1770407431; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769803498; x=1770408298; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iJW87ItPtnhQxFUy6EMS2HWMqA32zGvL0mHIWccRN1M=;
-        b=c8wxmIN/cM7xFtOsZs1etqO7Dx97JjSFaikAKBthysvodw5mcMnmPaDu2WFVt/YEIB
-         IK44XBMCKRfeHqYtR3rBmbUOubncyiYlrsxL+NRoYmo47bncj1KQuQY65JxrC9DjbTjM
-         MUC2rHzytLY62Lt+N/jS7KfnQ/RCRzFSfocdHzqvzf/zP74y7o4n63iBXRAWuuLc9KYy
-         otzDWnSYmBaIzGT5/3PxKlWAqpzalYmFViUFf+JrMD/jOchb9d1fMKis5tBQuo7covLB
-         SIBtVoR9KJ7xVyoti56ozYbJih+csoWYciA5mP/3rVaidiGMwEQ9NOp5dtB2by847e63
-         LS7Q==
+        bh=oGoBRgPPoitzO+sWNnImbteEFTL97pD/pkLJ6YZ87Q8=;
+        b=Ae/z5pIP8sEBMWpbOlwKHH+5+N5k/NNnDlBqvP6ETtUWkt9EDy9ht4MsSeVU06H/0O
+         4V6JkS4El4UvLaRK22Eeir1bamXb2qs4i6a3SreZlOelJezCpReBokkKdVWxLr/bcEV1
+         RLKIgRpGc7o5ltcFV4aN9U0V/E1PHleEtBug1chB25yXLV7Tl1ZbTTBlbqVj2iza2fFG
+         AOaQQG8jVWSus7xfFfPlJ39aIpItYJcRwAgjBxlQ0IHnOqHFDAUdvCc9u1mtQi5rGtnG
+         NHP5/gZjvKtLN8Lo1DhJ463DAmF+wlQqmlgkOnMcdBg1npQ33+FA1bw0ZzcVrmcASgCC
+         wWQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769802631; x=1770407431;
+        d=1e100.net; s=20230601; t=1769803498; x=1770408298;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=iJW87ItPtnhQxFUy6EMS2HWMqA32zGvL0mHIWccRN1M=;
-        b=eAKaNZmlPXB3htcDxv5Ga8v5mqpfIibOD3+y3n4sRvkc2EP1XwvI0SXXBpyLIhkBJ0
-         z5drbbYiShLYxE6ZcpQ8AHTEPbpBdInpZkJ6CNJ7dEYBY8NyLWAfxjtaYqJK1Kkwo8w8
-         VDzGUiCY3Vqyvy3naMiMhEHFfIiMW89Zh/PVZ5AWCWVHY6lDKoR6DhJIuGprFSIDTVyj
-         EXn2GtEtNSovboYJTvQAnfP7leQPcZQI1FYQlPR9LU5Qs0FqZvGiND11B3bAiarVGKfw
-         dfeqFqu7wKpnh0U5gEvcmUo6/9SlMMLzier9aRHgpP+m79yJfq7W5vaDOB93/KFihaka
-         44Og==
-X-Forwarded-Encrypted: i=1; AJvYcCVhNN8mk5kkOd/V6WA54+jCmzZHedcoG4UMhzxuMoMLod2xXp+lCC151ob9TFjGhazjdSA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbS8d3YQGbnI+FXtBuQHuSDPtiEfr/+s7HsR3V7ClvV4KWFDgi
-	/Kz97dPJosJ/MpstQzh+BFadLdA5k9Uu6d/blIaf6FlSDIvMPlTkooMNhzP5nWwy8CpyF4FEkab
-	pEdbQMJBqIn4Yoz3mwRxaXY6iy7CYWm0=
-X-Gm-Gg: AZuq6aIsNU5eD0bHDXZbclwT1RXW4DSvu28D3AUdRenPSFybWvE3F75bLZr35zXqj5I
-	7AhoxNZvnoFSw4lsYU3w146OaU13rs0Xv6S/SoZUtXd6RZAnEQyKyekoQM/crv2DScwBQkK7tFZ
-	BrXhC/aXJsT9/xdiq2s7+4cnrik4G86IQ+rl/yE7K1vsPXqpOpVFJNK8MgFM3c0xqe50Uu541jc
-	+SFtzX9jm3mXMhY1mIBqa6MHwzN6QRInnM38imF+RmMol+7belXztBdairr5MiiiOqsBOgn8qa5
-	Nqb2eb/ThZk=
-X-Received: by 2002:a17:90b:48c2:b0:349:5b1b:78be with SMTP id
- 98e67ed59e1d1-3543b3941dcmr4278320a91.17.1769802630549; Fri, 30 Jan 2026
- 11:50:30 -0800 (PST)
+        bh=oGoBRgPPoitzO+sWNnImbteEFTL97pD/pkLJ6YZ87Q8=;
+        b=SIPP++Anw4XW7D1xA9KJA1XxA03hohleG62aZS24s13EFgmz8DF4/WHavg6bAGcyAF
+         /F1Uqo9/IWGnUKNXbUdEzWzqCMp9fCU3KJVaUnGHV4c0ZzOCpP4CslSYvU+yF9R5uPam
+         C1CY5xWVY0qn1vNcuS7g5nP2Vtz/U8vb196qLWoxgqgwFOGHUdfKeikTVY5fi/9UTMHX
+         Fn88Z56vKWRU6OifZm0cluUMXPjzhvpVRXnuTOc5tiJ9/HnIdQgzXH3ke/2d/nXKH06d
+         Smcal26STKf/C3eWPDOwuUMpOMXK+JXD5AEylq2sBPoTqO7rn3SimqPCaj4k/DtOXGaM
+         rhGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXLu8VBxpYwUlce6bEOTOw6UOmKSaA/7NPWRwD9IUgJK4qMPow15EzxKZ4QJR783OgvN+Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzzvw73v2Lq3OP0fFf4H1Sh967GeXd0teVM6Bqf4H+8VKJADP6e
+	gy4STdCed4xl6KqI4nZTXe2HL2tTQ+17khXMiQsWOrrGxAk5Ag7MPIP2ZLMHLn0Z45uPgyolYDF
+	m3o9nNCRuC+dKxjsr2s18nDb9KZ5suTI=
+X-Gm-Gg: AZuq6aJJwR5puC2Qz8doy4+u/ViH4ymmAeHmDhhElecDYEiiE/SK97OkK1yoRR0p+9V
+	EEV9QWci3UZEELOMfj1jAxe6q1wP0Hv6VvRzj+eAyLLOUdpxVwHdTy9WL0Yk9/HrIAKAlPoN/94
+	5j0jVkt1lz6D5HqkUpoyVzyrxoqNEXpHuqrsxLQQCgbroh+qP/TXfCKlpCILgBhoGXJECSsbq8b
+	Dh1wq2t5m8z93doQyfp+WeyNQfxG6yP6h64ql4rclZaWjJ1Gor2Hhst7VYqgS+3IkrIPhuRgtBA
+	Z2p8884FPRs=
+X-Received: by 2002:a17:90b:35d2:b0:352:dbcc:d74c with SMTP id
+ 98e67ed59e1d1-3543c504f9bmr3899719a91.15.1769803497900; Fri, 30 Jan 2026
+ 12:04:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260126142118.2ea3cf13@gandalf.local.home> <CAEf4Bzax24jJVDs2bBiJuz1ZuuDihsb5Xq8pGcy18vLUMMLxbg@mail.gmail.com>
- <20260126192010.4f14bcb9@gandalf.local.home> <CAEf4BzZ0cYkJ-3Kt-O+2FTvTEirS7cSuea2swgaom18Q_sve4A@mail.gmail.com>
- <CAP_z_CgozbHejsuKeLRQHN-bz5jPA+C+c0GBNitgEvwOucm8TQ@mail.gmail.com>
- <CAEf4Bza91wTWzESxAyz5qP4e8siwGn=rvm-Few6xT_VpW9oJzw@mail.gmail.com>
- <CAP_z_ChhkA1W_5Bd0GQYpo2Vb-p-zP+Lbdp1cZw8Fr_WHQ=TcQ@mail.gmail.com>
- <CAEf4BzaSgmgzqfjToDx-O3BRKNZECJeeLpN81yNNWGF+N_uMNQ@mail.gmail.com> <CAP_z_Choy4Pe_VgdxwFzkUo4P71+TA=xAM8kov8QacGpRS5irg@mail.gmail.com>
-In-Reply-To: <CAP_z_Choy4Pe_VgdxwFzkUo4P71+TA=xAM8kov8QacGpRS5irg@mail.gmail.com>
+References: <20260126074331.815684-1-chen.dylane@linux.dev>
+ <20260126074331.815684-3-chen.dylane@linux.dev> <20260128091033.GG3372621@noisy.programming.kicks-ass.net>
+ <CAEf4BzYpcgC0Pi0f_ScUavJ_Tw74PKULsbPdexKsWmb8RmxLKg@mail.gmail.com> <20260130113150.GB166857@noisy.programming.kicks-ass.net>
+In-Reply-To: <20260130113150.GB166857@noisy.programming.kicks-ass.net>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 30 Jan 2026 11:50:16 -0800
-X-Gm-Features: AZwV_Qjz0B_OOY_cBNBMp0TW3abs0mS0HrQLtI9tn5KtCvOPc_qOKR7Q6-X39eg
-Message-ID: <CAEf4BzaEiQ8FApp1KMrCvsBVs+xLrk_mtQFUCfXZ3co2D6Oayg@mail.gmail.com>
-Subject: Re: BPF with deferred stacktrace and sframes?
-To: Blake Jones <blakejones@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Ian Rogers <irogers@google.com>
+Date: Fri, 30 Jan 2026 12:04:45 -0800
+X-Gm-Features: AZwV_QgnGlAMMCWYO2hOpTAbHl4pZuXMosvtjB3dgI88kFwaBbShTBvig50tbQ4
+Message-ID: <CAEf4BzZNOqxhkjuePzeG=ivqBSHXnWzPLPPHJdoC91c+u-WjAg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8 2/3] perf: Refactor get_perf_callchain
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Tao Chen <chen.dylane@linux.dev>, mingo@redhat.com, acme@kernel.org, 
+	namhyung@kernel.org, mark.rutland@arm.com, alexander.shishkin@linux.intel.com, 
+	jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com, 
+	kan.liang@linux.intel.com, song@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev, 
+	eddyz87@gmail.com, yonghong.song@linux.dev, john.fastabend@gmail.com, 
+	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
+	linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 29, 2026 at 5:44=E2=80=AFPM Blake Jones <blakejones@google.com>=
- wrote:
+On Fri, Jan 30, 2026 at 3:31=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
+g> wrote:
 >
-> Hi Andrii,
+> On Wed, Jan 28, 2026 at 11:12:09AM -0800, Andrii Nakryiko wrote:
+> > On Wed, Jan 28, 2026 at 1:10=E2=80=AFAM Peter Zijlstra <peterz@infradea=
+d.org> wrote:
+> > >
+> > > On Mon, Jan 26, 2026 at 03:43:30PM +0800, Tao Chen wrote:
+> > > > From BPF stack map, we want to ensure that the callchain buffer
+> > > > will not be overwritten by other preemptive tasks and we also aim
+> > > > to reduce the preempt disable interval, Based on the suggestions fr=
+om Peter
+> > > > and Andrrii, export new API __get_perf_callchain and the usage scen=
+arios
+> > > > are as follows from BPF side:
+> > > >
+> > > > preempt_disable()
+> > > > entry =3D get_callchain_entry()
+> > > > preempt_enable()
+> > > > __get_perf_callchain(entry)
+> > > > put_callchain_entry(entry)
+> > >
+> > > That makes no sense, this means any other task on that CPU is getting
+> > > screwed over.
+> >
+> > Yes, unfortunately, but unless we dynamically allocate new entry each
+> > time and/or keep per-current entry cached there isn't much choice we
+> > have here, no?
+> >
+> > Maybe that's what we have to do, honestly, because
+> > get_perf_callchain() usage we have right now from sleepable BPF isn't
+> > great no matter with or without changes in this patch set.
 >
-> On Wed, Jan 28, 2026 at 1:21=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > I'd probably pre-generate some unique ID (using atomic counters from
-> > the BPF side) that will be sent along with the async user stack trace
-> > eventually. And then join everything after the fact in user space.
+> All of the perf stuff is based on the fact that if we do it from IRQ/NMI
+> context, we can certainly do it with preemption disabled.
 >
-> I might be misunderstanding what you're proposing, but I don't see how
-> a single unique ID would solve my problem.
->
-> If a thread executes the following kernel function foo():
->
-> void bar(object_t *o)
-> {
->   mutex_lock(&o->lock);
->   o->count++;
->   mutex_unlock(&o->lock);
-> }
->
-> void foo(void)
-> {
->   mutex_lock(&current->foo_lock);
->   list_for_each_entry(object, ...) {
->     bar(object);
->   }
->   mutex_unlock(&current->foo_lock);
-> }
->
-> and blocked on both mutex acquisitions, it would generate two distinct
-> kernel stack traces in my profiler, corresponding to the two calls to
-> mutex_lock().
->
-> If I held onto the first stack trace ID in fixed-sized task-local
-> storage until I could acquire the user stack trace, it (and its
-> associated data) would get overwritten when it came time to take the
-> second stack trace.
->
-> If I just used the kernel stack trace ID (and not the user stack trace
-> ID) to index into a non-task-local BPF map, I wouldn't be able to
-> distinguish data from different user stack traces.
->
-> If I stored this data in a log, adding the user stack trace ID when it
-> was available, and aggregated the log in userspace, my profiler's
-> memory needs would go up by 50-100x, which would make it unusable.
->
-> Could you help me understand what you're proposing?
->
+> Bending the interface this way is just horrible.
 
-I'm not really proposing anything. You have a baked-in assumption that
-you will have a user stack available *synchronously* and that you can
-use that as some sort of lookup key. This is simply not true with
-SFrame (and asynchronously captured user space stack traces in
-general), so you'll have to redesign your approach (or you just say
-that you only support frame pointer-based synchronous stack traces).
+Sure, but I'm just trying to help mitigate the issue at hand (way too
+long preemption disabled region). I agree that we should do something
+better in terms of perf_callchain_entry retrieval and reuse, but maybe
+one thing at a time?
 
-> Thanks.
 >
-> Blake
+> > > Why are you worried about the preempt_disable() here? If this were an
+> > > interrupt context we'd still do that unwind -- but then with IRQs
+> > > disabled.
+> >
+> > Because __bpf_get_stack() from kernel/bpf/stackmap.c can be called
+> > from sleepable/faultable context and also we can do a rather expensive
+> > build ID resolution (either in sleepable or not, which only changes if
+> > build ID parsing logic waits for file backed pages to be paged in or
+> > not).
+>
+> <rant>
+> So stack_map_get_build_id_offset() is a piece of crap -- and I've always
+> said it was. And I hate that any of that ever got merged -- its the
+> pinnacle of bad engineering and simply refusing to do the right thing in
+> the interest of hack now, fix never :/
+> </rant>
+
+<hug><nod></hug>
+
+>
+> Anyway, as you well know, we now *do* have lockless vma lookups and
+> should be able to do this buildid thing much saner.
+
+Yes, probably, and I am aware of a mmap_lock use inside
+stack_map_get_build_id_offset() being problematic, we'll need to fix
+this as well. One step at a time.
+
+>
+> Also, there appears to be no buildid caching what so ever, surely that
+> would help some.
+
+Jiri Olsa proposed caching build id per file or per inode some time
+back, there was vehement opposition to it. And doing some locked
+global resizable hash that might need to be used from NMI sounds
+horrible, tbh. So we have what we have today.
+
+>
+> (and I'm not sure I've ever understood why the buildid crap needs to be
+> in this path in any case)
+
+Yeah, perhaps, I haven't dealt with stack_map_get_build_id_offset()
+much, so will need to go a bit deeper and analyze. As I said we have
+mmap_lock problem there, so we need to address that. I'll think if/how
+we can improve this.
+
+Do I understand correctly that you'd rather just not touch all this
+for now and we should just drop this patch set?
