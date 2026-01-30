@@ -1,33 +1,44 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8208936C5A4;
-	Fri, 30 Jan 2026 10:39:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9ED28C2BF;
+	Fri, 30 Jan 2026 11:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769769586; cv=none; b=bacam/o9R8zbcNF5M60JjJOXE/QJ4yuSFjerGdT+3l+IffYi4oF7Fee5fuCan10l9PomVtAjFdu45/7asjsZGJxdaSnlSLkmxJfKUoPBJ9P8vzAQ2DUgpKJ0tSWPuHWwuiu027+6NeWIVDxMAND5esSzg2Js1r1KrmAwh4SJmuY=
+	t=1769770837; cv=none; b=VTJJMwa+9/+d4UOkJVEfOGFZ9NwJp33UbiOefr5IouM6G/+Lv1Y+3HKGSLkpH+1i1EuunB7b4vYfGKmsUeJeAfOkbAtVZWqq5TeAAgaQyPADTjZx5+21lh1PB+qg1OpE5vLRWSP+wHNQSK34t7T4LvdeZ9mcPvSf8fTditJAPJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769769586; c=relaxed/simple;
-	bh=HqLf5fAjj919LYQEQ3fjjogDmxa6wbUD8HUVCT6MfUA=;
+	s=arc-20240116; t=1769770837; c=relaxed/simple;
+	bh=h98j0GiF5Q46i/BCECwqBU7tYPkSKApo0FwwUxRx2Sg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U7CHvIChRNOKWstSVflYfoX7kCuA5Hvp34W3KFTASPpNW/4cesylBNftjbXT2d0njTinrcbVXVdUghm85ciBn+YEsvMti0tUodzKKWUKaMPqLMIXs+YEOjESdmo2Wbmdt7F+DxzmPwef5iTQKtTO0Io2+eUNColXucqamd7/Lx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VnnDBNO/; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=tNE6yUoSLoZHJMnil821Zj5Egb5XD6ak7msq+U24dq4CNxQszrJLGKi7CXKuSffQ6CZuM3KP4yvH8Fu788PHkbfNd9Xg8vJBAvdPXsWii5r4zi4uWeBC1X0p4plwr4ZHauwPE2IofGxksbpnug8xpmAoCbg+dDLti6nYkBXBtLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=HlxXhSs+; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VnnDBNO/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D9FC19421;
-	Fri, 30 Jan 2026 10:39:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769769586;
-	bh=HqLf5fAjj919LYQEQ3fjjogDmxa6wbUD8HUVCT6MfUA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VnnDBNO/kG2fkcp9Rl0DaqlUw5pFJlYqqcbpgzlUaHW4PzNtYccnPo0uIYS0Z7QuC
-	 Cd/cXSRgptBXYilva4FihsbhIDFZSjDZLw6MooWAVvS+32V19BXNzesZomdNLjPIEM
-	 8bo2lgqs7UElyJR0mDi4cL9bOd8exIVb4cVgluUDkj+sWnRwXWrV/UR9LANR4YRXkO
-	 kD4E3E4miFzn8uTZ2k48zjckL5m2aNdrtabcI3vooDqf2aiQYaNpoEYHPCnL0jnm4p
-	 7sRuyYFE+1DAeBzUIL6SpgJCbErzHomCIEgUjeyVNmfhaoHOx7ZcOzLHEJHlSTJF0b
-	 hKi7lIMZ3X1Ew==
-Message-ID: <4e88f7b1-65bd-47e1-9875-03002bafdd04@kernel.org>
-Date: Fri, 30 Jan 2026 11:39:41 +0100
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="HlxXhSs+"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1vlmEX-001rVx-CS; Fri, 30 Jan 2026 12:00:13 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=+/P0hfZfmKtbQtXdnzfsK7ESYSfyI04sajFusIV+zlA=; b=HlxXhSs+nyhLHSZP6SGNBIbw/X
+	ivrEGuc+Sic8atG+2PjP31yHS8imLh6cnnn0POsgsvJwoD391H/8NkgN5GtsZlQ9yHcnAolMRePt3
+	P5TX1p8iCjxTNWqkM6p8pNOjmUMvoXfiA7gHTQyMzL9K+lvFmeuJdHUMtJ+ASGaNifay8/XRaf8n+
+	f8oIuBUqR6GBpRB+7rl+zhpdYfzdEn37Ik5FaaJLtw/U9I/sSgv6vxG+DiFITIO+FG4DtdNrZustH
+	RZ8HAZQEOgPN5gca20n66W2+0WNeIxlZuUUvP+IM1VUKdqXb8k4M5w8N/yRRnVPV8RCrxywhMTZaQ
+	h4KP8QCA==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1vlmEW-0006Qe-1Y; Fri, 30 Jan 2026 12:00:12 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vlmEV-004svS-IM; Fri, 30 Jan 2026 12:00:11 +0100
+Message-ID: <3362017f-9c3d-46cd-b3ce-cb750b565d5b@rbox.co>
+Date: Fri, 30 Jan 2026 12:00:09 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -35,92 +46,145 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 1/4] selftests: net: Move some UAPI header
- inclusions after libc ones
-Content-Language: en-GB, fr-BE
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
- linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
- libc-alpha@sourceware.org
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
- <20260120-uapi-sockaddr-v2-1-63c319111cf6@linutronix.de>
- <4e673f7f-c49c-46b0-85b4-bae6e4efcb3a@kernel.org>
- <20260130111949-4b4eb870-6df7-4026-a48c-730fa8660ad6@linutronix.de>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260130111949-4b4eb870-6df7-4026-a48c-730fa8660ad6@linutronix.de>
+Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
+ update
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, Kuniyuki Iwashima
+ <kuniyu@google.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260129-unix-proto-update-null-ptr-deref-v1-1-e1daeb7012fd@rbox.co>
+ <3fc5611f-394f-40db-b49d-2f26402e221a@linux.dev>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <3fc5611f-394f-40db-b49d-2f26402e221a@linux.dev>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Hi Thomas,
-
-On 30/01/2026 11:22, Thomas Weißschuh wrote:
-
-(...)
-
->> Note that I just noticed this is the only file from this directory where
->> the "includes" are not sorted by type and alphabetical order, see
->> pm_nl_ctl.c as an example. A bit of a detail, but if you plan to send a
->> v2, do you mind doing that too here while at it, please?
+On 1/29/26 20:41, Martin KaFai Lau wrote:
+> On 1/29/26 8:47 AM, Michal Luczaj wrote:
+>> BPF_MAP_UPDATE_ELEM races unix_stream_connect(): when
+>> sock_map_sk_state_allowed() passes (sk_state == TCP_ESTABLISHED),
+>> unix_peer(sk) in unix_stream_bpf_update_proto() may still return NULL.
+>>
+>> 	T0 bpf				T1 connect
+>> 	------				----------
+>>
+>> 				WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)
+>> sock_map_sk_state_allowed(sk)
+>> ...
+>> sk_pair = unix_peer(sk)
+>> sock_hold(sk_pair)
+>> 				sock_hold(newsk)
+>> 				smp_mb__after_atomic()
+>> 				unix_peer(sk) = newsk
+>>
+>> BUG: kernel NULL pointer dereference, address: 0000000000000080
+>> RIP: 0010:unix_stream_bpf_update_proto+0xa0/0x1b0
+>> Call Trace:
+>>   sock_map_link+0x564/0x8b0
+>>   sock_map_update_common+0x6e/0x340
+>>   sock_map_update_elem_sys+0x17d/0x240
+>>   __sys_bpf+0x26db/0x3250
+>>   __x64_sys_bpf+0x21/0x30
+>>   do_syscall_64+0x6b/0x3a0
+>>   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>
+>> Follow-up to discussion at
+>> https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.com/.
 > 
-> I'll send a v3 during the next cycle.
+> It is a long thread to dig. Please summarize the discussion in the 
+> commit message.
 
-Thanks!
->> If not, I can look at that later, but better to avoid doing that in
->> parallel.
+OK, there we go:
+
+The root cause of the null-ptr-deref is that unix_stream_connect() sets
+sk_state (`WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)`) _before_ it assigns
+a peer (`unix_peer(sk) = newsk`). sk_state == TCP_ESTABLISHED makes
+sock_map_sk_state_allowed() believe that socket is properly set up, which
+would include having a defined peer.
+
+In other words, there's a window when you can call
+unix_stream_bpf_update_proto() on socket which still has unix_peer(sk) == NULL.
+
+My initial idea was to simply move peer assignment _before_ the sk_state
+update, but the maintainer wasn't interested in changing the
+unix_stream_connect() hot path. He suggested taking care of it in the
+sockmap code.
+
+My understanding is that users are not supposed to put sockets in a sockmap
+when said socket is only half-way through connect() call. Hence `return
+-EINVAL` on a missing peer. Now, if users should be allowed to legally race
+connect() vs. sockmap update, then I guess we can wait for connect() to
+"finalize" e.g. by taking the unix_state_lock(), as discussed below.
+
+>  From looking at this commit message, if the existing lock_sock held by 
+> update_elem is not useful for af_unix,
+
+Right, the existing lock_sock is not useful. update's lock_sock holds
+sock::sk_lock, while unix_state_lock() holds unix_sock::lock.
+
+> it is not clear why a new test 
+> "!sk_pair" on top of the existing WRITE_ONCE(sk->sk_state...) is a fix. 
+
+"On top"? Just to make sure we're looking at the same thing: above I was
+trying to show two parallel flows with unix_peer() fetch in thread-0 and
+WRITE_ONCE(sk->sk_state...) and `unix_peer(sk) = newsk` in thread-1.
+
+It fixes the problem because now update_proto won't call sock_hold(NULL).
+
+> A minor thing is sock_map_sk_state_allowed doesn't have 
+> READ_ONCE(sk->sk_state) for sk_is_stream_unix also.
+
+Ok, I'll add this as a separate patch in v2. Along with the !tcp case of
+sock_map_redirect_allowed()?
+
+> If unix_stream_connect does not hold lock_sock, can unix_state_lock be 
+> used here? lock_sock has already been taken, update_elem should not be 
+> the hot path.
+
+Yes, it can be used, it was proposed in the old thread. In fact, critical
+section can be empty; only used to wait for unix_stream_connect() to
+release the lock, which would guarantee unix_peer(sk) != NULL by then.
+
+        if (!psock->sk_pair) {
++               unix_state_lock(sk);
++               unix_state_unlock(sk);
+                sk_pair = unix_peer(sk);
+                sock_hold(sk_pair);
+
+>> Fixes: 8866730aed51 ("bpf, sockmap: af_unix stream sockets need to hold ref for pair sock")
+>> Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
+>> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+>> ---
+>> Re-triggered while working on an unrelated selftest:
+>> https://lore.kernel.org/bpf/20260123-selftest-signal-on-connect-v1-0-b0256e7025b6@rbox.co/
+>> ---
+>>   net/unix/unix_bpf.c | 3 +++
+>>   1 file changed, 3 insertions(+)
+>>
+>> diff --git a/net/unix/unix_bpf.c b/net/unix/unix_bpf.c
+>> index e0d30d6d22ac..57f3124c9d8d 100644
+>> --- a/net/unix/unix_bpf.c
+>> +++ b/net/unix/unix_bpf.c
+>> @@ -185,6 +185,9 @@ int unix_stream_bpf_update_proto(struct sock *sk, struct sk_psock *psock, bool r
+>>   	 */
+>>   	if (!psock->sk_pair) {
+>>   		sk_pair = unix_peer(sk);
+>> +		if (unlikely(!sk_pair))
+>> +			return -EINVAL;
+>> +
+>>   		sock_hold(sk_pair);
+>>   		psock->sk_pair = sk_pair;
+>>   	}
+>>
+>> ---
+>> base-commit: 63804fed149a6750ffd28610c5c1c98cce6bd377
+>> change-id: 20260129-unix-proto-update-null-ptr-deref-6a2733bcbbf8
+>>
+>> Best regards,
 > 
-> If you want to fix this up already during this cycle,
-> that would also be most welcome.
-
-Sure, I can do that.
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
 
