@@ -1,119 +1,114 @@
-Received: from out28-145.mail.aliyun.com (out28-145.mail.aliyun.com [115.124.28.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C34A28750A;
-	Fri, 30 Jan 2026 02:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.145
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769739844; cv=none; b=gAXlypxTSuIvp3xPHQUqk3qy9iPiVJvu4WgB58zgc+c+V6FphwK+uZM86X2Iy/lXDW2+kp2jOSjmJe6qLVEtU3A4VHtsAfGOQzhwNguyFgXPWGADMqzA9OlTItHmCZ8pbE6Ea5wgzy7VblIUvxFbVrt6VvwqiP2HXlNNONac7y8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769739844; c=relaxed/simple;
-	bh=jf/RBGXHlw1fH394VTvjOKslnicC+u5E8BFY30ps4e8=;
-	h=Date:From:To:Cc:Message-ID:Subject:MIME-Version:References:
-	 In-Reply-To:Content-Type; b=BOXMJajlpbbcspAQ+wovRT9kvjbiqPJmYkI8tVgk3AFndnWwu/A7dECESx+ibNWwQ21+AHA3T2ijiHItSe/c1E1GPNjar6xt6gnK98kpaoupEr09eY2XT6bPGo9T2JQlGO8AEW5alQdLF9gdc/0/f+rrkQRznWjBfCHgYhUNCu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nebula-matrix.com; spf=pass smtp.mailfrom=nebula-matrix.com; arc=none smtp.client-ip=115.124.28.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nebula-matrix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nebula-matrix.com
-X-Alimail-AntiSpam:AC=CONTINUE;BC=0.5274864|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_alarm|0.0688948-0.0276571-0.903448;FP=4752486971615204742|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033037071049;MF=sam.chen@nebula-matrix.com;NM=1;PH=DW;RN=23;RT=23;SR=0;TI=W4_0.2.3_2125062F_1769739830224_o7001c211g;
-Received: from WS-web (sam.chen@nebula-matrix.com[W4_0.2.3_2125062F_1769739830224_o7001c211g] cluster:ay29) at Fri, 30 Jan 2026 10:23:50 +0800
-Date: Fri, 30 Jan 2026 10:23:50 +0800
-From: "Sam" <sam.chen@nebula-matrix.com>
-To: "Andrew Lunn" <andrew@lunn.ch>,
-  "Illusion Wang" <illusion.wang@nebula-matrix.com>
-Cc: "y" <y@lunn.ch>,
-  "Dimon" <dimon.zhao@nebula-matrix.com>,
-  "Alvin" <alvin.wang@nebula-matrix.com>,
-  "netdev" <netdev@vger.kernel.org>,
-  "andrew+netdev" <andrew+netdev@lunn.ch>,
-  "corbet" <corbet@lwn.net>,
-  "kuba" <kuba@kernel.org>,
-  "linux-doc" <linux-doc@vger.kernel.org>,
-  "lorenzo" <lorenzo@kernel.org>,
-  "pabeni" <pabeni@redhat.com>,
-  "horms" <horms@kernel.org>,
-  "vadim.fedorenko" <vadim.fedorenko@linux.dev>,
-  "lukas.bulwahn" <lukas.bulwahn@redhat.com>,
-  "hawk" <hawk@kernel.org>,
-  "ast" <ast@kernel.org>,
-  "bpf" <bpf@vger.kernel.org>,
-  "sdf" <sdf@fomichev.me>,
-  "daniel" <daniel@iogearbox.net>,
-  "john.fastabend" <john.fastabend@gmail.com>,
-  "edumazet" <edumazet@google.com>,
-  "open list" <linux-kernel@vger.kernel.org>
-Reply-To: "Sam" <sam.chen@nebula-matrix.com>
-Message-ID: <152750cb-ab8c-4f08-9c6a-6b69ec185f30.sam.chen@nebula-matrix.com>
-Subject: =?UTF-8?B?5Zue5aSN77ya5Zue5aSN77yaW1BBVENIIHYzIG5ldC1uZXh0IDAxLzE1XSBuZXQvbmVidWxh?=
-  =?UTF-8?B?LW1hdHJpeDogYWRkIG1pbmltdW0gbmJsIGJ1aWxkIGZyYW1ld29yaw==?=
-X-Mailer: [Alimail-Mailagent][W4_0.2.3][null][Chrome]
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7507F2ECEBB
+	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 02:32:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769740342; cv=pass; b=D17HC2XY3sxYyZ8Q1Jn14bs9pZ6kKx8vyHkBLISJS+BRgSjA5TM1hCfMfddneS1y/ljiOThhOshvrE+a4Y0J451jUJRvSwLV9XY09iMgFUoeocd3Dw574tFOr6pSI5og7CcQhtW7GAHoPBzLZjEeW5ExyERV8rLhysY8VDW9qso=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769740342; c=relaxed/simple;
+	bh=k/aDS+0oYH5HpbjfW6HjWYN5iso/Y5/50MxxdlYKMOM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hzVZWnzUUxQVCCeOkV7RxlIuLRYVOWqhIV5mBjAz6NaIi80GlwySr3iybtQyTuruToTexe7Cbsn7/mwAJHoMsHa58AFsZjk2RzVk1JcALVtqeV7wBhy035CGzHTrozCI8l3+SmCoAOvaB5mlAVq6m6mTWcmfAk+itRcAPFk4VoY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H2OgaRGK; arc=pass smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2OgaRGK"
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-42fbc305882so1063639f8f.0
+        for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 18:32:21 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769740339; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MuBrCqEanuMrrLrBktP55nLkXr1KCSgbmSf1jTJAEQ/mnndnmXdb7rSGjEKBRZLbHv
+         cq9q1jTQaYGOpqtB48Yo6ZVnos3W6fHRTQMB/UqmOheD3cJYB1FhlptmFCx1mMeXSZUM
+         9VE7IjV5VZi81OfIAOQySe9SEx3K5r9HcC+RCJQe5cMy7Y73b+ToCzpMt9lSrQiisBzM
+         px40GLgnCmI5u6v9LP1oK3r35mjQVrOF67vLTaPf6ehx8hlTRB8Wz4VFAs9c3V86hvsV
+         TIgvlAlCltR9w4yjXXifvsj+bledCggNBFWV12TE5D4cXNmcIy/8DX5mO6twx6LBXh/H
+         rArQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=k/aDS+0oYH5HpbjfW6HjWYN5iso/Y5/50MxxdlYKMOM=;
+        fh=d15VCG8OEfPtRSNrOSTPOQfis/hfBhlYH0737DJxG/c=;
+        b=cQHUe0yUJ4NOaJP7KFcmZ1OiFjgTCsOizs95tgrjgqqMKUF3/nIF7LApg9XFWbabYa
+         IPDeCgjlPyQSEt14kt6a1o8vLR6DKmxAbgsVG+bovA1NT2BOKpKav9OXERyaLLXc3P/F
+         IvQYr5Y35T4G7/+6k13pdokALohijA4q2DpjJBJEUDjiXdfiyE7AxbStWyUk6TDn53tp
+         +Z8/H2jWfcMKD1e8ajVMpzNYHLVqI2WIrX358chCgMF04q/7OqlcsvFSQkuSu0JTVOqW
+         giQV8fj3fBqbiZimvp5d9YVRmyj1N0KT5dJgkwiq6rtlxMMZUf8Al4BlIYpFYFyla5rn
+         F51g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769740339; x=1770345139; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k/aDS+0oYH5HpbjfW6HjWYN5iso/Y5/50MxxdlYKMOM=;
+        b=H2OgaRGKi6ZDrJ37aMl05QeaRRYk/X4JfFkhGVHFT0xghACtcEN3Zb0aQvt5HHJncO
+         3q4rzn1HqLdUH2dEGwR6vnj3G4c26SSdaWTwfBym9tmlxmzNpsg0tMqasmH4HZqzS0EH
+         6kTMA8BEnpJAS8IBBnjeP41+TQkf9iIhjXvo8lm8l6wfDD7xnkf5q6V+ooz1ZxCRGX//
+         VEvA4+A41oFgr0qJBbD+/ziHizScVjf+te8xymKYoslOtEUxIudlvLgEVWQcWi6UPT68
+         e7kuLOnrluRkGmRm16xicZeWJnnP005Fat+aR6f5PZYChB1jKbO9tR20V5CEs7YTdAYH
+         vsGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769740339; x=1770345139;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=k/aDS+0oYH5HpbjfW6HjWYN5iso/Y5/50MxxdlYKMOM=;
+        b=jP9WUQGfi+0rUfbNF/WWgm5WltIpOXK9AZ24jKLS9eQXePn2wW9tWdimftFAdEkcK/
+         n08FbiKJ0mYtdt9e+HOy3ZCh7dScdOtkl634RNZqH7TqRh8BFwndCcuseQJhl9V5uHww
+         n+djhzyCpcxhZ42I99Mn6Uf+yXRYpOh8/0sA/zgz/rOz3HiWiJsKkmudVuJBWqW+X2eM
+         v/RengOvT4zWgWdmgcr+usOooKTAezaS9AQypAu+XHqLsptc34sXwT11GyyIxSo6F41Z
+         cvGjIUGm67EVv4yb6185R0CBE+ZgD0PiddMGHk3KR72Yfc9Uu/EXVxFBVpsfs6rnsfdT
+         VKoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV+9319Uu3QTxI9aXtuLWIP21h9pDhleHc466bQvfvN3gzkWB/tEVuofFlczIBEnmos8nY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQptkJ5EWeioam1YLRtbA4TLq/NBp0LmjsgqkxObBEMw6O+d80
+	E3PjIsHxZ6RdPKgluOB2VOTgRugEABO7f5rjLvBPyUe2AgiLBG24SGCyZQxRhV4djpTAZvYKMtV
+	O69JTLZS/CZSYuFOnOuDYbaviuR2a4H4=
+X-Gm-Gg: AZuq6aIY/IAgI9jZZbvpt1hKl9mLQmKuoioVKTtyhyV2IzHqIBPN1vMzE28vJe9m5mQ
+	h2J1MwTZuTf8D8Vu/EMu1RiNxcecdlSjyUbUETNE/u1BQGuvrwhOecE79mzcx6JR1ZIgD1o98Tx
+	vTGScX/zzmHo5nQao+CDdK9NzQhyyQkXErvzi8UMduN0RwsamcxDRwcm8scPDe9htir9kdTLRJ4
+	JYInA3dFwQZ59N5JTCZBjbtlKKWFoMtFcEJOunr7Rz+zJokOxKGLvLfeqhldyLD6aSGBQNdA+yu
+	rSJXOzpx8E8oBp8rDzAkAjhMheMf9IjffJx24P65EHdwI6VMwpKqgHkZj1kv55NXah9LPK9mTJH
+	+wUyBvRAJgzMQtA==
+X-Received: by 2002:a5d:5f51:0:b0:435:97f6:4f44 with SMTP id
+ ffacd0b85a97d-435f3aba452mr2106682f8f.56.1769740339363; Thu, 29 Jan 2026
+ 18:32:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-x-aliyun-im-through: {"version":"v1.0"}
-References: <20260123011804.31263-1-illusion.wang@nebula-matrix.com> <20260123011804.31263-2-illusion.wang@nebula-matrix.com> <88c7e349-f941-4216-89ca-70a49e82b378@lunn.ch> <ad0a6f0f-3ce3-4f38-b27d-2f121511d6e3.illusion.wang@nebula-matrix.com>,<c1536b51-f441-45ca-8bfb-d5f7d8230713@lunn.ch>
-x-aliyun-mail-creator: W4_0.2.3_null_EuMTW96aWxsYS81LjAgKFdpbmRvd3MgTlQgMTAuMDsgV2luNjQ7IHg2NCkgQXBwbGVXZWJLaXQvNTM3LjM2IChLSFRNTCwgbGlrZSBHZWNrbykgQ2hyb21lLzEzMy4wLjY5NDMuMTQyIFNhZmFyaS81MzcuMzYgZGluZ3RhbGstd2luLzEuMC4wIG53KDAuMTQuNykgRGluZ1RhbGsoOC4yLjUtUmVsZWFzZS4yNjAxMTMwMDYpIE1vam8vMS4wLjAgTmF0aXZlIEFwcFR5cGUocmVsZWFzZSkgQ2hhbm5lbC8yMDEyMDAgQXJjaGl0ZWN0dXJlL3g4Nl82NCB3ZWJEdC9QQw==uL
-In-Reply-To: <c1536b51-f441-45ca-8bfb-d5f7d8230713@lunn.ch>
+References: <20260129035014.3283392-1-hui.zhu@linux.dev>
+In-Reply-To: <20260129035014.3283392-1-hui.zhu@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 29 Jan 2026 18:32:08 -0800
+X-Gm-Features: AZwV_QjkvCynu0iwUVBI8BI7kYSRcpjxCSWpTLRoHPDF8MFwQngmzpsXdmYVjRo
+Message-ID: <CAADnVQKGci3kJW0F40j0tJn6=ma-ACEzcYOcxYE8Vkp_Tif2hA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] mm/bpf_memcontrol: Add missing newline in
+ pr_warn message
+To: Hui Zhu <hui.zhu@linux.dev>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
+	bpf <bpf@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Hui Zhu <zhuhui@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 
-VGhhbmsgeW91IGZvciB5b3VyIGZlZWRiYWNrLiBJIHVuZGVyc3RhbmQgd2hhdCB5b3UgbWVhbi5U
-aGUgcmVhc29ucyB3aHkKd2UgY2Fubm90IGNoYW5nZSB0aGUgbW9kdWxlIG5hbWUgbm93IGFyZSBh
-cyBmb2xsb3dzOgpPdXIgZHJpdmVyIGhhcyBhbHJlYWR5IGJlZW4gaW50ZWdyYXRlZCBpbnRvIG11
-bHRpcGxlIGNvbW11bml0aWVzLCBhbmQKdGhlIG1vZHVsZSBuYW1lIGlzIG5ibF9jb3JlLiBNYW55
-IGN1c3RvbWVycyBoYXZlIGFscmVhZHkgZGVwbG95ZWQgaXQuIElmCndlIGNoYW5nZSB0aGUgbmFt
-ZSwgdGhlcmUgd2lsbCBiZSBhIGNyaXRpY2FsIHByb2JsZW0gb2YgY29uZmxpY3QgYmV0d2Vlbgp0
-aGUgdHdvIG1vZHVsZXMgZHVyaW5nIHN1YnNlcXVlbnQgb25saW5lIGRyaXZlciB1cGdyYWRlcy4K
-ClBTOiBPdXIgY2FyZCdzIGZ1bmN0aW9uYWxpdHkgaXMgY29tcGFyYWJsZSB0byBNZWxsYW5veCBD
-WCwgYW5kIHRoZSBkZXNpZ24Kb2YgbmJsX2NvcmUgd2FzIGluaXRpYWxseSBiYXNlZCBvbiB0aGVp
-ciBkZXNpZ24gcHJpbmNpcGxlcy4KLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tCuWPkeS7tuS6uu+8mkFuZHJldyBMdW5uIDxh
-bmRyZXdAbHVubi5jaD4K5Y+R6YCB5pe26Ze077yaMjAyNuW5tDHmnIgyOeaXpSjlkajlm5spIDIx
-OjE4CuaUtuS7tuS6uu+8mklsbHVzaW9uIFdhbmc8aWxsdXNpb24ud2FuZ0BuZWJ1bGEtbWF0cml4
-LmNvbT4K5oqE44CA6YCB77yaeTx5QGx1bm4uY2g+OyBEaW1vbjxkaW1vbi56aGFvQG5lYnVsYS1t
-YXRyaXguY29tPjsgQWx2aW48YWx2aW4ud2FuZ0BuZWJ1bGEtbWF0cml4LmNvbT47IFNhbTxzYW0u
-Y2hlbkBuZWJ1bGEtbWF0cml4LmNvbT47IG5ldGRldjxuZXRkZXZAdmdlci5rZXJuZWwub3JnPjsg
-ImFuZHJldytuZXRkZXYiPGFuZHJldytuZXRkZXZAbHVubi5jaD47IGNvcmJldDxjb3JiZXRAbHdu
-Lm5ldD47IGt1YmE8a3ViYUBrZXJuZWwub3JnPjsgImxpbnV4LWRvYyI8bGludXgtZG9jQHZnZXIu
-a2VybmVsLm9yZz47IGxvcmVuem88bG9yZW56b0BrZXJuZWwub3JnPjsgcGFiZW5pPHBhYmVuaUBy
-ZWRoYXQuY29tPjsgaG9ybXM8aG9ybXNAa2VybmVsLm9yZz47ICJ2YWRpbS5mZWRvcmVua28iPHZh
-ZGltLmZlZG9yZW5rb0BsaW51eC5kZXY+OyAibHVrYXMuYnVsd2FobiI8bHVrYXMuYnVsd2FobkBy
-ZWRoYXQuY29tPjsgaGF3azxoYXdrQGtlcm5lbC5vcmc+OyBhc3Q8YXN0QGtlcm5lbC5vcmc+OyBi
-cGY8YnBmQHZnZXIua2VybmVsLm9yZz47IHNkZjxzZGZAZm9taWNoZXYubWU+OyBkYW5pZWw8ZGFu
-aWVsQGlvZ2VhcmJveC5uZXQ+OyAiam9obi5mYXN0YWJlbmQiPGpvaG4uZmFzdGFiZW5kQGdtYWls
-LmNvbT47IGVkdW1hemV0PGVkdW1hemV0QGdvb2dsZS5jb20+OyBvcGVuIGxpc3Q8bGludXgta2Vy
-bmVsQHZnZXIua2VybmVsLm9yZz4K5Li744CA6aKY77yaUmU6IOWbnuWkje+8mltQQVRDSCB2MyBu
-ZXQtbmV4dCAwMS8xNV0gbmV0L25lYnVsYS1tYXRyaXg6IGFkZCBtaW5pbXVtIG5ibCBidWlsZCBm
-cmFtZXdvcmsKCgpPbiBNb24sIEphbiAyNiwgMjAyNiBhdCAxMDoxODo1MkFNICswODAwLCBJbGx1
-c2lvbiBXYW5nIHdyb3RlOgo+IAo+ID5fQ09SRSBpcyBhIGJpdCB1bnVzdWFsIGZvciBhIGRyaXZl
-ci4gQ09SRSBpcyBnZW5lcmFsbHkgYSBsaWJyYXJ5IHdoaWNoCj4gPmlzIHNoYXJlZCBieSBhIG51
-bWJlciBvZiBkcml2ZXJzLiBJdCBkb2VzIG5vdCBoYXZlIGEgdHJpc3RhdGUgc3RyaW5nLAo+ID5p
-dCBpcyBqdXN0IHNlbGVjdGVkIGJ5IHRoZSBkcml2ZXJzIHdoaWNoIG5lZWQgaXQuCj4gCj4gVGhh
-bmsgeW91IGZvciB5b3VyIGZlZWRiYWNrIG9uIHRoZSBOQkxfQ09SRSBjb25maWd1cmF0aW9uIG9w
-dGlvbi4gV2UgYXBwcmVjaWF0ZQo+IHlvdXIgZ3VpZGFuY2Ugb24gYWRoZXJpbmcgdG8gTGludXgg
-a2VybmVsIG5hbWluZyBjb252ZW50aW9ucy4KPiAKPiBXaHkgTkJMX0NPUkU/Cj4gVGhlIGRyaXZl
-ciBpcyBkZXNpZ25lZCB0byBzdXBwb3J0IHR3byBkaXN0aW5jdCBmdW5jdGlvbmFsaXRpZXMgZm9y
-IHRoZQo+IE5lYnVsYS1tYXRyaXggbTE4MTAwIEV0aGVybmV0IGNvbnRyb2xsZXI6Cj4gCj4gMS5T
-dGFuZGFyZCBFdGhlcm5ldC9OSUMgZnVuY3Rpb25hbGl0eSAodmlhIHRoZSBtYWluIGRyaXZlciBt
-b2R1bGUpLgo+IDIuQXV4aWxpYXJ5IGRldmljZSAoYXV4aWxpYXJ5IGRyaXZlcikgZm9yIFJETUEg
-KGV4cG9zZWQgdGhyb3VnaAo+IGF1eGlsaWFyeV9kZXZpY2UpLgo+IDQuTURFVi1iYXNlZCBTUi1J
-T1YvVkYgZW11bGF0aW9uIChmb3IgbmF0aXZlIGRldmljZSBzcGxpdHRpbmcpLgo+IFNpbmNlIHNo
-YXJlZCBsb2dpYyAoZS5nLiwgUENJZSByZXNvdXJjZSBtYW5hZ2VtZW50LCBNTUlPIGFjY2Vzcywg
-aW50ZXJydXB0Cj4gaGFuZGxpbmcsIGFuZCBjb21tb24gaGFyZHdhcmUgYWJzdHJhY3Rpb25zKSBp
-cyByZXF1aXJlZCBhY3Jvc3MgYm90aCB0aGUgbWFpbgo+IGRyaXZlciBhbmQgYXV4aWxpYXJ5L1JE
-TUEgZHJpdmVyLCB3ZSBvcHRlZCBmb3IgYSBfQ09SRSBzdWZmaXggdG8gaW5kaWNhdGU6CgpZb3Ug
-Y2FuIHNwbGl0IHRoaXMgdHdvIHdheXM6CgpBIHRydWUgY29yZSwgd2hpY2ggZG9lcyBub3QgcHJv
-dmlkZSBhbnkgZGV2aWNlcywganVzdCBjb3JlIGZ1bmN0aW9ucwp0byBhY2Nlc3MgdGhlIGhhcmR3
-YXJlLiBUaGVuIGxheWVyZWQgb24gdG9wIGlmIHRoaXMgeW91IGhhdmUga2VybmVsCm1vZHVsZXMg
-d2l0aCBwcm92aWRlIEV0aGVybmV0LCBSRE1BLCBNREVWIGV0Yy4gU3VjaCBrZXJuZWwgbW9kdWxl
-cwp3b3VsZCB0aGVuIGRlcGVuZCBvbiB0aGUgY29yZSwgdXNpbmcgS2NvbmZpZyBwcmltaXRpdmVz
-LiBBbmQgdGhlIGNvcmUKaXRzZWxmIHdvdWxkIG5vdCBoYXZlIGEgdHJpLXN0YXRlIHN0cmluZywg
-c2luY2Ugb24gaXRzIG93biBpdCBpcwp1c2VsZXNzLgoKT3IKCklmIHRoZSBjb3JlIGFsd2F5cyBw
-cm92aWRlcyBFdGhlcm5ldCwgY2FsbCBpdCBhbiBFdGhlcm5ldCBkcml2ZXIsIG5vdApjb3JlLiBU
-aGUgb3RoZXIga2VybmVsIG1vZHVsZXMgd291bGQgdGhlbiBkZXBlbmRzIG9uIGhhdmluZyB0aGUK
-RXRoZXJuZXQgZHJpdmVyLCB1c2luZyBLY29uZmlnIHByaW1pdGl2ZXMuCgpUaGlzIGFsbCBhYm91
-dCBuYW1pbmcsIG5vdCBhcmNoaXRlY3R1cmUuIFNwbGl0dGluZyBpdCB1cCBpbnRvIG11bHRpcGxl
-Cmtlcm5lbCBtb2R1bGVzIGlzIGdvb2QsIGJ1dCB5b3VyIG5hbWluZyBhbmQgZGVzY3JpcHRpb25z
-IG9mIHdoYXQgdGhlc2UKbW9kdWxlcyBkbyBtYXR0ZXJzLgoKIEFuZHJldwo=
+On Wed, Jan 28, 2026 at 7:53=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
+>
+> From: Hui Zhu <zhuhui@kylinos.cn>
+>
+> Add missing newline character at the end of pr_warn error message
+> in bpf_memcontrol_init() function. Kernel log messages should end
+> with a newline character for proper formatting in kernel logs.
+>
+> This issue was pointed out in
+> https://github.com/kernel-patches/bpf/pull/10864#discussion_r2735018210
+
+Just spell it out that it was found by copilot.
+
+pw-bot: cr
