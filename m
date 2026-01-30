@@ -1,114 +1,150 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7507F2ECEBB
-	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 02:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769740342; cv=pass; b=D17HC2XY3sxYyZ8Q1Jn14bs9pZ6kKx8vyHkBLISJS+BRgSjA5TM1hCfMfddneS1y/ljiOThhOshvrE+a4Y0J451jUJRvSwLV9XY09iMgFUoeocd3Dw574tFOr6pSI5og7CcQhtW7GAHoPBzLZjEeW5ExyERV8rLhysY8VDW9qso=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769740342; c=relaxed/simple;
-	bh=k/aDS+0oYH5HpbjfW6HjWYN5iso/Y5/50MxxdlYKMOM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hzVZWnzUUxQVCCeOkV7RxlIuLRYVOWqhIV5mBjAz6NaIi80GlwySr3iybtQyTuruToTexe7Cbsn7/mwAJHoMsHa58AFsZjk2RzVk1JcALVtqeV7wBhy035CGzHTrozCI8l3+SmCoAOvaB5mlAVq6m6mTWcmfAk+itRcAPFk4VoY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H2OgaRGK; arc=pass smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C876331A5F;
+	Fri, 30 Jan 2026 02:39:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769740751; cv=none; b=pxJnrgcIwnIQnK/lBg8TGEBqhaDb73U8/oF2kei65WPjk4J+KyhPHZZvxgt2uLWup/g2BN32AZW9j5/lT+so5jGcmPMEZIdhRbfD25n2/uOfz3bPDYuXsq/ZwKrOZJE//dJ7UYKOb//b0BHYuO94rePk+3gesGvnzkS4Lf8o+CA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769740751; c=relaxed/simple;
+	bh=b2fjr9SlIFfRfwHooV4/Sk/Eoh98yVotcbswH2ce68A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=okT0BjWRoTs3EzHvWYnqAYrqyf2Q/GGqQjB/re6ojLwbmN49zq3r8GMjXurofKGjNthRM5aMtGAVHynj3X3iKzLifR5vEa6D6GV8zsAC9wK9kNLcCeHY2mCbz97pE9kg+WovWa4WIComG0GILST6czWBS/d/mFx1nhtZpTKrIiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDKQe0jN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H2OgaRGK"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-42fbc305882so1063639f8f.0
-        for <bpf@vger.kernel.org>; Thu, 29 Jan 2026 18:32:21 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769740339; cv=none;
-        d=google.com; s=arc-20240605;
-        b=MuBrCqEanuMrrLrBktP55nLkXr1KCSgbmSf1jTJAEQ/mnndnmXdb7rSGjEKBRZLbHv
-         cq9q1jTQaYGOpqtB48Yo6ZVnos3W6fHRTQMB/UqmOheD3cJYB1FhlptmFCx1mMeXSZUM
-         9VE7IjV5VZi81OfIAOQySe9SEx3K5r9HcC+RCJQe5cMy7Y73b+ToCzpMt9lSrQiisBzM
-         px40GLgnCmI5u6v9LP1oK3r35mjQVrOF67vLTaPf6ehx8hlTRB8Wz4VFAs9c3V86hvsV
-         TIgvlAlCltR9w4yjXXifvsj+bledCggNBFWV12TE5D4cXNmcIy/8DX5mO6twx6LBXh/H
-         rArQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=k/aDS+0oYH5HpbjfW6HjWYN5iso/Y5/50MxxdlYKMOM=;
-        fh=d15VCG8OEfPtRSNrOSTPOQfis/hfBhlYH0737DJxG/c=;
-        b=cQHUe0yUJ4NOaJP7KFcmZ1OiFjgTCsOizs95tgrjgqqMKUF3/nIF7LApg9XFWbabYa
-         IPDeCgjlPyQSEt14kt6a1o8vLR6DKmxAbgsVG+bovA1NT2BOKpKav9OXERyaLLXc3P/F
-         IvQYr5Y35T4G7/+6k13pdokALohijA4q2DpjJBJEUDjiXdfiyE7AxbStWyUk6TDn53tp
-         +Z8/H2jWfcMKD1e8ajVMpzNYHLVqI2WIrX358chCgMF04q/7OqlcsvFSQkuSu0JTVOqW
-         giQV8fj3fBqbiZimvp5d9YVRmyj1N0KT5dJgkwiq6rtlxMMZUf8Al4BlIYpFYFyla5rn
-         F51g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769740339; x=1770345139; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k/aDS+0oYH5HpbjfW6HjWYN5iso/Y5/50MxxdlYKMOM=;
-        b=H2OgaRGKi6ZDrJ37aMl05QeaRRYk/X4JfFkhGVHFT0xghACtcEN3Zb0aQvt5HHJncO
-         3q4rzn1HqLdUH2dEGwR6vnj3G4c26SSdaWTwfBym9tmlxmzNpsg0tMqasmH4HZqzS0EH
-         6kTMA8BEnpJAS8IBBnjeP41+TQkf9iIhjXvo8lm8l6wfDD7xnkf5q6V+ooz1ZxCRGX//
-         VEvA4+A41oFgr0qJBbD+/ziHizScVjf+te8xymKYoslOtEUxIudlvLgEVWQcWi6UPT68
-         e7kuLOnrluRkGmRm16xicZeWJnnP005Fat+aR6f5PZYChB1jKbO9tR20V5CEs7YTdAYH
-         vsGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769740339; x=1770345139;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=k/aDS+0oYH5HpbjfW6HjWYN5iso/Y5/50MxxdlYKMOM=;
-        b=jP9WUQGfi+0rUfbNF/WWgm5WltIpOXK9AZ24jKLS9eQXePn2wW9tWdimftFAdEkcK/
-         n08FbiKJ0mYtdt9e+HOy3ZCh7dScdOtkl634RNZqH7TqRh8BFwndCcuseQJhl9V5uHww
-         n+djhzyCpcxhZ42I99Mn6Uf+yXRYpOh8/0sA/zgz/rOz3HiWiJsKkmudVuJBWqW+X2eM
-         v/RengOvT4zWgWdmgcr+usOooKTAezaS9AQypAu+XHqLsptc34sXwT11GyyIxSo6F41Z
-         cvGjIUGm67EVv4yb6185R0CBE+ZgD0PiddMGHk3KR72Yfc9Uu/EXVxFBVpsfs6rnsfdT
-         VKoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV+9319Uu3QTxI9aXtuLWIP21h9pDhleHc466bQvfvN3gzkWB/tEVuofFlczIBEnmos8nY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQptkJ5EWeioam1YLRtbA4TLq/NBp0LmjsgqkxObBEMw6O+d80
-	E3PjIsHxZ6RdPKgluOB2VOTgRugEABO7f5rjLvBPyUe2AgiLBG24SGCyZQxRhV4djpTAZvYKMtV
-	O69JTLZS/CZSYuFOnOuDYbaviuR2a4H4=
-X-Gm-Gg: AZuq6aIY/IAgI9jZZbvpt1hKl9mLQmKuoioVKTtyhyV2IzHqIBPN1vMzE28vJe9m5mQ
-	h2J1MwTZuTf8D8Vu/EMu1RiNxcecdlSjyUbUETNE/u1BQGuvrwhOecE79mzcx6JR1ZIgD1o98Tx
-	vTGScX/zzmHo5nQao+CDdK9NzQhyyQkXErvzi8UMduN0RwsamcxDRwcm8scPDe9htir9kdTLRJ4
-	JYInA3dFwQZ59N5JTCZBjbtlKKWFoMtFcEJOunr7Rz+zJokOxKGLvLfeqhldyLD6aSGBQNdA+yu
-	rSJXOzpx8E8oBp8rDzAkAjhMheMf9IjffJx24P65EHdwI6VMwpKqgHkZj1kv55NXah9LPK9mTJH
-	+wUyBvRAJgzMQtA==
-X-Received: by 2002:a5d:5f51:0:b0:435:97f6:4f44 with SMTP id
- ffacd0b85a97d-435f3aba452mr2106682f8f.56.1769740339363; Thu, 29 Jan 2026
- 18:32:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDKQe0jN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B5CC4AF09;
+	Fri, 30 Jan 2026 02:39:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769740750;
+	bh=b2fjr9SlIFfRfwHooV4/Sk/Eoh98yVotcbswH2ce68A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fDKQe0jNRYFB4dguu4QyCfHdfHcX5nc3f2rEYONXV+Sg7MA2xYw5Ia37WiiBK/4Yo
+	 3d60aR/3wdFHIKtB3zn7kZLLv64bmujm4nqx3tvUgmn0/m7OLs0K0qfZIbOo+5Rmak
+	 pJEOftN9h/0ETfNosGxk04XouJaI1WM2fvec3b9Dc4OiaNTV07c8LUwozXznud3jpB
+	 GK2Hi6pVF2N5KCXsWQgzJM2lu3g7fwHoZw6fMvBQ+WX4PX6HyAP75T77wR8Jj/Ib1K
+	 l//YcO7vJDWIdXcDcMuIABzMwXpQE8lHY6f0Au1ZPNXivGDP/pn8E6KGpHaS4WvDqL
+	 CpoqtSMROiIUg==
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 808A8F40072;
+	Thu, 29 Jan 2026 21:39:09 -0500 (EST)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Thu, 29 Jan 2026 21:39:09 -0500
+X-ME-Sender: <xms:zRl8aSlWwAGD7ogVG6-L7PwDh7Qf_sufHPBoIdCnEynPmS0ro6JQkg>
+    <xme:zRl8aaQ7u5kd3kuRQzQKaeKZvAhKxS1Dzet9OIokLCtWjVgPCXes9iES7Sh7anqYC
+    BARqREkODEkY6YB9huRVphn-dxtZBgQc18OdV4yHD5FPWcZIhl98g>
+X-ME-Received: <xmr:zRl8aRW5hKjG4OcOJE9XobqwxITxW1-1Qgp-8sQ08mllcT8OZM1PtfPb1PBCg_ToCxr17rNI7P_vcUgvrgDHdV33yx8VDS2O>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduieejkeeiucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepuehoqhhunhcu
+    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
+    efhefgffelkefhheeifeeggefhgeeuieevueegfeeugfeuffeludeuhefhleeggeenucev
+    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
+    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
+    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
+    hnsggprhgtphhtthhopeelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehprghu
+    lhhmtghksehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohhsthgvughtsehgohhoug
+    hmihhsrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+    dprhgtphhtthhopegsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    rghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlh
+    drohhrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgt
+    phhtthhopegsohhquhhnsehfihigmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:zRl8aeKS80s1IPVKL4K_Ng1NVJlxaNl1znmZHzNliz9bGhoSB45wow>
+    <xmx:zRl8aR3PqgTs8dQS9nVUphBERNOa7ZmaHmfSDErwaAaL4XzfMrkoMw>
+    <xmx:zRl8abI-_7fcOfFUBOI1qKgp_6ABf6X0zYtKP5w0zr9piygan05HhQ>
+    <xmx:zRl8ach1Ny47APoCYwlke9QewqdCKDh_73Kpaj1wve19i_UpctI9Jg>
+    <xmx:zRl8abBN0V7_4PUgdlzaOuD_YZVeL14p5MOubOdKPGbTwy1FUfIXly7s>
+Feedback-ID: i8dbe485b:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 29 Jan 2026 21:39:08 -0500 (EST)
+Date: Thu, 29 Jan 2026 18:39:07 -0800
+From: Boqun Feng <boqun@kernel.org>
+To: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
+	rcu@vger.kernel.org, bpf@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] srcu: Fix warning to permit SRCU-fast readers in NMI
+ handlers
+Message-ID: <aXwZyxqsxgOyZHTU@tardis.local>
+References: <8232efe8-a7a3-446c-af0b-19f9b523b4f7@paulmck-laptop>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260129035014.3283392-1-hui.zhu@linux.dev>
-In-Reply-To: <20260129035014.3283392-1-hui.zhu@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 29 Jan 2026 18:32:08 -0800
-X-Gm-Features: AZwV_QjkvCynu0iwUVBI8BI7kYSRcpjxCSWpTLRoHPDF8MFwQngmzpsXdmYVjRo
-Message-ID: <CAADnVQKGci3kJW0F40j0tJn6=ma-ACEzcYOcxYE8Vkp_Tif2hA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] mm/bpf_memcontrol: Add missing newline in
- pr_warn message
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Andrew Morton <akpm@linux-foundation.org>, 
-	bpf <bpf@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Hui Zhu <zhuhui@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8232efe8-a7a3-446c-af0b-19f9b523b4f7@paulmck-laptop>
 
-On Wed, Jan 28, 2026 at 7:53=E2=80=AFPM Hui Zhu <hui.zhu@linux.dev> wrote:
->
-> From: Hui Zhu <zhuhui@kylinos.cn>
->
-> Add missing newline character at the end of pr_warn error message
-> in bpf_memcontrol_init() function. Kernel log messages should end
-> with a newline character for proper formatting in kernel logs.
->
-> This issue was pointed out in
-> https://github.com/kernel-patches/bpf/pull/10864#discussion_r2735018210
+On Thu, Jan 29, 2026 at 05:30:44PM -0800, Paul E. McKenney wrote:
+> srcu: Fix warning to permit SRCU-fast readers in NMI handlers
+> 
 
-Just spell it out that it was found by copilot.
+This line seems to be duplicated ;)
 
-pw-bot: cr
+> SRCU-fast is designed to be used in NMI handlers, even going so far
+> as to use atomic operations for architectures supporting NMIs but not
+> providing NMI-safe per-CPU atomic operations.  However, the WARN_ON_ONCE()
+> in __srcu_check_read_flavor() complains if SRCU-fast is used in an NMI
+> handler.  This commit therefore modifies that WARN_ON_ONCE() to avoid
+> such complaints.
+> 
+> Reported-by: Steven Rostedt <rostedt@goodmis.org>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Tested-by: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Andrii Nakryiko <andrii@kernel.org>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: bpf@vger.kernel.org
+> 
+
+I queued it with the duplicate line removed, please see below.
+
+Regards,
+Boqun
+
+---------------------->8
+Subject: [PATCH] srcu: Fix warning to permit SRCU-fast readers in NMI handlers
+
+SRCU-fast is designed to be used in NMI handlers, even going so far
+as to use atomic operations for architectures supporting NMIs but not
+providing NMI-safe per-CPU atomic operations.  However, the WARN_ON_ONCE()
+in __srcu_check_read_flavor() complains if SRCU-fast is used in an NMI
+handler.  This commit therefore modifies that WARN_ON_ONCE() to avoid
+such complaints.
+
+[boqun: Remove the duplicate title line]
+
+Reported-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Tested-by: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: bpf@vger.kernel.org
+Signed-off-by: Boqun Feng <boqun@kernel.org>
+---
+ kernel/rcu/srcutree.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index c469c708fdd6..66ba6a2f83d3 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -789,7 +789,8 @@ void __srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
+ 	struct srcu_data *sdp;
+ 
+ 	/* NMI-unsafe use in NMI is a bad sign, as is multi-bit read_flavor values. */
+-	WARN_ON_ONCE((read_flavor != SRCU_READ_FLAVOR_NMI) && in_nmi());
++	WARN_ON_ONCE(read_flavor != SRCU_READ_FLAVOR_NMI &&
++		     read_flavor != SRCU_READ_FLAVOR_FAST && in_nmi());
+ 	WARN_ON_ONCE(read_flavor & (read_flavor - 1));
+ 
+ 	sdp = raw_cpu_ptr(ssp->sda);
+-- 
