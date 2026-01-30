@@ -1,150 +1,68 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C876331A5F;
-	Fri, 30 Jan 2026 02:39:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631A41A294;
+	Fri, 30 Jan 2026 02:50:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769740751; cv=none; b=pxJnrgcIwnIQnK/lBg8TGEBqhaDb73U8/oF2kei65WPjk4J+KyhPHZZvxgt2uLWup/g2BN32AZW9j5/lT+so5jGcmPMEZIdhRbfD25n2/uOfz3bPDYuXsq/ZwKrOZJE//dJ7UYKOb//b0BHYuO94rePk+3gesGvnzkS4Lf8o+CA=
+	t=1769741415; cv=none; b=gSSls0nrB534xA6ADFTwJNudheM0/IX+3HaGrbu42+v2Ig2L5VZa+XM1Q8QCILBVI87IiJU2ydJXQ+xdtv19K53QvtKnFpkSc7pLGuH92+TeMjt98SxvBMMzaSne62Qeb2y4bBbW60mJyX52SrBw7AhuiSwi0aNkoirHaL29w/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769740751; c=relaxed/simple;
-	bh=b2fjr9SlIFfRfwHooV4/Sk/Eoh98yVotcbswH2ce68A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=okT0BjWRoTs3EzHvWYnqAYrqyf2Q/GGqQjB/re6ojLwbmN49zq3r8GMjXurofKGjNthRM5aMtGAVHynj3X3iKzLifR5vEa6D6GV8zsAC9wK9kNLcCeHY2mCbz97pE9kg+WovWa4WIComG0GILST6czWBS/d/mFx1nhtZpTKrIiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDKQe0jN; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDKQe0jN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B5CC4AF09;
-	Fri, 30 Jan 2026 02:39:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769740750;
-	bh=b2fjr9SlIFfRfwHooV4/Sk/Eoh98yVotcbswH2ce68A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fDKQe0jNRYFB4dguu4QyCfHdfHcX5nc3f2rEYONXV+Sg7MA2xYw5Ia37WiiBK/4Yo
-	 3d60aR/3wdFHIKtB3zn7kZLLv64bmujm4nqx3tvUgmn0/m7OLs0K0qfZIbOo+5Rmak
-	 pJEOftN9h/0ETfNosGxk04XouJaI1WM2fvec3b9Dc4OiaNTV07c8LUwozXznud3jpB
-	 GK2Hi6pVF2N5KCXsWQgzJM2lu3g7fwHoZw6fMvBQ+WX4PX6HyAP75T77wR8Jj/Ib1K
-	 l//YcO7vJDWIdXcDcMuIABzMwXpQE8lHY6f0Au1ZPNXivGDP/pn8E6KGpHaS4WvDqL
-	 CpoqtSMROiIUg==
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 808A8F40072;
-	Thu, 29 Jan 2026 21:39:09 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Thu, 29 Jan 2026 21:39:09 -0500
-X-ME-Sender: <xms:zRl8aSlWwAGD7ogVG6-L7PwDh7Qf_sufHPBoIdCnEynPmS0ro6JQkg>
-    <xme:zRl8aaQ7u5kd3kuRQzQKaeKZvAhKxS1Dzet9OIokLCtWjVgPCXes9iES7Sh7anqYC
-    BARqREkODEkY6YB9huRVphn-dxtZBgQc18OdV4yHD5FPWcZIhl98g>
-X-ME-Received: <xmr:zRl8aRW5hKjG4OcOJE9XobqwxITxW1-1Qgp-8sQ08mllcT8OZM1PtfPb1PBCg_ToCxr17rNI7P_vcUgvrgDHdV33yx8VDS2O>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduieejkeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepuehoqhhunhcu
-    hfgvnhhguceosghoqhhunheskhgvrhhnvghlrdhorhhgqeenucggtffrrghtthgvrhhnpe
-    efhefgffelkefhheeifeeggefhgeeuieevueegfeeugfeuffeludeuhefhleeggeenucev
-    lhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnod
-    hmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduieejtdelkeegjeduqddujeej
-    keehheehvddqsghoqhhunheppehkvghrnhgvlhdrohhrghesfhhigihmvgdrnhgrmhgvpd
-    hnsggprhgtphhtthhopeelpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehprghu
-    lhhmtghksehkvghrnhgvlhdrohhrghdprhgtphhtthhopehrohhsthgvughtsehgohhoug
-    hmihhsrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgv
-    rhhnvghlrdhorhhgpdhrtghpthhtoheprhgtuhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-    dprhgtphhtthhopegsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    rghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgvlh
-    drohhrghdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgt
-    phhtthhopegsohhquhhnsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:zRl8aeKS80s1IPVKL4K_Ng1NVJlxaNl1znmZHzNliz9bGhoSB45wow>
-    <xmx:zRl8aR3PqgTs8dQS9nVUphBERNOa7ZmaHmfSDErwaAaL4XzfMrkoMw>
-    <xmx:zRl8abI-_7fcOfFUBOI1qKgp_6ABf6X0zYtKP5w0zr9piygan05HhQ>
-    <xmx:zRl8ach1Ny47APoCYwlke9QewqdCKDh_73Kpaj1wve19i_UpctI9Jg>
-    <xmx:zRl8abBN0V7_4PUgdlzaOuD_YZVeL14p5MOubOdKPGbTwy1FUfIXly7s>
-Feedback-ID: i8dbe485b:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 29 Jan 2026 21:39:08 -0500 (EST)
-Date: Thu, 29 Jan 2026 18:39:07 -0800
-From: Boqun Feng <boqun@kernel.org>
+	s=arc-20240116; t=1769741415; c=relaxed/simple;
+	bh=C0EzNO/s5vOx1RH3r97aHPUX22mFp2XFScqj9bBwRJI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cU/xvNNIkbdl0T7h6jbY9NAmN4EKK1Q1kHsvuWbsfFMJC35qyku/bNrrwJAz+vCHwnD6auA3XI6KMsb/b5rPY8AEje8wVNg/QZY+n90Bt48jHFNb5O6731or3A4nJta8cZIJDL0FaJM39qjnt5e1cxBMTiwfXJcIKY5yAm2AF/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay03.hostedemail.com (Postfix) with ESMTP id F09D2B84D6;
+	Fri, 30 Jan 2026 02:50:05 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf08.hostedemail.com (Postfix) with ESMTPA id BBEB920025;
+	Fri, 30 Jan 2026 02:50:03 +0000 (UTC)
+Date: Thu, 29 Jan 2026 21:50:02 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
 To: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, linux-kernel@vger.kernel.org,
-	rcu@vger.kernel.org, bpf@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] srcu: Fix warning to permit SRCU-fast readers in NMI
- handlers
-Message-ID: <aXwZyxqsxgOyZHTU@tardis.local>
-References: <8232efe8-a7a3-446c-af0b-19f9b523b4f7@paulmck-laptop>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Sebastian Andrzej Siewior
+ <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>
+Subject: Re: [PATCH v6 0/3] tracing: Guard __DECLARE_TRACE() use of
+ __DO_TRACE_CALL() with SRCU-fast
+Message-ID: <20260129215002.47fefc88@robin>
+In-Reply-To: <1d6300a5-61a8-498a-8d40-b529bacf9a8a@paulmck-laptop>
+References: <20260126231145.728172709@kernel.org>
+	<20260126213922.0a91bfac@robin>
+	<581f0711-9115-44e8-a616-06cd13563f8c@paulmck-laptop>
+	<20260129193359.08230ac0@gandalf.local.home>
+	<1d6300a5-61a8-498a-8d40-b529bacf9a8a@paulmck-laptop>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8232efe8-a7a3-446c-af0b-19f9b523b4f7@paulmck-laptop>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Queue-Id: BBEB920025
+X-Stat-Signature: jdx5oe7zae1oiebwtk99qdb8495ej9fo
+X-Rspamd-Server: rspamout08
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+W40uwtlUQmfwzxqhvqV64hrT80HkowJE=
+X-HE-Tag: 1769741403-543040
+X-HE-Meta: U2FsdGVkX18m6mVexk2/ZaOy2phXoO07/Ff6F9L0yY51xwdCYcu3xbIGnixvVqZyMpu/BwdJUFkDOKWlIFVcJLFYj7WlzQrW4e/GYdRhkXiUfN8zTwhV9VLh33TfXE7IKeZ/tiKV4sQWpx7eihyV2LbrWcJVS8RulZF2KCqRFiEGpSH+cJ2Q0O3RBACdFfo8VxElKFM5J56P4sbn8MjbcC37Qd6JTKuBS021CDgacb9XbTVCkRGcszXq0dCoinT/dzfIKu+9oVU1FpWaL+Rh7UQs34FIIQWskIFQG/M+BNqZXqXZr4+zW5LVaqH9lC4GbXbvHgkN1W+Gxo7mx9lmQTumr/HbYERjDZjVSkywX3xxmsZk4xsOCA==
 
-On Thu, Jan 29, 2026 at 05:30:44PM -0800, Paul E. McKenney wrote:
-> srcu: Fix warning to permit SRCU-fast readers in NMI handlers
+On Thu, 29 Jan 2026 17:32:24 -0800
+"Paul E. McKenney" <paulmck@kernel.org> wrote:
 > 
-
-This line seems to be duplicated ;)
-
-> SRCU-fast is designed to be used in NMI handlers, even going so far
-> as to use atomic operations for architectures supporting NMIs but not
-> providing NMI-safe per-CPU atomic operations.  However, the WARN_ON_ONCE()
-> in __srcu_check_read_flavor() complains if SRCU-fast is used in an NMI
-> handler.  This commit therefore modifies that WARN_ON_ONCE() to avoid
-> such complaints.
+> Thank you, done, and apologies for the hassle!  This should show up
+> here in a bit:
 > 
-> Reported-by: Steven Rostedt <rostedt@goodmis.org>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Tested-by: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: bpf@vger.kernel.org
-> 
+> https://lore.kernel.org/all/8232efe8-a7a3-446c-af0b-19f9b523b4f7@paulmck-laptop/
 
-I queued it with the duplicate line removed, please see below.
+I can get it from there. Also if you Cc
+linux-trace-kernel@vger.kernel.org, I would be able to pull it from
+patchwork.
 
-Regards,
-Boqun
-
----------------------->8
-Subject: [PATCH] srcu: Fix warning to permit SRCU-fast readers in NMI handlers
-
-SRCU-fast is designed to be used in NMI handlers, even going so far
-as to use atomic operations for architectures supporting NMIs but not
-providing NMI-safe per-CPU atomic operations.  However, the WARN_ON_ONCE()
-in __srcu_check_read_flavor() complains if SRCU-fast is used in an NMI
-handler.  This commit therefore modifies that WARN_ON_ONCE() to avoid
-such complaints.
-
-[boqun: Remove the duplicate title line]
-
-Reported-by: Steven Rostedt <rostedt@goodmis.org>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Tested-by: Steven Rostedt <rostedt@goodmis.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: bpf@vger.kernel.org
-Signed-off-by: Boqun Feng <boqun@kernel.org>
----
- kernel/rcu/srcutree.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index c469c708fdd6..66ba6a2f83d3 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -789,7 +789,8 @@ void __srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
- 	struct srcu_data *sdp;
- 
- 	/* NMI-unsafe use in NMI is a bad sign, as is multi-bit read_flavor values. */
--	WARN_ON_ONCE((read_flavor != SRCU_READ_FLAVOR_NMI) && in_nmi());
-+	WARN_ON_ONCE(read_flavor != SRCU_READ_FLAVOR_NMI &&
-+		     read_flavor != SRCU_READ_FLAVOR_FAST && in_nmi());
- 	WARN_ON_ONCE(read_flavor & (read_flavor - 1));
- 
- 	sdp = raw_cpu_ptr(ssp->sda);
--- 
+-- Steve
