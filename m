@@ -1,109 +1,92 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8677B287508;
-	Fri, 30 Jan 2026 06:50:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1811114F112;
+	Fri, 30 Jan 2026 07:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769755817; cv=none; b=sEd80vsp75BBnA4cLKlxcpoCVOvof42GsTIOLL9A4UDytEkfshTtkh6m4+kKxDq7itFzwPiMZ1r8L2iBCovPKf/p03Fzvv+jEA8Xqhg/e16tx/24VfJxBi/RhPOcDWYIsZDHjWcR+BVSfSjpwrQ1N7qga87Fr91Ig3M1SPNLnK0=
+	t=1769756561; cv=none; b=lBZJ7d97c+sxJRyzzw2rtS0wqj23Om6gAMaoGEj7klSec/bHTkquc+wmFpnUtTssIG7naIM1gm0r2/Cjcb2sj8g3uG9y4CS7hdYl7zCueNo9a5bMXSFMM4l6L+OVJTimQ+eGcBKfoWBhoCXmwez6DsnPMIxa6jXaz9yQin9u2tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769755817; c=relaxed/simple;
-	bh=YXKpjh0EJpqLSUJ/jki6Dyz4NykXUAKico+Ez/AF1IE=;
+	s=arc-20240116; t=1769756561; c=relaxed/simple;
+	bh=HC81kJ/KCUSax7CyJFaHbRwTsOK9Tppvga3NN4qu7ME=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AtZlV8r+oixM3ibIPxJjmxobJYabSK5GtHp6bOyuawyIHDOyQ9z45ATd2BmONbmAu8lCx1vOt0K7hpUnOFJtYqVZsQXZp31fEkORDzO2xC19eWmarR5cWMGufm6Gl1NmiYB4Bb36QdxyenAFFxHyxYTZ3rwdrT2chhdmi1X+p8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MdrH8qq7; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=O5BIpvHs4ye4qC2AcEbLCUpeJv2o+0VCNMSajzDS4FKtUy/nDpmowA9/GUwdu0GsUMyzDd9Qxr6kVyLS/ZEnv7lyY5x8mqIt+j/dzGvYV5J2uUr0hHymDNrHQd5RpD3yxJ0qiCE+nab0bOMovKBppsb4aScDENePk3ammH3Nli0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=ilytkKYY; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MdrH8qq7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769755816; x=1801291816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=YXKpjh0EJpqLSUJ/jki6Dyz4NykXUAKico+Ez/AF1IE=;
-  b=MdrH8qq7ruGsb+hhzBk0tR3hTBwMUHFf53P3gWzQJdbKwo72oTpxuvp7
-   gLgAZDnntRdhrcKCg0KoNvvftZMyO44dtaSLlObelDQWeJt9HiLcPJ7Oh
-   ihgO03psKlUsqAeWg8Jtz4zoPBzoj7tBcVZgLSGFOuVQJdBRXJvs2ZK8n
-   dWlQxK8PIJ0xJsyP90nOWwvAId1XriGyqyPKDyqvonqrPERqoRVFjgVO2
-   KCte0cmpn0GU4h/tIA4+9TQg5OZXM4FjyTRF/Z+Kq/hQcU5BeWsGDZL0n
-   ovbAHSXtqm39PVhvD45ecL+qJJyaS1yDX8Pdf20BDowvGuB0Pk1nTqvEz
-   A==;
-X-CSE-ConnectionGUID: db2rBWNoSdi6AJwz/+VS8w==
-X-CSE-MsgGUID: ubrm6crkTwOXYPk10rPlVg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="81320115"
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="81320115"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 22:50:11 -0800
-X-CSE-ConnectionGUID: mYaf0TBPRa2ykUmhlHu8pg==
-X-CSE-MsgGUID: LrWGv+Y3RriQke2ImZiRkw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,262,1763452800"; 
-   d="scan'208";a="208696559"
-Received: from liuzhao-optiplex-7080.sh.intel.com (HELO localhost) ([10.239.160.39])
-  by fmviesa006.fm.intel.com with ESMTP; 29 Jan 2026 22:50:06 -0800
-Date: Fri, 30 Jan 2026 15:15:59 +0800
-From: Zhao Liu <zhao1.liu@intel.com>
-To: Vlastimil Babka <vbabka@suse.cz>
-Cc: Harry Yoo <harry.yoo@oracle.com>, Petr Tesarik <ptesarik@suse.com>,
-	Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Hao Li <hao.li@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Alexei Starovoitov <ast@kernel.org>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-rt-devel@lists.linux.dev,
-	bpf@vger.kernel.org, kasan-dev@googlegroups.com
-Subject: Re: [PATCH v4 06/22] slab: add sheaves to most caches
-Message-ID: <aXxaryFUrIFo7/hL@intel.com>
-References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
- <20260123-sheaves-for-all-v4-6-041323d506f7@suse.cz>
- <aXsLKxukv60p3QWF@intel.com>
- <2cd89ed5-0c8e-43f8-896d-1b7dee047fef@suse.cz>
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="ilytkKYY"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=INMf6UfFQjVVnORY/K4s0FguYtBlQgR4+GC7Az9nAHk=; b=ilytkKYYIb15hDUYvk/ktFurn2
+	rIoSaVvuwrv/jNqt4iR6TROJ8IeZlN1PH5whhMv1/AbdXFNN++4wyTyv7KF0rsVh9LyisYV+v2x4b
+	8QcYgnYdrwmOBebbLAj82HRGHPg83XKl4d5ixnZQP3jnt6qes1l7NJpUU15IRRrSd2OrPbXiWuF5G
+	1Usc1/YAHY1hTXStoU1uN95rtw2ejQed+PicyisANY6LLn93TFaRsRfhXSowFrUo7Xjyenb5oA8gy
+	k3TEBPyYB9WuLgY3oozldImd1hRSvpxcR/Ekx3NPG7coY7XpmsUV6OouYMej4OWnhCk8fo8Af/yTI
+	OpDd5jSA==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1vliYK-00000009qV4-2BjG;
+	Fri, 30 Jan 2026 07:04:24 +0000
+Date: Fri, 30 Jan 2026 07:04:24 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Samuel Wu <wusamuel@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <20260130070424.GV3183987@ZenIV>
+References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
+ <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh>
+ <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
+ <20260128045954.GS3183987@ZenIV>
+ <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
+ <20260129032335.GT3183987@ZenIV>
+ <20260129225433.GU3183987@ZenIV>
+ <CAG2KctoNjktJTQqBb7nGeazXe=ncpwjsc+Lm+JotcpaO3Sf9gw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=gb2312
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2cd89ed5-0c8e-43f8-896d-1b7dee047fef@suse.cz>
+In-Reply-To: <CAG2KctoNjktJTQqBb7nGeazXe=ncpwjsc+Lm+JotcpaO3Sf9gw@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-Hi Vlastimil,
-
-> > vm_area_cachep's capacity seems to be adjusted to 60 and
-> > maple_node_cache keeps 32 as the args setting.
+On Thu, Jan 29, 2026 at 05:16:20PM -0800, Samuel Wu wrote:
+> On Thu, Jan 29, 2026 at 2:52â€¯PM Al Viro <viro@zeniv.linux.org.uk> wrote:
 > 
-> Good to know. It is a bit larger.
-> Hm I could have probably applied the args capacity before doing the roundup
-> to make sheaf fill whole kmalloc size. Would add a few object for maple node
-> I guess.
+> > > Sorry, I hadn't been clear enough: if you do
+> > > git switch --detach 1544775687f0
+> > > and build the resulting tree, does the breakage reproduce?  What I want
+> > > to do is to split e5bf5ee26663 into smaller steps and see which one
+> > > introduces the breakage, but the starting point would be verify that
+> > > there's no breakage prior to that.
+> 
+> Ultimately, same conclusion as before: 6.18-rc5 with patches up to
+> 1544775687f0 works, but adding e5bf5ee26663 breaks it.
 
-Re-considerring this formula:
+OK.  Could you take a clone of mainline repository and in there run
+; git fetch git://git.kernel.org:/pub/scm/linux/kernel/git/viro/vfs.git for-wsamuel:for-wsamuel
+then
+; git diff for-wsamuel e5bf5ee26663
+to verify that for-wsamuel is identical to tree you've seen breakage on
+; git diff for-wsamuel-base 1544775687f0
+to verify that for-wsamuel-base is the tree where the breakage did not reproduce
+Then bisect from for-wsamuel-base to for-wsamuel.
 
-the nr_objects in set_cpu_partial() in fact represents the half-full
-case since it was used to calculate nr_slabs in slub_set_cpu_partial().
-
-Therefore, the maximum capacity of this partial approach should be
-nr_objects * 2 (and should actually be even larger, since it doesn't
-account for the object on CPU's freelist).
-
-But here, for sheaf, the implicit assumption is that it is completely
-full, so that for the maximum capacity of objects per CPU, the sheaf
-approach is "half" that of the partial approach.
-
-Is this expected? I'm considering whether we should remove the
-¡°divide by two¡± and instead calculate the sheaf capacity based on
-half-full assumption (e.h., full main & empty spare).
-
-Thanks,
-Zhao
-
-
+Basically, that's the offending commit split into steps; let's try to figure
+out what causes the breakage with better resolution...
