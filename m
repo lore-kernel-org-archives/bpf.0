@@ -1,104 +1,190 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B245B27281D
-	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 23:48:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B790C38B999;
+	Fri, 30 Jan 2026 23:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769816918; cv=none; b=h56uhFM2qjyvW2Pvt5UqMzMzMGK7z1LAIXmQAeHCiU/vWaJGFjJ2zcgXFFtMKe8Um/GkSi+jdKO40QlvaAx2uRJRbTQMh08GHNagGMJPlrTmb+JVUQvFZlFy6jAfSw7YoUousI5oYNjKmYsMbEDYNuFQ8uHPQgE/tEkCB6iRIh4=
+	t=1769817360; cv=none; b=lwQ2Zp7dZdUcIY218nGkPjtXUbzS8BsNX2KRLPJa3pyrZc3XaXhcMKiK8CEYNBCnNtCgnR3+RGB08Yp7wYvGeUEFyWooABLR9m5wNjuAqkgl5TQdw8iD9IK3KchpmX2stt05Y0ksg4Jjqgr1G63uiKctJakY1BJUZEJlrYl5FwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769816918; c=relaxed/simple;
-	bh=bZ3myM0jPjsdbT1mwQfhbLvKT3mtlrvxq907N2Yr7jo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Av1p92kCGvtkVwemtR2EQyZFzgWFGc3P2Of1JNOs8IAC+yZxKvdkibcLeLioGaK3H92TQEHqXcBwPWJN5oSbrsYyiVaB7847pIYEtakxrYCn36hdxJiVXlqrHYWBgKHq6gMH7AQExY9k90TreIbtrB0aDdeYFA0uWaufX3ppqXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qKcV1Zy1; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769817360; c=relaxed/simple;
+	bh=Mstrtl107/xwKexWntN6sYj5esBWVe7AT7Q+cHnsYRU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MVrfO9mNvE3529L9QeDUN3gEi2j+0WgewnfvEHlK7CunK+ve6Z21N/AhW1BSyt+L7Wex3MulHEp2MZrQWnAjafixmx/UOrAKFY1VUOCx8N5nHqKg+6mUXKBv6IAkM+SWEIT0iZljHobCvPgtF67Vq0qJyzp+p2CuhKobckpUTnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=AO+G3MI/; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qKcV1Zy1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79B1AC4CEF7;
-	Fri, 30 Jan 2026 23:48:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769816918;
-	bh=bZ3myM0jPjsdbT1mwQfhbLvKT3mtlrvxq907N2Yr7jo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qKcV1Zy1FeBP81dsixRt+3ows8blv1uFMV+UgqgU4m9HIsk6g8tZ0AA9SO2de02BI
-	 9rs0ufHjqdU4Q88GZcK+g7Y/BdqcL7U4bbqpiNI2etQcb8UanusTnIvWgqFeCWrymX
-	 zyckXURmltOwxsjXXBIIrQB9PImLnKsjMRN7DYhcvyWPXq9WWf4VwHBwXlapiLcjcN
-	 GCHJMdJprv7yFRuj1XiGDiCnNR7OEPBaZaX+X1sWI6vT1D7giThfeGHcCduPF43jHW
-	 NwkgowA8ImsdpW7S/RdyOvi1Tr2xDHpAL5PyMDi5yhZfM05fTHFnPn75WC6qbGlTJk
-	 Xu3NyM5KI/FDA==
-Message-ID: <1d4546ca-8849-464d-9080-ef77602134c7@kernel.org>
-Date: Sat, 31 Jan 2026 00:48:34 +0100
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="AO+G3MI/"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
+	Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
+	bh=WunDx0fb3GW0z9IYkcolqOlpoStL9vS1z9b/3h7/9sA=; b=AO+G3MI/5/op50vRQvZ2KSjky2
+	o2ePb5Zukk3sXqeoNldFFJbSdw+Qp7uPktsF7JIRKDMKPcu/acltZPsnYWSewa2lLpyc2Gx9MlnMF
+	O3a5gu9xLnoZ1RZqF9iA05zLoPaHp5rsq+K1gR3L76DF8WbF9zlg8f6xM6E2G1VQAn9TaPm+Tk5Y2
+	s5bwYJffBoYET1FOa8HR7vJwT9oiZweshSD1mXBXH7uapwklcxfNchd2/QTs+ZWS3FHEhaI0q2NAO
+	4iOY76PwJp8GPEtE84eZvCDEagFHnDbFvVFgCapOv8se+c1FU82xSEGXvHZNGQbgXWrdNVN6O9s2V
+	gVLXLJfQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1vlyMx-0000000ChF7-0kg1;
+	Fri, 30 Jan 2026 23:57:43 +0000
+Date: Fri, 30 Jan 2026 23:57:43 +0000
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: Samuel Wu <wusamuel@google.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org,
+	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
+	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
+	a.hindborg@kernel.org, linux-mm@kvack.org,
+	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
+	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
+	paul@paul-moore.com, casey@schaufler-ca.com,
+	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
+	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
+	bpf@vger.kernel.org, clm@meta.com,
+	android-kernel-team <android-kernel-team@google.com>
+Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
+Message-ID: <20260130235743.GW3183987@ZenIV>
+References: <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
+ <2026012715-mantra-pope-9431@gregkh>
+ <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
+ <20260128045954.GS3183987@ZenIV>
+ <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
+ <20260129032335.GT3183987@ZenIV>
+ <20260129225433.GU3183987@ZenIV>
+ <CAG2KctoNjktJTQqBb7nGeazXe=ncpwjsc+Lm+JotcpaO3Sf9gw@mail.gmail.com>
+ <20260130070424.GV3183987@ZenIV>
+ <CAG2Kctoqja9R1bBzdEAV15_yt=sBGkcub6C2nGE6VHMJh13=FQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] bpftool: Allow explicitly skip llvm
- dependency
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
- kernel-team@meta.com, Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260128233425.374535-1-mykyta.yatsenko5@gmail.com>
- <2b6f4cd9-ff0f-4a91-90ef-8d8e6812f80f@kernel.org>
- <CAEf4BzY16OkoUQZ-Vaywb0oAL=UGY=8FVcBWLVM8oe=-bQ=4xg@mail.gmail.com>
-From: Quentin Monnet <qmo@kernel.org>
-Content-Language: en-GB
-In-Reply-To: <CAEf4BzY16OkoUQZ-Vaywb0oAL=UGY=8FVcBWLVM8oe=-bQ=4xg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG2Kctoqja9R1bBzdEAV15_yt=sBGkcub6C2nGE6VHMJh13=FQ@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-2026-01-30 12:46 UTC-0800 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
-> On Thu, Jan 29, 2026 at 9:34 AM Quentin Monnet <qmo@kernel.org> wrote:
->>
->> 2026-01-28 23:34 UTC+0000 ~ Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
->>> From: Mykyta Yatsenko <yatsenko@meta.com>
->>>
->>> BPF selftests depend on the bpftool. In some environments we may link
->>> bpftool to llvm dynamically and then try to run somewhere where llvm
->>> library is not available.
->>> It's simpler to avoid llvm linking altogether in those cases, this
->>> change allows to do it.
->>>
->>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->>
->>
->> Hi Mykyta, thanks for the patch. Do you have any other solution to make
->> it work on your environment? We've been rejecting similar changes in the
->> past, because we don't want to encourage people to strip away the
->> disassembler when shipping bpftool [0], so I'd rather avoid adding this
->> if you have another workaround available.
+On Fri, Jan 30, 2026 at 02:31:54PM -0800, Samuel Wu wrote:
+> On Thu, Jan 29, 2026 at 11:02 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> > OK.  Could you take a clone of mainline repository and in there run
+> > ; git fetch git://git.kernel.org:/pub/scm/linux/kernel/git/viro/vfs.git for-wsamuel:for-wsamuel
+> > then
+> > ; git diff for-wsamuel e5bf5ee26663
+> > to verify that for-wsamuel is identical to tree you've seen breakage on
+> > ; git diff for-wsamuel-base 1544775687f0
+> > to verify that for-wsamuel-base is the tree where the breakage did not reproduce
+> > Then bisect from for-wsamuel-base to for-wsamuel.
+> >
+> > Basically, that's the offending commit split into steps; let's try to figure
+> > out what causes the breakage with better resolution...
 > 
-> LLVM is a huge and somewhat problematic dependency, so I think it
-> makes sense to allow to opt-out of it. Of course this shouldn't be
-> abused by distro packagers and they should strive to provide
-> fully-featured build of bpftool. We don't have full control over this,
-> but let's hope they won't cut corners (either way they can always
-> apply some ugly local patch, if they decide to cut LLVM dependency).
-> 
-> But for a lot of environments this might not be worthwhile to wire up
-> LLVM libs. I haven't checked if this is the problem for bpftool's
-> bootstrap variant, but if LLVM gets pulled in for that one, it's
-> especially bad :)
+> Confirming that bisect points to this patch: 09e88dc22ea2 (serialize
+> ffs_ep0_open() on ffs->mutex)
 
+So we have something that does O_NDELAY opens of ep0 *and* does not retry on
+EAGAIN?
 
-Hi Andrii,
+How lovely...  Could you slap
+	WARN_ON(ret == -EAGAIN);
+right before that
+	if (ret < 0)
+		return ret;
+in there and see which process is doing that?  Regression is a regression, 
+odd userland or not, but I would like to see what is that userland actually
+trying to do there.
 
-The bootstrap version doesn't include "bpftool prog" commands, so it
-doesn't link against any of the disassembling libraries.
+*grumble*
 
-As for opting out from the LLVM disassembler, I understand the lib is an
-issue because of the size or when compiling a binary supposed to run on
-a different machine, although I do fear this won't help with getting
-bpftool shipped with the JIT disassembler.
+IMO at that point we have two problems - one is how to avoid a revert of the
+tail of tree-in-dcache series, another is how to deal with quite real
+preexisting bugs in functionfs.
 
-But if really you want to do this, at least let's do it fully and give
-more control for the disassembler dependencies: I think it shouldn't be
-just LLVM in this case, there should be a way to opt-out from libbfd as
-well, which was problematic for other reasons in the first place, and
-probably some mechanism to tell whether to use libbfd or LLVM for the
-disassembler when the two are available on the machine.
+Another thing to try (not as a suggestion of a fix, just an attempt to figure
+out how badly would the things break): in current mainline replace that
+	ffs_mutex_lock(&ffs->mutex, file->f_flags & O_NONBLOCK)
+in ffs_ep0_open() with
+	ffs_mutex_lock(&ffs->mutex, false)
+and see how badly do the things regress for userland.  Again, I'm not saying
+that this is a fix - just trying to get some sense of what's the userland
+is doing.
 
-Quentin
+FWIW, it might make sense to try a lighter serialization in ffs_ep0_open() -
+taking it there is due to the following scenario (assuming 6.18 or earlier):
+ffs->state is FFS_DEACTIVATED.  ffs->opened is 0.  Two threads attempt to
+open ep0.  Here's what happens prior to these patches:
+
+static int ffs_ep0_open(struct inode *inode, struct file *file)
+{
+        struct ffs_data *ffs = inode->i_private;
+ 
+        if (ffs->state == FFS_CLOSING)
+                return -EBUSY;
+ 
+        file->private_data = ffs;
+        ffs_data_opened(ffs);
+
+with
+static void ffs_data_opened(struct ffs_data *ffs)
+{
+        refcount_inc(&ffs->ref);
+        if (atomic_add_return(1, &ffs->opened) == 1 &&
+                        ffs->state == FFS_DEACTIVATED) {
+                ffs->state = FFS_CLOSING;
+                ffs_data_reset(ffs);
+        }
+}
+
+IOW, the sequence is
+	if (state == FFS_CLOSING)
+		return -EBUSY;
+	n = atomic_add_return(1, &opened);
+	if (n == 1 && state == FFS_DEACTIVATED) {
+		state = FFS_CLOSING;
+		ffs_data_reset();
+
+See the race there?  If the second open() comes between the
+increment of ffs->opened and setting the state to FFS_CLOSING,
+it will *not* fail with EBUSY - it will proceed to return to
+userland, while the first sucker is crawling through the work
+in ffs_data_reset()/ffs_data_clear()/ffs_epfiles_destroy().
+
+What's more, there's nothing to stop that second opener from
+calling write() on the descriptor it got.  No exclusion there -
+        ffs->state = FFS_READ_DESCRIPTORS;
+        ffs->setup_state = FFS_NO_SETUP;
+        ffs->flags = 0;
+in ffs_data_reset() is *not* serialized against ffs_ep0_write().
+Get preempted right after setting ->state and that write()
+will go just fine, only to be surprised when the first thread
+regains CPU and continues modifying the contents of *ffs
+under whatever the second thread is doing.
+
+That code obviously relies upon that kind of shit being prevented
+by that -EBUSY logics in ep0 open() and that logics is obviously
+racy as it is.  Note that other callers of ffs_data_reset() have
+similar problem: ffs_func_set_alt(), for example has
+        if (ffs->state == FFS_DEACTIVATED) {
+                ffs->state = FFS_CLOSING;
+                INIT_WORK(&ffs->reset_work, ffs_reset_work);
+                schedule_work(&ffs->reset_work);
+                return -ENODEV;
+        }
+again, with no exclusion.  Lose CPU just after seeing FFS_DEACTIVATED,
+then have another thread open() the sucker and start going through
+ffs_data_reset(), only to have us regain CPU and schedule this for
+execution:
+static void ffs_reset_work(struct work_struct *work)
+{
+        struct ffs_data *ffs = container_of(work,
+                struct ffs_data, reset_work);
+        ffs_data_reset(ffs);
+}
+IOW, stray ffs_data_reset() coming to surprise the opener who'd
+just finished ffs_data_reset() during open(2) and proceeded to
+write to the damn thing, etc.
+
+That's obviously on the "how do we fix the preexisting bugs" side
+of things, though - regression needs to be dealt with ASAP anyway.
