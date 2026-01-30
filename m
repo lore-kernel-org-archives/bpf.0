@@ -1,188 +1,112 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 543BC3358B8;
-	Fri, 30 Jan 2026 16:54:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44643559DA;
+	Fri, 30 Jan 2026 17:17:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769792050; cv=none; b=KkYm+ssQsPZsoaEAQciSI+/Wmnn9f+K/sq5p4looiQ0D1U5txaD4LRAWT0Zn0USeGbhw3eTqAhqwhox7M/zWv+ESW3trduPrQOFLcEo0oc6MeNwyihnK996LhpBXyzNYMMPyPkD1FV+sJ9TnsxxWQoaKbZ6pQrLJxnWUIE+L0S8=
+	t=1769793462; cv=none; b=mOMtrJJFI8xwHK10YqhXV+l3GFRy+a7b2Tf9HGKl62p6Eky9+UFIn8SZ0juzPqBkaXJklCmTFJqCcqkVlocG/T0gDlyWzxbqdIoQexMmrepZLoAjSbJpyaxiEVffFWrRIF527R8gGnHOxTWokyQJUCgm/LOwhDX97KN6ex4BL+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769792050; c=relaxed/simple;
-	bh=ephIT4v1KrY7rnsSJlQo+RxoFpbdo5aelPh8LwSP4Lo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wzr1zxKnHUmw5HiT0LTIfIXfAOD93kpg7M353xYoG87vicFNwzdBawZPvSWPlFt8BbxoecmSkCV7blbRlUmTSIgGAciIS+vdNFF7P31odW3wnqfcpTFS1KP/nN/Hq6iAPVWMU3+TjvOlbndBweQnALqhpgrNYc5zMyZ+87dCfHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tYCkOJDH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1769793462; c=relaxed/simple;
+	bh=6WH2JiWpUwtSy2YEgZz/amy0gqy++66/ns2O7K3oeIc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Glvh358DOIUZ7Iq/ytJsdlM2yu1612LWW6qrHxe5KT3qMu6FI++zkC4Z5R8hi9NT8A7dyapuziJfAF7JMa4h7aXWMyT6Is88FiR0+r37KK/A6pOMGDpu7rFfjXr3IEVUPQhRkMvq/xTZUUY6IVH5y1xU5F0AoGwyAl7ByNP1jws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QkIJqHpe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tYCkOJDH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7AD1C4CEF7;
-	Fri, 30 Jan 2026 16:54:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QkIJqHpe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42130C4CEF7;
+	Fri, 30 Jan 2026 17:17:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769792049;
-	bh=ephIT4v1KrY7rnsSJlQo+RxoFpbdo5aelPh8LwSP4Lo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tYCkOJDHKoHSYCl4GKsQWl4+Te6GuPmT5jLEFPmyWjCwi4wMtVvpCvkaux2IH6JdG
-	 hSYz8LLKLaeAnzcxG9MKua54mWFv4Dx4ycRE3HT6srjxIJkv7OYc2FynIrTLEZ3I7i
-	 nPsTuV5Xb6vSfMx/z1ItBfGHlLsPzvJAgrEsqM2Ib4oGJiBiwZfrJotyELTGk6t2+o
-	 aQjwkDW5o1/7jFBIfpIZSanwxeQynrs7YwiHyPdLicVE717l3UdIs/VdPiSd7URI0M
-	 u/41++oSrAPpcCqwKc2o9jCshSxwebAvezYo8xfziUY7/Krm20rcJQSbIXjjoPvWzO
-	 yp/Fyqc49JzSA==
-Message-ID: <6be17a08-f8aa-4f91-9bd0-d9e1f0a92d90@kernel.org>
-Date: Fri, 30 Jan 2026 17:54:05 +0100
+	s=k20201202; t=1769793462;
+	bh=6WH2JiWpUwtSy2YEgZz/amy0gqy++66/ns2O7K3oeIc=;
+	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+	b=QkIJqHpeUFF4wfqIJFJjzru2w5TUXqDVd9/PcwuTbqT5fIqZZ6BiirNoeRkeKs31w
+	 6CHNG30GSAAFnxA0igkXJpV/DuModCYd+t3EANh+4PVezua/8gCMKs8G1LinG5GFLr
+	 BzfBZN8oVQXJ8y/pbhBQwNt2zzNuAJ0xrw9pqlkboc+Ld+fZoE6WzsUoFteNw79eqL
+	 C/3u9Z9DpC6cExSr5eF4bIPyPSbB3poEjGxrwR/w4kT6xSvYCCSp5gxynlqO/LvUpL
+	 RVc0uS81QefGQVClecsCTnHJqC1o0aM8SfwPxptSauJsi05LTTcaUcnEAIPGwsS74/
+	 9IcUDthPAlL3A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+	id C640ACE289D; Fri, 30 Jan 2026 09:17:41 -0800 (PST)
+Date: Fri, 30 Jan 2026 09:17:41 -0800
+From: "Paul E. McKenney" <paulmck@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+Cc: Steven Rostedt <rostedt@kernel.org>, linux-kernel@vger.kernel.org,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>, bpf@vger.kernel.org
+Subject: Re: [for-next][PATCH 3/4] srcu: Fix warning to permit SRCU-fast
+ readers in NMI handlers
+Message-ID: <7ed7a968-4a37-4166-b9cb-09bccc18fd4d@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20260130154607.755725833@kernel.org>
+ <20260130154639.883617005@kernel.org>
+ <aXzTdOTyxuH-51_t@tardis.local>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3] net: sched: sfq: add detailed drop reasons
- for monitoring
-To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>
-Cc: bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, horms@kernel.org,
- jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
- jhs@mojatatu.com, carges@cloudflare.com, kernel-team@cloudflare.com
-References: <176917072608.1186611.11185920960590396939.stgit@firesoul>
- <87zf5v3347.fsf@toke.dk>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <87zf5v3347.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aXzTdOTyxuH-51_t@tardis.local>
 
-
-
-On 30/01/2026 09.40, Toke Høiland-Jørgensen wrote:
-> Jesper Dangaard Brouer <hawk@kernel.org> writes:
+On Fri, Jan 30, 2026 at 07:51:16AM -0800, Boqun Feng wrote:
+> On Fri, Jan 30, 2026 at 10:46:10AM -0500, Steven Rostedt wrote:
+> > From: "Paul E. McKenney" <paulmck@kernel.org>
+> > 
+> > SRCU-fast is designed to be used in NMI handlers, even going so far
+> > as to use atomic operations for architectures supporting NMIs but not
+> > providing NMI-safe per-CPU atomic operations.  However, the WARN_ON_ONCE()
+> > in __srcu_check_read_flavor() complains if SRCU-fast is used in an NMI
+> > handler.  This commit therefore modifies that WARN_ON_ONCE() to avoid
+> > such complaints.
+> > 
+> > Reported-by: Steven Rostedt <rostedt@goodmis.org>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Tested-by: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > Cc: Boqun Feng <boqun@kernel.org>
+> > Cc: Alexei Starovoitov <ast@kernel.org>
+> > Cc: Peter Zijlstra <peterz@infradead.org>
+> > Cc: bpf@vger.kernel.org
+> > Link: https://patch.msgid.link/8232efe8-a7a3-446c-af0b-19f9b523b4f7@paulmck-laptop
+> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > 
->> Add specific drop reasons to SFQ qdisc to improve packet drop
->> observability and monitoring capabilities. This change replaces
->> generic qdisc_drop() calls with qdisc_drop_reason() to provide
->> granular metrics about different drop scenarios in production
->> environments.
->>
->> Two new drop reasons are introduced:
->>
->> - SKB_DROP_REASON_QDISC_SFQ_MAXFLOWS: Used when a new flow cannot
->>    be created because the maximum number of flows (flows parameter)
->>    has been reached and no free flow slots are available.
->>
->> - SKB_DROP_REASON_QDISC_SFQ_MAXDEPTH: Used when a flow's queue
->>    length exceeds the per-flow depth limit (depth parameter),
->>    triggering either tail drop or head drop depending on headdrop
->>    configuration.
->>
->> The existing SKB_DROP_REASON_QDISC_OVERLIMIT is used in sfq_drop()
->> when the overall qdisc limit is exceeded and packets are dropped
->> from the longest queue.
->>
->> The naming uses qdisc-specific drop reasons tied to SFQ tunables,
->> following the pattern established by Eric's FQ commit 5765c7f6e317
->> ("net_sched: sch_fq: add three drop_reason") which introduced
->> FQ_BAND_LIMIT, FQ_HORIZON_LIMIT, and FQ_FLOW_LIMIT.
->>
->> The new drop reasons are inserted in the middle of the enum after
->> SKB_DROP_REASON_QDISC_CONGESTED to group all qdisc-related reasons
->> together. While drop reason enum values are not UAPI, the enum
->> names implicitly become UAPI as userspace tools rely on BTF to
->> resolve names to values. This makes middle-insertion safe as long
->> as names remain stable.
->>
->> These detailed drop reasons enable production monitoring systems
->> to distinguish between different SFQ drop scenarios and generate
->> specific metrics for:
->> - Flow table exhaustion (flows exceeded)
->> - Per-flow congestion (depth limit exceeded)
->> - Global qdisc congestion (overall limit exceeded)
->>
->> This granular visibility allows operators to identify capacity
->> planning needs, detect traffic patterns, and optimize SFQ
->> configuration based on real-world drop patterns.
->>
->> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> Thank you, Steven! I will drop this in the RCU PR since you already plan
+> to carry it via tracing.
+
+Thank you both!
+
+							Thanx, Paul
+
+> Regards,
+> Boqun
 > 
-> Okay, so I went looking for ways to get the information (which qdisc did
-> the drop come from) with a generic drop reason and... it's not exactly
-> trivial?
-> 
-
-(Correct, it is actually not possible to get the qdisc from the call
-location (see below), because we don't have the txq.)
-
-> My thought was that you could get it from the location, but that ends up
-> being in the generic __dev_queue_xmit:
-> 
->             ping-117101  [017] b.s2. 155651.231372: kfree_skb: skbaddr=0000000019495eb6 rx_sk=0000000000000000 protocol=34525 location=__dev_queue_xmit+0xcbd/0xee0 reason: QDISC_DROP
-> 
-> So you can't actually use the kfree_skb trace point to go backwards to
-> the qdisc.
-
-Thanks you for providing this example. Showing what info is provided by
-the tracepoint to existing tools.  (The location=__dev_queue_xmit is
-key, but realize this is actually __dev_xmit_skb being inlined)
-
-
-> Given that we have a sometimes-NULL socket parameter to the kfree_skb
-> tracepoint, I think it would make sense to augment it with a 'dev'
-> parameter as well, but that would require some restructuring of the drop
-> code, I guess.
-> 
-
-Adding 'dev' parameter to drop tracepoint is IMHO a can-of-worms.
-I.e. do you mean the ingress or egress device?
-The skb->dev pointer changes meaning ingress or egress depending on
-where in the network stack code we are.  And sometimes it is not even a
-net_device pointer, see the double union[1] skb->dev belongs to.
-Besides having the 'dev' doesn't help my use-case, I need the qdisc.
-
-  [1] 
-https://elixir.bootlin.com/linux/v6.18.6/source/include/linux/skbuff.h#L886-L900
-
-I've been looking over the code multiple times. A possible alternative
-is to have a new tracepoint for qdisc drops (meaning it no-longer calls
-trace_kfree_skb / skb:kfree_skb). We could argue that qdisc drops have
-it's own meaning like "consume".  Would this be acceptable?
-
-This will allow tracepoint to have it's own enum set of
-qdisc_drop_reasons.  This new tracepoint should have the same arguments
-as __dev_xmit_skb, and we know the 'dev' is egress :
-
-  static inline int __dev_xmit_skb(struct sk_buff *skb, struct Qdisc *q,
-				 struct net_device *dev,
-				 struct netdev_queue *txq)
-
-Doing this work involves removing all the qdisc specific drop_reason,
-except SKB_DROP_REASON_QDISC_DROP.  Is that acceptable?
-
-I need some buy-in from maintainers Paolo/Jakub/Eric if you want me to
-go down this road.  It is a lot of churn and restructuring for
-something, that might be overkill.  Current patch solves my use-case,
-but it would be cool/powerful to have qdisc pointer readable by BPF,
-although I don't have a use-case in mind.
-
-
-> Another option would be to add new stats members to sfq for each of
-> these drop reasons? Assuming you're only after the counts, that would
-> allow you to get those without adding new drop reasons to the core code?
->
-
-I'm fine with someone adding more stats members to SFQ, but it doesn't
-solve my use-case.  As mentioned before, we also sample packets and have
-different sample rates based on drop_reasons.  We also use this as a
-cmdline troubleshooting tool when debugging a prod issue, e.g. just
-using perf record.
-
-
-> OTOH, since we already have per-qdisc specific drop reasons for FQ and
-> CAKE, and adding more enums is cheap, I am also OK with adding these; so
-> with that in mind:
-> 
-> Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
-
-Thanks a lot for your review.
-
---Jesper
-
-
-
+> > ---
+> >  kernel/rcu/srcutree.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+> > index ea3f128de06f..c4a0a93e8da4 100644
+> > --- a/kernel/rcu/srcutree.c
+> > +++ b/kernel/rcu/srcutree.c
+> > @@ -789,7 +789,8 @@ void __srcu_check_read_flavor(struct srcu_struct *ssp, int read_flavor)
+> >  	struct srcu_data *sdp;
+> >  
+> >  	/* NMI-unsafe use in NMI is a bad sign, as is multi-bit read_flavor values. */
+> > -	WARN_ON_ONCE((read_flavor != SRCU_READ_FLAVOR_NMI) && in_nmi());
+> > +	WARN_ON_ONCE(read_flavor != SRCU_READ_FLAVOR_NMI &&
+> > +		     read_flavor != SRCU_READ_FLAVOR_FAST && in_nmi());
+> >  	WARN_ON_ONCE(read_flavor & (read_flavor - 1));
+> >  
+> >  	sdp = raw_cpu_ptr(ssp->sda);
+> > -- 
+> > 2.51.0
+> > 
+> > 
