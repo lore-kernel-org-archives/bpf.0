@@ -1,126 +1,205 @@
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAFB38A29F
-	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 22:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769812330; cv=pass; b=lJLTsUX2Nz29StmG9Wqp2EB/kT8y3oi5XxjIsipR0lyUdZt0dYZ/dBksEALxyxc9b5JsgOJnuObTNorGfZu13wGc+2jJsqGnH6A+gdiSC8Jjnu9fYVRjg8h7mUTEzSUnbFZFXYVe2zBIcZQUtyMr3eynZcQdrwM5WUnoACv9dNA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769812330; c=relaxed/simple;
-	bh=1L9Z4WjLTMd/nETiB4o0uKotvQN4Rh7dUtNkmBInouo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TC5lYGwERIc4Z4U+oxKDFKWxc5k7ah3jPfSU8dj/0clB1aNbPaDoNXkdArN8wtDmEKPiSt6gt1ybnDMiFuibpXEbLMT+R1xOV5sdPHd9C7o0jS6aWFzzpdSrOLcUFOVWB+UOjHP7XSfjMoY8YdgrmmZ+x72nSHeYNXcW8WN5tSA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xSsduIhT; arc=pass smtp.client-ip=209.85.218.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E6C3570B1
+	for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 22:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769813278; cv=none; b=fY7g0StN7hEZ0lL4QvmcjgjnPt64M2DH5V7yfsXCfCbhCQmxi3L/65hlDGPH8eJo3+KFteFS+vdTpqaGMttfVgendY1wU1WXHyOZnu3liRknxmbaPv7B82OTGpXmv+0MFw+SmMZPyGuvDUhTiYcMYWQc73wJHW66UmB6ZJzXBzw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769813278; c=relaxed/simple;
+	bh=KcUQ1q2ALIp6GQbsuyiFX7GWULQTAiWrMXNKUDp6gDA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AScXSkQJ6Wqfe8BLJhekkuKTYT0wF3j4XibFx8imk9A3JyiJo+VDIk7C3VhuJLA83Ty1/mmXZ5AQdAbONYtrpKhIEC5osNC6OX7nMNDETj5gZBVHBMGlSHB4ZSrP9RIcyKZ4cQiKCP89IIFQRqbufOs8v/zW4xJMsEqB5qPXmD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kd8bVprN; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xSsduIhT"
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b885e8c6700so425047666b.0
-        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 14:32:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769812326; cv=none;
-        d=google.com; s=arc-20240605;
-        b=JEaPbcMUlE7tCh4Ep9wchiOq4fDZzYUw3YwKsvgPq4QtAt/A/+TqHdbc040h4ezx9k
-         WgB4IpzwtgAYpDOw5nRlpkXLc70dj3TjOOxb2NnIC+ZmyuMRZJui2DyZUbnK1WgTzMtc
-         X/B9HkpTOaim7lRUT5N+jOqny3mlBTGp1mfhGrXZYoaG02UbN8PajQnWZ+/gWEaKNZTu
-         jm4MsKH/eJqA1bRNDdUziw+w5SU/zq26IEiNKNpxlzCKPJMLutXsi+VcVBuYSV9t6cQW
-         fnPD+fl0KspePeoo8JmmnCMhNe3VyaapEm56UZC51qvIhK1NumN9XLatYuDTd84TS3wd
-         oKuw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=V5nbc6oPm8LRFAHxRjfK4s+TrvKdniacoUK6JWeX1CM=;
-        fh=GfCnEf+HY825SHkHzVHKzbb2AFIaeH9SHzDhC2vRWL8=;
-        b=Lja9zJNM63meaBZK8B4hAZ2Knvso7ooX6f0RhjZON2cKxodOju17eY7J5Ibdp5uzmQ
-         w2Uwyb3bNwqdbfGkiuUIzn09oXFnfBJULYmXKtNmsNt5k49hrHnAhRiOr9bZXISH5NnL
-         6aX5e7miIaSWOLoXqIgePULcAU1SiUeOmy2I9aR++6OEIr9yoU5stI6xiz2g/lQEm7hZ
-         xLqceGfEk99L44k0/2x8nUMfxczybOT6INh+zq+pnRbkISo2E4r/3VLEPIAkb8fq7nJH
-         YJWRJM84Tlc8ZVSUr9u3Z3zYZI1YQqUxQuSbLRazKQX07JA+VusS25ABkDlPmBh5KsBt
-         Wiig==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kd8bVprN"
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-59b76844f89so2428557e87.1
+        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 14:47:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769812326; x=1770417126; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1769813275; x=1770418075; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V5nbc6oPm8LRFAHxRjfK4s+TrvKdniacoUK6JWeX1CM=;
-        b=xSsduIhTCrRwZ3JLNdbKh8tE+MdhFL5H9uFQ+5tllsHBric51bEYgyU7uP/nPJVuVm
-         PXBuoZbGBGhd9jC11zRL1GU483f7Fvm6uslzLapeb6QBFVPq0QqUEi22Yh4za+kn63ZO
-         VYPzScWvoAqGFSaLLyA8MHrbxgl4Go5rekjKE33pKIWosCL170UwdnhFMbcWW6Jy1nHl
-         BTUoIyOiMwtb7w1k7xMz4I30jgy1NoIFY4KeyxuPTUlWRVzku48qag4B+Mw5y3wg9X4J
-         7qYXltKRhjuTRa93Kg/i5KMrUJXJP9GaY7mIYlek1UyxtuCoSVeghV/7vYzm2MaotHdL
-         Ekpg==
+        bh=ZkVCe2Fm0X1zwm2m79SvkIhPjHfte2ufPAVZoEONEas=;
+        b=Kd8bVprNS+PU2+IyvcIQf/vxg6q/qdpShs2y9fajVXAYcuEyVMrT9xIFdAAOCgODJU
+         GibFCGveSCmr6hpVKDV1+ESy1h5B8ZWRFThsswlC0nfd6slbMKTvzbAykY5DmvBXoi6T
+         9yEhgeBG0kjReQMjVR3u+8mXSawcBTg3v6IJTgMqcBwGS+lGDqWuHCFss6UVXU/epxvT
+         rP9dwbQ/Yh2GpsXz4rk9xkoNyLQbM2oelMXuh4oWQERvVtNIl4Hi6St3LA40kmGUj8/C
+         Bho4ZytAs5WMgOVSJJO8/4mLwPT/OXmVMG4nAOBNVdIzqw4iq/OiN5x0YQa9mdJjvq76
+         XMBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769812326; x=1770417126;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1769813275; x=1770418075;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=V5nbc6oPm8LRFAHxRjfK4s+TrvKdniacoUK6JWeX1CM=;
-        b=LIHMgSVllveY2sNebMh+WsYAZ9dfa32gmwYocqUTbcb5KXCXTiNlcctpLv4UgFeZjm
-         1Ftx8e4xJ4fhR60/IzrKqqmGT+WhLzDaUiURp2ctI7iwTO6sXbKiGUsXsKZwHLXgQyjA
-         H1pmAmMUQGfvNoAqmeTaF3UYWT9TtplmCzm7HW/Ioe0QuN2Slv5o6gGsRAGBpnRrxI3b
-         F/7UbNrSc3352w4atGYjMqv52XX14D0Oxug24WygMmXTsl09wwvaBosrcVwExvkiV1/L
-         H5gbrYSJ6bBsJgBxcre04Hj0sAWv+KiOLv4mgwr8V72id9/OfI2ee7olVZ70YWAjUKrC
-         fMag==
-X-Forwarded-Encrypted: i=1; AJvYcCW8gsls+jTZ4+wICPNH1Usq7WHmbd1JvO6mJyB05doNrCj+QXvQU3Uy/LqaYRrCzDT5ygw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzI5tt+2ScwtIMxrLfs5war9dw2d6vNBETrfMv+yr7VLT4Nutmn
-	A5BUVUBm8fYOq3OcQmD3vV0USw0A4Wkyns9DjgxRrxM62sPCbqwBNF8vEeiPyUBsVks/isSplzr
-	Eoskj0tEUUGth92HzTBv4ItG8VFY9aCjibvXTyd+X
-X-Gm-Gg: AZuq6aLUd+xhAyutiJzDAHIn5eRg4JY/iOv66wL4kN3GjiOk0S9USYcSJga9IWwO2GE
-	+rXML7ZUENrZVq8p05NNDalE8+MgCOp9qVycP3jLCSDVEDi7I0eEPQlqAUsWTqTQub69RRknYrl
-	HVFHLpCzHWIQs8rALGsWQ7EP3U5aR26fqBWwGAXTcFdgBR5xpNbkbgD4K7CDwYzVe+VvHPED47u
-	UKTtNop4X2SD4KPq3ecw9j3GI/ydsZzf542FygmHovC1EKWyojX4yKjSl8iDOh8aO9I
-X-Received: by 2002:a17:907:e0d8:b0:b8e:14cc:9197 with SMTP id
- a640c23a62f3a-b8e14cca990mr91520566b.15.1769812325869; Fri, 30 Jan 2026
- 14:32:05 -0800 (PST)
+        bh=ZkVCe2Fm0X1zwm2m79SvkIhPjHfte2ufPAVZoEONEas=;
+        b=PTtWXXVXoJxDvC6PtwxC1wCmcnQo+FBQNQOFyJbnB5hn/pp0KGp7q0iue+aedYCy3L
+         LZIqbEKXZIGAPTghkXVAqLQOPUuGG7HmoX0pxianfdFYQZrm5H/Qv6LuhmNS7Sy4ccUY
+         QgFL4D8pTixu1QDfPOCju6Wp7BwenH40VXipX7ls6cMTopu5Ko9qGzWAfkUFg+iLp9x7
+         NCk3syJQAXxS7WSJV2sV/Nf2ugfKkkayOx17drpQmp/t7I9HzYlezCpLHJow/ciGSgeL
+         5PRHIOiun7DMOYJBqRFCocXr+MAXe89i6+Mmdv8dp+VCjsAQJzYyH0wdd5Ux553XKdm6
+         8S8w==
+X-Forwarded-Encrypted: i=1; AJvYcCUYvvDNs0jgjOot3xXH9ecsXjfhKrvbjskffAQKhlXaGXFOzt8PshjvMLkHiutepX1tE90=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEw/0l9M0lxJ7FudoDHI4ZoSu+LUK1nfTX+9P17AoZDkUYUztV
+	ffh2dGZ4LkaVkYAbindIAhuz5X9t5wX6OL0sBkXJZ27XDzQNdYh3OaJFREEm3A==
+X-Gm-Gg: AZuq6aKdVN9okkM4E9tcLwJIglGyprYPHuby9vOek6zaxgBD5Rzem288EyRR2lI9Jgp
+	evhlIBgj68vFGTPdRPVPmM+2UQyJY3LUgufmPMWGqt8LbStUR7SUZcKpJA2WVl0Pk/054/rJi8s
+	vl0YlimjEdVZou2ntGwfabIiNY8kAHMLsOVh29xrB0D98WhKDN0yVvjA4oAFhyaHj5RPUc2yMZl
+	1LxcIypkZFXCAnI0OXscu4vht43paCaCOtoIjdJJC60goJGm/Ah4L1hcDh8xVuPWDZLhwnUo/ri
+	NZ5rvD6Zsl/jgyMrIB5KS/LP8byl/3HKD0qN5b0Ot/ABOQpr/OgP4XoSbbR+D6eR6feGt3x8Z1E
+	4/ymXa/m2sjNAKDCcrL0Ssl8R1hXHU0evo7Ad2nilYQDcrwl0rCQJyeG/nUN7mrzUvySxC9F0NJ
+	Ymepts39iz0PfsE4PQ68ekm622aoFz1Y0TmS2kJJSu6P0XUwg+6371
+X-Received: by 2002:a05:6000:2004:b0:42f:b690:6788 with SMTP id ffacd0b85a97d-435f3a6baa6mr6239935f8f.10.1769806350269;
+        Fri, 30 Jan 2026 12:52:30 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482e267aad1sm21831845e9.15.2026.01.30.12.52.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 30 Jan 2026 12:52:29 -0800 (PST)
+Date: Fri, 30 Jan 2026 20:52:27 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Kuniyuki Iwashima
+ <kuniyu@google.com>, Willem de Bruijn <willemb@google.com>,
+ metze@samba.org, axboe@kernel.dk, Stanislav Fomichev <sdf@fomichev.me>,
+ io-uring@vger.kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
+ Linus Torvalds <torvalds@linux-foundation.org>,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH net-next RFC 0/3] net: move .getsockopt away from __user
+ buffers
+Message-ID: <20260130205227.6fb1d9ad@pumpkin>
+In-Reply-To: <20260130-getsockopt-v1-0-9154fcff6f95@debian.org>
+References: <20260130-getsockopt-v1-0-9154fcff6f95@debian.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251118051604.3868588-1-viro@zeniv.linux.org.uk>
- <CAG2KctrjSP+XyBiOB7hGA2DWtdpg3diRHpQLKGsVYxExuTZazA@mail.gmail.com>
- <2026012715-mantra-pope-9431@gregkh> <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
- <20260128045954.GS3183987@ZenIV> <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
- <20260129032335.GT3183987@ZenIV> <20260129225433.GU3183987@ZenIV>
- <CAG2KctoNjktJTQqBb7nGeazXe=ncpwjsc+Lm+JotcpaO3Sf9gw@mail.gmail.com> <20260130070424.GV3183987@ZenIV>
-In-Reply-To: <20260130070424.GV3183987@ZenIV>
-From: Samuel Wu <wusamuel@google.com>
-Date: Fri, 30 Jan 2026 14:31:54 -0800
-X-Gm-Features: AZwV_QjYrhpLENkXIfDxcZ9u-zvP7f57lE4mcVebqUxFVKgl6ULvCT7XG0RHQoc
-Message-ID: <CAG2Kctoqja9R1bBzdEAV15_yt=sBGkcub6C2nGE6VHMJh13=FQ@mail.gmail.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-To: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org, 
-	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz, 
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name, a.hindborg@kernel.org, 
-	linux-mm@kvack.org, linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev, 
-	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org, 
-	paul@paul-moore.com, casey@schaufler-ca.com, linuxppc-dev@lists.ozlabs.org, 
-	john.johansen@canonical.com, selinux@vger.kernel.org, 
-	borntraeger@linux.ibm.com, bpf@vger.kernel.org, clm@meta.com, 
-	android-kernel-team <android-kernel-team@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 29, 2026 at 11:02=E2=80=AFPM Al Viro <viro@zeniv.linux.org.uk> =
-wrote:
-> OK.  Could you take a clone of mainline repository and in there run
-> ; git fetch git://git.kernel.org:/pub/scm/linux/kernel/git/viro/vfs.git f=
-or-wsamuel:for-wsamuel
-> then
-> ; git diff for-wsamuel e5bf5ee26663
-> to verify that for-wsamuel is identical to tree you've seen breakage on
-> ; git diff for-wsamuel-base 1544775687f0
-> to verify that for-wsamuel-base is the tree where the breakage did not re=
-produce
-> Then bisect from for-wsamuel-base to for-wsamuel.
->
-> Basically, that's the offending commit split into steps; let's try to fig=
-ure
-> out what causes the breakage with better resolution...
+On Fri, 30 Jan 2026 10:46:16 -0800
+Breno Leitao <leitao@debian.org> wrote:
 
-Confirming that bisect points to this patch: 09e88dc22ea2 (serialize
-ffs_ep0_open() on ffs->mutex)
+> Currently, .getsockopt callback cannot be called with kernel buffers
+> because it requires userspace addresses:
+> 
+>   int (*getsockopt)(struct socket *sock, int level,
+> 		    int optname, char __user *optval, int __user *optlen);
+> 
+> This prevents kernel callers (io_uring, BPF, etc) from using getsockopt
+> on levels other than SOL_SOCKET, since they pass kernel pointers rather
+> than __user pointers.
+
+I had thoughts about this as well.
+I think using iov_iter is over the top and may have measurable performance
+impact for some paths.
+
+I think the first thing to do is sort out 'optlen'.
+There is absolutely no reason for the user pointer being passed into
+all the per-protocol functions.
+(and the code that changes that use sockptr_t are just stupid...)
+The system call wrapper can do the user copies, it can also suppress
+the write if the value is unchanged (which matters with clac/slac).
+The obvious change would be to pass the length itself and make the
+return value -ERRNO or the size.
+
+The annoyance is the few places that want to return an error and
+change optlen.
+That might be best addresses by something like:
+#define GETSOCKOPT_RVAL(errval, size) (1 << 31 | (errval) << 20 | (size))
+which would get picked in the rval < 0 path.
+It would also let 'return 0' mean 'don't change the size' requiring
+a special return for the one (or two?) places that want to set the
+size to zero and return success.
+
+The length passed should also be 'unsigned int' - with a check for
+negative values in the system call wrapper.
+(There are many broken drivers that treat negative lengths as 4.)
+
+There is not much point making the 'optval' parameter more than
+a structure of a user and kernel address - one of which will be NULL.
+(This is safer than sockptr_t's discriminant union.)
+You can't police the length because it is sometimes only the length
+of a header (and in some recent code as well).
+
+I have looked at some of this change - it is enormous.
+
+	David
+
+
+> 
+> Following Linus' suggestion [0], this series introduces a wrapper
+> around iov_iter (sockopt_t) and a temporary getsockopt_iter callback:
+> 
+>   typedef struct sockopt {
+> 	  struct iov_iter iter;
+> 	  int optlen;
+>   } sockopt_t;
+> 
+> Note: optlen was not suggested by Linus' but I believe it is needed, given
+> random values could be passed by protocols back to userspace.
+> 
+> And the callback becomes:
+> 
+>   int (*getsockopt_iter)(struct socket *sock, int level,
+> 			 int optname, sockopt_t *opt);
+> 
+> The sockopt_t structure encapsulates:
+> - An iov_iter for reading/writing option data (works with both user
+>   and kernel buffers)
+> - An optlen field for buffer size (input) and returned data size
+>   (output)
+> 
+> The plan is to enable getsockopt to leverage kernel buffers initially,
+> but then move .setsockopt from sockptr_t into this as well.
+> 
+> This series:
+> 
+>  1. Adds the sockopt_t type and getsockopt_iter callback to proto_ops
+>  2. Adds do_sock_getsockopt_iter() helper that prefers getsockopt_iter
+>  3. Converts one protocol (netlink) to use getsockopt_iter as a proof of
+>     concept
+> 
+> This is what I have in mind for this work stream, to make it more
+> digestible:
+> 
+>  * Keep the temporary getsockopt_iter callback allows protocols to
+>    migrate gradually.
+>  * Once all protocols have been converted, getsockopt can be removed and
+>    getsockopt_iter renamed back to getsockopt with the new API.
+>  * Once the protocols are converted, the SOL_SOCKET limitation in
+>    io_uring_cmd_getsockopt() will be removed.
+>  * Covert setsockopt() to also use a similar strategy, moving it away
+>    from sockptr_t.
+>  * Remove sockptr_t in the front end (do_sock_getsockopt(),
+>    io_uring_cmd_getsockopt()) and start with sockopt_t (instead of
+>    sockptr_t) in __sys_getsockopt() and io_uring_cmd_getsockopt()
+> 
+> Link: https://lore.kernel.org/all/CAHk-=whmzrO-BMU=uSVXbuoLi-3tJsO=0kHj1BCPBE3F2kVhTA@mail.gmail.com/ [0]
+> ---
+> Breno Leitao (3):
+>       net: add getsockopt_iter callback to proto_ops
+>       net: prefer getsockopt_iter in do_sock_getsockopt
+>       netlink: convert to getsockopt_iter
+> 
+>  include/linux/net.h      | 19 +++++++++++++++++++
+>  net/netlink/af_netlink.c | 22 ++++++++++++----------
+>  net/socket.c             | 42 +++++++++++++++++++++++++++++++++++++++---
+>  3 files changed, 70 insertions(+), 13 deletions(-)
+> ---
+> base-commit: 4d310797262f0ddf129e76c2aad2b950adaf1fda
+> change-id: 20260130-getsockopt-9f36625eedcb
+> 
+> Best regards,
+> --  
+> Breno Leitao <leitao@debian.org>
+> 
+> 
+
