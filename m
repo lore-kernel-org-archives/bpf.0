@@ -1,32 +1,32 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0803C2139C9
-	for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 14:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11465324B1C
+	for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 14:50:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769871043; cv=none; b=PWgSyPFj1vFvMTukaB4B83VdNbBPC3PZz0Yppb87EVSmCL38L09KzP/cUPi5LgUaEqBIIR2ewNkAWeOJ2UvrFMGYb3SVYRZn/k+5fni6a331y2+gJ9tcth2cMXyxDTw6hruHRsZuapsw1UOhIJh52Z77BBRJQKrGa0FM2H09gD8=
+	t=1769871052; cv=none; b=tAFiQxjaF4v+vfNSv+C/tQmVv3qd4hXN98lSwXLCM7JGfR7K6q29I/DLCpP2+KQ9wBuOaGrYe+TgWfK3lp9gBeeRddOPXekCrauXmcWkRkdOueaPMjEta8p+IVorCLwsD6wcr2tIJxLCiRs0iMP3pWiaaIWudho6cXFe4SZHaG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769871043; c=relaxed/simple;
-	bh=u6zUD5aot3GF5dY4uEPCOAfZW3GR3IG2+1hzfdCiLkQ=;
+	s=arc-20240116; t=1769871052; c=relaxed/simple;
+	bh=CwmBe6TWFR/q9XzSqvxcKoENIoluZ3iAcs0SQHXnNNw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EQ3ZgPM0Mp6h6FN/XcPvFtPvCv0e+SzOKC3peJpTMaQ3Es9uptJLM164J2uwILu5NNiBXSzXrFQz7mbf4qO8BcrqpvHklfv+Ng+SupWOxrAAtMcI1w7wqyLqMlaOSXzdLvDsExMm9JyB7CJTFBJBSUtmggVmZXXBoF8qK/iaQOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IuItCy9C; arc=none smtp.client-ip=95.215.58.188
+	 MIME-Version; b=ZrgWqKsAjR2+jMnFNRhP/RoLOuabU/7RYVdPyFKR6SwPSkNB09HGxjWI8neaZy8N63NqtIiacUy/WwGwCflprpc5/Kmew6WbgYvv9xjKgyB1vETHR/Q+Snp7tCIioN/7+K/VZC+bam86Z65KGKMM+Z2Y6yhDmI1MH1kOo1tlgQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qSIKDIo2; arc=none smtp.client-ip=95.215.58.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IuItCy9C"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qSIKDIo2"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769871039;
+	t=1769871049;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VX1ucsnfGT5wuxRP6BO6bI7cHl7cWTSTpYwvnXCcfVk=;
-	b=IuItCy9CR3bL3S7NwQX4ZvWx/Fjt982h0fhnNQ+lg7XkMPI+DrI5tXtWR1aGJo4kXKUoV2
-	sP9MTs82ufYt0q5cYxbWh+fkTt5JZFGWt9JHbDCj8FO/ccRFdv0oxWF4CuUzSp2dkUFZT7
-	BLss+7u79fFbIQyvknrwGEHYHNDxos8=
+	bh=iF1W/fFiptW5YzYqA4hrXfI2kCVLhtS2I4vAaZcmEv0=;
+	b=qSIKDIo2zYPgjZcK2IWaEGAziZ6UBqPWi3FWoAPDCeAh11ThhaLZvcYEgp04YeL8vHvx1V
+	FXJsCBAQT3L8K51NWCHarO1sUtQwI5ZNt38B5rtcS8rrm7dR0n5Pcwh0zbTqCCFea1k8C5
+	jHMvOgrfh52wSfty9zqetPjs3/ItSqU=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -52,9 +52,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v5 1/3] bpf: Add bpf_jit_supports_fsession()
-Date: Sat, 31 Jan 2026 22:49:48 +0800
-Message-ID: <20260131144950.16294-2-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v5 2/3] bpf, arm64: Add fsession support
+Date: Sat, 31 Jan 2026 22:49:49 +0800
+Message-ID: <20260131144950.16294-3-leon.hwang@linux.dev>
 In-Reply-To: <20260131144950.16294-1-leon.hwang@linux.dev>
 References: <20260131144950.16294-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -66,151 +66,196 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The added fsession does not prevent running on those architectures, that
-haven't added fsession support.
+Implement fsession support in the arm64 BPF JIT trampoline.
 
-For example, try to run fsession tests on arm64:
+Extend the trampoline stack layout to store function metadata and
+session cookies, and pass the appropriate metadata to fentry and
+fexit programs. This mirrors the existing x86 behavior and enables
+session cookies on arm64.
 
-test_fsession_basic:PASS:fsession_test__open_and_load 0 nsec
-test_fsession_basic:PASS:fsession_attach 0 nsec
-check_result:FAIL:test_run_opts err unexpected error: -14 (errno 14)
-
-In order to prevent such errors, add bpf_jit_supports_fsession() to guard
-those architectures.
-
-Fixes: 2d419c44658f ("bpf: add fsession support")
 Acked-by: Puranjay Mohan <puranjay@kernel.org>
 Tested-by: Puranjay Mohan <puranjay@kernel.org>
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- arch/x86/net/bpf_jit_comp.c                   |  5 +++
- include/linux/filter.h                        |  1 +
- kernel/bpf/core.c                             |  5 +++
- kernel/bpf/verifier.c                         |  5 +++
- .../selftests/bpf/prog_tests/fsession_test.c  | 32 ++++++++++++++-----
- 5 files changed, 40 insertions(+), 8 deletions(-)
+ arch/arm64/net/bpf_jit_comp.c | 71 ++++++++++++++++++++++++++++++-----
+ include/linux/bpf.h           |  7 +++-
+ 2 files changed, 68 insertions(+), 10 deletions(-)
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 5a075e06cf45..070ba80e39d7 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -4112,3 +4112,8 @@ bool bpf_jit_supports_timed_may_goto(void)
- {
- 	return true;
+diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+index 0c4d44bcfbf4..2dc5037694ba 100644
+--- a/arch/arm64/net/bpf_jit_comp.c
++++ b/arch/arm64/net/bpf_jit_comp.c
+@@ -2510,6 +2510,12 @@ static bool is_struct_ops_tramp(const struct bpf_tramp_links *fentry_links)
+ 		fentry_links->links[0]->link.type == BPF_LINK_TYPE_STRUCT_OPS;
  }
+ 
++static void store_func_meta(struct jit_ctx *ctx, u64 func_meta, int func_meta_off)
++{
++	emit_a64_mov_i64(A64_R(10), func_meta, ctx);
++	emit(A64_STR64I(A64_R(10), A64_SP, func_meta_off), ctx);
++}
 +
+ /* Based on the x86's implementation of arch_prepare_bpf_trampoline().
+  *
+  * bpf prog and function entry before bpf trampoline hooked:
+@@ -2533,7 +2539,7 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	int regs_off;
+ 	int retval_off;
+ 	int bargs_off;
+-	int nfuncargs_off;
++	int func_meta_off;
+ 	int ip_off;
+ 	int run_ctx_off;
+ 	int oargs_off;
+@@ -2544,6 +2550,9 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	bool save_ret;
+ 	__le32 **branches = NULL;
+ 	bool is_struct_ops = is_struct_ops_tramp(fentry);
++	int cookie_off, cookie_cnt, cookie_bargs_off;
++	int fsession_cnt = bpf_fsession_cnt(tlinks);
++	u64 func_meta;
+ 
+ 	/* trampoline stack layout:
+ 	 *                    [ parent ip         ]
+@@ -2562,10 +2571,14 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	 *                    [ ...               ]
+ 	 * SP + bargs_off     [ arg reg 1         ] for bpf
+ 	 *
+-	 * SP + nfuncargs_off [ arg regs count    ]
++	 * SP + func_meta_off [ regs count, etc   ]
+ 	 *
+ 	 * SP + ip_off        [ traced function   ] BPF_TRAMP_F_IP_ARG flag
+ 	 *
++	 *                    [ stack cookie N    ]
++	 *                    [ ...               ]
++	 * SP + cookie_off    [ stack cookie 1    ]
++	 *
+ 	 * SP + run_ctx_off   [ bpf_tramp_run_ctx ]
+ 	 *
+ 	 *                    [ stack arg N       ]
+@@ -2582,13 +2595,18 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	/* room for bpf_tramp_run_ctx */
+ 	stack_size += round_up(sizeof(struct bpf_tramp_run_ctx), 8);
+ 
++	cookie_off = stack_size;
++	/* room for session cookies */
++	cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
++	stack_size += cookie_cnt * 8;
++
+ 	ip_off = stack_size;
+ 	/* room for IP address argument */
+ 	if (flags & BPF_TRAMP_F_IP_ARG)
+ 		stack_size += 8;
+ 
+-	nfuncargs_off = stack_size;
+-	/* room for args count */
++	func_meta_off = stack_size;
++	/* room for function metadata, such as regs count */
+ 	stack_size += 8;
+ 
+ 	bargs_off = stack_size;
+@@ -2646,9 +2664,9 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 		emit(A64_STR64I(A64_R(10), A64_SP, ip_off), ctx);
+ 	}
+ 
+-	/* save arg regs count*/
+-	emit(A64_MOVZ(1, A64_R(10), nfuncargs, 0), ctx);
+-	emit(A64_STR64I(A64_R(10), A64_SP, nfuncargs_off), ctx);
++	/* save function metadata */
++	func_meta = nfuncargs;
++	store_func_meta(ctx, func_meta, func_meta_off);
+ 
+ 	/* save args for bpf */
+ 	save_args(ctx, bargs_off, oargs_off, m, a, false);
+@@ -2666,10 +2684,27 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 		emit_call((const u64)__bpf_tramp_enter, ctx);
+ 	}
+ 
+-	for (i = 0; i < fentry->nr_links; i++)
++	if (fsession_cnt) {
++		/* clear all the session cookies' value */
++		emit(A64_MOVZ(1, A64_R(10), 0, 0), ctx);
++		for (int i = 0; i < cookie_cnt; i++)
++			emit(A64_STR64I(A64_R(10), A64_SP, cookie_off + 8 * i), ctx);
++		/* clear the return value to make sure fentry always gets 0 */
++		emit(A64_STR64I(A64_R(10), A64_SP, retval_off), ctx);
++	}
++
++	cookie_bargs_off = (bargs_off - cookie_off) / 8;
++	for (i = 0; i < fentry->nr_links; i++) {
++		if (bpf_prog_calls_session_cookie(fentry->links[i])) {
++			u64 meta = func_meta | (cookie_bargs_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
++
++			store_func_meta(ctx, meta, func_meta_off);
++			cookie_bargs_off--;
++		}
+ 		invoke_bpf_prog(ctx, fentry->links[i], bargs_off,
+ 				retval_off, run_ctx_off,
+ 				flags & BPF_TRAMP_F_RET_FENTRY_RET);
++	}
+ 
+ 	if (fmod_ret->nr_links) {
+ 		branches = kcalloc(fmod_ret->nr_links, sizeof(__le32 *),
+@@ -2701,9 +2736,22 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 		*branches[i] = cpu_to_le32(A64_CBNZ(1, A64_R(10), offset));
+ 	}
+ 
+-	for (i = 0; i < fexit->nr_links; i++)
++	/* set the "is_return" flag for fsession */
++	func_meta |= (1ULL << BPF_TRAMP_IS_RETURN_SHIFT);
++	if (fsession_cnt)
++		store_func_meta(ctx, func_meta, func_meta_off);
++
++	cookie_bargs_off = (bargs_off - cookie_off) / 8;
++	for (i = 0; i < fexit->nr_links; i++) {
++		if (bpf_prog_calls_session_cookie(fexit->links[i])) {
++			u64 meta = func_meta | (cookie_bargs_off << BPF_TRAMP_COOKIE_INDEX_SHIFT);
++
++			store_func_meta(ctx, meta, func_meta_off);
++			cookie_bargs_off--;
++		}
+ 		invoke_bpf_prog(ctx, fexit->links[i], bargs_off, retval_off,
+ 				run_ctx_off, false);
++	}
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+ 		im->ip_epilogue = ctx->ro_image + ctx->idx;
+@@ -2753,6 +2801,11 @@ static int prepare_trampoline(struct jit_ctx *ctx, struct bpf_tramp_image *im,
+ 	return ctx->idx;
+ }
+ 
 +bool bpf_jit_supports_fsession(void)
 +{
 +	return true;
 +}
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index fd54fed8f95f..4e1cb4f91f49 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -1167,6 +1167,7 @@ bool bpf_jit_supports_arena(void);
- bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena);
- bool bpf_jit_supports_private_stack(void);
- bool bpf_jit_supports_timed_may_goto(void);
-+bool bpf_jit_supports_fsession(void);
- u64 bpf_arch_uaddress_limit(void);
- void arch_bpf_stack_walk(bool (*consume_fn)(void *cookie, u64 ip, u64 sp, u64 bp), void *cookie);
- u64 arch_bpf_timed_may_goto(void);
-diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 5ebece600aeb..dc906dfdff94 100644
---- a/kernel/bpf/core.c
-+++ b/kernel/bpf/core.c
-@@ -3144,6 +3144,11 @@ bool __weak bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
- 	return false;
++
+ int arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+ 			     struct bpf_tramp_links *tlinks, void *func_addr)
+ {
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 3b0ceb759075..cd9b96434904 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -2196,13 +2196,18 @@ static inline int bpf_fsession_cnt(struct bpf_tramp_links *links)
+ 	return cnt;
  }
  
-+bool __weak bpf_jit_supports_fsession(void)
++static inline bool bpf_prog_calls_session_cookie(struct bpf_tramp_link *link)
 +{
-+	return false;
++	return link->link.prog->call_session_cookie;
 +}
 +
- u64 __weak bpf_arch_uaddress_limit(void)
+ static inline int bpf_fsession_cookie_cnt(struct bpf_tramp_links *links)
  {
- #if defined(CONFIG_64BIT) && defined(CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE)
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 256cc5c1a7df..6b62b6d57175 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -24828,6 +24828,11 @@ int bpf_check_attach_target(struct bpf_verifier_log *log,
- 	case BPF_TRACE_FENTRY:
- 	case BPF_TRACE_FEXIT:
- 	case BPF_TRACE_FSESSION:
-+		if (prog->expected_attach_type == BPF_TRACE_FSESSION &&
-+		    !bpf_jit_supports_fsession()) {
-+			bpf_log(log, "JIT does not support fsession\n");
-+			return -EOPNOTSUPP;
-+		}
- 		if (!btf_type_is_func(t)) {
- 			bpf_log(log, "attach_btf_id %u is not a function\n",
- 				btf_id);
-diff --git a/tools/testing/selftests/bpf/prog_tests/fsession_test.c b/tools/testing/selftests/bpf/prog_tests/fsession_test.c
-index 0c4b428e1cee..a299aeb8cc2e 100644
---- a/tools/testing/selftests/bpf/prog_tests/fsession_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fsession_test.c
-@@ -29,8 +29,16 @@ static void test_fsession_basic(void)
- 	struct fsession_test *skel = NULL;
- 	int err;
+ 	struct bpf_tramp_links fentries = links[BPF_TRAMP_FENTRY];
+ 	int cnt = 0;
  
--	skel = fsession_test__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "fsession_test__open_and_load"))
-+	skel = fsession_test__open();
-+	if (!ASSERT_OK_PTR(skel, "fsession_test__open"))
-+		return;
-+
-+	err = fsession_test__load(skel);
-+	if (err == -EOPNOTSUPP) {
-+		test__skip();
-+		goto cleanup;
-+	}
-+	if (!ASSERT_OK(err, "fsession_test__load"))
- 		goto cleanup;
+ 	for (int i = 0; i < links[BPF_TRAMP_FENTRY].nr_links; i++) {
+-		if (fentries.links[i]->link.prog->call_session_cookie)
++		if (bpf_prog_calls_session_cookie(fentries.links[i]))
+ 			cnt++;
+ 	}
  
- 	err = fsession_test__attach(skel);
-@@ -47,8 +55,16 @@ static void test_fsession_reattach(void)
- 	struct fsession_test *skel = NULL;
- 	int err;
- 
--	skel = fsession_test__open_and_load();
--	if (!ASSERT_OK_PTR(skel, "fsession_test__open_and_load"))
-+	skel = fsession_test__open();
-+	if (!ASSERT_OK_PTR(skel, "fsession_test__open"))
-+		return;
-+
-+	err = fsession_test__load(skel);
-+	if (err == -EOPNOTSUPP) {
-+		test__skip();
-+		goto cleanup;
-+	}
-+	if (!ASSERT_OK(err, "fsession_test__load"))
- 		goto cleanup;
- 
- 	/* first attach */
-@@ -94,6 +110,10 @@ static void test_fsession_cookie(void)
- 	bpf_program__set_autoload(skel->progs.test6, false);
- 
- 	err = fsession_test__load(skel);
-+	if (err == -EOPNOTSUPP) {
-+		test__skip();
-+		goto cleanup;
-+	}
- 	if (!ASSERT_OK(err, "fsession_test__load"))
- 		goto cleanup;
- 
-@@ -111,10 +131,6 @@ static void test_fsession_cookie(void)
- 
- void test_fsession_test(void)
- {
--#if !defined(__x86_64__)
--	test__skip();
--	return;
--#endif
- 	if (test__start_subtest("fsession_test"))
- 		test_fsession_basic();
- 	if (test__start_subtest("fsession_reattach"))
 -- 
 2.52.0
 
