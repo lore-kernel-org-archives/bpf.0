@@ -1,91 +1,91 @@
-Received: from mail-yx1-f50.google.com (mail-yx1-f50.google.com [74.125.224.50])
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43373366832
-	for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 18:41:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A406A366077
+	for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 18:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769884872; cv=pass; b=fkOPFnnlakO+Hjg/AKLA2IEeL12uYLyuUUvjRk52muQDmER2wGJ6yr1xjFXHq//3LcD93a4Y+b8RfVhqvcK5rB3CvD23/bBE2LhJhsUIqjajXYZZo1rpHVAaMe8GhAbdXj2qaDCEs4I56deT5t5OHjFuecH3Ax2fhKs7joZZ4GY=
+	t=1769885019; cv=pass; b=S/ZpRFhawi0r9ROhHKJlQhQQwdGDkjy3+cK1/E2bCTiqvnpTpHAFJ7xqB4+H+vTGsAwQlMy5NF/4ILBWq7JCdLo2JgwCPZ5uX2XGcH9A5fIoy/XsNCYpfNDS4nvInmG5PftZ9JqocwxOwGUI9+WNV9HXoKuHXi7C8sBrZo3zDVc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769884872; c=relaxed/simple;
-	bh=tCsyq6uHBZmu7f+VMX3I8Leg76iME8s8qBPyEqw1Zok=;
+	s=arc-20240116; t=1769885019; c=relaxed/simple;
+	bh=rkBEBYuwb/JC4c8oQq2ILFkkUFeJejQiN5E98QHGepg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nAiUffQlaXo0P4C3NhrE+Z8NnAT2sBZa2ImvSAdXjvqIt+ivCZkktsN0+C7hW57JXtU+Ybp5KbV6uu1uCAeQqFfiZ+lBThAKAG+YZ5uh4mJB3/XqKpYmhayskHvfunqOJps8oFvRW69l56HyeX9ADIg0PolDe/ICVsX2QijEzrM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lx0T8R3v; arc=pass smtp.client-ip=74.125.224.50
+	 To:Cc:Content-Type; b=NSbfIy4pZHpzp1entDz6/xWZstIxtvzgsbWaDpqfDxVAWFCeWp71tvqU44wFIfuWcjn9RwPTaSvObyb1BPPTcSM7PAxNJncKbXuaysJIWbTttNvtXCy/HkinZJxdDNI+iOdHyKu/WCjmzLIhiw6Gyaq/qipuqV3M5wolVQWrn2M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S4C4cc20; arc=pass smtp.client-ip=74.125.224.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lx0T8R3v"
-Received: by mail-yx1-f50.google.com with SMTP id 956f58d0204a3-6495d592c45so3123332d50.2
-        for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 10:41:11 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769884870; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S4C4cc20"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-64455a2a096so2437541d50.3
+        for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 10:43:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769885017; cv=none;
         d=google.com; s=arc-20240605;
-        b=QZqpzXAoyo7oYN1pphH81U6xMWqV/fvIzIg5/z5dmjsHPSO76L5jGhfEx6E3nnVVUm
-         i1gA4FzHF54XNLOBYmpxYWPFThzp8KRU4U0C10Ed1TlHZ4hmXluMATQ4WPz25+3XTrOq
-         1JpDORjCw2o21R0UUsEnE3uq/N2SmLNoipMe1Mv2ASVUziBfVx0kYrJ0d1E7T0c51FDJ
-         jZ5SB7LTAfm++2Nq6TUYNdPOl3814bT8Cr5vh5s/P03I/ev5w94sbQSbrQ2Ak5O4P4SU
-         QwaK375m0fLATtAhX7vUNGimpEgmf8/XV++3kaF5gQP70NfLeVsFdt07QzrGC1qDCYaL
-         BJrQ==
+        b=Dp2Kn/yLsQmdcu7kLDmtpr1z+kSPfbYT2S0Zie1kj13cRBfNZc+v+VAdliCWYiXw2N
+         TU0ktUt8ZRHweZYOX+wppmCSKITMAs/tRZtuUFMwgtw+q3aLHG1KTFsUdMJ+T+L/XI1B
+         9LQ03XO12AQE8KBvAnloiRejJDejPdQ8IHHkuRCuEmcqzY6Tj0njv4mXC95h4p5WC8uN
+         UE2Ypiss/ZyJWhl+UDCg9R0B/TqNbodD1jWFmnm8DZPi2Rxgn+W736hdoLGrLxlCFFqF
+         hSppNYFp9qhAM8uMfgQ925QbGTkkPRUy1Xf0mVn+WSNyUlAIdelAcJy7hlJQS7HAGKzW
+         d/tw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=tCsyq6uHBZmu7f+VMX3I8Leg76iME8s8qBPyEqw1Zok=;
+        bh=TfO8hD4f0LL/XaXPlEc4lGUvKKLqPmej+W+yxaxFK10=;
         fh=NTV76uWbumciG3jeF60otY9u4fM38o9+fxTjJFdrb4E=;
-        b=E2jXveD+1/06VGmJBl2YK+djvxHmPmNeqYe0s78pXiiq7yGXMomZPoXSdG12HIOoFY
-         rgzNqPD9bFms3uYabX+lOoWTvln0cc3XbGCR9A1PEPfp8WyGo1FIMJm+d1j/y+C6ZcR2
-         vzSPeogeD25gFSYf4/ZJtU3MoXluMxhLN24QuP8wV9O+vBqUv8aTwN5HEMlpfRcKfKNj
-         +FRRQIVPoc6Mwo0owFxjb+zQsxMhVCSaYpNz9+tT52ebKH4VLJ6lSLl02ZwXTiXi1pDI
-         paFM0prhK8+IVoCGlldy4t2jzMaXnnlsZghrtOjs1AO50z6ic8VbzL+QO3zJI/3MD10s
-         a49Q==;
+        b=EIKS0EgdeFfr4g+Lxnse4TjSif2LS8SKkvfbo1AEACnKt63uDxSn4m9u/5LLuIRVPv
+         KlxciiK2auTMEvgxG+/l3r1WjOoMEp4hZwJ27T7A8iCl1kK0dFu6JZQvZlrB5U4TbBxW
+         u4pQLzhuEapcTeL21xvaKutqlTfA6bMhi6M6Q718lik6pt/mOxepbMu0D/YMxatLdTHM
+         6ld5Z5tjEWiPf1bJ+X3rq5f8nVQynvTTw5epObJoi9+PdNgpYGSdW23GeeeAn+NxwhCV
+         KUCJqCek3c11VxEtG5MNjpTYthyJat8NOfMO28IuvH1uA+mYbyly/b61e4XUg5Bf1iyo
+         zW5A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769884870; x=1770489670; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769885017; x=1770489817; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tCsyq6uHBZmu7f+VMX3I8Leg76iME8s8qBPyEqw1Zok=;
-        b=Lx0T8R3v1DfO3WLX66agVJl+NIH61jpNdij4bjvo3nsDc7LcC97Yqz++9Uc7FaC7IY
-         hOVOJW7ML4o2PXQ6ofpIypWNsaUMDSW+gQ0jX7SYXyDFysTNeY1LETDfND6yAjZ7iOuW
-         Ad3c/aA5IBQLhrmkrJi6jNUNDyCxY//4z9haJL0ivJ1y05xPVzAqauHFYTEzWWeFsK9d
-         akMoRuXn/ur9pnyxyM2lLYCRJx2M8uqLh+tDKU2s+7jxAeL9yxXDwOumW5097DMiQEK7
-         QFnp21VPyOsv61Y65tBJYKPkMuyMfEbO/v5llJazUB4yadfvvaIp4D3C3jm7EipDL4FN
-         jBQA==
+        bh=TfO8hD4f0LL/XaXPlEc4lGUvKKLqPmej+W+yxaxFK10=;
+        b=S4C4cc20kLZB+/nhWaH9zt3S+k1W7YxV23lWhKyHcj6PIMHUcnvANgMGmObYmwQwFc
+         8vXKCBDNDBK1qbWdJDLNQvhmf1AhKdT7PWv0lEyBS1PjcyS4Uv2nZ6AOUR1OIuQXiQq+
+         yrHIasFa88ri4TW/TUfR1f0HK5zscXk5Q0YjnXYEptla4+b5v6ne4s3oLrLM0dMkv6dv
+         X3MhIQhjBaoYwV/2RPQNDOYnRPpsHfsq0YvP1H6MUCGVCOIwZLTn6Bjx6VOyLOqQS4u2
+         2rPRdGnmavrfCcwsSerxeKofu/El1wcoLEwCseaJQGI7rsybCP6m56H1ALZA5Ley8j8A
+         aPSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769884870; x=1770489670;
+        d=1e100.net; s=20230601; t=1769885017; x=1770489817;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tCsyq6uHBZmu7f+VMX3I8Leg76iME8s8qBPyEqw1Zok=;
-        b=Ey2Ne5h//cECQ+ZymnWaGn1zU0x2mNftPS0AKP/V0D6RsqJWbEsToQrQop9arYKOmu
-         LjIv+/MCm9piNK/4OBTLpQuYPaiBafS4q0aNl3/0lpU7i9B07sQV6Hh5Q3vgpTkAHGJf
-         C2VU2qyxMW3PcTqhckit2sm1EwcXLNZV1mk0H22aBvCBJnN10SW7nawQrmCgWW6gtUnW
-         GDr1UlUm2dq7+AS18AgE++iEdAkzhqtp5620NF1CGII0Hw9Gx8f+KOIwKnMBhoHmF4vd
-         EZyw9anL1NolmWepY9u6C9QAgZNOMVb+EoNO5N1FM71AiIQsZ7qaG91vwNo591NmADV0
-         wmjg==
-X-Gm-Message-State: AOJu0Ywrru8T5/Pboy34g6wadPCwAyJmX0Yubx43n6ujW4Q3i9stT7sv
-	Njdz5XlZW3i1VbZDbtsdkWp35Y/cV9uWdvYKmpgYcZwgrxm07urMCBtcBjZ2HlgSg40I2YUx0hI
-	791OcxDHWio/fVpY1b8e3QOX3kBI5wA0=
-X-Gm-Gg: AZuq6aJkiQHXkRCCrUgM//6g9LwzhpPB9DDtHex3JumhmWew5XgdbUC6V231Sv9JQb3
-	juyE6Omf6PXJp66BxA+Xz3MaJalHI/nJv9+EhucomcxOzLvy0o51MvBIAhtaXbXZvZeN7gEz+bq
-	Rwrs52KE7dNaxa+jMAbSUYzzb5e6CzegW/RKyurN4XdpOoJqwwmow+ISEU8khEWI+28w1sv+bgy
-	PxXZvri8f5eRpVOpk2CRayRS79LG4CvvUbOUAXh2doMxzFMCqrLw37nezWujoZIq0uv4rw=
-X-Received: by 2002:a05:690e:400d:b0:644:444f:3bd1 with SMTP id
- 956f58d0204a3-649a84cf80fmr5260688d50.68.1769884870164; Sat, 31 Jan 2026
- 10:41:10 -0800 (PST)
+        bh=TfO8hD4f0LL/XaXPlEc4lGUvKKLqPmej+W+yxaxFK10=;
+        b=i5gABG6Gukn1Tz8InbqJ0rd7cSF+1tLnRze6esxMCIqurh4FtHpka2fuhC+YBEQ1T0
+         WoZYmOadRMZozBupuiZlJPZ83TdhJ2yIZe5PuqMc5pRhITkB5wP3Z1uxe4Vc1NLmzWi2
+         tymIzUFBf7BPZrkwIYOXW9Gkuz+faUMYz9N1/Ki+tFc4iMtKylyNXCgXJ04wwmbCI9k9
+         gNzKhCSjJDM3MAHD9AUWS6cac2P7yHSwTKj08r/+Vdmgq+cQb8J0Q3XZSXP8GLahiZWX
+         0iXPwZWMvWR5dYcsx/Uq5vojloqq/MSzOzOn16BMnCtcfg60tJiDhooN9vLIyQmhzDdT
+         1t0g==
+X-Gm-Message-State: AOJu0YxYNyp7BCBfxz4znnK0L6LOaf0LqYwrn2Hd+zZHqRoHEVCPG/T3
+	5vnUtBP6ovCGPveoYRCvnew30k1u+NJqJW9wtM72ox9supmATLgT9GHWB+Ky/hUOr5eJME44CLp
+	9a0him+sZcNr7CrBPLgEiJA40ZeTx7cY=
+X-Gm-Gg: AZuq6aKWvCjrELqhyCWWqaihvOZThP13ErNPpqgrIq5oIxamji0tJe153cxEGPOHzrP
+	1OScS2lE/EWn57WWLQU2MFrNpPpOjMUJQo0w9EM+zg08VXIVmwzFjIkApVBHO7e+RFnuSQVmGUc
+	lvhaXGE6fG/bx38Z42tPVBdqgmGvk3tj53XQPPxyLMlCIhNYGzR2u+b1357/zvqMO7pDmesGo0B
+	V3zF8JpZdP3h3fsafZqI/EVEsXJluApH6FEbGUJ98kW/JakUUkwmhFhv3rGJhXYxxFwJeU=
+X-Received: by 2002:a05:690c:6a83:b0:789:2be7:ae80 with SMTP id
+ 00721157ae682-7949e075338mr133133587b3.54.1769885017480; Sat, 31 Jan 2026
+ 10:43:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260131050920.2574084-3-ameryhung@gmail.com> <978ac9073e0fadb08c40399bbff7d78cfa4a826ef98911fd654318a9ef9725b4@mail.kernel.org>
-In-Reply-To: <978ac9073e0fadb08c40399bbff7d78cfa4a826ef98911fd654318a9ef9725b4@mail.kernel.org>
+References: <20260131050920.2574084-4-ameryhung@gmail.com> <6497e7de7911a13edaf39f91f47719c418c67ea8918f589b7d08737790181e0b@mail.kernel.org>
+In-Reply-To: <6497e7de7911a13edaf39f91f47719c418c67ea8918f589b7d08737790181e0b@mail.kernel.org>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Sat, 31 Jan 2026 10:40:59 -0800
-X-Gm-Features: AZwV_QiX0B343TusihQFChhKSjsbE837pUNA0oKthdptcAdSvgLvkRaiz1Igm2c
-Message-ID: <CAMB2axOww9RzMFVefSmkPXCggDxE8Y_vJONz=X+5Xaw7099e5w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 02/16] bpf: Convert bpf_selem_unlink_map to failable
+Date: Sat, 31 Jan 2026 10:43:26 -0800
+X-Gm-Features: AZwV_QjsIQi24JfJzKfp91_VOK65ha6WnTVDIqndrexI5dIoypyp2tgWcMaSbyY
+Message-ID: <CAMB2axNgigsCp2AYG9Smj+bRgN6eANP-yqmqUq0dQmSvxr3FNg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 03/16] bpf: Convert bpf_selem_link_map to failable
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
 	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
@@ -97,25 +97,51 @@ Content-Transfer-Encoding: quoted-printable
 
 On Fri, Jan 30, 2026 at 9:33=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
+> > diff --git a/net/core/bpf_sk_storage.c b/net/core/bpf_sk_storage.c
+> > index de111818f..9da11a531 100644
+> > --- a/net/core/bpf_sk_storage.c
+> > +++ b/net/core/bpf_sk_storage.c
+> > @@ -191,7 +191,9 @@ int bpf_sk_storage_clone(const struct sock *sk, str=
+uct sock *newsk)
+> >               }
+> >
+> >               if (new_sk_storage) {
+> > -                     bpf_selem_link_map(smap, copy_selem);
+> > +                     ret =3D bpf_selem_link_map(smap, copy_selem);
+> > +                     if (ret)
+> > +                             goto out;
+> >                       bpf_selem_link_storage_nolock(new_sk_storage, cop=
+y_selem);
+> >               } else {
+> >                       ret =3D bpf_local_storage_alloc(newsk, smap, copy=
+_selem, GFP_ATOMIC);
 >
-> commit 82de4fd08a55cc944c23c9ae889ed792870964d9
-> Author: Amery Hung <ameryhung@gmail.com>
+> When bpf_selem_link_map() fails, should there be cleanup similar to the
+> else branch? At this point copy_selem has been allocated via
+> bpf_sk_storage_clone_elem() and the map refcount was incremented via
+> bpf_map_inc_not_zero().
 >
-> bpf: Convert bpf_selem_unlink_map to failable
+> The existing else branch on bpf_local_storage_alloc() failure does:
 >
-> This commit converts bpf_selem_unlink_map() to return an int (always 0 fo=
-r
-> now) in preparation for changing bpf_local_storage_map_bucket::lock to
-> rqspinlock. It introduces _nolock helper variants and extends critical
-> sections to ensure atomic link/unlink operations.
+>     bpf_selem_free(copy_selem, true);
+>     atomic_sub(smap->elem_size, &newsk->sk_omem_alloc);
+>     bpf_map_put(map);
 >
-> > Remove the selem_linked_to_map_lockless() check as an selem in the
-> > commom paths (not bpf_local_storage_map_free() or
+> But the new if branch just does goto out, which only calls
+> rcu_read_unlock_migrate() before returning.
 >
-> This isn't a bug, but there's a typo here: "commom" should be "common".
+> The comment at out: says "the caller is responsible to call
+> bpf_sk_storage_free" but copy_selem was never linked to new_sk_storage
+> (bpf_selem_link_storage_nolock() never ran), so bpf_sk_storage_free()
+> iterating local_storage->list would not find it.
+>
+> This would leak copy_selem, the memory accounting, and a map reference
+> once bpf_selem_link_map() can actually fail (after commit 3636ab200
+> changes to rqspinlock in this series).
 >
 
-Will fix the typo
+Indeed a memory leak due to missing cleanup. Will fix it in the next iterat=
+ion.
 
 >
 > ---
@@ -128,10 +154,11 @@ E.md
 40647
 >
 > AI-authorship-score: low
-> AI-authorship-explanation: The commit demonstrates deep BPF subsystem kno=
-wledge, contains a human-typical typo, and is part of a coherent patch seri=
-es - all indicators of human authorship.
+> AI-authorship-explanation: The code follows standard kernel development p=
+atterns and the commit message has technical specificity typical of experie=
+nced kernel developers.
 > issues-found: 1
-> issue-severity-score: low
-> issue-severity-explanation: Minor typo in commit message (commom should b=
-e common) - no functional impact.
+> issue-severity-score: medium
+> issue-severity-explanation: Memory leak, memory accounting leak, and map =
+reference leak in socket cloning error path when bpf_selem_link_map fails a=
+fter rqspinlock change.
