@@ -1,93 +1,93 @@
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
+Received: from mail-yx1-f46.google.com (mail-yx1-f46.google.com [74.125.224.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC514367F4E
-	for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 18:49:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85608355037
+	for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 19:13:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769885389; cv=pass; b=O5l0jTFUTOAyNKoJwkw0BXM5qOvnOg5JhqRtf6ud30PKnEa4PgfyQWGbiY3QMq8ksT6kHY6vBlZtB0NsnLenryqwqzbLfNWSQXStP3twA54d8xqVb1b+ZFwCWL31MkrmO3XVDwNghcTgGip5f0FPj0zPhEBQMkoIVS9zVfvg5Fg=
+	t=1769886838; cv=pass; b=WQ+knx2LeUuJFIR07Gn+ttF2CcYe1N9oNcejVbeDuqzMsvXTjVObxv5J7JTJXx4S+NvT4Wg/f4mpTWbcrTh4PPqKIktliNeUKDzv8Ag7PfJ9J40C5kx2F0DEj+4WjDESyVVMzEZ2p67zfUBuDHmeOyXfkEpJrOjqnoBBVyd9xyI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769885389; c=relaxed/simple;
-	bh=dEPIDbpVDGVStP2kmKFvVuPvvr0MPhgKCs/HsINDJWg=;
+	s=arc-20240116; t=1769886838; c=relaxed/simple;
+	bh=ekOn+DEhFEy/8AkcFkDhbU/K+bPIUURUGDSbh6V3fUw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KdGEXc4VIbScYbVhhQdqyEOS6nDDmc5pKX0EDXr7pMoh2DUx+P+QrFoeRF3k2++n6FlL2bFO5fJOaVdegEwJh3s2LLTT0g4VdJpL/VjLUeyqUZ+2zNwKVrjyVN6CPQFCZ+Bnth5oStAAjgcGJgEGW3u8RlDXwGxz78wGAYaQ2lU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FKE1i082; arc=pass smtp.client-ip=74.125.224.47
+	 To:Cc:Content-Type; b=CPwhRyfsdZ7iMwkitB4pt5yWZTAK2qCVfjYWbJ9Mh31WPxJUtsaXaIWZH5jAlvo9P7kvYO36I+ELDnjK4kgglbZ0YWvK+wHxFCy+M11pYkkjtDbzkP+0NjmP5lp3asQUfnlDk+iK4MAgHm2gjWO2AZ++kVXUztcU8XCZY9wJzCQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fqwclV+f; arc=pass smtp.client-ip=74.125.224.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FKE1i082"
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-6481bd173c0so2798321d50.2
-        for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 10:49:47 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769885387; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fqwclV+f"
+Received: by mail-yx1-f46.google.com with SMTP id 956f58d0204a3-64942ebf1a3so2967220d50.3
+        for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 11:13:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769886836; cv=none;
         d=google.com; s=arc-20240605;
-        b=HiyUDTL7jJNH6JNx8CzzzY0Wc8q0plc9H5YURD6ETkInAFlTbUri1g88rxg+jkc+/n
-         u0N6nRGJ8zYfw/+rEJeVWL+wwHKGVvGRwr+uF4lo0Od/oUvjqShy24XJp5cA7Rgsg93v
-         Ru9Gpg5rA/W0ryPXG7zDXxMkqVVshTZHdMkXmerHk7UmBH9FR9epH4p56Xz7gOfE+m/n
-         AYdB2EaxsQmM247a/we/jB0gliGINz1El8zXxLCrN8k0dRi8mdREfc2JVw1u7bntaxh+
-         xD4WeIpeASpgpOBVDytrlYxk8pFyZHOkXVVgdmRRb4UnTov0wWl0byuz5VSAcld8vfgb
-         f/5g==
+        b=dzZADKIWdB9vJXJ2bDvrmxs4w8/r4qGi3RSv0hF9TV76WkRp/kV3z95MXEY89l6kLf
+         U7u906iotrTW10tuRbalp5wxtBPn1a1HcM3KiI/eg96ocEWz1DpdhOCtTHuMHlh5k7Mb
+         Qf8qeyWawvCujrf55kO7mHdSuop4FEvixIRmJUZM4JPolOnvXV0nI34T4urrYHADgn89
+         r1sZ8QVjlof8vgpECaN4mizowkqMBKE/gkm3jt5iV1+iR1WwKlaiaWlYOXFSfz4e+dqd
+         rd1ETo6ijtSm4RV8dpgdxoGOdcxfhCHlpD1yHwwQNqB+YrM3h5peG+yT8rtvbr20Sdpj
+         +2ig==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=oXHEZMRB2IMrYQ/E3FqCsNDjQQs4Qzp+JLdtQMC292A=;
+        bh=08g6K7KOBWEXWExX7xDMLno5kwYNjpmPpi5QBvnVcUw=;
         fh=NTV76uWbumciG3jeF60otY9u4fM38o9+fxTjJFdrb4E=;
-        b=U7SiEoZhicMynsgVk5J2YP738U7lyP3cS6l8AqISpui2h2yoPjSimmgVdpnbu5wd3O
-         t1NeFyAB66TVT5v09W1s4owqR90FQWLmPBQ+QSoOenz+0S75DG8sEPCzDsKLnO47T/Xe
-         S5THed0bYsPaYvhGpq02OEXArC0pJ0VCZRD+6On70IFoQZhQ+MW4FRW/cxsLYsqDOH5k
-         I/vseYSK04RUWIo+PolDrtNcBeBE2OWSNQwevS2E2QPRTFhABgPQGsh/AEnd/0yml2qR
-         2NGIKXEi901il/3B3P9026f1UgPoiUg9GZbPwgRQJhV7RlxXt3Vmb+Sn0GJQ1hSSAi3a
-         2vww==;
+        b=GXF3/c9VmbiSqiC4eE50AVB9+KUU5g1uW+gnzUnJHyTYdq6XVwaYs6FH+NZWHHJuII
+         Y+yWm6ejTEGfsQJBxEZLujDdeJb0imr0AW6UxfH8zw78cf0KzuMGXX0niMpnL5cmNmen
+         WzD62c8ufCkR2izo5tKPuC4y0caZrvocX/dYeHLl1dalXfxZs8AMHy0zn91vWpCYoQ0v
+         BZ5pNuQzHj8l8Qotpo/TAohpMUQKITNgLCRz3vccxqeYB/aSZzxBRtcaBuDriED8kaMN
+         SRxgsqWZmm8jYhDiE8qIyWnvvzCdSHRu1fLxNS0diCCeWsVD//aV/M7Z47lnRknYk8sh
+         KiXw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769885387; x=1770490187; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769886836; x=1770491636; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oXHEZMRB2IMrYQ/E3FqCsNDjQQs4Qzp+JLdtQMC292A=;
-        b=FKE1i082Z2NwDu4VoMW/vaPiRWhY3cYSHXiFeP60l/GRCm96J8NRch0H5L+ka3Mig/
-         TPNbsJLiYvdPLAkX7MiZjogmJbWC9odVahKTikyEYyAkrqqO0ZYeWbMiDn4cpZuvBTuE
-         cQYHvMpT8fMMF0bJRfDwv4h21VsokUoo/SJMjBtOkyecZGfhdV4DFEu9FCVzSQrfQRst
-         vrZu1TpsvWZ5RcQAmwE4H/Tpxvgg9FtEIlRZqhk+rOdMlE7GOuHy9okF0Mc1WepCw0e5
-         kaTavF4RWv11YkJM3AbcGqhTYlK23eiuoauv3QLj4O8kxCXL7aDo02yo2/eBprJFd4VI
-         Y2Pw==
+        bh=08g6K7KOBWEXWExX7xDMLno5kwYNjpmPpi5QBvnVcUw=;
+        b=fqwclV+f+UHilYybE4RcCC5YyWf2DFmkimjysZNxNmUvigNJ+BCwPPpHAaoFmqx9fe
+         kH5O9YkNoj2H5Wi0HyO3kHCD2YfsAot5rOGpaOn1bQmzCcwks+XXwci3fZ4/iUfJQ7He
+         6UO81YEnaVCjSVXN4N4vW/vcyDD1kjorpD4DhCpJhQZlt+mknaLtKkceWn/rW0ekXFez
+         ElzgKS8iRc3Yp+gAkugT1gzEX5u7LE5TMVbroPDXB0kpY7Q9pIp8BNZ1aKd92VLfxCvK
+         RcG7LXaTlgCcT3UE1ZPOoi3lHwOjxfogGK0zynqEwcM5BQKSam1opbN3mmFIRqIBnjJp
+         uTtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769885387; x=1770490187;
+        d=1e100.net; s=20230601; t=1769886836; x=1770491636;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=oXHEZMRB2IMrYQ/E3FqCsNDjQQs4Qzp+JLdtQMC292A=;
-        b=KZJw7muIzdDZPkyfFi5jEVKQFuUZkVMUdg8RQgsSG3SGc3TCIJJqJ2XQ9ctB5Rvd7u
-         HykP1Gq/N6hLzInPDq1VK15J0r8y509HSnqCI8gnOZAmu2JbFsiVyAuRGQSGP9vL88y0
-         atUMrI4VQHKYUyVzuiwq1faF5/HCvN8N61LX9fXvUNW2dO0PfEEVVtfQTltG+s00JEwS
-         gOVhcOgOiuSGfq4lgIbatza/zZvkT/REDK8WXBmolqdea/P4HgWKHIyjMZWHKTJ5V19C
-         hSWX7WGLTZflzfC9c9RoJvsR5drQpcmMq+Y2DvEpovx2LZoWOfKqCmkVbIjSsKsaF9ij
-         TSJg==
-X-Gm-Message-State: AOJu0Yw5d3uvXBzUnVUHi4W8O8SebEI7qxjLFgFSJKC+DHvEGL82DwBm
-	pcN8fht31LcLeQxieQJ66NPNr0N+AMMrLaH1OkOix0vn2LCoedXpMfEXpSngdU/USgN5TP7ppV1
-	SNnHv4XuxSiXVwqpFibMbnBkLaZs7jsk=
-X-Gm-Gg: AZuq6aL5K3+SUxJpXpiJa0OezjsXJ42eJ18d1NzRmaWYaG1x+zIFgDgDHR97RApOSPE
-	Ja9YNWl6ZU5bteNxhktic8L9YC8I/k9aqYzHCPH4ucivvfiDOsQHt+k997P3NF3E5JOzZ3gBdHN
-	McXGhfRQ45vyT6pVotgWqGlDyG8KhM7hlpOUFwPPk/ENP7Xlzb/aB6FalKUo7QECHpRiidaOVDv
-	Ytv+pwNwSLAd7+y9C/2mAqX+8EO2lTtpIwujGbaG++LrIUYZWsArsMwmWgRYucf6g9/tqI30+en
-	j0wrRw==
-X-Received: by 2002:a05:690e:1249:b0:649:5685:450b with SMTP id
- 956f58d0204a3-649a8501d25mr5195022d50.81.1769885386844; Sat, 31 Jan 2026
- 10:49:46 -0800 (PST)
+        bh=08g6K7KOBWEXWExX7xDMLno5kwYNjpmPpi5QBvnVcUw=;
+        b=VoSJaAqzPx0CTfrG8FrRVvJHEwt6Gj/2bDIBJWadPehq9Aq6AKF/VIXqSrcYikOrlc
+         Iu4CCT/JTDheenPW6eclGEGYZfiXoBUrZTBDwDIxBdDWYnukrsxVmpEEHy1T6qZHLioQ
+         2LnR4zG/dNMHZNuSqcPio8q/sSoxO4TKxhYvRQ/lVg1BRaBWZ27Qr64CbpJcLeHDPvex
+         REDnCEbcg2lJdBQhBJF7rw4dVzzInSm2wgF21mFQ0uToeTkzzL5xMkzTO9seCIoqRdfV
+         W/0p0/GpsYvCUys1YWrAyM84ryO3bwZ42fVkjO8jDzLfBFFSwMtGqDpFwx66qtzLlZPG
+         D6TA==
+X-Gm-Message-State: AOJu0YwSTPPUnnPdk5nB65FwpNsIhKhimNwjQZNCd/EKlNv5ov7uzxCJ
+	Pbdzghyr343oPdi5/q/FSgc10d7mdYyGpxwpzOc0wq605W6IKFo+ZaTxb3Ikud0OgQz30hU2ewk
+	QF8LL8KKZg1rfD6/6B0xFhShaFQarJFY=
+X-Gm-Gg: AZuq6aKhZabPo6RwZW7aj5N6cIUKCQwydGRf7ajLymy9bWY4DKg6a/7XftGmSKaEt5A
+	lgXOnaOfNIuAd9KcfQOw0IaciKPrt0evmEosalVQA8C9vmOOrtvPbD541z+ORJGdjPRI9M9gxpu
+	fZdStQpMnMXOKw4ond4p8bslQB1N0FLjAi56Tp1HR7iVwI7wWb78MqalawEeyQBKMqCzRKVom6y
+	057DQsySQKhXxmSYWJSocM3OZcDlQyaNrT6gBivoEstN1JN4PBymgqXC2y3FR1qMj0mxmc=
+X-Received: by 2002:a05:690e:1510:b0:63f:9937:6cce with SMTP id
+ 956f58d0204a3-649a849ef6fmr5497104d50.61.1769886836545; Sat, 31 Jan 2026
+ 11:13:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260131050920.2574084-14-ameryhung@gmail.com> <82944fa5ded226a7a91da123ec384e8e353df448628c47850c6bfa9917f85960@mail.kernel.org>
-In-Reply-To: <82944fa5ded226a7a91da123ec384e8e353df448628c47850c6bfa9917f85960@mail.kernel.org>
+References: <20260131050920.2574084-2-ameryhung@gmail.com> <fc5f36c2f50b99cba8b9b6d020a7400911a84c372ca15be7707c8513239228f3@mail.kernel.org>
+ <CAMB2axMA_8t6M2RJ97Y-9BB_E3N0h=9ZKArazbNKS_ySuNkKAQ@mail.gmail.com>
+In-Reply-To: <CAMB2axMA_8t6M2RJ97Y-9BB_E3N0h=9ZKArazbNKS_ySuNkKAQ@mail.gmail.com>
 From: Amery Hung <ameryhung@gmail.com>
-Date: Sat, 31 Jan 2026 10:49:36 -0800
-X-Gm-Features: AZwV_Qjt76zOwuZDomZAmIgIfiKk0V-KRrOkxhySSSMNB-cnFg6UnsRAQ65kVsA
-Message-ID: <CAMB2axO4=-b4PekKq3OzB8o3DeMM-0oCF7w_P2cfyHkYK4ab7A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 13/16] selftests/bpf: Update
- task_local_storage/recursion test
+Date: Sat, 31 Jan 2026 11:13:45 -0800
+X-Gm-Features: AZwV_QgR3Qklgxr5I6eJuJay4vGJHsEohIefeJJW_1k08xFjlty2yd7F843ksak
+Message-ID: <CAMB2axOyfFGdDbyZO0tBvj9Yv9=CGrT=9+a_A4mu0OTjwy7UUQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 01/16] bpf: Select bpf_local_storage_map_bucket
+ based on bpf_local_storage
 To: bot+bpf-ci@kernel.org
 Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
 	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
@@ -97,61 +97,106 @@ Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 30, 2026 at 9:33=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+On Sat, Jan 31, 2026 at 10:40=E2=80=AFAM Amery Hung <ameryhung@gmail.com> w=
+rote:
 >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.=
-c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-> > index 42e822ea3..559727b05 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
-> > @@ -117,19 +117,19 @@ static void test_recursion(void)
->
-> The comment just above this hunk at test_recursion() says:
->
->     /* Refer to the comment in BPF_PROG(on_update) for
->      * the explanation on the value 201 and 100.
->      */
->
-> Should this comment be updated to reference the new expected values 200 a=
-nd 1
-> instead of the old values 201 and 100?
-
-Indeed. Will update the commit message.
-
->
-> >       map_fd =3D bpf_map__fd(skel->maps.map_a);
-> >       err =3D bpf_map_lookup_elem(map_fd, &task_fd, &value);
-> >       ASSERT_OK(err, "lookup map_a");
-> > -     ASSERT_EQ(value, 201, "map_a value");
-> > -     ASSERT_EQ(skel->bss->nr_del_errs, 1, "bpf_task_storage_delete bus=
-y");
-> > +     ASSERT_EQ(value, 200, "map_a value");
-> > +     ASSERT_EQ(skel->bss->nr_del_errs, 0, "bpf_task_storage_delete bus=
-y");
+> On Fri, Jan 30, 2026 at 9:33=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 > >
-> >       map_fd =3D bpf_map__fd(skel->maps.map_b);
-> >       err =3D bpf_map_lookup_elem(map_fd, &task_fd, &value);
-> >       ASSERT_OK(err, "lookup map_b");
-> > -     ASSERT_EQ(value, 100, "map_b value");
-> > +     ASSERT_EQ(value, 1, "map_b value");
+> > > diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_st=
+orage.c
+> > > index e2fe6c328..6615091dd 100644
+> > > --- a/kernel/bpf/bpf_local_storage.c
+> > > +++ b/kernel/bpf/bpf_local_storage.c
+> >
+> > [ ... ]
+> >
+> > > @@ -368,9 +371,13 @@ static void bpf_selem_unlink_map(struct bpf_loca=
+l_storage_elem *selem)
+> > >  void bpf_selem_link_map(struct bpf_local_storage_map *smap,
+> > >                       struct bpf_local_storage_elem *selem)
+> > >  {
+> > > -     struct bpf_local_storage_map_bucket *b =3D select_bucket(smap, =
+selem);
+> > > +     struct bpf_local_storage *local_storage;
+> > > +     struct bpf_local_storage_map_bucket *b;
+> > >       unsigned long flags;
+> > >
+> > > +     local_storage =3D rcu_dereference_check(selem->local_storage,
+> > > +                                           bpf_rcu_lock_held());
+> > > +     b =3D select_bucket(smap, local_storage);
+> >
+> > The commit message states: "This is safe since a selem is always linked=
+ to
+> > local_storage before linked to map."
+> >
+> > Is this claim accurate? Looking at bpf_local_storage_update(), the orde=
+r is:
+> >
+> >     /* First, link the new selem to the map */
+> >     bpf_selem_link_map(smap, selem);
+> >
+> >     /* Second, link (and publish) the new selem to local_storage */
+> >     bpf_selem_link_storage_nolock(local_storage, selem);
+> >
+> > The comment explicitly says "First, link the new selem to the map" whic=
+h is
+> > the opposite order from what the commit message claims.
+> >
+> > Similarly, in bpf_sk_storage_clone() when new_sk_storage is non-NULL:
+> >
+> >     bpf_selem_link_map(smap, copy_selem);
+> >     bpf_selem_link_storage_nolock(new_sk_storage, copy_selem);
+> >
+> > Since bpf_selem_alloc() does not initialize selem->local_storage (it on=
+ly
+> > sets SDATA(selem)->smap), and bpf_selem_link_storage_nolock() is what s=
+ets
+> > selem->local_storage, wouldn't this mean bpf_selem_link_map() reads NUL=
+L
+> > from selem->local_storage?
+> >
+> > With local_storage being NULL, select_bucket() would compute hash_ptr(N=
+ULL)
+> > which returns 0, placing all newly linked selems into bucket 0. Later w=
+hen
+> > bpf_selem_unlink_map() runs, selem->local_storage has been set, so it
+> > computes a different bucket and tries to unlink from the wrong bucket.
+> >
+> > The next commit in the series (82de4fd08 "bpf: Convert bpf_selem_unlink=
+_map
+> > to failable") introduces bpf_selem_link_map_nolock() to fix this for
+> > bpf_local_storage_alloc() and bpf_local_storage_update(), but
+> > bpf_sk_storage_clone() still uses bpf_selem_link_map() and appears to
+> > remain affected throughout the series.
 >
-> [ ... ]
+> AI is right here. I will fix the bug. We should follow the
+> local_storage then map linking order in these three places.
+
+Actually, we should link map first. I will pass local_storage to
+bpf_selem_link_map() to get the bucket.
+
 >
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/215393=
-40647
->
-> AI-authorship-score: low
-> AI-authorship-explanation: The commit message demonstrates deep BPF subsy=
-stem expertise with detailed execution flow diagrams that suggest human aut=
-horship from a domain expert.
-> issues-found: 1
-> issue-severity-score: low
-> issue-severity-explanation: Stale comment in test code references old exp=
-ected values, causing potential confusion but no functional impact.
+> >
+> > >       raw_spin_lock_irqsave(&b->lock, flags);
+> > >       hlist_add_head_rcu(&selem->map_node, &b->list);
+> > >       raw_spin_unlock_irqrestore(&b->lock, flags);
+> >
+> >
+> > ---
+> > AI reviewed your patch. Please fix the bug or email reply why it's not =
+a bug.
+> > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/REA=
+DME.md
+> >
+> > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/2153=
+9340647
+> >
+> > AI-authorship-score: low
+> > AI-authorship-explanation: The commit has typical human characteristics=
+: domain-specific BPF knowledge, concise explanations, and follows kernel c=
+onventions.
+> > issues-found: 1
+> > issue-severity-score: high
+> > issue-severity-explanation: Hash bucket mismatch causes selems to be in=
+serted into wrong bucket and never properly unlinked, leading to hash list =
+corruption.
