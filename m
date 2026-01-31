@@ -1,88 +1,100 @@
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3C01CAA65;
-	Sat, 31 Jan 2026 01:16:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701C62F616E
+	for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 01:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769822202; cv=none; b=AjMqjfqOc0VR9vme9MhFKQNQW9VQSVBcHRUTXy/OrjNcRsV8vr8NqBQBAYAnKTWipjHYyN3Y3PUJekAWbTB2pJXgSFtB350TtPS9bls5a5KL0m33RiZNDUfj/mj5A4Ekzl9+IfE5CwCjnHSteAF4F2YvBf4IYluVc8UbH1yl9Bk=
+	t=1769822838; cv=none; b=Et0AegWrLMd6Fq7kLARTaexXGE/4qk/At7VP8e2+3MmOMg0WZFk/IqPwi8Oy99ZSnL1i2QluoJlqRfhm7hkYUaUixKg+37EcBiAW1y3tRoOrr/43dmkdZXDgn1+Oa0AWYzh4vl3lGMl/6mp9k4SL8Q4JEClDROpOGhLvoq719cA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769822202; c=relaxed/simple;
-	bh=s7cpkxammNxh6+d5d+3bqKdN3SPq8TpxVvWIZ8ZCcjI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZGYifQvBqHVSExSqbiLpMkqMM1bgPCOEC32hAVTVA8c6ossIh9ZtGVUY+VKFrJ3kZk1YeDOdh8oR1yhpUFulIsdYZHNz51qK1Ubbm9Yit6Q0cXD9Qpuz14lzJeUpNtwTlR1IJzcz59SNP6RVmVJdkLD2OBELHnWFUIvNZXdfzL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=XqfXg1dJ; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+	s=arc-20240116; t=1769822838; c=relaxed/simple;
+	bh=LqjG26iPcgUJUjdKHHQUCfcuvzKdnJ4bXKdhZ7B7/mk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KY5zgzatXcn/BCD2cMIaq4PdWWgsLIO+i3QAyDi9dTC8dWEJcnOQ0O5oDcyS3vq2lV7EfDz+5+QF9aJiVo+8sMgmSloD9ENMANVjWlt9X3LMdxkVmsJZKl7srZi5pzAH/3wNOwayaI2t5zxb9c5jQI8tQ64oXNq0Om/J3eL9sq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=R9e5Bpa8; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="XqfXg1dJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=4hGbcJX/zGCic8102G9qCIKZXSgkfeWlTMil/4Iaml4=; b=XqfXg1dJojWAta23wVrVGw8AbM
-	T4YFUEpAGNRy8GVl2crq0/yviLHSn1RwjY7OLNXFUr7MBlJZLFlel+DfkeASAyFuazuY5gYbkZg3C
-	r1X86wcMyDCgxj5D/ys/gdAHSFU7r5iSYp0zd049hk3wpBrFCur24CjExKXdOvqJN9VuHv/iRjxzx
-	kX5RrybEcEtWMX2qA0ottyCV7wKy8E6VDoLBwHqezT7iyteAdLuRpPADA5DDr5S896BrFSnJfOEmd
-	6JvaRmn5kwFYAVnGs71LXmLojX97iH8OqHMoKkN+pTlZ5RhbqGi9BrBSkACYzFfu78y9HaeWVKLwd
-	KJWr0I9A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1vlzd9-0000000DGbm-14ID;
-	Sat, 31 Jan 2026 01:18:31 +0000
-Date: Sat, 31 Jan 2026 01:18:31 +0000
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Samuel Wu <wusamuel@google.com>
-Cc: Greg KH <gregkh@linuxfoundation.org>, linux-fsdevel@vger.kernel.org,
-	torvalds@linux-foundation.org, brauner@kernel.org, jack@suse.cz,
-	raven@themaw.net, miklos@szeredi.hu, neil@brown.name,
-	a.hindborg@kernel.org, linux-mm@kvack.org,
-	linux-efi@vger.kernel.org, ocfs2-devel@lists.linux.dev,
-	kees@kernel.org, rostedt@goodmis.org, linux-usb@vger.kernel.org,
-	paul@paul-moore.com, casey@schaufler-ca.com,
-	linuxppc-dev@lists.ozlabs.org, john.johansen@canonical.com,
-	selinux@vger.kernel.org, borntraeger@linux.ibm.com,
-	bpf@vger.kernel.org, clm@meta.com,
-	android-kernel-team <android-kernel-team@google.com>
-Subject: Re: [PATCH v4 00/54] tree-in-dcache stuff
-Message-ID: <20260131011831.GZ3183987@ZenIV>
-References: <CAG2Kctoo=xiVdhRZnLaoePuu2cuQXMCdj2q6L-iTnb8K1RMHkw@mail.gmail.com>
- <20260128045954.GS3183987@ZenIV>
- <CAG2KctqWy-gnB4o6FAv3kv6+P2YwqeWMBu7bmHZ=Acq+4vVZ3g@mail.gmail.com>
- <20260129032335.GT3183987@ZenIV>
- <20260129225433.GU3183987@ZenIV>
- <CAG2KctoNjktJTQqBb7nGeazXe=ncpwjsc+Lm+JotcpaO3Sf9gw@mail.gmail.com>
- <20260130070424.GV3183987@ZenIV>
- <CAG2Kctoqja9R1bBzdEAV15_yt=sBGkcub6C2nGE6VHMJh13=FQ@mail.gmail.com>
- <20260130235743.GW3183987@ZenIV>
- <CAG2KctotL+tpHQMWWAFOQEy=3NX-7fa9YroqsjnxKmTuunJ2AQ@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="R9e5Bpa8"
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-658b9e95990so5142233a12.1
+        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 17:27:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1769822835; x=1770427635; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=X+Zsir5E/r34txHH39Th9Cb+s5GtaeVJrYm06jsRDB0=;
+        b=R9e5Bpa86dk+Ei0n4y0EXrpvoERRHuz6VPEvOKQyh70V2AYlZ4zD0is586U8PMto09
+         eNO4XCxCsEh2JM1ujrFVKKOnjT7aVry/Xn3rGpOqCBE/saTtf2jnZmuKnxHNsur+IRRw
+         JXktgOwXxWS/7odSJMJm0gIdyM4WS6vO8vv8E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769822835; x=1770427635;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X+Zsir5E/r34txHH39Th9Cb+s5GtaeVJrYm06jsRDB0=;
+        b=Uorj9Xw0IBfSlvCH8oFKoLgDglAMHpkg0OeM8HMVg8JF0M12hzXf/vf4fRZAop56uz
+         auCZLBMB6fBRAVc00OJiZJcXKtHBhuLihaNGPqKbG5cJRLmFv5fmpjVQdK+qqtnqF5zq
+         hnawLFNYa9PWYzRbIzCUCDf8mjtLUCtpcJtaI6aOYmibZWNSG9Z5aOH2/ugLIOnlMZZv
+         bOZtk/1v/W409eE83SItw3NUadEbnLV/L7kTtZaBRR840nEeNWmaCiY5dIO8ooKJ+uCz
+         naRK1tr1LXOCG62UvFtve9QkO+LMNzgA5YF21fVYjoXH3CEt9cyptFSFkrrAed2RlZKs
+         KAdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVnL1pQ4DUoq9WSoRlmgBomIKHTV327rs04SN6mcyxMACszVvGifB37nmf+i9hW9VW4Jpc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5rClYkAK0GA7nPo5qo111oE7/uDa/mOeH7xDMH+CCx9yO4kbP
+	Kd2U4L+zPaEwXE6vYLBPWpmj3nVrj3rcdCFaHLZSoL6HjE5j+2YieGw3kWtMe5Uu2RD/1hQvjD1
+	EhReasFJRzQ==
+X-Gm-Gg: AZuq6aJOKr2gpRa1aaRD0cWWtpMEydMlzh7LpUfRf/NFTujsBOphbi1upWcYcyqeduQ
+	MFJSVXh3eL2lw6hjCOgglK8XjLa5zclvBHHR+NeN5QzctQpvYVeZVKdTsX2oJWAxczvxOECHAgw
+	8Afz1MvGknaUAGijK59Sk6xsDTFshkwWSrlRwsZhVlR5NnRYUdCZGzU9ap/th6MsX9/1SQq1Hmq
+	9ntZJ6rGiox6I0ZFokabwch8+kjvjbmGFBvCi5498rf5MdLCWD2uILApsKhQVeF8T0fRFv2lOx2
+	CtQgS4FkUipo5QTH/5IAHuHOJMQD3izvJSOeXCt64YXZnpRSfGoFqfXwvTJiN8yBpYQBbNxrZXv
+	2FVlXGw28+JOVzqmrcwMvKbz/JyhZo8NralhnMBbBID7VxM6oLynZ+bhX87S9FeTiPabd90e39j
+	n7SUZWsIZgE7cTWY8efA6p26jz8qF/Eu0a6gJY2OscTOZ0AY8lcoJdS/LqdWXrn+rdgI87QIY=
+X-Received: by 2002:a17:906:c116:b0:b79:f984:1557 with SMTP id a640c23a62f3a-b8dff78c673mr277889266b.46.1769822834665;
+        Fri, 30 Jan 2026 17:27:14 -0800 (PST)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8dbef86df9sm517156566b.10.2026.01.30.17.27.14
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Jan 2026 17:27:14 -0800 (PST)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b8869cd7bb1so452866466b.1
+        for <bpf@vger.kernel.org>; Fri, 30 Jan 2026 17:27:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVqoAfo/r6QRdos339IjXyVw9DYQroDcwXnVN2IcRD1BQck2LYJPWTcBJlDzik8+z61GkU=@vger.kernel.org
+X-Received: by 2002:a17:906:6a1f:b0:b87:701d:341a with SMTP id
+ a640c23a62f3a-b8dff607a33mr279550266b.25.1769822411525; Fri, 30 Jan 2026
+ 17:20:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG2KctotL+tpHQMWWAFOQEy=3NX-7fa9YroqsjnxKmTuunJ2AQ@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+References: <20260130-getsockopt-v1-0-9154fcff6f95@debian.org> <20260130205227.6fb1d9ad@pumpkin>
+In-Reply-To: <20260130205227.6fb1d9ad@pumpkin>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 30 Jan 2026 17:19:55 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wiiPxGrVxFzzf1nbx7_0abjZkhmd9oPximUxUyDM7gwug@mail.gmail.com>
+X-Gm-Features: AZwV_QicYb2Y4IsMdcHkp6aaLn_xxvWlOuA7e1nJwap4TdBtycKshhvQFgQOM3M
+Message-ID: <CAHk-=wiiPxGrVxFzzf1nbx7_0abjZkhmd9oPximUxUyDM7gwug@mail.gmail.com>
+Subject: Re: [PATCH net-next RFC 0/3] net: move .getsockopt away from __user buffers
+To: David Laight <david.laight.linux@gmail.com>
+Cc: Breno Leitao <leitao@debian.org>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Willem de Bruijn <willemb@google.com>, metze@samba.org, axboe@kernel.dk, 
+	Stanislav Fomichev <sdf@fomichev.me>, io-uring@vger.kernel.org, bpf@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jan 30, 2026 at 05:05:34PM -0800, Samuel Wu wrote:
+On Fri, 30 Jan 2026 at 14:40, David Laight <david.laight.linux@gmail.com> wrote:
+>
+> There is not much point making the 'optval' parameter more than
+> a structure of a user and kernel address - one of which will be NULL.
 
-> > How lovely...  Could you slap
-> >         WARN_ON(ret == -EAGAIN);
-> > right before that
-> >         if (ret < 0)
-> >                 return ret;
-> 
-> Surprisingly ret == 0 every time, so no difference in dmesg logs with
-> this addition.
+That's exactly what we do *NOT* want. Because people will get it
+wrong, and then we're back to the bad old days where trivial bugs
+result in security issues.
 
-What the hell?  Other than that mutex_lock(), the only change in there
-is the order of store to file->private_data and call of ffs_data_opened();
-that struct file pointer is not visible to anyone at that point...
+Can you point to an actual case where setsockopt / getsockopt would be
+performance-critical? Typically you do it once or twice.
 
-Wait, it also brings ffs_data_reset() on that transition under ffs->mutex...
-For a quick check: does
-git fetch git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git for-wsamuel2
-git switch --detach FETCH_HEAD
-demonstrate the same breakage?
+              Linus
