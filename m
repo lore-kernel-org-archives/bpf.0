@@ -1,147 +1,112 @@
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A9A2868B2
-	for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 16:09:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68842E54D1;
+	Sat, 31 Jan 2026 17:25:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769875747; cv=none; b=kZX87sNKyzZDMscV/kEstdSMVUDTjZbEJp3bRYL65GyLKttmoACCfSKoJGfxzKdjUNiz1fyN7nJ9s9aeu6US0oW6pbRJjbqrIu1j4WjmrDIomCN81MMg5MltS+v0aglY9TyEGk1VVEFuP0PSTxMYrzp9LgCyhzIklK6RFJqOUW0=
+	t=1769880320; cv=none; b=sJOCOtxy7Fbts6voOSu6ckPujJMpdgqF0WfLykqmrYJXSNUj/MvxuRrPVbEcT/FCMmOryUrfz7nENiLKmH9PAHRqiLuCwvt6aqug0dun5jAXRj0bEGyerbr/AVAZYTAptVtKC6w30JxIFQ0uf7/uq+ESbqOwlV7ps73QGqf3OV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769875747; c=relaxed/simple;
-	bh=U7GV28I5Pnt6+fi3NGCXq2+oEiuFkOevXvjYMeCNdKs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OoQeKLKDuDTQOkXNc+GddjXW1hwFVbdn32pqvJzfzBYN039SsCwsj2hMxbSQD0TGsVGgHF9c82MCxhBZmeszANgZDd0q1ceEadcp+tBz/YAp9XDyqUC9DS/ZD5OAPYXImxY7z2EcAWTFMJ7G6sJyCyv0vtKVMDX5NuHOcccEUIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kYhyzwlb; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1769880320; c=relaxed/simple;
+	bh=VdrhpYX/xqvIWPFWCfZ0baQLFsfzzI9f0fA4hBvpNCU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O3+W8ZWliBSrEUXOZpR89v6xUst4VY2A1ITCEEqDnpOCE2Nmmk4C7sSdpwSCoKwPDW1hPAQxzIrrY8L1YT46TtH9bi4xnvcFBJ9ZvuoqtL/nGdpls5UGzyhwB7kTS+PjzqBlzAF1Iq6TOgbWjW68lJgscsN9H2w3o79A+3ySkzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyOpOqHt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kYhyzwlb"
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4359a302794so2136250f8f.1
-        for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 08:09:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769875745; x=1770480545; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3K0Su/GnhpJboAF70b6wT52wzdV8TnyIX/zYFlef7Do=;
-        b=kYhyzwlb0q31xJwbkZt41CpMFKxF32bMAbdtxQcwt6MjfBLv/HfUcAOn6oLDa7dvEw
-         67rTzaJ+W7Stz0abAwd0M2hbBcDyalUWb2Zsk7nf0wdUkz8w1ozD1KI8//gaZLNRuwLX
-         jP+jkqwrFJQcZ4BDnzk1wsOXfz4OnL2fMl/1zHISyOINmxT8JJDlVBN/cnqhagHz0zQ9
-         XS0LavTtXhPyjmtI6T0XoMrbS4/dpEIgnKV2NGjFewQmHOD6cWt+HUQkQ0kMNr+65OfD
-         fnvO/hO5eQ15sWiSZ6/XQ5622Q5IlKWdJIjD4Nsnw1/XXdminrjvfBxeqiFnoev+DKTV
-         iFPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769875745; x=1770480545;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3K0Su/GnhpJboAF70b6wT52wzdV8TnyIX/zYFlef7Do=;
-        b=q0sZvj1PpW42+SDVyz1GczgFUJglQzmzyfA4rRs7ifTn0ot4bwL88b1RSayE2b7AVv
-         bADGZfe/8s0QYF/Mk4xsrqp5eWeqq5DG3Maj8MsOhwx65PHVIfJsxqwkw2SyYd3LBkHi
-         K1Xjjj2qG4+ZOtk+IH2H7/f9E/zSy1dOGjY36qwtkMqzFZa+Q31W53ZOIjYOTd8vgNW0
-         /Fj3PCQgnSd4esqW3kj1Sr1qDr8ZXgGCRz0zjBWjlgXEcto1+2lhvG1dqQdr8xAaAegX
-         CE6GomvFS/G1jC3fTyBSp9Lp2e6voyoYvm6z0MuPulx3uO4bP6EqPXOyWp2PnJEtpklQ
-         Wgeg==
-X-Gm-Message-State: AOJu0YwOKBC1UtEOtLx/OW/Xs7qcTbsTK/84jLX2NRxuAO3fPvf/XxXa
-	39wgx/MM1lig4SUxLze5Wv3Qz9pmdkzYx2w/84DtvZiOjIEm6saoBjDCl0mEkg==
-X-Gm-Gg: AZuq6aJlqt/INdz5jv2ToX2hTdfjRXGF3sq8nUWs2CCZJdC2g5kflfi5zu7ANrpSabh
-	HfqZyg5BChjh7wG/+VL8DJH8kXx8ncQKaT9BEPR9iSeRbGIZH7wwSe8Fkj3052c09Jly9gAqk+k
-	/PdrX2oOF9IWRR+rdRJi42sXDdlxqMqmnScWl/XVPqc0U3Fj+MLUI8tI5SzWJFxe5+8jQqxEWzC
-	3kQvWPApr8q4vQhl9ywTId0pANykMIDuoDWcyw9zg1dblVZbj0lZZ5KLwP0BVIAySzOJLc9842P
-	fnRiFq73z1RDnOkiIwxibDV3sK9pg8mLLdyBFHGCFU47vvGDQA2HOAI9DxxkSK7MJff6+vvhF84
-	jTF6m0an1F3q4vu8+WJnnnoVLHB9AJISyAUsBcyTQ/j4Af7OMLJHrMqLGi2Ev+df5blnSbD/cZI
-	vY506VSwGL83q2+IaQarY27/yvzKENI2y9jtKMVri05MwTs95QnHyfPbnZN18oP+RQnoQvxygG6
-	OVM/mqPuhv9FmG7qqASzVVPLUw1Q9YVmBrprOTdjv5ZOLN6oMo/ZGJ/Xj/TRFmcA/e5tMtIgHA=
-X-Received: by 2002:a05:6000:3110:b0:435:ab90:6f34 with SMTP id ffacd0b85a97d-435f3a861c9mr8201264f8f.16.1769875744588;
-        Sat, 31 Jan 2026 08:09:04 -0800 (PST)
-Received: from mail.gmail.com (2a01cb0889497e008252ebe287038db7.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:8252:ebe2:8703:8db7])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e131ce58sm29920938f8f.20.2026.01.31.08.09.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Jan 2026 08:09:04 -0800 (PST)
-Date: Sat, 31 Jan 2026 17:09:02 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>
-Subject: [PATCH bpf 2/2] selftests/bpf: Test access from RO map from
- xdp_store_bytes
-Message-ID: <4fdb934a713b2d7cf133288c77f6cfefe9856440.1769875479.git.paul.chaignon@gmail.com>
-References: <9fa3c9f72d806e82541071c4df88b8cba28ad6a9.1769875479.git.paul.chaignon@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyOpOqHt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D040DC4CEF1;
+	Sat, 31 Jan 2026 17:25:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769880320;
+	bh=VdrhpYX/xqvIWPFWCfZ0baQLFsfzzI9f0fA4hBvpNCU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=lyOpOqHtctSBTT3RWfweLWjBSm8lFZdjvHAYZ8acBPsXKdsjhFaUI1HvBiJ+8esQx
+	 iZs9nM9nCkE7C41cwpNx07jcYh/Px++kGNvfXvuhwX+wcMLQRj3Vei2r7mL3A7gRAP
+	 7sPp2rRkruTZ74GGD8uXtl4d+ahRcbGFQ3JQro/P40AzkNF4VJ+T3MekVszUbRbz/N
+	 9XI2GGu2IoULhGPWnwnHmv6sxDJ79guFXCEv4zSwUe1AySyAk8Hu6XAtx17nkNtu9E
+	 3KTO/1xg6dk0qlgHyjCXxlSWgJg9zXp0c8PygCMTcs2k7jy8vycYji3w1BL7uj3OQQ
+	 vxGVswCFi595w==
+Date: Sat, 31 Jan 2026 09:25:17 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas.weissschuh@linutronix.de>
+Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima
+ <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn
+ <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Matthieu Baerts
+ <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, Geliang Tang
+ <geliang@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?=
+ <mic@digikod.net>, =?UTF-8?B?R8O8bnRoZXI=?= Noack <gnoack@google.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
+ <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+ linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
+ linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+ libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, Adhemerval
+ Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>,
+ klibc@zytor.com, Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition
+ of 'struct sockaddr'
+Message-ID: <20260131092517.6639d84c@kernel.org>
+In-Reply-To: <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+	<20260121192729.2095aa25@kernel.org>
+	<20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
+	<20260130081741.425a92e0@kernel.org>
+	<3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9fa3c9f72d806e82541071c4df88b8cba28ad6a9.1769875479.git.paul.chaignon@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-This new test simply checks that helper bpf_xdp_store_bytes can
-successfully read from a read-only map.
+On Sat, 31 Jan 2026 11:26:32 +0100 Thomas Wei=C3=9Fschuh wrote:
+> Jan 30, 2026 17:17:46 Jakub Kicinski <kuba@kernel.org>:
+>=20
+> > On Fri, 30 Jan 2026 11:34:15 +0100 Thomas Wei=C3=9Fschuh wrote: =20
+> >> Some of them get broken by the new 'struct sockaddr', but some others =
+are
+> >> already broken just by the new transitive inclusion of libc-compat.h.
+> >> So any header starting to use the compatibility machinery may trigger =
+breakage
+> >> in code including UAPI headers before libc header, even for completely=
+ new type
+> >> definitions which themselves would not conflict with libc. =20
+> >
+> > Let's split the uAPI header changes from any selftest changes.
+> > If you're saying the the selftests no longer build after the uAPI
+> > header changes then of course we can't apply the patches. =20
+>=20
+> Yes, the selftests don't build anymore after the uAPI changes.
+>=20
+> "can't apply" as in
+> * "can't apply separately"
+> * "are unacceptable in general"
 
-Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
----
- .../selftests/bpf/progs/verifier_xdp.c        | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+this one
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_xdp.c b/tools/testing/selftests/bpf/progs/verifier_xdp.c
-index 50768ed179b3..7dc9226aeb34 100644
---- a/tools/testing/selftests/bpf/progs/verifier_xdp.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_xdp.c
-@@ -5,6 +5,14 @@
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, int);
-+	__type(value, __u64);
-+	__uint(map_flags, BPF_F_RDONLY_PROG);
-+} map_array_ro SEC(".maps");
-+
- SEC("xdp")
- __description("XDP, using ifindex from netdev")
- __success __retval(1)
-@@ -21,4 +29,31 @@ l0_%=:	exit;						\
- 	: __clobber_all);
- }
- 
-+SEC("xdp")
-+__description("XDP, using xdp_store_bytes from RO map")
-+__success __retval(0)
-+__naked void xdp_store_bytes_from_ro_map(void)
-+{
-+	asm volatile ("					\
-+	r6 = r1;					\
-+	r1 = 0;                                         \
-+	*(u64*)(r10 - 8) = r1;                          \
-+	r2 = r10;                                       \
-+	r2 += -8;                                       \
-+	r1 = %[map_array_ro] ll;                        \
-+	call %[bpf_map_lookup_elem];                    \
-+	if r0 == 0 goto l0_%=;                          \
-+	r1 = r6;					\
-+	r2 = 0;						\
-+	r3 = r0;					\
-+	r4 = 8;						\
-+	call %[bpf_xdp_store_bytes];			\
-+l0_%=:	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_xdp_store_bytes),
-+	  __imm_addr(map_array_ro)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+> * "are too late for this cycle"
+> ?
+>=20
+> None of this is urgent.
+> We can do the selftests in one cycle and the uAPI in another one.
+> Feel free to pick up the patches as you see fit.
+> (The mptcp changes already go through their tree, so need to be dropped h=
+ere)
+> I can also resubmit the patches differently if preferred.
 
+The selftests are just a canary in the coalmine. If we break a bunch of
+selftests chances are we'll also break compilation of real applications
+for people. Subjective, but I don't see a sufficient upside here to do
+that.
+
+FWIW the typelimits change broke compilation of ethtool, we'll see if
+anyone "outside kernel community itself" complains.
