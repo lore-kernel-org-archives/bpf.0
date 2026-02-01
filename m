@@ -1,89 +1,86 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167B11F936
-	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 03:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE11D1F936
+	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 03:15:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769915753; cv=none; b=igJMiDfWf3Oyqqmd9rFmOEpKhRGGj0f5rhC6MgsaMHJUJfr+fCgDR9n2oj9aAwWBIYg4wal6dX7vl/ccM1FhtihPeYk0AgzNhWqksGFSeVQ5t5mgBTKxNf8q7mgqNs7QQX8qrCU9I+LhPqRux/jnBYix3TUQCXMapvXZXIk7NTY=
+	t=1769915754; cv=none; b=ScTGYoG09hCY2+2u9GQ9fkd4bTt8g1ENM1WzUK9k7N+ND7XAyklvM31u/IvlbPBYBgZSI5G083zacsYfEqQajEVwjNxN9+bPe9qDCFIAV43M7seiehvuQBP1aFzOR/B8O/K5/NukQRlVN70a5KVzdBFjQ7+VNF76ZnoKilOC92Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769915753; c=relaxed/simple;
-	bh=1j8dU1uZSpaRJswlUu14zVOSUottz6REZ/Q35EJLPvY=;
+	s=arc-20240116; t=1769915754; c=relaxed/simple;
+	bh=SCBGLgb6nkXGnqNCEtz0u54CdEpkAPMZs0d7rO1mEFg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RYYuiTv+2k9uELxB/YfCyySgaIGmxhXL308DDKNJPArOnmWQvJ48CgwwKEUvgbxtx/itCWru8Sot1nFeFQ/lFSUKKissKmSbk5+Fr1himHSSGDRL671ei9O0o4Wfw8tvW4K+IBbpOGdCThYvaUFNBiiogvU5uojyTcCC3OftpcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f4gJ50s9; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=Ko/LS8AXOY/sS8TGmUl4w+H1eKgKKKomp7k1KoSK9uzgwVARFM5MgNfXhw+1aPSzlJOAPXO+IZE08B1c7CZ4pIJx7qGxX1i8/haGfQoBAp/rqi5b65F4knuvcaG82egQ8nLaqOxHDC1c5LOfq9vTFiRxeRrfNYxvB+s1YMESBPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rYnQulqU; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f4gJ50s9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64399C4CEF7;
-	Sun,  1 Feb 2026 03:15:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rYnQulqU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24C89C4CEF7;
+	Sun,  1 Feb 2026 03:15:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769915752;
-	bh=1j8dU1uZSpaRJswlUu14zVOSUottz6REZ/Q35EJLPvY=;
+	s=k20201202; t=1769915754;
+	bh=SCBGLgb6nkXGnqNCEtz0u54CdEpkAPMZs0d7rO1mEFg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=f4gJ50s9nalgXIV+q280pfYbi+z3mAhDqEc0QVeccOi8pzNuUljFK0qT2dOXnXOwH
-	 8OM+iBqUVSvZMbXzvHmh2wSuiOBmMQ46/MpCebWQIjVk99PDAqVCpHnlxEXokaMzls
-	 YXcJ0JSU7jBTutkkEhl/kn0sKJYlL9r0TUY1er6gdiCflKVzrf9QFtVZ0G1OVpr4hr
-	 5Z9PeatlDW0Zwcoc/5iJazgQSOx48VKYUM1kpGF1fPyt9R5xrPh4IdoJWjge5g5jS8
-	 ekRXWGhyb9lSv+P+TBTZK7d4sH8a9kWPXxM6RsCU++QeCeiQrX0lycDKGGqF55sjba
-	 +/YiKQnNlLjrg==
-Content-Type: multipart/mixed; boundary="===============3249749971315742781=="
+	b=rYnQulqUa2tLzTmEOhDKpn7wmncMNGLG5Ia2uwnTzeeFy8yxVuJ2jdXI5uWvbE/hl
+	 02tIZK27+JehIhmtuUexDX9tEmDy0ocEhWCyuh3SarqgQ/B88MWj/Htrbv2sUPitx7
+	 2vqKb7miSNKeEUfrEXOpGpu8oXmOQjNPli7vRLA+buMfJYeqc3/Vyj0sLZ1GEf+cEd
+	 NYoUaUzheumgfgo+t2Ik/wQsfMNDW+okZKvorGf7+iTimJ4MCzAFeSOG7Bfw5oxuzw
+	 Mx9PAyi7VBwDc97PBuehZTN25ySfCeEdjBOpR/u1imnV+WZ6+y8eMzQzz5iuAMWVUL
+	 Jmb6iBNGkgrAg==
+Content-Type: multipart/mixed; boundary="===============4001247480762516691=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5c4d5e47fcb6f3146bcee4590b3227f5d937060535b8e9a7f14a3208100b9c7b@mail.kernel.org>
-In-Reply-To: <20260201025403.66625-10-alexei.starovoitov@gmail.com>
-References: <20260201025403.66625-10-alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH v9 bpf-next 9/9] selftests/bpf: Add a test to stress bpf_timer_start and map_delete race
+Message-Id: <16a6a06db16da1842bbad2a50f2cdecb6b71343c3b7b4c0e329794f8170cc890@mail.kernel.org>
+In-Reply-To: <20260201025403.66625-3-alexei.starovoitov@gmail.com>
+References: <20260201025403.66625-3-alexei.starovoitov@gmail.com>
+Subject: Re: [PATCH v9 bpf-next 2/9] bpf: Add verifier support for bpf_timer argument in kfuncs
 From: bot+bpf-ci@kernel.org
 To: alexei.starovoitov@gmail.com,bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,andrii@kernel.org,martin.lau@kernel.org,memxor@gmail.com,mykyta.yatsenko5@gmail.com,kernel-team@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun,  1 Feb 2026 03:15:52 +0000 (UTC)
+Date: Sun,  1 Feb 2026 03:15:54 +0000 (UTC)
 
---===============3249749971315742781==
+--===============4001247480762516691==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/progs/timer_start_delete_race.c b/tools/testing/selftests/bpf/progs/timer_start_delete_race.c
-> new file mode 100644
-> index 000000000..2ff6357f3
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/timer_start_delete_race.c
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6b62b6d57..9b1853fec 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
 [ ... ]
 
-> +SEC("syscall")
-> +int start_timer(void *ctx)
-> +{
-> +	struct map_value *value;
-> +	int i;
-> +
-> +	for (i = 0; i < ITER_CNT; i++) {
-> +		int key = 0;
-> +
-> +		value = bpf_map_lookup_elem(&timer_map, &key);
-> +		/* hey claude, no if (!value) here. The verifier got smarter */
-> +
-> +		bpf_timer_init(&value->timer, &timer_map, CLOCK_MONOTONIC);
+> @@ -21294,20 +21327,6 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
+>  		}
+>  	}
+>
+> -	if (btf_record_has_field(map->record, BPF_TIMER)) {
+> -		if (is_tracing_prog_type(prog_type)) {
+> -			verbose(env, "tracing progs cannot use bpf_timer yet\n");
+> -			return -EINVAL;
+> -		}
+> -	}
+> -
+> -	if (btf_record_has_field(map->record, BPF_WORKQUEUE)) {
+> -		if (is_tracing_prog_type(prog_type)) {
+> -			verbose(env, "tracing progs cannot use bpf_wq yet\n");
+> -			return -EINVAL;
+> -		}
+> -	}
 
-Will this program load?  bpf_map_lookup_elem() returns PTR_TO_MAP_VALUE_OR_NULL
-(defined in bpf_map_lookup_elem_proto in kernel/bpf/helpers.c), which requires
-a NULL check before dereferencing.
+The commit message describes adding kfunc timer argument support, but doesn't
+mention this removal of restrictions that previously prevented tracing programs
+(kprobe, fentry, fexit, etc.) from using bpf_timer and bpf_wq.
 
-The comment claims "the verifier got smarter", but I don't see any verifier
-changes in this series that would eliminate the NULL check requirement for
-bpf_map_lookup_elem().  All other timer tests in this series maintain the
-NULL check:
-
-    timer = bpf_map_lookup_elem(&race_array, &key);
-    if (!timer)
-        return 0;
-
-Without the NULL check, the verifier should reject this program with an
-error about dereferencing PTR_TO_MAP_VALUE_OR_NULL.
+This appears related to the previous commit fac023087 ("bpf: Enable bpf_timer
+and bpf_wq in any context") which made the runtime changes necessary for this.
+Should the commit message mention that this change also enables tracing
+programs to use timers and workqueues, or would it be clearer as a separate
+commit?
 
 
 ---
@@ -93,9 +90,9 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21555452257
 
 AI-authorship-score: low
-AI-authorship-explanation: The code follows standard kernel test patterns with typical C style; the unusual 'hey claude' comment is more likely a developer joke than AI-generated content.
+AI-authorship-explanation: The code follows established kernel patterns exactly and shows familiarity with the BPF verifier codebase, consistent with human-written kernel code from a known BPF contributor.
 issues-found: 1
-issue-severity-score: medium
-issue-severity-explanation: BPF program will fail to load due to missing NULL check after bpf_map_lookup_elem(), causing the test to fail silently or with a verifier rejection error.
+issue-severity-score: low
+issue-severity-explanation: The commit message doesn't mention the removal of tracing program restrictions for bpf_timer and bpf_wq, which is a documentation completeness issue rather than a functional bug.
 
---===============3249749971315742781==--
+--===============4001247480762516691==--
