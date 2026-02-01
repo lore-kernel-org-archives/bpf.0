@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6258236606F;
-	Sat, 31 Jan 2026 23:48:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83CCF163;
+	Sun,  1 Feb 2026 00:02:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769903319; cv=none; b=WhEiWeWRjlUWPFDRVpryhKEX/EjY6NODqgLQ1s/e8fnot9BSkiSV3BtwmyMZk56u0PSAMKW5WzMbuca4tKHU9cTaaMUDo2m1j6L2Do/YsxSBxHJyl93FyrvH+7GJMXbq+lXBCUUdVsIcx0RtF/lgDUNfST4VWSyRTSk/tjOiwpM=
+	t=1769904159; cv=none; b=MGt4W9oyN8m4jrxoPQ4k1TJWz8bnZ0TkvuMweiOwjA9cdzdRKG0Mn79QglMLARff5+sRy0gz4L7Yl5cAEQ9h/q+z9Z+h5B56e004f76RccQlV0gdUf9k+aNYGNBJvXm42YSDB7gd6AKp1LmNwdXl9CXUii0tS0oDLkOkn4l+mpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769903319; c=relaxed/simple;
-	bh=5cJYr6GlNYZ43Vw7dwNjQsA30lMlMFKZk92gLAW31SQ=;
+	s=arc-20240116; t=1769904159; c=relaxed/simple;
+	bh=oUi0nMaMrH1PZFx8wHi2LyYp7blgKlrgCLUYZ5ozKPM=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LYKugUL3P5LL43QvaxUA+K80T/gZBaLZkJzM+imrAKahbjJ0tA2Q1rYMETMkNfmr+JjrmHRJKP/SsM5nrwii2QPc/ZpoxVOt7uF3VNAuYxFRcNuBstpB+ICvUXLxY+T4/wIaHVUUnRViDDvuWfkyOjCDAd3bhOzMYAz8D3pKHtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QxFFzMzk; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=kbrJQdQ/X2vO//lVxsM16M3B0wMv+ZNZZ+oo6HU0jNpw8Qbj4zUVlUPKzMXeYQGlb/c8zMdZ4+8/fAz7013l/B5/pUHCSw714+lpCrmhXWx/bXMelD7wCgaBS14R1X+Cxx+rk4199DxwdFX+xcZ+WFp+zosQXQjG9QCV+7qKMiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KeviGF80; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QxFFzMzk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82107C4CEF1;
-	Sat, 31 Jan 2026 23:48:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KeviGF80"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52CEAC4CEF1;
+	Sun,  1 Feb 2026 00:02:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769903319;
-	bh=5cJYr6GlNYZ43Vw7dwNjQsA30lMlMFKZk92gLAW31SQ=;
+	s=k20201202; t=1769904159;
+	bh=oUi0nMaMrH1PZFx8wHi2LyYp7blgKlrgCLUYZ5ozKPM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QxFFzMzkgNPkgJJXsdARqCFLNzwQx+e0LzxLEXfCGC/i7GsABX8qFSeqFqEmitBLS
-	 LoBwbxedHTYuM+QJp2BYfTfcgdMlMTKC6HCey3S59y5oP9lVPQ98Li9mevHj+/m6OZ
-	 9Y3CtWXGPzuE4gtDU3+tEhDpgeqXs3uHq5mcJiJmDpLB9miw3h6nPyqle+8maamEfl
-	 R90ygYr2NG3o5LwgZGJeNldxoiFCvHYw18H48byCc5BuHncVfV5TAcvR1jhSooqQoZ
-	 81UiqaZ9FQKlcgy2zoKVf4j5rlJKtPX0WJK2TxoWgkGbXVawTXdISWZy+t5rHao15C
-	 QvF13MaKnTNRw==
-Date: Sat, 31 Jan 2026 15:48:37 -0800
+	b=KeviGF80GbEOwKXkmGzPFGEvOoJbynhnNP4CHPfOse/QOJUuAArBFGZJBEB/Wvipl
+	 M8RjTqHqoDxp4Cyc8sclpm54bKeIbv1Vk+GFqkfRasFgu8MkemXr/8fuMu2xVDq8Vn
+	 VdlDzm8WYer+MlVPCddWggGCR52yf1GfqjCXWnSD071LiSqGjyDd/emvTwGj12WlzF
+	 Be4xyrPeM66sracyqGo3Rct1W0WL57cJNggYPt5CqWhf/aJlrXLEx4yNJPApboHOlX
+	 TN7IHEmp8VQ62chlh4l7JqeTlBiuMaiHp5ffhRB0eMDSGYxOYqs7YFTqcXMKf6MLfW
+	 Pf0dOct40M0Xw==
+Date: Sat, 31 Jan 2026 16:02:37 -0800
 From: Jakub Kicinski <kuba@kernel.org>
 To: Daniel Borkmann <daniel@iogearbox.net>
 Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
@@ -35,12 +35,12 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
  jordan@jrife.io, maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
  dw@davidwei.uk, toke@redhat.com, yangzhenze@bytedance.com,
  wangdongdong.6@bytedance.com
-Subject: Re: [PATCH net-next v8 05/16] net: Slightly simplify
- net_mp_{open,close}_rxq
-Message-ID: <20260131154837.312cf828@kernel.org>
-In-Reply-To: <20260129222830.439687-6-daniel@iogearbox.net>
+Subject: Re: [PATCH net-next v8 06/16] net: Proxy net_mp_{open,close}_rxq
+ for leased queues
+Message-ID: <20260131160237.07789674@kernel.org>
+In-Reply-To: <20260129222830.439687-7-daniel@iogearbox.net>
 References: <20260129222830.439687-1-daniel@iogearbox.net>
-	<20260129222830.439687-6-daniel@iogearbox.net>
+	<20260129222830.439687-7-daniel@iogearbox.net>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,30 +50,81 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 29 Jan 2026 23:28:19 +0100 Daniel Borkmann wrote:
-> -int net_mp_open_rxq(struct net_device *dev, unsigned ifq_idx,
-> -		    struct pp_memory_provider_params *p);
-> -int __net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
-> -		      const struct pp_memory_provider_params *p,
-> -		      struct netlink_ext_ack *extack);
-> -void net_mp_close_rxq(struct net_device *dev, unsigned ifq_idx,
-> -		      struct pp_memory_provider_params *old_p);
-> -void __net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
-> -			const struct pp_memory_provider_params *old_p);
+On Thu, 29 Jan 2026 23:28:20 +0100 Daniel Borkmann wrote:
+> @@ -191,24 +214,15 @@ int netdev_rx_queue_restart(struct net_device *dev, unsigned int rxq_idx)
+>  }
+>  EXPORT_SYMBOL_NS_GPL(netdev_rx_queue_restart, "NETDEV_INTERNAL");
+>  
+> -int net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
+> -		    const struct pp_memory_provider_params *p,
+> -		    struct netlink_ext_ack *extack)
+> +static int __net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
+> +			     const struct pp_memory_provider_params *p,
+> +			     struct netlink_ext_ack *extack)
+>  {
+>  	const struct netdev_queue_mgmt_ops *qops = dev->queue_mgmt_ops;
+>  	struct netdev_queue_config qcfg[2];
+>  	struct netdev_rx_queue *rxq;
+>  	int ret;
+>  
+> -	if (!netdev_need_ops_lock(dev))
+> -		return -EOPNOTSUPP;
+> -
+> -	if (rxq_idx >= dev->real_num_rx_queues) {
+> -		NL_SET_ERR_MSG(extack, "rx queue index out of range");
+> -		return -ERANGE;
+> -	}
+> -	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
+> -
+
 > +int net_mp_open_rxq(struct net_device *dev, unsigned int rxq_idx,
 > +		    const struct pp_memory_provider_params *p,
-> +		    struct netlink_ext_ack *extack);
-> +void net_mp_close_rxq(struct net_device *dev, unsigned int rxq_idx,
-> +		      const struct pp_memory_provider_params *old_p);
+> +		    struct netlink_ext_ack *extack)
+> +{
+> +	struct net_device *orig_dev = dev;
+> +	int ret;
+> +
+> +	if (!netdev_need_ops_lock(dev))
+> +		return -EOPNOTSUPP;
+> +
+> +	if (rxq_idx >= dev->real_num_rx_queues) {
+> +		NL_SET_ERR_MSG(extack, "rx queue index out of range");
+> +		return -ERANGE;
+> +	}
+> +
 
-SG, but netdevices.rst says:
+nit: delete this empty line please, like it was in the original code.
 
-  For the (mostly software) drivers that need to interact with the core
-  stack, there are two sets of interfaces: ``dev_xxx``/``netdev_xxx``
-  and ``netif_xxx`` (e.g., ``dev_set_mtu`` and ``netif_set_mtu``). The
-  ``dev_xxx``/``netdev_xxx`` functions handle acquiring the instance
-  lock themselves, while the ``netif_xxx`` functions assume that the
-  driver has already acquired the instance lock.
+> +	rxq_idx = array_index_nospec(rxq_idx, dev->real_num_rx_queues);
+> +
+> +	if (!netif_get_rx_queue_lease_locked(&dev, &rxq_idx)) {
+> +		NL_SET_ERR_MSG(extack, "rx queue leased to a virtual netdev");
+> +		return -EBUSY;
+> +	}
+> +	if (!dev->dev.parent) {
+> +		NL_SET_ERR_MSG(extack, "rx queue belongs to a virtual netdev");
+> +		ret = -EOPNOTSUPP;
+> +		goto out;
+> +	}
+> +
+> +	ret = __net_mp_open_rxq(dev, rxq_idx, p, extack);
+> +out:
+> +	netif_put_rx_queue_lease_locked(orig_dev, dev);
+> +	return ret;
 
-Let's take this opportunity to replace the net_ prefix with netif_,
-if we want to assume that the caller took the instance lock?
+Please:
+
+	if (!netif_queue_is_a_lease())
+		return __net_mp_open_rxq(dev, rxq_idx, p, extack);
+
+	..explicit code that deals with the lease, no conditional locking
+	...
+	ret = __net_mp_open_rxq($dev, $rxq_idx, p, extack);
+	...
+
+
+> -	rxq = __netif_get_rx_queue(dev, ifq_idx);
+> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
+
+Indeed good to cleanup the ifq_idx naming that sneaked in, but IDK if
+this belongs in this commit :S
