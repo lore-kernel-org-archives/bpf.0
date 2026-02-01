@@ -1,133 +1,168 @@
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69AA24A049;
-	Sun,  1 Feb 2026 08:25:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EEE2D8DBB
+	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 09:01:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769934330; cv=none; b=UABN1HRbg4Ns+faLcNATmAF5dMafBwaZ1y33mUDEkfheT6AruWcjDszYDBOTxhGJqYo9k4nc+znLkfylpA0QoIJKqkP/sKU4C38xFaoQegPJI6lmCZQSRwjewJWRmoSUCwMVR0WzFJeMf7wAG4FIynrz1HvP6Ui5gQedhjbvB2c=
+	t=1769936489; cv=none; b=Xas4KnNI0Hc3dn9uG/Ek3rsG3lBf9ofyMwQvBgSjIiXb3dPyHXXYPqGuM53uc/3c2ZBuDmbjFzh4Xtjv7ra4rsmUewT+cAMPa/lBRhbiYff5sJdlsPrE69aQaxDGPGflA/1/m6ieW7ksHGyaoMLOkL7302FMuSfpKOw0MmEs0uQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769934330; c=relaxed/simple;
-	bh=4l+jabMVHYrLnG985lOKU4sOR/4lZBhBaCMGPxK4Hpg=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=E0qQbGrPiTBoi1ccmCxzA3kGATS/F0log1L1vudRhUvWVdf5SFMNPSDZccgJ6HVh6p2DxJVuRAOB08voGM5G6UFZgPcbTJ6PdgxsmoBOJVVwgHSPpkoZACYi1oeeiiy4eXBtb8dY6UX5rWgMF7j+DfeAIZv6/aa5kECE8JECefs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=fail (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=YQXB7/oy reason="signature verification failed"; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+	s=arc-20240116; t=1769936489; c=relaxed/simple;
+	bh=uLCjGvitM7MZI+iiZOhsAyamc3vLUAP3Bnzyj3zmxmw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K/KscdZdfoxuoMXsw2/21F/qNhbPvxxlduKnGrbnBes/fLUKV64X6+/VHgHJYu96/bFgb1qTJvfYe+GB+Sjo3DfBilpz/B4rWQg5wf3rDpqTp7XSaDf7guuSi8MH92sNyT2DMnu8sPvGVaXRPiyG1cI4pwqmznCImnWU/ZVZCmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XK9lUsSg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=U1PRsJnp; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="YQXB7/oy"
-Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 6118NbHC2133728
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Sun, 1 Feb 2026 00:23:38 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 6118NbHC2133728
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026012301; t=1769934220;
-	bh=plHDA7QLJmcfQszbJlbjOYhF5Sm//GhH9ob/Ho1ZwUY=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-	b=YQXB7/oyziryyUrNtDf7kszFAnpmhF2NepxI+HHDQQrNJY7A5Yrs4EMHSsmkVFvq6
-	 aUIbc52ZQjR/w5wSn7qpzj9962PvRGwfJ4wiKNsFhNpW2JFaUec0J1aCov8M6Q66wT
-	 My2BtDMHUmvOITSNHlPFrTjo5elNnPW2gwaHTyjqQ7w0tbrtISg+wEJPQxzkU/7EtO
-	 zoNFGnnpkYrzfM1wXCWRgeEh0v3Dc12ex5+thla7gIThvOSl5XbWjTcvlvn+lxJG+1
-	 Re9XH6nub6A4SpAo98WVg8ZiY2ENY+b6Bn8xkkXZK+SNM2iPLx+6YNQNqyXs/qmK2r
-	 edncvRF7Vno6Q==
-Date: Sun, 01 Feb 2026 00:23:31 -0800
-From: "H. Peter Anvin" <hpa@zytor.com>
-To: Jens Remus <jremus@linux.ibm.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        x86@kernel.org, linux-mm@kvack.org,
-        Steven Rostedt <rostedt@kernel.org>
-CC: Josh Poimboeuf <jpoimboe@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
-        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
-        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>
-Subject: Re: [PATCH v6 0/6] x86/vdso: VDSO updates and fixes for sframes
-User-Agent: K-9 Mail for Android
-In-Reply-To: <20260129112726.892340-1-jremus@linux.ibm.com>
-References: <20260129112726.892340-1-jremus@linux.ibm.com>
-Message-ID: <B1CDD538-668D-48E3-A937-740B7D6575FA@zytor.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XK9lUsSg";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="U1PRsJnp"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769936485;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=PbdMtd8ZV0Hoqg/gvmWguCwsRV3oQaDigUGA5FFlPEw=;
+	b=XK9lUsSgv5NmGKEW2yTbUcVZFlIN3gn6FVpOPZzTGj2iAkW6M30LRWxWBpmXbgMYy2zEx4
+	UmOIm8j8nIfsLX05vipwZJ4njvGoLoJmOMchwA3pBhCJKiaE7YOXEPMnz0TBmZOaKHP1uf
+	Gh9ewvy+u49vmQVe2LPZZ50PPddgPA0=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-367-_oKcRYVhN6Kbrbsl_lNzvA-1; Sun, 01 Feb 2026 04:01:24 -0500
+X-MC-Unique: _oKcRYVhN6Kbrbsl_lNzvA-1
+X-Mimecast-MFC-AGG-ID: _oKcRYVhN6Kbrbsl_lNzvA_1769936483
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-432db1a9589so2316621f8f.0
+        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 01:01:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1769936483; x=1770541283; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=PbdMtd8ZV0Hoqg/gvmWguCwsRV3oQaDigUGA5FFlPEw=;
+        b=U1PRsJnpLnDt6xCnPPIfMra8LELIvxROw7qE+hyB2URGbVFeGBJYqSDEMOJTQHzdz0
+         sDU/W86iLqgbUjCCjzfMTgiU1RUqOMJX4JYQ0GkjXnFS9s+vz2IFyaZW2m+2IpTBPcnL
+         aUkKcz2iMSl9NkFKMkFjzOqGutRASDRxfHCHm15rFQHSvFKhQOG87K8K5aY3Acvgq2jM
+         tq0Pm/CPPV7qmTU98/vkqmKTyQXUECl0Elpu9fFtMSj3Sq42fkHau7FchxSsoW7j+wny
+         +R1Zm2Eg7mDrF1pwYypkCy5597RqUFl3s47MSvwzspuQwKubwTmJnQjzE9Ny1gG/YxQ8
+         sDtw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769936483; x=1770541283;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PbdMtd8ZV0Hoqg/gvmWguCwsRV3oQaDigUGA5FFlPEw=;
+        b=UmXLBCUHMjDkOMMdD3Nkivf04DhTaYF6u3iOVnKkcoisIrRuHNmz97+4TSqzGqw6x3
+         AgWwUsKKAx5tVIfj3c+YSKt4Lq7ECnoa5ijv0oU3yEf1OZePHRrUbY2wE2SLCiiB4IKO
+         HZ4lvCdPw4eqSQEkdwkYCxumd+8HxhSD94KamXJNbqjeaAjULJRcaqdEs4lPPPwpI56a
+         HyWihoa7xPh9AhXwYEp5WKkY6Y42TAa4Gc4CGafASd9RwNSHgrpHgmTSA7FazN3Kk7e3
+         IZxlWfFhEcUH0MbwbQ6RLgXkX7xi3hFT3yhL+vPtM0AHegOnX5tRcbW2vVeH8hsKi41w
+         IMLA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPLBEziApKYM1VMwoQQ+q+LX/zbBoNdBeuKybCAceVcWsIqgrbmKu+heT5vdvO3wYTHNI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnEicJq9zrTC/G6Gtg7oiJj7TueTcdr2BG23f43MNPBN9QYMK2
+	yT8CpYyVYnhJO3W1hMDXJwPz885ECGYrnZ8/OXoBCqgP5J1eABKV++ZP3ZIyy9GoxJIGEUzTQB9
+	u0xQpe5DHGfDK/7a0RYcXuHEhMNg3JlvsJWHL4AfisckM/+Hpg8oQSA==
+X-Gm-Gg: AZuq6aIkvyCdXknizKyf+PZlngsvNrE00cs3MwuhD901pIIuUkn0vTfERAccvq0Ev6O
+	9pn9s3uMb/OYyfweuZGC3tI98i2zliuUMcw1+iL8kNUgt4Um3xm1C3NwpZK8hQKi3CZad/shD0Q
+	ju+qEgx79FfaHRzvnx2UPCZkSaxTfSXytGvq9YXHtl6T9/90NwkvZbsuxQwlJuUe9CEvLcd6jHu
+	eHJ3wKl2wDxOD1dN6udnHfI7PtiEDIZaT/HM6bruHGENtKkyaXTgCILyZUb5QMd86eYLIk9h31C
+	OtS5LkkSvdrbCnGxFNZZSsSZc5KGrma2n7DeNoCwdOdvSeDU0wx1XYagYi2NhNLeAZsUIXn7TOq
+	ctbsq1wfa/lVJdK6G/UyykfbUB4uOh1bmOQ==
+X-Received: by 2002:a05:6000:2883:b0:430:f742:fbb4 with SMTP id ffacd0b85a97d-435f3aaea5bmr11593857f8f.43.1769936482902;
+        Sun, 01 Feb 2026 01:01:22 -0800 (PST)
+X-Received: by 2002:a05:6000:2883:b0:430:f742:fbb4 with SMTP id ffacd0b85a97d-435f3aaea5bmr11593790f8f.43.1769936482295;
+        Sun, 01 Feb 2026 01:01:22 -0800 (PST)
+Received: from redhat.com (IGLD-80-230-34-155.inter.net.il. [80.230.34.155])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e131ce70sm36590005f8f.27.2026.02.01.01.01.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Feb 2026 01:01:21 -0800 (PST)
+Date: Sun, 1 Feb 2026 04:01:16 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: tariqt@nvidia.com, linux-rdma@vger.kernel.org, shaojijie@huawei.com,
+	shenjian15@huawei.com, salil.mehta@huawei.com, mbloch@nvidia.com,
+	saeedm@nvidia.com, leon@kernel.org, eperezma@redhat.com,
+	brett.creeley@amd.com, jasowang@redhat.com,
+	virtualization@lists.linux.dev, xuanzhuo@linux.alibaba.com,
+	pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
+	linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
+	dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
+	kuba@kernel.org, stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net,
+	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net,
+	liuhangbin@gmail.com, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, ij@kernel.org,
+	ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Subject: Re: [PATCH v1 net-next 1/3] net: update commnets for SKB_GSO_TCP_ECN
+ and SKB_GSO_TCP_ACCECN
+Message-ID: <20260201040043-mutt-send-email-mst@kernel.org>
+References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260131225510.2946-2-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260131225510.2946-2-chia-yu.chang@nokia-bell-labs.com>
 
-On January 29, 2026 3:27:20 AM PST, Jens Remus <jremus@linux=2Eibm=2Ecom> w=
-rote:
->This enables generation of SFrame V3 stack trace information for VDSO on
->x86-64=2E  It's a continuation of Josh's and Steve's work:
->
->   https://lore=2Ekernel=2Eorg/all/cover=2E1737511963=2Egit=2Ejpoimboe@ke=
-rnel=2Eorg/
->   https://lore=2Ekernel=2Eorg/all/20250422183439=2E895236512@goodmis=2Eo=
-rg/
->
->This series focuses only on the VDSO code=2E They are helpful fixes
->and updates that doesn't rely on sframes (although the last patch
->is sframe related)=2E
->
->This series applies on top of the latest unwind user sframe series
->"[PATCH v13 00/18] unwind_deferred: Implement sframe handling":
->https://lore=2Ekernel=2Eorg/all/20260127150554=2E2760964-1-jremus@linux=
-=2Eibm=2Ecom/
->
->Like above series it depends on the upcoming binutils 2=2E46 release to
->be used to build executables and libraries such as VDSO with SFrame V3
->stack trace information (using the assembler option --gsframe-3)=2E
->
->Changes in v6:
->- SFrame V3 support (SFrame V2 is not supported)=2E
->- Prevent GNU_SFRAME program table entry to empty =2Esframe section=2E
->- Integrate v5 review feedback=2E (Josh)
->
->Regards,
->Jens
->
->
->Josh Poimboeuf (6):
->  x86/vdso: Fix DWARF generation for getrandom()
->  x86/asm: Avoid emitting DWARF CFI for non-VDSO
->  x86/asm: Simplify VDSO DWARF generation
->  x86/vdso: Use SYM_FUNC_{START,END} in __kernel_vsyscall()
->  x86/vdso: Use CFI macros in __vdso_sgx_enter_enclave()
->  x86/vdso: Enable sframe generation in VDSO
->
-> arch/Kconfig                             |  7 +++
-> arch/x86/entry/vdso/Makefile             | 10 +++--
-> arch/x86/entry/vdso/vdso-layout=2Elds=2ES    |  9 +++-
-> arch/x86/entry/vdso/vdso32/system_call=2ES | 10 +----
-> arch/x86/entry/vdso/vgetrandom-chacha=2ES  |  3 +-
-> arch/x86/entry/vdso/vsgx=2ES               | 19 +++------
-> arch/x86/include/asm/dwarf2=2Eh            | 54 +++++++++++++++++-------
-> arch/x86/include/asm/linkage=2Eh           | 33 ++++++++++++---
-> arch/x86/include/asm/vdso=2Eh              |  1 -
-> 9 files changed, 97 insertions(+), 49 deletions(-)
->
+On Sat, Jan 31, 2026 at 11:55:08PM +0100, chia-yu.chang@nokia-bell-labs.com wrote:
+> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> 
+> No functional changes.
+> 
+> Co-developed-by: Ilpo Järvinen <ij@kernel.org>
+> Signed-off-by: Ilpo Järvinen <ij@kernel.org>
+> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-This patchset clashes *hard* with the changes already in tip:x86/entry=2E
+Subject: comments?
+
+> ---
+>  include/linux/skbuff.h | 16 +++++++++++++++-
+>  1 file changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index e6bfe5d0c525..30a8dc4233ba 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -671,7 +671,13 @@ enum {
+>  	/* This indicates the skb is from an untrusted source. */
+>  	SKB_GSO_DODGY = 1 << 1,
+>  
+> -	/* This indicates the tcp segment has CWR set. */
+> +	/* For Tx, this indicates the first TCP segment has CWR set, and any
+> +	 * subsequent segment in the same skb has CWR cleared. However, because
+> +	 * the connection to which the segment belongs is not tracked to use
+> +	 * RFC3168 or AccECN (RFC9768), and using RFC3168 ECN offload may clear
+> +	 * ACE signal (CWR is one of it). Therefore, this cannot be used on Rx.
+> +	 * Instead, SKB_GSO_TCP_ACCECN shall be used to avoid CWR corruption.
+> +	 */
+>  	SKB_GSO_TCP_ECN = 1 << 2,
+>  
+>  	__SKB_GSO_TCP_FIXEDID = 1 << 3,
+> @@ -706,6 +712,14 @@ enum {
+>  
+>  	SKB_GSO_FRAGLIST = 1 << 18,
+>  
+> +	/* For TX, this indicates the TCP segment uses the CWR flag as part of
+> +	 * ACE signal, and the CWR flag is not modified in the skb. For RX, any
+> +	 * CWR flagged segment must use SKB_GSO_TCP_ACCECN to ensure CWR flag
+> +	 * is not cleared by any RFC3168 ECN offload, and thus keeping ACE
+> +	 * signal of AccECN segments. This is particularly used for Rx of
+> +	 * virtio_net driver in order to tell latter GSO Tx in a forwarding
+> +	 * scenario that it is NOT ok to clean CWR flag from the 2nd segment.
+> +	 */
+>  	SKB_GSO_TCP_ACCECN = 1 << 19,
+>  
+>  	/* These indirectly map onto the same netdev feature.
+> -- 
+> 2.34.1
+
