@@ -1,63 +1,63 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E189C274B59
-	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 02:54:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B07274B59
+	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 02:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769914456; cv=none; b=ue0Bl78MRkwMk58AotVPRkZkHalmahkl6kWrepz5o/8e+CACL6wtu0gcEcx1J3xB5jk6D01VjSIIrfimKAclgCTuRM5kOeGLVRWAMTXGcWb3FxYjzBpaLCTiWYtJwkOhZZ1GaEgHUWG+YPA/gdhAFH8vL2PjcaeRi1zrytE72n4=
+	t=1769914458; cv=none; b=nhysv48m+qAePAaPKw8fOAKHbwF6Rd+LlQEVZIQAo/bxVWp+cRP1vFbqUpSplkiwJIUxkaHWZFv8fEI08gdyfBUc43tq1+Ca8LoC6wuc1amX0vJZvTEJs/yuPqtV4a3pg563pbkl/5wy4y0rYmi9d8f62176m6UbJCBvlzSjPJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769914456; c=relaxed/simple;
-	bh=gkF50bz90n8AIHBUNrG6ejVKz7rdoODf0Sv6P/gy+lc=;
+	s=arc-20240116; t=1769914458; c=relaxed/simple;
+	bh=RdF2G2dzRkWr0V8TjZdp1zVUlL3rHWOlbit2LbRBdc8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nkyCPZSVz9fcRmgwCeNvRQfQFD/L/sRjft1p+1DiTy7Xzubod3QlEOtslbL/v+5LbxTPknvBaeWVVdcqvwSOztO7L9r/5LvlnJoD0xDjLvZLX9X/4hs/WhuVeCqCTmz6Oj4j8PkDGy67ayX440lKhAEd2bdRP3UX7ct99kgW6N0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xi7OHMkx; arc=none smtp.client-ip=209.85.216.52
+	 MIME-Version; b=a9VayVALohSpAnwIXx2G7Q+w6FsHt45kavQ0lf/VjqbcfuwLqJU+/ihXrjNgH/ObBnoZhwq3didycl2LNKhVWv89IC4+B9G5xt6/tw0qohJt9OM7/tiCxn+udwCFYIZAcqaSAmKaM6HUDve+b7Ut44oGWe6xkaZoJmptoizKKgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jxHu+ATt; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xi7OHMkx"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-34c21417781so1694365a91.3
-        for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 18:54:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jxHu+ATt"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-bd1ce1b35e7so2037776a12.0
+        for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 18:54:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769914454; x=1770519254; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769914457; x=1770519257; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s4/rT8ni9uShBwCZbwHc9QvP6yGQp+8wEcnMK5KW3Fg=;
-        b=Xi7OHMkxQQgPlHJEmDPVBkcvu+YN4RKjjww/4Xhu9+toebGIyNdWinbLxcF/DD629j
-         ZKfn52Da6Urm5mYH/g/xeu0/yQTl4gMf/uFnS+LGRBTOAxygbHOv8bDE+gh6CKlWj1IT
-         /sMs8C+uqO5Hj2S5d+IeTs70l1uKveSaqbIq+v8xY3MEw7OzZ5OSlPGozIQ4SEomHkEm
-         okqgJqUyu3L+sZUg1+upBJPCVAHnlsTmxkTTaey9a6O55aDOmLTojbhnV5/+/07CiYT4
-         MPIBcdDmKbOTSi9k+YUnQ6ouTpga6KE/Att0qUv5jo7W2gruk/fbSzz//MAZeDDdtV9Q
-         ZaBA==
+        bh=APHkQLrkChI82VTQd/Qgj0NDqY47f9PUl8bOkrGs7BA=;
+        b=jxHu+ATttYkGbTER3xLrKJ8eN790bvxJuuPkRndk/zycpQtel2WLNoStGAYFWO8cpx
+         5yokcvzXdvlsFbv0X6pzglGgMO85AtFPrQvrIdj479kZJGzUt0vEY+LjEsIPzoed7Ooz
+         nv/H0iHFqEqbUY0CxDXs0zw1l+UBqEpgVyyIR0s8QkV6ofLlq3fa2GG3zOVk3qWOlpke
+         zE+qsa/XXuqXqaZxrRaJ1pGj8/gAxice8ji18niJWAAy4niQo4Lmr00Z0zMsZyi6gjrq
+         EmrN35m2yBa4tTAd0mEvO5Pk+UPfSA6djq1Vn4uidqMmrHNqWieopMt3hJw2y46OryKS
+         UmkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769914454; x=1770519254;
+        d=1e100.net; s=20230601; t=1769914457; x=1770519257;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=s4/rT8ni9uShBwCZbwHc9QvP6yGQp+8wEcnMK5KW3Fg=;
-        b=eFkMKRnNrVgn5vMY3kmRRxJnZPXLaYMruTCx6kZDilDLZpzCjQ25z/cb9d92v3s5NN
-         9cIxal0YJKL6WdARjrV26SJnTbcG0H42JbxNBKolgphWC3QsQMouZZSKUQWc3DIBFGWn
-         3Mqk4HBpsCZPXnQsxendI3m9WXlWOvOKLnQcHPyYIbFZZo4bVXOz51I33GYA+LqvUIJp
-         ngKzLgXnPyKjSKrUYrpFaGn04NGq8gTT1o+uHlKtQ4b+/6XGeAizlQnNGV2scSdC0AHj
-         yWkgP2aKRLvb9NtHc7gFgKKu4hIG6svZKvdi1clRTSuJqmFU18gtx4izVXu8zTotg2CO
-         Z+2w==
-X-Gm-Message-State: AOJu0YxLV/IS0ZEp7bcu2E742C/RwmM/mSQ1mJEviIgSeMa0xh+qvITZ
-	f2/oqFru6bMRL87F7lf1BfdmjW3FA4gevMkH9IgQtfC91fJW8y+A+u976mPFAA==
-X-Gm-Gg: AZuq6aJLRdLjBhKceuogcy8CbZLAWKjEot6/5k1UrbXw69u1izZYYs21yKZ6y4zjVAx
-	Oq54hEkrunppmCz+c3YzhOyVOjAoVojWiXmzdvJGQI8GCEhnYA6dTFkq0LjBQW4SO/3CICJyhdz
-	v8frjagYLu35L7cR0ipcShw4lBqqfDIWuuUHvCHdDWkQOd3h/ofKjN503eESsbN07ImepC2d3vs
-	i5QZ60JP+9eJgBRmdTPYfCO0vm+q4iw3voWdqa5PMnd1mxUqeICx8dN+mMTZr5Gf/4xPsQzRApB
-	/CeqMbylKAwsGHGIuZGzHh7rFKalRSmFGjySWla4RghHG+3dhhCSGBl9DqH1yJ8KatbPEkta7li
-	pKkMtmOhzgxOB0kYq8zhbR9NmbhW1Fv90gIqIml+WyC0++u77pI1mkuZc8o2ub4rZDuylEa1eBz
-	GUeQIEJ4EFLrHVaWc5CjN7ejEFo/4CGG/ozcOF2bxV333WfroGVyXgZd+qPrZWQfnjpKMhphsU/
-	4RNaJZCHHxk5odRiDQURn4jdts2q7HXvaJuGaBiogFiyfyGgQ==
-X-Received: by 2002:a17:90b:3bc6:b0:34a:47d0:9a82 with SMTP id 98e67ed59e1d1-3543b3d65c9mr8067862a91.23.1769914453903;
-        Sat, 31 Jan 2026 18:54:13 -0800 (PST)
+        bh=APHkQLrkChI82VTQd/Qgj0NDqY47f9PUl8bOkrGs7BA=;
+        b=r7UiqQ93Llmps00A9rdWue8pEBrrYPOA0AHYM/h8Yk1vSu7o8HJ8U3ZK0EZydfNXYV
+         jdokIBNDfymO+8c3MSRQtY6peZMpiT/VvK6hfuSHeKcBkus8SnWGbiMuKuBd/hNvpNHB
+         fs7ixwoejXY4ZcLtpiprzDVu5141a4yKbg//g1P+d07Ve1GOM2ty5FonLDBfRaY5d9hc
+         6Lymkna/mliEokoiltYsvy8wu9QOxG+ZVkCO3oLmP1V6wsmgXdr0ZEG2YTGBbToDrLQU
+         UwsPCZZylPhbcdIphNudbfXPled8HsV7TuaQoULEWgRBFm7t/gFIAn9ION2grA/WV9aY
+         OxVQ==
+X-Gm-Message-State: AOJu0Yzf+7NmpC28SvjHoGtmnatO2ZZRQsmLjnlgL+WfmYXBUpJYzMh9
+	QGWa291riT0myWTR1Xq+I31b3d6WkbmxcyFrmxNysc7bw/oXn6xiv6VCIGpVEQ==
+X-Gm-Gg: AZuq6aK+RBvLbSm2eZ9ot3S04peGDsIEjTN+QDEVlzS6YV9K502jJR/f0zzK+sQt3Xq
+	oT2MibZ6xn1nU7Io4ZxzwQlC9DXUeQm4k8utanngBpmR2JLN19gna71VXRdbg6MMzT4wKGTojPK
+	eAsa+K4hlyotLg8dvATU5OKSaYw8bBBpmtukhQbpK76BelFmVs1M3OjJnkwq83XIqgoOpJ+xhFd
+	/SreNNCrYmzyTOHOLh2pxbbGbLzGPFyRh3oR2K7Ov2euM0wsG18mc9qbJno/KULOxuU9DfyyTv9
+	0DkodJkwEQKA3zgOG0pjcTkClV0oUsioDx86Sr5GYkhs3XVKisYNbyjGWxunLcSBF0doLDLGC22
+	K9CF8s/YyAemLVDk+NZPyN2lqwt5CLF+EIY62XJsVlgN67YjFqyJbNg3eKbspkts3GJ2TQxgUrM
+	VbnqMChf1TzyMiY89hTvZ8k0BZr4U0FiLVo0YeOvSxI9K739BLwi0xFc6gqVNov5pQ3AsV2bV/i
+	dmiV0VWSynw8KK86RIqbflj9Pr0/CinCJv7Ajw0WRb3BdFsOw==
+X-Received: by 2002:a17:902:ea96:b0:2a3:bf9d:9399 with SMTP id d9443c01a7336-2a8d99194a9mr55539745ad.35.1769914456637;
+        Sat, 31 Jan 2026 18:54:16 -0800 (PST)
 Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3540f2f24ccsm15522112a91.8.2026.01.31.18.54.13
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b7f9a42sm114069805ad.99.2026.01.31.18.54.15
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 31 Jan 2026 18:54:13 -0800 (PST)
+        Sat, 31 Jan 2026 18:54:16 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -66,9 +66,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	mykyta.yatsenko5@gmail.com,
 	kernel-team@fb.com
-Subject: [PATCH v9 bpf-next 3/9] bpf: Introduce bpf_timer_cancel_async() kfunc
-Date: Sat, 31 Jan 2026 18:53:57 -0800
-Message-ID: <20260201025403.66625-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH v9 bpf-next 4/9] selftests/bpf: Refactor timer selftests
+Date: Sat, 31 Jan 2026 18:53:58 -0800
+Message-ID: <20260201025403.66625-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260201025403.66625-1-alexei.starovoitov@gmail.com>
 References: <20260201025403.66625-1-alexei.starovoitov@gmail.com>
@@ -80,84 +80,111 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Alexei Starovoitov <ast@kernel.org>
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Introduce bpf_timer_cancel_async() that wraps hrtimer_try_to_cancel()
-and executes it either synchronously or defers to irq_work.
+Refactor timer selftests, extracting stress test into a separate test.
+This makes it easier to debug test failures and allows to extend.
 
-Co-developed-by: Mykyta Yatsenko <yatsenko@meta.com>
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/helpers.c | 48 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 48 insertions(+)
+ .../testing/selftests/bpf/prog_tests/timer.c  | 55 ++++++++++++-------
+ 1 file changed, 36 insertions(+), 19 deletions(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 2eb262d52232..2ea0c08f5ef4 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4426,6 +4426,53 @@ __bpf_kfunc int bpf_dynptr_file_discard(struct bpf_dynptr *dynptr)
+diff --git a/tools/testing/selftests/bpf/prog_tests/timer.c b/tools/testing/selftests/bpf/prog_tests/timer.c
+index 34f9ccce2602..4d853d1bd2a7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/timer.c
++++ b/tools/testing/selftests/bpf/prog_tests/timer.c
+@@ -22,13 +22,35 @@ static void *spin_lock_thread(void *arg)
+ 	pthread_exit(arg);
+ }
+ 
+-static int timer(struct timer *timer_skel)
++
++static int timer_stress(struct timer *timer_skel)
+ {
+-	int i, err, prog_fd;
++	int i, err = 1, prog_fd;
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts);
+ 	pthread_t thread_id[NUM_THR];
+ 	void *ret;
+ 
++	prog_fd = bpf_program__fd(timer_skel->progs.race);
++	for (i = 0; i < NUM_THR; i++) {
++		err = pthread_create(&thread_id[i], NULL,
++				     &spin_lock_thread, &prog_fd);
++		if (!ASSERT_OK(err, "pthread_create"))
++			break;
++	}
++
++	while (i) {
++		err = pthread_join(thread_id[--i], &ret);
++		if (ASSERT_OK(err, "pthread_join"))
++			ASSERT_EQ(ret, (void *)&prog_fd, "pthread_join");
++	}
++	return err;
++}
++
++static int timer(struct timer *timer_skel)
++{
++	int err, prog_fd;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++
+ 	err = timer__attach(timer_skel);
+ 	if (!ASSERT_OK(err, "timer_attach"))
+ 		return err;
+@@ -63,25 +85,10 @@ static int timer(struct timer *timer_skel)
+ 	/* check that code paths completed */
+ 	ASSERT_EQ(timer_skel->bss->ok, 1 | 2 | 4, "ok");
+ 
+-	prog_fd = bpf_program__fd(timer_skel->progs.race);
+-	for (i = 0; i < NUM_THR; i++) {
+-		err = pthread_create(&thread_id[i], NULL,
+-				     &spin_lock_thread, &prog_fd);
+-		if (!ASSERT_OK(err, "pthread_create"))
+-			break;
+-	}
+-
+-	while (i) {
+-		err = pthread_join(thread_id[--i], &ret);
+-		if (ASSERT_OK(err, "pthread_join"))
+-			ASSERT_EQ(ret, (void *)&prog_fd, "pthread_join");
+-	}
+-
  	return 0;
  }
  
-+/**
-+ * bpf_timer_cancel_async - try to deactivate a timer
-+ * @timer:	bpf_timer to stop
-+ *
-+ * Returns:
-+ *
-+ *  *  0 when the timer was not active
-+ *  *  1 when the timer was active
-+ *  * -1 when the timer is currently executing the callback function and
-+ *       cannot be stopped
-+ *  * -ECANCELED when the timer will be cancelled asynchronously
-+ *  * -ENOMEM when out of memory
-+ *  * -EINVAL when the timer was not initialized
-+ *  * -ENOENT when this kfunc is racing with timer deletion
-+ */
-+__bpf_kfunc int bpf_timer_cancel_async(struct bpf_timer *timer)
-+{
-+	struct bpf_async_kern *async = (void *)timer;
-+	struct bpf_async_cb *cb;
-+	int ret;
-+
-+	cb = READ_ONCE(async->cb);
-+	if (!cb)
-+		return -EINVAL;
-+
-+	/*
-+	 * Unlike hrtimer_start() it's ok to synchronously call
-+	 * hrtimer_try_to_cancel() when refcnt reached zero, but deferring to
-+	 * irq_work is not, since irq callback may execute after RCU GP and
-+	 * cb could be freed at that time. Check for refcnt zero for
-+	 * consistency.
-+	 */
-+	if (!refcount_inc_not_zero(&cb->refcnt))
-+		return -ENOENT;
-+
-+	if (!in_hardirq()) {
-+		struct bpf_hrtimer *t = container_of(cb, struct bpf_hrtimer, cb);
-+
-+		ret = hrtimer_try_to_cancel(&t->timer);
-+		bpf_async_refcount_put(cb);
-+		return ret;
-+	} else {
-+		ret = bpf_async_schedule_op(cb, BPF_ASYNC_CANCEL, 0, 0);
-+		return ret ? ret : -ECANCELED;
-+	}
+-/* TODO: use pid filtering */
+-void serial_test_timer(void)
++static void test_timer(int (*timer_test_fn)(struct timer *timer_skel))
+ {
+ 	struct timer *timer_skel = NULL;
+ 	int err;
+@@ -94,13 +101,23 @@ void serial_test_timer(void)
+ 	if (!ASSERT_OK_PTR(timer_skel, "timer_skel_load"))
+ 		return;
+ 
+-	err = timer(timer_skel);
++	err = timer_test_fn(timer_skel);
+ 	ASSERT_OK(err, "timer");
+ 	timer__destroy(timer_skel);
 +}
 +
- __bpf_kfunc_end_defs();
++void serial_test_timer(void)
++{
++	test_timer(timer);
  
- static void bpf_task_work_cancel_scheduled(struct irq_work *irq_work)
-@@ -4608,6 +4655,7 @@ BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
- BTF_ID_FLAGS(func, bpf_dynptr_from_file)
- BTF_ID_FLAGS(func, bpf_dynptr_file_discard)
-+BTF_ID_FLAGS(func, bpf_timer_cancel_async)
- BTF_KFUNCS_END(common_btf_ids)
+ 	RUN_TESTS(timer_failure);
+ }
  
- static const struct btf_kfunc_id_set common_kfunc_set = {
++void serial_test_timer_stress(void)
++{
++	test_timer(timer_stress);
++}
++
+ void test_timer_interrupt(void)
+ {
+ 	struct timer_interrupt *skel = NULL;
 -- 
 2.47.3
 
