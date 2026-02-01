@@ -1,127 +1,140 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F592147E6
-	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 10:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BAD61EA7F4
+	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 16:34:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769941588; cv=pass; b=c3hL8WyBxWVZQOdr7DgeyUKhX2WLXEWydeVWc1sv0njSWMyZuaBd0DnvSVXI0OFG7Za9yJwdiwqHJxChXnuIFDthHO5hefZubzpGM/Q2bUmqkrXm6h6rbmQyA9aNdusUskZUJGGFG6UIpDJwajEKz1S1lsR4I5AgyMPMtj2dv+4=
+	t=1769963660; cv=pass; b=D347poJtnmt8EqjVm66rpCI52/E1VYzBeRnAxnGfWtTAV7WrFOfBC82CRvBBheBV/wqydAxfCCyTZL0rCnOjBjDBrDnVa91ROA3Z1XkD3uFwf1gAcClo22/ZY+qQxlKrVTZAR6kJB9WHx5VSfPsot6mGUwxjlAeau3rWiVJDDco=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769941588; c=relaxed/simple;
-	bh=amYpk8y7uZ17bXL/jYzc2DIrfTgbEjzT20gzakvuc2s=;
+	s=arc-20240116; t=1769963660; c=relaxed/simple;
+	bh=9vARzbqm57tHwuhXaOkV/GDbi+y1/yz3tQ/mR3mTHg8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CPxjWMpZJB4LsTeJ9eJh6evd4vWRflhcMIzqe8xRlHxOAatTfnZktC1haXFAXFOGb4/INsJdlsI/wMnGSserNEkJAy6+ylZC0AywlVAUILzj+N0IDVlYrreInmO7AsSCLu76Qa7hg0hFRB79kktnEGbLZ+BpEIHuf5/w4GIR2P4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tjWXVEIk; arc=pass smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	 To:Cc:Content-Type; b=Jw1KI46vDL1Tnw/oQ3Pdj8uEJFeOhBQNYEan1QvvsVedix60YXEKLIYnZ0epJBtzu0kvLWdhSnXR0/uPDTWZHOQI5f1gJel+UJ3jGhIvYLnveaqJbKwZQvcrW9NTTeDuqfov4gNmAdDTeysHxxInB8Ut8eJLsXucwlKf35qqHfA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SH26GhD1; arc=pass smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tjWXVEIk"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-50331ac1fedso44123601cf.0
-        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 02:26:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769941586; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SH26GhD1"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47edd6111b4so38437465e9.1
+        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 08:34:18 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1769963657; cv=none;
         d=google.com; s=arc-20240605;
-        b=STfzqG8G2yKao+2c8SZBtuZZ01FrzmpDDQK1G4jOqNFHFdpO8MDInXC63lGnf1GkQ3
-         pHjhOhQkt0+JBq3y17woYSni+rGoEUv9LLIGJ46ilIvW4jdQIPoDQfMrowp0SwCZbjH1
-         n1I1vWtOMbjljqodEf07lQkMmjubX0/04F+rEUwsMUibmXqrpgcoxOgH7VWuMFr64/OT
-         IC8hxk1K1NAAM+1+5/4RcVkTBiJ8VjDixF6nUuAsaOtVsFgkma3Porw4+7RAjUTxM1p/
-         MPiqp6C4ykpxaPNuF1ScWODwLZ7TXjUtu9c2jV8imiAAaC1i6+LAbezN8EZNi4yiChyQ
-         DOww==
+        b=IEGfdNiu50QQoOZyGHEx5VazsKwwGOjyB5v8jJv1M3e2u/AwfDrP1j0uCGh0bNy7ro
+         PnQRjYXvolltWWvAULuRyWoYI6Nhn2asUMfjNis6uRXtdcr0Eq4iL4ObC3FRbC4GoW1a
+         rR8HJekdVp5mluZWPW+cWpRRiDcPSztq4zPBKaszFVvugpP5reIMaoYcnJCkNB+yEMA9
+         LkWjR/dbWiuOlwqEErYyOqScjgxsnqa0DUfgu3B7DJwPhdpLDrDqaq55h2a7dZr3Rhh5
+         gMFxSHE3zL+u4omNZ2y6SWUgSIQdrEAR8+Bq4svArXqo4I7zk8wFdPmIY4fA1G+BqR2Q
+         NMXg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=amYpk8y7uZ17bXL/jYzc2DIrfTgbEjzT20gzakvuc2s=;
-        fh=/hIyvyVGXg3Dr4pfTeNR0RD5Iuu4kdS4BZq3Kk4tu2Q=;
-        b=TUImH3ECrY9BQzvh1xYOnmmca7uHsnydGKUgOrXTuTDZALnowumnG7bjR8a0T/majs
-         ZTswfQ9KJG1DpPQaAo+Rs8CR2pdJGtXxXHGt4Czn0r4BKwsodSu8CSQ/V3kP+8hBGznw
-         dhpM2ZLXs96vbaPbpWiVkbkDOSkJ7x1JY5kImj7k6yvBTR439Ul9jm+lugUbYxwpQeLw
-         GdKfltfnCkx1Kr/bnMA1ndH1+SKLzBEgGeW9Zz/nOM+PHy84NI3vQGnviwWIId5UXQy4
-         g7tcJdlwtFGx5WmRKRqoeiQY850TVsjlpyLk+Dqf0QOe6OAyzW/6lwVUFV2wfaA3jOE1
-         TfSQ==;
+        bh=u0Iy9aGR9ZHnPoAbdsA1GkEXv4tNmEq2SPJm+D/xhwc=;
+        fh=qyQ0aRNZEwQoAyW0zJk4MfnOBbCF5wxwkmXD36qAbqY=;
+        b=TzpbvrOJrAyqJ1fCiHgFQ1be5a6zcfGmLuaXada/Ci3c2P8Wap+v/JeIKr13+LB/3R
+         rLQ89kmTU0zOaNGy30pHKW7Gz3RE/dC3z246lHhkg9SvX2+bBNPU42JQbLPtltfrIFr6
+         TNRP8KJ4h2QH7TZaOxZn/hEtUFx0kjySnGYkvqeCybJqGle9/Nr4D5Z3cDHFAkxlUOdG
+         VtqgAPJhEclTvhshJdXOxIBR80/IybSwrVPuLsRqDriA21ZJj4R4XPHdyXzpelEbSIBj
+         6HBCCMWPn2S7Pr/0WuwDjQJiJNrZVSCqgmkJVxhbs2B8ibwwvjPbl9f8K9f12FTxpqLw
+         9cxQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1769941586; x=1770546386; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769963657; x=1770568457; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=amYpk8y7uZ17bXL/jYzc2DIrfTgbEjzT20gzakvuc2s=;
-        b=tjWXVEIkwuWlA/YmIFxQycJ590x8iPoVszHh0oOmLhIj3YUMioygV1KM3fv92WjZ0F
-         SHY5wx3LeG4cozL2PK8A3mbNvXvCenltELpXLUGtNCU+BuBeWX16hGri2tPTrLZ8KhA7
-         NY+/rato5A/jMf5EUPWojk+ie8GJKNXyqrNyarsXyGaq2NqyMZOqHH04v9EnZ0d5O50B
-         aBN+h5xgvWuY8k0S6atOqamEFKP/lARddKxU0NexaiEf8rzDo8icLpaWWeJvkRgM1ya1
-         oitFZWauwURHO+nFbvtOrYPd6O6Bm2LyGhcwmgYMKRtTMt0fjP24A+hYD8DxfWyiDfSn
-         bv9w==
+        bh=u0Iy9aGR9ZHnPoAbdsA1GkEXv4tNmEq2SPJm+D/xhwc=;
+        b=SH26GhD17Mc7LRD0W+pRH9GdbyywkcdDLfjEN25lZoyNq9U6dvEo4bjQ8OmURHNqf9
+         kY/ECSITSwhbJpZ0sXoqhTRqW0bZnjAn8ISaxq8ZUK4s1SxJl8yhMXN3iq6Dw2xR9wWc
+         KXwSaGHHQ2Ns4f7Lfkot2UUj9sO5PgOatIZxwekgfN/EiirYA8q6QobfPReQ8j0HJqKJ
+         TOGK2bSJyNy3zKgrW76lnp1h4BvG728gyAHHtZyBppuSDX0eNMwd8L53g8BNgr1D1L34
+         65rVzTJmR3WiAsBI6MNcnHKEMMirVe309IihVm5VD49wtNmRTZxSXpQhuWbGt3OvgqyU
+         jJbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769941586; x=1770546386;
+        d=1e100.net; s=20230601; t=1769963657; x=1770568457;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=amYpk8y7uZ17bXL/jYzc2DIrfTgbEjzT20gzakvuc2s=;
-        b=YY7uui91URk0lexUXG9naKBxcAlPEF3KaVZqS+ajX5QCRM4LOKMU3z8LUPCCVZ2bEi
-         EGbPHnmC1rJsByfMVwjgQ9m4PGEeNklrHGkgP/VW49q7EpmZuUb7wjrpXmTTRU85OFS8
-         IV4FHe/UW2wpOR2hYL9x4F/nL4YRctWFODZ7tUYFmBU8o/bvCZI7OSblJR5pCuTN/UuQ
-         m7dJ39IimWYn0eagxhB8Ow1J1WLP2i73v+4q/WAkw1yq5iUBuN27ClRDe2JKby/TL9hq
-         DZXscWqHK3hUkIP9D/4pyVfbKBLPItVCee6LRPur053P8eF3unORUJ120FTw+DKy3bWb
-         Qb3A==
-X-Forwarded-Encrypted: i=1; AJvYcCX8KaKumXZ0WjwUUoNVNK503YvgYOLObe4APXbgvQkj18a8TgF7RUKW/COt2oH/PGFekvM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1r5Q8Rxqci4SbElX8eXuKVPXFe1NQDQ/m9kcFuUXBYMoP1kmu
-	HcqqUjp6hPoA2m/K8YkZs+fWwHwxBbAvwNrDwffESyUP2EM3k5zaFPvHlgbIazeAhvJ0aqqjoIJ
-	RRwCn9BihSs98F2DJfKSbi1C9LxlxQ2jaavvMC1MM
-X-Gm-Gg: AZuq6aI1zNwgCbuebuhfuu00ZauvbpRkrVkq8oY3I+Cik5lCYPCK2ra8mkBAyfgBO2o
-	BB7uU/+YjQxxtTATmLRuSxAQc6ppyPyATgRqcxPfbk5+PAdzCzQ24TDoj2FRpgTqpXPd9BqgEqK
-	4p9hZDMXzZGaOtaBjOaUwhPLIIkCvZGTCU6u3x0e9tnoXFP4HDKdU184fh7Rh4G4nBLY75Qz98B
-	uERsLWlIi7+YqX4pt0vkd+n1gDcRffvBrjnWdbYkURmyVnAfyfkb9oILeVpYo2KH8Mfwj0=
-X-Received: by 2002:a05:622a:1aa9:b0:501:3c88:131 with SMTP id
- d75a77b69052e-505d219e7aemr108573901cf.22.1769941585616; Sun, 01 Feb 2026
- 02:26:25 -0800 (PST)
+        bh=u0Iy9aGR9ZHnPoAbdsA1GkEXv4tNmEq2SPJm+D/xhwc=;
+        b=S/FW7/PA4UY9uCTb2jynGijoeDCWDmamngLUIDRjIUC6pk3VTrHNKG9UjRck5oc862
+         a4mdxUKO4M6EJKEdZhVJezQsx6QukEL5K4mZyLY3FJxult7dU2QU5hfQrmNFEre6sqK4
+         b8/qwQYRycZur9GyttO0AFvpEbu//MMZXkbJQEZGK8QMGFE5KZxE17KBK34pjGjQhKVv
+         nnsXAeFuWfL6UKbYcwlLxs0YRhfkO+P6Xg12gSInHi9JSHfk35AsFuWn5Cs8R3Jxx0Ye
+         tKxabimwkW4IcOocYqhbJK4PIy5IY9pDwRIwVvUvg5lKasozzrl90W87vsQzRTzu7OSx
+         Jd3w==
+X-Forwarded-Encrypted: i=1; AJvYcCX+E1VRNBAL4C74EgeCa12Aq30nvbPIkQQcpCc2CTq2XQliScI8VmjdDumGuJt4PWz2cHs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUCNcmdW5d1nmZv6QzEfOmv7LaD0xegv/txPQ3K8TKOsjgGS8U
+	cM4Quns8xiPaGJ5iL3DnaQ5WJ0e/Q97X7QTY7Qe4q5zku5DrXL1DBssdtov0+LrL8N82w787f+J
+	uSo8enEMYGxg+UGHaye0VXdfPlCN6YpQ=
+X-Gm-Gg: AZuq6aLdDBJqV4fg/Z/8zNaH8Jecwgk0giFtqCl2y/vvn1Qa9OL8gDmvtoW1Zx0//Dq
+	7khCHZsLxqTnzAC0epOWXxn4pUEZOlBQxaUsoCzRQrXHJALavjEnDZJ/wf9JF2LFHC7S+8weR/f
+	CyI7XrYu55sDKaeqnzA4ksvS6Ph/ea4oOy1DTmZiVepnkhoC9wV5TYp6ZVrLAcxIMinjq6vMDk4
+	zUFE3440CZf9OAVdH8eJtX+ObV8xIWxe4+g/DweaTa3MbnK1o8Tk5pupFWyZVpLLUXwTcxMCMA4
+	RL4BY+JJWlfCs2E+PDPkY/TdZ1PbAdaQTNnY2cf5Z+PnBp+NJuulwFTwueVTNIEsKdZdhaQLPFK
+	ZhEJSMpvQ1HWtkiiihN7IxM/a
+X-Received: by 2002:a05:600c:4e12:b0:477:c478:46d7 with SMTP id
+ 5b1f17b1804b1-482db481c85mr120406455e9.22.1769963656749; Sun, 01 Feb 2026
+ 08:34:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260131222515.8485-1-chia-yu.chang@nokia-bell-labs.com> <20260131222515.8485-16-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20260131222515.8485-16-chia-yu.chang@nokia-bell-labs.com>
-From: Eric Dumazet <edumazet@google.com>
-Date: Sun, 1 Feb 2026 11:26:14 +0100
-X-Gm-Features: AZwV_Qi7N4AZtgtvbxnXQyIYVraEeuRtL1qe-JczyTuupqULFqmqcdCuYubvvbo
-Message-ID: <CANn89i+F8Hmx3-DoOBcW_tJnsyqeeKHZm+_jC1nk5hrnBWN2Jg@mail.gmail.com>
-Subject: Re: [PATCH v13 net-next 15/15] selftests/net: packetdrill: add TCP
- Accurate ECN cases
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: pabeni@redhat.com, parav@nvidia.com, linux-doc@vger.kernel.org, 
-	corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@google.com, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com, 
-	jhs@mojatatu.com, kuba@kernel.org, stephen@networkplumber.org, 
-	xiyou.wangcong@gmail.com, jiri@resnulli.us, davem@davemloft.net, 
-	andrew+netdev@lunn.ch, donald.hunter@gmail.com, ast@fiberby.net, 
-	liuhangbin@gmail.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
-	ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com, 
-	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com, 
-	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at, 
-	Jason_Livingood@comcast.com, vidhi_goel@apple.com
+References: <20260201031607.32940-1-pilgrimtao@gmail.com> <20260201031607.32940-4-pilgrimtao@gmail.com>
+In-Reply-To: <20260201031607.32940-4-pilgrimtao@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 1 Feb 2026 08:34:05 -0800
+X-Gm-Features: AZwV_Qhcz2_dwtnHN0abQtq47NxLW3mB88GNnOnp3aBl9Ob11U6ru31evgMuNbs
+Message-ID: <CAADnVQLFBJ5BKv_6UBk7Wrv=-5QxZfG=856uj+rUKRDcxGWbhQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] selftests/bpf: Add supplementary tests for bpf_kptr_xchg
+To: chengkaitao <pilgrimtao@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Feng Yang <yangfeng@kylinos.cn>, 
+	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Chengkaitao <chengkaitao@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 31, 2026 at 11:26=E2=80=AFPM <chia-yu.chang@nokia-bell-labs.com=
-> wrote:
+On Sat, Jan 31, 2026 at 7:16=E2=80=AFPM chengkaitao <pilgrimtao@gmail.com> =
+wrote:
 >
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> From: Chengkaitao <chengkaitao@kylinos.cn>
 >
-> Linux Accurate ECN test sets using ACE counters and AccECN options to
-> cover several scenarios: Connection teardown, different ACK conditions,
-> counter wrapping, SACK space grabbing, fallback schemes, negotiation
-> retransmission/reorder/loss, AccECN option drop/loss, different
-> handshake reflectors, data with marking, and different sysctl values.
->
-> The packetdrill used is commit cbe405666c9c8698ac1e72f5e8ffc551216dfa56
-> of repo: https://github.com/minuscat/packetdrill/tree/upstream_accecn.
-> And corresponding patches are sent to google/packetdrill email list.
->
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> Co-developed-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> Signed-off-by: Ilpo J=C3=A4rvinen <ij@kernel.org>
-> Co-developed-by: Neal Cardwell <ncardwell@google.com>
-> Signed-off-by: Neal Cardwell <ncardwell@google.com>
+> 1. Allow using bpf_kptr_xchg under lock-held context.
+> 2. The rb_node contains a __kptr pointer, eliminating the need to
+>    perform the remove-read-readd operation sequence.
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+typo
+
+> This patch implements the following workflow:
+> 1. Construct a rbtree with 16 elements.
+> 2. Traverse the rbtree, locate the kptr pointer in the target node,
+>    and read the content pointed to by the pointer.
+> 3. Remove all nodes from the rbtree.
+>
+> Signed-off-by: Chengkaitao <chengkaitao@kylinos.cn>
+
+Please use your full name. Like Feng did :
+
+> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+
+..
+
+> +#define private(name) (SEC(".data." #name) __hidden __aligned(8))
+> +
+> +private(A) struct bpf_rb_root root __contains(tree_node, node);
+> +private(A) struct bpf_spin_lock lock;
+
+It doesn't even build :(
+
+progs/rbtree_search_kptr.c:23:1: error: expected parameter declarator
+23 | private(A) struct bpf_rb_root root __contains(tree_node, node);
+| ^
+
+pw-bot: cr
