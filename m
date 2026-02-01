@@ -1,106 +1,84 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7784B24B45
-	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 18:06:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1532F22759C;
+	Sun,  1 Feb 2026 18:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769969167; cv=none; b=qQa4HoWVj4wjmSD32DUh6/70SXQ0EeHWWFrI1UukM4mtnYFQIkaZkoBptrjYEMwsmeSqnQoC2WBVbmHVzRugvRA7uht/nSyZzeYubqVuhjoiDg/p7SlbtLXACvfw0dx3pUvS7qSAUR2903l46x2eoPu5q2qj34TqwEtACs3hGTs=
+	t=1769970170; cv=none; b=OOrY7YXCfl1ZU9YCKf6A3wH7iIKP4a9rou6AA/HOkbMpjKoxrFxmqg7QP9YPM7IBwIbhe60qCxMX6OMng59Itez2xeMLvB19g8PxQiNq5nzB/Rwfi3xz84B8vBB+iikCVF7Pjnu7jV60kp3ikHm8c1tfP7QtBnc4tD53o0sIkFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769969167; c=relaxed/simple;
-	bh=QvYG1NXSzapY3iN4ReseN1zWtPiBu3A106cjFPaZZgM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H2VHHz8nnfN3TxPET5x6yT+VVVqR75AzHPXHfCAbN5KSwbudquaQnHPtAt+vE7emdmioHUOOyB1Bpa34MaH+7++QxhT+jK4cFXA4FQE3svadR/nkY8Hx3fsykWrBIn+HfPDIUSzhmbWqFYLFFJ7S3p/+UTs7OrPQHEgwelepDUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ke5YHglO; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1769970170; c=relaxed/simple;
+	bh=grlXjdm8xmThX3zhXh4qR9eXyekhcJ8bFV4lxhv8hKM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=EYLxW9diqXWh0X6kSFcIvjjL4AGqG0BhdAC/vMvpg17+M1a6Fgrhr/N8GB7akZ0yZJerO6yCaxiZA8wir3ljR4DhTSF786KL4CWj8xpRhE696DhouKCXy2XeLMrtJWHKZLh8bxmP61fOoRXOLQcNaWhU2nxU3Y7yPHzOHh198wQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X8+fFDWG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ke5YHglO"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1769969163;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=DquVoHz0bHRbcPaOo1xT2MSMheeHJTE2vLWSd+7qSoU=;
-	b=Ke5YHglOg5C/WDjMUBbXslPEyrWrm5KgiVEReLHCMQPGDH9MMXSDoDU7EnwknGuSKptG/v
-	SMMpxk+PBceEF3yE7muACEK7i7eb+Qo3e72f+khFXccXLagO4LRg7K6wWWCKtzl5s2QJjt
-	SgAUWl/KKtPbNxb2LZPgd4wi4cxJoas=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: Martin KaFai Lau <martin.lau@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>
-Cc: Thorsten Blum <thorsten.blum@linux.dev>,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next] bpf: Replace snprintf("%s", ...) with strscpy()
-Date: Sun,  1 Feb 2026 19:04:46 +0100
-Message-ID: <20260201180445.664056-2-thorsten.blum@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X8+fFDWG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7443AC4CEF7;
+	Sun,  1 Feb 2026 18:22:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769970169;
+	bh=grlXjdm8xmThX3zhXh4qR9eXyekhcJ8bFV4lxhv8hKM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=X8+fFDWGKvmGL/kZL1a4RmRCl5FZ4L1eJsOUy16c+f9p/XvE5lgwFYLlVJYDEnn/F
+	 jiR6NAa5bgJNSQozAjx205p1yaBerkmfPh/+E9Z0m6acTezM/w44gkC58KjNNrZ9ii
+	 bkJi6VHBPy7uwRdiSb7cx6uofduFTfEPIqwoHbqPf1n8qJn3+jjoIJiNRVS6hX/U6D
+	 Gt9WFjVNX1+2EFfLXk/Oa9/Q30ZX51gdC0uM0Ad0JjeEHLQm3e3QY0OnO54k3SoM6l
+	 3JxlS+KHaiADCB//hGkGlpBzAwzpDz6ek9kIYVMxp4rkfNpu4BgTzxBFRhPnPvFV4e
+	 F/6759iIg5X4A==
+Content-Type: multipart/mixed; boundary="===============5808050125888543634=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <805211652ab5a5433408cf5070e41ea289611a908c1f1f3c2584ba0c334a9560@mail.kernel.org>
+In-Reply-To: <20260201175050.468601-11-ameryhung@gmail.com>
+References: <20260201175050.468601-11-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v5 10/16] bpf: Support lockless unlink when freeing map or local storage
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,song@kernel.org,haoluo@google.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun,  1 Feb 2026 18:22:49 +0000 (UTC)
 
-Replace snprintf("%s", ...) with the faster and more direct strscpy().
+--===============5808050125888543634==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+
+commit 5ca113c57e19a4ef0ccfc390cc9274cc9ff66abc
+Author: Amery Hung <ameryhung@gmail.com>
+
+bpf: Support lockless unlink when freeing map or local storage
+
+This commit introduces bpf_selem_unlink_nofail() to handle errors from
+rqspinlock during map or local storage freeing. It uses a link_cnt refcount
+to coordinate between map_free() and destroy() when lock acquisition fails.
+
+> Under normal circumstances, bpf_selem_unlink_nofail() will be able to
+> grab locks and unlink a selem from map and local storage in sequeunce,
+
+This isn't a bug, but there is a typo: "sequeunce" should be "sequence".
+
+> Then, only when both map and
+> local storage are gone, an selem can be free by the last caller that
+
+This isn't a bug, but there is a grammar issue: "can be free by" should be
+"can be freed by".
+
+
 ---
- kernel/bpf/btf.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 8959f3bc1e92..72fa0cb1a71b 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -25,6 +25,7 @@
- #include <linux/perf_event.h>
- #include <linux/bsearch.h>
- #include <linux/kobject.h>
-+#include <linux/string.h>
- #include <linux/sysfs.h>
- #include <linux/overflow.h>
- 
-@@ -1210,8 +1211,7 @@ static const char *btf_show_name(struct btf_show *show)
- 
- 	/* Even if we don't want type name info, we want parentheses etc */
- 	if (show->flags & BTF_SHOW_NONAME)
--		snprintf(show->state.name, sizeof(show->state.name), "%s",
--			 parens);
-+		strscpy(show->state.name, parens);
- 	else
- 		snprintf(show->state.name, sizeof(show->state.name),
- 			 "%s%s%s(%s%s%s%s%s%s)%s",
-@@ -6324,7 +6324,7 @@ static struct btf *btf_parse_base(struct btf_verifier_env *env, const char *name
- 	btf->data_size = data_size;
- 	btf->kernel_btf = true;
- 	btf->named_start_id = 0;
--	snprintf(btf->name, sizeof(btf->name), "%s", name);
-+	strscpy(btf->name, name);
- 
- 	err = btf_parse_hdr(env);
- 	if (err)
-@@ -6443,7 +6443,7 @@ static struct btf *btf_parse_module(const char *module_name, const void *data,
- 	btf->start_str_off = base_btf->hdr.str_len;
- 	btf->kernel_btf = true;
- 	btf->named_start_id = 0;
--	snprintf(btf->name, sizeof(btf->name), "%s", module_name);
-+	strscpy(btf->name, module_name);
- 
- 	btf->data = kvmemdup(data, data_size, GFP_KERNEL | __GFP_NOWARN);
- 	if (!btf->data) {
--- 
-Thorsten Blum <thorsten.blum@linux.dev>
-GPG: 1D60 735E 8AEF 3BE4 73B6  9D84 7336 78FD 8DFE EAD4
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21567682421
 
+AI-authorship-score: low
+AI-authorship-explanation: The commit shows deep understanding of kernel synchronization primitives and BPF local storage internals with natural technical writing style typical of experienced kernel developers.
+issues-found: 2
+issue-severity-score: low
+issue-severity-explanation: Minor typo and grammar errors in commit message only, no code issues found.
+
+--===============5808050125888543634==--
