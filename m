@@ -1,110 +1,85 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C55A1B86C7
-	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 02:29:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769912954; cv=pass; b=ZSii/w7DWLaeEUezC1dDyLgfLdEnXvO/4mtaTQVrmOXvBFn0L9e35w9Yu7xZ0pJry2jOvgXeniFBTZYFkjMqUDwy4eWBlZsqLnjNbUbPK5uM4v2k3txtBDz+1yCj+DKauml/o8Pw9zLyGTsU2S26Jx8sp4jVbBZZIfQwaktXzRs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769912954; c=relaxed/simple;
-	bh=KXycpc357A6wBueFM3htQx3+sDwMFSwA0igwjNoKuZw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dDWaRmsh5VjcTrkVFGCVkZI5xCd84r0Z28DQL12cq01nW4iZ2l1MWNShWsT7AauBpvq1MxB11qUFbs+5c06cOBJBfpTeYhi7bDcJG2QfePIIqImVWnRimkytSu5vUwruXcLTzOfuzAShFxZI3DWYHaKj4xcvG9KrFdB6GkJWGnQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X2+Yagw4; arc=pass smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X2+Yagw4"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-432d2c7dd52so3287271f8f.2
-        for <bpf@vger.kernel.org>; Sat, 31 Jan 2026 18:29:12 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769912951; cv=none;
-        d=google.com; s=arc-20240605;
-        b=iz6BUYfmMzMI50WxqkDB1Hg0Z8xKxsGYFxirCJuLhXS2muoUowI2A5kvqAr+alhIlM
-         eg4KqXkyHELtdjDT/hGLKqPzZFaJP00VNkVeH7sq4EMx8vbJyY2BKxUJgPCTYzuTf2AH
-         jPUHhkaDzI168+U4EBqX6zHY4FHQe6K6VpKeily2X+oObmBgIh8DuZ5SDyCPqxYNE5SI
-         tQr/vkDNGwuWgGK73PPR7GClS0Bsr4prhZlPKYKpNMwuOJ7axjks8t1J6/Mlf94Iarc7
-         PNhehROQa3k/V6ZdXeuEFRKyE01TA8oVpgk8USdVzFEsYfUvM0r7iW54ewAlYQbiOILZ
-         VXUw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=KXycpc357A6wBueFM3htQx3+sDwMFSwA0igwjNoKuZw=;
-        fh=teKnXWkoKSRTR1rJRL9NU9uTTkuKJXyNGYDkjw407U4=;
-        b=SblL9qilcUDV1XbKdyOVSeVXoV3NA0rXmFSUzJ4Hsi9zNASnh50dQNJwMO/7WMOXpn
-         AJ1BC38kEJw4itg+l2Y+n+2UTvLzbq2rea9YQBTeu5k7XndgE6s0JwlPRSts9HLf1xJs
-         vUdKHJPA3hfottmtlZjK37CmznQ/mR/chKrtnWrKfe69iYIbXEUvGpWC1Z2Soc9hMbQl
-         VOm4qFCogtcB9u0bYB6G7tLW3j2x+7S2EgtT3M7/J+6Q9FF7ttTtW3fww1/VrOGjGLFm
-         oFwmA/pQpg5guwsr5DUq4RdPBE/F8ptaR8GmCELN0k0WZUQa64yioEhM31RtjS4miTkx
-         RIdw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769912951; x=1770517751; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KXycpc357A6wBueFM3htQx3+sDwMFSwA0igwjNoKuZw=;
-        b=X2+Yagw4C1o2ocC0dTB2wRqAkofYlk2V01DxyaPMm978cmCGAwMpNQLM1vqZaO/ERl
-         l9eae2W8Bn6/1uFE1PEDk76oGqwH6GEfS6UieJ/GGrR+BUJKOR0a+EHahOGIEHL87T1F
-         Ro1fOotR7mGpixL5POuMGlbKt+GAK7hFEtitbwjziXaza6IKvHcvCJke2/PH6CMzHHRp
-         RlP1p0cQUYaLNjIy3xfoVLk56g+3djF7LAWaFJyyvyMEEf33T5yVoJ7kc+HH/waYqy2d
-         +Oulg/dcXqmYNRIdz5kX4sM216vikH0a5F0hd4/9XiT5/cwKl5S5FsEhnBK8qoQR64ZK
-         i1qQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769912951; x=1770517751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=KXycpc357A6wBueFM3htQx3+sDwMFSwA0igwjNoKuZw=;
-        b=Pzos8z41eIHomGc+Ax9K3+DaNg+Q1z+SAVYnMd5usVfspwNqa/IObf+/BfOxTHe57c
-         fyEloquY2VtD7unh/9vQVbCN3zWL3+lbrJRisGyUYDPZS5d1E3DFComfPGB70pzCHFU+
-         B8z0tgei5Zvf48edc1zEk3vGMl+pMjtPYI5ZqK6Eu1jVWwQLWlfLxIK1Gtsp2RLGEh4a
-         7Mm2TQ3bcldSOze1ZbUx72KJ9taPL39+ikJXutRYPr00GYIjBQuI0pj9ujFEAne5hl67
-         y+EE/2XvmeQOZvSN63mRXxgAG79exGPkHjSFc2Ejgq4mofWW2NSAsJ9pDTLCZxUUEQ6t
-         r2rg==
-X-Gm-Message-State: AOJu0YyAeZdcKavQ7yORFn4ZYLP8DxrZ6gHGAw+WM/9IVudHj2Gm6X5P
-	12MCv874lrUpOaV8Epk6wZRfOIwx+vcjgnm9y4gAlhDPuIcjPiXv3H+qq7DoifPn9KxmjJgB54W
-	WfSJeKJhtsdf/hxE2pHHmU1PcrxQK+jQ=
-X-Gm-Gg: AZuq6aId7gH8jfiGwV1G2xVknMXyMn62wmWkPh1oBZm01m8eBMfEG1gbe598pCEUZnx
-	M5nVOYhPBAUj3yZxcQyMr0qe8NkQGMagvBb6bjMmYBV6WZvYHIvAKPsQDKT8GCiliXRcRATvYT7
-	oXTcar8cZc7eq7uyDEJIL8pN6oCjVWGMS6hQyZmxCBz3dckBt89OXm6L142lJBosianw1b1jbB4
-	Suevlzx0BEAKAUKllb7qnPOgyXHRVVq0gaf5K1CiTv5zoXWkeAgcsFvGoPE1gbUUDXg9WDUT+OG
-	sU1Yc+ojzOvtyGGK9NOxpWpfXnRZxkJ9PQD6EZwN54Ji/HsDAlzG6VRBX6NaeHzU2OF88XuR1Ql
-	SKFR+gpUeNXUzLw==
-X-Received: by 2002:a05:6000:184e:b0:42f:f627:3aa3 with SMTP id
- ffacd0b85a97d-435f3ad8530mr11044647f8f.56.1769912951224; Sat, 31 Jan 2026
- 18:29:11 -0800 (PST)
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FDE31F4180
+	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 02:44:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769913853; cv=none; b=k0lNSuGe3NX5Z/nnYYeRM2FLpZRTIoKXgdqCa0EYCb8QG6i+FTZa84y88JVJgTIALXUh+pdPwO+GhszY8SQL3o/NBeMetN/P0B//a8vVo/ssHxh/o/PgsYPQw2TwwIH/3EsSs6lTC7KWSZoqCU/4u2STbI+meASQDkJkOYPW4zk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769913853; c=relaxed/simple;
+	bh=fLL2ccTttwrWDGpomkRRu4yamEst/YBXA82ulJtnEAU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=blt4gFYBCw+zORjw3E8R1EZDrk9WByC9+d4zQxLIXh8j1L0Py5SlOS/YjWdCR/+K3n9u1CKn+cGNkda0Z7Apxm1FNzd/s9DcXcvqtb1ryunrVydQBmoDrjTkjop61VuZLOSEsOxW9XFb3hS1np1Y2bi+lunMtxJwAl6vQqWV+Aw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn; spf=pass smtp.mailfrom=hust.edu.cn; arc=none smtp.client-ip=4.193.249.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hust.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hust.edu.cn
+Received: from hust.edu.cn (unknown [172.16.0.50])
+	by app1 (Coremail) with SMTP id HgEQrACHS9zAvX5p+3DcAQ--.59252S2;
+	Sun, 01 Feb 2026 10:43:12 +0800 (CST)
+Received: from [192.168.1.7] (unknown [183.94.140.210])
+	by gateway (Coremail) with SMTP id _____wC3WOq+vX5pSDcKAA--.27241S2;
+	Sun, 01 Feb 2026 10:43:12 +0800 (CST)
+Message-ID: <214c0933-efdc-44b2-97f1-de6f66b4698f@hust.edu.cn>
+Date: Sun, 1 Feb 2026 10:43:10 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: BUG: unable to handle kernel NULL pointer dereference in
+ bpf_trace_run2
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ =?UTF-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>
+Cc: bpf <bpf@vger.kernel.org>, Yinhao Hu <dddddd@hust.edu.cn>,
+ hust-os-kernel-patches@googlegroups.com,
+ Matt Bobrowski <mattbobrowski@google.com>, KP Singh <kpsingh@kernel.org>
 References: <754601da.6db2d.19c1704f391.Coremail.kaiyanm@hust.edu.cn>
-In-Reply-To: <754601da.6db2d.19c1704f391.Coremail.kaiyanm@hust.edu.cn>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 31 Jan 2026 18:29:00 -0800
-X-Gm-Features: AZwV_QiZ03StB9sc7ltmuCk1l4IYhsyqgZWj1ysjjmlEtBAnQFdXPHlL_lGS3GM
-Message-ID: <CAADnVQJZGUCVuG16ZmZMNa4B9QLRAsMBWCXu3nh7p8qQjcS_Eg@mail.gmail.com>
-Subject: Re: BUG: unable to handle kernel NULL pointer dereference in bpf_trace_run2
-To: =?UTF-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>
-Cc: bpf <bpf@vger.kernel.org>, Yinhao Hu <dddddd@hust.edu.cn>, 
-	Dongliang Mu <dzm91@hust.edu.cn>, hust-os-kernel-patches@googlegroups.com, 
-	Matt Bobrowski <mattbobrowski@google.com>, KP Singh <kpsingh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <CAADnVQJZGUCVuG16ZmZMNa4B9QLRAsMBWCXu3nh7p8qQjcS_Eg@mail.gmail.com>
+From: Dongliang Mu <dzm91@hust.edu.cn>
+In-Reply-To: <CAADnVQJZGUCVuG16ZmZMNa4B9QLRAsMBWCXu3nh7p8qQjcS_Eg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:HgEQrACHS9zAvX5p+3DcAQ--.59252S2
+Authentication-Results: app1; spf=neutral smtp.mail=dzm91@hust.edu.cn;
+X-Coremail-Antispam: 1UD129KBjvdXoWrKryDAry5WF1kJw1kGFy5XFb_yoWfWwb_ur
+	srGr97Kw17Z3W3uFsrCFsIyFs7A3WvgF9Fv3y8ZwnFgay5Xr1rCrWYgry7AFy8XF4fWryr
+	Awn8Xa4fu39YkjkaLaAFLSUrUUUU8b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbPkYjsxI4VWxJwAYFVCjjxCrM7CY07I20VC2zVCF04k26cxKx2IY
+	s7xG6rWj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI
+	8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2
+	z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r
+	1Y6r17M2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI
+	12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj64x0Y40En7xvr7AKxV
+	WxJVW8Jr1lYx0E74AGY7Cv6cx26r4fZr1UJr1lYx0Ec7CjxVAajcxG14v26F4j6r4UJwAm
+	72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82
+	IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uFyUJr1UMxC20s026xCaFVCjc4AY6r1j
+	6r4UMxCIbckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
+	AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
+	0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
+	v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AK
+	xVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzOJ5DUUUU
+X-CM-SenderInfo: asqsiiirqrkko6kx23oohg3hdfq/
 
-On Sat, Jan 31, 2026 at 6:26=E2=80=AFPM =E6=A2=85=E5=BC=80=E5=BD=A6 <kaiyan=
-m@hust.edu.cn> wrote:
+
+On 2/1/26 10:29 AM, Alexei Starovoitov wrote:
+> On Sat, Jan 31, 2026 at 6:26 PM 梅开彦 <kaiyanm@hust.edu.cn> wrote:
+>> Our fuzzer discovered a vulnerability in the BPF subsystem. The crash can be trigger on bpf-next(93ce3bee311d6f885bffb4a83843bddbe6b126be).
+> ...
 >
-> Our fuzzer discovered a vulnerability in the BPF subsystem. The crash can=
- be trigger on bpf-next(93ce3bee311d6f885bffb4a83843bddbe6b126be).
+>> CPU: 0 UID: 0 PID: 5217 Comm: systemd-udevd Not tainted 6.17.0-g39e9d5f63075 #1 PREEMPT(full)
+> I don't believe it. The splat says 6.17.
+> Maybe stop trusting AI so much?
 
-...
+Hi Alexei,
 
-> CPU: 0 UID: 0 PID: 5217 Comm: systemd-udevd Not tainted 6.17.0-g39e9d5f63=
-075 #1 PREEMPT(full)
+This report is generated by our customized syzkaller, not generated from AI.
 
-I don't believe it. The splat says 6.17.
-Maybe stop trusting AI so much?
+Because syzkaller cannot stably reproduce this crash and generate a PoC, 
+we share it with this public mailing list in case someone may understand 
+this crash, or help us reproduce and fix it. BTW, if our fuzz can 
+reproduce it stably and generate a PoC in the future, we will analyze it 
+and send an email about its root cause like before.
+
+Dongliang Mu
+
