@@ -1,46 +1,54 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6185A3D3B3;
-	Sun,  1 Feb 2026 00:38:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964BD3EBF1F;
+	Sun,  1 Feb 2026 00:45:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769906316; cv=none; b=WoFOxKlBNOHStz9OtTGCKR2dbRjqywO9tLP0h4Pe6Mi6liZx/x8FjlFYQNKsjZj7GpNAUjmO0iN67l9pek1qI4RcoczBokoOnNkMD9QOsY3t+GFCvVfCDcDOyk3wqmzKOQRIxcwv92Am3VHB8Onk3DVvcsxdo31sLy9V9vEsaOE=
+	t=1769906719; cv=none; b=OlNwRV7bBYQPxhvxF+DVgdiw3CmZkTq2VQwCZgUBMTymfGI7cXXTT4cAhj9CN8cmytc5vpIQPwnhhHFnMEoMWo2M/YFBwWFmS8s7QENJcZ2s5s35fpj3EAJlgyP0MKxGqff26FjnYMxjMFUxK5hdnC9mh17nqhWc/4+Lo7PB9ZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769906316; c=relaxed/simple;
-	bh=O8FUssz1TBM/Vz8EXid9I/fJq0G1tpON2mr0Syo5JLs=;
+	s=arc-20240116; t=1769906719; c=relaxed/simple;
+	bh=3H50njZHf/MxF1LMF+V5Pv639i4KiMLWrfP4zBIYZyI=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DrYu7fhmEC9daLP2lFWXqvHns3XRtLREn5AiBeh6848K/FPMqXQBBPwPfYEjRWcfcgGzk9d113A+3izo1+8wvW8vYDWhmyJ9fv2PVyGg813dK6QZIeyTUh8H9yoMMAr9hR7NFcqEVzrco6PPf2pgOKULlEeCp3RgtQArvgjSExo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j8rNMoEB; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=XFSlELtCOYrfIVXq1ybsR55Zi0wfEEaM8bBuKqp/yfx04GDMqKCoTpEmyvp4D3IRcYjOWQrmX9vURq0a4X7my5A3cMHjVX3In5SGh/VkOF1a6QjO9q+lHfvFnYtzMKbuL/9PyL1xmOtcIsmX693ppHyRdyRX7kzW0ES+Y3sS4Wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7bY3VXT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j8rNMoEB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55865C4CEF1;
-	Sun,  1 Feb 2026 00:38:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7bY3VXT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 165EBC4CEF1;
+	Sun,  1 Feb 2026 00:45:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769906316;
-	bh=O8FUssz1TBM/Vz8EXid9I/fJq0G1tpON2mr0Syo5JLs=;
+	s=k20201202; t=1769906719;
+	bh=3H50njZHf/MxF1LMF+V5Pv639i4KiMLWrfP4zBIYZyI=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=j8rNMoEBPE5grsPcla115jNNfF9TBr4ZEITep8eTzJjsF0nZST1GuGx9sqGirnHWu
-	 kG7me3oV5UHE2edkTOekXpOOjw1YODfs026dF2DdUTQL58/kdIHv3m2ywfYTMxuZEC
-	 Nioi29aiATv4PDRDHJPg+MYBY948Htwd/b4Ou1DK+zVDGtVQq2iO7y+KOZA2sZ29yD
-	 2/+lRFc3vGQGh8VRSmLdtUhJsJpeSJaVLbq5l7qs5tAjQQc8+bl9o8cf/qk1l9R9bO
-	 BUqDk3NSyPuPee37yqG0z/fAOI+SVIyO/GNtbH5zxWEnGV9erjqipqRETGEtX5IpAy
-	 YPipbdq+1vwZw==
-Date: Sat, 31 Jan 2026 16:38:34 -0800
+	b=S7bY3VXTi93jajlzzf9u55uwY1CbLXh0X1C+sbA+21hInHUw0Fpej/aYRhSU3/jXh
+	 nBooIc/RlWsgFA/cGDkdsLhGmVYdaNWGpjHaWxhjtx4sMbsZcqB5HAQtYYHzIOJdhm
+	 lrkfaUHOyP5Vf6mqT/2D3UFb/0eGVCbrSV9yENRYzeN5a5FEJpzGjms7dHoravUEi/
+	 B05bkLXi+uGuGGJ5x1xp8hbG3dZFgWdNAsgNoCWEHTs7/m/EsK03somqEOGxIrna83
+	 xZHPgiuGZS5Wd8T2nPL9S3XufRfuaV1SRvpVzRDh0v0lK25et8Bkl0zgfD/id0oj3/
+	 TSKJyytk0CGZQ==
+Date: Sat, 31 Jan 2026 16:45:16 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
- razor@blackwall.org, pabeni@redhat.com, willemb@google.com,
- sdf@fomichev.me, john.fastabend@gmail.com, martin.lau@kernel.org,
- jordan@jrife.io, maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
- dw@davidwei.uk, toke@redhat.com, yangzhenze@bytedance.com,
- wangdongdong.6@bytedance.com
-Subject: Re: [PATCH net-next v8 15/16] selftests/net: Add env for container
- based tests
-Message-ID: <20260131163834.2c3d160d@kernel.org>
-In-Reply-To: <20260129222830.439687-16-daniel@iogearbox.net>
-References: <20260129222830.439687-1-daniel@iogearbox.net>
-	<20260129222830.439687-16-daniel@iogearbox.net>
+To: chia-yu.chang@nokia-bell-labs.com
+Cc: tariqt@nvidia.com, linux-rdma@vger.kernel.org, shaojijie@huawei.com,
+ shenjian15@huawei.com, salil.mehta@huawei.com, mbloch@nvidia.com,
+ saeedm@nvidia.com, leon@kernel.org, eperezma@redhat.com,
+ brett.creeley@amd.com, jasowang@redhat.com, virtualization@lists.linux.dev,
+ mst@redhat.com, xuanzhuo@linux.alibaba.com, pabeni@redhat.com,
+ edumazet@google.com, parav@nvidia.com, linux-doc@vger.kernel.org,
+ corbet@lwn.net, horms@kernel.org, dsahern@kernel.org, kuniyu@google.com,
+ bpf@vger.kernel.org, netdev@vger.kernel.org, dave.taht@gmail.com,
+ jhs@mojatatu.com, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
+ jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
+ donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
+ ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
+ g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
+ mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
+ Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Subject: Re: [PATCH v1 net-next 0/3] ECN offload handling for AccECN series
+Message-ID: <20260131164516.4a423230@kernel.org>
+In-Reply-To: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
+References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -50,106 +58,26 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Thu, 29 Jan 2026 23:28:29 +0100 Daniel Borkmann wrote:
-> +class NetDrvContEnv(NetDrvEpEnv):
-> +    """
-> +    Class for an environment with a netkit pair setup for forwarding traffic
-> +    between the physical interface and a network namespace.
+On Sat, 31 Jan 2026 23:55:07 +0100 chia-yu.chang@nokia-bell-labs.com
+wrote:
+> ---
+> v2:
+> - Replace VIRTIO_NET_HDR_GSO_ECN with VIRTIO_NET_HDR_GSO_ECN_FLAGS
 
-A little diagram would be pretty awesome to have here, and perhaps copy
-it to the README file too?
+For the future:
 
-> +    """
-> +
-> +    def __init__(self, src_path, rxqueues=1, **kwargs):
-> +        super().__init__(src_path, **kwargs)
-> +
-> +        self.require_ipver("6")
-> +        local_prefix = self.env.get("LOCAL_PREFIX_V6")
-> +        if not local_prefix:
-> +            raise KsftSkipEx("LOCAL_PREFIX_V6 required")
-> +
-> +        local_prefix = local_prefix.rstrip("/64").rstrip("::").rstrip(":")
-> +        self.ipv6_prefix = f"{local_prefix}::"
-> +        self.nk_host_ipv6 = f"{local_prefix}::2:1"
-> +        self.nk_guest_ipv6 = f"{local_prefix}::2:2"
-> +
-> +        self.netns = None
-> +        self._nk_host_ifname = None
-> +        self._nk_guest_ifname = None
-> +        self._tc_attached = False
-> +        self._bpf_prog_pref = None
-> +        self._bpf_prog_id = None
-> +        self._init_ns_attached = False
+Quoting documentation:
 
-I'm not a Python expert but the pre-init of variables that are set
-later on in __init__() (on all possible paths) seems like a waste of LoC
-
-> +
-> +        ip(f"link add type netkit mode l2 forward peer forward numrxqueues {rxqueues}")
-
-Would we be able to do this with YNL?
-no big deal but always nice to avoid the dependency on very latest CLI
-
-> +        all_links = ip("-d link show", json=True)
-> +        netkit_links = [link for link in all_links
-> +                        if link.get('linkinfo', {}).get('info_kind') == 'netkit'
-> +                        and 'UP' not in link.get('flags', [])]
-
-And of course if you use YNL you can actually ask Netlink to
-echo back / return to you what interface it ended up creating.
-No need for the scanning..
-
-> +        if len(netkit_links) != 2:
-> +            raise KsftSkipEx("Failed to create netkit pair")
-> +
-> +        netkit_links.sort(key=lambda x: x['ifindex'])
-> +        self._nk_host_ifname = netkit_links[1]['ifname']
-> +        self._nk_guest_ifname = netkit_links[0]['ifname']
-> +        self.nk_host_ifindex = netkit_links[1]['ifindex']
-> +        self.nk_guest_ifindex = netkit_links[0]['ifindex']
-> +
-> +        self._setup_ns()
-> +        self._attach_bpf()
-
-> +    def _setup_ns(self):
-> +        self.netns = NetNS()
-> +        cmd("ip netns attach init 1")
-> +        self._init_ns_attached = True
-> +        ip("netns set init 0", ns=self.netns)
-
-Hm, refactor class NetNSEnter or just use its enter method?
-
-> +        ip(f"link set dev {self._nk_guest_ifname} netns {self.netns.name}")
-> +        ip(f"link set dev {self._nk_host_ifname} up")
-> +        ip(f"-6 addr add fe80::1/64 dev {self._nk_host_ifname} nodad")
-> +        ip(f"-6 route add {self.nk_guest_ipv6}/128 via fe80::2 dev {self._nk_host_ifname}")
-> +
-> +        ip("link set lo up", ns=self.netns)
-> +        ip(f"link set dev {self._nk_guest_ifname} up", ns=self.netns)
-> +        ip(f"-6 addr add fe80::2/64 dev {self._nk_guest_ifname}", ns=self.netns)
-> +        ip(f"-6 addr add {self.nk_guest_ipv6}/64 dev {self._nk_guest_ifname} nodad", ns=self.netns)
-> +        ip(f"-6 route add default via fe80::1 dev {self._nk_guest_ifname}", ns=self.netns)
-> +
-> +    def _attach_bpf(self):
-> +        bpf_obj = self.test_dir / "nk_forward.bpf.o"
-> +        if not bpf_obj.exists():
-> +            raise KsftSkipEx("BPF prog not found")
-> +
-> +        cmd(f"tc filter add dev {self.ifname} ingress bpf obj {bpf_obj} sec tc/ingress direct-action")
-> +        self._tc_attached = True
-> +
-> +        tc_info = cmd(f"tc filter show dev {self.ifname} ingress").stdout
-
-Don't we need to also add a qdisc if there isn't one already?
-
-> +        match = re.search(r'pref (\d+).*nk_forward\.bpf.*id (\d+)', tc_info)
-
-I haven't checked but TC doesn't support enough JSON and YNL doesn't
-support enough TC to avoid re hacks? :( :(
-
-
-As I mentioned to David in person, Wei Wang also needs to use this
-class for PSP tests so would be awesome to detach these from the large
-series. I promise to prioritize the "detached" bits of these series in
-case you're worried about the MW.
+  Limit patches outstanding on mailing list
+  -----------------------------------------
+  
+  Avoid having more than 15 patches, across all series, outstanding for
+  review on the mailing list for a single tree. In other words, a maximum of
+  15 patches under review on net, and a maximum of 15 patches under review on
+  net-next.
+  
+  This limit is intended to focus developer effort on testing patches before
+  upstream review. Aiding the quality of upstream submissions, and easing the
+  load on reviewers.
+    
+See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#limit-patches-outstanding-on-mailing-list
