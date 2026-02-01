@@ -1,83 +1,81 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EEE2D8DBB
-	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 09:01:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BD832E62A8
+	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 09:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769936489; cv=none; b=Xas4KnNI0Hc3dn9uG/Ek3rsG3lBf9ofyMwQvBgSjIiXb3dPyHXXYPqGuM53uc/3c2ZBuDmbjFzh4Xtjv7ra4rsmUewT+cAMPa/lBRhbiYff5sJdlsPrE69aQaxDGPGflA/1/m6ieW7ksHGyaoMLOkL7302FMuSfpKOw0MmEs0uQ=
+	t=1769936713; cv=none; b=Yvr0dJmo/0nJKhy2kLsEX9YODPF0B/J3F2oACcP7G2WR7Ngdg2oSEqNVwX5HyHyq63Gbee8U8LiQrEaPnxeEqTYzAmvGXta7cojRXp7orN3+E7e60L3Dcd1Hh2CDk7PdUkF8uE+0SeYLrBxXMMX/uCALZe6T9lZZ9Ff/MLFMuV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769936489; c=relaxed/simple;
-	bh=uLCjGvitM7MZI+iiZOhsAyamc3vLUAP3Bnzyj3zmxmw=;
+	s=arc-20240116; t=1769936713; c=relaxed/simple;
+	bh=QEWaTUGYIM3AUbjp29sbAba2kUUYgtptVEBxmi5dzvQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K/KscdZdfoxuoMXsw2/21F/qNhbPvxxlduKnGrbnBes/fLUKV64X6+/VHgHJYu96/bFgb1qTJvfYe+GB+Sjo3DfBilpz/B4rWQg5wf3rDpqTp7XSaDf7guuSi8MH92sNyT2DMnu8sPvGVaXRPiyG1cI4pwqmznCImnWU/ZVZCmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XK9lUsSg; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=U1PRsJnp; arc=none smtp.client-ip=170.10.129.124
+	 Content-Type:Content-Disposition:In-Reply-To; b=BnSH1TGbctS6xf+hHYBpz64YluDxIN0HWLzzf0EHTF2YRmWWM7x4iDcE6OBKJSpZITupV1oM0rr8/ZDQDasXG0brp6n8Vp1godtvrlsI0fkZvP/GeqzyHVt66auTnESY60tn1IrEyyMtlQCIbLJwBWBL+kYewOKP2noby1L1w/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ejGiy0yY; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=s9jbkz2e; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XK9lUsSg";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="U1PRsJnp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ejGiy0yY";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="s9jbkz2e"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769936485;
+	s=mimecast20190719; t=1769936710;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PbdMtd8ZV0Hoqg/gvmWguCwsRV3oQaDigUGA5FFlPEw=;
-	b=XK9lUsSgv5NmGKEW2yTbUcVZFlIN3gn6FVpOPZzTGj2iAkW6M30LRWxWBpmXbgMYy2zEx4
-	UmOIm8j8nIfsLX05vipwZJ4njvGoLoJmOMchwA3pBhCJKiaE7YOXEPMnz0TBmZOaKHP1uf
-	Gh9ewvy+u49vmQVe2LPZZ50PPddgPA0=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=n3PpGZtslxQ3EtKo9C9Fdk6vH37O76cwSZfkhQe8fSc=;
+	b=ejGiy0yYrlzERbxn0s2DBF3yBt8IdYwD/wc6fstiXSGud87n2f//XjK6JbPl+8sN0CqxXh
+	e5RnJobBpuccb2BgpDlvWNN+Y49gydQtD8bou+OoRdNJdeCEG3plp2zxAzVxIIRU65rQn7
+	fXo2u1zIfUNIwTjqlAJukEWIKD6zlN4=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-367-_oKcRYVhN6Kbrbsl_lNzvA-1; Sun, 01 Feb 2026 04:01:24 -0500
-X-MC-Unique: _oKcRYVhN6Kbrbsl_lNzvA-1
-X-Mimecast-MFC-AGG-ID: _oKcRYVhN6Kbrbsl_lNzvA_1769936483
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-432db1a9589so2316621f8f.0
-        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 01:01:24 -0800 (PST)
+ us-mta-596-23l9q_GvNcmcrbdDyXpS9w-1; Sun, 01 Feb 2026 04:05:09 -0500
+X-MC-Unique: 23l9q_GvNcmcrbdDyXpS9w-1
+X-Mimecast-MFC-AGG-ID: 23l9q_GvNcmcrbdDyXpS9w_1769936708
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-43065ad16a8so2596747f8f.1
+        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 01:05:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769936483; x=1770541283; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PbdMtd8ZV0Hoqg/gvmWguCwsRV3oQaDigUGA5FFlPEw=;
-        b=U1PRsJnpLnDt6xCnPPIfMra8LELIvxROw7qE+hyB2URGbVFeGBJYqSDEMOJTQHzdz0
-         sDU/W86iLqgbUjCCjzfMTgiU1RUqOMJX4JYQ0GkjXnFS9s+vz2IFyaZW2m+2IpTBPcnL
-         aUkKcz2iMSl9NkFKMkFjzOqGutRASDRxfHCHm15rFQHSvFKhQOG87K8K5aY3Acvgq2jM
-         tq0Pm/CPPV7qmTU98/vkqmKTyQXUECl0Elpu9fFtMSj3Sq42fkHau7FchxSsoW7j+wny
-         +R1Zm2Eg7mDrF1pwYypkCy5597RqUFl3s47MSvwzspuQwKubwTmJnQjzE9Ny1gG/YxQ8
-         sDtw==
+        d=redhat.com; s=google; t=1769936708; x=1770541508; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n3PpGZtslxQ3EtKo9C9Fdk6vH37O76cwSZfkhQe8fSc=;
+        b=s9jbkz2eN7gN8syjeRgCFBcAIhMN4Cqa7RPo2gQzAk7QQaEaNTrdAEQ3fo0ittNrUc
+         tWpHk2fyq5itdr4wZDZ8TYYruwRCJbdGhZ97rsSjgO6Cc9eHzgynsc5xxHa2kiebCW3T
+         3pFO7TBti+J8H2dgL/KU+qk8Lrz36ii3SyNG5cxOC4UlsqnybTlmPXpwtEDOHdS36pJf
+         J6PFL9bjzJ1oKiYQ12pzv/S0WIlfQ0H4rldQtethFVKKlCYYZBvqKSHuRhew8xL7KGmY
+         sxD+oxG70O6OG90PBqxLRwTOUtfO19jRRqRlXYB/Dpt016wHR/C+9wrJztGJdDtmf4yW
+         Ijog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769936483; x=1770541283;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PbdMtd8ZV0Hoqg/gvmWguCwsRV3oQaDigUGA5FFlPEw=;
-        b=UmXLBCUHMjDkOMMdD3Nkivf04DhTaYF6u3iOVnKkcoisIrRuHNmz97+4TSqzGqw6x3
-         AgWwUsKKAx5tVIfj3c+YSKt4Lq7ECnoa5ijv0oU3yEf1OZePHRrUbY2wE2SLCiiB4IKO
-         HZ4lvCdPw4eqSQEkdwkYCxumd+8HxhSD94KamXJNbqjeaAjULJRcaqdEs4lPPPwpI56a
-         HyWihoa7xPh9AhXwYEp5WKkY6Y42TAa4Gc4CGafASd9RwNSHgrpHgmTSA7FazN3Kk7e3
-         IZxlWfFhEcUH0MbwbQ6RLgXkX7xi3hFT3yhL+vPtM0AHegOnX5tRcbW2vVeH8hsKi41w
-         IMLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUPLBEziApKYM1VMwoQQ+q+LX/zbBoNdBeuKybCAceVcWsIqgrbmKu+heT5vdvO3wYTHNI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnEicJq9zrTC/G6Gtg7oiJj7TueTcdr2BG23f43MNPBN9QYMK2
-	yT8CpYyVYnhJO3W1hMDXJwPz885ECGYrnZ8/OXoBCqgP5J1eABKV++ZP3ZIyy9GoxJIGEUzTQB9
-	u0xQpe5DHGfDK/7a0RYcXuHEhMNg3JlvsJWHL4AfisckM/+Hpg8oQSA==
-X-Gm-Gg: AZuq6aIkvyCdXknizKyf+PZlngsvNrE00cs3MwuhD901pIIuUkn0vTfERAccvq0Ev6O
-	9pn9s3uMb/OYyfweuZGC3tI98i2zliuUMcw1+iL8kNUgt4Um3xm1C3NwpZK8hQKi3CZad/shD0Q
-	ju+qEgx79FfaHRzvnx2UPCZkSaxTfSXytGvq9YXHtl6T9/90NwkvZbsuxQwlJuUe9CEvLcd6jHu
-	eHJ3wKl2wDxOD1dN6udnHfI7PtiEDIZaT/HM6bruHGENtKkyaXTgCILyZUb5QMd86eYLIk9h31C
-	OtS5LkkSvdrbCnGxFNZZSsSZc5KGrma2n7DeNoCwdOdvSeDU0wx1XYagYi2NhNLeAZsUIXn7TOq
-	ctbsq1wfa/lVJdK6G/UyykfbUB4uOh1bmOQ==
-X-Received: by 2002:a05:6000:2883:b0:430:f742:fbb4 with SMTP id ffacd0b85a97d-435f3aaea5bmr11593857f8f.43.1769936482902;
-        Sun, 01 Feb 2026 01:01:22 -0800 (PST)
-X-Received: by 2002:a05:6000:2883:b0:430:f742:fbb4 with SMTP id ffacd0b85a97d-435f3aaea5bmr11593790f8f.43.1769936482295;
-        Sun, 01 Feb 2026 01:01:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769936708; x=1770541508;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n3PpGZtslxQ3EtKo9C9Fdk6vH37O76cwSZfkhQe8fSc=;
+        b=I5Q9xMl6a57uNvcumAQCunNByawLe3MkkFHv+WPmQYflTJYqHxhaTHY3aV6LzFL9OW
+         Y6K3kwsbc4W62lBdm5aPkuaMYp0VgVLuM4RhsmxDfwfeZFVeQ4FrDYTUE4jc5uFGim/Y
+         8d4nzF+69YJJZuhbzZ1Ctkcw4OezhA7EnrlEzZvk00jG8lQaV+CfxfaiKXIlIb2v1Scf
+         xbCFOxK63lbXuROnBo4KHALjr7xKOzviIryp4KmckimmkkkPm1qdlXnOK7EFGe9ZzKmh
+         qZxerYmsfN6tA6q+FuFGC3UScZAnsO+1aSUn8tdtOQ2x396IqDYXRYzN0qPvLYXxb/zi
+         0OFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWuspZs+Jlj9vORl+urL6Fj3V7UD4EYnTo18Zks1XEv2dRbM/Mxi+z/WKpPr8USxjA+/Xo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqHLs1l5m1G2p/xz9hEku2BVPREP42rh91lX/VXrVCyv6kx/lE
+	ZC6p10/RfoSNnjAuYAXYIjrsG8tYRMd46OHKyGlU6UIONScNaZj5YHRgIUgu2UDFrWqzhz6t6VG
+	1upZ7smaWLCfmCcWNor3TkKLL5//TG8glE8R0UfLQby8dBG3gkrs/sQ==
+X-Gm-Gg: AZuq6aJ65FxVF+9Rr1qZbDqQ88vYPpql1+qcv4+yN386vF07G25kH7zzj9gEa5V1e8Z
+	lrydQFmSZZNfvDKQ0ZCW9Kxh+yLZgFkZVM4cdFhOV4dohgMbB+Qgm31Ocx39+MByXo/Mbuiu/S9
+	Dsu1BErK/AIy9uDXBvxiDJxwbm2k/dkRSEfgosECJ9IWRS+kY9dK11NqdR4YouZUytReF39euYa
+	x7R2jzsYjNsIv7Vt83ku5sA7uGmeoqwV8mAPJH+cGTMQ25jiMp6m86qUK1aasInI6pjkt/gnuxG
+	oFlFsUSDXSU/1+w9uCK98+aZX7Fe4OTBNHmltwEXb+OiUdzVQtW+CmJ51vV8kqUUzh8HSlv75ec
+	pOv1B0vdMAKQWEW2zTaM4odZq1E+zUmmC/g==
+X-Received: by 2002:a05:600c:4e56:b0:47e:f481:24b7 with SMTP id 5b1f17b1804b1-482db47cd9emr108399655e9.17.1769936708014;
+        Sun, 01 Feb 2026 01:05:08 -0800 (PST)
+X-Received: by 2002:a05:600c:4e56:b0:47e:f481:24b7 with SMTP id 5b1f17b1804b1-482db47cd9emr108399225e9.17.1769936707599;
+        Sun, 01 Feb 2026 01:05:07 -0800 (PST)
 Received: from redhat.com (IGLD-80-230-34-155.inter.net.il. [80.230.34.155])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e131ce70sm36590005f8f.27.2026.02.01.01.01.18
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482e04c13a2sm61038245e9.5.2026.02.01.01.05.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Feb 2026 01:01:21 -0800 (PST)
-Date: Sun, 1 Feb 2026 04:01:16 -0500
+        Sun, 01 Feb 2026 01:05:07 -0800 (PST)
+Date: Sun, 1 Feb 2026 04:05:02 -0500
 From: "Michael S. Tsirkin" <mst@redhat.com>
 To: chia-yu.chang@nokia-bell-labs.com
 Cc: tariqt@nvidia.com, linux-rdma@vger.kernel.org, shaojijie@huawei.com,
@@ -98,71 +96,82 @@ Cc: tariqt@nvidia.com, linux-rdma@vger.kernel.org, shaojijie@huawei.com,
 	g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
 	mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
 	Jason_Livingood@comcast.com, vidhi_goel@apple.com
-Subject: Re: [PATCH v1 net-next 1/3] net: update commnets for SKB_GSO_TCP_ECN
- and SKB_GSO_TCP_ACCECN
-Message-ID: <20260201040043-mutt-send-email-mst@kernel.org>
+Subject: Re: [PATCH v1 net-next 2/3] net: hns3/mlx5e: avoid corrupting CWR
+ flag when receiving GRO packet
+Message-ID: <20260201040151-mutt-send-email-mst@kernel.org>
 References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
- <20260131225510.2946-2-chia-yu.chang@nokia-bell-labs.com>
+ <20260131225510.2946-3-chia-yu.chang@nokia-bell-labs.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260131225510.2946-2-chia-yu.chang@nokia-bell-labs.com>
+In-Reply-To: <20260131225510.2946-3-chia-yu.chang@nokia-bell-labs.com>
 
-On Sat, Jan 31, 2026 at 11:55:08PM +0100, chia-yu.chang@nokia-bell-labs.com wrote:
+On Sat, Jan 31, 2026 at 11:55:09PM +0100, chia-yu.chang@nokia-bell-labs.com wrote:
 > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 > 
-> No functional changes.
+> In Accurate ECN, ACE counter (AE, ECE, CWR flags) changes only when new
+> CE packets arrive, while setting SKB_GSO_TCP_ECN in case of not knowing
+> the ECN variant can result in header change that corrupts the ACE field.
+> The new flag SKB_GSO_TCP_ACCECN is to prevent SKB_GSO_TCP_ECN or
+> NETIF_F_TSO_ECN offloading to be used because they would corrupt CWR
+> flag somewhere.
 > 
-> Co-developed-by: Ilpo Järvinen <ij@kernel.org>
-> Signed-off-by: Ilpo Järvinen <ij@kernel.org>
 > Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-Subject: comments?
+Not my driver, but a better format is something along the lines of:
+
+Currently .... this is wrong because ... as the result .... fix this by ...
+so that ....
+
+the coding style does say that you should use the imperative form.
+
+
 
 > ---
->  include/linux/skbuff.h | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
+>  drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 2 +-
+>  drivers/net/ethernet/mellanox/mlx5/core/en_rx.c | 4 ++--
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index e6bfe5d0c525..30a8dc4233ba 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -671,7 +671,13 @@ enum {
->  	/* This indicates the skb is from an untrusted source. */
->  	SKB_GSO_DODGY = 1 << 1,
+> diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+> index a47464a22751..3a1cf4335477 100644
+> --- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+> +++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
+> @@ -3897,7 +3897,7 @@ static int hns3_gro_complete(struct sk_buff *skb, u32 l234info)
 >  
-> -	/* This indicates the tcp segment has CWR set. */
-> +	/* For Tx, this indicates the first TCP segment has CWR set, and any
-> +	 * subsequent segment in the same skb has CWR cleared. However, because
-> +	 * the connection to which the segment belongs is not tracked to use
-> +	 * RFC3168 or AccECN (RFC9768), and using RFC3168 ECN offload may clear
-> +	 * ACE signal (CWR is one of it). Therefore, this cannot be used on Rx.
-> +	 * Instead, SKB_GSO_TCP_ACCECN shall be used to avoid CWR corruption.
-> +	 */
->  	SKB_GSO_TCP_ECN = 1 << 2,
+>  	skb_shinfo(skb)->gso_segs = NAPI_GRO_CB(skb)->count;
+>  	if (th->cwr)
+> -		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ECN;
+> +		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ACCECN;
 >  
->  	__SKB_GSO_TCP_FIXEDID = 1 << 3,
-> @@ -706,6 +712,14 @@ enum {
+>  	if (l234info & BIT(HNS3_RXD_GRO_FIXID_B))
+>  		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_FIXEDID;
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> index 1fc3720d2201..d174f83478a3 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_rx.c
+> @@ -1311,7 +1311,7 @@ static void mlx5e_shampo_update_ipv4_tcp_hdr(struct mlx5e_rq *rq, struct iphdr *
+>  	skb->csum_offset = offsetof(struct tcphdr, check);
 >  
->  	SKB_GSO_FRAGLIST = 1 << 18,
+>  	if (tcp->cwr)
+> -		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ECN;
+> +		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ACCECN;
+>  }
 >  
-> +	/* For TX, this indicates the TCP segment uses the CWR flag as part of
-> +	 * ACE signal, and the CWR flag is not modified in the skb. For RX, any
-> +	 * CWR flagged segment must use SKB_GSO_TCP_ACCECN to ensure CWR flag
-> +	 * is not cleared by any RFC3168 ECN offload, and thus keeping ACE
-> +	 * signal of AccECN segments. This is particularly used for Rx of
-> +	 * virtio_net driver in order to tell latter GSO Tx in a forwarding
-> +	 * scenario that it is NOT ok to clean CWR flag from the 2nd segment.
-> +	 */
->  	SKB_GSO_TCP_ACCECN = 1 << 19,
+>  static void mlx5e_shampo_update_ipv6_tcp_hdr(struct mlx5e_rq *rq, struct ipv6hdr *ipv6,
+> @@ -1332,7 +1332,7 @@ static void mlx5e_shampo_update_ipv6_tcp_hdr(struct mlx5e_rq *rq, struct ipv6hdr
+>  	skb->csum_offset = offsetof(struct tcphdr, check);
 >  
->  	/* These indirectly map onto the same netdev feature.
+>  	if (tcp->cwr)
+> -		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ECN;
+> +		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ACCECN;
+>  }
+>  
+>  static void mlx5e_shampo_update_hdr(struct mlx5e_rq *rq, struct mlx5_cqe64 *cqe, bool match)
 > -- 
 > 2.34.1
 
