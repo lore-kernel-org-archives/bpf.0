@@ -1,161 +1,129 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730F7289824
-	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 19:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769973982; cv=pass; b=qC7bNViIwxT9TVy9eLLUbGSwyA74hExDhKXIMtIx8QGIGZof24NAEGLFzZFZ6hxcjq2AgeVVCs0HqQhbsLwq9lIkjXZspRYrZgvt0N60UHHt9GiVCCZ9wOPkpiTrvCePtxwxNgJlfuViSXWsdzdEWyWSGOnn9UzMJI94Egj1XfQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769973982; c=relaxed/simple;
-	bh=p8bLIrBx6kv+n96MpAC+4i+uibsOKlLDSvQEb2xfiiY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dQdv5jcDTao7t+v7UpDsxyak30bJ+lRwCZdNp8xgM+Cq4QLXYSRI2/YibJQvZ4zzN5Du1qykpw4Vua2MIBtE4h2hLJI5+QY0bzKeZTL/dzVvF+S+Y58EdAhIJFhrvu4AlqJ21Uue4C7mEVI6SpkFvxPzVP/CClOfGl54MP3t9uY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AYNSB/pp; arc=pass smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23E6D221554
+	for <bpf@vger.kernel.org>; Sun,  1 Feb 2026 21:12:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769980361; cv=none; b=gM7T5xLg3stdVhPVILVTPsc3E1UdZfyp95zxEtqjBIdSpLe8a+mOPC7hX+XbzfTUC2sDQCfQIJYiTyiOADUwSsBHknnp8b3iHjpJjJh2DGCcq2r7XRkyywTgK4Kza2jwwl6BL5f+frsSKovyyK6hksdt3Nvh9HALPiQVv52OJko=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769980361; c=relaxed/simple;
+	bh=a7T9Mtp7+Cd+E6kyOhTLY7w99/qCoS5F6UZV8AdIek0=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=A9+koYXmhHu0CtWZwnzzFsoJNjgvZzJEzf3q/5vSP/tLorRRGUQCXhVcgrUSmsVSXdyl+0PH1vwL7ETE2xHIa3OH4kyXmlgGAMmUbAHVAufTNk3BvEMwkSpkdbYRT8bVfOjhsH1f9iZzNPbx/tgjhzGrvAh+YfL+14apHdLnBJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fyk8/QT/; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AYNSB/pp"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4801bc32725so27399265e9.0
-        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 11:26:20 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769973979; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IJdvM9HZaG0W0b6boSmHYDWLn6Y1aQkkNboaW5UMw1gvwT3pT0I4Y6nQMQWTKkvqSd
-         bAB1bcJSIAr+buJ39PVUEb156FKp4TlocMevrT47YyRDkzpR79Zjxdm+MnPheksNMdUX
-         9dgkwZ2kLWgopGGIeLFAad3d6V4QFJ8vGFQf/t/fEo76psmxGPkh+xlaR0K3dBIT44Ac
-         Iso/PQ1omrY897jg1C5fBS6WTO1uYxDlZc+u1oi8mfshrs515eRIbGhP/gu9PvzaZvnb
-         loQBAoK8Wg038GBRE7R9h57/uEBK36baCPPBAvwCCLQdz6c1CQBgyT+CQWgyjx94V+XF
-         X4FQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6U/8WpOu1MpAFYAYPVkk7MHYRqo5kmK7sjLK0gmV+QM=;
-        fh=bmcT8YpiIIQfZlTkPn2nphL4UQ+G3p1wMlzJxY+Capk=;
-        b=LWqKlKfuOgDYfysnh10mFMEue5Adklp6/K8RqaVBXcx84qsWj4/QwjFtyd1tDxUaMi
-         OcnznqCpZj25sa98yIMmUlwG/NQtWkuqFbm1X5Q52o5mn11m7Ovba78qLBAPyQb+3ckn
-         Yv0TG9T3W56b4uD744v+1xmAcmUFNALkiLzETJ0tc6uMxZJOJrhmp7fZUvXsBj6nAPxc
-         NY3pV3OXiAH7OSN7xHa+lN8a5po2V03wsxku/vnTPANSrOhfgzhPPFax/slvlL20MIDy
-         UvLGOKnhw16xUdlAgozVUclX34GDRnrZxs566z/jU63DT7Lob6zeM9uscCbdhTwiAKvb
-         2k5w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fyk8/QT/"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-432d2c7dd52so3954755f8f.2
+        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 13:12:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769973979; x=1770578779; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6U/8WpOu1MpAFYAYPVkk7MHYRqo5kmK7sjLK0gmV+QM=;
-        b=AYNSB/ppe0+Jhd5qCKCeUo6HTJMHae88v0ZGvjWY0X/hq8ysL562I1RfBiEU8W3R3N
-         MPmJ1fKhFVlEdauvnW9yFXme3GFJ9oowYjrCySWIup/5OrLFvroX4O+dKkVP2O14id7q
-         jNBo2z9zxDY3XEfo4LGqNKmePlZ2fJwMfJIO9xUToZMytyI2nWqcs1vyTIUGxAzXvXD9
-         /pBvymBNG35WT939XiOSoh8LxBvLbzYWBvtvEQ9tUahexJ3Pso9upyKXYniP1izskEn4
-         Y34AWNx7Otr3DkKZoNfL6p1/J3etD1S9KvrG54vg8ZyUZA5JP+ZKbX3dRo7ffwc2q8Kr
-         3tXw==
+        d=gmail.com; s=20230601; t=1769980358; x=1770585158; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6PMLIUbbhxWYDXz9TON8h3cYfNXfcLRPc4BPVL3NU1Y=;
+        b=Fyk8/QT/lJT8Epid4EPoTwnPuQrSLG3uQ9+4V2Zf0hTV+98rFn9RLPZYGwgi9TIbJ1
+         slzJpsqzwM4eeMX0GnNN75DDtKxRQqqMogT0SeA+vDCvoxkke1B7WP9Otbq6TPoa5R9d
+         SxR+x/3eKdcupKqVik211U7npjspwqrArPc/1oc62avIQD4dgYi4e4A1L8CBpnfQYDxq
+         /TBmK1+9oLqx4PKVorKJiZnmqJH+XpLfBGgz29lJ4LImd4KiZ3FW/DkjA/BRtnI7Ivym
+         3r7yeN0reD8Dc20QWHGfdqpvuTYG2yJ/4vXhEqFr5XiN7VmhQMX6zIjc+19UtqLP8qG1
+         pRvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769973979; x=1770578779;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6U/8WpOu1MpAFYAYPVkk7MHYRqo5kmK7sjLK0gmV+QM=;
-        b=WcQroyJ42ymPWmiUV3Smhbxm/RdXKqQxSXkX1G0GJOUaYIG3UZufCfVlimYo70qNYG
-         ThhZiJ5q7Bvv36t4OPRrXPzc1ZYHQpFucUgNHBfo2qaLaPeslH6MGPMa5zGUd9SrsFDP
-         J3E6NVQ8E0dUzYk5a7b3RHLyDdEPmWbOWws0mvw2N2ZJ0IRxjjQwneBHvmRCeJUdgp9R
-         s7JsXMIOCSN8dGGsovxk2OFCQvS6JvJkxTql5SZmoZ2bevhIqAJ9OGQ2w1raT+D7a2x1
-         s/8nzco4m7SqVOVl6k+v0YYTJP7rKibXcSLpPUmhuXaA0nQaKw4sY4LoDabqT1S9UDQB
-         qTQA==
-X-Forwarded-Encrypted: i=1; AJvYcCXZ2FvlZRuB18vLhYucmXCV2NCBAUrw9fei9p+Guw/ZQyrX2DLiMAfTzCPQvd3ugVguxNg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/hX5QW3JZzwGFWP4q5mX3qCXm0VJLBGGgZZL2jEGBolyYJEiq
-	C4zCDPShkvsm30MbxVtnrWV1rwXRk4vp+TpKy6HE7mZIsTOMEtlbD8uOQZVkJ1w3n35gg2yAZS6
-	4/yroknyUii06WZVg53TXd9URRfpM46k=
-X-Gm-Gg: AZuq6aJcZoBVixblhOFzCDLgSoAzOJXssALBNdpvzQwtFzHFoUFwNO4wf0ms54C/1zH
-	pEaC3qsIdsL8VWtoUKdIFsrxiBY69sD8RLtmiWsiyIy1mFksoLFvWgHzTcb6hesI+sUGR9XJPCU
-	sNHz/6oWvME33/5ArWvlseiJseIvqTxWKJ3T7FEO2uwEHi/MXZTVsHjSashJpRIX+tnBgt3ozG4
-	8zDKyf3e/eGn/Uf9XibYW2jf+achpJt7vHHyxAFCkGb6NSzQKQNvPgDBIV/njcI20rRGGXSobV7
-	ueIXVtgkfVmS8llYMNZVT7T4b+NO3OpiC5PC0LHJNRk8M9jzHUIADXRF+59rAWlnXEIVEc1s8JF
-	5Br7vV8qm9xigiw==
-X-Received: by 2002:a05:600c:1f16:b0:480:6941:d38b with SMTP id
- 5b1f17b1804b1-482db4a0207mr125661055e9.30.1769973978636; Sun, 01 Feb 2026
- 11:26:18 -0800 (PST)
+        d=1e100.net; s=20230601; t=1769980358; x=1770585158;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6PMLIUbbhxWYDXz9TON8h3cYfNXfcLRPc4BPVL3NU1Y=;
+        b=XEFmwdTJbo3eAn/veIOhJz7xputqTzSFFxEAQiNrZw5ee3W9P7NARhsgD4kJjyxAPu
+         wSOHtCrF+dN0UnWJnJIbFwTxIg7whRgVf0nmk+ZrYXEEqmmTTI41DB2csTlSpPJqxHVf
+         cj3nv6O9en8TBA5APNFmVDYWSkjR7gig9WUZHXmoha17XftZ9F8UE1z/l7efRoGodUt6
+         +fnFDAPaJozVngayOValnWD9ZeorBIbzkivJW44xpoTp7vkzuq3DKaRiJoXa4KwNWPbE
+         qtSRFL9gYvhJbsD4hKCDKw/WEnTjm6ZpN8FEOZjCCjuF2eWy5QPgwUBSWzbt78UjWXiP
+         vXgQ==
+X-Gm-Message-State: AOJu0YwINCnMNaD8Eo+fOc/+dul4MyOetFOKYZkGpj3IvfSH5I4O0d8q
+	4ZEp+gtvHJh+WMXqV1MwbRRWU/tx5LKpMZKfBaXj2eSghfd7cqdoqWnu
+X-Gm-Gg: AZuq6aKfI8QAvE7ZYDyK/Xg311TYe1ejsLI7RCBllLhGNw05Y5p1350+PzmiCMp6p+g
+	XMitNl9Sqt/crsVifWVA6Pjuq7gBoJhJEbZnkfV0U9jOQsuha8MGuY/eIo5YTXGEz8XChFarM74
+	dv84FEJPAKbD6JMv3GIgOiSpt4dT4JhZLXNLOjHvKwRqs3J0m1h8FjtsA3/t3PEMQ5C8LGJL+56
+	WL4cqUkhfP4qjfo566KEz1jn6UxbOTfVBnQCGCWlxMswjtad7VzQMLULjB9CwDQiyABDdnWJ1dU
+	BE7szNGujyAfGAsUzLrItahYnfSHXJkyPgG70Sa8x+z4R+VIk8pObQ9qZN81zJz1sizMKHBMnvn
+	5Cz222LMUjNtf5xVeJwYuCz5REpWbF57LrbWlCyo8MW682T0vtf1ZX3XjlV8KbmZx0hnOiPCaST
+	k=
+X-Received: by 2002:a05:6000:184e:b0:42f:f627:3aa3 with SMTP id ffacd0b85a97d-435f3ad8530mr14022312f8f.56.1769980358228;
+        Sun, 01 Feb 2026 13:12:38 -0800 (PST)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10ee04csm39225222f8f.12.2026.02.01.13.12.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Feb 2026 13:12:37 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sun, 1 Feb 2026 22:12:36 +0100
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: memory leaks of ftrace_hash
+Message-ID: <aX_BxG5EJTJdCMT9@krava>
+References: <CAADnVQLVYsosBeGEhB2uxyOKNB9aS94vmR9bQb7RY3jVR2iFxA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260201180445.664056-2-thorsten.blum@linux.dev>
-In-Reply-To: <20260201180445.664056-2-thorsten.blum@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sun, 1 Feb 2026 11:26:07 -0800
-X-Gm-Features: AZwV_QixrNWMacK37HeAKJR3bQsqyVDzalwwR7LS1k_ZGc1tpS0KUvo5BTdXVIs
-Message-ID: <CAADnVQ+2icTvHkt7ci285azpci42-8rZ0Air7KtSAmP+bF7m_Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Replace snprintf("%s", ...) with strscpy()
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAADnVQLVYsosBeGEhB2uxyOKNB9aS94vmR9bQb7RY3jVR2iFxA@mail.gmail.com>
 
-On Sun, Feb 1, 2026 at 10:06=E2=80=AFAM Thorsten Blum <thorsten.blum@linux.=
-dev> wrote:
->
-> Replace snprintf("%s", ...) with the faster and more direct strscpy().
->
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
->  kernel/bpf/btf.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 8959f3bc1e92..72fa0cb1a71b 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -25,6 +25,7 @@
->  #include <linux/perf_event.h>
->  #include <linux/bsearch.h>
->  #include <linux/kobject.h>
-> +#include <linux/string.h>
->  #include <linux/sysfs.h>
->  #include <linux/overflow.h>
->
-> @@ -1210,8 +1211,7 @@ static const char *btf_show_name(struct btf_show *s=
-how)
->
->         /* Even if we don't want type name info, we want parentheses etc =
-*/
->         if (show->flags & BTF_SHOW_NONAME)
-> -               snprintf(show->state.name, sizeof(show->state.name), "%s"=
-,
-> -                        parens);
-> +               strscpy(show->state.name, parens);
->         else
->                 snprintf(show->state.name, sizeof(show->state.name),
->                          "%s%s%s(%s%s%s%s%s%s)%s",
+On Fri, Jan 30, 2026 at 07:50:13PM -0800, Alexei Starovoitov wrote:
+> Hi Jiri,
+> 
+> I see a lot of:
+> unreferenced object 0xff1100012c967540 (size 32):
+>   comm "test_progs", pid 2052, jiffies 4294681345
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 b8 be 65 06 01 00 11 ff  ..........e.....
+>     74 3f 5b 83 ff ff ff ff 80 0d 01 a0 ff ff ff ff  t?[.............
+>   backtrace (crc 8dddf0a9):
+>     __kmalloc_cache_noprof+0x3a5/0x520
+>     add_ftrace_hash_entry_direct+0x4a/0x2e0
+>     alloc_and_copy_ftrace_hash+0x15a/0x280
+>     hash_sub+0x3a/0x470
+>     update_ftrace_direct_del+0x349/0x7d0
+>     bpf_trampoline_update+0xa9c/0x1070
+>     bpf_trampoline_unlink_prog+0x287/0x600
+>     bpf_tracing_link_release+0x5f/0x100
+>     bpf_link_free+0xca/0x300
+>     bpf_link_release+0x48/0x60
+>     __fput+0x2fc/0x9d0
+>     fput_close_sync+0xcd/0x170
+>     __x64_sys_close+0x7d/0xd0
+>     do_syscall_64+0x46/0xfc0
+>     entry_SYSCALL_64_after_hwframe+0x4b/0x53
+> 
+> just running the latest bpf-next.
+> 
+> I suspect it's due to your recent changes in the area.
+> 
+> Pls take a look.
 
-I prefer to keep snprintf here for symmetry with the above.
+hi,
+argh.. I had kmemleak disabled due to small CONFIG_DEBUG_KMEMLEAK_MEM_POOL_SIZE
+looks like change below fixes it, I'll send a patch
 
-> @@ -6324,7 +6324,7 @@ static struct btf *btf_parse_base(struct btf_verifi=
-er_env *env, const char *name
->         btf->data_size =3D data_size;
->         btf->kernel_btf =3D true;
->         btf->named_start_id =3D 0;
-> -       snprintf(btf->name, sizeof(btf->name), "%s", name);
-> +       strscpy(btf->name, name);
->
->         err =3D btf_parse_hdr(env);
->         if (err)
-> @@ -6443,7 +6443,7 @@ static struct btf *btf_parse_module(const char *mod=
-ule_name, const void *data,
->         btf->start_str_off =3D base_btf->hdr.str_len;
->         btf->kernel_btf =3D true;
->         btf->named_start_id =3D 0;
-> -       snprintf(btf->name, sizeof(btf->name), "%s", module_name);
-> +       strscpy(btf->name, module_name);
+thanks,
+jirka
 
-These two are fine.
 
-pw-bot: cr
+---
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 8574932e66b6..b12dbd93ae1c 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -6537,6 +6537,7 @@ int update_ftrace_direct_del(struct ftrace_ops *ops, struct ftrace_hash *hash)
+ 		/* free the new_direct_functions */
+ 		old_direct_functions = new_direct_functions;
+ 	} else {
++		old_direct_functions = direct_functions;
+ 		rcu_assign_pointer(direct_functions, new_direct_functions);
+ 	}
+ 
