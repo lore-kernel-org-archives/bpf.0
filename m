@@ -1,319 +1,210 @@
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C7B2FE578
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 23:37:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770075442; cv=none; b=AR2cdEQcOR4HScuubtmFGc9D2wValm4CqUCVBk2RRJBCSW2u4wpMqeVJ4b+9Uuy3BCXtBEnZAvW0TcmBF1U+Luxq9OvAdSSqctdAcSMM/y9lgTgcqRKSJa6tiwXBri2bvdeMIk0YLlQRoMjPEuLt5d0tapM86gg3y1TpAafR4Do=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770075442; c=relaxed/simple;
-	bh=41PWgcA9GU81h1QwWJiHkGlC6zJtHzdC1CiX/UCzVkM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k07CxQgZZFqlZx+p3NAtQvA5e3BPNUKCPL8VQPKNQjIHFBkDs+d7YkFL1QFq3183ukdc45ZPf79ZcfFScSzYB94LZY8WQ3wsGLn+LoJsxVkxb/1pI6TGDwuZZNp7Alejy+djMpqjapbIl9jDjBa9RpVPtJhLagkV89bqVPipEYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=M93yRP1A; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2751F2C21E6
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 23:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770075607; cv=pass; b=re8csmRVDYNmR/59ReCg0P1KvwiAYaCGl6CNcFQ+eKB0HUIyaKqmw09ZxAxdRhr2AyE8c1azmhZFXPUbT3Ru/uOfAOxMG9YtTZz2AOUPEAJ6TXm8VOwHIrCJfflj993L10jk4KYUmbEw/zGJfM+IgwwEJ4u8yAPvBS2TSW0qsAM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770075607; c=relaxed/simple;
+	bh=d/4PHqC+8q/tKZn/tZq2NAmR55Jba9qxeMWuH7IIevg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nQ+UvT41WDhfEBYsVqhpFMU49s+lmo1VZ621LubGD1tAD94LDkS0MmvxORmdaDOJegTsrw9+medj6wOzaE0XyMO+k24gClRGWkg5zwaGcb3JPDmpgKUMkY+tlRvqkt/FDw7CLI0gfqA8YLbGYbZ7g4Ek7M109/tB/ksgQI9u2qI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h7h0F2SA; arc=pass smtp.client-ip=74.125.224.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="M93yRP1A"
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-8c52c67f64cso468117885a.0
-        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 15:37:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h7h0F2SA"
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-649605d3664so5668045d50.3
+        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 15:40:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770075605; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZMSBo6hR438xgsev7bK3Htp/lpgMhkj4RaXGHzyWFbRJVePiO8LMysOh3gzcy07OB4
+         nmSNxInfPki3wTKjEARDdPXW9QwATgMOWZtmHoil1RUrpkXC3iWR2r15aCliMUU2A7O9
+         rC5/3yYObZUe2vAjL8hDDGClCmz+uqjrBRhuzTcxY1Bc8rp11dB8lZ4Rm4ORS0VFaehs
+         YmMSOJRbVcJwhLObNguz0x8dBhCSur2l2SXdSq9jFE7Ytxqd2HoJwvibg4LyWE+VC14d
+         +/TDMw/HeikiMZfWHf+N1hhjRp76hm84nu8VXLqNQg8z5kX4OBpsacmFCTgSpdYZGC13
+         BqQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4HH9dV4RRnbaqS1byKBaPP2XgnUxuW8qreK1Jv1zuQM=;
+        fh=YdDWaDljWJ5n0T9eCYK76ioNwJmtRLo9WZIZ41QkBks=;
+        b=VU/0dSzcXSw9dN6GlklgUmBok+YcCBH0KhoOEPypv3OFZf3tXrdQMm8NTmVuReJQYV
+         TCDLPxbQbx5pxuvfyM20Mze1hujRUJFARFp9LdN5ZcS0KFr0tW2300JmvKNwlqvNq/Me
+         lZiWa/MJObPcjnb9rnJajKJVzA7EbhvKAN/WAWl2VDpkAIuC1RMY5G/voiMmUfrTWs5s
+         SKS8MuXzfy3ycOejnlkWSKgFlyjUuGrjpt1E3v4Whmtd4d8ZHpMq8Ro9eteusTQihKv5
+         fC8V7Rpb2KjR7VrFu0crByZUSNok0WTq0kWY27o0zMQC/EnE5EIa23UgeCJiv2lzCvJv
+         /bJw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1770075440; x=1770680240; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mU5iV5P5yIAue/p9HNFFfSWias1dsf7XHWQ10OZTncs=;
-        b=M93yRP1AAOqrjJDhiDlqRyoG3O33Sq7amSZjDf5SfaYZHjv/GtZXj21jCy7gG1QNK+
-         jDeTwefOBMoWJWK2bCdDfUk/BK5rRVSVYVibUQAk7MsKhlTjjO23vfTrRwjsqxmkulCd
-         4I7OesUff2tCnX+dajEsfSqRWp1FPBBBzxPuuXwDeJTX5XMnFNi1m7CfFLabU5EIbw6i
-         OBeh6VY3tpyr9saKZQ+9SYxr7uED37XZv8XclW7I9+KGdtkrwtVbEZcg+Yu3NHbqYpri
-         utp3iH8hXjKDs0tkxweOCBQ9aeh5erLXWqaYdU/4i/1gMK6bx24dGX1tiJMJzrBCyiy3
-         RCTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770075440; x=1770680240;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1770075605; x=1770680405; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mU5iV5P5yIAue/p9HNFFfSWias1dsf7XHWQ10OZTncs=;
-        b=TW7QDvRPAmRjp/iU9R92M1gFlUPM/T7yToQYU6Q0BHSkvoPs+H9OjAyjBs1u0lpzpQ
-         TRfBPVmNV+Nq5OmlXS1fl9PW+vjOfIuIsLBZHGXTiMHfw20SCOHWyAQhS5vmQCRbxGcy
-         el8ziZtcgw1AWoisB/DSY095nuG0pwl9VWDbwoU1Oiy2ejRwxBPTj9wH0QCDVVwhTYhg
-         sntiLg4sxI/mZGzDldYbuCBu9mPqI2kSCsYUymmYgOZr1hdhuqZgRbyxCNhVz39hvtU/
-         vkTPlVVO35CQGYermqWn6H8BYpy3m6Go6i+vt3VPnEcF3JcbDpw4a1eR0j31pNWojbWz
-         Tuog==
-X-Gm-Message-State: AOJu0YxL/JpDPgJTF7sC/XqlRTwz6gelNiNjOxUUA7lutesgsg9cPtE/
-	sXAEB4dDRctV3WpFBesLfxk++ntx1kCpaEm5ej6YbX3nP/d5KDIt0Z2LHZbdPVCdejcnUhHBzDQ
-	IReg0
-X-Gm-Gg: AZuq6aK31OGb5yufoYloEIJUZEHL36tmssFqJ+k0QN+8lzgaKIfGdG6GbBKUcza5UXi
-	eXjjfrp7EriQQ9DTn0vZHA9bfW52UgZ5qNW1ulRNekK7hMXEJrdHhAxqyAzZnakY4iC4TVQZESB
-	1sQamzFOHXCx7VHxawDl2lQrEdYVIXJnTLkKQyn3kaG647qhjiHsQs5DLLBhUWbelRsn1ibT6A4
-	z2ffGqbmLOodpq4vBp5siQS77iDI9kftO7vDZlTxWfyXSfQSCSXM1bjjK0qOWvymSTfn1NT3hWs
-	QrKGCtIDzg1gHxcOzdcvkmjg3oYPZrhXJ/y07CfmQ8IJuJs4HyJ86kDh0o6hX5AKl7zQeyW6+ej
-	0fmmtsRNJYdVZ9Bz/l75GLl8tqgU7EDoiVtivCkHYmN9e7TXLaUHhFhus1PH/gptbgsm3Bcb2sz
-	jR1rgmn2NZOw==
-X-Received: by 2002:a05:620a:4887:b0:8bb:a346:8c84 with SMTP id af79cd13be357-8c9eb275f93mr1543552085a.30.1770075439673;
-        Mon, 02 Feb 2026 15:37:19 -0800 (PST)
-Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c711b95e43sm1338578185a.17.2026.02.02.15.37.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 15:37:19 -0800 (PST)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next] bpf: Bump maximum call stack depth to 16
-Date: Mon,  2 Feb 2026 18:37:16 -0500
-Message-ID: <20260202233716.835638-1-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.49.0
+        bh=4HH9dV4RRnbaqS1byKBaPP2XgnUxuW8qreK1Jv1zuQM=;
+        b=h7h0F2SAWC3KFQY2tCrVyMspUmWt9Df4McF9PZhELLjDx2XialR6IB19dqEfJv5c6u
+         3OzcnQZJgYw46SXQZUf0eh8ggUawRdZvwD04Naw1eEfk4Y0Pix4H/NgsyuQSocK5jcbc
+         AsM37eZZ+QPkd0iN94CjgdbKK44ian9+rdUok0gnWtBKmPBSG/kpDs94vAKgtneY7dmk
+         cGL3MA5GsKDk+YCq3Cd99rPzr9tQOiiZrlOzciZ9ovPX/7VlN+7KIwjK4nOetWiAY6f1
+         p95VIbgWPd5Sr1RhOnYgJ+na430yxnhCtlH2nOtS3Bht5eRM5qujEXOucWJB+a/M9PJS
+         paag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770075605; x=1770680405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=4HH9dV4RRnbaqS1byKBaPP2XgnUxuW8qreK1Jv1zuQM=;
+        b=IA8JNhDBeXM2pLZyxwgEsodZHYuubGg4uJt0ue7+FqOC7/Dh86UOOe4NaRVw6/J016
+         OES1VHtIx+cCildf9ZK696YJ8ZVQC0vnoijYFKH0r+uVFSJwCbTY2Cnl8R1GHlXL5gT+
+         QOAz0dm2HeQSpyRy6bKHSSksVvTBvkC4WyUAlIjTrWfLssWp0CqahDD5olPo4qsO2kES
+         /+0D6+83iYsVqBHZO1ctcaKZ58g3aiZx1kyPe3i3d/h7Ohhecl9l3yNiVq+OikXJx1Z1
+         iMSWwQ0ruqiWv+71fH3DDcIo978pSXSKnTmzMDGwk5/fWss3mRjFyCkv3ZBRtxs+Upka
+         AYgw==
+X-Gm-Message-State: AOJu0YxG51kFrnsSPqEff2ITM3H8q0q2K14bauaVwZuicOe8+EzS4Bf7
+	I15nV9Y6W0JZnit+PS261wAB2gkVenlc6f27GMtJzJsB6V/Z8EaaLw4iLLSWslpU9zZk5KXZaPB
+	NcY67+ufXyy6uhlExj5ViFVfI2vf+yjI=
+X-Gm-Gg: AZuq6aJZIFT96YFPS22/vnCi7JyFM2PaGldEZyM/+6AZt/OW704hbtSY+UI/29ReJ49
+	k+OIaLsJKHXnQbFgID8FPu7fkmTvWC9Q9GVI9tvWMbOzMdSj5AOe1/AiMHa3Dcw3SGyG76pBVyy
+	0iQFRRvzMQCBm4S15WjF4rI101Geu2M6GgXfpPRUXyMi7qiAJ+bEwBsYb0iAP8lkHjgWSuiohtF
+	Ob//bIvfvVgZT2ZBO1mTKHrxKms63vJvK+fCzqpf/WgPC47/S/ZPeXXpUJ4aQNxvhgXoYA=
+X-Received: by 2002:a05:690e:1486:b0:649:36f4:afb7 with SMTP id
+ 956f58d0204a3-649a84647f5mr11076549d50.29.1770075605146; Mon, 02 Feb 2026
+ 15:40:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260202214817.2853236-1-ameryhung@gmail.com> <77f6c7cf5ed980f733fad13caf87baddedae6c1bbaa8e55db00a81828638dec3@mail.kernel.org>
+In-Reply-To: <77f6c7cf5ed980f733fad13caf87baddedae6c1bbaa8e55db00a81828638dec3@mail.kernel.org>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Mon, 2 Feb 2026 15:39:54 -0800
+X-Gm-Features: AZwV_Qg5iGE7_oTNtKvKninvgG8pNqygpI5JosEyD2JMt1ubCtCeqspUbTTVL9k
+Message-ID: <CAMB2axNRZtGGgGxiEsNCi3Dz7PTDOi_B71RgzeWLJ_=RaQGpJQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v1 1/4] bpf: Fix and refactor object
+ relationship tracking
+To: bot+bpf-ci@kernel.org
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
+	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
+	martin.lau@kernel.org, kernel-team@meta.com, ast@kernel.org, 
+	eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com, 
+	ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The BPF verifier currently limits the maximum call stack depth to
-8 frames. Larger BPF programs like sched-ext schedulers routinely
-fail verification because they exceed this limit, even as they use
-very little actual stack space for each frame.
+On Mon, Feb 2, 2026 at 2:23=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+>
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 6b62b6d571..a357e03051 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+>
+> [ ... ]
+>
+> > @@ -10481,22 +10464,43 @@ static int release_reference_nomark(...)
+> >  *
+> >  * This is the release function corresponding to acquire_reference(). I=
+dempotent.
+> >  */
+> > -static int release_reference(struct bpf_verifier_env *env, int ref_obj=
+_id)
+> > +static int release_reference(struct bpf_verifier_env *env, int ref_obj=
+_id, bool acquired_ref)
+> >  {
+> >       struct bpf_verifier_state *vstate =3D env->cur_state;
+> >       struct bpf_func_state *state;
+> >       struct bpf_reg_state *reg;
+> > -     int err;
+> > +     int err, spi;
+> >
+> > -     err =3D release_reference_nomark(vstate, ref_obj_id);
+> > -     if (err)
+> > -             return err;
+> > +     if (acquired_ref) {
+> > +             err =3D release_reference_nomark(vstate, ref_obj_id);
+> > +             if (err)
+> > +                     return err;
+> > +     }
+> >
+> >       bpf_for_each_reg_in_vstate(vstate, state, reg, ({
+> > -             if (reg->ref_obj_id =3D=3D ref_obj_id)
+> > +             if (reg->ref_obj_id =3D=3D ref_obj_id) {
+> >                       mark_reg_invalid(env, reg);
+> > +                     if (reg->id && reg->id !=3D ref_obj_id) {
+> > +                             err =3D release_reference(env, reg->id, f=
+alse);
+> > +                             if (err)
+> > +                                     return err;
+> > +                     }
+> > +             }
+> >       }));
+> >
+> > +     bpf_for_each_spilled_reg(spi, state, reg, (1 << STACK_DYNPTR)) {
+> > +             if (!reg || !reg->dynptr.first_slot)
+> > +                     continue;
+> > +             if (reg->ref_obj_id =3D=3D ref_obj_id) {
+> > +                     __unmark_stack_slots_dynptr(env, state, spi);
+> > +                     if (reg->id && reg->id !=3D ref_obj_id) {
+> > +                             err =3D release_reference(env, reg->id, f=
+alse);
+> > +                             if (err)
+> > +                                     return err;
+> > +                     }
+> > +             }
+> > +     }
+>
+> Does this loop only scan dynptrs in the current frame?
+>
+> The bpf_for_each_reg_in_vstate macro sets 'state' to each frame in sequen=
+ce:
+>
+>     for (___i =3D 0; ___i <=3D ___vstate->curframe; ___i++) {
+>         __state =3D ___vstate->frame[___i];
+>         ...
+>     }
+>
+> After the macro completes, 'state' holds the last assigned value, which i=
+s
+> vstate->frame[vstate->curframe] - only the top frame.
+>
+> The subsequent bpf_for_each_spilled_reg loop uses this 'state' variable,
+> so it only scans STACK_DYNPTR slots in the top frame. Dynptrs residing in
+> caller frames (frames 0 through curframe-1) would not be found.
+>
+> When a BPF program creates a dynptr in frame 0 and then calls a subprog
+> (frame 1) that releases the parent object, the dynptr in frame 0 would no=
+t
+> be invalidated. The selftest bpf_qdisc_fail__invalid_dynptr_cross_frame.c
+> appears to test this exact scenario.
+>
+> Should the bpf_for_each_spilled_reg loop be wrapped in a loop over all
+> frames, similar to how bpf_for_each_reg_in_vstate_mask handles it?
 
-Bump the maximum call stack depth to 16 stack frames. This does not
-adjust the maximum stack size of 512.
+AI is right, it should loop through all frames. The selftest fail to
+catch this because free_skb is inlined. Will fix the bug and add
+__noinline to free_skb().
 
-Also adjust selftests that assume the max call stack depth is 8.
-
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- include/linux/bpf_verifier.h                  | 18 +++----
- .../selftests/bpf/progs/test_global_func3.c   | 52 +++++++++++++++++-
- .../selftests/bpf/progs/verifier_loops1.c     |  2 +-
- tools/testing/selftests/bpf/verifier/calls.c  | 54 +++++++++++++++++--
- 4 files changed, 111 insertions(+), 15 deletions(-)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 8355b585cd18..9f7fc990f380 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -317,25 +317,25 @@ struct bpf_func_state {
- 	int allocated_stack;
- };
- 
--#define MAX_CALL_FRAMES 8
-+#define MAX_CALL_FRAMES 16
- 
- /* instruction history flags, used in bpf_jmp_history_entry.flags field */
- enum {
- 	/* instruction references stack slot through PTR_TO_STACK register;
--	 * we also store stack's frame number in lower 3 bits (MAX_CALL_FRAMES is 8)
-+	 * we also store stack's frame number in lower 4 bits (MAX_CALL_FRAMES is 16)
- 	 * and accessed stack slot's index in next 6 bits (MAX_BPF_STACK is 512,
- 	 * 8 bytes per slot, so slot index (spi) is [0, 63])
- 	 */
--	INSN_F_FRAMENO_MASK = 0x7, /* 3 bits */
-+	INSN_F_FRAMENO_MASK = 0xf, /* 4 bits */
- 
- 	INSN_F_SPI_MASK = 0x3f, /* 6 bits */
--	INSN_F_SPI_SHIFT = 3, /* shifted 3 bits to the left */
-+	INSN_F_SPI_SHIFT = 4, /* shifted 4 bits to the left */
- 
--	INSN_F_STACK_ACCESS = BIT(9),
-+	INSN_F_STACK_ACCESS = BIT(10),
- 
--	INSN_F_DST_REG_STACK = BIT(10), /* dst_reg is PTR_TO_STACK */
--	INSN_F_SRC_REG_STACK = BIT(11), /* src_reg is PTR_TO_STACK */
--	/* total 12 bits are used now. */
-+	INSN_F_DST_REG_STACK = BIT(11), /* dst_reg is PTR_TO_STACK */
-+	INSN_F_SRC_REG_STACK = BIT(12), /* src_reg is PTR_TO_STACK */
-+	/* total 13 bits are used now. */
- };
- 
- static_assert(INSN_F_FRAMENO_MASK + 1 >= MAX_CALL_FRAMES);
-@@ -346,7 +346,7 @@ struct bpf_jmp_history_entry {
- 	/* insn idx can't be bigger than 1 million */
- 	u32 prev_idx : 20;
- 	/* special INSN_F_xxx flags */
--	u32 flags : 12;
-+	u32 flags : 13;
- 	/* additional registers that need precision tracking when this
- 	 * jump is backtracked, vector of six 10-bit records
- 	 */
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
-index 142b682d3c2f..7a0b7c4b9274 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func3.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
-@@ -53,9 +53,57 @@ int f8(struct __sk_buff *skb)
- 	return f7(skb);
- }
- 
-+__attribute__ ((noinline))
-+int f9(struct __sk_buff *skb)
-+{
-+	return f8(skb);
-+}
-+
-+__attribute__ ((noinline))
-+int f10(struct __sk_buff *skb)
-+{
-+	return f9(skb);
-+}
-+
-+__attribute__ ((noinline))
-+int f11(struct __sk_buff *skb)
-+{
-+	return f10(skb);
-+}
-+
-+__attribute__ ((noinline))
-+int f12(struct __sk_buff *skb)
-+{
-+	return f11(skb);
-+}
-+
-+__attribute__ ((noinline))
-+int f13(struct __sk_buff *skb)
-+{
-+	return f12(skb);
-+}
-+
-+__attribute__ ((noinline))
-+int f14(struct __sk_buff *skb)
-+{
-+	return f13(skb);
-+}
-+
-+__attribute__ ((noinline))
-+int f15(struct __sk_buff *skb)
-+{
-+	return f14(skb);
-+}
-+
-+__attribute__ ((noinline))
-+int f16(struct __sk_buff *skb)
-+{
-+	return f15(skb);
-+}
-+
- SEC("tc")
--__failure __msg("the call stack of 8 frames")
-+__failure __msg("the call stack of 16 frames")
- int global_func3(struct __sk_buff *skb)
- {
--	return f8(skb);
-+	return f16(skb);
- }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loops1.c b/tools/testing/selftests/bpf/progs/verifier_loops1.c
-index fbdde80e7b90..0970f25f9c60 100644
---- a/tools/testing/selftests/bpf/progs/verifier_loops1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_loops1.c
-@@ -139,7 +139,7 @@ SEC("tracepoint")
- __description("bounded recursion")
- __failure
- /* verifier limitation in detecting max stack depth */
--__msg("the call stack of 8 frames is too deep !")
-+__msg("the call stack of 16 frames is too deep !")
- __naked void bounded_recursion(void)
- {
- 	asm volatile ("					\
-diff --git a/tools/testing/selftests/bpf/verifier/calls.c b/tools/testing/selftests/bpf/verifier/calls.c
-index 9ca83dce100d..077db99d6a1f 100644
---- a/tools/testing/selftests/bpf/verifier/calls.c
-+++ b/tools/testing/selftests/bpf/verifier/calls.c
-@@ -455,7 +455,7 @@
- 	BPF_EXIT_INSN(),
- 	},
- 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "the call stack of 9 frames is too deep",
-+	.errstr = "the call stack of 17 frames is too deep",
- 	.result = REJECT,
- },
- {
-@@ -812,7 +812,7 @@
- 	BPF_EXIT_INSN(),
- 	},
- 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "the call stack of 9 frames is too deep",
-+	.errstr = "the call stack of 17 frames is too deep",
- 	.result = REJECT,
- },
- {
-@@ -824,7 +824,7 @@
- 	BPF_EXIT_INSN(),
- 	},
- 	.prog_type = BPF_PROG_TYPE_TRACEPOINT,
--	.errstr = "the call stack of 9 frames is too deep",
-+	.errstr = "the call stack of 17 frames is too deep",
- 	.result = REJECT,
- },
- {
-@@ -1219,6 +1219,30 @@
- 	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call H */
- 	BPF_EXIT_INSN(),
- 	/* H */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call I */
-+	BPF_EXIT_INSN(),
-+	/* I */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call J */
-+	BPF_EXIT_INSN(),
-+	/* J */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call K */
-+	BPF_EXIT_INSN(),
-+	/* K */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call L */
-+	BPF_EXIT_INSN(),
-+	/* L */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call M */
-+	BPF_EXIT_INSN(),
-+	/* M */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call N */
-+	BPF_EXIT_INSN(),
-+	/* N */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call O */
-+	BPF_EXIT_INSN(),
-+	/* O */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call P */
-+	BPF_EXIT_INSN(),
-+	/* P */
- 	BPF_MOV64_IMM(BPF_REG_0, 0),
- 	BPF_EXIT_INSN(),
- 	},
-@@ -1257,6 +1281,30 @@
- 	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call H */
- 	BPF_EXIT_INSN(),
- 	/* H */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call I */
-+	BPF_EXIT_INSN(),
-+	/* I */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call J */
-+	BPF_EXIT_INSN(),
-+	/* J */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call K */
-+	BPF_EXIT_INSN(),
-+	/* K */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call L */
-+	BPF_EXIT_INSN(),
-+	/* L */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call M */
-+	BPF_EXIT_INSN(),
-+	/* M */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call N */
-+	BPF_EXIT_INSN(),
-+	/* N */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call O */
-+	BPF_EXIT_INSN(),
-+	/* O */
-+	BPF_RAW_INSN(BPF_JMP|BPF_CALL, 0, 1, 0, 1), /* call P */
-+	BPF_EXIT_INSN(),
-+	/* P */
- 	BPF_MOV64_IMM(BPF_REG_0, 0),
- 	BPF_EXIT_INSN(),
- 	},
--- 
-2.49.0
-
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/216081=
+54622
+>
+> AI-authorship-score: low
+> AI-authorship-explanation: The commit demonstrates deep domain expertise =
+with detailed ASCII diagrams, uses standard kernel conventions, and the bug=
+ is a typical human oversight from misunderstanding macro variable scoping.
+> issues-found: 1
+> issue-severity-score: medium
+> issue-severity-explanation: The dynptr invalidation loop only scans the t=
+op frame, potentially missing dynptrs in caller frames when parent objects =
+are released, which could lead to use-after-free in the BPF verifier.
