@@ -1,210 +1,88 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221E327AC45;
-	Mon,  2 Feb 2026 15:11:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 432C022B8B6;
+	Mon,  2 Feb 2026 15:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770045090; cv=none; b=pAOSRpmNHbxwoshlBoGryGHXvPZyIp4rp4CTWa3X+ZOwKMvji80voaPlGGBST6SA05GbHa6FSevgW4e8PvsGUqDVH+yZDuqAegEGPv9k5ESn4HUu7PyDTO24lfvjyba6WkDy/9QBC1xyHYr8vErVADYjft0HDPqVN5/BcHcGRqk=
+	t=1770045632; cv=none; b=DvjWe57C9EbTXlrSv5YxRSlHIsbGYvpz1VtJoZnoT7v9+5yW39/zHLt915+PjYiNe/zAOZ1pgPGlDmbZcBMzYTgGjstuC329Dm+VwXKnk2CkqWXiLZ+41HzwikvugSYVfe3ys2pXkFfSH19L4Ubk0yhTOsyYbqeLFeCHu2HokLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770045090; c=relaxed/simple;
-	bh=EuNsfQDC+GwzZgMlzlDh70cwShNvSn7Z72szG+hMKUs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QOwIS8evmr0rnG3NgTikRojvVtj2mJFkkkXQkS/I9ppyIwTPIMJye6Z7nMoDnO3xg5oKPeN24Jmm34vhlAAqLUdBsXNqPLyWHNvnN1oALRNxWKEgfV3GN07CwoUSWXvE4qSkorpgSo5oJYjZwUj4/ygPoa0absrm3AOZX2hbKOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=YbBnNvU4; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1770045632; c=relaxed/simple;
+	bh=2+BVUp4yJLPs+Eu+0SrlY7RCM7BTt+P0S/7fIW/pv3c=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=AByaGyUveftFA+RRDFBQYSfPscJCwwAfk/rFxotP4MzAqRslH1KaGojDNaltwy2hA6mBg3Gm+pkS39IpufcLSF8pjKcjYLgIM3Pl0eqb3uefFMx+X6iodXi0l0M8KtQznE5MSSKxEPHAqPqcFKBHyjXrd7QWpUxlCR1iIxN8re0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sNMGU0gH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="YbBnNvU4"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vmva3-00C09r-Os; Mon, 02 Feb 2026 16:11:11 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=P36EvglWh6B36/yp8p2qXvwqnN34foHJfiKZdt7lA94=; b=YbBnNvU4foyoMtrt62cp9yGybT
-	EM/Pcm8a0W0s/o0+LcZv1oU86lrBj6n8d1ixe4NtE8gSp5bfr9pX0hhxBVxU630DX6xhO48ncbOxT
-	qNNxijyiv11IvNwL6TkYTBjDAjbRLH1uE4On1MSG+ARFMuwjORFfoA24IqTQaACCh20S9v5trPp+z
-	eWuIkEiywLQrur1nWNkVNGKyTxOALcM1ICNgy1ncQZQ51DD9jgQNX/ZBYh/uls4A1GIbijrbELTmv
-	IKA5UkNf6D4nUXnU5IsaJ7arhtYI+nWovbasLGJuAxm15BY0qnnahAhFhtnxTkrKsARHoTiuCvzSG
-	9PO2X5dA==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vmva2-0005wE-Oi; Mon, 02 Feb 2026 16:11:10 +0100
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vmvZp-00De8r-J4; Mon, 02 Feb 2026 16:10:58 +0100
-Message-ID: <b98a40e8-1be2-47f0-8238-92dee8f5a204@rbox.co>
-Date: Mon, 2 Feb 2026 16:10:56 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sNMGU0gH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75AC5C116C6;
+	Mon,  2 Feb 2026 15:20:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770045631;
+	bh=2+BVUp4yJLPs+Eu+0SrlY7RCM7BTt+P0S/7fIW/pv3c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=sNMGU0gHffA2/Fs/gNQCXzz9SII1InPgbmNfNYumw3KUy75LKMo+/Wg7ZdarZ7iQU
+	 EAJFHFvIONaG5F9oDsTdz9t+JCAGb2DdjKla5+akO5LPdVhkFPkkTSLIvTy/Djv4gl
+	 f5Z73htncVkp5GmY9M2Br4i3s3Hg57KV/myFtWDgnu7UDZLWMe3jMlXpYn4AbBK/po
+	 SgRTtGxPRc4r+LbQOouMgDaDu+6fW3I5v/XTTEU6oE81hmWurxdm3aJS8UsgnpMpvG
+	 y5nhgVyv4uOkaJICx1593zO2AIA9U3kZTk3UbVsDd3ycthYKndcbEUYx9KXawIWTmn
+	 69Lmyp0Y6NtRQ==
+Content-Type: multipart/mixed; boundary="===============1114375285770392558=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
- update
-To: Kuniyuki Iwashima <kuniyu@google.com>,
- Martin KaFai Lau <martin.lau@linux.dev>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260129-unix-proto-update-null-ptr-deref-v1-1-e1daeb7012fd@rbox.co>
- <3fc5611f-394f-40db-b49d-2f26402e221a@linux.dev>
- <3362017f-9c3d-46cd-b3ce-cb750b565d5b@rbox.co>
- <612a9446-252f-4b14-8605-ae1af000cc41@linux.dev>
- <CAAVpQUAc3S+Ebx2qp-Pbg9qH-Zc=yHdzVJbchCu++V_4XF3DLg@mail.gmail.com>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <CAAVpQUAc3S+Ebx2qp-Pbg9qH-Zc=yHdzVJbchCu++V_4XF3DLg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Message-Id: <522069f8c39e10c3f59886c538d973dbf3a1a9035a07fa3ac18fed2dcf55abdb@mail.kernel.org>
+In-Reply-To: <20260202144749.22932-4-git@danielhodges.dev>
+References: <20260202144749.22932-4-git@danielhodges.dev>
+Subject: Re: [PATCH bpf-next v7 3/4] bpf: Add signature verification kfuncs
+From: bot+bpf-ci@kernel.org
+To: git@danielhodges.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,vadim.fedorenko@linux.dev,song@kernel.org,yatsenko@meta.com,martin.lau@linux.dev,eddyz87@gmail.com,haoluo@google.com,jolsa@kernel.org,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,yonghong.song@linux.dev,herbert@gondor.apana.org.au,davem@davemloft.net,linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,git@danielhodges.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  2 Feb 2026 15:20:31 +0000 (UTC)
 
-On 1/31/26 11:06, Kuniyuki Iwashima wrote:
-> On Fri, Jan 30, 2026 at 1:30 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
->>
->> On 1/30/26 3:00 AM, Michal Luczaj wrote:
->>>>> Follow-up to discussion at
->>>>> https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.com/.
->>>>
->>>> It is a long thread to dig. Please summarize the discussion in the
->>>> commit message.
->>>
->>> OK, there we go:
->>>
->>> The root cause of the null-ptr-deref is that unix_stream_connect() sets
->>> sk_state (`WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)`) _before_ it assigns
->>> a peer (`unix_peer(sk) = newsk`). sk_state == TCP_ESTABLISHED makes
->>> sock_map_sk_state_allowed() believe that socket is properly set up, which
->>> would include having a defined peer.
->>>
->>> In other words, there's a window when you can call
->>> unix_stream_bpf_update_proto() on socket which still has unix_peer(sk) == NULL.
->>>
->>> My initial idea was to simply move peer assignment _before_ the sk_state
->>> update, but the maintainer wasn't interested in changing the
->>> unix_stream_connect() hot path. He suggested taking care of it in the
->>> sockmap code.
-> 
-> Yes, we already have a memory barrier for unix_peer(sk) there
-> (to save sock_hold()/sock_put() in sendmsg(), see 830a1e5c212fb)
-> and another one just for sk->sk_state is not worth the unlikely
-> case in sockmap by a buggy user.
-> 
-> 
->>>
->>> My understanding is that users are not supposed to put sockets in a sockmap
->>> when said socket is only half-way through connect() call. Hence `return
->>> -EINVAL` on a missing peer. Now, if users should be allowed to legally race
->>> connect() vs. sockmap update, then I guess we can wait for connect() to
->>> "finalize" e.g. by taking the unix_state_lock(), as discussed below.
-> 
-> If a user hit the issue, the user must have updated sockmap while the
-> user knows connect() had not returned.  Such a user must prepare
-> for failures since it could occur before sock_map_sk_state_allowed() too.
-> 
-> This is a subtle timing issue and I don't think the kernel should be
-> friendly to such buggy users by waiting for connect() etc.
-> 
-> 
->>>
->>>>   From looking at this commit message, if the existing lock_sock held by
->>>> update_elem is not useful for af_unix,
->>>
->>> Right, the existing lock_sock is not useful. update's lock_sock holds
->>> sock::sk_lock, while unix_state_lock() holds unix_sock::lock.
->>
->> It sounds like lock_sock is the incorrect lock to hold for af_unix. Is
->> taking lock_sock in sock_map doing anything useful for af_unix? Should
->> sock_map hold the unix_state_lock instead of lock_sock?
-> 
-> If sockmap code does not sleep, unix_state_lock can be used there.
-> 
-> 
->>
->> Other than update_elem, do other lock_sock() usages in sock_map have a
->> similar issue for af_unix?
+--===============1114375285770392558==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-As for the sockmap, I think that would be it.
+> diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+> index bf14856ab5..b763a6c5cd 100644
+> --- a/kernel/bpf/crypto.c
+> +++ b/kernel/bpf/crypto.c
 
-In related news, looks like bpf_iter_unix_seq_show() is missing
-unix_state_lock(): lock_sock_fast() won't stop unix_release_sock(). E.g.
-bpf iterator can grab unix_sock::peer as it is being released.
+[ ... ]
 
->>>> it is not clear why a new test
->>>> "!sk_pair" on top of the existing WRITE_ONCE(sk->sk_state...) is a fix.
->>>
->>> "On top"? Just to make sure we're looking at the same thing: above I was
->>> trying to show two parallel flows with unix_peer() fetch in thread-0 and
->>> WRITE_ONCE(sk->sk_state...) and `unix_peer(sk) = newsk` in thread-1.
->>>
->>> It fixes the problem because now update_proto won't call sock_hold(NULL).
->>>
->>>> A minor thing is sock_map_sk_state_allowed doesn't have
->>>> READ_ONCE(sk->sk_state) for sk_is_stream_unix also.
->>>
->>> Ok, I'll add this as a separate patch in v2. Along with the !tcp case of
->>> sock_map_redirect_allowed()?
->>
->> sgtm. thanks.
->>
->>>
->>>> If unix_stream_connect does not hold lock_sock, can unix_state_lock be
->>>> used here? lock_sock has already been taken, update_elem should not be
->>>> the hot path.
->>>
->>> Yes, it can be used, it was proposed in the old thread. In fact, critical
->>> section can be empty; only used to wait for unix_stream_connect() to
->>> release the lock, which would guarantee unix_peer(sk) != NULL by then.
->>>
->>>          if (!psock->sk_pair) {
->>> +               unix_state_lock(sk);
->>> +               unix_state_unlock(sk);
-> 
-> I don't like this... we had a similar one in recvmsg(MSG_PEEK) path
-> for GC with a biiiiiig comment, which I removed in 118f457da9ed .
-> 
-> 
->>>                  sk_pair = unix_peer(sk);
->>>                  sock_hold(sk_pair);
->>
->> I don't have a strong opinion on waiting or checking NULL. imo, both are
->> not easy to understand. One is sk_state had already been checked earlier
->> under a lock_sock but still needs to check NULL on unix_peer(). Another
->> one is an empty unix_state_[un]lock(). If taking unix_state_lock, may as
->> well just use the existing unix_peer_get(sk).
-> 
-> Yes, unix_peer_get() can be safely used there (with extra sock_put()).
-> 
-> 
->> If its return value cannot
->> (?) be NULL, WARN_ON_ONCE() instead of having a special empty
-> 
-> I suggested WARN_ON_ONCE() because Michal reproduced it with
-> mdelay() and I did not think it could occur in real life, but considering
-> PREEMPT_RT, it could be real.  So, the current form in this patch looks
-> good to me.
+> +/**
+> + * bpf_sig_keysize() - Get the key size for signature context
+> + * @ctx:	The crypto context being used. The ctx must be a trusted pointer.
+> + *
+> + * Return: The key size in bytes, or negative error code on failure.
+> + */
+                         ^^^^^^^^
 
-FWIW, it reproduces on CONFIG_PREEMPT_RT=n without mdelay().
-Please see
-https://lore.kernel.org/bpf/20260123-selftest-signal-on-connect-v1-0-b0256e7025b6@rbox.co/
+The underlying crypto_sig_keysize() function in include/crypto/sig.h returns
+the key size in bits, not bytes:
 
->> lock/unlock pattern here. If the correct lock (unix_state_lock) was held
->> earlier in update_elem, all these would go away.
->>
->> Also, it is not immediately clear why a non-NULL unix_peer(sk) is safe
->> here. From looking around af_unix.c, is it because the sk refcnt is held
->> earlier in update_elem? For unix_stream, unix_peer(sk) will stay valid
->> until unix_release_sock(sk). Am I reading it correctly?
-> 
-> unix_stream_connect() holds the peer's refcnt, and once unix_peer(sk)
-> is set, it and refcnt are not cleared until close()d.  So unix_peer_get() is
-> a bit redundant for sane users.
+    /**
+     * crypto_sig_keysize() - Get key size
+     *
+     * Function returns the key size in bits.
 
+Should this documentation say "in bits" instead of "in bytes"?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21595105586
+
+AI-authorship-score: low
+AI-authorship-explanation: The code follows established kernel patterns and the documentation error is equally likely a human oversight.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Documentation comment states wrong units (bytes instead of bits) for bpf_sig_keysize return value, which could mislead BPF program developers.
+
+--===============1114375285770392558==--
