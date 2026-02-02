@@ -1,57 +1,65 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85D536C598;
-	Mon,  2 Feb 2026 14:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C87E36997F
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 14:41:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770042500; cv=none; b=BnsbeX7E9T9aQM5xaCg5hzv7seqv3RXgR4Wkhqo02ul16BKR0Xn803tSlfuE9/4f+rY7czDBj84TZtojWKNgvQCF8SjMiPnI+0YUi/k+w7cU5/NtewZPDv4uy5B6dmLf8GvxJzyA1OuLy8+MYYQ9kdMdS99jSOIpHIOMrdw+6n0=
+	t=1770043281; cv=none; b=c3z3Y4wHbEOGl0PJegLcVsd9Xyl1qrwKhn/iKOVWtrQuRPA1HUzrAbB+BCbGKV9biBsIcUx8Zkv77szJZVRjf0I7C/xixiU3mij2oNG1L4zS+m5IRdmgFfVWMDVtsJ9k9BlTtqE7yOnKe6cC16V8kydL5d/sYCX14cbQY4EJauY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770042500; c=relaxed/simple;
-	bh=9GK7c/+ItwHetxr6eJlNOJePzxSiR/TFo01yiisSKV0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=d1E02RG9CubD40nZiLU1F/0MwRljqkrMAIK7yiCVlx9+LaCJEgT/1IFDLPfzpoeZd2EjDJfjYoQH+7XDwNMJzmVYB2ZWMqZzMZK5+8QWKMRL6GkoCTiAXim/7YNb3/Ue2QHjH1BTegsYYZXVXdgD8qVucOMuP/Ues+BLD0UGrQk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WenBnx0T; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770043281; c=relaxed/simple;
+	bh=z3rx/jabtg9ZjYZCaLoUAL261UbpmRt6sfWTLpeuLbo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l9jKCEjQO1jH9jqrWv5eCrahtBDPH/DBzjEo8o9PmnfI5yJTrRhSBkDyu4CaOw2aj6WEk3ZE2P0QuFcq7dPGRycjXRsxLueorSPWUhEwrA7UEM1I+91yUaue7EGk2QkituFWOZEnN/3efcjIff76aRs9NARh8ytbSMBRvUWebco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hVf4bAAP; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WenBnx0T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A191C19422;
-	Mon,  2 Feb 2026 14:28:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770042499;
-	bh=9GK7c/+ItwHetxr6eJlNOJePzxSiR/TFo01yiisSKV0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WenBnx0ThipuTGAaEC1onJkXKqsZQUieHUHYbvUCrtoP6RMH9x2d2nh+Qw/X7+grO
-	 MpO9/e4dnTsnyg9/G2yIShTGyrsqigzHVCYwX7tkeEgi2HZ6kUKy87sO9MO3Zsbpwv
-	 btliJlexQfREdwUM26ILJ9dePCP2LwZ5fayXXDpdYnVanBOfUpA8WNxEi5ZnsmhqDn
-	 +45Vtgi2PxGAU10DNmaX7Bw5Wl8j9agc7o95LtY+2TluU6kBDbvXn6xgl4zzoMjMBN
-	 3uV11nowhRsUBQ+HxXAPeUach42vKs3dx+CPNvPtvT6ZvFzuKKOsXTCheczw3lEgNX
-	 AApTrw4q5kWrw==
-From: Simon Horman <horms@kernel.org>
-To: wei.fang@nxp.com
-Cc: Simon Horman <horms@kernel.org>,
-	john.fastabend@gmail.com,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hVf4bAAP"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770043275;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=IQ2vObq+NaydxwU+/lMrowqMpvWKRek5w2I4imqOgDE=;
+	b=hVf4bAAPiZwHAoV0hq0QBmfyOkR9I/Q+iImhAuKG0CdRrrh4k2fHS/0YyWrRc8Yk+1Vwu8
+	1oMMk7kDuo7BLU98FBP/MTqjYWdRdX3e7blh7voXWmpsymj2xRLxp5MJ5m/DpAlZ5vLy3F
+	rG0FX0T3nPZPhYcG0ItpwFp8oVsuyrA=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
 	linux-kernel@vger.kernel.org,
-	sdf@fomichev.me,
-	netdev@vger.kernel.org,
-	xiaoning.wang@nxp.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	bpf@vger.kernel.org,
-	imx@lists.linux.dev,
-	ast@kernel.org,
-	frank.li@nxp.com,
-	shenwei.wang@nxp.com,
-	edumazet@google.com,
-	kuba@kernel.org,
-	hawk@kernel.org,
-	davem@davemloft.net,
-	daniel@iogearbox.net
-Subject: Re: [v5,net-next,06/15] net: fec: add fec_enet_rx_queue_xdp() for XDP path
-Date: Mon,  2 Feb 2026 14:26:55 +0000
-Message-ID: <20260202142655.1847932-1-horms@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260129103447.1893129-7-wei.fang@nxp.com>
-References: <20260129103447.1893129-7-wei.fang@nxp.com>
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v9 0/9] bpf: Extend BPF syscall with common attributes support
+Date: Mon,  2 Feb 2026 22:40:37 +0800
+Message-ID: <20260202144046.30651-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,73 +67,143 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
+This patch series builds upon the discussion in
+"[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-net: fec: add fec_enet_rx_queue_xdp() for XDP path
+This patch series introduces support for *common attributes* in the BPF
+syscall, providing a unified mechanism for passing shared metadata across
+all BPF commands.
 
-This commit separates XDP path packet processing from protocol stack
-processing by creating a dedicated fec_enet_rx_queue_xdp() function.
-The goal is to optimize XDP performance by removing unnecessary code
-paths that were interleaved with regular packet processing.
+The initial set of common attributes includes:
 
-> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-> --- a/drivers/net/ethernet/freescale/fec_main.c
-> +++ b/drivers/net/ethernet/freescale/fec_main.c
+1. 'log_buf': User-provided buffer for storing log output.
+2. 'log_size': Size of the provided log buffer.
+3. 'log_level': Verbosity level for logging.
+4. 'log_true_size': The size of log reported by kernel.
 
-[ ... ]
+With this extension, the BPF syscall will be able to return meaningful
+error messages (e.g., failures of creating map), improving debuggability
+and user experience.
 
-> +static void fec_xdp_drop(struct fec_enet_priv_rx_q *rxq,
-> +			 struct xdp_buff *xdp, u32 sync)
-> +{
-> +	struct page *page = virt_to_head_page(xdp->data);
-> +
-> +	page_pool_put_page(rxq->page_pool, page, sync, true);
-> +}
+Links:
+[1] https://lore.kernel.org/bpf/20250224153352.64689-1-leon.hwang@linux.dev/
 
-[ ... ]
+Changes:
+v8 -> v9:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create to
+  simplify struct bpf_log_attr (per Alexei).
+* v8: https://lore.kernel.org/bpf/20260126151409.52072-1-leon.hwang@linux.dev/
 
-> +static int fec_enet_rx_queue_xdp(struct fec_enet_private *fep, int queue,
-> +				 int budget, struct bpf_prog *prog)
-> +{
+v7 -> v8:
+* Return 0 when fd < 0 and errno != EFAULT in probe_sys_bpf_ext(), then simplify
+  probe_bpf_syscall_common_attrs() (per Alexei and Andrii).
+* v7: https://lore.kernel.org/bpf/20260123032445.125259-1-leon.hwang@linux.dev/
 
-[ ... ]
+v6 -> v7:
+* Return -errno when fd < 0 and errno != EFAULT in probe_sys_bpf_ext().
+* Convert return value of probe_sys_bpf_ext() to bool in
+  probe_bpf_syscall_common_attrs().
+* Address comments from Andrii:
+  * Drop the comment, and handle fd >= 0 case explicitly in
+    probe_sys_bpf_ext().
+  * Return an error when fd >= 0 in probe_sys_bpf_ext().
+* v6: https://lore.kernel.org/bpf/20260120152424.40766-1-leon.hwang@linux.dev/
 
-> +		switch (act) {
-> +		case XDP_PASS:
-> +			rxq->stats[RX_XDP_PASS]++;
-> +			/* The packet length includes FCS, but we don't want to
-> +			 * include that when passing upstream as it messes up
-> +			 * bridging applications.
-> +			 */
-> +			skb = fec_build_skb(fep, rxq, bdp, page, pkt_len);
-> +			if (!skb) {
-> +				fec_xdp_drop(rxq, &xdp, sync);
-> +				trace_xdp_exception(ndev, prog, XDP_PASS);
-> +			} else {
-> +				napi_gro_receive(&fep->napi, skb);
-> +			}
-> +			break;
+v5 -> v6:
+* Address comments from Andrii:
+  * Update some variables' name.
+  * Drop unnecessary 'close(fd)' in libbpf.
+  * Rename FEAT_EXTENDED_SYSCALL to FEAT_BPF_SYSCALL_COMMON_ATTRS with
+    updated description in libbpf.
+  * Use EINVAL instead of EUSERS, as EUSERS is not used in bpf yet.
+  * Rename struct bpf_syscall_common_attr_opts to bpf_log_opts in libbpf.
+  * Add 'OPTS_SET(log_opts, log_true_size, 0);' in libbpf's 'bpf_map_create()'.
+* v5: https://lore.kernel.org/bpf/20260112145616.44195-1-leon.hwang@linux.dev/
 
-When fec_build_skb() fails, it already returns the page to the page pool
-via page_pool_recycle_direct():
+v4 -> v5:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create
+  (per Alexei).
+* v4: https://lore.kernel.org/bpf/20260106172018.57757-1-leon.hwang@linux.dev/
 
-    static struct sk_buff *fec_build_skb(...)
-    {
-        skb = build_skb(page_address(page), ...);
-        if (unlikely(!skb)) {
-            page_pool_recycle_direct(rxq->page_pool, page);
-            ...
-            return NULL;
-        }
-        ...
-    }
+RFC v3 -> v4:
+* Drop RFC.
+* Address comments from Andrii:
+  * Add parentheses in 'sys_bpf_ext()'.
+  * Avoid creating new fd in 'probe_sys_bpf_ext()'.
+  * Add a new struct to wrap log fields in libbpf.
+* Address comments from Alexei:
+  * Do not skip writing to user space when log_true_size is zero.
+  * Do not use 'bool' arguments.
+  * Drop the adding WARN_ON_ONCE()'s.
+* v3: https://lore.kernel.org/bpf/20251002154841.99348-1-leon.hwang@linux.dev/
 
-Calling fec_xdp_drop() after fec_build_skb() returns NULL will return
-the same page to the pool a second time. Can this cause page pool
-corruption under memory pressure when build_skb() fails?
+RFC v2 -> RFC v3:
+* Rename probe_sys_bpf_extended to probe_sys_bpf_ext.
+* Refactor reporting 'log_true_size' for prog_load.
+* Refactor reporting 'btf_log_true_size' for btf_load.
+* Add warnings for internal bugs in map_create.
+* Check log_true_size in test cases.
+* Address comment from Alexei:
+  * Change kvzalloc/kvfree to kzalloc/kfree.
+* Address comments from Andrii:
+  * Move BPF_COMMON_ATTRS to 'enum bpf_cmd' alongside brief comment.
+  * Add bpf_check_uarg_tail_zero() for extra checks.
+  * Rename sys_bpf_extended to sys_bpf_ext.
+  * Rename sys_bpf_fd_extended to sys_bpf_ext_fd.
+  * Probe the new feature using NULL and -EFAULT.
+  * Move probe_sys_bpf_ext to libbpf_internal.h and drop LIBBPF_API.
+  * Return -EUSERS when log attrs are conflict between bpf_attr and
+    bpf_common_attr.
+  * Avoid touching bpf_vlog_init().
+  * Update the reason messages in map_create.
+  * Finalize the log using __cleanup().
+  * Report log size to users.
+  * Change type of log_buf from '__u64' to 'const char *' and cast type
+    using ptr_to_u64() in bpf_map_create().
+  * Do not return -EOPNOTSUPP when kernel doesn't support this feature
+    in bpf_map_create().
+  * Add log_level support for map creation for consistency.
+* Address comment from Eduard:
+  * Use common_attrs->log_level instead of BPF_LOG_FIXED.
+* v2: https://lore.kernel.org/bpf/20250911163328.93490-1-leon.hwang@linux.dev/
 
-[ ... ]
+RFC v1 -> RFC v2:
+* Fix build error reported by test bot.
+* Address comments from Alexei:
+  * Drop new uapi for freplace.
+  * Add common attributes support for prog_load and btf_load.
+  * Add common attributes support for map_create.
+* v1: https://lore.kernel.org/bpf/20250728142346.95681-1-leon.hwang@linux.dev/
+
+Leon Hwang (9):
+  bpf: Extend BPF syscall with common attributes support
+  libbpf: Add support for extended bpf syscall
+  bpf: Refactor reporting log_true_size for prog_load
+  bpf: Add syscall common attributes support for prog_load
+  bpf: Refactor reporting btf_log_true_size for btf_load
+  bpf: Add syscall common attributes support for btf_load
+  bpf: Add syscall common attributes support for map_create
+  libbpf: Add syscall common attributes support for map_create
+  selftests/bpf: Add tests to verify map create failure log
+
+ include/linux/bpf.h                           |   4 +-
+ include/linux/bpf_verifier.h                  |  17 ++
+ include/linux/btf.h                           |   3 +-
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/btf.c                              |  26 +--
+ kernel/bpf/log.c                              | 101 +++++++++++
+ kernel/bpf/syscall.c                          | 107 ++++++++---
+ kernel/bpf/verifier.c                         |  13 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/bpf.c                           |  52 +++++-
+ tools/lib/bpf/bpf.h                           |  17 +-
+ tools/lib/bpf/features.c                      |   8 +
+ tools/lib/bpf/libbpf_internal.h               |   3 +
+ .../selftests/bpf/prog_tests/map_init.c       | 168 ++++++++++++++++++
+ 15 files changed, 483 insertions(+), 55 deletions(-)
+
+--
+2.52.0
