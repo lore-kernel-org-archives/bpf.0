@@ -1,118 +1,102 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FB71F94F
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 05:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 698D423E33D
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 05:54:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770010796; cv=none; b=mFweOSGNMjigplDiAE3Iq3VaqDPgxs0MMJhTKLQPiB9X4+wLhan3qb0XmY+E8P0a95fONxbneH5tQLfU1ZkyxihkD4+j1nGzBsKcJmxNlBNyW+xx+iw5D/scFGLbhMeEm2Aymez5sBPfhWKvbtv8KfETQWdutnZifc1ZQbjRqPs=
+	t=1770011667; cv=none; b=KrMc/evtEr3c93ekHatj0cZr347JCd6nVObmPU2/bfp7tiEu65xRBfDy3jRSdJ0SGTt4uzLd7DL/EBIhtCE3mIzlQTnmjgn+y1xYcpjVbwWdyUf4B3Ivd+tWQe+2+415llQKfWgozzPLNMb+HOSTVRhmnDbZ/PnfbMymF2SYxI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770010796; c=relaxed/simple;
-	bh=cXdg5YoGsJVjjvtwqrLiUIW+CK4LXMS0mPg91TTgNsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SfLMFB63jABZnjIk2d1x7G6dTbAgWf9UYkfpaZaiWCurhWRK6BB/gvM/lDwM0+0NtSohmwqQKbTUCYYRKw28HSyMZCIprq39KNdgGSqm/y9k/SxTDfCKt6+cAHTlz43EQLe5dBC9nXdW6bVSBSIQW4xP+MF9sK7zYGwCMn8E51s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tQmu5Ifm; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1770011667; c=relaxed/simple;
+	bh=lywCEDPlyt3OiiQXvf51QMlsZ5pzc1imtu/yowAFg8o=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=G4HArUP1BVIQm5s6NhQ4W7HHxr++o9oa7nmRRzm9AZrTPSTPTEwbs5ErK+XHCFYMq7nHr3lh5Gw3pOZOnLK4Qz7jR7Fijl/7fgyD0kADbKi9d6xnFiNnR1jcrMgT/ev/0caldUj60JxCDO2JgaRb149CMRLB7mlAyw44drbXAQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lOa+etln; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tQmu5Ifm"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b8845cb580bso658462566b.3
-        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 21:39:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770010793; x=1770615593; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oQHxYYh/oaSmYIKd15e37VDf14jUNP+IN3jHPHFgtg4=;
-        b=tQmu5Ifm34sayGchBEo+KFQTDvp7mUzbMKz/Y0+Bgwk66scgAJPdvrS1uCBLQ+soG3
-         jUHSk37X33KL8mREqSfvCJ78Ixi/8xaiIzFxFYIE37mKCZawzfYV5gI7OEyz+4RVGrRS
-         KPnhA3UP/1UB8gxvisZwGFoW1t7vpJz/mI+IiYyF6xvSzu0fHg4UWUSn7/QJ5Z+J/eqk
-         MrkxjL3kzYgWZHRdUtatDpV/uw+gbkGxBr1JBYuegyEP94Hy+i3REfkUSQlELBSujAVc
-         pFZpc4O7oy38Ic3/KUoJAEyogEh1BDirfNX8Jd4kYzaFYqzrvk0ejBQcYhpNf5V9CNKx
-         frYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770010793; x=1770615593;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oQHxYYh/oaSmYIKd15e37VDf14jUNP+IN3jHPHFgtg4=;
-        b=dkbxM9puXnBThMIWpg1dXxZR/i8KP9y7qWkgH/yDrxFOG+I9RjwcjVpPsMjkqANygI
-         bZCpdKI0QufokI0qLCUxLczwINgMD5WtevtPvHCxybK4Yvp23g3jwZu/hIEWOycu4Czs
-         ukem2LnewJMY0DQdKgBSAkTboOgrZPk1PXvD5RWfX5f54MO2iDBEKIIf5ubNLrip6LX8
-         JUCsAfjp871alNHkS8qsKN0v9hmabns3GZqCPlCTNdpov0k9J8nD46ABCBKEQa55Z/oW
-         AJDy1HcZ6yhE+6LozRbUQs+NlmQVKnUFbPSSKSL68WGulMqubB1M3zbbWLvlhIG8hOPE
-         n8ng==
-X-Gm-Message-State: AOJu0YwQesla9R0RC5r+7VnGiXcZ15XXJoTHNIxIVXT4wBYbGw+Se5vY
-	lKBBM2Jjo06dtDuZVPf940rrLdQEmE+QiECx8zAdq3hmCjdaqQZoDnN1l6bX4M4XLQ==
-X-Gm-Gg: AZuq6aJWcA9BReTzMmAAXItqWxGtkvPJBYk5WP3HtDqFoS8eF4XcfvikLU8PK5cll/z
-	ak4QsO8McyM3crNWpTJenUB+eVhrSiScHIBm+mUj/OULSfygVf0UNUvpqLWz4gfBUiCXpbFu9LI
-	7115Zc8aBUpHMo3zYi9Z3eVfX948ED+JlrpZJ5hIVNKtDnjoNfc0aE5m5fJHwzuCRgTtrRu8sg3
-	WN42iutERskImnnrmDotuPZNtBv/Kg4Ch169DQ57NK99lbMGPW+OwXYKlYikKKvpiae45lKGgY1
-	FAGsJtmpNy6w6DtKxNh3u4CykB/e9wKBVDvgWJ9CCIFkfXxPwwFXryYENcB+utU/hoabrbtIXb1
-	iSExj5UiEJzQKnOqYnUagZggTmhfYKYG+uYBcvwg8KaoMbUDfT7X5FCxvrHfID8UXxWTEtAfgPQ
-	MsWN/7OrDrjO4qvoKHYnS2Pv98JkZ3OJG5eeZ94bWMelR0xOrf0Mw=
-X-Received: by 2002:a17:907:846:b0:b7d:1cbb:5deb with SMTP id a640c23a62f3a-b8dff5bfd66mr624231366b.27.1770010793134;
-        Sun, 01 Feb 2026 21:39:53 -0800 (PST)
-Received: from google.com (93.50.90.34.bc.googleusercontent.com. [34.90.50.93])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-658b4691d0asm7521455a12.18.2026.02.01.21.39.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Feb 2026 21:39:52 -0800 (PST)
-Date: Mon, 2 Feb 2026 05:39:48 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Roman Gushchin <roman.gushchin@linux.dev>
-Cc: bpf@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, Suren Baghdasaryan <surenb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH bpf-next v3 10/17] mm: introduce bpf_task_is_oom_victim()
- kfunc
-Message-ID: <aYA4pH_nIBZ-ZhLL@google.com>
-References: <20260127024421.494929-1-roman.gushchin@linux.dev>
- <20260127024421.494929-11-roman.gushchin@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lOa+etln"
+Message-ID: <fc05dd15-7119-4db7-9ddf-270bd9b838c9@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770011663;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Puxak2G+sBfL8q+PoNUkwncDertRMCGcIIZgmn1JsYo=;
+	b=lOa+etlnIqi57X6jQidrane+sY2vEBUct3hUX9jhq/pDN7i9y9CBmfGpuMRoviBZrnK8jj
+	NYxK4nwYjGYDuqFfozx45SODW/+fzOAe0fRyHOd5ut4eMbLhhTiD9PSxZ22Yx4eM+JGRv9
+	zW5JnF8thNlnZh8Hsjqe7M1ceGoOtz4=
+Date: Mon, 2 Feb 2026 13:54:14 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260127024421.494929-11-roman.gushchin@linux.dev>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Disallow BPF_F_LOCK with mixed
+ special fields and centralize flag checks
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+To: Martin KaFai Lau <martin.lau@linux.dev>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260123055658.372869-1-leon.hwang@linux.dev>
+ <20260123055658.372869-2-leon.hwang@linux.dev>
+ <CAP01T77UY=FjNg9RDFQP8UYsS67gJBEsJjZBobu=Dh-fHG-+Yw@mail.gmail.com>
+ <2a351923-5918-4735-8072-f21379e598c4@linux.dev>
+In-Reply-To: <2a351923-5918-4735-8072-f21379e598c4@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, Jan 26, 2026 at 06:44:13PM -0800, Roman Gushchin wrote:
-> Export tsk_is_oom_victim() helper as a BPF kfunc.
-> It's very useful to avoid redundant oom kills.
-> 
-> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> Suggested-by: Michal Hocko <mhocko@suse.com>
-> ---
->  mm/oom_kill.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> index 8f63a370b8f5..53f9f9674658 100644
-> --- a/mm/oom_kill.c
-> +++ b/mm/oom_kill.c
-> @@ -1381,10 +1381,24 @@ __bpf_kfunc int bpf_out_of_memory(struct mem_cgroup *memcg__nullable,
->  	return ret;
->  }
->  
-> +/**
-> + * bpf_task_is_oom_victim - Check if the task has been marked as an OOM victim
-> + * @task: task to check
-> + *
-> + * Returns true if the task has been previously selected by the OOM killer
-> + * to be killed. It's expected that the task will be destroyed soon and some
-> + * memory will be freed, so maybe no additional actions required.
-> + */
-> +__bpf_kfunc bool bpf_task_is_oom_victim(struct task_struct *task)
-> +{
-> +	return tsk_is_oom_victim(task);
-> +}
 
-Why not just do a direct memory read (i.e., task->signal->oom_mm)
-within the BPF program? I'm not quite convinced that a BPF kfunc
-wrapper for something like tsk_is_oom_victim() is warranted as you can
-literally achieve the same semantics without one.
+
+On 28/1/26 23:22, Leon Hwang wrote:
+> 
+> 
+> On 2026/1/28 10:27, Kumar Kartikeya Dwivedi wrote:
+>> On Fri, 23 Jan 2026 at 06:58, Leon Hwang <leon.hwang@linux.dev> wrote:
+>>>
+>>> Disallow combining BPF_F_LOCK with map values that contain special BTF
+>>> fields other than bpf_spin_lock (e.g. kptr or uptr). Such mixing may lead
+>>> to subtle or undefined behavior in map value handling. Reject these
+>>> combinations early by returning -EOPNOTSUPP.
+>>
+>> The commit log is really suboptimal in giving context on why you're doing this.
+>> You should summarize the discussion from [0], otherwise unless people
+>> go dig that thread they'd have no clue.
+>>
+>> Also, I would remove the 'undefined behavior' wording. It's just
+>> semantically different, in that the update doesn't free fields,
+>> but there's no undefined behavior.
+>>
+>>   [0]: https://lore.kernel.org/bpf/CAADnVQLib8ebe8cmGRj98YZiArendX8u=dSKNUrUFz6NGq7LRg@mail.gmail.com
+>>
+
+Hi Martin,
+
+Do you recall the original reasoning for disallowing BPF_F_LOCK together
+with BPF_UPTR in 'bpf_task_storage.c::bpf_pid_task_storage_update_elem()'?
+
+I didn’t find an explicit explanation in the commit message of
+ba512b00e5ef (“bpf: Add uptr support in the map_value of the task local
+storage”), and I’m trying to better understand the underlying concern.
+
+This is in the context of addressing Alexei’s comment in the linked
+discussion: I’d like to clearly articulate the risks of mixing
+BPF_F_LOCK with other special fields, rather than relying on vague
+phrasing.
+
+Thanks,
+Leon
+
