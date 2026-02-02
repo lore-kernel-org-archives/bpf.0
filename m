@@ -1,364 +1,580 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011061.outbound.protection.outlook.com [52.101.65.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37201308F03;
-	Mon,  2 Feb 2026 21:09:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770066575; cv=fail; b=K92dZba5m0IgxWc7BHGmRqibXwly/VNnQUWZJ+C+o+1q1G+zqIn5hDC9o5/V21CIclPYvE5jw7jLKqgv3sIi7ahzGdEUQwsFxq5ZemfuhqKv8zh3yKfZpvIBg+b6K4dS0GSeepQPXA9VM2wjFPeuBSzHRrmUSfDo3DgwTUxBcFg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770066575; c=relaxed/simple;
-	bh=xkq/S85vUyS5iKg6ayGv0WbkmpBE1rwr1ETMqJ8H4X0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=TgAdQlBTK7rbuL+3+zyEGeyRTvd/i40lQSZkRSbJ+6AZU/GO5LAh38G/LzFH1rVphQL+rPGlTNBT5ZkcRm8/QnRvutZA9SPp1rqlFP6sA3UT+w2anjPhZ8uECV8f+cHcg6efPdazyHDLpsFLLKU2PjoWuaU2tgfgAR7mg0Hfjuk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=n+bdpNIl; arc=fail smtp.client-ip=52.101.65.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1FA30F7EF
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 21:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770068900; cv=none; b=DcQcD1F1HMb1kJMgmOimeTHDXWLVIXAYmdvlC/voRkNjH0hxw0j6lhKwb8CUr7w7lOVQ1tADpcvMmFyik7jcGBoiw5gxLHZ+y06Dm+d3lxYcjOD51GetvipUj48DZrcsI9Nu/5XbSE9tWRYCLfb4yvBfRO2ofO/kZ+hQUfh/2eg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770068900; c=relaxed/simple;
+	bh=StdSAzH65ZY1dquY3E1BvusTTTE0QoYRwY5Q8/IwIXY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SfCxSapaLrCt9OWE7BjRhPmzOSf6h5dAJWdAaX3tsT87J22GdCs5f6r7k2ODhnSAWO5Mo26rhW1/CA0MZTUB9gMNihrrNo/NJGprNQIhhziWgbqpZ9kM75s7ccwIwjrlGoxm/0hwkJlSwrAxoH1W4bgjjSUYOt1hiFF4Xoqj2jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fVve2JIn; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="n+bdpNIl"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TqnCQxIN7V+p6B6ZS1VYLHX0O0XcazzB76qFhFlTC5KzSOOCPnMw0e+dvE3O1a1FuGOL5qBaR7146qO2Uv76IjdtF88NqdA6lUvKPv8vxX/1PHHP8KP1mgCF7lVOetJHm5DhoSZWFSvHVz/rNqNV2XyFv3udTIm7nxj0OBXN4iYj3i1dhWNKG+uTobHA3oB6NzEzxJblRsHjFdyEnud9rjEzsS6ScwPYdQkZ+jInyfHTowADjlDZEc+GiFr6r1AHl9Hj223rRtR3PnCIX2jFCm9yjArsu9DdKyckRceW9x2cxjS/NiciajI8x627CsQSkBo4D3Qe60m93BrhPfX3bQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LjomvUGWsd66Y9jbHaXhqlS99ya+BKpyCpHOt2HV91k=;
- b=h1TmUKmbPfq5t0ikyfcM+0wT0I5y83LXNDWjG7ad5sG8+GOiPeitQHlU9hKfgmefNtN7oCWnhDdI28E9xxCjJIcr9WptWxvuylwNJmHSNrsa+xJIoDJ+mwaFA7UzyHVnQr/zVUfU2ibZED/UyWmPTprNML8UmcEwZnY55mj0E0LNELuiasbPN1oiDySyrGJmsYV+ye7ZuMQU+Jl3xiz5PJkih+UU6TzHc0/7HEhEDfsqW9XrjHR5cME4v119L4Y7e+G3KICG9QZloIv89N5L89pmtTy3gB2Kbs3vcWoQfPiTXBKezZJglnfX23sRXI6dlYPTJipxAOGydhRjr16nYw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
- header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LjomvUGWsd66Y9jbHaXhqlS99ya+BKpyCpHOt2HV91k=;
- b=n+bdpNIltcIpNRx1XuGyHQxXE2vqLMLboWUzGrP9J15t+YDmeDrm+qe79UQmpTLgvw3NZWAHACCznXd4R9Jqk4KCMLnGKFXgiDfsu14FeUYieOrXyttDLmnLl0OWbXG0HXNLxhrwT19A+d+SEIWK2cSRneMR8rdEO4IOvdo4S4fheDzNamZlYwA0t3nQ8oTwZ25Ja6DkHJK5VXdai3j4eosfXIqZCB5ajrSq7lQGWH3l5AjmMKbyPtZLx7kVTH09S54Bo0WIB81t3gUoRIGV1kLlnfoNLyG+1Na2EXz7UucHCtC5kZLzCmd8dFI7d26yGoiYFqOfs7QzNZbLp28X9Q==
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
- by VI0PR07MB10807.eurprd07.prod.outlook.com (2603:10a6:800:2c9::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Mon, 2 Feb
- 2026 21:09:28 +0000
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::b7f8:dc0a:7e8d:56]) by PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::b7f8:dc0a:7e8d:56%2]) with mapi id 15.20.9520.005; Mon, 2 Feb 2026
- 21:09:28 +0000
-From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-To: "Michael S. Tsirkin" <mst@redhat.com>
-CC: "tariqt@nvidia.com" <tariqt@nvidia.com>, "linux-rdma@vger.kernel.org"
-	<linux-rdma@vger.kernel.org>, "shaojijie@huawei.com" <shaojijie@huawei.com>,
-	"shenjian15@huawei.com" <shenjian15@huawei.com>, "salil.mehta@huawei.com"
-	<salil.mehta@huawei.com>, "mbloch@nvidia.com" <mbloch@nvidia.com>,
-	"saeedm@nvidia.com" <saeedm@nvidia.com>, "leon@kernel.org" <leon@kernel.org>,
-	"eperezma@redhat.com" <eperezma@redhat.com>, "brett.creeley@amd.com"
-	<brett.creeley@amd.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
-	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>,
-	"xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "edumazet@google.com"
-	<edumazet@google.com>, "parav@nvidia.com" <parav@nvidia.com>,
-	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "corbet@lwn.net"
-	<corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
-	<dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
-	"jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
-	"stephen@networkplumber.org" <stephen@networkplumber.org>,
-	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
-	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
-	<donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
-	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
-	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
-	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
-	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
-	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
-	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
-	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
-	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
-Subject: RE: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag in
- virtio_net_hdr
-Thread-Topic: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag in
- virtio_net_hdr
-Thread-Index: AQHckwSvr7yGsOyrpUmxwtqxbyNbCbVtkSqAgAIPIWCAAAnvAIAACFrQ
-Date: Mon, 2 Feb 2026 21:09:28 +0000
-Message-ID:
- <PAXPR07MB7984B37862D3FBBE363AE5A8A39AA@PAXPR07MB7984.eurprd07.prod.outlook.com>
-References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
- <20260131225510.2946-4-chia-yu.chang@nokia-bell-labs.com>
- <20260201035912-mutt-send-email-mst@kernel.org>
- <AM9PR07MB79696F945D8DBEF370CD4DC6A39AA@AM9PR07MB7969.eurprd07.prod.outlook.com>
- <20260202121830-mutt-send-email-mst@kernel.org>
-In-Reply-To: <20260202121830-mutt-send-email-mst@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|VI0PR07MB10807:EE_
-x-ms-office365-filtering-correlation-id: 593589ab-4a2a-4b6f-1ad1-08de629f5a2e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|13003099007|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?YeyKsOCZaSFMioY6hQHSapN5iBu/3Of8jK8KwV1H9VRc9LkKW8ALnro6VC7w?=
- =?us-ascii?Q?DvJb8Wss6RBD0Ig0ZYjBKDD7KwwR/Y7XGPFsY79n/CVNEE62ccD7Ny45cZRw?=
- =?us-ascii?Q?Nehs4jtAD7xlc0AR/MzdIPpQFKXL+RlZnKlQt9EaxQiyaZHRZL0H9JrwUCkr?=
- =?us-ascii?Q?y95JEMKyo+qNlN9GLuUjLBmRUxn0Gr2FCUt5t4zviJXu900xjJRrjKYGYtJd?=
- =?us-ascii?Q?T+7LMxj2s6jH9RG1oXdTWTRueaieX5G8EE8UOA1TECK6xp8D3NVgnpo99T1B?=
- =?us-ascii?Q?0m6/Rn27iOE2a0/7ZUPlSiOVTl+Tb9rYYVbBZKprcjnAPoXQ1y06OdjGmYwY?=
- =?us-ascii?Q?Y0IEeYGBoTz8N0dmRSmpLl2Who5V6nzNAgmnwZraZFiPyTOSYCE0zb77hYZu?=
- =?us-ascii?Q?SMUn7MBNTnumV9nNafSYFdLUm9rzaNzvxvKjJaV8KWGfQ0JdiwMmUSjfYxQs?=
- =?us-ascii?Q?dVSP2dAAZRYRoQohuQ/HPsNV6TCAgo3rCWoG1SzBdbK4qCf+ji0Tos9n4pdI?=
- =?us-ascii?Q?GnUBvSVtBSGcYVqSKwVuAc6bj6hw+x6LN9UeB2miZddEVskAzePHnVlagrmP?=
- =?us-ascii?Q?ZuDylbP3b5M0lrnd/uCDjEysmZHmrZtan+14RnNOE5PUuljPjTCJkmZYzNbE?=
- =?us-ascii?Q?51EjNI4aMCmUOLB0/3Rq/9mJsNtwDl1SFzOIIVbd5g4pLj+acuIL6RcoNbn/?=
- =?us-ascii?Q?x7p/BQEqK+YkXiGWBLXvr+/v794X1nP5Q/VWy4CJaOH4EUCaNL/l04a89Krj?=
- =?us-ascii?Q?dInhR75QIQvXLufjDHNjJjob8XNBmNTLSws9Wojkqrl0JGbc18pqxnFoeagC?=
- =?us-ascii?Q?rmAwmCFjUgKyqSX5sOrwvrZPJizpIJ52zOlRJuCBIDPSYicqT0qjmHLxXYtQ?=
- =?us-ascii?Q?kE0UHxxtFRumWo+BLrG686d1uwQX0s1vUjI55M7zU/+zd0P/9YY6TBa7Avvp?=
- =?us-ascii?Q?HtdX2ogYfmvmiKcQYI/73gcr0YK/qbif+mzC4mz/U+XRHPUrcWKlUv4/e/Mb?=
- =?us-ascii?Q?AwVyENa0uI4NZeZch6T7yaLka8FMnS4SzWdfJ3+1KCxpIVQQ+3cI30KXJ71U?=
- =?us-ascii?Q?hhNypnbuMEohjnOJ26Pu76ZyjGvaJXbXk+4ExKMdZq4pAdhHj3auuVT9b7xu?=
- =?us-ascii?Q?Eudo1egYCk5ted8vGF5h6Y6klm4zTdPrq3lenKDu43bhb2HXSmx9UOjuU4b4?=
- =?us-ascii?Q?ULMf8m8WVe7XZJdsP4hTGOjAYLRWIQ6W3WFypfvPoboU70UOxp33TWW14pXe?=
- =?us-ascii?Q?ViTsOCswTQB2SGkYGWiZ5KDeIsEt5QeiiVpDxB8EhaMsCszo/axiidsBILOX?=
- =?us-ascii?Q?AZRovFCEoPKW6Pct/PJ8hwBL95DUABKQF5H0ORizfKBNflnBIHk51WUfLWDH?=
- =?us-ascii?Q?IFvRjD5mONEHTvff2L4zESbm88OQaG1e65LMtnxa22+rgSw+yucD4LJd0j9N?=
- =?us-ascii?Q?IAB5Cg9vOXv2wVrAP6IpCLhn6vI4Gbq7VsB/TQDMT4rohpTQd84q/Yy6+aFw?=
- =?us-ascii?Q?9XMh3SdAWz+0Fx5uttK+cF0rF4abM6q0Lu0m9iqkqiPD185TKhugQZGi6Fbc?=
- =?us-ascii?Q?mwtn9GFYCmT6aXEtsB6URIN3JOsZtiBW7e4Ng8Ee?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(13003099007)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?UfMBdPQDbk1z8w+0vOJ++gTIw1bQXZhOdljtqVIJuiSIJyF4bgD85tdU9Ao+?=
- =?us-ascii?Q?YUrovmls2Oun00qeOKSsSQ0Gl/WiHRUqv/FZFAMWPmu8jKSs3rbIftasoODc?=
- =?us-ascii?Q?CDZ3RE4oX1BEh6jOxH9bAH6qUreIsmGu7mjZ9LhWSOgL/WxxtWN3gZ0hQsH9?=
- =?us-ascii?Q?xgq6Woz4jnIaSCcLAiwBNka96cIdMyPAkKd6lcMKiku/6bGYSBpwSpPly2Bk?=
- =?us-ascii?Q?WdKGSQ2Q3r+ct/DrirgP6F6eGK6eA4nFaNcr1/FlKzrbbr20xoW4xxG/KNTB?=
- =?us-ascii?Q?nZ9dtl78UQF5b1LGWI5dRXJi2lfpsDesZiE4R/8F97Wt+478FF4IdDBKNwUl?=
- =?us-ascii?Q?vexCYN4FUFjrr08oP7TJLGkgewjtpSmLk73fCrqL3mnBx3qSd3hec+ufD++7?=
- =?us-ascii?Q?LOkIDCofzNSZUMCcH24HtJSH3MrRELiVx//nqbO8vQaTx7t0GbKSogNObNlO?=
- =?us-ascii?Q?GD/rZE3+KIkCvgkdwxL+t7NNiCuKI2Uld2qTqdUzUUQtckJpaqAZocxCwuVI?=
- =?us-ascii?Q?d7PIqPIFjqv5WW3Vb104aOKM9KrT2HJAZS68TgRJQiz4YGLCg6KL7RvgrnCR?=
- =?us-ascii?Q?QqY1nWzby7Ez+/vF3xeOAOdnsCUhQDNkoBVkNR3Jdo80VqapGWWqUClQ5aAf?=
- =?us-ascii?Q?/01e3tlkd6Cx420irS94hO8KwKfYCfFQ95DCXgE7eEbkkWdW66nBdcCc+y4T?=
- =?us-ascii?Q?ZIJx+SWA2/X58MoE92nktHpBo+xKZjyhvRhsSxZ3SAmW68F0mNAYfDCv8RQc?=
- =?us-ascii?Q?2RZGUzQRmcei7nsLRq/TQzXMySp9y8/SDLArz7+ab2r8zpZABqM7uL4gtK0j?=
- =?us-ascii?Q?BdgX+mF1uWNdkh6hS73IgkFg0NWAAw8Cp5n/GltetPe/GEDwULOx4yK3LPYI?=
- =?us-ascii?Q?oYSaM5M1l68Aa+5KRck5v4uulD98zC17Krs8PnXZCFRPJBsDG8y82I0cu8lH?=
- =?us-ascii?Q?One5ytKLKB5gsJtMPOkBgBOFD9R8UaPWZ0H3bbMqRJen9TdUzlw+FjCaVwon?=
- =?us-ascii?Q?sf9QJowiuKJXMtbwksmbNR/o2JF/EwGAXnJUHzajQJf6gQkJW6WeULt7Ug67?=
- =?us-ascii?Q?2nJziZWVd35UiggCG/xNC+v6/6yg5gQRYjJ00dlsyc0iSSFe8DR2HGpO1Gfe?=
- =?us-ascii?Q?icGlP+xWQKU4Mm72OYmi/2KWP1POiKcn+ElP1xRzkSK9bJqagJZMigjSYiLk?=
- =?us-ascii?Q?trXwzzNGpZPK5z9O5w9sec6oRtEK+bRuL5ulO21FIf3r3ZNJZl+5d0wrqMqC?=
- =?us-ascii?Q?lrpEEy4nlVa6RoXRkaaNBE56zkDGeBQCF1iaDmL+ZfPFra1hAzee/+eRIILO?=
- =?us-ascii?Q?QYwGVwnlMOUmeSpDIQX0z5lILlFofuu82SeiGdgsUsK8yHGrxemIMjf+z7hj?=
- =?us-ascii?Q?w96iW/GdG/Wztcxcfir+mI5Vyb7gejx7B0cz9JoZ8OrhvdMck7dFvdrxloZt?=
- =?us-ascii?Q?aKW66faycEbIq4dj7nktjj9nd1pHiukK0qWpmE7W38zXB8ZbsT1HQwRQkhU2?=
- =?us-ascii?Q?yoEbT35Sl6jIfwSKKZoUigd2L9N8XrVuV2jneFu3vgbrnwVr+2xkQUclPAj0?=
- =?us-ascii?Q?fbx1gIZerWGaMrQlsGMV68o9Rzr46Oz/R5YLMh4Qerhlh+bOYLFr+/+1D0Xc?=
- =?us-ascii?Q?PToD/O1RuLoBWsTddoZwQUlqHfk9k5gsV0hF08lLBZ5Z0eZOW7T/geIy4uag?=
- =?us-ascii?Q?VoHAxU/YxYo0+WPdsQ+CKZr4IT+1Kapu/0XjowIFJFPd+Cf//L14IIIAao8U?=
- =?us-ascii?Q?VLPI5uJzRuSgC6BDucPXi7AaxYH/iK8=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fVve2JIn"
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-8220bd582ddso2878189b3a.2
+        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 13:48:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770068898; x=1770673698; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=l93PSiyqraBCCV2RZN/CwLC26vrK1Fkxue2Ff3mkLn8=;
+        b=fVve2JInw4JnqLQEdCsiepTqsy5jKEr8uNSKyyCUUoC6v3YehvBTgOywqVTWXWphIR
+         tm26NTNYc4RwpqOHAEIiTiG/ld+2O0swrYxEnU9rmfDh1fdforbJzjxc/NxgJgFFvdPi
+         kV78QkXNep0Vx8DNXW+vvwRUMpHisIatp0jdMirLjpS9EMJwuNkdQ4DJnTKPX2+RmFkc
+         gLPTxaLmQDB9LBFZC0yqGShnmZ9N29XfPLu+pmC9TBT+FoKQ/bWpHIQ6T4LNC9nkJ+g1
+         Ewo/DIkaNAcnm/Af7GPniCj7CsroSQ7aABjDzwD2yLGDv4Bk+ugJAk1jpLRGEDLcKgzc
+         uWVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770068898; x=1770673698;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l93PSiyqraBCCV2RZN/CwLC26vrK1Fkxue2Ff3mkLn8=;
+        b=PXYAsrw6+jlJVQajGQX36tlyMoU2Xlp4TLJilF57mF6lYGfgtBn35kZW/KgDRJglh0
+         or9EWdLmGwiW6QMoq1DuBQKxs3ZAV/OivpDSrOTg3sdoEUjhChcPwZjyjWCOY2nEYOGg
+         e6wOOjzTB6qIG1AaEIzv72hp0iJyNHK4QdjIB8hC+Wk7psd1A7AxCLiFU7MjMpFnn46r
+         B2LMNGKKe3rLNZw12QIgzqoVLdi/8xulphx19LVffmoN/yXh4Lozc3WYj9PALOnJad7g
+         XK5152qCIWzLtUFBR/A9pxzuBLCWPq6o7gLqdW4708IDL0r1FsVULlSwN86qEzhwq7Y4
+         O2dA==
+X-Gm-Message-State: AOJu0Yy1coyQLpsbDXNoxtjfge8++6fIaYYMMmUkdLTm9UU+M53A0SgJ
+	d4EUiMxWpaafjrHTK7kKPujgxbI7v8OJqAiWJgyd/jIbmC8iBDrkWr5gK1rZaA==
+X-Gm-Gg: AZuq6aLwTqQEfY4NOO7Dfhq4ddLaXhu4dSQ1JjeCBQSo+XxQVJsTBdk0xfRNyo3FBuv
+	9OVUypQMh+uJ2LSyclOyIhKB5TBhXY108PEJE8vNnCqkhCy2PMloocjlOCSesCdE/dvxZJTE+dQ
+	b2hmH9XAWQs4uDXl/gu+UDfeVTC3E2RmvsINY/XAUpPVc/L9JaSvhJnTkBoleKg15/CoaIDx17V
+	MK5tF1I/k4WOnoSezMJCzyXkjjy5ITWU/OdsKIVBDiyV6EwxRCpvAHIZqQ2EyZKX1zCBcM3zEMv
+	cT8Ffk4oH2U5qEvBbv3P9F3S/coVNlV2Fe3KrPlYQxqn5PxB7WXBIbOs155Muz+ZtajiS6Dy2Ky
+	75Uoz4VlIcwJ1eJfZVLeFXbG2XqWgZ8rD1ATR2ftdKheWWBAwSHg7bZsNKAG8hA+EhArfw/vRQ9
+	HK0PnhurgaJARi
+X-Received: by 2002:a05:6a00:92a3:b0:81c:9f57:3090 with SMTP id d2e1a72fcca58-823aa6ae8c8mr13608370b3a.24.1770068898228;
+        Mon, 02 Feb 2026 13:48:18 -0800 (PST)
+Received: from localhost ([2a03:2880:ff:55::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-82379b48531sm16011264b3a.16.2026.02.02.13.48.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Feb 2026 13:48:17 -0800 (PST)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	memxor@gmail.com,
+	martin.lau@kernel.org,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [RFC PATCH bpf-next v1 1/4] bpf: Fix and refactor object relationship tracking
+Date: Mon,  2 Feb 2026 13:48:14 -0800
+Message-ID: <20260202214817.2853236-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 593589ab-4a2a-4b6f-1ad1-08de629f5a2e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2026 21:09:28.5121
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: MtBBou0Yj+VZ41rnCedkIskWWA9dTgvC8gWbcnw/q+xoClo940lnu4n0y95Q8ycmcdsbudP4VesiZ5tuX/0sAxVB85InO4AIfRm9g4Wy/dGC7zFzh25zARgbnB4vhvWz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR07MB10807
+Content-Transfer-Encoding: 8bit
 
-> -----Original Message-----
-> From: Michael S. Tsirkin <mst@redhat.com>=20
-> Sent: Monday, February 2, 2026 6:20 PM
-> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
-> Cc: tariqt@nvidia.com; linux-rdma@vger.kernel.org; shaojijie@huawei.com; =
-shenjian15@huawei.com; salil.mehta@huawei.com; mbloch@nvidia.com; saeedm@nv=
-idia.com; leon@kernel.org; eperezma@redhat.com; brett.creeley@amd.com; jaso=
-wang@redhat.com; virtualization@lists.linux.dev; xuanzhuo@linux.alibaba.com=
-; pabeni@redhat.com; edumazet@google.com; parav@nvidia.com; linux-doc@vger.=
-kernel.org; corbet@lwn.net; horms@kernel.org; dsahern@kernel.org; kuniyu@go=
-ogle.com; bpf@vger.kernel.org; netdev@vger.kernel.org; dave.taht@gmail.com;=
- jhs@mojatatu.com; kuba@kernel.org; stephen@networkplumber.org; xiyou.wangc=
-ong@gmail.com; jiri@resnulli.us; davem@davemloft.net; andrew+netdev@lunn.ch=
-; donald.hunter@gmail.com; ast@fiberby.net; liuhangbin@gmail.com; shuah@ker=
-nel.org; linux-kselftest@vger.kernel.org; ij@kernel.org; ncardwell@google.c=
-om; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-labs.com>; g.whit=
-e@cablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsso=
-n.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com; vid=
-hi_goel@apple.com
-> Subject: Re: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag in vir=
-tio_net_hdr
->=20
->=20
-> CAUTION: This is an external email. Please be very careful when clicking =
-links or opening attachments. See the URL nok.it/ext for additional informa=
-tion.
->=20
->=20
->=20
-> On Mon, Feb 02, 2026 at 04:56:38PM +0000, Chia-Yu Chang (Nokia) wrote:
-> > > -----Original Message-----
-> > > From: Michael S. Tsirkin <mst@redhat.com>
-> > > Sent: Sunday, February 1, 2026 10:18 AM
-> > > To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
-> > > Cc: tariqt@nvidia.com; linux-rdma@vger.kernel.org;=20
-> > > shaojijie@huawei.com; shenjian15@huawei.com; salil.mehta@huawei.com;=
-=20
-> > > mbloch@nvidia.com; saeedm@nvidia.com; leon@kernel.org;=20
-> > > eperezma@redhat.com; brett.creeley@amd.com; jasowang@redhat.com;=20
-> > > virtualization@lists.linux.dev; xuanzhuo@linux.alibaba.com;=20
-> > > pabeni@redhat.com; edumazet@google.com; parav@nvidia.com;=20
-> > > linux-doc@vger.kernel.org; corbet@lwn.net; horms@kernel.org;=20
-> > > dsahern@kernel.org; kuniyu@google.com; bpf@vger.kernel.org;=20
-> > > netdev@vger.kernel.org; dave.taht@gmail.com; jhs@mojatatu.com;=20
-> > > kuba@kernel.org; stephen@networkplumber.org;=20
-> > > xiyou.wangcong@gmail.com; jiri@resnulli.us; davem@davemloft.net;=20
-> > > andrew+netdev@lunn.ch; donald.hunter@gmail.com; ast@fiberby.net;=20
-> > > liuhangbin@gmail.com; shuah@kernel.org;=20
-> > > linux-kselftest@vger.kernel.org; ij@kernel.org;=20
-> > > ncardwell@google.com; Koen De Schepper (Nokia)=20
-> > > <koen.de_schepper@nokia-bell-labs.com>; g.white@cablelabs.com;=20
-> > > ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsson.com;=20
-> > > cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com;=20
-> > > vidhi_goel@apple.com
-> > > Subject: Re: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag=20
-> > > in virtio_net_hdr
-> > >
-> > >
-> > > CAUTION: This is an external email. Please be very careful when click=
-ing links or opening attachments. See the URL nok.it/ext for additional inf=
-ormation.
-> > >
-> > >
-> > >
-> > > Thanks for the patch! Yet something to improve:
-> > >
-> > > On Sat, Jan 31, 2026 at 11:55:10PM +0100, chia-yu.chang@nokia-bell-la=
-bs.com wrote:
-> > > > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> > > >
-> > > > Unlike RFC 3168 ECN, accurate ECN uses the CWR flag as part of the=
-=20
-> > > > ACE field to count new packets with CE mark; however, it will be=20
-> > > > corrupted by the RFC 3168 ECN-aware TSO. Therefore, fallback shall=
-=20
-> > > > be applied by seting NETIF_F_GSO_ACCECN to ensure that the CWR=20
-> > > > flag should not be changed within a super-skb.
-> > > >
-> > > > To apply the aforementieond new AccECN GSO for virtio, new featue=20
-> > > > bits for host and guest are added for feature negotiation between=20
-> > > > driver and device. And the translation of Accurate ECN GSO flag=20
-> > > > between virtio_net_hdr and skb header for NETIF_F_GSO_ACCECN is=20
-> > > > also added to avoid CWR flag corruption due to RFC3168 ECN TSO.
-> > > >
-> > > > Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> > >
-> > >
-> > > To the best of my understanding, this is a new feature - support for =
-VIRTIO_NET_F_HOST_ACCECN, VIRTIO_NET_F_GUEST_ACCECN?
-> > > The commit log makes it sound like it fixes some behaviour for existi=
-ng hardware, but that is not the case.
-> > >
-> >
-> > Thansk for the feedback, I will update commit message in v3.
-> > >
-> > > > ---
-> > > > v2:
-> > > > - Replace VIRTIO_NET_HDR_GSO_ECN with VIRTIO_NET_HDR_GSO_ECN_FLAGS
-> > >
-> > > but where is v2? this is v1...
-> >
-> > I shall update this version as v2, will do at the next version.
-> >
-> > [...]
-> > > > diff --git a/include/uapi/linux/virtio_net.h=20
-> > > > b/include/uapi/linux/virtio_net.h index 1db45b01532b..af5bfe45aa1f
-> > > > 100644
-> > > > --- a/include/uapi/linux/virtio_net.h
-> > > > +++ b/include/uapi/linux/virtio_net.h
-> > > > @@ -56,6 +56,8 @@
-> > > >  #define VIRTIO_NET_F_MQ      22      /* Device supports Receive Fl=
-ow
-> > > >                                        * Steering */
-> > > >  #define VIRTIO_NET_F_CTRL_MAC_ADDR 23        /* Set MAC address */
-> > > > +#define VIRTIO_NET_F_HOST_ACCECN 25  /* Host can handle GSO of=20
-> > > > +AccECN */ #define VIRTIO_NET_F_GUEST_ACCECN 26 /* Guest can=20
-> > > > +handle GSO of AccECN */
-> > > >  #define VIRTIO_NET_F_DEVICE_STATS 50 /* Device can provide=20
-> > > > device-level statistics. */  #define VIRTIO_NET_F_VQ_NOTF_COAL 52 /=
-* Device supports virtqueue notification coalescing */
-> > > >  #define VIRTIO_NET_F_NOTF_COAL       53      /* Device supports no=
-tifications coalescing */
-> > > > @@ -165,6 +167,9 @@ struct virtio_net_hdr_v1 {  #define=20
-> > > > VIRTIO_NET_HDR_GSO_UDP_TUNNEL (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV4 |=
- \
-> > > >                                      VIRTIO_NET_HDR_GSO_UDP_TUNNEL_=
-IPV6)
-> > > >  #define VIRTIO_NET_HDR_GSO_ECN               0x80    /* TCP has EC=
-N set */
-> > > > +#define VIRTIO_NET_HDR_GSO_ACCECN    0x10    /* TCP AccECN segment=
-ation */
-> > > > +#define VIRTIO_NET_HDR_GSO_ECN_FLAGS (VIRTIO_NET_HDR_GSO_ECN | \
-> > > > +                                      VIRTIO_NET_HDR_GSO_ACCECN)
-> > > >       __u8 gso_type;
-> > > >       __virtio16 hdr_len;     /* Ethernet + IP + tcp/udp hdrs */
-> > > >       __virtio16 gso_size;    /* Bytes to append to hdr_len per fra=
-me */
-> > >
-> > >
-> > > UAPI changes need to be added to the virtio spec.
-> > > Pls get this approved by the virtio TC.
-> > > Thanks!
-> >
-> > There were some discussions last October in virtio-comment@lists.linux.=
-dev mailing list.
->=20
->=20
-> That's it I could not find it. Could you include the archive link pls?
+This patch (1) fixes the missing link between dynptr and the parent
+referenced object and (2) simplifies the object relationship tracking
+to allow building more complex object relationship in the future.
 
-The email thread I found is https://yhbt.net/lore/all/20250814120118.81787-=
-1-chia-yu.chang@nokia-bell-labs.com/T/#m62dd5e559a68e8d3e5872e85d37c924f65f=
-c7033
+This patch makes dynptr tracks its parent object. After bpf qdisc is
+introduced, it is now possible for an skb to be freed in a qdisc program.
+However, since there is no link between the skb dynptr and the skb, the
+dynptr will not be invalidated after the skb is freed, resulting in
+use after free.
 
-There were discussions about updating the documents of SKB_GSO_TCP_ECN and =
-SKB_GSO_TCP_ACCECN, and you can find it in the first patch of this series.
+In addition, also take the chance to refactor object relationship
+tracking. Currently ref_obj_id of an object will share the same
+ref_obj_id of the object it is referencing. For dynptr slice, a separate
+dynptr_id is used to track its parent.
 
->=20
->=20
-> > At that moment, it is suggested to make Linux kernel accept new comment=
-s for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN first.
-> > So, could virtio-spec colleague give your feedback? (Parav?).
-> >
-> > Otherwise, the CWR handling of virtio will be wrong after all Accurate =
-ECN commits are merged in Linux.
-> >
-> > Chia-Yu
->=20
-> if there's a general agreement we don't need to block linux on tc approva=
-l.
->=20
-> --
-> MST
+This design works for now, but after adding link between skb and dynptr,
+it becomes problematic. It cannot correctly handle the removal of some
+nodes in the object relationship tree. For example, if dynptr a is
+destroyed by overwriting the stack slot, release_reference(1) would be
+called and all nodes will be removed. The correct handling should leave
+skb, dynptr c, and slice d intact. This is not a problem before since
+dynptr created from skb has ref_obj_id = 0.
 
-Shall I also submit patches to virtio-spec? Please suggest ways forwards.
+In the future if we start allowing creating dynptr from slice, the current
+design also cannot correctly handle the removal of dynptr e. Again, all
+nodes will be removed instead of childrens of dynptr e.
 
-Thanks!
+Before: object (id,ref_obj_id,dynptr_id)
 
-Chia-Yu
+                      skb (1,1,0)
+                             ^ (Link added in this patch)
+                             +-------------------------------+
+                             |           bpf_dynptr_clone    |
+                 dynptr a (2,1,0)                dynptr c (4,1,0)
+                           ^                               ^
+        bpf_dynptr_slice   |                               |
+                           |                               |
+              slice b (3,1,2)                 slice d (5,1,4)
+                         ^
+    bpf_dynptr_from_mem  |
+    (NOT allowed yet)    |
+             dynptr e (6,1,0)
+
+The new design removes dynptr_id and use ref_obj_id to track the id
+of the parent object instead of sharing the ref_obj_id of the root.
+For release_reference(), this means ref_obj_id argument now can aslo
+contains id not acquired through acquire_reference(). Add an argument
+"acquired_ref" to indicate this. If true, there is no need to call
+release_reference_nomark(). In addition, when iterating the register
+state, when a reg->ref_obj_id matches the to be released ref_obj_id,
+other objects referencing reg->id also needs to be released. Finally,
+since dynptrs reside on the stack, release_reference() will also need
+to scan stack slots.
+
+After: object (id,ref_obj_id)
+
+Qdisc:
+                        skb (1,1)
+                             ^
+        bpf_dynptr_from_skb  +-------------------------------+
+                             |           bpf_dynptr_clone    |
+                 dynptr a (2,1)                  dynptr c (4,1)
+                           ^                               ^
+        bpf_dynptr_slice   |                               |
+                           |                               |
+                slice b (3,2)                   slice d (5,4)
+                         ^
+    bpf_dynptr_from_mem  |
+    (NOT allowed yet)    |
+             dynptr e (6,3)
+
+Referenced dynptr:
+
+     bpf_dynptr_from_file  +---------------------------------+
+                           |           bpf_dynptr_clone      |
+                 dynptr a (1,1)                  dynptr c (2,1)
+
+Other non-referenced dynptr
+
+      bpf_dynptr_from_skb  +---------------------------------+
+                           |           bpf_dynptr_clone      |
+                 dynptr a (1,0)                  dynptr c (2,1)
+
+While this change introduces a potential circular call chain of
+release_reference() -> __unmark_stack_slots_dynptr(), we currently do
+not allow creating dynptr from slice so the depth of the tree will be
+capped at three. In the future when this is allowed, the recursion
+depth will still be bounded as the number of slices is limited by the
+number registers. Besides, mark_ptr_or_null_reg() also needs to preserve
+reg->id of slices.
+
+Note that the new design does not support intermediate nodes to acquire
+reference. If this is needed in the future, we might need to separate
+ref_obj_id into ref_obj_id and parent_id to handle it.
+
+CC: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Fixes: 870c28588afa ("bpf: net_sched: Add basic bpf qdisc kfuncs")
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+
+---
+
+This refactor is based on Kumar work in [0]
+
+[0] https://lore.kernel.org/bpf/20250414161443.1146103-2-memxor@gmail.com/
+---
+ include/linux/bpf_verifier.h |   1 -
+ kernel/bpf/log.c             |   2 -
+ kernel/bpf/verifier.c        | 173 ++++++++++++++++-------------------
+ 3 files changed, 81 insertions(+), 95 deletions(-)
+
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 8355b585cd18..0cb14648a269 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -66,7 +66,6 @@ struct bpf_reg_state {
+ 
+ 		struct { /* for PTR_TO_MEM | PTR_TO_MEM_OR_NULL */
+ 			u32 mem_size;
+-			u32 dynptr_id; /* for dynptr slices */
+ 		};
+ 
+ 		/* For dynptr stack slots */
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index a0c3b35de2ce..8851adfdb581 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -808,8 +808,6 @@ void print_verifier_state(struct bpf_verifier_env *env, const struct bpf_verifie
+ 				verbose_a("id=%d", reg->id);
+ 			if (reg->ref_obj_id)
+ 				verbose_a("ref_id=%d", reg->ref_obj_id);
+-			if (reg->dynptr_id)
+-				verbose_a("dynptr_id=%d", reg->dynptr_id);
+ 			verbose(env, ")");
+ 			break;
+ 		case STACK_ITER:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6b62b6d57175..a357e0305139 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -204,7 +204,7 @@ struct bpf_verifier_stack_elem {
+ 
+ static int acquire_reference(struct bpf_verifier_env *env, int insn_idx);
+ static int release_reference_nomark(struct bpf_verifier_state *state, int ref_obj_id);
+-static int release_reference(struct bpf_verifier_env *env, int ref_obj_id);
++static int release_reference(struct bpf_verifier_env *env, int ref_obj_id, bool acquired_ref);
+ static void invalidate_non_owning_refs(struct bpf_verifier_env *env);
+ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env);
+ static int ref_set_non_owning(struct bpf_verifier_env *env,
+@@ -287,7 +287,7 @@ struct bpf_call_arg_meta {
+ 	int mem_size;
+ 	u64 msize_max_value;
+ 	int ref_obj_id;
+-	int dynptr_id;
++	int id;
+ 	int func_id;
+ 	struct btf *btf;
+ 	u32 btf_id;
+@@ -733,7 +733,7 @@ static bool dynptr_type_refcounted(enum bpf_dynptr_type type)
+ 
+ static void __mark_dynptr_reg(struct bpf_reg_state *reg,
+ 			      enum bpf_dynptr_type type,
+-			      bool first_slot, int dynptr_id);
++			      bool first_slot, int id);
+ 
+ static void __mark_reg_not_init(const struct bpf_verifier_env *env,
+ 				struct bpf_reg_state *reg);
+@@ -764,7 +764,7 @@ static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_
+ {
+ 	struct bpf_func_state *state = func(env, reg);
+ 	enum bpf_dynptr_type type;
+-	int spi, i, err;
++	int spi, i, err, id;
+ 
+ 	spi = dynptr_get_spi(env, reg);
+ 	if (spi < 0)
+@@ -798,22 +798,17 @@ static int mark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_
+ 	mark_dynptr_stack_regs(env, &state->stack[spi].spilled_ptr,
+ 			       &state->stack[spi - 1].spilled_ptr, type);
+ 
+-	if (dynptr_type_refcounted(type)) {
+-		/* The id is used to track proper releasing */
+-		int id;
+-
+-		if (clone_ref_obj_id)
+-			id = clone_ref_obj_id;
+-		else
+-			id = acquire_reference(env, insn_idx);
++	id = clone_ref_obj_id;
+ 
++	if (dynptr_type_refcounted(type) && !clone_ref_obj_id) {
++		id = acquire_reference(env, insn_idx);
+ 		if (id < 0)
+ 			return id;
+-
+-		state->stack[spi].spilled_ptr.ref_obj_id = id;
+-		state->stack[spi - 1].spilled_ptr.ref_obj_id = id;
+ 	}
+ 
++	state->stack[spi].spilled_ptr.ref_obj_id = id;
++	state->stack[spi - 1].spilled_ptr.ref_obj_id = id;
++
+ 	bpf_mark_stack_write(env, state->frameno, BIT(spi - 1) | BIT(spi));
+ 
+ 	return 0;
+@@ -834,10 +829,30 @@ static void invalidate_dynptr(struct bpf_verifier_env *env, struct bpf_func_stat
+ 	bpf_mark_stack_write(env, state->frameno, BIT(spi - 1) | BIT(spi));
+ }
+ 
++static void __unmark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_func_state *state,
++					int spi)
++{
++	enum bpf_dynptr_type type;
++	int id, ref_obj_id;
++
++	id = state->stack[spi].spilled_ptr.id;
++	ref_obj_id = state->stack[spi].spilled_ptr.ref_obj_id;
++	type = state->stack[spi].spilled_ptr.dynptr.type;
++
++	invalidate_dynptr(env, state, spi);
++
++	/* Release the reference acquired on the dynptr */
++	if (dynptr_type_refcounted(type))
++		WARN_ON_ONCE(release_reference(env, ref_obj_id, true));
++
++	/* Invalidate any slices associated with this dynptr */
++	WARN_ON_ONCE(release_reference(env, id, false));
++}
++
+ static int unmark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_reg_state *reg)
+ {
+ 	struct bpf_func_state *state = func(env, reg);
+-	int spi, ref_obj_id, i;
++	int spi;
+ 
+ 	/*
+ 	 * This can only be set for PTR_TO_STACK, as CONST_PTR_TO_DYNPTR cannot
+@@ -848,44 +863,12 @@ static int unmark_stack_slots_dynptr(struct bpf_verifier_env *env, struct bpf_re
+ 		verifier_bug(env, "CONST_PTR_TO_DYNPTR cannot be released");
+ 		return -EFAULT;
+ 	}
++
+ 	spi = dynptr_get_spi(env, reg);
+ 	if (spi < 0)
+ 		return spi;
+ 
+-	if (!dynptr_type_refcounted(state->stack[spi].spilled_ptr.dynptr.type)) {
+-		invalidate_dynptr(env, state, spi);
+-		return 0;
+-	}
+-
+-	ref_obj_id = state->stack[spi].spilled_ptr.ref_obj_id;
+-
+-	/* If the dynptr has a ref_obj_id, then we need to invalidate
+-	 * two things:
+-	 *
+-	 * 1) Any dynptrs with a matching ref_obj_id (clones)
+-	 * 2) Any slices derived from this dynptr.
+-	 */
+-
+-	/* Invalidate any slices associated with this dynptr */
+-	WARN_ON_ONCE(release_reference(env, ref_obj_id));
+-
+-	/* Invalidate any dynptr clones */
+-	for (i = 1; i < state->allocated_stack / BPF_REG_SIZE; i++) {
+-		if (state->stack[i].spilled_ptr.ref_obj_id != ref_obj_id)
+-			continue;
+-
+-		/* it should always be the case that if the ref obj id
+-		 * matches then the stack slot also belongs to a
+-		 * dynptr
+-		 */
+-		if (state->stack[i].slot_type[0] != STACK_DYNPTR) {
+-			verifier_bug(env, "misconfigured ref_obj_id");
+-			return -EFAULT;
+-		}
+-		if (state->stack[i].spilled_ptr.dynptr.first_slot)
+-			invalidate_dynptr(env, state, i);
+-	}
+-
++	__unmark_stack_slots_dynptr(env, state, spi);
+ 	return 0;
+ }
+ 
+@@ -905,7 +888,7 @@ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+ {
+ 	struct bpf_func_state *fstate;
+ 	struct bpf_reg_state *dreg;
+-	int i, dynptr_id;
++	int i, id;
+ 
+ 	/* We always ensure that STACK_DYNPTR is never set partially,
+ 	 * hence just checking for slot_type[0] is enough. This is
+@@ -933,13 +916,13 @@ static int destroy_if_dynptr_stack_slot(struct bpf_verifier_env *env,
+ 		state->stack[spi - 1].slot_type[i] = STACK_INVALID;
+ 	}
+ 
+-	dynptr_id = state->stack[spi].spilled_ptr.id;
++	id = state->stack[spi].spilled_ptr.id;
+ 	/* Invalidate any slices associated with this dynptr */
+ 	bpf_for_each_reg_in_vstate(env->cur_state, fstate, dreg, ({
+ 		/* Dynptr slices are only PTR_TO_MEM_OR_NULL and PTR_TO_MEM */
+ 		if (dreg->type != (PTR_TO_MEM | PTR_MAYBE_NULL) && dreg->type != PTR_TO_MEM)
+ 			continue;
+-		if (dreg->dynptr_id == dynptr_id)
++		if (dreg->ref_obj_id == id)
+ 			mark_reg_invalid(env, dreg);
+ 	}));
+ 
+@@ -1098,7 +1081,7 @@ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
+ 		struct bpf_reg_state *st = &slot->spilled_ptr;
+ 
+ 		if (i == 0)
+-			WARN_ON_ONCE(release_reference(env, st->ref_obj_id));
++			WARN_ON_ONCE(release_reference(env, st->ref_obj_id, true));
+ 
+ 		__mark_reg_not_init(env, st);
+ 
+@@ -2235,7 +2218,7 @@ static void mark_reg_known_zero(struct bpf_verifier_env *env,
+ }
+ 
+ static void __mark_dynptr_reg(struct bpf_reg_state *reg, enum bpf_dynptr_type type,
+-			      bool first_slot, int dynptr_id)
++			      bool first_slot, int id)
+ {
+ 	/* reg->type has no meaning for STACK_DYNPTR, but when we set reg for
+ 	 * callback arguments, it does need to be CONST_PTR_TO_DYNPTR, so simply
+@@ -2244,7 +2227,7 @@ static void __mark_dynptr_reg(struct bpf_reg_state *reg, enum bpf_dynptr_type ty
+ 	__mark_reg_known_zero(reg);
+ 	reg->type = CONST_PTR_TO_DYNPTR;
+ 	/* Give each dynptr a unique id to uniquely associate slices to it. */
+-	reg->id = dynptr_id;
++	reg->id = id;
+ 	reg->dynptr.type = type;
+ 	reg->dynptr.first_slot = first_slot;
+ }
+@@ -10481,22 +10464,43 @@ static int release_reference_nomark(struct bpf_verifier_state *state, int ref_ob
+  *
+  * This is the release function corresponding to acquire_reference(). Idempotent.
+  */
+-static int release_reference(struct bpf_verifier_env *env, int ref_obj_id)
++static int release_reference(struct bpf_verifier_env *env, int ref_obj_id, bool acquired_ref)
+ {
+ 	struct bpf_verifier_state *vstate = env->cur_state;
+ 	struct bpf_func_state *state;
+ 	struct bpf_reg_state *reg;
+-	int err;
++	int err, spi;
+ 
+-	err = release_reference_nomark(vstate, ref_obj_id);
+-	if (err)
+-		return err;
++	if (acquired_ref) {
++		err = release_reference_nomark(vstate, ref_obj_id);
++		if (err)
++			return err;
++	}
+ 
+ 	bpf_for_each_reg_in_vstate(vstate, state, reg, ({
+-		if (reg->ref_obj_id == ref_obj_id)
++		if (reg->ref_obj_id == ref_obj_id) {
+ 			mark_reg_invalid(env, reg);
++			if (reg->id && reg->id != ref_obj_id) {
++				err = release_reference(env, reg->id, false);
++				if (err)
++					return err;
++			}
++		}
+ 	}));
+ 
++	bpf_for_each_spilled_reg(spi, state, reg, (1 << STACK_DYNPTR)) {
++		if (!reg || !reg->dynptr.first_slot)
++			continue;
++		if (reg->ref_obj_id == ref_obj_id) {
++			__unmark_stack_slots_dynptr(env, state, spi);
++			if (reg->id && reg->id != ref_obj_id) {
++				err = release_reference(env, reg->id, false);
++				if (err)
++					return err;
++			}
++		}
++	}
++
+ 	return 0;
+ }
+ 
+@@ -11673,7 +11677,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 				}));
+ 			}
+ 		} else if (meta.ref_obj_id) {
+-			err = release_reference(env, meta.ref_obj_id);
++			err = release_reference(env, meta.ref_obj_id, true);
+ 		} else if (register_is_null(&regs[meta.release_regno])) {
+ 			/* meta.ref_obj_id can only be 0 if register that is meant to be
+ 			 * released is NULL, which must be > R0.
+@@ -11757,19 +11761,14 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 	case BPF_FUNC_dynptr_data:
+ 	{
+ 		struct bpf_reg_state *reg;
+-		int id, ref_obj_id;
++		int id;
+ 
+ 		reg = get_dynptr_arg_reg(env, fn, regs);
+ 		if (!reg)
+ 			return -EFAULT;
+ 
+-
+-		if (meta.dynptr_id) {
+-			verifier_bug(env, "meta.dynptr_id already set");
+-			return -EFAULT;
+-		}
+-		if (meta.ref_obj_id) {
+-			verifier_bug(env, "meta.ref_obj_id already set");
++		if (meta.id) {
++			verifier_bug(env, "meta.id already set");
+ 			return -EFAULT;
+ 		}
+ 
+@@ -11779,14 +11778,7 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 			return id;
+ 		}
+ 
+-		ref_obj_id = dynptr_ref_obj_id(env, reg);
+-		if (ref_obj_id < 0) {
+-			verifier_bug(env, "failed to obtain dynptr ref_obj_id");
+-			return ref_obj_id;
+-		}
+-
+-		meta.dynptr_id = id;
+-		meta.ref_obj_id = ref_obj_id;
++		meta.id = id;
+ 
+ 		break;
+ 	}
+@@ -11990,10 +11982,9 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		return -EFAULT;
+ 	}
+ 
+-	if (is_dynptr_ref_function(func_id))
+-		regs[BPF_REG_0].dynptr_id = meta.dynptr_id;
+-
+-	if (is_ptr_cast_function(func_id) || is_dynptr_ref_function(func_id)) {
++	if (is_dynptr_ref_function(func_id)) {
++		regs[BPF_REG_0].ref_obj_id = meta.id;
++	} else if (is_ptr_cast_function(func_id)) {
+ 		/* For release_reference() */
+ 		regs[BPF_REG_0].ref_obj_id = meta.ref_obj_id;
+ 	} else if (is_acquire_function(func_id, meta.map.ptr)) {
+@@ -13328,7 +13319,9 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 		}
+ 
+ 		if (reg->ref_obj_id) {
+-			if (is_kfunc_release(meta) && meta->ref_obj_id) {
++			if (meta->ref_obj_id &&
++			    (is_kfunc_release(meta) ||
++			     meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb])) {
+ 				verifier_bug(env, "more than one arg with ref_obj_id R%d %u %u",
+ 					     regno, reg->ref_obj_id,
+ 					     meta->ref_obj_id);
+@@ -13478,6 +13471,7 @@ static int check_kfunc_args(struct bpf_verifier_env *env, struct bpf_kfunc_call_
+ 
+ 			if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb]) {
+ 				dynptr_arg_type |= DYNPTR_TYPE_SKB;
++				clone_ref_obj_id = meta->ref_obj_id;
+ 			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_xdp]) {
+ 				dynptr_arg_type |= DYNPTR_TYPE_XDP;
+ 			} else if (meta->func_id == special_kfunc_list[KF_bpf_dynptr_from_skb_meta]) {
+@@ -13955,12 +13949,7 @@ static int check_special_kfunc(struct bpf_verifier_env *env, struct bpf_kfunc_ca
+ 			verifier_bug(env, "no dynptr id");
+ 			return -EFAULT;
+ 		}
+-		regs[BPF_REG_0].dynptr_id = meta->initialized_dynptr.id;
+-
+-		/* we don't need to set BPF_REG_0's ref obj id
+-		 * because packet slices are not refcounted (see
+-		 * dynptr_type_refcounted)
+-		 */
++		regs[BPF_REG_0].ref_obj_id = meta->initialized_dynptr.id;
+ 	} else {
+ 		return 0;
+ 	}
+@@ -14154,7 +14143,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		if (meta.initialized_dynptr.ref_obj_id) {
+ 			err = unmark_stack_slots_dynptr(env, reg);
+ 		} else {
+-			err = release_reference(env, reg->ref_obj_id);
++			err = release_reference(env, reg->ref_obj_id, true);
+ 			if (err)
+ 				verbose(env, "kfunc %s#%d reference has not been acquired before\n",
+ 					func_name, meta.func_id);
+@@ -14176,7 +14165,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			return err;
+ 		}
+ 
+-		err = release_reference(env, release_ref_obj_id);
++		err = release_reference(env, release_ref_obj_id, true);
+ 		if (err) {
+ 			verbose(env, "kfunc %s#%d reference has not been acquired before\n",
+ 				func_name, meta.func_id);
+-- 
+2.47.3
+
