@@ -1,79 +1,71 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABFF3612E1
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 11:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E9D3659FA
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 12:01:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770030961; cv=none; b=DwzNjaKLAwcWJdPBTfA+CRZgjpkWLTbAe8xtuDEBuC3kX1xc9nEFjKRqi4xM+ozvc7ifXx9SqEFRRkTQX+U/ANOYU7dFlMUbyk/kyBL0dPZxmHYkvU4IikdSqANlEf8hf+OrriZBuVdjr3wKR63CrDTBPWcL4f5tK9AV5QH+SxY=
+	t=1770033683; cv=none; b=eZKx/OB1Ry53BHYgCsYoyMdw/f9yFtThxDWfnrb7obFck+wPhIPkdrdlyEe/nF2n3bSw0zVVqkr/+xTwD0etfr0GnpqLIxKnK24rwj21iRUI4HYPhctc/voKQSQxlmlPJkITdj1s8KpGLxDQTsRKbxy3p+Hb8DN0e4HFug4cxA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770030961; c=relaxed/simple;
-	bh=22sFyTT7zKstT7raUlAMlhW/K0ywNMaYuC46nWw/mUA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fYbaVLG+rwtUaKJhW9AlxKm5CLclYS7FXfs5JKEUgj36IXvgU+CGyOmjfetD3l05dz5lvWozRkMxAgkOlVZF3k33ZRNmkhbZqW4AK0UL5ekq9NvPcGpdIIBcEd8pRSqmx8kDoR1mJAfaCsumZyKFIVSNLSyooB6C+IzWJUr4jkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X26ME4wX; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1770033683; c=relaxed/simple;
+	bh=phaOpdqIarl8hHXtCzg9w9twE7EScKT68aPyG4AhU1g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kNjyR5WXystwSdHBZhAMTl1gMaf23dFovdGpi1iExXgGYSiWE/cY0UPVub2Qti0NyRwxB4kpo9wc6Yyy1X6Va5AkzEO+EpOX6U8ejxcgeWfMjfY8MFBhkv7MtVa5PVkkydnwtJWKsLfYnIHBfVva1+mHjcTOzIPveM9eVNx862s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i910Grbf; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X26ME4wX"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-352e2c59264so2791841a91.0
-        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 03:15:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i910Grbf"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-81e8a9d521dso2477046b3a.2
+        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 04:01:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770030959; x=1770635759; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1rbEpDPZnhCwf5iyaGOMt7RKstu0/YR3aU3fxdzXw9A=;
-        b=X26ME4wX9bABpLUXqhgJgWCb6UopKSOlQNQrDk1SdJ9uoRhBMJ+YPOdLIeePmusmf/
-         z5Ye5ghmajhbLxIXqK3EBBkjx/hRl4ICefXkbPlufhhgTHg8QAFtvGEpAsB6zzk5iOJN
-         TJ45PmJ/0u4vPqsIkpyPJ/FhRoBQ5h2d65kl8sY17nzzr25+pxu/rE1+ejoC2lNK6KOd
-         qQY9NiELmX/2Y9wdVJ0j76lSSSGCliS8w/dSKVgEY447sUdmlMitFgP4r09EAvHVrXz9
-         eveLgqMdFp2WU9J0dbKBRmSXvdTn0Ac7xmOZXzPizxbAcA0FnoNbp5zgFPaN+ZkoObHn
-         O0HQ==
+        d=gmail.com; s=20230601; t=1770033680; x=1770638480; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ynDhirwXFFvXF2jupXnRd7MMm674ZQYfVTP9bwD8e7A=;
+        b=i910Grbf1u1/Mauqtg8U6f418cZjNZ1geyMes3uzSZTXfFLH6GwtsxHMrp3dKX3ciE
+         rJbyAPjhAo6DTOuxk0APnmKQQ2pSALwWbrTIkWR2EvXrwGMTYEy5tYJXDLKP7JYU33vt
+         OcJ74W8RwGIB+8z8gjSfL64oA6zY19Zw1Vnn4p3/QgVm3MAdxaLBS1mD9L8e/VI+zbEm
+         iJGaWLhFn/fxEinngvPJBOa56EgKOKJ4Ay5pr5z3bCBQaZcMXeL13n5mPeoMXgKhG1bD
+         3C63tJmGPHAYzpLA1nDnVpGt56h/VDjSfHZzR6KcGNRYeGGBHyyGWM/KhGlX3YqybQfZ
+         wShg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770030959; x=1770635759;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1rbEpDPZnhCwf5iyaGOMt7RKstu0/YR3aU3fxdzXw9A=;
-        b=FY3wAZjYM2DPAJtDNn4m8Lk3sA5W8PUMLHEMjL58z8h37jU5x9VWQJeWThUhRWK8Dl
-         /F/aNPmOKthGeiBfxN3/keHZbx/kg/cNcf5yXfwRAws++mCZ1zen+wwm73w05igbbban
-         7nhh5N/71fa8sPwnF6RWw3sgvdUwwqMRKZ1fA2uwUjj14SDborMU2D9wBdYfEhXzs5D6
-         UCUTmvh8VrZQgBBd8SMxrR3IhD15y8r/xeMnhWIvNpkKRvWNV8wSIIl+vH2iWL4b2ZBq
-         EnA54XD1F4cA2Ej0Xye7CgZI/EHIlf3p+YWub/v4cc5MhlPrrIvuXvhwofa+EkSgsTFQ
-         ZIsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWK3bWQeldm2MhqYraJDKcHkIHebGSVFhhPVi4xVkP52e1tArSap6F11kXB14VnMLnn8mE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvgDFruhag2uc+NQQMHNggDILDd63fOLDtz6OQYG/DrTePgsjv
-	iCEqjO7YwgsG6CI5MiM9F8nUPjeXDgAgm683SA6O+0jG1d2x+L/6Vyaw
-X-Gm-Gg: AZuq6aIfUcPvxyfKV2hchqzdaGz17X8pDgekg5BmxGRrIx0q7WHz1o4ec4+k6oN/s9b
-	lSDeQVnz2UlR3RrQwlmeHzw0Mcjsm3j2uuxScgq6A5eFlsrfdqgt4nXMOvtTN2ni0Z2Fhi5J6sZ
-	hLQnz6zhLSXPR91MmWAlfAmiINVUbpCW80esQcU3io3eV3XPr6Wm4JvQaSi7ph1Zm0iQJ8uNZax
-	S3aFAhznO8TKg+Tb9b3E1zJ0RH09pPxv6SWyZx4mnawMOkSM4uOgBz21HkEQ9DuP908CePI2fd/
-	oDqCLimiGw7uy3N1kEowxIl1B73ftQEZ6SDHvEqNoOTXyIp0zLIUmupzCJ3/U9KYfJ1reuZjuyo
-	aT1TD1bZxfzbnC3UaIdM0qOO6dP2LxOWKG+riJWjznDvAtep6hLgm5kJlXcOkvDTOEUXMxBpT9I
-	wlNYLVJAQT/bv9QVPMcXUFPxcYPoWX+q4u2VvYmg==
-X-Received: by 2002:a17:90b:56c3:b0:349:9d63:8511 with SMTP id 98e67ed59e1d1-3543b3a54c9mr10469703a91.25.1770030959281;
-        Mon, 02 Feb 2026 03:15:59 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770033680; x=1770638480;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ynDhirwXFFvXF2jupXnRd7MMm674ZQYfVTP9bwD8e7A=;
+        b=qoaXh2Vr/q+I2eYV9S+7slG9DFHFtvpoGgdbQ/dfKCgG59F3s2HZ880uKwr/JgTryr
+         MZZlWyNnxH0axbjsDvJSeSnBExPIrFs1zzwplbXHu6X1FwSCY0ySHaEcXUK4fZipUwg2
+         kN5N8BEhIETS6y4u27lxxv8xmFnFOTqkWdaxPgOVIxzsRIIsPe/i5TnHt9EYY/Q1DUyp
+         c2H1FfIfziIF8tKltEe+CUbBZ/E4zirV5hw4dy0NYH2FryrKZgMGPyCbFvIDqlaqCuev
+         +msvNqhuebDgbFLkMmaR6IetTMyS62ERRvN1TFcuoBupo2FUalEYpBokYjiM6oDQ8X2b
+         PiCA==
+X-Forwarded-Encrypted: i=1; AJvYcCW8fMTB7CKXOC9ZnTw/TAi0bFJWau5oHFX5RwsQNPxvQaeduprLjXn6NmgnHJNhIjzVgwg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPJgj66RSpc+VioOASOALPO076hmJHj/fIA/YTAzoARtADJTyB
+	SpIaCoJ7eqHV+M6JvO7erzXRe14Zs7RCetwqsJNOiqbiccpvOsCQHVP8gQhD1jxTDAQ=
+X-Gm-Gg: AZuq6aIKrBuF23fIuzUPCNJoA4+afjH0mGYkcv3n4PryG3S1hnzF8ogZGwBB160tP4t
+	VZ75/keUOs/9xYi2mMJF+JKfMIHeinkngZkBw8TvBJMeQhmMtXwWMb8oz4XPVokNYtOIz53FqCh
+	S4YHYXXdG98KJvn+TER7Ekr4VqfvrF9uWTbkXcKSCTicjY+lNJiZdkF2tbghvvHpRkyqN8h8seA
+	YgQuu2CGZpz4GJSsyuyNov8NH6jpvUu0XbJ1HkpciKgya0haIY2S/pwKWck9/v9NmfDMALhfQmS
+	LP4EjboN62E8FBaPJx52f51OejZZMnJtzFZBY+oe0oxYUzGdEEzCbyjCeJm53MoXMzFLBDsla1M
+	JNMkmYSwuf2d/sWSltEW+JqWnu1tLJs/UxAEhAksQje9H8j1SXM015t3KnGnjEsEJlzm5adIzGI
+	/1MfknP2m4ceqdKaIcadvmnaeHG+A=
+X-Received: by 2002:a05:6a20:258b:b0:371:7f31:17f with SMTP id adf61e73a8af0-392e01b30ccmr10452068637.77.1770033679554;
+        Mon, 02 Feb 2026 04:01:19 -0800 (PST)
 Received: from pengdl-pc.mioffice.cn ([43.224.245.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3540f3ed0dasm14474680a91.14.2026.02.02.03.15.56
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c64283710e1sm14471720a12.14.2026.02.02.04.01.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Feb 2026 03:15:58 -0800 (PST)
+        Mon, 02 Feb 2026 04:01:18 -0800 (PST)
 From: Donglin Peng <dolinux.peng@gmail.com>
-To: rostedt@goodmis.org,
-	ast@kernel.org
-Cc: mhiramat@kernel.org,
-	andrii.nakryiko@gmail.com,
+To: ast@kernel.org
+Cc: andrii@kernel.org,
+	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Donglin Peng <pengdonglin@xiaomi.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	bpf@vger.kernel.org
-Subject: [PATCH 1/2] btf: Add for_each_enum and for_each_enum64 helper macros
-Date: Mon,  2 Feb 2026 19:15:47 +0800
-Message-Id: <20260202111548.3555306-2-dolinux.peng@gmail.com>
+	Donglin Peng <pengdonglin@xiaomi.com>
+Subject: [PATCH] resolve_btfids: Refactor the sort_btf_by_name function
+Date: Mon,  2 Feb 2026 20:01:14 +0800
+Message-Id: <20260202120114.3707141-1-dolinux.peng@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260202111548.3555306-1-dolinux.peng@gmail.com>
-References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -84,226 +76,64 @@ Content-Transfer-Encoding: 8bit
 
 From: Donglin Peng <pengdonglin@xiaomi.com>
 
-Introduce two new helper macros, for_each_enum and for_each_enum64,
-to clean up code.
+Preserve original relative order of anonymous or same-named
+types to improve the consistency.
 
 No functional changes.
 
-Cc: Alexei Starovoitov <ast@kernel.org>
 Cc: Andrii Nakryiko <andrii@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org
 Signed-off-by: Donglin Peng <pengdonglin@xiaomi.com>
 ---
- include/linux/btf.h | 10 +++++++
- kernel/bpf/btf.c    | 66 +++++++++++++++++++--------------------------
- 2 files changed, 38 insertions(+), 38 deletions(-)
+ tools/bpf/resolve_btfids/main.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index f06976ffb63f..cde2deb8e25e 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -254,6 +254,16 @@ const char *btf_type_str(const struct btf_type *t);
- 	     i < btf_type_vlen(datasec_type);			\
- 	     i++, member++)
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index db8d1554bdcc..ca7fcd03efb6 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -1226,22 +1226,26 @@ static int cmp_type_names(const void *a, const void *b, void *priv)
+ 	const struct btf_type *ta = btf__type_by_id(btf, *(__u32 *)a);
+ 	const struct btf_type *tb = btf__type_by_id(btf, *(__u32 *)b);
+ 	const char *na, *nb;
++	int r;
  
-+#define for_each_enum(i, enum_type, member)			\
-+	for (i = 0, member = btf_enum(enum_type);		\
-+	     i < btf_type_vlen(enum_type);			\
-+	     i++, member++)
+ 	na = btf__str_by_offset(btf, ta->name_off);
+ 	nb = btf__str_by_offset(btf, tb->name_off);
+-	return strcmp(na, nb);
++	r = strcmp(na, nb);
++	if (r != 0)
++		return r;
 +
-+#define for_each_enum64(i, enum_type, member)			\
-+	for (i = 0, member = btf_enum64(enum_type);		\
-+	     i < btf_type_vlen(enum_type);			\
-+	     i++, member++)
-+
- static inline bool btf_type_is_ptr(const struct btf_type *t)
- {
- 	return BTF_INFO_KIND(t->info) == BTF_KIND_PTR;
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 0de8fc8a0e0b..c80a7a0cbe1d 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -728,11 +728,6 @@ static const struct btf_array *btf_type_array(const struct btf_type *t)
- 	return (const struct btf_array *)(t + 1);
++	/* preserve original relative order of anonymous or same-named types */
++	return *(__u32 *)a < *(__u32 *)b ? -1 : 1;
  }
  
--static const struct btf_enum *btf_type_enum(const struct btf_type *t)
--{
--	return (const struct btf_enum *)(t + 1);
--}
--
- static const struct btf_var *btf_type_var(const struct btf_type *t)
+ static int sort_btf_by_name(struct btf *btf)
  {
- 	return (const struct btf_var *)(t + 1);
-@@ -743,11 +738,6 @@ static const struct btf_decl_tag *btf_type_decl_tag(const struct btf_type *t)
- 	return (const struct btf_decl_tag *)(t + 1);
- }
+ 	__u32 *permute_ids = NULL, *id_map = NULL;
+ 	int nr_types, i, err = 0;
+-	__u32 start_id = 0, start_offs = 1, id;
++	__u32 start_id = 0, id;
  
--static const struct btf_enum64 *btf_type_enum64(const struct btf_type *t)
--{
--	return (const struct btf_enum64 *)(t + 1);
--}
--
- static const struct btf_kind_operations *btf_type_ops(const struct btf_type *t)
- {
- 	return kind_ops[BTF_INFO_KIND(t->info)];
-@@ -4317,14 +4307,14 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
- 			       const struct btf_type *t,
- 			       u32 meta_left)
- {
--	const struct btf_enum *enums = btf_type_enum(t);
-+	const struct btf_enum *enump;
- 	struct btf *btf = env->btf;
- 	const char *fmt_str;
- 	u16 i, nr_enums;
- 	u32 meta_needed;
+-	if (btf__base_btf(btf)) {
++	if (btf__base_btf(btf))
+ 		start_id = btf__type_cnt(btf__base_btf(btf));
+-		start_offs = 0;
+-	}
+ 	nr_types = btf__type_cnt(btf) - start_id;
  
- 	nr_enums = btf_type_vlen(t);
--	meta_needed = nr_enums * sizeof(*enums);
-+	meta_needed = nr_enums * sizeof(*enump);
+ 	permute_ids = calloc(nr_types, sizeof(*permute_ids));
+@@ -1259,8 +1263,8 @@ static int sort_btf_by_name(struct btf *btf)
+ 	for (i = 0, id = start_id; i < nr_types; i++, id++)
+ 		permute_ids[i] = id;
  
- 	if (meta_left < meta_needed) {
- 		btf_verifier_log_basic(env, t,
-@@ -4347,16 +4337,16 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
+-	qsort_r(permute_ids + start_offs, nr_types - start_offs,
+-		sizeof(*permute_ids), cmp_type_names, btf);
++	qsort_r(permute_ids, nr_types, sizeof(*permute_ids), cmp_type_names,
++		btf);
  
- 	btf_verifier_log_type(env, t, NULL);
- 
--	for (i = 0; i < nr_enums; i++) {
--		if (!btf_name_offset_valid(btf, enums[i].name_off)) {
-+	for_each_enum(i, t, enump) {
-+		if (!btf_name_offset_valid(btf, enump->name_off)) {
- 			btf_verifier_log(env, "\tInvalid name_offset:%u",
--					 enums[i].name_off);
-+					 enump->name_off);
- 			return -EINVAL;
- 		}
- 
- 		/* enum member must have a valid name */
--		if (!enums[i].name_off ||
--		    !btf_name_valid_identifier(btf, enums[i].name_off)) {
-+		if (!enump->name_off ||
-+		    !btf_name_valid_identifier(btf, enump->name_off)) {
- 			btf_verifier_log_type(env, t, "Invalid name");
- 			return -EINVAL;
- 		}
-@@ -4365,8 +4355,8 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
- 			continue;
- 		fmt_str = btf_type_kflag(t) ? "\t%s val=%d\n" : "\t%s val=%u\n";
- 		btf_verifier_log(env, fmt_str,
--				 __btf_name_by_offset(btf, enums[i].name_off),
--				 enums[i].val);
-+				 __btf_name_by_offset(btf, enump->name_off),
-+				 enump->val);
- 	}
- 
- 	return meta_needed;
-@@ -4382,8 +4372,8 @@ static void btf_enum_show(const struct btf *btf, const struct btf_type *t,
- 			  u32 type_id, void *data, u8 bits_offset,
- 			  struct btf_show *show)
- {
--	const struct btf_enum *enums = btf_type_enum(t);
--	u32 i, nr_enums = btf_type_vlen(t);
-+	const struct btf_enum *enump;
-+	u32 i;
- 	void *safe_data;
- 	int v;
- 
-@@ -4393,13 +4383,13 @@ static void btf_enum_show(const struct btf *btf, const struct btf_type *t,
- 
- 	v = *(int *)safe_data;
- 
--	for (i = 0; i < nr_enums; i++) {
--		if (v != enums[i].val)
-+	for_each_enum(i, t, enump) {
-+		if (v != enump->val)
- 			continue;
- 
- 		btf_show_type_value(show, "%s",
- 				    __btf_name_by_offset(btf,
--							 enums[i].name_off));
-+							 enump->name_off));
- 
- 		btf_show_end_type(show);
- 		return;
-@@ -4425,14 +4415,14 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
- 				 const struct btf_type *t,
- 				 u32 meta_left)
- {
--	const struct btf_enum64 *enums = btf_type_enum64(t);
-+	const struct btf_enum64 *enump;
- 	struct btf *btf = env->btf;
- 	const char *fmt_str;
- 	u16 i, nr_enums;
- 	u32 meta_needed;
- 
- 	nr_enums = btf_type_vlen(t);
--	meta_needed = nr_enums * sizeof(*enums);
-+	meta_needed = nr_enums * sizeof(*enump);
- 
- 	if (meta_left < meta_needed) {
- 		btf_verifier_log_basic(env, t,
-@@ -4455,16 +4445,16 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
- 
- 	btf_verifier_log_type(env, t, NULL);
- 
--	for (i = 0; i < nr_enums; i++) {
--		if (!btf_name_offset_valid(btf, enums[i].name_off)) {
-+	for_each_enum64(i, t, enump) {
-+		if (!btf_name_offset_valid(btf, enump->name_off)) {
- 			btf_verifier_log(env, "\tInvalid name_offset:%u",
--					 enums[i].name_off);
-+					 enump->name_off);
- 			return -EINVAL;
- 		}
- 
- 		/* enum member must have a valid name */
--		if (!enums[i].name_off ||
--		    !btf_name_valid_identifier(btf, enums[i].name_off)) {
-+		if (!enump->name_off ||
-+		    !btf_name_valid_identifier(btf, enump->name_off)) {
- 			btf_verifier_log_type(env, t, "Invalid name");
- 			return -EINVAL;
- 		}
-@@ -4474,8 +4464,8 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
- 
- 		fmt_str = btf_type_kflag(t) ? "\t%s val=%lld\n" : "\t%s val=%llu\n";
- 		btf_verifier_log(env, fmt_str,
--				 __btf_name_by_offset(btf, enums[i].name_off),
--				 btf_enum64_value(enums + i));
-+				 __btf_name_by_offset(btf, enump->name_off),
-+				 btf_enum64_value(enump));
- 	}
- 
- 	return meta_needed;
-@@ -4485,8 +4475,8 @@ static void btf_enum64_show(const struct btf *btf, const struct btf_type *t,
- 			    u32 type_id, void *data, u8 bits_offset,
- 			    struct btf_show *show)
- {
--	const struct btf_enum64 *enums = btf_type_enum64(t);
--	u32 i, nr_enums = btf_type_vlen(t);
-+	const struct btf_enum64 *enump;
-+	u32 i;
- 	void *safe_data;
- 	s64 v;
- 
-@@ -4496,13 +4486,13 @@ static void btf_enum64_show(const struct btf *btf, const struct btf_type *t,
- 
- 	v = *(u64 *)safe_data;
- 
--	for (i = 0; i < nr_enums; i++) {
--		if (v != btf_enum64_value(enums + i))
-+	for_each_enum64(i, t, enump) {
-+		if (v != btf_enum64_value(enump))
- 			continue;
- 
- 		btf_show_type_value(show, "%s",
- 				    __btf_name_by_offset(btf,
--							 enums[i].name_off));
-+							 enump->name_off));
- 
- 		btf_show_end_type(show);
- 		return;
+ 	for (i = 0; i < nr_types; i++) {
+ 		id = permute_ids[i] - start_id;
 -- 
 2.34.1
 
