@@ -1,452 +1,247 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91E236997A
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 13:40:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770039639; cv=none; b=PLknKPB72XbfYbP+tbv1o8JtAlkp/sFfKRgnwg0yfaBhrQTKT/zTvW0ddAceH37cfa5HcNzVGgdHKfBXBMnVt8dOAthjB+zNszpqUU6r1ppWPksJylLktZEj+6icWBlKdRXCXvZ/0Oye4UHTvL7gd4fitFGQ3sZ7KBXQ4zJR97M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770039639; c=relaxed/simple;
-	bh=y0o92f5za9KoLMNlMSWlWEE6guz/2B6L4ioVx+Yb8EM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=T72r4tW9E7KJgbbuC+Gqa/Ns+/VmQ63esnKu8sWMWms7Kn7Voby9tVmd0wnEek9ph1QxIyagWx6rza9GhuEzQSRHJ34o+ZtclWMgzpR9CEZ7DKff5V4gZwuiwriCqXg7S/KgXzq9xWE3hWcNdOMJo+qOMT05YsiAR/OMo7UKkZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=fail smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=13.75.44.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [112.32.4.235])
-	by mtasvr (Coremail) with SMTP id _____wCnNYU5qIBpK0hvAA--.8122S3;
-	Mon, 02 Feb 2026 21:35:53 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.32.4.235])
-	by mail-app2 (Coremail) with SMTP id zC_KCgCXr0M2qIBplsekBQ--.55135S2;
-	Mon, 02 Feb 2026 21:35:52 +0800 (CST)
-From: Tianci Cao <ziye@zju.edu.cn>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	tangyazhou518@outlook.com,
-	shenghaoyuan0928@163.com,
-	ziye@zju.edu.cn
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Add tests for BPF_END bitwise tracking
-Date: Mon,  2 Feb 2026 21:35:36 +0800
-Message-Id: <20260202133536.66207-3-ziye@zju.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260202133536.66207-1-ziye@zju.edu.cn>
-References: <20260202133536.66207-1-ziye@zju.edu.cn>
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010024.outbound.protection.outlook.com [52.101.69.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5903C0C;
+	Mon,  2 Feb 2026 14:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.24
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770041436; cv=fail; b=jlKuoE9h7ey9uIIMqP8Zj8FuZwClgqo+JMXg+CPPs7hYoOG6KMHjrP2KAbMRxsV6xLySsx1r0c2lxDysuXLPIMATqcbn4NK8BC/1F8rgH0hd44Pdd+gAPU/fhSoV016pg/2PsCVFWLBRmub++k7CakSBZBwQ1bBbq063+kDWs3g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770041436; c=relaxed/simple;
+	bh=0/pjI7LEPLjoCvOWp7H9JcjXyC8yVewW9SjWbv9z/54=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=McYtHdehjSStyGTaSQy8q4eZ/7rTNVRvEXSnVXzXtfkAxmcBs0pOVW9k/JTtc2ZnVQ+cauAhNLL6MCyF+QxovrHoL1LKY0OOfvDgfq8QBXet+7qcGMwP9i8el8dosM/2V0yr7kBZpLGsfbBdQFQHDnfkoWLuJwPwWOk2D4sbT+c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=lm69v6Hi; arc=fail smtp.client-ip=52.101.69.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="lm69v6Hi"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=zJG1byOQpAp/Iv3o4OETOTmxiyHbnGeoyF40QjiXdZaJrfE4JwmnNQXoTiCIMp0G7MMQGZ3I7OuAGUj4X9JjrOoruV8HvqRDcHH98eM164AMTUzo3EP5QKnzHArmmwp/s0z4GmUutvSP5lRGnOPLZb1YqPN5CIQQ+ji4NKslowcd3/f8R2NKtzUwfgOMUjWOxbcnReKVZfKNg9IsVjTiP/DlUqJPzz60SpYH7u1BDrtk3qQe0aGYYYQRfin6bEmKla8ctYxiO0vi/JeERNbDKhP1DxvqTIQ9hn68QSiSFnt4gNHHMQwzAMG9IMOrK862cLyJl35R4H+RUZnBmhKKYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dAP2zJ0LnNt/RLKRLAZpoEbj0KC/+3mwh/02pXWGOOw=;
+ b=S27jWXNkA5VK2Sg9Ir9ygsQT3tULqi3Xf8dxSh2sKOZNAtKWUJPyzkKTwOlLWSsLBKA7iDW8IzO+WRfJC/TqSkL6rCSBW6lWIB7QCvTPl/MXS8t7PI/949wI+PVD8rvFT6zhlkvMPeAhN1kndAmePrU+RE0Qr6hEJfEtlzFHDVYV8gyDoFyR1rPehbhy+vEH04kHD6Jf1ru9Ri6LSKUKgNPJe1zH8cieSK+/YbriVtgWCwcjbLyv9Nx4qV89APqJ00UlUtn2u+uA6p+lgMovPUXChi+OFZAr337TJH98/fmb9guHXZxkUM+oa0/f5FmVuYuD1HljwnpJLwX7wGc/lQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dAP2zJ0LnNt/RLKRLAZpoEbj0KC/+3mwh/02pXWGOOw=;
+ b=lm69v6HiJUnc/NxzAjBMRmYCfTjqhPmtsfFvU8+V0yFy5/opsZ3Niol5XY7fL/FuZLLmsablVYIw82hC8afhKSGx4k6HqAcpeitjw1esXf9IPqm+w+xKKBAvc4RsUCWzVOSSwS5mp1JRtyBxr95r2P9Bl4V/r+fHvDMCjB3WJ4xOfU8SCg1HqAhKYDiqvQc9Ai1hv3wzZBMdyZwbiLVTY9A583Pso3tplNxKEzHSnzHIcJOo42Gc8jPpXaAiDPd7XQ8VmZAh8MDeD7MFRfo1w4T/0gyyHNRFV6Mc8B7+8LoneOrfUUDmACHI/j9cl0zOaIEO8meWmiyu4HoaNU415w==
+Received: from AM9PR07MB7969.eurprd07.prod.outlook.com (2603:10a6:20b:302::15)
+ by AMDPR07MB11453.eurprd07.prod.outlook.com (2603:10a6:20b:739::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Mon, 2 Feb
+ 2026 14:10:31 +0000
+Received: from AM9PR07MB7969.eurprd07.prod.outlook.com
+ ([fe80::b676:5e6b:e3e7:4bbd]) by AM9PR07MB7969.eurprd07.prod.outlook.com
+ ([fe80::b676:5e6b:e3e7:4bbd%5]) with mapi id 15.20.9564.007; Mon, 2 Feb 2026
+ 14:10:31 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: "tariqt@nvidia.com" <tariqt@nvidia.com>, "linux-rdma@vger.kernel.org"
+	<linux-rdma@vger.kernel.org>, "shaojijie@huawei.com" <shaojijie@huawei.com>,
+	"shenjian15@huawei.com" <shenjian15@huawei.com>, "salil.mehta@huawei.com"
+	<salil.mehta@huawei.com>, "mbloch@nvidia.com" <mbloch@nvidia.com>,
+	"saeedm@nvidia.com" <saeedm@nvidia.com>, "leon@kernel.org" <leon@kernel.org>,
+	"eperezma@redhat.com" <eperezma@redhat.com>, "brett.creeley@amd.com"
+	<brett.creeley@amd.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
+	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>,
+	"mst@redhat.com" <mst@redhat.com>, "xuanzhuo@linux.alibaba.com"
+	<xuanzhuo@linux.alibaba.com>, "pabeni@redhat.com" <pabeni@redhat.com>,
+	"edumazet@google.com" <edumazet@google.com>, "parav@nvidia.com"
+	<parav@nvidia.com>, "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"corbet@lwn.net" <corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>,
+	"dsahern@kernel.org" <dsahern@kernel.org>, "kuniyu@google.com"
+	<kuniyu@google.com>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, "dave.taht@gmail.com"
+	<dave.taht@gmail.com>, "jhs@mojatatu.com" <jhs@mojatatu.com>,
+	"stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
+	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
+	<donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
+	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: RE: [PATCH v1 net-next 0/3] ECN offload handling for AccECN series
+Thread-Topic: [PATCH v1 net-next 0/3] ECN offload handling for AccECN series
+Thread-Index: AQHckwSqNJd+cLpfckquPKO4yVYjJrVtAgcAgAJyxvA=
+Date: Mon, 2 Feb 2026 14:10:31 +0000
+Message-ID:
+ <AM9PR07MB79692171B9BB1BC2C2C0B888A39AA@AM9PR07MB7969.eurprd07.prod.outlook.com>
+References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260131164516.4a423230@kernel.org>
+In-Reply-To: <20260131164516.4a423230@kernel.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM9PR07MB7969:EE_|AMDPR07MB11453:EE_
+x-ms-office365-filtering-correlation-id: bbc26924-4047-46a2-b2d5-08de6264d339
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700021;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?xBsinDcdjbws4a8HIucfQz7pOSav191l7a9ypBIC3KI9zGV6EantkLHh7nx1?=
+ =?us-ascii?Q?tyAUMnaJ59zY4ycpMYwI7d1HYFjaY/tJguG8QRWEflSUwxV51rUsO/t5PSw2?=
+ =?us-ascii?Q?drah2UFwGeRbUmZk72vDSEgEBP6AKed+CxdLCKdI77FMrWjApygrIrSpjvTj?=
+ =?us-ascii?Q?ePH80lg/U9FM1oqctzVqjvdGjgPSbI20MdvO/fce79makQCHxwr2k7QOcKKo?=
+ =?us-ascii?Q?AL5cwu4+JejGy104HDyHxHU93lS0+qB+UhT4TYJd4YOq66zFhOSB22zl2bB3?=
+ =?us-ascii?Q?1fkoeQHp3/s65S6gRYQDz8/y7Fyvuv1nO8uXFafc7veYsQtAoPCo27d/85IR?=
+ =?us-ascii?Q?yNu0Qyt3o1W6WO/jdLowAGKpSrY05pj0O9nheP04ptA7urDMsY9yPmPYZEJk?=
+ =?us-ascii?Q?vbvZ/xL4OlIzV0aF8TigyV2TwTKi8wDd+EsS1SPRnid1MAWzBvUJuAjS3aCa?=
+ =?us-ascii?Q?lWD8jOK6Jg+oqqGjtukwNg9ur8HeBmPMtbu8Bd11Gl/m7MUow6RqNoUh1awe?=
+ =?us-ascii?Q?DT4HDTJxBD3EyXsAYq2dfGfu7PzleGESn44YeShnC9TTnu0jzbImhiDMkSZ7?=
+ =?us-ascii?Q?2tWl2xePdg0eLZ9JDEFaxQveX8DGwSP3F489la6uebX4zhaaAb0QXBj0Cv8v?=
+ =?us-ascii?Q?I4Auv0uf12+yn2J3hIymgB9KKuz+xZWXMsT4K7BSPllif00xVur0DdpcTk/H?=
+ =?us-ascii?Q?MXlqVUVxuPVdxzoM8ASwm2enPsCL3k0q3w7BdQiWApgG73hS48s3yPrSm+vH?=
+ =?us-ascii?Q?1PrLdRzjz/sJPvJq+foModqIQRqpWKCWvIAO1NQaU9KHKSDxFwNPtEWNjqWI?=
+ =?us-ascii?Q?ktFvMeiBKOFQnHojkfGlm0O6cxj9LDrmyU1/87Az9DzJJPSPqMxMN/cGzbjI?=
+ =?us-ascii?Q?Y9Pc7MiUShDnpKZDe3LMDan/Wdd91wzXtDF4BqQjfOV9+IV6Z7IJqTrUGwzo?=
+ =?us-ascii?Q?ETXrr89z2fVxhANWyuzM496B0k9l0stxqZmRmSdu3+Mfi5IdslPNDKHN5vFJ?=
+ =?us-ascii?Q?0flwntJrxRdXJ2PeigQjc+Py2Lz5rrURZHLzFxcU51BmgseKRX0kQp4Uz7A3?=
+ =?us-ascii?Q?BytV1vItUj46aoaCoCHDk/HBdaSqRppMzbE4Opx3G/ZWjF5P4heI97taMZph?=
+ =?us-ascii?Q?CjWFqJ0p9gQ3oraKcYTUvgP7840xfdOnJv7biGxQjd+8/TArhAabkVSiuOs9?=
+ =?us-ascii?Q?nO9MN3ZmKmX67U3/4nXjs6f78UZLnREN/ghG1OdwemUZj8baFmYe9SnljIt9?=
+ =?us-ascii?Q?sY+xuvX9WIewpnyjNXWj9E2taMZlPkUoiQpCI9XrG64g2FSh3jeVlAKZlPF8?=
+ =?us-ascii?Q?34n+qyjPkr9sEgKeJTGXSOibZ/tlWBcBICq4ZazFwTBm10Zjy2u5ga4sMaGs?=
+ =?us-ascii?Q?IaKOigQYOnePzsqgiWfh3qveXyyK8ae9Yy2MkQYpUbbfdAHxQhMc7CnRS19Z?=
+ =?us-ascii?Q?EQKo7dbnUWefF1k2+YkHR/EdEzpKqDofQ3f/cfIR0bk8cDtZM24MvSFLbdvz?=
+ =?us-ascii?Q?1pGZbP1NexRLLiVT6HeRW99Kr6Aq5PCgqYI9gO8l0FjbXyYGeMw8hBkIOdPV?=
+ =?us-ascii?Q?lN6v84vyX1KwYugWqJjRuBbJ+4QQtqlSnokuzWfn4EbB3w+OLJ8yw0fihoj+?=
+ =?us-ascii?Q?LDMDW0xTR99gSRiRNAi7a8Q=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR07MB7969.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?32yFSAG2nX1cAT1bUj7i6jWZSdC7Ti8IKN85QrkVSGQUjQtTJnMwN70lmWo0?=
+ =?us-ascii?Q?M+nT2VqLCdDF//o9R/hwyazFH4ZOhVgbkTOz3RFsEtB+KXHmBY9m4YFCbi3p?=
+ =?us-ascii?Q?g2UI0dfKEGk5REq5iuvd1asKLuVW6H8QLrKSbceo/t5qkIMUYNdYu/X/jM0o?=
+ =?us-ascii?Q?EhdzPRnpy2oFEtWQYG9mkrAhCUjmr+pbqbMVcYB7efEfTHD87tsukKdPE3m8?=
+ =?us-ascii?Q?KttiDl2Fc92S4sWyddJW3jR3smPWNsaYVqSa/WXmJH7Zk6ZA53WojytTGqk2?=
+ =?us-ascii?Q?wE2zRWYvWgiVC2hWDnCY8glICFDk7ZJAeAd3qVkYC3zOshPxAN3QvEmYZH4X?=
+ =?us-ascii?Q?2syJfvz0xXQuYt/64KB3Ii/20JMDP/mIVXZeSHVFQGSpMpMloea9Hsll0z+y?=
+ =?us-ascii?Q?zMbVtuz+VrnPTIoHF2rAUTUV0NVwmZOmJFVUEUCXMMPjGiqxXKBP3IHngLpl?=
+ =?us-ascii?Q?qLYMNlPFzCHcxKUtyaWaxqWLLorsCV/5sYkk2A0GxA9JUrmgqyFkZYpm+lcY?=
+ =?us-ascii?Q?JxGxvM+zuZkaqurECtqPiS2jl3IHjjp0XiiTCJKB5E5wLoc+dIWW3X5L3l1k?=
+ =?us-ascii?Q?Nv0thTJiafKAoNjypTiMgHdFwPI+yra93vMowkDWQ20Cts96FyXBygcz8k4f?=
+ =?us-ascii?Q?M79Gt5BPdFRhu+etuiSX0qEQfLdQs/FlMJB1da7NFDBXpQteUZg+yB8gTTpR?=
+ =?us-ascii?Q?8GrEEbpEIj2V7YM8FdpAhAt8PlJhGT3QIiB3MKvmn4cBkQHEGYhH/eMFDF2x?=
+ =?us-ascii?Q?tHXQoeclMWNSF75PBB9t9ALg7dOzFHfGWJ3227QidR8ki6ikLIax3o4QmPP/?=
+ =?us-ascii?Q?MfrzA2qxemmzuayErA5D1xzntDaLBUOAeroGA0M47p+ph4jHHgOniNXKjWbn?=
+ =?us-ascii?Q?yASyIULEeD+RZMEc8jswEfrV+6qXKA4XDkyEwLqwePhBr/Vvdxzg6FoV0VdK?=
+ =?us-ascii?Q?CVu7McSGhNTkZGVTWnFFM24Cs8SZ2jWv6mkS6plq+meP8QcN2Wi7DmVfQDM4?=
+ =?us-ascii?Q?EF3rEviySN0gYuoefa/rewHExfAmOPNWzGSEyZkvonrhwP7fTqacAJMumdvT?=
+ =?us-ascii?Q?lansFOMTsAXTCJxYp76AEK062QKhNmve2mZlc7g74mHkTXkDkjIrCRTXojXd?=
+ =?us-ascii?Q?ZZKmjtIR8jAk3u+yCw8T+FHI4UAyJN1DpbWQbeOTXtZE98k/yu9WLBKqytAJ?=
+ =?us-ascii?Q?LccEERzfw4636DvaZX52wycnZA85GcnSsqWu2qdcW7DgWwGp4Pn6KASH9eIk?=
+ =?us-ascii?Q?1IAYmbJg0vMhAAkVIu/JrUg6dbNLE4rfJUbt5kCbESe8U1E2uqHXA0wywBim?=
+ =?us-ascii?Q?/0AJZCyPUjBI7jxPa3nXFWSWrDb+cnIpDX4wPY51gjW95as4gXNmhe3ficou?=
+ =?us-ascii?Q?+46zCozwcXtqMv9TIIhY0+Tj0mQp04aBwgJAc00SVzYnndG0ZVkeYPXm6HaH?=
+ =?us-ascii?Q?VOlRxk0ZxEc1sz4acZIkcrve55/EvBqNBOsjxFFfNdlWBtzwNAqX+WU4kEZT?=
+ =?us-ascii?Q?mSU6lpE2FLxjXmRRB61nmlGDpgUgFuRKMk7GIVjZccCpyUKzzJQ5FyViB/5B?=
+ =?us-ascii?Q?7PrXfVbijmEvBzOnN6WLqDUNQuQVBPlNEkamgiNoF2e/rCTdipG/Dgs0DKT8?=
+ =?us-ascii?Q?pnjkjvtrk5jT5zgq69C88xdFXm0m1kHHG4XzREMADjKAVrBTymA9+CaocHpe?=
+ =?us-ascii?Q?nydCvdQc5QX/k05sQamH1NiJ4V6PweeQ1TcxKiapYEBM84bc1CSO233nIncU?=
+ =?us-ascii?Q?lweCwI8SJ5dPUYlzFUaXiFbYZUsN2GQ=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zC_KCgCXr0M2qIBplsekBQ--.55135S2
-X-CM-SenderInfo: qtstiiaquyiko62m3hxhgxhubq/
-X-CM-DELIVERINFO: =?B?KzCqWQXKKxbFmtjJiESix3B1w3tzYfmPt4q7bPP17nv9Zvsme7sPvU0377+RBBKdO8
-	083uYxgGwm4o3MkAMAFMbdSWj3N697O0FOs8nKjP2lBHm0P+BIhE/hWK9fdrtZhLC1DO/k
-	QPstsXzRNj60XEQ4FGQ+NlUreqKaTfCGU1ZYsmm5
-X-Coremail-Antispam: 1Uk129KBj9fXoWfGF47Zw4UWr1ktrW7CrWDJrc_yoW8Gry5uo
-	W5Wws5ZFZ3Gry5tF1q9ry3CF13Xa1a9a4xKrW8KFy5Gas7A3s5WrWUGw4UZFyruF1Y9Fy5
-	Xa43tF43Zw1xt3Zxl-sFpf9Il3svdjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf
-	9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-	UjIYCTnIWjp_UUUYJ7kC6x804xWl14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI
-	8IcIk0rVWrJVCq3wAFIxvE14AKwVWUGVWUXwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-	Y2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-	v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
-	14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjcxG0xvY0x
-	0EwIxGrVCF72vEw4AK0wACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCF
-	x2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14
-	v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY
-	67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI
-	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
-	6r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU2K9aDUUUU
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR07MB7969.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bbc26924-4047-46a2-b2d5-08de6264d339
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Feb 2026 14:10:31.2991
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Lz+OGeQ7KOcaPyyeiokoZEbMOVmKmELtJTs2zHUUDLKrXOKU6iw4DaDHDTzS/fpbcbd451//PLSKHeAIUpocFB04J8kLMgCvU1UVl4P6lasGc4qGQUG4hnY6biAafeUk
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AMDPR07MB11453
 
-Now BPF_END has bitwise tracking support. This patch adds selftests to
-cover various cases of BPF_END (`bswap(16|32|64)`, `be(16|32|64)`,
-`le(16|32|64)`) with bitwise propagation.
+> -----Original Message-----
+> From: Jakub Kicinski <kuba@kernel.org>
+> Sent: Sunday, February 1, 2026 1:45 AM
+> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
+> Cc: tariqt@nvidia.com; linux-rdma@vger.kernel.org; shaojijie@huawei.com; =
+shenjian15@huawei.com; salil.mehta@huawei.com; mbloch@nvidia.com; saeedm@nv=
+idia.com; leon@kernel.org; eperezma@redhat.com; brett.creeley@amd.com; jaso=
+wang@redhat.com; virtualization@lists.linux.dev; mst@redhat.com; xuanzhuo@l=
+inux.alibaba.com; pabeni@redhat.com; edumazet@google.com; parav@nvidia.com;=
+ linux-doc@vger.kernel.org; corbet@lwn.net; horms@kernel.org; dsahern@kerne=
+l.org; kuniyu@google.com; bpf@vger.kernel.org; netdev@vger.kernel.org; dave=
+.taht@gmail.com; jhs@mojatatu.com; stephen@networkplumber.org; xiyou.wangco=
+ng@gmail.com; jiri@resnulli.us; davem@davemloft.net; andrew+netdev@lunn.ch;=
+ donald.hunter@gmail.com; ast@fiberby.net; liuhangbin@gmail.com; shuah@kern=
+el.org; linux-kselftest@vger.kernel.org; ij@kernel.org; ncardwell@google.co=
+m; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-labs.com>; g.white=
+@cablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsson=
+.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com; vidh=
+i_goel@apple.com
+> Subject: Re: [PATCH v1 net-next 0/3] ECN offload handling for AccECN seri=
+es
+>
+>
+> CAUTION: This is an external email. Please be very careful when clicking =
+links or opening attachments. See the URL nok.it/ext for additional informa=
+tion.
+>
+>
+>
+> On Sat, 31 Jan 2026 23:55:07 +0100 chia-yu.chang@nokia-bell-labs.com
+> wrote:
+> > ---
+> > v2:
+> > - Replace VIRTIO_NET_HDR_GSO_ECN with VIRTIO_NET_HDR_GSO_ECN_FLAGS
+>
+> For the future:
+>
+> Quoting documentation:
+>
+>   Limit patches outstanding on mailing list
+>   -----------------------------------------
+>
+>   Avoid having more than 15 patches, across all series, outstanding for
+>   review on the mailing list for a single tree. In other words, a maximum=
+ of
+>   15 patches under review on net, and a maximum of 15 patches under revie=
+w on
+>   net-next.
+>
+>   This limit is intended to focus developer effort on testing patches bef=
+ore
+>   upstream review. Aiding the quality of upstream submissions, and easing=
+ the
+>   load on reviewers.
+>
+> See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#=
+limit-patches-outstanding-on-mailing-list
 
-This patch is based on existing `verifier_bswap.c`, and add several
-types of new tests:
+Hi Jakub,
 
-1. Unconditional byte swap operations:
-   - bswap16: port number routing (network byte order conversion)
-   - bswap32: IPv4 subnet routing (network byte order conversion)
-   - bswap64: IPv6 subnet routing (network byte order conversion)
+Sorry for my miss, I was thinking to submit up to 15 patches per series, wi=
+thout considering the overall limit on net-next.
+Will be careful next time. Thanks.
 
-2. Endian conversion operations (architecture-aware):
-   - be16/be32/be64: convert to big-endian
-     * on little-endian: do swap
-     * on big-endian: truncation (16/32-bit) or no-op (64-bit)
-   - le16/le32/le64: convert to little-endian
-     * on big-endian: do swap
-     * on little-endian: truncation (16/32-bit) or no-op (64-bit)
-
-Each test simulates realistic networking scenarios where a value is
-masked to a specific range (e.g., 0x3f00), then byte-swapped, and the
-verifier must prove the result stays within expected bounds.
-
-Specifically, these selftests are based on dead code elimination:
-If the BPF verifier can precisely track bitwise through byte swap
-operations, it can prune the trap path (invalid memory access) that
-should be unreachable, allowing the program to pass verification.
-If bitwise tracking is incorrect, the verifier cannot prove the trap
-is unreachable, causing verification failure.
-
-The tests use preprocessor conditionals (#ifdef __BYTE_ORDER__) to
-verify correct behavior on both little-endian and big-endian
-architectures, and require Clang 18+ for bswap instruction support.
-
-Co-developed-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Signed-off-by: Shenghao Yuan <shenghaoyuan0928@163.com>
-Co-developed-by: Yazhou Tang <tangyazhou518@outlook.com>
-Signed-off-by: Yazhou Tang <tangyazhou518@outlook.com>
-Signed-off-by: Tianci Cao <ziye@zju.edu.cn>
----
- .../selftests/bpf/progs/verifier_bswap.c      | 321 ++++++++++++++++++
- 1 file changed, 321 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bswap.c b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-index e61755656e8d..76d4fb3fc52c 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bswap.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bswap.c
-@@ -48,6 +48,327 @@ __naked void bswap_64(void)
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("BSWAP16 network - port number routing with tnum")
-+__success __log_level(2)
-+__msg("w0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))") __msg("r0 = bswap16 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=63,var_off=(0x0; 0x3f))")
-+__naked void bswap16_port_routing(void)
-+{
-+	asm volatile ("					\
-+	/* Simulate reading port number from network packet */	\
-+	call %[bpf_get_prandom_u32];			\
-+	/* Extract byte range 0x0000-0x3f00 */		\
-+	w0 &= 0x3f00;					\
-+	/* Convert network byte order to host order */	\
-+	r0 = bswap16 r0;				\
-+	/* Verify range - if tnum works correctly, trap path is dead code */	\
-+	if r0 > 0x3f goto trap_%=;			\
-+	r0 = 0;						\
-+	exit;						\
-+trap_%=:	/* Should never reach - r0 must be in [0, 0x3f] */	\
-+	r1 = 42;	/* r1 = scalar for trap */	\
-+	r0 = *(u64 *)(r1 + 0);	/* Invalid: scalar dereference */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("BSWAP32 network - IPv4 subnet routing with tnum")
-+__success __log_level(2)
-+__msg("w0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))") __msg("r0 = bswap32 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=0x3f0000,var_off=(0x0; 0x3f0000))")
-+__naked void bswap32_ipv4_subnet_routing(void)
-+{
-+	asm volatile ("					\
-+	/* Simulate reading IPv4 from network packet */	\
-+	call %[bpf_get_prandom_u32];			\
-+	/* Extract second byte (subnet ID) 0x0000-0x3f00 */	\
-+	w0 &= 0x3f00;					\
-+	/* Convert network byte order to host order */	\
-+	r0 = bswap32 r0;				\
-+	/* Verify bswap32 result - if tnum works correctly, trap path is dead code */	\
-+	if r0 > 0x3f0000 goto trap_%=;			\
-+	r0 = 0;						\
-+	exit;						\
-+trap_%=:	/* Should never reach - r0 must be in [0, 0x3f0000] */	\
-+	r1 = 42;	/* r1 = scalar for trap */	\
-+	r0 = *(u64 *)(r1 + 0);	/* Invalid: scalar dereference */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("BSWAP64 network - IPv6 subnet routing with tnum")
-+__success __log_level(2)
-+__msg("r0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))") __msg("r0 = bswap64 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=0x3f000000000000,smax32=umax32=0,var_off=(0x0; 0x3f000000000000))")
-+__naked void bswap64_ipv6_subnet_routing(void)
-+{
-+	asm volatile ("					\
-+	/* Simulate reading IPv6 from network packet */	\
-+	call %[bpf_get_prandom_u32];			\
-+	/* Extract second byte (subnet ID) 0x0000-0x3f00 */	\
-+	r0 &= 0x3f00;					\
-+	/* Convert network byte order to host order */	\
-+	r0 = bswap64 r0;				\
-+	/* Verify bswap64 result - if tnum works correctly, trap path is dead code */	\
-+	r2 = 0x3f000000000000 ll;	/* Load 64-bit constant */	\
-+	if r0 > r2 goto trap_%=;			\
-+	r0 = 0;						\
-+	exit;						\
-+trap_%=:	/* Should never reach - r0 must be in [0, 0x3f000000000000] */	\
-+	r1 = 42;	/* r1 = scalar for trap */	\
-+	r0 = *(u64 *)(r1 + 0);	/* Invalid: scalar dereference */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("BE16 (to big endian) network - endian conversion with tnum")
-+__success __log_level(2)
-+__msg("w0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+/* Little endian: be16 = bswap16 */
-+__msg("r0 = be16 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=63,var_off=(0x0; 0x3f))")
-+#else
-+/* Big endian: be16 = _to_u16 (truncation) */
-+__msg("r0 = be16 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#endif
-+__naked void be16_network(void)
-+{
-+	asm volatile ("					\
-+	/* Simulate reading from network packet */	\
-+	call %[bpf_get_prandom_u32];			\
-+	/* Extract byte range 0x0000-0x3f00 */		\
-+	w0 &= 0x3f00;					\
-+	/* Convert to big endian */			\
-+	r0 = be16 r0;					\
-+	/* Verify range - if tnum works correctly, trap path is dead code */	\
-+"
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	"if r0 > 0x3f goto trap_%=;			\
-+"
-+#else
-+	"if r0 > 0x3f00 goto trap_%=;			\
-+"
-+#endif
-+	"r0 = 0;					\
-+	exit;						\
-+trap_%=:	/* Should never reach */		\
-+	r1 = 42;	/* r1 = scalar for trap */	\
-+	r0 = *(u64 *)(r1 + 0);	/* Invalid: scalar dereference */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("BE32 (to big endian) network - endian conversion with tnum")
-+__success __log_level(2)
-+__msg("w0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+/* Little endian: be32 = bswap32 */
-+__msg("r0 = be32 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=0x3f0000,var_off=(0x0; 0x3f0000))")
-+#else
-+/* Big endian: be32 = _to_u32 (truncation) */
-+__msg("r0 = be32 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#endif
-+__naked void be32_network(void)
-+{
-+	asm volatile ("					\
-+	/* Simulate reading from network packet */	\
-+	call %[bpf_get_prandom_u32];			\
-+	/* Extract byte range 0x0000-0x3f00 */		\
-+	w0 &= 0x3f00;					\
-+	/* Convert to big endian */			\
-+	r0 = be32 r0;					\
-+	/* Verify range - if tnum works correctly, trap path is dead code */	\
-+"
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	"if r0 > 0x3f0000 goto trap_%=;			\
-+"
-+#else
-+	"if r0 > 0x3f00 goto trap_%=;			\
-+"
-+#endif
-+	"r0 = 0;					\
-+	exit;						\
-+trap_%=:	/* Should never reach */		\
-+	r1 = 42;	/* r1 = scalar for trap */	\
-+	r0 = *(u64 *)(r1 + 0);	/* Invalid: scalar dereference */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("BE64 (to big endian) network - endian conversion with tnum")
-+__success __log_level(2)
-+__msg("r0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+/* Little endian: be64 = bswap64 */
-+__msg("r0 = be64 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=0x3f000000000000,smax32=umax32=0,var_off=(0x0; 0x3f000000000000))")
-+#else
-+/* Big endian: be64 = no-op */
-+__msg("r0 = be64 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#endif
-+__naked void be64_network(void)
-+{
-+	asm volatile ("					\
-+	/* Simulate reading from network packet */	\
-+	call %[bpf_get_prandom_u32];			\
-+	/* Extract byte range 0x0000-0x3f00 */		\
-+	r0 &= 0x3f00;					\
-+	/* Convert to big endian */			\
-+	r0 = be64 r0;					\
-+	/* Verify range - if tnum works correctly, trap path is dead code */	\
-+"
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	"r2 = 0x3f000000000000 ll;	/* Load 64-bit constant */	\
-+	if r0 > r2 goto trap_%=;			\
-+"
-+#else
-+	"if r0 > 0x3f00 goto trap_%=;			\
-+"
-+#endif
-+	"r0 = 0;					\
-+	exit;						\
-+trap_%=:	/* Should never reach */		\
-+	r1 = 42;	/* r1 = scalar for trap */	\
-+	r0 = *(u64 *)(r1 + 0);	/* Invalid: scalar dereference */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("LE16 (to little endian) network - endian conversion with tnum")
-+__success __log_level(2)
-+__msg("w0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+/* Little endian: le16 = _to_u16 (truncation) */
-+__msg("r0 = le16 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#else
-+/* Big endian: le16 = bswap16 */
-+__msg("r0 = le16 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=63,var_off=(0x0; 0x3f))")
-+#endif
-+__naked void le16_network(void)
-+{
-+	asm volatile ("					\
-+	/* Simulate reading from network packet */	\
-+	call %[bpf_get_prandom_u32];			\
-+	/* Extract byte range 0x0000-0x3f00 */		\
-+	w0 &= 0x3f00;					\
-+	/* Convert to little endian */			\
-+	r0 = le16 r0;					\
-+	/* Verify range - if tnum works correctly, trap path is dead code */	\
-+"
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	"if r0 > 0x3f00 goto trap_%=;			\
-+"
-+#else
-+	"if r0 > 0x3f goto trap_%=;			\
-+"
-+#endif
-+	"r0 = 0;					\
-+	exit;						\
-+trap_%=:	/* Should never reach */		\
-+	r1 = 42;	/* r1 = scalar for trap */	\
-+	r0 = *(u64 *)(r1 + 0);	/* Invalid: scalar dereference */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("LE32 (to little endian) network - endian conversion with tnum")
-+__success __log_level(2)
-+__msg("w0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+/* Little endian: le32 = _to_u32 (truncation) */
-+__msg("r0 = le32 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#else
-+/* Big endian: le32 = bswap32 */
-+__msg("r0 = le32 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=0x3f0000,var_off=(0x0; 0x3f0000))")
-+#endif
-+__naked void le32_network(void)
-+{
-+	asm volatile ("					\
-+	/* Simulate reading from network packet */	\
-+	call %[bpf_get_prandom_u32];			\
-+	/* Extract byte range 0x0000-0x3f00 */		\
-+	w0 &= 0x3f00;					\
-+	/* Convert to little endian */			\
-+	r0 = le32 r0;					\
-+	/* Verify range - if tnum works correctly, trap path is dead code */	\
-+"
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	"if r0 > 0x3f00 goto trap_%=;			\
-+"
-+#else
-+	"if r0 > 0x3f0000 goto trap_%=;			\
-+"
-+#endif
-+	"r0 = 0;					\
-+	exit;						\
-+trap_%=:	/* Should never reach */		\
-+	r1 = 42;	/* r1 = scalar for trap */	\
-+	r0 = *(u64 *)(r1 + 0);	/* Invalid: scalar dereference */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("LE64 (to little endian) network - endian conversion with tnum")
-+__success __log_level(2)
-+__msg("r0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+/* Little endian: le64 = no-op */
-+__msg("r0 = le64 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))")
-+#else
-+/* Big endian: le64 = bswap64 */
-+__msg("r0 = le64 r0 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=0x3f000000000000,smax32=umax32=0,var_off=(0x0; 0x3f000000000000))")
-+#endif
-+__naked void le64_network(void)
-+{
-+	asm volatile ("					\
-+	/* Simulate reading from network packet */	\
-+	call %[bpf_get_prandom_u32];			\
-+	/* Extract byte range 0x0000-0x3f00 */		\
-+	r0 &= 0x3f00;					\
-+	/* Convert to little endian */			\
-+	r0 = le64 r0;					\
-+	/* Verify range - if tnum works correctly, trap path is dead code */	\
-+"
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	"if r0 > 0x3f00 goto trap_%=;			\
-+"
-+#else
-+	"r2 = 0x3f000000000000 ll;	/* Load 64-bit constant */	\
-+	if r0 > r2 goto trap_%=;			\
-+"
-+#endif
-+	"r0 = 0;					\
-+	exit;						\
-+trap_%=:	/* Should never reach */		\
-+	r1 = 42;	/* r1 = scalar for trap */	\
-+	r0 = *(u64 *)(r1 + 0);	/* Invalid: scalar dereference */	\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- #else
- 
- SEC("socket")
--- 
-2.52.0
-
+Chia-Yu
