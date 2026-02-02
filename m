@@ -1,324 +1,133 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 102C3221555
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 03:12:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1C8239E88
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 03:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770001961; cv=none; b=mPPg/FaEOkDuqVYp6SOhGWiNHF0bitMmC46H53DnqF6nHqpmKJAw4JIxkN8YhaAmJhKAvTmmiaPO358MAy5T8se1UoNZIagEptalYt+BY+zJUAOMK2QSQWZ2wKmSzMrvm/peNZ9t3l3l4e2LlvMvrZr89Sk3Xdehyfrfrqpr0fc=
+	t=1770002775; cv=none; b=NGXFSUfmCPDyswYCpw4ma82oRBYrRA/dsAZVUQ4gr64+ofJhxbUtbyI7dHSKQDUvYXTPHmHOdigsGRd4t5FVUtA4Wj4+xdMjQVSTSWoFk2Mp2cPYl5SUvcAffPdNUs6SVllvCoavKpKAY6jtKlo6Vs3B9ukfHquqxhAmR6wVPVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770001961; c=relaxed/simple;
-	bh=WqMh59Jh7O6oTHdQ7P3uwRCuoF1pABsvr7CUqtI/TbU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mxvoj38GNnmUT778y3UssQbcfKQu0WpX4FdFvKcabhZw/vzBWZNIDTFJUj+Qy2SlNp3kwTHWkOyGLGv1rLD61T5wdbt+vA+/ePWnyb+/KP0nXppK7zJ3+w2YLhBsRnXd7cZjUS5sPxYeExVb/DKVKLEuHbIOwYkGAayFl1+rq5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ViA4ISJm; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770002775; c=relaxed/simple;
+	bh=ZJqj9ri7+QRS7FBfUr198f3zndQJRIxPcf6OjR7r2ew=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a0XxHIlAocQ3Hbtwoi52u2jjE4WlDNv/n7AxZJvJxzbWw9J5amXLk+JYo0a0pnaYIYqCC9Hcs4JHgBoCA+DeZX4o9lpjxobexq67EfVdeDmep+27ral9FcjtRBSXkpMQ2+WsdQOMTsj5kPjuBYKKr313+0T3brC1tX+XQcFY50Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m/J6OKSh; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ViA4ISJm"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2a0d67f1877so25794145ad.2
-        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 19:12:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m/J6OKSh"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b885e8c6727so767287966b.1
+        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 19:26:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770001959; x=1770606759; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0IVHOGSx4NXgsONy8xwysVIqdktjCEZu5P7F2LVYkzA=;
-        b=ViA4ISJmEiVqePEiPzq7ogL9GAv0L/Rrn2Er2Oso0l+atF38gx3J5dwYB5/sj5PSr+
-         ZMTEWNDitj+RKoK4UA53W0EWf7mPCUmQRAKJxW/f2KedEvNYtsEi8dCcSRhkJljmz7wL
-         KbmzYKs6NwgBmZW5YzpKDk+0JY6AobtI0FftaVqSg5/Dt86zhACb+q3m47VWjZXuv/Xs
-         60bfSR+sa+mindJZpDUVi6qyia0roRuryyqrWPRjq49V2Ie4NixKw0eelZI18dsHZpvo
-         zwOri87Pj6zCy+Or6RviFPjEV1MNk6jTsfhMUTSYFZ64r2wPMHUNP0TcIJ7eAwJ6GZL1
-         kmRQ==
+        d=google.com; s=20230601; t=1770002772; x=1770607572; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8y1tSjszHwNi7K6C6xGA7ozYqT29UdTx9KR8G4VZTuc=;
+        b=m/J6OKShA3QjFN/CjRWFK2+WtOuc4WjnkuZXwFP+pZt/mCT7QiSownfTIZd5cCtj59
+         Slb6HDIjcOpo6RHuW+5BRpuUUvSOtGVwvQq0qbSXUk5n85IukSxzD94GPDX/Hj88GX3P
+         5+v7w+z9lpKGSqlKjUuPIxjeSu6UdMRQrcmuALSEsA5gUq+j49dvELzBD7VBh3y951/w
+         9DA8TlNBwhRDYzfxjSPFeikqY7pFoqnTwIHKuX/HwLt2UEDinqErci35UnzBRUBylUB9
+         nb46qMxjJfT7rV0rOWapsmnLNX6Sd2rZbALgV9fdveszEtI8ol5k6apib47uSrK/y1XL
+         AOzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770001959; x=1770606759;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0IVHOGSx4NXgsONy8xwysVIqdktjCEZu5P7F2LVYkzA=;
-        b=dDGMG1vVBlUbUDr9EM4KVABnM40LzYEgAmTTpPKe6GQVDfMxhXyUqGassXqjNzXP4H
-         GqvCfBzt87AG91KNQh5kcFXm+9vKnTQljPIeqA7/+hvgJsnVmHM9GrMrOu3WIqhWOW6O
-         fIV9TMw9YGVnTtYXu+B+AEVHGLYfZqoW4AAIrOGr6YW0Ip4U+Y1qyxSaCx/l25CVsPrW
-         xViCyBxsNFTRUZm/WYYYalQC1F4LmSaPLMjDIXv76a/eE38S1sK1kigZRIaV4pMqk/Vu
-         5M3Utgx5tEV6gvT08x4/YG0yedl3GX89E2r+LnHwspNyUVqF8hlf04mZWcacPxHwZWp9
-         miDA==
-X-Forwarded-Encrypted: i=1; AJvYcCVIvcZ6S9WJaeCh5E0rC/z3rCKhhXGnYwdIT0mBmvXV3m00UqBLeT7LTBj+E4UkMLcYuF4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/S56AGfBrUYARnV70e3vbMiqd07noHm0bBDUQ0g5ixZvYcQef
-	vTFbKD8FIiR/cLcA0WSAhfayW6xk88QcBEkttSbzihuBxbZNHrRFJXJN
-X-Gm-Gg: AZuq6aK7wYumDOGZJ5/nx9R4G5Lw2X+R0sfuDXlzRIxVBNuO3wddyba6U0rQbqp2jdR
-	gcExSyZpJnHSBthoobTEd5iLk6djLXZuvHuZKzIuzuE8oQ7r+QnGyrK++dlLvVFJr0mhOK7pdcm
-	9BcnWL+Cq/gm2M2OtrlkMEvevFrQpGD1q8vDu4gL/dc07y0vAqSW09jf5EPK0Bvjuc3d7iPZIW4
-	4qNZ2XWaKSUMAA/KOkAl491nx9iecgXQIoJ8QEIvsGMv6EO2ou/ApEJYJrRwrwrNCQqCJutEBBV
-	9WuLnyhOCJoTFd1Hbjrm4fbXY89KtYku4shCVqMq5epHgqOEBFR0eQIBYJ7HPXtcwtrQETn7Jg5
-	gKGTxkeTduyu1MQzrEt18+GQpm5J2xEr2KvYv6g0FkS+LsY2cCJS3Nbhu3uw0XdFKKcrcFzHpHx
-	fcVAtuqc5uKM28FGegn2D9SG+nIJVEfSPvYDUDgiWLPA==
-X-Received: by 2002:a17:902:f690:b0:2a0:e94e:5df6 with SMTP id d9443c01a7336-2a8d81818c8mr89657635ad.50.1770001959412;
-        Sun, 01 Feb 2026 19:12:39 -0800 (PST)
-Received: from localhost.localdomain ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a88b6e4110sm124318605ad.84.2026.02.01.19.12.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 01 Feb 2026 19:12:39 -0800 (PST)
-From: chengkaitao <pilgrimtao@gmail.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	yangfeng@kylinos.cn,
-	alexei.starovoitov@gmail.com
-Cc: linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Chengkaitao <chengkaitao@kylinos.cn>
-Subject: [PATCH v3 3/3] selftests/bpf: Add supplementary tests for bpf_kptr_xchg
-Date: Mon,  2 Feb 2026 11:12:14 +0800
-Message-ID: <20260202031214.69958-3-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260202031214.69958-1-pilgrimtao@gmail.com>
-References: <20260202031214.69958-1-pilgrimtao@gmail.com>
+        d=1e100.net; s=20230601; t=1770002772; x=1770607572;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8y1tSjszHwNi7K6C6xGA7ozYqT29UdTx9KR8G4VZTuc=;
+        b=HKcfNSJzNCezMbZtlkUaADYfXNFsYM5gxOWhQHjAcGCDf5nuAo1lUNunJ+MFL9mE8F
+         jZbwoR28QtwKeKf68e4y7ufxId0K1Gjf2gGCI5UvfMLqaQfxZdIRelr6+GAPfcAJVfwl
+         HOcRL8YpLadMotFslYpct8aISAbkfk8datcDFp9LArMK+Opw2y+zoN5w91SC107ZMmTj
+         kwzH62YscU/8TIlfBp8hh95ICck4i3PfcC2Ar1Y/2cNAfbKhx0F47z8RO50HRxn0Pd5D
+         pa5QoT9PY3MHRxgZ57pAyIiYq21719/IHu2YHcQuW3bUyGnp40d+KAKXarLMBJ/UvFPj
+         4oJg==
+X-Forwarded-Encrypted: i=1; AJvYcCUYV/hZAeIX/zc4UuzUSaFHBFiy6wI47Xuzgrk633BXaZjBCnbQxihhTEcPY8PFmFAzlb8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4c1ojTBGwEprNPcFeaJlbVNtADGjQn/c/GQ8T7yZNHfOEAGNK
+	ZO/JHNowAWyEZRCzIvu4kFyZN6zAndo+nTFv5nrJxSFCiYZ3ygsYmJuwPksrNoHe3Q==
+X-Gm-Gg: AZuq6aJuQL4j9YTx5nFhdWeqMM12bCp/pfcP04DRHknkUVWLA/HbiLkFGPDf+x8sBow
+	AovKumC60HrGClJk8P8GphbJKQRNRzxk4HKRoUJQE3iDHRIaYBLkx4mNviLnzvJ9LQOBP8/BxqE
+	SXTzAEgPuD4g5Mn5dBPB2yLSIQ8yWJdHiCVFlNBQaYCOkfXNlkrDW3yhPoMVV9ClkDnitskA/n+
+	G/xRcVoRxeywJXS+A/kf9wDAjtaytPKOLTLVdAmbCIEffM11wUOnKvdURywhVxBVfm+eNMc9Hnd
+	sCRZMPRbBijC+M6ajYpwcvzgasdeA9hHwYjG/KzXyk/2o8mnbMs7O1r0VGvRhD5EEId/xnGWarC
+	d1duy1sOPpppGlKg1EuwU4JoXpnmPGVHm7ko1hmj4+76//MQM2T9ueQa8k8NItvdD4B3PiDbgio
+	b/i1ae9MvHEJJjeK3/XG/0G4ZYqey9qkFFdbiaXQsYfY+O+dCN/a4=
+X-Received: by 2002:a17:906:f049:b0:b87:6839:6175 with SMTP id a640c23a62f3a-b8ddf84586fmr869883966b.10.1770002771786;
+        Sun, 01 Feb 2026 19:26:11 -0800 (PST)
+Received: from google.com (93.50.90.34.bc.googleusercontent.com. [34.90.50.93])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-658b46abb3esm7161539a12.32.2026.02.01.19.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 01 Feb 2026 19:26:10 -0800 (PST)
+Date: Mon, 2 Feb 2026 03:26:07 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Michal Hocko <mhocko@suse.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Andrew Morton <akpm@linux-foundation.org>, joshdon@google.com
+Subject: Re: [PATCH bpf-next v3 00/17] mm: BPF OOM
+Message-ID: <aYAZT-ZZSKdiChfd@google.com>
+References: <20260127024421.494929-1-roman.gushchin@linux.dev>
+ <aXh_LpTzDhvv20uB@tiehlicka>
+ <7ia44io6kbwj.fsf@castle.c.googlers.com>
+ <aXnDdkYmtipGwSjK@tiehlicka>
+ <CAADnVQ+ghTc5FtJCjm4ya3y3xVpSuJe-7ctdT-thowqWguc1pA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ+ghTc5FtJCjm4ya3y3xVpSuJe-7ctdT-thowqWguc1pA@mail.gmail.com>
 
-From: Chengkaitao <chengkaitao@kylinos.cn>
+On Wed, Jan 28, 2026 at 08:59:34AM -0800, Alexei Starovoitov wrote:
+> On Wed, Jan 28, 2026 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> >
+> > > Another viable idea (also suggested by Andrew Morton) is to develop
+> > > a production ready memcg-aware OOM killer in BPF, put the source code
+> > > into the kernel tree and make it loadable by default (obviously under a
+> > > config option). Myself or one of my colleagues will try to explore it a
+> > > bit later: the tricky part is this by-default loading because there are
+> > > no existing precedents.
+> >
+> > It certainly makes sense to have trusted implementation of a commonly
+> > requested oom policy that we couldn't implement due to specific nature
+> > that doesn't really apply to many users. And have that in the tree. I am
+> > not thrilled about auto-loading because this could be easily done by a
+> > simple tooling.
+> 
+> Production ready bpf-oom program(s) must be part of this set.
+> We've seen enough attempts to add bpf st_ops in various parts of
+> the kernel without providing realistic bpf progs that will drive
+> those hooks. It's great to have flexibility and people need
+> to have a freedom to develop their own bpf-oom policy, but
+> the author of the patch set who's advocating for the new
+> bpf hooks must provide their real production progs and
+> share their real use case with the community.
+> It's not cool to hide it.
+> In that sense enabling auto-loading without requiring an end user
+> to install the toolchain and build bpf programs/rust/whatnot
+> is necessary too.
+> bpf-oom can be a self contained part of vmlinux binary.
+> We already have a mechanism to do that.
+> This way the end user doesn't need to be a bpf expert, doesn't need
+> to install clang, build the tools, etc.
+> They can just enable fancy new bpf-oom policy and see whether
+> it's helping their apps or not while knowing nothing about bpf.
 
-1. Allow using bpf_kptr_xchg while holding a lock.
-2. When the rb_node contains a __kptr pointer, we do not need to
-   perform a remove-read-add operation.
-
-This patch implements the following workflow:
-1. Construct a rbtree with 16 elements.
-2. Traverse the rbtree, locate the kptr pointer in the target node,
-   and read the content pointed to by the pointer.
-3. Remove all nodes from the rbtree.
-
-Signed-off-by: Chengkaitao <chengkaitao@kylinos.cn>
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
----
- .../testing/selftests/bpf/prog_tests/rbtree.c |   6 +
- tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
- .../selftests/bpf/progs/rbtree_search_kptr.c  | 164 ++++++++++++++++++
- 3 files changed, 174 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/rbtree.c b/tools/testing/selftests/bpf/prog_tests/rbtree.c
-index d8f3d7a45fe9..a854fb38e418 100644
---- a/tools/testing/selftests/bpf/prog_tests/rbtree.c
-+++ b/tools/testing/selftests/bpf/prog_tests/rbtree.c
-@@ -9,6 +9,7 @@
- #include "rbtree_btf_fail__wrong_node_type.skel.h"
- #include "rbtree_btf_fail__add_wrong_type.skel.h"
- #include "rbtree_search.skel.h"
-+#include "rbtree_search_kptr.skel.h"
- 
- static void test_rbtree_add_nodes(void)
- {
-@@ -193,3 +194,8 @@ void test_rbtree_search(void)
- {
- 	RUN_TESTS(rbtree_search);
- }
-+
-+void test_rbtree_search_kptr(void)
-+{
-+	RUN_TESTS(rbtree_search_kptr);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index c9bfbe1bafc1..0904fe14ad1d 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -188,6 +188,10 @@
- #define POINTER_VALUE	0xbadcafe
- #define TEST_DATA_LEN	64
- 
-+#ifndef __aligned
-+#define __aligned(x) __attribute__((aligned(x)))
-+#endif
-+
- #ifndef __used
- #define __used __attribute__((used))
- #endif
-diff --git a/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c b/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-new file mode 100644
-index 000000000000..1345c7f441c1
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-@@ -0,0 +1,164 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 KylinSoft Corporation. */
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+#include "bpf_experimental.h"
-+
-+#define NR_NODES 16
-+
-+struct node_data {
-+	int data;
-+};
-+
-+struct tree_node {
-+	struct bpf_rb_node node;
-+	u64 key;
-+	struct node_data __kptr * node_data;
-+};
-+
-+#define private(name) SEC(".data." #name) __hidden __aligned(8)
-+
-+private(A) struct bpf_rb_root root __contains(tree_node, node);
-+private(A) struct bpf_spin_lock lock;
-+
-+static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
-+{
-+	struct tree_node *node_a, *node_b;
-+
-+	node_a = container_of(a, struct tree_node, node);
-+	node_b = container_of(b, struct tree_node, node);
-+
-+	return node_a->key < node_b->key;
-+}
-+
-+SEC("syscall")
-+__retval(0)
-+long rbtree_search_kptr(void *ctx)
-+{
-+	struct tree_node *tnode;
-+	struct bpf_rb_node *rb_n;
-+	struct node_data __kptr * node_data;
-+	int lookup_key  = NR_NODES / 2;
-+	int lookup_data = NR_NODES / 2;
-+	int i, data, ret = 0;
-+
-+	for (i = 0; i < NR_NODES && can_loop; i++) {
-+		tnode = bpf_obj_new(typeof(*tnode));
-+		if (!tnode)
-+			return __LINE__;
-+
-+		node_data = bpf_obj_new(typeof(*node_data));
-+		if (!node_data) {
-+			bpf_obj_drop(tnode);
-+			return __LINE__;
-+		}
-+
-+		tnode->key = i;
-+		node_data->data = i;
-+
-+		node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
-+		if (node_data)
-+			bpf_obj_drop(node_data);
-+
-+		bpf_spin_lock(&lock);
-+		bpf_rbtree_add(&root, &tnode->node, less);
-+		bpf_spin_unlock(&lock);
-+	}
-+
-+	bpf_spin_lock(&lock);
-+	rb_n = bpf_rbtree_root(&root);
-+	while (rb_n && can_loop) {
-+		tnode = container_of(rb_n, struct tree_node, node);
-+		node_data = bpf_kptr_xchg(&tnode->node_data, NULL);
-+		if (!node_data) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		data = node_data->data;
-+		node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
-+		if (node_data) {
-+			bpf_spin_unlock(&lock);
-+			bpf_obj_drop(node_data);
-+			return __LINE__;
-+		}
-+
-+		if (lookup_key == tnode->key) {
-+			if (data == lookup_data)
-+				break;
-+
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		if (lookup_key < tnode->key)
-+			rb_n = bpf_rbtree_left(&root, rb_n);
-+		else
-+			rb_n = bpf_rbtree_right(&root, rb_n);
-+	}
-+	bpf_spin_unlock(&lock);
-+
-+	rb_n = NULL;
-+	while (rb_n && can_loop) {
-+		bpf_spin_lock(&lock);
-+		rb_n = bpf_rbtree_first(&root);
-+		if (!rb_n) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		rb_n = bpf_rbtree_remove(&root, rb_n);
-+		if (!rb_n) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+		bpf_spin_unlock(&lock);
-+
-+		tnode = container_of(rb_n, struct tree_node, node);
-+		bpf_obj_drop(tnode->node_data);
-+		bpf_obj_drop(tnode);
-+	}
-+
-+	return 0;
-+fail:
-+	bpf_spin_unlock(&lock);
-+	return ret;
-+}
-+
-+
-+SEC("syscall")
-+__failure __msg("R1 type=scalar expected=map_value, ptr_, ptr_")
-+long non_own_ref_kptr_xchg_no_lock(void *ctx)
-+{
-+	struct tree_node *tnode;
-+	struct bpf_rb_node *rb_n;
-+	struct node_data __kptr * node_data;
-+	int data;
-+
-+	bpf_spin_lock(&lock);
-+	rb_n = bpf_rbtree_first(&root);
-+	if (!rb_n) {
-+		bpf_spin_unlock(&lock);
-+		return __LINE__;
-+	}
-+	bpf_spin_unlock(&lock);
-+
-+	tnode = container_of(rb_n, struct tree_node, node);
-+	node_data = bpf_kptr_xchg(&tnode->node_data, NULL);
-+	if (!node_data)
-+		return __LINE__;
-+
-+	data = node_data->data;
-+	if (data < 0)
-+		return __LINE__;
-+
-+	node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
-+	if (node_data)
-+		return __LINE__;
-+
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.50.1 (Apple Git-155)
-
+For the auto-loading capability you speak of here, I'm currently
+interpreting it as being some form of conceptually similar extension
+to the BPF preload functionality. Have I understood this correctly? If
+so, I feel as though something like this would be a completely
+independent stream of work, orthogonal to this BPF OOM feature, right?
+Or, is that you'd like this new auto-loading capability completed as a
+hard prerequisite before pulling in the BPF OOM feature?
