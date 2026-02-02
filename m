@@ -1,179 +1,76 @@
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24A930748B
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 19:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39A9B2C17A1;
+	Mon,  2 Feb 2026 19:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770061180; cv=none; b=c9jQEr4Xh7DLPS5afdSpnfYVuSBWoHxHtYfR1/U1Ih0OyAuDi/g9wJWmeTOeIbzwbrF3hXasHJ4sScW33VwNba1Vur50nJGOU7zfG34QFfg7qMLa6X8mGjv6KxJX2bqIUvUgAbLK6ngDQ77rF5fJ6S6EfAtKR9dz9HpU1yqLKDc=
+	t=1770062396; cv=none; b=qF4Y1L8T5TrmAvsFqRqOsVy4J6TcfrXTNXc1faXvdjQuVaIPtl4RcvaVrHGWJiBrMw9jfGSJw+F/LgfJgdr1xpsE35NPh0WTcC+mhgmK/hRIb0HRW8H3+mnOhR1krW1iZ41GYvDNHNOGx55IOSd7G9zbQS4JywXjUmFvqvv66fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770061180; c=relaxed/simple;
-	bh=n6E9zvFMWoY03F3m73ZI1gx6xlels/hxNGufX6evA1g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=NpCXVFOepq1OqqQoIXEYF3lNtbZVhyFetiCBSpmdZFZnqTnZSgpLA32HlP9tzA3D0GIupBQpHKJzrbjxeB+f3R9J9cCRgeYNKfjKT2okQIjoKCTyDq4iJ9R2J87MY8tQ9W22u6prcj54ve30Bmyy9DgiKrGrp7I64O4ZJVBf0TU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JSQCeXBB; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--hramamurthy.bounces.google.com
+	s=arc-20240116; t=1770062396; c=relaxed/simple;
+	bh=eEU6X/6L7H/3zpIVEJEiFvuFbR2Tsb/isJ7/+9fxYsk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nbfn/GJ4Q5Amhm+W+4RA3011BEOO2yFa4v3U2Mp8QwSmGMXHLj2aWD2kXHjfHukeTPbzMD3hzYCJ4DS//jB896a9DbJYSIClSbkQCBsoLcLQE4oVEi1CK5ZGV2hHMOX+m2OL879hm77V1f8NQynnTkH98vSOp+NFyPWcuizZjIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=fzWlhWu2; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JSQCeXBB"
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2a377e15716so128803815ad.3
-        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 11:39:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770061178; x=1770665978; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sq8UgQHMkDt9URltVgoRQ8Smj0jrcUPq0dpsGS66bCA=;
-        b=JSQCeXBBA8DPCXpZzgvVKmiTIwHypuwAr/vKsFpQQUFkLvZHy6F/Pag9l85UAmN7Al
-         JcweXrfDTaQmRxyKO0YckBAmQVN0dlpadq5EmeZTTB+32Ln24HXbKKuu268w7vjIjvqn
-         bUT+zqLxI8vgfdfsOo/NkvkgaZ14KLV51g/yf5GiG90vRBCBpHrBH6kRET//3alm9LHL
-         i0qRq2ousufwcSLd46mNRN08Q2Rntacn/PB+/vyTtzqN+QKJDITTXLEDGkVzWGYR1Djh
-         4YYFs4Hdy8qCJesqzgkkjsBm1lSifaExcQt7SN/sCkvPk5nKSG0KpMOmUDsiA0ff5Xry
-         tnQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770061178; x=1770665978;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sq8UgQHMkDt9URltVgoRQ8Smj0jrcUPq0dpsGS66bCA=;
-        b=uWPxuffmLWot5jdG1kBZFNMnHNWeQFItu69oGDuy78ONukcENMUL0x5ZJSzaMt9kad
-         ony/b+LBSMM0ql0dpnTMHGLPeAKZU7BVy3a5NmYtpSL8CRtivFlKhiZXlq0MzcsVzNVE
-         sLx2pInAzUY7FsEkDBdyFjwxLfzAGYB3smZiK8Hjh9F4kANg7b8uW8tIfDVSYgDkb/Xt
-         ObHV3M6zvrQx5fi2CJaygctKiM4BA6RCibnDTm+BL/+2Jar8VtAjzDNklKhjWoK8ctOs
-         NKwljd2o/eHeosevDiEnATk7qKP4g5/C+EDBIBfRFHr+tZTxms3UvUdevfG0j3UYLf6T
-         vg1A==
-X-Forwarded-Encrypted: i=1; AJvYcCXvcvPdIGYBXQN1nzldCZV7l3wMp8VJWeQRd03UdalHUKk5T4nlsk5eWak86Dzcms17hWA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw73hbdcULCjETVW4UIkH+8Ki3uayHBDfiNhucdJ1PZiVuduSjj
-	e17l2jg5DYYXl7ol2qCVNa4/Bty0Xt7d+vxC9wgcdbncHfLFsQhZ211Es8rytsR5IMJXU8V/t0u
-	1bISTUrWxB2hOsHMxK7HTyX7okA==
-X-Received: from plbjw4.prod.google.com ([2002:a17:903:2784:b0:2a0:f5f5:419d])
- (user=hramamurthy job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:902:d4c5:b0:2a9:4c2:e47 with SMTP id d9443c01a7336-2a904c241c5mr61022835ad.56.1770061178166;
- Mon, 02 Feb 2026 11:39:38 -0800 (PST)
-Date: Mon,  2 Feb 2026 19:39:25 +0000
-In-Reply-To: <20260202193925.3106272-1-hramamurthy@google.com>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="fzWlhWu2"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=Ijkgu82x5tCkNyZgQnmbEBJphoNEGQgRBkZ7m2AwrGY=; b=fzWlhWu2KNOvni03qgbg5X6xt+
+	e64YaRpHvUj5sM2HHZiHgNcfRce/ra3GMnADtB23Kpjc4zG8+Lc94UMoiueScO7YzNheOabtIOibK
+	LFDgeTrNBpeDtQltabGi3K3Tc+JM5Ng6vWU2iYY4gaBCb4W484JEpWhLJu2lE36IpjaaSvFZENLNB
+	hUaEPevouUmJZYvvcDGswZzVy46aONuN1tWgRDeo5kOHS0sxjonxHKSnuClDrpXeE869FjMiGGw2+
+	rSM+NGAUgX6Xd0eZabHVvxDmWEHfjI20xtquzq3gPbEu+unbJbpIvgt06tkSgdEVrv+GlVTVgrnWu
+	/Hi064UQ==;
+Received: from 2001-1c00-8d85-5700-266e-96ff-fe07-7dcc.cable.dynamic.v6.ziggo.nl ([2001:1c00:8d85:5700:266e:96ff:fe07:7dcc] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vn05H-0000000Gzcd-2exJ;
+	Mon, 02 Feb 2026 19:59:43 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 2A2853008E2; Mon, 02 Feb 2026 20:59:43 +0100 (CET)
+Date: Mon, 2 Feb 2026 20:59:43 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Tao Chen <chen.dylane@linux.dev>, mingo@redhat.com, acme@kernel.org,
+	namhyung@kernel.org, mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+	irogers@google.com, adrian.hunter@intel.com,
+	kan.liang@linux.intel.com, song@kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+	eddyz87@gmail.com, yonghong.song@linux.dev,
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+	haoluo@google.com, linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH bpf-next v8 2/3] perf: Refactor get_perf_callchain
+Message-ID: <20260202195943.GI1282955@noisy.programming.kicks-ass.net>
+References: <20260126074331.815684-1-chen.dylane@linux.dev>
+ <20260126074331.815684-3-chen.dylane@linux.dev>
+ <20260128091033.GG3372621@noisy.programming.kicks-ass.net>
+ <CAEf4BzYpcgC0Pi0f_ScUavJ_Tw74PKULsbPdexKsWmb8RmxLKg@mail.gmail.com>
+ <20260130113150.GB166857@noisy.programming.kicks-ass.net>
+ <CAEf4BzZNOqxhkjuePzeG=ivqBSHXnWzPLPPHJdoC91c+u-WjAg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260202193925.3106272-1-hramamurthy@google.com>
-X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <20260202193925.3106272-3-hramamurthy@google.com>
-Subject: [PATCH net 2/2] gve: Correct ethtool rx_dropped calculation
-From: Harshitha Ramamurthy <hramamurthy@google.com>
-To: netdev@vger.kernel.org
-Cc: joshwash@google.com, hramamurthy@google.com, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	willemb@google.com, ziweixiao@google.com, jordanrhee@google.com, 
-	nktgrg@google.com, kuozhao@google.com, yangchun@google.com, 
-	awogbemila@google.com, maolson@google.com, ast@kernel.org, 
-	daniel@iogearbox.net, hawk@kernel.org, john.fastabend@gmail.com, 
-	sdf@fomichev.me, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.com, Max Yuan <maxyuan@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzZNOqxhkjuePzeG=ivqBSHXnWzPLPPHJdoC91c+u-WjAg@mail.gmail.com>
 
-From: Max Yuan <maxyuan@google.com>
+On Fri, Jan 30, 2026 at 12:04:45PM -0800, Andrii Nakryiko wrote:
 
-The gve driver's "rx_dropped" statistic, exposed via `ethtool -S`,
-incorrectly includes `rx_buf_alloc_fail` counts. These failures
-represent an inability to allocate receive buffers, not true packet
-drops where a received packet is discarded. This misrepresentation can
-lead to inaccurate diagnostics.
+> > Also, there appears to be no buildid caching what so ever, surely that
+> > would help some.
+> 
+> Jiri Olsa proposed caching build id per file or per inode some time
+> back, there was vehement opposition to it. And doing some locked
+> global resizable hash that might need to be used from NMI sounds
+> horrible, tbh. So we have what we have today.
 
-This patch rectifies the ethtool "rx_dropped" calculation. It removes
-`rx_buf_alloc_fail` from the total and adds `xdp_tx_errors` and
-`xdp_redirect_errors`, which represent legitimate packet drops within
-the XDP path.
-
-Cc: stable@vger.kernel.org
-Fixes: 433e274b8f7b ("gve: Add stats for gve.")
-Signed-off-by: Max Yuan <maxyuan@google.com>
-Reviewed-by: Jordan Rhee <jordanrhee@google.com>
-Reviewed-by: Joshua Washington <joshwash@google.com>
-Reviewed-by: Matt Olson <maolson@google.com>
-Signed-off-by: Harshitha Ramamurthy <hramamurthy@google.com>
----
- drivers/net/ethernet/google/gve/gve_ethtool.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/google/gve/gve_ethtool.c b/drivers/net/ethernet/google/gve/gve_ethtool.c
-index f7864ae7..9fd954d1 100644
---- a/drivers/net/ethernet/google/gve/gve_ethtool.c
-+++ b/drivers/net/ethernet/google/gve/gve_ethtool.c
-@@ -152,10 +152,11 @@ gve_get_ethtool_stats(struct net_device *netdev,
- 	u64 tmp_rx_pkts, tmp_rx_hsplit_pkt, tmp_rx_bytes, tmp_rx_hsplit_bytes,
- 		tmp_rx_skb_alloc_fail, tmp_rx_buf_alloc_fail,
- 		tmp_rx_desc_err_dropped_pkt, tmp_rx_hsplit_unsplit_pkt,
--		tmp_tx_pkts, tmp_tx_bytes;
-+		tmp_tx_pkts, tmp_tx_bytes,
-+		tmp_xdp_tx_errors, tmp_xdp_redirect_errors;
- 	u64 rx_buf_alloc_fail, rx_desc_err_dropped_pkt, rx_hsplit_unsplit_pkt,
- 		rx_pkts, rx_hsplit_pkt, rx_skb_alloc_fail, rx_bytes, tx_pkts, tx_bytes,
--		tx_dropped;
-+		tx_dropped, xdp_tx_errors, xdp_redirect_errors;
- 	int rx_base_stats_idx, max_rx_stats_idx, max_tx_stats_idx;
- 	int stats_idx, stats_region_len, nic_stats_len;
- 	struct stats *report_stats;
-@@ -199,6 +200,7 @@ gve_get_ethtool_stats(struct net_device *netdev,
- 	for (rx_pkts = 0, rx_bytes = 0, rx_hsplit_pkt = 0,
- 	     rx_skb_alloc_fail = 0, rx_buf_alloc_fail = 0,
- 	     rx_desc_err_dropped_pkt = 0, rx_hsplit_unsplit_pkt = 0,
-+	     xdp_tx_errors = 0, xdp_redirect_errors = 0,
- 	     ring = 0;
- 	     ring < priv->rx_cfg.num_queues; ring++) {
- 		if (priv->rx) {
-@@ -216,6 +218,9 @@ gve_get_ethtool_stats(struct net_device *netdev,
- 					rx->rx_desc_err_dropped_pkt;
- 				tmp_rx_hsplit_unsplit_pkt =
- 					rx->rx_hsplit_unsplit_pkt;
-+				tmp_xdp_tx_errors = rx->xdp_tx_errors;
-+				tmp_xdp_redirect_errors =
-+					rx->xdp_redirect_errors;
- 			} while (u64_stats_fetch_retry(&priv->rx[ring].statss,
- 						       start));
- 			rx_pkts += tmp_rx_pkts;
-@@ -225,6 +230,8 @@ gve_get_ethtool_stats(struct net_device *netdev,
- 			rx_buf_alloc_fail += tmp_rx_buf_alloc_fail;
- 			rx_desc_err_dropped_pkt += tmp_rx_desc_err_dropped_pkt;
- 			rx_hsplit_unsplit_pkt += tmp_rx_hsplit_unsplit_pkt;
-+			xdp_tx_errors += tmp_xdp_tx_errors;
-+			xdp_redirect_errors += tmp_xdp_redirect_errors;
- 		}
- 	}
- 	for (tx_pkts = 0, tx_bytes = 0, tx_dropped = 0, ring = 0;
-@@ -250,8 +257,8 @@ gve_get_ethtool_stats(struct net_device *netdev,
- 	data[i++] = rx_bytes;
- 	data[i++] = tx_bytes;
- 	/* total rx dropped packets */
--	data[i++] = rx_skb_alloc_fail + rx_buf_alloc_fail +
--		    rx_desc_err_dropped_pkt;
-+	data[i++] = rx_skb_alloc_fail + rx_desc_err_dropped_pkt +
-+		    xdp_tx_errors + xdp_redirect_errors;
- 	data[i++] = tx_dropped;
- 	data[i++] = priv->tx_timeo_cnt;
- 	data[i++] = rx_skb_alloc_fail;
-@@ -330,6 +337,9 @@ gve_get_ethtool_stats(struct net_device *netdev,
- 				tmp_rx_buf_alloc_fail = rx->rx_buf_alloc_fail;
- 				tmp_rx_desc_err_dropped_pkt =
- 					rx->rx_desc_err_dropped_pkt;
-+				tmp_xdp_tx_errors = rx->xdp_tx_errors;
-+				tmp_xdp_redirect_errors =
-+					rx->xdp_redirect_errors;
- 			} while (u64_stats_fetch_retry(&priv->rx[ring].statss,
- 						       start));
- 			data[i++] = tmp_rx_bytes;
-@@ -340,8 +350,9 @@ gve_get_ethtool_stats(struct net_device *netdev,
- 			data[i++] = rx->rx_frag_alloc_cnt;
- 			/* rx dropped packets */
- 			data[i++] = tmp_rx_skb_alloc_fail +
--				tmp_rx_buf_alloc_fail +
--				tmp_rx_desc_err_dropped_pkt;
-+				    tmp_rx_desc_err_dropped_pkt +
-+				    tmp_xdp_tx_errors +
-+				    tmp_xdp_redirect_errors;
- 			data[i++] = rx->rx_copybreak_pkt;
- 			data[i++] = rx->rx_copied_pkt;
- 			/* stats from NIC */
--- 
-2.53.0.rc1.225.gd81095ad13-goog
-
+See kernel/module/tree_lookup.c and include/linux/rbtree_latch.h :-)
