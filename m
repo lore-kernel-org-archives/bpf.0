@@ -1,210 +1,344 @@
-Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2751F2C21E6
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 23:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770075607; cv=pass; b=re8csmRVDYNmR/59ReCg0P1KvwiAYaCGl6CNcFQ+eKB0HUIyaKqmw09ZxAxdRhr2AyE8c1azmhZFXPUbT3Ru/uOfAOxMG9YtTZz2AOUPEAJ6TXm8VOwHIrCJfflj993L10jk4KYUmbEw/zGJfM+IgwwEJ4u8yAPvBS2TSW0qsAM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770075607; c=relaxed/simple;
-	bh=d/4PHqC+8q/tKZn/tZq2NAmR55Jba9qxeMWuH7IIevg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nQ+UvT41WDhfEBYsVqhpFMU49s+lmo1VZ621LubGD1tAD94LDkS0MmvxORmdaDOJegTsrw9+medj6wOzaE0XyMO+k24gClRGWkg5zwaGcb3JPDmpgKUMkY+tlRvqkt/FDw7CLI0gfqA8YLbGYbZ7g4Ek7M109/tB/ksgQI9u2qI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h7h0F2SA; arc=pass smtp.client-ip=74.125.224.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC0D288C39
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 23:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770075927; cv=none; b=tJRv21Lgah5GQLTK77IspIl/i4XxtInKvHTRSrbTn6pftud1CGRpPkxgCb1RoO0qZv8jFj+fF/MpFyjsfNYPm5R8UGqVJWqo0nSAu2BXST1UmpYDbMhZRj00rxmyKNQSwLRpkMXf1MG/GDRnzAFQ7PJosJcsBKUCUs3DKsvRplE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770075927; c=relaxed/simple;
+	bh=v3QxbsnYFPFhmHyOT+53OCvrWXMe3iVLPtXS700YHFc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Suw+3/FsubmzaVXlvn3b6cKDwmhnmoCO0eyG5cuvpSphH9Wff5u19AIKDInTnr8h27f4eyw50N41LbEjMQiuz9Dq8DgIN3MfHuHeclfq0NYELT3QEBDRlg32fvPbOzqqRjApd/AzA4ibZY4iV7xzIUE4de+3/ETYxbLEiSpQ2to=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZdIfakYe; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Sav+JHRC; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h7h0F2SA"
-Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-649605d3664so5668045d50.3
-        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 15:40:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770075605; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZMSBo6hR438xgsev7bK3Htp/lpgMhkj4RaXGHzyWFbRJVePiO8LMysOh3gzcy07OB4
-         nmSNxInfPki3wTKjEARDdPXW9QwATgMOWZtmHoil1RUrpkXC3iWR2r15aCliMUU2A7O9
-         rC5/3yYObZUe2vAjL8hDDGClCmz+uqjrBRhuzTcxY1Bc8rp11dB8lZ4Rm4ORS0VFaehs
-         YmMSOJRbVcJwhLObNguz0x8dBhCSur2l2SXdSq9jFE7Ytxqd2HoJwvibg4LyWE+VC14d
-         +/TDMw/HeikiMZfWHf+N1hhjRp76hm84nu8VXLqNQg8z5kX4OBpsacmFCTgSpdYZGC13
-         BqQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=4HH9dV4RRnbaqS1byKBaPP2XgnUxuW8qreK1Jv1zuQM=;
-        fh=YdDWaDljWJ5n0T9eCYK76ioNwJmtRLo9WZIZ41QkBks=;
-        b=VU/0dSzcXSw9dN6GlklgUmBok+YcCBH0KhoOEPypv3OFZf3tXrdQMm8NTmVuReJQYV
-         TCDLPxbQbx5pxuvfyM20Mze1hujRUJFARFp9LdN5ZcS0KFr0tW2300JmvKNwlqvNq/Me
-         lZiWa/MJObPcjnb9rnJajKJVzA7EbhvKAN/WAWl2VDpkAIuC1RMY5G/voiMmUfrTWs5s
-         SKS8MuXzfy3ycOejnlkWSKgFlyjUuGrjpt1E3v4Whmtd4d8ZHpMq8Ro9eteusTQihKv5
-         fC8V7Rpb2KjR7VrFu0crByZUSNok0WTq0kWY27o0zMQC/EnE5EIa23UgeCJiv2lzCvJv
-         /bJw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZdIfakYe";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sav+JHRC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770075918;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lvgXYLhzuo4m8CMvfirt/IQLU1LzuZOJSYGy1TV2tNQ=;
+	b=ZdIfakYexuILOEZUcezelP/V2cA+lU4TFNo69ir2XwGFXd5A2fgoVQeiTyFQfpUC817XLE
+	NDbD+M72POt2Uytqyxp3UT5HKWNKSYm6lnsEg4AZ/eg27u7gQQx/MInXJ01sJJWzq2TUsQ
+	UQURRr4ariFtm4UyFC0VtE9KncA1GKo=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-489-kJH5kbX9P6G0O-fBZPuqFg-1; Mon, 02 Feb 2026 18:45:17 -0500
+X-MC-Unique: kJH5kbX9P6G0O-fBZPuqFg-1
+X-Mimecast-MFC-AGG-ID: kJH5kbX9P6G0O-fBZPuqFg_1770075916
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-430fe16b481so3419888f8f.3
+        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 15:45:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770075605; x=1770680405; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4HH9dV4RRnbaqS1byKBaPP2XgnUxuW8qreK1Jv1zuQM=;
-        b=h7h0F2SAWC3KFQY2tCrVyMspUmWt9Df4McF9PZhELLjDx2XialR6IB19dqEfJv5c6u
-         3OzcnQZJgYw46SXQZUf0eh8ggUawRdZvwD04Naw1eEfk4Y0Pix4H/NgsyuQSocK5jcbc
-         AsM37eZZ+QPkd0iN94CjgdbKK44ian9+rdUok0gnWtBKmPBSG/kpDs94vAKgtneY7dmk
-         cGL3MA5GsKDk+YCq3Cd99rPzr9tQOiiZrlOzciZ9ovPX/7VlN+7KIwjK4nOetWiAY6f1
-         p95VIbgWPd5Sr1RhOnYgJ+na430yxnhCtlH2nOtS3Bht5eRM5qujEXOucWJB+a/M9PJS
-         paag==
+        d=redhat.com; s=google; t=1770075916; x=1770680716; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lvgXYLhzuo4m8CMvfirt/IQLU1LzuZOJSYGy1TV2tNQ=;
+        b=Sav+JHRCO5q+63GngS2OyNbGbAaN4LJ1tzTArNim6Ok5WrSMvHZtznQEJpVS2RerrB
+         jJC1eofDv3HC2Ukl4TqHeD5PvnPrTUaRgY4PiuSl2Xh6cQb/Ri1XBQC3J5Ft3lxjN0TQ
+         2tMPA4lzi8F1vXVHm6v67688yfcYdRCzya+ZOHHqRTUHVIVy97Nts/f0a6IkrXzZlRCM
+         55psjYrasx72o1irMyJcpYAOHMtTH72Bx/E9z4oZhCZ+aEFotmMXa7vUlnXRYchZc4V6
+         l9nhqkbGrXS4W/PNU+trBaiwYz8XezVqJSE5a0dBOxRfYyp+0jLTVMVbFJUldKIUNRRF
+         ilIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770075605; x=1770680405;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=4HH9dV4RRnbaqS1byKBaPP2XgnUxuW8qreK1Jv1zuQM=;
-        b=IA8JNhDBeXM2pLZyxwgEsodZHYuubGg4uJt0ue7+FqOC7/Dh86UOOe4NaRVw6/J016
-         OES1VHtIx+cCildf9ZK696YJ8ZVQC0vnoijYFKH0r+uVFSJwCbTY2Cnl8R1GHlXL5gT+
-         QOAz0dm2HeQSpyRy6bKHSSksVvTBvkC4WyUAlIjTrWfLssWp0CqahDD5olPo4qsO2kES
-         /+0D6+83iYsVqBHZO1ctcaKZ58g3aiZx1kyPe3i3d/h7Ohhecl9l3yNiVq+OikXJx1Z1
-         iMSWwQ0ruqiWv+71fH3DDcIo978pSXSKnTmzMDGwk5/fWss3mRjFyCkv3ZBRtxs+Upka
-         AYgw==
-X-Gm-Message-State: AOJu0YxG51kFrnsSPqEff2ITM3H8q0q2K14bauaVwZuicOe8+EzS4Bf7
-	I15nV9Y6W0JZnit+PS261wAB2gkVenlc6f27GMtJzJsB6V/Z8EaaLw4iLLSWslpU9zZk5KXZaPB
-	NcY67+ufXyy6uhlExj5ViFVfI2vf+yjI=
-X-Gm-Gg: AZuq6aJZIFT96YFPS22/vnCi7JyFM2PaGldEZyM/+6AZt/OW704hbtSY+UI/29ReJ49
-	k+OIaLsJKHXnQbFgID8FPu7fkmTvWC9Q9GVI9tvWMbOzMdSj5AOe1/AiMHa3Dcw3SGyG76pBVyy
-	0iQFRRvzMQCBm4S15WjF4rI101Geu2M6GgXfpPRUXyMi7qiAJ+bEwBsYb0iAP8lkHjgWSuiohtF
-	Ob//bIvfvVgZT2ZBO1mTKHrxKms63vJvK+fCzqpf/WgPC47/S/ZPeXXpUJ4aQNxvhgXoYA=
-X-Received: by 2002:a05:690e:1486:b0:649:36f4:afb7 with SMTP id
- 956f58d0204a3-649a84647f5mr11076549d50.29.1770075605146; Mon, 02 Feb 2026
- 15:40:05 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770075916; x=1770680716;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lvgXYLhzuo4m8CMvfirt/IQLU1LzuZOJSYGy1TV2tNQ=;
+        b=c98d9RZuuPm9NXEcgD4sQDeb/rW9TdFtMAOERnCN/A8iG3JkpX6KxRRLNE89o6FHDv
+         Wv1uOVCXDe2zA6FpEyFGDvA4qDEfxpkrY51tQuz1jgMKhOu1VdUAdsf5E1qIoQWhGJc2
+         VYnv9d6+SncbyZbOBvBfa85Pmu4+Kkpb3aK1MBfvsEoT745nnkA52UKy+u+uxLGy7a+s
+         sbs1Ha6MpPKisomP1rOOIh+JSjPnWuTIFZ839YQXk9J749iRr3X8R4oyMpR1e/n7L0xr
+         rtm5WZBhBRmmIVUzHWRKQJxWkC8cIgQ9qRgE4COYCcUN9pGdOtmRIfvHeLNWOePzvRCX
+         eLLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXFnYXIQldIo/HYrRRZPP/z+K6mtO1sL7KzMtpJAsvMWywheNSX5V5SKM7IGeCs7JBWBWY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAksS0U/F89CX32AFzih20TSLKDZq02iA05tLHmh4u8xfti1Xx
+	MKggwDszT165G9lFtidmD3WGfdxhPb9EfOQt6Th0mFcxvXZqXEMg+Az5N7Miaag/t3Ha9bG3wMr
+	najjHd4tF5Dx9yA+1CPKUNL3SHJP+6GN+Y6lyxp109ZCFiObZs15OeA==
+X-Gm-Gg: AZuq6aIMqGmoY5vFlwyo8hP3RmLk3q0U711274S3EWr0tbuDt2YhRI6hQ5/qsHbPhUT
+	tbZNPj7O+l6Y2GktumbaDTB4sZyLjYg+UI/hS9fV6+PAFonY64rmi7izNuWq4WIeoA54Q5nTbUM
+	Qav6PEiNB6WEXwRO+iJ+A5Z0q61PiGAGq8l6BhrTwtg+GsrXRjYD/I/iK+ZixsvHUPjnBtMTsSn
+	6LMdk4Zka1OItx+UR1k/WESb95WIbYknx29meoOKB6Erx17FBF/G+QKk6+BNJLOlH2orJsXjuyN
+	EGBwHVZ3K/pbbugviKyUjhYrF2JVm9MWHSPk1pZCUXsc/qE/XXTm9GDs0Tirl30mo8T9Zos6TmZ
+	fupREpHteqm/THozFIyVWRG3r0TDV6+9Y+Q==
+X-Received: by 2002:a05:6000:611:b0:435:e47b:e746 with SMTP id ffacd0b85a97d-435f3aaa5e7mr18354407f8f.36.1770075916010;
+        Mon, 02 Feb 2026 15:45:16 -0800 (PST)
+X-Received: by 2002:a05:6000:611:b0:435:e47b:e746 with SMTP id ffacd0b85a97d-435f3aaa5e7mr18354364f8f.36.1770075915366;
+        Mon, 02 Feb 2026 15:45:15 -0800 (PST)
+Received: from redhat.com (IGLD-80-230-34-155.inter.net.il. [80.230.34.155])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e10ee057sm52844751f8f.15.2026.02.02.15.45.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Feb 2026 15:45:14 -0800 (PST)
+Date: Mon, 2 Feb 2026 18:45:08 -0500
+From: "Michael S. Tsirkin" <mst@redhat.com>
+To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+Cc: "tariqt@nvidia.com" <tariqt@nvidia.com>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"shaojijie@huawei.com" <shaojijie@huawei.com>,
+	"shenjian15@huawei.com" <shenjian15@huawei.com>,
+	"salil.mehta@huawei.com" <salil.mehta@huawei.com>,
+	"mbloch@nvidia.com" <mbloch@nvidia.com>,
+	"saeedm@nvidia.com" <saeedm@nvidia.com>,
+	"leon@kernel.org" <leon@kernel.org>,
+	"eperezma@redhat.com" <eperezma@redhat.com>,
+	"brett.creeley@amd.com" <brett.creeley@amd.com>,
+	"jasowang@redhat.com" <jasowang@redhat.com>,
+	"virtualization@lists.linux.dev" <virtualization@lists.linux.dev>,
+	"xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"parav@nvidia.com" <parav@nvidia.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"horms@kernel.org" <horms@kernel.org>,
+	"dsahern@kernel.org" <dsahern@kernel.org>,
+	"kuniyu@google.com" <kuniyu@google.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"dave.taht@gmail.com" <dave.taht@gmail.com>,
+	"jhs@mojatatu.com" <jhs@mojatatu.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>,
+	"jiri@resnulli.us" <jiri@resnulli.us>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"donald.hunter@gmail.com" <donald.hunter@gmail.com>,
+	"ast@fiberby.net" <ast@fiberby.net>,
+	"liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"ij@kernel.org" <ij@kernel.org>,
+	"ncardwell@google.com" <ncardwell@google.com>,
+	"Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>,
+	"g.white@cablelabs.com" <g.white@cablelabs.com>,
+	"ingemar.s.johansson@ericsson.com" <ingemar.s.johansson@ericsson.com>,
+	"mirja.kuehlewind@ericsson.com" <mirja.kuehlewind@ericsson.com>,
+	"cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>,
+	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>,
+	"vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: Re: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag in
+ virtio_net_hdr
+Message-ID: <20260202184439-mutt-send-email-mst@kernel.org>
+References: <20260131225510.2946-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260131225510.2946-4-chia-yu.chang@nokia-bell-labs.com>
+ <20260201035912-mutt-send-email-mst@kernel.org>
+ <AM9PR07MB79696F945D8DBEF370CD4DC6A39AA@AM9PR07MB7969.eurprd07.prod.outlook.com>
+ <20260202121830-mutt-send-email-mst@kernel.org>
+ <PAXPR07MB7984B37862D3FBBE363AE5A8A39AA@PAXPR07MB7984.eurprd07.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202214817.2853236-1-ameryhung@gmail.com> <77f6c7cf5ed980f733fad13caf87baddedae6c1bbaa8e55db00a81828638dec3@mail.kernel.org>
-In-Reply-To: <77f6c7cf5ed980f733fad13caf87baddedae6c1bbaa8e55db00a81828638dec3@mail.kernel.org>
-From: Amery Hung <ameryhung@gmail.com>
-Date: Mon, 2 Feb 2026 15:39:54 -0800
-X-Gm-Features: AZwV_Qg5iGE7_oTNtKvKninvgG8pNqygpI5JosEyD2JMt1ubCtCeqspUbTTVL9k
-Message-ID: <CAMB2axNRZtGGgGxiEsNCi3Dz7PTDOi_B71RgzeWLJ_=RaQGpJQ@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v1 1/4] bpf: Fix and refactor object
- relationship tracking
-To: bot+bpf-ci@kernel.org
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com, 
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com, 
-	martin.lau@kernel.org, kernel-team@meta.com, ast@kernel.org, 
-	eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com, 
-	ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <PAXPR07MB7984B37862D3FBBE363AE5A8A39AA@PAXPR07MB7984.eurprd07.prod.outlook.com>
 
-On Mon, Feb 2, 2026 at 2:23=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 6b62b6d571..a357e03051 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
->
-> [ ... ]
->
-> > @@ -10481,22 +10464,43 @@ static int release_reference_nomark(...)
-> >  *
-> >  * This is the release function corresponding to acquire_reference(). I=
-dempotent.
-> >  */
-> > -static int release_reference(struct bpf_verifier_env *env, int ref_obj=
-_id)
-> > +static int release_reference(struct bpf_verifier_env *env, int ref_obj=
-_id, bool acquired_ref)
-> >  {
-> >       struct bpf_verifier_state *vstate =3D env->cur_state;
-> >       struct bpf_func_state *state;
-> >       struct bpf_reg_state *reg;
-> > -     int err;
-> > +     int err, spi;
-> >
-> > -     err =3D release_reference_nomark(vstate, ref_obj_id);
-> > -     if (err)
-> > -             return err;
-> > +     if (acquired_ref) {
-> > +             err =3D release_reference_nomark(vstate, ref_obj_id);
-> > +             if (err)
-> > +                     return err;
-> > +     }
-> >
-> >       bpf_for_each_reg_in_vstate(vstate, state, reg, ({
-> > -             if (reg->ref_obj_id =3D=3D ref_obj_id)
-> > +             if (reg->ref_obj_id =3D=3D ref_obj_id) {
-> >                       mark_reg_invalid(env, reg);
-> > +                     if (reg->id && reg->id !=3D ref_obj_id) {
-> > +                             err =3D release_reference(env, reg->id, f=
-alse);
-> > +                             if (err)
-> > +                                     return err;
-> > +                     }
-> > +             }
-> >       }));
-> >
-> > +     bpf_for_each_spilled_reg(spi, state, reg, (1 << STACK_DYNPTR)) {
-> > +             if (!reg || !reg->dynptr.first_slot)
-> > +                     continue;
-> > +             if (reg->ref_obj_id =3D=3D ref_obj_id) {
-> > +                     __unmark_stack_slots_dynptr(env, state, spi);
-> > +                     if (reg->id && reg->id !=3D ref_obj_id) {
-> > +                             err =3D release_reference(env, reg->id, f=
-alse);
-> > +                             if (err)
-> > +                                     return err;
-> > +                     }
-> > +             }
-> > +     }
->
-> Does this loop only scan dynptrs in the current frame?
->
-> The bpf_for_each_reg_in_vstate macro sets 'state' to each frame in sequen=
-ce:
->
->     for (___i =3D 0; ___i <=3D ___vstate->curframe; ___i++) {
->         __state =3D ___vstate->frame[___i];
->         ...
->     }
->
-> After the macro completes, 'state' holds the last assigned value, which i=
-s
-> vstate->frame[vstate->curframe] - only the top frame.
->
-> The subsequent bpf_for_each_spilled_reg loop uses this 'state' variable,
-> so it only scans STACK_DYNPTR slots in the top frame. Dynptrs residing in
-> caller frames (frames 0 through curframe-1) would not be found.
->
-> When a BPF program creates a dynptr in frame 0 and then calls a subprog
-> (frame 1) that releases the parent object, the dynptr in frame 0 would no=
-t
-> be invalidated. The selftest bpf_qdisc_fail__invalid_dynptr_cross_frame.c
-> appears to test this exact scenario.
->
-> Should the bpf_for_each_spilled_reg loop be wrapped in a loop over all
-> frames, similar to how bpf_for_each_reg_in_vstate_mask handles it?
+On Mon, Feb 02, 2026 at 09:09:28PM +0000, Chia-Yu Chang (Nokia) wrote:
+> > -----Original Message-----
+> > From: Michael S. Tsirkin <mst@redhat.com>=20
+> > Sent: Monday, February 2, 2026 6:20 PM
+> > To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
+> > Cc: tariqt@nvidia.com; linux-rdma@vger.kernel.org; shaojijie@huawei.com=
+; shenjian15@huawei.com; salil.mehta@huawei.com; mbloch@nvidia.com; saeedm@=
+nvidia.com; leon@kernel.org; eperezma@redhat.com; brett.creeley@amd.com; ja=
+sowang@redhat.com; virtualization@lists.linux.dev; xuanzhuo@linux.alibaba.c=
+om; pabeni@redhat.com; edumazet@google.com; parav@nvidia.com; linux-doc@vge=
+r.kernel.org; corbet@lwn.net; horms@kernel.org; dsahern@kernel.org; kuniyu@=
+google.com; bpf@vger.kernel.org; netdev@vger.kernel.org; dave.taht@gmail.co=
+m; jhs@mojatatu.com; kuba@kernel.org; stephen@networkplumber.org; xiyou.wan=
+gcong@gmail.com; jiri@resnulli.us; davem@davemloft.net; andrew+netdev@lunn.=
+ch; donald.hunter@gmail.com; ast@fiberby.net; liuhangbin@gmail.com; shuah@k=
+ernel.org; linux-kselftest@vger.kernel.org; ij@kernel.org; ncardwell@google=
+=2Ecom; Koen De Schepper (Nokia) <koen.de_schepper@nokia-bell-labs.com>; g.=
+white@cablelabs.com; ingemar.s.johansson@ericsson.com; mirja.kuehlewind@eri=
+csson.com; cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com;=
+ vidhi_goel@apple.com
+> > Subject: Re: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag in v=
+irtio_net_hdr
+> >=20
+> >=20
+> > CAUTION: This is an external email. Please be very careful when clickin=
+g links or opening attachments. See the URL nok.it/ext for additional infor=
+mation.
+> >=20
+> >=20
+> >=20
+> > On Mon, Feb 02, 2026 at 04:56:38PM +0000, Chia-Yu Chang (Nokia) wrote:
+> > > > -----Original Message-----
+> > > > From: Michael S. Tsirkin <mst@redhat.com>
+> > > > Sent: Sunday, February 1, 2026 10:18 AM
+> > > > To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
+> > > > Cc: tariqt@nvidia.com; linux-rdma@vger.kernel.org;=20
+> > > > shaojijie@huawei.com; shenjian15@huawei.com; salil.mehta@huawei.com=
+;=20
+> > > > mbloch@nvidia.com; saeedm@nvidia.com; leon@kernel.org;=20
+> > > > eperezma@redhat.com; brett.creeley@amd.com; jasowang@redhat.com;=20
+> > > > virtualization@lists.linux.dev; xuanzhuo@linux.alibaba.com;=20
+> > > > pabeni@redhat.com; edumazet@google.com; parav@nvidia.com;=20
+> > > > linux-doc@vger.kernel.org; corbet@lwn.net; horms@kernel.org;=20
+> > > > dsahern@kernel.org; kuniyu@google.com; bpf@vger.kernel.org;=20
+> > > > netdev@vger.kernel.org; dave.taht@gmail.com; jhs@mojatatu.com;=20
+> > > > kuba@kernel.org; stephen@networkplumber.org;=20
+> > > > xiyou.wangcong@gmail.com; jiri@resnulli.us; davem@davemloft.net;=20
+> > > > andrew+netdev@lunn.ch; donald.hunter@gmail.com; ast@fiberby.net;=20
+> > > > liuhangbin@gmail.com; shuah@kernel.org;=20
+> > > > linux-kselftest@vger.kernel.org; ij@kernel.org;=20
+> > > > ncardwell@google.com; Koen De Schepper (Nokia)=20
+> > > > <koen.de_schepper@nokia-bell-labs.com>; g.white@cablelabs.com;=20
+> > > > ingemar.s.johansson@ericsson.com; mirja.kuehlewind@ericsson.com;=20
+> > > > cheshire@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com;=20
+> > > > vidhi_goel@apple.com
+> > > > Subject: Re: [PATCH v1 net-next 3/3] virtio_net: Accurate ECN flag=
+=20
+> > > > in virtio_net_hdr
+> > > >
+> > > >
+> > > > CAUTION: This is an external email. Please be very careful when cli=
+cking links or opening attachments. See the URL nok.it/ext for additional i=
+nformation.
+> > > >
+> > > >
+> > > >
+> > > > Thanks for the patch! Yet something to improve:
+> > > >
+> > > > On Sat, Jan 31, 2026 at 11:55:10PM +0100, chia-yu.chang@nokia-bell-=
+labs.com wrote:
+> > > > > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> > > > >
+> > > > > Unlike RFC 3168 ECN, accurate ECN uses the CWR flag as part of th=
+e=20
+> > > > > ACE field to count new packets with CE mark; however, it will be=
+=20
+> > > > > corrupted by the RFC 3168 ECN-aware TSO. Therefore, fallback shal=
+l=20
+> > > > > be applied by seting NETIF_F_GSO_ACCECN to ensure that the CWR=20
+> > > > > flag should not be changed within a super-skb.
+> > > > >
+> > > > > To apply the aforementieond new AccECN GSO for virtio, new featue=
+=20
+> > > > > bits for host and guest are added for feature negotiation between=
+=20
+> > > > > driver and device. And the translation of Accurate ECN GSO flag=
+=20
+> > > > > between virtio_net_hdr and skb header for NETIF_F_GSO_ACCECN is=
+=20
+> > > > > also added to avoid CWR flag corruption due to RFC3168 ECN TSO.
+> > > > >
+> > > > > Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+> > > >
+> > > >
+> > > > To the best of my understanding, this is a new feature - support fo=
+r VIRTIO_NET_F_HOST_ACCECN, VIRTIO_NET_F_GUEST_ACCECN?
+> > > > The commit log makes it sound like it fixes some behaviour for exis=
+ting hardware, but that is not the case.
+> > > >
+> > >
+> > > Thansk for the feedback, I will update commit message in v3.
+> > > >
+> > > > > ---
+> > > > > v2:
+> > > > > - Replace VIRTIO_NET_HDR_GSO_ECN with VIRTIO_NET_HDR_GSO_ECN_FLAGS
+> > > >
+> > > > but where is v2? this is v1...
+> > >
+> > > I shall update this version as v2, will do at the next version.
+> > >
+> > > [...]
+> > > > > diff --git a/include/uapi/linux/virtio_net.h=20
+> > > > > b/include/uapi/linux/virtio_net.h index 1db45b01532b..af5bfe45aa1f
+> > > > > 100644
+> > > > > --- a/include/uapi/linux/virtio_net.h
+> > > > > +++ b/include/uapi/linux/virtio_net.h
+> > > > > @@ -56,6 +56,8 @@
+> > > > >  #define VIRTIO_NET_F_MQ      22      /* Device supports Receive =
+Flow
+> > > > >                                        * Steering */
+> > > > >  #define VIRTIO_NET_F_CTRL_MAC_ADDR 23        /* Set MAC address =
+*/
+> > > > > +#define VIRTIO_NET_F_HOST_ACCECN 25  /* Host can handle GSO of=
+=20
+> > > > > +AccECN */ #define VIRTIO_NET_F_GUEST_ACCECN 26 /* Guest can=20
+> > > > > +handle GSO of AccECN */
+> > > > >  #define VIRTIO_NET_F_DEVICE_STATS 50 /* Device can provide=20
+> > > > > device-level statistics. */  #define VIRTIO_NET_F_VQ_NOTF_COAL 52=
+ /* Device supports virtqueue notification coalescing */
+> > > > >  #define VIRTIO_NET_F_NOTF_COAL       53      /* Device supports =
+notifications coalescing */
+> > > > > @@ -165,6 +167,9 @@ struct virtio_net_hdr_v1 {  #define=20
+> > > > > VIRTIO_NET_HDR_GSO_UDP_TUNNEL (VIRTIO_NET_HDR_GSO_UDP_TUNNEL_IPV4=
+ | \
+> > > > >                                      VIRTIO_NET_HDR_GSO_UDP_TUNNE=
+L_IPV6)
+> > > > >  #define VIRTIO_NET_HDR_GSO_ECN               0x80    /* TCP has =
+ECN set */
+> > > > > +#define VIRTIO_NET_HDR_GSO_ACCECN    0x10    /* TCP AccECN segme=
+ntation */
+> > > > > +#define VIRTIO_NET_HDR_GSO_ECN_FLAGS (VIRTIO_NET_HDR_GSO_ECN | \
+> > > > > +                                      VIRTIO_NET_HDR_GSO_ACCECN)
+> > > > >       __u8 gso_type;
+> > > > >       __virtio16 hdr_len;     /* Ethernet + IP + tcp/udp hdrs */
+> > > > >       __virtio16 gso_size;    /* Bytes to append to hdr_len per f=
+rame */
+> > > >
+> > > >
+> > > > UAPI changes need to be added to the virtio spec.
+> > > > Pls get this approved by the virtio TC.
+> > > > Thanks!
+> > >
+> > > There were some discussions last October in virtio-comment@lists.linu=
+x.dev mailing list.
+> >=20
+> >=20
+> > That's it I could not find it. Could you include the archive link pls?
+>=20
+> The email thread I found is https://yhbt.net/lore/all/20250814120118.8178=
+7-1-chia-yu.chang@nokia-bell-labs.com/T/#m62dd5e559a68e8d3e5872e85d37c924f6=
+5fc7033
 
-AI is right, it should loop through all frames. The selftest fail to
-catch this because free_skb is inlined. Will fix the bug and add
-__noinline to free_skb().
+or
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/216081=
-54622
->
-> AI-authorship-score: low
-> AI-authorship-explanation: The commit demonstrates deep domain expertise =
-with detailed ASCII diagrams, uses standard kernel conventions, and the bug=
- is a typical human oversight from misunderstanding macro variable scoping.
-> issues-found: 1
-> issue-severity-score: medium
-> issue-severity-explanation: The dynptr invalidation loop only scans the t=
-op frame, potentially missing dynptrs in caller frames when parent objects =
-are released, which could lead to use-after-free in the BPF verifier.
+https://lore.kernel.org/all/20250814120118.81787-1-chia-yu.chang@nokia-bell=
+-labs.com/
+
+
+> There were discussions about updating the documents of SKB_GSO_TCP_ECN an=
+d SKB_GSO_TCP_ACCECN, and you can find it in the first patch of this series.
+
+document this in commit log and cover letter pls.
+
+> >=20
+> >=20
+> > > At that moment, it is suggested to make Linux kernel accept new comme=
+nts for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN first.
+> > > So, could virtio-spec colleague give your feedback? (Parav?).
+> > >
+> > > Otherwise, the CWR handling of virtio will be wrong after all Accurat=
+e ECN commits are merged in Linux.
+> > >
+> > > Chia-Yu
+> >=20
+> > if there's a general agreement we don't need to block linux on tc appro=
+val.
+> >=20
+> > --
+> > MST
+>=20
+> Shall I also submit patches to virtio-spec? Please suggest ways forwards.
+>=20
+> Thanks!
+>=20
+> Chia-Yu
+
