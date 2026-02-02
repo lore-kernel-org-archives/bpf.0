@@ -1,133 +1,109 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1C8239E88
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 03:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770002775; cv=none; b=NGXFSUfmCPDyswYCpw4ma82oRBYrRA/dsAZVUQ4gr64+ofJhxbUtbyI7dHSKQDUvYXTPHmHOdigsGRd4t5FVUtA4Wj4+xdMjQVSTSWoFk2Mp2cPYl5SUvcAffPdNUs6SVllvCoavKpKAY6jtKlo6Vs3B9ukfHquqxhAmR6wVPVY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770002775; c=relaxed/simple;
-	bh=ZJqj9ri7+QRS7FBfUr198f3zndQJRIxPcf6OjR7r2ew=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a0XxHIlAocQ3Hbtwoi52u2jjE4WlDNv/n7AxZJvJxzbWw9J5amXLk+JYo0a0pnaYIYqCC9Hcs4JHgBoCA+DeZX4o9lpjxobexq67EfVdeDmep+27ral9FcjtRBSXkpMQ2+WsdQOMTsj5kPjuBYKKr313+0T3brC1tX+XQcFY50Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=m/J6OKSh; arc=none smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AD2A199252
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 03:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770003832; cv=pass; b=YOu8iSsGolmj8NjA2UepbfiS9D5rHyB1q2rk83ebBTHayPvviq5k2CBvg9sYxwPVMqmhBp4kmUocxGgYhdHAZBKOJT8jdfOPntUurJvoEsWfLOyhfqxM1htDY2LxOI9zeIJWR8WZKu57MPJkupXdjTC7wBOAGRJBZBwics+GPv4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770003832; c=relaxed/simple;
+	bh=glS8uDVkDR7mMFxtneMOU3m8N1JVB5ecq3MvWCrL388=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uTnhXtAQgvlZAX8HT2p4cdokVQy/E7O9UQPv9/mSOeHzPX1ZJD8vzM1AAcJoQ8oyZHDGmOx0JqclhH9Udl9t8Qu+j14LLH27PUr9MrPGICejSWbaRLTudAuw+O1wMekoFiIi2Lr0QER2xZiQGxPnwL8Wriv3gKUDI3eajgCOF8s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AOdOP05/; arc=pass smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="m/J6OKSh"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b885e8c6727so767287966b.1
-        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 19:26:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AOdOP05/"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4806f3fc50bso40448455e9.0
+        for <bpf@vger.kernel.org>; Sun, 01 Feb 2026 19:43:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770003829; cv=none;
+        d=google.com; s=arc-20240605;
+        b=kMVCOi2Sahj/HoRNsC7AE6AHkJlQSdPx9IuVmpb0Un/3sc/2DHuVeiGLmK1T+teBUH
+         VqA87UpFR7sVv/pNbLq+4ifkoXbZ+ImK2q1uyFY+yXB/5XjTfTSVPdDHWQxkkorZAac7
+         erEGsu3CFd2NRjrbuDQIRZu2hq/5vd91qh3ANRSWTjzEepqCRl0sO89Sm+hAUjTBdQrE
+         KRgM9pG7NY+q878xkoTgzGOJTCRMOt5pF/f2EXDWP3Nog0Qc3PYvkYWk63RtSKsj2ZBI
+         wbX6DY7WbEwa9pp5hzd5zSZMplyAJnTEeshCZ0tn5bHvjfosZhMmihwIYGhlqqnDwTFq
+         jK1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=glS8uDVkDR7mMFxtneMOU3m8N1JVB5ecq3MvWCrL388=;
+        fh=RYIadHUR/6ewKj/JAAquLnNCVmQCllWc/SQeKfOGrgk=;
+        b=LF077wlA3dd/rgCIE7U2okQO1AuUhTYHpbhd2w4SsgEIfJLS2F4MGnpy3abRI9SFM1
+         4vS9w9GKQfrnQNY8DdpJa2l3o72Nkzq8OOwIFAT7Mg7gr8RLo4YgbjEgFjOn38JRUZjG
+         nqvU43ltDfR9xTWpbpCCLtiwzdpMwG7xSL2H8ZrBD8MfIUSSF6Vil9ELtCRMB5a2IdCZ
+         wFDzlz2eGA5AJ1gOe50N0wQAm3tlpVdKnlHaemyCMa6fH2yLcYGX3jVRPHPmCvSu3IDu
+         iaXh/N/lRvgBDKupNe1hUtGJ2gk85d9JTbmGyxKK2Md9hfxaiEkIf5B7fk0L7VRrj8wl
+         VfRg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770002772; x=1770607572; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8y1tSjszHwNi7K6C6xGA7ozYqT29UdTx9KR8G4VZTuc=;
-        b=m/J6OKShA3QjFN/CjRWFK2+WtOuc4WjnkuZXwFP+pZt/mCT7QiSownfTIZd5cCtj59
-         Slb6HDIjcOpo6RHuW+5BRpuUUvSOtGVwvQq0qbSXUk5n85IukSxzD94GPDX/Hj88GX3P
-         5+v7w+z9lpKGSqlKjUuPIxjeSu6UdMRQrcmuALSEsA5gUq+j49dvELzBD7VBh3y951/w
-         9DA8TlNBwhRDYzfxjSPFeikqY7pFoqnTwIHKuX/HwLt2UEDinqErci35UnzBRUBylUB9
-         nb46qMxjJfT7rV0rOWapsmnLNX6Sd2rZbALgV9fdveszEtI8ol5k6apib47uSrK/y1XL
-         AOzQ==
+        d=gmail.com; s=20230601; t=1770003829; x=1770608629; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=glS8uDVkDR7mMFxtneMOU3m8N1JVB5ecq3MvWCrL388=;
+        b=AOdOP05/iXIiI5/7JENFuml+yFU0qYmxJy3yi0+6h1nmmZZctERyVicAbKcBNXunu8
+         uQHkC2JwHpz4v+TTY2zletPfMrw4nwH2TuFQllEeb3jGwZ0xrxegH/JGYincI0poajcs
+         ZddUDEl6It7Sa8Ntt0ofWP1Iy8b1bhKQae0oTqNMyTb0ipmfl4aGWiu8NQRRHqM6EUou
+         Xt8PEhZdgAIXVCJS/2oWEDlBgOavw0pTZtvmNvzbZqVCpkzAMZBd4E8Rvvu0JFQBGEw5
+         PVQELctXU2rgUCAx8VPsw24Uwc7Kf1hBx/XL7EQ8ttpEKyKPo796hBB5eosMk4zAkIxB
+         WMLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770002772; x=1770607572;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8y1tSjszHwNi7K6C6xGA7ozYqT29UdTx9KR8G4VZTuc=;
-        b=HKcfNSJzNCezMbZtlkUaADYfXNFsYM5gxOWhQHjAcGCDf5nuAo1lUNunJ+MFL9mE8F
-         jZbwoR28QtwKeKf68e4y7ufxId0K1Gjf2gGCI5UvfMLqaQfxZdIRelr6+GAPfcAJVfwl
-         HOcRL8YpLadMotFslYpct8aISAbkfk8datcDFp9LArMK+Opw2y+zoN5w91SC107ZMmTj
-         kwzH62YscU/8TIlfBp8hh95ICck4i3PfcC2Ar1Y/2cNAfbKhx0F47z8RO50HRxn0Pd5D
-         pa5QoT9PY3MHRxgZ57pAyIiYq21719/IHu2YHcQuW3bUyGnp40d+KAKXarLMBJ/UvFPj
-         4oJg==
-X-Forwarded-Encrypted: i=1; AJvYcCUYV/hZAeIX/zc4UuzUSaFHBFiy6wI47Xuzgrk633BXaZjBCnbQxihhTEcPY8PFmFAzlb8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4c1ojTBGwEprNPcFeaJlbVNtADGjQn/c/GQ8T7yZNHfOEAGNK
-	ZO/JHNowAWyEZRCzIvu4kFyZN6zAndo+nTFv5nrJxSFCiYZ3ygsYmJuwPksrNoHe3Q==
-X-Gm-Gg: AZuq6aJuQL4j9YTx5nFhdWeqMM12bCp/pfcP04DRHknkUVWLA/HbiLkFGPDf+x8sBow
-	AovKumC60HrGClJk8P8GphbJKQRNRzxk4HKRoUJQE3iDHRIaYBLkx4mNviLnzvJ9LQOBP8/BxqE
-	SXTzAEgPuD4g5Mn5dBPB2yLSIQ8yWJdHiCVFlNBQaYCOkfXNlkrDW3yhPoMVV9ClkDnitskA/n+
-	G/xRcVoRxeywJXS+A/kf9wDAjtaytPKOLTLVdAmbCIEffM11wUOnKvdURywhVxBVfm+eNMc9Hnd
-	sCRZMPRbBijC+M6ajYpwcvzgasdeA9hHwYjG/KzXyk/2o8mnbMs7O1r0VGvRhD5EEId/xnGWarC
-	d1duy1sOPpppGlKg1EuwU4JoXpnmPGVHm7ko1hmj4+76//MQM2T9ueQa8k8NItvdD4B3PiDbgio
-	b/i1ae9MvHEJJjeK3/XG/0G4ZYqey9qkFFdbiaXQsYfY+O+dCN/a4=
-X-Received: by 2002:a17:906:f049:b0:b87:6839:6175 with SMTP id a640c23a62f3a-b8ddf84586fmr869883966b.10.1770002771786;
-        Sun, 01 Feb 2026 19:26:11 -0800 (PST)
-Received: from google.com (93.50.90.34.bc.googleusercontent.com. [34.90.50.93])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-658b46abb3esm7161539a12.32.2026.02.01.19.26.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Feb 2026 19:26:10 -0800 (PST)
-Date: Mon, 2 Feb 2026 03:26:07 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Michal Hocko <mhocko@suse.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Andrew Morton <akpm@linux-foundation.org>, joshdon@google.com
-Subject: Re: [PATCH bpf-next v3 00/17] mm: BPF OOM
-Message-ID: <aYAZT-ZZSKdiChfd@google.com>
-References: <20260127024421.494929-1-roman.gushchin@linux.dev>
- <aXh_LpTzDhvv20uB@tiehlicka>
- <7ia44io6kbwj.fsf@castle.c.googlers.com>
- <aXnDdkYmtipGwSjK@tiehlicka>
- <CAADnVQ+ghTc5FtJCjm4ya3y3xVpSuJe-7ctdT-thowqWguc1pA@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1770003829; x=1770608629;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=glS8uDVkDR7mMFxtneMOU3m8N1JVB5ecq3MvWCrL388=;
+        b=WpgM9Hdgv+jZ/rgKIfCEkDsApgvZVrWfK2H0lyXmXLbeh7cUVI+SNvhMeOJI+N0d2r
+         HWjLn2IOhnZfykwnK74gViF/jjrhOfSsc5iqs+Tm2qVmbkeg6TRMaMnx82PGcF5VNdT1
+         Ko+UnQ+lCv6IN+Tk/itxtqp9swR7deCfWvWM82ZSnIYypRCUcaVPIEQBBxxlE5NgrVKZ
+         1RnRbdQK1iBcO1cVBpCUCvx8bhjKhcMssLZqXIKhIr2RV/eJFy7CMtrfphUg1NesEe2G
+         bmlhBTvcMihk8xG+uFe8B/0hSRmZESeYktIRuCu6tvAwyJtA41Byfya/rX6nJx9F7MKI
+         cLag==
+X-Gm-Message-State: AOJu0YympjdJZER55wJq1afMeBW8Z5K+oqRbRcJYFNYSPrcglzBIVQDN
+	UxCCR4z9N6Fn9tDLRWBivv5ezLCeGiVXNVixj3CC47FCaKxJ2QLbCfdStNc0kqOIxLNZInqzuoM
+	/kqCrd6QnyqX9kMGETU1DC6z/N4sarQA=
+X-Gm-Gg: AZuq6aIijQyyQgJMt+8wnmcxbv2p9anQII8QMVVEDTYZFWDVTUWgqd0NRclCKbL4i6t
+	PZfF7HLo/uMU2RGuOLbX/OjQ6+9NpQ7AheYj4MxoPqaUGVuNqEZDkMGAe4N8uJBiX1lGZdVEZZD
+	zvBzijaGPYfjHRavuMoGee1Al2ySJqmAsBblGrOuXYUBCw9i8TO2JLBa7W+Z4qJaZOhWWb5vmRC
+	rH2XLqG5tLVVLMSEQehQTSydSE6UavsRh4VWPSFknbv/1LE3VgXvZQXQkdOBCb7vx4sUSMo6eoA
+	6vo7po79ZM1JAerWsY924fIODb7i0MLOUsLjZVJQdC4OWPrCWWJx5Li5rhrl1AsmdiUd2qST+Z4
+	jYEmlvni4aaAHjg==
+X-Received: by 2002:a05:6000:1885:b0:431:4c6:724d with SMTP id
+ ffacd0b85a97d-435f3aaa77cmr16571275f8f.29.1770003829130; Sun, 01 Feb 2026
+ 19:43:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQ+ghTc5FtJCjm4ya3y3xVpSuJe-7ctdT-thowqWguc1pA@mail.gmail.com>
+References: <165da891.6e03d.19c1c554d72.Coremail.kaiyanm@hust.edu.cn>
+In-Reply-To: <165da891.6e03d.19c1c554d72.Coremail.kaiyanm@hust.edu.cn>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 1 Feb 2026 19:43:38 -0800
+X-Gm-Features: AZwV_QgWHQqtWyM9D96-f0vEkE0tahhOzZpEQix0M5NB_Y48csRRtzIIxj0oFjw
+Message-ID: <CAADnVQJVi+K1gx8PgWQtmtcphwgwHqT3mk2_TGuTiyu9kv=6Mw@mail.gmail.com>
+Subject: Re: INFO: rcu detected stall in prog_array_map_clear_deferred
+To: =?UTF-8?B?5qKF5byA5b2m?= <kaiyanm@hust.edu.cn>
+Cc: bpf <bpf@vger.kernel.org>, Yinhao Hu <dddddd@hust.edu.cn>, 
+	Dongliang Mu <dzm91@hust.edu.cn>, hust-os-kernel-patches@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 28, 2026 at 08:59:34AM -0800, Alexei Starovoitov wrote:
-> On Wed, Jan 28, 2026 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> >
-> > > Another viable idea (also suggested by Andrew Morton) is to develop
-> > > a production ready memcg-aware OOM killer in BPF, put the source code
-> > > into the kernel tree and make it loadable by default (obviously under a
-> > > config option). Myself or one of my colleagues will try to explore it a
-> > > bit later: the tricky part is this by-default loading because there are
-> > > no existing precedents.
-> >
-> > It certainly makes sense to have trusted implementation of a commonly
-> > requested oom policy that we couldn't implement due to specific nature
-> > that doesn't really apply to many users. And have that in the tree. I am
-> > not thrilled about auto-loading because this could be easily done by a
-> > simple tooling.
-> 
-> Production ready bpf-oom program(s) must be part of this set.
-> We've seen enough attempts to add bpf st_ops in various parts of
-> the kernel without providing realistic bpf progs that will drive
-> those hooks. It's great to have flexibility and people need
-> to have a freedom to develop their own bpf-oom policy, but
-> the author of the patch set who's advocating for the new
-> bpf hooks must provide their real production progs and
-> share their real use case with the community.
-> It's not cool to hide it.
-> In that sense enabling auto-loading without requiring an end user
-> to install the toolchain and build bpf programs/rust/whatnot
-> is necessary too.
-> bpf-oom can be a self contained part of vmlinux binary.
-> We already have a mechanism to do that.
-> This way the end user doesn't need to be a bpf expert, doesn't need
-> to install clang, build the tools, etc.
-> They can just enable fancy new bpf-oom policy and see whether
-> it's helping their apps or not while knowing nothing about bpf.
+On Sun, Feb 1, 2026 at 7:13=E2=80=AFPM =E6=A2=85=E5=BC=80=E5=BD=A6 <kaiyanm=
+@hust.edu.cn> wrote:
+>
+> Our fuzzer discovered a task hung vulnerability in the BPF subsystem. The=
+ crash can be trigger on bpf-next(39e9d5f63075f4d54e3b59b8238478c32af92755)=
+.
 
-For the auto-loading capability you speak of here, I'm currently
-interpreting it as being some form of conceptually similar extension
-to the BPF preload functionality. Have I understood this correctly? If
-so, I feel as though something like this would be a completely
-independent stream of work, orthogonal to this BPF OOM feature, right?
-Or, is that you'd like this new auto-loading capability completed as a
-hard prerequisite before pulling in the BPF OOM feature?
+...
+
+> CPU: 0 UID: 0 PID: 9930 Comm: sshd Not tainted 6.17.0-g39e9d5f63075 #1 PR=
+EEMPT(full)
+
+Same bogus report. Not worth anyone's time.
