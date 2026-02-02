@@ -1,50 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E40435971B
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 10:45:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABFF3612E1
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 11:15:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770029107; cv=none; b=FYadPCGbUucc5rVPNjwgVDuqNiur/vinZN8v+QNgSoo9hWBrIe9KZVPvUx5ziri+GOJlZZz1xj3jfkSYHfU/fztd7J1UIybDj5Dgg9IZ4hcfXJv41u4NWoMxQNLpKsAuEGO9g+LVc+lBt9s5j6dnE73rAF8fx1gbPgdE00zWOfY=
+	t=1770030961; cv=none; b=DwzNjaKLAwcWJdPBTfA+CRZgjpkWLTbAe8xtuDEBuC3kX1xc9nEFjKRqi4xM+ozvc7ifXx9SqEFRRkTQX+U/ANOYU7dFlMUbyk/kyBL0dPZxmHYkvU4IikdSqANlEf8hf+OrriZBuVdjr3wKR63CrDTBPWcL4f5tK9AV5QH+SxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770029107; c=relaxed/simple;
-	bh=Hm1IVE+G6iXo/jEq3/yAFEJAstywpn2z+Tb9Wg41c3Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jSdvRJsDQJCarxXNgsQNXUzn1PNLAAwy/vOnKiE0w/NLQbe2kWpQaoegO5fBaxNC33h15/PRgvkP/CIim7i9CctlCAtC20yyf6AW1w5ZGLt9XF9VbLTI0vZniwXHD710kHiAMSqbT7g6yWTSYe7Qrn445IgLtbgzICGEO2kOHec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLeoO1du; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770030961; c=relaxed/simple;
+	bh=22sFyTT7zKstT7raUlAMlhW/K0ywNMaYuC46nWw/mUA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=fYbaVLG+rwtUaKJhW9AlxKm5CLclYS7FXfs5JKEUgj36IXvgU+CGyOmjfetD3l05dz5lvWozRkMxAgkOlVZF3k33ZRNmkhbZqW4AK0UL5ekq9NvPcGpdIIBcEd8pRSqmx8kDoR1mJAfaCsumZyKFIVSNLSyooB6C+IzWJUr4jkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X26ME4wX; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLeoO1du"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB3FAC116C6;
-	Mon,  2 Feb 2026 10:45:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770029107;
-	bh=Hm1IVE+G6iXo/jEq3/yAFEJAstywpn2z+Tb9Wg41c3Q=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fLeoO1duGCV9FX7tOP0c7luywYqpx/GMKity0dz1x17X3+FkfGz5zEliW59dhXC1M
-	 EWcVx6TGRqWJi1Xt6d4ObzfloARS0QTZEPWG8A/Wvgfz+lQm8HKZUD7SuZ32spW6Yg
-	 mC1cDaiRolMVodoigZuUHiKeHGLQbwNCCJa6ah8m9dpw8KQk445wF1iv6iL77P6iC0
-	 2deJbTa5VwESd1eeK0kSSH5zOz7zyAj6UTVxGPoVjKKAV/h2WghXSSPPUCeZq26g2W
-	 WQ6km9ulTlHg7xP2ZS56jhV++Xu4SRHxQ18YDE2Yn0QjwLfITKob/Jhjul/BfL1dZs
-	 o28G9qxAeO9tA==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X26ME4wX"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-352e2c59264so2791841a91.0
+        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 03:15:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770030959; x=1770635759; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1rbEpDPZnhCwf5iyaGOMt7RKstu0/YR3aU3fxdzXw9A=;
+        b=X26ME4wX9bABpLUXqhgJgWCb6UopKSOlQNQrDk1SdJ9uoRhBMJ+YPOdLIeePmusmf/
+         z5Ye5ghmajhbLxIXqK3EBBkjx/hRl4ICefXkbPlufhhgTHg8QAFtvGEpAsB6zzk5iOJN
+         TJ45PmJ/0u4vPqsIkpyPJ/FhRoBQ5h2d65kl8sY17nzzr25+pxu/rE1+ejoC2lNK6KOd
+         qQY9NiELmX/2Y9wdVJ0j76lSSSGCliS8w/dSKVgEY447sUdmlMitFgP4r09EAvHVrXz9
+         eveLgqMdFp2WU9J0dbKBRmSXvdTn0Ac7xmOZXzPizxbAcA0FnoNbp5zgFPaN+ZkoObHn
+         O0HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770030959; x=1770635759;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=1rbEpDPZnhCwf5iyaGOMt7RKstu0/YR3aU3fxdzXw9A=;
+        b=FY3wAZjYM2DPAJtDNn4m8Lk3sA5W8PUMLHEMjL58z8h37jU5x9VWQJeWThUhRWK8Dl
+         /F/aNPmOKthGeiBfxN3/keHZbx/kg/cNcf5yXfwRAws++mCZ1zen+wwm73w05igbbban
+         7nhh5N/71fa8sPwnF6RWw3sgvdUwwqMRKZ1fA2uwUjj14SDborMU2D9wBdYfEhXzs5D6
+         UCUTmvh8VrZQgBBd8SMxrR3IhD15y8r/xeMnhWIvNpkKRvWNV8wSIIl+vH2iWL4b2ZBq
+         EnA54XD1F4cA2Ej0Xye7CgZI/EHIlf3p+YWub/v4cc5MhlPrrIvuXvhwofa+EkSgsTFQ
+         ZIsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWK3bWQeldm2MhqYraJDKcHkIHebGSVFhhPVi4xVkP52e1tArSap6F11kXB14VnMLnn8mE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvgDFruhag2uc+NQQMHNggDILDd63fOLDtz6OQYG/DrTePgsjv
+	iCEqjO7YwgsG6CI5MiM9F8nUPjeXDgAgm683SA6O+0jG1d2x+L/6Vyaw
+X-Gm-Gg: AZuq6aIfUcPvxyfKV2hchqzdaGz17X8pDgekg5BmxGRrIx0q7WHz1o4ec4+k6oN/s9b
+	lSDeQVnz2UlR3RrQwlmeHzw0Mcjsm3j2uuxScgq6A5eFlsrfdqgt4nXMOvtTN2ni0Z2Fhi5J6sZ
+	hLQnz6zhLSXPR91MmWAlfAmiINVUbpCW80esQcU3io3eV3XPr6Wm4JvQaSi7ph1Zm0iQJ8uNZax
+	S3aFAhznO8TKg+Tb9b3E1zJ0RH09pPxv6SWyZx4mnawMOkSM4uOgBz21HkEQ9DuP908CePI2fd/
+	oDqCLimiGw7uy3N1kEowxIl1B73ftQEZ6SDHvEqNoOTXyIp0zLIUmupzCJ3/U9KYfJ1reuZjuyo
+	aT1TD1bZxfzbnC3UaIdM0qOO6dP2LxOWKG+riJWjznDvAtep6hLgm5kJlXcOkvDTOEUXMxBpT9I
+	wlNYLVJAQT/bv9QVPMcXUFPxcYPoWX+q4u2VvYmg==
+X-Received: by 2002:a17:90b:56c3:b0:349:9d63:8511 with SMTP id 98e67ed59e1d1-3543b3a54c9mr10469703a91.25.1770030959281;
+        Mon, 02 Feb 2026 03:15:59 -0800 (PST)
+Received: from pengdl-pc.mioffice.cn ([43.224.245.249])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3540f3ed0dasm14474680a91.14.2026.02.02.03.15.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Feb 2026 03:15:58 -0800 (PST)
+From: Donglin Peng <dolinux.peng@gmail.com>
+To: rostedt@goodmis.org,
+	ast@kernel.org
+Cc: mhiramat@kernel.org,
+	andrii.nakryiko@gmail.com,
+	linux-kernel@vger.kernel.org,
+	Donglin Peng <pengdonglin@xiaomi.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	kernel-team@meta.com,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH bpf-next 4/4] bpf: verifier: Relax scalar id equivalence for state pruning
-Date: Mon,  2 Feb 2026 02:44:06 -0800
-Message-ID: <20260202104414.3103323-5-puranjay@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260202104414.3103323-1-puranjay@kernel.org>
-References: <20260202104414.3103323-1-puranjay@kernel.org>
+	bpf@vger.kernel.org
+Subject: [PATCH 1/2] btf: Add for_each_enum and for_each_enum64 helper macros
+Date: Mon,  2 Feb 2026 19:15:47 +0800
+Message-Id: <20260202111548.3555306-2-dolinux.peng@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260202111548.3555306-1-dolinux.peng@gmail.com>
+References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -53,154 +82,228 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Scalar register IDs are used by the verifier to track relationships
-between registers and enable bounds propagation across those
-relationships. Once an ID becomes singular (i.e. only a single
-register/stack slot carries it), it can no longer contribute to bounds
-propagation and effectively becomes stale. The previous commit makes the
-verifier clear such ids before caching the state.
+From: Donglin Peng <pengdonglin@xiaomi.com>
 
-When comparing the current and cached states for pruning, these stale
-IDs can cause technically equivalent states to be considered different
-and thus prevent pruning.
+Introduce two new helper macros, for_each_enum and for_each_enum64,
+to clean up code.
 
-Relax scalar ID equivalence by treating rold->id == 0 as "independent":
-if the old state did not rely on any ID relationships for a register,
-then any ID/linking present in the current state only adds constraints
-and is always safe to accept for pruning. Implement this by returning
-true immediately in check_scalar_ids() when old_id == 0.
+No functional changes.
 
-Maintain correctness for the opposite direction (old_id != 0 && cur_id
-== 0) by still allocating a temporary ID for cur_id == 0. This avoids
-incorrectly allowing multiple independent current registers (id==0) to
-satisfy a single linked old ID during mapping.
-
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org
+Signed-off-by: Donglin Peng <pengdonglin@xiaomi.com>
 ---
- kernel/bpf/verifier.c                         | 63 +++++++++++++++----
- .../selftests/bpf/progs/verifier_scalar_ids.c |  8 ++-
- 2 files changed, 56 insertions(+), 15 deletions(-)
+ include/linux/btf.h | 10 +++++++
+ kernel/bpf/btf.c    | 66 +++++++++++++++++++--------------------------
+ 2 files changed, 38 insertions(+), 38 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 9c14dbe7c10d..65c499867566 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19387,13 +19387,29 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
- 	return false;
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index f06976ffb63f..cde2deb8e25e 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -254,6 +254,16 @@ const char *btf_type_str(const struct btf_type *t);
+ 	     i < btf_type_vlen(datasec_type);			\
+ 	     i++, member++)
+ 
++#define for_each_enum(i, enum_type, member)			\
++	for (i = 0, member = btf_enum(enum_type);		\
++	     i < btf_type_vlen(enum_type);			\
++	     i++, member++)
++
++#define for_each_enum64(i, enum_type, member)			\
++	for (i = 0, member = btf_enum64(enum_type);		\
++	     i < btf_type_vlen(enum_type);			\
++	     i++, member++)
++
+ static inline bool btf_type_is_ptr(const struct btf_type *t)
+ {
+ 	return BTF_INFO_KIND(t->info) == BTF_KIND_PTR;
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 0de8fc8a0e0b..c80a7a0cbe1d 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -728,11 +728,6 @@ static const struct btf_array *btf_type_array(const struct btf_type *t)
+ 	return (const struct btf_array *)(t + 1);
  }
  
--/* Similar to check_ids(), but allocate a unique temporary ID
-- * for 'old_id' or 'cur_id' of zero.
-- * This makes pairs like '0 vs unique ID', 'unique ID vs 0' valid.
-+/*
-+ * Compare scalar register IDs for state equivalence.
-+ *
-+ * When old_id == 0, the old register is independent - not linked to any
-+ * other register. Any linking in the current state only adds constraints,
-+ * making it more restrictive. Since the old state didn't rely on any ID
-+ * relationships for this register, it's always safe to accept cur regardless
-+ * of its ID. Hence, return true immediately.
-+ *
-+ * When old_id != 0 but cur_id == 0, we need to ensure that different
-+ * independent registers in cur don't incorrectly satisfy the ID matching
-+ * requirements of linked registers in old.
-+ *
-+ * Example: if old has r6.id=X and r7.id=X (linked), but cur has r6.id=0
-+ * and r7.id=0 (both independent), without temp IDs both would map old_id=X
-+ * to cur_id=0 and pass. With temp IDs: r6 maps X->temp1, r7 tries to map
-+ * X->temp2, but X is already mapped to temp1, so the check fails correctly.
-  */
- static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+-static const struct btf_enum *btf_type_enum(const struct btf_type *t)
+-{
+-	return (const struct btf_enum *)(t + 1);
+-}
+-
+ static const struct btf_var *btf_type_var(const struct btf_type *t)
  {
--	old_id = old_id ? old_id : ++idmap->tmp_id_gen;
-+	if (!old_id)
-+		return true;
-+
- 	cur_id = cur_id ? cur_id : ++idmap->tmp_id_gen;
+ 	return (const struct btf_var *)(t + 1);
+@@ -743,11 +738,6 @@ static const struct btf_decl_tag *btf_type_decl_tag(const struct btf_type *t)
+ 	return (const struct btf_decl_tag *)(t + 1);
+ }
  
- 	return check_ids(old_id, cur_id, idmap);
-@@ -19624,11 +19640,21 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		}
- 		if (!rold->precise && exact == NOT_EXACT)
- 			return true;
--		if ((rold->id & BPF_ADD_CONST) != (rcur->id & BPF_ADD_CONST))
--			return false;
--		if ((rold->id & BPF_ADD_CONST) && (rold->off != rcur->off))
--			return false;
--		/* Why check_ids() for scalar registers?
-+		/*
-+		 * Linked register tracking uses rold->id to detect relationships.
-+		 * When rold->id == 0, the register is independent and any linking
-+		 * in rcur only adds constraints. When rold->id != 0, we must verify
-+		 * id mapping and (for BPF_ADD_CONST) offset consistency.
-+		 *
-+		 * +------------------+-----------+------------------+---------------+
-+		 * |                  | rold->id  | rold + ADD_CONST | rold->id == 0 |
-+		 * |------------------+-----------+------------------+---------------|
-+		 * | rcur->id         | range,ids | false            | range         |
-+		 * | rcur + ADD_CONST | false     | range,ids,off    | range         |
-+		 * | rcur->id == 0    | range,ids | false            | range         |
-+		 * +------------------+-----------+------------------+---------------+
-+		 *
-+		 * Why check_ids() for scalar registers?
- 		 *
- 		 * Consider the following BPF code:
- 		 *   1: r6 = ... unbound scalar, ID=a ...
-@@ -19652,9 +19678,22 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 		 * ---
- 		 * Also verify that new value satisfies old value range knowledge.
- 		 */
--		return range_within(rold, rcur) &&
--		       tnum_in(rold->var_off, rcur->var_off) &&
--		       check_scalar_ids(rold->id, rcur->id, idmap);
-+
-+		/* ADD_CONST mismatch: different linking semantics */
-+		if ((rold->id & BPF_ADD_CONST) && !(rcur->id & BPF_ADD_CONST))
-+			return false;
-+
-+		if (rold->id && !(rold->id & BPF_ADD_CONST) && (rcur->id & BPF_ADD_CONST))
-+			return false;
-+
-+		/* Both have offset linkage: offsets must match */
-+		if ((rold->id & BPF_ADD_CONST) && rold->off != rcur->off)
-+			return false;
-+
-+		if (!check_scalar_ids(rold->id, rcur->id, idmap))
-+			return false;
-+
-+		return range_within(rold, rcur) && tnum_in(rold->var_off, rcur->var_off);
- 	case PTR_TO_MAP_KEY:
- 	case PTR_TO_MAP_VALUE:
- 	case PTR_TO_MEM:
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-index c0ce690ddb68..c8f8820336b7 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-@@ -723,9 +723,9 @@ __success __log_level(2)
- /* The exit instruction should be reachable from two states,
-  * use two matches and "processed .. insns" to ensure this.
-  */
--__msg("13: (95) exit")
--__msg("13: (95) exit")
--__msg("processed 18 insns")
-+__msg("15: (95) exit")
-+__msg("15: (95) exit")
-+__msg("processed 20 insns")
- __flag(BPF_F_TEST_STATE_FREQ)
- __naked void two_old_ids_one_cur_id(void)
+-static const struct btf_enum64 *btf_type_enum64(const struct btf_type *t)
+-{
+-	return (const struct btf_enum64 *)(t + 1);
+-}
+-
+ static const struct btf_kind_operations *btf_type_ops(const struct btf_type *t)
  {
-@@ -734,9 +734,11 @@ __naked void two_old_ids_one_cur_id(void)
- 	"call %[bpf_ktime_get_ns];"
- 	"r0 &= 0xff;"
- 	"r6 = r0;"
-+	"r8 = r0;"
- 	"call %[bpf_ktime_get_ns];"
- 	"r0 &= 0xff;"
- 	"r7 = r0;"
-+	"r9 = r0;"
- 	"r0 = 0;"
- 	/* Maybe make r{6,7} IDs identical */
- 	"if r6 > r7 goto l0_%=;"
+ 	return kind_ops[BTF_INFO_KIND(t->info)];
+@@ -4317,14 +4307,14 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
+ 			       const struct btf_type *t,
+ 			       u32 meta_left)
+ {
+-	const struct btf_enum *enums = btf_type_enum(t);
++	const struct btf_enum *enump;
+ 	struct btf *btf = env->btf;
+ 	const char *fmt_str;
+ 	u16 i, nr_enums;
+ 	u32 meta_needed;
+ 
+ 	nr_enums = btf_type_vlen(t);
+-	meta_needed = nr_enums * sizeof(*enums);
++	meta_needed = nr_enums * sizeof(*enump);
+ 
+ 	if (meta_left < meta_needed) {
+ 		btf_verifier_log_basic(env, t,
+@@ -4347,16 +4337,16 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
+ 
+ 	btf_verifier_log_type(env, t, NULL);
+ 
+-	for (i = 0; i < nr_enums; i++) {
+-		if (!btf_name_offset_valid(btf, enums[i].name_off)) {
++	for_each_enum(i, t, enump) {
++		if (!btf_name_offset_valid(btf, enump->name_off)) {
+ 			btf_verifier_log(env, "\tInvalid name_offset:%u",
+-					 enums[i].name_off);
++					 enump->name_off);
+ 			return -EINVAL;
+ 		}
+ 
+ 		/* enum member must have a valid name */
+-		if (!enums[i].name_off ||
+-		    !btf_name_valid_identifier(btf, enums[i].name_off)) {
++		if (!enump->name_off ||
++		    !btf_name_valid_identifier(btf, enump->name_off)) {
+ 			btf_verifier_log_type(env, t, "Invalid name");
+ 			return -EINVAL;
+ 		}
+@@ -4365,8 +4355,8 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
+ 			continue;
+ 		fmt_str = btf_type_kflag(t) ? "\t%s val=%d\n" : "\t%s val=%u\n";
+ 		btf_verifier_log(env, fmt_str,
+-				 __btf_name_by_offset(btf, enums[i].name_off),
+-				 enums[i].val);
++				 __btf_name_by_offset(btf, enump->name_off),
++				 enump->val);
+ 	}
+ 
+ 	return meta_needed;
+@@ -4382,8 +4372,8 @@ static void btf_enum_show(const struct btf *btf, const struct btf_type *t,
+ 			  u32 type_id, void *data, u8 bits_offset,
+ 			  struct btf_show *show)
+ {
+-	const struct btf_enum *enums = btf_type_enum(t);
+-	u32 i, nr_enums = btf_type_vlen(t);
++	const struct btf_enum *enump;
++	u32 i;
+ 	void *safe_data;
+ 	int v;
+ 
+@@ -4393,13 +4383,13 @@ static void btf_enum_show(const struct btf *btf, const struct btf_type *t,
+ 
+ 	v = *(int *)safe_data;
+ 
+-	for (i = 0; i < nr_enums; i++) {
+-		if (v != enums[i].val)
++	for_each_enum(i, t, enump) {
++		if (v != enump->val)
+ 			continue;
+ 
+ 		btf_show_type_value(show, "%s",
+ 				    __btf_name_by_offset(btf,
+-							 enums[i].name_off));
++							 enump->name_off));
+ 
+ 		btf_show_end_type(show);
+ 		return;
+@@ -4425,14 +4415,14 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
+ 				 const struct btf_type *t,
+ 				 u32 meta_left)
+ {
+-	const struct btf_enum64 *enums = btf_type_enum64(t);
++	const struct btf_enum64 *enump;
+ 	struct btf *btf = env->btf;
+ 	const char *fmt_str;
+ 	u16 i, nr_enums;
+ 	u32 meta_needed;
+ 
+ 	nr_enums = btf_type_vlen(t);
+-	meta_needed = nr_enums * sizeof(*enums);
++	meta_needed = nr_enums * sizeof(*enump);
+ 
+ 	if (meta_left < meta_needed) {
+ 		btf_verifier_log_basic(env, t,
+@@ -4455,16 +4445,16 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
+ 
+ 	btf_verifier_log_type(env, t, NULL);
+ 
+-	for (i = 0; i < nr_enums; i++) {
+-		if (!btf_name_offset_valid(btf, enums[i].name_off)) {
++	for_each_enum64(i, t, enump) {
++		if (!btf_name_offset_valid(btf, enump->name_off)) {
+ 			btf_verifier_log(env, "\tInvalid name_offset:%u",
+-					 enums[i].name_off);
++					 enump->name_off);
+ 			return -EINVAL;
+ 		}
+ 
+ 		/* enum member must have a valid name */
+-		if (!enums[i].name_off ||
+-		    !btf_name_valid_identifier(btf, enums[i].name_off)) {
++		if (!enump->name_off ||
++		    !btf_name_valid_identifier(btf, enump->name_off)) {
+ 			btf_verifier_log_type(env, t, "Invalid name");
+ 			return -EINVAL;
+ 		}
+@@ -4474,8 +4464,8 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
+ 
+ 		fmt_str = btf_type_kflag(t) ? "\t%s val=%lld\n" : "\t%s val=%llu\n";
+ 		btf_verifier_log(env, fmt_str,
+-				 __btf_name_by_offset(btf, enums[i].name_off),
+-				 btf_enum64_value(enums + i));
++				 __btf_name_by_offset(btf, enump->name_off),
++				 btf_enum64_value(enump));
+ 	}
+ 
+ 	return meta_needed;
+@@ -4485,8 +4475,8 @@ static void btf_enum64_show(const struct btf *btf, const struct btf_type *t,
+ 			    u32 type_id, void *data, u8 bits_offset,
+ 			    struct btf_show *show)
+ {
+-	const struct btf_enum64 *enums = btf_type_enum64(t);
+-	u32 i, nr_enums = btf_type_vlen(t);
++	const struct btf_enum64 *enump;
++	u32 i;
+ 	void *safe_data;
+ 	s64 v;
+ 
+@@ -4496,13 +4486,13 @@ static void btf_enum64_show(const struct btf *btf, const struct btf_type *t,
+ 
+ 	v = *(u64 *)safe_data;
+ 
+-	for (i = 0; i < nr_enums; i++) {
+-		if (v != btf_enum64_value(enums + i))
++	for_each_enum64(i, t, enump) {
++		if (v != btf_enum64_value(enump))
+ 			continue;
+ 
+ 		btf_show_type_value(show, "%s",
+ 				    __btf_name_by_offset(btf,
+-							 enums[i].name_off));
++							 enump->name_off));
+ 
+ 		btf_show_end_type(show);
+ 		return;
 -- 
-2.47.3
+2.34.1
 
