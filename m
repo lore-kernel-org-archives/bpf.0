@@ -1,180 +1,111 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93B430148B
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 19:15:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3882F283159
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 19:33:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770059746; cv=none; b=N4DX2osteUzsM2WkwrniJqGj2M+k/pGMItUCCzJ1jpwUHf4HfdkRR1HDUBfLNzmOkPXKuyO3nOaCIhDRkdJ48PyeOHYavGMUtLFmXQDAheO1u0FBLjlQ5OiafP5UKmvS6TJInX8gKuDd1qXCQ3qSCgtwXDU02ib2CEcOwZ5dNbI=
+	t=1770060798; cv=none; b=aCaOZFqk38Vc1lsfRe6FexhQh0AlLhcXn4C8kofIbc5lRZyxjiAKjw3BTYdBnwRfr+T65Xt/LGjpcHMa3Dn+r+OX7NHdQhrzOuR+iuxAR7dzSFRDLNkVV9EmEFDRFalmk2bxC4rx+nyqU/Ok8UJGlkPVSF3MW1zSr610Duu+Ers=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770059746; c=relaxed/simple;
-	bh=9VFgvnb2SQG84MHF8K/s4Z/WcrfiHqwobIXEi8KC1Ps=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GOXxKmDwUwtTdCRvfMcQ81ockoCaWKYfxLXWE10cvdcq04O9N1EmwsW32zh56NHKQSfu5gAtBlzNprypaXIgBGNVnTzAs+PKIE/7VZ9IX+Ld16olxYgwm7oCAUfSwWBUi4RfWa7mvocSRpa7i18nEQEYCs92WvxDlW5utZXInBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=esoSanGJ; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770060798; c=relaxed/simple;
+	bh=XK1uyU2bVvv5qtXv93YEPL7R8vN9E8IwBEoN0ycX2os=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X7u7PHRjEd9wqxpVtqlfxZhURXH9Pqhzc5Ah9unlhrpDrimcY0mJWeUGKIAvfBb4NDjbU/S++zlx0ytTqnx4StMbqFaYa23HAHkFVMyVmei0+ksvzaMjUf+fIW9ILU20jFe6NBe/Pz8xvBayfv7Jq3J2ol0XthYmjVqOe74Dk8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=f8Ste4bG; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="esoSanGJ"
-Message-ID: <7603c0e6-cd5b-452b-b710-73b64bd9de26@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770059731;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8hHhZlQCKZl589HvHnAQeer7frVqLGswU0Xq6rQMtMw=;
-	b=esoSanGJ2W9A3cCIFUUCPOo/tfV5mwyZ0eNaUWaZx9LpwtlXoJVGuYrhPV0Q9VjsFeW/60
-	3Md6Qh1JuBZL+0gfrVHa9tL/hBnthVwXtl9dSdyfA9GhWl5KJryMnUL+oJ7LrAh9h0/eHe
-	u/9ta1mRXK+ukL/CGIwJyjn5IFEyxPw=
-Date: Mon, 2 Feb 2026 11:15:25 -0800
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="f8Ste4bG"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-503354cb21aso44249941cf.2
+        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 11:33:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1770060796; x=1770665596; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9g2e/TtKCAdb42J3qeZLe7B+a56yxtl1eN3FjRo079c=;
+        b=f8Ste4bGyGlThz1LkzTboM20ALMwApiAxlaSgJ8k4IDYD2nXx/6/+Jk7wR9cAcXRan
+         R8sPBfFz5/mw3t9YZwAiWyNs+jutoapcIVWbYv1174CY1UFBpHQOlEC9QQrJ3betpx9N
+         +csf0QvCd1C6OPA4O5+gBjIFpz54/2gsiED5oCpH7Lsut1eofUQ3KYbV/zVerhmjbeFs
+         GAAJCtVsbKjyGPXxEVJGaUJyZ34sYF1uh8CrObydALlfNmKSYsaCa6lt2BUrO538ZGrn
+         YYKQ0mr2EbOOr6rem3qbML0QLZc3SE9hb4M1G99NBbXTZn55rZAVU1EHTR3KLsrhQef0
+         FPYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770060796; x=1770665596;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9g2e/TtKCAdb42J3qeZLe7B+a56yxtl1eN3FjRo079c=;
+        b=RHwew+EjSjgswRTxUBeN43/MQDbOuDtpC/FJc1wlwCB+YkWPOjB4++rNfwweR/7ErZ
+         HMI44EP8Uv49PG7WZwS0dnJ/0uUpvDme5X/E8AkMu7LeeBJ/0zH7tJoFn7CKjPH0z/bQ
+         ieaYiV4C7PAv8lLQ8UiGBwAxwivaUB5fRk6UIFPiWg2tSufHRciPiEf2Uco8iKpjIUDX
+         UUambbPTAJr/zC0yzYoEHzYoUnszm/NbspyuNchqhg5QLOT1lwQsjdhYhD+dTdh5rMHz
+         zNs7KGvoY8/jPi41UzTMVRac3LyntaC189eae25oD3dtLrfkGLbOyPgOdCc3yQ0a6Orp
+         XAnw==
+X-Gm-Message-State: AOJu0YyoubaMqnB9AHpXEJCrxJtYKPZVBCaJULFTfeFNzXn6gQ6DnIkK
+	4awoQsPqZxcbC1f7tKPSxgHhB8mpj8pdPsZGDLu7ADqo8FNVD4KIv7YopmW0a3FzS7/0HHHEiDL
+	GOq1U
+X-Gm-Gg: AZuq6aKI4PdE9D/Z50qsgcMEVzA5ZBRFupOgF6Xx6dFoLAWdRc/pn/gZMyZ6cj+ci7v
+	YvwO1DGD55RTkQ4nS0yItpyQpjTdMx+kTvwrQvSz5ZlJxysfar891Ha4+HXmTbqDIHM130fsQGM
+	IfZvtr04vwqzVsg2EFDzdDvcusrwa+QiE7P5QZmw7hfvPFPewmlNY/sBpnhU/0eXn7vb7vcOdgJ
+	ATRvPBAJf4VrGhoTtk4kj8lRdd+xf//aNfShz+3IxKrH56/YFNCqw5qw0gD6dpnZTvVfDJ1acYx
+	nBgG8sDmDXMlBWPXLhoHkYKKp9vNr6xR698fBgahihfPSxGZPC2/T7KCv1PRlznetp0uYTGnIn6
+	1t1JpY6EIbcSkh4YRoo4KuvnCpZfifBfxWxeKt1RvC5ccWVIbJuOr+cAibAZSq5cIIeKZ0onFhV
+	k5d5jf0yJr3w==
+X-Received: by 2002:a05:622a:148e:b0:502:8fb7:77ff with SMTP id d75a77b69052e-505d2275bbbmr160756851cf.47.1770060796004;
+        Mon, 02 Feb 2026 11:33:16 -0800 (PST)
+Received: from boreas.. ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5033745d7a9sm111971941cf.5.2026.02.02.11.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Feb 2026 11:33:15 -0800 (PST)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH 0/4] bpf: Add bpf_stream_print_stack kfunc
+Date: Mon,  2 Feb 2026 14:33:07 -0500
+Message-ID: <20260202193311.446717-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
- update
-To: Kuniyuki Iwashima <kuniyu@google.com>, Michal Luczaj <mhal@rbox.co>,
- Jakub Sitnicki <jakub@cloudflare.com>,
- John Fastabend <john.fastabend@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260129-unix-proto-update-null-ptr-deref-v1-1-e1daeb7012fd@rbox.co>
- <3fc5611f-394f-40db-b49d-2f26402e221a@linux.dev>
- <3362017f-9c3d-46cd-b3ce-cb750b565d5b@rbox.co>
- <612a9446-252f-4b14-8605-ae1af000cc41@linux.dev>
- <CAAVpQUAc3S+Ebx2qp-Pbg9qH-Zc=yHdzVJbchCu++V_4XF3DLg@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <CAAVpQUAc3S+Ebx2qp-Pbg9qH-Zc=yHdzVJbchCu++V_4XF3DLg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 1/31/26 2:06 AM, Kuniyuki Iwashima wrote:
-> On Fri, Jan 30, 2026 at 1:30 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
->>
->> On 1/30/26 3:00 AM, Michal Luczaj wrote:
->>>>> Follow-up to discussion at
->>>>> https://lore.kernel.org/netdev/20240610174906.32921-1-kuniyu@amazon.com/.
->>>>
->>>> It is a long thread to dig. Please summarize the discussion in the
->>>> commit message.
->>>
->>> OK, there we go:
->>>
->>> The root cause of the null-ptr-deref is that unix_stream_connect() sets
->>> sk_state (`WRITE_ONCE(sk->sk_state, TCP_ESTABLISHED)`) _before_ it assigns
->>> a peer (`unix_peer(sk) = newsk`). sk_state == TCP_ESTABLISHED makes
->>> sock_map_sk_state_allowed() believe that socket is properly set up, which
->>> would include having a defined peer.
->>>
->>> In other words, there's a window when you can call
->>> unix_stream_bpf_update_proto() on socket which still has unix_peer(sk) == NULL.
->>>
->>> My initial idea was to simply move peer assignment _before_ the sk_state
->>> update, but the maintainer wasn't interested in changing the
->>> unix_stream_connect() hot path. He suggested taking care of it in the
->>> sockmap code.
-> 
-> Yes, we already have a memory barrier for unix_peer(sk) there
-> (to save sock_hold()/sock_put() in sendmsg(), see 830a1e5c212fb)
-> and another one just for sk->sk_state is not worth the unlikely
-> case in sockmap by a buggy user.
-> 
-> 
->>>
->>> My understanding is that users are not supposed to put sockets in a sockmap
->>> when said socket is only half-way through connect() call. Hence `return
->>> -EINVAL` on a missing peer. Now, if users should be allowed to legally race
->>> connect() vs. sockmap update, then I guess we can wait for connect() to
->>> "finalize" e.g. by taking the unix_state_lock(), as discussed below.
-> 
-> If a user hit the issue, the user must have updated sockmap while the
-> user knows connect() had not returned.  Such a user must prepare
-> for failures since it could occur before sock_map_sk_state_allowed() too.
-> 
-> This is a subtle timing issue and I don't think the kernel should be
-> friendly to such buggy users by waiting for connect() etc.
+Add a new bpf_stream_print_stack kfunc for printing a BPF program stack
+into a BPF stream. Update the verifier to allow the new kfunc to be 
+called with BPF spinlocks held, along with bpf_stream_vprintk.
 
-I don't have a use case for parallel connect and map update either. 
-Also, I have no concern about returning -EINVAL in map_update for the 
-not-yet-completed unix_stream_connect().
+Patchset spun out of the larger libarena + ASAN patchset.
+(https://lore.kernel.org/bpf/20260127181610.86376-1-emil@etsalapatis.com/)
 
-However, TCP/UDP (and probably vsock also?) do not have this racing 
-issue because sock_map follows the lock usage in TCP/UDP as in other 
-parts of the kernel. Why AF_UNIX is an exception and unix_state_lock() 
-is not used in sock_map.
+Changeset:
+	- Update bpf_stream_print_stack to take stream_id arg (Kumar)
+	- Added selftest for the bpf_stream_print_stack
+	- Add selftest for calling the streams kfuncs under lock
 
-John and Jakub Stinicki, could this be an oversight?
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Emil Tsalapatis (Meta) <emil@etsalapatis.com>
 
->>>
->>>>    From looking at this commit message, if the existing lock_sock held by
->>>> update_elem is not useful for af_unix,
->>>
->>> Right, the existing lock_sock is not useful. update's lock_sock holds
->>> sock::sk_lock, while unix_state_lock() holds unix_sock::lock.
->>
->> It sounds like lock_sock is the incorrect lock to hold for af_unix. Is
->> taking lock_sock in sock_map doing anything useful for af_unix? Should
->> sock_map hold the unix_state_lock instead of lock_sock?
-> 
-> If sockmap code does not sleep, unix_state_lock can be used there.
+Emil Tsalapatis (4):
+  bpf: Add bpf_stream_print_stack stack dumping kfunc
+  selftests/bpf: Add selftests for bpf_stream_print_stack
+  bpf: Allow BPF stream kfuncs while holding a lock
+  selftests/bpf: Add selftests for stream functions under lock
 
-afaik, bpf prog using the sockmap cannot sleep. Search for "if 
-(prog->sleepable)" in "check_map_prog_compatibility()". The bpf prog 
-attached to sock_map cannot sleep either, there is "can_be_sleepable()" 
-check in the verifier.
+ kernel/bpf/helpers.c                       |  1 +
+ kernel/bpf/stream.c                        | 19 ++++++++
+ kernel/bpf/verifier.c                      | 13 +++++-
+ tools/testing/selftests/bpf/progs/stream.c | 53 ++++++++++++++++++++++
+ 4 files changed, 85 insertions(+), 1 deletion(-)
 
->>>
->>>           if (!psock->sk_pair) {
->>> +               unix_state_lock(sk);
->>> +               unix_state_unlock(sk);
-> 
-> I don't like this... we had a similar one in recvmsg(MSG_PEEK) path
-> for GC with a biiiiiig comment, which I removed in 118f457da9ed .
-
-Me neither, for both empty critical section and big fat comment. This 
-usually suggests something else is incorrect to begin with. I believe 
-the wrong lock is taken in this case. Unless there is something 
-prohibiting taking unix_state_lock in sock_map, fix it properly instead.
-
-> 
-> 
->>>                   sk_pair = unix_peer(sk);
->>>                   sock_hold(sk_pair);
->>
->> I don't have a strong opinion on waiting or checking NULL. imo, both are
->> not easy to understand. One is sk_state had already been checked earlier
->> under a lock_sock but still needs to check NULL on unix_peer(). Another
->> one is an empty unix_state_[un]lock(). If taking unix_state_lock, may as
->> well just use the existing unix_peer_get(sk).
-> 
-> Yes, unix_peer_get() can be safely used there (with extra sock_put()).
-
-The sock_map needs to sock_hold(sk_pair) anyway and stores it in 
-psock->sk_pair, so I don't think it needs an extra sock_put().
-
-> 
-> 
->> If its return value cannot
->> (?) be NULL, WARN_ON_ONCE() instead of having a special empty
-> 
-> I suggested WARN_ON_ONCE() because Michal reproduced it with
-> mdelay() and I did not think it could occur in real life, but considering
-> PREEMPT_RT, it could be real.  So, the current form in this patch looks
-> good to me.
-
-hmm... If unix_peer_get(sk) is used and it takes (and waits for) the 
-unix_state_lock, it shouldn't be NULL? The above empty [un]lock idea 
-does not check for NULL on unix_peer() either. Or am I missing something?
-
-Regardless, if the proper lock is held, all this complication and 
-reasoning will go away.
+-- 
+2.49.0
 
