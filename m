@@ -1,93 +1,93 @@
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 189552FE578
-	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 20:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63962BE630
+	for <bpf@vger.kernel.org>; Mon,  2 Feb 2026 20:34:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770064056; cv=pass; b=r+kE9cmqmSDH/1rOO4N8cPk9rQSn2knmehVdqbeTWE51aS9EBxVP/q5JsE74NaSTk918CFUSKUlWTaUbZelgKQvZVJpisZ8bPPh256zouIOs5IRx6cxON3DOmsn/jhnA2ZzqGtcXTVL+4ABgx/idiAdVSUsj+b/fSw0zMasRgRg=
+	t=1770064454; cv=pass; b=KJANYRJbUeHuriThjZ3vX2WLvOBnqGpoZ09ZaETZpX7cVuqoiHDLV/ToLksKUMG1MFEOpaekXwiEoMVFTLAVw+6WZVgQSpvrL8jDPiXyKpIrBusc4L9hV+I1CH11FtAbzdelUlYp4aVF+t75qzJ/eAmxNd4JhgOcg4AlChcsmeg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770064056; c=relaxed/simple;
-	bh=jfXmnznKLJiTPbD5h8TXzPoCYSLFywcnZTDixTwqnvE=;
+	s=arc-20240116; t=1770064454; c=relaxed/simple;
+	bh=EjTrHJGCKhR5boXRYUI+Jfk/dvUeA0NTVO3B5HxvjZc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OvYcPj0TsWgCRbnUffbFnEkbjs5NIqL/+cK2YbNgHb1lT8CIYXqmnpPOKpiYNgLKFZ3uvliYK3u1a2OZpUaTxt+v3H65N7UaPf5RRktXaY2GheIVXpCoTGDXnkX15oKZ9nAQMHpPM+go+4d0oGnfg8Vk41q2ZCjWIjIa3LOGfqI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i35lvgzw; arc=pass smtp.client-ip=209.85.208.42
+	 To:Cc:Content-Type; b=Xdm+iRP5SKGc/SRujR560bvby45MB9UacK0ySBwVJRtLVsmXwBFDcRilNSj1SV4VSrxa0XpJT4fcxAebISVOkgPU7uJZb5nBu3YLU9fOl7e95BlSbnD+D7U1/UwMgTcl78dHxGCRViYcl+3qDX9UFSHdSu0m2PHxAJz1KVP6L80=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p3elRbe2; arc=pass smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i35lvgzw"
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-64b9dfc146fso255068a12.0
-        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 12:27:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770064053; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p3elRbe2"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-658d4059b79so7296364a12.1
+        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 12:34:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770064451; cv=none;
         d=google.com; s=arc-20240605;
-        b=HiYWG/ag5hJfuwGXL2pMYaEdWfW8dCemyqktbq0/usngJCkBvX3cfmOz3rtbE/poAD
-         OzQ8XYSjJY6fB0b2Uj8y0eIfKX/vOdtCJ0AkPTXvrEJPWxTEw1pIZpIr/dHLvA8GkbZ3
-         r9XILxHto1YrSMxdTuY6tXXfT8CkTbepqKUl6njZlEhptxlxIRlXCqkTBSQDa3cJ3lcE
-         b2tlYpuadId8/cBa6xq5fCi6HSTOz14yWzRdRxe9WNFU94ZywxCbxLpMXYPGsZI79VnQ
-         Frbv622GGelax+LTNsNePzQ+BY5hSgHQ9+qh6TkUR+0PHYOCXlWOtm73xla3FUb59eNj
-         XRAg==
+        b=lVjS71+hFt8IVY9k3VzAt/4PsD9p5jDZFOuxK0Meei5B7Q6P/EZNumX0l08HdALM7b
+         bdo5sWH+AySPamCUOMzzfM7l3kRr1fQE72/B5IgAoenHNqQkLTBDbwQ2VtWGQA/5fRpP
+         cmFPLOyGSqzm55GqIMtktc8ZUp3D+JoMJb94koh6DBfFZJxmsW1riwt18mLDxJZdA71/
+         TSxW1fhGRctHyM4cDS09Gox5Zu+ACsPh1XS4On1HFiwGxZ/fvpTMlzjP8A81Wx1Am87q
+         NEyquECQQ+n0lMHY8uIQq02TrEsfJqyW5Sc7R/RJVPi8LAsnPDsyAmR1gKcehO9idZHb
+         01OQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=tVRk+zilHW9UjKLQgTp2UA+pwv3RE3RSIRFfK1s01Ps=;
-        fh=TO7HN6/Q0ffzn2080nEMdCm99CF9sQRWdH4SzUfi95s=;
-        b=kwNpfl4sQ7HoaZ2NpB80XPK96AnWfEgcNjrNa9w2PMUWMt6J66qhv3go1lfJyTwuNE
-         1UvowGj1PiqMYiR5YU2dKYPuptVx2s6EEQL4XrGDVm16U2Z/I4rsi4BmQty6XL5sSgjO
-         MvvwEgfcX31C23B2Vum98zeyXEy/eGl8yKq9sAkzTKv51VX/D8Yh9qxkcYUraIF7PVay
-         2kt54y2AASvry0IicMU72Fc5345CdNmsHwB5zyo7ApfUTCx2OuZvFRymJMKdpph7Qh4f
-         MaDWMeBCPLFCOIado2/nBpeSqddElezhyV968/VmbPyKoeX7WQcNR1CsljJeDDfKczAm
-         VJ5Q==;
+        bh=fbUqeYjip+fDu2694PTri+FtAQxkD6UXiSLsVh9cQ8I=;
+        fh=xWaSRP5TWhd+mPiTErjzohblhQdAQx7tRnM8OYb68+A=;
+        b=QvpR3Mapz6jIDK/tJGXhw8gsg11KedNr5RNWmeWgYbS2fnmBiXw8u8fpqqJHd3Ah6r
+         eHZTSXyVG3MbWN0Y2TL1+QT8HcFgkgxs5fNAOLPP7eCOmHEKpd5fnNB6qcX0JZFAp2Qp
+         h30+fyvuY3+xxVBDPZ4tPBmadFOvAKd0GnaHOep5C7R5c2kVRMvb4LlJoHSZdO8nz+e6
+         9Ud2Ix0btDQ4f3ULJIcifKEHsYY8egrlps8J5FD5HQsaMmEZAHevm1ThpanTrmqSvSke
+         Pvbnafih5FWj3VYXtpEnLzsUVGvl6dk+y5rruHROVHKKB0NqmV7th9gy1bTSzVUQBLN8
+         EfsQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770064053; x=1770668853; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1770064451; x=1770669251; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=tVRk+zilHW9UjKLQgTp2UA+pwv3RE3RSIRFfK1s01Ps=;
-        b=i35lvgzw+EpxLEACaPBJPib1skMRWoVPBETG80k2waGjMfR0bvTZjqFY4pJKbGWn5E
-         5z5qZlpRY0MUjIuDeqPiYZ5mJsYcukgBq4FlMWsg5BlznYf+Tb5OQV5igiNXwUBcKK8h
-         WanbW26nVcvkhzR6FzEL08DsaIBY1+GGPt4MZnGjaXjCQNR37xzJoWZal2rtGXPrqIhH
-         YTiFolGNtNFzwocVne0qhe4Glb8NUm+b4eM48yuDO8eM0RLgYVgm3aCewqU8C3vJdBRp
-         aumxQz3314vbyn9SMtuvn8s8DXlZfqEzcjauhwS7efbvBqHQVb8mQ9U15CmJgt116OhL
-         xI3w==
+        bh=fbUqeYjip+fDu2694PTri+FtAQxkD6UXiSLsVh9cQ8I=;
+        b=p3elRbe2EDd1D2oRb06vHZgZGTMcmwQskgU1EpGm/oAB2gLoLEGe5p/7VrymgkOW0o
+         HXRDCXq1iUwgFkYl5TJhkYsksO2TAi/HUFDfvN9zY4skS8dp6mhzMPX7g84CSGqDNbH6
+         5q+D0K522ehaQ1VNHGoR+tMy7oC/1485cRPBMLWjHch2LAxo0lLAYambiKY1KSNnLl7H
+         kYUYHsty14rIQaLGxOK5pcR54C/xIPEAFgrt3Ph2/ZuOsRr8p+LL/uu0infH3Xa5wU7V
+         9SgEtY5putD/vCXtpb+9kbSlYW5yLLXb/ML6vGuT91gD2QylJQ2cILM15ZcJ3dVNH0+w
+         z4Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770064053; x=1770668853;
+        d=1e100.net; s=20230601; t=1770064451; x=1770669251;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=tVRk+zilHW9UjKLQgTp2UA+pwv3RE3RSIRFfK1s01Ps=;
-        b=JNm+zu63FouwTae/WZZOtXaIbIZu6Yk+C7eauZMcwpwQM6y0BlbZzTxEOR8J1LUcCr
-         6DEj/k41uVtogfu8JL3z1Lt2YTOCF9lKae0W4rlNrV+9HpwavTngIuGeIxd2uu4klOYi
-         Uz2Tn044hswSZ9S4fD3ik9EPY8dM1HmmebruMx7Oven26rqKi2SHfcYomg+2KZhottuC
-         uLIHN6Qh/z8txYQ2SG+2tsBZAhfvjWih6oUZJMvjF9+mhQFfM3TGUcBZOCHD1DpNrubC
-         VVgL1wsJtxbSHgG/jkcP22MzIO2kL1REF5DeFl6B7B70j4lTxfDc5mdQxPj/UwYJ+4DO
-         Rr1g==
-X-Forwarded-Encrypted: i=1; AJvYcCWwZFPMO8NKE/OBT+GBvUqT+j3pGVQcm6j+kCKZuyAH6rurQXoAifLp8xhrQYLefZ2o3Rk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyV9NZm+5bBxc3wF12Wnm53HP0H4a0XR5BpZugIMbB13KcOOBwu
-	PakTU8Ay3OSLK97lJbpNc7C5wh1bFqpUFvjAfCZFPgTt/yItr+LK2HWUXjZmGhcQRHeMloCEULs
-	asOGfNc5S1SiPD/FqnpD0dW/UKZTrUdfPD6lphLsI
-X-Gm-Gg: AZuq6aKK7hNF0z63poGmfY4IDj6hRsaET4S8WxShQ5ZcGxC+udVXQk38UCRjGik31/1
-	uqRzCDnPSg2YpD+rq236LvBaBP+JwQAoy5ZeIPvgJ6Jy5twAZH++1lwmRYt2fkem7DKplUy/K4a
-	8LXRrAaCBY8Mg3vvS01g7EWPPLSxBFtQ2ijh4o41Dulrqa1UhOV6vh/W1zKjuRvZ+9tSw0YFMtP
-	LAgkIg8Bd2lP0kSUSjiHJjKtGXugKCrCGy7sBMA2/aXwcr4+lr6VQnsO/5bAbGJEl4RhtuUWHIL
-	abrH79ygv8Dc5QhRjB+5WmH9x3HTRayXHXAI
-X-Received: by 2002:a17:907:7252:b0:b8e:380:5669 with SMTP id
- a640c23a62f3a-b8e83909daamr46612566b.32.1770064053184; Mon, 02 Feb 2026
- 12:27:33 -0800 (PST)
+        bh=fbUqeYjip+fDu2694PTri+FtAQxkD6UXiSLsVh9cQ8I=;
+        b=wAeAo9S5MVoqh1lyvQiex4d+UH51GZcfdNGPjxeLKg7qVP9Ry0rThwKedxMhD/xiEg
+         37VBaab+JdJ13GR2LvAhbkvLAgj8lZHKHPwe4OW+WdT8Khz6YBcKKGCwyPj0H0r3RyYb
+         CA4gENpZ7XtxoxUZlOAGYQSH3R79W1p+0u62UGYID9NAt6ktJH/8vteTGwKPvHv+R61Z
+         lre2jzrtgioh824Z69DVNUMKYqzohl25MyhPfDd4IX2j0FfTAprJDJHlYQeunvxdKb3a
+         eCxOBiKsKI7s6FjIYh4hvn4vg1WOoLgQMObQCppw/lcnkMcv+7eSMRFr/bxpU6VzdeeS
+         pw0g==
+X-Forwarded-Encrypted: i=1; AJvYcCVuwrLt9Q0ISVyQTqY48YEgbV3qJ4daIqhD8MCKchyEtvWCueLZpEWKwuamVijCZFYg6fA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIlmzmy4qEXEX1w64QO1F9wSa9a8Asl1L6WQWTZFtyloHgPcxu
+	UG1XEzXO313D9SoWtKiUsOR53SBXTga02LlzNHLXRqsZuFnrdXT9SGMq5yqqTDnP73zG6FRs4Pj
+	vOH8VCBAeyQBZiZqvYedgqGmR2vmnYtzTpgLVIfBh
+X-Gm-Gg: AZuq6aId0L3PYg5YkctcGUlR7ti2URX4HyS6aP8TfcrJKCw8B99PAOj5l4rZiqtY4Ac
+	LoULfkK6qV1CJKoybYHSmCv+oYeGXsrdSO3SXcGuZVh/BGhaW8bToi6LqTG3LEvOW4XifHjfPYi
+	TzZnykIjlV6zROf8c4vjOBpzQZ/rHuHSuZdqvNF2ioa2cnic9Rk4K+EijQPfk5fHsshcHpo3mpK
+	qHXHGRqGNGWbfdiz23Lbqew3ocp+6cj33geclhs26YkVCj+ncyZchEcStO1dh0f/xR/+JPT0wP4
+	ztCjie85BhgB5i7ZnBQ26loyEg==
+X-Received: by 2002:a17:907:968c:b0:b7a:1be1:983 with SMTP id
+ a640c23a62f3a-b8dff8071femr749742866b.63.1770064450976; Mon, 02 Feb 2026
+ 12:34:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260124012133.2451708-4-wusamuel@google.com> <9f904e57ca365036b12263b0d0a06b915e6090631df159d17f4e8a9651c1f5ff@mail.kernel.org>
-In-Reply-To: <9f904e57ca365036b12263b0d0a06b915e6090631df159d17f4e8a9651c1f5ff@mail.kernel.org>
+References: <20260124012133.2451708-3-wusamuel@google.com> <baead0e0a77a98f1f54703a05fcc861f40d8f9eec0a24f96cf26df249dd1cd1f@mail.kernel.org>
+In-Reply-To: <baead0e0a77a98f1f54703a05fcc861f40d8f9eec0a24f96cf26df249dd1cd1f@mail.kernel.org>
 From: Samuel Wu <wusamuel@google.com>
-Date: Mon, 2 Feb 2026 12:27:21 -0800
-X-Gm-Features: AZwV_Qg29xnGZqAdFJeszWEWENOogIq3Hn6LIMQK7pgNDZsdLvyvbyvFqAYEMNc
-Message-ID: <CAG2KctpjRWiLEur+27JZZ0bftDfBLj-dy6TA79iLYk-DQfr2MQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Add tests for wakeup_sources
+Date: Mon, 2 Feb 2026 12:33:58 -0800
+X-Gm-Features: AZwV_Qg9DXmMmV2h_Maz_0xWq2nHkrts0cRt9nDGe687Gic8SPCzSfFDm2mNxs0
+Message-ID: <CAG2KctpZB2EnBHccEYqGMjWiAoE3+HzV-0vpu5J8tejg5opNUg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 2/3] bpf: Add wakeup_source iterator
 To: bot+bpf-ci@kernel.org
 Cc: rafael@kernel.org, lenb@kernel.org, pavel@kernel.org, 
 	gregkh@linuxfoundation.org, dakr@kernel.org, ast@kernel.org, 
@@ -104,93 +104,60 @@ Content-Transfer-Encoding: quoted-printable
 
 On Fri, Jan 23, 2026 at 5:50=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
 >
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.=
-c b/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
+> > diff --git a/kernel/bpf/wakeup_source_iter.c b/kernel/bpf/wakeup_source=
+_iter.c
 > > new file mode 100644
-> > index 000000000000..c8a38717e284
+> > index 000000000000..ab83d212a1f9
 > > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
+> > +++ b/kernel/bpf/wakeup_source_iter.c
 >
 > [ ... ]
 >
-> > +static int get_ws_iter_stream(struct wakeup_source_iter *skel, int *it=
-er_fd,
-> > +                           FILE **iter_file)
+> > +static void wakeup_source_iter_seq_stop(struct seq_file *seq, void *v)
 > > +{
-> > +     *iter_fd =3D bpf_iter_create(
-> > +                     bpf_link__fd(skel->links.wakeup_source_collector)=
-);
-> > +     if (!ASSERT_OK_FD(*iter_fd, "iter_create"))
-> > +             return -1;
+> > +     int *srcuidx =3D seq->private;
 > > +
-> > +     *iter_file =3D fdopen(*iter_fd, "r");
-> > +     if (!ASSERT_OK_PTR(*iter_file, "fdopen"))
-> > +             return -1;
-> > +
-> > +     return 0;
+> > +     if (*srcuidx >=3D 0)
+> > +             wakeup_sources_read_unlock(*srcuidx);
+> > +     *srcuidx =3D -1;
 > > +}
 >
-> If bpf_iter_create() fails above, get_ws_iter_stream() returns -1 without
-> writing to *iter_file.
+> Should this function call __wakeup_source_seq_show(seq, v, true) when v i=
+s
+> NULL to notify the BPF program that iteration has completed?
+
+My understanding is that above code is invoked as a N+1 case after
+iterating through a list of size N. If desired behavior is to do
+additional cleanup not already covered by _seq_stop() (e.g. printing
+closing footers), then v =3D=3D NULL should be handled. However, there is
+no such need for wakeup_source_iter at the moment.
+
+>
+> Looking at other BPF iterators like map_iter, prog_iter, link_iter,
+> task_iter, and kmem_cache_iter, they all invoke the BPF program with
+> in_stop=3Dtrue when the stop callback receives a NULL pointer. For exampl=
+e,
+> map_iter does:
+>
+>     static void bpf_map_seq_stop(struct seq_file *seq, void *v)
+>     {
+>         if (!v)
+>             (void)__bpf_map_seq_show(seq, v, true);
+>         ...
+>     }
+>
+> The bpf_seq_read() function in kernel/bpf/bpf_iter.c has this comment at
+> the stop label: "/* bpf program called if !p */", which suggests this
+> callback is expected.
+>
+> The __wakeup_source_seq_show() function already accepts an in_stop
+> parameter but is never called with true. Without this callback, BPF
+> programs using this iterator cannot detect when iteration has finished.
 >
 
-This should be fine, if the BPF iter file isn't created, we will not
-write to that file.
-
-> > +static void subtest_ws_iter_check_active_count(struct wakeup_source_it=
-er *skel)
-> > +{
->
-> [ ... ]
->
-> > +     char *line =3D NULL;
-> > +     bool found_ws =3D false;
-> > +     FILE *iter_file =3D NULL;
-> > +     int iter_fd =3D -1;
->
-> This function correctly initializes iter_file and iter_fd before calling
-> get_ws_iter_stream().
->
-> [ ... ]
->
-> > +}
-> > +
-> > +static void subtest_ws_iter_check_sleep_times(struct wakeup_source_ite=
-r *skel)
-> > +{
-> > +     bool found_test_ws =3D false;
-> > +     struct WakeupSourceInfo ws_info;
-> > +     char *line =3D NULL;
-> > +     FILE *iter_file;
-> > +     int iter_fd;
->
-> In contrast to subtest_ws_iter_check_active_count(), iter_file and iter_f=
-d
-> are not initialized here.
->
-
-Ack, this is important and I can address it in the v4 of the patch.
-
-> > +
-> > +     if (get_ws_iter_stream(skel, &iter_fd, &iter_file))
-> > +             goto cleanup;
->
-> [ ... ]
->
-> > +cleanup:
-> > +     if (iter_file)
-> > +             fclose(iter_file);
-> > +     else if (iter_fd >=3D 0)
-> > +             close(iter_fd);
-> > +}
->
-> If get_ws_iter_stream() fails at bpf_iter_create(), can this access
-> uninitialized iter_file and iter_fd? The cleanup code would then evaluate
-> garbage values, potentially calling fclose() with an invalid pointer.
->
-
-Correct, and this issue will be fixed when the variables are
-initialized as pointed out in the previous comment.
+If I understand correctly, this is not mandatory. For a
+straightforward iterator like this one, I'd like to keep it simple and
+not unnecessarily handle this case.
 
 >
 > ---
