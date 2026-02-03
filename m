@@ -1,205 +1,193 @@
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011004.outbound.protection.outlook.com [40.107.130.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A8302F1FC8;
-	Tue,  3 Feb 2026 02:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.4
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770084250; cv=fail; b=VN9phUNuhyxLs97Fm0TmK2eq+iMn10W76Pv0lMeDX1RSI5NwQ7nxRA346K5LQKsstdcRgrwTyaW2HmxhPU822Tr+Ej6jb3MiDVvtSZ0/ZFDxHTtUEnUUemMAtqAlEun7En//7mL+/PoaPrv5v8VXcj+A4rlVCPgFNo5HcoS/bT4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770084250; c=relaxed/simple;
-	bh=Y1K+VOV52DehcuGmJ6TIa/WlHJb2Lx5CdLjKxrNsBAo=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Znxl8rIocPeIuGmCDfAsjz7QFDc4MlBpwiZBuHy6h6Sk7uaURvu+7uVrR3I0cU8Y6MWdZEsWNHpz//zglTV/FDFdCRte85M/ptafa5cv0uIm/FnUyGzQX0ywm2C4tW/CoQvHf0YBMp3me9GM9sRveSUYyNnkWK/fCE9b2n44y00=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=HVICsofY; arc=fail smtp.client-ip=40.107.130.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B5D202C48
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 02:04:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770084273; cv=none; b=IyWLK1Pi506xZ02QeZBfXnwoXIt7YdCxcpL/xKK+Lqltih23UzHwJoTNcnNvAWd3ZkWvkEjYjCuZCKNhYJo9oos99zq0wPNAy4Y8FHXosf4lpY6QFsN2TqM3zUF0jlWmYDoyVz5bdcQKrpX7W7J4m9jtb5gFDMvFx7UDLvC2TJ0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770084273; c=relaxed/simple;
+	bh=2PH8DwnVhBn0N5l25yCK4kjF0hHScCgi3X5B6+H3j5I=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=LNvYt+YfAIB8UZ4qIZoxffM+f2/OCH1+TumC3nolD6H4x7kRclAOknLkT82Ah8j/m+VBtvChDPGzSIAfY15fZGU8KO69ixsrxOFbemHqYbF1xK1qWGgd54+ml/t0fXejkMmA39jnbjd1ULy02lfXUS6hralGSwRgXQdDcrA3QDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=CR81TZGw; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="HVICsofY"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cdIn47BrQ3QfdTPX4twggDgzKVYSUh7egAoGKaXfOt43uTPygPjfr5V+lLv0HEdn8Bg40LRwqcrz1Xhj72rrijxs87Ttp49lMpiEaz9EHjtkJto26cHP0LplSws+QGDDkOehqczPpkABL1vrKPEyYX/9qrgacy4/v8fTsMv4JTxzPpCgzpOmEInaQfine5tgkuTlqhQwG27+FFwcYnVxIsdEUNkBzX54PWa19mwY5BIGZtaPKlsWw4dxY4wSIHuhvq4lJAuTUoDuZ2r919YGR5uew8WWJxLnz+7hWVrNv9WqyFyOGpcmXlADJ1JIWQeah+Gab9HgEwvRwgCPcgfuPg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bPcfyP/4FOXGfQMS6WmKSizsIqJRF8ru6fx5qQaDfQ8=;
- b=oAVI7akTFMGDwEnQp+Yk2SkmpTNuDSqDXapRmzPLAWearg7GWAslKHzf5bnu+az9/mpZvQWBvZ3+qzcAgSm3+O6HztJw9etqkp8ktZvnQls92V6sd6qqk7mpQjVOV4bf50tyF49OzImiUEKvlfKWq/fP7IIcXpMIkozUC/R4z+48KfGumEN8sGVFhfu8dv8CYROiwYZbW+v+Nz2lbBgaEzX5yHchXtyavHH16SaurfDFLTL4cCfQW3pSmGgoVmceHNB8K0Lm78EEGxEF+mXzrGoBy1AdUGctNuN10dcomJcofjrq+3DjYN5tIs526z+SKLtio9IhOM8Tro211U3bIw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bPcfyP/4FOXGfQMS6WmKSizsIqJRF8ru6fx5qQaDfQ8=;
- b=HVICsofYvLXT7lhwIjRTXO39A70ew8HNaNeIVSO0o0yvm+XdBcOrC+9KViYwJ3TiqiPKA9eSIJ3f6GEpFcamOeFS9m+8Q9Skz5Dbrl48Wz2dPdi5b5o9XEK8ybrSY7HHA41iBvXvWN/c5UHiOA4ULtXpeTRtFS4gx0cXWxpDQYQMx1mCFkceSJLbQfq9kBlZd9Otwz1aRsrMTJzakbM+QWX74PJaAEHvwZ57zsOvGIW2/CGeEjBZmtRJjNel252jpJES2RokEBPqCQL3I0DlCxcEQ2C8uBljOcs580JepXGp59kKvcBJFuKGdP/F0xrtvyDg2sb4hLJ8LV/9GDcnEg==
-Received: from PAXPR04MB8510.eurprd04.prod.outlook.com (2603:10a6:102:211::7)
- by DU4PR04MB12061.eurprd04.prod.outlook.com (2603:10a6:10:646::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Tue, 3 Feb
- 2026 02:04:06 +0000
-Received: from PAXPR04MB8510.eurprd04.prod.outlook.com
- ([fe80::b476:c19a:24cd:3694]) by PAXPR04MB8510.eurprd04.prod.outlook.com
- ([fe80::b476:c19a:24cd:3694%3]) with mapi id 15.20.9564.008; Tue, 3 Feb 2026
- 02:04:06 +0000
-From: Wei Fang <wei.fang@nxp.com>
-To: Simon Horman <horms@kernel.org>
-CC: "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"sdf@fomichev.me" <sdf@fomichev.me>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, Clark Wang <xiaoning.wang@nxp.com>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "andrew+netdev@lunn.ch"
-	<andrew+netdev@lunn.ch>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>, "ast@kernel.org"
-	<ast@kernel.org>, Frank Li <frank.li@nxp.com>, Shenwei Wang
-	<shenwei.wang@nxp.com>, "edumazet@google.com" <edumazet@google.com>,
-	"kuba@kernel.org" <kuba@kernel.org>, "hawk@kernel.org" <hawk@kernel.org>,
-	"davem@davemloft.net" <davem@davemloft.net>, "daniel@iogearbox.net"
-	<daniel@iogearbox.net>
-Subject: RE: [v5,net-next,06/15] net: fec: add fec_enet_rx_queue_xdp() for XDP
- path
-Thread-Topic: [v5,net-next,06/15] net: fec: add fec_enet_rx_queue_xdp() for
- XDP path
-Thread-Index: AQHclFAxxh94ggUHY0WiHYv3gtqinbVwOPRw
-Date: Tue, 3 Feb 2026 02:04:06 +0000
-Message-ID:
- <PAXPR04MB851042D1E3A2C8F9340611C9889BA@PAXPR04MB8510.eurprd04.prod.outlook.com>
-References: <20260129103447.1893129-7-wei.fang@nxp.com>
- <20260202142655.1847932-1-horms@kernel.org>
-In-Reply-To: <20260202142655.1847932-1-horms@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR04MB8510:EE_|DU4PR04MB12061:EE_
-x-ms-office365-filtering-correlation-id: e4ff5faf-f9ad-4839-d082-08de62c882e6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|376014|1800799024|19092799006|366016|38070700021;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?7lBgc/+ZX/ULIpR/6Lh5ZFQz/+oQXllz8S2yzmgFqfeDVOVCZNcYWOd+NZh8?=
- =?us-ascii?Q?PRPFsDu3AmY3zldnWFkwgfVqs4f5GmAWapx1XehHSbudVWpzZr1ju7xgUNzb?=
- =?us-ascii?Q?irqskAxvQtc+3vf8f85KSh0PzIXEGa7My21d/+DnOhUyHunNm5Cz0nCIpt+x?=
- =?us-ascii?Q?GV/uydmFwh6wCR5qcJLgbB2IQO3iJpBwYMl7zBOg7qDZS9UIhrlik46L5F1c?=
- =?us-ascii?Q?1kJ20yaFBJTod9lmrd8JYPNmKkTnTcsD7d75dZtGODhqO9KgwmNuvNxyWTlf?=
- =?us-ascii?Q?nN/1n6S1WKZMEoCsx8gWEwBh6FpkK5Fqv2ZdDf3N3coDWKZm9Jz6sYnHw2gi?=
- =?us-ascii?Q?rPkMzhteYVB5nHTE9Axtn/53+hUs9g5lGCZPTG4fdGPXhn/DaE1p66YdkWhM?=
- =?us-ascii?Q?G8QynpgVaq5o4tePZdhOE3i4J5IkS1du6dUeb5Pgqq4U9BxO9YIOFQHEjGfn?=
- =?us-ascii?Q?2YzsVLISVzKt6JaZ6Uc0KPA/k7cHA2iWpcOIwYOlw7f6jlPJBC+jQ/Cnavcv?=
- =?us-ascii?Q?u7U8BoXqplMGKtjuAd3xVLNZ57KqiTuN8m/mwqoVMPypt83sBttZ0PPLhxAT?=
- =?us-ascii?Q?owtBW3V0T/F5kscC6B83ZaGuIF3F5vVbwD5GH2aQKkTQjd3wet4NsGybZv/Q?=
- =?us-ascii?Q?GUk3H4oiLCju0RJmwTy5B1LDZfVTTYJzjHdx7tgnUvaKhqxufFpslFAqW/Om?=
- =?us-ascii?Q?khhfj2b80BabkZrOHfNaKNny4WHHiTT5zmCdPLZZaahaqj+hl6zgUDkHb45D?=
- =?us-ascii?Q?AyuGjdYWXsTFoKPx1umYhJRfMOHBoNt0TxjOivqZII7mRHkHz/kMtBeI7NoH?=
- =?us-ascii?Q?C3whKNKzgrwmvruQx9FBnJsmELHFd7KR2bK+uAFF7iIIqjyfbigdQNoCK+VV?=
- =?us-ascii?Q?nKkBnD66DRp8+ZcX2YzIGnb8A5KhD2vl+JVZzioeWP7M3gdXGqBRJ4qCMjnT?=
- =?us-ascii?Q?oFgrwwvStI3MvDW/klv1drNgXesa4uUO3dUL8ae6mGtUOr5svurtPluE166u?=
- =?us-ascii?Q?5gzSC4ZlgSp+BO/cm6D0oPsr/baSmT8rjRbATkpEfk65/H9uoFBm3enSo5qF?=
- =?us-ascii?Q?EDE/OKvMEjtisWDr3Z/+C2KAOs4TSM01/AwFvV66fqICBMcZ7qPyH2z/GBsW?=
- =?us-ascii?Q?bZXCry+OjX2Ak2CrXEpmuNaRsrhutjIPlo05QIe5kKdVoEDkP4lyU3B+2m2R?=
- =?us-ascii?Q?Eg8hplsylfh4M6n1FOulfmKYQy+tUlejX7aUpOGkWhWMNNe/04H6adFh5bIV?=
- =?us-ascii?Q?KwmyVwV3Jfc2G4GYgbFVpVmZ/yLz06cTYcrXNwuCQJjZKZ3/jkThyKGCzD72?=
- =?us-ascii?Q?ImUCVKlCCHQOs6CfmUyHIbahr63i1E2x9Lk1eU1pJ+YkS0dqTBKJvLyg7WOg?=
- =?us-ascii?Q?/Qopi1h+TXmwiypZwq2i8LoJKHY8S1DaLyzZ/P3ZJg0VpV+RNm9aWqX571Zk?=
- =?us-ascii?Q?oBdqT0GwZk7cL+fUkU4/jOJzWGoD425g1Gat/Wt62Vs5fTNaVOgQouCnmJPf?=
- =?us-ascii?Q?Qk6d3PeERowfw+ghX9gSlMNtSLdT3Xw2p3w0BYOnzqXtIwGFzljxqALySunY?=
- =?us-ascii?Q?nELMdLgFIaPKH4GMCslNCizPg9PXcbqnkrFfkMaCK0hqD4OFYkTQD5WMOXVZ?=
- =?us-ascii?Q?LWJbZkVTKE70kuuRgEcpmO4=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8510.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(19092799006)(366016)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?3h/P/sD8EcwmnnBwC97sIRuE4ekizlPOVoLAvfJTienVBX3D0ce+ng7rWq2h?=
- =?us-ascii?Q?Ey6LRkIGwYEuUNM+O9uPyH1pctjaPdVPwdlPOo1NhOuecDJyynyYyChWzoPG?=
- =?us-ascii?Q?Ao5EX0tWjtHtjpIZ2YbDxbkPOnuonOIzX3Lq43i19QRxQH7OtO92fvrS+6KY?=
- =?us-ascii?Q?FcfVkAMQlDL85KpBKyqPXPfLF7325jvlyyN/do2/lvGD3oPPU2hWf5a8oiTR?=
- =?us-ascii?Q?5ejqxQ6XkNfXYsW0eKlLo/gAFgF6pQdx4PLxXlKCayK3RsbqWGSPX1ByK0Z1?=
- =?us-ascii?Q?mpDVoj/qkSL1FAn0xlwTisktW/EBkqIBpphjkimBJeNB0EUlcVcIq/e/aDmh?=
- =?us-ascii?Q?N/Rc5BEMQ6GGtS959y3rL5tf66UtUv2qliRID2Bfxqbtm7ud8EsYDx7aKFkG?=
- =?us-ascii?Q?p5ON5E6pdAg/n+pY+UlgMn+H0Crx7CpFtckj/TvYl1TEu0AE5UwexrgpjEdo?=
- =?us-ascii?Q?T6I0/lsVj3RXK1xpBvASGFBLIovLxRFFTgoJ/vIgF9U+OI6F2GboGeYaJEYF?=
- =?us-ascii?Q?U1gv1qyWd7zianW0KyO+1wZYJuw2pOFZIDVRny5AaKCiVynzRymPA8nVRwdb?=
- =?us-ascii?Q?cnACfUy15cTSSY0789rVkjvIBoasP2nwdsq9jzgw3f47NCossH8AfqkOjzrh?=
- =?us-ascii?Q?IpUk9S/J/KPfo5pAbY1fkeSaRITe/cQNU4/UeXII8g44Jb0RlWVpCYdI4RR4?=
- =?us-ascii?Q?pSeKkdMJUJBA6fnqRmCZSFHiHSDVALViXQTQVH5D+kRN7w+tedu/a4VqFmjL?=
- =?us-ascii?Q?ltdsGGZr5dFbRUNtp27NYgonuR/Tj3foNAsdBMElJNaKcpvyX7Vkh5dtJmLQ?=
- =?us-ascii?Q?HOaCNxC9oQlfEpjuj60Jx0ucxDaVbncRJ+NGe/k+CN1sVnqjKxNasKDn1a8W?=
- =?us-ascii?Q?HVf/MzFNW8vgOf/RJbol44Yiz6DjXv6z9lX+lsNdf8cu6vaUAEy2yIoUdLYv?=
- =?us-ascii?Q?FwtKdbn1FZwj36DdsyAKPaHSHyx14lZhiPqwxlrRpyg6vO2oxTc8WE86l4a0?=
- =?us-ascii?Q?42GrcD9/s4c0aueAMw7kVveUQnHIPvLfFyKJ5kxVtcoYNMbHOSVbhSgzoLMb?=
- =?us-ascii?Q?SvGBAepQuqxq/ExRJUDLiVufeewUoJf7yVZMSUXKv+jrRzuifyk0vlXqDGWd?=
- =?us-ascii?Q?wR3f011KK4PVV6Tyhay46nFd5HE4ZrquKd+Pr/V7bCOE2vxXwyidrrT/eWOW?=
- =?us-ascii?Q?mxK+RMpMNj2UySBw0kdojf6fXDstXvR7yVjvj5n9M5F9tnBKoVuf4QeejfqM?=
- =?us-ascii?Q?6Chez9w5NWpYkM4Sm+tOebStQa4v5CwUkBTtsJ9cp0QC9uZ0mcpEBNUx808s?=
- =?us-ascii?Q?gxxbEQJtjUCEjW6cpAZ5a2zy72zd9QVWD1u24pxW31ZBtF2Lb2wirdEe7Gvk?=
- =?us-ascii?Q?TSKkyfX0sFXpS+g7Osz74lCEsa1NdQxJSbaeuszkX/uKqaEOc2XoDmI0CW6p?=
- =?us-ascii?Q?kDfR/+hjwoRjxBZJlVAc4qF6IcLcUIbYNqTOu8kfakcI4piACFWVKM+Vcd+N?=
- =?us-ascii?Q?tRIDGjvF2V2gDvPuUTr7LU7dG7whhXsq7kBK6hifGGx/ulZ7qydS05tjMOOq?=
- =?us-ascii?Q?dHBLbkFzTzZbyKZvT/4bxlQ2zho+XpY1/hpcpphtaIHzgPbdV7kSUFshkSrV?=
- =?us-ascii?Q?q8n5NOOuv1GyRxToEv684eTkVab1Bs3mWnJuc6ASk2sd0RUoN7/0+406huq5?=
- =?us-ascii?Q?m7dr4cwPqgyoINDghikfC1fO/grJwOjFhkxilbArfEptdx5+?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="CR81TZGw"
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8c07bc2ad13so386607385a.2
+        for <bpf@vger.kernel.org>; Mon, 02 Feb 2026 18:04:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1770084270; x=1770689070; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YbEBx635SR9k3YtuPgIJgSH902bQQCi/UAKy8PsFrl0=;
+        b=CR81TZGwFI+upakhi3uohRQMFn5RygpzeXmx96K15400NkHp+yX39z5g1KjH6VYky6
+         IawZFEQe46h57wl0PfWvY39GZxdI+oVYXvPTOgH+A3vEmn0SE9cAnogtC72IqApAi0Iv
+         Chxnthg7Uwxm90RJnbsCWe1HOn2lXPQzF1mCgLZ+W7h5LDaZjsr+ZHymN+CThov4mbXO
+         A4UC+Ow/nQRnwc5IMhpqYzBldnm2DAjLJ114Q/g9i1F7L5sHJwkRSTgMP8/m1r/LxwLq
+         vJwI6jF2a0RDD+UzruC03SETnUVWN4ovpv1hWYnY/yEfxYERKjdgG4F0T1Fe6pdN1EoG
+         3m+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770084270; x=1770689070;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YbEBx635SR9k3YtuPgIJgSH902bQQCi/UAKy8PsFrl0=;
+        b=Hq2VJexbDUw0ChpiVsxIlndS+32R5QcVIhqkqfAO1KYb6HKOkB2o0CGhNr9H+UqxaG
+         lt4QShJeR9kXd3mXGNgKvpAb7s40AuEhAetgO+meFUev1eWUMViCb/kFVU6hVTWQolB0
+         bODwZ7COQdrLdgUadH9VxN1I/lesVJGjqmWZ3kzydOHz1bboUpRU3TIC3i0iTxzff4TM
+         fyPX4w3xKqF+tmtOYONU8KgLrZMEGGftVy1ETnfvaldIUz0aN7LGC36NhWO7ZwR5nuXn
+         6SHen1DY9hRA1vzEB1ube/gARIoqcQysuzAtV1xs6TE1cph7OjHqdxodRfz6C0V+pvJb
+         o8yA==
+X-Forwarded-Encrypted: i=1; AJvYcCXwZdSCS/dsmBIjN2LotNDYyifd5zGQ8oa5UsU07FIFSbsyGxAw8fFtIBiELq+gjX5eXvQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4jBlGtpp57ftXSAK2TwuvqL9V88m/tQnXOsIdeCIvz3Yz4K/5
+	vkYNU0625BnJwTBU1uSOxZZdmZgMcSJroIyDO1SmvARfQvPX3kSCVEjreiQNSexbdNk=
+X-Gm-Gg: AZuq6aIxPokaPAE/Ua13CJasCZHShOsZfu2wviA1aD8PhQvVOWLlrZBhAmdtmA06Uve
+	sep7q0DukB8+3L63razGTc8B4nOddfNEgwo8rnrnjB9mLJHZfl/nAc8izaNdBvVkzeR7eKozVsZ
+	4srziL1gz4CVRmUC1r7B7hY5DOkDxAdIhPwVY0CFQXLQASwXZdAndoM2yA4A+0sFvZHg7NCcj4Y
+	K7ODLPO/8RmfADTjmLBsgPquuEQODrx+qLwcQ6PDQnF+0LVX7bLevSybn556gGBcNdrPmkSmtPc
+	HzJLgTyQnyag4wQaVyTXc+9Wz0DgvwdwfkC+gen5DWefSUF4tBE+boynHKPkLf6jtDXglGLTmot
+	X6e9ZNhWV+hHLUy/copL8PehfpVHrdHqgvEando4a0S0yp+YSwYHS0F2X5nnqoMaabYXaNUwKKq
+	yIQghmGQJcyzA=
+X-Received: by 2002:a05:620a:290f:b0:8c6:edca:1905 with SMTP id af79cd13be357-8c9eb224f5bmr1601519185a.12.1770084270236;
+        Mon, 02 Feb 2026 18:04:30 -0800 (PST)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca02eedf76sm624692685a.55.2026.02.02.18.04.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Feb 2026 18:04:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8510.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4ff5faf-f9ad-4839-d082-08de62c882e6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2026 02:04:06.1960
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: nzb8BZhMA/wenfiMa/tBlDTkzjei6LM3Ve6e5YJGPLECw67fBSFcYfCBR7VAHc7uXgSBbQb/5HCU9fu/FTG22A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB12061
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 02 Feb 2026 21:04:28 -0500
+Message-Id: <DG4YI75AFYJQ.FMENV4LELNM4@etsalapatis.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <eddyz87@gmail.com>, <martin.lau@kernel.org>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <clm@meta.com>,
+ <ihor.solodrai@linux.dev>
+Subject: Re: [PATCH bpf-next] bpf: Bump maximum call stack depth to 16
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: <bot+bpf-ci@kernel.org>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260202233716.835638-1-emil@etsalapatis.com>
+ <e3472b618ca3f4c00a78556992af9c819c3a6c93215358ab2e8d8264a7901e7f@mail.kernel.org>
+In-Reply-To: <e3472b618ca3f4c00a78556992af9c819c3a6c93215358ab2e8d8264a7901e7f@mail.kernel.org>
 
-> > +static int fec_enet_rx_queue_xdp(struct fec_enet_private *fep, int que=
-ue,
-> > +				 int budget, struct bpf_prog *prog)
-> > +{
->=20
+On Mon Feb 2, 2026 at 7:19 PM EST, bot+bpf-ci wrote:
+>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+>> index 8355b585cd..9f7fc990f3 100644
+>> --- a/include/linux/bpf_verifier.h
+>> +++ b/include/linux/bpf_verifier.h
+>> @@ -317,25 +317,25 @@ struct bpf_func_state {
+>>  	int allocated_stack;
+>>  };
+>>
+>> -#define MAX_CALL_FRAMES 8
+>> +#define MAX_CALL_FRAMES 16
+>
 > [ ... ]
->=20
-> > +		switch (act) {
-> > +		case XDP_PASS:
-> > +			rxq->stats[RX_XDP_PASS]++;
-> > +			/* The packet length includes FCS, but we don't want to
-> > +			 * include that when passing upstream as it messes up
-> > +			 * bridging applications.
-> > +			 */
-> > +			skb =3D fec_build_skb(fep, rxq, bdp, page, pkt_len);
-> > +			if (!skb) {
-> > +				fec_xdp_drop(rxq, &xdp, sync);
-> > +				trace_xdp_exception(ndev, prog, XDP_PASS);
-> > +			} else {
-> > +				napi_gro_receive(&fep->napi, skb);
-> > +			}
-> > +			break;
->=20
-> When fec_build_skb() fails, it already returns the page to the page pool
-> via page_pool_recycle_direct():
->=20
->     static struct sk_buff *fec_build_skb(...)
->     {
->         skb =3D build_skb(page_address(page), ...);
->         if (unlikely(!skb)) {
->             page_pool_recycle_direct(rxq->page_pool, page);
->             ...
->             return NULL;
->         }
->         ...
->     }
->=20
-> Calling fec_xdp_drop() after fec_build_skb() returns NULL will return
-> the same page to the pool a second time. Can this cause page pool
-> corruption under memory pressure when build_skb() fails?
->=20
+>
+>> @@ -346,7 +346,7 @@ struct bpf_jmp_history_entry {
+>>  	/* insn idx can't be bigger than 1 million */
+>>  	u32 prev_idx : 20;
+>>  	/* special INSN_F_xxx flags */
+>> -	u32 flags : 12;
+>> +	u32 flags : 13;
+>>  	/* additional registers that need precision tracking when this
+>>  	 * jump is backtracked, vector of six 10-bit records
+>>  	 */
+>
+> Was LR_FRAMENO_BITS in kernel/bpf/verifier.c intended to remain at 3 bits=
+?
+>
+> The linked_regs packing uses LR_FRAMENO_BITS to encode frame numbers:
+>
+>     #define LR_FRAMENO_BITS    3
+>     #define LR_FRAMENO_MASK    ((1ull << LR_FRAMENO_BITS) - 1)
+>
+> With MAX_CALL_FRAMES now at 16, frame numbers can be 0-15, but the 3-bit
+> mask (0x7) will truncate frames 8-15:
+>
+>     collect_linked_regs():
+>         for (i =3D vstate->curframe; i >=3D 0; i--)
+>             __collect_linked_regs(linked_regs, reg, id, i, j, true);
+>                                                        ^
+>                                                 frameno can be 0-15
+>
+>     linked_regs_unpack():
+>         e->frameno =3D val & LR_FRAMENO_MASK;
+>                           ^^^^^^^^^^^^^^^^^
+>                           mask is 0x7, truncates 8-15
+>
+> This means frame 8 becomes 0, frame 9 becomes 1, etc., causing
+> sync_linked_regs() to update registers in the wrong stack frame during
+> precision backtracking.
+>
+> The comment at linked_regs_pack() still documents "3-bits frameno" which
+> now conflicts with the 16-frame limit.
+>
+>
 
-Thanks for pointing this potential issue, I will fix it.
+The AI is right, we must also adjust the packed linked register masks.
+
+This complicates things, we now need 66 bits instead of 60 for the linked
+registers and cannot typecast the struct linked_reg into a u64 anymore.
+We need one more byte for this for the linked registers.
+
+An option is making a new struct to replace the u64 for linked registers
+with a buffer of 7 bytes, like so:
+
+/* A buffer of 72 bytes to store linked registers in a packed representatio=
+n. */
+struct linked_regs_packed {
+	u8 data[9];
+}
+
+struct bpf_jmp_history_entry {
+	u32 idx;
+	/* insn idx can't be bigger than 1 million */
+	u32 prev_idx : 20;
+	/* special INSN_F_xxx flags */
+	u32 flags : 13;
+	/* additional registers that need precision tracking when this
+	 * jump is backtracked, vector of six 11-bit records (66 bits).
+	 */
+	struct linked_regs_packed linked_regs;
+};
+
+This actually brings down the struct's total size down from 24 to 20 bytes=
+=20
+(tested with gcc 14.2) as the struct does not need to be aligned to an 8-by=
+te
+boundary. It would complicate packing and unpacking the linked registers
+though, and we'd need to see how the new code affects verification speed.
+
+
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/216107=
+11856
+>
+> AI-authorship-score: low
+> AI-authorship-explanation: The commit follows standard kernel conventions=
+ with concise technical language; the oversight of LR_FRAMENO_BITS is chara=
+cteristic of human error rather than AI-generated code which would typicall=
+y catch all related constants.
+> issues-found: 1
+> issue-severity-score: medium
+> issue-severity-explanation: LR_FRAMENO_BITS remaining at 3 bits causes fr=
+ame number truncation for frames 8-15, leading to incorrect precision track=
+ing in the verifier which could cause incorrect program acceptance or rejec=
+tion.
 
