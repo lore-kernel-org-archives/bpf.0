@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D279D378830
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 16:51:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D702F3D3335
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 16:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770137486; cv=none; b=Ll+VJoGCirTmBXDELpEwkjNWg+ojTCxFzUcC2M852oFckvV2j0bOHaeRtn6q3Yqv+fHscwmJ3M5cpr8SD3lwc60+Z05FN2YE0GJ7f4GGLPx9qetQBQn4lVjPOlKRuSpyQWaxBCktf1ty65P9kIgt5YThOyJ11NUTmDI8EDrjRI0=
+	t=1770137490; cv=none; b=RnW/RNf1iYuG/k6Zo1pHNc8JOpvCHqNt8++IxCwtlk9LMZZA582gS5sWgjiy3Krbmm/EWp7rEZWQ5xp9qtiL0cCnu/22xMTDDGNEcvrRbvY6EzTJ1E+Hdizh3EeQm2OCcFekiEBUcc1qnmQgWKQb1pHI1sIWnZmMOFDH6mR/0yM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770137486; c=relaxed/simple;
-	bh=TJEIoSQaA6vpmeda6hsnIhgd81BSJmFAXhCPx0lgB+U=;
+	s=arc-20240116; t=1770137490; c=relaxed/simple;
+	bh=MijVB++EBiOAhicEWvU0E80pYodo0lYLaXvFt2aUdxE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lInFd1Q8CiiB+FvBm9BCJJIOXn/a/CZpMsa/JPwTn8V7r/96QCnIvYK3jt/GjHsBlOYZIAQ7qsCLgNSwOksuszvgQNRiJAH+DEx9d9BbUzgbC12U4UKz7TQT655u+rMLME3SGC2BtwzFu/A0+or/RtPSCcRDPsbBXhbdvbz7pJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C085MorL; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=kILDDgu4K4AI8VZxWiEQVwO+6bYisUTuV4blXYE0s/Z7wM1fUR8lF7X2OvHH+WRuXyf7Azwe1CZuq/PPty5PHLwPAsQ0LK9O7doPoXTq7u/0zTlWqUELAL0iBRAtEP5Ti0V7QE5NtPmZYptp1gF84irtvmJa2qSfURSJqPHa0e4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nP35PGe3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C085MorL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D9B3C116D0;
-	Tue,  3 Feb 2026 16:51:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nP35PGe3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3ED18C116D0;
+	Tue,  3 Feb 2026 16:51:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770137486;
-	bh=TJEIoSQaA6vpmeda6hsnIhgd81BSJmFAXhCPx0lgB+U=;
+	s=k20201202; t=1770137490;
+	bh=MijVB++EBiOAhicEWvU0E80pYodo0lYLaXvFt2aUdxE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C085MorL4+baKVuDHol+Fh7QCKFKmG0y5QLefo0aFHB3gjPh8jhn+vqemcUW9Jdxo
-	 UTLUAbY6IDwvf1gdkvtmzxZ0PvKWKtt4h7z6WAUe/2yOhX7VK32NtseZ+7vDjuAJ5F
-	 9IgGEjiVq3I8Cbx/nfj7x2B7mAR+ymRnvy2v+I/JJ9e2Uf8CxbeKNS/RAYiL7+WBCW
-	 RWFsIc8NIxLKDloSlQ8x0pBpaeuD+wZIyFSEV9gwrTPF3HQcobjL9heNHQiBZoYYBP
-	 pd7a6/XPPA16dBkNsFJ8+EOLrItkP2U8gokhY/+a7/q9gBaXgdl+uovvYepk8x+VrV
-	 GJQNfp8iqQwpg==
+	b=nP35PGe3FBpxltamQOImFTpcLotxV3CnzeTMALi9GnKm5qhPjwKHnwBr80BLYc48R
+	 Xg+hJ0umMAqWRqBiuO7w82/1iEPAjOQlXIhJDBcpE7ipNQHXxK0Xk1PYuM7D/q8DgU
+	 76ez64aQf0FEl9KZYN1Kf+WNjTJ+397BvrUuuFHfgxj9y02L4ZltIkjKjpEwxl9q1c
+	 kA3feT+0tXZFZer7p5dp6AZUuUn8lpa0+MpY5DcA9YdIyK3ISKZ8USkVg2pSZC4IHS
+	 K5khG+gpe6BMVomskK9hWpnDymOy6WVpuASy7XsZfqwEI+2nhCyb+mBttWqCvcAYTE
+	 QZDCVv3nk5i6Q==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
 	kernel-team@meta.com,
 	Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH bpf-next v3 3/5] bpf: verifier: Relax maybe_widen_reg() constraints
-Date: Tue,  3 Feb 2026 08:50:59 -0800
-Message-ID: <20260203165102.2302462-4-puranjay@kernel.org>
+Subject: [PATCH bpf-next v3 4/5] bpf: verifier: Relax scalar id equivalence for state pruning
+Date: Tue,  3 Feb 2026 08:51:00 -0800
+Message-ID: <20260203165102.2302462-5-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260203165102.2302462-1-puranjay@kernel.org>
 References: <20260203165102.2302462-1-puranjay@kernel.org>
@@ -53,88 +53,162 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The maybe_widen_reg() function widens imprecise scalar registers to
-unknown when their values differ between the cached and current states.
-Previously, it used regs_exact() which also compared register IDs via
-check_ids(), requiring registers to have matching IDs (or mapped IDs) to
-be considered exact.
+Scalar register IDs are used by the verifier to track relationships
+between registers and enable bounds propagation across those
+relationships. Once an ID becomes singular (i.e. only a single
+register/stack slot carries it), it can no longer contribute to bounds
+propagation and effectively becomes stale. The previous commit makes the
+verifier clear such ids before caching the state.
 
-For scalar widening purposes, what matters is whether the value tracking
-(bounds, tnum, var_off) is the same, not whether the IDs match. Two
-scalars with identical value constraints but different IDs represent the
-same abstract value and don't need to be widened.
+When comparing the current and cached states for pruning, these stale
+IDs can cause technically equivalent states to be considered different
+and thus prevent pruning.
 
-Introduce scalars_exact_for_widen() that only compares the
-value-tracking portion of bpf_reg_state (fields before 'id'). This
-allows the verifier to preserve more scalar value information during
-state merging when IDs differ but actual tracked values are identical,
-reducing unnecessary widening and potentially improving verification
-precision.
+For example, in the selftest added in the next commit, two registers -
+r6 and r7 are not linked to any other registers and get cached with
+id=0, in the current state, they are both linked to each other with
+id=A.  Before this commit, check_scalar_ids would give temporary ids to
+r6 and r7 (say tid1 and tid2) and then check_ids() would map tid1->A,
+and when it would see tid2->A, it would not consider these state
+equivalent.
+
+Relax scalar ID equivalence by treating rold->id == 0 as "independent":
+if the old state did not rely on any ID relationships for a register,
+then any ID/linking present in the current state only adds constraints
+and is always safe to accept for pruning. Implement this by returning
+true immediately in check_scalar_ids() when old_id == 0.
+
+Maintain correctness for the opposite direction (old_id != 0 && cur_id
+== 0) by still allocating a temporary ID for cur_id == 0. This avoids
+incorrectly allowing multiple independent current registers (id==0) to
+satisfy a single linked old ID during mapping.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- kernel/bpf/verifier.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ kernel/bpf/verifier.c                         | 63 +++++++++++++++----
+ .../selftests/bpf/progs/verifier_scalar_ids.c |  8 ++-
+ 2 files changed, 56 insertions(+), 15 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index d92e10d4c2cc..dfb9fffbd141 100644
+index dfb9fffbd141..734c14bdc653 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -8995,15 +8995,23 @@ static bool regs_exact(const struct bpf_reg_state *rold,
- 		       const struct bpf_reg_state *rcur,
- 		       struct bpf_idmap *idmap);
- 
-+/* Check if scalar registers are exact for the purpose of not widening.
-+ * More lenient than regs_exact()
-+ */
-+static bool scalars_exact_for_widen(const struct bpf_reg_state *rold,
-+				    const struct bpf_reg_state *rcur)
-+{
-+	return !memcmp(rold, rcur, offsetof(struct bpf_reg_state, id));
-+}
-+
- static void maybe_widen_reg(struct bpf_verifier_env *env,
--			    struct bpf_reg_state *rold, struct bpf_reg_state *rcur,
--			    struct bpf_idmap *idmap)
-+			    struct bpf_reg_state *rold, struct bpf_reg_state *rcur)
- {
- 	if (rold->type != SCALAR_VALUE)
- 		return;
- 	if (rold->type != rcur->type)
- 		return;
--	if (rold->precise || rcur->precise || regs_exact(rold, rcur, idmap))
-+	if (rold->precise || rcur->precise || scalars_exact_for_widen(rold, rcur))
- 		return;
- 	__mark_reg_unknown(env, rcur);
+@@ -19386,13 +19386,29 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 	return false;
  }
-@@ -9015,7 +9023,6 @@ static int widen_imprecise_scalars(struct bpf_verifier_env *env,
- 	struct bpf_func_state *fold, *fcur;
- 	int i, fr, num_slots;
  
--	reset_idmap_scratch(env);
- 	for (fr = old->curframe; fr >= 0; fr--) {
- 		fold = old->frame[fr];
- 		fcur = cur->frame[fr];
-@@ -9023,8 +9030,7 @@ static int widen_imprecise_scalars(struct bpf_verifier_env *env,
- 		for (i = 0; i < MAX_BPF_REG; i++)
- 			maybe_widen_reg(env,
- 					&fold->regs[i],
--					&fcur->regs[i],
--					&env->idmap_scratch);
-+					&fcur->regs[i]);
+-/* Similar to check_ids(), but allocate a unique temporary ID
+- * for 'old_id' or 'cur_id' of zero.
+- * This makes pairs like '0 vs unique ID', 'unique ID vs 0' valid.
++/*
++ * Compare scalar register IDs for state equivalence.
++ *
++ * When old_id == 0, the old register is independent - not linked to any
++ * other register. Any linking in the current state only adds constraints,
++ * making it more restrictive. Since the old state didn't rely on any ID
++ * relationships for this register, it's always safe to accept cur regardless
++ * of its ID. Hence, return true immediately.
++ *
++ * When old_id != 0 but cur_id == 0, we need to ensure that different
++ * independent registers in cur don't incorrectly satisfy the ID matching
++ * requirements of linked registers in old.
++ *
++ * Example: if old has r6.id=X and r7.id=X (linked), but cur has r6.id=0
++ * and r7.id=0 (both independent), without temp IDs both would map old_id=X
++ * to cur_id=0 and pass. With temp IDs: r6 maps X->temp1, r7 tries to map
++ * X->temp2, but X is already mapped to temp1, so the check fails correctly.
+  */
+ static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ {
+-	old_id = old_id ? old_id : ++idmap->tmp_id_gen;
++	if (!old_id)
++		return true;
++
+ 	cur_id = cur_id ? cur_id : ++idmap->tmp_id_gen;
  
- 		num_slots = min(fold->allocated_stack / BPF_REG_SIZE,
- 				fcur->allocated_stack / BPF_REG_SIZE);
-@@ -9035,8 +9041,7 @@ static int widen_imprecise_scalars(struct bpf_verifier_env *env,
- 
- 			maybe_widen_reg(env,
- 					&fold->stack[i].spilled_ptr,
--					&fcur->stack[i].spilled_ptr,
--					&env->idmap_scratch);
-+					&fcur->stack[i].spilled_ptr);
+ 	return check_ids(old_id, cur_id, idmap);
+@@ -19617,11 +19633,21 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
  		}
- 	}
- 	return 0;
+ 		if (!rold->precise && exact == NOT_EXACT)
+ 			return true;
+-		if ((rold->id & BPF_ADD_CONST) != (rcur->id & BPF_ADD_CONST))
+-			return false;
+-		if ((rold->id & BPF_ADD_CONST) && (rold->off != rcur->off))
+-			return false;
+-		/* Why check_ids() for scalar registers?
++		/*
++		 * Linked register tracking uses rold->id to detect relationships.
++		 * When rold->id == 0, the register is independent and any linking
++		 * in rcur only adds constraints. When rold->id != 0, we must verify
++		 * id mapping and (for BPF_ADD_CONST) offset consistency.
++		 *
++		 * +------------------+-----------+------------------+---------------+
++		 * |                  | rold->id  | rold + ADD_CONST | rold->id == 0 |
++		 * |------------------+-----------+------------------+---------------|
++		 * | rcur->id         | range,ids | false            | range         |
++		 * | rcur + ADD_CONST | false     | range,ids,off    | range         |
++		 * | rcur->id == 0    | range,ids | false            | range         |
++		 * +------------------+-----------+------------------+---------------+
++		 *
++		 * Why check_ids() for scalar registers?
+ 		 *
+ 		 * Consider the following BPF code:
+ 		 *   1: r6 = ... unbound scalar, ID=a ...
+@@ -19645,9 +19671,22 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		 * ---
+ 		 * Also verify that new value satisfies old value range knowledge.
+ 		 */
+-		return range_within(rold, rcur) &&
+-		       tnum_in(rold->var_off, rcur->var_off) &&
+-		       check_scalar_ids(rold->id, rcur->id, idmap);
++
++		/* ADD_CONST mismatch: different linking semantics */
++		if ((rold->id & BPF_ADD_CONST) && !(rcur->id & BPF_ADD_CONST))
++			return false;
++
++		if (rold->id && !(rold->id & BPF_ADD_CONST) && (rcur->id & BPF_ADD_CONST))
++			return false;
++
++		/* Both have offset linkage: offsets must match */
++		if ((rold->id & BPF_ADD_CONST) && rold->off != rcur->off)
++			return false;
++
++		if (!check_scalar_ids(rold->id, rcur->id, idmap))
++			return false;
++
++		return range_within(rold, rcur) && tnum_in(rold->var_off, rcur->var_off);
+ 	case PTR_TO_MAP_KEY:
+ 	case PTR_TO_MAP_VALUE:
+ 	case PTR_TO_MEM:
+diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
+index c0ce690ddb68..c8f8820336b7 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
++++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
+@@ -723,9 +723,9 @@ __success __log_level(2)
+ /* The exit instruction should be reachable from two states,
+  * use two matches and "processed .. insns" to ensure this.
+  */
+-__msg("13: (95) exit")
+-__msg("13: (95) exit")
+-__msg("processed 18 insns")
++__msg("15: (95) exit")
++__msg("15: (95) exit")
++__msg("processed 20 insns")
+ __flag(BPF_F_TEST_STATE_FREQ)
+ __naked void two_old_ids_one_cur_id(void)
+ {
+@@ -734,9 +734,11 @@ __naked void two_old_ids_one_cur_id(void)
+ 	"call %[bpf_ktime_get_ns];"
+ 	"r0 &= 0xff;"
+ 	"r6 = r0;"
++	"r8 = r0;"
+ 	"call %[bpf_ktime_get_ns];"
+ 	"r0 &= 0xff;"
+ 	"r7 = r0;"
++	"r9 = r0;"
+ 	"r0 = 0;"
+ 	/* Maybe make r{6,7} IDs identical */
+ 	"if r6 > r7 goto l0_%=;"
 -- 
 2.47.3
 
