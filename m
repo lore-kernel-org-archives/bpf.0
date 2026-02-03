@@ -1,254 +1,182 @@
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F4E3009DA
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 10:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [207.46.229.174])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB49318B82
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 10:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.46.229.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770114063; cv=none; b=IBI4mjkO0qKvmmEp8NQ553nhmHc3qHEdaCSvWFTV3PEB/2OjGyoDHnBSjH4ocLgoWImLaj9I+hpdEaHvESoGCw1o1+MmjRmBJLIVQLWZCZWt7/99SjPFSTtjP2Ft9H/7jOzOh0xg+p10jhV8KpNgmsb0El1y0xgHzQ27mS0KOSI=
+	t=1770114096; cv=none; b=RQ7oinhJJU6FRdPQy2X+3wdgEXa92RP/7eLzwKSBfW5hy/FKEjpg5mtTIa2r8ZxueGCZSTLePK4lQBYjaNHKRYceh9c/TwRsJzZC/RQz9Ayc66g5veHoGrnPnDu6pioeWYzkxD8Oz2L0V9Af6eQUCX/m2ux2P6uynkuuNqNV7PM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770114063; c=relaxed/simple;
-	bh=kGivo3me2lY5yEK48E4ou48eJbyMQGbcKc3pWnb762E=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=YafijtALQL2Wx/FeR4560WKtdKmV4jqZJpXWDrUC5yHw7Fh1mFjfL2ijrlCdQWzi85c+CFdipj7HCSlwdn7OrDqjNnhXZg3vpzys196qAq6XkyYVvp6ElcoYvVbU44dlt/Pqqi39n14F72kuXfiYabm21Pyi8kZoMoJIJvwZsM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rohanka.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dY46tMJJ; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rohanka.bounces.google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dY46tMJJ"
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a0bb1192cbso46080125ad.1
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 02:21:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770114061; x=1770718861; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=R/Ef/udMn2CSsWbAmEZSNkhhgJ1qm83+e+FEKtRFSJE=;
-        b=dY46tMJJAdn5BcvMGGX+EnjPZ1XKXoCHAMJOEzUGFPmXeBW1JGjX2CGHUkgDF9N1GU
-         PZZwYzTYNQvUewrRVYH8lhoq9MdBlIA8U+Y3ge1k2t+60DN9FldjjbiTDz8CqH2SjN2P
-         wwaFNwtuv4dTFoBwRv/ztzo1q6wo+ntfGO0nx8ZwYDwZPjiRTDXlq9p2Ax2jSWEfwFUJ
-         F2HHX6miHgsE8lhpIxTQgYjv2/7fO/eF37cL4iYR3w4VT55zUBoKOc5WtN+wtcaM968C
-         D/l1DK113bkNHevBfvg8Zr21n5uXyywHhdAh+lpPVUSslIQin65k4ASHqSiyta2gK6UI
-         6tQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770114061; x=1770718861;
-        h=content-transfer-encoding:cc:to:from:subject:message-id
-         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R/Ef/udMn2CSsWbAmEZSNkhhgJ1qm83+e+FEKtRFSJE=;
-        b=r1OBZuUc+4PDIhVvlTwPEOhw4uENn+1fX7AD2C86plCSuvxwPGetefoD0KnSj/M0qQ
-         DbQ+o1GypLFO/AhtD1og0FyFs/CPAKpjoSdx5ekrgSJp3VM/8x4tuPUkv+94s32FmZ4B
-         bErND0XTght0PzkJ6OI0l7MwtYQzCL/C9aeuNYtBpas1XDn5HQtoH63ZjFiqO97Y/vcM
-         h4tITu1xyUhdAOpeYK2uNCzQYQxs9hyeQpipgVAtKBzzjX4n7EzXypYZy5htkmQVbdJ5
-         mcF+jw4furMJ7lq9ykKc3YxFDsM2Xsn+7aTHpOLld3s3ADnNbCZmur12r/Au30INqyP+
-         IY9Q==
-X-Gm-Message-State: AOJu0YxIZkSdqLTI6oxDJ8ncsrovszYOb8FHeLtHtvfh2FiOSlhD6bUx
-	Vl9OBl76kggjYYjC5f5Ht/jdMx52A4U6qKAyfj5ph2+YfN1RMsQT/xgK8N9SHLrkYRD4hXMezF1
-	PbJ3oGbHN9NSYMDnFXobhlfT+Odd/ChfTMw8VAsJRueYPeMBLgw+sGQkE9MLQ3mw1rYv4P2dxeP
-	88s5t5PHJFNGmtdOn7yJ8BsiUOICZiDlbB5apoPg==
-X-Received: from plka13.prod.google.com ([2002:a17:903:f8d:b0:2a7:5b68:f495])
- (user=rohanka job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:f06:b0:298:485d:556e
- with SMTP id d9443c01a7336-2a8d959c8b6mr112006655ad.11.1770114061111; Tue, 03
- Feb 2026 02:21:01 -0800 (PST)
-Date: Tue,  3 Feb 2026 10:20:55 +0000
+	s=arc-20240116; t=1770114096; c=relaxed/simple;
+	bh=NOFiUvLY89zwuuGAZXl447od8o4a6qCLz7lIs6yKV/o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=mHkLIsT76u7m3tkOK9fsnHElxe3u90FdbZ8vZ91uaTPKnwhMtZ7BRGKJicOdKf2fVczoUdKPDyOKGLzUyW7y2Gg/EzNkhqNDF1tK6xh+nSeuIxdy/uHM4EO7R6otJuua0CaiMFEeFV7ImTSFvaqW1luPwL3RRiZ5GfWsSh7Q9bE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=fail smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=207.46.229.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=zju.edu.cn
+Received: from zju.edu.cn (unknown [112.32.4.205])
+	by mtasvr (Coremail) with SMTP id _____wB3YXP9y4Fp26t1AA--.13151S3;
+	Tue, 03 Feb 2026 18:20:45 +0800 (CST)
+Received: from localhost.localdomain (unknown [112.32.4.205])
+	by mail-app2 (Coremail) with SMTP id zC_KCgCHoET5y4FpsnSoBQ--.60810S2;
+	Tue, 03 Feb 2026 18:20:42 +0800 (CST)
+From: Tianci Cao <ziye@zju.edu.cn>
+To: eddyz87@gmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	martin.lau@linux.dev,
+	sdf@fomichev.me,
+	shenghaoyuan0928@163.com,
+	song@kernel.org,
+	tangyazhou518@outlook.com,
+	yonghong.song@linux.dev,
+	ziye@zju.edu.cn
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add tests for BPF_END bitwise tracking
+Date: Tue,  3 Feb 2026 18:20:15 +0800
+Message-Id: <20260203102015.5570-1-ziye@zju.edu.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <b68a122d7a0b046a9ca5527bcf9f50dfea183ce9.camel@gmail.com>
+References: <b68a122d7a0b046a9ca5527bcf9f50dfea183ce9.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
-Message-ID: <20260203102058.41030-1-rohanka@google.com>
-Subject: [RFC PATCH bpf-next] bpf: ephemeral cgroup BPF control programs
-From: Rohan Kakulawaram <rohanka@google.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, ohn Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Josh Don <joshdon@google.com>, rohanka@google.com
-Content-Type: text/plain; charset="y"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:zC_KCgCHoET5y4FpsnSoBQ--.60810S2
+X-CM-SenderInfo: qtstiiaquyiko62m3hxhgxhubq/
+X-CM-DELIVERINFO: =?B?KU3CGQXKKxbFmtjJiESix3B1w3tzYfmPt4q7bPP17nv9Zvsme7sPvU0377+RBBKdO8
+	083uYxgGwm4o3MkAMAFMbdSWjwkFRbqrwFahGCMpxhEzL0jBZNhjOgNXkhJp7zsWRRVGmA
+	Ah9Gz3o1EOifTzwao2WXguWHTWSWDw9kjeBztpJ5
+X-Coremail-Antispam: 1Uk129KBj93XoWxGF1ftFWDWF48JFy3Cw17Jwc_yoWrJr45pr
+	yrGa13uFZ7JF1293WxXa1Iva45CFsY9FsxXr9Ivr40q3WxZw4UXr1jkr1Ykr4rJrZ5Z3WY
+	vFyUAFyYgF1qqacCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUU9Eb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
+	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
+	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAF
+	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
+	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
+	0s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI
+	0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE
+	14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20x
+	vaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8
+	JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1iZ23UUUUU==
 
-From: rohanka@google.com
+Hi Eduard,
 
-Extended Berkeley Packet Filter (eBPF) programs are loadable modules
-that can hook onto various contexts within the kernel: kernel
-functions, tracepoints, etc. Since these programs are decoupled
-from the main kernel binary and can be loaded without a machine
-reboot, there is a desire to outsource some of the kernel=E2=80=99s
-responsibilities to eBPF for increased flexibility. Furthermore,
-eBPF can serve as a bridge between userspace and the kernel by
-facilitating access to the kernel=E2=80=99s internal state.
+Thank you for the review and suggestions.
 
-One of the main gaps in achieving these ends, however, is that
-there is no infrastructure that supports exposing per cgroup data
-via file paths that mirror the cgroupfs hierarchy. This would
-allow for a unified source of truth as it relates to accessing
-various streams of data related to cgroups. It is important to
-note that we would want the fate of these ephemeral files to be
-tied to the manipulation of the cgroup tree, such as exposing/
-deleting files when creating/removing cgroups respectively.
-Cgroup iterators can mimic some of this functionality through
-bpffs pins but lack the dynamism of the listed approach.
+On 2/3/26 4:23 AM, Eduard Zingerman wrote:
+> Test cases themselves lgtm.
+>
+> Essentially you have two groups of tests that follow same template:
+> - bswap16_port_routing, bswap32_ipv4_subnet_routing, bswap64_ipv6_subnet_routing
+>   (why not just bswap16/32/64 as names, by the way?);
+> - be16_network, be32_network, be64_network, le16_network, le32_network, le64_network.
+>
+> Maybe define two macros using bswap64_ipv6_subnet_routing and
+> le64_network as templates to avoid the copy-paste?
+> E.g. like DEFINE_BAD_OFFSET_TEST in verifier_value_illegal_alu.c.
+> Also, could you please cut the amount of comments,
+> test cases are quite self explaining.
+>
 
-To elucidate the value of this infra, we note that this would be
-instrumental in aiding some of our efforts at Google. For
-instance, Borglet, the daemon that manages workloads on each
-production machine, repeatedly has to manually parse raw memory
-cgroup file from cgroupfs. If we had the capability to directly
-expose these stats at each level of the cgroup hierarchy via bpf,
-we could forgo some of the expensive parsing associated with the
-current approach. Moreover, in the context of upstream efforts,
-this infra could be helpful in allowing bpf based schedulers to
-expose customized cgroup controls to user space. Overall, this
-paradigm of exposing specialized stat files for file systems can
-be incredibly valuable in providing robust kernel visibility.
+I've refactored the tests using macros (DEFINE_BSWAP_TEST and DEFINE_ENDIAN_TEST) to
+eliminate the code duplication, similar to DEFINE_BAD_OFFSET_TEST. I also simplified the
+test names to bswap16/32/64 and be/le16/32/64, and reduced the comments significantly.
 
-Approach 1: BPFFS Centric
-------------------------
-This approach introduces a new BPF program type: BPF_PROG_TYPE_CGROUP_STAT.
-When such a program is loaded and linked, per-cgroup files are made
-available, mirrored under the BPFFS filesystem. For example, an iterator
-named "hist_oncpu" would expose data at paths like
-/sys/fs/bpf/cgroup/...<cgroup tree>.../hist_oncpu.
+The code is as follows:
 
-To accommodate cgroup-v1 hierarchies, a separate directory, such as
-/sys/fs/bpf/cgroup-v1/<controller>/...<memcg_tree>.../memcg_histo,
-would be populated for each v1 controller.
-
-Sample read program:
-
-SEC("cgroup/stat")
-int histo_on_cpu(struct bpf_iter__cgroup *ctx) {
-    struct seq_file *seq =3D ctx->meta->seq;
-    struct cgroup *cgrp =3D ctx->cgroup;
-    if (cgrp)
-        expose_buckets(cgrp, seq);
-    return 0;
+```
+/* Macro for bswap tests */
+#define DEFINE_BSWAP_TEST(bits, reg, mask, cmp_code, msg2) \
+SEC("socket") \
+__description("BSWAP" #bits " with tnum") \
+__success __log_level(2) \
+__msg(#reg " &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))") \
+__msg("r0 = bswap" #bits " r0 {{.*}}; " msg2) \
+__naked void bswap##bits(void) \
+{ \
+	asm volatile ("					\
+	call %[bpf_get_prandom_u32];			\
+	" #reg " &= " #mask ";				\
+	r0 = bswap" #bits " r0;				\
+	" cmp_code "					\
+	r0 = 0;						\
+	exit;						\
+trap_%=:	r1 = 42;				\
+	r0 = *(u64 *)(r1 + 0);				\
+	exit;						\
+"	: \
+	: __imm(bpf_get_prandom_u32) \
+	: __clobber_all); \
 }
 
-Approach 2: Cgroupfs Centric (Preferred)
------------------------------------------
-This alternative exposes ephemeral files directly within cgroupfs. During
-the initial cgroup traversal executed when link_create is called, the
-__kernfs_create_file function would be used for every cgroup directory
-encountered. The filenames would adhere to a bpf.stat.<program_name>
-convention to clearly distinguish them as BPF-managed ephemeral files.
+DEFINE_BSWAP_TEST(16, w0, 0x3f00, "if r0 > 0x3f goto trap_%=;",
+		  "R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=63,var_off=(0x0; 0x3f))")
+DEFINE_BSWAP_TEST(32, w0, 0x3f00, "if r0 > 0x3f0000 goto trap_%=;",
+		  "R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=0x3f0000,var_off=(0x0; 0x3f0000))")
+DEFINE_BSWAP_TEST(64, r0, 0x3f00, "r2 = 0x3f000000000000 ll; if r0 > r2 goto trap_%=;",
+		  "R0=scalar(smin=smin32=0,smax=umax=0x3f000000000000,smax32=umax32=0,var_off=(0x0; 0x3f000000000000))")
 
-The Case for Approach 2
-------------------------
-Approach 2 is preferred because it avoids complexities inherent in the
-BPFFS-centric approach, such as:
+/* Macro for be/le 16/32/64 tests*/
+#define DEFINE_ENDIAN_TEST(op, bits, le_msg, be_msg, le_cmp, be_cmp) \
+SEC("socket") \
+__description(#op #bits " with tnum") \
+__success __log_level(2) \
+__msg("r0 &= 16128 {{.*}}; R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))") \
+__IF_LE(__msg("r0 = " #op #bits " r0 {{.*}}; " le_msg)) \
+__IF_BE(__msg("r0 = " #op #bits " r0 {{.*}}; " be_msg)) \
+__naked void op##bits(void) \
+{ \
+	asm volatile ("					\
+	call %[bpf_get_prandom_u32];			\
+	r0 &= 0x3f00;					\
+	r0 = " #op #bits " r0;				\
+	" \
+	__IF_LE(le_cmp) \
+	__IF_BE(be_cmp) \
+	"r0 = 0;					\
+	exit;						\
+trap_%=:	r1 = 42;				\
+	r0 = *(u64 *)(r1 + 0);				\
+	exit;						\
+"	: \
+	: __imm(bpf_get_prandom_u32) \
+	: __clobber_all); \
+}
 
-1.Syncing the directory structure between cgroupfs and bpffs
-2.Handling the distinct cgroup-v1 and cgroup-v2 hierarchies within bpffs
+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#define __IF_LE(x) x
+#define __IF_BE(x)
+#else
+#define __IF_LE(x)
+#define __IF_BE(x) x
+#endif
 
-BPF Syscall Story
--------------------
-The primary syscall of interest will be link_create, which is invoked after
-the user has loaded the program. Traditionally, bpf links are used to
-manage the lifecycle of bpf programs; thus, in this context, we would be
-able to switch out the program associated with a link and alter the
-ephemeral file content associated with it. Essentially, when the link is
-created, analogous to how links are attached to some sort of target, it is
-"attached" to the cgroup tree. At this point, the underlying file the
-program is supposed to represent is exposed for every cgroup in the
-machine. Moreover, the user will pass in the cgroup whose descendants will
-expose this ephemeral stat file: attr->link_create.cgroup_root. We will add
-the file metadata, including the program link, to a list referenced by
-this root cgroup. As discussed in the "Evolving Cgroup Tree" section,
-this list will be utilized by cgroup_mkdir and cgroup_rmdir to manage the
-lifecycle of ephemeral files within the directories of descendant cgroups.
+DEFINE_ENDIAN_TEST(be, 16,
+	"R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=63,var_off=(0x0; 0x3f))",
+	"R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=16128,var_off=(0x0; 0x3f00))",
+	"if r0 > 0x3f goto trap_%=;\n",
+	"if r0 > 0x3f00 goto trap_%=;\n")
+... (and similar for be32, be64, le16, le32, le64)
 
-At a high level here are the file/seq operations we wish to define:
+```
 
-open -> prepare a seq file with seq->private containing the=20
-necessary metadata for the program (ie the cgroup)
-read -> invoke the seq_show operation on the seq file in file->private
-release -> free the seq file and update the bpf program's refcount
-seq_show for this file should be relatively simple: we set up the program c=
-tx=20
-to take in the cgroup pointer, as well as the seq file, and then run=20
-the program.
+However, I noticed that using macros does reduce readability somewhat - the test logic
+is now more abstracted. Given that this is test code, do you think this trade-off is
+acceptable, or would you prefer a middle ground?
 
-It is important to note that we might need to extend this program to handle
-writes, which is a prerequisite for their utility in providing sched_ext
-cgroup controls. Please reference the "Potential Feature: File Writes" for
-more information on this.
+Best,
 
-Cgroup Traversal
-------------------------
-With cgroup_mutex in hand, we will traverse the cgroup tree(s). For each
-iteration in approach 1, we check the corresponding level of the bpffs
-cgroup tree and see if there is an entry corresponding to our cgroup. To
-facilitate this, we can store the dentry of the corresponding bpffs dir
-within the cgroup struct. Thus, when we reach a particular cgroup we
-invoke lookup_one_qstr_excl using its parent dentry as the base.
-Essentially we want to emulate the filename_create without doing a path
-resolution for every cgroup we come across. Once we create this new
-directory or confirm that it already exists from a previous traversal, we
-can add the file using vfs_mkobj with the new set file operations we
-mentioned in the previous section.
+Tianci
 
-We must note, this complexity is not present in the cgroupfs-centric
-approach as the kernfs_node linked to a cgroup's directory is referenced
-by the cgroup itself.
-
-To support both v1 and v2 hierarchies simultaneously, the traversal will go
-as follows: we first traverse the default cgroup root to construct the v2
-hierarchy, then iterate through all cgroup subsystems to identify those
-belonging to the v1 hierarchy and create corresponding subdirectories under
-/sys/fs/bpf/cgroup-v1 for each controller. Once again, with the cgroupfs-
-centric approach, we do not need to deal with the complexities of these
-distinct hierarchies as the cgroup dir, which is accessible in each step
-of this traversal, is all we need to create the file.
-
-If we fail during this traversal, we must remove the associated ephemeral
-file in bpffs (or cgroupfs) for each visited cgroup. This is handled by
-re-walking the hierarchy (in post order for each root). In the bpffs
-approach, if no ephemeral files exist in the system on failure, the
-directories associated with each cgroup must be removed during this
-re-walk.
-
-Evolving Cgroup Tree
-------------------------
-We also wish to ensure that the ephemeral BPF file hierarchy evolves
-alongside the cgroup tree. In the bpffs-centric model, cgroup_mkdir
-creates a new directory using the parent bpffs dentry as a base,
-populating it with required ephemeral files. Conversely, the cgroupfs-
-centric model creates the ephemeral file within the current cgroup
-directory. During cgroup_mkdir, the new cgroup traverses each ancestor to
-iterate through its associated file list and adds the files to the
-appropriate directory in the appropriate filesystem. Additionally, these
-operations must ensure that link reference counts are managed precisely to
-maintain the persistence of underlying links. Accordingly, cgroup_rmdir
-must perform an equivalent traversal of the ephemeral files to decrement
-the reference counts for each associated link as they are removed.
-
-Potential Feature: File Writes
---------------------------------
-It is possible that we could use this mechanism to enable bpf based
-schedulers to expose cgroup controls to userspace. Thus, it is worth
-considering allowing for writes via this interface so that user space can
-turn these knobs. From an implementation standpoint, we could potentially
-use the same program to handle both reads and writes. In that case, the
-read/write handlers must provide a program context such that the program
-knows which mode it ought to be operating in. For instance, ctx->meta.buffe=
-r
-can be set to null when the program is in write mode, but in write mode,
-it will be populated and used by the program to update some internal state.
-
-Potential Feature: Lazy File Creation
---------------------------------------
-Rather than engaging in the complex operation of traversing the cgroup
-hierarchy, which carries the intrinsic risk of becoming a system bottleneck
-due to the necessity of acquiring the cgroup_mutex, we could create the
-ephemeral files when a task attempts to read it. This would potentially
-involve modifying the lookup operation in kernfs_dir_iops to invoke some
-sort of custom handler after the function attempts to find a file using
-kernfs_find_ns. In the case of cgroupfs, this custom handler could traverse
-through some sort of red black tree structure containing the ephemeral
-files' metadata. If we find the associated file in this tree, we create
-the necessary file structures (e.g. inode, kernfs_node, etc.) to support
-the file and link it to the containing cgroup's kernfs_node.
