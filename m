@@ -1,120 +1,140 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E25C30CDBD;
-	Tue,  3 Feb 2026 22:40:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB3E7405A
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 23:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770158414; cv=none; b=Alq9RsUvTRst9viktS6z3pg7EZLLeBKRF3uMe+EgZhh3XuUGVU8ZAxcS9AkcwsNsX5S5VwwzRS/g6yZk4swXw9iE7m9xT77oObKBO/RTODdhqBLLB+IbHa47/8RUgOYHo6yi6JAt4lJYJueo0y4e81RQ6jsk565Q6OEyAf9drXM=
+	t=1770160574; cv=none; b=qn8G/rpuwd5lCxY1a0wSeu8kmeGwV5L1kIdQASwb/iCbd99dRQEk6qxoktXHj0tBjOQZffHqcte3ssXHePSc3VYRmrR9lO7TBqooqKvpx3rYD34qQH8dOGoiB1cfsA8Xy3grhaOIspeIjzNtUYTe5Q51B59LoCujUM324VGtp5o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770158414; c=relaxed/simple;
-	bh=ZKt32DmVQN5n0rHwckCvF6Q/gd1U4TEdtu6Ncmef1x8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=h4csp1Cdqn0xAaVtPqgZpooYNxrduMeXnClZSBnZYjZR+ydozD9hgUcAZEUACt82hEUYCufk7nwnTWkiw5WlewrmuVsa0zQ+nw7G/M3YvzuF7bCAP33L17ltOuJEAPl+BbKxrElBDDE1IfZjIaldU2hL75Jg8sUwrkXscScxnaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HlEnh9Gd; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770160574; c=relaxed/simple;
+	bh=r1f76l2W8lfs2XcZ5GesaC4a6L1gjALG0EmEGjvWK7k=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=E3t3co77hyG+9w1VklKc19YwNaAkmDxhCmAffIB151CTcSJgCHg3KPRfZnZhQjxtLtl9jvrRR73kO5SzD2diCF9oYkq1yhlx5GhZt29c2wobvzCx2oFLOZq5bt7w9Qxa3X4ik+27WJSDvjHJASq7gSL304ZgcIbZKfJujpvZcZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IDMH5hX4; arc=none smtp.client-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HlEnh9Gd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51A1DC116D0;
-	Tue,  3 Feb 2026 22:40:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770158414;
-	bh=ZKt32DmVQN5n0rHwckCvF6Q/gd1U4TEdtu6Ncmef1x8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=HlEnh9GdbCfUV64zm5s1iTYMt5kWY5Cbsp0jDPCRAruj1k4qZUpn9sGiZhFGTI5Cv
-	 uWHsW2dajLBmpwqtb9YOYu356a5JisCfqsqFILJaUxlcMWPNEiIqnbo4BUDXj379vo
-	 IO3QrQun9eJgR3bRBMYaeAOr5ApZttFzFLugtWiDQJ8aK+5h9FmAaBa5qhlFYHiVgn
-	 25tcp8DtwgSebQNNa446NuXp0Cea3hXTQy68gCd0WQ2++wWoSXSHdG+BgMCAziDd7I
-	 vEO2lSp4PhsWrr+XvH3ZajK9EZ+HSSaYS9eXDjdJV2RR5MyECdZFb9dkpAq7jdKwx2
-	 LpMjow9qJmRTA==
-Date: Tue, 3 Feb 2026 14:40:11 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas.weissschuh@linutronix.de>
-Cc: Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima
- <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn
- <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Matthieu Baerts
- <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, Geliang Tang
- <geliang@kernel.org>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?=
- <mic@digikod.net>, =?UTF-8?B?R8O8bnRoZXI=?= Noack <gnoack@google.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
- <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
- linux-kselftest@vger.kernel.org, mptcp@lists.linux.dev,
- linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
- libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, Adhemerval
- Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>,
- klibc@zytor.com, Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition
- of 'struct sockaddr'
-Message-ID: <20260203144011.32d5b223@kernel.org>
-In-Reply-To: <20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
-	<20260121192729.2095aa25@kernel.org>
-	<20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
-	<20260130081741.425a92e0@kernel.org>
-	<3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
-	<20260131092517.6639d84c@kernel.org>
-	<20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IDMH5hX4"
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1248d27f293so1510291c88.0
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 15:16:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770160572; x=1770765372; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=liFpSsTStyEIOQCv34lD2CguoacjGONgmTHEiB9qokA=;
+        b=IDMH5hX4u0/5Qkd8EYRs5Hj3OKJmowFX4QlVmC6qJbdx6/LYKitYcKEeYFE+QI1G7l
+         UJLQKM26WFL1khHh2WKToFekyYgaoZ2bzGN4UwygIPNy+mNchqeVsxf9ANfmgaXcvIiB
+         n6ZT9nTOiJWCAw4LK6pLWkE2zMjA7g7odcxoLEn4fRBuECHonFKg667jYWbGjnjQLq4S
+         bhgu+Fs75lWF9na5uQejTx5s9pjLfSVvAaH8RVdX5o2lo9OTa3KUUOV+wC+CXy3S3JPT
+         GEa3M25RczzJ3PZOTSWa1RvlEsJpJfZkjSSMAuIlQVOJBhwKbhAJuZZabCuWWe3r/1XF
+         TxQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770160572; x=1770765372;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=liFpSsTStyEIOQCv34lD2CguoacjGONgmTHEiB9qokA=;
+        b=aP/XlQFEuq2EnZZ/Ym24VXAE04hZCVBoL39eEeaIHm6WNGkO7qQVH4AMdxF/tor7FS
+         aXuccTdm9Q9ByZdF7NqiFWkzVSsmf67hZUU3u2RCbVq9jb2rEsDLsfwjBRb2Wcmyyz/R
+         rybwyuK3vWvmfyG9LebtLulNZ2pmMA6KKdGNxubRTW8aGAXYpAqN5rj6KB6kDuKyJQi0
+         GLFymG7TAn4/a7S3IPL84duc67wm+iOZCO+1ZR82gnMg/FqVDEpngBq4irC3TrNdq6dd
+         8lXbynMemobJUHAgFKHkvfElyjQ1RkSv4rJRf2apUSCTeyi65Jp2zrtqydU9oQ6k+3Hl
+         5Iug==
+X-Forwarded-Encrypted: i=1; AJvYcCXTBgpKjzmh/lOTkMQ62RGN7Mpb4EcjkVxkYngO83pPCXbavEgzC2wVg4eA2plvEvx2u4c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyA1Yi2Ph3E++1PoYA+/Vp0byaR4DWVEaSOLbU38AUr1ij9/Kel
+	P7rTAw238kxpLV24iKumf503cnqGLoOJToKwekwkIpG4pbudLTZD+ayO
+X-Gm-Gg: AZuq6aKh95sneKi9hUdw2Ri1DYotZbXKZClgI6hbilxYi4LrDMSD/esY6EMMBjhjMwx
+	S1UKI/MNtrN+dxWKkl9XpT/7vP0qNkwqKv1KNdFdZXJfK81dxwvPS3ZAtEe5cba5Cx0oRy1Z9Vs
+	Y4tQ2s9S6cNQxSvIInBDy94Q+e92eWlvf8Yg/xOuHTAIrTfPcLnHj6WAUMPM5ohOF+UvYmduEq+
+	MxSOcZYKxI3ZuM/h8+JIbicVTa8UCBgsnsKoS1JO4KUwfHF/oCehywVmwbjKovPvukoR42n5UPK
+	hDQ44/CqWwY60N7Dw4C6cazL75LaxirCeQMxGxTE6WBrWK56B6IDjVb8eUDBTYOo+MxFKp5RjZK
+	Jr1rreolM/eNfpbC6n4VO2YbLKRcF7U0b2FPJvrkgEyPPiPtZwZUG0ex1yKqizXssZZnoIzsATS
+	ia7tiAVB8mKk1icME2YHOUtrHyDsXJWGrO15UUZ+8LmTbbb7rJhhY14/j3sf7RU1kIHA==
+X-Received: by 2002:a05:7022:325:b0:119:e56b:c75a with SMTP id a92af1059eb24-126f47bcfe3mr571073c88.31.1770160572095;
+        Tue, 03 Feb 2026 15:16:12 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:60e8:c921:e408:133f? ([2620:10d:c090:500::9470])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-126f5030b01sm654333c88.11.2026.02.03.15.16.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 15:16:11 -0800 (PST)
+Message-ID: <cde3706275830169d289d664d425df1a47b50f31.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add tests for BPF_END
+ bitwise tracking
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Tianci Cao <ziye@zju.edu.cn>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, 	haoluo@google.com, john.fastabend@gmail.com,
+ jolsa@kernel.org, kpsingh@kernel.org, 	martin.lau@linux.dev,
+ sdf@fomichev.me, shenghaoyuan0928@163.com, song@kernel.org, 
+	tangyazhou518@outlook.com, yonghong.song@linux.dev
+Date: Tue, 03 Feb 2026 15:16:09 -0800
+In-Reply-To: <20260203102015.5570-1-ziye@zju.edu.cn>
+References: <b68a122d7a0b046a9ca5527bcf9f50dfea183ce9.camel@gmail.com>
+	 <20260203102015.5570-1-ziye@zju.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, 3 Feb 2026 12:42:22 +0100 Thomas Wei=C3=9Fschuh wrote:
-> > FWIW the typelimits change broke compilation of ethtool, we'll see if
-> > anyone "outside kernel community itself" complains. =20
->=20
-> Can you point me to that breakage? I was unable to find it.
+On Tue, 2026-02-03 at 18:20 +0800, Tianci Cao wrote:
 
-Not reported on the ML, and it's kinda annoying to repro because=20
-the uAPI header sync script isn't committed :/ You have to check=20
-this out
+[...]
 
- https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/
+> However, I noticed that using macros does reduce readability somewhat - t=
+he test logic
+> is now more abstracted. Given that this is test code, do you think this t=
+rade-off is
+> acceptable, or would you prefer a middle ground?
 
-and run a script like this to sync headers from the kernel (then build):
+Why not like this?
 
-#!/bin/bash -e
+#define BSWAP_RANGE_TEST(name, op, in_value, out_value) \
+        SEC("socket") \
+        __success __log_level(2) \
+        __msg("r0 &=3D {{.*}}; R0=3Dscalar({{.*}},var_off=3D(0x0; " #in_val=
+ue "))") \
+        __msg("r0 =3D " op " r0 {{.*}}; R0=3Dscalar({{.*}},var_off=3D(0x0; =
+" #out_value "))") \
+        __naked void name(void) \
+        { \
+                asm volatile (                                  \
+                "call %[bpf_get_prandom_u32];"                  \
+                "r0 &=3D " #in_value ";"                          \
+                "r0 =3D  " op " r0;"                              \
+                "r2 =3D  " #out_value " ll;"                      \
+                "if r0 > r2 goto trap_%=3D;"                      \
+                "r0 =3D 0;"                                       \
+                "exit;"                                         \
+        "trap_%=3D:"                                              \
+                "r1 =3D 42;"                                      \
+                "r0 =3D *(u64 *)(r1 + 0);"                        \
+                "exit;"                                         \
+        :                                                       \
+        : __imm(bpf_get_prandom_u32)                            \
+        : __clobber_all);                                       \
+        }
 
-sn=3D"${0##*/}"
-export ARCH=3D"x86_64"
-
-if [ ! -d "$LINUX_GIT" ]; then
-    echo "${sn}: LINUX_GIT not set" >&2
-    exit 1
-fi
-
-pushd "$LINUX_GIT"
-if [ -n "$1" ]; then
-    git checkout "$1"
-fi
-desc=3D$(git describe --exact-match 2>/dev/null \
-       || git show -s --abbrev=3D12 --pretty=3D'commit %h')
-kobj=3D$(mktemp -d)
-make -j16 O=3D"$kobj" allmodconfig
-make -j16 O=3D"$kobj" prepare
-make -j16 O=3D"$kobj" INSTALL_HDR_PATH=3D"${kobj}/hdr" headers_install
-popd
-
-pushd uapi
-find . -type f -name '*.h' -exec cp -v "${kobj}/hdr/include/{}" {} \;
-popd
-rm -rf "$kobj"
-
-git add uapi
-git commit -s -F - <<EOT
-update UAPI header copies
-
-Update to kernel ${desc}.
-
-EOT
+BSWAP_RANGE_TEST(bswap16_range, "bswap16", 0x3f00, 0x3f)
+BSWAP_RANGE_TEST(bswap32_range, "bswap32", 0x3f00, 0x3f0000)
+BSWAP_RANGE_TEST(bswap64_range, "bswap64", 0x3f00, 0x3f000000000000)
+#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
+BSWAP_RANGE_TEST(be16_range, "be16", 0x3f00, 0x3f)
+BSWAP_RANGE_TEST(be32_range, "be32", 0x3f00, 0x3f0000)
+BSWAP_RANGE_TEST(be64_range, "be64", 0x3f00, 0x3f000000000000)
+BSWAP_RANGE_TEST(le16_range, "le16", 0x3f00, 0x3f00)
+BSWAP_RANGE_TEST(le32_range, "le32", 0x3f00, 0x3f00)
+BSWAP_RANGE_TEST(le64_range, "le64", 0x3f00, 0x3f00)
+#else
+BSWAP_RANGE_TEST(be16_range, "be16", 0x3f00, 0x3f00)
+BSWAP_RANGE_TEST(be32_range, "be32", 0x3f00, 0x3f00)
+BSWAP_RANGE_TEST(be64_range, "be64", 0x3f00, 0x3f00)
+BSWAP_RANGE_TEST(le16_range, "le16", 0x3f00, 0x3f)
+BSWAP_RANGE_TEST(le32_range, "le32", 0x3f00, 0x3f0000)
+BSWAP_RANGE_TEST(le64_range, "le64", 0x3f00, 0x3f000000000000)
+#endif
