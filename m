@@ -1,70 +1,85 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81D0202C48
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 02:53:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE552F363E
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 02:53:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770087202; cv=none; b=uXSfZqqDx52NZpuQhxNHIl6dOxIb8yDBrZDcvfCzAG8E5ehCOzdHCWcZnL5iTYYsWPJkMxWwUZlvc2qafwdGmUsewbCOFNC+RxHXjwCwlkG/agKSkxgf8xqJykrz7Bq/5t+NL9NRziXD8Vgs17t7lF4jxqvSF4nuetjI6xSQ72A=
+	t=1770087203; cv=none; b=Zc9Y9LttGcVXDF9gmz3Et2q1/AguKBvZMnADIBaCu+PjkIykUXWkbwYEMC4BuHIf8kp06bJo4nduO6kZW0rJTKPalburSsNyzKtL59T3xoyMbdLsr4+iKUmVKp8f2llQvQRr56mDgpzfQQN88U/FmEgc1n6OxpVg3WiBAf5GCcI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770087202; c=relaxed/simple;
-	bh=5hSwuYzqLHBd2Rbp9pi9pVM76pIigB/2Sd0H5qFJyoM=;
+	s=arc-20240116; t=1770087203; c=relaxed/simple;
+	bh=yvKUdCnK3yUoB8MqT+FUgCo3k+bQs2RS938i4L2ErZw=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LB+jP0zAmi8oT84WxKr0a0/lDZon1lA72JH6tHpDmuEYCyPUrCKmt+ztB8kaGhTsWpepkktpSXcu56jGZXnzbMNT64agBvNuAj7qPlo683a22Rl8F6NPluj0zYShnlPjpzt3OypiuR+33uExHCpjsSCo2YELorVGVDzZOmonNGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tG32wOf1; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=aarNz/dEDzcwi0Ih3+42klrsEwru8c/6sXLNpC8gJ7jLUWNPCpRKUKzwsMjazycAdLW3B5FuZTu0nA4Oe68XrFIeTM+prwmySzbtDp8ytNU3Eel2ubPpbsLj9Qxl1NmwcrrkKHurguAFsYHHXF4lKo3t8cDKNw596xmoCmzdDCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TkymhUgg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tG32wOf1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53076C116C6;
-	Tue,  3 Feb 2026 02:53:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TkymhUgg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE8A6C19425;
+	Tue,  3 Feb 2026 02:53:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770087201;
-	bh=5hSwuYzqLHBd2Rbp9pi9pVM76pIigB/2Sd0H5qFJyoM=;
+	s=k20201202; t=1770087203;
+	bh=yvKUdCnK3yUoB8MqT+FUgCo3k+bQs2RS938i4L2ErZw=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=tG32wOf16HHLrwTR+/aNUFOxpfdAB4s9aZTNxK6SeffCoGcpmI9y/hKkDShdpq3qD
-	 135QbHN/qajKpLcQo20SIY+OtjUX6YO84B0xe2zuX+qvFOAh0qyN7JUsixf2Vhfbon
-	 6F9jcv4fL/2EWmPlG/YmHszbmtMSfa01qIJByT4Ydfh0TgtgkjrpIvVJj9dIfOoojy
-	 /gRkg2AjXBVZABUuWXQqtFmR8eoaTIi0XLfHrw/wuOKmJnuObGjTZ9GsJGWYq1sB3T
-	 5xWOaf6G0fOD327Z6hxya158oMBlb6RJrAFY7VmLlhGI6TZB3ZLW7m6bUgQlhNvC7M
-	 ngFuRCnx046Mg==
-Content-Type: multipart/mixed; boundary="===============2609981117455602617=="
+	b=TkymhUggsJYRJ9aAFsLNwZxCQX2qkp7cFEttNCtsCfEw8J/8H2M3nfa4dbujOYVTi
+	 9/EzJqK6uMqvZbuVN8nEgsTvRyG9jPF3rCnQdHcTcpZ6cAifewVpmzZd7pQuUySxbY
+	 jRd+tnzA318eAt77J3pQzPlC58U1shpjwsIpms+EUET4AlsfBOnXuVK2pOvoU23D9x
+	 58pDzrPCX00X4g258NidQwUwBNvIG8fv19A9BaXtRrRp1T4wKFL02nk56ivm1hCUo5
+	 2bhrYzqlgItBbhMl1tHUHFboQJJ4y9MLX3GBetK5rXl39oe2w/fQqjc0Mn0cDjf+0P
+	 AAlLoxY6ud85Q==
+Content-Type: multipart/mixed; boundary="===============9215086658162783791=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e1a50428767daa8e647fa8fcc19acc59d83cf5c1e3e975821d14b47b94078f84@mail.kernel.org>
-In-Reply-To: <20260203022229.1630849-3-puranjay@kernel.org>
-References: <20260203022229.1630849-3-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v2 2/5] bpf: verifier: Clear singular ids for scalars
+Message-Id: <ee9a7350e136e13d16e6b5c7526beff39aa1ab555f3d815804abbecdd233e210@mail.kernel.org>
+In-Reply-To: <20260203022229.1630849-4-puranjay@kernel.org>
+References: <20260203022229.1630849-4-puranjay@kernel.org>
+Subject: Re: [PATCH bpf-next v2 3/5] bpf: verifier: relax maybe_widen_reg() constraints
 From: bot+bpf-ci@kernel.org
 To: puranjay@kernel.org,bpf@vger.kernel.org
 Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mykyta.yatsenko5@gmail.com,kernel-team@meta.com,andrii.nakryiko@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  3 Feb 2026 02:53:21 +0000 (UTC)
+Date: Tue,  3 Feb 2026 02:53:22 +0000 (UTC)
 
---===============2609981117455602617==
+--===============9215086658162783791==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index d92e10d4c..5da1c6036 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-commit ca2bffc24660b903cc21dad2f51a3a89f918b2eb
-Author: Puranjay Mohan <puranjay@kernel.org>
+[ ... ]
 
-bpf: verifier: Clear singular ids for scalars
+> @@ -9023,8 +9031,7 @@ static int widen_imprecise_scalars(struct bpf_verifier_env *env,
+>  		for (i = 0; i < MAX_BPF_REG; i++)
+>  			maybe_widen_reg(env,
+>  					&fold->regs[i],
+> -					&fcur->regs[i],
+> -					&env->idmap_scratch);
+> +					&fcur->regs[i]);
 
-This commit finds and clears singular (unique) scalar register IDs before
-caching verifier states. When only one register has a given ID, the ID can
-no longer participate in bounds propagation, so clearing it to zero
-enables better state pruning by treating such registers as independent.
+The change removes the idmap_scratch argument from maybe_widen_reg() calls,
+but widen_imprecise_scalars() still calls reset_idmap_scratch(env) at the
+start of the function. After this commit, the function looks like:
 
->     Verifier assigns ids to scalar registers/stack slots when they are
->     linked through a mov or stack spill/fill instruction. These ids are
->     later used to progagate newly found bounds to from one register to all
-                     ^^^^^^^^^                   ^^^^^^^
+    static int widen_imprecise_scalars(...)
+    {
+        ...
+        reset_idmap_scratch(env);      <-- this is now dead code
+        for (fr = old->curframe; fr >= 0; fr--) {
+            ...
+            maybe_widen_reg(env, ..., ...);  <-- no longer uses idmap
+            ...
+        }
+        return 0;
+    }
 
-This isn't a bug, but the commit message has "progagate" which should be
-"propagate", and "to from one register" appears to have an extra word.
+Should reset_idmap_scratch(env) be removed since it no longer serves any
+purpose in this function?
 
 
 ---
@@ -74,9 +89,9 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21614542865
 
 AI-authorship-score: low
-AI-authorship-explanation: The code follows kernel conventions consistently; commit message typos and natural technical phrasing suggest human authorship.
+AI-authorship-explanation: The commit demonstrates deep familiarity with BPF verifier internals and uses precise domain-specific terminology naturally; the focused scope and minimal code changes are consistent with experienced kernel developer patterns.
 issues-found: 1
 issue-severity-score: low
-issue-severity-explanation: Minor commit message typos that do not affect code correctness or system stability.
+issue-severity-explanation: Minor dead code issue where reset_idmap_scratch() is called but the idmap is no longer used after this change; no functional impact.
 
---===============2609981117455602617==--
+--===============9215086658162783791==--
