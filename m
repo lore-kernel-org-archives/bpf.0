@@ -1,122 +1,151 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19D173D3338
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 16:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B468D22B594;
+	Tue,  3 Feb 2026 16:58:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770137494; cv=none; b=d/eMsGrwHfkwQoJVZtjNaMlbNEiknybdaM3eJL6jWJxZQTPebgl+1kZZK2fqUczrPE4KexejCQ/4tBDj18yACB9noZbV5kKcLO7TU5/K+AeeLFWhjBiCkeJkX28srY5U52wN4vIikhJgatNj5ZdxlHnQX8SIunC2tPAeBm7rsvU=
+	t=1770137902; cv=none; b=rw16og2QGqtNObAuLjmcJeRlmD28eImNFMPsT9qXtCnbiQHpOKOrFaednKyjdD59+ItFy3mSdE4NP1EzjfYEq2UzGaQ8u9mu93mJDRdoSStyPPfzkD5VDcdxSVt4eHHpu1C9WPQMDZOsuinybi8a2XFMemuMUoVzJo2gDEfAjGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770137494; c=relaxed/simple;
-	bh=LG8aVkPS+1Gukg+64+iDQOxJobsKnPSvG4yGUYO2C00=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VzmsCRtuKdamzuW9T1OUTel3xFn8MiObdgXkUon+Pi6iroTJTdpz6kSFs188g3AG3hef3IA5y2OyFaubdQKZsCWHJJpVbjR91IWQdPGSPXDOpea7XV77/+ihUq9xsdPF2XFVQrEEOavhRB4XW+wmmvc60kVSC1sEFvwbkRepK/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VjJ/6+A7; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770137902; c=relaxed/simple;
+	bh=0289L1PKuryyzydZQqQllWWbPQlbVc0Tfg05QbiN3Vw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=oU04TesBr+xSX+RaCRdVi3PmqVqjMnsb8Q9XZ7sZcIB7ckHxSnib+5RCkyGXVMUQ7CgZ57Io1vdq/miHlDd2EycjsgSoZ9gtMf/nNVfodd7NM/1UBMtJZr67be5RBoWQXb53GDwwl2yVIHqzVBiboXcCAZE0UTvekZAYFfyGT9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=p1jc44bv; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=O3cYmRx+; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VjJ/6+A7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F916C19425;
-	Tue,  3 Feb 2026 16:51:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770137493;
-	bh=LG8aVkPS+1Gukg+64+iDQOxJobsKnPSvG4yGUYO2C00=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VjJ/6+A7TWLuWy0nzu0O6/UURwtouvrTSbEhpHAmDgygJDdDhCWzsXbIKAwsWop3e
-	 8n+oXPGQMPV1jqwOHzl61t/mMgDtxCbEaOHq7SngvYY1DOE7lool3wnGV95CWqYZ7e
-	 kSDXDHVb2VJGTLVqNiCpbOj2ENNdcZiarIQxvTKyEc1dHrW1kAj/iY0t7age7u+Os+
-	 w74qdWRhmItzKsvWSIQxnFj6n/AIAFb/CWjm1xGY35/p15YrGjU+0omKKzVkrxbeAb
-	 4xrEWa2yqnCJzmrsD/xl4XFFAgxasiNsVSNgpETSGrwT9+sOx1hhTPFgu+O5z7Ia9c
-	 kSRqeiNaE768w==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	kernel-team@meta.com,
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Subject: [PATCH bpf-next v3 5/5] selftests: bpf: verifier_scalar_ids: Add a test for ids=0
-Date: Tue,  3 Feb 2026 08:51:01 -0800
-Message-ID: <20260203165102.2302462-6-puranjay@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260203165102.2302462-1-puranjay@kernel.org>
-References: <20260203165102.2302462-1-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="p1jc44bv";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="O3cYmRx+"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id E7FC1EC057A;
+	Tue,  3 Feb 2026 11:58:18 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 03 Feb 2026 11:58:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1770137898;
+	 x=1770224298; bh=upK8X81jOmhOmWtnSD+fQ2W7IUu9DJYR+8J/jtItzcY=; b=
+	p1jc44bvGbvfiVfDrPZJbCHsbtZqdsAoZ+JKSHukCwDaupbg6gqF95MJAbDD5oXy
+	gnEzi+4Y2iQjDrr1GbKfMDWggCkitZntk2HMO7tMv52z2rk23YVKqf7VPfljjrIc
+	15GEyi8oi/xTeXtYHRxBEfTk/Bpe0tXvBxpj1xGPilKN6/8C0HhiWKkkGhqv3chF
+	MfCmutWKgyoOuDZ1GFCzaFxALmo1bgRtyuZIVwBm9m3A87/gKF7ASgMDWl2c1+IM
+	pfRgVsB3p1N7j4DjaW9IFF2eP6vB963F91QlwTZQPEyWInpPmIYKx3q2G/29rbj7
+	BVouWf+FBBVDNsMhouHPmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770137898; x=
+	1770224298; bh=upK8X81jOmhOmWtnSD+fQ2W7IUu9DJYR+8J/jtItzcY=; b=O
+	3cYmRx+goII2x37EtO/k2G27c2smmEHUHLE98+vFoemrme6dfYQ5onhqQNjKW+ZY
+	RUsRsD5nhTcfHwrWAB/SOlC2lMzJlBPZHElEyr5Wlfo/GJmSZgRLF8eOEeMWcmwE
+	KRXEhPcB3/eD++cGb7cFwSg6tZTWm8L1ZoMUudDdoiqtWRfurAjBl0jApHWcHgtc
+	CVxh/l+bT+gDlcX6lZOODSda18sJvjkc16KJ2U9rJwSJuIe3Ef7jGWh8aqViW4s1
+	TH+GYo/0bzH2Z3+AsAPyF3hFpuOORDqgOsvisMgwuzxc3YaZbMocsJPWRjES+Nno
+	cYBoPiONrENhBu3yJLcZA==
+X-ME-Sender: <xms:KimCaQc2rpPJ71dDcwRH0GGWMvDNVdpLECd667QSY6PJQMZYJSQY8w>
+    <xme:KimCadAeuiEV-loxHxKvKF896UnQMIJeQVvkbNzR76HR1gohwecZKe7MLEh26EvFJ
+    ttCkwT3QHT-w016iceFjc_HjqqyX3nBlkW51XZ6tyBq20zdoyqWkcs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukedtheelucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdefpdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopehmrghthhhivghurdguvghsnhhohigvrhhssegvfhhfihgtihhosh
+    drtghomhdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpthhtohep
+    rghlvgigvghirdhsthgrrhhovhhoihhtohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
+    epvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohhhnhdrfhgrshht
+    rggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehmvghmgihorhesghhmrghilh
+    drtghomhdprhgtphhtthhopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhrtghp
+    thhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdprhgtphhtthhopehmrghtthgsoh
+    gsrhhofihskhhisehgohhoghhlvgdrtghomh
+X-ME-Proxy: <xmx:KimCaS5sVgVt91B7P4f3ntTgpGl6UgYZcjGBWk7ggCgHwmYD5NnAWA>
+    <xmx:KimCaXcKd09fDD6CymT-D6fz66TJWFyWPkwbAY5219GD31f_LEVypw>
+    <xmx:KimCaRf7xG4Q5ZyJHp79Sm46ufBzSLBfjgnkC3wI5p2SaCRYJJvzYg>
+    <xmx:KimCaUGG-pCYiHa_WKJozfE0ViSFUPG5aBD9NYPg0J3qHrescFQq7w>
+    <xmx:KimCaYs8M-eXjzSUxQOExV68IoVNqYSeUYrHkBhqHCLSRAO1VFYkN51x>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 48370700065; Tue,  3 Feb 2026 11:58:18 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: ATnu9ZDQUFrg
+Date: Tue, 03 Feb 2026 17:57:58 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ "Arnd Bergmann" <arnd@kernel.org>
+Cc: "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Andrii Nakryiko" <andrii@kernel.org>, "Song Liu" <song@kernel.org>,
+ "KP Singh" <kpsingh@kernel.org>, "Matt Bobrowski" <mattbobrowski@google.com>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Masami Hiramatsu" <mhiramat@kernel.org>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>,
+ "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Yonghong Song" <yonghong.song@linux.dev>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
+ "Jiri Olsa" <jolsa@kernel.org>,
+ "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
+ "Mykyta Yatsenko" <yatsenko@meta.com>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf <bpf@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
+Message-Id: <5f9c89fe-df1d-4eb4-b724-08f8d90fcc59@app.fastmail.com>
+In-Reply-To: 
+ <CAADnVQ+14yum8okMmjuqF5m5DafWo1fY1EuPj-QU_ykYbQ01uw@mail.gmail.com>
+References: <20260203162746.2337002-1-arnd@kernel.org>
+ <CAADnVQ+14yum8okMmjuqF5m5DafWo1fY1EuPj-QU_ykYbQ01uw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: add missing __printf attributes
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Test that two registers with their id=0 (unlinked) in the cached state
-can be mapped to a single id (linked) in the current state.
+On Tue, Feb 3, 2026, at 17:34, Alexei Starovoitov wrote:
+> On Tue, Feb 3, 2026 at 8:27=E2=80=AFAM Arnd Bergmann <arnd@kernel.org>=
+ wrote:
+>>
+>> From: Arnd Bergmann <arnd@arndb.de>
+>>
+>> Some internal functions in bpf produce a warning when -Wsuggest-attri=
+bute=3Dformat
+>> is passed to the compiler, e.g. in 'make W=3D1':
+>>
+>> kernel/trace/bpf_trace.c: In function '____bpf_trace_printk':
+>> kernel/trace/bpf_trace.c:377:9: error: function '____bpf_trace_printk=
+' might be a candidate for 'gnu_printf' format attribute [-Werror=3Dsugg=
+est-attribute=3Dformat]
+>>   377 |         ret =3D bstr_printf(data.buf, MAX_BPRINTF_BUF, fmt, d=
+ata.bin_args);
+>>       |         ^~~
+>>
+>> The attribute here is useless since there are no callers from C code,
+>> but it helps to shut up the output anyway so we can eventually turn
+>> the warning option on by default.
+>>
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> This was discussed and it's incorrect.
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../selftests/bpf/progs/verifier_scalar_ids.c | 45 +++++++++++++++++++
- 1 file changed, 45 insertions(+)
+Do you have a reference to why it's incorrect?  It seems harmless
+and gives me a clean kernel build in combination with a handful
+of other fixes after enabling the option by default, but I assume
+I'm missing something,
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-index c8f8820336b7..3072fee9a448 100644
---- a/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_scalar_ids.c
-@@ -715,6 +715,51 @@ __naked void ignore_unique_scalar_ids_old(void)
- 	: __clobber_all);
- }
- 
-+/* Check that two registers with 0 scalar IDs in a verified state can be mapped
-+ * to the same scalar ID in current state.
-+ */
-+SEC("socket")
-+__success __log_level(2)
-+/* The states should be equivalent on reaching insn 12.
-+ */
-+__msg("12: safe")
-+__msg("processed 17 insns")
-+__flag(BPF_F_TEST_STATE_FREQ)
-+__naked void two_nil_old_ids_one_cur_id(void)
-+{
-+	asm volatile (
-+	/* Give unique scalar IDs to r{6,7} */
-+	"call %[bpf_ktime_get_ns];"
-+	"r0 &= 0xff;"
-+	"r6 = r0;"
-+	"r6 *= 1;"
-+	"call %[bpf_ktime_get_ns];"
-+	"r0 &= 0xff;"
-+	"r7 = r0;"
-+	"r7 *= 1;"
-+	"r0 = 0;"
-+	/* Maybe make r{6,7} IDs identical */
-+	"if r6 > r7 goto l0_%=;"
-+	"goto l1_%=;"
-+"l0_%=:"
-+	"r6 = r7;"
-+"l1_%=:"
-+	/* Mark r{6,7} precise.
-+	 * Get here in two states:
-+	 * - first:  r6{.id=0}, r7{.id=0} (cached state)
-+	 * - second: r6{.id=A}, r7{.id=A}
-+	 * Verifier considers such states equivalent.
-+	 * Thus "exit;" would be verified only once.
-+	 */
-+	"r2 = r10;"
-+	"r2 += r6;"
-+	"r2 += r7;"
-+	"exit;"
-+	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
-+}
-+
- /* Check that two different scalar IDs in a verified state can't be
-  * mapped to the same scalar ID in current state.
-  */
--- 
-2.47.3
+> Commit 7bf819aa992f ("vsnprintf: Mark binary printing functions with
+> __printf() attribute") should be reverted instead.
 
+Reverting that one would appear to introduce warnings elsewhere,
+so that would not be a complete fix either.
+
+      Arnd
