@@ -1,63 +1,63 @@
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE1C931B123
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 18:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B518F364EB2
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 18:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770141888; cv=none; b=txzfyZAjNGbelueyoZ2C3GlCOQCmOjyc0kyMp4A2wD+o2iFRiXzmFOLjJkymiatFIty9yW7Kd7M8+AZnAFljUV8nePx3Pz4OEkWo05YC3kh1JaOcmV1ObGneLk/ZN5w4gwrcfPs94t4K2OXB1k5G6r1mWq1VfkdZRGW9dwoN5aU=
+	t=1770141889; cv=none; b=ktswX3ssqjLPTh+kVgY2G8XnSLVI5SnpA4T38+71T6XdQXlkEavNW4raNvQAgCdI4gEqCc1MjC0daXXTgR/P5yqpAAv5lR47j9TIPljIIcxVHdPjuk0b54Epq1+Qv0Iv4xNtIjY1Z4X4byqJIgBFPlOvT0aXxaQbKdnZP2u7ndc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770141888; c=relaxed/simple;
-	bh=hMzeBTEJLEiYo56GsDXIp46jvdpyhOOAnCvCUyFVyjY=;
+	s=arc-20240116; t=1770141889; c=relaxed/simple;
+	bh=BAy2wS2w78jisfRWNwcbbtn8R+3j8ekGotqSONtZAxQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n34/cfqar5QLskN3W+iQSppQlx7uAunOjxJYUQZgdbDSAhdR54RCHudwava8p69jtlJBxDF/a1Qtq9ukNpKq6TEbgxCkeRnrDSV2ZeLETITFQ/ZDiReb2/tbTJGKlygRpfh0NHsscIBem5Gia8eSUZCKdpZPNPy37YADeP9xDis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=PtAN3ZEX; arc=none smtp.client-ip=209.85.222.182
+	 MIME-Version; b=IKDGeFYZWdRxflIHG/ScIUUWZZ2dgE/+pp4hNR2IidDztL0LDJ26mXn+ayRuZO7mIDnbWs1XIh62AzKKczbgid06n3oynxKPcn1Iwl2srg7WM6fArI1G9dPvxAVtB/KLefFzUGHFsXL7qAcBqEdasTKdskSmTwN0dj7CjWhVdc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=zCGE+pWM; arc=none smtp.client-ip=209.85.222.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="PtAN3ZEX"
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8c6d76b9145so638965685a.2
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 10:04:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="zCGE+pWM"
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8c6a0702b86so607677485a.0
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 10:04:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1770141885; x=1770746685; darn=vger.kernel.org;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1770141886; x=1770746686; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VaiEkcUh+ojAU8l6RgYAI8/eRP/IcL3qagF3E1r78mo=;
-        b=PtAN3ZEXHU9tkWS+ucW8nhI/ONffxVsRhBKClyycIgPIod5Os3n00lRrkoN5lluniz
-         bMia8flXswc/yssZ+mNfGL+Ff+WZVI3MCbuOeqWUlJpbSrdNdemEtblYmUGU+N0LcGud
-         ZbW2Y85+6uzW+WKfpj5y8z81A7am/ZQ85l+8cJLwQbUesri67WH4r5j8PHCyWBjwDQmg
-         RqIiOFYR2mW20RTmuRSYisnOsEu+Ok8yp3v3JvXs68441lafkRoIBdTQ/IuXXifNi5Wl
-         kTwJiAyyCfv4NxmSuENUuek6c2y8jppnoBOuwHSt82Vd7uv3lS1QE80hxejj6AmAQiev
-         UlZA==
+        bh=tvF4zPiM/74nGlGB7v4G21yGEcsL8UoXtHrhTAhYimg=;
+        b=zCGE+pWMq2f0t2FLuInUUxgaMsdQ/AS1CGhF3nPLlUyFngRX2cmlU6PPp/QB07MdZn
+         VYx9OqICdSFUOACuez1qxWBbEK0fuTfI1r2OsZkJMxs3MM3QPT+qDQ6j3W4qJy1NXorz
+         Pnfae7UtM1pX4FNAnhdCfCrYCUtxoN/AKgwwp23gN7cWQjTeakuepVy8EwX0mbd0+BC+
+         X0Bab2ITUCZk/WLNjfpn/SefmgDTsYkZw9CECcLUL0bjofaNJ9H57IVHRT96J9UU8rV9
+         tXwTRBiA03ffTdDSigSiVBh4vkSO6u6ZbRjT87X8z7D7PvoUEYVWnMkWpV07/XUOrdje
+         NIqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770141885; x=1770746685;
+        d=1e100.net; s=20230601; t=1770141886; x=1770746686;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=VaiEkcUh+ojAU8l6RgYAI8/eRP/IcL3qagF3E1r78mo=;
-        b=FV/pLbyUxFmqngZyCK5Oj0uQj6uDcRPVHlXsUEUEm9dxSEaiwDsHAC3lX+WYc3FgZx
-         A3/EToJQtMW5tMzS9wvVok67nmBI8GD6xMMojBLyAKRMg3EJasoVhTW0GNk1O16bwEN7
-         v2fxrphFnTQ600BxQ8zHox72trd+qNRKOSbb845yb774XyhieR/vyjFMqt5iuIO+xq+C
-         1fK5k3xeTa8jHmnKJl+PxNSoJFtvV+zdYXckcCrlOeBgcxy6e77I9iOGtXpdhgXnzOTK
-         0U8E7mayfNXXer7DkQ3FzRjxMZxl8TzSi06KKEEtncuzNxdDc+g6yhp9efZ4tkyOX/zr
-         IdYA==
-X-Gm-Message-State: AOJu0YyrhLonVgUbpP0FGLQvSjJtAqRXjCRmXJrbYDcFZPCSQ2swp/kP
-	+4EfIt2BH9MA3zsaoNUJTfyZKegjjfxHn1YuEEl74hgalTc+b1TC28kE2yG0bEUcdsA4UWoywpx
-	DsshU
-X-Gm-Gg: AZuq6aLXzUKfXb4yrehtHANu78pcR0/nndlnZF8875a8V4+JCe2Yrx3dKb51qvHaUCj
-	p+CsfWfzFGzTCPqjXWIWV/j/fJsOv8F+qhdAV17+x17lL7DdkRSd5PnrxV0SDiSYkWta78kzFZd
-	TUHuIs3nML/8RePik+T726x686/ep8Egr+FIAszaRfZjR6JI5K+fEJ1eZXYc/NVlTsXQECiuuhr
-	eR/ebrDXflWbBY0peBlkNbcDjtI29DeVF8SpM/OzBcPGVTQH4MxUZe+pJ/Y+CNrCrneAlp4Vdvl
-	PiKJiUPmLOlebii8kj7LDw+BXM10v6M92jRaBs34lQe+TohoHD9vpNJKbNSQm13BpPDji8yJYua
-	LYDfoFqFKDeXOVZ4cTLydmJim7NBt8cTYCHPMBiUq7IfhkRxK3cHviNyCcaGnNXhkfKFaxbCJ7e
-	M5qqMS1saXLQ==
-X-Received: by 2002:a05:620a:25cb:b0:8b1:728f:952e with SMTP id af79cd13be357-8ca2f845196mr63651485a.31.1770141884799;
-        Tue, 03 Feb 2026 10:04:44 -0800 (PST)
+        bh=tvF4zPiM/74nGlGB7v4G21yGEcsL8UoXtHrhTAhYimg=;
+        b=N1iSEWwVY/1o0UGEFbg60dJ6wLXPehIVKTaP/ypnly/zBw2QTjpiI3Sj03L90WU7up
+         p97b5f4PKJX4wFVWfZPWFPUM2tcHDfTbuJ0qJSMfHIOaP0tvEqJpjMZcoQLfd73OCzXB
+         SS1hf1OK5cLm8zOEHno6bTSLAwijWGIZy08tEz9cAXMMBC/5W4eu1KJEISSnd2VeOyaD
+         XaONSinGO/IeWXzgmzVDUeW7w1dfiLkH+nhhwGjQea6GXQ1lwhh5TmMyRQPO7fCOsP+8
+         v5i6AheRVe+gF2n/SqWXEn0eDKauZPdPS/WkrJoEAVoicbze1hzPO02+ndqS7zhxfvvm
+         SwRg==
+X-Gm-Message-State: AOJu0YyrnFkroL4euI1pNKr8XzAwIGf56w2uhtEsW1n4T47RdiNrDwcK
+	hcod7Xht0ntHlHnJ6l2R8hO0HjoSc6LLVi/h+ymdz/i28AudumrWy76Mbf6AQxhmKcm9Zy2w1iz
+	l2xll
+X-Gm-Gg: AZuq6aLPP6763m4tvpwE7lea3aFJIKZX9MJFVKx2J530yzzUY3o3Pg6D2zgE2OWyW2b
+	oGNVm2sP5cRHw97K+uteTk7zgDtqqn3+Lofc3tfR5ethANkvOkJYYycIpUh7x8Xh62qcgJUjw7I
+	sxaymUyOnGRhqOyno/r2SXliVoLI2z6prLXmt+W09XZpiIO2lTa69fhxLlbPH2cZyk63+VPzNwv
+	2q47bAzYujFrcEqlmUZoIaOacxgU5m7SOk7TCHDGeioya+c6ayDXUDOTMdZnaO45qSj349O0hec
+	4e4+VzKMhcy/eDn/wMyScmnXRPNhXmTVQZVeEyiV5UaRKm3z75dVeiJJy3QDt8PxBaj4QYO6mf7
+	LtlUI4Df+hyuAEDggOk8kOP83Mb/UmSYJeDvG2g6f746vlGZ2mBQlpNgCy69Q4WhCwhQGC6M0s3
+	o+t4nyfK3/9ddT7z44p2ON
+X-Received: by 2002:a05:620a:3912:b0:8c6:a373:c4a1 with SMTP id af79cd13be357-8ca2f84a04emr55343785a.24.1770141886318;
+        Tue, 03 Feb 2026 10:04:46 -0800 (PST)
 Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca2fa8144csm20469185a.14.2026.02.03.10.04.43
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca2fa8144csm20469185a.14.2026.02.03.10.04.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 10:04:44 -0800 (PST)
+        Tue, 03 Feb 2026 10:04:45 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
@@ -69,9 +69,9 @@ Cc: andrii@kernel.org,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH v2 3/4] bpf: Allow BPF stream kfuncs while holding a lock
-Date: Tue,  3 Feb 2026 13:04:23 -0500
-Message-ID: <20260203180424.14057-4-emil@etsalapatis.com>
+Subject: [PATCH v2 4/4] selftests/bpf: Add selftests for stream functions under lock
+Date: Tue,  3 Feb 2026 13:04:24 -0500
+Message-ID: <20260203180424.14057-5-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20260203180424.14057-1-emil@etsalapatis.com>
 References: <20260203180424.14057-1-emil@etsalapatis.com>
@@ -83,57 +83,63 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The BPF stream kfuncs bpf_stream_vprintk and bpf_stream_print_stack
-do not sleep and so are safe to call while holding a lock. Amend
-the verifier to allow that.
+Add a selftest to ensure BPF stream functions can now be called
+while holding a lock.
 
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/verifier.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/progs/stream.c | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6b62b6d57175..90811fb39974 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -12438,6 +12438,8 @@ enum special_kfunc_type {
- 	KF_bpf_arena_free_pages,
- 	KF_bpf_arena_reserve_pages,
- 	KF_bpf_session_is_return,
-+	KF_bpf_stream_vprintk,
-+	KF_bpf_stream_print_stack,
- };
+diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
+index f63b378de090..6f999ba951a3 100644
+--- a/tools/testing/selftests/bpf/progs/stream.c
++++ b/tools/testing/selftests/bpf/progs/stream.c
+@@ -42,6 +42,10 @@ int size;
+ u64 fault_addr;
+ void *arena_ptr;
  
- BTF_ID_LIST(special_kfunc_list)
-@@ -12516,6 +12518,8 @@ BTF_ID(func, bpf_arena_alloc_pages)
- BTF_ID(func, bpf_arena_free_pages)
- BTF_ID(func, bpf_arena_reserve_pages)
- BTF_ID(func, bpf_session_is_return)
-+BTF_ID(func, bpf_stream_vprintk)
-+BTF_ID(func, bpf_stream_print_stack)
- 
- static bool is_task_work_add_kfunc(u32 func_id)
- {
-@@ -12960,10 +12964,17 @@ static bool is_bpf_arena_kfunc(u32 btf_id)
- 	       btf_id == special_kfunc_list[KF_bpf_arena_reserve_pages];
++#define private(name) SEC(".bss." #name) __hidden __attribute__((aligned(8)))
++
++private(STREAM) struct bpf_spin_lock block;
++
+ SEC("syscall")
+ __success __retval(0)
+ int stream_exhaust(void *ctx)
+@@ -255,4 +259,32 @@ int stream_print_stack_invalid_id(void *ctx)
+ 	return bpf_stream_print_stack((enum bpf_stream_id)0xbadcafe);
  }
  
-+static bool is_bpf_stream_kfunc(u32 btf_id)
++SEC("syscall")
++__arch_x86_64
++__arch_arm64
++__success __retval(0)
++__stdout(_STR)
++__stderr("CPU: {{[0-9]+}} UID: 0 PID: {{[0-9]+}} Comm: {{.*}}")
++__stderr("Call trace:\n"
++"{{([a-zA-Z_][a-zA-Z0-9_]*\\+0x[0-9a-fA-F]+/0x[0-9a-fA-F]+\n"
++"|[ \t]+[^\n]+\n)*}}")
++int stream_print_kfuncs_locked(void *ctx)
 +{
-+	return btf_id == special_kfunc_list[KF_bpf_stream_vprintk] ||
-+	       btf_id == special_kfunc_list[KF_bpf_stream_print_stack];
++	int ret;
++
++	bpf_spin_lock(&block);
++
++	ret = bpf_stream_printk(BPF_STDOUT, _STR);
++	if (ret)
++		goto out;
++
++	ret = bpf_stream_print_stack(BPF_STDERR);
++
++out:
++	bpf_spin_unlock(&block);
++
++	return ret;
 +}
 +
- static bool kfunc_spin_allowed(u32 btf_id)
- {
- 	return is_bpf_graph_api_kfunc(btf_id) || is_bpf_iter_num_api_kfunc(btf_id) ||
--	       is_bpf_res_spin_lock_kfunc(btf_id) || is_bpf_arena_kfunc(btf_id);
-+	       is_bpf_res_spin_lock_kfunc(btf_id) || is_bpf_arena_kfunc(btf_id) ||
-+	       is_bpf_stream_kfunc(btf_id);
- }
- 
- static bool is_sync_callback_calling_kfunc(u32 btf_id)
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.49.0
 
