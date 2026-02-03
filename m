@@ -1,127 +1,242 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CDC232F75B;
-	Tue,  3 Feb 2026 11:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E456733FE2A
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 12:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770118947; cv=none; b=u+3w7mj0eD+/qD9qvco0Nb3t5c/Hing72O/vImV8t0TjCWohVtzkjLwhujsyJV0YxvPAIY4gkrEHPZ9iTbSBtntuxyFrCE3DMZRI20Io+GmOlN6sblznsB12Ei4tGha4sVobEod5NG2O83qx+TXWLMJRQLflkJD3ntpUgPNp/IU=
+	t=1770121590; cv=none; b=fdwd9M2y+yfZdKApAF5ICiozGyQkVnIiL8ypOrwJYf9t410hJ8xYMmxowCJzTFwv7/UdyXx+M7+6N47Hndtg8LuuIWMEUW8s+nQdP2gGVPtqQjkXF/j6eyzU5Tz/5z3uDytrVEy25g2zTBzfYquAC02/h74+mEletdK0/Ai3VoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770118947; c=relaxed/simple;
-	bh=f/4jPZjlH43hVd7djQf+N42+eV6nxJtc05EPg7iYKfI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d9xh8asrCGIzfjpQdYFzhSMPSOYu0DGaaGqMMSxIg3m36oZcpL8CghP0gj0QhmQogS3/8Qy3XlCwHDWTl+rx93hoBxZwAHAEKATgdlEtAq3JaUT7rEIX3OrgW5XsFkaUXh2ehhXzkn7Ybr3TWfS32NyUvrbelTFjToxcKlVOsqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Is5q8smq; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kzcip55z; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1770121590; c=relaxed/simple;
+	bh=VlQ6QmeoeBPSKxhfzXXw9dER5v/izF/WUHbx/Mi+EL8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=V/uVfgMvvtARQI/WrXxLKyBzae5iX2M1cuFBj7vpRhX7iymErUhkQ5ny8Iw12MKiBWae/mCTG6sn4DHs6ScL0uN+mlwMMHJ40p0sWMSAkBDNZMpcBDue/5hqXhJpbDDUuw8SUiA8ozokKFRID5141iVU7USnHZHqmK+wrD3meiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VrX9TG7R; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=W3sjq5Io; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Is5q8smq";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kzcip55z"
-Date: Tue, 3 Feb 2026 12:42:22 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1770118943;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VrX9TG7R";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="W3sjq5Io"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770121585;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Okjru8snA57GtyYjXxOgEFvqQ11nIpWc1KWAif9Vb94=;
-	b=Is5q8smq+1zCbNi8BcIT2F9JYkNoW4I2f6h3IsAC9+TAHZAJA+ptGoNxcksmNb9TJO7ASM
-	GrBNDpYopQXBfgTY5M6dWw4bCJMOtSruU2w8tp2eZKjimAA7Ubd1/OALNQQKUG+MLkwnUd
-	QRxbn1zb/g1zvxcC0GPrJcXHA9tPI/baTjQBdtonqWrDpkipE2wNvACjNoyebH1Ydp8s50
-	A946N23gdg226yVCStxech6jmC/7kbE9izKiwBmJX4vSz09YNs35yZeWZTuvY25R9TIzTe
-	p6tIfDELXJ+D1UMNJYD9v/kqx9EK1ZaQ5UlQiuNoexqlLkUa4DGFCiYIuHFNLQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1770118943;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Okjru8snA57GtyYjXxOgEFvqQ11nIpWc1KWAif9Vb94=;
-	b=kzcip55zJZvPYHswIjpDmmP5Hv1N0sjB+RQRB7cIM929AaKZ+VGOUSayo7E5Sl+KS/jTXA
-	BYV4WQ5EQ7zRpvCA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
-	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>, klibc@zytor.com, 
-	Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition of
- 'struct sockaddr'
-Message-ID: <20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
- <20260121192729.2095aa25@kernel.org>
- <20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
- <20260130081741.425a92e0@kernel.org>
- <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
- <20260131092517.6639d84c@kernel.org>
+	bh=VEfxefoU+z14b9IbVO/wML9s1Vu2K5sykD4MO79bNCw=;
+	b=VrX9TG7RkOJO2e8AAA8X4kTnggetjNpa4h27jLGsyPNVJ9PhicAfGxBAG0w/tHkqrWtpHo
+	QQtOQAJWyRXu3zlLdrIi0kZFyLDogviQSFtbbK+49byPm6nZzHWqmAvRUQSTi/neJ+B4LN
+	LacJpK7SSNMVsOysgA/2576e7AjHpK0=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-328-J9VsJpl0NZWVcAZlhlwVfw-1; Tue, 03 Feb 2026 07:26:24 -0500
+X-MC-Unique: J9VsJpl0NZWVcAZlhlwVfw-1
+X-Mimecast-MFC-AGG-ID: J9VsJpl0NZWVcAZlhlwVfw_1770121584
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-b88622fbe54so284728066b.0
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 04:26:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770121584; x=1770726384; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VEfxefoU+z14b9IbVO/wML9s1Vu2K5sykD4MO79bNCw=;
+        b=W3sjq5Iomz4YUBblDP06jBrmMUUXyI0TTWFAIjHBHL6GVIwgYgQZmEMad5HQdpPqOP
+         b0cdLjVyVPJdX3M2Ujjl/lZULzEK9nF7isZjvFTUPFySGphznl+CrMfeFloz7pBKOL+Z
+         5Z9A3SwnsfOXMSzaY+tBaRXoxrVklo+feCfB/ixXha6nN7org49NBNNUO90Wpznky7vZ
+         yn7vuLR6E6rIWPkiSNL4Hnq+TgcrOPwWDNk6zbEYdLASqHYv31AldAIl49BkNVzxxghp
+         pGw0JphimgaOd15g4wVxItPvhLAswpD9HIXdPeBQztderlmEfWMdo+H8NwdxUoPidfFe
+         kHog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770121584; x=1770726384;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VEfxefoU+z14b9IbVO/wML9s1Vu2K5sykD4MO79bNCw=;
+        b=In7ykWacrigtUMW7VxWs8lVKw6nSK8f8l7NrnXD++/NTCOvzGJR6Oyymn4/zszirgM
+         WwJZVRKMxVQLSEFowhoCQ3jWBap41N49/8Di6TmJqfXzr9pkiiN4ZcTpL5dcc85JIWwV
+         qXSNsARTiwbRoZXHzPW3DNHRd+B2Ua/8osCl5CtLSpNQgrf2R6ynpJ5g83cHmDn2T/eN
+         mphwhHmDMTmogmDJVKEoL2u/5P64xifYTcllHvZpfpvaeuE34m6A19bLBGqZ6uF0k3D7
+         qpnrBu6NFvupfLNvx3Gustz4gZ3Mg76lAFZdqSnIjO8bQgMzgte2J3elb58dOieGT3MA
+         6QBg==
+X-Forwarded-Encrypted: i=1; AJvYcCUISn6/5YJgzS9voFn6kKKDNs/WwOeE1+2abW1ySOvmelkL7kAuFDa9FlyLof5iU/0npV4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyilg3lm+Kv4Vbib1JOi0M1sMXwAS7hax1YTCSlPMy5N6B7GK0C
+	nVz0J41crUvfFcG0s+ZWpMcClqCNKuIF3EV1ZhU5GRJtIqYmslursYhW8Ss7rHo5VYOmeyjjIfO
+	z7HPbziR7NquYCj/c+PZTb2eliCtqNpEDe69a27yGAlJj/EcDZ4d8CA==
+X-Gm-Gg: AZuq6aKZM8ocMDjWTOCChpsLyNDnxBI0KiyUD0MPKx9lBJd7M5/OnTHFY3EHBZ0eBvU
+	TZXnK60s0r4vLrf2i4Ho5WaQvuOXfa70R7h/I29+gw+ftbcTgb54IZptIrk63k4ZhjEOm2K504i
+	8dkEOePonTfX9QzeojwkEKhI2FojZHMwt5h/L27Qo6fdLMyGv0XaxjXELN9+VdZRGc5ftdEJ0YV
+	LzPtu7YayB9pDWJyZcxO195/1KCCedVBxWVdJ1xOqEa4VMKkz+fGboOXD0N3pOw3FIKkGx9M2Sx
+	wcN0N+R1xrA2Syf80QZMAdj6z33LxZeq2jgTXirBS5BUusYNaAFxK5zY+gl3+1F7FDhNg4dUhZf
+	ESSXbPrZtrHLWc9WqUKU56z3LMQX5ODrTeg==
+X-Received: by 2002:a17:907:3e8d:b0:b87:7485:b4bf with SMTP id a640c23a62f3a-b8dff23c35dmr970638466b.0.1770121583567;
+        Tue, 03 Feb 2026 04:26:23 -0800 (PST)
+X-Received: by 2002:a17:907:3e8d:b0:b87:7485:b4bf with SMTP id a640c23a62f3a-b8dff23c35dmr970632766b.0.1770121582825;
+        Tue, 03 Feb 2026 04:26:22 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8dbf2ed500sm1044753466b.63.2026.02.03.04.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 04:26:22 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 89F7C4D0E1A; Tue, 03 Feb 2026 13:26:21 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Larysa Zaremba <larysa.zaremba@intel.com>, bpf@vger.kernel.org
+Cc: Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir Oltean
+ <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
+ <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Tony Nguyen
+ <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, Stanislav
+ Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
+ Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, "Bastien Curutchet
+ (eBPF Foundation)" <bastien.curutchet@bootlin.com>, Larysa Zaremba
+ <larysa.zaremba@intel.com>, Tushar Vyavahare <tushar.vyavahare@intel.com>,
+ Jason Xing <kernelxing@tencent.com>, =?utf-8?Q?Ricardo_B=2E_Marli=C3=A8re?=
+ <rbm@suse.com>,
+ Eelco Chaudron <echaudro@redhat.com>, Lorenzo Bianconi
+ <lorenzo@kernel.org>, imx@lists.linux.dev, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+ linux-kselftest@vger.kernel.org, Aleksandr Loktionov
+ <aleksandr.loktionov@intel.com>
+Subject: Re: [PATCH bpf 1/6] xdp: produce a warning when calculated tailroom
+ is negative
+In-Reply-To: <20260203105417.2302672-2-larysa.zaremba@intel.com>
+References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
+ <20260203105417.2302672-2-larysa.zaremba@intel.com>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Tue, 03 Feb 2026 13:26:21 +0100
+Message-ID: <87zf5q109e.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260131092517.6639d84c@kernel.org>
+Content-Type: text/plain
 
-On Sat, Jan 31, 2026 at 09:25:17AM -0800, Jakub Kicinski wrote:
-> On Sat, 31 Jan 2026 11:26:32 +0100 Thomas Weißschuh wrote:
-> > Jan 30, 2026 17:17:46 Jakub Kicinski <kuba@kernel.org>:
-> > 
-> > > On Fri, 30 Jan 2026 11:34:15 +0100 Thomas Weißschuh wrote:  
-> > >> Some of them get broken by the new 'struct sockaddr', but some others are
-> > >> already broken just by the new transitive inclusion of libc-compat.h.
-> > >> So any header starting to use the compatibility machinery may trigger breakage
-> > >> in code including UAPI headers before libc header, even for completely new type
-> > >> definitions which themselves would not conflict with libc.  
-> > >
-> > > Let's split the uAPI header changes from any selftest changes.
-> > > If you're saying the the selftests no longer build after the uAPI
-> > > header changes then of course we can't apply the patches.  
-> > 
-> > Yes, the selftests don't build anymore after the uAPI changes.
-> > 
-> > "can't apply" as in
-> > * "can't apply separately"
-> > * "are unacceptable in general"
-> 
-> this one
-> 
-> > * "are too late for this cycle"
-> > ?
-> > 
-> > None of this is urgent.
-> > We can do the selftests in one cycle and the uAPI in another one.
-> > Feel free to pick up the patches as you see fit.
-> > (The mptcp changes already go through their tree, so need to be dropped here)
-> > I can also resubmit the patches differently if preferred.
-> 
-> The selftests are just a canary in the coalmine. If we break a bunch of
-> selftests chances are we'll also break compilation of real applications
-> for people. Subjective, but I don't see a sufficient upside here to do
-> that.
+Larysa Zaremba <larysa.zaremba@intel.com> writes:
 
-Okay. We'll have around this inconsistency then.
+> Many ethernet drivers report xdp Rx queue frag size as being the same as
+> DMA write size. However, the only user of this field, namely
+> bpf_xdp_frags_increase_tail(), clearly expects a truesize.
+>
+> Such difference leads to unspecific memory corruption issues under certain
+> circumstances, e.g. in ixgbevf maximum DMA write size is 3 KB, so when
+> running xskxceiver's XDP_ADJUST_TAIL_GROW_MULTI_BUFF, 6K packet fully uses
+> all DMA-writable space in 2 buffers. This would be fine, if only
+> rxq->frag_size was properly set to 4K, but value of 3K results in a
+> negative tailroom, because there is a non-zero page offset.
+>
+> We could return -EINVAL and be done with it in such case, but due to
+> tailroom being stored as an unsigned int, it is reported to be somewhere
+> near UINT_MAX, resulting in a tail being grown, even if the requested
+> offset is too much (it is around 2K in the abovementioned test). This later
+> leads to all kinds of unspecific calltraces.
+>
+> [ 7340.337579] xskxceiver[1440]: segfault at 1da718 ip 00007f4161aeac9d sp 00007f41615a6a00 error 6
+> [ 7340.338040] xskxceiver[1441]: segfault at 7f410000000b ip 00000000004042b5 sp 00007f415bffecf0 error 4
+> [ 7340.338179]  in libc.so.6[61c9d,7f4161aaf000+160000]
+> [ 7340.339230]  in xskxceiver[42b5,400000+69000]
+> [ 7340.340300]  likely on CPU 6 (core 0, socket 6)
+> [ 7340.340302] Code: ff ff 01 e9 f4 fe ff ff 0f 1f 44 00 00 4c 39 f0 74 73 31 c0 ba 01 00 00 00 f0 0f b1 17 0f 85 ba 00 00 00 49 8b 87 88 00 00 00 <4c> 89 70 08 eb cc 0f 1f 44 00 00 48 8d bd f0 fe ff ff 89 85 ec fe
+> [ 7340.340888]  likely on CPU 3 (core 0, socket 3)
+> [ 7340.345088] Code: 00 00 00 ba 00 00 00 00 be 00 00 00 00 89 c7 e8 31 ca ff ff 89 45 ec 8b 45 ec 85 c0 78 07 b8 00 00 00 00 eb 46 e8 0b c8 ff ff <8b> 00 83 f8 69 74 24 e8 ff c7 ff ff 8b 00 83 f8 0b 74 18 e8 f3 c7
+> [ 7340.404334] Oops: general protection fault, probably for non-canonical address 0x6d255010bdffc: 0000 [#1] SMP NOPTI
+> [ 7340.405972] CPU: 7 UID: 0 PID: 1439 Comm: xskxceiver Not tainted 6.19.0-rc1+ #21 PREEMPT(lazy)
+> [ 7340.408006] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.17.0-5.fc42 04/01/2014
+> [ 7340.409716] RIP: 0010:lookup_swap_cgroup_id+0x44/0x80
+> [ 7340.410455] Code: 83 f8 1c 73 39 48 ba ff ff ff ff ff ff ff 03 48 8b 04 c5 20 55 fa bd 48 21 d1 48 89 ca 83 e1 01 48 d1 ea c1 e1 04 48 8d 04 90 <8b> 00 48 83 c4 10 d3 e8 c3 cc cc cc cc 31 c0 e9 98 b7 dd 00 48 89
+> [ 7340.412787] RSP: 0018:ffffcc5c04f7f6d0 EFLAGS: 00010202
+> [ 7340.413494] RAX: 0006d255010bdffc RBX: ffff891f477895a8 RCX: 0000000000000010
+> [ 7340.414431] RDX: 0001c17e3fffffff RSI: 00fa070000000000 RDI: 000382fc7fffffff
+> [ 7340.415354] RBP: 00fa070000000000 R08: ffffcc5c04f7f8f8 R09: ffffcc5c04f7f7d0
+> [ 7340.416283] R10: ffff891f4c1a7000 R11: ffffcc5c04f7f9c8 R12: ffffcc5c04f7f7d0
+> [ 7340.417218] R13: 03ffffffffffffff R14: 00fa06fffffffe00 R15: ffff891f47789500
+> [ 7340.418229] FS:  0000000000000000(0000) GS:ffff891ffdfaa000(0000) knlGS:0000000000000000
+> [ 7340.419489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [ 7340.420286] CR2: 00007f415bfffd58 CR3: 0000000103f03002 CR4: 0000000000772ef0
+> [ 7340.421237] PKRU: 55555554
+> [ 7340.421623] Call Trace:
+> [ 7340.421987]  <TASK>
+> [ 7340.422309]  ? softleaf_from_pte+0x77/0xa0
+> [ 7340.422855]  swap_pte_batch+0xa7/0x290
+> [ 7340.423363]  zap_nonpresent_ptes.constprop.0.isra.0+0xd1/0x270
+> [ 7340.424102]  zap_pte_range+0x281/0x580
+> [ 7340.424607]  zap_pmd_range.isra.0+0xc9/0x240
+> [ 7340.425177]  unmap_page_range+0x24d/0x420
+> [ 7340.425714]  unmap_vmas+0xa1/0x180
+> [ 7340.426185]  exit_mmap+0xe1/0x3b0
+> [ 7340.426644]  __mmput+0x41/0x150
+> [ 7340.427098]  exit_mm+0xb1/0x110
+> [ 7340.427539]  do_exit+0x1b2/0x460
+> [ 7340.427992]  do_group_exit+0x2d/0xc0
+> [ 7340.428477]  get_signal+0x79d/0x7e0
+> [ 7340.428957]  arch_do_signal_or_restart+0x34/0x100
+> [ 7340.429571]  exit_to_user_mode_loop+0x8e/0x4c0
+> [ 7340.430159]  do_syscall_64+0x188/0x6b0
+> [ 7340.430672]  ? __do_sys_clone3+0xd9/0x120
+> [ 7340.431212]  ? switch_fpu_return+0x4e/0xd0
+> [ 7340.431761]  ? arch_exit_to_user_mode_prepare.isra.0+0xa1/0xc0
+> [ 7340.432498]  ? do_syscall_64+0xbb/0x6b0
+> [ 7340.433015]  ? __handle_mm_fault+0x445/0x690
+> [ 7340.433582]  ? count_memcg_events+0xd6/0x210
+> [ 7340.434151]  ? handle_mm_fault+0x212/0x340
+> [ 7340.434697]  ? do_user_addr_fault+0x2b4/0x7b0
+> [ 7340.435271]  ? clear_bhb_loop+0x30/0x80
+> [ 7340.435788]  ? clear_bhb_loop+0x30/0x80
+> [ 7340.436299]  ? clear_bhb_loop+0x30/0x80
+> [ 7340.436812]  ? clear_bhb_loop+0x30/0x80
+> [ 7340.437323]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> [ 7340.437973] RIP: 0033:0x7f4161b14169
+> [ 7340.438468] Code: Unable to access opcode bytes at 0x7f4161b1413f.
+> [ 7340.439242] RSP: 002b:00007ffc6ebfa770 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+> [ 7340.440173] RAX: fffffffffffffe00 RBX: 00000000000005a1 RCX: 00007f4161b14169
+> [ 7340.441061] RDX: 00000000000005a1 RSI: 0000000000000109 RDI: 00007f415bfff990
+> [ 7340.441943] RBP: 00007ffc6ebfa7a0 R08: 0000000000000000 R09: 00000000ffffffff
+> [ 7340.442824] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+> [ 7340.443707] R13: 0000000000000000 R14: 00007f415bfff990 R15: 00007f415bfff6c0
+> [ 7340.444586]  </TASK>
+> [ 7340.444922] Modules linked in: rfkill intel_rapl_msr intel_rapl_common intel_uncore_frequency_common skx_edac_common nfit libnvdimm kvm_intel vfat fat kvm snd_pcm irqbypass rapl iTCO_wdt snd_timer intel_pmc_bxt iTCO_vendor_support snd ixgbevf virtio_net soundcore i2c_i801 pcspkr libeth_xdp net_failover i2c_smbus lpc_ich failover libeth virtio_balloon joydev 9p fuse loop zram lz4hc_compress lz4_compress 9pnet_virtio 9pnet netfs ghash_clmulni_intel serio_raw qemu_fw_cfg
+> [ 7340.449650] ---[ end trace 0000000000000000 ]---
+>
+> The issue can be fixed in all in-tree drivers, but we cannot just trust OOT
+> drivers to not do this. Therefore, make tailroom a signed int and produce a
+> warning when it is negative to prevent such mistakes in the future.
+>
+> Fixes: bf25146a5595 ("bpf: add frags support to the bpf_xdp_adjust_tail() API")
+> Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+> ---
+>  net/core/filter.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 616e0520a0bb..9715d957e3c5 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4149,12 +4149,13 @@ static int bpf_xdp_frags_increase_tail(struct xdp_buff *xdp, int offset)
+>  	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
+>  	skb_frag_t *frag = &sinfo->frags[sinfo->nr_frags - 1];
+>  	struct xdp_rxq_info *rxq = xdp->rxq;
+> -	unsigned int tailroom;
+> +	int tailroom;
+>  
+>  	if (!rxq->frag_size || rxq->frag_size > xdp->frame_sz)
+>  		return -EOPNOTSUPP;
+>  
+>  	tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
+> +	WARN_ON_ONCE(tailroom < 0);
+>  	if (unlikely(offset > tailroom))
+>  		return -EINVAL;
+>  
 
-> FWIW the typelimits change broke compilation of ethtool, we'll see if
-> anyone "outside kernel community itself" complains.
+Why can't we do both? I.e., WARN_ON_ONCE() *and* return -EINVAL?
 
-Can you point me to that breakage? I was unable to find it.
+-Toke
 
-
-Thomas
