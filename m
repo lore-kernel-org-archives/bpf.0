@@ -1,174 +1,224 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010059.outbound.protection.outlook.com [52.101.69.59])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F51331196C
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 16:01:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3609190462;
+	Tue,  3 Feb 2026 16:11:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.59
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770134462; cv=pass; b=jufO6dHAt/h0kztr5wl94EXKKHTtFShJNZwBaYPVNocVnzdpYVwihkF6mi8p7MhNmFu8npOcRRBGctrnC6GUpYTUgPz3ldcee7AcYloRtXLVffh/ZE6OOVFZq6KvGJcdKE4VPYG4XxAY0fU6wtTM/dmznQIxJGTHzvNmhlXTlGM=
+	t=1770135095; cv=fail; b=ivWkvxnU6gxbBg4ggEYCbdPLtknr4ISgd0EnH+iFB2p+pfXBP9xpz8uQS0rXk/5KTR2ED2iIE5ncVsSPfaYr/X0uHtU5/ZHAXk6d3VQgU2oygR81cJX/8vQPdbXU5g/EJOYaViLYkWEXxoGKJQogpmlvyreP7Rw+lOS0OYlWakc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770134462; c=relaxed/simple;
-	bh=deO57hxzyS5UzkvPh4r4kvjZmU6hULG6xhnk9q4NzV4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KGq/dcqAbCxBmRBG21vHM1SWIdu6EKOF82aKVFA4N/YdUBAPgf7sDBFZWSsWSOt+9IMVO33q367K/u+Y6sOnY9C2kDjdTT+bkiV0xN9iqRmJ7a1EljYaYlL4/yMXtK9qoRf2YIgmEGwIt89wcWanINus6kqJ+ChvdgloOJrzWPk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nJ8ZUjAh; arc=pass smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770135095; c=relaxed/simple;
+	bh=BEk3kud8WH/Gr7UdWfR6sU0wWh6JFyuIniAD6Q058YM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=kScRuGUGTKt27TBw5nCvbtYMjF5QKnqVNOZZZfOQXMVmjA9buaEpRxS7hk/4tbh1JPxrWFuXxnbVjs9Eo4T6qNYbBCUYDoZ2a7/OwLHkxi4tDBqveUSQyxYsHmRYMFU7VI5dGdYMvNxJcr+hn5Fn70bN3r2XN+MZTY3wSUnABN8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=q9neB3HA; arc=fail smtp.client-ip=52.101.69.59
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nJ8ZUjAh"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4806f80cac9so31796145e9.1
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 08:01:00 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770134459; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jPLjZUwZXlSCR9rMigj043DUlNPi0u9KAa1FqFNEJN4wj3Wo4aPO6gpbF4ghuxtfQj
-         LGwZN22oICr0+KJLmu10kjSpuE8t/rhbFsYVRWFTMsBKrDUnTvCLzD3DvThM/X0P0djS
-         J3s3GTckVHADESNbI+JkqgrdNDBRsyWOLb6S6Om16T5a6u2URUGzSACNkXj83ykv/Pf6
-         1xRYBMc5IYuG2vO0dz43YKTGGgdTBkdTXoRZNjaqmxLzMf8aQSpo8h1XD3a8pKWktxLQ
-         KGN3TiPsDipyv4AaLS8vhcNfcOb2iJ9qKWa/dXXp1XvEFEZ40Ay+X1b5X72UDTXaf1g2
-         CjLw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=A0rdFZkSZwICcKcvSlfIIEDfERHEMj/nUefLkALNSBg=;
-        fh=sxHj/QCMbJ+QcPj+jSygk6LTnmbJsNo58ZkoTWAZMNg=;
-        b=cDZ9ciM+XJBW8EUO0/oujuhSn/P/P5dSqFhjUSFaQlNqRiU7FG8i2drY9OVcfxcQQN
-         25qb+Z8o0HXossWyuDF3co4vo5pn5wuHPqVZUut6+u5PxqPSYZlvY4xERpAqLY9eAdLq
-         dRpQ7MiX+LeDZJ9hB9DzeWWT/POCuxdWHI9n52FRaxEPOiISZNKIVzkpAoHGzLgL5my1
-         PWZmD+Yk2eldhh9yFaTDHdQVVbpknXe55jqWfrAKnbJAtkUCh1ceg+rc4n06G+NXduAh
-         5KtYRCOUANdicbhJXN5jz2A7gzMMAiYZGR3Pqw9Dvpal0yO4NAVr+XMpvRff2/delHl+
-         Y8dA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770134459; x=1770739259; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A0rdFZkSZwICcKcvSlfIIEDfERHEMj/nUefLkALNSBg=;
-        b=nJ8ZUjAhc6eyDne25zx7/5W93JUZhndR2w7dRdvcwKJ20B2SZTtJsT3anhwAUAJY1Y
-         GKHyuGWhVkkxs8vO6/apwmn7lgHC4dAPihLNgQ+vC8RxF4OKpqDoS47K0MgWtwSfw6G6
-         7Lzn38y3HWegvH1M696KA1i5NKKW54nfXOE4JErIC+dwESBKMbkN+7QlAARvXe3UwjTv
-         aZJh668ldT7M9WNPL/PHnk77HGZyj3WbRgYtZP6DUuLD1pNkjOeBwxUajylodKmpMdsD
-         33K7msICw5VnXr9rbYEr2pbPyXXqb+kgH94YAsLC2dxLJLfSB+xOC9xlDz85E/uy0TIi
-         NIVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770134459; x=1770739259;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=A0rdFZkSZwICcKcvSlfIIEDfERHEMj/nUefLkALNSBg=;
-        b=gjBcdWyPzi8eBkhiHWirBCgCahj7UCGyhacj/Q+iDc6EUYmypZ+ajJygCaDlZUsIaV
-         A5uW9ZMrJ0KhocbAtVGKxf1MM6mZzqEJSoWFct/CuEqVTsfQfS1h4ROrJdKebtDnj1KX
-         CAUH7rKkQsKiHEiO6rKk8TU8DgnlZZt/ovaO2VONJY4TOR5ENhD/ZlB+ycR12GYFHfFO
-         Le+vytkoZb5PeMKHwfi9dztzFvA7komvhp3x6uE7jzzifuaSXslZFDd6Pwo4KFTdN782
-         Z53HKxn9nikfL/udXfN3Ldqm14+rwT+YTX+AgeC+HsiWofmQgOWxyRpbPM9eVC8tIv96
-         5AMA==
-X-Forwarded-Encrypted: i=1; AJvYcCWOGvTjNgLTqW5cyPVya5/BjC559ATyowqDUvCTjFxD9zUbsE5Z5WPCgMnJTPk1Wn5VDC0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxsm4iqgxfqwSS/xdFqSTB3C2fKrRm0EZap0+ngngP3TRi74cDF
-	FF521+FtLB0TH/YlThgYe7+iqmvCwCkOy8Ai1JLyFOv3jzTxDkdh0pURGb/IHi7E/cFA0DpbXdI
-	pvj8CUKt/eLzF9otO90bqwIk81S6BaTw=
-X-Gm-Gg: AZuq6aK0L3Df/QonSjw62ROfGO5SxYGXVtzM54xAP6Nm5/fl2bI7257ItLH2dGcWuIl
-	tN6GxOa8Zde3S7fXvu7FJGgYe457Np3KG7IM2jP/wqw3mj37M+fDrtoES9u6PP44kFvA8chzyvr
-	xS3s0dz9H1gmpF9sqKVvQtKPZyqmNYBtNXbcEpz8V8KTqoUEQS0xOFDBDPkuLZF/MXbo5Aks7m1
-	8gbGoBhNvrHEBQqfZai/u3TWWQ/OT59EzYeY9cl1V+h3l34Lf+3PpNBpmvVtozOICPLpYYUSV8h
-	bVftcHWG2c+J8o8peYbUnAtna5HcN+2EN2vRuoFhNfe5juv4LrDDP2Y0HLzrVa0Dr74jCQ==
-X-Received: by 2002:a05:600c:34d5:b0:47a:81b7:9a20 with SMTP id
- 5b1f17b1804b1-4830e930f67mr1621525e9.9.1770134459065; Tue, 03 Feb 2026
- 08:00:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="q9neB3HA"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bJlFVSRo+wVv2x8YSplT7+jvEBORCONMvT3ZjxmpZZUuTNu/eXu9mramh/Hw/XOMYnGPvGBd2KSmDimPq1UBky0+veUI5hqX4mDhL6QQF/TjspQXoLz8BgtNx95HdqWOY3RXpycoE05zR6FYyHpYtn0SsjF6Sr/0rzQuqCUA5VcE4QUQ0vKiRTYA0TWFvnNrtzj00Dr18Hnh8lBXuioJrDlADq2KmiSDbTbR3nqLrnsqcb0ihw69HNm6+qTfl4EK2a7qoKrssxFjvelzL78N01so+3gyScGhjxJOEWPggmAhLMEvXSv4kWTCKFDsVOdTHPLvyN/1pqk/srKMfZTe0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RGH0AU9itcjDXtMpLvn4ygdcu2M3WlM2jhV+vj3MV+0=;
+ b=gl0gdg8M/W6wHQTXr0yXE9TCbB+9InNBojnE4IWz50oBojM7V+S8vI7yYUUGFASDf28miFXJgoAndL5BtZRyy7mj7Y1olC1d6H70qGOPIKnM+aggojZlvyrsP+/SArqL0+FNb2/sW56tlRp/vrDRFGxt8jv2hLhSRJI/LLigrsvZEXEVxdl0mmMR8cMtcAm3uD6az+zv+SY0LF54LyPk3yX711/cBgHSEtZhq6k+k/ZhFYxHprEwOOvkVlPSXvLMvC/X9KwiPYT6o7mOy16+WDfb9J5Xwx42A/1UDMz3re0BQDFv+/EmHf9USDN8yUbABjXgHAQnY3EtDzmB49aiIw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.240) smtp.rcpttodomain=amd.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RGH0AU9itcjDXtMpLvn4ygdcu2M3WlM2jhV+vj3MV+0=;
+ b=q9neB3HAMEhaB51rPF8zZV+u+lFzERP4F7Y5yTQ+LdcQspeJrqkqmimegO/pM4RSSpylDrCkna7VWBkTT6nhn/Vr4iADIHfT/IVn6+KxEjqaVsoRfS6GceuEBby5H2mAnAkkou29MjwpNhi2XFka6FMbLQt0L5EyOXyu6MLoc4XxTBfkpBgqMs81MMLgdEDd0MK57+o/kIvulBuSiUcNt9/rkwO+/Wb1p3P2PNHoAhog5j2eEcK0vgJeQgPjaXIocYYrQrS/lLCKY87ExpVFKUp8UnIiwy20jF2Z+qYDrKeZBrk1HfXkXOWFbmr+1tBCM7VY82/0IrDNU27pbEUJWQ==
+Received: from AS4PR09CA0006.eurprd09.prod.outlook.com (2603:10a6:20b:5e0::16)
+ by AS8PR07MB7223.eurprd07.prod.outlook.com (2603:10a6:20b:25c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.10; Tue, 3 Feb
+ 2026 16:11:29 +0000
+Received: from AM1PEPF000252DA.eurprd07.prod.outlook.com
+ (2603:10a6:20b:5e0:cafe::75) by AS4PR09CA0006.outlook.office365.com
+ (2603:10a6:20b:5e0::16) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9587.12 via Frontend Transport; Tue,
+ 3 Feb 2026 16:11:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.240)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.2.240 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.2.240;
+ helo=fihe3nok0735.emea.nsn-net.net; pr=C
+Received: from fihe3nok0735.emea.nsn-net.net (131.228.2.240) by
+ AM1PEPF000252DA.mail.protection.outlook.com (10.167.16.52) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9587.10
+ via Frontend Transport; Tue, 3 Feb 2026 16:11:29 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fihe3nok0735.emea.nsn-net.net (Postfix) with ESMTP id 8E68623738;
+	Tue,  3 Feb 2026 18:11:27 +0200 (EET)
+From: chia-yu.chang@nokia-bell-labs.com
+To: tariqt@nvidia.com,
+	linux-rdma@vger.kernel.org,
+	shaojijie@huawei.com,
+	shenjian15@huawei.com,
+	salil.mehta@huawei.com,
+	mbloch@nvidia.com,
+	saeedm@nvidia.com,
+	leon@kernel.org,
+	eperezma@redhat.com,
+	brett.creeley@amd.com,
+	jasowang@redhat.com,
+	virtualization@lists.linux.dev,
+	mst@redhat.com,
+	xuanzhuo@linux.alibaba.com,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	parav@nvidia.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@google.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v3 net-next 0/3] ECN offload handling for AccECN series
+Date: Tue,  3 Feb 2026 17:11:23 +0100
+Message-Id: <20260203161126.2436-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
- <20260202111548.3555306-3-dolinux.peng@gmail.com> <20260202111249.649ac338@gandalf.local.home>
- <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
- <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com> <20260203101707.52965eb0@gandalf.local.home>
-In-Reply-To: <20260203101707.52965eb0@gandalf.local.home>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 3 Feb 2026 08:00:45 -0800
-X-Gm-Features: AZwV_Qgsf-FoXB1pc5mel06UTxL9uWyAFVjyhN8Kz0H72J6ymSV25GKNwS9ieHQ
-Message-ID: <CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
- via BTF
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Donglin Peng <dolinux.peng@gmail.com>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Donglin Peng <pengdonglin@xiaomi.com>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM1PEPF000252DA:EE_|AS8PR07MB7223:EE_
+X-MS-Office365-Filtering-Correlation-Id: d3eaa5de-69c4-4c3f-0edf-08de633ee3e8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|82310400026|36860700013|376014|1800799024|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?S3pheWxHQUtkWlpNQzAxc0I2aktJZ0ttV0pESnhzRnNhZGtQclQ3RHFvdUdx?=
+ =?utf-8?B?NDhVRDlBRktFTEFsYjR4NUFhWWgrM0NKYzhwQnlwRzU1QXpoK0tSdFNBZ0tE?=
+ =?utf-8?B?ZnFtdnAvSE9uM3g2T0Vubm1tSXJWZ0E3dWZ2bUlLTm9hT1ptemxHc2ViSG5x?=
+ =?utf-8?B?MW5oc1piOXhWVEttSFpUTXV4T3NsWXMxMFkzV1ZqWHRuRXlyNGpLWWYydjJr?=
+ =?utf-8?B?OGtHNDRENWg1WFJtNTNFZ3ZZejd3Ty9ZVnY5b0dWVTVONHplY0pUY2hhWmQr?=
+ =?utf-8?B?enQ1SEVUbXg4ZHJyMGFVS0FnWGV2blN6RVpiWmVhWGM5SW1lRXI4cXFoelVq?=
+ =?utf-8?B?UmNvcDhvUnNJUEZ0bG9jbkFyZ0x6WDFSblVDTkpTcW5SUVU3K2JpWHZkeG1T?=
+ =?utf-8?B?L2pYenVIaG5NcFlsTHFRTk1BQW13aE9ub3ZzeHdiOTZFbGsxdldCTkRIWW1G?=
+ =?utf-8?B?WFFOWEQyQ1V5Q3VsUW9PRDB5Sk5sdFRwS0FPTUJOSFB1OGoybG01a0tvUW50?=
+ =?utf-8?B?VVE3dzBHNXE0UXFFVitGeFUweS84bFF6YlNDYW9uRTFLbFcwamxrN1dUdU5J?=
+ =?utf-8?B?WjVMdGlnNFZVUFRjaFptVUNFeFZVcmdVQ0NHc3dRcElhM1dwY0cra3E5QzNt?=
+ =?utf-8?B?bEJxSDdxUk5Mc2wreXcvdHBmSlg4VUlCTklkbU1GUHp2ZmlVSjdHb1QrVjkz?=
+ =?utf-8?B?VVl3aG1SeUU0Y29VYk5RS3pHRVZFN2ZpZHMvQjkxTk0xdnlkcjhRbmhXa0JR?=
+ =?utf-8?B?Z0VpekVuelZNQTdFYmgrdWRic0RkVVAzZ3ZyNGw3ZVNaM0JnNXczZXlOWXNl?=
+ =?utf-8?B?dVF6c0pGYVBoOEl6K0cvU3JTaTk4aTMweWtaeFhBa2EyWnBGcjY1bk8rQWNy?=
+ =?utf-8?B?ODc1dXhDaDNsN0U0MHJ0MFpYOVdDQ0NVa1VRMVEremxENHlacGMrT3NJNEgw?=
+ =?utf-8?B?eHlveHpBMzh1TTZ4UHZjbDJoZXMwS0IrZGJPb3RiS3FKN01tSTQvMEc2N296?=
+ =?utf-8?B?L2VGU2Q1ZzNoblJoUm5xZzBQUlZweThTc1Rzdk53S3Y0ZEMrbVRybEtNcU4r?=
+ =?utf-8?B?TE96alNXbElsSG1GNlhlekFQSktiQ29lcm9WejlRRE81cHp5c0ZTSFBkZ0s2?=
+ =?utf-8?B?dUt2bGdER3FFdURYb2ljMWFlcEhWaU94R002ZHFaUXBUMFkwN251UldMUlFp?=
+ =?utf-8?B?VkpwTmdUWWRNT1dPL3c1dml4eG5CNFpJS2tOVmU1c0pSaGxEalFMTmR5RzBq?=
+ =?utf-8?B?SFA1ZzV0Ty9Tc2svNk9pbVRrNDNxNkxvcTdaSndFczFERVFQUlpzNGxjWDNB?=
+ =?utf-8?B?b0JNMnZmU0VFR1c2STBXeEo0SDlIeklrcW5FZG5wcWh1TVpBK044WVB4eWwr?=
+ =?utf-8?B?VTI3M1NxRWppcWJyU0phOUY3N0UrWlRtcFdYbXg4c08yWWxDNGpPdnBCRkRq?=
+ =?utf-8?B?QUI5QW4yMVc5cGk4SENUNzI5NEhjMDZqeGdGZW9aT1lnSk5qeGpLVkx0TFYw?=
+ =?utf-8?B?SnNIdFlCalNIRkEvcHBBQlFWQlJuclROQUl5YXJ6ckY0TkJsWnFtWGhkTThN?=
+ =?utf-8?B?VTlWR3lwbi9ObXAwYTZQcE5YTC9uVmwrUzNpU2RuL2FMTFVFaVRLTmZZMVdI?=
+ =?utf-8?B?RUJTN3RVNGdwNXplWkdZalRpMDJleU0vRmJNWU1HV2ZoMGJONmQ0dU51THNJ?=
+ =?utf-8?B?L3VjS1B0VjFXd29zbGM3LzFwaW81THlZT0hUWDJnNXFBcCtGOWYzcE56M1B6?=
+ =?utf-8?B?ZHhPamtPWS92VnB5YnR4QVlLVmxMY0NsMzlvMVNvdUU1K3Y4WUkvTGRtUXJk?=
+ =?utf-8?B?Sy9NOWNFY1VzaGd0aUdZNEM5M05sMUZrTTNkOWdlUnc0OWVOeHgvQUQvNENX?=
+ =?utf-8?B?QkF0MDNoSXdDWklMdWY5bTJqK0s3LzNSSzFxVWVzTEh6NHZkVVFpNVZRK0cw?=
+ =?utf-8?B?RkdDKzJ3dC9YS0RFT2JBUHg5NHJPK2VjMklWUXVYSmxGTldyaHRPMXN0WDEv?=
+ =?utf-8?B?aGhqQVN2ODdwaTFOYlZ0MzF2cEtkaGNUQUZVU1dtbFd3Skw5NUZ3QlJOWHpv?=
+ =?utf-8?B?ajVQbWdDV3UrMUthS0NqV2lST3htYXZ6RWkyUWFxRVJIME9iOVQzU25QbUZr?=
+ =?utf-8?B?c2pLYTVMWUxrS0JHaUlZelFXem9Xc0krRmd5WVNlSjBGeFluN1hJOElwd0R0?=
+ =?utf-8?B?dHdPdW5VOE9hbmFDYklDNWVmUEZQaHVYdXVtd1oyZWtDcmZWRHZmcUJ0VEhP?=
+ =?utf-8?Q?9HLatZNREWtCO6zR+CEgcO4MH7q5i89IH5Z0CpgcHM=3D?=
+X-Forefront-Antispam-Report:
+	CIP:131.228.2.240;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe3nok0735.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(82310400026)(36860700013)(376014)(1800799024)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	zyqfy0vtxQzFOvQv8Sgaq27v1GUlpU2u1Cdx6+jarUMKY2YllmE4xNcRswTwsJCqgtzmU1PPpAaWj1YyLHRQXdWDKiZE6kh33+Hry2a/BMI0g8uLbdd+g3nASiQAw5fCy40HeVUnHan8xgvYbhyYB+5YIVprMoqtCJHuwyBs5h+pah00CcgeBPoizIadcr9yUhapuJBIIbI8F1tiOofu4Sn1675f1Cm9LfSh/UQipJDpVZ81EcTXAUOmyQ2phvZrIqGK1RpnGUJ1TKyAlc8j5tJbtniPvJtL55tH4BGfye6B+UmTzKy29pcGpCkc76yNYvwP4w69AgwMa5fXw5Xn6uajp99B/vgAvnkVVF0YskDW3t43JHhZHSR6TVV0lO1m9wicX4JDsaQIjaUPdjIhUkz5ufaIFrIRIUp0UeVY3haZNAjTskAuMBkwGuHNxRrb
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2026 16:11:29.5318
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d3eaa5de-69c4-4c3f-0edf-08de633ee3e8
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.240];Helo=[fihe3nok0735.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM1PEPF000252DA.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB7223
 
-On Tue, Feb 3, 2026 at 7:16=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
->
-> On Tue, 3 Feb 2026 21:50:47 +0800
-> Donglin Peng <dolinux.peng@gmail.com> wrote:
->
-> > Testing revealed that sorting within resolve_btfids introduces issues w=
-ith
-> > btf__dedup. Therefore, I plan to move the sorting logic directly into
-> > btf__add_enum_value and btf__add_enum64_value in libbpf, which are
-> > invoked by pahole. However, it means that we need a newer pahole
-> > version.
->
-> Sorting isn't a requirement just something I wanted to bring up. If it's
-> too complex and doesn't achieve much benefit then let's not do it.
->
-> My worry is because "cat trace" takes quite a long time just reading the
-> BTF arguments. I'm worried it will just get worse with enums as well.
->
-> I have trace-cmd reading BTF now (just haven't officially released it) an=
-d
-> doing an extract and reading the trace.dat file is much faster than readi=
-ng
-> the trace file with arguments. I'll need to implement the enum logic too =
-in
-> libtraceevent.
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-If you mean to do pretty printing of the trace in user space then +1 from m=
-e.
+Hello,
 
-I don't like sorting enums either in resolve_btfid, pahole or kernel.
-Sorted BTF by name was ok, since it doesn't change original semantics.
-While sorting enums by value gets us to the grey zone where
-the sequence of enum names in vmlinux.h becomes different than in dwarf.
+Please find the v3 ECN offload handling for AccECN patch series. It aims
+to avoid potential CWR flag corruption due to RFC3168 ECN offload, because
+this flag is part of ACE signal used for Accurate ECN protocol (RFC9768).
 
-Also id->name mapping in general is not precise.
-There is no requirement for enums to be unique.
-Just grabbing the first one:
-ATA_PIO0 =3D 1,
-ATA_PIO1 =3D 3,
-ATA_PIO2 =3D 7,
-ATA_UDMA0 =3D 1,
-ATA_UDMA1 =3D 3,
-ATA_UDMA2 =3D 7,
-ATA_ID_CYLS =3D 1,
-ATA_ID_HEADS =3D 3,
-SCR_ERROR =3D 1,
-SCR_CONTROL =3D 2,
-SCR_ACTIVE =3D 3,
+This corresponds to discussions in virtio mailing list:
+https://lore.kernel.org/all/20250814120118.81787-1-chia-yu.chang@nokia-bell-labs.com/
+And it was suggested to clarify documents of SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN first.
 
-All these names are part of the same enum type.
-Which one to print? First one?
+Best regards,
+Chia-Yu
 
-another example:
-enum {
-        BPF_LOCAL_STORAGE_GET_F_CREATE =3D 1,
-        BPF_SK_STORAGE_GET_F_CREATE =3D 1,
-};
+---
+v3:
+- Update commit messages for clarity (Michael S. Tsirkin <mst@redhat.com>)
+- Update commit title for clarity (Michael S. Tsirkin <mst@redhat.com>)
+- Update cover letter to include discussion in virtio mailing list (Michael S. Tsirkin <mst@redhat.com>)
 
-and another:
-enum {
-        BPF_SKB_TSTAMP_UNSPEC =3D 0,
-        BPF_SKB_TSTAMP_DELIVERY_MONO =3D 1,
-        BPF_SKB_CLOCK_REALTIME =3D 0,
-        BPF_SKB_CLOCK_MONOTONIC =3D 1,
-        BPF_SKB_CLOCK_TAI =3D 2,
-};
+v2:
+- Replace VIRTIO_NET_HDR_GSO_ECN with VIRTIO_NET_HDR_GSO_ECN_FLAGS
 
-I'd rather not print any and keep it integer only.
+---
+Chia-Yu Chang (3):
+  net: update comments for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN
+  net: hns3/mls5e: fix CWR handling in drivers to preserve ACE signal
+  virtio_net: add AccECN feature negotiation and correct ECN flag
+    handling
 
-pw-bot: cr
+ .../net/ethernet/hisilicon/hns3/hns3_enet.c    |  2 +-
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c    |  4 ++--
+ drivers/net/virtio_net.c                       | 14 +++++++++++---
+ drivers/vdpa/pds/debugfs.c                     |  6 ++++++
+ include/linux/skbuff.h                         | 15 ++++++++++++++-
+ include/linux/virtio_net.h                     | 18 +++++++++++-------
+ include/uapi/linux/virtio_net.h                |  5 +++++
+ 7 files changed, 50 insertions(+), 14 deletions(-)
+
+-- 
+2.34.1
+
