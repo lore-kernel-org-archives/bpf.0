@@ -1,389 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787B7369208
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 22:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8D8277CB8
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 22:36:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770157664; cv=none; b=ZdTbrVJdt24JaaopWUU+kR1JObkUN9FB+yNCE8cyD8OWRlrVPti2AoKGf32sZw4EcpRHD5TSkxVc65mXFVJn4D1t3g9+4HRlhDz7/7ItEIAtzdupLioN9r1woYyntw8t7N8OlbArahiH0FHnE53LQEXNN+7cPQF1pC6Rlh4qMrU=
+	t=1770158209; cv=none; b=KsqRRuIOciOvZpCgtXphuZfwgGWx6rvynE3xnKi+kUUHUJKCG3MkqRrWpxIQPJHKiC3y57ANeSDVZsU2IihSRa+jaQR5m3I7QHsOqFgLYthUoA9BX/Ub2nZt8OIo6PA3r0pHMMiCDqyowUJ/ld4+bwTUBEUZ0ZPzUkIbqBegBlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770157664; c=relaxed/simple;
-	bh=lgrudMdKvy3b6NrRagQ+ewFklMMPEm3FgR6V7s/Zn2k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b+wDHzTlakuhKXmQ349MXOPMgMNu4FEDEvlo4fRqQct1/y0FCXQOtT/KwpanTFT4+Ukc8ZV2jLqno13ihVV7vrPTdW+4FXmdxN81RrkYEHpiZ1W+gSwvLZ3au/yHDU+8J0X7wNV869LQX5w0TYM9zMuNX3XNLB8QZN3a5Zq0kak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SPG+kvy+; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770158209; c=relaxed/simple;
+	bh=CDDXBDODhtjeVgsH3x1R2hu138QsWw+umWvoQbU1Y1k=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PfRNQyr7XDCB2RAZ4nXh6qg63dy2ZSmILuXxb5Q2W9FcNXjmzngydO7Pyx+xCcIHbP5kJpPT9+KDyRhyObQRU4rhzRrn0AtscYj5/2iprU7dGJUCTiJw5CCRHBwuurhMqUvQ+0z3yVFpULu/XzRXF+qoUqPB9WZIcUxCAmSQKwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HkPdRKIz; arc=none smtp.client-ip=74.125.82.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SPG+kvy+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B06C116D0;
-	Tue,  3 Feb 2026 22:27:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770157664;
-	bh=lgrudMdKvy3b6NrRagQ+ewFklMMPEm3FgR6V7s/Zn2k=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SPG+kvy+IESbT4u1YFGYkANMcaIw1zD7z+yTxIKhcCcmCR0bUfUiKwBr1y3ZTy69o
-	 Tvq2n34PB8EIKoem25V36A6uIT6ffK8CYbMb4DcW3TjTAMmSvkMrcethu9bP0OGFhe
-	 3IJ1rLEB4KZkkttny3QSO0CxPo+ceXqNmaDP/YyaNBEXI56HCsay2mZQOTvx8LW4Vx
-	 7Pef7Jcy3zAROWPdwC5HcJMGSVEFFapKBRC0h02YrutjUOq8tyTUSJsrXx7MslPcMv
-	 yAgeNjCSEP6fFp0wsSE/V3xh95eXJbJVs1zqO3hC7DzlXApzXYKcDfnTpoUX5NCUat
-	 Uc53bM4yKK59w==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add tests for improved linked register tracking
-Date: Tue,  3 Feb 2026 14:26:18 -0800
-Message-ID: <20260203222643.994713-3-puranjay@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260203222643.994713-1-puranjay@kernel.org>
-References: <20260203222643.994713-1-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HkPdRKIz"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-124899ee9d3so283502c88.0
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 14:36:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770158208; x=1770763008; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yzQblUVB3dkKySqKOCPBoJym3FToYDznhTd/jhvjz6M=;
+        b=HkPdRKIzVhYOKZq81D4DXekHbeWm2yB+OQU9eve6DZf3OH4XgqJ1qEdQ/vCcB2NLbH
+         Gs50b97QvGEQL/33BntIC9W1zn+KegRugHGLnq2UWfFDjxikl9Kb5sTl9l2BxpRhT8wr
+         atnhV7K+wHLS0vF4gO4cQlh9/ngx2+qF4uU53oL6oKWk3ttddhW80x+G30ghacttGTDv
+         7z9UZBDjcl1dJgzonR/ZSFpruV39Lg+Nja9Yik/IPjGoTBt4WAOZgkeBqK6v+u1sPJpd
+         9WWqYxoODMMCH4xpQQUVSVLwBb0626LCqbxFGqtg+LbgPs7usMlJlBo6RxJxTkhMo5dw
+         2diA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770158208; x=1770763008;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yzQblUVB3dkKySqKOCPBoJym3FToYDznhTd/jhvjz6M=;
+        b=h0yWhH6u2eHBmYQ13Pz7Ad4MjKqlB1z3UZ0Wp1TPXPxKCjru5fq1jPw77p4rvzYVTA
+         24jM2wos9i8XaYd853ovb4cByzWaWNYnCvKoKtZMxirf3c+xhNg4MGE5lwUqI+Djs0hK
+         SCTz5ntml0JFrVznkyilNZPMVYlDha5nf4rNDpZYSb8PdZFYd0MYTVzMTeXhwh3lyPh6
+         9qPqgz1X1xr5NwX6CUEAXCn26ZsZIkaiy/GygCK1QWV0zFV6Uw40SIBGjLq+TKPj06A0
+         sktJCWq8TiKU/votZfqKiEq50UsONsKAXKEtOVuzd90qYFnQ/iX8ZPV/9LD9Y8P51OLE
+         Rwcg==
+X-Forwarded-Encrypted: i=1; AJvYcCVSStQ+a2ny8AQ2USVUrVpXJrbt7xL9Px4gwhaQM3Af5MBtMyWg3cOoFiGrPP9tzpNRbGQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqfRIkqHJ0pgG51iRcVQyVCvBvDlP1P38bEizjqS+XGhwT/oKK
+	730d2aptU/assqWwvnFRPhd2OCr4c9PguWeO6Bjy2xL/e7dkZXu3WvNI
+X-Gm-Gg: AZuq6aKC63ipyCX7y4/TmlRcBKsA1svIaAPPJs5/1bnq1I183DbIflMWjsMD6HOIkNi
+	HaHDZm+MDZGhXg1HABHgg253N+QdbFUD6xKhandXxcMOHas5+I1ymYvaYCdz0NWxg2OFcMBaU6T
+	AOrXKvPc81K1S6xpbBqnpUZ3xB7ogHogWIfoPhgRE7U+dThu46xuRD5K5TO7lmO2RUED4SUKZqc
+	B2aDrZO20TDF/TW1qnMAT5/dsWhWa3XETruc8mBkARzlArEHLJ5LJAL+l463vMwqAPImHSxDOo1
+	lpFyQnXZBV4291IuEnAEoq3DgVsbqBjMk60rqdOnQ+DuGuc3ythnoRlFQZKP8PCHJ41kRqW93Is
+	T2U0/TCn/JZWCbABdZzyGTRlW3Luo0K1OFnr3EL46ust0B8AYQhFQLp8OgbGQQYBBHzFmaSWFV+
+	nvQymv7wkUCnh4jNlAbUIoPhm18ZFp8oSMli6xo9Vntw0c2FAU4prLKEwIGduo7QefeA==
+X-Received: by 2002:a05:7022:606:b0:11f:19f9:c5f9 with SMTP id a92af1059eb24-126f47dc565mr364453c88.12.1770158207639;
+        Tue, 03 Feb 2026 14:36:47 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:60e8:c921:e408:133f? ([2620:10d:c090:500::9470])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-126f4e107b4sm579351c88.7.2026.02.03.14.36.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 14:36:47 -0800 (PST)
+Message-ID: <390ea771d41c8cf53de64025036bf1435c5dac5e.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Add bitwise tracking for BPF_END
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Tianci Cao <ziye@zju.edu.cn>
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+ daniel@iogearbox.net, 	haoluo@google.com, john.fastabend@gmail.com,
+ jolsa@kernel.org, kpsingh@kernel.org, 	martin.lau@linux.dev,
+ sdf@fomichev.me, shenghaoyuan0928@163.com, song@kernel.org, 
+	tangyazhou518@outlook.com, yonghong.song@linux.dev
+Date: Tue, 03 Feb 2026 14:36:45 -0800
+In-Reply-To: <20260203101736.4975-1-ziye@zju.edu.cn>
+References: <e62c874af12c74ec4442df6e098c6d5000f9540e.camel@gmail.com>
+	 <20260203101736.4975-1-ziye@zju.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Add tests for linked register tracking with negative offsets, BPF_SUB,
-and alu32. These test for all edge cases like overflows, etc.
+On Tue, 2026-02-03 at 18:17 +0800, Tianci Cao wrote:
+> Hi Eduard,
+>=20
+> Thank you for the review and the ack.
+>=20
+> On 2/3/26 4:03 AM, Eduard Zingerman wrote:
+> > > -	/* ALU32 ops are zero extended into 64bit register */
+> > > -	if (alu32)
+> > > +	/*
+> > > +	 * ALU32 ops are zero extended into 64bit register.
+> > > +	 * BPF_END is already handled inside the helper (truncation),
+> > > +	 * so skip zext here.
+> > > +	 */
+> > > +	if (alu32 && opcode !=3D BPF_END)
+> >=20
+> > Nit: zext after scalar_byte_swap() won't change anything, right?
+> >      If so, I'd just avoid the special case and skip 'opcode !=3D BPF_E=
+ND'.
+>=20
+> Actually, for BPF_END, the alu32 flag may mislead regarding the actual da=
+ta width being processed.
+> The operand size for BPF_END is determined by insn->imm , not by the opco=
+de class.=20
+> So if we simply rely on if (alu32) to perform zext_32_to_64(), we might e=
+ncounter an unsound state=20
+> in the following cases:
+>=20
+> * le64 : opcode=3D0xd4 (BPF_END | BPF_ALU | BPF_TO_LE)
+> * be64 : opcode=3D0xdc (BPF_END | BPF_ALU | BPF_TO_BE)
+>=20
+> These instructions belong to BPF_ALU, so alu32 is true. However, it is a =
+64-bit operation. If we=20
+> perform zext_32_to_64() after scalar_byte_swap(), the verifier would inco=
+rrectly zero-out the=20
+> upper 32 bits of a 64-bit result, which is incorrect and unsound.
+>=20
+> Since scalar_byte_swap() already handles truncation and zero-extension in=
+ternally based on the=20
+> precise ' insn->imm ', it's safer to skip the generic alu32 zext for BPF_=
+END altogether.
+>=20
+> If you have any more questions, please feel free to reach out.
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../bpf/progs/verifier_linked_scalars.c       | 300 +++++++++++++++++-
- 1 file changed, 298 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-index 5f41bbb730a7..5ff3983c48b7 100644
---- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include <linux/bpf.h>
-+#include <limits.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
-@@ -18,9 +19,9 @@ __naked void scalars(void)
- 	r4 = r1;				\
- 	w2 += 0x7FFFFFFF;			\
- 	w4 += 0;				\
--	if r2 == 0 goto l1;			\
-+	if r2 == 0 goto l0_%=;			\
- 	exit;					\
--l1:						\
-+l0_%=:						\
- 	r4 >>= 63;				\
- 	r3 = 1;					\
- 	r3 -= r4;				\
-@@ -64,4 +65,299 @@ l0_%=:								\
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__success
-+__naked void scalars_neg(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 += -4;					\
-+	if r1 s< 0 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* Same test but using BPF_SUB instead of BPF_ADD with negative immediate */
-+SEC("socket")
-+__success
-+__naked void scalars_neg_sub(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 -= 4;					\
-+	if r1 s< 0 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* alu32 with negative offset */
-+SEC("socket")
-+__success
-+__naked void scalars_neg_alu32_add(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 &= 0xff;					\
-+	w1 = w0;					\
-+	w1 += -4;					\
-+	if w1 s< 0 goto l0_%=;				\
-+	if w0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* alu32 with negative offset using SUB */
-+SEC("socket")
-+__success
-+__naked void scalars_neg_alu32_sub(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 &= 0xff;					\
-+	w1 = w0;					\
-+	w1 -= 4;					\
-+	if w1 s< 0 goto l0_%=;				\
-+	if w0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* Positive offset: r1 = r0 + 4, then if r1 >= 6, r0 >= 2, so r0 != 0 */
-+SEC("socket")
-+__success
-+__naked void scalars_pos(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 += 4;					\
-+	if r1 < 6 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* SUB with negative immediate: r1 -= -4 is equivalent to r1 += 4 */
-+SEC("socket")
-+__success
-+__naked void scalars_sub_neg_imm(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 -= -4;					\
-+	if r1 < 6 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* Double ADD clears the ID (can't accumulate offsets) */
-+SEC("socket")
-+__failure
-+__msg("div by zero")
-+__naked void scalars_double_add(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 += 2;					\
-+	r1 += 2;					\
-+	if r1 < 6 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Test that sync_linked_regs() correctly handles large offset differences.
-+ * r1.off = S32_MIN, r2.off = 1, delta = S32_MIN - 1 requires 64-bit math.
-+ */
-+SEC("socket")
-+__success
-+__naked void scalars_sync_delta_overflow(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r2 = r0;					\
-+	r1 += %[s32_min];				\
-+	r2 += 1;					\
-+	if r2 s< 100 goto l0_%=;			\
-+	if r1 s< 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  [s32_min]"i"(INT_MIN)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Another large delta case: r1.off = S32_MAX, r2.off = -1.
-+ * delta = S32_MAX - (-1) = S32_MAX + 1 requires 64-bit math.
-+ */
-+SEC("socket")
-+__success
-+__naked void scalars_sync_delta_overflow_large_range(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r2 = r0;					\
-+	r1 += %[s32_max];				\
-+	r2 += -1;					\
-+	if r2 s< 0 goto l0_%=;				\
-+	if r1 s>= 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  [s32_max]"i"(INT_MAX)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Test linked scalar tracking with alu32 and large positive offset (0x7FFFFFFF).
-+ * After w1 += 0x7FFFFFFF, w1 wraps to negative for any r0 >= 1.
-+ * If w1 is signed-negative, then r0 >= 1, so r0 != 0.
-+ */
-+SEC("socket")
-+__success
-+__naked void scalars_alu32_big_offset(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 &= 0xff;					\
-+	w1 = w0;					\
-+	w1 += 0x7FFFFFFF;				\
-+	if w1 s>= 0 goto l0_%=;				\
-+	if w0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__failure
-+__msg("div by zero")
-+__naked void scalars_alu32_basic(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r1 = r0;					\
-+	w1 += 1;					\
-+	if r1 > 10 goto 1f;				\
-+	r0 >>= 32;					\
-+	if r0 == 0 goto 1f;				\
-+	r0 /= 0;					\
-+1:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Test alu32 linked register tracking with wrapping.
-+ * R0 is bounded to [0xffffff00, 0xffffffff] (high 32-bit values)
-+ * w1 += 0x100 causes R1 to wrap to [0, 0xff]
-+ *
-+ * After sync_linked_regs, if bounds are computed correctly:
-+ *   R0 should be [0x00000000_ffffff00, 0x00000000_ffffff80]
-+ *   R0 >> 32 == 0, so div by zero is unreachable
-+ *
-+ * If bounds are computed incorrectly (64-bit underflow):
-+ *   R0 becomes [0xffffffff_ffffff00, 0xffffffff_ffffff80]
-+ *   R0 >> 32 == 0xffffffff != 0, so div by zero is reachable
-+ */
-+SEC("socket")
-+__success
-+__naked void scalars_alu32_wrap(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 |= 0xffffff00;				\
-+	r1 = r0;					\
-+	w1 += 0x100;					\
-+	if r1 > 0x80 goto l0_%=;			\
-+	r2 = r0;					\
-+	r2 >>= 32;					\
-+	if r2 == 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__success
-+void alu32_negative_offset(void)
-+{
-+	volatile char path[5];
-+	volatile int offset = bpf_get_prandom_u32();
-+	int off = offset;
-+
-+	if (off >= 5 && off < 10)
-+		path[off - 5] = '.';
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.47.3
-
+Hm, makes sense, thank you for explaining.
