@@ -1,199 +1,134 @@
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398303D1CA8
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 16:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216543D3017
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 16:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770136294; cv=pass; b=u23Zp/g44DsrQfe//fzeS2hQTOjitr0imxPkvWZpNJlfvEPpt5acpVELwl2jgtZudN6FfqnZmiBj3DsdNlQW8hI1iTL33BqgXZFWVH5DReeN7UL5iB9/jplAiLd/GOOIuQwMkvgtp5quCE5mTUs2DvDDAjXVRPN7tZw7qsMAygs=
+	t=1770136456; cv=pass; b=fmFjIQ8fsDQChVJpBcDBYCd5HyNp+0JdJTEH5ORQHhEqmBVK5pEBXcZwcIRXUhszwb1aUUFpHFA1hl14w/n49c2de5kRcepAyanqk2s7ZbQqJXSursodZkXiEx0s6aIbHkWav2NjilzrUufzPk1RNQoczOm3pDTP702Mn2y54Mg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770136294; c=relaxed/simple;
-	bh=vDIqwnNGat7UeLSbDaR+Ta7GDbEkaTxOpsZnwVbtoWQ=;
+	s=arc-20240116; t=1770136456; c=relaxed/simple;
+	bh=bmwS02O7Xi0i3LCtAbnGeK3EdgJru2Z2vrI/HUuqlh4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=peGENPFGdXQ/hRlG8z0PkE5EclKoZ8yEsF+AbGzZ2kuFzovlexxWuRbPFU/0tptIQxer6jJdqjIJWobGb5gj3cgFD/szjDpySCFKcjReqVNtOHgJs9iNMbFrD+Nj3yXWkHTUIBE6IxMN/mfQOvJofRZfCQjFLO1l1QXPAHmLQOE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=N63+HBdC; arc=pass smtp.client-ip=209.85.221.43
+	 To:Cc:Content-Type; b=rJMCUiwIMX2+rZjCU54EYh8KLQC68iIfySm4othksUnicpmthTwAxq4FjajL/msnV4sVdtvNACu5Nxa/dEuUcPIwBHlWWoShrbKmFhjpPXESx5HYDqkyt/E/oSYh0nw2zkppkxQAgdeDkD5F2uBS+DAZQkDeb71NEiTvF2MjOw0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ROKiYh3y; arc=pass smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="N63+HBdC"
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42fbc544b09so5378420f8f.1
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 08:31:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770136292; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ROKiYh3y"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4359a302794so4012831f8f.1
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 08:34:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770136453; cv=none;
         d=google.com; s=arc-20240605;
-        b=e9ZGSfmbmx94uKxcBh0Y87RaphJkMtrqJjdhPCYOqML1xQEfVSYv60GbXu1/+06jhh
-         DMkkzq+CH18K9r3oK6EqFwmKP+g+kqslFYdXfPe2yYq9XHHnufIxLfUT38o4y1DGTa9U
-         VWHLgb5FqHnVQlxofVwJF+euUmX/WgQFnw3NBiqM9/6RIrUn8WOZx3qSzdPjyv1pFqwC
-         +55FV7sE0FF8cGowHO1dQ8LhjdpV389Q5NVXeAg98vV0/xRDHQ1vvEaBPgJOFHA13bDD
-         TCXeybMFY58oTc+SKt8isXJqIcOQzPMr1X8QODrkLhbe1LkBjVOTcHegW5mTfq2EZBgg
-         BVRA==
+        b=Fpz4rK86Xevi0fxWIl7AAYTV7JcXAQVLrq5ptlSXVLkNXA9NjKc+lMXv0UvBuBiTE8
+         fGDvJ8X8Qr4MWPzmoxhVtKxwl+2b2p7b9j2fBRTglTvorSUFJTgQ5FySenGjRp+1lY8U
+         0Im9rZAm/XuVymCDDkDDDgIUr7zuHnV74A6Se34bvV55uP/CqLpKeHukZ0gtdbBT+urr
+         HQv4jCAQ4+zsuuzUeBAySs5Vt46jqvQHNPvuYXHF5rpBT9H6I8ykN2IIABCS49IWrUuk
+         6EU7RIWfewF1KVx3EVMMGSFXPiQoFF8hlM3ZpNCADbaGBZIYXix9dkYxvDaUT5UXaPuo
+         BzEQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=DDXM1QX9aKS9kUkXf1pGpmDmgRr97TT7vac81474lko=;
-        fh=sMwIhylWImDfOav/di0h0j4jjkAM+7lh+vXlYHz5+xg=;
-        b=T114838yFEN5wzER6d9pPvBOZrJzM/h3i8oDzOHnOn8rkrRN5VF62ec61wtkt5JCDZ
-         +mQ+eiXAlYqpi6xhvWYdd1Y1rZFv6nF+kDtY1RdvQ1CVj/HXGnE19zurwA3+eb2oAyCs
-         uFyeaPE+QJMzTVn1YDZI4mPkPBbmbHT4kTzXi4f1FDq2gfe+4dQKn9UuK1uiaXKr9n6j
-         eKW/2whckEiR3e0wsT53BkuLfMkM+2Hadn6YUr9wosXYyY3FKvUAGy/OmtLLDfp9IsWh
-         /NP8Vxqy61NcQaRCjNsVTxUjswQCUrawMmo+0Ybz1Q7963M3ipCmxEzeUeAnkdpB8Et2
-         ypwQ==;
+        bh=Nf1oryXgAVHjZvk/1Ujit1GezDamlVePl/4411gfaKk=;
+        fh=Ke04bsHn2dfnVdrGyLgoc+QMWObZSNi8mjs0mKmdSgY=;
+        b=V5FPI98pwQ5EcYAo76rxFTJbHu0RqSdxpBSRHcD2t6HpFUmS9p2ih/lauqaO3H+7oJ
+         0Ch/AgITQAOEu4An8vM5qLFO4gCbf/SCCuFfJkGTPsneDtwjqd7WhmzTbpPH8oQv6rDE
+         Sd08mzhYA6uYMWSR9dGs5c1cXNniQTOzT0W02ZGCxrxhS8Mra9HtiTLKDnCMZarrblv2
+         s6YYvbSigbA95HoVPlkCgjPsPGdTvVdIeNBiZwSBZz0RtIfJn+3Z7pvX4nc6UDdYXP5t
+         TA8mry//+fL1tnDCh2mAK451nuzTeCNb+aHOLLcQA5RjhG4/0YUNWrl7PaBs8waHny86
+         Chyw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770136292; x=1770741092; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770136453; x=1770741253; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DDXM1QX9aKS9kUkXf1pGpmDmgRr97TT7vac81474lko=;
-        b=N63+HBdCnp/or3QpnmzaOiQMIuEl3Tu3Itl766iDPRP7QhVl5AhUwB+Y0EV6+FJhlj
-         5YcVwTIVnvK6HGNhph7Sw6W9itCKSfTW8MyY1EhCEQva1A/LuRGcGXVpqbkOlNRSaDzE
-         9Y/HHlmii8NIwmPA7p5B65Fy96nIOMXI93WPS/I5TxpKl9KEJ15oH2wnt28w9kQ9Mmcg
-         ynFlor6UQEet0FFdd7OE0LG1EqJ2oFYstu1DwWzSzR+qSkyqX4amATgeNewywvz8dm0g
-         caLXEsdi0bNFL0u4gqQqfBCUZHq0wHhWayJwtzS5X/UrbC+gKXduRzXDxMepDqDt0ox4
-         n4Aw==
+        bh=Nf1oryXgAVHjZvk/1Ujit1GezDamlVePl/4411gfaKk=;
+        b=ROKiYh3y2/wez35sE3CtMZsUKlRfWEg3t15YY1aBUgmt+LbSguUMsRFV/kzdfi903D
+         oGleb9H92ZHdDmm+ID3MluINwkVZReEfdDgulbme3JKKyCKjUBkIlP/096rhCI1jpP9O
+         AZ5bbIxydTsglt+acNCaSW+xO8hzAq5HXfbi6WPJ3isORrxe4H9hs6tLYn3IQTwrzio5
+         hgf25je7OE+NGjIzXKUsK12CrOtWNKp8mcs29EOIP0/8gfndW1nc3w1cPBVyiArh+feJ
+         +zwdmAVTgt9VsVP8n1FDCLDbDJNwkiGrPZB3lJUtw3n4heOf8IHTk86PfdQfbkJm3k7d
+         9rIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770136292; x=1770741092;
+        d=1e100.net; s=20230601; t=1770136453; x=1770741253;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=DDXM1QX9aKS9kUkXf1pGpmDmgRr97TT7vac81474lko=;
-        b=Nws6gli+yrKqKkProkjS1dUqlDavllQFVHntI6TtIJREnJu/a5lifs8wPzWnh56K9R
-         QLXvReBpkzM+U85trPzonIJLgVMkh9sj5e1mFQi2WxvlGNdQKbQthrUSgxsIwqoYwUZD
-         KwPx0cb5pDeWyG2dAJ20qhVrxEZ/3D3ZNP8/gOCBRiXgEIFMv4OEAV+NVRy5ATxaHH1e
-         z1kAcKwRmk7gE/2Rt4uUKdzrgY+nHYozpAfHx3K4PEPPDf5YTu/hlKYASGU6qbldbSsD
-         uZoxLGyDs/MlSrmLAye5S0Pcvya5YkkzsI8163y17foGfUyYCQQXebXbkeIsFcxaePN+
-         E7IQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXYAtlwwXHJpDaHh6k9F+rRgiyFeRyx9RG30+RzSBsP7hLRxq2sinXRJO0gZVCVeCN/G2A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4lcu/jKKgKCHgILh/Fs+EMIKRcQuuX1EMu6F3uJKMg2E/iMSc
-	h6j4wdW5GcTfEl0VTWDW6psxpNhX/8U9gwLGojPif0dV/Oh36pTOA6nSMkAyEOZ1VyLri+ZVAN+
-	vPmtCfDmD9113T6TiCTsskgQGIjEhoiQ=
-X-Gm-Gg: AZuq6aKN6Cgak3fe8Oh4q2Br1owQ0J94meRefCYuUFJICQDsYOXrikNWOkE7a/TxkCA
-	dBJUniwG+kel26hfgqigOkR0mwvx8lSL6rxs8Dpv/RAnmzXLQ6qJn+MBb7Wnpd7mTCARFrv8ZiT
-	n+enpimU5id1XZWLSb/rjunpaZZZ7/PbrEY3kKdFAGbPD6lJVaoDyf+RWVvxQVjOGDGNJpgiLo+
-	GEZ6A7iLC5v6mGNBPH/4pL7zrsx9gWL8UmQiwvgwwaJBbXGB5vOV3aNTRHHx080JCvrhbWkoFND
-	MgK6QefiuspcEtjIORpktV8DeEiNVK3i6QNYLq2U/tcXtrJINXGjDELUSB6ZelYts+wAEJXWAep
-	PAe/K
-X-Received: by 2002:a5d:5f54:0:b0:435:95c9:6895 with SMTP id
- ffacd0b85a97d-435f3a72dd1mr23007611f8f.18.1770136291408; Tue, 03 Feb 2026
- 08:31:31 -0800 (PST)
+        bh=Nf1oryXgAVHjZvk/1Ujit1GezDamlVePl/4411gfaKk=;
+        b=pQcMHYJvfDAGcOODM44IhCjQ3PeOnc3CAe6ZxgF2jPvcodaczqk4e/Iuc2NniEQA57
+         UU/PCWAneGUALVltS4kmOAy9WayHnwmV7AlS/EJB0Yx/U8oIEBFAgClFTI77pMixZCcS
+         w6QZeqA4yPkrVxR6w76eXyqvf9ys9sOvnQOfpuriKsy1O/dunGFqCDdfjiVTKPckeJ/z
+         nFEZqL0OcVwtpkq1nYa16vfR0kTH848wba3CbK+kChfxC1gN2sFRh5zbaLTTdzUaclQl
+         G9h3cGVmAT6IGvwyWsami0Uu41rMYdoMosGjF71HYC6QHDGAM56koj+0SW+GOrAi93nA
+         nmlw==
+X-Forwarded-Encrypted: i=1; AJvYcCWPuvfnL/ZB1bBljmr7HDs3HU52DPUsA5VPGjVLk9qoRK4UtHSelPh44zBlkvPGZuyXLpc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPorXBJ+6IxOmd0EBd82e5L9ddSQjQvxNLOAa5PkLKg4op2Hrc
+	DZXxWKqISifamS0nr27GMemT3Tiw46wJLqCaKFX0IKPKTUXWoQjSrWHjskF5Yp05kVFxyQhXg5e
+	6Q3Sz7Zd2serdS6l5t1zsYLZ8o35VgUqURU2S
+X-Gm-Gg: AZuq6aIh4VKsYomxnzfnW8/h+NkEPajnuwmk7GPX4iblVzjVZHVnXzBTXqgKN+7Io99
+	Qs0IKjW4tzuZSdmVo05pvmw1lsEw1suVd2yUkjGuwLDU9WxWGpkJJkaiZfdA7M0ZhitrBJy8DVW
+	+c9Xi0M7d+ZGFafkKbyMYNgUMNji//i8n6J6WVAKnVns7ItHVZW4DwFtlM79LcGW6pLczMUOcGh
+	ob8xAWB0wBDd2h/s/Gwqe7WR6vauBzoUuwgmDuMR3hOP6cxzPaX3tzW+tldmR9OHYpX2ZUDEk4a
+	p0s8Mpj730l/vri2COKPGvxF2wv/h6cQwfF7uRNGwR2/dNP8zQ7nEoVx6Q1Sk2TTWLKtXA==
+X-Received: by 2002:a05:6000:1861:b0:430:fd60:940f with SMTP id
+ ffacd0b85a97d-435f3a86042mr23293086f8f.14.1770136453481; Tue, 03 Feb 2026
+ 08:34:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260127024421.494929-1-roman.gushchin@linux.dev>
- <20260127024421.494929-11-roman.gushchin@linux.dev> <aYA4pH_nIBZ-ZhLL@google.com>
- <CAADnVQL5g8imKNGbHGQ4HA8_qNT4MYwM8P3aCTFUG7uwiuTeuw@mail.gmail.com>
- <87jywuwumq.fsf@linux.dev> <aYH21HhwNvWnFB8O@tiehlicka>
-In-Reply-To: <aYH21HhwNvWnFB8O@tiehlicka>
+References: <20260203162746.2337002-1-arnd@kernel.org>
+In-Reply-To: <20260203162746.2337002-1-arnd@kernel.org>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 3 Feb 2026 08:31:19 -0800
-X-Gm-Features: AZwV_QgPYD_QDDRHAxK8hl8lHjXdNa7m94_zYgqz9AxBSjsI0Bt6TxB1mrjzf8o
-Message-ID: <CAADnVQ+uF4cTVYYOYBEDWrkLXJJkru_FaRttFskHRUpamktMJQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 10/17] mm: introduce bpf_task_is_oom_victim() kfunc
-To: Michal Hocko <mhocko@suse.com>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>, Matt Bobrowski <mattbobrowski@google.com>, 
-	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Andrew Morton <akpm@linux-foundation.org>
+Date: Tue, 3 Feb 2026 08:34:02 -0800
+X-Gm-Features: AZwV_QjtdNAcExIQQf3VFUMrTl7vDDynoLe0KaCwRMNFYo9feUcHlzrdWMcOD4A
+Message-ID: <CAADnVQ+14yum8okMmjuqF5m5DafWo1fY1EuPj-QU_ykYbQ01uw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: add missing __printf attributes
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 3, 2026 at 5:23=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
-:
+On Tue, Feb 3, 2026 at 8:27=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wrot=
+e:
 >
-> On Mon 02-02-26 16:14:37, Roman Gushchin wrote:
-> > Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
-> >
-> > > On Sun, Feb 1, 2026 at 9:39=E2=80=AFPM Matt Bobrowski <mattbobrowski@=
-google.com> wrote:
-> > >>
-> > >> On Mon, Jan 26, 2026 at 06:44:13PM -0800, Roman Gushchin wrote:
-> > >> > Export tsk_is_oom_victim() helper as a BPF kfunc.
-> > >> > It's very useful to avoid redundant oom kills.
-> > >> >
-> > >> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
-> > >> > Suggested-by: Michal Hocko <mhocko@suse.com>
-> > >> > ---
-> > >> >  mm/oom_kill.c | 14 ++++++++++++++
-> > >> >  1 file changed, 14 insertions(+)
-> > >> >
-> > >> > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-> > >> > index 8f63a370b8f5..53f9f9674658 100644
-> > >> > --- a/mm/oom_kill.c
-> > >> > +++ b/mm/oom_kill.c
-> > >> > @@ -1381,10 +1381,24 @@ __bpf_kfunc int bpf_out_of_memory(struct m=
-em_cgroup *memcg__nullable,
-> > >> >       return ret;
-> > >> >  }
-> > >> >
-> > >> > +/**
-> > >> > + * bpf_task_is_oom_victim - Check if the task has been marked as =
-an OOM victim
-> > >> > + * @task: task to check
-> > >> > + *
-> > >> > + * Returns true if the task has been previously selected by the O=
-OM killer
-> > >> > + * to be killed. It's expected that the task will be destroyed so=
-on and some
-> > >> > + * memory will be freed, so maybe no additional actions required.
-> > >> > + */
-> > >> > +__bpf_kfunc bool bpf_task_is_oom_victim(struct task_struct *task)
-> > >> > +{
-> > >> > +     return tsk_is_oom_victim(task);
-> > >> > +}
-> > >>
-> > >> Why not just do a direct memory read (i.e., task->signal->oom_mm)
-> > >> within the BPF program? I'm not quite convinced that a BPF kfunc
-> > >> wrapper for something like tsk_is_oom_victim() is warranted as you c=
-an
-> > >> literally achieve the same semantics without one.
-> > >
-> > > +1
-> > > there is no need for this kfunc.
-> >
-> > It was explicitly asked by Michal Hocko, who is (co)maintaining the oom
-> > code. I don't have a strong opinion here. I agree that it can be easily
-> > open-coded without a kfunc, but at the same time the cost of having an
-> > extra kfunc is not high and it makes the API more consistent.
-> >
-> > Michal, do you feel strongly about having a dedicated kfunc vs the
-> > direct memory read?
+> From: Arnd Bergmann <arnd@arndb.de>
 >
-> The reason I wanted this an explicit API is that oom states are quite
-> internal part of the oom synchronization. And I would really like to
-> have that completely transparent for oom policies. In other words I do
-> not want to touch all potential oom policies or break them in the worst
-> case just because we need to change this. So while a trivial interface
-> now (and hopefully for a long time) it is really an internal thing.
+> Some internal functions in bpf produce a warning when -Wsuggest-attribute=
+=3Dformat
+> is passed to the compiler, e.g. in 'make W=3D1':
 >
-> Do I insist? No, I do not but I would like to hear why this is a bad
-> idea.
+> kernel/trace/bpf_trace.c: In function '____bpf_trace_printk':
+> kernel/trace/bpf_trace.c:377:9: error: function '____bpf_trace_printk' mi=
+ght be a candidate for 'gnu_printf' format attribute [-Werror=3Dsuggest-att=
+ribute=3Dformat]
+>   377 |         ret =3D bstr_printf(data.buf, MAX_BPRINTF_BUF, fmt, data.=
+bin_args);
+>       |         ^~~
+>
+> The attribute here is useless since there are no callers from C code,
+> but it helps to shut up the output anyway so we can eventually turn
+> the warning option on by default.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-It's a bad idea, since it doesn't address your goal.
-bpf prog can access task->signal->oom_mm without kfunc just fine
-and it will be doing so because performance matters and
-static inline bool foo(task)
-{
-  return task->signal->oom_mm;
-}
+This was discussed and it's incorrect.
+Commit 7bf819aa992f ("vsnprintf: Mark binary printing functions with
+__printf() attribute")
+should be reverted instead.
 
-will be inlined as 2 loads while kfunc is a function call with 6 registers
-being scratched.
-
-If anything changes and, say, oom_mm will get renamed whether
-it was kfunc or not doesn't change much. progs will adopt to a new
-way easily with CORE. kfuncs can also be renamed/deleted, etc.
-You're thinking about kfuncs as a stable api. It's definitely not.
-It's not a layer of isolation either. kfuncs are necessary only
-for the cases where bpf prog cannot do it on its own.
-
-"internal thing" is also a wrong way of thinking of bpf-oom.
-bpf-oom _will_ look into oom, cgroup and kernel internals in general.
-All bpf progs do because they have to do that to achieve their goals.
-Everything in mm/internal.h have been available to access by bpf progs
-for a decade now. Did it cause any issue to mm development? No.
-So let's not build some non-existent wall or "internal oom thing".
+pw-bot: cr
