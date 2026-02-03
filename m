@@ -1,180 +1,254 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588D0241665;
-	Tue,  3 Feb 2026 10:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3F4E3009DA
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 10:21:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770113644; cv=none; b=S78FlBtynkho2eOOnCCfyMtAHjWDyUqrPMtRBvKAF4V+Fp/QOwDFBHUQcWFln0/Pfps5yAxW6JgcqF5ulX6zaZHQxA2NtInx8oYucYIE2AoFurU5ZPPMMFX2qaZMkdSW2F1mv6UA6g0ty3SDkTYvLJ6BLLgEXSr4q5U2g1xDKSE=
+	t=1770114063; cv=none; b=IBI4mjkO0qKvmmEp8NQ553nhmHc3qHEdaCSvWFTV3PEB/2OjGyoDHnBSjH4ocLgoWImLaj9I+hpdEaHvESoGCw1o1+MmjRmBJLIVQLWZCZWt7/99SjPFSTtjP2Ft9H/7jOzOh0xg+p10jhV8KpNgmsb0El1y0xgHzQ27mS0KOSI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770113644; c=relaxed/simple;
-	bh=a95bCYVZNHnwNGshFP5zAsHsBfRps5vXxmAS+fYJJNM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=EnIXeKQHqMsrspXK/4bqdyYF/rI7QdQlEPxsMNXKWouEfUurULs8yaQFaEt3a0sbfysVdVxRxxpcWtZOs+QeTdxpzIFR/PWs1TKv5KHV0csakg75pD3nmNZ7RaMpxv86JbWqcLNr74uoK+uKWtZEEDLaCjuOfCJQLs9lU6mWhrk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ega2Z0tM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770114063; c=relaxed/simple;
+	bh=kGivo3me2lY5yEK48E4ou48eJbyMQGbcKc3pWnb762E=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=YafijtALQL2Wx/FeR4560WKtdKmV4jqZJpXWDrUC5yHw7Fh1mFjfL2ijrlCdQWzi85c+CFdipj7HCSlwdn7OrDqjNnhXZg3vpzys196qAq6XkyYVvp6ElcoYvVbU44dlt/Pqqi39n14F72kuXfiYabm21Pyi8kZoMoJIJvwZsM4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--rohanka.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dY46tMJJ; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--rohanka.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ega2Z0tM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C110EC116D0;
-	Tue,  3 Feb 2026 10:14:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770113644;
-	bh=a95bCYVZNHnwNGshFP5zAsHsBfRps5vXxmAS+fYJJNM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Ega2Z0tMvl6HkCOgIJvbVDmIywM0T6AW0owaUXk/JiHxTGjWS77p1FGZcAXNN6lyA
-	 c5jXP/MFDWkZ7mQQs6KLsfRLMEafl+8/D3vL3rk5WuFqxDWT85F+VtWg6hjxPIAeME
-	 pRXxXjdpoLxFfcUnM92ua6QIIrIeaE/jt2De6iWxVziqwDnsdoqvOcIQwIXPZXZTWN
-	 gvMKNbyuPK+K38+OudKChnnp3Lm7yl6eSnszB247V+1IocUNzCZL/WtS4O80U8/jCg
-	 YKAUTFjoRjJAEV5nTVRS+Baiwt3Tc0A9RKNhRBe36qhuq9kC1eP6pNiAC+cLWA+Q8b
-	 lWV0NJopYPMDw==
-Content-Type: multipart/mixed; boundary="===============1783507459544833468=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dY46tMJJ"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2a0bb1192cbso46080125ad.1
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 02:21:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770114061; x=1770718861; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R/Ef/udMn2CSsWbAmEZSNkhhgJ1qm83+e+FEKtRFSJE=;
+        b=dY46tMJJAdn5BcvMGGX+EnjPZ1XKXoCHAMJOEzUGFPmXeBW1JGjX2CGHUkgDF9N1GU
+         PZZwYzTYNQvUewrRVYH8lhoq9MdBlIA8U+Y3ge1k2t+60DN9FldjjbiTDz8CqH2SjN2P
+         wwaFNwtuv4dTFoBwRv/ztzo1q6wo+ntfGO0nx8ZwYDwZPjiRTDXlq9p2Ax2jSWEfwFUJ
+         F2HHX6miHgsE8lhpIxTQgYjv2/7fO/eF37cL4iYR3w4VT55zUBoKOc5WtN+wtcaM968C
+         D/l1DK113bkNHevBfvg8Zr21n5uXyywHhdAh+lpPVUSslIQin65k4ASHqSiyta2gK6UI
+         6tQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770114061; x=1770718861;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R/Ef/udMn2CSsWbAmEZSNkhhgJ1qm83+e+FEKtRFSJE=;
+        b=r1OBZuUc+4PDIhVvlTwPEOhw4uENn+1fX7AD2C86plCSuvxwPGetefoD0KnSj/M0qQ
+         DbQ+o1GypLFO/AhtD1og0FyFs/CPAKpjoSdx5ekrgSJp3VM/8x4tuPUkv+94s32FmZ4B
+         bErND0XTght0PzkJ6OI0l7MwtYQzCL/C9aeuNYtBpas1XDn5HQtoH63ZjFiqO97Y/vcM
+         h4tITu1xyUhdAOpeYK2uNCzQYQxs9hyeQpipgVAtKBzzjX4n7EzXypYZy5htkmQVbdJ5
+         mcF+jw4furMJ7lq9ykKc3YxFDsM2Xsn+7aTHpOLld3s3ADnNbCZmur12r/Au30INqyP+
+         IY9Q==
+X-Gm-Message-State: AOJu0YxIZkSdqLTI6oxDJ8ncsrovszYOb8FHeLtHtvfh2FiOSlhD6bUx
+	Vl9OBl76kggjYYjC5f5Ht/jdMx52A4U6qKAyfj5ph2+YfN1RMsQT/xgK8N9SHLrkYRD4hXMezF1
+	PbJ3oGbHN9NSYMDnFXobhlfT+Odd/ChfTMw8VAsJRueYPeMBLgw+sGQkE9MLQ3mw1rYv4P2dxeP
+	88s5t5PHJFNGmtdOn7yJ8BsiUOICZiDlbB5apoPg==
+X-Received: from plka13.prod.google.com ([2002:a17:903:f8d:b0:2a7:5b68:f495])
+ (user=rohanka job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:f06:b0:298:485d:556e
+ with SMTP id d9443c01a7336-2a8d959c8b6mr112006655ad.11.1770114061111; Tue, 03
+ Feb 2026 02:21:01 -0800 (PST)
+Date: Tue,  3 Feb 2026 10:20:55 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <9c8e4f31ee1d79f8ae145ec1c4d388f0829a77f1a75e8ec80e1d4bcf00bde751@mail.kernel.org>
-In-Reply-To: <20260203093819.2105105-10-jolsa@kernel.org>
-References: <20260203093819.2105105-10-jolsa@kernel.org>
-Subject: Re: [RFC bpf-next 09/12] libbpf: Add support to create tracing multi link
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,kafai@fb.com,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,menglong8.dong@gmail.com,rostedt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  3 Feb 2026 10:14:03 +0000 (UTC)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.rc1.225.gd81095ad13-goog
+Message-ID: <20260203102058.41030-1-rohanka@google.com>
+Subject: [RFC PATCH bpf-next] bpf: ephemeral cgroup BPF control programs
+From: Rohan Kakulawaram <rohanka@google.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, ohn Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Jiri Olsa <jolsa@kernel.org>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Tejun Heo <tj@kernel.org>, 
+	Matt Bobrowski <mattbobrowski@google.com>, Josh Don <joshdon@google.com>, rohanka@google.com
+Content-Type: text/plain; charset="y"
+Content-Transfer-Encoding: quoted-printable
 
---===============1783507459544833468==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: rohanka@google.com
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 0c8bf0b5c..a16243300 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+Extended Berkeley Packet Filter (eBPF) programs are loadable modules
+that can hook onto various contexts within the kernel: kernel
+functions, tracepoints, etc. Since these programs are decoupled
+from the main kernel binary and can be loaded without a machine
+reboot, there is a desire to outsource some of the kernel=E2=80=99s
+responsibilities to eBPF for increased flexibility. Furthermore,
+eBPF can serve as a bridge between userspace and the kernel by
+facilitating access to the kernel=E2=80=99s internal state.
 
-[ ... ]
+One of the main gaps in achieving these ends, however, is that
+there is no infrastructure that supports exposing per cgroup data
+via file paths that mirror the cgroupfs hierarchy. This would
+allow for a unified source of truth as it relates to accessing
+various streams of data related to cgroups. It is important to
+note that we would want the fate of these ephemeral files to be
+tied to the manipulation of the cgroup tree, such as exposing/
+deleting files when creating/removing cgroups respectively.
+Cgroup iterators can mimic some of this functionality through
+bpffs pins but lack the dynamism of the listed approach.
 
-> +struct bpf_link *
-> +bpf_program__attach_tracing_multi(const struct bpf_program *prog, const char *pattern,
-> +				  const struct bpf_tracing_multi_opts *opts)
-> +{
-> +	LIBBPF_OPTS(bpf_link_create_opts, lopts);
-> +	__u32 *btf_ids, cnt, *free_ids = NULL;
-> +	int prog_fd, link_fd, err;
-> +	struct bpf_link *link;
-> +
-> +	btf_ids = OPTS_GET(opts, btf_ids, false);
-> +	cnt = OPTS_GET(opts, cnt, false);
-> +
-> +	if (!pattern && !btf_ids && !cnt)
-> +		return libbpf_err_ptr(-EINVAL);
-> +	if (pattern && (btf_ids || cnt))
-> +		return libbpf_err_ptr(-EINVAL);
-> +
-> +	if (pattern) {
-> +		err = bpf_object__load_vmlinux_btf(prog->obj, true);
-> +		if (err)
-> +			return libbpf_err_ptr(err);
-> +
-> +		cnt = btf__find_by_glob_kind(prog->obj->btf_vmlinux, BTF_KIND_FUNC,
-> +					     pattern, NULL, &btf_ids);
-> +		if (cnt <= 0)
-> +			return libbpf_err_ptr(-EINVAL);
-> +		free_ids = btf_ids;
-> +	}
-> +
-> +	lopts.tracing_multi.btf_ids = btf_ids;
-> +	lopts.tracing_multi.btf_ids_cnt = cnt;
-> +
-> +	link = calloc(1, sizeof(*link));
-> +	if (!link)
-> +		return libbpf_err_ptr(-ENOMEM);
+To elucidate the value of this infra, we note that this would be
+instrumental in aiding some of our efforts at Google. For
+instance, Borglet, the daemon that manages workloads on each
+production machine, repeatedly has to manually parse raw memory
+cgroup file from cgroupfs. If we had the capability to directly
+expose these stats at each level of the cgroup hierarchy via bpf,
+we could forgo some of the expensive parsing associated with the
+current approach. Moreover, in the context of upstream efforts,
+this infra could be helpful in allowing bpf based schedulers to
+expose customized cgroup controls to user space. Overall, this
+paradigm of exposing specialized stat files for file systems can
+be incredibly valuable in providing robust kernel visibility.
 
-If calloc fails here and pattern was provided, btf__find_by_glob_kind() will
-have allocated btf_ids (tracked by free_ids). Does this leak free_ids? The
-error label below frees it properly, but this return bypasses that path.
+Approach 1: BPFFS Centric
+------------------------
+This approach introduces a new BPF program type: BPF_PROG_TYPE_CGROUP_STAT.
+When such a program is loaded and linked, per-cgroup files are made
+available, mirrored under the BPFFS filesystem. For example, an iterator
+named "hist_oncpu" would expose data at paths like
+/sys/fs/bpf/cgroup/...<cgroup tree>.../hist_oncpu.
 
-Something like:
+To accommodate cgroup-v1 hierarchies, a separate directory, such as
+/sys/fs/bpf/cgroup-v1/<controller>/...<memcg_tree>.../memcg_histo,
+would be populated for each v1 controller.
 
-    if (!link) {
-        free(free_ids);
-        return libbpf_err_ptr(-ENOMEM);
-    }
+Sample read program:
 
-or using goto error would fix this.
+SEC("cgroup/stat")
+int histo_on_cpu(struct bpf_iter__cgroup *ctx) {
+    struct seq_file *seq =3D ctx->meta->seq;
+    struct cgroup *cgrp =3D ctx->cgroup;
+    if (cgrp)
+        expose_buckets(cgrp, seq);
+    return 0;
+}
 
-> +	link->detach = &bpf_link__detach_fd;
-> +
-> +	prog_fd = bpf_program__fd(prog);
-> +	link_fd = bpf_link_create(prog_fd, 0, prog->expected_attach_type, &lopts);
-> +	if (link_fd < 0) {
-> +		err = -errno;
-> +		pr_warn("prog '%s': failed to attach: %s\n", prog->name, errstr(err));
-> +		goto error;
-> +	}
-> +	link->fd = link_fd;
-> +	free(free_ids);
-> +	return link;
-> +error:
-> +	free(link);
-> +	free(free_ids);
-> +	return libbpf_err_ptr(err);
-> +}
-> +
-> +static int attach_tracing_multi(const struct bpf_program *prog, long cookie, struct bpf_link **link)
-> +{
-> +	const char *spec;
-> +	char *pattern;
-> +	bool is_fexit;
-> +	int n;
-> +
-> +	/* no auto-attach for SEC("fentry.multi") and SEC("fexit.multi") */
-> +	if (strcmp(prog->sec_name, "fentry.multi") == 0 ||
-> +	    strcmp(prog->sec_name, "fexit.multi") == 0)
-> +		return 0;
-> +
-> +	is_fexit = str_has_pfx(prog->sec_name, "fexit.multi/");
-> +	if (is_fexit)
-> +		spec = prog->sec_name + sizeof("fexit.multi/") - 1;
-> +	else
-> +		spec = prog->sec_name + sizeof("fentry.multi/") - 1;
-> +
-> +	n = sscanf(spec, "%m[a-zA-Z0-9_.*?]", &pattern);
-> +	if (n < 1) {
-> +		pr_warn("tracing multi pattern is invalid: %s\n", pattern);
+Approach 2: Cgroupfs Centric (Preferred)
+-----------------------------------------
+This alternative exposes ephemeral files directly within cgroupfs. During
+the initial cgroup traversal executed when link_create is called, the
+__kernfs_create_file function would be used for every cgroup directory
+encountered. The filenames would adhere to a bpf.stat.<program_name>
+convention to clearly distinguish them as BPF-managed ephemeral files.
 
-When sscanf fails to match (n < 1), pattern is never assigned because %m only
-allocates on successful match. Should this print spec instead of the
-uninitialized pattern? Compare with attach_kprobe_multi() which uses:
+The Case for Approach 2
+------------------------
+Approach 2 is preferred because it avoids complexities inherent in the
+BPFFS-centric approach, such as:
 
-    pr_warn("kprobe multi pattern is invalid: %s\n", spec);
+1.Syncing the directory structure between cgroupfs and bpffs
+2.Handling the distinct cgroup-v1 and cgroup-v2 hierarchies within bpffs
 
-> +		return -EINVAL;
-> +	}
-> +
-> +	*link = bpf_program__attach_tracing_multi(prog, pattern, NULL);
-> +	return libbpf_get_error(*link);
+BPF Syscall Story
+-------------------
+The primary syscall of interest will be link_create, which is invoked after
+the user has loaded the program. Traditionally, bpf links are used to
+manage the lifecycle of bpf programs; thus, in this context, we would be
+able to switch out the program associated with a link and alter the
+ephemeral file content associated with it. Essentially, when the link is
+created, analogous to how links are attached to some sort of target, it is
+"attached" to the cgroup tree. At this point, the underlying file the
+program is supposed to represent is exposed for every cgroup in the
+machine. Moreover, the user will pass in the cgroup whose descendants will
+expose this ephemeral stat file: attr->link_create.cgroup_root. We will add
+the file metadata, including the program link, to a list referenced by
+this root cgroup. As discussed in the "Evolving Cgroup Tree" section,
+this list will be utilized by cgroup_mkdir and cgroup_rmdir to manage the
+lifecycle of ephemeral files within the directories of descendant cgroups.
 
-Is pattern being leaked here? sscanf with %m allocates the string, but there
-is no free(pattern) before returning. Compare with attach_kprobe_multi():
+At a high level here are the file/seq operations we wish to define:
 
-    *link = bpf_program__attach_kprobe_multi_opts(prog, pattern, &opts);
-    free(pattern);
-    return libbpf_get_error(*link);
+open -> prepare a seq file with seq->private containing the=20
+necessary metadata for the program (ie the cgroup)
+read -> invoke the seq_show operation on the seq file in file->private
+release -> free the seq file and update the bpf program's refcount
+seq_show for this file should be relatively simple: we set up the program c=
+tx=20
+to take in the cgroup pointer, as well as the seq file, and then run=20
+the program.
 
-> +}
+It is important to note that we might need to extend this program to handle
+writes, which is a prerequisite for their utility in providing sched_ext
+cgroup controls. Please reference the "Potential Feature: File Writes" for
+more information on this.
 
+Cgroup Traversal
+------------------------
+With cgroup_mutex in hand, we will traverse the cgroup tree(s). For each
+iteration in approach 1, we check the corresponding level of the bpffs
+cgroup tree and see if there is an entry corresponding to our cgroup. To
+facilitate this, we can store the dentry of the corresponding bpffs dir
+within the cgroup struct. Thus, when we reach a particular cgroup we
+invoke lookup_one_qstr_excl using its parent dentry as the base.
+Essentially we want to emulate the filename_create without doing a path
+resolution for every cgroup we come across. Once we create this new
+directory or confirm that it already exists from a previous traversal, we
+can add the file using vfs_mkobj with the new set file operations we
+mentioned in the previous section.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+We must note, this complexity is not present in the cgroupfs-centric
+approach as the kernfs_node linked to a cgroup's directory is referenced
+by the cgroup itself.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21625440628
+To support both v1 and v2 hierarchies simultaneously, the traversal will go
+as follows: we first traverse the default cgroup root to construct the v2
+hierarchy, then iterate through all cgroup subsystems to identify those
+belonging to the v1 hierarchy and create corresponding subdirectories under
+/sys/fs/bpf/cgroup-v1 for each controller. Once again, with the cgroupfs-
+centric approach, we do not need to deal with the complexities of these
+distinct hierarchies as the cgroup dir, which is accessible in each step
+of this traversal, is all we need to create the file.
 
-AI-authorship-score: low
-AI-authorship-explanation: The commit contains typical human copy-paste errors (forgetting to add free(), using wrong variable in error message) and a minor grammatical mistake, suggesting human authorship.
-issues-found: 3
-issue-severity-score: medium
-issue-severity-explanation: Memory leaks on every use of fentry.multi/fexit.multi auto-attach and potential undefined behavior from using uninitialized variable in error path.
+If we fail during this traversal, we must remove the associated ephemeral
+file in bpffs (or cgroupfs) for each visited cgroup. This is handled by
+re-walking the hierarchy (in post order for each root). In the bpffs
+approach, if no ephemeral files exist in the system on failure, the
+directories associated with each cgroup must be removed during this
+re-walk.
 
---===============1783507459544833468==--
+Evolving Cgroup Tree
+------------------------
+We also wish to ensure that the ephemeral BPF file hierarchy evolves
+alongside the cgroup tree. In the bpffs-centric model, cgroup_mkdir
+creates a new directory using the parent bpffs dentry as a base,
+populating it with required ephemeral files. Conversely, the cgroupfs-
+centric model creates the ephemeral file within the current cgroup
+directory. During cgroup_mkdir, the new cgroup traverses each ancestor to
+iterate through its associated file list and adds the files to the
+appropriate directory in the appropriate filesystem. Additionally, these
+operations must ensure that link reference counts are managed precisely to
+maintain the persistence of underlying links. Accordingly, cgroup_rmdir
+must perform an equivalent traversal of the ephemeral files to decrement
+the reference counts for each associated link as they are removed.
+
+Potential Feature: File Writes
+--------------------------------
+It is possible that we could use this mechanism to enable bpf based
+schedulers to expose cgroup controls to userspace. Thus, it is worth
+considering allowing for writes via this interface so that user space can
+turn these knobs. From an implementation standpoint, we could potentially
+use the same program to handle both reads and writes. In that case, the
+read/write handlers must provide a program context such that the program
+knows which mode it ought to be operating in. For instance, ctx->meta.buffe=
+r
+can be set to null when the program is in write mode, but in write mode,
+it will be populated and used by the program to update some internal state.
+
+Potential Feature: Lazy File Creation
+--------------------------------------
+Rather than engaging in the complex operation of traversing the cgroup
+hierarchy, which carries the intrinsic risk of becoming a system bottleneck
+due to the necessity of acquiring the cgroup_mutex, we could create the
+ephemeral files when a task attempts to read it. This would potentially
+involve modifying the lookup operation in kernfs_dir_iops to invoke some
+sort of custom handler after the function attempts to find a file using
+kernfs_find_ns. In the case of cgroupfs, this custom handler could traverse
+through some sort of red black tree structure containing the ephemeral
+files' metadata. If we find the associated file in this tree, we create
+the necessary file structures (e.g. inode, kernfs_node, etc.) to support
+the file and link it to the containing cgroup's kernfs_node.
