@@ -1,92 +1,74 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9AFD39C626;
-	Tue,  3 Feb 2026 10:13:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F5639C626;
+	Tue,  3 Feb 2026 10:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770113635; cv=none; b=lAvNnanNyiZHxviCgeaqHe6eNVfXPnvXE8SqC9rNcV6B41xRimiyUaY4I1IoPkk3M6ORkXrYbzqwXdpzRGjwtB+NobqwZAvA8TG5icG1dkwP8ltfhX2eCNsEcFfqBuERFmaWwlb4rqSPwHOUfPTJYyrf9XMolbBMevBRl5DAEeI=
+	t=1770113637; cv=none; b=mduVs0gONvB0bGVPpOM+WKGolaj445Rx9+U7v/G6n+ZNoaM4Efb7nyBqJOlCQbh5t4TXaznoQ8zR3NbrStjkwP6PCo80fYMksGHVmXS+9nEPOJmgDChjye65sI8iMYui38IWGuJx52TJozXa5T/C5yOP69ukC1YDHmbaVGbE+Nc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770113635; c=relaxed/simple;
-	bh=1h0MZLglRRwXDdr7ohwTbBSyhYXXX46bnWf57fAx2WA=;
+	s=arc-20240116; t=1770113637; c=relaxed/simple;
+	bh=7RY45F3AtE0pFYSZOeevgIoEdFw5H5YrhT+uYA2BmKo=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=CGO1jrl0bDKTMfykWHfjfTEKy52SoFBbN2otv7oN/E6rm+LYvZb0+Z85Kl3Jo7gsbQEOBwNtTFkDW9NHmrwnNehtCPZ9EExDEzPXgLLeCYsIThDQpg4jJdOlmhp7dHLNGwszQub+BMGehymiiBpyV7+ZHXZvJzIoIwrNRfm2VYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oHoLipoN; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=EfSNJxw29ZdkY3LN0kXVb7i8qjZo93pNA3vAif421B9dgxDXvJ0aiHXR66AvqAkcJAo+Ey/MPqaapI0K4TcBIRDcfsfpI89JhKXcCFlXLPZmVgHfce4LeLKbppbCiFnJDDPDkbdSDsM2jWi8kOgv86c62VzEZoqXmqJ7j6BOcKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nTHABszr; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oHoLipoN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61280C116D0;
-	Tue,  3 Feb 2026 10:13:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nTHABszr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 188B1C116D0;
+	Tue,  3 Feb 2026 10:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770113635;
-	bh=1h0MZLglRRwXDdr7ohwTbBSyhYXXX46bnWf57fAx2WA=;
+	s=k20201202; t=1770113637;
+	bh=7RY45F3AtE0pFYSZOeevgIoEdFw5H5YrhT+uYA2BmKo=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=oHoLipoN+ckQHvDzL76XK4wCBOeKM8tmHz5YE+4DwubvhNx2+hnFOa3BA/yPJ8V62
-	 U2WO55xaYL70pa3Rz6OPWzqB8Apkeo6ivpWQdcjKIsZ/K/ozxEpfw7YxB+H2U9vHFG
-	 2zd2sqN9nAJB2Rla7zWSonDDuwZUScZlbN2RM0yz3xUG7zcydhhWpQutGiXF//hfQb
-	 Y3n5ND3LO1LQN4ct7x4NMsvnkL7lzYu6CcLOD7pIdWcQ2w3sMRj/HB4ftrWa6L2q5e
-	 26RKg56cdRp8WF1Zx5VM+veM3L+z0JvakuwkcFYlPZ8crTkhr3osgKJa2ZR09UI4TA
-	 z9GJEa8VqGiQw==
-Content-Type: multipart/mixed; boundary="===============5549325204459829390=="
+	b=nTHABszrwb9BAAk5F1gqXo0Ydp60EJtUag6DBhtRbwu8+b/tRfRmd1HdSOGjycELt
+	 ag4PCN8ostsXX6ihtNG3YXqtRKE128EyOtbaK+gR9OlU6itCXkij9bvgXgV4t27tV0
+	 1MsMNXL1T1MuYG6JTbYGeyz0PlsEgGdAEEuu6cI4omxPJsd4ofBnoc0yhjgA9IjpU6
+	 aj6CoQYSeSZZfsSnS39jbnM+SKp+UU8sAmUOOABWdlkI313AEyaWDqF3W/jmx7QYD2
+	 Kt0Mw/pfgj8kt/3Pnx63xOGucGfVRvWetzvxzaNbg/U4+bge28yZNQKBIODU4WH+AB
+	 /zwzjqZm84Xzg==
+Content-Type: multipart/mixed; boundary="===============4134041393424372776=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <cd5126aaea4095fde41096caf553d7ab7c42efc42ee2bf8a5897be48a0e66a41@mail.kernel.org>
-In-Reply-To: <20260203093819.2105105-11-jolsa@kernel.org>
-References: <20260203093819.2105105-11-jolsa@kernel.org>
-Subject: Re: [RFC bpf-next 10/12] selftests/bpf: Add fentry tracing multi func test
+Message-Id: <9de646e4e4d2fda0d4f0543b422439f7c1fcc121d4db2e38a28bf3a454b96d98@mail.kernel.org>
+In-Reply-To: <20260203093819.2105105-13-jolsa@kernel.org>
+References: <20260203093819.2105105-13-jolsa@kernel.org>
+Subject: Re: [RFC bpf-next 12/12] selftests/bpf: Add tracing multi benchmark test
 From: bot+bpf-ci@kernel.org
 To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
 Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,kafai@fb.com,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,menglong8.dong@gmail.com,rostedt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  3 Feb 2026 10:13:55 +0000 (UTC)
+Date: Tue,  3 Feb 2026 10:13:57 +0000 (UTC)
 
---===============5549325204459829390==
+--===============4134041393424372776==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_check.c b/tools/testing/selftests/bpf/progs/tracing_multi_check.c
-> new file mode 100644
-> index 000000000..e5efa9884
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/tracing_multi_check.c
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> index 3ccf0d4ed..575454e31 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+> @@ -6,6 +6,9 @@
+>  #include <bpf/btf.h>
+>  #include <linux/btf.h>
+>  #include <search.h>
+> +#include <bpf/btf.h>
+> +#include <linux/btf.h>
+> +#include <search.h>
+
+These three includes are duplicates of the lines immediately above them.
+Were they added by mistake?
 
 [ ... ]
 
-> +	} else if (ip == &bpf_fentry_test3) {
-> +		char a, b;
-                      ^
+> +	t = btf__type_by_id(btf, proto->type);
+> +        while (t && btf_type_is_modifier(t))
+> +		t = btf__type_by_id(btf, t->type);
 
-The commit message states "We need to cast to real arguments types in
-multi_arg_check, because the checked value can be shorter than u64."
-
-Should variable b be declared as int instead of char?
-
-The kernel function signature is:
-
-    noinline int bpf_fentry_test3(char a, int b, u64 c)
-
-The second parameter is int, not char. While the test passes with the
-current test value of 5, this appears inconsistent with the stated goal
-of matching argument types.
-
-> +		__u64 c;
-
-[ ... ]
-
-> +	} else if (ip == &bpf_fentry_test6) {
-
-[ ... ]
-
-> +		e = (void*) value;;
-> +		if (bpf_get_func_arg(ctx, 5, &value))
-> +			return;
-> +		f = value;;
-                      ^^
-
-This isn't a bug, but there are extra semicolons on these two lines.
+The while line uses spaces for indentation instead of a tab.
 
 
 ---
@@ -96,9 +78,9 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21625440628
 
 AI-authorship-score: low
-AI-authorship-explanation: The commit follows standard kernel conventions with minor human-typical inconsistencies, and the author is a known BPF subsystem developer.
+AI-authorship-explanation: The commit shows characteristics typical of human-written code including copy-paste errors (duplicate includes), inconsistent whitespace, informal commit message language, and practical iterative testing with real measured results.
 issues-found: 2
 issue-severity-score: low
-issue-severity-explanation: Minor code quality issues in test code: a type mismatch in variable declaration and extraneous semicolons, neither affecting test functionality.
+issue-severity-explanation: Both issues are minor code quality problems in test code: duplicate header includes and inconsistent whitespace (spaces vs tabs).
 
---===============5549325204459829390==--
+--===============4134041393424372776==--
