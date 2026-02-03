@@ -1,50 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C364C331A57;
-	Tue,  3 Feb 2026 11:21:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94AF2335070;
+	Tue,  3 Feb 2026 11:21:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770117707; cv=none; b=X46IJhMJVYZ6do9T1Dq6AuJsv20KkqJlDd7UO4ZtxxryVt5YP9AMGR83kEY90modbBMcj8NDndMLa6lhIPyXVbMdrLLPdGVGDG5hO4o+QyRSUpLNyV8M6MuUHB837zjK0VB88XdAbfhPrIDWDGMMkMTeQiCA6TyBVVA01GeIg0U=
+	t=1770117709; cv=none; b=RvqR2fkLYSzna6I3CfYUfGd8tJo2PCuKumdPoIzQO245YNlPMMBwRdfYUUZqcpumkPa1fkiq5Pwy+z7h+LY6oO7NTCsMUp2Chs1ZwT8ow5JKgCYN/brCatsW8pVo1EePwTV6iDZU5KVuiRedIfhhzf6U7m4L6/yYZwu2sIZBguo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770117707; c=relaxed/simple;
-	bh=8bCdRho/FfoOYD6UnG8W+0FXP5Gu9038UhW698s44IY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GsthLULTwcj7dDMpXxKhjpWpO2stW+4x/hunR/cf9l/KQHR+N00XUk5zGSXyeR8zwk6JAsdp2Gfj/YWh3olYBmqGK/fP5D8+5fqk9EzJIIp2kKmuLI/OHs/ov/5ggM3E2PZL2XDNxgVDh3qXTZrp78FyajieaiE2YsQHiqsQfbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LlsObAIr; arc=none smtp.client-ip=198.175.65.19
+	s=arc-20240116; t=1770117709; c=relaxed/simple;
+	bh=yLNOP+UpalxH8WEVqBiyZ0wOPcREQ3178gW45g3FiJc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZS4rvdGAaPzfkIa16c/XbfOh+3iHQGnLqejKfRLw0HxV5ixRmQiONom10X3b5A/OQLPHHlro9owIQjGA0uJNHkiK0nRfE0cskHqmua3C4UMv99MMT+U5ieMc0tmzrv+HN63GgfswLOAN6kBiRLx1fYeC3m3n4JpjXGvZGoIaWVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hZm/2+1r; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LlsObAIr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hZm/2+1r"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770117706; x=1801653706;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8bCdRho/FfoOYD6UnG8W+0FXP5Gu9038UhW698s44IY=;
-  b=LlsObAIr7y8nGrvR6E/QU/jyL6AqjYoQ38Ikpjxjh8867gBuwQ0f2bmN
-   nBb4v+rQDhV6HsLmhDTiBV4bglcLseK7ohFV8nL52Z6RSWBvPsgRVLGeF
-   LaF3Bq5gLln2WgIXgqobQkqiNiTiESbmitSKHVAIVfzEaTLCthxvI0lHV
-   hGvfCVrsWNAzwtCr/yc72E5DsfBb/4q4ML/kF0lAj3+XFl7CQzOiZ37wb
-   3sJ2FHsoFFDSSDrED90/2/pqkocYXE2MVIYMdIOw+qImoahBDlh6ucB9H
-   06486lcYuyZVzha8jWMAWue9G0utHn9Ag5q832U068ck83kgBwB71oKDr
-   w==;
-X-CSE-ConnectionGUID: 9vMLffXdT46XAqvHvAIV8g==
-X-CSE-MsgGUID: o7ra46QbSomyQRbc0FF88w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="71185821"
+  t=1770117708; x=1801653708;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yLNOP+UpalxH8WEVqBiyZ0wOPcREQ3178gW45g3FiJc=;
+  b=hZm/2+1rRDmcW5mk62OCJ2L+9ojSaR0S2Rhs1IBq0if2+Yp8WdqERvJ2
+   Id8sRzscJlCg5OSOWNI4n+TQ+o8AMO4rN7M25cb1hCqnRRfiFRCAynd9J
+   T2cujgmp8n8+s7ZfgysslCotsiHfZmvj3N7H1kXIUSqJ76iLWQNfzhXfN
+   dBrUKGaBcsvEQrRolzd09HDsWt2b0FWR244terpTFezMd/CnbO3zqGhI2
+   +meUgfDuAI607v3kTy62EhN1Jq+dXAg9GgFatCkv9p3owmqElbZnDa8fc
+   flnFJnawIsYfisv/il4wrDO9xrQZTCPTfWRYoTVrolMzM7ToKlgkSi/yH
+   g==;
+X-CSE-ConnectionGUID: Km9JcWzwS2KrICqMtMGToA==
+X-CSE-MsgGUID: Ezu320UXQHKTqQ9lZQckbg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="71185841"
 X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="71185821"
+   d="scan'208";a="71185841"
 Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 03:21:46 -0800
-X-CSE-ConnectionGUID: I6c+m5qrQEOnKrYxngMrSw==
-X-CSE-MsgGUID: Q9pqdu6xToyyToKMr1/xhw==
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 03:21:48 -0800
+X-CSE-ConnectionGUID: JMp2ztUZQ9KptUBJHZPocw==
+X-CSE-MsgGUID: 4idJGZzFT02+ItIUMi2BVw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
-   d="scan'208";a="209913228"
+   d="scan'208";a="209913241"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orviesa007.jf.intel.com with ESMTP; 03 Feb 2026 03:21:37 -0800
+  by orviesa007.jf.intel.com with ESMTP; 03 Feb 2026 03:21:39 -0800
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 6B0AC28195;
-	Tue,  3 Feb 2026 11:21:33 +0000 (GMT)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id D0B4A28196;
+	Tue,  3 Feb 2026 11:21:35 +0000 (GMT)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Claudiu Manoil <claudiu.manoil@nxp.com>,
@@ -89,10 +90,12 @@ Cc: Claudiu Manoil <claudiu.manoil@nxp.com>,
 	intel-wired-lan@lists.osuosl.org,
 	linux-kselftest@vger.kernel.org,
 	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: [PATCH bpf 0/6] Address XDP frags having negative tailroom
-Date: Tue,  3 Feb 2026 11:53:28 +0100
-Message-ID: <20260203105417.2302672-1-larysa.zaremba@intel.com>
+Subject: [PATCH bpf 1/6] xdp: produce a warning when calculated tailroom is negative
+Date: Tue,  3 Feb 2026 11:53:29 +0100
+Message-ID: <20260203105417.2302672-2-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260203105417.2302672-1-larysa.zaremba@intel.com>
+References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -188,57 +191,32 @@ The issue can be fixed in all in-tree drivers, but we cannot just trust OOT
 drivers to not do this. Therefore, make tailroom a signed int and produce a
 warning when it is negative to prevent such mistakes in the future.
 
-The issue can also be easily reproduced with ice driver, by applying
-the following diff to xskxceiver and enjoying a kernel panic in xdpdrv mode:
+Fixes: bf25146a5595 ("bpf: add frags support to the bpf_xdp_adjust_tail() API")
+Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+---
+ net/core/filter.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-index 5af28f359cfd..042d587fa7ef 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-@@ -2541,8 +2541,8 @@ int testapp_adjust_tail_grow_mb(struct test_spec *test)
- {
-        test->mtu = MAX_ETH_JUMBO_SIZE;
-        /* Grow by (frag_size - last_frag_Size) - 1 to stay inside the last fragment */
--       return testapp_adjust_tail(test, (XSK_UMEM__MAX_FRAME_SIZE / 2) - 1,
--                                  XSK_UMEM__LARGE_FRAME_SIZE * 2);
-+       return testapp_adjust_tail(test, XSK_UMEM__MAX_FRAME_SIZE * 100,
-+                                  6912);
- }
-
- int testapp_tx_queue_consumer(struct test_spec *test)
-
-If we print out the values involved in the tailroom calculation:
-
-tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
-
-4294967040 = 3456 - 3456 - 256
-
-There may be also such issue on ZC path particulatly in i40e, but it would need
-to be addressed separately, as within my understanding it seems like
-neither frame_len nor chunk_size are appropriate values, instead
-we should calculate frag_size the following way (like frame_sz in ZC buffers):
-
-frag_size = xsk_pool_get_chunk_size(pool) - pool->headroom.
-
-I personally reproduced and verified the issue in ice only,
-aside from WiP ixgbevf implementation.
-
-Larysa Zaremba (6):
-  xdp: produce a warning when calculated tailroom is negative
-  ice: fix rxq info registering in mbuf packets
-  ice: change XDP RxQ frag_size from DMA write length to truesize
-  i40e: use truesize as XDP RxQ info frag_size
-  idpf: use truesize as XDP RxQ info frag_size
-  net: enetc: use truesize as XDP RxQ info frag_size
-
- drivers/net/ethernet/freescale/enetc/enetc.c |  2 +-
- drivers/net/ethernet/intel/i40e/i40e_main.c  |  5 ++--
- drivers/net/ethernet/intel/ice/ice_base.c    | 26 ++++++--------------
- drivers/net/ethernet/intel/ice/ice_xsk.c     |  3 +++
- drivers/net/ethernet/intel/idpf/xdp.c        |  2 +-
- net/core/filter.c                            |  3 ++-
- 6 files changed, 17 insertions(+), 24 deletions(-)
-
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 616e0520a0bb..9715d957e3c5 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4149,12 +4149,13 @@ static int bpf_xdp_frags_increase_tail(struct xdp_buff *xdp, int offset)
+ 	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
+ 	skb_frag_t *frag = &sinfo->frags[sinfo->nr_frags - 1];
+ 	struct xdp_rxq_info *rxq = xdp->rxq;
+-	unsigned int tailroom;
++	int tailroom;
+ 
+ 	if (!rxq->frag_size || rxq->frag_size > xdp->frame_sz)
+ 		return -EOPNOTSUPP;
+ 
+ 	tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
++	WARN_ON_ONCE(tailroom < 0);
+ 	if (unlikely(offset > tailroom))
+ 		return -EINVAL;
+ 
 -- 
 2.52.0
 
