@@ -1,126 +1,156 @@
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7448F34B683
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 13:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.178
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770123954; cv=pass; b=hgVp5bxj4VrOtEC9vrnVN1h0PuQkSCKNi1Jf4GvV2qAJg8NCjm5gjNPwktH0p5AZjwHOyx1o2tsjVFMC5Bd/cakar0MrFK9bfHK9M4DH3KLoYPDBJ+y5FIDdqPSSXyV6mQkgoLoURT9v229uSL0XLj+Dm0Lj7aMUphVHhBYCkaM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770123954; c=relaxed/simple;
-	bh=voLKekegcCZk0vr/4QPCTc1uZsgmhHcmtHb1yEzgJ0Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xhr/62T5P2a/HBxBx6wdeNjMS+w8UYl/APaElcTu6zT52uvIx7aZzwbN3s35a2DSBs0Yjk2EwyuWPryVQAgubbwpgT5xld7V0htmH2Wr2RydwKmvSugbc/PewD4wTRW9WugC67DkJPQMBO8rJc0l077+Q6x/jEIxNI6Wga28tU8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ah77SLl7; arc=pass smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81B531D750
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 13:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770125018; cv=none; b=KhP0nlC+hLwuFqUwLehQik41GiVvfDoK+Qs+lKZ02HQbQNQ8pg9wwujrCO87LSt4ypnOdGObi7p0J47Br3VGqdOyJfpmM+JPKREky0u+fW1xEjgFFaqzD3cBRHV5VGfFQfI7UM4OVXueIojslXwjxLxmfMasqWEB2OLBssYtg3c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770125018; c=relaxed/simple;
+	bh=m3yePJc5GJA6IQZfzwxGBSJ6VJU+aPmQFSVFUxjLip4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=otBjjeKWHsI3GRdd41D1DrUDABSvBB9DLzbEj0obaShNiOBU9rVOxfWG4ds2p7uM/fuWs1PTpp2gIn0O1WEArzGCtrWwfBcH06Ehne5dY0hhl8T0H6OSYp+o7KWT8qZalifVh/h2gvF0SxAjHxG9u7Nt6oD1maoUuWGyj0A/8mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=RHU9TQnT; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ah77SLl7"
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-794db376fc3so20087527b3.0
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 05:05:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770123952; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Kk8hoYq0XirIaEBiqqUXOpKJbrJDrgkV0zU6v3f2cYpCFV5qHDscWeRbTIJuekOC/u
-         srghKY2G0aAY6KJ25c1mna5qyOeAib7nKm7I7Pu+kSWM4f+8KbuKPISs4iK7Jc2wi022
-         NGFINkseJIl9CmYZgg6QgdFhlkrVY5jmnBskvC8bqmaupA9tm8YaaiVr37JqcQC0e5v0
-         Ad8EOOn/OeTb6J4JNLdzAdeF0SdwZ17I3IUMrQOrixO2DBAYceMBtB9u4a0Uu9+q3TeS
-         UK4cd5Qh9d7R34jqXK1lDewV8SE/N2NyS/zQabV+yKFbAzBE4z+/1ZBb8FB5kfNgsSZ7
-         gWsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=EzvCKkHvTDyl5Hbu0UI0p5YJ3tj4x14liy6theec5Kc=;
-        fh=HGa2Ht1KfYXPiLqNq1eXjH+mE5lrfMjz1Br6ldgArMU=;
-        b=OdcpYhHNCQyFBzZpoV5dDUx7+VOKGGu/iXrV0SqUZQji63CrbpA7ZfE7hO8zugo2Wk
-         3cd1Qv9kIW7eJ50YWBOIRF27iH2QaMJbfKnqBm6RoUpFPv2CR6gzgpz9P4vIRwOQQnE5
-         eSb6APgLRfFTH8ux0LU3fwJx+YDqbB7Y8uz60rqYzqXFLNVhtKc8TUC/Kt8EQja/764C
-         cP2hpx6D1nW30bo1JG/7huKBK3hwnXDIFxrg/5Woh2rTRVYiLLIqgyM+jHVwv/TxAAxn
-         jLXcvt/1Ev52rPMY97licMhqI986+j0Gn0jtKhhKeyw7UvL/YETrcszqJ3Nljzl4UVfE
-         8svA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="RHU9TQnT"
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4805ef35864so48748815e9.0
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 05:23:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770123952; x=1770728752; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EzvCKkHvTDyl5Hbu0UI0p5YJ3tj4x14liy6theec5Kc=;
-        b=ah77SLl78ZadDZvqsWf1HyUYFDANZituTkTeypLMev5DVch048NFyVh0XDtIixFzPO
-         Iu+vIFQwEYUnxdLiQu1Dp4ttKBm4EVoHhLHFKNskSPlcklv7SMY0n3yMShQxWfRhF9jj
-         Lxok7x7U6E7NrdmYBont85Nwm2RZW4e5wK4im9jzepXMMR8kCQQ0r04enfNfhVdwE43m
-         k+Hg4E2+uR3K4qiFuorx8CIZCQ7A4H1sODkC6fxe3ft6SkWVq2GgFOmQZxIX25C3bVhh
-         engzIq0hT4bkHYLQH8xG+z06Ut+fwxuxtS4PwE8A7j5tmeG/KL+1V3tzqgxgFbWw0Fa7
-         0ZDQ==
+        d=suse.com; s=google; t=1770125014; x=1770729814; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=X9jKCMLhYnPbhGwJQdPwGF6Ru9Db2nKOSg989VKRbuc=;
+        b=RHU9TQnT3v/UP+udLXke8my/D7cl6GQgGutNManoVPenN0hBXukToYoGzQ/6u+N9KP
+         zzW1/8MyoCTa4jJmR5L/s6eiJvNP4h10Bvzi9PYOAzbnY/SaAGgpH6+dEJbsifhMx7Vu
+         QT7ho0ZSnHvvhoTM7ev8JOerrD/wHog5Acm4nN1ZzxZyM1rwJrVHhG31VzmcS74XM+/l
+         ni1eM5LvUybOoDglmaTffus0JX/giSuFc4caXwKTK2XBrAbzmTyZpbtFnPEaFqDfwKYq
+         suPuE2KMw1JTDYXM6IcnRjNPFhrjt0FahVncFU9oLDVswInGXW5/27j6t1XAKiamstL8
+         d0Ug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770123952; x=1770728752;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EzvCKkHvTDyl5Hbu0UI0p5YJ3tj4x14liy6theec5Kc=;
-        b=fNwFNIXglZGmTopn7AJbGZ6iL5qWRFsbHe3URHmnjYhYP171/cCEzGCevI6Fum0M9J
-         t2ITZ6AVu9wa8FUQfa97bYjC/DseZJX+Ict4tAeqvb1oWjz+5O6u33k+Rr0rzPPwtmUO
-         0Q+d7HBzgq8ri0Vcw7canIcqEtYFWUq9xIvkLo+2SN1ZAFmZcK5Srpsdf3F71xsUuz7+
-         x4aMxwGSf205hQwU19rfOapTaEWBLpAjaGJ1JiRR2Mlo4rYpZ9lM8KOw6j60kfG4HLD2
-         eGGWa0EgdAQzbiDmEyLvJY2tBxlpFQVd4/vCMKjjlVyO5b193RfLG5t8tTie3l9LUL0b
-         yVbw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8Wzkh4EgQr8UNyAGnvhyM2KGk3ppq4uSiM6diqsZc+Sh9p+wB2BgPSS3ZkuDhXsY1NAU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzqu77JOTf8gUj5M6kAs8FnedHqYIQEiyA2s7rfDu931zX9YUha
-	QPqs/4xillNm0qo4WyO1odfyGrjGNiK0JI56gmjFZzyzgYrXBsjJcDCFDu97EP8grIzwLizkyin
-	iOmIIdm03jYbvIYY5sx9AgFn3F02Q1gE=
-X-Gm-Gg: AZuq6aLV4khvU4XEWR6a7GXjMOxedc3g4pCHkekQ455qepp1btor8JR9WfclEZ2qyNm
-	VNYMye6ClbFpINZc8kDnu449tjSB0hpSXzbPXrpu0v4xgZ8Ni8CcgXy7DQeC94ggOjNzJuB8UPl
-	TqzuRqNL0+mQSlo//kkxSs6//2v40CPDWzeLgl4mV7QsYxzYdCIUYZi3tfZXpnEQVoHm+YrLJyK
-	8CcPdk0iKE8i11NRSINa1NjNzNYLnR1d/ocN9JLTOX1BzNYUxT6Gn/6bGP7bc6ieW6ralBA+jGk
-	JhqOXQ==
-X-Received: by 2002:a05:690e:1382:b0:649:cd05:c518 with SMTP id
- 956f58d0204a3-649cd05c775mr4229871d50.44.1770123952334; Tue, 03 Feb 2026
- 05:05:52 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770125014; x=1770729814;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X9jKCMLhYnPbhGwJQdPwGF6Ru9Db2nKOSg989VKRbuc=;
+        b=iLczaOcZnsq11///Fe4FCcMRM6tROGtMedHZHd5wjALdxQfGKgRc9kc7JdNqyMfTsg
+         pu45QOHgf5juxPq3WYugT9+Ce3VDSKuIA3elSeaFFBh1Psp9uE+jGD9l7rwgKCddhZhU
+         qdSr0jisuTKSsZtw8QS2Y90ayXtVeL21226+Uqb+ey5DKKfqyA/wJowjaTvPJtfapMxH
+         c1qFIJ1rHLl5/IdPRT9eDtDvrcvGXG4Pb3INCxfngI0dmAmnvyDKCDbKcSihAj1Y20rX
+         J5dPbdbNILMu7/t624Gyd+s2Mp0mUgBEBqmAFt+9q/GkeFGxm1rwswmDiagC9NJGjEjy
+         RMRg==
+X-Forwarded-Encrypted: i=1; AJvYcCVsdIpNJklb1SK3H1dDSOSTTjjeAUpS/2YdPdvV/ejYLRJbcZElqFox707KKoT/41RF8RI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxo2rGCAHSEww/g2rGvF1bp4GubCW44mwYAapMxUVxz3xw9WB+9
+	dJs2g44YYicDHp9Go97JrMgilyq13+3Gd5ENi2a9MN/0ZRcNEyadnGSgRQ47GKCC8yQ=
+X-Gm-Gg: AZuq6aK90HfynQKmxOM4XQnppoK7m1W/OLopPr4PVVrM59Lqa2klY1LCo4ORscLbbaE
+	KhmajeLpoMZBrfulEHyA0iftD9Ju/iUvEzzCjQ+AnmRM/xGZT7/s72BXgiclPQ+DvepDkBaL2AF
+	14VggKavJFSGqpYuVKtaxng/6lQh3xo/5ZY/NOfVQLrCmuO8KaIp7eYhJCEJ8h6OfRVkGMxqGYI
+	6rZrM4rhsNmzj4jvQ8RFCuh/P6AfsJrax4wzUn96H7mT57Dm69396um6KbbB2NZoUjGGZ0W3+KW
+	yg6+/XryR1NuBni867xMl6DwIHhMG3piVXXuWyES9ZPfb7v/uC8aIz39/n8aRKSR43WxaK0kSAq
+	vYmHOoWj7KBj9CalKXIj5AUe7gwIIJI6e6VTpNCo4KPi+g1chMoq8vS85TSgdSU8MIoudXk/JVu
+	caH+h+yy7wAWXoWUR/tnbzzDmb
+X-Received: by 2002:a05:600c:a087:b0:479:35e7:a0e3 with SMTP id 5b1f17b1804b1-482db48f2ccmr215249685e9.30.1770125014093;
+        Tue, 03 Feb 2026 05:23:34 -0800 (PST)
+Received: from localhost (109-81-26-156.rct.o2.cz. [109.81.26.156])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482da903a30sm149018775e9.1.2026.02.03.05.23.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 05:23:33 -0800 (PST)
+Date: Tue, 3 Feb 2026 14:23:32 +0100
+From: Michal Hocko <mhocko@suse.com>
+To: Roman Gushchin <roman.gushchin@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Matt Bobrowski <mattbobrowski@google.com>,
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH bpf-next v3 10/17] mm: introduce bpf_task_is_oom_victim()
+ kfunc
+Message-ID: <aYH21HhwNvWnFB8O@tiehlicka>
+References: <20260127024421.494929-1-roman.gushchin@linux.dev>
+ <20260127024421.494929-11-roman.gushchin@linux.dev>
+ <aYA4pH_nIBZ-ZhLL@google.com>
+ <CAADnVQL5g8imKNGbHGQ4HA8_qNT4MYwM8P3aCTFUG7uwiuTeuw@mail.gmail.com>
+ <87jywuwumq.fsf@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260203084323.2685140-1-sun.jian.kdev@gmail.com> <aYHwd2mMaVp-qFlp@strlen.de>
-In-Reply-To: <aYHwd2mMaVp-qFlp@strlen.de>
-From: sun jian <sun.jian.kdev@gmail.com>
-Date: Tue, 3 Feb 2026 21:05:41 +0800
-X-Gm-Features: AZwV_Qh7OL-8yA3ZCQSQKBbrNjJ5KI5yV8gSWZdHYOrH-TO3MU-ndKsFoQt5iyM
-Message-ID: <CABFUUZHwLvfAfxdmaJHvCPQ=YHXMnkqEiJxjqTN=29VyiSBhnQ@mail.gmail.com>
-Subject: Re: [PATCH] netfilter: bpf: add missing declaration for bpf_ct_set_nat_info
-To: Florian Westphal <fw@strlen.de>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>, Phil Sutter <phil@nwl.cc>, Simon Horman <horms@kernel.org>, 
-	netfilter-devel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87jywuwumq.fsf@linux.dev>
 
-On Tue, Feb 3, 2026 at 8:56=E2=80=AFPM Florian Westphal <fw@strlen.de> wrot=
-e:
->
-> Sun Jian <sun.jian.kdev@gmail.com> wrote:
-> > When building with Sparse (C=3D2), the following warning is reported:
+On Mon 02-02-26 16:14:37, Roman Gushchin wrote:
+> Alexei Starovoitov <alexei.starovoitov@gmail.com> writes:
+> 
+> > On Sun, Feb 1, 2026 at 9:39 PM Matt Bobrowski <mattbobrowski@google.com> wrote:
+> >>
+> >> On Mon, Jan 26, 2026 at 06:44:13PM -0800, Roman Gushchin wrote:
+> >> > Export tsk_is_oom_victim() helper as a BPF kfunc.
+> >> > It's very useful to avoid redundant oom kills.
+> >> >
+> >> > Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> >> > Suggested-by: Michal Hocko <mhocko@suse.com>
+> >> > ---
+> >> >  mm/oom_kill.c | 14 ++++++++++++++
+> >> >  1 file changed, 14 insertions(+)
+> >> >
+> >> > diff --git a/mm/oom_kill.c b/mm/oom_kill.c
+> >> > index 8f63a370b8f5..53f9f9674658 100644
+> >> > --- a/mm/oom_kill.c
+> >> > +++ b/mm/oom_kill.c
+> >> > @@ -1381,10 +1381,24 @@ __bpf_kfunc int bpf_out_of_memory(struct mem_cgroup *memcg__nullable,
+> >> >       return ret;
+> >> >  }
+> >> >
+> >> > +/**
+> >> > + * bpf_task_is_oom_victim - Check if the task has been marked as an OOM victim
+> >> > + * @task: task to check
+> >> > + *
+> >> > + * Returns true if the task has been previously selected by the OOM killer
+> >> > + * to be killed. It's expected that the task will be destroyed soon and some
+> >> > + * memory will be freed, so maybe no additional actions required.
+> >> > + */
+> >> > +__bpf_kfunc bool bpf_task_is_oom_victim(struct task_struct *task)
+> >> > +{
+> >> > +     return tsk_is_oom_victim(task);
+> >> > +}
+> >>
+> >> Why not just do a direct memory read (i.e., task->signal->oom_mm)
+> >> within the BPF program? I'm not quite convinced that a BPF kfunc
+> >> wrapper for something like tsk_is_oom_victim() is warranted as you can
+> >> literally achieve the same semantics without one.
 > >
-> > net/netfilter/nf_nat_bpf.c:31:17: warning: symbol 'bpf_ct_set_nat_info'
-> >  was not declared. Should it be static?
-> >
-> > This function is a BPF kfunc and must remain non-static to be visible
-> > to the BPF verifier via BTF. However, it lacks a proper declaration
-> > in the header file, which triggers the sparse warning.
-> >
-> > Fix this by adding the missing declaration in
-> > include/net/netfilter/nf_conntrack_bpf.h inside the CONFIG_NF_NAT
-> > conditional block.
->
-> Didn't Alexei tell you to not send more fixes like this?
->
-> https://lore.kernel.org/netfilter-devel/CAADnVQ+j8Q5+2KSsaddj3nmU1EkuRAt8=
-XwM=3DzcSrfQfY+A1PsA@mail.gmail.com/
->
-> "No. Ignore the warning. Sparse is incorrect.
-> We have hundreds of such bogus warnings. Do NOT attempt to send
-> more patches to "fix" them."
->
-> I'm not applying patches when a subsystem maintainer already
-> said no.
-Sorry, I'll drop this patch.
+> > +1
+> > there is no need for this kfunc.
+> 
+> It was explicitly asked by Michal Hocko, who is (co)maintaining the oom
+> code. I don't have a strong opinion here. I agree that it can be easily
+> open-coded without a kfunc, but at the same time the cost of having an
+> extra kfunc is not high and it makes the API more consistent.
+> 
+> Michal, do you feel strongly about having a dedicated kfunc vs the
+> direct memory read?
+
+The reason I wanted this an explicit API is that oom states are quite
+internal part of the oom synchronization. And I would really like to
+have that completely transparent for oom policies. In other words I do
+not want to touch all potential oom policies or break them in the worst
+case just because we need to change this. So while a trivial interface
+now (and hopefully for a long time) it is really an internal thing.
+
+Do I insist? No, I do not but I would like to hear why this is a bad
+idea.
+
+-- 
+Michal Hocko
+SUSE Labs
