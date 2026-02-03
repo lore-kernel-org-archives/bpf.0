@@ -1,253 +1,250 @@
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011026.outbound.protection.outlook.com [52.101.65.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B392E396B81
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 13:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90121BBBE5;
+	Tue,  3 Feb 2026 14:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.26
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770126664; cv=pass; b=kGOcX61tj2LpPcnw7hcOnBhS6CK7SDWCOVIJh1m9DuPqiGv71cZfr/CL6WGX81oeH0Iw7jbuP5PbJQIPU9QhOd/87o9FdOVxDFFQgjEKOMXGeFYHTC4KPXICXDvW/+mGJG1NMXw0sNmGjqVtukwB00o+u6mH7v5xc5cZ8izaI6A=
+	t=1770127352; cv=fail; b=DR9HB5Whrya3fxa5+rAaXE3GZaw5sb/4S3bK8/TIrvh6/ETHABOFAe2eIO2BkWUTajD/wnljQvMSAITN9IZ9kpYoEiOrZ8hGj5U4Mgg4s8t4txdm1Var1hDjTJxEJwNCTEOMWJ8pdNZCFGp1udTgCa0qTOUDtU6Tn8XR9INveyw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770126664; c=relaxed/simple;
-	bh=92XrpT2p9XU0e0xMy8WL1woti1sBDTSSs/ON0SJ4NhE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q1GqlkEu2r/FUg2c6kXOsSVp7xVBpwFa2cNx7IXerz2fPquzrIDwW7qJDxske2hK6dt6vTpjMmoTt0dgLpAhF7VdD4P/CP3C+jTdZr1c7Nphn5S5ddIvuSS10MKLuL8bdlUPUSB/lDEdz4ATh67kFsM3G8MEx3MvhHwoaSRaJnk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fKkL3Mc0; arc=pass smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770127352; c=relaxed/simple;
+	bh=keRvZSXdP2G6zbHdW+RJrT5OYflwieOi4sw57PDqoBw=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=Gww+VKI+wgpJibF2cZRykAelIUzbirwZJpWsz0RUMeYgNLiwn6yhu8lPzLyv6tZVxhcLnzhaJIJ5/+BVh3ZedqfXExRO/ln24abpcjqEd+I8i95avug+trSYlJN7KieF1WNzmNIfmDcUC1ewc8e4VN5lgGnYOBK/rZjQQ3DRpSk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=sYecWXBl; arc=fail smtp.client-ip=52.101.65.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fKkL3Mc0"
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-65819e75691so9394389a12.3
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 05:51:01 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770126660; cv=none;
-        d=google.com; s=arc-20240605;
-        b=eeHqmFEzYnzYxqmbdB5+i2zSvUJ3EdRy8FIddOsVbZcgRIioBvyIN5fjC2wGPkhe6Y
-         +tBDChbMXdHaNhOniyEHLIpAjy/wV4zFU4UDwsdOlaN2sNuc6eOTWbIkQf0Q2Ia8T1GF
-         IMYIkPBCb7DG8aDw6wAKtJDXDMrG5sa6XG/34UJKh7M8u0lXBuDiPJaU281DfZNv4dJG
-         quaQJLXTYp/sfsCCJnuZHnN3a6mWqjrhHhQ2h8IRPqaqtqMH6Uux3zUG830fgMU23BOp
-         UVYIyiYqhd8lwiTxacZe3hTptVJ5iZNH93ZUie9GzThL6k0FxE+juJL3R0YDJR67SNTI
-         ovdg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Sc02BHMOvbhrAroJoMV6zgGl4CaFz7SM0OHSMbWN3/s=;
-        fh=L9Vc9YuOg2Pk6+C/P/YADDDY2Z+wIFy3MnxliQknCRo=;
-        b=DrY1OEtr9iO4TtLMNgcMb847cok/UKmQht5Arv7oUB+qK379qCY7nVlpKlCP6jJ8bq
-         IHAi0VwnOdHFcRBY/VQp/IVuzxDfMJv/xekSWpCq+tB8tfrX2aWcVxJBLTvse1fjPol5
-         R+MXGPp/FyNTLqlpBHXGjfFBWcSFNtCSXbTdi8eyr5Nafkpx3+OVcwUXqHV+fjIQjI3t
-         Mhdrf9T4w1U2vXLfjRvJvYMi9b9R4X2Ir5/c+gf2RwZYMcNJeoQ3xaN5/OS3lehEGz3X
-         blXwfBO9ILpRuetFN/yJZa12R1nBIDh0ACX2fF+Z027LIb2YQ+IwoK7LPvA+RoPEoN5q
-         xBQw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770126660; x=1770731460; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Sc02BHMOvbhrAroJoMV6zgGl4CaFz7SM0OHSMbWN3/s=;
-        b=fKkL3Mc0lWc/KXdzYlqMW9UNBZZx08EF7skXXHkwIBtGj1yzprbQy06sSi/S22k+LA
-         gGcPQdA855UTX3QB+ZIGzjoOz/+UPb7cn6/B8f3UZFnlPMg1KDC8tkhzoqJv3Zk4NTUU
-         Yp8jQtcYZ+q435sfKyuzYpNxlm+UHhHpJOUTjwxszyLPqjMAfTbECjl+JGf8EF6cuItE
-         dg0nL6aWvjFxy8IkBT6Yy5sKIpX5w0HfKwNj0rpKIp2cxxcw+wvM/AVqd7onRdoGc6eo
-         hPrKAQiagPzny3by1CqbnPkG3gmKzY2hg3/ApWyP0pdYi6FbrKopCDQZckjeyf1Mzw4U
-         5oXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770126660; x=1770731460;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Sc02BHMOvbhrAroJoMV6zgGl4CaFz7SM0OHSMbWN3/s=;
-        b=FSnyyU5xY/AF0nNOhigbdmFCW/4ikZGKnRs4ZJBS34MrzwsYI7fnJcuiWjZSWjFPJj
-         QKw4SmnU7Kq/lL3QvM4/92QzpD4C39thr9w/wRfP1tqmRc+7GTntGqsR1flb2/mqnZT6
-         YgjeGIIfbKJ+EXXlnJ/t8WsXj/VdsaDhLQDZpR5o9oVcbtwcZdDTWCF7GfXpUFf7osPW
-         yCYnxrQzNv8DFop7iLdpuA8JW5X6QJIf4Vvo+cxtB8Pk6Y167iT3Q/5cuqJJYUfUVH3j
-         PAerCpeTvEReKPjp8toTYIuBjD0QgsgG5UoUe+XaW9eVh6noEmZLXimdrj4utziHMEBI
-         sTpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXH+FdryYmF+rFrX4vjIOpt77u5IEIuNyfA6ph+mel0yXeHSqAguMRLOiOu1DXKh1LilRM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5EQErWew/Y88gYtneDHIKYrRphvBSgKo7q6rOWxdb7L7lb1qU
-	/FnD4NwVED5OAgxK+iUymnx96Vfy+CzeckaB98UBkU0ZvOyiUKn2YRhqHCM28SZXABQvdMINT2Y
-	e6G3vjlbFu9bJd7Itce+h1JwietAlVpo=
-X-Gm-Gg: AZuq6aISyx9ciCcRmip9/Z3CmA+nuE4Lq+aQenatN4wmjQv0TKgYNrIUhcL20t1l4+l
-	Fxdr9zP3gKIQ8QiTGcF90eU0LvV+Pz4eXdz7TRwHZFbUkoqjjRe0vWjVlMHMiysxIN14miV3xpJ
-	DEcmESZs54gjAIawUlotDzq0bmgpKknRdzIyj/EFmnQnOoSe1R3Ngcq3iA00wdLeL6OxKVZL6S5
-	8wTmpxVcVEyabXFXm/YFvlwH4vEWhjgtK2fNuqzDIj2R2kasllCFdDFscZFhjH5jHrPGOFZ
-X-Received: by 2002:a17:907:97c6:b0:b88:5385:59d7 with SMTP id
- a640c23a62f3a-b8dff5e9051mr970303466b.4.1770126659761; Tue, 03 Feb 2026
- 05:50:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="sYecWXBl"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hvdHBpvaEiubVdGUlB4azDc3zdhMFp9os38P5h3RhT+3ZPsd87hceyGlzCADRnqSf7tsu5xeph9ZeY1TQCfoI+03uXVS6J3b1wDdFwd3hq45SGgUlld68WUTEJMKJOgy9pMkbcbgWJB/bppDjf75pMllUFUICcRnSdR1PfSfgrF4Kd90o/gX+5/JHnMFvQ+HwVtfEOwH/p3vq9CdXKBx/KomK/JKhpl4A//TtX/PV99AuhcaCVofHKCjUXRAtZtBhWMdmQu9+8mjiFavGz6aXjFc8/FspvRnE/pmkOqqeVKVs7OLweUYIO4mr2j+2GUKWuQnCP972lu1PmfT5Qxlmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=keRvZSXdP2G6zbHdW+RJrT5OYflwieOi4sw57PDqoBw=;
+ b=PjWQXboX3Bx2ouUdMe2oOJ+QaDGTrnUllIVgzscOE+G/e8i1JiCKKBuU85tBvk7D9rBn7fsrmTZQ6jy5JJ+GvgTLkMuP6miwOVOVbevdyPQgd/eMd5q6UGdZt3kOxHJwOi4WuRPstCQS8/4zGgOLgrWW6BAGfNEC33KsS3Qc3JT5Z+MFgttpuSGIYbjOGRza0wIMpzLBsoEYAfGMTVKpm+m7IofdScdn2H906HIn0qnTuVQ3PuMMG0tBq3091Msu5kg+UrWVC/3cq9A3SBYwJbts3+a+qZ3Naz/ob4uIzaiooR8Kim+FIvFDJK7yr4CHsY98M/BJ9l5Njp9JotLCbw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=keRvZSXdP2G6zbHdW+RJrT5OYflwieOi4sw57PDqoBw=;
+ b=sYecWXBlXNaJH2EM3+eZAYHFlWjAh/ZZ61kKYBMlm+g6SSKA4/gN7hqAGZLMtxL1wtb21dPIwo/jqqKQGXbohunTVpJoYYewQZzBJZpi3Z0ZEqi0XiDC9ztPxfYEzVp7pmt9DoxZ2dA7bUw7LbIwoRp/S5WGSYtLPsJk1DXJS/+c64YvKG7eACckCFwX9p3eHyXDkRsonvROiqY5bLP4K42qKDnIf7OV2gImTcl1E1dMrFl8Wb1yy6iAHmz0h45PTLm8soewxo3evAxQhNuwzAEi8OnJ4xX/22GPXVdP6IMD87Q0VoBlAwjvHJTlzckFMKoweHE6g6I9wP+Ds414Xw==
+Received: from AS8PR07MB7973.eurprd07.prod.outlook.com (2603:10a6:20b:396::12)
+ by AS8PR07MB7144.eurprd07.prod.outlook.com (2603:10a6:20b:25e::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Tue, 3 Feb
+ 2026 14:02:24 +0000
+Received: from AS8PR07MB7973.eurprd07.prod.outlook.com
+ ([fe80::2572:d79:2e5f:7a3c]) by AS8PR07MB7973.eurprd07.prod.outlook.com
+ ([fe80::2572:d79:2e5f:7a3c%6]) with mapi id 15.20.9564.010; Tue, 3 Feb 2026
+ 14:02:24 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Paolo Abeni <pabeni@redhat.com>, "edumazet@google.com"
+	<edumazet@google.com>, "parav@nvidia.com" <parav@nvidia.com>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "corbet@lwn.net"
+	<corbet@lwn.net>, "horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
+	"jhs@mojatatu.com" <jhs@mojatatu.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"stephen@networkplumber.org" <stephen@networkplumber.org>,
+	"xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, "jiri@resnulli.us"
+	<jiri@resnulli.us>, "davem@davemloft.net" <davem@davemloft.net>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "donald.hunter@gmail.com"
+	<donald.hunter@gmail.com>, "ast@fiberby.net" <ast@fiberby.net>,
+	"liuhangbin@gmail.com" <liuhangbin@gmail.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "ij@kernel.org" <ij@kernel.org>,
+	"ncardwell@google.com" <ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>
+Subject: RE: [PATCH v13 net-next 00/15] AccECN protocol case handling series
+Thread-Topic: [PATCH v13 net-next 00/15] AccECN protocol case handling series
+Thread-Index: AQHckwB9GaK6k4C2cESQkI7GR1+dbrVw8V4AgAASmxA=
+Date: Tue, 3 Feb 2026 14:02:24 +0000
+Message-ID:
+ <AS8PR07MB797343EB84069170ACCFAE08A39BA@AS8PR07MB7973.eurprd07.prod.outlook.com>
+References: <20260131222515.8485-1-chia-yu.chang@nokia-bell-labs.com>
+ <7df9baf9-040f-41ae-b292-f3155842b5f4@redhat.com>
+In-Reply-To: <7df9baf9-040f-41ae-b292-f3155842b5f4@redhat.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AS8PR07MB7973:EE_|AS8PR07MB7144:EE_
+x-ms-office365-filtering-correlation-id: 5911f2a3-715f-4334-24d6-08de632cdb97
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|376014|7416014|1800799024|38070700021|921020;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?oGsMRVNMmo3g4QxUtduAd0/70elcWQvlngpY+KQq/WyZkiQTm5RaQ3j/rq45?=
+ =?us-ascii?Q?yF9F6GW6/8jrCB96fQIwk6RXNAn8sTOnB+zUOU5VtLKVlR1fvZvfVCbsxj7F?=
+ =?us-ascii?Q?YpwfNGVdNGRT5AVd81NSREI5z6EsbOQgvESYQjd5eRgkkdcxD72wMOXtVtnW?=
+ =?us-ascii?Q?Mr0lFwA9ABi9GwffPq9zDHhgUXxZeShl3NfxQPW1ctdxq7IMJgfSdUyLWg72?=
+ =?us-ascii?Q?cYyXk047VZY4xn6D+kqEsxottw06tKIpW197AmIC7zGQ5W4YB+lSCcQ+2E6v?=
+ =?us-ascii?Q?SrYY1M1W6NiDh4fYsJPQnxvgasUXDJDX8koFjiJeMMfbVKyqk/ayelQIuhHi?=
+ =?us-ascii?Q?Ild+Gtzjw9lvgOX9lwXnK7QNIzQUrYweIRMYf/eDctc1/Lds4E4ycrx1dkny?=
+ =?us-ascii?Q?tATRIqm5Ml7KZVEM7WLGGA4b5BLjDToJ5ukq8KKiHlRVhKTLj5IcweiJSPh2?=
+ =?us-ascii?Q?MEOVsTjNGh5wIiDtp1uULsE+pjNvgRQK2fNiIB1oA53x56ZU480plOEXu+Nr?=
+ =?us-ascii?Q?WjWF4A4p/ZQnqy6CE45TntjrNUVX0rwXEh1E+G/lTtmN7/DKaYbCAWv111JF?=
+ =?us-ascii?Q?9yGppFx5MXosiv5HkvE9CmJKRgFUiwyXSoa+IV/FTj/SX1/qjmqpDeonyJh2?=
+ =?us-ascii?Q?0IM44v85HtvIGyq2JPftjD6yG4J5kmgM0StvzbysAWfHES6iN81S92qGB/Dv?=
+ =?us-ascii?Q?wy2pdordG+0mOp4E6W+3b0xLdHoTX8naO3SdQiF+aVsEq0zA93H0s/xmd51a?=
+ =?us-ascii?Q?it2EaCEB9r3g9KVNFY4d416ZvCpW3SxqH7HwHVsM4V/faJSwdKeWi2q3wOL4?=
+ =?us-ascii?Q?Csd9oPbKQ7idz0yLiHJuj+DWYkghkzczhAb58Q9NHCwgV1dVyZM/SHOpLWk2?=
+ =?us-ascii?Q?836m68gzcal9VmHDtqauCIxxRHJBcuLnneJVgCeWD9/Yb2YwbfV3UoxoNWay?=
+ =?us-ascii?Q?AtE3UWqljPEa2l3FqOHpxkQFJm6GMZwWK++r4NgkFrmSSrJRwvMcUNk66RCF?=
+ =?us-ascii?Q?JhGIjtP3KEKlE867Zuf5acJK5AbF2dUxhRRyGS+/1/37Pvp87RjtALbl3gds?=
+ =?us-ascii?Q?0QVAQUhi/FqmxKjsFhXJ7yzcbSmQqgg2E4kP/bLnbxRtwUalqLBi6VGLzwcs?=
+ =?us-ascii?Q?SFgzjJg+O3FKyJ4m4+rG4n4JdBQNUueBpjk/UL2eBpUUTqYj5ZZQsHz74WDx?=
+ =?us-ascii?Q?sgo8IafJ3J1pkcvBTthZp0gvDeTJabWL/zpS6xb6qvGSxnMBVinmnB8bPJjr?=
+ =?us-ascii?Q?JCPPdtzUOlfzu4M+AnH78bnlAmO81nHg7mRBp1w8tr412qD+M8fJ6XyJcW8J?=
+ =?us-ascii?Q?2YaHmjIeWhgCQaNtCuCP+rHtPBIJRdNxphmYHoKHK8r11hR78eoeY76TQveH?=
+ =?us-ascii?Q?iZj8jk8IeGPaFiUEd8wD1p9s9EOwxizqOhwsrlu9gWm3AASdQYirIk5p1xfC?=
+ =?us-ascii?Q?UD++BlNI23Aj1BbwaNw+Ae/rCTZUkIAecbuqh6sBD98/dqv64ne4a40rdAYy?=
+ =?us-ascii?Q?7LwYnlpZch7aKEJuebm50tFogc+r/2J6v8MXBA7zCLz39IXiQQK2ncsMEWyJ?=
+ =?us-ascii?Q?LqvixZrmRndO4nAtWvkpUQ9IBSscZsZ+rluNWgBNH6vN5Tp7cA6oHJKwqGXb?=
+ =?us-ascii?Q?nbJrtQb5mWJPYLJE5GQUd9/LCfxHZAyJi+k9suZkAlkH?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR07MB7973.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024)(38070700021)(921020);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?qtgr4R8OxhB0YM0DOhZgUXbU+ke0sLvFpGYuiXqkSs9hi61idi//0fCBXdvm?=
+ =?us-ascii?Q?BRV/lL5nUj63op3It/aaGeqwGjt8tk6swk/nbwRhTWpviilwfUA8zOAIq+iY?=
+ =?us-ascii?Q?eX4zuJRr4rNbqqcL7IGSfQpQRMnY1H21xsOc5g0VZwrDbc5U/UG/iPDOIAna?=
+ =?us-ascii?Q?Tdkzcvav2m8ZBAcsXAQwM1KVncF36wAga/LnvLb1hKH/DF7v3mtizWsv6iV5?=
+ =?us-ascii?Q?OvovNSvYL1MO13wEWC1CUYyKDuv72nIicZ7MeS7wEEjMMBNG+Wnsw0xZMl+3?=
+ =?us-ascii?Q?qBxpyAkNkkDToCRAMDjR8AF6I+pPyKbxXt+z6YF2ryHqUF/7YQKOs99Qxlul?=
+ =?us-ascii?Q?DsXsIfujNiVA+x6IOU2cMcEoVvsiQGil20tklBLqyafi94D4dy+C0cpLpXtL?=
+ =?us-ascii?Q?2oJ8HOtjEz7zKt8SIjuxCzZkiFPncWnTs134sXSyl+yMHiRWDk3ug2tqP+YP?=
+ =?us-ascii?Q?cCmUGPo/SlBvzP8x6oVcD3RQrAKfhT2h5KlPgXAlZTGuhiPbl1naEskkMItz?=
+ =?us-ascii?Q?AKCPw+h0+Txmr8AQj8jtpj9ms/qH68HNHR270ijNdjql4NrrNuC0gwgmKJIC?=
+ =?us-ascii?Q?cNnAIi1vLL6iwP7vngSuANe0H04P9xVUPNDV3GOZl21Qm7eJQo4XGxroBVt0?=
+ =?us-ascii?Q?k5qnyeMb60Iu8F7+ir6byt6k5eMg3H7IyDF5U+lYsMu3CB+ytw4YIF8Szzo+?=
+ =?us-ascii?Q?QwLaDHpF3IyaPK1kbToy3tZqY4PhwRXMPckjiw3VpQgJ5m44Ft4p9U7MKyt+?=
+ =?us-ascii?Q?kagDjzyawL2nWvbyhJWKtU2Lx3EdVAbT9lZNxo6iIybUtqbNy9B+lVcXhncU?=
+ =?us-ascii?Q?mzBioevT7/F10WAwWNDIs78qfG0VsHFmp7TVDLbcTXx3zrZ9NVXchdDmLCRF?=
+ =?us-ascii?Q?nkoA5vYFanCRbW3GNNSDFkGSIcaICGEU7yJXkzcKJ0h+S+zIxPchk72uhGnc?=
+ =?us-ascii?Q?IfGgGSIuo6jXroNa0jn6loPQ0pOXwbDMvqSCQVZ+IqCwr/naxxwkwc5ni/nq?=
+ =?us-ascii?Q?HeoQlqep2Aq0BZQhRl2RuviY1M6DSc+68r/xUVSMiOBLJRf+8RwCeid/a+M3?=
+ =?us-ascii?Q?vc5K2PY+RRh56c+kxN/beqGGY+aqzwkoZ+2OgcimQAR4HJdeaxu5OFK5I1eC?=
+ =?us-ascii?Q?jhSnbqW5lERkbdyz6gixoCmAk4CQ1IA03ZZ2V30nMsw6hNaXkGWav9amU1R3?=
+ =?us-ascii?Q?AUPC73v03AWLZ94ZZrfZjVpn0KILFb62mj/OTfx7Zld926rKWRjlO/Wuq+/9?=
+ =?us-ascii?Q?ILT0IhLz84kvDpAzsh/Gh8ZUcjzHikFEofmQWPF5o1kpzF5XQxqIOI+kiuSQ?=
+ =?us-ascii?Q?cAMiL5lE8tSi32KMMCMJapzzDePGCIXqK4zFGjWYJCurM4x0qYxKFOJMzkc0?=
+ =?us-ascii?Q?tWIeQfAcK6ar+2a6tW1z+34reoqkf7gL/NpKM8Cd8yok0vDVeMcg1SgaCE5Q?=
+ =?us-ascii?Q?p4wU8vSl0dV/THmfQr1O7pYK17CzRg619a9ieKAgI9Vuc1/MFUE4ReRDO+Y+?=
+ =?us-ascii?Q?K4q7WOzXoXdiU7OmGqIDHW2P9U//5TTtC9zFw1dcxiweLm97Db8+0iIDNy0R?=
+ =?us-ascii?Q?nIJdjuo0QTl8HuTA7a2AnvUfcW5N+gr3NIfgv5g21/C+3u5qAXukw4qlnOE9?=
+ =?us-ascii?Q?nXzNJn+5WenhlWmtYQ92ng8VgW6PwBr5ISzAmdDQbOvnJkR+R4npeQC5SIeT?=
+ =?us-ascii?Q?dWrQB3XUYJaqPJ4TrASbDzBGcpFhI1ejb+Iee8p+uACjneRW7oOsBeqMKWkE?=
+ =?us-ascii?Q?yl9yyAQC+4+Enmnx4yws/b5+5WIkzEA=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
- <20260202111548.3555306-3-dolinux.peng@gmail.com> <20260202111249.649ac338@gandalf.local.home>
- <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
-In-Reply-To: <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
-From: Donglin Peng <dolinux.peng@gmail.com>
-Date: Tue, 3 Feb 2026 21:50:47 +0800
-X-Gm-Features: AZwV_QhxlPy3i7L--W6IIHW5vk0g3VwD2o54QXIh3r6V9MmcHYUHUhrXDGupVA4
-Message-ID: <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
- via BTF
-To: Steven Rostedt <rostedt@goodmis.org>, andrii.nakryiko@gmail.com
-Cc: ast@kernel.org, mhiramat@kernel.org, linux-kernel@vger.kernel.org, 
-	Donglin Peng <pengdonglin@xiaomi.com>, linux-trace-kernel@vger.kernel.org, 
-	bpf <bpf@vger.kernel.org>, Eduard Zingerman <eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AS8PR07MB7973.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5911f2a3-715f-4334-24d6-08de632cdb97
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Feb 2026 14:02:24.6791
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: TPAf/TEZwzu+REZRfyHCQCrx7D15c+DVKanIEQxFJhdecSfwWLg7qNaShwD/0SFW5dUlT9TAh0FEMAD3j1FiXsjhoN3OnadGG/uQeXPX8e3drfXNUlfMrwa9HmVF6ldD
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB7144
 
-On Tue, Feb 3, 2026 at 10:17=E2=80=AFAM Donglin Peng <dolinux.peng@gmail.co=
-m> wrote:
->
-> On Tue, Feb 3, 2026 at 12:12=E2=80=AFAM Steven Rostedt <rostedt@goodmis.o=
-rg> wrote:
+> -----Original Message-----
+> From: Paolo Abeni <pabeni@redhat.com>=20
+> Sent: Tuesday, February 3, 2026 1:51 PM
+> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>; edumazet@g=
+oogle.com; parav@nvidia.com; linux-doc@vger.kernel.org; corbet@lwn.net; hor=
+ms@kernel.org; dsahern@kernel.org; kuniyu@google.com; bpf@vger.kernel.org; =
+netdev@vger.kernel.org; dave.taht@gmail.com; jhs@mojatatu.com; kuba@kernel.=
+org; stephen@networkplumber.org; xiyou.wangcong@gmail.com; jiri@resnulli.us=
+; davem@davemloft.net; andrew+netdev@lunn.ch; donald.hunter@gmail.com; ast@=
+fiberby.net; liuhangbin@gmail.com; shuah@kernel.org; linux-kselftest@vger.k=
+ernel.org; ij@kernel.org; ncardwell@google.com; Koen De Schepper (Nokia) <k=
+oen.de_schepper@nokia-bell-labs.com>; g.white@cablelabs.com; ingemar.s.joha=
+nsson@ericsson.com; mirja.kuehlewind@ericsson.com; cheshire@apple.com; rs.i=
+etf@gmx.at; Jason_Livingood@comcast.com; vidhi_goel@apple.com
+> Subject: Re: [PATCH v13 net-next 00/15] AccECN protocol case handling ser=
+ies
+>=20
+>=20
+> CAUTION: This is an external email. Please be very careful when clicking =
+links or opening attachments. See the URL nok.it/ext for additional informa=
+tion.
+>=20
+>=20
+>=20
+> On 1/31/26 11:25 PM, chia-yu.chang@nokia-bell-labs.com wrote:
+> > From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 > >
-> > On Mon,  2 Feb 2026 19:15:48 +0800
-> > Donglin Peng <dolinux.peng@gmail.com> wrote:
+> > Hello,
 > >
-> > > @@ -754,6 +755,14 @@ void print_function_args(struct trace_seq *s, un=
-signed long *args,
-> > >                       break;
-> > >               case BTF_KIND_ENUM:
-> > >                       trace_seq_printf(s, "%ld", arg);
-> > > +                     for_each_enum(i, t, enump) {
-> > > +                             if (arg =3D=3D enump->val) {
-> > > +                                     trace_seq_printf(s, " [%s]",
-> > > +                                                      btf_name_by_of=
-fset(btf,
-> > > +                                                      enump->name_of=
-f));
-> > > +                                     break;
-> > > +                             }
-> > > +                     }
-> > >                       break;
+> > Plesae find the v13 AccECN case handling patch series, which covers=20
+> > several excpetional case handling of Accurate ECN spec (RFC9768), adds=
+=20
+> > new identifiers to be used by CC modules, adds ecn_delta into=20
+> > rate_sample, and keeps the ACE counter for computation, etc.
 > >
-> > I have to ask; how big is that enum list?
->
-> Based on local vmlinux analysis (6.18 kernel):
-> - 78% enums have vlen =E2=89=A4 10
-> - 95% enums have vlen =E2=89=A4 50
-> - Max observed vlen: 349 (extremely rare case)
->
-> $ bpftool btf dump file x86_64/vmlinux | grep "^\[" | grep ENUM | grep
-> -v "(anon)" | awk -F '[ =3D]' '{
->     for(i=3D1; i<=3DNF; i++) {
->         if ($i =3D=3D "vlen") {
->             count[$(i+1)]++
->         }
->     }
-> }
-> END {
->     for (vlen in count) {
->         print "vlen=3D" vlen ": " count[vlen] " times"
->     }
-> }' | sort -k 2 -n
-> vlen=3D104: 1 times
-> vlen=3D114: 1 times
-> vlen=3D116: 1 times
-> vlen=3D129: 1 times
-> vlen=3D146: 1 times
-> vlen=3D167: 1 times
-> vlen=3D181: 1 times
-> vlen=3D183: 1 times
-> vlen=3D201: 1 times
-> vlen=3D213: 1 times
-> vlen=3D33: 1 times
-> vlen=3D349: 1 times
-> vlen=3D42: 1 times
-> vlen=3D45: 1 times
-> vlen=3D48: 1 times
-> vlen=3D50: 1 times
-> vlen=3D54: 1 times
-> vlen=3D55: 1 times
-> vlen=3D56: 1 times
-> vlen=3D59: 1 times
-> vlen=3D60: 1 times
-> vlen=3D61: 1 times
-> vlen=3D64: 1 times
-> vlen=3D68: 1 times
-> vlen=3D71: 1 times
-> vlen=3D74: 1 times
-> vlen=3D83: 1 times
-> vlen=3D85: 1 times
-> vlen=3D87: 1 times
-> vlen=3D122: 2 times
-> vlen=3D38: 2 times
-> vlen=3D39: 2 times
-> vlen=3D43: 2 times
-> vlen=3D44: 2 times
-> vlen=3D49: 2 times
-> vlen=3D52: 2 times
-> vlen=3D58: 2 times
-> vlen=3D73: 2 times
-> vlen=3D79: 2 times
-> vlen=3D35: 3 times
-> vlen=3D41: 3 times
-> vlen=3D46: 3 times
-> vlen=3D25: 4 times
-> vlen=3D27: 4 times
-> vlen=3D28: 4 times
-> vlen=3D29: 4 times
-> vlen=3D34: 4 times
-> vlen=3D37: 4 times
-> vlen=3D40: 4 times
-> vlen=3D19: 5 times
-> vlen=3D30: 5 times
-> vlen=3D20: 6 times
-> vlen=3D22: 6 times
-> vlen=3D24: 6 times
-> vlen=3D16: 8 times
-> vlen=3D23: 8 times
-> vlen=3D26: 8 times
-> vlen=3D31: 8 times
-> vlen=3D32: 8 times
-> vlen=3D17: 11 times
-> vlen=3D18: 12 times
-> vlen=3D21: 12 times
-> vlen=3D15: 13 times
-> vlen=3D14: 21 times
-> vlen=3D12: 25 times
-> vlen=3D13: 25 times
-> vlen=3D10: 34 times
-> vlen=3D11: 35 times
-> vlen=3D1: 58 times
-> vlen=3D8: 70 times
-> vlen=3D9: 74 times
-> vlen=3D7: 102 times
-> vlen=3D6: 108 times
-> vlen=3D5: 170 times
-> vlen=3D2: 193 times
-> vlen=3D4: 250 times
-> vlen=3D3: 333 times
->
-> >
-> > Do we really want to do a linear search for every enum we come across?
->
-> I think linear search is efficient for typical enum value lists (vlen < 1=
-0), I
-> also support using binary search where feasible.
->
-> >
-> > What we could do is for the first time we hit an enum, create an array =
-of
-> > enums, sort them, and do a binary search from then on. This could be sa=
-ved
-> > in the tracing code itself (in kernel/trace/trace_btf.c), if BPF doesn'=
-t
-> > care about it.
->
-> I think this approach adds unnecessary complexity. Instead, we could
-> leverage btf2btf during the resolve_btfids phase to proactively sort the
-> btf_enum entries of enum-type btf_type by their value, enabling efficient
-> binary search lookups.
+> > This patch series is part of the full AccECN patch series, which is at
+> > https://eur03.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fgit=
+h
+> > ub.com%2FL4STeam%2Flinux-net-next%2Fcommits%2Fupstream_l4steam%2F&data
+> > =3D05%7C02%7Cchia-yu.chang%40nokia-bell-labs.com%7C28d9664ae2ba4bc908b0=
+0
+> > 8de6322d99f%7C5d4717519675428d917b70f44f9630b0%7C0%7C0%7C6390571985045
+> > 13725%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAw
+> > MCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdat
+> > a=3DLE02CSf%2BwO3EhH844vnsvMN4ToH4FbvnmHNQH2GXKj4%3D&reserved=3D0
+>=20
+> Beside the just shared feedback, the AI reported a bunch of other stuff t=
+hat are not relevant:
+> - fixes tags, IMHO not needed since the touched features were just partia=
+lly implemented before
+> - uapi breakage, already ruled out as irrelevant since the iproute bits a=
+re not there yet
+> - pktdrill syntax, which is a little inconsistent but AFAICS correct.
+>=20
+> I'm not sure about the BIT() macro usage in uAPI, which is already a thin=
+g in many uAPI exposed headers, but does not look correct. I guess it could=
+ be handled with a follow-up, if needed.
+>=20
+> So the only feedback the could really require a new revision is WRT ECN f=
+lags handling on retransmission - and I'm not 110% it needs a new
+> revision: please double check it.
+>=20
+> Thanks,
+>=20
+> Paolo
 
-Testing revealed that sorting within resolve_btfids introduces issues with
-btf__dedup. Therefore, I plan to move the sorting logic directly into
-btf__add_enum_value and btf__add_enum64_value in libbpf, which are
-invoked by pahole. However, it means that we need a newer pahole
-version.
+Hi Paolo,
 
->
-> >
-> > -- Steve
+Based on another email, if it is suggested to clarify that commit in the co=
+mmit message then I can also include other listed issues.
+
+And I would include fixes to packetdrill syntax and fixed to BIT() - which =
+might have an issue if someone took only the header without BIT macro.
+
+So, please let me know then I can submit v14 with all three changes, thanks=
+.
+
+Chia-Yu
