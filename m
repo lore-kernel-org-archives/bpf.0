@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2383242D2
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 22:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B6636680B
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 22:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770157654; cv=none; b=X6/0MCb2kiU9FFFy36V8w1fgYpIdMk3jxvAACg/KezC/6Kzb3m6ZBx7NhaaC+E6zdu3sAKpOkituicsHVBDaRJ9eKqmg2WcNY8vHAeyllQhVdxl0I2VUiA52f0aWl8yAFQUfltdPTp8cjUmxDnPSysgddmAp4N4fQ00w1UOwAXw=
+	t=1770157658; cv=none; b=o9WqSTefdnKZjevcVUUvpJZ7ZT70pgkcD9k6mFKS48DfIqtN1W1NFY4B/16xO4OXfgXXRMCEyEAs9iKXQShbVgBwtegyO8v5fxERZSqGIxQB5jhu+if8JgWt0bRTw2dMwBjCLs67+jykTeS80OUULUklnp+saiFauckA/en6bdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770157654; c=relaxed/simple;
-	bh=xWcU6TYSCGkMYQjpSwHo71rjhAkKpoYVc77GCTEgllE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=j5jzshxucUUzXRxFO8cffLvUSnvY7MhjCfis/dGkEf81f/UWRrtQcoTw7HVK8sPs2YFk68rdo15py9LurjM6GfmGp+0KNRH0VpB40xCWF27j0ON0/3m8c54U0gXylUWop2jqDqAGTLy9IMDAJkq53Qfap36NachIFY/w3Mt3oXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ivR7g2Pm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770157658; c=relaxed/simple;
+	bh=d6q+fWBRhZhBrbM8oPNbowV+1k9cfHPpNOowg2e01Xo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=r4REgvyJwzV7KXCwlM2W6jEBP/xeyQuAiAwLviOFxeynBhwMuk73SauK+Nawbs/BsBAIxx0k2zDOd4vurxB+Wl9UIXF7JPFOAsJiOhgm9CzGFoeVEkX9NifiLzPqqLXYIJ6FVLEh0Tb47MCJh16K2D1uoV/H2Qdcgwqggytxpwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PGWXwkwu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ivR7g2Pm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9BF6C116D0;
-	Tue,  3 Feb 2026 22:27:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PGWXwkwu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E304EC116D0;
+	Tue,  3 Feb 2026 22:27:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770157653;
-	bh=xWcU6TYSCGkMYQjpSwHo71rjhAkKpoYVc77GCTEgllE=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ivR7g2PmNuwbPGbQkijKJLYNo296m9Hp5Tmo5uG6Ncz3JhJVbKYHA04uR1r/9RVpp
-	 SMiwKdv/FE/nXxfnFLFPuQQtPdFjri9m3piUcS2m701rYrP2Ao3jtPi+EtyO4bkEwG
-	 p2rjSXhLGTE5fSVBW7THRDcGF3PAhActqsoMwMmuWlKqmC6P8nfqp9F/c1N49mtSje
-	 tRvgFA9v/hdJNzykTvamrW0IjqrjtRcowqTYZL+yWJnGOGlay4LPkVk2navi6DWjR7
-	 ngrsD4XOTEsK4RnKfRzEKEaDCHzCjuJSFknVrwTOfIl6CH4ah5Xz9HvZdk+nuXBwM5
-	 Dj90GJzveK2RA==
+	s=k20201202; t=1770157658;
+	bh=d6q+fWBRhZhBrbM8oPNbowV+1k9cfHPpNOowg2e01Xo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=PGWXwkwuUg66R2Al704EzOMMp9cwt2/xzZ4KK6aSTNaKGd5Bv7mDa6uZyVXGS2BND
+	 gV3GDSesGFy58Ndglfk9GfpdxbMxmIXFyeSh2NGGej95EXWb545doSssgLNlSEFk86
+	 7ak9VfvaW7Sa3ZzHew7yvlw73Mhbezk/iq/gp3mjx4Ecd/V1lQL03JpyJneyI+aYna
+	 tMiXOsE+UWZtRLxeyzCXKTTiXrcSNPoTosMnlqhdzncLiL1jILebzHZNNjWKVCQXCf
+	 SbReUo8BSngDJvYszFU0lxN+SpTzB29JeIsRmX/2u1Bw+K1qtNhtJbHhTjqufh7uxq
+	 7R+YubkMwmt7w==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -37,179 +38,171 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 0/2] bpf: Improve linked register tracking
-Date: Tue,  3 Feb 2026 14:26:16 -0800
-Message-ID: <20260203222643.994713-1-puranjay@kernel.org>
+Subject: [PATCH bpf-next v3 1/2] bpf: Support negative offsets, BPF_SUB, and alu32 for linked register tracking
+Date: Tue,  3 Feb 2026 14:26:17 -0800
+Message-ID: <20260203222643.994713-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260203222643.994713-1-puranjay@kernel.org>
+References: <20260203222643.994713-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-V2: https://lore.kernel.org/all/20260113152529.3217648-1-puranjay@kernel.org/
-Changes in v2->v3:
-- Added another selftest showing a real usage pattern
-- Rebased on bpf-next/master
+Previously, the verifier only tracked positive constant deltas between
+linked registers using BPF_ADD. This limitation meant patterns like:
 
-v1: https://lore.kernel.org/bpf/20260107203941.1063754-1-puranjay@kernel.org/
-Changes in v1->v2:
-- Add support for alu32 operations in linked register tracking (Alexei)
-- Squash the selftest fix with the first patch (Eduard)
-- Add more selftests to detect edge cases
+  r1 = r0;
+  r1 += -4;
+  if r1 s>= 0 goto l0_%=;   // r1 >= 0 implies r0 >= 4
+  // verifier couldn't propagate bounds back to r0
+  if r0 != 0 goto l0_%=;
+	r0 /= 0; // Verifier thinks this is reachable
+  l0_%=:
 
-This series extends the BPF verifier's linked register tracking to handle
-negative offsets, BPF_SUB operations, and alu32 operations, enabling better bounds propagation for
-common arithmetic patterns.
+Similar limitation exists for 32-bit registers.
 
-The verifier previously only tracked positive constant deltas between linked
-registers using BPF_ADD. This meant patterns using negative offsets or
-subtraction couldn't benefit from bounds propagation:
+With this change, the verifier can now track negative deltas in reg->off
+enabling bound propagation for the above pattern.
 
-  void alu32_negative_offset(void)
-  {
-          volatile char path[5];
-          volatile int offset = bpf_get_prandom_u32();
-          int off = offset;
-  
-          if (off >= 5 && off < 10)
-                  path[off - 5] = '.';
-  }
+For alu32, we make sure the destination register has the upper 32 bits
+as 0s before creating the link. BPF_ADD_CONST is split into
+BPF_ADD_CONST64 and BPF_ADD_CONST32, the latter is used in case of alu32
+and sync_linked_regs uses this to zext the result if known_reg has this
+flag.
 
-this gets compiled to:
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
+ include/linux/bpf_verifier.h                  |  6 ++-
+ kernel/bpf/verifier.c                         | 49 ++++++++++++++-----
+ .../selftests/bpf/progs/verifier_bounds.c     |  2 +-
+ 3 files changed, 44 insertions(+), 13 deletions(-)
 
-0000000000000478 <alu32_negative_offset>:
-     143:       call 0x7
-     144:       *(u32 *)(r10 - 0xc) = w0
-     145:       w1 = *(u32 *)(r10 - 0xc)
-     146:       w2 = w1				// w2 and w1 share the same id
-     147:       w2 += -0x5			// verifier knows w1 = w2 + 5
-     148:       if w2 > 0x4 goto +0x5 <L0>	// in fall-through: verifier knows w2 ∈ [0,4] => w1 ∈ [5, 9]
-     149:       r2 = r10
-     150:       r2 += -0x5			// r2 = fp - 5
-     151:       r2 += r1			// r2 = fp - 5 + r1 (∈ [5, 9]) => r2 ∈ [fp, fp + 4]
-     152:       w1 = 0x2e
-     153:       *(u8 *)(r2 - 0x5) = w1		// r2 ∈ [fp, fp + 4] => r2 - 5 ∈ [fp - 5, fp - 1]
-<L0>:
-     154:       exit
-
-After the changes, the verifier could link 32-bit scalars and also supported -ve offsets for linking:
-
-	146:       w2 = w1
-	147:       w2 += -0x5
-
-It allowed the verifier to correctly propagate bounds, without the
-changes in this patchset, verifier would reject this program with:
-
-invalid unbounded variable-offset write to stack R2
-
-This program has been added as a selftest in the second patch.
-
-Veristat comparison on programs from sched_ext, selftests, and some meta internal programs:
-
-Scx Progs
-File               Program           Verdict (A)  Verdict (B)  Verdict (DIFF)  Insns (A)  Insns (B)  Insns  (DIFF)
------------------  ----------------  -----------  -----------  --------------  ---------  ---------  -------------
-scx_layered.bpf.o  layered_runnable  success      success      MATCH                5674       6077  +403 (+7.10%)
-
-FB Progs
-File          Program           Verdict (A)  Verdict (B)  Verdict (DIFF)  Insns (A)  Insns (B)  Insns      (DIFF)
-------------  ----------------  -----------  -----------  --------------  ---------  ---------  -----------------
-bpf232.bpf.o  layered_dump      success      success      MATCH                1151       1218       +67 (+5.82%)
-bpf257.bpf.o  layered_runnable  success      success      MATCH                5743       6143      +400 (+6.97%)
-bpf252.bpf.o  layered_runnable  success      success      MATCH                5677       6075      +398 (+7.01%)
-bpf227.bpf.o  layered_dump      success      success      MATCH                 915        982       +67 (+7.32%)
-bpf239.bpf.o  layered_runnable  success      success      MATCH                5459       5861      +402 (+7.36%)
-bpf246.bpf.o  layered_runnable  success      success      MATCH                5562       6008      +446 (+8.02%)
-bpf229.bpf.o  layered_runnable  success      success      MATCH                2559       3011     +452 (+17.66%)
-bpf231.bpf.o  layered_runnable  success      success      MATCH                2559       3011     +452 (+17.66%)
-bpf234.bpf.o  layered_runnable  success      success      MATCH                2549       3001     +452 (+17.73%)
-bpf019.bpf.o  do_sendmsg        success      success      MATCH              124823     153523   +28700 (+22.99%)
-bpf019.bpf.o  do_parse          success      success      MATCH              124809     153509   +28700 (+23.00%)
-bpf227.bpf.o  layered_runnable  success      success      MATCH                1915       2356     +441 (+23.03%)
-bpf228.bpf.o  layered_runnable  success      success      MATCH                1700       2152     +452 (+26.59%)
-bpf232.bpf.o  layered_runnable  success      success      MATCH                1499       1951     +452 (+30.15%)
-
-bpf312.bpf.o  mount_exit        success      success      MATCH               19253      62883  +43630 (+226.61%)
-bpf312.bpf.o  umount_exit       success      success      MATCH               19253      62883  +43630 (+226.61%)
-bpf311.bpf.o  mount_exit        success      success      MATCH               19226      62863  +43637 (+226.97%)
-bpf311.bpf.o  umount_exit       success      success      MATCH               19226      62863  +43637 (+226.97%)
-
-The above four programs have specific patters that make the verifier explore a lot more states:
-
-    for (; depth < MAX_DIR_DEPTH; depth++) {
-        const unsigned char* name = BPF_CORE_READ(dentry, d_name.name);
-        if (offset >= MAX_PATH_LEN - MAX_DIR_LEN) {
-            return depth;
-        }
-        int len = bpf_probe_read_kernel_str(&path[offset], MAX_DIR_LEN, name);
-        offset += len;
-        if (len == MAX_DIR_LEN) {
-            if (offset - 2 < MAX_PATH_LEN) {   // <---- (a)
-                path[offset - 2] = '.';
-            }
-            if (offset - 3 < MAX_PATH_LEN) {   // <---- (b)
-                path[offset - 3] = '.';
-            }
-            if (offset - 4 < MAX_PATH_LEN) {   // <---- (c)
-                path[offset - 4] = '.';
-            }
-        }
-    }
-
-When at some depth == N false branches of conditions (a), (b) and (c) are scheduled for
-verification, constraints for offset at depth == N+1 are:
-1. offset >= MAX_PATH_LEN + 2
-2. offset >= MAX_PATH_LEN + 3
-3. offset >= MAX_PATH_LEN + 4 (visited before others)
-
-And after offset += len it becomes:
-1. offset >= MAX_PATH_LEN - 4093 
-2. offset >= MAX_PATH_LEN - 4092 
-3. offset >= MAX_PATH_LEN - 4091 (visited before others) 
-
-Because of the DFS states exploration logic, the states above are visited in order 3, 2, 1; 3 is not
-a subset of 2 and 1 is not a subset of 2, so pruning logic does not kick in.
-Previously this was not a problem, because range for offset was not propagated through the
-statements (a), (b), (c).
-
-As the root cause of this regression is understood, this is not a blocker for this change.
-
-Selftest Progs
-File                                Program                   Verdict (A)  Verdict (B)  Verdict (DIFF)  Insns (A)  Insns (B)  Insns   (DIFF)
-----------------------------------  ------------------------  -----------  -----------  --------------  ---------  ---------  --------------
-linked_list_peek.bpf.o              list_peek                 success      success      MATCH                 152         88   -64 (-42.11%)
-verifier_iterating_callbacks.bpf.o  cond_break2               success      success      MATCH                 110         88   -22 (-20.00%)
-
-These are the added selftests that failed earlier but are passing now:
-
-verifier_linked_scalars.bpf.o       alu32_negative_offset     failure      success      MISMATCH               11         13    +2 (+18.18%)
-verifier_linked_scalars.bpf.o       scalars_alu32_big_offset  failure      success      MISMATCH                7         10    +3 (+42.86%)
-verifier_linked_scalars.bpf.o       scalars_neg_alu32_add     failure      success      MISMATCH                7         10    +3 (+42.86%)
-verifier_linked_scalars.bpf.o       scalars_neg_alu32_sub     failure      success      MISMATCH                7         10    +3 (+42.86%)
-verifier_linked_scalars.bpf.o       scalars_neg               failure      success      MISMATCH                7         10    +3 (+42.86%)
-verifier_linked_scalars.bpf.o       scalars_neg_sub           failure      success      MISMATCH                7         10    +3 (+42.86%)
-verifier_linked_scalars.bpf.o       scalars_sub_neg_imm       failure      success      MISMATCH                7         10    +3 (+42.86%)
-
-iters.bpf.o                         iter_obfuscate_counter    success      success      MATCH                  83        119   +36 (+43.37%)
-bpf_cubic.bpf.o                     bpf_cubic_acked           success      success      MATCH                 243        430  +187 (+76.95%)
-
-Puranjay Mohan (2):
-  bpf: Support negative offsets, BPF_SUB, and alu32 for linked register
-    tracking
-  selftests/bpf: Add tests for improved linked register tracking
-
- include/linux/bpf_verifier.h                  |   6 +-
- kernel/bpf/verifier.c                         |  49 ++-
- .../selftests/bpf/progs/verifier_bounds.c     |   2 +-
- .../bpf/progs/verifier_linked_scalars.c       | 300 +++++++++++++++++-
- 4 files changed, 342 insertions(+), 15 deletions(-)
-
-
-base-commit: f11f7cf90ee09dbcf76413818063ffc38ed2d9fe
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index 746025df82c8..ef8e45a362d9 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -147,8 +147,12 @@ struct bpf_reg_state {
+ 	 * registers. Example:
+ 	 * r1 = r2;    both will have r1->id == r2->id == N
+ 	 * r1 += 10;   r1->id == N | BPF_ADD_CONST and r1->off == 10
++	 * r3 = r2;    both will have r3->id == r2->id == N
++	 * w3 += 10;   r3->id == N | BPF_ADD_CONST32 and r3->off == 10
+ 	 */
+-#define BPF_ADD_CONST (1U << 31)
++#define BPF_ADD_CONST64 (1U << 31)
++#define BPF_ADD_CONST32 (1U << 30)
++#define BPF_ADD_CONST (BPF_ADD_CONST64 | BPF_ADD_CONST32)
+ 	u32 id;
+ 	/* PTR_TO_SOCKET and PTR_TO_TCP_SOCK could be a ptr returned
+ 	 * from a pointer-cast helper, bpf_sk_fullsock() and
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 6a616dc4dc54..7f73f73adfe0 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -16122,6 +16122,13 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 		verbose(env, "verifier internal error: no src_reg\n");
+ 		return -EFAULT;
+ 	}
++	/*
++	 * For alu32 linked register tracking, we need to check dst_reg's
++	 * umax_value before the ALU operation. After adjust_scalar_min_max_vals(),
++	 * alu32 ops will have zero-extended the result, making umax_value <= U32_MAX.
++	 */
++	u64 dst_umax = dst_reg->umax_value;
++
+ 	err = adjust_scalar_min_max_vals(env, insn, dst_reg, *src_reg);
+ 	if (err)
+ 		return err;
+@@ -16131,26 +16138,44 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 	 * r1 += 0x1
+ 	 * if r2 < 1000 goto ...
+ 	 * use r1 in memory access
+-	 * So for 64-bit alu remember constant delta between r2 and r1 and
+-	 * update r1 after 'if' condition.
++	 * So remember constant delta between r2 and r1 and update r1 after
++	 * 'if' condition.
+ 	 */
+ 	if (env->bpf_capable &&
+-	    BPF_OP(insn->code) == BPF_ADD && !alu32 &&
+-	    dst_reg->id && is_reg_const(src_reg, false)) {
+-		u64 val = reg_const_value(src_reg, false);
++	    (BPF_OP(insn->code) == BPF_ADD || BPF_OP(insn->code) == BPF_SUB) &&
++	    dst_reg->id && is_reg_const(src_reg, alu32)) {
++		u64 val = reg_const_value(src_reg, alu32);
++		s32 off;
++
++		if (!alu32 && ((s64)val < S32_MIN || (s64)val > S32_MAX))
++			goto clear_id;
++
++		if (alu32 && (dst_umax > U32_MAX))
++			goto clear_id;
+ 
+-		if ((dst_reg->id & BPF_ADD_CONST) ||
+-		    /* prevent overflow in sync_linked_regs() later */
+-		    val > (u32)S32_MAX) {
++		off = (s32)val;
++
++		if (BPF_OP(insn->code) == BPF_SUB) {
++			/* Negating S32_MIN would overflow */
++			if (off == S32_MIN)
++				goto clear_id;
++			off = -off;
++		}
++
++		if (dst_reg->id & BPF_ADD_CONST) {
+ 			/*
+ 			 * If the register already went through rX += val
+ 			 * we cannot accumulate another val into rx->off.
+ 			 */
++clear_id:
+ 			dst_reg->off = 0;
+ 			dst_reg->id = 0;
+ 		} else {
+-			dst_reg->id |= BPF_ADD_CONST;
+-			dst_reg->off = val;
++			if (alu32)
++				dst_reg->id |= BPF_ADD_CONST32;
++			else
++				dst_reg->id |= BPF_ADD_CONST64;
++			dst_reg->off = off;
+ 		}
+ 	} else {
+ 		/*
+@@ -17247,7 +17272,7 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 			u32 saved_id = reg->id;
+ 
+ 			fake_reg.type = SCALAR_VALUE;
+-			__mark_reg_known(&fake_reg, (s32)reg->off - (s32)known_reg->off);
++			__mark_reg_known(&fake_reg, (s64)reg->off - (s64)known_reg->off);
+ 
+ 			/* reg = known_reg; reg += delta */
+ 			copy_register_state(reg, known_reg);
+@@ -17262,6 +17287,8 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 			scalar32_min_max_add(reg, &fake_reg);
+ 			scalar_min_max_add(reg, &fake_reg);
+ 			reg->var_off = tnum_add(reg->var_off, fake_reg.var_off);
++			if (known_reg->id & BPF_ADD_CONST32)
++				zext_32_to_64(reg);
+ 		}
+ 		if (e->is_reg)
+ 			mark_reg_scratched(env, e->regno);
+diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+index 411a18437d7e..560531404bce 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
++++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+@@ -1477,7 +1477,7 @@ __naked void sub64_full_overflow(void)
+ SEC("socket")
+ __description("64-bit subtraction, partial overflow, result in unbounded reg")
+ __success __log_level(2)
+-__msg("3: (1f) r3 -= r2 {{.*}} R3=scalar()")
++__msg("3: (1f) r3 -= r2 {{.*}} R3=scalar(id=1-1)")
+ __retval(0)
+ __naked void sub64_partial_overflow(void)
+ {
 -- 
 2.47.3
 
