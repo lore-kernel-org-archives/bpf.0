@@ -1,46 +1,98 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B16A5158535
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 10:23:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C364C331A57;
+	Tue,  3 Feb 2026 11:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770114190; cv=none; b=HeAxTbEIFeYusg5rhDP8ddMIHHFFnfl14+ilaci8kfMC434z+b+ULvuXLh/YB5eFuFct/V5mtAIYZM8tDf8P89xdzemRaJk07OCamzTFcfohrVpMQSM1kAVcf6Dfe+r6SK1RtekVZB8J5Xyuct1/ypRzea/zukZsboo9fq3nZ5o=
+	t=1770117707; cv=none; b=X46IJhMJVYZ6do9T1Dq6AuJsv20KkqJlDd7UO4ZtxxryVt5YP9AMGR83kEY90modbBMcj8NDndMLa6lhIPyXVbMdrLLPdGVGDG5hO4o+QyRSUpLNyV8M6MuUHB837zjK0VB88XdAbfhPrIDWDGMMkMTeQiCA6TyBVVA01GeIg0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770114190; c=relaxed/simple;
-	bh=3JTWcdJZRRCSxNoUsVTit46Hw8vl/f4P2VLDPsxV3RQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cm8nK3h5rYeRf5f1SmKvs0kLHgKQkoe5LActRzOh2hpLiP8lfJFPwX7quIxmgDpg8wPB+IlbkXv9EbYNocxCBL2hc6icna4z7MtkiOSKKI6C+qWNWVRap9fTMfjDEF696nR4acxwhFGZ/LZM4FWYCdAqLdMfRjhD7cx2nIw+sGk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=fail smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=4.193.249.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [112.32.4.205])
-	by mtasvr (Coremail) with SMTP id _____wDH2mdcy4FphqZ1AA--.1638S3;
-	Tue, 03 Feb 2026 18:18:04 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.32.4.205])
-	by mail-app2 (Coremail) with SMTP id zC_KCgDXpTdZy4FpVXOoBQ--.61863S2;
-	Tue, 03 Feb 2026 18:18:03 +0800 (CST)
-From: Tianci Cao <ziye@zju.edu.cn>
-To: eddyz87@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	martin.lau@linux.dev,
-	sdf@fomichev.me,
-	shenghaoyuan0928@163.com,
-	song@kernel.org,
-	tangyazhou518@outlook.com,
-	yonghong.song@linux.dev,
-	ziye@zju.edu.cn
-Subject: Re: [PATCH bpf-next 1/2] bpf: Add bitwise tracking for BPF_END
-Date: Tue,  3 Feb 2026 18:17:36 +0800
-Message-Id: <20260203101736.4975-1-ziye@zju.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <e62c874af12c74ec4442df6e098c6d5000f9540e.camel@gmail.com>
-References: <e62c874af12c74ec4442df6e098c6d5000f9540e.camel@gmail.com>
+	s=arc-20240116; t=1770117707; c=relaxed/simple;
+	bh=8bCdRho/FfoOYD6UnG8W+0FXP5Gu9038UhW698s44IY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GsthLULTwcj7dDMpXxKhjpWpO2stW+4x/hunR/cf9l/KQHR+N00XUk5zGSXyeR8zwk6JAsdp2Gfj/YWh3olYBmqGK/fP5D8+5fqk9EzJIIp2kKmuLI/OHs/ov/5ggM3E2PZL2XDNxgVDh3qXTZrp78FyajieaiE2YsQHiqsQfbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LlsObAIr; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LlsObAIr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770117706; x=1801653706;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8bCdRho/FfoOYD6UnG8W+0FXP5Gu9038UhW698s44IY=;
+  b=LlsObAIr7y8nGrvR6E/QU/jyL6AqjYoQ38Ikpjxjh8867gBuwQ0f2bmN
+   nBb4v+rQDhV6HsLmhDTiBV4bglcLseK7ohFV8nL52Z6RSWBvPsgRVLGeF
+   LaF3Bq5gLln2WgIXgqobQkqiNiTiESbmitSKHVAIVfzEaTLCthxvI0lHV
+   hGvfCVrsWNAzwtCr/yc72E5DsfBb/4q4ML/kF0lAj3+XFl7CQzOiZ37wb
+   3sJ2FHsoFFDSSDrED90/2/pqkocYXE2MVIYMdIOw+qImoahBDlh6ucB9H
+   06486lcYuyZVzha8jWMAWue9G0utHn9Ag5q832U068ck83kgBwB71oKDr
+   w==;
+X-CSE-ConnectionGUID: 9vMLffXdT46XAqvHvAIV8g==
+X-CSE-MsgGUID: o7ra46QbSomyQRbc0FF88w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11690"; a="71185821"
+X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
+   d="scan'208";a="71185821"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2026 03:21:46 -0800
+X-CSE-ConnectionGUID: I6c+m5qrQEOnKrYxngMrSw==
+X-CSE-MsgGUID: Q9pqdu6xToyyToKMr1/xhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,270,1763452800"; 
+   d="scan'208";a="209913228"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by orviesa007.jf.intel.com with ESMTP; 03 Feb 2026 03:21:37 -0800
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 6B0AC28195;
+	Tue,  3 Feb 2026 11:21:33 +0000 (GMT)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: bpf@vger.kernel.org
+Cc: Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Wei Fang <wei.fang@nxp.com>,
+	Clark Wang <xiaoning.wang@nxp.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
+	Larysa Zaremba <larysa.zaremba@intel.com>,
+	Tushar Vyavahare <tushar.vyavahare@intel.com>,
+	Jason Xing <kernelxing@tencent.com>,
+	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Toke Hoiland-Jorgensen <toke@redhat.com>,
+	imx@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Subject: [PATCH bpf 0/6] Address XDP frags having negative tailroom
+Date: Tue,  3 Feb 2026 11:53:28 +0100
+Message-ID: <20260203105417.2302672-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,64 +100,145 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zC_KCgDXpTdZy4FpVXOoBQ--.61863S2
-X-CM-SenderInfo: qtstiiaquyiko62m3hxhgxhubq/
-X-CM-DELIVERINFO: =?B?PERftAXKKxbFmtjJiESix3B1w3tzYfmPt4q7bPP17nv9Zvsme7sPvU0377+RBBKdO8
-	083uYxgGwm4o3MkAMAFMbdSWgb3btWnx/H4ChqrOzDo5u58BKQyCnTNddsZhqXbl0eNKKZ
-	QTZ4Zi8wLE89CsxZXv27IioAAjnOAt8rYZw12Biq
-X-Coremail-Antispam: 1Uk129KBj93XoWxJrWDJFyxAw13Aw4DWF4Dtrc_yoW8Gw4fpa
-	yrKF45Kr4DWa4Ika4UZFW7Jry29a13AFWkWayDGr93A3Zaqr18Xr9xt3WUu3WUGr4fuw1Y
-	qFs8Z3srurWqyFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUP0b4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AK
-	xVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc
-	02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAF
-	wI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0Y48IcxkI7V
-	AKI48G6xCjnVAKz4kxM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI7VAKI48JMxC2
-	0s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr
-	0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0E
-	wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JV
-	WxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-	cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU1iZ23UUUUU==
 
-Hi Eduard,
+Many ethernet drivers report xdp Rx queue frag size as being the same as
+DMA write size. However, the only user of this field, namely
+bpf_xdp_frags_increase_tail(), clearly expects a truesize.
 
-Thank you for the review and the ack.
+Such difference leads to unspecific memory corruption issues under certain
+circumstances, e.g. in ixgbevf maximum DMA write size is 3 KB, so when
+running xskxceiver's XDP_ADJUST_TAIL_GROW_MULTI_BUFF, 6K packet fully uses
+all DMA-writable space in 2 buffers. This would be fine, if only
+rxq->frag_size was properly set to 4K, but value of 3K results in a
+negative tailroom, because there is a non-zero page offset.
 
-On 2/3/26 4:03 AM, Eduard Zingerman wrote:
->> -	/* ALU32 ops are zero extended into 64bit register */
->> -	if (alu32)
->> +	/*
->> +	 * ALU32 ops are zero extended into 64bit register.
->> +	 * BPF_END is already handled inside the helper (truncation),
->> +	 * so skip zext here.
->> +	 */
->> +	if (alu32 && opcode != BPF_END)
->
-> Nit: zext after scalar_byte_swap() won't change anything, right?
->      If so, I'd just avoid the special case and skip 'opcode != BPF_END'.
+We could return -EINVAL and be done with it in such case, but due to
+tailroom being stored as an unsigned int, it is reported to be somewhere
+near UINT_MAX, resulting in a tail being grown, even if the requested
+offset is too much (it is around 2K in the abovementioned test). This later
+leads to all kinds of unspecific calltraces.
 
-Actually, for BPF_END, the alu32 flag may mislead regarding the actual data width being processed.
-The operand size for BPF_END is determined by insn->imm , not by the opcode class. 
-So if we simply rely on if (alu32) to perform zext_32_to_64(), we might encounter an unsound state 
-in the following cases:
+[ 7340.337579] xskxceiver[1440]: segfault at 1da718 ip 00007f4161aeac9d sp 00007f41615a6a00 error 6
+[ 7340.338040] xskxceiver[1441]: segfault at 7f410000000b ip 00000000004042b5 sp 00007f415bffecf0 error 4
+[ 7340.338179]  in libc.so.6[61c9d,7f4161aaf000+160000]
+[ 7340.339230]  in xskxceiver[42b5,400000+69000]
+[ 7340.340300]  likely on CPU 6 (core 0, socket 6)
+[ 7340.340302] Code: ff ff 01 e9 f4 fe ff ff 0f 1f 44 00 00 4c 39 f0 74 73 31 c0 ba 01 00 00 00 f0 0f b1 17 0f 85 ba 00 00 00 49 8b 87 88 00 00 00 <4c> 89 70 08 eb cc 0f 1f 44 00 00 48 8d bd f0 fe ff ff 89 85 ec fe
+[ 7340.340888]  likely on CPU 3 (core 0, socket 3)
+[ 7340.345088] Code: 00 00 00 ba 00 00 00 00 be 00 00 00 00 89 c7 e8 31 ca ff ff 89 45 ec 8b 45 ec 85 c0 78 07 b8 00 00 00 00 eb 46 e8 0b c8 ff ff <8b> 00 83 f8 69 74 24 e8 ff c7 ff ff 8b 00 83 f8 0b 74 18 e8 f3 c7
+[ 7340.404334] Oops: general protection fault, probably for non-canonical address 0x6d255010bdffc: 0000 [#1] SMP NOPTI
+[ 7340.405972] CPU: 7 UID: 0 PID: 1439 Comm: xskxceiver Not tainted 6.19.0-rc1+ #21 PREEMPT(lazy)
+[ 7340.408006] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.17.0-5.fc42 04/01/2014
+[ 7340.409716] RIP: 0010:lookup_swap_cgroup_id+0x44/0x80
+[ 7340.410455] Code: 83 f8 1c 73 39 48 ba ff ff ff ff ff ff ff 03 48 8b 04 c5 20 55 fa bd 48 21 d1 48 89 ca 83 e1 01 48 d1 ea c1 e1 04 48 8d 04 90 <8b> 00 48 83 c4 10 d3 e8 c3 cc cc cc cc 31 c0 e9 98 b7 dd 00 48 89
+[ 7340.412787] RSP: 0018:ffffcc5c04f7f6d0 EFLAGS: 00010202
+[ 7340.413494] RAX: 0006d255010bdffc RBX: ffff891f477895a8 RCX: 0000000000000010
+[ 7340.414431] RDX: 0001c17e3fffffff RSI: 00fa070000000000 RDI: 000382fc7fffffff
+[ 7340.415354] RBP: 00fa070000000000 R08: ffffcc5c04f7f8f8 R09: ffffcc5c04f7f7d0
+[ 7340.416283] R10: ffff891f4c1a7000 R11: ffffcc5c04f7f9c8 R12: ffffcc5c04f7f7d0
+[ 7340.417218] R13: 03ffffffffffffff R14: 00fa06fffffffe00 R15: ffff891f47789500
+[ 7340.418229] FS:  0000000000000000(0000) GS:ffff891ffdfaa000(0000) knlGS:0000000000000000
+[ 7340.419489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 7340.420286] CR2: 00007f415bfffd58 CR3: 0000000103f03002 CR4: 0000000000772ef0
+[ 7340.421237] PKRU: 55555554
+[ 7340.421623] Call Trace:
+[ 7340.421987]  <TASK>
+[ 7340.422309]  ? softleaf_from_pte+0x77/0xa0
+[ 7340.422855]  swap_pte_batch+0xa7/0x290
+[ 7340.423363]  zap_nonpresent_ptes.constprop.0.isra.0+0xd1/0x270
+[ 7340.424102]  zap_pte_range+0x281/0x580
+[ 7340.424607]  zap_pmd_range.isra.0+0xc9/0x240
+[ 7340.425177]  unmap_page_range+0x24d/0x420
+[ 7340.425714]  unmap_vmas+0xa1/0x180
+[ 7340.426185]  exit_mmap+0xe1/0x3b0
+[ 7340.426644]  __mmput+0x41/0x150
+[ 7340.427098]  exit_mm+0xb1/0x110
+[ 7340.427539]  do_exit+0x1b2/0x460
+[ 7340.427992]  do_group_exit+0x2d/0xc0
+[ 7340.428477]  get_signal+0x79d/0x7e0
+[ 7340.428957]  arch_do_signal_or_restart+0x34/0x100
+[ 7340.429571]  exit_to_user_mode_loop+0x8e/0x4c0
+[ 7340.430159]  do_syscall_64+0x188/0x6b0
+[ 7340.430672]  ? __do_sys_clone3+0xd9/0x120
+[ 7340.431212]  ? switch_fpu_return+0x4e/0xd0
+[ 7340.431761]  ? arch_exit_to_user_mode_prepare.isra.0+0xa1/0xc0
+[ 7340.432498]  ? do_syscall_64+0xbb/0x6b0
+[ 7340.433015]  ? __handle_mm_fault+0x445/0x690
+[ 7340.433582]  ? count_memcg_events+0xd6/0x210
+[ 7340.434151]  ? handle_mm_fault+0x212/0x340
+[ 7340.434697]  ? do_user_addr_fault+0x2b4/0x7b0
+[ 7340.435271]  ? clear_bhb_loop+0x30/0x80
+[ 7340.435788]  ? clear_bhb_loop+0x30/0x80
+[ 7340.436299]  ? clear_bhb_loop+0x30/0x80
+[ 7340.436812]  ? clear_bhb_loop+0x30/0x80
+[ 7340.437323]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ 7340.437973] RIP: 0033:0x7f4161b14169
+[ 7340.438468] Code: Unable to access opcode bytes at 0x7f4161b1413f.
+[ 7340.439242] RSP: 002b:00007ffc6ebfa770 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+[ 7340.440173] RAX: fffffffffffffe00 RBX: 00000000000005a1 RCX: 00007f4161b14169
+[ 7340.441061] RDX: 00000000000005a1 RSI: 0000000000000109 RDI: 00007f415bfff990
+[ 7340.441943] RBP: 00007ffc6ebfa7a0 R08: 0000000000000000 R09: 00000000ffffffff
+[ 7340.442824] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[ 7340.443707] R13: 0000000000000000 R14: 00007f415bfff990 R15: 00007f415bfff6c0
+[ 7340.444586]  </TASK>
+[ 7340.444922] Modules linked in: rfkill intel_rapl_msr intel_rapl_common intel_uncore_frequency_common skx_edac_common nfit libnvdimm kvm_intel vfat fat kvm snd_pcm irqbypass rapl iTCO_wdt snd_timer intel_pmc_bxt iTCO_vendor_support snd ixgbevf virtio_net soundcore i2c_i801 pcspkr libeth_xdp net_failover i2c_smbus lpc_ich failover libeth virtio_balloon joydev 9p fuse loop zram lz4hc_compress lz4_compress 9pnet_virtio 9pnet netfs ghash_clmulni_intel serio_raw qemu_fw_cfg
+[ 7340.449650] ---[ end trace 0000000000000000 ]---
 
-* le64 : opcode=0xd4 (BPF_END | BPF_ALU | BPF_TO_LE)
-* be64 : opcode=0xdc (BPF_END | BPF_ALU | BPF_TO_BE)
+The issue can be fixed in all in-tree drivers, but we cannot just trust OOT
+drivers to not do this. Therefore, make tailroom a signed int and produce a
+warning when it is negative to prevent such mistakes in the future.
 
-These instructions belong to BPF_ALU, so alu32 is true. However, it is a 64-bit operation. If we 
-perform zext_32_to_64() after scalar_byte_swap(), the verifier would incorrectly zero-out the 
-upper 32 bits of a 64-bit result, which is incorrect and unsound.
+The issue can also be easily reproduced with ice driver, by applying
+the following diff to xskxceiver and enjoying a kernel panic in xdpdrv mode:
 
-Since scalar_byte_swap() already handles truncation and zero-extension internally based on the 
-precise ' insn->imm ', it's safer to skip the generic alu32 zext for BPF_END altogether.
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+index 5af28f359cfd..042d587fa7ef 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+@@ -2541,8 +2541,8 @@ int testapp_adjust_tail_grow_mb(struct test_spec *test)
+ {
+        test->mtu = MAX_ETH_JUMBO_SIZE;
+        /* Grow by (frag_size - last_frag_Size) - 1 to stay inside the last fragment */
+-       return testapp_adjust_tail(test, (XSK_UMEM__MAX_FRAME_SIZE / 2) - 1,
+-                                  XSK_UMEM__LARGE_FRAME_SIZE * 2);
++       return testapp_adjust_tail(test, XSK_UMEM__MAX_FRAME_SIZE * 100,
++                                  6912);
+ }
 
-If you have any more questions, please feel free to reach out.
+ int testapp_tx_queue_consumer(struct test_spec *test)
 
-Best,
+If we print out the values involved in the tailroom calculation:
 
-Tianci
+tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
+
+4294967040 = 3456 - 3456 - 256
+
+There may be also such issue on ZC path particulatly in i40e, but it would need
+to be addressed separately, as within my understanding it seems like
+neither frame_len nor chunk_size are appropriate values, instead
+we should calculate frag_size the following way (like frame_sz in ZC buffers):
+
+frag_size = xsk_pool_get_chunk_size(pool) - pool->headroom.
+
+I personally reproduced and verified the issue in ice only,
+aside from WiP ixgbevf implementation.
+
+Larysa Zaremba (6):
+  xdp: produce a warning when calculated tailroom is negative
+  ice: fix rxq info registering in mbuf packets
+  ice: change XDP RxQ frag_size from DMA write length to truesize
+  i40e: use truesize as XDP RxQ info frag_size
+  idpf: use truesize as XDP RxQ info frag_size
+  net: enetc: use truesize as XDP RxQ info frag_size
+
+ drivers/net/ethernet/freescale/enetc/enetc.c |  2 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c  |  5 ++--
+ drivers/net/ethernet/intel/ice/ice_base.c    | 26 ++++++--------------
+ drivers/net/ethernet/intel/ice/ice_xsk.c     |  3 +++
+ drivers/net/ethernet/intel/idpf/xdp.c        |  2 +-
+ net/core/filter.c                            |  3 ++-
+ 6 files changed, 17 insertions(+), 24 deletions(-)
+
+-- 
+2.52.0
 
