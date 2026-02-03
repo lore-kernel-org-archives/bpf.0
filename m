@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735213148B4;
-	Tue,  3 Feb 2026 09:38:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1C1309EF7;
+	Tue,  3 Feb 2026 09:38:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770111521; cv=none; b=oeaMF4ZWw844jqI6pV6MuKpT+dzUNrhZTxUR6Mjy1J9PMKtodG+sULDL5+dKKYGaMDzZokmDelqoXLSJsL6UpThLxJ6BzpdlCNT8Woh5rV/XHybcvxCQGD9QyFw9LP735h2UkeqriLtbm0xSjLx3ksZBiPvvPPkxQWYwkx6MrbE=
+	t=1770111531; cv=none; b=tz/6IWgpU6O5hkLgcWgPAGQmj7H7dLNyECyjxAHmxApTIkimB4E3zktPMmaRUAk2nt4v3MiUDuIIwB41Yb4MuGvuTRqA8r5+7BvnocWo77uJ3imUa4bio9DMIdLFphJ+ykUd516Tkw6r2wI63BD71Hy9bxyiDOp63fIW0PCNBLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770111521; c=relaxed/simple;
-	bh=Jf9n6glm1Rnx06H2cE5z0LTr6QQfYz4idS+eXNgTfws=;
+	s=arc-20240116; t=1770111531; c=relaxed/simple;
+	bh=YOv2VO4cikt8VIaAznMOFRBBYzJ17APi4Fw0P9gizs8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tZq5Dx3OfOCZ3vGIvKwCqQ4XFqv2WbATp9Kj/iWZkhuflz5movEdtYTccH++MwlbLlceCOeS7LENF5+elseP0qNiiOuOcwK4PRR1V1ld0pBCZsKcBnc8XpXhSXifCQlGDEqrjdYShJgA9gejcDqsPOybqBQgR6tErqt2aoNgSr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p+kWjx93; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=qZNI7Ywmel7ZFlrz8XvYuyqHrcLphPvac7H0ugJJhJacrncAh870K9BC4v8lVuT3yvZ4gzPZ7BKDco3PkjTnXnUb2RG5Ct4drmvlJRAHmf1b/wY4O+MBwjFnO1w9i/IhyV9NgZ4o0C+/HVpmxmAvR3THPjD0AJ68Bhre0EobzYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQ+7nDdP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p+kWjx93"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84069C116D0;
-	Tue,  3 Feb 2026 09:38:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQ+7nDdP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF63C116D0;
+	Tue,  3 Feb 2026 09:38:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770111521;
-	bh=Jf9n6glm1Rnx06H2cE5z0LTr6QQfYz4idS+eXNgTfws=;
+	s=k20201202; t=1770111531;
+	bh=YOv2VO4cikt8VIaAznMOFRBBYzJ17APi4Fw0P9gizs8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p+kWjx93MqAaiJA/tLPokRJtlLghJ6UH9PvuisAJlMgGvhEWqTeLfnSGbz1wIIh7d
-	 s9AsrjlvSIMKzVZv4zW/Kp/mKPRk3xlKTx0C63DHo2RpF9DcrypJPSgR1X8KUJG8Ja
-	 uA8ocUcUT50xGsa8YePlD2PL6twEUdjBm2MNHGrZyQdhLEn9sSlmcUUycOe17mbs47
-	 FmExxZoIjFXodK8do1DkZ1QJ5uqO22GOtHmx/67NPy9cDAQG+lrYD++cpX0gS9a1Yh
-	 RwtqQgr2SinHv+BYGCDBlojdhmOMaMCwYoEyfIYa2q6Orqr4peCxF858RlDHHBs12B
-	 lUJZ6oWNCQhPQ==
+	b=kQ+7nDdP5+0QsM/ejMQvvlGk8WIS7sADnf31KqY06sXglG9sjpFF0NEOcJF0P/I2W
+	 QNpCvhxTWKoqR62I6yAL4RIMKqn4rC/kfNVXghG3wbLD+MUh/SuOvGHSp5m5vvUpqX
+	 8Nn7UGHKT/gEJPB1K4qMcR8+uTeHOAYH2AySFJwgFklNtXrdX5NyHhCSaSvy9ccLtF
+	 O+0jXjSK/RPnt88HHQEVx3H+MydMmQGbEckucs96P+xnTdTbByQh0FNvGDtjIhkGZB
+	 OuXImapdWtd4tzOEH3BbdGW6VlAbrYqDpcVb55TYckGdHSAqDIwYOMQT7eczRTa1rL
+	 b/Ap52f8Q3pbw==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [RFC bpf-next 01/12] ftrace: Add ftrace_hash_count function
-Date: Tue,  3 Feb 2026 10:38:08 +0100
-Message-ID: <20260203093819.2105105-2-jolsa@kernel.org>
+Subject: [RFC bpf-next 02/12] bpf: Add struct bpf_trampoline_ops object
+Date: Tue,  3 Feb 2026 10:38:09 +0100
+Message-ID: <20260203093819.2105105-3-jolsa@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260203093819.2105105-1-jolsa@kernel.org>
 References: <20260203093819.2105105-1-jolsa@kernel.org>
@@ -52,94 +52,195 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding external ftrace_hash_count function that replaces hash_count
-function, so we can get hash count outside of ftrace object.
+In following changes we will need to change ftrace direct attachment
+logic. In order to do that adding struct bpf_trampoline_ops object
+that defines 3 callbacks that follow ftrace attachment functions:
+
+   register_fentry
+   unregister_fentry
+   modify_fentry
+
+The new struct bpf_trampoline_ops object is passed as an argument to
+__bpf_trampoline_link_prog function.
+
+At the moment the default trampoline_ops is set to the current ftrace
+direct attachment functions, so there's no change for current code.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- include/linux/ftrace.h |  1 +
- kernel/trace/ftrace.c  | 14 +++++++-------
- 2 files changed, 8 insertions(+), 7 deletions(-)
+ kernel/bpf/trampoline.c | 53 +++++++++++++++++++++++++++++------------
+ 1 file changed, 38 insertions(+), 15 deletions(-)
 
-diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-index 705db0a6d995..6dade0eaee46 100644
---- a/include/linux/ftrace.h
-+++ b/include/linux/ftrace.h
-@@ -413,6 +413,7 @@ struct ftrace_hash *alloc_ftrace_hash(int size_bits);
- void free_ftrace_hash(struct ftrace_hash *hash);
- struct ftrace_func_entry *add_ftrace_hash_entry_direct(struct ftrace_hash *hash,
- 						       unsigned long ip, unsigned long direct);
-+unsigned long ftrace_hash_count(struct ftrace_hash *hash);
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 952cd7932461..ec9c1db78f47 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -30,6 +30,13 @@ static struct hlist_head trampoline_ip_table[TRAMPOLINE_TABLE_SIZE];
+ /* serializes access to trampoline tables */
+ static DEFINE_MUTEX(trampoline_mutex);
  
- /* The hash used to know what functions callbacks trace */
- struct ftrace_ops_hash {
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index b12dbd93ae1c..be9e0ac1fd95 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -6284,7 +6284,7 @@ int modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
++struct bpf_trampoline_ops {
++	int (*register_fentry)(struct bpf_trampoline *tr, void *new_addr, void *data);
++	int (*unregister_fentry)(struct bpf_trampoline *tr, u32 orig_flags, void *old_addr, void *data);
++	int (*modify_fentry)(struct bpf_trampoline *tr, u32 orig_flags, void *old_addr, void *new_addr,
++			     bool lock_direct_mutex, void *data);
++};
++
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex);
+ 
+@@ -387,7 +394,7 @@ static int bpf_trampoline_update_fentry(struct bpf_trampoline *tr, u32 orig_flag
  }
- EXPORT_SYMBOL_GPL(modify_ftrace_direct);
  
--static unsigned long hash_count(struct ftrace_hash *hash)
-+unsigned long ftrace_hash_count(struct ftrace_hash *hash)
+ static int unregister_fentry(struct bpf_trampoline *tr, u32 orig_flags,
+-			     void *old_addr)
++			     void *old_addr, void *data)
  {
- 	return hash ? hash->count : 0;
+ 	int ret;
+ 
+@@ -401,7 +408,7 @@ static int unregister_fentry(struct bpf_trampoline *tr, u32 orig_flags,
+ 
+ static int modify_fentry(struct bpf_trampoline *tr, u32 orig_flags,
+ 			 void *old_addr, void *new_addr,
+-			 bool lock_direct_mutex)
++			 bool lock_direct_mutex, void *data __maybe_unused)
+ {
+ 	int ret;
+ 
+@@ -415,7 +422,7 @@ static int modify_fentry(struct bpf_trampoline *tr, u32 orig_flags,
  }
-@@ -6302,7 +6302,7 @@ static struct ftrace_hash *hash_add(struct ftrace_hash *a, struct ftrace_hash *b
- 	struct ftrace_hash *add;
- 	int size;
  
--	size = hash_count(a) + hash_count(b);
-+	size = ftrace_hash_count(a) + ftrace_hash_count(b);
- 	if (size > 32)
- 		size = 32;
+ /* first time registering */
+-static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
++static int register_fentry(struct bpf_trampoline *tr, void *new_addr, void *data __maybe_unused)
+ {
+ 	void *ip = tr->func.addr;
+ 	unsigned long faddr;
+@@ -437,6 +444,12 @@ static int register_fentry(struct bpf_trampoline *tr, void *new_addr)
+ 	return ret;
+ }
  
-@@ -6345,7 +6345,7 @@ int update_ftrace_direct_add(struct ftrace_ops *ops, struct ftrace_hash *hash)
- 	int size;
- 	bool reg;
++static struct bpf_trampoline_ops trampoline_ops = {
++	.register_fentry   = register_fentry,
++	.unregister_fentry = unregister_fentry,
++	.modify_fentry     = modify_fentry,
++};
++
+ static struct bpf_tramp_links *
+ bpf_trampoline_get_progs(const struct bpf_trampoline *tr, int *total, bool *ip_arg)
+ {
+@@ -604,7 +617,8 @@ static struct bpf_tramp_image *bpf_tramp_image_alloc(u64 key, int size)
+ 	return ERR_PTR(err);
+ }
  
--	if (!hash_count(hash))
-+	if (!ftrace_hash_count(hash))
- 		return -EINVAL;
+-static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex)
++static int bpf_trampoline_update_ops(struct bpf_trampoline *tr, bool lock_direct_mutex,
++				     struct bpf_trampoline_ops *ops, void *data)
+ {
+ 	struct bpf_tramp_image *im;
+ 	struct bpf_tramp_links *tlinks;
+@@ -617,7 +631,7 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
+ 		return PTR_ERR(tlinks);
  
- 	mutex_lock(&direct_mutex);
-@@ -6362,7 +6362,7 @@ int update_ftrace_direct_add(struct ftrace_ops *ops, struct ftrace_hash *hash)
- 	old_filter_hash = ops->func_hash ? ops->func_hash->filter_hash : NULL;
+ 	if (total == 0) {
+-		err = unregister_fentry(tr, orig_flags, tr->cur_image->image);
++		err = ops->unregister_fentry(tr, orig_flags, tr->cur_image->image, data);
+ 		bpf_tramp_image_put(tr->cur_image);
+ 		tr->cur_image = NULL;
+ 		goto out;
+@@ -688,11 +702,11 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
+ 	WARN_ON(tr->cur_image && total == 0);
+ 	if (tr->cur_image)
+ 		/* progs already running at this address */
+-		err = modify_fentry(tr, orig_flags, tr->cur_image->image,
+-				    im->image, lock_direct_mutex);
++		err = ops->modify_fentry(tr, orig_flags, tr->cur_image->image,
++					 im->image, lock_direct_mutex, data);
+ 	else
+ 		/* first time registering */
+-		err = register_fentry(tr, im->image);
++		err = ops->register_fentry(tr, im->image, data);
  
- 	/* If there's nothing in filter_hash we need to register the ops. */
--	reg = hash_count(old_filter_hash) == 0;
-+	reg = ftrace_hash_count(old_filter_hash) == 0;
- 	if (reg) {
- 		if (ops->func || ops->trampoline)
- 			goto out_unlock;
-@@ -6480,7 +6480,7 @@ int update_ftrace_direct_del(struct ftrace_ops *ops, struct ftrace_hash *hash)
- 	unsigned long size;
- 	int err = -EINVAL;
+ #ifdef CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+ 	if (err == -EAGAIN) {
+@@ -722,6 +736,11 @@ static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mut
+ 	goto out;
+ }
  
--	if (!hash_count(hash))
-+	if (!ftrace_hash_count(hash))
- 		return -EINVAL;
- 	if (check_direct_multi(ops))
- 		return -EINVAL;
-@@ -6493,7 +6493,7 @@ int update_ftrace_direct_del(struct ftrace_ops *ops, struct ftrace_hash *hash)
++static int bpf_trampoline_update(struct bpf_trampoline *tr, bool lock_direct_mutex)
++{
++	return bpf_trampoline_update_ops(tr, lock_direct_mutex, &trampoline_ops, NULL);
++}
++
+ static enum bpf_tramp_prog_type bpf_attach_type_to_tramp(struct bpf_prog *prog)
+ {
+ 	switch (prog->expected_attach_type) {
+@@ -766,7 +785,9 @@ static int bpf_freplace_check_tgt_prog(struct bpf_prog *tgt_prog)
  
- 	old_filter_hash = ops->func_hash ? ops->func_hash->filter_hash : NULL;
+ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+ 				      struct bpf_trampoline *tr,
+-				      struct bpf_prog *tgt_prog)
++				      struct bpf_prog *tgt_prog,
++				      struct bpf_trampoline_ops *ops,
++				      void *data)
+ {
+ 	struct bpf_fsession_link *fslink = NULL;
+ 	enum bpf_tramp_prog_type kind;
+@@ -824,7 +845,7 @@ static int __bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+ 	} else {
+ 		tr->progs_cnt[kind]++;
+ 	}
+-	err = bpf_trampoline_update(tr, true /* lock_direct_mutex */);
++	err = bpf_trampoline_update_ops(tr, true /* lock_direct_mutex */, ops, data);
+ 	if (err) {
+ 		hlist_del_init(&link->tramp_hlist);
+ 		if (kind == BPF_TRAMP_FSESSION) {
+@@ -845,14 +866,16 @@ int bpf_trampoline_link_prog(struct bpf_tramp_link *link,
+ 	int err;
  
--	if (!hash_count(old_filter_hash))
-+	if (!ftrace_hash_count(old_filter_hash))
- 		goto out_unlock;
+ 	mutex_lock(&tr->mutex);
+-	err = __bpf_trampoline_link_prog(link, tr, tgt_prog);
++	err = __bpf_trampoline_link_prog(link, tr, tgt_prog, &trampoline_ops, NULL);
+ 	mutex_unlock(&tr->mutex);
+ 	return err;
+ }
  
- 	/* Make sure requested entries are already registered. */
-@@ -6580,7 +6580,7 @@ int update_ftrace_direct_mod(struct ftrace_ops *ops, struct ftrace_hash *hash, b
- 	unsigned long size, i;
- 	int err = -EINVAL;
+ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
+ 					struct bpf_trampoline *tr,
+-					struct bpf_prog *tgt_prog)
++					struct bpf_prog *tgt_prog,
++					struct bpf_trampoline_ops *ops,
++					void *data)
+ {
+ 	enum bpf_tramp_prog_type kind;
+ 	int err;
+@@ -877,7 +900,7 @@ static int __bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
+ 	}
+ 	hlist_del_init(&link->tramp_hlist);
+ 	tr->progs_cnt[kind]--;
+-	return bpf_trampoline_update(tr, true /* lock_direct_mutex */);
++	return bpf_trampoline_update_ops(tr, true /* lock_direct_mutex */, ops, data);
+ }
  
--	if (!hash_count(hash))
-+	if (!ftrace_hash_count(hash))
- 		return -EINVAL;
- 	if (check_direct_multi(ops))
- 		return -EINVAL;
+ /* bpf_trampoline_unlink_prog() should never fail. */
+@@ -888,7 +911,7 @@ int bpf_trampoline_unlink_prog(struct bpf_tramp_link *link,
+ 	int err;
+ 
+ 	mutex_lock(&tr->mutex);
+-	err = __bpf_trampoline_unlink_prog(link, tr, tgt_prog);
++	err = __bpf_trampoline_unlink_prog(link, tr, tgt_prog, &trampoline_ops, NULL);
+ 	mutex_unlock(&tr->mutex);
+ 	return err;
+ }
+@@ -1019,7 +1042,7 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+ 		goto err;
+ 	}
+ 
+-	err = __bpf_trampoline_link_prog(&shim_link->link, tr, NULL);
++	err = __bpf_trampoline_link_prog(&shim_link->link, tr, NULL, &trampoline_ops, NULL);
+ 	if (err)
+ 		goto err;
+ 
 -- 
 2.52.0
 
