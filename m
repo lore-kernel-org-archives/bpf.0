@@ -1,133 +1,82 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45988312805;
-	Tue,  3 Feb 2026 09:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48DE039E17E;
+	Tue,  3 Feb 2026 10:13:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770112685; cv=none; b=VdrQrp5PoLmwpci9fA7ejMQKhgziTe8tAA9K+bG18N4OC9BhDMx/JENu46hWQRwiiHLucTI4i1cIhCUaf4R5b4HfjdLupX/e1RTfYJhaJ3sHaIp0R4Ljp1B/VMt6MRi9WkHoa8jL9yjZBebSnWZ1hwmzTfAvN9SQX88Hvu4Kt3g=
+	t=1770113634; cv=none; b=jYLJdmL+QrKH7NVtEL1lSJRGj1iyj5q4GVrRs2RiLeHyxSRGPTBEK+DbzRRHGyevCho5QgImhWaywUz4JnzvVQ7oSVyxHjVzECeLhi8xWgm+A0KIZ6ugiWJW9Ri69dWbNy2yLiPZmdvmkF05BhXpZxyIcCHr9kPRsR3/oPNMjUg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770112685; c=relaxed/simple;
-	bh=qG5WW1NRpxJBrmekKQ9D5nzRgBn/+vBoWOrdgIPVTwQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YTNpHVUFbBIobaVmn+0Vig+iJEb/tR1y4xgShHRWNfgZDvqXH3ZqutqB3GJboeZ+9p6atjbopshe+Y1HCJJThL86F8zMQK2ZvbNYuReg41OTLLqR4v1UodeQc0GbzRpf8Hl+ueyNFk4g3UAmUTJpVY5Y5bHV7MNGKwQSFtcs8PY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=M7R7wWMr; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1770113634; c=relaxed/simple;
+	bh=62+dKi/sGs0cWaY6sK1LDp3kcrF+2c/L50jRccikQd4=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=QUkwjmhC4VEp6hoaJyazOEX4jNPpYl++DPOpwCjCA5r20IutUCDzEMIQXBIZrq7qDw6nMJiLpvC+V+n3VERYQBso/gz+7h/lOaXUz5PuLBgjg9Ccz/CXdPVZv/zU87vnH+e+Ghz53B/eI9O56nEtChnrqPkHQ+Rxd74lVPFfdQM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JpGozJRa; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="M7R7wWMr"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vnDAR-00EX1u-Dt; Tue, 03 Feb 2026 10:57:55 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=iMfpMkidXJnlb6QlaNpWnVaPHLTtMwpknzZdeH49YR8=; b=M7R7wWMrYcZ7ZgsHV1TuA/Iebu
-	wtd+weKCj4FMW6zJNZENhaYwFqrNRvXGB1CHbmcpEr6ARbNYhRFe+d4yjXeylczwnhkaJTb+dcngk
-	lsF/aro5CuYCWKItTKnjTAIExp1vprEo37Ze9dJh4MRlb/YSM0YatKgiWax1rQBe/uxH1CUoeOQ5Q
-	xNCmBxfgSGkRlKbIhb31xXRePaeUnYbCVQ92CfHdMCMjW3apNR9BwjBrRexVhnn/Z1DmjTgobwV4m
-	X56mK9q38Q2ZXYKg+SMofpA22t1dqTr4YF+V9LCvDr7Dz5UuWGT7q+tH1TrcggQ6bsBkXT/tKaraB
-	uKRf57GQ==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vnDAQ-00013V-D9; Tue, 03 Feb 2026 10:57:54 +0100
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vnDAJ-00G0EU-NP; Tue, 03 Feb 2026 10:57:47 +0100
-Message-ID: <8d055903-fe44-4bbf-a1a5-e0176343bf0b@rbox.co>
-Date: Tue, 3 Feb 2026 10:57:46 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JpGozJRa"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C23C19422;
+	Tue,  3 Feb 2026 10:13:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770113634;
+	bh=62+dKi/sGs0cWaY6sK1LDp3kcrF+2c/L50jRccikQd4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=JpGozJRa66xyWaJpviqL5l56CTE1Jj6aanmgF18rfosyJvN+oNTiRId2PXSufUPxT
+	 ufaQ0cTi2m3Va/YvJGl1ISsUjhsaZK0t60V31FCG1qvNiGWgyXQM2ccMaMX6pFl3BQ
+	 tEz66PrngEgem+EKoh7vGNik84AtWW9FlzA56vYycaOgmvsYSwC5ZKpdAn6DsyTALl
+	 rM9IAGEuwnEJIFn2OWyg8duPtn94P4d6MRx8G8qeJXczsmFxCpazaX18ZO3RamfQO7
+	 dV2pv5GL3UPmTnvapZKSdrlRo41I6xJUG9CdYCTK2q/oStCJxW0eCr2zIDe55GwPlo
+	 dDVhnjmUHvZ+w==
+Content-Type: multipart/mixed; boundary="===============6018976010174444517=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
- update
-To: Martin KaFai Lau <martin.lau@linux.dev>,
- Kuniyuki Iwashima <kuniyu@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260129-unix-proto-update-null-ptr-deref-v1-1-e1daeb7012fd@rbox.co>
- <3fc5611f-394f-40db-b49d-2f26402e221a@linux.dev>
- <3362017f-9c3d-46cd-b3ce-cb750b565d5b@rbox.co>
- <612a9446-252f-4b14-8605-ae1af000cc41@linux.dev>
- <CAAVpQUAc3S+Ebx2qp-Pbg9qH-Zc=yHdzVJbchCu++V_4XF3DLg@mail.gmail.com>
- <b98a40e8-1be2-47f0-8238-92dee8f5a204@rbox.co>
- <6de6f1bf-c8ee-4dfb-9b8c-f89185946630@linux.dev>
-From: Michal Luczaj <mhal@rbox.co>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <6de6f1bf-c8ee-4dfb-9b8c-f89185946630@linux.dev>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <9df0acf7860b7e4a90b3e93e2d6924e9bad35fe307bef0bf9b50f8afb5cccacc@mail.kernel.org>
+In-Reply-To: <20260203093819.2105105-6-jolsa@kernel.org>
+References: <20260203093819.2105105-6-jolsa@kernel.org>
+Subject: Re: [RFC bpf-next 05/12] bpf: Add multi tracing attach types
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: bpf@vger.kernel.org,linux-trace-kernel@vger.kernel.org,kafai@fb.com,eddyz87@gmail.com,songliubraving@fb.com,yhs@fb.com,menglong8.dong@gmail.com,rostedt@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  3 Feb 2026 10:13:53 +0000 (UTC)
+
+--===============6018976010174444517==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 2/3/26 04:53, Martin KaFai Lau wrote:
-> On 2/2/26 7:10 AM, Michal Luczaj wrote:
->> In related news, looks like bpf_iter_unix_seq_show() is missing
->> unix_state_lock(): lock_sock_fast() won't stop unix_release_sock(). E.g.
->> bpf iterator can grab unix_sock::peer as it is being released.
-> 
-> If the concern is the bpf iterator prog may use a released unix_peer(sk) 
-> pointer, it should be fine. The unix_peer(sk) pointer is not a trusted 
-> pointer to the bpf prog, so nothing bad will happen other than 
-> potentially reading incorrect values.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6b62b6d57..fb52ba2f7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-But if the prog passes a released peer pointer to a bpf helper:
+[ ... ]
 
-BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0x95/0xb0
-Read of size 1 at addr ffff888110654c92 by task test_progs/1936
-Call Trace:
- dump_stack_lvl+0x5d/0x80
- print_report+0x170/0x4f3
- kasan_report+0xe1/0x180
- bpf_skc_to_unix_sock+0x95/0xb0
- bpf_prog_382743e45576abd5_dump_unix+0x4a0/0x576
- bpf_iter_run_prog+0x5b9/0xb00
- bpf_iter_unix_seq_show+0x1f7/0x2e0
- bpf_seq_read+0x42c/0x10d0
- vfs_read+0x171/0xb20
- ksys_read+0xff/0x200
- do_syscall_64+0x6b/0x3a0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> @@ -25069,7 +25074,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
+>  		return 0;
+>  	} else if (prog->expected_attach_type == BPF_TRACE_ITER) {
+>  		return bpf_iter_prog_supported(prog);
+> -	}
+> +	} else if (is_tracing_multi(prog->expected_attach_type))
+> +		return prog->type == BPF_PROG_TYPE_TRACING ? 0 : -EINVAL;
 
-Allocated by task 1941:
- kasan_save_stack+0x30/0x50
- kasan_save_track+0x14/0x30
- __kasan_slab_alloc+0x63/0x80
- kmem_cache_alloc_noprof+0x1f7/0x6f0
- sk_prot_alloc+0x59/0x210
- sk_alloc+0x34/0x470
- unix_create1+0x86/0x8a0
- unix_create+0xd4/0x2d0
- __sock_create+0x243/0x5a0
- __sys_socket+0x119/0x1d0
- __x64_sys_socket+0x72/0xd0
- do_syscall_64+0x6b/0x3a0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
+This isn't a bug, but should this branch have braces for consistency with the
+preceding branches in the same if/else chain? The BPF_TRACE_RAW_TP and
+BPF_TRACE_ITER branches both use braces.
 
-Freed by task 1941:
- kasan_save_stack+0x30/0x50
- kasan_save_track+0x14/0x30
- kasan_save_free_info+0x3b/0x70
- __kasan_slab_free+0x47/0x70
- kmem_cache_free+0x12c/0x5d0
- __sk_destruct+0x432/0x6e0
- unix_release_sock+0x9b3/0xf60
- unix_release_sock+0x99f/0xf60
- unix_release+0x8a/0xf0
- __sock_release+0xb0/0x270
- sock_close+0x18/0x20
- __fput+0x36e/0xac0
- fput_close_sync+0xe5/0x1a0
- __x64_sys_close+0x7d/0xd0
- do_syscall_64+0x6b/0x3a0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21625440628
+
+AI-authorship-score: low
+AI-authorship-explanation: The commit message contains natural colloquial language and personal attribution typical of human kernel developers, and the code follows established BPF patterns with typical human oversights in style consistency.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Minor coding style inconsistency with missing braces in an else-if branch that does not affect functionality.
+
+--===============6018976010174444517==--
