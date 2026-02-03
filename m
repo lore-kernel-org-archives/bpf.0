@@ -1,115 +1,75 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2317F3A8FE6;
-	Tue,  3 Feb 2026 14:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB6A3ACF0A;
+	Tue,  3 Feb 2026 15:16:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770128440; cv=none; b=BPvDJ08RYJYipwXJobvRME2XKgeOaMVcRkekMN0nmyeZovqqYW/qIVngIknYKKq41bt55gWQDMlzTqgz3FJikyCHt1OS/Jmg2J5XaSOH5m+le19gHHbfTbdgqbx87S6SnUmAbpx5vn/isFsKrsXiTXEg7yiz3l5tte6HSv5bkb0=
+	t=1770131817; cv=none; b=da83gJIqcPTlZg2r0wBwKb3fUoeK5cI9c49d51ETXpPd73v35hoK/SbwBgGEVyTr6LCVlaruOtN0CQdMhnXqlDFQAZ0UoeI+UknW2nHoKBc9Uc0tfC84pYArLoL7LglkSF22iHrdt0qXTg+2hta580E30GBs/BEM6n1OpUariE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770128440; c=relaxed/simple;
-	bh=bh7+IerRoy6AL9qQCND5lJKi+YgjZel6S467nOCTmzk=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=a07gB91NfgzgSi4dcN5X9axHvX6jhcgHqL50Vuz6U0cQox2AYwsNqr8OQWZXc1M3uTZ7Qr+6F9MJHiKYjhakf3MqRuNWplh7kQgF4o+XRdv+ILdTwA6F3pPVrYHxouW+X95XEpDEzYgXIBgpDp/sWFKetZa61cgVGFfN2a9dkPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jBLpkqes; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jBLpkqes"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E06C116D0;
-	Tue,  3 Feb 2026 14:20:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770128439;
-	bh=bh7+IerRoy6AL9qQCND5lJKi+YgjZel6S467nOCTmzk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=jBLpkqes71HO/n5IeE6eAmpgINcqOttk0C0U0jGba4RUUBeCygc8B2vGJm+uwp9/4
-	 +cP06DGBLAV2RMu1gHkLuUrMDOCfDfrz3uaRcWw386yWapF0f24O0QL1PHZZWvjaM1
-	 mhfJhJNaKUjv3chl2jiyeysVSlC5Y17tUdZ7k3aS9YijcP9vxNMFy1iSkwLKDfYHgI
-	 H6vH3zYRR66VZBCbsljg9LTJbfP1/kaZL3jn9wuf1tq9fZc6as5lr3MvwyP+pj2YHd
-	 h7FfVu7Ujj9IY8fB+IRWpN5vCGSgyWBsuzHorMBPsB6O37efcIZ1vk5y4XNssIaENa
-	 59wUokk/JOWPg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 90F973808200;
-	Tue,  3 Feb 2026 14:20:37 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1770131817; c=relaxed/simple;
+	bh=MSFxL5BqemVPfYdBffVWaaEGpWr8Tos9N2nxcP6qPcM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f//YE6jHd6lrjRuwJ659GPP06WNI1bQ9wETB4HDTDV34R2mHpJvjbhikbQDyyiJrCyAH108CnxC58InLzFWB5RfP563WBumi629qcN82Uj3mYZIKXGoOh+nYEjcQkPR3pOHMavb7IacocguYblN/UFLTEgnF4Ua0MINMaz9uFYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id C06078BF00;
+	Tue,  3 Feb 2026 15:16:41 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf13.hostedemail.com (Postfix) with ESMTPA id 4DA6620010;
+	Tue,  3 Feb 2026 15:16:39 +0000 (UTC)
+Date: Tue, 3 Feb 2026 10:17:07 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Donglin Peng <dolinux.peng@gmail.com>
+Cc: andrii.nakryiko@gmail.com, ast@kernel.org, mhiramat@kernel.org,
+ linux-kernel@vger.kernel.org, Donglin Peng <pengdonglin@xiaomi.com>,
+ linux-trace-kernel@vger.kernel.org, bpf <bpf@vger.kernel.org>, Eduard
+ Zingerman <eddyz87@gmail.com>
+Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
+ via BTF
+Message-ID: <20260203101707.52965eb0@gandalf.local.home>
+In-Reply-To: <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
+References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
+	<20260202111548.3555306-3-dolinux.peng@gmail.com>
+	<20260202111249.649ac338@gandalf.local.home>
+	<CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
+	<CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v13 net-next 00/15] AccECN protocol case handling series
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177012843606.1498169.6318995786040957061.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Feb 2026 14:20:36 +0000
-References: <20260131222515.8485-1-chia-yu.chang@nokia-bell-labs.com>
-In-Reply-To: <20260131222515.8485-1-chia-yu.chang@nokia-bell-labs.com>
-To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
-Cc: pabeni@redhat.com, edumazet@google.com, parav@nvidia.com,
- linux-doc@vger.kernel.org, corbet@lwn.net, horms@kernel.org,
- dsahern@kernel.org, kuniyu@google.com, bpf@vger.kernel.org,
- netdev@vger.kernel.org, dave.taht@gmail.com, jhs@mojatatu.com,
- kuba@kernel.org, stephen@networkplumber.org, xiyou.wangcong@gmail.com,
- jiri@resnulli.us, davem@davemloft.net, andrew+netdev@lunn.ch,
- donald.hunter@gmail.com, ast@fiberby.net, liuhangbin@gmail.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, ij@kernel.org,
- ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: 8ernxmaa1387t35chuzdz1noy6qndsky
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 4DA6620010
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1/akkGfYzvrI7Dk0ZpaVf88QCXp2z7sFg4=
+X-HE-Tag: 1770131799-747990
+X-HE-Meta: U2FsdGVkX19aqvl1qUqWBD/IGDCza8jChhfyo7dsx1wtXEBgKW9RF9mgs8imtsXWFTL+KrerfWBCOp9b4/1nnTX38T8yJDFRHMj2Qd6mbCxjKK7AcoaEHkdYU13KycBNl7N2urdV802zECMGpLNHbr6s37R1wC/a8IEMlo68nFWq9YDiFQZMZf3adNPNmwmwZCJN/Z6hyVxhHL3qsWTPGxq5EUdalHl+DrhoL6FQeSRQ63UuRFp7z/7tk68a2TOrw9l1y572hRmE6GvR5JPuik8kWSRbGqzfInEveXquMtlq2nDPQMH7//ymWg+fi/H0uI1bryNL8GJTkghY7owvpCdBqtPFfw7z
 
-Hello:
+On Tue, 3 Feb 2026 21:50:47 +0800
+Donglin Peng <dolinux.peng@gmail.com> wrote:
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+> Testing revealed that sorting within resolve_btfids introduces issues with
+> btf__dedup. Therefore, I plan to move the sorting logic directly into
+> btf__add_enum_value and btf__add_enum64_value in libbpf, which are
+> invoked by pahole. However, it means that we need a newer pahole
+> version.
 
-On Sat, 31 Jan 2026 23:25:00 +0100 you wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> 
-> Hello,
-> 
-> Plesae find the v13 AccECN case handling patch series, which covers
-> several excpetional case handling of Accurate ECN spec (RFC9768),
-> adds new identifiers to be used by CC modules, adds ecn_delta into
-> rate_sample, and keeps the ACE counter for computation, etc.
-> 
-> [...]
+Sorting isn't a requirement just something I wanted to bring up. If it's
+too complex and doesn't achieve much benefit then let's not do it.
 
-Here is the summary with links:
-  - [v13,net-next,01/15] tcp: try to avoid safer when ACKs are thinned
-    https://git.kernel.org/netdev/net-next/c/7885ce014740
-  - [v13,net-next,02/15] gro: flushing when CWR is set negatively affects AccECN
-    https://git.kernel.org/netdev/net-next/c/ab4c8b6f7fcb
-  - [v13,net-next,03/15] selftests/net: gro: add self-test for TCP CWR flag
-    https://git.kernel.org/netdev/net-next/c/6f74bc8b6e8d
-  - [v13,net-next,04/15] tcp: ECT_1_NEGOTIATION and NEEDS_ACCECN identifiers
-    https://git.kernel.org/netdev/net-next/c/100f946b8d44
-  - [v13,net-next,05/15] tcp: disable RFC3168 fallback identifier for CC modules
-    https://git.kernel.org/netdev/net-next/c/e68c28f22f46
-  - [v13,net-next,06/15] tcp: accecn: handle unexpected AccECN negotiation feedback
-    https://git.kernel.org/netdev/net-next/c/c5ff6b837159
-  - [v13,net-next,07/15] tcp: accecn: retransmit downgraded SYN in AccECN negotiation
-    https://git.kernel.org/netdev/net-next/c/3ae62b8b4a48
-  - [v13,net-next,08/15] tcp: add TCP_SYNACK_RETRANS synack_type
-    https://git.kernel.org/netdev/net-next/c/f1eaea5585e4
-  - [v13,net-next,09/15] tcp: accecn: retransmit SYN/ACK without AccECN option or non-AccECN SYN/ACK
-    https://git.kernel.org/netdev/net-next/c/f326f1f17f37
-  - [v13,net-next,10/15] tcp: accecn: unset ECT if receive or send ACE=0 in AccECN negotiaion
-    https://git.kernel.org/netdev/net-next/c/4024081feb87
-  - [v13,net-next,11/15] tcp: accecn: fallback outgoing half link to non-AccECN
-    https://git.kernel.org/netdev/net-next/c/2ed661248e2b
-  - [v13,net-next,12/15] tcp: accecn: detect loss ACK w/ AccECN option and add TCP_ACCECN_OPTION_PERSIST
-    https://git.kernel.org/netdev/net-next/c/1247fb19cafe
-  - [v13,net-next,13/15] tcp: accecn: add tcpi_ecn_mode and tcpi_option2 in tcp_info
-    https://git.kernel.org/netdev/net-next/c/4fa4ac5e5848
-  - [v13,net-next,14/15] tcp: accecn: enable AccECN
-    https://git.kernel.org/netdev/net-next/c/8ae3e8e6ceed
-  - [v13,net-next,15/15] selftests/net: packetdrill: add TCP Accurate ECN cases
-    https://git.kernel.org/netdev/net-next/c/f85d9c45f1d4
+My worry is because "cat trace" takes quite a long time just reading the
+BTF arguments. I'm worried it will just get worse with enums as well.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I have trace-cmd reading BTF now (just haven't officially released it) and
+doing an extract and reading the trace.dat file is much faster than reading
+the trace file with arguments. I'll need to implement the enum logic too in
+libtraceevent.
 
-
+-- Steve
