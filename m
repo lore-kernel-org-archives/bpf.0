@@ -1,184 +1,116 @@
-Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00462F5487;
-	Tue,  3 Feb 2026 17:44:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419A733E377
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 18:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770140688; cv=none; b=osgsqs1asPw+9r++r+bxcyJMJop7zAqLrIRv5tkl3iao+9pZH5MrOgB9cxO6SIBPqabQymV7f1NTGSLBhII1PxsMkGqUZuRrzjk5cVKOBPytflmmtt8B0onvTBpmRzF/219WUM+kIddiF8dVUVnkt/zJOeIgnuJbTRF/d5kXlSU=
+	t=1770141881; cv=none; b=YjP1z4gTvymIzfOCNeXkBeeNcQBogRNYOGLtvEzW/by06/Hy8PrwiJjGztJjG1PfysRaqAvHWsmQ/ILmeFOsIEMfx4EYdwwG2BdjmT2knVuYpLfnbe9zqeyDMITg2aBXWXiK1Pun3E6YusIBuoP00r7vcfKUOVKy8ER7svJ2AZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770140688; c=relaxed/simple;
-	bh=AljXhBkvbuE0xOZ8XKFpmH9TODssO3BSBPIRwdLj414=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=D/XpNYB+5Gt84ABCYGsegsiuLXZTFwlk1id722hTkn40a+Dv7MeQ/oPxK7bX26zhddDeAjx1ZKTg65CAg9Bs60TE7p1UxXNBOzOozWf/EuoMIqyR8zK1xxwSgPLLxVdPyxx1ux9/sNbEGE6E7mTUzscWF7gEC4bqXdXG6GWCgwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ZuHPbZXQ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=i0RDooR2; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1770141881; c=relaxed/simple;
+	bh=2EQh8v4iSvt7JY3HCuEm9WMrqzAnKAznUeV8nugwArw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=okdt/IIhT992BsAzm1IwFB7NhfQlKUtEQvlxduOAgTFxym88LRcay5uQY9dYy1Y/pF2NAGuXcfo+gFrALu/vSsgSxW/bObQ7Kn2jDIzNUwAvRDLhMUc7igynx3uOcYDOvolGjWGNKMUW5L8F5OYCVh5vN5VR/iw8ol5UEVGdWic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=p5TgjJ5g; arc=none smtp.client-ip=209.85.222.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ZuHPbZXQ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="i0RDooR2"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id BD70AEC056D;
-	Tue,  3 Feb 2026 12:44:45 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Tue, 03 Feb 2026 12:44:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1770140685;
-	 x=1770227085; bh=bfw2kcvtfnc3Q83pa3ExnQIAU1qUQL+7PiDki1t3CJo=; b=
-	ZuHPbZXQWb1F3tui0CGdWthZ4Vj/Si2rzJMX/oXZ/0hTmft655k4xFCjTh4v0IkX
-	XRO5QcPHVhNPiESciRjcpCap/h9ok9E8K7eJ2jrSAloBy4EV+Ex8O5Szz1PBGQiH
-	XGRAMWarZYhrxiXnKaIH4df5l7QMuDoNYwCSl0+gs/HwvLEsJgyo2vIQevN2BePz
-	fDVTfVkNPHxuDE2Moo5aTp7wrWqXOs7Axs26fHSrLl5ak4SxgrvnrKVTnxc/iBqe
-	p9lrUWkCRPD7KEeUESv9US0DFfO5CVrI1j/8EvAqV/Ax8/zLdv17mMuPsqeZje9s
-	5vhABWIhUwl7kkKeSaNcYQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770140685; x=
-	1770227085; bh=bfw2kcvtfnc3Q83pa3ExnQIAU1qUQL+7PiDki1t3CJo=; b=i
-	0RDooR2KIxsgYpWdm25FPlyQH7UQ6vCSZsOxsoA3nBVQ+eUDcEKn771UAqdRnIl6
-	iKtacJsPQMsDcLe3uvckKYBy4YDtIEykKTRch/iROxAqbFbrNTVVubTfgX/irEU6
-	TcrNt73Eq8V0APjfK/0Tr73AAXlCPhGxf4Wx61mOz7olk0lRG0zOxPphEQEaIYJ9
-	ckQAEb3Wyf2Q1stVD2aQhrey4T6cmGcvAPtu8ib8XoTf/6Yo5n/Vg67NulEdaFHL
-	SgCus+Dz6eGgkw2mb3CbDj5/T+xjFfkMJaqWg1f9S4Jhli92LFfglxe7hlM06Dhi
-	FwmJhklzS/QUe5vEjkJDw==
-X-ME-Sender: <xms:DTSCaTlYEeJMsB1NhQrvTU_3P33EEsKWaZwXnTZwX3eaN_hn3ZU72A>
-    <xme:DTSCaRqawHQj0c92-VS_r4QYfEHmAT1XYEJTwMj4r9oR_LBe4kpy3fTtF-NqiMBd_
-    cmwJfafgIKopU4TOPB7hf6nbQmxnFIy6CroWNPvLRWAgOT4NVmvqus>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukedtieejucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdefpdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehmrghthhhivghurdguvghsnhhohigvrhhssegvfhhfihgtihhosh
-    drtghomhdprhgtphhtthhopehsughfsehfohhmihgthhgvvhdrmhgvpdhrtghpthhtohep
-    rghlvgigvghirdhsthgrrhhovhhoihhtohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
-    epvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohhhnhdrfhgrshht
-    rggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehmvghmgihorhesghhmrghilh
-    drtghomhdprhgtphhtthhopehrohhsthgvughtsehgohhoughmihhsrdhorhhgpdhrtghp
-    thhtohephhgrohhluhhosehgohhoghhlvgdrtghomhdprhgtphhtthhopehmrghtthgsoh
-    gsrhhofihskhhisehgohhoghhlvgdrtghomh
-X-ME-Proxy: <xmx:DTSCaTCvOqAeF3Otgcqlk5NDil5cw1XdSq8-LHRQXxF4Yv9NllgYMw>
-    <xmx:DTSCaVFes9jOD1Bp1ZdCWzGQHtheiLJFAesbdjcPHBbS2-QBX36N1g>
-    <xmx:DTSCaemKwmnpX_uKcWL0bU2IIV1BkIROf3gk_6LrmjOZ9xZgsIVcgg>
-    <xmx:DTSCaatuv-_UN2LoHnKnsEIaYoL7pggtDHrqsr9Mb0hoAJtp_e3gPA>
-    <xmx:DTSCaa1DADiCL3N6FGKgohIY_Wps5jVVEZmldUYIp5IcS6PfhbM-NiT1>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 36BDB700065; Tue,  3 Feb 2026 12:44:45 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="p5TgjJ5g"
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8c52f15c5b3so597535485a.3
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 10:04:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1770141879; x=1770746679; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9lIE4onBM72BiEcfoX6iBs6RfboGGiFM5XjSVrEdPbs=;
+        b=p5TgjJ5giaP/jtjcOT1jKI0yw3FLvNVkc6l3J3gdvi8C4fSgjAbc0jMPV4k7fibf4B
+         uIlHJjMGEXbmjRGAgJmuV0ngjGWJZO7sUXX/4iRAO2f1ZyEN01xl66zzahv4EjE0wPNr
+         QsSnUxylO6YD/S3DmdiBXAWWyW/KYpj++VQDCSe9R3ONKcNNFmILFOp0r0TxSaC613so
+         pgKKX2IXXBewzi31GJCWaYPzyh4DjZeW3ZSG/RfH4pZk7MiYsLb/6QW1CvQKX9eVanSY
+         026kHyZD4gIViW35j7qs63ltHWLcafDoLF1ujzmmqQqXw4tjTmUhlGCVIihv9lOj0XUs
+         NGJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770141879; x=1770746679;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9lIE4onBM72BiEcfoX6iBs6RfboGGiFM5XjSVrEdPbs=;
+        b=Sd2DG5hiR0giSQBxl4OQsRYkBdXRg/eyLnnNcwIhAoqGPcchbpWIlDJ29OYtgHjcKm
+         kmpuEyCBdKWyZlRbogflUpunkUhadaVUPJtKZe6Q9+L7kFQSaArnbPmqyENeflm3yOeG
+         uumvAMnKeNHM4JXvsmMiXn379+T+AmJfQ2dLunvkhb7ta+vdPMwervylkuHkBVRWSHwy
+         1gd2V+Z2G2RQmKJm3rSSMUqB4JdhvE2AwFYm+A1HqQEeO4LDzhGuVRB8Dv2MWpQAr36z
+         vLMugvJCg52mQ8rB7Zv+8ALlaJL2cPcwBbRFJGmG3PvwQhh7J2LnBbaUw3cZ5XY1KP03
+         ayZw==
+X-Gm-Message-State: AOJu0YzwkDWoFKU6T5BsgsqW5v2094wF1diuQ6o1ivDWlzFwszCYFGqb
+	PsU00jIQEuy9rEzySE0fYb0pndifnYG9oGFfACJkY9dX3H9qQvMU4WKgPKYWnIRAhcyR3LUJ21F
+	E9cEL
+X-Gm-Gg: AZuq6aIFjqbVXaEFwsJIOAqLPi/f2g05ng2OfWiwpFXzu77FqxarjfDjE7XpCABFUh9
+	PVqdk25Guq5Y4VQlQsT+QdgfvCYJBFYFPkuNYXxTCwkgzKmk1X+sbnOI/8Hr8B9waSKaOkXqQWp
+	K6Gmwg33yVb1Fux1d2Jk+3JaXI8478XqeqRkyLfrE5qtKJgQ/NHm6nhGut4OcpSgZIca8omwRvY
+	EQssFgv2sJFjWxxZAR9mPr3QJzhTGBm10fSKPO33Z7t/7/DFgIo5nWdFvWtR9hkE4SB/+kCo40/
+	So6vbQW0g8CXqF5Af4m9CoZjFM+GO38vEPLf3v2jtJd2dzo3TidXQXnNt19GeUkNw6SBZDOeKU5
+	8spUksEj5N5DowjyLorzDRHDN3n+NHrmRuEEHWJbvvSBbvfUMHh0qmJTA+sICwdYUQkdh1fxSgH
+	bR7VqCHQ1bPQ==
+X-Received: by 2002:a05:620a:294f:b0:8c6:670c:953f with SMTP id af79cd13be357-8ca2f9b7035mr59108885a.58.1770141879045;
+        Tue, 03 Feb 2026 10:04:39 -0800 (PST)
+Received: from boreas.. ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8ca2fa8144csm20469185a.14.2026.02.03.10.04.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 10:04:38 -0800 (PST)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH v2 0/4] bpf: Add bpf_stream_print_stack kfunc
+Date: Tue,  3 Feb 2026 13:04:20 -0500
+Message-ID: <20260203180424.14057-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: ATnu9ZDQUFrg
-Date: Tue, 03 Feb 2026 18:44:04 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>
-Cc: "Arnd Bergmann" <arnd@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>,
- "Andrii Nakryiko" <andrii@kernel.org>, "Song Liu" <song@kernel.org>,
- "KP Singh" <kpsingh@kernel.org>, "Matt Bobrowski" <mattbobrowski@google.com>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "Martin KaFai Lau" <martin.lau@linux.dev>,
- "Eduard Zingerman" <eddyz87@gmail.com>,
- "Yonghong Song" <yonghong.song@linux.dev>,
- "John Fastabend" <john.fastabend@gmail.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
- "Jiri Olsa" <jolsa@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Mykyta Yatsenko" <yatsenko@meta.com>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,
- linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
-Message-Id: <ab709a00-3a7f-423f-9d8b-b2cd17fef76f@app.fastmail.com>
-In-Reply-To: 
- <CAADnVQKn4xP9s_koBuP7D_eqUX0dSPwUr-dOj3mTZNTh_VxqKQ@mail.gmail.com>
-References: <20260203162746.2337002-1-arnd@kernel.org>
- <CAADnVQ+14yum8okMmjuqF5m5DafWo1fY1EuPj-QU_ykYbQ01uw@mail.gmail.com>
- <5f9c89fe-df1d-4eb4-b724-08f8d90fcc59@app.fastmail.com>
- <CAADnVQKn4xP9s_koBuP7D_eqUX0dSPwUr-dOj3mTZNTh_VxqKQ@mail.gmail.com>
-Subject: Re: [PATCH] bpf: add missing __printf attributes
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 3, 2026, at 18:24, Alexei Starovoitov wrote:
-> On Tue, Feb 3, 2026 at 8:58=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> w=
-rote:
->> On Tue, Feb 3, 2026, at 17:34, Alexei Starovoitov wrote:
->> > On Tue, Feb 3, 2026 at 8:27=E2=80=AFAM Arnd Bergmann <arnd@kernel.o=
-rg> wrote:
->> >>
->> >> From: Arnd Bergmann <arnd@arndb.de>
->> >>
->> >> Some internal functions in bpf produce a warning when -Wsuggest-at=
-tribute=3Dformat
->> >> is passed to the compiler, e.g. in 'make W=3D1':
->> >>
->> >> kernel/trace/bpf_trace.c: In function '____bpf_trace_printk':
->> >> kernel/trace/bpf_trace.c:377:9: error: function '____bpf_trace_pri=
-ntk' might be a candidate for 'gnu_printf' format attribute [-Werror=3Ds=
-uggest-attribute=3Dformat]
->> >>   377 |         ret =3D bstr_printf(data.buf, MAX_BPRINTF_BUF, fmt=
-, data.bin_args);
->> >>       |         ^~~
->> >>
->> >> The attribute here is useless since there are no callers from C co=
-de,
->> >> but it helps to shut up the output anyway so we can eventually turn
->> >> the warning option on by default.
->> >>
->> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> >
->> > This was discussed and it's incorrect.
->>
->> Do you have a reference to why it's incorrect?  It seems harmless
->> and gives me a clean kernel build in combination with a handful
->> of other fixes after enabling the option by default, but I assume
->> I'm missing something,
->
-> because it's not a printf format. There are no varags here.
-> gnu_printf attribute takes two arguments:
-> format (archetype, string-index, first-to-check)
-> Also
-> "GCC requires a function with the 'format' attribute to be variadic"
+Add a new bpf_stream_print_stack kfunc for printing a BPF program stack
+into a BPF stream. Update the verifier to allow the new kfunc to be 
+called with BPF spinlocks held, along with bpf_stream_vprintk.
 
-My impression was that at least vbin_printf() falls into the
-same category as vprintf(), which is explictly mentioned in the
-gcc documentation:
+Patchset spun out of the larger libarena + ASAN patchset.
+(https://lore.kernel.org/bpf/20260127181610.86376-1-emil@etsalapatis.com/)
 
-  For functions where the arguments are not available to be checked
-  (such as 'vprintf'), specify the third parameter as zero.
+Changeset:
+	- Update bpf_stream_print_stack to take stream_id arg (Kumar)
+	- Added selftest for the bpf_stream_print_stack
+	- Add selftest for calling the streams kfuncs under lock
 
-I also see the comment about bstr_printf() mention that it
-uses a vsnprintf() compatible format, which would indicate that
-marking the format argument isn't wrong, though I agree it is
-not actually useful if there are no callers that pass a string
-literal.
 
->> > Commit 7bf819aa992f ("vsnprintf: Mark binary printing functions with
->> > __printf() attribute") should be reverted instead.
->>
->> Reverting that one would appear to introduce warnings elsewhere,
->> so that would not be a complete fix either.
->
-> Somebody needs to root cause it and fix it properly.
-> Adding more incorrect annotation is not a solution.
+v2->v1: (https://lore.kernel.org/bpf/20260202193311.446717-1-emil@etsalapatis.com/)
+	- Updated Signed-off-by to be consistent with past submissions
+	- Updated From email to be consistent with Signed-off-by
 
-I've tried reverting it here now, will see what I can come up
-with. We can probably use the same trick that I used "[PATCH]
-[v2] tracing: move __printf() attribute on __ftrace_vbprintk()",
-annotate only the definition but not the declaration so the
-format string warning doesn't propagate to the callers.
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-      Arnd
+Emil Tsalapatis (4):
+  bpf: Add bpf_stream_print_stack stack dumping kfunc
+  selftests/bpf: Add selftests for bpf_stream_print_stack
+  bpf: Allow BPF stream kfuncs while holding a lock
+  selftests/bpf: Add selftests for stream functions under lock
+
+ kernel/bpf/helpers.c                       |  1 +
+ kernel/bpf/stream.c                        | 19 ++++++++
+ kernel/bpf/verifier.c                      | 13 +++++-
+ tools/testing/selftests/bpf/progs/stream.c | 53 ++++++++++++++++++++++
+ 4 files changed, 85 insertions(+), 1 deletion(-)
+
+-- 
+2.49.0
+
