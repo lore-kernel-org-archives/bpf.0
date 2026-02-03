@@ -1,140 +1,130 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB3E7405A
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 23:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770160574; cv=none; b=qn8G/rpuwd5lCxY1a0wSeu8kmeGwV5L1kIdQASwb/iCbd99dRQEk6qxoktXHj0tBjOQZffHqcte3ssXHePSc3VYRmrR9lO7TBqooqKvpx3rYD34qQH8dOGoiB1cfsA8Xy3grhaOIspeIjzNtUYTe5Q51B59LoCujUM324VGtp5o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770160574; c=relaxed/simple;
-	bh=r1f76l2W8lfs2XcZ5GesaC4a6L1gjALG0EmEGjvWK7k=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=E3t3co77hyG+9w1VklKc19YwNaAkmDxhCmAffIB151CTcSJgCHg3KPRfZnZhQjxtLtl9jvrRR73kO5SzD2diCF9oYkq1yhlx5GhZt29c2wobvzCx2oFLOZq5bt7w9Qxa3X4ik+27WJSDvjHJASq7gSL304ZgcIbZKfJujpvZcZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IDMH5hX4; arc=none smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F7628CF76
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 23:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770160639; cv=pass; b=tN56XQl3Vj/hicRrlJmWEp8YiNWF1ebUHTranQdNjtSSUcrtzNR6M/ksX5+JzrzwYoUUpdTpaXx9hLdBQTcqiyNMYVnvJeNtSgibuRjqv7k4RidZzEQUglA0hfYGeOorT2sGHtJCbRX5jLWBIRC3Xm/j5ZHowYa6TogrxKCkG4c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770160639; c=relaxed/simple;
+	bh=oGLAAx0oDXJySJ6SACiBMMlBs8l/0/aMYhTmfuLrNXc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XmpLB1pbSqlantpVBI/eZD1+9cCcIgJNib6xcVLIpmgCW+TfpwKIbLYJc9S+aem0kDTs/uJBG//shNz2c5sTLv2xwp9iY3MPoLdikUoF2cKhaj3rqHoxbQuZv43ouF0EwBF2yUg6bs/7NYS2A5Otadk1mV+ETI7DyWjHKGVQN5I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PIWkkqDy; arc=pass smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IDMH5hX4"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1248d27f293so1510291c88.0
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 15:16:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PIWkkqDy"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4807068eacbso51236645e9.2
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 15:17:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770160636; cv=none;
+        d=google.com; s=arc-20240605;
+        b=G3bM4i0KbSBex1D7ym9LEZwWxN4juGCa6MABeHof6tIUBJBczvjwI7blce+4MBEWf/
+         KQFpIVGABBgrGCyeD4RnIoTLRIzG7e+xmjy6LV+Psf7rz7dkl/278RgLv7AdChpyY9gZ
+         AzwNNx+ebWJU6eEIRLOmmBEluwfXGzzkE11LmVJr5D5GaiAotsvS/RvwHkCm+/xVAB/G
+         pXe7EGQCcQEkeJK7LviRHIq3xCxuNy6zOoaucAUOZsI8Fy//heEDIN8Pa8dUbXkKutxf
+         s05qIhSlp2fP80kNUyZedoBeWxkPR9JOmeg+R6MTyskcNqDJ6B1uHNdNE51AWDl1dbKI
+         BQ2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=qCzknF2XLFkMn/b7FrJtBsuU+TTC6yCt38+P4qpWFOk=;
+        fh=PMVhGt80QeKX4Kk621fCewXJClSlTOsokTxPTqNnDOU=;
+        b=Xo0cJA3xmj2CLPSoDPPE3UZgmUM6hbqh5FnxvEv1SAMVGtLQ2aBR4TChaywx73rOUC
+         t3vBihpW4/gTbWMKLWfGUqWl7nMQm4ZAom0iNpJ9PuyomMRL9hthLo/Tfq0obv2kXhi5
+         j5Ve92O4HJ64QLDgxBMxfflaLRNEKzzgoGCsY/KZ2qvczUsp8+tWWNYZbZG2Nql2zEWe
+         mjMbR+BjbPEMx7pWvyvqSgrU0j2VfmJt7JSnX/kw4AM+cO6qzv+F2Jbg8ga0M/Dr5szj
+         RjyR6IF7uup+EB02FnyK2kP3YfQKmIrUcSVAAANFnIs8vJ9wVX0rwpq5bX6DClDqE6hT
+         NC3g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770160572; x=1770765372; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=liFpSsTStyEIOQCv34lD2CguoacjGONgmTHEiB9qokA=;
-        b=IDMH5hX4u0/5Qkd8EYRs5Hj3OKJmowFX4QlVmC6qJbdx6/LYKitYcKEeYFE+QI1G7l
-         UJLQKM26WFL1khHh2WKToFekyYgaoZ2bzGN4UwygIPNy+mNchqeVsxf9ANfmgaXcvIiB
-         n6ZT9nTOiJWCAw4LK6pLWkE2zMjA7g7odcxoLEn4fRBuECHonFKg667jYWbGjnjQLq4S
-         bhgu+Fs75lWF9na5uQejTx5s9pjLfSVvAaH8RVdX5o2lo9OTa3KUUOV+wC+CXy3S3JPT
-         GEa3M25RczzJ3PZOTSWa1RvlEsJpJfZkjSSMAuIlQVOJBhwKbhAJuZZabCuWWe3r/1XF
-         TxQQ==
+        d=gmail.com; s=20230601; t=1770160636; x=1770765436; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qCzknF2XLFkMn/b7FrJtBsuU+TTC6yCt38+P4qpWFOk=;
+        b=PIWkkqDyCA1HVf849aOk6fpfssZMWbI6aRfHCT2+4Zg7Xv6XNZqzNEo0vWT+pXG8iE
+         rwKzeQldc65jH1utn2dGiRszSNUi0pMy+EUz7jFhau+1KAZjxwb8RumKvZa2MxTcw0eC
+         I7TB+z6m/d63cNzAUPzQIEb32iAaM9gQSVKD9L0rKOBM0B9hhQiuogwF4GlasQGa7186
+         MrNQU2t9s+gCZtDMUPjOzbosbQZgwtmFhcYwdbKBhAMUzoSpYpXHby1gOu89B8JgOlpi
+         +yfa7g3/ZbL8Mx/IlhVJh3/0N01LtAYvUisGM7gk2hiVDh34JfVmbh0t0kadW5pbnncS
+         EExw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770160572; x=1770765372;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=liFpSsTStyEIOQCv34lD2CguoacjGONgmTHEiB9qokA=;
-        b=aP/XlQFEuq2EnZZ/Ym24VXAE04hZCVBoL39eEeaIHm6WNGkO7qQVH4AMdxF/tor7FS
-         aXuccTdm9Q9ByZdF7NqiFWkzVSsmf67hZUU3u2RCbVq9jb2rEsDLsfwjBRb2Wcmyyz/R
-         rybwyuK3vWvmfyG9LebtLulNZ2pmMA6KKdGNxubRTW8aGAXYpAqN5rj6KB6kDuKyJQi0
-         GLFymG7TAn4/a7S3IPL84duc67wm+iOZCO+1ZR82gnMg/FqVDEpngBq4irC3TrNdq6dd
-         8lXbynMemobJUHAgFKHkvfElyjQ1RkSv4rJRf2apUSCTeyi65Jp2zrtqydU9oQ6k+3Hl
-         5Iug==
-X-Forwarded-Encrypted: i=1; AJvYcCXTBgpKjzmh/lOTkMQ62RGN7Mpb4EcjkVxkYngO83pPCXbavEgzC2wVg4eA2plvEvx2u4c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyA1Yi2Ph3E++1PoYA+/Vp0byaR4DWVEaSOLbU38AUr1ij9/Kel
-	P7rTAw238kxpLV24iKumf503cnqGLoOJToKwekwkIpG4pbudLTZD+ayO
-X-Gm-Gg: AZuq6aKh95sneKi9hUdw2Ri1DYotZbXKZClgI6hbilxYi4LrDMSD/esY6EMMBjhjMwx
-	S1UKI/MNtrN+dxWKkl9XpT/7vP0qNkwqKv1KNdFdZXJfK81dxwvPS3ZAtEe5cba5Cx0oRy1Z9Vs
-	Y4tQ2s9S6cNQxSvIInBDy94Q+e92eWlvf8Yg/xOuHTAIrTfPcLnHj6WAUMPM5ohOF+UvYmduEq+
-	MxSOcZYKxI3ZuM/h8+JIbicVTa8UCBgsnsKoS1JO4KUwfHF/oCehywVmwbjKovPvukoR42n5UPK
-	hDQ44/CqWwY60N7Dw4C6cazL75LaxirCeQMxGxTE6WBrWK56B6IDjVb8eUDBTYOo+MxFKp5RjZK
-	Jr1rreolM/eNfpbC6n4VO2YbLKRcF7U0b2FPJvrkgEyPPiPtZwZUG0ex1yKqizXssZZnoIzsATS
-	ia7tiAVB8mKk1icME2YHOUtrHyDsXJWGrO15UUZ+8LmTbbb7rJhhY14/j3sf7RU1kIHA==
-X-Received: by 2002:a05:7022:325:b0:119:e56b:c75a with SMTP id a92af1059eb24-126f47bcfe3mr571073c88.31.1770160572095;
-        Tue, 03 Feb 2026 15:16:12 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:60e8:c921:e408:133f? ([2620:10d:c090:500::9470])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-126f5030b01sm654333c88.11.2026.02.03.15.16.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 15:16:11 -0800 (PST)
-Message-ID: <cde3706275830169d289d664d425df1a47b50f31.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add tests for BPF_END
- bitwise tracking
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Tianci Cao <ziye@zju.edu.cn>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
- daniel@iogearbox.net, 	haoluo@google.com, john.fastabend@gmail.com,
- jolsa@kernel.org, kpsingh@kernel.org, 	martin.lau@linux.dev,
- sdf@fomichev.me, shenghaoyuan0928@163.com, song@kernel.org, 
-	tangyazhou518@outlook.com, yonghong.song@linux.dev
-Date: Tue, 03 Feb 2026 15:16:09 -0800
-In-Reply-To: <20260203102015.5570-1-ziye@zju.edu.cn>
-References: <b68a122d7a0b046a9ca5527bcf9f50dfea183ce9.camel@gmail.com>
-	 <20260203102015.5570-1-ziye@zju.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+        d=1e100.net; s=20230601; t=1770160636; x=1770765436;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qCzknF2XLFkMn/b7FrJtBsuU+TTC6yCt38+P4qpWFOk=;
+        b=fHS4HXixEbBUZfYdXWlHe13pjuGFrBSi/aI1+OEtZUKHoVcnW74BR/srF7A5ZHPJ2D
+         sNhza4LgRROPXNeT/jJZ5n42/vMfLs3XA4qHzJKYkgLP896EMTmd0gvjI4nB+c6Ax3rM
+         uuslR+ztdIA7fiKIXNEzrs6J/znMsBGIBaboqywbDvARZ4NKqR4ii9xMnpPKdnu5/zfb
+         P6GyxkzysJsxXbquXYVTa02P4O/L8XBv+klDsYrvhXvxVq0QhtPdcBC3ztJWT4s3DzNW
+         ds2GmLQsAROC16gW1T5OMmCPg4Ivioy/7l7AOE9swibeMmdfrWfxOO306RTSOFGNtg3t
+         9fAA==
+X-Forwarded-Encrypted: i=1; AJvYcCXPGbd+g+ruI6jIpoGNsWr/kkmiVpvVWGOCtPw693X+nwU6ZMBq7mtLpHDrru5lAnwKBhg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3AkjDBPwYWi3KmEXkRvv4UZwAqhH8hx+oVh5hwcgrBtpCJhyI
+	NzAGA8CI3fkGxn23MRVr/CtpoSiBUiD/qz95wBQmb3TNK+VZ0Ru+P52oSTuoBUdNHf8giAWUl3H
+	uM4QlFHpvHA/MUOO7oWVY5vgXgGA23jE=
+X-Gm-Gg: AZuq6aIDfkdtom14HPydQ4mt1gpiZxz2ct4uUCdbkOY9DDi388JpJAwkUn/IIzeSF2F
+	Hk93MigV2cdxyX1pqpXgNLoIP/jnyhTgdzWIq8GS944jME0YvImCaphp82amYISSEcov0G1cu76
+	DPJgsiOiinZliBYd1e+3AlrmjldfHQmE4FoHvPMn0XX3TzSElt0eJrLk1L7K4pKClQ+7ZSSADvC
+	PRdTbzleOx9tDpAwb4ZZHU/iep0XHHqNz5OV1fIo6n/1bkymhdjTi0RO9sNNN3fKxpznV+OvuqH
+	59o5W3tEilF1vY4koMQjm5XKwR8yrFl2Tno+OTw94dsqq4jBQiSXsLiqcgfHdg/z973gHUc+D8l
+	KehKxM4fOVsueQQ==
+X-Received: by 2002:a05:600c:468b:b0:479:3a86:dc1c with SMTP id
+ 5b1f17b1804b1-4830e99c72emr15368615e9.36.1770160636123; Tue, 03 Feb 2026
+ 15:17:16 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260203093819.2105105-1-jolsa@kernel.org>
+In-Reply-To: <20260203093819.2105105-1-jolsa@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 3 Feb 2026 15:17:05 -0800
+X-Gm-Features: AZwV_QiKtrXKdO5AhQ0I4_nizbg2ietswcwGbOy_bfzFE5Gd80HiFm4U4YWqCsw
+Message-ID: <CAADnVQ+EU_f4LVDQkqkB0Q+QYMBH5ynXU3+rGZA2XCGmYMcFqg@mail.gmail.com>
+Subject: Re: [RFC bpf-next 00/12] bpf: tracing_multi link
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	Menglong Dong <menglong8.dong@gmail.com>, Steven Rostedt <rostedt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-02-03 at 18:20 +0800, Tianci Cao wrote:
+On Tue, Feb 3, 2026 at 1:38=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> hi,
+> as an option to Meglong's change [1] I'm sending proposal for tracing_mul=
+ti
+> link that does not add static trampoline but attaches program to all need=
+ed
+> trampolines.
+>
+> This approach keeps the same performance but has some drawbacks:
+>
+>  - when attaching 20k functions we allocate and attach 20k trampolines
+>  - during attachment we hold each trampoline mutex, so for above
+>    20k functions we will hold 20k mutexes during the attachment,
+>    should be very prone to deadlock, but haven't hit it yet
 
-[...]
+If you check that it's sorted and always take them in the same order
+then there will be no deadlock.
+Or just grab one global mutex first and then grab trampolines mutexes
+next in any order. The global one will serialize this attach operation.
 
-> However, I noticed that using macros does reduce readability somewhat - t=
-he test logic
-> is now more abstracted. Given that this is test code, do you think this t=
-rade-off is
-> acceptable, or would you prefer a middle ground?
+> It looks the trampoline allocations/generation might not be big a problem
+> and I'll try to find a solution for holding that many mutexes. If there's
+> no better solution I think having one read/write mutex for tracing multi
+> link attach/detach should work.
 
-Why not like this?
+If you mean to have one global mutex as I proposed above then I don't see
+a downside. It only serializes multiple libbpf calls.
 
-#define BSWAP_RANGE_TEST(name, op, in_value, out_value) \
-        SEC("socket") \
-        __success __log_level(2) \
-        __msg("r0 &=3D {{.*}}; R0=3Dscalar({{.*}},var_off=3D(0x0; " #in_val=
-ue "))") \
-        __msg("r0 =3D " op " r0 {{.*}}; R0=3Dscalar({{.*}},var_off=3D(0x0; =
-" #out_value "))") \
-        __naked void name(void) \
-        { \
-                asm volatile (                                  \
-                "call %[bpf_get_prandom_u32];"                  \
-                "r0 &=3D " #in_value ";"                          \
-                "r0 =3D  " op " r0;"                              \
-                "r2 =3D  " #out_value " ll;"                      \
-                "if r0 > r2 goto trap_%=3D;"                      \
-                "r0 =3D 0;"                                       \
-                "exit;"                                         \
-        "trap_%=3D:"                                              \
-                "r1 =3D 42;"                                      \
-                "r0 =3D *(u64 *)(r1 + 0);"                        \
-                "exit;"                                         \
-        :                                                       \
-        : __imm(bpf_get_prandom_u32)                            \
-        : __clobber_all);                                       \
-        }
-
-BSWAP_RANGE_TEST(bswap16_range, "bswap16", 0x3f00, 0x3f)
-BSWAP_RANGE_TEST(bswap32_range, "bswap32", 0x3f00, 0x3f0000)
-BSWAP_RANGE_TEST(bswap64_range, "bswap64", 0x3f00, 0x3f000000000000)
-#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
-BSWAP_RANGE_TEST(be16_range, "be16", 0x3f00, 0x3f)
-BSWAP_RANGE_TEST(be32_range, "be32", 0x3f00, 0x3f0000)
-BSWAP_RANGE_TEST(be64_range, "be64", 0x3f00, 0x3f000000000000)
-BSWAP_RANGE_TEST(le16_range, "le16", 0x3f00, 0x3f00)
-BSWAP_RANGE_TEST(le32_range, "le32", 0x3f00, 0x3f00)
-BSWAP_RANGE_TEST(le64_range, "le64", 0x3f00, 0x3f00)
-#else
-BSWAP_RANGE_TEST(be16_range, "be16", 0x3f00, 0x3f00)
-BSWAP_RANGE_TEST(be32_range, "be32", 0x3f00, 0x3f00)
-BSWAP_RANGE_TEST(be64_range, "be64", 0x3f00, 0x3f00)
-BSWAP_RANGE_TEST(le16_range, "le16", 0x3f00, 0x3f)
-BSWAP_RANGE_TEST(le32_range, "le32", 0x3f00, 0x3f0000)
-BSWAP_RANGE_TEST(le64_range, "le64", 0x3f00, 0x3f000000000000)
-#endif
+overall makes sense to me.
