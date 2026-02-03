@@ -1,64 +1,64 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A45142F39A1;
-	Tue,  3 Feb 2026 17:21:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5767311C1B;
+	Tue,  3 Feb 2026 17:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770139276; cv=none; b=saSfsiCicJ9L5sFlo/vDnNYDA1LQ3ao2DXlvFiPLQy2Mxig+tGH52BxnE8y+7LgklhCKNW+MPJXjfbSxIkJ0saHi1OUOFKBbOFtCFw+eWe4oeIA0tRQxq/jIkYNg03MRc9KcIrf9SisUv9J0dJw68CTeiBSf4PGEJxxpExg8iec=
+	t=1770139277; cv=none; b=ayO2rVUnqcpRZXTuuabB6EkO/L1B5+LerZ8xGw3uw49ayA74943IDnW/RtZMhYRxAoGvBk4sI9h/MFa65EmBxIIDdpwIR8drJ81R0Dqwu/3xc9GS4PAKiyfEk9ubdDTED8eFdvANzMiPxGC8f34l21Fha0g5yIquSGpshYXDfB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770139276; c=relaxed/simple;
-	bh=eXSc+R+mgjt5bjfdI1QAyx8d43WTre6ueHjC8mD/Gbw=;
+	s=arc-20240116; t=1770139277; c=relaxed/simple;
+	bh=W7ayry2Aww0XrvpWMjggmqeVZdjApy6yy9bQoDVe7vM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZiyCh/rYjY52B7xa+rt31obfPA8O62N06cuRnk4DD/0KFSoBFpbzFlwI6yL2yt2u54lBgzh8U3yLw1S+kJbNuFwDn3KHJkKH7Omh3Id+R5YARnNXyPG5P18kPp2EhRC6ocdojOdAmbNWkmwNrlBU1Docoz0l5N/MnC581Z0mawM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bO9pc1Gl; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=cEbH3JRjdGJHI3Zy8F5cjq1figXzsMaVoLwf8ikupIlr1H2JhD3jpdQH5OTpgPhkdMNfHQS3PxfyIXlveNZmJRKscYa1bKpIDDzveG8uNEt5gArTT4mAAd5CgJSPRNHXT6RTg55teL9CyJ4qZTH1/TTMDfCF0YGoIvgPs7IdgYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bUPLywio; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bO9pc1Gl"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 6139JETP020418;
-	Tue, 3 Feb 2026 17:20:09 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bUPLywio"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 6139rVqQ009325;
+	Tue, 3 Feb 2026 17:20:07 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=l0yHqCBqS1ZKJImeo
-	J42JZTto0TnmtbsWjg6AbszB9U=; b=bO9pc1Gl6SE8zPetv3aref5y7gX/6ao0A
-	KzA8bu+qMc2ByHYW4M+pUMFAsuuEnhWq1ppjImk4xeVAZkNYah4we91X+jnxxeRz
-	U4bLt6dP0mynnVmPr1hzeG0KzYgaEAkPw1Lx7dweQNvC8mk4641/2tiKk1v1A5g2
-	Klj7OysTeG9+Ra9xqug1UKZM2sN24JNjnep5yEMADsg9AZzcOwLvCdS5507DaVTe
-	h2fXN9UHCd+pTK0Lj0ebKfWmWhfnYA71jmG15bwANVUNWVi1EROU+qZMTOwCrH5q
-	HcKEk7WaNLG+lmqNS7cB9i3AawQIuq16vbYiXiEcahOTKhkUN4A6A==
+	:mime-version:references:subject:to; s=pp1; bh=lXwp98bz1jNqiTbUT
+	xZsJVEJQVRp/j5BkYY+Xsqusn0=; b=bUPLywioYo1bsk6VaCGA8tmJWRfVrIxeG
+	2WwSeY3Zmtuksdt1kFavMmo8x0HHIEuPfaATmFlKBn372VB94bRokZR0ec9s4uon
+	FjYETRxihZGIu+7MCEJ8LzVoNTLt9JC2Kxzj98iJQERA4dLfavH63Tl5jzTvKRdf
+	2Kv0RoJBtKzSMck5YPZbtxYEL/v8WZ+fTIuonO0hUPCgpObF0+pQmq8j84r/k98p
+	hfTg05xOMujccAxkf+j1aQXp+wizNBZLhb/yHsl31MJz8eswdqF4YkrYPGfKYgqW
+	8xwPzZZ03ulskvtfFfC5ftKxWdnwwChZOBmAcg+C3wBy/SDqs74Fw==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c185gv7ny-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19dt6euv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Feb 2026 17:20:09 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 613HK84T029094;
-	Tue, 3 Feb 2026 17:20:08 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c185gv7ns-1
+	Tue, 03 Feb 2026 17:20:06 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 613HK6cn020223;
+	Tue, 3 Feb 2026 17:20:06 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19dt6eur-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Feb 2026 17:20:08 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 613Ew6gF029052;
-	Tue, 3 Feb 2026 17:20:07 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c1v2sa45x-1
+	Tue, 03 Feb 2026 17:20:06 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 613G1rd1004405;
+	Tue, 3 Feb 2026 17:20:04 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4c1wjjsx6r-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Feb 2026 17:20:07 +0000
+	Tue, 03 Feb 2026 17:20:04 +0000
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 613HK2dW42795460
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 613HK0JM56885646
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 3 Feb 2026 17:20:02 GMT
+	Tue, 3 Feb 2026 17:20:00 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 41EA720040;
-	Tue,  3 Feb 2026 17:20:02 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 8571B20040;
+	Tue,  3 Feb 2026 17:20:00 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B4B1920043;
-	Tue,  3 Feb 2026 17:20:01 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id F3AC62004B;
+	Tue,  3 Feb 2026 17:19:59 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  3 Feb 2026 17:20:01 +0000 (GMT)
+	Tue,  3 Feb 2026 17:19:59 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         bpf@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org,
@@ -89,9 +89,9 @@ Cc: Jens Remus <jremus@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH v7 4/6] x86/vdso: Use SYM_FUNC_{START,END} in __kernel_vsyscall()
-Date: Tue,  3 Feb 2026 18:19:55 +0100
-Message-ID: <20260203171958.1522030-5-jremus@linux.ibm.com>
+Subject: [PATCH v7 1/6] x86/vdso: Fix DWARF generation for getrandom()
+Date: Tue,  3 Feb 2026 18:19:52 +0100
+Message-ID: <20260203171958.1522030-2-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260203171958.1522030-1-jremus@linux.ibm.com>
 References: <20260203171958.1522030-1-jremus@linux.ibm.com>
@@ -103,73 +103,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=UdxciaSN c=1 sm=1 tr=0 ts=69822e49 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAzMDEzNSBTYWx0ZWRfX8hGbLWMlJYO2
+ uAMkK636Ieq+3YBBE6OByGiVEW79X8cUeztQBiGBEga7Umyn/C7wfimSvjdOekJpq5Emi1rtqn6
+ rqO9dGxd1bWA7u5mXjjc+AP3jQrfj/6P6JY8LWC3gVgYtCfVmlvX9PejxzFkL+BSzoxuaD8Xfky
+ R1JFGdy62SB/BlyMaaIUuCJ5vk3YLkHmdiA2xV+d746MBGfBJJTyLpHueZLt7VY+3GAb29UtLh0
+ eNVzrALmYf0q+AH6s0USLViKTyE2RR46kAACa7mYv+DYkX5nMz9miTkGGLX0KVQjHFcW2DuJfcC
+ qSjLX3A7Kt65oSHZrRwi1AcfNIbFH1w6aP8/MzmZVCm/RJywRYMdUee0g/1KImKIa6IXlE7o6um
+ CPB1OUWtOuXCUSymlaWEQ2F0yfIl1Vts7PsHWwAuHSwNVpL80vfBPyliUM6L77K+tip91YL4aOa
+ vFsKmN8MS12a0dSr+Qw==
+X-Proofpoint-GUID: iHJK-QciKONg_XCCBDJAe98iWK2gGu_8
+X-Proofpoint-ORIG-GUID: FrRdoqnxHFk_aiJG8gIbpgNhX6zHpsZr
+X-Authority-Analysis: v=2.4 cv=LesxKzfi c=1 sm=1 tr=0 ts=69822e46 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8
- a=VnNF1IyMAAAA:8 a=lbqDleH5ITP0AWbVeFgA:9 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-GUID: GNKdwioRoGA27afE0E8392Ul94d_ZrLP
-X-Proofpoint-ORIG-GUID: gwQjZ6492zhW4tHMZpmyRT52VL26xYof
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjAzMDEzNSBTYWx0ZWRfX+/PJ2lIh3fw/
- sv4dh477JTSQ7yp2Rt71pX9iCOgMa04FcmSn80PcpMZBnWejZqIh/dLt+G5fLsC8Ro2ka/Mpwic
- 6NXd61tLZNI1FPA+xIbR3XRHXgfnsPqD2UFjkwxOnOBv4STFQqQe+c2VKoKmjJFmU17jEa8UnU/
- DJVRkPFWlyKJtynjaT7y7MscuTC0pEBjOlTiRfy8oRfdF5m/TgadUxsivg6YdMZSu+Lm0P0hgJ8
- kj1G5TuBWUeJQPF94Gc3KkHNCJw9i/dyNuGzitx1PnsnuAwGcpDh9OPGdQcvQ3FxopK/fOyoJD2
- 5hg7i5E2U2prH+zAhtlw5g60h+SqIbFvcDRGXqJ9e0Sy8KfqaUHcoyd7AQrT1wg58ZkSQJVwspO
- QMQLput5dSW58cSw4tO/GQPO80HVIGQdMThPNmyq/BFelOvz6SWzHCCPJ1EVJCmq4nock0/oY8u
- z6EMN1Uj/DnJ5ENPwyw==
+ a=VnNF1IyMAAAA:8 a=rsc5PF6bQGhcUx5MhlsA:9 a=2JgSa4NbpEOStq-L5dxp:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-03_05,2026-02-02_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 malwarescore=0 impostorscore=0 lowpriorityscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 spamscore=0 phishscore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2601150000
- definitions=main-2602030135
+ bulkscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
+ adultscore=0 suspectscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2602030135
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Use SYM_FUNC_{START,END} instead of all the boilerplate.  No functional
-change.
+Add CFI annotations to the VDSO implementation of getrandom() so it will
+have valid DWARF unwinding metadata.
 
+Fixes: 33385150ac45 ("x86: vdso: Wire up getrandom() vDSO implementation")
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
+ arch/x86/entry/vdso/vdso64/vgetrandom-chacha.S | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Notes (jremus):
-    Changes in v7:
-    - Rebase on H. Peter Anvin's vDSO changes on tip:x86/entry.
-
- arch/x86/entry/vdso/vdso32/system_call.S | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/entry/vdso/vdso32/system_call.S b/arch/x86/entry/vdso/vdso32/system_call.S
-index 9157cf9c5749..a90f4f7de396 100644
---- a/arch/x86/entry/vdso/vdso32/system_call.S
-+++ b/arch/x86/entry/vdso/vdso32/system_call.S
-@@ -9,11 +9,7 @@
- #include <asm/alternative.h>
+diff --git a/arch/x86/entry/vdso/vdso64/vgetrandom-chacha.S b/arch/x86/entry/vdso/vdso64/vgetrandom-chacha.S
+index bcba5639b8ee..cc82da9216fb 100644
+--- a/arch/x86/entry/vdso/vdso64/vgetrandom-chacha.S
++++ b/arch/x86/entry/vdso/vdso64/vgetrandom-chacha.S
+@@ -4,7 +4,7 @@
+  */
  
- 	.text
--	.globl __kernel_vsyscall
--	.type __kernel_vsyscall,@function
--	ALIGN
--__kernel_vsyscall:
--	CFI_STARTPROC
-+SYM_FUNC_START(__kernel_vsyscall)
+ #include <linux/linkage.h>
+-#include <asm/frame.h>
++#include <asm/dwarf2.h>
  
- 	/*
- 	 * If using int $0x80, there is no reason to muck about with the
-@@ -85,7 +81,5 @@ SYM_INNER_LABEL(int80_landing_pad, SYM_L_GLOBAL)
- 	CFI_RESTORE		ecx
- 	CFI_ADJUST_CFA_OFFSET	-4
- 	RET
--	CFI_ENDPROC
+ .section	.rodata, "a"
+ .align 16
+@@ -22,7 +22,7 @@ CONSTANTS:	.octa 0x6b20657479622d323320646e61707865
+  *	rcx: number of 64-byte blocks to write to output
+  */
+ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
 -
--	.size __kernel_vsyscall,.-__kernel_vsyscall
-+SYM_FUNC_END(__kernel_vsyscall)
- 	.previous
++	CFI_STARTPROC
+ .set	output,		%rdi
+ .set	key,		%rsi
+ .set	counter,	%rdx
+@@ -175,4 +175,5 @@ SYM_FUNC_START(__arch_chacha20_blocks_nostack)
+ 	pxor		temp,temp
+ 
+ 	ret
++	CFI_ENDPROC
+ SYM_FUNC_END(__arch_chacha20_blocks_nostack)
 -- 
 2.51.0
 
