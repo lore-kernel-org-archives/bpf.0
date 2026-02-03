@@ -1,54 +1,54 @@
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 206672F12CF
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 21:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F7E4364EA9
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 21:34:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770154488; cv=none; b=bMSeDHLprXu/a3l4+f8ayol/KdbRfTD4DPpGhAsg9Jv8o2A3SgGTUUbTxGqqbdael8tFUYC1H1TeKueOq7PN5T3XuMNlBWAPYN/sNQHv7hAfL7whyAMlMgE7Tnk11fLH92O4cnxGeZvBfrBmUsLXQ75qPm6fyvwrGqTH+ArgBww=
+	t=1770154489; cv=none; b=e7+47Rvy4LWQoWcVBnCXvbiA5BAfk2KnJov7XA7PpYSt4LIkfwXG5MsK6fDOiD5bexVN3xFSTaTE/XW+DgEa7xtWP34zqjZZNEv+LQL82NZAWS7OekoTk6YLbyn4yP66/jP2OuhFBE2ffABMZPMTZ/8kM0bAKBRGHnrabksEEOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770154488; c=relaxed/simple;
-	bh=cfUL+QBLB2rC0uMmfJo10d4zYQEiZ5xQupjfnOTI7z4=;
+	s=arc-20240116; t=1770154489; c=relaxed/simple;
+	bh=VumRnA+ZNrdfwd1X60h4D5hY0PyUrhrl45NhcE9EIyY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=j7rshfxmVvd0R7+TslpZsDO+eWdb73j6FaFJyAqeCmaJVMlTB+pVgZnavlwp1GWeAOvxUAxDGLQQP3HcC1GpNgNADaO9JtoQ2nvVpMdbqFrwHNtKOtaygNnn7J+LCbHqM3rzGrDQhjlqAa4dnkxlePJtFRBMO+SL8hlF0P0vlcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=agikC0kS; arc=none smtp.client-ip=209.85.215.201
+	 To:Cc:Content-Type; b=dr1n4nutHaDG0JW73i7Im4h74DdtcOneupmmNYnI8J/hravShx/mQPO/33Yg32fzEYdNzj9wtZHwbBMvU0MX8Xx/2BG3RKB7MsnRCyDfcXdMnxPMlqertgdBtO/d/mYJZuR15zcNYjawiCCTN+Sbfj8Jd1t257NxGrEkdyeqPDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LiNmgZN5; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="agikC0kS"
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c6b1b22b134so1095039a12.2
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 13:34:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LiNmgZN5"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-34ec823527eso11191340a91.2
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 13:34:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1770154486; x=1770759286; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1770154488; x=1770759288; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SJzIgisjODq9k+q4iYcmrXlk9lhsHBo7an9mjRBWdmQ=;
-        b=agikC0kSs415UUxUwojBF042Xy9arx1OUm+5GgilGpZc/uep03Y1E8/b09qDLozUdK
-         nJQqTQehm5Y3TLb0PXqT3JkBsXF4Zy7TVW/UTIz3q36eMt6WKgrUuOyUsF/Y1XC91EZw
-         24eiViZjs91V6UxnPpi57ivdwarLEKoHPpWpBL5+NMR1N3BlbOe1/wApzE3tUMyLJlUj
-         5R4d631G1EPsfVUr62TxFYnJTW8rm0XokDoifgk967Cju4pC8Wz/l6Kkfg5mHbd0u7YS
-         cLe4gyX+tih8Za1+QaI3igNTxv/URd0E45eWHiEK333e+F9L9tenBZLOJhjL/D3UpS7U
-         08TQ==
+        bh=gssihM+M8rtTCDNcGtVpYjE9CLkPBtCcmBA/WAyl/B4=;
+        b=LiNmgZN5yrkdFHW3d0xRaUzXIuoQ5Jb/DdVc+9fGaRi0J6WFotpJD1e9k542z2lkEx
+         vT4/obc4TTsLGGrQ3VoUoGaKDpRj2rUDFaW9FWg5yaf2W286AY8ILYqdLlCVANQU40G9
+         nibkCQvqjlZgzYVCQkssWAxd54AqePetWopA9Y8l1BrYdMCcrxdvcxC2oQI6W/9n8HLW
+         h/tJbNAI8j1SWiFOmI/cNzRckZqDV+mfNufFvzLjDpgK5fJCn7MN1LPhQwsc1ApOZnNx
+         kyi4OCS42Ts+Rv64/+nz+Oe4CPLr8+u4zzekcuReViV0tVmcf6ZRqMCasGyxojGF1ly6
+         wbCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770154486; x=1770759286;
+        d=1e100.net; s=20230601; t=1770154488; x=1770759288;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SJzIgisjODq9k+q4iYcmrXlk9lhsHBo7an9mjRBWdmQ=;
-        b=vq3m+VJonLWvB7CnYZBcrjtuCO7J0hOGPtL6sbSjFGlbyN56CkOQv3M5V7DXo6Ngv8
-         IISIjVIqjRojhDZOSr6aQbesmHpZQv9nFHZepQu2iGKVEcjEKppw1+JyETykiwiJE2RA
-         VW11QLSS7y4Xq6g3ZWrzPGj6d+0XJgV3T01WOgno+lDcpZjoOcsRbIik+4UN+HhX1x7Y
-         nUnvsqK+B+LfoZU8o2aUTDMzD3tR3ubzeDG/B1Fm1f8lpUfgM8IZFu2jyOkOCa1PMMWO
-         Zcstz426MZVY3R5LMin27KFPFDKcmgSaD+UCUOPHkTmUVgVyc3CIkaYRVl0eThfDBvtD
-         vfNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUdYPpLp5/+gYDN4dCH5JEufInrnQTbmvLuIMC64QVzqqxzs270R6Y94SwSr7/nmgOoDso=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUxLsBSzD55cJjUHrmaouevsSglohE/355ERRdAeAJ4r4pNtys
-	UtxOp6ym3JSCPeRCmJg/1Cag58eCaGUivwRBZB/rCKyMACcVjbXug8wXxxPkJeNZFZV15PWpFWe
-	kaFOtjA==
-X-Received: from pjbqe1.prod.google.com ([2002:a17:90b:4f81:b0:352:b687:3b20])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6b02:b0:38d:f084:e342
- with SMTP id adf61e73a8af0-39372437323mr653921637.48.1770154486339; Tue, 03
- Feb 2026 13:34:46 -0800 (PST)
-Date: Tue,  3 Feb 2026 21:30:06 +0000
+        bh=gssihM+M8rtTCDNcGtVpYjE9CLkPBtCcmBA/WAyl/B4=;
+        b=cFuRRd/2si8Capl6XytnGacTYM92fYu+8f7yan0JnQ4jM6gtztLGGWHetFyP1MzIrf
+         evtin6DkqxSVSGyJmcS4ConEVTO4FrUY3kSBG7nBBqianG55CTUY7kQgMa4T2UFKKwFG
+         kFaX3VLMH+uUoqCi3hyxWiVzSHz6tVJkL2n7+cozh9z3VG7/mHdnzUHcS0Q1HtF8PZ6t
+         txEtkCgDDRBKvUZIO//FHNDBJMmhDtVn+o07WSaR4QDQk+bJjtPr72OZH7A26eCR2xAS
+         RZ0rlR3rcXKxFYGgPiJSYzOJ+A6aGxBxi3MUM74aqrsU5fdLLNZKnR2xGeJhqyI5fXhl
+         xItw==
+X-Forwarded-Encrypted: i=1; AJvYcCUthEn0jIRqDrdd2zjdMlyYm6gv1JPlehU+FCICiB3nRAEUxF2Ne2PvTsJHxoxab1R5aqE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1FHjIyy25khr3L+hwLhn9/uLaEROJtVXbhhPscSiUUxX4UhMV
+	BVV+yB0P5jScTg/uUvZsj92eBJ1dWU8JcrxWV1KnAgcVc+BhVhtvOGC1EqIAdAzPFgyEcKWWK3Z
+	kb2gD8A==
+X-Received: from pjuj14.prod.google.com ([2002:a17:90a:d00e:b0:34a:b8e4:f1b9])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5808:b0:34f:62e7:4cf3
+ with SMTP id 98e67ed59e1d1-354870d71d3mr655645a91.10.1770154487914; Tue, 03
+ Feb 2026 13:34:47 -0800 (PST)
+Date: Tue,  3 Feb 2026 21:30:07 +0000
 In-Reply-To: <20260203213442.682838-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,44 +58,37 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260203213442.682838-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
-Message-ID: <20260203213442.682838-2-kuniyu@google.com>
-Subject: [PATCH v1 bpf-next 1/2] bpf: Use sk_is_inet() and sk_is_unix() in __cgroup_bpf_run_filter_sock_addr().
+Message-ID: <20260203213442.682838-3-kuniyu@google.com>
+Subject: [PATCH v1 bpf-next 2/2] bpf: Don't check sk_fullsock() in bpf_skc_to_unix_sock().
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: Martin KaFai Lau <martin.lau@linux.dev>, Daniel Borkmann <daniel@iogearbox.net>
 Cc: Kuniyuki Iwashima <kuniyu@google.com>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-sk->sk_family should be read with READ_ONCE() in
-__cgroup_bpf_run_filter_sock_addr() due to IPV6_ADDRFORM.
+AF_UNIX does not use TCP_NEW_SYN_RECV nor TCP_TIME_WAIT and
+checking sk->sk_family is sufficient.
 
-Also, the comment there is a bit stale since commit 859051dd165e
-("bpf: Implement cgroup sockaddr hooks for unix sockets"), and the
-kdoc has the same comment.
-
-Let's use sk_is_inet() and sk_is_unix() and remove the comment.
+Let's remove sk_fullsock() and use sk_is_unix() in
+bpf_skc_to_unix_sock().
 
 Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
 ---
- kernel/bpf/cgroup.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ net/core/filter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 69988af44b37..b029f0369ecf 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -1680,11 +1680,7 @@ int __cgroup_bpf_run_filter_sock_addr(struct sock *sk,
- 	struct cgroup *cgrp;
- 	int ret;
+diff --git a/net/core/filter.c b/net/core/filter.c
+index f04982d79d72..90bfe5a6c1db 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -12021,7 +12021,7 @@ BPF_CALL_1(bpf_skc_to_unix_sock, struct sock *, sk)
+ 	 * trigger an explicit type generation here.
+ 	 */
+ 	BTF_TYPE_EMIT(struct unix_sock);
+-	if (sk && sk_fullsock(sk) && sk->sk_family == AF_UNIX)
++	if (sk && sk_is_unix(sk))
+ 		return (unsigned long)sk;
  
--	/* Check socket family since not all sockets represent network
--	 * endpoint (e.g. AF_UNIX).
--	 */
--	if (sk->sk_family != AF_INET && sk->sk_family != AF_INET6 &&
--	    sk->sk_family != AF_UNIX)
-+	if (!sk_is_inet(sk) && !sk_is_unix(sk))
- 		return 0;
- 
- 	if (!ctx.uaddr) {
+ 	return (unsigned long)NULL;
 -- 
 2.53.0.rc2.204.g2597b5adb4-goog
 
