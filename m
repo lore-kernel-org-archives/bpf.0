@@ -1,97 +1,106 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE552F363E
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 02:53:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91D93BB57;
+	Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770087203; cv=none; b=Zc9Y9LttGcVXDF9gmz3Et2q1/AguKBvZMnADIBaCu+PjkIykUXWkbwYEMC4BuHIf8kp06bJo4nduO6kZW0rJTKPalburSsNyzKtL59T3xoyMbdLsr4+iKUmVKp8f2llQvQRr56mDgpzfQQN88U/FmEgc1n6OxpVg3WiBAf5GCcI=
+	t=1770087880; cv=none; b=LTfhr0ImI3BEvYUvdRtP6ySMrb9+1oIDrb7VPcZ+o9BP9HHHxp9cocWPfy7V86nOnnsdodcwyIY39y94cnXfWO6kg/PEiuqhMf4Ozz3PyKnfLMH4zoX/HpFKLVndfUNhNJOydqffLhHWJErUyu9+i98pEqEziyAVvZtXHhRbhLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770087203; c=relaxed/simple;
-	bh=yvKUdCnK3yUoB8MqT+FUgCo3k+bQs2RS938i4L2ErZw=;
+	s=arc-20240116; t=1770087880; c=relaxed/simple;
+	bh=bF3DlkanlLmgqm9+KmI0PQ9tzBWPxly9drKEGHNWJfE=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=aarNz/dEDzcwi0Ih3+42klrsEwru8c/6sXLNpC8gJ7jLUWNPCpRKUKzwsMjazycAdLW3B5FuZTu0nA4Oe68XrFIeTM+prwmySzbtDp8ytNU3Eel2ubPpbsLj9Qxl1NmwcrrkKHurguAFsYHHXF4lKo3t8cDKNw596xmoCmzdDCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TkymhUgg; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=gK67e5IRhBvWV6bxR+94Aj03nS53qfEhi8jhXSlssxXp1hY+iShAYQt820W7uoi8lguJvUQc0PPzMUfbMoacv5bvoqvxM32T8pHQWZ8uZBL3kuB1bZpMMPfk+kLX6aLBHk7kvj3E5D3+mfna8rl+rnxhyGVMWhbWZ8L9/S049RE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GC1MovLI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TkymhUgg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE8A6C19425;
-	Tue,  3 Feb 2026 02:53:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GC1MovLI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E774C116C6;
+	Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770087203;
-	bh=yvKUdCnK3yUoB8MqT+FUgCo3k+bQs2RS938i4L2ErZw=;
+	s=k20201202; t=1770087880;
+	bh=bF3DlkanlLmgqm9+KmI0PQ9tzBWPxly9drKEGHNWJfE=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=TkymhUggsJYRJ9aAFsLNwZxCQX2qkp7cFEttNCtsCfEw8J/8H2M3nfa4dbujOYVTi
-	 9/EzJqK6uMqvZbuVN8nEgsTvRyG9jPF3rCnQdHcTcpZ6cAifewVpmzZd7pQuUySxbY
-	 jRd+tnzA318eAt77J3pQzPlC58U1shpjwsIpms+EUET4AlsfBOnXuVK2pOvoU23D9x
-	 58pDzrPCX00X4g258NidQwUwBNvIG8fv19A9BaXtRrRp1T4wKFL02nk56ivm1hCUo5
-	 2bhrYzqlgItBbhMl1tHUHFboQJJ4y9MLX3GBetK5rXl39oe2w/fQqjc0Mn0cDjf+0P
-	 AAlLoxY6ud85Q==
-Content-Type: multipart/mixed; boundary="===============9215086658162783791=="
+	b=GC1MovLIDnCEGThK06dmsaJOKF+HvkHMsapCWVg1lrkeLN8CelHIF5fEV02YtYqbZ
+	 1TaDB/S54Pw/bx7C3Nji0NjrYNSyeIc8h+nEx3wj7RBGc5xpVIPKRfN2/U+xTKoRKn
+	 hFoDjS8OrEbgAMi7pXDABoR/JlpkPBBCQVnRMpsqgbFItxrEuqfZzL5YuTK8wrrOtN
+	 Y+DCq44BQ5+zq+s1wbnCbka7lIuoSgW51wx8LzuWgPy+yxxAGJVBt1B6LfgzKjbfBF
+	 jK9Q6IUFlVnONjSgUFth2TnyOHnnJMOmkPy/ligy3niFsy7YQX68dP/v8pFvGJOjYu
+	 SLBDUoJitEUWg==
+Content-Type: multipart/mixed; boundary="===============5018553600281611377=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <ee9a7350e136e13d16e6b5c7526beff39aa1ab555f3d815804abbecdd233e210@mail.kernel.org>
-In-Reply-To: <20260203022229.1630849-4-puranjay@kernel.org>
-References: <20260203022229.1630849-4-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v2 3/5] bpf: verifier: relax maybe_widen_reg() constraints
+Message-Id: <94483c320d8eaf29277fe60ca7d10ed70b0bb6ca636994a0eb07c26d5f139b0e@mail.kernel.org>
+In-Reply-To: <20260203022712.99347-3-pilgrimtao@gmail.com>
+References: <20260203022712.99347-3-pilgrimtao@gmail.com>
+Subject: Re: [PATCH v5 2/3] bpf/verifier: allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
 From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mykyta.yatsenko5@gmail.com,kernel-team@meta.com,andrii.nakryiko@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  3 Feb 2026 02:53:22 +0000 (UTC)
+To: pilgrimtao@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,alexei.starovoitov@gmail.com
+Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
 
---===============9215086658162783791==
+--===============5018553600281611377==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index d92e10d4c..5da1c6036 100644
+> index 2dd860ae12..bb45fa5612 100644
 > --- a/kernel/bpf/verifier.c
 > +++ b/kernel/bpf/verifier.c
+> @@ -9300,7 +9300,8 @@ static const struct bpf_reg_types timer_types = { .types = { PTR_TO_MAP_VALUE }
+>  static const struct bpf_reg_types kptr_xchg_dest_types = {
+>  	.types = {
+>  		PTR_TO_MAP_VALUE,
+> -		PTR_TO_BTF_ID | MEM_ALLOC
+> +		PTR_TO_BTF_ID | MEM_ALLOC,
+> +		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF
+>  	}
+>  };
 
-[ ... ]
+Is the MEM_RCU variant also needed here?
 
-> @@ -9023,8 +9031,7 @@ static int widen_imprecise_scalars(struct bpf_verifier_env *env,
->  		for (i = 0; i < MAX_BPF_REG; i++)
->  			maybe_widen_reg(env,
->  					&fold->regs[i],
-> -					&fcur->regs[i],
-> -					&env->idmap_scratch);
-> +					&fcur->regs[i]);
+When ref_set_non_owning() marks a register as NON_OWN_REF, it also adds
+MEM_RCU if the node has a bpf_refcount field (refcount_off >= 0):
 
-The change removes the idmap_scratch argument from maybe_widen_reg() calls,
-but widen_imprecise_scalars() still calls reset_idmap_scratch(env) at the
-start of the function. After this commit, the function looks like:
+    reg->type |= NON_OWN_REF;
+    if (rec->refcount_off >= 0)
+        reg->type |= MEM_RCU;
 
-    static int widen_imprecise_scalars(...)
-    {
-        ...
-        reset_idmap_scratch(env);      <-- this is now dead code
-        for (fr = old->curframe; fr >= 0; fr--) {
-            ...
-            maybe_widen_reg(env, ..., ...);  <-- no longer uses idmap
-            ...
-        }
-        return 0;
-    }
+This means rbtree nodes with both a __kptr field and a bpf_refcount field
+would have type PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU, which
+won't match any entry in kptr_xchg_dest_types.
 
-Should reset_idmap_scratch(env) be removed since it no longer serves any
-purpose in this function?
+Should this also add:
+
+    PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU
+
+to handle that case?
+
+> @@ -9460,6 +9461,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
+>  	}
+>  	case PTR_TO_BTF_ID | MEM_ALLOC:
+>  	case PTR_TO_BTF_ID | MEM_PERCPU | MEM_ALLOC:
+> +	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
+>  		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock &&
+>  		    meta->func_id != BPF_FUNC_kptr_xchg) {
+
+Similarly, does this switch need a case for the MEM_RCU variant?
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21614542865
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21614799102
 
 AI-authorship-score: low
-AI-authorship-explanation: The commit demonstrates deep familiarity with BPF verifier internals and uses precise domain-specific terminology naturally; the focused scope and minimal code changes are consistent with experienced kernel developer patterns.
+AI-authorship-explanation: The commit addresses a specific practical problem with minimal targeted changes, showing domain expertise typical of human kernel developers rather than AI-generated comprehensive solutions.
 issues-found: 1
 issue-severity-score: low
-issue-severity-explanation: Minor dead code issue where reset_idmap_scratch() is called but the idmap is no longer used after this change; no functional impact.
+issue-severity-explanation: Missing MEM_RCU variant may prevent bpf_kptr_xchg on refcounted rbtree nodes, but this affects only a subset of use cases and causes verifier rejection rather than runtime issues.
 
---===============9215086658162783791==--
+--===============5018553600281611377==--
