@@ -1,106 +1,88 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91D93BB57;
-	Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C3D229B1F
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 03:53:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770087880; cv=none; b=LTfhr0ImI3BEvYUvdRtP6ySMrb9+1oIDrb7VPcZ+o9BP9HHHxp9cocWPfy7V86nOnnsdodcwyIY39y94cnXfWO6kg/PEiuqhMf4Ozz3PyKnfLMH4zoX/HpFKLVndfUNhNJOydqffLhHWJErUyu9+i98pEqEziyAVvZtXHhRbhLY=
+	t=1770090822; cv=none; b=QExROz/0Y4A5270fedfIg9kdibXSh1mA1mOcEsV/hcRrR3Yj3vIj5LAYMCp2GzEIY3FT60jcgj3O7T/+6PkSIa4+7aovB9/bRd2jlaxKDTaarK3pqlEUGl/YOUDuUoFzQlN9vvIZhetoO6FgLey/ksCQeyTdDqJkbBMQk6xLwoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770087880; c=relaxed/simple;
-	bh=bF3DlkanlLmgqm9+KmI0PQ9tzBWPxly9drKEGHNWJfE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=gK67e5IRhBvWV6bxR+94Aj03nS53qfEhi8jhXSlssxXp1hY+iShAYQt820W7uoi8lguJvUQc0PPzMUfbMoacv5bvoqvxM32T8pHQWZ8uZBL3kuB1bZpMMPfk+kLX6aLBHk7kvj3E5D3+mfna8rl+rnxhyGVMWhbWZ8L9/S049RE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GC1MovLI; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770090822; c=relaxed/simple;
+	bh=/QdirBqH01e+R56tuG0CRglKlnNLc2IU1d3Qfjfv9nY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lq2U8FKOsj1TrbHikE1kuB0O0aZipjSr7F7BJdrkicpo/PHQVr1FwiCsLA/3cuIqSiZoMvy/skZp2w1dPNlsd5O4+AxeV0GH3tzU85OGN2X65rUVNgh6S4jJ/4NaOFkS/WCuL+rBbBnnZUJX+8gxMbbgcObYNyAxIcdofQK7NbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P/UIDVMu; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GC1MovLI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E774C116C6;
-	Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770087880;
-	bh=bF3DlkanlLmgqm9+KmI0PQ9tzBWPxly9drKEGHNWJfE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=GC1MovLIDnCEGThK06dmsaJOKF+HvkHMsapCWVg1lrkeLN8CelHIF5fEV02YtYqbZ
-	 1TaDB/S54Pw/bx7C3Nji0NjrYNSyeIc8h+nEx3wj7RBGc5xpVIPKRfN2/U+xTKoRKn
-	 hFoDjS8OrEbgAMi7pXDABoR/JlpkPBBCQVnRMpsqgbFItxrEuqfZzL5YuTK8wrrOtN
-	 Y+DCq44BQ5+zq+s1wbnCbka7lIuoSgW51wx8LzuWgPy+yxxAGJVBt1B6LfgzKjbfBF
-	 jK9Q6IUFlVnONjSgUFth2TnyOHnnJMOmkPy/ligy3niFsy7YQX68dP/v8pFvGJOjYu
-	 SLBDUoJitEUWg==
-Content-Type: multipart/mixed; boundary="===============5018553600281611377=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P/UIDVMu"
+Message-ID: <6de6f1bf-c8ee-4dfb-9b8c-f89185946630@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770090809;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bEfhLzilj+zuoWEbJFfe5YutaKh7xj1E7i6hGBHvYBg=;
+	b=P/UIDVMukq1agKL/sg/WgshpY1NyVrVhwlaDyeUWNC+PxjScKbj1Y4+SNl6fWmsCktaKc0
+	jUlftRPXxl/MkkrPlCxlsZsimoHPjzgvIHhj/eA9AyKo7lDEQJKGPV2dgfQ8IfptWRrg30
+	YU+pYjlefRbic0gxVjFivjK9oua0Opk=
+Date: Mon, 2 Feb 2026 19:53:20 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <94483c320d8eaf29277fe60ca7d10ed70b0bb6ca636994a0eb07c26d5f139b0e@mail.kernel.org>
-In-Reply-To: <20260203022712.99347-3-pilgrimtao@gmail.com>
-References: <20260203022712.99347-3-pilgrimtao@gmail.com>
-Subject: Re: [PATCH v5 2/3] bpf/verifier: allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
-From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,alexei.starovoitov@gmail.com
-Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue,  3 Feb 2026 03:04:40 +0000 (UTC)
-
---===============5018553600281611377==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
+ update
+To: Michal Luczaj <mhal@rbox.co>, Kuniyuki Iwashima <kuniyu@google.com>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+ Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260129-unix-proto-update-null-ptr-deref-v1-1-e1daeb7012fd@rbox.co>
+ <3fc5611f-394f-40db-b49d-2f26402e221a@linux.dev>
+ <3362017f-9c3d-46cd-b3ce-cb750b565d5b@rbox.co>
+ <612a9446-252f-4b14-8605-ae1af000cc41@linux.dev>
+ <CAAVpQUAc3S+Ebx2qp-Pbg9qH-Zc=yHdzVJbchCu++V_4XF3DLg@mail.gmail.com>
+ <b98a40e8-1be2-47f0-8238-92dee8f5a204@rbox.co>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <b98a40e8-1be2-47f0-8238-92dee8f5a204@rbox.co>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 2dd860ae12..bb45fa5612 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9300,7 +9300,8 @@ static const struct bpf_reg_types timer_types = { .types = { PTR_TO_MAP_VALUE }
->  static const struct bpf_reg_types kptr_xchg_dest_types = {
->  	.types = {
->  		PTR_TO_MAP_VALUE,
-> -		PTR_TO_BTF_ID | MEM_ALLOC
-> +		PTR_TO_BTF_ID | MEM_ALLOC,
-> +		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF
->  	}
->  };
+On 2/2/26 7:10 AM, Michal Luczaj wrote:
+>>> Other than update_elem, do other lock_sock() usages in sock_map have a
+>>> similar issue for af_unix?
+> As for the sockmap, I think that would be it.
 
-Is the MEM_RCU variant also needed here?
+Thanks for checking.
 
-When ref_set_non_owning() marks a register as NON_OWN_REF, it also adds
-MEM_RCU if the node has a bpf_refcount field (refcount_off >= 0):
+> 
+> In related news, looks like bpf_iter_unix_seq_show() is missing
+> unix_state_lock(): lock_sock_fast() won't stop unix_release_sock(). E.g.
+> bpf iterator can grab unix_sock::peer as it is being released.
 
-    reg->type |= NON_OWN_REF;
-    if (rec->refcount_off >= 0)
-        reg->type |= MEM_RCU;
+If the concern is the bpf iterator prog may use a released unix_peer(sk) 
+pointer, it should be fine. The unix_peer(sk) pointer is not a trusted 
+pointer to the bpf prog, so nothing bad will happen other than 
+potentially reading incorrect values.
 
-This means rbtree nodes with both a __kptr field and a bpf_refcount field
-would have type PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU, which
-won't match any entry in kptr_xchg_dest_types.
+However, yeah, the bpf_iter_(tcp|udp)_seq_show is better in the sense 
+that the correct lock is used.
 
-Should this also add:
+For tcp_sock that has many stats, I think it will be particularly useful 
+to read them in a consistent state. I don't have a strong opinion on 
+af_unix.
 
-    PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU
+Unlike the sock_map where the lock_sock is not useful for af_unix. The 
+bpf iterator can do bpf_setsockopt, so a lock_sock_fast() is still 
+needed in bpf_iter_unix_seq_show and I think it is the reason 
+lock_sock_fast() is used here.
 
-to handle that case?
-
-> @@ -9460,6 +9461,7 @@ static int check_reg_type(struct bpf_verifier_env *env, u32 regno,
->  	}
->  	case PTR_TO_BTF_ID | MEM_ALLOC:
->  	case PTR_TO_BTF_ID | MEM_PERCPU | MEM_ALLOC:
-> +	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
->  		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock &&
->  		    meta->func_id != BPF_FUNC_kptr_xchg) {
-
-Similarly, does this switch need a case for the MEM_RCU variant?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21614799102
-
-AI-authorship-score: low
-AI-authorship-explanation: The commit addresses a specific practical problem with minimal targeted changes, showing domain expertise typical of human kernel developers rather than AI-generated comprehensive solutions.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Missing MEM_RCU variant may prevent bpf_kptr_xchg on refcounted rbtree nodes, but this affects only a subset of use cases and causes verifier rejection rather than runtime issues.
-
---===============5018553600281611377==--
