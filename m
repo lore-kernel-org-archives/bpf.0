@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC05396D09;
-	Tue,  3 Feb 2026 09:39:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B12B2C08D1;
+	Tue,  3 Feb 2026 09:40:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770111599; cv=none; b=BzQ8bWF8VwXODHVHa+nZTDReJdyrkKQv6sZEPIOee86OcVY7JBLDDvUXrbaQIxc1TLwIK72KKqoM7K3hfd1gqWlZn6wieRx8YVw8ycDJWqEWJWHqYdnaOoDDUuQGuihJF6QmiJcTrwaC2V6eT6cbodNxXAF5p2DOHxNlHEoOhH8=
+	t=1770111609; cv=none; b=BzSO8EbaLOUxcsyrBsMvI0AuEHhgKVc5MJtemHk6DeowUSj2a/0hUdboZowUY1jcOjQQ30pVD+x/gtJjxpdaEZYeXP/YJsb+rI+/cFr01H73ByqLq9xy+jNXsN8J1ZZjet800+zQO2miv6kST8Rt+ycszRt9t0kuUZmDUAwhufE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770111599; c=relaxed/simple;
-	bh=kZu+SSQDBT2V2LKXbOy4/q56K0pnhnO4CKWfwwwT5QA=;
+	s=arc-20240116; t=1770111609; c=relaxed/simple;
+	bh=gb2ktjdb6StmFJyWY47SG5vU5JdFXCuvzyNMn5eKSgA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AAgtylYojyPWxGmXFZpIlyO1qRa2sL4MQBOMW2kDNqKNLvfAO/5PeuvG33SVoTaOpySLTO160aLJSDCYlyhJ9A5Hhkp252+j1Ke0GJgp6L3XIJTnHxmSHS+lN6RjClFXMpavGXGtIoYF36wy7SApDaHELVbtmbdNJfYjz8guksM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YF8AugBn; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=uyk2vnBk74B7D4yFIflKUE7hMOg7idySvYGgishCUsJKoYLEULyuhcG0roPc+4Xg7n8/JpJdHaffNa3LdYDtmKn+vsXz9ZdVIodOwmsluDFJAMUcttZF/OvIbUmr4mFKj99gl8hOABJBwP91JrVEMc5te8QNGDtMwBlgbky6sB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pV2G5hxf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YF8AugBn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7436C116D0;
-	Tue,  3 Feb 2026 09:39:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pV2G5hxf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59402C116D0;
+	Tue,  3 Feb 2026 09:40:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770111599;
-	bh=kZu+SSQDBT2V2LKXbOy4/q56K0pnhnO4CKWfwwwT5QA=;
+	s=k20201202; t=1770111608;
+	bh=gb2ktjdb6StmFJyWY47SG5vU5JdFXCuvzyNMn5eKSgA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YF8AugBn4i7deEfjS5olATUvy+E5h8ChNnbplR1xFAT1L3AqRfeZZk9bMZjGdkLZW
-	 7l2f84rAAYIlCGZBuMZ61mX4khQoKB9dlvUUdel7QA+HR8rn/HN4BHFTQMCgS/2MQW
-	 l8YCbQeQuPJimdOC9qFfJWFGPXAC2EYyzC+1ih4gz7svV6aJb9y+A9vWnFxZT64bxm
-	 IE1yA7xBmXS52tz0LP+IxGjRcbXgyyhVY5R60tFznyI1JbkY2FKAw/vRP5plfsqfMf
-	 asPkm16rH6hADCwRvE3p3UNpfLQYmHVONyOgnx6QGMNKGoJrLO04mMrqzavn/ySr0c
-	 jj85fB60eu3jw==
+	b=pV2G5hxflOFPJDSTTUDs+atExGJA+ZNFjnKM6y0n8C46kh7W//GG9wki6ytdu3dwV
+	 tE7iaSFXsaorPEnwVAFG4sPZuNtKJdrDHZzLSonpIgeTUku4xfw0Jsr7DhQ8zd3Vl6
+	 G1Jy8KP+G5i47Z3WDO/2UjEy/hXRPID+Yl0H1oBAJwzLZdLdNxds9QPqw3w7dkbzdD
+	 ke5UdluvNQkGzsWSUkZ9hPiHRLQeLL03IFc2RhobTJPVM4+bXSoAfX2TPud1DWWqjh
+	 9DYVTTz3joKW3J/qJW6lcUvI/krptq8c+KyG9/EdRLx2kR/741fciil1dxtqqVLEbr
+	 1cP4Mf6HAovow==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [RFC bpf-next 09/12] libbpf: Add support to create tracing multi link
-Date: Tue,  3 Feb 2026 10:38:16 +0100
-Message-ID: <20260203093819.2105105-10-jolsa@kernel.org>
+Subject: [RFC bpf-next 10/12] selftests/bpf: Add fentry tracing multi func test
+Date: Tue,  3 Feb 2026 10:38:17 +0100
+Message-ID: <20260203093819.2105105-11-jolsa@kernel.org>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260203093819.2105105-1-jolsa@kernel.org>
 References: <20260203093819.2105105-1-jolsa@kernel.org>
@@ -52,227 +52,260 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding new interface function to attach programs with tracing
-multi link:
+Adding selftest for fentry multi func test that attaches to
+bpf_fentry_test* functions and checks argument values based
+on the processed function.
 
-  bpf_program__attach_tracing_multi(const struct bpf_program *prog,
-                                    const char *pattern,
-                                    const struct bpf_tracing_multi_opts *opts);
-
-The program is attach to functions specified by pattern or by
-btf IDs specified in bpf_tracing_multi_opts object.
-
-Adding support for new sections to attach programs with above
-functions:
-
-   fentry.multi/pattern
-   fexit.multi/pattern
+We need to cast to real arguments types in multi_arg_check,
+because the checked value can be shorter than u64.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/bpf.c      |  7 ++++
- tools/lib/bpf/bpf.h      |  4 ++
- tools/lib/bpf/libbpf.c   | 87 ++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   | 14 +++++++
- tools/lib/bpf/libbpf.map |  1 +
- 5 files changed, 113 insertions(+)
+ tools/testing/selftests/bpf/Makefile          |   3 +-
+ .../selftests/bpf/prog_tests/tracing_multi.c  |  48 +++++++
+ .../selftests/bpf/progs/tracing_multi_check.c | 132 ++++++++++++++++++
+ .../bpf/progs/tracing_multi_fentry.c          |  17 +++
+ 4 files changed, 199 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_check.c
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_fentry.c
 
-diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
-index 5846de364209..cee1fc6bbfd6 100644
---- a/tools/lib/bpf/bpf.c
-+++ b/tools/lib/bpf/bpf.c
-@@ -790,6 +790,13 @@ int bpf_link_create(int prog_fd, int target_fd,
- 		if (!OPTS_ZEROED(opts, uprobe_multi))
- 			return libbpf_err(-EINVAL);
- 		break;
-+	case BPF_TRACE_FENTRY_MULTI:
-+	case BPF_TRACE_FEXIT_MULTI:
-+		attr.link_create.tracing_multi.btf_ids = (__u64) OPTS_GET(opts, tracing_multi.btf_ids, 0);
-+		attr.link_create.tracing_multi.btf_ids_cnt = OPTS_GET(opts, tracing_multi.btf_ids_cnt, 0);
-+		if (!OPTS_ZEROED(opts, tracing_multi))
-+			return libbpf_err(-EINVAL);
-+		break;
- 	case BPF_TRACE_RAW_TP:
- 	case BPF_TRACE_FENTRY:
- 	case BPF_TRACE_FEXIT:
-diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
-index 2c8e88ddb674..005f884f9a0c 100644
---- a/tools/lib/bpf/bpf.h
-+++ b/tools/lib/bpf/bpf.h
-@@ -454,6 +454,10 @@ struct bpf_link_create_opts {
- 			__u32 relative_id;
- 			__u64 expected_revision;
- 		} cgroup;
-+		struct {
-+			__u32 *btf_ids;
-+			__u32  btf_ids_cnt;
-+		} tracing_multi;
- 	};
- 	size_t :0;
- };
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0c8bf0b5cce4..a16243300083 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -136,6 +136,8 @@ static const char * const attach_type_name[] = {
- 	[BPF_NETKIT_PEER]		= "netkit_peer",
- 	[BPF_TRACE_KPROBE_SESSION]	= "trace_kprobe_session",
- 	[BPF_TRACE_UPROBE_SESSION]	= "trace_uprobe_session",
-+	[BPF_TRACE_FENTRY_MULTI]	= "trace_fentry_multi",
-+	[BPF_TRACE_FEXIT_MULTI]		= "trace_fexit_multi",
- };
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index c6bf4dfb1495..b12d7b0e7828 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -481,7 +481,7 @@ SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
+ LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
+ 		linked_vars.skel.h linked_maps.skel.h 			\
+ 		test_subskeleton.skel.h test_subskeleton_lib.skel.h	\
+-		test_usdt.skel.h
++		test_usdt.skel.h tracing_multi_fentry_test.skel.h
  
- static const char * const link_type_name[] = {
-@@ -154,6 +156,7 @@ static const char * const link_type_name[] = {
- 	[BPF_LINK_TYPE_UPROBE_MULTI]		= "uprobe_multi",
- 	[BPF_LINK_TYPE_NETKIT]			= "netkit",
- 	[BPF_LINK_TYPE_SOCKMAP]			= "sockmap",
-+	[BPF_LINK_TYPE_TRACING_MULTI]		= "tracing_multi",
- };
+ LSKELS := fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c 	\
+ 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
+@@ -507,6 +507,7 @@ test_usdt.skel.h-deps := test_usdt.bpf.o test_usdt_multispec.bpf.o
+ xsk_xdp_progs.skel.h-deps := xsk_xdp_progs.bpf.o
+ xdp_hw_metadata.skel.h-deps := xdp_hw_metadata.bpf.o
+ xdp_features.skel.h-deps := xdp_features.bpf.o
++tracing_multi_fentry_test.skel.h-deps := tracing_multi_fentry.bpf.o tracing_multi_check.bpf.o
  
- static const char * const map_type_name[] = {
-@@ -9814,6 +9817,7 @@ static int attach_kprobe_session(const struct bpf_program *prog, long cookie, st
- static int attach_uprobe_multi(const struct bpf_program *prog, long cookie, struct bpf_link **link);
- static int attach_lsm(const struct bpf_program *prog, long cookie, struct bpf_link **link);
- static int attach_iter(const struct bpf_program *prog, long cookie, struct bpf_link **link);
-+static int attach_tracing_multi(const struct bpf_program *prog, long cookie, struct bpf_link **link);
- 
- static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("socket",		SOCKET_FILTER, 0, SEC_NONE),
-@@ -9862,6 +9866,8 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("fexit.s+",		TRACING, BPF_TRACE_FEXIT, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
- 	SEC_DEF("fsession+",		TRACING, BPF_TRACE_FSESSION, SEC_ATTACH_BTF, attach_trace),
- 	SEC_DEF("fsession.s+",		TRACING, BPF_TRACE_FSESSION, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
-+	SEC_DEF("fentry.multi+",	TRACING, BPF_TRACE_FENTRY_MULTI, 0, attach_tracing_multi),
-+	SEC_DEF("fexit.multi+",		TRACING, BPF_TRACE_FEXIT_MULTI, 0, attach_tracing_multi),
- 	SEC_DEF("freplace+",		EXT, 0, SEC_ATTACH_BTF, attach_trace),
- 	SEC_DEF("lsm+",			LSM, BPF_LSM_MAC, SEC_ATTACH_BTF, attach_lsm),
- 	SEC_DEF("lsm.s+",		LSM, BPF_LSM_MAC, SEC_ATTACH_BTF | SEC_SLEEPABLE, attach_lsm),
-@@ -12237,6 +12243,87 @@ static int attach_uprobe_multi(const struct bpf_program *prog, long cookie, stru
- 	return ret;
- }
- 
-+struct bpf_link *
-+bpf_program__attach_tracing_multi(const struct bpf_program *prog, const char *pattern,
-+				  const struct bpf_tracing_multi_opts *opts)
+ LINKED_BPF_OBJS := $(foreach skel,$(LINKED_SKELS),$($(skel)-deps))
+ LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.c,$(LINKED_BPF_OBJS))
+diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+new file mode 100644
+index 000000000000..6d45147f0730
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+@@ -0,0 +1,48 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++
++#ifdef __x86_64__
++#include "tracing_multi_fentry_test.skel.h"
++#include "trace_helpers.h"
++
++static void multi_fentry_test(void)
 +{
-+	LIBBPF_OPTS(bpf_link_create_opts, lopts);
-+	__u32 *btf_ids, cnt, *free_ids = NULL;
-+	int prog_fd, link_fd, err;
-+	struct bpf_link *link;
++	LIBBPF_OPTS(bpf_test_run_opts, topts);
++	struct tracing_multi_fentry_test *skel = NULL;
++	int err, prog_fd;
 +
-+	btf_ids = OPTS_GET(opts, btf_ids, false);
-+	cnt = OPTS_GET(opts, cnt, false);
++	skel = tracing_multi_fentry_test__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "fentry_multi_skel_load"))
++		goto cleanup;
 +
-+	if (!pattern && !btf_ids && !cnt)
-+		return libbpf_err_ptr(-EINVAL);
-+	if (pattern && (btf_ids || cnt))
-+		return libbpf_err_ptr(-EINVAL);
++	err = tracing_multi_fentry_test__attach(skel);
++	if (!ASSERT_OK(err, "fentry_attach"))
++		goto cleanup;
 +
-+	if (pattern) {
-+		err = bpf_object__load_vmlinux_btf(prog->obj, true);
-+		if (err)
-+			return libbpf_err_ptr(err);
++	prog_fd = bpf_program__fd(skel->progs.test);
++	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	ASSERT_OK(err, "test_run");
 +
-+		cnt = btf__find_by_glob_kind(prog->obj->btf_vmlinux, BTF_KIND_FUNC,
-+					     pattern, NULL, &btf_ids);
-+		if (cnt <= 0)
-+			return libbpf_err_ptr(-EINVAL);
-+		free_ids = btf_ids;
-+	}
++	ASSERT_EQ(skel->bss->test_result_1, 8, "test_result");
 +
-+	lopts.tracing_multi.btf_ids = btf_ids;
-+	lopts.tracing_multi.btf_ids_cnt = cnt;
-+
-+	link = calloc(1, sizeof(*link));
-+	if (!link)
-+		return libbpf_err_ptr(-ENOMEM);
-+	link->detach = &bpf_link__detach_fd;
-+
-+	prog_fd = bpf_program__fd(prog);
-+	link_fd = bpf_link_create(prog_fd, 0, prog->expected_attach_type, &lopts);
-+	if (link_fd < 0) {
-+		err = -errno;
-+		pr_warn("prog '%s': failed to attach: %s\n", prog->name, errstr(err));
-+		goto error;
-+	}
-+	link->fd = link_fd;
-+	free(free_ids);
-+	return link;
-+error:
-+	free(link);
-+	free(free_ids);
-+	return libbpf_err_ptr(err);
++cleanup:
++	tracing_multi_fentry_test__destroy(skel);
 +}
 +
-+static int attach_tracing_multi(const struct bpf_program *prog, long cookie, struct bpf_link **link)
++void __test_tracing_multi_test(void)
 +{
-+	const char *spec;
-+	char *pattern;
-+	bool is_fexit;
-+	int n;
-+
-+	/* no auto-attach for SEC("fentry.multi") and SEC("fexit.multi") */
-+	if (strcmp(prog->sec_name, "fentry.multi") == 0 ||
-+	    strcmp(prog->sec_name, "fexit.multi") == 0)
-+		return 0;
-+
-+	is_fexit = str_has_pfx(prog->sec_name, "fexit.multi/");
-+	if (is_fexit)
-+		spec = prog->sec_name + sizeof("fexit.multi/") - 1;
-+	else
-+		spec = prog->sec_name + sizeof("fentry.multi/") - 1;
-+
-+	n = sscanf(spec, "%m[a-zA-Z0-9_.*?]", &pattern);
-+	if (n < 1) {
-+		pr_warn("tracing multi pattern is invalid: %s\n", pattern);
-+		return -EINVAL;
-+	}
-+
-+	*link = bpf_program__attach_tracing_multi(prog, pattern, NULL);
-+	return libbpf_get_error(*link);
++	if (test__start_subtest("fentry/simple"))
++		multi_fentry_test();
 +}
++#else
++void __test_tracing_multi_test(void)
++{
++	test__skip();
++}
++#endif /* __x86_64__ */
 +
- static inline int add_uprobe_event_legacy(const char *probe_name, bool retprobe,
- 					  const char *binary_path, size_t offset)
- {
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index dfc37a615578..fa74a88f6c4a 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -701,6 +701,20 @@ bpf_program__attach_ksyscall(const struct bpf_program *prog,
- 			     const char *syscall_name,
- 			     const struct bpf_ksyscall_opts *opts);
- 
-+struct bpf_tracing_multi_opts {
-+	/* size of this struct, for forward/backward compatibility */
-+	size_t sz;
-+	__u32 *btf_ids;
-+	size_t cnt;
-+	size_t :0;
-+};
++void test_tracing_multi_test(void)
++{
++	__test_tracing_multi_test();
++}
+diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_check.c b/tools/testing/selftests/bpf/progs/tracing_multi_check.c
+new file mode 100644
+index 000000000000..e5efa9884dfd
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_multi_check.c
+@@ -0,0 +1,132 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
 +
-+#define bpf_tracing_multi_opts__last_field cnt
++extern const void bpf_fentry_test1 __ksym;
++extern const void bpf_fentry_test2 __ksym;
++extern const void bpf_fentry_test3 __ksym;
++extern const void bpf_fentry_test4 __ksym;
++extern const void bpf_fentry_test5 __ksym;
++extern const void bpf_fentry_test6 __ksym;
++extern const void bpf_fentry_test7 __ksym;
++extern const void bpf_fentry_test8 __ksym;
 +
-+LIBBPF_API struct bpf_link *
-+bpf_program__attach_tracing_multi(const struct bpf_program *prog, const char *pattern,
-+				  const struct bpf_tracing_multi_opts *opts);
++void multi_arg_check(__u64 *ctx, __u64 *test_result)
++{
++	void *ip = (void *) bpf_get_func_ip(ctx);
++	__u64 value = 0;
 +
- struct bpf_uprobe_opts {
- 	/* size of this struct, for forward/backward compatibility */
- 	size_t sz;
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index d18fbcea7578..a3ffb21270e9 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -358,6 +358,7 @@ LIBBPF_1.0.0 {
- 		bpf_program__attach_ksyscall;
- 		bpf_program__autoattach;
- 		bpf_program__set_autoattach;
-+		bpf_program__attach_tracing_multi;
- 		btf__add_enum64;
- 		btf__add_enum64_value;
- 		libbpf_bpf_attach_type_str;
++	if (ip == &bpf_fentry_test1) {
++		int a;
++
++		if (bpf_get_func_arg(ctx, 0, &value))
++			return;
++		a = (int) value;
++
++		*test_result += a == 1;
++	} else if (ip == &bpf_fentry_test2) {
++		__u64 b;
++		int a;
++
++		if (bpf_get_func_arg(ctx, 0, &value))
++			return;
++		a = (int) value;
++		if (bpf_get_func_arg(ctx, 1, &value))
++			return;
++		b = value;
++
++		*test_result += a == 2 && b == 3;
++	} else if (ip == &bpf_fentry_test3) {
++		char a, b;
++		__u64 c;
++
++		if (bpf_get_func_arg(ctx, 0, &value))
++			return;
++		a = (int) value;
++		if (bpf_get_func_arg(ctx, 1, &value))
++			return;
++		b = (int) value;
++		if (bpf_get_func_arg(ctx, 2, &value))
++			return;
++		c = value;
++
++		*test_result += a == 4 && b == 5 && c == 6;
++	} else if (ip == &bpf_fentry_test4) {
++		void *a;
++		char b;
++		int c;
++		__u64 d;
++
++		if (bpf_get_func_arg(ctx, 0, &value))
++			return;
++		a = (void*) value;
++		if (bpf_get_func_arg(ctx, 1, &value))
++			return;
++		b = (char) value;
++		if (bpf_get_func_arg(ctx, 2, &value))
++			return;
++		c = (int) value;
++		if (bpf_get_func_arg(ctx, 3, &value))
++			return;
++		d = value;
++
++		*test_result += a == (void *) 7 && b == 8 && c == 9 && d == 10;
++	} else if (ip == &bpf_fentry_test5) {
++		__u64 a;
++		void *b;
++		short c;
++		int d;
++		__u64 e;
++
++		if (bpf_get_func_arg(ctx, 0, &value))
++			return;
++		a = value;
++		if (bpf_get_func_arg(ctx, 1, &value))
++			return;
++		b = (void*) value;
++		if (bpf_get_func_arg(ctx, 2, &value))
++			return;
++		c = (short) value;
++		if (bpf_get_func_arg(ctx, 3, &value))
++			return;
++		d = (int) value;
++		if (bpf_get_func_arg(ctx, 4, &value))
++			return;
++		e = value;
++
++		*test_result += a == 11 && b == (void *) 12 && c == 13 && d == 14 && e == 15;
++	} else if (ip == &bpf_fentry_test6) {
++		__u64 a;
++		void *b;
++		short c;
++		int d;
++		void *e;
++		__u64 f;
++
++		if (bpf_get_func_arg(ctx, 0, &value))
++			return;
++		a = value;
++		if (bpf_get_func_arg(ctx, 1, &value))
++			return;
++		b = (void*) value;
++		if (bpf_get_func_arg(ctx, 2, &value))
++			return;
++		c = (short) value;
++		if (bpf_get_func_arg(ctx, 3, &value))
++			return;
++		d = (int) value;
++		if (bpf_get_func_arg(ctx, 4, &value))
++			return;
++		e = (void*) value;;
++		if (bpf_get_func_arg(ctx, 5, &value))
++			return;
++		f = value;;
++
++		*test_result += a == 16 && b == (void *) 17 && c == 18 && d == 19 && e == (void *) 20 && f == 21;
++	} else if (ip == &bpf_fentry_test7) {
++		*test_result += 1;
++	} else if (ip == &bpf_fentry_test8) {
++		*test_result += 1;
++	}
++}
+diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_fentry.c b/tools/testing/selftests/bpf/progs/tracing_multi_fentry.c
+new file mode 100644
+index 000000000000..628734596114
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/tracing_multi_fentry.c
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++char _license[] SEC("license") = "GPL";
++
++__u64 test_result_1 = 0;
++
++__hidden extern void multi_arg_check(__u64 *ctx, __u64 *test_result);
++
++SEC("fentry.multi/bpf_fentry_test*")
++int BPF_PROG(test, __u64 a, __u64 b, __u64 c, __u64 d, __u64 e, __u64 f)
++{
++	multi_arg_check(ctx, &test_result_1);
++	return 0;
++}
 -- 
 2.52.0
 
