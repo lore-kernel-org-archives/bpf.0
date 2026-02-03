@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73B6636680B
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 22:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 787B7369208
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 22:27:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770157658; cv=none; b=o9WqSTefdnKZjevcVUUvpJZ7ZT70pgkcD9k6mFKS48DfIqtN1W1NFY4B/16xO4OXfgXXRMCEyEAs9iKXQShbVgBwtegyO8v5fxERZSqGIxQB5jhu+if8JgWt0bRTw2dMwBjCLs67+jykTeS80OUULUklnp+saiFauckA/en6bdw=
+	t=1770157664; cv=none; b=ZdTbrVJdt24JaaopWUU+kR1JObkUN9FB+yNCE8cyD8OWRlrVPti2AoKGf32sZw4EcpRHD5TSkxVc65mXFVJn4D1t3g9+4HRlhDz7/7ItEIAtzdupLioN9r1woYyntw8t7N8OlbArahiH0FHnE53LQEXNN+7cPQF1pC6Rlh4qMrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770157658; c=relaxed/simple;
-	bh=d6q+fWBRhZhBrbM8oPNbowV+1k9cfHPpNOowg2e01Xo=;
+	s=arc-20240116; t=1770157664; c=relaxed/simple;
+	bh=lgrudMdKvy3b6NrRagQ+ewFklMMPEm3FgR6V7s/Zn2k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=r4REgvyJwzV7KXCwlM2W6jEBP/xeyQuAiAwLviOFxeynBhwMuk73SauK+Nawbs/BsBAIxx0k2zDOd4vurxB+Wl9UIXF7JPFOAsJiOhgm9CzGFoeVEkX9NifiLzPqqLXYIJ6FVLEh0Tb47MCJh16K2D1uoV/H2Qdcgwqggytxpwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PGWXwkwu; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=b+wDHzTlakuhKXmQ349MXOPMgMNu4FEDEvlo4fRqQct1/y0FCXQOtT/KwpanTFT4+Ukc8ZV2jLqno13ihVV7vrPTdW+4FXmdxN81RrkYEHpiZ1W+gSwvLZ3au/yHDU+8J0X7wNV869LQX5w0TYM9zMuNX3XNLB8QZN3a5Zq0kak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SPG+kvy+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PGWXwkwu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E304EC116D0;
-	Tue,  3 Feb 2026 22:27:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SPG+kvy+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B06C116D0;
+	Tue,  3 Feb 2026 22:27:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770157658;
-	bh=d6q+fWBRhZhBrbM8oPNbowV+1k9cfHPpNOowg2e01Xo=;
+	s=k20201202; t=1770157664;
+	bh=lgrudMdKvy3b6NrRagQ+ewFklMMPEm3FgR6V7s/Zn2k=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=PGWXwkwuUg66R2Al704EzOMMp9cwt2/xzZ4KK6aSTNaKGd5Bv7mDa6uZyVXGS2BND
-	 gV3GDSesGFy58Ndglfk9GfpdxbMxmIXFyeSh2NGGej95EXWb545doSssgLNlSEFk86
-	 7ak9VfvaW7Sa3ZzHew7yvlw73Mhbezk/iq/gp3mjx4Ecd/V1lQL03JpyJneyI+aYna
-	 tMiXOsE+UWZtRLxeyzCXKTTiXrcSNPoTosMnlqhdzncLiL1jILebzHZNNjWKVCQXCf
-	 SbReUo8BSngDJvYszFU0lxN+SpTzB29JeIsRmX/2u1Bw+K1qtNhtJbHhTjqufh7uxq
-	 7R+YubkMwmt7w==
+	b=SPG+kvy+IESbT4u1YFGYkANMcaIw1zD7z+yTxIKhcCcmCR0bUfUiKwBr1y3ZTy69o
+	 Tvq2n34PB8EIKoem25V36A6uIT6ffK8CYbMb4DcW3TjTAMmSvkMrcethu9bP0OGFhe
+	 3IJ1rLEB4KZkkttny3QSO0CxPo+ceXqNmaDP/YyaNBEXI56HCsay2mZQOTvx8LW4Vx
+	 7Pef7Jcy3zAROWPdwC5HcJMGSVEFFapKBRC0h02YrutjUOq8tyTUSJsrXx7MslPcMv
+	 yAgeNjCSEP6fFp0wsSE/V3xh95eXJbJVs1zqO3hC7DzlXApzXYKcDfnTpoUX5NCUat
+	 Uc53bM4yKK59w==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -38,9 +38,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 1/2] bpf: Support negative offsets, BPF_SUB, and alu32 for linked register tracking
-Date: Tue,  3 Feb 2026 14:26:17 -0800
-Message-ID: <20260203222643.994713-2-puranjay@kernel.org>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add tests for improved linked register tracking
+Date: Tue,  3 Feb 2026 14:26:18 -0800
+Message-ID: <20260203222643.994713-3-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260203222643.994713-1-puranjay@kernel.org>
 References: <20260203222643.994713-1-puranjay@kernel.org>
@@ -52,157 +52,338 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Previously, the verifier only tracked positive constant deltas between
-linked registers using BPF_ADD. This limitation meant patterns like:
-
-  r1 = r0;
-  r1 += -4;
-  if r1 s>= 0 goto l0_%=;   // r1 >= 0 implies r0 >= 4
-  // verifier couldn't propagate bounds back to r0
-  if r0 != 0 goto l0_%=;
-	r0 /= 0; // Verifier thinks this is reachable
-  l0_%=:
-
-Similar limitation exists for 32-bit registers.
-
-With this change, the verifier can now track negative deltas in reg->off
-enabling bound propagation for the above pattern.
-
-For alu32, we make sure the destination register has the upper 32 bits
-as 0s before creating the link. BPF_ADD_CONST is split into
-BPF_ADD_CONST64 and BPF_ADD_CONST32, the latter is used in case of alu32
-and sync_linked_regs uses this to zext the result if known_reg has this
-flag.
+Add tests for linked register tracking with negative offsets, BPF_SUB,
+and alu32. These test for all edge cases like overflows, etc.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- include/linux/bpf_verifier.h                  |  6 ++-
- kernel/bpf/verifier.c                         | 49 ++++++++++++++-----
- .../selftests/bpf/progs/verifier_bounds.c     |  2 +-
- 3 files changed, 44 insertions(+), 13 deletions(-)
+ .../bpf/progs/verifier_linked_scalars.c       | 300 +++++++++++++++++-
+ 1 file changed, 298 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 746025df82c8..ef8e45a362d9 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -147,8 +147,12 @@ struct bpf_reg_state {
- 	 * registers. Example:
- 	 * r1 = r2;    both will have r1->id == r2->id == N
- 	 * r1 += 10;   r1->id == N | BPF_ADD_CONST and r1->off == 10
-+	 * r3 = r2;    both will have r3->id == r2->id == N
-+	 * w3 += 10;   r3->id == N | BPF_ADD_CONST32 and r3->off == 10
- 	 */
--#define BPF_ADD_CONST (1U << 31)
-+#define BPF_ADD_CONST64 (1U << 31)
-+#define BPF_ADD_CONST32 (1U << 30)
-+#define BPF_ADD_CONST (BPF_ADD_CONST64 | BPF_ADD_CONST32)
- 	u32 id;
- 	/* PTR_TO_SOCKET and PTR_TO_TCP_SOCK could be a ptr returned
- 	 * from a pointer-cast helper, bpf_sk_fullsock() and
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6a616dc4dc54..7f73f73adfe0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -16122,6 +16122,13 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 		verbose(env, "verifier internal error: no src_reg\n");
- 		return -EFAULT;
- 	}
-+	/*
-+	 * For alu32 linked register tracking, we need to check dst_reg's
-+	 * umax_value before the ALU operation. After adjust_scalar_min_max_vals(),
-+	 * alu32 ops will have zero-extended the result, making umax_value <= U32_MAX.
-+	 */
-+	u64 dst_umax = dst_reg->umax_value;
-+
- 	err = adjust_scalar_min_max_vals(env, insn, dst_reg, *src_reg);
- 	if (err)
- 		return err;
-@@ -16131,26 +16138,44 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 	 * r1 += 0x1
- 	 * if r2 < 1000 goto ...
- 	 * use r1 in memory access
--	 * So for 64-bit alu remember constant delta between r2 and r1 and
--	 * update r1 after 'if' condition.
-+	 * So remember constant delta between r2 and r1 and update r1 after
-+	 * 'if' condition.
- 	 */
- 	if (env->bpf_capable &&
--	    BPF_OP(insn->code) == BPF_ADD && !alu32 &&
--	    dst_reg->id && is_reg_const(src_reg, false)) {
--		u64 val = reg_const_value(src_reg, false);
-+	    (BPF_OP(insn->code) == BPF_ADD || BPF_OP(insn->code) == BPF_SUB) &&
-+	    dst_reg->id && is_reg_const(src_reg, alu32)) {
-+		u64 val = reg_const_value(src_reg, alu32);
-+		s32 off;
-+
-+		if (!alu32 && ((s64)val < S32_MIN || (s64)val > S32_MAX))
-+			goto clear_id;
-+
-+		if (alu32 && (dst_umax > U32_MAX))
-+			goto clear_id;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+index 5f41bbb730a7..5ff3983c48b7 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
++++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
  
--		if ((dst_reg->id & BPF_ADD_CONST) ||
--		    /* prevent overflow in sync_linked_regs() later */
--		    val > (u32)S32_MAX) {
-+		off = (s32)val;
-+
-+		if (BPF_OP(insn->code) == BPF_SUB) {
-+			/* Negating S32_MIN would overflow */
-+			if (off == S32_MIN)
-+				goto clear_id;
-+			off = -off;
-+		}
-+
-+		if (dst_reg->id & BPF_ADD_CONST) {
- 			/*
- 			 * If the register already went through rX += val
- 			 * we cannot accumulate another val into rx->off.
- 			 */
-+clear_id:
- 			dst_reg->off = 0;
- 			dst_reg->id = 0;
- 		} else {
--			dst_reg->id |= BPF_ADD_CONST;
--			dst_reg->off = val;
-+			if (alu32)
-+				dst_reg->id |= BPF_ADD_CONST32;
-+			else
-+				dst_reg->id |= BPF_ADD_CONST64;
-+			dst_reg->off = off;
- 		}
- 	} else {
- 		/*
-@@ -17247,7 +17272,7 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
- 			u32 saved_id = reg->id;
+ #include <linux/bpf.h>
++#include <limits.h>
+ #include <bpf/bpf_helpers.h>
+ #include "bpf_misc.h"
  
- 			fake_reg.type = SCALAR_VALUE;
--			__mark_reg_known(&fake_reg, (s32)reg->off - (s32)known_reg->off);
-+			__mark_reg_known(&fake_reg, (s64)reg->off - (s64)known_reg->off);
+@@ -18,9 +19,9 @@ __naked void scalars(void)
+ 	r4 = r1;				\
+ 	w2 += 0x7FFFFFFF;			\
+ 	w4 += 0;				\
+-	if r2 == 0 goto l1;			\
++	if r2 == 0 goto l0_%=;			\
+ 	exit;					\
+-l1:						\
++l0_%=:						\
+ 	r4 >>= 63;				\
+ 	r3 = 1;					\
+ 	r3 -= r4;				\
+@@ -64,4 +65,299 @@ l0_%=:								\
+ 	: __clobber_all);
+ }
  
- 			/* reg = known_reg; reg += delta */
- 			copy_register_state(reg, known_reg);
-@@ -17262,6 +17287,8 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
- 			scalar32_min_max_add(reg, &fake_reg);
- 			scalar_min_max_add(reg, &fake_reg);
- 			reg->var_off = tnum_add(reg->var_off, fake_reg.var_off);
-+			if (known_reg->id & BPF_ADD_CONST32)
-+				zext_32_to_64(reg);
- 		}
- 		if (e->is_reg)
- 			mark_reg_scratched(env, e->regno);
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 411a18437d7e..560531404bce 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -1477,7 +1477,7 @@ __naked void sub64_full_overflow(void)
- SEC("socket")
- __description("64-bit subtraction, partial overflow, result in unbounded reg")
- __success __log_level(2)
--__msg("3: (1f) r3 -= r2 {{.*}} R3=scalar()")
-+__msg("3: (1f) r3 -= r2 {{.*}} R3=scalar(id=1-1)")
- __retval(0)
- __naked void sub64_partial_overflow(void)
- {
++SEC("socket")
++__success
++__naked void scalars_neg(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r1 = r0;					\
++	r1 += -4;					\
++	if r1 s< 0 goto l0_%=;				\
++	if r0 != 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* Same test but using BPF_SUB instead of BPF_ADD with negative immediate */
++SEC("socket")
++__success
++__naked void scalars_neg_sub(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r1 = r0;					\
++	r1 -= 4;					\
++	if r1 s< 0 goto l0_%=;				\
++	if r0 != 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* alu32 with negative offset */
++SEC("socket")
++__success
++__naked void scalars_neg_alu32_add(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0xff;					\
++	w1 = w0;					\
++	w1 += -4;					\
++	if w1 s< 0 goto l0_%=;				\
++	if w0 != 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* alu32 with negative offset using SUB */
++SEC("socket")
++__success
++__naked void scalars_neg_alu32_sub(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0xff;					\
++	w1 = w0;					\
++	w1 -= 4;					\
++	if w1 s< 0 goto l0_%=;				\
++	if w0 != 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* Positive offset: r1 = r0 + 4, then if r1 >= 6, r0 >= 2, so r0 != 0 */
++SEC("socket")
++__success
++__naked void scalars_pos(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r1 = r0;					\
++	r1 += 4;					\
++	if r1 < 6 goto l0_%=;				\
++	if r0 != 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* SUB with negative immediate: r1 -= -4 is equivalent to r1 += 4 */
++SEC("socket")
++__success
++__naked void scalars_sub_neg_imm(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r1 = r0;					\
++	r1 -= -4;					\
++	if r1 < 6 goto l0_%=;				\
++	if r0 != 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/* Double ADD clears the ID (can't accumulate offsets) */
++SEC("socket")
++__failure
++__msg("div by zero")
++__naked void scalars_double_add(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r1 = r0;					\
++	r1 += 2;					\
++	r1 += 2;					\
++	if r1 < 6 goto l0_%=;				\
++	if r0 != 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * Test that sync_linked_regs() correctly handles large offset differences.
++ * r1.off = S32_MIN, r2.off = 1, delta = S32_MIN - 1 requires 64-bit math.
++ */
++SEC("socket")
++__success
++__naked void scalars_sync_delta_overflow(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r1 = r0;					\
++	r2 = r0;					\
++	r1 += %[s32_min];				\
++	r2 += 1;					\
++	if r2 s< 100 goto l0_%=;			\
++	if r1 s< 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
++	  [s32_min]"i"(INT_MIN)
++	: __clobber_all);
++}
++
++/*
++ * Another large delta case: r1.off = S32_MAX, r2.off = -1.
++ * delta = S32_MAX - (-1) = S32_MAX + 1 requires 64-bit math.
++ */
++SEC("socket")
++__success
++__naked void scalars_sync_delta_overflow_large_range(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0xff;					\
++	r1 = r0;					\
++	r2 = r0;					\
++	r1 += %[s32_max];				\
++	r2 += -1;					\
++	if r2 s< 0 goto l0_%=;				\
++	if r1 s>= 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
++	  [s32_max]"i"(INT_MAX)
++	: __clobber_all);
++}
++
++/*
++ * Test linked scalar tracking with alu32 and large positive offset (0x7FFFFFFF).
++ * After w1 += 0x7FFFFFFF, w1 wraps to negative for any r0 >= 1.
++ * If w1 is signed-negative, then r0 >= 1, so r0 != 0.
++ */
++SEC("socket")
++__success
++__naked void scalars_alu32_big_offset(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0xff;					\
++	w1 = w0;					\
++	w1 += 0x7FFFFFFF;				\
++	if w1 s>= 0 goto l0_%=;				\
++	if w0 != 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__failure
++__msg("div by zero")
++__naked void scalars_alu32_basic(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	r1 = r0;					\
++	w1 += 1;					\
++	if r1 > 10 goto 1f;				\
++	r0 >>= 32;					\
++	if r0 == 0 goto 1f;				\
++	r0 /= 0;					\
++1:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++/*
++ * Test alu32 linked register tracking with wrapping.
++ * R0 is bounded to [0xffffff00, 0xffffffff] (high 32-bit values)
++ * w1 += 0x100 causes R1 to wrap to [0, 0xff]
++ *
++ * After sync_linked_regs, if bounds are computed correctly:
++ *   R0 should be [0x00000000_ffffff00, 0x00000000_ffffff80]
++ *   R0 >> 32 == 0, so div by zero is unreachable
++ *
++ * If bounds are computed incorrectly (64-bit underflow):
++ *   R0 becomes [0xffffffff_ffffff00, 0xffffffff_ffffff80]
++ *   R0 >> 32 == 0xffffffff != 0, so div by zero is reachable
++ */
++SEC("socket")
++__success
++__naked void scalars_alu32_wrap(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	w0 |= 0xffffff00;				\
++	r1 = r0;					\
++	w1 += 0x100;					\
++	if r1 > 0x80 goto l0_%=;			\
++	r2 = r0;					\
++	r2 >>= 32;					\
++	if r2 == 0 goto l0_%=;				\
++	r0 /= 0;					\
++l0_%=:							\
++	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("socket")
++__success
++void alu32_negative_offset(void)
++{
++	volatile char path[5];
++	volatile int offset = bpf_get_prandom_u32();
++	int off = offset;
++
++	if (off >= 5 && off < 10)
++		path[off - 5] = '.';
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.47.3
 
