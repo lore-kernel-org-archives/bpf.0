@@ -1,134 +1,144 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 216543D3017
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 16:34:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770136456; cv=pass; b=fmFjIQ8fsDQChVJpBcDBYCd5HyNp+0JdJTEH5ORQHhEqmBVK5pEBXcZwcIRXUhszwb1aUUFpHFA1hl14w/n49c2de5kRcepAyanqk2s7ZbQqJXSursodZkXiEx0s6aIbHkWav2NjilzrUufzPk1RNQoczOm3pDTP702Mn2y54Mg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770136456; c=relaxed/simple;
-	bh=bmwS02O7Xi0i3LCtAbnGeK3EdgJru2Z2vrI/HUuqlh4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rJMCUiwIMX2+rZjCU54EYh8KLQC68iIfySm4othksUnicpmthTwAxq4FjajL/msnV4sVdtvNACu5Nxa/dEuUcPIwBHlWWoShrbKmFhjpPXESx5HYDqkyt/E/oSYh0nw2zkppkxQAgdeDkD5F2uBS+DAZQkDeb71NEiTvF2MjOw0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ROKiYh3y; arc=pass smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73C43B8D5F
+	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 16:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770137477; cv=none; b=qP3UsdTKCzU+f7qFZJ0exFApMfMd6Dru4KSED10nLTXl2jKH6NncEtvGqf7SO605SJ9fsMK0GcXbkb/e44URstsQOyI/yKc4EdhAEeGQeZF+RLmt6mwFnaaeF0pgbF4ywn3oI2PVC4+Pzg46zYIC7jzqlYieX/kBMtAxkqT3jcg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770137477; c=relaxed/simple;
+	bh=PN93PyHyqqF73WLNs3vEoen9mBFTLAgxIM6y9IAz084=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KQASPql/4/13zafzXBiQbvj8nCGS6YVbK8OfJzH0sIuoHlNXIv7lr7X4/62euIWs6IuiBnWAWz1gLjxEp6OZ4AoUBvJx5IdvM0mdFRQK9xV5GVUvvlpebs06VVFHx0SfTAxzwDajQIwXAlQuhx+1FwgvqYdVqi4+l6bq8wzZFBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dfNjctCf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ROKiYh3y"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4359a302794so4012831f8f.1
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 08:34:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770136453; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Fpz4rK86Xevi0fxWIl7AAYTV7JcXAQVLrq5ptlSXVLkNXA9NjKc+lMXv0UvBuBiTE8
-         fGDvJ8X8Qr4MWPzmoxhVtKxwl+2b2p7b9j2fBRTglTvorSUFJTgQ5FySenGjRp+1lY8U
-         0Im9rZAm/XuVymCDDkDDDgIUr7zuHnV74A6Se34bvV55uP/CqLpKeHukZ0gtdbBT+urr
-         HQv4jCAQ4+zsuuzUeBAySs5Vt46jqvQHNPvuYXHF5rpBT9H6I8ykN2IIABCS49IWrUuk
-         6EU7RIWfewF1KVx3EVMMGSFXPiQoFF8hlM3ZpNCADbaGBZIYXix9dkYxvDaUT5UXaPuo
-         BzEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=Nf1oryXgAVHjZvk/1Ujit1GezDamlVePl/4411gfaKk=;
-        fh=Ke04bsHn2dfnVdrGyLgoc+QMWObZSNi8mjs0mKmdSgY=;
-        b=V5FPI98pwQ5EcYAo76rxFTJbHu0RqSdxpBSRHcD2t6HpFUmS9p2ih/lauqaO3H+7oJ
-         0Ch/AgITQAOEu4An8vM5qLFO4gCbf/SCCuFfJkGTPsneDtwjqd7WhmzTbpPH8oQv6rDE
-         Sd08mzhYA6uYMWSR9dGs5c1cXNniQTOzT0W02ZGCxrxhS8Mra9HtiTLKDnCMZarrblv2
-         s6YYvbSigbA95HoVPlkCgjPsPGdTvVdIeNBiZwSBZz0RtIfJn+3Z7pvX4nc6UDdYXP5t
-         TA8mry//+fL1tnDCh2mAK451nuzTeCNb+aHOLLcQA5RjhG4/0YUNWrl7PaBs8waHny86
-         Chyw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770136453; x=1770741253; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nf1oryXgAVHjZvk/1Ujit1GezDamlVePl/4411gfaKk=;
-        b=ROKiYh3y2/wez35sE3CtMZsUKlRfWEg3t15YY1aBUgmt+LbSguUMsRFV/kzdfi903D
-         oGleb9H92ZHdDmm+ID3MluINwkVZReEfdDgulbme3JKKyCKjUBkIlP/096rhCI1jpP9O
-         AZ5bbIxydTsglt+acNCaSW+xO8hzAq5HXfbi6WPJ3isORrxe4H9hs6tLYn3IQTwrzio5
-         hgf25je7OE+NGjIzXKUsK12CrOtWNKp8mcs29EOIP0/8gfndW1nc3w1cPBVyiArh+feJ
-         +zwdmAVTgt9VsVP8n1FDCLDbDJNwkiGrPZB3lJUtw3n4heOf8IHTk86PfdQfbkJm3k7d
-         9rIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770136453; x=1770741253;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Nf1oryXgAVHjZvk/1Ujit1GezDamlVePl/4411gfaKk=;
-        b=pQcMHYJvfDAGcOODM44IhCjQ3PeOnc3CAe6ZxgF2jPvcodaczqk4e/Iuc2NniEQA57
-         UU/PCWAneGUALVltS4kmOAy9WayHnwmV7AlS/EJB0Yx/U8oIEBFAgClFTI77pMixZCcS
-         w6QZeqA4yPkrVxR6w76eXyqvf9ys9sOvnQOfpuriKsy1O/dunGFqCDdfjiVTKPckeJ/z
-         nFEZqL0OcVwtpkq1nYa16vfR0kTH848wba3CbK+kChfxC1gN2sFRh5zbaLTTdzUaclQl
-         G9h3cGVmAT6IGvwyWsami0Uu41rMYdoMosGjF71HYC6QHDGAM56koj+0SW+GOrAi93nA
-         nmlw==
-X-Forwarded-Encrypted: i=1; AJvYcCWPuvfnL/ZB1bBljmr7HDs3HU52DPUsA5VPGjVLk9qoRK4UtHSelPh44zBlkvPGZuyXLpc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPorXBJ+6IxOmd0EBd82e5L9ddSQjQvxNLOAa5PkLKg4op2Hrc
-	DZXxWKqISifamS0nr27GMemT3Tiw46wJLqCaKFX0IKPKTUXWoQjSrWHjskF5Yp05kVFxyQhXg5e
-	6Q3Sz7Zd2serdS6l5t1zsYLZ8o35VgUqURU2S
-X-Gm-Gg: AZuq6aIh4VKsYomxnzfnW8/h+NkEPajnuwmk7GPX4iblVzjVZHVnXzBTXqgKN+7Io99
-	Qs0IKjW4tzuZSdmVo05pvmw1lsEw1suVd2yUkjGuwLDU9WxWGpkJJkaiZfdA7M0ZhitrBJy8DVW
-	+c9Xi0M7d+ZGFafkKbyMYNgUMNji//i8n6J6WVAKnVns7ItHVZW4DwFtlM79LcGW6pLczMUOcGh
-	ob8xAWB0wBDd2h/s/Gwqe7WR6vauBzoUuwgmDuMR3hOP6cxzPaX3tzW+tldmR9OHYpX2ZUDEk4a
-	p0s8Mpj730l/vri2COKPGvxF2wv/h6cQwfF7uRNGwR2/dNP8zQ7nEoVx6Q1Sk2TTWLKtXA==
-X-Received: by 2002:a05:6000:1861:b0:430:fd60:940f with SMTP id
- ffacd0b85a97d-435f3a86042mr23293086f8f.14.1770136453481; Tue, 03 Feb 2026
- 08:34:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dfNjctCf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9382BC116D0;
+	Tue,  3 Feb 2026 16:51:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770137476;
+	bh=PN93PyHyqqF73WLNs3vEoen9mBFTLAgxIM6y9IAz084=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dfNjctCfoKYWa5JE8Bn0ubk2gvkd+CLPvNDeD7jIPc7VYGgcn3X6s0ZgoL2eRwrmo
+	 U7bOQZtOiTz24W1cLbOG91NzavmOJBLNHNEBGZFFykEDQ8lk1uHTQz4/BbYwayu6zL
+	 fyeH4qYoPLxQmdM2B49K0Ya2yoBEWs30PadKok301D9U96fhNy+qjrY/8ekNS9RQgS
+	 IIH7gil6/w1sL7IBNp/Xv8X2LmVkJ0k92ERA698EzbMsTDH7E3JxThxM55oRdVVH9f
+	 NM5U/mV3N8B9nmaDjEfKKSED9ECKFsVO9b40mZ8YwgA+losjXw0W78wEbwAQTC1Rot
+	 EbbiQQb0BuAqw==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	kernel-team@meta.com,
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Subject: [PATCH bpf-next v3 0/5] bpf: verifier: Improve state pruning for scalar registers
+Date: Tue,  3 Feb 2026 08:50:56 -0800
+Message-ID: <20260203165102.2302462-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260203162746.2337002-1-arnd@kernel.org>
-In-Reply-To: <20260203162746.2337002-1-arnd@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 3 Feb 2026 08:34:02 -0800
-X-Gm-Features: AZwV_QjtdNAcExIQQf3VFUMrTl7vDDynoLe0KaCwRMNFYo9feUcHlzrdWMcOD4A
-Message-ID: <CAADnVQ+14yum8okMmjuqF5m5DafWo1fY1EuPj-QU_ykYbQ01uw@mail.gmail.com>
-Subject: Re: [PATCH] bpf: add missing __printf attributes
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 3, 2026 at 8:27=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wrot=
-e:
->
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Some internal functions in bpf produce a warning when -Wsuggest-attribute=
-=3Dformat
-> is passed to the compiler, e.g. in 'make W=3D1':
->
-> kernel/trace/bpf_trace.c: In function '____bpf_trace_printk':
-> kernel/trace/bpf_trace.c:377:9: error: function '____bpf_trace_printk' mi=
-ght be a candidate for 'gnu_printf' format attribute [-Werror=3Dsuggest-att=
-ribute=3Dformat]
->   377 |         ret =3D bstr_printf(data.buf, MAX_BPRINTF_BUF, fmt, data.=
-bin_args);
->       |         ^~~
->
-> The attribute here is useless since there are no callers from C code,
-> but it helps to shut up the output anyway so we can eventually turn
-> the warning option on by default.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+V2: https://lore.kernel.org/all/20260203022229.1630849-1-puranjay@kernel.org/
+Changes in V3:
+- Fix spelling mistakes in commit logs (AI)
+- Fix an incorrect comment in the selftest added in patch 5 (AI)
+- Improve the title of patch 5
 
-This was discussed and it's incorrect.
-Commit 7bf819aa992f ("vsnprintf: Mark binary printing functions with
-__printf() attribute")
-should be reverted instead.
+V1: https://lore.kernel.org/all/20260202104414.3103323-1-puranjay@kernel.org/
+Changes in V2:
+- Collected acked by Eduard
+- Removed some unnecessary comments
+- Added a selftest for id=0 equivalence in Patch 5
 
-pw-bot: cr
+This series improves BPF verifier state pruning by relaxing scalar ID
+equivalence requirements. Scalar register IDs are used to track
+relationships between registers for bounds propagation. However, once
+an ID becomes "singular" (only one register/stack slot carries it), it
+can no longer participate in bounds propagation and becomes stale.
+These stale IDs can prevent pruning of otherwise equivalent states.
+
+The series addresses this in four patches:
+
+Patch 1: Assign IDs on stack fills to ensure stack slots have IDs
+before being read into registers, preparing for the singular ID
+clearing in patch 2.
+
+Patch 2: Clear IDs that appear only once before caching, as they cannot
+contribute to bounds propagation.
+
+Patch 3: Relax maybe_widen_reg() to only compare value-tracking fields
+(bounds, tnum, var_off) rather than also requiring ID matches. Two
+scalars with identical value constraints but different IDs represent
+the same abstract value and don't need widening.
+
+Patch 4: Relax scalar ID equivalence in state comparison by treating
+rold->id == 0 as "independent". If the old state didn't rely on ID
+relationships for a register, any linking in the current state only
+adds constraints and is safe to accept for pruning.
+
+Patch 5: Add a selftest to show the exact case being handled by Patch 4
+
+I ran veristat on BPF programs from sched_ext, meta's internal programs,
+and on selftest programs, showing programs with insn diff > 5%:
+
+Scx Progs
+File                Program              States (A)  States (B)  States (DIFF)  Insns (A)  Insns (B)  Insns    (DIFF)
+------------------  -------------------  ----------  ----------  -------------  ---------  ---------  ---------------
+scx_rusty.bpf.o     rusty_set_cpumask           320         230  -90 (-28.12%)       4478       3259  -1219 (-27.22%)
+scx_bpfland.bpf.o   bpfland_select_cpu           55          49   -6 (-10.91%)        691        618    -73 (-10.56%)
+scx_beerland.bpf.o  beerland_select_cpu          27          25    -2 (-7.41%)        320        295     -25 (-7.81%)
+scx_p2dq.bpf.o      p2dq_init                   265         250   -15 (-5.66%)       3423       3233    -190 (-5.55%)
+scx_layered.bpf.o   layered_enqueue            1461        1386   -75 (-5.13%)      14541      13792    -749 (-5.15%)
+
+FB Progs
+File          Program              States (A)  States (B)  States  (DIFF)  Insns (A)  Insns (B)  Insns    (DIFF)
+------------  -------------------  ----------  ----------  --------------  ---------  ---------  ---------------
+bpf007.bpf.o  bpfj_free                  1726        1342  -384 (-22.25%)      25671      19096  -6575 (-25.61%)
+bpf041.bpf.o  armr_net_block_init       22373       20411  -1962 (-8.77%)     651697     602873  -48824 (-7.49%)
+bpf227.bpf.o  layered_quiescent            28          26     -2 (-7.14%)        365        340     -25 (-6.85%)
+bpf248.bpf.o  p2dq_init                   263         248    -15 (-5.70%)       3370       3159    -211 (-6.26%)
+bpf254.bpf.o  p2dq_init                   263         248    -15 (-5.70%)       3388       3177    -211 (-6.23%)
+bpf241.bpf.o  p2dq_init                   264         249    -15 (-5.68%)       3428       3240    -188 (-5.48%)
+bpf230.bpf.o  p2dq_init                   287         271    -16 (-5.57%)       3666       3431    -235 (-6.41%)
+bpf251.bpf.o  lavd_cpu_offline            321         316     -5 (-1.56%)       6221       5891    -330 (-5.30%)
+bpf251.bpf.o  lavd_cpu_online             321         316     -5 (-1.56%)       6219       5889    -330 (-5.31%)
+
+Selftest Progs
+File                                Program            States (A)  States (B)  States (DIFF)  Insns (A)  Insns (B)  Insns    (DIFF)
+----------------------------------  -----------------  ----------  ----------  -------------  ---------  ---------  ---------------
+verifier_iterating_callbacks.bpf.o  test2                       4           2   -2 (-50.00%)         29         18    -11 (-37.93%)
+verifier_iterating_callbacks.bpf.o  test3                       4           2   -2 (-50.00%)         31         19    -12 (-38.71%)
+strobemeta_bpf_loop.bpf.o           on_event                  318         221  -97 (-30.50%)       3938       2755  -1183 (-30.04%)
+bpf_qdisc_fq.bpf.o                  bpf_fq_dequeue            133         105  -28 (-21.05%)       1686       1385   -301 (-17.85%)
+iters.bpf.o                         delayed_read_mark           6           5   -1 (-16.67%)         60         46    -14 (-23.33%)
+arena_strsearch.bpf.o               arena_strsearch           107         106    -1 (-0.93%)       1394       1258    -136 (-9.76%)
+
+Puranjay Mohan (5):
+  bpf: verifier: Assign ids on stack fills
+  bpf: verifier: Clear singular ids for scalars
+  bpf: verifier: Relax maybe_widen_reg() constraints
+  bpf: verifier: Relax scalar id equivalence for state pruning
+  selftests: bpf: verifier_scalar_ids: Add a test for ids=0
+
+ include/linux/bpf_verifier.h                  |   7 +-
+ kernel/bpf/verifier.c                         | 163 +++++++++++++++---
+ .../selftests/bpf/progs/verifier_scalar_ids.c |  53 +++++-
+ 3 files changed, 198 insertions(+), 25 deletions(-)
+
+
+base-commit: d95d76aa772bf94df353b015b1cb38303d4a415d
+-- 
+2.47.3
+
