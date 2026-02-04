@@ -1,159 +1,178 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865FB320CBE
-	for <bpf@vger.kernel.org>; Tue,  3 Feb 2026 23:53:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B36A937
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 00:04:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.176
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770162815; cv=pass; b=GqIpYmb/5bs3Rd3R7CetOzfsQjhVsQrEhGzMExmfnjGft4q6Wd3tij0m7LrX+ZWmAgQd4tPz+0u71DXzIFEFUAtg9NpiYZJQZMzQE0SVks6nWPUgaCRrC/kqEDOgDZWH637OrlNL/8DZfm8iPY5pVFgygTrjtThgCGz61MiaOXk=
+	t=1770163465; cv=pass; b=ISbK74SS/8Q/Qgeb0FE0rNn63tWUKUPOafCAIaoDkyQi/PkV2qevbyzhBIZOtFRexr8g8DJz12DZK4ASJshqhor9nDzAwkm+syGQ+SDJg+U9iJ0B7J4TQSDC0Ar9uib9K+UDbjodGXcHF5yL5M2BhPfsP8FJH2vyw5QT1EIZ7w4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770162815; c=relaxed/simple;
-	bh=sWBU5dR7bqE6gcUoDbn4XTarOpaAPj7pe9odcGG41mE=;
+	s=arc-20240116; t=1770163465; c=relaxed/simple;
+	bh=kc1jJFUYanm72nBVwKH4HomeAzrqvPYkmvnRxU+TcFk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JTlibp6xHVLW1OUov16Zbr9HNRH3DfYFt9ZAIElIZ6t5uU69T2FEw5WL4LMDwGOAiiEbBh8OK4RjN+nLv51w3G8uuSezyOoQ9LlRvrywrHACbqNEPHFSeIzOypVbpkQRlO7nG7bE48zvh1LMQgydpaNuiljgTgaISajLZ6b2T54=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DcZXTYDk; arc=pass smtp.client-ip=209.85.216.46
+	 To:Cc:Content-Type; b=K83rt9d7S6sWkV8PFEVNoKk9GE4ftm7/opAsy2sJYvyJEHNrZgWsGaa0CJkmtXrfD5TLfCc6mh0PtVPnIIxMMPiSet1fHttlKvppSgHw7G1ET/rVBfqKqdwsY7i4AFUIHMYfZ800qPRM6xge15PGNch2ioFCSo7uyDftShG+vgg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2VSMOmA; arc=pass smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DcZXTYDk"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-352f60d6c2fso3988798a91.1
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 15:53:34 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770162814; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2VSMOmA"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c075ec1a58aso2564994a12.0
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 16:04:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770163464; cv=none;
         d=google.com; s=arc-20240605;
-        b=lvMgHmKBgn4AKFuXGGNke8poxMp7Iz2P13qr1+/h+nenqqJSIuW6QRZJx2rdofyJMt
-         IdD5PWxSteTLTqLqZP2rN8Ueqqz2iqEnsbD9Cm+nLukcJvacOdfHx1bj0/1d+xwEFyxv
-         hMbpD3SEB/62m/QFwih/fCnk0AmxI6V+q01dGBUd5NFCxMFGs8b9avB4z5bEqjXusJCb
-         WOn6O5UKJci+tLCDCVEM6JTpnaQHL1yurxgRju0JKhBnySa5whGdyYis5JW6D0uqCis4
-         0hKKFM0oGY9SIZ7WgAhHYLZEz5L8wsTH1W3k8HUHuot9O0MemsuNXJuWvUFQ7LEqKor/
-         p2Ow==
+        b=T8O2E4oUa4I+uimlFA3XqkT2u6RyH03gt5ku8uuhdl4mqeCfRzbvknzUxCCZvQL3KX
+         SDkE01DEhNn+9Ycs0UP9/T6uo6V6YCGeYKZdi6GWHfHTfxStR4sHha2rLjq76o6sF6VY
+         m/EuOq+XnHz/X9pmFspQnPLvvZbAOqm9rJKl3NB1GFjtZ8O2B+WBAD6JXfZIYnj+1Z+I
+         PeepXKbraKMBnzSZu/xQutFzyW3ue+hg13t665w4Z3mXtldbrJi7PhmMgMlUydZF1S/z
+         wK95BGUmqkXSbNMg0yjx4/Ug9rD00w6UfxyHV2Au56pH8OrEmxj2y1xITphi4/VokQYC
+         MlYg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=prTlIOsn11D69UtmpO3SxDs0bMWJCxMIrQjJlk4NovY=;
-        fh=ho6KmtfhenyMiGWYl8yibBZ1T9Ot2owIFIDwSbxpwss=;
-        b=GfauLMIrlGBhe8BfIqAhvPrQQv5wHnh0uaS555C7SqXGOhS6JV0u6KmLVI3v+f59sU
-         W5zQ21ZSzQCK4ZFd8HiPxeWwByudNCdG9AQWqRMYbcp9p57sPKsO5K/t+NTeJ4LJlgQD
-         8zODbrHmSymYnwyQXiaKLnQskxuRYrgr0vGrx7wtXzHL/5p91k9CkLg1DXoPFfCMJ5gl
-         Z0nAmK0ZYML7UWyX1pq0v+Z2mXPdtyzzsgsza8Zj8SlbWHQ+06Yl8tr9LrmSsc6yzfyS
-         IYncK9NWyo/Qlf9Ue7zuWT1luK/1QMc8wzReLa7h1CB2d6IImgb5cj7DTvig++osvwgz
-         oRQg==;
+        bh=tpXUMfuHceqRwFl5jbM1rv8f5sHVl9+U1rfTT6u6uw4=;
+        fh=BF8zMrOpXrdXp5oG1J9bobPHW4+D6H4qBnGOzUspcsA=;
+        b=bVTFA/el1Yofih3+MMzwHWA0sAoyNDQvVQyacsHkE7hhbjfmfjC+Uv/4hHFKvKiB7o
+         JrGOBGrsKzQ/N5CqLKBn6yLKkf7R2M4bq6TsawYt7V+vt29DoubWhdEUafVTX1ldnnj0
+         MI66plUdGickAm4DplNSOOc59PJMVNxMgIQJARb+vQ/iPLh9kipSGiPpfZ+d3A8vVxLq
+         0F12+LryApN4lg3ZTBz/Nz6nzUicbLoVAa1skev7Qo1cLi/Etdrizrh1wdsgO/on03wp
+         AkcN7s0N15gDcJ1LJLTUmmOl3SpjeJpYg3QB3TX+Iaz1ZNyQBOt0uxYyfp57sG7k3JPz
+         YR9Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770162814; x=1770767614; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770163464; x=1770768264; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=prTlIOsn11D69UtmpO3SxDs0bMWJCxMIrQjJlk4NovY=;
-        b=DcZXTYDky1NWWYz9BElRAd9tvXkjL0ijik7bqNiUTmDmfF+DEElGcCxfxm9vEthW0o
-         8WlIlkDm2tTeFszK1QHQ5led1R93ATQX1Mjj/mVBjBImAi54anv36FUoEf4MGY6ljPdN
-         Zm6ZuXtqFGm5WRo01WS4ZWCssaSjLLYZGQsRDUqWt7WeyaUX1cfsJai6G9R8i80QH0dG
-         4EZn2vWA5a7pKXZnLcf9qmnGxbuDoLCIPHCZ6rpLDP19XXgiXak7fbSUP6eZyMQY2AnH
-         rTjPMfvH+eVoMkPmLNxMswusBUOvIfkQffSCkCdWvzBSqCaqo7ovom1Fv7sLyrQcEK+2
-         N3gg==
+        bh=tpXUMfuHceqRwFl5jbM1rv8f5sHVl9+U1rfTT6u6uw4=;
+        b=D2VSMOmAsHiahz4DbC3UFCG+y5QoGVop1AXBMbYN56JVPaSHEUsWtT7jvkNNHdf92f
+         h4fij5846cO/FW+kCCjzFeYVgnSz5VAxtelUcl+AHmw6JSlmlyICF1fnB/BJjyeih3dJ
+         L9MaVAiyluGLhjNz7DRBnNO2SlFV+j9sal3DpP2+WK06q1jwVj6l5UPbJIcfjUiczU18
+         9GTgmsUkdoBP7bC/XVPcQZ3dFk5eWrGhnWEInSuFgYaSX43C7cFSBxlt32kgF2CAw9Gp
+         /sRR2x9N/wSAy7Js+li4nTHct31MXLah8LEZRwABgYVNsauWwDmYtGV0VUIPzj9TyRGU
+         g1bA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770162814; x=1770767614;
+        d=1e100.net; s=20230601; t=1770163464; x=1770768264;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=prTlIOsn11D69UtmpO3SxDs0bMWJCxMIrQjJlk4NovY=;
-        b=Xsg+bMrcEdUASeB+xntGzlZybD+dwITEFgMbIh+JaTcAQxTwt/GqBKHAWCwrItaqkW
-         y2gsfY5vhwBgTxj0cxsdwFREPs0SkmXl/Q26Sxp9wHsz/canb+/i/YBmuygEmSqLSj+X
-         vZkQYl8ADN6b9nNR/kgokeDxjCGmT/7Wjhl69JxVW/jGrvyLfLJKVIzGsKrxOv9x7u8W
-         FuBS65plozXuUkJ2Bo4J3Iv23NLB4Zm3MIzsxuYGbE8QfL6VvDhlSSthdrlmzBiCj+BM
-         PV43k+QdApCQ8swNJQiIGX6drskgPLE5Hgx9XeNtsCx3mW4FR3bgQtoefolwC5qW5Cbf
-         1oKQ==
-X-Gm-Message-State: AOJu0YwGwy738RnBYTCdb3BbNVrhdyU39OfpbiJIbftXWaO5EDc0nyHP
-	SrFV6PZuGOL8kdhuqilT8wlKfAfTnQ1NKTl5AQeOO8giiqGgvpVNX5ksa23GQLyUgPN+S3zl9Zj
-	GZBuo/Q84ntu4j81tZrqHYLDSWDq9p1k=
-X-Gm-Gg: AZuq6aJ7yvhonIED0XwuZiBr/yG3TzuD7snXL649zkurJPltck4S4u/7q+21zvAqSl/
-	4ka7aEq6s3l1vOdjqbHlPrzUkENfPKgg9QiW7TzLuYzx6mOsqiQRudoW9viztL/NS6K74G3IQUf
-	J418PjkQnurCBAYusNxL+Hz4M8XazOGu0D417bNp74Of1YeKw/6RMN1UwNAW1z/iLLvuhG+dDOY
-	4gdB5pncWLzfXsJu0x48D7/ONU/ktyP/LLd1rMGCNeBBnPR9gA1cv4Kci72ImzJE3oNWiH9hzGP
-	tl4n8yczR72XAHQPTMtRWg==
-X-Received: by 2002:a17:90b:35c8:b0:340:b86b:39c7 with SMTP id
- 98e67ed59e1d1-354870e4f05mr970587a91.11.1770162813798; Tue, 03 Feb 2026
- 15:53:33 -0800 (PST)
+        bh=tpXUMfuHceqRwFl5jbM1rv8f5sHVl9+U1rfTT6u6uw4=;
+        b=w/vJKLD/OoV7QD45Btk/LYUWYR5HcoNGRJ27h90FDDQd77dPdZmJxtxUg1nQYvGnKB
+         xEJ8Xb5zU1rgLKdvpzSgVwyCXaVCHB4XD+9ku8h4vxHEuqYSuYHtLiRADKpkNfF3TeRV
+         D+xRh4TiEpq08oV6wOLvFDc7HN3EWAYxaCCmu1DNCU6HxdRA1ay3yDnQyDioJxqUlyxz
+         ED/yhYhpqgHJ1PUlUaMDfIHRVM2E+5CT9xS+iym92ZH4hNQLbnVpPtPEfMZ7WQba/QLB
+         U8jREu3lRXFbS9LEKHx0GtMseRJFyj73L3O39/Dp2RPOmRdQ31OFmem+MoafK6sJj7wz
+         la7g==
+X-Forwarded-Encrypted: i=1; AJvYcCWsNZLeSIAOQlGpFbJnxmOcVGYv7bMbcX0n8AIym4il43LJF7F8WO7qodyyfIadcqPc9G4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywo1HVdlhKNCUzvuP/iiTRdVxaheo1uXoyJkslE/pKWysudiyg8
+	1lbZ3qAkzXlu+hnnpf0UAK3Gin2hMSnLX+xhqv3pDOuUdPY2O/MKbSzd1oZIKO1Itwfo2t36kIW
+	xkMIz6FeMV7wCrEbXLLCs73UjKyuA0so=
+X-Gm-Gg: AZuq6aJlOLiZ9C1lI9f8ZbbLF0dI/suQgbG4/7R9kptaBXRQclCu9JLmEw2i2nlxAai
+	M86QyJwK0Q5ihnbwWe+N5R5ykkCqatP+j09ZeplA3sZDt2TpGvsz3RkdGQ97q5FEWFKSPdCJbku
+	Vdj5wrOSz49ox09Vgd02jTP27oak7C+AtjzmmxJCsJv4szxKru/jwfGcOjPgibEUrspIlpRBwg4
+	bpEWdPakhHZCp5JgPso1HxcfogLkA840zEhj5idMNTHLks6h757VhXTy08DN6xVSOEMJzrSY7T3
+	3Z3i4lMCxJo=
+X-Received: by 2002:a17:90b:3843:b0:340:c60b:f362 with SMTP id
+ 98e67ed59e1d1-354870ae597mr1057131a91.6.1770163463573; Tue, 03 Feb 2026
+ 16:04:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260201025403.66625-1-alexei.starovoitov@gmail.com> <20260201025403.66625-2-alexei.starovoitov@gmail.com>
-In-Reply-To: <20260201025403.66625-2-alexei.starovoitov@gmail.com>
+References: <20260128061753.1857803-1-wangqing7171@gmail.com>
+In-Reply-To: <20260128061753.1857803-1-wangqing7171@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 3 Feb 2026 15:53:21 -0800
-X-Gm-Features: AZwV_QiKoT74EqANVXoUXIK7AA56gMdL3pVyxemqI-vahhc7gXemF4oMZGtsWwE
-Message-ID: <CAEf4BzZxWzntugOkbPLC=yy9TZ4v1YVaALR25-rOqF6xezVW-w@mail.gmail.com>
-Subject: Re: [PATCH v9 bpf-next 1/9] bpf: Enable bpf_timer and bpf_wq in any context
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@kernel.org, memxor@gmail.com, mykyta.yatsenko5@gmail.com, 
-	kernel-team@fb.com
+Date: Tue, 3 Feb 2026 16:04:11 -0800
+X-Gm-Features: AZwV_QjSU-xHFZaTZk9jkYzsceYdCAUetSnMDf2M6ltGkpGoSojCsn00RQszOxw
+Message-ID: <CAEf4BzYN33yQhO-tsF8pUWDMZoiLAXkV+Z1oP6fJkByocYcjpw@mail.gmail.com>
+Subject: Re: [PATCH] bpf/perf: Fix suspicious RCU usage in get_callchain_entry()
+To: Qing Wang <wangqing7171@gmail.com>
+Cc: Song Liu <song@kernel.org>, Jiri Olsa <jolsa@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, peterz@infradead.org, acme@kernel.org, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, 
+	syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Jan 31, 2026 at 6:54=E2=80=AFPM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
+On Tue, Jan 27, 2026 at 10:18=E2=80=AFPM Qing Wang <wangqing7171@gmail.com>=
+ wrote:
 >
-> From: Alexei Starovoitov <ast@kernel.org>
+> There is a patch intended to fix suspicious RCU usage in get_callchain_en=
+try(),
+> but it is incorrect. Specifically, rcu_read_lock()/rcu_read_unlock() is n=
+ot
+> called when may_fault =3D=3D false.
+
+rcu_read_lock/unlock is not called when may_fault =3D=3D false because in
+that case BPF program is already running within rcu_read_lock/unlock
+region. So I'm not sure this patch fixes anything really. And even
+with trace_in, if we cann rcu_read_lock/unlock one extra time it
+shouldn't be a problem, no?
+
+pw-bot: cr
+
 >
-> Refactor bpf_timer and bpf_wq to allow calling them from any context:
-> - add refcnt to bpf_async_cb
-> - map_delete_elem or map_free will drop refcnt to zero
->   via bpf_async_cancel_and_free()
-> - once refcnt is zero timer/wq_start is not allowed to make sure
->   that callback cannot rearm itself
-> - if in_hardirq defer to start/cancel operations to irq_work
+> Previous discussion:
+> https://lore.kernel.org/all/CAEf4BzaYL9zZN8TZyRHW3_O3vbHc7On+NSunrkDvDQx2=
+=3DwwyRw@mail.gmail.com/#R
 >
-> Co-developed-by: Mykyta Yatsenko <yatsenko@meta.com>
-> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> For perf's callchain, rcu_read_lock()/rcu_read_unlock() should be called =
+when
+> trace_in =3D=3D false.
+>
+> Fixes: d4dd9775ec24 ("bpf: wire up sleepable bpf_get_stack() and bpf_get_=
+task_stack() helpers")
+> Reported-by: syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3D72a43cdb78469f7fbad1
+> Tested-by: syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com
+> Signed-off-by: Qing Wang <wangqing7171@gmail.com>
 > ---
->  kernel/bpf/helpers.c | 408 ++++++++++++++++++++++++-------------------
->  1 file changed, 225 insertions(+), 183 deletions(-)
+>  kernel/bpf/stackmap.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-
-[...]
-
-> @@ -1456,10 +1493,20 @@ BPF_CALL_3(bpf_timer_start, struct bpf_async_kern=
- *, timer, u64, nsecs, u64, fla
->         if (flags & BPF_F_TIMER_CPU_PIN)
->                 mode |=3D HRTIMER_MODE_PINNED;
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index da3d328f5c15..f97d4aa9d038 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -460,7 +460,7 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
+uct task_struct *task,
 >
-> -       hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
-> -out:
-> -       __bpf_spin_unlock_irqrestore(&timer->lock);
-> -       return ret;
-> +       /*
-> +        * bpf_async_cancel_and_free() could have dropped refcnt to zero.=
- In
-> +        * such case BPF progs are not allowed to arm the timer to preven=
-t UAF.
-> +        */
-> +       if (!refcount_inc_not_zero(&t->cb.refcnt))
-> +               return -ENOENT;
-> +
-> +       if (!in_hardirq()) {
-> +               hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
-> +               bpf_async_refcount_put(&t->cb);
-
-any reason not to use bpf_async_process_op(BPF_ASYNC_START) here? you
-are basically open-coding it here (same for bpf_wq_start). For
-bpf_timer_delete() you just call
-bpf_async_process_op(BPF_ASYNC_CANCEL), so it's inconsistent...
-
-I can fix it up while applying, let me know
-
-
-> +               return 0;
-> +       } else {
-> +               return bpf_async_schedule_op(&t->cb, BPF_ASYNC_START, nse=
-cs, mode);
-> +       }
->  }
+>         max_depth =3D stack_map_calculate_max_depth(size, elem_size, flag=
+s);
 >
->  static const struct bpf_func_proto bpf_timer_start_proto =3D {
-
-[...]
+> -       if (may_fault)
+> +       if (!trace_in)
+>                 rcu_read_lock(); /* need RCU for perf's callchain below *=
+/
+>
+>         if (trace_in) {
+> @@ -474,7 +474,7 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
+uct task_struct *task,
+>         }
+>
+>         if (unlikely(!trace) || trace->nr < skip) {
+> -               if (may_fault)
+> +               if (!trace_in)
+>                         rcu_read_unlock();
+>                 goto err_fault;
+>         }
+> @@ -494,7 +494,7 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
+uct task_struct *task,
+>         }
+>
+>         /* trace/ips should not be dereferenced after this point */
+> -       if (may_fault)
+> +       if (!trace_in)
+>                 rcu_read_unlock();
+>
+>         if (user_build_id)
+> --
+> 2.34.1
+>
