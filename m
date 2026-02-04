@@ -1,163 +1,99 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA7521767D
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 05:39:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F542BD022
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 05:40:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770183556; cv=none; b=RexxLVZuQgfIvYvd3lnHlpJZ+mVzTZOQiSzt6djYhlpioFFmimc48e7oeYWBTO8LxONvkHCVz36te2z9tTH9Rui8JQeQEdkJAX+M1ihb8Lp/4RBlle8yteSCxYzv/4HdDILNCDIEIFrco/+fiUfheGHzOdjnRUmlNtEbwJLUBaI=
+	t=1770183630; cv=none; b=QvlNn/AI+Suf0Ez2AdsjS6xKqF5uP4eTNX8vDidvMIZdYBEt+wQwA9DwKQnnHfc8r1U83V5a0oNoLxkjZr8jdBmseSbA0PzKfR1Gdp7EOKKudFsOEZ/aBEimj6OnydstGPqs/Nvb0t85zahzT4bD4ueJjqeNPjhlkkTKXjIGmVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770183556; c=relaxed/simple;
-	bh=Ya1fXJdayG73D0309s1HgJMomX0g3FzRUGmtHwL3LcE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ojzDCg3XiwXMTDP2MoKodB5ofE6sDRJ4PaAC7agcx74su0S+YI0yFbCGgQipQl7lDxUHVz8IB7SCIsJFHcDgKgqZQrO9xi2KzDenkYtIQuorAF6SqVRzkEQ6MRD2new9/mebC1YDIuFBVTO63rW5h0Ho0RB0a1ikP5XkLPiuLKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F+lpFo8n; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770183630; c=relaxed/simple;
+	bh=l4MrBo+6CjuzgRtn5pPzZ+gEF6DSSMFOv7HnSi0Yj18=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gy2q4d05F/Xb8iexBi8mWZUQO2tQgu/foLGLZxRpzaREcbYrCqq/wLnbpcVRBpB79Sq8HNV9b72D80WMiQWkcX1z6qOgdWkpHFdaWDrRvjREYI2lEeSKQ0dkkdsbZg55HN6qd8TqRuNqrrHQ+QZtHzQSdeshmpKbfFioayBpugQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JNsJnWyv; arc=none smtp.client-ip=74.125.82.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F+lpFo8n"
-Message-ID: <d512e9fd-eb04-4194-ab75-b1d2e775461a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770183552;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=r6FiKVWQiD6+SFmcv0TIELc6uHmdzplm6VKLZ0lrRE0=;
-	b=F+lpFo8nWOcqQHiChzaps6VXdDK38sl2BTqR/DNehni/VXeBkd8eTzZPnlu80msKqjk+/S
-	TyLsmZKzfR3uxtHh2LMeuJ/OnH9LUeyKQHce0+buMVaECm5eu0XTCctJHKy/DW1EZ3J0Kk
-	sphqFwK8HEdVoudb0pGuIQEvJsO/U+g=
-Date: Tue, 3 Feb 2026 21:39:05 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JNsJnWyv"
+Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-124a95e592fso1506748c88.0
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 21:40:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770183629; x=1770788429; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3XFYmuOieHfW88o1iZ8tRxu744JAOX36TkB6kEmzKKQ=;
+        b=JNsJnWyvS8zjCWOb+U6kadRhzU8sduInwZQglMEA+eFbTdZN3+DFz8Gdrh39p4nDsH
+         2eNmnWJQxKPsZv7sXowPyHt2CxRBet8DO6yXRd8DDqHyDc1lwpjsj9GCM0Fl+8chAsOh
+         PuQ8Q/BRcSSwgtoJrFOmOj6lQwo+V3NhvEv7Y23J909T8rz77NK07Hgw9tgGVkjo5pcg
+         /y2FwZq6W2PpaxuFnZ4oqVbPnKxh2ungKC8o5/nCQQyq5AeGo2vSYoslUTsIW7XDc2kR
+         f/G5blGcD7IoNHNKlPJ1lBVW9/hxeVmC/N/KzFyyD6cLXBEpNUqupZNDR9huw5bwK8Ad
+         6SaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770183629; x=1770788429;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3XFYmuOieHfW88o1iZ8tRxu744JAOX36TkB6kEmzKKQ=;
+        b=e24eEu24966crIOGvAyHPUKQuqDLAKCErPjQnEyzK942zGy/uyYIHxTEVxY9bl9lCJ
+         XZ4IfQz3UsWk9/CzXIGEx8mAYqUFRsR2Jw9VRfAQkpes7GcRUP8TBgE2758nemGWDHxE
+         tdAX1acs9whEffWgn79+iCLpzcIfOU5J3MJgUfRmz6EMB25fKUMQ1I6BsgNMUCiU+lD7
+         quw8G56D09XX1stEvuxyigr59tTyfPge837j1vvG1rPiC6fl6WcJU80TxBi+SNQvRag0
+         oVuF9QveaNfvjE/zkNti1oz9r9+AtxO0If37lbE9z+T1oS0kNpFMJMFPzwKYw2TGuXMo
+         QEBg==
+X-Gm-Message-State: AOJu0Yxa/89/suQCT685bblNC/sior1DATAzHl3aiZJW6+0YGOov7XDV
+	2aZeMqZh5KJFHqRmEQ+34fhLi+3kgWfAf6XC6lbjm2UmaP6yA8yFuKJIgFljNQ==
+X-Gm-Gg: AZuq6aKRyZGi/e+XisgPTw2VCR7dqQ8mwtBUlLxucN4MRoOQn7Ccco2eNaqxMWWWYR2
+	KO6ioUu0sFcGD0I8uKMDmQKq/5omsyZz2y3SROFMQZnjJbt4ipVsNWEo+8I2CjtjHWKHUsNpKYd
+	CLkUsvpk1G/DWwvG5oCbXA3y0J/HvZ/4ZiEMyVpFRulKSCghNWXWIcbaySIw0BuwpL+1c1Rspr4
+	EDcaAhaPnvwWbkIblOVL2/qAuAzFLm9b4dSBNbfiiIwxsXtgz4xJDKu7nOFFajzn5iTBztRqlAX
+	QdAQO/B3ntGR9TcTj3qGplJdF5uFHE9BcnUrR/3WwAWG5bq7L6S4l/sdSRfsQj+vIrP5emSvefh
+	lDWL0feNEFRMSQkJtfY2iOGeatSUXsyDp10HGbPqS68jRf/2Na5j31zz2Eh7eubLEeLq2AfAmKe
+	wWqbaS56p6Nq4s/dWbV22Ev0ZsTFGe0UOBXR2urKbFFx1PR4FQstBOE+XHnhrtr43a6pw9ZknbP
+	baRQCHpSDlLstYOXfRsO5N/BFEk9UKUtE7P7COYjlDviANpQA==
+X-Received: by 2002:a17:902:c411:b0:2a9:2858:19ad with SMTP id d9443c01a7336-2a933fb6422mr18597685ad.49.1770178116014;
+        Tue, 03 Feb 2026 20:08:36 -0800 (PST)
+Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a93394e945sm8815055ad.57.2026.02.03.20.08.35
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 03 Feb 2026 20:08:35 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	mykyta.yatsenko5@gmail.com
+Subject: [PATCH v2 bpf-next 0/4] bpf: Fix conditions when timer/wq can be called
+Date: Tue,  3 Feb 2026 20:08:29 -0800
+Message-ID: <20260204040834.22263-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 10/16] bpf: Support lockless unlink when
- freeing map or local storage
-To: Amery Hung <ameryhung@gmail.com>
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org,
- kpsingh@kernel.org, yonghong.song@linux.dev, song@kernel.org,
- haoluo@google.com, kernel-team@meta.com, bpf@vger.kernel.org
-References: <20260201175050.468601-1-ameryhung@gmail.com>
- <20260201175050.468601-11-ameryhung@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260201175050.468601-11-ameryhung@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On 2/1/26 9:50 AM, Amery Hung wrote:
-> +/*
-> + * Unlink an selem from map and local storage with lockless fallback if callers
-> + * are racing or rqspinlock returns error. It should only be called by
-> + * bpf_local_storage_destroy() or bpf_local_storage_map_free().
-> + */
-> +static void bpf_selem_unlink_nofail(struct bpf_local_storage_elem *selem,
-> +				    struct bpf_local_storage_map_bucket *b)
-> +{
-> +	struct bpf_local_storage *local_storage;
-> +	struct bpf_local_storage_map *smap;
-> +	bool in_map_free = !!b;
-> +	unsigned long flags;
-> +	int err, unlink = 0;
-> +
-> +	local_storage = rcu_dereference_check(selem->local_storage, bpf_rcu_lock_held());
-> +	smap = rcu_dereference_check(SDATA(selem)->smap, bpf_rcu_lock_held());
-> +
-> +	/*
-> +	 * Prevent being called twice from the same caller on the same selem.
-> +	 * map_free() and destroy() each holds a link_cnt on an selem.
-> +	 */
-> +	if ((!smap && in_map_free) || (!local_storage && !in_map_free))
+From: Alexei Starovoitov <ast@kernel.org>
 
-There is chance that map_free() can see "!smap" in the very first call 
-of bpf_selem_unlink_nofail(). For example, the destroy() may grab the 
-b->lock and do the hlist_del_init_rcu(&selem->map_node). In the unlikely 
-case, the destroy() cannot grab the local_storage->lock, so it does 
-atomic_dec_and_test(&selem->link_cnt). If map_free() hits the !smap in 
-the very first time, it cannot move on to do 
-atomic_dec_and_test(&selem->link_cnt), and the selem will be leaked. It 
-is unlikely if we can assume destroy() should be able to hold its own 
-local_storage->lock (no bpf prog should be holding it and no ETIMEDOUT).
+v1->v2:
+- Add a recursion check
+v1: https://lore.kernel.org/bpf/20260204030927.171-1-alexei.starovoitov@gmail.com/ 
 
-I think the same goes for the "!local_storage" check calling from destroy().
+Alexei Starovoitov (4):
+  bpf: Tighten conditions when timer/wq can be called synchronously
+  selftests/bpf: Add a testcase for deadlock avoidance
+  bpf: Add a recursion counter to prevent loops in bpf_timer
+  selftests/bpf: Strengthen timer_start_deadlock test
 
+ kernel/bpf/helpers.c                          | 29 ++++++--
+ .../bpf/prog_tests/timer_start_deadlock.c     | 33 +++++++++
+ .../bpf/progs/timer_start_deadlock.c          | 70 +++++++++++++++++++
+ 3 files changed, 126 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_start_deadlock.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer_start_deadlock.c
 
-> +		return;
-> +
-> +	if (smap) {
-> +		b = b ? : select_bucket(smap, local_storage);
-> +		err = raw_res_spin_lock_irqsave(&b->lock, flags);
-> +		if (!err) {
-> +			/*
-> +			 * Call bpf_obj_free_fields() under b->lock to make sure it is done
-> +			 * exactly once for an selem. Safe to free special fields immediately
-> +			 * as no BPF program should be referencing the selem.
-> +			 */
-> +			if (likely(selem_linked_to_map(selem))) {
-> +				hlist_del_init_rcu(&selem->map_node);
-> +				bpf_obj_free_fields(smap->map.record, SDATA(selem)->data);
-> +				unlink++;
-> +			}
-> +			raw_res_spin_unlock_irqrestore(&b->lock, flags);
-> +		}
-> +		/*
-> +		 * Highly unlikely scenario: resource leak
-> +		 *
-> +		 * When map_free(selem1), destroy(selem1) and destroy(selem2) are racing
-> +		 * and both selem belong to the same bucket, if destroy(selem2) acquired
-> +		 * b->lock and block for too long, neither map_free(selem1) and
-> +		 * destroy(selem1) will be able to free the special field associated
-> +		 * with selem1 as raw_res_spin_lock_irqsave() returns -ETIMEDOUT.
-> +		 */
-> +		WARN_ON_ONCE(err && in_map_free);
-> +		if (!err || in_map_free)
-> +			RCU_INIT_POINTER(SDATA(selem)->smap, NULL);
-> +	}
-> +
-> +	if (local_storage) {
-> +		err = raw_res_spin_lock_irqsave(&local_storage->lock, flags);
-> +		if (!err) {
-> +			/*
-> +			 * Normally, map_free() can call mem_uncharge() if destroy() is
-> +			 * not about to return to the owner, which can then go away
-> +			 * immediately. Otherwise, the charge of the selem will stay
-> +			 * accounted in local_storage->selems_size and uncharged during
-> +			 * destroy().
-> +			 */
-> +			if (likely(selem_linked_to_storage(selem))) {
-> +				hlist_del_init_rcu(&selem->snode);
-> +				if (smap && in_map_free &&
-
-I think the smap non-null check is not needed.
-
-> +				    refcount_inc_not_zero(&local_storage->owner_refcnt)) {
-> +					mem_uncharge(smap, local_storage->owner, smap->elem_size);
-> +					local_storage->selems_size -= smap->elem_size;
-> +					refcount_dec(&local_storage->owner_refcnt);
-> +				}
-> +				unlink++;
-> +			}
-> +			raw_res_spin_unlock_irqrestore(&local_storage->lock, flags);
-> +		}
-> +		if (!err || !in_map_free)
-> +			RCU_INIT_POINTER(selem->local_storage, NULL);
-> +	}
-> +
-> +	/*
-> +	 * Normally, an selem can be unlinked under local_storage->lock and b->lock, and
-> +	 * then freed after an RCU grace period. However, if destroy() and map_free() are
-> +	 * racing or rqspinlock returns errors in unlikely situations (unlink != 2), free
-> +	 * the selem only after both map_free() and destroy() drop their link_cnt.
-> +	 */
-> +	if (unlink == 2 || atomic_dec_and_test(&selem->link_cnt))
-> +		bpf_selem_free(selem, false);
-
-This can be bpf_selem_free(..., true) here.
-
+-- 
+2.47.3
 
