@@ -1,39 +1,39 @@
 Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6886185B48;
-	Wed,  4 Feb 2026 00:45:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C26224AF7;
+	Wed,  4 Feb 2026 00:45:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770165928; cv=none; b=eQbaYciZzdNxF2eHALymLcdlwytjasEQQSHW1IENGFeHm9Ie31n4PVFn0PpUOQ60ou5v+ConD13CUzw4PKYoECg+f4Lr+NfLboJVm67WK8lQ/nnP0/w0EDR0F3KOHXPekyqUOmKxg9yAF5N2WPUynG+HKTfF/Rw9DrcRWJQnWOo=
+	t=1770165942; cv=none; b=YCNtXqckHJ9A7bAzYynDMM7ipciua29rISs9tFA1Mhoq/BNx50sbfQwohQ0XYsoZyhdAloRziqAhwor1B9RPPiUA+0FeGSsEvtGBUkuLibr8xZevha1J7V/N1sRwVtW3pQDI9WXvVrdDU1L/2Yo5t+FLBJGwc4qF+BFxQcUk/Xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770165928; c=relaxed/simple;
-	bh=3bPhxmVUocleFipC4reAR9MEKZH36EMxHLcWzmCJtUE=;
+	s=arc-20240116; t=1770165942; c=relaxed/simple;
+	bh=j9aAjw8wq9x5Wg9UQ/iT7LKiHLKGpYIZuPc8vwLMFUc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YGQifcaKpaPGOmvMwgXf2Nkh+TP4ZkFW59T8o373pv2cHFiANBlI+86VTbcW3Mebd1irSABeXxGqW5SQE2Wnzr9Th+jnypqL5xPjlk2mElUaZqn3ePWvzxuGWMgutOZ6NaULIjO1hmA4bpA5kdSvFfkANRZqG8J7a539f4oDLk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=fail (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=A667aHHn reason="signature verification failed"; arc=none smtp.client-ip=198.137.202.136
+	 In-Reply-To:Content-Type; b=Z6roP9fcqmXzabHB7VMKc0WU7xNA3qoUirjaC/5rieqgMlDboD6JR7fmWAjYePWkBq/YZw9yrJaVDN0OFlAiCXtECAvCylraM7wryoHHfg3bnpCOeC6JfqzkJd1QWMKbPFYzCeA+NrZ4qWTpDbZkvsBvd5pEFfzEq+3nEIJ6uac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=fail (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=1WuCWlAZ reason="signature verification failed"; arc=none smtp.client-ip=198.137.202.136
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="A667aHHn"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="1WuCWlAZ"
 Received: from [IPV6:2601:646:8081:9484:7f27:8faf:e50:c87b] ([IPv6:2601:646:8081:9484:7f27:8faf:e50:c87b])
 	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 6140hAvH3684475
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 6140iX2x3686652
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 3 Feb 2026 16:44:10 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 6140hAvH3684475
+	Tue, 3 Feb 2026 16:44:53 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 6140iX2x3686652
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026012301; t=1770165853;
-	bh=SfjcLG/RUmRtt9wxHxBQ6mL+sKk+V7CX7MeisYlYpJc=;
+	s=2026012301; t=1770165897;
+	bh=j99Bl1HWmVYx7aLiUOrbHBPAuPixzOzdzIN5XbrCTiI=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=A667aHHnZjPtA3vHvH0jpqhwqdKf4X6/35CpgUlJSQSe8LQuTsAR5kPmP4uY2ByIn
-	 ifXxRqU5OoZ1IoPKwL2BVP5QUwz+R3SGHYL3uh11dVN2rYTroBzK1nnGRvaco9x3AV
-	 PJkukzXaZTKyfW4NdDv8FFAy72MvB3KMvFwpcfVVbCZ4l72ccV320HTpY/RDFTQiHJ
-	 0B5tAvHF0AYi85FhQDMbDhUuXXulb3MZHpeluT4WdNX/UDpsLb9qVSVz8Tvxd3EigZ
-	 2CCyraJ5yWcTjnGmIAjRCwmsIoillqKATqXgWxaHjK8wsBFZ/B/ylwPhstUWBamK/p
-	 FX9idc7SfXpvw==
-Message-ID: <bd2fdf83-e460-46ad-8617-16319bc55ca5@zytor.com>
-Date: Tue, 3 Feb 2026 16:43:44 -0800
+	b=1WuCWlAZ2LhZ2XdJJ//0ZKbxmRZIMy+v0Q5Gs+tyjOaTdMQRWYkOsudn7MKWqWVj9
+	 7MOkiVAg9MeJkyt9wpViQhHOzhaI4cLck8cqu8Q5oZAn3yaGJ3hmgnZUwC57NKUG4a
+	 9Cd6aLdiAeDMlHU31HZdzetIgs+2qDwu0z7wG6CRIA8wiZhY5Vm7Sr/URCsMiP2TWx
+	 92ZwmWLg4zz9CBBrZu7gBRDNA0XHl3a0Y4HhbfY4l97iKjFZxMD3dDVAuaTF9vYaMi
+	 lIOUHeu+YHDGAZko7kuLNPRKFLShhAcrJhcISGLtcCf3nrmXRK5Q4rRz5da+K79hPT
+	 vqMZkagnMRgMw==
+Message-ID: <63dd1427-06c3-4bb8-b57e-f36cb417c381@zytor.com>
+Date: Tue, 3 Feb 2026 16:44:28 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -41,7 +41,8 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/6] x86/asm: Avoid emitting DWARF CFI for non-VDSO
+Subject: Re: [PATCH v7 4/6] x86/vdso: Use SYM_FUNC_{START,END} in
+ __kernel_vsyscall()
 To: Jens Remus <jremus@linux.ibm.com>, linux-kernel@vger.kernel.org,
         linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
         x86@kernel.org, linux-mm@kvack.org,
@@ -74,103 +75,59 @@ Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
         Vasily Gorbik <gor@linux.ibm.com>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
 References: <20260203171958.1522030-1-jremus@linux.ibm.com>
- <20260203171958.1522030-3-jremus@linux.ibm.com>
+ <20260203171958.1522030-5-jremus@linux.ibm.com>
 Content-Language: en-US, sv-SE
 From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20260203171958.1522030-3-jremus@linux.ibm.com>
+In-Reply-To: <20260203171958.1522030-5-jremus@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 2026-02-03 09:19, Jens Remus wrote:
 > From: Josh Poimboeuf <jpoimboe@kernel.org>
 > 
-> It was decided years ago that .cfi_* annotations aren't maintainable in
-> the kernel.  They were replaced by objtool unwind hints.  For the kernel
-> proper, ensure the CFI_* macros don't do anything.
-> 
-> On the other hand the VDSO library *does* use them, so user space can
-> unwind through it.
-> 
-> Make sure these macros only work for VDSO.  They aren't actually being
-> used outside of VDSO anyway, so there's no functional change.
+> Use SYM_FUNC_{START,END} instead of all the boilerplate.  No functional
+> change.
 > 
 > Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 > ---
->  arch/x86/include/asm/dwarf2.h | 51 ++++++++++++++++++++++++-----------
->  1 file changed, 35 insertions(+), 16 deletions(-)
 > 
-> diff --git a/arch/x86/include/asm/dwarf2.h b/arch/x86/include/asm/dwarf2.h
-> index 09c9684d3ad6..7cc30500c095 100644
-> --- a/arch/x86/include/asm/dwarf2.h
-> +++ b/arch/x86/include/asm/dwarf2.h
-> @@ -6,6 +6,15 @@
->  #warning "asm/dwarf2.h should be only included in pure assembly files"
->  #endif
+> Notes (jremus):
+>     Changes in v7:
+>     - Rebase on H. Peter Anvin's vDSO changes on tip:x86/entry.
+> 
+>  arch/x86/entry/vdso/vdso32/system_call.S | 10 ++--------
+>  1 file changed, 2 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/x86/entry/vdso/vdso32/system_call.S b/arch/x86/entry/vdso/vdso32/system_call.S
+> index 9157cf9c5749..a90f4f7de396 100644
+> --- a/arch/x86/entry/vdso/vdso32/system_call.S
+> +++ b/arch/x86/entry/vdso/vdso32/system_call.S
+> @@ -9,11 +9,7 @@
+>  #include <asm/alternative.h>
 >  
-> +#ifdef BUILD_VDSO
-> +
-> +	/*
-> +	 * For the vDSO, emit both runtime unwind information and debug
-> +	 * symbols for the .dbg file.
-> +	 */
-> +
-> +	.cfi_sections .eh_frame, .debug_frame
-> +
->  #define CFI_STARTPROC		.cfi_startproc
->  #define CFI_ENDPROC		.cfi_endproc
->  #define CFI_DEF_CFA		.cfi_def_cfa
-> @@ -22,21 +31,31 @@
->  #define CFI_ESCAPE		.cfi_escape
->  #define CFI_SIGNAL_FRAME	.cfi_signal_frame
+>  	.text
+> -	.globl __kernel_vsyscall
+> -	.type __kernel_vsyscall,@function
+> -	ALIGN
+> -__kernel_vsyscall:
+> -	CFI_STARTPROC
+> +SYM_FUNC_START(__kernel_vsyscall)
 >  
-> -#ifndef BUILD_VDSO
-> -	/*
-> -	 * Emit CFI data in .debug_frame sections, not .eh_frame sections.
-> -	 * The latter we currently just discard since we don't do DWARF
-> -	 * unwinding at runtime.  So only the offline DWARF information is
-> -	 * useful to anyone.  Note we should not use this directive if we
-> -	 * ever decide to enable DWARF unwinding at runtime.
-> -	 */
-> -	.cfi_sections .debug_frame
-> -#else
-> -	 /*
-> -	  * For the vDSO, emit both runtime unwind information and debug
-> -	  * symbols for the .dbg file.
-> -	  */
-> -	.cfi_sections .eh_frame, .debug_frame
-> -#endif
-> +#else /* !BUILD_VDSO */
-> +
-> +/*
-> + * On x86, these macros aren't used outside VDSO.  As well they shouldn't be:
-> + * they're fragile and very difficult to maintain.
-> + */
-> +
-> +.macro nocfi args:vararg
-> +.endm
-> +
-> +#define CFI_STARTPROC		nocfi
-> +#define CFI_ENDPROC		nocfi
-> +#define CFI_DEF_CFA		nocfi
-> +#define CFI_DEF_CFA_REGISTER	nocfi
-> +#define CFI_DEF_CFA_OFFSET	nocfi
-> +#define CFI_ADJUST_CFA_OFFSET	nocfi
-> +#define CFI_OFFSET		nocfi
-> +#define CFI_REL_OFFSET		nocfi
-> +#define CFI_REGISTER		nocfi
-> +#define CFI_RESTORE		nocfi
-> +#define CFI_REMEMBER_STATE	nocfi
-> +#define CFI_RESTORE_STATE	nocfi
-> +#define CFI_UNDEFINED		nocfi
-> +#define CFI_ESCAPE		nocfi
-> +
-> +#endif /* !BUILD_VDSO */
->  
->  #endif /* _ASM_X86_DWARF2_H */
+>  	/*
+>  	 * If using int $0x80, there is no reason to muck about with the
+> @@ -85,7 +81,5 @@ SYM_INNER_LABEL(int80_landing_pad, SYM_L_GLOBAL)
+>  	CFI_RESTORE		ecx
+>  	CFI_ADJUST_CFA_OFFSET	-4
+>  	RET
+> -	CFI_ENDPROC
+> -
+> -	.size __kernel_vsyscall,.-__kernel_vsyscall
+> +SYM_FUNC_END(__kernel_vsyscall)
+>  	.previous
 
-I guess patch 3 justifies this.
+Looks good to me.
 
 Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
 
