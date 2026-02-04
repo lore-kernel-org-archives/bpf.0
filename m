@@ -1,99 +1,147 @@
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F542BD022
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 05:40:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D405A350A00;
+	Wed,  4 Feb 2026 05:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770183630; cv=none; b=QvlNn/AI+Suf0Ez2AdsjS6xKqF5uP4eTNX8vDidvMIZdYBEt+wQwA9DwKQnnHfc8r1U83V5a0oNoLxkjZr8jdBmseSbA0PzKfR1Gdp7EOKKudFsOEZ/aBEimj6OnydstGPqs/Nvb0t85zahzT4bD4ueJjqeNPjhlkkTKXjIGmVI=
+	t=1770184311; cv=none; b=DfNGdCpErIqkxD8AnfDMSyt21id1UwKZc8+eCC3Y4kryu6MJdy5EqW7RYstnG1sfz/T4SCztuGaNWJbVQ0gKBsWkZcJ5MWczTTJRmLRxhw9RU6Jud0ebcK3Tq74DOIZw3cGk6aOw3/n8Bt3L3HhLZWrbuRkOHA1o9qL5i5/A5Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770183630; c=relaxed/simple;
-	bh=l4MrBo+6CjuzgRtn5pPzZ+gEF6DSSMFOv7HnSi0Yj18=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Gy2q4d05F/Xb8iexBi8mWZUQO2tQgu/foLGLZxRpzaREcbYrCqq/wLnbpcVRBpB79Sq8HNV9b72D80WMiQWkcX1z6qOgdWkpHFdaWDrRvjREYI2lEeSKQ0dkkdsbZg55HN6qd8TqRuNqrrHQ+QZtHzQSdeshmpKbfFioayBpugQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JNsJnWyv; arc=none smtp.client-ip=74.125.82.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770184311; c=relaxed/simple;
+	bh=WyeMu1AkwqKC5I7WTqh9UrxM26rqyj+dwIwTtP2n/uA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OyTpPnMVPJmVRzfW4eAZ1gmzg1ckR0JF4Z8Iia4QBQu/5JdxmUmwamOFdsfBH8xpaQE2OTh1234tVWiIhTB2ETgIpCb3aH2nX8uV7hjL++DtAj1cyzumAqUlugu72FNInSFquMTtomJT5A/WJqDyKr+g9blfFIFiZCXDPp71vlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=mH1c+uNa; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=d6ZMtz0u; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JNsJnWyv"
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-124a95e592fso1506748c88.0
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 21:40:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770183629; x=1770788429; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3XFYmuOieHfW88o1iZ8tRxu744JAOX36TkB6kEmzKKQ=;
-        b=JNsJnWyvS8zjCWOb+U6kadRhzU8sduInwZQglMEA+eFbTdZN3+DFz8Gdrh39p4nDsH
-         2eNmnWJQxKPsZv7sXowPyHt2CxRBet8DO6yXRd8DDqHyDc1lwpjsj9GCM0Fl+8chAsOh
-         PuQ8Q/BRcSSwgtoJrFOmOj6lQwo+V3NhvEv7Y23J909T8rz77NK07Hgw9tgGVkjo5pcg
-         /y2FwZq6W2PpaxuFnZ4oqVbPnKxh2ungKC8o5/nCQQyq5AeGo2vSYoslUTsIW7XDc2kR
-         f/G5blGcD7IoNHNKlPJ1lBVW9/hxeVmC/N/KzFyyD6cLXBEpNUqupZNDR9huw5bwK8Ad
-         6SaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770183629; x=1770788429;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3XFYmuOieHfW88o1iZ8tRxu744JAOX36TkB6kEmzKKQ=;
-        b=e24eEu24966crIOGvAyHPUKQuqDLAKCErPjQnEyzK942zGy/uyYIHxTEVxY9bl9lCJ
-         XZ4IfQz3UsWk9/CzXIGEx8mAYqUFRsR2Jw9VRfAQkpes7GcRUP8TBgE2758nemGWDHxE
-         tdAX1acs9whEffWgn79+iCLpzcIfOU5J3MJgUfRmz6EMB25fKUMQ1I6BsgNMUCiU+lD7
-         quw8G56D09XX1stEvuxyigr59tTyfPge837j1vvG1rPiC6fl6WcJU80TxBi+SNQvRag0
-         oVuF9QveaNfvjE/zkNti1oz9r9+AtxO0If37lbE9z+T1oS0kNpFMJMFPzwKYw2TGuXMo
-         QEBg==
-X-Gm-Message-State: AOJu0Yxa/89/suQCT685bblNC/sior1DATAzHl3aiZJW6+0YGOov7XDV
-	2aZeMqZh5KJFHqRmEQ+34fhLi+3kgWfAf6XC6lbjm2UmaP6yA8yFuKJIgFljNQ==
-X-Gm-Gg: AZuq6aKRyZGi/e+XisgPTw2VCR7dqQ8mwtBUlLxucN4MRoOQn7Ccco2eNaqxMWWWYR2
-	KO6ioUu0sFcGD0I8uKMDmQKq/5omsyZz2y3SROFMQZnjJbt4ipVsNWEo+8I2CjtjHWKHUsNpKYd
-	CLkUsvpk1G/DWwvG5oCbXA3y0J/HvZ/4ZiEMyVpFRulKSCghNWXWIcbaySIw0BuwpL+1c1Rspr4
-	EDcaAhaPnvwWbkIblOVL2/qAuAzFLm9b4dSBNbfiiIwxsXtgz4xJDKu7nOFFajzn5iTBztRqlAX
-	QdAQO/B3ntGR9TcTj3qGplJdF5uFHE9BcnUrR/3WwAWG5bq7L6S4l/sdSRfsQj+vIrP5emSvefh
-	lDWL0feNEFRMSQkJtfY2iOGeatSUXsyDp10HGbPqS68jRf/2Na5j31zz2Eh7eubLEeLq2AfAmKe
-	wWqbaS56p6Nq4s/dWbV22Ev0ZsTFGe0UOBXR2urKbFFx1PR4FQstBOE+XHnhrtr43a6pw9ZknbP
-	baRQCHpSDlLstYOXfRsO5N/BFEk9UKUtE7P7COYjlDviANpQA==
-X-Received: by 2002:a17:902:c411:b0:2a9:2858:19ad with SMTP id d9443c01a7336-2a933fb6422mr18597685ad.49.1770178116014;
-        Tue, 03 Feb 2026 20:08:36 -0800 (PST)
-Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a93394e945sm8815055ad.57.2026.02.03.20.08.35
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 03 Feb 2026 20:08:35 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: bpf@vger.kernel.org
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	mykyta.yatsenko5@gmail.com
-Subject: [PATCH v2 bpf-next 0/4] bpf: Fix conditions when timer/wq can be called
-Date: Tue,  3 Feb 2026 20:08:29 -0800
-Message-ID: <20260204040834.22263-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="mH1c+uNa";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="d6ZMtz0u"
+Date: Wed, 4 Feb 2026 06:51:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1770184308;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sZHCk7fKGvf7QzEKyi64QeW2Liq4IP/rnnD/aBkMl5c=;
+	b=mH1c+uNacxWRUNxmS4+KhnW02S+ScCNg0PSMrRBV3jl5Y9gLNvMzn2wKTFE119EqwrHZVK
+	0Xs2BQCwy0xLs2a7+gdd8+UIN1NJkFxmfKrvCWu8BRowAICffN4IDMn7nvd5n8pRhGlOTI
+	/lcoeDTVwx4C/5arPqxl4Pr1DwVM/XXISPy+Ud/+o5dE+3KjyDGBJawYLfFhBLuzKlHeEe
+	Jjaaa07nXgXxFL74kUd+x+t5iZVGeWcu8qhM/QlOyI3o3mdtjH2S9THZPgLNdLZakBJJlE
+	ZR3GP0J25NhG4p4mppsRJ+sb9ftJwtMZWzQmpngxhxJY0va5sW06twgDzT0yog==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1770184308;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sZHCk7fKGvf7QzEKyi64QeW2Liq4IP/rnnD/aBkMl5c=;
+	b=d6ZMtz0uUl3VOFryIOVmf39EYhSjv1iRpyzj0W6e5d3GCAZeC1TF0aBjXeboj7tm1lJ6gw
+	gmXb8/M6hAEDp/DQ==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
+	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>, klibc@zytor.com, 
+	Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition of
+ 'struct sockaddr'
+Message-ID: <20260204064248-d9c4ab78-f6d4-4ac6-8d55-e939bc1df6d2@linutronix.de>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+ <20260121192729.2095aa25@kernel.org>
+ <20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
+ <20260130081741.425a92e0@kernel.org>
+ <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
+ <20260131092517.6639d84c@kernel.org>
+ <20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
+ <20260203144011.32d5b223@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260203144011.32d5b223@kernel.org>
 
-From: Alexei Starovoitov <ast@kernel.org>
+On Tue, Feb 03, 2026 at 02:40:11PM -0800, Jakub Kicinski wrote:
+> On Tue, 3 Feb 2026 12:42:22 +0100 Thomas Weißschuh wrote:
+> > > FWIW the typelimits change broke compilation of ethtool, we'll see if
+> > > anyone "outside kernel community itself" complains.  
+> > 
+> > Can you point me to that breakage? I was unable to find it.
+> 
+> Not reported on the ML, and it's kinda annoying to repro because 
+> the uAPI header sync script isn't committed :/ You have to check 
+> this out
+> 
+>  https://git.kernel.org/pub/scm/network/ethtool/ethtool.git/
+> 
+> and run a script like this to sync headers from the kernel (then build):
+> 
+> #!/bin/bash -e
+> 
+> sn="${0##*/}"
+> export ARCH="x86_64"
+> 
+> if [ ! -d "$LINUX_GIT" ]; then
+>     echo "${sn}: LINUX_GIT not set" >&2
+>     exit 1
+> fi
+> 
+> pushd "$LINUX_GIT"
+> if [ -n "$1" ]; then
+>     git checkout "$1"
+> fi
+> desc=$(git describe --exact-match 2>/dev/null \
+>        || git show -s --abbrev=12 --pretty='commit %h')
+> kobj=$(mktemp -d)
 
-v1->v2:
-- Add a recursion check
-v1: https://lore.kernel.org/bpf/20260204030927.171-1-alexei.starovoitov@gmail.com/ 
+> make -j16 O="$kobj" allmodconfig
+> make -j16 O="$kobj" prepare
 
-Alexei Starovoitov (4):
-  bpf: Tighten conditions when timer/wq can be called synchronously
-  selftests/bpf: Add a testcase for deadlock avoidance
-  bpf: Add a recursion counter to prevent loops in bpf_timer
-  selftests/bpf: Strengthen timer_start_deadlock test
+These are not necessary.
+The UAPI generation does not need a kernel configuration.
 
- kernel/bpf/helpers.c                          | 29 ++++++--
- .../bpf/prog_tests/timer_start_deadlock.c     | 33 +++++++++
- .../bpf/progs/timer_start_deadlock.c          | 70 +++++++++++++++++++
- 3 files changed, 126 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_start_deadlock.c
- create mode 100644 tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+> make -j16 O="$kobj" INSTALL_HDR_PATH="${kobj}/hdr" headers_install
+> popd
+> 
+> pushd uapi
+> find . -type f -name '*.h' -exec cp -v "${kobj}/hdr/include/{}" {} \;
 
--- 
-2.47.3
+Here only those headers which already exist in ethtool's uapi/ directory
+are copied. As linux/typelimits.h is new, it is now missing.
+Honestly, if a user fiddles with the internals of the UAPI headers like
+this, it is on them to update their code if the internal structure
+changes. In your case a simple 'touch uapi/linux/typelimits.h'
+before running the script will be enough. Also internal.h now requires
+an explicit inclusion of <limits.h>, as that is not satisfied by the
+UAPI anymore.
 
+> popd
+> rm -rf "$kobj"
+> 
+> git add uapi
+> git commit -s -F - <<EOT
+> update UAPI header copies
+> 
+> Update to kernel ${desc}.
+> 
+> EOT
