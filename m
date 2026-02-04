@@ -1,111 +1,114 @@
-Received: from mail-pg1-f196.google.com (mail-pg1-f196.google.com [209.85.215.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DA831B812
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 09:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26A03A1CEF;
+	Wed,  4 Feb 2026 09:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770196469; cv=none; b=I7Id/+1TzGeZ+7PGmrS+3cpKYWH2S+kHqC9vhRz19xPPGPMZxpP/v7QStEXFTvl6E5fDhvLlamon0Upc3tqWhnOWGKn0PaOTg1HHQ7tPntesyfOxvyT/1OwIsDbO377QGhw3SUHCl7vai1PWCsuVBJgWC06iShUZj7OK7yEMAWo=
+	t=1770197315; cv=none; b=o3ZctFvSVTPi01L9L5pFYg5VL2IX/V9yqMZF0uPxV7RW9dxR3uXPwCRM6AEqCfyc/7xxBIrzPvYnm9yw4QUte7QR+xVqsNPOT7PilTmpmBY/XF1fPJ/W2B9tQrxoS/BZEP0rsoiRVQ3zGcF3qcufkCwj6bHI9eDUVztqRloTJJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770196469; c=relaxed/simple;
-	bh=sc27DwzzgfFQTFrQpnFL01JAH1HWFmGBXG321GfI0hM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MWfh1yeL0Qe2SLFUuj1LJQJPHpdJJweLQtl1JgFckvNYzmqxIiHACnWtY5zGsvRbODFxubVPftoojsni6RkQAtXglmGuQJWtmojTQPSdpRTujkSAr261N+SNkXJVA+fQEfJr64hH5RIqOgCtNyyMIGYZ6tBIlPLA95ARoXnrCkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T3JvLS9p; arc=none smtp.client-ip=209.85.215.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770197315; c=relaxed/simple;
+	bh=nXEQW0RD3tHANLDk1Vmj8TZU/wOk6Cxie+cPvOqsozU=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=NrZj/5Fw3UD1//2I6EkCliD2PjuTbZVVWGew6GnSYW7K15Ga6nNtmxVkYlEJtdscNjjlm4oiB0YOhyLDBhi3YoFmE+0CVNah3rp3A0NtVExZHa0+DVoMcO16NIt5/qwAceFDARBHnEL8B37lIh3QgLKxV9ApkdBQS3+qzIk9x0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hjvwfcjm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T3JvLS9p"
-Received: by mail-pg1-f196.google.com with SMTP id 41be03b00d2f7-c634bb5bd8eso1465838a12.0
-        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 01:14:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770196468; x=1770801268; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uygNsZst5G+GJw8qWQt/teS7lcnQtwFewRjz4BVhmDU=;
-        b=T3JvLS9pLVDYgvxvWKRNcV1GY4Oo/3v8w5vpkRTM2if7WMdoPZg2Um/rzhhwrEKZB5
-         T/zcONGV4/Ptck+kS2bPqQslHhQmJfwZg3DFHptlFQKOvN3nH/9wxDw0MRiu7ay0dQW4
-         jKcrYqzdJgcvZEbOeF7ik0S8pqOJrqYIdC1jRy05OTNOOZ03FS+rJMIyiINQg88q2iYF
-         hLmhnu/nTIelcdMGdqkaJFgoeW2aRWdFauOzFLeTvZvVILe40xLdpK3F3RsINJllFZVJ
-         klJPcivZIs2rEsdF2ayu6qaZccQu0qSrD3/XSuFjfznGozDFP4STSPLYR31QESAZ2b57
-         Qxhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770196468; x=1770801268;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=uygNsZst5G+GJw8qWQt/teS7lcnQtwFewRjz4BVhmDU=;
-        b=xPQ2ho1sQR1kEMUiHIF1conmyzslnijGI7DIu+aQIavc4wARcIs3/mf2uTqNFgXpLP
-         jSCwmNH25WLrn3QenpLJAZft6eSybk4J6rngr/gLBrgGzBrSipkoBkvmMl4J1EBwl5DD
-         GOZPUowYw/G0vtJTga/pFMnM68yHLDXG+AXFBhIgDvNS2ZTRZvm8jWPy98KV8oBXTouc
-         8sX23rU8g2DJQJ2W5wTLFHs2YX6LqmrjKbwYuO38ywfdS9mM+2mdbIQ1Ntx2+GLluzan
-         yi5dq9tzqbaBVMUyPLGFg+TparO0B7enhUzncTn/kP5iCOMDIvjIRufJXvZYaa4+IzC8
-         7aZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVRYHVDPgpindQXtoyAkS52zoabiKZECZmo8iA6kXwjgNU047Mw8nvsYlQLqs0niXqFxU4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxf37LErwpZ40zssrEMs47SorcqKM723+ZZDhDyo9TGQtXQ8KSp
-	iKyv2RpMme4a/Or9p2HpHsHzkxsG71l+SJTDX2OfcAgFkh0mQFneRG83
-X-Gm-Gg: AZuq6aLJ/j6SDD16ZeLRn/TjkIQYssrF9PH6CVdWB6nKDgIt++BWDSabw+lGJI8CU/n
-	uoiVEaZkrIAGNLzHnGhZ86h9TRA7T8j0mufySPc+s9WFS6IPiGWNdwBEE5SLaZUXK9e76087dhD
-	tOU36ko5VgInvB8KH1S6pORUNeEgoHmt09IyumIF/BCpjUZU0N3tO30LOmz6msoNQDSArz4gLza
-	wWMCZPxxenSqI9H1v1l3wSQ12Xf3E7Ntl2feeXJ1noVGizpmTqVXOfaaooYKbBVj6WKeO6blv08
-	VusRarECp8xHp8tYTJW1tDP8VBd5sN4YGDblcXdeyXVbqpbS3ifNVofsxn7vT4ydHjc1YH8+76Y
-	FggdcEGfn92jFmk5yKuYoaKymNrFK4omlWr7SvlPAr/3ofZDzSXKVhnIifHM+kJ6fPtbEEjhddz
-	PPX8covyn2ke470FK9siZFp5HIlp6pAvuUiOZllw==
-X-Received: by 2002:a17:90b:548c:b0:343:684c:f8a0 with SMTP id 98e67ed59e1d1-354871a955cmr2463472a91.23.1770196468414;
-        Wed, 04 Feb 2026 01:14:28 -0800 (PST)
-Received: from lima-ubuntu.hz.ali.com ([47.246.98.212])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3548630ed2fsm1996984a91.16.2026.02.04.01.14.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 01:14:27 -0800 (PST)
-From: Qing Wang <wangqing7171@gmail.com>
-To: andrii.nakryiko@gmail.com
-Cc: acme@kernel.org,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	martin.lau@linux.dev,
-	peterz@infradead.org,
-	sdf@fomichev.me,
-	song@kernel.org,
-	syzbot+72a43cdb78469f7fbad1@syzkaller.appspotmail.com,
-	wangqing7171@gmail.com,
-	yonghong.song@linux.dev
-Subject: Re: [PATCH] bpf/perf: Fix suspicious RCU usage in get_callchain_entry()
-Date: Wed,  4 Feb 2026 17:14:19 +0800
-Message-Id: <20260204091419.887114-1-wangqing7171@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <CAEf4BzYN33yQhO-tsF8pUWDMZoiLAXkV+Z1oP6fJkByocYcjpw@mail.gmail.com>
-References: <CAEf4BzYN33yQhO-tsF8pUWDMZoiLAXkV+Z1oP6fJkByocYcjpw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hjvwfcjm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5783DC4CEF7;
+	Wed,  4 Feb 2026 09:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770197315;
+	bh=nXEQW0RD3tHANLDk1Vmj8TZU/wOk6Cxie+cPvOqsozU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=HjvwfcjmVhIG76TDoBvmEmqdCRSO9SYrE7ujdWcl8T2Fu948Ns/o1vn2b3pXaPCIi
+	 dee53azAEIroEXCTp5LwyChJEXamfrSxBWAxW7LkivT44ix3z9LxKngbveUSWozvwu
+	 OnxqdeQ7esTgXviLu+0qnEdz8h+VbHb0GgGyhln/T4wugwj333JwlXoFykmGyOm3P1
+	 f0cAJsTKdNglQfHGqPi4jsZIkKy8mqXw/sxzKaZrNvJt0/NOI6HHLqw3nr03gpklE2
+	 0f9ebGS1YJmrKT7/VCAf19xpU6B+dVs73kUGQX+za0W7ETC/DvKEmwyhn/HorIw0dw
+	 kRyO2LnWnGdNA==
+Content-Type: multipart/mixed; boundary="===============3576808011636229974=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <958ccd923342ddd02e9122381d51319cb125ec51d601bb6fcad57531a2f5ef57@mail.kernel.org>
+In-Reply-To: <031afcd7c16e97f1f3c0d4a8a526a9eee2ad23fd.1770194182.git.zhuhui@kylinos.cn>
+References: <031afcd7c16e97f1f3c0d4a8a526a9eee2ad23fd.1770194182.git.zhuhui@kylinos.cn>
+Subject: Re: [RFC PATCH bpf-next v6 11/12] selftests/bpf: Add test for memcg_bpf_ops hierarchies
+From: bot+bpf-ci@kernel.org
+To: hui.zhu@linux.dev,akpm@linux-foundation.org,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,peterz@infradead.org,ojeda@kernel.org,nathan@kernel.org,kees@kernel.org,tj@kernel.org,jeffxu@chromium.org,mkoutny@suse.com,kernel@jfarr.cc,brauner@kernel.org,rdunlap@infradead.org,brgerst@gmail.com,masahiroy@kernel.org,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,inwardvessel@gmail.com,willemb@google.com,kerneljasonxing@gmail.com,paul.chaignon@gmail.com,a.s.protopopov@gmail.com,ameryhung@gmail.com,chenridong@huaweicloud.com,lance.yang@linux.dev,jiayuan.chen@linux.dev,linux-kernel@vger.kernel.org,linux-mm@kvack.org,cgroups@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org
+Cc: zhuhui@kylinos.cn,geliang@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed,  4 Feb 2026 09:28:34 +0000 (UTC)
 
-On Wed, 04 Feb 2026 at 08:04, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
-> rcu_read_lock/unlock is not called when may_fault == false because in
-> that case BPF program is already running within rcu_read_lock/unlock
-> region. So I'm not sure this patch fixes anything really. And even
-> with trace_in, if we cann rcu_read_lock/unlock one extra time it
-> shouldn't be a problem, no?
+--===============3576808011636229974==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Thanks for your review, I agree with you. My patch is incorrect and there was a patch series [0]
-to fix it.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> index 8c787439f..378ee3b3b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/memcg_ops.c
 
-    [0] https://lore.kernel.org/bpf/fb745675-e25c-4dcc-be4b-4a4411056755@linux.dev/T/#mc0fc5e0fec2e6456f72f402308fd4e397ba19d09
+[ ... ]
 
-Let's forget my patch.
+> +void test_memcg_ops_hierarchies(void)
+> +{
+> +	int ret, first = -1, second = -1, third = -1;
+> +	struct memcg_ops *skel = NULL;
 
-Thanks,
-Qing.
+[ ... ]
+
+> +cleanup:
+> +	bpf_link__destroy(link1);
+> +	bpf_link__destroy(link2);
+> +	bpf_link__destroy(link3);
+> +	memcg_ops__detach(skel);
+> +	memcg_ops__destroy(skel);
+
+Can this crash if skel is NULL? Unlike the other tests in this file
+which guard these calls with if (skel), this cleanup path calls
+memcg_ops__detach() unconditionally. If any of the earlier goto cleanup
+paths are taken before memcg_ops__open_and_load() succeeds, skel remains
+NULL.
+
+The generated skeleton __detach() function does not have a NULL check:
+
+    static inline void
+    %1$s__detach(struct %1$s *obj)
+    {
+        bpf_object__detach_skeleton(obj->skeleton);
+    }
+
+This would dereference NULL when accessing obj->skeleton.
+
+For comparison, test_memcg_ops_over_high(), test_memcg_ops_below_low_over_high(),
+and test_memcg_ops_below_min_over_high() in the same file all use:
+
+    if (skel) {
+        memcg_ops__detach(skel);
+        memcg_ops__destroy(skel);
+    }
+
+> +	close(first);
+> +	close(second);
+> +	close(third);
+> +	cleanup_cgroup_environment();
+> +}
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21665371660
+
+AI-authorship-score: low
+AI-authorship-explanation: The code follows consistent patterns with other tests in the file and uses standard BPF selftest conventions, suggesting human authorship with good domain knowledge.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: NULL pointer dereference crash in selftest cleanup path when cgroup setup fails, affecting test reliability but not production kernel code.
+
+--===============3576808011636229974==--
