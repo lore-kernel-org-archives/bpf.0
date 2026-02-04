@@ -1,342 +1,192 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013031.outbound.protection.outlook.com [40.107.201.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C823A24A054
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 01:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770169984; cv=none; b=Aa7X0LJJLOCY78GB4BZCurgsEXs4UzhX9dwlu2jeMyLA1BP3qc2OmOlYX+XuU08/ksSKtAJBtxyi78jVFFvzvNbWeWv16oRWh8fCkFXgPLAOspRWdHU7eNM1RRXFyDpZEs3G+VaIPBypOYxnd7fHiY7bRs78Nymvp+ZkVs5UiDI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770169984; c=relaxed/simple;
-	bh=GW+rkP3IR3K1AU7LjbHX+pRx2H+WK7a1plhmBTQdTDk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XfB5+e+gKZKQwWA3b07wExFWFV1CFF2WL6vx5+U6s5C4kpjMFf2x/gg4AREJRrON4Gx5CmbkMPFQFcqZyYW9ixOzRmROdfgy1ocaNpSCE6hJi/vRKXq8Fspw9im8dcFfkKmublvxarfObVdXJuI42yRHfdKTQKVfHww4xa4li3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fB56CNxs; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3959E84A35;
+	Wed,  4 Feb 2026 02:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.31
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770171365; cv=fail; b=iTIi1rJM9zH1c5P6CL6hr7CAAdCj4pC2gDqTQPFLcgUqSIaB1JZ7KbxNMzlHSqjt9CJU3ZIsuHsNk0x2dRHwwKXQI8xJRSsntrXHq30HTfegCXm3hgT0lhzoI1Gm9F8YrHUH/gu3Jf+Dtd2/Y6k9oRJw7xAKg2kFghcf6nOIAWA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770171365; c=relaxed/simple;
+	bh=eZGrE5OJ9iQLqeIrslnNboczIfxkRECR2+k0SUKRBTM=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=QmapV10sAe9QcNqF1MU7MSJIRhXb1S1m2NhneuOPYijW/lKR5Co0RE4laWkF/+wkgMed0FCQ+mtZf5UnyCKz0qvk36/PPisLw/mkzhyP6OTpzUcn60xiF+6LS4MvDFAS1+SjHc9xvw59OaGs6XH61p8MdqbcL/1XsWMS5P2zyfs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com; spf=pass smtp.mailfrom=altera.com; dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b=d2dHbus1; arc=fail smtp.client-ip=40.107.201.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=altera.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altera.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fB56CNxs"
-Message-ID: <42d51b94-f8de-41df-98ba-b074e02e5d00@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770169970;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WPNLQv+LvdfTrQOFA82L/Rop36opehWTIAJVuHamoO8=;
-	b=fB56CNxsNcFgthvEYJ6vA3lWj86dtBvdC5uTjqoJ5X7cUolzhBU6eVma9jJ07if000/Z89
-	7pTuztqSOOi1QsKcKcTPrIccMwbWNOFaYg5q8N7LVlHvJRnTIB7KtVTvapxaIibf7a9dMZ
-	gPeRegib9d/EqpwWDkdOjilXhXXib/0=
-Date: Tue, 3 Feb 2026 17:52:44 -0800
+	dkim=pass (2048-bit key) header.d=altera.com header.i=@altera.com header.b="d2dHbus1"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ski9JgMdQe7Ei9uq8uumYogQ5FQJ/XA7meLcBlVRtN6apjEZNNRe6Bw2clgkdlqRhP8g3jDdrdOih0qPZR6l+JxDuvoj043Q0ELKHPNdb0ozs95ccrpxDTzrcGoKUXVrEW/dGH+4zhn/iGQRNGpl6en+HKIBPIfQhw1x4wKugsgX7lQclD02j5SXLFBwolfeSuvmNEVwsJEuBfNpbAjZwMc67zzJ/Bn+HhIk7JDDAdowkULQ8ah+dh8mHFfwDh+yesbLZmp9ivNOfw1bFRv2elr2MqdrmmAKiRIWxZM68VDS0kgXzcoNPxbU6V1D95Hb+5t4AFMRFUpVjhaShSqS2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pKE7Ue4j+7Uh8sff8M9BEXyHTZ3698birl6N97Laj+I=;
+ b=iwN6aDXMbYEPMi8bpeM9iXo0SPklCwxVY8e01QhbqTH2KxvbrCtBzwey2qcmSuI1svki8fOhqSoLaAaG/fbFpPidNOhj77e1+3/JhgdsV4DfFSsBLi6XaIJojMJXCt/KTN/0t4daYO7FEMXcPBDlyDox/S7pSA+ani2O1wrm/jPN7YkWnaEo0uzRB7xRRPdH7BkjtdNPpoV7zN1aPFXwVeQ7v1I0XgwmXkeoDwZRgqOAbJPUaSOKQTmkRTaKRGACx84KqyOaPOCPLL+fbY9pTb/gHvtnJcYBygMJpvvdcmWk2VUAlpBZi50c9n1iT+sy5PEaMIZHgWZ7ct/UB3KoXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=altera.com; dmarc=pass action=none header.from=altera.com;
+ dkim=pass header.d=altera.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=altera.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pKE7Ue4j+7Uh8sff8M9BEXyHTZ3698birl6N97Laj+I=;
+ b=d2dHbus11nI3iuiZEJhoiUEnJbqjR7zcELvNtlGPMQzEhTFtR3J8H4RvXaZcLa1LmuYaCIUQv6EXL68X5VcPIv1E6LtdyAU+z1eDHqSEvlBjFkjHLhMKYoeQCXraZa76uX8UVpyP0nasdyFNK84cfwrzM5uMmxi5IwVFT1r88Rm6LdTQ5nncRw+flNqZMPnFtpY7lnz1YcWw+PjbFiZLwgvjKj2WRBfZNDPVO2aoOavCOz+WgpdDVrjHFw88Oz6F7AJBLnVinPJghXZAR8LanSxkbTtWpGE3TI9oXS2JEL78np0Aw3xdDMavflSrB0evHV6kusEj+I/IUU1QtiDWhQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=altera.com;
+Received: from SJ0PR03MB6964.namprd03.prod.outlook.com (2603:10b6:a03:432::18)
+ by DS7PR03MB8036.namprd03.prod.outlook.com (2603:10b6:8:252::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Wed, 4 Feb
+ 2026 02:16:02 +0000
+Received: from SJ0PR03MB6964.namprd03.prod.outlook.com
+ ([fe80::b965:bfa8:58fb:e775]) by SJ0PR03MB6964.namprd03.prod.outlook.com
+ ([fe80::b965:bfa8:58fb:e775%6]) with mapi id 15.20.9587.013; Wed, 4 Feb 2026
+ 02:16:01 +0000
+From: muhammad.nazim.amirul.nazle.asmade@altera.com
+To: netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] net: stmmac: Disable queues before tx_disable
+Date: Tue,  3 Feb 2026 18:15:58 -0800
+Message-Id: <20260204021558.24592-1-muhammad.nazim.amirul.nazle.asmade@altera.com>
+X-Mailer: git-send-email 2.26.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BY3PR03CA0012.namprd03.prod.outlook.com
+ (2603:10b6:a03:39a::17) To SJ0PR03MB6964.namprd03.prod.outlook.com
+ (2603:10b6:a03:432::18)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v5 11/16] bpf: Switch to bpf_selem_unlink_nofail
- in bpf_local_storage_{map_free, destroy}
-To: Amery Hung <ameryhung@gmail.com>
-Cc: netdev@vger.kernel.org, alexei.starovoitov@gmail.com, andrii@kernel.org,
- daniel@iogearbox.net, memxor@gmail.com, martin.lau@kernel.org,
- kpsingh@kernel.org, yonghong.song@linux.dev, song@kernel.org,
- haoluo@google.com, bpf@vger.kernel.org, kernel-team@meta.com
-References: <20260201175050.468601-1-ameryhung@gmail.com>
- <20260201175050.468601-12-ameryhung@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260201175050.468601-12-ameryhung@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR03MB6964:EE_|DS7PR03MB8036:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27c6ecc7-28f8-4c51-9d9d-08de63935772
+X-MS-Exchange-AtpMessageProperties: SA
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Gdc1p0mUU3jLZ5/rn5zSd3n03PSWjD9A+CqPmcQULPZfR5woy4q9PLn5YJ73?=
+ =?us-ascii?Q?hF3o2KSZABRssqShSFl+or7JsMx5SFfHa/Py4zbJBj5M0fn6s3wdQYieLrbh?=
+ =?us-ascii?Q?+/iFymVx0kLSAs+jH6/GEMxn9NSeDUUFDkPVo/hUvSiDUyhjuV9RfR6EJCRc?=
+ =?us-ascii?Q?+r/x5nQqbpwGW/dYzioFOwB9A6lyopSDy1g1aqKoWysJg+SDmIHD5bEkT7ny?=
+ =?us-ascii?Q?C/D/VTu5aOrJO3c0rpylr0inG4DwDKst4xk7d5510ni++eNGaoh53iqIdkRI?=
+ =?us-ascii?Q?1tCtYBIaPzNXyFViBMPedLJR7o91LZTX7NoAE0BgjSBgQspZLe0sPk5ozJmS?=
+ =?us-ascii?Q?Fr3pZh9h4XupSHhdtnwx1JQ9jmwogSOOjpdM2i1jJz24cSjwRnczLxC0z0tF?=
+ =?us-ascii?Q?roSnNGMtF093FB7aw94XLEycC8QtrNJhOIrE35eQFZVfZ+CcRV/NmvpUPyur?=
+ =?us-ascii?Q?I6BP2MM3n/mOqaGrx7lA5zkzWW6GvvNdp3uFgdwQ0YuULZ2aplltcfPdehtk?=
+ =?us-ascii?Q?uJsywv8iK3ae+bgW7Csa9HWQV2Hr3afDAkPepJSQ+ip/GNtmzIIATFaGs4v/?=
+ =?us-ascii?Q?wSNHZhBwpzLYLR0Keq79VUrjQ2GUli3W34zl1vqbx1EWkj01IbOe7RYYO6u0?=
+ =?us-ascii?Q?gpcWHYIgGntIqeRWE2F1hqMhdSuXLz4BVcwmK5tkevHt9e+It9dQiq3OOV34?=
+ =?us-ascii?Q?Qw+IYzxpTE3hRJT3PRWCVBhkKa9PthpDI0NDmQE5sgZiLFs1tkITqBS7CUCT?=
+ =?us-ascii?Q?zXtHhHXTX27S77hf5vQb4LycYdDS8P6AJ+1EdJHs1drbyIQiHo88C0tBdM35?=
+ =?us-ascii?Q?MOF4jg3pHx8l7Y+0pCPrdCfWMYE3nWVE7phbQjB/4qGxHPVHrTLwL5hQsMKP?=
+ =?us-ascii?Q?VQPW1DjT9MDd6+yEoyL1s0pNLohCw8xGb/u0nWV8OMU31cHao1C7Sl4PRxrp?=
+ =?us-ascii?Q?kMlLhiD9szrFVEM5o1aA3ZKiMT/I/qv+C0JWaMEufavQ4HKGVo5ickVP95TZ?=
+ =?us-ascii?Q?YPNWlTZk0xFV9L+by4JdRKzOHfrm4T3YhMtiLkvhQCvi2HSn3eJR2C9lL4rc?=
+ =?us-ascii?Q?+oGBzCvDV2U82aBWsJ2iQ5x7psunK1/AC+SQL4rkLra/9IJyYbSoO1CgOC0e?=
+ =?us-ascii?Q?JkbVB0k9drm36dj4lNiW6lJCKpz8txDH86YC2y1UXfZVuRjKr1mnDp0yLAji?=
+ =?us-ascii?Q?DvZS/O7unQRHV5YvqZbw0+czNLY/zsXh5zbKGwgcOBIblzznLwCqYwWQVbqF?=
+ =?us-ascii?Q?omojzXcUky5ONN6ia1M46lujcGTwTc7CYUed2t55xsEIwT8NIalMQC/Mx/Bz?=
+ =?us-ascii?Q?zgREvBdovhon2HRlaV5ZqUYz3osVtnUWTQZ8MWYYAZOyK1yqhM+v6wb96aBo?=
+ =?us-ascii?Q?RIo5NduwAT+09JrhOKcMKTzYdbMSFDy9Eb65o/K33LwWeR3DjiVfZk7B5Lbt?=
+ =?us-ascii?Q?a3RwgjaAr5Rsoi6ZT78jMEILLQ/WQoNAVbYIH9aKMKLjRnREmes9D6wuqiJ/?=
+ =?us-ascii?Q?zBAJWGeS6s9gSF6UQpOnlFkks/QsGQKAZETUUyXpXhpMqB42D58G+q4NsGfd?=
+ =?us-ascii?Q?5+EOUFmCPXl1DpdfdSQ=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6964.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?+sjxvJZ0H/deJcywoC3pZcqOEV44NUXYAZg+Q1dNiCYaehN4RPRB12inJt0Z?=
+ =?us-ascii?Q?4lwuyxQU23ODyVoHVN+zVRSx1k6F5SHskhE2nfBfwHBVWwYfHydFp4RAnv1M?=
+ =?us-ascii?Q?iybbUwegtaIw2hi2Jc+z4W5pFAlGsREPLZ44VULfcIABbhuGMfV8s6gkDgq4?=
+ =?us-ascii?Q?9hSpBBua61CWMKx5kW/M2cdapnZEU/CVZNKueBFvHynKXGDq4DfnagpcApOl?=
+ =?us-ascii?Q?XTasi8uRfqcFG4nKOswkUNer+sdlq5FxJnVEv1jIS6AvVTKRAijZVZS5fxIV?=
+ =?us-ascii?Q?srQiD42+hcWHxab+RuaVtMvf44qJ4gRNG0YISpJvkYaoaJOoRdLGlH7c7TNu?=
+ =?us-ascii?Q?McNed4TIAnsvnpCFAfcj7QllZWqIV/oac9/rLCgPXr0DfQE7uU8uRQcMdQkZ?=
+ =?us-ascii?Q?GsmRwefdHZq7ayn6uITQ9rq+OnJhW89N5uIO1WSg9gi1GGSLpkKDdUXNGmUQ?=
+ =?us-ascii?Q?a+zrGdBfU7jc60PJuBysvwG9YlEbfxU9a66S6ooQt3Au8pQMrJ5aNAFKhTTf?=
+ =?us-ascii?Q?F8bB7wbCpu8YT4BRQBlfr7RSSmV2Rm/Q6EJpO0Wt+AC3/MnNNlLP9tNKUv5r?=
+ =?us-ascii?Q?EkPPnmGth4C2DZybCf0CwOejbVJw0PThV6+avNyTJw+GRwrseH8/YL2CUiVb?=
+ =?us-ascii?Q?K/CZ/Jqct1VZ8+TZwtaYEtPj2xjFw9C+mqtpS/blw6OvHPchg8x1IOb457jW?=
+ =?us-ascii?Q?Cw9BVpHwSDrXZRuatRISPi7zNcfSZ4ejSYEH+DIOamsKuyiLb0J6O4jkUHr/?=
+ =?us-ascii?Q?Ez4Cx9FuzBH1/C25jYK9mNAgXvo9KW3U2yyFJrdit2bXp4lPdLNw9N1hPlT/?=
+ =?us-ascii?Q?I0MCVgAJHP3WUIOxBemm0u6gAjZCanF+Pa69V7s8YE5Q4vBhtFsowXsZ3OmM?=
+ =?us-ascii?Q?gzdcbsI/B7Jj4k3uG94soy5q4+1Qo72mwl6wuyAMJMRLYuR3FcoS3xwoBTUy?=
+ =?us-ascii?Q?Hd3Dn+WUJO6QG2DqCo+o9+JrF+GTbYoleJDo6ja9Ku9DJ4bA1UGu3+ZNBgqz?=
+ =?us-ascii?Q?Htb6d3b4+nWpuATwvvPPyRlWIZMpR2QLAnqGD2Bkb+b4+6rIQB/XtXsUlFfL?=
+ =?us-ascii?Q?A+beaC+FKhzALqL4hVtm+7YNqZ4AG3lIXEeSqkYR5PlNvZRvp/mWdO6CzsG5?=
+ =?us-ascii?Q?YdkrfqUUZjouwajvJS1SjSUzswyxI2miWafWAcTpEAyEyy23P5fBZR4de0AY?=
+ =?us-ascii?Q?FxMCvcdO9pmbUTE6xFmawIVnqc9LAniJe/a3jHzhb3LNRmvpaGbZjtP7/cS/?=
+ =?us-ascii?Q?Ixvcqx26KwsYsKGbQxXnzmavxNgk8C2G+L89qwpSGQDnT3mUlCxIVixs6en5?=
+ =?us-ascii?Q?Wi9Z0T+rQUtaYpo2zY40A3Nf9p3+5VDq7qQIf6J8uPmHpUw/5ku9ElJCSMgM?=
+ =?us-ascii?Q?v9wlcs590AZdxijQDBvueqqfbpS7EVgweRWnWF4IZ9scssdNXiWByQmZKBcE?=
+ =?us-ascii?Q?aYSoypBgYqnGFNG9nEao0yIcIIY6GpP1TAMy/b2csTQb/nkw2W54hhQSobdl?=
+ =?us-ascii?Q?x6nNVKeG++QAG5UHe9j7/cGQGI5VK2lRQcapK8/fNn+8uuJl4MGOa1w6uDWC?=
+ =?us-ascii?Q?2dnTkPBSWI5IJNTMRnPb/CCjO6NPA0b8LB6CP5Yb8bw/8SrNlQpUYLL0TRxv?=
+ =?us-ascii?Q?FnEp3NN3MKizuly/slTCqbGzPBpMdTebRrNqKHtHtJomCwTELiI50X/Iln8P?=
+ =?us-ascii?Q?4dwC16tkMv49mWh2xAtqezurvXgy0yM4L/JSAVzUdJ6O7GYxxIOXf8O153HR?=
+ =?us-ascii?Q?4xvdFk4/5tlTO1PillgU8hEN8SyTd8FksY9F9KKAqTZNG62AIMaQ2MdJWg5i?=
+X-MS-Exchange-AntiSpam-MessageData-1: wGrHycR68tMqiQ==
+X-OriginatorOrg: altera.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27c6ecc7-28f8-4c51-9d9d-08de63935772
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6964.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Feb 2026 02:16:01.6899
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fbd72e03-d4a5-4110-adce-614d51f2077a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DSgkkX0cP7txSFmy7txs6+U9y+Ab8QkxlYhnVhyNMoJ3gbK/AQR7WqQaSErEjB3e6+h5alSP6TD7HtTnRXHCsy8oxbEfU4SXDuo9xEkGocN0pcigK+juSSh21tcWMqGTxvxlKJn4xj03HkkaEirMVQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR03MB8036
 
-On 2/1/26 9:50 AM, Amery Hung wrote:
-> Take care of rqspinlock error in bpf_local_storage_{map_free, destroy}()
-> properly by switching to bpf_selem_unlink_nofail().
-> 
-> Both functions iterate their own RCU-protected list of selems and call
-> bpf_selem_unlink_nofail(). In map_free(), to prevent infinite loop when
-> both map_free() and destroy() fail to remove a selem from b->list
-> (extremely unlikely), switch to hlist_for_each_entry_rcu(). In destroy(),
-> also switch to hlist_for_each_entry_rcu() since we no longer iterate
-> local_storage->list under local_storage->lock. In addition, defer it to
-> workqueue as sleep may not always be possible in destroy().
-> 
-> Since selem, SDATA(selem)->smap and selem->local_storage may be seen by
-> map_free() and destroy() at the same time, protect them with RCU. This
-> means passing reuse_now == false to bpf_selem_free() and
+From: Nazim Amirul <muhammad.nazim.amirul.nazle.asmade@altera.com>
 
-Amery and I discussed some details offline. Summarize here to sync up 
-the mailing list.
+Disable all queues and disconnect before tx_disable in stmmac_xdp_release
+to prevent a corner case where packet may be still queued at the same time
+tx_disable is called resulting in kernel panic if some packet still has to
+be processed.
 
-If only map_free/destroy is using the selem/local_storage, reuse_now 
-should be true. reuse_now == true will go through the regular rcu gp. 
-The current map_free/destroy should be under rcu_read_lock().
+Signed-off-by: Nazim Amirul <muhammad.nazim.amirul.nazle.asmade@altera.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-fwiw, some history, iirc it used to always go through rcu gp only. 
-Sleepable support was added later, so rcu_tasks_trace gp was added. 
-After a regression report, reuse_now (the name may have been changed 
-once) was added to signal that no bpf prog is using the selem and to 
-avoid waiting for the rcu_tasks_trace gp.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+index da206b24aaed..7f5a6f30c231 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
++++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+@@ -6967,15 +6967,15 @@ void stmmac_xdp_release(struct net_device *dev)
+ 	struct stmmac_priv *priv = netdev_priv(dev);
+ 	u32 chan;
+ 
+-	/* Ensure tx function is not running */
+-	netif_tx_disable(dev);
+-
+ 	/* Disable NAPI process */
+ 	stmmac_disable_all_queues(priv);
+ 
+ 	for (chan = 0; chan < priv->plat->tx_queues_to_use; chan++)
+ 		hrtimer_cancel(&priv->dma_conf.tx_queue[chan].txtimer);
+ 
++	/* Ensure tx function is not running */
++	netif_tx_disable(dev);
++
+ 	/* Free the IRQ lines */
+ 	stmmac_free_irq(dev, REQ_IRQ_ERR_ALL, 0);
+ 
+-- 
+2.43.7
 
-> bpf_local_storage_free(). The local storage map is already protected as
-> bpf_local_storage_map_free() waits for an RCU grace period after
-> iterating b->list and before freeing itself.
-> 
-> bpf_selem_unlink() now becomes dedicated to helpers and syscalls paths
-> so reuse_now should always be false. Remove it from the argument and
-> hardcode it.
-> 
-> Co-developed-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Martin KaFai Lau <martin.lau@kernel.org>
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
-> ---
->   include/linux/bpf_local_storage.h |  5 +-
->   kernel/bpf/bpf_cgrp_storage.c     |  3 +-
->   kernel/bpf/bpf_inode_storage.c    |  3 +-
->   kernel/bpf/bpf_local_storage.c    | 96 +++++++++++++++++--------------
->   kernel/bpf/bpf_task_storage.c     |  3 +-
->   net/core/bpf_sk_storage.c         |  9 ++-
->   6 files changed, 69 insertions(+), 50 deletions(-)
-> 
-> diff --git a/include/linux/bpf_local_storage.h b/include/linux/bpf_local_storage.h
-> index cfa301ccc700..0d04f6babb2e 100644
-> --- a/include/linux/bpf_local_storage.h
-> +++ b/include/linux/bpf_local_storage.h
-> @@ -101,6 +101,7 @@ struct bpf_local_storage {
->   	rqspinlock_t lock;	/* Protect adding/removing from the "list" */
->   	u64 selems_size;	/* Total selem size. Protected by "lock" */
->   	refcount_t owner_refcnt;
-> +	struct work_struct work;
->   	bool use_kmalloc_nolock;
->   };
->   
-> @@ -168,7 +169,7 @@ bpf_local_storage_lookup(struct bpf_local_storage *local_storage,
->   	return SDATA(selem);
->   }
->   
-> -void bpf_local_storage_destroy(struct bpf_local_storage *local_storage);
-> +u32 bpf_local_storage_destroy(struct bpf_local_storage *local_storage);
->   
->   void bpf_local_storage_map_free(struct bpf_map *map,
->   				struct bpf_local_storage_cache *cache);
-> @@ -181,7 +182,7 @@ int bpf_local_storage_map_check_btf(const struct bpf_map *map,
->   void bpf_selem_link_storage_nolock(struct bpf_local_storage *local_storage,
->   				   struct bpf_local_storage_elem *selem);
->   
-> -int bpf_selem_unlink(struct bpf_local_storage_elem *selem, bool reuse_now);
-> +int bpf_selem_unlink(struct bpf_local_storage_elem *selem);
->   
->   int bpf_selem_link_map(struct bpf_local_storage_map *smap,
->   		       struct bpf_local_storage *local_storage,
-> diff --git a/kernel/bpf/bpf_cgrp_storage.c b/kernel/bpf/bpf_cgrp_storage.c
-> index 853183eead2c..0bc3ab19c7b4 100644
-> --- a/kernel/bpf/bpf_cgrp_storage.c
-> +++ b/kernel/bpf/bpf_cgrp_storage.c
-> @@ -27,6 +27,7 @@ void bpf_cgrp_storage_free(struct cgroup *cgroup)
->   	if (!local_storage)
->   		goto out;
->   
-> +	RCU_INIT_POINTER(cgroup->bpf_cgrp_storage, NULL);
->   	bpf_local_storage_destroy(local_storage);
->   out:
->   	rcu_read_unlock();
-> @@ -89,7 +90,7 @@ static int cgroup_storage_delete(struct cgroup *cgroup, struct bpf_map *map)
->   	if (!sdata)
->   		return -ENOENT;
->   
-> -	return bpf_selem_unlink(SELEM(sdata), false);
-> +	return bpf_selem_unlink(SELEM(sdata));
->   }
->   
->   static long bpf_cgrp_storage_delete_elem(struct bpf_map *map, void *key)
-> diff --git a/kernel/bpf/bpf_inode_storage.c b/kernel/bpf/bpf_inode_storage.c
-> index 470f4b02c79e..eb607156ba35 100644
-> --- a/kernel/bpf/bpf_inode_storage.c
-> +++ b/kernel/bpf/bpf_inode_storage.c
-> @@ -68,6 +68,7 @@ void bpf_inode_storage_free(struct inode *inode)
->   	if (!local_storage)
->   		goto out;
->   
-> +	RCU_INIT_POINTER(bsb->storage, NULL);
->   	bpf_local_storage_destroy(local_storage);
->   out:
->   	rcu_read_unlock_migrate();
-> @@ -110,7 +111,7 @@ static int inode_storage_delete(struct inode *inode, struct bpf_map *map)
->   	if (!sdata)
->   		return -ENOENT;
->   
-> -	return bpf_selem_unlink(SELEM(sdata), false);
-> +	return bpf_selem_unlink(SELEM(sdata));
->   }
->   
->   static long bpf_fd_inode_storage_delete_elem(struct bpf_map *map, void *key)
-> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-> index 1846067e6e7e..d02ad9052bd6 100644
-> --- a/kernel/bpf/bpf_local_storage.c
-> +++ b/kernel/bpf/bpf_local_storage.c
-> @@ -381,7 +381,11 @@ static void bpf_selem_link_map_nolock(struct bpf_local_storage_map_bucket *b,
->   	hlist_add_head_rcu(&selem->map_node, &b->list);
->   }
->   
-> -int bpf_selem_unlink(struct bpf_local_storage_elem *selem, bool reuse_now)
-> +/*
-> + * Unlink an selem from map and local storage with lock held.
-> + * This is the common path used by local storages to delete an selem.
-> + */
-> +int bpf_selem_unlink(struct bpf_local_storage_elem *selem)
->   {
->   	struct bpf_local_storage *local_storage;
->   	bool free_local_storage = false;
-> @@ -415,10 +419,10 @@ int bpf_selem_unlink(struct bpf_local_storage_elem *selem, bool reuse_now)
->   out:
->   	raw_res_spin_unlock_irqrestore(&local_storage->lock, flags);
->   
-> -	bpf_selem_free_list(&selem_free_list, reuse_now);
-> +	bpf_selem_free_list(&selem_free_list, false);
->   
->   	if (free_local_storage)
-> -		bpf_local_storage_free(local_storage, reuse_now);
-> +		bpf_local_storage_free(local_storage, false);
-
-The false here is correct because bpf_selem_unlink is called by the bpf 
-prog.
-
-This is related to the next change. The bpf_selem_unlink (called by bpf 
-prog, so a normal path) can free the local_storage after unlinking the 
-last selem...
-
->   
->   	return err;
->   }
-> @@ -648,7 +652,7 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
->   
->   	local_storage = rcu_dereference_check(*owner_storage(smap, owner),
->   					      bpf_rcu_lock_held());
-> -	if (!local_storage || hlist_empty(&local_storage->list)) {
-> +	if (!local_storage) {
->   		/* Very first elem for the owner */
->   		err = check_flags(NULL, map_flags);
->   		if (err)
-> @@ -696,17 +700,6 @@ bpf_local_storage_update(void *owner, struct bpf_local_storage_map *smap,
->   	if (err)
->   		goto free_selem;
->   
-> -	/* Recheck local_storage->list under local_storage->lock */
-> -	if (unlikely(hlist_empty(&local_storage->list))) {
-> -		/* A parallel del is happening and local_storage is going
-> -		 * away.  It has just been checked before, so very
-> -		 * unlikely.  Return instead of retry to keep things
-> -		 * simple.
-> -		 */
-> -		err = -EAGAIN;
-> -		goto unlock;
-> -	}
-> -
-
-... so skip checking hlist_empty(&local_storage->list) here before 
-linking new selem could be UAF. The local_storage could have been freed 
-in bpf_selem_unlink. If I am reading it correctly, this needs to be 
-addressed.
-
->   	old_sdata = bpf_local_storage_lookup(local_storage, smap, false);
->   	err = check_flags(old_sdata, map_flags);
->   	if (err)
-> @@ -810,13 +803,16 @@ int bpf_local_storage_map_check_btf(const struct bpf_map *map,
->   	return 0;
->   }
->   
-> -void bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
-> +/*
-> + * Deferred looping local_storage->list to workqueue since sleeping may not be
-> + * allowed in bpf_local_storage_destroy()
-> + */
-> +static void bpf_local_storage_free_deferred(struct work_struct *work)
->   {
-> +	struct bpf_local_storage *local_storage;
->   	struct bpf_local_storage_elem *selem;
-> -	bool free_storage = false;
-> -	HLIST_HEAD(free_selem_list);
-> -	struct hlist_node *n;
-> -	unsigned long flags;
-> +
-> +	local_storage = container_of(work, struct bpf_local_storage, work);
->   
->   	/* Neither the bpf_prog nor the bpf_map's syscall
->   	 * could be modifying the local_storage->list now.
-> @@ -827,33 +823,44 @@ void bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
->   	 * when unlinking elem from the local_storage->list and
->   	 * the map's bucket->list.
->   	 */
-> -	raw_res_spin_lock_irqsave(&local_storage->lock, flags);
-> -	hlist_for_each_entry_safe(selem, n, &local_storage->list, snode) {
-> -		/* Always unlink from map before unlinking from
-> -		 * local_storage.
-> -		 */
-> -		bpf_selem_unlink_map(selem);
-> -		/* If local_storage list has only one element, the
-> -		 * bpf_selem_unlink_storage_nolock() will return true.
-> -		 * Otherwise, it will return false. The current loop iteration
-> -		 * intends to remove all local storage. So the last iteration
-> -		 * of the loop will set the free_cgroup_storage to true.
-> -		 */
-> -		free_storage = bpf_selem_unlink_storage_nolock(
-> -			local_storage, selem, &free_selem_list);
-> +	rcu_read_lock();
-> +restart:
-> +	hlist_for_each_entry_rcu(selem, &local_storage->list, snode) {
-> +		bpf_selem_unlink_nofail(selem, NULL);
-> +
-> +		if (need_resched()) {
-> +			cond_resched_rcu();
-
-Unlike b->list, the local_storage->list should not be long. The current 
-local_storage->list is also iterated under rcu_read_lock(). Can this 
-iteration stay in bpf_local_storage_destroy and skip deferring to wq?
-
-> +			goto restart;
-> +		}
->   	}
-> -	raw_res_spin_unlock_irqrestore(&local_storage->lock, flags)
-> +	rcu_read_unlock();
->   
-> -	bpf_selem_free_list(&free_selem_list, true);
-> +	bpf_local_storage_free(local_storage, false);
-
-I think this can be bpf_local_storage_free(..., true)
-
-> +}
-> +
-> +/*
-> + * Destroy local storage when the owner is going away. Caller must clear owner->storage
-> + * and uncharge memory if memory charging is used.
-> + *
-> + * Since smaps associated with selems may already be gone, mem_uncharge() or
-> + * owner_storage() cannot be called in this function. Let the owner (i.e., the caller)
-> + * do it instead.
-> + */
-> +u32 bpf_local_storage_destroy(struct bpf_local_storage *local_storage)
-> +{
-> +	INIT_WORK(&local_storage->work, bpf_local_storage_free_deferred);
->   
-> -	if (free_storage)
-> -		bpf_local_storage_free(local_storage, true);
-> +	queue_work(system_dfl_wq, &local_storage->work);
->   
->   	if (!refcount_dec_and_test(&local_storage->owner_refcnt)) {
->   		while (refcount_read(&local_storage->owner_refcnt))
->   			cpu_relax();
->   		smp_mb();  /* pair with refcount_dec in bpf_selem_unlink_nofail */
-
-This puzzled me a bit when reading patch 10 alone without the following 
-lines on local_storage->owner and local_storage->selems_size. :)
-
-A nit. It will be useful to have more details here in patch 11. My 
-understanding is to ensure the map_free() see the local_storage->owner 
-and the destroy() here sees the correct local_storage->selems_size?
-
- > +
- > +	local_storage->owner = NULL;
- > +
- > +	return sizeof(*local_storage) + local_storage->selems_size;
