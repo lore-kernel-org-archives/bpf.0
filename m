@@ -1,158 +1,184 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D7241C2EE;
-	Wed,  4 Feb 2026 15:41:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770219701; cv=none; b=s6rbK3WtRskoI58ADpIarB7eWD5zQEJyFHmSlq91VJDfzb1elGc1zuAInxImt1C4ciAvxtW4MbnEDqWoUS/ONFlDn1b8DeyE3UrfSDmsQNlErULIYINiOliwJ+mnSmhRaKzjy9iulNOMs/F4cSnuFxVWoLP0LRRvgJuhwhzLYgE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770219701; c=relaxed/simple;
-	bh=y+VfXyZfEv/iLTKOZwxeeQmhfZehJ6ewL2y08ntJHMA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HP927FL0hOm8Bv5fnmt2b1N/brIMxJPBZJA6Mzal3x/T/sSAv8UiOC0gRfAgKkDFuNfAypH6UrZBwS4pWg6yp2AB5Pnm7EeSWQg0Ehfp69s6W0GVmUJ6J9U1av7lgLVVzPVWell6cxxUpu5NFxZGC4t+jHnpOUbTG+8VZvYG8pg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=XJ49bUqs; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F8E3D9041
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 16:07:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770221226; cv=pass; b=doDzVOGKHTXxag99HAMtEFZZ8I3VCx9mBI4cB7FjBUECkOHY6wTo5S3afZ+mTgyJZ7V7NIfbwmY/9nrd7aZbAYarcTgIiPfqgae+b90vRLZZC7NPbuiGommm5FqATAnVucIaDjnHgw/oQXedTrmzVfwD9hZvds8GfHusT6d61YM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770221226; c=relaxed/simple;
+	bh=VFCK34v1D422aldVA5ktiMUDtY/jZRvdezQa8B13quE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=boKfH2R9lyw1kum8mpSjcf+BTgAoDYnVNEGR8v71Jf5MGNBDnJ9XH07dTBVTXx11Npru8NAQDpX59US0deTuUkZPyb7ck9Fi4AKRaZZ6uIdH4T10ezpTLqO3lRwUCi9rpr8E7/CLD/hwIWCtfwvsgRWTTLMDS6hKEdfeoiGtHak=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FFrmsTa+; arc=pass smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="XJ49bUqs"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vnf0R-001HOM-Oa; Wed, 04 Feb 2026 16:41:27 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=yy+pfXDm9B5saBKTpihytUhl3OzuXowP2Q77KQkJhnU=; b=XJ49bUqsIwmLRJmMTrY7Hgn3IB
-	x0hPLvwIniiuy5QCOcU5BOjXgph4Q9kcl1ckH8tDqEsWpDBdl1QHp/VFW1rMYoou3GyIiF/z56xk5
-	EzS8M17Cv4q7LDUoooV+r4cpOWYV3ysV8wg/iIwCjAu0vnw6wS103rlswl6+EmRyoiUWzlnsK4i9x
-	RKj5JMae3Q3pQDyntOvfNIXArl/vXogS3Hz9PnH0yjMHRkvYWPzVhWCagOZGADzhgoTIJ8ZG/shwk
-	qMBCQDxxpRCl14y0X2a35lmXg5RPY+JVHYRqqgLmi7NZ+DrWfaKN8LTD4FovJKeSYG5wNHN7P3BzK
-	KTKeAwLw==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vnf0R-0005dh-55; Wed, 04 Feb 2026 16:41:27 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vnf0P-002MxR-0s; Wed, 04 Feb 2026 16:41:25 +0100
-Message-ID: <408569e7-2b82-4eff-b767-79ce6ef6cae0@rbox.co>
-Date: Wed, 4 Feb 2026 16:41:23 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FFrmsTa+"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-42fbc305914so29443f8f.0
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 08:07:05 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770221224; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZbJx2F2loJewQLFVvojRTycYuR7leDOQ8y7QKF6t2DmfBJYmbZVwAGnrNWrOCTNU++
+         X+f+hxiAeQVD7kfk0iACbV0vNTZB6iScf5MhP82aTGyJxBXwvwkgKN7rESu/y23q0CZi
+         rM/iLj9yyTYGP5Q40kUtwVaDkHqiWJcI18oM94PB4YzSPcejZT/tBebgHINU+9gSDVlk
+         o55HUy6lNanq7HljHOLWXCvUyFY2pHiI++9uDhg6DFKbkLDJdlLqJPrQzi4sxxy4goMz
+         HpFAuTMSD5MT8Y5jr4yrTns34ACNrbF3zQneEpW5Eoi5a2QBX6mYP+Iqc/xQ5MMhPtCV
+         VW4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=g3KyJo8YATugesAfXcKf+1b+zK4Bs92mhLlJFwblWSM=;
+        fh=pmT6OOCiuWPVQKUrqz8+xryBCBwuJe4NNthf+ZRY9dE=;
+        b=jdSnmOVC7CCahK0MB1B9M78eYUq02Pdng30f4SZTKgh/OeIC9t4ertPHx33hKcPwdv
+         5ahDbPRfGMCLUHpDIsKlSLk9GEucAJSLuOiF9yCxEdIrpn89VLX+/zhVv+8WP4P1F1Jc
+         JqLHXC/hSUNuKeq0/DTI8wlkD1EDp+KcIuj7JRnGVwqLyEN2h1Klbd1SQn7y11k7gE+l
+         koSDOJJAABU/YiZpOvbOrXAgmaKYk8Qv+637YlH4/at5fz6TwD1vgYOQUwOcsVMg8se5
+         HeOdaeJjGi2EJ5mCYMoasA9jRBlG7gVe0gXdksUFr4WhXtleFTJqoTCtIVsXUvlHUlYS
+         ZKiA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770221224; x=1770826024; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g3KyJo8YATugesAfXcKf+1b+zK4Bs92mhLlJFwblWSM=;
+        b=FFrmsTa+GCl3ztGEusr0qqHOuyzDce+1vvF0milYxsyRGgwUAFS7c1ecuGaRA0ptlI
+         /0Xu6xXBNZlQdYXAl4K7XkvWxMPTQOL2y/H0iiANZJlPrOTcdWSufH4lh1F3glA/gHQX
+         1nSFKMN2bGYgdH0cWctczjeq+zzytdvM8TqdvuQ1VQEhjzkt1f4lqzao1whcZ7As617f
+         Et1Ik3eBF1Ny7XFgF4uJNC/hpomKiRWVxO5KozHZwH1vWBVTCYpbnBuoyuXNRI4G5hoc
+         PNpiZV3T3EoqJn3HKqyEAIF/4lByIilzn7smpJwajLOKq5qXFL2DJYds4ulmLGcizC0d
+         A4vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770221224; x=1770826024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=g3KyJo8YATugesAfXcKf+1b+zK4Bs92mhLlJFwblWSM=;
+        b=uHWLN/sBWynxmRutogfa+EvCu3ZXJLcURR2T2eUZt5TEYs26KFY58K3uVvbsZQ2pTR
+         DNp4uNAsBw7vYi69Yt2PWhqft9YYZBrX9yGkdOxq7j7ZSBqfc2n+W7pAHJqDUTxBDd8B
+         PYG7niz03yjqYv9HikaruhXHRjKYPMrqCjgt/knvLShkDUyr7Wx+93jWxWemugnIoLaw
+         G91MiT/AlPgW4be4II4hunIgU2Aw3LXduqarfgI6ayQzdLu2JCmWBG8HE8KlTwy33P1F
+         tmZjUhvEk0A8qIfKbcXBKEi7zFeqfIr9oqNPasMlpROMYMKJqV3Jn5jIOJn7b2Vmqlat
+         Ot6A==
+X-Forwarded-Encrypted: i=1; AJvYcCVzyGTNT2cyS9TwsI9D5eZdcMig8PP87Xqn3ILVrOJXtlNavdApbWYVtm/BbpOLjUWj3cU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEv7cwGygYjiSpPptiN30VLuOa7xeY6l5xdmVLjr4WZlxUTXCs
+	FcSjGkHzBApjkN9KJ/fvs9io0jHqr423Yd6Jlb5++NSMbcT5RCZbM8JY0d8A8ZI60X7Dhco3ygv
+	/zqpcNvjvvSOLK5MAdYEQA994/c/LxnI=
+X-Gm-Gg: AZuq6aJev24Stx9lS8ELeIqRi/ewYpsl/b3eTFI3JDMJPI/nzFKBQXqfzwu5La+w0yq
+	M0z0dO5gjG6ZkH80l8zMFNCbKZvZV7PkBcBTDckJ3EMa9avEX2WqxCUOe1DkJzgGxYnyxZDiUV4
+	Y0HjdJOha7LZR7hEMlAXygLF1U2seyM9+MyR+dNVtHzAxrcZ9s4IhFcR/+9X5qs17kJmMJt9gKW
+	DUR/g+itZTmuvQHBvaPXD0elHJ0rxNX5JC162Ohc8lwwFeEsc4sRpI/0ED9+w9cUrPognTo8z15
+	/25PmpMhw8DY6tD3sH4t0MQGSBRiZxpldR7DB8RLRx2mEkO8chiYVqxHcaKWt2xs80YJWK5+AUx
+	JZCDaDxcZs7DF2Q==
+X-Received: by 2002:a05:6000:608:b0:436:1516:4faf with SMTP id
+ ffacd0b85a97d-43617e30129mr5407282f8f.10.1770221223749; Wed, 04 Feb 2026
+ 08:07:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
- update
-To: Kuniyuki Iwashima <kuniyu@google.com>,
- Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
- edumazet@google.com, horms@kernel.org, jakub@cloudflare.com,
- john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com
-References: <8d055903-fe44-4bbf-a1a5-e0176343bf0b@rbox.co>
- <20260203200242.404131-1-kuniyu@google.com>
- <80865b12-7786-4787-81c8-08b754716a5d@linux.dev>
- <CAAVpQUCshzAAHZQQ7sVE+3UdKmBV42bKudcdDR0KtaTcTqn5gA@mail.gmail.com>
-From: Michal Luczaj <mhal@rbox.co>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <CAAVpQUCshzAAHZQQ7sVE+3UdKmBV42bKudcdDR0KtaTcTqn5gA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260203093819.2105105-1-jolsa@kernel.org> <CAADnVQ+EU_f4LVDQkqkB0Q+QYMBH5ynXU3+rGZA2XCGmYMcFqg@mail.gmail.com>
+ <aYM9YUl6xf9I2x4c@krava>
+In-Reply-To: <aYM9YUl6xf9I2x4c@krava>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 4 Feb 2026 08:06:50 -0800
+X-Gm-Features: AZwV_QiYCIvOKIgNbC9t1KZ1fUnzpyrPVQ58tyi_XhyB3WAfGc73HFZJPGO5tzc
+Message-ID: <CAADnVQJPbnVEDYAAy4mUP7NmsGkUmeV9B73V+Bc=LYb8r8Zrow@mail.gmail.com>
+Subject: Re: [RFC bpf-next 00/12] bpf: tracing_multi link
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	Menglong Dong <menglong8.dong@gmail.com>, Steven Rostedt <rostedt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/4/26 08:58, Kuniyuki Iwashima wrote:
-> On Tue, Feb 3, 2026 at 11:15 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
->>
->> On 2/3/26 11:47 AM, Kuniyuki Iwashima wrote:
->>> From: Michal Luczaj <mhal@rbox.co>
->>> Date: Tue, 3 Feb 2026 10:57:46 +0100
->>>> On 2/3/26 04:53, Martin KaFai Lau wrote:
->>>>> On 2/2/26 7:10 AM, Michal Luczaj wrote:
->>>>>> In related news, looks like bpf_iter_unix_seq_show() is missing
->>>>>> unix_state_lock(): lock_sock_fast() won't stop unix_release_sock(). E.g.
->>>>>> bpf iterator can grab unix_sock::peer as it is being released.
->>>>>
->>>>> If the concern is the bpf iterator prog may use a released unix_peer(sk)
->>>>> pointer, it should be fine. The unix_peer(sk) pointer is not a trusted
->>>>> pointer to the bpf prog, so nothing bad will happen other than
->>>>> potentially reading incorrect values.
->>>>
->>>> But if the prog passes a released peer pointer to a bpf helper:
->>>>
->>>> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0x95/0xb0
->>>> Read of size 1 at addr ffff888110654c92 by task test_progs/1936
->>
->> hmm... bpf_skc_to_unix_sock is exposed to tracing. bpf_iter is a tracing
->> bpf prog.
->>
->>>
->>> Can you cook a patch for this ? probably like below
->>
->> This can help the bpf_iter but not the other tracing prog such as fentry.
-> 
-> Oh well ... then bpf_skc_to_unix_sock() can be used even
-> with SEQ_START_TOKEN at fentry of bpf_iter_unix_seq_show() ??
-> 
-> How about adding notrace to all af_unix bpf iterator functions ?
-> 
-> The procfs iterator holds a spinlock of the hashtable from
-> ->start/next() to ->stop() to prevent the race with unix_release_sock().
-> 
-> I think other (non-iterator) functions cannot do such racy
-> access with tracing prog.
+On Wed, Feb 4, 2026 at 4:36=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
+>
+> On Tue, Feb 03, 2026 at 03:17:05PM -0800, Alexei Starovoitov wrote:
+> > On Tue, Feb 3, 2026 at 1:38=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wro=
+te:
+> > >
+> > > hi,
+> > > as an option to Meglong's change [1] I'm sending proposal for tracing=
+_multi
+> > > link that does not add static trampoline but attaches program to all =
+needed
+> > > trampolines.
+> > >
+> > > This approach keeps the same performance but has some drawbacks:
+> > >
+> > >  - when attaching 20k functions we allocate and attach 20k trampoline=
+s
+> > >  - during attachment we hold each trampoline mutex, so for above
+> > >    20k functions we will hold 20k mutexes during the attachment,
+> > >    should be very prone to deadlock, but haven't hit it yet
+> >
+> > If you check that it's sorted and always take them in the same order
+> > then there will be no deadlock.
+> > Or just grab one global mutex first and then grab trampolines mutexes
+> > next in any order. The global one will serialize this attach operation.
+> >
+> > > It looks the trampoline allocations/generation might not be big a pro=
+blem
+> > > and I'll try to find a solution for holding that many mutexes. If the=
+re's
+> > > no better solution I think having one read/write mutex for tracing mu=
+lti
+> > > link attach/detach should work.
+> >
+> > If you mean to have one global mutex as I proposed above then I don't s=
+ee
+> > a downside. It only serializes multiple libbpf calls.
+>
+> we also need to serialize it with standard single trampoline attach,
+> because the direct ftrace update is now done under trampoline->mutex:
+>
+>   bpf_trampoline_link_prog(tr)
+>   {
+>     mutex_lock(&tr->mutex);
+>     ...
+>     update_ftrace_direct_*
+>     ...
+>     mutex_unlock(&tr->mutex);
+>   }
+>
+> for tracing_multi we would link the program first (with tr->mutex)
+> and do the bulk ftrace update later (without tr->mutex)
+>
+>   {
+>     for each involved trampoline:
+>       bpf_trampoline_link_prog
+>
+>     --> and here we could race with some other thread doing single
+>         trampoline attach
+>
+>     update_ftrace_direct_*
+>   }
+>
+> note the current version locks all tr->mutex instances all the way
+> through the update_ftrace_direct_* update
+>
+> I think we could use global rwsem and take read lock on single
+> trampoline attach path and write lock on tracing_multi attach,
+>
+> I thought we could take direct_mutex early, but that would mean
+> different order with trampoline mutex than we already have in
+> single attach path
 
-But then there's SOCK_DGRAM where you can drop unix_peer(sk) without
-releasing sk; see AF_UNSPEC in unix_dgram_connect(). I think Martin is
-right, we can crash at many fentries.
+I feel we're talking past each other.
+I meant:
 
-BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa4/0xb0
-Read of size 2 at addr ffff888147d38890 by task test_progs/2495
-Call Trace:
- dump_stack_lvl+0x5d/0x80
- print_report+0x170/0x4f3
- kasan_report+0xe1/0x180
- bpf_skc_to_unix_sock+0xa4/0xb0
- bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
- bpf_trampoline_6442564662+0x47/0xab
- unix_shutdown+0x9/0x880
- __sys_shutdown+0xe1/0x160
- __x64_sys_shutdown+0x52/0x90
- do_syscall_64+0x6b/0x3a0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
+For multi:
+1. take some global mutex
+2. take N tramp mutexes in any order
 
-> 
->>
->>>
->>> ---8<---
->>> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
->>> index 02ebad6afac7..9c7e9fbde362 100644
->>> --- a/net/unix/af_unix.c
->>> +++ b/net/unix/af_unix.c
->>> @@ -3740,8 +3740,9 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
->>>               return 0;
->>>
->>>       slow = lock_sock_fast(sk);
->>> +     unix_state_lock(sk);
->>>
->>> -     if (unlikely(sk_unhashed(sk))) {
->>> +     if (unlikely(sock_flag(other, SOCK_DEAD))) {
->>>               ret = SEQ_SKIP;
->>>               goto unlock;
->>>       }
->>> @@ -3751,6 +3752,7 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
->>>       prog = bpf_iter_get_info(&meta, false);
->>>       ret = unix_prog_seq_show(prog, &meta, v, uid);
->>>   unlock:
->>> +     unix_staet_unlock(sk);
->>>       unlock_sock_fast(sk, slow);
->>>       return ret;
->>>   }
->>> ---8<---
->>>
->>> Thanks!
->>
-
+For single:
+1. take that 1 specific tramp mutex.
