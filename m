@@ -1,94 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8157821D3F3;
-	Wed,  4 Feb 2026 13:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2FAE232395;
+	Wed,  4 Feb 2026 13:26:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770210296; cv=none; b=hOF3I4zvDSYKuoyLQNNmgSS/auB3qL4+I045OKMYmANPvj1jw0yK7Y7MFeY8IO+NsJ3hOuRmU0PxKwx+uPuw9JPC49D/ObtPbeOaWV6R6pKUS44F31hJ+UJT94Rx0nyVpqHViu4X2BBarJcbMkY5ZF42px5XJeQPelbaA67Pl28=
+	t=1770211609; cv=none; b=Jj4RNeYe5b+2ShWsXeJMitzxa/EQ41jWLWT8jr//xPwPtoKZHhhj1jplxvvu+91bxnTrM3196S00JOleGYfa8yi3cn8rn7t/jBNRrywSOmijnzDQ94j9NxXHGMfCuvWwojvORCiNtUSAf0ukymqYVMZbMagwqY2MM/m6UyAJYxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770210296; c=relaxed/simple;
-	bh=t5rwIpvTwqvo+MrjZpxhrJz32tY2+75WSQEZtzqs8Ak=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=pMK2Vvdx2SRcZoAfKDbaF65lP8clh7CXKx3XIm2MBbqblKmp+sdxdo0vikZgFG48iTdO9oLZwPKFYH3wsXcmw+EUztD1/URn2/+BGKcmOhJJeE7DniEJF5aXdclpc3VFAe8xhMN2cp1+rK6LByat+y4hu/XEU+tRz+4BTpQjmAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K8dukxSv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770211609; c=relaxed/simple;
+	bh=U/llW4oZD1dqeKtQHuKdyCEJeTKfe14SLqOiC8Fseik=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hN1/oXClU/XZ5LSNkLGbAgnTPo2J0FpcWmQQ/0cqbgHMsw+OAsSpzn1An1KidDG+nRDGE3osIiuFIDGtXoeNyKUeMZovV5hP9vMgzQfZapCy+zP/LUjTauid8zeka5jhbsHaGCTHFW1oKiBfih3MFyzyB/jkeDkqXopzQ6fdSDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KGVeDora; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K8dukxSv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB88AC4CEF7;
-	Wed,  4 Feb 2026 13:04:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KGVeDora"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34729C4CEF7;
+	Wed,  4 Feb 2026 13:26:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770210296;
-	bh=t5rwIpvTwqvo+MrjZpxhrJz32tY2+75WSQEZtzqs8Ak=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=K8dukxSvFphRFOzEdLJvrMAzBBhVEXqTjvKAPjYj7AMGCEl/cQfYTp067nQkPMADL
-	 CR/WJu3tLRUds/H4yfwn7EUv0c7/hDQIJ7F2WmlFLI4n686pkduj87Cl/f4r7Yuao9
-	 h5nK6dAr2swO4uHqoie3yURdA9QSSVXvzKH8/WY92xQCneLnA7fDSHC0XYyPvZlRi3
-	 SZCCgXyOzMCUtfAj1nV9H2WBEAjFTXhp7uIWyHYpQhRpvOGWqWJ7Z0Wd64TaZgOITz
-	 +DkggZ1KJ5Jj/jtBkYWWJDqUpYxPOvsCEVs8jRqOtP7dzahiwslIXPvHKaGhn2hkbX
-	 7DlpGqKuDtw9w==
-Content-Type: multipart/mixed; boundary="===============1159060639630682925=="
+	s=k20201202; t=1770211608;
+	bh=U/llW4oZD1dqeKtQHuKdyCEJeTKfe14SLqOiC8Fseik=;
+	h=From:To:Cc:Subject:Date:From;
+	b=KGVeDoraVD0sVyWBGV0aaMKiFYONM1BjthWXLqs/58XYaoA96/8GpLqnJ5hpL5Lbe
+	 hiYpMCGEy9z9Z4Bsz3rGiIDSE+lzNM5xbxrQBuXDi6giEmT/mhyGTVIc6F5VietLf4
+	 zFuenXTf+lreEazHmQE3WL9kGHzPyM05OHECUxUGL3AO2opEf/X1YSQodjCYzXCed1
+	 +/XmNbfyRE3rA/gdJQlLiLqnLSjL6yzZ4wamciRPow+IASmqKxqkRc95aLvIQPnDdH
+	 DNh1NFDEwv8DIuKUIF/hRzqHGp/vTHQJ6+TM61ouI09VuYdsFcnjG4kHlPi2H+aGxN
+	 jA8GJ/lQp9izg==
+From: Arnd Bergmann <arnd@kernel.org>
+To: Kees Cook <kees@kernel.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	kernel test robot <lkp@intel.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Bartosz Golaszewski <brgl@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] vsnprintf: drop __printf() attributes on binary printing functions
+Date: Wed,  4 Feb 2026 14:26:23 +0100
+Message-Id: <20260204132643.1302967-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <167a8f4235973cd42372884aa66182a10fd17e50c70626b1fa0e659933e82b4e@mail.kernel.org>
-In-Reply-To: <20260204-afabre-bpf_tcp_sock-v1-1-a22b40c630c0@cloudflare.com>
-References: <20260204-afabre-bpf_tcp_sock-v1-1-a22b40c630c0@cloudflare.com>
-Subject: Re: [PATCH bpf-next] bpf: Allow bpf_tcp_sock() helper in XDP
-From: bot+bpf-ci@kernel.org
-To: afabre@cloudflare.com,martin.lau@linux.dev,daniel@iogearbox.net,john.fastabend@gmail.com,sdf@fomichev.me,ast@kernel.org,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org
-Cc: bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,kernel-team@cloudflare.com,wferguson@cloudflare.com,afabre@cloudflare.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed,  4 Feb 2026 13:04:55 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============1159060639630682925==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Arnd Bergmann <arnd@arndb.de>
 
->     But the TCP TIME-WAIT state needs special handling for this: packets
->     received for a TIME-WAIT socket can either belong to the current
->     incarnation of the connection, or a new incarnation. The only way to
->     determine this is to compare the sequence numbers.
->
->     Add the bpf_tcp_sock() helper in XDP to allow the socket sequence
->     numbers to be read.
+The printf() format attributes are applied inconsistently for the binary
+printf helpers, which causes warnings for the bpf_trace code using
+them from functions that pass down format strings:
 
-Can this approach work for TIME-WAIT sockets? Looking at bpf_tcp_sock() in
-net/core/filter.c:
+    kernel/trace/bpf_trace.c: In function '____bpf_trace_printk':
+    kernel/trace/bpf_trace.c:377:9: error: function '____bpf_trace_printk' might be a candidate for 'gnu_printf' format attribute [-Werror=suggest-attribute=format]
+      377 |         ret = bstr_printf(data.buf, MAX_BPRINTF_BUF, fmt, data.bin_args);
+          |         ^~~
 
-    if (sk_fullsock(sk) && sk->sk_protocol == IPPROTO_TCP)
-        return (unsigned long)sk;
-    return (unsigned long)NULL;
+This can be addressed either by annotating all five callers in bpf code,
+or by removing the annotations on the callees that were added by Andy
+Shevchenko last year.
 
-And sk_fullsock() in include/net/sock.h:
+As Alexei Starovoitov points out, there are no callers in C code that
+would benefit from the __printf attributes, the only users are in BPF
+code or in the do_trace_printk() helper that already checks the arguments.
 
-    static inline bool sk_fullsock(const struct sock *sk)
-    {
-        return (1 << sk->sk_state) & ~(TCPF_TIME_WAIT | TCPF_NEW_SYN_RECV);
-    }
+Drop all three of these annotations, reverting the earlierl commits that
+added these, in order to get a clean build with -Wsuggest-attribute=format.
 
-TIME-WAIT sockets are explicitly excluded by sk_fullsock(), so bpf_tcp_sock()
-returns NULL for them. The sequence numbers stored in TIME-WAIT sockets
-(skc_tw_rcv_nxt and skc_tw_snd_nxt in sock_common) would not be accessible
-through this helper.
-
-The change itself is useful for accessing tcp_sock fields from established
-connections in XDP, but the commit message implies this solves the TIME-WAIT
-sequence number problem described, which doesn't appear to be the case.
-
-
+Fixes: 6b2c1e30ad68 ("seq_file: Mark binary printing functions with __printf() attribute")
+Fixes: 7bf819aa992f ("vsnprintf: Mark binary printing functions with __printf() attribute")
+Link: https://lore.kernel.org/all/CAADnVQK3eZp3yp35OUx8j1UBsQFhgsn5-4VReqAJ=68PaaKYmg@mail.gmail.com/
+Closes: https://lore.kernel.org/oe-kbuild-all/202512061640.9hKTnB8p-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Acked-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+For reference, three additional patches are required before we can drop
+the Makefile.warn line that currently hides these warnings:
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21671977729
+https://lore.kernel.org/lkml/20260203162546.2254900-1-arnd@kernel.org/
+https://lore.kernel.org/lkml/20260203163440.2674340-1-arnd@kernel.org/
+https://lore.kernel.org/lkml/20260203164545.3174910-1-arnd@kernel.org/
 
-AI-authorship-score: low
-AI-authorship-explanation: The commit message style is consistent with human-written kernel patches, with natural technical language and standard formatting; the technical error is more likely human oversight than AI hallucination.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: The issue is a misleading commit message that claims the change enables TIME-WAIT socket sequence number reading, but the bpf_tcp_sock() helper explicitly returns NULL for TIME-WAIT sockets.
+Tested using randconfig builds on arm/arm64/x86
+---
+ include/linux/seq_file.h | 1 -
+ include/linux/string.h   | 4 ++--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
---===============1159060639630682925==--
+diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
+index d6ebf0596510..2fb266ea69fa 100644
+--- a/include/linux/seq_file.h
++++ b/include/linux/seq_file.h
+@@ -181,7 +181,6 @@ int seq_open_private(struct file *, const struct seq_operations *, int);
+ int seq_release_private(struct inode *, struct file *);
+ 
+ #ifdef CONFIG_BINARY_PRINTF
+-__printf(2, 0)
+ void seq_bprintf(struct seq_file *m, const char *f, const u32 *binary);
+ #endif
+ 
+diff --git a/include/linux/string.h b/include/linux/string.h
+index 1b564c36d721..b850bd91b3d8 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -336,8 +336,8 @@ int __sysfs_match_string(const char * const *array, size_t n, const char *s);
+ #define sysfs_match_string(_a, _s) __sysfs_match_string(_a, ARRAY_SIZE(_a), _s)
+ 
+ #ifdef CONFIG_BINARY_PRINTF
+-__printf(3, 0) int vbin_printf(u32 *bin_buf, size_t size, const char *fmt, va_list args);
+-__printf(3, 0) int bstr_printf(char *buf, size_t size, const char *fmt, const u32 *bin_buf);
++int vbin_printf(u32 *bin_buf, size_t size, const char *fmt, va_list args);
++int bstr_printf(char *buf, size_t size, const char *fmt, const u32 *bin_buf);
+ #endif
+ 
+ extern ssize_t memory_read_from_buffer(void *to, size_t count, loff_t *ppos,
+-- 
+2.39.5
+
