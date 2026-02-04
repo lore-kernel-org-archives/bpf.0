@@ -1,94 +1,181 @@
-Received: from mail-dy1-f175.google.com (mail-dy1-f175.google.com [74.125.82.175])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56935353ED1
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 21:12:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD56D353ED1
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 21:14:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770239555; cv=none; b=uIzRsZjDdsQO6zqrj5qRAAA/hbEFWlfgvbAkbeqx8oiepQeRROuWUudZ6AyyQWYLHQp7UOylKhMaOADBhmuxFm/xXaPfLWNMaKXakNSpOdc0T6SmqF2aMsG9NTwvYjiP/sgzWxNvMSB1ZU4neaFvVkwrW93dstFwvv3lpFEG5E4=
+	t=1770239679; cv=none; b=nRWoTLVbGhi3v+s1n0VNU80jdGNDXJ1rKElh0bUaZ/gImkx4dXzg2/csj4kzfLXCf1xFHysd/9dVKkXw7PYpm50BXIArrPs1KkuwCiCGIccokGQd7hvrJey5v9B16FcoDx9waqFtiqp+DU69hYWL2lWMgZo7VRUmhnT+KolRNAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770239555; c=relaxed/simple;
-	bh=eU0RUgTHXGDPCiN8j85KUZ7TBl9ZYV3Uqnyow4HAQ7o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=hR8oKutkS5oGxW/EVifDViFNaWpO+S79CRP6SVE0pAeBVHgQxGrA7jDf+ZbKcAtTvdVA7hbnepUhl+Kktu3F2jA/oLJjkddtt9yOqc+4P5BPC8Vt7sod4j0h4zeMUeMiJeTxZt76CXI27lbIJLsHVRZbtGvnUwH/icf7zKptvxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kKahF4Rp; arc=none smtp.client-ip=74.125.82.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770239679; c=relaxed/simple;
+	bh=vJaBhMWH5pT1jXjbnJkk1Uuz4c1EfZ+roLHnfr47Lhg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Ht9bvIA4xqsvHnfjROnd1qis6LNC2+qTsUVw3jWAEXX4qcf0sLOOooaonfLLRombo+v589hADbmX5WyQizPekJj4hXUfTEKeSk3dy1woCY2Q1ir08Js+s0lyNYw0EtDoIM5CKFGJpr4OtpMS9p0R9p8ru71BPMFimHUqhiWAxDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y9Hduqs0; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kKahF4Rp"
-Received: by mail-dy1-f175.google.com with SMTP id 5a478bee46e88-2b704f08e73so191990eec.1
-        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 13:12:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y9Hduqs0"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-352ec74a925so283401a91.2
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 13:14:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770239554; x=1770844354; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eU0RUgTHXGDPCiN8j85KUZ7TBl9ZYV3Uqnyow4HAQ7o=;
-        b=kKahF4RpS6d2qlxGJuh0R9lRCSJYOBmALq15CT23JpIG/xMt1xsKZLCTEgATMMeR7p
-         L3eN+8+a0+QdzkbJU0tMWbhpMqoYVkOXcoYLC54PnC+YQ5MHMckdX1XKGFSPYQfpt7Uh
-         wPf7tJh8mAnrDqhinv6yqvzxsz4/AnDA9HwDBUF3c1Yw81BQl35x0WtHlIgT7VrHxd1A
-         Or9NKiy/WqYX+k0P/ySX6CWBq3qlVAkKumZEhXLD3EnneZjfSLSIj7h7L9zHjyq3qXUL
-         lDr4iflTs61OtmKuCP5xlVaaftNPIU6af+Y7pK5uwDO5uA1jA2YnaUzy3jgv4vW3GXXY
-         TMyA==
+        d=google.com; s=20230601; t=1770239678; x=1770844478; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rx+gPwWi4jfbtwZqP36zqhC/LfHvmZ4z4w0gN+mYPes=;
+        b=Y9Hduqs04Ni7n6Om2KP29LgY9PAoE+O2reCSyR15azTr4WZzkNYOaR4uTpfd9EmHNA
+         eqJZgVMcIjz3WJCejmBLeUq7D/ZXBMl9GIGfO5mUr40TntYPiDe9eJN6a03D9Sb0E3Po
+         UyyKdFe5O0N0UIvs9ojPUFfyp5Lh9/+FGXlspxD8Rn/G2LJewnUg/ChXUS2/7Ktlxcdy
+         6+uWVFeub1nqas6Cr+2pZWHjR4WfIWt+RWuTmet9eRTpinlW+PkvRQock5Csnv6c+pv5
+         0SfnzatAHXycYu8r+cm1PBFOS6P0Pbvw2tTPWvkchd09obeH05S5Acc0FduxIxtkQ6HV
+         CdpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770239554; x=1770844354;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eU0RUgTHXGDPCiN8j85KUZ7TBl9ZYV3Uqnyow4HAQ7o=;
-        b=pVwhqgS7+CKxxAb0ovn7TS94BfFJt7Sa16CNRMHfUTX9sClKrzopT0wilM/JkkX1+g
-         CyPmcXN8cP6O5JeVvzlIyP0F30Jr/Khq24aCEB8Db6Dxy5qOiATcH0BB9ChAj0U3Ncch
-         WP8d4k+xn30FpON5emhUrR82XivyM7g2TL7+SPtv4VLfh7uQd2HQD3Sh9lygIOzv9lWB
-         665qOVlXnPcaykD93F5po60TAGX5rWpg7TIikXHpNPcLcAWByqSyal96SSoe5Y4Qetyq
-         z87gjqo+v8r6r1JSYPLg01NkCXyNKTnSDD+g2WaxNt3z7GFNrd7KduuDgQIWc5WmxPb7
-         2FkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWV50j64ko4pFHMThlmWMFT+wDbxP+mFCdzNpTFksoAXhxGxPRYZMXEgX9Tdh6KtzMz3QM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7cG1MEmMkqSoMeYp/jb+2t0kBBh9VYy8L1JzUFf5VAcTlK8nV
-	XYS/ZZPyOQOcmxLlJPlmFaTHazcJtWn6eXgb23ExVniDFivCj2BT67Xx
-X-Gm-Gg: AZuq6aJPUPgYF3N3oQxpE1O0n5YZ1O1eJz7NZRe6qEJrqB6hy+9DYc8c/1qZ9qTF2Qa
-	mhzTDK/JIJmFQqYi/jyeiIqPofOqGPyND5qr36xEicQbF/cfX33NQYcmXBglsH960E0/c+FqkG2
-	rR0i2HW5vTNBpvZlRm7IRZg3yBuQY5NG1ry1aaMzsyNDhuavtnlLzV+75B1xOpcqxVd1glnwbft
-	3rMiPiSH5iG2Je6Ao04B6+nZUWObExcT1w8c6d8qFVoKnMUGNQOmhNvHkgCmg+elLU2Pn2T7EGt
-	MW6XrVa5Y65hfn2Q8bjX9VtGti5SQqKI9Iqh9UO1ueC7w69V+cO8rfkgOB64kKtCSzuLHr/+wnT
-	HLHghUJCInj93PnTW/wAILC2ZmKBiK3THSw2j6U2v0s0Cnk6xVOsawWAMDUnSPQS39sC9WKkahe
-	z76cd4k2DKkULE1npI3A756dnSE12RAPi/kELvLgDvGmIyDJRljQtJyC0F/D6RiPJO9Vk3
-X-Received: by 2002:a05:693c:2298:b0:2b8:3b47:8951 with SMTP id 5a478bee46e88-2b845b58bfcmr288639eec.1.1770239554449;
-        Wed, 04 Feb 2026 13:12:34 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:ac05:8e30:1e93:7ef5? ([2620:10d:c090:500::2:5ebc])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b832fb363esm2214741eec.26.2026.02.04.13.12.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 13:12:34 -0800 (PST)
-Message-ID: <314151a78544a462f2b4a0c0fd5166fe390eee44.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Add tests for improved
- linked register tracking
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko
- <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
-Date: Wed, 04 Feb 2026 13:12:32 -0800
-In-Reply-To: <20260204151741.2678118-3-puranjay@kernel.org>
-References: <20260204151741.2678118-1-puranjay@kernel.org>
-	 <20260204151741.2678118-3-puranjay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+        d=1e100.net; s=20230601; t=1770239678; x=1770844478;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rx+gPwWi4jfbtwZqP36zqhC/LfHvmZ4z4w0gN+mYPes=;
+        b=R66rfTQ6GPxaegnA0qSsoACublkha/CoZoVJkTJLBDdYFhaSTriTNVyhfDONxQ28oD
+         U4HrA4xGcVXaNqWjIbQtKDzSP3eKeM2RvCL1KZktZWObhmROdW4RuW6kVm0kKSd8eDb0
+         Ki+/4CUGHrd+Z+jezgyiEVh/OvfER92CQIWODhBfz+g2vJJhkjhJSRWUydfexp5ooezo
+         wa2D3UBiVYRj4NAa5tT5G+MLMgSfSauk0uxLMmvJgcy4Em13n0hx/Rc8fW637HURotQU
+         t/NYPY+7ZboA+15Rd67IFkBaSLbi2NyEHALtlRKIza490+5Su1CbcsG44FuGUqzT2otH
+         PESg==
+X-Gm-Message-State: AOJu0YzV7ly0S/8ci2YQs8TJkkGst/dxeuaPI2+5r+79xubTls8JVGGH
+	qy6CFu7hq45Pl7srM6HDncxctpw7jIdKxt5vpHxpHf+zRY/u00b3wCWeE3JCYFbedr7utEkTQdQ
+	pdv5X2w==
+X-Received: from pjps6.prod.google.com ([2002:a17:90a:a106:b0:352:ba61:b351])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2dcd:b0:34c:9cf7:60a0
+ with SMTP id 98e67ed59e1d1-354870aad58mr3408954a91.5.1770239678292; Wed, 04
+ Feb 2026 13:14:38 -0800 (PST)
+Date: Wed,  4 Feb 2026 21:09:59 +0000
+In-Reply-To: <0f8ec4c7-5de4-4e0b-a50e-cf4f8d59709b@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <0f8ec4c7-5de4-4e0b-a50e-cf4f8d59709b@linux.dev>
+X-Mailer: git-send-email 2.53.0.rc2.204.g2597b5adb4-goog
+Message-ID: <20260204211436.1821958-1-kuniyu@google.com>
+Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto update
+From: Kuniyuki Iwashima <kuniyu@google.com>
+To: martin.lau@linux.dev
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
+	edumazet@google.com, horms@kernel.org, jakub@cloudflare.com, 
+	john.fastabend@gmail.com, kuba@kernel.org, kuniyu@google.com, 
+	linux-kernel@vger.kernel.org, mhal@rbox.co, netdev@vger.kernel.org, 
+	pabeni@redhat.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 2026-02-04 at 07:17 -0800, Puranjay Mohan wrote:
-> Add tests for linked register tracking with negative offsets, BPF_SUB,
-> and alu32. These test for all edge cases like overflows, etc.
->=20
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Date: Wed, 4 Feb 2026 11:34:55 -0800
+> On 2/4/26 7:41 AM, Michal Luczaj wrote:
+> >>>>>> If the concern is the bpf iterator prog may use a released unix_peer(sk)
+> >>>>>> pointer, it should be fine. The unix_peer(sk) pointer is not a trusted
+> >>>>>> pointer to the bpf prog, so nothing bad will happen other than
+> >>>>>> potentially reading incorrect values.
+> 
+> I misremembered that following unix->peer would be marked as 
+> (PTR_TO_BTF_ID | PTR_UNTRUSTED). I forgot there are some legacy supports 
+> on the PTR_TO_BTF_ID (i.e. without PTR_UNTRUSTED marking).
+> 
+> >>>>>
+> >>>>> But if the prog passes a released peer pointer to a bpf helper:
+> >>>>>
+> >>>>> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0x95/0xb0
+> >>>>> Read of size 1 at addr ffff888110654c92 by task test_progs/1936
+> >>>
+> >>> hmm... bpf_skc_to_unix_sock is exposed to tracing. bpf_iter is a tracing
+> >>> bpf prog.
+> >>>
+> >>>>
+> >>>> Can you cook a patch for this ? probably like below
+> >>>
+> >>> This can help the bpf_iter but not the other tracing prog such as fentry.
+> >>
+> >> Oh well ... then bpf_skc_to_unix_sock() can be used even
+> >> with SEQ_START_TOKEN at fentry of bpf_iter_unix_seq_show() ??
+> 
+> It is fine. The type is void.
+> 
+> >>
+> >> How about adding notrace to all af_unix bpf iterator functions ?
+> 
+> but right, other functions taking [unix_]sock pointer could be audited. 
+> I don't know af_unix well enough to assess the blast radius or whether 
+> some useful functions may become untraceable.
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Considering SOCK_DGRAM, the blast radus is much bigger than
+I thought, so I'd avoid this way if possible by modifying
+the verifier.
 
-[...]
+
+> 
+> >>
+> >> The procfs iterator holds a spinlock of the hashtable from
+> >> ->start/next() to ->stop() to prevent the race with unix_release_sock().
+> >>
+> >> I think other (non-iterator) functions cannot do such racy
+> >> access with tracing prog.
+> > 
+> > But then there's SOCK_DGRAM where you can drop unix_peer(sk) without
+> > releasing sk; see AF_UNSPEC in unix_dgram_connect(). I think Martin is
+> > right, we can crash at many fentries.
+> > 
+> > BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa4/0xb0
+> > Read of size 2 at addr ffff888147d38890 by task test_progs/2495
+> > Call Trace:
+> >   dump_stack_lvl+0x5d/0x80
+> >   print_report+0x170/0x4f3
+> >   kasan_report+0xe1/0x180
+> >   bpf_skc_to_unix_sock+0xa4/0xb0
+> >   bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
+> >   bpf_trampoline_6442564662+0x47/0xab
+> >   unix_shutdown+0x9/0x880
+> >   __sys_shutdown+0xe1/0x160
+> >   __x64_sys_shutdown+0x52/0x90
+> >   do_syscall_64+0x6b/0x3a0
+> >   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> 
+> This probably is the first case where reading a sk pointer requires a 
+> lock. I think it will need to be marked as PTR_UNTRUSTED in the verifier 
+> for the unix->peer access, so that it cannot be passed to a helper. 
+> There is a BTF_TYPE_SAFE_TRUSTED list. afaik, there is no untrusted one now.
+
+Just skimmed the code, and I guess something like below would
+do that ?  and if needed, we could add another helper to fetch
+peer with a proper release function ?
+
+---8<---
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 3135643d5695..ef8b4dd21923 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -7177,6 +7177,14 @@ static bool type_is_rcu_or_null(struct bpf_verifier_env *env,
+ 	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id, "__safe_rcu_or_null");
+ }
+ 
++static bool type_is_untrusted(struct bpf_verifier_env *env,
++			      struct bpf_reg_state *reg,
++			      const char *field_name, u32 btf_id)
++{
++	/* TODO: return true if field_name and btf_id is unix_sock.peer. */
++	return false;
++}
++
+ static bool type_is_trusted(struct bpf_verifier_env *env,
+ 			    struct bpf_reg_state *reg,
+ 			    const char *field_name, u32 btf_id)
+@@ -7307,7 +7315,9 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+ 		 * A regular RCU-protected pointer with __rcu tag can also be deemed
+ 		 * trusted if we are in an RCU CS. Such pointer can be NULL.
+ 		 */
+-		if (type_is_trusted(env, reg, field_name, btf_id)) {
++		if (type_is_untrusted(env, reg, field_name, btf_id)) {
++			flag |= PTR_UNTRUSTED;
++		} else if (type_is_trusted(env, reg, field_name, btf_id)) {
+ 			flag |= PTR_TRUSTED;
+ 		} else if (type_is_trusted_or_null(env, reg, field_name, btf_id)) {
+ 			flag |= PTR_TRUSTED | PTR_MAYBE_NULL;
+---8<---
