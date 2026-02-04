@@ -1,125 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5A442982B
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 20:25:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A33227B4FA
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 20:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770236716; cv=none; b=ox1QjY3txwhwsQQXtKE+lQoGMOR+XEm7NOF+1ExkAGPjaEaHMkToBGdpMWkIM2cs8mv8fi3n/uFEka11Z7usiBC3yPMH6mBn9AoAbs7EMn2/+HcfcQ87UQdIiVHg+PUvMObhVs02ocMFD7S0BQn8g+pdDGggSqpcShgUFbyf+0Y=
+	t=1770237885; cv=none; b=rAq+BSyDzt/tn//yZ/pf6BYTKMUqNeREWUOwlf0QqgCDGcmIVRBpvnGwVC4crL3uHMbLTc5DJjYUdRIL8Z+/5uD1V1kwDers4Mw7jc55wvXWdBDST1yFJvewBa7po9opYfVVCRcCaQZfwh7OjrMlncXK/67B1xdLC8Pn8CgaRk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770236716; c=relaxed/simple;
-	bh=6L75ZvRtYQ5DK6HozL8NxAaOjemGmVEHjnEaykm4mVA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lNlkErznXwK/OyMwS/dW5aJj/tVykqrcWZfMw+oy7z150xYazwPqRlfNeUYQZwhDOicnRjuKtCeaM96/iooptqv0t+lYV66Z87wBUSzhOEgMUgLSodNiAT+L120Grf7fw0oLwu451YyZg15aBER4C4OpW7bm2Dqf/8nl5Hjt7MU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ObNukigN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770237885; c=relaxed/simple;
+	bh=gX8m1XPZQAf0jGUqj6AQt/r1JxuH6RPKOIZCXMUQkts=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hQSw/Df/72LKW8kpUaMKjefbCfF9eLidZcUdlNOSB2kyO9aIwk3ZfpEsHA9+zpPIU2kswkGDgloXh0VZ2VSQ7sybGZaKaVqEIpm/fSG7WuKAOw+mtmFAxxLw/M8VBrwq0bexpB8R1Nhayt1yNy8Ej9UjwEDCskgk1gt4vfMwwhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cla5WtQB; arc=none smtp.client-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ObNukigN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E587AC4CEF7;
-	Wed,  4 Feb 2026 20:25:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770236716;
-	bh=6L75ZvRtYQ5DK6HozL8NxAaOjemGmVEHjnEaykm4mVA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ObNukigN0JA1Ql4BHO3NESX5b9RRtZF3u+wvawDbyfeqiqwU2DWr1kG20jjXJOhRz
-	 U78+h1Anf1mEoU+dEhrQy/cmqjvjmmDZFc+NvXkT+O8FeKPchg/5k5NOUarxT14yw8
-	 vpAmqLIOXU2XUjVFO2ABJtQukH7fSrt6sU07H3RD8MVCKBkmiG7xqWy2KRMHkZpIzQ
-	 fhYy7NqRTdiMnlwJC6vDSS5E+fFyDpgJw8uxpa0UklYy5KbnbcMJrRPd71QDvJnEip
-	 y2+8EeQSTa5xDgKFovH8sn518ZaoH2x4S1rCC90yzYcb9+FjCs79wzcWoE+FRdRkoA
-	 27G9jLVs1058g==
-Date: Wed, 4 Feb 2026 10:25:14 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Josh Don <joshdon@google.com>
-Cc: Rohan Kakulawaram <rohanka@google.com>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	ohn Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Matt Bobrowski <mattbobrowski@google.com>
-Subject: Re: [RFC PATCH bpf-next] bpf: ephemeral cgroup BPF control programs
-Message-ID: <aYOrKpI7vxCUdZVr@slm.duckdns.org>
-References: <20260203102058.41030-1-rohanka@google.com>
- <aYJZ62BCwNIC1Q3f@slm.duckdns.org>
- <CABk29NuyzS_XSUQM3yA0a2rqpNXg6xaGP5pVGXJoJa-xaOBdOQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cla5WtQB"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2b729f4c154so295179eec.0
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 12:44:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770237884; x=1770842684; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lHpABv2VfJMtiEfvt0mWzgxZtrEbRoXdJycTfGEO3c4=;
+        b=cla5WtQBzwZOvupl0ifvh6z1nWGbATZVumG0mEp2Kk0KuSzKXIyHiNCbN+3KIAmS/f
+         4aA95SH1hPYtLpo0u9uWFVO9Bo4ELw5xzg7ScdMg5H0oT82HwPOO24zIuYT41fQUNRN6
+         LrhML0TVIeTc45BhDsTTsU7r0GeEkJOoWZk2kvsjQ7beVjQ22nFgg2k3k6SW2FUYXexM
+         UP9QWE9NGwMcKkRqmPuQtkaWPCtQPrUb7cEd+yCHOea/f/bg+aQXLqyQI8bDAVITKfBk
+         LIMDaxKIuAGvHOr/eF8qnVoNhHP7DtjUr4BIzo2LmAXlQPRcVpyyrSJNrwJQqC4benWS
+         UiDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770237884; x=1770842684;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lHpABv2VfJMtiEfvt0mWzgxZtrEbRoXdJycTfGEO3c4=;
+        b=b4mUCEvJ2YV9+gZnESgty4loMaUw8SLvQ4ull3rzwaiRA51bCvX0JGUB7cDVuYUUyF
+         3R1ltGZ8laVBM513EgbhO+5513a6KfpZXhY2kCA7QhCMQJM+AwsvmL9z8mNWo/VJ9la8
+         dqoQa6MULYMi6QvXghqa5N5bW8Qff7bK28riAm6J1410UqKN/UzFGDMWS6GCYA/1qwu8
+         5cN27kfVur+Ccpw0I8wW0hZlXgstVZSAK9oPdtx1bxqmb+LctjzUukfyCBBjSDJf9Mwh
+         KgWcZhzL7Z455aw2Ekt3L4EnRVcjxpEyUzdZD8n8JsL1xtlr6KtWvObxqz6gVkFqakD6
+         lomw==
+X-Forwarded-Encrypted: i=1; AJvYcCWFumU47DsRq/vEpYVNI4LX5/m+/3bvSy/4Y3VVp3YjqpCBnDc9Qu7D0hCtL9Cg9VtQSbg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzShD2NYGLki2IeKuPjxjfVD9VFhhsgzHzbqUyHzL4PvGZcmhwN
+	Rxa7bbspmjAWp/5lsW9Bvr7lgPHSlu+R6NXlEnfkgeradHvS+BVzg/Do
+X-Gm-Gg: AZuq6aJqdCS2Yn3OZ4VjPoiB9FTCJcWvOTmncpyyPL7gstyHGut3A29DKxTQhCTYwUv
+	eu6bCtGmtlkRvDrCbs8J7/pNmLwm4wOHKX/EZy7GApwqBfdmkGA37kxyqEbPU/KvM5zZzH6WPGW
+	K9E4q0hpssnwGAyrwX+ftruajmwmKyoH0zg//Dq/zJ3gvNKWwyTLv4ZG5pT3LL8I1IbW2OwFoN8
+	utwk9CrLQdNfA0qt0CMtFhphoGJNSks57vleEjRJk3l44xE0+y3Gry3vabIJnHBuF9PTutItIBU
+	Noyj2HdvVXtt4hIZgVqrRjZodqhANA6N9rorQ63MmsWKBSVUXcV+/Ek4hKEQy2iM+Sga02NTmWq
+	ns8A5goApOqc1iZl5q0ZN4wk9oBUxZ7tEBsiFPz+fgkxIjWTCXOmnZBz2EYwT4K2TiknfG+H/o2
+	ZAZw3xugpQDDKuztsli63fF8dz66+rJpPfxdU0SbGzMTGxQ2Z8mbfVDrgIHgu5d1uIYAo3
+X-Received: by 2002:a05:7300:e613:b0:2ae:5a13:97d8 with SMTP id 5a478bee46e88-2b8329901e3mr1767150eec.14.1770237884242;
+        Wed, 04 Feb 2026 12:44:44 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:ac05:8e30:1e93:7ef5? ([2620:10d:c090:500::2:5ebc])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b832f8ea26sm2335301eec.21.2026.02.04.12.44.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 12:44:43 -0800 (PST)
+Message-ID: <9252b79ef036a3147803e4878eb3c7144c4327c5.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: Support negative offsets, BPF_SUB,
+ and alu32 for linked register tracking
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko
+ <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Date: Wed, 04 Feb 2026 12:44:42 -0800
+In-Reply-To: <20260204151741.2678118-2-puranjay@kernel.org>
+References: <20260204151741.2678118-1-puranjay@kernel.org>
+	 <20260204151741.2678118-2-puranjay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABk29NuyzS_XSUQM3yA0a2rqpNXg6xaGP5pVGXJoJa-xaOBdOQ@mail.gmail.com>
 
-Hello, Josh.
+On Wed, 2026-02-04 at 07:17 -0800, Puranjay Mohan wrote:
+> Previously, the verifier only tracked positive constant deltas between
+> linked registers using BPF_ADD. This limitation meant patterns like:
+>=20
+>   r1 =3D r0;
+>   r1 +=3D -4;
+>   if r1 s>=3D 0 goto l0_%=3D;   // r1 >=3D 0 implies r0 >=3D 4
+>   // verifier couldn't propagate bounds back to r0
+>   if r0 !=3D 0 goto l0_%=3D;
+> 	r0 /=3D 0; // Verifier thinks this is reachable
+>   l0_%=3D:
+>=20
+> Similar limitation exists for 32-bit registers.
+>=20
+> With this change, the verifier can now track negative deltas in reg->off
+> enabling bound propagation for the above pattern.
+>=20
+> For alu32, we make sure the destination register has the upper 32 bits
+> as 0s before creating the link. BPF_ADD_CONST is split into
+> BPF_ADD_CONST64 and BPF_ADD_CONST32, the latter is used in case of alu32
+> and sync_linked_regs uses this to zext the result if known_reg has this
+> flag.
+>=20
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
 
-On Tue, Feb 03, 2026 at 05:04:09PM -0800, Josh Don wrote:
-> > Can you elaborate why this *needs* to be a separate file interface? Note
-> > that this doesn't really expand what BPF progs can do with cgroups. The only
-> > thing being added is a different and not-particularly-efficient way to
-> > communicate with BPF progs.
-> 
-> Each of those existing communication mechanisms have advantages and
-> disadvantages, and my take is that none are really optimal for the use
-> case described/implied here.
-> 
-> For starters, I think it is important to have the interface be
-> synchronous. Stat collection and reporting for example makes much more
-> sense to do on a read() edge rather than arbitrarily dumping info
-> continuously into a map or ring buffer or something.
-> 
-> For the BPF iterators we already have, you could in theory pin and
-> unpin as cgroups are created and destroyed but that feels like a bit
-> of a hack; at that point you don't really care about it being an
-> iterator program, you're just piggy-backing off the fact that it
-> exposes a seqfile interface. Add to that the fact the trickiness of
-> keeping everything in sync as the cgroup tree is modified, plus there
-> will always be a latency between cgroups getting created and userspace
-> going to pin an iterator (especially if the jobs creating the cgroups
-> are not the ones caring to pin the program).
-
-Wouldn't pinned BPF_PROG_RUN program fit the bill? It can serve as a generic
-entry point with arbitrary input and output data. It can take the cgroup ID
-along with other params, do whatever operations necessary and then return
-output in whatever format. The users don't have to know much either. It just
-needs to know the name of the pinned program and input/output formats and
-then do bpf_prog_test_run_opts(). It's not whole lot different from doing an
-ioctl call.
-
-> I also find the file based interface incredibly convenient. You don't
-> need to have code deal with making BPF upcalls or read() from an
-> iterator fd, instead you can use traditional file based APIs. Exposing
-> as a file-based interface also easily lets scripts and manual
-> observation/manipulation work easily as you can cat/grep/etc just as
-> any other file. I have to imagine the motivation for allowing file
-> based pinning of iterators shared similar motivations.
-
-AFAICS, this is the only actual benefit, right? Having text files as
-interface.
-
-> Typically cgroupfs interfaces are low bandwidth communication
-> mechanisms to occasionally set/get resource limits and stats. So, in
-> contrast to the APIs you describe, this is also about offering a more
-> flexible and convenient solution without needing to worry as much
-> about efficiency.
-> 
-> I also think this pairs pretty nicely with sched_ext as schedulers can
-> define custom tuning knobs that will be automatically exposed for
-> manipulation on a per-job (cgroup) basis.
-
-Maybe, but, for cgroup level low-freq hinting, being able to read xattrs on
-cgroupfs should be enough. Anything high-volume/freq or needing finer
-granularity, cgroupfs file interface is far from ideal.
-
-So, I don't know. I'm not dead against it but unless I'm misunderstanding
-something the rationale seems pretty weak.
-
-Thanks.
-
--- 
-tejun
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
