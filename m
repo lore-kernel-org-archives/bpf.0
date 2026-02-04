@@ -1,116 +1,165 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11F138945C
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 23:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F58C3358C4
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 23:52:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770247558; cv=none; b=nz8jczzBznISmEQ36SxRL81WfDLiGBrMXmtsjxHbfLSsFo4/HbrAa7eH4ECoZSG9jbpPHswH+g2BkOLFuLp60+szwsId3NZwnPNY+3nhH5Hqd/8faf7822F0Nmjwl9vFCRodTR/unYMViE77/8vcum8B5PH8SQWd5kgBETiX6n4=
+	t=1770249150; cv=none; b=acOAyjTzBbMWgnQSCWFanbg49vcJ5WNnNUj2YACQ3Nw3C65PaMPiyct6nZZLh+lq9RzR5Q1IthU4dtE3GWY1JYZhVgHXpNLptsBVRdTZFjcac4S9lJw5RHnKRBPMnU02lwpvwt/52ytSGunK+G6eeN0XKyu6zzrLu/XnIfJjBG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770247558; c=relaxed/simple;
-	bh=23SS+XtT7lCt1kn5I7DiJKgm3ihSY8Qpfz4e1qL4HGA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ajR2hzihQXDxG/Z8U9UcyRbk69aUjBzXCqht+a/1bJXUB9GgglKYj6IGWt5fczWcySYTgEIKMhXBff+suBCfTaMjeoaMWBIfpsdi1tg4RMF1kJmkjlLu/J4Zbn0oaOLCHCsEe4XLvLxT7zOjlZoFDULVFY3mP/kEg/FssjmCLJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=iiTlPlAf; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1770249150; c=relaxed/simple;
+	bh=FTtXKXZ4GD0ZpUHSRS2eNmWFvyglSZStTQE1prKSVYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GfnGflZgBKIUAA3TWcQ+hZUqHs3NBP6HPLvb93sW1Hw89y4/pIrVpeDDEGtSwzkaASXO5lcPuf7+KathIH14OUNqkUH0FM2hAdOoVvY+4iCwsCQ5i0KDDdVXicK/ZhQ328itd2/CE9+DxhBICLyD5bptT1XO1H+3Fl4aU/1LHHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QGXXHJLv; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="iiTlPlAf"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vnmFr-002Xq2-Pl; Thu, 05 Feb 2026 00:25:51 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=tjwzzeP9KZHnpW8GEpbcDG3lqJQmyCrrTFz9XMbkVeY=; b=iiTlPlAf5cIAY0JSJZ7K6+iZQn
-	Ncrinc+MGsoB/P9YemVfVfyAry/WMimsC68YKMWs/aLpGf7qMRxdaq89fOh4WmaPFkHYxLI5FzB/t
-	iA7RMuPJ7QJcslw/mO8BcC1FzIuu1D0KipsDsMQb/DLbU73U/BfzWZPK+rjOk0gHXSh8C6mLvyflA
-	Awp6mkZQFCgBOd3sNoLm2PpwJsxIX4GDSKlvs/LpfB2Fl/vTTncfovFdum9il0uf8fxl7+ncirYIg
-	i6R9ByRXbIgkdBroN63Uh44IlmqsZlKpQDG0zV5khz1q5Vg//93KXB8fQvYuJvlO0QhTt+NkDOu0Z
-	g6YH2h9Q==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vnmFq-0003kJ-Qk; Thu, 05 Feb 2026 00:25:50 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vnmFg-003ETh-S0; Thu, 05 Feb 2026 00:25:41 +0100
-Message-ID: <37a594f4-a951-4283-80eb-67b6acecf61f@rbox.co>
-Date: Thu, 5 Feb 2026 00:25:39 +0100
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QGXXHJLv"
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b8869cd7bb1so50015366b.1
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 15:52:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1770249149; x=1770853949; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=vydobbPXrZrzizZdxwwfY84vYBgm5hoA9LpOro1zZVU=;
+        b=QGXXHJLvsqkwmmen7dCGYZQ9dLBO5kA6SFwGCSUyOYjk1yZRi+UvtMgCmGhom/rKU5
+         5hc4Srdv/Q5lNLFg7QQfYBz97aXlJEs8OGN66MaW1Z5PVjrX+EUbKSkqMN8bzV9a/U58
+         JtkdD93MGNafPbaU3D4+Ss4pWy/1m9kJHdy53FEzpnLmjD7NqkmqCe+EGu3cZp2JlBeL
+         UScRAO8kXXPzZOST3hn/lNFHldWtNNHglekzEcpUEgbvVmA+GzBbFNCSR8H878nB6u3B
+         lfUy2LZV7FORs9hBytGT9fhalhlPsKsf2v9pc6V64fGnxJ+3OAyL5XaW61mFLewIL91Q
+         ruDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770249149; x=1770853949;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vydobbPXrZrzizZdxwwfY84vYBgm5hoA9LpOro1zZVU=;
+        b=JCBrI93HyAZjAQTtA8VrYjNIuU5v13GE57HRW5YpnJt+/WW19PLjXrQFjB2KYCwy6w
+         EHt8OzF1peTBYjASjM2V6b7IcpIefgNAYEUcdXxfdGUXyIWTs2AprKp6U+W2smP8p6Go
+         AZlSTy2hc1QJfPrAcdot1FACfwv3sOMRKCf7tIuLUbHs0fIbQYgD3ybbjVTigs4XMCGA
+         054iX87rYHIQVAs08ZrBR5G+NvdDsh31Qnh2j/cr2fsJxTOH1I0bzazwKEW5K+s6DHfq
+         XODyl+zqs2kKg0KoeRhNTjLCEVM86QPMy/Fp+bnDV6O6atXdeHu61ZwmIZmAuyHbGAu3
+         VRGg==
+X-Forwarded-Encrypted: i=1; AJvYcCWwZdVNNbFz6e2NHauax9kEqnxaaX8wrH+/+fbfaK7Fx8EmsAb3VpV39yd8Pkd9t81lVpQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLP+ewV/RqypJJ6MEuaprO9o7pUfq+zLIa1AR3EWyDrLx0432V
+	IYi0XLnI6viRa1kuVZqEJ9nBhuZt577Q6mU7rMxkaTEubawlEq8DUgUtCt8bQjmtVQ==
+X-Gm-Gg: AZuq6aKItYadIoJ1vwDfBomkh2gGP8EEetd1ERFooyVO8CKPz9Ui6Jza4+Vr3kS/DES
+	irJ5mKlrV1d9hkkNvVCdNZKv8BwAs/FBSP3In1VYnzVoP40jojIX/LSnKGBS5d4WIVPzSas6C7b
+	ietrK6rzIEnG3/NzMrPDPqddpjGDkjUjkoQTTPmDqlbPVUTALZa+X8ziZ/zEqRmQ5DOEvbgxQw+
+	xBVFGBxyFgkjslgfPMzeb3Av/BnyVXI0IZl6V6hi3nmXY7OjtNxMDJvbPhOGa+16slY0tG/STNS
+	XFSPY1gcmdrOv80p6Y+9PV9fnBahARRgfG5hceTBDs8w8rWGtDjZ9jBMfaH5kjHmo5urN+aRDcS
+	NP4va4o9XOJ7pJlntu5NpGLiCWIrQAClwgqMto59K7XD4rarwZIavb2MQOHne8qxM38Cj9PD3lx
+	cC2Y7xKI6mUb1+edZjrKgMvQRtA3mb3/dAHG1HPDsRn/SuD/sOWQQ=
+X-Received: by 2002:a17:907:9625:b0:b88:71ec:e7a6 with SMTP id a640c23a62f3a-b8e9f04c989mr307018066b.17.1770249148604;
+        Wed, 04 Feb 2026 15:52:28 -0800 (PST)
+Received: from google.com (93.50.90.34.bc.googleusercontent.com. [34.90.50.93])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8ea0021b25sm164091166b.50.2026.02.04.15.52.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 15:52:27 -0800 (PST)
+Date: Wed, 4 Feb 2026 23:52:25 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Michal Hocko <mhocko@suse.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	LKML <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Josh Don <joshdon@google.com>
+Subject: Re: [PATCH bpf-next v3 00/17] mm: BPF OOM
+Message-ID: <aYPbubIPIsfFiMhD@google.com>
+References: <20260127024421.494929-1-roman.gushchin@linux.dev>
+ <aXh_LpTzDhvv20uB@tiehlicka>
+ <7ia44io6kbwj.fsf@castle.c.googlers.com>
+ <aXnDdkYmtipGwSjK@tiehlicka>
+ <CAADnVQ+ghTc5FtJCjm4ya3y3xVpSuJe-7ctdT-thowqWguc1pA@mail.gmail.com>
+ <aYAZT-ZZSKdiChfd@google.com>
+ <CAADnVQL3+huSAwoYRexoSDaLRK+nEsY6UUnVSmhk_sGYUYsO7Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
- update
-To: Martin KaFai Lau <martin.lau@linux.dev>,
- Kuniyuki Iwashima <kuniyu@google.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
- edumazet@google.com, horms@kernel.org, jakub@cloudflare.com,
- john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com
-References: <8d055903-fe44-4bbf-a1a5-e0176343bf0b@rbox.co>
- <20260203200242.404131-1-kuniyu@google.com>
- <80865b12-7786-4787-81c8-08b754716a5d@linux.dev>
- <CAAVpQUCshzAAHZQQ7sVE+3UdKmBV42bKudcdDR0KtaTcTqn5gA@mail.gmail.com>
- <408569e7-2b82-4eff-b767-79ce6ef6cae0@rbox.co>
- <0f8ec4c7-5de4-4e0b-a50e-cf4f8d59709b@linux.dev>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <0f8ec4c7-5de4-4e0b-a50e-cf4f8d59709b@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQL3+huSAwoYRexoSDaLRK+nEsY6UUnVSmhk_sGYUYsO7Q@mail.gmail.com>
 
-On 2/4/26 20:34, Martin KaFai Lau wrote:
->> But then there's SOCK_DGRAM where you can drop unix_peer(sk) without
->> releasing sk; see AF_UNSPEC in unix_dgram_connect(). I think Martin is
->> right, we can crash at many fentries.
->>
->> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa4/0xb0
->> Read of size 2 at addr ffff888147d38890 by task test_progs/2495
->> Call Trace:
->>   dump_stack_lvl+0x5d/0x80
->>   print_report+0x170/0x4f3
->>   kasan_report+0xe1/0x180
->>   bpf_skc_to_unix_sock+0xa4/0xb0
->>   bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
->>   bpf_trampoline_6442564662+0x47/0xab
->>   unix_shutdown+0x9/0x880
->>   __sys_shutdown+0xe1/0x160
->>   __x64_sys_shutdown+0x52/0x90
->>   do_syscall_64+0x6b/0x3a0
->>   entry_SYSCALL_64_after_hwframe+0x76/0x7e
+On Mon, Feb 02, 2026 at 09:50:05AM -0800, Alexei Starovoitov wrote:
+> On Sun, Feb 1, 2026 at 7:26 PM Matt Bobrowski <mattbobrowski@google.com> wrote:
+> >
+> > On Wed, Jan 28, 2026 at 08:59:34AM -0800, Alexei Starovoitov wrote:
+> > > On Wed, Jan 28, 2026 at 12:06 AM Michal Hocko <mhocko@suse.com> wrote:
+> > > >
+> > > >
+> > > > > Another viable idea (also suggested by Andrew Morton) is to develop
+> > > > > a production ready memcg-aware OOM killer in BPF, put the source code
+> > > > > into the kernel tree and make it loadable by default (obviously under a
+> > > > > config option). Myself or one of my colleagues will try to explore it a
+> > > > > bit later: the tricky part is this by-default loading because there are
+> > > > > no existing precedents.
+> > > >
+> > > > It certainly makes sense to have trusted implementation of a commonly
+> > > > requested oom policy that we couldn't implement due to specific nature
+> > > > that doesn't really apply to many users. And have that in the tree. I am
+> > > > not thrilled about auto-loading because this could be easily done by a
+> > > > simple tooling.
+> > >
+> > > Production ready bpf-oom program(s) must be part of this set.
+> > > We've seen enough attempts to add bpf st_ops in various parts of
+> > > the kernel without providing realistic bpf progs that will drive
+> > > those hooks. It's great to have flexibility and people need
+> > > to have a freedom to develop their own bpf-oom policy, but
+> > > the author of the patch set who's advocating for the new
+> > > bpf hooks must provide their real production progs and
+> > > share their real use case with the community.
+> > > It's not cool to hide it.
+> > > In that sense enabling auto-loading without requiring an end user
+> > > to install the toolchain and build bpf programs/rust/whatnot
+> > > is necessary too.
+> > > bpf-oom can be a self contained part of vmlinux binary.
+> > > We already have a mechanism to do that.
+> > > This way the end user doesn't need to be a bpf expert, doesn't need
+> > > to install clang, build the tools, etc.
+> > > They can just enable fancy new bpf-oom policy and see whether
+> > > it's helping their apps or not while knowing nothing about bpf.
+> >
+> > For the auto-loading capability you speak of here, I'm currently
+> > interpreting it as being some form of conceptually similar extension
+> > to the BPF preload functionality. Have I understood this correctly? If
+> > so, I feel as though something like this would be a completely
+> > independent stream of work, orthogonal to this BPF OOM feature, right?
+> > Or, is that you'd like this new auto-loading capability completed as a
+> > hard prerequisite before pulling in the BPF OOM feature?
 > 
-> This probably is the first case where reading a sk pointer requires a 
-> lock. I think it will need to be marked as PTR_UNTRUSTED in the verifier 
-> for the unix->peer access, so that it cannot be passed to a helper. 
-> There is a BTF_TYPE_SAFE_TRUSTED list. afaik, there is no untrusted one now.
+> It's not a hard prerequisite, but it has to be thought through.
+> bpf side is ready today. bpf preload is an example of it.
+> The oom side needs to design an interface to do it.
+> sysctl to enable builtin bpf-oom policy is probably too rigid.
+> Maybe a file in cgroupfs? Writing a name of bpf-oom policy would
+> trigger load and attach to that cgroup.
+> Or you can plug it exactly like bpf preload:
+> when bpffs is mounted all builtin bpf progs get loaded and create
+> ".debug" files in bpffs.
+> 
+> I recall we discussed an ability to create files in bpffs from
+> tracepoints. This way bpffs can replicate cgroupfs directory
+> structure without user space involvement. New cgroup -> new directory
+> in cgroupfs -> tracepoint -> bpf prog -> new directory in bpffs
+> -> create "enable_bpf_oom.debug" file in there.
+> Writing to that file we trigger bpf prog that will attach bpf-oom
+> prog to that cgroup.
+> Could be any combination of the above or something else,
+> but needs to be designed and agreed upon.
+> Otherwise, I'm afraid, we will have bpf-oom progs in selftests
+> and users who want to experiment with it would need kernel source
+> code, clang, etc to try it. We need to lower the barrier to use it.
 
-What about 'fexit/sk_common_release' that does 'bpf_skc_to_unix_sock(sk)'.
-Is this something the verifies is supposed to handle?
-
-$ python -c 'from socket import *; socket(AF_INET, SOCK_DGRAM)'
-
-BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0x95/0xb0
-Read of size 1 at addr ffff888128312112 by task python/4076
-Call Trace:
- dump_stack_lvl+0x5d/0x80
- print_report+0x170/0x4f3
- kasan_report+0xe1/0x180
- bpf_skc_to_unix_sock+0x95/0xb0
- bpf_prog_70a8d38bd5dbf399_release_exit+0x87/0x8b
- bpf_trampoline_6442556594+0x64/0xd3
- inet_release+0x104/0x230
- __sock_release+0xb0/0x270
- sock_close+0x18/0x20
- __fput+0x36e/0xac0
- fput_close_sync+0xe5/0x1a0
- __x64_sys_close+0x7d/0xd0
- do_syscall_64+0x6b/0x3a0
- entry_SYSCALL_64_after_hwframe+0x76/0x7e
-
+OK, I see what you're saying here. I'll have a chat to Roman about
+this and see what his thoughts are on it.
