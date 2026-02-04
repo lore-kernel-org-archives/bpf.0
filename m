@@ -1,187 +1,221 @@
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A50286A4
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 14:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770216745; cv=pass; b=u022k0bDoK101Qysdb84OjNP762b4Qgxx8Iv1J1XLgw3cqYmRLeO45X42Quj+V1nZZRCZKOalYT7KWhlZl5JrvF/183INmAKLfs86/um43EM47hrZQ0YylUnpZtOW/nBEMgn5hE2Nz7UgH9kc5d1ycHpIvfoVjxN6T0nl+hi6ZM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770216745; c=relaxed/simple;
-	bh=vAPrTpVvtjDoYqyCk5qlFEtzMqAPTstr/NkSMREnjU8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qiu0au5pF38ZBfP5WWAWyyxLSh02wXVB6NL8mc8GoD44MpmMKn9gh8UPVNWtQozVrh3MHpivN/xpRGoTe9+vDiWCuc6qTxvp42OKuBjODC7Z8ib7tUBFBPCcIS3N+L/Nf63fSQ1z32gKqB5zHVBCxHfMkkMWbNUFOHUU+aoz5wA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KmmCkk8i; arc=pass smtp.client-ip=209.85.218.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD23718859B
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 15:18:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770218294; cv=none; b=DCceBJDKUafPEZSU99SIFo0bV9/0KWNExbBbUCPBG2NCeAfYyCOr+g4ceeHtql1WId7nAg0o15S3HMFU3HDY2v/39GSbFxs6r7q5q2wScN41ovWX367XpZB24kjpt13XWcSyaGH7nT3Udjf7EBhFCKFW23JAVOnxd7Kr7iqkctY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770218294; c=relaxed/simple;
+	bh=M1JdlGGSS4vN6AUTpYWX7DuvdiPD9j/QLjG/q/Gz3NQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PF1Ynp0ydUeJxdLLAHHlKz9bWfO6qLkI1YJGnOZ+HImTszh4FoEwx0t0ROTn/C9J4glitrZxjmVp+4YEVzlUXrtvEHx6e1w6mTCAgORoSFjV390zHvlvRTPXsBEA9fr0l+sTtplq0ST2vcW6//p0a0mAklO8fZUmAyVpP75yb7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C/7aykFT; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KmmCkk8i"
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b885e8c6727so201969566b.1
-        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 06:52:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770216743; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IvBPITKN1kIyXgosApo6NQKR/qicUilMFSNtCMIT2Asb0XgxkMT9SSngF3WIjLnODj
-         aYqmhk/ts3gYEOTu0/BhJ0Bh6JbmKVB6uCihPRl+TlGq8CYgOHT0JbaM13JIJCwgPPj0
-         gFkieB30xcfbd+fcS/og5wZ53iOH6WAtfoUrciZ7xAH90tfQo82F7f+NmKktU1eKdKjh
-         kN8RvOsmRf8cI5oZLw9pRYF/pVR6F2wOU+RN8Z0Bmdn866ykGGs8PJE5J1Og5oGPuZh9
-         4sHC+IWEEiTpOXsR1oRgr4sGQCCQrlZufAJNalBGs1/758bHOd4Z6mUyeuKXF/FhPPpn
-         RbPA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=7ae/2zsLX1SITkee1l+dAFeZHbUj9ZwEYK3HL0LzMcs=;
-        fh=2SrMtZiocCPvAVFmnfWfkI+9klaiUGjzCcYfeu5qPWs=;
-        b=Wj/7JcSDKaEltx156stFn1DjJYhqMBURCW9b/p72+RUkAVawIzRTzZvw6BGqd1j4rY
-         qJIhccA9/1yV+dCcC2bU3R4bC/sKMMlNVzRpVwcp1WUcQG/Z83xAGrLr29HIC2iZ2pKx
-         fb7zKGhRuZUhTkUNfUyKTpzrvDrmtBeKPJfWbRIJRBGiOCJgv+PnuLjmhnustdcq5rDw
-         shBS/hPfHM4G5YgSwThI/cOxzPF5dD34V8i3NiIh7rS9T0hzcMBy21ZTIb2edcfXbW6d
-         wgyONo5b2Lm51jT7DZWarPw3ybRYC4Ih6V9LmEAfxR3EAeJURmWVr3FqDvSX/cQLo1n/
-         yTyw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770216743; x=1770821543; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7ae/2zsLX1SITkee1l+dAFeZHbUj9ZwEYK3HL0LzMcs=;
-        b=KmmCkk8ilN7MwW1HOtn3JeITxCIHDlsKvKcop8WAgvKvXkoISiw8AP1tLRIaaNeRjs
-         7wfS2KxGF4XskI56h18aOdcohK9j5toE3kP3VPzDUDodap4CdfYWQDdxPaIIQJ0YvzIt
-         QO9nS6fk/QDd3tWDVIY9R3Uz45GrT49RwHL9V92o81SPiifhjuCiFdhgYGXvbMkL2aCt
-         qwTM6D4ONkquVtHlGryMOldmsiZcBZOfA8dWfwYWhfbhfbYRoGRxIPR2UK0UEb+EtNmZ
-         UYJcyANj8/0ZoQFR5pJlrF+e5oLG/51ZoFfZYZD/ekiOHRH2aX+SORfVUhaNQ09wveLt
-         iR0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770216743; x=1770821543;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=7ae/2zsLX1SITkee1l+dAFeZHbUj9ZwEYK3HL0LzMcs=;
-        b=wwURIcJhpHyxkvm4gGWUB1IpJcWJ5EmLKQPX/3rNAOEGfXDscnw3GgOZK3v5zQdN63
-         d7mIPw0Nh1zOQe3pBABHY6o67qVc4ts+jkEm9Oo5Re8uelESmpjSKj/ZuTWRLqFfwutN
-         jNyZhgzTzD26DkiYE2OdOfOL428PZvE2omANwjj1mEfeRVFYsBhDQvbLpoAQ7QwVzLTB
-         xkXhTsY1p9GOpLH593lyrOTrtn8tFA/Xn6kpw1nSwg8oxH1RSlskpzejpu7RnRIW+J0Z
-         EUllPsAkjRo5TWiLbhP/UjvKhNYxD/wD4aREwDndz6vCi8eFOfT6h+UD55PUd8lXMOg+
-         SMKw==
-X-Forwarded-Encrypted: i=1; AJvYcCWnbirqqEf1LEtdi+bAN/jNBqGlMQoqQUFynCnaVSnbh3fEXa3+kIUV1QOMdVdG8+tOPKQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwKvQHD3Lxt+p/ICU2EMHwHPfDhjrPxKfb05OkB4OB3qTeIJ6y
-	Mg9rlsZV+Pf/ifQ4nlp0fpoRYA0XoC80kJHghivjldvO0/CVHXfjCX3tof9GEuVkgjnbUf7S6RB
-	VzZGofnDo6F3byOFCFERCR+JUR5DHdyA=
-X-Gm-Gg: AZuq6aLnwHFvUqFh04i4A70Qcmu/bm0PGzv4ayCr0uBaFJDTyXIj2tmVKc+X3sQKfC6
-	vL0QcQj14XQOu+XUnmco5KO+OHkMmtXJDBIgUwc3x3FtocBFOJMbT53KimQ1VJ5eGbGA6zeaVMZ
-	SLQ3SEPVGHRbdSxk+C4asjH/OcZPdeRlmP0pLZffyoxsqQaW/+1YBwxgUxbDsl5QNrtHJustpk9
-	hm2tXUBUjon9ZmJAf04tHegazf8fId8C1mHEmPXCW6h5ZyDGZ8k69g8I2dIMLHhw3lfuPca
-X-Received: by 2002:a17:907:72d2:b0:b80:40ea:1d65 with SMTP id
- a640c23a62f3a-b8e9fb81038mr249447766b.31.1770216742630; Wed, 04 Feb 2026
- 06:52:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C/7aykFT"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45C16C4CEF7;
+	Wed,  4 Feb 2026 15:18:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770218294;
+	bh=M1JdlGGSS4vN6AUTpYWX7DuvdiPD9j/QLjG/q/Gz3NQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=C/7aykFTm0uoSe5aEbmAIN998cXJy+BygpgOXlQtdp6gNnt9Jh7sjk/j9jfAmiVtB
+	 /QaqXpZh6yuauJdwpuMxnWzMbnukSpA3q5e0g+6bwctdF6aAbedBJUsc0/aKAXhB9A
+	 zIVWNY36va9lhTm5CXj3ljF8IdR8/CqoOG5zeZ7QCiLvvEAbQzdFYiNnNh73NcPRsP
+	 dQ9y5DYtyjDhDH5DibTdOgt0HyHLr65/6i6ykEBstQCthpqKulQgoicqz0Eb2NkNTL
+	 I4+m3LFghgZu9IAd8ENXLrujs6NhAELgXF0wNqLi4F1kFeeSA68Jmz0vlVwAorZ9YC
+	 GK1vebl9e1KjA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v4 0/2] bpf: Improve linked register tracking
+Date: Wed,  4 Feb 2026 07:17:36 -0800
+Message-ID: <20260204151741.2678118-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
- <20260202111548.3555306-3-dolinux.peng@gmail.com> <20260202111249.649ac338@gandalf.local.home>
- <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
- <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
- <20260203101707.52965eb0@gandalf.local.home> <CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
-In-Reply-To: <CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
-From: Donglin Peng <dolinux.peng@gmail.com>
-Date: Wed, 4 Feb 2026 22:52:11 +0800
-X-Gm-Features: AZwV_QhyUAnBXEaRMJ8cNNq58o_SXW6uwD6sX0x2qOdpKoR92KuetEKRu2ZVyQ8
-Message-ID: <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
- via BTF
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Donglin Peng <pengdonglin@xiaomi.com>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 4, 2026 at 12:00=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Feb 3, 2026 at 7:16=E2=80=AFAM Steven Rostedt <rostedt@goodmis.or=
-g> wrote:
-> >
-> > On Tue, 3 Feb 2026 21:50:47 +0800
-> > Donglin Peng <dolinux.peng@gmail.com> wrote:
-> >
-> > > Testing revealed that sorting within resolve_btfids introduces issues=
- with
-> > > btf__dedup. Therefore, I plan to move the sorting logic directly into
-> > > btf__add_enum_value and btf__add_enum64_value in libbpf, which are
-> > > invoked by pahole. However, it means that we need a newer pahole
-> > > version.
-> >
-> > Sorting isn't a requirement just something I wanted to bring up. If it'=
-s
-> > too complex and doesn't achieve much benefit then let's not do it.
-> >
-> > My worry is because "cat trace" takes quite a long time just reading th=
-e
-> > BTF arguments. I'm worried it will just get worse with enums as well.
-> >
-> > I have trace-cmd reading BTF now (just haven't officially released it) =
-and
-> > doing an extract and reading the trace.dat file is much faster than rea=
-ding
-> > the trace file with arguments. I'll need to implement the enum logic to=
-o in
-> > libtraceevent.
->
-> If you mean to do pretty printing of the trace in user space then +1 from=
- me.
->
-> I don't like sorting enums either in resolve_btfid, pahole or kernel.
-> Sorted BTF by name was ok, since it doesn't change original semantics.
-> While sorting enums by value gets us to the grey zone where
-> the sequence of enum names in vmlinux.h becomes different than in dwarf.
+V3: https://lore.kernel.org/all/20260203222643.994713-1-puranjay@kernel.org/
+Changes in v3->v4:
+- Add a call to reg_bounds_sync() in sync_linked_regs() to sync bounds after alu op.
+- Add a __sink(path[0]); in the C selftest so compiler doesn't say  "error: variable 'path' set but
+  not used"
 
-Thanks, I agreed.
+V2: https://lore.kernel.org/all/20260113152529.3217648-1-puranjay@kernel.org/
+Changes in v2->v3:
+- Added another selftest showing a real usage pattern
+- Rebased on bpf-next/master
 
->
-> Also id->name mapping in general is not precise.
-> There is no requirement for enums to be unique.
-> Just grabbing the first one:
-> ATA_PIO0 =3D 1,
-> ATA_PIO1 =3D 3,
-> ATA_PIO2 =3D 7,
-> ATA_UDMA0 =3D 1,
-> ATA_UDMA1 =3D 3,
-> ATA_UDMA2 =3D 7,
-> ATA_ID_CYLS =3D 1,
-> ATA_ID_HEADS =3D 3,
-> SCR_ERROR =3D 1,
-> SCR_CONTROL =3D 2,
-> SCR_ACTIVE =3D 3,
->
-> All these names are part of the same enum type.
-> Which one to print? First one?
+v1: https://lore.kernel.org/bpf/20260107203941.1063754-1-puranjay@kernel.org/
+Changes in v1->v2:
+- Add support for alu32 operations in linked register tracking (Alexei)
+- Squash the selftest fix with the first patch (Eduard)
+- Add more selftests to detect edge cases
 
-I think these cases are not very common and printing the first
-one would be helpful enough, and we can add documentation
-notes in ftrace to guide users.
+This series extends the BPF verifier's linked register tracking to handle
+negative offsets, BPF_SUB operations, and alu32 operations, enabling better bounds propagation for
+common arithmetic patterns.
 
->
-> another example:
-> enum {
->         BPF_LOCAL_STORAGE_GET_F_CREATE =3D 1,
->         BPF_SK_STORAGE_GET_F_CREATE =3D 1,
-> };
->
-> and another:
-> enum {
->         BPF_SKB_TSTAMP_UNSPEC =3D 0,
->         BPF_SKB_TSTAMP_DELIVERY_MONO =3D 1,
->         BPF_SKB_CLOCK_REALTIME =3D 0,
->         BPF_SKB_CLOCK_MONOTONIC =3D 1,
->         BPF_SKB_CLOCK_TAI =3D 2,
-> };
->
-> I'd rather not print any and keep it integer only.
->
-> pw-bot: cr
+The verifier previously only tracked positive constant deltas between linked
+registers using BPF_ADD. This meant patterns using negative offsets or
+subtraction couldn't benefit from bounds propagation:
+
+  void alu32_negative_offset(void)
+  {
+          volatile char path[5];
+          volatile int offset = bpf_get_prandom_u32();
+          int off = offset;
+  
+          if (off >= 5 && off < 10)
+                  path[off - 5] = '.';
+  }
+
+this gets compiled to:
+
+0000000000000478 <alu32_negative_offset>:
+     143:       call 0x7
+     144:       *(u32 *)(r10 - 0xc) = w0
+     145:       w1 = *(u32 *)(r10 - 0xc)
+     146:       w2 = w1				// w2 and w1 share the same id
+     147:       w2 += -0x5			// verifier knows w1 = w2 + 5
+     148:       if w2 > 0x4 goto +0x5 <L0>	// in fall-through: verifier knows w2 ∈ [0,4] => w1 ∈ [5, 9]
+     149:       r2 = r10
+     150:       r2 += -0x5			// r2 = fp - 5
+     151:       r2 += r1			// r2 = fp - 5 + r1 (∈ [5, 9]) => r2 ∈ [fp, fp + 4]
+     152:       w1 = 0x2e
+     153:       *(u8 *)(r2 - 0x5) = w1		// r2 ∈ [fp, fp + 4] => r2 - 5 ∈ [fp - 5, fp - 1]
+<L0>:
+     154:       exit
+
+After the changes, the verifier could link 32-bit scalars and also supported -ve offsets for linking:
+
+	146:       w2 = w1
+	147:       w2 += -0x5
+
+It allowed the verifier to correctly propagate bounds, without the
+changes in this patchset, verifier would reject this program with:
+
+invalid unbounded variable-offset write to stack R2
+
+This program has been added as a selftest in the second patch.
+
+Veristat comparison on programs from sched_ext, selftests, and some meta internal programs:
+
+Scx Progs
+File               Program           Verdict (A)  Verdict (B)  Verdict (DIFF)  Insns (A)  Insns (B)  Insns  (DIFF)
+-----------------  ----------------  -----------  -----------  --------------  ---------  ---------  -------------
+scx_layered.bpf.o  layered_runnable  success      success      MATCH                5674       6077  +403 (+7.10%)
+
+FB Progs
+File          Program           Verdict (A)  Verdict (B)  Verdict (DIFF)  Insns (A)  Insns (B)  Insns      (DIFF)
+------------  ----------------  -----------  -----------  --------------  ---------  ---------  -----------------
+bpf232.bpf.o  layered_dump      success      success      MATCH                1151       1218       +67 (+5.82%)
+bpf257.bpf.o  layered_runnable  success      success      MATCH                5743       6143      +400 (+6.97%)
+bpf252.bpf.o  layered_runnable  success      success      MATCH                5677       6075      +398 (+7.01%)
+bpf227.bpf.o  layered_dump      success      success      MATCH                 915        982       +67 (+7.32%)
+bpf239.bpf.o  layered_runnable  success      success      MATCH                5459       5861      +402 (+7.36%)
+bpf246.bpf.o  layered_runnable  success      success      MATCH                5562       6008      +446 (+8.02%)
+bpf229.bpf.o  layered_runnable  success      success      MATCH                2559       3011     +452 (+17.66%)
+bpf231.bpf.o  layered_runnable  success      success      MATCH                2559       3011     +452 (+17.66%)
+bpf234.bpf.o  layered_runnable  success      success      MATCH                2549       3001     +452 (+17.73%)
+bpf019.bpf.o  do_sendmsg        success      success      MATCH              124823     153523   +28700 (+22.99%)
+bpf019.bpf.o  do_parse          success      success      MATCH              124809     153509   +28700 (+23.00%)
+bpf227.bpf.o  layered_runnable  success      success      MATCH                1915       2356     +441 (+23.03%)
+bpf228.bpf.o  layered_runnable  success      success      MATCH                1700       2152     +452 (+26.59%)
+bpf232.bpf.o  layered_runnable  success      success      MATCH                1499       1951     +452 (+30.15%)
+
+bpf312.bpf.o  mount_exit        success      success      MATCH               19253      62883  +43630 (+226.61%)
+bpf312.bpf.o  umount_exit       success      success      MATCH               19253      62883  +43630 (+226.61%)
+bpf311.bpf.o  mount_exit        success      success      MATCH               19226      62863  +43637 (+226.97%)
+bpf311.bpf.o  umount_exit       success      success      MATCH               19226      62863  +43637 (+226.97%)
+
+The above four programs have specific patters that make the verifier explore a lot more states:
+
+    for (; depth < MAX_DIR_DEPTH; depth++) {
+        const unsigned char* name = BPF_CORE_READ(dentry, d_name.name);
+        if (offset >= MAX_PATH_LEN - MAX_DIR_LEN) {
+            return depth;
+        }
+        int len = bpf_probe_read_kernel_str(&path[offset], MAX_DIR_LEN, name);
+        offset += len;
+        if (len == MAX_DIR_LEN) {
+            if (offset - 2 < MAX_PATH_LEN) {   // <---- (a)
+                path[offset - 2] = '.';
+            }
+            if (offset - 3 < MAX_PATH_LEN) {   // <---- (b)
+                path[offset - 3] = '.';
+            }
+            if (offset - 4 < MAX_PATH_LEN) {   // <---- (c)
+                path[offset - 4] = '.';
+            }
+        }
+    }
+
+When at some depth == N false branches of conditions (a), (b) and (c) are scheduled for
+verification, constraints for offset at depth == N+1 are:
+1. offset >= MAX_PATH_LEN + 2
+2. offset >= MAX_PATH_LEN + 3
+3. offset >= MAX_PATH_LEN + 4 (visited before others)
+
+And after offset += len it becomes:
+1. offset >= MAX_PATH_LEN - 4093 
+2. offset >= MAX_PATH_LEN - 4092 
+3. offset >= MAX_PATH_LEN - 4091 (visited before others) 
+
+Because of the DFS states exploration logic, the states above are visited in order 3, 2, 1; 3 is not
+a subset of 2 and 1 is not a subset of 2, so pruning logic does not kick in.
+Previously this was not a problem, because range for offset was not propagated through the
+statements (a), (b), (c).
+
+As the root cause of this regression is understood, this is not a blocker for this change.
+
+Selftest Progs
+File                                Program                   Verdict (A)  Verdict (B)  Verdict (DIFF)  Insns (A)  Insns (B)  Insns   (DIFF)
+----------------------------------  ------------------------  -----------  -----------  --------------  ---------  ---------  --------------
+linked_list_peek.bpf.o              list_peek                 success      success      MATCH                 152         88   -64 (-42.11%)
+verifier_iterating_callbacks.bpf.o  cond_break2               success      success      MATCH                 110         88   -22 (-20.00%)
+
+These are the added selftests that failed earlier but are passing now:
+
+verifier_linked_scalars.bpf.o       alu32_negative_offset     failure      success      MISMATCH               11         13    +2 (+18.18%)
+verifier_linked_scalars.bpf.o       scalars_alu32_big_offset  failure      success      MISMATCH                7         10    +3 (+42.86%)
+verifier_linked_scalars.bpf.o       scalars_neg_alu32_add     failure      success      MISMATCH                7         10    +3 (+42.86%)
+verifier_linked_scalars.bpf.o       scalars_neg_alu32_sub     failure      success      MISMATCH                7         10    +3 (+42.86%)
+verifier_linked_scalars.bpf.o       scalars_neg               failure      success      MISMATCH                7         10    +3 (+42.86%)
+verifier_linked_scalars.bpf.o       scalars_neg_sub           failure      success      MISMATCH                7         10    +3 (+42.86%)
+verifier_linked_scalars.bpf.o       scalars_sub_neg_imm       failure      success      MISMATCH                7         10    +3 (+42.86%)
+
+iters.bpf.o                         iter_obfuscate_counter    success      success      MATCH                  83        119   +36 (+43.37%)
+bpf_cubic.bpf.o                     bpf_cubic_acked           success      success      MATCH                 243        430  +187 (+76.95%)
+
+Puranjay Mohan (2):
+  bpf: Support negative offsets, BPF_SUB, and alu32 for linked register
+    tracking
+  selftests/bpf: Add tests for improved linked register tracking
+
+ include/linux/bpf_verifier.h                  |   6 +-
+ kernel/bpf/verifier.c                         |  50 ++-
+ .../selftests/bpf/progs/verifier_bounds.c     |   2 +-
+ .../bpf/progs/verifier_linked_scalars.c       | 303 +++++++++++++++++-
+ 4 files changed, 346 insertions(+), 15 deletions(-)
+
+
+base-commit: b28dac3fc99bb6f1d0b029f1b742a96e7bc797d6
+-- 
+2.47.3
+
