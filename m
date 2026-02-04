@@ -1,162 +1,173 @@
-Received: from mail-oi1-f206.google.com (mail-oi1-f206.google.com [209.85.167.206])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E568221577
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 00:52:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.206
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770166364; cv=none; b=Yt8omwXwx0+phQSbb/wzgAfPrA8H1ooy/WoaYctgXeHx6WKmuyqzJ0YGQH4IZOSYVH/F/rkp9egBHoFWMO0bu8logDjBdWwRBARRHL1P7LLIkJxCYhgthOaB4/nbbuyIkpeux0s7rQPHYYWyG/+OMUb2OwW55detZm3z2c5iby4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770166364; c=relaxed/simple;
-	bh=BDwytseUDZN2RitMqoVQscmyQnNkZLcbnzX0MbAIEEw=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=RCXNi2o1naSL1KqZsE7efoGbZDL5nWIGe+CrAsiR9h0/4wTcjQ3jI1czrEqkTbdQfdKsyMPT5EuEHFM8WgFBb8xeKzmChCAqDtZbMHKxk7RFzjhL7/pzV9D/R28yap2Fx5XT00WtGGdQqHqNR/+7iUlqZV8BWYGO7AR90acI7Dw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.167.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oi1-f206.google.com with SMTP id 5614622812f47-462a9191720so9788018b6e.0
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 16:52:43 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0507E221554
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 00:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770166396; cv=pass; b=tdBiSxkk2F6q1gCXxwHI1S2hBhMxLmq1OntBYS7Y/B1k8VQdMEB+CyKqzm/TWV3aOhrAjbq3WyJDjToWvFm2cyz4ZkTAsFFdhlJXxQIssPrX2fPcWRrv/sOM5eynMIjjkBvGNw4mbXgDhDumDKHW3yjtGetFgL5H6Si4jfGQ4B0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770166396; c=relaxed/simple;
+	bh=hJoxwbCf1202qnrnTkaVoQ03QxkF363XCcGVKZ1rDEw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aqbTUpLUWyOYMFfm5utRhhZnAzhU3mb+zBxBzclTmpTkeefJvx+2AQcGyI5eUIuMCc3jqm6XBlhSxUY5dnPnFHVto7xEjBgE/aBm5rnD6komI1+lrU/Lt6jaDDKvSLx6dUzNIjKRyVGwPiXgDmx4GqrnaddeijE6jkaDYrzkOS4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mttGGqkU; arc=pass smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mttGGqkU"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-34ab8e0df53so5231750a91.3
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 16:53:14 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770166394; cv=none;
+        d=google.com; s=arc-20240605;
+        b=DMtgSalOLuc3UVs2SjPMA6yPeaB0OkD7L6pP7MH4ruETftLuz0cBiTOzJJl21AZpo1
+         R9JZ+k/L13ET+L3sH96B/dDxc0wi/39EBfLVo8HTUM54EDue7iqkvOVyWmDWf0uoQAme
+         zXMELx3RV+9ABguZHrrT24mc1JXzHM5RAzAPJmkrW85ola0hLQvur9+eboX7cKy2rURH
+         zKpafAKOQ8D/GN9vzQ2Q97It8jMY0lk0xGANtUz8JyXNGyNGPmdnlV+9r/mfkBFzPPHh
+         4q9O6n6Xt8cM9Py7L433RBcSqJpjFrl+hjeBwrJVoNaOLrauCxhnikxgJHGwvo8N0Swe
+         pH0g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7qmlllrmbVRYmuhd7Gn9dS98jj4YGml5ebLKdqtNczY=;
+        fh=F67QOCqalbsFVAGPSJigrtRkIsSjn/242asg//34fs0=;
+        b=bGqYPQ4ZQ3YUoRrBMvmhUO6rZ4xxpUBHxxXLN1jWFe3lmHKfzOhwXZaKGNuIpVfAl9
+         HW1UYqGyT8k1O/o463vqDAfN3iMQ/ZjC8COf3Cw6sydJrEHtCia3+1gwZAB6aPoGda6/
+         9yisbX1t99jPnGvEd0bjxzDSKNp+nNGWwij8LWCE7TCg8T0rRXpShdwu4ZF9Rn9/uvkw
+         B6wvqTRzU5txcggq+xA6fk3nGwONATUtRmsIKkbgkvU6jKlcjlV7LxG3KhOxnP76xcpI
+         cqmjGApzvg6MnR+NrtoLlT6jfkcyEfwvZITFPvRR+NGjGS2HdGx/7wwuz/PqU9U2TleW
+         MdJQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770166394; x=1770771194; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7qmlllrmbVRYmuhd7Gn9dS98jj4YGml5ebLKdqtNczY=;
+        b=mttGGqkU45y9uj4fPXfL/6Yr+Hqx0/AhqR20pjRMgudqA9zqCPvzgoIp0rxmaFY4Lw
+         SnAuXGO1Cw51ev7o/ZL+7KH4XNjzjE3fZWVRYWuuckU0UxAjtlIBJAchJsBr2+FQPJAK
+         Zsw6Q4QyMrzBA6CY9nXMHZmSVR0B6c6b/kRRXTL8Z8lyfapLIYGrV0ImsD+qCHWUKELo
+         3QmKqjlc/hcC/8hkPpO9mLlh1FLCb+dvZUipnVLX4ItrqC2jyssAmrbq3ncZV2VB0ett
+         dXOwOHL+F8kkgvlCHjLpOwemyy2zcDeSChtW+KmtftUOApch1lKGJrP3aRh1eiOTfU/a
+         cghA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770166362; x=1770771162;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5eU6gD2UjAk0c4GuLiweDyPRtvwSn/5AASYdK95cAdY=;
-        b=sxwDvWThzMkJ2ax0K7pRgJT5nmNQcI0JU/SCAbfYfZ1LPCmDm7n5YlkFD1U4kHwgiS
-         kT0F4rKHr9y06l0vHw/8mmKK5LB4fE4JocPt1BZxQX/+xGqdn1Zk3BG6OyV8AtsDzPIE
-         jT3txQ8xs00wy3swL8FnuoAdscEKAWHYTpApy6w3+5ldUq3MYoTFYNLdTs/GI/0twyWe
-         N0abcifZTBh4j6SfvI9sbRapLYhRxD2eADb7m5jmtNiWWaBEK4+cwz1voWKSQXPZFP3n
-         I8oxdl10V/E33+HcCv93GETLw1UbvhaQsnei42QbOxhXqK4fF7G5hcNfIvEfU456nqRK
-         O1pQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWif3ohCt2d7ETAoqYkJeu+6SBQLjtBTZbuZZ+EGeYzwWWMba18i4XwBvzLnD6udTTo09s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0hsIW9tW5BX6IUV1qW+wUcfdcB+UK151m3ziphsJ6NSdZtW+K
-	qXateYdMa8LNEAdHlkEAgr+VjIyZSB4zzaj0ZOD8VvE8bIKJADUGwW0IUjFvuY8m75+40iYMQr6
-	bWikytBP0rvymB206aHKWHVYqVHXm0wWBM4zxLTlB/8mjxxf2+PEz16rhI6M=
+        d=1e100.net; s=20230601; t=1770166394; x=1770771194;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7qmlllrmbVRYmuhd7Gn9dS98jj4YGml5ebLKdqtNczY=;
+        b=NbTPLNlzpaqfJb4twPwCvHL+C9PYUar/eZ7BVXZekFKD0DpN8h4yCn3HWx3+IOuMRQ
+         nBFbUtdLhqHFOUExqx9wwrXw9hm0+ew8RHK5h/EinjREWtJSVtHxFb6sol+MHju2AWo1
+         f+Zpet/7waXdiVemJX694GKe1MCftFge9EBqNwclG7HHhTDVhBQsxBQfQu+nXGbMMc5x
+         2nMe5uYGf9yzlxNG3QqzECbMZ60f9Dqmlx36ayvTN5MdJdbNQJDEMoXZpBkknGDkcmTL
+         vXHGfGgI7B7R2lM5qgrmEirOZzNDZX0cvCoVXmObbjMRdUmIX+jEQlHTpIr+L0kK+2W0
+         uZLw==
+X-Gm-Message-State: AOJu0Yz28Vnyvpv6C31k2yz3wmRAd+OmYLeDxwYJRiLsB28G7hnKGb8h
+	l1Hso1+4OkD2OZjSd/p5Tey8NUDEKDz2NuLKF5WR6lesw5ylhCeVB0IOQG5e5g/bQ3SbVPree8e
+	x8aqB/4vrL/Z41/pLGetGFUFOZPuSRWY=
+X-Gm-Gg: AZuq6aJnjT4YdmyplHsM6SSn6pP/xskG5+KVfGErNgzb01UhObm9iY++eCkB0ldVYK3
+	T0StjW4oxe5AQ0TdnSmiMVAO56M36Gl4oqROw4kFbkPVGaRKZwndOF6QdQJuycWdbwuQynbp06c
+	JjrjpyXyotny8ruKBBnam9jwdiXlRR5FuyNmWpF32BxoBDRj2nXa+F+m55+Re/+NSlQplJEOnbB
+	19f2r725ejlQEpXZ7PAfNMTSgviyM/PXQilQaZrgM1NkQM0S07YpGT4E5JCtIwiqETPN+aQClLL
+	95IeQbvm3NM=
+X-Received: by 2002:a17:90b:57c5:b0:352:c762:8c2e with SMTP id
+ 98e67ed59e1d1-354870d71e2mr926443a91.13.1770166394237; Tue, 03 Feb 2026
+ 16:53:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:4cca:b0:663:74a:f0ca with SMTP id
- 006d021491bc7-66a22c6044dmr695206eaf.44.1770166362318; Tue, 03 Feb 2026
- 16:52:42 -0800 (PST)
-Date: Tue, 03 Feb 2026 16:52:42 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6982985a.a00a0220.37c87e.0018.GAE@google.com>
-Subject: [syzbot] [bpf?] WARNING: refcount bug in __add_used_btf
-From: syzbot <syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
-	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
-	sdf@fomichev.me, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	yonghong.song@linux.dev
+References: <20260201025403.66625-1-alexei.starovoitov@gmail.com>
+ <20260201025403.66625-2-alexei.starovoitov@gmail.com> <CAEf4BzZxWzntugOkbPLC=yy9TZ4v1YVaALR25-rOqF6xezVW-w@mail.gmail.com>
+ <CAADnVQ+c26Ff14vni7iqaZ71s3pw0AgABk81QSZ+5o4brBnoqg@mail.gmail.com>
+In-Reply-To: <CAADnVQ+c26Ff14vni7iqaZ71s3pw0AgABk81QSZ+5o4brBnoqg@mail.gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 3 Feb 2026 16:53:02 -0800
+X-Gm-Features: AZwV_QgzoyBzLhButbMPKyPvz7-OiI01gRQimZXJbjPgQ1dj_vWi-IFvSz-dxng
+Message-ID: <CAEf4BzbNR1n6=t3m+gJdZPq8giEHim-FeFyFhya8n9ZszR09xA@mail.gmail.com>
+Subject: Re: [PATCH v9 bpf-next 1/9] bpf: Enable bpf_timer and bpf_wq in any context
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
+	Kernel Team <kernel-team@fb.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On Tue, Feb 3, 2026 at 4:32=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Tue, Feb 3, 2026 at 3:53=E2=80=AFPM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Sat, Jan 31, 2026 at 6:54=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > From: Alexei Starovoitov <ast@kernel.org>
+> > >
+> > > Refactor bpf_timer and bpf_wq to allow calling them from any context:
+> > > - add refcnt to bpf_async_cb
+> > > - map_delete_elem or map_free will drop refcnt to zero
+> > >   via bpf_async_cancel_and_free()
+> > > - once refcnt is zero timer/wq_start is not allowed to make sure
+> > >   that callback cannot rearm itself
+> > > - if in_hardirq defer to start/cancel operations to irq_work
+> > >
+> > > Co-developed-by: Mykyta Yatsenko <yatsenko@meta.com>
+> > > Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> > > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
+> > > ---
+> > >  kernel/bpf/helpers.c | 408 ++++++++++++++++++++++++-----------------=
+--
+> > >  1 file changed, 225 insertions(+), 183 deletions(-)
+> > >
+> >
+> > [...]
+> >
+> > > @@ -1456,10 +1493,20 @@ BPF_CALL_3(bpf_timer_start, struct bpf_async_=
+kern *, timer, u64, nsecs, u64, fla
+> > >         if (flags & BPF_F_TIMER_CPU_PIN)
+> > >                 mode |=3D HRTIMER_MODE_PINNED;
+> > >
+> > > -       hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+> > > -out:
+> > > -       __bpf_spin_unlock_irqrestore(&timer->lock);
+> > > -       return ret;
+> > > +       /*
+> > > +        * bpf_async_cancel_and_free() could have dropped refcnt to z=
+ero. In
+> > > +        * such case BPF progs are not allowed to arm the timer to pr=
+event UAF.
+> > > +        */
+> > > +       if (!refcount_inc_not_zero(&t->cb.refcnt))
+> > > +               return -ENOENT;
+> > > +
+> > > +       if (!in_hardirq()) {
+> > > +               hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
+> > > +               bpf_async_refcount_put(&t->cb);
+> >
+> > any reason not to use bpf_async_process_op(BPF_ASYNC_START) here? you
+> > are basically open-coding it here (same for bpf_wq_start). For
+> > bpf_timer_delete() you just call
+> > bpf_async_process_op(BPF_ASYNC_CANCEL), so it's inconsistent...
+>
+> I didn't want to obfuscate the call and to avoid tiny overhead
+> of switch (cb->type) which won't be optimized away by the compiler.
+>
+> bpf_async_process_op(BPF_ASYNC_CANCEL) is there right next
+> to bpf_async_schedule_op(BPF_ASYNC_CANCEL),
+> so I wanted to keep those two consistent.
 
-syzbot found the following issue on:
+Same as for BPF_ASYNC_START, not sure what's different there. I still
+find it inconsistent with the synchronous bpf_timer_cancel(), but
+whatever, I'll apply as is.
 
-HEAD commit:    6b95cc562de2 ftrace: Fix direct_functions leak in update_f..
-git tree:       bpf-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=11a5fbfa580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b5a1ee0109784fc2
-dashboard link: https://syzkaller.appspot.com/bug?extid=5a0f1995634f7c1dadbf
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1035fc5a580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12a1625a580000
+>
+> 3rd reason is in bpf_timer_cancel_async() kfunc that
+> calls hrtimer_try_to_cancel() directly to return the result.
+> See patch 3.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e902619c9a45/disk-6b95cc56.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c8a15c0caf9a/vmlinux-6b95cc56.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3e7c64a9dbaf/bzImage-6b95cc56.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-refcount_t: addition on 0; use-after-free.
-WARNING: lib/refcount.c:25 at refcount_warn_saturate+0x9f/0x110 lib/refcount.c:25, CPU#0: syz.1.44/6186
-Modules linked in:
-CPU: 0 UID: 0 PID: 6186 Comm: syz.1.44 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/24/2026
-RIP: 0010:refcount_warn_saturate+0x9f/0x110 lib/refcount.c:25
-Code: eb 66 85 db 74 3e 83 fb 01 75 4c e8 2b 5b 23 fd 48 8d 3d 04 7d 58 0b 67 48 0f b9 3a eb 4a e8 18 5b 23 fd 48 8d 3d 01 7d 58 0b <67> 48 0f b9 3a eb 37 e8 05 5b 23 fd 48 8d 3d fe 7c 58 0b 67 48 0f
-RSP: 0018:ffffc90003337380 EFLAGS: 00010293
-RAX: ffffffff84a11b58 RBX: 0000000000000002 RCX: ffff88802f648000
-RDX: 0000000000000000 RSI: ffffffff8ece7f00 RDI: ffffffff8ff99860
-RBP: 0000000000000000 R08: ffff88802f648000 R09: 0000000000000005
-R10: 0000000000000004 R11: 0000000000000000 R12: ffff8880762d8854
-R13: 1ffff9200078f60c R14: ffff888079bc6258 R15: ffff888079bc6200
-FS:  00007fb9d62266c0(0000) GS:ffff8881256f8000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fb9d53e8600 CR3: 00000000329a6000 CR4: 00000000003526f0
-Call Trace:
- <TASK>
- __add_used_btf+0x152/0x2e0 kernel/bpf/verifier.c:21107
- check_pseudo_btf_id+0x764/0xbb0 kernel/bpf/verifier.c:21238
- resolve_pseudo_ldimm64+0x3f4/0xc90 kernel/bpf/verifier.c:21489
- bpf_check+0x1d82/0x1ce00 kernel/bpf/verifier.c:25715
- bpf_prog_load+0x1484/0x1ae0 kernel/bpf/syscall.c:3081
- __sys_bpf+0x618/0x950 kernel/bpf/syscall.c:6218
- __do_sys_bpf kernel/bpf/syscall.c:6331 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6329 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6329
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fb9d539aeb9
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fb9d6226028 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007fb9d5615fa0 RCX: 00007fb9d539aeb9
-RDX: 0000000000000094 RSI: 0000200000000180 RDI: 0000000000000005
-RBP: 00007fb9d5408c1f R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fb9d5616038 R14: 00007fb9d5615fa0 R15: 00007ffda6487988
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	eb 66                	jmp    0x68
-   2:	85 db                	test   %ebx,%ebx
-   4:	74 3e                	je     0x44
-   6:	83 fb 01             	cmp    $0x1,%ebx
-   9:	75 4c                	jne    0x57
-   b:	e8 2b 5b 23 fd       	call   0xfd235b3b
-  10:	48 8d 3d 04 7d 58 0b 	lea    0xb587d04(%rip),%rdi        # 0xb587d1b
-  17:	67 48 0f b9 3a       	ud1    (%edx),%rdi
-  1c:	eb 4a                	jmp    0x68
-  1e:	e8 18 5b 23 fd       	call   0xfd235b3b
-  23:	48 8d 3d 01 7d 58 0b 	lea    0xb587d01(%rip),%rdi        # 0xb587d2b
-* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
-  2f:	eb 37                	jmp    0x68
-  31:	e8 05 5b 23 fd       	call   0xfd235b3b
-  36:	48 8d 3d fe 7c 58 0b 	lea    0xb587cfe(%rip),%rdi        # 0xb587d3b
-  3d:	67                   	addr32
-  3e:	48                   	rex.W
-  3f:	0f                   	.byte 0xf
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+yes, I noticed this one.
