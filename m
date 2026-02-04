@@ -1,392 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACA2328853E
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 15:18:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62D7241C2EE;
+	Wed,  4 Feb 2026 15:41:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770218301; cv=none; b=Ok679eb8+TdcFTVr+YBuTKS4U5HXWhUI+K2uta/l62INUSNQxbGt0WAYVK6pxO0VoEE7V/YhmGUQKADLON+trzH4+jloAExpQKX0Gbp/f/0VY9Rr8YScQA7GJ8ebONTqbvOTvbIvj8VJehRdZ3jX4YhC8AdohfUvCsYnXlaiVfU=
+	t=1770219701; cv=none; b=s6rbK3WtRskoI58ADpIarB7eWD5zQEJyFHmSlq91VJDfzb1elGc1zuAInxImt1C4ciAvxtW4MbnEDqWoUS/ONFlDn1b8DeyE3UrfSDmsQNlErULIYINiOliwJ+mnSmhRaKzjy9iulNOMs/F4cSnuFxVWoLP0LRRvgJuhwhzLYgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770218301; c=relaxed/simple;
-	bh=kkzYKs/XskFw1gP7D2w9g4lEyIBMvwTFDTdud6vf0dA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Pcxry024pxEaDSvW3fP5QEHhpbVfKIEHciZ7tZfex/3iEAZ72IvWLRpedwKqYXM8WLj9qT0s0RLK5/a4OieKfwa7wZz+eMeEWUKJE0xqf1LhgGbr9RpU7JLE6s2A/75/o0hIoqwyBokUNhoc/K+aO0ZE5zPVj5JUGoWJR5SxJrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SdSF0DEh; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770219701; c=relaxed/simple;
+	bh=y+VfXyZfEv/iLTKOZwxeeQmhfZehJ6ewL2y08ntJHMA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HP927FL0hOm8Bv5fnmt2b1N/brIMxJPBZJA6Mzal3x/T/sSAv8UiOC0gRfAgKkDFuNfAypH6UrZBwS4pWg6yp2AB5Pnm7EeSWQg0Ehfp69s6W0GVmUJ6J9U1av7lgLVVzPVWell6cxxUpu5NFxZGC4t+jHnpOUbTG+8VZvYG8pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=XJ49bUqs; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SdSF0DEh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B94AC4CEF7;
-	Wed,  4 Feb 2026 15:18:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770218301;
-	bh=kkzYKs/XskFw1gP7D2w9g4lEyIBMvwTFDTdud6vf0dA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SdSF0DEhcEk4rbWStQ3D7tJeZqG/hzavQo5feEIb5pEXt07GxkS2xXEuGL5MVEbQh
-	 wao6I26CpBivRZ4nVjX+qMwlXmYGpKkkqIFsN7VmL/7/dzSRHdIHd2QskURc46BSXY
-	 rzf0AJqAHFPummCJKBhaB/kh8OGzasPt40dROn/8rvjp+2DLm6B08zKEHGBW4d4C7R
-	 LQdg6Y8KZRGWST1LCsVAZxcL/0vnOjg59uZR10W7TH6yx4VkphhWsAvY10TPNaQhvH
-	 P2W0TF2WkKNBNrNScsyUztOAEZoK8wUQDLaZyI6ntS59toFeD65wnCkojdJXGosG86
-	 TbK2WITU8O6/w==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add tests for improved linked register tracking
-Date: Wed,  4 Feb 2026 07:17:38 -0800
-Message-ID: <20260204151741.2678118-3-puranjay@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260204151741.2678118-1-puranjay@kernel.org>
-References: <20260204151741.2678118-1-puranjay@kernel.org>
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="XJ49bUqs"
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1vnf0R-001HOM-Oa; Wed, 04 Feb 2026 16:41:27 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=yy+pfXDm9B5saBKTpihytUhl3OzuXowP2Q77KQkJhnU=; b=XJ49bUqsIwmLRJmMTrY7Hgn3IB
+	x0hPLvwIniiuy5QCOcU5BOjXgph4Q9kcl1ckH8tDqEsWpDBdl1QHp/VFW1rMYoou3GyIiF/z56xk5
+	EzS8M17Cv4q7LDUoooV+r4cpOWYV3ysV8wg/iIwCjAu0vnw6wS103rlswl6+EmRyoiUWzlnsK4i9x
+	RKj5JMae3Q3pQDyntOvfNIXArl/vXogS3Hz9PnH0yjMHRkvYWPzVhWCagOZGADzhgoTIJ8ZG/shwk
+	qMBCQDxxpRCl14y0X2a35lmXg5RPY+JVHYRqqgLmi7NZ+DrWfaKN8LTD4FovJKeSYG5wNHN7P3BzK
+	KTKeAwLw==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1vnf0R-0005dh-55; Wed, 04 Feb 2026 16:41:27 +0100
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vnf0P-002MxR-0s; Wed, 04 Feb 2026 16:41:25 +0100
+Message-ID: <408569e7-2b82-4eff-b767-79ce6ef6cae0@rbox.co>
+Date: Wed, 4 Feb 2026 16:41:23 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
+ update
+To: Kuniyuki Iwashima <kuniyu@google.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+ edumazet@google.com, horms@kernel.org, jakub@cloudflare.com,
+ john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, pabeni@redhat.com
+References: <8d055903-fe44-4bbf-a1a5-e0176343bf0b@rbox.co>
+ <20260203200242.404131-1-kuniyu@google.com>
+ <80865b12-7786-4787-81c8-08b754716a5d@linux.dev>
+ <CAAVpQUCshzAAHZQQ7sVE+3UdKmBV42bKudcdDR0KtaTcTqn5gA@mail.gmail.com>
+From: Michal Luczaj <mhal@rbox.co>
+Content-Language: pl-PL, en-GB
+In-Reply-To: <CAAVpQUCshzAAHZQQ7sVE+3UdKmBV42bKudcdDR0KtaTcTqn5gA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Add tests for linked register tracking with negative offsets, BPF_SUB,
-and alu32. These test for all edge cases like overflows, etc.
+On 2/4/26 08:58, Kuniyuki Iwashima wrote:
+> On Tue, Feb 3, 2026 at 11:15 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
+>>
+>> On 2/3/26 11:47 AM, Kuniyuki Iwashima wrote:
+>>> From: Michal Luczaj <mhal@rbox.co>
+>>> Date: Tue, 3 Feb 2026 10:57:46 +0100
+>>>> On 2/3/26 04:53, Martin KaFai Lau wrote:
+>>>>> On 2/2/26 7:10 AM, Michal Luczaj wrote:
+>>>>>> In related news, looks like bpf_iter_unix_seq_show() is missing
+>>>>>> unix_state_lock(): lock_sock_fast() won't stop unix_release_sock(). E.g.
+>>>>>> bpf iterator can grab unix_sock::peer as it is being released.
+>>>>>
+>>>>> If the concern is the bpf iterator prog may use a released unix_peer(sk)
+>>>>> pointer, it should be fine. The unix_peer(sk) pointer is not a trusted
+>>>>> pointer to the bpf prog, so nothing bad will happen other than
+>>>>> potentially reading incorrect values.
+>>>>
+>>>> But if the prog passes a released peer pointer to a bpf helper:
+>>>>
+>>>> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0x95/0xb0
+>>>> Read of size 1 at addr ffff888110654c92 by task test_progs/1936
+>>
+>> hmm... bpf_skc_to_unix_sock is exposed to tracing. bpf_iter is a tracing
+>> bpf prog.
+>>
+>>>
+>>> Can you cook a patch for this ? probably like below
+>>
+>> This can help the bpf_iter but not the other tracing prog such as fentry.
+> 
+> Oh well ... then bpf_skc_to_unix_sock() can be used even
+> with SEQ_START_TOKEN at fentry of bpf_iter_unix_seq_show() ??
+> 
+> How about adding notrace to all af_unix bpf iterator functions ?
+> 
+> The procfs iterator holds a spinlock of the hashtable from
+> ->start/next() to ->stop() to prevent the race with unix_release_sock().
+> 
+> I think other (non-iterator) functions cannot do such racy
+> access with tracing prog.
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
----
- .../bpf/progs/verifier_linked_scalars.c       | 303 +++++++++++++++++-
- 1 file changed, 301 insertions(+), 2 deletions(-)
+But then there's SOCK_DGRAM where you can drop unix_peer(sk) without
+releasing sk; see AF_UNSPEC in unix_dgram_connect(). I think Martin is
+right, we can crash at many fentries.
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-index 5f41bbb730a7..2ef346c827c2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include <linux/bpf.h>
-+#include <limits.h>
- #include <bpf/bpf_helpers.h>
- #include "bpf_misc.h"
- 
-@@ -18,9 +19,9 @@ __naked void scalars(void)
- 	r4 = r1;				\
- 	w2 += 0x7FFFFFFF;			\
- 	w4 += 0;				\
--	if r2 == 0 goto l1;			\
-+	if r2 == 0 goto l0_%=;			\
- 	exit;					\
--l1:						\
-+l0_%=:						\
- 	r4 >>= 63;				\
- 	r3 = 1;					\
- 	r3 -= r4;				\
-@@ -64,4 +65,302 @@ l0_%=:								\
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__success
-+__naked void scalars_neg(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 += -4;					\
-+	if r1 s< 0 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* Same test but using BPF_SUB instead of BPF_ADD with negative immediate */
-+SEC("socket")
-+__success
-+__naked void scalars_neg_sub(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 -= 4;					\
-+	if r1 s< 0 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* alu32 with negative offset */
-+SEC("socket")
-+__success
-+__naked void scalars_neg_alu32_add(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 &= 0xff;					\
-+	w1 = w0;					\
-+	w1 += -4;					\
-+	if w1 s< 0 goto l0_%=;				\
-+	if w0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* alu32 with negative offset using SUB */
-+SEC("socket")
-+__success
-+__naked void scalars_neg_alu32_sub(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 &= 0xff;					\
-+	w1 = w0;					\
-+	w1 -= 4;					\
-+	if w1 s< 0 goto l0_%=;				\
-+	if w0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* Positive offset: r1 = r0 + 4, then if r1 >= 6, r0 >= 2, so r0 != 0 */
-+SEC("socket")
-+__success
-+__naked void scalars_pos(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 += 4;					\
-+	if r1 < 6 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* SUB with negative immediate: r1 -= -4 is equivalent to r1 += 4 */
-+SEC("socket")
-+__success
-+__naked void scalars_sub_neg_imm(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 -= -4;					\
-+	if r1 < 6 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/* Double ADD clears the ID (can't accumulate offsets) */
-+SEC("socket")
-+__failure
-+__msg("div by zero")
-+__naked void scalars_double_add(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r1 += 2;					\
-+	r1 += 2;					\
-+	if r1 < 6 goto l0_%=;				\
-+	if r0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Test that sync_linked_regs() correctly handles large offset differences.
-+ * r1.off = S32_MIN, r2.off = 1, delta = S32_MIN - 1 requires 64-bit math.
-+ */
-+SEC("socket")
-+__success
-+__naked void scalars_sync_delta_overflow(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r2 = r0;					\
-+	r1 += %[s32_min];				\
-+	r2 += 1;					\
-+	if r2 s< 100 goto l0_%=;			\
-+	if r1 s< 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  [s32_min]"i"(INT_MIN)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Another large delta case: r1.off = S32_MAX, r2.off = -1.
-+ * delta = S32_MAX - (-1) = S32_MAX + 1 requires 64-bit math.
-+ */
-+SEC("socket")
-+__success
-+__naked void scalars_sync_delta_overflow_large_range(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	r1 = r0;					\
-+	r2 = r0;					\
-+	r1 += %[s32_max];				\
-+	r2 += -1;					\
-+	if r2 s< 0 goto l0_%=;				\
-+	if r1 s>= 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  [s32_max]"i"(INT_MAX)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Test linked scalar tracking with alu32 and large positive offset (0x7FFFFFFF).
-+ * After w1 += 0x7FFFFFFF, w1 wraps to negative for any r0 >= 1.
-+ * If w1 is signed-negative, then r0 >= 1, so r0 != 0.
-+ */
-+SEC("socket")
-+__success
-+__naked void scalars_alu32_big_offset(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 &= 0xff;					\
-+	w1 = w0;					\
-+	w1 += 0x7FFFFFFF;				\
-+	if w1 s>= 0 goto l0_%=;				\
-+	if w0 != 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__failure
-+__msg("div by zero")
-+__naked void scalars_alu32_basic(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r1 = r0;					\
-+	w1 += 1;					\
-+	if r1 > 10 goto 1f;				\
-+	r0 >>= 32;					\
-+	if r0 == 0 goto 1f;				\
-+	r0 /= 0;					\
-+1:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+/*
-+ * Test alu32 linked register tracking with wrapping.
-+ * R0 is bounded to [0xffffff00, 0xffffffff] (high 32-bit values)
-+ * w1 += 0x100 causes R1 to wrap to [0, 0xff]
-+ *
-+ * After sync_linked_regs, if bounds are computed correctly:
-+ *   R0 should be [0x00000000_ffffff00, 0x00000000_ffffff80]
-+ *   R0 >> 32 == 0, so div by zero is unreachable
-+ *
-+ * If bounds are computed incorrectly (64-bit underflow):
-+ *   R0 becomes [0xffffffff_ffffff00, 0xffffffff_ffffff80]
-+ *   R0 >> 32 == 0xffffffff != 0, so div by zero is reachable
-+ */
-+SEC("socket")
-+__success
-+__naked void scalars_alu32_wrap(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	w0 |= 0xffffff00;				\
-+	r1 = r0;					\
-+	w1 += 0x100;					\
-+	if r1 > 0x80 goto l0_%=;			\
-+	r2 = r0;					\
-+	r2 >>= 32;					\
-+	if r2 == 0 goto l0_%=;				\
-+	r0 /= 0;					\
-+l0_%=:							\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__success
-+void alu32_negative_offset(void)
-+{
-+	volatile char path[5];
-+	volatile int offset = bpf_get_prandom_u32();
-+	int off = offset;
-+
-+	if (off >= 5 && off < 10)
-+		path[off - 5] = '.';
-+
-+	/* So compiler doesn't say: error: variable 'path' set but not used */
-+	__sink(path[0]);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.47.3
+BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa4/0xb0
+Read of size 2 at addr ffff888147d38890 by task test_progs/2495
+Call Trace:
+ dump_stack_lvl+0x5d/0x80
+ print_report+0x170/0x4f3
+ kasan_report+0xe1/0x180
+ bpf_skc_to_unix_sock+0xa4/0xb0
+ bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
+ bpf_trampoline_6442564662+0x47/0xab
+ unix_shutdown+0x9/0x880
+ __sys_shutdown+0xe1/0x160
+ __x64_sys_shutdown+0x52/0x90
+ do_syscall_64+0x6b/0x3a0
+ entry_SYSCALL_64_after_hwframe+0x76/0x7e
+
+> 
+>>
+>>>
+>>> ---8<---
+>>> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
+>>> index 02ebad6afac7..9c7e9fbde362 100644
+>>> --- a/net/unix/af_unix.c
+>>> +++ b/net/unix/af_unix.c
+>>> @@ -3740,8 +3740,9 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
+>>>               return 0;
+>>>
+>>>       slow = lock_sock_fast(sk);
+>>> +     unix_state_lock(sk);
+>>>
+>>> -     if (unlikely(sk_unhashed(sk))) {
+>>> +     if (unlikely(sock_flag(other, SOCK_DEAD))) {
+>>>               ret = SEQ_SKIP;
+>>>               goto unlock;
+>>>       }
+>>> @@ -3751,6 +3752,7 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
+>>>       prog = bpf_iter_get_info(&meta, false);
+>>>       ret = unix_prog_seq_show(prog, &meta, v, uid);
+>>>   unlock:
+>>> +     unix_staet_unlock(sk);
+>>>       unlock_sock_fast(sk, slow);
+>>>       return ret;
+>>>   }
+>>> ---8<---
+>>>
+>>> Thanks!
+>>
 
