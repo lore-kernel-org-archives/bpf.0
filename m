@@ -1,93 +1,93 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B511E3346B5
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 19:05:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD27C3346B5
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 19:05:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770231922; cv=pass; b=EmWHB8aK0uZxvROcnseMu/0lQbX/IX/R5D+dUR530CiRElEScZo3xuoyQ5B9galwNZkcvgSnkRLJcluX9C+U6ZyBX+cMgb+cz3tm6ERtAjG+ykOe0BZQhxjRyuhQ9a0OEAJico94+mU7D2sdjs2C3gW01SXVzGMIvsSHfI8BVo4=
+	t=1770231931; cv=pass; b=bn7f9pNuAAHKP5A3O+lAM2PCP0rdDiySKJiYzy/UsIky/4gh2/DBnIhrpFdvvFMiSV7MMxJwMyMPSjuqAzBekP5/WvMunqjVfkI6Fd4i2eiLe/BuoJxirLfHpo9yWxQNwcVQ/EgE9bbdvMuAG5Bgg4vs0h4AHFVRzv+erg/OA5M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770231922; c=relaxed/simple;
-	bh=SLv+i/uowOZdIzzgD53bs7FT7DHh4IXtUrkqJZYulLM=;
+	s=arc-20240116; t=1770231931; c=relaxed/simple;
+	bh=1dbeWO5LFpJKj4kIqqUWAsIYt2PSGy1Uuoa/aP1gUo4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O6qDQkAf2E7RCNRR5FnqkJ7w22LDiXCl/P+5Vfe5LUV1D30SaND7LauQT10Am20JwSlaL/7oF6dIXIdIagSmvBjb9PKxqHesn/HOHS31cL5t0SbnREsmBkfNhKWbv7GVLjOWCytJXjlHIOgIGfSTiu3Ge6JZjHPgV8XeaQ6hBdA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OeuiKjby; arc=pass smtp.client-ip=209.85.216.54
+	 To:Cc:Content-Type; b=HEYsDM9PvXxDNzqTFfQIlF4em766tIJruJMAUC8Qmi/dE5hwP5epkS2t60+2giHolU2QNhYoeRpmxxt81A1d65kwXAAwdnE/Dw8pxec+sUBNmhUcF9cMJEO1/yhlGwf999uPLmqo6Svapfo/vTME20MwL4Bb7SgHY/ykP7o32b0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jqiocb2n; arc=pass smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OeuiKjby"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-35338b3dd31so13238a91.2
-        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 11:05:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770231922; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jqiocb2n"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2a933b9b591so1604395ad.0
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 11:05:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770231931; cv=none;
         d=google.com; s=arc-20240605;
-        b=K7Ox/JnS1rcJ4VCSyAQk4ESbKc0KCf7M+poVWaTndZbMkNZOeNpTIy9bUayF9d2Qoi
-         XoVUjQiI/U9cCGJ4z4rMiUWumNaoZ8hn5Fr9yPF8Kzla1uNADIj+kIT12X+F3TgxtTy9
-         gpWlVdZWjFj12P2iWvyuuAw4T+9muLmrFvVGTlpFbr0t/sZetfPPz+VB7TBRCWYoIsRo
-         Ayrb7uKsASCVZnD/Y+Dvpm6tGCu4MIxLUr0Cc1k2gENS0Td6JIraAToqC4xUoVM/3wPF
-         1t0znimpgQZn3MFZqrOq92+jdvqmKC+5zpY93Yqf+hIOz4p24XMIWhvJCSDc+y9mbCgM
-         DHuA==
+        b=Q+JbegPDq6vELQytITvuomoZu64/P3UCZKxsuk4kq9nkl2iv7Dkbf5kdcsOGJflabi
+         aeTIwD3X/Vf5+tYdLbOiv5r34S6LMQ7M4sqKR/sjBVK7p9I2B0xFquJHaG0Ej8lwXVCF
+         cX3CNCLBOuq8/rQSA/Dkg2wUCiD+unU/OgSe3yGT4MkMWaPPqEN0Oo+1VHssPWSAJJL2
+         Cpb7t4jtPyNXWHJB6AUeLm1ysp6Jho4bb3woTzi9g05XDzLES1igmpX4OYvCzCVIpauy
+         MClc4400VGfr+IVt03B1f9lOFzlqj8bpbxxV5LhVorsqZ7L+Btz+AMxoaCYdsLmIp+82
+         qraQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=MzwGZHzRP4UEU2ZnVmONLCtGE+i75cYH0c1sOGrN9zk=;
-        fh=qkjOoXQbOrzD2LJSw2no37Jm+ghVmNS90pEwZA3G03o=;
-        b=F4JrY2+lw/0uIwh9h2plL5xdvfRdUk+Gaa9BWiE0Sap3/1OtSraJ2bugiLYdsoD69F
-         YGn1cSMcXaumugMiUUqpTM69DfeSUA0pHXY1vlN+E/dJnt3xaORwwAnBD83gF0qeutru
-         05O7c0Mh9QjdaWDNQISX2GSvWlf06eMpFRxMtdGBGYQLt26YlLwvB1IrUW6xPKeeJZZl
-         +D6VwidfezfwFQz8tNVITU5MxkL+lc4ZEiL0g0LYuM31qXKKliSTZ1Sy25QCJxK/ZFlW
-         VRBEtlmogdwIE0f4ude3qFKVioP0CavlFxxK0Ozs/tmnLmarlUQntUKkNjp+/acPh6M1
-         nnoA==;
+        bh=CnDPeb6tsH3iytcoTISmiYrFT6n+/+39ezoN43xAOVo=;
+        fh=HRPxslv126Imos5dlzTYofzCF+r5aYIWegxBaNcEl/o=;
+        b=M8Dx//CpXCcEDaOF9SA0vbeSK9zfHAQvD2gFZxSJ5N1D1CqS3n1NkQ94s8jI8BKhn0
+         3jCxKdvhfE3p5q0I/B8peIS9Y4oXlVTW2DOLAz+1syaM+ulqtNt9RNZ96+JKBw7WRhoh
+         E/mAOmx/zlLlS1FrU67J/3gNTLNNBbRyO8puIqzhaNMbbBLnLhVHzJgpiJ4sXiDoyXpF
+         GiNRp1Kjd3jySufrsZHekJoV0iG+nnQfU/m7sCyn1/T+h63i7WoGZBgSKbKDf1ga5C/7
+         IEhhB0vsMQn7W8ORibiCqPWdKBWwlxBwJyE3FEoUZXazJ8MJDrkhagxmZQxYscn293aQ
+         pmgg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770231922; x=1770836722; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770231931; x=1770836731; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MzwGZHzRP4UEU2ZnVmONLCtGE+i75cYH0c1sOGrN9zk=;
-        b=OeuiKjbyvSsC+LGnZirfM8e4eZuAKhDwxTdwOQSTNwLjbl/1ISFyQAv8I8aPt6w4la
-         lld6B39YyhH7Us6rHfqXOXtbrt1wTCjBO1y/6mPQZ6m1NzhJR+Px6KHLb6fS14FO/GCb
-         9yNYAdUncyxVAk0WZRIM4HkB0nQvwqPY0jTvYunORi0PFXJRm+NmyaLkYC88xsktM0US
-         vyg7H926z2kDAVo4lybni+wesNUhFvOBlvo4HUj0I1KaYTKX3cpXod0LGsuo97c4848J
-         Cqrddy0epK6RC9QwnVBO7POtS3E42pTaibiFzpLnpD6xJnaMW4N14yei8vatuIC86UW9
-         QLXg==
+        bh=CnDPeb6tsH3iytcoTISmiYrFT6n+/+39ezoN43xAOVo=;
+        b=Jqiocb2nn+TLcM/yZpAVN69+2EIjSS3BKGkXdyyMiMlk1y9Gsl3lv2MeDasKYZweZf
+         HSLQmX2oXzdj8jaz0ukXshgloYaNYMrDs9LxnMfPUXvjDqJi31FpVvfYBbez5ngd74ly
+         KfldW4+yYDUa4Yrq/0FSk4XPNdClLqEak6IU7X/BsQ6iobtv9Pq5erECS2sspN4QJ3iG
+         rz9cqAaojNcf377kJ1ja3t3YLR3eEh4mlCpoDgvpTxeasH3SyvEQmQb+5DfzsF6ffSgd
+         F1PLcCd6U8coDpSZehRJXZ5NIQmJZuMYs80023LsxgjV2AHWfscGXVMz8xT0i1GXpxve
+         ifag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770231922; x=1770836722;
+        d=1e100.net; s=20230601; t=1770231931; x=1770836731;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=MzwGZHzRP4UEU2ZnVmONLCtGE+i75cYH0c1sOGrN9zk=;
-        b=hSl83fI31W9PI3W62Oc1blYcrOBytjOX99E0XneJl6AC/GN9M1pizUXW7mmBi0kBZ5
-         uQGZAi5MCP1LZvzaZNyeOxFbrK+2E0/zgWHYpTFdzOoK/m+DwLFHJ8NI3NuZRJymMYKL
-         2f+vmVPwNYeDQCDOyc/A7w6TQ5JNFEln8KXt3C1itT43qD0Or/w3jYjkHsjz3q1Aj+v5
-         /mAdjKePva4h2vnk6MsBxsGVcXKCWwR/aTSxc7qRC7xsHKWf4vFY+TeVsB9VqHIfjIXZ
-         u8Q3xYr/i1EnIby0MhqBKwRFdTyQyu8kbL4JF8gpib3t+aC075doXzil2pk6DpBp2N0L
-         YiJw==
-X-Forwarded-Encrypted: i=1; AJvYcCUXK+EG+gbnrqaOvC9MZev6qv7zMult894XiCx/kff0mKtfkEM1hF1Z0PVs+BW04TyZchc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOlUnVicS2HB79HcqZElH/aGuyVbuifg8hCPOq8YOoR5lRQ06z
-	/XZp6JHBXNX02yVYdbv7iukRGafaqS9Nz/4mTABhC4ArdEPr24ZT37saP6uw228XTZXi0/nSRZg
-	nMw4JVUmCwNrKUQAIFIThCJDFNfN2i1o=
-X-Gm-Gg: AZuq6aJ+aaUD27PrTfCA+1TGaHEdY1usrU+KVzxo9IuMDrOQ7JUDrIGFmcBY5EzlFZk
-	y/LAiF9ffiuHvvXfWNd9Em9Ex9pVD+nQysf4usyZ7l7zCeVdxVXGhNK5b0+p+f5QdI5cUdcVkEC
-	KxV5ceCWOY9f0610fjF3OdZMukDPSj2Qun5dbTNhisybQ+gdbapeJwBAOINoFTJ/dBKjA2sbuQB
-	DhVAuDvei1NW/yC4M7ISnGMo2hAcV1ARiSz2xfWpza9oG3sKa0Cye50uje5tsiMEhmAbyeQPps5
-	OHXbVaoRnSL7uDYAAcWKeA==
-X-Received: by 2002:a17:90b:2f90:b0:352:f2a6:334 with SMTP id
- 98e67ed59e1d1-35487102a6bmr3735022a91.16.1770231921980; Wed, 04 Feb 2026
- 11:05:21 -0800 (PST)
+        bh=CnDPeb6tsH3iytcoTISmiYrFT6n+/+39ezoN43xAOVo=;
+        b=VG6yBn9TvzAFZPnSijy+CFVnZ+SGcfGfYvdPLgg9vLgfWRoXzv0tVETEz1yKMywFSX
+         gvFbAnE9kZaCQYfy5zeXiNy0xEkYemq86pmPsDd40y7lHNlpsln8BIcoPdWIKr7o5Anv
+         pVPj00A7CEvxz40ERBjx1NpAA1OANO9LeVBijVSk3p3UxtvIPaGXk4gNF/o4JMb+PDG6
+         n808XH7YvenM5gQ7hYUTgKOIXGqW4zQ5wKKddLjB2QUV8BiSHETuZkn0xk6/BlnUMt9O
+         z+TEnNbRRuTAOMBgnjwV/5HoXVhobWmZZRYJj5wGZk089FT1own3/X2Bvyw7521PhZ7W
+         UerA==
+X-Forwarded-Encrypted: i=1; AJvYcCUebf6+l8zKbfMjsR44BYCAobdjAGopfEfeHVQwgQQXXR+NMOXKHcP+DkDfUqN3awvOWQQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyy3Xk6spMKGqkH84tcegT+ttT+l/OBKqSGmFQsT8mpKL7dgEt1
+	2aQ26KIH3haBHiZgbDZZzG3wH9ZAsBwU7efKviyUUdqd10au1DcB7roAu9ylb+VOvaezvRcR3Fn
+	XzhN5p68ki6hbmlHFE6vSOc33nfQM/Dk=
+X-Gm-Gg: AZuq6aJBGAmgqTRBUIvOUxujCneamIa04Ok7YL15pdL6FoGw81loJjeWoATEG9Mjq3j
+	RaeamttMjHHUi9oluzCMoxNNZTdMn6b0KKC6sa9JDgCLVrH8+CUyDkmvBqlfzQ52usKvwNLEanw
+	47bg4uKvJjDjQPKwcbNkIjsAPJEIJ7ZRx+MZjJ2ONY2UBazUoJWIMXKg9Qe5fMLTWJybiCOg79T
+	99yAhR+NIKXuZudvGtDdPbwxPu8foIaP3sd2wh9QAZVqFrPmaC87TsboCybcID+1a78gavs9NOW
+	D+Wt2zoQyFU/QBEaObTTSA==
+X-Received: by 2002:a17:902:f687:b0:290:c516:8c53 with SMTP id
+ d9443c01a7336-2a933fb321fmr42812115ad.40.1770231930994; Wed, 04 Feb 2026
+ 11:05:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260203093819.2105105-1-jolsa@kernel.org> <20260203093819.2105105-8-jolsa@kernel.org>
-In-Reply-To: <20260203093819.2105105-8-jolsa@kernel.org>
+References: <20260203093819.2105105-1-jolsa@kernel.org> <20260203093819.2105105-10-jolsa@kernel.org>
+In-Reply-To: <20260203093819.2105105-10-jolsa@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 4 Feb 2026 11:05:09 -0800
-X-Gm-Features: AZwV_QgaQpMZ0tpIpyAEJ87GlKt-GPSr2xmV-LTtnAWWeELD4WudclagqaBx5gg
-Message-ID: <CAEf4BzYsE3W8QvtKBOZZWGudFjXJ-_szUZOejT-Ab5v72Sei+A@mail.gmail.com>
-Subject: Re: [RFC bpf-next 07/12] bpf: Add support to create tracing multi link
+Date: Wed, 4 Feb 2026 11:05:16 -0800
+X-Gm-Features: AZwV_QhJfv6VjdcJV9wp8iYM2M1Z3o3-7voLrA-H_mf2W1haFnii2IsLekgcejg
+Message-ID: <CAEf4BzYhP8CdS_Xpw1iEvGNxYGnf3Zq5zkb-HEZKvx5cxEJBqw@mail.gmail.com>
+Subject: Re: [RFC bpf-next 09/12] libbpf: Add support to create tracing multi link
 To: Jiri Olsa <jolsa@kernel.org>
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
@@ -97,36 +97,121 @@ Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 3, 2026 at 1:39=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+On Tue, Feb 3, 2026 at 1:40=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
 >
-> Adding new link to allow to attach program to multiple function
-> BTF IDs. The link is represented by struct bpf_tracing_multi_link.
+> Adding new interface function to attach programs with tracing
+> multi link:
 >
-> To configure the link, new fields are added to bpf_attr::link_create
-> to pass array of BTF IDs;
+>   bpf_program__attach_tracing_multi(const struct bpf_program *prog,
+>                                     const char *pattern,
+>                                     const struct bpf_tracing_multi_opts *=
+opts);
 >
->   struct {
->       __aligned_u64   btf_ids;        /* addresses to attach */
->       __u32           btf_ids_cnt;    /* addresses count */
-
-cookies suspiciously missing?
-
->   } tracing_multi;
+> The program is attach to functions specified by pattern or by
+> btf IDs specified in bpf_tracing_multi_opts object.
 >
-> Each BTF ID represents function (BTF_KIND_FUNC) that the link will
-> attach bpf program to.
+> Adding support for new sections to attach programs with above
+> functions:
 >
-> We use previously added bpf_trampoline_multi_attach/detach functions
-> to attach/detach the link.
+>    fentry.multi/pattern
+>    fexit.multi/pattern
 >
 > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 > ---
->  include/linux/trace_events.h   |   6 ++
->  include/uapi/linux/bpf.h       |   5 ++
->  kernel/bpf/syscall.c           |   2 +
->  kernel/trace/bpf_trace.c       | 105 +++++++++++++++++++++++++++++++++
->  tools/include/uapi/linux/bpf.h |   5 ++
->  5 files changed, 123 insertions(+)
->
+>  tools/lib/bpf/bpf.c      |  7 ++++
+>  tools/lib/bpf/bpf.h      |  4 ++
+>  tools/lib/bpf/libbpf.c   | 87 ++++++++++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf.h   | 14 +++++++
+>  tools/lib/bpf/libbpf.map |  1 +
+>  5 files changed, 113 insertions(+)
 
 [...]
+
+>  static const char * const map_type_name[] =3D {
+> @@ -9814,6 +9817,7 @@ static int attach_kprobe_session(const struct bpf_p=
+rogram *prog, long cookie, st
+>  static int attach_uprobe_multi(const struct bpf_program *prog, long cook=
+ie, struct bpf_link **link);
+>  static int attach_lsm(const struct bpf_program *prog, long cookie, struc=
+t bpf_link **link);
+>  static int attach_iter(const struct bpf_program *prog, long cookie, stru=
+ct bpf_link **link);
+> +static int attach_tracing_multi(const struct bpf_program *prog, long coo=
+kie, struct bpf_link **link);
+>
+>  static const struct bpf_sec_def section_defs[] =3D {
+>         SEC_DEF("socket",               SOCKET_FILTER, 0, SEC_NONE),
+> @@ -9862,6 +9866,8 @@ static const struct bpf_sec_def section_defs[] =3D =
+{
+>         SEC_DEF("fexit.s+",             TRACING, BPF_TRACE_FEXIT, SEC_ATT=
+ACH_BTF | SEC_SLEEPABLE, attach_trace),
+>         SEC_DEF("fsession+",            TRACING, BPF_TRACE_FSESSION, SEC_=
+ATTACH_BTF, attach_trace),
+>         SEC_DEF("fsession.s+",          TRACING, BPF_TRACE_FSESSION, SEC_=
+ATTACH_BTF | SEC_SLEEPABLE, attach_trace),
+> +       SEC_DEF("fentry.multi+",        TRACING, BPF_TRACE_FENTRY_MULTI, =
+0, attach_tracing_multi),
+> +       SEC_DEF("fexit.multi+",         TRACING, BPF_TRACE_FEXIT_MULTI, 0=
+, attach_tracing_multi),
+>         SEC_DEF("freplace+",            EXT, 0, SEC_ATTACH_BTF, attach_tr=
+ace),
+>         SEC_DEF("lsm+",                 LSM, BPF_LSM_MAC, SEC_ATTACH_BTF,=
+ attach_lsm),
+>         SEC_DEF("lsm.s+",               LSM, BPF_LSM_MAC, SEC_ATTACH_BTF =
+| SEC_SLEEPABLE, attach_lsm),
+> @@ -12237,6 +12243,87 @@ static int attach_uprobe_multi(const struct bpf_=
+program *prog, long cookie, stru
+>         return ret;
+>  }
+>
+> +struct bpf_link *
+> +bpf_program__attach_tracing_multi(const struct bpf_program *prog, const =
+char *pattern,
+> +                                 const struct bpf_tracing_multi_opts *op=
+ts)
+> +{
+> +       LIBBPF_OPTS(bpf_link_create_opts, lopts);
+> +       __u32 *btf_ids, cnt, *free_ids =3D NULL;
+> +       int prog_fd, link_fd, err;
+> +       struct bpf_link *link;
+> +
+> +       btf_ids =3D OPTS_GET(opts, btf_ids, false);
+> +       cnt =3D OPTS_GET(opts, cnt, false);
+> +
+> +       if (!pattern && !btf_ids && !cnt)
+
+let's check that either both btf_ids and cnt are specified or none
+
+then we can check that either pattern or btf_ids are specified
+
+still two checks, but will capture all the bad cases
+
+> +               return libbpf_err_ptr(-EINVAL);
+> +       if (pattern && (btf_ids || cnt))
+> +               return libbpf_err_ptr(-EINVAL);
+> +
+
+[...]
+
+>  struct bpf_uprobe_opts {
+>         /* size of this struct, for forward/backward compatibility */
+>         size_t sz;
+> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+> index d18fbcea7578..a3ffb21270e9 100644
+> --- a/tools/lib/bpf/libbpf.map
+> +++ b/tools/lib/bpf/libbpf.map
+> @@ -358,6 +358,7 @@ LIBBPF_1.0.0 {
+>                 bpf_program__attach_ksyscall;
+>                 bpf_program__autoattach;
+>                 bpf_program__set_autoattach;
+> +               bpf_program__attach_tracing_multi;
+
+stuck in the past? ;) we are in 1.7 cycle
+
+
+>                 btf__add_enum64;
+>                 btf__add_enum64_value;
+>                 libbpf_bpf_attach_type_str;
+> --
+> 2.52.0
+>
