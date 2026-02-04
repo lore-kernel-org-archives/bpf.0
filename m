@@ -1,184 +1,170 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1182459DC
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 01:13:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FDD63EBF2D
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 01:17:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770167633; cv=pass; b=TTEBJ5gg39ZG04zpbILiLm1Him7O3etOyjW0Y8JyO3t/q4aXmzb3HB61FBl+k9nOV0s/ICznXoPYhxmDyIrncN75PqnVFRNtqz6dzb1WSJ5Pz4srCaTD0UiMtLgc6PFRPP1fFtU1T34bitkJVISW3fQsUKi5pqZxCWYEIIA+UzM=
+	t=1770167852; cv=pass; b=TaGW2Gts6TxsuiwWZmg1ypR+US+h/RqlttWrHtqDas6BNqbo/xsgghyoL8qrkRJlbZKvwr0zptAql5YdVwnPoIZtZTBSTjrfaxwrihalc5VgCzlykDPwchXe/DS+zBoNO82/CUYU3KzDv+5ExvO+f+kXE+10tF5JnTejVBDtNOg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770167633; c=relaxed/simple;
-	bh=DmyDsQTdgwrdnRnbSEOhvuw4V7/O5lKI/r9PK721cqA=;
+	s=arc-20240116; t=1770167852; c=relaxed/simple;
+	bh=pthws6uxWqub+jx6HvrHLf5wqFVXjS6siiR7rMX7Ahg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LbRa+nQSWmO++klz4Fn4kP38U1LWeyT3yNI2sMOujKcyUhmibss56vutyP5UvkTt+ANSmfujSPJvFnPk56M9HXau74q4MrfN0ywQ+ooBXgi3TDWPbtjbrEJels+pbtIhylSsFO5cuOa/yUynCAUrCYbXbrCAWWMuzdQ7LEzmqes=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RBQ48qUn; arc=pass smtp.client-ip=209.85.216.54
+	 To:Cc:Content-Type; b=e+GENF5Osh728QHNjRfyCk2f1yn578GNLEBg8/q7VZaMr6eEkv7/y3lZax1HMAU4h0VF6SoLdsCubtgHOQ0/KtJ2ZDYFzCthM2YkVAej2GyZrMzoahML7z8xZd1AMFbIr/HjTwjJUfpGVg5oCENv+gp94BznkoZSbnGNWzWamT4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cUvi+y33; arc=pass smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RBQ48qUn"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-34c3259da34so129812a91.2
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 17:13:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770167631; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cUvi+y33"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c61342a69b9so2430572a12.0
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 17:17:30 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770167850; cv=none;
         d=google.com; s=arc-20240605;
-        b=IxmZc3HCd2bjovu0Xca50h/3c6ilgTelw1j3HQ7+HPCyMBOh3Sy89nZ8cUdKOXSP6y
-         BcuDKtNZn+YaluwJAiv9hm3nNjoz6IY76qSfmh5Ebs7eVZ4lC25fyyMLC28HUNly8wdX
-         k6yrnXn49tws5qZWTcyZI5QIf+FAYHmirEff5LU1I3Bu86t/a9Hg13QzOethougWa+JB
-         dzmlSXmzLdWWwKKOVXZRZ9qHUijsU/PmtTjmZDFn1ZYIiV9EFyf4e5/YrKRYcjnXEpF2
-         wpTD85+GW8TusjBFT6D9mqggD9bxQzPTQ0Am6sA72KEMHtJhDbxyVOyj0IDYOUBVUSv1
-         SAfg==
+        b=RYq4Dqa4lE3/ez8NiLWYBZ6DIWVqZdwhfF5FFo30vpCjfjPrIqqZYgUSmTT/WO2E4n
+         3AiPK+uVxLKUO4JrZGz620bPrhrYaLU9DIkfCOs+gzttr0WQcggJX7C73fYm55FqbTIf
+         +uuZ6dJSgoHGpOBUDcCsgRd0xzLNop7K+VwLNo/QsyZ5IzX5RYpx0rGTewvuMKfhnwvg
+         O+0puvw9mifnKVajOKPxyejRBwFPjhA8ioECq/MIFRn46lrzVnVEqwO08kTE0lsVwCYe
+         p9cxj58oz5BJTWD7ZwJruuNwfAAo4zB+NsxMKfO/zz9PHOoyxQrv7XCfXlbGGdAyX8x4
+         5p3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=aRe+QoW4e0CJpFcn15WQGAvB6T9wkt5sXE8i6MGhMV0=;
-        fh=wSr5An2mWhVqq4U6CQPtzp4O4vipPthFHJwMzpvpjRs=;
-        b=h4B1YdXhg5KNQfZNigiX8CEE8yAQc+3Fh8Z//USJEcf8374N4hbJQI+DRGZUqoadAY
-         UvNQXGmdE17TZdpfUqjtkK60YvElTSJyILa7YwxWmh9IPPHKg7XebGeIiUctpsx/95AL
-         Bs1U/SMT+klJ76WFI1DVBQZeiXI7OaiO3ueEHsY7Yc3Q+43EgmfWxYseHjhCAKaOldUv
-         tbNWZZ2p+Hw1Ie1EgghQXmXglO+mc4AXQ3xfGBG9z0XzRGZ6kqum1NaD1n+0Vap92/Bk
-         FLEWa3likdt021ByZW8s55+YWjFaq8Ld8AZ6jhXwC09UdWQY1JCF/CrwG6LqTmXf0rkC
-         +3fQ==;
+        bh=pthws6uxWqub+jx6HvrHLf5wqFVXjS6siiR7rMX7Ahg=;
+        fh=HCF5jpLaAabILoSa1MB8aj+la2LMZiCcmhbDv5qsBSw=;
+        b=D4OGuvKSfBqO18/vQZzrULwMJWNpOks0Uvu5O9b3Vw4R0jSGDjRnXXFiGhdyhbv9lO
+         hu9om+ZXb7xkw3kL1mY4yuDkr8Kr4Kv5aqGnPQi/To/Ri3/yeHx8cwAMrbCRgNNeZZ7P
+         ylzQqb7LnC0ZwX+N6nA94SHKtCYMWZDXKDxu+OcGU6T1c72k1uojOm356IgFa/yRuk6S
+         6SqxhyCTPpg3hBPeqlfso26fthfla9sSQ0clTVwWpwZfGdybVOHitPyJiw8JISdynpJL
+         2rpG8mpvQyxsRasz63jsNiNt5pxrgGQnA8qOYe7Mw40wUkZlN5tYXpuoPxCtkS6gMzUe
+         5TMA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770167631; x=1770772431; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770167850; x=1770772650; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aRe+QoW4e0CJpFcn15WQGAvB6T9wkt5sXE8i6MGhMV0=;
-        b=RBQ48qUnydw3Aq3ggvacL9SFkJbcF8aTcjNrK0Md8zsMVC7CH4AWL4H85/OHR39KVG
-         eFA7yMwStAFTWoUCi6KJYIQYTN7OA5GK3phmXPMUWy5LL0j9qeV/70B6lQVzxUFWvjOK
-         sEQ1lSz3cWj+7t11e5g6BR1YQQiw0I3tzAKXIvrvZaZQHe+QMtLyOh0UDgnpvIYUg6HB
-         j4m/4WGAvdR1IL984K8iVZN3vlJKBQHjbSEnOLl3bjaOtnJKdF0T6/6SSdHF2CGhxI64
-         AStwperL7R+J+iD7JcRp2hHd3TaCcGDBvIAiy2y29lS/WZpnOT2YltM18INpAU3N024C
-         o0Vw==
+        bh=pthws6uxWqub+jx6HvrHLf5wqFVXjS6siiR7rMX7Ahg=;
+        b=cUvi+y33JwrSxgHUcmk8Hp8lVDQMtxvbaidX0+283GslFQ9wzXE/BMnuylrFRYVloh
+         sfjjoGTMCa/dwE0uPFLmJfakvZRe+ohY0v0ePEelUOa5eD7NgcDa/yVHB0i55jZygC+N
+         8a6l6UgMFyxgVlDKbwkgpvYbzoD76wAmtpBq355X7dfrKKNuWlr7PFMQ79xqJrmgDF28
+         HbiCzmiL/eYIiSkDm0aavz3FAxgbW+Q6wboDFwaOjQ2Ey818D5v+ykzjnTLpx2PO/tNZ
+         a3L3ojwGyUHmnABtX05eqx9aDCWfCXIsxr9X+uZ7aM3GqIbCAfc/7BVbYwQMCT1NWhxV
+         TZvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770167631; x=1770772431;
+        d=1e100.net; s=20230601; t=1770167850; x=1770772650;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=aRe+QoW4e0CJpFcn15WQGAvB6T9wkt5sXE8i6MGhMV0=;
-        b=nzLlJxsyK9Sfx5EFzeedioVyUJ4dEt1J7UeFk10OHRYmhB5kXqnjrmO/XtoGYnT8Ny
-         qYwaGaYhr3aVa/ilvvHBGqjmRhlcjezxkjPZIOAOXXRYk75G340mXIWGCpRKCPXYBvyr
-         LSwev4gSenjj8ubzQ7tSgT0XI3RjlHNW324GcdxOASIqpDD4C+YFfhpzOBvYihU8ifqf
-         9XzYacklbaGFs+7MG8ZpGAY+EAmpnc0BOs4I4V5WlziVTcAhRcA0RxapBMYICzxELrR4
-         hQSF+zE9wRzKR/70UH21Hky97QpO8QJ/y+UVoy3/NcPKOT7/sLC6/yC6BOmgf8R1txmi
-         9cYg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKtkZREcCIDpwLGVNtI/wy+mbiS/E01r20tHGTAcYBaGca/132G4nPk+hmTFNwMERPUAA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKZLybHhg5CnFfdatbimaJica2f7Nh7bvSe+dOQj/CWtAjOohc
-	DRMVF9+mWn5bxM0SH7GLpUwnaQpbtx6kSSIEvB296HlW0n3FYlrhZvbB6NtJ8T9mmau0xCjbeKc
-	2xPTcjwhlJQBOeZhP9G7oSeZhPfAHd/levg==
-X-Gm-Gg: AZuq6aK3Hqie4bFWoiWMwcyvzmQPmuQUSEzpvgDl6LlvSvMTKB6oYGPkVN9tdEP8v2L
-	3m1ZpQUsPR/8YnmrxhaDUKkGTbzrnK/KaWJLhSs970TgxnooRBXS0jLX2z78AgqVHXsTpGBFCh7
-	14ZdPHFoEPlz7z3UidacwQ7z4s9D7Q9kmAyfQU5TfY95ot7s+4wtmsj5TTHJ0UZYUHf+QS4D6rK
-	rRf3NoXkGWEZu1vqqZ5KTEgXBLvy+O643S5vanC+6020LR44Pez4tdqoErbsr4JnG3pWFsiOG+p
-	XwEVF6ucr6E=
-X-Received: by 2002:a17:90b:4fc1:b0:341:8bda:d0ae with SMTP id
- 98e67ed59e1d1-354871afde8mr1064836a91.20.1770167631008; Tue, 03 Feb 2026
- 17:13:51 -0800 (PST)
+        bh=pthws6uxWqub+jx6HvrHLf5wqFVXjS6siiR7rMX7Ahg=;
+        b=gqWNSVsm0+TH5aM/OEwqf0j/qif1VsTHBtRPoy6p5BPrLc0gX7vTWlmPr+33/TjYm+
+         6c6bm20yF1J6/F6qCR2oEBAaT5Ox/EBa5FdhvqsTwpmnJbQNe37yNxdAs4bvIgMwW0Ui
+         daHuRwQkngN3Yz1y8pC9gcMEQXYQtxV+AqKv1mdT3fEd0kS325cVM2iG8tZV04gF384U
+         Wak9MSI8NJss71iDp9XotX4nPKv5zsRSW/uKzk/7E1ijrqjw3pesWLJfR6T923a2jir1
+         g5D9wNCUWxKeUaNfDU0HDtcgz6H3wbPvi4aYs6qy84G0gocMCvvYGvwbs3E9IyZMs04I
+         A/JA==
+X-Forwarded-Encrypted: i=1; AJvYcCVuwnGtq+TAoU3cVY49odqjf1tyg9WN3Oq1YD4aMIe7F2MyKdQvsjWwaKfiTnBpRJllCn0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyq5ktB5WJl8Lp3Ui/oLgn8IbRjpSloRiI+zFaX5Cqm3RTdVGsJ
+	UXbP1iDXMBMPz00AlzVXtQhO20RN078NeNt+R0EaQ4D80T+h+/cc/CUt3enJ9Mvgrkw7ebPshHd
+	d6G9Nb3rUEo01Yd9InxNgWkp4Sj1xfpk=
+X-Gm-Gg: AZuq6aLgI7aL9I1O3wasMg175/jabw3bhzItzVMrUYm9wrZqrfNnZ7QDUF7iRX4TSLd
+	idprZEAOE7x67mf5LIsFxb3hbvUmTb+jBKbnB20TdSRruUleW+W4Kt83x3imro0g8+lInPXX8lE
+	fxLS8xa7mu54CFCCVQYkFo9Wom4y0957GgZmPC3DJ8vRm6/H4u5CqOu5wsNeC8YJkEvBN7nHLhh
+	Dj2YNumB7qb66Rnq8LjTrsQu7ZC8QB4xkfh7K4oAs84ukBgFynhYLskm1g408SjHbppiqpfiaIn
+	ng4Y+M5/6yA=
+X-Received: by 2002:a05:6a21:1507:b0:38d:ef23:12d1 with SMTP id
+ adf61e73a8af0-393725ddd5fmr1149906637.74.1770167850408; Tue, 03 Feb 2026
+ 17:17:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260128165710.928294-1-chen.dylane@linux.dev> <d41c3d60-09e8-4f49-a8f4-5fe4f7db37e1@linux.dev>
-In-Reply-To: <d41c3d60-09e8-4f49-a8f4-5fe4f7db37e1@linux.dev>
+References: <20260128233425.374535-1-mykyta.yatsenko5@gmail.com>
+ <2b6f4cd9-ff0f-4a91-90ef-8d8e6812f80f@kernel.org> <CAEf4BzY16OkoUQZ-Vaywb0oAL=UGY=8FVcBWLVM8oe=-bQ=4xg@mail.gmail.com>
+ <1d4546ca-8849-464d-9080-ef77602134c7@kernel.org>
+In-Reply-To: <1d4546ca-8849-464d-9080-ef77602134c7@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 3 Feb 2026 17:13:39 -0800
-X-Gm-Features: AZwV_QhSIrQ_48HzHYS_GA0rsb9AhwXfkygzrUDk5xaSJwBMiY_M40SagWnKd30
-Message-ID: <CAEf4BzYCj4ZT=a3uWVD9fEL6XQR8ZHzM6oyewBD0H1cHq_uFwg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: Remove RCU lock for perf callchain buffer
-To: Tao Chen <chen.dylane@linux.dev>
-Cc: song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Tue, 3 Feb 2026 17:17:18 -0800
+X-Gm-Features: AZwV_QjTS5SKG7GPVTYZUzjK2-QGIi_LOuLBt8syWpJlVJPPZly613TJlNbYakc
+Message-ID: <CAEf4BzZ2cxBfCBsTHDPHRqtbWmmN8ksYCOA_ScNiyAcTHdfZTw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] bpftool: Allow explicitly skip llvm dependency
+To: Quentin Monnet <qmo@kernel.org>
+Cc: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, bpf@vger.kernel.org, ast@kernel.org, 
+	andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
+	Mykyta Yatsenko <yatsenko@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 30, 2026 at 12:52=E2=80=AFAM Tao Chen <chen.dylane@linux.dev> w=
-rote:
+On Fri, Jan 30, 2026 at 3:48=E2=80=AFPM Quentin Monnet <qmo@kernel.org> wro=
+te:
 >
-> =E5=9C=A8 2026/1/29 00:57, Tao Chen =E5=86=99=E9=81=93:
-> > As Andrii suggested, BPF can guarantee perf callchain buffer won't
-> > be released during use, for bpf_get_stack_id, BPF stack map will
-> > keep them alive by delaying put_callchain_buffer() until freeing time
-> > or for bpf_get_stack/bpf_get_task_stack, BPF program itself will hold
-> > these buffers alive again, until freeing time which is delayed until
-> > after RCU Tasks Trace + RCU grace period.
+> 2026-01-30 12:46 UTC-0800 ~ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+> > On Thu, Jan 29, 2026 at 9:34=E2=80=AFAM Quentin Monnet <qmo@kernel.org>=
+ wrote:
+> >>
+> >> 2026-01-28 23:34 UTC+0000 ~ Mykyta Yatsenko <mykyta.yatsenko5@gmail.co=
+m>
+> >>> From: Mykyta Yatsenko <yatsenko@meta.com>
+> >>>
+> >>> BPF selftests depend on the bpftool. In some environments we may link
+> >>> bpftool to llvm dynamically and then try to run somewhere where llvm
+> >>> library is not available.
+> >>> It's simpler to avoid llvm linking altogether in those cases, this
+> >>> change allows to do it.
+> >>>
+> >>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> >>
+> >>
+> >> Hi Mykyta, thanks for the patch. Do you have any other solution to mak=
+e
+> >> it work on your environment? We've been rejecting similar changes in t=
+he
+> >> past, because we don't want to encourage people to strip away the
+> >> disassembler when shipping bpftool [0], so I'd rather avoid adding thi=
+s
+> >> if you have another workaround available.
 > >
-> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > Signed-off-by: Tao Chen <chen.dylane@linux.dev>
-> > ---
-> >   kernel/bpf/stackmap.c | 12 +-----------
-> >   1 file changed, 1 insertion(+), 11 deletions(-)
+> > LLVM is a huge and somewhat problematic dependency, so I think it
+> > makes sense to allow to opt-out of it. Of course this shouldn't be
+> > abused by distro packagers and they should strive to provide
+> > fully-featured build of bpftool. We don't have full control over this,
+> > but let's hope they won't cut corners (either way they can always
+> > apply some ugly local patch, if they decide to cut LLVM dependency).
 > >
-> > diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> > index da3d328f5c1..2e682d8697b 100644
-> > --- a/kernel/bpf/stackmap.c
-> > +++ b/kernel/bpf/stackmap.c
-> > @@ -460,9 +460,6 @@ static long __bpf_get_stack(struct pt_regs *regs, s=
-truct task_struct *task,
-> >
-> >       max_depth =3D stack_map_calculate_max_depth(size, elem_size, flag=
-s);
-> >
-> > -     if (may_fault)
-> > -             rcu_read_lock(); /* need RCU for perf's callchain below *=
-/
-> > -
-> >       if (trace_in) {
-> >               trace =3D trace_in;
-> >               trace->nr =3D min_t(u32, trace->nr, max_depth);
-> > @@ -473,11 +470,8 @@ static long __bpf_get_stack(struct pt_regs *regs, =
-struct task_struct *task,
-> >                                          crosstask, false, 0);
-> >       }
-> >
-> > -     if (unlikely(!trace) || trace->nr < skip) {
-> > -             if (may_fault)
-> > -                     rcu_read_unlock();
-> > +     if (unlikely(!trace) || trace->nr < skip)
-> >               goto err_fault;
-> > -     }
-> >
-> >       trace_nr =3D trace->nr - skip;
-> >       copy_len =3D trace_nr * elem_size;
-> > @@ -493,10 +487,6 @@ static long __bpf_get_stack(struct pt_regs *regs, =
-struct task_struct *task,
-> >               memcpy(buf, ips, copy_len);
-> >       }
-> >
-> > -     /* trace/ips should not be dereferenced after this point */
-> > -     if (may_fault)
-> > -             rcu_read_unlock();
-> > -
-> >       if (user_build_id)
-> >               stack_map_get_build_id_offset(buf, trace_nr, user, may_fa=
-ult);
-> >
+> > But for a lot of environments this might not be worthwhile to wire up
+> > LLVM libs. I haven't checked if this is the problem for bpftool's
+> > bootstrap variant, but if LLVM gets pulled in for that one, it's
+> > especially bad :)
+>
 >
 > Hi Andrii,
 >
-> I send this patch as a separate submission, and I'm not sure when the
-> patchset will be merged. After this merged, i will update v9. Is it ok?
+> The bootstrap version doesn't include "bpftool prog" commands, so it
+> doesn't link against any of the disassembling libraries.
 
-See my reply to your other patch set. We should probably just replace
-RCU manipulations with preempt_disable/enable and be done with all of
-this. (and RCU Tasks Trace is implying RCU right now and that is going
-to be guaranteed moving forward, we already make this assumption in
-recent bpf_timer patch set).
+ok, that's good, I was hoping we won't bring in unnecessary
+dependencies for the bootstrap version of bpftool.
 
 >
-> The previous patchset:
-> https://lore.kernel.org/bpf/CAEf4BzbubXxLHsO_2aVBG_oYE1Sc9iafLyvcX-PEjcQ7=
-EXWCqA@mail.gmail.com/
+> As for opting out from the LLVM disassembler, I understand the lib is an
+> issue because of the size or when compiling a binary supposed to run on
+> a different machine, although I do fear this won't help with getting
+> bpftool shipped with the JIT disassembler.
 >
-> And i also saw Qing reported a syzbot issue recently.
-> https://lore.kernel.org/bpf/20260128084538.1889001-1-wangqing7171@gmail.c=
-om/
+> But if really you want to do this, at least let's do it fully and give
+> more control for the disassembler dependencies: I think it shouldn't be
+> just LLVM in this case, there should be a way to opt-out from libbfd as
+> well, which was problematic for other reasons in the first place, and
+> probably some mechanism to tell whether to use libbfd or LLVM for the
+> disassembler when the two are available on the machine.
+
+Yeah, absolutely, that makes sense. Mykyta, do you mind looking in
+what's the most sensible way to do what Quentin asks? Should we just
+have NO_LLVM and NO_BFD switches and take them both into account. If
+LLVM or BFD is not explicitly opted-out-from then we'll just prefere
+LLVM over BFD?
+
 >
-> --
-> Best Regards
-> Tao Chen
+> Quentin
