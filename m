@@ -1,63 +1,63 @@
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C71301002
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 04:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C953009E4
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 04:08:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770178129; cv=none; b=pEBgOmrvHSHk1Y/TP84ZSNe/zu4rSXgq4H/J2QBHHcCxOebWC7AwU5UcLjaNMqdwTjUofLtW70mwDhC/Y9LkpZu1MZyy9TfwsysEZ151O0OS42yvirpLc6HdSAFMo9OfS2g/vcGtlbufANfGxa8Xbt3qtEh+W1LEjnIZxP6m4oo=
+	t=1770178131; cv=none; b=S7a168kqXdla5DZfQXw081FiuPWgmEvl8Ky5KciArO9URZCEzFbugZQc4LkGTVb8lCM4Sq2EVmVv6AcCxtYsvmpH8A0MyzoLu1NJW5m3j5vZAfAckJM7n4jCeuWmfigKkOkmoKWzgOPqelecBIW20ZKAMeufKwnGLyiI9bevGbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770178129; c=relaxed/simple;
-	bh=Btl1bGUnRu7+h0uN8S0x6Vfgm/J7bB+e803H18jiwSE=;
+	s=arc-20240116; t=1770178131; c=relaxed/simple;
+	bh=/S+etfuorB4JOg8c64Eam5cYiK78H2/ahYAQYzDaMmQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NrspwwNRkR9qlOykIkC0odnfrSuDsWP7L0+n5WWj2WP062nE6IUD2K8zqVbamMuykTeCf/imFL9oR0Iywe+ok8ySNoCEKKQlJpTyAx+QdAMZpIEvHZZcTdFSN3T7B2pLsD7NB63Hsk9OB7mNHS4lGXH58Am0BK5UdqOpD/GVMHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MgTJ74i2; arc=none smtp.client-ip=209.85.216.53
+	 MIME-Version; b=I2BvSF/wwKO8ZRvcVZ8DzqIxjo0M4kU0NQq53DKfh35r6ymqKPEl4kjZp560J7vu1wVqDtalzfx6EZfUmSu8yKvrN3XVHbH0t0c7ucWvF0wdAnNk9w7frrg1rg6/jhqGxNEBfonv+cvkeLorfHhLyuYyFKRxJHBtdYMiJJq12b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mC1KlQjm; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MgTJ74i2"
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-34c27d14559so3303905a91.2
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 20:08:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mC1KlQjm"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-352e3d18fa7so206687a91.1
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 20:08:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770178124; x=1770782924; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770178127; x=1770782927; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8Ln6rcHM3CJsi+L4yX01pz2fFYCfyocMjzXLeCJuEAE=;
-        b=MgTJ74i2w8t0xU2rBaHMEqfMv6eebZN3NPThXsnSXoVQ747uLAvrDz2t6pzWw39kcB
-         6Nn+XoSM2KKd3QE2ZMzuFP4ZNDNT/yyH4MO7gAqsTFcCCKdWFcH7CPxpk6XIFVyicsj0
-         jqAdWFNiBVxX+5X5u9fgBZfH3OfxjU3JaTvGb+UxrG0PsKomWyIVogaR8/+YT/5l5wBc
-         e44eKKJNP92IgMF6AqHAWzypnGOuABtqwGCVSYT9jym5PI/BInkJ2Oeo9YDf6U1lH300
-         Jf7bt6hkghanlQBXKmfnbofCbp/yvtoEieyL71L/1fqe7KCJDsD4gCvkNv8VNpTwcqwl
-         eJGA==
+        bh=Jy96ccwe/DIbob0XU38YOrX4Z8oK6cPORd0GBiVrrfg=;
+        b=mC1KlQjmsTvUDEGrob5c+sxXnK4lUfm7iyUjxx7JAW/S10R8Z0J5I7B3hDfzVjmbsT
+         pfZfhyyifA1kNdFKvfqypRSo0Kcv5z7bLiQnHt3jYDFsjNyGJgic0kkJNHWEOBAHyWLP
+         7mKgqSHeM3pWhRTd4aDN/Bbza0SEsxQUiS8QiuWtyV3+ZX3COfKfhsJZGO9nme4P9OJ4
+         vC19qWA/UusfaS4okcOSEEdcSQa9ERNnWbjJIatmcwi4n4V2VvOzLNtIP95OJQLy3Qgt
+         k+r6Bni28sBNzZ6N0Rnf+x7BXIVT0xmftYC3LGitp/vnMzN3O30ywin/dxBa3hYXUAJu
+         FXxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770178124; x=1770782924;
+        d=1e100.net; s=20230601; t=1770178127; x=1770782927;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=8Ln6rcHM3CJsi+L4yX01pz2fFYCfyocMjzXLeCJuEAE=;
-        b=dUnjVZ130S2/+eV+WrNkhM3+rRe7OKFyjlB60B66fFuFkwVALQT4plYwBclFA+tBEZ
-         YfWs4rKuFuppmzVVqIH/UG4Cr6GT/TLKDURS0DxTcbJwoQEP+l/P80Is9c840p5iFamP
-         Lsoyk3LbLMIhakcKk6v1lMcDndXB8PcswDP5gs7k30VIT6OivM1ndYZ/I7E+sWFhuMnq
-         ZziHNzEX4qtMsDcplmvAeg0NYSBCIvthF/+iZuMg8xgxBsVjscdHbajzAtabLcLFpWOg
-         fcFtl6+UJ+Se4VEv6hS8EebT0NqJvHkFFwK8ADE7xHBoVdfmASOKa1wHfU8H67DCkHvT
-         AKfw==
-X-Gm-Message-State: AOJu0Yy8FCmmXirQp2LzGbLI9hj8m+W7nSlDDEwrMepneEENHuc9AaOb
-	H+Fdnj3f37iWO15sR9SZspX5qg9of0L+KXrNFNQDHWOmGHO/FnAIU/1IGfho8w==
-X-Gm-Gg: AZuq6aLcrRp+6IL4MDh50KTxWro2hQ+mjTG1AKqQCPw3M+zrT1Tvj3N/Labr+NcDPNX
-	lTY/QBCP8d6gVq5XNXNh4mrQ0yMk/bwOMOuQuZTySSD2sfaxILEoftqiVggaQ+Mty68hwnAoJLa
-	EQ8gdH4DRB6DIxrHeM+Xp4pPeIzORPJadw5YF3QTlNPxypnclGEeXUzIfCR98F32JJ2jW9cBlgM
-	yCNQBvD33mWIJ3v+rDXjWXcaGR0KIvKmwYB1AJ9tdkwQB1cTilNXQUsXipYI2IFKsKiwjVyDggZ
-	CVCtfaVi6xJ3G1ui39hwrJsiUWTjESnCw9N6vINQVB/Aolv70VuIC2Sw1eYmRWrX2OFynvwlk2M
-	zlBOKV9Mw0a035zL98hIV/JOx+GB98iU+43kBhAnGthlAC0fySvp+MUAnPYYCIYrhNY6K7bEEtd
-	0tMtDaw4hBYHG+HZUwGmZB5umHLcu48bKnx/XxXyGV1smoJjzDKv9Sq+yxXgp0BWtUUN3ntF2UM
-	Ec+fQus/L97JJ+oLh7IHvH9vDYMBt5yR3OvBY+s9OgQeTZwWw==
-X-Received: by 2002:a17:90b:5348:b0:340:ec8f:82d8 with SMTP id 98e67ed59e1d1-354870e9703mr1479750a91.12.1770178123980;
-        Tue, 03 Feb 2026 20:08:43 -0800 (PST)
+        bh=Jy96ccwe/DIbob0XU38YOrX4Z8oK6cPORd0GBiVrrfg=;
+        b=HkbYRuBhKU9iU58nHudULdgwAZ+1gnz+mPiAjrSp3nyg2c3Fsd3fT6gLBy6Y51JnrQ
+         jNxDlOk1dkKAxNAIkVkWVUzIMATL3OF+yy4hZ4JfdgMbJpFHIn3HF6Q+5KUKPYJT0bmT
+         fnOWanS/NgGsZKgPFU0dfX8TE6kzB0Y/JBs4qor4J4Q+afE5xoNryv51mT/srjLKUROX
+         Rtf7+WECreau6cNI5tQbudsXf5lLOrAx0ohXVNaXNH+edOvnweaxcHJRy9IfszEVicTm
+         Ym22g1B+vuBdEFcQtzvfw6tE7qMmxiMjkG5MJDG0G3MDY+2no8hDofEJhpWD6nfg8zEY
+         OCjg==
+X-Gm-Message-State: AOJu0Yxvcmhz1HAIgjUB2NWSma4+xBhdvVJmhJaT6/2tp6eQNNgDU6kf
+	u/6A1GGN4p+mOKSAu+ztFK7olEH+z0h+ryXHJTBjldVAdypy2NsSmvCBFOCncA==
+X-Gm-Gg: AZuq6aK7MyTvC95hfbaax7z9Os7vOOptzo5W5obUnPevxEhXBjEPp2yDGR6lumj4fWf
+	4Dvi8SSqqRvYmDXjrZNDgypCthgyOvqhbK2H1XPtZ71x7kq8ihgDIlr6qXKUGMbtdCli8PEabwF
+	FfoF/M5FTe7X9oB8o0c8bA9eZ71xXWRi6CrEjyp7FcM1FzF4AM3s/9UtU6uF9+z5xwy8PE7v8dG
+	nOyfCAuPLU4BSl2h1elpn9hS7rwvOaFbYaETbcoTSTxfTAHj70oiz82LEcGJFLD30hW9RCCzK/+
+	tmik8yIGHEXNA0i/J5g3XBp4Ao2VGnZ8HXwB4RFVyVIt8NRk3857Teq17fyizTxF3HPpen0qcAQ
+	Ak2VwBw+RtxqEnrWrzIC7ddDSb+Ibm3F6PAgf8VwBSxgypWH1isLIvs9aK3AZIjSoiZ7M2uVBJa
+	HqCBIF6S1AnFsYmzUTTg32MEI2/QY5jxdkiIVyC29iI9ZDtJrMSyBcqCVEgV0HOq6eL0Db6KAkY
+	rVBHvNR8fW7JSruZFCW3MGVKHmAOucSHtnilOV0i4IYZZp4bA==
+X-Received: by 2002:a17:90b:3c49:b0:353:356c:6821 with SMTP id 98e67ed59e1d1-354870b1dd8mr1324283a91.8.1770178126603;
+        Tue, 03 Feb 2026 20:08:46 -0800 (PST)
 Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-354860bef61sm1047619a91.3.2026.02.03.20.08.43
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35485edfdc2sm1009961a91.15.2026.02.03.20.08.45
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 03 Feb 2026 20:08:43 -0800 (PST)
+        Tue, 03 Feb 2026 20:08:46 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -65,9 +65,9 @@ Cc: daniel@iogearbox.net,
 	martin.lau@kernel.org,
 	memxor@gmail.com,
 	mykyta.yatsenko5@gmail.com
-Subject: [PATCH v2 bpf-next 3/4] bpf: Add a recursion counter to prevent loops in bpf_timer
-Date: Tue,  3 Feb 2026 20:08:32 -0800
-Message-ID: <20260204040834.22263-4-alexei.starovoitov@gmail.com>
+Subject: [PATCH v2 bpf-next 4/4] selftests/bpf: Strengthen timer_start_deadlock test
+Date: Tue,  3 Feb 2026 20:08:33 -0800
+Message-ID: <20260204040834.22263-5-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260204040834.22263-1-alexei.starovoitov@gmail.com>
 References: <20260204040834.22263-1-alexei.starovoitov@gmail.com>
@@ -81,60 +81,41 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Do not schedule timer/wq operation on a cpu that is in irq_work
-callback that is processing async_cmds queue.
-Otherwise the following loop is possible:
-bpf_timer_start() -> bpf_async_schedule_op() -> irq_work_queue().
-irqrestore -> bpf_async_irq_worker() -> tracepoint -> bpf_timer_start().
+Strengthen timer_start_deadlock test and check for recursion now
 
-Fixes: 1bfbc267ec91 ("bpf: Enable bpf_timer and bpf_wq in any context")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/helpers.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ tools/testing/selftests/bpf/progs/timer_start_deadlock.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 0517e9a8fc7c..0f681a89b842 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1427,9 +1427,21 @@ static int bpf_async_update_prog_callback(struct bpf_async_cb *cb,
+diff --git a/tools/testing/selftests/bpf/progs/timer_start_deadlock.c b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+index 368563747a46..019518ee18cd 100644
+--- a/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
++++ b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+@@ -31,7 +31,6 @@ SEC("tp_btf/hrtimer_cancel")
+ int BPF_PROG(tp_hrtimer_cancel, struct hrtimer *hrtimer)
+ {
+ 	struct bpf_timer *timer;
+-	static bool called = false;
+ 	int key = 0;
+ 
+ 	if (!in_timer_start)
+@@ -42,13 +41,9 @@ int BPF_PROG(tp_hrtimer_cancel, struct hrtimer *hrtimer)
+ 
+ 	/*
+ 	 * Call bpf_timer_start() from the tracepoint within hrtimer logic
+-	 * on the same timer to make sure it doesn't deadlock,
+-	 * and do it once.
++	 * on the same timer to make sure it doesn't deadlock.
+ 	 */
+-	if (!called) {
+-		called = true;
+-		bpf_timer_start(timer, 1000000000, 0);
+-	}
++	bpf_timer_start(timer, 1000000000, 0);
  	return 0;
  }
  
-+static DEFINE_PER_CPU(int, async_cb_running);
-+
- static int bpf_async_schedule_op(struct bpf_async_cb *cb, enum bpf_async_op op,
- 				 u64 nsec, u32 timer_mode)
- {
-+	/*
-+	 * Do not schedule another operation on this cpu if it's in irq_work
-+	 * callback that is processing async_cmds queue. Otherwise the following
-+	 * loop is possible:
-+	 * bpf_timer_start() -> bpf_async_schedule_op() -> irq_work_queue().
-+	 * irqrestore -> bpf_async_irq_worker() -> tracepoint -> bpf_timer_start().
-+	 */
-+	if (this_cpu_read(async_cb_running))
-+		return -EDEADLK;
-+
- 	struct bpf_async_cmd *cmd = kmalloc_nolock(sizeof(*cmd), 0, NUMA_NO_NODE);
- 
- 	if (!cmd) {
-@@ -1628,6 +1640,7 @@ static void bpf_async_irq_worker(struct irq_work *work)
- 		return;
- 
- 	list = llist_reverse_order(list);
-+	this_cpu_inc(async_cb_running);
- 	llist_for_each_safe(pos, n, list) {
- 		struct bpf_async_cmd *cmd;
- 
-@@ -1635,6 +1648,7 @@ static void bpf_async_irq_worker(struct irq_work *work)
- 		bpf_async_process_op(cb, cmd->op, cmd->nsec, cmd->mode);
- 		kfree_nolock(cmd);
- 	}
-+	this_cpu_dec(async_cb_running);
- }
- 
- static void bpf_async_cancel_and_free(struct bpf_async_kern *async)
 -- 
 2.47.3
 
