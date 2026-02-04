@@ -1,109 +1,104 @@
-Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f174.google.com (mail-vk1-f174.google.com [209.85.221.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF8B31A549
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 07:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB7627E04C
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 07:36:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770189360; cv=none; b=pfcvv7ME4dCY8ijGGV/g7QRmY8rwQrLY3NGlT9A3TwzZvXWlTQvWqYuNYNZagBURpg1+BW/9C8GYKaMBb79iuEX2kHxAzrZox/U17MqBatYOhVmrNTicTexOnuklDaJBN4Wdn2tB3s88mARwzIKBCbMJrmJm+rLS6iSRvl/aJRE=
+	t=1770190564; cv=none; b=i+Hu1ylagiHhXSBQF/Q9QFmd6E+DwPTyaAGx185g6hGqo8fRIJgNzMBKeKATV7iWtKctPblCz0nAeJgPdmYggk2urJm/eRBrpD9M4lw8+EKPc4Np9JyaQR8IAdrB7bw1XOBiOKQuJDgEVAbhGgY48hd7hqf1kn1dqImr/O+Hm6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770189360; c=relaxed/simple;
-	bh=Fb1JguzNlrjEL6SazegIH4xSNcYGMvK/YOd9uZglxjU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n6a4J3X5lLZ60+XKDucZxMzxj8S5O9SaPgQl6veBk4ZjMGVHdH/HIW9MNX/I05H2dCEKwQ7S3RkJktCXT8llfqaKHBn+8tAcP4ogn1u8gDWMhtxfxwQHVuXkeALWfnqoeZfn9zvC62GMA2bCcHXXY8b9avVUECci/SZzL2eRn7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FhdEUhiM; arc=none smtp.client-ip=91.218.175.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770190564; c=relaxed/simple;
+	bh=AkfWSn6/+xsW7ST5MKU1RyB7aw8jMS5NSrFFa7ROEEc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e6CtygF7C/BfXtcYHZEKt8jhz9uyFQF2UOGSho3rq8q6uXo5HK0TLsbKromKNO9GkPIumiajesV6XlkR1Z69NLxSciu4p85Q0YvQaziyjFTjNLDQg+YYWRJHznQ4O4ALgXLRISGpWVBQboGOXziMAWwWd2hxVl5fzpdGsWGhTlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j7IJ+xxg; arc=none smtp.client-ip=209.85.221.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FhdEUhiM"
-Message-ID: <80865b12-7786-4787-81c8-08b754716a5d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770189357;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=aIzahF4fKiLYiAsLF0Jwew4BLtV36PrwNYbnuxLSg1w=;
-	b=FhdEUhiMa8LB4K5xC9Df0p8ff3q2uin4eJhHxBVqPKGEUlIZqLNRWeR93cjKgzVvWgaUaX
-	5L4sABf7CboDTUh8OXj9Rtih9VRPFX/c8jiiOf7ht7SX4Y9FzQyVPEZgj/IlFX30k0Xwho
-	wppfl3xQijscSEuL85HJKAgntZP0eh0=
-Date: Tue, 3 Feb 2026 23:15:51 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j7IJ+xxg"
+Received: by mail-vk1-f174.google.com with SMTP id 71dfb90a1353d-5663724e4daso4475034e0c.3
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 23:36:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770190563; x=1770795363; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=agMTM9qEqwnVQsJGvKQ5XLr26U2EggmGkInmG3UyHBk=;
+        b=j7IJ+xxgfNWBSsUkqSQ3wtK5kC327kXEr/1xkdilTZrxYn9oqZ8TkDu5/MsF95yHdn
+         UeJZWt33/viYsdrFnZZ8dWq0W6RAaRB8XFGgTmbdVx+nypqhHUhRe5OFeqGlmz4Fa/9U
+         YGPEkvyY4jIalRNst0kj3bW/OkCZ9VJc9KWuZU4objKrw2vF7GhEOIkeE+YmjYraMeMX
+         dFgvLREi5dtb8EbPQEUgjGocVgHYZV1OgiPovn48bUbyH0DPo9fNDs8aE/td9NIkOvg8
+         1rM3cS3Foi0P7mzz+APKXNp0F4EsHeOeveJaNyXHhJaz64LZM/AXGt+5HXY9C3iaJCkF
+         W7BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770190563; x=1770795363;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=agMTM9qEqwnVQsJGvKQ5XLr26U2EggmGkInmG3UyHBk=;
+        b=ZoRFw/v67Iy8EORMmGJAst5vEe2Li/RN1SXXdQ14KOnSUNH+Edl9YbS3YAxbP6ZGqR
+         LWLW3OIeo3rsINnrOg/VV+AGHz1ZEHNiHFhnRV6PruyGlmMvYQb7gMqFK1PQTOIUo/gW
+         oy+Cgyx35jUf/UK7NzCuK/jerwm+w9F36b5S51HejhV5R+ijwHYzrGh3mRLK2JlcZg1C
+         rl7UMGN1AFqD9lrcbu4Cb5ljaIUXpnTBH+8Wr14eDJTiemWjKH0733z7MpotoO3hrfID
+         V8qLGoiI/HDgjIwJ+ni7g2zcbVjcaPmVhzYdpUr9SpayIj7vC4KHypvQDcL0NQ+xAosI
+         mmlA==
+X-Gm-Message-State: AOJu0YyJ6NCUeigEUVkykMkgUE5/Bw+xu3+RaZX68P6rFXH+ubU5K+8A
+	67Vd3CJyH+qc7dyge7GpXa2uDgfwgirexNtTm61GOy8f4BKWI7p6stm4QChGsg==
+X-Gm-Gg: AZuq6aIyHv8fiqylgfjGrWGSeOVv1MligWgO58aTRF2TqV8H2Ul1l7cU44bl4nwum5P
+	1Ns9GKul8g2m+JJu+86ogNsuT7p4IV8cgqQjXJE5gWTCRVWTY57XDD/TIKxgbgV0oB93lzQmMKr
+	zXUCsrDJFe6B5IfO6dKpkg0uCYZgFM+qPZjMi+7jm7C1k4TFbVRWzUi9GhdrrJ7xVYwQmxvO99L
+	dtMvGbrXI4acubOdfIqncJWuF2k36E7Wx/9LouAjyiTdR/a8mD4yvZbu9gY2iA5/yfx0tquzP26
+	nHyqUtGG1F0zENUPcFe1wsjbXufj2VjUXx//S7eIlioVbWZEWJFcjkFcwjnV+vEhmS2BoURkBBR
+	dkFEvzBL0Cx3CWti5ZAny6tJ74UjpTYm54ET4t0kjYLGWdBYp9VCu3zqOML7LA+TwWD15US0BvL
+	qZVrck7Xybx4HjvdRnXTEsI2hk0sBuTphpj9OTKFrpEfUSdrgtvPzyK4I4Slq9tw8yB//N95xlb
+	AzVm9B/U6+z+8IG39X1wANY86G2KRdN+c8AWLrZ64GvoXPCmA==
+X-Received: by 2002:a17:902:ec82:b0:2a8:7814:47cc with SMTP id d9443c01a7336-2a933bc8a05mr19931225ad.16.1770184309615;
+        Tue, 03 Feb 2026 21:51:49 -0800 (PST)
+Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a9338936a7sm10703085ad.33.2026.02.03.21.51.48
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 03 Feb 2026 21:51:49 -0800 (PST)
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+To: bpf@vger.kernel.org
+Cc: daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	mykyta.yatsenko5@gmail.com
+Subject: [PATCH v3 bpf-next 0/4] bpf: Fix conditions when timer/wq can be called
+Date: Tue,  3 Feb 2026 21:51:43 -0800
+Message-ID: <20260204055147.54960-1-alexei.starovoitov@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
- update
-To: Kuniyuki Iwashima <kuniyu@google.com>, mhal@rbox.co
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
- edumazet@google.com, horms@kernel.org, jakub@cloudflare.com,
- john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com
-References: <8d055903-fe44-4bbf-a1a5-e0176343bf0b@rbox.co>
- <20260203200242.404131-1-kuniyu@google.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260203200242.404131-1-kuniyu@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-On 2/3/26 11:47 AM, Kuniyuki Iwashima wrote:
-> From: Michal Luczaj <mhal@rbox.co>
-> Date: Tue, 3 Feb 2026 10:57:46 +0100
->> On 2/3/26 04:53, Martin KaFai Lau wrote:
->>> On 2/2/26 7:10 AM, Michal Luczaj wrote:
->>>> In related news, looks like bpf_iter_unix_seq_show() is missing
->>>> unix_state_lock(): lock_sock_fast() won't stop unix_release_sock(). E.g.
->>>> bpf iterator can grab unix_sock::peer as it is being released.
->>>
->>> If the concern is the bpf iterator prog may use a released unix_peer(sk)
->>> pointer, it should be fine. The unix_peer(sk) pointer is not a trusted
->>> pointer to the bpf prog, so nothing bad will happen other than
->>> potentially reading incorrect values.
->>
->> But if the prog passes a released peer pointer to a bpf helper:
->>
->> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0x95/0xb0
->> Read of size 1 at addr ffff888110654c92 by task test_progs/1936
+From: Alexei Starovoitov <ast@kernel.org>
 
-hmm... bpf_skc_to_unix_sock is exposed to tracing. bpf_iter is a tracing 
-bpf prog.
+v2->v3:
+- Add missing refcount_put
+- Detect recursion of indiviual async_cb
+v2: https://lore.kernel.org/bpf/20260204040834.22263-4-alexei.starovoitov@gmail.com/
 
-> 
-> Can you cook a patch for this ? probably like below
+v1->v2:
+- Add a recursion check
+v1: https://lore.kernel.org/bpf/20260204030927.171-1-alexei.starovoitov@gmail.com/ 
 
-This can help the bpf_iter but not the other tracing prog such as fentry.
+Alexei Starovoitov (4):
+  bpf: Tighten conditions when timer/wq can be called synchronously
+  selftests/bpf: Add a testcase for deadlock avoidance
+  bpf: Add a recursion check to prevent loops in bpf_timer
+  selftests/bpf: Strengthen timer_start_deadlock test
 
-> 
-> ---8<---
-> diff --git a/net/unix/af_unix.c b/net/unix/af_unix.c
-> index 02ebad6afac7..9c7e9fbde362 100644
-> --- a/net/unix/af_unix.c
-> +++ b/net/unix/af_unix.c
-> @@ -3740,8 +3740,9 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
->   		return 0;
->   
->   	slow = lock_sock_fast(sk);
-> +	unix_state_lock(sk);
->   
-> -	if (unlikely(sk_unhashed(sk))) {
-> +	if (unlikely(sock_flag(other, SOCK_DEAD))) {
->   		ret = SEQ_SKIP;
->   		goto unlock;
->   	}
-> @@ -3751,6 +3752,7 @@ static int bpf_iter_unix_seq_show(struct seq_file *seq, void *v)
->   	prog = bpf_iter_get_info(&meta, false);
->   	ret = unix_prog_seq_show(prog, &meta, v, uid);
->   unlock:
-> +	unix_staet_unlock(sk);
->   	unlock_sock_fast(sk, slow);
->   	return ret;
->   }
-> ---8<---
-> 
-> Thanks!
+ kernel/bpf/helpers.c                          | 31 ++++++--
+ .../bpf/prog_tests/timer_start_deadlock.c     | 33 +++++++++
+ .../bpf/progs/timer_start_deadlock.c          | 70 +++++++++++++++++++
+ 3 files changed, 128 insertions(+), 6 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_start_deadlock.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+
+-- 
+2.47.3
 
