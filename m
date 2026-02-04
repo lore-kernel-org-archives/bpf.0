@@ -1,162 +1,167 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3154A1917F1
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 00:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC4841C84D0
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 00:33:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770165181; cv=pass; b=Wfdyt6kEZXdBG39XkhQ6UO334PW1nE+E7lu7fIMifOECb65znIDX0wdAHflB8Uc4eWI0Yo8xtwxXIBDnk7pba1G2kV0SM1pYEKIdekuIzKxaFOtEeGnmEBLNa4X3VnvL+dg5EocG8nGH3ZRafZc6nc5HUymZ181qRkeihK3SdcU=
+	t=1770165238; cv=pass; b=MzTvdUtGWxknC23otXD0+u3gyZvFPQJJzFOPT/xf2DUo4D9/xWEufWuxqIyyGUYqX8vgmWhN1Olu/mLXjrsP9MBih0MmEoEueEH63nBGknODNQgdKwv9JlqzgX3gqTDnlthJJqNZmzTX0nCwpgw85+ot23lwIKZbpMqCkCX1OYE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770165181; c=relaxed/simple;
-	bh=QWkzteauj0a/xDl70Jvy3xLshg/6rX1fUfUBJsu2eww=;
+	s=arc-20240116; t=1770165238; c=relaxed/simple;
+	bh=BGYBSwLSXw3GozsSaycEkBwr/A0rvU61Cqbob+qm6+I=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ci4JW1DjGHyHB5h5Y0ub8yjUevnZZD5symnMErXIcNGCtMn36GNz7TEH6zKeKpM6Mh5o9Ce0HdlFtX2LdBNPL+uqAcGMI0LebUAMflOhWNLSAhJCHR8Rcnmie1x+2w/6Mj03AlBD1yWJVJEqRf71SXLm3IW4NBd5xfOceAnW4rc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FLaEjOiq; arc=pass smtp.client-ip=209.85.221.44
+	 To:Cc:Content-Type; b=MP3v4zZtq7uNLKgDwoRoPFTvu9Ud+jSW8EqhvK2SGQLh3hlIiLWzmRSMbJKEROayaZJrScQIEa2CJxuaybXyuh038FCDKY7AEwBWZ1DIK4BAEFBkYCWX+UZDKLcJMhR2R1/JQuE6NEMMylSJq9DE7Cn2BoWawR73sfNVF7QWXew=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YjxGUmMV; arc=pass smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FLaEjOiq"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43615d9c5d0so570686f8f.1
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 16:32:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770165178; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YjxGUmMV"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4805ef35864so54250645e9.0
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 16:33:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770165235; cv=none;
         d=google.com; s=arc-20240605;
-        b=LNBBIjsbkAp980jGVyMWkdc+Y7Lr9fEclqLckYW7RBjie8rYDYw1L5YpCT3EVGExjB
-         MSec248GPF430xHwWaoqjUwLxA8rA6KB0v/j6F0w/ZTPsarAK0nNeLxyRVnWyngLCMNt
-         t1UlNhydszFqKGc2/cDDHHWMoHy+Dxbv7IzBbUovDFlOSjCUVsr5GHuMV6KHMcx/yfXg
-         htChv4U18Ah/EplJwKGi0R86xB3GEan44U7A0TnP0tgrWaDOXxjHyNJjFaC8YUijDR38
-         GoNrD+SVj7d+Y9b26DdIEm8aXtfnQBAnR4XYvTcpKQbaLG4H0WsclMb82c/3NqslQISi
-         Tzow==
+        b=X1y5rpxfY+eomtr2qbaGk71Rnf39ZgiFGiBuYuvriMEi4QdefqsGGQk7E4gOoAP9o8
+         Bn/YfdKEpIFBcM4+6Um/KGygYY52m9CA8ayZQ50dxoi7ZmvQ6hpczKYft4UYDKd9eCvo
+         07y6KXAaEwH+VFHiPH1wYVgqxH4qTKtroN58Hvk3HauaU4aI/DaafFdxCC3+AwbLB8kF
+         qrU6Lkqr4h5E00gzckVHFqCEliNdthlHWZDj1bimXJkNA4kIZFk/L+nT7jKaSP6fWdnf
+         ejbElwsJnl4X/IJODdpe8tzTFwdQsVmoih3Z9VmT+oV7Bm6HQSkevWQWBpZBk4qodDSU
+         h1OQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=NqQ3bzlYfFhXWlxoYLyctq53kuXQUb6sNX4WeDpsPO4=;
-        fh=+fKu4vNNExkwLzWIKYmGNY7ZVAccuGPbPKhHhGA4f7c=;
-        b=jysQw7vzUCZ+qNHDy+zvdo6bpOy5ff+zaa4pJJLXzEsygX40d96OWXr9K6PmlZ4pnz
-         ZZvuVctIPNjpa6GA5j/CytOr42ISIdOAe3leXhlf+lY5Pf4BlY8H1F19fNR9k+7qIQNP
-         Ql6YvcsekbqxQXIicNnVIJ+RhZT6koMvHFmJP+0KEi1rK6XR55Wx4KaFornR4hrZPBCD
-         OjlrxvmJpmozCLjbEWoY0EtQfT4cLvKKvzJF31jxM9pCbnUq5BA9/yigeAcIgTVXOTIE
-         MOCrnEDzj0lVGL8BiO9m7mM0TY7mAVsS9337sklfWn81Oun7TyqjET/Ml9NCcmeaf8km
-         BjlQ==;
+        bh=SPVaxMJSX4AG/CeVmMqvFPaGAwqC64TXT71T62h0CPs=;
+        fh=sn/trcUGTBW/ZbZ1/BJHYp2jeahFPK/jirPSfqFZYwU=;
+        b=A7Jcm/O0e+RMwZzOte/b70mALYnELHA/R0ZVoENFAwZ158O0gSAm/nBZVczYjc206C
+         5uhUsyIPImad3a6FEaF1ByM4ZRVNa/4/COMQ/pcooaNghi9M31rYtmSzv3ytZA0xxgXD
+         vYSXTwwxgfuwrHkYC4238Oo3za43nYmSh1nudMjy7OtNqBFwbdNIVNB3d+ywlnm6gPDG
+         5qOy0lVja7sqGO3p0XpC78NkJTKW6z2TImaaR8k+CGK5FjZv2OGdQ5G6B4nQ6U8JdyTZ
+         knt7gBO9Mx4vQv75sbMPwTJy8i/tUgnQhBrHh1apGpIsxV5xt2qxsm6AW6M3YlQaeeNU
+         babQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770165178; x=1770769978; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770165235; x=1770770035; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NqQ3bzlYfFhXWlxoYLyctq53kuXQUb6sNX4WeDpsPO4=;
-        b=FLaEjOiqv70boEcF1Rh6+o9NfXoNHWv0doht0f0UXIJv7WJcPMaRfXEJqEH9xMQT0U
-         nbOJE2u8rgwYgyuD8ErMph1ZAGsYXoi9NaWZnP3dmyZDAKINgciiMSd1fS77r7zQ46Xo
-         OM6diC9tbFfd2JaGjTmpErdia6Qnu7KggQkLWWnX2xEw4NYeaQMb8fX1Nn28qKYUFAgh
-         W6pJPnttmo+3CUGI2v+sSdSnnKFR0tD9n5U4xs/5Fr2h7lJWJWKG03twW+TnC5db0PQa
-         B3H/wt1BRM0+MUcZAUM+/MMhf+zq0n2WqnCXmJf0BH289KSMKdi7VTsqgwtJkPBFC8Fs
-         aDqw==
+        bh=SPVaxMJSX4AG/CeVmMqvFPaGAwqC64TXT71T62h0CPs=;
+        b=YjxGUmMVEp2tVQqqVOigEEv1KH2gL2jCI1gSnxN+mwhAUVT95y/j8rNPQzsV9XM+je
+         46uXbatWCmha0/6JRP5i2k2BDu+/+G2jlivmiJ5QHrNrMZGtKhecTueRit9NVwRk2oXC
+         /+rRNTb8D9vybS5Q72W97RwD7/pd+Vk4gyVE6j1ApfXnnkMkwW65MxJBAr0V5R+jlM7K
+         +yUV+B+uVyJcYBiNrigDZYxe76y3aPuC0nHMJ27701+R9hS5UIfi8sIKvCvYmizqwwJQ
+         6Ue45HiBFsRaYOxxNpSN7vnN4uHdIi66jMbkfkbafmfC28UA62IvCKlr7jQvyyuZjK/L
+         +Crw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770165178; x=1770769978;
+        d=1e100.net; s=20230601; t=1770165235; x=1770770035;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=NqQ3bzlYfFhXWlxoYLyctq53kuXQUb6sNX4WeDpsPO4=;
-        b=lwO1iFMZ/okfqol7sqGmvH5bJNaFVk8SsnbZj6Nv3wS2EyPk/lOWYOdWe0HH0RmWxN
-         d5DjbMZ+ic5MbeFkDzh3a15CoqpIqVU+ubv11IpKZ+btVvmJoAhGJD5KP0/lVQR5e2Hh
-         6qFcT+CUCRbh+nUzwX82F2Jz9PM0EdsEd27xRsFuXdbYiO2TzZN15RXckzLjg3ZpNCG1
-         v8uzJ51sQVUqtTk3nvYuT+ST5o3/yCkcrmYym6h8dG5L0mjeyIXGkaZYVRTWl8onXV7M
-         BpWpGXoj9NXoZD4tUVvZYmfqZXBwVnsG2srRetpNQC/8A6BoiZywrWM72fIdieWEkFly
-         ddRw==
-X-Gm-Message-State: AOJu0YyyzO/RRz6qwJ3tc+eYfHwsZ1G9/FUa8MuzaJcvaauXgzL7rsAl
-	UEP9v1GGraoTmbhlur/nEy8MEd7DHaIXihMcGZnwS+g9bu/jwS6y9WdbBdcG2MbjY2cwT7J61rQ
-	o1fW6BvhyjxrGy2Pf6a8XClSJDK48YhQ=
-X-Gm-Gg: AZuq6aL7nkO12ctMLrOV5qMJamq0Oi2lG/92Tvtozk0rEFBozjXPkyKp1Lz8Fw28QB7
-	KKpmk+35mZtO5RmA/73SSLtZtYoEiO6VD6MEsaurkGczrfUahTQOCycImiLS0uV4JYi9OUTh2R+
-	UP0lDnBiJsLLc8SEJ/ou7zHE9frvkbfKU2h9eV3vM9EfM/wCvu4mNgUvKmVAj5gMkbT5XCYTZyj
-	z0qNpioSR5rX1CoNhhVbd+xMXccD3UzZqyP1jHrHEf134hAViu1dU+rVlTGmXvu2UQtFlE8hzyM
-	ffVVevpMNDVN840ZUaPyo0vlwRZkPDhN3xcG7xnPlCozHdaCpZJ4+tSfJYt1mKHX+B9UMaUsicX
-	CBlKDKvdKYiRO/g==
-X-Received: by 2002:a05:6000:1888:b0:435:9690:f056 with SMTP id
- ffacd0b85a97d-4361805284fmr1419233f8f.35.1770165178311; Tue, 03 Feb 2026
- 16:32:58 -0800 (PST)
+        bh=SPVaxMJSX4AG/CeVmMqvFPaGAwqC64TXT71T62h0CPs=;
+        b=RLeqm1DhiMuFG/LSHvoWtfRxhfXkDvJ1Scmp/QJ7EhawUURohYSlG6NVG0kTpgtaah
+         oVQ/5agFwp1tbTQZVNXEw9mx63noQzhkbAxpTtwf1TKsKFUZvS1wQbqVpma0kpbwCBR8
+         6YgRoa9qjF2uC84WFOo3jcQbboQ/DF9PmSFD994qSEvTlRTXde3Db4KpQattROMHTNg/
+         OYG5kbxz3BD1tXXPfGQyYVw9/EjKaLaxI0MgL7RCWm9DvXXH1/onPxyl6m1OSBw3AJVe
+         g53nqfpXbF0KRpL2cWC+jqpBUXNvFvCfnO0o2IxU7+nqeodm5gp+FBcXg6dudNfB1Bu+
+         NlmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUURlb/k0WY1oy38Z1DbeN2ZQ5cmHZMwK4ki4M3Nuis+VGPl7+MkHxoOMVW6CmU9P/rUBI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwI2bfew9N1li0zP7MjoCbIcj+iKidyMEDnEBION5GLqS/ALP7w
+	wTQoBwAHfZRcUkLb3vP2pjM2ktBr2nWi0f99KIa6GlJjlNLGUNo8H8eXdvcZs2xqaR9Xp5cIrsw
+	DhWA8jgEFEoAIrXFTKa54qmnajh6xm68=
+X-Gm-Gg: AZuq6aJe0ZnJ+z9UNB/hxvyq1M7WL8tIZ3EyedV7e1dGi/OhSw6NYB/j0QZiPYNypx7
+	EWhhcGRUEauqLxEexsoBw0Sv+iM7SnXB8Y769CyKtCli37qzFfalCjrRRylifN5VNfFUtnfvtC4
+	boy7xKu9IC4H423HU0q3NbSLQ54LUGyaieWe+CdwsY28X9OkFbt7UtOfvPZ6o1mCIcx1yDEhxqv
+	v3Y/sl7pm4WT3o63uJj6bWXMwtu0zrouI9/agx43kSoslKbJbHBuU+qXzQn1ULJ2K6kA+Ngefbm
+	po+rTVkh/lVLZqsVwECxLTPROGhNlVCdYZcWVKJYuqa19UEL/2aleNv4DosHoGycn68avcDCJ6E
+	VjZgEB/oNfePbOQ==
+X-Received: by 2002:a05:6000:1a87:b0:435:9d70:f2a2 with SMTP id
+ ffacd0b85a97d-43617e3ff2bmr1687108f8f.25.1770165234840; Tue, 03 Feb 2026
+ 16:33:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260201025403.66625-1-alexei.starovoitov@gmail.com>
- <20260201025403.66625-2-alexei.starovoitov@gmail.com> <CAEf4BzZxWzntugOkbPLC=yy9TZ4v1YVaALR25-rOqF6xezVW-w@mail.gmail.com>
-In-Reply-To: <CAEf4BzZxWzntugOkbPLC=yy9TZ4v1YVaALR25-rOqF6xezVW-w@mail.gmail.com>
+References: <20260203162746.2337002-1-arnd@kernel.org> <CAADnVQ+14yum8okMmjuqF5m5DafWo1fY1EuPj-QU_ykYbQ01uw@mail.gmail.com>
+ <5f9c89fe-df1d-4eb4-b724-08f8d90fcc59@app.fastmail.com> <CAADnVQKn4xP9s_koBuP7D_eqUX0dSPwUr-dOj3mTZNTh_VxqKQ@mail.gmail.com>
+ <ab709a00-3a7f-423f-9d8b-b2cd17fef76f@app.fastmail.com> <CAADnVQK3eZp3yp35OUx8j1UBsQFhgsn5-4VReqAJ=68PaaKYmg@mail.gmail.com>
+ <0d5b64a5-8cf9-45c7-8848-ac62d3fdca44@app.fastmail.com>
+In-Reply-To: <0d5b64a5-8cf9-45c7-8848-ac62d3fdca44@app.fastmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 3 Feb 2026 16:32:47 -0800
-X-Gm-Features: AZwV_QgV8OcvolZ_SzoxQC1GVAe5_R7QsF58Vku8sTx-RN8q6uEcTEM1tu7dy7w
-Message-ID: <CAADnVQ+c26Ff14vni7iqaZ71s3pw0AgABk81QSZ+5o4brBnoqg@mail.gmail.com>
-Subject: Re: [PATCH v9 bpf-next 1/9] bpf: Enable bpf_timer and bpf_wq in any context
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
-	Kernel Team <kernel-team@fb.com>
+Date: Tue, 3 Feb 2026 16:33:43 -0800
+X-Gm-Features: AZwV_Qjc7I4LW10A_MsBK9gzCnlcGrYFPLQJ4MHmI9YKwGlTTtcByDbp2yg08qk
+Message-ID: <CAADnVQ+_Ed8HgtwF5UcX2Ee2SeHU6ad31Z01Zq=2uL2qpUmgsA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: add missing __printf attributes
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Arnd Bergmann <arnd@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Song Liu <song@kernel.org>, 
+	KP Singh <kpsingh@kernel.org>, Matt Bobrowski <mattbobrowski@google.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 3, 2026 at 3:53=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
+On Tue, Feb 3, 2026 at 3:21=E2=80=AFPM Arnd Bergmann <arnd@arndb.de> wrote:
 >
-> On Sat, Jan 31, 2026 at 6:54=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
+> On Tue, Feb 3, 2026, at 19:11, Alexei Starovoitov wrote:
+> > On Tue, Feb 3, 2026 at 9:44=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wr=
+ote:
+> >> On Tue, Feb 3, 2026, at 18:24, Alexei Starovoitov wrote:
+> >> I also see the comment about bstr_printf() mention that it
+> >> uses a vsnprintf() compatible format, which would indicate that
+> >> marking the format argument isn't wrong, though I agree it is
+> >> not actually useful if there are no callers that pass a string
+> >> literal.
 > >
-> > From: Alexei Starovoitov <ast@kernel.org>
-> >
-> > Refactor bpf_timer and bpf_wq to allow calling them from any context:
-> > - add refcnt to bpf_async_cb
-> > - map_delete_elem or map_free will drop refcnt to zero
-> >   via bpf_async_cancel_and_free()
-> > - once refcnt is zero timer/wq_start is not allowed to make sure
-> >   that callback cannot rearm itself
-> > - if in_hardirq defer to start/cancel operations to irq_work
-> >
-> > Co-developed-by: Mykyta Yatsenko <yatsenko@meta.com>
-> > Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
-> > Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-> > ---
-> >  kernel/bpf/helpers.c | 408 ++++++++++++++++++++++++-------------------
-> >  1 file changed, 225 insertions(+), 183 deletions(-)
-> >
+> > In general I don't think it's a good idea to add nop annotations
+> > just to shut up over eager compiler warning.
 >
-> [...]
->
-> > @@ -1456,10 +1493,20 @@ BPF_CALL_3(bpf_timer_start, struct bpf_async_ke=
-rn *, timer, u64, nsecs, u64, fla
-> >         if (flags & BPF_F_TIMER_CPU_PIN)
-> >                 mode |=3D HRTIMER_MODE_PINNED;
-> >
-> > -       hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
-> > -out:
-> > -       __bpf_spin_unlock_irqrestore(&timer->lock);
-> > -       return ret;
-> > +       /*
-> > +        * bpf_async_cancel_and_free() could have dropped refcnt to zer=
-o. In
-> > +        * such case BPF progs are not allowed to arm the timer to prev=
-ent UAF.
-> > +        */
-> > +       if (!refcount_inc_not_zero(&t->cb.refcnt))
-> > +               return -ENOENT;
-> > +
-> > +       if (!in_hardirq()) {
-> > +               hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
-> > +               bpf_async_refcount_put(&t->cb);
->
-> any reason not to use bpf_async_process_op(BPF_ASYNC_START) here? you
-> are basically open-coding it here (same for bpf_wq_start). For
-> bpf_timer_delete() you just call
-> bpf_async_process_op(BPF_ASYNC_CANCEL), so it's inconsistent...
+> I've tried removing these three below, which now gives me
+> a clean build with -Wsuggest-attribute=3Dformat, after the
+> other three patches I posted for unrelated code.
 
-I didn't want to obfuscate the call and to avoid tiny overhead
-of switch (cb->type) which won't be optimized away by the compiler.
+Nice. lgtm. Ack.
 
-bpf_async_process_op(BPF_ASYNC_CANCEL) is there right next
-to bpf_async_schedule_op(BPF_ASYNC_CANCEL),
-so I wanted to keep those two consistent.
-
-3rd reason is in bpf_timer_cancel_async() kfunc that
-calls hrtimer_try_to_cancel() directly to return the result.
-See patch 3.
+>      Arnd
+>
+> diff --git a/include/linux/seq_file.h b/include/linux/seq_file.h
+> index d6ebf0596510..2fb266ea69fa 100644
+> --- a/include/linux/seq_file.h
+> +++ b/include/linux/seq_file.h
+> @@ -181,7 +181,6 @@ int seq_open_private(struct file *, const struct seq_=
+operations *, int);
+>  int seq_release_private(struct inode *, struct file *);
+>
+>  #ifdef CONFIG_BINARY_PRINTF
+> -__printf(2, 0)
+>  void seq_bprintf(struct seq_file *m, const char *f, const u32 *binary);
+>  #endif
+>
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index 1b564c36d721..b850bd91b3d8 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -336,8 +336,8 @@ int __sysfs_match_string(const char * const *array, s=
+ize_t n, const char *s);
+>  #define sysfs_match_string(_a, _s) __sysfs_match_string(_a, ARRAY_SIZE(_=
+a), _s)
+>
+>  #ifdef CONFIG_BINARY_PRINTF
+> -__printf(3, 0) int vbin_printf(u32 *bin_buf, size_t size, const char *fm=
+t, va_list args);
+> -__printf(3, 0) int bstr_printf(char *buf, size_t size, const char *fmt, =
+const u32 *bin_buf);
+> +int vbin_printf(u32 *bin_buf, size_t size, const char *fmt, va_list args=
+);
+> +int bstr_printf(char *buf, size_t size, const char *fmt, const u32 *bin_=
+buf);
+>  #endif
+>
+>  extern ssize_t memory_read_from_buffer(void *to, size_t count, loff_t *p=
+pos,
