@@ -1,61 +1,63 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A51D1632E7
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 03:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 644731632E7
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 03:09:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770174571; cv=none; b=lGLYUL/rgX0ZJAV0rSGlXHuuq23LzKIrI5//TVUcgcZa5KaEfWIqU0cyId4GtLf6PQoviz5rszMsjN6NKPHp7AHmrwQoiAWUTj5FYZiHgfR8wXcNpYd5AqKJLyH8azG0o51DVAQqib/ea9TN4zNvvc23dmXi4OquVl4225wzQVM=
+	t=1770174574; cv=none; b=N0uKKEDTX8u/tlN862IaJwV/atZb2tjvrKBf19aCu2Kf21gLBDFb8hFqld5Riu1YECjZ0ucwr2hevtKj4fZkfCxl9aMkwYagjdL4tErqiI1HcxdSMtLLX51SsH19aoxTuKYzPxMNiFo1mvb8B86ODcvFxfaI7umpCG+llcTejzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770174571; c=relaxed/simple;
-	bh=EHbKQIVTqeIGKON9OiE4YL4MYDfTp8GxMi8M6dRx8yw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pGtHutWImamO14sEu3uYNooYP84t3z+w3lhTrEfjjpJO7wopP3BDT8OWoWFDxxR9kH/kNs3Ks6NVaZqCqiLj3eJZt/FMekggK0oD1faDLNmt6IbUo9jHSyHD4/K92O9z7C8cUCULlHG1DQzt5/UNQdyYCb28FZhWNsk6QaSDJf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WNgNs3/a; arc=none smtp.client-ip=209.85.216.54
+	s=arc-20240116; t=1770174574; c=relaxed/simple;
+	bh=nPjYYnHQxObuB0Ahuo6+NDJE4IlnvfXBohhhY94UzTk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=G9Jk9orMCftWST6v8SUBPr1IsPouN03AIeYIAVKTHhLi0jQX2tgSjbATXc+PfCZW+8siG8NSLIR2CpyfmHudoarMU0osYm6AsV7thZ9exTGSX+M5uB6dGwTmBtNeQcjgbJcLzjP7YhHTFwyr0bwbAo/OfoJlRzf0dtKx2TsINSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dWesp2o2; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WNgNs3/a"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-34c708702dfso3433854a91.1
-        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 19:09:30 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dWesp2o2"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a7bceb6cd0so43921835ad.1
+        for <bpf@vger.kernel.org>; Tue, 03 Feb 2026 19:09:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770174569; x=1770779369; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=neOpCYQFngkvhjSRp8EQNNDXnkfKVHtTaKJiutiskcU=;
-        b=WNgNs3/avDKWmeRlaJSB+ipZjEyFIPj45vZ7wJ8OKqiQp2OgBvNDH6dNwZ32NE6uAm
-         ZKEoSFH/FVVgXdb3bWBBJYjgLWSCkl/KcgIRjJhOtsFsTWLdE/gr0rnfxtwNqvIWrh2E
-         eREZKVOttkW7z4ZTIb1aQIUlfL7pcOyoQAmQf6xeNiuSKCzD97RkpJbHzt/P4rzXBXrx
-         DNl7smvYy8INUd6tG3LwSCe+T1iujkc8t6D5JjDEZFlYxhA36eMPhvesYAhWOxHUjloU
-         hEOOuyRTfloeIWQizU+R3vocJ82XrhHN3R4hHRjHf4GqPsoOiHKMH0/knY/mDO7vOp0g
-         l7OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770174569; x=1770779369;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1770174572; x=1770779372; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=neOpCYQFngkvhjSRp8EQNNDXnkfKVHtTaKJiutiskcU=;
-        b=FXZHE7Mhl20Se4/YNAmHXpuwbHBwxNJrvGWdeTYGQltjlkB1k7rabVwOGhzaq7gk/t
-         92ghC6dEHjNquFbvFl6u1mgob9S2ifeFQ/Ao4B8DCyvDYu1mogauBFhbQBvmh3J5D9iC
-         CmE6qy93/LSfxnB/hHUj1gjRZxEplk7yuuijHEzIXfGiz3cbjEhrYOOke/TVNg5byw6U
-         gTAFVHoxj26LfkbRAgg6W5kkYn5GHWhw8Mp5FH19ZkSpaEbvKFb0XT8aSVDEKnhaLJaH
-         OLC9Krz4rO8UWgw2sytkBjepPFlTsibG4oJ4BwDv3NmfQaqNaZ7oD+Wlqepik07xQWvK
-         zosw==
-X-Gm-Message-State: AOJu0YwGpZLBcsyJ3meKPl5LMkMWsvpziDOzDSsx1bgm68gZm3aGnj5Q
-	jRNZ4CYIAXyyc6rKRWFM8nhZumDX5cdNnuW4hsyp/imQm5kUFeXylwCDHfV6RA==
-X-Gm-Gg: AZuq6aLfvcmOfExqyYfeKF38PJBHoFaY/JKKVnVas0A2yzCrMnNfGLmlW43Q1TpVCIs
-	6qV9OEGfwYrKvgXy9w5ToBz986esrJ4EKXT5mlor+TsBmuZIQZEuE+rELxXDaruUkWD+Uj+6NLi
-	aOJwhKxJs7Q3d++rqmlfhJDuaqFu4OUykR29GgAOwArnnzBkczUPucZ3velYehXbwoOwb10rrjE
-	Ro1EDi5J/s51bcq4rpIjbqW54iktZZNnUU2aF7O2XrnHRBBc0cEPeyp56DzKQCM7qxzagLCxVua
-	PaLOAZGnMsknL/uixs6yem3Td59609/IEJ0Y4JnyIVTgR7DNlsVpDF2GYTyGTpARWmROVLuRysN
-	3pP4m6LXNTiZw2zJX9FLNAl8xXuAz9U2xJ6kLV72kORt2lKkhqk1/9dHh9Uo2t5/REL4geOUc7Y
-	FOuIxtaBjjupoDcT492P+xXzNRq5BH+pQL+F+9mHNtJVsz2RklXdDfn2kBfUuHAsUTeoJX0xuTr
-	KlDLhTJCo/PwluQNJHF7UPZGTn1d1KHwXyXP8sUbcsjmHXnmA==
-X-Received: by 2002:a17:90b:3d84:b0:34c:27ad:71e7 with SMTP id 98e67ed59e1d1-354871f826bmr1235202a91.35.1770174569598;
-        Tue, 03 Feb 2026 19:09:29 -0800 (PST)
+        bh=w//PdEvEK79u4CG5EQr9wEDM4RdGRC8XJ2Jm/hb6SdA=;
+        b=dWesp2o2ioWs/5SkpwpO3/2PNmmV7v8X9Vq1X9qKUgTNtqg3RLApaxnGHR+8CErnPQ
+         Z04Ela6yvZAkoUspy+cRU4bLUoJt9m+WmYY2UQw7bVV71g7wLswnfKSoQ7qrwaoBu+BZ
+         dFzvxB7lp/S+4eW8QQBgCUcAm0/xRRjjb1JwKWpcyOxwxFpR9jW7lgY/vd729zQQj+Md
+         TgvNyWsdsoe2L4Ubv6br9lpbfs/BLz5wnZh5jfo+TY3w+6Xo3z6TtXIWG4IHVtLgsznK
+         4rEwhJb1r9lUFeR1Rk/lEZBxkc+PDq6cf5f2TDqxAZj8Nn6VercG0v4RlBPHNoqIRY+o
+         NGnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770174572; x=1770779372;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=w//PdEvEK79u4CG5EQr9wEDM4RdGRC8XJ2Jm/hb6SdA=;
+        b=iRBCs4485GWz5tdLK0yC6m+11i77StVdKJJ1Y8PYoZgOeNq6R/5fR1A/3dfGvXwprx
+         TZvetFCV7T4QJbcz2FwStjD/LlEaU2I5oG2Id8Bm7W1DOD3ZYFGT7t+lIMFc1plIkNpS
+         JZQEGxTK6WXmxU8exCEc/+tBvAWlCbyjfP9548eQ5TCjFoFMzfcaKcPvp37ME5Di9w7F
+         OrOF7ELPNSXQJrYOzsdoeIZYL65anD1b5iIGVtEKZSXQtg8vZZ7zy88EzL9MJpkCt5cf
+         cd9hpM0IV0QdfhS9z3dOSIh/ELxtk3FcKN0rArHG+3vnd/J6om7k7pNmxOmzRGUUGSXP
+         USNQ==
+X-Gm-Message-State: AOJu0YwSQ6RDPDxfGSeVsO7wkhEN+6IgZEnaygINIZfHNORoObrsKzJy
+	90S+patPzS3W1tbyWvCstHx6z9JkfXqZ8z/yoJUNYOyH5+0sGUiJMan30KsLlw==
+X-Gm-Gg: AZuq6aIH3dsmMfv4dh+7j9m+lSiyGVumo9ToT7MihONdowjeW3CMzAPWbmN5kHlAT3W
+	r7+yBmNLGUEt+j7dxFEfIxzrMP75syrEqAjH7+ReO9wzPErF6cdyySga1Zw4PLL+Ki2MBdKLdrs
+	VMMkDqHejJ5AD0P8aE25toupolkUsZOz75hRbTdV+g9sg55sovBg3/hNoMYIrDs0CADjnmd6XEj
+	Wo4Qqg0XlkWmLOyhtb+SiaZoJ2rkbZtxSt2FrQnqaYhZaKu1F8MA6EKgBB3QPg3sR1o2PCxOTvx
+	ajk+Ke6VhgGsdj3S+HFhdBTp/ICy2wxizeF3wPArxHMyP6mozlAQqIVXbOYMymdovCM8JsuY7tA
+	2JqvqCN6aPdJH/h5Ep4d6Mh29buHNLhzfphTP8pNbkGzKQQ9Nf9tMO7F5a8bbVfpuBSgRdFf1oV
+	kTzTU+N1+5AQ+l2inmTCLFRHm5TgIeU2/Y6JHQWWxtrB2ip/d31vZ5LjyNkAikXXOj0uTee3eGB
+	bEg1vWc/KXdheVW64UOT+u9u8vpCZzq4q/ksdDYIJ18JbTzWw==
+X-Received: by 2002:a17:903:fa7:b0:2a3:e76d:e8e with SMTP id d9443c01a7336-2a933fcc930mr16278255ad.45.1770174572481;
+        Tue, 03 Feb 2026 19:09:32 -0800 (PST)
 Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-354862ef8a3sm879223a91.12.2026.02.03.19.09.28
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a9338b71b7sm7410965ad.44.2026.02.03.19.09.31
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 03 Feb 2026 19:09:29 -0800 (PST)
+        Tue, 03 Feb 2026 19:09:32 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -63,10 +65,12 @@ Cc: daniel@iogearbox.net,
 	martin.lau@kernel.org,
 	memxor@gmail.com,
 	mykyta.yatsenko5@gmail.com
-Subject: [PATCH bpf-next 1/2] bpf: Tighten conditions when timer/wq can be called synchronously
-Date: Tue,  3 Feb 2026 19:09:26 -0800
-Message-ID: <20260204030927.171-1-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: Add a testcase for deadlock avoidance
+Date: Tue,  3 Feb 2026 19:09:27 -0800
+Message-ID: <20260204030927.171-2-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260204030927.171-1-alexei.starovoitov@gmail.com>
+References: <20260204030927.171-1-alexei.starovoitov@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -77,90 +81,137 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-Though hrtimer_start/cancel() inlines all of the smaller helpers in
-hrtimer.c and only call timerqueue_add/del() from lib/timerqueue.c where
-everything is not traceable and not kprobe-able (because all files in
-lib/ are not traceable), there are tracepoints within hrtimer that are
-called with locks held. Therefore prevent the deadlock by tightening
-conditions when timer/wq can be called synchronously.
-hrtimer/wq are using raw_spin_lock_irqsave(), so irqs_disabled() is enough.
+Add a testcase that checks that deadlock avoidance is working
+as expected.
 
-Fixes: 1bfbc267ec91 ("bpf: Enable bpf_timer and bpf_wq in any context")
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/helpers.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ .../bpf/prog_tests/timer_start_deadlock.c     | 33 ++++++++
+ .../bpf/progs/timer_start_deadlock.c          | 75 +++++++++++++++++++
+ 2 files changed, 108 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/timer_start_deadlock.c
+ create mode 100644 tools/testing/selftests/bpf/progs/timer_start_deadlock.c
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index d4aedac14a60..0517e9a8fc7c 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1430,8 +1430,6 @@ static int bpf_async_update_prog_callback(struct bpf_async_cb *cb,
- static int bpf_async_schedule_op(struct bpf_async_cb *cb, enum bpf_async_op op,
- 				 u64 nsec, u32 timer_mode)
- {
--	WARN_ON_ONCE(!in_hardirq());
--
- 	struct bpf_async_cmd *cmd = kmalloc_nolock(sizeof(*cmd), 0, NUMA_NO_NODE);
- 
- 	if (!cmd) {
-@@ -1473,6 +1471,11 @@ static const struct bpf_func_proto bpf_timer_set_callback_proto = {
- 	.arg2_type	= ARG_PTR_TO_FUNC,
- };
- 
-+static bool defer_timer_wq_op(void)
+diff --git a/tools/testing/selftests/bpf/prog_tests/timer_start_deadlock.c b/tools/testing/selftests/bpf/prog_tests/timer_start_deadlock.c
+new file mode 100644
+index 000000000000..9f1f9aec8888
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/timer_start_deadlock.c
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include "timer_start_deadlock.skel.h"
++
++void test_timer_start_deadlock(void)
 +{
-+	return in_hardirq() || irqs_disabled();
++	struct timer_start_deadlock *skel;
++	int err, prog_fd;
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++
++	skel = timer_start_deadlock__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
++		return;
++
++	err = timer_start_deadlock__attach(skel);
++	if (!ASSERT_OK(err, "skel_attach"))
++		goto cleanup;
++
++	prog_fd = bpf_program__fd(skel->progs.start_timer);
++
++	/*
++	 * Run the syscall program that attempts to deadlock.
++	 * If the kernel deadlocks, this call will never return.
++	 */
++	err = bpf_prog_test_run_opts(prog_fd, &opts);
++	ASSERT_OK(err, "prog_test_run");
++	ASSERT_EQ(opts.retval, 0, "prog_retval");
++
++	ASSERT_EQ(skel->bss->tp_called, 1, "tp_called");
++cleanup:
++	timer_start_deadlock__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/timer_start_deadlock.c b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+new file mode 100644
+index 000000000000..368563747a46
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/timer_start_deadlock.c
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++
++#define CLOCK_MONOTONIC 1
++
++char _license[] SEC("license") = "GPL";
++
++struct elem {
++	struct bpf_timer timer;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 1);
++	__type(key, int);
++	__type(value, struct elem);
++} timer_map SEC(".maps");
++
++volatile int in_timer_start;
++volatile int tp_called;
++
++static int timer_cb(void *map, int *key, struct elem *value)
++{
++	return 0;
 +}
 +
- BPF_CALL_3(bpf_timer_start, struct bpf_async_kern *, async, u64, nsecs, u64, flags)
- {
- 	struct bpf_hrtimer *t;
-@@ -1500,7 +1503,7 @@ BPF_CALL_3(bpf_timer_start, struct bpf_async_kern *, async, u64, nsecs, u64, fla
- 	if (!refcount_inc_not_zero(&t->cb.refcnt))
- 		return -ENOENT;
- 
--	if (!in_hardirq()) {
-+	if (!defer_timer_wq_op()) {
- 		hrtimer_start(&t->timer, ns_to_ktime(nsecs), mode);
- 		bpf_async_refcount_put(&t->cb);
- 		return 0;
-@@ -1524,7 +1527,7 @@ BPF_CALL_1(bpf_timer_cancel, struct bpf_async_kern *, async)
- 	bool inc = false;
- 	int ret = 0;
- 
--	if (in_hardirq())
-+	if (defer_timer_wq_op())
- 		return -EOPNOTSUPP;
- 
- 	t = READ_ONCE(async->timer);
-@@ -1650,7 +1653,7 @@ static void bpf_async_cancel_and_free(struct bpf_async_kern *async)
- 	 * refcnt. Either synchronously or asynchronously in irq_work.
- 	 */
- 
--	if (!in_hardirq()) {
-+	if (!defer_timer_wq_op()) {
- 		bpf_async_process_op(cb, BPF_ASYNC_CANCEL, 0, 0);
- 	} else {
- 		(void)bpf_async_schedule_op(cb, BPF_ASYNC_CANCEL, 0, 0);
-@@ -3161,7 +3164,7 @@ __bpf_kfunc int bpf_wq_start(struct bpf_wq *wq, unsigned int flags)
- 	if (!refcount_inc_not_zero(&w->cb.refcnt))
- 		return -ENOENT;
- 
--	if (!in_hardirq()) {
-+	if (!defer_timer_wq_op()) {
- 		schedule_work(&w->work);
- 		bpf_async_refcount_put(&w->cb);
- 		return 0;
-@@ -4461,7 +4464,7 @@ __bpf_kfunc int bpf_timer_cancel_async(struct bpf_timer *timer)
- 	if (!refcount_inc_not_zero(&cb->refcnt))
- 		return -ENOENT;
- 
--	if (!in_hardirq()) {
-+	if (!defer_timer_wq_op()) {
- 		struct bpf_hrtimer *t = container_of(cb, struct bpf_hrtimer, cb);
- 
- 		ret = hrtimer_try_to_cancel(&t->timer);
++SEC("tp_btf/hrtimer_cancel")
++int BPF_PROG(tp_hrtimer_cancel, struct hrtimer *hrtimer)
++{
++	struct bpf_timer *timer;
++	static bool called = false;
++	int key = 0;
++
++	if (!in_timer_start)
++		return 0;
++
++	tp_called = 1;
++	timer = bpf_map_lookup_elem(&timer_map, &key);
++
++	/*
++	 * Call bpf_timer_start() from the tracepoint within hrtimer logic
++	 * on the same timer to make sure it doesn't deadlock,
++	 * and do it once.
++	 */
++	if (!called) {
++		called = true;
++		bpf_timer_start(timer, 1000000000, 0);
++	}
++	return 0;
++}
++
++SEC("syscall")
++int start_timer(void *ctx)
++{
++	struct bpf_timer *timer;
++	int key = 0;
++
++	timer = bpf_map_lookup_elem(&timer_map, &key);
++	/* claude may complain here that there is no NULL check. Ignoring it. */
++	bpf_timer_init(timer, &timer_map, CLOCK_MONOTONIC);
++	bpf_timer_set_callback(timer, timer_cb);
++
++	/*
++	 * call hrtimer_start() twice, so that 2nd call does
++	 * remove_hrtimer() and trace_hrtimer_cancel() tracepoint.
++	 */
++	in_timer_start = 1;
++	bpf_timer_start(timer, 1000000000, 0);
++	bpf_timer_start(timer, 1000000000, 0);
++	in_timer_start = 0;
++	return 0;
++}
 -- 
 2.47.3
 
