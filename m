@@ -1,128 +1,153 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491773D3307
-	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 12:25:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A7B63E8C7D
+	for <bpf@vger.kernel.org>; Wed,  4 Feb 2026 12:36:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770207935; cv=none; b=Khfw3qUMtHMRr2/kSt/7eX3prE01NvAYx4tyizXySmHK6+CuJZQICpfnJ15Xhn+CNxr+4cOk45sYl3zlRcSU6tBQ8c0V9g4yEoXy8j4x8dLDBvFSPTxPrsOdTqeegeh6+Kf6X6hyxy26J0p/GXYzNC3DB12FDMWGgGyOMJUD0wo=
+	t=1770208613; cv=none; b=QU27U6J/jx3f/u6SxlIDAQNZYJ20GOujacvoXuEVwiYV2lj574FKkoecElyFGziON3jiBm3e4M0v4/7zPriK5Dsquvz7lMpHSizVnfBA8B4xM4R4ugC6OEq18hZX1+ioZpcwqMOmkFByCvF6WLjvcrPQ5d0TNuVFtcXXqhP5rHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770207935; c=relaxed/simple;
-	bh=442GijrACNIyhOO1PCXlk5yOxBA5l2sO0BEtkSrO/ac=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qOQt9ysfLUWPcGvuE3pa3hFUTvSfzmXUoQZNs1Wkyw3u9xjldZibFtMSzN5kIh5WIfiNqvoxYEkMU1E4Q5sKd60FqX7V6NqCrVu6MO7UjJp+cSPVn21EWh4GXR98iDrwrlIE9DxXqjtnnDtV6qTG1/RK/RAKHbxDlU48u+uD5zw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=PW9jpWSq; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1770208613; c=relaxed/simple;
+	bh=ZUtUU8w3n1Ps+0zwZM+YcPHrIvjLtPw1rNq3K3A3tpg=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=X0cbs+mk7Y0nd4i6GhTGQsSxx5AHDz8mEr0aKtC+0VBOnvrtBW7QPIZ98B8tEtqRsxXhz8dB7gMqu2I1FC4R8flIi8bOfxlK3E1lDKbywBDm3T+vul8O+jx79negB9AGNWnVs4PwHKeXxtiMAAiExe9C7pyYvSzw9GZJea7iPu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Igsbuvq8; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="PW9jpWSq"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4801c2fae63so52390665e9.2
-        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 04:25:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Igsbuvq8"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4806bf39419so4973625e9.1
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 04:36:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1770207934; x=1770812734; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yH8MXVCKtWqJdP7mij43Xe3QvXlt93YlWk5c/5DsI+Y=;
-        b=PW9jpWSqEFr9vYeuiN1hEZNBDMAP07jDPrQVot+jcRcfJegIBAUAvqPFVp7nBjrQQI
-         RcRvvRS1Y+fiGd7s69W7A0f0LWwQPy77iG6HMiUJ0gwA789dYIpkIEjTWNiuhG6ujT0b
-         EwJvgAqMJpLi4o7lUxJAlAgjgNGjyWTAs0X+IiYYkrdyf4YmiYceQGpaVZGthYxXKxTZ
-         BhB47D8lOh+ef4Yr5tVL4P26LAqdtzFj0X1KjVj6DBTAUD6yhQ60gjCgyRU3BihFfo/7
-         jkeVDJzkiV84q6ClqArOmpmeMyawUu3Ti2iTIA7eebIk1fADUJFFRbKSMe+00e41LzD7
-         C9eg==
+        d=gmail.com; s=20230601; t=1770208612; x=1770813412; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=cmvHSszd0IlLpvYredQUSiRYBuWhyTBWjd5dWUF7dDw=;
+        b=Igsbuvq8qQSvGFE/RJyabwtmp/5NWxYmDJ7yugFitx1God5CgdtDSNzkJT/w/A8r3T
+         oex6L1acC6cRbU9Y/vUhNOnzdKAmtQH1tUtKm7rqr0sSwI3ID7xZgBdophD9Dp5HBkiX
+         kvaH3yeMP1PmSRJEC73mtSIbsXUxSli2euC0bH3UfGhV6JTZCh1v5kBUKdb8RyA+mNGQ
+         iC4RtiHy6dDFmjMeVG/dDMELakkw+XQDuu94PTbH3H8gpO2EkKxAxQc3eldD3ugfqEeL
+         6BsnKD+cmyuTUXqBkpMBH/6xXovd9xA/11XlvaOHCb/OqfacpqwgMQqNqfz9yYymdTBw
+         gCAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770207934; x=1770812734;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yH8MXVCKtWqJdP7mij43Xe3QvXlt93YlWk5c/5DsI+Y=;
-        b=tGy2yym4EseI+qwvWK/H9nhon+PoL/6eJVKYJLTWaLH+LxlyYUbQn+Iq+cJmJMtZ6i
-         RVweJiJ2AMvV3mun7P328itNFdJLjXPs0okv5LlNolPs9KC7nXKI2QaTJwN95gzozc81
-         OG/KmYdGv1R0yKRnLzTCsPuYrE6noc2Q1JYIGU2wgUHdRU8h8UjWu7rd909GBshAh0MY
-         mo8WwXXgUO1/xlaVNEbHN4hEbGmlLVqykFSbM6hhVNL6URKEiqEVJ4Ju4Eipfozw9Pgv
-         W3eBc7mHVHttYX6eiHsjdMd8ROfwIfkysX2dItUZ1r04cBMsT6qBU7INCN3wqpnK85xY
-         x8yQ==
-X-Gm-Message-State: AOJu0YyiFrhHsI1oDMBM9mcOeuIncpHcQco9jahVhue+s5LhCdeT/HxT
-	78Z+qf5kpsx0lqd/8a1KJMy2+WoDWxZC5IQsLYItz5LymPzb+mkZkSP+2zbpbufSi6U=
-X-Gm-Gg: AZuq6aJu6pcEm+S6HRW6vgsCCoDcdw4+lSb3xtDoTV1Vr3Bt98aExv8B09sjBlOp12M
-	X4ZKYkBhfklONYJhgmTA/y6UVKBJrXkCH/MzcXAu3rjI1STvRYoTKnmFXmjZCSjH43r/qq/4k/F
-	NQWB6HmIC1GJWWKzPCNR0n4fKrssOj61dP26WllDvfE+n7AEbqgGP7gFKQO4AL/AzIDroJUMFh5
-	zkaWJQ9c/1rCId8RbHmkumdxs7UQrws/knVNuJJMOnapJmGJRz7cE1V7Tsik0G4MqDfZMZX1EUB
-	KWuVAoe/6jy82oON25GUuospMdcUJz/1r7JUgo2ib+AtA6u9yhShD4+Ph/IX7vODzJxiLIJK4hi
-	IJtse+WworjRA5dyDzBK4/pclH239Lh4atFvch339a2V+tS8H6VqkHddJVmCSF5vKmeugR/BPcF
-	CE2zOORtDccA4SwIlh4mQmBaXq2ihA41bV+KnhG0SPjXcz
-X-Received: by 2002:a05:6000:240b:b0:435:9a4a:9b79 with SMTP id ffacd0b85a97d-43618052a8bmr3855745f8f.31.1770207933548;
-        Wed, 04 Feb 2026 04:25:33 -0800 (PST)
-Received: from [127.0.1.1] (24.162.85.79.rev.sfr.net. [79.85.162.24])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4361805f25dsm6377318f8f.29.2026.02.04.04.25.32
+        d=1e100.net; s=20230601; t=1770208612; x=1770813412;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cmvHSszd0IlLpvYredQUSiRYBuWhyTBWjd5dWUF7dDw=;
+        b=JXCWKDOZwoSQAtvKNlJbZJu/mdQqSFBVf4o3QvfuSMRTT8XUiTuF2vtINI+kh04xNQ
+         UUMYzlvpSEjhsm98WssS8on/LnHrZ5LsxAHgg2Q94+HOLCZfDgGQ5svr2Kj5zkj7dN5i
+         5RoBp4gHbsADWwj4pl+9oB+8qO44w/Ht8jcxIgIsXbxAa3LGcHKS0ygg/WO9hYgaX6PB
+         tDq3BK+MEqugTc4gUfTLQub2QN+BfaLrGDsiJbPNSr7qNOt1GKSNEen7TkALKpYQEI4+
+         fh6BL43VbS8jYrC3eWO0KCRKDGhBMHNa0f9475ybzoxRLdX8ylXlMTw1zajmhTzgAGQF
+         /jRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUZEoXqNC8RUgIYO376eMUV/10BBZMm4T7B9QRPQO0+qUTafvSq/CbYAEztglhMsqGjEmc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxtn+cxkx4EtOTCCBMZmDeqUMDZtd7RCfGaUCNpDRxEn68HxPl4
+	6CSFlS7BLnqdVEbs7mzpvNMINQEdZ0qrGd7cFGnqw1b49x/AZfe17Ynb
+X-Gm-Gg: AZuq6aLl2dppT3cgmmQ6j5xOgCj308KOYHDkm8h1w1JTNJ9qKkEVyllPVc2cNPAg/v9
+	7cSYsilLA074QrGcpQKRJh5uhQ2/3IMY2Qaj1LssS5EYnTyQccOqmTihFciBKa/+twzi+1oL/2f
+	BH8yM7EVW4yc9jUiuprlmRzf9PfrgsJOjapz0wYgeCYMZ0BWVhAEQ1iec4MkxobT1/HDMxAXFXZ
+	0ew7egCti3QYXPd2x2NfpeYmJH0fdYZE3vXD7oEXmaFtfe5VxDzg7U0AEiNaTxss7g5xxtfPXkO
+	VFkV4rM7ii/x6ogSquYRk7Xy+crEdbIoAd7sDXWZhL9Ab5y0G4zo+XRbIYM7Z9EEDPi0gUUK+ZX
+	4mgkJsmtcFffY2IEqWFEFaw8JGj0JH/4pyfGpx4+8ZrmrfmcaYPPwbh0lG2NU
+X-Received: by 2002:a05:600c:6209:b0:479:13e9:3d64 with SMTP id 5b1f17b1804b1-4830eb6540dmr35302075e9.15.1770208611368;
+        Wed, 04 Feb 2026 04:36:51 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::b44f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4831088ce39sm57168165e9.9.2026.02.04.04.36.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 04:25:33 -0800 (PST)
-From: Arthur Fabre <afabre@cloudflare.com>
-Date: Wed, 04 Feb 2026 13:24:56 +0100
-Subject: [PATCH bpf-next] bpf: Allow bpf_tcp_sock() helper in XDP
+        Wed, 04 Feb 2026 04:36:51 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Wed, 4 Feb 2026 13:36:49 +0100
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>
+Subject: Re: [RFC bpf-next 00/12] bpf: tracing_multi link
+Message-ID: <aYM9YUl6xf9I2x4c@krava>
+References: <20260203093819.2105105-1-jolsa@kernel.org>
+ <CAADnVQ+EU_f4LVDQkqkB0Q+QYMBH5ynXU3+rGZA2XCGmYMcFqg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260204-afabre-bpf_tcp_sock-v1-1-a22b40c630c0@cloudflare.com>
-X-B4-Tracking: v=1; b=H4sIAJc6g2kC/x2MQQqAIBAAvxJ7bmHVKOgrEWG21hKYaEQQ/T3pO
- DAzD2ROwhn66oHEl2Q5QgFVV+A2G1ZGWQqDJt2Spgatt3NinKOfThenfLgdleoWMq71xAZKGRN
- 7uf/rAMXEwPcJ4/t+BgR9928AAAA=
-X-Change-ID: 20260204-afabre-bpf_tcp_sock-117d03c6f0e3
-To: Martin KaFai Lau <martin.lau@linux.dev>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kernel-team@cloudflare.com, 
- wferguson@cloudflare.com, Arthur Fabre <afabre@cloudflare.com>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ+EU_f4LVDQkqkB0Q+QYMBH5ynXU3+rGZA2XCGmYMcFqg@mail.gmail.com>
 
-We can already lookup sockets in XDP via the bpf_sk(c)_lookup_(udp|tcp)
-helpers. This can be used to determine if a received packet is for an
-established socket or not, for example in a load balancer.
+On Tue, Feb 03, 2026 at 03:17:05PM -0800, Alexei Starovoitov wrote:
+> On Tue, Feb 3, 2026 at 1:38 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > hi,
+> > as an option to Meglong's change [1] I'm sending proposal for tracing_multi
+> > link that does not add static trampoline but attaches program to all needed
+> > trampolines.
+> >
+> > This approach keeps the same performance but has some drawbacks:
+> >
+> >  - when attaching 20k functions we allocate and attach 20k trampolines
+> >  - during attachment we hold each trampoline mutex, so for above
+> >    20k functions we will hold 20k mutexes during the attachment,
+> >    should be very prone to deadlock, but haven't hit it yet
+> 
+> If you check that it's sorted and always take them in the same order
+> then there will be no deadlock.
+> Or just grab one global mutex first and then grab trampolines mutexes
+> next in any order. The global one will serialize this attach operation.
+> 
+> > It looks the trampoline allocations/generation might not be big a problem
+> > and I'll try to find a solution for holding that many mutexes. If there's
+> > no better solution I think having one read/write mutex for tracing multi
+> > link attach/detach should work.
+> 
+> If you mean to have one global mutex as I proposed above then I don't see
+> a downside. It only serializes multiple libbpf calls.
 
-But the TCP TIME-WAIT state needs special handling for this: packets
-received for a TIME-WAIT socket can either belong to the current
-incarnation of the connection, or a new incarnation. The only way to
-determine this is to compare the sequence numbers.
+we also need to serialize it with standard single trampoline attach,
+because the direct ftrace update is now done under trampoline->mutex:
 
-Add the bpf_tcp_sock() helper in XDP to allow the socket sequence
-numbers to be read.
+  bpf_trampoline_link_prog(tr)
+  {
+    mutex_lock(&tr->mutex);
+    ...
+    update_ftrace_direct_*
+    ...
+    mutex_unlock(&tr->mutex);
+  }
 
----
-Signed-off-by: Arthur Fabre <afabre@cloudflare.com>
----
- net/core/filter.c | 2 ++
- 1 file changed, 2 insertions(+)
+for tracing_multi we would link the program first (with tr->mutex)
+and do the bulk ftrace update later (without tr->mutex)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index f04982d79d72e92f1b46ccd87633391e38c3da81..5e3a1951130369f070c3a373ea649bd10db412b6 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -8506,6 +8506,8 @@ xdp_func_proto(enum bpf_func_id func_id, const struct bpf_prog *prog)
- 		return &bpf_sk_release_proto;
- 	case BPF_FUNC_skc_lookup_tcp:
- 		return &bpf_xdp_skc_lookup_tcp_proto;
-+	case BPF_FUNC_tcp_sock:
-+		return &bpf_tcp_sock_proto;
- 	case BPF_FUNC_tcp_check_syncookie:
- 		return &bpf_tcp_check_syncookie_proto;
- 	case BPF_FUNC_tcp_gen_syncookie:
+  {
+    for each involved trampoline:
+      bpf_trampoline_link_prog
 
----
-base-commit: d95d76aa772bf94df353b015b1cb38303d4a415d
-change-id: 20260204-afabre-bpf_tcp_sock-117d03c6f0e3
+    --> and here we could race with some other thread doing single
+        trampoline attach
 
-Best regards,
--- 
-Arthur Fabre <afabre@cloudflare.com>
+    update_ftrace_direct_*
+  }
 
+note the current version locks all tr->mutex instances all the way
+through the update_ftrace_direct_* update
+
+I think we could use global rwsem and take read lock on single
+trampoline attach path and write lock on tracing_multi attach,
+
+I thought we could take direct_mutex early, but that would mean
+different order with trampoline mutex than we already have in
+single attach path
+
+or just sort those btf ids
+
+jirka
