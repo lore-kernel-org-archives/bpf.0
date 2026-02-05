@@ -1,36 +1,36 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33E31A5B8B;
-	Thu,  5 Feb 2026 01:26:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E231B29CEB;
+	Thu,  5 Feb 2026 01:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770254792; cv=none; b=PWh94Kv+T5STZINi0vLl/WDFAjm+QLxPEr/Jq248/UPNrUsTwaMZvNg5eqFP75qVGqo9Sb4NqwOOBQNq6bzcl1MopXX2CJCV+s+g7kTXwGCTBlPf4fn49jI3Q1UPDRAh836aneJ7gO29GvrKUVBy6bfcOxHvBgs2HEGAAu8hM2c=
+	t=1770255245; cv=none; b=QEbI7Vx4P8h5cpr4YszihzQfDQaJf63iKYS/mWfdnyBSgr93GP7PR6Gig7Hh+/47liG/FfOXBM8KkoEcFvrftVBXzdpSfdfmmQnSLJidoswyJ00BzRkVCNAcWdQBF5+NhWbwLJSI74q/lMblRNhwAc2qVOUEq4KWmGY4Y1Dwnls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770254792; c=relaxed/simple;
-	bh=hjxysTPajKK2FZ1aXORytluX1M7dwqbn4j8lWHCg0/c=;
+	s=arc-20240116; t=1770255245; c=relaxed/simple;
+	bh=0u0PVRNuSSgJ24J9RSkTtvGB/Sq3SToazqRzHf3k9oM=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Y6TbEU7w6UsdEb83PHXePH7Wt7pzzjIp5jDgRAh4W1Z3a4GXTG9d+sm3myWPQ5GcQYzyqb2Arg9lvlZBt4pNlzkToO2cygWDAfKeCsCVmulyglSG+o+zkGSwDj/YNmet96E/PyaOkJrbKldkpN4qTa/hlG5FMIEREcPDBhjzwcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GbBGR8QZ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=OVLlK5VM1vo41kmjKgEfgtkNovH3+1iaFlIElx4iZ2LPjOIoLB2+zbUbag+Uij2SCKwm8TgEIzNEEgtm0E5gDLrD4e4neNlrd7XjhUq0/cCYsXpNsWq5RDed6BSC875M3llo8hJ6MAD8dzWdVeq32AIXlyhoAiuv86oIBOLTDPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JvLrpYKJ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GbBGR8QZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD7CDC4CEF7;
-	Thu,  5 Feb 2026 01:26:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JvLrpYKJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE722C4CEF7;
+	Thu,  5 Feb 2026 01:34:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770254791;
-	bh=hjxysTPajKK2FZ1aXORytluX1M7dwqbn4j8lWHCg0/c=;
+	s=k20201202; t=1770255244;
+	bh=0u0PVRNuSSgJ24J9RSkTtvGB/Sq3SToazqRzHf3k9oM=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=GbBGR8QZRyQf1w+JGOdQufOHYIHqbhaclPKXQu+FPwVTQlYMbyJh4dsZ74ICk/u7i
-	 Yi+pqPsc7cWmSM5hwMlBzL2YH49kB5Bi+douYUfQnDepKf0Tr0ba2hOrn3+gGd87i4
-	 I25scu4d1CtYK+hfjhOWyuOqbBmZkY+nvlq9TbMSChhO2tpFji4BLg/oNoLVtGIOf5
-	 rHvFNsMv28+kKOAaOp+nh+43wyIFQ4TmylYSR17lufX08UxgD5ACPRVUmB1WM3iIaH
-	 wV7D/1DSzi7r5DprXmNxWWz3xon3gs3HJOvy6uMbc+7QJ9t/+S0WxqhZo8qouhkizf
-	 tJaDadsu0gvZg==
-Date: Wed, 4 Feb 2026 17:26:28 -0800
+	b=JvLrpYKJ+A2rWVs3m/oJxbPk0NKGBV3yMRqt1DguRhcao+2cLLgtrW+isjepeRdRm
+	 0KBV76gfQqSSxGOhOmvMM/RyLPDWlG9S1kHtvuZWyk6AXt/sEstH8IIJifkP/p6xIB
+	 BD1m4M+QGdw13h/YVfZwgxp2lTPt0aVOYTVn7ABLW4DNV9iMQ9A41ZZALHaJZNkFBx
+	 RThyPw3UfVlM+waX3tvsKyhHDU7VmBVhtNfnW38PH68F25bDbuyv+t/Y1Wb2aUrgSb
+	 SAdRL3rU2JebD0trLF5grO4sIulV/wTIwizO/fIbDW6lGkCaEIYz+l8uUs1BvfX/pc
+	 Qqeo72b6g/UsA==
+Date: Wed, 4 Feb 2026 17:34:01 -0800
 From: Jakub Kicinski <kuba@kernel.org>
-To: Larysa Zaremba <larysa.zaremba@intel.com>
-Cc: bpf@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir
- Oltean <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>, bpf@vger.kernel.org, Claudiu
+ Manoil <claudiu.manoil@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
  <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
  Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
  Abeni <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
@@ -47,16 +47,19 @@ Cc: bpf@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>, Vladimir
  <maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF Foundation)"
  <bastien.curutchet@bootlin.com>, Tushar Vyavahare
  <tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, "Ricardo
- B. =?UTF-8?B?TWFybGnDqHJl?=" <rbm@suse.com>, Eelco Chaudron
+ B. =?UTF-8?B?TWFybGniiJrCrnJl?=" <rbm@suse.com>, Eelco Chaudron
  <echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, Toke
  Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
  Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: Re: [PATCH bpf 0/6] Address XDP frags having negative tailroom
-Message-ID: <20260204172628.165ac4c8@kernel.org>
-In-Reply-To: <20260203105417.2302672-1-larysa.zaremba@intel.com>
+Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
+ frag_size
+Message-ID: <20260204173401.282899d0@kernel.org>
+In-Reply-To: <20260205005901.gnju3zmqimtgeu2b@skbuf>
 References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
+	<20260203105417.2302672-7-larysa.zaremba@intel.com>
+	<20260205005901.gnju3zmqimtgeu2b@skbuf>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,17 +69,40 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue,  3 Feb 2026 11:53:28 +0100 Larysa Zaremba wrote:
-> Many ethernet drivers report xdp Rx queue frag size as being the same as
-> DMA write size. However, the only user of this field, namely
-> bpf_xdp_frags_increase_tail(), clearly expects a truesize.
+On Thu, 5 Feb 2026 02:59:01 +0200 Vladimir Oltean wrote:
+> Thanks! This is an extremely subtle corner case. I appreciate the patch
+> and explanation.
+> 
+> I did run tests on the blamed commit (which I still have), but to catch
+> a real issue in a meaningful way it would have been required to have a
+> program which calls bpf_xdp_adjust_tail() with a very large offset.
+> I'm noting that I'm seeing the WARN_ON() much easier after your fix, but
+> before, it was mostly inconsequential for practical cases.
+> 
+> Namely, the ENETC truesize is 2048, and XDP_PACKET_HEADROOM is 256.
+> First buffers also contain the skb_shared_info (320 bytes), while
+> subsequent buffers don't.
 
-truesize may not be the most fortunate term.
-truesize is how much memory we charge to the skb (for memory management)
-which may relate to frag size in strange ways for strange HW :S
-I don't have a great term, but I have a feeling truesize already
-confuses driver developers.
+I can't wrap my head around this series, hope you can tell me where I'm
+going wrong. AFAICT enetc splits the page into two halves for small MTU.
 
-Note two our xdp.py tests covers tail adjust, I wonder if it would have
-caught this for you. Looking at Intel's results the XDP tests don't run
-due to missing BTF. Could you work with Adrian to address that?
+So we have 
+
+ |                 2k          |             2k              |
+  ----------------------------- ----------------------------- 
+ | hroom | data | troom/shinfo | hroom | data | troom/shinfo |
+  ----------------------------- ----------------------------- 
+
+If we attach the second chunk as frag well have:
+  offset = 2k + hroom
+  size = data.len
+But we use
+  truesize / frag_size = 2k
+so
+  tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
+  tailroom = 2k - data.len - 2k
+  tailroom = -data.len
+  WARN(tailroom < 0) -> yes
+
+The frag_size thing is unusable for any driver that doesn't hand out
+full pages to frags?
