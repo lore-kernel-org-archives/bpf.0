@@ -1,194 +1,206 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35CA728371
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 02:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C0F24677F
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 02:09:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770256824; cv=none; b=GsvPvHaCvNS4P9MDScyHBqCxdTJPgqsqGyGIAQ9Dl3BhOfNlrsoeLFE5VCif2UEDPnUH6VJX5saJHkLq79+Yz5mMUFy/RUt4D2LiueCPBC/aUFtiT41bBRQgKpbC+isKWQopxnpDfOJpGnR4FgZiAnrAg9Fd76tYRs0Fy1WuZlU=
+	t=1770257342; cv=none; b=DLjCdVLUyX6ANKrhHHcGFvCU+GOhAZvIF5wdE6XawMvFGyqJmDXoG7UWQEZ0mGCrzt7ESMvNHTm4J4idygd2xBagAYLajsDabKlTI0nJ/KAwJJ5JgdGwFVXq3K9T1Hvi64kHtFCfI0GEizjftLIHI7xm22V95zg8IT7IAfmJZXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770256824; c=relaxed/simple;
-	bh=RPY8u6waJi/HuYW0mbeBd/xg1THWsE0hqysKYejDC5M=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=nuiCs6RTFxe1bogrZi414sR0EgY8CgAHSq1sWH0oJGimQgcdXDcYOQp7DYepthOICLONW2/DPsG5yyXUY6+NslIQF79dWI7Vgke3xKkqGoHZiZBr9YNq4pIYjjy2GSRLxy1rIdJJ3wB7APSL6j1jMmxALJ5GlFCwUjM72flTHHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MUH9WLJQ; arc=none smtp.client-ip=91.218.175.186
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770257342; c=relaxed/simple;
+	bh=tBzbkz8256Vih7pxqt0jVZhcy/cBPl5M+E4b7BEl88w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NFqP8ePIsAgR9m8tlnGtRpsvev3eXN9CT+C45wRY5ZP2fgayG4qQxMIfrRNQnOJ5MjMPHiQnXNd0cAxZEGbF+Nd8fSGGOXC5Al/CVDW6zqxAHQAceMsYo/iPyI9aN5w0yZFdQ4FF8h0fMjokOTBm+hdgmaaz3S1IxMmfch7TMjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hVnudtFS; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MUH9WLJQ"
-Message-ID: <73175419-adbe-4108-a734-ff409ea3d1d4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770256812;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=uaUjf5w0ZQtbrwKPtByMT35wS6Q+83Y2s3WdA59KCpI=;
-	b=MUH9WLJQCOCKn277sZ389VrCKHFxwiqNCncv/7WwamG7jBrZ+LfrZGGgreP8fjYn2B6CGC
-	0pN68r9eiRafkfpp4rK28nYR5H/RnUKtVUu18o6UvevDSnXpFc0dUUfbZn4IfQy/Uwu+OS
-	lrxFt+g58o4BAGHJDXPCjjPHFZV2ofo=
-Date: Wed, 4 Feb 2026 18:00:05 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hVnudtFS"
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7945838691aso21934397b3.0
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 18:09:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770257341; x=1770862141; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4GxCia3YTkeFkXiAmt+I4fDEo9RUscZAHfRM1p4DBO4=;
+        b=hVnudtFSC8tn0RChyKvz9/fK92rwtywiP+C5SsoNnRxekkmSe1HPPAd1QYKzjlOIZr
+         TkmlcIPAcnMmr6LkY2my06vbfqzSCUvxxrGv0Rzg1PAGY4iTN9O+3KvYzIWMTuUfjnNU
+         Sft4XcN/AuggoCcUwjRN1gKK2TZHJG8XXUaPGrzfo81WEPt2vmPwQUUu6ZPMl2p+n9oe
+         IoZjfPlT0OB1VAEY7lc8BdCYt7eHCEPiC37me1GM0DuQ+AkyraaCfgrUOToGLTiNc4rb
+         XzmQOQ40BkWN2PNmOXGCPcuT/xCdgUUmWPVG7I7fz/fZPKkx3+XRGMwb+9L+MyMTAWza
+         SW+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770257341; x=1770862141;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4GxCia3YTkeFkXiAmt+I4fDEo9RUscZAHfRM1p4DBO4=;
+        b=SNIlFUgvsq9o9+7D0khDnOMCqWWrsDAmcm65M5+frRhKzupAWgHcsovSrh3h4ZwGje
+         JPNgyg3ab+MEHV+BqLaoJkKMw8dKrXHYB9CcU06+nXa93InlxJGNFCxww2wAsW0wyj48
+         IXLp1bpdpFHFOyRCxwsKFJdked9moqv6CqrSxPIY4CvdPDStavgkxWcL1b+iy8lFSZGf
+         7Uo7P4AnspvJ+2V5uyCHUHJfRTIW6uUT7ydWBx/1K/OQTlswdfc1fUB5f+vppa++bHSo
+         WB/pSFVI9eesOnZeYJVIXkH5x3bghvz26AnkOIQlIH8UAnmkrgflxUvLji1YBT9q4Csw
+         Qa0g==
+X-Forwarded-Encrypted: i=1; AJvYcCXz21R4B4bv9eVl0MNMPy6bQ8b0XW/C/aCpcQPiuL6fhNgpp0LV3Nkm8zxAx/vfJqrWFrA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxILrYNGctWkcnkfrp/CPOkTtJTdBcUArDPKPa9ZgbFVoJcffRZ
+	qAAXxEmnLkuPNHmSq+ajoa6id2lsBWJjT07Mo0zXYLduznxOIQeI/09L
+X-Gm-Gg: AZuq6aJSTgkBcJ9YvcjeZdNRjDAcIs4vQfv+b3oIpgEmcADj6B7G7QlGtsAHm68GQjS
+	0xo9FUu92NP/zTusIRn8VE4rEaq5LYrYNm+zYKy6H8Y99Xt1y8poO+QQmjDS8gjMGlITFqyU1Io
+	X5FVI4LQ54FH2C7HzS2tyx+5sFve21JESxRYUpnDQcH8Uag1v7TRcg+cjI7q3xsG8SgVihKnfEO
+	CsL6uUcGf8ggEwBMpnFQWZbnaeoM+Aeq7V5/2fGT+t2xDh3X2pHHUJYcOCLxGzZ0penM09/cUWJ
+	mS0BP0Dmn/HP5LuOo/QSev/vLS6mc8w4iNHGlG7Emt5DYKRyDtmBRNd+7NNjrSw6078H+B3FzHP
+	QtxtRRz8J2cNsnnmqWtSd32orJ9Q+cAh+w1/qSB4ARvvtKsUNZ7AX5aE4BjuVXJn3qKm0KfCDdk
+	H7wDwhuYSpgkPgey5bTYBrF+LvYXm3yGHZhdA=
+X-Received: by 2002:a05:690e:118b:b0:649:d5f9:6770 with SMTP id 956f58d0204a3-649e871b6e9mr1257455d50.6.1770257340589;
+        Wed, 04 Feb 2026 18:09:00 -0800 (PST)
+Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:5a::])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-649dc494810sm4033837d50.4.2026.02.04.18.09.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 18:09:00 -0800 (PST)
+Date: Wed, 4 Feb 2026 18:08:58 -0800
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: David Wei <dw@davidwei.uk>
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, davem@davemloft.net, razor@blackwall.org,
+	pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+	john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+	maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
+	toke@redhat.com, yangzhenze@bytedance.com,
+	wangdongdong.6@bytedance.com
+Subject: Re: [PATCH net-next v8 15/16] selftests/net: Add env for container
+ based tests
+Message-ID: <aYP7uiuPWAbJEgLD@devvm11784.nha0.facebook.com>
+References: <20260129222830.439687-1-daniel@iogearbox.net>
+ <20260129222830.439687-16-daniel@iogearbox.net>
+ <20260131163834.2c3d160d@kernel.org>
+ <9037828b-c7fd-4eb1-9dd8-19ee49063361@davidwei.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
- update
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: Kuniyuki Iwashima <kuniyu@google.com>, Alexei Starovoitov <ast@kernel.org>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
- edumazet@google.com, horms@kernel.org, jakub@cloudflare.com,
- john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- mhal@rbox.co, netdev@vger.kernel.org, pabeni@redhat.com
-References: <0f8ec4c7-5de4-4e0b-a50e-cf4f8d59709b@linux.dev>
- <20260204211436.1821958-1-kuniyu@google.com>
- <bf498b0f-7bdb-4668-b2de-80dbf9b0397f@linux.dev>
-Content-Language: en-US
-In-Reply-To: <bf498b0f-7bdb-4668-b2de-80dbf9b0397f@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9037828b-c7fd-4eb1-9dd8-19ee49063361@davidwei.uk>
 
+On Mon, Feb 02, 2026 at 07:53:34AM +0900, David Wei wrote:
+> On 2026-02-01 09:38, Jakub Kicinski wrote:
+> > On Thu, 29 Jan 2026 23:28:29 +0100 Daniel Borkmann wrote:
+> > > +class NetDrvContEnv(NetDrvEpEnv):
+> > > +    """
+> > > +    Class for an environment with a netkit pair setup for forwarding traffic
+> > > +    between the physical interface and a network namespace.
+> > 
+> > A little diagram would be pretty awesome to have here, and perhaps copy
+> > it to the README file too?
+> 
+> Sounds good, I'll add one. I forget how much you like ASCII diagrams.
+> 
+> > 
+> > > +    """
+> > > +
+> > > +    def __init__(self, src_path, rxqueues=1, **kwargs):
+> > > +        super().__init__(src_path, **kwargs)
+> > > +
+> > > +        self.require_ipver("6")
+> > > +        local_prefix = self.env.get("LOCAL_PREFIX_V6")
+> > > +        if not local_prefix:
+> > > +            raise KsftSkipEx("LOCAL_PREFIX_V6 required")
+> > > +
+> > > +        local_prefix = local_prefix.rstrip("/64").rstrip("::").rstrip(":")
+> > > +        self.ipv6_prefix = f"{local_prefix}::"
+> > > +        self.nk_host_ipv6 = f"{local_prefix}::2:1"
+> > > +        self.nk_guest_ipv6 = f"{local_prefix}::2:2"
+> > > +
+> > > +        self.netns = None
+> > > +        self._nk_host_ifname = None
+> > > +        self._nk_guest_ifname = None
+> > > +        self._tc_attached = False
+> > > +        self._bpf_prog_pref = None
+> > > +        self._bpf_prog_id = None
+> > > +        self._init_ns_attached = False
+> > 
+> > I'm not a Python expert but the pre-init of variables that are set
+> > later on in __init__() (on all possible paths) seems like a waste of LoC
+> 
+> It's so that exceptions thrown -> __del__() don't complain about
+> undefined vars.
+> 
+> > 
+> > > +
+> > > +        ip(f"link add type netkit mode l2 forward peer forward numrxqueues {rxqueues}")
+> > 
+> > Would we be able to do this with YNL?
+> > no big deal but always nice to avoid the dependency on very latest CLI
+> 
+> Hmm, I tried looking into this already. My understanding is that this
+> can be done in C but not currently in YNL, not without adding a spec.
+> 
+> > 
+> > > +        all_links = ip("-d link show", json=True)
+> > > +        netkit_links = [link for link in all_links
+> > > +                        if link.get('linkinfo', {}).get('info_kind') == 'netkit'
+> > > +                        and 'UP' not in link.get('flags', [])]
+> > 
+> > And of course if you use YNL you can actually ask Netlink to
+> > echo back / return to you what interface it ended up creating.
+> > No need for the scanning..
+> > 
+> > > +        if len(netkit_links) != 2:
+> > > +            raise KsftSkipEx("Failed to create netkit pair")
+> > > +
+> > > +        netkit_links.sort(key=lambda x: x['ifindex'])
+> > > +        self._nk_host_ifname = netkit_links[1]['ifname']
+> > > +        self._nk_guest_ifname = netkit_links[0]['ifname']
+> > > +        self.nk_host_ifindex = netkit_links[1]['ifindex']
+> > > +        self.nk_guest_ifindex = netkit_links[0]['ifindex']
+> > > +
+> > > +        self._setup_ns()
+> > > +        self._attach_bpf()
+> > 
+> > > +    def _setup_ns(self):
+> > > +        self.netns = NetNS()
+> > > +        cmd("ip netns attach init 1")
+> > > +        self._init_ns_attached = True
+> > > +        ip("netns set init 0", ns=self.netns)
+> > 
+> > Hm, refactor class NetNSEnter or just use its enter method?
+> 
+> I did consider this but I didn't feel like it fit the very specific
+> purpose of NetNSEnter. I needed the init ns to have a valid nsid from
+> within the test netns, which I didn't think many other tests would need.
+> 
+> > 
+> > > +        ip(f"link set dev {self._nk_guest_ifname} netns {self.netns.name}")
+> > > +        ip(f"link set dev {self._nk_host_ifname} up")
+> > > +        ip(f"-6 addr add fe80::1/64 dev {self._nk_host_ifname} nodad")
+> > > +        ip(f"-6 route add {self.nk_guest_ipv6}/128 via fe80::2 dev {self._nk_host_ifname}")
+> > > +
+> > > +        ip("link set lo up", ns=self.netns)
+> > > +        ip(f"link set dev {self._nk_guest_ifname} up", ns=self.netns)
+> > > +        ip(f"-6 addr add fe80::2/64 dev {self._nk_guest_ifname}", ns=self.netns)
+> > > +        ip(f"-6 addr add {self.nk_guest_ipv6}/64 dev {self._nk_guest_ifname} nodad", ns=self.netns)
+> > > +        ip(f"-6 route add default via fe80::1 dev {self._nk_guest_ifname}", ns=self.netns)
+> > > +
+> > > +    def _attach_bpf(self):
+> > > +        bpf_obj = self.test_dir / "nk_forward.bpf.o"
+> > > +        if not bpf_obj.exists():
+> > > +            raise KsftSkipEx("BPF prog not found")
+> > > +
+> > > +        cmd(f"tc filter add dev {self.ifname} ingress bpf obj {bpf_obj} sec tc/ingress direct-action")
+> > > +        self._tc_attached = True
+> > > +
+> > > +        tc_info = cmd(f"tc filter show dev {self.ifname} ingress").stdout
+> > 
+> > Don't we need to also add a qdisc if there isn't one already?
+> 
+> Sorry, why would qdisc be needed? The bpf prog attaches to tc. I don't
+> know anything about qdisc, though.
 
+The ingress qdisc is the attachment point. I think we need
+CONFIG_NET_SCH_INGRESS here too?
 
-On 2/4/26 4:55 PM, Martin KaFai Lau wrote:
-> 
-> 
-> On 2/4/26 1:09 PM, Kuniyuki Iwashima wrote:
->> From: Martin KaFai Lau <martin.lau@linux.dev>
->> Date: Wed, 4 Feb 2026 11:34:55 -0800
->>> On 2/4/26 7:41 AM, Michal Luczaj wrote:
->>>>>>>>> If the concern is the bpf iterator prog may use a released 
->>>>>>>>> unix_peer(sk)
->>>>>>>>> pointer, it should be fine. The unix_peer(sk) pointer is not a 
->>>>>>>>> trusted
->>>>>>>>> pointer to the bpf prog, so nothing bad will happen other than
->>>>>>>>> potentially reading incorrect values.
->>>
->>> I misremembered that following unix->peer would be marked as
->>> (PTR_TO_BTF_ID | PTR_UNTRUSTED). I forgot there are some legacy supports
->>> on the PTR_TO_BTF_ID (i.e. without PTR_UNTRUSTED marking).
->>>
->>>>>>>>
->>>>>>>> But if the prog passes a released peer pointer to a bpf helper:
->>>>>>>>
->>>>>>>> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0x95/0xb0
->>>>>>>> Read of size 1 at addr ffff888110654c92 by task test_progs/1936
->>>>>>
->>>>>> hmm... bpf_skc_to_unix_sock is exposed to tracing. bpf_iter is a 
->>>>>> tracing
->>>>>> bpf prog.
->>>>>>
->>>>>>>
->>>>>>> Can you cook a patch for this ? probably like below
->>>>>>
->>>>>> This can help the bpf_iter but not the other tracing prog such as 
->>>>>> fentry.
->>>>>
->>>>> Oh well ... then bpf_skc_to_unix_sock() can be used even
->>>>> with SEQ_START_TOKEN at fentry of bpf_iter_unix_seq_show() ??
->>>
->>> It is fine. The type is void.
->>>
->>>>>
->>>>> How about adding notrace to all af_unix bpf iterator functions ?
->>>
->>> but right, other functions taking [unix_]sock pointer could be audited.
->>> I don't know af_unix well enough to assess the blast radius or whether
->>> some useful functions may become untraceable.
->>
->> Considering SOCK_DGRAM, the blast radus is much bigger than
->> I thought, so I'd avoid this way if possible by modifying
->> the verifier.
->>
->>
->>>
->>>>>
->>>>> The procfs iterator holds a spinlock of the hashtable from
->>>>> ->start/next() to ->stop() to prevent the race with 
->>>>> unix_release_sock().
->>>>>
->>>>> I think other (non-iterator) functions cannot do such racy
->>>>> access with tracing prog.
->>>>
->>>> But then there's SOCK_DGRAM where you can drop unix_peer(sk) without
->>>> releasing sk; see AF_UNSPEC in unix_dgram_connect(). I think Martin is
->>>> right, we can crash at many fentries.
->>>>
->>>> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa4/0xb0
->>>> Read of size 2 at addr ffff888147d38890 by task test_progs/2495
->>>> Call Trace:
->>>>    dump_stack_lvl+0x5d/0x80
->>>>    print_report+0x170/0x4f3
->>>>    kasan_report+0xe1/0x180
->>>>    bpf_skc_to_unix_sock+0xa4/0xb0
->>>>    bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
->>>>    bpf_trampoline_6442564662+0x47/0xab
->>>>    unix_shutdown+0x9/0x880
->>>>    __sys_shutdown+0xe1/0x160
->>>>    __x64_sys_shutdown+0x52/0x90
->>>>    do_syscall_64+0x6b/0x3a0
->>>>    entry_SYSCALL_64_after_hwframe+0x76/0x7e
->>>
->>> This probably is the first case where reading a sk pointer requires a
->>> lock. I think it will need to be marked as PTR_UNTRUSTED in the verifier
->>> for the unix->peer access, so that it cannot be passed to a helper.
->>> There is a BTF_TYPE_SAFE_TRUSTED list. afaik, there is no untrusted 
->>> one now.
->>
->> Just skimmed the code, and I guess something like below would
->> do that ?  and if needed, we could add another helper to fetch
->> peer with a proper release function ?
->>
->> ---8<---
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 3135643d5695..ef8b4dd21923 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -7177,6 +7177,14 @@ static bool type_is_rcu_or_null(struct 
->> bpf_verifier_env *env,
->>       return btf_nested_type_is_trusted(&env->log, reg, field_name, 
->> btf_id, "__safe_rcu_or_null");
->>   }
->> +static bool type_is_untrusted(struct bpf_verifier_env *env,
->> +                  struct bpf_reg_state *reg,
->> +                  const char *field_name, u32 btf_id)
->> +{
->> +    /* TODO: return true if field_name and btf_id is unix_sock.peer. */
->> +    return false;
->> +}
->> +
->>   static bool type_is_trusted(struct bpf_verifier_env *env,
->>                   struct bpf_reg_state *reg,
->>                   const char *field_name, u32 btf_id)
->> @@ -7307,7 +7315,9 @@ static int check_ptr_to_btf_access(struct 
->> bpf_verifier_env *env,
->>            * A regular RCU-protected pointer with __rcu tag can also 
->> be deemed
->>            * trusted if we are in an RCU CS. Such pointer can be NULL.
->>            */
->> -        if (type_is_trusted(env, reg, field_name, btf_id)) {
->> +        if (type_is_untrusted(env, reg, field_name, btf_id)) {
->> +            flag |= PTR_UNTRUSTED;
-> 
-> Something like this but I think the PTR_UNTRUSTED marking should be done 
-> right after the clear_trusted_flags() where it is for supporting the 
-> depreciated PTR_TO_BTF_ID. Before that ...
-> 
-> Alexei, can you advise if we should change the verifier to mark 
-> PTR_UNTRUSTED on unix_sock->peer or we can deprecate the bpf_skc_to_* 
-> helper support from tracing and ask the user to switch to bpf_core_cast 
-> (i.e. bpf_rdonly_cast) by using a WARN_ON_ONCE message?
-
-After trying more, taking out bpf_skc_to_* is not enough. It still needs 
-to reject passing unix->peer to bpf_setsockopt for bpf_iter, so 
-PTR_UNTRUSTED mark is needed.
-
-> 
-> The problem is that the unix_sock->peer pointer is not always valid when 
-> passing to the bpf_skc_to_* helpers, so it is a UAF.
-> 
-
+Best,
+Bobby
