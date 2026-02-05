@@ -1,152 +1,335 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1210F2EC55C
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 17:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770313207; cv=pass; b=b9DG/mbv9benHykRQVjfNfhK+EbR/0u5/CK8QT7U1IHXOOQxJJKCD4zIw4M9L4513abGWYoaOLiCqOMYN0kW34BE7rj/uvYSBIJiUWgAbir79SAvQKQsaHvxocfmyXOIi1/TVJxWr5v5p26GMcKqXV6/K5apOqTgrWOUPqEjYSY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770313207; c=relaxed/simple;
-	bh=zVdpqwYG7PaWa4bf5lLIQyx/ODHwgnQIuFEz6lmmX2I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uVnUUqyUHzqbujYq4fFYObdMb0v48owedH3RZ1sABcoWtLZT3oIrpHXqBgQAYKwjGMZvA8DhfrPfoVflHLI2qtPpOHYwaCxgCtQ99YukcJGWYGmngDTmbvpk4kxdCs/g2xMdT9yyDbGti6A5tb0BV2KJtXsGlbgS4+NahvZllU4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YjkKGPEw; arc=pass smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5733033C8;
+	Thu,  5 Feb 2026 17:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770314368; cv=none; b=qKJEFSwAvpkuXgyf2MW3alNVlkj6OvzhE9djbg/QfcwLlYL1jugoF8cMpNs2PoSNfpTLNLpeqTzqPXsvWVCThTu8BZF3FsmtiWgHB5zoTvFobs6pF6blOmJ66w4wWt82xvcD/daMgi7xkrSHvAVpVLAnF+dr2KY5VUGWAhzY0gk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770314368; c=relaxed/simple;
+	bh=NhzhwITI9ZBOqgCkCO1eRGUL4UGRqOM83DHf5ZgY1ds=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eRfDtRPpsvELsKhuAnNbFjzmbCS1ly/kwcvSMP4zF9lgs/s1vrSFKQkao446m0gQ04a0DJPOi0cZ7ccu/2juORTvW+oEeQ51HwcdE91DiwPklGeLe+cxFeJiAiJtmySNUvowRLCIdB4sE5SM/4jRcd3Q1VOfR+ArFxT8wH93t8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lRSPxXPy; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YjkKGPEw"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-29efd139227so9572015ad.1
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 09:40:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770313206; cv=none;
-        d=google.com; s=arc-20240605;
-        b=GJLvovqOUnUdJh0kxvNLMPFaY+oj7rgDo3aYQ8NjHJSYxkbiaszZGTfTTd3hGMbh6Z
-         v94gWU8n+IfCheerf/+BCjOtCOItCHbuf12daaXchf+2f0ElH4IBAxabrlXYWWC+9YoZ
-         tLmNeFoAfbguMUJjLvxIWn1sSqKsuuan71pc+uDG2bE+I1UPmPalUovjaaM5OKa42sUs
-         TbWJLlQgXqe3vBRu9wE6O4htPEReBjrjxYGCPJOFU6KD5YmEYOZAy2w6FGT9ssDUxHxe
-         clWoTRhFnnj5KaF3yxa5keN3TLy/Q3wdCoszHn19fP/Lc07RLD66n7nhECo9yM83/MFF
-         YvVg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=zVdpqwYG7PaWa4bf5lLIQyx/ODHwgnQIuFEz6lmmX2I=;
-        fh=/y+bwH9IQgpfgvKMwCbRdBKFjGilnt1VTlnU4VJFXms=;
-        b=NG0iFXKwIZs5tf/tHQP9dgFyeJYgz7jvhFI9Qy+Kzcf9XGuvaCh0J0phfGgLD9XgMl
-         dls1+/eV57M+IV/q3YX9KrYGZMe7KPADLo05NrWIwDgb33a/J1rdENLVnT9Uzsa0ICkB
-         L5igk85VcOkM0yQU08KcEoeG+D+Jm7z+ABAoAoQgGmYs9pJHVPr3KOPVEexAzcSyzKtX
-         Vp3NVak8w/vZNIokwj4a9TCBI93Tmg3C7GT4UDqi5e58rGUtEaeSw4KeKgIwrv3AG37D
-         c/xaqkhbi93GN9ruK0Dd5oAO4TyA30IN8Dc6IajMUtnY/kpa92AqgC8uPO+D72rR8bWM
-         iWog==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770313206; x=1770918006; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zVdpqwYG7PaWa4bf5lLIQyx/ODHwgnQIuFEz6lmmX2I=;
-        b=YjkKGPEw7VZ/omN9NQpgylRuCzrQ5YVnuJ/nXqQWulAyDaxakZq0Y6+rjXTMr0kKvT
-         Dhvap0fAJOKa7f1emShykvsNK3w+sg9NFBTOMwftrJ9E3+O6EQcUC0P1Boa2UNkaKKNW
-         N9JiIYi03jw0+0rOeYrP1JCjrzXLyevE1GWOj+C3A5v/onCJUWttiSJdn+ZhXwmi2/jW
-         LINrIPyzNLHEsH8dRqSRB2jIvZkaRR7wTJGOy2spnkpowWyQShOgNo5PdAWPCcIZI16J
-         66oPFD8CDXDUnJhuBPrVK3SUKE83gZoKrQETdwKxQkIWBzjm9siJLQabrMLHDXeVs3Je
-         OvHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770313206; x=1770918006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=zVdpqwYG7PaWa4bf5lLIQyx/ODHwgnQIuFEz6lmmX2I=;
-        b=Xk4i0PFl+GQ5YLvhnRTqMwAYA803OToSkr7BiIxVoco4Ror/L02Zj4xw6cG0vrXZxj
-         BS76SiFzMdoGmzikR92QQIdG8bdpnva5ZsdIntX1ZM0CzFqIu2BBIsCVpiNVu8P5+eW4
-         M8lt0SOkARookLJdPyNe7mmgZ3JghglF3xHf/ouEwgvPmvSdMvwHpViTCj5dPIebsJ48
-         pZWsFrAUU4SX0jVWJ3V7mTnRomRqTJqMrpAgussmZaR95ayV9hYiVBv+wSzOIrQrs/f9
-         KEZnWJ0bhiQhAM3Pur8aV8xbL50LHKdT8Boo4gz9pW5zo6Jpyi/YeWwhTGrqgxG42jyp
-         Cz8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWc7dubWr+F+EJ/8qpzvfoJYgaryDStdPHwBypILONbHJnzyPk0j+UTnwfuq8QRyLal+pw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTc8iD+2d38EIKX8sQ3r7Heu5gb4cTbCByZwJXEbxC7GeIU0+f
-	9KcurtAcQDHQ/H/vwOdveiZs3r3nivBpMLvYVVClTYI/WCgg1aKhqUmKUdIc8gZoj+WyCarfqHm
-	RrBY1WV0s4ZLaqPeUSPU3Sb3LKCVk+b0=
-X-Gm-Gg: AZuq6aJGNo/6VaULQLcf8mpGJmMDqPcZzfPIiZ3kn5tBCY4JgfWpkiRchpI+aMNi6UD
-	iACLIhSnNzL1nqLQqZ6OMYaky/cnVtxmctAhZtUpPyDscBdrpZR+xXP8TabgUTft+/ojIXk+0h5
-	NoL6hfg/Xfu1yq4MmZIpD8XOVRXa/z7/uolpZL/2MyGzne7cY84FjTEAl519pZ3jfm7HGELXx3u
-	eesyXz6gcRCDLv7DlC1CXZM2Ej2x2F8A/wAp/HwvuZikN2gOTXBmDHW2M9W88aBvQOTtbxU2Pss
-	zP1rMqbcvgA=
-X-Received: by 2002:a17:902:e54a:b0:2a7:952f:97c3 with SMTP id
- d9443c01a7336-2a951646166mr735095ad.21.1770313206319; Thu, 05 Feb 2026
- 09:40:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lRSPxXPy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770314368; x=1801850368;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NhzhwITI9ZBOqgCkCO1eRGUL4UGRqOM83DHf5ZgY1ds=;
+  b=lRSPxXPya21uDhJ1tPfp1UNFSt35mQKqpxsvIGgyQAxAlfQnDkvPuGFp
+   wljR2DUojZBuE2w/Q8LED1NCAjF7LwWBLSEW3dTmas//4VZB9abaGZrJi
+   13RZoDbMMe8/7+IeEdMgq00x4JP2L8r7vpR9tlbGS0mv+VN2zoH71IpEk
+   Ar8NMNcMS+ia/0h2qql+GZSKfwZXI0GlT7dYoK2cG8WJ2I0Hnl53OwY28
+   FfWk1Mwf0qF6agvS3bvHO+B6vTwDDlQMd/dgIVa5U754pUtyjo+uDuv3P
+   rLAuOfsRQ2gKenSTtEq0Lz9QIX9xfgLVSc6NI/9Ogtn/BTsdWOJeHTPCm
+   g==;
+X-CSE-ConnectionGUID: aVzHUc9tQgmjh1YWv6as3A==
+X-CSE-MsgGUID: qrRH0wnYRre2VF6yJan8sA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="70714607"
+X-IronPort-AV: E=Sophos;i="6.21,275,1763452800"; 
+   d="scan'208";a="70714607"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 09:59:27 -0800
+X-CSE-ConnectionGUID: AMadNLnoR8imejMCY6honQ==
+X-CSE-MsgGUID: MjlpLEqHQce48LJ0uGeHOQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,275,1763452800"; 
+   d="scan'208";a="210569208"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 05 Feb 2026 09:59:24 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vo3dS-00000000k5C-1E0r;
+	Thu, 05 Feb 2026 17:59:22 +0000
+Date: Fri, 6 Feb 2026 01:58:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: Feng Yang <yangfeng59949@163.com>, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] bpf: test_run: Fix the null pointer dereference issue
+ in bpf_lwt_xmit_push_encap
+Message-ID: <202602060101.PefMJeTB-lkp@intel.com>
+References: <20260205092227.126665-1-yangfeng59949@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260126142118.2ea3cf13@gandalf.local.home> <CAEf4Bzax24jJVDs2bBiJuz1ZuuDihsb5Xq8pGcy18vLUMMLxbg@mail.gmail.com>
- <20260126192010.4f14bcb9@gandalf.local.home> <CAEf4BzZ0cYkJ-3Kt-O+2FTvTEirS7cSuea2swgaom18Q_sve4A@mail.gmail.com>
- <CAP_z_CgozbHejsuKeLRQHN-bz5jPA+C+c0GBNitgEvwOucm8TQ@mail.gmail.com>
- <CAEf4Bza91wTWzESxAyz5qP4e8siwGn=rvm-Few6xT_VpW9oJzw@mail.gmail.com>
- <CAP_z_ChhkA1W_5Bd0GQYpo2Vb-p-zP+Lbdp1cZw8Fr_WHQ=TcQ@mail.gmail.com>
- <CAEf4BzaSgmgzqfjToDx-O3BRKNZECJeeLpN81yNNWGF+N_uMNQ@mail.gmail.com>
- <CAP_z_Choy4Pe_VgdxwFzkUo4P71+TA=xAM8kov8QacGpRS5irg@mail.gmail.com>
- <CAEf4BzaEiQ8FApp1KMrCvsBVs+xLrk_mtQFUCfXZ3co2D6Oayg@mail.gmail.com>
- <20260130152400.6a71abb8@gandalf.local.home> <CAP_z_CjZWFqyKAti_NLtq7QhiJfwVXhohakQh2yEFS_vLsb4zw@mail.gmail.com>
- <CAEf4BzYq117=EbJ1ovpr0YBQr=myvxwF4uetO5umL4P27yAcDw@mail.gmail.com> <CAP_z_Cj9Z0q-UrJUKgrb4vQ_sTQbyN-aN2GM-ZvPLNsvcS9k-w@mail.gmail.com>
-In-Reply-To: <CAP_z_Cj9Z0q-UrJUKgrb4vQ_sTQbyN-aN2GM-ZvPLNsvcS9k-w@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 5 Feb 2026 09:39:54 -0800
-X-Gm-Features: AZwV_QhHx7UarewTKsOadJzQl3Ep9pOsdRH42oyfWawBLkibYYXX9AVjpiBK3M8
-Message-ID: <CAEf4BzZ=oawwbEtTOOEsVsoUkJsuAqLietyQHf8QVa5D7U5P-A@mail.gmail.com>
-Subject: Re: BPF with deferred stacktrace and sframes?
-To: Blake Jones <blakejones@google.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260205092227.126665-1-yangfeng59949@163.com>
 
-On Wed, Feb 4, 2026 at 5:51=E2=80=AFPM Blake Jones <blakejones@google.com> =
-wrote:
->
-> Hi Andrii,
->
-> On Fri, Jan 30, 2026 at 2:03=E2=80=AFPM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> > > Yep Steve, your explanation sounds correct to me. If there was a way
-> > > of storing a non-constant amount of metadata in something like
-> > > task-local storage, I would have a solution.
-> >
-> > There isn't (AFAIA), but you can approximate that with a global
-> > hashmap keyed by task's pid + whatever the original per-task key you
-> > needed.
->
-> My original per-task key did include the kernel stack trace ID, as
-> stored in a global hash map by bpf_get_stackid(); if I understood you
-> right, that's what you suggested in your reply to Steve as well. But I
-> don't see how the task_work handler that gets the user stack trace
-> would be able to find any hash map entries stored under that key,
-> since it would be operating from a different location (and thus also
-> from different stack traces) than the profiler. Could you help me
-> understand this, please?
+Hi Feng,
 
-Ok, I think I see the confusion. You need to look up how task_work
-(and, similarly, timer and wq callbacks) work from BPF usage
-perspective. You basically get your custom context data passed to you
-in the same map value, so in this case you can have that entire
-hashmap value as your context by just embedding task_work field into
-your hashmap value. You will be given that same exact key and value,
-so you don't even need to look up anything.
+kernel test robot noticed the following build warnings:
 
-Just look at the BPF selftest for examples (grep for
-bpf_task_work_schedule_resume), note what the callback gets passed in
-(map+key+value).
+[auto build test WARNING on bpf-next/net]
+[also build test WARNING on bpf-next/master bpf/master net-next/main net/main linus/master v6.19-rc8 next-20260205]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
-> Regarding the rest of the discussion - what I'm hearing is that the
-> need to handle asynchronous user stack traces is just part and parcel
-> of any decision to switch to SFrames, and it's up to each user to
-> decide how that cost/benefit tradeoff works for them. That makes sense
-> to me.
+url:    https://github.com/intel-lab-lkp/linux/commits/Feng-Yang/bpf-test_run-Fix-the-null-pointer-dereference-issue-in-bpf_lwt_xmit_push_encap/20260205-172527
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
+patch link:    https://lore.kernel.org/r/20260205092227.126665-1-yangfeng59949%40163.com
+patch subject: [PATCH v2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+config: hexagon-randconfig-r132-20260205 (https://download.01.org/0day-ci/archive/20260206/202602060101.PefMJeTB-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260206/202602060101.PefMJeTB-lkp@intel.com/reproduce)
 
-yep, pretty much
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602060101.PefMJeTB-lkp@intel.com/
 
->
-> Blake
+sparse warnings: (new ones prefixed by >>)
+   net/bpf/test_run.c:617:18: sparse: sparse: symbol 'bpf_kfunc_call_test_release_dtor' was not declared. Should it be static?
+   net/bpf/test_run.c:627:18: sparse: sparse: symbol 'bpf_kfunc_call_memb_release_dtor' was not declared. Should it be static?
+>> net/bpf/test_run.c:984:18: sparse: sparse: symbol 'bpf_test_run_lwt_xmit_dst' was not declared. Should it be static?
+
+vim +/bpf_test_run_lwt_xmit_dst +984 net/bpf/test_run.c
+
+   983	
+ > 984	struct dst_entry bpf_test_run_lwt_xmit_dst;
+   985	int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+   986				  union bpf_attr __user *uattr)
+   987	{
+   988		bool is_l2 = false, is_direct_pkt_access = false, is_lwt = false;
+   989		u32 tailroom = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+   990		struct net *net = current->nsproxy->net_ns;
+   991		struct net_device *dev = net->loopback_dev;
+   992		u32 headroom = NET_SKB_PAD + NET_IP_ALIGN;
+   993		u32 linear_sz = kattr->test.data_size_in;
+   994		u32 repeat = kattr->test.repeat;
+   995		struct __sk_buff *ctx = NULL;
+   996		struct sk_buff *skb = NULL;
+   997		struct sock *sk = NULL;
+   998		u32 retval, duration;
+   999		int hh_len = ETH_HLEN;
+  1000		void *data = NULL;
+  1001		int ret;
+  1002	
+  1003		if ((kattr->test.flags & ~BPF_F_TEST_SKB_CHECKSUM_COMPLETE) ||
+  1004		    kattr->test.cpu || kattr->test.batch_size)
+  1005			return -EINVAL;
+  1006	
+  1007		if (kattr->test.data_size_in < ETH_HLEN)
+  1008			return -EINVAL;
+  1009	
+  1010		switch (prog->type) {
+  1011		case BPF_PROG_TYPE_SCHED_CLS:
+  1012		case BPF_PROG_TYPE_SCHED_ACT:
+  1013			is_direct_pkt_access = true;
+  1014			is_l2 = true;
+  1015			break;
+  1016		case BPF_PROG_TYPE_LWT_IN:
+  1017		case BPF_PROG_TYPE_LWT_OUT:
+  1018		case BPF_PROG_TYPE_LWT_XMIT:
+  1019			is_lwt = true;
+  1020			fallthrough;
+  1021		case BPF_PROG_TYPE_CGROUP_SKB:
+  1022			is_direct_pkt_access = true;
+  1023			break;
+  1024		default:
+  1025			break;
+  1026		}
+  1027	
+  1028		ctx = bpf_ctx_init(kattr, sizeof(struct __sk_buff));
+  1029		if (IS_ERR(ctx))
+  1030			return PTR_ERR(ctx);
+  1031	
+  1032		if (ctx) {
+  1033			if (ctx->data_end > kattr->test.data_size_in || ctx->data || ctx->data_meta) {
+  1034				ret = -EINVAL;
+  1035				goto out;
+  1036			}
+  1037			if (ctx->data_end) {
+  1038				/* Non-linear LWT test_run is unsupported for now. */
+  1039				if (is_lwt) {
+  1040					ret = -EINVAL;
+  1041					goto out;
+  1042				}
+  1043				linear_sz = max(ETH_HLEN, ctx->data_end);
+  1044			}
+  1045		}
+  1046	
+  1047		linear_sz = min_t(u32, linear_sz, PAGE_SIZE - headroom - tailroom);
+  1048	
+  1049		data = bpf_test_init(kattr, linear_sz, linear_sz, headroom, tailroom);
+  1050		if (IS_ERR(data)) {
+  1051			ret = PTR_ERR(data);
+  1052			data = NULL;
+  1053			goto out;
+  1054		}
+  1055	
+  1056		sk = sk_alloc(net, AF_UNSPEC, GFP_USER, &bpf_dummy_proto, 1);
+  1057		if (!sk) {
+  1058			ret = -ENOMEM;
+  1059			goto out;
+  1060		}
+  1061		sock_init_data(NULL, sk);
+  1062	
+  1063		skb = slab_build_skb(data);
+  1064		if (!skb) {
+  1065			ret = -ENOMEM;
+  1066			goto out;
+  1067		}
+  1068		skb->sk = sk;
+  1069	
+  1070		data = NULL; /* data released via kfree_skb */
+  1071	
+  1072		skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
+  1073		__skb_put(skb, linear_sz);
+  1074	
+  1075		if (unlikely(kattr->test.data_size_in > linear_sz)) {
+  1076			void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+  1077			struct skb_shared_info *sinfo = skb_shinfo(skb);
+  1078			u32 copied = linear_sz;
+  1079	
+  1080			while (copied < kattr->test.data_size_in) {
+  1081				struct page *page;
+  1082				u32 data_len;
+  1083	
+  1084				if (sinfo->nr_frags == MAX_SKB_FRAGS) {
+  1085					ret = -ENOMEM;
+  1086					goto out;
+  1087				}
+  1088	
+  1089				page = alloc_page(GFP_KERNEL);
+  1090				if (!page) {
+  1091					ret = -ENOMEM;
+  1092					goto out;
+  1093				}
+  1094	
+  1095				data_len = min_t(u32, kattr->test.data_size_in - copied,
+  1096						 PAGE_SIZE);
+  1097				skb_fill_page_desc(skb, sinfo->nr_frags, page, 0, data_len);
+  1098	
+  1099				if (copy_from_user(page_address(page), data_in + copied,
+  1100						   data_len)) {
+  1101					ret = -EFAULT;
+  1102					goto out;
+  1103				}
+  1104				skb->data_len += data_len;
+  1105				skb->truesize += PAGE_SIZE;
+  1106				skb->len += data_len;
+  1107				copied += data_len;
+  1108			}
+  1109		}
+  1110	
+  1111		if (ctx && ctx->ifindex > 1) {
+  1112			dev = dev_get_by_index(net, ctx->ifindex);
+  1113			if (!dev) {
+  1114				ret = -ENODEV;
+  1115				goto out;
+  1116			}
+  1117		}
+  1118		skb->protocol = eth_type_trans(skb, dev);
+  1119		skb_reset_network_header(skb);
+  1120	
+  1121		switch (skb->protocol) {
+  1122		case htons(ETH_P_IP):
+  1123			sk->sk_family = AF_INET;
+  1124			if (sizeof(struct iphdr) <= skb_headlen(skb)) {
+  1125				sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
+  1126				sk->sk_daddr = ip_hdr(skb)->daddr;
+  1127			}
+  1128			break;
+  1129	#if IS_ENABLED(CONFIG_IPV6)
+  1130		case htons(ETH_P_IPV6):
+  1131			sk->sk_family = AF_INET6;
+  1132			if (sizeof(struct ipv6hdr) <= skb_headlen(skb)) {
+  1133				sk->sk_v6_rcv_saddr = ipv6_hdr(skb)->saddr;
+  1134				sk->sk_v6_daddr = ipv6_hdr(skb)->daddr;
+  1135			}
+  1136			break;
+  1137	#endif
+  1138		default:
+  1139			break;
+  1140		}
+  1141	
+  1142		if (is_l2)
+  1143			__skb_push(skb, hh_len);
+  1144		if (is_direct_pkt_access)
+  1145			bpf_compute_data_pointers(skb);
+  1146	
+  1147		ret = convert___skb_to_skb(skb, ctx);
+  1148		if (ret)
+  1149			goto out;
+  1150	
+  1151		if (kattr->test.flags & BPF_F_TEST_SKB_CHECKSUM_COMPLETE) {
+  1152			const int off = skb_network_offset(skb);
+  1153			int len = skb->len - off;
+  1154	
+  1155			skb->csum = skb_checksum(skb, off, len, 0);
+  1156			skb->ip_summed = CHECKSUM_COMPLETE;
+  1157		}
+  1158	
+  1159		if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
+  1160			bpf_test_run_lwt_xmit_dst.dev = dev;
+  1161			skb_dst_set(skb, &bpf_test_run_lwt_xmit_dst);
+  1162		}
+  1163		ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
+  1164		if (prog->type == BPF_PROG_TYPE_LWT_XMIT)
+  1165			skb_dst_set(skb, NULL);
+  1166		if (ret)
+  1167			goto out;
+  1168		if (!is_l2) {
+  1169			if (skb_headroom(skb) < hh_len) {
+  1170				int nhead = HH_DATA_ALIGN(hh_len - skb_headroom(skb));
+  1171	
+  1172				if (pskb_expand_head(skb, nhead, 0, GFP_USER)) {
+  1173					ret = -ENOMEM;
+  1174					goto out;
+  1175				}
+  1176			}
+  1177			memset(__skb_push(skb, hh_len), 0, hh_len);
+  1178		}
+  1179	
+  1180		if (kattr->test.flags & BPF_F_TEST_SKB_CHECKSUM_COMPLETE) {
+  1181			const int off = skb_network_offset(skb);
+  1182			int len = skb->len - off;
+  1183			__wsum csum;
+  1184	
+  1185			csum = skb_checksum(skb, off, len, 0);
+  1186	
+  1187			if (csum_fold(skb->csum) != csum_fold(csum)) {
+  1188				ret = -EBADMSG;
+  1189				goto out;
+  1190			}
+  1191		}
+  1192	
+  1193		convert_skb_to___skb(skb, ctx);
+  1194	
+  1195		if (skb_is_nonlinear(skb))
+  1196			/* bpf program can never convert linear skb to non-linear */
+  1197			WARN_ON_ONCE(linear_sz == kattr->test.data_size_in);
+  1198		ret = bpf_test_finish(kattr, uattr, skb->data, skb_shinfo(skb), skb->len,
+  1199				      skb->data_len, retval, duration);
+  1200		if (!ret)
+  1201			ret = bpf_ctx_finish(kattr, uattr, ctx,
+  1202					     sizeof(struct __sk_buff));
+  1203	out:
+  1204		if (dev && dev != net->loopback_dev)
+  1205			dev_put(dev);
+  1206		kfree_skb(skb);
+  1207		kfree(data);
+  1208		if (sk)
+  1209			sk_free(sk);
+  1210		kfree(ctx);
+  1211		return ret;
+  1212	}
+  1213	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
