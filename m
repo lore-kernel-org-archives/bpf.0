@@ -1,65 +1,65 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96A232C316
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 20:27:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF5032BF4C
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 20:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770323240; cv=none; b=dAQFN3wqQmkDxlQoE9u0VN+42cpfHOZ1H8GkkJNl0kjqHk/vAsJR37DkqClFxnI6E9Z7q7YXQBRnXsl+myTFECbZEu+C64M+VS/pgcmNbJeoR3ojXg27akHjIsg8CGw8WA+BQ7JbWC1o/nShA7W7KiTnC2maWDt2o8Q0fj1AxPA=
+	t=1770323241; cv=none; b=tags1sy/X2MG7RDmjHv/1iW8fJR3/26bgp2bl1Fs8AZfwkIKGPYzdk8NUMjNVTAzJQYP5VxNQ8viRkMIqVtt/rv+EGgv1PC4CF7i2ZTvNMUUB7GiGvutqGnkhfRfjt03sB132uQEA0RJu0T0s078nK18xC3+zYRYiktxMF/Dkb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770323240; c=relaxed/simple;
-	bh=EawU7E85hyQKnDsSsnAlVae/EIZGOBjtAsn3UT3imPg=;
+	s=arc-20240116; t=1770323241; c=relaxed/simple;
+	bh=gm6bBiQU8PZ/QZx25phxxpnrJJaVyMN3T7nsfxSD6XM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kQlp51z3ctMM1oeLDkLCfPKUgEHxL3kF6zHYvJ15TxxT8FJnvIgu3XNc6OaNipjYwn8ogUNO0FfmeiJpzROjmsWDkSGhqBkiIu2wSajSelqD04kN9pZTE6tSzQY5PF+GoCUXcLaTy9TTJ5nds7/0ITSZcY/4B2ZILfL//1miFHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KD0ew9M8; arc=none smtp.client-ip=209.85.128.53
+	 In-Reply-To:To:Cc; b=MbcXeJkoXGdTf+nTGuIjigcPu+cxGvLv1ZUR5jHFsddf4b10kQLe7AIW66HHrYJHuQWFivKFpjTlSgObmeZddcMgCada6UnHSEofbe83sHpmv7+hELOvtRuEc2bwhqGW75WsmWb5e6kbRDK+4Rd5Mgk7Jy+GAq/e2VZ0ORJsoo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ak2dzjuY; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KD0ew9M8"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-482f2599980so15934295e9.0
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 12:27:19 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ak2dzjuY"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4801ea9bafdso8500925e9.3
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 12:27:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770323238; x=1770928038; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770323239; x=1770928039; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NhtMWfffRJqUdF6LokCsrkYymnt1gXV5MfKG8KtoDhY=;
-        b=KD0ew9M84EMQNzJ7rzjsevMFeg76SKekGA+L+X9dJih0qDql0yt/9CK5tkg7ICa2gV
-         hE8GxGsrZkfGi+KGKlYxWyvv0zc+HLTJ55U6VuA8h3/1ZcxiBdpFKpLRVQURtwZvTvpO
-         Kec+NNoe5LXwBpb1jDeB4ybe9Yr+k2ZVdEPwZv58fa2RtMzRtJ3neCTQQd/UJM2+wty/
-         QdpHlEeNuZcKZKmIHp1b2/sddqZFRvlJT0A/hWPh8JNEozCxRV8zm9Zo59CQ8MaqB/Nh
-         V6Awes2Oa5xtbm02+Cfy9v2SPeoCFWPOA3Y4GD4h/twEcLqcl1dB4LrEyMpJ/5iMiqhf
-         4Qhw==
+        bh=wUmdRmniV/AbCKQPwVBc9R6soa5H9SgDS+/K3SfmgWU=;
+        b=Ak2dzjuYqMwUP8MZqMkEzYSjj/nPWrOAb3qUv8fFrUs+10+hImGPY59+V88AHHpOTC
+         DLB8YEFsJUm472BrgR2RHDblcI0nYOPmPKkMAtP3F40U20fub2jp1Pvg4YVQuVr6TCYS
+         F0eQVqlLchn88W6fqsKE2VU6n4BCqei3gYf+srQU4hhdgCkRlTaHvjapWbtEy7Ic49iD
+         DmFP6bkchtKQFW/hqDBgv9cT/n+wwZ4ysibDwRYm+fxlCzS+CPswU7zNFs3jVgxUA1jD
+         bICQB8vbI6lo3jrp+9roGJ9lzLQEIQYhJYFhEVwmzfwWEMI8id+wPBKlnehJIoBuGyFU
+         xIiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770323238; x=1770928038;
+        d=1e100.net; s=20230601; t=1770323239; x=1770928039;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=NhtMWfffRJqUdF6LokCsrkYymnt1gXV5MfKG8KtoDhY=;
-        b=cXOeMxK00vwAiJXC/vGY2nXMvvpCClKi8ZrneYloL0a8HIqyVc6yaHUN1I/8oDtv07
-         dYNza3yuKyfoHjepGVjYT4HAGIwh34YJR7tqOlB/RcbWKGfu8XRu1O7W3XquHlQnfVQU
-         m8wf0DpaeHHdZ4c99C4x2drNGYizJ0dmSqIsS42uPBncowWH3VbcEztAQfVS93bPe3+n
-         jGAyYGM2ZBrFjQ+uHLfserrjCkdhxMFK1kpkfJpreP7mCKSE1HVG1i6/n2CLFXTFiWhQ
-         64iKaRZAYqTJmMXT17Vfmazg3g37y+oDbPIXb6TDz+RghUWVmJ6Q+O7z5m+9nAtaatlI
-         QezQ==
-X-Gm-Message-State: AOJu0Yy6iZd6VGF5SZ1msohDHm4UKA90cHD6jGLqE4wxm7cyPeJAXnDe
-	3+tqyv1fHni4b3DhN4Cv5blzZsAW6Qrcii7cfMBc1H0hGYJ4PPzr9iHF
-X-Gm-Gg: AZuq6aJZWjMBuT/fx2jyPlPOHTYv8UID6bZJ44sWvxyomQb+Ex496lnWjuP5j2IR7ub
-	peOuVyVcpvxKar2mO/9vxNyHvCvXf/soUxdKKa6erF+F1uXZoaGdZJbLh9oxGvfg6nivs9SKvlq
-	qoBScetUBLn+FzJE5Uiw68P5VcqtyahKHdaAXp2Y1kveVCrvm1HIq/3PFxY6eIt5n47PNeIxUKH
-	ZZQfuKzCgxrGQwdNQMDkXuVsimGJVrHxSSo3QZNcoSkDstIUN6sAbbdDouNAWyZ59cOPj+uG6a0
-	2S3J/bZKUgORSnovyb1IW3pWfGX+6DmAw/xYKcALPQfoRPBfKxBozCRdgYEe3it/prqTeFZbbdK
-	t7YHQbmSG7esyOUWAuH3+W4p75zJW2Trwh/DzN7XvFUshVD60SH+zTVbj0MlPjdSNXk7XnuY=
-X-Received: by 2002:a05:600c:8719:b0:482:eec4:76d with SMTP id 5b1f17b1804b1-4832021b461mr9492395e9.17.1770323238173;
-        Thu, 05 Feb 2026 12:27:18 -0800 (PST)
+        bh=wUmdRmniV/AbCKQPwVBc9R6soa5H9SgDS+/K3SfmgWU=;
+        b=sENQRJE8yHsFiKc9lqC/f8qV0ZDy3p36mMKgmdmvslPULz8xxdOnj2pSlmnpTFUBMY
+         CqzRzRqJoXiz4iD5AIDxRJvR+rNv7cXkSfDre0rX3l8UkzcSs56XslBx7CTfmOVky1Nl
+         8PAp2Sgb3FN7V5m9uDDos0dRTkzhpe8S9lUESk96TFca8gdN7/NjgUAwfoCDkfSX7irP
+         0SSpOl22jLJ5xqTDm5k7sO86+0U8iOJe6/pQ3VBAi6uLVQp23wgSQmRTEszHqK03+1Hq
+         jPXlRC/OTztZjal5Eg2aijOA9RyBfTT9sHcRluYkU6+/VpH7IoYuYrEjVVkbOCa+uFBt
+         lK8A==
+X-Gm-Message-State: AOJu0YyhTUTApiS32BXDAEs3DCcltQ1vCgFk4OIepNzzST8B9B7lYRU1
+	waPaKFor+cIropVvttZDncJJ/D/olOQqYkXhgoJdYH+vKuuCNvTCxveTeHgahA==
+X-Gm-Gg: AZuq6aIRBR9aG9fzCV3DPK2oIavbtDMUmyUWLH5zBXBvf6HfdrJhrEjHZXtgLa2qi3n
+	EvdQaI29AW6skWJiZj7FI+z8kB4xp+sQLA7e15igA3DYa6RhWPO+z/QkvleYT6GKdO7EK3PIvXn
+	3iNkcRxOjPYPFAQmJ4JO5iLSFzEop2ge/9CZDoYwWgELX3Bh5TiKvv1r3XtSxsORTJT3LWYk5AQ
+	xr+1dNEzCMpxtreIrZT4A51LRyhCyox0ru+nXTuSKVUqvldxsStftSYqgmao+dBACuZaZgHpGxS
+	q6njtxni1kKPyZ3njiYg9ZrkjNPwaMp30XrDIRG8zc9/1aNyodHafwMGQDdbMbYMB7TafKuwFAN
+	9nlxc3qlk6bASJ5RFTgcxd5CATR0439bBgVsqAVSlmMaJCTKTETCmRmrk72BKfqRqShJu5t8=
+X-Received: by 2002:a05:600c:354d:b0:479:2f95:5179 with SMTP id 5b1f17b1804b1-4832093d427mr2122245e9.15.1770323239334;
+        Thu, 05 Feb 2026 12:27:19 -0800 (PST)
 Received: from localhost ([2620:10d:c092:500::6:1325])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483203e37f9sm4235255e9.3.2026.02.05.12.27.16
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483206d87c7sm3716855e9.7.2026.02.05.12.27.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 12:27:16 -0800 (PST)
+        Thu, 05 Feb 2026 12:27:18 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Thu, 05 Feb 2026 20:24:40 +0000
-Subject: [PATCH RFC bpf-next 10/12] selftests/bpf: Add BPF iterator tests
- for resizable hash map
+Date: Thu, 05 Feb 2026 20:24:41 +0000
+Subject: [PATCH RFC bpf-next 11/12] selftests/bpf: Verify resizable hash
+ map is rejected in tracing progs
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260205-rhash-v1-10-30dd6d63c462@meta.com>
+Message-Id: <20260205-rhash-v1-11-30dd6d63c462@meta.com>
 References: <20260205-rhash-v1-0-30dd6d63c462@meta.com>
 In-Reply-To: <20260205-rhash-v1-0-30dd6d63c462@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -77,300 +77,164 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  puranjay@kernel.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1770323224; l=8242;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1770323224; l=4754;
  i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=ejinDW8MMgmtgwwOzAdrh2BwNdAQa3UKBa+36mpFm40=;
- b=jM22hC3mLwsoLGx/mnCVN8xdaWSMb8RsargYE/SlmYBRJ06R7mO95O2RtREpqtopUJqzbmOIu
- Y9TsWCd/vZJCskWWQsPBWtHCPIGnSGiNBAtZtplOXtID7DuTn8aFrLk
+ bh=dzBrd8eLiuhpRTj2NJiwdYjrbeuOqHRJXBv3nYrx4/c=;
+ b=d7xR2Vrlpa9DC8UZE5uX2+tQkwIpuf8fHdxDDDcq+Z1lWbPP1eShK4V8I+CdSWy8Wb7o+o3Cs
+ FwCPHA72Pk5CYQ5d1ey5kgGDkndL8Uf3Wn2CsLaMzdiWIseOh6clPAC
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Test BPF iterator functionality for BPF_MAP_TYPE_RHASH:
- * Basic iteration verifying all elements are visited
- * Overflow test triggering seq_file restart, validating correct
-resume behavior via skip_elems tracking
+Verify that resizable hash map can't be used in tracing progs, as it
+uses bit_spin_lock for per-bucket locking which can deadlock in NMI
+context.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/testing/selftests/bpf/prog_tests/rhash.c     | 168 +++++++++++++++++++++
- .../selftests/bpf/progs/bpf_iter_bpf_rhash_map.c   |  75 +++++++++
- 2 files changed, 243 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
+ tools/testing/selftests/bpf/progs/verifier_rhash.c | 112 +++++++++++++++++++++
+ 2 files changed, 114 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testing/selftests/bpf/prog_tests/rhash.c
-index 689ba6d73a724e94c3845acaeca3c0a7b45a8c6d..ee8f4181d501df8d31223bff72d4e551a903de4d 100644
---- a/tools/testing/selftests/bpf/prog_tests/rhash.c
-+++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
-@@ -4,6 +4,7 @@
- #include <string.h>
- #include <stdio.h>
- #include "rhash.skel.h"
-+#include "bpf_iter_bpf_rhash_map.skel.h"
- #include <linux/bpf.h>
- #include <linux/perf_event.h>
- #include <sys/syscall.h>
-@@ -282,6 +283,167 @@ static void rhash_get_next_key_resize_test(void)
- 	rhash__destroy(skel);
- }
- 
-+static void rhash_iter_test(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct bpf_iter_bpf_rhash_map *skel;
-+	int err, i, len, map_fd, iter_fd;
-+	union bpf_iter_link_info linfo;
-+	u32 expected_key_sum = 0, key;
-+	struct bpf_link *link;
-+	u64 val = 0;
-+	char buf[64];
-+
-+	skel = bpf_iter_bpf_rhash_map__open();
-+	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_rhash_map__open"))
-+		return;
-+
-+	err = bpf_iter_bpf_rhash_map__load(skel);
-+	if (!ASSERT_OK(err, "bpf_iter_bpf_rhash_map__load"))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(skel->maps.rhashmap);
-+
-+	/* Populate map with test data */
-+	for (i = 0; i < 64; i++) {
-+		key = i + 1;
-+		expected_key_sum += key;
-+
-+		err = bpf_map_update_elem(map_fd, &key, &val, BPF_NOEXIST);
-+		if (!ASSERT_OK(err, "map_update"))
-+			goto out;
-+	}
-+
-+	memset(&linfo, 0, sizeof(linfo));
-+	linfo.map.map_fd = map_fd;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(skel->progs.dump_bpf_rhash_map, &opts);
-+	if (!ASSERT_OK_PTR(link, "attach_iter"))
-+		goto out;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
-+		goto free_link;
-+
-+	do {
-+		len = read(iter_fd, buf, sizeof(buf));
-+	} while (len > 0);
-+
-+	ASSERT_EQ(skel->bss->key_sum, expected_key_sum, "key_sum");
-+	ASSERT_EQ(skel->bss->elem_count, 64, "elem_count");
-+
-+	close(iter_fd);
-+
-+free_link:
-+	bpf_link__destroy(link);
-+out:
-+	bpf_iter_bpf_rhash_map__destroy(skel);
-+}
-+
-+static void rhash_iter_overflow_test(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct bpf_iter_bpf_rhash_map *skel;
-+	u32 total_read_len, expected_read_len, write_len, num_elems = 64;
-+	u64 seen_values = 0;
-+	int err, i, j, len, map_fd, iter_fd;
-+	union bpf_iter_link_info linfo;
-+	struct bpf_link *link;
-+	char *buf;
-+
-+	skel = bpf_iter_bpf_rhash_map__open();
-+	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_rhash_map__open"))
-+		return;
-+
-+	/*
-+	 * Configure print_count so that output for each element almost fills
-+	 * the seq_file buffer (8 pages). With multiple elements, this will
-+	 * trigger buffer overflow and restart.
-+	 */
-+	write_len = sysconf(_SC_PAGE_SIZE) * 8;
-+	skel->bss->print_count = (write_len - 8) / 8;
-+	expected_read_len = num_elems * (write_len - 8);
-+
-+	err = bpf_iter_bpf_rhash_map__load(skel);
-+	if (!ASSERT_OK(err, "bpf_iter_bpf_rhash_map__load"))
-+		goto out;
-+
-+	map_fd = bpf_map__fd(skel->maps.rhashmap);
-+
-+	/* Populate map with test data */
-+	for (i = 0; i < num_elems; i++) {
-+		__u64 val = i;
-+
-+		err = bpf_map_update_elem(map_fd, &i, &val, BPF_NOEXIST);
-+		if (!ASSERT_OK(err, "map_update"))
-+			goto out;
-+	}
-+
-+	memset(&linfo, 0, sizeof(linfo));
-+	linfo.map.map_fd = map_fd;
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(skel->progs.dump_bpf_rhash_map_overflow, &opts);
-+	if (!ASSERT_OK_PTR(link, "attach_iter"))
-+		goto out;
-+
-+	iter_fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
-+		goto free_link;
-+
-+	buf = malloc(expected_read_len);
-+	if (!ASSERT_OK_PTR(buf, "malloc"))
-+		goto close_iter;
-+
-+	/* Read all data - this should trigger multiple overflows/restarts */
-+	total_read_len = 0;
-+	while ((len = read(iter_fd, buf + total_read_len, expected_read_len - total_read_len)) > 0)
-+		total_read_len += len;
-+
-+	ASSERT_OK(err, "err");
-+	ASSERT_EQ(total_read_len, expected_read_len, "total_read_len");
-+	ASSERT_EQ(skel->bss->unique_elem_count, num_elems, "unique_elem_count");
-+
-+	/*
-+	 * Verify overflow actually happened: if total_visits > unique_elem_count,
-+	 * some elements were visited multiple times due to seq_file restart.
-+	 */
-+	ASSERT_GT(skel->bss->total_visits, skel->bss->unique_elem_count, "overflow_occurred");
-+
-+	/*
-+	 * Verify:
-+	 * 1. Each chunk of print_count size has same values
-+	 * 2. All values 0 to num_elems-1 appear exactly once
-+	 */
-+	for (i = 0; i < num_elems; i++) {
-+		__u64 *val = ((__u64 *)buf) + i * skel->bss->print_count;
-+
-+		ASSERT_GE(val[0], 0, "value_greater_or_eq_zero");
-+		ASSERT_LT(val[0], num_elems, "value_in_range");
-+
-+		/* Verify all copies in this chunk are consistent */
-+		for (j = 1; j < skel->bss->print_count; j++)
-+			ASSERT_EQ(val[0], val[j], "consistent_value");
-+
-+		/* Track which values we've seen */
-+		seen_values |= (1ULL << val[0]);
-+	}
-+
-+	/* Verify all values 0 to num_elems-1 were present */
-+	ASSERT_EQ(seen_values, ~0ULL, "all_values_seen");
-+
-+	free(buf);
-+close_iter:
-+	close(iter_fd);
-+free_link:
-+	bpf_link__destroy(link);
-+out:
-+	bpf_iter_bpf_rhash_map__destroy(skel);
-+}
-+
- void test_rhash(void)
- {
- 	if (test__start_subtest("test_rhash_lookup_update"))
-@@ -313,5 +475,11 @@ void test_rhash(void)
- 
- 	if (test__start_subtest("test_rhash_get_next_key_stress"))
- 		rhash_get_next_key_stress_test();
-+
-+	if (test__start_subtest("test_rhash_iter"))
-+		rhash_iter_test();
-+
-+	if (test__start_subtest("test_rhash_iter_overflow"))
-+		rhash_iter_overflow_test();
- }
- 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_rhash_map.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_rhash_map.c
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 302286a80154d37e1e81bef405c2806d1310c252..ef42781a9c1856600a52b4d04f78fb0fd7b54bfb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -79,6 +79,7 @@
+ #include "verifier_reg_equal.skel.h"
+ #include "verifier_ref_tracking.skel.h"
+ #include "verifier_regalloc.skel.h"
++#include "verifier_rhash.skel.h"
+ #include "verifier_ringbuf.skel.h"
+ #include "verifier_runtime_jit.skel.h"
+ #include "verifier_scalar_ids.skel.h"
+@@ -222,6 +223,7 @@ void test_verifier_raw_tp_writable(void)      { RUN(verifier_raw_tp_writable); }
+ void test_verifier_reg_equal(void)            { RUN(verifier_reg_equal); }
+ void test_verifier_ref_tracking(void)         { RUN(verifier_ref_tracking); }
+ void test_verifier_regalloc(void)             { RUN(verifier_regalloc); }
++void test_verifier_rhash(void)                { RUN(verifier_rhash); }
+ void test_verifier_ringbuf(void)              { RUN(verifier_ringbuf); }
+ void test_verifier_runtime_jit(void)          { RUN(verifier_runtime_jit); }
+ void test_verifier_scalar_ids(void)           { RUN(verifier_scalar_ids); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_rhash.c b/tools/testing/selftests/bpf/progs/verifier_rhash.c
 new file mode 100644
-index 0000000000000000000000000000000000000000..2de69f983a1bd04993339c2a565b9d940043c37c
+index 0000000000000000000000000000000000000000..66dda95d56b0544a43682df42381759e0f8c62d6
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_rhash_map.c
-@@ -0,0 +1,75 @@
++++ b/tools/testing/selftests/bpf/progs/verifier_rhash.c
+@@ -0,0 +1,112 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <linux/bpf.h>
 +#include <bpf/bpf_helpers.h>
-+
-+char _license[] SEC("license") = "GPL";
++#include "bpf_misc.h"
 +
 +struct {
 +	__uint(type, BPF_MAP_TYPE_RHASH);
++	__uint(max_entries, 1);
 +	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, 64);
 +	__type(key, __u32);
 +	__type(value, __u64);
-+} rhashmap SEC(".maps");
++} map_rhash SEC(".maps");
 +
-+__u32 key_sum = 0;
-+__u64 val_sum = 0;
-+__u32 elem_count = 0;
-+__u32 err = 0;
-+
-+SEC("iter/bpf_map_elem")
-+int dump_bpf_rhash_map(struct bpf_iter__bpf_map_elem *ctx)
++SEC("kprobe")
++__description("rhash map is forbidden in BPF_PROG_TYPE_KPROBE")
++__failure __msg("tracing progs cannot use resizable hash maps yet")
++__naked void rhash_forbidden_in_kprobe(void)
 +{
-+	__u32 *key = ctx->key;
-+	__u64 *val = ctx->value;
-+
-+	if (!key || !val)
-+		return 0;
-+
-+	key_sum += *key;
-+	val_sum += *val;
-+	elem_count++;
-+	return 0;
++	asm volatile (
++	"r1 = 0;"
++	"*(u64*)(r10 - 8) = r1;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"r1 = %[map_rhash] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_rhash)
++	: __clobber_all);
 +}
 +
-+/* For overflow test: configurable print count */
-+__u32 print_count = 0;
-+
-+__u64 seen_keys = 0;
-+__u32 unique_elem_count = 0;
-+__u32 total_visits = 0;
-+
-+SEC("iter/bpf_map_elem")
-+int dump_bpf_rhash_map_overflow(struct bpf_iter__bpf_map_elem *ctx)
++SEC("tracepoint")
++__description("rhash map is forbidden in BPF_PROG_TYPE_TRACEPOINT")
++__failure __msg("tracing progs cannot use resizable hash maps yet")
++__naked void rhash_forbidden_in_tracepoint(void)
 +{
-+	struct seq_file *seq = ctx->meta->seq;
-+	__u32 *key = ctx->key;
-+	__u64 *val = ctx->value;
-+	__u64 bit;
-+	__u32 i;
-+
-+	if (!key || !val)
-+		return 0; /* The end of iteration */
-+
-+	total_visits++;
-+
-+	/* Validate key value are as expected */
-+	if (*key != *val || *key < 0 || *key > 64) {
-+		err = 1;
-+		return 0;
-+	}
-+
-+	bit = 1ULL << *key;
-+	if (!(seen_keys & bit))
-+		unique_elem_count++;
-+	seen_keys |= bit;
-+
-+	/* Write print_count * 8 bytes to potentially overflow buffer */
-+	bpf_for(i, 0, print_count) {
-+		if (bpf_seq_write(seq, val, sizeof(__u64)))
-+			return 1;
-+	}
-+
-+	return 0;
++	asm volatile (
++	"r1 = 0;"
++	"*(u64*)(r10 - 8) = r1;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"r1 = %[map_rhash] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_rhash)
++	: __clobber_all);
 +}
++
++SEC("perf_event")
++__description("rhash map is forbidden in BPF_PROG_TYPE_PERF_EVENT")
++__failure __msg("tracing progs cannot use resizable hash maps yet")
++__naked void rhash_forbidden_in_perf_event(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64*)(r10 - 8) = r1;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"r1 = %[map_rhash] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_rhash)
++	: __clobber_all);
++}
++
++SEC("raw_tracepoint")
++__description("rhash map is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT")
++__failure __msg("tracing progs cannot use resizable hash maps yet")
++__naked void rhash_forbidden_in_raw_tp(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64*)(r10 - 8) = r1;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"r1 = %[map_rhash] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_rhash)
++	: __clobber_all);
++}
++
++/* Positive test: socket filter programs CAN use rhash maps */
++SEC("socket")
++__description("rhash map is allowed in BPF_PROG_TYPE_SOCKET_FILTER")
++__success
++__naked void rhash_allowed_in_socket(void)
++{
++	asm volatile (
++	"r1 = 0;"
++	"*(u64*)(r10 - 8) = r1;"
++	"r2 = r10;"
++	"r2 += -8;"
++	"r1 = %[map_rhash] ll;"
++	"call %[bpf_map_lookup_elem];"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_rhash)
++	: __clobber_all);
++}
++
++char _license[] SEC("license") = "GPL";
 
 -- 
 2.53.0
