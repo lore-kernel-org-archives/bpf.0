@@ -1,172 +1,162 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EBCD42E016
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 15:58:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AE743637E
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 16:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.129.124
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770307104; cv=pass; b=TYJK0jNyZO0PW0BxDFmFk+x7RqIwtPTjE6eAxAeHOU6LFgsf+1WkwXM1LpnQp45bdhnkh/gGlBUceEY0oKWVumD3262LHc9OmrHBxFoOT1JFqZBHHina+rlRoYZ0HkmEBgRKtynEyQPkWRUyBd7Z2JWI8AdooE9v6W65JgUFWO8=
+	t=1770308688; cv=pass; b=rTH4FxG7rkPOWfj5Vs7rgMcuuCxi6Dug10aghSua9XeXwvOjIVQBxexDQa9pGxdyo1C03vJO6X0efpSC9plddJANCzNUhZGbh+7R5pT6SuFxEE6Hle4cnERRNnYiaYUgHp6te48tzDhiNOasghELQVAPJVU+2WywdYP+VvXs4Pw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770307104; c=relaxed/simple;
-	bh=mhRjsY9XdiyEWld+ROW1wj+EoQxOZCQ1eVAjPZCgUxQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BKIBcBjdKC/kNm+Hymf1xbgi4LiI4MzKMLOx5eHOCvBhm8ot1UREBNFXF0qUAM5Qfngr6+3xiXJ1fRuTzVdWdS46qfIaG5Us/zoAO1xtD6XDA3x5fCb0pcAMWuMZ6YIo0atTOLCCWBbHKldLARtiEhI31xE68Y7U3ktfYoybVWA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PJIchiKl; arc=pass smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770308688; c=relaxed/simple;
+	bh=odNvXPzdKEvCp0BCtgvbKVCz2w6TVfIMVaJ+RANVd8U=;
+	h=From:References:MIME-Version:In-Reply-To:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Z5r30a6ArBWuknfQHMSjxiP8kdl0MKu4Yj/pJMKiva+0rlsKLDnYPV+j8EEu31hkfAreL4sbFRpuyDrtCHNkSUP2Elve57PDnoQJGW8TgiX+XD1lrwfA1dveDdmscULPldG2upnj6TNBVaCKOxkkJunma5bfNXv1pMNfHihhBG4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OtK6VMZa; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=H4MwZqYi; arc=pass smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PJIchiKl"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47edd6111b4so12501995e9.1
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 07:58:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770307103; cv=none;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OtK6VMZa";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="H4MwZqYi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770308687;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Cthf3UpvR7SCVCTwNlvuIv9lekgY0gGhp/EgpN064I0=;
+	b=OtK6VMZa7Jy48sADBGbhBuPi7M7y2DDI5FIgIAmErPU2zMNBj+Dc8x3M+9IU+a3YguKdWX
+	1pvJ8ESq4gITsVnzrdNirOxD9YpxD6R9x2eG7vbMJvyJyVCji7rqbAoJjZV7pUIAI6wwMt
+	dq/3oEy6odpdzpZl+4bCnkcgP06QO+A=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-13-OQ6agnzIOEStCoB6ZhGwMA-1; Thu, 05 Feb 2026 11:24:46 -0500
+X-MC-Unique: OQ6agnzIOEStCoB6ZhGwMA-1
+X-Mimecast-MFC-AGG-ID: OQ6agnzIOEStCoB6ZhGwMA_1770308684
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-894709fbae5so40049346d6.2
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 08:24:45 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770308684; cv=none;
         d=google.com; s=arc-20240605;
-        b=DD70a096geEjbkUdWWZQi91mlZ2NOtaoCjUqnGy15Py5Ib76kp/rlLx2HwE9nEpc0v
-         ydHxjP/myZCBv4avoTthG8kGrTkqtbxQeXlD6kjlJnE/4nZT3GZb0cPINwPfVPAMrwpG
-         mMUA21amX36zO1cU2T4n/ptuApTwARDly3v0l6O+gQpfNXJk3Nl3s1KymzcetTw9qWB9
-         9hOLE/27mxxfrlStZKXfYvCzeQY+9gw4opBvZheImFSi5XGXZU/ZMx7Ul6tYqWPrjMGU
-         y+GFBIrOapGveIHNHY4JVf6gzdCHCpLmaiM7vV3ytinzSAXA76IDWT3PCShIk+O9dN18
-         169Q==
+        b=kIiKeA6oBni/BZL7g4b1TpVF01rdwjjjXjjj4MCas8q/9eFjda9O6yRKwzxDO0pH1B
+         1yToLggsF7G86JD7r3fMnDF2bEwosOXNbE8WSqaB0gcpL4HYkAj5ylnzZAJ4vSoR5RiK
+         lwi784bQ345B3whgbEs248aCLRwO1nJKo1POqyhhdEMMFDrB7s5T0xMERFEQRqhLAo17
+         aL1lWUQ+TL7gVr7PN9USEUWe0O2ENiw7uu6m9iCkXKal2nUFA8kv5GJlZH5SShR1OZ95
+         xerDBLfWqSg7ar2pjipISn1DadPgthmEuaU0f69+vdcEL/WfAnWd+1t1GeA8ke1Ja7Z3
+         ZB0Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=lEOIUdssHjNAbAyKETqU9sXnwcXc0uZE8jvop6D9OmU=;
-        fh=y0X5OnHIw5ksfKLwaIoVWiCZAIseCir3g011mHwt8tE=;
-        b=HpMhku1XxieAO56JZf9CLWYMDvFTqRkFYlo8dqZ0+WuMHliaoO1c/J147wCX4Lws6z
-         6O/ZBOyTI/yIbO3PaiaHP5xqToW90vTRnWWjyvjdzOUV/5RAaO5RjUl5sPHNPnS/qezT
-         mVn33nKT2xbmwmFO7TIjKPMFXfI+hV8eZRT/hvjh4lfY3u4q09OCvtczQFPpwBSUEb8V
-         yjXUykqKR/7LBeCIUU2MSOJkgrGE21+A6ZhSSkqqWMWrol56vka/xDteEZwxNpguWqsd
-         G56h4Jd0hXvab26StAHC/TrLzMP+CWTl3QbJKncX00M7lI/o/lBFMVde/FbHOnpF+wE1
-         ky5g==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :mime-version:references:from:dkim-signature;
+        bh=Cthf3UpvR7SCVCTwNlvuIv9lekgY0gGhp/EgpN064I0=;
+        fh=vk/1m4YucDUYvb8IQzx8IIBucQNTLr2IlVHUJgQTOYM=;
+        b=UNLwhdC6mJUZiaiixCvXr9Pkz8VYz53dDts1aubn4CyLASJA/4VNpAtqRg8a0lbY4E
+         wWtFdkFtDVkpmpw+nX6n+0PS+yFZrfJswRBT0hq1Mn1pbbNO12WpGestoyz1n+tC9zky
+         mh8sInvWpbte8NLYPlk0e9lc2byLlYQBOf4fiPLQfGQiWqRtpC8+kjDV2KfQnRZxodOW
+         yWzUTvD9zDw5BAS8+jaLmWYSy7rOzA6NatOxo/lYwPwx5U9DE2d84UPI6BAocIa+QBjA
+         OuBh1LteroxrBl7fLzXLzz4Z+iAWe1GVJ0WqpAsxwgdxCkARMDLbfyMJocs/zGTbGfn2
+         d6Dw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770307103; x=1770911903; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lEOIUdssHjNAbAyKETqU9sXnwcXc0uZE8jvop6D9OmU=;
-        b=PJIchiKl1VF0HBY71zykBGIw5xRoNXsmZbmffVCnrpESe8KUr3zNHBzax7S3DeGwj8
-         4IFbH/1QFdqEKpncdiGoaO4gETSCnu0LMEWSSxa3VFkBnPyB4lxu+SP2jCpuDx41IDfY
-         pakpOWde47KJeiEZhL7RrrSl8nCOuWM9qhW13bjw4MypX/QwcK3kkitCzgU058RQ3GHW
-         06frYQzP5ozHRW4acrS3QmhuYn/DG3T/Go/0oEdJLbzr2UuHUQyf1iQAVkUhZXGgkYLs
-         gCHit5g+lzshmxP/XPZ7VuvBqP5X8CaGpuRVHOu4RnA0354JzCgDI3wHAoI11IMJWWIP
-         SUJw==
+        d=redhat.com; s=google; t=1770308684; x=1770913484; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :mime-version:references:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cthf3UpvR7SCVCTwNlvuIv9lekgY0gGhp/EgpN064I0=;
+        b=H4MwZqYisU5ALnuy+nWb4XH+7ryBxD1UcrN0Kr+63iRWDQe3ewrNoSfC9qf3Qbg9vq
+         fDfeZeilyMTZruufv5J+EZl0oGSL3MZ3EgCXQC9uZ2CDyShRAkrn49m2lNiAmyv4nDzt
+         Xi0mtcpbf5g6Lwsx3h2D3x+DoFP/sSzqrt6jeaor/Xu1yJD01FmZdd6Z9aOUO2xiYxWu
+         IkVKmy+0eEGT5UhpnRtRWA1tVwtxJeGyOe8igUBqBy5Chx6XuR4tdX/FMDiwLhVx0kNv
+         g5aOu6c61unrNZmEwHwnahC5BrOXZozjig/tq9FdGjRKsud/b4YukgdtVnjawDldMgQH
+         i5Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770307103; x=1770911903;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=lEOIUdssHjNAbAyKETqU9sXnwcXc0uZE8jvop6D9OmU=;
-        b=Z1Mff9o6/ldJuHD7WWTv7ufbVxPTe95FS7cc6cbJBJqNrE9xu4fvADvFgkcAHTJxac
-         K49vTfKpT4hdeiSFkLCgrIeMqNivyu+vrqFuMcWKBgMys4aC/cVM04bDypxq3EFyTXNV
-         SLqku9g8VJDWUWWrTyV45oNqvfA/k5E+LpY9GLL5T8TFah0EIQgv4z8+vdGH96gFoewn
-         2OITnNgllMvlDmmeDih9sycfzQrbTEACJe9OZe57iG8YNcfN83HLTjoW6yf/OJ11ikvL
-         qQ/Sb3hMYXu6cnOGfg+q4dCZ2MbqPLl8AAKuIjaRiYJqnYkBMPsIw+W8bE7wf4SbF0gg
-         cDsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWazhARB2pNeRXieoXv+HgllUu1YfJibjsVVQHx5L6bGeYzQR+HnH3TSXbdg4lCwsczAcI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFf9Hyu82sqbYM5oCsjMs7tT854Aelv9EFne2+PAVibz3Y0fEU
-	xnA9x8fNitJ8LdA5BRomvY/PsfjE8ojJMu+SP8FV2FCh/r22jqMox37RBjhKfC5lChqlWQjphyD
-	cgpnITvO7v4LTroWavEjp4EjlznQISgg=
-X-Gm-Gg: AZuq6aIjliajk5Mmjw7ud5hphXLPK1DD8GuE6xTqvzEWfWOV7ySnESsqzv8URo6cciJ
-	J/o4YefEfy2PO19Mu6brQNXHDhJ6NWveo0bbXySALGYpOozZpRAB1xksBXuRET61SNYGE5mNyf/
-	mPbZ2WXmo+ZIbwKF7xauwj24qrBL+WhWwcb40Q9AhRxgWyhpjVWoyopxShDrt6+MIV6046uMGBl
-	Vq4q0EjpyvwRnDXtd8MpUSCHPD9AsTwshHN6wXg8WHOp8K973ppszNltYd7+Rj+sMsQPmI7Z1SO
-	M4m5K6f+tHFsyeBLltqkDHF26Ir+MB6nIZNcZMjeRunb0xAMjY+XHgSnbBVzxr7q1X75XyaM
-X-Received: by 2002:a05:600c:19cd:b0:477:93f7:bbc5 with SMTP id
- 5b1f17b1804b1-4830e9402f8mr99700685e9.10.1770307102712; Thu, 05 Feb 2026
- 07:58:22 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770308684; x=1770913484;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:in-reply-to
+         :mime-version:references:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Cthf3UpvR7SCVCTwNlvuIv9lekgY0gGhp/EgpN064I0=;
+        b=U/TrLl3gspGR+L3DYYLdS54yNOPreb7iMNqUsBpV8Ewcv8o+ucCooxcCOmfhvEVF7k
+         mfm42wejSjM2V8O+mTeIijDq7wTmxoYs+sNhV3Jk82SA84YKiiAD2Pq4TaSSth5vPvAr
+         ow9Zf9selHdtnRtWsCdBFQb1sqfiXGuS0Su7+2USHwuRAecxtD2stSYJDPHakIw5/O24
+         7dLML5Smm1sQt9TZFPzIW/l2r2WchGdnvjFZuojcgo9t0E+7NAUhMpxQn1fBHz7PfSsL
+         RO3Vi0VmpDWyqZUvFnZvc+QH16eXVcT03LqDkYuZsdq2hpyz2Vy/V7QvenqX9dQMSApA
+         /Xjw==
+X-Forwarded-Encrypted: i=1; AJvYcCVmjMamoOGbr40QrG+fqoTeZA05xwkjGd4Sd+fjY4L2E377YbuUE1Lpzck6UWKEyO5RuzY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfTnt8lBAQmzQ/mgh4N+LCst5eKh+s3n0Q8P8aOb75UBwgRHBn
+	KkqkDJBIvLpXAZlzBU2MpHc4hYndQFNTOYqVSoP8+gwK8HJkl1hBxUmkPwgIWVizxDp9ZqOdaZn
+	EPLzhuDx/kyjbFdEPG3kwG3+8CVLqU12mHQs2RkRYq31CDJnyKOjrNdOu5Y+u6jg0a44ChopVDY
+	b7m3AcaWZ/uHi+bRt9l2vLUNpZjwSv
+X-Gm-Gg: AZuq6aIEdz9qb08hBh52o8rGrGrc+ZgEYGViOIJn3gNIZpvmhr2oKJQzrxkNj4Vg2hi
+	PquqGUS+OVYbBKiVOazwObiBK9+4fY+PPZvM2tgouEd/Om8RxJbTIzy7mPqWTPveB9vcEs/PVEh
+	s2RPeNeN+lZJdksMCxGBZ9/Kx0SKcfaXfbcQUPY1WOir1yVK/sydoZYQ3EqKs9t4RJOecLreFiO
+	XptW32/xTVgLQAyvD/SOkzcrw==
+X-Received: by 2002:a05:6214:29e9:b0:894:7051:2681 with SMTP id 6a1803df08f44-895221b95ccmr104470936d6.51.1770308684587;
+        Thu, 05 Feb 2026 08:24:44 -0800 (PST)
+X-Received: by 2002:a05:6214:29e9:b0:894:7051:2681 with SMTP id
+ 6a1803df08f44-895221b95ccmr104470156d6.51.1770308683860; Thu, 05 Feb 2026
+ 08:24:43 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 5 Feb 2026 11:24:42 -0500
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 5 Feb 2026 11:24:42 -0500
+From: Antoine Tenart <atenart@redhat.com>
+References: <177022452988.1827734.5121740962985640333.stgit@firesoul>
+ <20260204190417.110f5498@kernel.org> <2e1eb11c-cd47-4772-baff-45d43d4fa539@kernel.org>
+ <877bsr1l1h.fsf@toke.dk> <CADCXZ1yMkZbRd7ioGw5QQ61OdmYp6misUDoj-s-g7wuoiCHKbg@mail.gmail.com>
+ <87v7gbz1ru.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260204132643.1302967-1-arnd@kernel.org> <aYRapf5K8wFGEO8v@pathway.suse.cz>
- <4637e47c-61b0-43bf-996e-6291f2b49f31@app.fastmail.com>
-In-Reply-To: <4637e47c-61b0-43bf-996e-6291f2b49f31@app.fastmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 5 Feb 2026 07:58:10 -0800
-X-Gm-Features: AZwV_Qip0-Uod4KA17qrGjY15Db9LSEX5ZZwEFt60DeX3MwvopCq8Ga6SLOClDI
-Message-ID: <CAADnVQJ5uHCVm3d_hO35cgrrcoLYBgk9x5iee0rNXBqKkHjj4Q@mail.gmail.com>
-Subject: Re: [PATCH] vsnprintf: drop __printf() attributes on binary printing functions
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Petr Mladek <pmladek@suse.com>, Arnd Bergmann <arnd@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, kernel test robot <lkp@intel.com>, 
-	Andy Shevchenko <andy@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Bartosz Golaszewski <brgl@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, linux-hardening@vger.kernel.org, 
-	bpf <bpf@vger.kernel.org>
+In-Reply-To: <87v7gbz1ru.fsf@toke.dk>
+Date: Thu, 5 Feb 2026 11:24:42 -0500
+X-Gm-Features: AZwV_QhdojdkYOVl1RGk_7Zu-0LDXZBDivdkSb9oE5RRssG5O18zc8Kz5q75RuU
+Message-ID: <CADCXZ1z-gg_VsN4kjf325HvWRxL1irhUC76B_erggm5+A7qQ7g@mail.gmail.com>
+Subject: Re: [PATCH net-next RFC v1 0/3] net: sched: refactor qdisc drop
+ reasons into dedicated tracepoint
+To: =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	Eric Dumazet <eric.dumazet@gmail.com>, netdev@vger.kernel.org, 
+	"David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org, 
+	horms@kernel.org, jiri@resnulli.us, edumazet@google.com, 
+	xiyou.wangcong@gmail.com, jhs@mojatatu.com, carges@cloudflare.com, 
+	kernel-team@cloudflare.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 5, 2026 at 2:13=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote:
+On Thu, Feb 05, 2026 at 03:46:29PM +0100, Toke H=C3=B8iland-J=C3=B8rgensen =
+wrote:
+> Antoine Tenart <atenart@redhat.com> writes:
 >
-> On Thu, Feb 5, 2026, at 09:53, Petr Mladek wrote:
-> > On Wed 2026-02-04 14:26:23, Arnd Bergmann wrote:
-> >> Fixes: 6b2c1e30ad68 ("seq_file: Mark binary printing functions with __=
-printf() attribute")
-> >> Fixes: 7bf819aa992f ("vsnprintf: Mark binary printing functions with _=
-_printf() attribute")
-> >
-> > From the commit message, it is not obvious why reverting these commits
-> > won't bring back the warnings in the modified functions.
-> >
-> > My understanding is that the warnings won't get back thanks to
-> > the commit bd67c1c3c353b6560 ("vsnprintf: Silence false positive
-> > GCC warning for va_format()") as explained by the original cover
-> > letter, see
-> > https://lore.kernel.org/all/20250321144822.324050-1-andriy.shevchenko@l=
-inux.intel.com/#t
-> >
-> > It would be worth to mentionin this in the commit message.
+> > I'm wondering why not using the drop reason subsys logic to combine the
+> > qdisc specific enum while not conflicting with drop reasons and allowin=
+g
+> > to inject the qdisc reasons into drop reason enabled helpers as well?
 >
-> Unfortunately, I have not been able to reproduce the original
-> warnings at all. The va_format() warning and the patch to
-> silence that look entirely unrelated here, that was just the
-> compiler incorrectly identifying a function that does not even
-> take a format argument.
+> See this prior discussion for how the proposal came to be:
 >
-> I'm sure some other intermediate change managed to shut up
-> the warnings, but I don't know which one. My best guess would
-> be that 938df695e98d ("vsprintf: associate the format state with
-> the format pointer") made gcc no longer warn about bstr_printf(),
-> but that predates Andy's patch and I can't easily revert it for
-> testing. Checking out a kernel before those patches does have
-> the warning on va_format() but not on the other ones.
+> https://lore.kernel.org/all/6be17a08-f8aa-4f91-9bd0-d9e1f0a92d90@kernel.o=
+rg/
 >
-> >> Link: https://lore.kernel.org/all/CAADnVQK3eZp3yp35OUx8j1UBsQFhgsn5-4V=
-ReqAJ=3D68PaaKYmg@mail.gmail.com/
-> >> Closes: https://lore.kernel.org/oe-kbuild-all/202512061640.9hKTnB8p-lk=
-p@intel.com/
-> >> Reported-by: kernel test robot <lkp@intel.com>
-> >> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> >> Acked-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-> >> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> >> ---
-> >> For reference, three additional patches are required before we can dro=
-p
-> >> the Makefile.warn line that currently hides these warnings:
-> >>
-> >> https://lore.kernel.org/lkml/20260203162546.2254900-1-arnd@kernel.org/
-> >> https://lore.kernel.org/lkml/20260203163440.2674340-1-arnd@kernel.org/
-> >> https://lore.kernel.org/lkml/20260203164545.3174910-1-arnd@kernel.org/
-> >>
-> >> Tested using randconfig builds on arm/arm64/x86
-> >> ---
-> >>  include/linux/seq_file.h | 1 -
-> >>  include/linux/string.h   | 4 ++--
-> >>  2 files changed, 2 insertions(+), 3 deletions(-)
-> >
-> > Otherwise, the change looks good to me. Feel free to use,
-> > ideally with the updated commit message:
-> >
-> > Acked-by: Petr Mladek <pmladek@suse.com>
-> >
-> > I wonder who should take this patch. Should it go via
-> > printk/bpf/tracing or another tree?
-> > Does anyone has any preference, please?
+> Basically, figuring out which qdisc a drop came from is not possible
+> with the current drop_reason code.
 >
-> I think your tree makes most sense here, but I have no strong
-> preference.
+> So it's not just new drop reasons, it's a separate tracepoint with more
+> information available (qdisc handle, name, etc). So you'll get two
+> events for qdisc drops with this series (from patch 1):
+>
+> +		trace_qdisc_drop(q, txq, dev, skb, reason);
+> +		kfree_skb_reason(skb, SKB_DROP_REASON_QDISC_DROP);
 
-As long as it makes into the upcoming merge window any tree is fine.
-Let's go via printk.
+Right and that's fine. Using the drop reason subsys logic you could turn
+the above into:
+
+ +		trace_qdisc_drop(q, txq, dev, skb, reason);
+ +		kfree_skb_reason(skb, (u32)reason);
+
+You can look at enum skb_drop_reason_subsys and how that is used within
+OvS (net/openvswitch/drop.h) for example.
+
+Antoine
+
