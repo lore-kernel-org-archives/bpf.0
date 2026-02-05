@@ -1,98 +1,108 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f51.google.com (mail-dl1-f51.google.com [74.125.82.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F2B3D544
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 00:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539BB13A244
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 00:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770251517; cv=none; b=DHF76/njtD2A1nbA8+53NSUtQ2A27/H4TxHLD9Ck9xL2rT0yJ0UR3kLKnEtLsy6ZsH7y6uAeVy+sb9l0vGgjCUI1n6AcQEDiTG2Dz4SqswJRTDhOB/dOxXjTUnNRITUXd4Gf3KseQywtK1n7FS6K65aWRWwAjLaub7Sg0dfYLvU=
+	t=1770251589; cv=none; b=IGNFVUfObkWjAodYkXGLH6JO2PTnJvfukZedFRQeDyAc9IoAXPPRUYOq4bOiCe2yN/fMAE4cxpBqTY8hBgq/v+kXUv4UESsA6fRZ9NEeS01pprmegybqucSCbPnx/uOrg28MhwkfTwMuZ3g4IA+D5l+QHRmCdvVekDhtBk4m1zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770251517; c=relaxed/simple;
-	bh=n9fHcu8iZOUYTF8e/Bf3Uxj0xVdGkFnoJ1+rpmRkZYQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cpBBNE74i8pNGkgzcxlBQBnPaxcJRDrcWxJWe4V5kFrq6z/ypH7A87gZUbWV2jBsDf48f7LQQ9C1yaxKEhCMl37PFmKa92Uh9FzhNLgWctbm0VTwLjcyJoOgjsxt5QStAqfQvSSKQohLJcZRZqsF3I1Rk92/A60QWFu+UGRK7Pc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JI7mvZkY; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770251589; c=relaxed/simple;
+	bh=9pxlpjRaLErQ4Ay/iZtV7x9PZue/Wz0S/gFaMjDZUgg=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=YMngsFG5m9EhSztYfR7FJUM+2XFnXSQGhwDedX9GIExQdCbFA7J6NWo0i6ry8KcFiEL0rTbpsg38sUcZfnvvy4G0sM9elac+ejKjM+TsKDoSsfSHxRjLnW+TQEnYD8mHXDZqnz70CPpToLdjPSinGU15yF+2kb2PmNa9EZoYg4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iJD7lmOp; arc=none smtp.client-ip=74.125.82.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JI7mvZkY"
-Message-ID: <c4b5aba5-ec48-4329-9549-b5c96de40c69@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770251505;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lM/MzMow83GadW34Ofqq1msI3+/k3/l0eZ4j44zqwbk=;
-	b=JI7mvZkYjHQAx3QYwclZ4I/BOWiSc7IXVIScGIBAv4EgPh1dwaXxNw5OWCYQbg7GamihBN
-	84V5V6BvlXyff9SEr8tcFkzsvvGWB763XjHxp+kGCsK2mL8GSWT8/eiBVLFR3ga/JrpapC
-	/X7PcxIiE5kDK2kcNHpacqeKbQfn6Jg=
-Date: Wed, 4 Feb 2026 16:31:32 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iJD7lmOp"
+Received: by mail-dl1-f51.google.com with SMTP id a92af1059eb24-1248d27f293so1076535c88.0
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 16:33:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770251588; x=1770856388; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=AEJyr5eD/wJ7UmxUsj4/BPzc4evxz4IHu8tyN4UFT8I=;
+        b=iJD7lmOpYeM8lGuuy9udCWo6GSCWkeuEOnVtcou8pJAYsnHcm7IMKqzCTpBPJalbMd
+         vHmyEqLlHm8c21IVKJ7dsWZPPgq2//u3yFnp9T+KsdAWllVWypzMo6ywMSNtKVrCaKG0
+         8aawCNVBvWKB8Ubp33PROuSp/TdGMIskfmEeDLzpQz3psRWaDckCG+MD49YPps+xYgPn
+         CY98FV7pRFZcF6+MRP4ZgVTaTDRf9snIAmIR+L6eTJa92oJaNQ9kOnO626IdQNan31vv
+         vVc1p59fqyh1yh4DGgg8CdhLcpV7ZhrRaI8sF/uFZAjbBVcaAi12xlbh2adA32eCLxXA
+         gNqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770251588; x=1770856388;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEJyr5eD/wJ7UmxUsj4/BPzc4evxz4IHu8tyN4UFT8I=;
+        b=Ckwpo8v34NlcoDqeLFkzrTI1lSTT9UnkRPnzhkaY6wafOD7KRBxr96NFLP6T2xhPFN
+         O1E01Om01Bvh9Ck9TdtWrQuinSOGAUyRwn0ah1zTmzrAWI5NhKqn9NN5scyhiVIJfa67
+         88YguYQwSfAuwR6vNeR6hy9czqO7sNfkK3a4uiYkopQ2r0mWhtUSIDtBjZ37PCPMoLMR
+         9lSpQAiGab6nuTopjyPldcKA2bK5+/A9qEa1eZ7hd5Y6F/h9JO+SbfJtn9mfUsJ3ypb0
+         77tmYfbngYidgnFRGXp8ayMXIrjvF88iIZ4tgXJsGGsPeBcIJenK2uACF6WN7Ej958Ay
+         qduQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXBcKwjYoYBbuDPRyu8LyGy8wRWc48yy1SUcJEx2xItzd0wHwK2I5YbPaeN+UfzyYH7gOI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyhtxx7GNF5NaZDoAYV6HhWuNazwRU6Gy9BT0rjDzJRS7S1BZ20
+	fwu+MrHAHU6O9VofAcXcvqhTNJt+nB+umb0OQiecK2JnFmj/VZ/ppaWM
+X-Gm-Gg: AZuq6aLhxPRttB4N9c15HSqiJFJQNRTuSINwf6avebrLj2WldKvYlIm1b43o/qz0Uss
+	Q2J6/a9jr8+RPc6u/3EuGFVSUQWqfPom/zxxg5z0dm+7IhIyhLz1Qz7fwlfYsficOMR2oHIVaoR
+	irmPPKnFHnaf/v+xTcO+kbFM7dPcmJaRlWS8THR6iX+AtUF/fELG7EGgE7oOJ/q1P97nks+Em/f
+	oUfqPDbEiCsFuvky0vEO/rMp5uEUg6CNwYeMBtJQf4JSzF2RekjIO7ojuNVL1Qgdw/jvJKyKs1V
+	VNifOsWpmAUt4lSSRZ//DfasDKruBm5AxTTMJhlgytRfYGdreNv3lhne9hMRgrjaZcU50yN+KSm
+	BIz/3r0gpfaNk34+hlHsp7vmsEV0YlO3c/NuTfpPenJg8C0jd48u7Yyv4GZKFsnor+NdK4rDsBr
+	n37H8Dr8qX2dpGUD9CK0GyWPkqtNBRt8dHOZ/JJeUpUPCrS20ec9nOqZMVxvDR4NhjBJl3
+X-Received: by 2002:a05:7022:92a:b0:11b:9386:7ed3 with SMTP id a92af1059eb24-126f48d96f2mr2478169c88.48.1770251588336;
+        Wed, 04 Feb 2026 16:33:08 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:ac05:8e30:1e93:7ef5? ([2620:10d:c090:500::2:5ebc])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-126f4e107b4sm3309730c88.7.2026.02.04.16.33.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 16:33:08 -0800 (PST)
+Message-ID: <724c37abf5249d48701e337fca1571de1eee4b18.camel@gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Remove unnecessary volatile and
+ barrier_var()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko
+ <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Date: Wed, 04 Feb 2026 16:33:06 -0800
+In-Reply-To: <20260205002508.808963-1-puranjay@kernel.org>
+References: <20260205002508.808963-1-puranjay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
- update
-To: Michal Luczaj <mhal@rbox.co>, Kuniyuki Iwashima <kuniyu@google.com>
-Cc: bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
- edumazet@google.com, horms@kernel.org, jakub@cloudflare.com,
- john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com
-References: <8d055903-fe44-4bbf-a1a5-e0176343bf0b@rbox.co>
- <20260203200242.404131-1-kuniyu@google.com>
- <80865b12-7786-4787-81c8-08b754716a5d@linux.dev>
- <CAAVpQUCshzAAHZQQ7sVE+3UdKmBV42bKudcdDR0KtaTcTqn5gA@mail.gmail.com>
- <408569e7-2b82-4eff-b767-79ce6ef6cae0@rbox.co>
- <0f8ec4c7-5de4-4e0b-a50e-cf4f8d59709b@linux.dev>
- <37a594f4-a951-4283-80eb-67b6acecf61f@rbox.co>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <37a594f4-a951-4283-80eb-67b6acecf61f@rbox.co>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
+On Wed, 2026-02-04 at 16:24 -0800, Puranjay Mohan wrote:
 
+[...]
 
-On 2/4/26 3:25 PM, Michal Luczaj wrote:
-> On 2/4/26 20:34, Martin KaFai Lau wrote:
->>> But then there's SOCK_DGRAM where you can drop unix_peer(sk) without
->>> releasing sk; see AF_UNSPEC in unix_dgram_connect(). I think Martin is
->>> right, we can crash at many fentries.
->>>
->>> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa4/0xb0
->>> Read of size 2 at addr ffff888147d38890 by task test_progs/2495
->>> Call Trace:
->>>    dump_stack_lvl+0x5d/0x80
->>>    print_report+0x170/0x4f3
->>>    kasan_report+0xe1/0x180
->>>    bpf_skc_to_unix_sock+0xa4/0xb0
->>>    bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
->>>    bpf_trampoline_6442564662+0x47/0xab
->>>    unix_shutdown+0x9/0x880
->>>    __sys_shutdown+0xe1/0x160
->>>    __x64_sys_shutdown+0x52/0x90
->>>    do_syscall_64+0x6b/0x3a0
->>>    entry_SYSCALL_64_after_hwframe+0x76/0x7e
->>
->> This probably is the first case where reading a sk pointer requires a
->> lock. I think it will need to be marked as PTR_UNTRUSTED in the verifier
->> for the unix->peer access, so that it cannot be passed to a helper.
->> There is a BTF_TYPE_SAFE_TRUSTED list. afaik, there is no untrusted one now.
-> 
-> What about 'fexit/sk_common_release' that does 'bpf_skc_to_unix_sock(sk)'.
-> Is this something the verifies is supposed to handle?
+> diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c b/tool=
+s/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+> index 99c8d1d8a187..b50dc92b2126 100644
+> --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+> +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+> @@ -14,7 +14,7 @@ struct {
+>  __noinline
+>  int subprog_tail2(struct __sk_buff *skb)
+>  {
+> -	volatile char arr[64] =3D {};
+> +	char arr[64] =3D {};
+> =20
+>  	if (load_word(skb, 0) || load_half(skb, 0))
+>  		bpf_tail_call_static(skb, &jmp_table, 10);
 
-fexit is an obvious one if the bpf prog wants to shoot itself on the 
-foot by using things at the fexit of a free/release function. There are 
-other things can break also if a tracing-capable user wants to exploit 
-at fexit. I don't have good idea how to solve it.
+I think 'volatile' is used here to force specific function stack size.
+W/o 'volatile' compiler will throw the variable away.
+With 'volatile' one should check what's happening.
+Could you please double check?
 
-Going back to the bpf_skc_to_* helper. The bigger hammer may be, we 
-should properly depreciate the bpf_skc_to_* usage from tracing instead 
-of fixing it and ask the user to stay with the bpf_core_cast.
-
+[...]
