@@ -1,101 +1,242 @@
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E93B306489;
-	Thu,  5 Feb 2026 18:05:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642E5263F4A;
+	Thu,  5 Feb 2026 18:26:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770314705; cv=none; b=qb0VDLUI59lIUnHz+AwUfq+2V0nr6rqCJ+oAZuCsVTeEeNUtsGmmIUSKWd2+wuQhI81w53Y8R8D8PBw21fTjfd5mncprv9aedqnDHCtcdqZ6MJ+938fl9jhZ4XVxgIaklN9SNN9yIQbwUV7mjqWBm6I5+ecnU6FRsCWtUDvoa8Y=
+	t=1770315974; cv=none; b=ADU3qzT2ivN+9DRAdfu1JtNAedfxDW9u/Eurr6yvcxkK/pecqbV5C8eoCzmsl+Sts4OZ67olgsAkqTe5THQcjAvdZb4w4KdWheVDZMcRVnb4Tyh6kkIsInGih/aCU4dfHN0YyJlzNFueJ40fGW3CfXrquc0X2tXDjSTl8EtU2Dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770314705; c=relaxed/simple;
-	bh=qnXcG8TyhXVkhV0B4MDVo0OOIOG+RAs69AOE8siF3u4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Mx7Xi8JpaJ9TEcIHowkSPL4NOU3DrxxbuEAcM8k1K09eu2sKllhOe6fGHlBoxNsoc0NhApmQnM6tGErqFmJigFkLbj/nx3qqsbR+TvbZNtCKlopHjF2SobnqWqKQvVLu1tzc4lIZAU8Q+BkyhH6gzhqmPp7d/5h5eYHNDc9uK6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
-Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay09.hostedemail.com (Postfix) with ESMTP id 25D508C17D;
-	Thu,  5 Feb 2026 18:05:03 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id CDF5520033;
-	Thu,  5 Feb 2026 18:05:00 +0000 (UTC)
-Date: Thu, 5 Feb 2026 13:04:59 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Donglin Peng <dolinux.peng@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko
- <andrii.nakryiko@gmail.com>, Alexei Starovoitov <ast@kernel.org>, Masami
- Hiramatsu <mhiramat@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Donglin Peng <pengdonglin@xiaomi.com>, linux-trace-kernel
- <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, Eduard
- Zingerman <eddyz87@gmail.com>
-Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
- via BTF
-Message-ID: <20260205130459.0ff532f3@robin>
-In-Reply-To: <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
-References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
-	<20260202111548.3555306-3-dolinux.peng@gmail.com>
-	<20260202111249.649ac338@gandalf.local.home>
-	<CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
-	<CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
-	<20260203101707.52965eb0@gandalf.local.home>
-	<CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
-	<CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1770315974; c=relaxed/simple;
+	bh=ZgI4s4IJcqbYrOfugYledwXgFygfiU6a+fz/w80FIxM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o7c2vphajSp7QdEf2OMCQdGTwkUQM6xbz22Nl67QNWvqdlG2PyViEcHW1zpINsb3JLXggalk37EIdc8fo5IbNGVUOnayOGt3s0Y1XAUbHNec6HK7EGPSdsgKH9Z4IBzZKttTZzRR86T9nMVU7ez10Svar0XEGZqcWrAgJzm2M9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z1Y/k+3S; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z1Y/k+3S"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CB09C4CEF7;
+	Thu,  5 Feb 2026 18:26:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770315973;
+	bh=ZgI4s4IJcqbYrOfugYledwXgFygfiU6a+fz/w80FIxM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z1Y/k+3SJ4RKsX8YvKX86d51UTcLx1XomnMvEAaxmVVKLBE1BdoWJJE/+swWUIxmh
+	 QdqPYoZLdyHu41x7DCQVqzexpwe/mriTIGMbyAvqPealoXRis9NuJaOjB8c7xlBMdf
+	 B2OjtIExPowIFb8OWrbepKwlD5Mtb+TZMk+Ww1oFDDznGMz/xqiiyOmngHOjHOE5v1
+	 +3Apngm2vNRIe4cgGITUaKtfpYwl4FgVLrw+AK9IYejkRXA0TkeaWzslBb9CyTA43W
+	 W6vMFdREQO8O7vg+SKtW/7NWh0OQpyokQVaCengvMXduAPAMwApvEZLSFE1nNCTxxh
+	 AtN6aWEKtonpA==
+Date: Thu, 5 Feb 2026 10:26:10 -0800
+From: Namhyung Kim <namhyung@kernel.org>
+To: Jens Remus <jremus@linux.ibm.com>
+Cc: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org,
+	Steven Rostedt <rostedt@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Indu Bhagat <indu.bhagat@oracle.com>,
+	"Jose E. Marchesi" <jemarch@gnu.org>,
+	Beau Belgrave <beaub@linux.microsoft.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
+	Carlos O'Donell <codonell@redhat.com>, Sam James <sam@gentoo.org>,
+	Dylan Hatch <dylanbhatch@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@redhat.com>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>
+Subject: Re: [PATCH v13 00/18] unwind_deferred: Implement sframe handling
+Message-ID: <aYTgwoyRl8kxQShT@google.com>
+References: <20260127150554.2760964-1-jremus@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Stat-Signature: zjddx89rc1eyukuzz9d6uqsb1ekcmdgk
-X-Rspamd-Server: rspamout04
-X-Rspamd-Queue-Id: CDF5520033
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX183W0R0rrhW3VpPbWKCoDKiif7gZxi29O4=
-X-HE-Tag: 1770314700-352729
-X-HE-Meta: U2FsdGVkX1/jUOdmqt5tBDITXjI2gF7AxRQr2LbTqTVpqe0SisXIMe0T/FJxY8GW+uYgM0jiBhXCFyqON+XnrV5bmr9Haw3WU2y1gYEcXhK+o9VURS8JwdabW7pRVW0o/zRsF37ZB25jW9ZeyZB5uZC0JumUWxKi1BdzFZ3WbJt1VhCXPhym1NV3KmErBsI3oF/2e5ou1J71JqmDskBVm6LEiFtPktsyQ92/S5gE4vDedUxKLxNTb0t8abZAgltbng22pcxp4i9h+HkWX9mZplwRcXX/ApX6ZobUesOK3478QhJ1KRjt8ZCQdSMt49VnDDQl9DdyKE0Mhk6lnFrbHCvHxHVhEwMnai7jwAv2nnTlfE/mU6XaxA==
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260127150554.2760964-1-jremus@linux.ibm.com>
 
-On Wed, 4 Feb 2026 22:52:11 +0800
-Donglin Peng <dolinux.peng@gmail.com> wrote:
+Hello,
 
-> > > I have trace-cmd reading BTF now (just haven't officially released it) and
-> > > doing an extract and reading the trace.dat file is much faster than reading
-> > > the trace file with arguments. I'll need to implement the enum logic too in
-> > > libtraceevent.  
-> >
-> > If you mean to do pretty printing of the trace in user space then +1 from me.
-> >
-> > I don't like sorting enums either in resolve_btfid, pahole or kernel.
-> > Sorted BTF by name was ok, since it doesn't change original semantics.
-> > While sorting enums by value gets us to the grey zone where
-> > the sequence of enum names in vmlinux.h becomes different than in dwarf.  
+On Tue, Jan 27, 2026 at 04:05:35PM +0100, Jens Remus wrote:
+> This is the implementation of parsing the SFrame V3 stack trace information
+> from an .sframe section in an ELF file.  It's a continuation of Josh's and
+> Steve's work that can be found here:
 > 
-> Thanks, I agreed.
+>    https://lore.kernel.org/all/cover.1737511963.git.jpoimboe@kernel.org/
+>    https://lore.kernel.org/all/20250827201548.448472904@kernel.org/
+> 
+> Currently the only way to get a user space stack trace from a stack
+> walk (and not just copying large amount of user stack into the kernel
+> ring buffer) is to use frame pointers. This has a few issues. The biggest
+> one is that compiling frame pointers into every application and library
+> has been shown to cause performance overhead.
+> 
+> Another issue is that the format of the frames may not always be consistent
+> between different compilers and some architectures (s390) has no defined
+> format to do a reliable stack walk. The only way to perform user space
+> profiling on these architectures is to copy the user stack into the kernel
+> buffer.
+> 
+> SFrame [1] is now supported in binutils (x86-64, ARM64, and s390). There is
+> discussions going on about supporting SFrame in LLVM. SFrame acts more like
+> ORC, and lives in the ELF executable file as its own section. Like ORC it
+> has two tables where the first table is sorted by instruction pointers (IP)
+> and using the current IP and finding it's entry in the first table, it will
+> take you to the second table which will tell you where the return address
+> of the current function is located and then you can use that address to
+> look it up in the first table to find the return address of that function,
+> and so on. This performs a user space stack walk.
+> 
+> Now because the .sframe section lives in the ELF file it needs to be faulted
+> into memory when it is used. This means that walking the user space stack
+> requires being in a faultable context. As profilers like perf request a stack
+> trace in interrupt or NMI context, it cannot do the walking when it is
+> requested. Instead it must be deferred until it is safe to fault in user
+> space. One place this is known to be safe is when the task is about to return
+> back to user space.
+> 
+> This series makes the deferred unwind user code implement SFrame format V3
+> and enables it on x86-64.
+> 
+> [1]: https://sourceware.org/binutils/wiki/sframe
+> 
+> 
+> This series applies on top of the tip perf/core branch:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git  perf/core
+> 
+> The to be stack-traced user space programs (and libraries) need to be
+> built with the recent SFrame stack trace information format V3, as
+> generated by the upcoming binutils 2.46 with assembler option --gsframe.
+> It can be built from source from the binutils-2_46-branch branch:
+> 
+>   git://sourceware.org/git/binutils-gdb.git  binutils-2_46-branch
+> 
+> Namhyung Kim's related perf tools deferred callchain support can be used
+> for testing ("perf record --call-graph fp,defer" and "perf report/script").
 
-BTW, I just officially released trace-cmd v3.4 (where you can see whats
-new in that release here[1]).
+Is it possible for users to choose the unwinder - frame pointer or
+SFrame at runtime?  I feel like the option should be
+"--call-graph sframe,defer" or just "--call-graph sframe" if it always
+uses deferred unwinding.
 
-The biggest change is that it saves the BTF file in the trace.dat file
-and parses it on the report (it requires libtraceevent v1.9):
+Thanks,
+Namhyung
 
- ~# trace-cmd record -p function_graph -O funcgraph-args -g do_sys_openat2
- [..]
- ~# trace-cmd report
-       trace-cmd-50935 [002] ...1.  3490.518138: funcgraph_entry:                   |  do_sys_openat2(dfd=4294967196, filename=0x557bb9e3ee10, how=0xffff88815220fea8) {
-       trace-cmd-50935 [002] ...1.  3490.518141: funcgraph_entry:                   |    getname_flags(filename=0x557bb9e3ee10, flags=0) {
-       trace-cmd-50935 [002] ...1.  3490.518142: funcgraph_entry:                   |      getname_flags.part.0(filename=0x557bb9e3ee10, flags=0) {
-       trace-cmd-50935 [002] ...1.  3490.518143: funcgraph_entry:                   |        kmem_cache_alloc_noprof(s=0xffff888106c7e000, gfpflags=0xcc0) {
-       trace-cmd-50935 [002] ...1.  3490.518145: funcgraph_entry:                   |          stack_trace_save(store=0xffff88815220fac8, size=0x40, skipnr=0x0) {
-       trace-cmd-50935 [002] ...1.  3490.518147: funcgraph_entry:                   |            arch_stack_walk(consume_entry=0xffffffff94d9dfe0, cookie=0xffff88815220fa58, task=0xffff88812d4c3580, regs=0x0) {
-       trace-cmd-50935 [002] ...1.  3490.518148: funcgraph_entry:                   |              __unwind_start(state=0xffff88815220f988, task=0xffff88812d4c3580, regs=0x0, first_frame=0xffff88815220fa28) {
-       trace-cmd-50935 [002] ...1.  3490.518149: funcgraph_entry:        1.518 us   |                get_stack_info(stack=0xffff88815220f938, task=0xffff88812d4c3580, info=0xffff88815220f988, visit_mask=0xffff88815220f9a8); (ret=0x0)
-       trace-cmd-50935 [002] ...1.  3490.518152: funcgraph_entry:                   |                unwind_next_frame(state=0xffff88815220f988) {
-       trace-cmd-50935 [002] ...1.  3490.518153: funcgraph_entry:        0.951 us   |                  __rcu_read_lock(); (ret=0xffff88812d4c3580)
-
--- Steve
-
-
-
-[1] https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/tag/?h=trace-cmd-v3.4
+> 
+> 
+> Changes since v12 (see patch notes for details):
+> - Rebase on tip perf/core branch (d55c571e4333).
+> - Add support for SFrame V3, including its new flexible FDEs.  SFrame V2
+>   is not supported.
+> 
+> Changes since v11 (see patch notes for details):
+> - Rebase on tip master branch (f8fdee44bf2f) with Namhyung Kim's
+>   perf/defer-callchain-v4 branch merged on top.
+> - Adjust to Peter's latest undwind user enhancements.
+> - Simplify logic by using an internal SFrame FDE representation, whose
+>   FDE function start address field is an address instead of a PC-relative
+>   offset (from FDE).
+> - Rename struct sframe_fre to sframe_fre_internal to align with
+>   struct sframe_fde_internal.
+> - Remove unused pt_regs from unwind_user_next_common() and its
+>   callers. (Peter)
+> - Simplify unwind_user_next_sframe(). (Peter)
+> - Fix a few checkpatch errors and warnings.
+> - Minor cleanups (e.g. move includes, fix indentation).
+> 
+> Changes since v10:
+> - Support for SFrame V2 PC-relative FDE function start address.
+> - Support for SFrame V2 representing RA undefined as indication for
+>   outermost frames.
+> 
+> 
+> Patches 1, 4, 11, and 17 have been updated to exclusively support the
+> latest SFrame V3 stack trace information format, that is generated by
+> the upcoming binutils 2.46 release.  Old SFrame V2 sections get rejected
+> with dynamic debug message "bad/unsupported sframe header".
+> 
+> Patches 7 and 8 add support to unwind user (sframe) for outermost frames.
+> 
+> Patches 12-15 add support to unwind user (sframe) for the new SFrame V3
+> flexible FDEs.
+> 
+> Patch 16 improves the performance of searching the SFrame FRE for an IP.
+> 
+> Regards,
+> Jens
+> 
+> 
+> Jens Remus (7):
+>   unwind_user: Stop when reaching an outermost frame
+>   unwind_user/sframe: Add support for outermost frame indication
+>   unwind_user: Enable archs that pass RA in a register
+>   unwind_user: Flexible FP/RA recovery rules
+>   unwind_user: Flexible CFA recovery rules
+>   unwind_user/sframe: Add support for SFrame V3 flexible FDEs
+>   unwind_user/sframe: Separate reading of FRE from reading of FRE data
+>     words
+> 
+> Josh Poimboeuf (11):
+>   unwind_user/sframe: Add support for reading .sframe headers
+>   unwind_user/sframe: Store .sframe section data in per-mm maple tree
+>   x86/uaccess: Add unsafe_copy_from_user() implementation
+>   unwind_user/sframe: Add support for reading .sframe contents
+>   unwind_user/sframe: Detect .sframe sections in executables
+>   unwind_user/sframe: Wire up unwind_user to sframe
+>   unwind_user/sframe: Remove .sframe section on detected corruption
+>   unwind_user/sframe: Show file name in debug output
+>   unwind_user/sframe: Add .sframe validation option
+>   unwind_user/sframe/x86: Enable sframe unwinding on x86
+>   unwind_user/sframe: Add prctl() interface for registering .sframe
+>     sections
+> 
+>  MAINTAINERS                               |   1 +
+>  arch/Kconfig                              |  23 +
+>  arch/x86/Kconfig                          |   1 +
+>  arch/x86/include/asm/mmu.h                |   2 +-
+>  arch/x86/include/asm/uaccess.h            |  39 +-
+>  arch/x86/include/asm/unwind_user.h        |  69 +-
+>  arch/x86/include/asm/unwind_user_sframe.h |  12 +
+>  fs/binfmt_elf.c                           |  48 +-
+>  include/linux/mm_types.h                  |   3 +
+>  include/linux/sframe.h                    |  60 ++
+>  include/linux/unwind_user.h               |  18 +
+>  include/linux/unwind_user_types.h         |  46 +-
+>  include/uapi/linux/elf.h                  |   1 +
+>  include/uapi/linux/prctl.h                |   6 +-
+>  kernel/fork.c                             |  10 +
+>  kernel/sys.c                              |   9 +
+>  kernel/unwind/Makefile                    |   3 +-
+>  kernel/unwind/sframe.c                    | 840 ++++++++++++++++++++++
+>  kernel/unwind/sframe.h                    |  87 +++
+>  kernel/unwind/sframe_debug.h              |  68 ++
+>  kernel/unwind/user.c                      | 105 ++-
+>  mm/init-mm.c                              |   2 +
+>  22 files changed, 1414 insertions(+), 39 deletions(-)
+>  create mode 100644 arch/x86/include/asm/unwind_user_sframe.h
+>  create mode 100644 include/linux/sframe.h
+>  create mode 100644 kernel/unwind/sframe.c
+>  create mode 100644 kernel/unwind/sframe.h
+>  create mode 100644 kernel/unwind/sframe_debug.h
+> 
+> -- 
+> 2.51.0
+> 
