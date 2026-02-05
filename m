@@ -1,65 +1,80 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0317283FFB;
-	Thu,  5 Feb 2026 13:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CBB221FCF
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 13:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770299069; cv=none; b=ASUfIA1N5ER/nr0dBdkLH+xn7Tc+EK/bjzSRdQCV95Fg/kbmIpPYPDgGdJPnYdCFBgvzDqBsJ+8mIUooRndm9L65DtNxYJ8efbp3s4Oq+zVwKbXBuoF09jasDd3iiNB09NFBuykGeZ3ZANGKVqQKzj9JTULKNifXj3N5MoH+9MI=
+	t=1770299160; cv=none; b=mkabA79F2SQuXfULDxMFcJ2OEG+woCM4eeEQYBBY8iBTHk1AomkqzUL2T169GiB1EJOc3Bl6ogxp5rZKf0jq2w6hchUwcclyK7pN1+Bc0ku2cIfGdqvOabFsK4NC+n2pvcoQOeN7FvRNwvXvQfcfR3JX85hIYMlhZBo8vx11xh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770299069; c=relaxed/simple;
-	bh=+XcJc4Y73NCfrZTD+9DmarCzXkV9jJFSlBeo5lqiIaQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nX95S2RKJqnJSH5hd4d6Z2mNCvgNMlTObJBDD4AepB9NuFRZRpQsPAjVXt2GMAk6W5b1UWflolzKTNBWp0RBrYc9R/MB/+8KGFUMfXLAAeEis/bHYKU4+ZPKXn3H6uhS82uYdc32j8uYg9cJ9vEueSnGkzKSMQk6j+/dR1bTu7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JEIT2Fba; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770299160; c=relaxed/simple;
+	bh=zntokVry81Mkk3OI0HoMyp2+zaPjjBCi0jfPMCHWqZg=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kewwldDMhGTu5tB/tgD6uCi4uify9HDcu2Bd14kHUDoJ3JmtCwxArp5zbtg359MXC4cZFvggOPmk1bMseRR3Mbmvzl5aXM7Xsh5YY822CAzYoHLcsfB3gpfuOTp39WItP8ai0BwiUMRE+Ngntl3Vb/ZdYoAyZPMTrXIvG482wwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bk+49ZGL; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JEIT2Fba"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770299070; x=1801835070;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+XcJc4Y73NCfrZTD+9DmarCzXkV9jJFSlBeo5lqiIaQ=;
-  b=JEIT2Fbaq8bXxyxrXlbX4lMvZcI1nUfLYWVLaP/Yud7bB09r+78xZUwf
-   hbIgL8ZKlEgmwKVdS+VHRdwVfgJyuxQJjYw58ax57AGBolUDc23DxmC0o
-   wrvZaOoZ/YEhxwhaYN6RykK2TkY0qgCplk/MTu/Bf3EfpGgzSBUuOTWdA
-   MKviERMshIeKTKvFPLQ+O5ffYd1HtKn4DnzLI68VsXRfQah1PthIQEXD5
-   t2ENIoDFi5YULVJeqEr5yaqz1pWumvW/DYPnac1L60O9cEONJwW/RcXIL
-   9BD0Y3JdRDVAeG2k494JO1QheDKHXM/TprWkdo3VP6Big83U8jJSgFuaW
-   w==;
-X-CSE-ConnectionGUID: fUXtqPRVSMCUw5CD/NpwbQ==
-X-CSE-MsgGUID: OD2UJcyLQimSDqsGhKAtfw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="71486685"
-X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
-   d="scan'208";a="71486685"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 05:44:30 -0800
-X-CSE-ConnectionGUID: 0DTb0rsKSWCJcU79gSaarA==
-X-CSE-MsgGUID: JGiF1l+eR8WFw1aLLheqoA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
-   d="scan'208";a="215048553"
-Received: from igk-lkp-server01.igk.intel.com (HELO afc5bfd7f602) ([10.211.93.152])
-  by orviesa004.jf.intel.com with ESMTP; 05 Feb 2026 05:44:26 -0800
-Received: from kbuild by afc5bfd7f602 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vnzeh-000000004B3-2wHq;
-	Thu, 05 Feb 2026 13:44:23 +0000
-Date: Thu, 5 Feb 2026 14:43:58 +0100
-From: kernel test robot <lkp@intel.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com,
-	martin.lau@kernel.org, kpsingh@kernel.org, yonghong.song@linux.dev,
-	song@kernel.org, haoluo@google.com, ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v6 09/17] bpf: Prepare for
- bpf_selem_unlink_nofail()
-Message-ID: <202602051417.ebnQFUul-lkp@intel.com>
-References: <20260205070208.186382-10-ameryhung@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bk+49ZGL"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4805ef35864so8567395e9.0
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 05:46:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770299159; x=1770903959; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lSe3DP+UKMA69sAOGcKJ9mzaLMcIBDtArPSidVC84FE=;
+        b=Bk+49ZGLKHTgkFl2QDWCyWIuR5hjTfD/7J1/uqxl6AWiUu85+FZeEOc+BJJo+iBLmg
+         +Z30KcZ03q/+CDTalS/vb2LlddsREhQkfKaKkO8CZs5g30iy38znfaT8JMc9uRRNUuaJ
+         JiNTCrPfj+0ci8vSJvQrU3wxtLXPdS1YZ5TUoCyZtvPjUMcv+RRzHdcdOEhXr1q6dJnm
+         dWgos2of80T7ehiCIqT5QIawYyp4363QcZelkIq8XeIitGblChpnkzYtLTknnUrmx0fh
+         lseeeVrUQ/HA7+6IX+Ikrm2CCfUm9oC2MHU7ZgmeJtEl3OYTIKjV3KyvndCuZsruw7Xp
+         7wdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770299159; x=1770903959;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lSe3DP+UKMA69sAOGcKJ9mzaLMcIBDtArPSidVC84FE=;
+        b=wh1jKQuKNENAG8Xxm1OcgvNLcr6IK/7vJMHHaxRnDmD7rLxcIWpWVu2QP5epB0CCgO
+         KXHZF15DQNE3IWeDNl4GlDTZSb9092yb7oaL/8ZDs7KsyZKnF983pAa7mGpRyDP/gHX8
+         GF2JY4dO4fsPM5EsiWnv1t/qQHKkDILWRzLsQXfRjKaXfR2A533oYreYRvQF8pywi8Me
+         3WO8lV9hWJ/t9Cri0TNh+dNRUCtSc1M/lqQeqPXlvQ/IbQNa4iG/FZoOf1Z4J30FEnGe
+         6+a52gYWCyhXa6KuQcr5/yRzNyEAt/8eoQc55I+lx0xnK/Ib5QW7F10sP3JKnneVObIX
+         CFoA==
+X-Forwarded-Encrypted: i=1; AJvYcCUxI7nnz/oI6tBqrN1mLyqmgaQ4/9xUkmjxFcpgRTSQ+hSmJUh6LjPNtgtg3BZNZ2/m6RA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz71Z6xGrln828WogUUsyiFQoUTBHTPICZo7iNLgevu9xjoPJA/
+	fejOcvudHQLhFWQmyqykEibzx3GkY3hjaycbVncFwqJ7UVwKL8bVJxvM
+X-Gm-Gg: AZuq6aKyUIm2Uwdp2EBky7fXuboGX6R7o+QH00KMxN0udVpzn8p3LrV6kR33AGcFjET
+	6/oOgoax3yIp2fZFPQe7q30h13D9YoMTafkUq3kNr48lmUFtcYksjcgnfLWRBfhsvYGhV8ioedB
+	xwfg7K5KDYAAyNpiS09pyTbZpmiVa/nZw2nI+i9jmWAbXsv+qxRq7jz0xStc2VtSxcgywQhAH/G
+	6Dtl+v9AmStBW5FLEMEJsk9SXxRTIbBc6N7+oce8rqwspSqjD6//cDLZBbufXCr3zFOpH9vyUIA
+	+Mq6lGwYUpQmP8qtn07hG2lq0RH8+WFTmgOxDNNo6ax0HyWV1jOYOeKv7UAPYjSt368TpxAkYvm
+	IsKFMxTzrMxKpjVPNBJ5dH9wEQc1IOJp/SsSBtV4exupE33BhKQxnAOjT2RyC
+X-Received: by 2002:a05:600c:1f08:b0:477:b642:9dc9 with SMTP id 5b1f17b1804b1-4830e993164mr89199165e9.28.1770299157801;
+        Thu, 05 Feb 2026 05:45:57 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::b44f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48317d3f007sm87930895e9.9.2026.02.05.05.45.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Feb 2026 05:45:57 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 5 Feb 2026 14:45:55 +0100
+To: Menglong Dong <menglong.dong@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [RFC bpf-next 06/12] bpf: Add bpf_trampoline_multi_attach/detach
+ functions
+Message-ID: <aYSfEy8Zf8bCs4-j@krava>
+References: <20260203093819.2105105-1-jolsa@kernel.org>
+ <20260203093819.2105105-7-jolsa@kernel.org>
+ <1945516.tdWV9SEqCh@7940hx>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,70 +83,85 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260205070208.186382-10-ameryhung@gmail.com>
+In-Reply-To: <1945516.tdWV9SEqCh@7940hx>
 
-Hi Amery,
+On Thu, Feb 05, 2026 at 05:16:49PM +0800, Menglong Dong wrote:
+> On 2026/2/3 17:38 Jiri Olsa <jolsa@kernel.org> write:
+> > Adding bpf_trampoline_multi_attach/detach functions that allows
+> > to attach/detach multi tracing trampoline.
+> > 
+> > The attachment is defined with bpf_program and array of BTF ids
+> > of functions to attach the bpf program to.
+> > 
+> [...]
+> > @@ -367,7 +367,11 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key, unsigned long ip)
+> >  	head = &trampoline_ip_table[hash_64(tr->ip, TRAMPOLINE_HASH_BITS)];
+> >  	hlist_add_head(&tr->hlist_ip, head);
+> >  	refcount_set(&tr->refcnt, 1);
+> > +#ifdef CONFIG_LOCKDEP
+> > +	mutex_init_with_key(&tr->mutex, &__lockdep_no_track__);
+> > +#else
+> >  	mutex_init(&tr->mutex);
+> > +#endif
+> >  	for (i = 0; i < BPF_TRAMP_MAX; i++)
+> >  		INIT_HLIST_HEAD(&tr->progs_hlist[i]);
+> >  out:
+> > @@ -1400,6 +1404,188 @@ int __weak arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
+> >  	return -ENOTSUPP;
+> >  }
+> >  
+> > +#if defined(CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS) && defined(CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS)
+> 
+> Hi, Jiri. It's great to see your tracing_multi link finally. It looks great ;)
 
-kernel test robot noticed the following build warnings:
+heya, thanks ;-)
 
-[auto build test WARNING on bpf-next/master]
+> 
+> After analyzing a little deeper on the SINGLE_FTRACE_DIRECT_OPS, I
+> understand why it is only supported on x86_64 for now. It seems that
+> it's a little hard to implement it in the other arch, as we need to
+> restructure the implement of ftrace direct call.
+> 
+> So do we need some more ftrace API here to make the tracing multi-link
+> independent from SINGLE_FTRACE_DIRECT_OPS? Otherwise, we can only
+> use it on x86_64.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Amery-Hung/bpf-Select-bpf_local_storage_map_bucket-based-on-bpf_local_storage/20260205-150959
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260205070208.186382-10-ameryhung%40gmail.com
-patch subject: [PATCH bpf-next v6 09/17] bpf: Prepare for bpf_selem_unlink_nofail()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20260205/202602051417.ebnQFUul-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260205/202602051417.ebnQFUul-lkp@intel.com/reproduce)
+I tried to describe it in commit [2] changelog:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602051417.ebnQFUul-lkp@intel.com/
+    At the moment we can enable this only on x86 arch, because arm relies
+    on ftrace_ops object representing just single trampoline image (stored
+    in ftrace_ops::direct_call). Archs that do not support this will continue
+    to use *_ftrace_direct api.
 
-All warnings (new ones prefixed by >>):
+> 
+> Have you ever tried to implement the SINGLE_FTRACE_DIRECT_OPS on arm64?
+> The direct call on arm64 is so complex, and I didn't work it out :/
 
->> kernel/bpf/bpf_local_storage.c:289:8: warning: variable 'owner' set but not used [-Wunused-but-set-variable]
-     289 |         void *owner;
-         |               ^
-   kernel/bpf/bpf_local_storage.c:64:13: warning: unused function 'selem_linked_to_map' [-Wunused-function]
-      64 | static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
-         |             ^~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
+yes, it seems to be difficult atm, Mark commented on that in [1],
+I don't know arm that good to be of much help in here, cc-ing Mark
+
+jirka
 
 
-vim +/owner +289 kernel/bpf/bpf_local_storage.c
+[1] https://lore.kernel.org/bpf/aIyNOd18TRLu8EpY@J2N7QTR9R3/
+[2] 424f6a361096 ("bpf,x86: Use single ftrace_ops for direct calls")
 
-588d80f1d996ea9 Amery Hung       2026-02-04  278  
-450af8d0f6be2e7 KP Singh         2020-08-25  279  /* local_storage->lock must be held and selem->local_storage == local_storage.
-450af8d0f6be2e7 KP Singh         2020-08-25  280   * The caller must ensure selem->smap is still valid to be
-450af8d0f6be2e7 KP Singh         2020-08-25  281   * dereferenced for its smap->elem_size and smap->cache_idx.
-450af8d0f6be2e7 KP Singh         2020-08-25  282   */
-c83597fa5dc6b32 Yonghong Song    2022-10-25  283  static bool bpf_selem_unlink_storage_nolock(struct bpf_local_storage *local_storage,
-450af8d0f6be2e7 KP Singh         2020-08-25  284  					    struct bpf_local_storage_elem *selem,
-0e854e553569083 Amery Hung       2025-11-14  285  					    struct hlist_head *free_selem_list)
-450af8d0f6be2e7 KP Singh         2020-08-25  286  {
-450af8d0f6be2e7 KP Singh         2020-08-25  287  	struct bpf_local_storage_map *smap;
-450af8d0f6be2e7 KP Singh         2020-08-25  288  	bool free_local_storage;
-450af8d0f6be2e7 KP Singh         2020-08-25 @289  	void *owner;
-450af8d0f6be2e7 KP Singh         2020-08-25  290  
-0fe4b381a59ebc5 KP Singh         2021-12-24  291  	smap = rcu_dereference_check(SDATA(selem)->smap, bpf_rcu_lock_held());
-450af8d0f6be2e7 KP Singh         2020-08-25  292  	owner = local_storage->owner;
-450af8d0f6be2e7 KP Singh         2020-08-25  293  
-450af8d0f6be2e7 KP Singh         2020-08-25  294  	free_local_storage = hlist_is_singular_node(&selem->snode,
-450af8d0f6be2e7 KP Singh         2020-08-25  295  						    &local_storage->list);
-450af8d0f6be2e7 KP Singh         2020-08-25  296  
-588d80f1d996ea9 Amery Hung       2026-02-04  297  	bpf_selem_unlink_storage_nolock_misc(selem, smap, local_storage,
-588d80f1d996ea9 Amery Hung       2026-02-04  298  					     free_local_storage);
-450af8d0f6be2e7 KP Singh         2020-08-25  299  
-450af8d0f6be2e7 KP Singh         2020-08-25  300  	hlist_del_init_rcu(&selem->snode);
-450af8d0f6be2e7 KP Singh         2020-08-25  301  
-5bd5bab76669b1e Martin KaFai Lau 2024-10-23  302  	hlist_add_head(&selem->free_node, free_selem_list);
-dcf456c9a095a6e KP Singh         2022-04-18  303  
-450af8d0f6be2e7 KP Singh         2020-08-25  304  	return free_local_storage;
-450af8d0f6be2e7 KP Singh         2020-08-25  305  }
-450af8d0f6be2e7 KP Singh         2020-08-25  306  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> Thanks!
+> Menglong Dong
+> 
+> > +
+> > +struct fentry_multi_data {
+> > +	struct ftrace_hash *unreg;
+> > +	struct ftrace_hash *modify;
+> > +	struct ftrace_hash *reg;
+> > +};
+> > +
+> [...]
+> > 
+> > 
+> > 
+> 
+> 
+> 
+> 
