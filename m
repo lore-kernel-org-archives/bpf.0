@@ -1,46 +1,46 @@
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B6A3A6402
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 10:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8520B3A7F42
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 10:32:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770287361; cv=none; b=QVdbig8PgTh4wJ4dHPVwDCT3C+hW4Yk/TvJWn0183SxfPJ0QyJv1QAhjME0TZjq+hUKl4xc6i/WqcjYRu6iClJjwLnMVcQpxZzE+PTNXoVosloFjDFiR+oE1iKL57rTpf6ZOCMOcVGK0/6iVEsxpnvQyLaQfp3gh9zZVxD3O2xY=
+	t=1770287542; cv=none; b=rCc3JR326sRlGpAP5MPSwPlVC7DA148WaIjyOPSVFseTS2T3sZTvZBx2kJ/Gp1vpJuy5nJMZgEs1gfGZM0mCAN9/6Fv2/1MfVDgXSdXk5oRDytXd3JnnxJ0pJ19+siXEZjDNGKUIeumvipiMJkgASLv5yaT2YICCh2DmaVSNQhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770287361; c=relaxed/simple;
-	bh=M0gZn8winEliqhGahy84Qhzwa5ObKvMsu8NdNP3r6Y4=;
+	s=arc-20240116; t=1770287542; c=relaxed/simple;
+	bh=mzwY9TgNXznHH1Dt0eYLQq/L3pUbTYG3zZaFG8yD1t0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ip98X8Gd0aQO0F8JZ2ORDg1AqUp/iCv+FS0mHkHXhKlvdZf7z+yERAhBTnoYr9FttISxG0ff32U4hs/PnjcT9nNUmf8MWIxE6UCWh/YsVrgDfi7lt11IpBZETI6D+x2s4PLY7gQah5Sm5Ys7Pid6T1ApDPH8Tl9qRuoR7n8TC44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=M9PYZvML; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=dd7+ILOC8cSd87d5nePXSgsKoehnTaOJoPr65poELXt0qv0Rha/m3+JvWzU00Gvt8qDz7Ftk5mysJaT1KLSK4Ib6dKUWvCBz+geJMwUnGrTgOF3OJ2ag4/+SVndHSAWdVgPn0Gnj5m/iv+7/OamXf0kpUEo9TKw6J9liVbXe8wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=P6MK2gjj; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="M9PYZvML"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="P6MK2gjj"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=H3H5KVNh1pnHHVh9Ov6jx6rE+cNPbS/SCtZP43JlK6s=; b=M9PYZvMLjKM+daf2ys8jLddjso
-	ITNxteJGknoOrAXwXxn9Axpf8Ze7lXs3jEHce2wOf2WmQsf6apeAqExTrW33rbE4m4GQ9auoRlOlA
-	8OqXddLknPmkZ5ivvixkS+K4H5U+/w138gYdqq7/Y0DJkLutUCpe9JqNtzsMywMRF/nqNA1JjjX+j
-	lGfbbpv2XwE3zkapezxIiPDl06+WajWggHtMs44APE7o/we33Yq1RxDiVC1w8r63RUrN3B/Mp7GFi
-	X0k/M4sgx1iYJ4I7C4uFuY5U2dmjrSa6uA4SWDAkNZHou3ZtcTBK5g0hPMkK9NaMNl3sQpqxY5qmk
-	RsorXong==;
-Received: from sslproxy04.your-server.de ([78.46.152.42])
+	bh=hqOgSkCb9E8EmtWJeP1Waru0HUgyqx+7A2u+ul8BGfQ=; b=P6MK2gjjkwweNiwBKaMGc5kMzW
+	2bH1RZO0GJ9KLCYi9S+QSSnQCkOAUPiQzWk3zFBhtJp9hrFO+IjjQkS6+N8F/PwXdkfBVO/HFZ/Rm
+	gxm/yfFfLlVVcatJPUe+ZD3ytner1t7wKr0MbrvLmZEpTYfHBDJcXh4qr2D0+2ygbMVpJg7jun/14
+	Cll2EBnb9TA0roZVs+2ITgTQzwjbSryb8iQm9rRmWn20jgLK0iwTg30c6Rndjm8sXYl3o8Ge/lqvN
+	NQoRkeqb8kYDeNklnpMrRK/sLJ6U70y8rLfEac0ClqVc0/11swZDvkmsmxsw/uKTuzzrem0apB+8w
+	QE6luqpQ==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vnwbq-000Abp-2d;
-	Thu, 05 Feb 2026 11:29:14 +0100
+	id 1vnwSM-0008Ep-37;
+	Thu, 05 Feb 2026 11:19:27 +0100
 Received: from localhost ([127.0.0.1])
-	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1vnwbr-000OEs-1Q;
-	Thu, 05 Feb 2026 11:29:14 +0100
-Message-ID: <4edfed95-15cb-403c-b6ec-fae025a53757@iogearbox.net>
-Date: Thu, 5 Feb 2026 11:29:14 +0100
+	id 1vnwSN-000J1N-06;
+	Thu, 05 Feb 2026 11:19:26 +0100
+Message-ID: <4eaf4476-f8dd-4c75-a6bf-50dbee8fb807@iogearbox.net>
+Date: Thu, 5 Feb 2026 11:19:26 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,11 +48,10 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3] bpf: Limit signature size to
- KMALLOC_MAX_CACHE_SIZE
+Subject: Re: [PATCH bpf] bpf: Require frozen map for calculating map hash
 To: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org
-Cc: ast@kernel.org, clm@meta.com
-References: <20260205063807.690823-1-kpsingh@kernel.org>
+Cc: ast@kernel.org, Toshi Piazza <toshi.piazza@microsoft.com>
+References: <20260205070755.695776-1-kpsingh@kernel.org>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -98,33 +97,35 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20260205063807.690823-1-kpsingh@kernel.org>
+In-Reply-To: <20260205070755.695776-1-kpsingh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Virus-Scanned: Clear (ClamAV 1.4.3/27903/Thu Feb  5 08:23:30 2026)
 
-On 2/5/26 7:38 AM, KP Singh wrote:
-> Practical BPF signatures are significantly smaller than
-> KMALLOC_MAX_CACHE_SIZE
+On 2/5/26 8:07 AM, KP Singh wrote:
+> Currently, bpf_map_get_info_by_fd calculates and caches the hash of the
+> map regardless of the map's frozen state.
 > 
-> Allowing larger sizes opens the door for abuse by passing excessive
-> size values and forcing the kernel into expensive allocation paths (via
-> kmalloc_large or vmalloc).
+> This leads to a TOCTOU bug where userspace can call
+> BPF_OBJ_GET_INFO_BY_FD to cache the hash and then modify the map
+> contents before freezing.
 > 
-> Fixes: 349271568303 ("bpf: Implement signature verification for BPF programs")
-> Reported-by: Chris Mason <clm@meta.com>
+> Therefore, a trusted loader can be tricked into verifying the stale hash
+> while loading the modified contents.
+> 
+> Fix this by returning -EPERM if the map is not frozen when the hash is
+> requested. This ensures the hash is only generated for the final,
+> immutable state of the map.
+> 
+> Fixes: ea2e6467ac36 ("bpf: Return hashes of maps in BPF_OBJ_GET_INFO_BY_FD")
+> Reported-by: Toshi Piazza <toshi.piazza@microsoft.com>
 > Signed-off-by: KP Singh <kpsingh@kernel.org>
 
 [ tree would be bpf-next ]
 
 Acked-by: Daniel Borkmann <daniel@iogearbox.net>
 
-> ---
+Could you later also follow-up with a small BPF selftest?
 
-Next time pls add a small changelog below the "---".
-
->   kernel/bpf/syscall.c | 6 ++++++
->   1 file changed, 6 insertions(+)
-> 
 Thanks,
 Daniel
