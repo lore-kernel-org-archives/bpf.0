@@ -1,75 +1,83 @@
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com [209.85.160.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA5D320A0C
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 08:30:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06BE8155C82;
+	Thu,  5 Feb 2026 08:48:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770280203; cv=none; b=b9tGn8LVr0UsZg+XRbyI3m5fsV6k3Jrl71MnTdgB059OWbW/yRDxQ8CmrNrfLNRhZNZk2fKQk5NGB8UwtqaTaGr/4yL2dKII4lRziKuqkfeEjzmUMzoFznHL8xqCorfFRZWBLFUBiatSFj2DVJGxDV5BC0KLr9/QuoewVdV+J8c=
+	t=1770281329; cv=none; b=LoNxJoMFxk1GwupV/iWgdYhI2wHREueHFt6+B64+IxMo5iZsM2tR83tPDICBBUtpKx5l49rbruRQZw0Zmak3OGx0jr+Q4AFY+jGVuwyUZjwskjwNZCcGrjU8T5UTh9xbISunCqLa1S4urDv1q5EAOZJ/jmU2dklhh07sNe5OaoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770280203; c=relaxed/simple;
-	bh=uMswa8QgyTDD4PSRzJyW7FHr5n7JVIst00rKkccJkbA=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=DjTJt2h9pcivB1UsoMRzQpvgInpHyCmoU/6j1jL9CZHbcg0Ycqz6Yf5mgODbU7Bb7dfDv9mbQ9cIlG09xgAkaRqRb8u7ByFP2Mc26KXcalHYMjX4GyTJJ0eRFLT8i/V8v4HNYatAsBEDtotj0FvRuR1Bg9sN1HfwnhC4G+XswcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.160.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-4041710f90fso3095831fac.2
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 00:30:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770280202; x=1770885002;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=llRsHVUGZUWzlNHdbad61AK1n7j7FSs2B3eJju6Uw+Q=;
-        b=YifdXQ7tq/ElPtgX1wPBajPMBVKfDLnKtrmEAwG7zNiSAxuGU5KEEJVQMNzUwtc9MZ
-         UCUex87YAuniSk2A2OCeY+9IkyWNVET3Q+6Bm9FEe5JQaEtg0ieJchHb7izsrlSo6ln2
-         J6YKuVFgwZVu8tQ8kRXbTSkQGaQ9AVUOACPmGKiO0hWDOwU8GCz8vXkqxIiNEj8wwAH6
-         2i25TBa5xPT6ROeeRJkzJnLlJmgXw/QEk5/tO+H54CVUBHjEUr3Yx5ahanV44y9olGyo
-         yNqxZXSsXdsu43ZvJ0VFU2AzpeuzkEdczXCdLKGEzxZUDyUaIA3SimVovkk569gqXBYs
-         h0BQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWWIQtlZuVBmZgkJoXG0oUobUAP+5RDt7VCGuncRwjDlTDFjRn+2C9Y4cwAE91sO99wcps=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWOZIQKcq9g/l1rxuIdo2HLPZ9jj8PrJV2vEiwXTEjGw5XG128
-	vTlDMRY5K2eCJu574exQKfXjgDZZKE+lTaO0Pu3Zfpco7WEPkk9/JKuLnijlTosSx+vi7fD95wp
-	knMwIsLVEVMy91YdE0Q9TCcPLgwZ1K62amRU1Q13GnUzfmvMEMXNJrG0xuOk=
+	s=arc-20240116; t=1770281329; c=relaxed/simple;
+	bh=7WGYzvj+SUhdfVxlowxaOV3IwVaL8lRhNVvTBxDsSVg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fv3TMPsnszBXhXMlL6PGhSZBNP9UG53RW/Hyjiwm6EUlyLPkiYbbvDl0JKCiEBhEjR5AADezqWQNfKaIz6GIFNcpkCsIbgKglDvniuFszXxjVK+ua0ziFp+jeMQXXLyncKtbIO+gUbxYja975E8t7VwYHFt3WUKxW5RtQ7z68TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k+l6F4Ey; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k+l6F4Ey"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C8E6C4CEF7;
+	Thu,  5 Feb 2026 08:48:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770281328;
+	bh=7WGYzvj+SUhdfVxlowxaOV3IwVaL8lRhNVvTBxDsSVg=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=k+l6F4EyooXlpS+/zHTNpbn/px1aM8VPaUxyL/6CWk53EfJFBeK1qcC63fnYMEzU8
+	 XFuUw4/Z0FotaeLYdvRzu7022j32Gx7uZpcglnk1BZMTL2Xn/62OQCXvaewgEP2KV8
+	 ZN5Oym/SCBdBTxkyQ1GYoJqGA6goeQ+SoAf/j0VPj3ymMRFIAXQsQ+dcpihxh3sZ3O
+	 ultYYlMHUrNdvEUZQ5KBq7foxItCnvLt/fT/vHLuNC3RkiXNmZjRNs8+nfVUa7bdGk
+	 aeMBRhHsSX4cB0CDdqZ/VfLAaQV0nSsifwhziLq9XYnGnzz/xi8tv9TFP2XJd88Rcs
+	 8iUno/2u1zZxA==
+Message-ID: <2e1eb11c-cd47-4772-baff-45d43d4fa539@kernel.org>
+Date: Thu, 5 Feb 2026 09:48:43 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:1522:b0:663:f65:1c8b with SMTP id
- 006d021491bc7-66a229794admr2711424eaf.51.1770280202384; Thu, 05 Feb 2026
- 00:30:02 -0800 (PST)
-Date: Thu, 05 Feb 2026 00:30:02 -0800
-In-Reply-To: <CAGn_ityekaJpFNnaYHS==PcfDdeXY87w50s9VmeiN4r4EyD__g@mail.gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6984550a.050a0220.3b3015.001b.GAE@google.com>
-Subject: Re: [syzbot] [bpf?] WARNING: refcount bug in __add_used_btf
-From: syzbot <syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com>
-To: a.s.protopopov@gmail.com, alexei.starovoitov@gmail.com, andrii@kernel.org, 
-	ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net, eddyz87@gmail.com, 
-	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
-	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
-	netdev@vger.kernel.org, sdf@fomichev.me, song@kernel.org, 
-	syzkaller-bugs@googlegroups.com, yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next RFC v1 0/3] net: sched: refactor qdisc drop
+ reasons into dedicated tracepoint
+To: Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <eric.dumazet@gmail.com>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org, horms@kernel.org,
+ jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
+ jhs@mojatatu.com, carges@cloudflare.com, kernel-team@cloudflare.com
+References: <177022452988.1827734.5121740962985640333.stgit@firesoul>
+ <20260204190417.110f5498@kernel.org>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <20260204190417.110f5498@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello,
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Reported-by: syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com
-Tested-by: syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com
+On 05/02/2026 04.04, Jakub Kicinski wrote:
+> On Wed, 04 Feb 2026 18:02:49 +0100 Jesper Dangaard Brouer wrote:
+>> RFC: Seeking feedback on this refactoring approach.
+>>
+>> This series refactors qdisc drop reason handling by introducing a dedicated
+>> enum qdisc_drop_reason and trace_qdisc_drop tracepoint, providing qdisc
+>> layer drop diagnostics with direct qdisc context visibility.
+> 
+> I like this!
 
-Tested on:
+Awesome, then I will continue in this direction :-)
 
-commit:         ea7bf7f2 bpf: Fix a potential use-after-free
-git tree:       https://github.com/aspsk/bpf-next.git fix-btf-refcount
-console output: https://syzkaller.appspot.com/x/log.txt?x=150eda5a580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b5a1ee0109784fc2
-dashboard link: https://syzkaller.appspot.com/bug?extid=5a0f1995634f7c1dadbf
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+> It will presumably require existing users to migrate over
+> but sooner we do it the fewer users that have to move?
 
-Note: no patches were applied.
-Note: testing is done by a robot and is best-effort only.
+I agree. Existing users will loose some details, but the patchset
+results in fallback to SKB_DROP_REASON_QDISC_DROP as a drop reason,
+which existing tools/users will still handle.
+(The more specific drop reason is now avail via trace_qdisc_drop).
+
+Eric and Toke is this acceptable for your users?
+
+In patch 1/3 I kept the qdisc "name" as part of the enum for FQ and
+CAKE. IMHO this should be changed for next patchset, but I offer you the
+chance to review and suggest generic naming (else I will choose).
+
+--Jesper
+
