@@ -1,112 +1,175 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4205813A244
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 00:38:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1136019AD5C
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 00:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770251939; cv=none; b=u19+Kt+jUKLdyLO2q3zuhvrMTBmnk/Ct7XmTxf8Z7YP77wixHWMCiQlvtXzs9LSch2FA5p1iOHly0Y4a6tsr3eVjePjdWdGLaUZiHYG3TK9wM9drtovdQBLcittfvDlaHw8WZPdLXJwkh4ualeorEXMOHHTYd/SYyHVGyufGcD4=
+	t=1770252944; cv=none; b=EzxbAlN0aXc5RCPC7Om1z/dx7L1vMl+cJQZ+jykCBndnxV3ZLe/2qCyEdobJLuRGT5IZS0ue+xAJ6R+opJSZJyYltyQivrfBYzkySOxjeAKzDP1v7C0AMqaLUvQZhGsaFffUJwFhZRq/M49ICxyxoj5glGtgyWQxcsfgStnBYzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770251939; c=relaxed/simple;
-	bh=K5Ggqj6brOrpLyiYIKKgcE5SjwhVsQL2fqGgWUT88Po=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=p0NtF83pD16OsWDyePuOe4Zg30M/arFtnDAhJVPQi96zocMRvh/zWotVkHNP3NLj5Zzihwb3k3OnQl3SnkYi0UoiGBQYGLToaexkm3CjUBoklfDvGh9ZPPPZqZ0qMI59oqSYSElkrfetRRH/hZyQ2kBpyXDi7BPEGRMmwDZBv+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mzJD6Pot; arc=none smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770252944; c=relaxed/simple;
+	bh=IzN9tiZFsFxyS+DvHSMY47r5D850JznzNMO+IpZsP3w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=akhwpTYcHWOtP/txtxyJxBwfzmYf/s6GbMASVW+ztvB5AwFk8fNVy5IVTkTT2N2gg2KR4RLCHLb5fb+JhWSm9mRcs/lYEAkQGiM1x9fXpYrGckav3ZCobqEUzO9inde9hShk6EpVXCTR4tSH277/aPAlUgVixRpe1fvEDvnA3jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EwGKlL28; arc=none smtp.client-ip=95.215.58.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mzJD6Pot"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-4359a302794so294268f8f.1
-        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 16:38:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770251937; x=1770856737; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dqylYFpXisLAY/foFTC+RT1cIbLo7HP1HpeWW7OVMEQ=;
-        b=mzJD6PotLn0Olwcs+1THHjwUXU3x6MG9yFhNxsCFrf66TDlNTQLHy/EcmkVbYP9veQ
-         lgnoSrAaa4qTZEBjO4YALSvAxyORLqsxCgsgR3FoWtRD3Nt/Z1/truBPcxY0FlAL6Rzh
-         r41jThEZS1H9lvsFSCAqwh3DZ8iDLgj/AouEBMZeBYZvzl78my2TMEO6BYcmsaxiGDw9
-         isYuP6x4Gh/gagCWE+glUG8WS59GdSd6ezySKi+U/8PwvTHYj1w2U+J8GnjRMD1yI/DU
-         zggU37CG317b7DB0Le5prQDO9mzOhf+MnyTlHMBBagpkbc6Q3yUMTRx9TiI1geROAg/C
-         7ihg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770251937; x=1770856737;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=dqylYFpXisLAY/foFTC+RT1cIbLo7HP1HpeWW7OVMEQ=;
-        b=butdwZgv2BsiQIeLeGamYahowk0v8pnDuEDWwFp5INS20KTYAfI7mzNJ9QOpwvVE7o
-         iBSb9JpxlR1i9DkOWDKy+lFG3p/KSL3ef1yPwu9mnFuw1qXwLC4UCNdu6nIoCAeurin6
-         ffkNXsJJbtEYgHxgFljRfD8AbrUis6rqcxEZThXDhEJfuhFe5PtORKVQ4haAKHNQxOOh
-         lbzJIivyhIjc7+faRYohma0nGxR4x1hhhEuQNJOshlO9bLuIbZj02yQfSCWxCaNC24X4
-         QUJpuCZI3sEuA5yYf8WGkBBQ3OJBz8O9ACHsjGFWakFOxZ9GRQ3EIiU4ChJyBEQntrDe
-         64mQ==
-X-Gm-Message-State: AOJu0YzQE7S8SJ2Cid3c/aduIIlA5zTjJAAPwNbbAPBOSDX1MBsBp0/S
-	wt/8g3Rx+y78I/3VhzuuZPiuLeLTeaHCvWvpcCiOi5dPLlVgomh/5sc2CAi+b+oF8I8=
-X-Gm-Gg: AZuq6aKnJZ+982zr6+VrTzoyMIHzaBpCzq8Vzssk6TLYaeyJYMp40xFE34CqFXZCF8Z
-	uiF4epTSezorHxWL9EYawqCoxyHGYiSsLJZfbhw/ij6bIj2iCDe6qfVFeS+YIm0xp7JcbPzt9va
-	BDvtHY367qIqDrBRgBYXDxtZ8FLKM+74Hzr4quaGgtYZ53abkNijjTcovhRxWnrRVNfD3AUvHdn
-	ZajHPa0vg39OttWVkd5ziYEdKalxOUIKwqA/mENQ3Lsv3lIZFfx2sUzmE/6+BhpX4b6ltQN0Rey
-	HNDiI6bDB+OfeNHuq5ops9JHPwWMHA8lfmnmeBuCJUFd32xt602xEruKuXCElSwEs/LvAKqavy8
-	ZzFa3UTwFXIkuq0a3S0gdlsFcvzDqjM4vVc3PN81IsLYkGY+TtFc1hX/dSHMGCLfzv2AMD9RV6m
-	j+yByvuwZQQna29rpFbamDvgYvCmHVN8VJ
-X-Received: by 2002:a05:6000:250c:b0:432:5c34:fb32 with SMTP id ffacd0b85a97d-43617e40896mr7326851f8f.23.1770251937372;
-        Wed, 04 Feb 2026 16:38:57 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:4d::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43617e25d02sm9785766f8f.3.2026.02.04.16.38.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 16:38:56 -0800 (PST)
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	kkd@meta.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 2/2] bpf: Reset prog callback in bpf_async_cancel_and_free()
-Date: Wed,  4 Feb 2026 16:38:53 -0800
-Message-ID: <20260205003853.527571-3-memxor@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260205003853.527571-1-memxor@gmail.com>
-References: <20260205003853.527571-1-memxor@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EwGKlL28"
+Message-ID: <bf498b0f-7bdb-4668-b2de-80dbf9b0397f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770252931;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JmbLTZPvluuSE8f3wxlxV1n2sPjWJP799eNNyA91G7g=;
+	b=EwGKlL28jm8g+vYzacJJQWyjA48WoKqAzSGPPcZSR0sgVaGkp9j3cubv1TwscIa3yybMeF
+	aLpAUkbiFNk9rgffrqDIddAMaywB+OBQ04x7RH4/mQW+k++hPXY9DY38K1FUouAFEAZ47C
+	sb6ddKrZu2oSuZ1iecmJN/1KN4Qce04=
+Date: Wed, 4 Feb 2026 16:55:26 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=981; h=from:subject; bh=K5Ggqj6brOrpLyiYIKKgcE5SjwhVsQL2fqGgWUT88Po=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpg+Z77F2VPj7dCo81a254U8riEdMvAxNdNSbGhPfC fcMTvkeJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaYPmewAKCRBM4MiGSL8RyrJ6D/ 4kIhqgMrIBpBC690IabCfnuqqpKW6S5sgWIkjUVbKU9qbCU7wx2hoBfKnsSuALQNIFg5KjE3fjqPk8 uMZN29um54UvWVrN9uFFLIXs/s/HJ2sBSESvbyXLSamYiiuUdWnMGSK80wuZlFt8VIVfL7p2gXpYUg TJwwKsm9DyZDu+B28Ji9lPEvVFe1Hi/Wk351BvBnbhA3krbs2jc2+LG4CFVKhaog7ASx+Zdbef5IOv T12ms16gPsQ72Um4SMwb4zRCJ5IorjfjS9n/hwy8e8HdOfMW7yli0v8yvDCA/mzAf3rO4kfxKQ7+HI sHD28MqX1SzlSfD9T8hBsKqJnYP3mFpMgt4bf//G5uF0mKLNw8m/sUpEKobr8RVmBNCBu3HaOuAb4o dbUhjSQvpYWhChbbNBTcj9x00aX6A2I2rQUzp3wCJ0xo5W2GB03cic+9TwKQ8DQhz1z5fF/5nCnFVw jH4EoxHarQvtG/kZ2k765vNdzFTdLyHR6q4O9lPhL5pNhHIIlVQRhqyqnWaE1av7nEleNTb43b5XTk 9qwR2C2hebL8ddClcbRFENCvaqkaquxugVXJNlB0Z1siET3CEMzInBaGwxWGr8BcpI+sWafxUmoFSO wsZ+N7ZDXFKgyorPhwZsP43/Wa0EWjmtOnnMjJiAdJNo/+PQvlOIdgCOKk0w==
-X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
+ update
+To: Kuniyuki Iwashima <kuniyu@google.com>, Alexei Starovoitov <ast@kernel.org>
+Cc: bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+ edumazet@google.com, horms@kernel.org, jakub@cloudflare.com,
+ john.fastabend@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+ mhal@rbox.co, netdev@vger.kernel.org, pabeni@redhat.com
+References: <0f8ec4c7-5de4-4e0b-a50e-cf4f8d59709b@linux.dev>
+ <20260204211436.1821958-1-kuniyu@google.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20260204211436.1821958-1-kuniyu@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Replace prog and callback in bpf_async_cb after removing visibility of
-bpf_async_cb in bpf_async_cancel_and_free() to increase the chances the
-scheduled async callbacks short-circuit execution and exit early, and
-not starting a RCU tasks trace section. This improves the overall time
-spent in running the wq selftest.
 
-Suggested-by: Alexei Starovoitov <ast@kernel.org>
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
- kernel/bpf/helpers.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index b7aec34540c2..a4f039cee88b 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -1664,6 +1664,7 @@ static void bpf_async_cancel_and_free(struct bpf_async_kern *async)
- 	if (!cb)
- 		return;
- 
-+	bpf_async_update_prog_callback(cb, NULL, NULL);
- 	/*
- 	 * No refcount_inc_not_zero(&cb->refcnt) here. Dropping the last
- 	 * refcnt. Either synchronously or asynchronously in irq_work.
--- 
-2.47.3
+On 2/4/26 1:09 PM, Kuniyuki Iwashima wrote:
+> From: Martin KaFai Lau <martin.lau@linux.dev>
+> Date: Wed, 4 Feb 2026 11:34:55 -0800
+>> On 2/4/26 7:41 AM, Michal Luczaj wrote:
+>>>>>>>> If the concern is the bpf iterator prog may use a released unix_peer(sk)
+>>>>>>>> pointer, it should be fine. The unix_peer(sk) pointer is not a trusted
+>>>>>>>> pointer to the bpf prog, so nothing bad will happen other than
+>>>>>>>> potentially reading incorrect values.
+>>
+>> I misremembered that following unix->peer would be marked as
+>> (PTR_TO_BTF_ID | PTR_UNTRUSTED). I forgot there are some legacy supports
+>> on the PTR_TO_BTF_ID (i.e. without PTR_UNTRUSTED marking).
+>>
+>>>>>>>
+>>>>>>> But if the prog passes a released peer pointer to a bpf helper:
+>>>>>>>
+>>>>>>> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0x95/0xb0
+>>>>>>> Read of size 1 at addr ffff888110654c92 by task test_progs/1936
+>>>>>
+>>>>> hmm... bpf_skc_to_unix_sock is exposed to tracing. bpf_iter is a tracing
+>>>>> bpf prog.
+>>>>>
+>>>>>>
+>>>>>> Can you cook a patch for this ? probably like below
+>>>>>
+>>>>> This can help the bpf_iter but not the other tracing prog such as fentry.
+>>>>
+>>>> Oh well ... then bpf_skc_to_unix_sock() can be used even
+>>>> with SEQ_START_TOKEN at fentry of bpf_iter_unix_seq_show() ??
+>>
+>> It is fine. The type is void.
+>>
+>>>>
+>>>> How about adding notrace to all af_unix bpf iterator functions ?
+>>
+>> but right, other functions taking [unix_]sock pointer could be audited.
+>> I don't know af_unix well enough to assess the blast radius or whether
+>> some useful functions may become untraceable.
+> 
+> Considering SOCK_DGRAM, the blast radus is much bigger than
+> I thought, so I'd avoid this way if possible by modifying
+> the verifier.
+> 
+> 
+>>
+>>>>
+>>>> The procfs iterator holds a spinlock of the hashtable from
+>>>> ->start/next() to ->stop() to prevent the race with unix_release_sock().
+>>>>
+>>>> I think other (non-iterator) functions cannot do such racy
+>>>> access with tracing prog.
+>>>
+>>> But then there's SOCK_DGRAM where you can drop unix_peer(sk) without
+>>> releasing sk; see AF_UNSPEC in unix_dgram_connect(). I think Martin is
+>>> right, we can crash at many fentries.
+>>>
+>>> BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa4/0xb0
+>>> Read of size 2 at addr ffff888147d38890 by task test_progs/2495
+>>> Call Trace:
+>>>    dump_stack_lvl+0x5d/0x80
+>>>    print_report+0x170/0x4f3
+>>>    kasan_report+0xe1/0x180
+>>>    bpf_skc_to_unix_sock+0xa4/0xb0
+>>>    bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
+>>>    bpf_trampoline_6442564662+0x47/0xab
+>>>    unix_shutdown+0x9/0x880
+>>>    __sys_shutdown+0xe1/0x160
+>>>    __x64_sys_shutdown+0x52/0x90
+>>>    do_syscall_64+0x6b/0x3a0
+>>>    entry_SYSCALL_64_after_hwframe+0x76/0x7e
+>>
+>> This probably is the first case where reading a sk pointer requires a
+>> lock. I think it will need to be marked as PTR_UNTRUSTED in the verifier
+>> for the unix->peer access, so that it cannot be passed to a helper.
+>> There is a BTF_TYPE_SAFE_TRUSTED list. afaik, there is no untrusted one now.
+> 
+> Just skimmed the code, and I guess something like below would
+> do that ?  and if needed, we could add another helper to fetch
+> peer with a proper release function ?
+> 
+> ---8<---
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 3135643d5695..ef8b4dd21923 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -7177,6 +7177,14 @@ static bool type_is_rcu_or_null(struct bpf_verifier_env *env,
+>   	return btf_nested_type_is_trusted(&env->log, reg, field_name, btf_id, "__safe_rcu_or_null");
+>   }
+>   
+> +static bool type_is_untrusted(struct bpf_verifier_env *env,
+> +			      struct bpf_reg_state *reg,
+> +			      const char *field_name, u32 btf_id)
+> +{
+> +	/* TODO: return true if field_name and btf_id is unix_sock.peer. */
+> +	return false;
+> +}
+> +
+>   static bool type_is_trusted(struct bpf_verifier_env *env,
+>   			    struct bpf_reg_state *reg,
+>   			    const char *field_name, u32 btf_id)
+> @@ -7307,7 +7315,9 @@ static int check_ptr_to_btf_access(struct bpf_verifier_env *env,
+>   		 * A regular RCU-protected pointer with __rcu tag can also be deemed
+>   		 * trusted if we are in an RCU CS. Such pointer can be NULL.
+>   		 */
+> -		if (type_is_trusted(env, reg, field_name, btf_id)) {
+> +		if (type_is_untrusted(env, reg, field_name, btf_id)) {
+> +			flag |= PTR_UNTRUSTED;
+
+Something like this but I think the PTR_UNTRUSTED marking should be done 
+right after the clear_trusted_flags() where it is for supporting the 
+depreciated PTR_TO_BTF_ID. Before that ...
+
+Alexei, can you advise if we should change the verifier to mark 
+PTR_UNTRUSTED on unix_sock->peer or we can deprecate the bpf_skc_to_* 
+helper support from tracing and ask the user to switch to bpf_core_cast 
+(i.e. bpf_rdonly_cast) by using a WARN_ON_ONCE message?
+
+The problem is that the unix_sock->peer pointer is not always valid when 
+passing to the bpf_skc_to_* helpers, so it is a UAF.
 
