@@ -1,110 +1,125 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A6C82868B2
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 18:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770316546; cv=none; b=b1j+Il5ZqoDtsX59pfKSa6GcKEWhUxjBB1TX1owglyWI1gqRhlIBSNp1AFdPCa6NAg+e+ZyBckauf9s9U8kykYbuJtBpGXilVAsg5nmWKzLYrDjhMyRqUW4yNOslvig8W6KMWpM5F/Mntht0VeaBttHW0KLdEeWWd/92uwbKhr0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770316546; c=relaxed/simple;
-	bh=m55Pe+R5VjpRH1rrRb8Gz+jVpvHwz4rdWmym5ebZFuc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dXSQFPuIaA8QxFxxKvj0NDikKHao9gv/SmNTEwdp4O75PPJDr2p5QdHeJfP3m8RmqtEJsMwzly2ucQTD8ZjVfkjJsZEy++LNEB3y4aRG8AhBJgNuAXJ1KSG8S1Rcb9cNaUgqATuPmwfJdCObCSsNkuSSrHVHoKEdGvZBUF6MWY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m4l/d9yy; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4AC9222575
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 18:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770316872; cv=pass; b=S7Y90exOYO4hMz5rhSWbuVZnV8tbAhoMj5q6a9fug3Smmaxq2jGuI54mLGFSYkeP+AenBU7q6roG79vjVZbbjrY4OfLBLXsYxulXOc1SsivxveD/u6/gUUW57tmI/tU0vt5OaU9LPntYYwBX9uQd/HEBmsVw6ZAtBy5uNpFlOi8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770316872; c=relaxed/simple;
+	bh=TcRSbvXNJgdwK0D+zr1lv7A69Xhax3SXB/KZlxGu3Z0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qVXIjo6ILP1XR0iN4PQUz5lS2MnKfKtU4vZrN6LKuRwm8K67oJro1GbC1c4Cz7CBDIrYDSQGbNpIBSA+WCfmWk2oMZ0boDbVCEmeprGqScfW1/z++AxMA6jdVurde3Fbgp0/6/usOwK7WHhtgdaNuKfKygmalGrD+4Ybtmmv+bk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G+PkkvQx; arc=pass smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m4l/d9yy"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2a07f8dd9cdso9439335ad.1
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 10:35:46 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G+PkkvQx"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43629377370so67148f8f.3
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 10:41:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770316870; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Dqb0GMhig9/Gm2ct9Iq2Jwf7rVISQrsOz0Zk0k/wKF+EMyVUHMa8iPSpnzmZcVTc3T
+         PzVRf88s1Y+ntqDcBTgXz1WelenrM/I29SXOLOAng/xYhvwlfOCGNV0CKI5SpUPXaHx7
+         Q56SwosO+bvtWm6ZhmkSRHE6O0HRdLlk3YiIMuUOqwEg6F0noUvGG9SJyI8063VVuVEP
+         529S/s0XynZxOAr1xV32dpvyLOc5vOlqAIZwitLLiJqeb0w37fuyHxB7D/zAwXrY7Apt
+         40jUxw/z5OeJ+bIFnUMX9CniZiJvMY1cn9FDkIqUedtvqbDnpUMCzCmoZ4m9Cc49dS5I
+         g56A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=TcRSbvXNJgdwK0D+zr1lv7A69Xhax3SXB/KZlxGu3Z0=;
+        fh=YwvFB+7MW92qFeDWuJHtK6kxWR5Ma4hmbXV7sMeuLro=;
+        b=AHgjRDx4qqUrtzQ3lTg47oz+gfDSuAbBM3gjLJOU5PjKUkGy8SPZMALlPJnp/ZW1/N
+         96SgzORtn4nZW6GRTTxYVsLYVAkug/NFuiuqPbiRwWjYQ+AnpgamsHHjl6+QCDS74m/p
+         v+7vaBnE6R32c/pUcqCDE7DW6FD5Ttlq9PTg1oEWi5huXa5YkRC17JyG9CAMrT6TJMdY
+         V5cwohV8ROu1vGfq1a+wSbtmPLvofbCydcJiM5xwlyXxH4NI7fmLcqEAfR44nxydB6p7
+         SlAGrnhDn4jYtUGEOPii/r8z8bjafpITRRSXuI28gVZnYzJv2+yD1k+niFhryokI1ejG
+         Nwiw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770316546; x=1770921346; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=m55Pe+R5VjpRH1rrRb8Gz+jVpvHwz4rdWmym5ebZFuc=;
-        b=m4l/d9yy8YYWPvIDdX2iHiUkcswDkjj3w0FyzTcHGKoARCMF7ZeHu9E1FLagxfWNHi
-         2auPY5oyPynTXeBqSEp0CgkJS7LxJzFKfO41TwZoiTRo6F2cavkfY2vNrvFTQ3nUzHgF
-         pPWdZg3qqSQancumclsGig0QrFpYZ6n7fEmUoYQ44M3xSHlyZ7aw/bRaNLZpGefd9VgO
-         GUUvKVlL0AN6lsxD6prk3WhhvSedp3hHYZFkUQR06Kxjg7ElgnIyqb/Cu6XOZZ9BL00N
-         6BRV4+eSRHojsZSaltLbpPJNlRg7ROqhyd1qGVWfy5D2HfmIoTKsEPQrtnL5GJbDVNmH
-         xiFw==
+        d=gmail.com; s=20230601; t=1770316870; x=1770921670; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TcRSbvXNJgdwK0D+zr1lv7A69Xhax3SXB/KZlxGu3Z0=;
+        b=G+PkkvQxh1YzxqvRjYGUXHgtLGLCtz2HCHkR4wEiUzdWaSzwITBkfbh3MYrMWkFjZL
+         GZ2z0s4ercWpUr0h0HL2/gqQROxmG4XkGsF/YVGAvgT2wUn4FRfDw02kduMl58Mli7wk
+         fI161Pyb55IoN9fG6PV2RjIH0nDmlbNsIFyZURMyNEymaB+XnZDoyXil5H5qbC4IsQHw
+         JCEQI7/rFyXGvaZcwrgrfcD3ZkFGaaDs9sWJ5l8bjXC341ZSJVNEXFPkLQF4KWrI5xSr
+         G81E82kMX6lJedKWgTlPoQbQHr+GciVczN++pkPjK0RJJrcfDmgnlT2ouWH4SziG8GCg
+         I0uA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770316546; x=1770921346;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m55Pe+R5VjpRH1rrRb8Gz+jVpvHwz4rdWmym5ebZFuc=;
-        b=nIk00ls0JnvX5A9U/6q6LNZwvhqORUHIaq1f7b4o5w6LcUFCTAACGWnjVYasgY5om+
-         vjxGY8z+79hmVysRs+6XMcxrFzvXeHxoCmNFGgPkHMMIVVjz/7UO072Y3Q998haTDdOL
-         /aCIlP9o+Tf8V5MC3Mn+uV47WXnmk0hlxCSlepwZ3rxzeiRBfRbaQbWtc75YVqdiKeuf
-         g1u38kiSu5z9WmO9x2k1siySYlIMIRYKZK6/ftZ6g0HjV98t8MUk2dJGTnYhRiHooaHQ
-         l15bBcILLrNnOrjVFnvdEbbHtJudH17fvIIKms8MWb0RztEwPMcCdWiFy4dEOuV9GPGd
-         QWBA==
-X-Forwarded-Encrypted: i=1; AJvYcCVuOLuqbGqWzqh4noHUppmEEEEtzDCIXLYOiorGi/2SeBQ4boSVeumpXnr09KIij6kLCxE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwR3FCzNu0KNXvrAeFdW79rCNM63lnGR2Z9HX6bptaR3DdQzfZu
-	H6K8+zzYMzDi9ZyU9TjWvwZa4qsdAG7GNnDJlgab7m8oHfYIX0421/40
-X-Gm-Gg: AZuq6aJOuqajXZQHqDeOwy8mbH9iZKMzsWgYOrn9ZzZ+JuKgQ4e67PQSdDpSzlGi6Di
-	WXNOoMOkdAkH1561fL/R8PGiwh2sRRHCoJtx6NAttxKGk/1hhw8lUma0UEP1FKPvObklxYD3siA
-	wX66ZfmXXpydSk2AaMGUnb9ucfWgngcHGS39ARscAOr7gtzPOQBGq1M95NOn7ZkcK67+9lCI7Js
-	XQ0YicqUFEKO2FgaIKAPngcSO2lSOSLJWV4nHzE3nR/uMOIiCbVtSxpDA87mV6USYcmssaXUWpu
-	rWtVDf8HRiaWjJ9O7RN1BcO7VAbwFgQb9oUU/rTW8FlGGYZLBzNpY6KcEgaXTa0GdWHxWUgLtIp
-	R5T4KTIcUkWDmofbqnaDhniYEsFfkpzKGkylUYXkunAxdh0caSG6paODWlJ0WuYaQIb0DIJ9afa
-	CaC8VQfZx2jmkRXXm9KQL/u6ANMzV4l3B79Vl55fcf
-X-Received: by 2002:a17:902:e752:b0:2a9:320a:ec7 with SMTP id d9443c01a7336-2a95165735cmr2347215ad.26.1770316545858;
-        Thu, 05 Feb 2026 10:35:45 -0800 (PST)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a951a644a6sm885955ad.8.2026.02.05.10.35.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 10:35:44 -0800 (PST)
-Message-ID: <0e05189fc901cc1952982fe422d11c565f01c7f9.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add tests for BPF_END
- bitwise tracking
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Tianci Cao <ziye@zju.edu.cn>
-Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
- daniel@iogearbox.net, 	haoluo@google.com, john.fastabend@gmail.com,
- jolsa@kernel.org, kpsingh@kernel.org, 	martin.lau@linux.dev,
- sdf@fomichev.me, shenghaoyuan0928@163.com, song@kernel.org, 
-	tangyazhou518@outlook.com, yonghong.song@linux.dev
-Date: Thu, 05 Feb 2026 10:35:41 -0800
-In-Reply-To: <20260205052313.225076-1-ziye@zju.edu.cn>
-References: <e316e3675ffae5f65f70cfc25d8c5e2522c97e09.camel@gmail.com>
-	 <20260205052313.225076-1-ziye@zju.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+        d=1e100.net; s=20230601; t=1770316870; x=1770921670;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TcRSbvXNJgdwK0D+zr1lv7A69Xhax3SXB/KZlxGu3Z0=;
+        b=sFUCZDObQv8bCN1gMn29xOdjxy6pPAH1HI+H6M+KG5ESCHxa9bEng6/BbfjCY8ITH4
+         ZxVDG3EDz+3AYixpOj/kWDeyoxhVTosGbCIC5cdizpObdA2EV1Due17C0sMj/RF54ztC
+         KXwfOths63KAmlXzw/pdlnbLbPADP3FFEHVKWrMM60iczlYOsPuID+mnQ1JAE+AOIzEX
+         nj/oN+XCHOVZIdKLeGb3NaFY3a1Nod0OFp985rqoohHHClQnldB0gVgFXfoAINQHgIIX
+         pSZwemmlIR13fjGlLzDhoW70W7cJ93AJkVxgUfT9PVvz7hJGgLMJ4hqSXzWuLDsarwQD
+         DZfg==
+X-Forwarded-Encrypted: i=1; AJvYcCVvjpyYsIZ8XNlSQ4k7EZgN8wYGuHzO1OEQ8opIUd48XP+cech3wuE6eefG67ifbr0ab78=@vger.kernel.org
+X-Gm-Message-State: AOJu0YypOrez3KsVYEjuX/IjFgBcLgkbFzdzl/gDys9DZrGC3psDUAu5
+	3nIN7xZ6Z1kh3v5i9+5hkzwycRudQjJjXynpu1taAnKcTP3e9F64OI8aEArZBENK2u2SxltWjQX
+	yeoVxoj2w5XOLiJtOEooKq2dhfM0ExaM=
+X-Gm-Gg: AZuq6aJ1btW9DuSObJKvIC+PHxs8qHdBMDaYpH5C7wvOA6aLLMcqgl+JmnKSsJVRUjC
+	Vr666LBIDIqXdtCqr6mBeLpaR6Z/y/RG027Qs/Pbv34Utsg//j1T3qTlw1pxAHYoLmCOLCpn/jz
+	pY5IdiAny1MDkDlnt7n1zAxONZrK883MZfya1va0wb9t6Lo8jAMXyzA9BpSXqzEJJ5Rsj1hsqJF
+	x2ZOIr9EA/8HrK/Qmr0lGdO/xq0SM4emS4m1iOKqCCwMbY6pzPOd9CM9lVKytB+U0qOgGxuFPtU
+	4FzkDvpjNZXskop4Bk9NbjgYB4tgGo688f5Sc9FBaHCLWUIHXhfitTPlWVS/XFJuBX1U3lvf
+X-Received: by 2002:a05:6000:4212:b0:435:bd00:3978 with SMTP id
+ ffacd0b85a97d-436293b6e91mr312523f8f.60.1770316869849; Thu, 05 Feb 2026
+ 10:41:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260205070755.695776-1-kpsingh@kernel.org> <4eaf4476-f8dd-4c75-a6bf-50dbee8fb807@iogearbox.net>
+In-Reply-To: <4eaf4476-f8dd-4c75-a6bf-50dbee8fb807@iogearbox.net>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 5 Feb 2026 10:40:58 -0800
+X-Gm-Features: AZwV_QgS8if9r2iLLf6OupCtlsqadQmmVImKaHfGMnYVmhq4RYukqRgAkfz9_dw
+Message-ID: <CAADnVQLePYSw7Ke5LmcNB3B6mnxrKVjSa-uv8JfgoRjT9=BBWw@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf: Require frozen map for calculating map hash
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: KP Singh <kpsingh@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Toshi Piazza <toshi.piazza@microsoft.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 2026-02-05 at 13:23 +0800, Tianci Cao wrote:
+On Thu, Feb 5, 2026 at 2:19=E2=80=AFAM Daniel Borkmann <daniel@iogearbox.ne=
+t> wrote:
+>
+> On 2/5/26 8:07 AM, KP Singh wrote:
+> > Currently, bpf_map_get_info_by_fd calculates and caches the hash of the
+> > map regardless of the map's frozen state.
+> >
+> > This leads to a TOCTOU bug where userspace can call
+> > BPF_OBJ_GET_INFO_BY_FD to cache the hash and then modify the map
+> > contents before freezing.
+> >
+> > Therefore, a trusted loader can be tricked into verifying the stale has=
+h
+> > while loading the modified contents.
+> >
+> > Fix this by returning -EPERM if the map is not frozen when the hash is
+> > requested. This ensures the hash is only generated for the final,
+> > immutable state of the map.
+> >
+> > Fixes: ea2e6467ac36 ("bpf: Return hashes of maps in BPF_OBJ_GET_INFO_BY=
+_FD")
+> > Reported-by: Toshi Piazza <toshi.piazza@microsoft.com>
+> > Signed-off-by: KP Singh <kpsingh@kernel.org>
+>
+> [ tree would be bpf-next ]
+>
+> Acked-by: Daniel Borkmann <daniel@iogearbox.net>
 
-[...]
-
-> On a side note, we are also working on range tracking (interval analysis)
-> support for bswap operations. While bswap is non-monotonic and hard to
-> track with ranges, we found that by leveraging existing range information=
-,
-> range tracking can complement bitwise tracking (tnum) to yield a more
-> precise combined reg state.
->=20
-> Given that the implementation would be more complex than the tnum approac=
-h,
-> we wanted to ask if the community would be interested in seeing an RFC fo=
-r this?
-
-Hi Tianci,
-
-Depends on how complicated the implementation is.
-Is it just theoretical work or you see some real-world programs that
-fail to verify due to insufficient BPF_END range tracking?
-
-Thanks,
-Eduard
-
-[...]
+Applied. pw-bot is down.
