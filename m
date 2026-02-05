@@ -1,430 +1,162 @@
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AB4425CCE
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 15:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F73426D0D
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 15:52:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770306246; cv=none; b=k6nNqMPET8E3ghYeIl24qS3nm+nXoyP2HV+vtQZwRPNWygj0wXXd1DOR3PN5PdVB5qaaPURe+8xQwMtG/RPn7fbos9gwhNvfq5zt9IfCAH/Ntcwg0Pou4SD5iSeUruzIcoR9cYins0r+mj8+sO5lMmn4LNuVhDnLU1ns5UWkNVA=
+	t=1770306752; cv=none; b=tprpCWVtD+wiB8LM8eMnAw9cxDYnY/h7hSnWIwQWVKY8DfCTEuZzU6Tx7a9Hxl1W33nPxgtsoVynRGP+FaIUZEQJmHG+kfhbQPx0FzU7w7CVPZhLJKP+mj5cDpBfDeIhfuwQZmAPTudqm+dM6xFjw4KOSQfBHPTogcUZXICOe1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770306246; c=relaxed/simple;
-	bh=r7jBCeQO1gfuyxQglTggnYf/bwCDVCLzh/BohBiDzZc=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=QJgXl2LgLnEYZohhIJlv1mwoLw5YT4d+EKZlIBx8206PnCCKr0xxwJpjMyS+XuHK+I4NHwjjhaj58J4pORl9pZ0vwL4lq0RAHMwQliwWEAGXBkd888Q8BUZ3T44DiRZy+Z5AA0/GZ90nLjuOMHTH54QDgkLrZAJ2SBHNvwoe0fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-662f839d680so2864200eaf.2
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 07:44:06 -0800 (PST)
+	s=arc-20240116; t=1770306752; c=relaxed/simple;
+	bh=FNFL0/+E2aKnOvoNT9LImHUIIlRjvKZVxcmxb7yxYDI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Za4TWhpFe6hsNWxi3QOM8eOjavtnr6bQ2CSOCv/yK1EoOwOHxipq2YHUYiXExTvV6lfsJFmyUjh6anEterKoWv2FsOABw2wTnfHyw7wLJUNj5TyVtWRW9Y+iFxSANz9eDtebeIA4C3kv5G1cczRkSWYryf+zKfiiLGXCODH2c3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=NsdhnNmZ; arc=none smtp.client-ip=209.85.128.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="NsdhnNmZ"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-47f5c2283b6so9731435e9.1
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 07:52:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1770306750; x=1770911550; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UTu7qU8UN7vo13iwk65Itm5Hd0Cv+O0GXDEO+OULSSA=;
+        b=NsdhnNmZZ+or54k3tuyagYkH2oSUJVSQZusPjtXF0o9co4Yavd9/67+CVje6lfG2GH
+         Imm7ruzWxwyorDgaPrNf8XDPNEE5ga3JGo2ASBTBTjhKyJcfNnvRvwRtN5SuGLyuhabv
+         S9o+pymxhEWJBc7Xkt7vYF+Nvd1YmnaIv3dEfm6XCXyFjvBRocdIRwxwJQdJOb4nAr76
+         DJJ/6AdIYYeNxkfSL4nn2cwmbfJRP3SydAlttMcCVmbksCdxZ1/Pd5e1k/W9xcIghZRZ
+         dKglZ5nT67KNqyF7e0tLcJn6w/3Eq6yiXiGxV7e777R8p8qgwuGOZvSil5zYcQLet7ar
+         cCWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770306245; x=1770911045;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ag8pOfpCtUt2lrkw/LDRIMj+IbBuBQtD56qru7gNPtQ=;
-        b=tQva3M2jB5E1srFTKF5ZRaxAH90N6gBOXKxlo8o727CeR+6rZnqt18arLbgKKCKJFG
-         Shxht5ieVSsmM4m+Nd3RSRYqh2CryGpIJbxOlAncxZkKRoxOKwu1RZrMhdK0wUVDdUYA
-         g8wJqmBlnh+CEAlW6feMzfqF0xCPkSk7Eos5WmPjjNp6nR/fqeoCpaN9qejfy4Et0ssy
-         PnNpdLUSA++iZbw3/NnCEOFpTn59vM6pt5CwJVPogNS5eum/WBdwJbAyBE3fthqwW5hm
-         O7cnWMcX4gBwkKlAcsiHbmADF6rkwF1NMIONdplFarMsirQKJnRH4xON4jsiWxv8S0ak
-         zlfQ==
-X-Gm-Message-State: AOJu0YxDPTbMg/wXwLTkvkven9gtjdK0HdSTPP/DBTryw3NvYLec7z2u
-	Wmz3QRy6tuvFXnALddJcmES5enmqw45mope+nplistEBCm62BsuxNRI3j4hSRXXxCp2oGBF6jOn
-	euYVZ3U5u4hPcKBxdJWO3cuI5b2ACesI8C7mlU5w2ZECwLj8qvHRyx0JNpTc=
+        d=1e100.net; s=20230601; t=1770306750; x=1770911550;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UTu7qU8UN7vo13iwk65Itm5Hd0Cv+O0GXDEO+OULSSA=;
+        b=r9Hcj2pJL0CWgA2xbpPKU69WVS1HkLAeN0svNKKa0y/ML0fstL3j14ND44NSLTEBDG
+         46fUB7QkXCgTwdrwKbmIsN8KoSXtVQByGzV7k+qmqrNdOXZB45r9i//JyynsdYeMNDfi
+         nocN7+Dnt6xUuonjcROZ3RuHwx01D7RxKK0poE+Z1NbN5KXrpABsPkOUdds+K6g2cNrJ
+         WtJiXyEsWIkHTmxSGnErUG4oZE16PcavZ2ucJXjMuNJmpu6x8iJWbYfevZV7BdU+JhSO
+         WeYOIdUnQT79hAjjuY6z316/HEaVyk/Ucad0mcxb9pYKvyiAUsVFyNwlprx9IHDcwHoO
+         Zu2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWKEsTI1JMu8FdR5kUobl4Od/35admQighDX/fJzq5xzvhP3D7SzP5/3LpL1A81PPwaAsQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWZg8/X9Ks/O+/dwTALtzAc/L7BifUdjt01jbK7glKytL7T0d8
+	M6XzEebMVzMX3NrqA6bJLfwEOx0vtgZVkDQL7U4y2zG3km0k6qSF4fWgYMmalwbqO+E=
+X-Gm-Gg: AZuq6aKd4+BI958RG7sH8RNMAQmIvowA83NQxpNdw3b+KHVcRkHHQiyBdzIHnP4Nz0f
+	SZ0yh7ZPY/fwSpmBOEvfN/pOgNUglGFP2j8Y69/n1wnm91KuCCYW9pJkOun5r2Y522dCCXB+NlN
+	y1yq4mZhnv3qerMv4kB2OvHiANl3cMY6gH1ozYzuYuzZBknvbLp/rWop3IWOgEXkyb/xjv07w68
+	Kr/XUYFoY33ymWsFWOxdCRd14gVYC/TzTxgHV64Gj+nIvf7IXc2g2r5OUAfldQ2touWhct/wN6O
+	MNfFSdBmPcApfrZe6qXehXUVH79ll11TJTSLw7roBjLMlWLDHUI2FWin2YLGli048FXdFaf+c2V
+	bWpOqCvuSd0vfgDw0vdIFD3enz4i4lKZ7YiWdgd3wHQ7g3ohn7O7dS2WoyQR8NRdyYEnolQyvNA
+	==
+X-Received: by 2002:a05:600c:810b:b0:480:4a90:1af2 with SMTP id 5b1f17b1804b1-4830e979f7bmr95259165e9.35.1770306750051;
+        Thu, 05 Feb 2026 07:52:30 -0800 (PST)
+Received: from localhost ([2a09:bac5:327b:2541::3b6:79])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436234781fbsm5263375f8f.15.2026.02.05.07.52.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 05 Feb 2026 07:52:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-Received: by 2002:a05:6820:4a8d:b0:663:bf2:9218 with SMTP id
- 006d021491bc7-66a2059192bmr2469888eaf.2.1770306245179; Thu, 05 Feb 2026
- 07:44:05 -0800 (PST)
-Date: Thu, 05 Feb 2026 07:44:05 -0800
-In-Reply-To: <20260205092227.126665-1-yangfeng59949@163.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6984bac5.050a0220.3b3015.0028.GAE@google.com>
-Subject: [syzbot ci] Re: bpf: test_run: Fix the null pointer dereference issue
- in bpf_lwt_xmit_push_encap
-From: syzbot ci <syzbot+cie430046170bd68d4@syzkaller.appspotmail.com>
-To: bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
-	horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, pabeni@redhat.com, yangfeng59949@163.com
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 05 Feb 2026 16:52:27 +0100
+Message-Id: <DG75D8PWP35E.2MD9TYHOCQO9V@cloudflare.com>
+Cc: <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <sdf@fomichev.me>,
+ <ast@kernel.org>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <kpsingh@kernel.org>,
+ <haoluo@google.com>, <jolsa@kernel.org>, <davem@davemloft.net>,
+ <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+ <horms@kernel.org>, <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <kernel-team@cloudflare.com>,
+ <wferguson@cloudflare.com>, <martin.lau@kernel.org>, <clm@meta.com>,
+ <ihor.solodrai@linux.dev>, <bot+bpf-ci@kernel.org>
+Subject: Re: [PATCH bpf-next] bpf: Allow bpf_tcp_sock() helper in XDP
+From: "Arthur Fabre" <afabre@cloudflare.com>
+To: "Martin KaFai Lau" <martin.lau@linux.dev>
+X-Mailer: aerc 0.17.0
+References: <20260204-afabre-bpf_tcp_sock-v1-1-a22b40c630c0@cloudflare.com>
+ <167a8f4235973cd42372884aa66182a10fd17e50c70626b1fa0e659933e82b4e@mail.kernel.org> <917eadc0-9341-48d5-a795-8a7d5318886c@linux.dev>
+In-Reply-To: <917eadc0-9341-48d5-a795-8a7d5318886c@linux.dev>
 
-syzbot ci has tested the following series
+On Wed Feb 4, 2026 at 11:27 PM CET, Martin KaFai Lau wrote:
+>
+>
+> On 2/4/26 5:04 AM, bot+bpf-ci@kernel.org wrote:
+> >>      But the TCP TIME-WAIT state needs special handling for this: pack=
+ets
+> >>      received for a TIME-WAIT socket can either belong to the current
+> >>      incarnation of the connection, or a new incarnation. The only way=
+ to
+> >>      determine this is to compare the sequence numbers.
+> >>
+> >>      Add the bpf_tcp_sock() helper in XDP to allow the socket sequence
+> >>      numbers to be read.
+> >=20
+> > Can this approach work for TIME-WAIT sockets? Looking at bpf_tcp_sock()=
+ in
+> > net/core/filter.c:
+> >=20
+> >      if (sk_fullsock(sk) && sk->sk_protocol =3D=3D IPPROTO_TCP)
+> >          return (unsigned long)sk;
+> >      return (unsigned long)NULL;
+> >=20
+> > And sk_fullsock() in include/net/sock.h:
+> >=20
+> >      static inline bool sk_fullsock(const struct sock *sk)
+> >      {
+> >          return (1 << sk->sk_state) & ~(TCPF_TIME_WAIT | TCPF_NEW_SYN_R=
+ECV);
+> >      }
+> >=20
+> > TIME-WAIT sockets are explicitly excluded by sk_fullsock(), so bpf_tcp_=
+sock()
+> > returns NULL for them. The sequence numbers stored in TIME-WAIT sockets
+> > (skc_tw_rcv_nxt and skc_tw_snd_nxt in sock_common) would not be accessi=
+ble
+> > through this helper.
+> >=20
+> > The change itself is useful for accessing tcp_sock fields from establis=
+hed
+> > connections in XDP, but the commit message implies this solves the TIME=
+-WAIT
+> > sequence number problem described, which doesn't appear to be the case.
+>
+> or use "tp =3D bpf_core_cast(sk, struct tcp_sock /* or tcp_timewait_sock=
+=20
+> */);". The bpf prog can also read all members of the kernel struct=20
+> instead of a subset defined in bpf_tcp_sock.
 
-[v2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
-https://lore.kernel.org/all/20260205092227.126665-1-yangfeng59949@163.com
-* [PATCH v2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+Brilliant, that works! Thanks Martin.
 
-and found the following issues:
-* WARNING in skb_dst_set
-* general protection fault in percpu_counter_add_batch
-* general protection fault in tnl_update_pmtu
-* general protection fault in xfrm_lookup_with_ifid
+>
+> pw-bot: cr
+>
+> >=20
+> >=20
+> > ---
+> > AI reviewed your patch. Please fix the bug or email reply why it's not =
+a bug.
+> > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/REA=
+DME.md
+> >=20
+> > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/2167=
+1977729
+> >=20
+> > AI-authorship-score: low
+> > AI-authorship-explanation: The commit message style is consistent with =
+human-written kernel patches, with natural technical language and standard =
+formatting; the technical error is more likely human oversight than AI hall=
+ucination.
+> > issues-found: 1
+> > issue-severity-score: low
+> > issue-severity-explanation: The issue is a misleading commit message th=
+at claims the change enables TIME-WAIT socket sequence number reading, but =
+the bpf_tcp_sock() helper explicitly returns NULL for TIME-WAIT sockets.
 
-Full report is available here:
-https://ci.syzbot.org/series/c278e614-0520-4be1-8e1b-b6ed06beb3cd
-
-***
-
-WARNING in skb_dst_set
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      75cd3beb64d0977009e3d1a2d0c03715d3e5e156
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/8d5f34b6-d9df-4c4a-9d51-7f4f910f379a/config
-C repro:   https://ci.syzbot.org/findings/9f4f73a7-44d6-4d8b-8fed-818bb8ca054d/c_repro
-syz repro: https://ci.syzbot.org/findings/9f4f73a7-44d6-4d8b-8fed-818bb8ca054d/syz_repro
-
-------------[ cut here ]------------
-(skb->_skb_refdst & ~(1UL)) && !(skb->_skb_refdst & 1UL)
-WARNING: ./include/linux/skbuff.h:1171 at skb_dst_check_unset include/linux/skbuff.h:1170 [inline], CPU#1: syz.0.17/5978
-WARNING: ./include/linux/skbuff.h:1171 at skb_dst_set+0xfd/0x140 include/linux/skbuff.h:1217, CPU#1: syz.0.17/5978
-Modules linked in:
-CPU: 1 UID: 0 PID: 5978 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:skb_dst_check_unset include/linux/skbuff.h:1170 [inline]
-RIP: 0010:skb_dst_set+0xfd/0x140 include/linux/skbuff.h:1217
-Code: 2d 00 00 74 08 4c 89 f7 e8 80 13 98 f8 49 89 1e 48 83 c4 08 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc cc e8 64 5c 30 f8 90 <0f> 0b 90 e9 6d ff ff ff 44 89 e1 80 e1 07 38 c1 7c 8f be 04 00 00
-RSP: 0018:ffffc90005367b58 EFLAGS: 00010293
-RAX: ffffffff89923bbc RBX: dffffc0000000001 RCX: ffff8881037d8000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: 1ffff1102edaad5b R08: ffffffff8fced777 R09: 1ffffffff1f9daee
-R10: dffffc0000000000 R11: ffffffff817422b0 R12: 0000000000000000
-R13: ffff888176d56b01 R14: ffff888176d56ad8 R15: ffff888176d56a80
-FS:  0000555564e8a500(0000) GS:ffff8882a9928000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b2fe63fff CR3: 000000016852c000 CR4: 00000000000006f0
-Call Trace:
- <TASK>
- bpf_prog_test_run_skb+0xe46/0x1ea0 net/bpf/test_run.c:1166
- bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4714
- __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6236
- __do_sys_bpf kernel/bpf/syscall.c:6331 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6329 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6329
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f51a119acb9
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff3a40e428 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007f51a1415fa0 RCX: 00007f51a119acb9
-RDX: 0000000000000050 RSI: 00002000000003c0 RDI: 000000000000000a
-RBP: 00007f51a1208bf7 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f51a1415fac R14: 00007f51a1415fa0 R15: 00007f51a1415fa0
- </TASK>
-
-
-***
-
-general protection fault in percpu_counter_add_batch
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      75cd3beb64d0977009e3d1a2d0c03715d3e5e156
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/8d5f34b6-d9df-4c4a-9d51-7f4f910f379a/config
-C repro:   https://ci.syzbot.org/findings/f58ed194-db04-464a-95de-a6d6cc45527a/c_repro
-syz repro: https://ci.syzbot.org/findings/f58ed194-db04-464a-95de-a6d6cc45527a/syz_repro
-
-Oops: general protection fault, probably for non-canonical address 0xdffffc000000001b: 0000 [#1] SMP KASAN PTI
-KASAN: null-ptr-deref in range [0x00000000000000d8-0x00000000000000df]
-CPU: 1 UID: 0 PID: 5976 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:percpu_counter_add_batch+0x3e/0x1d0 lib/percpu_counter.c:98
-Code: d4 49 89 f5 48 89 fb 49 bf 00 00 00 00 00 fc ff df e8 e6 76 f2 fc 48 89 5c 24 10 4c 8d 73 58 4c 89 f0 48 c1 e8 03 48 89 04 24 <42> 80 3c 38 00 74 08 4c 89 f7 e8 d3 2c 5a fd 49 8b 06 65 8b 28 41
-RSP: 0018:ffffc90003b37778 EFLAGS: 00010206
-RAX: 000000000000001b RBX: 0000000000000080 RCX: ffff888115b8ba80
-RDX: 0000000000000000 RSI: ffffffffffffffff RDI: 0000000000000080
-RBP: 0000000000000000 R08: 0000000000000003 R09: 0000000000000004
-R10: dffffc0000000000 R11: fffff52000766ee4 R12: 0000000000000020
-R13: ffffffffffffffff R14: 00000000000000d8 R15: dffffc0000000000
-FS:  000055555baf2500(0000) GS:ffff8882a9928000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc74af2e38 CR3: 0000000115cec000 CR4: 00000000000006f0
-Call Trace:
- <TASK>
- dst_entries_add include/net/dst_ops.h:59 [inline]
- dst_count_dec net/core/dst.c:162 [inline]
- dst_release+0x126/0x1b0 net/core/dst.c:176
- refdst_drop include/net/dst.h:266 [inline]
- skb_dst_drop include/net/dst.h:278 [inline]
- ____bpf_skb_set_tunnel_key net/core/filter.c:4867 [inline]
- bpf_skb_set_tunnel_key+0x239/0xa30 net/core/filter.c:4835
- bpf_prog_adb554717e5d6596+0x4f/0x5c
- bpf_dispatcher_nop_func include/linux/bpf.h:1402 [inline]
- __bpf_prog_run include/linux/filter.h:723 [inline]
- bpf_prog_run include/linux/filter.h:730 [inline]
- bpf_test_run+0x354/0x830 net/bpf/test_run.c:423
- bpf_prog_test_run_skb+0xe02/0x1ea0 net/bpf/test_run.c:1164
- bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4714
- __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6236
- __do_sys_bpf kernel/bpf/syscall.c:6331 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6329 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6329
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fca1679acb9
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffdef1739c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007fca16a15fa0 RCX: 00007fca1679acb9
-RDX: 0000000000000050 RSI: 0000200000000d80 RDI: 000000000000000a
-RBP: 00007fca16808bf7 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fca16a15fac R14: 00007fca16a15fa0 R15: 00007fca16a15fa0
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:percpu_counter_add_batch+0x3e/0x1d0 lib/percpu_counter.c:98
-Code: d4 49 89 f5 48 89 fb 49 bf 00 00 00 00 00 fc ff df e8 e6 76 f2 fc 48 89 5c 24 10 4c 8d 73 58 4c 89 f0 48 c1 e8 03 48 89 04 24 <42> 80 3c 38 00 74 08 4c 89 f7 e8 d3 2c 5a fd 49 8b 06 65 8b 28 41
-RSP: 0018:ffffc90003b37778 EFLAGS: 00010206
-RAX: 000000000000001b RBX: 0000000000000080 RCX: ffff888115b8ba80
-RDX: 0000000000000000 RSI: ffffffffffffffff RDI: 0000000000000080
-RBP: 0000000000000000 R08: 0000000000000003 R09: 0000000000000004
-R10: dffffc0000000000 R11: fffff52000766ee4 R12: 0000000000000020
-R13: ffffffffffffffff R14: 00000000000000d8 R15: dffffc0000000000
-FS:  000055555baf2500(0000) GS:ffff8882a9928000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffc74af2e38 CR3: 0000000115cec000 CR4: 00000000000006f0
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	49 89 f5             	mov    %rsi,%r13
-   3:	48 89 fb             	mov    %rdi,%rbx
-   6:	49 bf 00 00 00 00 00 	movabs $0xdffffc0000000000,%r15
-   d:	fc ff df
-  10:	e8 e6 76 f2 fc       	call   0xfcf276fb
-  15:	48 89 5c 24 10       	mov    %rbx,0x10(%rsp)
-  1a:	4c 8d 73 58          	lea    0x58(%rbx),%r14
-  1e:	4c 89 f0             	mov    %r14,%rax
-  21:	48 c1 e8 03          	shr    $0x3,%rax
-  25:	48 89 04 24          	mov    %rax,(%rsp)
-* 29:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1) <-- trapping instruction
-  2e:	74 08                	je     0x38
-  30:	4c 89 f7             	mov    %r14,%rdi
-  33:	e8 d3 2c 5a fd       	call   0xfd5a2d0b
-  38:	49 8b 06             	mov    (%r14),%rax
-  3b:	65 8b 28             	mov    %gs:(%rax),%ebp
-  3e:	41                   	rex.B
-
-
-***
-
-general protection fault in tnl_update_pmtu
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      75cd3beb64d0977009e3d1a2d0c03715d3e5e156
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/8d5f34b6-d9df-4c4a-9d51-7f4f910f379a/config
-C repro:   https://ci.syzbot.org/findings/2b87e46f-6cd5-4189-a1f4-896ea63e96a0/c_repro
-syz repro: https://ci.syzbot.org/findings/2b87e46f-6cd5-4189-a1f4-896ea63e96a0/syz_repro
-
-Oops: general protection fault, probably for non-canonical address 0xdffffc000000000a: 0000 [#1] SMP KASAN PTI
-KASAN: null-ptr-deref in range [0x0000000000000050-0x0000000000000057]
-CPU: 0 UID: 0 PID: 5994 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:skb_dst_update_pmtu_no_confirm include/net/dst.h:565 [inline]
-RIP: 0010:tnl_update_pmtu+0x52b/0x1190 net/ipv4/ip_tunnel.c:533
-Code: c1 e8 03 42 80 3c 38 00 74 08 48 89 df e8 0d 3a 2a f8 4c 8b 3b 49 83 c7 50 4c 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 ff e8 e7 39 2a f8 4d 8b 3f 4d 85 ff 8b 5c
-RSP: 0018:ffffc90004ef6f68 EFLAGS: 00010206
-RAX: 000000000000000a RBX: ffffffff9a2dcec8 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: ffffffff9a2dcec0 RDI: 0000000000000000
-RBP: ffffffff9a2dcec0 R08: ffffffff89db11f3 R09: ffffffff8e35a3a0
-R10: ffffc90004ef6f20 R11: fffff520009dede6 R12: ffff888112583800
-R13: ffff888112583858 R14: 1ffff110224b070b R15: 0000000000000050
-FS:  000055557643a500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30363fff CR3: 00000001744e0000 CR4: 00000000000006f0
-Call Trace:
- <TASK>
- ip_tunnel_xmit+0xd36/0x2430 net/ipv4/ip_tunnel.c:805
- __gre_xmit net/ipv4/ip_gre.c:490 [inline]
- ipgre_xmit+0x8e6/0xc60 net/ipv4/ip_gre.c:694
- __netdev_start_xmit include/linux/netdevice.h:5273 [inline]
- netdev_start_xmit include/linux/netdevice.h:5282 [inline]
- xmit_one net/core/dev.c:3853 [inline]
- dev_hard_start_xmit+0x2cd/0x7f0 net/core/dev.c:3869
- __dev_queue_xmit+0x14dd/0x32a0 net/core/dev.c:4819
- dev_queue_xmit include/linux/netdevice.h:3381 [inline]
- __bpf_tx_skb+0x18e/0x260 net/core/filter.c:2153
- ____bpf_clone_redirect net/core/filter.c:2487 [inline]
- bpf_clone_redirect+0x313/0x4b0 net/core/filter.c:2450
- bpf_prog_885767c90d177146+0x62/0x6b
- bpf_dispatcher_nop_func include/linux/bpf.h:1402 [inline]
- __bpf_prog_run include/linux/filter.h:723 [inline]
- bpf_prog_run include/linux/filter.h:730 [inline]
- bpf_test_run+0x354/0x830 net/bpf/test_run.c:423
- bpf_prog_test_run_skb+0xe02/0x1ea0 net/bpf/test_run.c:1164
- bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4714
- __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6236
- __do_sys_bpf kernel/bpf/syscall.c:6331 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6329 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6329
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fad0c59acb9
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe97cab158 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007fad0c815fa0 RCX: 00007fad0c59acb9
-RDX: 0000000000000028 RSI: 0000200000000080 RDI: 000000000000000a
-RBP: 00007fad0c608bf7 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fad0c815fac R14: 00007fad0c815fa0 R15: 00007fad0c815fa0
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:skb_dst_update_pmtu_no_confirm include/net/dst.h:565 [inline]
-RIP: 0010:tnl_update_pmtu+0x52b/0x1190 net/ipv4/ip_tunnel.c:533
-Code: c1 e8 03 42 80 3c 38 00 74 08 48 89 df e8 0d 3a 2a f8 4c 8b 3b 49 83 c7 50 4c 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 ff e8 e7 39 2a f8 4d 8b 3f 4d 85 ff 8b 5c
-RSP: 0018:ffffc90004ef6f68 EFLAGS: 00010206
-RAX: 000000000000000a RBX: ffffffff9a2dcec8 RCX: dffffc0000000000
-RDX: 0000000000000000 RSI: ffffffff9a2dcec0 RDI: 0000000000000000
-RBP: ffffffff9a2dcec0 R08: ffffffff89db11f3 R09: ffffffff8e35a3a0
-R10: ffffc90004ef6f20 R11: fffff520009dede6 R12: ffff888112583800
-R13: ffff888112583858 R14: 1ffff110224b070b R15: 0000000000000050
-FS:  000055557643a500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30363fff CR3: 00000001744e0000 CR4: 00000000000006f0
-----------------
-Code disassembly (best guess):
-   0:	c1 e8 03             	shr    $0x3,%eax
-   3:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1)
-   8:	74 08                	je     0x12
-   a:	48 89 df             	mov    %rbx,%rdi
-   d:	e8 0d 3a 2a f8       	call   0xf82a3a1f
-  12:	4c 8b 3b             	mov    (%rbx),%r15
-  15:	49 83 c7 50          	add    $0x50,%r15
-  19:	4c 89 f8             	mov    %r15,%rax
-  1c:	48 c1 e8 03          	shr    $0x3,%rax
-  20:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
-  27:	fc ff df
-* 2a:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1) <-- trapping instruction
-  2e:	74 08                	je     0x38
-  30:	4c 89 ff             	mov    %r15,%rdi
-  33:	e8 e7 39 2a f8       	call   0xf82a3a1f
-  38:	4d 8b 3f             	mov    (%r15),%r15
-  3b:	4d 85 ff             	test   %r15,%r15
-  3e:	8b                   	.byte 0x8b
-  3f:	5c                   	pop    %rsp
-
-
-***
-
-general protection fault in xfrm_lookup_with_ifid
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      75cd3beb64d0977009e3d1a2d0c03715d3e5e156
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/8d5f34b6-d9df-4c4a-9d51-7f4f910f379a/config
-C repro:   https://ci.syzbot.org/findings/5c4a2d70-b003-439e-8039-496b9009f1e9/c_repro
-syz repro: https://ci.syzbot.org/findings/5c4a2d70-b003-439e-8039-496b9009f1e9/syz_repro
-
-Oops: general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN PTI
-KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-CPU: 0 UID: 0 PID: 5985 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:xfrm_lookup_with_ifid+0xe1/0x1af0 net/xfrm/xfrm_policy.c:3181
-Code: 24 20 4d 8d 66 08 4c 89 e0 48 c1 e8 03 4d 89 ee 42 80 3c 28 00 74 08 4c 89 e7 e8 ba 20 17 f8 4d 8b 24 24 4c 89 e0 48 c1 e8 03 <42> 0f b6 04 30 84 c0 0f 85 94 17 00 00 41 0f b7 04 24 89 44 24 28
-RSP: 0018:ffffc90003e96fe0 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffffc90003e97080 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffc90003e97090
-RBP: ffffc90003e970f8 R08: ffffc90003e9708f R09: 0000000000000000
-R10: ffffc90003e97080 R11: fffff520007d2e12 R12: 0000000000000000
-R13: dffffc0000000000 R14: dffffc0000000000 R15: 0000000000000000
-FS:  000055558c0ab500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30363fff CR3: 00000001b9fc8000 CR4: 00000000000006f0
-Call Trace:
- <TASK>
- xfrm_lookup net/xfrm/xfrm_policy.c:3336 [inline]
- xfrm_lookup_route+0x3c/0x1c0 net/xfrm/xfrm_policy.c:3347
- vti_xmit net/ipv4/ip_vti.c:217 [inline]
- vti_tunnel_xmit+0x48e/0x18f0 net/ipv4/ip_vti.c:307
- __netdev_start_xmit include/linux/netdevice.h:5273 [inline]
- netdev_start_xmit include/linux/netdevice.h:5282 [inline]
- xmit_one net/core/dev.c:3853 [inline]
- dev_hard_start_xmit+0x2cd/0x7f0 net/core/dev.c:3869
- __dev_queue_xmit+0x14dd/0x32a0 net/core/dev.c:4819
- dev_queue_xmit include/linux/netdevice.h:3381 [inline]
- __bpf_tx_skb+0x18e/0x260 net/core/filter.c:2153
- ____bpf_clone_redirect net/core/filter.c:2487 [inline]
- bpf_clone_redirect+0x313/0x4b0 net/core/filter.c:2450
- bpf_prog_e16758452f539c38+0x5f/0x68
- bpf_dispatcher_nop_func include/linux/bpf.h:1402 [inline]
- __bpf_prog_run include/linux/filter.h:723 [inline]
- bpf_prog_run include/linux/filter.h:730 [inline]
- bpf_test_run+0x354/0x830 net/bpf/test_run.c:423
- bpf_prog_test_run_skb+0xe02/0x1ea0 net/bpf/test_run.c:1164
- bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4714
- __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6236
- __do_sys_bpf kernel/bpf/syscall.c:6331 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6329 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6329
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fe30af9acb9
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fffa3d1a918 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007fe30b215fa0 RCX: 00007fe30af9acb9
-RDX: 000000000000002c RSI: 0000200000000080 RDI: 000000000000000a
-RBP: 00007fe30b008bf7 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fe30b215fac R14: 00007fe30b215fa0 R15: 00007fe30b215fa0
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:xfrm_lookup_with_ifid+0xe1/0x1af0 net/xfrm/xfrm_policy.c:3181
-Code: 24 20 4d 8d 66 08 4c 89 e0 48 c1 e8 03 4d 89 ee 42 80 3c 28 00 74 08 4c 89 e7 e8 ba 20 17 f8 4d 8b 24 24 4c 89 e0 48 c1 e8 03 <42> 0f b6 04 30 84 c0 0f 85 94 17 00 00 41 0f b7 04 24 89 44 24 28
-RSP: 0018:ffffc90003e96fe0 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: ffffc90003e97080 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffc90003e97090
-RBP: ffffc90003e970f8 R08: ffffc90003e9708f R09: 0000000000000000
-R10: ffffc90003e97080 R11: fffff520007d2e12 R12: 0000000000000000
-R13: dffffc0000000000 R14: dffffc0000000000 R15: 0000000000000000
-FS:  000055558c0ab500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000001b30363fff CR3: 00000001b9fc8000 CR4: 00000000000006f0
-----------------
-Code disassembly (best guess):
-   0:	24 20                	and    $0x20,%al
-   2:	4d 8d 66 08          	lea    0x8(%r14),%r12
-   6:	4c 89 e0             	mov    %r12,%rax
-   9:	48 c1 e8 03          	shr    $0x3,%rax
-   d:	4d 89 ee             	mov    %r13,%r14
-  10:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1)
-  15:	74 08                	je     0x1f
-  17:	4c 89 e7             	mov    %r12,%rdi
-  1a:	e8 ba 20 17 f8       	call   0xf81720d9
-  1f:	4d 8b 24 24          	mov    (%r12),%r12
-  23:	4c 89 e0             	mov    %r12,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 0f b6 04 30       	movzbl (%rax,%r14,1),%eax <-- trapping instruction
-  2f:	84 c0                	test   %al,%al
-  31:	0f 85 94 17 00 00    	jne    0x17cb
-  37:	41 0f b7 04 24       	movzwl (%r12),%eax
-  3c:	89 44 24 28          	mov    %eax,0x28(%rsp)
-
-
-***
-
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
-
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
