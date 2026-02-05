@@ -1,136 +1,142 @@
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BCB3ACEE6
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 11:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770290843; cv=pass; b=s6zhiBIJUJNc5wPNboaGhS9QsvmHvH3jdJ2dRDszNLDBKHTkBEi6t/DFTJ0YEoImJeW2cRpwQTb92iu9wis/FIQg7tzWwymaTDIaXkL33wnR8Tf28dpD9ONEoXTazDt3UIokX5GBNqCCrSJqyPBTviuyHYfhs1PZ5iLjhlkU9l8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770290843; c=relaxed/simple;
-	bh=VMZ7gH803ReScbBjYHJOeIUb0hkAuWgyGar2xBFxBZQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V0WJKdmMJ+Fhcs9sg1hExulWQpa+o7vrhZ9HwYb0kcB95ALHXIYAfn1H/OhZveuw3CNVsMJybGYtoKkeoYGVRExQ3DT4VLsemp+Om9EehHwYopV+tHgnQpQS0z/eSSbLlFqCIH+P2aFivlOkRyf0mheZ499vNu3vk45umCu+s80=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com; spf=pass smtp.mailfrom=mihalicyn.com; dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b=OqWZXLFP; arc=pass smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mihalicyn.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B493A9DA7
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 11:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770291263; cv=none; b=YGCXol2mHJ1AAxTIq6b6g4mQukGo1EHWTspqsbl/oXhYk8phMuyLW10MvUHP4vhot4qVVcsQZRE8rdyllYZA/MO7zkGRxwEHuXQl1hzJwyZQx89WGuisOD8QOIEaoJIgSfp6Sa8SAjNdT1HEl1yLLL82+YyMURzywOw2ylzdKUg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770291263; c=relaxed/simple;
+	bh=N4P1rTEaiRVoBP5YzqUCAYVm+4YmWUXPGm+5vZ1R368=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=aAf+FJdhjHDhC0cEYBmEZw1zKxZI6536txXHPlmWlPdW/W0RQw0YLPYFrsJcQ5IKT0+U7Kw/NYGt8NfdCUScCQ/T6rC3QeHWExT+GavhTHQfDXNIaPX0Nmq6RO0lJ5wKcI6T9K9N2TsmRzizhP5n3autZBpc+z9duolRiE6Y4do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UYPxu70z; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=I5E1laiZ; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b="OqWZXLFP"
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-59dd7bfeb8aso992548e87.0
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 03:27:22 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770290841; cv=none;
-        d=google.com; s=arc-20240605;
-        b=g1w6NQV0JBlevxu9uuY/YE6lB9VSG2LlabEHm7wg2kOsa9OZvT/oNP4NhROH9YLgqr
-         vf1Bsde7tLRq/HCdQL5JumI8muGSnBog2ZEqxAot3AiNzqle36+/XL6KMqfvGiSVbzok
-         3gmzl0lojjNJcbfsnjFGixc6hbp1jLvHn1QMFdDGg3vAtcifAKejwtR3NbTyH2Ja8xpI
-         lDlbn3HLKBlRrU5xJnCZW2pSPr0Hbu9FPHUuHohFHfcJ1ZPtHvxJyNI3GPP83b9Qkk6x
-         eY3GrD6qkvtKmGvcN/w4sl9a72RtGdANVqN0YE3XO411xkI76bNNV9EY/Wnr8xtkbZmE
-         Ga8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=wB2O+cKVYBqmoEW7vQIPmoD4iADQ3byabRucTrKUGwg=;
-        fh=VNQUnM6+gN1G+tyZLlCncdn7yf3r5P0jWVi1tG5NrH4=;
-        b=FPT5VjERy6NL9UcFnQsSRUaTKtCdMgU63k4tWIoE7DQ/ZgN+FIRJnOtddZh3cFpGfm
-         AjUIbA0MqhvYR+36HSKyVMkbxgZrG+X7ul4kQvqUw8iDaJ72vjtbXNwC9UFtnlqCMe5k
-         AB/fhFsWtY/Ce2dEjyqJp+OloGEa0/j3bDC5Jb/if5JJxTdCpg1ppsefUEAmyPquPhD3
-         WlGCqZ37E0fyHu2NcDM37TE+IFyRvFC2ejn7Z1GHe9wctsR+9bwkDd/dneY1KSx3J3hS
-         6LJlHBJjG7N+Ex3U0k59+BxrQjL9KJEB+TEP9WXxQujl2q2sy1oM3wLK6sOfKmqBdi8t
-         OEUw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UYPxu70z";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="I5E1laiZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770291262;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZjEzuRz7BplWMcNqxxm3QxaRX6RnMIACl/NvfHd6qac=;
+	b=UYPxu70z0VTKYYUMmfqUdByc+zwjMrDy1jsYJzwHTEmaaDSdDr5vBbV/T50jUiSnz2ht7m
+	pZvB2XF9i6hHhz/MquJZiY4nqORY5ui5fJqh4p20Uv3RVCmBmEZaIlTBQEYnk/tTmf7ZMf
+	b1a/RDj+k2tHoD7G6vcczoXoe2HYX+o=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-674-TB1hxyjbP2C7pCwPh9SA9Q-1; Thu, 05 Feb 2026 06:34:21 -0500
+X-MC-Unique: TB1hxyjbP2C7pCwPh9SA9Q-1
+X-Mimecast-MFC-AGG-ID: TB1hxyjbP2C7pCwPh9SA9Q_1770291260
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-435af2d3144so664617f8f.3
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 03:34:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mihalicyn.com; s=mihalicyn; t=1770290841; x=1770895641; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wB2O+cKVYBqmoEW7vQIPmoD4iADQ3byabRucTrKUGwg=;
-        b=OqWZXLFPFuARHuoSt59LjiR8Zve6+DbrQSCRSqZRuiQNEGGciWQ9T+5uXLjPflIjoI
-         MhLMPuewBpdBnm0GRvmv4uKDk8/N3wQmGWbcqBjLMIVuqm6BzO7it0rs8hZ3vbtLduWU
-         ZgkC+cDuD4FDu4INE972C29qf8xqsG47SdIhU=
+        d=redhat.com; s=google; t=1770291260; x=1770896060; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZjEzuRz7BplWMcNqxxm3QxaRX6RnMIACl/NvfHd6qac=;
+        b=I5E1laiZ94aNfAKKZeIH0rmuOUXAjqDww9PZRtRKnREnEtxf5pnOqh0Qp+pYlDs1BB
+         o1WE23mZGAAerqLFZFJ0p9LjYTyDyon/ideyWtCPkXfGxVIKxTnlO4dpi8nk3z8zE/ju
+         dL6zcrFXCEKEBrnRKNIm39G7cE5bwp3fB2iLFRwfG84QFJUJDAskfnsIZ6ZLDN/MfwrF
+         hFO2m0TfZBt3lCtOw0Ji40Px4nMdhAzx5/DUmx/ptNbOTAfN7h1qDCL0HAPRiaQumCN2
+         x9yCTrUUAgL6eZ3/dSuQcCEoYUpC8WJ/PNM089EZeSziPNVYDfFLItfoKrqE1JycZ068
+         1DRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770290841; x=1770895641;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wB2O+cKVYBqmoEW7vQIPmoD4iADQ3byabRucTrKUGwg=;
-        b=csdvkDJ16wy1rXhcd2mv9nj0SU4YEbEOFxiWXAXhV3wGXLa4aeg5p0py23A/KRLouA
-         42EY6xuzi1vIBfLpSKLyOQGyp65gsYMx6ZNNNjyNqTS2wnvX5wOrGGZfr0w9txwCPTET
-         rVAuzMQfUogVvDgmbC/QJ/3BkzbbE46f400fzlqVMWzdB62zd3hYRzR8/K2CVyso9zeb
-         9AJojN/1mzcaETZ0iQrOxByeQrdTr/RgQ2vEk9K35XXV3Z3ibVfzLuNYRAojHKEikzK5
-         Nin+KCOw0X6f4rjg+Qi9gh9FJmty5X4CX6JPE9N5M1gRn8OFS8RP2RakAp2e0BDFjVCo
-         RnWA==
-X-Forwarded-Encrypted: i=1; AJvYcCW2LGzCXHsj6J+52mut2z6tMXVFVfe1eKO9D51gUShw7IJ2KGHm/7Lsgf3Zt+w3xfX3Z/A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEG8SQl4EQ1mwD77AQAsoPCSLglLyI0u28BOoEBEQMKuAL4LUU
-	2CAPMbyTpqeNpRMS/U3d+YN8zIW9dk3bVHLFlHBUBMaHff8tb9MAwxgobYqE9PzGq82zqpCp5t9
-	R81CtCYbcwIzdkn7lBcFCwqpYW7YMcMIaR7GT+HJOLw==
-X-Gm-Gg: AZuq6aKJclVynai8xiHQgDM7Cy0B1Wg7LlCmHc+CWrQmeu/V/y1EvPtjvavnfcjpy0C
-	Mu02oM0QEBKo7oLDcas0Dfh5Qgm508W2ekhXGdW3UPkNNtQBue5AMPZ1DRVgi7Ew7PDnxjeXTe1
-	ypIJVRPdZhPct/IIp1DozF35inZ0nauwsGkO5KsS2TbLZkXqlu8zjZsLHVNu5NVJ4KQCwvT5PG6
-	JAXERHCwPRBnuzGxHjrVAWVktDqRV9Ci+1RYst5KQLupqXM/aaq3H9HHkqAYBkQFwsbnEk6LJsO
-	7hAVl1DLssn9DvFcJBdngf6zHUo=
-X-Received: by 2002:a05:6512:3e27:b0:59e:9b0:165c with SMTP id
- 2adb3069b0e04-59e38c4a4cbmr2386140e87.43.1770290840891; Thu, 05 Feb 2026
- 03:27:20 -0800 (PST)
+        d=1e100.net; s=20230601; t=1770291260; x=1770896060;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZjEzuRz7BplWMcNqxxm3QxaRX6RnMIACl/NvfHd6qac=;
+        b=dCnwqjFp/FTFPs/hRxiSDk92X7VXz8MRV/PJMXQYx3ZjGWkMnf//cfkYo2IB/Vkoj+
+         VUDKjdROUvRBW3ZgL/0D0M0tABleqhJv93TboCdNOKAQ1iOzP7xv4adtTvYM2Ec4AHWz
+         /jwf7JoTsNtLH39r3VOeIs7yAg7eM7iBP9UUhKVAS23ISP9QjbnwjSBQ4DFIf0/bY4+Y
+         h26OusgGrFWXQNz5sVp93/EHaVrJg5T0YR4Pm0l0KlBqEh0pHFB1WN3RLUXRpXCYhemo
+         Og327YwsQnSJYM+5DA4KKxrc5GT2pyse955jlm+gK19LXPgaoTbcGQIKmaqlKyOc9a8q
+         m4kA==
+X-Forwarded-Encrypted: i=1; AJvYcCV9tN9mJko64u98xVjj0t6gJVvuCnIg+anh202QK/CFbmkZqQm+ap5R7WLee8jqxbHbrTo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynCkflzpXFQqTK3UsbheK4Shf6USOM67VpLYe6mPp50Z9Wooz/
+	vSC+e5N4rXis+lNPYfdikdNFQIqlqymqWc83JfXngK0adbzIlxQMR9a6260FmyAlYHwgqK829Ma
+	/2O3GUKq9nDqF36NVtGObX2QaHskpEvErtY4H9/E8Bi9X9drObLv4jQ==
+X-Gm-Gg: AZuq6aKUFyp5FtcF1QGcKgMhrYKLFpK5qBuQtSB6lfiXDerxjFs95WZZ6j5XYoq+728
+	qc0yR5IjjCFWCD4oVfe2ZV4a5mpCuXMN8hxbW8P2qGYr1LSXUuVGyS1OjBg3I2jBf9L5fr5CVga
+	5+Cz5BLdVMRZtm7JUTuRNyiVA82aC6vdt9VyCLoNmQjXmmEv01/mCTayJKmWNCFVD0Mdvyv69D7
+	ho/VclZMYbmXMKHzE/BhcESr4XynqasfpIUienQez26M2xB/ZcGIRWxqaLGn69BhavVqIzk12gB
+	5b36aMo9fBbCjIcw7gFyuatVNpAozOa+jRDcGJ6kgcGgCnJIkKKQPxcivLqRZr/ANJ2MQw71WiZ
+	p4Q2/UFxWT0Lg22DR+T4wQjN48mn5HA5G2Z7l
+X-Received: by 2002:a5d:64c7:0:b0:431:488:b9bc with SMTP id ffacd0b85a97d-43617e351camr9160961f8f.10.1770291259886;
+        Thu, 05 Feb 2026 03:34:19 -0800 (PST)
+X-Received: by 2002:a5d:64c7:0:b0:431:488:b9bc with SMTP id ffacd0b85a97d-43617e351camr9160905f8f.10.1770291259456;
+        Thu, 05 Feb 2026 03:34:19 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43617e25d47sm12473826f8f.5.2026.02.05.03.34.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Feb 2026 03:34:18 -0800 (PST)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 27C274D1132; Thu, 05 Feb 2026 12:34:18 +0100 (CET)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Jesper Dangaard Brouer <hawk@kernel.org>, Jakub Kicinski
+ <kuba@kernel.org>, Eric Dumazet <eric.dumazet@gmail.com>
+Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, Paolo
+ Abeni <pabeni@redhat.com>, bpf@vger.kernel.org, horms@kernel.org,
+ jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
+ jhs@mojatatu.com, carges@cloudflare.com, kernel-team@cloudflare.com,
+ Antoine Tenart <atenart@redhat.com>
+Subject: Re: [PATCH net-next RFC v1 0/3] net: sched: refactor qdisc drop
+ reasons into dedicated tracepoint
+In-Reply-To: <2e1eb11c-cd47-4772-baff-45d43d4fa539@kernel.org>
+References: <177022452988.1827734.5121740962985640333.stgit@firesoul>
+ <20260204190417.110f5498@kernel.org>
+ <2e1eb11c-cd47-4772-baff-45d43d4fa539@kernel.org>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Thu, 05 Feb 2026 12:34:18 +0100
+Message-ID: <877bsr1l1h.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260205104541.171034-1-alexander@mihalicyn.com> <4502642b48f31719673001628df90526071649bc4555c5432d88d2212db3f925@mail.kernel.org>
-In-Reply-To: <4502642b48f31719673001628df90526071649bc4555c5432d88d2212db3f925@mail.kernel.org>
-From: Alexander Mikhalitsyn <alexander@mihalicyn.com>
-Date: Thu, 5 Feb 2026 12:27:09 +0100
-X-Gm-Features: AZwV_Qi3EfgySmXpzaYg6pmJ3PxLGQMqI9MaiDB1obuVcZkBWW47mj52bZU7S8Y
-Message-ID: <CAJqdLrqRBhmrQQA0MA9f5Js6rTZkJFf6-=KT+eZahakgX4_3fw@mail.gmail.com>
-Subject: Re: [PATCH] bpf: use FS_USERNS_DELEGATABLE for bpffs
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, jlayton@kernel.org, 
-	brauner@kernel.org, bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, aleksandr.mikhalitsyn@futurfusion.io, 
-	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain
 
-Am Do., 5. Feb. 2026 um 12:20 Uhr schrieb <bot+bpf-ci@kernel.org>:
->
-> > diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-> > index 005ea3a2c..c350857b2 100644
->
-> [ ... ]
->
-> > @@ -1077,7 +1073,7 @@ static struct file_system_type bpf_fs_type = {
-> >       .init_fs_context = bpf_init_fs_context,
-> >       .parameters     = bpf_fs_parameters,
-> >       .kill_sb        = bpf_kill_super,
-> > -     .fs_flags       = FS_USERNS_MOUNT,
-> > +     .fs_flags       = FS_USERNS_DELEGATABLE,
-> >  };
->
-> FS_USERNS_DELEGATABLE does not appear to be defined anywhere in the kernel
-> tree. A search of include/linux/fs.h shows only FS_USERNS_MOUNT is defined
-> (at line 2268), not FS_USERNS_DELEGATABLE.
->
-> The commit message states this flag was "recently introduced", but it is not
-> present in this codebase. Will this cause a build failure due to an undefined
-> identifier?
+Jesper Dangaard Brouer <hawk@kernel.org> writes:
 
-Yeah, this should be applied on top of
-https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git/commit/?h=vfs-7.0.misc&id=269c46e936f3b5f2b6b567ca124d5f5ea07a371c
-in vfs/vfs-7.0.misc I think.
+> On 05/02/2026 04.04, Jakub Kicinski wrote:
+>> On Wed, 04 Feb 2026 18:02:49 +0100 Jesper Dangaard Brouer wrote:
+>>> RFC: Seeking feedback on this refactoring approach.
+>>>
+>>> This series refactors qdisc drop reason handling by introducing a dedicated
+>>> enum qdisc_drop_reason and trace_qdisc_drop tracepoint, providing qdisc
+>>> layer drop diagnostics with direct qdisc context visibility.
+>> 
+>> I like this!
+>
+> Awesome, then I will continue in this direction :-)
+>
+>> It will presumably require existing users to migrate over
+>> but sooner we do it the fewer users that have to move?
+>
+> I agree. Existing users will loose some details, but the patchset
+> results in fallback to SKB_DROP_REASON_QDISC_DROP as a drop reason,
+> which existing tools/users will still handle.
+> (The more specific drop reason is now avail via trace_qdisc_drop).
+>
+> Eric and Toke is this acceptable for your users?
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21708956860
->
-> AI-authorship-score: low
-> AI-authorship-explanation: The commit follows standard kernel contribution patterns with natural language and proper references, suggesting human authorship, though the undefined flag error could indicate incomplete context.
-> issues-found: 1
-> issue-severity-score: high
-> issue-severity-explanation: The commit uses FS_USERNS_DELEGATABLE which is not defined in the kernel, causing a build failure that prevents kernel compilation.
+I like it! My only concern is that drop monitor tools will see two
+events for each qdisc drop. I guess that could be relatively
+straight-forwardly deduplicated in the tool, though? +Antoine who works
+on Retis to give him a chance to complain if not :)
+
+> In patch 1/3 I kept the qdisc "name" as part of the enum for FQ and
+> CAKE. IMHO this should be changed for next patchset, but I offer you the
+> chance to review and suggest generic naming (else I will choose).
+
+You mean you'd just name it something like QDISC_DROP_FLOOD_PROTECTION
+instead of QDISC_DROP_CAKE_FLOOD? No strong objections to that...
+
+-Toke
+
