@@ -1,83 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09C422FE578
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 07:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34032D3A7B;
+	Thu,  5 Feb 2026 07:37:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770275296; cv=none; b=BGugiNHNmS5N7fizX1iTHda4WKK0PKw9fcvL2//22btV/1xwS1S3diGAobafntfnAVJxoKcSbHInyNi14iyNzmhkpy1FB5RzGf0xHubeTHsLWECH4MpRTm2IAwApWehZRESAzlgT8hdi4pjVtLNZnwNyzugtbd8mZ7PDiPks1Ss=
+	t=1770277066; cv=none; b=ueS7DRW1kZfIAuxW7XG2Te2M9ty7asJmbNotnTlyjt8dFshfNX98eeyA/3Lr4kSyo7orTtyEHyR0MKw+TstkSb2MYCUfp3hfVFNLaqj6GsXLIYqaLZxMBqi5ICdfP5vvyW66iA5AjggLRAbnuhKY4E3O00hdjClJ0RQcxX3ylJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770275296; c=relaxed/simple;
-	bh=sC8RLQAjbEeT2tQH9ptuTec+CBU89NqNFgjGWczzFDQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=X2H1Oq2Rte6/7x1AZp5oR7QmromrPOsamXJh/a3325edxILtleEUXItnMzMFo2dkSA+bidwCyVDa42Fmb3l2MGT0FXjdW890yDdBDe0++zN93PwBy0Rg4/jg7IT8devh+UVjcMezjgOpdjx9aDPSOhGujT/dne1eFuEKvvnc/VU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f/QQTlVr; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770277066; c=relaxed/simple;
+	bh=5UjMjLqFV48WjeXWfsLf7rKP+ZFnPy8CXOLRnmY9+D8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=HxD63TJ4AVgIE3XS8mXzHuQKT7LleJrdLCo/EcBvTrwvK5EjQImloha/Il6ExdT8iS+gTb1Zo9lF6n2VipHJrqGtGF2SD4WX+ljJH7v6WxSaaTeDcPj0YgGFlIW8hKzndtuXLvHO2mQYxfA2/s0cUYrZOjfPcvqiN1HyhQen/hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mvN14OBs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f/QQTlVr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DCD4C4CEF7;
-	Thu,  5 Feb 2026 07:08:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mvN14OBs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A95CC4CEF7;
+	Thu,  5 Feb 2026 07:37:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770275295;
-	bh=sC8RLQAjbEeT2tQH9ptuTec+CBU89NqNFgjGWczzFDQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=f/QQTlVridNphhhGZGKx7TUzi8dKPp53955WAw13tRgZQoHV83RA4+Z9eKhMaIFXn
-	 TXET9/ujVTyLyOAHKZQGZGLbgdMGpZvJxZ2xSwV4OV/CV20khrCfKMbqpCiz+2vAjk
-	 NOq/pbi+xGAECgAGZGkj/DUd1u4nvHtyeF9Mh2Mq7PggdJKX+Km7Yx+/2hUb/p5bSP
-	 kVcbjWmrcF52pV+4vUiNkvHh749WO1guk7aUz6TjtGtWgyiNeE070Bc8Ga71dw2N54
-	 AEdUIY7vxbKv3NWerRB6rJvtyRJnpvxYFTUI7C0Ghpdi9LNbkXdJgtSKfjhAdi8sWd
-	 T3VmAZ23mlRFQ==
-From: KP Singh <kpsingh@kernel.org>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	Toshi Piazza <toshi.piazza@microsoft.com>,
-	KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf] bpf: Require frozen map for calculating map hash
-Date: Thu,  5 Feb 2026 08:07:55 +0100
-Message-ID: <20260205070755.695776-1-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=k20201202; t=1770277065;
+	bh=5UjMjLqFV48WjeXWfsLf7rKP+ZFnPy8CXOLRnmY9+D8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=mvN14OBsrFCkiazvM8aaRZw7ImwmE2Qcqh4EBlbE8jJaYKqXEZ14dfkGh0E7F7v+a
+	 rOKTI5ptOEVcbVsDEihPBInLtgSKQeCN/y/lJL0A0q4bS/2btcCQ8NuX5YHtn4/LAD
+	 cD5cJ4+GXwaQ9cvw17rgCSQ70gxS1XjDL4rLe4BdndJICT3bc19QxDneb5vaJR7kia
+	 MhoTi2b1M1UQHHRj6KjbGd6mIuHFdnlqpLTQ5I06qBPC/Zd4YbkBjS7jdVQXlYDOWt
+	 Ylsq5f+31Ltb2K+mV5JjbhaGJWKtV2UzN1vJHY7hLL3w/Tjpf2ySiXbm9ubFg3We72
+	 DhphbPz7AfYpg==
+Content-Type: multipart/mixed; boundary="===============8749420910679437655=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <47c4a239503f811cce651c4ff0c57bd0e088befaa30adad912240804eaed2fe0@mail.kernel.org>
+In-Reply-To: <20260205070208.186382-14-ameryhung@gmail.com>
+References: <20260205070208.186382-14-ameryhung@gmail.com>
+Subject: Re: [PATCH bpf-next v6 13/17] selftests/bpf: Update task_local_storage/recursion test
+From: bot+bpf-ci@kernel.org
+To: ameryhung@gmail.com,bpf@vger.kernel.org
+Cc: netdev@vger.kernel.org,alexei.starovoitov@gmail.com,andrii@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@kernel.org,kpsingh@kernel.org,yonghong.song@linux.dev,song@kernel.org,haoluo@google.com,ameryhung@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  5 Feb 2026 07:37:45 +0000 (UTC)
 
-Currently, bpf_map_get_info_by_fd calculates and caches the hash of the
-map regardless of the map's frozen state.
+--===============8749420910679437655==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-This leads to a TOCTOU bug where userspace can call
-BPF_OBJ_GET_INFO_BY_FD to cache the hash and then modify the map
-contents before freezing.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+> index 42e822ea3..7bee33797 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+> @@ -112,24 +112,24 @@ static void test_recursion(void)
+>  	task_ls_recursion__detach(skel);
+>
+>  	/* Refer to the comment in BPF_PROG(on_update) for
+> -	 * the explanation on the value 201 and 100.
+> +	 * the explanation on the value 200 and 1.
+>  	 */
 
-Therefore, a trusted loader can be tricked into verifying the stale hash
-while loading the modified contents.
+This comment directs readers to the BPF_PROG(on_update) comments in
+progs/task_ls_recursion.c for an explanation of the expected values.
 
-Fix this by returning -EPERM if the map is not frozen when the hash is
-requested. This ensures the hash is only generated for the final,
-immutable state of the map.
+However, the comments in task_ls_recursion.c were not updated and still
+describe the old behavior. The second comment in BPF_PROG(on_update) says:
 
-Fixes: ea2e6467ac36 ("bpf: Return hashes of maps in BPF_OBJ_GET_INFO_BY_FD")
-Reported-by: Toshi Piazza <toshi.piazza@microsoft.com>
-Signed-off-by: KP Singh <kpsingh@kernel.org>
+    /* This will still fail because map_b is empty and
+     * this BPF_PROG(on_update) has failed to acquire
+     * the percpu busy lock => meaning potential
+     * deadlock is detected and it will fail to create
+     * new storage.
+     */
+
+The "percpu busy lock" mentioned here no longer exists after commit
+de64e0109 removed the percpu counter. With the new behavior, map_b
+creation now succeeds because bpf_trampoline catches the recursion
+instead.
+
+Should the comments in task_ls_recursion.c be updated to match the new
+behavior, or should this test file comment be changed to reference the
+commit message instead?
+
+[ ... ]
+
+
 ---
- kernel/bpf/syscall.c | 3 +++
- 1 file changed, 3 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 4ff82144f885..868f55641cdd 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -5310,6 +5310,9 @@ static int bpf_map_get_info_by_fd(struct file *file,
- 		if (info.hash_size != SHA256_DIGEST_SIZE)
- 			return -EINVAL;
- 
-+		if (!READ_ONCE(map->frozen))
-+			return -EPERM;
-+
- 		err = map->ops->map_get_hash(map, SHA256_DIGEST_SIZE, map->sha);
- 		if (err != 0)
- 			return err;
--- 
-2.43.0
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21702523104
 
+AI-authorship-score: low
+AI-authorship-explanation: The commit shows characteristics of human-written kernel code including a hand-crafted ASCII diagram, concise technical language, and minor inconsistencies in capitalization typical of manual editing.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Documentation inconsistency where test file references BPF program comments that were not updated to reflect the new behavior after percpu counter removal.
+
+--===============8749420910679437655==--
