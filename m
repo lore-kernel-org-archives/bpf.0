@@ -1,198 +1,143 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE0A3939D4
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 09:21:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770283284; cv=pass; b=UkgcJ0ZLcD91ddi7PDvfOtvlM2wu6hqJU9d8Vtx6HtDdhsuFMWbBUyJvfnYb1lqkKRnbz57Uz4qxCEUgyxKguzkyv00P2vH6pbvHc4kheXjoFRBTQo/sxMCGZMMKE0qL8OIFFYhNVZjXjtLyr8chJKVkMtrxxyPcFf6B91a7OkQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770283284; c=relaxed/simple;
-	bh=H9TJNHkisUEr4z39rBi90p8f80JBCtp4uFnDx2T9EUU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nOQhlCu+TaKVQVn8iR/XJXgtJwTe7EnAopB5QTCSxvEFgZ4zDJKqLehJfg2s/XtIyGWxANwgHDhvDxNuaKY7v2Mt3VZ3liuPjYyy0oQHMzHXZiVdoxMjuY9P+27uPOmHwDOXL8nQI6JSDUQ6Jn5o88qljV5JSytr5cmrBvY/6kQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aLFi+UPk; arc=pass smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE558361672;
+	Thu,  5 Feb 2026 09:23:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770283395; cv=none; b=AtKLqof1+Mqp2m2zubhxdSn6AcC/QLSO6t3JQCLeNeZsErnqI9Nt8pDpj5BXEQIFN3EmwJNNkOkbQ9qSsUXZ+P3egz49/8VxYnHlsgMDU8ZbkkxPPwjRclQr5AzCn3AkgCrCYLI3Da5LOfn2pq6AKFmIH43b9MFakSO47YQlvK0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770283395; c=relaxed/simple;
+	bh=ASFscKfQZNTqdX/nIkBWTYyfKL3Xxu/c8YcFqW2TIRg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GyZGSmwGJkv0Rq/Os2pQFx1KSB+G1NadCy1pJPWw59reNMpF6UxWrTlqPXpVpq4BJeeaZz1aW89JZsBDvUDTTXKxxuIZNZkZ3z7Mx+FFYEOZf60E8MFOyej2CY97EOMZ3delfV1LpL4mSe1qM28lo7KcJQerTpCHwX8BIhg+24k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=HYC1fRc4; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aLFi+UPk"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b884cb1e717so271444666b.0
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 01:21:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770283282; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TdppezOcuB/VHeVvzdH7OV1G1AkX6dMR3n3m3yDVkW1e2vj1UXnKK9BaSyE76tn2QP
-         jaOKVKh0tsHT8Vcx54K3eE6vaE3HuTXQjWQAsSVRpx4CvS8aS/EKqpyUmD9wWts0IoYh
-         mqzIZ3g2GWG3bF2Mg1/XDWgyD/YMFiYoZy45zkxP3mcowcb0AdlVz15BENskaPGaUvxu
-         Xjh6M+gWMGZdDWwu++Rfd8Z7OP/GP4ND7anJfuJe0aapzEAgAN80fZiJl8V/yYVacIB1
-         vm6cPgVuprfRoCYNd7sTAyB26poOafFM72IAVYv0TdIAwGouKnLASPTtkhTYse4QQfLU
-         KWoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=IalgGCN2Gqp+8rAz+6lD8MM8rro1ne0RtIUJXyB5u2c=;
-        fh=CoNpXdpd4TqWoVfk55xEDTQ0hn1HhSHvORSz3HfzkcQ=;
-        b=cB1e6yEPdYcRYBJXiB5R2vhMSqYWNPEz4Bp/fOdd/9cfyXo5hCCh0ZPzyNWHOgCkKy
-         lIuxI8EOB+Xe56lVLl4RVZOHIjA/XgVW+KeA/oy8izURwExVQ160iAcgkZgEBICAy0aC
-         0CF/VnjOUjBPUCS8f05fhRvAn4ihDdaP2mO9Tj7IGAh4VxmEuQ/nq6Es1e/X1nP3KrM9
-         9K1JPxXVeCEM+uxl/gScKDPYHMAvfczeJAOn6zS/TglKwz4bBt8k7AbGMjGkaOFl2UJC
-         dMhOMZWi+d6f07hmnv7zwsst/yhfofrN7XWPpuqIKG7UU0FShLD+J1HU3FMaa8eMnUHe
-         jzQQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770283282; x=1770888082; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IalgGCN2Gqp+8rAz+6lD8MM8rro1ne0RtIUJXyB5u2c=;
-        b=aLFi+UPkU/J1L8MI4XywYY6RUA673hLsPtAsH7MkE6SIEIMe2fMjl2oTdhb0SyNEh/
-         TPI+KGVRxKBHeU7isX9hSVdCXOds5aV+MkOJ4zfSl2E1Nxi1riy9Bg6eANse7IIQMxx9
-         3M6/OpXHy8erDw3isR4Tp18f5FI1fR06teutGpuQGmXQyojcU93udewR0XVh2/eiRP2H
-         odvMUONSBcbbjH4q/3dsMOWUPQ4ZQE2cbROjms0F9isuFSoe0CxUC+jrVdH0LMkhvUpK
-         P6tCXmj+SrTc10OnUNPoFYjPql4y/3fPJl5aL0+62G9HycwRMbSSWhbJUm6UbYVsl4xm
-         z+0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770283282; x=1770888082;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=IalgGCN2Gqp+8rAz+6lD8MM8rro1ne0RtIUJXyB5u2c=;
-        b=bnii3Wu5bBi3J9pVemTe0LB3VOPcBjgvHGNIlr2fG3EqkglnCRVZETgaSPCv2i74Jr
-         M3aycuX9ZL9nGMFxXUII4Gdnk8gdh2l9X6OF6C7Rji6VKorHlfp0ipMuP+wVsojl5+dp
-         +/l1fVKdmUrMeh3T2PZFJBiu9QXcX3WlWUMmeyg1re2qFAAdqZJJLRee9AZtsuiSB/8J
-         KUK9SCIHYlrrCF5iQeA9IJfeh3Fti4ZgboBSutqTPMfVljZ756fSDh45tQOErmI9Uf2Y
-         a4uSfsbQt73Zs5ZuIEfDjMiN8gEcJWBs1lFbak1DafShFeCdYWE5XDpq8BYQ8Iuh3rTg
-         ljUA==
-X-Forwarded-Encrypted: i=1; AJvYcCXP2s96qy8Wwy39Y6oFgbnztdgXEclgVVUdpbvXH/uT9iukQ6NzhXadcvfvOubtXludsTg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNHOGXOApSlfIkupU/q8GcJWBFcGD7/L0aJVpvxBG0WD99TawE
-	Bm3ub/DgIsBss6nh/aWC2lS/IvB+0uQ/x464Q0d3KsMI8YDTLdA3QTIpnv5iRLnUvM6lrd5XV/5
-	h9hdKrej9tJtoT5ySPrkAfQiFwAkvV4I=
-X-Gm-Gg: AZuq6aL6ORk8EX8HzL58z7OCG45Tj1TyNBV305WohS2MFxHvGdrhLw9MfuVlCDrAKPN
-	abEI6FfzX26UFiO7aRDWcEVJ5iGNF873D/ZE2VNopOpxj+YMwQTvGkrHfjFsFeo/4Ny3wtkEur6
-	ktCoTft90ND2saB3HbWjGHV8MUUFJivLebia/I/a57mOxXtyJUfLbB9OxOxKOfBpfIEBc2WDR/H
-	KWK8C44q0h/8WnibFijsV1UtNTQ8y0N2GkkSxKN8vLcizHhODJHytkLvRbWFw7I/bsUuALf
-X-Received: by 2002:a17:907:94c2:b0:b88:3877:d922 with SMTP id
- a640c23a62f3a-b8ebaebf0b0mr159376266b.10.1770283281676; Thu, 05 Feb 2026
- 01:21:21 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="HYC1fRc4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Hb
+	ZLkhI9yayHaUp7I8gdb9rZtco+zUFIDWHACs6Uq6Q=; b=HYC1fRc4lWnpdZjEOB
+	zef9RiVm1ulu9ToGu0CmDfGK0A1H7EXDPvsW25ZAAuhibnGE+dEUUwfi2Ri/XVja
+	mkL3TgK5lDRX55Ayj4AJETRRj4f7IY3o6XSqj7yuhVg7tX3kLeJw1q7P/SD24Axy
+	rwi+WEuyoodzaBTk8ieetrmW8=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAX_mlTYYRpN2GXKQ--.9587S2;
+	Thu, 05 Feb 2026 17:22:29 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+Date: Thu,  5 Feb 2026 17:22:27 +0800
+Message-Id: <20260205092227.126665-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
- <20260202111548.3555306-3-dolinux.peng@gmail.com> <20260202111249.649ac338@gandalf.local.home>
- <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
- <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
- <20260203101707.52965eb0@gandalf.local.home> <CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
- <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
-In-Reply-To: <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
-From: Donglin Peng <dolinux.peng@gmail.com>
-Date: Thu, 5 Feb 2026 17:21:09 +0800
-X-Gm-Features: AZwV_QgyCP5qHv6wmrjDl43TBmC7uiqpMqCxslLuXWGhiI-yrqFKJcJ-V81-X70
-Message-ID: <CAErzpmvtJwB7nTD5EFHP9SxPxH-rc3NuJp5xLGSTB7YPbUX8YA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
- via BTF
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Donglin Peng <pengdonglin@xiaomi.com>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wAX_mlTYYRpN2GXKQ--.9587S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4UWFy5ZF1Utr1UWryfZwb_yoWrWw4fpF
+	1UtrW09rs5J340qF48Jr4UJw1aqFWqvFW5Jryavw1jqF1jqw1xXr1ftF4jgrZ8Ar4ruw47
+	J34UKFn2qw1UJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jY89tUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RboYWmEYVZuyQAA3T
 
-On Wed, Feb 4, 2026 at 10:52=E2=80=AFPM Donglin Peng <dolinux.peng@gmail.co=
-m> wrote:
->
-> On Wed, Feb 4, 2026 at 12:00=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Tue, Feb 3, 2026 at 7:16=E2=80=AFAM Steven Rostedt <rostedt@goodmis.=
-org> wrote:
-> > >
-> > > On Tue, 3 Feb 2026 21:50:47 +0800
-> > > Donglin Peng <dolinux.peng@gmail.com> wrote:
-> > >
-> > > > Testing revealed that sorting within resolve_btfids introduces issu=
-es with
-> > > > btf__dedup. Therefore, I plan to move the sorting logic directly in=
-to
-> > > > btf__add_enum_value and btf__add_enum64_value in libbpf, which are
-> > > > invoked by pahole. However, it means that we need a newer pahole
-> > > > version.
-> > >
-> > > Sorting isn't a requirement just something I wanted to bring up. If i=
-t's
-> > > too complex and doesn't achieve much benefit then let's not do it.
-> > >
-> > > My worry is because "cat trace" takes quite a long time just reading =
-the
-> > > BTF arguments. I'm worried it will just get worse with enums as well.
-> > >
-> > > I have trace-cmd reading BTF now (just haven't officially released it=
-) and
-> > > doing an extract and reading the trace.dat file is much faster than r=
-eading
-> > > the trace file with arguments. I'll need to implement the enum logic =
-too in
-> > > libtraceevent.
-> >
-> > If you mean to do pretty printing of the trace in user space then +1 fr=
-om me.
-> >
-> > I don't like sorting enums either in resolve_btfid, pahole or kernel.
-> > Sorted BTF by name was ok, since it doesn't change original semantics.
-> > While sorting enums by value gets us to the grey zone where
-> > the sequence of enum names in vmlinux.h becomes different than in dwarf=
-.
->
-> Thanks, I agreed.
->
-> >
-> > Also id->name mapping in general is not precise.
-> > There is no requirement for enums to be unique.
-> > Just grabbing the first one:
-> > ATA_PIO0 =3D 1,
-> > ATA_PIO1 =3D 3,
-> > ATA_PIO2 =3D 7,
-> > ATA_UDMA0 =3D 1,
-> > ATA_UDMA1 =3D 3,
-> > ATA_UDMA2 =3D 7,
-> > ATA_ID_CYLS =3D 1,
-> > ATA_ID_HEADS =3D 3,
-> > SCR_ERROR =3D 1,
-> > SCR_CONTROL =3D 2,
-> > SCR_ACTIVE =3D 3,
-> >
-> > All these names are part of the same enum type.
-> > Which one to print? First one?
+From: Feng Yang <yangfeng@kylinos.cn>
 
-Another option is to print all matching entries, incurring increased
-overhead and extended trace log length. However, I prefer printing
-the first matching entry, though it might be inaccurate in rare cases.
+The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
+calculate the needed headroom:
 
->
-> I think these cases are not very common and printing the first
-> one would be helpful enough, and we can add documentation
-> notes in ftrace to guide users.
->
-> >
-> > another example:
-> > enum {
-> >         BPF_LOCAL_STORAGE_GET_F_CREATE =3D 1,
-> >         BPF_SK_STORAGE_GET_F_CREATE =3D 1,
-> > };
-> >
-> > and another:
-> > enum {
-> >         BPF_SKB_TSTAMP_UNSPEC =3D 0,
-> >         BPF_SKB_TSTAMP_DELIVERY_MONO =3D 1,
-> >         BPF_SKB_CLOCK_REALTIME =3D 0,
-> >         BPF_SKB_CLOCK_MONOTONIC =3D 1,
-> >         BPF_SKB_CLOCK_TAI =3D 2,
-> > };
-> >
-> > I'd rather not print any and keep it integer only.
-> >
-> > pw-bot: cr
+	err = skb_cow_head(skb,
+			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
+
+But skb->_skb_refdst may not be initialized when the skb is set up by
+bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
+in this scenario will trigger null pointer dereference, causing a kernel
+crash as Yinhao reported:
+
+[  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[  105.186382] #PF: supervisor read access in kernel mode
+[  105.186388] #PF: error_code(0x0000) - not-present page
+[  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
+[  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
+[  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
+[  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
+[  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
+[  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
+[  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
+[  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
+[  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
+[  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
+[  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
+[  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
+[  105.186499] PKRU: 55555554
+[  105.186502] Call Trace:
+[  105.186507]  <TASK>
+[  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
+[  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
+[  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
+[  105.186547]  ? ktime_get+0x3c/0xa0
+[  105.186554]  bpf_test_run+0x195/0x320
+[  105.186563]  ? bpf_test_run+0x10f/0x320
+[  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
+[  105.186590]  __sys_bpf+0x69c/0xa40
+[  105.186603]  __x64_sys_bpf+0x1e/0x30
+[  105.186611]  do_syscall_64+0x59/0x110
+[  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
+[  105.186649] RIP: 0033:0x7f166a97455d
+
+Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
+
+Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+---
+Changes in v2:
+- Link to v1: https://lore.kernel.org/all/20260127084520.13890-1-luyun_611@163.com/ 
+---
+ net/bpf/test_run.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 178c4738e63b..c05b31cd1741 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -982,6 +982,7 @@ static struct proto bpf_dummy_proto = {
+ 	.obj_size = sizeof(struct sock),
+ };
+ 
++struct dst_entry bpf_test_run_lwt_xmit_dst;
+ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 			  union bpf_attr __user *uattr)
+ {
+@@ -1156,7 +1157,13 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 		skb->ip_summed = CHECKSUM_COMPLETE;
+ 	}
+ 
++	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
++		bpf_test_run_lwt_xmit_dst.dev = dev;
++		skb_dst_set(skb, &bpf_test_run_lwt_xmit_dst);
++	}
+ 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
++	if (prog->type == BPF_PROG_TYPE_LWT_XMIT)
++		skb_dst_set(skb, NULL);
+ 	if (ret)
+ 		goto out;
+ 	if (!is_l2) {
+-- 
+2.43.0
+
