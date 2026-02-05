@@ -1,65 +1,64 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f66.google.com (mail-wm1-f66.google.com [209.85.128.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF5032BF4C
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 20:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1F2B32BF44
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 20:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770323241; cv=none; b=tags1sy/X2MG7RDmjHv/1iW8fJR3/26bgp2bl1Fs8AZfwkIKGPYzdk8NUMjNVTAzJQYP5VxNQ8viRkMIqVtt/rv+EGgv1PC4CF7i2ZTvNMUUB7GiGvutqGnkhfRfjt03sB132uQEA0RJu0T0s078nK18xC3+zYRYiktxMF/Dkb4=
+	t=1770323244; cv=none; b=XMObDbiD6ANHsgQNGVGobBQkabgh0PvQGAa+dxTC75BwNZq0d88gfv/lxqCdfaglWjivtw1ipm48K0PoM4WvsQn0Th1DJLt2/xL68CEZcei6zS7k00Tbhc2koq5n6cWxivYsWZLtTJOzyRd5kAeCH6ONipkLXVglsgEVCUrsSWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770323241; c=relaxed/simple;
-	bh=gm6bBiQU8PZ/QZx25phxxpnrJJaVyMN3T7nsfxSD6XM=;
+	s=arc-20240116; t=1770323244; c=relaxed/simple;
+	bh=/Pg3zJMJAxw2cKetZocCLln2GST1TQccC68mgrqFwoM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MbcXeJkoXGdTf+nTGuIjigcPu+cxGvLv1ZUR5jHFsddf4b10kQLe7AIW66HHrYJHuQWFivKFpjTlSgObmeZddcMgCada6UnHSEofbe83sHpmv7+hELOvtRuEc2bwhqGW75WsmWb5e6kbRDK+4Rd5Mgk7Jy+GAq/e2VZ0ORJsoo8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ak2dzjuY; arc=none smtp.client-ip=209.85.128.46
+	 In-Reply-To:To:Cc; b=U6Le5MZHwHJ+/9XorfP5kDLeGDaUSEF7n7bdz41/hOL1oToO6cNIzLJCazwi0dCiwDeDOddT3GhvlbtBsOhnc94aw18hKKlcS802BuOGedSpy8UV4eVMBW36e+6bNWE+cu+e9g8OW1oSMfUy3FYjvfd4vRkKDCLuZKKZgjX+bnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NEeGZekC; arc=none smtp.client-ip=209.85.128.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ak2dzjuY"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4801ea9bafdso8500925e9.3
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 12:27:20 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NEeGZekC"
+Received: by mail-wm1-f66.google.com with SMTP id 5b1f17b1804b1-47fedb7c68dso14382115e9.2
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 12:27:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770323239; x=1770928039; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770323242; x=1770928042; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wUmdRmniV/AbCKQPwVBc9R6soa5H9SgDS+/K3SfmgWU=;
-        b=Ak2dzjuYqMwUP8MZqMkEzYSjj/nPWrOAb3qUv8fFrUs+10+hImGPY59+V88AHHpOTC
-         DLB8YEFsJUm472BrgR2RHDblcI0nYOPmPKkMAtP3F40U20fub2jp1Pvg4YVQuVr6TCYS
-         F0eQVqlLchn88W6fqsKE2VU6n4BCqei3gYf+srQU4hhdgCkRlTaHvjapWbtEy7Ic49iD
-         DmFP6bkchtKQFW/hqDBgv9cT/n+wwZ4ysibDwRYm+fxlCzS+CPswU7zNFs3jVgxUA1jD
-         bICQB8vbI6lo3jrp+9roGJ9lzLQEIQYhJYFhEVwmzfwWEMI8id+wPBKlnehJIoBuGyFU
-         xIiQ==
+        bh=ybne09pfN8jB5zjYAMJp+qQlXwXcKMBu1tEQB0yCTSg=;
+        b=NEeGZekC1srpBQLqYwesfX5AL7hG6k7Ev5BWQhKIaZyt5ysqYuj8AcGXtxUGlPF59l
+         HhBtwhYf920K/GlJjnGgxZnooQMPKt1SEj6NGIpjuYbB5KfjK1U5l0MQi3SS3CWH9LAe
+         5wvsv2UhRcz721ibPovRRIww60p8Fd3atKIn6PntcJmxumh5WCXRVVI4fCHQvEjVX7Q8
+         BF0tIWkRKLznI1kxLBKAKXRU30d8NZw7rRJzhzxvRbImONWyrJgvU2ZfcA+iyFYQdcg7
+         D8cBCizM740mMZ9AYNLxSkv9vxcoiNU6l352mkujgHl+nfN9RBOJfxxXiYeDqkO3crRS
+         3jWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770323239; x=1770928039;
+        d=1e100.net; s=20230601; t=1770323242; x=1770928042;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=wUmdRmniV/AbCKQPwVBc9R6soa5H9SgDS+/K3SfmgWU=;
-        b=sENQRJE8yHsFiKc9lqC/f8qV0ZDy3p36mMKgmdmvslPULz8xxdOnj2pSlmnpTFUBMY
-         CqzRzRqJoXiz4iD5AIDxRJvR+rNv7cXkSfDre0rX3l8UkzcSs56XslBx7CTfmOVky1Nl
-         8PAp2Sgb3FN7V5m9uDDos0dRTkzhpe8S9lUESk96TFca8gdN7/NjgUAwfoCDkfSX7irP
-         0SSpOl22jLJ5xqTDm5k7sO86+0U8iOJe6/pQ3VBAi6uLVQp23wgSQmRTEszHqK03+1Hq
-         jPXlRC/OTztZjal5Eg2aijOA9RyBfTT9sHcRluYkU6+/VpH7IoYuYrEjVVkbOCa+uFBt
-         lK8A==
-X-Gm-Message-State: AOJu0YyhTUTApiS32BXDAEs3DCcltQ1vCgFk4OIepNzzST8B9B7lYRU1
-	waPaKFor+cIropVvttZDncJJ/D/olOQqYkXhgoJdYH+vKuuCNvTCxveTeHgahA==
-X-Gm-Gg: AZuq6aIRBR9aG9fzCV3DPK2oIavbtDMUmyUWLH5zBXBvf6HfdrJhrEjHZXtgLa2qi3n
-	EvdQaI29AW6skWJiZj7FI+z8kB4xp+sQLA7e15igA3DYa6RhWPO+z/QkvleYT6GKdO7EK3PIvXn
-	3iNkcRxOjPYPFAQmJ4JO5iLSFzEop2ge/9CZDoYwWgELX3Bh5TiKvv1r3XtSxsORTJT3LWYk5AQ
-	xr+1dNEzCMpxtreIrZT4A51LRyhCyox0ru+nXTuSKVUqvldxsStftSYqgmao+dBACuZaZgHpGxS
-	q6njtxni1kKPyZ3njiYg9ZrkjNPwaMp30XrDIRG8zc9/1aNyodHafwMGQDdbMbYMB7TafKuwFAN
-	9nlxc3qlk6bASJ5RFTgcxd5CATR0439bBgVsqAVSlmMaJCTKTETCmRmrk72BKfqRqShJu5t8=
-X-Received: by 2002:a05:600c:354d:b0:479:2f95:5179 with SMTP id 5b1f17b1804b1-4832093d427mr2122245e9.15.1770323239334;
-        Thu, 05 Feb 2026 12:27:19 -0800 (PST)
+        bh=ybne09pfN8jB5zjYAMJp+qQlXwXcKMBu1tEQB0yCTSg=;
+        b=KQUDJ6bWl8ZGMfemKwv0K5JOed98l9TxKRDvL5UlS7f5mk5SmQo/Z7P4hugq4YTRTu
+         oF7QWSOgnEqctAOZLliGHtLl2H0IC02oJ9n/Qb4rds2YQM5fG223p+v4qy+f2QfHKjRc
+         YV89wRKiNSTCnBnBPhlf9ufoSXuh+p9roCgwP7ZNwS4VWva1P6gpn80PDYdbCzGekq+0
+         ubo9j7XzHrnDcTW70YNrsZrrQeiRHv+i6C8p0CmErfY9ydh2Jkfxa+PG/wiRTqJ62I3H
+         PItxvmhO88wvRDfMae7FsT26wt/6ektUBQbB9Bbh+RfH2KjuKohct/kUuShLwQV+fw0Z
+         kLsw==
+X-Gm-Message-State: AOJu0YxZypjG7ISrP+Ypq/VN6TdFlCZOdFc9iJLFqA+h1XY1Y5n7aHvz
+	7GkpzepsLXcXoKEGvU+HjVRlqPqcOW8J42M1zxQ/6SILHMBrFBLrIz1I
+X-Gm-Gg: AZuq6aLsntekw3+8WJHXb7QiMqFEcVBByBbRh9axFFQF6Hj+fiTUqiee50OwhJmXr7H
+	1oKKjUIU0rTudNQ03nIBoINx2SUYSk84ucGomJlw9m1NjZ+Gxi9+foX1s25BZnVXLxNLXSC7Eub
+	Bx6AXz/PnqxYS5c6HrGP4euVFUbCMyKQJ5JK+phi2iqvRdoRyCCjuSHKPbmTfmPlgi5Wunxrfs9
+	zatK/IvReCwz2hoXw46mqdNCRWsN3H9Xa0KdnMAnE+357FGTvysEd7xoWfxYNFYunMqvWB+nekQ
+	ukKuI/B9ro5QKoQ29+ew09bHmintVnMO/VhcjPdc26kvwVV1xQxch/72pNI6Gg+VB7kz1/dUwDl
+	/RDW4IX1SDjCB25udNi9wamWqbK783leXz/JJPUCdnld1OYAJ1BMzmTzLtApRoT1K8qZ/1bI=
+X-Received: by 2002:a05:600c:4f81:b0:479:3a89:121d with SMTP id 5b1f17b1804b1-483209d06a9mr1367915e9.36.1770323241975;
+        Thu, 05 Feb 2026 12:27:21 -0800 (PST)
 Received: from localhost ([2620:10d:c092:500::6:1325])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483206d87c7sm3716855e9.7.2026.02.05.12.27.18
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48317d7a963sm67154755e9.9.2026.02.05.12.27.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 12:27:18 -0800 (PST)
+        Thu, 05 Feb 2026 12:27:21 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Thu, 05 Feb 2026 20:24:41 +0000
-Subject: [PATCH RFC bpf-next 11/12] selftests/bpf: Verify resizable hash
- map is rejected in tracing progs
+Date: Thu, 05 Feb 2026 20:24:42 +0000
+Subject: [PATCH RFC bpf-next 12/12] bpftool: Add rhash map documentation
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,7 +67,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260205-rhash-v1-11-30dd6d63c462@meta.com>
+Message-Id: <20260205-rhash-v1-12-30dd6d63c462@meta.com>
 References: <20260205-rhash-v1-0-30dd6d63c462@meta.com>
 In-Reply-To: <20260205-rhash-v1-0-30dd6d63c462@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -77,164 +76,50 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  puranjay@kernel.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1770323224; l=4754;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1770323224; l=1782;
  i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=dzBrd8eLiuhpRTj2NJiwdYjrbeuOqHRJXBv3nYrx4/c=;
- b=d7xR2Vrlpa9DC8UZE5uX2+tQkwIpuf8fHdxDDDcq+Z1lWbPP1eShK4V8I+CdSWy8Wb7o+o3Cs
- FwCPHA72Pk5CYQ5d1ey5kgGDkndL8Uf3Wn2CsLaMzdiWIseOh6clPAC
+ bh=CoDUZ9m6zOSfqCe+pry5a87DYfbWmnFLlvxphxuzm1g=;
+ b=d6MCakptmrbH2kzAmKQPgsheR2qhivHG5y7dNmOWxUEvzbudPW/kzxm5gkLKslPpdpnr/pDpX
+ 11PyU06DMSwDuPngfVYaGdbkw3fZdNxPJxausB6aw7dnkNCL0ea7unY
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Verify that resizable hash map can't be used in tracing progs, as it
-uses bit_spin_lock for per-bucket locking which can deadlock in NMI
-context.
+Make bpftool documentation aware of the resizable hash map.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/testing/selftests/bpf/prog_tests/verifier.c  |   2 +
- tools/testing/selftests/bpf/progs/verifier_rhash.c | 112 +++++++++++++++++++++
- 2 files changed, 114 insertions(+)
+ tools/bpf/bpftool/Documentation/bpftool-map.rst | 2 +-
+ tools/bpf/bpftool/map.c                         | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
-index 302286a80154d37e1e81bef405c2806d1310c252..ef42781a9c1856600a52b4d04f78fb0fd7b54bfb 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
-@@ -79,6 +79,7 @@
- #include "verifier_reg_equal.skel.h"
- #include "verifier_ref_tracking.skel.h"
- #include "verifier_regalloc.skel.h"
-+#include "verifier_rhash.skel.h"
- #include "verifier_ringbuf.skel.h"
- #include "verifier_runtime_jit.skel.h"
- #include "verifier_scalar_ids.skel.h"
-@@ -222,6 +223,7 @@ void test_verifier_raw_tp_writable(void)      { RUN(verifier_raw_tp_writable); }
- void test_verifier_reg_equal(void)            { RUN(verifier_reg_equal); }
- void test_verifier_ref_tracking(void)         { RUN(verifier_ref_tracking); }
- void test_verifier_regalloc(void)             { RUN(verifier_regalloc); }
-+void test_verifier_rhash(void)                { RUN(verifier_rhash); }
- void test_verifier_ringbuf(void)              { RUN(verifier_ringbuf); }
- void test_verifier_runtime_jit(void)          { RUN(verifier_runtime_jit); }
- void test_verifier_scalar_ids(void)           { RUN(verifier_scalar_ids); }
-diff --git a/tools/testing/selftests/bpf/progs/verifier_rhash.c b/tools/testing/selftests/bpf/progs/verifier_rhash.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..66dda95d56b0544a43682df42381759e0f8c62d6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/verifier_rhash.c
-@@ -0,0 +1,112 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RHASH);
-+	__uint(max_entries, 1);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} map_rhash SEC(".maps");
-+
-+SEC("kprobe")
-+__description("rhash map is forbidden in BPF_PROG_TYPE_KPROBE")
-+__failure __msg("tracing progs cannot use resizable hash maps yet")
-+__naked void rhash_forbidden_in_kprobe(void)
-+{
-+	asm volatile (
-+	"r1 = 0;"
-+	"*(u64*)(r10 - 8) = r1;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"r1 = %[map_rhash] ll;"
-+	"call %[bpf_map_lookup_elem];"
-+	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_rhash)
-+	: __clobber_all);
-+}
-+
-+SEC("tracepoint")
-+__description("rhash map is forbidden in BPF_PROG_TYPE_TRACEPOINT")
-+__failure __msg("tracing progs cannot use resizable hash maps yet")
-+__naked void rhash_forbidden_in_tracepoint(void)
-+{
-+	asm volatile (
-+	"r1 = 0;"
-+	"*(u64*)(r10 - 8) = r1;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"r1 = %[map_rhash] ll;"
-+	"call %[bpf_map_lookup_elem];"
-+	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_rhash)
-+	: __clobber_all);
-+}
-+
-+SEC("perf_event")
-+__description("rhash map is forbidden in BPF_PROG_TYPE_PERF_EVENT")
-+__failure __msg("tracing progs cannot use resizable hash maps yet")
-+__naked void rhash_forbidden_in_perf_event(void)
-+{
-+	asm volatile (
-+	"r1 = 0;"
-+	"*(u64*)(r10 - 8) = r1;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"r1 = %[map_rhash] ll;"
-+	"call %[bpf_map_lookup_elem];"
-+	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_rhash)
-+	: __clobber_all);
-+}
-+
-+SEC("raw_tracepoint")
-+__description("rhash map is forbidden in BPF_PROG_TYPE_RAW_TRACEPOINT")
-+__failure __msg("tracing progs cannot use resizable hash maps yet")
-+__naked void rhash_forbidden_in_raw_tp(void)
-+{
-+	asm volatile (
-+	"r1 = 0;"
-+	"*(u64*)(r10 - 8) = r1;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"r1 = %[map_rhash] ll;"
-+	"call %[bpf_map_lookup_elem];"
-+	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_rhash)
-+	: __clobber_all);
-+}
-+
-+/* Positive test: socket filter programs CAN use rhash maps */
-+SEC("socket")
-+__description("rhash map is allowed in BPF_PROG_TYPE_SOCKET_FILTER")
-+__success
-+__naked void rhash_allowed_in_socket(void)
-+{
-+	asm volatile (
-+	"r1 = 0;"
-+	"*(u64*)(r10 - 8) = r1;"
-+	"r2 = r10;"
-+	"r2 += -8;"
-+	"r1 = %[map_rhash] ll;"
-+	"call %[bpf_map_lookup_elem];"
-+	"r0 = 0;"
-+	"exit;"
-+	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_rhash)
-+	: __clobber_all);
-+}
-+
-+char _license[] SEC("license") = "GPL";
+diff --git a/tools/bpf/bpftool/Documentation/bpftool-map.rst b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+index 1af3305ea2b2e396be9873483ef24877bc80b9e6..5daf3de5c7446a5b32328887ae7efcb2cbc36993 100644
+--- a/tools/bpf/bpftool/Documentation/bpftool-map.rst
++++ b/tools/bpf/bpftool/Documentation/bpftool-map.rst
+@@ -56,7 +56,7 @@ MAP COMMANDS
+ |     | **cgroup_storage** | **reuseport_sockarray** | **percpu_cgroup_storage**
+ |     | **queue** | **stack** | **sk_storage** | **struct_ops** | **ringbuf** | **inode_storage**
+ |     | **task_storage** | **bloom_filter** | **user_ringbuf** | **cgrp_storage** | **arena**
+-|     | **insn_array** }
++|     | **insn_array** | **rhash** }
+ 
+ DESCRIPTION
+ ===========
+diff --git a/tools/bpf/bpftool/map.c b/tools/bpf/bpftool/map.c
+index 7ebf7dbcfba4ff62b63c84d3de1f95f540fe09e6..71a45d96617edbb85244260c05e572abb17369ea 100644
+--- a/tools/bpf/bpftool/map.c
++++ b/tools/bpf/bpftool/map.c
+@@ -1478,7 +1478,7 @@ static int do_help(int argc, char **argv)
+ 		"                 cgroup_storage | reuseport_sockarray | percpu_cgroup_storage |\n"
+ 		"                 queue | stack | sk_storage | struct_ops | ringbuf | inode_storage |\n"
+ 		"                 task_storage | bloom_filter | user_ringbuf | cgrp_storage | arena |\n"
+-		"                 insn_array }\n"
++		"                 insn_array | rhash }\n"
+ 		"       " HELP_SPEC_OPTIONS " |\n"
+ 		"                    {-f|--bpffs} | {-n|--nomount} }\n"
+ 		"",
 
 -- 
 2.53.0
