@@ -1,335 +1,430 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EBE641C311;
-	Thu,  5 Feb 2026 14:56:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35AB4425CCE
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 15:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770303404; cv=none; b=Kp+HdE/0ulXlArAgGyZvjHNWCflcPKmFvGvPeAYI46z+B4fzhSzkNBdtacCXbFhCDthH9saOclVXhkbB1Ssp1HLSTKwFwhy/ICDL7YJ6fWZ7od4eekrkINSr23/6vDkd+FoGdJpFJJEhnXhKXHbc7wLoXxb05EKPsE4IOagAJN4=
+	t=1770306246; cv=none; b=k6nNqMPET8E3ghYeIl24qS3nm+nXoyP2HV+vtQZwRPNWygj0wXXd1DOR3PN5PdVB5qaaPURe+8xQwMtG/RPn7fbos9gwhNvfq5zt9IfCAH/Ntcwg0Pou4SD5iSeUruzIcoR9cYins0r+mj8+sO5lMmn4LNuVhDnLU1ns5UWkNVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770303404; c=relaxed/simple;
-	bh=ihSzUDt1aGgwhJCB6NN/ZdDcDlr5hD6W3yAsj6bonjY=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=G+kO4+I4et8KiDb+U2Q3GEJ2yrc7YZCY6YKCgYLjypMHD2hSbOmWGNnwlfCEgjmyEizdEbNo0a+H4qKNLt3p7Lq1IJBI9EWKO31xyszhoytUKLdBvzJ5OSd5zIfuVKP1P+ZmWZJ1pV4Pbx6s04FOel0AWK7ef3NVoWJTaPHIafI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sk88o5cv; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sk88o5cv"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 615482Q8020399;
-	Thu, 5 Feb 2026 14:56:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=C1QVcx
-	89xJLUfn8qHtMTrZdJKubsb+NMK2PGpnfJGaE=; b=sk88o5cvWxFBYMs4NV1YwH
-	Slk029KZmpP1iNiWjLwTrozfOHe0VZQwjG2JM3sf7wl21lmP7vMgn6iOBHCuEmLu
-	ewHAc3oMMsRJ0mNUnNMpgriynBljbFtx3MLei37YwSY7t8kEN9meShC+nvXu215D
-	zKc0aBKdnWIqLR8OI5X7NLEfcUD8Tlaonj0nBvS/A5r7fzaaMqdt7Zu/oI0QA1l3
-	WMBMxC/d811JdCmupJZodbfSvBiYFcmKu34XBTu5o+Z84MBpRbcJhRq0jv+RKuyq
-	H1hqH2alBtIvYpN9/NSC5UD1f6GMqIKc4TXN50AkVGtBQ1gC5IkhUb90cMAfqI/Q
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19f6qb07-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Feb 2026 14:56:03 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 615EsWZl017604;
-	Thu, 5 Feb 2026 14:56:03 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19f6qb05-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Feb 2026 14:56:02 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 615CoaO9027353;
-	Thu, 5 Feb 2026 14:56:01 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c1xs1hx8h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Feb 2026 14:56:01 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 615Eu0Bl13173472
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 5 Feb 2026 14:56:00 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0686158052;
-	Thu,  5 Feb 2026 14:56:00 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C029058050;
-	Thu,  5 Feb 2026 14:55:51 +0000 (GMT)
-Received: from smtpclient.apple (unknown [9.61.246.105])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu,  5 Feb 2026 14:55:51 +0000 (GMT)
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1770306246; c=relaxed/simple;
+	bh=r7jBCeQO1gfuyxQglTggnYf/bwCDVCLzh/BohBiDzZc=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=QJgXl2LgLnEYZohhIJlv1mwoLw5YT4d+EKZlIBx8206PnCCKr0xxwJpjMyS+XuHK+I4NHwjjhaj58J4pORl9pZ0vwL4lq0RAHMwQliwWEAGXBkd888Q8BUZ3T44DiRZy+Z5AA0/GZ90nLjuOMHTH54QDgkLrZAJ2SBHNvwoe0fM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-662f839d680so2864200eaf.2
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 07:44:06 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770306245; x=1770911045;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ag8pOfpCtUt2lrkw/LDRIMj+IbBuBQtD56qru7gNPtQ=;
+        b=tQva3M2jB5E1srFTKF5ZRaxAH90N6gBOXKxlo8o727CeR+6rZnqt18arLbgKKCKJFG
+         Shxht5ieVSsmM4m+Nd3RSRYqh2CryGpIJbxOlAncxZkKRoxOKwu1RZrMhdK0wUVDdUYA
+         g8wJqmBlnh+CEAlW6feMzfqF0xCPkSk7Eos5WmPjjNp6nR/fqeoCpaN9qejfy4Et0ssy
+         PnNpdLUSA++iZbw3/NnCEOFpTn59vM6pt5CwJVPogNS5eum/WBdwJbAyBE3fthqwW5hm
+         O7cnWMcX4gBwkKlAcsiHbmADF6rkwF1NMIONdplFarMsirQKJnRH4xON4jsiWxv8S0ak
+         zlfQ==
+X-Gm-Message-State: AOJu0YxDPTbMg/wXwLTkvkven9gtjdK0HdSTPP/DBTryw3NvYLec7z2u
+	Wmz3QRy6tuvFXnALddJcmES5enmqw45mope+nplistEBCm62BsuxNRI3j4hSRXXxCp2oGBF6jOn
+	euYVZ3U5u4hPcKBxdJWO3cuI5b2ACesI8C7mlU5w2ZECwLj8qvHRyx0JNpTc=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.300.41.1.7\))
-Subject: Re: [PATCH v5 0/6] powerpc64/bpf: Support tailcalls with subprogs &
- BPF exceptions
-From: Venkat <venkat88@linux.ibm.com>
-In-Reply-To: <20260124075223.6033-1-adubey@linux.ibm.com>
-Date: Thu, 5 Feb 2026 20:25:38 +0530
-Cc: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hbathini@linux.ibm.com, sachinpb@linux.ibm.com, andrii@kernel.org,
-        eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-        christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
-        mpe@ellerman.id.au, npiggin@gmail.com, memxor@gmail.com,
-        iii@linux.ibm.com, shuah@kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <806FB5EA-F429-406D-8916-CDA12476790A@linux.ibm.com>
-References: <20260124075223.6033-1-adubey@linux.ibm.com>
-To: adubey@linux.ibm.com
-X-Mailer: Apple Mail (2.3864.300.41.1.7)
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: YfAaPik6j-LOo4NcfkpKN9DtAt3n_Aha
-X-Authority-Analysis: v=2.4 cv=drTWylg4 c=1 sm=1 tr=0 ts=6984af83 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8 a=XfyschVtOzqIvrHFB38A:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: wLblhyGenrLrhgE7dKEgdxYLBuM8naH5
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA1MDExMiBTYWx0ZWRfX+/aqUuKF+P4x
- ExXaTUMtHCEbOoekG3RwHkUkicvV52mVFlqiQ7OaopXYSoSDisv1Nj4fOF1KT1r8FQ8gd5jW3AV
- My2+LcdXb92lYqIoH7UNAQQwa/YX7AVRr0HXoLWh5T+Wohbvs11eqxDvJmQ7+QnmqtgiLTybP+n
- dCm59GzrE9pg2ML2ZkFT6ujZmq6kaChAvrFBFHLTfuYPpPd+BGH+sqGMipUMTqYfbbW4BffvB35
- Wmo2Cy3KUWthawCDem9vlrbTWPKNDFQ2tTvxxQWZTlybEF41GV+lmFuc0YyPrtNc7weIBkB/jAD
- hLGY2XsbAw5ac7CQuVmFRIOyQ13m6XnuKumoIlhJVw93P6xAfknFZqOP8803CzA99vVdtTSetiM
- ezDUmZIxSPXaS5ZsfuLCL7NuIxxHRPohg+GiUw9AaNeVQqoGcTZE0+5okM1m41qrghX5UvF9W2p
- e2bgk6oT1v6FbCqX2QQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-05_03,2026-02-05_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- suspectscore=0 clxscore=1011 spamscore=0 malwarescore=0 bulkscore=0
- phishscore=0 adultscore=0 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2601150000
- definitions=main-2602050112
+MIME-Version: 1.0
+X-Received: by 2002:a05:6820:4a8d:b0:663:bf2:9218 with SMTP id
+ 006d021491bc7-66a2059192bmr2469888eaf.2.1770306245179; Thu, 05 Feb 2026
+ 07:44:05 -0800 (PST)
+Date: Thu, 05 Feb 2026 07:44:05 -0800
+In-Reply-To: <20260205092227.126665-1-yangfeng59949@163.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6984bac5.050a0220.3b3015.0028.GAE@google.com>
+Subject: [syzbot ci] Re: bpf: test_run: Fix the null pointer dereference issue
+ in bpf_lwt_xmit_push_encap
+From: syzbot ci <syzbot+cie430046170bd68d4@syzkaller.appspotmail.com>
+To: bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com, 
+	horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, pabeni@redhat.com, yangfeng59949@163.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+syzbot ci has tested the following series
+
+[v2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+https://lore.kernel.org/all/20260205092227.126665-1-yangfeng59949@163.com
+* [PATCH v2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+
+and found the following issues:
+* WARNING in skb_dst_set
+* general protection fault in percpu_counter_add_batch
+* general protection fault in tnl_update_pmtu
+* general protection fault in xfrm_lookup_with_ifid
+
+Full report is available here:
+https://ci.syzbot.org/series/c278e614-0520-4be1-8e1b-b6ed06beb3cd
+
+***
+
+WARNING in skb_dst_set
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      75cd3beb64d0977009e3d1a2d0c03715d3e5e156
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/8d5f34b6-d9df-4c4a-9d51-7f4f910f379a/config
+C repro:   https://ci.syzbot.org/findings/9f4f73a7-44d6-4d8b-8fed-818bb8ca054d/c_repro
+syz repro: https://ci.syzbot.org/findings/9f4f73a7-44d6-4d8b-8fed-818bb8ca054d/syz_repro
+
+------------[ cut here ]------------
+(skb->_skb_refdst & ~(1UL)) && !(skb->_skb_refdst & 1UL)
+WARNING: ./include/linux/skbuff.h:1171 at skb_dst_check_unset include/linux/skbuff.h:1170 [inline], CPU#1: syz.0.17/5978
+WARNING: ./include/linux/skbuff.h:1171 at skb_dst_set+0xfd/0x140 include/linux/skbuff.h:1217, CPU#1: syz.0.17/5978
+Modules linked in:
+CPU: 1 UID: 0 PID: 5978 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:skb_dst_check_unset include/linux/skbuff.h:1170 [inline]
+RIP: 0010:skb_dst_set+0xfd/0x140 include/linux/skbuff.h:1217
+Code: 2d 00 00 74 08 4c 89 f7 e8 80 13 98 f8 49 89 1e 48 83 c4 08 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc cc e8 64 5c 30 f8 90 <0f> 0b 90 e9 6d ff ff ff 44 89 e1 80 e1 07 38 c1 7c 8f be 04 00 00
+RSP: 0018:ffffc90005367b58 EFLAGS: 00010293
+RAX: ffffffff89923bbc RBX: dffffc0000000001 RCX: ffff8881037d8000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 1ffff1102edaad5b R08: ffffffff8fced777 R09: 1ffffffff1f9daee
+R10: dffffc0000000000 R11: ffffffff817422b0 R12: 0000000000000000
+R13: ffff888176d56b01 R14: ffff888176d56ad8 R15: ffff888176d56a80
+FS:  0000555564e8a500(0000) GS:ffff8882a9928000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b2fe63fff CR3: 000000016852c000 CR4: 00000000000006f0
+Call Trace:
+ <TASK>
+ bpf_prog_test_run_skb+0xe46/0x1ea0 net/bpf/test_run.c:1166
+ bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4714
+ __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6236
+ __do_sys_bpf kernel/bpf/syscall.c:6331 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6329 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6329
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f51a119acb9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff3a40e428 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007f51a1415fa0 RCX: 00007f51a119acb9
+RDX: 0000000000000050 RSI: 00002000000003c0 RDI: 000000000000000a
+RBP: 00007f51a1208bf7 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f51a1415fac R14: 00007f51a1415fa0 R15: 00007f51a1415fa0
+ </TASK>
 
 
+***
 
-> On 24 Jan 2026, at 1:22=E2=80=AFPM, adubey@linux.ibm.com wrote:
->=20
-> From: Abhishek Dubey <adubey@linux.ibm.com>
->=20
-> This patch series enables support for two BPF JIT features
-> on powerpc64. The first three patches target support for
-> tail calls with subprogram combinations. The first patch
-> supports realignment of tail_call_cnt offset in stack frame.
-> Implementation details are provided in the commit messages.
->=20
-> The last three patches add support for BPF exceptions. An
-> architecture-specific stack walker is implemented to assist
-> with stack walk during exceptions.
->=20
-> All selftests related to tailcalls and exceptions are passing:
->=20
-> # ./test_progs -t tailcalls
-> #442/1   tailcalls/tailcall_1:OK
-> #442/2   tailcalls/tailcall_2:OK
-> #442/3   tailcalls/tailcall_3:OK
-> #442/4   tailcalls/tailcall_4:OK
-> #442/5   tailcalls/tailcall_5:OK
-> #442/6   tailcalls/tailcall_6:OK
-> #442/7   tailcalls/tailcall_bpf2bpf_1:OK
-> #442/8   tailcalls/tailcall_bpf2bpf_2:OK
-> #442/9   tailcalls/tailcall_bpf2bpf_3:OK
-> #442/10  tailcalls/tailcall_bpf2bpf_4:OK
-> #442/11  tailcalls/tailcall_bpf2bpf_5:OK
-> #442/12  tailcalls/tailcall_bpf2bpf_6:OK
-> #442/13  tailcalls/tailcall_bpf2bpf_fentry:OK
-> #442/14  tailcalls/tailcall_bpf2bpf_fexit:OK
-> #442/15  tailcalls/tailcall_bpf2bpf_fentry_fexit:OK
-> #442/16  tailcalls/tailcall_bpf2bpf_fentry_entry:OK
-> #442/17  tailcalls/tailcall_poke:OK
-> #442/18  tailcalls/tailcall_bpf2bpf_hierarchy_1:OK
-> #442/19  tailcalls/tailcall_bpf2bpf_hierarchy_fentry:OK
-> #442/20  tailcalls/tailcall_bpf2bpf_hierarchy_fexit:OK
-> #442/21  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_fexit:OK
-> #442/22  tailcalls/tailcall_bpf2bpf_hierarchy_fentry_entry:OK
-> #442/23  tailcalls/tailcall_bpf2bpf_hierarchy_2:OK
-> #442/24  tailcalls/tailcall_bpf2bpf_hierarchy_3:OK
-> #442/25  tailcalls/tailcall_freplace:OK
-> #442/26  tailcalls/tailcall_bpf2bpf_freplace:OK
-> #442/27  tailcalls/tailcall_failure:OK
-> #442/28  tailcalls/reject_tail_call_spin_lock:OK
-> #442/29  tailcalls/reject_tail_call_rcu_lock:OK
-> #442/30  tailcalls/reject_tail_call_preempt_lock:OK
-> #442/31  tailcalls/reject_tail_call_ref:OK
-> #442     tailcalls:OK
-> Summary: 1/31 PASSED, 0 SKIPPED, 0 FAILED
->=20
-> # ./test_progs -t exceptions
-> #105/1   exceptions/exception_throw_always_1:OK
-> #105/2   exceptions/exception_throw_always_2:OK
-> #105/3   exceptions/exception_throw_unwind_1:OK
-> #105/4   exceptions/exception_throw_unwind_2:OK
-> #105/5   exceptions/exception_throw_default:OK
-> #105/6   exceptions/exception_throw_default_value:OK
-> #105/7   exceptions/exception_tail_call:OK
-> #105/8   exceptions/exception_ext:OK
-> #105/9   exceptions/exception_ext_mod_cb_runtime:OK
-> #105/10  exceptions/exception_throw_subprog:OK
-> #105/11  exceptions/exception_assert_nz_gfunc:OK
-> #105/12  exceptions/exception_assert_zero_gfunc:OK
-> #105/13  exceptions/exception_assert_neg_gfunc:OK
-> #105/14  exceptions/exception_assert_pos_gfunc:OK
-> #105/15  exceptions/exception_assert_negeq_gfunc:OK
-> #105/16  exceptions/exception_assert_poseq_gfunc:OK
-> #105/17  exceptions/exception_assert_nz_gfunc_with:OK
-> #105/18  exceptions/exception_assert_zero_gfunc_with:OK
-> #105/19  exceptions/exception_assert_neg_gfunc_with:OK
-> #105/20  exceptions/exception_assert_pos_gfunc_with:OK
-> #105/21  exceptions/exception_assert_negeq_gfunc_with:OK
-> #105/22  exceptions/exception_assert_poseq_gfunc_with:OK
-> #105/23  exceptions/exception_bad_assert_nz_gfunc:OK
-> #105/24  exceptions/exception_bad_assert_zero_gfunc:OK
-> #105/25  exceptions/exception_bad_assert_neg_gfunc:OK
-> #105/26  exceptions/exception_bad_assert_pos_gfunc:OK
-> #105/27  exceptions/exception_bad_assert_negeq_gfunc:OK
-> #105/28  exceptions/exception_bad_assert_poseq_gfunc:OK
-> #105/29  exceptions/exception_bad_assert_nz_gfunc_with:OK
-> #105/30  exceptions/exception_bad_assert_zero_gfunc_with:OK
-> #105/31  exceptions/exception_bad_assert_neg_gfunc_with:OK
-> #105/32  exceptions/exception_bad_assert_pos_gfunc_with:OK
-> #105/33  exceptions/exception_bad_assert_negeq_gfunc_with:OK
-> #105/34  exceptions/exception_bad_assert_poseq_gfunc_with:OK
-> #105/35  exceptions/exception_assert_range:OK
-> #105/36  exceptions/exception_assert_range_with:OK
-> #105/37  exceptions/exception_bad_assert_range:OK
-> #105/38  exceptions/exception_bad_assert_range_with:OK
-> #105/39  exceptions/non-throwing fentry -> exception_cb:OK
-> #105/40  exceptions/throwing fentry -> exception_cb:OK
-> #105/41  exceptions/non-throwing fexit -> exception_cb:OK
-> #105/42  exceptions/throwing fexit -> exception_cb:OK
-> #105/43  exceptions/throwing extension (with custom cb) -> =
-exception_cb:OK
-> #105/44  exceptions/throwing extension -> global func in =
-exception_cb:OK
-> #105/45  exceptions/exception_ext_mod_cb_runtime:OK
-> #105/46  exceptions/throwing extension (with custom cb) -> global func =
-in exception_cb:OK
-> #105/47  exceptions/exception_ext:OK
-> #105/48  exceptions/non-throwing fentry -> non-throwing subprog:OK
-> #105/49  exceptions/throwing fentry -> non-throwing subprog:OK
-> #105/50  exceptions/non-throwing fentry -> throwing subprog:OK
-> #105/51  exceptions/throwing fentry -> throwing subprog:OK
-> #105/52  exceptions/non-throwing fexit -> non-throwing subprog:OK
-> #105/53  exceptions/throwing fexit -> non-throwing subprog:OK
-> #105/54  exceptions/non-throwing fexit -> throwing subprog:OK
-> #105/55  exceptions/throwing fexit -> throwing subprog:OK
-> #105/56  exceptions/non-throwing fmod_ret -> non-throwing subprog:OK
-> #105/57  exceptions/non-throwing fmod_ret -> non-throwing global =
-subprog:OK
-> #105/58  exceptions/non-throwing extension -> non-throwing subprog:OK
-> #105/59  exceptions/non-throwing extension -> throwing subprog:OK
-> #105/60  exceptions/non-throwing extension -> non-throwing subprog:OK
-> #105/61  exceptions/non-throwing extension -> throwing global =
-subprog:OK
-> #105/62  exceptions/throwing extension -> throwing global subprog:OK
-> #105/63  exceptions/throwing extension -> non-throwing global =
-subprog:OK
-> #105/64  exceptions/non-throwing extension -> main subprog:OK
-> #105/65  exceptions/throwing extension -> main subprog:OK
-> #105/66  exceptions/reject_exception_cb_type_1:OK
-> #105/67  exceptions/reject_exception_cb_type_2:OK
-> #105/68  exceptions/reject_exception_cb_type_3:OK
-> #105/69  exceptions/reject_exception_cb_type_4:OK
-> #105/70  exceptions/reject_async_callback_throw:OK
-> #105/71  exceptions/reject_with_lock:OK
-> #105/72  exceptions/reject_subprog_with_lock:OK
-> #105/73  exceptions/reject_with_rcu_read_lock:OK
-> #105/74  exceptions/reject_subprog_with_rcu_read_lock:OK
-> #105/75  exceptions/reject_with_rbtree_add_throw:OK
-> #105/76  exceptions/reject_with_reference:OK
-> #105/77  exceptions/reject_with_cb_reference:OK
-> #105/78  exceptions/reject_with_cb:OK
-> #105/79  exceptions/reject_with_subprog_reference:OK
-> #105/80  exceptions/reject_throwing_exception_cb:OK
-> #105/81  exceptions/reject_exception_cb_call_global_func:OK
-> #105/82  exceptions/reject_exception_cb_call_static_func:OK
-> #105/83  exceptions/reject_multiple_exception_cb:OK
-> #105/84  exceptions/reject_exception_throw_cb:OK
-> #105/85  exceptions/reject_exception_throw_cb_diff:OK
-> #105/86  exceptions/reject_set_exception_cb_bad_ret1:OK
-> #105/87  exceptions/reject_set_exception_cb_bad_ret2:OK
-> #105/88  exceptions/check_assert_eq_int_min:OK
-> #105/89  exceptions/check_assert_eq_int_max:OK
-> #105/90  exceptions/check_assert_eq_zero:OK
-> #105/91  exceptions/check_assert_eq_llong_min:OK
-> #105/92  exceptions/check_assert_eq_llong_max:OK
-> #105/93  exceptions/check_assert_lt_pos:OK
-> #105/94  exceptions/check_assert_lt_zero:OK
-> #105/95  exceptions/check_assert_lt_neg:OK
-> #105/96  exceptions/check_assert_le_pos:OK
-> #105/97  exceptions/check_assert_le_zero:OK
-> #105/98  exceptions/check_assert_le_neg:OK
-> #105/99  exceptions/check_assert_gt_pos:OK
-> #105/100 exceptions/check_assert_gt_zero:OK
-> #105/101 exceptions/check_assert_gt_neg:OK
-> #105/102 exceptions/check_assert_ge_pos:OK
-> #105/103 exceptions/check_assert_ge_zero:OK
-> #105/104 exceptions/check_assert_ge_neg:OK
-> #105/105 exceptions/check_assert_range_s64:OK
-> #105/106 exceptions/check_assert_range_u64:OK
-> #105/107 exceptions/check_assert_single_range_s64:OK
-> #105/108 exceptions/check_assert_single_range_u64:OK
-> #105/109 exceptions/check_assert_generic:OK
-> #105/110 exceptions/check_assert_with_return:OK
-> #105     exceptions:OK
-> Summary: 1/110 PASSED, 0 SKIPPED, 0 FAILED
->=20
-> [v1]: =
-https://lore.kernel.org/all/20260105105212.136645-1-adubey@linux.ibm.com/
-> [v2]: =
-https://lore.kernel.org/all/20260114114450.30405-1-adubey@linux.ibm.com/
-> [v3]: =
-https://lore.kernel.org/all/20260122165716.10508-1-adubey@linux.ibm.com/
-> [v4]: =
-https://lore.kernel.org/all/20260122211854.5508-1-adubey@linux.ibm.com/
->=20
-> Changes v4->v5:
-> Patch comments and code refactoring
-> Handle exception callback and boundary frame checks
-> Changes v3->v4:
->        Handle bpf-ci warnings
-> Changes v2->v3:
->        Added PPC_BCC_CONST_SHORT for short jumps of constant offset
->        Optimize tailcall allocation for BPF_TRAMP_F_CALL_ORIG flag
->        New helper for stack size calculation during exceptions
->        Prologue JIT optimizations during non exception prog case
-> Changes v1->v2:
->        Move tail_call_cnt to offset 0 in stack frame
->        Remove trampoline NVR remapping-patch3/6
->=20
-> Abhishek Dubey (6):
->  powerpc64/bpf: Moving tail_call_cnt to bottom of frame
->  powerpc64/bpf: Support tailcalls with subprogs
->  powerpc64/bpf: Avoid tailcall restore from trampoline
->  powerpc64/bpf: Add arch_bpf_stack_walk() for BPF JIT
->  powerpc64/bpf: Support exceptions
->  powerpc64/bpf: Additional NVR handling for bpf_throw
->=20
-> arch/powerpc/net/bpf_jit.h        |  16 ++
-> arch/powerpc/net/bpf_jit_comp.c   |  85 +++++++--
-> arch/powerpc/net/bpf_jit_comp64.c | 276 +++++++++++++++++++++++++-----
-> 3 files changed, 315 insertions(+), 62 deletions(-)
->=20
-> --=20
-> 2.48.1
->=20
+general protection fault in percpu_counter_add_batch
 
-Tested this series, it=E2=80=99s working as expected. Please add below =
-tag.
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      75cd3beb64d0977009e3d1a2d0c03715d3e5e156
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/8d5f34b6-d9df-4c4a-9d51-7f4f910f379a/config
+C repro:   https://ci.syzbot.org/findings/f58ed194-db04-464a-95de-a6d6cc45527a/c_repro
+syz repro: https://ci.syzbot.org/findings/f58ed194-db04-464a-95de-a6d6cc45527a/syz_repro
 
-Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+Oops: general protection fault, probably for non-canonical address 0xdffffc000000001b: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x00000000000000d8-0x00000000000000df]
+CPU: 1 UID: 0 PID: 5976 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:percpu_counter_add_batch+0x3e/0x1d0 lib/percpu_counter.c:98
+Code: d4 49 89 f5 48 89 fb 49 bf 00 00 00 00 00 fc ff df e8 e6 76 f2 fc 48 89 5c 24 10 4c 8d 73 58 4c 89 f0 48 c1 e8 03 48 89 04 24 <42> 80 3c 38 00 74 08 4c 89 f7 e8 d3 2c 5a fd 49 8b 06 65 8b 28 41
+RSP: 0018:ffffc90003b37778 EFLAGS: 00010206
+RAX: 000000000000001b RBX: 0000000000000080 RCX: ffff888115b8ba80
+RDX: 0000000000000000 RSI: ffffffffffffffff RDI: 0000000000000080
+RBP: 0000000000000000 R08: 0000000000000003 R09: 0000000000000004
+R10: dffffc0000000000 R11: fffff52000766ee4 R12: 0000000000000020
+R13: ffffffffffffffff R14: 00000000000000d8 R15: dffffc0000000000
+FS:  000055555baf2500(0000) GS:ffff8882a9928000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffc74af2e38 CR3: 0000000115cec000 CR4: 00000000000006f0
+Call Trace:
+ <TASK>
+ dst_entries_add include/net/dst_ops.h:59 [inline]
+ dst_count_dec net/core/dst.c:162 [inline]
+ dst_release+0x126/0x1b0 net/core/dst.c:176
+ refdst_drop include/net/dst.h:266 [inline]
+ skb_dst_drop include/net/dst.h:278 [inline]
+ ____bpf_skb_set_tunnel_key net/core/filter.c:4867 [inline]
+ bpf_skb_set_tunnel_key+0x239/0xa30 net/core/filter.c:4835
+ bpf_prog_adb554717e5d6596+0x4f/0x5c
+ bpf_dispatcher_nop_func include/linux/bpf.h:1402 [inline]
+ __bpf_prog_run include/linux/filter.h:723 [inline]
+ bpf_prog_run include/linux/filter.h:730 [inline]
+ bpf_test_run+0x354/0x830 net/bpf/test_run.c:423
+ bpf_prog_test_run_skb+0xe02/0x1ea0 net/bpf/test_run.c:1164
+ bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4714
+ __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6236
+ __do_sys_bpf kernel/bpf/syscall.c:6331 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6329 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6329
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fca1679acb9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdef1739c8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007fca16a15fa0 RCX: 00007fca1679acb9
+RDX: 0000000000000050 RSI: 0000200000000d80 RDI: 000000000000000a
+RBP: 00007fca16808bf7 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fca16a15fac R14: 00007fca16a15fa0 R15: 00007fca16a15fa0
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:percpu_counter_add_batch+0x3e/0x1d0 lib/percpu_counter.c:98
+Code: d4 49 89 f5 48 89 fb 49 bf 00 00 00 00 00 fc ff df e8 e6 76 f2 fc 48 89 5c 24 10 4c 8d 73 58 4c 89 f0 48 c1 e8 03 48 89 04 24 <42> 80 3c 38 00 74 08 4c 89 f7 e8 d3 2c 5a fd 49 8b 06 65 8b 28 41
+RSP: 0018:ffffc90003b37778 EFLAGS: 00010206
+RAX: 000000000000001b RBX: 0000000000000080 RCX: ffff888115b8ba80
+RDX: 0000000000000000 RSI: ffffffffffffffff RDI: 0000000000000080
+RBP: 0000000000000000 R08: 0000000000000003 R09: 0000000000000004
+R10: dffffc0000000000 R11: fffff52000766ee4 R12: 0000000000000020
+R13: ffffffffffffffff R14: 00000000000000d8 R15: dffffc0000000000
+FS:  000055555baf2500(0000) GS:ffff8882a9928000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffc74af2e38 CR3: 0000000115cec000 CR4: 00000000000006f0
+----------------
+Code disassembly (best guess), 1 bytes skipped:
+   0:	49 89 f5             	mov    %rsi,%r13
+   3:	48 89 fb             	mov    %rdi,%rbx
+   6:	49 bf 00 00 00 00 00 	movabs $0xdffffc0000000000,%r15
+   d:	fc ff df
+  10:	e8 e6 76 f2 fc       	call   0xfcf276fb
+  15:	48 89 5c 24 10       	mov    %rbx,0x10(%rsp)
+  1a:	4c 8d 73 58          	lea    0x58(%rbx),%r14
+  1e:	4c 89 f0             	mov    %r14,%rax
+  21:	48 c1 e8 03          	shr    $0x3,%rax
+  25:	48 89 04 24          	mov    %rax,(%rsp)
+* 29:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1) <-- trapping instruction
+  2e:	74 08                	je     0x38
+  30:	4c 89 f7             	mov    %r14,%rdi
+  33:	e8 d3 2c 5a fd       	call   0xfd5a2d0b
+  38:	49 8b 06             	mov    (%r14),%rax
+  3b:	65 8b 28             	mov    %gs:(%rax),%ebp
+  3e:	41                   	rex.B
 
-Regards,
-Venkat.=
+
+***
+
+general protection fault in tnl_update_pmtu
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      75cd3beb64d0977009e3d1a2d0c03715d3e5e156
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/8d5f34b6-d9df-4c4a-9d51-7f4f910f379a/config
+C repro:   https://ci.syzbot.org/findings/2b87e46f-6cd5-4189-a1f4-896ea63e96a0/c_repro
+syz repro: https://ci.syzbot.org/findings/2b87e46f-6cd5-4189-a1f4-896ea63e96a0/syz_repro
+
+Oops: general protection fault, probably for non-canonical address 0xdffffc000000000a: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000050-0x0000000000000057]
+CPU: 0 UID: 0 PID: 5994 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:skb_dst_update_pmtu_no_confirm include/net/dst.h:565 [inline]
+RIP: 0010:tnl_update_pmtu+0x52b/0x1190 net/ipv4/ip_tunnel.c:533
+Code: c1 e8 03 42 80 3c 38 00 74 08 48 89 df e8 0d 3a 2a f8 4c 8b 3b 49 83 c7 50 4c 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 ff e8 e7 39 2a f8 4d 8b 3f 4d 85 ff 8b 5c
+RSP: 0018:ffffc90004ef6f68 EFLAGS: 00010206
+RAX: 000000000000000a RBX: ffffffff9a2dcec8 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: ffffffff9a2dcec0 RDI: 0000000000000000
+RBP: ffffffff9a2dcec0 R08: ffffffff89db11f3 R09: ffffffff8e35a3a0
+R10: ffffc90004ef6f20 R11: fffff520009dede6 R12: ffff888112583800
+R13: ffff888112583858 R14: 1ffff110224b070b R15: 0000000000000050
+FS:  000055557643a500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30363fff CR3: 00000001744e0000 CR4: 00000000000006f0
+Call Trace:
+ <TASK>
+ ip_tunnel_xmit+0xd36/0x2430 net/ipv4/ip_tunnel.c:805
+ __gre_xmit net/ipv4/ip_gre.c:490 [inline]
+ ipgre_xmit+0x8e6/0xc60 net/ipv4/ip_gre.c:694
+ __netdev_start_xmit include/linux/netdevice.h:5273 [inline]
+ netdev_start_xmit include/linux/netdevice.h:5282 [inline]
+ xmit_one net/core/dev.c:3853 [inline]
+ dev_hard_start_xmit+0x2cd/0x7f0 net/core/dev.c:3869
+ __dev_queue_xmit+0x14dd/0x32a0 net/core/dev.c:4819
+ dev_queue_xmit include/linux/netdevice.h:3381 [inline]
+ __bpf_tx_skb+0x18e/0x260 net/core/filter.c:2153
+ ____bpf_clone_redirect net/core/filter.c:2487 [inline]
+ bpf_clone_redirect+0x313/0x4b0 net/core/filter.c:2450
+ bpf_prog_885767c90d177146+0x62/0x6b
+ bpf_dispatcher_nop_func include/linux/bpf.h:1402 [inline]
+ __bpf_prog_run include/linux/filter.h:723 [inline]
+ bpf_prog_run include/linux/filter.h:730 [inline]
+ bpf_test_run+0x354/0x830 net/bpf/test_run.c:423
+ bpf_prog_test_run_skb+0xe02/0x1ea0 net/bpf/test_run.c:1164
+ bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4714
+ __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6236
+ __do_sys_bpf kernel/bpf/syscall.c:6331 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6329 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6329
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fad0c59acb9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffe97cab158 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007fad0c815fa0 RCX: 00007fad0c59acb9
+RDX: 0000000000000028 RSI: 0000200000000080 RDI: 000000000000000a
+RBP: 00007fad0c608bf7 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fad0c815fac R14: 00007fad0c815fa0 R15: 00007fad0c815fa0
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:skb_dst_update_pmtu_no_confirm include/net/dst.h:565 [inline]
+RIP: 0010:tnl_update_pmtu+0x52b/0x1190 net/ipv4/ip_tunnel.c:533
+Code: c1 e8 03 42 80 3c 38 00 74 08 48 89 df e8 0d 3a 2a f8 4c 8b 3b 49 83 c7 50 4c 89 f8 48 c1 e8 03 48 b9 00 00 00 00 00 fc ff df <80> 3c 08 00 74 08 4c 89 ff e8 e7 39 2a f8 4d 8b 3f 4d 85 ff 8b 5c
+RSP: 0018:ffffc90004ef6f68 EFLAGS: 00010206
+RAX: 000000000000000a RBX: ffffffff9a2dcec8 RCX: dffffc0000000000
+RDX: 0000000000000000 RSI: ffffffff9a2dcec0 RDI: 0000000000000000
+RBP: ffffffff9a2dcec0 R08: ffffffff89db11f3 R09: ffffffff8e35a3a0
+R10: ffffc90004ef6f20 R11: fffff520009dede6 R12: ffff888112583800
+R13: ffff888112583858 R14: 1ffff110224b070b R15: 0000000000000050
+FS:  000055557643a500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30363fff CR3: 00000001744e0000 CR4: 00000000000006f0
+----------------
+Code disassembly (best guess):
+   0:	c1 e8 03             	shr    $0x3,%eax
+   3:	42 80 3c 38 00       	cmpb   $0x0,(%rax,%r15,1)
+   8:	74 08                	je     0x12
+   a:	48 89 df             	mov    %rbx,%rdi
+   d:	e8 0d 3a 2a f8       	call   0xf82a3a1f
+  12:	4c 8b 3b             	mov    (%rbx),%r15
+  15:	49 83 c7 50          	add    $0x50,%r15
+  19:	4c 89 f8             	mov    %r15,%rax
+  1c:	48 c1 e8 03          	shr    $0x3,%rax
+  20:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
+  27:	fc ff df
+* 2a:	80 3c 08 00          	cmpb   $0x0,(%rax,%rcx,1) <-- trapping instruction
+  2e:	74 08                	je     0x38
+  30:	4c 89 ff             	mov    %r15,%rdi
+  33:	e8 e7 39 2a f8       	call   0xf82a3a1f
+  38:	4d 8b 3f             	mov    (%r15),%r15
+  3b:	4d 85 ff             	test   %r15,%r15
+  3e:	8b                   	.byte 0x8b
+  3f:	5c                   	pop    %rsp
+
+
+***
+
+general protection fault in xfrm_lookup_with_ifid
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      75cd3beb64d0977009e3d1a2d0c03715d3e5e156
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/8d5f34b6-d9df-4c4a-9d51-7f4f910f379a/config
+C repro:   https://ci.syzbot.org/findings/5c4a2d70-b003-439e-8039-496b9009f1e9/c_repro
+syz repro: https://ci.syzbot.org/findings/5c4a2d70-b003-439e-8039-496b9009f1e9/syz_repro
+
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+CPU: 0 UID: 0 PID: 5985 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:xfrm_lookup_with_ifid+0xe1/0x1af0 net/xfrm/xfrm_policy.c:3181
+Code: 24 20 4d 8d 66 08 4c 89 e0 48 c1 e8 03 4d 89 ee 42 80 3c 28 00 74 08 4c 89 e7 e8 ba 20 17 f8 4d 8b 24 24 4c 89 e0 48 c1 e8 03 <42> 0f b6 04 30 84 c0 0f 85 94 17 00 00 41 0f b7 04 24 89 44 24 28
+RSP: 0018:ffffc90003e96fe0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffffc90003e97080 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffc90003e97090
+RBP: ffffc90003e970f8 R08: ffffc90003e9708f R09: 0000000000000000
+R10: ffffc90003e97080 R11: fffff520007d2e12 R12: 0000000000000000
+R13: dffffc0000000000 R14: dffffc0000000000 R15: 0000000000000000
+FS:  000055558c0ab500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30363fff CR3: 00000001b9fc8000 CR4: 00000000000006f0
+Call Trace:
+ <TASK>
+ xfrm_lookup net/xfrm/xfrm_policy.c:3336 [inline]
+ xfrm_lookup_route+0x3c/0x1c0 net/xfrm/xfrm_policy.c:3347
+ vti_xmit net/ipv4/ip_vti.c:217 [inline]
+ vti_tunnel_xmit+0x48e/0x18f0 net/ipv4/ip_vti.c:307
+ __netdev_start_xmit include/linux/netdevice.h:5273 [inline]
+ netdev_start_xmit include/linux/netdevice.h:5282 [inline]
+ xmit_one net/core/dev.c:3853 [inline]
+ dev_hard_start_xmit+0x2cd/0x7f0 net/core/dev.c:3869
+ __dev_queue_xmit+0x14dd/0x32a0 net/core/dev.c:4819
+ dev_queue_xmit include/linux/netdevice.h:3381 [inline]
+ __bpf_tx_skb+0x18e/0x260 net/core/filter.c:2153
+ ____bpf_clone_redirect net/core/filter.c:2487 [inline]
+ bpf_clone_redirect+0x313/0x4b0 net/core/filter.c:2450
+ bpf_prog_e16758452f539c38+0x5f/0x68
+ bpf_dispatcher_nop_func include/linux/bpf.h:1402 [inline]
+ __bpf_prog_run include/linux/filter.h:723 [inline]
+ bpf_prog_run include/linux/filter.h:730 [inline]
+ bpf_test_run+0x354/0x830 net/bpf/test_run.c:423
+ bpf_prog_test_run_skb+0xe02/0x1ea0 net/bpf/test_run.c:1164
+ bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4714
+ __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6236
+ __do_sys_bpf kernel/bpf/syscall.c:6331 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6329 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6329
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fe30af9acb9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffa3d1a918 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007fe30b215fa0 RCX: 00007fe30af9acb9
+RDX: 000000000000002c RSI: 0000200000000080 RDI: 000000000000000a
+RBP: 00007fe30b008bf7 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fe30b215fac R14: 00007fe30b215fa0 R15: 00007fe30b215fa0
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:xfrm_lookup_with_ifid+0xe1/0x1af0 net/xfrm/xfrm_policy.c:3181
+Code: 24 20 4d 8d 66 08 4c 89 e0 48 c1 e8 03 4d 89 ee 42 80 3c 28 00 74 08 4c 89 e7 e8 ba 20 17 f8 4d 8b 24 24 4c 89 e0 48 c1 e8 03 <42> 0f b6 04 30 84 c0 0f 85 94 17 00 00 41 0f b7 04 24 89 44 24 28
+RSP: 0018:ffffc90003e96fe0 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: ffffc90003e97080 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffc90003e97090
+RBP: ffffc90003e970f8 R08: ffffc90003e9708f R09: 0000000000000000
+R10: ffffc90003e97080 R11: fffff520007d2e12 R12: 0000000000000000
+R13: dffffc0000000000 R14: dffffc0000000000 R15: 0000000000000000
+FS:  000055558c0ab500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30363fff CR3: 00000001b9fc8000 CR4: 00000000000006f0
+----------------
+Code disassembly (best guess):
+   0:	24 20                	and    $0x20,%al
+   2:	4d 8d 66 08          	lea    0x8(%r14),%r12
+   6:	4c 89 e0             	mov    %r12,%rax
+   9:	48 c1 e8 03          	shr    $0x3,%rax
+   d:	4d 89 ee             	mov    %r13,%r14
+  10:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1)
+  15:	74 08                	je     0x1f
+  17:	4c 89 e7             	mov    %r12,%rdi
+  1a:	e8 ba 20 17 f8       	call   0xf81720d9
+  1f:	4d 8b 24 24          	mov    (%r12),%r12
+  23:	4c 89 e0             	mov    %r12,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 0f b6 04 30       	movzbl (%rax,%r14,1),%eax <-- trapping instruction
+  2f:	84 c0                	test   %al,%al
+  31:	0f 85 94 17 00 00    	jne    0x17cb
+  37:	41 0f b7 04 24       	movzwl (%r12),%eax
+  3c:	89 44 24 28          	mov    %eax,0x28(%rsp)
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
