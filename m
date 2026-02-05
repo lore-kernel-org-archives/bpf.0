@@ -1,143 +1,121 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE558361672;
-	Thu,  5 Feb 2026 09:23:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1ACD2D6409;
+	Thu,  5 Feb 2026 09:55:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770283395; cv=none; b=AtKLqof1+Mqp2m2zubhxdSn6AcC/QLSO6t3JQCLeNeZsErnqI9Nt8pDpj5BXEQIFN3EmwJNNkOkbQ9qSsUXZ+P3egz49/8VxYnHlsgMDU8ZbkkxPPwjRclQr5AzCn3AkgCrCYLI3Da5LOfn2pq6AKFmIH43b9MFakSO47YQlvK0=
+	t=1770285300; cv=none; b=GRKZvUvWib21B9N7yGExazorbAkcZIu13bhtSwHciI72X/0xRQ3ghYvADjO80LjHJcHVbKDsKsZIYonCWI75l7zyWjMf94NL9OYwDnyDwgIhYa0JUpI8lUo6H6Jr+M+dH77WaOLSm75m271065D4nfL+S8Jc/tjDB+s3LHQw/BE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770283395; c=relaxed/simple;
-	bh=ASFscKfQZNTqdX/nIkBWTYyfKL3Xxu/c8YcFqW2TIRg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GyZGSmwGJkv0Rq/Os2pQFx1KSB+G1NadCy1pJPWw59reNMpF6UxWrTlqPXpVpq4BJeeaZz1aW89JZsBDvUDTTXKxxuIZNZkZ3z7Mx+FFYEOZf60E8MFOyej2CY97EOMZ3delfV1LpL4mSe1qM28lo7KcJQerTpCHwX8BIhg+24k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=HYC1fRc4; arc=none smtp.client-ip=220.197.31.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1770285300; c=relaxed/simple;
+	bh=P8Ez/5KiqJWkKnxyKsNthtgwrEXnmSki4zkSpe9Khuk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=f3ErN20aUbcX+xc8YnZTcEYABqZZcHwGjWcxjggt9ocFjv4PhdR5j8MdAqRpsAQFy+zIUkwq97rLaxNC19TbcrMNI+ltc+xhQWHeunVs8aCoiy2OfbO3JRqPLlj0auR6CVX44ssJ0IUwhEuroY9dlfGGzIP/y5eHIKyyQTRrU74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WUW7a+w3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="HYC1fRc4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Hb
-	ZLkhI9yayHaUp7I8gdb9rZtco+zUFIDWHACs6Uq6Q=; b=HYC1fRc4lWnpdZjEOB
-	zef9RiVm1ulu9ToGu0CmDfGK0A1H7EXDPvsW25ZAAuhibnGE+dEUUwfi2Ri/XVja
-	mkL3TgK5lDRX55Ayj4AJETRRj4f7IY3o6XSqj7yuhVg7tX3kLeJw1q7P/SD24Axy
-	rwi+WEuyoodzaBTk8ieetrmW8=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAX_mlTYYRpN2GXKQ--.9587S2;
-	Thu, 05 Feb 2026 17:22:29 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org
-Cc: bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
-Date: Thu,  5 Feb 2026 17:22:27 +0800
-Message-Id: <20260205092227.126665-1-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WUW7a+w3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D36ADC4CEF7;
+	Thu,  5 Feb 2026 09:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770285300;
+	bh=P8Ez/5KiqJWkKnxyKsNthtgwrEXnmSki4zkSpe9Khuk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=WUW7a+w3VRuLvrWrimtObOGF5O9AIAHs068rVd4DfyK0Ngh30rv1e4InsQrW3Hasy
+	 j8EZNXcDHtgLun6wjELo+9vM++piw9l+d/KsbqvgGHVzZrCbfrOvqqcnf0v14kQ9df
+	 EhHcs9U19xE+SjG4J4JjPSZzb2PlhyBS7wQmqoWseNnTw0noMQwuC6m6TcoarmE43g
+	 qk7kjlhuCT70JqYQ55LFFdP8NRweWWudUBsvLmnl4RNu+fRAFFZSGiLR6TnkRFhdFW
+	 Fhg10ySAp88fIYuI5BVdoK8aKnrKCZe9RechdaPiC3pUcR5gnjv+3u23OKaGL0LAA4
+	 9bhGbLDR7nTlA==
+Content-Type: multipart/mixed; boundary="===============0855396603024733409=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAX_mlTYYRpN2GXKQ--.9587S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4UWFy5ZF1Utr1UWryfZwb_yoWrWw4fpF
-	1UtrW09rs5J340qF48Jr4UJw1aqFWqvFW5Jryavw1jqF1jqw1xXr1ftF4jgrZ8Ar4ruw47
-	J34UKFn2qw1UJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jY89tUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RboYWmEYVZuyQAA3T
+Message-Id: <da02105f8b623cf906cccbc701787aec26bd7603f1855814285493beaa847196@mail.kernel.org>
+In-Reply-To: <20260205092227.126665-1-yangfeng59949@163.com>
+References: <20260205092227.126665-1-yangfeng59949@163.com>
+Subject: Re: [PATCH v2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+From: bot+bpf-ci@kernel.org
+To: yangfeng59949@163.com,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org
+Cc: bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu,  5 Feb 2026 09:54:59 +0000 (UTC)
 
-From: Feng Yang <yangfeng@kylinos.cn>
+--===============0855396603024733409==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
-calculate the needed headroom:
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> index 178c4738e..c05b31cd1 100644
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -982,6 +982,7 @@ static struct proto bpf_dummy_proto = {
+>  	.obj_size = sizeof(struct sock),
+>  };
+>
+> +struct dst_entry bpf_test_run_lwt_xmit_dst;
 
-	err = skb_cow_head(skb,
-			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
+The bpf_test_run_lwt_xmit_dst is a global variable shared by all callers of
+bpf_prog_test_run_skb(). If two processes concurrently run LWT_XMIT tests,
+could this race?
 
-But skb->_skb_refdst may not be initialized when the skb is set up by
-bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
-in this scenario will trigger null pointer dereference, causing a kernel
-crash as Yinhao reported:
+Process A:
+    bpf_test_run_lwt_xmit_dst.dev = dev_A;
+    skb_dst_set(skb_A, &bpf_test_run_lwt_xmit_dst);
 
-[  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[  105.186382] #PF: supervisor read access in kernel mode
-[  105.186388] #PF: error_code(0x0000) - not-present page
-[  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
-[  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
-[  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
-[  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
-[  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
-[  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
-[  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
-[  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
-[  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
-[  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
-[  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
-[  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
-[  105.186499] PKRU: 55555554
-[  105.186502] Call Trace:
-[  105.186507]  <TASK>
-[  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
-[  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
-[  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
-[  105.186547]  ? ktime_get+0x3c/0xa0
-[  105.186554]  bpf_test_run+0x195/0x320
-[  105.186563]  ? bpf_test_run+0x10f/0x320
-[  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
-[  105.186590]  __sys_bpf+0x69c/0xa40
-[  105.186603]  __x64_sys_bpf+0x1e/0x30
-[  105.186611]  do_syscall_64+0x59/0x110
-[  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
-[  105.186649] RIP: 0033:0x7f166a97455d
+Process B preempts and runs:
+    bpf_test_run_lwt_xmit_dst.dev = dev_B;
+    skb_dst_set(skb_B, &bpf_test_run_lwt_xmit_dst);
 
-Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
+Now Process A resumes but skb_A's dst_entry has dev_B instead of dev_A.
+This could lead to wrong headroom calculation in bpf_lwt_push_ip_encap()
+via LL_RESERVED_SPACE(skb_dst(skb)->dev).
 
-Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+Would a per-cpu variable or allocating the dst_entry locally avoid this
+race condition?
+
+>  int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+>  			  union bpf_attr __user *uattr)
+>  {
+
+[ ... ]
+
+> @@ -1156,7 +1157,13 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+>  		skb->ip_summed = CHECKSUM_COMPLETE;
+>  	}
+>
+> +	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
+> +		bpf_test_run_lwt_xmit_dst.dev = dev;
+> +		skb_dst_set(skb, &bpf_test_run_lwt_xmit_dst);
+> +	}
+>  	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
+> +	if (prog->type == BPF_PROG_TYPE_LWT_XMIT)
+> +		skb_dst_set(skb, NULL);
+
+The skb_dst_set() documentation states: "Sets skb dst, assuming a reference
+was taken on dst and should be released by skb_dst_drop()". The global
+bpf_test_run_lwt_xmit_dst isn't reference counted and wasn't initialized via
+dst_init().
+
+When skb_dst_set(skb, NULL) is called, skb_dst_check_unset() will trigger
+DEBUG_NET_WARN_ON_ONCE because the dst was set without the SKB_DST_NOREF bit.
+
+Is this the intended behavior, or should skb_dst_set_noref() be used instead
+(which would require holding rcu_read_lock)?
+
+
 ---
-Changes in v2:
-- Link to v1: https://lore.kernel.org/all/20260127084520.13890-1-luyun_611@163.com/ 
----
- net/bpf/test_run.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 178c4738e63b..c05b31cd1741 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -982,6 +982,7 @@ static struct proto bpf_dummy_proto = {
- 	.obj_size = sizeof(struct sock),
- };
- 
-+struct dst_entry bpf_test_run_lwt_xmit_dst;
- int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 			  union bpf_attr __user *uattr)
- {
-@@ -1156,7 +1157,13 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		skb->ip_summed = CHECKSUM_COMPLETE;
- 	}
- 
-+	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-+		bpf_test_run_lwt_xmit_dst.dev = dev;
-+		skb_dst_set(skb, &bpf_test_run_lwt_xmit_dst);
-+	}
- 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
-+	if (prog->type == BPF_PROG_TYPE_LWT_XMIT)
-+		skb_dst_set(skb, NULL);
- 	if (ret)
- 		goto out;
- 	if (!is_l2) {
--- 
-2.43.0
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21706325881
 
+AI-authorship-score: low
+AI-authorship-explanation: The commit shows characteristics of human-authored code including real bug reporters, kernel crash stack trace from actual testing, and the self-aware comment Temporarily indicating the author knows this is not an ideal fix.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Race condition on global dst_entry when concurrent LWT_XMIT tests run, could cause wrong headroom calculation but unlikely to cause crashes in typical usage scenarios.
+
+--===============0855396603024733409==--
