@@ -1,65 +1,65 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE4232C31D
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 20:27:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2499732B9AA
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 20:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770323235; cv=none; b=k6teG7mK16CrN9hWZJyhEVM1lW4F8EmYLvVv7IKRp8GfzS6azlHmt7CGW0Owp8DFMGgIcaRkVyQFQN+fpw8sI0x002SiUskSNq0RONAhDgEJB90ESj9bJDPqmxf0GQFt7AcVhlv+TigLausKP3+hAxtmxKoxD0nPhcgnUgkgZiM=
+	t=1770323236; cv=none; b=SqO+r8gCQdDL3NG85PLZn3NwptndhA8wbXGcuYbTwpJK5njStwSTwUheNPSSVsECbJ5Ljjgw3aR0Dba+P6ZDlBJglts973NjuJ1uXK/FlxiDN1O2BRXCdVa/X+8Xwd4DkvPQe0mBpFeIh76otwDue0uOgdA6bZxwQ8Pyj7jvfYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770323235; c=relaxed/simple;
-	bh=CgvWjgwjwu3afB2p6Vi/DRzOkXq9AR1WDgKdeUfMaKU=;
+	s=arc-20240116; t=1770323236; c=relaxed/simple;
+	bh=yPwoFy2F52etMS82189nfwaU76dHE0K/kk+mi8ToBBQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fh3X1t1xv4STQCRkzgjWbWH+iVxe8YFKJ3wnNMcZM0Xh1fv8O7TE8enQdhUh6x2n5zZHipddcq/fogtUtidnp7UPYoRoSn7o1b2EQjnMofIpuOM2qYGvXQ5UrHhDx3wEiLJ/pAk+N0U4Cl29h5n9b5Ehf4YcPChufhl59P2O8HQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AIT9OOW5; arc=none smtp.client-ip=209.85.221.46
+	 In-Reply-To:To:Cc; b=LH6LQJPDqux42VMoSTC+R+lI0faXohugIp7/527zMJpAAz5NsbDe/l9HpuuSIyAmhLJjAZPjI0djjLksADXIrmbUV0BrP3lfa1KH+42TsiIAmnuIzQDExZ28Crr+weILJYjaDqVLygu5RsQAX8zcQxcNtQnvwT8CcHb8PC1r+/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ewcEzq0m; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AIT9OOW5"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-42fbc305552so1444978f8f.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ewcEzq0m"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-48068ed1eccso14446325e9.2
         for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 12:27:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770323233; x=1770928033; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770323234; x=1770928034; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Z9q1FRflL4a60/E4fm+RXZCnICIZ3NvCB0KloVre3Zk=;
-        b=AIT9OOW5ZEBOQ632TBX5iRL66L5QtFuhRR44OJjPA7RAe1kU0peqZ3b7AdQHJFhvdL
-         K6SGQ6f+1vUvoD3FN04pXFXoX3n+B6OfDyeQbD3uH1OGWZFNx89SJktYl2rxcop38Jbk
-         8+0mGMxw92LV9+M3z1+XQqw+cuIO5rCsu2nRxgmuKyx46ibEEu/yut9/ca+fOqldD9gI
-         ImkwWUWcWRnYBH/Gp3bH+N6/sA3Yis8Zu7VHCov9MXb04jXebNo+u5bm/KMjjYdnl9JU
-         4icobebbfn3BBmWaHfNgHzmj/jb28e/nvSAfi0BRf7Ku8ipV36rzOCv4JvMCO/TTyoLq
-         TLqA==
+        bh=bZEBQkAk32l632d1vVadsVwBeTU0gWKua83dEQl0cvo=;
+        b=ewcEzq0mxGGhEnmfOu0OnIJqjiVG2w8zlyelpnKbxscCp8qB5nYsB8b6viYDiIWHOC
+         YyBo0iwmKX84XUF/2ezlip0T7KRy02ZrBN8TcKWwEj4zOX/LulfYh0Au9rTPnuE+F4dw
+         ToK2ZYm3cJggWUouiW/RH278P/B2R8yX/727H2eBUwiXPXrJZm09OCYkALKk1luuFD6E
+         yT+iQXhLyiE0L2xk6nuJOE9ptLKSHanK1+PFMdh1MFVNSwDPB8USSAhq+prxLoR3tJHF
+         vZrxHCe/w1O8VYo/uXgbu+zOmgcveKeskT52jYE4Kk9cpY6U1i5puMWSlhLa+hHJK1ag
+         8E6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1770323234; x=1770928034;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Z9q1FRflL4a60/E4fm+RXZCnICIZ3NvCB0KloVre3Zk=;
-        b=YDNWQymWXN7BK7ZKaRm/AO+RC/PqhsokKw63DC1I6myb/McJK0RyHwmkPWF3Kx7awn
-         EKq+3hHHZlMoMKcDVSdDOpAuxz0h9MQ5Ef6p5hzm5jsywoMNfpNytT2TdEYFygUaEy11
-         KutBGJhqSHR4Ewvis1PUv5BoaIGYhYmP1kBcASZvpapFO6Ki31vB94Xv/tHcJQTBNih+
-         lZWLJTzpyoYkddRbN8ihTyYlMm9wdai1jKyw7VIttSeJuHt305u8xUNxTMCj0cuNWCa4
-         Du8koN+nDl6fG7hvAPW/QnowsbTUV1zArMnu2eFyjc6ju/Ya49CqLe2Itk89xCnXWScb
-         YHMg==
-X-Gm-Message-State: AOJu0YyyUDJnsk5WxJL3MsdjqE7B+Kw/l6WT/2k3n5IqYj2tm6skiLgi
-	Zvpmsx/myOexZohi+oTHrCPWv2io1xzveq3b0JZGm3n4BVg/WxenEBkp
-X-Gm-Gg: AZuq6aImqVNw6rd4UKIRi4Uf3TVbxvNW3wRh4OQzd4mV1K0P9eIIXkB3FcQDC5i/ela
-	eC87gFPX5dDZ7LNoqAea90wACvWucm6qTiQbxNIf6Nr6111B9HmmVdlzietMiMkkHv+LWqoeNtw
-	4tWLTVwed+p/wQBd7xZMOThBWHph2yb3TJvnZzpwQRP7koDrRgWJX3vA7yfv1dPq8IEoqtvGiZ/
-	12WX5xjv9V10JgbTU3N8R21vJl1PMnqZkiPd/RYh+tjEyRbMHRYTs/hUJazDW8iSR4NKqQTPSQY
-	L4EukP0wqO8C/Efq3BfDYbT9vifjDMwlyIwd9ytB+rDVoA1K+1LfCYhEGH+V5/YDtEC6IFCvbVZ
-	VFDKEO2OaaGt6VotqOfRlqD70PVw6bmDI+DpMWTkLb74IoDssDlNbEzH57bU6Lht3uf5V7d8=
-X-Received: by 2002:a05:6000:26c3:b0:435:bbd7:1947 with SMTP id ffacd0b85a97d-4362933c3f2mr811730f8f.5.1770323233390;
-        Thu, 05 Feb 2026 12:27:13 -0800 (PST)
+        bh=bZEBQkAk32l632d1vVadsVwBeTU0gWKua83dEQl0cvo=;
+        b=oyYNAheaOhs295aPGsQ8WR8atlGldMneWtnMb5FD77wnQP7PoSpGWU45j4FLyRWwja
+         Xbs/0XVQAXDVmn3b+IRa/swoYgHferLqHDpjBx/e07cB6Wz0Ukv2TJJQu+B2KYXV2jJc
+         V/qgMo3iWeMyPR89UcJ9TDgx05yEapDmwapHvA8Lz39XgwyjvKpmB+WpXaMUGe8B2SlQ
+         d8lcbw1lQOYP3B6UbZBiW7TQLWt+4EGaG6nXbMJtO/4fE6UYfFvzqub6Igi8Aw6jbKSl
+         4+OJQW/VByqqaZnuBrVBPWHacasw6vTt60ryrghnBCrjI0lrgxtSfTwEJYOdPtfzrp8z
+         oz7w==
+X-Gm-Message-State: AOJu0Yw63evWG089dOJHF0zIVMLFh2zv8i1xyiZNXUzRfbxGcIBJkelO
+	4AbV0qUBV1+aeIV93sg7O6ZdJjhPKChie3uDoCe9m4eKUCw8WX3YJGgG
+X-Gm-Gg: AZuq6aIrovchHxW75tg0tzlR07CA6RijOyoCEUqUGL6fGzx3CV8WIrZSz40w3UyJqo6
+	yHj/v7GKBXQs6jNbD0lITdXqEYuNimWakyX17QUGQTZ6z7nl4xSc66jw4LnHaeBrVAf8b4QcHzA
+	5wdScpYmxJPtCVvmHZ6BAqzs7wJta7FB2xroQNpPDrv3f82JoXoZKQcysvE9cUpC3Pv7XBR5KsM
+	RCl7vBSeKaGZT1HdXuqsWh8zB/605hCPTiDl6yj3jBKu8KVwyYFFh/jOwK0EasQtP2rMiC1pRQm
+	FdHmnO8CFvsVPkbWOGTmBJImNRT+I7V1YC1TrYh7q17YW3Q832yhb+qQ4qLasFycY/6sYhshvZO
+	AcdBKUy29XAn/55FrOBfd75kBQgK5TF02VDi5W3KS8fWx5530M6JXq04gvPFvINJjh1G/aYo=
+X-Received: by 2002:a05:600c:a15:b0:46e:35a0:3587 with SMTP id 5b1f17b1804b1-4832021fe42mr9590005e9.27.1770323234317;
+        Thu, 05 Feb 2026 12:27:14 -0800 (PST)
 Received: from localhost ([2620:10d:c092:500::6:1325])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436296b2ed9sm637030f8f.5.2026.02.05.12.27.12
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4832040a3cesm5432265e9.3.2026.02.05.12.27.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 05 Feb 2026 12:27:13 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Thu, 05 Feb 2026 20:24:37 +0000
-Subject: [PATCH RFC bpf-next 07/12] selftests/bpf: Support resizable
- hashtab in test_maps
+Date: Thu, 05 Feb 2026 20:24:38 +0000
+Subject: [PATCH RFC bpf-next 08/12] selftests/bpf: Resizable hashtab
+ BPF_F_LOCK tests
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260205-rhash-v1-7-30dd6d63c462@meta.com>
+Message-Id: <20260205-rhash-v1-8-30dd6d63c462@meta.com>
 References: <20260205-rhash-v1-0-30dd6d63c462@meta.com>
 In-Reply-To: <20260205-rhash-v1-0-30dd6d63c462@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -77,350 +77,190 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  puranjay@kernel.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1770323224; l=11411;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1770323224; l=4717;
  i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=mh0xS9LngNdHirVBoyK/YWp5xPiQQHz82E+D+IKKrio=;
- b=I5WNr/Q96YCWEYVgUJL1gp+ryVtbYVYffTlAg1J+5RhZ/OUn+0u4ep/jnoN0P3DLscHN1YbwE
- QRMYapYuWiNB2d865hwqM+cFKQ2XT7wvZCI+4QhEMbV1d9JraC6dvUS
+ bh=pj+BbcAV0W5HxY/HENSfxOB+qVcUOOuZuo2EyFr0Cqk=;
+ b=0A5wt71SepdaBahKK+K0AhIu7BV7VjIEBh3s+qCQXFPMRZ1vENfREUJxxPow7LLB+QQqUAwJL
+ Iu9mJYegVaxD7COqLurwczjlCbusS+tNdcomjevLfMXAlB0ll4iv7CQ
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
+Add tests validating resizable hash map handles BPF_F_LOCK flag as
+expected.
+
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- .../selftests/bpf/map_tests/htab_map_batch_ops.c   |  22 ++++-
- tools/testing/selftests/bpf/test_maps.c            | 107 +++++++++++++++------
- 2 files changed, 97 insertions(+), 32 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/rhash.c | 99 ++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/rhash.c      | 35 +++++++++
+ 2 files changed, 134 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c b/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
-index 5da493b94ae2573c50e0f0eccadb577d549062a0..e8e83bf95be478eaaad35309e1268c5053a4135d 100644
---- a/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
-+++ b/tools/testing/selftests/bpf/map_tests/htab_map_batch_ops.c
-@@ -74,10 +74,11 @@ static void map_batch_verify(int *visited, __u32 max_entries,
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testing/selftests/bpf/prog_tests/rhash.c
+index be6e5e01bde6b127268f313d0ef25dcb33373b97..d1557405e062851ba2ad3d7378049c93395e7943 100644
+--- a/tools/testing/selftests/bpf/prog_tests/rhash.c
++++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
+@@ -7,6 +7,7 @@
+ #include <linux/bpf.h>
+ #include <linux/perf_event.h>
+ #include <sys/syscall.h>
++#include <network_helpers.h>
+ 
+ static void rhash_run(const char *prog_name)
+ {
+@@ -37,6 +38,100 @@ static void rhash_run(const char *prog_name)
+ 	rhash__destroy(skel);
  }
  
--void __test_map_lookup_and_delete_batch(bool is_pcpu)
-+void __test_map_lookup_and_delete_batch(enum bpf_map_type map_type)
- {
- 	__u32 batch, count, total, total_success;
- 	typedef BPF_DECLARE_PERCPU(int, value);
-+	bool is_pcpu = (map_type == BPF_MAP_TYPE_PERCPU_HASH);
- 	int map_fd, *keys, *visited, key;
- 	const __u32 max_entries = 10;
- 	value pcpu_values[max_entries];
-@@ -88,9 +89,13 @@ void __test_map_lookup_and_delete_batch(bool is_pcpu)
- 		.elem_flags = 0,
- 		.flags = 0,
- 	);
-+	struct bpf_map_create_opts map_opts = {
-+		.sz = sizeof(map_opts),
-+		.map_flags = (map_type == BPF_MAP_TYPE_RHASH) ? BPF_F_NO_PREALLOC : 0,
-+	};
- 
--	map_fd = bpf_map_create(is_pcpu ? BPF_MAP_TYPE_PERCPU_HASH : BPF_MAP_TYPE_HASH,
--				"hash_map", sizeof(int), sizeof(int), max_entries, NULL);
-+	map_fd = bpf_map_create(map_type, "hash_map", sizeof(int), sizeof(int),
-+				max_entries, &map_opts);
- 	CHECK(map_fd == -1,
- 	      "bpf_map_create()", "error:%s\n", strerror(errno));
- 
-@@ -261,13 +266,19 @@ void __test_map_lookup_and_delete_batch(bool is_pcpu)
- 
- void htab_map_batch_ops(void)
- {
--	__test_map_lookup_and_delete_batch(false);
-+	__test_map_lookup_and_delete_batch(BPF_MAP_TYPE_HASH);
- 	printf("test_%s:PASS\n", __func__);
- }
- 
- void htab_percpu_map_batch_ops(void)
- {
--	__test_map_lookup_and_delete_batch(true);
-+	__test_map_lookup_and_delete_batch(BPF_MAP_TYPE_PERCPU_HASH);
-+	printf("test_%s:PASS\n", __func__);
++struct lock_thread_args {
++	int prog_fd;
++	int map_fd;
++};
++
++struct lock_elem {
++	struct bpf_spin_lock lock;
++	int var[16];
++};
++
++static void *spin_lock_thread(void *arg)
++{
++	struct lock_thread_args *args = arg;
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.data_in = &pkt_v4,
++		.data_size_in = sizeof(pkt_v4),
++		.repeat = 10000,
++	);
++	int err;
++
++	err = bpf_prog_test_run_opts(args->prog_fd, &topts);
++	if (err || topts.retval)
++		return (void *)1;
++
++	return (void *)0;
 +}
 +
-+void rhtab_map_batch_ops(void)
++static void *parallel_map_access(void *arg)
 +{
-+	__test_map_lookup_and_delete_batch(BPF_MAP_TYPE_RHASH);
- 	printf("test_%s:PASS\n", __func__);
- }
- 
-@@ -275,4 +286,5 @@ void test_htab_map_batch_ops(void)
- {
- 	htab_map_batch_ops();
- 	htab_percpu_map_batch_ops();
-+	rhtab_map_batch_ops();
- }
-diff --git a/tools/testing/selftests/bpf/test_maps.c b/tools/testing/selftests/bpf/test_maps.c
-index ccc5acd55ff9d522e40e32b5b2addd294e802aee..b7286f8f1b40ea1bf14589d20390924fed8fdc28 100644
---- a/tools/testing/selftests/bpf/test_maps.c
-+++ b/tools/testing/selftests/bpf/test_maps.c
-@@ -30,12 +30,23 @@ int skips;
- 
- static struct bpf_map_create_opts map_opts = { .sz = sizeof(map_opts) };
- 
-+static bool skip_test(enum bpf_map_type map_type)
-+{
-+	return map_type == BPF_MAP_TYPE_RHASH &&
-+	       !(map_opts.map_flags & BPF_F_NO_PREALLOC);
++	struct lock_thread_args *args = arg;
++	int i, j, key = 0;
++	int err;
++	struct lock_elem val;
++
++	for (i = 0; i < 10000; i++) {
++		err = bpf_map_lookup_elem_flags(args->map_fd, &key, &val, BPF_F_LOCK);
++		if (err)
++			return (void *)1;
++		if (val.lock.val)
++			return (void *)1;
++		for (j = 1; j < 16; j++) {
++			if (val.var[j] != val.var[0])
++				return (void *)1;
++		}
++	}
++
++	return (void *)0;
 +}
 +
- static void test_hashmap(unsigned int task, void *data)
- {
-+	enum bpf_map_type map_type = data ? *(enum bpf_map_type *)data : BPF_MAP_TYPE_HASH;
- 	long long key, next_key, first_key, value;
- 	int fd;
- 
--	fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(key), sizeof(value), 2, &map_opts);
-+	/* RHASH doesn't support prealloc mode */
-+	if (skip_test(map_type))
++static void rhash_spin_lock_test(void)
++{
++	struct lock_thread_args args;
++	struct rhash *skel;
++	struct lock_elem val = {};
++	pthread_t thread_id[4];
++	int err, key = 0, i;
++	void *ret;
++
++	skel = rhash__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "rhash__open_and_load"))
 +		return;
 +
-+	fd = bpf_map_create(map_type, NULL, sizeof(key), sizeof(value), 2, &map_opts);
- 	if (fd < 0) {
- 		printf("Failed to create hashmap '%s'!\n", strerror(errno));
- 		exit(1);
-@@ -128,11 +139,16 @@ static void test_hashmap(unsigned int task, void *data)
- 
- static void test_hashmap_sizes(unsigned int task, void *data)
- {
-+	enum bpf_map_type map_type = data ? *(enum bpf_map_type *)data : BPF_MAP_TYPE_HASH;
- 	int fd, i, j;
- 
-+	/* RHASH doesn't support prealloc mode */
-+	if (skip_test(map_type))
-+		return;
++	args.prog_fd = bpf_program__fd(skel->progs.test_rhash_spin_lock);
++	args.map_fd = bpf_map__fd(skel->maps.rhmap_lock);
 +
- 	for (i = 1; i <= 512; i <<= 1)
- 		for (j = 1; j <= 1 << 18; j <<= 1) {
--			fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, i, j, 2, &map_opts);
-+			fd = bpf_map_create(map_type, NULL, i, j, 2, &map_opts);
- 			if (fd < 0) {
- 				if (errno == ENOMEM)
- 					return;
-@@ -261,12 +277,12 @@ static void test_hashmap_percpu(unsigned int task, void *data)
++	/* Insert initial element with BPF_F_LOCK */
++	err = bpf_map_update_elem(args.map_fd, &key, &val, BPF_F_LOCK);
++	if (!ASSERT_OK(err, "initial update"))
++		goto cleanup;
++
++	/* Spawn 2 threads running BPF program (uses bpf_spin_lock) */
++	for (i = 0; i < 2; i++)
++		if (!ASSERT_OK(pthread_create(&thread_id[i], NULL,
++					      &spin_lock_thread, &args),
++			       "pthread_create spin_lock"))
++			goto cleanup;
++
++	/* Spawn 2 threads doing parallel map access with BPF_F_LOCK */
++	for (i = 2; i < 4; i++)
++		if (!ASSERT_OK(pthread_create(&thread_id[i], NULL,
++					      &parallel_map_access, &args),
++			       "pthread_create parallel_map_access"))
++			goto cleanup;
++
++	/* Wait for all threads */
++	for (i = 0; i < 4; i++)
++		if (!ASSERT_OK(pthread_join(thread_id[i], &ret), "pthread_join") ||
++		    !ASSERT_OK((long)ret, "thread ret"))
++			goto cleanup;
++
++cleanup:
++	rhash__destroy(skel);
++}
++
+ void test_rhash(void)
+ {
+ 	if (test__start_subtest("test_rhash_lookup_update"))
+@@ -59,4 +154,8 @@ void test_rhash(void)
+ 
+ 	if (test__start_subtest("test_rhash_delete_nonexistent"))
+ 		rhash_run("test_rhash_delete_nonexistent");
++
++	if (test__start_subtest("test_rhash_spin_lock"))
++		rhash_spin_lock_test();
+ }
++
+diff --git a/tools/testing/selftests/bpf/progs/rhash.c b/tools/testing/selftests/bpf/progs/rhash.c
+index 246cc4538c493902c720498bf7ab9bc5587d4643..fba55b5d9ed2575a1a31c4d2247c1d76f10d6bb1 100644
+--- a/tools/testing/selftests/bpf/progs/rhash.c
++++ b/tools/testing/selftests/bpf/progs/rhash.c
+@@ -247,3 +247,38 @@ int test_rhash_delete_nonexistent(void *ctx)
+ 	return 0;
  }
  
- #define VALUE_SIZE 3
--static int helper_fill_hashmap(int max_entries)
-+static int helper_fill_hashmap(int max_entries, enum bpf_map_type map_type)
- {
- 	int i, fd, ret;
- 	long long key, value[VALUE_SIZE] = {};
- 
--	fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(key), sizeof(value),
-+	fd = bpf_map_create(map_type, NULL, sizeof(key), sizeof(value),
- 			    max_entries, &map_opts);
- 	CHECK(fd < 0,
- 	      "failed to create hashmap",
-@@ -285,11 +301,16 @@ static int helper_fill_hashmap(int max_entries)
- 
- static void test_hashmap_walk(unsigned int task, void *data)
- {
-+	enum bpf_map_type map_type = data ? *(enum bpf_map_type *)data : BPF_MAP_TYPE_HASH;
- 	int fd, i, max_entries = 10000;
- 	long long key, value[VALUE_SIZE], next_key;
- 	bool next_key_valid = true;
- 
--	fd = helper_fill_hashmap(max_entries);
-+	/* RHASH doesn't support prealloc mode */
-+	if (skip_test(map_type))
-+		return;
++#define VAR_NUM 16
 +
-+	fd = helper_fill_hashmap(max_entries, map_type);
- 
- 	for (i = 0; bpf_map_get_next_key(fd, !i ? NULL : &key,
- 					 &next_key) == 0; i++) {
-@@ -297,7 +318,8 @@ static void test_hashmap_walk(unsigned int task, void *data)
- 		assert(bpf_map_lookup_elem(fd, &key, value) == 0);
- 	}
- 
--	assert(i == max_entries);
-+	/* rhash does not guarantee visiting all elements or not visiting the same element twice */
-+	assert(map_type == BPF_MAP_TYPE_RHASH || i == max_entries);
- 
- 	assert(bpf_map_get_next_key(fd, NULL, &key) == 0);
- 	for (i = 0; next_key_valid; i++) {
-@@ -308,7 +330,7 @@ static void test_hashmap_walk(unsigned int task, void *data)
- 		key = next_key;
- 	}
- 
--	assert(i == max_entries);
-+	assert(map_type == BPF_MAP_TYPE_RHASH || i == max_entries);
- 
- 	for (i = 0; bpf_map_get_next_key(fd, !i ? NULL : &key,
- 					 &next_key) == 0; i++) {
-@@ -317,7 +339,7 @@ static void test_hashmap_walk(unsigned int task, void *data)
- 		assert(value[0] - 1 == key);
- 	}
- 
--	assert(i == max_entries);
-+	assert(map_type == BPF_MAP_TYPE_RHASH || i == max_entries);
- 	close(fd);
- }
- 
-@@ -329,8 +351,8 @@ static void test_hashmap_zero_seed(void)
- 	old_flags = map_opts.map_flags;
- 	map_opts.map_flags |= BPF_F_ZERO_SEED;
- 
--	first = helper_fill_hashmap(3);
--	second = helper_fill_hashmap(3);
-+	first = helper_fill_hashmap(3, BPF_MAP_TYPE_HASH);
-+	second = helper_fill_hashmap(3, BPF_MAP_TYPE_HASH);
- 
- 	for (i = 0; ; i++) {
- 		void *key_ptr = !i ? NULL : &key;
-@@ -1301,7 +1323,7 @@ static void test_map_in_map(void)
- 
- #define MAP_SIZE (32 * 1024)
- 
--static void test_map_large(void)
-+static void test_map_large(enum bpf_map_type map_type)
- {
- 
- 	struct bigkey {
-@@ -1311,7 +1333,11 @@ static void test_map_large(void)
- 	} key;
- 	int fd, i, value;
- 
--	fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(key), sizeof(value),
-+	/* RHASH doesn't support prealloc mode */
-+	if (skip_test(map_type))
-+		return;
++struct lock_elem {
++	struct bpf_spin_lock lock;
++	int var[VAR_NUM];
++};
 +
-+	fd = bpf_map_create(map_type, NULL, sizeof(key), sizeof(value),
- 			    MAP_SIZE, &map_opts);
- 	if (fd < 0) {
- 		printf("Failed to create large map '%s'!\n", strerror(errno));
-@@ -1378,10 +1404,16 @@ static void __run_parallel(unsigned int tasks,
- 
- static void test_map_stress(void)
- {
--	run_parallel(100, test_hashmap_walk, NULL);
--	run_parallel(100, test_hashmap, NULL);
-+	enum bpf_map_type hash_type = BPF_MAP_TYPE_HASH;
-+	enum bpf_map_type rhash_type = BPF_MAP_TYPE_RHASH;
++struct {
++	__uint(type, BPF_MAP_TYPE_RHASH);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, struct lock_elem);
++} rhmap_lock SEC(".maps");
 +
-+	run_parallel(100, test_hashmap_walk, &hash_type);
-+	run_parallel(100, test_hashmap_walk, &rhash_type);
-+	run_parallel(100, test_hashmap, &hash_type);
-+	run_parallel(100, test_hashmap, &rhash_type);
- 	run_parallel(100, test_hashmap_percpu, NULL);
--	run_parallel(100, test_hashmap_sizes, NULL);
-+	run_parallel(100, test_hashmap_sizes, &hash_type);
-+	run_parallel(100, test_hashmap_sizes, &rhash_type);
- 
- 	run_parallel(100, test_arraymap, NULL);
- 	run_parallel(100, test_arraymap_percpu, NULL);
-@@ -1471,12 +1503,16 @@ static void test_update_delete(unsigned int fn, void *data)
- 	}
- }
- 
--static void test_map_parallel(void)
-+static void test_map_parallel(enum bpf_map_type map_type)
- {
- 	int i, fd, key = 0, value = 0, j = 0;
- 	int data[2];
- 
--	fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(key), sizeof(value),
-+	/* RHASH doesn't support prealloc mode */
-+	if (skip_test(map_type))
-+		return;
++SEC("cgroup/skb")
++int test_rhash_spin_lock(struct __sk_buff *skb)
++{
++	struct lock_elem *val;
++	int rnd = bpf_get_prandom_u32();
++	int key = 0, i;
 +
-+	fd = bpf_map_create(map_type, NULL, sizeof(key), sizeof(value),
- 			    MAP_SIZE, &map_opts);
- 	if (fd < 0) {
- 		printf("Failed to create map for parallel test '%s'!\n",
-@@ -1529,14 +1565,18 @@ static void test_map_parallel(void)
- 	close(fd);
- }
- 
--static void test_map_rdonly(void)
-+static void test_map_rdonly(enum bpf_map_type map_type)
- {
- 	int fd, key = 0, value = 0;
- 	__u32 old_flags;
- 
-+	/* RHASH doesn't support prealloc mode */
-+	if (skip_test(map_type))
-+		return;
++	val = bpf_map_lookup_elem(&rhmap_lock, &key);
++	if (!val)
++		return 1;
 +
- 	old_flags = map_opts.map_flags;
- 	map_opts.map_flags |= BPF_F_RDONLY;
--	fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(key), sizeof(value),
-+	fd = bpf_map_create(map_type, NULL, sizeof(key), sizeof(value),
- 			    MAP_SIZE, &map_opts);
- 	map_opts.map_flags = old_flags;
- 	if (fd < 0) {
-@@ -1558,14 +1598,18 @@ static void test_map_rdonly(void)
- 	close(fd);
- }
- 
--static void test_map_wronly_hash(void)
-+static void test_map_wronly_hash(enum bpf_map_type map_type)
- {
- 	int fd, key = 0, value = 0;
- 	__u32 old_flags;
- 
-+	/* RHASH doesn't support prealloc mode */
-+	if (skip_test(map_type))
-+		return;
++	/* spin_lock in resizable hash map */
++	bpf_spin_lock(&val->lock);
++	for (i = 0; i < VAR_NUM; i++)
++		val->var[i] = rnd;
++	bpf_spin_unlock(&val->lock);
 +
- 	old_flags = map_opts.map_flags;
- 	map_opts.map_flags |= BPF_F_WRONLY;
--	fd = bpf_map_create(BPF_MAP_TYPE_HASH, NULL, sizeof(key), sizeof(value),
-+	fd = bpf_map_create(map_type, NULL, sizeof(key), sizeof(value),
- 			    MAP_SIZE, &map_opts);
- 	map_opts.map_flags = old_flags;
- 	if (fd < 0) {
-@@ -1623,7 +1667,8 @@ static void test_map_wronly_stack_or_queue(enum bpf_map_type map_type)
- 
- static void test_map_wronly(void)
- {
--	test_map_wronly_hash();
-+	test_map_wronly_hash(BPF_MAP_TYPE_HASH);
-+	test_map_wronly_hash(BPF_MAP_TYPE_RHASH);
- 	test_map_wronly_stack_or_queue(BPF_MAP_TYPE_STACK);
- 	test_map_wronly_stack_or_queue(BPF_MAP_TYPE_QUEUE);
- }
-@@ -1883,9 +1928,14 @@ static void test_reuseport_array(void)
- 
- static void run_all_tests(void)
- {
--	test_hashmap(0, NULL);
-+	enum bpf_map_type hash_type = BPF_MAP_TYPE_HASH;
-+	enum bpf_map_type rhash_type = BPF_MAP_TYPE_RHASH;
++	return 0;
++}
 +
-+	test_hashmap(0, &hash_type);
-+	test_hashmap(0, &rhash_type);
- 	test_hashmap_percpu(0, NULL);
--	test_hashmap_walk(0, NULL);
-+	test_hashmap_walk(0, &hash_type);
-+	test_hashmap_walk(0, &rhash_type);
- 	test_hashmap_zero_seed();
- 
- 	test_arraymap(0, NULL);
-@@ -1897,11 +1947,14 @@ static void run_all_tests(void)
- 	test_devmap_hash(0, NULL);
- 	test_sockmap(0, NULL);
- 
--	test_map_large();
--	test_map_parallel();
-+	test_map_large(BPF_MAP_TYPE_HASH);
-+	test_map_large(BPF_MAP_TYPE_RHASH);
-+	test_map_parallel(BPF_MAP_TYPE_HASH);
-+	test_map_parallel(BPF_MAP_TYPE_RHASH);
- 	test_map_stress();
- 
--	test_map_rdonly();
-+	test_map_rdonly(BPF_MAP_TYPE_HASH);
-+	test_map_rdonly(BPF_MAP_TYPE_RHASH);
- 	test_map_wronly();
- 
- 	test_reuseport_array();
 
 -- 
 2.53.0
