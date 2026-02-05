@@ -1,131 +1,154 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8520B3A7F42
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 10:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58996260588
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 10:46:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770287542; cv=none; b=rCc3JR326sRlGpAP5MPSwPlVC7DA148WaIjyOPSVFseTS2T3sZTvZBx2kJ/Gp1vpJuy5nJMZgEs1gfGZM0mCAN9/6Fv2/1MfVDgXSdXk5oRDytXd3JnnxJ0pJ19+siXEZjDNGKUIeumvipiMJkgASLv5yaT2YICCh2DmaVSNQhc=
+	t=1770288388; cv=none; b=PuIo0CWwvITBA022JwCaAZBDTobHaJFx8pHCzK9FCN7NMTT/yCCEelDxujaNlMEDZic5+rLPDIGZ4fAWTvZTOjMeynmukqEIRVCrfhiMiWk1ZCE3Ef+JPKRwVmA013GWI/d4mdmVSQqe8RuIZoofaWqkp3LzhSUmElvYP27wyZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770287542; c=relaxed/simple;
-	bh=mzwY9TgNXznHH1Dt0eYLQq/L3pUbTYG3zZaFG8yD1t0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dd7+ILOC8cSd87d5nePXSgsKoehnTaOJoPr65poELXt0qv0Rha/m3+JvWzU00Gvt8qDz7Ftk5mysJaT1KLSK4Ib6dKUWvCBz+geJMwUnGrTgOF3OJ2ag4/+SVndHSAWdVgPn0Gnj5m/iv+7/OamXf0kpUEo9TKw6J9liVbXe8wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=P6MK2gjj; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1770288388; c=relaxed/simple;
+	bh=FntRL1qpxfsNfmvPILCwbU6dqigMGKuJ0zJnx7gXrxs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lgDsWvczxshwQE2Q08MCHVKDbdkrdhVcTPXUb/NhebwY/56G03w/XuoQLHDzaDLiT5Xo5riQDAH4talmYaHLopKDJYgEHJHNsSWXb0f9FW+J3D4RUhaeNpb+ipgOeDibkMTw+AyVEmk+qSthNJGPwkhCMGtIeZ5FEFVCEdbmW/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com; spf=pass smtp.mailfrom=mihalicyn.com; dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b=TaZk3GHv; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mihalicyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="P6MK2gjj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=hqOgSkCb9E8EmtWJeP1Waru0HUgyqx+7A2u+ul8BGfQ=; b=P6MK2gjjkwweNiwBKaMGc5kMzW
-	2bH1RZO0GJ9KLCYi9S+QSSnQCkOAUPiQzWk3zFBhtJp9hrFO+IjjQkS6+N8F/PwXdkfBVO/HFZ/Rm
-	gxm/yfFfLlVVcatJPUe+ZD3ytner1t7wKr0MbrvLmZEpTYfHBDJcXh4qr2D0+2ygbMVpJg7jun/14
-	Cll2EBnb9TA0roZVs+2ITgTQzwjbSryb8iQm9rRmWn20jgLK0iwTg30c6Rndjm8sXYl3o8Ge/lqvN
-	NQoRkeqb8kYDeNklnpMrRK/sLJ6U70y8rLfEac0ClqVc0/11swZDvkmsmxsw/uKTuzzrem0apB+8w
-	QE6luqpQ==;
-Received: from sslproxy01.your-server.de ([78.46.139.224])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vnwSM-0008Ep-37;
-	Thu, 05 Feb 2026 11:19:27 +0100
-Received: from localhost ([127.0.0.1])
-	by sslproxy01.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1vnwSN-000J1N-06;
-	Thu, 05 Feb 2026 11:19:26 +0100
-Message-ID: <4eaf4476-f8dd-4c75-a6bf-50dbee8fb807@iogearbox.net>
-Date: Thu, 5 Feb 2026 11:19:26 +0100
+	dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b="TaZk3GHv"
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-4359a302794so617961f8f.1
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 02:46:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mihalicyn.com; s=mihalicyn; t=1770288386; x=1770893186; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pI+I8Y4vd8PrLGBnjDW8Sa0zt5Y1hsnun0xp3Gdhd6o=;
+        b=TaZk3GHvcIEe2sT+plbieP5K2VYopl7ILZjpw4m5IHR16O9JXem0J9GvruTYqwJwzo
+         phVz2+hSLhhob1YfzZo+BYuvdb7uipF1JFO+X+UWPi0LlSr+Pgs8Nqli9x+tBQfFvtyG
+         mYOGqORAEAfAo28anmd2r8YSydNK/zGpgBfRs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770288386; x=1770893186;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pI+I8Y4vd8PrLGBnjDW8Sa0zt5Y1hsnun0xp3Gdhd6o=;
+        b=rhYJjmQaByRb+c6ubYQZ5PTz5mSsjJkR24imbBEOI3Zu/9dg6SXWZG5pUMGe5yHjHt
+         mLp1hC77gdxrZ+op4HI0ATtdBeyFzI71Xpa/LJ8Ri/7dYY9otSVEKgSvkVtOpPRp2nHZ
+         J50+jn99ITj7yqUCPPx3zoLWB/VMYQbghVjpLoG8uDLuE2qR1aRhSZtb7AzjkXK5FNlv
+         5zBmDMaLgKjExrf48YaoHuKETG7LK3/4NjlR/4cOGktIJlpOv07ws5nKfg3RW5Ld0lBU
+         /5L2erjE2urQLcxOftSQPHbu8T39zZZ6zX8eMQDPAbNnv28b6Em34XM34SL0qaLiRuYw
+         uAtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU5px1fCqWa8keV5670KSdOL2kI17u5OzPu1GryqEzkSJdLanPx/+7+4AsdYTC6QkH2N9E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCjU7szd0IKfy1das3ecZWrxflbhRNHVXtV7b7vWbw4gzWXfHv
+	2TLndUqF3uolMh3IDCxW5gGiCcQJ4/4TnEBSHW5EULXHWEbjT4Cr3TEWDiNdBV3QpCU=
+X-Gm-Gg: AZuq6aJuJoaxYhUjiFcLhI7k3tacUBNDvD3/+UXxMREAGplTwOFpdWCM8tlXIcLhO01
+	vzycd+LMm9+PGcMcL2oHrLVuddSBVdQPm01InlU44C6kKDuvlEA7xwrkoygEeTHcgM+OmE5JnGE
+	l/04qijUuuGnONSZ8GhZdt5eRFrdjy2Rj3ClxM0EPwmC4Cqgho3v1L5g/Jkn9+G3/MTXXeXiWNv
+	5uDa1W4WY4OnwxOQWAUPb6ig9XdgMGjoWd/AXtPcUqUx4gbCVKKlHeyeo4/Ja+eZXd7pYhJ7nfe
+	U+NF2KZRwtkFHpXEglcsZZpkik/twFz79lMry19FNujHAQLOTOr03I58wx2Et+WMFbpPl3pfngl
+	Bp7tQAGUarnwFVQHO+ecnKr0/LPVegFI4PomgUxVhpqlTB8x0jCIPSDbO06xikKQI38PvjHWCx6
+	j7NXxeFUMV9EoZQveBkKBaWygfBQB3RrPoYw1dq4RhesLZZ6TpbAzxyuTWLAvDPiB/6eNSS4VmG
+	pM/fnoLKzE=
+X-Received: by 2002:a05:6000:2207:b0:435:faa5:c154 with SMTP id ffacd0b85a97d-43618053a3fmr9052159f8f.37.1770288386357;
+        Thu, 05 Feb 2026 02:46:26 -0800 (PST)
+Received: from alex-laptop.lan (p200300cf574bcf00678f3cb95ec6a9da.dip0.t-ipconnect.de. [2003:cf:574b:cf00:678f:3cb9:5ec6:a9da])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43618057f66sm12351476f8f.25.2026.02.05.02.46.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Feb 2026 02:46:25 -0800 (PST)
+From: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+To: ast@kernel.org
+Cc: Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
+Subject: [PATCH] bpf: use FS_USERNS_DELEGATABLE for bpffs
+Date: Thu,  5 Feb 2026 11:45:41 +0100
+Message-ID: <20260205104541.171034-1-alexander@mihalicyn.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: Require frozen map for calculating map hash
-To: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org
-Cc: ast@kernel.org, Toshi Piazza <toshi.piazza@microsoft.com>
-References: <20260205070755.695776-1-kpsingh@kernel.org>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260205070755.695776-1-kpsingh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/27903/Thu Feb  5 08:23:30 2026)
+Content-Transfer-Encoding: 8bit
 
-On 2/5/26 8:07 AM, KP Singh wrote:
-> Currently, bpf_map_get_info_by_fd calculates and caches the hash of the
-> map regardless of the map's frozen state.
-> 
-> This leads to a TOCTOU bug where userspace can call
-> BPF_OBJ_GET_INFO_BY_FD to cache the hash and then modify the map
-> contents before freezing.
-> 
-> Therefore, a trusted loader can be tricked into verifying the stale hash
-> while loading the modified contents.
-> 
-> Fix this by returning -EPERM if the map is not frozen when the hash is
-> requested. This ensures the hash is only generated for the final,
-> immutable state of the map.
-> 
-> Fixes: ea2e6467ac36 ("bpf: Return hashes of maps in BPF_OBJ_GET_INFO_BY_FD")
-> Reported-by: Toshi Piazza <toshi.piazza@microsoft.com>
-> Signed-off-by: KP Singh <kpsingh@kernel.org>
+From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
 
-[ tree would be bpf-next ]
+Instead of FS_USERNS_MOUNT we should use recently introduced
+FS_USERNS_DELEGATABLE cause it better expresses what we
+really want to get there. Filesystem should not be allowed
+to be mounted by an unprivileged user, but at the same time
+we want to have sb->s_user_ns to point to the container's
+user namespace, at the same time superblock can only
+be created if capable(CAP_SYS_ADMIN) check is successful.
 
-Acked-by: Daniel Borkmann <daniel@iogearbox.net>
+Tested and no regressions noticed.
 
-Could you later also follow-up with a small BPF selftest?
+No functional change intended.
 
-Thanks,
-Daniel
+Link: https://lore.kernel.org/linux-fsdevel/6dd181bf9f6371339a6c31f58f582a9aac3bc36a.camel@kernel.org [1]
+Fixes: 6fe01d3cbb92 ("bpf: Add BPF token delegation mount options to BPF FS")
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Jeff Layton <jlayton@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: bpf@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
+- RWB-tag from Jeff [1]
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
+---
+ kernel/bpf/inode.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+index 9f866a010dad..d8dfdc846bd0 100644
+--- a/kernel/bpf/inode.c
++++ b/kernel/bpf/inode.c
+@@ -1009,10 +1009,6 @@ static int bpf_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	struct inode *inode;
+ 	int ret;
+ 
+-	/* Mounting an instance of BPF FS requires privileges */
+-	if (fc->user_ns != &init_user_ns && !capable(CAP_SYS_ADMIN))
+-		return -EPERM;
+-
+ 	ret = simple_fill_super(sb, BPF_FS_MAGIC, bpf_rfiles);
+ 	if (ret)
+ 		return ret;
+@@ -1085,7 +1081,7 @@ static struct file_system_type bpf_fs_type = {
+ 	.init_fs_context = bpf_init_fs_context,
+ 	.parameters	= bpf_fs_parameters,
+ 	.kill_sb	= bpf_kill_super,
+-	.fs_flags	= FS_USERNS_MOUNT,
++	.fs_flags	= FS_USERNS_DELEGATABLE,
+ };
+ 
+ static int __init bpf_init(void)
+-- 
+2.47.3
+
