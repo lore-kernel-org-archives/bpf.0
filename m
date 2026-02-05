@@ -1,211 +1,203 @@
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 321DD288C30
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 02:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770258868; cv=none; b=T+Hn9CZH981KGT2EowUPRnQhEKPREB479e38GO79wfqAPOUj7cKvlRIrRWNem+maM+OcDkLenS+ydVkDVDjP0VzlF4UTybrj/memiK5H7eBcdnd13qb8t51zDoWsiZeoEkNwOisol1Ffp4TaoSOnKm3cbmMxZGHpyMNTW9X0Q20=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770258868; c=relaxed/simple;
-	bh=UFAU54HdP2dYY9mu9+YXWTb1xE3S9Mki0hlpCFtBBmI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ld/pJDqihszMqTdBZ+g/EePG1mfzlVmAh4BgDyUsP1HdEdTjNO9WBA/XNXIh9IkdIdE0+5vqaT+Gr+F/iPB98K4TbjtbMG/obe9W0VjG4LaqND0FGqlPmlyr0J8teFUorxKQVpx4jQJ3qmqXCom6cu6firHFi9bOSHJ5ujlWftY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fq7iynkF; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5096F3EBF11
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 02:57:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770260251; cv=pass; b=tg/qFFsBWmH3TsLgPER226fw5Y22KwFDjVnpsv9CFP2UN5x1jRFr83svxRaSjh4SeOT1C7YjGOCCoZ4W6DHdyV2lfmld6lBwspdJOq1sUW272qd9pYdTudifAKL3bhQwKkWXuBMJ6414lRp+GkkhQ+tkr3eW8WF08ap+cTqGce4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770260251; c=relaxed/simple;
+	bh=zReCzhoD7uhQak6MKiJdHU0d8mwNSsWi+X8HrUDLmS4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=An5QtMBPmKa47rHB9oK6Yk2TlEtTve/nh4AvawrGaRGHj+bwxnWFR/EdakNIa1A/e+Ry9kmjngQWwn6eBky+hrqpT1JKyPb2ArmePy+5gmjZkD6RkomgzeeHknaxUAtJjdFllDryFL/X1UY7mZe1SAkIYRme1ZTDGbH2XSBCMEo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LAFWAgM5; arc=pass smtp.client-ip=209.85.218.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fq7iynkF"
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-794f701a3e6so4386747b3.2
-        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 18:34:28 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LAFWAgM5"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b8710c9cddbso47589766b.2
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 18:57:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770260249; cv=none;
+        d=google.com; s=arc-20240605;
+        b=bt0hWg4akipXvhyeBehhc/v2LtMAYXZq78U+PlI+hzJARMCWYUv6psiL5bhvhhEGHf
+         qAhd4p2UsYU28wTFJYhVL/N67npGO8dnOoPgcmY9DSd4G4vF8mqfu7t3JmEmQ+epV4yE
+         H+WiqNXq1w5iLzv2eXhCQ2hoauyjFmv5KpfzmAQHsl7W3SBzW7XyAdSjaFKpMVjeuD+W
+         uIJhLK4j1tUOKVqYnNR43abK06UhjaoVoF5DLVIC0OhS9UpONvPrZh1izrDevtil4XAB
+         ZCvEgPj5dETMMD81JLK8i13tZdJRW9UGGFXnTZF++bWaiz2fUdvt7QEoNSNx6pj/Dqtg
+         UrLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=NcUOQslXoqjpGowED28xCL+IJ+l2ktcHAgIek0ZG9RU=;
+        fh=cKMUHX+7uaxJJpnCJTUj05r6u3b5LIa8H8LPnjF8mDI=;
+        b=CyAinxKEMnJBsIiENH42IOVu7nwvsfwzJpBPUMYNIQOYZTf3Cb5a8lu6bpDpZe8N8B
+         axapize/z8VKYpPtyOGKuA0FRNMIDR4ZbU9HXJ0s1IANtFN+ATn5VtBVZcRrgQxW42WA
+         okqNX6Jl1quB/ODMSM2PVkEwp668GKtvS4qqwcXUF972Upka24TOQTbmr5xNC2neRAFK
+         IZfIb/y/lIqSGYWpg8xkLXLT0rdp9/XCjr5beOlQpMIRBnUfb+UDIMBnZKb8pXNn3SqO
+         xyp80Q4pzQNS4Pd7Evwx/D+r6fHMZMJfm8dr22b+l0W8UPP3UgmpMVA8GtYsTakaSwZy
+         rDCQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770258867; x=1770863667; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+42VXTEpQZ45JO+UQbhd4FcXvztHFo9rbvBGnqtcZk=;
-        b=fq7iynkFOhj2v6FAuzJATilDxVEpisZH9hs6B38HQEEtroXDRxU1tW8mhbJcv9/A+P
-         eVj0sgRhGWvKtXKkPXfb18Tv8Q11EhZ3NzGNo348wxHj43Rhh4Nlho7ns3AnIcGYGSUv
-         lfauIEcfPkVpxa2QQVQu37dweuEGLK8ogb2vweDZm04ycg8+Q7ggJoUymQPTPWTMV425
-         JtW7PMEYp4Ez7e7xvOWMfyCAM5AKDd9Kj8YZiOM7RihkEIVNfaiz8P7ihh+3T9lQrIry
-         SwlI0ZIRXO573Sa+9Xj5Qfyw7uGs4WOL1ZKnl10mWIHdOgFCtH9joD1wkvcQUPkHrDMn
-         2lMw==
+        d=gmail.com; s=20230601; t=1770260249; x=1770865049; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NcUOQslXoqjpGowED28xCL+IJ+l2ktcHAgIek0ZG9RU=;
+        b=LAFWAgM5MjBTCmYPTXhShNuHzZqznbgG86N0TP9xlm4WK2DukOuYJG/PiTQRiO68jM
+         0pUAHvB99yBld3wssSMWGSBVKBzHw2dHQ5TzODZDLAWdI3S5abVOz8vq6T9BwzkGgBni
+         AdNDO780EWi1mosWLAWhA+OJmuYRNkyuZiPePu2F8wfzP/nVlJAR16hh7CYwWtTlRMbT
+         pqQVHVqVrIVh4IQTIIlWj6mXUKfys0WecTzfU5B9Cc0NMHuMqAQ40aeyc5uGpsdOWLmo
+         FgovXzvvJ2tUuaaJ0BE5gXQ15g8L5tOhX4hb1t0SdVa5KaxUmZaG3vY2+es/0wNegSiT
+         ukkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770258867; x=1770863667;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q+42VXTEpQZ45JO+UQbhd4FcXvztHFo9rbvBGnqtcZk=;
-        b=IPAtJv1w9GwBOe+duUJScHkLO+k9jpVLRtogt8KBdiFN8R6fKfgU7nZBZ7p6Qa4TXI
-         PhDdwqsESJvHHo9qTXYUeRnP6qPmriPBE2P72fnbQ0Rqn22G2hDq/3+gzsP2OHAH6wjg
-         9hmJJZ0htDnReZuq43IKlqEXQ/DQJznAhibFCkWUYiSVQfIwtpap5tbNOv40tvNW27PV
-         trbT6Va8UXuTVcl7lMqvczOnexQ7SDCN4Qzs95rbH6DRplcuUWx02SDBNtRVLEsyTTeh
-         3cnklTKiiZoYcQeSqPDLXKM9rfYkY5tFsnbXUQrMeAZ5s9l/LpF/sNRgUvFzcsI7d7Ah
-         LGyg==
-X-Forwarded-Encrypted: i=1; AJvYcCU7r9Ah7n71Hn3Js+BAQaQY8+p3MMC4PzS/0DKk90AZSe+r36PgeDgY3FbThTf19h0qvLY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7KLXA8nj1rgeAmL4mz1Qyq9bJ/LPQzXJjqYp8BSaIqB5dFnuQ
-	Wi+79lkX/GZdYFTK4khwkORTNKv0T/+pg3uwNpKUwJpaXYwo2C78P73i
-X-Gm-Gg: AZuq6aJrffD/pcmDg5ZRrGQBZ6BaM0E+D2j9hQjbeFmYWsQq1cQ1MbnjixjfiP9sPUC
-	3ZnEK/p5/FW19MZh7iWyamOl1sGicUPLxSdz7VhGEhK5V807gR1TeGdmQYvg7PRqUDi/tbC8dK8
-	nAwgoeIhdSLcv33YUj2jSEiuYzI7Ozsd+Y891AoBrf9UKs/j/StNeIpPa+rVlZU0NAFXV+5kObu
-	e4ef/ebjDvlUrGQJaJn6hPxbXB1p48T6zPee03oCa11JJX3+lna5z0r5irAIuMESpNgZRXTygk/
-	eBwdCRJDcXrW7bPfwzbxRGsVnpUwUhlKy540/PaIH/aV/32CWfiJ16RyJ/8CiDD4mIwFnh75nBI
-	6W/579cd0M2LA5nDG5ygpOsltkrKaEQlu8o9sE53B1+RYlJ8GvuNFfZeiYbwatLglgvHTb5ff2m
-	3dawYGrL4FuinsFiTZCEWE8Dl9vI5Np/gbWqWidzwcdeDq
-X-Received: by 2002:a05:690c:4905:b0:794:c58e:2dab with SMTP id 00721157ae682-794fe6ac0b6mr47199667b3.20.1770258867093;
-        Wed, 04 Feb 2026 18:34:27 -0800 (PST)
-Received: from devvm11784.nha0.facebook.com ([2a03:2880:25ff:7::])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-794fed6d095sm36569707b3.0.2026.02.04.18.34.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Feb 2026 18:34:26 -0800 (PST)
-Date: Wed, 4 Feb 2026 18:34:25 -0800
-From: Bobby Eshleman <bobbyeshleman@gmail.com>
-To: David Wei <dw@davidwei.uk>
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, davem@davemloft.net, razor@blackwall.org,
-	pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
-	john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
-	maciej.fijalkowski@intel.com, magnus.karlsson@intel.com,
-	toke@redhat.com, yangzhenze@bytedance.com,
-	wangdongdong.6@bytedance.com
-Subject: Re: [PATCH net-next v8 15/16] selftests/net: Add env for container
- based tests
-Message-ID: <aYQBsTfF4PrJcHNl@devvm11784.nha0.facebook.com>
-References: <20260129222830.439687-1-daniel@iogearbox.net>
- <20260129222830.439687-16-daniel@iogearbox.net>
- <20260131163834.2c3d160d@kernel.org>
- <9037828b-c7fd-4eb1-9dd8-19ee49063361@davidwei.uk>
- <aYP7uiuPWAbJEgLD@devvm11784.nha0.facebook.com>
+        d=1e100.net; s=20230601; t=1770260249; x=1770865049;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=NcUOQslXoqjpGowED28xCL+IJ+l2ktcHAgIek0ZG9RU=;
+        b=xAI4vhToocredEPPmnjqptMz89VzXhpj5NDWMBJO0FQrekNEMUdVWmSADRlf1kf2OZ
+         gnKtrxlxoH6g8FWAmdlC9wrCVWoXNKNR8PPqeNuUUXr7HA4XuZqHt1hU53MD+FdLgXou
+         cLUZndFsu72ZM9udOTgrJMYnIoc1crvBfCYB4nX/ntJ/Jl0FYi+mJ7T73ZWPHltB6WUv
+         PSK8xqDFv0JY3j0aMoYdQjCkgBi2G+kvlzUxM2fiBJ4In1rZn0GADxZdkXaNm1bOjW8x
+         ehsN0a7NyeyjvgvEGII8srdXldHRdirzuC106PyyGntdxYgJr+xSAHs/WAz555WkpJga
+         1d5A==
+X-Gm-Message-State: AOJu0YwBkC/SRhow3b+JkqKCJVOGYftxhBYP7eS/+PcAxEyjKWQKshZE
+	bmj4IlzPRrU1g/jhS0F59uCIUG5S7bowyqWwU+Y+V3QoKB2/Oj9aWwneeROqDBI5uQuxX7+0jE+
+	+v03zRX3JnEjcBNioGmw8If/5sEkQFJU=
+X-Gm-Gg: AZuq6aLEwNW8O6Bh1/ymjuZK05L98a6d7hdToY2k9PhJJFtuuVbAj2AZ0k2WMMO1gCW
+	+GcKgCEnA0OVdzez+RISRSIlaEqTeIwr+iG8xtoVdWkTCeuVXc99T14PoHsGCdP+QtB2TUZa20C
+	9O1Tx6HP2XJ0BYsRiKPYLn3mgAgHsrlfHj4h+Hww/Hu7quTByiqOUSgEnz+TDFnmNLAYpktCoRH
+	iafWeL7KMeUZFyuCtQDZSsBWe4zPhCYMx71lgE0z/WbHDOCWAmysSbdzHUz7vmG4ztsmqMP7vT1
+	nzU2UKs=
+X-Received: by 2002:a17:907:7b83:b0:b86:f495:5e4c with SMTP id
+ a640c23a62f3a-b8e9f3781d8mr338561166b.55.1770260249352; Wed, 04 Feb 2026
+ 18:57:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aYP7uiuPWAbJEgLD@devvm11784.nha0.facebook.com>
+References: <20260205002508.808963-1-puranjay@kernel.org> <724c37abf5249d48701e337fca1571de1eee4b18.camel@gmail.com>
+ <CANk7y0hoCGExyyiAGCUfV-5L6Vo_bRV5aBWvUBZBsfj1qFU4qQ@mail.gmail.com> <f1718e2e6e00785b1d654401a598641b3e9b890f.camel@gmail.com>
+In-Reply-To: <f1718e2e6e00785b1d654401a598641b3e9b890f.camel@gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Thu, 5 Feb 2026 02:57:16 +0000
+X-Gm-Features: AZwV_QgdBMRF4AWv_r-ktn00_x0pjLcVI1WUSXy-R4kqxbIqUrwyuiGAqdVEjds
+Message-ID: <CANk7y0h0WqRQOM7L=s0ndfa45dy3hqA2LqDWeORm50XS3spviQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Remove unnecessary volatile and barrier_var()
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 04, 2026 at 06:08:58PM -0800, Bobby Eshleman wrote:
-> On Mon, Feb 02, 2026 at 07:53:34AM +0900, David Wei wrote:
-> > On 2026-02-01 09:38, Jakub Kicinski wrote:
-> > > On Thu, 29 Jan 2026 23:28:29 +0100 Daniel Borkmann wrote:
-> > > > +class NetDrvContEnv(NetDrvEpEnv):
-> > > > +    """
-> > > > +    Class for an environment with a netkit pair setup for forwarding traffic
-> > > > +    between the physical interface and a network namespace.
-> > > 
-> > > A little diagram would be pretty awesome to have here, and perhaps copy
-> > > it to the README file too?
-> > 
-> > Sounds good, I'll add one. I forget how much you like ASCII diagrams.
-> > 
-> > > 
-> > > > +    """
-> > > > +
-> > > > +    def __init__(self, src_path, rxqueues=1, **kwargs):
-> > > > +        super().__init__(src_path, **kwargs)
-> > > > +
-> > > > +        self.require_ipver("6")
-> > > > +        local_prefix = self.env.get("LOCAL_PREFIX_V6")
-> > > > +        if not local_prefix:
-> > > > +            raise KsftSkipEx("LOCAL_PREFIX_V6 required")
-> > > > +
-> > > > +        local_prefix = local_prefix.rstrip("/64").rstrip("::").rstrip(":")
-> > > > +        self.ipv6_prefix = f"{local_prefix}::"
-> > > > +        self.nk_host_ipv6 = f"{local_prefix}::2:1"
-> > > > +        self.nk_guest_ipv6 = f"{local_prefix}::2:2"
-> > > > +
-> > > > +        self.netns = None
-> > > > +        self._nk_host_ifname = None
-> > > > +        self._nk_guest_ifname = None
-> > > > +        self._tc_attached = False
-> > > > +        self._bpf_prog_pref = None
-> > > > +        self._bpf_prog_id = None
-> > > > +        self._init_ns_attached = False
-> > > 
-> > > I'm not a Python expert but the pre-init of variables that are set
-> > > later on in __init__() (on all possible paths) seems like a waste of LoC
-> > 
-> > It's so that exceptions thrown -> __del__() don't complain about
-> > undefined vars.
-> > 
-> > > 
-> > > > +
-> > > > +        ip(f"link add type netkit mode l2 forward peer forward numrxqueues {rxqueues}")
-> > > 
-> > > Would we be able to do this with YNL?
-> > > no big deal but always nice to avoid the dependency on very latest CLI
-> > 
-> > Hmm, I tried looking into this already. My understanding is that this
-> > can be done in C but not currently in YNL, not without adding a spec.
-> > 
-> > > 
-> > > > +        all_links = ip("-d link show", json=True)
-> > > > +        netkit_links = [link for link in all_links
-> > > > +                        if link.get('linkinfo', {}).get('info_kind') == 'netkit'
-> > > > +                        and 'UP' not in link.get('flags', [])]
-> > > 
-> > > And of course if you use YNL you can actually ask Netlink to
-> > > echo back / return to you what interface it ended up creating.
-> > > No need for the scanning..
-> > > 
-> > > > +        if len(netkit_links) != 2:
-> > > > +            raise KsftSkipEx("Failed to create netkit pair")
-> > > > +
-> > > > +        netkit_links.sort(key=lambda x: x['ifindex'])
-> > > > +        self._nk_host_ifname = netkit_links[1]['ifname']
-> > > > +        self._nk_guest_ifname = netkit_links[0]['ifname']
-> > > > +        self.nk_host_ifindex = netkit_links[1]['ifindex']
-> > > > +        self.nk_guest_ifindex = netkit_links[0]['ifindex']
-> > > > +
-> > > > +        self._setup_ns()
-> > > > +        self._attach_bpf()
-> > > 
-> > > > +    def _setup_ns(self):
-> > > > +        self.netns = NetNS()
-> > > > +        cmd("ip netns attach init 1")
-> > > > +        self._init_ns_attached = True
-> > > > +        ip("netns set init 0", ns=self.netns)
-> > > 
-> > > Hm, refactor class NetNSEnter or just use its enter method?
-> > 
-> > I did consider this but I didn't feel like it fit the very specific
-> > purpose of NetNSEnter. I needed the init ns to have a valid nsid from
-> > within the test netns, which I didn't think many other tests would need.
-> > 
-> > > 
-> > > > +        ip(f"link set dev {self._nk_guest_ifname} netns {self.netns.name}")
-> > > > +        ip(f"link set dev {self._nk_host_ifname} up")
-> > > > +        ip(f"-6 addr add fe80::1/64 dev {self._nk_host_ifname} nodad")
-> > > > +        ip(f"-6 route add {self.nk_guest_ipv6}/128 via fe80::2 dev {self._nk_host_ifname}")
-> > > > +
-> > > > +        ip("link set lo up", ns=self.netns)
-> > > > +        ip(f"link set dev {self._nk_guest_ifname} up", ns=self.netns)
-> > > > +        ip(f"-6 addr add fe80::2/64 dev {self._nk_guest_ifname}", ns=self.netns)
-> > > > +        ip(f"-6 addr add {self.nk_guest_ipv6}/64 dev {self._nk_guest_ifname} nodad", ns=self.netns)
-> > > > +        ip(f"-6 route add default via fe80::1 dev {self._nk_guest_ifname}", ns=self.netns)
-> > > > +
-> > > > +    def _attach_bpf(self):
-> > > > +        bpf_obj = self.test_dir / "nk_forward.bpf.o"
-> > > > +        if not bpf_obj.exists():
-> > > > +            raise KsftSkipEx("BPF prog not found")
-> > > > +
-> > > > +        cmd(f"tc filter add dev {self.ifname} ingress bpf obj {bpf_obj} sec tc/ingress direct-action")
-> > > > +        self._tc_attached = True
-> > > > +
-> > > > +        tc_info = cmd(f"tc filter show dev {self.ifname} ingress").stdout
-> > > 
-> > > Don't we need to also add a qdisc if there isn't one already?
-> > 
-> > Sorry, why would qdisc be needed? The bpf prog attaches to tc. I don't
-> > know anything about qdisc, though.
-> 
-> The ingress qdisc is the attachment point. I think we need
-> CONFIG_NET_SCH_INGRESS here too?
+On Thu, Feb 5, 2026 at 1:14=E2=80=AFAM Eduard Zingerman <eddyz87@gmail.com>=
+ wrote:
+>
+> On Thu, 2026-02-05 at 01:04 +0000, Puranjay Mohan wrote:
+> > On Thu, Feb 5, 2026 at 12:33=E2=80=AFAM Eduard Zingerman <eddyz87@gmail=
+.com> wrote:
+> > >
+> > > On Wed, 2026-02-04 at 16:24 -0800, Puranjay Mohan wrote:
+> > >
+> > > [...]
+> > >
+> > > > diff --git a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c =
+b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+> > > > index 99c8d1d8a187..b50dc92b2126 100644
+> > > > --- a/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+> > > > +++ b/tools/testing/selftests/bpf/progs/tailcall_bpf2bpf3.c
+> > > > @@ -14,7 +14,7 @@ struct {
+> > > >  __noinline
+> > > >  int subprog_tail2(struct __sk_buff *skb)
+> > > >  {
+> > > > -     volatile char arr[64] =3D {};
+> > > > +     char arr[64] =3D {};
+> > > >
+> > > >       if (load_word(skb, 0) || load_half(skb, 0))
+> > > >               bpf_tail_call_static(skb, &jmp_table, 10);
+> > >
+> > > I think 'volatile' is used here to force specific function stack size=
+.
+> > > W/o 'volatile' compiler will throw the variable away.
+> > > With 'volatile' one should check what's happening.
+> > > Could you please double check?
+> > >
+> > > [...]
+> >
+> > without volatile:
+> >
+> > Disassembly of section .text:
+> >
+> > 0000000000000000 <subprog_tail2>:
+> > ; {
+> >        0:       bf 16 00 00 00 00 00 00 r6 =3D r1
+> >        1:       b7 01 00 00 00 00 00 00 r1 =3D 0x0
+> > ;       char arr[64] =3D {};
+> >        2:       7b 1a f8 ff 00 00 00 00 *(u64 *)(r10 - 0x8) =3D r1
+> >        3:       7b 1a f0 ff 00 00 00 00 *(u64 *)(r10 - 0x10) =3D r1
+> >        4:       7b 1a e8 ff 00 00 00 00 *(u64 *)(r10 - 0x18) =3D r1
+> >        5:       7b 1a e0 ff 00 00 00 00 *(u64 *)(r10 - 0x20) =3D r1
+> >        6:       7b 1a d8 ff 00 00 00 00 *(u64 *)(r10 - 0x28) =3D r1
+> >        7:       7b 1a d0 ff 00 00 00 00 *(u64 *)(r10 - 0x30) =3D r1
+> >        8:       7b 1a c8 ff 00 00 00 00 *(u64 *)(r10 - 0x38) =3D r1
+> >        9:       7b 1a c0 ff 00 00 00 00 *(u64 *)(r10 - 0x40) =3D r1
+> >
+> > with volatile (bpf-next/master)
+> >
+> > 0000000000000000 <subprog_tail2>:
+> > ; {
+> >        0:       bf 16 00 00 00 00 00 00 r6 =3D r1
+> >        1:       b7 01 00 00 00 00 00 00 r1 =3D 0x0
+> > ;       volatile char arr[64] =3D {};
+> >        2:       7b 1a f8 ff 00 00 00 00 *(u64 *)(r10 - 0x8) =3D r1
+> >        3:       7b 1a f0 ff 00 00 00 00 *(u64 *)(r10 - 0x10) =3D r1
+> >        4:       7b 1a e8 ff 00 00 00 00 *(u64 *)(r10 - 0x18) =3D r1
+> >        5:       7b 1a e0 ff 00 00 00 00 *(u64 *)(r10 - 0x20) =3D r1
+> >        6:       7b 1a d8 ff 00 00 00 00 *(u64 *)(r10 - 0x28) =3D r1
+> >        7:       7b 1a d0 ff 00 00 00 00 *(u64 *)(r10 - 0x30) =3D r1
+> >        8:       7b 1a c8 ff 00 00 00 00 *(u64 *)(r10 - 0x38) =3D r1
+> >        9:       7b 1a c0 ff 00 00 00 00 *(u64 *)(r10 - 0x40) =3D r1
+> >
+> >
+> > I see that the commit c8ed66859397 ("selftests/bpf: fix lots of silly
+> > mistakes pointed out by compiler")
+> > added the __sink(arr[sizeof(arr) - 1]);
+> >
+> > and after that even without volatile, compiler will not remove it.
+>
+> Interesting. __sink is defined as follows:
+>
+>     #define __sink(expr) asm volatile("" : "+g"(expr))
+>
+> 'g' constraint [1]:
+>
+>   > Any register, memory or immediate integer operand is allowed,
+>   > except for registers that are not general registers.
+>
+> '+' modifier [2]:
+>
+>   > Means that this operand is both read and written by the instruction.
+>
+> So, it is not obvious for me, why compiler can't replace 'arr' with a
+> single char variable. It appears that passing an address of the array
+> would be a safer strategy.
 
-Sorry for the config stuff I'm replying about, I ran into needing these
-too for this:
+Yeah you are right, I feel the best way is to keep the volatile. or do
+something like:
 
-CONFIG_NET_CLS_BPF=y
-CONFIG_BPF_SYSCALL=y 
+#define __sink_ptr(p)  asm volatile("" : : "g"(p) : "memory")
+
+__sink_ptr(&arr);
+
+tested it on arm64 gcc with -O3 and it works.
+
+
+
+> [1] https://gcc.gnu.org/onlinedocs/gcc/Simple-Constraints.html
+> [2] https://gcc.gnu.org/onlinedocs/gcc/Modifiers.html
