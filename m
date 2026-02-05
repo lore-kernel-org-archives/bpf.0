@@ -1,114 +1,198 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D37E38F223
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 09:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770283037; cv=none; b=Thy7bTzSoRVg3Hwchr0v0Dq4OchaNkpbR3DWhyywbvZfJPhL3btRpfcY6TTA3INZA1y+KqLPPKN3svOnRtgMknschS3+oLeJpZYOJEpKjrl5qv6yF3EUjb/lhW1l+HEW6+DXsFEsbve8tGmxCVT9qYvo2P99IE8kXu7I4+ifI60=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770283037; c=relaxed/simple;
-	bh=llCfhdWLAUf38LDLJNhs92NfagMppXOX8/a21f7RzNE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nVb4XGEygWrOh2KVu8dzKznDajMpzMGHGRjdZjtoYZY7mf5DIDqlN9u/YtJqAgBKA5+2ABwOD2GBhFwhhuxBVPWHFzy8xRR9W6oqXFJ18ZeNjEi/DcflQfRsT6LpM5ur+9L02iRiIZh32qehv8yPmuJM5L+BO6rFu+vnyC+Ku78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PTo2bB4F; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCE0A3939D4
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 09:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770283284; cv=pass; b=UkgcJ0ZLcD91ddi7PDvfOtvlM2wu6hqJU9d8Vtx6HtDdhsuFMWbBUyJvfnYb1lqkKRnbz57Uz4qxCEUgyxKguzkyv00P2vH6pbvHc4kheXjoFRBTQo/sxMCGZMMKE0qL8OIFFYhNVZjXjtLyr8chJKVkMtrxxyPcFf6B91a7OkQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770283284; c=relaxed/simple;
+	bh=H9TJNHkisUEr4z39rBi90p8f80JBCtp4uFnDx2T9EUU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nOQhlCu+TaKVQVn8iR/XJXgtJwTe7EnAopB5QTCSxvEFgZ4zDJKqLehJfg2s/XtIyGWxANwgHDhvDxNuaKY7v2Mt3VZ3liuPjYyy0oQHMzHXZiVdoxMjuY9P+27uPOmHwDOXL8nQI6JSDUQ6Jn5o88qljV5JSytr5cmrBvY/6kQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aLFi+UPk; arc=pass smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PTo2bB4F"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770283024;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=txA+2pjtunrOQaD73Lox37GtWLRfO/g8FhDa6Ku5D/k=;
-	b=PTo2bB4FznxY+gotNzEWgl0pk9kG4zNEDlMPIAJ9pIq0h3UsuppTeLrutp55jpwrGuuVui
-	LosqELPVfyClfLbnxcKKM3o8A1bt6OQqEhlv5Y4/nZh819gSpkAKofJkwot5WgIl8bOvZ3
-	LFFUkWdc9MCu19AtL8qUBMI74VRgx84=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- Martin KaFai Lau <kafai@fb.com>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
- Menglong Dong <menglong8.dong@gmail.com>, Steven Rostedt <rostedt@kernel.org>
-Subject:
- Re: [RFC bpf-next 06/12] bpf: Add bpf_trampoline_multi_attach/detach
- functions
-Date: Thu, 05 Feb 2026 17:16:49 +0800
-Message-ID: <1945516.tdWV9SEqCh@7940hx>
-In-Reply-To: <20260203093819.2105105-7-jolsa@kernel.org>
-References:
- <20260203093819.2105105-1-jolsa@kernel.org>
- <20260203093819.2105105-7-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aLFi+UPk"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b884cb1e717so271444666b.0
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 01:21:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770283282; cv=none;
+        d=google.com; s=arc-20240605;
+        b=TdppezOcuB/VHeVvzdH7OV1G1AkX6dMR3n3m3yDVkW1e2vj1UXnKK9BaSyE76tn2QP
+         jaOKVKh0tsHT8Vcx54K3eE6vaE3HuTXQjWQAsSVRpx4CvS8aS/EKqpyUmD9wWts0IoYh
+         mqzIZ3g2GWG3bF2Mg1/XDWgyD/YMFiYoZy45zkxP3mcowcb0AdlVz15BENskaPGaUvxu
+         Xjh6M+gWMGZdDWwu++Rfd8Z7OP/GP4ND7anJfuJe0aapzEAgAN80fZiJl8V/yYVacIB1
+         vm6cPgVuprfRoCYNd7sTAyB26poOafFM72IAVYv0TdIAwGouKnLASPTtkhTYse4QQfLU
+         KWoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=IalgGCN2Gqp+8rAz+6lD8MM8rro1ne0RtIUJXyB5u2c=;
+        fh=CoNpXdpd4TqWoVfk55xEDTQ0hn1HhSHvORSz3HfzkcQ=;
+        b=cB1e6yEPdYcRYBJXiB5R2vhMSqYWNPEz4Bp/fOdd/9cfyXo5hCCh0ZPzyNWHOgCkKy
+         lIuxI8EOB+Xe56lVLl4RVZOHIjA/XgVW+KeA/oy8izURwExVQ160iAcgkZgEBICAy0aC
+         0CF/VnjOUjBPUCS8f05fhRvAn4ihDdaP2mO9Tj7IGAh4VxmEuQ/nq6Es1e/X1nP3KrM9
+         9K1JPxXVeCEM+uxl/gScKDPYHMAvfczeJAOn6zS/TglKwz4bBt8k7AbGMjGkaOFl2UJC
+         dMhOMZWi+d6f07hmnv7zwsst/yhfofrN7XWPpuqIKG7UU0FShLD+J1HU3FMaa8eMnUHe
+         jzQQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770283282; x=1770888082; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IalgGCN2Gqp+8rAz+6lD8MM8rro1ne0RtIUJXyB5u2c=;
+        b=aLFi+UPkU/J1L8MI4XywYY6RUA673hLsPtAsH7MkE6SIEIMe2fMjl2oTdhb0SyNEh/
+         TPI+KGVRxKBHeU7isX9hSVdCXOds5aV+MkOJ4zfSl2E1Nxi1riy9Bg6eANse7IIQMxx9
+         3M6/OpXHy8erDw3isR4Tp18f5FI1fR06teutGpuQGmXQyojcU93udewR0XVh2/eiRP2H
+         odvMUONSBcbbjH4q/3dsMOWUPQ4ZQE2cbROjms0F9isuFSoe0CxUC+jrVdH0LMkhvUpK
+         P6tCXmj+SrTc10OnUNPoFYjPql4y/3fPJl5aL0+62G9HycwRMbSSWhbJUm6UbYVsl4xm
+         z+0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770283282; x=1770888082;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IalgGCN2Gqp+8rAz+6lD8MM8rro1ne0RtIUJXyB5u2c=;
+        b=bnii3Wu5bBi3J9pVemTe0LB3VOPcBjgvHGNIlr2fG3EqkglnCRVZETgaSPCv2i74Jr
+         M3aycuX9ZL9nGMFxXUII4Gdnk8gdh2l9X6OF6C7Rji6VKorHlfp0ipMuP+wVsojl5+dp
+         +/l1fVKdmUrMeh3T2PZFJBiu9QXcX3WlWUMmeyg1re2qFAAdqZJJLRee9AZtsuiSB/8J
+         KUK9SCIHYlrrCF5iQeA9IJfeh3Fti4ZgboBSutqTPMfVljZ756fSDh45tQOErmI9Uf2Y
+         a4uSfsbQt73Zs5ZuIEfDjMiN8gEcJWBs1lFbak1DafShFeCdYWE5XDpq8BYQ8Iuh3rTg
+         ljUA==
+X-Forwarded-Encrypted: i=1; AJvYcCXP2s96qy8Wwy39Y6oFgbnztdgXEclgVVUdpbvXH/uT9iukQ6NzhXadcvfvOubtXludsTg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNHOGXOApSlfIkupU/q8GcJWBFcGD7/L0aJVpvxBG0WD99TawE
+	Bm3ub/DgIsBss6nh/aWC2lS/IvB+0uQ/x464Q0d3KsMI8YDTLdA3QTIpnv5iRLnUvM6lrd5XV/5
+	h9hdKrej9tJtoT5ySPrkAfQiFwAkvV4I=
+X-Gm-Gg: AZuq6aL6ORk8EX8HzL58z7OCG45Tj1TyNBV305WohS2MFxHvGdrhLw9MfuVlCDrAKPN
+	abEI6FfzX26UFiO7aRDWcEVJ5iGNF873D/ZE2VNopOpxj+YMwQTvGkrHfjFsFeo/4Ny3wtkEur6
+	ktCoTft90ND2saB3HbWjGHV8MUUFJivLebia/I/a57mOxXtyJUfLbB9OxOxKOfBpfIEBc2WDR/H
+	KWK8C44q0h/8WnibFijsV1UtNTQ8y0N2GkkSxKN8vLcizHhODJHytkLvRbWFw7I/bsUuALf
+X-Received: by 2002:a17:907:94c2:b0:b88:3877:d922 with SMTP id
+ a640c23a62f3a-b8ebaebf0b0mr159376266b.10.1770283281676; Thu, 05 Feb 2026
+ 01:21:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
+References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
+ <20260202111548.3555306-3-dolinux.peng@gmail.com> <20260202111249.649ac338@gandalf.local.home>
+ <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
+ <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
+ <20260203101707.52965eb0@gandalf.local.home> <CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
+ <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
+In-Reply-To: <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
+From: Donglin Peng <dolinux.peng@gmail.com>
+Date: Thu, 5 Feb 2026 17:21:09 +0800
+X-Gm-Features: AZwV_QgyCP5qHv6wmrjDl43TBmC7uiqpMqCxslLuXWGhiI-yrqFKJcJ-V81-X70
+Message-ID: <CAErzpmvtJwB7nTD5EFHP9SxPxH-rc3NuJp5xLGSTB7YPbUX8YA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
+ via BTF
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Donglin Peng <pengdonglin@xiaomi.com>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/2/3 17:38 Jiri Olsa <jolsa@kernel.org> write:
-> Adding bpf_trampoline_multi_attach/detach functions that allows
-> to attach/detach multi tracing trampoline.
-> 
-> The attachment is defined with bpf_program and array of BTF ids
-> of functions to attach the bpf program to.
-> 
-[...]
-> @@ -367,7 +367,11 @@ static struct bpf_trampoline *bpf_trampoline_lookup(u64 key, unsigned long ip)
->  	head = &trampoline_ip_table[hash_64(tr->ip, TRAMPOLINE_HASH_BITS)];
->  	hlist_add_head(&tr->hlist_ip, head);
->  	refcount_set(&tr->refcnt, 1);
-> +#ifdef CONFIG_LOCKDEP
-> +	mutex_init_with_key(&tr->mutex, &__lockdep_no_track__);
-> +#else
->  	mutex_init(&tr->mutex);
-> +#endif
->  	for (i = 0; i < BPF_TRAMP_MAX; i++)
->  		INIT_HLIST_HEAD(&tr->progs_hlist[i]);
->  out:
-> @@ -1400,6 +1404,188 @@ int __weak arch_bpf_trampoline_size(const struct btf_func_model *m, u32 flags,
->  	return -ENOTSUPP;
->  }
->  
-> +#if defined(CONFIG_DYNAMIC_FTRACE_WITH_DIRECT_CALLS) && defined(CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS)
+On Wed, Feb 4, 2026 at 10:52=E2=80=AFPM Donglin Peng <dolinux.peng@gmail.co=
+m> wrote:
+>
+> On Wed, Feb 4, 2026 at 12:00=E2=80=AFAM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Tue, Feb 3, 2026 at 7:16=E2=80=AFAM Steven Rostedt <rostedt@goodmis.=
+org> wrote:
+> > >
+> > > On Tue, 3 Feb 2026 21:50:47 +0800
+> > > Donglin Peng <dolinux.peng@gmail.com> wrote:
+> > >
+> > > > Testing revealed that sorting within resolve_btfids introduces issu=
+es with
+> > > > btf__dedup. Therefore, I plan to move the sorting logic directly in=
+to
+> > > > btf__add_enum_value and btf__add_enum64_value in libbpf, which are
+> > > > invoked by pahole. However, it means that we need a newer pahole
+> > > > version.
+> > >
+> > > Sorting isn't a requirement just something I wanted to bring up. If i=
+t's
+> > > too complex and doesn't achieve much benefit then let's not do it.
+> > >
+> > > My worry is because "cat trace" takes quite a long time just reading =
+the
+> > > BTF arguments. I'm worried it will just get worse with enums as well.
+> > >
+> > > I have trace-cmd reading BTF now (just haven't officially released it=
+) and
+> > > doing an extract and reading the trace.dat file is much faster than r=
+eading
+> > > the trace file with arguments. I'll need to implement the enum logic =
+too in
+> > > libtraceevent.
+> >
+> > If you mean to do pretty printing of the trace in user space then +1 fr=
+om me.
+> >
+> > I don't like sorting enums either in resolve_btfid, pahole or kernel.
+> > Sorted BTF by name was ok, since it doesn't change original semantics.
+> > While sorting enums by value gets us to the grey zone where
+> > the sequence of enum names in vmlinux.h becomes different than in dwarf=
+.
+>
+> Thanks, I agreed.
+>
+> >
+> > Also id->name mapping in general is not precise.
+> > There is no requirement for enums to be unique.
+> > Just grabbing the first one:
+> > ATA_PIO0 =3D 1,
+> > ATA_PIO1 =3D 3,
+> > ATA_PIO2 =3D 7,
+> > ATA_UDMA0 =3D 1,
+> > ATA_UDMA1 =3D 3,
+> > ATA_UDMA2 =3D 7,
+> > ATA_ID_CYLS =3D 1,
+> > ATA_ID_HEADS =3D 3,
+> > SCR_ERROR =3D 1,
+> > SCR_CONTROL =3D 2,
+> > SCR_ACTIVE =3D 3,
+> >
+> > All these names are part of the same enum type.
+> > Which one to print? First one?
 
-Hi, Jiri. It's great to see your tracing_multi link finally. It looks great ;)
+Another option is to print all matching entries, incurring increased
+overhead and extended trace log length. However, I prefer printing
+the first matching entry, though it might be inaccurate in rare cases.
 
-After analyzing a little deeper on the SINGLE_FTRACE_DIRECT_OPS, I
-understand why it is only supported on x86_64 for now. It seems that
-it's a little hard to implement it in the other arch, as we need to
-restructure the implement of ftrace direct call.
-
-So do we need some more ftrace API here to make the tracing multi-link
-independent from SINGLE_FTRACE_DIRECT_OPS? Otherwise, we can only
-use it on x86_64.
-
-Have you ever tried to implement the SINGLE_FTRACE_DIRECT_OPS on arm64?
-The direct call on arm64 is so complex, and I didn't work it out :/
-
-Thanks!
-Menglong Dong
-
-> +
-> +struct fentry_multi_data {
-> +	struct ftrace_hash *unreg;
-> +	struct ftrace_hash *modify;
-> +	struct ftrace_hash *reg;
-> +};
-> +
-[...]
-> 
-> 
-> 
-
-
-
-
+>
+> I think these cases are not very common and printing the first
+> one would be helpful enough, and we can add documentation
+> notes in ftrace to guide users.
+>
+> >
+> > another example:
+> > enum {
+> >         BPF_LOCAL_STORAGE_GET_F_CREATE =3D 1,
+> >         BPF_SK_STORAGE_GET_F_CREATE =3D 1,
+> > };
+> >
+> > and another:
+> > enum {
+> >         BPF_SKB_TSTAMP_UNSPEC =3D 0,
+> >         BPF_SKB_TSTAMP_DELIVERY_MONO =3D 1,
+> >         BPF_SKB_CLOCK_REALTIME =3D 0,
+> >         BPF_SKB_CLOCK_MONOTONIC =3D 1,
+> >         BPF_SKB_CLOCK_TAI =3D 2,
+> > };
+> >
+> > I'd rather not print any and keep it integer only.
+> >
+> > pw-bot: cr
