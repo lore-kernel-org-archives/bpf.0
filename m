@@ -1,65 +1,65 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA6232B9AA
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 20:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D96A232C316
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 20:27:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770323237; cv=none; b=uYssZsvymIhxvxS6DyADF7kybKdF/AGCvRe+7edaS05W7avmHZotyHHuuaoGhMr5NII2VhuKr8rdNF4NYIg7XOEoJZWKVhjwvgJr6xV93kBM6y6eupMbX3tRHPBvzozJsp3uDV8gJqFJBdT6eBB5ZZQH8cjKdAPDP64w1noBQZk=
+	t=1770323240; cv=none; b=dAQFN3wqQmkDxlQoE9u0VN+42cpfHOZ1H8GkkJNl0kjqHk/vAsJR37DkqClFxnI6E9Z7q7YXQBRnXsl+myTFECbZEu+C64M+VS/pgcmNbJeoR3ojXg27akHjIsg8CGw8WA+BQ7JbWC1o/nShA7W7KiTnC2maWDt2o8Q0fj1AxPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770323237; c=relaxed/simple;
-	bh=Gw6v2KSmKGNLAqR+bH2uKM4erbcEIkzzqhOjxX83iXQ=;
+	s=arc-20240116; t=1770323240; c=relaxed/simple;
+	bh=EawU7E85hyQKnDsSsnAlVae/EIZGOBjtAsn3UT3imPg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EAz7boMgxvD3HYRkut1I5ULm2s6szee8I0JL2o1a5IrssDcp9Y40163YlDCdbvLREvXSmaYEjZLJmtD9txS1DPG+g1PTHwzMMf7xXuEJuLTF90f+LjoKzUrrXrHmKzb07UQU7C6sbLcOaD3x3Ouv7KSPYY3lwANF4muYY0dmrCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YQ3NqIq/; arc=none smtp.client-ip=209.85.128.45
+	 In-Reply-To:To:Cc; b=kQlp51z3ctMM1oeLDkLCfPKUgEHxL3kF6zHYvJ15TxxT8FJnvIgu3XNc6OaNipjYwn8ogUNO0FfmeiJpzROjmsWDkSGhqBkiIu2wSajSelqD04kN9pZTE6tSzQY5PF+GoCUXcLaTy9TTJ5nds7/0ITSZcY/4B2ZILfL//1miFHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KD0ew9M8; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YQ3NqIq/"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4805ef35864so12203785e9.0
-        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 12:27:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KD0ew9M8"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-482f2599980so15934295e9.0
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 12:27:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770323236; x=1770928036; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770323238; x=1770928038; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lBhLYVGTqFjXukaAaL4A1adIXxm7iX7vbQw8ckkpp2s=;
-        b=YQ3NqIq/GCxhwIKHV1WEtjbD7AT36mwiV7upPtqka2xMGdqy5UO4FYmSE3Qmydf9hW
-         bH1RzzkZlrcTyWyNVD1+bUGdjGkkMIFT33lMBgjXsVsUitCwRC3Wrpc00FoYHzQP31tZ
-         RULHoeLT4uC74agZ4NeEFySPHgVkM/risgxGgPaxhsCB38nlPA2UDwacZ646V0tJTsKn
-         aFAskVeyh1C6VyHLCI912bGAu3bATvONPp/Aphetg4aQHpwB6AMjKn8lLqGhHs5DmyW9
-         sZ1a4PLqjaroJ0hP+HPH1x0LCPKjnnoNixUwFpQTLBv6UYlAZirunN2oCoiMZObsfCpS
-         +FyA==
+        bh=NhtMWfffRJqUdF6LokCsrkYymnt1gXV5MfKG8KtoDhY=;
+        b=KD0ew9M84EMQNzJ7rzjsevMFeg76SKekGA+L+X9dJih0qDql0yt/9CK5tkg7ICa2gV
+         hE8GxGsrZkfGi+KGKlYxWyvv0zc+HLTJ55U6VuA8h3/1ZcxiBdpFKpLRVQURtwZvTvpO
+         Kec+NNoe5LXwBpb1jDeB4ybe9Yr+k2ZVdEPwZv58fa2RtMzRtJ3neCTQQd/UJM2+wty/
+         QdpHlEeNuZcKZKmIHp1b2/sddqZFRvlJT0A/hWPh8JNEozCxRV8zm9Zo59CQ8MaqB/Nh
+         V6Awes2Oa5xtbm02+Cfy9v2SPeoCFWPOA3Y4GD4h/twEcLqcl1dB4LrEyMpJ/5iMiqhf
+         4Qhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770323236; x=1770928036;
+        d=1e100.net; s=20230601; t=1770323238; x=1770928038;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=lBhLYVGTqFjXukaAaL4A1adIXxm7iX7vbQw8ckkpp2s=;
-        b=utz9FWk/Pe0ZqtJ484p2vxtt3kr5r8d28XBEozIMOXzIzNb90JR6MvRHnc1yOrj3H9
-         Pvv27ZDwc7hPwjDXBfmii8AyXbFn3nxw6jN+UuOXLQwLwBhONrgXbnmhdVKO+XUJ//Ja
-         f3UfTb4eWHhwuMdRo1LcFIm/9deO1Ku9KvIcrGO/gTwDED0xBkNNYe+Eb898WYhX57/h
-         aRV3z8n5uoQsPl4WwExslfGL2gIHc12KoTj0Jo7Vd/Y/PsPocEPEIYl+r5BngjntTCkE
-         BMWmFyOKEjfhu7V21ykHnVE3V0jlHk9ckbbHvG2b+V/PErdW5ulf8giyWMvjrGvY9nqp
-         oEGQ==
-X-Gm-Message-State: AOJu0Yz0EYIsODHG6WWYnUPZFnQGLr9zn7kDa8rlwkv1x1z+lX2/79rF
-	IkqcBOPR9M6UeqhQZgXqY2HybtCot4ysX71KcBFtHx9hQuFoecQgJilh
-X-Gm-Gg: AZuq6aLoLLG7Kcwa9fknKnsmdYgPPPzpgwrS669WOuQFT8pQ4bu29ukFX2eNzHbNJq/
-	G/bdmrZPiXHGUR0KaV0zjMxFVFjd8ELzr+jidfIit+ogIKN0nABnIvUg33vFZJ1IWo3cuc0SX8P
-	Oxlq2jFeTGoBf+R3eTbG8L0P/XttVEhUQksIuCniAjH8HUIP9e+MSug+GUVgMUXMWNHGBP7CTw0
-	nmiuNwSx76q5l3X/ezSOREY7eaH4fIneFncLEJjHiWbGillleqbic3EiEko823NJkSDEzZe69S6
-	t6dJvd8tLNX3dPP7w7li//Etb3b9Gdcxd1JUHx7VX6Ct48xOV6CHPicwfzJxuAxnYYI5u8cI62x
-	SFYxbCduPtmGmqmv13gaFua+ciy8R1b6xuvtWl+LA1150whMGou5g3gWyH14Z4QxuE73D1wc=
-X-Received: by 2002:a05:600c:4f8a:b0:480:5678:1fdd with SMTP id 5b1f17b1804b1-483201dd265mr9118025e9.12.1770323235517;
-        Thu, 05 Feb 2026 12:27:15 -0800 (PST)
+        bh=NhtMWfffRJqUdF6LokCsrkYymnt1gXV5MfKG8KtoDhY=;
+        b=cXOeMxK00vwAiJXC/vGY2nXMvvpCClKi8ZrneYloL0a8HIqyVc6yaHUN1I/8oDtv07
+         dYNza3yuKyfoHjepGVjYT4HAGIwh34YJR7tqOlB/RcbWKGfu8XRu1O7W3XquHlQnfVQU
+         m8wf0DpaeHHdZ4c99C4x2drNGYizJ0dmSqIsS42uPBncowWH3VbcEztAQfVS93bPe3+n
+         jGAyYGM2ZBrFjQ+uHLfserrjCkdhxMFK1kpkfJpreP7mCKSE1HVG1i6/n2CLFXTFiWhQ
+         64iKaRZAYqTJmMXT17Vfmazg3g37y+oDbPIXb6TDz+RghUWVmJ6Q+O7z5m+9nAtaatlI
+         QezQ==
+X-Gm-Message-State: AOJu0Yy6iZd6VGF5SZ1msohDHm4UKA90cHD6jGLqE4wxm7cyPeJAXnDe
+	3+tqyv1fHni4b3DhN4Cv5blzZsAW6Qrcii7cfMBc1H0hGYJ4PPzr9iHF
+X-Gm-Gg: AZuq6aJZWjMBuT/fx2jyPlPOHTYv8UID6bZJ44sWvxyomQb+Ex496lnWjuP5j2IR7ub
+	peOuVyVcpvxKar2mO/9vxNyHvCvXf/soUxdKKa6erF+F1uXZoaGdZJbLh9oxGvfg6nivs9SKvlq
+	qoBScetUBLn+FzJE5Uiw68P5VcqtyahKHdaAXp2Y1kveVCrvm1HIq/3PFxY6eIt5n47PNeIxUKH
+	ZZQfuKzCgxrGQwdNQMDkXuVsimGJVrHxSSo3QZNcoSkDstIUN6sAbbdDouNAWyZ59cOPj+uG6a0
+	2S3J/bZKUgORSnovyb1IW3pWfGX+6DmAw/xYKcALPQfoRPBfKxBozCRdgYEe3it/prqTeFZbbdK
+	t7YHQbmSG7esyOUWAuH3+W4p75zJW2Trwh/DzN7XvFUshVD60SH+zTVbj0MlPjdSNXk7XnuY=
+X-Received: by 2002:a05:600c:8719:b0:482:eec4:76d with SMTP id 5b1f17b1804b1-4832021b461mr9492395e9.17.1770323238173;
+        Thu, 05 Feb 2026 12:27:18 -0800 (PST)
 Received: from localhost ([2620:10d:c092:500::6:1325])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43629756ff1sm574143f8f.43.2026.02.05.12.27.14
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483203e37f9sm4235255e9.3.2026.02.05.12.27.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Feb 2026 12:27:15 -0800 (PST)
+        Thu, 05 Feb 2026 12:27:16 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Thu, 05 Feb 2026 20:24:39 +0000
-Subject: [PATCH RFC bpf-next 09/12] selftests/bpf: Add stress tests for
- resizable hash get_next_key
+Date: Thu, 05 Feb 2026 20:24:40 +0000
+Subject: [PATCH RFC bpf-next 10/12] selftests/bpf: Add BPF iterator tests
+ for resizable hash map
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260205-rhash-v1-9-30dd6d63c462@meta.com>
+Message-Id: <20260205-rhash-v1-10-30dd6d63c462@meta.com>
 References: <20260205-rhash-v1-0-30dd6d63c462@meta.com>
 In-Reply-To: <20260205-rhash-v1-0-30dd6d63c462@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -77,218 +77,300 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  puranjay@kernel.org
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1770323224; l=5452;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1770323224; l=8242;
  i=yatsenko@meta.com; s=20251031; h=from:subject:message-id;
- bh=a2UC/WYp2CyoSH6ywPLqTDPmYw/yjplf8x4WFlOzSPQ=;
- b=DBylU5Vbv/Hjtje150LKzRwN5u5nRKnXr3VzJQc2asQt8qigl1blT2majCd+M1PbMazNd/9JN
- FvWlKyZA3p+BkuGEfg4IoUSF2i0M5VFzf5rr5tQQFflg9zUZ53gUFni
+ bh=ejinDW8MMgmtgwwOzAdrh2BwNdAQa3UKBa+36mpFm40=;
+ b=jM22hC3mLwsoLGx/mnCVN8xdaWSMb8RsargYE/SlmYBRJ06R7mO95O2RtREpqtopUJqzbmOIu
+ Y9TsWCd/vZJCskWWQsPBWtHCPIGnSGiNBAtZtplOXtID7DuTn8aFrLk
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=TFoLStOoH/++W4HJHRgNr8zj8vPFB1W+/QECPcQygzo=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Test get_next_key behavior under concurrent modification:
- * Resize test: verify all elements visited after resize trigger
- * Stress test: concurrent iterators and modifiers to detect races
+Test BPF iterator functionality for BPF_MAP_TYPE_RHASH:
+ * Basic iteration verifying all elements are visited
+ * Overflow test triggering seq_file restart, validating correct
+resume behavior via skip_elems tracking
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/testing/selftests/bpf/prog_tests/rhash.c | 156 +++++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/rhash.c      |   8 ++
- 2 files changed, 164 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/rhash.c     | 168 +++++++++++++++++++++
+ .../selftests/bpf/progs/bpf_iter_bpf_rhash_map.c   |  75 +++++++++
+ 2 files changed, 243 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testing/selftests/bpf/prog_tests/rhash.c
-index d1557405e062851ba2ad3d7378049c93395e7943..689ba6d73a724e94c3845acaeca3c0a7b45a8c6d 100644
+index 689ba6d73a724e94c3845acaeca3c0a7b45a8c6d..ee8f4181d501df8d31223bff72d4e551a903de4d 100644
 --- a/tools/testing/selftests/bpf/prog_tests/rhash.c
 +++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
-@@ -132,6 +132,156 @@ static void rhash_spin_lock_test(void)
+@@ -4,6 +4,7 @@
+ #include <string.h>
+ #include <stdio.h>
+ #include "rhash.skel.h"
++#include "bpf_iter_bpf_rhash_map.skel.h"
+ #include <linux/bpf.h>
+ #include <linux/perf_event.h>
+ #include <sys/syscall.h>
+@@ -282,6 +283,167 @@ static void rhash_get_next_key_resize_test(void)
  	rhash__destroy(skel);
  }
  
-+struct iter_thread_args {
-+	int map_fd;
-+	int stop;
-+	int error;
-+};
-+
-+static void *get_next_key_thread(void *arg)
++static void rhash_iter_test(void)
 +{
-+	struct iter_thread_args *args = arg;
-+	int key, next_key;
-+	int i = 0;
++	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
++	struct bpf_iter_bpf_rhash_map *skel;
++	int err, i, len, map_fd, iter_fd;
++	union bpf_iter_link_info linfo;
++	u32 expected_key_sum = 0, key;
++	struct bpf_link *link;
++	u64 val = 0;
++	char buf[64];
 +
-+	for (i = 0; i < 1000; i++) {
-+		if (READ_ONCE(args->stop))
-+			break;
-+
-+		if (bpf_map_get_next_key(args->map_fd, NULL, &next_key) != 0) {
-+			WRITE_ONCE(args->error, 1);
-+			continue;
-+		}
-+
-+		key = next_key;
-+		while (bpf_map_get_next_key(args->map_fd, &key, &next_key) == 0)
-+			key = next_key;
-+	}
-+
-+	return (void *)0;
-+}
-+
-+static void *modifier_thread(void *arg)
-+{
-+	struct iter_thread_args *args = arg;
-+	int key, value;
-+	int i;
-+
-+	for (i = 0; i < 10000; i++) {
-+		if (READ_ONCE(args->stop))
-+			break;
-+
-+		key = i;
-+		value = i;
-+		if (bpf_map_update_elem(args->map_fd, &key, &value, BPF_ANY))
-+			WRITE_ONCE(args->error, 1);
-+	}
-+
-+	return (void *)0;
-+}
-+
-+static void rhash_get_next_key_stress_test(void)
-+{
-+	struct iter_thread_args args = {};
-+	struct rhash *skel;
-+	pthread_t iter_threads[2];
-+	pthread_t mod_threads[2];
-+	int key, value;
-+	int err, i;
-+	void *ret;
-+
-+	skel = rhash__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "rhash__open_and_load"))
++	skel = bpf_iter_bpf_rhash_map__open();
++	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_rhash_map__open"))
 +		return;
 +
-+	args.map_fd = bpf_map__fd(skel->maps.rhmap_iter);
-+	args.stop = 0;
-+	args.error = 0;
++	err = bpf_iter_bpf_rhash_map__load(skel);
++	if (!ASSERT_OK(err, "bpf_iter_bpf_rhash_map__load"))
++		goto out;
 +
-+	/* Pre-populate map */
-+	for (i = 0; i < 50; i++) {
-+		key = i;
-+		value = i;
-+		err = bpf_map_update_elem(args.map_fd, &key, &value, BPF_NOEXIST);
-+		if (!ASSERT_OK(err, "initial insert"))
-+			goto cleanup;
++	map_fd = bpf_map__fd(skel->maps.rhashmap);
++
++	/* Populate map with test data */
++	for (i = 0; i < 64; i++) {
++		key = i + 1;
++		expected_key_sum += key;
++
++		err = bpf_map_update_elem(map_fd, &key, &val, BPF_NOEXIST);
++		if (!ASSERT_OK(err, "map_update"))
++			goto out;
 +	}
 +
-+	/* Iterator threads */
-+	for (i = 0; i < 2; i++)
-+		if (!ASSERT_OK(pthread_create(&iter_threads[i], NULL,
-+					      &get_next_key_thread, &args),
-+			       "pthread_create iter"))
-+			goto cleanup;
++	memset(&linfo, 0, sizeof(linfo));
++	linfo.map.map_fd = map_fd;
++	opts.link_info = &linfo;
++	opts.link_info_len = sizeof(linfo);
 +
-+	/* Modifier threads */
-+	for (i = 0; i < 2; i++)
-+		if (!ASSERT_OK(pthread_create(&mod_threads[i], NULL,
-+					      &modifier_thread, &args),
-+			       "pthread_create mod"))
-+			goto cleanup;
++	link = bpf_program__attach_iter(skel->progs.dump_bpf_rhash_map, &opts);
++	if (!ASSERT_OK_PTR(link, "attach_iter"))
++		goto out;
 +
-+	/* Wait for modifier threads to finish */
-+	for (i = 0; i < 2; i++)
-+		pthread_join(mod_threads[i], &ret);
-+
-+	/* Signal iterator threads to stop */
-+	WRITE_ONCE(args.stop, 1);
-+
-+	/* Wait for iterator threads */
-+	for (i = 0; i < 2; i++)
-+		if (!ASSERT_OK(pthread_join(iter_threads[i], &ret), "pthread_join iter") ||
-+		    !ASSERT_OK((long)ret, "iter thread ret"))
-+			goto cleanup;
-+
-+	ASSERT_EQ(args.error, 0, "no infinite loop");
-+
-+cleanup:
-+	rhash__destroy(skel);
-+}
-+
-+static void rhash_get_next_key_resize_test(void)
-+{
-+	struct rhash *skel;
-+	int key, next_key, value;
-+	int visited[128] = {0};
-+	int map_fd;
-+	int err, i;
-+
-+	skel = rhash__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "rhash__open_and_load"))
-+		return;
-+
-+	map_fd = bpf_map__fd(skel->maps.rhmap_iter);
-+
-+	/* Insert 100 elements - triggers resize */
-+	for (i = 0; i < 100; i++) {
-+		key = i;
-+		value = i;
-+		err = bpf_map_update_elem(map_fd, &key, &value, BPF_NOEXIST);
-+		if (!ASSERT_OK(err, "insert elem"))
-+			goto cleanup;
-+	}
-+
-+	/* Iterate all elements */
-+	err = bpf_map_get_next_key(map_fd, NULL, &next_key);
-+	if (!ASSERT_OK(err, "get first key"))
-+		goto cleanup;
++	iter_fd = bpf_iter_create(bpf_link__fd(link));
++	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
++		goto free_link;
 +
 +	do {
-+		key = next_key;
-+		ASSERT_NEQ(visited[key], 1, "unique keys");
-+		visited[key] = 1;
-+	} while (bpf_map_get_next_key(map_fd, &key, &next_key) == 0);
++		len = read(iter_fd, buf, sizeof(buf));
++	} while (len > 0);
 +
-+	/* Verify all elements visited */
-+	for (i = 0; i < 100; i++)
-+		ASSERT_TRUE(visited[i], "element visited");
++	ASSERT_EQ(skel->bss->key_sum, expected_key_sum, "key_sum");
++	ASSERT_EQ(skel->bss->elem_count, 64, "elem_count");
 +
-+cleanup:
-+	rhash__destroy(skel);
++	close(iter_fd);
++
++free_link:
++	bpf_link__destroy(link);
++out:
++	bpf_iter_bpf_rhash_map__destroy(skel);
++}
++
++static void rhash_iter_overflow_test(void)
++{
++	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
++	struct bpf_iter_bpf_rhash_map *skel;
++	u32 total_read_len, expected_read_len, write_len, num_elems = 64;
++	u64 seen_values = 0;
++	int err, i, j, len, map_fd, iter_fd;
++	union bpf_iter_link_info linfo;
++	struct bpf_link *link;
++	char *buf;
++
++	skel = bpf_iter_bpf_rhash_map__open();
++	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_rhash_map__open"))
++		return;
++
++	/*
++	 * Configure print_count so that output for each element almost fills
++	 * the seq_file buffer (8 pages). With multiple elements, this will
++	 * trigger buffer overflow and restart.
++	 */
++	write_len = sysconf(_SC_PAGE_SIZE) * 8;
++	skel->bss->print_count = (write_len - 8) / 8;
++	expected_read_len = num_elems * (write_len - 8);
++
++	err = bpf_iter_bpf_rhash_map__load(skel);
++	if (!ASSERT_OK(err, "bpf_iter_bpf_rhash_map__load"))
++		goto out;
++
++	map_fd = bpf_map__fd(skel->maps.rhashmap);
++
++	/* Populate map with test data */
++	for (i = 0; i < num_elems; i++) {
++		__u64 val = i;
++
++		err = bpf_map_update_elem(map_fd, &i, &val, BPF_NOEXIST);
++		if (!ASSERT_OK(err, "map_update"))
++			goto out;
++	}
++
++	memset(&linfo, 0, sizeof(linfo));
++	linfo.map.map_fd = map_fd;
++	opts.link_info = &linfo;
++	opts.link_info_len = sizeof(linfo);
++
++	link = bpf_program__attach_iter(skel->progs.dump_bpf_rhash_map_overflow, &opts);
++	if (!ASSERT_OK_PTR(link, "attach_iter"))
++		goto out;
++
++	iter_fd = bpf_iter_create(bpf_link__fd(link));
++	if (!ASSERT_GE(iter_fd, 0, "create_iter"))
++		goto free_link;
++
++	buf = malloc(expected_read_len);
++	if (!ASSERT_OK_PTR(buf, "malloc"))
++		goto close_iter;
++
++	/* Read all data - this should trigger multiple overflows/restarts */
++	total_read_len = 0;
++	while ((len = read(iter_fd, buf + total_read_len, expected_read_len - total_read_len)) > 0)
++		total_read_len += len;
++
++	ASSERT_OK(err, "err");
++	ASSERT_EQ(total_read_len, expected_read_len, "total_read_len");
++	ASSERT_EQ(skel->bss->unique_elem_count, num_elems, "unique_elem_count");
++
++	/*
++	 * Verify overflow actually happened: if total_visits > unique_elem_count,
++	 * some elements were visited multiple times due to seq_file restart.
++	 */
++	ASSERT_GT(skel->bss->total_visits, skel->bss->unique_elem_count, "overflow_occurred");
++
++	/*
++	 * Verify:
++	 * 1. Each chunk of print_count size has same values
++	 * 2. All values 0 to num_elems-1 appear exactly once
++	 */
++	for (i = 0; i < num_elems; i++) {
++		__u64 *val = ((__u64 *)buf) + i * skel->bss->print_count;
++
++		ASSERT_GE(val[0], 0, "value_greater_or_eq_zero");
++		ASSERT_LT(val[0], num_elems, "value_in_range");
++
++		/* Verify all copies in this chunk are consistent */
++		for (j = 1; j < skel->bss->print_count; j++)
++			ASSERT_EQ(val[0], val[j], "consistent_value");
++
++		/* Track which values we've seen */
++		seen_values |= (1ULL << val[0]);
++	}
++
++	/* Verify all values 0 to num_elems-1 were present */
++	ASSERT_EQ(seen_values, ~0ULL, "all_values_seen");
++
++	free(buf);
++close_iter:
++	close(iter_fd);
++free_link:
++	bpf_link__destroy(link);
++out:
++	bpf_iter_bpf_rhash_map__destroy(skel);
 +}
 +
  void test_rhash(void)
  {
  	if (test__start_subtest("test_rhash_lookup_update"))
-@@ -157,5 +307,11 @@ void test_rhash(void)
+@@ -313,5 +475,11 @@ void test_rhash(void)
  
- 	if (test__start_subtest("test_rhash_spin_lock"))
- 		rhash_spin_lock_test();
+ 	if (test__start_subtest("test_rhash_get_next_key_stress"))
+ 		rhash_get_next_key_stress_test();
 +
-+	if (test__start_subtest("test_rhash_get_next_key_resize"))
-+		rhash_get_next_key_resize_test();
++	if (test__start_subtest("test_rhash_iter"))
++		rhash_iter_test();
 +
-+	if (test__start_subtest("test_rhash_get_next_key_stress"))
-+		rhash_get_next_key_stress_test();
++	if (test__start_subtest("test_rhash_iter_overflow"))
++		rhash_iter_overflow_test();
  }
  
-diff --git a/tools/testing/selftests/bpf/progs/rhash.c b/tools/testing/selftests/bpf/progs/rhash.c
-index fba55b5d9ed2575a1a31c4d2247c1d76f10d6bb1..61eda618cf55dfd4938c818eb4db41a842869599 100644
---- a/tools/testing/selftests/bpf/progs/rhash.c
-+++ b/tools/testing/selftests/bpf/progs/rhash.c
-@@ -262,6 +262,14 @@ struct {
- 	__type(value, struct lock_elem);
- } rhmap_lock SEC(".maps");
- 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_bpf_rhash_map.c b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_rhash_map.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..2de69f983a1bd04993339c2a565b9d940043c37c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_bpf_rhash_map.c
+@@ -0,0 +1,75 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++
 +struct {
 +	__uint(type, BPF_MAP_TYPE_RHASH);
 +	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, 65536);
-+	__type(key, int);
-+	__type(value, int);
-+} rhmap_iter SEC(".maps");
++	__uint(max_entries, 64);
++	__type(key, __u32);
++	__type(value, __u64);
++} rhashmap SEC(".maps");
 +
- SEC("cgroup/skb")
- int test_rhash_spin_lock(struct __sk_buff *skb)
- {
++__u32 key_sum = 0;
++__u64 val_sum = 0;
++__u32 elem_count = 0;
++__u32 err = 0;
++
++SEC("iter/bpf_map_elem")
++int dump_bpf_rhash_map(struct bpf_iter__bpf_map_elem *ctx)
++{
++	__u32 *key = ctx->key;
++	__u64 *val = ctx->value;
++
++	if (!key || !val)
++		return 0;
++
++	key_sum += *key;
++	val_sum += *val;
++	elem_count++;
++	return 0;
++}
++
++/* For overflow test: configurable print count */
++__u32 print_count = 0;
++
++__u64 seen_keys = 0;
++__u32 unique_elem_count = 0;
++__u32 total_visits = 0;
++
++SEC("iter/bpf_map_elem")
++int dump_bpf_rhash_map_overflow(struct bpf_iter__bpf_map_elem *ctx)
++{
++	struct seq_file *seq = ctx->meta->seq;
++	__u32 *key = ctx->key;
++	__u64 *val = ctx->value;
++	__u64 bit;
++	__u32 i;
++
++	if (!key || !val)
++		return 0; /* The end of iteration */
++
++	total_visits++;
++
++	/* Validate key value are as expected */
++	if (*key != *val || *key < 0 || *key > 64) {
++		err = 1;
++		return 0;
++	}
++
++	bit = 1ULL << *key;
++	if (!(seen_keys & bit))
++		unique_elem_count++;
++	seen_keys |= bit;
++
++	/* Write print_count * 8 bytes to potentially overflow buffer */
++	bpf_for(i, 0, print_count) {
++		if (bpf_seq_write(seq, val, sizeof(__u64)))
++			return 1;
++	}
++
++	return 0;
++}
 
 -- 
 2.53.0
