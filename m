@@ -1,46 +1,57 @@
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [4.193.249.245])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE8431B10D
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 05:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.193.249.245
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9AC1F471F;
+	Thu,  5 Feb 2026 05:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770269018; cv=none; b=NTRnw/KH9TjoRh4x5ARKa91OrGROXI6kwHA+yi/xYidSkz69kzWywVEeIgFQ3p1bIpc+Gp+m7pyu3bSh5a44MZJ1tlwPktr11BZK3E/wdPScfkiae17kYx57iHSeC/PIBl7E/NFWl6nfiMOelZf+hwTJdDCijTL4Z/FLF5OieZY=
+	t=1770269320; cv=none; b=UAgtf3t83Qyfcs7j3SpJc91HXUgMP17aEu0xLSmcqw/ICYAVm4NU1+YmTWSvEeLalu23cyIR1Ed6kRPMgBlJyiPhQvzvgEWSmjdxdu3S2rU5u6+6vyT+PwsjdIMUtb4N0DQhCfwSbudf9YrueyhvLhmEXIN9bBLEu8J2XyYN3vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770269018; c=relaxed/simple;
-	bh=d1aOwghCS+SVrYb9dbtTndq1HEIan9kcryVnARMAIKI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Jwkmg16gJeTKI8JIco7nm8dQktcgtwB09WIQihYN9JltolhW+qnE+6aPjo+wLzSr06NV9RsQGmypt56NASP1+H14rQqFrpF+B1YL2kfrdW/I4NW6YTBcED4aYUQF25TLB5Jj1uxAoO95OQRMzig0Evoy/GyidTCT64fxxXeqhns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn; spf=fail smtp.mailfrom=zju.edu.cn; arc=none smtp.client-ip=4.193.249.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=zju.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=zju.edu.cn
-Received: from zju.edu.cn (unknown [112.32.2.84])
-	by mtasvr (Coremail) with SMTP id _____wCXJVBDKYRpiWKCAA--.13889S3;
-	Thu, 05 Feb 2026 13:23:16 +0800 (CST)
-Received: from localhost.localdomain (unknown [112.32.2.84])
-	by mail-app3 (Coremail) with SMTP id zS_KCgA3OWxCKYRpgxwRBg--.3405S2;
-	Thu, 05 Feb 2026 13:23:15 +0800 (CST)
-From: Tianci Cao <ziye@zju.edu.cn>
-To: eddyz87@gmail.com
-Cc: andrii@kernel.org,
+	s=arc-20240116; t=1770269320; c=relaxed/simple;
+	bh=BBfLCDc2/uDCwmTSk1Ji6KmW/FlEp2r0PF0c3zsmOBE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=FF3dby1bFjSIe3Rmo03D1E4dFoQ53maxcHxTaLtwAkz7fu0chHOl33RSAA5CdR37xpaGX3WH5e3iNbmGTZCpsv+YKgNBKBpSeBClVsKqvxNid4F2JVdYtza2YjN8Yca9r/cuW70vIDTl06nmh+07+uYPduEAbiLox0+3yoC1Ulc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K3KkRD3m; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K3KkRD3m"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFEA1C4CEF7;
+	Thu,  5 Feb 2026 05:28:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770269319;
+	bh=BBfLCDc2/uDCwmTSk1Ji6KmW/FlEp2r0PF0c3zsmOBE=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=K3KkRD3mQgYJ18W/8bq3mA9yT+cLveQshHPaHZd/DN3UlCTZleACxtx6uOo3beHjz
+	 8f092D0wOVbKWAoux3EeXpEjPY8KfOgasazv3ekJOfBkCYGi+x4AirUJd/IDEejDGs
+	 LtJfnlarGj17U15Bwie62MofkMQUeRDkEHolXQ3HbiN5CFIvP3L17AWrQQfDgb7Q6V
+	 i711FpbmU/dAZ38ynZr0K044E8kaCF08RKl4pCzeBG9Hm2fWCZOBvbniJO4qB9cupN
+	 GbwdSsJJue9ANOavzpc41UZZkxfnv0j95xK1lBRag9WDpH+3NK8mNl6RsJDj0SGpV7
+	 RYSUnyJQ6W4Sw==
+From: Jakub Kicinski <kuba@kernel.org>
+To: wei.fang@nxp.com
+Cc: Jakub Kicinski <kuba@kernel.org>,
 	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	haoluo@google.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	pabeni@redhat.com,
+	xiaoning.wang@nxp.com,
 	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	martin.lau@linux.dev,
+	daniel@iogearbox.net,
 	sdf@fomichev.me,
-	shenghaoyuan0928@163.com,
-	song@kernel.org,
-	tangyazhou518@outlook.com,
-	yonghong.song@linux.dev,
-	ziye@zju.edu.cn
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add tests for BPF_END bitwise tracking
-Date: Thu,  5 Feb 2026 13:23:13 +0800
-Message-Id: <20260205052313.225076-1-ziye@zju.edu.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <e316e3675ffae5f65f70cfc25d8c5e2522c97e09.camel@gmail.com>
-References: <e316e3675ffae5f65f70cfc25d8c5e2522c97e09.camel@gmail.com>
+	frank.li@nxp.com,
+	linux-kernel@vger.kernel.org,
+	hawk@kernel.org,
+	horms@kernel.org,
+	bpf@vger.kernel.org,
+	edumazet@google.com,
+	netdev@vger.kernel.org,
+	imx@lists.linux.dev,
+	shenwei.wang@nxp.com
+Subject: Re: [v6,net-next,06/15] net: fec: add fec_enet_rx_queue_xdp() for XDP path
+Date: Wed,  4 Feb 2026 21:28:37 -0800
+Message-ID: <20260205052837.2449389-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260203052329.1085444-7-wei.fang@nxp.com>
+References: <20260203052329.1085444-7-wei.fang@nxp.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -48,57 +59,131 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zS_KCgA3OWxCKYRpgxwRBg--.3405S2
-X-CM-SenderInfo: qtstiiaquyiko62m3hxhgxhubq/
-X-CM-DELIVERINFO: =?B?/rZqywXKKxbFmtjJiESix3B1w3tzYfmPt4q7bPP17nv9Zvsme7sPvU0377+RBBKdO8
-	083r2keJFfieWsS/AIcxKcp+cJqesHuFo4GQAAK1VhX371AMRQfHId7+6o/06X+QqMmkue
-	b4FmBMr79jbuJ3p8zirN5RPxYw6l01w8CbPzC/8w
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Wr4xuFykXrWkuF4xJF4fZwc_yoWkZFc_ua
-	48Xr1kCa1DXay7GrnxZF1rJrnrGw4jgryfGw1qgws3JryxJFn5GrWDC34kKr1fKF4UGFnF
-	yFnxJ3yY9wnFvosvyTuYvTs0mTUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-	s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-	cSsGvfJTRUUUbTAYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20EY4v20x
-	vaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-	w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-	W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-	8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AK
-	xVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7xvr2IYc2Ij64
-	vIr40E4x8a64kEw24lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I
-	3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxV
-	WUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAF
-	wI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcI
-	k0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j
-	6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU7xwIDUUUU
 
-Hi Eduard,
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
 
-On 2/5/26 3:58 AM, Eduard Zingerman wrote:
-> Nit: Technically I did not ack this patch, just suggested the changes.
->      For such cases you should keep SOB as in the previous version,
->      or add suggested-by. Acks should only be added if someone sent
->      and email with ack itself.
+For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
+---
+net: fec: add fec_enet_rx_queue_xdp() for XDP path
+
+This commit separates XDP path packet processing from fec_enet_rx_queue()
+into a new function fec_enet_rx_queue_xdp() to optimize XDP performance.
+Performance testing on iMX93 shows improvements across all xdp-bench tests.
+
+> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+> --- a/drivers/net/ethernet/freescale/fec_main.c
+> +++ b/drivers/net/ethernet/freescale/fec_main.c
+> @@ -1666,71 +1666,6 @@ static int fec_enet_update_cbd(struct fec_enet_priv_rx_q *rxq,
+>  	return 0;
+>  }
 >
->      Anyway, patch-set looks good to me, thank you for working on this!
->
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> -static u32
+> -fec_enet_run_xdp(struct fec_enet_private *fep, struct bpf_prog *prog,
+> -		 struct xdp_buff *xdp, struct fec_enet_priv_rx_q *rxq, int cpu)
+> -{
 
-Thanks for the review and the Ack!
+[ ... ]
 
-I see the patch set has been merged (thanks Alexei for applying!). Apologies
-for the misunderstanding regarding the tags earlier. I have noted your advice
-and will follow the proper conventions in future submissions.
+> -	default:
+> -		bpf_warn_invalid_xdp_action(fep->netdev, prog, act);
+> -		fallthrough;
+> -
+> -	case XDP_ABORTED:
+> -		fallthrough;    /* handle aborts by dropping packet */
+> -
+> -	case XDP_DROP:
+> -		rxq->stats[RX_XDP_DROP]++;
+> -xdp_err:
+> -		ret = FEC_ENET_XDP_CONSUMED;
+> -		page = virt_to_head_page(xdp->data);
+> -		page_pool_put_page(rxq->page_pool, page, sync, true);
+> -		if (act != XDP_DROP)
+> -			trace_xdp_exception(fep->netdev, prog, act);
+> -		break;
+> -	}
+> -
+> -	return ret;
+> -}
+> -
 
-On a side note, we are also working on range tracking (interval analysis)
-support for bswap operations. While bswap is non-monotonic and hard to
-track with ranges, we found that by leveraging existing range information,
-range tracking can complement bitwise tracking (tnum) to yield a more
-precise combined reg state.
+[ ... ]
 
-Given that the implementation would be more complex than the tnum approach,
-we wanted to ask if the community would be interested in seeing an RFC for this?
+> @@ -1962,7 +1879,167 @@
 
-Thanks,
+[ ... ]
 
-Tianci
+> +static int fec_enet_rx_queue_xdp(struct fec_enet_private *fep, int queue,
+> +				 int budget, struct bpf_prog *prog)
+> +{
 
+[ ... ]
+
+> +		switch (act) {
+> +		case XDP_PASS:
+> +			rxq->stats[RX_XDP_PASS]++;
+> +			/* The packet length includes FCS, but we don't want to
+> +			 * include that when passing upstream as it messes up
+> +			 * bridging applications.
+> +			 */
+> +			skb = fec_build_skb(fep, rxq, bdp, page, pkt_len);
+> +			if (!skb)
+> +				trace_xdp_exception(ndev, prog, XDP_PASS);
+> +			else
+> +				napi_gro_receive(&fep->napi, skb);
+> +
+> +			break;
+> +		case XDP_REDIRECT:
+> +			rxq->stats[RX_XDP_REDIRECT]++;
+> +			err = xdp_do_redirect(ndev, &xdp, prog);
+> +			if (unlikely(err)) {
+> +				fec_xdp_drop(rxq, &xdp, sync);
+> +				trace_xdp_exception(ndev, prog, XDP_REDIRECT);
+> +			} else {
+> +				xdp_res |= FEC_ENET_XDP_REDIR;
+> +			}
+> +			break;
+> +		case XDP_TX:
+> +			rxq->stats[RX_XDP_TX]++;
+> +			err = fec_enet_xdp_tx_xmit(fep, cpu, &xdp, sync);
+> +			if (unlikely(err)) {
+> +				rxq->stats[RX_XDP_TX_ERRORS]++;
+> +				fec_xdp_drop(rxq, &xdp, sync);
+> +				trace_xdp_exception(ndev, prog, XDP_TX);
+> +			}
+> +			break;
+> +		default:
+> +			bpf_warn_invalid_xdp_action(ndev, prog, act);
+> +			fallthrough;
+> +		case XDP_ABORTED:
+> +			/* handle aborts by dropping packet */
+> +			fallthrough;
+> +		case XDP_DROP:
+> +			rxq->stats[RX_XDP_DROP]++;
+> +			fec_xdp_drop(rxq, &xdp, sync);
+> +			break;
+
+Are XDP_ABORTED and invalid XDP actions being traced properly? In the
+deleted fec_enet_run_xdp() function, the error path included this check:
+
+    if (act != XDP_DROP)
+        trace_xdp_exception(fep->netdev, prog, act);
+
+This would trace both XDP_ABORTED and invalid actions (after calling
+bpf_warn_invalid_xdp_action). The new code in fec_enet_rx_queue_xdp()
+calls trace_xdp_exception() for XDP_PASS failures, XDP_REDIRECT failures,
+and XDP_TX failures, but not for XDP_ABORTED or invalid actions.
+
+This trace information is useful for debugging XDP program issues and
+monitoring abnormal XDP behavior.
+
+> +		}
+> +
+> +rx_processing_done:
+
+[ ... ]
+
+> +	return pkt_received;
+> +}
+-- 
+pw-bot: cr
