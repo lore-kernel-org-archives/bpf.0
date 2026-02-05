@@ -1,164 +1,130 @@
-Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E92219A2A3;
-	Thu,  5 Feb 2026 10:13:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64B6A3A6402
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 10:29:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770286390; cv=none; b=HLQyXC7LBqgsKx+gB60e6y5HQBpbpGStsHY3lyIE04AUExSJUbaVFBzsvpAzGi/XJbocSXvdoR5sx+e0HGkOL0kGOF86L49JO141Xnw7QTPC8phM2K0xnv72LcW9oKtSrjxP53LDwDCZdgfE03XdsXPFZVdY/VqUzuQYjlfnl4s=
+	t=1770287361; cv=none; b=QVdbig8PgTh4wJ4dHPVwDCT3C+hW4Yk/TvJWn0183SxfPJ0QyJv1QAhjME0TZjq+hUKl4xc6i/WqcjYRu6iClJjwLnMVcQpxZzE+PTNXoVosloFjDFiR+oE1iKL57rTpf6ZOCMOcVGK0/6iVEsxpnvQyLaQfp3gh9zZVxD3O2xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770286390; c=relaxed/simple;
-	bh=I56DRuyNOihYpX7ViXshfCJ6d9dg4ShXnJyAmYep3J4=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=cTallfvttxZY8NU+G7IxfX4Ps/RRYOZTxCAZ0TfPjBVjscxrcuRwDec7+QbPiZKvhiEQZthMFldOIkZjNefZc6Bx9vjJMVI67UwrSFyEAUEH3ILOKk+w11Hwb1yGQ0CWgDlBO9Zj85vcNTmWryeWfxBFGmsTtW0jg5Ezm11vZtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=OWCRm2yt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=R2hVa6OW; arc=none smtp.client-ip=103.168.172.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+	s=arc-20240116; t=1770287361; c=relaxed/simple;
+	bh=M0gZn8winEliqhGahy84Qhzwa5ObKvMsu8NdNP3r6Y4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ip98X8Gd0aQO0F8JZ2ORDg1AqUp/iCv+FS0mHkHXhKlvdZf7z+yERAhBTnoYr9FttISxG0ff32U4hs/PnjcT9nNUmf8MWIxE6UCWh/YsVrgDfi7lt11IpBZETI6D+x2s4PLY7gQah5Sm5Ys7Pid6T1ApDPH8Tl9qRuoR7n8TC44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=M9PYZvML; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="OWCRm2yt";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="R2hVa6OW"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id 38D36EC0302;
-	Thu,  5 Feb 2026 05:13:09 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-04.internal (MEProxy); Thu, 05 Feb 2026 05:13:09 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1770286389;
-	 x=1770372789; bh=E5R/spuaQMZA/kDXnvyzE7QpoYs/inr2iPdEuHG6yr0=; b=
-	OWCRm2ytSW5Ze3u8BU219YMsJiLfFCKDZZlLtLb14ocU/pNMgCS2GVcVwcx2O45f
-	D5WTB2FqWtenbVdBamzJboGVxNXjb3EIIT75xHUqwwpltjajyRlbO7AX59aUzULe
-	Q2UbNARGh3enkCORcuSxQgAWCTDZSmDi9PHey1iJAJfycVhblcBtZU+lSGuoB9iF
-	f9nmX3APOlQKctFLgSoDXJco6bykXopVzl/guH0MSNmGCTC2PUaVqi368wIBMBnC
-	PC+/UOVgx8xK5HuQPQlBcEXxt+bHBsgOaGbYN/jhjBhxCIei18rzroVxdzB9HY8H
-	MmjIo7Xzj+F3ER0Z+ee25Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1770286389; x=
-	1770372789; bh=E5R/spuaQMZA/kDXnvyzE7QpoYs/inr2iPdEuHG6yr0=; b=R
-	2hVa6OWgmpcIZw6IPm0H2bdJBbtoRbp9QyyR+Pxr7VcDo/2tvaClz4c4yDig0j6Z
-	GVD3aGe2tTkN0gdGqFrXqv0A5o+xkYGvar1RsyFdE3zqiweg0w2gnrOZLWthAxa1
-	7GooQZ8+5G8EjczdGm1vysqlXes0QqYJoZNeLTt4y4bQiiTr/tJycdKUm3SVCxlW
-	sIK411TUJSAajNfmakkPG56YplFVnt8+aSXqVuN96BOg/xvAbNiuf9G/5BAPTV1L
-	0w0mqg5DnaNYLVrZh1TkCwWHDBI2IMS9R0nypqcqCyoMe+2jt2Jt8zgrOrs9P2SH
-	nHrO8fIkBVsasQVcLLINA==
-X-ME-Sender: <xms:NG2EaYoqIrzQGRe2MVnhcjoeinCkSccmZHfdc68m_Fi5hp4VHZGAFA>
-    <xme:NG2EaZfsiovdauY5R0ydtAujm5eGu_VAvD6Mzj7fiFoJFvs0b-qfdYL_-_eD0klvF
-    VhOdiYyYvmldEI2fMstDNREpcthpeJUCuXB4v_zj74tPiOP1rq8YCU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukeehtdefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhepfefhheetffduvdfgieeghfejtedvkeetkeejfeekkeelffejteevvdeghffhiefh
-    necuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgt
-    phhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghlvgigvghird
-    hsthgrrhhovhhoihhtohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhkphesihhn
-    thgvlhdrtghomhdprhgtphhtthhopegrnhguhieskhgvrhhnvghlrdhorhhgpdhrtghpth
-    htoheprghrnhgusehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrshhtsehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopegsrhhglheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    epkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhihidrshhhvghv
-    tghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtohepphhmlhgrug
-    gvkhesshhushgvrdgtohhm
-X-ME-Proxy: <xmx:NG2Eae5bKWrpoGMMQrV4byKV2b-1w6i4tPsiArIW2wt6wbqW0s1b9g>
-    <xmx:NG2EaeaXCeU38qXHbOaB2k9vcvghR0BanTPojOGTODlBgM-eMu6Puw>
-    <xmx:NG2EabdbgDicy2WUTEBXsbZSgUsbujCzYRuUec9IAXGYmTkUIyIAYw>
-    <xmx:NG2Ead7Ca61qzpzgDdBS8ta6xOouawzE8SI1mnKEdvTczwGntqIMjQ>
-    <xmx:NW2EaXufNYIbZDCmzGMllLjRC-cx49st1wmjxPGsiOcbWMObpluqp2ky>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 6BC43700065; Thu,  5 Feb 2026 05:13:08 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="M9PYZvML"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=H3H5KVNh1pnHHVh9Ov6jx6rE+cNPbS/SCtZP43JlK6s=; b=M9PYZvMLjKM+daf2ys8jLddjso
+	ITNxteJGknoOrAXwXxn9Axpf8Ze7lXs3jEHce2wOf2WmQsf6apeAqExTrW33rbE4m4GQ9auoRlOlA
+	8OqXddLknPmkZ5ivvixkS+K4H5U+/w138gYdqq7/Y0DJkLutUCpe9JqNtzsMywMRF/nqNA1JjjX+j
+	lGfbbpv2XwE3zkapezxIiPDl06+WajWggHtMs44APE7o/we33Yq1RxDiVC1w8r63RUrN3B/Mp7GFi
+	X0k/M4sgx1iYJ4I7C4uFuY5U2dmjrSa6uA4SWDAkNZHou3ZtcTBK5g0hPMkK9NaMNl3sQpqxY5qmk
+	RsorXong==;
+Received: from sslproxy04.your-server.de ([78.46.152.42])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vnwbq-000Abp-2d;
+	Thu, 05 Feb 2026 11:29:14 +0100
+Received: from localhost ([127.0.0.1])
+	by sslproxy04.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1vnwbr-000OEs-1Q;
+	Thu, 05 Feb 2026 11:29:14 +0100
+Message-ID: <4edfed95-15cb-403c-b6ec-fae025a53757@iogearbox.net>
+Date: Thu, 5 Feb 2026 11:29:14 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AKtysVZkJHK3
-Date: Thu, 05 Feb 2026 11:12:47 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Petr Mladek" <pmladek@suse.com>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: "Kees Cook" <kees@kernel.org>,
- "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
- "kernel test robot" <lkp@intel.com>,
- "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- "Andy Shevchenko" <andy@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Bartosz Golaszewski" <brgl@kernel.org>, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, bpf@vger.kernel.org
-Message-Id: <4637e47c-61b0-43bf-996e-6291f2b49f31@app.fastmail.com>
-In-Reply-To: <aYRapf5K8wFGEO8v@pathway.suse.cz>
-References: <20260204132643.1302967-1-arnd@kernel.org>
- <aYRapf5K8wFGEO8v@pathway.suse.cz>
-Subject: Re: [PATCH] vsnprintf: drop __printf() attributes on binary printing functions
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3] bpf: Limit signature size to
+ KMALLOC_MAX_CACHE_SIZE
+To: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org
+Cc: ast@kernel.org, clm@meta.com
+References: <20260205063807.690823-1-kpsingh@kernel.org>
+Content-Language: en-US
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260205063807.690823-1-kpsingh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/27903/Thu Feb  5 08:23:30 2026)
 
-On Thu, Feb 5, 2026, at 09:53, Petr Mladek wrote:
-> On Wed 2026-02-04 14:26:23, Arnd Bergmann wrote:
->> Fixes: 6b2c1e30ad68 ("seq_file: Mark binary printing functions with __printf() attribute")
->> Fixes: 7bf819aa992f ("vsnprintf: Mark binary printing functions with __printf() attribute")
->
-> From the commit message, it is not obvious why reverting these commits
-> won't bring back the warnings in the modified functions.
->
-> My understanding is that the warnings won't get back thanks to
-> the commit bd67c1c3c353b6560 ("vsnprintf: Silence false positive
-> GCC warning for va_format()") as explained by the original cover
-> letter, see
-> https://lore.kernel.org/all/20250321144822.324050-1-andriy.shevchenko@linux.intel.com/#t
->
-> It would be worth to mentionin this in the commit message.
+On 2/5/26 7:38 AM, KP Singh wrote:
+> Practical BPF signatures are significantly smaller than
+> KMALLOC_MAX_CACHE_SIZE
+> 
+> Allowing larger sizes opens the door for abuse by passing excessive
+> size values and forcing the kernel into expensive allocation paths (via
+> kmalloc_large or vmalloc).
+> 
+> Fixes: 349271568303 ("bpf: Implement signature verification for BPF programs")
+> Reported-by: Chris Mason <clm@meta.com>
+> Signed-off-by: KP Singh <kpsingh@kernel.org>
 
-Unfortunately, I have not been able to reproduce the original
-warnings at all. The va_format() warning and the patch to
-silence that look entirely unrelated here, that was just the
-compiler incorrectly identifying a function that does not even
-take a format argument.
+[ tree would be bpf-next ]
 
-I'm sure some other intermediate change managed to shut up
-the warnings, but I don't know which one. My best guess would
-be that 938df695e98d ("vsprintf: associate the format state with
-the format pointer") made gcc no longer warn about bstr_printf(),
-but that predates Andy's patch and I can't easily revert it for
-testing. Checking out a kernel before those patches does have
-the warning on va_format() but not on the other ones.
+Acked-by: Daniel Borkmann <daniel@iogearbox.net>
 
->> Link: https://lore.kernel.org/all/CAADnVQK3eZp3yp35OUx8j1UBsQFhgsn5-4VReqAJ=68PaaKYmg@mail.gmail.com/
->> Closes: https://lore.kernel.org/oe-kbuild-all/202512061640.9hKTnB8p-lkp@intel.com/
->> Reported-by: kernel test robot <lkp@intel.com>
->> Suggested-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
->> Acked-by: Alexei Starovoitov <alexei.starovoitov@gmail.com>
->> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->> ---
->> For reference, three additional patches are required before we can drop
->> the Makefile.warn line that currently hides these warnings:
->> 
->> https://lore.kernel.org/lkml/20260203162546.2254900-1-arnd@kernel.org/
->> https://lore.kernel.org/lkml/20260203163440.2674340-1-arnd@kernel.org/
->> https://lore.kernel.org/lkml/20260203164545.3174910-1-arnd@kernel.org/
->> 
->> Tested using randconfig builds on arm/arm64/x86
->> ---
->>  include/linux/seq_file.h | 1 -
->>  include/linux/string.h   | 4 ++--
->>  2 files changed, 2 insertions(+), 3 deletions(-)
->
-> Otherwise, the change looks good to me. Feel free to use,
-> ideally with the updated commit message:
->
-> Acked-by: Petr Mladek <pmladek@suse.com>
->
-> I wonder who should take this patch. Should it go via
-> printk/bpf/tracing or another tree?
-> Does anyone has any preference, please?
+> ---
 
-I think your tree makes most sense here, but I have no strong
-preference.
+Next time pls add a small changelog below the "---".
 
-       Arnd
+>   kernel/bpf/syscall.c | 6 ++++++
+>   1 file changed, 6 insertions(+)
+> 
+Thanks,
+Daniel
