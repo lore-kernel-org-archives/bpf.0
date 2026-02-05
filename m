@@ -1,271 +1,200 @@
-Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011019.outbound.protection.outlook.com [40.107.130.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D3A374160;
-	Thu,  5 Feb 2026 08:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.19
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770281839; cv=fail; b=GQfXLZROoEn2+or3l3VeXP3jS+Qa4P9zs/x5tji55SmmY6/FJl2xcssC+bE/jqjCB3SMVua9TmHpoM3VNWvRkaIhcnxgcyu+QFNj0v79whMsHACcAeSZxTnS2Q/Qw/saSBJ4KeB0vgauHhHAIrJzhdoNbzIJS6bQVrgdgUfmKTA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770281839; c=relaxed/simple;
-	bh=7baunNL7EIZn1O7CQG9FxPXcmpHyCeXiNzLgU7yx58Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=IPo86g+LF8d4E80Tc8VtsWeCAJMk9SxkY/lGk8bLYr0R5Tesz5HjFWS4198qbBiK0eJfzb6aeLaifvfG4rUN+ZTy3Me9mRvHtg811N821gRU/3C9JsaRP0gqDMtbLHiKG1Uui5Ss2cP6YHl8V6oRULkKNNyQMRW5YtBDkTD/0jo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=CantAfNf; arc=fail smtp.client-ip=40.107.130.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949823A7849
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 08:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770281841; cv=none; b=qJzXvq2mtsht+FxInqnZABZhQxarQxtYFvKbP9/y61rWky8SzscRVOjDGZfB+Y/XkMTjqRY8ulEgn9GRg4v2gjKz8Y6wKw5jm/DEbnTBQk9jlhh9BEpxfwJSbQ4MV0dGIJqh3nro1SPPgkHATTygKxILV4ZcWG/Nfg9HEkuuoyE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770281841; c=relaxed/simple;
+	bh=X33MvehfDzFy5G+x/8MD4X7C0oKq3Gd855MY4flA61w=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IYd/BWS7K29fFY4Nc9ODaN3cSUjUHhqg1n+wLcyRdBZ4VQbdRaWTZZ58nU/e0o5W969ro3ynlTxS+MofxH9KJoGTismb9+HLRdbeiUlwlaxy73Sbyfpo0hRAxX0LyhL81a/mOJhpIS1HL1A2fce27z1TlqQmf/WhmkN8xy1/TcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l7ajSCEE; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="CantAfNf"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yMEddDPSo6K+iorBYN5h+7M5KB+fXLerDbbEO9idelEz3n/x/u8tznSnROQUBUzY2n/FTedRrJ7L6Ht9HNABu9p+jiHGql+m4NDn7d2n1okgIZBPrXtdgfCyec2cgDUUTsEqpXm794J6dH7Msi4HMk2dtlWJ3dr0XBpCuFzs/x+4lsVedpGIbyKgGOXWCBDmB3nav3NkTjqNYIuDBcS+8L/BvtNRTClE32Y8Rz/zwvNy88c/UOSrDcJe0tf3aLlsnIMnmnlmlE0DO1ksAThswxYvlBVMSrsLv2QgsquMEmGZCeCmFTKhp/ExGFOCedffAyrMo/Z+AAfES/dYq5RmGg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HxItYxZN2WyrVH2MaRMG5cxpd5c+hogKvy3nRQfvtx0=;
- b=eHLqhh0bDQu96ZRkiFNYYr41+nOFyoGlDTgahETTRJW9T/vXa6G/XBFP0UIi1Ot63kr6pXSFH3DS+R9ur7rIQqkvnGwLR5KOTK+SU5C/vmjwyAI/ATMSkUbuaas6g+GPMksAwoxA3kdB5myw4Nwv0irsuZy4s/KWCQszK5w8qS64clMGYxaJxtEIckfn1+wLtjHfkBBd+nHhrRJFUKKc9KAopQpr7Lg1wdFC3+uDJub0fT8Z7F8zzjArLk6a70j1XmGXtEI41XOuGCxK9SxT+G6Zrw56tLcALc5stmavHfLxHm3DkR4mopDP6icJPbtYI/OnqDdPSn02sCfnCd4YqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HxItYxZN2WyrVH2MaRMG5cxpd5c+hogKvy3nRQfvtx0=;
- b=CantAfNfvmtFpZWXvcqBlxMyRjh7NVmEJv/KJPfOpqfIF+prWNsuTvdLgXwFQS2QNyy/vq+/nMgls9+Ev4TcaYUaJOopd7c6kxbIaKHwq+AXlGjgI6eKIRHGwESaT7UrkeIg681ooB590EFg5LjpconwzK4MQpQJKjtoTMSag8CllKNZtSdW8cm5xJw263cnizAfb8cBRytko2GpEVS/jHQwkLhMIcAVphtRjbXREs07mzWipm7iRdnWNsSoV19JntgTMzQCfNWvUv/6s32gnAPoFknUWAvQmR6vSDCVWU99yW63Io4hHtwGG3uDizWgRGdmeRDqMlmo5I7O4olXnw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8510.eurprd04.prod.outlook.com (2603:10a6:102:211::7)
- by PAWPR04MB10007.eurprd04.prod.outlook.com (2603:10a6:102:387::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.14; Thu, 5 Feb
- 2026 08:57:16 +0000
-Received: from PAXPR04MB8510.eurprd04.prod.outlook.com
- ([fe80::b476:c19a:24cd:3694]) by PAXPR04MB8510.eurprd04.prod.outlook.com
- ([fe80::b476:c19a:24cd:3694%3]) with mapi id 15.20.9587.013; Thu, 5 Feb 2026
- 08:57:15 +0000
-From: Wei Fang <wei.fang@nxp.com>
-To: shenwei.wang@nxp.com,
-	xiaoning.wang@nxp.com,
-	frank.li@nxp.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	horms@kernel.org
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev,
-	bpf@vger.kernel.org
-Subject: [PATCH v7 net-next 12/15] net: fec: move xdp_rxq_info* APIs out of fec_enet_create_page_pool()
-Date: Thu,  5 Feb 2026 16:57:39 +0800
-Message-Id: <20260205085742.2685134-13-wei.fang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260205085742.2685134-1-wei.fang@nxp.com>
-References: <20260205085742.2685134-1-wei.fang@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0132.apcprd02.prod.outlook.com
- (2603:1096:4:188::15) To PAXPR04MB8510.eurprd04.prod.outlook.com
- (2603:10a6:102:211::7)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l7ajSCEE"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-47ee76e8656so9599425e9.0
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 00:57:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770281839; x=1770886639; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LA/F9UoinJbMcoNJBXzOZcpf42t/L4SBmgG6R3SDux4=;
+        b=l7ajSCEE2+HJQcFP2T9o7b+XC4ti/fdLVaXEi8r4Ay/b93OURInNY+kPRY6+Cs3PEL
+         h2mma9+yhYQ8sZe+5an8Z3/2o42X94xqtTZAlMm9y+0K4dK/Wa2KQ1EH1PUQMPdAr89Q
+         EpG27VpaklnRTsGXb4tOtH15vxu3zM35dVIg5g4bWlN+aV60ioZw4MGWmMSHm5R20m+Q
+         gtpB+2KFYKmgn/mmZyw3uXk7PZZGyLaF2I2TNrrMDgkx7qi3JkIZ1DX51sOygGCYl58i
+         FbYk0+07p98l3L/g9J8BaVCl1Od4oVhUIJvaCJ596enheq8Ss/I+40aRVeyCs626P2s8
+         pLbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770281839; x=1770886639;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LA/F9UoinJbMcoNJBXzOZcpf42t/L4SBmgG6R3SDux4=;
+        b=ghSNKUQJQu9IQpUXxZczfJQoCvW7Zh8m4aYKBUWExOq9hX7BQiOeZ/lTdVTxC6Fpax
+         qqKN2kcUSObcY5cYZIYIAAL0mEWfV4LFEiNBvh5SaFZpjZ505OKVZZ+JBDsaYRUe5Duv
+         tbn99MUMdU2WCePc5LXZAFxqPTNeRxb0YY3UI0Kpi1txtLKH+hGMG6l9CvHcKoTojNj3
+         eqvWXWb14DKw99Z3AipW5KPbviY7hhwy8c9FTNc0mV76isAgkn+NMQWAY+GjYu23aeOm
+         zc3KBV0+fIJa0OO/dUSHse70g/kg2Flo9Nuo/MKKWG128UbQy+85x9eB1a9WIxQ68cv1
+         suNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWH6L77Hv6anYYAkxSFxapCjRt7qtpeTgBpEV0j3hADtYseAvnvPRuTXCBdz++gM3Ud2BM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyD4ryjolFfDcOWWsie1iTl3TzkYW/XALD3rtv2hXEjbWOmuQbR
+	nn7u8ef96mkJtAjPiVHkX7S+E22bxXgAW+7AAatMClllN8emMipqjVjb
+X-Gm-Gg: AZuq6aIzOWoEieCW0ac1TT6g0GfRm9dwclud9/78BLZ7pLPAdeBlFPUvzfMpkfrfUHb
+	iG4PSzAGJmIFNGUMNgbNlhIfVIIS3HA02Jr6yzjs+QphIupumg4b7GSpmDA+8SMRi37c7AVI3yL
+	zJN+tIKl21NeTFki+ORcHFB33R9jx3KiWW32z+qyrxdjhZLsGzcm1SHZFCnYr/EnltDiwY8HIuT
+	CrLBj+rpVrTcGRNz64g48oIoE/SonbODlIMF6vBPqCHAXL9jZf7twcnChh11X84VPW502GQP7qD
+	V1I4Dh9/3cnwRsssJTKoIa41O14ZvdHmqncK6vPouGfoZx+rYPr56pRs1X6pL6wiG5wfgyusKPC
+	Lg+q8XhKWT07+pNCEFWOJfyRgdqdi2LJLu9gZILNBCAGGjTvJImyn2x9GWTtH
+X-Received: by 2002:a05:600c:350e:b0:477:fcb:2256 with SMTP id 5b1f17b1804b1-4830e966c2fmr82320975e9.17.1770281838858;
+        Thu, 05 Feb 2026 00:57:18 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::b44f])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4830ec5cc24sm58841725e9.3.2026.02.05.00.57.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Feb 2026 00:57:18 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Thu, 5 Feb 2026 09:57:16 +0100
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>
+Subject: Re: [RFC bpf-next 08/12] libbpf: Add btf__find_by_glob_kind function
+Message-ID: <aYRbbL-QCnAZ6PGD@krava>
+References: <20260203093819.2105105-1-jolsa@kernel.org>
+ <20260203093819.2105105-9-jolsa@kernel.org>
+ <CAEf4BzY7zZmEqFq577NiG2wh0aU0_og1_RjVSURjaqTOnTc-Bw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8510:EE_|PAWPR04MB10007:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9b8a87a8-bc0c-4fb7-e980-08de64948f5c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|19092799006|1800799024|366016|7416014|52116014|376014|38350700014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?uiJoSA6tBlxhGfgjcbRvH+qdQBdyoQmwUFz/ZQoaBhmz1hTQzX0sNxuozqP9?=
- =?us-ascii?Q?kLO8RssJWG8uSyRzSNecILVz9xTqr0MEqkta6diMzmMwRIT12RYFWZ20INGt?=
- =?us-ascii?Q?QkgiVIOl8MH27TAFRbDt018C5zEL3tB9RG89XfuTPvTLiVQP1p7yG2GoAy5d?=
- =?us-ascii?Q?DvOKKhJmlK83uSxAOuN0GyGtFHaKdWR9vh7QQVyQOTMdaxdhvxyBm3OC9FjZ?=
- =?us-ascii?Q?GlyvVs9JLNm1vhpWRoIWbBlyWayNf+o45PRpY6Q/19DYJ9tsmmevKJUV8b8m?=
- =?us-ascii?Q?9yJxu3qgq42AuURZgA85S3pMoK5SogTzUI5oskeJBG5E1Lbm+w0jXuiZ4eTu?=
- =?us-ascii?Q?/GRz/KGAJ9htlD3vzV5GgmftGoCaqbXIuXwOwgHP7A2Grm2k0jdXvcdQJces?=
- =?us-ascii?Q?PNIeKmVhrXF5zxr945EXL36S5LtnHqAGk7W4zPN6mJacRUG/onnRFyc6qCdX?=
- =?us-ascii?Q?kBaAQe0k9Dv3v46WOKBy72AWJCjGQPKOEegZMEPc4wUnmDYYNPIxDu+MF3j4?=
- =?us-ascii?Q?OlXVRC6adIU6SYZ/wCedX+PPco2l6EUNNSiEDvqDFwes78TQikifvP8JPgRY?=
- =?us-ascii?Q?Ss2bnq12jCLbOWcHLoIXnptiY7mCSeJpQV7vJyIiVwHYOr/PltCvz2JTQifj?=
- =?us-ascii?Q?m1ImOL9YNWG2nEIna+DYow5voNpJO2/FEwzkSf5hOoty1P4Y7j4+PRBQLhZE?=
- =?us-ascii?Q?YXaicy/78hl0bxbZWSYMBmj3/SZLwEg6m038Bayqs7s+tAeisk8YCna1a8pv?=
- =?us-ascii?Q?5FkBgj8B2BtUyw1pZ5q/g9E9gg9PeiIDYrOFbDsyUe4kE3ObfCoWdE89tosH?=
- =?us-ascii?Q?E9V4Uyd4o7XYBr/0hroOwF7hDD5Dqh17NCuXmRZ4VPa/z/yq9mr6oXeYgcbQ?=
- =?us-ascii?Q?nzww9VuHj7awg0nSZuVSGbLrocpcbDKJj0junCQvmlRscLGFjyXu8NVi2DFO?=
- =?us-ascii?Q?vZKiS4oy19rQIOCJQ67bXIJNPV1bNraVx3sFtIyO1mmBvnmdy92Xy2rykr3R?=
- =?us-ascii?Q?ggSkGlijjzMaCUQj0iW1mJooTiPgyU6cKvqfEUZIsWDza7hOTjSko0Vat5ON?=
- =?us-ascii?Q?VrmM6pJ/If7jCO9bnXk61eBePUbJ5ZHV+6jcXEK/40JSsWXza36I31XBHbWZ?=
- =?us-ascii?Q?uSOrHam6aLiEJnpN6VpPGna4EM+jTzdEpLN12KEiOPpzY+hwXs8w+xkbDKED?=
- =?us-ascii?Q?TT/IKPW0bGKLMWRTB7Cyw2GehWNUB0nPSgz2hZpS9fJbhsRgGnR4BjzejB04?=
- =?us-ascii?Q?+kDcxXtce3uPJeSTFrAVZwWScZ1aRDZAfOADO+sC/rXVhzOq+GMxaWdBBWPX?=
- =?us-ascii?Q?htjYDLZyi5CawJ8g/vYimyiqVhg0KXSlfXGvUdgxceptIZXbSzEnYVcQBakO?=
- =?us-ascii?Q?UxhAz0cnudXSJEg0RyV6d4MPF/d+YH9SEB1RpM7D66JHUBg5I/+LsuEtyEyX?=
- =?us-ascii?Q?9c6rxE1E7seuqnpAIQ1qYco7LUa1eWs/tHY7X4Q7A6snof6hbCfAQHhVGWlY?=
- =?us-ascii?Q?7Rrt4+s0pgxqLBCuDgNfMG3pKVbcktoHvDItE98+Uv2hDmuOE6OTcwR9ShJS?=
- =?us-ascii?Q?XazXbtQiW+Aq7LIr9QITpBhT4vRquKjfgrKaBtnrZ/2KqQp5S3LWI00KNcg/?=
- =?us-ascii?Q?H6h+GSYfDnwsqpKlcp0P1rr7Wr+Pb8Owg4YnPIhHaUr5?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8510.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(19092799006)(1800799024)(366016)(7416014)(52116014)(376014)(38350700014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?e8Z3Rg8VqZeRkd/Q/mlCnnPq7A+9RSpGm+fspuMCMSrg/Ray0ToOx21EDlWu?=
- =?us-ascii?Q?Vbt48hUZVOOSfGaPVsV67hxvmGHOvfXmCWJigTgHE+7JopJcawBlXeHSQmmd?=
- =?us-ascii?Q?bX7QNSJzI2cL9AsfbjFIB7XML9oVyLMkJGIcUBRQL4ip4l1AqmFaCFhgJt2t?=
- =?us-ascii?Q?TA7c5GzfO3wk9PqXJDJE+ZttjIMqfPeVcII15qDmegKk3iqTf+UhbRo5NO1Y?=
- =?us-ascii?Q?myRs0IV8cJrIVuFwj0wMzD7h9Sp8iv+karApZugF9CQi/OzKXunpSpspYkI4?=
- =?us-ascii?Q?fk00dNvJqIFU5to/oqPyhL5tcCEU3+tiGICixJXcU9emip5UPiSrthZUfJya?=
- =?us-ascii?Q?gSh/fT3YVTqbMu55rZTeegZF9otMAKHJEIYifaCDUC4H1YRZ+bLtMmR+XrUp?=
- =?us-ascii?Q?wiyd9uEeEwkbFzooUdQSPtnKry6c7vDEkmAGXxPqVA7/MIUvfBnH5snuBEnX?=
- =?us-ascii?Q?jWqSgTPHmMTtg59qdEyCpir1JmPrxrONFT3GG0jwFUTrOTa0IlRNvBg26GPu?=
- =?us-ascii?Q?gk60/zWvvH5z0X6pG28bYPv2KNjpNiO0ifCPNZclP4g76ESxZpSv5lyBN1Nb?=
- =?us-ascii?Q?PNY7vo4Cjq8ytkwp/eIUq6JKe0eKFcVYJs+gY6Sl56MX3tk/vIhofNvvy6qe?=
- =?us-ascii?Q?eMb6WOWdUPxr0eQGbIJqV22HWe9CTSc4NB4KvcWpAHF+6fkuadt+xZU4u/ii?=
- =?us-ascii?Q?Bj4a3zOlDmSCl3bqbIXkBpL1ICIVJjoi0Lvq/xIdp74rRC/jzyzHv6AtipZa?=
- =?us-ascii?Q?Hboh2RQco8HXiFcoLpsX2/EhXhkdJkGsR5vvw0wJD71oldGb0JW7U2HDekGS?=
- =?us-ascii?Q?yxWsp76ctnM2vSkvFfDKyNkxdtMllY5Mrg3kG2gPN2LMM0jrCmf+YJPTsFzu?=
- =?us-ascii?Q?e9wp7+fhhK7foSEmHxjX1/EgA4+8TMp096cLcEc+yXfEXZCX0KizQgniOzuX?=
- =?us-ascii?Q?VxYbWt578Utw0uyj7asDoarfAQr3Amzq6o6XQgMGxAmH3x/FzGz65o7PAmPc?=
- =?us-ascii?Q?fMAgEkYpIJ7/Y7bqLcKPa/iow6jmS7NzIslpCJhYkuyFLAhdtXHr8pP8cnrI?=
- =?us-ascii?Q?iN/kx4UbCinznhzZI5yBgpdsmNy/gqrfzA7bqmDaOEF1I+3VKRou1rK32Rgn?=
- =?us-ascii?Q?zHaXnk7wmKu1hYFm2EkOGxPrlAjciAtzVxUNjEXKy77Ch4/V65meOM3c4Fkd?=
- =?us-ascii?Q?WU2BLGZQtvxG3swSZQ3PtFFKSwZwuCmeKZUbjBEnVuu3/WOfJu+KZzQWgg4j?=
- =?us-ascii?Q?8NDLJb7IzY8LrgjfY2TewtK1Pyy4H1chzCAsWDthOaaJPfNjKMHCGvvk0QdC?=
- =?us-ascii?Q?K2O7NmnUCC4eT2XijAXnAJDVb4fPWCoK/isthTM2MQgdlFWMU2ptgRy/z6zs?=
- =?us-ascii?Q?kwipLjeOAG4k4OMFoK7Ju8UnOBWZ5tsbaCoTETPD/ihGt294+mPIy+AmHnmb?=
- =?us-ascii?Q?a9aBM83NUrtxhiSiFiEc0HlF6QK64PA289VCHNoRJdjJrmRdARWmEJDMX4jQ?=
- =?us-ascii?Q?mnofKaZT9YwnADQKX69/sUG5/EO/vgzqiqlar1z/MhHUZFv9BEc4cORc37rx?=
- =?us-ascii?Q?s6B3UK5LsA3iE1TXEs2RomMcFgHoFUy1hJJYY0bRYpxSd9dOu8xDc1AaCFLN?=
- =?us-ascii?Q?9e0BItX2d/PWYlUZkBgcZJxoPMIQKE3fYORAXxJkC2ao+2AWZriDajAsgURf?=
- =?us-ascii?Q?0IOmivaAzrolPLvA1TWG94rMeCxcgUVWY8NvsUf7Sf9TKOtDHFh+VtLsPGsr?=
- =?us-ascii?Q?U0/1kJJj8g=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b8a87a8-bc0c-4fb7-e980-08de64948f5c
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8510.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Feb 2026 08:57:15.8964
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8a401LODVwMDTc4DR5mcb51nmEFpgdKaYb4a7dy0EKLtM/gisqF5SSVrSUJfxEC9DnjiEfbndIp41XNKwSMQ1Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR04MB10007
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzY7zZmEqFq577NiG2wh0aU0_og1_RjVSURjaqTOnTc-Bw@mail.gmail.com>
 
-Extract fec_xdp_rxq_info_reg() from fec_enet_create_page_pool() and move
-it out of fec_enet_create_page_pool(), so that it can be reused in the
-subsequent patches to support XDP zero copy mode.
+On Wed, Feb 04, 2026 at 11:04:09AM -0800, Andrii Nakryiko wrote:
+> On Tue, Feb 3, 2026 at 1:39 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Adding btf__find_by_glob_kind function that returns array of
+> > BTF ids that match given kind and allow/deny patterns.
+> >
+> > int btf__find_by_glob_kind(const struct btf *btf, __u32 kind,
+> >                            const char *allow_pattern,
+> >                            const char *deny_pattern,
+> >                            __u32 **__ids);
+> >
+> > The __ids array is allocated and needs to be manually freed.
+> >
+> > The pattern check is done by glob_match function.
+> >
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  tools/lib/bpf/btf.c | 41 +++++++++++++++++++++++++++++++++++++++++
+> >  tools/lib/bpf/btf.h |  3 +++
+> >  2 files changed, 44 insertions(+)
+> >
+> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> > index 83fe79ffcb8f..64502b3ef38a 100644
+> > --- a/tools/lib/bpf/btf.c
+> > +++ b/tools/lib/bpf/btf.c
+> > @@ -1010,6 +1010,47 @@ __s32 btf__find_by_name_kind(const struct btf *btf, const char *type_name,
+> >         return btf_find_by_name_kind(btf, 1, type_name, kind);
+> >  }
+> >
+> > +int btf__find_by_glob_kind(const struct btf *btf, __u32 kind,
+> > +                          const char *allow_pattern, const char *deny_pattern,
+> > +                          __u32 **__ids)
+> > +{
+> > +       __u32 i, nr_types = btf__type_cnt(btf);
+> > +       int cnt = 0, alloc = 0;
+> > +       __u32 *ids = NULL;
+> > +
+> > +       for (i = 1; i < nr_types; i++) {
+> > +               const struct btf_type *t = btf__type_by_id(btf, i);
+> > +               const char *name;
+> > +               __u32 *p;
+> > +
+> > +               if (btf_kind(t) != kind)
+> > +                       continue;
+> > +               name = btf__name_by_offset(btf, t->name_off);
+> > +               if (!name)
+> > +                       continue;
+> > +
+> > +               if (deny_pattern && glob_match(name, deny_pattern))
+> > +                       continue;
+> > +               if (allow_pattern && !glob_match(name, allow_pattern))
+> > +                       continue;
+> > +
+> > +               if (cnt == alloc) {
+> > +                       alloc = max(16, alloc * 3 / 2);
+> > +                       p = libbpf_reallocarray(ids, alloc, sizeof(__u32));
+> > +                       if (!p) {
+> > +                               free(ids);
+> > +                               return -ENOMEM;
+> > +                       }
+> > +                       ids = p;
+> > +               }
+> > +               ids[cnt] = i;
+> > +               cnt++;
+> > +       }
+> > +
+> > +       *__ids = ids;
+> > +       return cnt;
+> > +}
+> > +
+> >  static bool btf_is_modifiable(const struct btf *btf)
+> >  {
+> >         return (void *)btf->hdr != btf->raw_data;
+> > diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> > index b30008c267c0..d7b47bb0ba99 100644
+> > --- a/tools/lib/bpf/btf.h
+> > +++ b/tools/lib/bpf/btf.h
+> > @@ -661,6 +661,9 @@ static inline struct btf_decl_tag *btf_decl_tag(const struct btf_type *t)
+> >         return (struct btf_decl_tag *)(t + 1);
+> >  }
+> >
+> > +int btf__find_by_glob_kind(const struct btf *btf, __u32 kind,
+> > +                          const char *allow_pattern, const char *deny_pattern,
+> > +                          __u32 **__ids);
+> 
+> 
+> as AI pointed out, this should be an internal helper, no? Let's also
+> not use double underscore pattern here,
+> "collect_btf_ids_by_glob_kind()" perhaps?
 
-Signed-off-by: Wei Fang <wei.fang@nxp.com>
----
- drivers/net/ethernet/freescale/fec_main.c | 58 ++++++++++++++++-------
- 1 file changed, 40 insertions(+), 18 deletions(-)
+ok
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index d7a92ff25cfe..312d9b87e615 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -489,23 +489,7 @@ fec_enet_create_page_pool(struct fec_enet_private *fep,
- 		return err;
- 	}
- 
--	err = xdp_rxq_info_reg(&rxq->xdp_rxq, fep->netdev, rxq->id, 0);
--	if (err < 0)
--		goto err_free_pp;
--
--	err = xdp_rxq_info_reg_mem_model(&rxq->xdp_rxq, MEM_TYPE_PAGE_POOL,
--					 rxq->page_pool);
--	if (err)
--		goto err_unregister_rxq;
--
- 	return 0;
--
--err_unregister_rxq:
--	xdp_rxq_info_unreg(&rxq->xdp_rxq);
--err_free_pp:
--	page_pool_destroy(rxq->page_pool);
--	rxq->page_pool = NULL;
--	return err;
- }
- 
- static void fec_txq_trigger_xmit(struct fec_enet_private *fep,
-@@ -3420,6 +3404,38 @@ static const struct ethtool_ops fec_enet_ethtool_ops = {
- 	.self_test		= net_selftest,
- };
- 
-+static int fec_xdp_rxq_info_reg(struct fec_enet_private *fep,
-+				struct fec_enet_priv_rx_q *rxq)
-+{
-+	struct net_device *ndev = fep->netdev;
-+	int err;
-+
-+	err = xdp_rxq_info_reg(&rxq->xdp_rxq, ndev, rxq->id, 0);
-+	if (err) {
-+		netdev_err(ndev, "Failed to register xdp rxq info\n");
-+		return err;
-+	}
-+
-+	err = xdp_rxq_info_reg_mem_model(&rxq->xdp_rxq, MEM_TYPE_PAGE_POOL,
-+					 rxq->page_pool);
-+	if (err) {
-+		netdev_err(ndev, "Failed to register XDP mem model\n");
-+		xdp_rxq_info_unreg(&rxq->xdp_rxq);
-+
-+		return err;
-+	}
-+
-+	return 0;
-+}
-+
-+static void fec_xdp_rxq_info_unreg(struct fec_enet_priv_rx_q *rxq)
-+{
-+	if (xdp_rxq_info_is_reg(&rxq->xdp_rxq)) {
-+		xdp_rxq_info_unreg_mem_model(&rxq->xdp_rxq);
-+		xdp_rxq_info_unreg(&rxq->xdp_rxq);
-+	}
-+}
-+
- static void fec_enet_free_buffers(struct net_device *ndev)
- {
- 	struct fec_enet_private *fep = netdev_priv(ndev);
-@@ -3431,6 +3447,9 @@ static void fec_enet_free_buffers(struct net_device *ndev)
- 
- 	for (q = 0; q < fep->num_rx_queues; q++) {
- 		rxq = fep->rx_queue[q];
-+
-+		fec_xdp_rxq_info_unreg(rxq);
-+
- 		for (i = 0; i < rxq->bd.ring_size; i++)
- 			page_pool_put_full_page(rxq->page_pool, rxq->rx_buf[i],
- 						false);
-@@ -3438,8 +3457,6 @@ static void fec_enet_free_buffers(struct net_device *ndev)
- 		for (i = 0; i < XDP_STATS_TOTAL; i++)
- 			rxq->stats[i] = 0;
- 
--		if (xdp_rxq_info_is_reg(&rxq->xdp_rxq))
--			xdp_rxq_info_unreg(&rxq->xdp_rxq);
- 		page_pool_destroy(rxq->page_pool);
- 		rxq->page_pool = NULL;
- 	}
-@@ -3594,6 +3611,11 @@ fec_enet_alloc_rxq_buffers(struct net_device *ndev, unsigned int queue)
- 	/* Set the last buffer to wrap. */
- 	bdp = fec_enet_get_prevdesc(bdp, &rxq->bd);
- 	bdp->cbd_sc |= cpu_to_fec16(BD_ENET_RX_WRAP);
-+
-+	err = fec_xdp_rxq_info_reg(fep, rxq);
-+	if (err)
-+		goto err_alloc;
-+
- 	return 0;
- 
-  err_alloc:
--- 
-2.34.1
+> 
+> Also, you don't seem to be using deny_pattern, where you planning to?
 
+the tests are just rudimentary before we agree we want to do it this way
+
+but I'm not sure I have a usecase for deny_pattern.. I think we added it
+just to be complete, I recall we copied that function from somewhere,
+it's long time ago ;-)
+
+> 
+> Also, are there functions that we'll have BTF for, but they won't be
+> attachable? What if I do SEC("fentry.multi/*")? Will it attach or fail
+> to attach some functions (and thus fail the overall attachment)?
+
+yes, for the benchmark tests I had to add is_allowed_func which mimics
+btf_distill_func_proto and denies attach for some functions
+
+also I had to filter out some core kernel functions like rcu*,trace*,..
+which seemed to cause trouble when you attach them
+
+jirka
