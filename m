@@ -1,137 +1,157 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E5B3D7D72;
-	Thu,  5 Feb 2026 13:48:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770299293; cv=none; b=OWOlBbS7s5KQicVAoTcUNvFNHYIjsvJlVYNKvrYPCtiV5ZUCKH9Af470cBmjucepGtUwqwQ57OycY3nRhE3k41MM9dcL3POe9jdxqcAHOzGFn/eaOyyeUQP7FPOEhbEDvj3vn88hnPF3dPjMwX7T3WWWU//OGZsNkmvi/E/0G14=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770299293; c=relaxed/simple;
-	bh=YjGy4klz7sBtKbFx6i0lok1YI6F8G4CWbU/FimH+M0Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lsQ0rPvpVzQKlz9O64eXwFXVZN9Pp/+2q2XRSZ73rXSU5tRUfA4sHK4oYp6AQ01xc2dr2d9NAvRMMtQ4hHnr5Q+qhTqQqRqOi4/uV8mg/msAqRn9e8ol1rM1Y5oCKkHchQR2ia1AXjOaX3uB5qH4Ml94Z04XBgAcvP61ClVFWpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lyjSyGgv; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0F253E8C6A
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 13:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770299861; cv=pass; b=O15byBkNEUhfxg9AzfIhtIh2OX7XmYxVsNx3rpm5q0+JQlYpGIyP/rmLso45sF31szltV4KIphyMGVoGtIehDpLj+BUqpocUt6+q/dYdP5glKt5C9GPW/vlAYbZTg7ks7a93YdwZnJyUsekgnpiYQILaM3pqYrcpVnbQFNua4Ec=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770299861; c=relaxed/simple;
+	bh=oadeknu5pggRVyIIVgA4TEeGW4cY+QtMhF+tlOuYHt4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YvnZlBfnBWEZ3oYsv+DqRegls6R+t3b4yZ1+LoqiNsJmPXCWx2dt3FVufGlX80sA9FzcP3ohyf53/udqAUChMi4gBwaKhwz8Y2T7yKACfVOvLqkeIspyt4P9DGdzHOsaib1DGEg4fnYY0XbpitOadVXVFZBuMiup0Sge20U6YrU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com; spf=pass smtp.mailfrom=mihalicyn.com; dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b=LQRhCHvu; arc=pass smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mihalicyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lyjSyGgv"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770299294; x=1801835294;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YjGy4klz7sBtKbFx6i0lok1YI6F8G4CWbU/FimH+M0Q=;
-  b=lyjSyGgvi1mZiSLxuRgFQnfVOhU39Nwer4twsy9mhTYpcF9Zu7edat77
-   2v4SxKsCd9cvdfHH4nU8mAgVSQGQrrev81q/XDw1LC1VUmWZ+72X0pzhm
-   WfHWLhfbAPRvxaaJifATDXVK9zcRuAxNqQ0sqfWuRxj5N0Wnk6HurjewJ
-   abplQvk85dvNfwu6PkEskHIM28B8G1C1497V8U6ZMmtJrJgO6eIYCyM0W
-   TmHViH7f13G7I3JfXXrF1tQawDHQV/bz8J8w8Re3pZb/jioQ3P/hSPaNx
-   0olzNiezfxb1E0qXxVlzVlePdW5vgpDSw1yYgnJZLrHMZWV+xvLTLFGGR
-   Q==;
-X-CSE-ConnectionGUID: IgrYuXj+QRGJuE45Re4BMA==
-X-CSE-MsgGUID: 9AK0w5JVR22OQodbGhk56Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="71535652"
-X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
-   d="scan'208";a="71535652"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 05:48:13 -0800
-X-CSE-ConnectionGUID: fS8dvbdAQUOzRFftliHy+Q==
-X-CSE-MsgGUID: sgGPYrHwSN6eBd58VrP/Ag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,274,1763452800"; 
-   d="scan'208";a="241145326"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 05 Feb 2026 05:48:09 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vnziJ-00000000jqy-2JAv;
-	Thu, 05 Feb 2026 13:48:07 +0000
-Date: Thu, 5 Feb 2026 21:48:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
-	andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com,
-	martin.lau@kernel.org, kpsingh@kernel.org, yonghong.song@linux.dev,
-	song@kernel.org, haoluo@google.com, ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v6 09/17] bpf: Prepare for
- bpf_selem_unlink_nofail()
-Message-ID: <202602052147.PjiFTJlT-lkp@intel.com>
-References: <20260205070208.186382-10-ameryhung@gmail.com>
+	dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b="LQRhCHvu"
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-59ddb31ddcaso1295621e87.2
+        for <bpf@vger.kernel.org>; Thu, 05 Feb 2026 05:57:40 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770299859; cv=none;
+        d=google.com; s=arc-20240605;
+        b=jrP2a873Q8TwqVGHAdgwWkqpPSd12c9HsdH56Xlf41ZZMGFoOPzjtZnLRieOatByoQ
+         Xy+Y8HbiwK//7vUGdv2jTQ9bhhf97tA/m78g8GeYSWZnQNTMwgYOcEXIlFf9gJ4KMgI/
+         ntc5OSnOFLbFEcKVkCX1hAcNyY5oxELKL62kxj92t3iJWozdj1ODRlhFFVs7pfrt+O9Z
+         zWYmSbKSE+99uMM1gWZq9xfkREONNjVnYvPNYhl2rwgkd9EssPn3j4s97u6lnzDH2gKL
+         ZFYg11q/khXy1K7oEmsKBdTY6wQ4BesGPT2dfNu89CMW/Trdty3S1rj1D0H/l2dqlkIq
+         lzfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=0LNeuKL87GBX2RRx9untVeVZ+MuGVKScy/9f8vIzBNo=;
+        fh=U8TVTdIz6n4mbCTFqNgQPisxZ2CcHxlV7MH6bNjfWZc=;
+        b=Xn8v6+PG4lylxhxQ9pqGBLytR0WQXI7gBZ9U1QejjRFhV+63oXKZQ41TiGCwTXIArf
+         MdYbqtLA63bhqqPA6r8eeYpoNp49CQ7I/g1Ru9P8bWiXw1BVeBsq+34/+vhesdAGNaX/
+         mddQw5aIekiqA/yEa3Id2McUayRZnCRDQzqe5/P+Ltsdw5Wr/jwfEwoFEF0OashJ9gM8
+         KVSc94WJ/AbMjH+VeSqGnwiJyMcRuOhQiuwr+I2e+dCxHL1+80eHGmfmLCK9WzwmfAX3
+         SPgmrM+TchJlKuEEXo/gwpBvz8yxoJaQCDKeTS7OBdqqLOOv3RSyx/AlFdo988OKkis4
+         AJYA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mihalicyn.com; s=mihalicyn; t=1770299859; x=1770904659; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0LNeuKL87GBX2RRx9untVeVZ+MuGVKScy/9f8vIzBNo=;
+        b=LQRhCHvubT4bCozL6wzNLq9vmqb7ideKQR2ps/qOwoO8Cz/stavSm2U788sSx3A66e
+         h8xdRlO7+oFfNBYt6PWo4YUgH7kbPZnNN5tsZtglmu6exYuHpkl6VJY+015sHsgO5Sj/
+         h/6+zMYGiTB+WhmhIxofspCKeStGDFEmMMrK0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770299859; x=1770904659;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0LNeuKL87GBX2RRx9untVeVZ+MuGVKScy/9f8vIzBNo=;
+        b=mpK1VrvusQa9/Ca79ZMSk41BfY5iIGrCz6395Ys70D9x0WSqdKaNZUYNysp26uxVN9
+         23EKya/BUdKgkiqbAwwtaxM7Ss5qSdUFopw9syXzCVs/LizaMKq/mMwbFMKHdI+zhyPe
+         DwRgLYfEl352aqk+IrwKTmPae9nxs2NhSOsSv1dK95sstudeUgygtBm5y3A493t6Zym9
+         MeXBf6D8123HtVjtBB5FJzFfNhh3GISF0Rr9xseoUbRRjcanuovzmwu+fI7oH/D1TEcE
+         8MC8hvDOEItv3j8MoT0YJl35YLD9mmSOvKYjXq/ZELtABVCnF23xL2aZOykwdB/Ygd1z
+         mpaw==
+X-Forwarded-Encrypted: i=1; AJvYcCW9wGE+gwr1R2dFfrFGKuuO8UZO0uEcDSJHGn1Dtnedbl18Z8RGeSjRqlcZgDgZftc00JY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBl15F6OJAw/tE9kLHGXRYa4lsP9lTNXDsq5x4SmNFubodpCVm
+	bQgoKUiMB9vOX+KideclXLCazhgZXb/xMZpLE+W2HUzIqlkXOEJmZkpGwJAHf4G6t+HD9+LYG8i
+	p8DzhEbvdpj1Avfg+Paa2rzqCyCB0ikxAsS/MVs3dfQ==
+X-Gm-Gg: AZuq6aJEAYPiL604H6rlPogkqmNY3uBx5+fO+K/fQns5joGWYK/gomGe8k9wOpPJ7Ly
+	SACSwCBsDM0np9AybWt93TbQPiEHL6xyAOuW2Pr7vzOtOgIjHS/VSIVPvUJ5sn3xVa6vZnRiFcS
+	kPePGzCtiEI++hPqIgiElIaDR2Ql8ONw6Vyb4QzLDP3rJuY3gDAjh+mAyippEF0a6NXACtWjrMq
+	4m2RK03HB9O7lvHQOnosxmMsNrbxSb7tZ+W6wOi74XnUbEEDdvmr2GPdLNw5h8BnKyRs+k6LT+E
+	X2dcvkO3yxGqgrM11hmSdnimG/s=
+X-Received: by 2002:a05:6512:acb:b0:59d:e446:c7a with SMTP id
+ 2adb3069b0e04-59e38c08e2dmr2659853e87.17.1770299858759; Thu, 05 Feb 2026
+ 05:57:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205070208.186382-10-ameryhung@gmail.com>
+References: <20260205104541.171034-1-alexander@mihalicyn.com>
+ <4502642b48f31719673001628df90526071649bc4555c5432d88d2212db3f925@mail.kernel.org>
+ <CAJqdLrqRBhmrQQA0MA9f5Js6rTZkJFf6-=KT+eZahakgX4_3fw@mail.gmail.com>
+ <174025c0-e13c-49a1-8835-5d971c024bb5@iogearbox.net> <CAJqdLroDeo2CFQA_BT_zV+1NC7WGBo_eb5xG1+hna7sOyAF_Pg@mail.gmail.com>
+In-Reply-To: <CAJqdLroDeo2CFQA_BT_zV+1NC7WGBo_eb5xG1+hna7sOyAF_Pg@mail.gmail.com>
+From: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Date: Thu, 5 Feb 2026 14:57:27 +0100
+X-Gm-Features: AZwV_Qg2m06cnKHDUJ1VsUzeKU_0ovl-31-xmPMNyP6_BJpdS8SpPv67DcY3M-A
+Message-ID: <CAJqdLrrqCxt4iS4m57G6fEEOPBkXsi81hmM_sb1WgQ_96K-qKg@mail.gmail.com>
+Subject: Re: [PATCH] bpf: use FS_USERNS_DELEGATABLE for bpffs
+To: Daniel Borkmann <daniel@iogearbox.net>
+Cc: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org, 
+	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, jlayton@kernel.org, 
+	brauner@kernel.org, bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, aleksandr.mikhalitsyn@futurfusion.io, 
+	martin.lau@kernel.org, clm@meta.com, ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Amery,
+Am Do., 5. Feb. 2026 um 13:49 Uhr schrieb Alexander Mikhalitsyn
+<alexander@mihalicyn.com>:
+>
+> Am Do., 5. Feb. 2026 um 13:38 Uhr schrieb Daniel Borkmann
+> <daniel@iogearbox.net>:
+> >
+> > Hi Alexander,
+> >
+> > On 2/5/26 12:27 PM, Alexander Mikhalitsyn wrote:
+> > > Am Do., 5. Feb. 2026 um 12:20 Uhr schrieb <bot+bpf-ci@kernel.org>:
+> > >>
+> > >>> diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+> > >>> index 005ea3a2c..c350857b2 100644
+> > >>
+> > >> [ ... ]
+> > >>
+> > >>> @@ -1077,7 +1073,7 @@ static struct file_system_type bpf_fs_type = {
+> > >>>        .init_fs_context = bpf_init_fs_context,
+> > >>>        .parameters     = bpf_fs_parameters,
+> > >>>        .kill_sb        = bpf_kill_super,
+> > >>> -     .fs_flags       = FS_USERNS_MOUNT,
+> > >>> +     .fs_flags       = FS_USERNS_DELEGATABLE,
+> > >>>   };
+> > >>
+> > >> FS_USERNS_DELEGATABLE does not appear to be defined anywhere in the kernel
+> > >> tree. A search of include/linux/fs.h shows only FS_USERNS_MOUNT is defined
+> > >> (at line 2268), not FS_USERNS_DELEGATABLE.
+> > >>
+> > >> The commit message states this flag was "recently introduced", but it is not
+> > >> present in this codebase. Will this cause a build failure due to an undefined
+> > >> identifier?
+> > >
+> > > Yeah, this should be applied on top of
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git/commit/?h=vfs-7.0.misc&id=269c46e936f3b5f2b6b567ca124d5f5ea07a371c
+> > > in vfs/vfs-7.0.misc I think.
+>
+> Hi Daniel,
+>
+> > If this goes via Christian's vfs tree, it would make sense at least to open a
+> > test PR against https://github.com/kernel-patches/bpf to run this through the
+> > BPF CI with the vfs branch + your patch on top to make sure the tests don't
+> > break.
+>
+> Sure, https://github.com/kernel-patches/bpf/pull/10970#issue-3901410145
 
-kernel test robot noticed the following build warnings:
+All looks good, except
+x86_64 llvm-21 / test (sched_ext, false, 360) / sched_ext on x86_64 with llvm-21
+which seems unrelated.
 
-[auto build test WARNING on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Amery-Hung/bpf-Select-bpf_local_storage_map_bucket-based-on-bpf_local_storage/20260205-150959
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260205070208.186382-10-ameryhung%40gmail.com
-patch subject: [PATCH bpf-next v6 09/17] bpf: Prepare for bpf_selem_unlink_nofail()
-config: x86_64-buildonly-randconfig-002-20260205 (https://download.01.org/0day-ci/archive/20260205/202602052147.PjiFTJlT-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260205/202602052147.PjiFTJlT-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602052147.PjiFTJlT-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> kernel/bpf/bpf_local_storage.c:289:8: warning: variable 'owner' set but not used [-Wunused-but-set-variable]
-     289 |         void *owner;
-         |               ^
-   kernel/bpf/bpf_local_storage.c:64:13: warning: unused function 'selem_linked_to_map' [-Wunused-function]
-      64 | static bool selem_linked_to_map(const struct bpf_local_storage_elem *selem)
-         |             ^~~~~~~~~~~~~~~~~~~
-   2 warnings generated.
-
-
-vim +/owner +289 kernel/bpf/bpf_local_storage.c
-
-588d80f1d996ea Amery Hung       2026-02-04  278  
-450af8d0f6be2e KP Singh         2020-08-25  279  /* local_storage->lock must be held and selem->local_storage == local_storage.
-450af8d0f6be2e KP Singh         2020-08-25  280   * The caller must ensure selem->smap is still valid to be
-450af8d0f6be2e KP Singh         2020-08-25  281   * dereferenced for its smap->elem_size and smap->cache_idx.
-450af8d0f6be2e KP Singh         2020-08-25  282   */
-c83597fa5dc6b3 Yonghong Song    2022-10-25  283  static bool bpf_selem_unlink_storage_nolock(struct bpf_local_storage *local_storage,
-450af8d0f6be2e KP Singh         2020-08-25  284  					    struct bpf_local_storage_elem *selem,
-0e854e55356908 Amery Hung       2025-11-14  285  					    struct hlist_head *free_selem_list)
-450af8d0f6be2e KP Singh         2020-08-25  286  {
-450af8d0f6be2e KP Singh         2020-08-25  287  	struct bpf_local_storage_map *smap;
-450af8d0f6be2e KP Singh         2020-08-25  288  	bool free_local_storage;
-450af8d0f6be2e KP Singh         2020-08-25 @289  	void *owner;
-450af8d0f6be2e KP Singh         2020-08-25  290  
-0fe4b381a59ebc KP Singh         2021-12-24  291  	smap = rcu_dereference_check(SDATA(selem)->smap, bpf_rcu_lock_held());
-450af8d0f6be2e KP Singh         2020-08-25  292  	owner = local_storage->owner;
-450af8d0f6be2e KP Singh         2020-08-25  293  
-450af8d0f6be2e KP Singh         2020-08-25  294  	free_local_storage = hlist_is_singular_node(&selem->snode,
-450af8d0f6be2e KP Singh         2020-08-25  295  						    &local_storage->list);
-450af8d0f6be2e KP Singh         2020-08-25  296  
-588d80f1d996ea Amery Hung       2026-02-04  297  	bpf_selem_unlink_storage_nolock_misc(selem, smap, local_storage,
-588d80f1d996ea Amery Hung       2026-02-04  298  					     free_local_storage);
-450af8d0f6be2e KP Singh         2020-08-25  299  
-450af8d0f6be2e KP Singh         2020-08-25  300  	hlist_del_init_rcu(&selem->snode);
-450af8d0f6be2e KP Singh         2020-08-25  301  
-5bd5bab76669b1 Martin KaFai Lau 2024-10-23  302  	hlist_add_head(&selem->free_node, free_selem_list);
-dcf456c9a095a6 KP Singh         2022-04-18  303  
-450af8d0f6be2e KP Singh         2020-08-25  304  	return free_local_storage;
-450af8d0f6be2e KP Singh         2020-08-25  305  }
-450af8d0f6be2e KP Singh         2020-08-25  306  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> Thanks for suggestion ;-)
+>
+> Kind regards,
+> Alex
+>
+> >
+> > Thanks,
+> > Daniel
