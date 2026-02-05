@@ -1,150 +1,79 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1AD330D36
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 06:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D9633343B
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 06:36:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770272210; cv=none; b=nn489eBDyK4xZZxYjQ3MnTuiy3pb/sQjH6UiRUzHN3al2dfAtD5B6ITC3Usk430QfksWM1/pTjnCX70OmkMu0O60/p+rbclQu81mIYourbrB5wBdbDzVUVzOXN+VVVF9Y2OZl5xvO9Yp6iCFMJnlFlH/g8xE2p0qUBB2Yr9o2tE=
+	t=1770273416; cv=none; b=t6R5ZmDGe3CKgSFpLu1d8LmpoRw0pwkg2v9Ryb9nW79grQ125P4ZVvCd6+3Hk2Qx7DTVGpQdhd3c6CuTbtkKJHsXv6LgVSk4eKARu6SgpI8OGv23FUN58c6Nrv6zSluW1dLw0mfDYzT6ISA8tVapbm+H/6Wbgv0H3mvXwKgfTic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770272210; c=relaxed/simple;
-	bh=1E0SciJXPE1yk0JplcHeLfrSOybe1RyO+x/hgHdc36s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dsj/HBv6i1aD1mBOcTLjm46q/xY+l1/pEQDm8vXxS8PpVUr7KJcQ7sPVyIZuCWnuPQ237/Z506R3g89QLVikyn+eqt18DXLO5CKLX5Y+JeITmiZBtF1rVNCp/1FTmJTsIrcpetol0yYW62BYAOUBrFCReLCK0ZxtUtBi5S6cE0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FCO30Irs; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770273416; c=relaxed/simple;
+	bh=yp2xz4J7V6UrDoYY7UchbWzPubV/Tw3cGEqxmsGaUJk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uPEmzbf665k/I9FsUV6bPTD6ld9aFV4jNZjbd2UvWhyv1pJ8JcfKeCpx+ewOArM+0a3yS2bGdcYYypkGeL8r5nmVmLt8f+n26+CXA6d+eJi317czcaRRxxf2UxLySZafihiv6nyIVtugQPdbiikLZwwWH0NyGwS9guYz5eUd8ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fRKbVmHs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FCO30Irs"
-Message-ID: <bb62bd4f-199e-4907-817f-bc820c9198c9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770272197;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=/viAndT9HhD0mSIQB8owUDsdQG9Eoq6fTAbljN9WxIk=;
-	b=FCO30Irs/PYDEVCeiiQEiLTHieTIlC4Jw6iZB5c2Wr21SySKIIoTvkjdnYKAsQ79URKSGb
-	sa2bxUWdku0q3AHIa0wZr+jBfj6bWLU9gKupkn/3YBq81WCzGC9ZDkq+A/l4+EKPwdK/Em
-	1XLmEVzL6oSSiNVCxktTGBr2iJzdgBQ=
-Date: Thu, 5 Feb 2026 14:16:00 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fRKbVmHs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5913C4CEF7;
+	Thu,  5 Feb 2026 06:36:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770273415;
+	bh=yp2xz4J7V6UrDoYY7UchbWzPubV/Tw3cGEqxmsGaUJk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fRKbVmHskqcmHzEKrDkj1QXq28TzeF9M9OrDA3RXhQ0NWEG3DBRJDvoPtVFRRAOWo
+	 539r/mGA/B7qh/kc+ivC6rCsUs1PcUCP31toFLa5A3KQnAETIGZFFKM4lnV3b0a5Aw
+	 PP+gaIUSfOdl0ZGx5qwVurWVueTrsPFDf8mnaYS0JnZybrveoZeZuf6Pf362Pun+1A
+	 A4rad5ynmvK7W+L7jc///zTKOxdG51Jat/GSro8gysihn94eClkEYr+l6AeGyb3QaJ
+	 SHMpCVymkxOb83u7uxrPgPizmiVpkgrAlPSQtePoVU3Yz4L2XBZ9vvzjBvaZQTw9DZ
+	 8odV5/IUzyjxA==
+From: KP Singh <kpsingh@kernel.org>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	clm@meta.com,
+	KP Singh <kpsingh@kernel.org>
+Subject: [PATCH bpf v2] bpf: Limit signature size to KMALLOC_MAX_CACHE_SIZE
+Date: Thu,  5 Feb 2026 07:36:51 +0100
+Message-ID: <20260205063652.690588-1-kpsingh@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v8 2/3] perf: Refactor get_perf_callchain
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
- namhyung@kernel.org, mark.rutland@arm.com,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com, song@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260126074331.815684-1-chen.dylane@linux.dev>
- <20260126074331.815684-3-chen.dylane@linux.dev>
- <CAEf4BzYMJfQN+0SwzBM-DhREHwZ54TwA6GUtFv9=xret9pzXrQ@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Tao Chen <chen.dylane@linux.dev>
-In-Reply-To: <CAEf4BzYMJfQN+0SwzBM-DhREHwZ54TwA6GUtFv9=xret9pzXrQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-在 2026/2/4 09:08, Andrii Nakryiko 写道:
-> On Sun, Jan 25, 2026 at 11:45 PM Tao Chen <chen.dylane@linux.dev> wrote:
->>
->>  From BPF stack map, we want to ensure that the callchain buffer
->> will not be overwritten by other preemptive tasks and we also aim
->> to reduce the preempt disable interval, Based on the suggestions from Peter
->> and Andrrii, export new API __get_perf_callchain and the usage scenarios
->> are as follows from BPF side:
->>
->> preempt_disable()
->> entry = get_callchain_entry()
->> preempt_enable()
->> __get_perf_callchain(entry)
->> put_callchain_entry(entry)
->>
->> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
->> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
->> ---
->>   include/linux/perf_event.h |  5 +++++
->>   kernel/events/callchain.c  | 34 ++++++++++++++++++++++------------
->>   2 files changed, 27 insertions(+), 12 deletions(-)
->>
-> 
-> Looking at the whole __bpf_get_stack() logic again, why didn't we just
-> do something like this:
-> 
-> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
-> index da3d328f5c15..80364561611c 100644
-> --- a/kernel/bpf/stackmap.c
-> +++ b/kernel/bpf/stackmap.c
-> @@ -460,8 +460,8 @@ static long __bpf_get_stack(struct pt_regs *regs,
-> struct task_struct *task,
-> 
->          max_depth = stack_map_calculate_max_depth(size, elem_size, flags);
-> 
-> -       if (may_fault)
-> -               rcu_read_lock(); /* need RCU for perf's callchain below */
-> +       if (!trace_in)
-> +               preempt_disable();
-> 
->          if (trace_in) {
->                  trace = trace_in;
-> @@ -474,8 +474,8 @@ static long __bpf_get_stack(struct pt_regs *regs,
-> struct task_struct *task,
->          }
-> 
->          if (unlikely(!trace) || trace->nr < skip) {
-> -               if (may_fault)
-> -                       rcu_read_unlock();
-> +               if (!trace_in)
-> +                       preempt_enable();
->                  goto err_fault;
->          }
-> 
-> @@ -494,8 +494,8 @@ static long __bpf_get_stack(struct pt_regs *regs,
-> struct task_struct *task,
->          }
-> 
->          /* trace/ips should not be dereferenced after this point */
-> -       if (may_fault)
-> -               rcu_read_unlock();
-> +       if (!trace_in)
-> +               preempt_enable();
-> 
->          if (user_build_id)
->                  stack_map_get_build_id_offset(buf, trace_nr, user, may_fault);
-> 
-> 
-> ?
-> 
-> Build ID parsing is happening after we copied data from perf's
-> callchain_entry into user-provided memory, so raw callchain retrieval
-> can be done with preemption disabled, as it's supposed to be brief.
-> Build ID parsing part which indeed might fault and be much slower will
-> be done well after that (we even have a comment there saying that
-> trace/ips should not be touched).
-> 
-> Am I missing something?
+Practical BPF signatures are significantly smaller than
+KMALLOC_MAX_CACHE_SIZE
 
-Yes it looks good for bpf_get_stack, and I also proposed a similar 
-change previously. But Alexei suggested that we should reduce the 
-preemption-disabled section protected in bpf_get_stackid if we do like 
-bpf_get_stack. Maybe we can change it first for bpf_get_stack?
+Allowing larger sizes opens the door for abuse by passing excessive
+size values and forcing the kernel into expensive allocation paths (via
+kmalloc_large or vmalloc).
 
-https://lore.kernel.org/bpf/20250922075333.1452803-1-chen.dylane@linux.dev/
+Fixes: 349271568303 ("bpf: Implement signature verification for BPF programs")
+Reported-by: Chris Mason <clm@meta.com>
+Signed-off-by: KP Singh <kpsingh@kernel.org>
+---
+ kernel/bpf/syscall.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-> 
-> [...]
-
-
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 4ff82144f885..447b101d2195 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -2820,6 +2820,12 @@ static int bpf_prog_verify_signature(struct bpf_prog *prog, union bpf_attr *attr
+ 	void *sig;
+ 	int err = 0;
+ 
++	/* Don't attempt to use kmalloc_large or vmalloc for signatures.
++	 * Practical signature for BPF program should be below this limit.
++	 */
++	if (attr->signature_size != KMALLOC_MAX_CACHE_SIZE)
++		return -EINVAL;
++
+ 	if (system_keyring_id_check(attr->keyring_id) == 0)
+ 		key = bpf_lookup_system_key(attr->keyring_id);
+ 	else
 -- 
-Best Regards
-Tao Chen
+2.43.0
+
