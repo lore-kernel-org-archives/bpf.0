@@ -1,129 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C577303CAA;
-	Thu,  5 Feb 2026 17:59:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E93B306489;
+	Thu,  5 Feb 2026 18:05:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770314370; cv=none; b=Zo0USpi/4c0wmdbvrD2gKzRFhrr/1oQ/pFASP/kH8OMhN0pe4+BisoBlq2pYWpYLBvis114qq1zNhmPw/QoV+h0ifniHunObAgbV773oSM2R/GpHyuAU9h3aNYqThXmfGC8Jh+OkytkSa6W8cUAx65dW2DhqbrBhP38E0iffBhU=
+	t=1770314705; cv=none; b=qb0VDLUI59lIUnHz+AwUfq+2V0nr6rqCJ+oAZuCsVTeEeNUtsGmmIUSKWd2+wuQhI81w53Y8R8D8PBw21fTjfd5mncprv9aedqnDHCtcdqZ6MJ+938fl9jhZ4XVxgIaklN9SNN9yIQbwUV7mjqWBm6I5+ecnU6FRsCWtUDvoa8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770314370; c=relaxed/simple;
-	bh=QPnMGMiiqKGmwJXq9xUjekruFfRDSmqjNebQDbWjscg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y9449ewNO3Iicd1sX+2+wkbw7MAfdrBSo8OuvzyWsBhZuxKvmPMaml8bED6dxT+BHA5E5FqtyNEMmgtiJWCqBbJLVG/8t2gWGVbNaFiuBlN0vAUpA/m2PE/a084Kr90tjkcM//jFDycqESONgJudynQOPAB8Gk40Tn62O+LlSqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DxKGDeJz; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DxKGDeJz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770314370; x=1801850370;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QPnMGMiiqKGmwJXq9xUjekruFfRDSmqjNebQDbWjscg=;
-  b=DxKGDeJzHFWs8z1oBdM38Nw4cYlVyBYOQlmURJZ07uC7UcckyITyHs5D
-   yW9rMkAZeMGyr8AyZv7RR6QWj9LJpZpHOPJgMnsRmBhlmReWNB1XpqGDu
-   gWF1fTQDZGIm9xGNEDkgylHJyVEXiJD21OWGFDHo6SYTior7U4wOTT1lM
-   yhQxl+AiKRXeuOYVjSzzG2wHxocQoty5qlzSkfq3bomofiMAudHdmb+4a
-   La1m4PWOG+hc5Xbn984UvOQ3vI3q1vyvmMKYJBNYS3E9TzKywb+smih+X
-   E+hyQnriTiK/dQZ97wZBcjq09t8QsJKs5D9PhdWQsy8SNqTxKR+cophtW
-   Q==;
-X-CSE-ConnectionGUID: xgWg5Dd8SC+UpaPAc9dvcg==
-X-CSE-MsgGUID: gimbldOFRXG+T86jeSeFLw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="82957294"
-X-IronPort-AV: E=Sophos;i="6.21,275,1763452800"; 
-   d="scan'208";a="82957294"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 09:59:29 -0800
-X-CSE-ConnectionGUID: 1Qo+LnH2Rw2K6QGdWD9sPg==
-X-CSE-MsgGUID: DNX37lliSDuSAIS8oirMcw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,275,1763452800"; 
-   d="scan'208";a="233552840"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Feb 2026 09:59:25 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vo3dS-00000000k5A-16zC;
-	Thu, 05 Feb 2026 17:59:22 +0000
-Date: Fri, 6 Feb 2026 01:58:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Alexander Mikhalitsyn <alexander@mihalicyn.com>, ast@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Jeff Layton <jlayton@kernel.org>,
-	Christian Brauner <brauner@kernel.org>, bpf@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
-Subject: Re: [PATCH] bpf: use FS_USERNS_DELEGATABLE for bpffs
-Message-ID: <202602060128.qfggT7Pd-lkp@intel.com>
-References: <20260205104541.171034-1-alexander@mihalicyn.com>
+	s=arc-20240116; t=1770314705; c=relaxed/simple;
+	bh=qnXcG8TyhXVkhV0B4MDVo0OOIOG+RAs69AOE8siF3u4=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Mx7Xi8JpaJ9TEcIHowkSPL4NOU3DrxxbuEAcM8k1K09eu2sKllhOe6fGHlBoxNsoc0NhApmQnM6tGErqFmJigFkLbj/nx3qqsbR+TvbZNtCKlopHjF2SobnqWqKQvVLu1tzc4lIZAU8Q+BkyhH6gzhqmPp7d/5h5eYHNDc9uK6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf07.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay09.hostedemail.com (Postfix) with ESMTP id 25D508C17D;
+	Thu,  5 Feb 2026 18:05:03 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf07.hostedemail.com (Postfix) with ESMTPA id CDF5520033;
+	Thu,  5 Feb 2026 18:05:00 +0000 (UTC)
+Date: Thu, 5 Feb 2026 13:04:59 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Donglin Peng <dolinux.peng@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Andrii Nakryiko
+ <andrii.nakryiko@gmail.com>, Alexei Starovoitov <ast@kernel.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Donglin Peng <pengdonglin@xiaomi.com>, linux-trace-kernel
+ <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, Eduard
+ Zingerman <eddyz87@gmail.com>
+Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
+ via BTF
+Message-ID: <20260205130459.0ff532f3@robin>
+In-Reply-To: <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
+References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
+	<20260202111548.3555306-3-dolinux.peng@gmail.com>
+	<20260202111249.649ac338@gandalf.local.home>
+	<CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
+	<CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
+	<20260203101707.52965eb0@gandalf.local.home>
+	<CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
+	<CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205104541.171034-1-alexander@mihalicyn.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Stat-Signature: zjddx89rc1eyukuzz9d6uqsb1ekcmdgk
+X-Rspamd-Server: rspamout04
+X-Rspamd-Queue-Id: CDF5520033
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX183W0R0rrhW3VpPbWKCoDKiif7gZxi29O4=
+X-HE-Tag: 1770314700-352729
+X-HE-Meta: U2FsdGVkX1/jUOdmqt5tBDITXjI2gF7AxRQr2LbTqTVpqe0SisXIMe0T/FJxY8GW+uYgM0jiBhXCFyqON+XnrV5bmr9Haw3WU2y1gYEcXhK+o9VURS8JwdabW7pRVW0o/zRsF37ZB25jW9ZeyZB5uZC0JumUWxKi1BdzFZ3WbJt1VhCXPhym1NV3KmErBsI3oF/2e5ou1J71JqmDskBVm6LEiFtPktsyQ92/S5gE4vDedUxKLxNTb0t8abZAgltbng22pcxp4i9h+HkWX9mZplwRcXX/ApX6ZobUesOK3478QhJ1KRjt8ZCQdSMt49VnDDQl9DdyKE0Mhk6lnFrbHCvHxHVhEwMnai7jwAv2nnTlfE/mU6XaxA==
 
-Hi Alexander,
+On Wed, 4 Feb 2026 22:52:11 +0800
+Donglin Peng <dolinux.peng@gmail.com> wrote:
 
-kernel test robot noticed the following build errors:
+> > > I have trace-cmd reading BTF now (just haven't officially released it) and
+> > > doing an extract and reading the trace.dat file is much faster than reading
+> > > the trace file with arguments. I'll need to implement the enum logic too in
+> > > libtraceevent.  
+> >
+> > If you mean to do pretty printing of the trace in user space then +1 from me.
+> >
+> > I don't like sorting enums either in resolve_btfid, pahole or kernel.
+> > Sorted BTF by name was ok, since it doesn't change original semantics.
+> > While sorting enums by value gets us to the grey zone where
+> > the sequence of enum names in vmlinux.h becomes different than in dwarf.  
+> 
+> Thanks, I agreed.
 
-[auto build test ERROR on bpf-next/net]
-[also build test ERROR on bpf-next/master bpf/master brauner-vfs/vfs.all linus/master v6.19-rc8 next-20260205]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+BTW, I just officially released trace-cmd v3.4 (where you can see whats
+new in that release here[1]).
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Mikhalitsyn/bpf-use-FS_USERNS_DELEGATABLE-for-bpffs/20260205-184845
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
-patch link:    https://lore.kernel.org/r/20260205104541.171034-1-alexander%40mihalicyn.com
-patch subject: [PATCH] bpf: use FS_USERNS_DELEGATABLE for bpffs
-config: i386-buildonly-randconfig-002-20260205 (https://download.01.org/0day-ci/archive/20260206/202602060128.qfggT7Pd-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260206/202602060128.qfggT7Pd-lkp@intel.com/reproduce)
+The biggest change is that it saves the BTF file in the trace.dat file
+and parses it on the report (it requires libtraceevent v1.9):
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602060128.qfggT7Pd-lkp@intel.com/
+ ~# trace-cmd record -p function_graph -O funcgraph-args -g do_sys_openat2
+ [..]
+ ~# trace-cmd report
+       trace-cmd-50935 [002] ...1.  3490.518138: funcgraph_entry:                   |  do_sys_openat2(dfd=4294967196, filename=0x557bb9e3ee10, how=0xffff88815220fea8) {
+       trace-cmd-50935 [002] ...1.  3490.518141: funcgraph_entry:                   |    getname_flags(filename=0x557bb9e3ee10, flags=0) {
+       trace-cmd-50935 [002] ...1.  3490.518142: funcgraph_entry:                   |      getname_flags.part.0(filename=0x557bb9e3ee10, flags=0) {
+       trace-cmd-50935 [002] ...1.  3490.518143: funcgraph_entry:                   |        kmem_cache_alloc_noprof(s=0xffff888106c7e000, gfpflags=0xcc0) {
+       trace-cmd-50935 [002] ...1.  3490.518145: funcgraph_entry:                   |          stack_trace_save(store=0xffff88815220fac8, size=0x40, skipnr=0x0) {
+       trace-cmd-50935 [002] ...1.  3490.518147: funcgraph_entry:                   |            arch_stack_walk(consume_entry=0xffffffff94d9dfe0, cookie=0xffff88815220fa58, task=0xffff88812d4c3580, regs=0x0) {
+       trace-cmd-50935 [002] ...1.  3490.518148: funcgraph_entry:                   |              __unwind_start(state=0xffff88815220f988, task=0xffff88812d4c3580, regs=0x0, first_frame=0xffff88815220fa28) {
+       trace-cmd-50935 [002] ...1.  3490.518149: funcgraph_entry:        1.518 us   |                get_stack_info(stack=0xffff88815220f938, task=0xffff88812d4c3580, info=0xffff88815220f988, visit_mask=0xffff88815220f9a8); (ret=0x0)
+       trace-cmd-50935 [002] ...1.  3490.518152: funcgraph_entry:                   |                unwind_next_frame(state=0xffff88815220f988) {
+       trace-cmd-50935 [002] ...1.  3490.518153: funcgraph_entry:        0.951 us   |                  __rcu_read_lock(); (ret=0xffff88812d4c3580)
 
-All errors (new ones prefixed by >>):
-
->> kernel/bpf/inode.c:1084:14: error: use of undeclared identifier 'FS_USERNS_DELEGATABLE'; did you mean 'CFTYPE_NS_DELEGATABLE'?
-    1084 |         .fs_flags       = FS_USERNS_DELEGATABLE,
-         |                           ^~~~~~~~~~~~~~~~~~~~~
-         |                           CFTYPE_NS_DELEGATABLE
-   include/linux/cgroup-defs.h:137:2: note: 'CFTYPE_NS_DELEGATABLE' declared here
-     137 |         CFTYPE_NS_DELEGATABLE   = (1 << 2),     /* writeable beyond delegation boundaries */
-         |         ^
-   1 error generated.
+-- Steve
 
 
-vim +1084 kernel/bpf/inode.c
 
-  1077	
-  1078	static struct file_system_type bpf_fs_type = {
-  1079		.owner		= THIS_MODULE,
-  1080		.name		= "bpf",
-  1081		.init_fs_context = bpf_init_fs_context,
-  1082		.parameters	= bpf_fs_parameters,
-  1083		.kill_sb	= bpf_kill_super,
-> 1084		.fs_flags	= FS_USERNS_DELEGATABLE,
-  1085	};
-  1086	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+[1] https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/tag/?h=trace-cmd-v3.4
