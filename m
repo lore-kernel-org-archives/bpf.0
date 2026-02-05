@@ -1,79 +1,352 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2498322B69
-	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 06:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DDA121D3F2
+	for <bpf@vger.kernel.org>; Thu,  5 Feb 2026 07:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770273492; cv=none; b=c9JSrrBeB/jODgmNwHtACvEPbkU2A/pR9Bh2U7jJq4UMLNQWT+stAI9BnIQiaXeWgpdMT02sENaVimtEKqS5HBjBvGlK1pfBxnTZPcLIrdblEl//he9C9M0ZVS2hvIiJ7QsVz3O3TdO8KkxZyyR/bXnH3f7/mXQrnUhMXJ5pBF8=
+	t=1770274931; cv=none; b=mh12ZZJYzW35ixAm1WuO1ulrRdUDYbB+fwCcA8nTY49R1KKfqO7zBNZHqdqMP4q138DiYhIIyVlmAS4+mFiimRrj2535xcnUIR80L/apUdp/pz544mHoQ6xh1BfOYESW5LYVi/Rv1oapAvQ4jJgfw6ZPpMvGk0ZGb2jTwmVAnG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770273492; c=relaxed/simple;
-	bh=0yd3vl9ueFi69vzy5bKtA8iHjYXoRZY6bH5RzkXrKnI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QYcxOytD17II95oqVMfTVwudS+nP7mhroMrI2u14nbG6weJkS5Z+A3V6XpvGZzlZwBf+uLLkDCg3hHXOA/hdBdyowZCo1bq3/I8r2cSLwXyOG7g8zBQzT10po1foqe21bdTlW6OA4GZj2agCT7rDCK40+1rU5XRZVPDPLcgpcsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AXKKlYTo; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770274931; c=relaxed/simple;
+	bh=UrofwGf6OeiX/V/L1qUidfJoZvfk2lWfkCfTZvgJDGk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pfdzLCTfKep6kzZKufsAjt+iqWVF8hqAnHIu1uT0QWGvSMFx5OcdMQu93Sn9u67SMMoTP+JSQ8bhOSlG+DU1krx2UKvCT+eEFD69fkt/wihZGvpXr/YjRnwrAWpNytuGJbBBn2eVQOMfwNDzIYze7JqASKsi4GwOlWaMT94253A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UjAi6nel; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AXKKlYTo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209D8C4CEF7;
-	Thu,  5 Feb 2026 06:38:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770273492;
-	bh=0yd3vl9ueFi69vzy5bKtA8iHjYXoRZY6bH5RzkXrKnI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=AXKKlYToam59wC03EQsDxhv8HsTSRbdy6J7PwSXiZmS9u0MUgfIkjhhIq+psc2hge
-	 D605mqhR68tie413OUCXnBlGHwDcfbw+LFqcsCo7VCVgvdRp+vzFD6ZgaqiWWtc2J7
-	 8L7iT3kEFLUhBj2+S8PG9xe/6+kbPHBcnssr1PqQIQkOng5mEiwa9njaQARwFeCP0r
-	 N3n80k149gjDeu5jtS5zOwpCE1qETwvJ5bsKd5KAdXFyw3QkfxOkocGtyAJhNKXAuA
-	 1hshK04UwZRhprNzX997Ym0R9RLwa/CJb0FdCZHslh442v/n580FdpJtZfCzgV0zB5
-	 rFPbcAI85DrMg==
-From: KP Singh <kpsingh@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UjAi6nel"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-34c868b197eso372292a91.2
+        for <bpf@vger.kernel.org>; Wed, 04 Feb 2026 23:02:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770274930; x=1770879730; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=9Y0ZHmJdDVcWp/j2+6ICbIpI0YI9gGKhxnxL/yoCo7c=;
+        b=UjAi6nel4Cn2XvQFPX9Rl75OW/if7r2EBEJMWpetGwaEYWCYRkpLKYgLUYUs8R8/3l
+         Qq8XAKe4vSkRUUn0v93WrC40cXQ67/qotnQNYHI4MVOa69ExdMvyscrxs1ylks0po6Eu
+         7/rquN1/FBHUw/BiSWvuwoW+A169bA3zOkusAtnUDSPVRFVDiubImUyEvx0HdhUMHVSe
+         7A6VnLOH7mRGICzH7uPPy9aI+gDc7X8VOCbDGffxFb/+2Q5fsD9VQRUb6Y/cgSQ9uWh1
+         qAnWSZCoa7DqPvmCs7aDsbD9zLB48mGZ6AWBeUNb4F1ZV7CHWZfbG6J3+LVekqDAh+g7
+         7bnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770274930; x=1770879730;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9Y0ZHmJdDVcWp/j2+6ICbIpI0YI9gGKhxnxL/yoCo7c=;
+        b=ZgpkCtWpVBulXA4hBMSq9qZ1n+rXd7SplIpVH5cJxNoSGfPnbGs9ZSzKWJzUifmvso
+         AQcjnrdi1YOQpk9uYThtXkB/oIzA0tYnUriAQ5pDFrN9DOZOa/x8J0Xjk1M3wcts1/b+
+         zlnFLtRW4ddN1G8y9cv8T5DZx7E+/4MquEKvJoYwwgMikzM9MM2vR+3biFGV/9tuoOzR
+         SYjBF34kZK6TgXWwE7HUz8rJByY+OdRobVra5JPaTAM0+t5Zi1aJaI1VRhnFIWCr1ka6
+         +cj82g2lgteWCd5E/YF5SFn3/562TPeW6o5xFxgd76R/XW7vZ7OvGqTBJuPXyWns0UAp
+         pvAg==
+X-Gm-Message-State: AOJu0Yz8t5m5rrdxRso3jVR/b1eUImbmNyE0QaAbxWE+B9YBmweklNZ4
+	aDl7YZx1jPYmm8Q/Tcx/9yQI4p1Vgk6zRNVhBSaQBK4aHjfATtcA83CFcFNxyg==
+X-Gm-Gg: AZuq6aI6Vs3vABN+8EYA6/VUNwB0Y8fq4hreBTa6Be8ys5YnTPETwvVlzbivGVVGOFu
+	NuYFknAGbg8YKmwr7x9pG1ofdWVTxDUcJ8r9N7Z4HvOE+DhZFElRGJrbULGYe8eqcu/r9Cwz5uX
+	MjhYYkscdXG3sO7Fnn6TI+OgjqLC7ZxScXGFC/t0QPz29nG75iU63eWJoL6sq8vcCPK0KkRVdEM
+	EeboSEwLpyXkBM1WqsiDQbJ/alwBMDKURYszKSc0RfVmalLSG821twyVz2SulAs4LOixUylLzm6
+	0f8LR3r6y7Stae2vLAbsgbigPzwjRDYb1DQDVOU/8DM/ICYtbQP06M1IYfY3UZpB0UzpWYdAL6r
+	iuBkgqG5M8+8m2txM/D3pTaSYP0FTaLm/2/Z18+ZGJKPY15dxgjD4J6ChDvqijTw3KrF+wN1hCU
+	yD
+X-Received: by 2002:a17:90b:5446:b0:343:6d82:9278 with SMTP id 98e67ed59e1d1-354871b864fmr5131969a91.30.1770274929900;
+        Wed, 04 Feb 2026 23:02:09 -0800 (PST)
+Received: from localhost ([2a03:2880:ff:1::])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3549c239c67sm1449442a91.16.2026.02.04.23.02.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Feb 2026 23:02:09 -0800 (PST)
+From: Amery Hung <ameryhung@gmail.com>
 To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
+Cc: netdev@vger.kernel.org,
+	alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
 	daniel@iogearbox.net,
-	clm@meta.com,
-	KP Singh <kpsingh@kernel.org>
-Subject: [PATCH bpf v3] bpf: Limit signature size to KMALLOC_MAX_CACHE_SIZE
-Date: Thu,  5 Feb 2026 07:38:07 +0100
-Message-ID: <20260205063807.690823-1-kpsingh@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	memxor@gmail.com,
+	martin.lau@kernel.org,
+	kpsingh@kernel.org,
+	yonghong.song@linux.dev,
+	song@kernel.org,
+	haoluo@google.com,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v6 00/17] Remove task and cgroup local storage percpu counters
+Date: Wed,  4 Feb 2026 23:01:49 -0800
+Message-ID: <20260205070208.186382-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Practical BPF signatures are significantly smaller than
-KMALLOC_MAX_CACHE_SIZE
+* Motivation *
 
-Allowing larger sizes opens the door for abuse by passing excessive
-size values and forcing the kernel into expensive allocation paths (via
-kmalloc_large or vmalloc).
+The goal of this patchset is to make bpf syscalls and helpers updating
+task and cgroup local storage more robust by removing percpu counters
+in them. Task local storage and cgroup storage each employs a percpu
+counter to prevent deadlock caused by recursion. Since the underlying
+bpf local storage takes spinlocks in various operations, bpf programs
+running recursively may try to take a spinlock which is already taken.
+For example, when a tracing bpf program called recursively during
+bpf_task_storage_get(..., F_CREATE) tries to call
+bpf_task_storage_get(..., F_CREATE) again, it will cause AA deadlock
+if the percpu variable is not in place.
 
-Fixes: 349271568303 ("bpf: Implement signature verification for BPF programs")
-Reported-by: Chris Mason <clm@meta.com>
-Signed-off-by: KP Singh <kpsingh@kernel.org>
+However, sometimes, the percpu counter may cause bpf syscalls or helpers
+to return errors spuriously, as soon as another threads is also updating
+the local storage or the local storage map. Ideally, the two threads
+could have taken turn to take the locks and perform their jobs
+respectively. However, due to the percpu counter, the syscalls and
+helpers can return -EBUSY even if one of them does not run recursively
+in another one. All it takes for this to happen is if the two threads run
+on the same CPU. This happened when BPF-CI ran the selftest of task local
+data. Since CI runs the test on VM with 2 CPUs, bpf_task_storage_get(...,
+F_CREATE) can easily fail.
+
+The failure mode is not good for users as they need to add retry logic
+in user space or bpf programs to avoid it. Even with retry, there
+is no guaranteed upper bound of the loop for a success call. Therefore,
+this patchset seeks to remove the percpu counter and makes the related
+bpf syscalls and helpers more reliable, while still make sure recursion
+deadlock will not happen, with the help of resilient queued spinlock
+(rqspinlock).
+
+
+* Implementation *
+
+To remove the percpu counter without introducing deadlock,
+bpf_local_storage is refactored by changing the locks from raw_spin_lock
+to rqspinlock, which prevents deadlock with deadlock detection and a
+timeout mechanism.
+
+The refactor basically repalces the locks with rqspinlock and propagates
+errors returned by the locking function to BPF helpers or syscalls.
+bpf_selem_unlink_nofail() is introduced to handle rqspinlock errors
+in two lock acquiring functions that cannot fail,
+bpf_local_storage_destroy() and bpf_local_storage_map_free()
+(i.e., local storage is being freed by the subsystem or the map is
+being freed). The high level idea is to bitfiel and atomic operation to
+track who is referencing an selem when any locks cannot be acquired.
+Additional care is needed to make sure special fields are freed and
+owner memory are uncharged safely and correctly.
+
+If not familiar with local storage, the last section briefly describe
+the locks and structure of local storage. It also shows the abbreviation
+used in the rest of the letter.
+
+
+* Test *
+
+Task and cgroup local storage selftests have already covered deadlock
+caused by recursion. Patch 14 updates the expected result of task local
+storage selftests as task local storage bpf helpers can now run on the
+same CPU as they don't cause deadlock.
+
+
+* Benchmark *
+
+./bench -p 1 local-storage-create --storage-type <socket,task> \
+  --batch-size <16,32,64>
+
+The benchmark is a microbenchmark stress-testing how fast local storage
+can be created. After swicthing to rqspinlock and
+bpf_unlink_selem_nofail(), socket local storage creation speed has a
+~5% gain. For task local storage, the number remains the same.
+
+Socket local storage
+                 batch  creation speed              creation speed diff
+---------------  ----   ------------------                         ----
+Before            16    134.371 ± 0.884k/s  3.12 kmallocs/create
+                  32    133.032 ± 3.405k/s  3.12 kmallocs/create
+                  64    133.494 ± 0.862k/s  3.12 kmallocs/create
+                  
+After             16    140.778 ± 1.306k/s  3.12 kmallocs/create  +4.8%
+                  32    140.550 ± 2.058k/s  3.11 kmallocs/create  +5.7%
+                  64    139.311 ± 0.911k/s  3.13 kmallocs/create  +4.4%
+                   
+Task local storage
+                  batch  creation speed              creation speed diff
+---------------  ----   ------------------                         ----
+Before           16     25.301 ± 0.089k/s   2.43 kmallocs/create
+                 32     23.797 ± 0.106k/s   2.51 kmallocs/create
+                 64     23.251 ± 0.187k/s   2.51 kmallocs/create
+               
+After            16     25.307 ± 0.080k/s   2.45 kmallocs/create  +0.0%
+                 32     23.889 ± 0.089k/s   2.46 kmallocs/create  +0.0%
+                 64     23.230 ± 0.113k/s   2.63 kmallocs/create  -0.1%
+
+
+* Patchset organization *
+
+Patch 1-4 convert local storage internal helpers to failable.
+
+Patch 5 changes the locks to rqspinlock and propagate the error
+returned from raw_res_spin_lock_irqsave() to BPF heleprs and syscalls.
+
+Patch 6-8 remove percpu counters in task and cgroup local storage.
+
+Patch 9-11 address the unlikely rqspinlock errors by switching to
+bpf_selem_unlink_nofail() in map_free() and destroy().
+
+Patch 12-17 update selftests.
+
+
+* Appendix: local storage internal *
+
+There are two locks in bpf_local_storage due to the ownership model as
+illustrated in the figure below. A map value, which consists of a
+pointer to the map and the data, is a bpf_local_storage_map_data (sdata)
+stored in a bpf_local_storage_elem (selem). A selem belongs to a
+bpf_local_storage and bpf_local_storage_map at the same time. 
+bpf_local_storage::lock (lock_storage->lock in short) protects the list
+in a bpf_local_storage and bpf_local_storage_map_bucket::lock (b->lock)
+protects the hash bucket in a bpf_local_storage_map.
+
+
+ task_struct
+┌ task1 ───────┐       bpf_local_storage
+│ *bpf_storage │---->┌─────────┐
+└──────────────┘<----│ *owner  │         bpf_local_storage_elem
+                     │ *cache[16]        (selem)              selem
+                     │ *smap   │        ┌──────────┐         ┌──────────┐
+                     │ list    │------->│ snode    │<------->│ snode    │
+                     │ lock    │  ┌---->│ map_node │<--┐ ┌-->│ map_node │
+                     └─────────┘  │     │ sdata =  │   │ │   │ sdata =  │
+ task_struct                      │     │ {&mapA,} │   │ │   │ {&mapB,} │
+┌ task2 ───────┐      bpf_local_storage └──────────┘   │ │   └──────────┘
+│ *bpf_storage │---->┌─────────┐  │                    │ │
+└──────────────┘<----│ *owner  │  │                    │ │
+                     │ *cache[16] │      selem         │ │    selem
+                     │ *smap   │  │     ┌──────────┐   │ │   ┌──────────┐
+                     │ list    │--│---->│ snode    │<--│-│-->│ snode    │
+                     │ lock    │  │ ┌-->│ map_node │   └-│-->│ map_node │
+                     └─────────┘  │ │   │ sdata =  │     │   │ sdata =  │
+ bpf_local_storage_map            │ │   │ {&mapB,} │     │   │ {&mapA,} │
+ (smap)                           │ │   └──────────┘     │   └──────────┘
+┌ mapA ───────┐                   │ │                    │
+│ bpf_map map │      bpf_local_storage_map_bucket        │
+│ *buckets    │---->┌ b[0] ┐      │ │                    │
+└─────────────┘     │ list │------┘ │                    │
+                    │ lock │        │                    │
+                    └──────┘        │                    │
+ smap                 ...           │                    │
+┌ mapB ───────┐                     │                    │
+│ bpf_map map │      bpf_local_storage_map_bucket        │
+│ *buckets    │---->┌ b[0] ┐        │                    │
+└─────────────┘     │ list │--------┘                    │
+                    │ lock │                             │
+                    └──────┘                             │
+                    ┌ b[1] ┐                             │
+                    │ list │-----------------------------┘
+                    │ lock │
+                    └──────┘
+                      ...
+
+* Changelog *
+
+v5 -> v6
+  - Redo benchmark
+  - Patch 9: Remove storage->smap as it is not used any more
+  - Patch 17: Remove storage->smap check in selftests
+  - Patch 10, 11: Pass reuse_now = true to bpf_selem_free() and
+    bpf_local_storage_free() to allow faster memory reclaim (Martin)
+  - Patch 10: Use bitfield instead of refcount to track selem state to
+    be more precise, which removes the possibility map_free missing an
+    selem (Martin)
+  - Patch 10: Allow map_free() to free local_storage and drop
+    the change in bpf_local_storage_map_update() (Martin)
+  - Patch 11: Simplify destroy() by not deferring work as an owner is
+    unlikely to have too many maps that stalls RCU (Martin)
+  Link: https://lore.kernel.org/bpf/20260201175050.468601-1-ameryhung@gmail.com/
+
+v4 -> v5
+  - Patch 1: Fix incorrect bucket calculation (AI)
+  - Patch 3: Fix memory leak in bpf_sk_storage_clone() (AI)
+  - Patch 5: Fix memory leak in bpf_local_storage_update() (AI)
+  - Fix typo/comment/commit msg (AI)
+  - Patch 10: Replace smp_rmb() with smp_mb(). smp_rmb does not imply
+    acquire semantics
+  Link: https://lore.kernel.org/bpf/20260131050920.2574084-1-ameryhung@gmail.com/ 
+
+v3 -> v4
+  - Add performance numbers
+  - Avoid stale element when calling bpf_local_storage_map_free()
+    by allowing it to unlink selem from local_storage->list and uncharge
+    memory. Block destroy() from returning when pending map_free()
+    are uncharging
+  - Fix an -EAGAIN bug in bpf_local_storage_update() as map_free() now
+    does not free local storage
+  - Fix possible double-free of selem by ensuring an selem is only
+    processed once for each caller (Kumar)
+  - Fix possible inifinite loop in bpf_selem_unlink_nofail() when
+    iterating b->list by replacing while loop with
+    hlist_for_each_entry_rcu
+  - Fix unsafe iteration in destroy() by iterating local_storage->list
+    using hlist_for_each_entry_rcu
+  - Fix UAF due to clearing storage_owner after destroy(). Flip the order
+    to fix it
+  - Misc clean-up suggested by Martin
+  Link: https://lore.kernel.org/bpf/20251218175628.1460321-1-ameryhung@gmail.com/
+
+v2 -> v3
+  - Rebase to bpf-next where BPF memory allocator is replaced with
+    kmalloc_nolock()
+  - Revert to selecting bucket based on selem
+  - Introduce bpf_selem_unlink_lockless() to allow unlinking and
+    freeing selem without taking locks
+  Link: https://lore.kernel.org/bpf/20251002225356.1505480-1-ameryhung@gmail.com/
+
+v1 -> v2
+  - Rebase to bpf-next  
+  - Select bucket based on local_storage instead of selem (Martin)
+  - Simplify bpf_selem_unlink (Martin)
+  - Change handling of rqspinlock errors in bpf_local_storage_destroy()
+    and bpf_local_storage_map_free(). Retry instead of WARN_ON.
+  Link: https://lore.kernel.org/bpf/20250729182550.185356-1-ameryhung@gmail.com/
+
 ---
- kernel/bpf/syscall.c | 6 ++++++
- 1 file changed, 6 insertions(+)
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 4ff82144f885..15e87f507991 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -2820,6 +2820,12 @@ static int bpf_prog_verify_signature(struct bpf_prog *prog, union bpf_attr *attr
- 	void *sig;
- 	int err = 0;
- 
-+	/* Don't attempt to use kmalloc_large or vmalloc for signatures.
-+	 * Practical signature for BPF program should be below this limit.
-+	 */
-+	if (attr->signature_size > KMALLOC_MAX_CACHE_SIZE)
-+		return -EINVAL;
-+
- 	if (system_keyring_id_check(attr->keyring_id) == 0)
- 		key = bpf_lookup_system_key(attr->keyring_id);
- 	else
+Amery Hung (17):
+  bpf: Select bpf_local_storage_map_bucket based on bpf_local_storage
+  bpf: Convert bpf_selem_unlink_map to failable
+  bpf: Convert bpf_selem_link_map to failable
+  bpf: Convert bpf_selem_unlink to failable
+  bpf: Change local_storage->lock and b->lock to rqspinlock
+  bpf: Remove task local storage percpu counter
+  bpf: Remove cgroup local storage percpu counter
+  bpf: Remove unused percpu counter from bpf_local_storage_map_free
+  bpf: Prepare for bpf_selem_unlink_nofail()
+  bpf: Support lockless unlink when freeing map or local storage
+  bpf: Switch to bpf_selem_unlink_nofail in bpf_local_storage_{map_free,
+    destroy}
+  selftests/bpf: Update sk_storage_omem_uncharge test
+  selftests/bpf: Update task_local_storage/recursion test
+  selftests/bpf: Update task_local_storage/task_storage_nodeadlock test
+  selftests/bpf: Remove test_task_storage_map_stress_lookup
+  selftests/bpf: Choose another percpu variable in bpf for btf_dump test
+  selftests/bpf: Fix outdated test on storage->smap
+
+ include/linux/bpf_local_storage.h             |  29 +-
+ kernel/bpf/bpf_cgrp_storage.c                 |  62 +--
+ kernel/bpf/bpf_inode_storage.c                |   6 +-
+ kernel/bpf/bpf_local_storage.c                | 407 ++++++++++++------
+ kernel/bpf/bpf_task_storage.c                 | 154 +------
+ kernel/bpf/helpers.c                          |   4 -
+ net/core/bpf_sk_storage.c                     |  20 +-
+ .../bpf/map_tests/task_storage_map.c          | 128 ------
+ .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+ .../bpf/prog_tests/task_local_storage.c       |  10 +-
+ .../selftests/bpf/progs/local_storage.c       |  19 +-
+ .../bpf/progs/read_bpf_task_storage_busy.c    |  38 --
+ .../bpf/progs/sk_storage_omem_uncharge.c      |  12 +-
+ .../bpf/progs/task_storage_nodeadlock.c       |   7 +-
+ 14 files changed, 353 insertions(+), 547 deletions(-)
+ delete mode 100644 tools/testing/selftests/bpf/map_tests/task_storage_map.c
+ delete mode 100644 tools/testing/selftests/bpf/progs/read_bpf_task_storage_busy.c
+
 -- 
-2.43.0
+2.47.3
 
