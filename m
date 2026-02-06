@@ -1,174 +1,144 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E96348866
-	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 08:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2EF631960B
+	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 08:32:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770366450; cv=none; b=FHNI3UDllwCpWwWBRUcfraZjG6Ii0xtoMKTuYGb2Kf36erdX9oL5k84h/r0tIfOZYjalvVRoI7SfSz4tZfH+wM3cMsc0pFtZU9sxwz86FSQJ20ByiKNoYmtNi7d9UWaPCrjfJhDZup48B1vZ12OJLyN7LeB23tc/cuzg4plC0S8=
+	t=1770366734; cv=none; b=NJ++Kh7vPA+pUqmb5Ya11RucvvpdR96Ikgyjx/j3nf/m/6w52C3vTnJD44b61bcz7uP4tglZK3xU4lt68zexed+2jPiKepw0C4zTO1M96OlxaLMU7pyL7Oh1/bEwKdlETTemL3pAWRk9f209B+dLJLZdYwfhREbHCTumlje0bi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770366450; c=relaxed/simple;
-	bh=cJUFiVuff/KPlnx1eULVJx3hfbbTA1i+WxGtZimLSEo=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YYsZ0NCDyN1S8hwKb8yoF/4sphhTzM/oKGMHxRDxfH+lyE6FHAaeG+GqAqxVOsdU3nXPOI/pQSbMOJQgW7bx4WM5HZEoRLTyrl3Prsat9AvNgdfzs+oXvjX9ayYKfcMaP/+ogSjTtNS85fKQXZFSRgzLpgTlYfwV0lvDoq/hHyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SCLPzcaI; arc=none smtp.client-ip=209.85.128.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SCLPzcaI"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-47fedb7c68dso18711295e9.2
-        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 00:27:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770366448; x=1770971248; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yK3NKY8aaTUDoPfEVQhx9I8PtsQ63/NYZYEF7PuRZjc=;
-        b=SCLPzcaIBHfa0u65NVJfUj0vQWTmcHicdHZzt2h36sOQwG5Z1w6tspO5dV/7SekjNR
-         SJs02zRH/q6xWu2ewis1iVOac/o5+wQEmHqgTCHfkFQo5+Hj29c01aw3STgm38k6uXDr
-         B5N3v3ggebUNps1e3y4sGuHdbw4Vc8aTmERFUKAcQMGNetGyQrCx0cJPbDWkxqAJKciM
-         5BHpz47cmYldleb2puOZdbXM148EpAkLDPPBKZAVtx7HfcpWr6C4MZLbXlyt1dYENPZ4
-         DnB6r0k7vhcc/1cQ432VlXIgNmRJM25sy5NPzTFaUC1ySlSLrRzs1LZE9MmTD4YMbRxQ
-         1dmA==
+	s=arc-20240116; t=1770366734; c=relaxed/simple;
+	bh=L5b8qOVQgNvhOSD+v+84L84qH7uRefmcsqF3UxEZMpE=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=Lea7Dl68u23skt9Ljo+8kzqykpkzN1WB+G0lX2kzNh6Ihdk10jPfu5APr5TbFpdgb+N/mgkPFdOvZ0luEitIjveyVRNKGyLnJkP5UjjJbQt3evivtYWIjX5diBEW967E8KmbEoEbjJxNgZdAJJnfUh9E26/+H7rW1R9Trz0kHrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-66308f16e13so580889eaf.0
+        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 00:32:13 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770366448; x=1770971248;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+        d=1e100.net; s=20230601; t=1770366733; x=1770971533;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yK3NKY8aaTUDoPfEVQhx9I8PtsQ63/NYZYEF7PuRZjc=;
-        b=h/DbyPYRs0KQ6P4EZ4WFykHppUPSN6mTIYogvWbXbauVwJxaSeJgaAb6R4R4kRiq0g
-         Fiv2PGiA0dU2Ydgl4TYT4QSWR7uta14XjIbBJ/qKMSMqqTYTittl/rOyrGsVJRuqbSIZ
-         k9qfiUrjkVkt2ZVShAek1eolzhSaz0u8e+EMnanslsdZQbtkr+k+uDXk51ZKUZMP9PhS
-         +sBSC2vvfrO+BYCLCHILnAm+2Y3zwKSYaKNNvVO35wzlssy24n2D19LHnjkX1+NSRqAp
-         ZnO82WekYsJr9m+NGXIgw4B2xNix5tXqZTGKvimIKi/vYPBHiHSLszBEaQhEhchZKywM
-         csOA==
-X-Forwarded-Encrypted: i=1; AJvYcCU3SS49TlvzF+qoS3qGdFnCydeCFa9ntS+W2qnflhtDM8n3I4oWMwZm2ohcIArv4PVeunk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7tt0V/RqnHcJTJ5dmlm2ZwFvg8BsEAQW0JofXAunaV3s7nGHo
-	00wAKXUzvWL9d5gctXEH7MnzzzVaRMV72PY2dAjtj8egEfxPU04THfHY
-X-Gm-Gg: AZuq6aJfMJI4RNAZGCb2nnNATzvKyRTYfR5Filskzk9F2L3PoPUjeShKjTkdlRJqpax
-	YrTk21L3GVRqEplsTimUZXG8XswKmyFBv017VCNzsyl+BjkNVDqN22cE4AuCTpDPh8gsu5AXM3u
-	VD8DLMz0FJ1/L2X3rGK5MjnZqC0E6tqiUcXLi3acSG3/5SjyY76K+JgmlMRfrYF2Yr/z2dzGXRa
-	5YdPBHeLPgEuj4m2J7WIqJLYTZVsUoRAfrX1Q+eCluI0BBOlbXkLnkiZfpRMXoJD06IRRys+Sca
-	Y5EaeCMcbAEmdoAVgiRymZpD1XDF9nZrfnnT3BVMVV14s+9H/ZccoixWGHAE0wOlYXfS1+YRc+0
-	6mD9CnlgTodyBhdAlAzECR5f4G/Nb0qf7qpJIe+1w3gzoWbhJ2deBR7nzqDs1TKJvvBKaJFM=
-X-Received: by 2002:a05:600c:3148:b0:47a:8154:33e3 with SMTP id 5b1f17b1804b1-4832097e27fmr19030385e9.28.1770366448150;
-        Fri, 06 Feb 2026 00:27:28 -0800 (PST)
-Received: from krava ([2a02:8308:a00c:e200::b44f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48320638ff7sm40060185e9.0.2026.02.06.00.27.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Feb 2026 00:27:27 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Fri, 6 Feb 2026 09:27:25 +0100
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Steven Rostedt <rostedt@kernel.org>
-Subject: Re: [RFC bpf-next 04/12] bpf: Add struct bpf_tramp_node object
-Message-ID: <aYWl7Y9ok32_eZXi@krava>
-References: <20260203093819.2105105-1-jolsa@kernel.org>
- <20260203093819.2105105-5-jolsa@kernel.org>
- <CAEf4BzYWxmg7YO_ewENt1rr4R1YT=iL0fc5yJqanfQZJk6u1nQ@mail.gmail.com>
- <aYRbYY8f_wWoiZhk@krava>
- <CAEf4BzY=vqpnjrDNtLVvC3_nU5=Z7iROU_He=xbkEJDuGCoqug@mail.gmail.com>
+        bh=dPmTo2ri7jG36KtEfZNF+L2qJMQS+9NuLWlVMlY7PME=;
+        b=ecId+Yw24Fgk4WFEk2jJw9KnHNnfiY3qds1IfVkFo5EzUcCB6N6fqSEZ1HpKSs22ZM
+         MlqhSv0BfL2IMAzPPLzRbDkcdCgk6yUD81vaU74vkoKvJx7NAsM7kfoaWCu4fTL9hEXO
+         dwYoYf4iK8PqP9LiJTfa2OfeGVJ+2T/z9qxCTONCEjl2tMZ7xLsk3sTi7eMLzgc3OUN3
+         +NusAVEIevWnYlAP6pkA+wd2Pm3vR1Yvitoj/U9TBbWJ4pWdyzB+AIH88YMJCQpXe8zr
+         mQNgEYGT7H/Qn1ZNQvuvj+tLDveBrNeBu/RKvD+G8iHEqTz+24BVSiBISc/33jXzhT7L
+         egHA==
+X-Forwarded-Encrypted: i=1; AJvYcCVzvKCBFq/uQBuJM7RIT6sJBuveNS5SWoqQa+Aa59ky4iMsn2KnWkmTBRfm1Q7qmjoZKyw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6GL25g89h9fH1uJdHAXmtnKQmeSzmF1KUZjukFJ6QUe05q772
+	q9ZuMive2TA82DxMCtzRDQfY07u8IugX28/rNoafuKPXmHzp0Xg97gJNVJfMUi8wlQS1CI+3Xco
+	GIioxB1TuGp5YSjYNN2qTDlUUktFHKpMPEXkY+TmwV/VOzmO0KDnaJl5tP3I=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzY=vqpnjrDNtLVvC3_nU5=Z7iROU_He=xbkEJDuGCoqug@mail.gmail.com>
+X-Received: by 2002:a05:6820:3093:b0:663:8c6:978c with SMTP id
+ 006d021491bc7-66d0c75d6a8mr1083916eaf.65.1770366732936; Fri, 06 Feb 2026
+ 00:32:12 -0800 (PST)
+Date: Fri, 06 Feb 2026 00:32:12 -0800
+In-Reply-To: <177032644012.1975497.16411100029657607833.stgit@firesoul>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6985a70c.050a0220.3b3015.0034.GAE@google.com>
+Subject: [syzbot ci] Re: net: sched: refactor qdisc drop reasons into
+ dedicated tracepoint
+From: syzbot ci <syzbot+ci335f183b8446659a@syzkaller.appspotmail.com>
+To: atenart@redhat.com, bpf@vger.kernel.org, carges@cloudflare.com, 
+	davem@davemloft.net, edumazet@google.com, eric.dumazet@gmail.com, 
+	hawk@kernel.org, horms@kernel.org, jhs@mojatatu.com, jiri@resnulli.us, 
+	kernel-team@cloudflare.com, kuba@kernel.org, netdev@vger.kernel.org, 
+	pabeni@redhat.com, toke@toke.dk, xiyou.wangcong@gmail.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 05, 2026 at 02:27:38PM -0800, Andrii Nakryiko wrote:
-> On Thu, Feb 5, 2026 at 12:57 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Wed, Feb 04, 2026 at 11:00:57AM -0800, Andrii Nakryiko wrote:
-> > > On Tue, Feb 3, 2026 at 1:39 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > > >
-> > > > Adding struct bpf_tramp_node to decouple the link out of the trampoline
-> > > > attachment info.
-> > > >
-> > > > At the moment the object for attaching bpf program to the trampoline is
-> > > > 'struct bpf_tramp_link':
-> > > >
-> > > >   struct bpf_tramp_link {
-> > > >        struct bpf_link link;
-> > > >        struct hlist_node tramp_hlist;
-> > > >        u64 cookie;
-> > > >   }
-> > > >
-> > > > The link holds the bpf_prog pointer and forces one link - one program
-> > > > binding logic. In following changes we want to attach program to multiple
-> > > > trampolines but have just one bpf_link object.
-> > > >
-> > > > Splitting struct bpf_tramp_link into:
-> > > >
-> > > >   struct bpf_tramp_link {
-> > > >        struct bpf_link link;
-> > > >        struct bpf_tramp_node node;
-> > > >   };
-> > > >
-> > > >   struct bpf_tramp_node {
-> > > >        struct hlist_node tramp_hlist;
-> > > >        struct bpf_prog *prog;
-> > > >        u64 cookie;
-> > > >   };
-> > >
-> > > I'm a bit confused here. For singular fentry/fexit attachment we have
-> > > one trampoline and one program, right? For multi-fentry, we have
-> > > multiple trampoline, but still one program pointer, no? So why put a
-> > > prog pointer into tramp_node?.. You do want cookie in tramp_node, yes,
-> > > but not the program.
-> >
-> > yes, but both links:
-> >   - single link 'struct bpf_tramp_link'
-> >   - multi link  'struct bpf_tracing_multi_link'
-> >
-> > are using same code to attach that code needs to have a hlist_node to
-> > link the program to the trampoline and be able to reach the bpf_prog
-> > (like in invoke_bpf_prog)
-> >
-> > current code is passing whole bpf_tramp_link object so it has access
-> > to both, but multi link needs to keep link to each trampoline (nodes
-> > below):
-> >
-> > struct bpf_tracing_multi_link {
-> >        struct bpf_link link;
-> >        enum bpf_attach_type attach_type;
-> >        int nodes_cnt;
-> >        struct bpf_tracing_multi_node nodes[] __counted_by(nodes_cnt);
-> > };
-> >
-> > and we can't get get from &nodes[x] to bpf_tracing_multi_link.link.prog
-> >
-> > it's bit redundant, but not sure what else we can do
-> 
-> invoke_bpf_prog() specifically doesn't have to get prog pointer from
-> bpf_tramp_link, it can be passed prog as a separate argument and then
-> bpf_tramp_node  with cookie separately as well. I haven't looked at
-> all other code, but I suspect we can refactor it to accept prog
-> explicitly and the relevant parts (node+cookie) separately.
+syzbot ci has tested the following series
 
-ok, makes sense.. will check on how to refactor that code
+[v2] net: sched: refactor qdisc drop reasons into dedicated tracepoint
+https://lore.kernel.org/all/177032644012.1975497.16411100029657607833.stgit@firesoul
+* [PATCH net-next v2 1/6] net: sched: introduce qdisc-specific drop reason tracing
+* [PATCH net-next v2 2/6] net: sched: sfq: convert to qdisc drop reasons
+* [PATCH net-next v2 3/6] net: sched: sch_cake: use enum qdisc_drop_reason for cobalt_should_drop
+* [PATCH net-next v2 4/6] net: sched: rename QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION
+* [PATCH net-next v2 5/6] net: sched: rename QDISC_DROP_FQ_* to generic names
+* [PATCH net-next v2 6/6] net: sched: sch_dualpi2: use qdisc_dequeue_drop() for dequeue drops
 
-for some reason I thought we don't wan't to refactor jit code much,
-because it means changes through all the archs code.. but this one
-should mostly change just arguments, so it's probably ok
+and found the following issue:
+WARNING in __dev_queue_xmit
 
-> 
-> Just at the conceptual level, we have single prog and multiple places
-> to patch (trampolines), so we shouldn't be co-locating in the same
-> data structure. It feels like a complete hack to duplicate prog just
-> to make some internal code access it.
+Full report is available here:
+https://ci.syzbot.org/series/51381d54-6fc9-4542-a8cd-eac656a11965
 
-ook
+***
 
-jirka
+WARNING in __dev_queue_xmit
+
+tree:      net-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/netdev/net-next.git
+base:      7a4cd71fa4514cd85df39b3cf99da8142660cdcd
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/17bc5e9e-8ccc-4afb-a291-312bbc43df20/config
+C repro:   https://ci.syzbot.org/findings/20939160-05e8-4589-a6d5-6a253d5e39b0/c_repro
+syz repro: https://ci.syzbot.org/findings/20939160-05e8-4589-a6d5-6a253d5e39b0/syz_repro
+
+syzkaller0: entered promiscuous mode
+syzkaller0: entered allmulticast mode
+------------[ cut here ]------------
+reason && reason < __QDISC_DROP_REASON
+WARNING: net/sched/sch_generic.c:50 at tcf_kfree_skb_list+0xd6/0x100 net/sched/sch_generic.c:50, CPU#0: syz.0.17/5949
+Modules linked in:
+CPU: 0 UID: 0 PID: 5949 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:tcf_kfree_skb_list+0xd6/0x100 net/sched/sch_generic.c:50
+Code: 89 e8 e8 5d 00 00 00 31 ff 4c 89 e6 ba 40 00 00 00 e8 be e6 d6 ff 4c 8b 24 24 4d 85 e4 74 27 e9 6e ff ff ff e8 1b f3 50 f8 90 <0f> 0b 90 eb c4 44 89 e9 80 e1 07 80 c1 03 38 c1 7c 96 4c 89 ef e8
+RSP: 0018:ffffc90003e67360 EFLAGS: 00010293
+RAX: ffffffff89718645 RBX: ffff8881133cc000 RCX: ffff8881738b9d40
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 000000000002ffff
+RBP: 0000000000000001 R08: ffff88811571195b R09: 1ffff11022ae232b
+R10: dffffc0000000000 R11: ffffed1022ae232c R12: ffff88810a9bca80
+R13: 0000000000000002 R14: ffff888109569400 R15: ffff888115711800
+FS:  000055558d217500(0000) GS:ffff88818e31a000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000200000001410 CR3: 0000000166b9c000 CR4: 00000000000006f0
+Call Trace:
+ <TASK>
+ __dev_xmit_skb net/core/dev.c:4272 [inline]
+ __dev_queue_xmit+0x18e5/0x3180 net/core/dev.c:4797
+ packet_snd net/packet/af_packet.c:3077 [inline]
+ packet_sendmsg+0x3eb6/0x50f0 net/packet/af_packet.c:3109
+ sock_sendmsg_nosec net/socket.c:727 [inline]
+ __sock_sendmsg+0x21c/0x270 net/socket.c:742
+ ____sys_sendmsg+0x4d7/0x810 net/socket.c:2592
+ ___sys_sendmsg+0x2a5/0x360 net/socket.c:2646
+ __sys_sendmsg net/socket.c:2678 [inline]
+ __do_sys_sendmsg net/socket.c:2683 [inline]
+ __se_sys_sendmsg net/socket.c:2681 [inline]
+ __x64_sys_sendmsg+0x1bd/0x2a0 net/socket.c:2681
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f6544b9acb9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc871586c8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
+RAX: ffffffffffffffda RBX: 00007f6544e15fa0 RCX: 00007f6544b9acb9
+RDX: 0000000000000004 RSI: 00002000000000c0 RDI: 0000000000000008
+RBP: 00007f6544c08bf7 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f6544e15fac R14: 00007f6544e15fa0 R15: 00007f6544e15fa0
+ </TASK>
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
