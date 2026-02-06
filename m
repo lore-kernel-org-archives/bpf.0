@@ -1,84 +1,124 @@
-Received: from mail3-164.sinamail.sina.com.cn (mail3-164.sinamail.sina.com.cn [202.108.3.164])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B947154BE2
-	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 23:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.108.3.164
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F5C23C8AE;
+	Fri,  6 Feb 2026 23:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770420518; cv=none; b=S/pt5g6WQtQ4d7Fn5dqKFzUgNkXAS9F+358NMfye2VHLLWxwm5aWXyxN2iPmWk9YzAy7QX9QsK1T38GhJzPNXEKbpVXs/jRe0OQN2gs7+3ng2q0w+Nr74ERWVK+11W22LlN5wzurI6Ig/XBFsFJ8IVb5ydrwN5XAzPktIcGGThk=
+	t=1770422292; cv=none; b=mcbvjFH00QzNzwkfCzvOLGAv51OyUlddO2QIDKPofVCk6EmbwCUtuLTnKWN4J+ZZ/Kl44lyq5PWbURiuONquygQBDGKh2es1nrydqqOpw7L3z8Z/e0cCWS4809rWVMx6K1SQn0ZDAQpH5T5uew/3KnNPvSfrTBaiu0aUEfBkORk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770420518; c=relaxed/simple;
-	bh=iza11KscdRHOTuvDe3hMGkfU3X17vHiGzjO5FKQD14g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=if43mo9lCoMTQOtvSpMC+e+e9LW7Yz8AJtGTqHD+4pTJYJhNg4jANuzajgx61CA6w2MqXShK/stfZmK3quZH9sJVXtRlWMu3EZE4AH0Fp0YtntKWJRIxh6yIiPgJWKGNbibeBcD+fmL4fFmhTy4QwemEM7tCOs6cjAFbVCMpNcc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com; spf=pass smtp.mailfrom=sina.com; dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b=lojftZ5m; arc=none smtp.client-ip=202.108.3.164
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sina.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sina.com
+	s=arc-20240116; t=1770422292; c=relaxed/simple;
+	bh=aNceiIqQwD0cE1qqeyljG2hgz12x7OsfWe5rwTsofgg=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=nBqoIYnA/v+70OdQ6GP33Z2EXqyMP5uSDdwuaPKxBuTsB0tK/HsDkid08/NeWX1RFbTg2oGghcmahDHHA+5ModXxA/YKUiB6vWGup7NAC00TALBCZiDuU8FFgyWQ2uphUxLolqPsTrixklV1waPFra14msSKtyF4V81wBnoavKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=fail (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=r3FNeO88 reason="signature verification failed"; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=sina.com header.i=@sina.com header.b="lojftZ5m"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sina.com; s=201208; t=1770420516;
-	bh=5+q2ZVcAz7bB71SNxE1U3HEq9dQbnKL+GOuYh5D2Ugo=;
-	h=From:Subject:Date:Message-ID;
-	b=lojftZ5mXw8MYIeFje/RCMVBsBksBwh9EFVf2KsbY7ysZKpspKPJE0DeHoWFSgeJa
-	 E80uGfy2TP6RswBl00mWFpViLbZ6MoK9tcYBya75ksta+mcqxQupxQJTBl2EXkatGK
-	 MGj5qJBMkQWR2PL5QYyF2is3xU+pdtvINnEEQusU=
-X-SMAIL-HELO: localhost.localdomain
-Received: from unknown (HELO localhost.localdomain)([114.249.62.144])
-	by sina.com (10.54.253.32) with ESMTP
-	id 6986791A000015B1; Fri, 7 Feb 2026 07:28:27 +0800 (CST)
-X-Sender: hdanton@sina.com
-X-Auth-ID: hdanton@sina.com
-Authentication-Results: sina.com;
-	 spf=none smtp.mailfrom=hdanton@sina.com;
-	 dkim=none header.i=none;
-	 dmarc=none action=none header.from=hdanton@sina.com
-X-SMAIL-MID: 5619754456882
-X-SMAIL-UIID: 5FFF89B0442249D792C553FA56B5A095-20260207-072827-1
-From: Hillf Danton <hdanton@sina.com>
-To: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
-Cc: lsf-pc@lists.linux-foundation.org,
-	Viacheslav Dubeyko <vdubeyko@redhat.com>,
-	linux-mm@kvack.org,
-	Pavan Rallabhandi <Pavan.Rallabhandi@ibm.com>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] Machine Learning (ML) library in Linux kernel
-Date: Sat,  7 Feb 2026 07:28:11 +0800
-Message-ID: <20260206232817.2596-1-hdanton@sina.com>
-In-Reply-To: <47d21a6821c4b2d085f7b97bcdaa205bfcb0e0ad.camel@ibm.com>
-References: 
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="r3FNeO88"
+Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 616Nv5wn1409975
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 6 Feb 2026 15:57:06 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 616Nv5wn1409975
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026012301; t=1770422230;
+	bh=qrRYtFR1PGHmyWdm1nw1biFHQwk7kZHfuvavlQRdIOg=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=r3FNeO88r0RrnhV3YBVyg+iBIZuK7drEQKWqvPsgtjVOB80iUpyD9ZWIkp2SVJIeX
+	 6GhpYllzsUGTGmGSG4hi5SZzYlxs7uUjM0QDA+ln71Wu2OhfR3NozOo0Q608eXhGET
+	 DKr/v+GRHJr20m5R18bjdYsLVUeuQLh6UG7vzxclzO4z7LMNpzExpF3yD+QddoGlnf
+	 bucheALVuE+6WxjwWkzddnE/J4Af53zMzfyRGmfpVhnLw3JOONTS2y2/5HkkhVl9JK
+	 F9MePpObJToFaZVZlxW5iT8KQnP+crUCszIH00GX9xN6JfQAZiQ9eehxIcXMxLSDkb
+	 hsGrh2zK8IPSg==
+Date: Fri, 06 Feb 2026 15:56:59 -0800
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Jens Remus <jremus@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        x86@kernel.org, linux-mm@kvack.org,
+        Steven Rostedt <rostedt@kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Indu Bhagat <indu.bhagat@oracle.com>
+CC: Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
+        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
+        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: Re: [PATCH v7 6/6] x86/vdso: Enable sframe generation in VDSO
+User-Agent: K-9 Mail for Android
+In-Reply-To: <9a63ce89-84f0-4782-90bf-dfd7c8ec8c52@linux.ibm.com>
+References: <20260203171958.1522030-1-jremus@linux.ibm.com> <20260203171958.1522030-7-jremus@linux.ibm.com> <f671c79a-ee73-4a12-af48-2811f97b9f3d@zytor.com> <9a63ce89-84f0-4782-90bf-dfd7c8ec8c52@linux.ibm.com>
+Message-ID: <1AE3ED79-C094-46AE-B455-06199D5699DD@zytor.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 6 Feb 2026 19:38:28 +0000 Viacheslav Dubeyko wrote:
-> Hello,
-> 
-> Machine Learning (ML) is approach/area of learning from data,
-> finding patterns, and making predictions without implementing algorithms
-> by developers. The number of areas of ML applications is growing
-> with every day. Generally speaking, ML can introduce a self-evolving and
-> self-learning capability in Linux kernel. There are already research works
-> and industry efforts to employ ML approaches for configuration and
-> optimization the Linux kernel. However, introduction of ML approaches
-> in Linux kernel is not so simple and straightforward way. There are multiple
-> problems and unanswered questions on this road. First of all, any ML model
-> requires the floating-point operations (FPU) for running. But there is
-> no direct use of FPUs in kernel space. Also, ML model requires training phase
-> that can be a reason of significant performance degradation of Linux kernel.
-> Even inference phase could be problematic from the performance point of view
-> on kernel side. The using of ML approaches in Linux kernel is inevitable step.
-> But, how can we use ML approaches in Linux kernel? Which infrastructure
-> do we need to adopt ML models in Linux kernel?
+On February 6, 2026 9:48:24 AM PST, Jens Remus <jremus@linux=2Eibm=2Ecom> w=
+rote:
+>On 2/4/2026 1:49 AM, H=2E Peter Anvin wrote:
+>> On 2026-02-03 09:19, Jens Remus wrote:
+>>> -
+>>> +#if defined(__x86_64__) && defined(CONFIG_AS_SFRAME)
 >
-Given the short list, eevdf, slab, ext4, IP stack, usb bus and kvm, ML is not
-needed before the second half in 2027, because it wastes minutes to make
-either liver or pancreas intelligent. By intelligent I mean liver can edit
-ppt in Russian. Perhaps Cerebellum is an exception.
+>My understanding is that you would like above changed to:
+>
+>#ifdef CONFIG_AS_SFRAME
+>
+>>> +	=2Ecfi_sections =2Eeh_frame, =2Edebug_frame, =2Esframe
+>>> +#else
+>>>  	=2Ecfi_sections =2Eeh_frame, =2Edebug_frame
+>>> +#endif
+>>> =20
+>>=20
+>> It would be better to:
+>>=20
+>> #undef CONFIG_AS_SFRAME	/* i386 doesn't support =2Esframe */
+>>=20
+>> in fake_32bit_build=2Eh=2E
+>Due to (binutils 2=2E46 pre-release) GNU assembler supporting --gsframe-3=
+,
+>but only for x86-64 not for x86-32 (nor x32) CONFIG_AS_SFRAME is enabled
+>even for my i386 cross build attempt=2E  This then wrongly causes the
+>=2Ecfi_sections with =2Esframe to be selected (verified by adding an #err=
+or
+>for testing)=2E
+>
+>IIUC the =2Ecfi_sections is there to have DWARF in both =2Eeh_frame and
+>=2Edebug_frame=2E  For =2Esframe it basically has the same effect as
+>specifying the common assembler option --gsframe=2E  Given the more
+>specific option --gsframe-3 is explicitly specified I think it would
+>be better to drop the changes to both dwarf2=2Eh and fake_32bit_build=2Eh
+>and solely rely on --gsframe-3=2E
+>
+>Josh, Indu, do you agree?
+>
+>Thanks and rRegards,
+>Jens
 
-Can you build bot to fix syzbot reports before 2028?
+Seems a lot cleaner to me, too, assuming it actually works=2E
