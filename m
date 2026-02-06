@@ -1,61 +1,63 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB6732FA3C
-	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 11:58:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE7CD350A37
+	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 11:58:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770379122; cv=none; b=Hl1vifs40uvwsCGLNpVSzlXec8fKye3oCwlaap/PD6mFlLYTkaePvpqR1qqJf0ES7qiTzV9nd6b5Ake7x5Yjw5qnloe0t3Ce1w+RS+YA4yEIPLdAtAv4S7XRDJxXVLhDn+a2lOBcUj5sax1s8AlAGO13OI7u9jxCFiWr0cDrjLM=
+	t=1770379133; cv=none; b=DImnSfsaQQ62+GGdDz1GFftqUKpPEJSqE6+/ZAtO0tjhLUUJk83QupQjHRs3SQA/ai/kbcE/KGQOUtQDKmQMy7lP6FIcLDVPBtoDguVYSMeQXxwWg1VBQmQmUnZ61cVEHKFcj3BMbKsh0MD+6SZGU4C8fYSPrVwHjw5KpCjg29M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770379122; c=relaxed/simple;
-	bh=i3gEZwOC5w7/K7o9p92wgBf1kb9PSKuPb33y6/Vx8cA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XkpCe1+FfxwRg3DKgWXkr1fFxWwaeeUogNgZVCyltT+mYONQYGAZUMFJ0nRQqDUKFdRRGoEknPCwW3dE2ppe6t0PgQb7bjUmPCZjHaeDgIzj8noLsskNyukt2B1RMyPL+Wf3YlPugUERbajR5trcEoNdYGCnEDfZ77Zs7VMdbx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CTegR1d6; arc=none smtp.client-ip=209.85.214.196
+	s=arc-20240116; t=1770379133; c=relaxed/simple;
+	bh=w5NGJ74MU5R3R7DpzqJ2S6IYEkng2ht1IhcPzlGqqV0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MaUVG6trwj+5nYHJwtp1XnkvnxBpBhsK2vG02sGR1N2GudGx6u9vscEDyhE5yXBc4BzAtok39I4xj29NIHkVk0QCw3blYxhM8UcBfrK3ytHlWoWSr6VAEnFOZfam/lg2PfO6I0sGiZ1dxDfKGDOf5DW+EWANJLyMWn1on6EpKb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yw8I63IX; arc=none smtp.client-ip=209.85.214.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CTegR1d6"
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2a95de4b5cbso359995ad.1
-        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 03:58:41 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yw8I63IX"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2a95de4b5cbso361185ad.1
+        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 03:58:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770379121; x=1770983921; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BwiHVlaKsntpUJzB9dI5SHd2dWcYWLOEu8oB1qgtOsM=;
-        b=CTegR1d6CM34XpFolfhRF4iBbvBzl7zoxxo27nlKZFjMutNSX9CgwyF/qugBGUTVj9
-         LRuyk9/k+Pepn26xs3mstdwaf6ouxMp1vWO9soGLdrsF90QwCNBnU3wNnYQw1pgJhSqT
-         tmwIsNdCcHeUPOkcKLHn/51PBoMlTglJ7sCJmIXPLGVkGtRxySJ81DpUeC8/h8oIK6O6
-         B8vgLVJy6cL7quRhAzEpLXB6vRuqsuR024EsCyjdbbn+CuJuzCHZ/f9Y08AxQEpL41SZ
-         Dfx8+7qtu581Xx6gg884mW0Q7a878QC746ep0h+7wXH9fthA48g76SzxqyvVfcyBibuV
-         rFVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770379121; x=1770983921;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1770379133; x=1770983933; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=BwiHVlaKsntpUJzB9dI5SHd2dWcYWLOEu8oB1qgtOsM=;
-        b=HZVuHZH1Xw0/dea6ephrnW/6V9NgXimNKHGBFCa+Jj/NxVqvtwBn7cy1ARuVB3LGa3
-         KjvDwPjn8Au1fhY2cxKyos7PXjdk7rYJHLDB10Qdzd7nWY0lLEbT0A578fXYChzTYLWa
-         6UhWzG1s4KtPm7Qd3EwigfneqVOmI3y8324DnxTsU8NIsLyPg4jK/kJzGFeqIi88wJHZ
-         pXui42DPnVdqxFi+NdZSYUQfm/jeoWbTv9NZEy/PidEsoG1mrAceyEpJaxHUNe/D0l1i
-         TA9YCHPpcF9OFVHQ2EhamptX4Nnd33qNDE0W4IfyrUauZpM77phnBrENghnhUwt360pA
-         zG6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVNzZGxRGW3omUwMXT63b/iP0VA4GSYwC/jUHVccqBIrhfEQYnaVkD4hbAgQh6xlB7V8so=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0CqDOwOHQFGe45+E6IFvVrRfzH7zcl7TPNg9aBOXbf0QK30bo
-	aXlvf8jCOv1pHwJmpUg11NwJilszgh+9lf2yiRlTSS5F8d3GhR2YnETl
-X-Gm-Gg: AZuq6aICuHfBWh9u4X35G3VlPPilPvFXoBg5ysCfCi5JW7zV5uXayZuPUua4+YKX35i
-	ku6pvlB4UbpIx0dHFrVOVW/EFMBwHa62X80UAWVCm+Ahn2etAOcoi0op+ZrHbnf0OTT873ZLVRW
-	PS6L5vbmpY+g8NXgXJdc97uc1EeEzMS61OznfZdBkfUa5mwur62DSeGgo+j+Mg0HnWQ0BwWn7Q+
-	Mc0e2DjP2pV2yXsjNGTCZ0q5niy7u0Qu69i38bAfRSDyYHGWJ7vbJCyFATzLRzdjLWTtZ82CSS1
-	x74c5QDmJJPwDyNrEm8eAufWuamEpFwXQr4mTVWVPYMYt4giWCEJbUuZs8+On5u/szjYwyAaVTj
-	LCQpNRnRq0nlYY2Jqn4K5hGWUHBBsQ9E3VA9ia1+K6NOhcI/SmIIfBGp98fVOb7UFmwzswrqO3U
-	rdlVIpE19/
-X-Received: by 2002:a17:902:d504:b0:2a0:b4f6:5595 with SMTP id d9443c01a7336-2a95192514bmr23739265ad.50.1770379121168;
-        Fri, 06 Feb 2026 03:58:41 -0800 (PST)
+        bh=n5ZW0Lp2uS+rJ6cqos6DM9CIgCyO+gQDhoGFyA1Jyks=;
+        b=Yw8I63IX5uKg6zVHCvSyd3kxa+LTuAgOtLxmRdXxGBQVOejZIzYZ86sZj7Y8+BuVLY
+         N+rgDmji+7lEARkZVnCH2+xtUDlcbgZ16l4uLtBRki02MQqnuqVck6U4PebR/EepPtnz
+         XC2/vdWsaVUhNo1xya6pW5dDJnFWUzmvoOAM82JnECM0LJoSUMYIqsEB+vNW2n7bNJF7
+         oIoQXglB5ZqzJ4EZPTpmo9arNozcc8I04u/LkiQ+V89rqOg9StEWyiQT9jVfRuQK48Kh
+         vpXyDkaqejIw+zlYgqf2ev2j+jyz5yxIYin+v4VSgaK+DYY/M9G62Sy/PgnJacflBKuf
+         6DWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770379133; x=1770983933;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=n5ZW0Lp2uS+rJ6cqos6DM9CIgCyO+gQDhoGFyA1Jyks=;
+        b=lVE7fS3tKaYHBz7M8czjymE1/pM/e3pNpvbtVY8+vst/ODXIKEbztdJ4ph4wdvgYQ6
+         jv8vx1htgjbNBe4zl/MBYJHCCLkZUbEguw36A3YiFfqUgLZVgscEtt2c0irv58DmmVTM
+         5fng291lN7RDoWtvh2ww473R/0QQ16HBm99rVu0JMdy0e+JB+4kKmNV5/F0mysa/RRVN
+         oeCvpd5smVZPNs986BuNiCRD2KH1ddF1B3Cj9PT2uv3vZUpSq6m9++k7KbV8bUtdIpQi
+         MNKiQ8PoKXZ6LBcTSOhI4HV6qOMohVFUI2BBi8OfRF7Rifb9MbmWE8QN0fNpGjnPmht7
+         eCZg==
+X-Forwarded-Encrypted: i=1; AJvYcCWSMujBjuu2vZwX5jduNjvK5sg6I/wzv9fpKrvD/V+H6Jz8kMBsD0uEaBkEYp3hzxLbJHQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLsH+S9hleVDvSYw93s3vi940CfUjrkMxbcYlXj9ukGW+ye3OM
+	MWM+6tqb5xT3nvP4fg9dG+09S9CNCiYsK1zrfFYIbT8/z+JzTJIKWAKY
+X-Gm-Gg: AZuq6aJMNy6pqvwN2DSIYsRA7xPhREumuo6Ro3RI/zWnTbW5koxhwnyEFHaqVhaYSVh
+	JOzsKPQU3CXeW9eFklJDawcKU6sBTOZPMEzbeqe6jGpcCygIUIKe8I1w6AUP+TGHDHGFNrnY8Xd
+	QQi4idNAY5//VwTgJa/tNU6ie6dhBlcqJyesUfDfeBm5P4CYTYbC+7gRpOQweOmo6gFVOBJJLUs
+	5MQBqRolRYGjnTPgDqV/eS6XLReK62XAwMkxK6AViCdbT3P8/94XIJFd+rufZkASdDEcYLIraYc
+	QgBPMhJ/rdpkPTqj2asSA58LR6sdbMALGv3sSMooCIo6t65mXiV1FoNTE0u1Vo6Wy0h5Go6hJbW
+	G7dmC0uRDYRg6XCKR0GeTULqDIlhXotVGwTpIJHUAr8k9cGXJOjCCxi4H2pzvdJjjek79zvOANp
+	ApFvixxJxzD4HG/w9B8vk=
+X-Received: by 2002:a17:903:8c3:b0:2a7:7c72:42b6 with SMTP id d9443c01a7336-2a95162538amr31216585ad.18.1770379133082;
+        Fri, 06 Feb 2026 03:58:53 -0800 (PST)
 Received: from 7950hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a951c8ac5asm22856395ad.35.2026.02.06.03.58.29
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a951c8ac5asm22856395ad.35.2026.02.06.03.58.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Feb 2026 03:58:40 -0800 (PST)
+        Fri, 06 Feb 2026 03:58:52 -0800 (PST)
 From: Menglong Dong <menglong8.dong@gmail.com>
 X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: ast@kernel.org,
@@ -81,10 +83,12 @@ Cc: daniel@iogearbox.net,
 	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	jiang.biao@linux.dev
-Subject: [PATCH bpf-next v2 0/3] bpf: fsession support for riscv
-Date: Fri,  6 Feb 2026 19:58:20 +0800
-Message-ID: <20260206115823.1070354-1-dongml2@chinatelecom.cn>
+Subject: [PATCH bpf-next v2 1/3] bpf, riscv: introduce emit_store_stack_imm64() for trampoline
+Date: Fri,  6 Feb 2026 19:58:21 +0800
+Message-ID: <20260206115823.1070354-2-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260206115823.1070354-1-dongml2@chinatelecom.cn>
+References: <20260206115823.1070354-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -94,22 +98,68 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Implement bpf fsession for the riscv architecture.
+Introduce a helper to store 64-bit immediate on the trampoline stack with
+a help of a register.
 
-Changes v2 -> v1:
-* use bpf_prog_calls_session_cookie() in invoke_bpf() in the 2nd patch.
-* https://lore.kernel.org/bpf/20260203055231.1088479-1-dongml2@chinatelecom.cn/
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+Tested-by: Björn Töpel <bjorn@kernel.org>
+Acked-by: Björn Töpel <bjorn@kernel.org>
+---
+ arch/riscv/net/bpf_jit_comp64.c | 25 ++++++++++++++-----------
+ 1 file changed, 14 insertions(+), 11 deletions(-)
 
-Menglong Dong (3):
-  bpf, riscv: introduce emit_store_stack_imm64() for trampoline
-  bpf, riscv: add fsession support for trampolines
-  selftests/bpf: enable fsession_test on riscv64
-
- arch/riscv/net/bpf_jit_comp64.c               | 97 +++++++++++++++----
- .../selftests/bpf/progs/get_func_args_test.c  |  2 +-
- .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
- 3 files changed, 79 insertions(+), 22 deletions(-)
-
+diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+index 37888abee70c..e4f45e2e7e2f 100644
+--- a/arch/riscv/net/bpf_jit_comp64.c
++++ b/arch/riscv/net/bpf_jit_comp64.c
+@@ -926,6 +926,14 @@ static void restore_stack_args(int nr_stack_args, int args_off, int stk_arg_off,
+ 	}
+ }
+ 
++static void emit_store_stack_imm64(u8 reg, int stack_off, u64 imm64,
++				   struct rv_jit_context *ctx)
++{
++	/* Load imm64 into reg and store it at [FP + stack_off]. */
++	emit_imm(reg, (s64)imm64, ctx);
++	emit_sd(RV_REG_FP, stack_off, reg, ctx);
++}
++
+ static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int retval_off,
+ 			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
+ {
+@@ -933,12 +941,10 @@ static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int retval_of
+ 	struct bpf_prog *p = l->link.prog;
+ 	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+ 
+-	if (l->cookie) {
+-		emit_imm(RV_REG_T1, l->cookie, ctx);
+-		emit_sd(RV_REG_FP, -run_ctx_off + cookie_off, RV_REG_T1, ctx);
+-	} else {
++	if (l->cookie)
++		emit_store_stack_imm64(RV_REG_T1, -run_ctx_off + cookie_off, l->cookie, ctx);
++	else
+ 		emit_sd(RV_REG_FP, -run_ctx_off + cookie_off, RV_REG_ZERO, ctx);
+-	}
+ 
+ 	/* arg1: prog */
+ 	emit_imm(RV_REG_A0, (const s64)p, ctx);
+@@ -1123,13 +1129,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+ 	emit_sd(RV_REG_FP, -sreg_off, RV_REG_S1, ctx);
+ 
+ 	/* store ip address of the traced function */
+-	if (flags & BPF_TRAMP_F_IP_ARG) {
+-		emit_imm(RV_REG_T1, (const s64)func_addr, ctx);
+-		emit_sd(RV_REG_FP, -ip_off, RV_REG_T1, ctx);
+-	}
++	if (flags & BPF_TRAMP_F_IP_ARG)
++		emit_store_stack_imm64(RV_REG_T1, -ip_off, (u64)func_addr, ctx);
+ 
+-	emit_li(RV_REG_T1, nr_arg_slots, ctx);
+-	emit_sd(RV_REG_FP, -nregs_off, RV_REG_T1, ctx);
++	emit_store_stack_imm64(RV_REG_T1, -nregs_off, nr_arg_slots, ctx);
+ 
+ 	store_args(nr_arg_slots, args_off, ctx);
+ 
 -- 
 2.53.0
 
