@@ -1,67 +1,33 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B2917736;
-	Fri,  6 Feb 2026 14:02:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C673D3EF0C2;
+	Fri,  6 Feb 2026 14:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770386566; cv=none; b=I6ao3VNOJGD/loxgPJfA3HRujdHSSiyPgytFbXs6T+o7cq3pdckSLN//u1U9wYOBnJ8kCJCTeMykNrxkG9b6df6i+dKkZRU+gV09adHdW3GnDCJtvTRsW6/8rQjea/ZXja294O82y1jxzvdV9a9N/6iE8R28T1HtNKpcgEJlqug=
+	t=1770387292; cv=none; b=gEOtCWQB9ggTKs2zldX2HrPngnkEiqKBDCJYDnpgidqne8SBs1KX0pjr6b5BSmOsPA1mLO5V9bFPsLG1oYaa6++w3kNavG83oA2P4jKbgcCfuY0LdiN8phW2lGod5gj+UyfdZ6wmKhUrU0PToWLMKiux0/0t6FEViLWk+YzAwOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770386566; c=relaxed/simple;
-	bh=pyqxtvILUQDZ95xel4viuI9ICwczsp4jTzU+/Z7hG9c=;
+	s=arc-20240116; t=1770387292; c=relaxed/simple;
+	bh=sdRRT+SBk1wu0tv1Ig3EjPncHzNUEQZl7cQ0SQTz2lk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QhSTrKjaItD8wMch3l+/CGlRtc+FBQBHpZucE5F7hIme/DuxSNToR3Nkp/UVIAdfwo/QDvwBEQIaiJNRsLh16KM70ZgZh9tXLQb7cdLOdfU9VAsEo4y6j+YXXtTdQlFq31rEy7hhk5R3cM8gVRKfDZ/n0d12tU1Sk0etdDaNHLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JZqyYoC1; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 In-Reply-To:Content-Type; b=fMRPbgV2eq5Ev5oU3KsnEoKlnSiPfc+96boAiw37nW6ZGtG/4Cb6JvlUVSv62xwdDmbkcsgxhL0QHn/f6z6ployaw/i8BF8XN2lnDX07Hh2f6WVvW3tcykdhf5joT6qN9Ko3ZJjFN3kGu364rOyLzoizKfd1jOVMM8agyz12KKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UtY6Pa4i; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JZqyYoC1"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 616CwKY8032189;
-	Fri, 6 Feb 2026 14:01:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=5rTeGm
-	WivFmx0h9oCMWdLVhqyGHZ8vG/gGEjTr34nc0=; b=JZqyYoC1dCZuow2dTuRAPi
-	kffhIzL9Y0wJIqwCSU3c3HmSKviWuFYqb3PfoV55hidOPBhuBCO74s+zVj/z8zZm
-	N4LBY6V0RGVTVYeBFztucaQ+YS3hrEm8yacUO8q2BEwr+p9TCBh36bPyztTbRzoR
-	Begvzdwn8bXQADuf/n/ApO4b00wNP3xDoJ3QkzZRf8G7fGOHYd9fDQH0gRM+BDm6
-	oFQ9/y7nAI85tGzxsOTyW0rOd41nKXf6bo4N7kKpG2o/obkhlBVzRB6fUTdapjl/
-	6kquZeyEniNNpQTsNvLzoezTPZGrtVmAHlfXCk7YVL/A73nczo95pyf1pNLG8PdA
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c185h8q2t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Feb 2026 14:01:28 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 616E1R8o000813;
-	Fri, 6 Feb 2026 14:01:28 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c185h8q2p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Feb 2026 14:01:27 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 616DPce0005914;
-	Fri, 6 Feb 2026 14:01:26 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c1x9jp44x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Feb 2026 14:01:26 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 616E1Mv031129980
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 6 Feb 2026 14:01:23 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DAB8B20043;
-	Fri,  6 Feb 2026 14:01:22 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0BB772004B;
-	Fri,  6 Feb 2026 14:01:20 +0000 (GMT)
-Received: from [9.111.140.182] (unknown [9.111.140.182])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  6 Feb 2026 14:01:19 +0000 (GMT)
-Message-ID: <832897ac-f1d4-4f91-8034-f6b2d9e86fa4@linux.ibm.com>
-Date: Fri, 6 Feb 2026 15:01:19 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UtY6Pa4i"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E95E7C19421;
+	Fri,  6 Feb 2026 14:14:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770387292;
+	bh=sdRRT+SBk1wu0tv1Ig3EjPncHzNUEQZl7cQ0SQTz2lk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=UtY6Pa4iRbUGTCHrQV1Emxn3dyaUTIVjXT8pyPCe+1uF9XrKZ7DJOjkL/dGlQ3h6b
+	 4t5ElPj7bYm/khLMAxOGih8yWLvNmj392O9AesL9M5XOK93gsj79i51rxLtLYiUlxS
+	 Zjeet9pEshne7JLqmfwn27hP5D412PRUe26mJAtVOwudywTfepWMfrnYsWSLqlHkeD
+	 hQnftOOXrl6u8T7yxMz0HNCpStVxbqy5PWBszfXrs5CnrDaReeB9xY9aylapsvKpWZ
+	 18r/EcAXNqyARNdDBxI3o143nXawdJuAJpA576IvMxERafg3KiFiM8DJ9HQLIniEPO
+	 rI30+p4m/wNLw==
+Message-ID: <26e54152-e576-4292-b6ba-d50cf7cc8aa2@kernel.org>
+Date: Fri, 6 Feb 2026 15:14:47 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,184 +35,132 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/6] x86/asm: Avoid emitting DWARF CFI for non-VDSO
-To: "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        x86@kernel.org, linux-mm@kvack.org,
-        Steven Rostedt <rostedt@kernel.org>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
-        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
-        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Michal Hocko
- <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-References: <20260203171958.1522030-1-jremus@linux.ibm.com>
- <20260203171958.1522030-3-jremus@linux.ibm.com>
- <bd2fdf83-e460-46ad-8617-16319bc55ca5@zytor.com>
+Subject: Re: [PATCH net-next v2 1/6] net: sched: introduce qdisc-specific drop
+ reason tracing
+To: atenart@redhat.com, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
+ <toke@redhat.com>, netdev@vger.kernel.org,
+ Eric Dumazet <eric.dumazet@gmail.com>, Paolo Abeni <pabeni@redhat.com>
+Cc: bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, horms@kernel.org,
+ jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
+ jhs@mojatatu.com, carges@cloudflare.com, kernel-team@cloudflare.com,
+ "David S. Miller" <davem@davemloft.net>
+References: <177032644012.1975497.16411100029657607833.stgit@firesoul>
+ <177032649028.1975497.12663177216553780756.stgit@firesoul>
+ <87sebez099.fsf@toke.dk>
 Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <bd2fdf83-e460-46ad-8617-16319bc55ca5@zytor.com>
-Content-Type: text/plain; charset=UTF-8
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <87sebez099.fsf@toke.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=UdxciaSN c=1 sm=1 tr=0 ts=6985f438 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=oGMlB6cnAAAA:8 a=jT-ijHZqpt8M6Ml0j-IA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=2JgSa4NbpEOStq-L5dxp:22
- a=NdAtdrkLVvyUPsUoGJp4:22
-X-Proofpoint-GUID: AVfC4cfylaxogN-qGUTbmOpp_mw_Lu9E
-X-Proofpoint-ORIG-GUID: jo5kE4wFwL9iNHMz-So3u1DkBXo94QrW
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA2MDA5OSBTYWx0ZWRfXwRUWWbWoJ2KN
- CXLjScrh6OEZpc1H9DcVlgdSwf7fQogYn0lBZS58ZcH4WKOluwVZCHAdIE21bCDLJZzxDtE7LKT
- jysaMiE4mmFaPcMrGdP6xLDE83DJ+DgZiWpU2L36p1K5tka+HlS3kZma+bpbxCwFsPEkCbw+t9T
- Hbt97yDxIRwaaZkZtvMLplPRnHMiXOouDOO400eJXPix2gt6KELn1L7jdEZ3Tw3RW9/gTGc/TSf
- pYSskOv7w/zPdxSEqmsvtp0SvBbKtb2RtVuNv/mIoeTxpurp30ptkGGGyXvAen/m7CorbIw3Z8U
- plzEaAu9zoUD2GwHHPVd3+wBEtSf2pys67iyRCHFm47xKTryaJaeh53jxQdVvMuTqUzxbS4u6dq
- El8w5bXcVMsUULdnamZ1AAGWN0FDuihRZQV2ULjFWWUtc76D1tcaB6YP/jbM5Us+v2kHIvQl/V6
- Wbtu1Nv/f3bIMaQa/NQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-06_04,2026-02-05_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 malwarescore=0 impostorscore=0 lowpriorityscore=0
- suspectscore=0 clxscore=1015 bulkscore=0 spamscore=0 phishscore=0
- adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2601150000
- definitions=main-2602060099
 
-On 2/4/2026 1:43 AM, H. Peter Anvin wrote:
-> On 2026-02-03 09:19, Jens Remus wrote:
->> From: Josh Poimboeuf <jpoimboe@kernel.org>
->>
->> It was decided years ago that .cfi_* annotations aren't maintainable in
->> the kernel.  They were replaced by objtool unwind hints.  For the kernel
->> proper, ensure the CFI_* macros don't do anything.
->>
->> On the other hand the VDSO library *does* use them, so user space can
->> unwind through it.
->>
->> Make sure these macros only work for VDSO.  They aren't actually being
->> used outside of VDSO anyway, so there's no functional change.
->>
->> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
->> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
->> Signed-off-by: Jens Remus <jremus@linux.ibm.com>
->> ---
->>  arch/x86/include/asm/dwarf2.h | 51 ++++++++++++++++++++++++-----------
->>  1 file changed, 35 insertions(+), 16 deletions(-)
->>
->> diff --git a/arch/x86/include/asm/dwarf2.h b/arch/x86/include/asm/dwarf2.h
->> index 09c9684d3ad6..7cc30500c095 100644
->> --- a/arch/x86/include/asm/dwarf2.h
->> +++ b/arch/x86/include/asm/dwarf2.h
->> @@ -6,6 +6,15 @@
->>  #warning "asm/dwarf2.h should be only included in pure assembly files"
->>  #endif
->>  
->> +#ifdef BUILD_VDSO
->> +
->> +	/*
->> +	 * For the vDSO, emit both runtime unwind information and debug
->> +	 * symbols for the .dbg file.
->> +	 */
->> +
->> +	.cfi_sections .eh_frame, .debug_frame
->> +
->>  #define CFI_STARTPROC		.cfi_startproc
->>  #define CFI_ENDPROC		.cfi_endproc
->>  #define CFI_DEF_CFA		.cfi_def_cfa
->> @@ -22,21 +31,31 @@
->>  #define CFI_ESCAPE		.cfi_escape
->>  #define CFI_SIGNAL_FRAME	.cfi_signal_frame
 
-I missed that this is new on tip:x86/entry and thus also needs to be
-added below in the !BUILD_VDSO case.
 
->>  
->> -#ifndef BUILD_VDSO
->> -	/*
->> -	 * Emit CFI data in .debug_frame sections, not .eh_frame sections.
->> -	 * The latter we currently just discard since we don't do DWARF
->> -	 * unwinding at runtime.  So only the offline DWARF information is
->> -	 * useful to anyone.  Note we should not use this directive if we
->> -	 * ever decide to enable DWARF unwinding at runtime.
->> -	 */
->> -	.cfi_sections .debug_frame
->> -#else
->> -	 /*
->> -	  * For the vDSO, emit both runtime unwind information and debug
->> -	  * symbols for the .dbg file.
->> -	  */
->> -	.cfi_sections .eh_frame, .debug_frame
->> -#endif
->> +#else /* !BUILD_VDSO */
->> +
->> +/*
->> + * On x86, these macros aren't used outside VDSO.  As well they shouldn't be:
->> + * they're fragile and very difficult to maintain.
->> + */
->> +
->> +.macro nocfi args:vararg
->> +.endm
->> +
->> +#define CFI_STARTPROC		nocfi
->> +#define CFI_ENDPROC		nocfi
->> +#define CFI_DEF_CFA		nocfi
->> +#define CFI_DEF_CFA_REGISTER	nocfi
->> +#define CFI_DEF_CFA_OFFSET	nocfi
->> +#define CFI_ADJUST_CFA_OFFSET	nocfi
->> +#define CFI_OFFSET		nocfi
->> +#define CFI_REL_OFFSET		nocfi
->> +#define CFI_REGISTER		nocfi
->> +#define CFI_RESTORE		nocfi
->> +#define CFI_REMEMBER_STATE	nocfi
->> +#define CFI_RESTORE_STATE	nocfi
->> +#define CFI_UNDEFINED		nocfi
->> +#define CFI_ESCAPE		nocfi
-
-#define CFI_SIGNAL_FRAME		nocfi
-
->> +
->> +#endif /* !BUILD_VDSO */
->>  
->>  #endif /* _ASM_X86_DWARF2_H */
+On 06/02/2026 10.31, Toke Høiland-Jørgensen wrote:
+> Jesper Dangaard Brouer <hawk@kernel.org> writes:
 > 
-> I guess patch 3 justifies this.
+>> Create new enum qdisc_drop_reason and trace_qdisc_drop tracepoint
+>> for qdisc layer drop diagnostics with direct qdisc context visibility.
+>>
+>> The new tracepoint includes qdisc handle, parent, kind (name), and
+>> device information. Existing SKB_DROP_REASON_QDISC_DROP is retained
+>> for backwards compatibility via kfree_skb_reason().
+>>
+>> Convert FQ, FQ_CoDel, CoDel, SFB, and pfifo_fast to use the new
+>> infrastructure.
+>>
+>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+[...]
+>> diff --git a/include/net/dropreason-core.h b/include/net/dropreason-core.h
+>> index a7b7abd66e21..3d8d284e05c8 100644
+>> --- a/include/net/dropreason-core.h
+>> +++ b/include/net/dropreason-core.h
+>> @@ -68,12 +68,6 @@
+>>   	FN(SECURITY_HOOK)		\
+>>   	FN(QDISC_DROP)			\
+>>   	FN(QDISC_BURST_DROP)		\
+>> -	FN(QDISC_OVERLIMIT)		\
+>> -	FN(QDISC_CONGESTED)		\
+>> -	FN(CAKE_FLOOD)			\
+>> -	FN(FQ_BAND_LIMIT)		\
+>> -	FN(FQ_HORIZON_LIMIT)		\
+>> -	FN(FQ_FLOW_LIMIT)		\
+>>   	FN(CPU_BACKLOG)			\
+>>   	FN(XDP)				\
+>>   	FN(TC_INGRESS)			\
+>> @@ -371,8 +365,10 @@ enum skb_drop_reason {
+>>   	/** @SKB_DROP_REASON_SECURITY_HOOK: dropped due to security HOOK */
+>>   	SKB_DROP_REASON_SECURITY_HOOK,
+>>   	/**
+>> -	 * @SKB_DROP_REASON_QDISC_DROP: dropped by qdisc when packet outputting (
+>> -	 * failed to enqueue to current qdisc)
+>> +	 * @SKB_DROP_REASON_QDISC_DROP: dropped by qdisc during enqueue or
+>> +	 * dequeue. More specific drop reasons are available via the
+>> +	 * qdisc:qdisc_drop tracepoint, which also provides qdisc handle
+>> +	 * and name for identifying the source.
 > 
-> Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
+> IIUC, this is not needed, see below:
 > 
+> [...]
+> 
+>> @@ -37,6 +37,24 @@
+>>   const struct Qdisc_ops *default_qdisc_ops = &pfifo_fast_ops;
+>>   EXPORT_SYMBOL(default_qdisc_ops);
+>>   
+>> +void tcf_kfree_skb_list(struct sk_buff *skb, struct Qdisc *q,
+>> +			struct netdev_queue *txq,
+>> +			struct net_device *dev)
+>> +{
+>> +	while (unlikely(skb)) {
+>> +		struct sk_buff *next = skb->next;
+>> +		enum qdisc_drop_reason reason = tcf_get_qdisc_drop_reason(skb);
+>> +
+>> +		prefetch(next);
+>> +		/* Catch wrong enum: skb_drop_reason vs qdisc_drop_reason */
+>> +		WARN_ON_ONCE(reason && reason < __QDISC_DROP_REASON);
+>> +		trace_qdisc_drop(q, txq, dev, skb, reason);
+>> +		kfree_skb_reason(skb, SKB_DROP_REASON_QDISC_DROP);
+> 
+> AFAIU, the idea here is that you just pass the same 'reason' value to
+> kfree_skb_reason(). Because of the subsys shift and offset, these will
+> all be unique values, so anyone just watching the old tracepoint will
+> get QDISC_DROP_* reasons with no context, and if you want the context
+> you listen to the qdisc_drop tracepoint.
 
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
+I'm already changing this code in V3, as syzbot revealed that some
+existing skb_drop_reason's do arrive here, which is the TC filter drop
+reasons (SKB_DROP_REASON_TC_*).  We primarily need subsys encoding as
+we share the SKB->cb area.
 
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
+This is the new code, that pass 'reason' through:
 
+  /* TC classifier and qdisc share drop_reason storage.
+   * Check subsystem mask to identify qdisc drop reasons,
+   * else pass through skb_drop_reason set by TC classifier.
+   */
+  if ((reason & SKB_DROP_REASON_SUBSYS_MASK) == __QDISC_DROP_REASON) {
+  	trace_qdisc_drop(q, txq, dev, skb, reason);
+  	skb_reason = SKB_DROP_REASON_QDISC_DROP;
+  } else {
+  	skb_reason = (enum skb_drop_reason)reason;
+  }
+  kfree_skb_reason(skb, skb_reason);
+
+I do realize that the reason is now a unique value, that in principle
+could be passed through, *BUT* that will break existing userspace
+tools.  E.g. the `perf trace -e skb:kfree_skb` cannot decode these to
+strings. (The net/core/drop_monitor.c also need special handling.)
+I actually want to give userspace a *single* SKB_DROP_REASON_QDISC_DROP
+reason (that existing tools already knows).
+
+Leaking extra qdisc drop reasons is not helpful to consume as it is not
+actionable without knowing the qdisc. A QDISC_DROP_OVERLIMIT from FQ is
+very different from one in CAKE - knowing just the reason without the
+qdisc type/config is insufficient for debugging. The trace_qdisc_drop
+tracepoint provides both the reason AND the qdisc context together
+
+I've talked to our "consumer" tool developers and our plan is to try
+attach to new tracepoint, if that is successful we change the existing
+SKB_DROP_REASON_QDISC_DROP sampling rate to be zero.
+
+
+--Jesper
