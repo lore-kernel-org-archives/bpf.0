@@ -1,290 +1,120 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B13DB1FE45D;
-	Fri,  6 Feb 2026 00:29:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2827822068A;
+	Fri,  6 Feb 2026 01:54:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770337776; cv=none; b=TtRENkg+LS4YACnn4wf4EHTEujky5tF369dBPCajqSsRLcru4QRu5HMbtOzVylIzdyX45iuE11Z9iRBrR1Rfc+D9Jw+RAMz5E0imfE6Qqo4P1kbv47D2Rnak0zElmtoJgF9lSzKSa8zib3OfG9iPSevUd1DYlWqLNGz8cMAJccs=
+	t=1770342851; cv=none; b=V7yybiSfSntVw+jsI5VL90i7UMhBmO2ftTz1N7O6wXeL68wipXnlUkcUph+f9N4yJIgxyuBTGxad0iyZwaKF+QljgTzeTmo8P07VLhUD9OkkMllhTEcWvxy7C7jJFpjlKk8itutyKv51+hikXBwHCeThaYuw7mNSkdGwM/mB6Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770337776; c=relaxed/simple;
-	bh=qi0YT5w+VAfOLVXwbysCpsyOvif5wKvEtusQrIWsrAY=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Lo6fvUzIIq+fBBXelXDAzJeIsf3whgCr/hz730hmEZ5NQdF7HvS0K3X2+IjD5uFkHHDzofm7Rk4kcSeQH3loqvS7jJcrgE0vV7L42nUzIm2vdcMw0fTZMfqmO1+CUMvQb0DywCvT6k4v+hLO0GSUKjS1WyWHcgpRcMpeXFbkcPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X+2wfR1s; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770342851; c=relaxed/simple;
+	bh=5J3kMshGAuQBNb43c32R/D42M6M9n/bqmLxIbWEwyAg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LfDOZMRpbX3ZqVENGd9cy26Qxz3hiDN19EtJHNwJb27s8d05pxpfLMOtQXcCV5wEIW3mAv/xVu8B5RCRInPfCZyv9mCOj3IJPcrwGZ7TIJEwFMhMcrGkZd1DjjSO451UOXcCBEPROgu2Xokq+Vhh8rqp7qbEntyE2PvGWZQeUWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JuOxFJ+4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X+2wfR1s"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBBC2C4CEF7;
-	Fri,  6 Feb 2026 00:29:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JuOxFJ+4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1E8C4CEF7;
+	Fri,  6 Feb 2026 01:54:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770337776;
-	bh=qi0YT5w+VAfOLVXwbysCpsyOvif5wKvEtusQrIWsrAY=;
+	s=k20201202; t=1770342851;
+	bh=5J3kMshGAuQBNb43c32R/D42M6M9n/bqmLxIbWEwyAg=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=X+2wfR1saXeUTBZdCYBLA43L0lppZxqbRHlbTRlcwpJ54TlKI7yo81ax01oaidYQ3
-	 +JmdBkuNo5DJvGcoWJCkBnx+OVOxc9ClsoG3aZI+ZiUC1kRcYeoo+4hcRTJYx6RvVS
-	 bgNp+03DUf+ct2klmvwfhSlG4dCl4Wg2m6YEIYvRWrV/m/RzPow+Vj8JyiPduV+Db+
-	 xx7Qxf94ndHhTZU3EX96h28/J1y6sQoTYq20iqY2dzpRxBZWRAlRXehou6TGwr6lM1
-	 qxLVHj99ELRN4dcc/Z7ZlJ3EGSbx2B01WaMcsW2tiFVGBqkW8XWhx5JVQNPimm8B8V
-	 1wmAHDxrr4RaA==
-Date: Fri, 6 Feb 2026 09:29:31 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Donglin Peng <dolinux.peng@gmail.com>
-Cc: rostedt@goodmis.org, ast@kernel.org, mhiramat@kernel.org,
- andrii.nakryiko@gmail.com, linux-kernel@vger.kernel.org, Donglin Peng
- <pengdonglin@xiaomi.com>, Andrii Nakryiko <andrii@kernel.org>, Eduard
- Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org
-Subject: Re: [PATCH 1/2] btf: Add for_each_enum and for_each_enum64 helper
- macros
-Message-Id: <20260206092931.13895170d57fb0c704f2bbc0@kernel.org>
-In-Reply-To: <20260202111548.3555306-2-dolinux.peng@gmail.com>
-References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
-	<20260202111548.3555306-2-dolinux.peng@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	b=JuOxFJ+4wxUl1w911PrccY2p3Vmohj2BvL9fBMt1cWe/0L4OK4QPqbUd3fy94/Mcf
+	 6V43l4m0aLTlQSxxUxPf4hj17JW7JZD9P1/iHdt5D7QkKC1BGyK9z65SH09Z3oTCDa
+	 ljqWhIuXiDyG8kEJ3beU5HL6/T2d5rVuFWHTe1BLMi1zBxYS1LkEggFv9V4VuzlXnQ
+	 5t161dfkh7E3JuMKyLaOredWzSUQTmlQR2/7C1kgO0oycAUgZmLy1xr4hNfP8f7DWg
+	 haIZ33cCUoa8VVXPp6gxDSZhasWB8pxbjqzmfd+Irqyx6BD/kOUM6nRYyEwXYUqsHw
+	 xw2DRGYeSIzKA==
+Date: Thu, 5 Feb 2026 17:54:08 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>, Larysa Zaremba
+ <larysa.zaremba@intel.com>
+Cc: bpf@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>, Wei Fang
+ <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Tony Nguyen
+ <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
+ Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
+ <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF
+ Foundation)" <bastien.curutchet@bootlin.com>, Tushar Vyavahare
+ <tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, "Ricardo
+ B. =?UTF-8?B?TWFybGniiJrCrnJl?=" <rbm@suse.com>, Eelco Chaudron
+ <echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, Toke
+ Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
+ Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
+ frag_size
+Message-ID: <20260205175408.30ab72a1@kernel.org>
+In-Reply-To: <20260205134046.pggwyosutj7ggi4i@skbuf>
+References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
+	<20260203105417.2302672-7-larysa.zaremba@intel.com>
+	<20260205005901.gnju3zmqimtgeu2b@skbuf>
+	<20260204173401.282899d0@kernel.org>
+	<20260205122953.lscemcctayrvszdu@skbuf>
+	<aYSP344FT-JlylwY@soc-5CG4396X81.clients.intel.com>
+	<20260205124638.hxzvjiocephzlrk3@skbuf>
+	<aYSZw4wbd-nvLTuD@soc-5CG4396X81.clients.intel.com>
+	<20260205134046.pggwyosutj7ggi4i@skbuf>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon,  2 Feb 2026 19:15:47 +0800
-Donglin Peng <dolinux.peng@gmail.com> wrote:
-
-> From: Donglin Peng <pengdonglin@xiaomi.com>
+On Thu, 5 Feb 2026 15:40:46 +0200 Vladimir Oltean wrote:
+> > > I mean, it should "work" given the caveat that calling bpf_xdp_adjust_tail()
+> > > on a first-half page buffer with a large offset risks leaking into the
+> > > second half, which may also be in use, and this will go undetected, right?
+> > > Although the practical chances of that happening are low, the requested
+> > > offset needs to be in the order of hundreds still.  
+> > 
+> > Oh, I did get carried away there...
+> > Well, one thing is shared page memory model in enetc and i40e, another thing is
+> > xsk_buff_pool, where chunk size can be between 2K and PAGE_SIZE. What about
+> > 
+> > tailroom = rxq->frag_size - skb_frag_size(frag) -
+> >            (skb_frag_off(frag) % rxq->frag_size);
+> > 
+> > When frag_size is set to 2K, headroom is let's say 256, so aligned DMA write
+> > size is 1420.
+> > last frag at the start of the page: offset=256, size<=1420
+> >     tailroom >= 2K - 1420 - 256 = 372
+> > last frag in the middle of the page: offset=256+2K, size<=1420
+> >     tailroom >= 2K - 1420 - ((256 + 2K) % 2K) = 372
+> > 
+> > And for drivers that do not fragment pages for multi-buffer packets, nothing
+> > changes, since offset is always less than rxq->frag_size.
+> > 
+> > This brings us back to rxq->frag_size being half of a page for enetc and i40e,
+> > and seems like in ZC mode it should be pool->chunk_size to work properly.  
 > 
-> Introduce two new helper macros, for_each_enum and for_each_enum64,
-> to clean up code.
-> 
-> No functional changes.
+> With skb_frag_off() taken into account modulo 2K for the tailroom
+> calculation, I can confirm bpf_xdp_frags_increase_tail() works well for
+> ENETC. I haven't fully considered the side effects, though.
 
-This change looks good to me. But this should go through bpf tree.
++1, also seems to me like it would work tho I haven't thought thru all 
+the cases. We do need to document and name things well, tho, 'cause
+subtleties are piling up ;) Maybe it's time for an ASCII art
+for xdp layout?
 
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-
-Thanks,
-
-> 
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Andrii Nakryiko <andrii@kernel.org>
-> Cc: Eduard Zingerman <eddyz87@gmail.com>
-> Cc: bpf@vger.kernel.org
-> Signed-off-by: Donglin Peng <pengdonglin@xiaomi.com>
-> ---
->  include/linux/btf.h | 10 +++++++
->  kernel/bpf/btf.c    | 66 +++++++++++++++++++--------------------------
->  2 files changed, 38 insertions(+), 38 deletions(-)
-> 
-> diff --git a/include/linux/btf.h b/include/linux/btf.h
-> index f06976ffb63f..cde2deb8e25e 100644
-> --- a/include/linux/btf.h
-> +++ b/include/linux/btf.h
-> @@ -254,6 +254,16 @@ const char *btf_type_str(const struct btf_type *t);
->  	     i < btf_type_vlen(datasec_type);			\
->  	     i++, member++)
->  
-> +#define for_each_enum(i, enum_type, member)			\
-> +	for (i = 0, member = btf_enum(enum_type);		\
-> +	     i < btf_type_vlen(enum_type);			\
-> +	     i++, member++)
-> +
-> +#define for_each_enum64(i, enum_type, member)			\
-> +	for (i = 0, member = btf_enum64(enum_type);		\
-> +	     i < btf_type_vlen(enum_type);			\
-> +	     i++, member++)
-> +
->  static inline bool btf_type_is_ptr(const struct btf_type *t)
->  {
->  	return BTF_INFO_KIND(t->info) == BTF_KIND_PTR;
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 0de8fc8a0e0b..c80a7a0cbe1d 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
-> @@ -728,11 +728,6 @@ static const struct btf_array *btf_type_array(const struct btf_type *t)
->  	return (const struct btf_array *)(t + 1);
->  }
->  
-> -static const struct btf_enum *btf_type_enum(const struct btf_type *t)
-> -{
-> -	return (const struct btf_enum *)(t + 1);
-> -}
-> -
->  static const struct btf_var *btf_type_var(const struct btf_type *t)
->  {
->  	return (const struct btf_var *)(t + 1);
-> @@ -743,11 +738,6 @@ static const struct btf_decl_tag *btf_type_decl_tag(const struct btf_type *t)
->  	return (const struct btf_decl_tag *)(t + 1);
->  }
->  
-> -static const struct btf_enum64 *btf_type_enum64(const struct btf_type *t)
-> -{
-> -	return (const struct btf_enum64 *)(t + 1);
-> -}
-> -
->  static const struct btf_kind_operations *btf_type_ops(const struct btf_type *t)
->  {
->  	return kind_ops[BTF_INFO_KIND(t->info)];
-> @@ -4317,14 +4307,14 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
->  			       const struct btf_type *t,
->  			       u32 meta_left)
->  {
-> -	const struct btf_enum *enums = btf_type_enum(t);
-> +	const struct btf_enum *enump;
->  	struct btf *btf = env->btf;
->  	const char *fmt_str;
->  	u16 i, nr_enums;
->  	u32 meta_needed;
->  
->  	nr_enums = btf_type_vlen(t);
-> -	meta_needed = nr_enums * sizeof(*enums);
-> +	meta_needed = nr_enums * sizeof(*enump);
->  
->  	if (meta_left < meta_needed) {
->  		btf_verifier_log_basic(env, t,
-> @@ -4347,16 +4337,16 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
->  
->  	btf_verifier_log_type(env, t, NULL);
->  
-> -	for (i = 0; i < nr_enums; i++) {
-> -		if (!btf_name_offset_valid(btf, enums[i].name_off)) {
-> +	for_each_enum(i, t, enump) {
-> +		if (!btf_name_offset_valid(btf, enump->name_off)) {
->  			btf_verifier_log(env, "\tInvalid name_offset:%u",
-> -					 enums[i].name_off);
-> +					 enump->name_off);
->  			return -EINVAL;
->  		}
->  
->  		/* enum member must have a valid name */
-> -		if (!enums[i].name_off ||
-> -		    !btf_name_valid_identifier(btf, enums[i].name_off)) {
-> +		if (!enump->name_off ||
-> +		    !btf_name_valid_identifier(btf, enump->name_off)) {
->  			btf_verifier_log_type(env, t, "Invalid name");
->  			return -EINVAL;
->  		}
-> @@ -4365,8 +4355,8 @@ static s32 btf_enum_check_meta(struct btf_verifier_env *env,
->  			continue;
->  		fmt_str = btf_type_kflag(t) ? "\t%s val=%d\n" : "\t%s val=%u\n";
->  		btf_verifier_log(env, fmt_str,
-> -				 __btf_name_by_offset(btf, enums[i].name_off),
-> -				 enums[i].val);
-> +				 __btf_name_by_offset(btf, enump->name_off),
-> +				 enump->val);
->  	}
->  
->  	return meta_needed;
-> @@ -4382,8 +4372,8 @@ static void btf_enum_show(const struct btf *btf, const struct btf_type *t,
->  			  u32 type_id, void *data, u8 bits_offset,
->  			  struct btf_show *show)
->  {
-> -	const struct btf_enum *enums = btf_type_enum(t);
-> -	u32 i, nr_enums = btf_type_vlen(t);
-> +	const struct btf_enum *enump;
-> +	u32 i;
->  	void *safe_data;
->  	int v;
->  
-> @@ -4393,13 +4383,13 @@ static void btf_enum_show(const struct btf *btf, const struct btf_type *t,
->  
->  	v = *(int *)safe_data;
->  
-> -	for (i = 0; i < nr_enums; i++) {
-> -		if (v != enums[i].val)
-> +	for_each_enum(i, t, enump) {
-> +		if (v != enump->val)
->  			continue;
->  
->  		btf_show_type_value(show, "%s",
->  				    __btf_name_by_offset(btf,
-> -							 enums[i].name_off));
-> +							 enump->name_off));
->  
->  		btf_show_end_type(show);
->  		return;
-> @@ -4425,14 +4415,14 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
->  				 const struct btf_type *t,
->  				 u32 meta_left)
->  {
-> -	const struct btf_enum64 *enums = btf_type_enum64(t);
-> +	const struct btf_enum64 *enump;
->  	struct btf *btf = env->btf;
->  	const char *fmt_str;
->  	u16 i, nr_enums;
->  	u32 meta_needed;
->  
->  	nr_enums = btf_type_vlen(t);
-> -	meta_needed = nr_enums * sizeof(*enums);
-> +	meta_needed = nr_enums * sizeof(*enump);
->  
->  	if (meta_left < meta_needed) {
->  		btf_verifier_log_basic(env, t,
-> @@ -4455,16 +4445,16 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
->  
->  	btf_verifier_log_type(env, t, NULL);
->  
-> -	for (i = 0; i < nr_enums; i++) {
-> -		if (!btf_name_offset_valid(btf, enums[i].name_off)) {
-> +	for_each_enum64(i, t, enump) {
-> +		if (!btf_name_offset_valid(btf, enump->name_off)) {
->  			btf_verifier_log(env, "\tInvalid name_offset:%u",
-> -					 enums[i].name_off);
-> +					 enump->name_off);
->  			return -EINVAL;
->  		}
->  
->  		/* enum member must have a valid name */
-> -		if (!enums[i].name_off ||
-> -		    !btf_name_valid_identifier(btf, enums[i].name_off)) {
-> +		if (!enump->name_off ||
-> +		    !btf_name_valid_identifier(btf, enump->name_off)) {
->  			btf_verifier_log_type(env, t, "Invalid name");
->  			return -EINVAL;
->  		}
-> @@ -4474,8 +4464,8 @@ static s32 btf_enum64_check_meta(struct btf_verifier_env *env,
->  
->  		fmt_str = btf_type_kflag(t) ? "\t%s val=%lld\n" : "\t%s val=%llu\n";
->  		btf_verifier_log(env, fmt_str,
-> -				 __btf_name_by_offset(btf, enums[i].name_off),
-> -				 btf_enum64_value(enums + i));
-> +				 __btf_name_by_offset(btf, enump->name_off),
-> +				 btf_enum64_value(enump));
->  	}
->  
->  	return meta_needed;
-> @@ -4485,8 +4475,8 @@ static void btf_enum64_show(const struct btf *btf, const struct btf_type *t,
->  			    u32 type_id, void *data, u8 bits_offset,
->  			    struct btf_show *show)
->  {
-> -	const struct btf_enum64 *enums = btf_type_enum64(t);
-> -	u32 i, nr_enums = btf_type_vlen(t);
-> +	const struct btf_enum64 *enump;
-> +	u32 i;
->  	void *safe_data;
->  	s64 v;
->  
-> @@ -4496,13 +4486,13 @@ static void btf_enum64_show(const struct btf *btf, const struct btf_type *t,
->  
->  	v = *(u64 *)safe_data;
->  
-> -	for (i = 0; i < nr_enums; i++) {
-> -		if (v != btf_enum64_value(enums + i))
-> +	for_each_enum64(i, t, enump) {
-> +		if (v != btf_enum64_value(enump))
->  			continue;
->  
->  		btf_show_type_value(show, "%s",
->  				    __btf_name_by_offset(btf,
-> -							 enums[i].name_off));
-> +							 enump->name_off));
->  
->  		btf_show_end_type(show);
->  		return;
-> -- 
-> 2.34.1
-> 
-
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+FWIW my feeling is that instead of nickel and diming leftover space 
+in the frags if someone actually cared about growing mbufs we should
+have the helper allocate a new page from the PP and append it to the
+shinfo. Much simpler, "infinite space", and works regardless of the
+driver. I don't mean that to suggest you implement it, purely to point
+out that I think nobody really uses positive offsets.. So we can as
+well switch more complicated drivers back to xdp_rxq_info_reg().
