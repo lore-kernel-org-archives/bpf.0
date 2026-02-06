@@ -1,93 +1,101 @@
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F102B26159E
-	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 14:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE8BE36CE17;
+	Fri,  6 Feb 2026 14:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770388238; cv=none; b=LWZaSunumFzuVD/jZ2CR8bCX7VIYkVqksoQdcmfdsqHXIsC0zNSqCTkj4tpynqb4kHtXfmnGdv+hWyJRV+gD5KHtsHnlCIZetem6+dP6noJ6Z8fsBuEznZ6kpumSrgFJzW42H/u2TONKyF7lAOBKNYxJtVZ5+vtppiDXONIjkFk=
+	t=1770388888; cv=none; b=KKiX4SAGNXR163n1dEsRtWmwYhw9AgDMomthJk9PNuu2M0NOT1FmXfTCwb+Sr1EJFH++1ZwVKTR0A1nY6diQIrZI44j3J7RHFohmeG1d+VrTM+ZZ5hzcIDDFyOHC78xk1/iB9DTVEvZEu//aIJCTX2JghMNhWgh7aXemqZkRNh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770388238; c=relaxed/simple;
-	bh=SZQibCQFzDu6+R4DAdXUKMWgRhCRqvrvnThoiwsKPpM=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=fy249sC3pVlov2IS+8ttUacfkyxOHW0b90j6xAxEKLRwLQ6oICdtvF9+D44PvffidUoafAxQjqin6vxailtAaZ89QZC3Un3O/eiPO8dHW8RYmYE+D9SKEJ4DkxHaZfJhdtQc/MgWLSzPnFGm3DADg5DUm9jMZG6ygu75NtBAvqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-6630d586952so1107246eaf.3
-        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 06:30:37 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770388237; x=1770993037;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mLTg7YHbi1N1AN2BWUe7JjPeDZ5Z4RE3xpX2/P/yxSA=;
-        b=MPGgIlbH/nRkKkuC2g4ZV/VJ0M/m4IXOTNVGSNxFB5LotnAvbYbBMteGjglMB7V7wI
-         UM1AZ7LaqugRUwfmPkFJmR9kWdQWDIV4EapAmVzRjLJpepLphnvexZuc3x4o5A82y0X5
-         VCVgEbVvOKrg7X/++90WxrpotuBb0dqSGt4mZtThKrotUN5u258KxUsIW35ZrDazzCxp
-         Zk3YkonNwbyRC925scQL6vDxCb96X7efqK+5KBXIibYJydB7+udbOvKHdnJS8Zv3TkTZ
-         g3RgW6KnzLreVbojkJU3b2NSUeRGikvhLdkKYjZ7m8c9dXGbH7lrl6Zj+LbKGyFH8K4/
-         l/gQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVB+HGQD3JbZ4qZWoKY4e+2weEeNif0dJD9HLdP6g5P8IDsH4rXElHY4i2pVTYAM1oEdNk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcoQJwroquVyOycVNPAsAngfaCtiJ/ZFG6ptshHpNurLh4dDV0
-	XTzFhBSFyC/eW5oqtRBnnej6L48iYxLymh6eud6oSYLQaD0x3RKoZ+/JRIukCUHSRVdJ9J8bYyB
-	HJ/N5YJoyjj71hxy1o3MpEvmGz4uY5AnRiu62GEEtAg1tGVIHh5QDpaAlxqY=
+	s=arc-20240116; t=1770388888; c=relaxed/simple;
+	bh=IVpOrbiMnZuCcqYATf6ZbRJh0Zwts1wEucCBbV6v/LQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NUSDW0reVDNf+Ng1xce1S3EdAS4WTMF4hGBfpHE78zdVCxJTeD7zOdqh+hTYB3UDcdATwJ6CxBQuYGdZXP+6/5soW7D+jZHyzTlTyY2ZEEJCtJUmYGlKvKqOwTf6SDr2WG0aRXyAu9zBSieBTGOQxWVvmZOFWUcDxgwogR+ltpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NruK1uiJ; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NruK1uiJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03CCCC116C6;
+	Fri,  6 Feb 2026 14:41:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770388888;
+	bh=IVpOrbiMnZuCcqYATf6ZbRJh0Zwts1wEucCBbV6v/LQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NruK1uiJWPEpEOfzz4WdAqh2Rb3RcGd1mswYVlLNg8ZrKz5GYOp6omkJCbSV1bnDZ
+	 m6qzVkBmLZw4wpFP/byCAkmW1d7IpnphBOOuR3IU3Nnbdh9J27yb+zkzkI/0wD2Al4
+	 e/ADqv1foUEK3DEJTKKBvUGj0jNFoKI7rWI3oW4OWsL8D3AibhJiSuwNQggxelYO45
+	 urqW04tnDI+Se00dfxSud6IGmEvC/Oo2FdXy0VX64YW0Mkw83yedKHB40AaO42WOM9
+	 aS4UnX1a6X9yyhW15lhYVvWIAcP7g/byExg+P48CqiyQ6+GwpdTo/G8ePxYTcxYD56
+	 W5C8ruY3I4x0w==
+Message-ID: <41da26a6-4024-461f-8254-ac5dcf231397@kernel.org>
+Date: Fri, 6 Feb 2026 15:41:23 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:3093:b0:664:8644:8853 with SMTP id
- 006d021491bc7-66d0d2f9e56mr1402230eaf.78.1770388236544; Fri, 06 Feb 2026
- 06:30:36 -0800 (PST)
-Date: Fri, 06 Feb 2026 06:30:36 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6985fb0c.a00a0220.34fa92.002f.GAE@google.com>
-Subject: [syzbot] Monthly bpf report (Feb 2026)
-From: syzbot <syzbot+list85f939fc7e5f454b1c1f@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, linux-kernel@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next RFC v1 0/3] net: sched: refactor qdisc drop
+ reasons into dedicated tracepoint
+To: Antoine Tenart <atenart@redhat.com>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <eric.dumazet@gmail.com>,
+ netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org, horms@kernel.org,
+ jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
+ jhs@mojatatu.com, carges@cloudflare.com, kernel-team@cloudflare.com
+References: <177022452988.1827734.5121740962985640333.stgit@firesoul>
+ <20260204190417.110f5498@kernel.org>
+ <2e1eb11c-cd47-4772-baff-45d43d4fa539@kernel.org> <877bsr1l1h.fsf@toke.dk>
+ <CADCXZ1yMkZbRd7ioGw5QQ61OdmYp6misUDoj-s-g7wuoiCHKbg@mail.gmail.com>
+ <87v7gbz1ru.fsf@toke.dk>
+ <CADCXZ1z-gg_VsN4kjf325HvWRxL1irhUC76B_erggm5+A7qQ7g@mail.gmail.com>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <CADCXZ1z-gg_VsN4kjf325HvWRxL1irhUC76B_erggm5+A7qQ7g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello bpf maintainers/developers,
 
-This is a 31-day syzbot report for the bpf subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/bpf
 
-During the period, 2 new issues were detected and 1 were fixed.
-In total, 25 issues are still open and 318 have already been fixed.
+On 05/02/2026 17.24, Antoine Tenart wrote:
+> On Thu, Feb 05, 2026 at 03:46:29PM +0100, Toke Høiland-Jørgensen wrote:
+>> Antoine Tenart <atenart@redhat.com> writes:
+>>
+>>> I'm wondering why not using the drop reason subsys logic to combine the
+>>> qdisc specific enum while not conflicting with drop reasons and allowing
+>>> to inject the qdisc reasons into drop reason enabled helpers as well?
+>>
+>> See this prior discussion for how the proposal came to be:
+>>
+>> https://lore.kernel.org/all/6be17a08-f8aa-4f91-9bd0-d9e1f0a92d90@kernel.org/
+>>
+>> Basically, figuring out which qdisc a drop came from is not possible
+>> with the current drop_reason code.
+>>
+>> So it's not just new drop reasons, it's a separate tracepoint with more
+>> information available (qdisc handle, name, etc). So you'll get two
+>> events for qdisc drops with this series (from patch 1):
+>>
+>> +		trace_qdisc_drop(q, txq, dev, skb, reason);
+>> +		kfree_skb_reason(skb, SKB_DROP_REASON_QDISC_DROP);
+> 
+> Right and that's fine. Using the drop reason subsys logic you could turn
+> the above into:
+> 
+>   +		trace_qdisc_drop(q, txq, dev, skb, reason);
+>   +		kfree_skb_reason(skb, (u32)reason);
+> 
+> You can look at enum skb_drop_reason_subsys and how that is used within
+> OvS (net/openvswitch/drop.h) for example.
+> 
 
-Some of the still happening issues:
+Thanks for the input Antoine, I've adapted V2 to use skb_drop_reason_subsys.
 
-Ref Crashes Repro Title
-<1> 16793   Yes   WARNING in reg_bounds_sanity_check (2)
-                  https://syzkaller.appspot.com/bug?extid=c950cc277150935cc0b5
-<2> 2297    Yes   WARNING in trace_suspend_resume
-                  https://syzkaller.appspot.com/bug?extid=99d4fec338b62b703891
-<3> 102     No    INFO: rcu detected stall in sys_sendmmsg (7)
-                  https://syzkaller.appspot.com/bug?extid=53e660acb94e444b9d63
-<4> 59      Yes   inconsistent lock state in bpf_lru_push_free
-                  https://syzkaller.appspot.com/bug?extid=c69a0a2c816716f1e0d5
-<5> 45      No    KMSAN: uninit-value in handle_bug
-                  https://syzkaller.appspot.com/bug?extid=ba80855313e6fa65717a
-<6> 22      Yes   INFO: rcu detected stall in task_numa_work (2)
-                  https://syzkaller.appspot.com/bug?extid=06d48cbf3e767907cec2
-<7> 7       Yes   KASAN: stack-out-of-bounds Write in __bpf_get_stack
-                  https://syzkaller.appspot.com/bug?extid=d1b7fa1092def3628bd7
-<8> 1       Yes   INFO: rcu detected stall in vma_merge_new_range (3)
-                  https://syzkaller.appspot.com/bug?extid=316c0070a0341d2661a2
+Can you point me at the OVS userspace code that consume these subsys 
+drop_reason's?
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+--Jesper
+[V2] 
+https://lore.kernel.org/all/177032644012.1975497.16411100029657607833.stgit@firesoul/
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
