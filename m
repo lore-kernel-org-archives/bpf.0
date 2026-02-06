@@ -1,83 +1,207 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD4826ED40;
-	Fri,  6 Feb 2026 15:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770391304; cv=none; b=pFDt8JpbFuZIoLj6lBw2a7B+eLt7w3gYedH8RHDrt9I6PPd33PA+IsiavgjqES2XF6npPcIPWqyi/N1fL1caYfH10S6lFLnoNvsOouYxzqXDKF+8mzhKZ8zRH6+/YAjJ+yn55EqLpy777NNb3TA6cTaW1b4CqamrJpcGZYVNKVA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770391304; c=relaxed/simple;
-	bh=TUuctS5iACsWdKHAPpxd3q5N9pvKwPqGOSSMlfwtrP0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UB/qLNLU2tXnc/z0zRu+Qt9cW8Alp+WwUf2XpnZECixBtuNdYJDg03uvBZc2n2UA2e96q1hgtlnrgDDJJNtF4fUNjbVhTIrFl45dqCvvCB2HkFRTzLYmgLbQgQM/cwoBmkKfiQqsSMn2JkQcNW0WKQONCdYn6nhUQ1Kxupczh1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8JPupPL; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C94B2DC32A
+	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 16:05:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770393907; cv=pass; b=qdbpTeprgeBWNKpJYWuexc07Q31DyTuiM6gLMvoUgrl+XcpFiwxPYG6/4UICIm8T9HsoIEVNqs6kBIYFTq7tu86zA8FJ+J3Unrjn+AlS742YqA4//0Jq8IEMPUfD3X/akpEmXMUlIallrvjhI9LLFK8p1ta7oCnziRDwSnk90jA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770393907; c=relaxed/simple;
+	bh=8AUOgLGnMMIEfqB+Rfe3dTR9LWMxVZqOBCh7oFBO4Zo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gbOOMlrOG0HfBrFIkoPHP9jQJx8GvJlmdjWBBQWf8rjVNSMARjvhkop0S2I8Jm2T4FDF9NvFU61QZ0CagH6krozps9kslc4ADN8Pn3W/glgFfZ5dlCR5BGdcOmbMQmwsioWBvs/ACP69lTWAzDB55ywljxKYVrWAc8jHomGjHKQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WUQz7tUu; arc=pass smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8JPupPL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD56CC116C6;
-	Fri,  6 Feb 2026 15:21:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770391303;
-	bh=TUuctS5iACsWdKHAPpxd3q5N9pvKwPqGOSSMlfwtrP0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=C8JPupPLdctogUO0DG858/BnV3dU9UDerbef9V4Xq7nfzNFRYIaMI2j0cpINidzzv
-	 Pk1RnIuh/2ALunTiE3vSe1I3LUK+PvjGM+UBwi4k45RXRUbcrDQ9ewTFIUFEsMyOnB
-	 JJ2MG+aaUWp3NkY03nCG4AQ8xjU4DbtOBGleDNnCebGA/x0KMTsXJiDmyzt0nn5Tx6
-	 vQv33Lvu84QRplRhLE9XeQoM1TfTv7npUj2/+Pb8MC38mdufCZKSjCQ9qNzQtkZzez
-	 VzxOO2/TyrBq2NWzbhJ5walzS9N21AS6nykFUkxp9vkvUzgMzTs1mZqf7owwxM/3tE
-	 e3zwQfM/xxfJQ==
-Message-ID: <007e93e8-ab52-45b3-8e06-107f1b02af0c@kernel.org>
-Date: Fri, 6 Feb 2026 16:21:38 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WUQz7tUu"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4806d23e9f1so26806575e9.2
+        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 08:05:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770393905; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YvBy9osLJKzfMULd8I3R+l/DpIZL6cIp3xzSjqBDMntoEecYjzyuwyw9Q8nRK+JrL4
+         z3X6LPnYimXMu7H7ueExHC7+viwN/N2swEFvSpFCk5VfAlMomZtFB9X6PzKsPYC8wgSQ
+         gk3cVq05HMycb4htsluQukcDm0vcRT+WNtsfnf1SvRhwCzB0SwzuKBub+Fn5MJdvuk+P
+         a7rZ84hWGARx/YAoPq/Ud/l8by922ofpw3If0VmfemLKBVAvJAKOxATcFhWfHj1NaeoW
+         fohS+fPl7ZWYfIZR/fr4JSOV/qW3Ovi6rex54FC97C84g4i3Uv1xoawLeGks1zWZCPmF
+         1+3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8AUOgLGnMMIEfqB+Rfe3dTR9LWMxVZqOBCh7oFBO4Zo=;
+        fh=4XHimgBhUuo71VOGhN2DULKwF0WFMnyK9mjFhJzwoN8=;
+        b=Go2Yi2QjRK3Of3dqhmFmTXEZYwvEtLNPGDYsLh3wRCYFvW/y39jiDfpl+XfeXubiHE
+         nQI9p45G5gfeIRtRE96nwAom8vYy0GwT2KTq6G4cUGlt3BIxZV4lfCn1/2+Lrb8jEcQo
+         pySAlYpipikMw+0nrI+GMeweex/kqNhYdDMHd74xJQSpx9vBB3/dYybBu02h1vR2+AxQ
+         iBZ1jctIeome8mvqmlQkTA19YshyYBwpwLhC7fIU80TexJ3VKbgo8hkk7rPOHqfgAt/s
+         rjXYaXUalVF0Uzzzga96oSr9stiOUBMVsW5hWP5emsUQiZJBP2tpIlJs4FT6GMmvuxMK
+         p6oA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770393905; x=1770998705; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8AUOgLGnMMIEfqB+Rfe3dTR9LWMxVZqOBCh7oFBO4Zo=;
+        b=WUQz7tUuC3BzUZBSiSNXzjiHf/QhZoz70WSbC5QNKjNRYgjUVkM79P/DjYKSwJqt9O
+         QO5peGz+feW0mIKTE/lP0jThvvr4exeIe/SZBQMcAImWnB+KK9QBy54DJ1OxH6hGNgu6
+         mPhsa8oxNd1c3eVs8x7Ewul7ph1rmVJypOwtLPaTtdZaFW1GNXJTGqCknj9wt8+9bVIB
+         RHeIZP1axnHN87yM8bjz7GuswLbjHHV/bm6xz/Q0NPglbwyDMi87Z/vRvHYbYqC9tvo/
+         +AJ6Q9ONqomIu0lw90haB7X1YpiOJnxB/qFu4m6vWk4qgckUPBTt9mLs67Il7rC1xjdb
+         ttmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770393905; x=1770998705;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8AUOgLGnMMIEfqB+Rfe3dTR9LWMxVZqOBCh7oFBO4Zo=;
+        b=oJxZwMQlDS9oae/UCprmAcdl8iy8fcKbGAV7FnenMY+3LsxYlKiDtmqvz3N+Bj1OAH
+         kTIGZiWgMwuung13luyUYkH+kcX/NnSsrflE8GLLwHjzMt7spBvNDrxZ9C+3wZbyLiCm
+         zRMvRZKmc8eln/OVBizi0ek5wIo73xcBmFYgiH5gavkYUMMJJar1u5R1xIQtMv2mjwNn
+         0SNbY3vOloHdNtv/GYW0zzOkxPP+SnInNvO/+IRg02YAMfeJoL3LlGYjuI5MBFk5EaVd
+         oIq+Qf1sTVHwPQapafXTb694jwGX2YBw4LsvXlfE+msITZyc4Yn8d7XWDpLb5OEsk7Cp
+         CnSA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZO8rTFX3uBUpnq6G20FyEPP0MqYH65kHlkDZ9TZbsj8XBVlACGq3uSmDXmG2LgYpH8GE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnBIsndkuPK7tRWPTDwssOQjUGaZPb+JRGntBUPMa1BvHh+D/A
+	iVykQBs3qgIxmDlBD9pTA93s91O98+IvXZKzcO4oCisTF6vKGUr1d9hI0HaMjyoTEMAKCXKcQ9/
+	nM/RnSLHvYFFBq+nBYeV2FanGggqSbZg=
+X-Gm-Gg: AZuq6aKuzlAxkrnaicAUvQQvbx2hqaEnMPCEIx7tKjj3jjSeEulBDpcDNax2BBYLL4J
+	7cDW4qn1+ZMScK4irpip5YBCp+9SRfkbsrMhB4ujHF8g/iD964cRvi3NMzKnNb7il9wJsP73Pna
+	1gEkUZxU34n80gczOjj2LVA0AMX+kOFGVg61wUe6gmy4SddgD59xLwDsL2AZlPZ5eZoGnT7iqXG
+	46tgx/zIhEGcR89p14XjVmEtHcOIfN2GGYcItT6P4MU1GH0VbOkd5+aWnfYZD9jGwDhhQl97vHL
+	2EG7ys7fYAvxamyyLtIcPTeUc3FEeh5xXhGxJJWaWuWDxLj9ChJlKtWKzfvj6bwtbHknPaBxvwS
+	kqfH85Oram/YET/czK7M3sstk
+X-Received: by 2002:a05:600c:548d:b0:480:7162:fa48 with SMTP id
+ 5b1f17b1804b1-483201ecd90mr50571685e9.13.1770393905153; Fri, 06 Feb 2026
+ 08:05:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next RFC v1 0/3] net: sched: refactor qdisc drop
- reasons into dedicated tracepoint
-To: Antoine Tenart <atenart@redhat.com>
-Cc: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <eric.dumazet@gmail.com>,
- netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org, horms@kernel.org,
- jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
- jhs@mojatatu.com, carges@cloudflare.com, kernel-team@cloudflare.com
-References: <177022452988.1827734.5121740962985640333.stgit@firesoul>
- <20260204190417.110f5498@kernel.org>
- <2e1eb11c-cd47-4772-baff-45d43d4fa539@kernel.org> <877bsr1l1h.fsf@toke.dk>
- <CADCXZ1yMkZbRd7ioGw5QQ61OdmYp6misUDoj-s-g7wuoiCHKbg@mail.gmail.com>
- <87v7gbz1ru.fsf@toke.dk>
- <CADCXZ1z-gg_VsN4kjf325HvWRxL1irhUC76B_erggm5+A7qQ7g@mail.gmail.com>
- <41da26a6-4024-461f-8254-ac5dcf231397@kernel.org>
- <CADCXZ1wMxCN3B-c+x4SgqC7H-Wap=e_sJ_hu-2B+96b=ip9OVQ@mail.gmail.com>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <CADCXZ1wMxCN3B-c+x4SgqC7H-Wap=e_sJ_hu-2B+96b=ip9OVQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
+ <20260202111548.3555306-3-dolinux.peng@gmail.com> <20260202111249.649ac338@gandalf.local.home>
+ <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
+ <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
+ <20260203101707.52965eb0@gandalf.local.home> <CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
+ <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
+ <CAErzpmvtJwB7nTD5EFHP9SxPxH-rc3NuJp5xLGSTB7YPbUX8YA@mail.gmail.com>
+ <CAADnVQJgM0W3aQVGi5_35xWc=D7Ruzt1xV0REM+RnnvtooeC5w@mail.gmail.com> <CAErzpmsC0qHL41KoRTxQ2-Xy=t74NnOZQxrv8VMFRSt3eoFrRA@mail.gmail.com>
+In-Reply-To: <CAErzpmsC0qHL41KoRTxQ2-Xy=t74NnOZQxrv8VMFRSt3eoFrRA@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 6 Feb 2026 08:04:54 -0800
+X-Gm-Features: AZwV_QgRI0gmm_jNdS8JQDVd_GmShLrDbwSVBXnZrnR5RfecCaQcg6USmNhxez4
+Message-ID: <CAADnVQKrAcSzTYbSEHkWiWS0Ot5wAQ8_Q_v6-J=6=O4MxLpbpQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
+ via BTF
+To: Donglin Peng <dolinux.peng@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Donglin Peng <pengdonglin@xiaomi.com>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Feb 5, 2026 at 8:10=E2=80=AFPM Donglin Peng <dolinux.peng@gmail.com=
+> wrote:
+>
+> On Thu, Feb 5, 2026 at 11:56=E2=80=AFPM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Thu, Feb 5, 2026 at 1:21=E2=80=AFAM Donglin Peng <dolinux.peng@gmail=
+.com> wrote:
+> > >
+> > > On Wed, Feb 4, 2026 at 10:52=E2=80=AFPM Donglin Peng <dolinux.peng@gm=
+ail.com> wrote:
+> > > >
+> > > > On Wed, Feb 4, 2026 at 12:00=E2=80=AFAM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > >
+> > > > > On Tue, Feb 3, 2026 at 7:16=E2=80=AFAM Steven Rostedt <rostedt@go=
+odmis.org> wrote:
+> > > > > >
+> > > > > > On Tue, 3 Feb 2026 21:50:47 +0800
+> > > > > > Donglin Peng <dolinux.peng@gmail.com> wrote:
+> > > > > >
+> > > > > > > Testing revealed that sorting within resolve_btfids introduce=
+s issues with
+> > > > > > > btf__dedup. Therefore, I plan to move the sorting logic direc=
+tly into
+> > > > > > > btf__add_enum_value and btf__add_enum64_value in libbpf, whic=
+h are
+> > > > > > > invoked by pahole. However, it means that we need a newer pah=
+ole
+> > > > > > > version.
+> > > > > >
+> > > > > > Sorting isn't a requirement just something I wanted to bring up=
+. If it's
+> > > > > > too complex and doesn't achieve much benefit then let's not do =
+it.
+> > > > > >
+> > > > > > My worry is because "cat trace" takes quite a long time just re=
+ading the
+> > > > > > BTF arguments. I'm worried it will just get worse with enums as=
+ well.
+> > > > > >
+> > > > > > I have trace-cmd reading BTF now (just haven't officially relea=
+sed it) and
+> > > > > > doing an extract and reading the trace.dat file is much faster =
+than reading
+> > > > > > the trace file with arguments. I'll need to implement the enum =
+logic too in
+> > > > > > libtraceevent.
+> > > > >
+> > > > > If you mean to do pretty printing of the trace in user space then=
+ +1 from me.
+> > > > >
+> > > > > I don't like sorting enums either in resolve_btfid, pahole or ker=
+nel.
+> > > > > Sorted BTF by name was ok, since it doesn't change original seman=
+tics.
+> > > > > While sorting enums by value gets us to the grey zone where
+> > > > > the sequence of enum names in vmlinux.h becomes different than in=
+ dwarf.
+> > > >
+> > > > Thanks, I agreed.
+> > > >
+> > > > >
+> > > > > Also id->name mapping in general is not precise.
+> > > > > There is no requirement for enums to be unique.
+> > > > > Just grabbing the first one:
+> > > > > ATA_PIO0 =3D 1,
+> > > > > ATA_PIO1 =3D 3,
+> > > > > ATA_PIO2 =3D 7,
+> > > > > ATA_UDMA0 =3D 1,
+> > > > > ATA_UDMA1 =3D 3,
+> > > > > ATA_UDMA2 =3D 7,
+> > > > > ATA_ID_CYLS =3D 1,
+> > > > > ATA_ID_HEADS =3D 3,
+> > > > > SCR_ERROR =3D 1,
+> > > > > SCR_CONTROL =3D 2,
+> > > > > SCR_ACTIVE =3D 3,
+> > > > >
+> > > > > All these names are part of the same enum type.
+> > > > > Which one to print? First one?
+> > >
+> > > Another option is to print all matching entries, incurring increased
+> > > overhead and extended trace log length. However, I prefer printing
+> > > the first matching entry, though it might be inaccurate in rare cases=
+.
+> >
+> > I disagree. It's not rare.
+> > I wouldn't print anything. Let user space deal with it.
+>
+> Okay, I will implement this in libtraceevent first. By the way, would the=
+ first
+> patch [1] introducing the for_each_enumand for_each_enum64 helper
+> macros be acceptable?
+>
+> [1] https://lore.kernel.org/lkml/20260202111548.3555306-2-dolinux.peng@gm=
+ail.com/
 
-
-On 06/02/2026 16.04, Antoine Tenart wrote:
-> On Fri, Feb 06, 2026 at 03:41:23PM +0100, Jesper Dangaard Brouer wrote:
->> On 05/02/2026 17.24, Antoine Tenart wrote:
->>
->> Can you point me at the OVS userspace code that consume these subsys
->> drop_reason's?
-> 
-> I think this was mostly added for debugging utilities and not consumed
-> by OvS directly but I don't know the OvS userspace code tbf. Anything
-> you're looking for specifically?
-> 
-
-I'm just trying to making sure that I/we don't break any userspace code.
-
-Yes, looks like debugging tools are the consumer. E.g. The Red Hat
-NetObserv[1] tool mentions OVS decoding drop reason.
-
-[1] 
-https://www.redhat.com/en/blog/network-observability-real-time-per-flow-packets-drop
-
---Jesper
+Just that patch alone? What's the point?
+Refactor for what? Does it read better? No.
