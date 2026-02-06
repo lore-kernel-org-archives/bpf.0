@@ -1,120 +1,138 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2827822068A;
-	Fri,  6 Feb 2026 01:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9239E27B35F
+	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 02:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770342851; cv=none; b=V7yybiSfSntVw+jsI5VL90i7UMhBmO2ftTz1N7O6wXeL68wipXnlUkcUph+f9N4yJIgxyuBTGxad0iyZwaKF+QljgTzeTmo8P07VLhUD9OkkMllhTEcWvxy7C7jJFpjlKk8itutyKv51+hikXBwHCeThaYuw7mNSkdGwM/mB6Ew=
+	t=1770345942; cv=none; b=ibPE3KUHwZP0yaddcCWfOATDcXEHmlo+eGvYl8ykP3aaG4jyaBGVzCj+/fY+i0ZxSm27Hf2C4x9YOyTUWMXiihTRVansGB25aPJpjTwDsr5yZafZ0R/FQH1ni2zHAUAGtBE1rqgrcQR91Xq7RfeVDJ5onqzBVSFknn6qyVYRwt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770342851; c=relaxed/simple;
-	bh=5J3kMshGAuQBNb43c32R/D42M6M9n/bqmLxIbWEwyAg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LfDOZMRpbX3ZqVENGd9cy26Qxz3hiDN19EtJHNwJb27s8d05pxpfLMOtQXcCV5wEIW3mAv/xVu8B5RCRInPfCZyv9mCOj3IJPcrwGZ7TIJEwFMhMcrGkZd1DjjSO451UOXcCBEPROgu2Xokq+Vhh8rqp7qbEntyE2PvGWZQeUWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JuOxFJ+4; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770345942; c=relaxed/simple;
+	bh=Z+JWro3E8aRvfngoe/6LubDVzHtuFX4mcalY38TDisw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=taUCXzxoQfGuBkixfJ4fu/JGyJVsvgivrJAam2ZNBLYis+zswp3uQO7Z+bN3KeW82hdDmMQd46PhrmAz7AydzY9WclQntRCLXwPRTPzWP9zvnD+JaJRhYpmp69VA7d8MLN7Nlt3wnuyKUXPW2xWDgAY8IllMcy78vZnJkWwdfQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oPwCIleO; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JuOxFJ+4"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E1E8C4CEF7;
-	Fri,  6 Feb 2026 01:54:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770342851;
-	bh=5J3kMshGAuQBNb43c32R/D42M6M9n/bqmLxIbWEwyAg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=JuOxFJ+4wxUl1w911PrccY2p3Vmohj2BvL9fBMt1cWe/0L4OK4QPqbUd3fy94/Mcf
-	 6V43l4m0aLTlQSxxUxPf4hj17JW7JZD9P1/iHdt5D7QkKC1BGyK9z65SH09Z3oTCDa
-	 ljqWhIuXiDyG8kEJ3beU5HL6/T2d5rVuFWHTe1BLMi1zBxYS1LkEggFv9V4VuzlXnQ
-	 5t161dfkh7E3JuMKyLaOredWzSUQTmlQR2/7C1kgO0oycAUgZmLy1xr4hNfP8f7DWg
-	 haIZ33cCUoa8VVXPp6gxDSZhasWB8pxbjqzmfd+Irqyx6BD/kOUM6nRYyEwXYUqsHw
-	 xw2DRGYeSIzKA==
-Date: Thu, 5 Feb 2026 17:54:08 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Vladimir Oltean <vladimir.oltean@nxp.com>, Larysa Zaremba
- <larysa.zaremba@intel.com>
-Cc: bpf@vger.kernel.org, Claudiu Manoil <claudiu.manoil@nxp.com>, Wei Fang
- <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Tony Nguyen
- <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
- <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Simon Horman <horms@kernel.org>, Shuah Khan
- <shuah@kernel.org>, Alexander Lobakin <aleksander.lobakin@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF
- Foundation)" <bastien.curutchet@bootlin.com>, Tushar Vyavahare
- <tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, "Ricardo
- B. =?UTF-8?B?TWFybGniiJrCrnJl?=" <rbm@suse.com>, Eelco Chaudron
- <echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, Toke
- Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
- Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
- frag_size
-Message-ID: <20260205175408.30ab72a1@kernel.org>
-In-Reply-To: <20260205134046.pggwyosutj7ggi4i@skbuf>
-References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
-	<20260203105417.2302672-7-larysa.zaremba@intel.com>
-	<20260205005901.gnju3zmqimtgeu2b@skbuf>
-	<20260204173401.282899d0@kernel.org>
-	<20260205122953.lscemcctayrvszdu@skbuf>
-	<aYSP344FT-JlylwY@soc-5CG4396X81.clients.intel.com>
-	<20260205124638.hxzvjiocephzlrk3@skbuf>
-	<aYSZw4wbd-nvLTuD@soc-5CG4396X81.clients.intel.com>
-	<20260205134046.pggwyosutj7ggi4i@skbuf>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oPwCIleO"
+Message-ID: <097f4aa3-dfa6-4847-8395-8108323b020f@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770345930;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VFSlinCyA0+SI/xvgDMbNOQR7AvWVKP4QIPnbgTtWvc=;
+	b=oPwCIleO+x6qGEM2MPOk1oahBLC874RmsIV3FYPsjS+ThIOuUSrGtg98iITL0/cFrXRZKv
+	FmzYyBU1skxQCEk+86jQvm43siMpAk1ABkej8TKgy1HwY46NqkWGCv5Qb7dhAJ63JJSaiI
+	QNGZyT7v88Mc/Wk19Mj48rwvkeUtU5c=
+Date: Fri, 6 Feb 2026 10:45:17 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH bpf-next v9 4/9] bpf: Add syscall common attributes
+ support for prog_load
+Content-Language: en-US
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
+ Seth Forshee <sforshee@kernel.org>, Yuichiro Tsuji <yuichtsu@amazon.com>,
+ Andrey Albershteyn <aalbersh@redhat.com>,
+ Willem de Bruijn <willemb@google.com>, Jason Xing
+ <kerneljasonxing@gmail.com>, Tao Chen <chen.dylane@linux.dev>,
+ Mykyta Yatsenko <yatsenko@meta.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Rong Tao <rongtao@cestc.cn>,
+ linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+References: <20260202144046.30651-1-leon.hwang@linux.dev>
+ <20260202144046.30651-5-leon.hwang@linux.dev>
+ <CAEf4Bza-PM9ExqJS=Q_oj7Cqc5dvmbN_Zv9-4UnJNtsZU28FoQ@mail.gmail.com>
+ <a31b7f19-a22a-44ab-8ecd-9df9dead9c3d@linux.dev>
+ <CAEf4BzZWawrE+mXaPNPAT8zcz0Qy+5QYA6r4JzEVw7UAcUH-uA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4BzZWawrE+mXaPNPAT8zcz0Qy+5QYA6r4JzEVw7UAcUH-uA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 5 Feb 2026 15:40:46 +0200 Vladimir Oltean wrote:
-> > > I mean, it should "work" given the caveat that calling bpf_xdp_adjust_tail()
-> > > on a first-half page buffer with a large offset risks leaking into the
-> > > second half, which may also be in use, and this will go undetected, right?
-> > > Although the practical chances of that happening are low, the requested
-> > > offset needs to be in the order of hundreds still.  
-> > 
-> > Oh, I did get carried away there...
-> > Well, one thing is shared page memory model in enetc and i40e, another thing is
-> > xsk_buff_pool, where chunk size can be between 2K and PAGE_SIZE. What about
-> > 
-> > tailroom = rxq->frag_size - skb_frag_size(frag) -
-> >            (skb_frag_off(frag) % rxq->frag_size);
-> > 
-> > When frag_size is set to 2K, headroom is let's say 256, so aligned DMA write
-> > size is 1420.
-> > last frag at the start of the page: offset=256, size<=1420
-> >     tailroom >= 2K - 1420 - 256 = 372
-> > last frag in the middle of the page: offset=256+2K, size<=1420
-> >     tailroom >= 2K - 1420 - ((256 + 2K) % 2K) = 372
-> > 
-> > And for drivers that do not fragment pages for multi-buffer packets, nothing
-> > changes, since offset is always less than rxq->frag_size.
-> > 
-> > This brings us back to rxq->frag_size being half of a page for enetc and i40e,
-> > and seems like in ZC mode it should be pool->chunk_size to work properly.  
+
+
+On 6/2/26 06:18, Andrii Nakryiko wrote:
+> On Wed, Feb 4, 2026 at 7:42 PM Leon Hwang <leon.hwang@linux.dev> wrote:
+
+[...]
+
+>>>> +
+>>>> +       if (!attr->log_buf && attr_common->log_buf) {
+>>>> +               attr->log_buf = attr_common->log_buf;
+>>>> +               attr->log_size = attr_common->log_size;
+>>>> +               attr->log_level = attr_common->log_level;
+>>>
+>>> why are we setting this? Do we still have code that can access
+>>> attr->log_buf even though we pass attr_log everywhere? If yes, should
+>>> we still have that "split brain" code?
+>>>
+>>
+>> 'attr->log_buf' is accessed only in bpf_check().
 > 
-> With skb_frag_off() taken into account modulo 2K for the tailroom
-> calculation, I can confirm bpf_xdp_frags_increase_tail() works well for
-> ENETC. I haven't fully considered the side effects, though.
+> bpf_check should be changed then, see below
+> 
+>>
+>>> If we don't have this assignment, then I think we don't need to have
+>>> bpf_prog_load-specific and btf_load-specific log_attr_init() helpers.
+>>> They can be unified into generic log_attr_init, where for
+>>> bpf_prog_load you'll pass offsetof(log_true_size) +
+>>> attr->log_{buf,size,level}, and for btf_load you'll pass different
+>>> offset of and btf-specific attr->btf_log*
+>>>
+>>> This helper will just be making decision whether to use common_attr's
+>>> log fields or passed directly command-specific ones.
+>>>
+>>> Or what am I missing?
+>>>
+>>
+>> If the log attributes differ, where should the effective
+>> log_* values be stored?
+>>
+>> Should they live in struct bpf_common_attr, or should we extend
+>> struct bpf_log_attr to carry them?
+>>
+>> Note that in v8, Alexei suggested struct bpf_log_attr only needs
+>>   u32 offsetof_true_size;
+>>   bpfptr_t uattr;
+>>
+>> so I’d like to clarify the intended direction here. Once that’s clear, a
+>> single generic log_attr_init() should be sufficient to handle this.
+>>
+> 
+> The intended direction is to have log buf/size/level in one place
+> (after attr and common_attr validations), so we keep internal logic
+> simple. Let's put all of that and log_true_size **pointer** (we don't
+> have to much with offsetof, just calculate user addr for
+> log_true_size, which just might be NULL) into bpf_log_attrs and teach
+> all code to look and work *only* with that struct, ignoring anything
+> log related from attr.
+> 
+It’s clear now.
 
-+1, also seems to me like it would work tho I haven't thought thru all 
-the cases. We do need to document and name things well, tho, 'cause
-subtleties are piling up ;) Maybe it's time for an ASCII art
-for xdp layout?
+I’ll follow this direction in the next revision and consolidate all
+log-related fields (including the log_true_size pointer) into
+bpf_log_attr, so that internal code relies solely on that struct.
 
-FWIW my feeling is that instead of nickel and diming leftover space 
-in the frags if someone actually cared about growing mbufs we should
-have the helper allocate a new page from the PP and append it to the
-shinfo. Much simpler, "infinite space", and works regardless of the
-driver. I don't mean that to suggest you implement it, purely to point
-out that I think nobody really uses positive offsets.. So we can as
-well switch more complicated drivers back to xdp_rxq_info_reg().
+Thanks,
+Leon
+
