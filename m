@@ -1,64 +1,64 @@
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC7533971D;
-	Fri,  6 Feb 2026 19:37:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF89930C61E;
+	Fri,  6 Feb 2026 19:37:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770406647; cv=none; b=m3XjOBc2dEWLsEgiML/TZV1psQAfAIudum2Ak/bcoOu49X0JFoYnW9AjSv+ET/zTlXLvGhkBGxM/gRV5AjcULMbL5Lb3gRzDUbA6XubA7Et4teCYH06n72Ma36Z+1GGmLISSgz1oCGYGruZrL7VJvQy8RC6FOJ2pWnksvnGuCvM=
+	t=1770406651; cv=none; b=CDP3LxAlNZl5REHXQsrx4K+mTNjWe3LKrssXuhjGEZHTPYO/dSlqM4ppqdaf8nqM97NQ2PcJQUBWUUi0GpSb5o1226DNbh91gBhZPC78ZuZEv1OF7ihz9sPl4r2XH79A6RXYX5e8h/0vWwu1ieFziXkT0Ngnc2IEb/m7TbDWwOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770406647; c=relaxed/simple;
-	bh=oq0FWBveUGSeMhAcXcysR6Ct95jkvRt2c4zuz73D7JY=;
+	s=arc-20240116; t=1770406651; c=relaxed/simple;
+	bh=OAWaLOSHZDpLaJZvLcOOZL28lBXMhQYhK0tmFFzEHD0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eslrduugEvhgaCgc6qjRfasPK2j50vCcry6H/kNdbzpJVKyDnGt3ISh02H8SbqR3CEN3BwNiHswQneQOAHYZE8ErJBcUwB9gK+v4AzZuTVwyQkxk5eRJYm5SXNueYOTLHcCd7M5p/hupETV2fDB7j2Z4FWw9L1ET7/P2Hs5K3yI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Pf2vmZ3n; arc=none smtp.client-ip=148.163.156.1
+	 MIME-Version; b=DFsQASvmjgpgoQ7SO5/ivVgt/EtApNc73WhycZ+9oMGUTSF1qR9x26O8H7BWM0RUavErpmgwyL4P3gutHhDDJg1H5awOZX27gzbOhWfXlQ3rgvv+kAIUN+UX3Cmt52g58g9Mr7n9kcaaTaQ8+6QNVOml4rgCpI95TJ8mG71dnig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SkTtRszS; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Pf2vmZ3n"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SkTtRszS"
 Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 616ERlsL016796;
-	Fri, 6 Feb 2026 19:36:53 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 616DLpbk021704;
+	Fri, 6 Feb 2026 19:36:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=Zcp5Naq2FPjOG1kV+
-	prJJdfvki9PYjEAiotKE3UfUD8=; b=Pf2vmZ3nfO6af3/45TVT4GNZo3hsN6yEx
-	FukJvpxzckzerzitx6bd/uutdfCaEi62jz1iXAiyRIe6eJQSkMwEhqR+8JqBo5Wn
-	Elc06lfW50wNswO7swz4ki6wPZp8utwq63QEMrMg4pBNZbJTF8ogqCWEMoRLgHFu
-	lxsAvTeTOXXhXNN3wUHkht8wB9+89ErnDz75SKtou6ja2mWIzUiqg5vVcXc5ZUhL
-	kS7/GQhPBGHv3B0vJE2QiVRG80+De75b72GlfdMabwd7bbtW7M0U2zYltHlhnon+
-	F2Id44XN9q+ouMtif6wNGAUHvO+mubDmA2UOTx9V4FHrL3uRUrXcQ==
+	:mime-version:references:subject:to; s=pp1; bh=Eo/pp0nleSO0EJ0wJ
+	M1Dr/9d5BD1HLrvl5BFx61+S2U=; b=SkTtRszSnvu4kzzDHbdtLOuVJBEPdPkrp
+	AJZYZoNmKlQazA8VQXdJXxEZik2aOwBo//6Pc1xJG1VjsNrq7Qz8KUIpRa/5yEMg
+	Cg9RCKdXqkIzjNmsE3AGPELbR71QZB+0vKpzjdR6GGq6omxtjf5aA6ikqax8RFhO
+	r1HBZdHsPN1xQhW1etoPY8hoX4BHDe6ihCI8NdJB1x9eYf2nbzwnXqaL8CXE0qOF
+	nK0PER7G3gZXfJ+4F6xXWnqcBX8PQ3Sxf03crmRJNgqMVa2YNEIPqJn+7ZyuwPvS
+	hXVzdp/1M3jlwdkW5+cATtPZGoMj/ywACujK0B++ErugdcSWaNu5g==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19dtn2k4-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19dtn2k6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Feb 2026 19:36:52 +0000 (GMT)
+	Fri, 06 Feb 2026 19:36:53 +0000 (GMT)
 Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 616JapGW018714;
-	Fri, 6 Feb 2026 19:36:52 GMT
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 616JarY2018734;
+	Fri, 6 Feb 2026 19:36:53 GMT
 Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19dtn2k0-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19dtn2k2-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Feb 2026 19:36:51 +0000 (GMT)
+	Fri, 06 Feb 2026 19:36:53 +0000 (GMT)
 Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 616FfNFI015355;
-	Fri, 6 Feb 2026 19:36:50 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4c4gsgywpw-1
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 616JIMGH015359;
+	Fri, 6 Feb 2026 19:36:51 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4c4gsgywpy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Feb 2026 19:36:50 +0000
+	Fri, 06 Feb 2026 19:36:51 +0000
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 616JakAj46596538
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 616JalcJ24772906
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 6 Feb 2026 19:36:46 GMT
+	Fri, 6 Feb 2026 19:36:47 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 19DDD20040;
+	by IMSVA (Postfix) with ESMTP id 18E3420040;
+	Fri,  6 Feb 2026 19:36:47 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 99DAD20043;
 	Fri,  6 Feb 2026 19:36:46 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9755B20043;
-	Fri,  6 Feb 2026 19:36:45 +0000 (GMT)
 Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.87.85.9])
 	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  6 Feb 2026 19:36:45 +0000 (GMT)
+	Fri,  6 Feb 2026 19:36:46 +0000 (GMT)
 From: Jens Remus <jremus@linux.ibm.com>
 To: linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         bpf@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org,
@@ -89,9 +89,9 @@ Cc: Jens Remus <jremus@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
         Vasily Gorbik <gor@linux.ibm.com>,
         "Steven Rostedt (Google)" <rostedt@goodmis.org>
-Subject: [PATCH v8 4/6] x86/vdso: Use SYM_FUNC_{START,END} in __kernel_vsyscall()
-Date: Fri,  6 Feb 2026 20:36:40 +0100
-Message-ID: <20260206193642.1580787-5-jremus@linux.ibm.com>
+Subject: [PATCH v8 6/6] x86/vdso: Enable sframe generation in VDSO
+Date: Fri,  6 Feb 2026 20:36:42 +0100
+Message-ID: <20260206193642.1580787-7-jremus@linux.ibm.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260206193642.1580787-1-jremus@linux.ibm.com>
 References: <20260206193642.1580787-1-jremus@linux.ibm.com>
@@ -103,70 +103,159 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA2MDE0MyBTYWx0ZWRfX6MUdgADcKgBV
- L9D4yBWk5NS2uv2XK/R6Yw4ZDfNYNF/0hdgm6X0oDzuN8LT81lsVv+ZNosZpRCwG1uJXHVJWr2J
- sPSXtrgqaoEjiFF5tv5MhkZjqkWT9BRbeTiabARGU0iRwHgtkdNKSSR9nFy4NSJvNx62sAmoqhO
- y4zLeHwnsC3QoD/9gLYen2YLidQkfpHu3CDLG71nMlVK8rnd+RGn9TVAdQKtb3k5G5UZptnAsna
- CE7ygH+dp3JBZAmbFwDyjnYiMr1Rj9gVw5xuob0aqPV8SZDHgrRyOMffJmdk4IJhBOWoNlADIA9
- sOYmaB9JBq/+C4Cx66vyE/zanabHh9jZIpW+eRRFWrgQGV6BWAw72oV1q+ErxCUa3WHFqHyZyqT
- ejLpCUd38EWZISHUA4hLQzgzTjac08Ynqeob0Apu6fzVksHE+NjUHXpUHH+/TAieHV+lFeYqz+R
- 98Gmm2m/dKXo1kgD+Bw==
-X-Proofpoint-GUID: 3G3zA37M8tzsTp2MgMUjmQt-X6LdyvvP
-X-Proofpoint-ORIG-GUID: p0nCG_YctyTf1NkU38vgBpV0X0NDIDO1
-X-Authority-Analysis: v=2.4 cv=LesxKzfi c=1 sm=1 tr=0 ts=698642d4 cx=c_pps
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA2MDE0MyBTYWx0ZWRfXyYp98ghj0CTl
+ oBtY/leBNptJ1RaF8DKX0p/UpDtRPwGPAxn4WhDeRvkoh0Xq1jw1IGLAFt3JpKlR9TKskYlM/N4
+ H7Ix7A3Lr0YqlVbNCIH5tD6SWg1RoTSr4ejyZJi2oWqn8q87adY5n3gL0RJGREsFOagZvj54aKq
+ mHBt5EWfm+++P422P2tYGFx5V4GZO9tDN7G4oz3P+/OuvHlGXlYxN0f3PKJpSguHw9jjtmC04iW
+ jU7cJeoSBmdgNkpFsZ/mP0X90OA0E/4w1lpZO5EBdA/sgtcOntsVVdE6ni50dB1PlvnjiV/wk/T
+ R9nuIORufkMQtz68MLYTbQmn4L02HlPp5EokrGMwyDyQbJGqaJcd24YQGC2UyeHhDPtRUI/l1L1
+ iZ3XO62RefXT6OiyWw7xKl/6IRMjVrMVEW4bIdXywZ1O2BVBHeQWhZIQjZ1c5QdISclmP3yDQRn
+ 0TQtBK3Gt9x7gVApK6Q==
+X-Proofpoint-GUID: g0EbasElDUZeed4PNLBzqj12gLtaZ6p3
+X-Proofpoint-ORIG-GUID: 56BAnvhvgqqDiT9io4BOCNC62xKpL8oi
+X-Authority-Analysis: v=2.4 cv=LesxKzfi c=1 sm=1 tr=0 ts=698642d5 cx=c_pps
  a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
  a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=oGMlB6cnAAAA:8
- a=VnNF1IyMAAAA:8 a=lbqDleH5ITP0AWbVeFgA:9 a=2JgSa4NbpEOStq-L5dxp:22
- a=NdAtdrkLVvyUPsUoGJp4:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=VnNF1IyMAAAA:8
+ a=IoSOydnM9KY_bAp2vAIA:9 a=2JgSa4NbpEOStq-L5dxp:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-06_05,2026-02-05_03,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
+ bulkscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 clxscore=1011
  adultscore=0 suspectscore=0 priorityscore=1501 phishscore=0 malwarescore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
  reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2602060143
 
 From: Josh Poimboeuf <jpoimboe@kernel.org>
 
-Use SYM_FUNC_{START,END} instead of all the boilerplate.  No functional
-change.
+Enable sframe generation in the VDSO library so kernel and user space
+can unwind through it.
+
+SFrame isn't supported for x32 or x86-32.  Discard .sframe sections for
+those VDSOs.
+
+[ Jens Remus: Add support for SFrame V3.  Prevent GNU_SFRAME program
+table entry to empty .sframe section. ]
 
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Acked-by: H. Peter Anvin (Intel) <hpa@zytor.com>
 Signed-off-by: Jens Remus <jremus@linux.ibm.com>
 ---
- arch/x86/entry/vdso/vdso32/system_call.S | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/entry/vdso/vdso32/system_call.S b/arch/x86/entry/vdso/vdso32/system_call.S
-index 9157cf9c5749..a90f4f7de396 100644
---- a/arch/x86/entry/vdso/vdso32/system_call.S
-+++ b/arch/x86/entry/vdso/vdso32/system_call.S
-@@ -9,11 +9,7 @@
- #include <asm/alternative.h>
+Notes (jremus):
+    Changes in v8:
+    - Discard .sframe for x32 and x86-32 VDSOs. (Josh/Indu)
+      Note that the use of KEEP_SFRAME enables to define it for x86-64
+      VDSO only.  Unlike CONFIG_AS_SFRAME, which may also be defined
+      for x32 and x86-32 VDSO.  In x32 VDSO it would result in superfluous
+      .sframe (copied from the x86-64 build - could be removed in X32
+      build step).  In x86-32 VDSO it would cause a bogus GNU_SFRAME
+      program table entry.
+    - Reword commit message (append Josh's private fix).
+    - Drop .cfi_sections .sframe in dwarf2.h in favor of the explicitly
+      specified more specific assembler option --gsframe-3.  With this
+      it is not necessary to undefine CONFIG_AS_SFRAME in
+      fake_32bit_build.h.
+
+ arch/Kconfig                                 |  7 +++++++
+ arch/x86/entry/vdso/common/vdso-layout.lds.S | 15 +++++++++++++++
+ arch/x86/entry/vdso/vdso64/Makefile          |  1 +
+ arch/x86/entry/vdso/vdso64/vdso64.lds.S      |  4 ++++
+ 4 files changed, 27 insertions(+)
+
+diff --git a/arch/Kconfig b/arch/Kconfig
+index 31220f512b16..8170e492a44c 100644
+--- a/arch/Kconfig
++++ b/arch/Kconfig
+@@ -479,6 +479,13 @@ config HAVE_HARDLOCKUP_DETECTOR_ARCH
+ 	  It uses the same command line parameters, and sysctl interface,
+ 	  as the generic hardlockup detectors.
  
- 	.text
--	.globl __kernel_vsyscall
--	.type __kernel_vsyscall,@function
--	ALIGN
--__kernel_vsyscall:
--	CFI_STARTPROC
-+SYM_FUNC_START(__kernel_vsyscall)
++config AS_SFRAME
++	bool
++
++config AS_SFRAME3
++	def_bool $(as-instr,.cfi_startproc\n.cfi_endproc,-Wa$(comma)--gsframe-3)
++	select AS_SFRAME
++
+ config UNWIND_USER
+ 	bool
  
+diff --git a/arch/x86/entry/vdso/common/vdso-layout.lds.S b/arch/x86/entry/vdso/common/vdso-layout.lds.S
+index 856b8b9d278c..47e6a6a0560a 100644
+--- a/arch/x86/entry/vdso/common/vdso-layout.lds.S
++++ b/arch/x86/entry/vdso/common/vdso-layout.lds.S
+@@ -60,6 +60,13 @@ SECTIONS
+ 		*(.eh_frame.*)
+ 	}					:text
+ 
++#ifdef KEEP_SFRAME
++	.sframe		: {
++		KEEP (*(.sframe))
++		*(.sframe.*)
++	}					:text	:sframe
++#endif
++
  	/*
- 	 * If using int $0x80, there is no reason to muck about with the
-@@ -85,7 +81,5 @@ SYM_INNER_LABEL(int80_landing_pad, SYM_L_GLOBAL)
- 	CFI_RESTORE		ecx
- 	CFI_ADJUST_CFA_OFFSET	-4
- 	RET
--	CFI_ENDPROC
--
--	.size __kernel_vsyscall,.-__kernel_vsyscall
-+SYM_FUNC_END(__kernel_vsyscall)
- 	.previous
+ 	 * Text is well-separated from actual data: there's plenty of
+ 	 * stuff that isn't used at runtime in between.
+@@ -80,6 +87,10 @@ SECTIONS
+ 		*(.discard)
+ 		*(.discard.*)
+ 		*(__bug_table)
++#ifndef KEEP_SFRAME
++		*(.sframe)
++		*(.sframe.*)
++#endif
+ 	}
+ }
+ 
+@@ -89,6 +100,7 @@ SECTIONS
+ #define PT_GNU_EH_FRAME	0x6474e550
+ #define PT_GNU_STACK	0x6474e551
+ #define PT_GNU_PROPERTY	0x6474e553
++#define PT_GNU_SFRAME	0x6474e554
+ 
+ /*
+  * We must supply the ELF program headers explicitly to get just one
+@@ -104,6 +116,9 @@ PHDRS
+ 	dynamic		PT_DYNAMIC	PF_R;
+ 	note		PT_NOTE		PF_R;
+ 	eh_frame_hdr	PT_GNU_EH_FRAME PF_R;
++#ifdef KEEP_SFRAME
++	sframe		PT_GNU_SFRAME	PF_R;
++#endif
+ 	gnu_stack	PT_GNU_STACK	PF_RW;
+ 	gnu_property	PT_GNU_PROPERTY	PF_R;
+ }
+diff --git a/arch/x86/entry/vdso/vdso64/Makefile b/arch/x86/entry/vdso/vdso64/Makefile
+index bfffaf1aeecc..459f8026531e 100644
+--- a/arch/x86/entry/vdso/vdso64/Makefile
++++ b/arch/x86/entry/vdso/vdso64/Makefile
+@@ -14,6 +14,7 @@ vobjs-$(CONFIG_X86_SGX)		+= vsgx.o
+ 
+ # Compilation flags
+ flags-y				:= -DBUILD_VDSO64 -m64 -mcmodel=small
++flags-$(CONFIG_AS_SFRAME3)	+= -Wa,--gsframe-3
+ 
+ # The location of this include matters!
+ include $(src)/../common/Makefile.include
+diff --git a/arch/x86/entry/vdso/vdso64/vdso64.lds.S b/arch/x86/entry/vdso/vdso64/vdso64.lds.S
+index 5ce3f2b6373a..13e30d3b4827 100644
+--- a/arch/x86/entry/vdso/vdso64/vdso64.lds.S
++++ b/arch/x86/entry/vdso/vdso64/vdso64.lds.S
+@@ -9,6 +9,10 @@
+ 
+ #define BUILD_VDSO64
+ 
++#ifdef CONFIG_AS_SFRAME
++# define KEEP_SFRAME
++#endif
++
+ #include "common/vdso-layout.lds.S"
+ 
+ /*
 -- 
 2.51.0
 
