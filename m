@@ -1,88 +1,89 @@
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CC043ACEF2
-	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 12:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D8D93AE6F7
+	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 12:44:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.182
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770381751; cv=pass; b=YXFee1vaQLTtZf2uVIxmzsmXLS4YOaJ7BNi9iRNuzTHJP3kW1CaCgiyUwt4pUHXLZC2gDxS4y00t/pve0ms6uXTlla7RbiOVpwUWbg21ngGcl6t5DX2T22QiL+4ZJ8aoUvqj278ot3LCTr3nso7I5hj79AAnrP2lMLl3pWvHl60=
+	t=1770381869; cv=pass; b=Pzn0DDNH3TxtFmWshWnqoSCdKId8IKy0/LgY5HoX/nt4/ii8hY+HMGD4XFRmzr4pbEbt80OlPrM7T772jr/woa09miOckszr09uGiPNu4XovGzOYWLUGqFuNZw8ssu/u2TmeeToWbrUrDBmTZqr96ioQ7Jk1vzptW0mxwQA4+B4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770381751; c=relaxed/simple;
-	bh=zdhBWmvj+JKFWU/nHEjqvB/HzAnQKmeTgyhMS0D9RWw=;
+	s=arc-20240116; t=1770381869; c=relaxed/simple;
+	bh=3mw8uJP0ZIcDNqYKhNkrQSFVmjQSE9rgWbRnkN5Bt+Y=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gJpzXIArMjLGrVTLy+TyIRfFSsak53fxUuvxkYy1eLcgsIY6orHxCaYdVd4+ef3FJcGwBaESBd6iv2miS/2yed8TsJ9+TXyNmpmXUxn+qHW1I15CLK/iuBALSWe5bmqVEGq61cNzh59PtxTwtqksG0BGlHkU+hj69dx6aI3t8ws=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com; spf=pass smtp.mailfrom=mihalicyn.com; dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b=TqnNaZCJ; arc=pass smtp.client-ip=209.85.167.47
+	 To:Cc:Content-Type; b=SYpo6FLPCEEIlbOxCqumhYjwgOSF9jk5m2lTG616qmxNcv+nXqk6ra4ObzT7A+VeUHdTyCJVYREOwG0eXQv7u1DaDThx94tytDPreutL4ZKkN/a05TdT0pJUSSESVu/cZZhWq0E2qbnkhCHMYFTb1tTLir1/eVja9JCaiR5JmAI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com; spf=pass smtp.mailfrom=mihalicyn.com; dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b=I9W7zIIs; arc=pass smtp.client-ip=209.85.128.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mihalicyn.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mihalicyn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b="TqnNaZCJ"
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-59b6d5bd575so2139117e87.1
-        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 04:42:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770381749; cv=none;
+	dkim=pass (1024-bit key) header.d=mihalicyn.com header.i=@mihalicyn.com header.b="I9W7zIIs"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-794f281eb04so22168097b3.2
+        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 04:44:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770381868; cv=none;
         d=google.com; s=arc-20240605;
-        b=LF9gOE/mK1JAzQ1pnEjS+N1Y5HiNac6KVRnUaumIqS6XHkHDFn5nI6uM+/FVuoWVGR
-         J0IPGqeNEy6KbiDyrdeZVr6jXD46nnoundUCzX1X6nuFxcWJfQDLVP9SchAL1gJ0RNEq
-         d3ttX8mtsjauTyBZnUrslG84i7f2Tnpg9fuIpi6jAElnRvAG1jqUZfWZCtOOowMlBWsk
-         O84dOg/6HubTbo3o2R51n1/ND8Tx/TIMLg/t5R7mQ84JzDNXeyx5J23kBZUkGX76uCj1
-         ZLh/xoe8UOhjOtFdTEWYe7t2RRXzcab2dy4JXgAjDjj6kzwdhpdlv+SBsz8zaxbFdI8v
-         9D4A==
+        b=Y19mhj73sCisyjC5MUH/3ugL9Bb3jYwilW3KbToJm4jSlX7K5koy3X2ZPehOwyNofC
+         U55fM9ItP5bLzh15w1dhOJseEDlk+p6rBo1CqiwzvLD/u7DK3EUUr/zM83VtyB0jznU9
+         AoFTYei6WwRwUnClMlED8XCYPoYfhIjWD68+QtDIMwq9ITvvuk4s2pyBUczoNw92inX+
+         O1InK2jNzHEBNN3HYTo1qAbp/3hmJAI2pnff4d155SumbZRHYiaB24hyQbg4CMc1FSAq
+         JQz2E34L5+hAYV7WePs+gM4b9ZkdsgY97k9VaeYG26woFv2ZmZ3BafUH4+PhFbfUlTP5
+         i0Xw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:dkim-signature;
-        bh=pILuumm4s94M5+C2aJ63ms278oe7itYtLuvXSi366vg=;
-        fh=T8e2i69DcevrKc8oK8jC/Tx6uLQ44CTCseu9gxnj0bg=;
-        b=XS6LztNOSIvMsJwaeGtiINy5BIZPs9zUU5FWWl+15PYH4Gl5momFEIwIZgGXERlmeQ
-         Pl5WW/mVOc6k0tJx0t5eoOe2mpZve0aSib8ocUgGgqWEsvPWejRe4dfx32q5LL9HiPkj
-         QvGn1mZegYwHhXle2N/xOvL3Gwy/W1TaJcp1iEZy9/L1pD7E1AleDFPwjgYVsAEm3gKW
-         KHENOy6VEk9lvsV1bU/rJBVyxf8OgKP0Y8XSxMNnLAGCSliKYwjIa+SsoIKggc+T8xyt
-         jMXz7kps9nR95g46ZTVhIqxOWU1C87cNcVWCpBRHH7l4BkU80Fys+DE4Vro6N8yLvGUO
-         lPFA==;
+        bh=gi3nJRbnTdHkSlsltmqaPF5ojrlDv3hokMB+vZDqhcw=;
+        fh=uyoXyA3FVuX3zOI42JOfyTjScZi/OGvvS5hMCYgy5kU=;
+        b=GJYdQFmJDDMvYC5I4khEDABKgJ2tG9nFLsYdyH4R46zcX7+/dwS/MV2SHq6AfeK9y9
+         o3hXr9S2iItMGp9UbfTX13NHjmxtb572mRpa+0oLzKSOUjUHRux1QN8OyQ08RqUI9UTo
+         CIyGwt/d+netS8msVPBa8/lAcaQWKGptdfqMIs67rtFcynxAUS4zlYl+uRrQkpsGkEub
+         yWYw52NXSbAnFHAnNykKsXeEOZmCw2uQcOewbOrd/LGnE5mVtSflIGXp+XtW0UvM8pve
+         4exIVUCuCeoGfpC8cJ/2lwUsov/wa49ZRz2D/DRrWrWR05XSIno8l5M19m7UZuu+Hvey
+         Dw8Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mihalicyn.com; s=mihalicyn; t=1770381749; x=1770986549; darn=vger.kernel.org;
+        d=mihalicyn.com; s=mihalicyn; t=1770381868; x=1770986668; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pILuumm4s94M5+C2aJ63ms278oe7itYtLuvXSi366vg=;
-        b=TqnNaZCJZKDgERTbB2O9RwX5KuxSimAIghe/aagR/qPzjAwjRyvzeCSvMOuyjy6M8G
-         QrqskpvjYrPhWinHVcC+pIMVNqWEDvflwH88SFxyt52NiYfoybLL3zN9YcucA6TwxlqC
-         qp+KeMIUqb1deDSE5WZxVUCrzj9+++lV0ok2A=
+        bh=gi3nJRbnTdHkSlsltmqaPF5ojrlDv3hokMB+vZDqhcw=;
+        b=I9W7zIIseqoqUxW7SbhJXiGhjf6rafdA6zBBij5gQs6oxa1Ll6o+HclXVxD5krVu2g
+         Lexl4gtI3mPOPS9jJY7xuO2T3wIx8/ZvI8o7KZRgWzzUCP8awlKRjL6p2CmoyQOjAoxb
+         8iZUzBUBA/QrixGrNWHw4DxjFIT/Q1p+LEzTA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770381749; x=1770986549;
+        d=1e100.net; s=20230601; t=1770381868; x=1770986668;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pILuumm4s94M5+C2aJ63ms278oe7itYtLuvXSi366vg=;
-        b=B5ooR3rhi8XTo1QlfeOGPT10X9v5Op57dh9rErtAgJ+TkYW0GzI1NQ1YKdQZWyN1Vz
-         tZ+2cckJvm7YlwjkVr13HFS94+EfrHhdA3R85ZKakdvsvl/zqK/WCeT4zsYMuQQ2gIfP
-         SF2vNXeHN6E39A0guCpop21Hxb63TXt7OCTbcP0/lGFdaEd/4BNZHDl0MXxhAJlXQwZt
-         I9j4HXM6XHmg/4wZDVAb1f8OExsi0jFDbsfeZVkFfIRxel8nO5niNkIxAD/d7OHggidL
-         AmT4Do28MHudE0ADCnWrJD795hoCog/5ELW5mwNb2ZAuEPkJU7TcjtaBDbTSNPk+lEnt
-         0RiA==
-X-Forwarded-Encrypted: i=1; AJvYcCVlhYizZFijJDQ0JJvgCD9AHVje67uG/UGYY9j4zEZ2V9VIaJdAlRLxqvrQIIqIeYfUBc8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJRbTaYFEtBwcWKLUbdeRcSaVg1KW83+aKDWJ/sv7N0FI1J1gM
-	iXKpqvdnFfXHyOfj7GDNK/ufMMGUc29qsmlEq4zGfb8R2FOICQUysueEjzA8iTy8jwkwqV1kU+T
-	Iiz4DZHBa1y33l6zrmOCKO6mCPhwl+P9JHNCGTzSB3A==
-X-Gm-Gg: AZuq6aJMOZ4N7VKO9FNtGq3kUFeYmv0PqXtJIaaUHicsRkOjEsygu+RQLR14Es3ahqr
-	VeZTZbdfuMaduTxSLw6BeKM3JRuA68ykQk8nO8aQn81EdE6Fbq2xRljEX4K6SHVPVDc+MtiQzwD
-	qUxI9CkGfrq0GLlDlIQhhI30WopIQNYuKt6qIrGOLwtmwnPNrTHdTk0/zWZU4iYAAe3O2Q0WGgN
-	cvwS3F41V3x57SIFnMMGg9hV7GiMZuyfD/QIDWC2Xs5hw8Ci+0c1v4ttnby7tq7Z1Ysv4LGelLm
-	VmyUYJkgmzVGa93724edn0kWEdA=
-X-Received: by 2002:a05:6512:1390:b0:59e:476:a1cf with SMTP id
- 2adb3069b0e04-59e45173187mr806234e87.49.1770381749061; Fri, 06 Feb 2026
- 04:42:29 -0800 (PST)
+        bh=gi3nJRbnTdHkSlsltmqaPF5ojrlDv3hokMB+vZDqhcw=;
+        b=r+/pkzICOsKTe8WtiRmotqF3hnYr/shEfUy9eOgAlMcUPLG1bJmLlIyXyscMN3+WTa
+         bwZmcms/L66ZHH1FNgcKzfzuGz1bQc1jRxG3lKSVI0lmyHxshcdZfkM27odvFc3IvMZI
+         DdVIOHo6vJ9rvq5gBxNyLnA8BXFAt0BEZuWbUZNvYEVTdbN1khNM8tzH05Np+4sJqhpY
+         gyZwhnshMExuLNexuxxuOo1ehtG1v73JjEnUvX7UmkVG6eWt1sf9lr9XKaITPIp2KjvR
+         CfnSPhld/6RVgSpv6543Cdy6lLXOn8kKRp/KV5mg3WyM2TQGZ6UpNfTOyIe+9dWCk8Nn
+         EhVA==
+X-Forwarded-Encrypted: i=1; AJvYcCVB31MD7xOpzgwQTjfLq5Uf2VxA8m/+CRLsvm0PcOo/iaugwIeMy/B9e1UByr/oSIhXWoY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5NimrGV2yV2ogvCmcKGDRPI9YiDaXuAxA6w80kGh6QOH7XDEx
+	L0L1LdG2YrXb0VMrdnXXCYd54gf/3gDYLR62e3LcaLAAapn6hUIm1yUNlQcxEfkNzKNDp1Ij1Uf
+	G4ChAXOLCchb7PFJnPY6kgxVTZQ+c9J/eVL7GaY0WVA==
+X-Gm-Gg: AZuq6aK6JW8A27zSgku6wJYWraQLp7To7EynMXuUp9iRNT6iDgmOxorQXJJNx/0g25g
+	aQxAmA6mm6+vU/sN+j6I9+nm07ladeT0w9WH2Twefkm8FvCnNRWe1xvURd2kvFN2DaYt/PLs+io
+	Mljfqm0/87YftitaU6O2iM7FFALwU0vNhQMh6FydaYv6nTIgOO0wzxdibwxG/S3anLUc7JsRMqt
+	MpOSMlzslJp/WexdeA03AZQrUDaAcArk/Td/gDtN3uHWqz1u+Y29uzaDx8mAzZMuPLv8O++N5Yt
+	Cr/BDqImET/eqlDorX3Ps5s5u/M=
+X-Received: by 2002:a05:690c:39c:b0:794:ef94:1222 with SMTP id
+ 00721157ae682-7952ab57b30mr48502987b3.55.1770381868226; Fri, 06 Feb 2026
+ 04:44:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260205104541.171034-1-alexander@mihalicyn.com> <20260206-gelenk-gierig-82ad15ec8080@brauner>
-In-Reply-To: <20260206-gelenk-gierig-82ad15ec8080@brauner>
+References: <20260205104541.171034-1-alexander@mihalicyn.com>
+ <20260206-gelenk-gierig-82ad15ec8080@brauner> <CAJqdLroezjW2qe+1CNykwhFc9OO7uGADzc6ffjZzvyVOxLjXVA@mail.gmail.com>
+In-Reply-To: <CAJqdLroezjW2qe+1CNykwhFc9OO7uGADzc6ffjZzvyVOxLjXVA@mail.gmail.com>
 From: Alexander Mikhalitsyn <alexander@mihalicyn.com>
-Date: Fri, 6 Feb 2026 13:42:17 +0100
-X-Gm-Features: AZwV_QgkLBXyWCcKj5zjTf7523gOvqXKWBYJGr6JBO7fN7jZv7v_4Ao7HJZnJug
-Message-ID: <CAJqdLroezjW2qe+1CNykwhFc9OO7uGADzc6ffjZzvyVOxLjXVA@mail.gmail.com>
+Date: Fri, 6 Feb 2026 13:44:14 +0100
+X-Gm-Features: AZwV_QjKPM44JjJR4PKgkXJKTIpISniJnOL6jzJRVFwiWxRMDOew-ykuozR4V5U
+Message-ID: <CAJqdLrrU-iJcSg-pA_L4iZLkt6Xd2Ju5=C3x71QZmB9X4zYtsQ@mail.gmail.com>
 Subject: Re: [PATCH] bpf: use FS_USERNS_DELEGATABLE for bpffs
 To: Christian Brauner <brauner@kernel.org>
 Cc: ast@kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -95,113 +96,122 @@ Cc: ast@kernel.org, Daniel Borkmann <daniel@iogearbox.net>,
 	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
 Content-Type: text/plain; charset="UTF-8"
 
-Am Fr., 6. Feb. 2026 um 13:33 Uhr schrieb Christian Brauner
-<brauner@kernel.org>:
+Am Fr., 6. Feb. 2026 um 13:42 Uhr schrieb Alexander Mikhalitsyn
+<alexander@mihalicyn.com>:
 >
-> On Thu, Feb 05, 2026 at 11:45:41AM +0100, Alexander Mikhalitsyn wrote:
-> > From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
+> Am Fr., 6. Feb. 2026 um 13:33 Uhr schrieb Christian Brauner
+> <brauner@kernel.org>:
 > >
-> > Instead of FS_USERNS_MOUNT we should use recently introduced
-> > FS_USERNS_DELEGATABLE cause it better expresses what we
-> > really want to get there. Filesystem should not be allowed
-> > to be mounted by an unprivileged user, but at the same time
-> > we want to have sb->s_user_ns to point to the container's
-> > user namespace, at the same time superblock can only
-> > be created if capable(CAP_SYS_ADMIN) check is successful.
+> > On Thu, Feb 05, 2026 at 11:45:41AM +0100, Alexander Mikhalitsyn wrote:
+> > > From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
+> > >
+> > > Instead of FS_USERNS_MOUNT we should use recently introduced
+> > > FS_USERNS_DELEGATABLE cause it better expresses what we
+> > > really want to get there. Filesystem should not be allowed
+> > > to be mounted by an unprivileged user, but at the same time
+> > > we want to have sb->s_user_ns to point to the container's
+> > > user namespace, at the same time superblock can only
+> > > be created if capable(CAP_SYS_ADMIN) check is successful.
+> > >
+> > > Tested and no regressions noticed.
+> > >
+> > > No functional change intended.
+> > >
+> > > Link: https://lore.kernel.org/linux-fsdevel/6dd181bf9f6371339a6c31f58f582a9aac3bc36a.camel@kernel.org [1]
+> > > Fixes: 6fe01d3cbb92 ("bpf: Add BPF token delegation mount options to BPF FS")
+> > > Cc: Alexei Starovoitov <ast@kernel.org>
+> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > > Cc: Eduard Zingerman <eddyz87@gmail.com>
+> > > Cc: Song Liu <song@kernel.org>
+> > > Cc: Yonghong Song <yonghong.song@linux.dev>
+> > > Cc: John Fastabend <john.fastabend@gmail.com>
+> > > Cc: KP Singh <kpsingh@kernel.org>
+> > > Cc: Stanislav Fomichev <sdf@fomichev.me>
+> > > Cc: Hao Luo <haoluo@google.com>
+> > > Cc: Jiri Olsa <jolsa@kernel.org>
+> > > Cc: Jeff Layton <jlayton@kernel.org>
+> > > Cc: Christian Brauner <brauner@kernel.org>
+> > > Cc: bpf@vger.kernel.org
+> > > Cc: linux-fsdevel@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
+> > > - RWB-tag from Jeff [1]
+> > > Reviewed-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > >  kernel/bpf/inode.c | 6 +-----
+> > >  1 file changed, 1 insertion(+), 5 deletions(-)
+> > >
+> > > diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+> > > index 9f866a010dad..d8dfdc846bd0 100644
+> > > --- a/kernel/bpf/inode.c
+> > > +++ b/kernel/bpf/inode.c
+> > > @@ -1009,10 +1009,6 @@ static int bpf_fill_super(struct super_block *sb, struct fs_context *fc)
+> > >       struct inode *inode;
+> > >       int ret;
+> > >
+> > > -     /* Mounting an instance of BPF FS requires privileges */
+> > > -     if (fc->user_ns != &init_user_ns && !capable(CAP_SYS_ADMIN))
+> > > -             return -EPERM;
 > >
-> > Tested and no regressions noticed.
+> > Jeff's patch does:
 > >
-> > No functional change intended.
-> >
-> > Link: https://lore.kernel.org/linux-fsdevel/6dd181bf9f6371339a6c31f58f582a9aac3bc36a.camel@kernel.org [1]
-> > Fixes: 6fe01d3cbb92 ("bpf: Add BPF token delegation mount options to BPF FS")
-> > Cc: Alexei Starovoitov <ast@kernel.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Andrii Nakryiko <andrii@kernel.org>
-> > Cc: Martin KaFai Lau <martin.lau@linux.dev>
-> > Cc: Eduard Zingerman <eddyz87@gmail.com>
-> > Cc: Song Liu <song@kernel.org>
-> > Cc: Yonghong Song <yonghong.song@linux.dev>
-> > Cc: John Fastabend <john.fastabend@gmail.com>
-> > Cc: KP Singh <kpsingh@kernel.org>
-> > Cc: Stanislav Fomichev <sdf@fomichev.me>
-> > Cc: Hao Luo <haoluo@google.com>
-> > Cc: Jiri Olsa <jolsa@kernel.org>
-> > Cc: Jeff Layton <jlayton@kernel.org>
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: bpf@vger.kernel.org
-> > Cc: linux-fsdevel@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
-> > - RWB-tag from Jeff [1]
-> > Reviewed-by: Jeff Layton <jlayton@kernel.org>
-> > ---
-> >  kernel/bpf/inode.c | 6 +-----
-> >  1 file changed, 1 insertion(+), 5 deletions(-)
-> >
-> > diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
-> > index 9f866a010dad..d8dfdc846bd0 100644
-> > --- a/kernel/bpf/inode.c
-> > +++ b/kernel/bpf/inode.c
-> > @@ -1009,10 +1009,6 @@ static int bpf_fill_super(struct super_block *sb, struct fs_context *fc)
-> >       struct inode *inode;
-> >       int ret;
-> >
-> > -     /* Mounting an instance of BPF FS requires privileges */
-> > -     if (fc->user_ns != &init_user_ns && !capable(CAP_SYS_ADMIN))
-> > -             return -EPERM;
+> >         if (user_ns != &init_user_ns &&
+> >             !(fc->fs_type->fs_flags & (FS_USERNS_MOUNT | FS_USERNS_DELEGATABLE))) {
+> >                 errorfc(fc, "VFS: Mounting from non-initial user namespace is not allowed");
+> >                 return ERR_PTR(-EPERM);
+> >         }
 >
-> Jeff's patch does:
+> Hi Christian,
 >
->         if (user_ns != &init_user_ns &&
->             !(fc->fs_type->fs_flags & (FS_USERNS_MOUNT | FS_USERNS_DELEGATABLE))) {
->                 errorfc(fc, "VFS: Mounting from non-initial user namespace is not allowed");
->                 return ERR_PTR(-EPERM);
->         }
-
-Hi Christian,
-
->
-> IOW, it only restricts the ability to end up in bpf_fill_super() if
-> FS_USERNS_DELEGATABLE is set. You still need to perform the permission
-> check in bpf_fill_super() though otherwise anyone can mount bpffs in an
-> unprivileged container now.
-
-Yeah, this is what  mount_capable(struct fs_context *fc) does. I'm removing
-FS_USERNS_MOUNT so know it checks capable(CAP_SYS_ADMIN), instead of
-ns_capable(fc->user_ns, CAP_SYS_ADMIN).
-
-No functional changes here.
-
->
-> So either Jeff's patch needs to be changed to require
-> capable(CAP_SYS_ADMIN) when FS_USERNS_DELEGATABLE is set (which makes
-> sense to me in general) or the check needs to remain n bpf_fill_super().
->
-> @Jeff do you require capable(CAP_SYS_ADMIN) from within nfs? I think you
-> somehow must because otherwise what prevents a container from mounting
-> arbitrary servers?
-
-Same point here. We have this check in mount_capable(struct fs_context
-*fc) already.
-
-Kind regards,
-Alex
-
->
-> > -
-> >       ret = simple_fill_super(sb, BPF_FS_MAGIC, bpf_rfiles);
-> >       if (ret)
-> >               return ret;
-> > @@ -1085,7 +1081,7 @@ static struct file_system_type bpf_fs_type = {
-> >       .init_fs_context = bpf_init_fs_context,
-> >       .parameters     = bpf_fs_parameters,
-> >       .kill_sb        = bpf_kill_super,
-> > -     .fs_flags       = FS_USERNS_MOUNT,
-> > +     .fs_flags       = FS_USERNS_DELEGATABLE,
-> >  };
 > >
-> >  static int __init bpf_init(void)
-> > --
-> > 2.47.3
+> > IOW, it only restricts the ability to end up in bpf_fill_super() if
+> > FS_USERNS_DELEGATABLE is set. You still need to perform the permission
+> > check in bpf_fill_super() though otherwise anyone can mount bpffs in an
+> > unprivileged container now.
+>
+> Yeah, this is what  mount_capable(struct fs_context *fc) does. I'm removing
+> FS_USERNS_MOUNT so know it checks capable(CAP_SYS_ADMIN), instead of
+> ns_capable(fc->user_ns, CAP_SYS_ADMIN).
+>
+> No functional changes here.
+>
 > >
+> > So either Jeff's patch needs to be changed to require
+> > capable(CAP_SYS_ADMIN) when FS_USERNS_DELEGATABLE is set (which makes
+> > sense to me in general) or the check needs to remain n bpf_fill_super().
+> >
+> > @Jeff do you require capable(CAP_SYS_ADMIN) from within nfs? I think you
+> > somehow must because otherwise what prevents a container from mounting
+> > arbitrary servers?
+>
+> Same point here. We have this check in mount_capable(struct fs_context
+> *fc) already.
+
+And of course, I would never send a patch like this without testing it
+for unprivileged
+user and without ensuring that it doesn't cause any obvious privilege
+escalation ;-)
+
+>
+> Kind regards,
+> Alex
+>
+> >
+> > > -
+> > >       ret = simple_fill_super(sb, BPF_FS_MAGIC, bpf_rfiles);
+> > >       if (ret)
+> > >               return ret;
+> > > @@ -1085,7 +1081,7 @@ static struct file_system_type bpf_fs_type = {
+> > >       .init_fs_context = bpf_init_fs_context,
+> > >       .parameters     = bpf_fs_parameters,
+> > >       .kill_sb        = bpf_kill_super,
+> > > -     .fs_flags       = FS_USERNS_MOUNT,
+> > > +     .fs_flags       = FS_USERNS_DELEGATABLE,
+> > >  };
+> > >
+> > >  static int __init bpf_init(void)
+> > > --
+> > > 2.47.3
+> > >
