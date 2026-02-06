@@ -1,104 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C306239E9B;
-	Fri,  6 Feb 2026 06:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99EB1F03D7
+	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 07:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770359558; cv=none; b=dKUQBplAwHD5y4umuCC/+XVAqd0fEnJcj2PiK9QEMM6Mq9vWpbEfvbl2oO2b1cRsfCRZT061dZoSU8G00QDWfOM3KgXPQvShUV5iafiR/emiwaLHWPlEsNTk5qKZs3A+WTZGAgv0Z2PCIiA7ZBWcelsTtwtjjJ1+jGNT2jPYtJs=
+	t=1770362183; cv=none; b=uZhmA/c/7YWrH+CO6sOhXEUALG/SrZ9o8XX93oTUH355sH/xUG+Krh3+m1mI4GdsmC6uSFTvouLYnWJdRewGH+K+1wYR6aLfUwDWoPESxUDGNAXDgk8z9tRfK1bXIjvln3iCknsynNUY25HhZxLNnuWd9771FS3t06wdCmhhb0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770359558; c=relaxed/simple;
-	bh=B86+/w/Y4PxSyTGA99MIGHYH6HWoVwrAIkWvZ6pFjDg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=TMscb6KOqv55oflHiOSVtrsJ6mH3OIy3vBFR3weZkGUp295dIMTBnIiaCbpt2BYA7SaXQfKp57SOK+jbTcP1iGUZNeP93g/OYWuyzvxSx+LTePSunbbdKSQpCs8G+o2xpAQKr6eMRQNFAsg8Bf001Hk5xY+7JMFJFQoZMd/izxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3JiF5CH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770362183; c=relaxed/simple;
+	bh=L+VQ+PxTCyWvrHd+1VewiZQRFO9LPlaHeUzZMf2rcjQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=k82F4OcgeFqxFo5bOGeub1Li6oB8b4G92c4stoHfyYlTcycGlVa0SFJdcGqXQaWnbuJp551dmPBhl+kcxXyB89y/EvzNOgEP2KC5DsCnJKhN/ftQ10pV5DDUBFtmZ6xMWxWQYg6/Zdwr7Eo5zrs3Rv3HzqcmzdmCwWElYTcdGik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Rl7FdjFu; arc=none smtp.client-ip=18.132.163.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3JiF5CH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D32C116C6;
-	Fri,  6 Feb 2026 06:32:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770359557;
-	bh=B86+/w/Y4PxSyTGA99MIGHYH6HWoVwrAIkWvZ6pFjDg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=A3JiF5CHN58XGJOB6tuJkGjL9AJdi5GAJx6wUIa0ibgAD4jXzrH8K8GcinVpPjUXH
-	 QKvDIcWXx+RuFgfN6nep1inV3mWy3x7tcGnbnXq9oxBIOR3QwNBSbkXh25LezxpRB8
-	 /0xtnUm6r2W01eoBtQYw8xbwuh7EBHbiJEWua/sz5AeXa/2GK5ntpK1qVOmBtgbEgk
-	 WqNVUFgYCIO5YCKepsKaUmQSLrbp2bvQw33SPwb1Aei/n3HTOSAYr0oBrsYG38SvxK
-	 LXOEp2xPcB+q9GoFVy+BTDUWOYM8wjql2rB0qfR3Swb/DaeoVVte/wuJuCJ9CRmJEs
-	 hu15e/Al8eTeg==
-Content-Type: multipart/mixed; boundary="===============3171514973363339314=="
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Rl7FdjFu"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1770362061;
+	bh=/Vul21+ISQacwTUF7OTfl8dj1bgbi/35CWI7daY6gKo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=Rl7FdjFu18x4Sh3IonTe//n8MkrsRrIR+3NIQ8tWbOevbXQ2cRjFZpCKCuwO3iW8+
+	 jJUVIsDMO111m1XcnRGT018v9zc0PDejSiSS0r3RfVeocvGZG8NvDiDBIqZ10mSDHD
+	 GGOdMYyOzMZh6DeJ79HxkBtEX70z8pnPGRRBD0Jo=
+X-QQ-mid: zesmtpip4t1770362043t2cc3e028
+X-QQ-Originating-IP: qJD/3LovQX6BjVuq37tqGMuBs54va7/MIAHhdsEEj/M=
+Received: from xulang-PC ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 06 Feb 2026 15:14:01 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 204545660866557785
+EX-QQ-RecipientCnt: 10
+From: xulang <xulang@uniontech.com>
+To: martin.lau@linux.dev
+Cc: ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	dddddd@hust.edu.cn,
+	dzm91@hust.edu.cn,
+	hust-os-kernel-patches@googlegroups.com,
+	kaiyanm@hust.edu.cn,
+	sdf@fomichev.me,
+	xulang <xulang@uniontech.com>
+Subject: [PATCH] bpf: fix: Race condition in bpf_trampoline_unlink_cgroup_shim
+Date: Fri,  6 Feb 2026 15:13:57 +0800
+Message-ID: <68AC3CE38AB1BD07+20260206071357.4075301-1-xulang@uniontech.com>
+X-Mailer: git-send-email 2.51.0
+In-Reply-To: <dd71a6ff-929d-4958-ac73-99b4852808e4@linux.dev>
+References: <dd71a6ff-929d-4958-ac73-99b4852808e4@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e5ea98f963294d7c51801f7ef150d64e2be425b9fdbbf21fd37235c30fc0ca04@mail.kernel.org>
-In-Reply-To: <20260206055113.63476-1-yangfeng59949@163.com>
-References: <20260206055113.63476-1-yangfeng59949@163.com>
-Subject: Re: [PATCH v3] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
-From: bot+bpf-ci@kernel.org
-To: yangfeng59949@163.com,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org
-Cc: bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  6 Feb 2026 06:32:37 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
+X-QQ-XMAILINFO: OXbMFIZh3FGE3dBHeeypkrrTDVXH+2vYARUQyuXHs6KyZoxVG7KNkXim
+	daICmNPEcGl7nMA99WHe8XA24HJYQm8nMO8R27no7Xo3OXPSW8EXDma6nKzmz4r+tMdG21U
+	aFP5CCdWIXS+N/GYoq+wZxu7rUixGeJcckMHw8p/KgaSu67fg7LwmJ1gnzHKwCJ66eHFdRJ
+	OKz0XCMervRHspt0/kf/N7+OdJW0+KXWig8eR2SOgw21Uow6cLTEKPnRUWJk+tsY+B0wI4t
+	4Vaj5XWnJoXAEa3CQoH33gL0Z39mBhPsamHwH6kOSSVKg4GLcnbfg4PcycfS/+xhxQB5pHY
+	/h1JYsCoc7n4M19PC6H1MliWGuflO08riwZHjTPckIkT1zxJdQa460RMc6eIdlKfTsjv3DL
+	I1IsW1ECbz4+lmne20XuuNBXebTIeouNSo+kt/Kw+KnXkFBmYCVvli6vpfE1kXrIg9UbIEL
+	O84p8w3cwuTId1f9Eh3vbzSGxDRjEd46YKPEkhuFMv7G8C18MfBG9UguBq7Ac/WmqJkjWMe
+	JdL65d83tbWYkDgYTer8de1PThyz9JMcVsLlLAsZ59BuWeN3JV/0aCpT9WoSRUR7D0RdRH6
+	vHGK+WxSSUF2iBGHUVVaINCCmoyv4Gd1KXdZtqahVuFyXs7u/Pa0kGiGkB1GVZe0mLFLQIH
+	btIqel/pcsoXz93zid5oHHzPPkwYynEouN8GB/iKBpSpu7ItuNHMzwlzGNDiY3vYDvIQmet
+	7kA6/PLD66UH/2aw9c7qK969kZ1qAnexa7GrFHpR2/OpXgmGdXlnkIt6fHr3AXe+Ol3CwQl
+	CeX+rIevaXTzpTOloNgpI/EDejjWR8BiyAKlddsNCKge1fNtxAvYTUdkUVt6u2KYFM5OJBs
+	1P6mc84yQzZpPO96WZlzeMaiVSg1Afu/Obndkf+fDBXutM+6ouAeI5bfAS6M68MwU9psJlj
+	Bzd20Lq6yuDSKBwCG1cx7yKpdTs7bhIEbb/LJPYaIx89zdMNHxXV52Qn/cmGZXpqwcPSXpN
+	fqhec0htngoE5CwVqWW7YF5V/J+VI4tlMlnzkqPakw1YuYaUhhDH4C7L6QmxAGDDpdRRaq1
+	tTnS/3AXVDd9qirKrijA26lAj7qQJs+dQ==
+X-QQ-XMRINFO: OWPUhxQsoeAVwkVaQIEGSKwwgKCxK/fD5g==
+X-QQ-RECHKSPAM: 0
 
---===============3171514973363339314==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Based on Martin KaFai Lau's suggestions, I have created a simple patch.
 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -989,6 +989,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->  	u32 tailroom = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
->  	struct net *net = current->nsproxy->net_ns;
->  	struct net_device *dev = net->loopback_dev;
-> +	struct dst_entry bpf_test_run_lwt_xmit_dst;
->  	u32 headroom = NET_SKB_PAD + NET_IP_ALIGN;
+The root cause of this bug is that when `bpf_link_put` reduces the
+refcount of `shim_link->link.link` to zero, the resource is considered
+released but may still be referenced via `tr->progs_hlist` in
+`cgroup_shim_find`. The actual cleanup of `tr->progs_hlist` in
+`bpf_shim_tramp_link_release` is deferred. During this window, another
+process can cause a use-after-free via `bpf_trampoline_link_cgroup_shim`.
 
-[ ... ]
+To fix this:
+1. Add an atomic non-zero check in `bpf_trampoline_link_cgroup_shim`.
+   Only increment the refcount if it is not already zero.
+2. Guard the freeing of `shim_link` with `tr->mutex` to prevent release
+   while the mutex is held.
 
-> @@ -1156,6 +1157,12 @@
->  		skb->ip_summed = CHECKSUM_COMPLETE;
->  	}
->
-> +	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-> +		dst_init(&bpf_test_run_lwt_xmit_dst, NULL, NULL,
-> +			 DST_OBSOLETE_NONE, DST_NOCOUNT);
-> +		bpf_test_run_lwt_xmit_dst.dev = dev;
-> +		skb_dst_set_noref(skb, &bpf_test_run_lwt_xmit_dst);
-> +	}
+Testing:
+I used a non-rigorous method to verify the fix by adding a delay in
+`bpf_link_put` to make the bug easier to trigger:
 
-Will skb_dst_set_noref() trigger a WARN_ON here? Looking at the function
-in include/linux/skbuff.h:
+void bpf_link_put(struct bpf_link *link)
+{
+        if (!atomic64_dec_and_test(&link->refcnt))
+                return;
++       msleep(100);
+        INIT_WORK(&link->work, bpf_link_put_deferred);
+        schedule_work(&link->work);
+}
 
-    static inline void skb_dst_set_noref(struct sk_buff *skb, struct dst_entry *dst)
-    {
-        skb_dst_check_unset(skb);
-        WARN_ON(!rcu_read_lock_held() && !rcu_read_lock_bh_held());
-        ...
-    }
+Before the patch, running a PoC easily reproduced the crash (often within
+dozens of iterations) with a call trace similar to KaiyanM's report.
+After the patch, the bug no longer occurs even after millions of
+iterations.
 
-This code runs from syscall context in bpf_prog_test_run_skb() before
-bpf_test_run() is called. At this point, neither rcu_read_lock() nor
-local_bh_disable() is held - local_bh_disable() is only called inside
-bpf_test_run().
-
-Should the dst setup be wrapped with rcu_read_lock()/rcu_read_unlock(),
-or moved inside bpf_test_run() where RCU-bh context is already held?
-
-
+Signed-off-by: xulang <xulang@uniontech.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ kernel/bpf/trampoline.c | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21740645384
+diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+index 976d89011b15..c16a53cca5e0 100644
+--- a/kernel/bpf/trampoline.c
++++ b/kernel/bpf/trampoline.c
+@@ -702,15 +702,23 @@ static void bpf_shim_tramp_link_release(struct bpf_link *link)
+ 		return;
+ 
+ 	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link, shim_link->trampoline, NULL));
+-	bpf_trampoline_put(shim_link->trampoline);
+ }
+ 
+ static void bpf_shim_tramp_link_dealloc(struct bpf_link *link)
+ {
+ 	struct bpf_shim_tramp_link *shim_link =
+ 		container_of(link, struct bpf_shim_tramp_link, link.link);
++	struct bpf_trampoline *tr = shim_link->trampoline;
+ 
++	if (!tr) {
++		kfree(shim_link);
++		return;
++	}
++
++	mutex_lock(&tr->mutex);
+ 	kfree(shim_link);
++	mutex_unlock(&tr->mutex);
++	bpf_trampoline_put(tr);
+ }
+ 
+ static const struct bpf_link_ops bpf_shim_tramp_link_lops = {
+@@ -800,10 +808,8 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+ 	mutex_lock(&tr->mutex);
+ 
+ 	shim_link = cgroup_shim_find(tr, bpf_func);
+-	if (shim_link) {
++	if (shim_link && atomic64_inc_not_zero(&shim_link->link.link.refcnt)) {
+ 		/* Reusing existing shim attached by the other program. */
+-		bpf_link_inc(&shim_link->link.link);
+-
+ 		mutex_unlock(&tr->mutex);
+ 		bpf_trampoline_put(tr); /* bpf_trampoline_get above */
+ 		return 0;
+-- 
+2.50.1
 
-AI-authorship-score: low
-AI-authorship-explanation: The commit shows human authorship with real bug reporters from HUST, actual crash stack trace, self-aware comment using Temporarily, and author from kylinos.cn Linux distribution company.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: WARN_ON will trigger in skb_dst_set_noref due to missing RCU context, causing kernel log warnings but no functional impact.
-
---===============3171514973363339314==--
