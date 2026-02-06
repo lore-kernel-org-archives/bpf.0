@@ -1,147 +1,145 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D9A32573C;
-	Fri,  6 Feb 2026 04:51:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B02298CAB;
+	Fri,  6 Feb 2026 05:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770353508; cv=none; b=ruXC4F7n2TxCwSbc290MSzCmZ+Y5Luu4U/5W7wLeacjcnYM+uarFGpKFQ1xkFXCtKXXr9X8hAPnfXJaBNS6ZAwvHkcSHjZ33icWk3mVAUoi2LvX7R3KL+R4GrQghum6G88l8iwVenWbO+frXshlP/LxHHFTSEufIY1LaaF5LxNg=
+	t=1770357113; cv=none; b=Hu/2evFYmXnIrysqRE6+ESk3hsRoNQA+gDNAuxTRRIFkaxINKz8JnSFdF9kmcaVcroT2P5L634GsZ1PMmhYnVXSAM/RjrSit8al/NFwPoK9gFGqsTTlOpZ9nLM2phLJgecHGCoKT/HMyHAt43oRi4Fgjrb1u+HR1gQPTg81iFLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770353508; c=relaxed/simple;
-	bh=XoYD41piRQAsj7drwNYcIFc+f2x2sYboM5dSb+18cPQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WYJkFORKA4cCRbgvr6gaPmIR+B6uKz3N4/ah4nhKbxb4lIe9o2HSGzR0baxtvJojB8d518bCEikPsERcM4ObODMkqMZHQId9Srfjr30M2sTLi4aShDvA8bVrX3Q5UbLCzgunJptjV3TJa3LQBfGPHjoyg52oYoSH/pFPyflc3Uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SSZyDbnS; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770357113; c=relaxed/simple;
+	bh=RYqdXloqrTVpQ6/Ha38EU1AdCzc9YMGAl4I1Kgwk9IA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SFo8677yqM2Z2qO4AYOkdMaaq6iD0bLPBqijdEH1onKsUG1XkRU+TvdTFTdugoG6/FATvP51rK+begL36bEPpobOrsXKu+C/OX/izjnRdfrvPViUx1kn2NFUft4OgMjAzqslpF8kgdY7L+Tmag5PeMp2LE7tii6mBgRJGETC+MI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=SM7XOpYD; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SSZyDbnS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770353508; x=1801889508;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=XoYD41piRQAsj7drwNYcIFc+f2x2sYboM5dSb+18cPQ=;
-  b=SSZyDbnSfeEDPAnoWW8mYv0aDJiKrNE9rkNa/53GvDL4qfRdHkO6amLb
-   RTywinqngk1PMTUFaohvz0ZNK3vumfq7+nIop4/7d1LhYq2tYnVHGC32S
-   ZOhQ3Bu3dDyntBskQTZ96uzqROw5gXxMSiOrmk7+2e6094NL7c71zZrlT
-   Ju0ktf4EM4OeDYL/ZCuWD+siPnHZ30YbUGcHqoa+vg9NFYsUe6xbK1Xv0
-   6DNn/NcfeaHv9jgr+MatbuwDU0C9Jdnmi+93VC+u9DnX6UoyzVr2J+vD8
-   woHiCClRcPrnWIFB9LruWbytWIbiUtZjyQumEPxyM/+p5s/lI7pcTGBwy
-   w==;
-X-CSE-ConnectionGUID: j9NvvvS9TxeLXrgarSQ6mA==
-X-CSE-MsgGUID: tZrm3BoZSRi0/c483wgVMg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="82999976"
-X-IronPort-AV: E=Sophos;i="6.21,275,1763452800"; 
-   d="scan'208";a="82999976"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2026 20:51:47 -0800
-X-CSE-ConnectionGUID: v2AKH+1DSfuVfv26FuZ+jA==
-X-CSE-MsgGUID: 4CWYJQDOSvSACue4p6WBSg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,275,1763452800"; 
-   d="scan'208";a="210690212"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa008.fm.intel.com with ESMTP; 05 Feb 2026 20:51:43 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1voDoj-00000000kQu-0Zkp;
-	Fri, 06 Feb 2026 04:51:41 +0000
-Date: Fri, 6 Feb 2026 12:50:42 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
-	Eric Dumazet <eric.dumazet@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>
-Cc: oe-kbuild-all@lists.linux.dev, Jesper Dangaard Brouer <hawk@kernel.org>,
-	bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-	horms@kernel.org, jiri@resnulli.us, edumazet@google.com,
-	xiyou.wangcong@gmail.com, jhs@mojatatu.com, atenart@redhat.com,
-	carges@cloudflare.com, kernel-team@cloudflare.com
-Subject: Re: [PATCH net-next v2 6/6] net: sched: sch_dualpi2: use
- qdisc_dequeue_drop() for dequeue drops
-Message-ID: <202602061245.hvInrQwP-lkp@intel.com>
-References: <177032652354.1975497.2269771162710918590.stgit@firesoul>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="SM7XOpYD"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=dA
+	4zof/j+V7ltXHiN5KBnBwB+kE4YImgeqEqw3BtgqM=; b=SM7XOpYDqJIY7aFGlX
+	Y+4jGtIKtC9VsmWFmDN13t2jGP958FmLaP63/EA2Qtr3EU7J+tsuZYPuT5ghRTg6
+	G6PCzpxnvO2919r3mxHigkTLHgEz2XuexBz11IM8IMQJFsxaiavKDQtQW8CGXAlN
+	g+WqNmDanRw/o1gZ+seD/hlnM=
+Received: from localhost.localdomain (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id PigvCgDX3KtRgYVp1VXIOA--.82S2;
+	Fri, 06 Feb 2026 13:51:16 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+Date: Fri,  6 Feb 2026 13:51:13 +0800
+Message-Id: <20260206055113.63476-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <177032652354.1975497.2269771162710918590.stgit@firesoul>
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:PigvCgDX3KtRgYVp1VXIOA--.82S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4UWFy5ZF1Utr1UWryfZwb_yoWrZFyxpF
+	WUtrW0kF4kJ340qF48Jr4UJ3WYqFWqvF45Wr1Svw1jqF1jqryxXr1SyF4jqrZ8Ar4rur47
+	J34UtFn7tw1UJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jYfOwUUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8hUxqWmFgVXFJQAA3n
 
-Hi Jesper,
+From: Feng Yang <yangfeng@kylinos.cn>
 
-kernel test robot noticed the following build errors:
+The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
+calculate the needed headroom:
 
-[auto build test ERROR on net-next/main]
+	err = skb_cow_head(skb,
+			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jesper-Dangaard-Brouer/net-sched-introduce-qdisc-specific-drop-reason-tracing/20260206-052816
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/177032652354.1975497.2269771162710918590.stgit%40firesoul
-patch subject: [PATCH net-next v2 6/6] net: sched: sch_dualpi2: use qdisc_dequeue_drop() for dequeue drops
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20260206/202602061245.hvInrQwP-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 15.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260206/202602061245.hvInrQwP-lkp@intel.com/reproduce)
+But skb->_skb_refdst may not be initialized when the skb is set up by
+bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
+in this scenario will trigger null pointer dereference, causing a kernel
+crash as Yinhao reported:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602061245.hvInrQwP-lkp@intel.com/
+[  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[  105.186382] #PF: supervisor read access in kernel mode
+[  105.186388] #PF: error_code(0x0000) - not-present page
+[  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
+[  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
+[  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
+[  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
+[  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
+[  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
+[  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
+[  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
+[  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
+[  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
+[  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
+[  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
+[  105.186499] PKRU: 55555554
+[  105.186502] Call Trace:
+[  105.186507]  <TASK>
+[  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
+[  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
+[  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
+[  105.186547]  ? ktime_get+0x3c/0xa0
+[  105.186554]  bpf_test_run+0x195/0x320
+[  105.186563]  ? bpf_test_run+0x10f/0x320
+[  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
+[  105.186590]  __sys_bpf+0x69c/0xa40
+[  105.186603]  __x64_sys_bpf+0x1e/0x30
+[  105.186611]  do_syscall_64+0x59/0x110
+[  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
+[  105.186649] RIP: 0033:0x7f166a97455d
 
-All errors (new ones prefixed by >>):
+Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
 
-   net/sched/sch_dualpi2.c: In function 'dualpi2_qdisc_dequeue':
->> net/sched/sch_dualpi2.c:600:53: error: 'QDISC_DROP_STEP_DROP' undeclared (first use in this function); did you mean 'QDISC_DROP_GENERIC'?
-     600 |                         drop_and_retry(q, skb, sch, QDISC_DROP_STEP_DROP);
-         |                                                     ^~~~~~~~~~~~~~~~~~~~
-         |                                                     QDISC_DROP_GENERIC
-   net/sched/sch_dualpi2.c:600:53: note: each undeclared identifier is reported only once for each function it appears in
+Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+---
+Changes in v3:
+- use dst_init
+- Link to v2: https://lore.kernel.org/all/20260205092227.126665-1-yangfeng59949@163.com/
+Changes in v2:
+- Link to v1: https://lore.kernel.org/all/20260127084520.13890-1-luyun_611@163.com/ 
+---
+ net/bpf/test_run.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-
-vim +600 net/sched/sch_dualpi2.c
-
-   581	
-   582	static struct sk_buff *dualpi2_qdisc_dequeue(struct Qdisc *sch)
-   583	{
-   584		struct dualpi2_sched_data *q = qdisc_priv(sch);
-   585		struct sk_buff *skb;
-   586		int credit_change;
-   587		u64 now;
-   588	
-   589		now = ktime_get_ns();
-   590	
-   591		while ((skb = dequeue_packet(sch, q, &credit_change, now))) {
-   592			if (!q->drop_early && must_drop(sch, q, skb)) {
-   593				drop_and_retry(q, skb, sch,
-   594					       QDISC_DROP_CONGESTED);
-   595				continue;
-   596			}
-   597	
-   598			if (skb_in_l_queue(skb) && do_step_aqm(q, skb, now)) {
-   599				qdisc_qstats_drop(q->l_queue);
- > 600				drop_and_retry(q, skb, sch, QDISC_DROP_STEP_DROP);
-   601				continue;
-   602			}
-   603	
-   604			q->c_protection_credit += credit_change;
-   605			qdisc_bstats_update(sch, skb);
-   606			break;
-   607		}
-   608	
-   609		if (q->deferred_drops_cnt) {
-   610			qdisc_tree_reduce_backlog(sch, q->deferred_drops_cnt,
-   611						  q->deferred_drops_len);
-   612			q->deferred_drops_cnt = 0;
-   613			q->deferred_drops_len = 0;
-   614		}
-   615		return skb;
-   616	}
-   617	
-
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 178c4738e63b..3e1c47d53b82 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -989,6 +989,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	u32 tailroom = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+ 	struct net *net = current->nsproxy->net_ns;
+ 	struct net_device *dev = net->loopback_dev;
++	struct dst_entry bpf_test_run_lwt_xmit_dst;
+ 	u32 headroom = NET_SKB_PAD + NET_IP_ALIGN;
+ 	u32 linear_sz = kattr->test.data_size_in;
+ 	u32 repeat = kattr->test.repeat;
+@@ -1156,6 +1157,12 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 		skb->ip_summed = CHECKSUM_COMPLETE;
+ 	}
+ 
++	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
++		dst_init(&bpf_test_run_lwt_xmit_dst, NULL, NULL,
++			 DST_OBSOLETE_NONE, DST_NOCOUNT);
++		bpf_test_run_lwt_xmit_dst.dev = dev;
++		skb_dst_set_noref(skb, &bpf_test_run_lwt_xmit_dst);
++	}
+ 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
+ 	if (ret)
+ 		goto out;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
