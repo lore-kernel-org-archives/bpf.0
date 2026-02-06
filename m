@@ -1,152 +1,140 @@
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C685F3624C2
-	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 14:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B4E3F075C;
+	Fri,  6 Feb 2026 14:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770387600; cv=none; b=pzwN15Dxw6LDIhwLX+OWFeOV+eBeKtrPdlEQn4cyfBBeIE9HNPGJn8dJZLec9SftVYi5Buc9NimZ02AZUsNZEBI3TJ4SAp+QWrwdV1Vge08mdoo+KERwyit0dixcs3v4c860hPcVkYrlUHEdt2Cq7tBIRA0ym8y7XT5gTnkontA=
+	t=1770388075; cv=none; b=mqrL8gDUZ7qLYlqsbvHZZMzcMiuZztfLkzde/CV1wslUDwGqd07sn4+gqsy9/BvpZqsl7l97yL1LIaQEN3kRXKpi17y5ubnW8Zg/zDTA+zF9E+7dSP034hqTq3L/oGUrdoSV+bmW6zqZzYWKGW2AwipITAFiKIkJ2XCcYQJbaMQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770387600; c=relaxed/simple;
-	bh=xi6G1Az0UC6YWfZAbbIubg49oP1VqI2yvisqfCVFi0s=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=qLTVJJbZXu6ZlnbJizP58YQ252AU60ygW3jpfKENzwlSSXEnNtfYAg9W0Ik5/AyARZ3js65UWKpx0zguSa4uYyfhM3xfd8Rx2NqKEuHYpIVqFyVHtLnDoFQxDiGkU0XcczNtWOXKSheKEbQQboYq5OjepLQHgUnIAVrddcm8S5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.160.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-4041ef81d01so9555497fac.0
-        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 06:19:59 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770387598; x=1770992398;
-        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jaVjok5OMEjS3WxdyJKtpu7BpoJXJurtEfcq0KQRMp4=;
-        b=KYCCxc10QRe4kSLcCF/pPfCnJZvknt1xSMfzBvtwTuxcXTDI23HM+ZKI3pQmZn6Kfd
-         55Tln4M8go+fnIWIHVmi2RMhMjGeMMD2ujN6ljJ+soLp791A/0lmGl6gP4BIhVBE5HP6
-         DD28iJ68eescuN19HOt3VaYNotWV0HIETtA7JwXVQ9GyjQd/rfXdi27vN+O1JUkywMA2
-         RWnLDVkPoI6YmAkEQhLmLTkwVKUHqRzpKHxKOXcdQiPcC9Srdn89sD9tso7G6jLRD6lc
-         rr5rnVIs1RuqDbVG0BurFHLYy+AF4SNA8TN9vIv5MSTtf28WZlerHs2PkqW3l7ukVZg6
-         HCyQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXnEw6VVl9HAInxY6mbynCaSGK2tSFa+Z9xIF/RB9bWCZwxXofmV/d7Cub+0B3/Cxrp864=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVgVQ42G4GsKR38s4/k3j/lTYB0CEtcOHb+gYLtf16zp+wMT8G
-	HNi7QAJ+vKHPdUYYhSKf+3Y2hl0rwoiDeCeFsYNsvOFTUsS9ZN0xD8UbpTmEhlARU7iVLOmLURh
-	5+2HmX7bfV0UDs15Ec4LmWuLttgp5Qp/frh1pYemZ82zEeNo/+qNBu7A2xNg=
+	s=arc-20240116; t=1770388075; c=relaxed/simple;
+	bh=M7FzU8SObdsHg7Fnom8HBW9tbsGcQPSiDWjRfhydF+w=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dGgcHY/ldxjfjdnPueYhs8IIGFNLOc1jbAosHLPOFiY/JgUnlEAiX2gvzSK15j/j7AXM4afYgeHRKc+3r0f49Y6lUBZD47LOoXUzQBEcbJ4VWODjZ2EEydG+IMn6j1WGrw3UXPVYyYgHPTB+GC1S68TC3sCQLuvP18LqWfl6bsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ArIbMtIf; arc=none smtp.client-ip=95.215.58.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ArIbMtIf"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770388072;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VDTQrVkhNMhRGCiK8BUkruN/7ThIMVtkU5IFQtE1kMM=;
+	b=ArIbMtIfzGo7vEj2gGrJ4K/X5CEPzLjOjGP4hNAfUqjrAE6EVKgxCipBYF/gj+qY8GjM6+
+	pRRDU+IK7A6cUpiQQ5xtk/IRe2wA3YBLCZMn9a9TGpMKmnvpU4k8jguuhNxx7gyOsmuc0w
+	Ik1CzZArMWPVg/9cn9D3GqCiLb5n9UU=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: menglong8.dong@gmail.com,
+ =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, pulehui@huawei.com,
+ puranjay@kernel.org, pjw@kernel.org, palmer@dabbelt.com,
+ aou@eecs.berkeley.edu, alex@ghiti.fr, bpf@vger.kernel.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ jiang.biao@linux.dev, martin.lau@kernel.org, clm@meta.com,
+ ihor.solodrai@linux.dev
+Subject: Re: [PATCH bpf-next v3 2/3] bpf,
+ riscv: add fsession support for trampolines
+Date: Fri, 06 Feb 2026 22:27:22 +0800
+Message-ID: <5059733.GXAFRqVoOG@7950hx>
+In-Reply-To:
+ <CAJ+HfNj5JZJ-k5bJibSgLPD5xnTzf7kfvma4kJOBKoNTnSLLDg@mail.gmail.com>
+References:
+ <20260206122002.1494125-3-dongml2@chinatelecom.cn>
+ <444267200b59241e9da104eab8af2d7189aa401005887a2cd0128cd6aeda98e2@mail.kernel.org>
+ <CAJ+HfNj5JZJ-k5bJibSgLPD5xnTzf7kfvma4kJOBKoNTnSLLDg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:210b:b0:657:4733:dde with SMTP id
- 006d021491bc7-66d09cb2bbamr1355342eaf.8.1770387598624; Fri, 06 Feb 2026
- 06:19:58 -0800 (PST)
-Date: Fri, 06 Feb 2026 06:19:58 -0800
-In-Reply-To: <20260206090653.1336687-1-chen.dylane@linux.dev>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6985f88e.a00a0220.37c87e.0037.GAE@google.com>
-Subject: [syzbot ci] Re: bpf: Add preempt disable for bpf_get_stack
-From: syzbot ci <syzbot+ci51bd138098766aea@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	chen.dylane@linux.dev, daniel@iogearbox.net, eddyz87@gmail.com, 
-	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
-	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
-	sdf@fomichev.me, song@kernel.org, yonghong.song@linux.dev
-Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-syzbot ci has tested the following series
+On 2026/2/6 21:42, Bj=C3=B6rn T=C3=B6pel wrote:
+> Menglong!
+>=20
+> On Fri, 6 Feb 2026 at 13:51, <bot+bpf-ci@kernel.org> wrote:
+> >
+> > > diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit=
+_comp64.c
+> > > --- a/arch/riscv/net/bpf_jit_comp64.c
+> > > +++ b/arch/riscv/net/bpf_jit_comp64.c
+> >
+> > [ ... ]
+> >
+> > > +static int invoke_bpf(struct bpf_tramp_links *tl, int args_off, int =
+retval_off,
+> > > +                   int run_ctx_off, int func_meta_off, bool save_ret=
+, u64 func_meta,
+> > > +                   int cookie_off, struct rv_jit_context *ctx)
+> > > +{
+> > > +     int i, cur_cookie =3D (cookie_off - args_off) / 8;
+> > > +
+> > > +     for (i =3D 0; i < tl->nr_links; i++) {
+> > > +             int err;
+> > > +
+> > > +             if (bpf_prog_calls_session_cookie(&tl->links[i])) {
+> >                                                 ^^^^^^^^^^^^^^
+> >
+> > Should this be tl->links[i] instead of &tl->links[i]?
+> >
+> > The function bpf_prog_calls_session_cookie() expects a struct bpf_tramp=
+_link
+> > pointer, but tl->links is an array of pointers, so tl->links[i] is alre=
+ady
+> > a struct bpf_tramp_link pointer. The extra & passes a pointer-to-pointe=
+r.
+> >
+> > For comparison, arm64 uses:
+> >
+> >     if (bpf_prog_calls_session_cookie(fentry->links[i]))
+> >
+> > And include/linux/bpf.h uses:
+> >
+> >     if (bpf_prog_calls_session_cookie(fentries.links[i]))
+> >
+> > Both without the &.
+> >
+> > > +                     u64 meta =3D func_meta | ((u64)cur_cookie << BP=
+=46_TRAMP_COOKIE_INDEX_SHIFT);
+> > > +
+> > > +                     emit_store_stack_imm64(RV_REG_T1, -func_meta_of=
+f, meta, ctx);
+> > > +                     cur_cookie--;
+> > > +             }
+> > > +             err =3D invoke_bpf_prog(tl->links[i], args_off, retval_=
+off, run_ctx_off,
+> > > +                                   save_ret, ctx);
+> >
+> > Note that invoke_bpf_prog() correctly uses tl->links[i] without the &.
+>=20
+> Menglong, the v3 doesn't build. Please refrain from just stressing
+> versions out. For v4, make sure you properly build/test. On that note;
+> on what hardware/simulator did you perform the tests on?
 
-[v2] bpf: Add preempt disable for bpf_get_stack
-https://lore.kernel.org/all/20260206090653.1336687-1-chen.dylane@linux.dev
-* [PATCH bpf-next v2 1/2] bpf: Add preempt disable for bpf_get_stack
-* [PATCH bpf-next v2 2/2] bpf: Add preempt disable for bpf_get_stackid
+Ah, sorry that the CONFIG_BPF_JIT is not enabled in my config, which
+makes me didn't find this compile error.
 
-and found the following issue:
-WARNING in preempt_count_sub
+I used to test it in qemu. As this is a tiny change, so I didn't run the
+test again :/
 
-Full report is available here:
-https://ci.syzbot.org/series/90d08df2-d19d-404f-b9dd-c201605b83a2
+I'll make sure the build and test pass in the V4.
 
-***
+Thanks!
+Menglong Dong
 
-WARNING in preempt_count_sub
-
-tree:      bpf-next
-URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
-base:      1ace9bac1ad2bc6a0a70baaa16d22b7e783e88c5
-arch:      amd64
-compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
-config:    https://ci.syzbot.org/builds/64881591-241a-4854-9beb-1f691566835c/config
-C repro:   https://ci.syzbot.org/findings/98f347c8-b879-4c85-829b-a20ef900e645/c_repro
-syz repro: https://ci.syzbot.org/findings/98f347c8-b879-4c85-829b-a20ef900e645/syz_repro
-
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(val > preempt_count())
-WARNING: kernel/sched/core.c:5751 at preempt_count_sub+0x9e/0x170 kernel/sched/core.c:5751, CPU#0: syz.0.17/5991
-Modules linked in:
-CPU: 0 UID: 0 PID: 5991 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
-RIP: 0010:preempt_count_sub+0xa5/0x170 kernel/sched/core.c:5751
-Code: 05 cf 8f 48 c1 e8 03 0f b6 04 18 84 c0 0f 85 88 00 00 00 83 3d ef 21 3d 0e 00 75 13 48 8d 3d b2 f3 3f 0e 48 c7 c6 a0 fe 8b 8b <67> 48 0f b9 3a 90 eb b8 90 e8 5d ab 03 03 85 c0 74 2f 48 c7 c0 a4
-RSP: 0018:ffffc90004437bc8 EFLAGS: 00010246
-RAX: 0000000000000000 RBX: dffffc0000000000 RCX: ffff8881746f8000
-RDX: 0000000000000000 RSI: ffffffff8b8bfea0 RDI: ffffffff8fd1d770
-RBP: ffffc90004437cd0 R08: ffffffff8fcf05a3 R09: 1ffffffff1f9e0b4
-R10: dffffc0000000000 R11: fffffbfff1f9e0b5 R12: dffffc0000000000
-R13: 1ffff92000886f84 R14: 0000000000000000 R15: 0000000000000000
-FS:  000055557d481500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f1f89c706c0 CR3: 00000001742f0000 CR4: 00000000000006f0
-Call Trace:
- <TASK>
- bpf_prog_test_run_raw_tp+0x4b9/0x6c0 net/bpf/test_run.c:794
- bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4721
- __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6246
- __do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
- __se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
- __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6339
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f1f89d9acb9
-Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fff9e3fd488 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
-RAX: ffffffffffffffda RBX: 00007f1f8a015fa0 RCX: 00007f1f89d9acb9
-RDX: 000000000000000c RSI: 0000200000000500 RDI: 000000000000000a
-RBP: 00007f1f89e08bf7 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f1f8a015fac R14: 00007f1f8a015fa0 R15: 00007f1f8a015fa0
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	05 cf 8f 48 c1       	add    $0xc1488fcf,%eax
-   5:	e8 03 0f b6 04       	call   0x4b60f0d
-   a:	18 84 c0 0f 85 88 00 	sbb    %al,0x88850f(%rax,%rax,8)
-  11:	00 00                	add    %al,(%rax)
-  13:	83 3d ef 21 3d 0e 00 	cmpl   $0x0,0xe3d21ef(%rip)        # 0xe3d2209
-  1a:	75 13                	jne    0x2f
-  1c:	48 8d 3d b2 f3 3f 0e 	lea    0xe3ff3b2(%rip),%rdi        # 0xe3ff3d5
-  23:	48 c7 c6 a0 fe 8b 8b 	mov    $0xffffffff8b8bfea0,%rsi
-* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
-  2f:	90                   	nop
-  30:	eb b8                	jmp    0xffffffea
-  32:	90                   	nop
-  33:	e8 5d ab 03 03       	call   0x303ab95
-  38:	85 c0                	test   %eax,%eax
-  3a:	74 2f                	je     0x6b
-  3c:	48                   	rex.W
-  3d:	c7                   	.byte 0xc7
-  3e:	c0                   	.byte 0xc0
-  3f:	a4                   	movsb  %ds:(%rsi),%es:(%rdi)
+>=20
+>=20
 
 
-***
 
-If these findings have caused you to resend the series or submit a
-separate fix, please add the following tag to your commit message:
-  Tested-by: syzbot@syzkaller.appspotmail.com
 
----
-This report is generated by a bot. It may contain errors.
-syzbot ci engineers can be reached at syzkaller@googlegroups.com.
