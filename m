@@ -1,207 +1,165 @@
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C94B2DC32A
-	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 16:05:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770393907; cv=pass; b=qdbpTeprgeBWNKpJYWuexc07Q31DyTuiM6gLMvoUgrl+XcpFiwxPYG6/4UICIm8T9HsoIEVNqs6kBIYFTq7tu86zA8FJ+J3Unrjn+AlS742YqA4//0Jq8IEMPUfD3X/akpEmXMUlIallrvjhI9LLFK8p1ta7oCnziRDwSnk90jA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770393907; c=relaxed/simple;
-	bh=8AUOgLGnMMIEfqB+Rfe3dTR9LWMxVZqOBCh7oFBO4Zo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gbOOMlrOG0HfBrFIkoPHP9jQJx8GvJlmdjWBBQWf8rjVNSMARjvhkop0S2I8Jm2T4FDF9NvFU61QZ0CagH6krozps9kslc4ADN8Pn3W/glgFfZ5dlCR5BGdcOmbMQmwsioWBvs/ACP69lTWAzDB55ywljxKYVrWAc8jHomGjHKQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WUQz7tUu; arc=pass smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67DAB299A84;
+	Fri,  6 Feb 2026 16:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770395061; cv=none; b=CsSIPE5szQ6oqLyySptqQt9ZAdWctihTIJZbJhF3Lm33fk/eEBuMSnwm0yaolmuf/5jfE+c+6lcvlmlUjIP2eaHFw8/1IoA5ynCcITlAsSbv4y+xItH8mBb95KvVzB1jI1wOTqlb0CEQkL78aFun7ZYGaB2TZIh/SzoeHWS5VYw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770395061; c=relaxed/simple;
+	bh=laFChuTmZOUfnuSnTssw7wSY/OIRgBAeIvRbZXa/OW4=;
+	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=WWGA56pnwNRb6S2i2tDLsczXLuLZJ7ydGWcGemH52aDqViWOwyYQAXSQZlvvandsiZlmJjYKT7BG4l7y5VnvGjMP0tRRPsRhGW/EMJXH9mvV6VyxGCWVpJCoMFwPH5AyhQgi6FU0qfyL91Nio1BE1LAA8P6dOvuye/l6slYCq9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f7as794O; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WUQz7tUu"
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4806d23e9f1so26806575e9.2
-        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 08:05:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770393905; cv=none;
-        d=google.com; s=arc-20240605;
-        b=YvBy9osLJKzfMULd8I3R+l/DpIZL6cIp3xzSjqBDMntoEecYjzyuwyw9Q8nRK+JrL4
-         z3X6LPnYimXMu7H7ueExHC7+viwN/N2swEFvSpFCk5VfAlMomZtFB9X6PzKsPYC8wgSQ
-         gk3cVq05HMycb4htsluQukcDm0vcRT+WNtsfnf1SvRhwCzB0SwzuKBub+Fn5MJdvuk+P
-         a7rZ84hWGARx/YAoPq/Ud/l8by922ofpw3If0VmfemLKBVAvJAKOxATcFhWfHj1NaeoW
-         fohS+fPl7ZWYfIZR/fr4JSOV/qW3Ovi6rex54FC97C84g4i3Uv1xoawLeGks1zWZCPmF
-         1+3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=8AUOgLGnMMIEfqB+Rfe3dTR9LWMxVZqOBCh7oFBO4Zo=;
-        fh=4XHimgBhUuo71VOGhN2DULKwF0WFMnyK9mjFhJzwoN8=;
-        b=Go2Yi2QjRK3Of3dqhmFmTXEZYwvEtLNPGDYsLh3wRCYFvW/y39jiDfpl+XfeXubiHE
-         nQI9p45G5gfeIRtRE96nwAom8vYy0GwT2KTq6G4cUGlt3BIxZV4lfCn1/2+Lrb8jEcQo
-         pySAlYpipikMw+0nrI+GMeweex/kqNhYdDMHd74xJQSpx9vBB3/dYybBu02h1vR2+AxQ
-         iBZ1jctIeome8mvqmlQkTA19YshyYBwpwLhC7fIU80TexJ3VKbgo8hkk7rPOHqfgAt/s
-         rjXYaXUalVF0Uzzzga96oSr9stiOUBMVsW5hWP5emsUQiZJBP2tpIlJs4FT6GMmvuxMK
-         p6oA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770393905; x=1770998705; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8AUOgLGnMMIEfqB+Rfe3dTR9LWMxVZqOBCh7oFBO4Zo=;
-        b=WUQz7tUuC3BzUZBSiSNXzjiHf/QhZoz70WSbC5QNKjNRYgjUVkM79P/DjYKSwJqt9O
-         QO5peGz+feW0mIKTE/lP0jThvvr4exeIe/SZBQMcAImWnB+KK9QBy54DJ1OxH6hGNgu6
-         mPhsa8oxNd1c3eVs8x7Ewul7ph1rmVJypOwtLPaTtdZaFW1GNXJTGqCknj9wt8+9bVIB
-         RHeIZP1axnHN87yM8bjz7GuswLbjHHV/bm6xz/Q0NPglbwyDMi87Z/vRvHYbYqC9tvo/
-         +AJ6Q9ONqomIu0lw90haB7X1YpiOJnxB/qFu4m6vWk4qgckUPBTt9mLs67Il7rC1xjdb
-         ttmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770393905; x=1770998705;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8AUOgLGnMMIEfqB+Rfe3dTR9LWMxVZqOBCh7oFBO4Zo=;
-        b=oJxZwMQlDS9oae/UCprmAcdl8iy8fcKbGAV7FnenMY+3LsxYlKiDtmqvz3N+Bj1OAH
-         kTIGZiWgMwuung13luyUYkH+kcX/NnSsrflE8GLLwHjzMt7spBvNDrxZ9C+3wZbyLiCm
-         zRMvRZKmc8eln/OVBizi0ek5wIo73xcBmFYgiH5gavkYUMMJJar1u5R1xIQtMv2mjwNn
-         0SNbY3vOloHdNtv/GYW0zzOkxPP+SnInNvO/+IRg02YAMfeJoL3LlGYjuI5MBFk5EaVd
-         oIq+Qf1sTVHwPQapafXTb694jwGX2YBw4LsvXlfE+msITZyc4Yn8d7XWDpLb5OEsk7Cp
-         CnSA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZO8rTFX3uBUpnq6G20FyEPP0MqYH65kHlkDZ9TZbsj8XBVlACGq3uSmDXmG2LgYpH8GE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnBIsndkuPK7tRWPTDwssOQjUGaZPb+JRGntBUPMa1BvHh+D/A
-	iVykQBs3qgIxmDlBD9pTA93s91O98+IvXZKzcO4oCisTF6vKGUr1d9hI0HaMjyoTEMAKCXKcQ9/
-	nM/RnSLHvYFFBq+nBYeV2FanGggqSbZg=
-X-Gm-Gg: AZuq6aKuzlAxkrnaicAUvQQvbx2hqaEnMPCEIx7tKjj3jjSeEulBDpcDNax2BBYLL4J
-	7cDW4qn1+ZMScK4irpip5YBCp+9SRfkbsrMhB4ujHF8g/iD964cRvi3NMzKnNb7il9wJsP73Pna
-	1gEkUZxU34n80gczOjj2LVA0AMX+kOFGVg61wUe6gmy4SddgD59xLwDsL2AZlPZ5eZoGnT7iqXG
-	46tgx/zIhEGcR89p14XjVmEtHcOIfN2GGYcItT6P4MU1GH0VbOkd5+aWnfYZD9jGwDhhQl97vHL
-	2EG7ys7fYAvxamyyLtIcPTeUc3FEeh5xXhGxJJWaWuWDxLj9ChJlKtWKzfvj6bwtbHknPaBxvwS
-	kqfH85Oram/YET/czK7M3sstk
-X-Received: by 2002:a05:600c:548d:b0:480:7162:fa48 with SMTP id
- 5b1f17b1804b1-483201ecd90mr50571685e9.13.1770393905153; Fri, 06 Feb 2026
- 08:05:05 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f7as794O"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC9E1C116C6;
+	Fri,  6 Feb 2026 16:24:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770395061;
+	bh=laFChuTmZOUfnuSnTssw7wSY/OIRgBAeIvRbZXa/OW4=;
+	h=Subject:From:To:Cc:Date:From;
+	b=f7as794O1w3LSuBZ4/3TMag357j3xQXJztACZFZV+koMmVOR/WsHYtOFQqbtToOBE
+	 +MAFwx2VhXV/96BfDxO2xOCuPlJKtbz6hHABN5QnQgTpf4bbyHDtV+waAkJqWMAafp
+	 XgyUjVQ9qqQYDicxlGNwLwrJRv8z9Xqr7+4FK5ujVrvYNlWFZUnwRPFOP2/+qb1Wom
+	 N17o6Nu7zHm6z+HItjYi1AK9WQS1SNAM/obk4NoKzyX56SsKAn/JLEavMU3erup7yu
+	 Y6685BxbjJl11WagdCNy/prCdHH+iOEN3idgijTpjmDb7tLu27lR7zl+uOlnA06V1d
+	 q7Xdyf2pYjwlQ==
+Subject: [PATCH net-next v3 0/6] net: sched: refactor qdisc drop reasons into
+ dedicated tracepoint
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+To: netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
+ Jakub Kicinski <kuba@kernel.org>, horms@kernel.org, jiri@resnulli.us,
+ edumazet@google.com, xiyou.wangcong@gmail.com, jhs@mojatatu.com,
+ atenart@redhat.com, carges@cloudflare.com, kernel-team@cloudflare.com
+Date: Fri, 06 Feb 2026 17:24:15 +0100
+Message-ID: <177039500964.2258217.2989656069254156812.stgit@firesoul>
+User-Agent: StGit/1.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
- <20260202111548.3555306-3-dolinux.peng@gmail.com> <20260202111249.649ac338@gandalf.local.home>
- <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
- <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
- <20260203101707.52965eb0@gandalf.local.home> <CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
- <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
- <CAErzpmvtJwB7nTD5EFHP9SxPxH-rc3NuJp5xLGSTB7YPbUX8YA@mail.gmail.com>
- <CAADnVQJgM0W3aQVGi5_35xWc=D7Ruzt1xV0REM+RnnvtooeC5w@mail.gmail.com> <CAErzpmsC0qHL41KoRTxQ2-Xy=t74NnOZQxrv8VMFRSt3eoFrRA@mail.gmail.com>
-In-Reply-To: <CAErzpmsC0qHL41KoRTxQ2-Xy=t74NnOZQxrv8VMFRSt3eoFrRA@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 6 Feb 2026 08:04:54 -0800
-X-Gm-Features: AZwV_QgRI0gmm_jNdS8JQDVd_GmShLrDbwSVBXnZrnR5RfecCaQcg6USmNhxez4
-Message-ID: <CAADnVQKrAcSzTYbSEHkWiWS0Ot5wAQ8_Q_v6-J=6=O4MxLpbpQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
- via BTF
-To: Donglin Peng <dolinux.peng@gmail.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Donglin Peng <pengdonglin@xiaomi.com>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 5, 2026 at 8:10=E2=80=AFPM Donglin Peng <dolinux.peng@gmail.com=
-> wrote:
->
-> On Thu, Feb 5, 2026 at 11:56=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Thu, Feb 5, 2026 at 1:21=E2=80=AFAM Donglin Peng <dolinux.peng@gmail=
-.com> wrote:
-> > >
-> > > On Wed, Feb 4, 2026 at 10:52=E2=80=AFPM Donglin Peng <dolinux.peng@gm=
-ail.com> wrote:
-> > > >
-> > > > On Wed, Feb 4, 2026 at 12:00=E2=80=AFAM Alexei Starovoitov
-> > > > <alexei.starovoitov@gmail.com> wrote:
-> > > > >
-> > > > > On Tue, Feb 3, 2026 at 7:16=E2=80=AFAM Steven Rostedt <rostedt@go=
-odmis.org> wrote:
-> > > > > >
-> > > > > > On Tue, 3 Feb 2026 21:50:47 +0800
-> > > > > > Donglin Peng <dolinux.peng@gmail.com> wrote:
-> > > > > >
-> > > > > > > Testing revealed that sorting within resolve_btfids introduce=
-s issues with
-> > > > > > > btf__dedup. Therefore, I plan to move the sorting logic direc=
-tly into
-> > > > > > > btf__add_enum_value and btf__add_enum64_value in libbpf, whic=
-h are
-> > > > > > > invoked by pahole. However, it means that we need a newer pah=
-ole
-> > > > > > > version.
-> > > > > >
-> > > > > > Sorting isn't a requirement just something I wanted to bring up=
-. If it's
-> > > > > > too complex and doesn't achieve much benefit then let's not do =
-it.
-> > > > > >
-> > > > > > My worry is because "cat trace" takes quite a long time just re=
-ading the
-> > > > > > BTF arguments. I'm worried it will just get worse with enums as=
- well.
-> > > > > >
-> > > > > > I have trace-cmd reading BTF now (just haven't officially relea=
-sed it) and
-> > > > > > doing an extract and reading the trace.dat file is much faster =
-than reading
-> > > > > > the trace file with arguments. I'll need to implement the enum =
-logic too in
-> > > > > > libtraceevent.
-> > > > >
-> > > > > If you mean to do pretty printing of the trace in user space then=
- +1 from me.
-> > > > >
-> > > > > I don't like sorting enums either in resolve_btfid, pahole or ker=
-nel.
-> > > > > Sorted BTF by name was ok, since it doesn't change original seman=
-tics.
-> > > > > While sorting enums by value gets us to the grey zone where
-> > > > > the sequence of enum names in vmlinux.h becomes different than in=
- dwarf.
-> > > >
-> > > > Thanks, I agreed.
-> > > >
-> > > > >
-> > > > > Also id->name mapping in general is not precise.
-> > > > > There is no requirement for enums to be unique.
-> > > > > Just grabbing the first one:
-> > > > > ATA_PIO0 =3D 1,
-> > > > > ATA_PIO1 =3D 3,
-> > > > > ATA_PIO2 =3D 7,
-> > > > > ATA_UDMA0 =3D 1,
-> > > > > ATA_UDMA1 =3D 3,
-> > > > > ATA_UDMA2 =3D 7,
-> > > > > ATA_ID_CYLS =3D 1,
-> > > > > ATA_ID_HEADS =3D 3,
-> > > > > SCR_ERROR =3D 1,
-> > > > > SCR_CONTROL =3D 2,
-> > > > > SCR_ACTIVE =3D 3,
-> > > > >
-> > > > > All these names are part of the same enum type.
-> > > > > Which one to print? First one?
-> > >
-> > > Another option is to print all matching entries, incurring increased
-> > > overhead and extended trace log length. However, I prefer printing
-> > > the first matching entry, though it might be inaccurate in rare cases=
-.
-> >
-> > I disagree. It's not rare.
-> > I wouldn't print anything. Let user space deal with it.
->
-> Okay, I will implement this in libtraceevent first. By the way, would the=
- first
-> patch [1] introducing the for_each_enumand for_each_enum64 helper
-> macros be acceptable?
->
-> [1] https://lore.kernel.org/lkml/20260202111548.3555306-2-dolinux.peng@gm=
-ail.com/
+This series refactors qdisc drop reason handling by introducing a dedicated
+enum qdisc_drop_reason and trace_qdisc_drop tracepoint, providing qdisc
+layer drop diagnostics with direct qdisc context visibility.
 
-Just that patch alone? What's the point?
-Refactor for what? Does it read better? No.
+Background:
+-----------
+Identifying which qdisc dropped a packet via skb_drop_reason is difficult.
+Normally, the kfree_skb tracepoint caller "location" hints at the dropping
+code, but qdisc drops happen at a central point (__dev_queue_xmit), making
+this unusable. As a workaround, commits 5765c7f6e317 ("net_sched: sch_fq:
+add three drop_reason") and a42d71e322a8 ("net_sched: sch_cake: Add drop
+reasons") encoded qdisc names directly in the drop reason enums.
+
+This series provides a cleaner solution by creating a dedicated qdisc
+tracepoint that naturally includes qdisc context (handle, parent, kind).
+
+Solution:
+---------
+Create a new tracepoint trace_qdisc_drop that builds on top of existing
+trace_qdisc_enqueue infrastructure. It includes qdisc handle, parent,
+qdisc kind (name), and device information directly.
+
+The existing SKB_DROP_REASON_QDISC_DROP is retained for backwards
+compatibility via kfree_skb_reason(). The qdisc-specific drop reasons
+(QDISC_DROP_*) provide fine-grained detail via the new tracepoint.
+The enum uses subsystem encoding (offset by SKB_DROP_REASON_SUBSYS_QDISC)
+to catch type mismatches during debugging.
+
+This implements the alternative approach described in:
+https://lore.kernel.org/all/6be17a08-f8aa-4f91-9bd0-d9e1f0a92d90@kernel.org/
+
+Changes since v2:
+-----------------
+Link v2: https://lore.kernel.org/all/177032644012.1975497.16411100029657607833.stgit@firesoul/
+- Patch 1: Fix tcf_kfree_skb_list() to handle TC classifier drop reasons
+  - syzbot triggered WARN_ON_ONCE revealing TC classifier's SKB_DROP_REASON_TC_*
+    reasons arrive via shared tc_skb_cb->drop_reason storage
+  - Use SKB_DROP_REASON_SUBSYS_MASK to distinguish qdisc vs TC classifier reasons
+  - Pass TC classifier reasons through to kfree_skb_reason() unchanged
+  - Reported-by: syzbot+ci335f183b8446659a@syzkaller.appspotmail.com
+- Patch 6: Fix compile error - add missing QDISC_DROP_L4S_STEP_NON_ECN
+  - Reported-by: kernel test robot <lkp@intel.com>
+  - Closes: https://lore.kernel.org/oe-kbuild-all/202602061240.CRDtcOeX-lkp@intel.com/
+  - Reported-by: kernel test robot <lkp@intel.com>
+  
+Changes since RFC v1:
+---------------------
+Link RFC-v1: https://lore.kernel.org/all/177022452988.1827734.5121740962985640333.stgit@firesoul/
+- Added SKB_DROP_REASON_SUBSYS_QDISC subsystem encoding for enum debugging
+- Added WARN_ON_ONCE to catch wrong enum type (skb vs qdisc drop reason)
+- Renamed QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION (Toke)
+- Renamed QDISC_DROP_FQ_BAND_LIMIT to QDISC_DROP_BAND_LIMIT
+- Renamed QDISC_DROP_FQ_HORIZON_LIMIT to QDISC_DROP_HORIZON_LIMIT
+- Updated SKB_DROP_REASON_QDISC_DROP doc to reference qdisc:qdisc_drop
+- Split rename changes into separate patches for clarity
+
+Series overview:
+----------------
+Patch 1: Introduce the qdisc drop reason infrastructure
+  - New enum qdisc_drop_reason with subsystem encoding
+  - New trace_qdisc_drop tracepoint with qdisc context
+  - tcf_kfree_skb_list() handles both qdisc and TC classifier drop reasons
+  - Convert FQ, FQ_CoDel, CoDel, SFB, pfifo_fast to use new infrastructure
+
+Patch 2: Convert SFQ as example for reviewers
+  - Demonstrates how to convert a flow-based qdisc
+  - Adds QDISC_DROP_MAXFLOWS for flow table exhaustion
+
+Patch 3: Fix CAKE to use enum qdisc_drop_reason
+  - Change cobalt_should_drop() return type for type correctness
+
+Patch 4: Rename QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION
+  - Generic name without embedding qdisc name
+
+Patch 5: Rename QDISC_DROP_FQ_* to generic names
+  - QDISC_DROP_FQ_BAND_LIMIT -> QDISC_DROP_BAND_LIMIT
+  - QDISC_DROP_FQ_HORIZON_LIMIT -> QDISC_DROP_HORIZON_LIMIT
+
+Patch 6: DualPI2 use qdisc_dequeue_drop() for dequeue drops
+  - Demonstrates dequeue-time drop handling with trace_qdisc_drop
+  - Adds QDISC_DROP_L4S_STEP_NON_ECN for L4S step AQM drops
+
+---
+
+Jesper Dangaard Brouer (6):
+      net: sched: introduce qdisc-specific drop reason tracing
+      net: sched: sfq: convert to qdisc drop reasons
+      net: sched: sch_cake: use enum qdisc_drop_reason for cobalt_should_drop
+      net: sched: rename QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION
+      net: sched: rename QDISC_DROP_FQ_* to generic names
+      net: sched: sch_dualpi2: use qdisc_dequeue_drop() for dequeue drops
+
+
+ include/net/dropreason-core.h  |  48 ++------------
+ include/net/dropreason-qdisc.h | 115 +++++++++++++++++++++++++++++++++
+ include/net/dropreason.h       |   6 ++
+ include/net/sch_generic.h      |  36 +++++++----
+ include/trace/events/qdisc.h   |  51 +++++++++++++++
+ net/core/dev.c                 |   8 +--
+ net/sched/sch_cake.c           |  26 ++++----
+ net/sched/sch_codel.c          |   5 +-
+ net/sched/sch_dualpi2.c        |  18 +++---
+ net/sched/sch_fq.c             |   7 +-
+ net/sched/sch_fq_codel.c       |   4 +-
+ net/sched/sch_fq_pie.c         |   4 +-
+ net/sched/sch_generic.c        |  29 ++++++++-
+ net/sched/sch_gred.c           |   4 +-
+ net/sched/sch_pie.c            |   4 +-
+ net/sched/sch_red.c            |   4 +-
+ net/sched/sch_sfb.c            |   4 +-
+ net/sched/sch_sfq.c            |   8 +--
+ 18 files changed, 272 insertions(+), 109 deletions(-)
+ create mode 100644 include/net/dropreason-qdisc.h
+
+--
+
