@@ -1,377 +1,190 @@
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFC135FF6B
-	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 17:03:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6CC0363C46
+	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 17:12:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770397422; cv=pass; b=fPPwVm9w9LqNLG5aeO2k5DlxbchCvYDQrMvnQSYFZGESpkTdCDbbsr0oVHbvNqRTMSr4KDERT09D/kDu7jHYtBWNpckNSUxQTXf2per7WNWdPxRy1mjRzgjqniEOxPQ+HuroUUIFCBei4VmpmLe7iw2d+CodQi3uClPWqWUhjHE=
+	t=1770397946; cv=pass; b=UhITZWMmfFsOogxryFwKlxION/i7s3QEPOdCsQ2++LZeiiDFIhGpOtwD6YT43yyWGjdeDblj2n3JApijFNDhNwQvIhMPOvWWN4/5Bn8BL53j+fvuJWISYJUZf+AecWOXDESJAj5wAGDil2psiI3gO7uA9t/S9F5s8vVehIFR2jk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770397422; c=relaxed/simple;
-	bh=0gK/iVx9C6u6GAIowrIBVLevr6ScygPxrWCcNezgBM4=;
+	s=arc-20240116; t=1770397946; c=relaxed/simple;
+	bh=eItsci1j6bUpFWKf/bM3HsF0LPU7ybEv0AslFAgLUbs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Z2Ka7P9aGjcmZ2DzYVQHTCf9ido4D0phkAVVZ1AGTXxgqiSRi2GEEC4up4AoVAMOU9kgo6FOm/abhsREHNbkNVrtQCUARVDl+3YM0BkkdnXrb55xfqC/Vxqa8IC+Tstd+bDE5d5VagslQERekiR5j3VyRqStZ2RwmMlOrDKb1VQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iNxd1FXa; arc=pass smtp.client-ip=209.85.210.175
+	 To:Cc:Content-Type; b=fIW3WwpYiKC8mQlMs0eFZ3G2/YyomUcbjtu6ANbdXAygAd15k+goZe66aMcCiD6XfP2jz3aSOLgLOtez0hEhs13Oau0u/LqceulIMsK/tEpKPKw71bS212SReFoeN6Mdvug17zk3HdgZ9YagG4pPGwzHIOYVZb7MZ7n+w/zxGjc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CQ6Yyekl; arc=pass smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iNxd1FXa"
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-81f4f4d4822so1336469b3a.3
-        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 09:03:42 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770397421; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQ6Yyekl"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-352e2c59264so1546645a91.0
+        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 09:12:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770397946; cv=none;
         d=google.com; s=arc-20240605;
-        b=MzIsYgZJhLdzOwcAZMhd/tqCcfCvNDyM0yfKymk5fpiBnLNCrUPZRq0GZXRqfOQJOi
-         qxVCwoivR67doic2J9L0xvpbTGmVbd4jmnemOpt5ABEQfrZhMr7QbappuA9xu1BZrIDm
-         MRzqWnr8EL10IJrSKyK6VkFbns2y/bVzlAm+z1rZJZspO3G7VPqbu1AhZV/cy3htx3uZ
-         s5XO1/2rhMT3FSWvu3pgtLD9Mnl5YgJK2rbbuDLGjbupMQEwmvtxELXrVcUy5tIWX0mq
-         OUg7LmfyysT8FYR0eCZfXdgvr9wpI1O/rRAxBpdqZYmW0jZMZlgj9mPggBYoR1yvi01v
-         2Tjw==
+        b=cPi9qeq0nLFrjmtTSyGsud+qCp0BUREzFFslvSt9hGH3vnYU5FSI8GA5cX/MEYKuZv
+         GNnvT7MJ6CYcDkku7U9Gts+60qCeYaAKNxP5edgck29XeftxJDTqAFTC4qzmypXZhcxL
+         kvNsZmoPfnogffJyzSCUXD3uSpxecC+Zd5B4FpuG1SNFIiG1jtONaKGHeJHTLGL36ynK
+         QcJD3puHWD4QF15cAFIpT8PvAMza3tb6BPqCuWmjxxO3+J/d6P5E1ciNDeRua9Ihm4Lb
+         G+M2yl+gPP80oGGkbtymJ/P0ALEp9p2bkFh0Xm5xD/YTqCu9S56Ljr9sgB2fLweu0KDs
+         WP9A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=lzvjAbki/GfjEDACBGU634JpIQeRo+5itCY0HQJsI3A=;
-        fh=+Rx81j6Cfa2hhtVW+eKCpaI3yjhQ1Dvd9c/d0T2fF1I=;
-        b=S7fzw2keCt23E6d1p2+1x9IUupddJiPHHuJ2EDN4rtlbzbOBhWPi2h4ctWN+xsSGi7
-         +sDFpjVYgOc6Fu0cEeLY5OMlexENdnYk02rVMAqbzZPiOaSgD3yLOVvRrZTQxsZx5UR3
-         iQ6WBYbdwi1CP9xBb6E6uB3/XNZX4/Y0d2B36W/TRODRW4ebnC+6WzIaQnviH5LrnNpS
-         zFiv+KY01U+lcFf151/+dYBB8abKYkABfBBAcpCtcVZocvZAQsumg+VJa8bPEIyWzV6j
-         BnwZxEn+8ZbYGq6Xw6NG2lbrUENv9V5FTNz5G27l1pZ11uS2FuPM/oprDYnlvKnlx72Z
-         fTbg==;
+        bh=fItd2bw2A3cIv4j5yZcRJpbDcD6mfOqtcfF4kIzdAho=;
+        fh=WRciZejG1m2NBVt6qb8kKC2ilrZX40waX3awGc+SwHo=;
+        b=AqTI2+t7TyDmytvJz7SP5Zat9Oe7DuGagCB6lVNZkBoKUpn9aCGXtCYRnNlxYZTDSk
+         cSnM0dEFlvduaMdn0IyOIY/gd8PSO+SIbB2cGSTNbpZ7PKtatSkOKTRnLTapYrETyjzS
+         Q9WdoSU3cSsAvEujIJ0EKFs6Jcu4YWXNaf/knGtPC0HixsTm+JPouwplWjinaNp1+Jpl
+         Vv1RQAyFPQCAh20Hbdgz8FklFmjbJfzP82DYBE6cFbmcgGblNd0lxnNZshBPeTWqV8Cu
+         hK8IeL1DmfANeP+WNHHwwPdv6xkCfZirUcO0LWJkQGeXm7YH0jiDmq6SHMO9KUnVglBJ
+         aH5w==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770397421; x=1771002221; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770397946; x=1771002746; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lzvjAbki/GfjEDACBGU634JpIQeRo+5itCY0HQJsI3A=;
-        b=iNxd1FXa0QJgXYPvmz/8t6s9SDEY4InSioWAoB5dwWTITPBb25zonhisSvQUCA3O9l
-         xCFKM78/qMjsbl3dO28VvUJ4BR/Qvrbx1tSkqY3RnS2fuX+X9YERpRuxUryQLGhbC58f
-         R+rf0cs7W8MTOzrPBkNuOjdVsmLKixz8b+KPqpbTbxi2jR5fNL9mEJzDbNxaNWUQ3r4M
-         hToUJOIGBPj9GKknc4R3xTm0zYz+NS1EmJDq8XYzYn2Z8fKOuXX9j0Ft390PBuW0kiOf
-         A10GMwWBZ+DhG1ANR7+yKqdLT5cXhtJ3T+7gDvDzJkPitU51+FfQiYs8PuaRhlctXDM/
-         Y70w==
+        bh=fItd2bw2A3cIv4j5yZcRJpbDcD6mfOqtcfF4kIzdAho=;
+        b=CQ6YyeklWbo2JRgUGimeV2QNOO04t/VF6hCCDpj/QvoVcNcNSpyqiQ3WP6+/3Ohpsf
+         xiDOnOBmbIb0+kqkszRhMMh8Rm4XK21JJIxKSwb9tgmwdcV1nlqzvekKK8wAFYNC3U24
+         WYHSmSdDvoSs11VJ68ROFvCG8Itmu151Hus7lp1ZdsCWgjkxw2CJjq/E9Wi3cg3HOrRc
+         X7LkNIoMJVuwhEXa/zTjpPIBp7eQqPYM3rrBfPBk9TWbvWAd1mz/KejdesnpH4Totnkb
+         3kYxzL6DKUs0lu1BVcmm/yOZE3kbLMakuWEvg/FFi+mag787C53ObnfqAaO6Gh0JlyGj
+         a6LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770397421; x=1771002221;
+        d=1e100.net; s=20230601; t=1770397946; x=1771002746;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=lzvjAbki/GfjEDACBGU634JpIQeRo+5itCY0HQJsI3A=;
-        b=nPy3ZWZF2bgSCEF3qdN/8d0CpB9KVQFbvkkGbtu+i+eoZNmZzuCsBFimno8evo7jD3
-         rWbIhCYyzhPKHTDDLgV2PpSOnlwCsISXhHDfqN20pHZOcpcC1HzimxpKisb9g/KRu3rP
-         CceZmnMexOhR6SDO/oTCdGxt12oEV8wCD4ro0AHLFtjgoeUWJEMPM5q8KRjUDmjlPLBH
-         j+dLNZMJy5iWUsNLACiYeoFbqBPqzwUITCZWE7sXu+hqQWKvuv6k2VruGyWA6C/nbiLo
-         A9TyDwc9J2O5tWiqxeGMgotZyVRIQeSbS2nU19PwUdxlluF6wAEeGqGuKWykL75n0cCh
-         Rx+Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVBRnsmrn62+FxvffVkGGI2e8284YgGhqNuuarBVarxn/52J+2LcfpOjVKExLcqePICmWU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy98HsWMSfliML9nyJntRF8B27xOK9oMre4hpOZBDHaZTQseaIq
-	na5LNTvkm7HPOkxEqduUiU2pkF9lMtIVFSzneAolvgKom3AvCmZduRPhrRL5HvCHrNzSiBuBdnD
-	B1SGhhja+48nFF/A21XyNuJ7wPixCD6s=
-X-Gm-Gg: AZuq6aLM61d9p4CSTibNOvpJrMU4kfuy3j85BSg2cN6p1Gebs/+dDZYoGNZvj6gGjgh
-	I63HLqD9vNhUMhylpAmLnkMOn2alV+4syIWtcVXArzMj2EC9XrSIcvRnQuSCHrhE0IDgToJEe+S
-	nWSNzNbjazdP8b+xemJnB9aa0LoQ5tAEwxo/EFOpryG2t7i5uIrBJefBCWj6Knpyiz8uk8gX5d3
-	l6vCC0eXq+yjraKGSeKheZRI0sjtDYXZgDqrB5DCG5eurBH5+qzPmUt8xT5jUKjJzAf1+R5iaI6
-	8OF7RNc7BRs=
-X-Received: by 2002:a05:6a20:4324:b0:34f:241f:aa1e with SMTP id
- adf61e73a8af0-393ad00b442mr3459764637.31.1770397421372; Fri, 06 Feb 2026
- 09:03:41 -0800 (PST)
+        bh=fItd2bw2A3cIv4j5yZcRJpbDcD6mfOqtcfF4kIzdAho=;
+        b=rtU3bsejztSPSJZTDHguqPxI5DZgpAOMmEtXL21HV8QIvdBruJOK61MnDMb8QwgeDd
+         S8CFFYTpHvMVEEfLu117DjEEHKq6T7LkxN85QiDlUhqqCipTqgfCQrB/uLjazSFQnLDs
+         fjzdsECtlZYiinMV6exryYhtkk3ZbC7o1zodvpgE+YNrKuJz2FSnJB3VL00aGhOo4hXE
+         d3vyhUsw5TAhKS4o600IwbV4WmeBFIONYmA5EadRZeQOJgPmDlvzQDJK1fK+fqC5IiqF
+         5bXWFgpMOIt6F9fisu/WWmqndp5wLiF2WikjU9NAWSCEnQ+qx69p13lXcQt3ItwXbhxY
+         OgCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXSQSJOSeWlFytxOOUsylFCTOi5gDDGrKcfSD0Axl0C5hh00yoHR2WWhuO1mpzcz/KUdHY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFArRyVJC2mStAjgmA/KVDfF+ucw6oUqtCxeGr45WkOr4N6iX6
+	yvUCMeVMWhzAZaMl3bkxHPRZ+/pVe1KkQDN2/aeZ8+MCJtLXep9Tf6ip9CHz1nLiHZl4XWadjUn
+	hELMJNTH/TgN5w9mdDUiMm+x+5iiQjyY=
+X-Gm-Gg: AZuq6aL2L3DgYrU1m6QK7Zby43XGEzksG62EWww7tR+xpegLBXXuJtvnXGeknR6XB9N
+	0MYpnkvVKKrKMMVSlxbpSh12L4//PfnspXXAkaPGjR2H8KoGSBPcP2RPV8kRAUCCSm57ELAMor0
+	8a9fc3vXUu/zyfgHfdQH9OoYxZLy9ghG2Pi7GICvQfyYpRW6nhJcbuRvWBJZd4UHxK3R+ZhT6ay
+	4WglMc1/TVEy1cTZuxtnZoeGE5LpNjziYnEN7aS5EkJTqhdJYcJ1KCdaBXA6WDN72+G7YmlMJD/
+	B0+uwQUS8m4=
+X-Received: by 2002:a17:90b:5348:b0:353:e91:9b2f with SMTP id
+ 98e67ed59e1d1-354b3d086ebmr2798120a91.37.1770397946064; Fri, 06 Feb 2026
+ 09:12:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260203093819.2105105-1-jolsa@kernel.org> <CAADnVQ+EU_f4LVDQkqkB0Q+QYMBH5ynXU3+rGZA2XCGmYMcFqg@mail.gmail.com>
- <aYM9YUl6xf9I2x4c@krava> <CAADnVQJPbnVEDYAAy4mUP7NmsGkUmeV9B73V+Bc=LYb8r8Zrow@mail.gmail.com>
- <aYRa_CDL1RqIR_8S@krava> <CAADnVQLJJn=bSDvQrjNyyeNdLOZABKDjjR_3j6DG3pgbsJ+JXA@mail.gmail.com>
- <aYWjxMeXABGcYqEI@krava>
-In-Reply-To: <aYWjxMeXABGcYqEI@krava>
+References: <20260206090653.1336687-1-chen.dylane@linux.dev>
+In-Reply-To: <20260206090653.1336687-1-chen.dylane@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 6 Feb 2026 09:03:29 -0800
-X-Gm-Features: AZwV_QjOjkBoQkj5t0GC43pofpDNXlwuDaVx59-ZLVp5H6LCJshEE1XSJVX6d-A
-Message-ID: <CAEf4BzbUX8xEp1x66ugtj1C6sxWPJ+_9EpyVmy3TVOMiKrFcWA@mail.gmail.com>
-Subject: Re: [RFC bpf-next 00/12] bpf: tracing_multi link
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
-	Menglong Dong <menglong8.dong@gmail.com>, Steven Rostedt <rostedt@kernel.org>
+Date: Fri, 6 Feb 2026 09:12:13 -0800
+X-Gm-Features: AZwV_QhIo0b-EARCGAHAsX97Jk6vBjuf3a75F2R2Xy-uB9J6NXfEDaz9CPSGXYM
+Message-ID: <CAEf4BzbSCbqg6y1KGg_j5xkK1=xsmOyK5ob9uTJiVcWgQ4jAJw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 1/2] bpf: Add preempt disable for bpf_get_stack
+To: Tao Chen <chen.dylane@linux.dev>
+Cc: song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 6, 2026 at 12:18=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
-e:
+On Fri, Feb 6, 2026 at 1:07=E2=80=AFAM Tao Chen <chen.dylane@linux.dev> wro=
+te:
 >
-> On Thu, Feb 05, 2026 at 07:55:19AM -0800, Alexei Starovoitov wrote:
-> > On Thu, Feb 5, 2026 at 12:55=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> =
-wrote:
-> > >
-> > > On Wed, Feb 04, 2026 at 08:06:50AM -0800, Alexei Starovoitov wrote:
-> > > > On Wed, Feb 4, 2026 at 4:36=E2=80=AFAM Jiri Olsa <olsajiri@gmail.co=
-m> wrote:
-> > > > >
-> > > > > On Tue, Feb 03, 2026 at 03:17:05PM -0800, Alexei Starovoitov wrot=
-e:
-> > > > > > On Tue, Feb 3, 2026 at 1:38=E2=80=AFAM Jiri Olsa <jolsa@kernel.=
-org> wrote:
-> > > > > > >
-> > > > > > > hi,
-> > > > > > > as an option to Meglong's change [1] I'm sending proposal for=
- tracing_multi
-> > > > > > > link that does not add static trampoline but attaches program=
- to all needed
-> > > > > > > trampolines.
-> > > > > > >
-> > > > > > > This approach keeps the same performance but has some drawbac=
-ks:
-> > > > > > >
-> > > > > > >  - when attaching 20k functions we allocate and attach 20k tr=
-ampolines
-> > > > > > >  - during attachment we hold each trampoline mutex, so for ab=
-ove
-> > > > > > >    20k functions we will hold 20k mutexes during the attachme=
-nt,
-> > > > > > >    should be very prone to deadlock, but haven't hit it yet
-> > > > > >
-> > > > > > If you check that it's sorted and always take them in the same =
-order
-> > > > > > then there will be no deadlock.
-> > > > > > Or just grab one global mutex first and then grab trampolines m=
-utexes
-> > > > > > next in any order. The global one will serialize this attach op=
-eration.
-> > > > > >
-> > > > > > > It looks the trampoline allocations/generation might not be b=
-ig a problem
-> > > > > > > and I'll try to find a solution for holding that many mutexes=
-. If there's
-> > > > > > > no better solution I think having one read/write mutex for tr=
-acing multi
-> > > > > > > link attach/detach should work.
-> > > > > >
-> > > > > > If you mean to have one global mutex as I proposed above then I=
- don't see
-> > > > > > a downside. It only serializes multiple libbpf calls.
-> > > > >
-> > > > > we also need to serialize it with standard single trampoline atta=
-ch,
-> > > > > because the direct ftrace update is now done under trampoline->mu=
-tex:
-> > > > >
-> > > > >   bpf_trampoline_link_prog(tr)
-> > > > >   {
-> > > > >     mutex_lock(&tr->mutex);
-> > > > >     ...
-> > > > >     update_ftrace_direct_*
-> > > > >     ...
-> > > > >     mutex_unlock(&tr->mutex);
-> > > > >   }
-> > > > >
-> > > > > for tracing_multi we would link the program first (with tr->mutex=
-)
-> > > > > and do the bulk ftrace update later (without tr->mutex)
-> > > > >
-> > > > >   {
-> > > > >     for each involved trampoline:
-> > > > >       bpf_trampoline_link_prog
-> > > > >
-> > > > >     --> and here we could race with some other thread doing singl=
+> The get_perf_callchain() return values may be reused if a task is preempt=
+ed
+> after the BPF program enters migrate disable mode, so we should add
+> preempt_disable. And as Andrii suggested, BPF can guarantee perf callchai=
+n
+> buffer won't be released during use, for bpf_get_stack_id, BPF stack map
+> will keep them alive by delaying put_callchain_buffer() until freeing tim=
 e
-> > > > >         trampoline attach
-> > > > >
-> > > > >     update_ftrace_direct_*
-> > > > >   }
-> > > > >
-> > > > > note the current version locks all tr->mutex instances all the wa=
-y
-> > > > > through the update_ftrace_direct_* update
-> > > > >
-> > > > > I think we could use global rwsem and take read lock on single
-> > > > > trampoline attach path and write lock on tracing_multi attach,
-> > > > >
-> > > > > I thought we could take direct_mutex early, but that would mean
-> > > > > different order with trampoline mutex than we already have in
-> > > > > single attach path
-> > > >
-> > > > I feel we're talking past each other.
-> > > > I meant:
-> > > >
-> > > > For multi:
-> > > > 1. take some global mutex
-> > > > 2. take N tramp mutexes in any order
-> > > >
-> > > > For single:
-> > > > 1. take that 1 specific tramp mutex.
-> > >
-> > > ah ok, I understand, it's to prevent the lockup but keep holding all
-> > > the trampolines locks.. the rwsem I mentioned was for the 'fix', wher=
-e
-> > > we do not take all the trampolines locks
-> >
-> > I don't understand how rwsem would help.
-> > All the operations on trampoline are protected by mutex.
-> > Switching to rw makes sense only if we can designate certain
-> > operations as "read" and others as "write" and number of "reads"
-> > dominate. This won't be the case with multi-fentry.
-> > And we still need to take all of them as "write" to update trampoline.
+> or for bpf_get_stack/bpf_get_task_stack, BPF program itself will hold the=
+se
+> buffers alive again, until freeing time which is delayed until after
+> RCU Tasks Trace + RCU grace period.
 >
-> this applies to scenario where we do not hold all the trampoline locks,
-> in such case we could have race between single and multi attachment,
-> while single/single attachment race stays safe
->
-> as a fix the single attach would take read lock and multi attach would
-> take write lock, so single/single race is allowed and single/multi is
-> not ... showed in the patch below
->
-> but it might be too much.. in a sense that there's already many locks
-> involved in trampoline attach/detach, and simple global lock in multi
-> or just sorting the ids would be enough
->
-
-I'll just throw this idea here, but we don't have to do it right away.
-What if instead of having a per-trampoline lock, we just have a common
-relatively small pool of locks that all trampolines share based on
-some hash (i.e., we deterministically map trampoline to one of the
-locks). Then multi-attach can just go and grab all of them in
-predefined order, while singular trampoline attaches will just get
-their own one. We won't need to sort anything, we reduce the amount of
-different locks. I don't think lock contention (due to lock sharing
-for some trampolines) is a real issue to be worried about either.
-
-> jirka
->
->
+> Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Tao Chen <chen.dylane@linux.dev>
 > ---
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> index b76bb545077b..edbc8f133dda 100644
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
-> @@ -30,6 +30,8 @@ static struct hlist_head trampoline_ip_table[TRAMPOLINE=
-_TABLE_SIZE];
->  /* serializes access to trampoline tables */
->  static DEFINE_MUTEX(trampoline_mutex);
 >
-> +static DECLARE_RWSEM(multi_sem);
-> +
->  struct bpf_trampoline_ops {
->         int (*register_fentry)(struct bpf_trampoline *tr, void *new_addr,=
- void *data);
->         int (*unregister_fentry)(struct bpf_trampoline *tr, u32 orig_flag=
-s, void *old_addr, void *data);
-> @@ -367,11 +369,7 @@ static struct bpf_trampoline *bpf_trampoline_lookup(=
-u64 key, unsigned long ip)
->         head =3D &trampoline_ip_table[hash_64(tr->ip, TRAMPOLINE_HASH_BIT=
-S)];
->         hlist_add_head(&tr->hlist_ip, head);
->         refcount_set(&tr->refcnt, 1);
-> -#ifdef CONFIG_LOCKDEP
-> -       mutex_init_with_key(&tr->mutex, &__lockdep_no_track__);
-> -#else
->         mutex_init(&tr->mutex);
-> -#endif
->         for (i =3D 0; i < BPF_TRAMP_MAX; i++)
->                 INIT_HLIST_HEAD(&tr->progs_hlist[i]);
->  out:
-> @@ -871,6 +869,8 @@ int bpf_trampoline_link_prog(struct bpf_tramp_node *n=
-ode,
->  {
->         int err;
+> Change list:
+>  - v1 -> v2
+>    - add preempt_disable for bpf_get_stack in patch1
+>    - add patch2
+>  - v1: https://lore.kernel.org/bpf/20260128165710.928294-1-chen.dylane@li=
+nux.dev
 >
-> +       guard(rwsem_read)(&multi_sem);
-> +
->         mutex_lock(&tr->mutex);
->         err =3D __bpf_trampoline_link_prog(node, tr, tgt_prog, &trampolin=
-e_ops, NULL);
->         mutex_unlock(&tr->mutex);
-> @@ -916,6 +916,8 @@ int bpf_trampoline_unlink_prog(struct bpf_tramp_node =
-*node,
->  {
->         int err;
+>  kernel/bpf/stackmap.c | 13 ++++++-------
+>  1 file changed, 6 insertions(+), 7 deletions(-)
 >
-> +       guard(rwsem_read)(&multi_sem);
-> +
->         mutex_lock(&tr->mutex);
->         err =3D __bpf_trampoline_unlink_prog(node, tr, tgt_prog, &trampol=
-ine_ops, NULL);
->         mutex_unlock(&tr->mutex);
-> @@ -1463,6 +1465,8 @@ int bpf_trampoline_multi_attach(struct bpf_prog *pr=
-og, u32 *ids,
->         struct bpf_trampoline *tr;
->         u64 key;
+
+Hm... looking at bpf_get_stack_pe(), I'm not sure what's the exact
+guarantees around that ctx->data->callchain that we pass as
+trace_in... It looks like it's the same temporary per-cpu callchain as
+in other places, just attached (temporarily) to ctx. So we probably
+want preemption disabled/enabled for that one as well, no? And to
+achieve that, I think we'll need to split out build_id logic out of
+__bpf_get_stack() and do it after preemption is enabled in the
+callers. Luckily it's not that much of a code and logic, should be
+easy. But please analyze this carefully yourself.
+
+pw-bot: cr
+
+
+> diff --git a/kernel/bpf/stackmap.c b/kernel/bpf/stackmap.c
+> index da3d328f5c1..1b100a03ef2 100644
+> --- a/kernel/bpf/stackmap.c
+> +++ b/kernel/bpf/stackmap.c
+> @@ -460,8 +460,8 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
+uct task_struct *task,
 >
-> +       guard(rwsem_write)(&multi_sem);
-> +
->         data.reg =3D alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
->         if (!data.reg)
->                 return -ENOMEM;
-> @@ -1494,12 +1498,10 @@ int bpf_trampoline_multi_attach(struct bpf_prog *=
-prog, u32 *ids,
->                 tr =3D mnode->trampoline;
+>         max_depth =3D stack_map_calculate_max_depth(size, elem_size, flag=
+s);
 >
->                 mutex_lock(&tr->mutex);
-> -
->                 err =3D __bpf_trampoline_link_prog(&mnode->node, tr, NULL=
-, &trampoline_multi_ops, &data);
-> -               if (err) {
-> -                       mutex_unlock(&tr->mutex);
-> +               mutex_unlock(&tr->mutex);
-> +               if (err)
->                         goto rollback_unlink;
-> -               }
+> -       if (may_fault)
+> -               rcu_read_lock(); /* need RCU for perf's callchain below *=
+/
+> +       if (!trace_in)
+> +               preempt_disable();
+>
+>         if (trace_in) {
+>                 trace =3D trace_in;
+> @@ -474,8 +474,8 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
+uct task_struct *task,
 >         }
 >
->         if (ftrace_hash_count(data.reg)) {
-> @@ -1516,11 +1518,6 @@ int bpf_trampoline_multi_attach(struct bpf_prog *p=
-rog, u32 *ids,
->                 }
+>         if (unlikely(!trace) || trace->nr < skip) {
+> -               if (may_fault)
+> -                       rcu_read_unlock();
+> +               if (!trace_in)
+> +                       preempt_enable();
+>                 goto err_fault;
 >         }
 >
-> -       for (i =3D 0; i < cnt; i++) {
-> -               tr =3D link->nodes[i].trampoline;
-> -               mutex_unlock(&tr->mutex);
-> -       }
-> -
->         free_fentry_multi_data(&data);
->         return 0;
->
-> @@ -1528,6 +1525,7 @@ int bpf_trampoline_multi_attach(struct bpf_prog *pr=
-og, u32 *ids,
->         for (j =3D 0; j < i; j++) {
->                 mnode =3D &link->nodes[j];
->                 tr =3D mnode->trampoline;
-> +               mutex_lock(&tr->mutex);
->                 WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, t=
-r, NULL,
->                              &trampoline_multi_ops, &data));
->                 mutex_unlock(&tr->mutex);
-> @@ -1550,6 +1548,8 @@ int bpf_trampoline_multi_detach(struct bpf_prog *pr=
-og, struct bpf_tracing_multi_
->         int i, cnt =3D link->nodes_cnt;
->         struct bpf_trampoline *tr;
->
-> +       guard(rwsem_write)(&multi_sem);
-> +
->         data.unreg =3D alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
->         if (!data.unreg)
->                 return -ENOMEM;
-> @@ -1567,6 +1567,7 @@ int bpf_trampoline_multi_detach(struct bpf_prog *pr=
-og, struct bpf_tracing_multi_
->                 mutex_lock(&tr->mutex);
->                 WARN_ON_ONCE(__bpf_trampoline_unlink_prog(&mnode->node, t=
-r, NULL,
->                                                           &trampoline_mul=
-ti_ops, &data));
-> +               mutex_unlock(&tr->mutex);
+> @@ -493,9 +493,8 @@ static long __bpf_get_stack(struct pt_regs *regs, str=
+uct task_struct *task,
+>                 memcpy(buf, ips, copy_len);
 >         }
 >
->         if (ftrace_hash_count(data.unreg))
-> @@ -1576,7 +1577,6 @@ int bpf_trampoline_multi_detach(struct bpf_prog *pr=
-og, struct bpf_tracing_multi_
+> -       /* trace/ips should not be dereferenced after this point */
+> -       if (may_fault)
+> -               rcu_read_unlock();
+> +       if (!trace_in)
+> +               preempt_enable();
 >
->         for (i =3D 0; i < cnt; i++) {
->                 tr =3D link->nodes[i].trampoline;
-> -               mutex_unlock(&tr->mutex);
->                 bpf_trampoline_put(tr);
->         }
+>         if (user_build_id)
+>                 stack_map_get_build_id_offset(buf, trace_nr, user, may_fa=
+ult);
+> --
+> 2.48.1
 >
