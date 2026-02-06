@@ -1,117 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987A849659;
-	Fri,  6 Feb 2026 23:00:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E56828642D;
+	Fri,  6 Feb 2026 23:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770418831; cv=none; b=fNsN1JohnMaUf0ac91B10wGs+gs0sFp4k9xVmMx5V9CfwOh15akzIbiYXYH6k0RcOmqKv73WwpXoVk16jq+DIfaezhaM1GmGOZQ9XeVw1TKZ7clyuJekn/7YTdRdhvp+NcXGUXDXgHzrf2KKxyn8G3grKGSI1gpOaLbHO5sMgNU=
+	t=1770419525; cv=none; b=r3Krm+zW2gY49ZeB0AVB1/CVOt0WqWDBGJA4Cg0gkvR1gv8jWsBZFdPIaI2eGDufnt8NWMu73FCInEbOvcP1ZOWsvOsjO3Jmc0z37Fe9GEC03GpMeK0OMtrgtVIiDjIqUxFMATuanznDhcJTN0aNBPQWzUDhXsmMB/sbrZ41K7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770418831; c=relaxed/simple;
-	bh=mLy9KV0aGwWO2bQW20k9G/fysd3HLWDbfIqP1sPn//Q=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=FOFOEZTSkGR0LMegZtIJhz/Qn/5aYhXrGJgcCR+kLMnkqcpiDnqPO87us51yoZ1a59Tbg9heMI2W+sP5x0sjuB7PgAi6VAQsE1tQgnloWzTSlCkHREM4kXQGl008WyKhEZEP+PWSa4KoF5fveg0vGjtIFBEooSOcotncJSsRnQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hjO/7W1Q; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770419525; c=relaxed/simple;
+	bh=n/Gw3B7dhzs5kbVhcSZwxQThMptQ12DJ7MK3V38XV94=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M9DHvK6TEt0tK7dKktNBpb3pspCAoGr7FTWapJ0Wew+CF1VNzewWeSHbrfyz38dTv8o0WmxJ53e9Krh2aLNeX710Pe1E8Z62eFUbCFwkqTGjj8X6lDrYRbSBLNwIrVpcms1UOS3KVfHlhhKleaT/tGVzpsr07DJx4kne7KzWNH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=fail (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=f6mExEWV reason="signature verification failed"; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hjO/7W1Q"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C368C116C6;
-	Fri,  6 Feb 2026 23:00:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770418831;
-	bh=mLy9KV0aGwWO2bQW20k9G/fysd3HLWDbfIqP1sPn//Q=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=hjO/7W1Q8QwBMWtluaR7g68piPHJ1vhcOkXtYKpDYn+FwFMrH4wRdnrsiEijYKCk5
-	 QyBNS6BT1UCVthj+vt9z7HJ5ZmkA+tbV1daRiM4wDU0za6ZgR1kCVHw+IyyOAf1Kcw
-	 hoXYDsxHsSgg6mYi97QpmEfsRAOQe+xX842MCTYiB5c8WKJTBiPAWOsUNsktiyKy1B
-	 IsijJ9+U7yu0PonfeH95CXfQLxxJs1Jo4oC//J6eH0TMhcXNHrInBMqTg88d/g6zCi
-	 mx2qqxnRV0oH2EdizD57hhdj5Wobkod33pFb7p+GRpRQLlo6L++9vpnf11TO9TWfLS
-	 S/w+nyTB37cwQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 855783809A17;
-	Fri,  6 Feb 2026 23:00:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="f6mExEWV"
+Received: from [IPV6:2601:646:8081:9484:da7e:5e09:3c1e:8002] ([IPv6:2601:646:8081:9484:da7e:5e09:3c1e:8002])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 616N8MNN1391383
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Fri, 6 Feb 2026 15:08:29 -0800
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 616N8MNN1391383
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026012301; t=1770419312;
+	bh=FVE23sU8f0tF/woG1DKU3iF/2D4ifdEew5Zjv3zRdio=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=f6mExEWVcFoGl+DPFS7WpxlxeCRIHac6tvcqDNllvY7fcn5iEbosRIzvziGMVi/jr
+	 IlZrZd/QABAJm2OHwDCNpqS9Bw2KbrG4IncZjpAWpmV6APHhylB1Bq9EOsCNzpQe1c
+	 pz4U8RZ3j8bVG6TzLrp+r8xc4p+Kt8wLNpOS0TqiPsWKN/d9wFnwjWOh04emb2YoTR
+	 svx3yUV2tx8YCHfBHxvpyy21Ps1+5ztp55UBPmKZTWspjimi2ZvfuvNGRAI5DS5db8
+	 5dBNmHcpOQXuS2bisH9Fug5kgfNmaEss+y8njKZu8sjy7noBU6YSnK1NreRaOSUXl0
+	 4okmimMg43c4g==
+Message-ID: <4304d18a-f647-4709-9f29-43d9995cc24e@zytor.com>
+Date: Fri, 6 Feb 2026 15:08:17 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v7 00/17] Remove task and cgroup local storage
- percpu
- counters
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177041882833.1106743.17316630593839442939.git-patchwork-notify@kernel.org>
-Date: Fri, 06 Feb 2026 23:00:28 +0000
-References: <20260205222916.1788211-1-ameryhung@gmail.com>
-In-Reply-To: <20260205222916.1788211-1-ameryhung@gmail.com>
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
- andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com,
- martin.lau@kernel.org, kpsingh@kernel.org, yonghong.song@linux.dev,
- song@kernel.org, haoluo@google.com, kernel-team@meta.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 6/6] x86/vdso: Enable sframe generation in VDSO
+To: Jens Remus <jremus@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        x86@kernel.org, linux-mm@kvack.org,
+        Steven Rostedt <rostedt@kernel.org>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Indu Bhagat <indu.bhagat@oracle.com>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
+        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
+        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        David Hildenbrand <david@kernel.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+        Michal Hocko
+ <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>
+References: <20260206193642.1580787-1-jremus@linux.ibm.com>
+ <20260206193642.1580787-7-jremus@linux.ibm.com>
+Content-Language: en-US, sv-SE
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <20260206193642.1580787-7-jremus@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@kernel.org>:
-
-On Thu,  5 Feb 2026 14:28:58 -0800 you wrote:
-> * Motivation *
+On 2026-02-06 11:36, Jens Remus wrote:
+> From: Josh Poimboeuf <jpoimboe@kernel.org>
 > 
-> The goal of this patchset is to make bpf syscalls and helpers updating
-> task and cgroup local storage more robust by removing percpu counters
-> in them. Task local storage and cgroup storage each employs a percpu
-> counter to prevent deadlock caused by recursion. Since the underlying
-> bpf local storage takes spinlocks in various operations, bpf programs
-> running recursively may try to take a spinlock which is already taken.
-> For example, when a tracing bpf program called recursively during
-> bpf_task_storage_get(..., F_CREATE) tries to call
-> bpf_task_storage_get(..., F_CREATE) again, it will cause AA deadlock
-> if the percpu variable is not in place.
+> Enable sframe generation in the VDSO library so kernel and user space
+> can unwind through it.
 > 
-> [...]
+> SFrame isn't supported for x32 or x86-32.  Discard .sframe sections for
+> those VDSOs.
+> 
+> [ Jens Remus: Add support for SFrame V3.  Prevent GNU_SFRAME program
+> table entry to empty .sframe section. ]
+> 
 
-Here is the summary with links:
-  - [bpf-next,v7,01/17] bpf: Select bpf_local_storage_map_bucket based on bpf_local_storage
-    https://git.kernel.org/bpf/bpf-next/c/0ccef7079ea8
-  - [bpf-next,v7,02/17] bpf: Convert bpf_selem_unlink_map to failable
-    https://git.kernel.org/bpf/bpf-next/c/1b7e0cae85ac
-  - [bpf-next,v7,03/17] bpf: Convert bpf_selem_link_map to failable
-    https://git.kernel.org/bpf/bpf-next/c/fd103ffc57c9
-  - [bpf-next,v7,04/17] bpf: Convert bpf_selem_unlink to failable
-    https://git.kernel.org/bpf/bpf-next/c/403e935f9158
-  - [bpf-next,v7,05/17] bpf: Change local_storage->lock and b->lock to rqspinlock
-    https://git.kernel.org/bpf/bpf-next/c/8dabe34b9d5b
-  - [bpf-next,v7,06/17] bpf: Remove task local storage percpu counter
-    https://git.kernel.org/bpf/bpf-next/c/4a98c2efa613
-  - [bpf-next,v7,07/17] bpf: Remove cgroup local storage percpu counter
-    https://git.kernel.org/bpf/bpf-next/c/5254de7b9607
-  - [bpf-next,v7,08/17] bpf: Remove unused percpu counter from bpf_local_storage_map_free
-    https://git.kernel.org/bpf/bpf-next/c/3417dffb5833
-  - [bpf-next,v7,09/17] bpf: Prepare for bpf_selem_unlink_nofail()
-    https://git.kernel.org/bpf/bpf-next/c/c8be3da14718
-  - [bpf-next,v7,10/17] bpf: Support lockless unlink when freeing map or local storage
-    https://git.kernel.org/bpf/bpf-next/c/5d800f87d0a5
-  - [bpf-next,v7,11/17] bpf: Switch to bpf_selem_unlink_nofail in bpf_local_storage_{map_free, destroy}
-    https://git.kernel.org/bpf/bpf-next/c/0be08389c7f2
-  - [bpf-next,v7,12/17] selftests/bpf: Update sk_storage_omem_uncharge test
-    https://git.kernel.org/bpf/bpf-next/c/d652f425d5e3
-  - [bpf-next,v7,13/17] selftests/bpf: Update task_local_storage/recursion test
-    https://git.kernel.org/bpf/bpf-next/c/e4772031d105
-  - [bpf-next,v7,14/17] selftests/bpf: Update task_local_storage/task_storage_nodeadlock test
-    https://git.kernel.org/bpf/bpf-next/c/902a79b6389f
-  - [bpf-next,v7,15/17] selftests/bpf: Remove test_task_storage_map_stress_lookup
-    https://git.kernel.org/bpf/bpf-next/c/e02cf06b85f8
-  - [bpf-next,v7,16/17] selftests/bpf: Choose another percpu variable in bpf for btf_dump test
-    https://git.kernel.org/bpf/bpf-next/c/cdce7b0848f6
-  - [bpf-next,v7,17/17] selftests/bpf: Fix outdated test on storage->smap
-    https://git.kernel.org/bpf/bpf-next/c/97b859b5ed04
+This will not break the x86-32 build if the assembler encounters .sframe?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> Notes (jremus):
+>     Changes in v8:
+>     - Discard .sframe for x32 and x86-32 VDSOs. (Josh/Indu)
+>       Note that the use of KEEP_SFRAME enables to define it for x86-64
+>       VDSO only.  Unlike CONFIG_AS_SFRAME, which may also be defined
+>       for x32 and x86-32 VDSO.  In x32 VDSO it would result in superfluous
+>       .sframe (copied from the x86-64 build - could be removed in X32
+>       build step).  In x86-32 VDSO it would cause a bogus GNU_SFRAME
+>       program table entry.
 
+For x32, this would be a "valid" sframe, right, even if the tools currently
+don't know how to consume it (and potentially never will)? If so, is there
+really any reason to explicitly remove it?
+
+>  	/*
+>  	 * Text is well-separated from actual data: there's plenty of
+>  	 * stuff that isn't used at runtime in between.
+> @@ -80,6 +87,10 @@ SECTIONS
+>  		*(.discard)
+>  		*(.discard.*)
+>  		*(__bug_table)
+> +#ifndef KEEP_SFRAME
+> +		*(.sframe)
+> +		*(.sframe.*)
+> +#endif
+
+This #ifndef is actually not necessary: if we have already "consumed" the
+.sframe* sections they will not be encountered here.
+
+I would prefer to have KEEP_SFRAME always defined (as true or false, and using
+#if) instead of using #ifdef. I believe that also means you can do:
+
+#define KEEP_SFRAME IS_ENABLED(CONFIG_AS_SFRAME)
+
+... instead of #ifdef.
+
+	-hpa
 
