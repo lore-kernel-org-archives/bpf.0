@@ -1,266 +1,215 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8F1F3B28D;
-	Fri,  6 Feb 2026 08:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770367002; cv=fail; b=MqvMV0jmPHp5+m9ajnLAypBkhphSZV2H9IVIGoZkLGzeIXSCDol7svneGgelnvPFWIl7lLiAEZdrVS7ZFaKb6N08k4fagHW+Wwx5Lgjx0/LmBul0UjpPQyz2nDiQB/jw0LBAAfNxXJBdn2/BqKSM0+kHjO0839INz08am+VS1B0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770367002; c=relaxed/simple;
-	bh=ta7GzHFHB2yuQt6ypWv43VSGCAt699EObcZYk1m0RAc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=osnM2QGXesXht+IaisHn22cl7e1WFX+Sik/2E18BVQyEJjBHuTl1qyrqtPWPlWCy41stVS/zxgMjvc3ctXjcRbof6YWr3favs5PlE+QQ/Q7PlxOwAg0WnHpQB/mW/RFRqRtCXaMwX+mOlrBzVN2pqSqTitNx3ebhTyAOm3OX0so=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i2CA5PzC; arc=fail smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A71934CFB1
+	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 08:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770367398; cv=none; b=JEQp4rH2SDP3YwG+s6s2640bsdUrdmZBMOmrUoKo05yuWsTp4cW5RQwGL1vxQljhANe1NlfrCkyBR0UngseL7wbRnFkiWpwvjRq2M4uacpGqQ+cyIp9Kv2qg+OVNYs6RUTOW5Sg65ZZnV7tgAfhz2hCYcIBoRHYti+to3zdXwZc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770367398; c=relaxed/simple;
+	bh=nmT6jlogQH5AZPKuyGJ72RwfLpmX8vxOowKL0ee/364=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mAUtuxHaWBnWelPN0X/r2mhkf1r5IXIUVf2ONbZuj4PVfA6EYo0PDjGpR79hFgNSl7uuaN79Jr3myu3XIyWhNNoos1kzO2EuNdMLo+uVZgapV/7Ee/T2dKtEwrxcAJVE5CzdS7Gueq7Do+TU386JHeHde4DqHvfOwHXvmHRkWmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cx4MaJXu; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i2CA5PzC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770367002; x=1801903002;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=ta7GzHFHB2yuQt6ypWv43VSGCAt699EObcZYk1m0RAc=;
-  b=i2CA5PzCWP18dLK2fsK4l7OFI9C7AfNCShwlFpqEkkGurhqZ038+EuKb
-   p0T1MTECqxZhs16IKTcLxcqWKXTfHBWUoDiVOEFbOrS413TVr87gDzylK
-   JiSbtXFRI46dDvlXTDuAxs9dkZL4VXdMbyevEFfqJCOPLv1IXGuyqmcCG
-   vRoKo/ecPG/JKq7VaMG1Xg5RtoeZ9Wtd3WiZ1r9OX0BQOybOWTQTsER8Z
-   qHKTd/eLBfpWnNEL4PT9cV/olmrpTOLP80DF5iMA/qqlDnHEn19woUg29
-   j97DtNOkFE2Xbp9Z0MKLGIkasyAqgfWO4vCIhkAV0FiaHVnMV01Rc9YU5
-   Q==;
-X-CSE-ConnectionGUID: v7mzYoKqSsuUvoZsLe8ljQ==
-X-CSE-MsgGUID: 4wcE002MQCuDd6eATVgvzg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11692"; a="82310217"
-X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="82310217"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 00:36:41 -0800
-X-CSE-ConnectionGUID: rhQmhHl1QYeQoRXF2+RzTA==
-X-CSE-MsgGUID: 0ZQajFNVQOC4PZXrr7AQ5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,276,1763452800"; 
-   d="scan'208";a="241300502"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2026 00:36:40 -0800
-Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Fri, 6 Feb 2026 00:36:39 -0800
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Fri, 6 Feb 2026 00:36:39 -0800
-Received: from CH5PR02CU005.outbound.protection.outlook.com (40.107.200.23) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Fri, 6 Feb 2026 00:36:39 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ExsPs4GI+eh5li+TQn9WmSv7QXxGsTJypRvbFDuPnj1XetSJRyupEeWKB3BuqNmjfa1gYElOFNT1bPm8PCv3mevu1yEyMEQ2uzmXfzEqyhfc8B0wFjvn4DGDd6A3MEKGOcOwv17SeLnO2QKhm2Ysf4Kfe4dnaEWB6BSPFRT7BOb/32lppKIzKmiGdtauPOvs8mFVj6Hq+KgxETMghJ79pSvNAmCKTAzm3SQl0Kibi3RYNk0kxq6Fq0ytjtUSM+mGEpHQYMT+xoJPg/6atTNwlo2/eQFK8LWXhDwysfc7LGiXyPwJ9Fj+I73dSkKFNznFNdRYxr7DJEQd9aixdx85VQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oaRp100IJCMXfd4ZDPAes7SJr3iKF3KHcJV9ioK8xhc=;
- b=p0aH3OinFHs1DDetigQgwZ/y/iYHAvMPaX4P6Kr8WtaRCHZUiot9Rommnn1DkZ8rGyp1Ym6NpdmFRKK8HsieSH1xhCSWUPw9Ry0HBqSjfCqnVlBkSY97Xc4tW+ivVEpHuFTqgzPcgx1CLvFWWaSsVIEYHefBkfOq/c+NsmBsxcpL+Y1NYIZ1g6fNaJG6Ly6DvpPNSrWHJH/DWPCPzpmQPCydMDapxUhs3okkPczLrTUXeIBQJYboJC76QRA6Tzmxd9o7JcOuLW/9T5fyfhJaPMkmmKmucj8OKtgcC/YVmrnThiIQf01AVpiF2XeBt3MZHY65yYKHRyBFo4fficcgcw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SN7PR11MB7540.namprd11.prod.outlook.com (2603:10b6:806:340::7)
- by LV8PR11MB8582.namprd11.prod.outlook.com (2603:10b6:408:1f7::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.16; Fri, 6 Feb
- 2026 08:36:36 +0000
-Received: from SN7PR11MB7540.namprd11.prod.outlook.com
- ([fe80::2edd:5c6d:169c:389b]) by SN7PR11MB7540.namprd11.prod.outlook.com
- ([fe80::2edd:5c6d:169c:389b%4]) with mapi id 15.20.9587.013; Fri, 6 Feb 2026
- 08:36:36 +0000
-Date: Fri, 6 Feb 2026 09:36:21 +0100
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: Vladimir Oltean <vladimir.oltean@nxp.com>, <bpf@vger.kernel.org>, "Claudiu
- Manoil" <claudiu.manoil@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
-	<xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Paolo
- Abeni" <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
-	"Przemek Kitszel" <przemyslaw.kitszel@intel.com>, Alexei Starovoitov
-	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
- Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
-	"Stanislav Fomichev" <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
-	"Martin KaFai Lau" <martin.lau@linux.dev>, Eduard Zingerman
-	<eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
-	<yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
-	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
-	<horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Alexander Lobakin
-	<aleksander.lobakin@intel.com>, "Maciej Fijalkowski"
-	<maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF Foundation)"
-	<bastien.curutchet@bootlin.com>, Tushar Vyavahare
-	<tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, Ricardo
- =?utf-8?B?Qi4gTWFybGniiJrCrnJl?= <rbm@suse.com>, Eelco Chaudron
-	<echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, "Toke
- Hoiland-Jorgensen" <toke@redhat.com>, <imx@lists.linux.dev>,
-	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<intel-wired-lan@lists.osuosl.org>, <linux-kselftest@vger.kernel.org>,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
- frag_size
-Message-ID: <aYWoBRmt-lcM_JkG@soc-5CG4396X81.clients.intel.com>
-References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
- <20260203105417.2302672-7-larysa.zaremba@intel.com>
- <20260205005901.gnju3zmqimtgeu2b@skbuf>
- <20260204173401.282899d0@kernel.org>
- <20260205122953.lscemcctayrvszdu@skbuf>
- <aYSP344FT-JlylwY@soc-5CG4396X81.clients.intel.com>
- <20260205124638.hxzvjiocephzlrk3@skbuf>
- <aYSZw4wbd-nvLTuD@soc-5CG4396X81.clients.intel.com>
- <20260205134046.pggwyosutj7ggi4i@skbuf>
- <20260205175408.30ab72a1@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260205175408.30ab72a1@kernel.org>
-X-ClientProxiedBy: VI1P195CA0086.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:802:59::39) To SN7PR11MB7540.namprd11.prod.outlook.com
- (2603:10b6:806:340::7)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cx4MaJXu"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4362cdf1d5aso197394f8f.0
+        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 00:43:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770367397; x=1770972197; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mfgNjjC4FlGfey1zASb3yyxvwr/kmot3+J84KwzJnMY=;
+        b=cx4MaJXulBpmG+0Cy5jhr+VCPB6hnkORWvG5gFFQXAKBKiVQC5O/lfEXGC2l944nYC
+         8v5aB2MCifa7ZGcZq1TUxm9V94GKtPICIlOrfxe65W3n5D+vk2c8APiGSgzRmXY1gG7U
+         mrIkR+MIrnSuHtxN6Au211bqZQ2+4kSD0l5b6AAweASWPANscqWa0Y7LfED0zw8C/YKH
+         llJ1CCaluJZxmmxYPgtuk49xV2zYhPmN0xCUsqCHcKccVsMNU/ppg7DAFqnksHh5zEX7
+         re1uenRko+S872F21e2bXLKOXblV5PHQfJfiWincZvNEVuznfMwuemR+WgUxtHw/OGmQ
+         x5Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770367397; x=1770972197;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mfgNjjC4FlGfey1zASb3yyxvwr/kmot3+J84KwzJnMY=;
+        b=JAZEAzZwwf4TlhUEfdPVEvyDfHZsO7gM1cPLo6rgn8Sqt2zotseur9w+lnHcORg3Eb
+         fexVFQeK6vA19rjjGScgg4h6KxwGTTa36YhiW9pQuReNWJxnNQIoGbrHh4KL/sws9V8t
+         wk1wgPo3yZxwzpoSGGfzL/fLT6aeLXg4l8/aewG5UP6Zz7afITZfA0lz/oyaKMR0Vv49
+         vainr7MZ8pa4UT7RJUI/B2P1Qe6gYKVZ8w4AqCGRFeiETqHvgnTFmr4mxK/6jh1y60/H
+         aTTjl8sDcIABOLyjHY+PxeU4db9egXGEQR1coYf4lAnHeiHd6AsZSuHsXd7+h8klNJsH
+         HGCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV3/mvUwkSLOCvRHgKeK+eZg/s58sW94yQEr0YuMgmiZkjzvXAfaqYNa0N90zhqzFohJdg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyN5fWBwLsjQcR8xcd8kf3f14iGUi/C0OhfBVZBirjLRFEK9idA
+	MEIvWtpIaQq+MfXze7xwtzhjItwY5NMgVIMSUrM3p2wI2Oqgtk7pufqL
+X-Gm-Gg: AZuq6aIuGIZ3XN/WDC3BejS7Vo1N1N/UUlv6HDiQkwg2fTNb32Kl9OnWrJm0xSPzvUo
+	wHkmH0+kvj3mgNQVeSeNsQkx11APfzpwluRr9qbd7HwU3Oqk6//RUzBwOQua9fM9nsQLCLD4aT6
+	LOlahB/98d6D4xVwL/7OItDdfziDRRrheuRT2evRRy2hXGRASaFLEUfK6CB9VL3mHzpLDdS9aI1
+	8g893jYrKSxOTFj7BoilobkWnrz+AY53KKqFR+5IFeqHaG2gYpBiFx9zuDhXSD4Z0BXJzgvYfKw
+	DCp6jzPBnpLesyG4maVkoyBf5z8d2VCNCdPsArV9cPIeGwcAnqOeY/l5thI/RKw4sEUxgCU2Y55
+	T5p7VTaUXEGIa10nNUJ0eLtVeRhe+OktwYrefsZZ8dRixMkSeAOULT66PsHQy
+X-Received: by 2002:a05:6000:2f83:b0:435:a815:dd81 with SMTP id ffacd0b85a97d-4362933be7fmr2912739f8f.11.1770367396449;
+        Fri, 06 Feb 2026 00:43:16 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::b44f])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4362972fc1bsm4345367f8f.28.2026.02.06.00.43.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Feb 2026 00:43:16 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 6 Feb 2026 09:43:14 +0100
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>
+Subject: Re: [RFC bpf-next 08/12] libbpf: Add btf__find_by_glob_kind function
+Message-ID: <aYWpotJVLSZdiZgG@krava>
+References: <20260203093819.2105105-1-jolsa@kernel.org>
+ <20260203093819.2105105-9-jolsa@kernel.org>
+ <CAEf4BzY7zZmEqFq577NiG2wh0aU0_og1_RjVSURjaqTOnTc-Bw@mail.gmail.com>
+ <aYRbbL-QCnAZ6PGD@krava>
+ <CAEf4BzbzrPemyBe0xtEwuxG8d-JUC+Dd+B412VBLLAui=88LEw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN7PR11MB7540:EE_|LV8PR11MB8582:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff9a766c-50a5-4b96-8165-08de655ad731
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|366016|1800799024|10070799003;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?ZqdpDkpbDEsdsyhSkopD/i3EtcnE7m8AnJa9Dq+RgqpvGnCNOOpDub6Z4hDI?=
- =?us-ascii?Q?Czgj0eAgPrLNRFtI/YAgwgIQxBshxkGGDo/IJUHUJkYDcbc2hoCZTPrJi/xb?=
- =?us-ascii?Q?r6tUz+A5106C+477lL011C9j8BPvlx6NehLzObekJnsg7nlKAZ009zvbKtVu?=
- =?us-ascii?Q?Xz66+LbgmgPCO8lUlJ/4UrrY4lBJADC/6evDDunConuTL/uHq3344zcf0+Ab?=
- =?us-ascii?Q?FSROeZXMaKX5NyuRxJO2qvdVemVNlrzV1bCczqxDT2hc5+Etx3nIG9mAQVL6?=
- =?us-ascii?Q?QIjK8VAk7x0r0IwiF/jlHk6kXbjLjZMl7kMwfnsSAVW5vQhET372kN81WYg1?=
- =?us-ascii?Q?zO5VP+XFJYfhXpBHypZnZosg4duNDjM59AcX4LtPKYtAp5AESj6tWqvnf+0N?=
- =?us-ascii?Q?0lxltjidtGDvUVgSkbHP4XdWnz3RBCsJeYX91De2+cU4ycIjD0YBj15Q18lb?=
- =?us-ascii?Q?dvxH0Ag0lFhLh8oNnHFF8FXoXGxtRA9Hqp2rPMx7qVBFaLlVGeo3XlSoEYEn?=
- =?us-ascii?Q?k8g+lWLU5k+JEe2JUthglPpf4gMhW0bkQtWpOwJy0Yk9LKB9Difcz8fl5Zbl?=
- =?us-ascii?Q?++REx4ei3VwRefN5HbJrebmLsVkLC1u89JxjwUsCJtg0KXXa8AwRJ5KaJmOr?=
- =?us-ascii?Q?j7+iIBx/0MV9A159Ye9GDQfANEBh0Wchi8Gwu8DmtfvTQEZM8gKYceqt6iwX?=
- =?us-ascii?Q?bue20yJGfS2xx5Dh2CH1tqJgsR1vx0TQjpcVyMPOoheWMj9rhqSMY5EBxZmH?=
- =?us-ascii?Q?fURXqunqCxrqHuu4GVWqHttrUry1xT/mCgxwvz3XuqoIA6K/A0Gdudd6ltA7?=
- =?us-ascii?Q?otEsT+bR4P9ezAvGPLCg9kTVDAC9D8Y4JEMM8lU5QL3lotjZ/YBoqeAC5mig?=
- =?us-ascii?Q?v93UQyDAI67DiTspLvrQ4pEJ/QPSbCzlgbqKOR5D51o46hP+7p8klFeDbTnK?=
- =?us-ascii?Q?Z8q3mBmPxOSUHLN5Kb+IqH+z3pM6IVhDUtVotjxnpDFg9i2f49fGDxSmVcqT?=
- =?us-ascii?Q?susTQ01BCHRPrDMsirbYS4/v+KHKLXOB4qO5azQ53KpeS0IVIrRVS0Fh78IF?=
- =?us-ascii?Q?kUVuq79H4AsmanLzAdnL9irFxk4DEXEm/909HrnvTLr+MuP3AD4DNWc/nrUP?=
- =?us-ascii?Q?5wy5SzkJ+8vdfwownRzfvdLUg2DnXRfuW1H3lMkFMCIOmZbYysNxeduZ4QBD?=
- =?us-ascii?Q?ugABSW3Oy2rUHJzA10wDVLZUOXQrhetrt98JVCYkOOA2Fks48NfjrvIs7oOi?=
- =?us-ascii?Q?s/U7NBTpP6ukh3ORxnZSOrh5eBexRSLWYlMlhqVUe1jmly9YDufLdWFnMmgk?=
- =?us-ascii?Q?mOPNHjnbXyeCMwmytuG/Y+HtM7CGYF2LY+IvhWB6FnEYxdt9bAoRNk0ZPIZt?=
- =?us-ascii?Q?MVbPXh5nWG1ytkPG0/q70GJ28BfhZF8cFHKP8KhL69cXIo9FH2eKGggeXE25?=
- =?us-ascii?Q?DQXAsHoT6D/JXY+C5eLadvxxzGA9PkFQ0jL5/BtzjnkN6s8nzykFimgmcTrT?=
- =?us-ascii?Q?psqqaIikeNEK16cNFfhxplfjdzVb6xZxFGMOhr5McN+63g7mRD4KM86oS/dy?=
- =?us-ascii?Q?Zy7DK7oObLu0PRSx6pk=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(10070799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5u6dh2zHKfjWhUdgJ9GzEgLH5VvjcpD5u7A18jVlAjaDkE/5UH3UBGEhQ9ii?=
- =?us-ascii?Q?6hJF/R2EK2pgs0MqyGXJkipnxbGKRmZ47FMp6qGJw8wXH7fleI0rhaMqvRXR?=
- =?us-ascii?Q?4NQfEQI96luXXt71BSMYTYnAIzVGDrGqZwZFcHTJRR2EmeoR8hDTKcY+UY9i?=
- =?us-ascii?Q?005H5UhgQACafxqsqOmO9F+pvaBj6zZUGI5JIiUWddncLmxIcfuYuNWWpE+K?=
- =?us-ascii?Q?SmxuPY0fwLxqZE9BttpVoJdZgNIFUQbbTjvUUml6Rl7Y/nXc/oX74y5TOVW2?=
- =?us-ascii?Q?UfQLpJJaXcGmFxFw7fxBqcm9raaSEBm36NlQsrR89dIDjRztInUv4+0bmyiQ?=
- =?us-ascii?Q?R4MATAV4vqsZsCyq56PEf97VLWULR3G19ZIaJ+zTlYEjFSLVp0bQiHsTPQsh?=
- =?us-ascii?Q?L6kXvqTbHcwyBpuc4+25CvXLHbAY4S7yzZ9mK7i6abv/Nttd9TBkZsQmbkgH?=
- =?us-ascii?Q?XV5WfOyXpSdEFwWCQTzKcj4Bvtnr5XOIo8ZtdZJcIOH2xu58A4MX6UaQQ85/?=
- =?us-ascii?Q?486P90NZhw7V6/nvyok4NeRM5tn0NkXlgNlwsCyxJYk1H2EAUMOv/vhrDahz?=
- =?us-ascii?Q?KOOxQDQiyeUHs2L5HcJQBVbC1177PXUX1fYnXMc9h4Q+RDhUnEyFq6LoI/QG?=
- =?us-ascii?Q?W7tb61jbukrHZd1cxfge5eoV9OXWStR8ss3bQirjOZ6FePGdOHzQk/G6Jbfp?=
- =?us-ascii?Q?r4ONmsmLTZTJs1T5cCGvi4dTu8DquT4RU1klhvCtpV6rd1S2s3GtiB309HjR?=
- =?us-ascii?Q?hXKqai8ixeeKeqN4mwcZW4J1Y8jPpAY4h+t99VpV9gGkZe7uwrLzpsUTr96C?=
- =?us-ascii?Q?ft+JyLXxJ5eTwZX4mH7QpSYzxMDFuRKcGnO2UnekLa9b8uTZxAwNJuNQivcX?=
- =?us-ascii?Q?xMhUQQdg95qczV+2kc45tgaglAtVLkBnE/QDg8UxFj39h8siLmZVnwyYC4qf?=
- =?us-ascii?Q?t1unxnzgdFxCsQaHJ0/msrBkoYA+uzHf155xYQJYqj5Ya7RcepfJHoSBRhky?=
- =?us-ascii?Q?kYIXFJEft4WT2GNST7H0oztlAv0KUIrCGDHkSmz4Y37bQ58C0fTGuGnZjRed?=
- =?us-ascii?Q?tdOD1bdkU8PIARyh2TpHskWoemjQt4ZNIj+wh5nZ22XnDm6PnG1Qa1b+BSI/?=
- =?us-ascii?Q?w0vtZK0Hutpbsplolt67ajSLPNfIztXngA5fPTLeaicE2gZKkVnxsg8gRCrK?=
- =?us-ascii?Q?A4umCFomYMpV1SRo1cZszE8tyx9GBJaxlQvWB5emBXJuyX3NN8XwGGABIBJQ?=
- =?us-ascii?Q?/8Om5BTFjmJmuM5q8lSl16emTXGnOLlUFl5c1cAMUXRJctV6aXPpapDcwxgm?=
- =?us-ascii?Q?fQXEDH56/I38otXhjD7X//tPosHUJaZrXOurZ72JRyXkXYY+z+4LUw836jcY?=
- =?us-ascii?Q?fuUZ7sQXh4nBgLu47iMZgle/Uy8Z8v+CG0bee3bKNOFeMNtLWQMA2XtZ+qDr?=
- =?us-ascii?Q?Z29j5goRZMED4/3S81sJIM9mRh1GJlC2YbgwtS6RuzkwZgUejr+gkgv1zTte?=
- =?us-ascii?Q?X+TjwXz82+hYQExLBIUo0CrDgaMxZKn+CxptAuABiFPsGG2XfCcGq6sWxIBu?=
- =?us-ascii?Q?zqKcMU8O/2RmH3jrpAtKSEAT6F6D6ly8fihHSJIXpI/z5GO7JlM+3gQ663U8?=
- =?us-ascii?Q?lpGkptiL3+LnX/OI1A5/wNB4KAK1NUsENqAzHiupXG3vAEwoA9ONL/CQ6gCd?=
- =?us-ascii?Q?la3d+XTZOh6wkAm9/XgaGIG3kDx03Gi3P+yhGMDRDFy1BOF+w6cwrdEgqmwj?=
- =?us-ascii?Q?9uHBQZ2LZbXIj3kFfOz7VVDP+M+QO6dxgJiKmzrnGRT1Oo4m5x9aU0nQfSFz?=
-X-MS-Exchange-AntiSpam-MessageData-1: XZO0SZUSoJFd5tPyLg15bRlu9xonZc+Ud9E=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff9a766c-50a5-4b96-8165-08de655ad731
-X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7540.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Feb 2026 08:36:36.7780
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qyRGQf5P2RfJhXu1yousINPJ6Tw9zy7KiKSGtW3nqANAeaza6khYxO/pvzyUd6FfVO3BIusjK0uDvvJo6fnCp4dA/bkX9emC04bf/Ca4E28=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR11MB8582
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzbzrPemyBe0xtEwuxG8d-JUC+Dd+B412VBLLAui=88LEw@mail.gmail.com>
 
-On Thu, Feb 05, 2026 at 05:54:08PM -0800, Jakub Kicinski wrote:
-> On Thu, 5 Feb 2026 15:40:46 +0200 Vladimir Oltean wrote:
-> > > > I mean, it should "work" given the caveat that calling bpf_xdp_adjust_tail()
-> > > > on a first-half page buffer with a large offset risks leaking into the
-> > > > second half, which may also be in use, and this will go undetected, right?
-> > > > Although the practical chances of that happening are low, the requested
-> > > > offset needs to be in the order of hundreds still.  
-> > > 
-> > > Oh, I did get carried away there...
-> > > Well, one thing is shared page memory model in enetc and i40e, another thing is
-> > > xsk_buff_pool, where chunk size can be between 2K and PAGE_SIZE. What about
-> > > 
-> > > tailroom = rxq->frag_size - skb_frag_size(frag) -
-> > >            (skb_frag_off(frag) % rxq->frag_size);
-> > > 
-> > > When frag_size is set to 2K, headroom is let's say 256, so aligned DMA write
-> > > size is 1420.
-> > > last frag at the start of the page: offset=256, size<=1420
-> > >     tailroom >= 2K - 1420 - 256 = 372
-> > > last frag in the middle of the page: offset=256+2K, size<=1420
-> > >     tailroom >= 2K - 1420 - ((256 + 2K) % 2K) = 372
-> > > 
-> > > And for drivers that do not fragment pages for multi-buffer packets, nothing
-> > > changes, since offset is always less than rxq->frag_size.
-> > > 
-> > > This brings us back to rxq->frag_size being half of a page for enetc and i40e,
-> > > and seems like in ZC mode it should be pool->chunk_size to work properly.  
-> > 
-> > With skb_frag_off() taken into account modulo 2K for the tailroom
-> > calculation, I can confirm bpf_xdp_frags_increase_tail() works well for
-> > ENETC. I haven't fully considered the side effects, though.
+On Thu, Feb 05, 2026 at 02:45:14PM -0800, Andrii Nakryiko wrote:
+> On Thu, Feb 5, 2026 at 12:57 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Wed, Feb 04, 2026 at 11:04:09AM -0800, Andrii Nakryiko wrote:
+> > > On Tue, Feb 3, 2026 at 1:39 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > > >
+> > > > Adding btf__find_by_glob_kind function that returns array of
+> > > > BTF ids that match given kind and allow/deny patterns.
+> > > >
+> > > > int btf__find_by_glob_kind(const struct btf *btf, __u32 kind,
+> > > >                            const char *allow_pattern,
+> > > >                            const char *deny_pattern,
+> > > >                            __u32 **__ids);
+> > > >
+> > > > The __ids array is allocated and needs to be manually freed.
+> > > >
+> > > > The pattern check is done by glob_match function.
+> > > >
+> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > > ---
+> > > >  tools/lib/bpf/btf.c | 41 +++++++++++++++++++++++++++++++++++++++++
+> > > >  tools/lib/bpf/btf.h |  3 +++
+> > > >  2 files changed, 44 insertions(+)
+> > > >
+> > > > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> > > > index 83fe79ffcb8f..64502b3ef38a 100644
+> > > > --- a/tools/lib/bpf/btf.c
+> > > > +++ b/tools/lib/bpf/btf.c
+> > > > @@ -1010,6 +1010,47 @@ __s32 btf__find_by_name_kind(const struct btf *btf, const char *type_name,
+> > > >         return btf_find_by_name_kind(btf, 1, type_name, kind);
+> > > >  }
+> > > >
+> > > > +int btf__find_by_glob_kind(const struct btf *btf, __u32 kind,
+> > > > +                          const char *allow_pattern, const char *deny_pattern,
+> > > > +                          __u32 **__ids)
+> > > > +{
+> > > > +       __u32 i, nr_types = btf__type_cnt(btf);
+> > > > +       int cnt = 0, alloc = 0;
+> > > > +       __u32 *ids = NULL;
+> > > > +
+> > > > +       for (i = 1; i < nr_types; i++) {
+> > > > +               const struct btf_type *t = btf__type_by_id(btf, i);
+> > > > +               const char *name;
+> > > > +               __u32 *p;
+> > > > +
+> > > > +               if (btf_kind(t) != kind)
+> > > > +                       continue;
+> > > > +               name = btf__name_by_offset(btf, t->name_off);
+> > > > +               if (!name)
+> > > > +                       continue;
+> > > > +
+> > > > +               if (deny_pattern && glob_match(name, deny_pattern))
+> > > > +                       continue;
+> > > > +               if (allow_pattern && !glob_match(name, allow_pattern))
+> > > > +                       continue;
+> > > > +
+> > > > +               if (cnt == alloc) {
+> > > > +                       alloc = max(16, alloc * 3 / 2);
+> > > > +                       p = libbpf_reallocarray(ids, alloc, sizeof(__u32));
+> > > > +                       if (!p) {
+> > > > +                               free(ids);
+> > > > +                               return -ENOMEM;
+> > > > +                       }
+> > > > +                       ids = p;
+> > > > +               }
+> > > > +               ids[cnt] = i;
+> > > > +               cnt++;
+> > > > +       }
+> > > > +
+> > > > +       *__ids = ids;
+> > > > +       return cnt;
+> > > > +}
+> > > > +
+> > > >  static bool btf_is_modifiable(const struct btf *btf)
+> > > >  {
+> > > >         return (void *)btf->hdr != btf->raw_data;
+> > > > diff --git a/tools/lib/bpf/btf.h b/tools/lib/bpf/btf.h
+> > > > index b30008c267c0..d7b47bb0ba99 100644
+> > > > --- a/tools/lib/bpf/btf.h
+> > > > +++ b/tools/lib/bpf/btf.h
+> > > > @@ -661,6 +661,9 @@ static inline struct btf_decl_tag *btf_decl_tag(const struct btf_type *t)
+> > > >         return (struct btf_decl_tag *)(t + 1);
+> > > >  }
+> > > >
+> > > > +int btf__find_by_glob_kind(const struct btf *btf, __u32 kind,
+> > > > +                          const char *allow_pattern, const char *deny_pattern,
+> > > > +                          __u32 **__ids);
+> > >
+> > >
+> > > as AI pointed out, this should be an internal helper, no? Let's also
+> > > not use double underscore pattern here,
+> > > "collect_btf_ids_by_glob_kind()" perhaps?
+> >
+> > ok
+> >
+> > >
+> > > Also, you don't seem to be using deny_pattern, where you planning to?
+> >
+> > the tests are just rudimentary before we agree we want to do it this way
+> >
+> > but I'm not sure I have a usecase for deny_pattern.. I think we added it
+> > just to be complete, I recall we copied that function from somewhere,
+> > it's long time ago ;-)
+> >
+> > >
+> > > Also, are there functions that we'll have BTF for, but they won't be
+> > > attachable? What if I do SEC("fentry.multi/*")? Will it attach or fail
+> > > to attach some functions (and thus fail the overall attachment)?
+> >
+> > yes, for the benchmark tests I had to add is_allowed_func which mimics
+> > btf_distill_func_proto and denies attach for some functions
+> >
+> > also I had to filter out some core kernel functions like rcu*,trace*,..
+> > which seemed to cause trouble when you attach them
 > 
-> +1, also seems to me like it would work tho I haven't thought thru all 
-> the cases. We do need to document and name things well, tho, 'cause
-> subtleties are piling up ;) Maybe it's time for an ASCII art
-> for xdp layout?
->
+> So the question I'm implying here is if libbpf should do what we do
+> for kprobes: use libbpf_available_kprobes_parse and intersect?
 
-Yeah, for AF_XDP mbuf in i40e we actually recently discovered another 
-buffer-size-calculation-related issue, so some visual aid would be useful. I 
-will think about how it should look.
- 
-> FWIW my feeling is that instead of nickel and diming leftover space 
-> in the frags if someone actually cared about growing mbufs we should
-> have the helper allocate a new page from the PP and append it to the
-> shinfo. Much simpler, "infinite space", and works regardless of the
-> driver. I don't mean that to suggest you implement it, purely to point
-> out that I think nobody really uses positive offsets.. So we can as
-> well switch more complicated drivers back to xdp_rxq_info_reg().
-> 
+right, I think it's good idea.. and in addition (just for patterns) we would
+filter out functions that:
 
-As Vladimir has mentioned, if the driver does not use header split, frags will 
-have a tailroom of a size of skb_shared_info, so tail growing does work in 
-practice.
+  - won't attach (is_allowed_func == false)
+  - might cause problems (rcu*,trace*), maybe for that we could have
+    opts config bool
 
-Allocating a page_pool buffer (given XDP queue has one attached) is certainly an 
-option, although I am not sure if anyone needs it. Furthermore, growing tail 
-would still fail for a single-buf case.
+jirka
