@@ -1,166 +1,152 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C673D3EF0C2;
-	Fri,  6 Feb 2026 14:14:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C685F3624C2
+	for <bpf@vger.kernel.org>; Fri,  6 Feb 2026 14:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770387292; cv=none; b=gEOtCWQB9ggTKs2zldX2HrPngnkEiqKBDCJYDnpgidqne8SBs1KX0pjr6b5BSmOsPA1mLO5V9bFPsLG1oYaa6++w3kNavG83oA2P4jKbgcCfuY0LdiN8phW2lGod5gj+UyfdZ6wmKhUrU0PToWLMKiux0/0t6FEViLWk+YzAwOQ=
+	t=1770387600; cv=none; b=pzwN15Dxw6LDIhwLX+OWFeOV+eBeKtrPdlEQn4cyfBBeIE9HNPGJn8dJZLec9SftVYi5Buc9NimZ02AZUsNZEBI3TJ4SAp+QWrwdV1Vge08mdoo+KERwyit0dixcs3v4c860hPcVkYrlUHEdt2Cq7tBIRA0ym8y7XT5gTnkontA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770387292; c=relaxed/simple;
-	bh=sdRRT+SBk1wu0tv1Ig3EjPncHzNUEQZl7cQ0SQTz2lk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fMRPbgV2eq5Ev5oU3KsnEoKlnSiPfc+96boAiw37nW6ZGtG/4Cb6JvlUVSv62xwdDmbkcsgxhL0QHn/f6z6ployaw/i8BF8XN2lnDX07Hh2f6WVvW3tcykdhf5joT6qN9Ko3ZJjFN3kGu364rOyLzoizKfd1jOVMM8agyz12KKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UtY6Pa4i; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UtY6Pa4i"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E95E7C19421;
-	Fri,  6 Feb 2026 14:14:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770387292;
-	bh=sdRRT+SBk1wu0tv1Ig3EjPncHzNUEQZl7cQ0SQTz2lk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UtY6Pa4iRbUGTCHrQV1Emxn3dyaUTIVjXT8pyPCe+1uF9XrKZ7DJOjkL/dGlQ3h6b
-	 4t5ElPj7bYm/khLMAxOGih8yWLvNmj392O9AesL9M5XOK93gsj79i51rxLtLYiUlxS
-	 Zjeet9pEshne7JLqmfwn27hP5D412PRUe26mJAtVOwudywTfepWMfrnYsWSLqlHkeD
-	 hQnftOOXrl6u8T7yxMz0HNCpStVxbqy5PWBszfXrs5CnrDaReeB9xY9aylapsvKpWZ
-	 18r/EcAXNqyARNdDBxI3o143nXawdJuAJpA576IvMxERafg3KiFiM8DJ9HQLIniEPO
-	 rI30+p4m/wNLw==
-Message-ID: <26e54152-e576-4292-b6ba-d50cf7cc8aa2@kernel.org>
-Date: Fri, 6 Feb 2026 15:14:47 +0100
+	s=arc-20240116; t=1770387600; c=relaxed/simple;
+	bh=xi6G1Az0UC6YWfZAbbIubg49oP1VqI2yvisqfCVFi0s=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=qLTVJJbZXu6ZlnbJizP58YQ252AU60ygW3jpfKENzwlSSXEnNtfYAg9W0Ik5/AyARZ3js65UWKpx0zguSa4uYyfhM3xfd8Rx2NqKEuHYpIVqFyVHtLnDoFQxDiGkU0XcczNtWOXKSheKEbQQboYq5OjepLQHgUnIAVrddcm8S5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.160.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-4041ef81d01so9555497fac.0
+        for <bpf@vger.kernel.org>; Fri, 06 Feb 2026 06:19:59 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770387598; x=1770992398;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jaVjok5OMEjS3WxdyJKtpu7BpoJXJurtEfcq0KQRMp4=;
+        b=KYCCxc10QRe4kSLcCF/pPfCnJZvknt1xSMfzBvtwTuxcXTDI23HM+ZKI3pQmZn6Kfd
+         55Tln4M8go+fnIWIHVmi2RMhMjGeMMD2ujN6ljJ+soLp791A/0lmGl6gP4BIhVBE5HP6
+         DD28iJ68eescuN19HOt3VaYNotWV0HIETtA7JwXVQ9GyjQd/rfXdi27vN+O1JUkywMA2
+         RWnLDVkPoI6YmAkEQhLmLTkwVKUHqRzpKHxKOXcdQiPcC9Srdn89sD9tso7G6jLRD6lc
+         rr5rnVIs1RuqDbVG0BurFHLYy+AF4SNA8TN9vIv5MSTtf28WZlerHs2PkqW3l7ukVZg6
+         HCyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXnEw6VVl9HAInxY6mbynCaSGK2tSFa+Z9xIF/RB9bWCZwxXofmV/d7Cub+0B3/Cxrp864=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVgVQ42G4GsKR38s4/k3j/lTYB0CEtcOHb+gYLtf16zp+wMT8G
+	HNi7QAJ+vKHPdUYYhSKf+3Y2hl0rwoiDeCeFsYNsvOFTUsS9ZN0xD8UbpTmEhlARU7iVLOmLURh
+	5+2HmX7bfV0UDs15Ec4LmWuLttgp5Qp/frh1pYemZ82zEeNo/+qNBu7A2xNg=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 1/6] net: sched: introduce qdisc-specific drop
- reason tracing
-To: atenart@redhat.com, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
- <toke@redhat.com>, netdev@vger.kernel.org,
- Eric Dumazet <eric.dumazet@gmail.com>, Paolo Abeni <pabeni@redhat.com>
-Cc: bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, horms@kernel.org,
- jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
- jhs@mojatatu.com, carges@cloudflare.com, kernel-team@cloudflare.com,
- "David S. Miller" <davem@davemloft.net>
-References: <177032644012.1975497.16411100029657607833.stgit@firesoul>
- <177032649028.1975497.12663177216553780756.stgit@firesoul>
- <87sebez099.fsf@toke.dk>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <87sebez099.fsf@toke.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6820:210b:b0:657:4733:dde with SMTP id
+ 006d021491bc7-66d09cb2bbamr1355342eaf.8.1770387598624; Fri, 06 Feb 2026
+ 06:19:58 -0800 (PST)
+Date: Fri, 06 Feb 2026 06:19:58 -0800
+In-Reply-To: <20260206090653.1336687-1-chen.dylane@linux.dev>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6985f88e.a00a0220.37c87e.0037.GAE@google.com>
+Subject: [syzbot ci] Re: bpf: Add preempt disable for bpf_get_stack
+From: syzbot ci <syzbot+ci51bd138098766aea@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	chen.dylane@linux.dev, daniel@iogearbox.net, eddyz87@gmail.com, 
+	haoluo@google.com, john.fastabend@gmail.com, jolsa@kernel.org, 
+	kpsingh@kernel.org, linux-kernel@vger.kernel.org, martin.lau@linux.dev, 
+	sdf@fomichev.me, song@kernel.org, yonghong.song@linux.dev
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+syzbot ci has tested the following series
+
+[v2] bpf: Add preempt disable for bpf_get_stack
+https://lore.kernel.org/all/20260206090653.1336687-1-chen.dylane@linux.dev
+* [PATCH bpf-next v2 1/2] bpf: Add preempt disable for bpf_get_stack
+* [PATCH bpf-next v2 2/2] bpf: Add preempt disable for bpf_get_stackid
+
+and found the following issue:
+WARNING in preempt_count_sub
+
+Full report is available here:
+https://ci.syzbot.org/series/90d08df2-d19d-404f-b9dd-c201605b83a2
+
+***
+
+WARNING in preempt_count_sub
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      1ace9bac1ad2bc6a0a70baaa16d22b7e783e88c5
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/64881591-241a-4854-9beb-1f691566835c/config
+C repro:   https://ci.syzbot.org/findings/98f347c8-b879-4c85-829b-a20ef900e645/c_repro
+syz repro: https://ci.syzbot.org/findings/98f347c8-b879-4c85-829b-a20ef900e645/syz_repro
+
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(val > preempt_count())
+WARNING: kernel/sched/core.c:5751 at preempt_count_sub+0x9e/0x170 kernel/sched/core.c:5751, CPU#0: syz.0.17/5991
+Modules linked in:
+CPU: 0 UID: 0 PID: 5991 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+RIP: 0010:preempt_count_sub+0xa5/0x170 kernel/sched/core.c:5751
+Code: 05 cf 8f 48 c1 e8 03 0f b6 04 18 84 c0 0f 85 88 00 00 00 83 3d ef 21 3d 0e 00 75 13 48 8d 3d b2 f3 3f 0e 48 c7 c6 a0 fe 8b 8b <67> 48 0f b9 3a 90 eb b8 90 e8 5d ab 03 03 85 c0 74 2f 48 c7 c0 a4
+RSP: 0018:ffffc90004437bc8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: dffffc0000000000 RCX: ffff8881746f8000
+RDX: 0000000000000000 RSI: ffffffff8b8bfea0 RDI: ffffffff8fd1d770
+RBP: ffffc90004437cd0 R08: ffffffff8fcf05a3 R09: 1ffffffff1f9e0b4
+R10: dffffc0000000000 R11: fffffbfff1f9e0b5 R12: dffffc0000000000
+R13: 1ffff92000886f84 R14: 0000000000000000 R15: 0000000000000000
+FS:  000055557d481500(0000) GS:ffff88818e328000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f1f89c706c0 CR3: 00000001742f0000 CR4: 00000000000006f0
+Call Trace:
+ <TASK>
+ bpf_prog_test_run_raw_tp+0x4b9/0x6c0 net/bpf/test_run.c:794
+ bpf_prog_test_run+0x2c7/0x340 kernel/bpf/syscall.c:4721
+ __sys_bpf+0x643/0x950 kernel/bpf/syscall.c:6246
+ __do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6339
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f1f89d9acb9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fff9e3fd488 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007f1f8a015fa0 RCX: 00007f1f89d9acb9
+RDX: 000000000000000c RSI: 0000200000000500 RDI: 000000000000000a
+RBP: 00007f1f89e08bf7 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f1f8a015fac R14: 00007f1f8a015fa0 R15: 00007f1f8a015fa0
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	05 cf 8f 48 c1       	add    $0xc1488fcf,%eax
+   5:	e8 03 0f b6 04       	call   0x4b60f0d
+   a:	18 84 c0 0f 85 88 00 	sbb    %al,0x88850f(%rax,%rax,8)
+  11:	00 00                	add    %al,(%rax)
+  13:	83 3d ef 21 3d 0e 00 	cmpl   $0x0,0xe3d21ef(%rip)        # 0xe3d2209
+  1a:	75 13                	jne    0x2f
+  1c:	48 8d 3d b2 f3 3f 0e 	lea    0xe3ff3b2(%rip),%rdi        # 0xe3ff3d5
+  23:	48 c7 c6 a0 fe 8b 8b 	mov    $0xffffffff8b8bfea0,%rsi
+* 2a:	67 48 0f b9 3a       	ud1    (%edx),%rdi <-- trapping instruction
+  2f:	90                   	nop
+  30:	eb b8                	jmp    0xffffffea
+  32:	90                   	nop
+  33:	e8 5d ab 03 03       	call   0x303ab95
+  38:	85 c0                	test   %eax,%eax
+  3a:	74 2f                	je     0x6b
+  3c:	48                   	rex.W
+  3d:	c7                   	.byte 0xc7
+  3e:	c0                   	.byte 0xc0
+  3f:	a4                   	movsb  %ds:(%rsi),%es:(%rdi)
 
 
+***
 
-On 06/02/2026 10.31, Toke Høiland-Jørgensen wrote:
-> Jesper Dangaard Brouer <hawk@kernel.org> writes:
-> 
->> Create new enum qdisc_drop_reason and trace_qdisc_drop tracepoint
->> for qdisc layer drop diagnostics with direct qdisc context visibility.
->>
->> The new tracepoint includes qdisc handle, parent, kind (name), and
->> device information. Existing SKB_DROP_REASON_QDISC_DROP is retained
->> for backwards compatibility via kfree_skb_reason().
->>
->> Convert FQ, FQ_CoDel, CoDel, SFB, and pfifo_fast to use the new
->> infrastructure.
->>
->> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
-[...]
->> diff --git a/include/net/dropreason-core.h b/include/net/dropreason-core.h
->> index a7b7abd66e21..3d8d284e05c8 100644
->> --- a/include/net/dropreason-core.h
->> +++ b/include/net/dropreason-core.h
->> @@ -68,12 +68,6 @@
->>   	FN(SECURITY_HOOK)		\
->>   	FN(QDISC_DROP)			\
->>   	FN(QDISC_BURST_DROP)		\
->> -	FN(QDISC_OVERLIMIT)		\
->> -	FN(QDISC_CONGESTED)		\
->> -	FN(CAKE_FLOOD)			\
->> -	FN(FQ_BAND_LIMIT)		\
->> -	FN(FQ_HORIZON_LIMIT)		\
->> -	FN(FQ_FLOW_LIMIT)		\
->>   	FN(CPU_BACKLOG)			\
->>   	FN(XDP)				\
->>   	FN(TC_INGRESS)			\
->> @@ -371,8 +365,10 @@ enum skb_drop_reason {
->>   	/** @SKB_DROP_REASON_SECURITY_HOOK: dropped due to security HOOK */
->>   	SKB_DROP_REASON_SECURITY_HOOK,
->>   	/**
->> -	 * @SKB_DROP_REASON_QDISC_DROP: dropped by qdisc when packet outputting (
->> -	 * failed to enqueue to current qdisc)
->> +	 * @SKB_DROP_REASON_QDISC_DROP: dropped by qdisc during enqueue or
->> +	 * dequeue. More specific drop reasons are available via the
->> +	 * qdisc:qdisc_drop tracepoint, which also provides qdisc handle
->> +	 * and name for identifying the source.
-> 
-> IIUC, this is not needed, see below:
-> 
-> [...]
-> 
->> @@ -37,6 +37,24 @@
->>   const struct Qdisc_ops *default_qdisc_ops = &pfifo_fast_ops;
->>   EXPORT_SYMBOL(default_qdisc_ops);
->>   
->> +void tcf_kfree_skb_list(struct sk_buff *skb, struct Qdisc *q,
->> +			struct netdev_queue *txq,
->> +			struct net_device *dev)
->> +{
->> +	while (unlikely(skb)) {
->> +		struct sk_buff *next = skb->next;
->> +		enum qdisc_drop_reason reason = tcf_get_qdisc_drop_reason(skb);
->> +
->> +		prefetch(next);
->> +		/* Catch wrong enum: skb_drop_reason vs qdisc_drop_reason */
->> +		WARN_ON_ONCE(reason && reason < __QDISC_DROP_REASON);
->> +		trace_qdisc_drop(q, txq, dev, skb, reason);
->> +		kfree_skb_reason(skb, SKB_DROP_REASON_QDISC_DROP);
-> 
-> AFAIU, the idea here is that you just pass the same 'reason' value to
-> kfree_skb_reason(). Because of the subsys shift and offset, these will
-> all be unique values, so anyone just watching the old tracepoint will
-> get QDISC_DROP_* reasons with no context, and if you want the context
-> you listen to the qdisc_drop tracepoint.
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
 
-I'm already changing this code in V3, as syzbot revealed that some
-existing skb_drop_reason's do arrive here, which is the TC filter drop
-reasons (SKB_DROP_REASON_TC_*).  We primarily need subsys encoding as
-we share the SKB->cb area.
-
-This is the new code, that pass 'reason' through:
-
-  /* TC classifier and qdisc share drop_reason storage.
-   * Check subsystem mask to identify qdisc drop reasons,
-   * else pass through skb_drop_reason set by TC classifier.
-   */
-  if ((reason & SKB_DROP_REASON_SUBSYS_MASK) == __QDISC_DROP_REASON) {
-  	trace_qdisc_drop(q, txq, dev, skb, reason);
-  	skb_reason = SKB_DROP_REASON_QDISC_DROP;
-  } else {
-  	skb_reason = (enum skb_drop_reason)reason;
-  }
-  kfree_skb_reason(skb, skb_reason);
-
-I do realize that the reason is now a unique value, that in principle
-could be passed through, *BUT* that will break existing userspace
-tools.  E.g. the `perf trace -e skb:kfree_skb` cannot decode these to
-strings. (The net/core/drop_monitor.c also need special handling.)
-I actually want to give userspace a *single* SKB_DROP_REASON_QDISC_DROP
-reason (that existing tools already knows).
-
-Leaking extra qdisc drop reasons is not helpful to consume as it is not
-actionable without knowing the qdisc. A QDISC_DROP_OVERLIMIT from FQ is
-very different from one in CAKE - knowing just the reason without the
-qdisc type/config is insufficient for debugging. The trace_qdisc_drop
-tracepoint provides both the reason AND the qdisc context together
-
-I've talked to our "consumer" tool developers and our plan is to try
-attach to new tracepoint, if that is successful we change the existing
-SKB_DROP_REASON_QDISC_DROP sampling rate to be zero.
-
-
---Jesper
+---
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
