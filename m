@@ -1,67 +1,33 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E4C52773C1;
-	Fri,  6 Feb 2026 15:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BD4826ED40;
+	Fri,  6 Feb 2026 15:21:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770390337; cv=none; b=tqQQKkj8v9buRhUNJYc0MiolMan2k3X7jrvGCXNoh3EnoS2q6J478TNo2Q68IC38GAJnfvl3Z/4i0dgh5GXzeW5/+yxPeoro0Kc5bPcdAh6A/nrh0QzhsMlpqohYy+VwbJeX/HdiijA774A8cqNyVsBZSPEudr9zR0sYeoXaa2E=
+	t=1770391304; cv=none; b=pFDt8JpbFuZIoLj6lBw2a7B+eLt7w3gYedH8RHDrt9I6PPd33PA+IsiavgjqES2XF6npPcIPWqyi/N1fL1caYfH10S6lFLnoNvsOouYxzqXDKF+8mzhKZ8zRH6+/YAjJ+yn55EqLpy777NNb3TA6cTaW1b4CqamrJpcGZYVNKVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770390337; c=relaxed/simple;
-	bh=kXhMEm/r43JQvzQR27AZQaknOuXzbKUJKXMj+QuKSns=;
+	s=arc-20240116; t=1770391304; c=relaxed/simple;
+	bh=TUuctS5iACsWdKHAPpxd3q5N9pvKwPqGOSSMlfwtrP0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=umPk+Sr0aAppP1jZM547R4xdTmmROrEyDLtHAVd69XFTJm6RoJChrSUCSvd4K99KmOmZq9IfYNNvxX8wImnwJgh2v3RhCGaaHe+egNnHCIft7yvePK6TbhZxDcgnj4a+4fM0sVKCW//uY5JnFY3IEcuoFiwe95rnUR9jW4+Xgi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=m0DmBTo1; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 In-Reply-To:Content-Type; b=UB/qLNLU2tXnc/z0zRu+Qt9cW8Alp+WwUf2XpnZECixBtuNdYJDg03uvBZc2n2UA2e96q1hgtlnrgDDJJNtF4fUNjbVhTIrFl45dqCvvCB2HkFRTzLYmgLbQgQM/cwoBmkKfiQqsSMn2JkQcNW0WKQONCdYn6nhUQ1Kxupczh1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C8JPupPL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="m0DmBTo1"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 616CIWC3025645;
-	Fri, 6 Feb 2026 15:04:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=/+NUvF
-	/1T7B6GCJR8b+rLpDCIKJcl6xd780xFLtfmXI=; b=m0DmBTo1W5nv4yaxXixnbz
-	FGA5S3DXkdp1bBcl2hHC+7LYI5aZGbS/EaipLdif3b50+7C14Akx4I5lq8W+mjSi
-	ImaF+BgmlSswRcEvr7bNE8p1fJTvwBZlZrRZpEVQquExDd+YYPpZx5wUGgo6FcrN
-	Z6JI/jUUMA8N7Fvuqd7EYsXaW+W3h15/JeRIwclBY4lF26vJKfTuJ1qwJQnqHevx
-	A5Lc0V6PnCw/j4a0XuQVSzEo5FSKMSrIvbXexf5Q74/D/g7Pemylo0AH/x3tbRU6
-	ROsDMecWHyC/7oN9xqTm62K994BZcV0IbpioEwMDiRHHaNjmzyu4BOsp1qRj41Gw
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19dtm1ep-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Feb 2026 15:04:52 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 616F3411011832;
-	Fri, 6 Feb 2026 15:04:51 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c19dtm1eh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Feb 2026 15:04:51 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 616DpKje027348;
-	Fri, 6 Feb 2026 15:04:50 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c1xs1pb67-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Feb 2026 15:04:50 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 616F4kgx50332134
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 6 Feb 2026 15:04:47 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CFC0820043;
-	Fri,  6 Feb 2026 15:04:46 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BC09820040;
-	Fri,  6 Feb 2026 15:04:44 +0000 (GMT)
-Received: from [9.111.140.182] (unknown [9.111.140.182])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri,  6 Feb 2026 15:04:44 +0000 (GMT)
-Message-ID: <a8274e59-4e7d-47ce-83dc-cfea5c61a45f@linux.ibm.com>
-Date: Fri, 6 Feb 2026 16:04:44 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C8JPupPL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD56CC116C6;
+	Fri,  6 Feb 2026 15:21:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770391303;
+	bh=TUuctS5iACsWdKHAPpxd3q5N9pvKwPqGOSSMlfwtrP0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=C8JPupPLdctogUO0DG858/BnV3dU9UDerbef9V4Xq7nfzNFRYIaMI2j0cpINidzzv
+	 Pk1RnIuh/2ALunTiE3vSe1I3LUK+PvjGM+UBwi4k45RXRUbcrDQ9ewTFIUFEsMyOnB
+	 JJ2MG+aaUWp3NkY03nCG4AQ8xjU4DbtOBGleDNnCebGA/x0KMTsXJiDmyzt0nn5Tx6
+	 vQv33Lvu84QRplRhLE9XeQoM1TfTv7npUj2/+Pb8MC38mdufCZKSjCQ9qNzQtkZzez
+	 VzxOO2/TyrBq2NWzbhJ5walzS9N21AS6nykFUkxp9vkvUzgMzTs1mZqf7owwxM/3tE
+	 e3zwQfM/xxfJQ==
+Message-ID: <007e93e8-ab52-45b3-8e06-107f1b02af0c@kernel.org>
+Date: Fri, 6 Feb 2026 16:21:38 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -69,140 +35,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 5/6] x86/vdso: Use CFI macros in
- __vdso_sgx_enter_enclave()
-To: Josh Poimboeuf <jpoimboe@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, x86@kernel.org, linux-mm@kvack.org,
-        Steven Rostedt <rostedt@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
-        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
-        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Michal Hocko
- <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-References: <20260203171958.1522030-1-jremus@linux.ibm.com>
- <20260203171958.1522030-6-jremus@linux.ibm.com>
+Subject: Re: [PATCH net-next RFC v1 0/3] net: sched: refactor qdisc drop
+ reasons into dedicated tracepoint
+To: Antoine Tenart <atenart@redhat.com>
+Cc: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ Jakub Kicinski <kuba@kernel.org>, Eric Dumazet <eric.dumazet@gmail.com>,
+ netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org, horms@kernel.org,
+ jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
+ jhs@mojatatu.com, carges@cloudflare.com, kernel-team@cloudflare.com
+References: <177022452988.1827734.5121740962985640333.stgit@firesoul>
+ <20260204190417.110f5498@kernel.org>
+ <2e1eb11c-cd47-4772-baff-45d43d4fa539@kernel.org> <877bsr1l1h.fsf@toke.dk>
+ <CADCXZ1yMkZbRd7ioGw5QQ61OdmYp6misUDoj-s-g7wuoiCHKbg@mail.gmail.com>
+ <87v7gbz1ru.fsf@toke.dk>
+ <CADCXZ1z-gg_VsN4kjf325HvWRxL1irhUC76B_erggm5+A7qQ7g@mail.gmail.com>
+ <41da26a6-4024-461f-8254-ac5dcf231397@kernel.org>
+ <CADCXZ1wMxCN3B-c+x4SgqC7H-Wap=e_sJ_hu-2B+96b=ip9OVQ@mail.gmail.com>
 Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260203171958.1522030-6-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA2MDEwNyBTYWx0ZWRfX74+yGx2tRSMH
- WC5yeiqpYSi0SmiON4O+jYZFhZvj8KbYVCx9Zv5CyH/+pm413HJArNIA559F7TOig3PQWjyluKC
- uRxJsh5Qf4ScNPiJTBRqcS8reZbuwv0Pstpl8nNmbWZoPkY13IY3l96Lu6QfvhWHD6nxKhR0qb+
- kVSzQSEyp8GaHT8Sb6Lvt8Vl1UTOjfK+vsuDm4knZhdaOoHITf7VwJauq3yvEhl2va+JHKWCw6v
- eK4QqLOkqmkhfdCPwE2WzuQDLyXtVLPpHiCo2/WyWDq3yT71yE3KoeI8bFuGJr2JQYtd9geJr+U
- EIGQwEI2Eam+RtBWYE+V0ewE7VfdX/tF6NTrmDOq0s19f/F/Bq1bHVeWcvE1crhX0IBEVVM96+K
- XaPNyxxmPxnYdOgfjZTos7puGHKgjvuHJIrkOWaV3boQ/RENa17dkpaIZuuOX6BAUJgx1ONOlbX
- 719YUAKJ27s+muWUTmg==
-X-Proofpoint-GUID: XPd4wWwQGmuRjZnZjoB4arIOKbc4d9iw
-X-Proofpoint-ORIG-GUID: GmdViZUO-3EVxYkMXdbQPRaVORisp6Lg
-X-Authority-Analysis: v=2.4 cv=LesxKzfi c=1 sm=1 tr=0 ts=69860314 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=meVymXHHAAAA:8 a=ynVLL-t7yow9N31yAb4A:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-06_04,2026-02-05_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 impostorscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
- adultscore=0 suspectscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2601150000 definitions=main-2602060107
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <CADCXZ1wMxCN3B-c+x4SgqC7H-Wap=e_sJ_hu-2B+96b=ip9OVQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 2/3/2026 6:19 PM, Jens Remus wrote:
-> From: Josh Poimboeuf <jpoimboe@kernel.org>
+
+
+On 06/02/2026 16.04, Antoine Tenart wrote:
+> On Fri, Feb 06, 2026 at 03:41:23PM +0100, Jesper Dangaard Brouer wrote:
+>> On 05/02/2026 17.24, Antoine Tenart wrote:
+>>
+>> Can you point me at the OVS userspace code that consume these subsys
+>> drop_reason's?
 > 
-> Use the CFI macros instead of the raw .cfi_* directives to be consistent
-> with the rest of the VDSO asm.  It's also easier on the eyes.
+> I think this was mostly added for debugging utilities and not consumed
+> by OvS directly but I don't know the OvS userspace code tbf. Anything
+> you're looking for specifically?
 > 
-> No functional changes.
-> 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Signed-off-by: Jens Remus <jremus@linux.ibm.com>
-> ---
->  arch/x86/entry/vdso/vdso64/vsgx.S | 15 +++++++--------
->  1 file changed, 7 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/entry/vdso/vdso64/vsgx.S b/arch/x86/entry/vdso/vdso64/vsgx.S
-> index c0342238c976..8d7b8eb45c50 100644
-> --- a/arch/x86/entry/vdso/vdso64/vsgx.S
-> +++ b/arch/x86/entry/vdso/vdso64/vsgx.S
-> @@ -24,13 +24,14 @@
->  .section .text, "ax"
->  
->  SYM_FUNC_START(__vdso_sgx_enter_enclave)
-> +	SYM_F_ALIGN
 
-Somehow I missed Steven's v6 and any of it's review feedback, where Josh
-noticed that this added SYM_F_ALIGN somehow creeped in and should be
-dropped:
-https://lore.kernel.org/all/amh7fzsjx4p5nowy3b3j6blkty5ojqf7jawtlslexwzdbxrhc3@zersgacmcnai/
+I'm just trying to making sure that I/we don't break any userspace code.
 
->  	push	%rbp
-> -	.cfi_adjust_cfa_offset	8
-> -	.cfi_rel_offset		%rbp, 0
-> +	CFI_ADJUST_CFA_OFFSET	8
-> +	CFI_REL_OFFSET		%rbp, 0
->  	mov	%rsp, %rbp
-> -	.cfi_def_cfa_register	%rbp
-> +	CFI_DEF_CFA_REGISTER	%rbp
->  	push	%rbx
-> -	.cfi_rel_offset		%rbx, -8
-> +	CFI_REL_OFFSET		%rbx, -8
->  
->  	mov	%ecx, %eax
->  .Lenter_enclave:
-> @@ -77,13 +78,11 @@ SYM_FUNC_START(__vdso_sgx_enter_enclave)
->  .Lout:
->  	pop	%rbx
->  	leave
-> -	.cfi_def_cfa		%rsp, 8
-> +	CFI_DEF_CFA		%rsp, 8
->  	RET
->  
-> -	/* The out-of-line code runs with the pre-leave stack frame. */
-> -	.cfi_def_cfa		%rbp, 16
-> -
->  .Linvalid_input:
-> +	CFI_DEF_CFA		%rbp, 16
->  	mov	$(-EINVAL), %eax
->  	jmp	.Lout
->  
+Yes, looks like debugging tools are the consumer. E.g. The Red Hat
+NetObserv[1] tool mentions OVS decoding drop reason.
 
-Regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
+[1] 
+https://www.redhat.com/en/blog/network-observability-real-time-per-flow-packets-drop
 
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
-
+--Jesper
