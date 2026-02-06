@@ -1,67 +1,117 @@
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FC52EC080;
-	Fri,  6 Feb 2026 22:59:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987A849659;
+	Fri,  6 Feb 2026 23:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770418762; cv=none; b=h8436UYvwi7ug5mPhHf9dM5aoMORWKoKO123oVb3I5OKM54HyemDsl5/Rzu1qquDB5EKGBeZ9EBir2f4Mifi7tb8yFWJKueV/kh2DD+SSp/EYw4OgFLoL3019KTSwlPHZH0AZMEzshv8vckLfaf44Mg8qjQInt02MjdpciKSNRU=
+	t=1770418831; cv=none; b=fNsN1JohnMaUf0ac91B10wGs+gs0sFp4k9xVmMx5V9CfwOh15akzIbiYXYH6k0RcOmqKv73WwpXoVk16jq+DIfaezhaM1GmGOZQ9XeVw1TKZ7clyuJekn/7YTdRdhvp+NcXGUXDXgHzrf2KKxyn8G3grKGSI1gpOaLbHO5sMgNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770418762; c=relaxed/simple;
-	bh=HgrPqahvKSC+3pLJbLbSqxeZA+MNAMItNVfs14dPLzs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UK02kb7ZByehDAhJyt0UT4LcVKcOciaFyi6R0tAe3l2UVQo2VxOUeSIn8XylUOvEex7d8MDJYwACDyAUKR+ngpFYf/mvXUjqnppXVMjZ5oPS6csTX5G5aD0HmjpyHRHRmDm1t3uYRRTfnu87/j6r2XJSZiOSnkXReGkdoP0N1a8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=YyzMC78p; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
+	s=arc-20240116; t=1770418831; c=relaxed/simple;
+	bh=mLy9KV0aGwWO2bQW20k9G/fysd3HLWDbfIqP1sPn//Q=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=FOFOEZTSkGR0LMegZtIJhz/Qn/5aYhXrGJgcCR+kLMnkqcpiDnqPO87us51yoZ1a59Tbg9heMI2W+sP5x0sjuB7PgAi6VAQsE1tQgnloWzTSlCkHREM4kXQGl008WyKhEZEP+PWSa4KoF5fveg0vGjtIFBEooSOcotncJSsRnQY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hjO/7W1Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="YyzMC78p"
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 82B7340C3E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1770418761; bh=RBeZ3QqeRRrFj81rm3Ls1gh3UuGDICwkpAl601siemc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=YyzMC78p4uc6xu28e8vgtoPqMypY5xFMnDOgvZXDtINjD9hAA9rSluQ6SejloPR2K
-	 98OGQr1IUV7GV8jevu52Lir0ixlyqwnAtuBbeWnSaA06m6DlLPEsBi3ok3LtywF2+A
-	 8Kp/8VySVkAaxf7CHWPdENjgQ6/m7rqIIvAMoGArlMY2xRkWr/nZWT9o6j3BFwPaRh
-	 HiWuw3DbWsK65Sp+KPgli/VEa1ReWjIJk5GcpecJf749d7tjARBNTTYxmVkvd8SzHJ
-	 37Sa+Y/eLzYj35c4UToHdvyD/Naxbs/7A9UjJ2cxphn80j8xlwOvcsQM0E2k15K15Z
-	 lKKhUxJqLyIsg==
-Received: from localhost (unknown [IPv6:2601:280:4600:27b::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature ECDSA (prime256v1) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 82B7340C3E;
-	Fri,  6 Feb 2026 22:59:21 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Viacheslav Dubeyko <slava@dubeyko.com>, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, bpf@vger.kernel.org
-Cc: Slava.Dubeyko@ibm.com, slava@dubeyko.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/4] Machine Learning (ML) library in Linux kernel
-In-Reply-To: <20260206191136.2609767-1-slava@dubeyko.com>
-References: <20260206191136.2609767-1-slava@dubeyko.com>
-Date: Fri, 06 Feb 2026 15:59:20 -0700
-Message-ID: <87343deawn.fsf@trenco.lwn.net>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hjO/7W1Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C368C116C6;
+	Fri,  6 Feb 2026 23:00:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770418831;
+	bh=mLy9KV0aGwWO2bQW20k9G/fysd3HLWDbfIqP1sPn//Q=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=hjO/7W1Q8QwBMWtluaR7g68piPHJ1vhcOkXtYKpDYn+FwFMrH4wRdnrsiEijYKCk5
+	 QyBNS6BT1UCVthj+vt9z7HJ5ZmkA+tbV1daRiM4wDU0za6ZgR1kCVHw+IyyOAf1Kcw
+	 hoXYDsxHsSgg6mYi97QpmEfsRAOQe+xX842MCTYiB5c8WKJTBiPAWOsUNsktiyKy1B
+	 IsijJ9+U7yu0PonfeH95CXfQLxxJs1Jo4oC//J6eH0TMhcXNHrInBMqTg88d/g6zCi
+	 mx2qqxnRV0oH2EdizD57hhdj5Wobkod33pFb7p+GRpRQLlo6L++9vpnf11TO9TWfLS
+	 S/w+nyTB37cwQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 855783809A17;
+	Fri,  6 Feb 2026 23:00:29 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v7 00/17] Remove task and cgroup local storage
+ percpu
+ counters
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177041882833.1106743.17316630593839442939.git-patchwork-notify@kernel.org>
+Date: Fri, 06 Feb 2026 23:00:28 +0000
+References: <20260205222916.1788211-1-ameryhung@gmail.com>
+In-Reply-To: <20260205222916.1788211-1-ameryhung@gmail.com>
+To: Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, alexei.starovoitov@gmail.com,
+ andrii@kernel.org, daniel@iogearbox.net, memxor@gmail.com,
+ martin.lau@kernel.org, kpsingh@kernel.org, yonghong.song@linux.dev,
+ song@kernel.org, haoluo@google.com, kernel-team@meta.com
 
-Viacheslav Dubeyko <slava@dubeyko.com> writes:
+Hello:
 
-> This patchset introduces initial vision of Machine Learning (ML) library
-> in Linux kernel. It is an effort to define the ML library API and
-> to elaborate the way of running ML models in Linux kernel.
+This series was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-I went looking for the documentation files ... but then I've always been
-known as an optimist.  That would be a nice thing to fill in.
+On Thu,  5 Feb 2026 14:28:58 -0800 you wrote:
+> * Motivation *
+> 
+> The goal of this patchset is to make bpf syscalls and helpers updating
+> task and cgroup local storage more robust by removing percpu counters
+> in them. Task local storage and cgroup storage each employs a percpu
+> counter to prevent deadlock caused by recursion. Since the underlying
+> bpf local storage takes spinlocks in various operations, bpf programs
+> running recursively may try to take a spinlock which is already taken.
+> For example, when a tracing bpf program called recursively during
+> bpf_task_storage_get(..., F_CREATE) tries to call
+> bpf_task_storage_get(..., F_CREATE) again, it will cause AA deadlock
+> if the percpu variable is not in place.
+> 
+> [...]
 
-Perhaps more important, though, would be a real user for this facility.
-You must certainly have one in mind, can we see it to get a sense for
-how this library is meant to be used?
+Here is the summary with links:
+  - [bpf-next,v7,01/17] bpf: Select bpf_local_storage_map_bucket based on bpf_local_storage
+    https://git.kernel.org/bpf/bpf-next/c/0ccef7079ea8
+  - [bpf-next,v7,02/17] bpf: Convert bpf_selem_unlink_map to failable
+    https://git.kernel.org/bpf/bpf-next/c/1b7e0cae85ac
+  - [bpf-next,v7,03/17] bpf: Convert bpf_selem_link_map to failable
+    https://git.kernel.org/bpf/bpf-next/c/fd103ffc57c9
+  - [bpf-next,v7,04/17] bpf: Convert bpf_selem_unlink to failable
+    https://git.kernel.org/bpf/bpf-next/c/403e935f9158
+  - [bpf-next,v7,05/17] bpf: Change local_storage->lock and b->lock to rqspinlock
+    https://git.kernel.org/bpf/bpf-next/c/8dabe34b9d5b
+  - [bpf-next,v7,06/17] bpf: Remove task local storage percpu counter
+    https://git.kernel.org/bpf/bpf-next/c/4a98c2efa613
+  - [bpf-next,v7,07/17] bpf: Remove cgroup local storage percpu counter
+    https://git.kernel.org/bpf/bpf-next/c/5254de7b9607
+  - [bpf-next,v7,08/17] bpf: Remove unused percpu counter from bpf_local_storage_map_free
+    https://git.kernel.org/bpf/bpf-next/c/3417dffb5833
+  - [bpf-next,v7,09/17] bpf: Prepare for bpf_selem_unlink_nofail()
+    https://git.kernel.org/bpf/bpf-next/c/c8be3da14718
+  - [bpf-next,v7,10/17] bpf: Support lockless unlink when freeing map or local storage
+    https://git.kernel.org/bpf/bpf-next/c/5d800f87d0a5
+  - [bpf-next,v7,11/17] bpf: Switch to bpf_selem_unlink_nofail in bpf_local_storage_{map_free, destroy}
+    https://git.kernel.org/bpf/bpf-next/c/0be08389c7f2
+  - [bpf-next,v7,12/17] selftests/bpf: Update sk_storage_omem_uncharge test
+    https://git.kernel.org/bpf/bpf-next/c/d652f425d5e3
+  - [bpf-next,v7,13/17] selftests/bpf: Update task_local_storage/recursion test
+    https://git.kernel.org/bpf/bpf-next/c/e4772031d105
+  - [bpf-next,v7,14/17] selftests/bpf: Update task_local_storage/task_storage_nodeadlock test
+    https://git.kernel.org/bpf/bpf-next/c/902a79b6389f
+  - [bpf-next,v7,15/17] selftests/bpf: Remove test_task_storage_map_stress_lookup
+    https://git.kernel.org/bpf/bpf-next/c/e02cf06b85f8
+  - [bpf-next,v7,16/17] selftests/bpf: Choose another percpu variable in bpf for btf_dump test
+    https://git.kernel.org/bpf/bpf-next/c/cdce7b0848f6
+  - [bpf-next,v7,17/17] selftests/bpf: Fix outdated test on storage->smap
+    https://git.kernel.org/bpf/bpf-next/c/97b859b5ed04
 
-Thanks,
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-jon
+
