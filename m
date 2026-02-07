@@ -1,176 +1,117 @@
-Received: from mail.189.cn (189sx01-ptr.21cn.com [14.18.100.240])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B8B8271450;
-	Sat,  7 Feb 2026 14:00:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.18.100.240
+Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5AFF271A9A;
+	Sat,  7 Feb 2026 14:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770472807; cv=none; b=BackGYAZowMmT+Bqqf6OAPA5uZ7T3bErBgJZHI8WSNRs9MtEG2fDZ6eUcUvLxNDM/vcbWN7WZ1nhe3njf8tJDGwtMu5g9fIWeBWP9eMmrt5nQoTjZDo1VnXiNfV7VA8QhDWryC8Vum+SGeBPjcNhQemahzrosIWy8xF/RJFAYn0=
+	t=1770474921; cv=none; b=S8hip14EuZOeySH1tTBLpcIk3IEVcqfHXWcclQsc9+tlDXEqpF6llQVJwmSKafPBDb/o/Jy5Es061NgWNpzi6f3sAQ0oU17NUExaxfE2PJnMamMA5/fkR0EkaFOyoWxYuLHF/YHghyKrrR8BbZ0jhNis06NDf1uGk2qJnfzZfXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770472807; c=relaxed/simple;
-	bh=rjdm1Ic7XoZk25AH0X9RP+05ak1ktFxkWjaJcXYGSm0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WSbpNzoV+5kkIgCnaKomCkGcBO/QVOLXnxMXFgfNe07DxOWOpIDM8nx1AYC+/eXOocEes+H4K/P2jeX6gJM1FiTG9C3O3xXgATEdBft0OyybnqoMSr8bva96Cd8R5ryHUJHuFLNXBF9WRs8DMRwK+w/tVfp41rRMlkYDgsV72Sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn; spf=pass smtp.mailfrom=189.cn; arc=none smtp.client-ip=14.18.100.240
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=189.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=189.cn
-HMM_SOURCE_IP:10.158.242.145:0.671580944
-HMM_ATTACHE_NUM:0000
-HMM_SOURCE_TYPE:SMTP
-Received: from clientip-60.27.224.131 (unknown [10.158.242.145])
-	by mail.189.cn (HERMES) with SMTP id DBB45400088;
-	Sat,  7 Feb 2026 21:55:21 +0800 (CST)
-Received: from  ([60.27.224.131])
-	by gateway-153622-dep-76cc7bc9cd-r45x9 with ESMTP id 589abf40d3564fb186639cebaec3af04 for alexei.starovoitov@gmail.com;
-	Sat, 07 Feb 2026 21:55:22 CST
-X-Transaction-ID: 589abf40d3564fb186639cebaec3af04
-X-Real-From: chensong_2000@189.cn
-X-Receive-IP: 60.27.224.131
-X-MEDUSA-Status: 0
-Sender: chensong_2000@189.cn
-Message-ID: <49e41217-d96e-4234-a18c-633cc22fbbd4@189.cn>
-Date: Sat, 7 Feb 2026 21:55:21 +0800
+	s=arc-20240116; t=1770474921; c=relaxed/simple;
+	bh=VvRhjH4hTKapCtClYsgBZbrGChd3nVZjJ9WJNhLGvlY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VmW35PkUsblbgVgnfUOI6dg8e4hzR85xAunMu4AhLLuy3iwKFAndkjEyyQ5nDHvhEVXGOFEADXXBYZJrGbLwicuYrqDqXINSqRF2aVzW0a9/HugtFMdI3CEA0u05Uhbqip9iPRVt7hyPeYuuD9VRT+QPNMCMR1hJVVoO5kZaVfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=lYNtmPM2; arc=none smtp.client-ip=185.226.149.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="lYNtmPM2"
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
+	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1vojOt-00Airs-Jy; Sat, 07 Feb 2026 15:35:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector2; h=Cc:To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+	Message-Id:Date:Subject:From; bh=bK1n8TnZjOHQM/fZ8MSrVUXmF3jzAmBE7GkteDfxDfc=
+	; b=lYNtmPM2lfyMz4BfsjbaRg8M4vdYw/ySfXm6gb0hdHld6xZGW+aAIb4SMZE1NXUmobyUrs6S0
+	LJdx+13+o/aQooKF5wdFYPbH75YrX7B4pPLEwD57HQZUYV8ZCE63Liv+vH2comugOYsYCpnkk+6ai
+	csLA3yBg+uDkG7uFrPEvGVe7ndZPxoA9G5NI6MRwWmxLqkK0Yrngv6G07/KYmzXw0D7K8+EE6tZjD
+	5r8lyRmcCgvChJN+7FSrgEUh4FcQ0gS9ulkXtLKxFeCvV7mqQNtWDX/VBEgRDn+r4s2tn9HRhF+Rb
+	daoWISJzqH6Kdm/Y4WO98SNj0qPOJvgvs29etQ==;
+Received: from [10.9.9.72] (helo=submission01.runbox)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1vojOs-0005VL-NH; Sat, 07 Feb 2026 15:35:06 +0100
+Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1vojOp-006OQ1-LD; Sat, 07 Feb 2026 15:35:03 +0100
+From: Michal Luczaj <mhal@rbox.co>
+Subject: [PATCH bpf v2 0/4] bpf, sockmap: Fix af_unix null-ptr-deref in
+ proto update
+Date: Sat, 07 Feb 2026 15:34:53 +0100
+Message-Id: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] kernel/bpf/btf.c: reject to register duplicated kfunc
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>
-References: <20260122090404.15553-1-chensong_2000@189.cn>
- <CAADnVQLVQW-Mb_d+zT+aSpPOZ042erPVcSHVBx9PMGET+a754Q@mail.gmail.com>
- <bb4a868d-d4e2-40dc-aed4-4788b159a7f6@189.cn>
- <CAADnVQJEjhJH6+2cLJ0jM_fZ366oU3yoK1b5aMk=VgksXhJtoQ@mail.gmail.com>
-Content-Language: en-US
-From: Song Chen <chensong_2000@189.cn>
-In-Reply-To: <CAADnVQJEjhJH6+2cLJ0jM_fZ366oU3yoK1b5aMk=VgksXhJtoQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/42NQQqDMBBFr1Jm3SkmgrZd9R7FRWImdUCSMIliE
+ e/e4Am6/O/z/9shkzBleF52EFo5cww16OsFxsmEDyG7mkE3umuUfuASeMMksURckjOFMCzzjKk
+ IOhLy2Bndt60drfV3qDepQt5OxRts8jBUOHEuUb6ndlVn9b9hVaiQlDNk+7rw7iU2brcxwnAcx
+ w9Gtbf50wAAAA==
+X-Change-ID: 20260129-unix-proto-update-null-ptr-deref-6a2733bcbbf8
+To: John Fastabend <john.fastabend@gmail.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Willem de Bruijn <willemb@google.com>, Cong Wang <cong.wang@bytedance.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Michal Luczaj <mhal@rbox.co>
+X-Mailer: b4 0.14.3
 
+BPF_MAP_UPDATE_ELEM races unix_stream_connect(): when
+sock_map_sk_state_allowed() passes (sk_state == TCP_ESTABLISHED),
+unix_peer(sk) in unix_stream_bpf_update_proto() may still return NULL.
 
+BUG: kernel NULL pointer dereference, address: 0000000000000080
+RIP: 0010:unix_stream_bpf_update_proto+0xa0/0x1b0
+Call Trace:
+  sock_map_link+0x564/0x8b0
+  sock_map_update_common+0x6e/0x340
+  sock_map_update_elem_sys+0x17d/0x240
+  __sys_bpf+0x26db/0x3250
+  __x64_sys_bpf+0x21/0x30
+  do_syscall_64+0x6b/0x3a0
+  entry_SYSCALL_64_after_hwframe+0x76/0x7e
 
-On 1/30/26 10:54, Alexei Starovoitov wrote:
-> On Thu, Jan 29, 2026 at 6:18 PM Song Chen <chensong_2000@189.cn> wrote:
->>
->> hi,
->>
->> my comments are in line, thanks.
->>
->> Song
->>
->> 在 2026/1/28 12:28, Alexei Starovoitov 写道:
->>> On Thu, Jan 22, 2026 at 1:04 AM <chensong_2000@189.cn> wrote:
->>>>
->>>> From: Song Chen <chensong_2000@189.cn>
->>>>
->>>> I had an ebpf program which calls a kfunc defined and
->>>> implemented in one of my kernel modules, they were working
->>>> fine in 6.16, but was broken by libbpf in 6.19, the error
->>>> message was:
->>>>
->>>> libbpf: extern (func ksym) 'bpf_strstr': func_proto [5]
->>>> incompatible with vmlinux [94389]
->>>>
->>>> yes, the reason is there is a new added kfunc in kernel 6.19
->>>> which happens to be the same name with my kfunc. However the
->>>> error message is not obvious enough to address problem
->>>> immediately.
->>>
->>> I don't quite understand what you're trying to say.
->>> "broken by libbpf"?! You mean that kernel 6.19 got
->>> new kfunc bpf_strstr() ?
->>> Why libbpf error is relevant?
->>> You mean you had your own custom .h file where
->>> you defined your own kfunc from a custom module
->>> and libbpf complained that your bpf_strstr() kfunc
->>> definition doesn't match the kernel 6.19 ?
->>
->> let me explain:
->>
->> I had a module, defined a kfunc(bpf_strstr) in its c file and register
->> it through register_btf_kfunc_id_set.I also had a ebpf program to use
->> bpf_strstr in this module.
->>
->> They were working fine in kernel 6.16, but kernel 6.19 has its own
->> bpf_strstr, so when i ran my ebpf program in kernel 6.19, libbpf broke
->> it here:
->>
->> bpf_object__resolve_ksym_func_btf_id
->>     --bpf_core_types_are_compat
->>       --__bpf_core_types_are_compat
->>
->> yes, your understanding is pretty much correct.
->>
->>>
->>> and your proposed solution is ...
->>>
->>>> Therefore, this patches searches duplicated kfunc in
->>>> btf_vmlinux before a kernel module attempts to register kfuncs
->>>> through register_btf_kfunc_id_set, it prints clear error message
->>>> and returns error code if same name kfunc has already implemented
->>>> and registered, then developer knows at the first place.
->>>
->>> Are you saying that the kernel module that supplied bpf_strstr
->>> shouldn't be allowed to register its kfunc if kfunc with
->>> the same name exists in vmlinux. So insmod will fail?
->>
->> yes, two kfuncs of bpf_strstr are registered in the system and one of
->> them is never used, this is a problem.
->>
->>>
->>> This is debatable. I guess we can add such sanity check,
->>
->> agree, even it's not a big deal.
->>
->>> but what about kfunc in module A with the same name as kfunc
->>> in module B?
->>
->> It's in my plan, also go through "list_for_each_entry_safe(btf_mod, tmp,
->> &btf_modules, list)", but i haven't gone that far yet, i can add it.
-> 
-> I'm not convinced that we should be doing it.
-> 
->>> Currently libbpf tells kernel both btf FD and kfunc btf ID,
->>> though there is a single namespace for all kfuncs from bpf
->>> program pov the kernel and libbpf api-s allow a selection.
->>>
->>> Technically we can hack something in bpf.c to "namespace" kfuncs
->>> and say that the kfunc "foo" is in the module "bar".
->>> It won't be pretty in C, but possible in principle.
->>>
->>> Maybe a kfunc with the same name in the module should be allowed
->>> to override a kfunc in the kernel.
->>> It can be seen as livepatching of kfuncs.
->>> imo that's a more interesting use case than helping
->>> out-of-tree module to produce nicier error.
-> 
-> because ^^^ is what I think we should be doing instead.
-> Since it is more applicable and useful.
-> 
-> I'd like to hear what other folks are thinking
+Series fixes the null-ptr-deref by teaching sockmap about the
+af_unix-specific locking. Accidentally this also fixes a deadlock.
 
-If I understand you correctly, you need both kfuncs to co-exist and 
-kfunc in module has higher priority.
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+Changes in v2:
+- Instead of probing for unix peer, make sockmap take the right lock [Martin]
+- Annotate data races [Kaniyuki, Martin]
+- Extend bpf unix iter selftest to attempt a deadlock
+- Link to v1: https://lore.kernel.org/r/20260129-unix-proto-update-null-ptr-deref-v1-1-e1daeb7012fd@rbox.co
 
-I did some research and test:
-kfunc addr is set in function add_kfunc_call by calling 
-kallsyms_lookup_name(func_name), if it calls 
-module_kallsyms_lookup_name(func_name) instead, it will get the kfunc in 
-module and it works like a livepatch literally.
+---
+Michal Luczaj (4):
+      bpf, sockmap: Annotate af_unix sock::sk_state data-races
+      bpf, sockmap: Use sock_map_sk_{acquire,release}() where open-coded
+      bpf, sockmap: Adapt for the af_unix-specific lock
+      selftests/bpf: Extend bpf_iter_unix to attempt deadlocking
 
-The problem is how can we know which one should be called, insn->off 
-seems to indicate kfunc is from module if it's bigger than 0, but it's 0 
-in this case.
+ net/core/sock_map.c                               | 72 +++++++++++++++--------
+ tools/testing/selftests/bpf/progs/bpf_iter_unix.c | 10 ++++
+ 2 files changed, 58 insertions(+), 24 deletions(-)
+---
+base-commit: 2687c848e57820651b9f69d30c4710f4219f7dbf
+change-id: 20260129-unix-proto-update-null-ptr-deref-6a2733bcbbf8
 
-Any advice in this case?
-
-/Song
+Best regards,
+-- 
+Michal Luczaj <mhal@rbox.co>
 
