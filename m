@@ -1,77 +1,81 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4AF2D9EF0;
-	Sat,  7 Feb 2026 14:38:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 668E42F3C37;
+	Sat,  7 Feb 2026 15:52:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770475093; cv=none; b=U7qtZA8BxeK5xzqVXOq0X9u0CGyp/tNiwz0S+Gaq6MiMBKJColzTKKmQ5VSTSvVzklzzAFNC47MqG/Zlnbdc8DxUbsTBUZjz3+Riy+axl78nRyNGLk4uKqHiNuDGXnk84duLWKIE2ztOD3NKxNo5MKNIrmxE/L7wyzE8nYmwRwk=
+	t=1770479563; cv=none; b=ScTiSRzABYVpZTfhyOLwOOna7Cm3kaop++H/Iv6/pL/uxHJtMwMJF4RHq+oAZ8DF+TfrJmpMrZvx+TUflq1yzsQYt5mJoOgbZKFAIXOFj7iCa6dWX8xJa9K+CG5CNkdbw9uRY+rVs+R5sQ54z4p2AM6Ren7HfRCj9x5JAGG+nCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770475093; c=relaxed/simple;
-	bh=uPhTkoUWjHgNMwwXTNmsb77q8glN+hMS3JyqfBiQvpM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IGgQ3i2mwll4bKzvQHLd4Tu/hip+HNYNAf3qqsafzWsYhJSc4X1iaTtJw2gXits6sFiUzCQsavJu8xYiF4L7rRb/EVawiJs5dE+DniZjCOD2a0pCh/8jswJ+sUeMWFzQreW938N7dIRglM6YBNuTKPXqSb6RLYRNqgIkTuSccTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=d3Nqzrp6; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1770479563; c=relaxed/simple;
+	bh=3caPt/SFdYRNTEo+dzqjdrsO13S53h4yikkUh2Rehmo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JRgP24Oj3dMCX++6DyE2+mA7HJTH/gzRL8Sh0pqsLuHXLVmGTE4/oKgXgqkwInXjKbF0KHDVxdyqWkMpruxBhhWRB6YDt4Fa1ygnuZDvM5a+UHi+7rSLWwZbD3zGs0Q4zU6plXYX0+2+dl6Fb3TxwJS6vRYCVuWHQ8GF4U53PdQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xM1CQ1rN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="d3Nqzrp6"
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vojRl-00Aje3-5W; Sat, 07 Feb 2026 15:38:05 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=TEPq9Z1dVcmlqvSnG6I2Wyw56Ztf93dpV8RY4AtCcjI=; b=d3Nqzrp6lhqZ4T8FFWvs2GkYJy
-	u0iw6c5J4M07zofx0kGPoNIfASUWnCbJ4c+0T6pLvCZcNqdNhgiZZdvwH29idGesyOzECDCqZor+q
-	YMhLn4bvfcfiw7rt8bHWyLH/EvuVNejX+LY2rN21dWH61B49a1RLdtYhIyISZsIX9ulfk2/SNBo+S
-	LrgwMoX5OTRCqpNlYXuWTTJ+LETzuRs78D+S2D4rM7FAtyqfDGGn7nYS489eYHx+06GxJDPDw5VgX
-	jB8FFv7BTpRXDes162Zfd2PbiJBbDjrdvcBdhdmvllgJcdRB2tkYlou8RS+UEnlUUKfoznlntycZN
-	8f9J8/6w==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vojRk-0007hg-QE; Sat, 07 Feb 2026 15:38:04 +0100
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vojRT-006OsM-Sd; Sat, 07 Feb 2026 15:37:47 +0100
-Message-ID: <82925c1e-11ad-4cf0-9b44-c22ee9193cf9@rbox.co>
-Date: Sat, 7 Feb 2026 15:37:46 +0100
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xM1CQ1rN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C912C116D0;
+	Sat,  7 Feb 2026 15:52:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1770479563;
+	bh=3caPt/SFdYRNTEo+dzqjdrsO13S53h4yikkUh2Rehmo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=xM1CQ1rN5w+BCMNjOxhWt/xsRibe+1dr4kkrdTVWsqr3kymC2TxGJ9jXMjpd3nwVw
+	 fcJ9ijERW5U0GBg6rjXZYP8lYikC6eAVig0J6HiUuavTx1SvqOi2tecEPAQJkOGaoE
+	 rW0hm4ANXI3jYvp3ptUC5jtIjD/cUEeX5hb3Bl0E=
+Date: Sat, 7 Feb 2026 16:52:39 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Viacheslav Dubeyko <slava@dubeyko.com>
+Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
+	Slava.Dubeyko@ibm.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v1 1/4] ml-lib: Introduce Machine Learning (ML)
+ library declarations
+Message-ID: <2026020756-remarry-declared-9187@gregkh>
+References: <20260206191136.2609767-1-slava@dubeyko.com>
+ <20260206191136.2609767-2-slava@dubeyko.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf, sockmap: Fix af_unix null-ptr-deref in proto
- update
-To: Martin KaFai Lau <martin.lau@linux.dev>,
- Kuniyuki Iwashima <kuniyu@google.com>, Jakub Sitnicki
- <jakub@cloudflare.com>, John Fastabend <john.fastabend@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260129-unix-proto-update-null-ptr-deref-v1-1-e1daeb7012fd@rbox.co>
- <3fc5611f-394f-40db-b49d-2f26402e221a@linux.dev>
- <3362017f-9c3d-46cd-b3ce-cb750b565d5b@rbox.co>
- <612a9446-252f-4b14-8605-ae1af000cc41@linux.dev>
- <CAAVpQUAc3S+Ebx2qp-Pbg9qH-Zc=yHdzVJbchCu++V_4XF3DLg@mail.gmail.com>
- <7603c0e6-cd5b-452b-b710-73b64bd9de26@linux.dev>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <7603c0e6-cd5b-452b-b710-73b64bd9de26@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260206191136.2609767-2-slava@dubeyko.com>
 
-On 2/2/26 20:15, Martin KaFai Lau wrote:
-> Regardless, if the proper lock is held, all this complication and 
-> reasoning will go away.
+On Fri, Feb 06, 2026 at 11:11:33AM -0800, Viacheslav Dubeyko wrote:
+> + * @kobj: /sys/<subsystem>/<ml_model>/ ML model object
+> + * @kobj_unregister: completion state for <ml_model> kernel object
+> + */
+> +struct ml_lib_model {
+> +	atomic_t mode;
+> +	atomic_t state;
+> +	const char *subsystem_name;
+> +	const char *model_name;
+> +
+> +	struct ml_lib_subsystem *parent;
+> +
+> +	spinlock_t parent_state_lock;
+> +	struct ml_lib_subsystem_state * __rcu parent_state;
+> +
+> +	spinlock_t options_lock;
+> +	struct ml_lib_model_options * __rcu options;
+> +
+> +	spinlock_t dataset_lock;
+> +	struct ml_lib_dataset * __rcu dataset;
+> +
+> +	struct ml_lib_model_operations *model_ops;
+> +	struct ml_lib_subsystem_state_operations *system_state_ops;
+> +	struct ml_lib_dataset_operations *dataset_ops;
+> +	struct ml_lib_request_config_operations *request_config_ops;
+> +
+> +	/* /sys/<subsystem>/<ml_model>/ */
+> +	struct kobject kobj;
+> +	struct completion kobj_unregister;
+> +};
 
-Here's my attempt:
-https://lore.kernel.org/bpf/20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co/
+Do NOT abuse sysfs for something like this.  Please make your own
+filesystem or char device or something else, but this is not what sysfs
+is for at all, sorry.
 
+greg k-h
