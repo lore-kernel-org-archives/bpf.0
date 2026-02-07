@@ -1,46 +1,46 @@
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E6D34F27F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FDB334F499;
 	Sat,  7 Feb 2026 14:35:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770474921; cv=none; b=QIhujqr6hjpCcZwudtQT5+gn+VwFUBPI28Jp1eJ2bIK44y8CdjiBXgd8NQjkrNzxIAmcAlESyOaLfAp1z59ik7n5CVWc99ThvHcT7hFKjHnvifkkzChDJzkIW1CoiOyO/pN6DFkW+0Z7/y6J6loapXRK3oOOBFIoVf7XkThMO8w=
+	t=1770474921; cv=none; b=bWih68u0jwi8w9n7xexgVI0lpQ327co/oA05+y8xfNT7t26qAbi/1Rs1FTdk/fx7bjeMxf3Y3JE7N2DYsehjb3Tv8sj3kkQScTZX5TuyveI+tXAbAI70HcL2Tq6c4N7bIqFQmqDP6TWsbBIhWVcqTX6EhB/3Naw6NhD49EAOT3c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1770474921; c=relaxed/simple;
-	bh=Hc7+R2mF21jy9zsi5eBu1HjQAxX9qX6No6aOq+OlE10=;
+	bh=dPxiuBeFVLFXcQWhDoQAORF1N20Mja2gEH0QbJScTxc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fOBVjtb2FULTAucJ4gxaO96hIPE5pktSZ9sUr22I2FvT1kSFRBEFgluPwh8uXBnfe8T7ho7o6CiqVBEbkWg3z2+N/QLgQy/c1R5p635hCqeRqMb2NOfNOn57HpavY60tvDg4kwhd6ZLc81xDU4Z8XL+mT1fdyeAndCi+FFkNH34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=Bs6mi3TT; arc=none smtp.client-ip=185.226.149.37
+	 In-Reply-To:To:Cc; b=VNqCCtzz7AftFrRoToTORZ10MIyOViyL55WuvmtRGUK5KipvKqcCeklzZeN7daTWj6SZNLaTFd6dWC81S4r+XGPyqI3/3tHl10v/9BkmTfLmk2T46wmhrkjq4tHnnwh8St9R5vcdRlcjLY49IlyRObJU6uc8b4DXv589Vz0dcxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=QxexerH/; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="Bs6mi3TT"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="QxexerH/"
 Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1vojOx-00Ah4k-OE; Sat, 07 Feb 2026 15:35:11 +0100
+	id 1vojOz-00Ah6X-ET; Sat, 07 Feb 2026 15:35:13 +0100
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
 	s=selector2; h=Cc:To:In-Reply-To:References:Message-Id:
 	Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:From;
-	bh=aXjE+KBBPBDEGL17SNukFZZe6xLinfU8oJd7PxZV38s=; b=Bs6mi3TT6JvjyI3/NtouGwRuAm
-	ZFIlojAiXwcvUPVq3fFLtrrRpD4Y4opAlOJl098mV7hgGlR2n7taPL83ScdIUdsk2/BycnZUyyuWQ
-	iUtsi35ss3Te5SOPkzOSWtA6+3WBjVB1ZG9lsOOopq/pvHsaZwgzmGBZM1p3ML2fpyeU0WqGTP6hp
-	s+K1eReugvknKnQzeFAD4SPG+5cUwxEUThKhKhHiNlQ6W9VJ40xrkNmqCn7HdXlXNXJSOh1q+z6qy
-	Kbcv/iCctQm3HOIygpE2Z7gvULIe92JS5vCDExTMcL20LWdxSXYT5MyzcPWnJWTf0omWroeZ9Q6Fu
-	3CLvquPQ==;
+	bh=RdHEkIIRAhdGMHaZV+5C0ZEGBw8Y9TkMkH8ReCDpSdI=; b=QxexerH/G4vQrH0ysQvQZs5/h6
+	TM7eBxQrdwPl2XWkMh+sdKQF5HWIY99GWfw/VHw3bcjuLxAN0VIfcxLU58aGGRls3+2zcSa8UU9dD
+	KXvT04w41NtQW65dCcfn0RkANvmBY8njdOQ0wbdQohUzLZaNy4oI8/TAxV/sy5ynm+1tIH6C7jTtD
+	pNkoQfpkaap+hDFl555PlY31eSMrNAPlCU6aj4baseW+v4lWqgtmaKKEX0bw28kCqKCBBgYL1UmYO
+	aQqWx1zHYPzPv6ItAttzUHTjzMIbooXJkrzFwMUB8flAa1ZiZPz08PuKA+6hEVSMS3VUsXQbRyndf
+	rdmbWfmA==;
 Received: from [10.9.9.72] (helo=submission01.runbox)
 	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1vojOx-0005X7-6G; Sat, 07 Feb 2026 15:35:11 +0100
+	id 1vojOy-0005Xv-Si; Sat, 07 Feb 2026 15:35:13 +0100
 Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1vojOq-006OQ1-VG; Sat, 07 Feb 2026 15:35:05 +0100
+	id 1vojOu-006OQ1-VX; Sat, 07 Feb 2026 15:35:09 +0100
 From: Michal Luczaj <mhal@rbox.co>
-Date: Sat, 07 Feb 2026 15:34:54 +0100
-Subject: [PATCH bpf v2 1/4] bpf, sockmap: Annotate af_unix sock::sk_state
- data-races
+Date: Sat, 07 Feb 2026 15:34:57 +0100
+Subject: [PATCH bpf v2 4/4] selftests/bpf: Extend bpf_iter_unix to attempt
+ deadlocking
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,7 +49,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260207-unix-proto-update-null-ptr-deref-v2-1-9f091330e7cd@rbox.co>
+Message-Id: <20260207-unix-proto-update-null-ptr-deref-v2-4-9f091330e7cd@rbox.co>
 References: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
 In-Reply-To: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
 To: John Fastabend <john.fastabend@gmail.com>, 
@@ -70,41 +70,41 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>
 X-Mailer: b4 0.14.3
 
-sock_map_sk_state_allowed() and sock_map_redirect_allowed() read af_unix
-socket sk_state locklessly.
+Updating a sockmap from a unix iterator prog may lead to a deadlock.
+Piggyback on the original selftest.
 
-Use READ_ONCE(). Note that for sock_map_redirect_allowed() change affects
-not only af_unix, but all non-TCP sockets (UDP, af_vsock).
-
-Suggested-by: Kuniyuki Iwashima <kuniyu@google.com>
-Suggested-by: Martin KaFai Lau <martin.lau@linux.dev>
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 ---
- net/core/sock_map.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/bpf/progs/bpf_iter_unix.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/net/core/sock_map.c b/net/core/sock_map.c
-index 5947b38e4f8b..d4f15b846ad4 100644
---- a/net/core/sock_map.c
-+++ b/net/core/sock_map.c
-@@ -530,7 +530,7 @@ static bool sock_map_redirect_allowed(const struct sock *sk)
- 	if (sk_is_tcp(sk))
- 		return sk->sk_state != TCP_LISTEN;
- 	else
--		return sk->sk_state == TCP_ESTABLISHED;
-+		return READ_ONCE(sk->sk_state) == TCP_ESTABLISHED;
- }
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+index fea275df9e22..a2652c8c3616 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_unix.c
+@@ -7,6 +7,13 @@
  
- static bool sock_map_sk_is_suitable(const struct sock *sk)
-@@ -543,7 +543,7 @@ static bool sock_map_sk_state_allowed(const struct sock *sk)
- 	if (sk_is_tcp(sk))
- 		return (1 << sk->sk_state) & (TCPF_ESTABLISHED | TCPF_LISTEN);
- 	if (sk_is_stream_unix(sk))
--		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
-+		return (1 << READ_ONCE(sk->sk_state)) & TCPF_ESTABLISHED;
- 	if (sk_is_vsock(sk) &&
- 	    (sk->sk_type == SOCK_STREAM || sk->sk_type == SOCK_SEQPACKET))
- 		return (1 << sk->sk_state) & TCPF_ESTABLISHED;
+ char _license[] SEC("license") = "GPL";
+ 
++SEC(".maps") struct {
++	__uint(type, BPF_MAP_TYPE_SOCKMAP);
++	__uint(max_entries, 1);
++	__type(key, __u32);
++	__type(value, __u64);
++} sockmap;
++
+ static long sock_i_ino(const struct sock *sk)
+ {
+ 	const struct socket *sk_socket = sk->sk_socket;
+@@ -76,5 +83,8 @@ int dump_unix(struct bpf_iter__unix *ctx)
+ 
+ 	BPF_SEQ_PRINTF(seq, "\n");
+ 
++	/* Test for deadlock. */
++	bpf_map_update_elem(&sockmap, &(int){0}, sk, 0);
++
+ 	return 0;
+ }
 
 -- 
 2.52.0
