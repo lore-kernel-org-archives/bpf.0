@@ -1,127 +1,123 @@
-Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F3A33554C;
-	Sat,  7 Feb 2026 15:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770479719; cv=none; b=H/GFgUWg9by91rxqMCdYFA6uNYn15A1QybbHFhWI/5J/KIT+5wAFYJ2w2Jyy/HTbh4yCQ+qFP2wV6hD8UXUuJLJEsGYhcM8/mh6FbddqGEtrooIGAp94BauANQW8PNsd4qKDqmxa6npo+zy/e4OCFiROG3YELLSm7jRq/GaoeV4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770479719; c=relaxed/simple;
-	bh=u4cdu7LU2++Dj+oZF3MV9n1uNpHRItmMPalmPX9YI70=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kOg4bWEiBxBeG64e6wCXoAIUtfS8rNSYy2RzcnaUTJrFoSP+MKkrHd7G9Agb8YUYM7vl5TPXwyzzm05nHJLIlWIogWKinZAycT8UHF+Dwdhdz2ChHhwdawX2Gs6BbJDoPEDpQwtBRW14DLq54Rgt7EuSoMmQxxzT62svZPKUrwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=X7h1bo3L; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TnKt90u3; arc=none smtp.client-ip=202.12.124.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD5D33B95C
+	for <bpf@vger.kernel.org>; Sat,  7 Feb 2026 19:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770491657; cv=pass; b=Oz7vAfzKNK1qBuga0xgRvLHUzMfdRtroE7/SPfJO/wfYum4T5t29pwj7JwpqhunBZhNyQkWiFLl2O3Pt1jRyiaUbiBQyzsoZNzfTs6jUxBoJRQGlh2ZTBKsKa6mkId7rOHKfqyNwelQtI04lT7hRgUnLoo96KyZ/aHelMq3zlwE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770491657; c=relaxed/simple;
+	bh=FjkaHPuElOBB44uTelMn0UPjI+jPasTY3KiBIXox284=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZU8l8rGNnPcerRTiYA744r1tQebkfF0ZB+ss3H9QKdzlIOw/Zofw34+0brkTKrTPTK/nD8Cv9MHJCYycz2jgCvG1IJIu+9xP99h6IsMEDtxJnRK2rrZuL74/wJnYutfH2phEmfbOrmQ2Gz5rMrUe5yvklOPGo2m+rabfy9vAM64=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C+3yZijf; arc=pass smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="X7h1bo3L";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TnKt90u3"
-Received: from phl-compute-07.internal (phl-compute-07.internal [10.202.2.47])
-	by mailfout.stl.internal (Postfix) with ESMTP id 008AF1D00066;
-	Sat,  7 Feb 2026 10:55:17 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-07.internal (MEProxy); Sat, 07 Feb 2026 10:55:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1770479717; x=1770566117; bh=RRj6BKNr/q
-	9soARGeWpVLXX4DM+VgJ2PyVbqhDP5l+g=; b=X7h1bo3LcSWGun/j3/Wlcop+tn
-	VE2WGpUOw949VG/sUBb+So84nSLxUIYFuB+AYwWIigeO6Q6JCu1MkP57fTeloJPY
-	GDTtDfLK7n3gBcDrvIGzKQJzNaUo6FBCYU0NUsHmwuLdVakTtcH0e6dmIudQ42za
-	+w3jbCvKq8zzOqTXQ2YBsaq+y8fxUajUZP7EV+TuvcoDheKyNzL9gLPE4u2V0AF9
-	RPsIdb7XVIR3YjekRmGaZkKPx/sQgYs+ij6HCV5wgTOMKTwvywvUk8SO1JDjNI0g
-	EvjXIk3fEg1iVlMLFzTMmGp6SWP/pzlIx4cQrBZomlOfXpgPOGPrcdL+Lgww==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1770479717; x=1770566117; bh=RRj6BKNr/q9soARGeWpVLXX4DM+VgJ2PyVb
-	qhDP5l+g=; b=TnKt90u35ifweiw4Lani8nSB9gpYr36UYkP6Cfwgym1ZFXBZYmW
-	PPiqtAhAReCWWEC4fP7JfB3/A3JYm2XS1zGX8sJtcbT2o9RUuR60Xzd5iigbHfqU
-	zQvHU1k1m0ErF7qKPjhm5Fhqv2W0YJ4+CMASH2J7ndLbdKoYs7oqrSho1N2ic6jP
-	Z5K/Yz5fJd3X7mqoEr2tPGSmW91hzNjN2pXfNAmT0UvX0xTkp6xHXj1X0P/CRFVO
-	A2zOARRp1SlXopEtqvAkL9qrg5UdrqUMj83kEwfne+oR4G7OE/cvRw9Aiwf6+uYM
-	KoZm4NodOtFozqU2YU3puZP2akWgCLhcJ/g==
-X-ME-Sender: <xms:ZWCHaTkVsBzVkjbXom8JRO2RJhFfVa1aC2qSzWbzN__Uo05SAjVeYg>
-    <xme:ZWCHaTiLQHYavMM4STlpwRkgSzy_riHvyLz-S6Fh14y5Fnf5ey1V-qHlPQDVTj9JT
-    FkpeuRqWiWzK4roHaR8HPZyj9JuPqawOMmtv_bx8ZiseoSuOA>
-X-ME-Received: <xmr:ZWCHadh5HbhpT_W2JhFlQrvz6-l1mZllvKwjMsBBZlR_IEfs4qdqm5_mKIpZCSQUd8uea8Ah-6Hc9olhoBRdEJfEibkNV2eDEhL8qQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdduledugeeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttdertd
-    dttddvnecuhfhrohhmpefirhgvghcumffjuceoghhrvghgsehkrhhorghhrdgtohhmqeen
-    ucggtffrrghtthgvrhhnpeehgedvvedvleejuefgtdduudfhkeeltdeihfevjeekjeeuhf
-    dtueefhffgheekteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpehgrhgvgheskhhrohgrhhdrtghomhdpnhgspghrtghpthhtohepuddvpdhmoh
-    guvgepshhmthhpohhuthdprhgtphhtthhopehslhgrvhgrseguuhgsvgihkhhordgtohhm
-    pdhrtghpthhtoheplhhinhhugidqfhhsuggvvhgvlhesvhhgvghrrdhkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehlihhnuhigqdhmmheskhhvrggtkhdrohhrghdprhgtphhtthho
-    pegsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhlrghvrgdrug
-    husggvhihkohesihgsmhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhes
-    vhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:ZWCHaVvk6iA4gdRYE64I__QFvx0cFZyVefN7fhskTAyZs0B_ciNvEA>
-    <xmx:ZWCHaVtKiEIw1bQi7bRiokGws6YemGOflh5cb8YvCOAFNi3AbE_yNg>
-    <xmx:ZWCHaTqyOW09q8JjFEs2JmBqsnS5e7f8vZJPyoozqrfz_mvXto1WrQ>
-    <xmx:ZWCHacKGkxCtH6ESXrZJhhDyC0NIFL2myp4Lis4r3wZ4PbrxrugVLw>
-    <xmx:ZWCHadwD9im2-xdcMwOzx3l_2ClyqLYPNgF03DVstTE_WXOA9RsH9iAJ>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 7 Feb 2026 10:55:16 -0500 (EST)
-Date: Sat, 7 Feb 2026 16:55:14 +0100
-From: Greg KH <greg@kroah.com>
-To: Viacheslav Dubeyko <slava@dubeyko.com>
-Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, bpf@vger.kernel.org,
-	Slava.Dubeyko@ibm.com, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 3/4] ml-lib: Implement simple testing character
- device driver
-Message-ID: <2026020719-thrive-domain-f0c2@gregkh>
-References: <20260206191136.2609767-1-slava@dubeyko.com>
- <20260206191136.2609767-4-slava@dubeyko.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C+3yZijf"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4362e77d7fbso1228412f8f.2
+        for <bpf@vger.kernel.org>; Sat, 07 Feb 2026 11:14:16 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770491655; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YNl3gw7RRMG1liIuymHykClIjTJRTVMlGCIq54ubnc/cZqI1TYBaM9mvC3vmNa8qiu
+         Bz1xVhptKdCn3UwYH+KomH8SxYPBU5Qx+pEUJu8HDdhCkSNWOIcR4vffRDi+j2upwY3V
+         ye3VLa7dp7dfO/PV99RUYexry+51fpgfn2Me6uu3vGDd001JazIGsglrlXXAD9BgDYce
+         HOcV1mhqNopeReWwVS7drHFdXwE41/VAhf7NhqjZG/AwHHTD4f7H5u6dB0xHZc9HIgGY
+         R2wkgSBpsk5pSQj0204Rs8Nack2B41d9GyBJ+s8DVnEMaEXM+b+MD/DGpbNmfp7dGUPD
+         u1FQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Jcrvr5wraqN/h8nskCTF/xn5cgM1Ku/oiwwkDvO3IVA=;
+        fh=Z/Fl3zYaxAxSKlqkB4M9/PWWF8CMchl7hxkyvqSANMc=;
+        b=igNG9ESFWzEw4PrDIGUUdS7ucXZc6y3facPjjD+irQj1bdcDUPUUbxr0gHEAIAcg6q
+         nj8EFbH61fIQToiemSQ0iN5I04Z8SkorGZw+7RtUqRdqsM8u5Qf6yjFC7T/4qxYCkTyf
+         G7KpLqnQpJTnBMwX2fqwuh7R0B4rZt145I8zogHvfvl1gT/I+HIe2IYKhTW1g7d2IjMV
+         Hr8487NSHsOHdApnLRZ1FJWH2jxmc9Z8VAS/uuqUjJtnzJJr/Yy0OU+7y212OQvFACHZ
+         1Wy3j8cku00yezGVB8BFfuaM+s8t12KQ6gh/zeUiy6ep+h4vpUHzEroRcFWpmJnqBoiT
+         cU4w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770491655; x=1771096455; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jcrvr5wraqN/h8nskCTF/xn5cgM1Ku/oiwwkDvO3IVA=;
+        b=C+3yZijf+d7e+nnbxj9mqNryu/JORhUwFzohoBDqCgejluD6uGIrdDhd4C//I0PBrX
+         BDG7ZFVIz31JBrsV3ziQJi6h96PMPIyAh4pMf7frufph8EuVX58oMPwS0yWocoiL+ulG
+         ytbWKWxzlm49zKiYvSTE4OTjsHaZsv1jUmtUEsmtK50K2v65sZEzQHwLhHNjWbk1hHzJ
+         3fN2uTxTBqRiIlMgFdYHwwlIbfbxVbjT4k6ZWNn7xnu2gxL7oD+jYWLaViRoCNnQ0rvM
+         az7SLgeiAKE5vMmDZVUyc5reFNsIewEusL/LT1FjCZenbqR/xkDh/iD2AGrMt5dlvFG9
+         6+GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770491655; x=1771096455;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Jcrvr5wraqN/h8nskCTF/xn5cgM1Ku/oiwwkDvO3IVA=;
+        b=IqUDBV+vkPd3bZ6/FnFVeIf3dRhq9JHskO6WfitPlS7knfkFFrZkgR/+hJwIkdiGQS
+         Tb7ayGo4rxRGLooNbdgG7aOv1MCn7xKytJn6WqI0zl4UOnTaI7IvCLGz9J1DP0MRvYfB
+         q56teyuKCGHDo2xY8DRXtPBF1lSLf3zw1I/cxGeMXZ+Oh8qnS2wz0AEAybSZdbcWbJHI
+         sClDS5ILFgRtDBoaHlQFYe/qo5efJoVH3369L5OiWPsJ6lSE4PW6vkMV/0AI81OYGV2O
+         xobBBryfsAvfrTow5MYwzIj7O8aLEP2ke7v6TWSwRWtFPwJvXZFbgihX7K4Rsp/4cB6n
+         Pq3w==
+X-Gm-Message-State: AOJu0YzvrrTwQbCZe5WMC/X58BW2MkcqhfBWQz/WgDOdc5sv0o/ZwI1h
+	qWf+ZFZyNqiR6LlJt2FPPRwO/aoz8hvyr3tC0GSNazxsgz6DvJkKdXkMHp98dE6Z/6vLo2JaYeX
+	Nh3PUApEz1FA2R7+HMhq+D2z/cUimw0Y=
+X-Gm-Gg: AZuq6aICSzY6gRYFMrNvu2KZ5E5OazYDeK280y0BaAbpXI35LYj1IU2EAvy2BjeVpqB
+	7k2iL+95CdgEmO3J/SlPf+6T6g4KpcIwv72YLF48L/EeTOE4s9L5K1Qd0Zq4UKQTMc5uMb4dOi3
+	jZVC5pHiEJXasqdW5zAE7J39WocJBlHH3avXZ14YDWBZrpokwJj+PODqU0w6iS5ly3KwooBCxi3
+	UWl4G/TQqLFTBSnDU1lLC7DF1uzRYn90sirEDswCNQbjHBg6qpYBGF2bPfoKrqOsapjV/EggPu6
+	56aTFjZyUFt7rTyLbDBml2+w5+eJ/VzD1oyvutxNNGRo4wOu98l4O8b4OJ2rbFKONUw/WMc5tBi
+	QN1PmZD0CHfz5Vw==
+X-Received: by 2002:a05:6000:2307:b0:435:a9c9:159 with SMTP id
+ ffacd0b85a97d-436293411e4mr9811207f8f.18.1770491654853; Sat, 07 Feb 2026
+ 11:14:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260206191136.2609767-4-slava@dubeyko.com>
+References: <20260205-rhash-v1-0-30dd6d63c462@meta.com> <20260205-rhash-v1-4-30dd6d63c462@meta.com>
+In-Reply-To: <20260205-rhash-v1-4-30dd6d63c462@meta.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 7 Feb 2026 11:14:03 -0800
+X-Gm-Features: AZwV_QhYN286ERsE6R0aWw5-phKeXHHUh_r_9NcQSMJkARrxasB47xt-ztI5cSQ
+Message-ID: <CAADnVQKvp2tnQSWW4Kh3ofGLvaEYJ47kyZeNUscAH_DShw8XHw@mail.gmail.com>
+Subject: Re: [PATCH RFC bpf-next 04/12] bpf: Reject resizable hash map in
+ tracing progs
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>, 
+	Kernel Team <kernel-team@meta.com>, Eduard <eddyz87@gmail.com>, 
+	Amery Hung <ameryhung@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Puranjay Mohan <puranjay@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 06, 2026 at 11:11:35AM -0800, Viacheslav Dubeyko wrote:
-> Implement simple testing character device driver
-> 
-> Signed-off-by: Viacheslav Dubeyko <slava@dubeyko.com>
+On Thu, Feb 5, 2026 at 12:27=E2=80=AFPM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> From: Mykyta Yatsenko <yatsenko@meta.com>
+>
+> Resizable hash map uses spin lock per bucket, which makes it not
+> possible to use in NMI or IRQ contexts. Reject in verifier.
 
-It's hard to tell if this is just an early april-fools joke or not, but
-if it's not:
+It uses irq protected bit lock.
+> +       if (map->map_type =3D=3D BPF_MAP_TYPE_RHASH) {
+> +               if (is_tracing_prog_type(prog_type)) {
+> +                       verbose(env, "tracing progs cannot use resizable =
+hash maps yet\n");
+> +                       return -EINVAL;
+> +               }
 
-> +### Character Device Operations
-> +- **Open/Close**: Device can be opened and closed multiple times
-> +- **Read**: Read data from a kernel buffer
-> +- **Write**: Write data to a kernel buffer (1KB capacity)
-> +- **Seek**: Support for lseek() operations
-> +
-> +### IOCTL Commands
-> +- `ML_LIB_TEST_DEV_IOCRESET`: Clear the device buffer
-> +- `ML_LIB_TEST_DEV_IOCGETSIZE`: Get current data size
-> +- `ML_LIB_TEST_DEV_IOCSETSIZE`: Set data size
-> +
-> +### Sysfs Attributes
-> +Located at `/sys/class/ml_lib_test/mllibdev`:
-> +- `buffer_size`: Maximum buffer capacity (read-only)
-> +- `data_size`: Current amount of data in buffer (read-only)
-> +- `access_count`: Number of times device has been opened (read-only)
-> +- `stats`: Comprehensive statistics (opens, reads, writes)
+This is too restrictive. lookup is lockless and
+update/delete are using bitlock with irqsave,
+so we can do if (irqs_disabled()) return -EBUSY in map_update/delete
+helpers.
 
-Again, this is not an acceptable use of sysfs.
-
-> +	/* Allocate device number */
-> +	ret = alloc_chrdev_region(&dev_number, 0, 1, DEVICE_NAME);
-
-Don't burn a cdev for this, please use the misc device api.
-
-good luck!
-
-greg k-h
+Also please add it to selftest/bpf/bench and compare it
+to regular hashmap. It's likely slower, but how much?
