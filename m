@@ -1,80 +1,79 @@
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE3926B764
-	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 13:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C655258CDF
+	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 13:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.47
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770556072; cv=pass; b=g34nAyKt+EgIgGUiULqbbR0p2P0BgbuN6Ux2h9bB7Khe8C0uCftLESc2wohZQ65jhLxS8fJ1XJ05TNn83dtJniiwOXNgMKiBZQoQZ7r5+tvsu/EGyYfXVxjArJEe4HjdYTytvhJtVKM9pe7Mktdj+9XqHa74gTCeKJCdOpx2w0Y=
+	t=1770556099; cv=pass; b=mfEZeA/h14GRWn7DcbCAAw1valaycXE1HJ4gNfF2Ok1wQhHBU5oIeC/tSx9vBHioxZD6zq3XrKRDyhvMU0khdzPhCqeXq2S+CN/GtD1Hy/63MIn8MVZ7smoK7GGjWc6Tqci6WR0Y+T8tpYVec58GgltPc/dxckUei3atdINeYVs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770556072; c=relaxed/simple;
-	bh=1Lh2M9MV6l1zfYMfYfAA4oRMXUg/S1a/HJ99t2BQ6ag=;
+	s=arc-20240116; t=1770556099; c=relaxed/simple;
+	bh=9OJqdnT6R5/4E5JMOG7ZtX0T+HXSx64sLiypnTWLM2E=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qwRAtYDrIafyYy6DQFj6r1uRhs92KVzleLW88S1UHaKvmcvlJt10Ea4MduIp8plki6itcd2kNKdDtEO5v8jdFARUaVbTTG+DgDlZXYf270l+qMI0SK9CTNiOdUUxvFtkmkaFiyvmUXDUzWui+TlyvLj5zTx7acC7e902nBSI0rc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZJIvfzS6; arc=pass smtp.client-ip=209.85.218.52
+	 To:Cc:Content-Type; b=MxG6evySKfTlTjU4oDoTQJctEkOviOm2dxUTJOwEOZNiS5E/5FLzH/UyXoGkzE28K/YDaKeWrRE3sAoCKqfEy7Rxa1EOx0GisU/JSexeT5t2eTxA64AcPrEGmCAmLNJId3+pSER9DHvhWkOtf2kbbsweEbIkBeiNz/JOvAY8Q7g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjY60c9Z; arc=pass smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZJIvfzS6"
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b8870ac4c4eso351191366b.2
-        for <bpf@vger.kernel.org>; Sun, 08 Feb 2026 05:07:51 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770556070; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjY60c9Z"
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b883787268fso329045366b.3
+        for <bpf@vger.kernel.org>; Sun, 08 Feb 2026 05:08:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770556098; cv=none;
         d=google.com; s=arc-20240605;
-        b=ZG+m7JPWthYNLwzna/2ok+Z+CKUM0eW/5yn1vOJrWtQ0Twz1PHUifhTumIALHZSZCt
-         AfeqiZDZS7tAD6azsUVexMP82JjeeSwMqbwhIQX48C91o4rBlR6wVvy/qvEbK0Ag43f6
-         Z8iPi/rKQFxjFWllxICkOkFju5yXzXF2KboKUc5jxx49hSe3M93Af5899kZaKWYC9mZ9
-         WIU5ynTBi6zCnB7UlVTUxwkfrxq7YYSQODC09ZgbvzG+nsZmzgaLPRYTfUw8FmeznLZh
-         6U7RDKVbxiAM+tMw6H+NdyQ5+sO1+Nh9umFQz7m9tlqzD/rZMQ70E6zHPpDj4COuE8N8
-         WJfQ==
+        b=huNbMulRYve422EWF6BhVXghCjHfkwhWbFEOfQc29wztCRnouhEYldzmbOwRZT469t
+         FK7ARjiPTo4wLPVqZWD/y8IVG0X3VkL+Eu6d/OhQkH0uCvyS3bC/k4zaFvGUl8GSzGXr
+         p2MqolU1OkCsP9VuyqlrFTszG3h+5p/rSgEkXWgzw55bwgeF4jbRoPAWNqubc5cTXh1H
+         O7hYC+vFwd9v0eC/XlNHtTu9g/gnqPriyJSL/HhvtTx5W179YSRLFkxMljup91Hhmkp6
+         Tr+/ZzQuABmbZppOpfIkABWFAM2UL54xmPNMFH91QHh0a8BTwI1gp0BnzyipSLJFhtk6
+         hw1w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Lpk7186utWa07lVburlY6Omhhb1I4wGPFXBY93Ojxf0=;
-        fh=XL2jPfvqjcyaHu3y9d8ob5jONML1E8BXDx9GcwdzAfc=;
-        b=aRavWPvU8TKOft+sqBywOMXNsmneY63lk5NazB2WyH7VLsDjiu/KZqwysz3Hopy/ys
-         eflA8timxnWOKJd/838QzbioIbJ6badhjEvO6dxug51EwkSbX9cTPmfOPfyvS3wzhx0b
-         5pe1CqkI/RVpk7gJanepZTk9MqV4pxYcxxvfXxlqOBCy6cV/m+igxeqoI/pWOIFydW2p
-         4Q+lC9S1ybghmT2IuyRUmOSDDU/0SKuVnw6VhWTiCijFyv3hAEfDw4fXYbc6F1ZQwT5r
-         IOGzaCPf9/EYJF/Mi0MJSGbn65XTxmr0WTktu5iQzQzz1m06X9tfE70ub4PrvxydqJfr
-         nyPw==;
+        bh=9OJqdnT6R5/4E5JMOG7ZtX0T+HXSx64sLiypnTWLM2E=;
+        fh=GcP14/x+bZSA8+McS/12UjdB695wfgK2p7IOu2/hCvg=;
+        b=N+SJKOuaXI1ehKKH4fVaXry7D38TmajJ23OKyNlR0LZT6tJgz1gaqV0aFdvFsYzo6F
+         HpNgc4XGw8BLS3TdLqs98zQXtPsgKKN5jrSoU1WEoei3txO7Ivj6EJc2nIfRQEMk/fr4
+         xMWLNrdqaeHepQbqStLEt03aDh2qz5BlLmL4PzXo4UlbY6FxV0k20aAsxoC3i07sbVkV
+         ZFnmr6fahkBKl3Cw3VCVGos48+Vl2fRq6UaEGMII3RruxSOybwlYR2VPK2H2BPSCDwL7
+         Ns7KpVsChWEjgYFPcgpBqK61oIYlg7zewcdsTnpX5UOBbJ2VUEyrfRemkSiX1c5ViuFn
+         5JRQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770556070; x=1771160870; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770556098; x=1771160898; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Lpk7186utWa07lVburlY6Omhhb1I4wGPFXBY93Ojxf0=;
-        b=ZJIvfzS6tDKInHr/TstleNlPkHi5Yd3HGom2HjRlJjjYg57ZQENTi1evIcdp0JMbeo
-         dEfn2+ZEx99jGKohLUOZ6+SobQSNDY/IDotrpYR/NP5Fvi1CJlNRVi5Se4mQD6jX7TSz
-         xWb9/6OKtAVUngiiYhBVDnJk3bGzen8hgBcyPwFapcAJHUuF461TmZ5je2K15Sm8jEvl
-         3DxUErY8jQtxxI3yOI4Rhm666411MNqJgOiXmSjqokBf9F2YGe8w9nPA0lhpNHdv/4M/
-         3Br65pOz7homXmRiCNJsE5Sw8C3cyUNvM+NkIsZpeZe/p2UY9v/E/pzaXWU1zr/naGWb
-         6f7g==
+        bh=9OJqdnT6R5/4E5JMOG7ZtX0T+HXSx64sLiypnTWLM2E=;
+        b=XjY60c9ZWHYsyEZIxYugWU9bCDqy5Iv14GgRP1DdykTLRU6Nd3qRZCkHKz0jnoFLcL
+         m6X8uGAWNE1dgSZn0X0lM3CwSund7SQzdHBZRoNJx7EV6n4VY/5cRZ5ApvzD2gODItWj
+         pKXxCOKkQa/YliZK6/6IDRrUMV/fwqKL3p8bIJ/xH7ycPCzxTdvOUBHFC4K2EavDGnFP
+         x0r+dz7qN9MTSYjQujvsG4UQ7uQ6iyxpkQ5lxcjsBOZ1Pw0Yr/a6sn/7qZp0aOWHmRvo
+         +BXrKbTN9oWB0TDGTvhDZl8El7ayfdnmUhe0OWFZBUVe31F3aHdobsVJ9dxiOkHZnycE
+         NVzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770556070; x=1771160870;
+        d=1e100.net; s=20230601; t=1770556098; x=1771160898;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=Lpk7186utWa07lVburlY6Omhhb1I4wGPFXBY93Ojxf0=;
-        b=CUym7rcyqIFIdwvbgyoLY1SadeYp2nR7tPDJvAikMd8hDfX005k0aW2CGbpKePTK/h
-         o/D/kLxdYKbZPPjJFJ1rQGRgbCigFSxvA32WlptIiWDP1+BO5A1OgBkrlFzRXFJvWQx1
-         FQGpHZpTb2uug6gc9Gd8b4Ru2vRSdMW3R5Tyh1abUnRK5pJOFa7SwysLh37+qfy7ei2q
-         ypd5yai/i4m6V4reAF3OmcmM8uisvRsUr7Bpr8gcbZxVgFB7IqYK9my2UkzAyVS1yBxL
-         fKMwqQiov26uvlTS59V+9ISRABlg30P1J1j9wKsfNO0hl00pqf3i04F229F88cwcYpZZ
-         skgw==
-X-Forwarded-Encrypted: i=1; AJvYcCUlWNo1o8PTb9xLPU8BNMhZZw0xHbUXcuYBcp54KRs5hkstcgC+UU0vseTtviaAGzvh/4A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTc8B1F61b9MhDfKxcCtdK/UxHj6ZOheDvVFzDR9P99Xu1B/zW
-	/OAvpt26oY0ugYzIBQIhgANUBtxTyxSwMXnLqvFvBTGhbna5uojAcBcEWrGO8/dKuDQl9YBAojL
-	v4/tndGdKV/EasWAxOUvesol9vy+VN+I=
-X-Gm-Gg: AZuq6aJSpqLKhXaVt8hyAL3ZzZV4qedwFAqg6Vd4qJYyK6r6lVeTxSpThG1ESM+GmrU
-	FTlQhvIK6FMxqy0ejj5LY3DMDMePmJNarEGROK8sWBtQ66lXOszPqq3I9jckpTmutF4JwGdhGoF
-	N1bs0f/SfE50P6LseXqftP8SU7MnrIZ6keHfJ+GtQPgoWGqkV39nxDwWA/mmnd2JtWtHUPjV0E+
-	hIb2JxKASwxbpUE27zrV5R7BqOMqYvIGEQKmD/0pgGCOUkAJD3KhEQrH8iBywIlT03TSo0SUY0S
-	x2fnWns=
-X-Received: by 2002:a17:907:2da6:b0:b87:117f:b6f9 with SMTP id
- a640c23a62f3a-b8edf174430mr469352266b.8.1770556069578; Sun, 08 Feb 2026
- 05:07:49 -0800 (PST)
+        bh=9OJqdnT6R5/4E5JMOG7ZtX0T+HXSx64sLiypnTWLM2E=;
+        b=DLcxLz0v0bOLmzFn5gxqGeGUa9jJapzl/KdP2x7hKoSpPez13V66/aYyAb9tguMWXl
+         7ymbOTZcrmgSKgGgV4trlhz5bBzM2cAjtRCjXO/1SZGOCi7ohK2WGr7Jrds/RQMGXUNH
+         i+N0w9P8nddvAyZRF/ww9UEpLHW/vJ6EWT0vRqHkV4kkNS31dtntuxSPLNt/cVR9VkjN
+         BvZhJPqcUc8BVMxjULCDZd0ah7QezZpgQjQCYgh+F+/Lb2ENjGARm9ms9SkW2LRpdHjB
+         stg98OY4vSB3XStdSJ0D2FWOt+eOzzo35KltD0jVEjpXgwT1UdguK3XhjvfgWyQUpO44
+         v8eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPpyW3pXIkh9xWMlEAw76Xv/8kN2aLtDYRSLs0aO2VPOO5oo9dvqjhbDXJZytOV2mqOUk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2bj+xkzABedIOFbOHzIeX5JlCXiLW5aOifBaCjxJ2OPoplPD7
+	wB/l02aZSbFnmyeZk/5f/haBnAnwLxx2UTTUxoasooQfpi3qp7tX7r+rKyzYL2iCW6/szYiJrNY
+	IZ0vhgCgPL3XnxEYqizKFD2O+kuv+sSM=
+X-Gm-Gg: AZuq6aIpaHtkWSGa18tjYAAr+/BSCU6LiPwiQ8WMPhyOeYKsnn8U/9H3PPdtqHjZDcZ
+	sHcPegx/C0mTZVpM+3cYnP15F+m8qVZWYJnh/c8sQ9RqP7GcCYr+vmx6Y+f8RW7uitQNrt2N7eD
+	88ym9dCU5H4auvO8MN1a+h8gTnYoMIQ1H3nwYrWEsWlSEPTiL/UtsRN98Zlt0THEGbUC8fISw7A
+	oF+uYAuUw32lGWLE5HqLK+1SCSFtFIyGk4vnebfal5CaBLwWL/FOsuFnf1PcBKrbgCOUnAc
+X-Received: by 2002:a17:907:2daa:b0:b8a:f9d7:1aec with SMTP id
+ a640c23a62f3a-b8edf14ca69mr505910466b.10.1770556097276; Sun, 08 Feb 2026
+ 05:08:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -86,121 +85,128 @@ References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
  <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
  <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
  <20260203101707.52965eb0@gandalf.local.home> <CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
- <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com> <20260205130459.0ff532f3@robin>
-In-Reply-To: <20260205130459.0ff532f3@robin>
+ <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com>
+ <CAErzpmvtJwB7nTD5EFHP9SxPxH-rc3NuJp5xLGSTB7YPbUX8YA@mail.gmail.com>
+ <CAADnVQJgM0W3aQVGi5_35xWc=D7Ruzt1xV0REM+RnnvtooeC5w@mail.gmail.com>
+ <CAErzpmsC0qHL41KoRTxQ2-Xy=t74NnOZQxrv8VMFRSt3eoFrRA@mail.gmail.com> <CAADnVQKrAcSzTYbSEHkWiWS0Ot5wAQ8_Q_v6-J=6=O4MxLpbpQ@mail.gmail.com>
+In-Reply-To: <CAADnVQKrAcSzTYbSEHkWiWS0Ot5wAQ8_Q_v6-J=6=O4MxLpbpQ@mail.gmail.com>
 From: Donglin Peng <dolinux.peng@gmail.com>
-Date: Sun, 8 Feb 2026 21:07:37 +0800
-X-Gm-Features: AZwV_Qhtrwbg9jnGoduBNEr6Oncp7yRGU_wrKqlI5ZNeTdjeTOHhCmBD0TzKe2Y
-Message-ID: <CAErzpmsajhJ45TkPx_TPwAPwN1fxO0cNYFTKFgLaosiPMo9wew@mail.gmail.com>
+Date: Sun, 8 Feb 2026 21:08:06 +0800
+X-Gm-Features: AZwV_Qieeug1LxlBhiGFK7rwN1TwVDWOJW9C6yLIevkRt3nhVeuKkqX9xXTmh2g
+Message-ID: <CAErzpmv547nBOT95ZYv6KLD6esVUKY4he=EKiWvmuVPXZfSaYA@mail.gmail.com>
 Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
  via BTF
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Donglin Peng <pengdonglin@xiaomi.com>, 
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Donglin Peng <pengdonglin@xiaomi.com>, 
 	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
 	Eduard Zingerman <eddyz87@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 6, 2026 at 2:05=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org>=
- wrote:
+On Sat, Feb 7, 2026 at 12:05=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> On Wed, 4 Feb 2026 22:52:11 +0800
-> Donglin Peng <dolinux.peng@gmail.com> wrote:
->
-> > > > I have trace-cmd reading BTF now (just haven't officially released =
-it) and
-> > > > doing an extract and reading the trace.dat file is much faster than=
- reading
-> > > > the trace file with arguments. I'll need to implement the enum logi=
-c too in
-> > > > libtraceevent.
-> > >
-> > > If you mean to do pretty printing of the trace in user space then +1 =
-from me.
-> > >
-> > > I don't like sorting enums either in resolve_btfid, pahole or kernel.
-> > > Sorted BTF by name was ok, since it doesn't change original semantics=
-.
-> > > While sorting enums by value gets us to the grey zone where
-> > > the sequence of enum names in vmlinux.h becomes different than in dwa=
-rf.
+> On Thu, Feb 5, 2026 at 8:10=E2=80=AFPM Donglin Peng <dolinux.peng@gmail.c=
+om> wrote:
 > >
-> > Thanks, I agreed.
+> > On Thu, Feb 5, 2026 at 11:56=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Thu, Feb 5, 2026 at 1:21=E2=80=AFAM Donglin Peng <dolinux.peng@gma=
+il.com> wrote:
+> > > >
+> > > > On Wed, Feb 4, 2026 at 10:52=E2=80=AFPM Donglin Peng <dolinux.peng@=
+gmail.com> wrote:
+> > > > >
+> > > > > On Wed, Feb 4, 2026 at 12:00=E2=80=AFAM Alexei Starovoitov
+> > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > >
+> > > > > > On Tue, Feb 3, 2026 at 7:16=E2=80=AFAM Steven Rostedt <rostedt@=
+goodmis.org> wrote:
+> > > > > > >
+> > > > > > > On Tue, 3 Feb 2026 21:50:47 +0800
+> > > > > > > Donglin Peng <dolinux.peng@gmail.com> wrote:
+> > > > > > >
+> > > > > > > > Testing revealed that sorting within resolve_btfids introdu=
+ces issues with
+> > > > > > > > btf__dedup. Therefore, I plan to move the sorting logic dir=
+ectly into
+> > > > > > > > btf__add_enum_value and btf__add_enum64_value in libbpf, wh=
+ich are
+> > > > > > > > invoked by pahole. However, it means that we need a newer p=
+ahole
+> > > > > > > > version.
+> > > > > > >
+> > > > > > > Sorting isn't a requirement just something I wanted to bring =
+up. If it's
+> > > > > > > too complex and doesn't achieve much benefit then let's not d=
+o it.
+> > > > > > >
+> > > > > > > My worry is because "cat trace" takes quite a long time just =
+reading the
+> > > > > > > BTF arguments. I'm worried it will just get worse with enums =
+as well.
+> > > > > > >
+> > > > > > > I have trace-cmd reading BTF now (just haven't officially rel=
+eased it) and
+> > > > > > > doing an extract and reading the trace.dat file is much faste=
+r than reading
+> > > > > > > the trace file with arguments. I'll need to implement the enu=
+m logic too in
+> > > > > > > libtraceevent.
+> > > > > >
+> > > > > > If you mean to do pretty printing of the trace in user space th=
+en +1 from me.
+> > > > > >
+> > > > > > I don't like sorting enums either in resolve_btfid, pahole or k=
+ernel.
+> > > > > > Sorted BTF by name was ok, since it doesn't change original sem=
+antics.
+> > > > > > While sorting enums by value gets us to the grey zone where
+> > > > > > the sequence of enum names in vmlinux.h becomes different than =
+in dwarf.
+> > > > >
+> > > > > Thanks, I agreed.
+> > > > >
+> > > > > >
+> > > > > > Also id->name mapping in general is not precise.
+> > > > > > There is no requirement for enums to be unique.
+> > > > > > Just grabbing the first one:
+> > > > > > ATA_PIO0 =3D 1,
+> > > > > > ATA_PIO1 =3D 3,
+> > > > > > ATA_PIO2 =3D 7,
+> > > > > > ATA_UDMA0 =3D 1,
+> > > > > > ATA_UDMA1 =3D 3,
+> > > > > > ATA_UDMA2 =3D 7,
+> > > > > > ATA_ID_CYLS =3D 1,
+> > > > > > ATA_ID_HEADS =3D 3,
+> > > > > > SCR_ERROR =3D 1,
+> > > > > > SCR_CONTROL =3D 2,
+> > > > > > SCR_ACTIVE =3D 3,
+> > > > > >
+> > > > > > All these names are part of the same enum type.
+> > > > > > Which one to print? First one?
+> > > >
+> > > > Another option is to print all matching entries, incurring increase=
+d
+> > > > overhead and extended trace log length. However, I prefer printing
+> > > > the first matching entry, though it might be inaccurate in rare cas=
+es.
+> > >
+> > > I disagree. It's not rare.
+> > > I wouldn't print anything. Let user space deal with it.
+> >
+> > Okay, I will implement this in libtraceevent first. By the way, would t=
+he first
+> > patch [1] introducing the for_each_enumand for_each_enum64 helper
+> > macros be acceptable?
+> >
+> > [1] https://lore.kernel.org/lkml/20260202111548.3555306-2-dolinux.peng@=
+gmail.com/
 >
-> BTW, I just officially released trace-cmd v3.4 (where you can see whats
-> new in that release here[1]).
->
-> The biggest change is that it saves the BTF file in the trace.dat file
-> and parses it on the report (it requires libtraceevent v1.9):
->
->  ~# trace-cmd record -p function_graph -O funcgraph-args -g do_sys_openat=
-2
->  [..]
->  ~# trace-cmd report
->        trace-cmd-50935 [002] ...1.  3490.518138: funcgraph_entry:        =
-           |  do_sys_openat2(dfd=3D4294967196, filename=3D0x557bb9e3ee10, h=
-ow=3D0xffff88815220fea8) {
->        trace-cmd-50935 [002] ...1.  3490.518141: funcgraph_entry:        =
-           |    getname_flags(filename=3D0x557bb9e3ee10, flags=3D0) {
->        trace-cmd-50935 [002] ...1.  3490.518142: funcgraph_entry:        =
-           |      getname_flags.part.0(filename=3D0x557bb9e3ee10, flags=3D0=
-) {
->        trace-cmd-50935 [002] ...1.  3490.518143: funcgraph_entry:        =
-           |        kmem_cache_alloc_noprof(s=3D0xffff888106c7e000, gfpflag=
-s=3D0xcc0) {
->        trace-cmd-50935 [002] ...1.  3490.518145: funcgraph_entry:        =
-           |          stack_trace_save(store=3D0xffff88815220fac8, size=3D0=
-x40, skipnr=3D0x0) {
->        trace-cmd-50935 [002] ...1.  3490.518147: funcgraph_entry:        =
-           |            arch_stack_walk(consume_entry=3D0xffffffff94d9dfe0,=
- cookie=3D0xffff88815220fa58, task=3D0xffff88812d4c3580, regs=3D0x0) {
->        trace-cmd-50935 [002] ...1.  3490.518148: funcgraph_entry:        =
-           |              __unwind_start(state=3D0xffff88815220f988, task=
-=3D0xffff88812d4c3580, regs=3D0x0, first_frame=3D0xffff88815220fa28) {
->        trace-cmd-50935 [002] ...1.  3490.518149: funcgraph_entry:        =
-1.518 us   |                get_stack_info(stack=3D0xffff88815220f938, task=
-=3D0xffff88812d4c3580, info=3D0xffff88815220f988, visit_mask=3D0xffff888152=
-20f9a8); (ret=3D0x0)
->        trace-cmd-50935 [002] ...1.  3490.518152: funcgraph_entry:        =
-           |                unwind_next_frame(state=3D0xffff88815220f988) {
->        trace-cmd-50935 [002] ...1.  3490.518153: funcgraph_entry:        =
-0.951 us   |                  __rcu_read_lock(); (ret=3D0xffff88812d4c3580)
+> Just that patch alone? What's the point?
+> Refactor for what? Does it read better? No.
 
-Hi Steve,
-
-I noticed that trace-cmd 3.4 introduced a new feature:
-
-- Add support for showing parent functions in function graph
-
-  If the "funcgraph-retaddr" option is set during function graph tracing,
-  the parent functions will now be displayed:
-
-  preempt_count_add(val=3D65536); /* <-irq_enter_rcu */ (ret=3D0x10001)
-
-However, it currently only prints the caller's entry point. I suggest
-enhancing this to include the **offset within the caller** as well. This
-would allow tools like `faddr2line` to locate the exact call site accuratel=
-y.
-
-I implemented a tool named FuncGraph[1] to convert function_graph
-ftrace output into an interactive HTML file. It leverages fastfaddr2line
-to map return addresses (e.g., __sys_bpf+0x51/0x500) to their
-corresponding call sites, such as: __sys_bpfat kernel/bpf/syscall.c:6115.
-
-What do you think?
-
-Thanks,
-Donglin
-
-[1] https://github.com/pengdonglin137/FuncGraph
-
->
-> -- Steve
->
->
->
-> [1] https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/tag/?h=
-=3Dtrace-cmd-v3.4
+Thanks, I see.
