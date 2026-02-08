@@ -1,210 +1,206 @@
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013071.outbound.protection.outlook.com [52.101.83.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01638207A32;
-	Sun,  8 Feb 2026 12:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE3926B764
+	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 13:07:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.52
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770555584; cv=fail; b=YkedFEm2yQ8OaGbHoNYq2Oy9LxmjGYLhn8+5J+ZpGATCcu9ka2AA2tNk7fqcISAIWYT9HdGWtEZp9DpLK+6BhIg2wjDNzehu7LO9DlPohq8DfJ/3O9gnwLRGTqPefDFVlPzeHrjzJUIysBSm0v9+3wR0YO27oTGE8N8N4BO0kbI=
+	t=1770556072; cv=pass; b=g34nAyKt+EgIgGUiULqbbR0p2P0BgbuN6Ux2h9bB7Khe8C0uCftLESc2wohZQ65jhLxS8fJ1XJ05TNn83dtJniiwOXNgMKiBZQoQZ7r5+tvsu/EGyYfXVxjArJEe4HjdYTytvhJtVKM9pe7Mktdj+9XqHa74gTCeKJCdOpx2w0Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770555584; c=relaxed/simple;
-	bh=rIkNgHv3jka08RRZ70QXEEIF98/sidj5RNIPXJz2OX0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=lx2nAMBtbeqOsSqc6PJ+6RQ+/JVIGBQfoRXddPEg4IEL9lRNOSJDme+KqCeZAkgvLkgr5GKDF9qrpmlHR5MAHtOKCB4EAw+HtZouLetsiTZvmz8MJQYXMJsKUOFIiiThCH+Paaif/SZqQEzO0ZMbFqB9ait6kIsciMU+y4YfUhI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=kDEuVQYU; arc=fail smtp.client-ip=52.101.83.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1770556072; c=relaxed/simple;
+	bh=1Lh2M9MV6l1zfYMfYfAA4oRMXUg/S1a/HJ99t2BQ6ag=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qwRAtYDrIafyYy6DQFj6r1uRhs92KVzleLW88S1UHaKvmcvlJt10Ea4MduIp8plki6itcd2kNKdDtEO5v8jdFARUaVbTTG+DgDlZXYf270l+qMI0SK9CTNiOdUUxvFtkmkaFiyvmUXDUzWui+TlyvLj5zTx7acC7e902nBSI0rc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZJIvfzS6; arc=pass smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="kDEuVQYU"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Z7218mSPAu+UuVMaPMzOeXK6AQaixBBL/uD0Wj5CHKm+wyFngzYKdQXLMSnqRt3srINqKAHE/8JTQa6xuTzIgiNehH3yAlM6Jv4UdH71qmHToRaodbnnLX44g1F0Gi3ZFj0QpnYca+Y5xwc0IEo7MWVPNRAeuUfPUj55etCQZIdvVlh6r4IBCRIYHk/5H3wkwShVJEPvGxbELyqQRGSIPdJaMS1bsgL4JskT1ub9HWOF6tSMEtHDyFmvV4xQeYgYDonhjBJuy+w6bFuKzGcHMUt6VVZIPf3XhFE4akwp0GEXgjRGOk0fWdGHkZA+nEgYa96LHmjyzwq3lYZM8P1htg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rr/XIC2d6FGoYwy7L7vsitxwYPjosV0yjsxLuIsaA0k=;
- b=T9VsBko9WpliLS4mA/PdHRApX7biUQRrfsTSe8goADtRSr8UKKHvX6JzPK8ekM+JnxtCeqyapm96ZZ0VijsKbnNTSnlHTFy1DUOh6GRsAPDuwuUt7SQ0un8bvgXJN0CLqooV6SBVKBf3KSFJ7H31aMCChENL92V4B5CBBwIxBvL3NOIY1zJKETUHZoaMaUKiE2hkp9W2GewrRIx+6O6NkU739A2lPNZx89kHKBVqEgHTGUf7R5YC8vA2ah3rgZbV1oFWrxU3qtljQAre7n53+bHR9fUJQswfl1lQ/e+J8xNtZVFA6QMSherIj6E6h1wVri7n2Q1GNs1/QGhGzVHm5Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rr/XIC2d6FGoYwy7L7vsitxwYPjosV0yjsxLuIsaA0k=;
- b=kDEuVQYU2LKFyOglhtQJpGPY97muxxMdWxRK82T2WFQ7MmxNRldrdB/snTmi9GA4I2VGfvHwFMkII73VksGIfSC4YKKwuI0K/pPc1XtMM3ZQt3O8cZsq7ClGk+ti2lLvLpSvL/6N2ZuFvfLVCSHh4rOaC4daHfHYcVtiO7Ggsy62Gf4eY8ZvFkeZDNbyXuHKyBGHxt5vq9x5hfGTJ1ZNyrNYJPWM1oaHPzdwyyUFKxk3H3eaZFEga+bJrMAfV8w1pKKkEhRwB7l3R6jMYBLK4FDqLYKJKoMbnwLOs9JguUXhqhmuSFcJ/m9m48bp+e/qOU4wlz6KLTR6dezTnLU44g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com (2603:10a6:20b:438::13)
- by DB9PR04MB8106.eurprd04.prod.outlook.com (2603:10a6:10:24b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.18; Sun, 8 Feb
- 2026 12:59:40 +0000
-Received: from AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4]) by AM9PR04MB8585.eurprd04.prod.outlook.com
- ([fe80::f010:fca8:7ef:62f4%4]) with mapi id 15.20.9587.010; Sun, 8 Feb 2026
- 12:59:39 +0000
-Date: Sun, 8 Feb 2026 14:59:34 +0200
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Larysa Zaremba <larysa.zaremba@intel.com>, bpf@vger.kernel.org,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
-	Tushar Vyavahare <tushar.vyavahare@intel.com>,
-	Jason Xing <kernelxing@tencent.com>,
-	Ricardo =?utf-8?B?Qi4gTWFybGniiJrCrnJl?= <rbm@suse.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
- frag_size
-Message-ID: <20260208125934.f4n5mri2pit6s6gn@skbuf>
-References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
- <20260203105417.2302672-7-larysa.zaremba@intel.com>
- <20260205005901.gnju3zmqimtgeu2b@skbuf>
- <20260204173401.282899d0@kernel.org>
- <20260205122953.lscemcctayrvszdu@skbuf>
- <aYSP344FT-JlylwY@soc-5CG4396X81.clients.intel.com>
- <20260205124638.hxzvjiocephzlrk3@skbuf>
- <aYSZw4wbd-nvLTuD@soc-5CG4396X81.clients.intel.com>
- <20260205134046.pggwyosutj7ggi4i@skbuf>
- <20260205175408.30ab72a1@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260205175408.30ab72a1@kernel.org>
-X-ClientProxiedBy: VI1PR0102CA0104.eurprd01.prod.exchangelabs.com
- (2603:10a6:803:15::45) To AM9PR04MB8585.eurprd04.prod.outlook.com
- (2603:10a6:20b:438::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZJIvfzS6"
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b8870ac4c4eso351191366b.2
+        for <bpf@vger.kernel.org>; Sun, 08 Feb 2026 05:07:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770556070; cv=none;
+        d=google.com; s=arc-20240605;
+        b=ZG+m7JPWthYNLwzna/2ok+Z+CKUM0eW/5yn1vOJrWtQ0Twz1PHUifhTumIALHZSZCt
+         AfeqiZDZS7tAD6azsUVexMP82JjeeSwMqbwhIQX48C91o4rBlR6wVvy/qvEbK0Ag43f6
+         Z8iPi/rKQFxjFWllxICkOkFju5yXzXF2KboKUc5jxx49hSe3M93Af5899kZaKWYC9mZ9
+         WIU5ynTBi6zCnB7UlVTUxwkfrxq7YYSQODC09ZgbvzG+nsZmzgaLPRYTfUw8FmeznLZh
+         6U7RDKVbxiAM+tMw6H+NdyQ5+sO1+Nh9umFQz7m9tlqzD/rZMQ70E6zHPpDj4COuE8N8
+         WJfQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Lpk7186utWa07lVburlY6Omhhb1I4wGPFXBY93Ojxf0=;
+        fh=XL2jPfvqjcyaHu3y9d8ob5jONML1E8BXDx9GcwdzAfc=;
+        b=aRavWPvU8TKOft+sqBywOMXNsmneY63lk5NazB2WyH7VLsDjiu/KZqwysz3Hopy/ys
+         eflA8timxnWOKJd/838QzbioIbJ6badhjEvO6dxug51EwkSbX9cTPmfOPfyvS3wzhx0b
+         5pe1CqkI/RVpk7gJanepZTk9MqV4pxYcxxvfXxlqOBCy6cV/m+igxeqoI/pWOIFydW2p
+         4Q+lC9S1ybghmT2IuyRUmOSDDU/0SKuVnw6VhWTiCijFyv3hAEfDw4fXYbc6F1ZQwT5r
+         IOGzaCPf9/EYJF/Mi0MJSGbn65XTxmr0WTktu5iQzQzz1m06X9tfE70ub4PrvxydqJfr
+         nyPw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770556070; x=1771160870; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Lpk7186utWa07lVburlY6Omhhb1I4wGPFXBY93Ojxf0=;
+        b=ZJIvfzS6tDKInHr/TstleNlPkHi5Yd3HGom2HjRlJjjYg57ZQENTi1evIcdp0JMbeo
+         dEfn2+ZEx99jGKohLUOZ6+SobQSNDY/IDotrpYR/NP5Fvi1CJlNRVi5Se4mQD6jX7TSz
+         xWb9/6OKtAVUngiiYhBVDnJk3bGzen8hgBcyPwFapcAJHUuF461TmZ5je2K15Sm8jEvl
+         3DxUErY8jQtxxI3yOI4Rhm666411MNqJgOiXmSjqokBf9F2YGe8w9nPA0lhpNHdv/4M/
+         3Br65pOz7homXmRiCNJsE5Sw8C3cyUNvM+NkIsZpeZe/p2UY9v/E/pzaXWU1zr/naGWb
+         6f7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770556070; x=1771160870;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Lpk7186utWa07lVburlY6Omhhb1I4wGPFXBY93Ojxf0=;
+        b=CUym7rcyqIFIdwvbgyoLY1SadeYp2nR7tPDJvAikMd8hDfX005k0aW2CGbpKePTK/h
+         o/D/kLxdYKbZPPjJFJ1rQGRgbCigFSxvA32WlptIiWDP1+BO5A1OgBkrlFzRXFJvWQx1
+         FQGpHZpTb2uug6gc9Gd8b4Ru2vRSdMW3R5Tyh1abUnRK5pJOFa7SwysLh37+qfy7ei2q
+         ypd5yai/i4m6V4reAF3OmcmM8uisvRsUr7Bpr8gcbZxVgFB7IqYK9my2UkzAyVS1yBxL
+         fKMwqQiov26uvlTS59V+9ISRABlg30P1J1j9wKsfNO0hl00pqf3i04F229F88cwcYpZZ
+         skgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUlWNo1o8PTb9xLPU8BNMhZZw0xHbUXcuYBcp54KRs5hkstcgC+UU0vseTtviaAGzvh/4A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTc8B1F61b9MhDfKxcCtdK/UxHj6ZOheDvVFzDR9P99Xu1B/zW
+	/OAvpt26oY0ugYzIBQIhgANUBtxTyxSwMXnLqvFvBTGhbna5uojAcBcEWrGO8/dKuDQl9YBAojL
+	v4/tndGdKV/EasWAxOUvesol9vy+VN+I=
+X-Gm-Gg: AZuq6aJSpqLKhXaVt8hyAL3ZzZV4qedwFAqg6Vd4qJYyK6r6lVeTxSpThG1ESM+GmrU
+	FTlQhvIK6FMxqy0ejj5LY3DMDMePmJNarEGROK8sWBtQ66lXOszPqq3I9jckpTmutF4JwGdhGoF
+	N1bs0f/SfE50P6LseXqftP8SU7MnrIZ6keHfJ+GtQPgoWGqkV39nxDwWA/mmnd2JtWtHUPjV0E+
+	hIb2JxKASwxbpUE27zrV5R7BqOMqYvIGEQKmD/0pgGCOUkAJD3KhEQrH8iBywIlT03TSo0SUY0S
+	x2fnWns=
+X-Received: by 2002:a17:907:2da6:b0:b87:117f:b6f9 with SMTP id
+ a640c23a62f3a-b8edf174430mr469352266b.8.1770556069578; Sun, 08 Feb 2026
+ 05:07:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8585:EE_|DB9PR04MB8106:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5f87fcb2-3396-4b0f-c469-08de6711eaea
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|19092799006|10070799003;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?2968HSiAeGXhzrc7hbhRzB9MjbsSFesdzBOBL32LzSAcuUNpnBJuSAV4MtNQ?=
- =?us-ascii?Q?+DGuEAQyPio8kSwYXUfzD+NLEsWyEfj89XTqjQhY0qltU+grlT50BWaJrtIv?=
- =?us-ascii?Q?7ARhJT0R6SYwPtgjnpm73UkSAfZZx/179b/1QPBLn24KxuHPoUglvYRlj4KB?=
- =?us-ascii?Q?TARGXUeM71BIJSfzPce1iwm+C9N8rq7A2T0TtwmbTIkuLJLDEZefl6GdA6Wa?=
- =?us-ascii?Q?O6jYdfz2GPX9RAImBhoN/Yi+6W6I1vexl3xBRBdQg0cpRQSG0GURTc2UVAAa?=
- =?us-ascii?Q?iwKmJ6i4pbjeS8HTVAZC+h0JcWqxXZkKt+b0QJsOXJawlYSv5kw1cEBjNifS?=
- =?us-ascii?Q?uLM65O3C5WoOknHsSxvF3B6LuNQmhOSMc3ev5hWuLtV9VjQxx02guuLfTsVy?=
- =?us-ascii?Q?l7nD70aY7SxgMJIrvy7FUU/goYRZoQ5XAA13OghJU6Epj7o5BVSOvjhWgoNK?=
- =?us-ascii?Q?FE+wRWO7aJbzAG3aVrJ3xbV8SKdTPRFY+y2o3uFyIBD46d9DcFw2/LG3ClOx?=
- =?us-ascii?Q?jNPa3TXRNKcMrKVKqSlXJ9vqIwqgWN4FfB+hgiOT9xMmkrjvR+7acTMfvxrf?=
- =?us-ascii?Q?gqVjH4CIBgH5m3LWJ57upewrLhDiN8HQFLT/I2ekVBloC2j2nowZ9obRqwsk?=
- =?us-ascii?Q?zr5rHccm+9ahwdRcnYpjMrtmsBr7jZPWLWJT4EFO5ZONIOLHVW4vqoRiRJU+?=
- =?us-ascii?Q?IoA4Ielch/pn7JoONqpChVh/7zY0dMJ3u45XJBWEdO93ezPdDV7B9XsEgw7C?=
- =?us-ascii?Q?OOOqlyJ2RgJLLS4ZiFvxGp07nFSWPZqeGzL36Ry2XU8OmJOVZ5o3WGQV4EJe?=
- =?us-ascii?Q?HXmeQlHEsp9irkXEFsdAPoITZPG1UKU0uLniqoz1jHuii43Rj/4p2fGUCVlO?=
- =?us-ascii?Q?Lgh8YvUma6V8z8UIZbcHrUmN2EtB3lzplfd19ExsBZou49CpewQKe8JS75hu?=
- =?us-ascii?Q?Plhb0gUh/Cpls7upcp6TKXRw18Xn9fw4ygukakClJnUlrHUeGrY/ePZNkRCn?=
- =?us-ascii?Q?x54zn9/8XenucwqE/rVPbRfYxwXW76YmiPx6hEuYxyVwmWiW4xxTRSWunIBS?=
- =?us-ascii?Q?6ff+YkIB/HKc1rEbbmjmN/oBOEpTK9dx96/2auRFp08IEqpfiLL25ie6eUB1?=
- =?us-ascii?Q?UgM/s46feo47mglAt+V+pIxM4zvrNaLJEKfkbUNvD3WborVTfULKxaODdqzZ?=
- =?us-ascii?Q?TZSg2KIPS6fuGn0tfvmmdXB4ogcYNU5wLOdW+AczJtv0b+y47Xkc0fisBO+I?=
- =?us-ascii?Q?3eOyyALSeyZ38XrEqXnVlkq5nb510bD7+axkc39E3nfeThSLV8wp9M3eCp+z?=
- =?us-ascii?Q?W67Rq4BP+PHafKWTzEbcLIepkfPpQiZM813I+EY6fdIGo8i1qJp/ZaRivWoe?=
- =?us-ascii?Q?eqXQWcumPbHgEgR62VW12KI7khhl7lETMxqkciSRk5J0UJrtXhUXuh+LILSK?=
- =?us-ascii?Q?zl6n9I6IsGHbB7+BnEm3584dybqaemHjq/whxnT2Xid0Wpeg7Ly+wdz0py+a?=
- =?us-ascii?Q?E1yof72cfuR9veiTPcps6F1ySc0843YX4TNaCFSK/2mPk+MivsQzop8YlRhg?=
- =?us-ascii?Q?hdIvVQRe8w+9opeomPc=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8585.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(19092799006)(10070799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?efqqSRQPcEpckUSyfJtq/zS2v9/81RnU+m6th5sZTgHiJzhY0e5X8tv/faCh?=
- =?us-ascii?Q?65CP7KtGsMGbRNVyFJHfUfCK3b3KCJ9AtTPi5og6EAl9gpxuSaPn8AENywte?=
- =?us-ascii?Q?k0sv8SZEeFO9brjE7wXl7IHW3+SWzoR+k89MFF0+0OYfv5ZubZZhn90bLEOf?=
- =?us-ascii?Q?wOQkN8GIf9SShHIkHoWDYaYnYpGNIrY5QPw/E38xsY8qwN9Pb5HiIXAsW4Tu?=
- =?us-ascii?Q?fb5JQtH9BWq+JYLt4uTUglI5o6Sx5aYuPGY239GkTTsrIpJEHYPfOBo66NwT?=
- =?us-ascii?Q?fRCT8I43eT5f/aH2yvF5n5Yljrw91KIW1rQnBl/LWZV2CyAfGSELNZOp1FrK?=
- =?us-ascii?Q?snvyiGo3sv2PDLBKEDdnYqKybSCCvGSyU4aaA/IsIRc/VSQeYMv/Al3DZq+G?=
- =?us-ascii?Q?yxi36UPq2DDcvYMmqXJV/704XN6pqtifHDZw+2huWFalc0hSOgG8tnXEJOQ3?=
- =?us-ascii?Q?RL4C+JPixXWH6tA3Zs89bsj4LGp9dsnhPUl69aJA8iID28ascs7qEmDS0qtS?=
- =?us-ascii?Q?lMKwLZaRR+E/4jJLlH9n9brJAA4UuQR90aO3xcTA0pS0nBs5dCDOX+vghIBV?=
- =?us-ascii?Q?t9c6W7jl5T8fn73FPK+yn1A8g7uFxDg1SnkvuHDTgQlFiUzIk1jb4DrVp6L1?=
- =?us-ascii?Q?1JEs0ekYVCxz0smQV2PNGVgG1hMUrzvlyn7PZORebnhviFJ0EhY5uDjghZwu?=
- =?us-ascii?Q?Ts89bMHdghJzPyov5R5BugfvHjYSA4xUeagap0hcTz7LurEyFjv2uo/DWGsl?=
- =?us-ascii?Q?yQMB2yhfm3MjHIkoJBOPAzfH5vwgJHvbEy4Tlf0+wFYyBrsX5gl94WaEdvld?=
- =?us-ascii?Q?G5nexlZh0Zzgrgr/bJfiinPh7TXgbnVdSrxSV0cFvyOszwUBOgHRTqbAI783?=
- =?us-ascii?Q?wxPm24w1DfGerLON0myLeeL8dnyKMYT1hVgcioGv45m4y6MgUuDTssgXa3cz?=
- =?us-ascii?Q?CEAsE66ONVD63OR/sLqiNz45Av0ZrkCcU+pTv2oARJJLxJDNuG+p1WEdsLob?=
- =?us-ascii?Q?kB7kTy9AwaKV5d0jWy+1d8NsRvbdf2xjjeblom79VtVfLYlHtQ+ayOb7May5?=
- =?us-ascii?Q?DcXnzCo5VYB/8R+6MK9/4aiFmXZrtbHURzv/Rkb5ItADtTrk1DruGaHLvFoc?=
- =?us-ascii?Q?gFF8aIVi7YB0L8l0kz59YJPnKCwMhDOifHV/NCzDh8RLY32tz6uwt9tLTBM7?=
- =?us-ascii?Q?ooojYxp5SNSR8MLKNYGFU0QqRu4c+VchK4pt/i7OeZs1WbelncQsKwYtyQCO?=
- =?us-ascii?Q?3+1wvIaNdWbnzWDgUaOgB/g2d/2Euoc6LnxNURTHT7X2xtYtJgD1SSbsFSMf?=
- =?us-ascii?Q?+dSxFjF3ug5xH7G6T/gLRjcj1w+XcelLzQRYaccZtpXFWShsfEmHhQl9XVwo?=
- =?us-ascii?Q?8H4em7JWkQqiBbfN/XwH5s6NxT52Ib2lFlO3nR6z3M8Oypj+5TL2zz25NVCI?=
- =?us-ascii?Q?yaPn4pmKfXCWyaZzYZszP8DGbgFBvI5e7zj4scUALB9o6z4TJ/KSLMNJDSMt?=
- =?us-ascii?Q?2wD5PoRDEUFiLnKqIHxNijxz6waiGTSpQeMguKENa3iJTqraSER1+2gNQSa8?=
- =?us-ascii?Q?BvTbtviPD3ORODbW81ZHHOuvcJ8EWe266W29aTo1juq8XBa0LXc+RcDxDqe/?=
- =?us-ascii?Q?ffNG+CHN1zxgXtM7SzptoLZ8sD1Ey8/pooH0RaX62oUWL3X+AxAykH1RwCvO?=
- =?us-ascii?Q?qircJ176UAz0waLScMvQsnYj75ehBqBrMiPcMbwfPh0bxRYQbamcNb4xDYUM?=
- =?us-ascii?Q?LNhMPNHaeh5zewA8OUuNSyR+huvtX38yh4OVbwslgbGEHNz/V8/HfCKyA9A1?=
-X-MS-Exchange-AntiSpam-MessageData-1: MAATTmjWMPcIPKFTlkpcBs4+ha7YVLbSZ14=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f87fcb2-3396-4b0f-c469-08de6711eaea
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8585.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Feb 2026 12:59:39.8414
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eW9b9Zp8zGViC8jU7UXVDyupvl/WPHoZuTizgbM2ujFz+4eIEGlaZHoTtYwwjMJSMw3PRLd820gOBaTJmL2uMg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8106
+References: <20260202111548.3555306-1-dolinux.peng@gmail.com>
+ <20260202111548.3555306-3-dolinux.peng@gmail.com> <20260202111249.649ac338@gandalf.local.home>
+ <CAErzpmuFQqT3+7cSjq4HrYj0Bp_qjagJSh313_ePJxs+0QjVFA@mail.gmail.com>
+ <CAErzpmvgR7QgUTkcEfYstci9wNfGZBksczbkMv5w0ijoUcsBwg@mail.gmail.com>
+ <20260203101707.52965eb0@gandalf.local.home> <CAADnVQKXMzTsbrD8j0spJETXL77x=r30fEiPQLCiNr=XWtgB+Q@mail.gmail.com>
+ <CAErzpmu9mNXTOw-WwkSGEdvmJY2VjyUbGWZD=5s6kXNRE_YkJQ@mail.gmail.com> <20260205130459.0ff532f3@robin>
+In-Reply-To: <20260205130459.0ff532f3@robin>
+From: Donglin Peng <dolinux.peng@gmail.com>
+Date: Sun, 8 Feb 2026 21:07:37 +0800
+X-Gm-Features: AZwV_Qhtrwbg9jnGoduBNEr6Oncp7yRGU_wrKqlI5ZNeTdjeTOHhCmBD0TzKe2Y
+Message-ID: <CAErzpmsajhJ45TkPx_TPwAPwN1fxO0cNYFTKFgLaosiPMo9wew@mail.gmail.com>
+Subject: Re: [PATCH 2/2] tracing: resolve enum names for function arguments
+ via BTF
+To: Steven Rostedt <rostedt@goodmis.org>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Donglin Peng <pengdonglin@xiaomi.com>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 05, 2026 at 05:54:08PM -0800, Jakub Kicinski wrote:
-> FWIW my feeling is that instead of nickel and diming leftover space 
-> in the frags if someone actually cared about growing mbufs we should
-> have the helper allocate a new page from the PP and append it to the
-> shinfo. Much simpler, "infinite space", and works regardless of the
-> driver. I don't mean that to suggest you implement it, purely to point
-> out that I think nobody really uses positive offsets.. So we can as
-> well switch more complicated drivers back to xdp_rxq_info_reg().
+On Fri, Feb 6, 2026 at 2:05=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org>=
+ wrote:
+>
+> On Wed, 4 Feb 2026 22:52:11 +0800
+> Donglin Peng <dolinux.peng@gmail.com> wrote:
+>
+> > > > I have trace-cmd reading BTF now (just haven't officially released =
+it) and
+> > > > doing an extract and reading the trace.dat file is much faster than=
+ reading
+> > > > the trace file with arguments. I'll need to implement the enum logi=
+c too in
+> > > > libtraceevent.
+> > >
+> > > If you mean to do pretty printing of the trace in user space then +1 =
+from me.
+> > >
+> > > I don't like sorting enums either in resolve_btfid, pahole or kernel.
+> > > Sorted BTF by name was ok, since it doesn't change original semantics=
+.
+> > > While sorting enums by value gets us to the grey zone where
+> > > the sequence of enum names in vmlinux.h becomes different than in dwa=
+rf.
+> >
+> > Thanks, I agreed.
+>
+> BTW, I just officially released trace-cmd v3.4 (where you can see whats
+> new in that release here[1]).
+>
+> The biggest change is that it saves the BTF file in the trace.dat file
+> and parses it on the report (it requires libtraceevent v1.9):
+>
+>  ~# trace-cmd record -p function_graph -O funcgraph-args -g do_sys_openat=
+2
+>  [..]
+>  ~# trace-cmd report
+>        trace-cmd-50935 [002] ...1.  3490.518138: funcgraph_entry:        =
+           |  do_sys_openat2(dfd=3D4294967196, filename=3D0x557bb9e3ee10, h=
+ow=3D0xffff88815220fea8) {
+>        trace-cmd-50935 [002] ...1.  3490.518141: funcgraph_entry:        =
+           |    getname_flags(filename=3D0x557bb9e3ee10, flags=3D0) {
+>        trace-cmd-50935 [002] ...1.  3490.518142: funcgraph_entry:        =
+           |      getname_flags.part.0(filename=3D0x557bb9e3ee10, flags=3D0=
+) {
+>        trace-cmd-50935 [002] ...1.  3490.518143: funcgraph_entry:        =
+           |        kmem_cache_alloc_noprof(s=3D0xffff888106c7e000, gfpflag=
+s=3D0xcc0) {
+>        trace-cmd-50935 [002] ...1.  3490.518145: funcgraph_entry:        =
+           |          stack_trace_save(store=3D0xffff88815220fac8, size=3D0=
+x40, skipnr=3D0x0) {
+>        trace-cmd-50935 [002] ...1.  3490.518147: funcgraph_entry:        =
+           |            arch_stack_walk(consume_entry=3D0xffffffff94d9dfe0,=
+ cookie=3D0xffff88815220fa58, task=3D0xffff88812d4c3580, regs=3D0x0) {
+>        trace-cmd-50935 [002] ...1.  3490.518148: funcgraph_entry:        =
+           |              __unwind_start(state=3D0xffff88815220f988, task=
+=3D0xffff88812d4c3580, regs=3D0x0, first_frame=3D0xffff88815220fa28) {
+>        trace-cmd-50935 [002] ...1.  3490.518149: funcgraph_entry:        =
+1.518 us   |                get_stack_info(stack=3D0xffff88815220f938, task=
+=3D0xffff88812d4c3580, info=3D0xffff88815220f988, visit_mask=3D0xffff888152=
+20f9a8); (ret=3D0x0)
+>        trace-cmd-50935 [002] ...1.  3490.518152: funcgraph_entry:        =
+           |                unwind_next_frame(state=3D0xffff88815220f988) {
+>        trace-cmd-50935 [002] ...1.  3490.518153: funcgraph_entry:        =
+0.951 us   |                  __rcu_read_lock(); (ret=3D0xffff88812d4c3580)
 
-FWIW, I do have a use case at least in the theoretical sense for
-bpf_xdp_adjust_tail() with positive offsets, although it's still under
-development.
+Hi Steve,
 
-I'm working on a DSA data path library for XDP, and one of the features
-it supports is redirecting from one user port to another, with in-place
-tag modification.
+I noticed that trace-cmd 3.4 introduced a new feature:
 
-If the path to the egress port goes through a tail-tagging switch but
-the path from the ingress port didn't, bpf_xdp_adjust_tail() with a
-positive offset will be called to make space for the tail tags.
+- Add support for showing parent functions in function graph
 
-I'm not sure about the "regardless of the driver" part of your comment.
-Is it possible to mix and match allocation models and still keep track
-of how each individual page needs to be freed? AFAICS in xdp_return_frame(),
-the mem_type is assumed to be the same for the entire xdp_frame.
+  If the "funcgraph-retaddr" option is set during function graph tracing,
+  the parent functions will now be displayed:
+
+  preempt_count_add(val=3D65536); /* <-irq_enter_rcu */ (ret=3D0x10001)
+
+However, it currently only prints the caller's entry point. I suggest
+enhancing this to include the **offset within the caller** as well. This
+would allow tools like `faddr2line` to locate the exact call site accuratel=
+y.
+
+I implemented a tool named FuncGraph[1] to convert function_graph
+ftrace output into an interactive HTML file. It leverages fastfaddr2line
+to map return addresses (e.g., __sys_bpf+0x51/0x500) to their
+corresponding call sites, such as: __sys_bpfat kernel/bpf/syscall.c:6115.
+
+What do you think?
+
+Thanks,
+Donglin
+
+[1] https://github.com/pengdonglin137/FuncGraph
+
+>
+> -- Steve
+>
+>
+>
+> [1] https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/tag/?h=
+=3Dtrace-cmd-v3.4
