@@ -1,97 +1,216 @@
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933D7253B42;
-	Sun,  8 Feb 2026 17:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D4C34320C
+	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 20:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770570887; cv=none; b=mVkjFktRkQxXJkiep2Ct42AXr4UIG6t2nDoPzsRnl4I+/mQcGqkmOiYHvW2FR8dSpWfOHxCNiH8CKQZhxwLp/tkUr/NVNPtfe0XPxt7ml9vbfcnacEr3BS/lyl0L2K8EDEfwLZpM47hyY6oLtocOU32QeWhUXjUl9EpoT+N+9CE=
+	t=1770584083; cv=none; b=f7MTltvnWilLhktvBvkGe6oN4zAoNpwPrHWRT4qms/sgUptindCD0K+CXEAWa7bBO0sGuQqBmkVmS7OnZxzTpdB2QN6PYJQJMviFch2+mkLaqjVFIG04gw5dZCTRm5+/Qtyj73j3V1VSqjj9z9up8mKI3D1Nkv09/bIboqJUZ3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770570887; c=relaxed/simple;
-	bh=SjRiWd8htRUZceqO0qWUBlYW4sLMYjWzzvAvbqp1y+4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RjMhNzXCPj4DQauNNAcnFGAbH5+f2QPerHqbYmOfoKQzE5EVz11UMsffVUiWrTxWg89uH7Ina89/haYndsFhGlutL6WHR2hd27HfM3XUoN3SXlEmVXPqBZgOM/n8dbBIGaZXWmJV4svn8jA13PARqeEGAE+QZ34La+w5qtCtiZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=DhiMBPvP; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+	s=arc-20240116; t=1770584083; c=relaxed/simple;
+	bh=eK05MBlMzImiefkpgxbWyOhV3iimcUuSiDy9MKaaclo=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BaBG87Au8E2DLpGcvotK3zYEea9hXrWlcEDR4eIEHY3UWLth57FWl3EWE6s63pijYmiTvgqCycS+8H56KiYDt0ezISL7ICpUEw01tNISAxviDh9QpwDoqoWn76SS7+OTAzbEcjbqGDKk6WWufFs3EEKDq6vYUmbvwa6i7pV9dwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BlNNroyx; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="DhiMBPvP"
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1vp8MP-00GmpH-SO; Sun, 08 Feb 2026 18:14:13 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector2; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=O8RJUkzJbz9LuXYHmv9bPjA91UwSvRO7HiTaqxe8MH4=; b=DhiMBPvPODBnXusfoYVpucW69Q
-	uDqqJ/cgC8zBP6n4gFDWCIqtQY+FC1W2yU2V3Ri0x/L3PNO815lA8K+hFWneVOAbgzaSIcs1O95Da
-	ILVQs12GI0KCGf9rueTc/VQXO20L2AlPi/yxonXAh30cbeMAYQRnP/L/O/U42+OSds/qcAoI5uW8Y
-	IFF4MaDPPi4Vsqgn9Oq9A4rmX+MCKfl7/rOpR1d0BspDyVu4h4emph8SuZmA61jwOGDwEOpHpeQM7
-	xP5LKrhmwytf5qGxnE2yd/S+EfLjTzuY6WNTYCrpZBzljN5RqTl+aZ2xz+2cPWGS0rJBVf04QQyMp
-	cl+TuqAQ==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1vp8MO-0007In-Hn; Sun, 08 Feb 2026 18:14:12 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vp8MG-009NlI-TC; Sun, 08 Feb 2026 18:14:04 +0100
-Message-ID: <c4eaead1-ad69-42f0-9699-5f2d555a7693@rbox.co>
-Date: Sun, 8 Feb 2026 18:14:02 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BlNNroyx"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4801bc32725so17715845e9.0
+        for <bpf@vger.kernel.org>; Sun, 08 Feb 2026 12:54:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770584081; x=1771188881; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7EEz2ZzYiyLdsMM9R6IByMZnU2nWj69epSM+E7T1+is=;
+        b=BlNNroyxn/uXbLwXsxEsV2WCJ9mosbbv24+LgpDT5WINiiNgj1RlSWHDCZtYw4FySQ
+         lhgJy7k0Lm67GTUGjKcZ5eRBQcQW6MjgKYQ92Z+80kWe1eSi1ldOFCIrxfdbKzdILnka
+         i9LVKZuKFoguKOWrd5ueeSjiI4R9diFek1gWHv+znWhJbVjlAhnbUt1nPdo7W9Kebo1a
+         +6gx8mS+A47Un4TcwtJ/lm6yCbxKiXfspgEKDuG3W5+AjV229XcwaqTgc8qEvikOIEH2
+         r+MHlPHDLuv8uftFFZ/MrFyW1N43+1TS+2APV4++BmOPLl8DCPVXXSFr8Hry0uBobk4N
+         zLRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770584081; x=1771188881;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7EEz2ZzYiyLdsMM9R6IByMZnU2nWj69epSM+E7T1+is=;
+        b=F5U0tPv7ZMBVzL6FdV0tI0486s30mvHBOW5Nny6/ylQalYOIwIaOU+vX4Im+6QAl5x
+         BeszaVoeveJoRpqcFJA+yzC7T1ukoa/z1mX1LKEThk6C5uRizd7TE3L0t3opDXl1YUSa
+         Ph7KEmrwJloMZHQQhfu99IiTiKZHk94a0kFZf14RZsmOygChe1QMrBNj5j4KQRo0ccp5
+         apw9RV8MBeDbKa7CRhDCn1OMk7eCsS5ImL4n/BY7YGuOvtJC37r/r+04+Dv9bBn39s3Y
+         zH0+CI1lvyYGGfHMzHHiStMwAUoxXoAKpQ4rLr2Nm736uRJywuXdz+fXOGTJFcpDBUmJ
+         mtkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXCw8jbX71HKh+YCa+0v4xVOfx/WKzD9r0752k8kg/M0ep2T3YYO6fkeTdj/8Md7MkoojE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHiaJ000D/vsx+AFGCG/+eLzebIKJwn4X0yhltZnux75hKN7jc
+	1eU0n0qkcwZuvuIkYou+viDVrkax/sKWI+GveUABJwsRxj0Ac0l23ycs
+X-Gm-Gg: AZuq6aK5wrx/NP67mbTAEbjrYhAb2SS+xmWE95tEgKJtPEcONA5FrS+Pn9RUn7HCSFm
+	+tkyzfqN7LuLCO1vEQJvi27Xq0JROnuoOjXCCAhLhoO4/mFMBC3YA1prMUbMGAuUMRENMaZSf2s
+	l6wjOvA9XLr2LOwVnQtdk+4JttKBtU2rOR2WJ7QBCTM/fhBK5v5GVlbtd0xmQKBjFqpNHTi/O0E
+	jP8+HeTidXAv0c1DC3OyI1Ygt3rJh0jR1DArfGW16ARFTW8ws+dBKrEeX0jiP0AUrakVLg6/eyS
+	63JOde0gL45L3FFq5Dh/8/J1kTyJDJ2zG0yJ5hKsJPrnTnN09ijn8MXccFzmo6cpCviZUBKl9Qq
+	8QybFXY/AcaArJmsGDqLUquUvUHzmQaw62Kop6ZZFhP/goxUJv48RlFRKNvDvFRCS56HeAkbV1+
+	Y=
+X-Received: by 2002:a05:600c:1e0d:b0:477:63a4:88fe with SMTP id 5b1f17b1804b1-483201da2f1mr132554955e9.2.1770584081273;
+        Sun, 08 Feb 2026 12:54:41 -0800 (PST)
+Received: from krava ([176.74.159.170])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436296bd211sm22939470f8f.13.2026.02.08.12.54.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Feb 2026 12:54:40 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Sun, 8 Feb 2026 21:54:38 +0100
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Jiri Olsa <olsajiri@gmail.com>,
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>
+Subject: Re: [RFC bpf-next 00/12] bpf: tracing_multi link
+Message-ID: <aYj4DnCDlUHUSPgU@krava>
+References: <20260203093819.2105105-1-jolsa@kernel.org>
+ <CAADnVQ+EU_f4LVDQkqkB0Q+QYMBH5ynXU3+rGZA2XCGmYMcFqg@mail.gmail.com>
+ <aYM9YUl6xf9I2x4c@krava>
+ <CAADnVQJPbnVEDYAAy4mUP7NmsGkUmeV9B73V+Bc=LYb8r8Zrow@mail.gmail.com>
+ <aYRa_CDL1RqIR_8S@krava>
+ <CAADnVQLJJn=bSDvQrjNyyeNdLOZABKDjjR_3j6DG3pgbsJ+JXA@mail.gmail.com>
+ <aYWjxMeXABGcYqEI@krava>
+ <CAEf4BzbUX8xEp1x66ugtj1C6sxWPJ+_9EpyVmy3TVOMiKrFcWA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 3/4] bpf, sockmap: Adapt for the af_unix-specific
- lock
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: John Fastabend <john.fastabend@gmail.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Willem de Bruijn <willemb@google.com>, Cong Wang <cong.wang@bytedance.com>,
- Alexei Starovoitov <ast@kernel.org>, Yonghong Song <yhs@fb.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260207-unix-proto-update-null-ptr-deref-v2-0-9f091330e7cd@rbox.co>
- <20260207-unix-proto-update-null-ptr-deref-v2-3-9f091330e7cd@rbox.co>
- <CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <CAAVpQUA+8GL_j63CaKb8hbxoL21izD58yr1NvhOhU=j+35+3og@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzbUX8xEp1x66ugtj1C6sxWPJ+_9EpyVmy3TVOMiKrFcWA@mail.gmail.com>
 
-On 2/7/26 23:00, Kuniyuki Iwashima wrote:
-> On Sat, Feb 7, 2026 at 6:35 AM Michal Luczaj <mhal@rbox.co> wrote:
->> This patch also happens to fix a deadlock that may occur when
->> bpf_iter_unix_seq_show()'s lock_sock_fast() takes the fast path and the
->> iter prog attempts to update a sockmap. Which ends up spinning at
->> sock_map_update_elem()'s bh_lock_sock():
+On Fri, Feb 06, 2026 at 09:03:29AM -0800, Andrii Nakryiko wrote:
+> On Fri, Feb 6, 2026 at 12:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> >
+> > On Thu, Feb 05, 2026 at 07:55:19AM -0800, Alexei Starovoitov wrote:
+> > > On Thu, Feb 5, 2026 at 12:55 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > >
+> > > > On Wed, Feb 04, 2026 at 08:06:50AM -0800, Alexei Starovoitov wrote:
+> > > > > On Wed, Feb 4, 2026 at 4:36 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > > > >
+> > > > > > On Tue, Feb 03, 2026 at 03:17:05PM -0800, Alexei Starovoitov wrote:
+> > > > > > > On Tue, Feb 3, 2026 at 1:38 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> > > > > > > >
+> > > > > > > > hi,
+> > > > > > > > as an option to Meglong's change [1] I'm sending proposal for tracing_multi
+> > > > > > > > link that does not add static trampoline but attaches program to all needed
+> > > > > > > > trampolines.
+> > > > > > > >
+> > > > > > > > This approach keeps the same performance but has some drawbacks:
+> > > > > > > >
+> > > > > > > >  - when attaching 20k functions we allocate and attach 20k trampolines
+> > > > > > > >  - during attachment we hold each trampoline mutex, so for above
+> > > > > > > >    20k functions we will hold 20k mutexes during the attachment,
+> > > > > > > >    should be very prone to deadlock, but haven't hit it yet
+> > > > > > >
+> > > > > > > If you check that it's sorted and always take them in the same order
+> > > > > > > then there will be no deadlock.
+> > > > > > > Or just grab one global mutex first and then grab trampolines mutexes
+> > > > > > > next in any order. The global one will serialize this attach operation.
+> > > > > > >
+> > > > > > > > It looks the trampoline allocations/generation might not be big a problem
+> > > > > > > > and I'll try to find a solution for holding that many mutexes. If there's
+> > > > > > > > no better solution I think having one read/write mutex for tracing multi
+> > > > > > > > link attach/detach should work.
+> > > > > > >
+> > > > > > > If you mean to have one global mutex as I proposed above then I don't see
+> > > > > > > a downside. It only serializes multiple libbpf calls.
+> > > > > >
+> > > > > > we also need to serialize it with standard single trampoline attach,
+> > > > > > because the direct ftrace update is now done under trampoline->mutex:
+> > > > > >
+> > > > > >   bpf_trampoline_link_prog(tr)
+> > > > > >   {
+> > > > > >     mutex_lock(&tr->mutex);
+> > > > > >     ...
+> > > > > >     update_ftrace_direct_*
+> > > > > >     ...
+> > > > > >     mutex_unlock(&tr->mutex);
+> > > > > >   }
+> > > > > >
+> > > > > > for tracing_multi we would link the program first (with tr->mutex)
+> > > > > > and do the bulk ftrace update later (without tr->mutex)
+> > > > > >
+> > > > > >   {
+> > > > > >     for each involved trampoline:
+> > > > > >       bpf_trampoline_link_prog
+> > > > > >
+> > > > > >     --> and here we could race with some other thread doing single
+> > > > > >         trampoline attach
+> > > > > >
+> > > > > >     update_ftrace_direct_*
+> > > > > >   }
+> > > > > >
+> > > > > > note the current version locks all tr->mutex instances all the way
+> > > > > > through the update_ftrace_direct_* update
+> > > > > >
+> > > > > > I think we could use global rwsem and take read lock on single
+> > > > > > trampoline attach path and write lock on tracing_multi attach,
+> > > > > >
+> > > > > > I thought we could take direct_mutex early, but that would mean
+> > > > > > different order with trampoline mutex than we already have in
+> > > > > > single attach path
+> > > > >
+> > > > > I feel we're talking past each other.
+> > > > > I meant:
+> > > > >
+> > > > > For multi:
+> > > > > 1. take some global mutex
+> > > > > 2. take N tramp mutexes in any order
+> > > > >
+> > > > > For single:
+> > > > > 1. take that 1 specific tramp mutex.
+> > > >
+> > > > ah ok, I understand, it's to prevent the lockup but keep holding all
+> > > > the trampolines locks.. the rwsem I mentioned was for the 'fix', where
+> > > > we do not take all the trampolines locks
+> > >
+> > > I don't understand how rwsem would help.
+> > > All the operations on trampoline are protected by mutex.
+> > > Switching to rw makes sense only if we can designate certain
+> > > operations as "read" and others as "write" and number of "reads"
+> > > dominate. This won't be the case with multi-fentry.
+> > > And we still need to take all of them as "write" to update trampoline.
+> >
+> > this applies to scenario where we do not hold all the trampoline locks,
+> > in such case we could have race between single and multi attachment,
+> > while single/single attachment race stays safe
+> >
+> > as a fix the single attach would take read lock and multi attach would
+> > take write lock, so single/single race is allowed and single/multi is
+> > not ... showed in the patch below
+> >
+> > but it might be too much.. in a sense that there's already many locks
+> > involved in trampoline attach/detach, and simple global lock in multi
+> > or just sorting the ids would be enough
+> >
 > 
-> Hmm.. this seems to be a more general problem for
-> bpf iter vs sockmap.  bpf_iter_{tcp,udp}_seq_show() also
-> hold lock_sock(),  where this patch's solution does not help.
-> We need to resolve this regardless of socket family.
+> I'll just throw this idea here, but we don't have to do it right away.
+> What if instead of having a per-trampoline lock, we just have a common
+> relatively small pool of locks that all trampolines share based on
+> some hash (i.e., we deterministically map trampoline to one of the
+> locks). Then multi-attach can just go and grab all of them in
+> predefined order, while singular trampoline attaches will just get
+> their own one. We won't need to sort anything, we reduce the amount of
+> different locks. I don't think lock contention (due to lock sharing
+> for some trampolines) is a real issue to be worried about either.
 
-I don't see any deadlocks there. Note that I've mentioned lock_sock_fast()
-fast path was a problem, not lock_sock().
+nice idea, I'll check on that
 
-> Also, I feel lock_sock() should be outside of unix_state_lock()
-> since the former is usually sleepable.  If we used such locking
-> order in the future, it would trigger ABBA deadlock and we would
-> have to revisit this problem.
-
-Do I understand correctly you're suggesting taking lock_sock() for af_unix
-just as well?
-
+thanks,
+jirka
