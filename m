@@ -1,258 +1,123 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pf1-f193.google.com (mail-pf1-f193.google.com [209.85.210.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA80288530
-	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 02:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0B113E02A
+	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 05:33:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770518995; cv=none; b=na0IkvNQ+SQDX0biXe6xVZJ8Lpu03JHh5oeD5flAMVstqBLruT+LbRNgXcYZMpRrrcxE+o/l0LMqxse106NquD5ycl+DUp4CzLskEOJ17vJF3UeaF207hF7VXHt7vcDz/Isx0Z9bx1l+NDyODz5ejiMUf3Qs0jcROJSfMX+IoNs=
+	t=1770528808; cv=none; b=riB+5BeHGpe/o8zcKsbhzkTiH9gUH7inexZH2/HstezeKqYf0Ch1SOdlkgXSWAs1+R57Qrga2Qr1WpQzEkAv2wloGLgBCgMrRMdAkoWjUVktajuRgbkogNlg0SxFK0WPkp+1gcCzHvaEynV0IQJJezQ5bRaMqbf6oxYLO1r6zvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770518995; c=relaxed/simple;
-	bh=bA50R0bu4pcFiczphQwo0OOSupIpSY/EOYDo7M0jk+U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AnJfUYtHVTjwaM5GBSRg/JoxTi7edZSJ5FOYD7ugpu+34wTokvPGn5+8hAKVT8ReCIj/KxjlbKLdODSsrDBJnVdyhy+MVwq2K9/fGzRe1axGDLS1aBfc+qSxG7f9g3wX3Riq5eCNLs0oO3sVrjMUZ7EneJsF7VUU8MR3OAaymsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B5/S/5Tp; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1770528808; c=relaxed/simple;
+	bh=FD6BjmeoFI8+bG22TYqQeE6y7DzMj6HiX+tZhWNW7w4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RImNQNcjhbn5knw8vnyAlZO45LhoLH2fcqTZDjX78lKRdHehjfmmyxZaVTxr3J5ihw8IU/XM2VsJMFE59V7yT0SPt9s0sungt8RNhIj3EzPJ886axJnic8x5lstl5S6m1FV2OtRbjqvQG0spH3Qkbi5Qrma8ahp3kIficwTp9vU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jp0nCmxM; arc=none smtp.client-ip=209.85.210.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B5/S/5Tp"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2aae4816912so309125ad.2
-        for <bpf@vger.kernel.org>; Sat, 07 Feb 2026 18:49:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jp0nCmxM"
+Received: by mail-pf1-f193.google.com with SMTP id d2e1a72fcca58-8217f2ad01eso2940443b3a.2
+        for <bpf@vger.kernel.org>; Sat, 07 Feb 2026 21:33:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770518995; x=1771123795; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eWhBTVQRjsnIct/t3J+DD3t989mrabDRUagk4xQvzMQ=;
-        b=B5/S/5TpBr4/41WsnOGYvFcKBYAJ2yGoTd0eKYEz1D7ag+vtQ4Evt8crh8WSgMEhyc
-         MzHuRDlciJkKAfpOPqcAEKREsk0Vl8o8Cti0SUL305yfRSnfN0w7+Mnx6xlgkUYwRCNv
-         Ul3OHhlwtbiW0aj3H9uwT7x/RXGEAh0uvBWzsApgeNtY3gqEs0MS4eDI6pFndq+OCV1V
-         hAOQ0xaGROjK7AxcxY8zB/7Aeqv+21ko/ogRNBe7YCS1kuYeMqfvXEHsgXuVFvZrseg2
-         ruWMZdLQQ2ZRqVLQszev1Fo/dwsz5ozykdtZWgWlp7d3oh36a4XJ2antlL6Nd1kbJ4CW
-         yhMQ==
+        d=gmail.com; s=20230601; t=1770528807; x=1771133607; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vYwL1EESl4uI9GdV+OkRykkZGeDMHRXuiQ8c1/130nM=;
+        b=jp0nCmxMrLPi2wMqF+slQ4/cGBAiItalXEixb6uzppjBl7SE7m4+JyD/ksKRy0z9Lg
+         1yKAVSiX5/svSTtR3dQaDiGzspaKxvz0+SRawAllqzkrwZQTDGP0IBddIhcVWxuuiVnn
+         UqNE0Ou8Q7UK9Y0ZRJxYEQ+86rGFZASpwOL4k1IvEf0m0+ii71BYetU3U4bjWpUqmHEM
+         icfpWtnCBKtyo7ZAtkuaPeszAIbVPZBISOvkdWjv+8XYXsUNkyTbyO4kMpq+zZ5WwzCy
+         PzkN9LccAY8NDGUGkZjQ5qIn33Y1E1CiqpudKmSg8nC3716zO/EtP0lauev9DiNaxB69
+         tBZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770518995; x=1771123795;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=eWhBTVQRjsnIct/t3J+DD3t989mrabDRUagk4xQvzMQ=;
-        b=Lottk7qdWhBaT6cAwuwiPLc0XvyYo15upxaobRdzhqLQGQL9rhmsO7fWZx2kQgA0fC
-         2NLKXVph3bUEgE0+EmTyW694YyNo9Or0PKDmOmioXXmX+DBmmYWV6sZkyyKOTghCc67A
-         yINLuJdjSqPV5GSlS7uaD7f2XEP4caWJ3ODKhgjfE6M8JAtS4vSLAI2WyUUjQLPKJKQ+
-         LXuESf8sgYSj2q45aSALAxwFTM2T415K1TiBUINzjpWjP0ArouZuBxpHDhsOz1reB15U
-         iqlxpOkvlKdpElHQwpN2lCgZ77IRaw//IvEkVAZw2/ZM1RAWRfSiSKWB+g2IEYIOdncY
-         ptWw==
-X-Forwarded-Encrypted: i=1; AJvYcCUjylS38rSanQsDgWxA0UAwuMTQbxs/uSiBsK0uwezsotTa8qgflnNngrTy0A96hpdZgt8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDZv6R8Ditrwy/iwUGT1bueNb+wOBngahBzDObZDSjKrxQ1TGt
-	dyW3GXvR973nbcplvGfyS9C25vF6LwuTV5fPHrR/gMGU9aSip4vmBdUS
-X-Gm-Gg: AZuq6aJeZcethpinXJTuCSfdcRrVEFPGRaRTcNSnTxUIJSzln07CfckawxXNkOUgEMD
-	vR6FbR8B1xBrcaVKc2QEYoHeOJGQ5l3o2fW3upDtpmvHEL4FphC3ypFW8MYphja+JHfAGs+sf2k
-	m/pXzaAYDcA56X4z2pdr/Hl/VyEXe6pPOKktqHP+fmEFc3udQgoHPvJPqmLyrE9KqpzRdal+/Rm
-	FkYBMGJrMaPz/qbU/nFvdOeV/D2dTtN+MO4tYo9775bo7a11qyLBdsy9Cycc9bswkqiz12m6TmW
-	PYjPywNUBWGdfT2/xY27B4rf83jkCxsofdnwX1nLiW80JZGziRMET9W5gzFyHEoif+fvd+vFa2v
-	CksIirfHvY2WLbkVV8P296HYac6xor9vn/+d9Ixs6G/ocpJr32p0VCiRSUMJkjHECKF5uXQsOdR
-	2Q+oSUaoRepdOhA8EhfGqnowFvbwzbeFefdMY/XnKE
-X-Received: by 2002:a17:903:8c7:b0:2a9:6414:719c with SMTP id d9443c01a7336-2a964148176mr34608145ad.16.1770518994826;
-        Sat, 07 Feb 2026 18:49:54 -0800 (PST)
-Received: from localhost.localdomain ([113.218.252.53])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a9521b9f5esm67194715ad.51.2026.02.07.18.49.44
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 07 Feb 2026 18:49:54 -0800 (PST)
-From: Chengkaitao <pilgrimtao@gmail.com>
+        d=1e100.net; s=20230601; t=1770528807; x=1771133607;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vYwL1EESl4uI9GdV+OkRykkZGeDMHRXuiQ8c1/130nM=;
+        b=f1sBLwO/h6htHJMReqNHaPO4lnDnIxXDnwSQvzrGbw6dr4UrWg37HEE0QtRgJKS7Vt
+         cRLVw5tU3ELSpl+6TD+SIvzaDHJ6AEe8EORsDK8aXPn94zUZkfvxja1M+ldwvUx1mobD
+         afmk53sk3nviImxdGGzlO2hwjKkECBCIgTmKe03AtLZ9cZatpxUOoAl6SMBRM1BPojbR
+         cGCNa5Skp/wQaHA1saEbF+3TrH0nTh++c3UGqP3ot8k/PNfy4NRmKJlzCKpnantocjr2
+         fkz74Zmxzy8ln0+WIyObxDStX/7SKMWhwjMWuwnClHX/IDA15+zH9WHiW41csCJB/BBl
+         OtMA==
+X-Forwarded-Encrypted: i=1; AJvYcCWuPPR0252fvdf7nQcaJAeSCSxF0ddgqR//aANOZnRgueOmcH5mONq8TFsyEfhxf7kWG6Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrYQ8p1tvYt9Jqx0zKfuxsxaqPwUcaI2J8l4fdLsM+U+0QyTnM
+	ylSJSjfxR46TM9qmGeHi8b4Y4hbZ0geaIqyuFuTYe5toFKFY+aCOn82/
+X-Gm-Gg: AZuq6aKkm+cHOt678bVqYX/BppN6POTH9m45Ik8wbVIgSy2MmrLyuDJm5+DGKg9JgFv
+	i0QqU6Bwtp+OM5WIRZrlPmCuYApGyKTi+F3fyW8P5QlYmG1rMcCxu2CCC53UIQ8wHmtSkO35CZg
+	qtHI0fxDPacD8+mfI2CG2wIaHI9T/+i4y+PGgf+nNDxgnRw8O6N/PPex9d3sW9XGY1CmZC1b2i+
+	2fqYV0xscyQ1LGw+qNIh2xa96Z2XD0UFR5ge1x3P45ZRz7PkLM+XTYhwsVZiWee2OdjNEl+eWr7
+	2REKIltOaKb7zjDmz2Y4XmoCnN5trkz6U+TigCRkQakNpFTWg65U44YXQfw56GYN159azAgK4Dm
+	3sMYlDNEbjz+Y5JDCQsWJhEGGt/bHVTGhQk2rIOxDwLFxWiNvvvWEjmdYovVeBOOIDV4Gu02Sf0
+	hEoaWDfBf8
+X-Received: by 2002:a05:6a00:aa09:b0:81f:4063:f1ef with SMTP id d2e1a72fcca58-8244172c192mr7635880b3a.54.1770528807304;
+        Sat, 07 Feb 2026 21:33:27 -0800 (PST)
+Received: from 7950hx ([103.173.155.241])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824418de80dsm6067700b3a.62.2026.02.07.21.33.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 07 Feb 2026 21:33:26 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: ast@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
+	bjorn@kernel.org
+Cc: daniel@iogearbox.net,
 	andrii@kernel.org,
 	martin.lau@linux.dev,
 	eddyz87@gmail.com,
 	song@kernel.org,
 	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
 	kpsingh@kernel.org,
 	sdf@fomichev.me,
 	haoluo@google.com,
 	jolsa@kernel.org,
-	shuah@kernel.org,
-	yangfeng@kylinos.cn,
-	alexei.starovoitov@gmail.com
-Cc: linux-kernel@vger.kernel.org,
+	pulehui@huawei.com,
+	puranjay@kernel.org,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu,
+	alex@ghiti.fr,
 	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Kaitao Cheng <chengkaitao@kylinos.cn>
-Subject: [PATCH v6 5/5] selftests/bpf: Add test case for rbtree nodes that contain both bpf_refcount and kptr fields.
-Date: Sun,  8 Feb 2026 10:48:46 +0800
-Message-ID: <20260208024846.18653-6-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260208024846.18653-1-pilgrimtao@gmail.com>
-References: <20260208024846.18653-1-pilgrimtao@gmail.com>
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	jiang.biao@linux.dev
+Subject: [PATCH bpf-next v4 0/3] bpf: fsession support for riscv
+Date: Sun,  8 Feb 2026 13:33:08 +0800
+Message-ID: <20260208053311.698352-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+Implement bpf fsession for the riscv architecture.
 
-Allow bpf_kptr_xchg to directly operate on pointers marked with
-NON_OWN_REF | MEM_RCU.
+Changes v4 -> v3:
+* fix the build error
+* v3: https://lore.kernel.org/bpf/20260206122002.1494125-1-dongml2@chinatelecom.cn/
 
-In the example demonstrated in this patch, as long as "struct
-bpf_refcount ref" exists, the __kptr pointer is guaranteed to
-carry the MEM_RCU flag. The ref member itself does not need to
-be explicitly used.
+Changes v3 -> v2:
+* fix some comments.
+* v2: https://lore.kernel.org/bpf/20260206115823.1070354-1-dongml2@chinatelecom.cn/T/#t
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
----
- .../selftests/bpf/progs/rbtree_search_kptr.c  | 123 ++++++++++++++++++
- 1 file changed, 123 insertions(+)
+Changes v2 -> v1:
+* use bpf_prog_calls_session_cookie() in invoke_bpf() in the 2nd patch.
+* v1: https://lore.kernel.org/bpf/20260203055231.1088479-1-dongml2@chinatelecom.cn/
 
-diff --git a/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c b/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-index 069fc64b0167..610aae45e2dc 100644
---- a/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-@@ -18,11 +18,21 @@ struct tree_node {
- 	struct node_data __kptr * node_data;
- };
- 
-+struct tree_node_ref {
-+	struct bpf_refcount ref;
-+	struct bpf_rb_node node;
-+	u64 key;
-+	struct node_data __kptr * node_data;
-+};
-+
- #define private(name) SEC(".data." #name) __hidden __aligned(8)
- 
- private(A) struct bpf_rb_root root __contains(tree_node, node);
- private(A) struct bpf_spin_lock lock;
- 
-+private(B) struct bpf_rb_root root_r __contains(tree_node_ref, node);
-+private(B) struct bpf_spin_lock lock_r;
-+
- static bool less(struct bpf_rb_node *a, const struct bpf_rb_node *b)
- {
- 	struct tree_node *node_a, *node_b;
-@@ -130,6 +140,119 @@ long rbtree_search_kptr(void *ctx)
- 	return ret;
- }
- 
-+static bool less_r(struct bpf_rb_node *a, const struct bpf_rb_node *b)
-+{
-+	struct tree_node_ref *node_a, *node_b;
-+
-+	node_a = container_of(a, struct tree_node_ref, node);
-+	node_b = container_of(b, struct tree_node_ref, node);
-+
-+	return node_a->key < node_b->key;
-+}
-+
-+SEC("syscall")
-+__retval(0)
-+long rbtree_search_kptr_ref(void *ctx)
-+{
-+	struct tree_node_ref *tnode_r, *tnode_m;
-+	struct bpf_rb_node *rb_n;
-+	struct node_data __kptr * node_data;
-+	int lookup_key  = NR_NODES / 2;
-+	int lookup_data = NR_NODES / 2;
-+	int i, data, ret = 0;
-+
-+	for (i = 0; i < NR_NODES && can_loop; i++) {
-+		tnode_r = bpf_obj_new(typeof(*tnode_r));
-+		if (!tnode_r)
-+			return __LINE__;
-+
-+		node_data = bpf_obj_new(typeof(*node_data));
-+		if (!node_data) {
-+			bpf_obj_drop(tnode_r);
-+			return __LINE__;
-+		}
-+
-+		tnode_r->key = i;
-+		node_data->data = i;
-+
-+		node_data = bpf_kptr_xchg(&tnode_r->node_data, node_data);
-+		if (node_data)
-+			bpf_obj_drop(node_data);
-+
-+		/* Unused reference */
-+		tnode_m = bpf_refcount_acquire(tnode_r);
-+		if (!tnode_m)
-+			return __LINE__;
-+
-+		bpf_spin_lock(&lock_r);
-+		bpf_rbtree_add(&root_r, &tnode_r->node, less_r);
-+		bpf_spin_unlock(&lock_r);
-+
-+		bpf_obj_drop(tnode_m);
-+	}
-+
-+	bpf_spin_lock(&lock_r);
-+	rb_n = bpf_rbtree_root(&root_r);
-+	while (rb_n && can_loop) {
-+		tnode_r = container_of(rb_n, struct tree_node_ref, node);
-+		node_data = bpf_kptr_xchg(&tnode_r->node_data, NULL);
-+		if (!node_data) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		data = node_data->data;
-+		node_data = bpf_kptr_xchg(&tnode_r->node_data, node_data);
-+		if (node_data) {
-+			bpf_spin_unlock(&lock_r);
-+			bpf_obj_drop(node_data);
-+			return __LINE__;
-+		}
-+
-+		if (lookup_key == tnode_r->key) {
-+			if (data == lookup_data)
-+				break;
-+
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+
-+		if (lookup_key < tnode_r->key)
-+			rb_n = bpf_rbtree_left(&root_r, rb_n);
-+		else
-+			rb_n = bpf_rbtree_right(&root_r, rb_n);
-+	}
-+	bpf_spin_unlock(&lock_r);
-+
-+	while (can_loop) {
-+		bpf_spin_lock(&lock_r);
-+		rb_n = bpf_rbtree_first(&root_r);
-+		if (!rb_n) {
-+			bpf_spin_unlock(&lock_r);
-+			return 0;
-+		}
-+
-+		rb_n = bpf_rbtree_remove(&root_r, rb_n);
-+		if (!rb_n) {
-+			ret = __LINE__;
-+			goto fail;
-+		}
-+		bpf_spin_unlock(&lock_r);
-+
-+		tnode_r = container_of(rb_n, struct tree_node_ref, node);
-+
-+		node_data = bpf_kptr_xchg(&tnode_r->node_data, NULL);
-+		if (node_data)
-+			bpf_obj_drop(node_data);
-+
-+		bpf_obj_drop(tnode_r);
-+	}
-+
-+	return 0;
-+fail:
-+	bpf_spin_unlock(&lock_r);
-+	return ret;
-+}
- 
- SEC("syscall")
- __failure __msg("R1 type=scalar expected=map_value, ptr_, ptr_")
+Menglong Dong (3):
+  bpf, riscv: introduce emit_store_stack_imm64() for trampoline
+  bpf, riscv: add fsession support for trampolines
+  selftests/bpf: enable fsession_test on riscv64
+
+ arch/riscv/net/bpf_jit_comp64.c               | 97 +++++++++++++++----
+ .../selftests/bpf/progs/get_func_args_test.c  |  2 +-
+ .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
+ 3 files changed, 79 insertions(+), 22 deletions(-)
+
 -- 
-2.50.1 (Apple Git-155)
+2.53.0
 
