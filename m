@@ -1,63 +1,63 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409B3946A
-	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 16:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0AE723A98D
+	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 16:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770568453; cv=none; b=mYoWfh2dCEWGEu8ENZgErS7odG+JCcyxW4OEEZ7hW3u49F8Jy1D3MbIWfRYre07JI0d4RSOombAHF107+XZ9OiyGAq3VUQrIMBNfcXth2z2xtW4fHyk71OY9ilhGy+Pmhy3gdfAtTnvar3edcG9zeJW/MJQOhaT081WYaUfNhW0=
+	t=1770568456; cv=none; b=VrU1O4cwb6tun3r950bEpdFi3z2rNCeXcmKluE61pPyPfgTtvH64R4vAl2cFUF+IRqS2YMNVgQnwOYnufiquwrxWkvGMopuT7kIUOVkJinnTOJNySE/Dbfs7JW4uH71m5D7/WiiBB1XGlF4TZNPHviK6Ywz8tKz7wXMkm65MSC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770568453; c=relaxed/simple;
-	bh=7gjx6cr+PGu/P24fUbnGfEOtuG0cRu/9DFY/irh7P4U=;
+	s=arc-20240116; t=1770568456; c=relaxed/simple;
+	bh=IOEZGXV+uj67w6mn6SiwqOpGB3wWjRWff6sDhR4YQnc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rXMF6t8bG6sUdRJb2R76PD6IuOt9nibp8z56yljitA5pjwEgDxe7Ku0adshHB5ajKgonHzHUU8wCwakquinsF7Hrh4pxTLySbOuNkvKwubZVu0KYoX/s6oL7Egb0P2Cqhc39snqGtsdskPH3+QNPK2WNYk3zZNdaZnlLTLjo3GY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PAsljgy7; arc=none smtp.client-ip=209.85.210.182
+	 MIME-Version:Content-Type; b=UmZq29oH0vlxJfQEC49bqQ056pjeX9HWdD1ZJgWQ31avkOnY/MTKzTep5UskdToxSwmQHkPRr7U7DjGzj8qEKDAw1rwFTwib5UeyZw7QUUt1bLzpt5qN3EZi0txdYqyakH2YS362kwx5DKGzkr/8/f7OY29Q9Cy38/z2mfqy/CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bZ70ZuyM; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PAsljgy7"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-8244c048d41so1601840b3a.0
-        for <bpf@vger.kernel.org>; Sun, 08 Feb 2026 08:34:13 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bZ70ZuyM"
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2a95de4b5cbso16432375ad.1
+        for <bpf@vger.kernel.org>; Sun, 08 Feb 2026 08:34:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770568452; x=1771173252; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770568455; x=1771173255; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WiikWOXI8BM2b6t4oc652K4v5Nr/7wfAQODrHWYhzsM=;
-        b=PAsljgy7CZA4byfO9iSLoaio1JOVm1gyhSFFexDt2X+BJQXtrb9/Jh8BlRPV2MHvxP
-         CsSoN3jLSwjuCC5Wt9GRajcbD3sn+UMSz6yfypDeec6j1sqxQShtCgAHzlGwXPF9TxAi
-         z+S26iSbBZ772E0xR3GbR0PiLiZ2TmUvLb0GTmG4WLiJ2dUlRGm9authaTrLBosGGxZG
-         QwJNEavWJPNs/xgzXVkplxMU48ZdV/obpPIxnkCzTY1HJdaYtO8oBcgenEXaWm2Q2JW+
-         Yvp/h9eMtTAltTSDzuQJj6keZeCuGuQR4Q8/vKDX2tC08ETJH4ANuqaq++fWS7XC46UU
-         2FTg==
+        bh=xrSYvQ77Jpo5ax2oz42VqvBquSYuMO57lB+3HBZbqBo=;
+        b=bZ70ZuyMv4ZbT3HMTEJF9ETVLo+FDtBf4htlZ3kDd7Hh011Q0tGj8LmP3WxwoYwfZM
+         HAKW/7gmC24IRh15wcKRM67qaZPu3M8QfbskjaaDA3LiD9wdqC8xcL8U+KhOPHxhttlk
+         Pe8oGqmTgc8+/uMDMYEvEQvwQ2GmVfGFtQJg+rm3ds1FitaLqw/oJxMNepbx+glidSYK
+         O99uBk2FOMQSMPhaq8d+c8f9HMSPwTJbwyBsJWtDclGwDA9MGkPp7DQKJNCFHGcBdE+0
+         aarrZ6Ej9P4qMAKxJMxY44zkcFgs2xeH3aE9ftFWbKHsGxOxaC5galb6DdjTTBGru54z
+         fGlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770568452; x=1771173252;
+        d=1e100.net; s=20230601; t=1770568455; x=1771173255;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=WiikWOXI8BM2b6t4oc652K4v5Nr/7wfAQODrHWYhzsM=;
-        b=XvnZ3YNGDUkhLe17EXwLD8Ur15+EfYrK/CYq84BkFgje1PCD7SBy3gDw9Jnv6GBOFb
-         BJPynhNs0nUbAlb0iJiLCgXuLLgyClAcrQdLdYFOV6z3lJVyBZgKioI0SbhS1revgjx7
-         KC7dttQi37yrPwA7EP7frAepNmtwqEEiPWxdpb5A3aQkDYA5slHYdvC6xZ7/3G5/mHSS
-         CDWzAt356wkSISEcd5htJtQR9qIwIx2TR2WTprp/m1SyujT3uolIlEmmPRfT4Ca5H8BX
-         7Aq4vrmAvI6ZgGc9eSbDdviKsJ8l8kQXQiqqWdRyfU4g6PJ3F9qU8TMX2VYpacC4PRkL
-         A2qg==
-X-Gm-Message-State: AOJu0YyBBkMbPe2l4RK6GFJE819v7UtdWRkf8ntRDQCrBBHF2xouHpms
-	UOSuofc3tmmHB/8KEXZIdXEt+cSHRqRCnEYh5AyML3WJG3rLYAig10Q/kByWzA==
-X-Gm-Gg: AZuq6aKfB0qgF/QoqQbyZeDC+/s1L+uItMdIfyciAv1j2UaTT5ml+/K5rUZNPm0zGzo
-	0/HlvJadFPek8b4nTWOs8vI7ARax1wxzfXdYDeYhyc3IStuxZuJ3alPM9wwg5HB0ZOi/JFAOf5j
-	aJ3nast9cjVX1H7GlR9IcRx4gBWBkkDorjq1yFcQunlvXOSh24FcJGPrsFW9B43/n3lGYeYaRFw
-	ZB2D9jS1Xm9gX0i9P0BZwS354lPhzE4rmuZKnwuxs35LnnO5Z8skeHwEWv06Zm4xgJsZ9QLsFKL
-	Z3xQmL5MR22m7XadS4PnOYgRGsV9dssJv6kSNCaqwHn/o2c86EthXY3MbvU02TfN6cPExK2maBI
-	k2uBhgi/EICVo8bnMiVP5tp414ynn0/zrQQcdN6HsMqMpXgkeNSkMCD9/sbV2HNjLkzZLaZqWGE
-	CQF+YEd9ALrAJB9PiS5CFFeFr/DsgOvIsr4WzaDRFWau8xXyPC2qq1+ibcVqmz3J/mmrwJC3XcE
-	rbu29c6Z+qqAjCLW1/f5wkxihEzSL38RK7HciVVudBUmX87NP6681etjJ6T
-X-Received: by 2002:a05:6a00:9098:b0:823:120a:d09a with SMTP id d2e1a72fcca58-82441655aa8mr7138124b3a.31.1770568452180;
-        Sun, 08 Feb 2026 08:34:12 -0800 (PST)
+        bh=xrSYvQ77Jpo5ax2oz42VqvBquSYuMO57lB+3HBZbqBo=;
+        b=a8B0GYc52+pJHTtHHqLSmSPTjdPdvuPqypNvkwEgnCWOC2Qawt3cid8SHHKlPZhKJk
+         cr7UrYfiq/8yXPTTOwJIfgyGSDYjiducI6ONxQP7SsQP3OvvsIzbEooLFA5cqwF7y/i/
+         JbtmKgn3lHWzgLf/h9TLwMARHqYy4DxZ7xyfJHjmjrFFLDILTnHfpJ0b6RJNMsOW2kgv
+         zpqXgVpKKbL0aYKJsIe40A0TontD5ERFr94L9VlXvMafXrlExnCFXtUVjXwN5vNR12TD
+         m8C81x+eUHGR8xl6JxLGiv44YVhFtLj7uFstdTPgnxx4XII3F4ynZo2eY1wtkPk9MKo0
+         vo7w==
+X-Gm-Message-State: AOJu0Yzgyrvni2cm89I+7VQrMCMa3U1wXX6W4nxZhnSQglf2UNcOoEqk
+	agRAAQNGt17aTRzCWBZiBmvHEIMcY67GbgJNxtXeoQT0CorpialdSIRJG1NWrA==
+X-Gm-Gg: AZuq6aK2pobcDCjeZxRVhNd55wdCUJsyRmpiR+GXruTrMLmAbIqzCfHR+tCtqxzjHPy
+	4OqO2KTIxGjUq/I+HuIFQ3RVTGPIPo1/SmyyqDfuGYAhwLuiBqRH0n14My5mclmOSuhhtAjXQeG
+	PqOoTfTl3oVPE3RQcm/mbcdhdgXjIjHBt87K5LXCL5ea3ishx5kaldZFU80UZGscWMC+Bt3wrjN
+	pxGp3gq0GZEV6FNgbE8k/shbTdfoMHDDTy5RugOhjo4wn8vZd5V96qac5fQwF8tiXsv+/UE52/u
+	86bfepHBgYMU8008BT2qrBKQ86hk44IATj60GzGQFLaXyZWuGhJAg1+xxgU0asYeghsniVnaOWC
+	7SKVxb/1KwmNxwGXLVeet3uoxR5yAUbiUEk9QiYFR2k5oCJc32z3G1HMkADA+RGGpVKOMfDcQvK
+	spzmd/29QqRG4yujuWidk46S6V2DLcsRoHvN9Vd3I0tPZWzLX94DpZ/2/VaS8xUtm3czInQF+iI
+	QDtXKxrca/u5+unparSg/JhpaxL3qQ0b6omvIIZf01YuYPZLg==
+X-Received: by 2002:a17:902:d510:b0:2aa:dcc0:36d with SMTP id d9443c01a7336-2aadcc00551mr23988965ad.29.1770568454924;
+        Sun, 08 Feb 2026 08:34:14 -0800 (PST)
 Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824418812c5sm7247916b3a.41.2026.02.08.08.34.10
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2a951c7a342sm79889445ad.26.2026.02.08.08.34.14
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 08 Feb 2026 08:34:11 -0800 (PST)
+        Sun, 08 Feb 2026 08:34:14 -0800 (PST)
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
 To: bpf@vger.kernel.org
 Cc: daniel@iogearbox.net,
@@ -66,9 +66,9 @@ Cc: daniel@iogearbox.net,
 	memxor@gmail.com,
 	eddyz87@gmail.com,
 	puranjay@kernel.org
-Subject: [PATCH bpf-next 1/2] bpf: jne/jeq fork
-Date: Sun,  8 Feb 2026 08:34:04 -0800
-Message-ID: <20260208163406.14974-2-alexei.starovoitov@gmail.com>
+Subject: [PATCH bpf-next 2/2] selftests/bpf: jne/jeq fork test
+Date: Sun,  8 Feb 2026 08:34:05 -0800
+Message-ID: <20260208163406.14974-3-alexei.starovoitov@gmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260208163406.14974-1-alexei.starovoitov@gmail.com>
 References: <20260208163406.14974-1-alexei.starovoitov@gmail.com>
@@ -83,202 +83,243 @@ Content-Transfer-Encoding: 8bit
 
 From: Alexei Starovoitov <ast@kernel.org>
 
-TLDR: not worth doing.
-
-When the verifier processes JEQ/JNE against a known constant, the
-existing logic in reg_set_min_max() refines:
- - equal branch:     dst_reg = const (exact value)
- - not-equal branch: dst_reg != const (edge-trim only)
-
-The JNE edge-trim only tightens bounds when the constant sits at
-a range boundary (e.g. umin == const → umin++). For a register
-with range [0, 255] and "if r0 != 100", the not-equal branch
-keeps the full [0, 255] range — no useful information is gained.
-
-Improve this by forking the not-equal branch into two sub-states:
- - fork 1: dst > const  (via JGT refinement → e.g. [101, 255])
- - fork 2: dst < const  (via JLT refinement → e.g. [0, 99])
-
-This is implemented by pushing an additional verifier state onto
-the exploration stack after reg_set_min_max() and sync_linked_regs()
-have already processed the original two branches.
-
-The fork is guarded by feasibility checks requiring both unsigned
-and signed ranges to strictly span the constant (umin < val < umax
-and smin < val < smax). The signed check prevents infeasible states
-from reg_bounds_sync() cross-propagating signed bounds into unsigned
-after the JGT/JLT refinement.
-
-For JEQ: the not-equal branch is this_branch (fallthrough), and
-fork2 targets the next instruction.
-For JNE: the not-equal branch is other_branch (jump target), and
-push_stack copies env->cur_state (the equal branch), so dst_reg
-in fork2 must be overwritten with the not-equal branch's copy.
-
-Linked registers sharing the same ID are propagated via
-sync_linked_regs() on both forks.
-
-File                Program                 Insns (A)  Insns (B)  Insns     (DIFF)
-------------------  ----------------------  ---------  ---------  ----------------
-scx_beerland.bpf.o  beerland_enqueue              332        361      +29 (+8.73%)
-scx_central.bpf.o   central_enqueue                68         74       +6 (+8.82%)
-scx_central.bpf.o   central_init                  200        210      +10 (+5.00%)
-scx_chaos.bpf.o     chaos_tick                     14         15       +1 (+7.14%)
-scx_flash.bpf.o     enable_sibling_cpu            120        113       -7 (-5.83%)
-scx_flatcg.bpf.o    fcg_cgroup_init               120        132     +12 (+10.00%)
-scx_lavd.bpf.o      lavd_dispatch              218925     237897   +18972 (+8.67%)
-scx_lavd.bpf.o      lavd_quiescent                168        191     +23 (+13.69%)
-scx_lavd.bpf.o      set_power_profile             167        109     -58 (-34.73%)
-scx_layered.bpf.o   layered_dispatch            13909      14480     +571 (+4.11%)
-scx_layered.bpf.o   layered_enqueue             13798      24143  +10345 (+74.97%)
-scx_layered.bpf.o   layered_runnable             6077       6447     +370 (+6.09%)
-scx_layered.bpf.o   layered_select_cpu           2288       3121    +833 (+36.41%)
-scx_layered.bpf.o   layered_set_cpumask           238        250      +12 (+5.04%)
-scx_layered.bpf.o   layered_stopping              598        643      +45 (+7.53%)
-scx_layered.bpf.o   tp_task_rename                 70         73       +3 (+4.29%)
-scx_qmap.bpf.o      qmap_select_cpu                52         55       +3 (+5.77%)
-scx_rlfifo.bpf.o    rustland_dispatch             340        363      +23 (+6.76%)
-scx_rustland.bpf.o  rustland_dispatch             340        363      +23 (+6.76%)
-scx_rusty.bpf.o     rusty_set_cpumask            3259       3552     +293 (+8.99%)
-scx_userland.bpf.o  userland_enqueue               91         97       +6 (+6.59%)
-scx_userland.bpf.o  userland_select_cpu            53         56       +3 (+5.66%)
-scxtop.bpf.o        long_tail_tracker_exit        104        119     +15 (+14.42%)
-scxtop.bpf.o        start_trace                   127        134       +7 (+5.51%)
-
-Program                                   Insns (A)  Insns (B)  Insns       (DIFF)
-----------------------------------------  ---------  ---------  ------------------
-bpfj_dns_sendmsg                               6322       8432     +2110 (+33.38%)
-bpfj_exec_execve                               4790       4091      -699 (-14.59%)
-bpfj_exec_execveat                             4790       4091      -699 (-14.59%)
-do_parse                                     157621     688994  +531373 (+337.12%)
-do_sendmsg                                   157635     689008  +531373 (+337.09%)
-balancer_ingress                              62403      70516     +8113 (+13.00%)
-on_py_event                                   88094      76037    -12057 (-13.69%)
-on_custom_event_start                         13847      15347     +1500 (+10.83%)
-
 Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 ---
- kernel/bpf/verifier.c | 107 ++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 107 insertions(+)
+ .../selftests/bpf/prog_tests/verifier.c       |   2 +
+ .../bpf/progs/verifier_jeq_jne_fork.c         | 204 ++++++++++++++++++
+ 2 files changed, 206 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/verifier_jeq_jne_fork.c
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index edf5342b982f..c9f0c62ab4e0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -17579,6 +17579,113 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
- 				 &linked_regs);
- 	}
- 
-+	/* For JEQ/JNE with a known constant, fork the not-equal branch
-+	 * into dst > const and dst < const for tighter range tracking.
-+	 */
-+	if ((opcode == BPF_JEQ || opcode == BPF_JNE) &&
-+	    dst_reg->type == SCALAR_VALUE) {
-+		struct bpf_verifier_state *neq_branch2, *neq_state;
-+		struct bpf_reg_state *neq_regs, *neq2_regs;
-+		struct bpf_reg_state fake_const;
-+		bool can_fork = false;
-+		s32 neq_target;
-+		u64 val;
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier.c b/tools/testing/selftests/bpf/prog_tests/verifier.c
+index 302286a80154..25f4a095938d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier.c
+@@ -47,6 +47,7 @@
+ #include "verifier_int_ptr.skel.h"
+ #include "verifier_iterating_callbacks.skel.h"
+ #include "verifier_jeq_infer_not_null.skel.h"
++#include "verifier_jeq_jne_fork.skel.h"
+ #include "verifier_jit_convergence.skel.h"
+ #include "verifier_ld_ind.skel.h"
+ #include "verifier_ldsx.skel.h"
+@@ -191,6 +192,7 @@ void test_verifier_helper_value_access(void)  { RUN(verifier_helper_value_access
+ void test_verifier_int_ptr(void)              { RUN(verifier_int_ptr); }
+ void test_verifier_iterating_callbacks(void)  { RUN(verifier_iterating_callbacks); }
+ void test_verifier_jeq_infer_not_null(void)   { RUN(verifier_jeq_infer_not_null); }
++void test_verifier_jeq_jne_fork(void)         { RUN(verifier_jeq_jne_fork); }
+ void test_verifier_jit_convergence(void)      { RUN(verifier_jit_convergence); }
+ void test_verifier_load_acquire(void)         { RUN(verifier_load_acquire); }
+ void test_verifier_ld_ind(void)               { RUN(verifier_ld_ind); }
+diff --git a/tools/testing/selftests/bpf/progs/verifier_jeq_jne_fork.c b/tools/testing/selftests/bpf/progs/verifier_jeq_jne_fork.c
+new file mode 100644
+index 000000000000..bde661e0ce2a
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/verifier_jeq_jne_fork.c
+@@ -0,0 +1,204 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Tests for JEQ/JNE not-equal branch forking.
++ *
++ * When the verifier processes JEQ/JNE with a known constant, it forks
++ * the not-equal branch into two sub-states:
++ *   fork1: dst > const  (unsigned, via JGT refinement)
++ *   fork2: dst < const  (unsigned, via JLT refinement)
++ * This gives tighter range tracking than the original JNE edge-trim,
++ * which only adjusts bounds when the constant is at the range boundary.
++ */
 +
-+		/* Determine which src is the constant */
-+		if (BPF_SRC(insn->code) == BPF_K) {
-+			val = (u64)(s64)insn->imm;
-+			can_fork = true;
-+		} else if (is_reg_const(src_reg, is_jmp32)) {
-+			val = reg_const_value(src_reg, is_jmp32);
-+			can_fork = true;
-+		} else if (is_reg_const(dst_reg, is_jmp32)) {
-+			/* dst is const — JNE/JEQ is symmetric for forking,
-+			 * but we'd fork on src's range. Skip for now.
-+			 */
-+			can_fork = false;
-+		}
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
 +
-+		if (can_fork) {
-+			/* Identify the not-equal branch and check feasibility */
-+			if (opcode == BPF_JEQ) {
-+				neq_regs = regs; /* this_branch = fallthrough = != */
-+				neq_target = *insn_idx + 1;
-+				neq_state = this_branch;
-+			} else {
-+				neq_regs = other_branch_regs; /* other_branch = jump = != */
-+				neq_target = *insn_idx + insn->off + 1;
-+				neq_state = other_branch;
-+			}
++/* JNE with BPF_K: both forks land on the jump target and are popped
++ * from the verifier stack, so both appear in the "from X to Y:" log.
++ *
++ * r0 in [0, 7], JNE r0, 3:
++ *   fork2 (popped first, JLT): r0 in [0, 2]
++ *   fork1 (popped second, JGT): r0 in [4, 7]
++ */
++SEC("socket")
++__description("jne_k: neq branch forked into r0 > 3 and r0 < 3")
++__success __log_level(2)
++__msg("R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2")
++__msg("R0=scalar(smin=umin=smin32=umin32=4,smax=umax=smax32=umax32=7")
++__retval(0)
++__naked void jne_k_neq_fork(void)
++{
++	asm volatile (
++	"call %[bpf_ktime_get_ns];"
++	"r0 &= 7;"
++	"if r0 != 3 goto l_neq_%=;"
++	"r0 = 0;"
++	"exit;"
++	"l_neq_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
 +
-+			/* Check that the range spans across the constant.
-+			 * Check both unsigned and signed ranges, because
-+			 * reg_bounds_sync() may cross-propagate signed
-+			 * bounds into unsigned after JGT/JLT refinement,
-+			 * creating infeasible states if the signed range
-+			 * doesn't also span the constant.
-+			 */
-+			if (is_jmp32) {
-+				can_fork = neq_regs[insn->dst_reg].u32_min_value < (u32)val &&
-+					   neq_regs[insn->dst_reg].u32_max_value > (u32)val &&
-+					   neq_regs[insn->dst_reg].s32_min_value < (s32)val &&
-+					   neq_regs[insn->dst_reg].s32_max_value > (s32)val;
-+			} else {
-+				can_fork = neq_regs[insn->dst_reg].umin_value < val &&
-+					   neq_regs[insn->dst_reg].umax_value > val &&
-+					   neq_regs[insn->dst_reg].smin_value < (s64)val &&
-+					   neq_regs[insn->dst_reg].smax_value > (s64)val;
-+			}
-+		}
++/* JEQ with BPF_K: fork1 is the continuation (not popped) and fork2
++ * is popped.  We verify fork2's bounds in the log.
++ *
++ * r0 in [0, 7], JEQ r0, 3:
++ *   fork1 (continuation, JGT): r0 in [4, 7]
++ *   fork2 (popped, JLT):       r0 in [0, 2]
++ */
++SEC("socket")
++__description("jeq_k: neq branch forked, fork2 has r0 < 3")
++__success __log_level(2)
++__msg("R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2")
++__retval(0)
++__naked void jeq_k_neq_fork(void)
++{
++	asm volatile (
++	"call %[bpf_ktime_get_ns];"
++	"r0 &= 7;"
++	"if r0 == 3 goto l_eq_%=;"
++	"r0 = 0;"
++	"exit;"
++	"l_eq_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
 +
-+		if (can_fork) {
-+			/* Create a fake const register for regs_refine_cond_op */
-+			memset(&fake_const, 0, sizeof(fake_const));
-+			fake_const.type = SCALAR_VALUE;
-+			__mark_reg_known(&fake_const, val);
++/* JEQ with BPF_X: register source containing a known constant.
++ *
++ * r0 in [0, 7], r1 = 3, JEQ r0, r1:
++ *   fork2 (popped, JLT): r0 in [0, 2]
++ */
++SEC("socket")
++__description("jeq_x: neq branch forked with register source")
++__success __log_level(2)
++__msg("R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2")
++__retval(0)
++__naked void jeq_x_neq_fork(void)
++{
++	asm volatile (
++	"call %[bpf_ktime_get_ns];"
++	"r0 &= 7;"
++	"r1 = 3;"
++	"if r0 == r1 goto l_eq_%=;"
++	"r0 = 0;"
++	"exit;"
++	"l_eq_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
 +
-+			/* Push second fork for the not-equal branch.
-+			 * push_stack copies env->cur_state (this_branch).
-+			 * For JNE this_branch is the equal branch, so we
-+			 * must overwrite dst_reg with the not-equal copy.
-+			 */
-+			neq_branch2 = push_stack(env, neq_target, *insn_idx, false);
-+			if (IS_ERR(neq_branch2))
-+				return PTR_ERR(neq_branch2);
-+			neq2_regs = neq_branch2->frame[neq_branch2->curframe]->regs;
-+			neq2_regs[insn->dst_reg] = neq_regs[insn->dst_reg];
++/* JMP32 JEQ with BPF_K: 32-bit comparison variant.
++ * Fork uses u32_min/u32_max for the feasibility check.
++ *
++ * w0 in [0, 7], JEQ32 w0, 3:
++ *   fork2 (popped, JLT32): w0 in [0, 2]
++ */
++SEC("socket")
++__description("jeq32_k: 32-bit neq branch forked")
++__success __log_level(2)
++__msg("R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=2")
++__retval(0)
++__naked void jeq32_k_neq_fork(void)
++{
++	asm volatile (
++	"call %[bpf_ktime_get_ns];"
++	"w0 &= 7;"
++	"if w0 == 3 goto l_eq_%=;"
++	"r0 = 0;"
++	"exit;"
++	"l_eq_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
 +
-+			/* Fork 1 (existing not-equal branch): dst > const */
-+			regs_refine_cond_op(&neq_regs[insn->dst_reg],
-+					    &fake_const, BPF_JGT, is_jmp32);
-+			reg_bounds_sync(&neq_regs[insn->dst_reg]);
++/* JNE with larger range and different constant.
++ * r0 in [0, 255], JNE r0, 100:
++ *   fork2 (JLT): r0 in [0, 99]
++ *   fork1 (JGT): r0 in [101, 255]
++ */
++SEC("socket")
++__description("jne_k: neq branch forked with wider range")
++__success __log_level(2)
++__msg("R0=scalar(smin=smin32=0,smax=umax=smax32=umax32=99")
++__msg("R0=scalar(smin=umin=smin32=umin32=101,smax=umax=smax32=umax32=255")
++__retval(0)
++__naked void jne_k_neq_fork_wide(void)
++{
++	asm volatile (
++	"call %[bpf_ktime_get_ns];"
++	"r0 &= 0xff;"
++	"if r0 != 100 goto l_neq_%=;"
++	"r0 = 0;"
++	"exit;"
++	"l_neq_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
 +
-+			/* Fork 2 (new state): dst < const */
-+			memset(&fake_const, 0, sizeof(fake_const));
-+			fake_const.type = SCALAR_VALUE;
-+			__mark_reg_known(&fake_const, val);
-+			regs_refine_cond_op(&neq2_regs[insn->dst_reg],
-+					    &fake_const, BPF_JLT, is_jmp32);
-+			reg_bounds_sync(&neq2_regs[insn->dst_reg]);
++/* Const at umin boundary — no fork expected.
++ * r0 in [0, 7], JEQ r0, 0:
++ *   Fork condition: umin(0) < 0 is false for unsigned → no fork.
++ *   Edge-trim gives not-equal branch r0 in [1, 7].
++ */
++SEC("socket")
++__description("jeq_k: const at umin, no fork needed")
++__success
++__retval(0)
++__naked void jeq_k_no_fork_umin(void)
++{
++	asm volatile (
++	"call %[bpf_ktime_get_ns];"
++	"r0 &= 7;"
++	"if r0 == 0 goto l_eq_%=;"
++	"r0 = 0;"
++	"exit;"
++	"l_eq_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
 +
-+			/* Propagate JGT/JLT bounds to linked registers */
-+			if (neq_regs[insn->dst_reg].id) {
-+				sync_linked_regs(env, neq_state,
-+						 &neq_regs[insn->dst_reg],
-+						 &linked_regs);
-+				sync_linked_regs(env, neq_branch2,
-+						 &neq2_regs[insn->dst_reg],
-+						 &linked_regs);
-+			}
++/* Const at umax boundary — no fork expected.
++ * r0 in [0, 7], JEQ r0, 7:
++ *   Fork condition: umax(7) > 7 is false → no fork.
++ *   Edge-trim gives not-equal branch r0 in [0, 6].
++ */
++SEC("socket")
++__description("jeq_k: const at umax, no fork needed")
++__success
++__retval(0)
++__naked void jeq_k_no_fork_umax(void)
++{
++	asm volatile (
++	"call %[bpf_ktime_get_ns];"
++	"r0 &= 7;"
++	"if r0 == 7 goto l_eq_%=;"
++	"r0 = 0;"
++	"exit;"
++	"l_eq_%=:"
++	"r0 = 0;"
++	"exit;"
++	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
 +
-+			err = reg_bounds_sanity_check(env,
-+					&neq_regs[insn->dst_reg], "neq_gt");
-+			err = err ?: reg_bounds_sanity_check(env,
-+					&neq2_regs[insn->dst_reg], "neq_lt");
-+			if (err)
-+				return err;
-+		}
-+	}
-+
- 	/* if one pointer register is compared to another pointer
- 	 * register check if PTR_MAYBE_NULL could be lifted.
- 	 * E.g. register A - maybe null
++char _license[] SEC("license") = "GPL";
 -- 
 2.47.3
 
