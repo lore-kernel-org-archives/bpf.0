@@ -1,184 +1,129 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C4A934678C
-	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 10:24:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE0928725F
+	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 10:52:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770546287; cv=none; b=kcgYvDC4o4CQJOPM8mY0yh68rJVsrw5cq6q/nCAzdM+vNWvYgGZKGo4OKDHigkSLFuwHmluG2TefCzxrb5iE3Gs2b5Hg0wjNkpO8PtVxlRaqHOPJtClBMOgk8kf/6uFgwePLCYELR2uVRW7hY4GetFPhjmjuxgEYU4GJFG0j4lY=
+	t=1770547973; cv=none; b=ciAI4p9M/B/9aYzJ6fJRIEFavzglZRTyWtbK/MyU9Vnfox8YuE/Zdz2O3tRf065obu8zn9MSH3VblNo5Yg3cSIMf+p1nhGS2TsoFopg6/6uRXY2LHJyOozKstYmLex5bZ6AXPqOjEQfhBPA8w570yVuI81yrajhAT6KMqYwepTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770546287; c=relaxed/simple;
-	bh=cVdowyqu9FgfWukgr8FyguD0AAJpvR9htYI4O4gK1NA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T1yjQKGAMs//tF4L06ltR+PPYeAek1n9fGyy27TpCsSMfLBIzB6LMu0E62XbTrYBagHqNxh9vDwSQi0BwrukjFUmxRhh4S94K3C+1E0CkqF2di7Yw8CDiypKhnYyFx7Sw7tUajxd16+X3RYxlmc8Kbl0bHMrA/gSObYf+j68iPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bEUKoNJv; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770547973; c=relaxed/simple;
+	bh=0VExI0SEjJo3SF54AFoiMTAyRRM24mQmZhByR0No9d8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=JZNyaMiRabBx4BqRwNKWdFLcPaOuCwat0BdGYobbcibFpz726tRaFJnbfmOaPHqOa/a6lS9OZTBr3Nv7okNzdanSu7AvBF8dBrF60uBd84n06caZMFUVA7gSkZTvwiTIEzaAjad38A0JQol+KD0yj/QB2qxu9+zvg0OPjXEgcrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WhXvZdcR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bEUKoNJv"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-47ee76e8656so54059185e9.0
-        for <bpf@vger.kernel.org>; Sun, 08 Feb 2026 02:24:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770546285; x=1771151085; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IyOmeZTBFI+Byh4RTWX4pgkdebEC59t+q2vB7MuEzPY=;
-        b=bEUKoNJv9lVOLsWAwyDZQPZF532nEiu7aesGWvOJiRAKmNo15cdXaCrzA8+ptiT1Ei
-         caI7y6eafBlbrttZITr+qeJmxvltnnomYGMB/txjdWXxmte/tWZ0DzVIJOeUpMLLoybB
-         LcBpsF8p1wYNfsm9WKMe34s0mxDDCEohS43xOzh7PyBYYtvW/HBKcY2N4hFja2CFSQuU
-         WfJTBOYLoqKXR8EvoWMHNExSeAhJtQ6Y582VBTcy4wFcijD2eOdplkO2b/Svt6ov+7/3
-         xEcHnwNOBZWwPe0TrclyUSsB08xBIKCoA7/2PmUVQ/FAoSRVYvavtedFbiZyx26QGGc8
-         cnjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770546285; x=1771151085;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IyOmeZTBFI+Byh4RTWX4pgkdebEC59t+q2vB7MuEzPY=;
-        b=umhuZYXHV5gJYoli9LcwBp1J6fb2TVWtAhhYWUqrqgqqyzaBO6ENncgIHKUs+KEgaP
-         gIICNFN3nGaHoGcYjfFIXaMH4TXAXAXZDOGex3Bz6jR32qD3Ce8aTmuad0nN3BXh3Dge
-         oJIw60HEpwP8pl+488b6Rjqx/DxeInsADP0u2eZAS0Y0ASUM1hwgaJAy0/YSDADXLayu
-         WibNjW9Xa+1hBLFQ8IcuXXRleF9K8LVdBaMnyTeWBSQMab/uphbCMpcVUvURI4jHwbuO
-         Yi1mh0wwax+k1eEsUaocbEC1A6jKY4FDLjDMN1cWhgZZ2kW81G0LDGHUhpI9+KSkYEdz
-         7QAw==
-X-Gm-Message-State: AOJu0YyHiRQ96ixbSo6CIfjS0jrx8ObZAnL6mPAwSAi14gbYyYO7ip8g
-	8p2Dg7nS9iutZKoEjfuC7KYOR4Ev4Ngz3+iu3ai3W9NlHj8bNB3VSXiOspiiPQ==
-X-Gm-Gg: AZuq6aLEjBdoR9SDIEzUR9h1cAh43XFQEFJNol5sjS6txlxyuUQkPnHPHii7ELyZzJ2
-	R3J/JTBCpzPsoCpvEX+Bs76zp8UPtvS+nnYaZioL59NmmQ7FId4bM77uDnGh1q6KkFKXJXPCjaa
-	vfN3E7kXq5o2jB1rX4xu/EfILHAYeqDZkfneNU6uyoddaRqHkXz836gUpnXikUNVat8YwDs1imA
-	pEE6jgDwmHtqH8XYx0xmT1FpntQmE/yo4KEjAqsyuoYP6Vxd6prOhdf5ETI21pTufqKU/3urBUb
-	+UDtltq84dYkbpFRUToXFic+rZvEJoqUyB57bp/VLcxJ8nxY7IdNX8qXkcyBnRyv/682DbftA5O
-	aK89DcSRbGveKZKjbxNwSHOjKw04dAzEIeSSF0uxdyaCldpGew34u7ouNewj4PhJg7fL1RU0hZw
-	j+jl11afuSXyJyMM0sHp/0wW3noJUN3A==
-X-Received: by 2002:a05:600c:5290:b0:477:6d96:b3e5 with SMTP id 5b1f17b1804b1-4832020023cmr112292595e9.7.1770546285056;
-        Sun, 08 Feb 2026 02:24:45 -0800 (PST)
-Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436296bd211sm19883599f8f.13.2026.02.08.02.24.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Feb 2026 02:24:44 -0800 (PST)
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Anton Protopopov <a.s.protopopov@gmail.com>,
-	Anton Protopopov <aspsk@isovalent.com>,
-	syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com
-Subject: [PATCH v1 bpf-next] bpf: Fix a potential use-after-free
-Date: Sun,  8 Feb 2026 10:32:40 +0000
-Message-Id: <20260208103240.6268-1-a.s.protopopov@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WhXvZdcR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4231C4CEF7;
+	Sun,  8 Feb 2026 10:52:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770547973;
+	bh=0VExI0SEjJo3SF54AFoiMTAyRRM24mQmZhByR0No9d8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=WhXvZdcRnkLOcMV0T89/MkDwmp5GqGPEcjg35L8R6975sE6Ksh5SN0lZ9dbF04Bb8
+	 3sU9ORcgVIXDVIKBxvnQ1vJnf7eYgPD8MR96j9UoThXQ96eE6PPG4uCRuVqIej+J4E
+	 5OXt/UUp2E8xP4q+hHNc6EqN+hYQHnBSbfMY8ygE1wh95TonQ/CUZHW8/U9jmtCW97
+	 WjhE3+3GRdvB8qwkaI+558vQyF3JLjdIir1wr5zC+bWDYzdgAN2ggarwJwziTBWlKE
+	 1L8Xb1tFSVp2/r7513I9S8PLYh3PmGlZMNSu4auFDt6bCvJt8F9bxhoKqnQx796hRS
+	 gZE3pvi9fn4lQ==
+Content-Type: multipart/mixed; boundary="===============2923070129947316635=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <620b07ccda2db959a07fd2fc81c6cb3127dddfd17c64ef6dce63113c8eb30f37@mail.kernel.org>
+In-Reply-To: <20260208103240.6268-1-a.s.protopopov@gmail.com>
+References: <20260208103240.6268-1-a.s.protopopov@gmail.com>
+Subject: Re: [PATCH v1 bpf-next] bpf: Fix a potential use-after-free
+From: bot+bpf-ci@kernel.org
+To: a.s.protopopov@gmail.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
+Cc: a.s.protopopov@gmail.com,aspsk@isovalent.com,syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sun,  8 Feb 2026 10:52:52 +0000 (UTC)
 
-Refcounting in the check_pseudo_btf_id() function is incorrect:
-the __check_pseudo_btf_id() function might get called with a zero
-refcounted btf. Fix this, and patch related code accordingly.
+--===============2923070129947316635==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Reported-by: syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=5a0f1995634f7c1dadbf
-Fixes: 76145f725532 ("bpf: Refactor check_pseudo_btf_id")
-Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -21466,9 +21461,7 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
+>
+>  	btf_fd = insn[1].imm;
+>  	if (btf_fd) {
+> -		CLASS(fd, f)(btf_fd);
+> -
+> -		btf = __btf_get_by_fd(f);
+> +		btf = btf_get_by_fd(btf_fd);
+>  		if (IS_ERR(btf)) {
+>  			verbose(env, "invalid module BTF object FD specified.\n");
+>  			return -EINVAL;
+> @@ -21478,17 +21471,23 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
+>  			verbose(env, "kernel is missing BTF, make sure CONFIG_DEBUG_INFO_BTF=y is specified in Kconfig.\n");
+>  			return -EINVAL;
+>  		}
+> +		btf_get(btf_vmlinux);
+>  		btf = btf_vmlinux;
+>  	}
+>
+>  	err = __check_pseudo_btf_id(env, insn, aux, btf);
+>  	if (err)
+> -		return err;
+> +		goto err_put;
+>
+>  	err = __add_used_btf(env, btf);
+>  	if (err < 0)
+> -		return err;
+> +		goto err_put;
+> +
+>  	return 0;
+
+Can btf leak a reference here when __add_used_btf() returns a non-negative
+value for an already-recorded btf?
+
+Looking at __add_used_btf():
+
+    for (i = 0; i < env->used_btf_cnt; i++)
+        if (env->used_btfs[i].btf == btf)
+            return i;
+
+If the btf was already added to used_btfs (e.g., two BPF_PSEUDO_BTF_ID
+instructions reference the same btf), __add_used_btf() returns the existing
+index without consuming the reference.
+
+In that case, check_pseudo_btf_id() took a reference via btf_get_by_fd() or
+btf_get(btf_vmlinux), but the "return 0" path does not release it.
+
+The original code before commit 76145f725532 handled this case:
+
+    for (i = 0; i < env->used_btf_cnt; i++) {
+        if (env->used_btfs[i].btf == btf) {
+            btf_put(btf);
+            return 0;
+        }
+    }
+
+Should something like this be restored, perhaps by adding btf_put(btf) when
+__add_used_btf() returns a non-negative value indicating the btf was already
+recorded?
+
+
 ---
- kernel/bpf/verifier.c | 33 +++++++++++++++++----------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index edf5342b982f..30a3f90e9aaf 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21333,10 +21333,9 @@ static int find_btf_percpu_datasec(struct btf *btf)
- }
- 
- /*
-- * Add btf to the used_btfs array and return the index. (If the btf was
-- * already added, then just return the index.) Upon successful insertion
-- * increase btf refcnt, and, if present, also refcount the corresponding
-- * kernel module.
-+ * Add btf to the used_btfs array and return the index. If the btf was
-+ * already added, then just return the index. If needed, refcount the
-+ * corresponding kernel module.
-  */
- static int __add_used_btf(struct bpf_verifier_env *env, struct btf *btf)
- {
-@@ -21354,8 +21353,6 @@ static int __add_used_btf(struct bpf_verifier_env *env, struct btf *btf)
- 		return -E2BIG;
- 	}
- 
--	btf_get(btf);
--
- 	btf_mod = &env->used_btfs[env->used_btf_cnt];
- 	btf_mod->btf = btf;
- 	btf_mod->module = NULL;
-@@ -21363,10 +21360,8 @@ static int __add_used_btf(struct bpf_verifier_env *env, struct btf *btf)
- 	/* if we reference variables from kernel module, bump its refcount */
- 	if (btf_is_module(btf)) {
- 		btf_mod->module = btf_try_get_module(btf);
--		if (!btf_mod->module) {
--			btf_put(btf);
-+		if (!btf_mod->module)
- 			return -ENXIO;
--		}
- 	}
- 
- 	return env->used_btf_cnt++;
-@@ -21466,9 +21461,7 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
- 
- 	btf_fd = insn[1].imm;
- 	if (btf_fd) {
--		CLASS(fd, f)(btf_fd);
--
--		btf = __btf_get_by_fd(f);
-+		btf = btf_get_by_fd(btf_fd);
- 		if (IS_ERR(btf)) {
- 			verbose(env, "invalid module BTF object FD specified.\n");
- 			return -EINVAL;
-@@ -21478,17 +21471,23 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
- 			verbose(env, "kernel is missing BTF, make sure CONFIG_DEBUG_INFO_BTF=y is specified in Kconfig.\n");
- 			return -EINVAL;
- 		}
-+		btf_get(btf_vmlinux);
- 		btf = btf_vmlinux;
- 	}
- 
- 	err = __check_pseudo_btf_id(env, insn, aux, btf);
- 	if (err)
--		return err;
-+		goto err_put;
- 
- 	err = __add_used_btf(env, btf);
- 	if (err < 0)
--		return err;
-+		goto err_put;
-+
- 	return 0;
-+
-+err_put:
-+	btf_put(btf);
-+	return err;
- }
- 
- static bool is_tracing_prog_type(enum bpf_prog_type type)
-@@ -25368,11 +25367,13 @@ static int add_fd_from_fd_array(struct bpf_verifier_env *env, int fd)
- 		return 0;
- 	}
- 
--	btf = __btf_get_by_fd(f);
-+	btf = btf_get_by_fd(fd);
- 	if (!IS_ERR(btf)) {
- 		err = __add_used_btf(env, btf);
--		if (err < 0)
-+		if (err < 0) {
-+			btf_put(btf);
- 			return err;
-+		}
- 		return 0;
- 	}
- 
--- 
-2.34.1
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21796744040
 
+AI-authorship-score: low
+AI-authorship-explanation: The commit has standard kernel formatting, addresses a real syzbot-reported bug, and the code changes follow conventional kernel patterns without any AI-typical verbosity or over-explanation.
+issues-found: 1
+issue-severity-score: medium
+issue-severity-explanation: BTF reference count leak when the same btf is referenced multiple times can cause memory to never be freed, but does not cause crashes or security issues.
+
+--===============2923070129947316635==--
