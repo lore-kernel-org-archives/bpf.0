@@ -1,248 +1,354 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073772FE579;
-	Mon,  9 Feb 2026 20:56:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.158.5
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770670618; cv=fail; b=hbFWq+5gVF1EyNZLb02WLpfPhGAS6Ed9YsWRsE3IxAL/zFYvlTLcWUVQrCh7L1HwJ9qZeylkhEIlst1/mA5exT9dLBdKO0+iRrk/u9rII4jj8+Ka2N1SwttAYXmrSntHIFZV31jC0ZvUCRmBGDY3GmAupJCIvjEki11ZpDSypD0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770670618; c=relaxed/simple;
-	bh=k1B3FtHIfpNWG1kRAfe1wZ6Cr7tOSwCeWyG338LpTic=;
-	h=From:To:CC:Date:Message-ID:References:In-Reply-To:Content-Type:
-	 MIME-Version:Subject; b=kRfmQJKmibNy9hfFqJBKayWsI0vdRwl1o58EFlAK9TjqtG4QiCrDyZt3IOh6FCnhFy3oJxTaWchuAU97VPeNVYam0WZqXm+G/Ts6dRi14AR5OmsNk+/OtNXFt6ZETVqMGjY8q2gHqg/wQWdanaKk8vr2xUTTy7CzTbht8PwNgHI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ibm.com; spf=pass smtp.mailfrom=ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hdiUcouh; arc=fail smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E3D42E06ED
+	for <bpf@vger.kernel.org>; Mon,  9 Feb 2026 21:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770670965; cv=none; b=e8kdb6P4ndaSFoTzvMJQwnJfMOqLATU4yYc0j/LBPCXcTS5BIBUeu8XSSwRyTDWWimP1Pk4u9QbCC2cz9R0sQb7O/0PtLs1q2BIUIxWo/TXrpb+bp9+H3GIGLdFirKwxex+awNbrMMLx9uW5B+JYQ46Nbh2xpzIcXH6YTK7r0N0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770670965; c=relaxed/simple;
+	bh=uthVYtoK6Py2p6tfpDG5ceZ4HUaz7JyNRMMenj6wHo8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hrvIKv2+iuL4d1a1E0XctKOgFanUSgnY/qTww/idMd6W2x39AUcRpRwCeYr2EUuuFI4p3mynGprUfRFW17L5DwuqYWhPqKpP3Y2W4SEx3oWSISTnVLl5zLqEFUvCzX/tUuSip+5gviNr6RQ0FwW3J9xEwd7uoRhT+E8NlIsQ47Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=iGwe1yop; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hdiUcouh"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 619FFLhN130324;
-	Mon, 9 Feb 2026 20:56:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-id:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	pp1; bh=k1B3FtHIfpNWG1kRAfe1wZ6Cr7tOSwCeWyG338LpTic=; b=hdiUcouh
-	f7a+GNWMM+v3YBwsLw8jOnFcXYJSkv2HfAv2DFpwLLmQVbMBvaa8KjqQL6oLWZJ+
-	1BJqvcOGemKsZxw68+Oac4pfPIWuDlfnRxV5SN8AC36x71znazGtjL16yP+B0CI+
-	zdNBbunVHTiBVPUgOS2MmbTPANwBB1VqsGInLT9YQk30GZJZ8Sdqv75miCjX4Hvx
-	fSS2arUoRXwhSQFghhkPIRUpG6cONKv5rsqrupaZx1LLGK5yITAX2QCCatkc8C+1
-	O/YbyDjbYNsuvPmp6x+9NtN28B/ZB1iPQpUbPsw+zq7Qf2UGDH5b7pYKeAeLANs3
-	3yJryFCFvLzJCQ==
-Received: from ph8pr06cu001.outbound.protection.outlook.com (mail-westus3azon11012006.outbound.protection.outlook.com [40.107.209.6])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696uqkj4-1
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-	Mon, 09 Feb 2026 20:56:50 +0000 (GMT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RrrBJ4rEsuEILMjclJNMTkN4XtpxiMU+U8o4SaqvlHOrVILTUj2YiE3bR3qdLuaEEYreKU/i9/bps5PN7lzZfqrjAD5hinj60ddQbNeXrRXZ9jzWadIt5ZYm2tLi0Q2s5G+MjexKwFHQZiKZThzFfRZZe2BuMyrQdaLRabb6+xVLUyRGkUHEm8zFl2DKsyf9sU+Stj2Te+TcDHsuC2lU4WjaLipAA5K53E379ky46b5kV2vbgspkKOpVG2615sq44pyX7YH1GEvJWCa3Jpss6trcpzBEiKXFZ3OPo5xuwiAGyF5FseSNO4u+lCj7YUpMhQw8PsQzwujm5ujp/y5Dog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k1B3FtHIfpNWG1kRAfe1wZ6Cr7tOSwCeWyG338LpTic=;
- b=cs++VAPtzWzNyKIg0BIREj5IXJSmEHaIC3sOwTSGYa+skOc+7WDW6t+IQ7xCvv2mjBbemANrOLtZTqPM7GGAMwhkN9H7GrJffMEjmZileumPXXNl644ht4YfT+oKr20TRcLSQVMd84zDoH4bCrmxGVOCCULdE4975xm12iwcAa1uV9b/5CtW+2Bj791ooVQiA6wmaCxG4+p9RfJBu9N+VYkShdbkrswM9Hv2eRraPFAICRFBmSLEBsABUA9avvPws8KuOgTmcawxkjRwz0VgtauizB0YwJsO1kRSxj9MFtGorfa47EDh0m4z3Xdhn4OX7snIUxJmBUcE7FgUZQfU0g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=ibm.com; dmarc=pass action=none header.from=ibm.com; dkim=pass
- header.d=ibm.com; arc=none
-Received: from SA1PR15MB5819.namprd15.prod.outlook.com (2603:10b6:806:338::8)
- by PH3PPFA04B1B353.namprd15.prod.outlook.com (2603:10b6:518:1::4b9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.14; Mon, 9 Feb
- 2026 20:56:47 +0000
-Received: from SA1PR15MB5819.namprd15.prod.outlook.com
- ([fe80::920c:d2ba:5432:b539]) by SA1PR15MB5819.namprd15.prod.outlook.com
- ([fe80::920c:d2ba:5432:b539%6]) with mapi id 15.20.9587.017; Mon, 9 Feb 2026
- 20:56:47 +0000
-From: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
-To: "greg@kroah.com" <greg@kroah.com>, "slava@dubeyko.com" <slava@dubeyko.com>
-CC: "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-fsdevel@vger.kernel.org"
-	<linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Thread-Topic: [EXTERNAL] Re: [RFC PATCH v1 3/4] ml-lib: Implement simple
- testing character device driver
-Thread-Index: AQHcmEos0SSjVp/v2kOIbbb6FIhOeLV63J6A
-Date: Mon, 9 Feb 2026 20:56:47 +0000
-Message-ID: <d3f051c5920d4f68c00a92845e2491003b516a1f.camel@ibm.com>
-References: <20260206191136.2609767-1-slava@dubeyko.com>
-	 <20260206191136.2609767-4-slava@dubeyko.com>
-	 <2026020719-thrive-domain-f0c2@gregkh>
-In-Reply-To: <2026020719-thrive-domain-f0c2@gregkh>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR15MB5819:EE_|PH3PPFA04B1B353:EE_
-x-ms-office365-filtering-correlation-id: 012a8f58-fa39-4932-6319-08de681dbd7e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|10070799003|366016|376014|38070700021;
-x-microsoft-antispam-message-info:
- =?utf-8?B?Rk94K1ZJSWZZV2dlZzlEdGY5Z2oxblg1SVJvZTdXOTVqK1FQUlJHL3dwN0w4?=
- =?utf-8?B?S2lITGJGZFozaUZKbVFOb0Z4eGpGWk1MQzVRdFQ3SHMwbkRBWjA3Zzg0aXp4?=
- =?utf-8?B?ZGNGUzNPWjV0SWhZanl6dzlKcVFZQURuQ3RKdzRLcXByR1JZaXh4bWJvZnQr?=
- =?utf-8?B?dGxCRWpDdmc1Tkk4VEJWdmtIRzFJeDJycjRKTGV6S0Vtd3M1VXBxdTFzSGVS?=
- =?utf-8?B?ejNBUGJNZ0ptRmZ4c05xeW1odTNRaTZZTndGRS85Y0ZKcGpHai9lN3FFWEVX?=
- =?utf-8?B?aExHQUErb2lQcDNYQ3VsZEtURDZ4cWtSZjJ4NHcwcDVZcmZJL0ZvSVN4YnYx?=
- =?utf-8?B?YmNXSnV3OHRnR1FPaWo0ZS91SFRZeDFuQmxHbzVqRTB5emYybmlobWI1S3do?=
- =?utf-8?B?N3ExQWhEdHF1bi81MXF3Y3J6c2JBNjVQcUJES2lsdW9qWG05RVNHL2Z6NUUy?=
- =?utf-8?B?KzgrUVEveFVUMVlkMVZNTDd5Q2JtQ1VwQXVFdFcwQWYrM3NvSFhGN0tFVS9n?=
- =?utf-8?B?dm9vRVAySVFOcm5QT2dHVWRLTHJDSm5TcnRTT25ZejcwV1RvcjFDY2dnWWhB?=
- =?utf-8?B?dG5sL1F2a2hPZGZqbU1RUnRVTzFlZWVuSlB3RUFPemtqKzN2enAxZDlNQ3Yr?=
- =?utf-8?B?aXpSZmxra21oVnVPUFYveWNYaWpYWmdGN05DTkhUV0s0L3YyTkEvRzczNmxs?=
- =?utf-8?B?eVhSNjVCTXdUdEdlWENXYW5aME0zSjlwc0g1Q1Z1SFVPTENrMHZwVHVGbHZr?=
- =?utf-8?B?S056Nm1ac0JaWGRpb3ZrQ05yUVZZNjQ5ZVhSU1FXRXV1SDYzREdNd2ZhWWN5?=
- =?utf-8?B?c1dWV09MbWE5RXcrVnhHcEtHY0E0YlgrQmNianJjQmdYT08xSE94VTJmNXBw?=
- =?utf-8?B?cjdBZ09LQ2RkNHNJV3lQNVFHVHhOaytONVNhL0hlcEhHblFtMllrSnRrL0N1?=
- =?utf-8?B?VjhYWjJNQWlhVVh4RlJlVUZKY2RTbzEvQkxuS2cvNmpGWDFtYlJPOGxNdEFU?=
- =?utf-8?B?MnJjV1ZmOEM5cThtcG5XRE1VeTVoUUMzSHZRWXFKRTE4MndoRnY2Zk1tSncy?=
- =?utf-8?B?eitVZUx5YVppaW9lWmRpOTRPZDBrK3hrTGVxY1hGZXozSFZoZmpWVWd6ZXZ0?=
- =?utf-8?B?UGEzMlFnRStpV0tHZURxL1hnS29SQkxxa0hnVDkyaUwrZHk2aGJ3K2RRZE5D?=
- =?utf-8?B?QTRjVVZ2eDg3T0loZ1ZxcFhqVW43SkpybWZqRVYwVEdVNmRyNndoUjFyN2xm?=
- =?utf-8?B?ZVhMOW51ajMvYnJITkJKeUlzd0cydWtPUWFPNTUzcE0vcDhGSjk3OTFFZ2tt?=
- =?utf-8?B?SU5Lenl1L09ONEVCQXJKbTZVSGs3N0pBS1BjOHh0MW9EcU1XZHNQN2syMURp?=
- =?utf-8?B?M0YrK2o5L29EbXVtWFYrRTgrK3pHLzFaTG1pUFdmM2pIM1RuSnVaUEF3UkNP?=
- =?utf-8?B?amJqeXJRaXhuOERYbFpjQXJFNkdlZzJ4d1J6Y0JKVGovT1lETmQ0cTVsRzNI?=
- =?utf-8?B?T3FkNFBJblBHeGZUREhlVG9KTG8yMm5FRUJBVUxoTWVIaU1PVkpMQ0dMb0JH?=
- =?utf-8?B?VzJ2ZnduR2UvaEpXMWNyRWh6NCs5Zmlpb25zcTVHN215QjZzNkY4bzdidEVm?=
- =?utf-8?B?b3BTUzNDc1k5YXd2NGZyZG53QTUvQVpPbUtKSFlzazFzMzRLTEUwVTJiRXpn?=
- =?utf-8?B?OHRYbE5yUEF4b1g5Z2RnZkJOWTA0cHp0cHFrSjRiSkpnQ21qOHdGVFZCQjBD?=
- =?utf-8?B?Zm1hODRueGljOXNEc3JTVlRUaUdjTUF4L2Z5NGxUS3FuTGNyV2ZZVXkrSFhk?=
- =?utf-8?B?YVczKzVCdnI4cFZEL3d4SlFwOUt3eFpoc3NaYkhyRFBPcmJPa3AyR0N6Q0h1?=
- =?utf-8?B?MTg4NFpqcXJDcjVoOXk2bWYreURJM1plMVJZZGNYdE9ranlMV2tzVGprcWY1?=
- =?utf-8?B?SnJuNld4WWdBeDZXMWE4NkVEWUYzNUoxNDc0dnlPQ0E0ajIyMWJVUStnVU5i?=
- =?utf-8?B?YzBaaHM4NkJ0NERjSmVmRXRzNmJ4enJmQjVLS1dQeXQvczZtR2hldTBVZFpE?=
- =?utf-8?B?alpPUXVZM200ZXpXWXBFOWp6RHRVTWRvdmtrUFFIcmdNNytNOTZWMHlGRlAx?=
- =?utf-8?B?Zm1Fc1N5RkdFZVJjT3ZGb0F4S3p2aStuM2NKU1FMQmxsci8vbitESDVXT285?=
- =?utf-8?Q?mQvf+yd6IVOfy1M8gVCHolI=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5819.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(10070799003)(366016)(376014)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?Y0JpM2NZM3VsRHN3a2wvSUV0ZW9ITXN1NXdHVFZUdHRTZHkvSmJoeWZLUjZl?=
- =?utf-8?B?d3JWRzFyR0NSYjRYME8zS1dBc3dUWnZzQWp0L0VySWFxVUFQR1VYM0VUbWhz?=
- =?utf-8?B?bnI2WklIUENyRVpKb0d4bGJBclBYRDA1ek5TRXRSVGg3OURYTU9iS2swSGlh?=
- =?utf-8?B?K0Y0QkVMTTgvREpORFRLUmVlbjNRQTArZlZZZ2dXM2c5Y0srN016ZkRJK0lF?=
- =?utf-8?B?K0djWi92dUlKb1gyNU84RDc4SXpuL29NcThncm1kek5aLzdLemhQVUV1VkZl?=
- =?utf-8?B?VUl4Rkc5amQ1T1hnMjhhOVpqbHlnQTZ0dFJobEh2S1Y0M1RXQkxpd3JGU2VT?=
- =?utf-8?B?UW1CNm9oZ3QvdjB3TDdXTnZYakRjdkxNSll3MHhhMGR4YThiVkRGclRzeUFr?=
- =?utf-8?B?dHRrWnNiY29LSU9jZGIxTUlocDE4dGI1OE9hNXE0WEt5UmRRK1BES20rbWFw?=
- =?utf-8?B?NFZ4bnZBSHJ3V0dTMmhjTjFTelZ5Nm5LWTJwN21BL25kWXV3U1VPakFpek15?=
- =?utf-8?B?TFVGaFI3am4reG1OdTM1UGU3Q1NGZkprQVhqejBCUS9NdWE2Q0ZqMlBRUzV2?=
- =?utf-8?B?MHF4NVJTZDlYREg4c2pJaktDWFhnRjRSRjdmdkRaUmFxMTNFWWk3UWRKLy9I?=
- =?utf-8?B?Rm4rZmYxZ2kwSHlZQTF3N0J3NkJBdCtyZFoyWHc0MmswbDVFRW1ZLzlSUC9E?=
- =?utf-8?B?cDdQbGVPQnpzTkRuelNjalMyQVROd1VJWUZORGE2a0M1RVVIV2ZFVDJlMWN0?=
- =?utf-8?B?aWhTdWNqakswcGVWWGpPOTVqQ2tBQ0laZWZtTXZYTjZoU2x3dm80TlZwc0Q3?=
- =?utf-8?B?UFc5cm83NDl4ZVVkSkVBNkpGUGVpVFd1NmJWTXNMQTZIQTJkWWlVZkM3K25o?=
- =?utf-8?B?SXhDMWJmemJDK0Z6Y0FvWWV4ekZDWTFDMWRNS1k0WkJqelBKVWUvSVlUTjM4?=
- =?utf-8?B?MGZXM0pWZExWTkhZQ1JMdy9JTWRpZ3RqWGw1d2hGNWJpNGc4enhqcFZaUzNV?=
- =?utf-8?B?N0xZUGZyanBrMGJiQk5nZ2dZNWYveUtQb1NGMUdkL1VVbjZ1ZDRtYk94QkVD?=
- =?utf-8?B?b3ZtUzY3dDVHaHBoYnV2eUF0VEZWOWIzYUk1MHgzNjJ2N0Fqem81RnB1clVU?=
- =?utf-8?B?SjhMU1JiTkgzOTBIQ0FGQTl4dUYvRGhoMkV3cXhUMG85NFRrWkFCeHRFZDFB?=
- =?utf-8?B?OHVPZzNZWkFSVHozY283OC9oaE5odzRSVnJGZFMybFgzS213S2gza2Y0bkIz?=
- =?utf-8?B?ejBzVnNRV1QxTDVwSkFUVGNYTFpyVDR3OEFsbFhpMDM5SXBJVGMzM1RFOFJy?=
- =?utf-8?B?clo1MjRPVTBhekFTL2ZNRzBWWVQ1cVJPaFlKbmRyajlmZWxzSGE1Y1lFeVFW?=
- =?utf-8?B?a3NIQUNRYmJCNUc2ejB0NUZoa1BRSjM1VlJ0T3JrWGd1dmo4TTlDejZoYXhZ?=
- =?utf-8?B?cktLc2l0WEZUWDR2NWU2cGxzcVpZQVB4L2RXakZWdkxRVFFhYWdPSnJhYlE1?=
- =?utf-8?B?MlFtQ1JtVG1QZ3ZrcE55M2lFN01UelpxUG8rdVZBSUxPSDFBdFI0TnowL21r?=
- =?utf-8?B?TEtJMjJrMGQrakZtU21wVlkyaTV5akE5S0ZZQ0I5RVlLYXB3d1V0MGFFaFZN?=
- =?utf-8?B?Zi91TU9GYlRmblZNcEdIOFBXOXBUdlY2eTdxWHNUNS9jTW9RZStkaEw3SUJG?=
- =?utf-8?B?cEFaalpkL3IwNGovc3pycE13SE1mQzVDeXI2UUpRaHY3S2lMSWRoVFZ5RG5R?=
- =?utf-8?B?UUp0V1dkNGdMeWlkby93K1A4NmJjOW5ORlFxREpoazhNbDZiR0RLdEJiUHl2?=
- =?utf-8?B?TjQvYXJPY2VzY1BNc2F6cjdiZEZhUlpEVWp2VDk0UWVFNU1VcUFJazlsbldR?=
- =?utf-8?B?b3A2akVqSVRmSUFyRlNrcm84eXdkekpLK283Snp6cDlXdEc0K2FkNnlENjBN?=
- =?utf-8?B?YVBhek5PTC95Y2NUVi9lZ21XK2htWlhURjQxMVBXS2NxeXhHMHdOTjNubHc4?=
- =?utf-8?B?QUpNaHpad0pBUjlId09iWDRJQ1pDTFA1ZmdqcUZwQUxlOUVldjZFcitSWW9B?=
- =?utf-8?B?SHJkZzFmQnFiQnlScFR6elRsRFZ1elowN1Q1WEIycWVmK1VJTmtzKzljTGtD?=
- =?utf-8?B?djV5SXhYL0hqSjYwQlhuNG5QUHdIMEZ5elpMbEFuOVNQSTQ1M3JDdFpWRmY3?=
- =?utf-8?B?QldYQjhTVFVndFUvR2Y4THdKdFVyLzl1TGtMQ3ZqbHFQNVFSQzZKaUo1aVJ2?=
- =?utf-8?B?MkZTT3lRVHkzYVB3VVl2VlhYc0gxcTV0OVdxKzhxZmFzSXhNZUViVFJ5dElh?=
- =?utf-8?B?bFVTdTBiV2hXSTVIZTlBMWNwMjJPQmEwMFlHaDFBK2hKcyttYXppendiSDVR?=
- =?utf-8?Q?skShO9BSp8vsZaGHh8Yzxra7FOgUyWOp7yijP?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <C799914920FF724E844FE42F648B10FB@namprd15.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="iGwe1yop"
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-8947e6ffd30so37426826d6.0
+        for <bpf@vger.kernel.org>; Mon, 09 Feb 2026 13:02:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1770670963; x=1771275763; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UpznQ5QtKL+/BMnmaM7AmayREmS/8IKGCYsK08yInlY=;
+        b=iGwe1yopujhEoxn9gTPt8UkIleDH1Bqf0od+wDUQuc5hIOf5a443X8+TBRHErV2Ng5
+         vwfMQeIHulexFh0SDeks9kLHFRJBzomlvK3pxZsnzsWKlJu1kYjvDD5k0r9PtDWTEQPg
+         RYuFb4NZy20F4WeeZG1sReuDLgTT64IKwjfSyZcD4Or7FWT6noUNoLi7cXiU43kAFXQz
+         U+6sIot6Do7rw4kh+IsuVPKbcn+qsHvJyU89Cn8fLDe5BsI048ej7oa2zulzfWgMfi7c
+         fLpEGWA79+oH/ai/MzIAQ3MDP+taceN+6sqL/VBx/5yTfoTF5aPZiqf2aFPtBQSWCQru
+         PVDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770670963; x=1771275763;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UpznQ5QtKL+/BMnmaM7AmayREmS/8IKGCYsK08yInlY=;
+        b=NO1B4ZLEjyN532wCRNgiw0Syi4dJ97ePUi2nKE42j2sGXEqOZ2vK4SRuDdlU9t0fQB
+         NiTEOaI4de/kBComoQsLhU1LMZt+Xwc52ZLPUEdt6Cq0LyWcVZ8qQMPeT0oV+Jch3xM9
+         y1rnc/VJ93ZWDA848WaxpftTOFBavbpQK7GvRAfdrFZzcPZR6k443tjiC8TTOg9NSqv/
+         0/LiokbAeLlRIvqiuad4CroF4qd6zwUecXYZlgoZLeGNczx42nY99WVfgtTS8QEgLD77
+         0CQaX92ZhMuarq4QT5wx3k9GLXx6z11wrTzIuOZuwG9pqlC8uv0u0dUA+HBJr08Q7/oF
+         GJSQ==
+X-Gm-Message-State: AOJu0YzilDSiLtOJELVpjqeQBAnK8gEet0hFunpgPICTRBmyKNikhPB2
+	2xWviSNbUGn9UjbQqF95/HYjjhDbm7jVAf+ZfmAeFyo8ZlzXWt/JyCzujJNpzzEC2TueCJLx+bd
+	gQeJGn8Q=
+X-Gm-Gg: AZuq6aJmB+2dj/tDoVqqutsEfFFVt34gv8zlj0rwwNLmCoxv5bYU7Fawoq0ms5oros+
+	qTBjpqBvv0vrzjm1G5D9UNAKiA2Ndd303Z8ZL8qLsFakhLXGvpQJXufBmv/oD4qUetx8fUC4dXM
+	3Qfio4NjxQojELdweZNJ5rcZ3uS1NnutHAyDdoTKXGK8bs+p8+h+Bkg3AywZl2n9ddOMMtA/vr5
+	PHBQU9/nc6pEI8R01Wu+TMP0a55R1mkt9yamIBdWxdjwbe9kpAQzlYeWGIBQ+DEWCMMxdlESmQA
+	0mBHlUD1SU4NrSCwMkY3xJW5d1YWkFjfL/m6NyADPQEJS9HBkNbKBnv3dhpRUKDIGppkKLjMme7
+	7jPhhBtVsbCPBosHAlvag00y4KrELjuRpecgbIQAUobgRU3mc6petcB2bq1PiGCFDWTxwtnWJNY
+	hVig81IFACyw==
+X-Received: by 2002:a05:6214:1d27:b0:895:4bec:c629 with SMTP id 6a1803df08f44-8954becc85cmr117850336d6.31.1770670962859;
+        Mon, 09 Feb 2026 13:02:42 -0800 (PST)
+Received: from boreas.. ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8953c0574a0sm87063816d6.40.2026.02.09.13.02.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Feb 2026 13:02:42 -0800 (PST)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH bpf-next] libbpf: Add gating for arena globals relocation feature
+Date: Mon,  9 Feb 2026 16:02:40 -0500
+Message-ID: <20260209210240.2051209-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: ibm.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5819.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 012a8f58-fa39-4932-6319-08de681dbd7e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Feb 2026 20:56:47.5079
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: fcf67057-50c9-4ad4-98f3-ffca64add9e9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 2yrf744E/LBTGjTAYSgPSzDv5KeJYEGz/Yc9UqZAZHYIzMbq8hA5Q9xmRBZv8BPNdVSvSabgKDiu1wsydo70ug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3PPFA04B1B353
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjA5MDE3NSBTYWx0ZWRfXxptLBe5p9Xeh
- Td9vPzvyF+k20HOxXUT8q6alwUZG79k0uRmerP2CxrDTPqWhBCtw9KXtB2aeZ8OE/yRnGM6ID8O
- mi2ty62z1Xy0VtCLAf3EDRkDOXs7Uzdnz9eOwvPk5YqpkL88dqjEogTBGcOpW31qh4HVhLPKwE2
- fHPVc3F2RRj9pPh6hmjLFOX+6NQfG1O0FouS0YH6PMZFhp83Ie0oViGWfmUQl+YSOsatTNA/EBW
- Tv5daiKGkX9AubthWDv9FWT4EkYse4Diu4Va1PFRZbgrYH5t017NsYAeAjsJeRqUtcWjgawJrOq
- KwRj6Qd4x86sM+4lOrj4gAdRPHuJ/++dQCrLFDxbKaX11Zcxs1+Hiy7BMGahldictGar+I35zLu
- 3pZHBgJjfyT+PxTIUafbWOZp9xrgXEkmI13NVSOQCYxPd6DIOqFKM6q6zb67/Teh0fDcr8vipTN
- vLp0zM0brl+S78uksVw==
-X-Proofpoint-ORIG-GUID: VCfE44vWW3XKOi-wXD_RLUPslxrWNiwh
-X-Proofpoint-GUID: VCfE44vWW3XKOi-wXD_RLUPslxrWNiwh
-X-Authority-Analysis: v=2.4 cv=O+Y0fR9W c=1 sm=1 tr=0 ts=698a4a12 cx=c_pps
- a=fq9WP/vNXoxpaIAZvvUcmQ==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=wCmvBT1CAAAA:8 a=kbvEEr2ZjCnUHBvhssgA:9
- a=QEXdDO2ut3YA:10 a=6z96SAwNL0f8klobD5od:22
-Subject: RE: [RFC PATCH v1 3/4] ml-lib: Implement simple testing character
- device driver
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-09_01,2026-02-09_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 adultscore=0
- malwarescore=0 impostorscore=0 bulkscore=0 clxscore=1011 spamscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2602090175
+Content-Transfer-Encoding: 8bit
 
-T24gU2F0LCAyMDI2LTAyLTA3IGF0IDE2OjU1ICswMTAwLCBHcmVnIEtIIHdyb3RlOg0KPiBPbiBG
-cmksIEZlYiAwNiwgMjAyNiBhdCAxMToxMTozNUFNIC0wODAwLCBWaWFjaGVzbGF2IER1YmV5a28g
-d3JvdGU6DQo+ID4gSW1wbGVtZW50IHNpbXBsZSB0ZXN0aW5nIGNoYXJhY3RlciBkZXZpY2UgZHJp
-dmVyDQo+ID4gDQo+ID4gU2lnbmVkLW9mZi1ieTogVmlhY2hlc2xhdiBEdWJleWtvIDxzbGF2YUBk
-dWJleWtvLmNvbT4NCj4gDQo+IEl0J3MgaGFyZCB0byB0ZWxsIGlmIHRoaXMgaXMganVzdCBhbiBl
-YXJseSBhcHJpbC1mb29scyBqb2tlIG9yIG5vdCwgYnV0DQo+IGlmIGl0J3Mgbm90Og0KPiANCj4g
-PiArIyMjIENoYXJhY3RlciBEZXZpY2UgT3BlcmF0aW9ucw0KPiA+ICstICoqT3Blbi9DbG9zZSoq
-OiBEZXZpY2UgY2FuIGJlIG9wZW5lZCBhbmQgY2xvc2VkIG11bHRpcGxlIHRpbWVzDQo+ID4gKy0g
-KipSZWFkKio6IFJlYWQgZGF0YSBmcm9tIGEga2VybmVsIGJ1ZmZlcg0KPiA+ICstICoqV3JpdGUq
-KjogV3JpdGUgZGF0YSB0byBhIGtlcm5lbCBidWZmZXIgKDFLQiBjYXBhY2l0eSkNCj4gPiArLSAq
-KlNlZWsqKjogU3VwcG9ydCBmb3IgbHNlZWsoKSBvcGVyYXRpb25zDQo+ID4gKw0KPiA+ICsjIyMg
-SU9DVEwgQ29tbWFuZHMNCj4gPiArLSBgTUxfTElCX1RFU1RfREVWX0lPQ1JFU0VUYDogQ2xlYXIg
-dGhlIGRldmljZSBidWZmZXINCj4gPiArLSBgTUxfTElCX1RFU1RfREVWX0lPQ0dFVFNJWkVgOiBH
-ZXQgY3VycmVudCBkYXRhIHNpemUNCj4gPiArLSBgTUxfTElCX1RFU1RfREVWX0lPQ1NFVFNJWkVg
-OiBTZXQgZGF0YSBzaXplDQo+ID4gKw0KPiA+ICsjIyMgU3lzZnMgQXR0cmlidXRlcw0KPiA+ICtM
-b2NhdGVkIGF0IGAvc3lzL2NsYXNzL21sX2xpYl90ZXN0L21sbGliZGV2YDoNCj4gPiArLSBgYnVm
-ZmVyX3NpemVgOiBNYXhpbXVtIGJ1ZmZlciBjYXBhY2l0eSAocmVhZC1vbmx5KQ0KPiA+ICstIGBk
-YXRhX3NpemVgOiBDdXJyZW50IGFtb3VudCBvZiBkYXRhIGluIGJ1ZmZlciAocmVhZC1vbmx5KQ0K
-PiA+ICstIGBhY2Nlc3NfY291bnRgOiBOdW1iZXIgb2YgdGltZXMgZGV2aWNlIGhhcyBiZWVuIG9w
-ZW5lZCAocmVhZC1vbmx5KQ0KPiA+ICstIGBzdGF0c2A6IENvbXByZWhlbnNpdmUgc3RhdGlzdGlj
-cyAob3BlbnMsIHJlYWRzLCB3cml0ZXMpDQo+IA0KPiBBZ2FpbiwgdGhpcyBpcyBub3QgYW4gYWNj
-ZXB0YWJsZSB1c2Ugb2Ygc3lzZnMuDQoNCk1heWJlLCBJIGFtIG1pc3NpbmcgeW91ciBwb2ludC4g
-QXJlIHlvdSBhc3N1bWluZyB0aGF0IEkgYW0gZ29pbmcgdG8gc2hhcmUgaHVnZQ0KcGllY2VzIG9m
-IGRhdGEgYnkgbWVhbnMgb2Ygc3lzZnM/IElmIHNvLCB0aGVuIEkgYW0gbm90IGdvaW5nIHRvIHVz
-ZSBzeXNmcyBmb3INCml0Lg0KDQo+IA0KPiA+ICsJLyogQWxsb2NhdGUgZGV2aWNlIG51bWJlciAq
-Lw0KPiA+ICsJcmV0ID0gYWxsb2NfY2hyZGV2X3JlZ2lvbigmZGV2X251bWJlciwgMCwgMSwgREVW
-SUNFX05BTUUpOw0KPiANCj4gRG9uJ3QgYnVybiBhIGNkZXYgZm9yIHRoaXMsIHBsZWFzZSB1c2Ug
-dGhlIG1pc2MgZGV2aWNlIGFwaS4NCj4gDQoNCkl0IGlzIG5vdCByZWFsLWxpZmUgZHJpdmVyLiBJ
-dCBpcyBvbmx5IHRlc3RpbmcgZHJpdmVyIHdpdGggdGhlIGdvYWwgdG8NCmNoZWNrL3Rlc3QgdGhl
-IE1MIGxpYnJhcnkgaW5mcmFzdHJ1Y3R1cmUgYW5kIHRvIHNob3cgdGhlIHBvdGVudGlhbCB3YXkg
-b2YgdXNpbmcNCnRoZSBNTCBsaWJyYXJ5Lg0KDQpBcyB0aGUgbmV4dCBzdGVwLCBJIGFtIHBsYW5u
-aW5nIHRvIHVzZSB0aGUgTUwgbGlicmFyeSBmb3IgdHdvIHBvdGVudGlhbCByZWFsLQ0KbGlmZSB1
-c2UtY2FzZTogKDEpIEdDIHN1YnN5c3RlbSBvZiBMRlMgZmlsZSBzeXN0ZW0sICgyKSBNTC1iYXNl
-ZCBEQU1PTiBhcHByb2FjaC4NCg0KU28sIHRoaXMgZHJpdmVyIGlzIG9ubHkgdGVzdGluZyBlbmdp
-bmUgb2YgaW1wbGVtZW50aW5nIGFuZCB0ZXN0aW5nIHRoZSB2aXNpb24gb2YNCk1MIGxpYnJhcnku
-DQoNClRoYW5rcywNClNsYXZhLg0K
+Add feature gating for the arena globals relocation introduced in
+commit c1f61171d44b. The commit depends on a previous commit in the same
+patchset that is absent from older kernels, causing arena programs using
+arenas >= 512MiB to fail to load and breaking libbpf's backwards
+compatibility. Introduce a libbpf feature to check whether the running
+kernel includes the required patch and only relocate arena globals
+if it does.
+
+Fixes: c1f61171d44b ("libbpf: Move arena globals to the end of the arena")
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ tools/include/linux/filter.h    |  10 ++
+ tools/lib/bpf/features.c        | 178 ++++++++++++++++++++++++++++++++
+ tools/lib/bpf/libbpf.c          |   7 +-
+ tools/lib/bpf/libbpf_internal.h |   2 +
+ 4 files changed, 195 insertions(+), 2 deletions(-)
+
+diff --git a/tools/include/linux/filter.h b/tools/include/linux/filter.h
+index bcc6df79301a..70d4b5c08a7e 100644
+--- a/tools/include/linux/filter.h
++++ b/tools/include/linux/filter.h
+@@ -366,4 +366,14 @@
+ 		.off   = 0,					\
+ 		.imm   = 0 })
+ 
++/* Program address space cast from 1 -> 0 */
++
++#define BPF_ADDR_SPACE_CAST_TO_ARENA(REG)			\
++	((struct bpf_insn) {					\
++		.code  = BPF_ALU64 | BPF_MOV | BPF_X,		\
++		.dst_reg = REG,					\
++		.src_reg = REG,					\
++		.off   = BPF_ADDR_SPACE_CAST,			\
++		.imm   = 1U })
++
+ #endif /* __TOOLS_LINUX_FILTER_H */
+diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+index b842b83e2480..a412b63b3e96 100644
+--- a/tools/lib/bpf/features.c
++++ b/tools/lib/bpf/features.c
+@@ -7,6 +7,8 @@
+ #include "libbpf_common.h"
+ #include "libbpf_internal.h"
+ 
++#include <sys/mman.h>
++
+ static inline __u64 ptr_to_u64(const void *ptr)
+ {
+ 	return (__u64)(unsigned long)ptr;
+@@ -506,6 +508,179 @@ static int probe_kern_arg_ctx_tag(int token_fd)
+ 	return probe_fd(prog_fd);
+ }
+ 
++static int probe_kern_arena_global_reloc(int token_fd)
++{
++	long PAGE_SIZE = sysconf(_SC_PAGESIZE);
++	size_t arena_size = 1ULL << 32;
++	size_t arena_pages = arena_size / PAGE_SIZE;
++#if defined(__TARGET_ARCH_arm64) || defined(__aarch64__)
++	size_t arena_offset = 1ULL << 32;
++#else
++	size_t arena_offset = 1ULL << 44;
++#endif
++
++	int btf_fd, prog_fd, map;
++	void *mapping;
++	int insn_cnt;
++	int ret;
++	static const char strs[] = "\0"
++		"int\0"				/* [1, 5) */
++		"arrind\0"			/* [5, 12) */
++		"counter\0"			/* [12, 20) */
++		"type\0"			/* [20, 25) */
++		"map_flags\0"			/* [25, 35) */
++		"max_entries\0"			/* [35, 47) */
++		"map_extra\0"			/* [47, 57) */
++		"arena\0"			/* [57, 63) */
++		"func";				/* [63, 68) */
++
++	/*
++	 * BTF for a trivial arena program, taken from a real compilation (some
++	 * autogenerated type names changed for brevity).
++	 */
++	/*
++	 * [1] PTR '(anon)' type_id=3
++	 * [2] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED
++	 * [3] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=33
++	 * [4] INT 'arrind' size=4 bits_offset=0 nr_bits=32 encoding=(none)
++	 * [5] PTR '(anon)' type_id=6
++	 * [6] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=1024
++	 * [7] PTR '(anon)' type_id=8
++	 * [8] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=1048576
++	 * [9] ENUM64 '(anon)' encoding=UNSIGNED size=8 vlen=1
++	 * 	'__unique_value__COUNTER__' val=17592186044416ULL
++	 * [10] STRUCT '(anon)' size=32 vlen=4
++	 * 	'type' type_id=1 bits_offset=0
++	 * 	'map_flags' type_id=5 bits_offset=64
++	 * 	'max_entries' type_id=7 bits_offset=128
++	 * 	'map_extra' type_id=9 bits_offset=192
++	 * [11] VAR 'arena' type_id=10, linkage=global
++	 * [12] FUNC_PROTO '(anon)' ret_type_id=2 vlen=0
++	 * [13] FUNC 'func' type_id=12 linkage=global
++	 */
++	const __u32 types[] = {
++		/* [1] PTR '(anon)' type_id=3 */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 3),
++
++		/* [2] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED */
++		BTF_TYPE_INT_ENC(1 /* "int" */, BTF_INT_SIGNED, 0, 32, 4),
++
++		/* [3] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=33 */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_ARRAY, 0, 0), 0),
++		/* struct btf_array [type, index_type, nelems] */
++		2, 4, 33,
++
++		/* [4] INT 'arrind' size=4 bits_offset=0 nr_bits=32 encoding=(none) */
++		BTF_TYPE_INT_ENC(5 /* "arrind" */, 0, 0, 32, 4),
++
++		/* [5] PTR '(anon)' type_id=6 */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 6),
++
++		/* [6] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=1024 */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_ARRAY, 0, 0), 0),
++		/* struct btf_array [type, index_type, nelems] */
++		2, 4, 1024,
++
++		/* [7] PTR '(anon)' type_id=8 */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_PTR, 0, 0), 8),
++
++		/* [8] ARRAY '(anon)' type_id=2 index_type_id=4 nr_elems=1048576 */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_ARRAY, 0, 0), 0),
++		/* struct btf_array [type, index_type, nelems] */
++		2, 4, 1U << 20,
++
++		/* [9] ENUM64 '(anon)' encoding=UNSIGNED size=8 vlen=1 */
++		/* 	'counter' val=17592186044416ULL */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_ENUM64, 0, 1), 8),
++		 /* struct btf_enum64 [name_off, val_lo32, val_hi32 */
++		12 /* counter */, 0, 1U << 12,
++
++		/* [10] STRUCT '(anon)' size=32 vlen=4 */
++		/* 	'type' type_id=1 bits_offset=0 */
++		/* 	'map_flags' type_id=5 bits_offset=64 */
++		/* 	'max_entries' type_id=7 bits_offset=128 */
++		/* 	'map_extra' type_id=9 bits_offset=192 */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_STRUCT, 0, 4), 32),
++		/* struct btf_member [name_off, type, offset] */
++		20 /* 'type' */, 1, 0,
++		25 /* 'map_flags' */, 5, 64,
++		35 /* 'max_entries' */, 7, 128,
++		47 /* 'map_extra' */, 9, 192,
++
++		/* [11] VAR 'arena' type_id=10, linkage=global */
++		BTF_TYPE_ENC(57 /* 'arena' */, BTF_INFO_ENC(BTF_KIND_VAR, 0, 0), 10),
++		/* struct btf_var [ linkage ] */
++		BTF_VAR_GLOBAL_ALLOCATED,
++
++		/* [12] FUNC_PROTO '(anon)' ret_type_id=2 vlen=0 */
++		BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_FUNC_PROTO, 0, 0), 2),
++
++		/* [13] FUNC 'func' type_id=12 linkage=global */
++		BTF_TYPE_ENC(63 /* 'func' */, BTF_INFO_ENC(BTF_KIND_FUNC, 0, BTF_FUNC_GLOBAL), 12),
++	};
++	struct bpf_insn insns[] = {
++		BPF_LD_MAP_VALUE(BPF_REG_1, 0, 0xfffffffc), /* Very last 32 bits in the arena */
++		BPF_ADDR_SPACE_CAST_TO_ARENA(BPF_REG_1),
++		BPF_LDX_MEM(BPF_W, BPF_REG_1,  BPF_REG_1, 0),
++		BPF_MOV64_IMM(BPF_REG_0, 0),
++		BPF_EXIT_INSN(),
++	};
++	struct bpf_func_info_min func_infos[] = {
++		{ 0, 13 },
++	};
++	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
++		.token_fd = token_fd,
++		.map_flags = BPF_F_MMAPABLE | (token_fd ? BPF_F_TOKEN_FD : 0),
++		.map_extra = arena_offset,
++	);
++	LIBBPF_OPTS(bpf_prog_load_opts, opts,
++		.token_fd = token_fd,
++		.prog_flags = BPF_F_SLEEPABLE | (token_fd ? BPF_F_TOKEN_FD : 0),
++	);
++
++	insn_cnt = ARRAY_SIZE(insns);
++	btf_fd = libbpf__load_raw_btf((char *)types, sizeof(types), strs, sizeof(strs), token_fd);
++	if (btf_fd < 0) {
++		ret = -errno;
++		pr_warn("Error in %s(): %s. Couldn't load BTF.\n",
++			__func__, errstr(ret));
++		return ret;
++	}
++
++	/* Create the arena and patch the instruction. */
++	map = bpf_map_create(BPF_MAP_TYPE_ARENA, "arena", 0, 0, arena_pages, &map_opts);
++	if (map < 0) {
++		ret = -errno;
++		pr_warn("Error in %s(): %s. Couldn't create arena map.\n",
++			__func__, errstr(ret));
++		close(btf_fd);
++		return ret;
++	}
++	insns[0].imm = map;
++
++	/* The mapping the arena is hosted on is created by libbpf. */
++	mapping = mmap((void *)arena_offset, arena_size, PROT_READ | PROT_WRITE, MAP_SHARED, map, 0);
++	if (mapping == MAP_FAILED) {
++		ret = -errno;
++		pr_warn("Error in %s(): %s. Failed to mmap arena.\n",
++			__func__, errstr(ret));
++		close(map);
++		close(btf_fd);
++		return ret;
++	}
++	opts.prog_btf_fd = btf_fd;
++	opts.func_info = &func_infos;
++	opts.func_info_cnt = ARRAY_SIZE(func_infos);
++	opts.func_info_rec_size = sizeof(func_infos[0]);
++
++	prog_fd = bpf_prog_load(BPF_PROG_TYPE_SYSCALL, NULL, "GPL", insns, insn_cnt, &opts);
++	munmap(mapping, arena_size);
++	close(btf_fd);
++	close(map);
++
++	return probe_fd(prog_fd);
++}
++
+ typedef int (*feature_probe_fn)(int /* token_fd */);
+ 
+ static struct kern_feature_cache feature_cache;
+@@ -581,6 +756,9 @@ static struct kern_feature_desc {
+ 	[FEAT_BTF_QMARK_DATASEC] = {
+ 		"BTF DATASEC names starting from '?'", probe_kern_btf_qmark_datasec,
+ 	},
++	[FEAT_ARENA_GLOBAL_RELOC] = {
++		"Relocatable arena globals support", probe_kern_arena_global_reloc,
++	},
+ };
+ 
+ bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id)
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 0c8bf0b5cce4..0aeb740a5f47 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -3009,8 +3009,11 @@ static int init_arena_map_data(struct bpf_object *obj, struct bpf_map *map,
+ 	memcpy(obj->arena_data, data, data_sz);
+ 	obj->arena_data_sz = data_sz;
+ 
+-	/* place globals at the end of the arena */
+-	obj->arena_data_off = mmap_sz - data_alloc_sz;
++	/* place globals at the end of the arena (if supported) */
++	if (kernel_supports(obj, FEAT_ARENA_GLOBAL_RELOC))
++		obj->arena_data_off = mmap_sz - data_alloc_sz;
++	else
++		obj->arena_data_off = 0;
+ 
+ 	/* make bpf_map__init_value() work for ARENA maps */
+ 	map->mmaped = obj->arena_data;
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index fc59b21b51b5..e0223a6e4c95 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -392,6 +392,8 @@ enum kern_feature_id {
+ 	FEAT_ARG_CTX_TAG,
+ 	/* Kernel supports '?' at the front of datasec names */
+ 	FEAT_BTF_QMARK_DATASEC,
++	/* Kernel supports relocating arena globals to end of the arena */
++	FEAT_ARENA_GLOBAL_RELOC,
+ 	__FEAT_CNT,
+ };
+ 
+-- 
+2.49.0
+
