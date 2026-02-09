@@ -1,216 +1,155 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42D4C34320C
-	for <bpf@vger.kernel.org>; Sun,  8 Feb 2026 20:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A6342765ED;
+	Mon,  9 Feb 2026 01:53:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770584083; cv=none; b=f7MTltvnWilLhktvBvkGe6oN4zAoNpwPrHWRT4qms/sgUptindCD0K+CXEAWa7bBO0sGuQqBmkVmS7OnZxzTpdB2QN6PYJQJMviFch2+mkLaqjVFIG04gw5dZCTRm5+/Qtyj73j3V1VSqjj9z9up8mKI3D1Nkv09/bIboqJUZ3g=
+	t=1770602015; cv=none; b=fOhGvLk2h0A8gbMMI0YKNeFmRjtWOZehLTSyblZwL5gYVe81c6KY5RTspJQzimuaNfwuTNitE2n/fsTi6g+qTIx9zwdP93+6gc8W5jvh6LMHPnj3DXTqURu6Iiay6mRBoKoKnOdfjIm/9faRQl/Lg5Hih1fl1k7oeDs6pwJX2aI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770584083; c=relaxed/simple;
-	bh=eK05MBlMzImiefkpgxbWyOhV3iimcUuSiDy9MKaaclo=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BaBG87Au8E2DLpGcvotK3zYEea9hXrWlcEDR4eIEHY3UWLth57FWl3EWE6s63pijYmiTvgqCycS+8H56KiYDt0ezISL7ICpUEw01tNISAxviDh9QpwDoqoWn76SS7+OTAzbEcjbqGDKk6WWufFs3EEKDq6vYUmbvwa6i7pV9dwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BlNNroyx; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770602015; c=relaxed/simple;
+	bh=zlk+Tdd7H8hyLcmwCN+xy2kD5hmyAqrXH9cgpmTs39k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ihpx72nDwYXCphAJva8hiZj57VmcA/hXC4wNVOfoPjXwhUAkYVMd+NNJc+0iT6jWfSa7B9maKaaFlBUkSKlbnkJ0aNCFbIc1RCibaKQPbN4GvLj5tCEIsFmw1nTiDnYAFjhqC/AskcU1uWjFPOELWatk/ZkjMLqpJ4EkX491bo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=WD7vrL1v; arc=none smtp.client-ip=220.197.31.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BlNNroyx"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4801bc32725so17715845e9.0
-        for <bpf@vger.kernel.org>; Sun, 08 Feb 2026 12:54:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770584081; x=1771188881; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7EEz2ZzYiyLdsMM9R6IByMZnU2nWj69epSM+E7T1+is=;
-        b=BlNNroyxn/uXbLwXsxEsV2WCJ9mosbbv24+LgpDT5WINiiNgj1RlSWHDCZtYw4FySQ
-         lhgJy7k0Lm67GTUGjKcZ5eRBQcQW6MjgKYQ92Z+80kWe1eSi1ldOFCIrxfdbKzdILnka
-         i9LVKZuKFoguKOWrd5ueeSjiI4R9diFek1gWHv+znWhJbVjlAhnbUt1nPdo7W9Kebo1a
-         +6gx8mS+A47Un4TcwtJ/lm6yCbxKiXfspgEKDuG3W5+AjV229XcwaqTgc8qEvikOIEH2
-         r+MHlPHDLuv8uftFFZ/MrFyW1N43+1TS+2APV4++BmOPLl8DCPVXXSFr8Hry0uBobk4N
-         zLRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770584081; x=1771188881;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7EEz2ZzYiyLdsMM9R6IByMZnU2nWj69epSM+E7T1+is=;
-        b=F5U0tPv7ZMBVzL6FdV0tI0486s30mvHBOW5Nny6/ylQalYOIwIaOU+vX4Im+6QAl5x
-         BeszaVoeveJoRpqcFJA+yzC7T1ukoa/z1mX1LKEThk6C5uRizd7TE3L0t3opDXl1YUSa
-         Ph7KEmrwJloMZHQQhfu99IiTiKZHk94a0kFZf14RZsmOygChe1QMrBNj5j4KQRo0ccp5
-         apw9RV8MBeDbKa7CRhDCn1OMk7eCsS5ImL4n/BY7YGuOvtJC37r/r+04+Dv9bBn39s3Y
-         zH0+CI1lvyYGGfHMzHHiStMwAUoxXoAKpQ4rLr2Nm736uRJywuXdz+fXOGTJFcpDBUmJ
-         mtkw==
-X-Forwarded-Encrypted: i=1; AJvYcCXCw8jbX71HKh+YCa+0v4xVOfx/WKzD9r0752k8kg/M0ep2T3YYO6fkeTdj/8Md7MkoojE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHiaJ000D/vsx+AFGCG/+eLzebIKJwn4X0yhltZnux75hKN7jc
-	1eU0n0qkcwZuvuIkYou+viDVrkax/sKWI+GveUABJwsRxj0Ac0l23ycs
-X-Gm-Gg: AZuq6aK5wrx/NP67mbTAEbjrYhAb2SS+xmWE95tEgKJtPEcONA5FrS+Pn9RUn7HCSFm
-	+tkyzfqN7LuLCO1vEQJvi27Xq0JROnuoOjXCCAhLhoO4/mFMBC3YA1prMUbMGAuUMRENMaZSf2s
-	l6wjOvA9XLr2LOwVnQtdk+4JttKBtU2rOR2WJ7QBCTM/fhBK5v5GVlbtd0xmQKBjFqpNHTi/O0E
-	jP8+HeTidXAv0c1DC3OyI1Ygt3rJh0jR1DArfGW16ARFTW8ws+dBKrEeX0jiP0AUrakVLg6/eyS
-	63JOde0gL45L3FFq5Dh/8/J1kTyJDJ2zG0yJ5hKsJPrnTnN09ijn8MXccFzmo6cpCviZUBKl9Qq
-	8QybFXY/AcaArJmsGDqLUquUvUHzmQaw62Kop6ZZFhP/goxUJv48RlFRKNvDvFRCS56HeAkbV1+
-	Y=
-X-Received: by 2002:a05:600c:1e0d:b0:477:63a4:88fe with SMTP id 5b1f17b1804b1-483201da2f1mr132554955e9.2.1770584081273;
-        Sun, 08 Feb 2026 12:54:41 -0800 (PST)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436296bd211sm22939470f8f.13.2026.02.08.12.54.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Feb 2026 12:54:40 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 8 Feb 2026 21:54:38 +0100
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Steven Rostedt <rostedt@kernel.org>
-Subject: Re: [RFC bpf-next 00/12] bpf: tracing_multi link
-Message-ID: <aYj4DnCDlUHUSPgU@krava>
-References: <20260203093819.2105105-1-jolsa@kernel.org>
- <CAADnVQ+EU_f4LVDQkqkB0Q+QYMBH5ynXU3+rGZA2XCGmYMcFqg@mail.gmail.com>
- <aYM9YUl6xf9I2x4c@krava>
- <CAADnVQJPbnVEDYAAy4mUP7NmsGkUmeV9B73V+Bc=LYb8r8Zrow@mail.gmail.com>
- <aYRa_CDL1RqIR_8S@krava>
- <CAADnVQLJJn=bSDvQrjNyyeNdLOZABKDjjR_3j6DG3pgbsJ+JXA@mail.gmail.com>
- <aYWjxMeXABGcYqEI@krava>
- <CAEf4BzbUX8xEp1x66ugtj1C6sxWPJ+_9EpyVmy3TVOMiKrFcWA@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="WD7vrL1v"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=V6
+	g9dvNVPKPDjPoIen5fEnKdOBRYF7alaavRnPHv4d8=; b=WD7vrL1vcxeDYhyax7
+	sjCR4vnbSyiLZYUjsDo4qOIe/6Q7PPi8fUlkJwx/jd2v2VWmM5jsW7D90djUgZ05
+	jaS2ifvBtyZiaPUcQgKfR6xEGGBI2VXPCInGEQwBO0HMqGTa2KWcRJkCwyNyZ23j
+	cwszl7H1hCOuEasjFKv2Q/csY=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wAnlOWQPYlpcKpTKg--.386S2;
+	Mon, 09 Feb 2026 09:51:14 +0800 (CST)
+From: Feng Yang <yangfeng59949@163.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+Date: Mon,  9 Feb 2026 09:51:11 +0800
+Message-Id: <20260209015111.28144-1-yangfeng59949@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzbUX8xEp1x66ugtj1C6sxWPJ+_9EpyVmy3TVOMiKrFcWA@mail.gmail.com>
+X-CM-TRANSID:_____wAnlOWQPYlpcKpTKg--.386S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4UWFy5ZF1Utr1UWryfZwb_yoWrKry5pF
+	WUtrWFkF4kJ340qF48Ja1UXw1YqFZ0yF45Wr1Svw1jvF1jqr17Xr1SyF4jqrZ8Ars8ur47
+	J34UtFn7tw1UJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jj_M-UUUUU=
+X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8hMwqGmJPZOfogAA3K
 
-On Fri, Feb 06, 2026 at 09:03:29AM -0800, Andrii Nakryiko wrote:
-> On Fri, Feb 6, 2026 at 12:18 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Thu, Feb 05, 2026 at 07:55:19AM -0800, Alexei Starovoitov wrote:
-> > > On Thu, Feb 5, 2026 at 12:55 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > >
-> > > > On Wed, Feb 04, 2026 at 08:06:50AM -0800, Alexei Starovoitov wrote:
-> > > > > On Wed, Feb 4, 2026 at 4:36 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > > > >
-> > > > > > On Tue, Feb 03, 2026 at 03:17:05PM -0800, Alexei Starovoitov wrote:
-> > > > > > > On Tue, Feb 3, 2026 at 1:38 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > > > > > > >
-> > > > > > > > hi,
-> > > > > > > > as an option to Meglong's change [1] I'm sending proposal for tracing_multi
-> > > > > > > > link that does not add static trampoline but attaches program to all needed
-> > > > > > > > trampolines.
-> > > > > > > >
-> > > > > > > > This approach keeps the same performance but has some drawbacks:
-> > > > > > > >
-> > > > > > > >  - when attaching 20k functions we allocate and attach 20k trampolines
-> > > > > > > >  - during attachment we hold each trampoline mutex, so for above
-> > > > > > > >    20k functions we will hold 20k mutexes during the attachment,
-> > > > > > > >    should be very prone to deadlock, but haven't hit it yet
-> > > > > > >
-> > > > > > > If you check that it's sorted and always take them in the same order
-> > > > > > > then there will be no deadlock.
-> > > > > > > Or just grab one global mutex first and then grab trampolines mutexes
-> > > > > > > next in any order. The global one will serialize this attach operation.
-> > > > > > >
-> > > > > > > > It looks the trampoline allocations/generation might not be big a problem
-> > > > > > > > and I'll try to find a solution for holding that many mutexes. If there's
-> > > > > > > > no better solution I think having one read/write mutex for tracing multi
-> > > > > > > > link attach/detach should work.
-> > > > > > >
-> > > > > > > If you mean to have one global mutex as I proposed above then I don't see
-> > > > > > > a downside. It only serializes multiple libbpf calls.
-> > > > > >
-> > > > > > we also need to serialize it with standard single trampoline attach,
-> > > > > > because the direct ftrace update is now done under trampoline->mutex:
-> > > > > >
-> > > > > >   bpf_trampoline_link_prog(tr)
-> > > > > >   {
-> > > > > >     mutex_lock(&tr->mutex);
-> > > > > >     ...
-> > > > > >     update_ftrace_direct_*
-> > > > > >     ...
-> > > > > >     mutex_unlock(&tr->mutex);
-> > > > > >   }
-> > > > > >
-> > > > > > for tracing_multi we would link the program first (with tr->mutex)
-> > > > > > and do the bulk ftrace update later (without tr->mutex)
-> > > > > >
-> > > > > >   {
-> > > > > >     for each involved trampoline:
-> > > > > >       bpf_trampoline_link_prog
-> > > > > >
-> > > > > >     --> and here we could race with some other thread doing single
-> > > > > >         trampoline attach
-> > > > > >
-> > > > > >     update_ftrace_direct_*
-> > > > > >   }
-> > > > > >
-> > > > > > note the current version locks all tr->mutex instances all the way
-> > > > > > through the update_ftrace_direct_* update
-> > > > > >
-> > > > > > I think we could use global rwsem and take read lock on single
-> > > > > > trampoline attach path and write lock on tracing_multi attach,
-> > > > > >
-> > > > > > I thought we could take direct_mutex early, but that would mean
-> > > > > > different order with trampoline mutex than we already have in
-> > > > > > single attach path
-> > > > >
-> > > > > I feel we're talking past each other.
-> > > > > I meant:
-> > > > >
-> > > > > For multi:
-> > > > > 1. take some global mutex
-> > > > > 2. take N tramp mutexes in any order
-> > > > >
-> > > > > For single:
-> > > > > 1. take that 1 specific tramp mutex.
-> > > >
-> > > > ah ok, I understand, it's to prevent the lockup but keep holding all
-> > > > the trampolines locks.. the rwsem I mentioned was for the 'fix', where
-> > > > we do not take all the trampolines locks
-> > >
-> > > I don't understand how rwsem would help.
-> > > All the operations on trampoline are protected by mutex.
-> > > Switching to rw makes sense only if we can designate certain
-> > > operations as "read" and others as "write" and number of "reads"
-> > > dominate. This won't be the case with multi-fentry.
-> > > And we still need to take all of them as "write" to update trampoline.
-> >
-> > this applies to scenario where we do not hold all the trampoline locks,
-> > in such case we could have race between single and multi attachment,
-> > while single/single attachment race stays safe
-> >
-> > as a fix the single attach would take read lock and multi attach would
-> > take write lock, so single/single race is allowed and single/multi is
-> > not ... showed in the patch below
-> >
-> > but it might be too much.. in a sense that there's already many locks
-> > involved in trampoline attach/detach, and simple global lock in multi
-> > or just sorting the ids would be enough
-> >
-> 
-> I'll just throw this idea here, but we don't have to do it right away.
-> What if instead of having a per-trampoline lock, we just have a common
-> relatively small pool of locks that all trampolines share based on
-> some hash (i.e., we deterministically map trampoline to one of the
-> locks). Then multi-attach can just go and grab all of them in
-> predefined order, while singular trampoline attaches will just get
-> their own one. We won't need to sort anything, we reduce the amount of
-> different locks. I don't think lock contention (due to lock sharing
-> for some trampolines) is a real issue to be worried about either.
+From: Feng Yang <yangfeng@kylinos.cn>
 
-nice idea, I'll check on that
+The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
+calculate the needed headroom:
 
-thanks,
-jirka
+	err = skb_cow_head(skb,
+			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
+
+But skb->_skb_refdst may not be initialized when the skb is set up by
+bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
+in this scenario will trigger null pointer dereference, causing a kernel
+crash as Yinhao reported:
+
+[  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[  105.186382] #PF: supervisor read access in kernel mode
+[  105.186388] #PF: error_code(0x0000) - not-present page
+[  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
+[  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
+[  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
+[  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
+[  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
+[  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
+[  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
+[  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
+[  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
+[  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
+[  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
+[  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
+[  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
+[  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
+[  105.186499] PKRU: 55555554
+[  105.186502] Call Trace:
+[  105.186507]  <TASK>
+[  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
+[  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
+[  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
+[  105.186547]  ? ktime_get+0x3c/0xa0
+[  105.186554]  bpf_test_run+0x195/0x320
+[  105.186563]  ? bpf_test_run+0x10f/0x320
+[  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
+[  105.186590]  __sys_bpf+0x69c/0xa40
+[  105.186603]  __x64_sys_bpf+0x1e/0x30
+[  105.186611]  do_syscall_64+0x59/0x110
+[  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
+[  105.186649] RIP: 0033:0x7f166a97455d
+
+Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
+
+Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
+Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
+Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
+Closes: https://groups.google.com/g/hust-os-kernel-patches/c/8-a0kPpBW2s
+Signed-off-by: Yun Lu <luyun@kylinos.cn>
+Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+Tested-by: syzbot@syzkaller.appspotmail.com
+---
+Changes in v4:
+- add rcu lock
+- Link to v3: https://lore.kernel.org/all/20260206055113.63476-1-yangfeng59949@163.com/
+Changes in v3:
+- use dst_init
+- Link to v2: https://lore.kernel.org/all/20260205092227.126665-1-yangfeng59949@163.com/
+Changes in v2:
+- Link to v1: https://lore.kernel.org/all/20260127084520.13890-1-luyun_611@163.com/ 
+---
+ net/bpf/test_run.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 178c4738e63b..79b60ab9e682 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -989,6 +989,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 	u32 tailroom = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+ 	struct net *net = current->nsproxy->net_ns;
+ 	struct net_device *dev = net->loopback_dev;
++	struct dst_entry bpf_test_run_lwt_xmit_dst;
+ 	u32 headroom = NET_SKB_PAD + NET_IP_ALIGN;
+ 	u32 linear_sz = kattr->test.data_size_in;
+ 	u32 repeat = kattr->test.repeat;
+@@ -1156,6 +1157,14 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+ 		skb->ip_summed = CHECKSUM_COMPLETE;
+ 	}
+ 
++	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
++		dst_init(&bpf_test_run_lwt_xmit_dst, NULL, NULL,
++			 DST_OBSOLETE_NONE, DST_NOCOUNT);
++		bpf_test_run_lwt_xmit_dst.dev = dev;
++		rcu_read_lock();
++		skb_dst_set_noref(skb, &bpf_test_run_lwt_xmit_dst);
++		rcu_read_unlock();
++	}
+ 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
+ 	if (ret)
+ 		goto out;
+-- 
+2.43.0
+
