@@ -1,91 +1,93 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from canpmsgout03.his.huawei.com (canpmsgout03.his.huawei.com [113.46.200.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A28E376483
-	for <bpf@vger.kernel.org>; Mon,  9 Feb 2026 13:06:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F562040B6;
+	Mon,  9 Feb 2026 13:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770642414; cv=none; b=Q0SnPO5a4Z8UrGmfvO4kD7naEBgmOuYuSnvK/DqNzHkTuV9qKhJlamgkuLDOGSHzWHDG2qbnNg20upoa7VegA6Xly5z7NooRyN87vKNbvdasDEp4c1FDEVjDqZ+oBCjVdzRAnUr8Xyibv0JCnQh0PQlyZqnON+cUnqL8DEgJXVI=
+	t=1770643136; cv=none; b=aypfXKrkmMkjgE2sfuVehItV5mvLOLwxYL48csb6cMNGnnkN+BjRAPlZuQ/KP+EXE2exMa5yzwi4kV1if9rjfOg6HxX4iJsPJNCt73XFO6Kbx+CNM7i//2ScU8J2ZlV6NgOMhuAQGZrkIqt99g1cguq0CYKccVZ3DqAfbeOgllU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770642414; c=relaxed/simple;
-	bh=Q1CV8onnYNmEHm7yCi6F3Q/ktJKItj/Ym4Y9XLRU/vs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=QAbfTmsYUT7XC/TYROGcf/TlPZZQtVNPk5GfuAZlkmMAnxDzGYvFaF7gZ3k5Nw8nMtkvKq31MNXvEiVER/b5aAoCYvRNnRTZ9bxHk8dmcokbDy0W7nu5IxJM/LctmQwD/HEfKjUdnVZNjphuIsyjHwrfZP9I+brnRNS0FgcrEsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nsTx9KfQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770643136; c=relaxed/simple;
+	bh=Or3NiazN/gLOlpbJIThRQOpfISr25Xg1wR/TYqOzeUg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=fbw53Kr1iPBWYE6U2lj5VDgS6xrxhmPrFFBKnECYAKP3G9IXaP5lqWXg4W5pqh0dgh4KIEHJEeC/fMKwZjhAOyJhHaKa9fhuIeTn2+FZ2OMyq5Tf7vtVpOMffpUUsAvKVmjkmygcWCZ+Ajn3wmdA0uZ646ySXvlVXnpZishB2l8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=0eMI6mgk; arc=none smtp.client-ip=113.46.200.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nsTx9KfQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C33C16AAE;
-	Mon,  9 Feb 2026 13:06:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770642414;
-	bh=Q1CV8onnYNmEHm7yCi6F3Q/ktJKItj/Ym4Y9XLRU/vs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=nsTx9KfQCVtXFw3kruv9KfnYZjfpfhacj3WPMcSv0m82J1XSxv2Fho7l9e3dlmZjn
-	 69bz14riGrlOhWXDMVCNlGik1d9tsWv9OkMFCctyJTpgDp4K4Fg0ThaJkAvI5SVJx8
-	 hxvCyGIUZzmedVuMBJHqhLMom3rhP8uNETdSDFnpCmNJshSrgktgY+JXgirEt1VvsC
-	 EBgVSKEp0o5LZN0ND8MnWuq+TZ6jfbcIXhXCeuSTN+kmfl+QxPKzErYROHY9XlAeuz
-	 U4S7d8ciHAP4KU2cBt7yeRoJirIVZapF1aOCiq8KjVjCPg88ol8JedB/qqdRAZ9LwC
-	 h85+551kXROAA==
-Content-Type: multipart/mixed; boundary="===============8763090411818044184=="
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="0eMI6mgk"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=ZcnmD8/Oc5SbdX3u+nnGeYLputNhesaaUI5g9TCzBEU=;
+	b=0eMI6mgkBu1Wr+5isJ1ZE9QEFCSdGsYtbQ+ZpZyzIEuRMUPDL7pYlRQQPXCXkpyCTXDMl+N63
+	y/gZuDvq30Pf7CR7xobigbOmUSHc8AjRPx/cL7vizKJn0b2rStLY6hjn3nxul4S/amnZDk5QhR1
+	BYIJiPtv6+PKheIvrteF7IQ=
+Received: from mail.maildlp.com (unknown [172.19.163.0])
+	by canpmsgout03.his.huawei.com (SkyGuard) with ESMTPS id 4f8lXT4fDpzpStM;
+	Mon,  9 Feb 2026 21:14:33 +0800 (CST)
+Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5F5744036C;
+	Mon,  9 Feb 2026 21:18:53 +0800 (CST)
+Received: from [10.67.110.198] (10.67.110.198) by
+ kwepemf100007.china.huawei.com (7.202.181.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.36; Mon, 9 Feb 2026 21:18:52 +0800
+Message-ID: <036eb7a9-1759-447b-ad94-2d66928f9d71@huawei.com>
+Date: Mon, 9 Feb 2026 21:18:52 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <896dfc751c8e3c2b98b9b36b05bf75956640d3b9dca70d24d18eed82c4f662c7@mail.kernel.org>
-In-Reply-To: <20260209124653.56103-1-a.s.protopopov@gmail.com>
-References: <20260209124653.56103-1-a.s.protopopov@gmail.com>
-Subject: Re: [PATCH v2 bpf-next] bpf: Fix a potential use-after-free
-From: bot+bpf-ci@kernel.org
-To: a.s.protopopov@gmail.com,bpf@vger.kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: a.s.protopopov@gmail.com,aspsk@isovalent.com,syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  9 Feb 2026 13:06:54 +0000 (UTC)
-
---===============8763090411818044184==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v4 0/3] bpf: fsession support for riscv
+To: Menglong Dong <menglong8.dong@gmail.com>, <ast@kernel.org>,
+	<bjorn@kernel.org>
+CC: <daniel@iogearbox.net>, <andrii@kernel.org>, <martin.lau@linux.dev>,
+	<eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
+	<john.fastabend@gmail.com>, <kpsingh@kernel.org>, <sdf@fomichev.me>,
+	<haoluo@google.com>, <jolsa@kernel.org>, <puranjay@kernel.org>,
+	<pjw@kernel.org>, <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+	<alex@ghiti.fr>, <bpf@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <jiang.biao@linux.dev>
+References: <20260208053311.698352-1-dongml2@chinatelecom.cn>
+Content-Language: en-US
+From: Pu Lehui <pulehui@huawei.com>
+In-Reply-To: <20260208053311.698352-1-dongml2@chinatelecom.cn>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index edf5342b982f..24de90357450 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -21333,29 +21333,28 @@ static int find_btf_percpu_datasec(struct btf *btf)
->  }
->
->  /*
-> - * Add btf to the used_btfs array and return the index. (If the btf was
-> - * already added, then just return the index.) Upon successful insertion
-> - * increase btf refcnt, and, if present, also refcount the corresponding
-> - * kernel module.
-> + * Add btf to the used_btfs array and return the index. If needed, refcount the
-> + * corresponding kernel module. To simplify caller's error checking in case of
-> + * error or if btf was added before, decrease the btf refcount.
->   */
-
-The updated comment says "return the index" but the function now returns 0
-on success rather than the actual index. The old code returned
-env->used_btf_cnt++ (the index), but the new code returns 0:
-
-    env->used_btf_cnt++;
-    return 0;
-
-Should the comment say "return 0 on success" instead of "return the index"?
-
-[ ... ]
+X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
+ kwepemf100007.china.huawei.com (7.202.181.221)
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+On 2026/2/8 13:33, Menglong Dong wrote:
+> Implement bpf fsession for the riscv architecture.
+> 
+> Changes v4 -> v3:
+> * fix the build error
+> * v3: https://lore.kernel.org/bpf/20260206122002.1494125-1-dongml2@chinatelecom.cn/
+> 
+> Changes v3 -> v2:
+> * fix some comments.
+> * v2: https://lore.kernel.org/bpf/20260206115823.1070354-1-dongml2@chinatelecom.cn/T/#t
+> 
+> Changes v2 -> v1:
+> * use bpf_prog_calls_session_cookie() in invoke_bpf() in the 2nd patch.
+> * v1: https://lore.kernel.org/bpf/20260203055231.1088479-1-dongml2@chinatelecom.cn/
+> 
+> Menglong Dong (3):
+>    bpf, riscv: introduce emit_store_stack_imm64() for trampoline
+>    bpf, riscv: add fsession support for trampolines
+>    selftests/bpf: enable fsession_test on riscv64
+> 
+>   arch/riscv/net/bpf_jit_comp64.c               | 97 +++++++++++++++----
+>   .../selftests/bpf/progs/get_func_args_test.c  |  2 +-
+>   .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
+>   3 files changed, 79 insertions(+), 22 deletions(-)
+> 
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21825693233
+looks good to me, feel free to add
 
-AI-authorship-score: low
-AI-authorship-explanation: The commit has standard kernel formatting, addresses a real syzbot-reported bug with proper attribution, and shows iterative development through review feedback, all consistent with human authorship.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Minor documentation issue where a comment says 'return the index' but the function returns 0 on success; no runtime impact as no callers use the return value as an index.
-
---===============8763090411818044184==--
+Reviewed-by: Pu Lehui <pulehui@huawei.com>
