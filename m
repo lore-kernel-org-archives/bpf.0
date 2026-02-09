@@ -1,113 +1,207 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3276244665;
-	Mon,  9 Feb 2026 13:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1F520DE3;
+	Mon,  9 Feb 2026 13:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770644054; cv=none; b=fDKucmtPTsnP0aTXnIVn5aSNofGt8UocUDWSWGb+XWZ0ifxbq3wRkaJuxmimou0ek17NLq3TjUbYjA00N+P6/Qh/EqB5es/ecX7sdM+tRDP+qWtsGaZ+GMIr1F8IZz2npDky3C78k0WgS6zWA2cuISLdjThJRjmhH3hRtq86ufo=
+	t=1770644760; cv=none; b=Jw10KO2bsfLR2POnG57dkV7iQkwP37ksELD6ygfj/HwBejrX+q7Bkqf8cCfqV+RaMVzWMe7jz9KGAlnZ8hqyo5Zcrz/gbYyiXK/tvGM4KiG2XbdM1wVIGVmAw34JJ+19Ag4tP2xGAqIG4iSpXkL9lu6wmtQ+QyI6WDOxmLbKxw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770644054; c=relaxed/simple;
-	bh=IOCckDQmO3bCx6vIbKsdQfr+uc3RnkYrCh6Yh98UfAA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HXQoA2Dzz1AmrArXrWzIEOb5EUX+t9h/5Y866oJGh5pyAHEp2N4I8GCIVM5hV3HJFNqboc+Y9qqENpTG9bzCuLhACh6cI3pFPKvMbjkE+n5rzsPJvSO0h8ND6F4T954HXATHNoT1Ea0VMeJd8X9bhdfPzW22COSE7wMtHdY+8H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YlR9bj5Z; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1J7rxPcV; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1770644760; c=relaxed/simple;
+	bh=T49mErdSFpcnZPp5rFKlKVBgqpWl7YYTKDj0O7SD0HU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NJ2j8Zn7a6BpnH3LQf8/n5UriAFjRP8tsFn2XPw2BEz9g6N3pSqFYtIuJOcciv/7D9ysqufR8f9nCZ1lbBduT9QC9g0cSmFw9uT0mtzzzn8gsGi6GR79etPzRUF5YxrrH01f5T8egRthbGSf46MSGAowWh7n2w9AGsQgKYEhfMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yh1pnC+v; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YlR9bj5Z";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1J7rxPcV"
-Date: Mon, 9 Feb 2026 14:34:09 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1770644051;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=60PQiy2iBpgFewxiruovzAslbmJSAAtPFOFOOiKjjPA=;
-	b=YlR9bj5ZIrN5Hl5gkUFTHUhbBNirduv8CgJZeENp11uU3U6thi6j/OtC/KQPAKc9QoY16b
-	iqhuyzi/b0ZQ7M7VUfUOm6xDjdKBiVAcL0NDslJlAhb3BeoAwDRRtJnPjGMbf1mFXVv7bt
-	NMrFeatDijOgXhtd0UkwblQQRQ31qH8+8sJoew6J5Wkmb20RAzlLTsuX1HheIftYOGQ2/H
-	DD0vYw+2DrYDfmR/vW+TfUOUQruDrKryktRtVAgS4glEN42/iCi7e94OG0AE7SlxspDuCq
-	Or+Gco28APE0lsa0wk71wKJNamcmGRe8DaKywyoaJhATqU9E7ZWe6UypX84Xbg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1770644051;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=60PQiy2iBpgFewxiruovzAslbmJSAAtPFOFOOiKjjPA=;
-	b=1J7rxPcVC/2n9mif2u5PsOumsh3UqugEaRYJHku7wMkXPEW7VFN4X8Fwwg9s/kVlJ7j0qj
-	wEPG5ci9hZIbMODg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>, 
-	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
-	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
-	libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>, klibc@zytor.com, 
-	Florian Weimer <fweimer@redhat.com>
-Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition of
- 'struct sockaddr'
-Message-ID: <20260209143003-80d3cb63-38c6-4280-a319-ee6879eeab11@linutronix.de>
-References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
- <20260121192729.2095aa25@kernel.org>
- <20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
- <20260130081741.425a92e0@kernel.org>
- <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
- <20260131092517.6639d84c@kernel.org>
- <20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
- <20260203144011.32d5b223@kernel.org>
- <20260204064248-d9c4ab78-f6d4-4ac6-8d55-e939bc1df6d2@linutronix.de>
- <20260204175516.4fb11966@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yh1pnC+v"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 040A5C116C6;
+	Mon,  9 Feb 2026 13:45:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770644760;
+	bh=T49mErdSFpcnZPp5rFKlKVBgqpWl7YYTKDj0O7SD0HU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Yh1pnC+vpEA4FRvwAQDoDbnUoWJkAs4lk9o1TPt/rQCIw0VYPwHdm5LbzUPCxETrO
+	 FmaGSQ8NrUK4CibPdlwEMGHjSXTKroFurjWE5njtaZj9VKkcKPrN794G3wRxESnZ+C
+	 s/KF02AW5NOn0GddWowvKHdXAxh0MInSEru9vm3W7n5eXR42Uy67WlWfWgob7s/6NW
+	 U6rleKFwzRb1TmuV0ipq+Uf4zXb8ssPAvVlS03JGfrV3a7t7qKT1AJ/aJ4xCPuSny3
+	 /IJZVzy9hDcLoUC0OCbD6sVY9+xWShMAOEQfl/kDnR1xtBPekRYQ0fSKTpuSBZfm8c
+	 E2XZDXlEp2OWA==
+Message-ID: <548fd395-f73a-48ce-b598-92039353b4e1@kernel.org>
+Date: Mon, 9 Feb 2026 14:45:55 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v2 1/6] net: sched: introduce qdisc-specific drop
+ reason tracing
+To: =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ atenart@redhat.com, netdev@vger.kernel.org,
+ Eric Dumazet <eric.dumazet@gmail.com>, Paolo Abeni <pabeni@redhat.com>
+Cc: bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, horms@kernel.org,
+ jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
+ jhs@mojatatu.com, carges@cloudflare.com, kernel-team@cloudflare.com,
+ "David S. Miller" <davem@davemloft.net>
+References: <177032644012.1975497.16411100029657607833.stgit@firesoul>
+ <177032649028.1975497.12663177216553780756.stgit@firesoul>
+ <87sebez099.fsf@toke.dk> <26e54152-e576-4292-b6ba-d50cf7cc8aa2@kernel.org>
+ <87pl6hzveb.fsf@toke.dk>
+Content-Language: en-US
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+In-Reply-To: <87pl6hzveb.fsf@toke.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260204175516.4fb11966@kernel.org>
 
-On Wed, Feb 04, 2026 at 05:55:16PM -0800, Jakub Kicinski wrote:
-> On Wed, 4 Feb 2026 06:51:46 +0100 Thomas Wei�schuh wrote:
-> > > make -j16 O="$kobj" INSTALL_HDR_PATH="${kobj}/hdr" headers_install
-> > > popd
-> > > 
-> > > pushd uapi
-> > > find . -type f -name '*.h' -exec cp -v "${kobj}/hdr/include/{}" {} \;  
-> > 
-> > Here only those headers which already exist in ethtool's uapi/ directory
-> > are copied. As linux/typelimits.h is new, it is now missing.
-> > Honestly, if a user fiddles with the internals of the UAPI headers like
-> > this, it is on them to update their code if the internal structure
-> > changes. In your case a simple 'touch uapi/linux/typelimits.h'
-> > before running the script will be enough. Also internal.h now requires
-> > an explicit inclusion of <limits.h>, as that is not satisfied by the
-> > UAPI anymore.
+
+
+On 06/02/2026 17.31, Toke Høiland-Jørgensen wrote:
+> Jesper Dangaard Brouer <hawk@kernel.org> writes:
 > 
-> Hopefully you understand that while due to uapi header copy this is not
-> a huge issue for ethtool itself, but it is a proof that your changes
-> can break normal user space applications which do not vendor in uapi.
+>> On 06/02/2026 10.31, Toke Høiland-Jørgensen wrote:
+>>> Jesper Dangaard Brouer <hawk@kernel.org> writes:
+>>>
+>>>> Create new enum qdisc_drop_reason and trace_qdisc_drop tracepoint
+>>>> for qdisc layer drop diagnostics with direct qdisc context visibility.
+>>>>
+>>>> The new tracepoint includes qdisc handle, parent, kind (name), and
+>>>> device information. Existing SKB_DROP_REASON_QDISC_DROP is retained
+>>>> for backwards compatibility via kfree_skb_reason().
+>>>>
+>>>> Convert FQ, FQ_CoDel, CoDel, SFB, and pfifo_fast to use the new
+>>>> infrastructure.
+>>>>
+>>>> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+>> [...]
+>>>> diff --git a/include/net/dropreason-core.h b/include/net/dropreason-core.h
+>>>> index a7b7abd66e21..3d8d284e05c8 100644
+>>>> --- a/include/net/dropreason-core.h
+>>>> +++ b/include/net/dropreason-core.h
+>>>> @@ -68,12 +68,6 @@
+>>>>    	FN(SECURITY_HOOK)		\
+>>>>    	FN(QDISC_DROP)			\
+>>>>    	FN(QDISC_BURST_DROP)		\
+>>>> -	FN(QDISC_OVERLIMIT)		\
+>>>> -	FN(QDISC_CONGESTED)		\
+>>>> -	FN(CAKE_FLOOD)			\
+>>>> -	FN(FQ_BAND_LIMIT)		\
+>>>> -	FN(FQ_HORIZON_LIMIT)		\
+>>>> -	FN(FQ_FLOW_LIMIT)		\
+>>>>    	FN(CPU_BACKLOG)			\
+>>>>    	FN(XDP)				\
+>>>>    	FN(TC_INGRESS)			\
+>>>> @@ -371,8 +365,10 @@ enum skb_drop_reason {
+>>>>    	/** @SKB_DROP_REASON_SECURITY_HOOK: dropped due to security HOOK */
+>>>>    	SKB_DROP_REASON_SECURITY_HOOK,
+>>>>    	/**
+>>>> -	 * @SKB_DROP_REASON_QDISC_DROP: dropped by qdisc when packet outputting (
+>>>> -	 * failed to enqueue to current qdisc)
+>>>> +	 * @SKB_DROP_REASON_QDISC_DROP: dropped by qdisc during enqueue or
+>>>> +	 * dequeue. More specific drop reasons are available via the
+>>>> +	 * qdisc:qdisc_drop tracepoint, which also provides qdisc handle
+>>>> +	 * and name for identifying the source.
+>>>
+>>> IIUC, this is not needed, see below:
+>>>
+>>> [...]
+>>>
+>>>> @@ -37,6 +37,24 @@
+>>>>    const struct Qdisc_ops *default_qdisc_ops = &pfifo_fast_ops;
+>>>>    EXPORT_SYMBOL(default_qdisc_ops);
+>>>>    
+>>>> +void tcf_kfree_skb_list(struct sk_buff *skb, struct Qdisc *q,
+>>>> +			struct netdev_queue *txq,
+>>>> +			struct net_device *dev)
+>>>> +{
+>>>> +	while (unlikely(skb)) {
+>>>> +		struct sk_buff *next = skb->next;
+>>>> +		enum qdisc_drop_reason reason = tcf_get_qdisc_drop_reason(skb);
+>>>> +
+>>>> +		prefetch(next);
+>>>> +		/* Catch wrong enum: skb_drop_reason vs qdisc_drop_reason */
+>>>> +		WARN_ON_ONCE(reason && reason < __QDISC_DROP_REASON);
+>>>> +		trace_qdisc_drop(q, txq, dev, skb, reason);
+>>>> +		kfree_skb_reason(skb, SKB_DROP_REASON_QDISC_DROP);
+>>>
+>>> AFAIU, the idea here is that you just pass the same 'reason' value to
+>>> kfree_skb_reason(). Because of the subsys shift and offset, these will
+>>> all be unique values, so anyone just watching the old tracepoint will
+>>> get QDISC_DROP_* reasons with no context, and if you want the context
+>>> you listen to the qdisc_drop tracepoint.
+>>
+>> I'm already changing this code in V3, as syzbot revealed that some
+>> existing skb_drop_reason's do arrive here, which is the TC filter drop
+>> reasons (SKB_DROP_REASON_TC_*).  We primarily need subsys encoding as
+>> we share the SKB->cb area.
+>>
+>> This is the new code, that pass 'reason' through:
+>>
+>>    /* TC classifier and qdisc share drop_reason storage.
+>>     * Check subsystem mask to identify qdisc drop reasons,
+>>     * else pass through skb_drop_reason set by TC classifier.
+>>     */
+>>    if ((reason & SKB_DROP_REASON_SUBSYS_MASK) == __QDISC_DROP_REASON) {
+>>    	trace_qdisc_drop(q, txq, dev, skb, reason);
+>>    	skb_reason = SKB_DROP_REASON_QDISC_DROP;
+>>    } else {
+>>    	skb_reason = (enum skb_drop_reason)reason;
+>>    }
+>>    kfree_skb_reason(skb, skb_reason);
+>>
+>> I do realize that the reason is now a unique value, that in principle
+>> could be passed through, *BUT* that will break existing userspace
+>> tools.  E.g. the `perf trace -e skb:kfree_skb` cannot decode these to
+>> strings. (The net/core/drop_monitor.c also need special handling.)
+> 
+> Ah, that's a bit unfortunate. I assumed the tools would handle these
+> correctly automatically :(
+> 
 
-A regular application which uses a full UAPI headers tree will get
-access to the new header automatically.
-If the application uses symbols from <limits.h> without including <limits.h>
-on its own, it is broken.
+I've sent a [v3] with this code change:
+  [v3] 
+https://lore.kernel.org/all/177039500964.2258217.2989656069254156812.stgit@firesoul/
+
+>> I actually want to give userspace a *single* SKB_DROP_REASON_QDISC_DROP
+>> reason (that existing tools already knows).
+>>
+>> Leaking extra qdisc drop reasons is not helpful to consume as it is not
+>> actionable without knowing the qdisc. A QDISC_DROP_OVERLIMIT from FQ is
+>> very different from one in CAKE - knowing just the reason without the
+>> qdisc type/config is insufficient for debugging. The trace_qdisc_drop
+>> tracepoint provides both the reason AND the qdisc context together
+> 
+> Depends; if you only have one of those installed on your system it'll do
+> just fine :)
+> 
+> In any case we're changing things here (removing reasons, or changing
+> them). I would lean towards having more information available (i.e.,
+> passing through the reason), but if common tools can't decode them,
+> that's a bit of a bummer.
+> 
+> I suppose it'll be too much churn to start out with the single reason,
+> then fix the tools to understand subsystem drop reasons, then change it
+> again?
+
+IMHO it makes sense to merge this patchset, and then we can work on
+adding support on tools to understand subsystem drop reasons. (After
+which we can let these subsystem drop reasons fall-through.)
+
+If I let "reason" fall-through (in above code) this "perf script" shows
+this (0x30004) when listening to the current skb:kfree_skb tracepoint:
+
+  skb:kfree_skb: skbaddr=0xffff8a9a54864ee8 rx_sk=(nil) protocol=2048 
+location=tcf_kfree_skb_list+0x53 reason: 0x30004
+
+The new qdisc tracepoint gets decodes (same event) like this:
+
+  qdisc:qdisc_drop: drop ifindex=8 kind=sfq handle=0x10000 
+parent=0xFFFFFFFF skbaddr=0xffff8a9a5f751ae8 reason=FLOW_LIMIT
 
 
-Thomas
+--Jesper
+
+
+
+
+
