@@ -1,328 +1,223 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42AF363C7D
-	for <bpf@vger.kernel.org>; Mon,  9 Feb 2026 09:25:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9033A309DC5
+	for <bpf@vger.kernel.org>; Mon,  9 Feb 2026 09:38:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770629111; cv=none; b=tzMWigosXkSLKgO1OsS13mm7M1QNvUt1LOu5Cb2p+Yo+uv5PLPsAHMzf6+xYBFVJ+oW860s90yoUSwtSrtvc/OXABdBGqIh+v9M7HTwg/max7ub9xb0RdcL4OwtMvEQDyIipKBcxGQWBlwyOJg86dBC5PPGH8I2eo4LolRoMWQU=
+	t=1770629927; cv=none; b=h3Op7PbU+gCupxfT2mvmJptQHZOTqXFmIrpz2PDBXiFBASB3itEJpqNKtyNOzKF9JT1REkVFFTd5zQ98WnvYd4gkxZlo2SinVoH6uf1QdDvwHKtMsRELIASPuiO9yddGw8NSjGt3k+aOsjU4kbGmjD0oPKma1F0+9beydP6U0Eg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770629111; c=relaxed/simple;
-	bh=jXM6h73fi/T1NI6sc5NlsOcr2JeACiIlmwKPddXhEyc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jaryT5olBvaZSvA3xNAJQymRCo24gwqbnFV9KaFfpufw1YcrMykLcm+NuzPfCvDqB202/t8qZVi0pKaFGR/ZfpqSVd1ay+5w8iygt31h9L8aMQ81BZdF33qonR3Fkmbr9ETG26+GcwePn9gO7sFJm8nMX8m07lkmtQgpFsy5+v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T3/Zzoaj; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=LPHBb2wl; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770629927; c=relaxed/simple;
+	bh=6fk1plRGtLdqK2lGI65BpEEzjAsJ87tUykHRBu0KQ1c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BRGIvs8AaPo0dZaSX0Fpl1v1uBpp14dwb16VaHNj4v3LjouOW7+ixIYixg4tx4cgESbWOqtVvcHC7NXUwlrVLUswRTobtMOsRhBsx63Er4mCYaj3p5BrmNoXzQAkn82axaBbDFFAEqDaMXvVRpF1+YF8mEaBJU33Xhf97cLW7go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=QMazHPSc; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=hjPCs1Si; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=vpgyqBiA; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=hLPIN9MU; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T3/Zzoaj";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="LPHBb2wl"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770629110;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="QMazHPSc";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="hjPCs1Si";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="vpgyqBiA";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="hLPIN9MU"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 865AB5BCD8;
+	Mon,  9 Feb 2026 09:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770629924; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vrzntSVggQfVgXA1EfIrnMrsyGocXfN5hLyeRmwcLd0=;
-	b=T3/ZzoajpQqp5M/+ui8wdZ1QUx8L1UbO4vFlxydB5qKd2mbp2vQzSTaEydpIMBcKC6vKNx
-	vLJQj4dS2qCe0MqxaKeO/O2vIQ7idPDVHCOmnPAPtQyCTFnAX1HWVMBw0NaHw+i3jkPusw
-	b+k/Ux6jkQONHc7hMldzVgLAkDTcvWY=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-410-cjpUDyFFP2mQ1NJFQMKzmg-1; Mon, 09 Feb 2026 04:25:08 -0500
-X-MC-Unique: cjpUDyFFP2mQ1NJFQMKzmg-1
-X-Mimecast-MFC-AGG-ID: cjpUDyFFP2mQ1NJFQMKzmg_1770629107
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4806865a01bso41925605e9.0
-        for <bpf@vger.kernel.org>; Mon, 09 Feb 2026 01:25:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770629107; x=1771233907; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vrzntSVggQfVgXA1EfIrnMrsyGocXfN5hLyeRmwcLd0=;
-        b=LPHBb2wlvzHU2pUC8e1YUSCfikI3hstMcfZt6H946JzTHCxq8Dekf6czPHbl+Hc119
-         E16+eo741ivzeGFOcHC7D7sBYuWos1lECSj09hNum9HG3BmJTLwJUrZLYUNIA5qOMmNT
-         NskLh01RN9j635jOdTlNaA6R85AzyDnxr3yjgA/kT6GTA8HQ/Y65hYPq1uV7lyKP3j2u
-         0CcyoeGetKPN5lX46GYa4ZjU84K/agg5sDs9mdS/ZoUMdAbNFl2BL2U9r7C8ZaQMF7Ki
-         VHm0TFGjzL3FhEjxD1VasFejZ4sLMYnrIST7D/G/WCS24sdcokfMOdkjKEGSXdu4CWX5
-         c4yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770629107; x=1771233907;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vrzntSVggQfVgXA1EfIrnMrsyGocXfN5hLyeRmwcLd0=;
-        b=l8YRNCcWxC55BVHQ0iFQUyiTb8Vnsd++glyY5KpTsk1o8UJUeM4Cr9s7IyZr6KzFU8
-         lZ99Y6Cab+EQnwSuwEiNXZdgY4XUcpOKOgAipL/6x8vbu1DAccVtfK2HKuqQS95qVsuh
-         gK0qDiCGwvyCpOaXqx3u6hY6eJMXHQxd1b5lgtAClI7XxECmqrI6PVDz2SEtckWHL5oi
-         g7UpdgUjhVNKf2QBOVbefmE7Pl2Q/MArIXvOMAPuEPNnuYvhcvlqt7ZwwV56n7GIyutj
-         Qch4K7wWgkp7cJKGlBvbAF+8ySiDBlLbFCPbZDj9L3zDUQs+zhuCoywmWnpKLV8yAybi
-         Hsjw==
-X-Forwarded-Encrypted: i=1; AJvYcCXq5DkyVvtZPl53w/GN9IMd00XzzG390qe6Y65giVtm5uzuXUfYbz3/dCY662GYj6+Stl8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHYs1pU0xH7uOELAhKG6RRltXdw6g8mi7GFDxiOZGv3pSaVJWw
-	EtmH0Xj6/ZkT3QKnKdnaVvDxIZam+ahJE1sgNQEvZNa8nwqLTJoUyAM9CcGDJCEISsCfTjGbXNm
-	bqaWXNO8bSKZgbQnDQSDncISE+4Nr+4yGsnQuZiAdtr+FlzLDVaB1rQ==
-X-Gm-Gg: AZuq6aKhcne6S0rZb7itdV/o4CmQsD5mryljT/PB5w3spdafJwewcJ+K+69QTovYtjq
-	3pkObCTE29amU52J7Uk/wQTgtoEtPjr8RwAglmGzbwciKp5Nm9ovbQrF9NuxfiTRhvnfYiYMWpb
-	vRcyLV6jEmU/2KbFVZNzfCu1/0j+Gj5RB0UzumOfmlTuFB/cZ3RdgLKaarVkghvFoQ/yMxWGW+7
-	nSfLE37P/jzdGrWnGWrV4tF26CBwXkVCJiZCNW3LW6pyxBu3BMPrlsRBEwFS/qva6z7Z9qOV3xL
-	kzVWlBm2dHk2st3STZ+smlowijVDpPPpa4D7xs8XkA/4+T9KjG75A0Bba08ycPOlVnBLZ+RbdLu
-	Wk73MvXzwuVP3uDdXlTwpq3I9Bg==
-X-Received: by 2002:a05:600c:5307:b0:480:4a4f:c36f with SMTP id 5b1f17b1804b1-4832096671dmr160891275e9.21.1770629107337;
-        Mon, 09 Feb 2026 01:25:07 -0800 (PST)
-X-Received: by 2002:a05:600c:5307:b0:480:4a4f:c36f with SMTP id 5b1f17b1804b1-4832096671dmr160890915e9.21.1770629106883;
-        Mon, 09 Feb 2026 01:25:06 -0800 (PST)
-Received: from costa-tp.redhat.com ([2a00:a041:e223:1b00:fe51:8bb:7986:c897])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48317d33f5fsm316310295e9.5.2026.02.09.01.25.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 01:25:06 -0800 (PST)
-From: Costa Shulyupin <costa.shul@redhat.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Tomas Glozar <tglozar@redhat.com>,
-	Costa Shulyupin <costa.shul@redhat.com>,
-	Crystal Wood <crwood@redhat.com>,
-	Wander Lairson Costa <wander@redhat.com>,
-	Ivan Pravdin <ipravdin.official@gmail.com>,
-	John Kacur <jkacur@redhat.com>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v2 4/4] tools/rtla: Remove unneeded nr_cpus from for_each_monitored_cpu
-Date: Mon,  9 Feb 2026 11:24:36 +0200
-Message-ID: <20260209092436.2899888-5-costa.shul@redhat.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260209092436.2899888-1-costa.shul@redhat.com>
-References: <20260209092436.2899888-1-costa.shul@redhat.com>
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=JAf3pqkFnwq+zdsxVQQtCzWCRKHcpfVHtUf9wwuLw4I=;
+	b=QMazHPScT78p8/A5LSY0zf5Gy+ntNYaAa/KDEvAaZOnAAMMo7cMO1AXhXYu6fUzeYfudkA
+	ohbandRiORga0tPe56Gl4jv0lN5ERKxGJeARGkJg9DmD22NGNsLlHcdILRVF1lelq6W5ns
+	8D7PfWHjLJHkc0YxX3BosNzbOvdznDQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770629924;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=JAf3pqkFnwq+zdsxVQQtCzWCRKHcpfVHtUf9wwuLw4I=;
+	b=hjPCs1SiuZlmsnRmm4WuXxzlgIWtcI1+FwmskJMUwsahkuoZ2KgwDN+BGXF9pQu6H2bo4r
+	c4cnzNXKNe01/GBA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=vpgyqBiA;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=hLPIN9MU
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770629923; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=JAf3pqkFnwq+zdsxVQQtCzWCRKHcpfVHtUf9wwuLw4I=;
+	b=vpgyqBiAF59GS8TN0tj1Yw4gD3AFubW2+nvp95OMWMNE0RoW4gl8GaHjOMqeILjreb20hq
+	00ZGgX5153b9c8kxfXq7QfLWsg1laWcWqFoW9AFUjp0SlZhVETsWU8YS2GZLWAAXa6vqs/
+	L2U14MsiN6/8NfIO/A/QkNJybl2XLY4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770629923;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=JAf3pqkFnwq+zdsxVQQtCzWCRKHcpfVHtUf9wwuLw4I=;
+	b=hLPIN9MUGlpFuBJIypL8kyMsuSxsVGSzMW/nK9OcuWkkG/N9PFuCMLKLUFB/bduiIe0pHK
+	G0jxZU53UMZRAVCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 438E33EA63;
+	Mon,  9 Feb 2026 09:38:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id QC8kDyOriWnnCgAAD6G6ig
+	(envelope-from <vbabka@suse.cz>); Mon, 09 Feb 2026 09:38:43 +0000
+Message-ID: <ebc2eb77-722d-4966-8376-f11607de53c2@suse.cz>
+Date: Mon, 9 Feb 2026 10:38:42 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 4/7] mm/slab: free a bit in enum objexts_flags
+Content-Language: en-US
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Harry Yoo <harry.yoo@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Johannes Weiner <hannes@cmpxchg.org>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Michal Hocko <mhocko@kernel.org>, Hao Li <hao.li@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Amery Hung <ameryhung@gmail.com>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ "Paul E . McKenney" <paulmck@kernel.org>,
+ Frederic Weisbecker <frederic@kernel.org>,
+ Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+ Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett
+ <josh@joshtriplett.org>, Boqun Feng <boqun.feng@gmail.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
+ Dave Chinner <david@fromorbit.com>, Qi Zheng <zhengqi.arch@bytedance.com>,
+ Muchun Song <muchun.song@linux.dev>, rcu@vger.kernel.org,
+ linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>
+References: <20260206093410.160622-1-harry.yoo@oracle.com>
+ <20260206093410.160622-5-harry.yoo@oracle.com>
+ <CAADnVQ+rNYeb5Pu2aHRVc+hYDeAF5t19MVwzXsyn2HkOuLPNLg@mail.gmail.com>
+From: Vlastimil Babka <vbabka@suse.cz>
+Autocrypt: addr=vbabka@suse.cz; keydata=
+ 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
+ m6M14QORSWTLRg==
+In-Reply-To: <CAADnVQ+rNYeb5Pu2aHRVc+hYDeAF5t19MVwzXsyn2HkOuLPNLg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	URIBL_BLOCKED(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,oracle.com:email,suse.cz:dkim,suse.cz:mid];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com,oracle.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_TWELVE(0.00)[32];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[linux-foundation.org,gentwo.org,google.com,linux.dev,cmpxchg.org,kernel.org,gmail.com,arm.com,nvidia.com,joshtriplett.org,goodmis.org,efficios.com,fromorbit.com,bytedance.com,vger.kernel.org,kvack.org];
+	RCVD_TLS_ALL(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	R_RATELIMIT(0.00)[to_ip_from(RLo39o19myzc71a6h1g6fiybuc)];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.cz:dkim,suse.cz:mid,oracle.com:email]
+X-Spam-Flag: NO
+X-Spam-Score: -3.01
+X-Rspamd-Queue-Id: 865AB5BCD8
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
 
-nr_cpus does not change at runtime, so passing it through the macro
-argument is unnecessary.
+On 2/6/26 21:09, Alexei Starovoitov wrote:
+> On Fri, Feb 6, 2026 at 1:35 AM Harry Yoo <harry.yoo@oracle.com> wrote:
+>>
+>> Since kfree() now supports freeing objects allocated with
+>> kmalloc_nolock(), free one bit in enum object_flags.
+>>
+>> Signed-off-by: Harry Yoo <harry.yoo@oracle.com>
+> 
+> For patches 3 and 4:
+> 
+> Acked-by: Alexei Starovoitov <ast@kernel.org>
+> 
+> I think patches 3 and 4 are ready.
+> Would be great to land them for this merge window
+> (if Vlastimil agrees).
 
-Remove the argument and use the global nr_cpus instead.
+We should have an ack from Catalin for kmemleak. Also better take them out
+of the RFC and send as 2 non-rfc patches first, with cc list reduced
+accordingly etc.
 
-Signed-off-by: Costa Shulyupin <costa.shul@redhat.com>
----
- tools/tracing/rtla/src/common.h        |  2 +-
- tools/tracing/rtla/src/osnoise_hist.c  | 15 +++++++--------
- tools/tracing/rtla/src/osnoise_top.c   |  2 +-
- tools/tracing/rtla/src/timerlat.c      |  4 ++--
- tools/tracing/rtla/src/timerlat_hist.c | 16 ++++++++--------
- tools/tracing/rtla/src/timerlat_top.c  |  2 +-
- 6 files changed, 20 insertions(+), 21 deletions(-)
+Then I can put them to -next and try sending second merge window PR next
+week. Can you also point to any bug reports that would be fixed? (that you
+had to work around or delay merging or something) that would help the
+argument to not wait a cycle.
 
-diff --git a/tools/tracing/rtla/src/common.h b/tools/tracing/rtla/src/common.h
-index 32f9c1351209..28d258d6d178 100644
---- a/tools/tracing/rtla/src/common.h
-+++ b/tools/tracing/rtla/src/common.h
-@@ -109,7 +109,7 @@ struct common_params {
- 
- extern int nr_cpus;
- 
--#define for_each_monitored_cpu(cpu, nr_cpus, common) \
-+#define for_each_monitored_cpu(cpu, common) \
- 	for (cpu = 0; cpu < nr_cpus; cpu++) \
- 		if (!(common)->cpus || CPU_ISSET(cpu, &(common)->monitored_cpus))
- 
-diff --git a/tools/tracing/rtla/src/osnoise_hist.c b/tools/tracing/rtla/src/osnoise_hist.c
-index 90291504a1aa..e8f07108d39a 100644
---- a/tools/tracing/rtla/src/osnoise_hist.c
-+++ b/tools/tracing/rtla/src/osnoise_hist.c
-@@ -244,7 +244,7 @@ static void osnoise_hist_header(struct osnoise_tool *tool)
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(s, "Index");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].count)
- 			continue;
-@@ -273,8 +273,7 @@ osnoise_print_summary(struct osnoise_params *params,
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "count:");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
--
-+	for_each_monitored_cpu(cpu, &params->common) {
- 		if (!data->hist[cpu].count)
- 			continue;
- 
-@@ -285,7 +284,7 @@ osnoise_print_summary(struct osnoise_params *params,
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "min:  ");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].count)
- 			continue;
-@@ -298,7 +297,7 @@ osnoise_print_summary(struct osnoise_params *params,
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "avg:  ");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].count)
- 			continue;
-@@ -314,7 +313,7 @@ osnoise_print_summary(struct osnoise_params *params,
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "max:  ");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].count)
- 			continue;
-@@ -349,7 +348,7 @@ osnoise_print_stats(struct osnoise_tool *tool)
- 			trace_seq_printf(trace->seq, "%-6d",
- 					 bucket * data->bucket_size);
- 
--		for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+		for_each_monitored_cpu(cpu, &params->common) {
- 
- 			if (!data->hist[cpu].count)
- 				continue;
-@@ -385,7 +384,7 @@ osnoise_print_stats(struct osnoise_tool *tool)
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "over: ");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].count)
- 			continue;
-diff --git a/tools/tracing/rtla/src/osnoise_top.c b/tools/tracing/rtla/src/osnoise_top.c
-index 6fb3e72d74f2..ab5db35f21ae 100644
---- a/tools/tracing/rtla/src/osnoise_top.c
-+++ b/tools/tracing/rtla/src/osnoise_top.c
-@@ -236,7 +236,7 @@ osnoise_print_stats(struct osnoise_tool *top)
- 
- 	osnoise_top_header(top);
- 
--	for_each_monitored_cpu(i, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(i, &params->common) {
- 		osnoise_top_print(top, i);
- 	}
- 
-diff --git a/tools/tracing/rtla/src/timerlat.c b/tools/tracing/rtla/src/timerlat.c
-index 69856f677fce..ec14abd45fff 100644
---- a/tools/tracing/rtla/src/timerlat.c
-+++ b/tools/tracing/rtla/src/timerlat.c
-@@ -115,7 +115,7 @@ int timerlat_enable(struct osnoise_tool *tool)
- 			return -1;
- 		}
- 
--		for_each_monitored_cpu(i, nr_cpus, &params->common) {
-+		for_each_monitored_cpu(i, &params->common) {
- 			if (save_cpu_idle_disable_state(i) < 0) {
- 				err_msg("Could not save cpu idle state.\n");
- 				return -1;
-@@ -218,7 +218,7 @@ void timerlat_free(struct osnoise_tool *tool)
- 	if (dma_latency_fd >= 0)
- 		close(dma_latency_fd);
- 	if (params->deepest_idle_state >= -1) {
--		for_each_monitored_cpu(i, nr_cpus, &params->common) {
-+		for_each_monitored_cpu(i, &params->common) {
- 			restore_cpu_idle_disable_state(i);
- 		}
- 	}
-diff --git a/tools/tracing/rtla/src/timerlat_hist.c b/tools/tracing/rtla/src/timerlat_hist.c
-index 4bf1489cad23..db66312ec966 100644
---- a/tools/tracing/rtla/src/timerlat_hist.c
-+++ b/tools/tracing/rtla/src/timerlat_hist.c
-@@ -298,7 +298,7 @@ static void timerlat_hist_header(struct osnoise_tool *tool)
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(s, "Index");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
- 			continue;
-@@ -350,7 +350,7 @@ timerlat_print_summary(struct timerlat_params *params,
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "count:");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
- 			continue;
-@@ -372,7 +372,7 @@ timerlat_print_summary(struct timerlat_params *params,
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "min:  ");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
- 			continue;
-@@ -400,7 +400,7 @@ timerlat_print_summary(struct timerlat_params *params,
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "avg:  ");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
- 			continue;
-@@ -428,7 +428,7 @@ timerlat_print_summary(struct timerlat_params *params,
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "max:  ");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
- 			continue;
-@@ -473,7 +473,7 @@ timerlat_print_stats_all(struct timerlat_params *params,
- 	sum.min_thread = ~0;
- 	sum.min_user = ~0;
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
- 			continue;
-@@ -620,7 +620,7 @@ timerlat_print_stats(struct osnoise_tool *tool)
- 			trace_seq_printf(trace->seq, "%-6d",
- 					 bucket * data->bucket_size);
- 
--		for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+		for_each_monitored_cpu(cpu, &params->common) {
- 
- 			if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
- 				continue;
-@@ -658,7 +658,7 @@ timerlat_print_stats(struct osnoise_tool *tool)
- 	if (!params->common.hist.no_index)
- 		trace_seq_printf(trace->seq, "over: ");
- 
--	for_each_monitored_cpu(cpu, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(cpu, &params->common) {
- 
- 		if (!data->hist[cpu].irq_count && !data->hist[cpu].thread_count)
- 			continue;
-diff --git a/tools/tracing/rtla/src/timerlat_top.c b/tools/tracing/rtla/src/timerlat_top.c
-index 4eb820fe1f21..ed3d3d1c8956 100644
---- a/tools/tracing/rtla/src/timerlat_top.c
-+++ b/tools/tracing/rtla/src/timerlat_top.c
-@@ -446,7 +446,7 @@ timerlat_print_stats(struct osnoise_tool *top)
- 
- 	timerlat_top_header(params, top);
- 
--	for_each_monitored_cpu(i, nr_cpus, &params->common) {
-+	for_each_monitored_cpu(i, &params->common) {
- 		timerlat_top_print(top, i);
- 		timerlat_top_update_sum(top, i, &summary);
- 	}
--- 
-2.52.0
+> Patch 3 is tiny, but the impact is huge and
+> patch 4 is a very nice cleanup.
+> If we land it now we can start using kfree_rcu() on bpf side
+> in the next release cycle. That will help us a lot.
 
