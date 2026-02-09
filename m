@@ -1,112 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649082F5A3D;
-	Mon,  9 Feb 2026 03:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDB719A288;
+	Mon,  9 Feb 2026 04:57:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770606347; cv=none; b=FJq5quzX/LXyuTbYCu19HOzmsEKs6QF1iN3CLflesnT3cTV7mRUOQ649oB7UHSVZuBZMxe4HBZS3f/TOkzA3eVpdKVe382TxbkMqq0y7cd8gZnL02Mmrm+fJbPHPX1Jg1qEHNSRo74U6Fh8C3Wi7142p+t8nLlfGpsAtXRzwcHo=
+	t=1770613079; cv=none; b=Ny1lBv5PovXDh98jVXZ2VYBzodowQ1xn/s0uaSens6oaCcKn5u3BqiTynJ++itmuR07+3Un3Pxmx/GYQZmyrROqq2diN/1whQOeovBjDltU1RSI9C15wEMgodawW7mkDJFQe7FdNgrs49QBf6kaX2rYYdGuY1w7HvKb3ujuYG34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770606347; c=relaxed/simple;
-	bh=vvMHAN6L2tVEAL6dEZf2ykF+FEIUVDPhLofe2WZoOhg=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=pFqBBXW0ApfAGJE8P9yRUfikwedVM2EwCe/HUzmeTdGYywkDpXmpPHan/lW3mEHxt13onHsaYlfq+el/K4BWY61/MAJRGZT11kxjwQXB/nka1/OOc3zODwIMRxuRhKXNXXwy2Tpm/PpQDmyUWDxH429a5UUnXYvrt+0Qc8xFx5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EGqniBRk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770613079; c=relaxed/simple;
+	bh=9x9+JFiBtU9fVVNKicjmNwKuYIVND/FdpOrv/7OJM/U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CTptO0QL5oFieraKoF29K8gQVMfenNfmy5hFPJhQM4JWYiH6EWR3qfZ2zV9UrUTvasae6Ue/oBKWF1DK2lMJD9edDD9Kw8O5R3+rsTEe7H/mGZ89aTWX92TVIMLo7XSIoyqpZyj9N4C7vuefF4C5deE8ZSgAQpiZxyFvprm/b8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ai7OIfxj; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EGqniBRk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C1CC4CEF7;
-	Mon,  9 Feb 2026 03:05:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770606347;
-	bh=vvMHAN6L2tVEAL6dEZf2ykF+FEIUVDPhLofe2WZoOhg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=EGqniBRkII1k0v2zEcVrgvvp1RGHn5x1yku3AM9oRO7ltwSd5Hx059aku8TzQeA5W
-	 Qech1D2jNbTI4/325eLAAXom6FCOlYZut+9bStgMtdLJOV9O5BhHILXPRU/JaVF6d0
-	 AMUp8sVEARuZCxKCUKBocVqb1Aa6yj5ahcuieRxTofBIcolX83w4wZoJCf+TKGqwgS
-	 2/Q2gEalcidmAAo3hl0K3PUaqvs4p8eZlUe6CqzRqnNPIpKDO6vEQeO40QBXDdq2XX
-	 7f38PNlJA0ANID1SeUCXuf5sBcXt9QOkZ2t0MSuXg7uX92J5oxYIF3knEBsUWh0J5G
-	 GKj9WATL7YBlg==
-Content-Type: multipart/mixed; boundary="===============6771391642254911456=="
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ai7OIfxj"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=FNs90UWUFg7F1Jb2HJimlsZX6woxU5aTVOhpGX9WvCk=; b=ai7OIfxjxCh8hdXnJ7YJ6JfSe8
+	Z1xLIHez0yo5+Jqtxi7AyZLjhUd741CQLhmMcy/K+qksVjDP3XLZx/N2cQseoNs3hGFUT79/WP+j+
+	Pq9hxm0MuE6ZJRaXtY8KmeQWBCW78NEKIHPZ587dSRG/lZ9KzEPSdzTdpYaZXtY4vf+SBDxHBnFVs
+	ZPl+vgJQquhZnZ6DIr7M1oRdjSEQSvTNZluCja6r2mssF5fbV1BKk/Nomugvu//n1qN7rI3+Rc7MN
+	nymEHd+XspNYKeu5JlbiHg1aIB5o5HKE2QWhA44kRRrSNFJkk/NKyVnW5sdK8JBAhGMrHLogZMtT2
+	1nrxf+wA==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vpJLL-0000000EpXA-3g1G;
+	Mon, 09 Feb 2026 04:57:51 +0000
+Message-ID: <9414714a-ba13-4d17-8b4f-97a03b90d6c1@infradead.org>
+Date: Sun, 8 Feb 2026 20:57:50 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <48114f7cb5d9dbe88299056f69a43708f29f4f4569aa0c04d4411d5140e932c3@mail.kernel.org>
-In-Reply-To: <20260209023153.2661784-10-ankur.a.arora@oracle.com>
-References: <20260209023153.2661784-10-ankur.a.arora@oracle.com>
-Subject: Re: [PATCH v9 09/12] bpf/rqspinlock: switch check_timeout() to a clock interface
-From: bot+bpf-ci@kernel.org
-To: ankur.a.arora@oracle.com,linux-kernel@vger.kernel.org,linux-arch@vger.kernel.org,linux-arm-kernel@lists.infradead.org,linux-pm@vger.kernel.org,bpf@vger.kernel.org
-Cc: arnd@arndb.de,catalin.marinas@arm.com,will@kernel.org,peterz@infradead.org,akpm@linux-foundation.org,mark.rutland@arm.com,harisokn@amazon.com,cl@gentwo.org,ast@kernel.org,rafael@kernel.org,daniel.lezcano@linaro.org,memxor@gmail.com,zhenglifeng1@huawei.com,xueshuai@linux.alibaba.com,joao.m.martins@oracle.com,boris.ostrovsky@oracle.com,konrad.wilk@oracle.com,ankur.a.arora@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  9 Feb 2026 03:05:46 +0000 (UTC)
-
---===============6771391642254911456==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 01/12] asm-generic: barrier: Add
+ smp_cond_load_relaxed_timeout()
+To: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-pm@vger.kernel.org, bpf@vger.kernel.org
+Cc: arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org,
+ peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com,
+ harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
+ daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com,
+ xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
+ boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
+References: <20260209023153.2661784-1-ankur.a.arora@oracle.com>
+ <20260209023153.2661784-2-ankur.a.arora@oracle.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20260209023153.2661784-2-ankur.a.arora@oracle.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/rqspinlock.c b/kernel/bpf/rqspinlock.c
-> index 2fdfa828e3d3..f02b1c5f0222 100644
-> --- a/kernel/bpf/rqspinlock.c
-> +++ b/kernel/bpf/rqspinlock.c
-
-[ ... ]
-
-> @@ -340,6 +349,7 @@ int __lockfunc resilient_queued_spin_lock_slowpath(rqspinlock_t *lock, u32 val)
-> {
-> 	struct mcs_spinlock *prev, *next, *node;
-> 	struct rqspinlock_timeout ts;
-> +	s64 timeout_err = 0;
-> 	int idx, ret = 0;
-> 	u32 old, tail;
-
-[ ... ]
-
-In arch_mcs_spin_lock_contended(), when a waiter in the MCS queue receives
-a timeout signal (RES_TIMEOUT_VAL) from the previous waiter:
-
-> 	if (old & _Q_TAIL_MASK) {
-> 		int val;
->
-> 		prev = decode_tail(old, rqnodes);
->
-> 		/* Link @node into the waitqueue. */
-> 		WRITE_ONCE(prev->next, node);
->
-> 		val = arch_mcs_spin_lock_contended(&node->locked);
-> 		if (val == RES_TIMEOUT_VAL) {
-> 			ret = -ETIMEDOUT;
-> 			goto waitq_timeout;
-> 		}
-
-This sets ret = -ETIMEDOUT but does not set timeout_err. When execution
-reaches the waitq_timeout label:
-
-> waitq_timeout:
-> -	if (ret) {
-> +	if (timeout_err < 0) {
-
-The condition evaluates to false since timeout_err is still 0. This causes
-the timeout handling to be skipped entirely, and execution falls through
-to the lock acquisition path. If the lock is acquired, the function
-returns ret (which is -ETIMEDOUT), making the caller believe the lock was
-not acquired when it actually was. This appears to be a lock leak.
-
-Should the goto waitq_timeout path also set timeout_err = -ETIMEDOUT?
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21810635323
+> +/**
+> + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
+> + * guarantees until a timeout expires.
+> + * @ptr: pointer to the variable to wait on.
+> + * @cond: boolean expression to wait for.
 
-AI-authorship-score: low
-AI-authorship-explanation: The commit shows typical human developer patterns including a missed edge case during refactoring, which is a common human error rather than systematic AI-generated code issues.
-issues-found: 1
-issue-severity-score: high
-issue-severity-explanation: Lock leak bug where the function may acquire a lock but return an error code, causing callers to think acquisition failed when it actually succeeded.
+s/cond/cond_expr/
 
---===============6771391642254911456==--
+> + * @time_expr_ns: expression that evaluates to monotonic time (in ns) or,
+> + *  on failure, returns a negative value.
+> + * @timeout_ns: timeout value in ns
+> + * Both of the above are assumed to be compatible with s64; the signed
+> + * value is used to handle the failure case in @time_expr_ns.
+> + *
+> + * Equivalent to using READ_ONCE() on the condition variable.
+> + *
+> + * Callers that expect to wait for prolonged durations might want to
+> + * take into account the availability of ARCH_HAS_CPU_RELAX.
+> + */
+> +#ifndef smp_cond_load_relaxed_timeout
+> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
+> +				      time_expr_ns, timeout_ns)		\
+> +({									\
+
+
+-- 
+~Randy
+
