@@ -1,166 +1,138 @@
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3374F36405F
-	for <bpf@vger.kernel.org>; Mon,  9 Feb 2026 10:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08EA536C0DE;
+	Mon,  9 Feb 2026 11:11:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770633684; cv=none; b=RwCHfN2n9y1e8hwr0ldbDT91/VlnnThqhd83P3gq9pxsUn/WoNKNssqy4AjkEuiuDDTKOGZTRAgpv9VURa3Z77jvJJ/+J2C4Nw6N1Atf6VgEWd9EROvA3ncNtUUWVv8BPubkGRTF5tAV5QhgMBC50NVhXWratHCeKkSruONg2u8=
+	t=1770635488; cv=none; b=ABu9oPsfL4TblNnMPYWIHiLdizNwWGO8+ZfHyX+H7kp9lpzTiAVhh5PIZNNUurKGsTf312c1dabBGGJAwb1lhPiU8N6v2YGYyctkw3R5Ss5qyvv026A7WBYMkTMuazyTVdnTo9ONcGTCl1fK0ABk18VJDkpt37TVMvIMqunCy6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770633684; c=relaxed/simple;
-	bh=64SnTDVjxPBO8/D1WSbXynmYKOC747zxXu2M/2TsRic=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GwTfxQ3RNQYZMbIBhgOs/zBKnnK+PeahjDbItxNeZKtfIOVAGQ8i5G8yB6I3BiRwTNr+G95oVi5MAb9za/3LGpwzOwRt5goRTsp4K8tdpxWYZplabWaCQLq6FeQZUZZqkkPdzhdJ7boLuv85Mhmo//27Y0Q7K0KIcr3IG9FaMaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lJrFntQY; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770635488; c=relaxed/simple;
+	bh=t9KSThTVOz35Ej5vEwbl+zga07u71//fQQzyyB/C/1E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gP9UHY+7cUFkUBsu40Qg0xLXMpAXoAL/nZ9qOUMYmWUFSaeafXhVLpTbB14xOB7K9Uu4L9dDuun1W7VrOzjAeCAemzZopCRQNlAXn3bVYGEaGFklvrwA73WP0hho8L4kjIpukh/n38P5+5kS3R0hLWJb/WKr8BpFKdYUizKG2wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=US3j3mXe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJrFntQY"
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-382fa66fa9dso31263121fa.0
-        for <bpf@vger.kernel.org>; Mon, 09 Feb 2026 02:41:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770633682; x=1771238482; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1vceECY6oOVlxttD05QrM0v69VFRLzzkozbTpsthX2I=;
-        b=lJrFntQY6ghDt64qSZ2RZjrmOnxvAvV4aM5478alnuXcPzddm4iBNBviYzAVuPWxdJ
-         RP4Hup+LhyTxS7QhN7J2xBKlsIKE6JHcqSc2VuzFY1t5S7mtUAEuq+EyN6yA3SsC/ZVH
-         gAmi9ffanskRfoAqy+PSUg1njaJJ8hrkfh7rBB7CHaxTvRddvxak7rZgDSE38F1G6eLU
-         xzK+zyrV09wIx8Wl/FfAipGy1IdeBBPqOpmVxrR+QiE2MXwTndFDciPGueNo99R0nmie
-         PLdT72Zo7M91gKqetMhjed3IzqIYy+WwtjcYdLZ5RkotUimKt5KzZLlUI57fuOGfYELX
-         Zb6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770633682; x=1771238482;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1vceECY6oOVlxttD05QrM0v69VFRLzzkozbTpsthX2I=;
-        b=IvyTGkAZ13dryxbZLUA6Wc+HJKEb7aD/tNCuc1h3F98d/DpbmIdIYISw/DUnDfDoJ1
-         ka/z4RF25q1SsteNrUluXG7U0TEZJR+DrHzHntbeQ1U4zHU5QCPH/euXKnWbxvihGvOu
-         RnF1LsGqpabc6ylZoZ68rigq+jwpfE8ax5J5RdmIysmKWocx9l61cdJqJ+yYWVzpALjW
-         wlPdho+LaoR5y0j/SppcaKklhxyXcbnGo0eG8dkqDWk/JmpQ+06wBsvkUNUePPooQ734
-         VMPo9FLwnblAwp6WYghfJtbMIwD5mDX7RuFTGrYb5beSrDz4u42ymePNS971/sd8BSDm
-         jPMw==
-X-Forwarded-Encrypted: i=1; AJvYcCXIwVUs3lo59qlsXZO3y38cE74vKIT0FNTcKwBZ2ezDePt6F+KN0gvvOQYbh0Bm9USYBQM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOmMpMCbNHSGZFbeNNXT8DAO0fw4FdVVOa4NIAex1PoTUTFVoC
-	Aoc5h3Qw+4puCMOk1chXP34IbVfsmyUQcNpfwku/Pg3cABok93g/JSRo
-X-Gm-Gg: AZuq6aIL4E72SuUjzrvBovh49/ZCmBgXtLQMgQcw5f6RHpAtebSOQW2kP9momP7QK8w
-	KoBanwVE7e1i7GhI990gDdfg1TjnH4m0yF+XY9xsnkVgRQzqNzei2R6BbSxNMWudhBhRmwe7u3F
-	cndQov+uAdBbD0z3GNIKdigeV7K19+gWg+reDZFtqe4Vi3G6MPq9dknVCSp2kYnMttrUpV/rNrn
-	FSdjRx2R/YvcVrBY2V42YZbuElT2+uLV7OjI3SoKijN2rr9JYgXnBytXCNlncf4vBisemkX+hrK
-	TUWvCkUgeOZJxEKm5GMd+yH8Hau1pIZE3xOJdBKkFmZ1HuHwpz6lYxfJtxJh+OsQbRTsSpEK8g2
-	I6FSQ4g5G/lA/VpXGSGbSHqhRtWJJAec/TK0z2CYgQhGV1RWm9RuHbUmrPqwqAiAsXuBeJ9kFn/
-	2ARypUQFhDWPUFwqATBQJZJ+1DdZR0JwwOlJtq2hEs
-X-Received: by 2002:a2e:a5c2:0:b0:382:56ff:5207 with SMTP id 38308e7fff4ca-386b515ab20mr35812111fa.36.1770633681964;
-        Mon, 09 Feb 2026 02:41:21 -0800 (PST)
-Received: from pc636 (host-90-233-206-112.mobileonline.telia.com. [90.233.206.112])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-386b6281ee1sm26940621fa.20.2026.02.09.02.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 02:41:21 -0800 (PST)
-From: Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date: Mon, 9 Feb 2026 11:41:17 +0100
-To: Harry Yoo <harry.yoo@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@gentwo.org>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Michal Hocko <mhocko@kernel.org>, Hao Li <hao.li@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Amery Hung <ameryhung@gmail.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	"Paul E . McKenney" <paulmck@kernel.org>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Joel Fernandes <joelagnelf@nvidia.com>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Lai Jiangshan <jiangshanlai@gmail.com>,
-	Zqiang <qiang.zhang@linux.dev>, Dave Chinner <david@fromorbit.com>,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Muchun Song <muchun.song@linux.dev>, rcu@vger.kernel.org,
-	linux-mm@kvack.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 2/7] mm: use rcu_ptr instead of rcu_head
-Message-ID: <aYm5zZLvkZpCYw2s@pc636>
-References: <20260206093410.160622-1-harry.yoo@oracle.com>
- <20260206093410.160622-3-harry.yoo@oracle.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="US3j3mXe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0DBDC116C6;
+	Mon,  9 Feb 2026 11:11:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770635487;
+	bh=t9KSThTVOz35Ej5vEwbl+zga07u71//fQQzyyB/C/1E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=US3j3mXewcTiSU8I3Xlw/cde2ucDVcT7xZfdQwl8uJ+rDRL1avQRXq/A9rmRM4DJG
+	 9SwKd9wUkYOeG1boavbpk62LUM81u9QoeAKdiC7p2BX4wnNqJeC5hc7RoKh2uRwh+t
+	 vXmXRqAWp4gEdqTetrH/uhy8uYpPW6xB8EzRgqTWcOeanqUS82UqDijHgr62WOyH5A
+	 E2mTGW2TP6GnlBgB1SwvN9Rbb4mJQN2/2rTcP41Fm0TUNwONGY8XPHqbdPDeWCI1P+
+	 ta2NA7X0xvBytjX3PsXkAVxAg/isRpoSn0Qm4whT6WZ0xuKsnGRQ/1QxuuCj5TpbZb
+	 zMTQ7+FuXtyUg==
+Date: Mon, 9 Feb 2026 12:11:20 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Cc: ast@kernel.org, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Jeff Layton <jlayton@kernel.org>, 
+	bpf@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
+Subject: Re: [PATCH] bpf: use FS_USERNS_DELEGATABLE for bpffs
+Message-ID: <20260209-infolge-dachorganisation-acd79c9ad934@brauner>
+References: <20260205104541.171034-1-alexander@mihalicyn.com>
+ <20260206-gelenk-gierig-82ad15ec8080@brauner>
+ <CAJqdLroezjW2qe+1CNykwhFc9OO7uGADzc6ffjZzvyVOxLjXVA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260206093410.160622-3-harry.yoo@oracle.com>
+In-Reply-To: <CAJqdLroezjW2qe+1CNykwhFc9OO7uGADzc6ffjZzvyVOxLjXVA@mail.gmail.com>
 
-On Fri, Feb 06, 2026 at 06:34:05PM +0900, Harry Yoo wrote:
-> When slab objects are freed with kfree_rcu() and not call_rcu(),
-> using struct rcu_head (16 bytes on 64-bit) is unnecessary and
-> struct rcu_ptr (8 bytes on 64-bit) is enough. Save one pointer
-> per slab object by using struct rcu_ptr.
+On Fri, Feb 06, 2026 at 01:42:17PM +0100, Alexander Mikhalitsyn wrote:
+> Am Fr., 6. Feb. 2026 um 13:33 Uhr schrieb Christian Brauner
+> <brauner@kernel.org>:
+> >
+> > On Thu, Feb 05, 2026 at 11:45:41AM +0100, Alexander Mikhalitsyn wrote:
+> > > From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
+> > >
+> > > Instead of FS_USERNS_MOUNT we should use recently introduced
+> > > FS_USERNS_DELEGATABLE cause it better expresses what we
+> > > really want to get there. Filesystem should not be allowed
+> > > to be mounted by an unprivileged user, but at the same time
+> > > we want to have sb->s_user_ns to point to the container's
+> > > user namespace, at the same time superblock can only
+> > > be created if capable(CAP_SYS_ADMIN) check is successful.
+> > >
+> > > Tested and no regressions noticed.
+> > >
+> > > No functional change intended.
+> > >
+> > > Link: https://lore.kernel.org/linux-fsdevel/6dd181bf9f6371339a6c31f58f582a9aac3bc36a.camel@kernel.org [1]
+> > > Fixes: 6fe01d3cbb92 ("bpf: Add BPF token delegation mount options to BPF FS")
+> > > Cc: Alexei Starovoitov <ast@kernel.org>
+> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > > Cc: Eduard Zingerman <eddyz87@gmail.com>
+> > > Cc: Song Liu <song@kernel.org>
+> > > Cc: Yonghong Song <yonghong.song@linux.dev>
+> > > Cc: John Fastabend <john.fastabend@gmail.com>
+> > > Cc: KP Singh <kpsingh@kernel.org>
+> > > Cc: Stanislav Fomichev <sdf@fomichev.me>
+> > > Cc: Hao Luo <haoluo@google.com>
+> > > Cc: Jiri Olsa <jolsa@kernel.org>
+> > > Cc: Jeff Layton <jlayton@kernel.org>
+> > > Cc: Christian Brauner <brauner@kernel.org>
+> > > Cc: bpf@vger.kernel.org
+> > > Cc: linux-fsdevel@vger.kernel.org
+> > > Cc: linux-kernel@vger.kernel.org
+> > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@futurfusion.io>
+> > > - RWB-tag from Jeff [1]
+> > > Reviewed-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > >  kernel/bpf/inode.c | 6 +-----
+> > >  1 file changed, 1 insertion(+), 5 deletions(-)
+> > >
+> > > diff --git a/kernel/bpf/inode.c b/kernel/bpf/inode.c
+> > > index 9f866a010dad..d8dfdc846bd0 100644
+> > > --- a/kernel/bpf/inode.c
+> > > +++ b/kernel/bpf/inode.c
+> > > @@ -1009,10 +1009,6 @@ static int bpf_fill_super(struct super_block *sb, struct fs_context *fc)
+> > >       struct inode *inode;
+> > >       int ret;
+> > >
+> > > -     /* Mounting an instance of BPF FS requires privileges */
+> > > -     if (fc->user_ns != &init_user_ns && !capable(CAP_SYS_ADMIN))
+> > > -             return -EPERM;
+> >
+> > Jeff's patch does:
+> >
+> >         if (user_ns != &init_user_ns &&
+> >             !(fc->fs_type->fs_flags & (FS_USERNS_MOUNT | FS_USERNS_DELEGATABLE))) {
+> >                 errorfc(fc, "VFS: Mounting from non-initial user namespace is not allowed");
+> >                 return ERR_PTR(-EPERM);
+> >         }
 > 
-> Signed-off-by: Harry Yoo <harry.yoo@oracle.com>
-> ---
->  include/linux/list_lru.h | 2 +-
->  include/linux/shrinker.h | 2 +-
->  mm/vmalloc.c             | 4 ++--
->  3 files changed, 4 insertions(+), 4 deletions(-)
+> Hi Christian,
 > 
-> diff --git a/include/linux/list_lru.h b/include/linux/list_lru.h
-> index fe739d35a864..c79bccb7dafa 100644
-> --- a/include/linux/list_lru.h
-> +++ b/include/linux/list_lru.h
-> @@ -37,7 +37,7 @@ struct list_lru_one {
->  };
->  
->  struct list_lru_memcg {
-> -	struct rcu_head		rcu;
-> +	struct rcu_ptr		rcu;
->  	/* array of per cgroup per node lists, indexed by node id */
->  	struct list_lru_one	node[];
->  };
-> diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
-> index 1a00be90d93a..bad20de2803a 100644
-> --- a/include/linux/shrinker.h
-> +++ b/include/linux/shrinker.h
-> @@ -19,7 +19,7 @@ struct shrinker_info_unit {
->  };
->  
->  struct shrinker_info {
-> -	struct rcu_head rcu;
-> +	struct rcu_ptr rcu;
->  	int map_nr_max;
->  	struct shrinker_info_unit *unit[];
->  };
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 41dd01e8430c..89c781dcab58 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -2596,7 +2596,7 @@ struct vmap_block {
->  	DECLARE_BITMAP(used_map, VMAP_BBMAP_BITS);
->  	unsigned long dirty_min, dirty_max; /*< dirty range */
->  	struct list_head free_list;
-> -	struct rcu_head rcu_head;
-> +	struct rcu_ptr rcu;
->  	struct list_head purge;
->  	unsigned int cpu;
->  };
->
-Why this change is needed?
+> >
+> > IOW, it only restricts the ability to end up in bpf_fill_super() if
+> > FS_USERNS_DELEGATABLE is set. You still need to perform the permission
+> > check in bpf_fill_super() though otherwise anyone can mount bpffs in an
+> > unprivileged container now.
+> 
+> Yeah, this is what  mount_capable(struct fs_context *fc) does. I'm removing
+> FS_USERNS_MOUNT so know it checks capable(CAP_SYS_ADMIN), instead of
+> ns_capable(fc->user_ns, CAP_SYS_ADMIN).
+> 
+> No functional changes here.
 
-If you want to save 8 bytes of vmap_block structure, then i
-do not see a big gain here. We do not have so many vmap_block
-objects.
+Ah right, I remember. We require global CAP_SYS_ADMIN if FS_USERNS_MOUNT
+isn't set. That's great. Thanks!
 
-Am i missing something here? :)
-
---
-Uladzislau Rezki
+I can route Jeff's patch as fix since the original change technically
+regressed nfs a while ago.
