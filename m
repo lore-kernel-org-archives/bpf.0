@@ -1,210 +1,113 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00C41367F5C
-	for <bpf@vger.kernel.org>; Mon,  9 Feb 2026 13:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3276244665;
+	Mon,  9 Feb 2026 13:34:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770643259; cv=none; b=PpukLTnvKwsOVCAjgLFM/RIBXV3GUwtH0CgtBAKBy7lxh98mX05px8ucz10qFU8an2Ff+p0Sd73BFTHvK5otkzqYDWLuQZem8mMsPRs5Xb1Mri10AYPiBnnMH8VZMJWzrinx7HmOvMSlxKrzxp1WoGA2raVySDb3qDoImdgxfC0=
+	t=1770644054; cv=none; b=fDKucmtPTsnP0aTXnIVn5aSNofGt8UocUDWSWGb+XWZ0ifxbq3wRkaJuxmimou0ek17NLq3TjUbYjA00N+P6/Qh/EqB5es/ecX7sdM+tRDP+qWtsGaZ+GMIr1F8IZz2npDky3C78k0WgS6zWA2cuISLdjThJRjmhH3hRtq86ufo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770643259; c=relaxed/simple;
-	bh=ZRDgmXWV2rTk18uqa+3nUo2ICoKg10NgIL4ScV84a7w=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=q/SpuzXFmnWejO+u/q76eY9A5l2zGgMDfEWU0fkgoh8NQdHzz1owH2ejPaE403PKn8Drxd36m6A6g02b5ACKG7Z1lF07zZXK96nKNB4KSSBRp341tUAnLejBOxbDPbqAuRSq1TXKbSf+svADmumJufqmnCwobH/q6qBVWzpsXzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TLFaEh4n; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770644054; c=relaxed/simple;
+	bh=IOCckDQmO3bCx6vIbKsdQfr+uc3RnkYrCh6Yh98UfAA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HXQoA2Dzz1AmrArXrWzIEOb5EUX+t9h/5Y866oJGh5pyAHEp2N4I8GCIVM5hV3HJFNqboc+Y9qqENpTG9bzCuLhACh6cI3pFPKvMbjkE+n5rzsPJvSO0h8ND6F4T954HXATHNoT1Ea0VMeJd8X9bhdfPzW22COSE7wMtHdY+8H8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YlR9bj5Z; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=1J7rxPcV; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TLFaEh4n"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-47ee0291921so28158725e9.3
-        for <bpf@vger.kernel.org>; Mon, 09 Feb 2026 05:20:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770643257; x=1771248057; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qI9FGuo5sVk90HD2IZ0DaJx8cBbfY90Hh1oyTpghi4Y=;
-        b=TLFaEh4n62wk8yRmNUto4gf5a3xLX+cuGZlWzThq6oYqZZvzZligVAwHLMLwQpA2r6
-         5zehUoFe16RF4id2YVYaoO3KnM3wMa1WwMmTIyezgVhLjSZD2wVsDJEvuz32UCd1Sz3H
-         hlVk/YJ2yVFLZpHKpc253v3/2B/X7di1t2Tb7fJJHZ3ltOOwQIDVQ7CbL3eainlsEp8a
-         Ftf5dk7eb9gzY8t1OxsN1EG/LNYkAomf0goX1HBmXXswwinMV3O04mhO7mm7ctavkntA
-         glOS84QO7d042jZ15i7lZetRHxIhIJ5jjqMkBs658KPJRw6UBVwEI/0xB8+43ce7xQZb
-         TDUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770643257; x=1771248057;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qI9FGuo5sVk90HD2IZ0DaJx8cBbfY90Hh1oyTpghi4Y=;
-        b=XW8C/au51aqKSlBJyHpxcSSEcaEcpRrxHwT/YeA+pjgO3m0V2SUf2QuPUQkqP9qTxV
-         lWbzrcL2nutC0bfXwvGeskH29p1AbHtD2qkInm3ve9yL4OgU2Sa9E8qUypDMhBz/SSMi
-         Fis6Z8zJI09z/vzSqHhFiCswxufnZ9QCSwv6vfpTUEtXJy8D3j1AYGSaWRDRXOAkD7bt
-         /GapoKKS67pbGbDr6+aIlREY9KxE7TAg6GtrsWxsd+5QOKutKDSdpXlnCBEGVKHYgtt/
-         PZApKZDlqO7QoTzCsj8ZsS4SA1KSov3KThKXLFaWTgp5wWVNS/AiNsU4hKgNBA20Su6n
-         mIBA==
-X-Gm-Message-State: AOJu0Yw4FiypKFuhO2Ol6ff+MUTDkboHppaF9axyxirIi/QwQpPDaR/o
-	mBwfSvRSJPRtYT9kT9KNNL2CyndEAULi6HObdHzNRJQKpWjtgMDSzZOathzT0g==
-X-Gm-Gg: AZuq6aI0JX1B7r8c9uVVxonvvTptC+857X6WBVTgjm1JPvKAWNjzB+GY1Bk3OzO22+5
-	jQ+TPYFOv3msi7lc5emDI57ZkZUqXTc7KE6hqzZ61q3ZBCM1dbOLRaIfoVfRjWfasSMlFpPc7ei
-	jYCVkn9RLzXm3oftgtGrEQ1el7K2pCdhQpuk61AVwQ7oN23mi0iX6XwQKq4J8ED52HEqjggWJvB
-	EWG79MPV7VG99XNNEsqAPiU9GCNidqwhSe/TmfrOkcEXdE6tcsS949smJ9D87lYWBh4fuO6nIsp
-	pyQ7xN4/EmIxghX9d+vVc8jJeEGykpnJIwuGcmXVFxEbzLtOfK3J0yQ4UlqdUVMd48BIdX05bfl
-	ElrvRlzDka/IQKX1GzokHnoUxAanxFsoJbUPpEnZsGfpD6lhpDHKCnnJzkT+brVvgM9RTQupFMe
-	xkgPY9Sg0H/Wx8Ze2Uzx+Q75AH8UOg9Vz83Jo/Rkxu
-X-Received: by 2002:a05:600c:6290:b0:47e:e78a:c834 with SMTP id 5b1f17b1804b1-48320226676mr182000465e9.34.1770643256826;
-        Mon, 09 Feb 2026 05:20:56 -0800 (PST)
-Received: from localhost.localdomain ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436296bd4desm26981545f8f.18.2026.02.09.05.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Feb 2026 05:20:56 -0800 (PST)
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: Anton Protopopov <a.s.protopopov@gmail.com>,
-	Anton Protopopov <aspsk@isovalent.com>,
-	syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com
-Subject: [PATCH v3 bpf-next] bpf: Fix a potential use-after-free
-Date: Mon,  9 Feb 2026 13:29:04 +0000
-Message-Id: <20260209132904.63908-1-a.s.protopopov@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YlR9bj5Z";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="1J7rxPcV"
+Date: Mon, 9 Feb 2026 14:34:09 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1770644051;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=60PQiy2iBpgFewxiruovzAslbmJSAAtPFOFOOiKjjPA=;
+	b=YlR9bj5ZIrN5Hl5gkUFTHUhbBNirduv8CgJZeENp11uU3U6thi6j/OtC/KQPAKc9QoY16b
+	iqhuyzi/b0ZQ7M7VUfUOm6xDjdKBiVAcL0NDslJlAhb3BeoAwDRRtJnPjGMbf1mFXVv7bt
+	NMrFeatDijOgXhtd0UkwblQQRQ31qH8+8sJoew6J5Wkmb20RAzlLTsuX1HheIftYOGQ2/H
+	DD0vYw+2DrYDfmR/vW+TfUOUQruDrKryktRtVAgS4glEN42/iCi7e94OG0AE7SlxspDuCq
+	Or+Gco28APE0lsa0wk71wKJNamcmGRe8DaKywyoaJhATqU9E7ZWe6UypX84Xbg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1770644051;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=60PQiy2iBpgFewxiruovzAslbmJSAAtPFOFOOiKjjPA=;
+	b=1J7rxPcVC/2n9mif2u5PsOumsh3UqugEaRYJHku7wMkXPEW7VFN4X8Fwwg9s/kVlJ7j0qj
+	wEPG5ci9hZIbMODg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemb@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+	Geliang Tang <geliang@kernel.org>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-api@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>, linux-kselftest@vger.kernel.org, 
+	mptcp@lists.linux.dev, linux-security-module@vger.kernel.org, bpf@vger.kernel.org, 
+	libc-alpha@sourceware.org, Carlos O'Donell <carlos@redhat.com>, 
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>, Rich Felker <dalias@libc.org>, klibc@zytor.com, 
+	Florian Weimer <fweimer@redhat.com>
+Subject: Re: [PATCH net-next v2 0/4] net: uapi: Provide an UAPI definition of
+ 'struct sockaddr'
+Message-ID: <20260209143003-80d3cb63-38c6-4280-a319-ee6879eeab11@linutronix.de>
+References: <20260120-uapi-sockaddr-v2-0-63c319111cf6@linutronix.de>
+ <20260121192729.2095aa25@kernel.org>
+ <20260130112309-28f2645b-e756-4173-96da-cf5c59191520@linutronix.de>
+ <20260130081741.425a92e0@kernel.org>
+ <3c46fc49-b41b-44a2-b42a-669cc7e6bb02@linutronix.de>
+ <20260131092517.6639d84c@kernel.org>
+ <20260203122715-eeb304f9-4b42-4fc6-a527-658182a92ba5@linutronix.de>
+ <20260203144011.32d5b223@kernel.org>
+ <20260204064248-d9c4ab78-f6d4-4ac6-8d55-e939bc1df6d2@linutronix.de>
+ <20260204175516.4fb11966@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260204175516.4fb11966@kernel.org>
 
-Refcounting in the check_pseudo_btf_id() function is incorrect:
-the __check_pseudo_btf_id() function might get called with a zero
-refcounted btf. Fix this, and patch related code accordingly.
+On Wed, Feb 04, 2026 at 05:55:16PM -0800, Jakub Kicinski wrote:
+> On Wed, 4 Feb 2026 06:51:46 +0100 Thomas Weißschuh wrote:
+> > > make -j16 O="$kobj" INSTALL_HDR_PATH="${kobj}/hdr" headers_install
+> > > popd
+> > > 
+> > > pushd uapi
+> > > find . -type f -name '*.h' -exec cp -v "${kobj}/hdr/include/{}" {} \;  
+> > 
+> > Here only those headers which already exist in ethtool's uapi/ directory
+> > are copied. As linux/typelimits.h is new, it is now missing.
+> > Honestly, if a user fiddles with the internals of the UAPI headers like
+> > this, it is on them to update their code if the internal structure
+> > changes. In your case a simple 'touch uapi/linux/typelimits.h'
+> > before running the script will be enough. Also internal.h now requires
+> > an explicit inclusion of <limits.h>, as that is not satisfied by the
+> > UAPI anymore.
+> 
+> Hopefully you understand that while due to uapi header copy this is not
+> a huge issue for ethtool itself, but it is a proof that your changes
+> can break normal user space applications which do not vendor in uapi.
 
-v3: rephrase a comment (AI)
-v2: fix a refcount leak introduced in v1 (AI)
+A regular application which uses a full UAPI headers tree will get
+access to the new header automatically.
+If the application uses symbols from <limits.h> without including <limits.h>
+on its own, it is broken.
 
-Reported-by: syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=5a0f1995634f7c1dadbf
-Fixes: 76145f725532 ("bpf: Refactor check_pseudo_btf_id")
-Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
----
- kernel/bpf/verifier.c | 52 +++++++++++++++++++++----------------------
- 1 file changed, 26 insertions(+), 26 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index edf5342b982f..d4afd571761b 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -21333,29 +21333,29 @@ static int find_btf_percpu_datasec(struct btf *btf)
- }
- 
- /*
-- * Add btf to the used_btfs array and return the index. (If the btf was
-- * already added, then just return the index.) Upon successful insertion
-- * increase btf refcnt, and, if present, also refcount the corresponding
-- * kernel module.
-+ * Add btf to the env->used_btfs array. If needed, refcount the
-+ * corresponding kernel module. To simplify caller's logic
-+ * in case of error or if btf was added before the function
-+ * decreases the btf refcount.
-  */
- static int __add_used_btf(struct bpf_verifier_env *env, struct btf *btf)
- {
- 	struct btf_mod_pair *btf_mod;
-+	int ret = 0;
- 	int i;
- 
- 	/* check whether we recorded this BTF (and maybe module) already */
- 	for (i = 0; i < env->used_btf_cnt; i++)
- 		if (env->used_btfs[i].btf == btf)
--			return i;
-+			goto ret_put;
- 
- 	if (env->used_btf_cnt >= MAX_USED_BTFS) {
- 		verbose(env, "The total number of btfs per program has reached the limit of %u\n",
- 			MAX_USED_BTFS);
--		return -E2BIG;
-+		ret = -E2BIG;
-+		goto ret_put;
- 	}
- 
--	btf_get(btf);
--
- 	btf_mod = &env->used_btfs[env->used_btf_cnt];
- 	btf_mod->btf = btf;
- 	btf_mod->module = NULL;
-@@ -21364,12 +21364,18 @@ static int __add_used_btf(struct bpf_verifier_env *env, struct btf *btf)
- 	if (btf_is_module(btf)) {
- 		btf_mod->module = btf_try_get_module(btf);
- 		if (!btf_mod->module) {
--			btf_put(btf);
--			return -ENXIO;
-+			ret = -ENXIO;
-+			goto ret_put;
- 		}
- 	}
- 
--	return env->used_btf_cnt++;
-+	env->used_btf_cnt++;
-+	return 0;
-+
-+ret_put:
-+	/* Either error or this BTF was already added */
-+	btf_put(btf);
-+	return ret;
- }
- 
- /* replace pseudo btf_id with kernel symbol address */
-@@ -21466,9 +21472,7 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
- 
- 	btf_fd = insn[1].imm;
- 	if (btf_fd) {
--		CLASS(fd, f)(btf_fd);
--
--		btf = __btf_get_by_fd(f);
-+		btf = btf_get_by_fd(btf_fd);
- 		if (IS_ERR(btf)) {
- 			verbose(env, "invalid module BTF object FD specified.\n");
- 			return -EINVAL;
-@@ -21478,17 +21482,17 @@ static int check_pseudo_btf_id(struct bpf_verifier_env *env,
- 			verbose(env, "kernel is missing BTF, make sure CONFIG_DEBUG_INFO_BTF=y is specified in Kconfig.\n");
- 			return -EINVAL;
- 		}
-+		btf_get(btf_vmlinux);
- 		btf = btf_vmlinux;
- 	}
- 
- 	err = __check_pseudo_btf_id(env, insn, aux, btf);
--	if (err)
-+	if (err) {
-+		btf_put(btf);
- 		return err;
-+	}
- 
--	err = __add_used_btf(env, btf);
--	if (err < 0)
--		return err;
--	return 0;
-+	return __add_used_btf(env, btf);
- }
- 
- static bool is_tracing_prog_type(enum bpf_prog_type type)
-@@ -25368,13 +25372,9 @@ static int add_fd_from_fd_array(struct bpf_verifier_env *env, int fd)
- 		return 0;
- 	}
- 
--	btf = __btf_get_by_fd(f);
--	if (!IS_ERR(btf)) {
--		err = __add_used_btf(env, btf);
--		if (err < 0)
--			return err;
--		return 0;
--	}
-+	btf = btf_get_by_fd(fd);
-+	if (!IS_ERR(btf))
-+		return __add_used_btf(env, btf);
- 
- 	verbose(env, "fd %d is not pointing to valid bpf_map or btf\n", fd);
- 	return PTR_ERR(map);
--- 
-2.34.1
-
+Thomas
