@@ -1,113 +1,72 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F94832B9A5
-	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 13:50:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D25E1B0439;
+	Tue, 10 Feb 2026 14:12:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770731460; cv=none; b=Y7jCLkSMBDQJMx9hAJ/eR7kn1PfRf1VNwgH2VA3HkMBkbIOBQUu5EqFeISIiyzU3BHWggwdSGFSmuJtiOI+Ye2ninbp3/zlEibogSY6T/bwGDV/wDJ0UQHWfIBZz6DBpHjka/pV5pu23HRFS/PrzYiWlvSVD0SGDKzYfIT4OzRY=
+	t=1770732728; cv=none; b=k4l+wKugte9l8TT0pj/CfT41B9DG46hSZw1XJCE7/Bcg6yDfoELmwoEx9k3xRZJPWzn+OQUth4QRZtbANyCl/DDSXndemFma+xHNlD9VzeV7xSiij7n/s6y3in3OrKE4o3reet//Z90lJXhm0wjBZrLBzRUMgU5QyCfo67rlpeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770731460; c=relaxed/simple;
-	bh=Apk6b4Ser9pZEBm3Ipc5FPIOTneTH/e76yIbKMT40nU=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p5/dD9e2iRU1RbVYLZkSkw38/s4eiO9tPHaoLSmEnOArFgOf8xgcR/ZyL0a1xG8ZOSfRr5lTB9/6vqvIL/FMrU/3tMPW6XLfJQzvZQ6azeVDR14WXMELsDxUuzmtZQjN21NdblYFaHRR03pJGoMpTtcdHzCVwZD/D1v14SSQAc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SNvV7qTW; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770732728; c=relaxed/simple;
+	bh=bgeaZMr6r5KueYlvWOmKSylBIxsVrvO56o1wcIlVhvs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=g9YWMR9nGJxKjw2kRxIFiQK6VuDI3zWYxAAU+hvMGzEWahM/YguzTniVGQvLv5v8fM8KtuZcbgMzF3wz914oOJ0iE3ZtAyLQF+D1Rx6i5v2atKT2OBUP9phBlUeCQGo42B64cqk5xYH0+Nkd7gakcUCKMKFHcDZIzpXjF5osqSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PV+eZub+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SNvV7qTW"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48327b8350dso35002735e9.1
-        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 05:50:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770731458; x=1771336258; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=AZSyHzsKlLj3SzVp+5gj2MbG7e5iF5jGchS1II3M/kE=;
-        b=SNvV7qTWqYPJBprbiLU12DKjIMNzN0DW1PRLwcuOYzFHMxy8rpBRAwp2R75otQ+8JH
-         WgYPN/Kg7vyIkutMLMOW3BoaroLcciyUgVGE5W1taB4Gm+L1NFXZeofTRKnmplsK71xt
-         fwoabtGhxQeusVjpIOCQzS1+7l46rqzSgQD/Y5xg1xQL7wOV1tvvcXGNM4tnxQtCjWMY
-         QE1kkj+A/MIMjX9cC9bYNqNRmNJy6dQvYkjfODYWUWh6W+D+klWbFaPjkO3brH1fUMeD
-         Saa6UlZF+hAyngSad0KbzSts/6baRScrO5AFkzHyic1F7TjevxrAh9UrjjSaP811etYi
-         oXuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770731458; x=1771336258;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AZSyHzsKlLj3SzVp+5gj2MbG7e5iF5jGchS1II3M/kE=;
-        b=wPH5E5Ib9roa3o46dPIXvwQsnXz8QPittDRjRKcgxxkeiuzzgj2PZENcX6RiDZiQoG
-         cRlmaoBHeQyO8b1qfcB2wN+XBj+7PJt1v9T+htmgMf4+hfe1Zo2rt6Bg23N4yGH03ffp
-         RQ4CuuxepFMu9oH0b6aUwwL4WigfkcRgtGGRr98mzYczdD5OBFMBTqaB7l3ltVOgmvQQ
-         qibnEAHgDsW0+PVOJxX3pGg7+0QIQiTaE0ZVRS9xaUjTp7DsTdij/j/y98lDElY/8w76
-         qQRo3t3ufUrJ5ofR4liFKw4T9rDXsuOSDhnSrPB71LmwnIRVJm3CtBxpO8OqL3I9MYOP
-         A5aw==
-X-Gm-Message-State: AOJu0Yzws0CeV4h7YnU6nIE8MlTjGQFQMVqGtswNVvrQDejfDblVmOaW
-	Q+gZ2AK+JTBVlM0AoWj9AlV86/zO8FYiCKpNb3eGYroNGj7jQ6dRbpnIpba2IVbb
-X-Gm-Gg: AZuq6aIJTjUjWryTDwG4VhoGy4k1guuhHTrPs4zYGbECJGRAofdc2ctraPME26uCPF+
-	amShqAJah+hGtW13TOv2auJ6w9czcs40zi105meFrEEyF6npow8PV6fUPxtF7i+gJeIE8RqeKHc
-	eXvOHlglIuhFhL4PxAKtsOkpPu+pAZWotkBy1fWCwjmOvi3ZqCcNqChg61dV2piBySb3vUvN4Dz
-	Gfq4KdheJUzWakl3FIDbMnTcZYjcJZbuHhbxo1wNRRhd+WsJ69egWbt8iKGTshJ1ijOg2E992UP
-	s6IAbyzvyfRKVzgMwvWrnnQ3TA0dPHRZu71M5juUKfwrtCW6wUWv5rEB65ieF+Y3eyeXMQdVQ+V
-	Zs84GRXdBxHueiW+aCNTcrpZNSwaUzAvRY8g7zoJOZ1rB3d0/D2vjfkl/mqSJA3S7sFMMh+hC
-X-Received: by 2002:a05:600c:3e16:b0:483:1403:c47f with SMTP id 5b1f17b1804b1-483201d9fc5mr202082045e9.6.1770731457294;
-        Tue, 10 Feb 2026 05:50:57 -0800 (PST)
-Received: from krava ([2a02:8308:a00c:e200::b44f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d482480sm70897135e9.0.2026.02.10.05.50.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 05:50:56 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 10 Feb 2026 14:50:55 +0100
-To: Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, eddyz87@gmail.com,
-	kernel-team@meta.com
-Subject: Re: [PATCH bpf v1 1/1] libbpf: Fix out-of-bound read in
- bpf_linker__add_buf()
-Message-ID: <aYs3v2OMxm1HIcmw@krava>
-References: <20260209230134.3530521-1-ameryhung@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PV+eZub+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8259EC116C6;
+	Tue, 10 Feb 2026 14:12:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770732727;
+	bh=bgeaZMr6r5KueYlvWOmKSylBIxsVrvO56o1wcIlVhvs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=PV+eZub+oOvboy+j21MtRufNusIbYYgYKZmxnbWc9iUnRdvAZrx00VkZnkgru+Mnj
+	 s7Mob+snwWibC8f+OsRsjMRE8igUD0XZZavLv8L2++slDL2B8h4j+mx8Mv89fAF1T/
+	 bpZ1hBjCPKH6imnwTx2KUf5Oy+rhu+aA/3NOpUrmAG1K/rPjJIvY1y9dPMuMN8nkOx
+	 kKLnUozYeZ1nQ1AxEVvVxG9w0U+gnW3ClHW02tKGNC34PL26oggBGzOVekLexW56b/
+	 Vb0pS4glOR2yGZ7wBXeUzDjWbQycxl4B0GPHfbYirusoPvD6Y0LGxY6zDkmmYpkFun
+	 oKlq0uCekvw7w==
+Content-Type: multipart/mixed; boundary="===============0113478247927627336=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260209230134.3530521-1-ameryhung@gmail.com>
+Message-Id: <028617ef5663bf2f9901701630d223fed88e519d2020e3317bfffb4ef5cb123b@mail.kernel.org>
+In-Reply-To: <20260210133649.524292-4-jolsa@kernel.org>
+References: <20260210133649.524292-4-jolsa@kernel.org>
+Subject: Re: [PATCHv2 bpf-next 3/5] selftests/bpf: Emit nop,no5 instructions combo for x86_64 arch
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,andrii@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,songliubraving@fb.com,yhs@fb.com,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 10 Feb 2026 14:12:07 +0000 (UTC)
 
-On Mon, Feb 09, 2026 at 03:01:34PM -0800, Amery Hung wrote:
-> Fix a potential out-of-bound read in bpf_linker__add_buf() by advancing
-> the buffer pointer and reducing the remaining buffer size passed to
-> write() in each iteration. The bug is reported in [0].
-> 
-> [0]: https://github.com/libbpf/libbpf/issues/945
-> 
-> Fixes: 6d5e5e5d7ce1 ("libbpf: Extend linker API to support in-memory ELF files")
-> Signed-off-by: Amery Hung <ameryhung@gmail.com>
+--===============0113478247927627336==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+> selftests/bpf: Emit nop,no5 instructions combo for x86_64 arch
 
-jirka
+This isn't a bug, but there's a typo in the subject line. "no5" should
+be "nop5".
+
+> Now that we have no5 optimization support in kernel, let's emit
+
+The same typo appears here in the commit body.
 
 
-> ---
->  tools/lib/bpf/linker.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-> index f4403e3cf994..78f92c39290a 100644
-> --- a/tools/lib/bpf/linker.c
-> +++ b/tools/lib/bpf/linker.c
-> @@ -581,7 +581,7 @@ int bpf_linker__add_buf(struct bpf_linker *linker, void *buf, size_t buf_sz,
->  
->  	written = 0;
->  	while (written < buf_sz) {
-> -		ret = write(fd, buf, buf_sz);
-> +		ret = write(fd, buf + written, buf_sz - written);
->  		if (ret < 0) {
->  			ret = -errno;
->  			pr_warn("failed to write '%s': %s\n", filename, errstr(ret));
-> -- 
-> 2.47.3
-> 
-> 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21867569087
+
+AI-authorship-score: low
+AI-authorship-explanation: The commit shows typical human development patterns including a typo in the commit message, iterative design changes between v1 and v2 based on real-world testing, and normal kernel mailing list review interactions.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Single typo in commit message subject and body where 'no5' should be 'nop5'; does not affect code functionality.
+
+--===============0113478247927627336==--
