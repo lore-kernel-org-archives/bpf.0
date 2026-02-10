@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A923619EEC2;
-	Tue, 10 Feb 2026 13:37:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 297DE1DC198;
+	Tue, 10 Feb 2026 13:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770730637; cv=none; b=pGQFSW5uEk2XyyRdOW+ycby2Y7vR1ek743H9eRLZ0zES9QiFyFFn7wLRm+JzP47g9mINCVvH6l2SbLQXKr6fqHh1GdURmve+W5Movp3Uy4u2ZnmmeUa+EKiahrJTqJ4EjflNHjzT3ZYt6+ecgUPW0j+8OMNRlusNwM9vFXfDDAM=
+	t=1770730647; cv=none; b=YJ4WcQ9ULLtMmE2VzLUGkRI1y880eAR2OPCNClDpoZu84+8zY3HSxjbIIIInz0JGSu19ujW6MnpO28DVynLPv+y7WNiks8hbY9ttKoy62lPqAnrCvVo1e57XwDE+0NBvKpk/Ki0FeebRlk7/PaHyDULXlZiuPhqjquEW1upc1XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770730637; c=relaxed/simple;
-	bh=/e5FLaITB6aTJI/Ft1Jn5QjDQwpwtZrhk8oW4a8Zxes=;
+	s=arc-20240116; t=1770730647; c=relaxed/simple;
+	bh=3n+AbcvciHPQzsJ1Ve5hHZjrNk7frJapa91/WlvFxa4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qhk+/iLVsDAalHHUZ00rBGUjkeq767umCOIFuQFiOMhBCAXqOxpLzGyiD+8EI8rWeKmtEFYfrgVIWEJHgP/mZ4RmdKyYq1EH4ZcfYQDBotLrV3wRFeoeJ4Ns34S9YOuNCL7jte5FJsemIdUim/NQixqPQtIK5BFDerwlYCdet38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cCAuXSYe; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=DmdDBHtJDq19KPS5CCYx9RBvRIihk2apA8y4V8QymXcJWB/zg7Oc/h6Xw5oLkaBl5zUF2p5P9wBxiI2adQBHYfuolRrLek5yin17woL+9bvFo/5U/cqm9y8ceAS5+yu9b5xoQNGPzll0yqE7y9ezy/DnIZsra4kCwzwE/fYn5B0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H3FVRcqI; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cCAuXSYe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73FEAC19423;
-	Tue, 10 Feb 2026 13:37:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H3FVRcqI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6DF7C116C6;
+	Tue, 10 Feb 2026 13:37:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770730637;
-	bh=/e5FLaITB6aTJI/Ft1Jn5QjDQwpwtZrhk8oW4a8Zxes=;
+	s=k20201202; t=1770730646;
+	bh=3n+AbcvciHPQzsJ1Ve5hHZjrNk7frJapa91/WlvFxa4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=cCAuXSYelOTYd3HF6We1IHZdPb5TxjroPvpNdZ0VFtu92yYDVF9Vvpt4I4KxPUIC8
-	 ZIVrmVXIjNXqvM3nuqAfSHHcNN3x43Ct4cWB5nb9u+3ZsLw4vKPXhPYH5MftV3vZnl
-	 PMClYGnhBXlnw4LjNATKWXuiu8FAGJYSV+jhwRmuUrnRQyWrkfJ5+iy6bdVNk0OclH
-	 JJiwIUMFBFK4BL3hg3reqpdASO3Cc33ZxFRWEQAkbEk0Kpnh35B8J8nZ5wdJGH5Ifz
-	 8eGgXyPfbv10xIj6T1JcSFNQb7Qz5g3x1blwq3l/i0iKuYOc0gIP/moWqHhyA0Ku8T
-	 CzW/kQ6z2aJTQ==
+	b=H3FVRcqIj97228QakmaZNDZiaCsXs7j3fjfHudfOMRU0BfuyFGhovp0gKnKpd0Jpy
+	 TPMquBR8nOuPzEYkogyQuHrYWCnIBKdVchws8zRgc5q8rnDwSKctCNZAIviNKj7l6k
+	 uesO7z3gCqp9pAGjikfGolFDKrK9N4ug65VvQCKZYw+gDLOJ6TGdUFfPoo6bt7w/Rl
+	 OkWLy4XJNfObss/MmDalxGUyl3iK2GVAc1X1wfSE3x/5AP6PwQucsPf0jGlXrjLFXq
+	 comwfq5I4/wGB3OTaYhVKy3O2cdwFhghQ+Yf1vyU4nbaL2y099ljXTgFLQqydZPV7R
+	 DuFmOfoO5Pqog==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc: bpf@vger.kernel.org,
 	Song Liu <songliubraving@fb.com>,
 	Yonghong Song <yhs@fb.com>,
 	John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCHv2 bpf-next 2/5] libbpf: Add support to detect nop,nop5 instructions combo for usdt probe
-Date: Tue, 10 Feb 2026 14:36:46 +0100
-Message-ID: <20260210133649.524292-3-jolsa@kernel.org>
+Subject: [PATCHv2 bpf-next 3/5] selftests/bpf: Emit nop,no5 instructions combo for x86_64 arch
+Date: Tue, 10 Feb 2026 14:36:47 +0100
+Message-ID: <20260210133649.524292-4-jolsa@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260210133649.524292-1-jolsa@kernel.org>
 References: <20260210133649.524292-1-jolsa@kernel.org>
@@ -47,116 +47,31 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding support to detect nop,nop5 instructions combo for usdt probe
-by checking on probe's following nop5 instruction.
+Syncing latest usdt.h change [1].
 
-When the nop,nop5 combo is detected together with uprobe syscall,
-we can place the probe on top of nop5 and get it optimized.
+Now that we have no5 optimization support in kernel, let's emit
+nop,nop5 for usdt probe. We leave it up to the library to use
+desirable nop instruction.
 
-[1] https://github.com/libbpf/usdt
+[1] https://github.com/libbpf/usdt/commit/c9865d158984fb2b73e3cbbdcdfb4f583ad36a73
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/usdt.c | 55 ++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 51 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/usdt.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
-index d1524f6f54ae..4e5f70bb4c31 100644
---- a/tools/lib/bpf/usdt.c
-+++ b/tools/lib/bpf/usdt.c
-@@ -262,6 +262,7 @@ struct usdt_manager {
- 	bool has_bpf_cookie;
- 	bool has_sema_refcnt;
- 	bool has_uprobe_multi;
-+	bool has_uprobe_syscall;
- };
- 
- struct usdt_manager *usdt_manager_new(struct bpf_object *obj)
-@@ -301,6 +302,13 @@ struct usdt_manager *usdt_manager_new(struct bpf_object *obj)
- 	 * usdt probes.
- 	 */
- 	man->has_uprobe_multi = kernel_supports(obj, FEAT_UPROBE_MULTI_LINK);
-+
-+	/*
-+	 * Detect kernel support for uprobe() syscall, it's presence means we can
-+	 * take advantage of faster nop5 uprobe handling.
-+	 * Added in: 56101b69c919 ("uprobes/x86: Add uprobe syscall to speed up uprobe")
-+	 */
-+	man->has_uprobe_syscall = kernel_supports(obj, FEAT_UPROBE_SYSCALL);
- 	return man;
- }
- 
-@@ -585,13 +593,42 @@ static int parse_usdt_note(GElf_Nhdr *nhdr, const char *data, size_t name_off,
- 
- static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note, __u64 usdt_cookie);
- 
--static int collect_usdt_targets(struct usdt_manager *man, Elf *elf, const char *path, pid_t pid,
--				const char *usdt_provider, const char *usdt_name, __u64 usdt_cookie,
--				struct usdt_target **out_targets, size_t *out_target_cnt)
-+#if defined(__x86_64__)
-+static bool has_nop_combo(int fd, long off)
-+{
-+	static unsigned char nop_combo[6] = {
-+		0x90, 0x0f, 0x1f, 0x44, 0x00, 0x00 /* nop,nop5 */
-+	};
-+	unsigned char buf[6] = {};
-+
-+	/*
-+	 * We are using file descriptor that backs Elf object,
-+	 * let's dup it to be on the safe side.
-+	 */
-+	fd = dup(fd);
-+	if (fd < 0)
-+		return false;
-+	if (lseek(fd, off, SEEK_SET) == off)
-+		read(fd, buf, 6);
-+	close(fd);
-+	return memcmp(buf, nop_combo, 6) == 0;
-+}
-+#else
-+static bool has_nop_combo(int fd, long off)
-+{
-+	return false;
-+}
-+#endif
-+
-+static int collect_usdt_targets(struct usdt_manager *man, struct elf_fd *elf_fd, const char *path,
-+				pid_t pid, const char *usdt_provider, const char *usdt_name,
-+				__u64 usdt_cookie, struct usdt_target **out_targets,
-+				size_t *out_target_cnt)
- {
- 	size_t off, name_off, desc_off, seg_cnt = 0, vma_seg_cnt = 0, target_cnt = 0;
- 	struct elf_seg *segs = NULL, *vma_segs = NULL;
- 	struct usdt_target *targets = NULL, *target;
-+	Elf *elf = elf_fd->elf;
- 	long base_addr = 0;
- 	Elf_Scn *notes_scn, *base_scn;
- 	GElf_Shdr base_shdr, notes_shdr;
-@@ -784,6 +821,16 @@ static int collect_usdt_targets(struct usdt_manager *man, Elf *elf, const char *
- 		target = &targets[target_cnt];
- 		memset(target, 0, sizeof(*target));
- 
-+		/*
-+		 * We have uprobe syscall and usdt with nop,nop5 instructions combo,
-+		 * so we can place the uprobe directly on nop5 (+1) and get this probe
-+		 * optimized.
-+		 */
-+		if (man->has_uprobe_syscall && has_nop_combo(elf_fd->fd, usdt_rel_ip)) {
-+			usdt_abs_ip++;
-+			usdt_rel_ip++;
-+		}
-+
- 		target->abs_ip = usdt_abs_ip;
- 		target->rel_ip = usdt_rel_ip;
- 		target->sema_off = usdt_sema_off;
-@@ -998,7 +1045,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
- 	/* discover USDT in given binary, optionally limiting
- 	 * activations to a given PID, if pid > 0
- 	 */
--	err = collect_usdt_targets(man, elf_fd.elf, path, pid, usdt_provider, usdt_name,
-+	err = collect_usdt_targets(man, &elf_fd, path, pid, usdt_provider, usdt_name,
- 				   usdt_cookie, &targets, &target_cnt);
- 	if (err <= 0) {
- 		err = (err == 0) ? -ENOENT : err;
+diff --git a/tools/testing/selftests/bpf/usdt.h b/tools/testing/selftests/bpf/usdt.h
+index 549d1f774810..c71e21df38b3 100644
+--- a/tools/testing/selftests/bpf/usdt.h
++++ b/tools/testing/selftests/bpf/usdt.h
+@@ -312,6 +312,8 @@ struct usdt_sema { volatile unsigned short active; };
+ #ifndef USDT_NOP
+ #if defined(__ia64__) || defined(__s390__) || defined(__s390x__)
+ #define USDT_NOP			nop 0
++#elif defined(__x86_64__)
++#define USDT_NOP                       .byte 0x90, 0x0f, 0x1f, 0x44, 0x00, 0x0 /* nop, nop5 */
+ #else
+ #define USDT_NOP			nop
+ #endif
 -- 
 2.53.0
 
