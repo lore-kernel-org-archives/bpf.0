@@ -1,225 +1,156 @@
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749CB2F5461
-	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 16:48:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770742134; cv=pass; b=d3fUsr8+UWceWj6bhLAfhJhKwVb51x14HnMgeybilaQtuglBb+fPd54chxcDiSurAJcmKtsZQNkzvETtlvYvudfGeNcZUZj2neqUe9Kh0FJbuu0KOA/yUY+WGZWHULJQVxGlUT7GvaU635mG0TMDbl/Qg0evmCKSRhGx2mRWkTI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770742134; c=relaxed/simple;
-	bh=cn5+eLRFyXybilovXeK1nbQgiKBCKvcC8nE/jjFqDXo=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EECE3246E4
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 16:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770742569; cv=none; b=HtySmf0XbtBDiP3B5eaz+TCbpYqefGV75vrV6IP+A5mnFJ1OsSUsw18RmM7hIwFCj4jko93bFyDRtm85h8a3OiAi45DzNLdkw3KjYrufQnuRpallbBYXzi+4Kv5ksuFvTs7F1QJwQPVIOSBb6Be1mRANf/zpywb9yDPbJkmhtX8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770742569; c=relaxed/simple;
+	bh=mp18oumLYcbeEo35CqspzfgW3GZ3+0epzStLxKYcz3Y=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mXw5X1w0xYbaESxKYDG1tfjWfwlUryQH0/tsiEbVW2vyDyCWMxPT3qGOvzAysESaFjg+um3L31a3wq58m+FqtqxBgcdpHXHHm3fxbcgQoJhtiOlzTfJwOUEVj5NVS7B2e8DA3+BBBSm5TFKud8Q7vVBLfsk3BXLqYFyyds8t/9g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZGcOdLUp; arc=pass smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=OSSuc7rqaEIBjMFOYsIHGM9U6d6v+qDsLdpucxUeEbiuYOsCsC/UhSJmAyz27cUuz6MMwjYa/b1EAW+KUeDsWGRw4Q9eCAW4UNFi/WraquoB9usUh/KNr9ShqJ3i67TPXs28M/HTLV2ujhET/khmyqkXA97GEqBDgKgEglb6Ez8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B+vfLrXY; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZGcOdLUp"
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c6dd0ec465aso383a12.1
-        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 08:48:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770742133; cv=none;
-        d=google.com; s=arc-20240605;
-        b=SPPJaLmrixD5Xzaoj7txWHoK0XSYiaNxHwxFoMCbF78mSSSUzkdMU/uu4tvBghfnvU
-         /haOu1BpxBEsxTq/dUTYT5KQveIV3uY4USWbAsA7Wthz8RSyiBtenwqRHwHpo6eUpqsA
-         fxVmyOiA4h4MLiJEFvMoiC6jh9SFl9sm+xHNxbRUWzJUAU2jcK+4nuwIEJ6yoioSr74X
-         BTYKIn50iFzhLvtQSh7/S28IvsOYXpk46qjTcE/UhPqVk1dQCFa4IYU5H/scVFZHasS1
-         9IIxvdgd7Nr4RcDX+nylzBDF7UQM+M2lmBxhOgPtpsoo/GHprByetVpvs7XxCI/9+oeE
-         UFZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=fdN0niDgwU0p5pLJISvMf3YiADHyHlfw/GlVzZCGO/o=;
-        fh=TCTIBws018cdvbzFnR9DP/oHdDTIeWJgn/HK86y3L8c=;
-        b=QqXhnKQ5ONeZurFuN1YXTPUA7+VfGfoZ8c62yzuE6AY7QiKW0w2GCnuaJRxMBEoEzU
-         JUMD95yxLnaFy4dqhvB78j3kfznyl1hSlRJWUefyX5quhfKUfV0iEXr1eK3nv13KwAsd
-         VW3BBEnMJfN4R/aq2VVwytgppAU77GX0HFPySrxwevDnud79oigo2WZlbG6piLSw8ZCV
-         fVKDuaHhqXvGhW2/FL6U2Pid6oJJKtSkiA+L6otHsrNSJMoJJnslBejzC8qSD0gSIKId
-         Md3n/pQqAhAzcoA/DQ3/cFUDNGS5Ff35/nZf+HYwkvOnJ1kozYtsqI/Pt1KzJpEaUacm
-         bxlQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770742133; x=1771346933; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fdN0niDgwU0p5pLJISvMf3YiADHyHlfw/GlVzZCGO/o=;
-        b=ZGcOdLUpVAGxuRyUGu6i9qqLSh84F9ZdyITfGfwx2xUo6JUIvUPrVEwIUpBZIjNIAE
-         HaegqJ2m+gsTMbNhz0jLrKokm84XIwU5TmmExm/T5R/lADC1Wd34vuYzNJ7Cn7Q83uso
-         91Ba+Gl2NRpglElHX2aTtTj1g6pjsl2PKep2m4sIvtqnMKNdsrGhz+Ewg7xRDEPVrhZz
-         BiNGmKvETEHaeY03kKTrBXm8NUERVRnGxF33A5QYwBIdd1Yj8oSn/i91muka+pyJxAPz
-         gU6a0U6ltvG18no0cKjN+bF8ejtWyNO+jYlfBt4E7amhugbYpHxjzTIHyUA1LnmbZXSv
-         DvKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770742133; x=1771346933;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fdN0niDgwU0p5pLJISvMf3YiADHyHlfw/GlVzZCGO/o=;
-        b=BGskaZcVpOOLeDV796Jyk0i9mwt5vpDDNnG7OpKRsJ7yaCJvIQGqW8UZD/GHP9nrfJ
-         ugXJg5QElOvaxoe0XTenSjd9x7zULqaKBSF7w5uwkybF/ZMpN7VgD5hIxT2tQnE/OdJS
-         2+CmMgaFwaWc8lQ/q9mTmig65leDgF2K0cq8hzbyxw83u0/ZiGKamyJ8iX7aDArruvQ9
-         fjEiQTpCxBB0ntvsrLU3yLGWgMp1VcFQTVq4QlADYlvroc687ntHM2q2MSs5JiP7chNc
-         rYdZgjL81LlriH1nbkU6hj12RdJVu1ctcZ3/lqjD7it6bt1JDvog8pXSm2vb9t3+UsJM
-         N+bQ==
-X-Gm-Message-State: AOJu0YygvboyBAKki5oIoVP1p1r917kbsTqvUHKiNm10Nc/1zMHTWwY2
-	z44NTbBSx3NnxVasgU3SM+phjYyCrQZ6rmEpD5eAzD8Rl7s9fbSix9Z1g42xaG7ZRA/i7/a5sYa
-	lFnJMea2KSCK1zYDfqVekqzCQuIOntOk=
-X-Gm-Gg: AZuq6aLKh0dSqPIQxq5C5BP79HLttbxnoJuL7PbhkCfnNbussklyzmZg/Vskh+2u7Ji
-	2gryZQyPKxzkKmVOPTsQIVMWQYHqYl2EdVDYX39GQRkO1HWJRcHZccsd5s6imM1vZdOwm/RtDKl
-	2ydeSBUJJlkUo7CJ3PUcMokvWe1fmpOKXnOQp6jaoqFmjMCGHHgZFkEweFtVkCczoj1649YkzJq
-	cc5k6NFd4isHo9efbG3VGmv+q2/KPhAYaiyHAVXcApXb7+24nZUTKZCwuogKGqqUrC458i90ut/
-	Kk2ZhId2a16ne1qCXru273Y=
-X-Received: by 2002:a17:903:1107:b0:2aa:e388:da4b with SMTP id
- d9443c01a7336-2ab101354cbmr29455205ad.29.1770742132554; Tue, 10 Feb 2026
- 08:48:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B+vfLrXY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12C41C2BCB4
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 16:56:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770742569;
+	bh=mp18oumLYcbeEo35CqspzfgW3GZ3+0epzStLxKYcz3Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=B+vfLrXYDhuxtnnfJaay1hYyGh42RGex8MZljTnODqb8w0NnHVgg62DJCZGCdHRV7
+	 Kw9YPHaw3seqxJfv0Pw4wpCfaMoLuEyKQYXZpL2ADOggg2TtvUNcOBuqLTtyE9SWsB
+	 7lKD94ie8eFqrayG2h4CQ+cxX7cQD2C16diAaWMBST32onkjGdgyzhSbvh92JBqtfg
+	 +wqHcTG4aTOnLcQNtJHJ7f0qStdrCUGzF8F2ecqY91jCUdJ0cl+uR0MDE3nyiA1NPr
+	 pDeSXFSD5fYiXIjAwx7gaj8QjQIb/EkrjIF6NFLIVTzjEVHifnC27z3FQLkpPJvsL+
+	 MeLolQoeKxZ+g==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-40429b1d8baso1876232fac.0
+        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 08:56:09 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWT99QQUO4TsBu3oVjKEmkbOn87MFix8kXLaf/Xf1RtsfOnYFfJ1PK6IL/oKJneVN3pp/U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyf36x6HmufIlfc/ZS6CF9dARTpaiGS//s3vROn1Aarr6jN8rSE
+	VwvpeBx58VsF61yeTedGwJ4Res960deJB4nfKmg1qCkiLy16sTdQWajHVZgIm6zQNgJUuFNZ9Nb
+	uZfqkGjW+oolYX1lCnPG+sS0zN1cO3mw=
+X-Received: by 2002:a05:6870:e98e:b0:409:e025:a467 with SMTP id
+ 586e51a60fabf-40e66987163mr1394689fac.56.1770742568025; Tue, 10 Feb 2026
+ 08:56:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260210005508.3642641-1-emil@etsalapatis.com>
- <CAEf4BzaLqWT1oj-EXibyAfE0ExmiaCCqhosRujDi7Y0Nyho6dA@mail.gmail.com> <DGBEQ37JLW22.2IFYZDGMHZI2G@etsalapatis.com>
-In-Reply-To: <DGBEQ37JLW22.2IFYZDGMHZI2G@etsalapatis.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 10 Feb 2026 08:48:39 -0800
-X-Gm-Features: AZwV_QgtdPpoow1icF0yR303pktx8eJSGKE2Vr9D7lmHsbVTS-MQQLITij4fpUI
-Message-ID: <CAEf4BzZ1tedVxfv6G+F_w8TJ7ngkHe9Uui22xXOGc24Kdpi5nA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] libbpf: Add gating for arena globals
- relocation feature
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, martin.lau@kernel.org, 
-	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev
+References: <20260209023153.2661784-1-ankur.a.arora@oracle.com> <20260209023153.2661784-13-ankur.a.arora@oracle.com>
+In-Reply-To: <20260209023153.2661784-13-ankur.a.arora@oracle.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 10 Feb 2026 17:55:57 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0j_iXcbsOpkEFN=Qy0UMpa73eVfLLM42mNpx2E6JD1zHw@mail.gmail.com>
+X-Gm-Features: AZwV_Qg8i5FSICt8qHIV10FqvRMrMFr7XqGHKA8IPhFnZEOVrYzwGdBhqyez9Dg
+Message-ID: <CAJZ5v0j_iXcbsOpkEFN=Qy0UMpa73eVfLLM42mNpx2E6JD1zHw@mail.gmail.com>
+Subject: Re: [PATCH v9 12/12] cpuidle/poll_state: Wait for need-resched via tif_need_resched_relaxed_wait()
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, 
+	bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com, will@kernel.org, 
+	peterz@infradead.org, akpm@linux-foundation.org, mark.rutland@arm.com, 
+	harisokn@amazon.com, cl@gentwo.org, ast@kernel.org, rafael@kernel.org, 
+	daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com, 
+	xueshuai@linux.alibaba.com, joao.m.martins@oracle.com, 
+	boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 10, 2026 at 8:03=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.c=
-om> wrote:
+On Mon, Feb 9, 2026 at 3:43=E2=80=AFAM Ankur Arora <ankur.a.arora@oracle.co=
+m> wrote:
 >
-> On Tue Feb 10, 2026 at 1:54 AM EST, Andrii Nakryiko wrote:
-> > On Mon, Feb 9, 2026 at 4:55=E2=80=AFPM Emil Tsalapatis <emil@etsalapati=
-s.com> wrote:
-> >>
-> >> Add feature gating for the arena globals relocation introduced in
-> >> commit c1f61171d44b. The commit depends on a previous commit in the
-> >> same patchset that is absent from older kernels (12a1fe6e12db,
-> >> "bpf/verifier: Do not limit maximum direct offset into arena map").
-> >> Without this commit, arena globals relocation with arenas >=3D 512MiB
-> >> fails to load and breaks libbpf's backwards compatibility.
-> >>
-> >> Introduce a libbpf feature to check whether the running kernel include=
-s
-> >> patch 12a1fe6e12db, and only relocate arena globals if it does.
-> >>
-> >> CHANGELOG
-> >> ---------
-> >>
-> >> v2 -> v3 (https://lore.kernel.org/bpf/20260209234850.2750149-1-emil@et=
-salapatis.com/)
-> >>
-> >> - Rename feature to better specify the verifier feature it probes for
-> >>   (Andrii)
-> >>
-> >> v1 -> v2 (https://lore.kernel.org/bpf/20260209210240.2051209-1-emil@et=
-salapatis.com/)
-> >>
-> >> - Reworked test to use simpler array-based program (Andrii)
-> >>
-> >> Fixes: c1f61171d44b ("libbpf: Move arena globals to the end of the are=
-na")
-> >> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> >> ---
-> >>  tools/lib/bpf/features.c        | 92 ++++++++++++++++++++++++++++++++=
-+
-> >>  tools/lib/bpf/libbpf.c          |  7 ++-
-> >>  tools/lib/bpf/libbpf_internal.h |  2 +
-> >>  3 files changed, 99 insertions(+), 2 deletions(-)
-> >>
-
-[...]
-
-> >> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_in=
-ternal.h
-> >> index fc59b21b51b5..974147e8a8aa 100644
-> >> --- a/tools/lib/bpf/libbpf_internal.h
-> >> +++ b/tools/lib/bpf/libbpf_internal.h
-> >> @@ -392,6 +392,8 @@ enum kern_feature_id {
-> >>         FEAT_ARG_CTX_TAG,
-> >>         /* Kernel supports '?' at the front of datasec names */
-> >>         FEAT_BTF_QMARK_DATASEC,
-> >> +       /* Kernel supports LDIMM64 imm offsets past 512 MiB. */
-> >> +       FEAT_LDIMM64_FULL_RANGE_OFF,
-> >>         __FEAT_CNT,
-> >>  };
-> >>
-> >
-> > So overall this patch gets the job done, but I think we should tighten
-> > it up. I was curious why you have so much ceremony, so applied your
-> > patch locally and tried to strip everything I thought unnecessary
-> > (plus reformatted that big comment to be a bit more greppable). Here's
-> > what I got and it seems to do the job...
-> >
-> > pw-bot: cr
-> >
+> The inner loop in poll_idle() polls over the thread_info flags,
+> waiting to see if the thread has TIF_NEED_RESCHED set. The loop
+> exits once the condition is met, or if the poll time limit has
+> been exceeded.
 >
-> So to recap:
+> To minimize the number of instructions executed in each iteration,
+> the time check is rate-limited. In addition, each loop iteration
+> executes cpu_relax() which on certain platforms provides a hint to
+> the pipeline that the loop busy-waits, allowing the processor to
+> reduce power consumption.
 >
-> a) Remove BTF as it's not necessary
-> b) func_infos is also not needed
-> c) Use sizeof(log_buf) to avoid having a separate variable
-> d) Use a TRACEPOINT program to avoid the SLEEPABLE flag
+> Switch over to tif_need_resched_relaxed_wait() instead, since that
+> provides exactly that.
 >
-> Will update with those.
+> However, since we want to minimize power consumption in idle, building
+> of cpuidle/poll_state.c continues to depend on CONFIG_ARCH_HAS_CPU_RELAX
+> as that serves as an indicator that the platform supports an optimized
+> version of tif_need_resched_relaxed_wait() (via
+> smp_cond_load_acquire_timeout()).
 >
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+> Cc: linux-pm@vger.kernel.org
+> Suggested-by: "Rafael J. Wysocki" <rafael@kernel.org>
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
 
-ack, thanks
+This is generally fine with me, of course depending on how
+tif_need_resched_relaxed_wait() will work, so conditional on reaching
+an agreement with the arch and scheduler folks feel free to add
 
-> For two of the changes I have questions:
+Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
+
+to this one.
+
+> ---
+> Notes:
+>   - get rid of unnecessary variable assignments, casts etc
 >
-> >
-> > diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-> > index 034ea9b20617..6e27aa618e70 100644
-> > --- a/tools/lib/bpf/features.c
-> > +++ b/tools/lib/bpf/features.c
-> > @@ -508,90 +508,64 @@ static int probe_kern_arg_ctx_tag(int token_fd)
-> >
-> >  static int probe_ldimm64_full_range_off(int token_fd)
-> >  {
-> > -       const size_t bufsz =3D 1024;
-> > -       int btf_fd, prog_fd, map;
-> > -       char log_buf[bufsz];
-> > +       int prog_fd, map_fd;
+>  drivers/cpuidle/poll_state.c | 21 +--------------------
+>  1 file changed, 1 insertion(+), 20 deletions(-)
 >
-> Should we rename here? Every test program in this file uses map for map.
-> No strong opinions one way or the other.
-
-given we have prog_fd, yeah, let's use map_fd here as well
-
+> diff --git a/drivers/cpuidle/poll_state.c b/drivers/cpuidle/poll_state.c
+> index c7524e4c522a..7443b3e971ba 100644
+> --- a/drivers/cpuidle/poll_state.c
+> +++ b/drivers/cpuidle/poll_state.c
+> @@ -6,41 +6,22 @@
+>  #include <linux/cpuidle.h>
+>  #include <linux/export.h>
+>  #include <linux/irqflags.h>
+> -#include <linux/sched.h>
+> -#include <linux/sched/clock.h>
+>  #include <linux/sched/idle.h>
+>  #include <linux/sprintf.h>
+>  #include <linux/types.h>
 >
-> > +       char log_buf[1024];
-> >         int ret;
-> > -       static const char strs[] =3D "\0f\0";
-> > -       const __u32 types[] =3D {
-> > -               /* [1] FUNC_PROTO `void(void)` */
-> > -               BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_FUNC_PROTO, 0, 0)=
-, 0),
-> > -               /* [2] FUNC 'f' -> FUNC_PROTO (main prog) */
-
-[...]
-
-> >
-> > -       /* Be conservative and NULL terminate the buffer to ensure
-> > strstr terminates. */
-> > -       log_buf[bufsz - 1] =3D '\0';
-> >
+> -#define POLL_IDLE_RELAX_COUNT  200
+> -
+>  static int __cpuidle poll_idle(struct cpuidle_device *dev,
+>                                struct cpuidle_driver *drv, int index)
+>  {
+> -       u64 time_start;
+> -
+> -       time_start =3D local_clock_noinstr();
+> -
+>         dev->poll_time_limit =3D false;
 >
-> Should we remove this? If there is no guarantee the buffer has a NUL
-> character somewhere, the strstr can fly off past the end of the array.
-
-verifier log on error will be properly zero terminated, that's part of
-verifier contract, we shouldn't doubt it
-
-[...]
+>         raw_local_irq_enable();
+>         if (!current_set_polling_and_test()) {
+> -               unsigned int loop_count =3D 0;
+>                 u64 limit;
+>
+>                 limit =3D cpuidle_poll_time(drv, dev);
+>
+> -               while (!need_resched()) {
+> -                       cpu_relax();
+> -                       if (loop_count++ < POLL_IDLE_RELAX_COUNT)
+> -                               continue;
+> -
+> -                       loop_count =3D 0;
+> -                       if (local_clock_noinstr() - time_start > limit) {
+> -                               dev->poll_time_limit =3D true;
+> -                               break;
+> -                       }
+> -               }
+> +               dev->poll_time_limit =3D !tif_need_resched_relaxed_wait(l=
+imit);
+>         }
+>         raw_local_irq_disable();
+>
+> --
