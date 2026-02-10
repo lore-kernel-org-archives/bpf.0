@@ -1,229 +1,214 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC913815DE
-	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 15:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352C62EC0B4
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 15:26:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770736480; cv=none; b=TSOWs3IDskS3gNjK1VW/VLjEJORhqqgstbRWn7Pg2QgT4aACDNr9hHFABWcsy/rn4hJ/LgN5YvNo+yk5Nvml85V9Ah1e5tavT9sBJRRKLttuWgBEF8dlNSqFnyDR7CnkWLvmvT1SiHWiNe/utzFYxfh6dnRX4+WMZFHf5JEcut8=
+	t=1770737203; cv=none; b=ehw0VIaTiVdPyvyD1+l4D8WUq6dQx5tHhLycipL+6Bo/GlS5iNlU/qR5z/1vrACxOydfxvgAEILqTEGApVmjW/WAAb4DH/fAH3kjxY2RSGsiJL3DOju8iev5GIJIkJMi6g1/fGiZgaSa8RnSilkukAd38cPjgmoO04Gfv6utWjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770736480; c=relaxed/simple;
-	bh=sqiT3+uyyM6ebZdpvR35gZBu+tS3jCmQS4gar3sPAAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kYUCeXg8bDhPLh6ZXOF0jnqrVDiBBILG1fruk+mB/XvbUlf+xx3egpwve/dNvLN0N5xYhlwjqxjF1vBamX1Pl/lEEyiuy00UsFKgMiSga2yTDRcZJZhqAfypQpFTL5lt4Zzeom95dUolfEj4RsQ/EYqNX9QnMWc2sv517qpdjl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UusObNAj; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770737203; c=relaxed/simple;
+	bh=x0spoTGQbotbIU8NDtg0SM4E8b0+uBFbTN5esIpLojM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gy3YuViRyH3a1cqFG/+0tiCtg9/aoWSaZfvoFPR5py3VHfgYQyCMwdJV9tnGym2Dos1QzChg7Gff6GzB2+bR5AbyH05OQgkTczDpCpI/22FmHw6D0iYRlOa3eKJFQpV6IDspgujwOEhJAYrWz28xCMUs0EiohWfFlr6+CF4sFiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h75KCqhm; arc=none smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UusObNAj"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770736477;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S0Nfw5s3TJqNVpXObSZjuDTJd7YW0mVz1NbVuQpSRk4=;
-	b=UusObNAjhPzE2rbdHiHY2psKGvYWjX/v8zeQdYT1hdyf39f0pFLD0u7T5LLeLi4tkcUwsU
-	3HuahEqSPj6JLxARAVVolCDtxlM911CGpmjPBJR3AsXb7iQC0LIJpmAYZWagIxdSKGzmRk
-	EDSGH4eSDYn+GzsIM14DziuDBkBtM1U=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-466-hxjFVNMHOPaXdUmZvX7cZw-1; Tue,
- 10 Feb 2026 10:14:32 -0500
-X-MC-Unique: hxjFVNMHOPaXdUmZvX7cZw-1
-X-Mimecast-MFC-AGG-ID: hxjFVNMHOPaXdUmZvX7cZw_1770736465
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D260C195605C;
-	Tue, 10 Feb 2026 15:14:24 +0000 (UTC)
-Received: from vmalik-fedora.brq.redhat.com (unknown [10.43.17.26])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id CB9BB30001A5;
-	Tue, 10 Feb 2026 15:14:20 +0000 (UTC)
-From: Viktor Malik <vmalik@redhat.com>
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h75KCqhm"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4376acce52eso658455f8f.1
+        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 07:26:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770737200; x=1771342000; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4hEHTIohXIURSDF0f+f1UTjwj6j9j4gbdCoJ83XdZpg=;
+        b=h75KCqhmEKJeh5QBoCufYcJ/J6IHsSJS46ZawDEgeDE0tO3sBN3JDIgy0fGxteMnOR
+         VYFy9wlQWkebWpu8wNAWvD7SqTb63AQyvojwl22eqRKRTHpkCwvSzWX+WzeEns44ln0j
+         bvIDzTR//DGTzaWrOr8bk5eBuiERDL0N22BHuMoVEVNjp7o4NRI7P5yUEKy2UmnkY4Ji
+         bfqxKfLZUpidl76jHxSBhd7R4wYml1aW+nSw8d3dss7Mlf7peT0eshxMajzGFyLV0RiE
+         5NmTfftDttQ7EI5mkUpPwZH6cByQvcXcEe6emFzsqU1jXNIRQN0x3kXYy9jdt4OdtJoe
+         uwPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770737200; x=1771342000;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4hEHTIohXIURSDF0f+f1UTjwj6j9j4gbdCoJ83XdZpg=;
+        b=Z0PRcBCcZ5sGy1pHebGACdSxh3w+vwotFqsED4sgl1E5revGoH6F/usG6XfWZHVRyX
+         PLAbGdcIww7+Q3nFo7r0dit51+cXfLGJhDiRM8oi/fngH6SKNyVUiNfB23p17sJt9mTW
+         FAbDdHCEL5IAQCsVETQLHaVavw+FHuT2TEGEmaxT9Po0KPR44XRuJX3McsxBE4AW/LS5
+         0zDPhMqVvEti8M9ivEzJ3ERvQpGHkcrMtbDsDupWCK1Sr/FlYgL73Vz7VjByrSpmUAUV
+         SV3cy2+9L4pb9aSc6C+vTzK9odBeG1adMAVigHQztjR216BuBkYo2NkVupWV6mBtw35O
+         AN+A==
+X-Gm-Message-State: AOJu0Yw9KmljfNLVDaH2Wl20wXJS2kFZffEQJ7HZKaMbxR8ZdS1nKCTM
+	9llPIvm3yyTUvVaqn11XZSM2FoHxTHs7ySjGwVqkbF4VTp4r825yfsRX
+X-Gm-Gg: AZuq6aLodC7sGBRxTUPQRYL1A6zWSCbfy0CdVKmxYYvMWnH/IzuIWchh1I+z56BLmKc
+	Pnb3pVLkTidJ5a3ezyiiy2Px9KeE0RTy5pBtuTATuHBX2FK+3ep8ok1y/M2E+ViAyS68oEFC79h
+	PfL206LxMPfVMNw2DgtYN3b+qbJ1OxqeNDDfpGNdHpRFEn0S7oF0ilWSMJAidHa8ZiBtoBVqvJE
+	23mw7TXyKnjpestv+SdgcxZmIhhBbWG+HhayDk/4+iU9WpSl1SxKKo4CHvQBunuiPoewtUWd0Iu
+	GtjWf2t1v/5tVzcz2FS/msBdUJwWtm4ccQL2A5HHVPx9AHbBcJBt8GBCoRT7EV12ROPUZ7ZyhLb
+	Rqfs8xQRB5mTMQaazxQcAcYJodx6onpVsYXrFakZfOsbPo6oX2W41RlRNExnQY0LGAntoWkwKVw
+	lSMMv+zgS0BPrhXZgk
+X-Received: by 2002:a05:6000:2482:b0:436:37e4:594f with SMTP id ffacd0b85a97d-43637e459fcmr17616704f8f.47.1770737200112;
+        Tue, 10 Feb 2026 07:26:40 -0800 (PST)
+Received: from krava ([2a00:102a:4031:6dfd:1b8f:d778:eeaa:181b])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4376806626fsm21884613f8f.37.2026.02.10.07.26.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Feb 2026 07:26:39 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Tue, 10 Feb 2026 16:26:35 +0100
+To: Viktor Malik <vmalik@redhat.com>
+Cc: bpf@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
 	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Viktor Malik <vmalik@redhat.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
 	Jordan Rome <linux@jordanrome.com>,
-	Qais Yousef <qyousef@layalina.io>,
-	Hou Tao <houtao1@huawei.com>
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Split sleepable fentry from LSM test
-Date: Tue, 10 Feb 2026 16:14:02 +0100
-Message-ID: <f9e085f8bd6d5b9dec19fd02788a6e343ebdbb89.1770736390.git.vmalik@redhat.com>
-In-Reply-To: <cover.1770736390.git.vmalik@redhat.com>
-References: <cover.1770736390.git.vmalik@redhat.com>
+	Qais Yousef <qyousef@layalina.io>, Hou Tao <houtao1@huawei.com>
+Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Split module_attach into
+ subtests
+Message-ID: <aYtOK8YerYM-801A@krava>
+References: <cover.1770723724.git.vmalik@redhat.com>
+ <699a95dfb6493cfd588524f388214db1250518f3.1770723724.git.vmalik@redhat.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <699a95dfb6493cfd588524f388214db1250518f3.1770723724.git.vmalik@redhat.com>
 
-The test_lsm/lsm_basic test contains a test attaching to a sleepable
-fentry, which doesn't logically fit into the LSM test suite. In
-addition, it makes the entire test fail on kernels which do not support
-sleepable fentry programs.
+On Tue, Feb 10, 2026 at 01:40:32PM +0100, Viktor Malik wrote:
 
-Factor out the sleepable fentry part into a new test fentry_sleepable.
+SNIP
 
-Signed-off-by: Viktor Malik <vmalik@redhat.com>
----
- .../bpf/prog_tests/fentry_sleepable.c         | 28 +++++++++++++++++++
- .../selftests/bpf/prog_tests/test_lsm.c       |  8 ------
- .../selftests/bpf/progs/fentry_sleepable.c    | 28 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/lsm.c       | 21 --------------
- 4 files changed, 56 insertions(+), 29 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_sleepable.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_sleepable.c
+> -void test_module_attach(void)
+> +static void test_module_attach_prog(const char *prog_name, int sz,
+> +				    const char *attach_target, int ret)
+>  {
+> -	const int READ_SZ = 456;
+> -	const int WRITE_SZ = 457;
+> -	struct test_module_attach* skel;
+> -	struct test_module_attach__bss *bss;
+> -	struct bpf_link *link;
+> +	struct test_module_attach *skel;
+> +	struct bpf_program *prog;
+>  	int err;
+> -	int writable_val = 0;
+>  
+>  	skel = test_module_attach__open();
+>  	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+>  		return;
+>  
+> -	err = bpf_program__set_attach_target(skel->progs.handle_fentry_manual,
+> -					     0, "bpf_testmod_test_read");
+> -	ASSERT_OK(err, "set_attach_target");
+> +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
+> +	if (!ASSERT_OK_PTR(prog, "find program"))
+> +		goto cleanup;
+> +	bpf_program__set_autoload(prog, true);
+>  
+> -	err = bpf_program__set_attach_target(skel->progs.handle_fentry_explicit_manual,
+> -					     0, "bpf_testmod:bpf_testmod_test_read");
+> -	ASSERT_OK(err, "set_attach_target_explicit");
+> +	if (attach_target) {
+> +		err = bpf_program__set_attach_target(prog, 0, attach_target);
+> +		ASSERT_OK(err, attach_target);
+> +	}
+> +
+> +	err = test_module_attach__load(skel);
+> +	if (CHECK(err, "skel_load", "failed to load skeleton\n"))
+> +		return;
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_sleepable.c b/tools/testing/selftests/bpf/prog_tests/fentry_sleepable.c
-new file mode 100644
-index 000000000000..efe3ea616575
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_sleepable.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <unistd.h>
-+#include "fentry_sleepable.skel.h"
-+
-+void test_fentry_sleepable(void)
-+{
-+	struct fentry_sleepable *skel;
-+	int buf = 1234;
-+	int err;
-+
-+	skel = fentry_sleepable__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "fentry_sleepable__open_and_load"))
-+		return;
-+
-+	err = fentry_sleepable__attach(skel);
-+	if (!ASSERT_OK(err, "fentry_sleepable__attach"))
-+		goto cleanup;
-+
-+	syscall(__NR_setdomainname, &buf, -2L);
-+	syscall(__NR_setdomainname, 0, -3L);
-+	syscall(__NR_setdomainname, ~0L, -4L);
-+
-+	ASSERT_EQ(skel->bss->copy_test, 3, "copy_test");
-+
-+cleanup:
-+	fentry_sleepable__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-index bdc4fc06bc5a..67c7c437574a 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-@@ -55,7 +55,6 @@ int exec_cmd(int *monitored_pid)
- static int test_lsm(struct lsm *skel)
- {
- 	struct bpf_link *link;
--	int buf = 1234;
- 	int err;
- 
- 	err = lsm__attach(skel);
-@@ -82,15 +81,8 @@ static int test_lsm(struct lsm *skel)
- 
- 	ASSERT_EQ(skel->bss->mprotect_count, 1, "mprotect_count");
- 
--	syscall(__NR_setdomainname, &buf, -2L);
--	syscall(__NR_setdomainname, 0, -3L);
--	syscall(__NR_setdomainname, ~0L, -4L);
--
--	ASSERT_EQ(skel->bss->copy_test, 3, "copy_test");
--
- 	lsm__detach(skel);
- 
--	skel->bss->copy_test = 0;
- 	skel->bss->bprm_count = 0;
- 	skel->bss->mprotect_count = 0;
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/fentry_sleepable.c b/tools/testing/selftests/bpf/progs/fentry_sleepable.c
-new file mode 100644
-index 000000000000..621548b97564
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fentry_sleepable.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int copy_test = 0;
-+
-+SEC("fentry.s/" SYS_PREFIX "sys_setdomainname")
-+int BPF_PROG(test_sys_setdomainname, struct pt_regs *regs)
-+{
-+	void *ptr = (void *)PT_REGS_PARM1_SYSCALL(regs);
-+	int len = PT_REGS_PARM2_SYSCALL(regs);
-+	int buf = 0;
-+	long ret;
-+
-+	ret = bpf_copy_from_user(&buf, sizeof(buf), ptr);
-+	if (len == -2 && ret == 0 && buf == 1234)
-+		copy_test++;
-+	if (len == -3 && ret == -EFAULT)
-+		copy_test++;
-+	if (len == -4 && ret == -EFAULT)
-+		copy_test++;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
-index 7de173daf27b..dd5d41903a26 100644
---- a/tools/testing/selftests/bpf/progs/lsm.c
-+++ b/tools/testing/selftests/bpf/progs/lsm.c
-@@ -9,7 +9,6 @@
- #include <bpf/bpf_core_read.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
--#include "bpf_misc.h"
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
-@@ -161,23 +160,3 @@ int BPF_PROG(test_task_free, struct task_struct *task)
- {
- 	return 0;
- }
--
--int copy_test = 0;
--
--SEC("fentry.s/" SYS_PREFIX "sys_setdomainname")
--int BPF_PROG(test_sys_setdomainname, struct pt_regs *regs)
--{
--	void *ptr = (void *)PT_REGS_PARM1_SYSCALL(regs);
--	int len = PT_REGS_PARM2_SYSCALL(regs);
--	int buf = 0;
--	long ret;
--
--	ret = bpf_copy_from_user(&buf, sizeof(buf), ptr);
--	if (len == -2 && ret == 0 && buf == 1234)
--		copy_test++;
--	if (len == -3 && ret == -EFAULT)
--		copy_test++;
--	if (len == -4 && ret == -EFAULT)
--		copy_test++;
--	return 0;
--}
--- 
-2.53.0
+goto cleanup?
 
+> +
+> +	err = test_module_attach__attach(skel);
+> +	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
+
+should we use ASSERT in new code?
+
+> +		goto cleanup;
+> +
+> +	if (sz) {
+> +		/* trigger both read and write though each test uses only one */
+> +		ASSERT_OK(trigger_module_test_read(sz), "trigger_read");
+> +		ASSERT_OK(trigger_module_test_write(sz), "trigger_write");
+> +
+> +		ASSERT_EQ(skel->bss->sz, sz, prog_name);
+> +	}
+> +
+> +	if (ret)
+> +		ASSERT_EQ(skel->bss->retval, ret, "ret");
+> +cleanup:
+> +	test_module_attach__destroy(skel);
+> +}
+> +
+> +static void test_module_attach_writable(void)
+> +{
+> +	struct test_module_attach__bss *bss;
+> +	struct test_module_attach *skel;
+> +	struct bpf_program *prog;
+> +	int writable_val = 0;
+> +	int err;
+> +
+> +	skel = test_module_attach__open();
+> +	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+> +		return;
+> +
+> +	prog = bpf_object__find_program_by_name(skel->obj,
+> +						"handle_raw_tp_writable_bare");
+> +	if (!ASSERT_OK_PTR(prog, "find program"))
+> +		goto cleanup;
+> +	bpf_program__set_autoload(prog, true);
+>  
+>  	err = test_module_attach__load(skel);
+>  	if (CHECK(err, "skel_load", "failed to load skeleton\n"))
+
+seems like there's missing goto cleanup in original code as well
+
+> @@ -65,21 +121,6 @@ void test_module_attach(void)
+>  	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
+>  		goto cleanup;
+>  
+> -	/* trigger tracepoint */
+> -	ASSERT_OK(trigger_module_test_read(READ_SZ), "trigger_read");
+> -	ASSERT_OK(trigger_module_test_write(WRITE_SZ), "trigger_write");
+> -
+> -	ASSERT_EQ(bss->raw_tp_read_sz, READ_SZ, "raw_tp");
+> -	ASSERT_EQ(bss->raw_tp_bare_write_sz, WRITE_SZ, "raw_tp_bare");
+> -	ASSERT_EQ(bss->tp_btf_read_sz, READ_SZ, "tp_btf");
+> -	ASSERT_EQ(bss->fentry_read_sz, READ_SZ, "fentry");
+> -	ASSERT_EQ(bss->fentry_manual_read_sz, READ_SZ, "fentry_manual");
+> -	ASSERT_EQ(bss->fentry_explicit_read_sz, READ_SZ, "fentry_explicit");
+> -	ASSERT_EQ(bss->fentry_explicit_manual_read_sz, READ_SZ, "fentry_explicit_manual");
+> -	ASSERT_EQ(bss->fexit_read_sz, READ_SZ, "fexit");
+> -	ASSERT_EQ(bss->fexit_ret, -EIO, "fexit_tet");
+> -	ASSERT_EQ(bss->fmod_ret_read_sz, READ_SZ, "fmod_ret");
+
+SNIP
+
+> +void test_module_attach(void)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(read_tests); i++) {
+> +		if (!test__start_subtest(read_tests[i]))
+> +			continue;
+> +		test_module_attach_prog(read_tests[i], READ_SZ, NULL, 0);
+> +	}
+> +	if (test__start_subtest("handle_raw_tp_bare")) {
+> +		test_module_attach_prog("handle_raw_tp_bare", WRITE_SZ, NULL,
+> +					0);
+
+nit, could be on the previous line?
+
+jirka
