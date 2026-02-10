@@ -1,125 +1,173 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01CB32E6A2
-	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 21:22:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B169B3328E1
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 21:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770758527; cv=none; b=O7g52bU1WdHUuJfcvPjuB8MpmmIjcMraBNG29gV3zf4F+Xen4bGjQ5fhfFebRnnq8+I7xXBSnDLdJ6/Qwtc0WEvQqTTwHnxYfLBuMOI8jFFwlXaRRGamReKj79HhivJ50SdEPscv+04KrxXQPJt9EkXg2qw63vJrgazyRUdK+28=
+	t=1770758666; cv=none; b=cEHxMKjMksztzc1y/x0HRrHDAA+0VUaVm9Xid9HU8XWwYS0xWKzeZqa2VDnQpubdB3s64Q6cAhoYcCpNWs3X/feyk2zHOsT1UhgwUiLaOrTyE+ecw8yKEG+VQ/UQQqB40BppNyjdnHZbnDLp3C5QLAkfhu+NvVncDcK4tVqLmaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770758527; c=relaxed/simple;
-	bh=SZZyyFOo4ipSn+s/JnxYiRFx8kVcIC+Dy+zK3yvV4XA=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZFXFD/5BED/7kAhQ4nOrwwjTCDxaYQXae1MeXnWXd5aBhY+3mwsGVQlnEzMEK1flLoIVvvXyST8ZqhAHWhAvNjBGRW1Myy1wwaHtH98TTsVEtD/M03+z1A6y8PZrf4DwDblu2fCt99XVF1HYPBxPTJdN1RZYJoglob8HKBVm9sE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i1FIdCLa; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770758666; c=relaxed/simple;
+	bh=7E1B3JTzSlLDzTk96oLtHyqAOUZtpHG8qb0g0JmsMuo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PP8Pd1p/9bBqPQ1xYWU0LxpznyPdx/t+yMyEjkOg2whPylx70chxKfJ51DSlXBhhbNQ4szbxFDBlFH+DlTbDAbSXytzdu1NcZ+Jk4kv/Ca+VE3Ep217Od7ftE0L+Kpbs0Y5SClZDxvjsHBp946CZrPdr4IhyESd4bp9MJyG/O6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MqHgmj7e; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i1FIdCLa"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4806cc07ce7so11532415e9.1
-        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 13:22:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770758524; x=1771363324; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aFMnbyIMFWqCOPwVX2vRxrTvT44BLLb27MqwwaXgklk=;
-        b=i1FIdCLaiJqbKgdp8C+FaDV65JhfcwzKbWEJiI0YwBHsKNSjo7D1mI2lpxHXPWU9cN
-         U9sKlBxfy8+pcv+WoxhVER8JwCoTe21lxgliNESDPf4TrJPN+TJgJxOcUkqpQznopRsk
-         rDVkzq+Jyb+zSuFswWvZgpdB/vpVyp/WYWQ3SkC6vel5hvkzjs3rpvN6mq7jvn6z87zz
-         HGPwQQGDkDDpPmXP2/307rUqofgYmpctKXWEPPyyoHJH3M+/cRYQ5+Nt27ExkliVX7Bg
-         4TMrdkibi4dJONnlHq+t26TKwe0Uim0kfbcq4igvXjSaU/95meIe55Pq/1gRegl3pPQF
-         TQgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770758524; x=1771363324;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aFMnbyIMFWqCOPwVX2vRxrTvT44BLLb27MqwwaXgklk=;
-        b=OqdZk8MO371BdIloaSenxkmAQ88jWzLv9xcOyWjuHLrCilyjtlLC93AuWMpJoGP6V5
-         NIMOYOfNmh1TECPZa7rsfjy1jMscD3csE33ImiykCWRAI49vWzIfuw3pNecbKg+PJtNa
-         Y/ZnJXQc8vveeaxfFXq16TEYUFlYXfUe/pKlHmd+mEs54P/MEcLI/OfoY/ifUftAdSrq
-         yH1zALDEgZBR3HR4MVWGf8sKwL6wsN5wTJxfqIMguCNszEBkDNjHeSl4l9XgShZPiY6H
-         aWYtuM1lCGNCuC506lUwp8sP2yvj2yv46Fp0bCWnM/mhq++QyZzPDS6n379YplA20UhS
-         GDFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX/ohOuTG5whAPwcKxK9fh4dZgWAiZaFyyVS5NXE9MtgGOjozMOvXq0uNNLFyzZ5Jke6qk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgJWUJ5TC9fmGxtJ3x6TH57WwLBnMSwQoLVHqE62fBBF2PRM0F
-	GNCqM9qQ7xeeV4ZJTVlJJhyYfDEDAXhepYePZzOm35pv2bK0Zeo5bVzu
-X-Gm-Gg: AZuq6aIhS76jC4VZrcHpMWUHqfT2TOl1f7jmeMuXSrTFVKVC6ZlmKFZrevHNT2CzfIS
-	Gf1JcehkCRuv6L5zUneohsZGB9sMcBU4bRPyGcijCP3Ic2Dc2NDfjYaVI0Cbu8HnzErqGKJLWGy
-	UpfxZzjhAJShIgNUHQzJYt8iU039gOBqVgX9T6/TZdf7HeC4hfjklsWi+da8sCDsfmmy1wQxkmH
-	lWy3OWvScZeqCf1DrRhlwUDOtU/xhhM+5miLEFfi6GuMZGhSOnNQK71Ikn5DOQPE8ohx4YD1JDM
-	DrLXFGwZHaMNrNWPCsFd5XyGYUobxbuZWzUPqDQtBhAwqIT/G62ymloFQDPRg2oVtyhAwp1WhTJ
-	l+3D0Q/NmqsqQAI1CHSkheW2TwaDl9Fq4gB5pbDv6g6k8joRGVfCoHj68xFEH4PTDMRAusEn613
-	x6bBJY3MukVpM=
-X-Received: by 2002:a05:600c:3b23:b0:45d:d8d6:7fcc with SMTP id 5b1f17b1804b1-48320225ef9mr241947475e9.27.1770758524058;
-        Tue, 10 Feb 2026 13:22:04 -0800 (PST)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d7d53c3sm91014225e9.7.2026.02.10.13.22.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 13:22:03 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 10 Feb 2026 22:22:01 +0100
-To: bot+bpf-ci@kernel.org
-Cc: andrii@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-	songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-	ast@kernel.org, daniel@iogearbox.net, martin.lau@kernel.org,
-	eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com,
-	ihor.solodrai@linux.dev
-Subject: Re: [PATCHv2 bpf-next 4/5] selftests/bpf: Add test for checking
- correct nop of optimized usdt
-Message-ID: <aYuheTlS8QtYbi4b@krava>
-References: <20260210133649.524292-5-jolsa@kernel.org>
- <189eab8445c1c9fa3b7e4c6dde23b4a30dc7f63ed2d3df62a1f8c889280f5927@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MqHgmj7e"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61ACSZqw565607;
+	Tue, 10 Feb 2026 21:23:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=TYPnpv
+	GxuYId0M4VsaM74R0G0ctCSUqDuqP/upMsptc=; b=MqHgmj7e1AjzAAtQfRN/P1
+	stmeOB3roqzggM6jCpHmBvBKKsqFmM++GgG5dK6wjdoBf6es4QvU2l28OhZrWlTD
+	zZYXIGUEgaDw82SbbcurN8FL8nbimov4fafAwJx1BI5lJqWQU9Is2Ic13WEkdWMD
+	fjv21nAo2P7PuoFZ2vwaNfmozko8/HyMb/h2nplaE7uc7oQRQri/+Q41a1jATJNB
+	pzF/0fCPCHEJRupUycphHAnNBAGCOG30X+3o9LP4GC30RAwa3tFRLG3aBlxcpTSM
+	NTEhPtx7ACAnN+xmn7HQ4WsxYZ5e/Mz1+walJYVepJ3JpqbraUXsmEQ9Ix+xkMeg
+	==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696wv633-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Feb 2026 21:23:57 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61AJ5WSN019221;
+	Tue, 10 Feb 2026 21:23:57 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c6hxk318w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Feb 2026 21:23:57 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61ALNt6936241880
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 10 Feb 2026 21:23:55 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 71F4820043;
+	Tue, 10 Feb 2026 21:23:55 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 03F2720040;
+	Tue, 10 Feb 2026 21:23:55 +0000 (GMT)
+Received: from [0.0.0.0] (unknown [9.111.60.229])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 10 Feb 2026 21:23:54 +0000 (GMT)
+Message-ID: <3748538c-9624-47eb-a060-9d35508c4f93@linux.ibm.com>
+Date: Tue, 10 Feb 2026 22:23:54 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <189eab8445c1c9fa3b7e4c6dde23b4a30dc7f63ed2d3df62a1f8c889280f5927@mail.kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [BPF CI] OOMs on s390x runners
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+References: <8553c4ab-9b42-46a8-9187-38ba4f63fff0@linux.dev>
+ <62cab7f1-06ea-434b-99e5-ba8b1a7d7eb5@linux.ibm.com>
+ <019b0f02-d177-457f-89e2-96727ee48cff@linux.dev>
+Content-Language: en-US
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+In-Reply-To: <019b0f02-d177-457f-89e2-96727ee48cff@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=WZYBqkhX c=1 sm=1 tr=0 ts=698ba1ed cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=NEAV23lmAAAA:8
+ a=msg3acWZ7gUUhz7JZMcA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: hv-BuzbSdGqLHAsoSSyho9C-Ae7evN6l
+X-Proofpoint-ORIG-GUID: hv-BuzbSdGqLHAsoSSyho9C-Ae7evN6l
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEwMDE3NiBTYWx0ZWRfXx6nYsZHiUNNs
+ KOL/9P8iHweigPf2cRzoCIEwNLvxSkftL1b8w7YEmWwZzPjOOJAFsQPT1LuLooGmi694dCakzwg
+ ZWh94fuAQjzm4Vo6Ba7YPeFXIfN1w80Zv7sWkIVFQuDcv5cyLfBUqO2uT4X1TWtHhZSZSZlOjs3
+ 8pme71tImZArN4EbXaVsshxZ0VTn6kDtn9+W/XFj/jkTTJT40FI4H/dnMkK5ilXsvSNnGGEvocO
+ iqiX5bUm6BsWLvWWpGDib7nL7PevYfK+khk0Das0aouF3SEpvCdW/vKD5xkvql/d86VAGlT2Gj/
+ AfaYFVUm4RA5FnZ96AXd1snozMupbJD4FD/YrL/gL/2uCzPeRKxs1QC0i+1IPjfjPGVEjIm4z4m
+ Jn3gxyjPtrowXWl3xXupYUz3NCqGcy1FgJGjTAVTAkNK+Uvqol6C1u0Cngk8t4472Cr6KPrMTgF
+ 4UEMRaFk7Tx1ZKQcCkw==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-10_03,2026-02-10_02,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 clxscore=1015 phishscore=0 bulkscore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602100176
 
-On Tue, Feb 10, 2026 at 02:12:09PM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-> > --- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
-> 
-> [ ... ]
-> 
-> > +#ifdef __x86_64
->           ^^^^^^^^
-> Should this be __x86_64__ (with trailing underscores) to match the standard
-> GCC predefined macro? The call site in test_usdt() uses __x86_64__:
-> 
-> > @@ -516,6 +599,8 @@ void test_usdt(void)
-> > #ifdef __x86_64__
-> > 	if (test__start_subtest("basic_optimized"))
-> > 		subtest_basic_usdt(true);
-> > +	if (test__start_subtest("optimized_attach"))
-> > +		subtest_optimized_attach();
-> > #endif
-> 
-> Without the trailing underscores, the function definition will not be
-> compiled on x86_64 while the call will be, leading to a linker error.
 
-it actually compiles, interestingly enough __x86_64 is allowed as well,
-but it's a typo.. will fix, thnx
+On 2/6/26 00:50, Ihor Solodrai wrote:
+> On 1/21/26 2:56 PM, Ilya Leoshkevich wrote:
+>> On 1/20/26 18:59, Ihor Solodrai wrote:
+>>> Hi Ilya,
+>>>
+>>> The BPF selftests regularly fail on s390x runners with OOMs.
+>>>
+>>> The s390x hosts that I've been maintaining have 16G of memory, hosting
+>>> 2 runners each. VMs (qemu instances) running the tests currently get
+>>> 5G of memory each.
+>>>
+>>> I noticed that the s390x runners didn't have swap set up, so I added
+>>> an ansible config to set up a swapfile. This seems to have helped with
+>>> OOM failures.
+>>>
+>>> https://github.com/libbpf/ci/commit/8767dc05ab84c88da198af3c651511e731ddbac7
+>>>
+>>> I spot checked a couple of recent failures, and all of them happened
+>>> on the "ebpf1-worker-*" runners that you've been maintaining IIRC.
+>>> Here is a couple of examples:
+>>>     - https://github.com/kernel-patches/bpf/actions/runs/21178791628/job/60916006746
+>>>     - https://github.com/kernel-patches/bpf/actions/runs/21163448380/job/60863171062
+>>>     - https://github.com/kernel-patches/bpf/actions/runs/21157785072/job/60846570064
+>>>
+>>> Could you please re-provision the hosts with the swap setup?
+>>> Let's see if that helps.
+>>>
+>>> Thanks!
+>> Hi Ihor,
+>>
+>>
+>> Thanks for the scripts!
+>>
+>> I reprovisioned all 5 builders, everything looks healthy.
+>>
+>> I will check on them again tomorrow morning.
+> Hi Ilya.
+>
+> We ended up disabling KASAN for s390x and that helped with OOMs.
+>
+> I noticed a couple "no space left on device" errors on your runners
+> today, could you please take a look? Example:
+>
+> https://github.com/kernel-patches/bpf/actions/runs/21732338737/job/62690585484
+>
+> Thanks!
+>
+>>
+>> Best regards,
+>>
+>> Ilya
+>>
 
-jirka
+Hi Ihor,
 
-> 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21867569087
-> 
-> AI-authorship-score: low
-> AI-authorship-explanation: The commit follows standard kernel selftest patterns with a natural coding style and contains a typo characteristic of human error rather than AI generation.
-> issues-found: 1
-> issue-severity-score: medium
-> issue-severity-explanation: The mismatched preprocessor macro will cause a linker error on x86_64 builds, preventing the test from compiling.
+
+Thanks for letting me know.
+
+I deleted the unused volumes: actions-runner-kernel-patches-worker-02 
+and actions-runner-kernel-patches-worker-03 from all builders.
+
+Now there should be enough space on all of them.
+
+
+Best regards,
+
+Ilya
 
