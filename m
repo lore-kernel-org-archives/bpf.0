@@ -1,71 +1,41 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BCE1C3C08
-	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 12:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31C419EEC2;
+	Tue, 10 Feb 2026 13:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770727268; cv=none; b=R9TWY4cScmiFwvbaZpXhXyUoUbZHaDCqW9vkovUojAELU1qijL//6Cqan38UZ2dGchzFQiZe0qH64TOTM2X+yufusck2OKM252TWRein4Zj4bQFOacON5aFbWilwq4fBqh72NiAhlQsirNvlB12vo7EHET1eba/TlB/Gpz4nmzU=
+	t=1770730619; cv=none; b=N/j/bx3EgyHFaXFDOynoqdVS7zH+v+N7DS9rkTAt8hhoX/3qwwqF99eAoEIk0QNX5R4/SFfV/pCos1Q9InBy6MBs9RbID/19HsnXCFd11agBljHmQ5zlt6gnj/ydy6io3QZBx3y01w6+yiNdx05HQVWqdGGyS/IQYogVyD6/Iak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770727268; c=relaxed/simple;
-	bh=sqiT3+uyyM6ebZdpvR35gZBu+tS3jCmQS4gar3sPAAo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i6IbU65YztcBBHJ8oulMCID1FEvOVQJmGsJzSfDI75Zb/gNz+XbKZmJPjKGXTqFQcL+x2gVMySSNAo7ueL7op+cOKKvZbZsl8knLM/9G49R3b/mKrcmozE4iuzTVeMSSITxwD0WZLhY8i3WweqM4R3TL5410SR/3mwDBoPSczKs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bri7uLL0; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770730619; c=relaxed/simple;
+	bh=GOmRG864vY6D1kESbwlYap6WaTBduydOxPqdZeAjT0E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b/rx3mOAHlkyQrGSO5AOYG8iQckSHmEaQfSasQstAHiKFk37VA7YyZw2t6guy1qQVpFCn2EUawNglpIV8Es+sMpacK5QD9OcE2lje7m7nSHpGTD/Kd83SRW2r8wmjmIbc2Ja8XocrtSeFdD4ydOMkfW78Bpwz2u9MPQh8GBZPxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kg2ktQKz; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bri7uLL0"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770727265;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S0Nfw5s3TJqNVpXObSZjuDTJd7YW0mVz1NbVuQpSRk4=;
-	b=bri7uLL0RjxaNNyiB6br8GZKYWhJRh5mePDrgnohgyjEMnzwMzzZyH9nDPjnNr8knIF9Ly
-	TqxUr+YErXbBEGKePCRHglQaJUoETY9T3B1BYvhauwft1Esf0qwoTZ1lwshG3FDN88z6u8
-	5LT9IyQKZMDjkSLZ3bRC8rLv9+xEuOE=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-657-R3Cn2HnPM72ZTurfUw-8yg-1; Tue,
- 10 Feb 2026 07:41:02 -0500
-X-MC-Unique: R3Cn2HnPM72ZTurfUw-8yg-1
-X-Mimecast-MFC-AGG-ID: R3Cn2HnPM72ZTurfUw-8yg_1770727260
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5813A1955F0E;
-	Tue, 10 Feb 2026 12:41:00 +0000 (UTC)
-Received: from vmalik-fedora.brq.redhat.com (unknown [10.43.17.26])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BA36F180066F;
-	Tue, 10 Feb 2026 12:40:55 +0000 (UTC)
-From: Viktor Malik <vmalik@redhat.com>
-To: bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Viktor Malik <vmalik@redhat.com>,
-	Jordan Rome <linux@jordanrome.com>,
-	Qais Yousef <qyousef@layalina.io>,
-	Hou Tao <houtao1@huawei.com>
-Subject: [PATCH bpf-next 3/3] selftests/bpf: Split sleepable fentry from LSM test
-Date: Tue, 10 Feb 2026 13:40:34 +0100
-Message-ID: <234cbb7e08f944471a8a8d72dc289a9d3d37cc00.1770723724.git.vmalik@redhat.com>
-In-Reply-To: <cover.1770723724.git.vmalik@redhat.com>
-References: <cover.1770723724.git.vmalik@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kg2ktQKz"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC6F7C116C6;
+	Tue, 10 Feb 2026 13:36:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770730618;
+	bh=GOmRG864vY6D1kESbwlYap6WaTBduydOxPqdZeAjT0E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kg2ktQKz46NlVdh6c9xC28x1MGfPXrueSd/nKViP1SVfld23AytZL6hT/N1kYEYvv
+	 +rdLk+PSE92FpkQIUlcFXZ51nONGyxSnuv9H+1cTl87OlfpThwiiu6lJb0NM+eWizk
+	 2Q42di9odcL6s2j/fAmEctCMyQgk/XO71SKRXOJ88aR/uiwN+Ffs+WIiWhX8Rz7+Uv
+	 606XYl2LsBiUxXDyMLkBrwKdbGcj6OhbqE2tOCM5CdYMUGcb3V2Zk9y/uSS18Bfd9T
+	 UEGt46JvNPEouM6NE/AySds0WzCUmB39E87XAMkdLk+/2umMP5o9DZlXHn14vkft8F
+	 3v+wfnFKIAuEw==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCHv2 bpf-next 0/5] libbpf: Make optimized uprobes backward compatible
+Date: Tue, 10 Feb 2026 14:36:44 +0100
+Message-ID: <20260210133649.524292-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -73,157 +43,65 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-The test_lsm/lsm_basic test contains a test attaching to a sleepable
-fentry, which doesn't logically fit into the LSM test suite. In
-addition, it makes the entire test fail on kernels which do not support
-sleepable fentry programs.
+hi,
+we can currently optimize uprobes on top of nop5 instructions,
+so application can define USDT_NOP to nop5 and use USDT macro
+to define optimized usdt probes.
 
-Factor out the sleepable fentry part into a new test fentry_sleepable.
+This works fine on new kernels, but could have performance penalty
+on older kernels, that do not have the support to optimize and to
+emulate nop5 instruction.
 
-Signed-off-by: Viktor Malik <vmalik@redhat.com>
+This patchset adds support to workaround the performance penalty
+on older kernels that do not support uprobe optimization, please
+see detailed description in patch 2.
+
+v1: https://lore.kernel.org/bpf/20251117083551.517393-1-jolsa@kernel.org/
+
+v2 changes:
+- after more investigation we realized there are some versions of
+  bpftrace and stap that does not work with solution suggested in
+  version 1, so we decided to switch to following solution:
+
+  - change USDT macro [1] emits nop,nop5 instructions combo by
+    default
+  - libbpf detects nop,nop5 instructions combo for USDT probe,
+    if there is and if uprobe syscall is detected libbpf installs
+    usdt probe on top of nop5 instruction to get it optimized
+
+- added usdt trigger benchmarks [Andrii]
+- several small fixes on uprobe syscall detection, tests and other places [Andrii]
+- true usdt.h source [1] updated [Andrii]
+- compile usdt_* objects unconditionally [Andrii]
+
+thanks,
+jirka
+
+
+[1] https://github.com/libbpf/usdt
 ---
- .../bpf/prog_tests/fentry_sleepable.c         | 28 +++++++++++++++++++
- .../selftests/bpf/prog_tests/test_lsm.c       |  8 ------
- .../selftests/bpf/progs/fentry_sleepable.c    | 28 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/lsm.c       | 21 --------------
- 4 files changed, 56 insertions(+), 29 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_sleepable.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_sleepable.c
+Jiri Olsa (5):
+      libbpf: Add uprobe syscall feature detection
+      libbpf: Add support to detect nop,nop5 instructions combo for usdt probe
+      selftests/bpf: Emit nop,no5 instructions combo for x86_64 arch
+      selftests/bpf: Add test for checking correct nop of optimized usdt
+      selftests/bpf: Add usdt trigger bench
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fentry_sleepable.c b/tools/testing/selftests/bpf/prog_tests/fentry_sleepable.c
-new file mode 100644
-index 000000000000..efe3ea616575
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/fentry_sleepable.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <unistd.h>
-+#include "fentry_sleepable.skel.h"
-+
-+void test_fentry_sleepable(void)
-+{
-+	struct fentry_sleepable *skel;
-+	int buf = 1234;
-+	int err;
-+
-+	skel = fentry_sleepable__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "fentry_sleepable__open_and_load"))
-+		return;
-+
-+	err = fentry_sleepable__attach(skel);
-+	if (!ASSERT_OK(err, "fentry_sleepable__attach"))
-+		goto cleanup;
-+
-+	syscall(__NR_setdomainname, &buf, -2L);
-+	syscall(__NR_setdomainname, 0, -3L);
-+	syscall(__NR_setdomainname, ~0L, -4L);
-+
-+	ASSERT_EQ(skel->bss->copy_test, 3, "copy_test");
-+
-+cleanup:
-+	fentry_sleepable__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_lsm.c b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-index bdc4fc06bc5a..67c7c437574a 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_lsm.c
-@@ -55,7 +55,6 @@ int exec_cmd(int *monitored_pid)
- static int test_lsm(struct lsm *skel)
- {
- 	struct bpf_link *link;
--	int buf = 1234;
- 	int err;
- 
- 	err = lsm__attach(skel);
-@@ -82,15 +81,8 @@ static int test_lsm(struct lsm *skel)
- 
- 	ASSERT_EQ(skel->bss->mprotect_count, 1, "mprotect_count");
- 
--	syscall(__NR_setdomainname, &buf, -2L);
--	syscall(__NR_setdomainname, 0, -3L);
--	syscall(__NR_setdomainname, ~0L, -4L);
--
--	ASSERT_EQ(skel->bss->copy_test, 3, "copy_test");
--
- 	lsm__detach(skel);
- 
--	skel->bss->copy_test = 0;
- 	skel->bss->bprm_count = 0;
- 	skel->bss->mprotect_count = 0;
- 	return 0;
-diff --git a/tools/testing/selftests/bpf/progs/fentry_sleepable.c b/tools/testing/selftests/bpf/progs/fentry_sleepable.c
-new file mode 100644
-index 000000000000..621548b97564
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fentry_sleepable.c
-@@ -0,0 +1,28 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+int copy_test = 0;
-+
-+SEC("fentry.s/" SYS_PREFIX "sys_setdomainname")
-+int BPF_PROG(test_sys_setdomainname, struct pt_regs *regs)
-+{
-+	void *ptr = (void *)PT_REGS_PARM1_SYSCALL(regs);
-+	int len = PT_REGS_PARM2_SYSCALL(regs);
-+	int buf = 0;
-+	long ret;
-+
-+	ret = bpf_copy_from_user(&buf, sizeof(buf), ptr);
-+	if (len == -2 && ret == 0 && buf == 1234)
-+		copy_test++;
-+	if (len == -3 && ret == -EFAULT)
-+		copy_test++;
-+	if (len == -4 && ret == -EFAULT)
-+		copy_test++;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/lsm.c b/tools/testing/selftests/bpf/progs/lsm.c
-index 7de173daf27b..dd5d41903a26 100644
---- a/tools/testing/selftests/bpf/progs/lsm.c
-+++ b/tools/testing/selftests/bpf/progs/lsm.c
-@@ -9,7 +9,6 @@
- #include <bpf/bpf_core_read.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
--#include "bpf_misc.h"
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
-@@ -161,23 +160,3 @@ int BPF_PROG(test_task_free, struct task_struct *task)
- {
- 	return 0;
- }
--
--int copy_test = 0;
--
--SEC("fentry.s/" SYS_PREFIX "sys_setdomainname")
--int BPF_PROG(test_sys_setdomainname, struct pt_regs *regs)
--{
--	void *ptr = (void *)PT_REGS_PARM1_SYSCALL(regs);
--	int len = PT_REGS_PARM2_SYSCALL(regs);
--	int buf = 0;
--	long ret;
--
--	ret = bpf_copy_from_user(&buf, sizeof(buf), ptr);
--	if (len == -2 && ret == 0 && buf == 1234)
--		copy_test++;
--	if (len == -3 && ret == -EFAULT)
--		copy_test++;
--	if (len == -4 && ret == -EFAULT)
--		copy_test++;
--	return 0;
--}
--- 
-2.53.0
-
+ tools/lib/bpf/features.c                                | 24 ++++++++++++++++++++++++
+ tools/lib/bpf/libbpf_internal.h                         |  2 ++
+ tools/lib/bpf/usdt.c                                    | 55 +++++++++++++++++++++++++++++++++++++++++++++++++++----
+ tools/testing/selftests/bpf/.gitignore                  |  2 ++
+ tools/testing/selftests/bpf/Makefile                    |  5 ++++-
+ tools/testing/selftests/bpf/bench.c                     |  4 ++++
+ tools/testing/selftests/bpf/benchs/bench_trigger.c      | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh |  2 +-
+ tools/testing/selftests/bpf/prog_tests/usdt.c           | 85 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_usdt.c           |  9 +++++++++
+ tools/testing/selftests/bpf/progs/trigger_bench.c       | 10 +++++++++-
+ tools/testing/selftests/bpf/usdt.h                      |  2 ++
+ tools/testing/selftests/bpf/usdt_1.c                    | 18 ++++++++++++++++++
+ tools/testing/selftests/bpf/usdt_2.c                    | 16 ++++++++++++++++
+ 14 files changed, 287 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/usdt_1.c
+ create mode 100644 tools/testing/selftests/bpf/usdt_2.c
