@@ -1,243 +1,212 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C471DC198;
-	Tue, 10 Feb 2026 13:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F96727CCEE
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 13:47:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770730665; cv=none; b=n304bdumv9RS9+n89jSMrxce0hj8imLh9iDTt373GwyB+1Q8xmuwAYq5orMjst1ekVVgh3BflVFizoSEon36rrWLQYK219Yw7sIIRyBOaAc1f6h3mVUQOq+0U3qCqHIUmfngz80GmQ/EZfuNuPAsLgiOiFu3PZjWrFkWxhNmOfw=
+	t=1770731261; cv=none; b=IcLTgRILkY4SfC6sFlB48MPuyYVVdAvCti7dSwFZeJ7F+eawlS0bosbhyydFrttOysqkdMj4sAlMrZXhLAAyA1cf/94FDKTWDmZA7GnUZ2RWdDqLcuaX2mYumCNqAiJuQnAJGWMhTZlo8+dm5Xe/OyxQpxP8G3iC/V5F0u+oCAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770730665; c=relaxed/simple;
-	bh=j/ImcZTftZ2nzFNq2YJAfz4LlmzAH/8itUNdqym9u14=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RrNiUIq18bgF33Wvz6IPR0NFId4vzXCD3+SN16/7tcVLzyObLC1AL1y4whrlr5VYexWXMA4ic2r3/v3DGkVPDpA9tJ8crVzlugHyMH6aLrNkp/lAy/W+wbc6ICh/A8jPcmczCFpLTJEDOckD+lLWuQMkVaiUi79Qq5FuW0zyGdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nWZrq5L/; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770731261; c=relaxed/simple;
+	bh=0THwwROVL+fP4Kuci6TK/6lUhruDSaWkWEreHr5XB0w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uwhLndl4H7YFvV/QNdFFn9DHToFThh9rbdhR1c3hAUuuMAYhgUALlDLHCvSIVb7m4zhYB1MJl61KLPk3HrYbxvvQ+ROzZQXZcrH4xO0XYxFjHbJLDQcQQxN9kpWg9ZV90aQkwmC8mD5VBcfm67IOLmLBoezAQQdxYjtpMlF4uJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=e8Klf4H3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=z1Zo/KBR; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=e8Klf4H3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=z1Zo/KBR; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nWZrq5L/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37691C16AAE;
-	Tue, 10 Feb 2026 13:37:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770730665;
-	bh=j/ImcZTftZ2nzFNq2YJAfz4LlmzAH/8itUNdqym9u14=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nWZrq5L/Yr1+dHrIBUnQ+7+cNDq26K+9cxBp000JitT2QD9Xi0SwkHg4Q35eVgXxH
-	 wg6DrmZwrtGcR4vli3lKZr/U/CCTSLt7P76terJjY8QpJROYLSm2w7VIHZFLfvFA9J
-	 +cXgrwMqFwnfwycCTYQ9lDMl1j/fodFZAmEFbRhz4Xj2pJTUU0deoE9WvHa087AZyK
-	 V49hXYRe/VO8nq1JgvghZyasvHKGNzKqJKzMLpRzqa9zrru/OHqZAxJvJZtIiInZeO
-	 hHiSVbOOyN3cqSh9nAOIbYdIgIjjn9UXxdH8mqMTEDsbpJeEfBCGMgar18xp0arprh
-	 XPbO5EkuVTowQ==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCHv2 bpf-next 5/5] selftests/bpf: Add usdt trigger bench
-Date: Tue, 10 Feb 2026 14:36:49 +0100
-Message-ID: <20260210133649.524292-6-jolsa@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260210133649.524292-1-jolsa@kernel.org>
-References: <20260210133649.524292-1-jolsa@kernel.org>
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="e8Klf4H3";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="z1Zo/KBR";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="e8Klf4H3";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="z1Zo/KBR"
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 105A83E71A;
+	Tue, 10 Feb 2026 13:47:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770731257; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5YjEW9rY5f+WC+e8I8HcxIvHHp40YBO+UXznndHs1FM=;
+	b=e8Klf4H3Wf0REiYrsJ5KDGCefLcZmtsIzkYRYYqlLIPOY5fdMzBQ4u0hPQoEz5wqWsNDKB
+	JQYLJqvoaXBHdzoVftKo4DT/1c+WKqX/E7bx+3nC2rZu2WGgLgYmNUD4emRew1GXsYShW7
+	aM7zs4M8etINl62m0PYPBjiCP8Eq5AA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770731257;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5YjEW9rY5f+WC+e8I8HcxIvHHp40YBO+UXznndHs1FM=;
+	b=z1Zo/KBRSYTQoiDNeqx4bYHpRLjWuIoYwPJ4+iFO4jOOnF8jTMIuUv26I49Su4DfEVKwHl
+	s5yKw1c3fiLjWAAQ==
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=e8Klf4H3;
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b="z1Zo/KBR"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770731257; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5YjEW9rY5f+WC+e8I8HcxIvHHp40YBO+UXznndHs1FM=;
+	b=e8Klf4H3Wf0REiYrsJ5KDGCefLcZmtsIzkYRYYqlLIPOY5fdMzBQ4u0hPQoEz5wqWsNDKB
+	JQYLJqvoaXBHdzoVftKo4DT/1c+WKqX/E7bx+3nC2rZu2WGgLgYmNUD4emRew1GXsYShW7
+	aM7zs4M8etINl62m0PYPBjiCP8Eq5AA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770731257;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5YjEW9rY5f+WC+e8I8HcxIvHHp40YBO+UXznndHs1FM=;
+	b=z1Zo/KBRSYTQoiDNeqx4bYHpRLjWuIoYwPJ4+iFO4jOOnF8jTMIuUv26I49Su4DfEVKwHl
+	s5yKw1c3fiLjWAAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EC4DF3EA62;
+	Tue, 10 Feb 2026 13:47:36 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id nAesOfg2i2kZZQAAD6G6ig
+	(envelope-from <jack@suse.cz>); Tue, 10 Feb 2026 13:47:36 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id A6F82A0A4E; Tue, 10 Feb 2026 14:47:28 +0100 (CET)
+Date: Tue, 10 Feb 2026 14:47:28 +0100
+From: Jan Kara <jack@suse.cz>
+To: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
+Cc: "chrisl@kernel.org" <chrisl@kernel.org>, "clm@meta.com" <clm@meta.com>, 
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, Pavan Rallabhandi <Pavan.Rallabhandi@ibm.com>, 
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"lsf-pc@lists.linux-foundation.org" <lsf-pc@lists.linux-foundation.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>
+Subject: Re: [Lsf-pc] [LSF/MM/BPF TOPIC] Machine Learning (ML) library in
+ Linux kernel
+Message-ID: <6ek3nhulz72niscw2iz2n5xhczz4ta6a6hvyrlneuyk2d36ngx@4ymlemzifugr>
+References: <47d21a6821c4b2d085f7b97bcdaa205bfcb0e0ad.camel@ibm.com>
+ <CACePvbVH0ovOcBqCN7kJ3n0QFmvuf+_5tMeRXs-JAQ+m5fdoCg@mail.gmail.com>
+ <a994bdedca7d966168076044249a58e52754c6ac.camel@ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <a994bdedca7d966168076044249a58e52754c6ac.camel@ibm.com>
+X-Spamd-Result: default: False [-4.01 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_COUNT_THREE(0.00)[3];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	FROM_EQ_ENVFROM(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	REDIRECTOR_URL(0.00)[proofpoint.com];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DKIM_TRACE(0.00)[suse.cz:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns]
+X-Spam-Flag: NO
+X-Spam-Score: -4.01
+X-Rspamd-Queue-Id: 105A83E71A
+X-Rspamd-Action: no action
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spam-Level: 
 
-Adding usdt trigger bench for usdt:
- trig-usdt_nop - usdt on top of nop1 instruction
- trig-usdt_nop_combo - usdt on top of nop1/nop5 combo
+On Mon 09-02-26 22:28:59, Viacheslav Dubeyko via Lsf-pc wrote:
+> On Mon, 2026-02-09 at 02:03 -0800, Chris Li wrote:
+> > On Fri, Feb 6, 2026 at 11:38 AM Viacheslav Dubeyko
+> > <Slava.Dubeyko@ibm.com> wrote:
+> > > 
+> > > Hello,
+> > > 
+> > > Machine Learning (ML) is approach/area of learning from data,
+> > > finding patterns, and making predictions without implementing algorithms
+> > > by developers. The number of areas of ML applications is growing
+> > > with every day. Generally speaking, ML can introduce a self-evolving and
+> > > self-learning capability in Linux kernel. There are already research works
+> > > and industry efforts to employ ML approaches for configuration and
+> > > optimization the Linux kernel. However, introduction of ML approaches
+> > > in Linux kernel is not so simple and straightforward way. There are multiple
+> > > problems and unanswered questions on this road. First of all, any ML model
+> > > requires the floating-point operations (FPU) for running. But there is
+> > > no direct use of FPUs in kernel space. Also, ML model requires training phase
+> > > that can be a reason of significant performance degradation of Linux kernel.
+> > > Even inference phase could be problematic from the performance point of view
+> > > on kernel side. The using of ML approaches in Linux kernel is inevitable step.
+> > > But, how can we use ML approaches in Linux kernel? Which infrastructure
+> > > do we need to adopt ML models in Linux kernel?
+> > 
+> > I think there are two different things, I think you want the latter
+> > but I am not sure
+> > 
+> > 1) using ML model to help kernel development, code reviews, generate
+> > patches by descriptions etc. For example, Chris Mason has a kernel
+> > review repo on github and he is sharing his review finding the mailing
+> > list:
+> > https://urldefense.proofpoint.com/v2/url?u=https-3A__github.com_masoncl_review-2Dprompts_tree_main&d=DwIFaQ&c=BSDicqBQBDjDI9RkVyTcHQ&r=q5bIm4AXMzc8NJu1_RGmnQ2fMWKq4Y4RAkElvUgSs00&m=vvrDPxyw_JXPrkC8BjzA2kEtwdPfwV2gBMEXG7ZveXM4LhS01LfoGwqhEyUZpPe4&s=rqNez5_rmiEuE7in5e_7MfyUzzqzaA6Gk46WWvmN3yk&e= 
+> > It is kernel development related, but the ML agent code is running in
+> > the user space. The actual ML computation might run GPU/TPUs. That
+> > does not seem to be what you have in mind.
+> > 
+> > 2) Run the ML model computation in the kernel space.
+> > Can you clarify if this is what you have in mind? You mention kernel
+> > FPU usage in the kernel for ML model. It is only relevant if you need
+> > to run the FP in the kernel CPU instructions. Most ML computations are
+> > not run in CPU instructions. They run on GPUs/TPUs. Why not keep the
+> > ML program (PyTorch/agents) in the user space and pass the data to the
+> > GPU/TPU driver to run? There will be some kernel instructure like
+> > VFIO/IOMMU involved with the GPU/TPU driver. For the most part the
+> > kernel is just facilitating the data passing to/from the GPU/TPU
+> > driver then to the GPU/TPU hardware. The ML hardware is doing the
+> > heavy lifting.
+> 
+> The idea is to have ML model running in user-space and kernel subsystem can
+> interact with ML model in user-space. As the next step, I am considering two
+> real-life use-cases: (1) GC subsystem of LFS file system, (2) ML-based DAMON
+> approach. So, for example, GC can be represented by ML model in user-space. GC
+> can request data (segments state) from kernel-space and ML model in user-space
+> can do training or/and inference. As a result, ML model in user-space can select
+> victim segments and instruct kernel-space logic of moving valid data from victim
+> segment(s) into clean/current one(s). 
 
-Adding it to benchs/run_bench_uprobes.sh script.
+To be honest I'm skeptical about how generic this can be. Essentially
+you're describing a generic interface to offload arbitrary kernel decision
+to userspace. ML is a userspace bussiness here and not really relevant for
+the concept AFAICT. And we already have several ways of kernel asking
+userspace to do something for it and unless it is very restricted and well
+defined it is rather painful, prone to deadlocks, security issues etc.
 
-Example run on x86_64 kernel with uprobe syscall:
+So by all means if you want to do GC decisions for your filesystem in
+userspace by ML, be my guest, it does make some sense although I'd be wary
+of issues where we need to writeback dirty pages to free memory which may
+now depend on your userspace helper to make a decision which may need the
+memory to do the decision... But I don't see why you need all the ML fluff
+around it when it seems like just another way to call userspace helper and
+why some of the existing methods would not suffice.
 
-  # ./benchs/run_bench_uprobes.sh
-  usermode-count :  152.507 ± 0.098M/s
-  syscall-count  :   14.309 ± 0.093M/s
-  uprobe-nop     :    3.190 ± 0.012M/s
-  uprobe-push    :    3.057 ± 0.004M/s
-  uprobe-ret     :    1.095 ± 0.009M/s
-  uprobe-nop5    :    7.305 ± 0.034M/s
-  uretprobe-nop  :    2.175 ± 0.005M/s
-  uretprobe-push :    2.109 ± 0.003M/s
-  uretprobe-ret  :    0.945 ± 0.002M/s
-  uretprobe-nop5 :    3.530 ± 0.006M/s
-  usdt_nop       :    3.235 ± 0.008M/s   <-- added
-  usdt_nop_combo :    7.511 ± 0.045M/s   <-- added
-
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- tools/testing/selftests/bpf/Makefile          |  2 +
- tools/testing/selftests/bpf/bench.c           |  4 ++
- .../selftests/bpf/benchs/bench_trigger.c      | 60 +++++++++++++++++++
- .../selftests/bpf/benchs/run_bench_uprobes.sh |  2 +-
- .../selftests/bpf/progs/trigger_bench.c       | 10 +++-
- 5 files changed, 76 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 306949162a5b..9b2ca0028322 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -874,6 +874,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_bpf_crypto.o \
- 		 $(OUTPUT)/bench_sockmap.o \
- 		 $(OUTPUT)/bench_lpm_trie_map.o \
-+		 $(OUTPUT)/usdt_1.o \
-+		 $(OUTPUT)/usdt_2.o \
- 		 #
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 8368bd3a0665..4dacb87e464e 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -541,6 +541,8 @@ extern const struct bench bench_trig_uprobe_nop5;
- extern const struct bench bench_trig_uretprobe_nop5;
- extern const struct bench bench_trig_uprobe_multi_nop5;
- extern const struct bench bench_trig_uretprobe_multi_nop5;
-+extern const struct bench bench_trig_usdt_nop;
-+extern const struct bench bench_trig_usdt_nop_combo;
- #endif
- 
- extern const struct bench bench_rb_libbpf;
-@@ -617,6 +619,8 @@ static const struct bench *benchs[] = {
- 	&bench_trig_uretprobe_nop5,
- 	&bench_trig_uprobe_multi_nop5,
- 	&bench_trig_uretprobe_multi_nop5,
-+	&bench_trig_usdt_nop,
-+	&bench_trig_usdt_nop_combo,
- #endif
- 	/* ringbuf/perfbuf benchmarks */
- 	&bench_rb_libbpf,
-diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-index aeec9edd3851..b4b03fe1f61d 100644
---- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-@@ -405,6 +405,23 @@ static void *uprobe_producer_nop5(void *input)
- 		uprobe_target_nop5();
- 	return NULL;
- }
-+
-+void usdt_1(void);
-+void usdt_2(void);
-+
-+static void *uprobe_producer_usdt_nop(void *input)
-+{
-+	while (true)
-+		usdt_1();
-+	return NULL;
-+}
-+
-+static void *uprobe_producer_usdt_nop_combo(void *input)
-+{
-+	while (true)
-+		usdt_2();
-+	return NULL;
-+}
- #endif
- 
- static void usetup(bool use_retprobe, bool use_multi, void *target_addr)
-@@ -542,6 +559,47 @@ static void uretprobe_multi_nop5_setup(void)
- {
- 	usetup(true, true /* use_multi */, &uprobe_target_nop5);
- }
-+
-+static void usdt_setup(const char *name)
-+{
-+	struct bpf_link *link;
-+	int err;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = trigger_bench__open();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	bpf_program__set_autoload(ctx.skel->progs.bench_trigger_usdt, true);
-+
-+	err = trigger_bench__load(ctx.skel);
-+	if (err) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
-+	link = bpf_program__attach_usdt(ctx.skel->progs.bench_trigger_usdt,
-+					0 /*self*/, "/proc/self/exe",
-+					"optimized_attach", name, NULL);
-+	if (libbpf_get_error(link)) {
-+		fprintf(stderr, "failed to attach optimized_attach:%s usdt probe\n", name);
-+		exit(1);
-+	}
-+	ctx.skel->links.bench_trigger_usdt = link;
-+}
-+
-+static void usdt_nop_setup(void)
-+{
-+	usdt_setup("usdt_1");
-+}
-+
-+static void usdt_nop_combo_setup(void)
-+{
-+	usdt_setup("usdt_2");
-+}
- #endif
- 
- const struct bench bench_trig_syscall_count = {
-@@ -609,4 +667,6 @@ BENCH_TRIG_USERMODE(uprobe_nop5, nop5, "uprobe-nop5");
- BENCH_TRIG_USERMODE(uretprobe_nop5, nop5, "uretprobe-nop5");
- BENCH_TRIG_USERMODE(uprobe_multi_nop5, nop5, "uprobe-multi-nop5");
- BENCH_TRIG_USERMODE(uretprobe_multi_nop5, nop5, "uretprobe-multi-nop5");
-+BENCH_TRIG_USERMODE(usdt_nop, usdt_nop, "usdt_nop");
-+BENCH_TRIG_USERMODE(usdt_nop_combo, usdt_nop_combo, "usdt_nop_combo");
- #endif
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh b/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh
-index 03f55405484b..3656676d99d2 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh
-@@ -2,7 +2,7 @@
- 
- set -eufo pipefail
- 
--for i in usermode-count syscall-count {uprobe,uretprobe}-{nop,push,ret,nop5}
-+for i in usermode-count syscall-count {uprobe,uretprobe}-{nop,push,ret,nop5} usdt_nop usdt_nop_combo
- do
- 	summary=$(sudo ./bench -w2 -d5 -a trig-$i | tail -n1 | cut -d'(' -f1 | cut -d' ' -f3-)
- 	printf "%-15s: %s\n" $i "$summary"
-diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/testing/selftests/bpf/progs/trigger_bench.c
-index 4ea0422d1042..f631706bbdc9 100644
---- a/tools/testing/selftests/bpf/progs/trigger_bench.c
-+++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
-@@ -1,10 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2020 Facebook
--#include <linux/bpf.h>
-+#include "vmlinux.h"
- #include <asm/unistd.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include "bpf_misc.h"
-+#include "bpf/usdt.bpf.h"
- 
- char _license[] SEC("license") = "GPL";
- 
-@@ -180,3 +181,10 @@ int bench_trigger_rawtp(void *ctx)
- 	handle(ctx);
- 	return 0;
- }
-+
-+SEC("usdt")
-+int bench_trigger_usdt(void *ctx)
-+{
-+	inc_counter();
-+	return 0;
-+}
+								Honza
 -- 
-2.53.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
