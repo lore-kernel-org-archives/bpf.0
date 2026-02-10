@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F31C419EEC2;
-	Tue, 10 Feb 2026 13:36:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C183164B7;
+	Tue, 10 Feb 2026 13:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770730619; cv=none; b=N/j/bx3EgyHFaXFDOynoqdVS7zH+v+N7DS9rkTAt8hhoX/3qwwqF99eAoEIk0QNX5R4/SFfV/pCos1Q9InBy6MBs9RbID/19HsnXCFd11agBljHmQ5zlt6gnj/ydy6io3QZBx3y01w6+yiNdx05HQVWqdGGyS/IQYogVyD6/Iak=
+	t=1770730628; cv=none; b=MwDnbkWMHG63w5GZqHxPEXopz6CpRHbGpVVFyWSGs1LIkH+OOC883PDuj90o+8tFdi/B+zOWQB9H4AR3F94giGFb4xNDMCQpPO5Nv/kEjByHqfaFkvAabgKFw5rypWZNLzl+JOYSuOVFyMctHj7pebD6k6v2J+mLvwmSjAKVmhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770730619; c=relaxed/simple;
-	bh=GOmRG864vY6D1kESbwlYap6WaTBduydOxPqdZeAjT0E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b/rx3mOAHlkyQrGSO5AOYG8iQckSHmEaQfSasQstAHiKFk37VA7YyZw2t6guy1qQVpFCn2EUawNglpIV8Es+sMpacK5QD9OcE2lje7m7nSHpGTD/Kd83SRW2r8wmjmIbc2Ja8XocrtSeFdD4ydOMkfW78Bpwz2u9MPQh8GBZPxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kg2ktQKz; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770730628; c=relaxed/simple;
+	bh=S29y+uuqZrMgOo1hWvanWYe+TzfNJHT+V3QfZUY1MX0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=PLVVuFBySd6V2+tZ5krcOJJX4Itt4bDCLuG5Xigm3UvrnEOyioskWfZnYAFADmOn0qgPlpetvJHHNbVTN1iWCricamrc6kRlKdz34wxR7tDo6ZDTq8Q5ibDvs+gBBXQ9yQfC3oWfKU2clDjlqt3yV+wmqT/eoqV5g1ah4pV2cPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j04/8tW3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kg2ktQKz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC6F7C116C6;
-	Tue, 10 Feb 2026 13:36:56 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j04/8tW3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21916C116C6;
+	Tue, 10 Feb 2026 13:37:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770730618;
-	bh=GOmRG864vY6D1kESbwlYap6WaTBduydOxPqdZeAjT0E=;
-	h=From:To:Cc:Subject:Date:From;
-	b=kg2ktQKz46NlVdh6c9xC28x1MGfPXrueSd/nKViP1SVfld23AytZL6hT/N1kYEYvv
-	 +rdLk+PSE92FpkQIUlcFXZ51nONGyxSnuv9H+1cTl87OlfpThwiiu6lJb0NM+eWizk
-	 2Q42di9odcL6s2j/fAmEctCMyQgk/XO71SKRXOJ88aR/uiwN+Ffs+WIiWhX8Rz7+Uv
-	 606XYl2LsBiUxXDyMLkBrwKdbGcj6OhbqE2tOCM5CdYMUGcb3V2Zk9y/uSS18Bfd9T
-	 UEGt46JvNPEouM6NE/AySds0WzCUmB39E87XAMkdLk+/2umMP5o9DZlXHn14vkft8F
-	 3v+wfnFKIAuEw==
+	s=k20201202; t=1770730627;
+	bh=S29y+uuqZrMgOo1hWvanWYe+TzfNJHT+V3QfZUY1MX0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=j04/8tW3y/fVB+KQI5g/8sX9U5Xk4P510ScKTYR3aQfj8NM2O5EuP7AwIEdNdOgK1
+	 AuKv7e9mAfp/wuFTo8uBk/mia4TJCtM8oMNWvcIOkY/f0hc12kSPf9/URuLsXFbe8U
+	 5zj2msq9FzfArus6MFEqjVjU2icWelkU0ZuZdubQf22bubveho7dMnvBK1XKK9xf6V
+	 Biy9Mvi4Fj+s4bPrwmPRMPWLWrowyqJ2nN4z2hb1QAUIsF9DQC/DIcYxNGMm1zs7RA
+	 VrTjIubUH4aVEsGiv/Si4MN80TG+fvZHmpkGwFBLUnOz3rgRVOODkTIetGumdB33Hr
+	 o2JFFdVNKAOkg==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org,
@@ -32,10 +33,12 @@ Cc: bpf@vger.kernel.org,
 	Song Liu <songliubraving@fb.com>,
 	Yonghong Song <yhs@fb.com>,
 	John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCHv2 bpf-next 0/5] libbpf: Make optimized uprobes backward compatible
-Date: Tue, 10 Feb 2026 14:36:44 +0100
-Message-ID: <20260210133649.524292-1-jolsa@kernel.org>
+Subject: [PATCHv2 bpf-next 1/5] libbpf: Add uprobe syscall feature detection
+Date: Tue, 10 Feb 2026 14:36:45 +0100
+Message-ID: <20260210133649.524292-2-jolsa@kernel.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260210133649.524292-1-jolsa@kernel.org>
+References: <20260210133649.524292-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -44,64 +47,70 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hi,
-we can currently optimize uprobes on top of nop5 instructions,
-so application can define USDT_NOP to nop5 and use USDT macro
-to define optimized usdt probes.
+Adding uprobe syscall feature detection that will be used
+in following changes.
 
-This works fine on new kernels, but could have performance penalty
-on older kernels, that do not have the support to optimize and to
-emulate nop5 instruction.
-
-This patchset adds support to workaround the performance penalty
-on older kernels that do not support uprobe optimization, please
-see detailed description in patch 2.
-
-v1: https://lore.kernel.org/bpf/20251117083551.517393-1-jolsa@kernel.org/
-
-v2 changes:
-- after more investigation we realized there are some versions of
-  bpftrace and stap that does not work with solution suggested in
-  version 1, so we decided to switch to following solution:
-
-  - change USDT macro [1] emits nop,nop5 instructions combo by
-    default
-  - libbpf detects nop,nop5 instructions combo for USDT probe,
-    if there is and if uprobe syscall is detected libbpf installs
-    usdt probe on top of nop5 instruction to get it optimized
-
-- added usdt trigger benchmarks [Andrii]
-- several small fixes on uprobe syscall detection, tests and other places [Andrii]
-- true usdt.h source [1] updated [Andrii]
-- compile usdt_* objects unconditionally [Andrii]
-
-thanks,
-jirka
-
-
-[1] https://github.com/libbpf/usdt
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (5):
-      libbpf: Add uprobe syscall feature detection
-      libbpf: Add support to detect nop,nop5 instructions combo for usdt probe
-      selftests/bpf: Emit nop,no5 instructions combo for x86_64 arch
-      selftests/bpf: Add test for checking correct nop of optimized usdt
-      selftests/bpf: Add usdt trigger bench
+ tools/lib/bpf/features.c        | 24 ++++++++++++++++++++++++
+ tools/lib/bpf/libbpf_internal.h |  2 ++
+ 2 files changed, 26 insertions(+)
 
- tools/lib/bpf/features.c                                | 24 ++++++++++++++++++++++++
- tools/lib/bpf/libbpf_internal.h                         |  2 ++
- tools/lib/bpf/usdt.c                                    | 55 +++++++++++++++++++++++++++++++++++++++++++++++++++----
- tools/testing/selftests/bpf/.gitignore                  |  2 ++
- tools/testing/selftests/bpf/Makefile                    |  5 ++++-
- tools/testing/selftests/bpf/bench.c                     |  4 ++++
- tools/testing/selftests/bpf/benchs/bench_trigger.c      | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh |  2 +-
- tools/testing/selftests/bpf/prog_tests/usdt.c           | 85 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/test_usdt.c           |  9 +++++++++
- tools/testing/selftests/bpf/progs/trigger_bench.c       | 10 +++++++++-
- tools/testing/selftests/bpf/usdt.h                      |  2 ++
- tools/testing/selftests/bpf/usdt_1.c                    | 18 ++++++++++++++++++
- tools/testing/selftests/bpf/usdt_2.c                    | 16 ++++++++++++++++
- 14 files changed, 287 insertions(+), 7 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/usdt_1.c
- create mode 100644 tools/testing/selftests/bpf/usdt_2.c
+diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+index b842b83e2480..04a225c7f2c0 100644
+--- a/tools/lib/bpf/features.c
++++ b/tools/lib/bpf/features.c
+@@ -506,6 +506,27 @@ static int probe_kern_arg_ctx_tag(int token_fd)
+ 	return probe_fd(prog_fd);
+ }
+ 
++#ifdef __x86_64__
++
++#ifndef __NR_uprobe
++#define __NR_uprobe 336
++#endif
++
++static int probe_uprobe_syscall(int token_fd)
++{
++	/*
++	 * If kernel supports uprobe() syscall, it will return -ENXIO when called
++	 * from the outside of a kernel-generated uprobe trampoline.
++	 */
++	return syscall(__NR_uprobe) < 0 && errno == ENXIO;
++}
++#else
++static int probe_uprobe_syscall(int token_fd)
++{
++	return 0;
++}
++#endif
++
+ typedef int (*feature_probe_fn)(int /* token_fd */);
+ 
+ static struct kern_feature_cache feature_cache;
+@@ -581,6 +602,9 @@ static struct kern_feature_desc {
+ 	[FEAT_BTF_QMARK_DATASEC] = {
+ 		"BTF DATASEC names starting from '?'", probe_kern_btf_qmark_datasec,
+ 	},
++	[FEAT_UPROBE_SYSCALL] = {
++		"Kernel supports uprobe syscall", probe_uprobe_syscall,
++	},
+ };
+ 
+ bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id)
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index fc59b21b51b5..69aa61c038a9 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -392,6 +392,8 @@ enum kern_feature_id {
+ 	FEAT_ARG_CTX_TAG,
+ 	/* Kernel supports '?' at the front of datasec names */
+ 	FEAT_BTF_QMARK_DATASEC,
++	/* Kernel supports uprobe syscall */
++	FEAT_UPROBE_SYSCALL,
+ 	__FEAT_CNT,
+ };
+ 
+-- 
+2.53.0
+
