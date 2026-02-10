@@ -1,90 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DD4438A9CF;
-	Tue, 10 Feb 2026 17:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF20148850
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 18:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770746102; cv=none; b=QGS8C8lF2PdJlFCJJOiMOJ7uuL0vxXHX11nfGl+9/EaUsU0HYKebpm4c3k7Y8HN0OTHysdsL21o8+sFm2jv5KWQrJ7DyA0L9UFUhl2b443gAEgZYBVaUoN1h9h71DTpvZIr1CCoprcmGwbXkS+OP4NGM92fsflIrrhrKkYePW+c=
+	t=1770748383; cv=none; b=K5ltPmTAgeBuzRktY1X+iy+bYrB4GC9aQjoqlcJU5jRrfkh/8rwQzphtlHLpx0mwG9l2VhhL28VJeUgOqmBtLaQroj3LtIz2yx7g+RHaM/Rcn9KLQCMv0UwxngKuVIwoAjCJcF77lwgo174hNV/vdBjBE0rV8ylfhSD97pBv5bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770746102; c=relaxed/simple;
-	bh=oakjD26/4tkGvWqhilxMCc4hiHX5ft4jQ4Iq6CfC8Ok=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Vlcwarck/nxOkijC9qquUww3WHFA0xddfS8Z0IDcUwd/DbaBKv8UE3GvXko5qdYSnT2Dc13GF+CsFVHfivxMEXeMZI9I1qA8EKaDCWD+wT7XbY+bdafMNqud6AEXChXpnL/wBROD7Hd0J7rt9pDQoVD3UhrDLWidrxaBhjLRLKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IV5HWXkc; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770748383; c=relaxed/simple;
+	bh=ATFrnZePvUzu0sfQ1RWZ+PItW7G6U4XLUxckhsDIkqY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EPspUXra2kvYpkUG+Ugbq3kH0c0YdJHLmXtq5K7LCiP+TUca+DSDyWrhfKP0UAr3w4FtNCDXVQDbjwsIYgvJGSyeGMjdpCQEbBycHjYkUBkE53mJc1f2HRnHzKzIyHcNFxGql3bNOXSb4K9cZBcN2n2nuV8nw0D+VAKs/NZjecg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=wBWAxTw5; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IV5HWXkc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E45DC116C6;
-	Tue, 10 Feb 2026 17:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770746102;
-	bh=oakjD26/4tkGvWqhilxMCc4hiHX5ft4jQ4Iq6CfC8Ok=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=IV5HWXkc/FCiRpLej35EorMs268YVetMhHEcMuM8RZrQDwNon4ujlVriIsWMItPQO
-	 EqpPqMEeYxMCD6O4YFIrEvdJEAaFfqIGPwZOjfLqaxtmbteFvtM06iSeex9Dz5XBgO
-	 eId3ASq6UbrOQNwrEjse/Tdi30l18VlSWm7BlPWh5mf4t33MAhtXT3IbgjW51LF+r9
-	 vzEBdcZkI3eZTjdO3Q29eABxls3qZxt/DDPJl5+t8fLfEvnhAh5SbzAkjEx5m1VN5S
-	 rM53+ku47GAnrwJMK4bvWMODcdVtJF+2hO0GTGelBaK5cYQfywiYVchoItLmFSR3p/
-	 OS8Eizj1vbL9A==
-Content-Type: multipart/mixed; boundary="===============7295902335523839857=="
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="wBWAxTw5"
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-89503a3bb83so9865596d6.1
+        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 10:33:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1770748380; x=1771353180; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yD1gALP+CFChmDyhIu6E5QKeuXVRMTgmn9hdC0RPuIA=;
+        b=wBWAxTw5pBR8ToIlIx5jDiMBEmRurn5HAWsFoqnBHizkL3YFTuv5ZHb4kOcc4325lm
+         0gSvcH1nnjxlujh0jDmw87zyhzB88UL56YWj4SUl27RfbbKOrNlL5mjzpCyMwTF9Myt2
+         ZM3BE6Bx6xlrTW3uyw3DXEDOFbtoO94bOfzmPHqMAoEEKuxjoDsMSNRMdGjwxSZAK5AG
+         smeepsrZFNpR09pPQXjXdgCiqE09hXgGjZRLle7hXjRXoWMbiZ5KurFV7rysxdEaMzyA
+         wTLGxsEHKnd8FzPfDCL7xkcO5oVIXs4mZfaOp149Y/tWZ4iAJhJ+d4ydAZexEJootrcl
+         mb5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770748380; x=1771353180;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yD1gALP+CFChmDyhIu6E5QKeuXVRMTgmn9hdC0RPuIA=;
+        b=NniQoxVGlAgfOLfEd4gWe3Bqb8OHNjciWNXZouPzg3oF60J7SbzCDOgX5wwwq54tmU
+         Ks0HUN9EfJEYDsLLwU0iyzRR98I5a6OH1DiCHKlqjss7jn/HEKHaVDRxwgNN1R+o/aga
+         ZOkiEtrqQP3oV2j+Kmj0BrKKaiQ7UcjJS7G/SLaA6ueYRr/oV58ZT4eZa9AKPPTcBiGc
+         BkYu9IsiiAHfLsHJaO8ZPIlv90M4kKvE4hr3ek+Hf7OIQaWScllolC0iLMT9hPl7rNxd
+         uOMEQcEbrRhc10OFnzjOTzNBNakSyxtiyI2bakrK8F0zzGDcHfPd0ggoK6ipIBScc1xY
+         dEuw==
+X-Gm-Message-State: AOJu0YxI0FVkd37lYeiqgOdSob68+g6S/unJxS/AogLEmE0OVBzG8WCd
+	+iny+5zDwQuruuJuIrjJY0VvEP/JELwqAW7f/JFPRsv+2AVboGPR/Zjn/3WUQNIwPWQm+/COQt4
+	7g3HJSk0=
+X-Gm-Gg: AZuq6aL9qsDDvzm3Yn2zhjllx+z0lOCZaRy1+5SEtTJ0JWPtQ6THNykbysAptA89sAU
+	Vs2OHB6fwnCD6hCqPHWvrhI0uM5kYWKxJPBnbKYqLwx8lWMgDlepATUlE0gOplelw8X07918t83
+	tjqInz5kEqTjfbMq8peFuTzzIAGAlN/Bo6702EL6ogFJKJJH66MwC5XzH4vik/EOQNdO2S/yTAh
+	3puQQZF2bmoKXwhL2kyM7GOV4lPIr5OHbd/zI6QjTe8LFhjwIib9muqLwSPMByJFBQqukmHAWAF
+	m/NP2KN5nwZYjoe314gjHAQdvt2arJsYTSVdSnbS6MtToubewb00vH4SJTLLP65JxZmUfXnNaek
+	/LLmHZgyuP986wQ3rlV/2rEfnniG6dw3cDCswst5lvKtKL5cus3Jrk+W987tmH2KGQXjYjChSjd
+	0X6FtvdSE9FIUwbxktLMiAqg==
+X-Received: by 2002:ac8:5945:0:b0:4fc:8ed0:d4a4 with SMTP id d75a77b69052e-506399fe0c2mr229293321cf.64.1770748380064;
+        Tue, 10 Feb 2026 10:33:00 -0800 (PST)
+Received: from boreas.. ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5063913b829sm105348641cf.7.2026.02.10.10.32.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Feb 2026 10:32:59 -0800 (PST)
+From: Emil Tsalapatis <emil@etsalapatis.com>
+To: bpf@vger.kernel.org
+Cc: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	martin.lau@kernel.org,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Subject: [PATCH v2 0/2] bpf: Allow void return type for global subprogs
+Date: Tue, 10 Feb 2026 13:32:55 -0500
+Message-ID: <20260210183257.217285-1-emil@etsalapatis.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8d3fe8a5425f2e6af5a75f8d1a26d1b460719b1e904b6e1499747ca479b73832@mail.kernel.org>
-In-Reply-To: <20260210-bpf-xdp-meta-rxcksum-v1-4-e5d55caa0541@kernel.org>
-References: <20260210-bpf-xdp-meta-rxcksum-v1-4-e5d55caa0541@kernel.org>
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Add selftest support for bpf_xdp_metadata_rx_checksum
-From: bot+bpf-ci@kernel.org
-To: lorenzo@kernel.org,donald.hunter@gmail.com,kuba@kernel.org,davem@davemloft.net,edumazet@google.com,pabeni@redhat.com,horms@kernel.org,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrew+netdev@lunn.ch,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,aleksander.lobakin@intel.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,maciej.fijalkowski@intel.com
-Cc: jakub@cloudflare.com,netdev@vger.kernel.org,bpf@vger.kernel.org,intel-wired-lan@lists.osuosl.org,linux-kselftest@vger.kernel.org,lorenzo@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 10 Feb 2026 17:55:01 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============7295902335523839857==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Global subprogs are currently not allowed to return void. Adjust
+verifier logic to allow global functions with a void return type.
+Exception callbacks are excluded from this change, and still require
+a scalar return type.
 
-> diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-> index 09bb8a038d52..ef6a5584a187 100644
-> --- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
-> +++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
+Also adjust existing selftests that were ensuring that global subprogs
+with void return types fail to verify. These tests should now load
+successfully.
 
-[ ... ]
+v1 -> v2
+(https://lore.kernel.org/bpf/20260127231414.359283-1-emil@etsalapatis.com/)
 
-> @@ -98,6 +98,7 @@ int rx(struct xdp_md *ctx)
->  	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
->  	bpf_xdp_metadata_rx_vlan_tag(ctx, &meta->rx_vlan_proto,
->  				     &meta->rx_vlan_tci);
-> +	bpf_xdp_metadata_rx_checksum(ctx, &meta->ip_summed, &meta->cksum_meta);
+- Only mark R0 as valid for non-void global functions (AI)
+- Rename subprog_is_void to subprog_returns_void (Kumar)
+- Add test that R0 is invalid after calling a void global (Alexei)
+- Add check to ensure exception callbacks do not return void
+and associated selftest
 
-Is there a missing extern declaration for bpf_xdp_metadata_rx_checksum()?
-The other kfuncs used in this file have extern declarations with __ksym:
+Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-extern int bpf_xdp_metadata_rx_timestamp(const struct xdp_md *ctx,
-                                         __u64 *timestamp) __ksym;
-extern int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, __u32 *hash,
-                                    enum xdp_rss_hash_type *rss_type) __ksym;
-extern int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
-                                        __be16 *vlan_proto,
-                                        __u16 *vlan_tci) __ksym;
+Emil Tsalapatis (2):
+  bpf: Allow void global functions in the verifier
+  selftests: Add selftests for void globals
 
-Without a similar declaration for bpf_xdp_metadata_rx_checksum(), the BPF
-program may fail to compile or link.
+ kernel/bpf/btf.c                              |  7 +--
+ kernel/bpf/verifier.c                         | 49 ++++++++++++++++---
+ .../bpf/prog_tests/test_global_funcs.c        |  2 +
+ .../selftests/bpf/progs/exceptions_fail.c     | 19 +++++--
+ .../selftests/bpf/progs/test_global_func18.c  | 23 +++++++++
+ .../selftests/bpf/progs/test_global_func7.c   |  2 +-
+ 6 files changed, 89 insertions(+), 13 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_global_func18.c
 
+-- 
+2.49.0
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21875603263
-
-AI-authorship-score: low
-AI-authorship-explanation: The code follows standard BPF selftest patterns and appears to be written by a domain expert familiar with XDP metadata kfuncs.
-issues-found: 1
-issue-severity-score: medium
-issue-severity-explanation: Missing extern declaration for bpf_xdp_metadata_rx_checksum kfunc will cause BPF program build failure.
-
---===============7295902335523839857==--
