@@ -1,179 +1,239 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3145C1DF74F;
-	Tue, 10 Feb 2026 17:22:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1EBF3128A3
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 17:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770744138; cv=none; b=sgaZPbIfUd+qL6weEoSNAQJFnel5mJ2i6idG9V6oFVie56vslXuF8a/FxjISaDI1v0P2rTycFBSnwYbE5oHhTVSMDcnkxJhgMjrAXfNgjw0iUUnlUO1rRaDljr+YFMakgp2vaRvQRzAsBj3gLb0xg29gt1BwQBDcJtDuHfkK4Oo=
+	t=1770744370; cv=none; b=dYH5HLjcsJvxSXIa5ZY56JEs4wIyHYh/wmMjprvOId46321UE8u/HUKLY09JJUc3MNacwFyVjuXy7usDXKv/SJ21GfWV+ISzjGRLmBCN1qkWXojuW1ETGGYSSqO/vhsDvLkG4ZHJ4tHUTu94ZCvBxgk+GNCOLmrpmDswdvtwHSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770744138; c=relaxed/simple;
-	bh=YeOpAiaT58KYK6hzmVoXzdp05TldJdth7tHhp/RBBwI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Q/RcXTEv4TlGm2JazF8zAGuRjidQFc6vEnc/mXH+DMmaC8HQ0GtqaVxxIIzbeW5T6AuS67jDxIEBnCUeY9riR5/YXupq2hwAlZEx5T7eczAAbyMRiX8VvlyHFSQe/nCtbk37c+mOZ2MsA2AEkfgT7sE2C0UFsJqqau41kzbxA9k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DcN1cZ8M; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770744370; c=relaxed/simple;
+	bh=bGZAvqDxEIu2N9ucVC96wgoTT6pCXw1PIhUB4cBYFnI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UXLUQUNjnlUHXFKAd4SxA0Tm3kW4YBYPPPjAUZlKjW98USgWkYTsbQRnRWXX/PZ1NVrMM5goM3jjMRyHm2sZapxBhu7l4Zl+ErhKJqHG48+cWNVRbTBaMHajv+uJMHOz3H5l3GC9w/Kg7VUec7mEcz+6pa1rQnm9OGePf6et1Vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MbVzr0bH; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=tl1ZTJTO; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DcN1cZ8M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5733CC19421;
-	Tue, 10 Feb 2026 17:22:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770744137;
-	bh=YeOpAiaT58KYK6hzmVoXzdp05TldJdth7tHhp/RBBwI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=DcN1cZ8MIVrVizEdckIkDsj+vkfGTjCcdrVG8PXfF8icyC1RXK1DgpKeHJ+xNeldA
-	 4aJAKr0+nxaa6lhZx5q9XECPUJoT57pOnnASJjoYU3/OvIdYtSIZnsLRyt8IBc1lh2
-	 s8xeuebxE9sJwEId85fna95BVhQH+2ON0MOlmHVy7E3i0S3n+ivCYe7ybA/JJdr4P+
-	 JOgIhd6ve8DEy42YiHVIesy461KPrUnHAe2dPptYKrfEs9KAz7SF+74734kmWvyc+q
-	 C8lY2Umv5kGboxo1pCn+V8/SFlXyeWX+bnoi1C+qDntiS7EhJ/5JRXnvhA6gHLrtgW
-	 BcRLIVwxZSBeA==
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Tue, 10 Feb 2026 18:21:51 +0100
-Subject: [PATCH bpf-next 5/5] selftests/bpf: Add
- bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MbVzr0bH";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="tl1ZTJTO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770744367;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=M6SXb5IczZILKvt9qVo3/THUDjn6esbNCNc+i/3NT+A=;
+	b=MbVzr0bHv4KfwrQPF02uLZydCCM+SDFDlEqxDsoZkSla13pQXbDHG04+tN/kvP7uIk6FHX
+	IL7tr7OsiBE5lCr8eYABtUFgFJivStQUJrqlbC0Y1mAk92TQWhC4di+I2mjMrUPU3Gtkze
+	SPlREfPrTirpeIdlLk8dfY+yK13gHwY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-126-WyAyPbhxO_yxiM1mddcb-A-1; Tue, 10 Feb 2026 12:26:06 -0500
+X-MC-Unique: WyAyPbhxO_yxiM1mddcb-A-1
+X-Mimecast-MFC-AGG-ID: WyAyPbhxO_yxiM1mddcb-A_1770744363
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-4359849d324so4947367f8f.1
+        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 09:26:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770744363; x=1771349163; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M6SXb5IczZILKvt9qVo3/THUDjn6esbNCNc+i/3NT+A=;
+        b=tl1ZTJTOg45iq6VrG0u5VwUFL4YNzUWIYDH3vVn8XghxoTq8Djq1qV9MRvHfxOIa4z
+         dqZq5eJVgTL8NmKcM1ELVl6g/a67bKKZ5680EPiGYR39W/g8TXJrQpLOWMJ+xnB8/jNr
+         XsnK++MDByMpI3EhFo7yG61dR8eY3zAcCvuG96mhy229oAX1BEd2HKeYZoxz3ORAujcK
+         JATvzC7gJiyfTNwKmWp8tmkq5MG4aaFtmXfVujj9rfYr+A+/L5LaJFFj1IxU98LLml0L
+         ZK2fzXy2vKQF3+aR7DDnSw54tTB+vAfidxPDiRdG/EhkIZWA2/BUBnaYgBQHsRlecpkW
+         dP5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770744363; x=1771349163;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M6SXb5IczZILKvt9qVo3/THUDjn6esbNCNc+i/3NT+A=;
+        b=qAkyaA4OnR7CYQOYKM/FW9mxSYnCYx/NRuOXcCsFx+xmA0Wfq07rTzn8TyNkLXuzUz
+         8fUESZF2TcSXcW5zt8qqWda+bdIQVuUFI+QDTDhZGscZFjRu79GkKsx9myu1i8/JD81+
+         DDQGQycgC8g7OKNVF9DrLqjNofdHIq/CQQT/IR5kHfJl9S1mmmv5NChMY2Bn2Ml4gmY4
+         FaWT6dj0/LhWPIB9rEeK9nsLG9txJtaZho9Nc2DbJRAMff3goYNPTupZ3kOdHHUlS9TM
+         xkmtpaahGHRZ7jUyZkAdjmoKApY4go9vGxpitJByBBaLrSWtEhB3ncoatraeItMiPJ5Q
+         vBzg==
+X-Forwarded-Encrypted: i=1; AJvYcCUvQ0PAjCEbkr3esKcfB9lBXipJH39IxGPLnuHhpL3y9KM0u/YQ0q3Yj1BiTWIMeX5k1HE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIe3GH9wAuqMRubajjQsm4RywBkzTYc/JBb7S0FgvddMOwhgi8
+	QgSmsQ4RPQC4O7NNewJnnODktas/m2Qxx9W5uft/08/ZfKTpYY8adm/H9hH+sy3wfLfmEAqYn6K
+	iOuUaLBJFvWNWdDJwVtdK6srzUSU01thWg8MwIJJWtCZ0Zn3Bge0G3g==
+X-Gm-Gg: AZuq6aK1iac5JeYw/rSDw7OHf/Sh7KOtOgH28NzR97yiG3pzmfrxyf1wY3XwiJXaqlT
+	6wDEu2lXta7WpdBVUrGtYVFF0iBCyWlXyqIrG+fiTe9eDBCW5D3GRS+X91ZhTAChm1qAJUMXa8t
+	Ikw5qRBSq9JaZK6/ccaKI6WBmBP7Rbl8W5izCUTijMLA36SYWsCjLA+lzG6ZQBS7fjdNZWn0kSF
+	aBCJmVS82rJQtZYiQxVjNUgCHMgYBxrbXNpp+mrsn5aI8SRGTyXIXHXIuOhAmCa8yy/dv7IED4I
+	xb1OOoXtwM8S5swoa9p0ELjeukFMZ5+YcJXzBrIAgJDAJ2Zwoe8aEOcn4xOiVUnXWU2xrtvybno
+	S8HSIgob4LJd/DNmQLBWQJhqBpsDvTQwdi9dLT1hzb75mFTAqb7dL3LZREiFcC+sfCQFdiA==
+X-Received: by 2002:a05:6000:2287:b0:432:5d73:79a1 with SMTP id ffacd0b85a97d-4377a5a89c5mr4412120f8f.55.1770744363093;
+        Tue, 10 Feb 2026 09:26:03 -0800 (PST)
+X-Received: by 2002:a05:6000:2287:b0:432:5d73:79a1 with SMTP id ffacd0b85a97d-4377a5a89c5mr4412089f8f.55.1770744362668;
+        Tue, 10 Feb 2026 09:26:02 -0800 (PST)
+Received: from localhost (net-37-119-153-93.cust.vodafonedsl.it. [37.119.153.93])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436296bd4a1sm35585372f8f.17.2026.02.10.09.26.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Feb 2026 09:26:01 -0800 (PST)
+Date: Tue, 10 Feb 2026 18:26:01 +0100
+From: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	netdev@vger.kernel.org, bpf@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC bpf-next v2 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <aYtqKfv0F0l2-hgy@lore-desk>
+References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
+ <20250925-bpf-xdp-meta-rxcksum-v2-1-6b3fe987ce91@kernel.org>
+ <aNYUqdaIJV1cvFCb@mini-arch>
+ <e03d6d69-73ea-46dc-b632-149ef5831f85@kernel.org>
+ <aNcZdfCivLR2slFw@mini-arch>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260210-bpf-xdp-meta-rxcksum-v1-5-e5d55caa0541@kernel.org>
-References: <20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org>
-In-Reply-To: <20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org>
-To: Donald Hunter <donald.hunter@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
- Tony Nguyen <anthony.l.nguyen@intel.com>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- Alexander Lobakin <aleksander.lobakin@intel.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, 
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
- linux-kselftest@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>
-X-Mailer: b4 0.14.2
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Kbaeu9Ugo55vjxdy"
+Content-Disposition: inline
+In-Reply-To: <aNcZdfCivLR2slFw@mini-arch>
 
-Introduce the capability to dump HW rx checksum in xdp_hw_metadat
-program via bpf_xdp_metadata_rx_checksum() kfunc.
 
-Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
----
- .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |  7 ++++++
- tools/testing/selftests/bpf/xdp_hw_metadata.c      | 28 ++++++++++++++++++++++
- tools/testing/selftests/bpf/xdp_metadata.h         | 10 +++++---
- 3 files changed, 42 insertions(+), 3 deletions(-)
+--Kbaeu9Ugo55vjxdy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-index 330ece2eabdb454da2bb2cbd297d2b2dd6efddc0..dc62d572e3ac6e2ef173b330da515757ea543415 100644
---- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
-@@ -110,6 +110,13 @@ int rx(struct xdp_md *ctx)
- 	else
- 		meta->hint_valid |= XDP_META_FIELD_VLAN_TAG;
- 
-+	err = bpf_xdp_metadata_rx_checksum(ctx, &meta->ip_summed,
-+					   &meta->cksum_meta);
-+	if (err)
-+		meta->rx_cksum_err = err;
-+	else
-+		meta->hint_valid |= XDP_META_FIELD_CHECKSUM;
-+
- 	__sync_add_and_fetch(&pkts_redir, 1);
- 	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
- }
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index 3d8de0d4c96a7afdf5f60b2fdff73c22b876ce54..5f4bd63b8a31586353e58e4f6472ee8ac9531a06 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -8,6 +8,7 @@
-  * - Metadata verified:
-  *   - rx_timestamp
-  *   - rx_hash
-+ *   - rx_checksum
-  *
-  * TX:
-  * - UDP 9091 packets trigger TX reply
-@@ -219,6 +220,28 @@ static void print_vlan_tci(__u16 tag)
- 	printf("PCP=%u, DEI=%d, VID=0x%X\n", pcp, dei, vlan_id);
- }
- 
-+static void print_rx_cksum(__u8 ip_summed, __u32 cksum_meta)
-+{
-+	const char *cksum = "CHECKSUM_NONE";
-+
-+	switch (ip_summed) {
-+	case XDP_CHECKSUM_UNNECESSARY:
-+		cksum = "CHECKSUM_UNNECESSARY";
-+		break;
-+	case XDP_CHECKSUM_COMPLETE:
-+		cksum = "CHECKSUM_COMPLETE";
-+		break;
-+	case XDP_CHECKSUM_PARTIAL:
-+		cksum = "CHECKSUM_PARTIAL";
-+		break;
-+	case XDP_CHECKSUM_NONE:
-+	default:
-+		break;
-+	}
-+
-+	printf("rx-cksum: %s, csum_meta=0x%x\n", cksum, cksum_meta);
-+}
-+
- static void verify_xdp_metadata(void *data, clockid_t clock_id)
- {
- 	struct xdp_meta *meta;
-@@ -254,6 +277,11 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
- 		printf("No rx_vlan_tci or rx_vlan_proto, err=%d\n",
- 		       meta->rx_vlan_tag_err);
- 	}
-+
-+	if (meta->hint_valid & XDP_META_FIELD_CHECKSUM)
-+		print_rx_cksum(meta->ip_summed, meta->cksum_meta);
-+	else
-+		printf("No rx_chsum, err=%d\n", meta->rx_cksum_err);
- }
- 
- static void verify_skb_metadata(int fd)
-diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index a16f71488a34e6df23fec6dd7dde7b7989774618..b7ab112da8032405ec0e3d699499f4a9c5cb91dc 100644
---- a/tools/testing/selftests/bpf/xdp_metadata.h
-+++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -28,6 +28,7 @@ enum xdp_meta_field {
- 	XDP_META_FIELD_TS	= BIT(0),
- 	XDP_META_FIELD_RSS	= BIT(1),
- 	XDP_META_FIELD_VLAN_TAG	= BIT(2),
-+	XDP_META_FIELD_CHECKSUM = BIT(3),
- };
- 
- #define XDP_CHECKSUM_NONE		0
-@@ -53,9 +54,12 @@ struct xdp_meta {
- 		};
- 		__s32 rx_vlan_tag_err;
- 	};
--	struct {
--		__u8 ip_summed;
--		__u32 cksum_meta;
-+	union {
-+		struct {
-+			__u8 ip_summed;
-+			__u32 cksum_meta;
-+		};
-+		__s32 rx_cksum_err;
- 	};
- 	enum xdp_meta_field hint_valid;
- };
+> On 09/26, Jesper Dangaard Brouer wrote:
+> >=20
+> >=20
+> > On 26/09/2025 06.20, Stanislav Fomichev wrote:
+> > > On 09/25, Lorenzo Bianconi wrote:
+> > > > Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
+> > > > checksum will be use by devices capable of exposing receive checksum
+> > > > result via bpf_xdp_metadata_rx_checksum().
+> > > > Moreover, introduce xmo_rx_checksum netdev callback in order allow =
+the
+> > > > eBPF program bounded to the device to retrieve the RX checksum resu=
+lt
+> > > > computed by the hw NIC.
+> > > >=20
+> > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > > > ---
+> > > >   Documentation/netlink/specs/netdev.yaml |  5 +++++
+> > > >   include/net/xdp.h                       | 14 ++++++++++++++
+> > > >   net/core/xdp.c                          | 29 ++++++++++++++++++++=
++++++++++
+> > > >   3 files changed, 48 insertions(+)
+> > > >=20
+> > > > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentatio=
+n/netlink/specs/netdev.yaml
+> > > > index e00d3fa1c152d7165e9485d6d383a2cc9cef7cfd..00699bf4a7fdb67c6b9=
+ee3548098b0c933fd39a4 100644
+> > > > --- a/Documentation/netlink/specs/netdev.yaml
+> > > > +++ b/Documentation/netlink/specs/netdev.yaml
+> > > > @@ -61,6 +61,11 @@ definitions:
+> > > >           doc: |
+> > > >             Device is capable of exposing receive packet VLAN tag v=
+ia
+> > > >             bpf_xdp_metadata_rx_vlan_tag().
+> > > > +      -
+> > > > +        name: checksum
+> > > > +        doc: |
+> > > > +          Device is capable of exposing receive checksum result via
+> > > > +          bpf_xdp_metadata_rx_checksum().
+> > > >     -
+> > > >       type: flags
+> > > >       name: xsk-flags
+> > > > diff --git a/include/net/xdp.h b/include/net/xdp.h
+> > > > index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2074b7061=
+8a9d4f32544d8b9a30b63 100644
+> > > > --- a/include/net/xdp.h
+> > > > +++ b/include/net/xdp.h
+> > > > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachmen=
+t_info *info,
+> > > >   			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+> > > >   			   bpf_xdp_metadata_rx_vlan_tag, \
+> > > >   			   xmo_rx_vlan_tag) \
+> > > > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> > > > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> > > > +			   bpf_xdp_metadata_rx_checksum, \
+> > > > +			   xmo_rx_checksum)
+> > > >   enum xdp_rx_metadata {
+> > > >   #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> > > > @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
+> > > >   	XDP_RSS_TYPE_L4_IPV6_SCTP_EX =3D XDP_RSS_TYPE_L4_IPV6_SCTP | XDP=
+_RSS_L3_DYNHDR,
+> > > >   };
+> > > > +enum xdp_checksum {
+> > > > +	XDP_CHECKSUM_NONE		=3D CHECKSUM_NONE,
+> > > > +	XDP_CHECKSUM_UNNECESSARY	=3D CHECKSUM_UNNECESSARY,
+> > > > +	XDP_CHECKSUM_COMPLETE		=3D CHECKSUM_COMPLETE,
+> > > > +	XDP_CHECKSUM_PARTIAL		=3D CHECKSUM_PARTIAL,
+> > > > +};
+> > >=20
+> > > Btw, might be worth mentioning, awhile ago we had settled on a smalle=
+r set of
+> > > exposed types:
+> > >=20
+> > > https://lore.kernel.org/netdev/20230811161509.19722-13-larysa.zaremba=
+@intel.com/
+> > >=20
+> > > Maybe go through the previous postings and check if the arguments are
+> > > still relevant? (or explain why we want more checksum now)
+> >=20
+> > IHMO the linked proposal reduced the types too much.
+>=20
+> IIRC, PARTIAL was removed because it's mostly (or only) a TX feature?
+> So no real need to expose it as an rx hint. And I think empty xdp_csum_st=
+atus
+> in that proposal might have indicated NONE?
 
--- 
-2.53.0
+Sorry for the (very) late reply. According to [0] CHECKSUM_PARTIAL can be u=
+sed
+even on Rx side, right?
+
+Regards,
+Lorenzo
+
+[0] https://github.com/torvalds/linux/blob/master/include/linux/skbuff.h#L1=
+48
+
+>=20
+
+--Kbaeu9Ugo55vjxdy
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaYtqKAAKCRA6cBh0uS2t
+rFNfAP9IZ4RIoXiTgNfqdm61xXJO8X8DZttEjYppOw1iHdPLUAEAtTMcYDTh8p0A
+ZFsUX/AZUM9EY7k2Fd9cdM0dbkaAKg8=
+=ofYP
+-----END PGP SIGNATURE-----
+
+--Kbaeu9Ugo55vjxdy--
 
