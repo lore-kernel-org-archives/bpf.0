@@ -1,198 +1,382 @@
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2737303C97
-	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 18:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4727D2EC083;
+	Tue, 10 Feb 2026 18:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770748385; cv=none; b=qD7a+2YRWow2EaWLG3fXJaHzII/fyJjJmiyPNDGD9vIfTWI0/IejwJsFPtAW3i5yWB/SP9I8eoAaYfg0CYX6+zXhP++jW7l8m9oWkepFQrb/UrovO0FsdJTTE3Ru95WnHtl7357HVaSwRNp/F4mNPpVKW3naq9qwV8I685H8R1g=
+	t=1770748559; cv=none; b=rlYjqtc2K9CdDdNKYSQNKcUx/CN9msRYlBP8kWL11kvrKgAvL1inHja9uXdND7Dqqjbh9T1fkkmgN+x+3BtBUDYbrErdBwv4yW9+ExLOUJQICaZZd5CStaTjtK8kRPqSOaQ0K5npIyjiUIlels/cPJ0im2iNKbHsbd4TCcf0saQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770748385; c=relaxed/simple;
-	bh=F/+j+4BMnkmhmAeYeXhQT23UVkzT9LDeN0u+HSrNbHE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=e5/dU51ZzluStXYMcuA/7w/lIRvG8Kl901cQtBsnvF0yh37K036YnBAjp6hM1Qe3MUdYLcL3Z2EigqRFWh/jjVCvMjG7pEHJDwk0kGW78SwUY9+RP/h8P6mnbtp6Jkdq95jd5yxk0cDho7ZuMtHDA/SVk/XlmRyDVe1rOUZdE8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=ivoLkLgK; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1770748559; c=relaxed/simple;
+	bh=J8vbRyDhN4fBEoVRPg0epdkE1Y35vtWi7KoWKKdWtOI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dOdJkdqh6bIElwuFcYkp0J4MZzfKjPsUNiBRZGSQxGI9zfo0B7VSCCZeCsM9IJIiedH+Pz3j8xpX+aRY8YvsYpWNNU3lMeJYY4LSuVTox8tdyiBLCvXVC2kyNP/eBy2K7floPmrhTgtX0c4FeeCH/wCu7QmhbC81ijCgqbmvxbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z/AKeO99; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="ivoLkLgK"
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-896f5af3d8aso14724746d6.1
-        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 10:33:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1770748383; x=1771353183; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xnnF7v9P6RTzrP5qU00aD/Wl+rtYCM6Z1Ka0QsECUJE=;
-        b=ivoLkLgKPVtYeDR+y+NMauiBw/mBgXP+9pwKWPR0RNNPkmu2EuUl3ApC+oRT4ukOie
-         h7CK/lghOW7N77EA2LMqOt8qeJ/1e52XhO0z82OwxEBg8S9G4DgcN+ZaQVqwvKd4iz6t
-         RLk+rCL/5sg8I4ucvX0Jgkre+R9h0sfxOcfQ0SfdXL5nmKpkt7eM05lYLZYCyhKCGwkl
-         SEP2FQOpfpD24Nwq+ZOrwq1u3Zlix+KStQvcp7r/27RPF4kjVFPL6w9sauR2yqIGv4SL
-         d6sx6XRhUfAuSktXKoMb6BSYM4icxPZRr2BwodTOQuSz7sxV5chyLnD5PZ/SkNrZfdep
-         JRvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770748383; x=1771353183;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=xnnF7v9P6RTzrP5qU00aD/Wl+rtYCM6Z1Ka0QsECUJE=;
-        b=qI+QgSwDHv3eFhMcRndOLnvpkL6jr1ujKAXf5VKA7dr/ha9MC6b5422MtpzrqYxqL4
-         zMNy3Csi9IC6rKsWPdZW4JqloSa40/ZViv7umJ8UMLRuXMOE9Hpq4e3xLO1u08N0Zf5g
-         V7KuK7xVmXcPZ3rLoIW7/OND2NY1+Rc0RS5JtxL/RJYQmMn6nPYbUiYu4YoKCNEjSXah
-         BSVqVgx6hel0SDxHsSfIN5BwnSX5IRXMJGazKLVsF2QySPoJ7oeA0g5yo/fxpQmosQR/
-         imEoKsOXaimzLFh1uPnLl2AJBj0m6j+trn4TvDJT0l4oqUs9RCaTViCDMimHx6/EtYiO
-         286w==
-X-Gm-Message-State: AOJu0Yx1zvM/mByCVGTbWfl/cboJqnhBThp+I73fVo1UM0cbSyz6Uy8D
-	sXtcaWbV4lOqwqqurKyBYwaPW/dTsybOR0PeKTusVO2sCvuqkcYUZDn51hNsByCsRlndnWoPBco
-	mS5zjqgI=
-X-Gm-Gg: AZuq6aLlP8pBodX+jctXeBrxpeLHmzH+eSrWyVh6mVoCOr0uRN7r+K9beLTZNPZqsHS
-	fgFPwsfzJGqCkjkT7Yy/ELQI14GOLSiiJURrrDCH8inHRNzCs1Q69Hjzk8sOOhgxfqa5kg3bdIK
-	4FMQz2m+NekAqCUUSUBzKHrxE5kII3Ruz3GfTSQA3eHKFg9vX8w77IyD+1Huek2jvN5Gxpomrid
-	po+F/BHDstenlQbQjuu1z95GIwcIcAAW4YuwhEku0JOgddRyOxVVT0VASnrdDWxinmCJTQleSLR
-	AyJVJfPZlq08uGTJR/q7c4WHuoEPcS9MBdA4SqhP9/M74pfyM+roLQ8jMPz8sNI0GkDwQ8xqcVO
-	HU913otkMoCvGEpa52wcwOL5IW+O3t+7Fzbvj8PM9EfFA2Qcri6Uw8FXCMg0b7ibKlA4tjsd+fQ
-	wrE6yyFIYT1VIes2vcgkyzlg==
-X-Received: by 2002:a05:622a:18aa:b0:4ee:24fc:bea3 with SMTP id d75a77b69052e-506398e56e9mr192155401cf.35.1770748382831;
-        Tue, 10 Feb 2026 10:33:02 -0800 (PST)
-Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5063913b829sm105348641cf.7.2026.02.10.10.33.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 10:33:02 -0800 (PST)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH v2 2/2] selftests: Add selftests for void globals
-Date: Tue, 10 Feb 2026 13:32:57 -0500
-Message-ID: <20260210183257.217285-3-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20260210183257.217285-1-emil@etsalapatis.com>
-References: <20260210183257.217285-1-emil@etsalapatis.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z/AKeO99"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770748557; x=1802284557;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=J8vbRyDhN4fBEoVRPg0epdkE1Y35vtWi7KoWKKdWtOI=;
+  b=Z/AKeO99qxAozPfya3K3uvNqxIo1F9jp4aZmX/Vx7XQ8BEGd0Feraga3
+   lGUYEGHtRhDjq/Y9WxB2yN99ox91UqvAxhmD56k7inTiis9vA2ksrsLVj
+   scyZ1rld9nCOwWg40mEDoVDK/v7OucSV9TSeBsTcKVzlayh6PUs4On6l3
+   kEZw0ltqMhMd8CWyswBbYdc1l3Dr8vsgEspsxXHaCpqu6nIRkGM8fLQta
+   qZGcT1NWUhmb7oJ4FYp54wjaylsifb6wsn21IjwGsyi8l5upYSpXXUtxJ
+   +NqJjC6SjF7z4AGLDwCKcjkxRqjjT4IikzhAdLE4Q/nM56HAkMAi0JjES
+   Q==;
+X-CSE-ConnectionGUID: 6a6C99wsREqIUdzhNzPyTg==
+X-CSE-MsgGUID: TMQV4jc2SK6KzzZIs6zpKQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="75513471"
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="75513471"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 10:35:56 -0800
+X-CSE-ConnectionGUID: 1LG9rKigRWuh/ZAeHTsn4Q==
+X-CSE-MsgGUID: +46kTIN+SnWUSn88Fnt7Wg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
+   d="scan'208";a="211324033"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa010.jf.intel.com with ESMTP; 10 Feb 2026 10:35:53 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vpsaU-00000000pIi-0Tbp;
+	Tue, 10 Feb 2026 18:35:50 +0000
+Date: Wed, 11 Feb 2026 02:34:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Feng Yang <yangfeng59949@163.com>, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	yangfeng59949@163.com
+Subject: Re: [PATCH v5] bpf: test_run: Fix the null pointer dereference issue
+ in bpf_lwt_xmit_push_encap
+Message-ID: <202602110246.gh5IIHrI-lkp@intel.com>
+References: <20260210090657.86977-1-yangfeng59949@163.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260210090657.86977-1-yangfeng59949@163.com>
 
-Add additional testing for void global functions. The tests
-ensure that calls to void global functions properly keep
-R0 invalid. Also make sure that exception callbacks still
-require a return value.
+Hi Feng,
 
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- .../bpf/prog_tests/test_global_funcs.c        |  2 ++
- .../selftests/bpf/progs/exceptions_fail.c     | 19 ++++++++++++---
- .../selftests/bpf/progs/test_global_func18.c  | 23 +++++++++++++++++++
- 3 files changed, 41 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/test_global_func18.c
+kernel test robot noticed the following build errors:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-index e905cbaf6b3d..45854cbcbfcf 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_global_funcs.c
-@@ -18,6 +18,7 @@
- #include "test_global_func15.skel.h"
- #include "test_global_func16.skel.h"
- #include "test_global_func17.skel.h"
-+#include "test_global_func18.skel.h"
- #include "test_global_func_ctx_args.skel.h"
- 
- #include "bpf/libbpf_internal.h"
-@@ -155,6 +156,7 @@ void test_test_global_funcs(void)
- 	RUN_TESTS(test_global_func15);
- 	RUN_TESTS(test_global_func16);
- 	RUN_TESTS(test_global_func17);
-+	RUN_TESTS(test_global_func18);
- 	RUN_TESTS(test_global_func_ctx_args);
- 
- 	if (test__start_subtest("ctx_arg_rewrite"))
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/testing/selftests/bpf/progs/exceptions_fail.c
-index d28ecc4ee2d0..691c16001952 100644
---- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
-@@ -29,11 +29,15 @@ struct {
- private(A) struct bpf_spin_lock lock;
- private(A) struct bpf_rb_root rbtree __contains(foo, node);
- 
--__noinline void *exception_cb_bad_ret_type(u64 cookie)
-+__noinline void *exception_cb_bad_ret_type1(u64 cookie)
- {
- 	return NULL;
- }
- 
-+__noinline void exception_cb_bad_ret_type2(u64 cookie)
-+{
-+}
-+
- __noinline int exception_cb_bad_arg_0(void)
- {
- 	return 0;
-@@ -50,8 +54,8 @@ __noinline int exception_cb_ok_arg_small(int a)
- }
- 
- SEC("?tc")
--__exception_cb(exception_cb_bad_ret_type)
--__failure __msg("Global function exception_cb_bad_ret_type() return value not void or scalar.")
-+__exception_cb(exception_cb_bad_ret_type1)
-+__failure __msg("Global function exception_cb_bad_ret_type1() return value not void or scalar.")
- int reject_exception_cb_type_1(struct __sk_buff *ctx)
- {
- 	bpf_throw(0);
-@@ -85,6 +89,15 @@ int reject_exception_cb_type_4(struct __sk_buff *ctx)
- 	return 0;
- }
- 
-+SEC("?tc")
-+__exception_cb(exception_cb_bad_ret_type2)
-+__failure __msg("exception cb cannot return void")
-+int reject_exception_cb_type_5(struct __sk_buff *ctx)
-+{
-+	bpf_throw(0);
-+	return 0;
-+}
-+
- __noinline
- static int timer_cb(void *map, int *key, struct bpf_timer *timer)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func18.c b/tools/testing/selftests/bpf/progs/test_global_func18.c
-new file mode 100644
-index 000000000000..3dafb0dc2342
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_global_func18.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_misc.h"
-+
-+__weak
-+void foo(void)
-+{
-+}
-+
-+SEC("tc")
-+__failure __msg("!read_ok")
-+int global_func18(struct __sk_buff *skb)
-+{
-+	foo();
-+
-+	asm volatile(
-+		"r1 = r0;"
-+		:::
-+	);
-+
-+	return 0;
-+}
+[auto build test ERROR on bpf-next/net]
+[also build test ERROR on bpf-next/master bpf/master net-next/main net/main linus/master v6.19 next-20260209]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Feng-Yang/bpf-test_run-Fix-the-null-pointer-dereference-issue-in-bpf_lwt_xmit_push_encap/20260210-171138
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git net
+patch link:    https://lore.kernel.org/r/20260210090657.86977-1-yangfeng59949%40163.com
+patch subject: [PATCH v5] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+config: x86_64-buildonly-randconfig-004-20260210 (https://download.01.org/0day-ci/archive/20260211/202602110246.gh5IIHrI-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260211/202602110246.gh5IIHrI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602110246.gh5IIHrI-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+   net/bpf/test_run.c: In function 'bpf_prog_test_run_skb':
+>> net/bpf/test_run.c:1162:31: warning: unused variable 'fl6' [-Wunused-variable]
+    1162 |                 struct flowi6 fl6 = {};
+         |                               ^~~
+--
+   ld: vmlinux.o: in function `ip_route_output_key':
+>> include/net/route.h:179:(.text+0x128a7e9): undefined reference to `ip_route_output_flow'
+
+
+vim +/fl6 +1162 net/bpf/test_run.c
+
+   984	
+   985	int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
+   986				  union bpf_attr __user *uattr)
+   987	{
+   988		bool is_l2 = false, is_direct_pkt_access = false, is_lwt = false;
+   989		u32 tailroom = SKB_DATA_ALIGN(sizeof(struct skb_shared_info));
+   990		struct net *net = current->nsproxy->net_ns;
+   991		struct net_device *dev = net->loopback_dev;
+   992		u32 headroom = NET_SKB_PAD + NET_IP_ALIGN;
+   993		u32 linear_sz = kattr->test.data_size_in;
+   994		u32 repeat = kattr->test.repeat;
+   995		struct dst_entry *dst = NULL;
+   996		struct __sk_buff *ctx = NULL;
+   997		struct sk_buff *skb = NULL;
+   998		struct sock *sk = NULL;
+   999		u32 retval, duration;
+  1000		int hh_len = ETH_HLEN;
+  1001		void *data = NULL;
+  1002		int ret;
+  1003	
+  1004		if ((kattr->test.flags & ~BPF_F_TEST_SKB_CHECKSUM_COMPLETE) ||
+  1005		    kattr->test.cpu || kattr->test.batch_size)
+  1006			return -EINVAL;
+  1007	
+  1008		if (kattr->test.data_size_in < ETH_HLEN)
+  1009			return -EINVAL;
+  1010	
+  1011		switch (prog->type) {
+  1012		case BPF_PROG_TYPE_SCHED_CLS:
+  1013		case BPF_PROG_TYPE_SCHED_ACT:
+  1014			is_direct_pkt_access = true;
+  1015			is_l2 = true;
+  1016			break;
+  1017		case BPF_PROG_TYPE_LWT_IN:
+  1018		case BPF_PROG_TYPE_LWT_OUT:
+  1019		case BPF_PROG_TYPE_LWT_XMIT:
+  1020			is_lwt = true;
+  1021			fallthrough;
+  1022		case BPF_PROG_TYPE_CGROUP_SKB:
+  1023			is_direct_pkt_access = true;
+  1024			break;
+  1025		default:
+  1026			break;
+  1027		}
+  1028	
+  1029		ctx = bpf_ctx_init(kattr, sizeof(struct __sk_buff));
+  1030		if (IS_ERR(ctx))
+  1031			return PTR_ERR(ctx);
+  1032	
+  1033		if (ctx) {
+  1034			if (ctx->data_end > kattr->test.data_size_in || ctx->data || ctx->data_meta) {
+  1035				ret = -EINVAL;
+  1036				goto out;
+  1037			}
+  1038			if (ctx->data_end) {
+  1039				/* Non-linear LWT test_run is unsupported for now. */
+  1040				if (is_lwt) {
+  1041					ret = -EINVAL;
+  1042					goto out;
+  1043				}
+  1044				linear_sz = max(ETH_HLEN, ctx->data_end);
+  1045			}
+  1046		}
+  1047	
+  1048		linear_sz = min_t(u32, linear_sz, PAGE_SIZE - headroom - tailroom);
+  1049	
+  1050		data = bpf_test_init(kattr, linear_sz, linear_sz, headroom, tailroom);
+  1051		if (IS_ERR(data)) {
+  1052			ret = PTR_ERR(data);
+  1053			data = NULL;
+  1054			goto out;
+  1055		}
+  1056	
+  1057		sk = sk_alloc(net, AF_UNSPEC, GFP_USER, &bpf_dummy_proto, 1);
+  1058		if (!sk) {
+  1059			ret = -ENOMEM;
+  1060			goto out;
+  1061		}
+  1062		sock_init_data(NULL, sk);
+  1063	
+  1064		skb = slab_build_skb(data);
+  1065		if (!skb) {
+  1066			ret = -ENOMEM;
+  1067			goto out;
+  1068		}
+  1069		skb->sk = sk;
+  1070	
+  1071		data = NULL; /* data released via kfree_skb */
+  1072	
+  1073		skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN);
+  1074		__skb_put(skb, linear_sz);
+  1075	
+  1076		if (unlikely(kattr->test.data_size_in > linear_sz)) {
+  1077			void __user *data_in = u64_to_user_ptr(kattr->test.data_in);
+  1078			struct skb_shared_info *sinfo = skb_shinfo(skb);
+  1079			u32 copied = linear_sz;
+  1080	
+  1081			while (copied < kattr->test.data_size_in) {
+  1082				struct page *page;
+  1083				u32 data_len;
+  1084	
+  1085				if (sinfo->nr_frags == MAX_SKB_FRAGS) {
+  1086					ret = -ENOMEM;
+  1087					goto out;
+  1088				}
+  1089	
+  1090				page = alloc_page(GFP_KERNEL);
+  1091				if (!page) {
+  1092					ret = -ENOMEM;
+  1093					goto out;
+  1094				}
+  1095	
+  1096				data_len = min_t(u32, kattr->test.data_size_in - copied,
+  1097						 PAGE_SIZE);
+  1098				skb_fill_page_desc(skb, sinfo->nr_frags, page, 0, data_len);
+  1099	
+  1100				if (copy_from_user(page_address(page), data_in + copied,
+  1101						   data_len)) {
+  1102					ret = -EFAULT;
+  1103					goto out;
+  1104				}
+  1105				skb->data_len += data_len;
+  1106				skb->truesize += PAGE_SIZE;
+  1107				skb->len += data_len;
+  1108				copied += data_len;
+  1109			}
+  1110		}
+  1111	
+  1112		if (ctx && ctx->ifindex > 1) {
+  1113			dev = dev_get_by_index(net, ctx->ifindex);
+  1114			if (!dev) {
+  1115				ret = -ENODEV;
+  1116				goto out;
+  1117			}
+  1118		}
+  1119		skb->protocol = eth_type_trans(skb, dev);
+  1120		skb_reset_network_header(skb);
+  1121	
+  1122		switch (skb->protocol) {
+  1123		case htons(ETH_P_IP):
+  1124			sk->sk_family = AF_INET;
+  1125			if (sizeof(struct iphdr) <= skb_headlen(skb)) {
+  1126				sk->sk_rcv_saddr = ip_hdr(skb)->saddr;
+  1127				sk->sk_daddr = ip_hdr(skb)->daddr;
+  1128			}
+  1129			break;
+  1130	#if IS_ENABLED(CONFIG_IPV6)
+  1131		case htons(ETH_P_IPV6):
+  1132			sk->sk_family = AF_INET6;
+  1133			if (sizeof(struct ipv6hdr) <= skb_headlen(skb)) {
+  1134				sk->sk_v6_rcv_saddr = ipv6_hdr(skb)->saddr;
+  1135				sk->sk_v6_daddr = ipv6_hdr(skb)->daddr;
+  1136			}
+  1137			break;
+  1138	#endif
+  1139		default:
+  1140			break;
+  1141		}
+  1142	
+  1143		if (is_l2)
+  1144			__skb_push(skb, hh_len);
+  1145		if (is_direct_pkt_access)
+  1146			bpf_compute_data_pointers(skb);
+  1147	
+  1148		ret = convert___skb_to_skb(skb, ctx);
+  1149		if (ret)
+  1150			goto out;
+  1151	
+  1152		if (kattr->test.flags & BPF_F_TEST_SKB_CHECKSUM_COMPLETE) {
+  1153			const int off = skb_network_offset(skb);
+  1154			int len = skb->len - off;
+  1155	
+  1156			skb->csum = skb_checksum(skb, off, len, 0);
+  1157			skb->ip_summed = CHECKSUM_COMPLETE;
+  1158		}
+  1159	
+  1160		if (prog->type == BPF_PROG_TYPE_LWT_XMIT && !skb_dst(skb)) {
+  1161			struct flowi4 fl4 = {};
+> 1162			struct flowi6 fl6 = {};
+  1163			struct rtable *rt;
+  1164	
+  1165			switch (skb->protocol) {
+  1166			case htons(ETH_P_IP):
+  1167				if (sizeof(struct iphdr) <= skb_headlen(skb)) {
+  1168					fl4.saddr = ip_hdr(skb)->saddr;
+  1169					fl4.daddr = ip_hdr(skb)->daddr;
+  1170				}
+  1171	
+  1172				rt = ip_route_output_key(net, &fl4);
+  1173				if (IS_ERR(rt)) {
+  1174					ret = PTR_ERR(rt);
+  1175					goto out;
+  1176				}
+  1177				dst = &rt->dst;
+  1178				break;
+  1179	#if IS_ENABLED(CONFIG_IPV6)
+  1180			case htons(ETH_P_IPV6):
+  1181				if (sizeof(struct ipv6hdr) <= skb_headlen(skb)) {
+  1182					fl6.saddr = ipv6_hdr(skb)->saddr;
+  1183					fl6.daddr = ipv6_hdr(skb)->daddr;
+  1184				}
+  1185	
+  1186				dst = ip6_route_output(net, NULL, &fl6);
+  1187				if (IS_ERR(dst)) {
+  1188					ret = PTR_ERR(dst);
+  1189					goto out;
+  1190				}
+  1191				break;
+  1192	#endif
+  1193			default:
+  1194				ret = -EINVAL;
+  1195				goto out;
+  1196			}
+  1197	
+  1198			if (unlikely(dst->error)) {
+  1199				ret = dst->error;
+  1200				dst_release(dst);
+  1201				goto out;
+  1202			}
+  1203			skb_dst_set(skb, dst);
+  1204		}
+  1205		ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
+  1206		if (ret)
+  1207			goto out;
+  1208		if (!is_l2) {
+  1209			if (skb_headroom(skb) < hh_len) {
+  1210				int nhead = HH_DATA_ALIGN(hh_len - skb_headroom(skb));
+  1211	
+  1212				if (pskb_expand_head(skb, nhead, 0, GFP_USER)) {
+  1213					ret = -ENOMEM;
+  1214					goto out;
+  1215				}
+  1216			}
+  1217			memset(__skb_push(skb, hh_len), 0, hh_len);
+  1218		}
+  1219	
+  1220		if (kattr->test.flags & BPF_F_TEST_SKB_CHECKSUM_COMPLETE) {
+  1221			const int off = skb_network_offset(skb);
+  1222			int len = skb->len - off;
+  1223			__wsum csum;
+  1224	
+  1225			csum = skb_checksum(skb, off, len, 0);
+  1226	
+  1227			if (csum_fold(skb->csum) != csum_fold(csum)) {
+  1228				ret = -EBADMSG;
+  1229				goto out;
+  1230			}
+  1231		}
+  1232	
+  1233		convert_skb_to___skb(skb, ctx);
+  1234	
+  1235		if (skb_is_nonlinear(skb))
+  1236			/* bpf program can never convert linear skb to non-linear */
+  1237			WARN_ON_ONCE(linear_sz == kattr->test.data_size_in);
+  1238		ret = bpf_test_finish(kattr, uattr, skb->data, skb_shinfo(skb), skb->len,
+  1239				      skb->data_len, retval, duration);
+  1240		if (!ret)
+  1241			ret = bpf_ctx_finish(kattr, uattr, ctx,
+  1242					     sizeof(struct __sk_buff));
+  1243	out:
+  1244		if (dev && dev != net->loopback_dev)
+  1245			dev_put(dev);
+  1246		kfree_skb(skb);
+  1247		kfree(data);
+  1248		if (sk)
+  1249			sk_free(sk);
+  1250		kfree(ctx);
+  1251		return ret;
+  1252	}
+  1253	
+
 -- 
-2.49.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
