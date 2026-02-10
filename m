@@ -1,219 +1,483 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D22A21257F;
-	Tue, 10 Feb 2026 05:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604BB2DECA8
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 06:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770702806; cv=fail; b=ZJqcAARi83mOmUA88prSMYhg3c8GMW5EzI3B+nVbRJTCHi45pJBDcYk3HuWVz6ZM6CdHAHWYBiJLfSF8f9JUs9Y4mM1vFdnkzxNIYv97eHlM/jEE+5+94FACu6/ZMuQFLo8vCX0IugnOnhqIUuvyM8peBXOL/Lqm4VibhVkrUd4=
+	t=1770706488; cv=pass; b=mf7heuZPJodf/ZlnWxAUycY10PkKeJUrB2ltEXgBhamgV2xuQYLi5QRhiyo3dZ+PChz/pGYRZpu2sFem9rEw6gELAMDHGB7yW70RMUXzQONouQ1xvE+UnKmVhZUsK71e2rLFy2nq6kiEqHbkelF2Gy46PSZxXpe8eDTY8Zgv0Fo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770702806; c=relaxed/simple;
-	bh=xLFgS6D97xrvouiqcUsQngJynTeMptraAclKOJiLK7Y=;
-	h=References:From:To:Cc:Subject:In-reply-to:Date:Message-ID:
-	 Content-Type:MIME-Version; b=mnXqqHl5uDq2fG+x8S45wIlXP5L7SZLc+Mg+73E0CuM2bXkvc0//GfrfMeQqRvQ/njMR+HAGITkzE4gE8Ddjf9H21cnbJ7bQBBFOHAykhQys2ozQaeghsr3tc3/SzMFd3xtpiPcnDkfcycwc3HHdv1ipn/mNPA+99vxSpa4TeQc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=HsLWCDxo; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=Jq/I9+iP; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1770706488; c=relaxed/simple;
+	bh=cShi6S+64Ne2xKqEBDuW7M2DlXD+bHijhk4bVUcXVFw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CkbZ7KX/x/jOrfNzjRWAtCNpjbhZdoSFlvNeptQ5m8l+f6NXF/PQhv7UtJzhFLKg9rzduPMNEJ07SaIdGTbCKN/oW7Z2UTWQHB1dz3wN/8eLMU80AYCjj+swkCy8ZyCDxyC1+n3yZXDIBWYWlPlYQ1k59AzaMz9ircMNld5atiA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bPJn36jI; arc=pass smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="HsLWCDxo";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="Jq/I9+iP"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 619Lol2q1150033;
-	Tue, 10 Feb 2026 05:52:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=xLFgS6D97xrvouiqcU
-	sQngJynTeMptraAclKOJiLK7Y=; b=HsLWCDxoudNvvHaX8DuAZct0ejue0Oywfa
-	SIk3NlMy5fs6HjxbW8lUeZ/JBWAOrpy7m1aTyP3HqIuPiYncEQQp2sa8TFV8s8eP
-	/bYQg4jvqeTXLbY1DULTjjfzrGOAm3VT+RBTzjbXc+YUSJoY4OqPXOFGMW/mLbnf
-	O8YVfjhlncazjzIs9xWHsrXg3fNCaQk3fbOSw5VaZ5Oz393ODEL1pqXIv8nynXGR
-	vBrKNc5R9F7/3oPRASf3/COg3ThRkiBZzxJRHI66mZnSYoW/rZsjFh7SIsXLPFW9
-	1ke5faaXSaznqDgUT0H4X6PA0Q0J9VGWS3TJnAvD1+syzgKpNXIQ==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4c5xjyubjd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Feb 2026 05:52:28 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61A509m7033578;
-	Tue, 10 Feb 2026 05:52:27 GMT
-Received: from ph8pr06cu001.outbound.protection.outlook.com (mail-westus3azon11012026.outbound.protection.outlook.com [40.107.209.26])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4c7ctyhxrh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Feb 2026 05:52:27 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fyXtfLi/DPhEXw9CoQY1tK3c+IvLNpUedRp//afbTw5tdC3AMTiJkjn8GeMf6FOst8hPk22whQemj7Uk92sXSbbLh6KYUiruh9d3nT4rxjZpnR+cnrn4IFF/fbmITY/bQEK6NmkiAwWPqyIfIgdR97wW3wjkk7+yGYJqjGezQ9kd+dfJQNdi4YcFlc7Yxu3fmgaGaoIIOEJG3AggrHuuuUByrm6USige40q3ghi3UKIdtZxaZ/PgqHHZZxKdZDxtnl0bOB4m8cvFevG3EbysaaD6vPKBbHlp780O3YQAZS9+bG4vds/hLXXN5ZisvAZhiy/NwSfVqvsNmmx7DXOHVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xLFgS6D97xrvouiqcUsQngJynTeMptraAclKOJiLK7Y=;
- b=k/UulndURXMe5WAsfGYcKlAQkYDmKzN3PQT5RUdlEJSK4bnME3NxUljxt8Vpoj8FFKA8C6C37Rs/Vv1sPSWB8WBlAvcpp6urkf+9fFszayItrGdi8Pq9I4S/QnBBkWjXJ2M9JfvUTWldZnDy2QJ3hF+MDs9KupmkD52KMfdXtX0MTDSsWkI679uvfSYONOcpD0K9ow/y9ub+6k6eZR/VYdQyga9jdYkrAotGJ5x/7YjfNu74Y5dD2wJlqjelklmjOtSgOBRP3eZrQ+10CL0MrFRDZhZCVgFQ53EfFIm2HgVOkvaEmwkreysc0nHqmWe/nD/s8+g3gBTSjYI0JgrsSQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bPJn36jI"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2aaf59c4f7cso2421155ad.1
+        for <bpf@vger.kernel.org>; Mon, 09 Feb 2026 22:54:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770706487; cv=none;
+        d=google.com; s=arc-20240605;
+        b=O1+7evAZRqaPemQW7WASxgeHmE0FpLSQQQWv6bnCTmLpVBTmIz7APbP9vaw6GaTARm
+         5bXll6KIJr6QnKauZVc9OMIQxcj9kSUXQbqgvWrDFAQDaokpaSx4frINikDowa6X/PZG
+         YTABz0Hr/+6/8OL718w2QT/xPdJAj3mlDkQfZXTq3uK8v7QezvnUgp2yajHdCGG6Vs76
+         nojTRqH5xrdctA3ri/kaAEgalC/w9t6x9yybvfjNwimrbC8lvH6+i0ND+sU+JWE10TnF
+         tyx1OrqE/YfMOHYJyE6qJxQEIFuSyZx4laArJagNO+D39S8YNv4jn/8pZL7eeBIXff4e
+         8/Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=q/oRnvZp9zxGQuEHklbxnoTFI0h43dGFyuX7iJvD5jo=;
+        fh=TCTIBws018cdvbzFnR9DP/oHdDTIeWJgn/HK86y3L8c=;
+        b=ISeWeRF8JYroFJLcY8xFgqke8pMkHRB/3rljrmXjDRfWF+nQbU9lRGxTWz8hogmr7Z
+         UsRy1w1zXvLupAd8hVTXqFfOQBu2VJPOMo435y/QdAIB6DjG8IvIXr6KZEvxSANmZdj2
+         uUVuMrvFsUNsUVyjGY4jvZ5mQ5jfell2Hg7Ljlr7V5YTgEeBMPRDDDjIpY+MfPCMlpSB
+         n7RoGfffrTesjpsCVYp7y+fGT9VHcOmgA9NVHEWGEb1BHIlq5PERTWe/UIZLIO1sp5Fw
+         hKeElxpGAr/wR1Ol6ai7RxN8ufAdBWFG9ORQSLAw4TE3Sd7RGBB2j3kbqWWnuM7F7IDf
+         rd0Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xLFgS6D97xrvouiqcUsQngJynTeMptraAclKOJiLK7Y=;
- b=Jq/I9+iPviWENfMXw/QKQ5dhFArytseoeZRf4t7QHnGnPUKExNmJvqCBWYUi8ItSdz64Fj7vzQrEehuOuN/SY5Y/LPpLpSAOhz4Q5esA2nAqDQ9frIekI0/t/oOJ7CsCH3O9Zf1yL90EYumVHLQU9pxRM6SUe/db+vtJdjsJgno=
-Received: from DM8PR10MB5416.namprd10.prod.outlook.com (2603:10b6:8:3f::19) by
- DM3PPF0AF60B9AF.namprd10.prod.outlook.com (2603:10b6:f:fc00::c08) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.19; Tue, 10 Feb
- 2026 05:52:23 +0000
-Received: from DM8PR10MB5416.namprd10.prod.outlook.com
- ([fe80::c8c3:861e:be9b:fa6]) by DM8PR10MB5416.namprd10.prod.outlook.com
- ([fe80::c8c3:861e:be9b:fa6%6]) with mapi id 15.20.9587.017; Tue, 10 Feb 2026
- 05:52:23 +0000
-References: <20260209023153.2661784-1-ankur.a.arora@oracle.com>
- <20260209023153.2661784-2-ankur.a.arora@oracle.com>
- <9414714a-ba13-4d17-8b4f-97a03b90d6c1@infradead.org>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
-        catalin.marinas@arm.com, will@kernel.org, peterz@infradead.org,
-        akpm@linux-foundation.org, mark.rutland@arm.com, harisokn@amazon.com,
-        cl@gentwo.org, ast@kernel.org, rafael@kernel.org,
-        daniel.lezcano@linaro.org, memxor@gmail.com, zhenglifeng1@huawei.com,
-        xueshuai@linux.alibaba.com, joao.m.martins@oracle.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Subject: Re: [PATCH v9 01/12] asm-generic: barrier: Add
- smp_cond_load_relaxed_timeout()
-In-reply-to: <9414714a-ba13-4d17-8b4f-97a03b90d6c1@infradead.org>
-Date: Mon, 09 Feb 2026 21:52:20 -0800
-Message-ID: <87ecmtb0x7.fsf@oracle.com>
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR04CA0222.namprd04.prod.outlook.com
- (2603:10b6:303:87::17) To DM8PR10MB5416.namprd10.prod.outlook.com
- (2603:10b6:8:3f::19)
+        d=gmail.com; s=20230601; t=1770706487; x=1771311287; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q/oRnvZp9zxGQuEHklbxnoTFI0h43dGFyuX7iJvD5jo=;
+        b=bPJn36jI2RK7mU46tLLUZGVu3MyO0oRMhXVIxZPt+Z3CEdPPc8/XL7aAlf7dJPt57t
+         htI/FCM5Vu9irf2Xub3299lk4KfyhPumfaeEvbHv9OPVEZUwXH0Icr+ioq6TUKB0KLpK
+         XDOhTot75KA+BPGW4okNKtjIVG4sAokr8CW26wcr1O8VTOWg2U9yux2VPnzn2UvgPzeX
+         PwsppotKzpTdbA0zCjGuyicTppChysDWjHIhRiqj0y4C1E/UPH9LRKBWCjHY3bY+hajI
+         9P0espGQnooCQvSOmeYKLsJtsKs/55V00wNYpwtJAdTJKDN1Wog7Z0sBUw3r7bhUQfNk
+         Imdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770706487; x=1771311287;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=q/oRnvZp9zxGQuEHklbxnoTFI0h43dGFyuX7iJvD5jo=;
+        b=YxIv1ZGFAkgy8RYnfqLCCvbe9zeKaKG1FBe/T6p3TJdITLdqW14LMBvpviFpEKe/88
+         lgoA5CUCQnPcnqrA8+2jpR6v7hkX859tymV4KcQawnj3aSyyPjN+2bCIP9xAqgfI+Flv
+         wRtPcv0d3SuTDdgJJpQiewYyaKfMjNXmMsbOr3OL10H+6fkMJXYd4eZEbUU8gSSdetw4
+         adZKew/41zaMPOeYGon6qfxPtGxZDMGXtvAYC4tahHXoPrG1MXJoY0pveFwphRIhiP0Q
+         wkVqNejVemdHhvgkEIJ51MULgKuQapx85bHLlizNE0Rt03spDjuAQb/EInCpMNeRilEF
+         fAYg==
+X-Gm-Message-State: AOJu0YwCzyM07Dl8HF7bpQ5NrUqtF9m/petyJe4Is0YmgkyMgjxJKhEB
+	if0JPshBWMZmDpI7iAS7GAwTd0selQ8lnwjI2PEGU1ZkEezppw1bu93ypwe6kXa0QoECDqfzh0V
+	9n69dDvyE/LKKguJCbvGxnUK3qytnFVU=
+X-Gm-Gg: AZuq6aLaULFDewPCfaeM2I25yk8kf9H8CxMZmpfXYSwP2W3ZrxCPbN3Fq2TcbRu3aIf
+	VNkQQaL68OW5DK/GjjoOPCmWC/F5KQ9ylS+WBGhh0VL++s3RzkdbBTAOZ5ThztAx1fJcF/QkM+q
+	jEpa9PCc2AESmQ8g1wjzXJyN6YIa/1R8wxagy9e7Tr/beb0jgzEXLXGDflKB0R/2oyxBYx9HgZF
+	kIPEIIzahsSpvfqdcm4hyuE+ueYHnOa7GKcO8HgVrWKdHzmYxi5sRhXm4lc/j3VHLze7bVSW2Es
+	tByhqjetW57jR0iX4KqyS/E=
+X-Received: by 2002:a17:903:3c68:b0:2a3:c667:e0a0 with SMTP id
+ d9443c01a7336-2a9516d5821mr124582285ad.29.1770706486494; Mon, 09 Feb 2026
+ 22:54:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM8PR10MB5416:EE_|DM3PPF0AF60B9AF:EE_
-X-MS-Office365-Filtering-Correlation-Id: 151f5ddb-a81c-4a05-9ce6-08de68688eee
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?vBnOIdu1/EyPCRjpSuBaouxdoOwg4rPioI+wtO1Nq+K/4h8w7r+Nhr9RQ0c6?=
- =?us-ascii?Q?v8PpQvCCM592ouONFIXCSO6cNjIjvYdRlP5Ab5Hm9HdSgfixeqdnY3whAz4c?=
- =?us-ascii?Q?SF82aZcZtw60le/RpTrcp+WjKFnRRG5VMeN1gAVcj969mexVg/Z+nNewRJeX?=
- =?us-ascii?Q?IIHQWBeE9RSTjJop5XZXOzWhCwyovdbkHltmzzt9y4QnKXutbZwDzAu++jgy?=
- =?us-ascii?Q?nbWyjRXVdmpzM3DFFqPcfX5gSPKjfdOF7p6iSz+pmr7uyq+BwBXKyK7QuauR?=
- =?us-ascii?Q?E0+OmkBu4kodN1NXqRXpL82Vkuyhp0Gww5hK2M2hbBhcTN5eYrwOU0Ehg+hG?=
- =?us-ascii?Q?oGrwA3QKfi23Mo3WOFoafcmN4Z3ZXGsaPIMXksX+ubdrYxFv9mPoTX9U+kki?=
- =?us-ascii?Q?7M3eevjKdX393t7r5I1PNIUJXoxEFHqTmK2WEy/G+Jb0DOex5y4vBOKE1/dH?=
- =?us-ascii?Q?vMQWiwXgzL6EWHpXfuYsWb+u8MHY74G4Ti2Ob8/jJsgB1kywAQeF69B13LvT?=
- =?us-ascii?Q?zYNLYtJiaatAgEasU7eFIiIXhHjCqVmEku16zEWQrcLLcGksZ1SfxRYYez0B?=
- =?us-ascii?Q?TlC2Ph+hbVge25z/WptN1C7e0gFtsUjHWTQhr9dpRCt0akzl2kHx/gzzonza?=
- =?us-ascii?Q?4hbSSUP8Xtdv7y8L4TvMJZRNKm63vpfDl6D5pazxY3oeEy14iDtuW9skB2bs?=
- =?us-ascii?Q?QdWZy0lrhG6U2ysIPrXfsAjNp3S3AKULrbOLIIRmkyrZb+2uojyfoJc/t7fX?=
- =?us-ascii?Q?MGVTy2bb3zcdhX4aAhPtLmyqXrNsgDF+yInaXJDn4RWXp+c6qHbYlpZjZPiZ?=
- =?us-ascii?Q?U0chYp5bp6wykTWqHmzr2XjGyfJ6l4is/N/8MVA7MlcZtAa5POtipCSZ633q?=
- =?us-ascii?Q?Ppou+qpsZm1pcUlX98BDyKpbfK9L5JOTkJXdVae+jb4RPxlfRaXd7lfAjWlP?=
- =?us-ascii?Q?lrF/xqa+sYg43OAoufFA5TuHLan1iho9Rs/3xfHeaZJSzi74uUv1IYnq4RiC?=
- =?us-ascii?Q?aYKSPI3vwfdI3nUb3og1eBGZcxQ0VtTSgfYxfMJtyALBF5K3Y673soNGCR3w?=
- =?us-ascii?Q?LZcRpmtrA6h9aDTVzWhIbUBfmPuBmqFwiE/Ru4KbFYFGT08JkEctkZlEnyWD?=
- =?us-ascii?Q?gEPWzVTjD4Z8Yrau0fsFGzozMGanpfQsnEJC+x/p+Oq5ndMuRrIkX2irtlok?=
- =?us-ascii?Q?73RXYOTRWUyBGFHLLuMtpU5Rv7MuJJohKV53n4SG4W4Vs95YdytNt7oAjv1I?=
- =?us-ascii?Q?/mEETdyFqgCQvZ89jKQoZsMucxgMg2lPkqDg9vkPp3KjvsDR4rLB79dsOif0?=
- =?us-ascii?Q?ogOq7BdoRbEDbeApSLmcREqZHLz5sQHJiZtpsf2Bg634mgFXxvtwxJurZElz?=
- =?us-ascii?Q?PwJcza12blMyS+vtqoZV+C34AKqYcLzuBs9NWQFxNuEUMdTmbirukF2sM9/r?=
- =?us-ascii?Q?++n06URrK4X7lgJGjr626vODsB/PhLztpi6fKMse6f3vW4ubPfdFRvveyKit?=
- =?us-ascii?Q?o/L9lk/NBC+VeAQhXGi2ucLIo934qzAZ52+n+eQAQ0TtQBea55PcYoIpa+4r?=
- =?us-ascii?Q?21QEvQvXB+HpdHg1W04=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR10MB5416.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?WL/9vaQdkqHrhRhIgTKJUuzP9zy9DUETyviQ4iRcLIyGtEsr79Ex916Yv8zm?=
- =?us-ascii?Q?FLvWbbOJm/WBlGylwu2KlqnYXeAqa2CXtIkMV8r4b2ebMHxcGtwoNNDCxy+x?=
- =?us-ascii?Q?fS3h5Vv8X3dci7DoIMh0JNvtmdX0lP0VUTMcL3C5Ase5iwxAN2kBQz3Axjz9?=
- =?us-ascii?Q?b7yhDWFyEShf6zK42yzzriEDlOOA0h1x6t/VY/gsGIzywhqWjFKq/ommPTuO?=
- =?us-ascii?Q?hsl5y5AMy3j096rLcasulaCRPWXCAgeUvfXScb62pn3n3n4zA8EJ2N5KXhQY?=
- =?us-ascii?Q?M1icSwa4vq/g9r8Yz7HWeo6wt/tTnmPYhp/cKzEQbNRyeaN7BD2MNwt7ISPg?=
- =?us-ascii?Q?1vxZw9mJnGX4703Ll1RAX8Kcz4PiSo4rYaiD/ea6AhFvjB68bzNtXY1xlmOl?=
- =?us-ascii?Q?+O0Qrskfp1I2oqHBQN4S7N/SIWCEIFg0Obb98ZJhQueSFrMfEJpYUSbnz86H?=
- =?us-ascii?Q?yUsgXbZSiKLESvSXZggmi5m3XKnB+YRnoRbfcGICzFfI8X4aBcrR1coh/KsT?=
- =?us-ascii?Q?+rU4b9wMNsYeBj7Xvpxm9Yh3M2+MkFb3dfH5vx+RWIroGAepDaXgui0hAbQ+?=
- =?us-ascii?Q?jKSn4gTQ7M5kbTaS0RLBKQQsCtQUvngaDSY5PYXq5eSFKFjEvor3odjSZ7hY?=
- =?us-ascii?Q?PYP5xJnLNpPSfdKwVqBa+CHMgPmIIeNtU2YOroZ4BuXTlxT9sd/hLvyihEgP?=
- =?us-ascii?Q?0EKzghceBIZSPKdvSOZtPZQqn7fjdzxwz6qQ6Sadt8aVm1ESdAp/hxrzPjUD?=
- =?us-ascii?Q?J0QpAq087wnU6Fo+y23cwzrl7CjzIQTR8WNh/SBbZ2G3X+ejO5fRVusE0whT?=
- =?us-ascii?Q?htPiCuJIfGqbS2n6kyHxpTSI9W+m9bYrl0kTHKoS64Yko9ZB+tflm2W3vovt?=
- =?us-ascii?Q?qWM/4K/GnvbD4xoq1zAXSTndfnaeiOIoLQjEz2H18CMoRAanXEl/ar97Qepd?=
- =?us-ascii?Q?vK9SW/VXAHg15duI3KFBiqpzf0Kot11v7cYhTwndtDwodnz/lY0Fcmd8HE9Q?=
- =?us-ascii?Q?gShm4B5VRntGXUtedFfdF5jYUcr7/Olj+XTJbj5i9O1DJW7yPAnXIfAIo2UO?=
- =?us-ascii?Q?Bw3YcdcAXxL7lou/bSyOsO9QHiCgVvvOcrNQJjgQEVg85Y8vldzC2Qil5UvS?=
- =?us-ascii?Q?P4g77kJa33QPokk6I4Ies9iHHxNAKxZkDdhukRMd5lfKuvy5iU3IuRzkcT9v?=
- =?us-ascii?Q?/6sMzDyDzKv5Z0Aaz0zlWdfRhHqgaeVPcvwMBFkXLehV/EjWGLIIiT1CMnp6?=
- =?us-ascii?Q?8xZWcpgRDCR7B+K6TKQHVpyNeQE5eANXO3GGQjJDy1BPAE56k2dvff2dlWZr?=
- =?us-ascii?Q?PXJ/GYZRHiTroL1Ufh328Jksf2xwhwDgZZ3oshRWKgqf8lU1AOQZDOGjPDMj?=
- =?us-ascii?Q?15zilAfT1PEbWx0rNh2uRCVq0RfgdcY3AG/PJgKtg9M2Z/gBlq4bnxjAeHDh?=
- =?us-ascii?Q?H6jgIEfq2GjDFL06cwij8UGuzM0pYtFkI2FNpml2vfysZFkwuOSdJKEac8Hg?=
- =?us-ascii?Q?S6rn2LYeAkHQDqB8VdB0rUx2QRmbxoGSSB2HFxuvtm4FjC1bsMJdhTPapMxy?=
- =?us-ascii?Q?ouiOiyHm9HibqoLKqYauSIU/3BVfrFAHFDznQMVkWHErRXejLMzCUKQZkPPL?=
- =?us-ascii?Q?ugxNWXSTC0Ku2XFHKupEicXqJS9S1yPHaJA2v5y1mVSBsTULoiMEPkWBynCD?=
- =?us-ascii?Q?IegLhHp2DY7SZ6+yS6nzHaXqIMSdBaUkXtpYpd8ga90qzHWXTyM9OLMWi6w4?=
- =?us-ascii?Q?JTB2FBfoMQ1gKBUW+312akKsVDvAGjE=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	c+28rCZyGzvWRVEQ+/WVn9sq7GTLuK0Bo7k25v2ZB7K2Npb/UxrQxw7bKwzm82+5Ags1Ow1ePusnRmBQViEnm+JCNkdAVcUX/oLVpvYg2WSVQ4GuQhXa9hGJjfD9JOJDJ08/nz0zOc2wNE8LzSz4+66Z7G95uIbZ5qiSjrcU+7/kQsM3UFYZL+HsSxeHZOmVxftvPzP30wbpGWMSFScO8/Juu1okFl68EWKOeMS5Kv9UJ8nGQ0ygSAy/2q1pJ3zZqI7E/c5lKBgibvoeSdOfG2/ebYTW0I1BevFEW8nLZsljYbXzbref7dy7/WJPzh+QLtlHhTDtCqKpi3wDkRHkRY59pOiXqE7/6mN+Q3GsusoHRpni4mCg+z6hMMyqxGJGzmjAFiX54x52cVI06I4p1MR6/d2IswD9/1lzBJxCKAGE1MHai7O+Cajj/IwUO/dILvvjZLKoBM6qfe9scNQisWwIMeru21nMEcj8vks2QtINm1EHi+2ZBFo5hC1LnRctjnb9y8/aX21fhiOqjlJEcQ31qq1PuiDNvfnrggl77w99S7w3UX24iSD9340tQZhWUFP0TbWsRbEkaefDns4z2n8S5Moa+LgNC1WLLoMCbfE=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 151f5ddb-a81c-4a05-9ce6-08de68688eee
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR10MB5416.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2026 05:52:22.9611
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mUU/68t/wYx3tjZRV7hwfIp/zyUdOsdHxonsi5jN5MOFhCZ39aQoIU0Lbu3a8a4gd+H4YJBVuF0pt9ra3c3Y/TlYIrYzvhyupehFb9jc/Ow=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM3PPF0AF60B9AF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-09_01,2026-02-09_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 malwarescore=0
- mlxlogscore=948 suspectscore=0 phishscore=0 mlxscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2601150000
- definitions=main-2602100046
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEwMDA0NyBTYWx0ZWRfX4LjiHPdRZZiw
- UVIPnJACkpAgd/LASGgR7hbAZEHRzurbV6UAT5dfeAsv+JxjoCJfsxIoyBFk7dbcNqNYRN+QroZ
- wkYGHJhMP3M0Q34aQWOV64AlhHHLOOvqAdrvUONwbgVEp5URzmh8FQDI0wmZ0FmvBxX/DicB2SI
- gP5hQCbauWzni8QQb1EaXG9Y1xWIexNV8hIzb4nUDxyFE8DgZ3rjXrOhES2rKLCX+Fo9EOqpUjq
- Mtvk8aNzGM/t+cF0/8wHPOnFfOudvmdvTfP5XDAd6SmB0M2/W62ADdCWx6B9KtoEIsYcdZjeRFD
- fcL/xnuOD+SW093kXHi8+7BbTJBorkyZ95AZMfBtMMiBUha8PJez6OXWn/TYvwbTvZsgtpyevgo
- yIARS+HJq5RDenjicTct4Z/Bi6gXKww4znR62FFElVvYZA7y83gEyoZd3KJbHJeJFScdYeTBoKQ
- dx6D3sLKZMuiFCXOVpA==
-X-Proofpoint-GUID: pRJyj9brpTvgaWz6D4kMOBhBSOPPu289
-X-Proofpoint-ORIG-GUID: pRJyj9brpTvgaWz6D4kMOBhBSOPPu289
-X-Authority-Analysis: v=2.4 cv=VPLQXtPX c=1 sm=1 tr=0 ts=698ac79c cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=HzLeVaNsDn8A:10
- a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=JfrnYn6hAAAA:8 a=fkmKkzQ4kxvVF4Q-le0A:9
- a=1CNFftbPRP8L7MoqJWF3:22
+References: <20260210005508.3642641-1-emil@etsalapatis.com>
+In-Reply-To: <20260210005508.3642641-1-emil@etsalapatis.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 9 Feb 2026 22:54:34 -0800
+X-Gm-Features: AZwV_QiI02ooSrZEHm2FqvENU7njB7PPwTWIz4j0B7F84XnfnS4apC9mG7owwUs
+Message-ID: <CAEf4BzaLqWT1oj-EXibyAfE0ExmiaCCqhosRujDi7Y0Nyho6dA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3] libbpf: Add gating for arena globals
+ relocation feature
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, martin.lau@kernel.org, 
+	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-Randy Dunlap <rdunlap@infradead.org> writes:
-
->> +/**
->> + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
->> + * guarantees until a timeout expires.
->> + * @ptr: pointer to the variable to wait on.
->> + * @cond: boolean expression to wait for.
+On Mon, Feb 9, 2026 at 4:55=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.co=
+m> wrote:
 >
-> s/cond/cond_expr/
+> Add feature gating for the arena globals relocation introduced in
+> commit c1f61171d44b. The commit depends on a previous commit in the
+> same patchset that is absent from older kernels (12a1fe6e12db,
+> "bpf/verifier: Do not limit maximum direct offset into arena map").
+> Without this commit, arena globals relocation with arenas >=3D 512MiB
+> fails to load and breaks libbpf's backwards compatibility.
+>
+> Introduce a libbpf feature to check whether the running kernel includes
+> patch 12a1fe6e12db, and only relocate arena globals if it does.
+>
+> CHANGELOG
+> ---------
+>
+> v2 -> v3 (https://lore.kernel.org/bpf/20260209234850.2750149-1-emil@etsal=
+apatis.com/)
+>
+> - Rename feature to better specify the verifier feature it probes for
+>   (Andrii)
+>
+> v1 -> v2 (https://lore.kernel.org/bpf/20260209210240.2051209-1-emil@etsal=
+apatis.com/)
+>
+> - Reworked test to use simpler array-based program (Andrii)
+>
+> Fixes: c1f61171d44b ("libbpf: Move arena globals to the end of the arena"=
+)
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> ---
+>  tools/lib/bpf/features.c        | 92 +++++++++++++++++++++++++++++++++
+>  tools/lib/bpf/libbpf.c          |  7 ++-
+>  tools/lib/bpf/libbpf_internal.h |  2 +
+>  3 files changed, 99 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b842b83e2480..034ea9b20617 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
+> @@ -506,6 +506,95 @@ static int probe_kern_arg_ctx_tag(int token_fd)
+>         return probe_fd(prog_fd);
+>  }
+>
+> +static int probe_ldimm64_full_range_off(int token_fd)
+> +{
+> +       const size_t bufsz =3D 1024;
 
-Thanks! Well spotted.
+buf_sz, but really just
 
---
-ankur
+char log_buf[1024]; and use sizeof(log_buf) below
+
+> +       int btf_fd, prog_fd, map;
+> +       char log_buf[bufsz];
+> +       int ret;
+> +       static const char strs[] =3D "\0f\0";
+> +       const __u32 types[] =3D {
+> +               /* [1] FUNC_PROTO `void(void)` */
+> +               BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_FUNC_PROTO, 0, 0), =
+0),
+> +               /* [2] FUNC 'f' -> FUNC_PROTO (main prog) */
+> +               BTF_TYPE_ENC(1 /* "f" */, BTF_INFO_ENC(BTF_KIND_FUNC, 0, =
+BTF_FUNC_GLOBAL), 1),
+> +       };
+> +       LIBBPF_OPTS(bpf_map_create_opts, map_opts,
+> +               .token_fd =3D token_fd,
+> +               .map_flags =3D token_fd ? BPF_F_TOKEN_FD : 0,
+> +       );
+> +       LIBBPF_OPTS(bpf_prog_load_opts, prog_opts,
+> +               .token_fd =3D token_fd,
+> +               .prog_flags =3D BPF_F_SLEEPABLE | (token_fd ? BPF_F_TOKEN=
+_FD : 0),
+
+ SLEEPABLE just for SYSCALL program? let's use TRACEPOINT and keep it simpl=
+e
+
+> +               .log_buf =3D log_buf,
+> +               .log_size =3D bufsz,
+> +       );
+> +       struct bpf_insn insns[] =3D {
+> +               BPF_LD_MAP_VALUE(BPF_REG_1, 0, 1UL << 30),
+> +               BPF_EXIT_INSN(),
+> +       };
+> +       const struct bpf_func_info_min func_infos[] =3D {
+> +               { 0, 2 }, /* main prog -> FUNC 'f' */
+> +       };
+
+unnecesasry
+
+> +       int insn_cnt =3D ARRAY_SIZE(insns);
+> +
+> +       btf_fd =3D libbpf__load_raw_btf((char *)types, sizeof(types), str=
+s, sizeof(strs), token_fd);
+> +       if (btf_fd < 0)
+> +               return 0; /* BTF not supported at all */
+> +
+
+Do we need BTF at all? Have you tried this without it?
+
+> +       map =3D bpf_map_create(BPF_MAP_TYPE_ARRAY, "arr", sizeof(int), 1,=
+ 1, &map_opts);
+
+nit: map_fd for consistency with prog_fd
+> +       if (map < 0) {
+> +               ret =3D -errno;
+> +               pr_warn("Error in %s(): %s. Couldn't create simple array =
+map.\n",
+> +                       __func__, errstr(ret));
+> +               close(btf_fd);
+> +               return ret;
+> +       }
+> +       insns[0].imm =3D map;
+> +
+> +       prog_opts.prog_btf_fd =3D btf_fd;
+> +       prog_opts.func_info =3D &func_infos;
+> +       prog_opts.func_info_cnt =3D ARRAY_SIZE(func_infos);
+> +       prog_opts.func_info_rec_size =3D sizeof(func_infos[0]);
+
+unnecessary
+
+> +
+> +       prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_SYSCALL, "global_reloc", =
+"GPL", insns, insn_cnt, &prog_opts);
+> +
+
+let's use TRACEPOINT as one of the most basic program types
+
+also "global_reloc" as a name doesn't match, really
+
+> +       ret =3D -errno;
+> +       close(map);
+> +       close(btf_fd);
+> +
+> +       if (prog_fd >=3D 0) {
+> +               pr_warn("Error in %s(): Program loading unexpectedly succ=
+eeded.\n",
+> +                       __func__);
+> +               close(prog_fd);
+> +               return -EINVAL;
+> +       }
+> +
+> +       /* Be conservative and NULL terminate the buffer to ensure strstr=
+ terminates. */
+> +       log_buf[bufsz - 1] =3D '\0';
+
+let's not be conservative, trust the verifier :)
+
+> +
+> +       /*
+> +        * Feature is allowed if we're not failing with the error message=
+ "direct value
+> +        * offset of %u is not allowed that was removed in 12a1fe6e12db
+
+missing quote after "is not allowed", also try to keep commit hash +
+subject on single line if possible (see my diff below, it looks pretty
+straightforward to achieve that)
+
+> +        * ("bpf/verifier: Do not limit maximum direct offset into arena =
+map").
+> +        * Instead, we should be failing with the message "invalid access=
+ to map value
+> +        * pointer". Ensure we match with one of the two and we're not fa=
+iling with a
+> +        * different, unexpected message.
+> +        */
+> +       if (strstr(log_buf, "direct value offset of"))
+> +               return 0;
+> +
+> +       if (strstr(log_buf, "invalid access to map value pointer") =3D=3D=
+ NULL) {
+
+!strstr()
+
+> +               pr_warn("Error in %s(): Program unexpectedly failed with =
+message: %s.\n",
+> +                       __func__, log_buf);
+> +               return ret;
+> +       }
+> +
+> +       /* Feature is on. */
+> +
+
+unnecessary comment
+
+> +       return 1;
+> +}
+> +
+>  typedef int (*feature_probe_fn)(int /* token_fd */);
+>
+>  static struct kern_feature_cache feature_cache;
+> @@ -581,6 +670,9 @@ static struct kern_feature_desc {
+>         [FEAT_BTF_QMARK_DATASEC] =3D {
+>                 "BTF DATASEC names starting from '?'", probe_kern_btf_qma=
+rk_datasec,
+>         },
+> +       [FEAT_LDIMM64_FULL_RANGE_OFF] =3D {
+> +               "Full range LDIMM64 support", probe_ldimm64_full_range_of=
+f,
+
+this description is used in the middle of sentence, it should start
+with lowercase (see other descriptions where the first word is not
+some abbreviation like BTF).
+
+> +       },
+>  };
+>
+>  bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_=
+id feat_id)
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 0c8bf0b5cce4..93e59ed8d9a1 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -3009,8 +3009,11 @@ static int init_arena_map_data(struct bpf_object *=
+obj, struct bpf_map *map,
+>         memcpy(obj->arena_data, data, data_sz);
+>         obj->arena_data_sz =3D data_sz;
+>
+> -       /* place globals at the end of the arena */
+> -       obj->arena_data_off =3D mmap_sz - data_alloc_sz;
+> +       /* place globals at the end of the arena (if supported) */
+> +       if (kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_OFF))
+> +               obj->arena_data_off =3D mmap_sz - data_alloc_sz;
+> +       else
+> +               obj->arena_data_off =3D 0;
+>
+>         /* make bpf_map__init_value() work for ARENA maps */
+>         map->mmaped =3D obj->arena_data;
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+> index fc59b21b51b5..974147e8a8aa 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+> @@ -392,6 +392,8 @@ enum kern_feature_id {
+>         FEAT_ARG_CTX_TAG,
+>         /* Kernel supports '?' at the front of datasec names */
+>         FEAT_BTF_QMARK_DATASEC,
+> +       /* Kernel supports LDIMM64 imm offsets past 512 MiB. */
+> +       FEAT_LDIMM64_FULL_RANGE_OFF,
+>         __FEAT_CNT,
+>  };
+>
+
+So overall this patch gets the job done, but I think we should tighten
+it up. I was curious why you have so much ceremony, so applied your
+patch locally and tried to strip everything I thought unnecessary
+(plus reformatted that big comment to be a bit more greppable). Here's
+what I got and it seems to do the job...
+
+pw-bot: cr
+
+
+diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+index 034ea9b20617..6e27aa618e70 100644
+--- a/tools/lib/bpf/features.c
++++ b/tools/lib/bpf/features.c
+@@ -508,90 +508,64 @@ static int probe_kern_arg_ctx_tag(int token_fd)
+
+ static int probe_ldimm64_full_range_off(int token_fd)
+ {
+-       const size_t bufsz =3D 1024;
+-       int btf_fd, prog_fd, map;
+-       char log_buf[bufsz];
++       int prog_fd, map_fd;
++       char log_buf[1024];
+        int ret;
+-       static const char strs[] =3D "\0f\0";
+-       const __u32 types[] =3D {
+-               /* [1] FUNC_PROTO `void(void)` */
+-               BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_FUNC_PROTO, 0, 0), 0)=
+,
+-               /* [2] FUNC 'f' -> FUNC_PROTO (main prog) */
+-               BTF_TYPE_ENC(1 /* "f" */, BTF_INFO_ENC(BTF_KIND_FUNC,
+0, BTF_FUNC_GLOBAL), 1),
+-       };
+        LIBBPF_OPTS(bpf_map_create_opts, map_opts,
+                .token_fd =3D token_fd,
+                .map_flags =3D token_fd ? BPF_F_TOKEN_FD : 0,
+        );
+        LIBBPF_OPTS(bpf_prog_load_opts, prog_opts,
+                .token_fd =3D token_fd,
+-               .prog_flags =3D BPF_F_SLEEPABLE | (token_fd ? BPF_F_TOKEN_F=
+D : 0),
++               .prog_flags =3D token_fd ? BPF_F_TOKEN_FD : 0,
+                .log_buf =3D log_buf,
+-               .log_size =3D bufsz,
++               .log_size =3D sizeof(log_buf),
+        );
+        struct bpf_insn insns[] =3D {
+                BPF_LD_MAP_VALUE(BPF_REG_1, 0, 1UL << 30),
+                BPF_EXIT_INSN(),
+        };
+-       const struct bpf_func_info_min func_infos[] =3D {
+-               { 0, 2 }, /* main prog -> FUNC 'f' */
+-       };
+        int insn_cnt =3D ARRAY_SIZE(insns);
+
+-       btf_fd =3D libbpf__load_raw_btf((char *)types, sizeof(types),
+strs, sizeof(strs), token_fd);
+-       if (btf_fd < 0)
+-               return 0; /* BTF not supported at all */
+-
+-       map =3D bpf_map_create(BPF_MAP_TYPE_ARRAY, "arr", sizeof(int),
+1, 1, &map_opts);
+-       if (map < 0) {
++       map_fd =3D bpf_map_create(BPF_MAP_TYPE_ARRAY, "arr",
+sizeof(int), 1, 1, &map_opts);
++       if (map_fd < 0) {
+                ret =3D -errno;
+                pr_warn("Error in %s(): %s. Couldn't create simple
+array map.\n",
+                        __func__, errstr(ret));
+-               close(btf_fd);
+                return ret;
+        }
+-       insns[0].imm =3D map;
+-
+-       prog_opts.prog_btf_fd =3D btf_fd;
+-       prog_opts.func_info =3D &func_infos;
+-       prog_opts.func_info_cnt =3D ARRAY_SIZE(func_infos);
+-       prog_opts.func_info_rec_size =3D sizeof(func_infos[0]);
+-
+-       prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_SYSCALL, "global_reloc",
+"GPL", insns, insn_cnt, &prog_opts);
++       insns[0].imm =3D map_fd;
+
++       prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, "ldimm64_off", =
+"GPL",
++                               insns, insn_cnt, &prog_opts);
+        ret =3D -errno;
+-       close(map);
+-       close(btf_fd);
++       close(map_fd);
+
+        if (prog_fd >=3D 0) {
+-               pr_warn("Error in %s(): Program loading unexpectedly
+succeeded.\n",
+-                       __func__);
++               pr_warn("Error in %s(): Program loading unexpectedly
+succeeded.\n", __func__);
+                close(prog_fd);
+                return -EINVAL;
+        }
+
+-       /* Be conservative and NULL terminate the buffer to ensure
+strstr terminates. */
+-       log_buf[bufsz - 1] =3D '\0';
+
+        /*
+-        * Feature is allowed if we're not failing with the error
+message "direct value
+-        * offset of %u is not allowed that was removed in 12a1fe6e12db
+-        * ("bpf/verifier: Do not limit maximum direct offset into arena ma=
+p").
+-        * Instead, we should be failing with the message "invalid
+access to map value
+-        * pointer". Ensure we match with one of the two and we're not
+failing with a
++        * Feature is allowed if we're not failing with the error message
++        * "direct value offset of %u is not allowed" that was removed in
++        * 12a1fe6e12db ("bpf/verifier: Do not limit maximum direct
+offset into arena map").
++        * Instead, we should be failing with the message "invalid
+access to map value pointer".
++        * Ensure we match with one of the two and we're not failing with a
+         * different, unexpected message.
+         */
+        if (strstr(log_buf, "direct value offset of"))
+                return 0;
+
+-       if (strstr(log_buf, "invalid access to map value pointer") =3D=3D N=
+ULL) {
++       if (!strstr(log_buf, "invalid access to map value pointer")) {
+                pr_warn("Error in %s(): Program unexpectedly failed
+with message: %s.\n",
+                        __func__, log_buf);
+                return ret;
+        }
+
+-       /* Feature is on. */
+-
+        return 1;
+ }
+
+> --
+> 2.49.0
+>
