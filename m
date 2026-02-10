@@ -1,224 +1,225 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819F43176E4;
-	Tue, 10 Feb 2026 16:47:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770742046; cv=none; b=q9h7iBYsd8uxOSED3d2Kq/F8ELh29CHn99nn6ryGFO8M2r+QLTc8qrSlBpSIHWKabtwdQ3dj0UIHQPzNApeeJNFaGBUbRih5eCxEXfjrw6fjVspMd7UWfZ7MDgD5qxPo1pQPqRME+swh5TUvzznzuv6O4Ifb5dFwMlIScpOG0gA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770742046; c=relaxed/simple;
-	bh=BVm/5gq52CdaZjQ4djKa+p0um+0soZsJ3vLS+v1e+ww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lPHl+p5dUJxynEo/WRi70sRPknVoG+UNA6dgp7NwY6xpIhKEk/KzkC6FAIFghQxyNbXbVEMgLdfxf9EiFSHmAr22WVZpsd72lcoIrJscMaYLes4pbXGnhnmi0m91rgp+zWIP2B/bLNHstlk9qd4Sz8ryljtuXvNJ+4kQ/mzTG3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kysmhW/u; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749CB2F5461
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 16:48:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.171
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770742134; cv=pass; b=d3fUsr8+UWceWj6bhLAfhJhKwVb51x14HnMgeybilaQtuglBb+fPd54chxcDiSurAJcmKtsZQNkzvETtlvYvudfGeNcZUZj2neqUe9Kh0FJbuu0KOA/yUY+WGZWHULJQVxGlUT7GvaU635mG0TMDbl/Qg0evmCKSRhGx2mRWkTI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770742134; c=relaxed/simple;
+	bh=cn5+eLRFyXybilovXeK1nbQgiKBCKvcC8nE/jjFqDXo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mXw5X1w0xYbaESxKYDG1tfjWfwlUryQH0/tsiEbVW2vyDyCWMxPT3qGOvzAysESaFjg+um3L31a3wq58m+FqtqxBgcdpHXHHm3fxbcgQoJhtiOlzTfJwOUEVj5NVS7B2e8DA3+BBBSm5TFKud8Q7vVBLfsk3BXLqYFyyds8t/9g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZGcOdLUp; arc=pass smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kysmhW/u"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61A3aBC93408670;
-	Tue, 10 Feb 2026 16:46:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=hWIG4k
-	TyswI9jcJ/eF4E6+Aw6IleHIzONJBK1RVFQNA=; b=kysmhW/utq4d6wdVlZnUaF
-	r/IRwiaChYl1wuGU3Uh8Wxo+msm6lJsXuxQfn7GsTpZJ9C62AKdIOQqgHrl9xwYS
-	5BVJVGZ7LaQ19aQmhYkyPDunPolrBVTrc013Jh/HAe0kJ0+3ber0+89Z7VbNQttU
-	zexHliC+wz/QSQA41kHSt9zwK/cxvSxQwZJS0AAmOKUy+N/RgTpKLOFaz4V01UzI
-	sXvP6h5MpJEiZCZR0D0O3diDeHCVU/RH79T5Cg/vQJejaYG3H9m/DJ7XsLmXOLx6
-	abDnwzd6xLbC2+zEzw6ZceagIEemby/9fcebel9/Sh8VrRya9Lx1fdezqUoNJ4ww
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696uu4qr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Feb 2026 16:46:40 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61AEbFxq001499;
-	Tue, 10 Feb 2026 16:46:39 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4c6gqn27jx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Feb 2026 16:46:39 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61AGkZf230605964
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 10 Feb 2026 16:46:35 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EBBD620040;
-	Tue, 10 Feb 2026 16:46:34 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6E7C020043;
-	Tue, 10 Feb 2026 16:46:34 +0000 (GMT)
-Received: from [9.52.200.149] (unknown [9.52.200.149])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 10 Feb 2026 16:46:34 +0000 (GMT)
-Message-ID: <15f2af3b-be33-46fc-b972-6b8e7e0aa52e@linux.ibm.com>
-Date: Tue, 10 Feb 2026 17:46:33 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZGcOdLUp"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c6dd0ec465aso383a12.1
+        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 08:48:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770742133; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SPPJaLmrixD5Xzaoj7txWHoK0XSYiaNxHwxFoMCbF78mSSSUzkdMU/uu4tvBghfnvU
+         /haOu1BpxBEsxTq/dUTYT5KQveIV3uY4USWbAsA7Wthz8RSyiBtenwqRHwHpo6eUpqsA
+         fxVmyOiA4h4MLiJEFvMoiC6jh9SFl9sm+xHNxbRUWzJUAU2jcK+4nuwIEJ6yoioSr74X
+         BTYKIn50iFzhLvtQSh7/S28IvsOYXpk46qjTcE/UhPqVk1dQCFa4IYU5H/scVFZHasS1
+         9IIxvdgd7Nr4RcDX+nylzBDF7UQM+M2lmBxhOgPtpsoo/GHprByetVpvs7XxCI/9+oeE
+         UFZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=fdN0niDgwU0p5pLJISvMf3YiADHyHlfw/GlVzZCGO/o=;
+        fh=TCTIBws018cdvbzFnR9DP/oHdDTIeWJgn/HK86y3L8c=;
+        b=QqXhnKQ5ONeZurFuN1YXTPUA7+VfGfoZ8c62yzuE6AY7QiKW0w2GCnuaJRxMBEoEzU
+         JUMD95yxLnaFy4dqhvB78j3kfznyl1hSlRJWUefyX5quhfKUfV0iEXr1eK3nv13KwAsd
+         VW3BBEnMJfN4R/aq2VVwytgppAU77GX0HFPySrxwevDnud79oigo2WZlbG6piLSw8ZCV
+         fVKDuaHhqXvGhW2/FL6U2Pid6oJJKtSkiA+L6otHsrNSJMoJJnslBejzC8qSD0gSIKId
+         Md3n/pQqAhAzcoA/DQ3/cFUDNGS5Ff35/nZf+HYwkvOnJ1kozYtsqI/Pt1KzJpEaUacm
+         bxlQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770742133; x=1771346933; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fdN0niDgwU0p5pLJISvMf3YiADHyHlfw/GlVzZCGO/o=;
+        b=ZGcOdLUpVAGxuRyUGu6i9qqLSh84F9ZdyITfGfwx2xUo6JUIvUPrVEwIUpBZIjNIAE
+         HaegqJ2m+gsTMbNhz0jLrKokm84XIwU5TmmExm/T5R/lADC1Wd34vuYzNJ7Cn7Q83uso
+         91Ba+Gl2NRpglElHX2aTtTj1g6pjsl2PKep2m4sIvtqnMKNdsrGhz+Ewg7xRDEPVrhZz
+         BiNGmKvETEHaeY03kKTrBXm8NUERVRnGxF33A5QYwBIdd1Yj8oSn/i91muka+pyJxAPz
+         gU6a0U6ltvG18no0cKjN+bF8ejtWyNO+jYlfBt4E7amhugbYpHxjzTIHyUA1LnmbZXSv
+         DvKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770742133; x=1771346933;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=fdN0niDgwU0p5pLJISvMf3YiADHyHlfw/GlVzZCGO/o=;
+        b=BGskaZcVpOOLeDV796Jyk0i9mwt5vpDDNnG7OpKRsJ7yaCJvIQGqW8UZD/GHP9nrfJ
+         ugXJg5QElOvaxoe0XTenSjd9x7zULqaKBSF7w5uwkybF/ZMpN7VgD5hIxT2tQnE/OdJS
+         2+CmMgaFwaWc8lQ/q9mTmig65leDgF2K0cq8hzbyxw83u0/ZiGKamyJ8iX7aDArruvQ9
+         fjEiQTpCxBB0ntvsrLU3yLGWgMp1VcFQTVq4QlADYlvroc687ntHM2q2MSs5JiP7chNc
+         rYdZgjL81LlriH1nbkU6hj12RdJVu1ctcZ3/lqjD7it6bt1JDvog8pXSm2vb9t3+UsJM
+         N+bQ==
+X-Gm-Message-State: AOJu0YygvboyBAKki5oIoVP1p1r917kbsTqvUHKiNm10Nc/1zMHTWwY2
+	z44NTbBSx3NnxVasgU3SM+phjYyCrQZ6rmEpD5eAzD8Rl7s9fbSix9Z1g42xaG7ZRA/i7/a5sYa
+	lFnJMea2KSCK1zYDfqVekqzCQuIOntOk=
+X-Gm-Gg: AZuq6aLKh0dSqPIQxq5C5BP79HLttbxnoJuL7PbhkCfnNbussklyzmZg/Vskh+2u7Ji
+	2gryZQyPKxzkKmVOPTsQIVMWQYHqYl2EdVDYX39GQRkO1HWJRcHZccsd5s6imM1vZdOwm/RtDKl
+	2ydeSBUJJlkUo7CJ3PUcMokvWe1fmpOKXnOQp6jaoqFmjMCGHHgZFkEweFtVkCczoj1649YkzJq
+	cc5k6NFd4isHo9efbG3VGmv+q2/KPhAYaiyHAVXcApXb7+24nZUTKZCwuogKGqqUrC458i90ut/
+	Kk2ZhId2a16ne1qCXru273Y=
+X-Received: by 2002:a17:903:1107:b0:2aa:e388:da4b with SMTP id
+ d9443c01a7336-2ab101354cbmr29455205ad.29.1770742132554; Tue, 10 Feb 2026
+ 08:48:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 6/6] x86/vdso: Enable sframe generation in VDSO
-To: "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        x86@kernel.org, linux-mm@kvack.org,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Steven Rostedt <rostedt@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Indu Bhagat <indu.bhagat@oracle.com>,
-        "Jose E. Marchesi" <jemarch@gnu.org>,
-        Beau Belgrave <beaub@linux.microsoft.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Florian Weimer <fweimer@redhat.com>, Kees Cook <kees@kernel.org>,
-        "Carlos O'Donell" <codonell@redhat.com>, Sam James <sam@gentoo.org>,
-        Dylan Hatch <dylanbhatch@google.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Hildenbrand <david@kernel.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-        Michal Hocko
- <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-References: <20260206193642.1580787-1-jremus@linux.ibm.com>
- <20260206193642.1580787-7-jremus@linux.ibm.com>
-Content-Language: en-US
-From: Jens Remus <jremus@linux.ibm.com>
-Organization: IBM Deutschland Research & Development GmbH
-In-Reply-To: <20260206193642.1580787-7-jremus@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEwMDEzNiBTYWx0ZWRfXx0hBg5sfg+Sm
- RCuatqOyNDSemteUA5F+r4Ge2cM0/zQOT5n/ZqVCnhyWG/QDD8i2JZhH1g/2iNZAlUWMjFcAQVv
- pLQReX4/gIcOywzLhe9vqmurQ5b392gkE0KkGwkYXtgA5vQqorSZO05XXfmGA7F3cHoV7IuOb0W
- SVobFFKAR0XUxdXlnR4vIoqeLG8O3jVoiY7hQ6NzvemQWA+EtgEVvD5AlP3e/vVG9Qaa3drVQy9
- /sgxePwtuEN1f8WRa82RYtNS9SVWFZlrfXcicv/IhhD80u3BXV48SQ2VkPvaBjKDUA9TbF4+KFb
- tMseD+WNlwQAAB+vVNDVm8wRqwnIolO5Etlys3u7FIrx9imuqvSssMtnTBNkfnBTmdc43e0kyV8
- 9aIDMBhrzcmT5khDY9al2AMmIMlQjsBL1iF949YpEinx01JHeY8jM/0sXyRV+4rbE/yYRPRyR05
- 564StLrk5fLK2GaTHmw==
-X-Proofpoint-ORIG-GUID: lFUhbotL6mZHHQBIGQHNWFr4iFqXQvoQ
-X-Proofpoint-GUID: yXXBPSDw6CtLkz2VIBzGSNLoMPEAqhQX
-X-Authority-Analysis: v=2.4 cv=O+Y0fR9W c=1 sm=1 tr=0 ts=698b60f1 cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
- a=VwQbUJbxAAAA:8 a=meVymXHHAAAA:8 a=1YTvd-3GSpCLN8fQQIoA:9 a=3ZKOabzyN94A:10
- a=QEXdDO2ut3YA:10 a=2JgSa4NbpEOStq-L5dxp:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-10_01,2026-02-10_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 adultscore=0
- malwarescore=0 impostorscore=0 bulkscore=0 clxscore=1015 spamscore=0
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2602100136
+References: <20260210005508.3642641-1-emil@etsalapatis.com>
+ <CAEf4BzaLqWT1oj-EXibyAfE0ExmiaCCqhosRujDi7Y0Nyho6dA@mail.gmail.com> <DGBEQ37JLW22.2IFYZDGMHZI2G@etsalapatis.com>
+In-Reply-To: <DGBEQ37JLW22.2IFYZDGMHZI2G@etsalapatis.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 10 Feb 2026 08:48:39 -0800
+X-Gm-Features: AZwV_QgtdPpoow1icF0yR303pktx8eJSGKE2Vr9D7lmHsbVTS-MQQLITij4fpUI
+Message-ID: <CAEf4BzZ1tedVxfv6G+F_w8TJ7ngkHe9Uui22xXOGc24Kdpi5nA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3] libbpf: Add gating for arena globals
+ relocation feature
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, martin.lau@kernel.org, 
+	memxor@gmail.com, song@kernel.org, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/6/2026 8:36 PM, Jens Remus wrote:
-> From: Josh Poimboeuf <jpoimboe@kernel.org>
-> 
-> Enable sframe generation in the VDSO library so kernel and user space
-> can unwind through it.
-> 
-> SFrame isn't supported for x32 or x86-32.  Discard .sframe sections for
-> those VDSOs.
-> 
-> [ Jens Remus: Add support for SFrame V3.  Prevent GNU_SFRAME program
-> table entry to empty .sframe section. ]
-> 
-> Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Signed-off-by: Jens Remus <jremus@linux.ibm.com>
+On Tue, Feb 10, 2026 at 8:03=E2=80=AFAM Emil Tsalapatis <emil@etsalapatis.c=
+om> wrote:
+>
+> On Tue Feb 10, 2026 at 1:54 AM EST, Andrii Nakryiko wrote:
+> > On Mon, Feb 9, 2026 at 4:55=E2=80=AFPM Emil Tsalapatis <emil@etsalapati=
+s.com> wrote:
+> >>
+> >> Add feature gating for the arena globals relocation introduced in
+> >> commit c1f61171d44b. The commit depends on a previous commit in the
+> >> same patchset that is absent from older kernels (12a1fe6e12db,
+> >> "bpf/verifier: Do not limit maximum direct offset into arena map").
+> >> Without this commit, arena globals relocation with arenas >=3D 512MiB
+> >> fails to load and breaks libbpf's backwards compatibility.
+> >>
+> >> Introduce a libbpf feature to check whether the running kernel include=
+s
+> >> patch 12a1fe6e12db, and only relocate arena globals if it does.
+> >>
+> >> CHANGELOG
+> >> ---------
+> >>
+> >> v2 -> v3 (https://lore.kernel.org/bpf/20260209234850.2750149-1-emil@et=
+salapatis.com/)
+> >>
+> >> - Rename feature to better specify the verifier feature it probes for
+> >>   (Andrii)
+> >>
+> >> v1 -> v2 (https://lore.kernel.org/bpf/20260209210240.2051209-1-emil@et=
+salapatis.com/)
+> >>
+> >> - Reworked test to use simpler array-based program (Andrii)
+> >>
+> >> Fixes: c1f61171d44b ("libbpf: Move arena globals to the end of the are=
+na")
+> >> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> >> ---
+> >>  tools/lib/bpf/features.c        | 92 ++++++++++++++++++++++++++++++++=
++
+> >>  tools/lib/bpf/libbpf.c          |  7 ++-
+> >>  tools/lib/bpf/libbpf_internal.h |  2 +
+> >>  3 files changed, 99 insertions(+), 2 deletions(-)
+> >>
 
-> diff --git a/arch/Kconfig b/arch/Kconfig
+[...]
 
-> @@ -479,6 +479,13 @@ config HAVE_HARDLOCKUP_DETECTOR_ARCH
->  	  It uses the same command line parameters, and sysctl interface,
->  	  as the generic hardlockup detectors.
->  
-> +config AS_SFRAME
-> +	bool
-> +
-> +config AS_SFRAME3
-> +	def_bool $(as-instr,.cfi_startproc\n.cfi_endproc,-Wa$(comma)--gsframe-3)
+> >> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_in=
+ternal.h
+> >> index fc59b21b51b5..974147e8a8aa 100644
+> >> --- a/tools/lib/bpf/libbpf_internal.h
+> >> +++ b/tools/lib/bpf/libbpf_internal.h
+> >> @@ -392,6 +392,8 @@ enum kern_feature_id {
+> >>         FEAT_ARG_CTX_TAG,
+> >>         /* Kernel supports '?' at the front of datasec names */
+> >>         FEAT_BTF_QMARK_DATASEC,
+> >> +       /* Kernel supports LDIMM64 imm offsets past 512 MiB. */
+> >> +       FEAT_LDIMM64_FULL_RANGE_OFF,
+> >>         __FEAT_CNT,
+> >>  };
+> >>
+> >
+> > So overall this patch gets the job done, but I think we should tighten
+> > it up. I was curious why you have so much ceremony, so applied your
+> > patch locally and tried to strip everything I thought unnecessary
+> > (plus reformatted that big comment to be a bit more greppable). Here's
+> > what I got and it seems to do the job...
+> >
+> > pw-bot: cr
+> >
+>
+> So to recap:
+>
+> a) Remove BTF as it's not necessary
+> b) func_infos is also not needed
+> c) Use sizeof(log_buf) to avoid having a separate variable
+> d) Use a TRACEPOINT program to avoid the SLEEPABLE flag
+>
+> Will update with those.
+>
 
-Above tests whether the assembler supports --gsframe-3 to generate
-.sframe in SFrame V3 format.  GNU assembler only supports to generate
-SFrame for x86-64.  If the assembler is built for i386 (x86-32) the test
-will fail unless option --64 is specified.  I wonder whether that could
-happen in (the rather hypothetical?) case, when the kernel is cross built
-for x86-64 on i386?  Should this therefore be changed to the following?
+ack, thanks
 
-config AS_SFRAME_64
-	def_bool $(as-instr,.cfi_startproc\n.cfi_endproc,$(m64-flag) -Wa$(comma)--gsframe)
+> For two of the changes I have questions:
+>
+> >
+> > diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> > index 034ea9b20617..6e27aa618e70 100644
+> > --- a/tools/lib/bpf/features.c
+> > +++ b/tools/lib/bpf/features.c
+> > @@ -508,90 +508,64 @@ static int probe_kern_arg_ctx_tag(int token_fd)
+> >
+> >  static int probe_ldimm64_full_range_off(int token_fd)
+> >  {
+> > -       const size_t bufsz =3D 1024;
+> > -       int btf_fd, prog_fd, map;
+> > -       char log_buf[bufsz];
+> > +       int prog_fd, map_fd;
+>
+> Should we rename here? Every test program in this file uses map for map.
+> No strong opinions one way or the other.
 
-An alternative would be to enable as-instr64 to accept an optional flag
-operand, similar to as-instr, and use as-instr64 instead of as-instr.
+given we have prog_fd, yeah, let's use map_fd here as well
 
-Or is this not required, as in a cross build for 64-bit on a 32-bit
-platform (or inverse) a respective cross toolchain is a prerequisite and
-the m64-flag (or m32-flag) is not used?
+>
+> > +       char log_buf[1024];
+> >         int ret;
+> > -       static const char strs[] =3D "\0f\0";
+> > -       const __u32 types[] =3D {
+> > -               /* [1] FUNC_PROTO `void(void)` */
+> > -               BTF_TYPE_ENC(0, BTF_INFO_ENC(BTF_KIND_FUNC_PROTO, 0, 0)=
+, 0),
+> > -               /* [2] FUNC 'f' -> FUNC_PROTO (main prog) */
 
-I tried to simulate this using docker and an i386 image and then using
-the i386 tool in the container to switch "uname -m" to "i686".  But both
-of my following attempts to build for x86-64 on i386 fail with fixdep
-not found:
+[...]
 
-$ docker run -it --rm -v "$HOME/linux:$HOME/linux" --platform i386 public.ecr.aws/docker/library/debian:13.3
-# sed -i -s 's/^Types: deb/& deb-src/' /etc/apt/sources.list.d/debian.sources
-# apt update
-# apt -y build-dep linux
+> >
+> > -       /* Be conservative and NULL terminate the buffer to ensure
+> > strstr terminates. */
+> > -       log_buf[bufsz - 1] =3D '\0';
+> >
+>
+> Should we remove this? If there is no guarantee the buffer has a NUL
+> character somewhere, the strstr can fly off past the end of the array.
 
-# make mrproper
-# i386 make ARCH=x86_64 defconfig
-# i386 make ARCH=x86_64 arch/x86/entry/vdso/
+verifier log on error will be properly zero terminated, that's part of
+verifier contract, we shouldn't doubt it
 
-# make mrproper
-# apt -y install gcc-x86-64-linux-gnu
-# i386 make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu- defconfig
-# i386 make ARCH=x86_64 CROSS_COMPILE=x86_64-linux-gnu- arch/x86/entry/vdso/
-
-> +	select AS_SFRAME
-> +
->  config UNWIND_USER
->  	bool
-
-> diff --git a/arch/x86/entry/vdso/vdso64/Makefile b/arch/x86/entry/vdso/vdso64/Makefile
-
-> @@ -14,6 +14,7 @@ vobjs-$(CONFIG_X86_SGX)		+= vsgx.o
->  
->  # Compilation flags
->  flags-y				:= -DBUILD_VDSO64 -m64 -mcmodel=small
-> +flags-$(CONFIG_AS_SFRAME3)	+= -Wa,--gsframe-3
-
-flags-$(CONFIG_AS_SFRAME3_64)	+= -Wa,--gsframe-3
-
->  
->  # The location of this include matters!
->  include $(src)/../common/Makefile.include
-Thanks and regards,
-Jens
--- 
-Jens Remus
-Linux on Z Development (D3303)
-jremus@de.ibm.com / jremus@linux.ibm.com
-
-IBM Deutschland Research & Development GmbH; Vorsitzender des Aufsichtsrats: Wolfgang Wendt; Geschäftsführung: David Faller; Sitz der Gesellschaft: Ehningen; Registergericht: Amtsgericht Stuttgart, HRB 243294
-IBM Data Privacy Statement: https://www.ibm.com/privacy/
-
+[...]
