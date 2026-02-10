@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3F83128A3;
-	Tue, 10 Feb 2026 17:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3145C1DF74F;
+	Tue, 10 Feb 2026 17:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770744137; cv=none; b=f53y6tGu6hj0UofiFVOu23Cge1v8CKJ0hcaXrkh7EGjRaY8POt3yBGEk8SJojJMAk8L8725g151haK+hvHRDfhYASYeIK5ez0YYZ+jtajHZIylptvlCe3p/fv3k8tNPg+WjseEu6dPH8G1j08YEI1CnNNzUlvUDGG5IIwh1OifQ=
+	t=1770744138; cv=none; b=sgaZPbIfUd+qL6weEoSNAQJFnel5mJ2i6idG9V6oFVie56vslXuF8a/FxjISaDI1v0P2rTycFBSnwYbE5oHhTVSMDcnkxJhgMjrAXfNgjw0iUUnlUO1rRaDljr+YFMakgp2vaRvQRzAsBj3gLb0xg29gt1BwQBDcJtDuHfkK4Oo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770744137; c=relaxed/simple;
-	bh=yBBOEuRACrTrU3mNxgRQgQe/fJ3wQzfx+UORh+ruz5Q=;
+	s=arc-20240116; t=1770744138; c=relaxed/simple;
+	bh=YeOpAiaT58KYK6hzmVoXzdp05TldJdth7tHhp/RBBwI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hgKW/vUMLXGnvrLx55CskmjBVOXVhASEYAjhPkV/Uslsy0lHP8f4RmXW1NuOyJb18doaBPZZhMyEIvqRr1sVrs8FltxE6sQWJxS4Bbxc07MZX42AtFNrvXJEfZ3wbP100Rua7zob/SkqwXXL5stBoAa8Q+y4GGQdx5iE9NE63Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XrzHLwud; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=Q/RcXTEv4TlGm2JazF8zAGuRjidQFc6vEnc/mXH+DMmaC8HQ0GtqaVxxIIzbeW5T6AuS67jDxIEBnCUeY9riR5/YXupq2hwAlZEx5T7eczAAbyMRiX8VvlyHFSQe/nCtbk37c+mOZ2MsA2AEkfgT7sE2C0UFsJqqau41kzbxA9k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DcN1cZ8M; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XrzHLwud"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D85C116C6;
-	Tue, 10 Feb 2026 17:22:14 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DcN1cZ8M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5733CC19421;
+	Tue, 10 Feb 2026 17:22:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770744135;
-	bh=yBBOEuRACrTrU3mNxgRQgQe/fJ3wQzfx+UORh+ruz5Q=;
+	s=k20201202; t=1770744137;
+	bh=YeOpAiaT58KYK6hzmVoXzdp05TldJdth7tHhp/RBBwI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=XrzHLwudb2DoS4C0sUx7B1zOK7yZVOGy4Q0fDvuOPuKQUamX08/FnoVPX0+5zt2rt
-	 w2q+LDjKAmVqoiVomGvk5ILg1gJI0lB+AelHBiD/Zrp9zGx8w1FJdLxNYffey/bKTx
-	 31LCzPfqhIn+fvUubkD4s0jUIHJwzvcCRTa4tGYilSrQUiuzqoQ3vJtrXohL2oRlMl
-	 dQmxuPMFNny6xKOojrYsmh90yG3LbQsN7ORNbVERpVjUjZ8VRuAxfFo0KXuuvcygwU
-	 LpAVjFkc0sTHxL2lAh1YJ7ABRPjVA2nvIaJmzMzqrz3CHkbDUhDlWbl8MaxtmuII8U
-	 rpUlfDnoCuZ5g==
+	b=DcN1cZ8MIVrVizEdckIkDsj+vkfGTjCcdrVG8PXfF8icyC1RXK1DgpKeHJ+xNeldA
+	 4aJAKr0+nxaa6lhZx5q9XECPUJoT57pOnnASJjoYU3/OvIdYtSIZnsLRyt8IBc1lh2
+	 s8xeuebxE9sJwEId85fna95BVhQH+2ON0MOlmHVy7E3i0S3n+ivCYe7ybA/JJdr4P+
+	 JOgIhd6ve8DEy42YiHVIesy461KPrUnHAe2dPptYKrfEs9KAz7SF+74734kmWvyc+q
+	 C8lY2Umv5kGboxo1pCn+V8/SFlXyeWX+bnoi1C+qDntiS7EhJ/5JRXnvhA6gHLrtgW
+	 BcRLIVwxZSBeA==
 From: Lorenzo Bianconi <lorenzo@kernel.org>
-Date: Tue, 10 Feb 2026 18:21:50 +0100
-Subject: [PATCH bpf-next 4/5] selftests/bpf: Add selftest support for
- bpf_xdp_metadata_rx_checksum
+Date: Tue, 10 Feb 2026 18:21:51 +0100
+Subject: [PATCH bpf-next 5/5] selftests/bpf: Add
+ bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260210-bpf-xdp-meta-rxcksum-v1-4-e5d55caa0541@kernel.org>
+Message-Id: <20260210-bpf-xdp-meta-rxcksum-v1-5-e5d55caa0541@kernel.org>
 References: <20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org>
 In-Reply-To: <20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org>
 To: Donald Hunter <donald.hunter@gmail.com>, 
@@ -64,77 +64,113 @@ Cc: Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>
 X-Mailer: b4 0.14.2
 
-Introduce support to xdp_metadata selftest for bpf_xdp_metadata_rx_checksum
-kfunc.
+Introduce the capability to dump HW rx checksum in xdp_hw_metadat
+program via bpf_xdp_metadata_rx_checksum() kfunc.
 
 Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 ---
- tools/testing/selftests/bpf/prog_tests/xdp_metadata.c | 7 +++++++
- tools/testing/selftests/bpf/progs/xdp_metadata.c      | 1 +
- tools/testing/selftests/bpf/xdp_metadata.h            | 9 +++++++++
- 3 files changed, 17 insertions(+)
+ .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |  7 ++++++
+ tools/testing/selftests/bpf/xdp_hw_metadata.c      | 28 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/xdp_metadata.h         | 10 +++++---
+ 3 files changed, 42 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-index 19f92affc2daa23fdd869554e7a0475b86350a4f..707c98e664745763b01b638a537a797211ded4e1 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_metadata.c
-@@ -258,6 +258,7 @@ static void refill_rx(struct xsk *xsk, __u64 addr)
+diff --git a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+index 330ece2eabdb454da2bb2cbd297d2b2dd6efddc0..dc62d572e3ac6e2ef173b330da515757ea543415 100644
+--- a/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/progs/xdp_hw_metadata.c
+@@ -110,6 +110,13 @@ int rx(struct xdp_md *ctx)
+ 	else
+ 		meta->hint_valid |= XDP_META_FIELD_VLAN_TAG;
  
- static int verify_xsk_metadata(struct xsk *xsk, bool sent_from_af_xdp)
- {
-+	__u8 ip_summed = sent_from_af_xdp ? XDP_CHECKSUM_NONE : XDP_CHECKSUM_PARTIAL;
- 	const struct xdp_desc *rx_desc;
- 	struct pollfd fds = {};
- 	struct xdp_meta *meta;
-@@ -310,6 +311,12 @@ static int verify_xsk_metadata(struct xsk *xsk, bool sent_from_af_xdp)
- 	if (!ASSERT_NEQ(meta->rx_hash, 0, "rx_hash"))
- 		return -1;
- 
-+	if (!ASSERT_EQ(meta->ip_summed, ip_summed, "rx_ip_summed"))
-+		return -1;
++	err = bpf_xdp_metadata_rx_checksum(ctx, &meta->ip_summed,
++					   &meta->cksum_meta);
++	if (err)
++		meta->rx_cksum_err = err;
++	else
++		meta->hint_valid |= XDP_META_FIELD_CHECKSUM;
 +
-+	if (!ASSERT_EQ(meta->cksum_meta, 0, "rx_cksum_meta"))
-+		return -1;
-+
- 	if (!sent_from_af_xdp) {
- 		if (!ASSERT_NEQ(meta->rx_hash_type & XDP_RSS_TYPE_L4, 0, "rx_hash_type"))
- 			return -1;
-diff --git a/tools/testing/selftests/bpf/progs/xdp_metadata.c b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-index 09bb8a038d528cf26c5b314cc927915ac2796bf0..ef6a5584a1876a3c47440f21dca927ec783469dc 100644
---- a/tools/testing/selftests/bpf/progs/xdp_metadata.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_metadata.c
-@@ -98,6 +98,7 @@ int rx(struct xdp_md *ctx)
- 	bpf_xdp_metadata_rx_hash(ctx, &meta->rx_hash, &meta->rx_hash_type);
- 	bpf_xdp_metadata_rx_vlan_tag(ctx, &meta->rx_vlan_proto,
- 				     &meta->rx_vlan_tci);
-+	bpf_xdp_metadata_rx_checksum(ctx, &meta->ip_summed, &meta->cksum_meta);
- 
+ 	__sync_add_and_fetch(&pkts_redir, 1);
  	return bpf_redirect_map(&xsk, ctx->rx_queue_index, XDP_PASS);
  }
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 3d8de0d4c96a7afdf5f60b2fdff73c22b876ce54..5f4bd63b8a31586353e58e4f6472ee8ac9531a06 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -8,6 +8,7 @@
+  * - Metadata verified:
+  *   - rx_timestamp
+  *   - rx_hash
++ *   - rx_checksum
+  *
+  * TX:
+  * - UDP 9091 packets trigger TX reply
+@@ -219,6 +220,28 @@ static void print_vlan_tci(__u16 tag)
+ 	printf("PCP=%u, DEI=%d, VID=0x%X\n", pcp, dei, vlan_id);
+ }
+ 
++static void print_rx_cksum(__u8 ip_summed, __u32 cksum_meta)
++{
++	const char *cksum = "CHECKSUM_NONE";
++
++	switch (ip_summed) {
++	case XDP_CHECKSUM_UNNECESSARY:
++		cksum = "CHECKSUM_UNNECESSARY";
++		break;
++	case XDP_CHECKSUM_COMPLETE:
++		cksum = "CHECKSUM_COMPLETE";
++		break;
++	case XDP_CHECKSUM_PARTIAL:
++		cksum = "CHECKSUM_PARTIAL";
++		break;
++	case XDP_CHECKSUM_NONE:
++	default:
++		break;
++	}
++
++	printf("rx-cksum: %s, csum_meta=0x%x\n", cksum, cksum_meta);
++}
++
+ static void verify_xdp_metadata(void *data, clockid_t clock_id)
+ {
+ 	struct xdp_meta *meta;
+@@ -254,6 +277,11 @@ static void verify_xdp_metadata(void *data, clockid_t clock_id)
+ 		printf("No rx_vlan_tci or rx_vlan_proto, err=%d\n",
+ 		       meta->rx_vlan_tag_err);
+ 	}
++
++	if (meta->hint_valid & XDP_META_FIELD_CHECKSUM)
++		print_rx_cksum(meta->ip_summed, meta->cksum_meta);
++	else
++		printf("No rx_chsum, err=%d\n", meta->rx_cksum_err);
+ }
+ 
+ static void verify_skb_metadata(int fd)
 diff --git a/tools/testing/selftests/bpf/xdp_metadata.h b/tools/testing/selftests/bpf/xdp_metadata.h
-index 87318ad1117a1d677af121f11778178532e2a562..a16f71488a34e6df23fec6dd7dde7b7989774618 100644
+index a16f71488a34e6df23fec6dd7dde7b7989774618..b7ab112da8032405ec0e3d699499f4a9c5cb91dc 100644
 --- a/tools/testing/selftests/bpf/xdp_metadata.h
 +++ b/tools/testing/selftests/bpf/xdp_metadata.h
-@@ -30,6 +30,11 @@ enum xdp_meta_field {
+@@ -28,6 +28,7 @@ enum xdp_meta_field {
+ 	XDP_META_FIELD_TS	= BIT(0),
+ 	XDP_META_FIELD_RSS	= BIT(1),
  	XDP_META_FIELD_VLAN_TAG	= BIT(2),
++	XDP_META_FIELD_CHECKSUM = BIT(3),
  };
  
-+#define XDP_CHECKSUM_NONE		0
-+#define XDP_CHECKSUM_UNNECESSARY	1
-+#define XDP_CHECKSUM_COMPLETE		2
-+#define XDP_CHECKSUM_PARTIAL		3
-+
- struct xdp_meta {
- 	union {
- 		__u64 rx_timestamp;
-@@ -48,5 +53,9 @@ struct xdp_meta {
+ #define XDP_CHECKSUM_NONE		0
+@@ -53,9 +54,12 @@ struct xdp_meta {
  		};
  		__s32 rx_vlan_tag_err;
  	};
-+	struct {
-+		__u8 ip_summed;
-+		__u32 cksum_meta;
-+	};
+-	struct {
+-		__u8 ip_summed;
+-		__u32 cksum_meta;
++	union {
++		struct {
++			__u8 ip_summed;
++			__u32 cksum_meta;
++		};
++		__s32 rx_cksum_err;
+ 	};
  	enum xdp_meta_field hint_valid;
  };
 
