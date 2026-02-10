@@ -1,84 +1,82 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41FA314B6D
-	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 11:53:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055AB3271EB
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 11:54:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770724392; cv=none; b=SQg3uJAVtHu2ycQAH8MinBRfCBlV7X18scwgqtRqh9ErikYF4sgo5TNEkGTznEWiQn80TpNMkVam3m2UUbe7wiFL2zOIhJ50+Si22JgM7UT4yxoRCmeoTdfpBCyoHbPyc3OZtgB2ACubvtRU3irQYIdlq0neX+O/7JPldyvz9Wo=
+	t=1770724477; cv=none; b=dwdSzWESqgIUyRMq1UqPeJDgzPVBiPpfUnz7SOYxdUZebFhJ/+srkBnCOweg3q7+F52CtLqumwRJRLF8mBE8z1XYWHmxczVRt1n2nfEH+bT1RTPBhRPsyJVVJ0LybV4rO0syHC5nxnCic2/E1LH/VJkAa1BSIabp8jTCeJ+aF7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770724392; c=relaxed/simple;
-	bh=LpdzJGfDHQqYzc5BCyZcOZFflmElhqHKLmb47eKNQ2U=;
+	s=arc-20240116; t=1770724477; c=relaxed/simple;
+	bh=V8S+bf/F66K8deOO2u9VcoAmmrQcaSvWUcOZQvCI4qM=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=uotMJrjzSPUPMdcTuw9PCT8mtAIybMIf5J66cWXSRTjxTpokCTbFnmBhbnSmTBL7kN6IYSO+zh0dq4N5FwvWGYdPxbH2kDNRl/N/0fjiXGMLYcyOituVZQHAjp7gY7wi4cf7KiRPlCc8S/1R+uN3O0/V9oyMAt1NyuSU48Mglr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RxYnvSBJ; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=VwDccQIL; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=LiPYliJsMim9XWlSo6ROrTey2f9XBQNXIh0Q1gsRtYBUDJ9GXrHCdNGmadZYHYRqbWIB2cxLShMNjfmYDMjGvP6uvGErfFlK08DObMmGzvA3jczYuotY6t7DdeZrTMUz8xo1BbSQge/In8bNDvBujNEPHDlJDoph8zlrkQAApg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=A45wwVYb; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Bd1C3MiL; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RxYnvSBJ";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="VwDccQIL"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="A45wwVYb";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Bd1C3MiL"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770724390;
+	s=mimecast20190719; t=1770724475;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LpdzJGfDHQqYzc5BCyZcOZFflmElhqHKLmb47eKNQ2U=;
-	b=RxYnvSBJfFWeujRnQcARi1UtqbTuaq07DcC+zxQ9eNTpo5Cks94s3/09CD6g9qLcKFmhXo
-	Jg9Thhsit/8NUT3ivzIu1krqTrSV2vpl0R4bEHjU83q56lVLaiiD5yU3x8vZmW+qtr9dYk
-	sejYz/bEbjQAS42vVqKy7fhkFTMaqdo=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=2ujBMXc2jefpwX552HAfe/z0MTFmV9RxghsSUrNeWh4=;
+	b=A45wwVYbTa30lF9BY3aj+tDYbjIHTC4hESd4qXo69mmrvaq0cdTw4wSIAp4gS+BxaobdbE
+	jzgkZfns7pYUUW/3AtLPMn0Abe6Xx4knyBIsCVaPJ9dyGfZacB6eJwT4hLplLfwkFdIeQa
+	7mQqtcUdSCieXrt9gXjH64plvZtIgck=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-616-eRVEUQb1OHeSBQsoy45gyw-1; Tue, 10 Feb 2026 06:53:09 -0500
-X-MC-Unique: eRVEUQb1OHeSBQsoy45gyw-1
-X-Mimecast-MFC-AGG-ID: eRVEUQb1OHeSBQsoy45gyw_1770724388
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-48071615686so6450645e9.1
-        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 03:53:09 -0800 (PST)
+ us-mta-691-b5bb9PRKNfWnVKGyJN-e6Q-1; Tue, 10 Feb 2026 06:54:34 -0500
+X-MC-Unique: b5bb9PRKNfWnVKGyJN-e6Q-1
+X-Mimecast-MFC-AGG-ID: b5bb9PRKNfWnVKGyJN-e6Q_1770724473
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4803b4e3b9eso34391675e9.3
+        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 03:54:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770724388; x=1771329188; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LpdzJGfDHQqYzc5BCyZcOZFflmElhqHKLmb47eKNQ2U=;
-        b=VwDccQILtoPONVQxd8Cto43gtIoE7hyb3RWyJLReOtBRBmLYiQSRiXFZS3c/J7QjmK
-         7W+PCZPT+BkG+QLEDDYhWp6ienIViwzeZaJGAt4Y2HEgB1J4M4bHC9XTj0cUuGqFINrX
-         gKWKdR0irnAnZO9T4IZuI+5KYFe91hCqK75vXJtEobqLhLc445k/Q9UHneZsiA6KFnV5
-         3bqG9WpEGS/t5KPmS8NGdeHkMSrt422dtmArLEUDDMzPrRli8d7f4YXj0nFhsdF50DxI
-         YcG6BixRhgr5sB3B/h0o5Pt4LXuYZ5M1Y+pyGTZElHaPcdTUpnWcq9biPblfEGcxwZ51
-         /rCQ==
+        d=redhat.com; s=google; t=1770724473; x=1771329273; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2ujBMXc2jefpwX552HAfe/z0MTFmV9RxghsSUrNeWh4=;
+        b=Bd1C3MiLcYsQWKH+8dbql5kYWpYxacqklrLco/Gl1uzMVPsVNsoIAWiYKbqddPQdVQ
+         G8WYkQOx9OG7txUFaVSwNA/eDcIazY8cYFahhO0lws47ezpPUrUgtyT9H67zMHgPthME
+         tI4y9Iy8zcvKh0Dc7GC47uop10bETYYleMgoI6zuDVcFzpBnIB/9g2XTtbJNzTpSuBZr
+         LbPkG8Gv9KVz6MACldrfXEcMaEhBodbWA7/9cvoVQELP5wUvMV/xhxiLIDIXWXnyLNdY
+         1THbFEwQSt7GBImYX0YGwOhhsGxs5TT4xGmGMVoaMa5DHQjnh+8W+EiUuPATXXmHek01
+         XITg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770724388; x=1771329188;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LpdzJGfDHQqYzc5BCyZcOZFflmElhqHKLmb47eKNQ2U=;
-        b=ShlHQ96SxeQs3IzQGt0lCwDrsc2wBXuGPphzLStfeu+bzuF+MQy8xPKzatFS6BJ0Oh
-         ax1xbX97Q6YkznsUopbq6EtzvTuv/dVQ3mAm9gVjppSt6SLwkucpVqBZxMzjGla1hecf
-         +lkMHxIxmM4aoSimYs8BxV0jm3f81A2rZV1KvcgIlpjRpq8YW9EFnhQHUXir4zRkUnyw
-         852dbkW5NXpqlDgrTjEQtsVHJvlJfkzKfoPWBvoqLVxXXZyIqs2mjF7JEU5y9EpS6iWm
-         braS3mOEl0sS5l6nstz5o83dk6+d/cblmSWLEpW8/GVB7mrPakVagaguxuB7cqwKzFdH
-         DiuA==
-X-Forwarded-Encrypted: i=1; AJvYcCWBzXQCk/ZUbHyBMNIMwu0pzkYqTox4CJQ4EoheXgwHnBd31XI2Sk8oqEbv3cWBsjiXDWU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwO4TAklMQ5Y4I54ygrjrQWPv9BS2oEYZsmrA/aeZOtl8I9/ZJu
-	EqUAkiqNzexQn8rv/ym1raK3HdthT5INzayjkAl8hSHRLsVbgmRi4kY2d8LwIuS1oW58Wp1pATW
-	Nza8gtJuh9mLg4GiDt50svYTv834SRI2XOY9WhirVdfOoOfAQgFLNgQ==
-X-Gm-Gg: AZuq6aIM1/NigDItJqcMdZgqoYkOtIM6NHaQ1F0g2srA8QGMT7rRmwM/9/du7oO0lgN
-	VZpHK4VohJVDi3fpS38/Dnfv4M+BnaXJbdBJj8l9G7DfrRv+BTfFCL3SQUIYepP6q+6A6n9HdBF
-	99ngKBj6rylOyB4xuoNo6xxT7HaxgDSRBClm8295J5Va/2fm213Kmepr4F1h7YiY36o9wjVE57t
-	Be1GuVkXUvwKE7S+tBlqvqYNdLihfqwg++BQKFliUyB7V9664GR29u6ZSPz/8i7KXD9VB4Q1HMo
-	dJyLx5ZXIJZy09JS6HSwJFOY5Q78YX7mfPfOCqysvbO0pgj9aS+enumVvKHHa+4m2QuMlER8Izy
-	hNSMUFNmijLl3DSvCRmwJ5av+D2ZBlkuoL/IEQ4qXdtZ9cror
-X-Received: by 2002:a05:600c:4e48:b0:47e:e076:c7a5 with SMTP id 5b1f17b1804b1-483201e408dmr184790605e9.11.1770724388258;
-        Tue, 10 Feb 2026 03:53:08 -0800 (PST)
-X-Received: by 2002:a05:600c:4e48:b0:47e:e076:c7a5 with SMTP id 5b1f17b1804b1-483201e408dmr184790305e9.11.1770724387866;
-        Tue, 10 Feb 2026 03:53:07 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk (alrua-x1.borgediget.toke.dk. [2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48323c0296dsm323555505e9.1.2026.02.10.03.53.07
+        d=1e100.net; s=20230601; t=1770724473; x=1771329273;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2ujBMXc2jefpwX552HAfe/z0MTFmV9RxghsSUrNeWh4=;
+        b=aYbXBLd4zCCxZ+7av10S1Q9VukpxYtyQWaazoxJ1petzxnMtNGBgOc6mjoFCgaoBPp
+         aIj3PA/9+DMux/KziQ99K7x/P23pi873nxFBQ4n8kK079SITfSasgwCLq8x0zP4fVNKw
+         3yEFeEXqFlyCI98MS0nME/0eGh1M1AhYQMzgxptnZDJxsrJFT8n5hsYQoYmh4btRKatm
+         oROb+IlYSKo2FxP5b3RrUaxmApBHiXLhrZKOY1F52XR8DNOYHRSruF58PEAtwrQafEC0
+         ZsgTPvlYZC/gIa6jYa+DES+Fgob7MAsbpkGWKbKahCgON91OrMKQgvGITvyGMxbR2NlF
+         GZdw==
+X-Forwarded-Encrypted: i=1; AJvYcCXZ+gry2aFbRYrsSNSRrkrtAMJVHgVMJkxOixrGNoFXYJJlZTQ6qK/LDbB4KNJOOGwB2qQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPuk4TT/2Dbjf54qrVoRodQvscbChpJ9srwsnsv8XkVvE4+Apy
+	gmpLSocN1+9ZmPclg37Zt9SsdX0ZA3gF1jHrFyYBezfBu9t780r1fkyT7cuZ7Gbkt8Y7OHQTjhR
+	XeoHbj1wt3D9m8uZ8ciGE3NP+Abh7UqTvxjpHyyDwLR9AhncxFYPtvQ==
+X-Gm-Gg: AZuq6aL9WXFen6RVgHOjPZRlHyhF24v3Z0Z9C/HnmeihUndt2wETGXDQZ6wirkEcyix
+	jGksszBSqD7aRqGGYfitf1AY6aikuXYhu7pA0/wxdwmhXnbTbDjjC3jl+n+GsJNafNApleHy99w
+	hg2UPGn6UGH547ADFINKfKUNnOZVSgYuetKSfah9P1lHvmNhwmCb1cqvnq5zeknMbSqANok6jvo
+	iffUsgsfnqbhZTW6pEObu3ZikJs+4DhtGYLajhmamyaDTPW/KGxbO/qxcSkQGMeW/vEgEj1GZVC
+	Bfu+KrNY4zmKjvkvz5fLdrkH5NOkqugJI9ye1mYIGX70lj3GXLwzHXrXlfxaWVD+Ga+IJQj8Vlb
+	TC5I8OZfDfDhRlHF7+niiSY9leYKPoyNZQRQ524w0gX0AUQ==
+X-Received: by 2002:a05:600d:6413:10b0:483:4807:20fd with SMTP id 5b1f17b1804b1-4834807226emr44644895e9.30.1770724472675;
+        Tue, 10 Feb 2026 03:54:32 -0800 (PST)
+X-Received: by 2002:a05:600d:6413:10b0:483:4807:20fd with SMTP id 5b1f17b1804b1-4834807226emr44644605e9.30.1770724472261;
+        Tue, 10 Feb 2026 03:54:32 -0800 (PST)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d5d8f2csm83406055e9.1.2026.02.10.03.54.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 03:53:07 -0800 (PST)
+        Tue, 10 Feb 2026 03:54:31 -0800 (PST)
 Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 4E89E4FE89D; Tue, 10 Feb 2026 12:53:05 +0100 (CET)
+	id B7F784FE89F; Tue, 10 Feb 2026 12:54:29 +0100 (CET)
 From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
 To: Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org, Eric
  Dumazet <eric.dumazet@gmail.com>, "David S. Miller" <davem@davemloft.net>,
@@ -87,37 +85,77 @@ Cc: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org, Jakub
  Kicinski <kuba@kernel.org>, horms@kernel.org, jiri@resnulli.us,
  edumazet@google.com, xiyou.wangcong@gmail.com, jhs@mojatatu.com,
  atenart@redhat.com, carges@cloudflare.com, kernel-team@cloudflare.com
-Subject: Re: [PATCH net-next v3 4/6] net: sched: rename
- QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION
-In-Reply-To: <177039508262.2258217.13751577312338706877.stgit@firesoul>
+Subject: Re: [PATCH net-next v3 5/6] net: sched: rename QDISC_DROP_FQ_* to
+ generic names
+In-Reply-To: <177039508922.2258217.2724637003148631081.stgit@firesoul>
 References: <177039500964.2258217.2989656069254156812.stgit@firesoul>
- <177039508262.2258217.13751577312338706877.stgit@firesoul>
+ <177039508922.2258217.2724637003148631081.stgit@firesoul>
 X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 10 Feb 2026 12:53:05 +0100
-Message-ID: <87v7g4yfvi.fsf@toke.dk>
+Date: Tue, 10 Feb 2026 12:54:29 +0100
+Message-ID: <87seb8yft6.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
 Jesper Dangaard Brouer <hawk@kernel.org> writes:
 
-> Rename QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION to use a
-> generic name without embedding the qdisc name. This follows the
-> principle that drop reasons should describe the drop mechanism rather
-> than being tied to a specific qdisc implementation.
+> Rename FQ-specific drop reasons to generic names:
+> - QDISC_DROP_FQ_BAND_LIMIT -> QDISC_DROP_BAND_LIMIT
+> - QDISC_DROP_FQ_HORIZON_LIMIT -> QDISC_DROP_HORIZON_LIMIT
 >
-> The flood protection drop reason is used by qdiscs implementing
-> probabilistic drop algorithms (like BLUE) that detect unresponsive
-> flows indicating potential DoS or flood attacks. CAKE uses this via
-> its Cobalt AQM component.
+> This follows the principle that drop reasons should describe the drop
+> mechanism rather than being tied to a specific qdisc implementation.
+> These concepts (priority band limits, timestamp horizon) could apply
+> to other qdiscs as well.
 >
-> Suggested-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 > Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> ---
+>  include/net/dropreason-qdisc.h |   21 +++++++++++----------
+>  net/sched/sch_fq.c             |    2 +-
+>  2 files changed, 12 insertions(+), 11 deletions(-)
+>
+> diff --git a/include/net/dropreason-qdisc.h b/include/net/dropreason-qdisc.h
+> index 2e2f4fc36e0d..8661797193b1 100644
+> --- a/include/net/dropreason-qdisc.h
+> +++ b/include/net/dropreason-qdisc.h
+> @@ -12,8 +12,8 @@
+>  	FN(FLOW_LIMIT)			\
+>  	FN(MAXFLOWS)			\
+>  	FN(FLOOD_PROTECTION)		\
+> -	FN(FQ_BAND_LIMIT)		\
+> -	FN(FQ_HORIZON_LIMIT)		\
+> +	FN(BAND_LIMIT)			\
+> +	FN(HORIZON_LIMIT)		\
+>  	FNe(MAX)
+>  
+>  #undef FN
+> @@ -82,17 +82,18 @@ enum qdisc_drop_reason {
+>  	 */
+>  	QDISC_DROP_FLOOD_PROTECTION,
+>  	/**
+> -	 * @QDISC_DROP_FQ_BAND_LIMIT: FQ (Fair Queue) dropped packet because
+> -	 * the priority band's packet limit was reached. Each priority band
+> -	 * in FQ has its own limit.
+> +	 * @QDISC_DROP_BAND_LIMIT: packet dropped because the priority band's
+> +	 * limit was reached. Used by qdiscs with priority bands that have
+> +	 * per-band packet limits (e.g., FQ).
+>  	 */
+> -	QDISC_DROP_FQ_BAND_LIMIT,
+> +	QDISC_DROP_BAND_LIMIT,
+>  	/**
+> -	 * @QDISC_DROP_FQ_HORIZON_LIMIT: FQ dropped packet because its
+> -	 * timestamp is too far in the future (beyond horizon). This prevents
+> -	 * packets with unreasonable future timestamps from blocking the queue.
+> +	 * @QDISC_DROP_HORIZON_LIMIT: packet dropped because its timestamp
+> +	 * is too far in the future (beyond horizon). This prevents packets
+> +	 * with unreasonable future timestamps from occupying queue space.
 
-Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+Why change "blocking the queue" to "occupying queue space"? The former
+seems worse, so worth calling out?
+
+-Toke
 
