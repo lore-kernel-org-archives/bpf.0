@@ -1,205 +1,91 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61004301717
-	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 19:10:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8941732E6BF
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 19:19:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770750622; cv=none; b=T12AgTs03xH7Fe/MrCuSuxoUbiz5jkZXdZRnsNFSLpcTcpGXiEZjlB6AWIXE175YJbZy0l7B++at9dlFv+GtnXNMmi8BpUKoEM0nS9Vfuti849y8ZQfUl9JNtWzPYc7gaIPL9jnZJLaDikgQvaszDgRa5ORJXJSMplr40AICPYc=
+	t=1770751187; cv=none; b=MPLWhuhHo6xieW+cocpa+qKInrM4f6rsCkEY1SeulqoZ//eAG3T72bAgjS9eZCKtsdpWmJ4Zvc9HAVpbH1akeHFtgcOR9ug2JGJVTZJz8O7pQ3KLfr6w/r8WAp9XLSiezizeBpQlTTAH2hsR9vs7ofXY0JANsp1E/1aTeLoHaAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770750622; c=relaxed/simple;
-	bh=trMBxo0b2Li8GQHK6BFyv8TXBEua1y2eDtYbCo6pafk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SH6QbVLtgmER9cYLFiDf58iJLTzA5TDUDot6WmwyG90O/TMkHTOPDVqsfw4fYA9My89fw/YcSRbV6LVTAS6O2WzOqbf9/sd5A0kryYQ/gDqD+3BRB2LfzF/IpYl5yCyl3FBP84p53wLBZhrAACfGtMRoIFeZcCOF9UYJM2mZQmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <249d6576-2259-4785-87b6-619052b4ce75@linux.dev>
-Date: Tue, 10 Feb 2026 11:10:03 -0800
+	s=arc-20240116; t=1770751187; c=relaxed/simple;
+	bh=SGP2+kon+6/3eugtxY6Rsq5yyqsbMYDTPjww7DFr/z0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=X/pI2JgYLuO5ab97Vh596uGk4nFxuAhX3+4GTbU0gzVlu5UGyumvOigTPsSDeYVzmpx6L28C13DGoFQAuPbewjyX+eXUY67kL1fPV4va9pIyg1nmW+tBXpGNAvMMnC5fkJrdkKmHDkNdYw1MQ+3QdJHV1qUY29GjwNu6xusikUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NGMpLdmM; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NGMpLdmM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03872C116C6;
+	Tue, 10 Feb 2026 19:19:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770751187;
+	bh=SGP2+kon+6/3eugtxY6Rsq5yyqsbMYDTPjww7DFr/z0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=NGMpLdmM3pMA1yfBkniRXrMPSziU+OClt9LC7RuLi+P9eNZfXaOZp/U9dlcuXS4kT
+	 di8p/WilL4yTJyYByEOM4uEg9yTK/S1Jvbpgmet80Ox59dI07dWPGp0w+6qSxmW6Tk
+	 QOoWT5BsNWcG4SVH+T1EkFID65KaMs6glDWPGPC73fi57kC5WlbGWJ004Sbip3xMdT
+	 jUEGo2AkIoyqOkR0bfhhWnjjJiSmFAgUNzMDjavf1k+1WteX7mgYYiTwtHt2QlyhI/
+	 a54/htp3aHZpo9UIrGmdlIP43kfpHWcfhM2xAk7+aWzB1igjr7bTmLja2dXNm9BK6s
+	 bKo5HFzDefRIA==
+Content-Type: multipart/mixed; boundary="===============4730977871711708424=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5] bpf: test_run: Fix the null pointer dereference issue
- in bpf_lwt_xmit_push_encap
-To: Feng Yang <yangfeng59949@163.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260210090657.86977-1-yangfeng59949@163.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260210090657.86977-1-yangfeng59949@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-Id: <848c629364521da9cb0fa24c52d6e034f3346c5cfd824faa12b0f139de16ce74@mail.kernel.org>
+In-Reply-To: <20260210184532.255475-1-emil@etsalapatis.com>
+References: <20260210184532.255475-1-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v4] libbpf: Add gating for arena globals relocation feature
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,martin.lau@kernel.org,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 10 Feb 2026 19:19:47 +0000 (UTC)
+
+--===============4730977871711708424==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b842b83e2480..9689e408ac58 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
+
+[ ... ]
+
+> @@ -581,6 +643,9 @@ static struct kern_feature_desc {
+>  	[FEAT_BTF_QMARK_DATASEC] = {
+>  		"BTF DATASEC names starting from '?'", probe_kern_btf_qmark_datasec,
+>  	},
+> +	[FEAT_LDIMM64_FULL_RANGE_OFF] = {
+> +		"Full range LDIMM64 support", probe_ldimm64_full_range_off,
+                 ^
+
+Andrii requested in v3 review that the description should start with
+lowercase since it appears mid-sentence in error messages like
+"Detection of kernel %s support failed". Other feature descriptions
+that don't start with acronyms use lowercase (e.g., "global variables",
+"minimal BTF", "kernel-side __arg_ctx tag").
+
+Should this be "full range LDIMM64 support" instead?
+
+See: https://lore.kernel.org/bpf/CAEf4BzaLqWT1oj-EXibyAfE0ExmiaCCqhosRujDi7Y0Nyho6dA@mail.gmail.com/
+
+> +	},
+>  };
 
 
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-On 2/10/26 1:06 AM, Feng Yang wrote:
-> From: Feng Yang <yangfeng@kylinos.cn>
-> 
-> The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
-> calculate the needed headroom:
-> 
-> 	err = skb_cow_head(skb,
-> 			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
-> 
-> But skb->_skb_refdst may not be initialized when the skb is set up by
-> bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
-> in this scenario will trigger null pointer dereference, causing a kernel
-> crash as Yinhao reported:
-> 
-> [  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
-> [  105.186382] #PF: supervisor read access in kernel mode
-> [  105.186388] #PF: error_code(0x0000) - not-present page
-> [  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
-> [  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
-> [  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
-> [  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-> [  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
-> [  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
-> [  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
-> [  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
-> [  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
-> [  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
-> [  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
-> [  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
-> [  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
-> [  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
-> [  105.186499] PKRU: 55555554
-> [  105.186502] Call Trace:
-> [  105.186507]  <TASK>
-> [  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
-> [  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
-> [  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
-> [  105.186547]  ? ktime_get+0x3c/0xa0
-> [  105.186554]  bpf_test_run+0x195/0x320
-> [  105.186563]  ? bpf_test_run+0x10f/0x320
-> [  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
-> [  105.186590]  __sys_bpf+0x69c/0xa40
-> [  105.186603]  __x64_sys_bpf+0x1e/0x30
-> [  105.186611]  do_syscall_64+0x59/0x110
-> [  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
-> [  105.186649] RIP: 0033:0x7f166a97455d
-> 
-> Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
-> 
-> Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-> Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-> Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-> Closes: https://groups.google.com/g/hust-os-kernel-patches/c/8-a0kPpBW2s
-> Signed-off-by: Yun Lu <luyun@kylinos.cn>
-> Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-> Tested-by: syzbot@syzkaller.appspotmail.com
-> ---
-> Changes in v5:
-> - Refer to the bpf_lwt_xmit_reroute function to configure the dst parameter.
-> - Link to v4: https://lore.kernel.org/all/20260209015111.28144-1-yangfeng59949@163.com/
-> Changes in v4:
-> - add rcu lock
-> - Link to v3: https://lore.kernel.org/all/20260206055113.63476-1-yangfeng59949@163.com/
-> Changes in v3:
-> - use dst_init
-> - Link to v2: https://lore.kernel.org/all/20260205092227.126665-1-yangfeng59949@163.com/
-> Changes in v2:
-> - Link to v1: https://lore.kernel.org/all/20260127084520.13890-1-luyun_611@163.com/
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21878398162
 
-The earlier syzbot reports are crying for a selftest which is still 
-missing in v5.
+AI-authorship-score: low
+AI-authorship-explanation: The code follows standard libbpf feature probe patterns, includes iterative review responses documented in changelog, and shows natural debugging artifacts from review cycles.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Minor style issue - feature description capitalization should be lowercase to match other feature descriptions.
 
-The CI has also reported errors in the test_progs. Did you run any test 
-before posting ?
-
-pw-bot: cr
-
-> ---
->   net/bpf/test_run.c | 47 ++++++++++++++++++++++++++++++++++++++++++++++
->   1 file changed, 47 insertions(+)
-> 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 178c4738e63b..dbd2c44da7e5 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -24,6 +24,7 @@
->   #include <net/netdev_rx_queue.h>
->   #include <net/xdp.h>
->   #include <net/netfilter/nf_bpf_link.h>
-> +#include <net/ip6_route.h>
->   
->   #define CREATE_TRACE_POINTS
->   #include <trace/events/bpf_test_run.h>
-> @@ -992,6 +993,7 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->   	u32 headroom = NET_SKB_PAD + NET_IP_ALIGN;
->   	u32 linear_sz = kattr->test.data_size_in;
->   	u32 repeat = kattr->test.repeat;
-> +	struct dst_entry *dst = NULL;
->   	struct __sk_buff *ctx = NULL;
->   	struct sk_buff *skb = NULL;
->   	struct sock *sk = NULL;
-> @@ -1156,6 +1158,51 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
->   		skb->ip_summed = CHECKSUM_COMPLETE;
->   	}
->   
-> +	if (prog->type == BPF_PROG_TYPE_LWT_XMIT && !skb_dst(skb)) {
-> +		struct flowi4 fl4 = {};
-> +		struct flowi6 fl6 = {};
-> +		struct rtable *rt;
-> +
-> +		switch (skb->protocol) {
-> +		case htons(ETH_P_IP):
-> +			if (sizeof(struct iphdr) <= skb_headlen(skb)) {
-> +				fl4.saddr = ip_hdr(skb)->saddr;
-> +				fl4.daddr = ip_hdr(skb)->daddr;
-> +			}
-> +
-> +			rt = ip_route_output_key(net, &fl4);
-
-What can be expected from the return value rt if fl4 is 0.
-
-> +			if (IS_ERR(rt)) {
-> +				ret = PTR_ERR(rt);
-
-I suspect this is probably what failed in CI. Add a NULL check in 
-bpf_lwt_push_ip_encap instead. No change is needed in the 
-bpf_prog_test_run_skb.
-
-> +				goto out;
-> +			}
-> +			dst = &rt->dst;
-> +			break;
-> +#if IS_ENABLED(CONFIG_IPV6)
-> +		case htons(ETH_P_IPV6):
-> +			if (sizeof(struct ipv6hdr) <= skb_headlen(skb)) {
-> +				fl6.saddr = ipv6_hdr(skb)->saddr;
-> +				fl6.daddr = ipv6_hdr(skb)->daddr;
-> +			}
-> +
-> +			dst = ip6_route_output(net, NULL, &fl6);
-> +			if (IS_ERR(dst)) {
-> +				ret = PTR_ERR(dst);
-> +				goto out;
-> +			}
-> +			break;
-> +#endif
-> +		default:
-> +			ret = -EINVAL;
-> +			goto out;
-> +		}
-> +
-> +		if (unlikely(dst->error)) {
-> +			ret = dst->error;
-> +			dst_release(dst);
-> +			goto out;
-> +		}
-> +		skb_dst_set(skb, dst);
-> +	}
->   	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
->   	if (ret)
->   		goto out;
-
+--===============4730977871711708424==--
