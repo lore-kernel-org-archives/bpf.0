@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C183164B7;
-	Tue, 10 Feb 2026 13:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A923619EEC2;
+	Tue, 10 Feb 2026 13:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770730628; cv=none; b=MwDnbkWMHG63w5GZqHxPEXopz6CpRHbGpVVFyWSGs1LIkH+OOC883PDuj90o+8tFdi/B+zOWQB9H4AR3F94giGFb4xNDMCQpPO5Nv/kEjByHqfaFkvAabgKFw5rypWZNLzl+JOYSuOVFyMctHj7pebD6k6v2J+mLvwmSjAKVmhI=
+	t=1770730637; cv=none; b=pGQFSW5uEk2XyyRdOW+ycby2Y7vR1ek743H9eRLZ0zES9QiFyFFn7wLRm+JzP47g9mINCVvH6l2SbLQXKr6fqHh1GdURmve+W5Movp3Uy4u2ZnmmeUa+EKiahrJTqJ4EjflNHjzT3ZYt6+ecgUPW0j+8OMNRlusNwM9vFXfDDAM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770730628; c=relaxed/simple;
-	bh=S29y+uuqZrMgOo1hWvanWYe+TzfNJHT+V3QfZUY1MX0=;
+	s=arc-20240116; t=1770730637; c=relaxed/simple;
+	bh=/e5FLaITB6aTJI/Ft1Jn5QjDQwpwtZrhk8oW4a8Zxes=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PLVVuFBySd6V2+tZ5krcOJJX4Itt4bDCLuG5Xigm3UvrnEOyioskWfZnYAFADmOn0qgPlpetvJHHNbVTN1iWCricamrc6kRlKdz34wxR7tDo6ZDTq8Q5ibDvs+gBBXQ9yQfC3oWfKU2clDjlqt3yV+wmqT/eoqV5g1ah4pV2cPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j04/8tW3; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=Qhk+/iLVsDAalHHUZ00rBGUjkeq767umCOIFuQFiOMhBCAXqOxpLzGyiD+8EI8rWeKmtEFYfrgVIWEJHgP/mZ4RmdKyYq1EH4ZcfYQDBotLrV3wRFeoeJ4Ns34S9YOuNCL7jte5FJsemIdUim/NQixqPQtIK5BFDerwlYCdet38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cCAuXSYe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j04/8tW3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21916C116C6;
-	Tue, 10 Feb 2026 13:37:05 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cCAuXSYe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73FEAC19423;
+	Tue, 10 Feb 2026 13:37:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770730627;
-	bh=S29y+uuqZrMgOo1hWvanWYe+TzfNJHT+V3QfZUY1MX0=;
+	s=k20201202; t=1770730637;
+	bh=/e5FLaITB6aTJI/Ft1Jn5QjDQwpwtZrhk8oW4a8Zxes=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=j04/8tW3y/fVB+KQI5g/8sX9U5Xk4P510ScKTYR3aQfj8NM2O5EuP7AwIEdNdOgK1
-	 AuKv7e9mAfp/wuFTo8uBk/mia4TJCtM8oMNWvcIOkY/f0hc12kSPf9/URuLsXFbe8U
-	 5zj2msq9FzfArus6MFEqjVjU2icWelkU0ZuZdubQf22bubveho7dMnvBK1XKK9xf6V
-	 Biy9Mvi4Fj+s4bPrwmPRMPWLWrowyqJ2nN4z2hb1QAUIsF9DQC/DIcYxNGMm1zs7RA
-	 VrTjIubUH4aVEsGiv/Si4MN80TG+fvZHmpkGwFBLUnOz3rgRVOODkTIetGumdB33Hr
-	 o2JFFdVNKAOkg==
+	b=cCAuXSYelOTYd3HF6We1IHZdPb5TxjroPvpNdZ0VFtu92yYDVF9Vvpt4I4KxPUIC8
+	 ZIVrmVXIjNXqvM3nuqAfSHHcNN3x43Ct4cWB5nb9u+3ZsLw4vKPXhPYH5MftV3vZnl
+	 PMClYGnhBXlnw4LjNATKWXuiu8FAGJYSV+jhwRmuUrnRQyWrkfJ5+iy6bdVNk0OclH
+	 JJiwIUMFBFK4BL3hg3reqpdASO3Cc33ZxFRWEQAkbEk0Kpnh35B8J8nZ5wdJGH5Ifz
+	 8eGgXyPfbv10xIj6T1JcSFNQb7Qz5g3x1blwq3l/i0iKuYOc0gIP/moWqHhyA0Ku8T
+	 CzW/kQ6z2aJTQ==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org,
@@ -33,9 +33,9 @@ Cc: bpf@vger.kernel.org,
 	Song Liu <songliubraving@fb.com>,
 	Yonghong Song <yhs@fb.com>,
 	John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCHv2 bpf-next 1/5] libbpf: Add uprobe syscall feature detection
-Date: Tue, 10 Feb 2026 14:36:45 +0100
-Message-ID: <20260210133649.524292-2-jolsa@kernel.org>
+Subject: [PATCHv2 bpf-next 2/5] libbpf: Add support to detect nop,nop5 instructions combo for usdt probe
+Date: Tue, 10 Feb 2026 14:36:46 +0100
+Message-ID: <20260210133649.524292-3-jolsa@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260210133649.524292-1-jolsa@kernel.org>
 References: <20260210133649.524292-1-jolsa@kernel.org>
@@ -47,70 +47,116 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding uprobe syscall feature detection that will be used
-in following changes.
+Adding support to detect nop,nop5 instructions combo for usdt probe
+by checking on probe's following nop5 instruction.
 
+When the nop,nop5 combo is detected together with uprobe syscall,
+we can place the probe on top of nop5 and get it optimized.
+
+[1] https://github.com/libbpf/usdt
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/lib/bpf/features.c        | 24 ++++++++++++++++++++++++
- tools/lib/bpf/libbpf_internal.h |  2 ++
- 2 files changed, 26 insertions(+)
+ tools/lib/bpf/usdt.c | 55 ++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 51 insertions(+), 4 deletions(-)
 
-diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
-index b842b83e2480..04a225c7f2c0 100644
---- a/tools/lib/bpf/features.c
-+++ b/tools/lib/bpf/features.c
-@@ -506,6 +506,27 @@ static int probe_kern_arg_ctx_tag(int token_fd)
- 	return probe_fd(prog_fd);
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index d1524f6f54ae..4e5f70bb4c31 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -262,6 +262,7 @@ struct usdt_manager {
+ 	bool has_bpf_cookie;
+ 	bool has_sema_refcnt;
+ 	bool has_uprobe_multi;
++	bool has_uprobe_syscall;
+ };
+ 
+ struct usdt_manager *usdt_manager_new(struct bpf_object *obj)
+@@ -301,6 +302,13 @@ struct usdt_manager *usdt_manager_new(struct bpf_object *obj)
+ 	 * usdt probes.
+ 	 */
+ 	man->has_uprobe_multi = kernel_supports(obj, FEAT_UPROBE_MULTI_LINK);
++
++	/*
++	 * Detect kernel support for uprobe() syscall, it's presence means we can
++	 * take advantage of faster nop5 uprobe handling.
++	 * Added in: 56101b69c919 ("uprobes/x86: Add uprobe syscall to speed up uprobe")
++	 */
++	man->has_uprobe_syscall = kernel_supports(obj, FEAT_UPROBE_SYSCALL);
+ 	return man;
  }
  
-+#ifdef __x86_64__
-+
-+#ifndef __NR_uprobe
-+#define __NR_uprobe 336
-+#endif
-+
-+static int probe_uprobe_syscall(int token_fd)
+@@ -585,13 +593,42 @@ static int parse_usdt_note(GElf_Nhdr *nhdr, const char *data, size_t name_off,
+ 
+ static int parse_usdt_spec(struct usdt_spec *spec, const struct usdt_note *note, __u64 usdt_cookie);
+ 
+-static int collect_usdt_targets(struct usdt_manager *man, Elf *elf, const char *path, pid_t pid,
+-				const char *usdt_provider, const char *usdt_name, __u64 usdt_cookie,
+-				struct usdt_target **out_targets, size_t *out_target_cnt)
++#if defined(__x86_64__)
++static bool has_nop_combo(int fd, long off)
 +{
++	static unsigned char nop_combo[6] = {
++		0x90, 0x0f, 0x1f, 0x44, 0x00, 0x00 /* nop,nop5 */
++	};
++	unsigned char buf[6] = {};
++
 +	/*
-+	 * If kernel supports uprobe() syscall, it will return -ENXIO when called
-+	 * from the outside of a kernel-generated uprobe trampoline.
++	 * We are using file descriptor that backs Elf object,
++	 * let's dup it to be on the safe side.
 +	 */
-+	return syscall(__NR_uprobe) < 0 && errno == ENXIO;
++	fd = dup(fd);
++	if (fd < 0)
++		return false;
++	if (lseek(fd, off, SEEK_SET) == off)
++		read(fd, buf, 6);
++	close(fd);
++	return memcmp(buf, nop_combo, 6) == 0;
 +}
 +#else
-+static int probe_uprobe_syscall(int token_fd)
++static bool has_nop_combo(int fd, long off)
 +{
-+	return 0;
++	return false;
 +}
 +#endif
 +
- typedef int (*feature_probe_fn)(int /* token_fd */);
++static int collect_usdt_targets(struct usdt_manager *man, struct elf_fd *elf_fd, const char *path,
++				pid_t pid, const char *usdt_provider, const char *usdt_name,
++				__u64 usdt_cookie, struct usdt_target **out_targets,
++				size_t *out_target_cnt)
+ {
+ 	size_t off, name_off, desc_off, seg_cnt = 0, vma_seg_cnt = 0, target_cnt = 0;
+ 	struct elf_seg *segs = NULL, *vma_segs = NULL;
+ 	struct usdt_target *targets = NULL, *target;
++	Elf *elf = elf_fd->elf;
+ 	long base_addr = 0;
+ 	Elf_Scn *notes_scn, *base_scn;
+ 	GElf_Shdr base_shdr, notes_shdr;
+@@ -784,6 +821,16 @@ static int collect_usdt_targets(struct usdt_manager *man, Elf *elf, const char *
+ 		target = &targets[target_cnt];
+ 		memset(target, 0, sizeof(*target));
  
- static struct kern_feature_cache feature_cache;
-@@ -581,6 +602,9 @@ static struct kern_feature_desc {
- 	[FEAT_BTF_QMARK_DATASEC] = {
- 		"BTF DATASEC names starting from '?'", probe_kern_btf_qmark_datasec,
- 	},
-+	[FEAT_UPROBE_SYSCALL] = {
-+		"Kernel supports uprobe syscall", probe_uprobe_syscall,
-+	},
- };
- 
- bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id)
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index fc59b21b51b5..69aa61c038a9 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -392,6 +392,8 @@ enum kern_feature_id {
- 	FEAT_ARG_CTX_TAG,
- 	/* Kernel supports '?' at the front of datasec names */
- 	FEAT_BTF_QMARK_DATASEC,
-+	/* Kernel supports uprobe syscall */
-+	FEAT_UPROBE_SYSCALL,
- 	__FEAT_CNT,
- };
- 
++		/*
++		 * We have uprobe syscall and usdt with nop,nop5 instructions combo,
++		 * so we can place the uprobe directly on nop5 (+1) and get this probe
++		 * optimized.
++		 */
++		if (man->has_uprobe_syscall && has_nop_combo(elf_fd->fd, usdt_rel_ip)) {
++			usdt_abs_ip++;
++			usdt_rel_ip++;
++		}
++
+ 		target->abs_ip = usdt_abs_ip;
+ 		target->rel_ip = usdt_rel_ip;
+ 		target->sema_off = usdt_sema_off;
+@@ -998,7 +1045,7 @@ struct bpf_link *usdt_manager_attach_usdt(struct usdt_manager *man, const struct
+ 	/* discover USDT in given binary, optionally limiting
+ 	 * activations to a given PID, if pid > 0
+ 	 */
+-	err = collect_usdt_targets(man, elf_fd.elf, path, pid, usdt_provider, usdt_name,
++	err = collect_usdt_targets(man, &elf_fd, path, pid, usdt_provider, usdt_name,
+ 				   usdt_cookie, &targets, &target_cnt);
+ 	if (err <= 0) {
+ 		err = (err == 0) ? -ENOENT : err;
 -- 
 2.53.0
 
