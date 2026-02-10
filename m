@@ -1,47 +1,47 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B1513FEE
-	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 12:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27CFA13FEE
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 12:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770727259; cv=none; b=FmUEOjdXxWbcG+0862/Z95imC8TDtUDUeTn+PhbEnkeDWODKvfJpOnqlcTnOYYsN+Sm6P8VN//SpGiqkBHrXvyXV7Be05uG6TAG0yy23tEsUboPZssvawHJkNuUNWDdJbUly4J0jPqeq69EoWtpkD0kCbTrGd4okPD5Kz2BHpjI=
+	t=1770727263; cv=none; b=bSWNGIM2ia5cdbUNiiX1BMCaUTvRoPo8rawipR6EX7qhn9dEuIIh03S6fArc4Klc4LrUuQjd7DWofJ4owEeP+FdsZnGuBF+41132Fv7lyeoZ4XXhs2kn+m8kqPJTmhX0LgZEM/fpVLaSCreG0P1FDArjFubO71Hzk0leYYumyfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770727259; c=relaxed/simple;
-	bh=ZsiJ1vhOG8zeqEaGvSz4SOcx9naoKn9s8oMy/+ihbPo=;
+	s=arc-20240116; t=1770727263; c=relaxed/simple;
+	bh=8m1aiw5dCT/9dAF118a6EdpmqjqR8uTXgFQOzDTRhvs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ihibHYLraEJsr2pGoezlNCoSePbMRSbDxsbfdAuQ8i2l31DzuopdCHKielYhH0ew+M/Y5khCGvTP9tnb81HiIt/5+mL4qtf7kVZ4iDKVUV+QcvFqtFFdF3wZxragc5+a85ofYSPQyLvNcUSEZpCAt0DmSXHGcHC4a0Wd0oAOXUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OfVcTzoa; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version; b=UCawezez+iSizIabLPUziUpY+H5ke8YOKuYjFdhDhdQH9iQLq3iUggaSxoQd/VurmXfWdBVMLkbyanSm+mULcfnpoLSRSpPpZdeJAW9PzaDNEQjNY2dudoIpJ4sN/FU2GCCyqeE7BWCcln8YLYnXVWDbtf21V53rhEUffa9Aemg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MjEA/64R; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OfVcTzoa"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MjEA/64R"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770727256;
+	s=mimecast20190719; t=1770727261;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=etVuoiAb5+kd41JtqkKtJEjEOJ+ZjgP8bE+mBFG62fo=;
-	b=OfVcTzoajJ99zSjvz0PTJX0aOF50vjVfc4DzkHyDbrGLUUu5k5tb51ymj/jM2kLeuYDncK
-	mi8NLkCbEWngS8HgLhMIkFggLlPP/Gps6NRkQwgkqOXwX/P8GrH/9zmLBg3vkPnSwVAADA
-	SMoVQCWPo32byTZ1zkk1cjRnlS+W784=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+	bh=j0uC/hm9dDbYXMMtVNqNCVOpE/wxnFHX64qAFNKfT1g=;
+	b=MjEA/64R4ZjvKisi0X5qfHcR2hQnFuEj3tPVJqWV0Q/YCc/m7FL6ubVrs9Nc3ovKk2I9Fh
+	e3nRSnK1he4129TBRKdMjm7CobHC3Wu17Be/xcWwhZbEGmvn9c6Y7UV3csL+Z/L+Y+cOK2
+	4hghxsNFZWqnfM1PiOl7lZTcFKpF9ts=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-586-AMd8HNvgMOiFFMrAbhjArA-1; Tue,
- 10 Feb 2026 07:40:53 -0500
-X-MC-Unique: AMd8HNvgMOiFFMrAbhjArA-1
-X-Mimecast-MFC-AGG-ID: AMd8HNvgMOiFFMrAbhjArA_1770727251
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-570-AcHTzYkDPUav6ZSoMIGkqA-1; Tue,
+ 10 Feb 2026 07:40:57 -0500
+X-MC-Unique: AcHTzYkDPUav6ZSoMIGkqA-1
+X-Mimecast-MFC-AGG-ID: AcHTzYkDPUav6ZSoMIGkqA_1770727255
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id A6AD9180057E;
-	Tue, 10 Feb 2026 12:40:50 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5CA3C195609F;
+	Tue, 10 Feb 2026 12:40:55 +0000 (UTC)
 Received: from vmalik-fedora.brq.redhat.com (unknown [10.43.17.26])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2520F180066D;
-	Tue, 10 Feb 2026 12:40:45 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0F0B41800674;
+	Tue, 10 Feb 2026 12:40:50 +0000 (UTC)
 From: Viktor Malik <vmalik@redhat.com>
 To: bpf@vger.kernel.org
 Cc: Andrii Nakryiko <andrii@kernel.org>,
@@ -61,9 +61,9 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	Jordan Rome <linux@jordanrome.com>,
 	Qais Yousef <qyousef@layalina.io>,
 	Hou Tao <houtao1@huawei.com>
-Subject: [PATCH bpf-next 1/3] selftests/bpf: Split module_attach into subtests
-Date: Tue, 10 Feb 2026 13:40:32 +0100
-Message-ID: <699a95dfb6493cfd588524f388214db1250518f3.1770723724.git.vmalik@redhat.com>
+Subject: [PATCH bpf-next 2/3] selftests/bpf: Split read_vsyscall into subtests
+Date: Tue, 10 Feb 2026 13:40:33 +0100
+Message-ID: <05e00d8a6ffd7a18f3bbd5d4268aead29ff8ab04.1770723724.git.vmalik@redhat.com>
 In-Reply-To: <cover.1770723724.git.vmalik@redhat.com>
 References: <cover.1770723724.git.vmalik@redhat.com>
 Precedence: bulk
@@ -75,395 +75,127 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-The test verifies attachment to various hooks in a kernel module,
-however, everything is flattened into a single test. When running the
-test on a kernel which doesn't support some of the hooks, it is
-impossible to skip them selectively.
+Split the test into two subtests: one for checking bpf_probe_read* of a
+vsyscall page from a non-sleepable probe and one for checking
+bpf_copy_from_user* of a vsyscall page from a sleepable probe.
 
-Isolate each BPF program into a separate subtest. This is done by
-disabling auto-loading of programs and loading and testing each program
-separately.
+The split is useful for running the test on kernels which do not support
+sleepable fentry programs to allow skipping just a part of the test.
 
 Signed-off-by: Viktor Malik <vmalik@redhat.com>
 ---
- .../selftests/bpf/prog_tests/module_attach.c  | 168 +++++++++++++-----
- .../selftests/bpf/progs/test_module_attach.c  |  63 +++----
- 2 files changed, 149 insertions(+), 82 deletions(-)
+ .../selftests/bpf/prog_tests/read_vsyscall.c  | 41 ++++++++++++++++---
+ .../selftests/bpf/progs/read_vsyscall.c       |  8 ++--
+ 2 files changed, 39 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/module_attach.c b/tools/testing/selftests/bpf/prog_tests/module_attach.c
-index 70fa7ae93173..8668c26c202f 100644
---- a/tools/testing/selftests/bpf/prog_tests/module_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/module_attach.c
-@@ -6,6 +6,23 @@
- #include "test_module_attach.skel.h"
- #include "testing_helpers.h"
- 
-+static const char * const read_tests[] = {
-+	"handle_raw_tp",
-+	"handle_tp_btf",
-+	"handle_fentry",
-+	"handle_fentry_explicit",
-+	"handle_fmod_ret",
+diff --git a/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c b/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
+index a8d1eaa67020..bbacd1309046 100644
+--- a/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
++++ b/tools/testing/selftests/bpf/prog_tests/read_vsyscall.c
+@@ -14,22 +14,30 @@
+ struct read_ret_desc {
+ 	const char *name;
+ 	int ret;
+-} all_read[] = {
 +};
 +
-+static const char * const detach_tests[] = {
-+	"handle_fentry",
-+	"handle_fexit",
-+	"kprobe_multi",
++struct read_ret_desc all_probe_read[] = {
+ 	{ .name = "probe_read_kernel", .ret = -ERANGE },
+ 	{ .name = "probe_read_kernel_str", .ret = -ERANGE },
+ 	{ .name = "probe_read", .ret = -ERANGE },
+ 	{ .name = "probe_read_str", .ret = -ERANGE },
+ 	{ .name = "probe_read_user", .ret = -EFAULT },
+ 	{ .name = "probe_read_user_str", .ret = -EFAULT },
 +};
 +
-+static const int READ_SZ = 456;
-+static const int WRITE_SZ = 457;
-+
- static int duration;
++struct read_ret_desc all_copy_from_user[] = {
+ 	{ .name = "copy_from_user", .ret = -EFAULT },
+ 	{ .name = "copy_from_user_task", .ret = -EFAULT },
+ 	{ .name = "copy_from_user_str", .ret = -EFAULT },
+ 	{ .name = "copy_from_user_task_str", .ret = -EFAULT },
+ };
  
- static int trigger_module_test_writable(int *val)
-@@ -33,27 +50,66 @@ static int trigger_module_test_writable(int *val)
- 	return 0;
- }
- 
--void test_module_attach(void)
-+static void test_module_attach_prog(const char *prog_name, int sz,
-+				    const char *attach_target, int ret)
+-void test_read_vsyscall(void)
++static void test_read_vsyscall_subtest(const char *prog_name,
++				       const struct read_ret_desc *descs,
++				       unsigned int cnt)
  {
--	const int READ_SZ = 456;
--	const int WRITE_SZ = 457;
--	struct test_module_attach* skel;
--	struct test_module_attach__bss *bss;
--	struct bpf_link *link;
-+	struct test_module_attach *skel;
+ 	struct read_vsyscall *skel;
 +	struct bpf_program *prog;
+ 	unsigned int i;
  	int err;
--	int writable_val = 0;
  
- 	skel = test_module_attach__open();
- 	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
+@@ -37,10 +45,19 @@ void test_read_vsyscall(void)
+ 	test__skip();
+ 	return;
+ #endif
+-	skel = read_vsyscall__open_and_load();
+-	if (!ASSERT_OK_PTR(skel, "read_vsyscall open_load"))
++	skel = read_vsyscall__open();
++	if (!ASSERT_OK_PTR(skel, "read_vsyscall open"))
  		return;
  
--	err = bpf_program__set_attach_target(skel->progs.handle_fentry_manual,
--					     0, "bpf_testmod_test_read");
--	ASSERT_OK(err, "set_attach_target");
 +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-+	if (!ASSERT_OK_PTR(prog, "find program"))
-+		goto cleanup;
++	if (!ASSERT_OK_PTR(prog, "read_vsyscall find program"))
++		goto out;
 +	bpf_program__set_autoload(prog, true);
- 
--	err = bpf_program__set_attach_target(skel->progs.handle_fentry_explicit_manual,
--					     0, "bpf_testmod:bpf_testmod_test_read");
--	ASSERT_OK(err, "set_attach_target_explicit");
-+	if (attach_target) {
-+		err = bpf_program__set_attach_target(prog, 0, attach_target);
-+		ASSERT_OK(err, attach_target);
-+	}
 +
-+	err = test_module_attach__load(skel);
-+	if (CHECK(err, "skel_load", "failed to load skeleton\n"))
-+		return;
++	err = read_vsyscall__load(skel);
++	if (!ASSERT_EQ(err, 0, "read_vsyscall load"))
++		goto out;
 +
-+	err = test_module_attach__attach(skel);
-+	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
-+		goto cleanup;
-+
-+	if (sz) {
-+		/* trigger both read and write though each test uses only one */
-+		ASSERT_OK(trigger_module_test_read(sz), "trigger_read");
-+		ASSERT_OK(trigger_module_test_write(sz), "trigger_write");
-+
-+		ASSERT_EQ(skel->bss->sz, sz, prog_name);
-+	}
-+
-+	if (ret)
-+		ASSERT_EQ(skel->bss->retval, ret, "ret");
-+cleanup:
-+	test_module_attach__destroy(skel);
-+}
-+
-+static void test_module_attach_writable(void)
-+{
-+	struct test_module_attach__bss *bss;
-+	struct test_module_attach *skel;
-+	struct bpf_program *prog;
-+	int writable_val = 0;
-+	int err;
-+
-+	skel = test_module_attach__open();
-+	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-+		return;
-+
-+	prog = bpf_object__find_program_by_name(skel->obj,
-+						"handle_raw_tp_writable_bare");
-+	if (!ASSERT_OK_PTR(prog, "find program"))
-+		goto cleanup;
-+	bpf_program__set_autoload(prog, true);
+ 	skel->bss->target_pid = getpid();
+ 	err = read_vsyscall__attach(skel);
+ 	if (!ASSERT_EQ(err, 0, "read_vsyscall attach"))
+@@ -52,8 +69,20 @@ void test_read_vsyscall(void)
+ 	skel->bss->user_ptr = (void *)VSYSCALL_ADDR;
+ 	usleep(1);
  
- 	err = test_module_attach__load(skel);
- 	if (CHECK(err, "skel_load", "failed to load skeleton\n"))
-@@ -65,21 +121,6 @@ void test_module_attach(void)
- 	if (CHECK(err, "skel_attach", "skeleton attach failed: %d\n", err))
- 		goto cleanup;
- 
--	/* trigger tracepoint */
--	ASSERT_OK(trigger_module_test_read(READ_SZ), "trigger_read");
--	ASSERT_OK(trigger_module_test_write(WRITE_SZ), "trigger_write");
--
--	ASSERT_EQ(bss->raw_tp_read_sz, READ_SZ, "raw_tp");
--	ASSERT_EQ(bss->raw_tp_bare_write_sz, WRITE_SZ, "raw_tp_bare");
--	ASSERT_EQ(bss->tp_btf_read_sz, READ_SZ, "tp_btf");
--	ASSERT_EQ(bss->fentry_read_sz, READ_SZ, "fentry");
--	ASSERT_EQ(bss->fentry_manual_read_sz, READ_SZ, "fentry_manual");
--	ASSERT_EQ(bss->fentry_explicit_read_sz, READ_SZ, "fentry_explicit");
--	ASSERT_EQ(bss->fentry_explicit_manual_read_sz, READ_SZ, "fentry_explicit_manual");
--	ASSERT_EQ(bss->fexit_read_sz, READ_SZ, "fexit");
--	ASSERT_EQ(bss->fexit_ret, -EIO, "fexit_tet");
--	ASSERT_EQ(bss->fmod_ret_read_sz, READ_SZ, "fmod_ret");
--
- 	bss->raw_tp_writable_bare_early_ret = true;
- 	bss->raw_tp_writable_bare_out_val = 0xf1f2f3f4;
- 	ASSERT_OK(trigger_module_test_writable(&writable_val),
-@@ -87,31 +128,72 @@ void test_module_attach(void)
- 	ASSERT_EQ(bss->raw_tp_writable_bare_in_val, 1024, "writable_test_in");
- 	ASSERT_EQ(bss->raw_tp_writable_bare_out_val, writable_val,
- 		  "writable_test_out");
-+cleanup:
-+	test_module_attach__destroy(skel);
-+}
- 
--	test_module_attach__detach(skel);
--
--	/* attach fentry/fexit and make sure it gets module reference */
--	link = bpf_program__attach(skel->progs.handle_fentry);
--	if (!ASSERT_OK_PTR(link, "attach_fentry"))
--		goto cleanup;
-+static void test_module_attach_detach(const char *prog_name)
-+{
-+	struct test_module_attach *skel;
-+	struct bpf_program *prog;
-+	struct bpf_link *link;
-+	int err;
- 
--	ASSERT_ERR(unload_bpf_testmod(false), "unload_bpf_testmod");
--	bpf_link__destroy(link);
-+	skel = test_module_attach__open();
-+	if (CHECK(!skel, "skel_open", "failed to open skeleton\n"))
-+		return;
- 
--	link = bpf_program__attach(skel->progs.handle_fexit);
--	if (!ASSERT_OK_PTR(link, "attach_fexit"))
-+	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-+	if (!ASSERT_OK_PTR(prog, "find program"))
- 		goto cleanup;
-+	bpf_program__set_autoload(prog, true);
- 
--	ASSERT_ERR(unload_bpf_testmod(false), "unload_bpf_testmod");
--	bpf_link__destroy(link);
-+	err = test_module_attach__load(skel);
-+	if (CHECK(err, "skel_load", "failed to load skeleton\n"))
-+		goto cleanup;
- 
--	link = bpf_program__attach(skel->progs.kprobe_multi);
--	if (!ASSERT_OK_PTR(link, "attach_kprobe_multi"))
-+	/* attach and make sure it gets module reference */
-+	link = bpf_program__attach(prog);
-+	if (!ASSERT_OK_PTR(link, "attach"))
- 		goto cleanup;
- 
- 	ASSERT_ERR(unload_bpf_testmod(false), "unload_bpf_testmod");
- 	bpf_link__destroy(link);
--
- cleanup:
- 	test_module_attach__destroy(skel);
+-	for (i = 0; i < ARRAY_SIZE(all_read); i++)
+-		ASSERT_EQ(skel->bss->read_ret[i], all_read[i].ret, all_read[i].name);
++	for (i = 0; i < cnt; i++)
++		ASSERT_EQ(skel->bss->read_ret[i], descs[i].ret, descs[i].name);
+ out:
+ 	read_vsyscall__destroy(skel);
  }
 +
-+void test_module_attach(void)
++void test_read_vsyscall(void)
 +{
-+	int i;
-+
-+	for (i = 0; i < ARRAY_SIZE(read_tests); i++) {
-+		if (!test__start_subtest(read_tests[i]))
-+			continue;
-+		test_module_attach_prog(read_tests[i], READ_SZ, NULL, 0);
++	if (test__start_subtest("probe_read")) {
++		test_read_vsyscall_subtest("probe_read", all_probe_read,
++					   ARRAY_SIZE(all_probe_read));
 +	}
-+	if (test__start_subtest("handle_raw_tp_bare")) {
-+		test_module_attach_prog("handle_raw_tp_bare", WRITE_SZ, NULL,
-+					0);
-+	}
-+	if (test__start_subtest("handle_raw_tp_writable_bare"))
-+		test_module_attach_writable();
-+	if (test__start_subtest("handle_fentry_manual")) {
-+		test_module_attach_prog("handle_fentry_manual", READ_SZ,
-+					"bpf_testmod_test_read", 0);
-+	}
-+	if (test__start_subtest("handle_fentry_explicit_manual")) {
-+		test_module_attach_prog("handle_fentry_explicit_manual",
-+					READ_SZ,
-+					"bpf_testmod:bpf_testmod_test_read", 0);
-+	}
-+	if (test__start_subtest("handle_fexit"))
-+		test_module_attach_prog("handle_fexit", READ_SZ, NULL, -EIO);
-+	if (test__start_subtest("handle_fexit_ret"))
-+		test_module_attach_prog("handle_fexit_ret", 0, NULL, 0);
-+	for (i = 0; i < ARRAY_SIZE(detach_tests); i++) {
-+		if (!test__start_subtest(detach_tests[i]))
-+			continue;
-+		test_module_attach_detach(detach_tests[i]);
++	if (test__start_subtest("copy_from_user")) {
++		test_read_vsyscall_subtest("copy_from_user", all_copy_from_user,
++					   ARRAY_SIZE(all_copy_from_user));
 +	}
 +}
-diff --git a/tools/testing/selftests/bpf/progs/test_module_attach.c b/tools/testing/selftests/bpf/progs/test_module_attach.c
-index 03d7f89787a1..5609e388fb58 100644
---- a/tools/testing/selftests/bpf/progs/test_module_attach.c
-+++ b/tools/testing/selftests/bpf/progs/test_module_attach.c
-@@ -7,23 +7,21 @@
- #include <bpf/bpf_core_read.h>
- #include "../test_kmods/bpf_testmod.h"
+diff --git a/tools/testing/selftests/bpf/progs/read_vsyscall.c b/tools/testing/selftests/bpf/progs/read_vsyscall.c
+index 395591374d4f..2a3e5325b7d8 100644
+--- a/tools/testing/selftests/bpf/progs/read_vsyscall.c
++++ b/tools/testing/selftests/bpf/progs/read_vsyscall.c
+@@ -19,8 +19,8 @@ int bpf_copy_from_user_str(void *dst, u32, const void *, u64) __weak __ksym;
+ int bpf_copy_from_user_task_str(void *dst, u32, const void *,
+ 				struct task_struct *, u64) __weak __ksym;
  
--__u32 raw_tp_read_sz = 0;
-+__u32 sz = 0;
- 
--SEC("raw_tp/bpf_testmod_test_read")
-+SEC("?raw_tp/bpf_testmod_test_read")
- int BPF_PROG(handle_raw_tp,
- 	     struct task_struct *task, struct bpf_testmod_test_read_ctx *read_ctx)
+-SEC("fentry/" SYS_PREFIX "sys_nanosleep")
+-int do_probe_read(void *ctx)
++SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
++int probe_read(void *ctx)
  {
--	raw_tp_read_sz = BPF_CORE_READ(read_ctx, len);
-+	sz = BPF_CORE_READ(read_ctx, len);
+ 	char buf[8];
+ 
+@@ -37,8 +37,8 @@ int do_probe_read(void *ctx)
  	return 0;
  }
  
--__u32 raw_tp_bare_write_sz = 0;
--
--SEC("raw_tp/bpf_testmod_test_write_bare_tp")
-+SEC("?raw_tp/bpf_testmod_test_write_bare_tp")
- int BPF_PROG(handle_raw_tp_bare,
- 	     struct task_struct *task, struct bpf_testmod_test_write_ctx *write_ctx)
+-SEC("fentry.s/" SYS_PREFIX "sys_nanosleep")
+-int do_copy_from_user(void *ctx)
++SEC("?fentry.s/" SYS_PREFIX "sys_nanosleep")
++int copy_from_user(void *ctx)
  {
--	raw_tp_bare_write_sz = BPF_CORE_READ(write_ctx, len);
-+	sz = BPF_CORE_READ(write_ctx, len);
- 	return 0;
- }
+ 	char buf[8];
  
-@@ -31,7 +29,7 @@ int raw_tp_writable_bare_in_val = 0;
- int raw_tp_writable_bare_early_ret = 0;
- int raw_tp_writable_bare_out_val = 0;
- 
--SEC("raw_tp.w/bpf_testmod_test_writable_bare_tp")
-+SEC("?raw_tp.w/bpf_testmod_test_writable_bare_tp")
- int BPF_PROG(handle_raw_tp_writable_bare,
- 	     struct bpf_testmod_test_writable_ctx *writable)
- {
-@@ -41,76 +39,65 @@ int BPF_PROG(handle_raw_tp_writable_bare,
- 	return 0;
- }
- 
--__u32 tp_btf_read_sz = 0;
--
--SEC("tp_btf/bpf_testmod_test_read")
-+SEC("?tp_btf/bpf_testmod_test_read")
- int BPF_PROG(handle_tp_btf,
- 	     struct task_struct *task, struct bpf_testmod_test_read_ctx *read_ctx)
- {
--	tp_btf_read_sz = read_ctx->len;
-+	sz = read_ctx->len;
- 	return 0;
- }
- 
--__u32 fentry_read_sz = 0;
--
--SEC("fentry/bpf_testmod_test_read")
-+SEC("?fentry/bpf_testmod_test_read")
- int BPF_PROG(handle_fentry,
- 	     struct file *file, struct kobject *kobj,
- 	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len)
- {
--	fentry_read_sz = len;
-+	sz = len;
- 	return 0;
- }
- 
--__u32 fentry_manual_read_sz = 0;
--
--SEC("fentry")
-+SEC("?fentry")
- int BPF_PROG(handle_fentry_manual,
- 	     struct file *file, struct kobject *kobj,
- 	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len)
- {
--	fentry_manual_read_sz = len;
-+	sz = len;
- 	return 0;
- }
- 
--__u32 fentry_explicit_read_sz = 0;
--
--SEC("fentry/bpf_testmod:bpf_testmod_test_read")
-+SEC("?fentry/bpf_testmod:bpf_testmod_test_read")
- int BPF_PROG(handle_fentry_explicit,
- 	     struct file *file, struct kobject *kobj,
- 	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len)
- {
--	fentry_explicit_read_sz = len;
-+	sz = len;
- 	return 0;
- }
- 
- 
--__u32 fentry_explicit_manual_read_sz = 0;
--
--SEC("fentry")
-+SEC("?fentry")
- int BPF_PROG(handle_fentry_explicit_manual,
- 	     struct file *file, struct kobject *kobj,
- 	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len)
- {
--	fentry_explicit_manual_read_sz = len;
-+	sz = len;
- 	return 0;
- }
- 
--__u32 fexit_read_sz = 0;
--int fexit_ret = 0;
-+int retval = 0;
- 
--SEC("fexit/bpf_testmod_test_read")
-+SEC("?fexit/bpf_testmod_test_read")
- int BPF_PROG(handle_fexit,
- 	     struct file *file, struct kobject *kobj,
- 	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len,
- 	     int ret)
- {
--	fexit_read_sz = len;
--	fexit_ret = ret;
-+	sz = len;
-+	retval = ret;
- 	return 0;
- }
- 
--SEC("fexit/bpf_testmod_return_ptr")
-+SEC("?fexit/bpf_testmod_return_ptr")
- int BPF_PROG(handle_fexit_ret, int arg, struct file *ret)
- {
- 	long buf = 0;
-@@ -122,18 +109,16 @@ int BPF_PROG(handle_fexit_ret, int arg, struct file *ret)
- 	return 0;
- }
- 
--__u32 fmod_ret_read_sz = 0;
--
--SEC("fmod_ret/bpf_testmod_test_read")
-+SEC("?fmod_ret/bpf_testmod_test_read")
- int BPF_PROG(handle_fmod_ret,
- 	     struct file *file, struct kobject *kobj,
- 	     struct bin_attribute *bin_attr, char *buf, loff_t off, size_t len)
- {
--	fmod_ret_read_sz = len;
-+	sz = len;
- 	return 0; /* don't override the exit code */
- }
- 
--SEC("kprobe.multi/bpf_testmod_test_read")
-+SEC("?kprobe.multi/bpf_testmod_test_read")
- int BPF_PROG(kprobe_multi)
- {
- 	return 0;
 -- 
 2.53.0
 
