@@ -1,273 +1,218 @@
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011003.outbound.protection.outlook.com [40.107.208.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 488B325A354;
-	Tue, 10 Feb 2026 17:28:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.3
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770744485; cv=fail; b=mjqjFU7WjxulbcY2pR8BB/NHrEV/dR2Y5KJ1L0gc2Z/CDvqZpt5dv6tl+7nuUMAV0FscDDAV5fYq1/XSg5J6on5P+SnWmO0O1yr6nF1SwKtFDiOuYnx5wlDFWQZgqccbzNxLi7muJYAK41jlT8X9S6i+4+WUM4mJ2FzxqYrfmt4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770744485; c=relaxed/simple;
-	bh=RSQJKPhtZhFM6AxYG6xu6w1ovFJgeBDed66eerIPAoc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=oayRlGRe1ajmfufun9IcCAgF9qpl5DNO3EHUHXlLu8T86RMZDWDeoPkXXI+SWvDdKIwCWuGc/zinpZ9iyZYnizP/I0wzSaV25aiy9xbejxqvuScb2DxZ5ECIk+e4CPYNW1e2ZaipXkTxQ+WNfcd62w1pybTIXfGbhocsv2w/Mps=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=B8MgP372; arc=fail smtp.client-ip=40.107.208.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84CBF38A9A6
+	for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 17:30:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770744624; cv=none; b=s02puOtv3sK1kb2/6sUAHqEhTc8YmfA0WX1O8dDSHgisKV94H55HplH2q6Pxlryo2gxDnWUGsC0p0mVVnnisddpVLi8vvHRLDYbR9rJgfTv1yjgf7OE3dM9HyPyFgtGUdUkHbfcopdQXfF4pxL/1Cg2bnohEjNRcU7SuUHQi+Fk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770744624; c=relaxed/simple;
+	bh=h4SUjAC1/+1WI5l2vmSlYY/nKJfsmyvesTsuCN94dpg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Hxd9+ih2GTSgn8KXME2dFN0Rt1VNLSMcwPYm0FuJGtk7GkDoEPCIjCe8zczIlOmeGg5xQ7+KDvSw6OGel21wNNk4nGmazuT5WBtrdjJeFA33Fp6tbXr92pQmXLc+GSS3ohDNMqvBbrRI2xxSrILv94Bzg/g738xQ1pTcyrNTfZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b=NdqUEyUi; arc=none smtp.client-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="B8MgP372"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=G8RkgRUQaTBWTcL0kz9sw1oKyq4TctcvjjF5jb+hwRucQkXfaGb2NVr45yVmeznhumGrj5KtjpOzdWgnxSmjtAgJHf9NOeYh5bLctDFT2tNPu8lM759nRRyGQt5wQm6W31AsNaOGI0CNEBrAz7MGooJ90Qa8OXwB3l27MA41i9x/g8oi95RgPDHGDydgGGibqMX1w+psN1BceHAVD7LQ6NoKC1tsBZ1nzAEp7Hbyot0P/Cy660g5G8RAthQbEbUg+O2rm1McdZiGNA9OMXsjvo1DVt/nOqgO7gR01F+UaO+PUUWgKV0gGNhIXeZ4Bv0lQ047cmSNU3Sf3Tio7uA+EQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cstK84dcUuyRVSOuTcQxy2W31zuB/M0IW6tDX+QlZJk=;
- b=MPdMZMYemD0MtjKHNlWv5En6QANEO+9WBdM0PhXJ0uSMBDeZA34I83Qv3wGdEP1zJrAk9vPsH1lJJYVKx8cyAd01oMXkFoP/O/6BM0zrxb7bvjyEYoMyMswqSf2FsJ2UCczgXdKGOQXPb8OWsbSHTcAbQJyFCPhOjMMhx5FMrVGiZBT65pHJx56yZWC7DFm0xDu0DRICUdWYczxVn5x2pqPdK+Pc5Ha+HQQoTdQx6+/+o94EvAlIBExHyxlKawuGlHL9mVnKpxanlJVygMJEWPVzNYDv68dfYd5RpdankXhd85JTMEqH9pLRUjaC5rtnTnKjBHkvM9LOnzIy1oaoUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cstK84dcUuyRVSOuTcQxy2W31zuB/M0IW6tDX+QlZJk=;
- b=B8MgP372Sz5TvFhC1dvh4YMkcCdnsYwzjYuYmVYfA9UKLrhQ8vdfRKL5E6MJQWRMumf7jmPx3cCaVAcfbmpf85pTJNu8rYQfLr1x1zq9L5OT5NIaCnS/eS8qoiQduEhiPzJ9tBkBUIH9p8N9kjvRrtNTuiLYMpnRoqPfbtwS/JAQ/NJ5ydeB2NqO3TccsfZXUT8gxqvAX0oKeOhZlAsmzeFqdU6oSrOFTWcqBUBJxuhQluBsb2E+w2e/Q/vHdMwHx0pTaqMtnr4JIkLUH1XMdLSXrihveTETrw2MPrVakB59eFgwYDUQTL2yghJeP6TgI2vi2+m42QnJFMTmJNzISQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8728.namprd12.prod.outlook.com (2603:10b6:610:171::12)
- by BN5PR12MB9487.namprd12.prod.outlook.com (2603:10b6:408:2aa::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.8; Tue, 10 Feb
- 2026 17:27:58 +0000
-Received: from CH3PR12MB8728.namprd12.prod.outlook.com
- ([fe80::2641:1046:bdf3:93d7]) by CH3PR12MB8728.namprd12.prod.outlook.com
- ([fe80::2641:1046:bdf3:93d7%6]) with mapi id 15.20.9587.013; Tue, 10 Feb 2026
- 17:27:58 +0000
-Message-ID: <e229a820-e2e0-4dc7-a6c2-03ad6f2bdac3@nvidia.com>
-Date: Tue, 10 Feb 2026 18:27:48 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 6/6] net: enetc: use truesize as XDP RxQ info
- frag_size
-To: Vladimir Oltean <vladimir.oltean@nxp.com>,
- Jakub Kicinski <kuba@kernel.org>
-Cc: Larysa Zaremba <larysa.zaremba@intel.com>, bpf@vger.kernel.org,
- Claudiu Manoil <claudiu.manoil@nxp.com>, Wei Fang <wei.fang@nxp.com>,
- Clark Wang <xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- "Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
- Tushar Vyavahare <tushar.vyavahare@intel.com>,
- Jason Xing <kernelxing@tencent.com>, =?UTF-8?B?UmljYXJkbyBCLiBNYXJsaeKImsKu?=
- =?UTF-8?Q?re?= <rbm@suse.com>, Eelco Chaudron <echaudro@redhat.com>,
- Lorenzo Bianconi <lorenzo@kernel.org>,
- Toke Hoiland-Jorgensen <toke@redhat.com>, imx@lists.linux.dev,
- netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org,
- Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
- Tariq Toukan <tariqt@nvidia.com>, Nimrod Oren <noren@nvidia.com>
-References: <20260203105417.2302672-1-larysa.zaremba@intel.com>
- <20260203105417.2302672-7-larysa.zaremba@intel.com>
- <20260205005901.gnju3zmqimtgeu2b@skbuf> <20260204173401.282899d0@kernel.org>
- <20260205122953.lscemcctayrvszdu@skbuf>
- <aYSP344FT-JlylwY@soc-5CG4396X81.clients.intel.com>
- <20260205124638.hxzvjiocephzlrk3@skbuf>
- <aYSZw4wbd-nvLTuD@soc-5CG4396X81.clients.intel.com>
- <20260205134046.pggwyosutj7ggi4i@skbuf> <20260205175408.30ab72a1@kernel.org>
- <20260208125934.f4n5mri2pit6s6gn@skbuf>
-Content-Language: en-US
-From: Dragos Tatulea <dtatulea@nvidia.com>
-In-Reply-To: <20260208125934.f4n5mri2pit6s6gn@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0007.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1d::6) To CH3PR12MB8728.namprd12.prod.outlook.com
- (2603:10b6:610:171::12)
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20230601.gappssmtp.com header.i=@davidwei-uk.20230601.gappssmtp.com header.b="NdqUEyUi"
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-12721cd256bso2537230c88.1
+        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 09:30:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1770744622; x=1771349422; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uij+yze6+KWtPneIeRHK7BdEXls9H9TrWBaPlCemb3w=;
+        b=NdqUEyUihUBWcyrk1wlON1+l0HMKekiKBUYUFH0+/Fr4pAiQMDmyEptnN8YXT0b948
+         TS5/3osFxV6DakCjmOzK1x9qHqU79BR+ALthxqTcTOHMgN3EmV44P69seYit5RcOXc4z
+         /LTH5+ppnNy0rnWLoziqsH9d+q3VnmbLjR533Dsq+c2bjWT3EY0BCzG9BLmQqe+b4LQ6
+         TSeBWmMN6xOIilcGM4+/Ip2ftRrSvgrhfXFVcOTex2fZy/Kx2fdFV6YLCkUaqTyT4e33
+         4lQ6Zs42v6HrZtqu9Qc1cz5zir2BhB0miB+F59JX5DmzcY94MBzPqCH13pSRmdMfBxX3
+         /zdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770744622; x=1771349422;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uij+yze6+KWtPneIeRHK7BdEXls9H9TrWBaPlCemb3w=;
+        b=RePcslVTLcMWrBTlbvTis7gVxYVN/bLPij0dfx6NU9JizhH2B5Vlx3iPyF4Zvgd/RJ
+         d5I6TRP0uMlQ0OvGlmsUbk7vjbVgmsWFRd5xUS6a3yOJ0NiY+k29O8yiNF3U2hc/nWTD
+         2kLzzTArTPS7/b+gN9kcxO4f5IzCuRHoCH2TmCJaPt33giXofPYu6UBCqsFigIcUhLHR
+         RWm9q3/ZLKFj/c5D6At59/ZWMgBn1x48ethBwIm2CYxH33+aIZVTkcPf4l38daQ0a0B/
+         i2b5v3ZCEmX3RtzI/To1E/xgsrkw+FaUWWybHs8KnR0K2pVpHw7BIEWgQppLB+6Y+Ll4
+         HkJA==
+X-Forwarded-Encrypted: i=1; AJvYcCVKpq1zsvJ3UfQr3TUk65D//SVefWEj1OWGA1ybvVeZ36XmOWnEVsLhuXN7YMnkFuywjLI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE5LUdEg7wy+vpVxOe8aDGpQs7E+cGwB7zjgM+r8j+JE7VEFoj
+	K6G7oBeqxISd+52z0yN85GmsgCfYfcfX8Rn/tWxblD7szdi++VnhbrPtQsWYYhwTQEM=
+X-Gm-Gg: AZuq6aJzV6ohJ5ncJTXXfIkKJ3+XcKJqZZ58E9ZCkM7O79E5tLX9lRoat8q1SCt/UFY
+	NNNMzZaIBREzhCMEh6mnleFBvEq7o5WK8mBPsywHIUe6LDVFpgzysTVM91n8wRnFEXDfPi/Kmx6
+	I2MpqTcVwmgl5nC0p+J7t5kxqEh5IkH5uuUvVRJltgRebMNm+ftjIws4hM5j0ySaiGUrCechQAZ
+	mEB53UJ8TnhKQ0oe5+QlpN8Jvm34S8Jsx21qZo7ltwq8PeWvEkvpnrl+uq0hv/0Haj6XAXP+FYQ
+	L8550WG+20uOrkB2POO1VNrG3mNElZvgM/0y1wHo9RKM/lQVeLg3SeLULAXn46KI0E+WTo0iyNH
+	95164Jopiu3j52Xrzti6y7Ybyg7xwxNWZd/Ho0UHYUU4jl2OFQJv+7sha6sSLw1JiVp4JYgOk9r
+	atIDXsNqESmClHW39NHzilYDAFtpsqbqkt6u8k3xEKqzA8ssPwELlfF7oHykYkY2k3VLn7AmEBn
+	U911lti4POp0G/9DUKwVtjB
+X-Received: by 2002:a05:7022:1285:b0:11a:37a7:3d2f with SMTP id a92af1059eb24-12703fe8c82mr6800135c88.37.1770744622066;
+        Tue, 10 Feb 2026 09:30:22 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::1:a031])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-127041d9c91sm12989395c88.2.2026.02.10.09.30.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 10 Feb 2026 09:30:20 -0800 (PST)
+Message-ID: <82535cd8-7bcc-4454-b8ee-2af513bcf31c@davidwei.uk>
+Date: Tue, 10 Feb 2026 09:30:18 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8728:EE_|BN5PR12MB9487:EE_
-X-MS-Office365-Filtering-Correlation-Id: 70d0f811-be2b-4bc5-bd83-08de68c9bbe9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Z0NsQWJzQlRNOU1XSEFSV2o1cklOek05NTVIdU5jOWlTM1lwaGp1VXZmWU1H?=
- =?utf-8?B?K08rcFI3NG9EcVd2WlNIUUIxK2xPQ2hGS2JXT1NOQ1FieUkxMTI1V2MwTHNS?=
- =?utf-8?B?Uy9EOWpoa1BZazZUNDNuNFB4eDFpS3EvQ2l0ZWNQSDJIRjVoSk1XWCt1N01z?=
- =?utf-8?B?VlNUMDZIcGhJY1JJTW5kamF0d3drTXZCYVBmdVZnVnpGSXB4UVZhTmtrZHBE?=
- =?utf-8?B?WW5ySm42SkMyT3AwTmZPM0F5NGxWdnYyM1oxSDUxZmliMFBoelZLWFgzN1JX?=
- =?utf-8?B?MUJWSHFqRThNY3VFYmZPTmJ4NkxTVG9WbHprRks5ZkFteDZGdHBTb3oyRWVY?=
- =?utf-8?B?M0pDNWdxaUlCMnV5cVFWRTNWWStZTFF0RDZkMitJVWJ5L0NoLzN3VzNnbzRs?=
- =?utf-8?B?YmdjSkM2YWZCV3FRUFlOWUQ0YXlLcHpZWUlYVGs4Z0RtVFprVVVBaHM3K0Yv?=
- =?utf-8?B?VS84cHF1cjNkYXdDcFZKcE8vUzVRdHF3TFNUN1RsdU1mWFQwZWFpeG9ORVdx?=
- =?utf-8?B?dlJvQ0p3Q3VVSVRNNlhDM1BhaW9CNnQ3SHJOUG0zU2k3NzRTREZ2NE9QcWY4?=
- =?utf-8?B?ZFVxazl3ejhpWW8xUXN5N2NGdU5RSjRrQ0ovVnVCSHM1akYxaVFqTEF5RkFu?=
- =?utf-8?B?c1dXajJrZHR3aS9YVDdOd1ZKQm9BcDJmenJiY3o3RGV6ZzY1K1FFdGJETFli?=
- =?utf-8?B?eTR3SzlBRnptdGNJY1lZUFFmU2VUUXVCZzE5MklPTWw1aTRWOVlhR1NsWUd1?=
- =?utf-8?B?dUFJc0phZHh3Q3JBbUtjWEN6Y1NTRnhjS2F1ekljR1VyTElQSVRHM0s0UHd1?=
- =?utf-8?B?SmtlWGJCT0dwa2VmWnlSZXdqWk1maUQ4QmpVZFZZOVVyUFNQbFBIR2VWQVJx?=
- =?utf-8?B?SHpZNXVCbk81UUJZTFNwdXRiZ1FBQ1I2dzN6QWJOS2FHUHRuTDZDeHVFbUQx?=
- =?utf-8?B?MGpQS1d5T2szZHZidTFaYnNMUjBUMWxiL0V6cjNGbTB3Z2o3WU1wT2RMcWpK?=
- =?utf-8?B?VVVJdGVDVDZuQXdmUE1EWkpYTFBMbmdrSGtQdHhMQXFUeTNEcExXVTZwWm9S?=
- =?utf-8?B?aG5RZ1JYby9vdHpIeU9lQnBldkFyeVJMbFpSUE5XM1A1bHNhdjNKVFNhUXJ3?=
- =?utf-8?B?ZDlRZmFkdnhDWlprUWlrV3hiaDhpS0wreHlBb25jeVNTd05zRU5ySmJiclBO?=
- =?utf-8?B?M2tlaitnYzBSeE4zWmZzNjdUUTJFYUZyYlpodVQ0K2hDRnMxcVRrRzZsakd4?=
- =?utf-8?B?SHU5RUtrc3dseTFBWDVRRXdWKzJyRlAxYWxJZUMreG5qNjhRalpCckl2WWJC?=
- =?utf-8?B?c2xGakI2aW0wNWs3WGNnVmwyZGJRb2c3MXpLUEt3dWxsalRaeGc4c3B6bHFl?=
- =?utf-8?B?Y1pUUFJ3RndJRVA3MnFENGd6RHpzY3R1Mm1OOEhKZGIvYjlaYzhxak4yYXNE?=
- =?utf-8?B?ZGRZNnRPNTBTaXVHQklRK0d4UytLWXhqdEJ3Qys5QkkvdHFSbnFMeTlxbjdU?=
- =?utf-8?B?cFBCQ3FtaHlIYUtzaWdlZE5sY2s2MG43cG5WUWlkdis0MzlsVGhRYno3SUpx?=
- =?utf-8?B?TStZYUZmU3pjQldBbUIvU2JwaEg4Nk9WazUybzM2dlVVUjh2TldvRTZ2aUFn?=
- =?utf-8?B?TFlMalowaEM5d0NRTEFkSWQxYnRqclpOWjEvYlFLVUF3dG9ZOGtjSmpUTGRP?=
- =?utf-8?B?NTlRUFl2THVCZFl4NG02Y3g5eGxva0lqbEpVbmQ0RHdXUHRhMmZ2YWlNdHpL?=
- =?utf-8?B?eXBEWVlyeFlyRXJmdEx6alNnTks3S203Q0w3MGY0ako4T2RtL0xrTW8yV1BQ?=
- =?utf-8?B?azVBaFdSblNxcVRFWTZmdkFjYVVVVnNyNXErejZJd0pFOFBrTlR4YlhCUXh4?=
- =?utf-8?B?ZGJ6dGdHNDBIbnRFdjlIZmFuOHJQZmszRExHYUowaldzV3IydmpyTWk4RjNX?=
- =?utf-8?B?emNVVS9KRmJSUXArSGZ5RUpsUmsrWEFzaWVBN1dKMFVZTlJpVUhVL2pJU1Bz?=
- =?utf-8?B?R0cyNHNLWmhudkpVKytOTTg5Y25aZTgrdHArbEJJSVhLNzNIVGE4Ui9FVE1M?=
- =?utf-8?B?aHJxVnJpRWtQd05USWJ6STYxRE54dEVqQkMyajk5K1AzWGJBQ3RFUmU3c1N5?=
- =?utf-8?Q?KKJA=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8728.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OVBCbXptcTgvVVJ2YThDUDVFb3hWZTV2bXBYTWEwSXlKVGNmaVE5TkF1bjcv?=
- =?utf-8?B?TFdzYnRGNUJ2blBrNCtVNXhBL2JxYXM5dkVoT3hWM0QrSEN2NUgxa2daWWMw?=
- =?utf-8?B?UEI5S0FoZXllSjdlcHRGNUgvNDk4aFVOemxlTEN1SHpnYjlVbFhRajgwNTZ0?=
- =?utf-8?B?VmtEUmI2Z3k0S0ZpRW9tdWlweGRrNkRIS2V4eCtRZ1BTL1BRU2NoaHJuR3NN?=
- =?utf-8?B?SGcraGtuNTJGNTFXUnlTa2lHUWpMaEQ2OVgvKzVxV2x6NlgvWGYySExQZVAv?=
- =?utf-8?B?SFRKdERsWEFFbURLM1o0Q09nOHhXVFJvT0dKdXVXS1ZBVmM3SE1oZXhWOVBB?=
- =?utf-8?B?OUpsU01VWEo0MFFvT2NIY213eDBZS3hvelpBMzV4V0pLNXdZNWsrVGFqdHJh?=
- =?utf-8?B?NkhJdDlFeVVJOEZuTkhhRFVZRU9QQUZSUHRHcWUwV0tZYVBYL1JtcG55TTZJ?=
- =?utf-8?B?WHE5UE1hQWFvWkV5OWhLUWpsdUMvQkYyUVFRNzRIaDd6dkJHLzRpZ1doV0VM?=
- =?utf-8?B?L3ZOZlEyWVFZQ0xVZHZ4bGhvdjFYZ0IwSUJjNXlQTDVqT2oyQlppM25KNXR5?=
- =?utf-8?B?L2w0d29mZHFFQU1hUWV3Y3BnWk5iTjNaOHZxWG9pT1ZTZjdoSzIyS1JibG04?=
- =?utf-8?B?anpyVXVjVmhEZWMrNE1WNU5zbHJXczhZVlFSbzhyeGs2SjU1T1JhcitxZHNR?=
- =?utf-8?B?UzQ0Yks0OEZiYTlBNkdwb3NPUFpqSnMwditEQzQ1eUlheEJYalZnT3pSNVVK?=
- =?utf-8?B?K09jdDFiaVp6aVpwaUxva2tHenlqbmdoS2JuV3NHeDVHR0RlRWx6a0FXZmJh?=
- =?utf-8?B?TEd6elVsNDkvK3phVGl6Mzk0TUppT3M1S3FMbXNQNkoxU0dLOVk4ck42SGdV?=
- =?utf-8?B?cTRLbkw0U0NIdTd1bWtBcDFGMGM0MUh3bVhmbjI3SDFqdjdzZkxQTllGQjRp?=
- =?utf-8?B?VXZYekxsemoyenIzbjBVS0ZrRndQajJqZGtLNlBkUmlUM0lrdW1GekVNYlFx?=
- =?utf-8?B?VkN1MTVhZk40UXUyQm83ZzRvaG5BMVYxMzdZYkxKMEJHVkxZZ3dGRkgzbUNY?=
- =?utf-8?B?MkdNNWFiM3U1Rm1ocWJDN0Q1TW96R2pOcFowbnV3dGRvMmVkL1JwaEsveXdB?=
- =?utf-8?B?WUx0MytoY2cvQThQMWpEblRxeFJVR3l0STg3VjErT1p3M2FJVlkvYUw0UkNB?=
- =?utf-8?B?STVqSlV1SGdxZnF5TTBOam9mWU9vQUdabmNUWWFhc2MxNnlsWCt6bTA4bmZJ?=
- =?utf-8?B?aWdFMG1nVGJtR3EwWGtJcU9KTDcxWGhXWS9yZFdERUJVN3VaVWs4TzE1dVVD?=
- =?utf-8?B?YWFwZGh6SWt6Y2pZYUVXSGdKQ3FiampFcHhLN3E3VzNWU1l6ako4TnduNDhq?=
- =?utf-8?B?dlUvRFlDWjZMbUtjN3lKUkg4Wm41bFVHSTNWY0N0c05tclRKUGdyaUpQMXN3?=
- =?utf-8?B?UEZqOStRdWJsSFZxRHlEc3FlTW1KZ2tYbkdsaXpweVFSalV4YWh2aGQ1TzRJ?=
- =?utf-8?B?SmZhVXNESTRvS3pGbHpaOHRLdXpKSFFZRzMzeG44WmdFNXExT1AyTGlHTEFq?=
- =?utf-8?B?UEZTSTBON2N4ZDQvREU4UzBlMHBqTnpnUExseURPa1RaRWdiMXlpTUpuRUt5?=
- =?utf-8?B?SnBxOGNmSnVHeGFJOU5KVEpUdkxUOXJ6QnRtY1VNSGRoaVdKSmVhblRHVzI1?=
- =?utf-8?B?UUQwNklXTzhWV0pSK0VBMXRUdGowNFRPM2JzaXprYUtRN2Rkc1gwdXpNUU9Q?=
- =?utf-8?B?TktKZjRtRHRQWUQxRzJ5SnpaTWxvNnpBMWN2NzJ3cWJZbFN5WnlQVnh0a1pw?=
- =?utf-8?B?OEE4UW9pcnQ5akhidlBDUGg0ck9Kc3V1UGpPL3ZJOE0vRk1CdkVQTkVhaHBK?=
- =?utf-8?B?bVRlWVc3b2oydzQyVFl3R1dTeERLR3dYVEpHdUxxN1E1Sk1UciszNWMvZHB4?=
- =?utf-8?B?TTJyR25DSTF1cnNuK1A2Z2ZBd1hqK0MyanoyMzN5TEQzWU5uYUlTTFNnTGZR?=
- =?utf-8?B?MWhxeDc4WS9Hdm9vYVZkZklVS1N4cWNjdDl1V3V6SHhCSDlTRkRvSG9jMXV2?=
- =?utf-8?B?Y2RXemhoNGRiRFU0Y2hzSFc4bFpOVWF3MVVuc21tU1JUc3g0eFZQc3lQeVJl?=
- =?utf-8?B?Q0kwMGhQZmpKVGFTUkEyS0o5OU1TRXRVeERlRlZLbGdKeW9IeVhnYUVyT2oy?=
- =?utf-8?B?TVdtQjFzcTJ1bC9tc2NSSGgyb3FyNVdKTUh0TmRKb3lYalFSa3ozVlp6KzNU?=
- =?utf-8?B?MWszeHhPY3dzcnJFcWF2TmtiLzNETXhUdlNkQmhWaDhiSHhWWFdkV2RaZEx3?=
- =?utf-8?B?MTRaK0dFYXhlNDNsWENWTzZjWW0vMnBSZCtqZ0UxeWJ4ZVhMUzJBdz09?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 70d0f811-be2b-4bc5-bd83-08de68c9bbe9
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8728.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2026 17:27:58.5557
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ShZYJWKY+fFbpEIz8KxdFbjqE0ef9ziKApKzKB3aD52jJ8+POfL8gTUrvQn2dyR+bs4ihNVhRwceGISpT68rVg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN5PR12MB9487
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v8 15/16] selftests/net: Add env for container
+ based tests
+To: Bobby Eshleman <bobbyeshleman@gmail.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, davem@davemloft.net,
+ razor@blackwall.org, pabeni@redhat.com, willemb@google.com, sdf@fomichev.me,
+ john.fastabend@gmail.com, martin.lau@kernel.org, jordan@jrife.io,
+ maciej.fijalkowski@intel.com, magnus.karlsson@intel.com, toke@redhat.com,
+ yangzhenze@bytedance.com, wangdongdong.6@bytedance.com
+References: <20260129222830.439687-1-daniel@iogearbox.net>
+ <20260129222830.439687-16-daniel@iogearbox.net>
+ <20260131163834.2c3d160d@kernel.org>
+ <9037828b-c7fd-4eb1-9dd8-19ee49063361@davidwei.uk>
+ <aYP7uiuPWAbJEgLD@devvm11784.nha0.facebook.com>
+ <aYQBsTfF4PrJcHNl@devvm11784.nha0.facebook.com>
+Content-Language: en-US
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <aYQBsTfF4PrJcHNl@devvm11784.nha0.facebook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-
-On 08.02.26 13:59, Vladimir Oltean wrote:
-> On Thu, Feb 05, 2026 at 05:54:08PM -0800, Jakub Kicinski wrote:
->> FWIW my feeling is that instead of nickel and diming leftover space 
->> in the frags if someone actually cared about growing mbufs we should
->> have the helper allocate a new page from the PP and append it to the
->> shinfo. Much simpler, "infinite space", and works regardless of the
->> driver. I don't mean that to suggest you implement it, purely to point
->> out that I think nobody really uses positive offsets.. So we can as
->> well switch more complicated drivers back to xdp_rxq_info_reg().
+On 2026-02-04 18:34, Bobby Eshleman wrote:
+> On Wed, Feb 04, 2026 at 06:08:58PM -0800, Bobby Eshleman wrote:
+>> On Mon, Feb 02, 2026 at 07:53:34AM +0900, David Wei wrote:
+>>> On 2026-02-01 09:38, Jakub Kicinski wrote:
+>>>> On Thu, 29 Jan 2026 23:28:29 +0100 Daniel Borkmann wrote:
+>>>>> +class NetDrvContEnv(NetDrvEpEnv):
+>>>>> +    """
+>>>>> +    Class for an environment with a netkit pair setup for forwarding traffic
+>>>>> +    between the physical interface and a network namespace.
+>>>>
+>>>> A little diagram would be pretty awesome to have here, and perhaps copy
+>>>> it to the README file too?
+>>>
+>>> Sounds good, I'll add one. I forget how much you like ASCII diagrams.
+>>>
+>>>>
+>>>>> +    """
+>>>>> +
+>>>>> +    def __init__(self, src_path, rxqueues=1, **kwargs):
+>>>>> +        super().__init__(src_path, **kwargs)
+>>>>> +
+>>>>> +        self.require_ipver("6")
+>>>>> +        local_prefix = self.env.get("LOCAL_PREFIX_V6")
+>>>>> +        if not local_prefix:
+>>>>> +            raise KsftSkipEx("LOCAL_PREFIX_V6 required")
+>>>>> +
+>>>>> +        local_prefix = local_prefix.rstrip("/64").rstrip("::").rstrip(":")
+>>>>> +        self.ipv6_prefix = f"{local_prefix}::"
+>>>>> +        self.nk_host_ipv6 = f"{local_prefix}::2:1"
+>>>>> +        self.nk_guest_ipv6 = f"{local_prefix}::2:2"
+>>>>> +
+>>>>> +        self.netns = None
+>>>>> +        self._nk_host_ifname = None
+>>>>> +        self._nk_guest_ifname = None
+>>>>> +        self._tc_attached = False
+>>>>> +        self._bpf_prog_pref = None
+>>>>> +        self._bpf_prog_id = None
+>>>>> +        self._init_ns_attached = False
+>>>>
+>>>> I'm not a Python expert but the pre-init of variables that are set
+>>>> later on in __init__() (on all possible paths) seems like a waste of LoC
+>>>
+>>> It's so that exceptions thrown -> __del__() don't complain about
+>>> undefined vars.
+>>>
+>>>>
+>>>>> +
+>>>>> +        ip(f"link add type netkit mode l2 forward peer forward numrxqueues {rxqueues}")
+>>>>
+>>>> Would we be able to do this with YNL?
+>>>> no big deal but always nice to avoid the dependency on very latest CLI
+>>>
+>>> Hmm, I tried looking into this already. My understanding is that this
+>>> can be done in C but not currently in YNL, not without adding a spec.
+>>>
+>>>>
+>>>>> +        all_links = ip("-d link show", json=True)
+>>>>> +        netkit_links = [link for link in all_links
+>>>>> +                        if link.get('linkinfo', {}).get('info_kind') == 'netkit'
+>>>>> +                        and 'UP' not in link.get('flags', [])]
+>>>>
+>>>> And of course if you use YNL you can actually ask Netlink to
+>>>> echo back / return to you what interface it ended up creating.
+>>>> No need for the scanning..
+>>>>
+>>>>> +        if len(netkit_links) != 2:
+>>>>> +            raise KsftSkipEx("Failed to create netkit pair")
+>>>>> +
+>>>>> +        netkit_links.sort(key=lambda x: x['ifindex'])
+>>>>> +        self._nk_host_ifname = netkit_links[1]['ifname']
+>>>>> +        self._nk_guest_ifname = netkit_links[0]['ifname']
+>>>>> +        self.nk_host_ifindex = netkit_links[1]['ifindex']
+>>>>> +        self.nk_guest_ifindex = netkit_links[0]['ifindex']
+>>>>> +
+>>>>> +        self._setup_ns()
+>>>>> +        self._attach_bpf()
+>>>>
+>>>>> +    def _setup_ns(self):
+>>>>> +        self.netns = NetNS()
+>>>>> +        cmd("ip netns attach init 1")
+>>>>> +        self._init_ns_attached = True
+>>>>> +        ip("netns set init 0", ns=self.netns)
+>>>>
+>>>> Hm, refactor class NetNSEnter or just use its enter method?
+>>>
+>>> I did consider this but I didn't feel like it fit the very specific
+>>> purpose of NetNSEnter. I needed the init ns to have a valid nsid from
+>>> within the test netns, which I didn't think many other tests would need.
+>>>
+>>>>
+>>>>> +        ip(f"link set dev {self._nk_guest_ifname} netns {self.netns.name}")
+>>>>> +        ip(f"link set dev {self._nk_host_ifname} up")
+>>>>> +        ip(f"-6 addr add fe80::1/64 dev {self._nk_host_ifname} nodad")
+>>>>> +        ip(f"-6 route add {self.nk_guest_ipv6}/128 via fe80::2 dev {self._nk_host_ifname}")
+>>>>> +
+>>>>> +        ip("link set lo up", ns=self.netns)
+>>>>> +        ip(f"link set dev {self._nk_guest_ifname} up", ns=self.netns)
+>>>>> +        ip(f"-6 addr add fe80::2/64 dev {self._nk_guest_ifname}", ns=self.netns)
+>>>>> +        ip(f"-6 addr add {self.nk_guest_ipv6}/64 dev {self._nk_guest_ifname} nodad", ns=self.netns)
+>>>>> +        ip(f"-6 route add default via fe80::1 dev {self._nk_guest_ifname}", ns=self.netns)
+>>>>> +
+>>>>> +    def _attach_bpf(self):
+>>>>> +        bpf_obj = self.test_dir / "nk_forward.bpf.o"
+>>>>> +        if not bpf_obj.exists():
+>>>>> +            raise KsftSkipEx("BPF prog not found")
+>>>>> +
+>>>>> +        cmd(f"tc filter add dev {self.ifname} ingress bpf obj {bpf_obj} sec tc/ingress direct-action")
+>>>>> +        self._tc_attached = True
+>>>>> +
+>>>>> +        tc_info = cmd(f"tc filter show dev {self.ifname} ingress").stdout
+>>>>
+>>>> Don't we need to also add a qdisc if there isn't one already?
+>>>
+>>> Sorry, why would qdisc be needed? The bpf prog attaches to tc. I don't
+>>> know anything about qdisc, though.
+>>
+>> The ingress qdisc is the attachment point. I think we need
+>> CONFIG_NET_SCH_INGRESS here too?
 > 
-> FWIW, I do have a use case at least in the theoretical sense for
-> bpf_xdp_adjust_tail() with positive offsets, although it's still under
-> development.
+> Sorry for the config stuff I'm replying about, I ran into needing these
+> too for this:
 > 
-> I'm working on a DSA data path library for XDP, and one of the features
-> it supports is redirecting from one user port to another, with in-place
-> tag modification.
-> 
-> If the path to the egress port goes through a tail-tagging switch but
-> the path from the ingress port didn't, bpf_xdp_adjust_tail() with a
-> positive offset will be called to make space for the tail tags.
->
-Jumping a bit late in the conversation...
+> CONFIG_NET_CLS_BPF=y
+> CONFIG_BPF_SYSCALL=y
 
-We were recently discussing this limitation when trying to add growable
-tail support for multi-buf XDP buffers in the mlx5 driver (Striding RQ
-mode) after lifting the page_size stride limitation for XDP [1].
-
-It turns out that it is quite complicated to do in this mode with the
-with existing frag_size configuration...
-
-The issue is that the HW can write a packet in multiple smaller strides
-(256B for example) and setting rxq->frag_size to it would not work for
-the following reasons:
-
-1) The tailroom formula would yield a negative value, as pointed out by
-   this series.
-
-2) Even if this formula would not be the issue, frag_size currently
-   means that the underlying storage of each fragment has a size of
-   frag_size. So the number of fragments would explode in the driver.
-   That's a no go.
-
-3) And even if we would change the semantics of frag_size to mean
-   something else so that the XDP code would use frag_size as the available
-   growth size in the fragment
-   (tailroom = skb_frag_off() + frag_size - skb_frag_size())
-   we'd still be very much in the "nickel and diming" space with less than
-   256B to spare.
-
-4) The only sane way to do it would be to use a large stride but this
-   would kill small packet optimization
-
-So +1 for the direction of having a helper allocating an extra page from
-the page_pool instead.
-
-> I'm not sure about the "regardless of the driver" part of your comment.
-> Is it possible to mix and match allocation models and still keep track
-> of how each individual page needs to be freed? AFAICS in xdp_return_frame(),
-> the mem_type is assumed to be the same for the entire xdp_frame.
-> 
-Wouldn't the allocations happen from the page_pool of the rx queue
-so the mem_type would be homogenous. I was initially worried about the
-cpumap case but seems to not allow tail growth (frag_size is initialized
-to 0 in cpu_map_bpf_prog_run_xdp()).
-
-[1] - Disclaimer: XDP multi-buf fragment growth is still supported for the
-      non Striding RQ mode.
-
-Thanks,
-Dragos
-
+Thanks Bobby, I'll add these to the kconfig.
