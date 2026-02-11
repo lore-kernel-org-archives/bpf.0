@@ -1,132 +1,113 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33847352C39
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 08:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4901552FD;
+	Wed, 11 Feb 2026 08:49:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770799615; cv=none; b=ENmiuc8P67Xm+VWGL1PERE/HS+hc+SxMO98RHL93YdIcIOSmdRCIUEWxy4B6ml8XFIgSz64bT2Q6RJYEnaMgQ+eCJzQLSnLn/lxGcQpP+3B+WTldNOKJ1Sxv6s8sakFtDEYPpEQOdgDykaj3TPzYi/HAuELXX9kENIX9xd3nLiU=
+	t=1770799747; cv=none; b=R9TsJKBBNdOFHO/M3dAa3NV7Dt//UeHA4LxL0LI8kZ3St5sArQ9EY/dOkDKI1/UDtOOmCIOWMvhnptaP+T0W77TlJhzhiLsfpkgxFVTyp4Ds+Sgd7nPiiPFRp/g+SUM22+fPv4dQXIwOoB3DtHf6WgkUtxBc9rZAQ35GtUuNw4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770799615; c=relaxed/simple;
-	bh=+6vukVA0/H10G5i+xywqgG4wJ1OTLqt6f510aloB/C4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=a2j6dloSxJRON1Ga8tP1jertE4vJ/LsUaVmDkjGlWAZ6bwxFSN2r51Awn2RupDoiGMZbEyAI+GmCfOpmHKGwe60gU42niuA+AlcTW5jJiBUSajnRq2wIyzHT6WHkTcyHhIvPhRwWHcTlAsEmiXirtOt0f4PwSpQvJJ1WOlckHzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CC5aTaJW; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=dC13Ilnt; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1770799747; c=relaxed/simple;
+	bh=AG1lE/nPNEXvwJjxUefhIEczksu+rXBsxg44NxLTx/4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LzYb2AK2J2WoAnHfbhA1ak7JM8Dll76Z2LF/NdV0trKWmJ3NFc0Wb4Ndpc+UXwp0g+yWsuueEBSvNqeaMCFDjL6FZJA/ZYP9Lt4qUB8FGC2Ap82XwR5x4QSuPvXKO/d/4fR6ZdEXjPPOrK/2ZhHmGYrF5sQlWxkmAdbh7gOKMrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dh1z5wWq; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CC5aTaJW";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="dC13Ilnt"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770799612;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=z2NUfxY3dgOQc6Up8CPv860MldCejLy3p2EwnH2qBy8=;
-	b=CC5aTaJW9cuDyF0YrxfDfYMy+Rhlj7jXNnVoigelOF4J5x0Ez+A/UeEK18woIroKHcCsyT
-	eXnG723BXdR68/6jwFFlP1KB5ZOcE9dJ/4OsBY5s9OeHeU5pUu5/COEXqBH3lKGHqPviAw
-	mfAlqAG4NBmz60BVGX+kQgwOgiSaE2Y=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-166-BulL_M-1OS6AB_bwAIU-ng-1; Wed, 11 Feb 2026 03:46:51 -0500
-X-MC-Unique: BulL_M-1OS6AB_bwAIU-ng-1
-X-Mimecast-MFC-AGG-ID: BulL_M-1OS6AB_bwAIU-ng_1770799610
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-437159d3ff2so2351854f8f.1
-        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 00:46:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770799610; x=1771404410; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=z2NUfxY3dgOQc6Up8CPv860MldCejLy3p2EwnH2qBy8=;
-        b=dC13Ilnt8g763AzwB7o6onZdzHwNh5j//lrgNQ4MqU90G8nooxIj5TimZkkoJCoW1a
-         AVpfbN9lJAIG2imlxH04+lyr7cPztW9flzJaI7qKt6Z7kLRGyccDEU7ExnAlcpJnWtv5
-         bcevmQ1Uz+oIGmHmTQ+FIZ1Hn2j07XUIiTyW1NOnNtfYmGM+L9Ak1AnZaDf7lre13B4G
-         ne18ZiaNgLp97azNIpDJFQrZXL4vTzr/GhainO8SfMO5ODzDLxNLY+Q4bMPz3b9GIhW8
-         ZWq358GyWcgfjo6VJDeFw3pJGF5pfKmeNJyIKra9o47q16wwpo9R1EtIydLo8a2gGPo7
-         Qbfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770799610; x=1771404410;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z2NUfxY3dgOQc6Up8CPv860MldCejLy3p2EwnH2qBy8=;
-        b=THuxXpmuhPJ8v2diuCMWVW0ejalb7y8CeOjVeg94EBvINQ1YXqdlNNIl3T3TgZe+gC
-         UESVyp1i493pdxogPxELY77O/sRRCZk/Ym/uqMnaYC3PElmYJ6iLSEVH1gR3+3lttlCu
-         8ygXf+YUlpaowiNOn2HwcQb0FnfI19UhuvTHaTYf8Fo2+2fDYoyIzSh0FMh5Gl1fk7/E
-         Lbxm5SAJAccp0wNjMAEOV3cnBwQC9arc6qfzwUCiGcR/4iCqxeCNL0dvPYwZQf9fV7yI
-         qDsUz2pTKnJk1JF1TdSEI9k3G9F9RIMsO8e6bsGFrMeZubjMPAM+SxMCKyi8o6L3P6IB
-         FoaA==
-X-Gm-Message-State: AOJu0YxUksipskl5n17t33xsdmuKGK2/3j7YaT3wlDTdpHD5guvvfwD+
-	Vj8ahHfAAyLMiCsxfmglIyXle378Hy6LL7oDqOFfGQ0Kb99qtVYJPvAGoNv1FvQMRsadEEBGBUT
-	oNii26GVvte5fdN5gjuExbbwhY+mTegezJo9vQPXSCtm55bLxF8Cnjw==
-X-Gm-Gg: AZuq6aLBuIubhBbvC6nwaGtPnqSo+gRT/HpcYqTSkJa++wvSmKYgCnIobjdFhZAos30
-	22tROFkIAtLQY4Qt1vqEcFknkUNOAX9oFrxC+qEmAqxIwmfMkYdD9qdc3kT3bkQfmWav2HjaFcC
-	ZpIL8znmOtQS/iQ29Xp8PEGuMEDbQVfQh+O5+JuFA/lPsDokJ6Uve1xRZKCQ6X5iZMI2e/yLEI6
-	UPd9HPwpafHFk7RMoqs8RXP4Qp5hanee7+yDValRrBihfni0hn6KWGqWyyZxn7EiTlimSo0PNWH
-	wt0I4OiU/Jv08wOY+VHGIa3pjrxObloN5dQQ3L4tZrVd7PL3026du5XBG6CJk6AUFPBwg8W9vhV
-	JuqYsWeIR/BJvBar6uDrRf5nxSg==
-X-Received: by 2002:a5d:5e01:0:b0:436:3267:3ed4 with SMTP id ffacd0b85a97d-43784548a6amr1674573f8f.17.1770799609671;
-        Wed, 11 Feb 2026 00:46:49 -0800 (PST)
-X-Received: by 2002:a5d:5e01:0:b0:436:3267:3ed4 with SMTP id ffacd0b85a97d-43784548a6amr1674542f8f.17.1770799609237;
-        Wed, 11 Feb 2026 00:46:49 -0800 (PST)
-Received: from [192.168.88.32] ([212.105.155.220])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43783d310c6sm3305848f8f.2.2026.02.11.00.46.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Feb 2026 00:46:48 -0800 (PST)
-Message-ID: <dda23104-3ca9-4f81-aa79-b0517a9cc5a2@redhat.com>
-Date: Wed, 11 Feb 2026 09:46:47 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dh1z5wWq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85BFEC19424;
+	Wed, 11 Feb 2026 08:49:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770799747;
+	bh=AG1lE/nPNEXvwJjxUefhIEczksu+rXBsxg44NxLTx/4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Dh1z5wWqF9CvpKT9dXrnp9YIL8lKtq6bwLKkyTMLqAwBKEmFo+uxvzvssJ7RTpjWH
+	 5B8n+H8BXYX47UUWj5ZYnVK/9FxK+lAWWDQ1D8n04MlGMUbACVx7vnRR9f4F/cFnjk
+	 l35O+/71ge+PUPBSQCXIvpUlaQmgwbkTuXIPurbPBaX2ovwnX5OXl0x/x5jEkQeJ9O
+	 bseL+uPmfAUT4fL0mZ5pm8DFHRqMGbsV88mSy6qSRV8WfRo6gHgn6DRFAvNAhLt20q
+	 Y86HR5kqc0IQtEmfYTMhR6AFUejT24f9vWN4AxlHR+tLKnAKKG15D4o4UaEI22ZYwF
+	 ZurSI9u70dVTw==
+From: Jiri Olsa <jolsa@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Song Liu <songliubraving@fb.com>,
+	Yonghong Song <yhs@fb.com>,
+	John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCHv3 bpf-next 0/5] libbpf: Make optimized uprobes backward compatible
+Date: Wed, 11 Feb 2026 09:48:53 +0100
+Message-ID: <20260211084858.750950-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 1/6] net: sched: introduce qdisc-specific drop
- reason tracing
-From: Paolo Abeni <pabeni@redhat.com>
-To: Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
- Eric Dumazet <eric.dumazet@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
- <toke@toke.dk>
-Cc: bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, horms@kernel.org,
- jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
- jhs@mojatatu.com, atenart@redhat.com, carges@cloudflare.com,
- kernel-team@cloudflare.com
-References: <177039500964.2258217.2989656069254156812.stgit@firesoul>
- <177039506239.2258217.7863252279149995024.stgit@firesoul>
- <f1827414-b6c4-47de-827a-9f9f4c796cf8@redhat.com>
-Content-Language: en-US
-In-Reply-To: <f1827414-b6c4-47de-827a-9f9f4c796cf8@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 2/11/26 9:36 AM, Paolo Abeni wrote:
-> On 2/6/26 5:24 PM, Jesper Dangaard Brouer wrote:
->> @@ -593,7 +591,7 @@ static struct sk_buff *dualpi2_qdisc_dequeue(struct Qdisc *sch)
->>  	while ((skb = dequeue_packet(sch, q, &credit_change, now))) {
->>  		if (!q->drop_early && must_drop(sch, q, skb)) {
->>  			drop_and_retry(q, skb, sch,
->> -				       SKB_DROP_REASON_QDISC_CONGESTED);
->> +				       QDISC_DROP_CONGESTED);
-> 
-> An explicit cast is needed above to avoid compiler warning (or you can
-> change drop_and_retry() signature).
+hi,
+we can currently optimize uprobes on top of nop5 instructions,
+so application can define USDT_NOP to nop5 and use USDT macro
+to define optimized usdt probes.
 
-I see that the type confusion issues are handled for good by later
-patches in the series, but I still think it would be better to avoid
-introducing them with explicit casts as needed (removed by later patches).
+This works fine on new kernels, but could have performance penalty
+on older kernels, that do not have the support to optimize and to
+emulate nop5 instruction.
 
-> Also a few lines below there is another drop_and_retry() calls that is
-> not converted.
+This patchset adds support to workaround the performance penalty
+on older kernels that do not support uprobe optimization, please
+see detailed description in patch 2.
 
-I see it's handled by a later patch. I guess it would be useful to
-mention such fact in the commit message.
+v1: https://lore.kernel.org/bpf/20251117083551.517393-1-jolsa@kernel.org/
+v2: https://lore.kernel.org/bpf/20260210133649.524292-1-jolsa@kernel.org/
 
-Thanks,
+v3 changes:
+- fix __x86_64 define and other typos [CI]
+- add missing '?' to usdt trigger program [CI]
 
-Paolo
+v2 changes:
+- after more investigation we realized there are some versions of
+  bpftrace and stap that does not work with solution suggested in
+  version 1, so we decided to switch to following solution:
 
+  - change USDT macro [1] emits nop,nop5 instructions combo by
+    default
+  - libbpf detects nop,nop5 instructions combo for USDT probe,
+    if there is and if uprobe syscall is detected libbpf installs
+    usdt probe on top of nop5 instruction to get it optimized
+
+- added usdt trigger benchmarks [Andrii]
+- several small fixes on uprobe syscall detection, tests and other places [Andrii]
+- true usdt.h source [1] updated [Andrii]
+- compile usdt_* objects unconditionally [Andrii]
+
+
+thanks,
+jirka
+
+
+[1] https://github.com/libbpf/usdt
+---
+Jiri Olsa (5):
+      selftests/bpf: Emit nop,no5 instructions combo for x86_64 arch
+      libbpf: Add uprobe syscall feature detection
+      libbpf: Add support to detect nop,nop5 instructions combo for usdt probe
+      selftests/bpf: Add test for checking correct nop of optimized usdt
+      selftests/bpf: Add usdt trigger bench
+
+ tools/lib/bpf/features.c                                | 24 ++++++++++++++++++++++++
+ tools/lib/bpf/libbpf_internal.h                         |  2 ++
+ tools/lib/bpf/usdt.c                                    | 55 +++++++++++++++++++++++++++++++++++++++++++++++++++----
+ tools/testing/selftests/bpf/.gitignore                  |  2 ++
+ tools/testing/selftests/bpf/Makefile                    |  5 ++++-
+ tools/testing/selftests/bpf/bench.c                     |  4 ++++
+ tools/testing/selftests/bpf/benchs/bench_trigger.c      | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh |  2 +-
+ tools/testing/selftests/bpf/prog_tests/usdt.c           | 85 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_usdt.c           |  9 +++++++++
+ tools/testing/selftests/bpf/progs/trigger_bench.c       | 10 +++++++++-
+ tools/testing/selftests/bpf/usdt.h                      |  2 ++
+ tools/testing/selftests/bpf/usdt_1.c                    | 18 ++++++++++++++++++
+ tools/testing/selftests/bpf/usdt_2.c                    | 16 ++++++++++++++++
+ 14 files changed, 287 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/usdt_1.c
+ create mode 100644 tools/testing/selftests/bpf/usdt_2.c
