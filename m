@@ -1,346 +1,231 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76300260565;
-	Wed, 11 Feb 2026 13:54:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770818078; cv=fail; b=f+L2v+gpzuwSycF8tqsZ8ra3gU6gikJqIApBwwZAWDcYewwf9jWGFvCF7MHuPqrRNgFoOSEoLBX4zOVRp5emQcz6QXSIWKxPPhtYc0DfZlpQMW+LtwdbJv6p30nIc1r8WojJoyirnl9S30dsb9f5zEr5y+jJUnuwUN3K7Ncxod0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770818078; c=relaxed/simple;
-	bh=BIThnqDHalgaVdl2qKjENFhuFCHeQ6LnrxUMvnTAdAI=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ehj/e0LzVCZQ1skcnuD7Jh/GVB6paK2uODgI7MPesNqb6YOnKqL0RXgPj00oh3LahSgSVrKq3LCKMt+kJyA966nFuuM0C7MrYjE2t6GINuLCMtWWnKal1Zg2mQ87re23pZQhMCanCsodjZAazFUngXd/Q+H1+A3ffwBaLJG2SQc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h7cMkBCq; arc=fail smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD8C31619C
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 13:55:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770818104; cv=none; b=ZfvMzHtvdYeStmqZ6uXJeDa1BjrSbG46z+ukeMwTXAVfziOxgbUlTKlJZ2b/NB4uvL1hYOvzq8eSexWdpY8weyrY0XP9UhTM7GXfS4ScaIYQN05qLe/SZ6Z/pyJpDPGQslehuVao67Q8RsJf6KiALBq7n7qK2MxK2dRQsPZvevM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770818104; c=relaxed/simple;
+	bh=h8TVSxpF3S1g75wMSlh7R5WYJJefy9r9FLsaDGtf4F4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=c5G8g6dCk61LegXAHOKvuNcstdlWiiq4AciGiReo8AQBj7/MksoAwPlLX3HawMd70ugMwfxgdXC6jKv5KLEIjGwH9M19pDQS5cBxIkjAjhBJN/nmi0eeq64sdD+hNPMOYrZU8l1VYEn3aRe2c4F4QshpcvHzPsMY5aqbg/VRaRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=g9QWd3ar; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=FlM5J7Ge; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h7cMkBCq"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770818077; x=1802354077;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=BIThnqDHalgaVdl2qKjENFhuFCHeQ6LnrxUMvnTAdAI=;
-  b=h7cMkBCqKF63lTAg1OMwen0PUbXiznl7OzQKQYXfiPvT0AUCaMlHDHVH
-   Lzb6XkeUXsCGKBozkyhjv3pVQnUiAjl/rWgkdu/nOHFZPWaGiKKRWmjHA
-   3poCKwEU1wlLqImMm1lX5zj7wP5UQjtOc54bl0jEjV+AAW1H/5atRy6zC
-   EurVrj0txqyPO48CeioA4epkPD2yVsb5KiWl7snHYm2pInrCf8gRBOGME
-   Eu5QOr2IeoH/VCYEmZMr65AdlWOBO5eCmIO/R19TjxJwpf1SZ28ZqEM02
-   4UFMq0CFgdg9gho5xD3AII5OM+289H5LCfEF4FMclU+nAXtnevol1GCzu
-   g==;
-X-CSE-ConnectionGUID: UavOPHL4SYCJ/2r8a0TPkQ==
-X-CSE-MsgGUID: TgDNI2FjQTe7XA8xWsv9pQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11698"; a="89554564"
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="89554564"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 05:54:36 -0800
-X-CSE-ConnectionGUID: ItT3RHe4QKOKrdOVHH1/gw==
-X-CSE-MsgGUID: lEl0ZvyYQl6I83vHTyBYXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="211565160"
-Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2026 05:54:35 -0800
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Wed, 11 Feb 2026 05:54:34 -0800
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Wed, 11 Feb 2026 05:54:34 -0800
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.37)
- by edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Wed, 11 Feb 2026 05:54:34 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Y0hBfgv8m6FH9ER8I5fCu1F+/3mxg9By86LNBusyafmVOQUDoLTArvSAh2+RssJM8Qh97sbsLs65l5VfKiltvc2z7ViObeO7Q9UTltGGwHpoitkk5yi3WC61Vdjxw3qLUeMey5kcWWblaeetUjqTRNRIkf7rOT5KGVzD6XT3EVShjO+ER9790hHZNXwu6UrNd2VzkzzNHjruEDURk+KpkGs371uW8M4cIwp72DoAcubk8EViNsqSpk14Ct2JRCCBt6WstJwGEUGbiRUZ8YA6+VdynZUNdQkR8g2EvSy7LPgXz6f62bW7Z6dJ3ut/VvaJj8JHKRv7gtyQEAlkiBFkhg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FFEA3soUSOBCr7JX048sFT73ISt9RGA/NsvvMygp2vs=;
- b=VFzYQAdirYOHeXibwUaYxu7+TA5yBOl3fGJeRjwin2kC53zKktIIXhn/Nq5myVfPNmMbA0lMpri2DNvG0ga3Wm+mrCEqAaTzV7DWTI+DoUGl710WpCSZdiWuVINlMzhxB2yPQGgdBEXkF0e4XHzH7dTGCbqTMDnl2GCfoOB4au/TdeE4LKggaEZjYxUmLSG9WWSbJERc3zIK3osL9NwXUSxLn6w+WtPMzUPJ3gTbrO3qnVDIVAYZEZ0UBkMzRWfGCdrT0fmQZWnCw825LZqA+nbWOh4knEiMMdUYPaL4XZZqcwhBt3kBorgOghm2eJRJlfBmqsWo11nWChqSsBAM5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
- by DM4PR11MB5312.namprd11.prod.outlook.com (2603:10b6:5:393::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.10; Wed, 11 Feb
- 2026 13:54:31 +0000
-Received: from DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::6aa:411d:4bfa:619c]) by DS0PR11MB8718.namprd11.prod.outlook.com
- ([fe80::6aa:411d:4bfa:619c%5]) with mapi id 15.20.9587.017; Wed, 11 Feb 2026
- 13:54:31 +0000
-Message-ID: <2a300bf0-3975-4f79-a3e0-5cb9b8159d62@intel.com>
-Date: Wed, 11 Feb 2026 14:51:56 +0100
-User-Agent: Mozilla Thunderbird
-Subject: Re: [net-next,3/9] ice: migrate to netdev ops lock
-To: Jakub Kicinski <kuba@kernel.org>
-CC: <anthony.l.nguyen@intel.com>, <netdev@vger.kernel.org>, <sdf@fomichev.me>,
-	<andrew+netdev@lunn.ch>, <ast@kernel.org>, <sx.rinitha@intel.com>,
-	<horms@kernel.org>, <yury.norov@gmail.com>, <john.fastabend@gmail.com>,
-	<kohei@enjuk.jp>, <przemyslaw.kitszel@intel.com>, <richardcochran@gmail.com>,
-	<alexander.nowlin@intel.com>, <daniel@iogearbox.net>,
-	<maciej.fijalkowski@intel.com>, <nxne.cnse.osdt.itp.upstreaming@intel.com>,
-	<edumazet@google.com>, <aleksandr.loktionov@intel.com>,
-	<marcin.szycik@linux.intel.com>, <hawk@kernel.org>,
-	<jacob.e.keller@intel.com>, <magnus.karlsson@intel.com>,
-	<pmenzel@molgen.mpg.de>, <pabeni@redhat.com>, <bpf@vger.kernel.org>,
-	<davem@davemloft.net>, <andriy.shevchenko@linux.intel.com>
-References: <20260206174910.4066255-4-anthony.l.nguyen@intel.com>
- <20260211042458.555701-1-kuba@kernel.org>
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-Content-Language: en-US
-In-Reply-To: <20260211042458.555701-1-kuba@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR07CA0221.eurprd07.prod.outlook.com
- (2603:10a6:802:58::24) To DS0PR11MB8718.namprd11.prod.outlook.com
- (2603:10b6:8:1b9::20)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g9QWd3ar";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="FlM5J7Ge"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770818101;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ig06o4Gr91sCSE6EwffkQG2fdhXjgVUS7BCrFHVvq6c=;
+	b=g9QWd3arMXqiIcQN3sMGmA+KzeSYT2DpaigzxT0VlzE9kVV65NhgUuuGqP0RA90IuMFEaT
+	pibtNsQSMq1w0e1mYAscNK1rofTIQIqN0FkR1WGXkzEZtwjlQRS78B0BNTAomhbvVTwZqL
+	2Xbh4wrIrKmQ0g8u/BEKLpUOBHLNR68=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-342-kMQxQPA2PYKcIs4yoY3TvA-1; Wed, 11 Feb 2026 08:55:00 -0500
+X-MC-Unique: kMQxQPA2PYKcIs4yoY3TvA-1
+X-Mimecast-MFC-AGG-ID: kMQxQPA2PYKcIs4yoY3TvA_1770818099
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-43768e2aa4dso3141817f8f.0
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 05:55:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770818099; x=1771422899; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ig06o4Gr91sCSE6EwffkQG2fdhXjgVUS7BCrFHVvq6c=;
+        b=FlM5J7GeM1XZXzXDAqjZB6Z86b/Dvm/DTgjsdopVPwi2XtmTf8DXVX+0VgjdlKXhaZ
+         1YsDus2/s06urloqhOEoq5IIO4mIPHFMDPcp31B0lMjFzPXptObjd82NS1G8OdaZO/O1
+         tFh1YXkeNEeHEk3UBJAq7T9nJ+6DblOSIbvQUgC5+cKJ/7LKCN67KjXV0BaufzOjSRSp
+         bEwLYnc2xMVh5tIMcHBkFUWl+GLn5miL8T09WrTqotV6cDl09w+suUVv3I8y2EiUS5QV
+         PSoUZqJaFdL5ja2IZP1ZaJpPfPnykG93ViSXtiSxLXAPTvzt7doIWp4taSJRwQ02Mg4N
+         eKXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770818099; x=1771422899;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ig06o4Gr91sCSE6EwffkQG2fdhXjgVUS7BCrFHVvq6c=;
+        b=mFj4+mFW5cW2bq0H2lTQqbwz9OUS2dQ+Icm+CRWs5b6Z5YkcwSUEF+vR3Yc8IikEDJ
+         SSnQS4AbJmnr5KaCBwHiUYjiccJawUKczCc2n2Vb9Fr6dpVCcZiDPyog+GATTIL8PUcY
+         TkMtXYzerZfrWiEB9vQr2/D38+2mRXy7L46rv7AobKbqYm42cnXCOCyQAtk1bTmn6Gy3
+         kKpTHQJ6fGsI14GBuKQ2dySWQVnfUZeoCE8hmDr4yxXs+0YUL8gLmJc2pEXn79jobY3h
+         8R9PyAb+MHMpXjmq0/NkRPow7Wd7q7EO0tBVSq+XG6QoPcudET/Sj7UCCdqcOpQrJz2V
+         AdmQ==
+X-Gm-Message-State: AOJu0Yzch9IKIWD7LzdkXXN0/R1FukUIQZnRApr+/1OnUsOwF4yJKGay
+	RniLvkjRPlJPXZ0Lqp3VCJnWRzOVI9UaR3F60GADA5OwkpVzb+wIcMjT2NuNPw70x4xTrfWq7ve
+	VGczc7IfK9KotIt1xCgSJAgkZ67J2uoV9scIcDunKuG5R7k4iKi97
+X-Gm-Gg: AZuq6aJXgn5MVCGgxlsl5JxZko/3kzFEouBS0jRZsFYkEMdweJfbYNvh7yrNp3X2gle
+	sIw23kINb/g3gITpikcNo3NJeRcuH9pSPhdS0/4vpK04DUzfkr+m8jVczGtJ0Fy3UF2px61kxl4
+	yMx3T9uf1V3p5kaui0YVae8nisrMtlgcf1Ouo6kPxGJrWI9IgK7Fff/Ciq+n2bh1aPMoOt5MA+4
+	ULf3YRfYRts8pN0u5BQes6/FiTmoM6DcvvuuJZM0WHin7RbFBo/HNFDdLy+gjIhRjD7Rurt/lqV
+	qrb+HDJI2/fq5OEqFvL9IWMVDMoUIVym1eSsDO26OMWLzCLBWSvif5+Hp8Rm9O4/jn6qiBzSKC6
+	t6CnCfYZq
+X-Received: by 2002:a05:6000:2404:b0:431:35a:4a8f with SMTP id ffacd0b85a97d-4377a596f40mr9580267f8f.47.1770818099257;
+        Wed, 11 Feb 2026 05:54:59 -0800 (PST)
+X-Received: by 2002:a05:6000:2404:b0:431:35a:4a8f with SMTP id ffacd0b85a97d-4377a596f40mr9580226f8f.47.1770818098771;
+        Wed, 11 Feb 2026 05:54:58 -0800 (PST)
+Received: from [10.43.17.26] ([213.175.37.14])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43783d48954sm4368554f8f.12.2026.02.11.05.54.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Feb 2026 05:54:58 -0800 (PST)
+Message-ID: <d92e60ea-d590-4ce4-961f-4e8ce1cb0c42@redhat.com>
+Date: Wed, 11 Feb 2026 14:54:54 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|DM4PR11MB5312:EE_
-X-MS-Office365-Filtering-Correlation-Id: 33dc18b1-d537-4717-178b-08de69751484
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016|7053199007;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?aGxCeDBOa21LQ0xEU2lpSlAwMC9SNkovQ0JYTUxtWE0vSTBvMW9DSHBnQzM2?=
- =?utf-8?B?bGVxMldCUUsxREEwclR6eks4YjBxR3Bhd09WemQ1OUFxcVBEZEl2Q1F4Ulpu?=
- =?utf-8?B?WDMzTlBZV3k3MGxHUk5NMDE3aHN0YmFHbVFKV1Q0cnNqd2dOUHlKVXU3OTl1?=
- =?utf-8?B?U09Ta0pobFpESTE5UHJlL01ud1dSamhBZklNV0hzVnBMMWpKZkNwUjRBWVpo?=
- =?utf-8?B?USt4Q1pHLzFOTHJtcVpGcDRuZ2FtcGFnaHg0UVNzTGdEREVITGUzaVl1ay9J?=
- =?utf-8?B?VlRCdzVtQThwUVFnL2ZkaDNMZTJ5Y21zVWc3eUVBQW1XRzZteUNuYzVRdzF4?=
- =?utf-8?B?KzlSdHpHVWZJUENXMlUrb2RaTTd0MGtTTE9LK1dpOHY4VnY5eHpkUitmU1dF?=
- =?utf-8?B?dUtBMFV6TC9MM1JaMkdjMG04ZU93SEZPZXNuaG1VYTNjaVhyKzltbm5GMm9s?=
- =?utf-8?B?aFNiQ3JCeFJPYWRBUTgwMFV5a3RWSFV6ZkRndWZiRDlYNzdxa2xxTDg5ck1w?=
- =?utf-8?B?SE5VODhDbGd6S0RsRFVYS3J0ZlJiOWptQjJKZ1V3OVJJNzJiVzNtWmFBWEc5?=
- =?utf-8?B?eEZkdzdwYXJxclpwU3ZaSk1HQmthYWh2QnE0VzluR0J0YytXMmVLQlZtVFZQ?=
- =?utf-8?B?WS95MXBUUk16NTY4MWljNFc4N0YrYjBiS2FvS052UmJrNWxqVWdjRWQvSFYx?=
- =?utf-8?B?ZjlFZmRoSlV5c1lBM2VmcFBta3BFNHdKNDRXN2U5eVlCMFArZXhKUlV4Uzkw?=
- =?utf-8?B?YjVUb295WDFYWW5BVFc0aVVYcXlrUlN6SUdpK2hOaGs4aEVKaWplSXVENXcz?=
- =?utf-8?B?V3pqaEFPWW5FL2RadVJqZFhRZ25xcm16YkthVWVNbmRsWkVwM0Zvc3M3eEhl?=
- =?utf-8?B?bTFBSzBEQXh6SjFFeG9XbFExUys0TU5PbkNjWlBBLzR5Vkd2YUhrMkhONndm?=
- =?utf-8?B?ZjdDMVVMckJ2QU4xdWp2VXBRSnVOWHpEQW13ZU1PMHpZTkxGY3preGU3bVEx?=
- =?utf-8?B?Y3lYUWUwRERzSkFvbldsK2thNWZmZ1Q2amNrSG5DRmE5Rit0YVNKSDhQMjhj?=
- =?utf-8?B?YWg2dm5JMDQwWHVyVVBHbmlLaWU4L1JCUkRwNEpxZGtHUkdRbnozd1gyWWVp?=
- =?utf-8?B?TjJZY1piMU9mSHV6QkVpVU94bEhEcDN1ZGpZQ3dLSzR0eUJCSmRSdmdtQ2l3?=
- =?utf-8?B?bnF3bWZndWgrdUsrMnN4TVUwMzB4ZUQycTY4QVVSSTJ0YkRPZkMvUTVMODlx?=
- =?utf-8?B?cjVBM1V1MHFrc0NzdWNWWFBHVENVOVpWL0JMbENqRldIcHdSUlJNOXZhaDEr?=
- =?utf-8?B?TndmUEZ1Z0tHRG0xSGM3dG14QzZla2JrM3BucERmQjNmK0kzaGdSSWFCOTQ2?=
- =?utf-8?B?QVpRNDdUeVRHV3REMlQrN3ZkL1ZJK3RjWDJWeFJEdWdTc0kreEtwaVNNUDVM?=
- =?utf-8?B?UUJDRm1Scm5UYXhWTy9iMHQrQm02K2w0Z3ZQdzFBbWJEVTZCQWVHTkNENzZZ?=
- =?utf-8?B?aUJrYUs3QitQWG9rZjlmMEtBRzdIVmJsOE5zMGd4RUs1YWlybUxKODk3OU9F?=
- =?utf-8?B?NlA1aUlDc1NQNHJxcTVGUXpCaDhENDFEUDFVNVFwT0VZdVVlTjFOcWdDYUh1?=
- =?utf-8?B?dUFYL0V4ZnAvTmxIZHllUGVDRkdwdXBqUXg2Z1hGcmowdWJ3RzA2cGYrcHFz?=
- =?utf-8?B?eEtCelQzeHdJb0JIb3dIRnJYMktFUjVJeXVTZmhod0VQdTN0VHBwWGNmaDln?=
- =?utf-8?B?bXJYMUx4RlFOWW0wZTBoemxPYm9nOFpQMW9jeExERnZKZmN4WnkzdU5CbjR6?=
- =?utf-8?B?YUFNakZHTnN1M0docVZ6T2NSb0J4QnluQjNFOFFSdlRVamIwSWhZSWxBclBj?=
- =?utf-8?B?dVNqVVNyakg4YXp6WGlDcGFmZjEzVlp2MW1kdHh2b1NnMC9ib2ZNeDkyMjE3?=
- =?utf-8?B?Y0xzSVF1TG94MVNUOUovUCt1ajhXeHZzMHljUnh5dUVqaXZpZzZKZ3RzRFdS?=
- =?utf-8?B?VEczdWJ0a0xsK09oTld3UEdpK3N1Z0JzNVBESXI2SXlTUjNiekI1WDh0dkRQ?=
- =?utf-8?B?YnliTlZIQTlGU1UrOUlRTHhDdEtkaStFNUx0TGFCWmpTZTFlcXQrY25qM01t?=
- =?utf-8?Q?2KOY=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aHNTaW0rZnRRdUhuclNHQ1pna3E3NTlqMXREVUlYbGE5dFJyQ3RqQ2tVWHlU?=
- =?utf-8?B?emkwL2Z0ZmYrTDAzTVhBVnc2c0NJNzIwZHFpYlpoc3VUdjZsdlM2R1JHNXdR?=
- =?utf-8?B?MFpCUm1iRFQva0VFSFIxZTZqbmcwZEtjeGRmSlc3QTIxb0RMR1E0L3B3ZEw0?=
- =?utf-8?B?eTQzQmJ5NFE2Ync5bGZZQmJIS2tiT3FPV04yUzlxYnJRWERIcWJZVmtmWVkr?=
- =?utf-8?B?Z0I4ZTBvbXYraktCNXhuUm5KY0dLc2UzVHhOcGprMXRUdDMvbUVGcjhnZUxZ?=
- =?utf-8?B?TDB5ZnA4RmdCT1l1ZnAyVGpvK1FQTlh6MnY2TEVpUUFweUZ3TklWelJSalFI?=
- =?utf-8?B?QWZtZW11WFUxWS9yZXJ2R01VWmZlQjBpTU1hMm1tQTlmWTVzM0VoQ29tQ21h?=
- =?utf-8?B?Kzkxck1NalQ4ZVZRYU1GRnZqVFFiK1VZQk9NeURweEJqc2FsTExsMUgxb2NW?=
- =?utf-8?B?UE1uWmxJMU1YbHlVWHhQSDBRQk9lckhFanl0aXRuTzFrc1ppaVU5aXQ2U0p3?=
- =?utf-8?B?WGtVUC9RMTF2MHJreXpmYkhVbmI1Q3cyWFZBSWlLaXpqd24zVVdPUjU2VHpQ?=
- =?utf-8?B?ekZ4NEpQdTFMeGdwVGRFMGJ1ZUZXVXY5RXhxL1BLRThWY0E2bTV5Q0V2bG9J?=
- =?utf-8?B?c0tLSlFPci95aXNZYlNaVW4vZWdkOWtvOFJEcElZOVlXdENaSGM3OCtxSnox?=
- =?utf-8?B?VWZRUXBhVEZaTEUzNjNlVGp4aWRFMUZwdXlGclNCSEw0QnBidlVQQ2xGUEps?=
- =?utf-8?B?cnJxMzlLb0gwSlMyNzZxOXhqaDh5ai8zWjhXd2Vsc1BhZjhDbkJFMzJiQmtt?=
- =?utf-8?B?K21tVHIyU0RSdGRCck1SM29lNGJLditMU1hOZE1IVWxQcjNqZ0dsRjJPdmM3?=
- =?utf-8?B?SkE2L0h3OCtNa1oxMGJsQ2V2U3VyODZOTUI3Y1dQUjhJcUpod2N2ZUZHR1la?=
- =?utf-8?B?eEtrUWtvMXFQRjdnd241NjN2c3RIbEhMSUdObWdPVERlK3lCbVoxRUovVU0w?=
- =?utf-8?B?aUhSUytQLzRESm44T0sycjEvNytQaVhqVTNzK0x0UHlWTVFFTHpadWtCY1Ju?=
- =?utf-8?B?TnRDcTZyWGk1K0xqcmwrb1lCRlAyck56OWFEZDY1cVh2d3VnZDgxK25seTdk?=
- =?utf-8?B?QXFkWnVzWVdqSkZMVnNybnMvb1FZU01vMFRQemZXK2xwaUNHZXFPU3NOSlI4?=
- =?utf-8?B?OEpkNWJ4WTJVTkJsTUhuYUlNdGJTd04zTXp6WDFGZjAzSVlDVjVjL0ZHdFA2?=
- =?utf-8?B?MFBxQ3FrY3RDSUxSWDQ2dmpYc3hScEJuYVJTeEsyQ0JIc3RWZlMrWkhvVEJj?=
- =?utf-8?B?dzVka2ptVE1vQk5jWUJPYmZKVzJ0MnArcUpHQWNSSTVHT3hGQWFPbUM1NkFR?=
- =?utf-8?B?b0NMT1N2dERpaWpJcU1GMjVXWWZiSVVldkkvWFVLaVdEMXVDUENpZVlESE5W?=
- =?utf-8?B?WjFmUnYxeGdLZmR3OTBWSnJtSmMyQ1lGOXhWSTBUU2lyM1lKM3BGZ1Uxb25V?=
- =?utf-8?B?aHFsa0o0akg2b2x4QkQ2UElsbFJmRytkT0lEQno0WEJoRHNlOFhpSEsvUkVa?=
- =?utf-8?B?WlFBQSs5Sm1uYU81bUM4Wjd1TGNzUkFQaitLbDJLQktWRHdEWnBPK0Y1TG9z?=
- =?utf-8?B?aE9yZDZuc3JvOUs4cnNXSS9DTitnZUIzNnFoeEVlWXNLWlFXOVd6S2JsNGJZ?=
- =?utf-8?B?RS8vNFZuRUtYUTV1MzJpeGV5TDZPVktLVDFkbUsyTkVkQmJLRzhRenBXZGw1?=
- =?utf-8?B?UGUxdHVMWlZzODFUODgzTldIOVl3NFN3bkcxRVBsSk4wS1h1RWFmY3ZWM2FF?=
- =?utf-8?B?aE5uOWE4dUVZV3hOaEl0TnhsWlkzUzYwaHpxMVF0bWdCeVNDOXJQM1ZIcTFx?=
- =?utf-8?B?QnhnUWVHUXpLaTg3ZXVhbnhFYTd2UVY2cytoQzJ3NVZURDZsSXFBQ1RjNHl1?=
- =?utf-8?B?U3dScW00S2NLYWQ0MGtWek95ZlpLeTJoL292aGk1SDUxVCs2R3pMa2hyY1BZ?=
- =?utf-8?B?TVZ3QldUZmo3QTFLOG56d0RZV09JanRxbGpGbk90T3lOVm9ieGhaejVhTDE2?=
- =?utf-8?B?QWFtcHV4WlB3ZkdwSTZvZVV3OWk5SjJiUVRCTmtiNTRScktnTWxjSTZkdUND?=
- =?utf-8?B?WDQrQk42WGFFOG5SeVZKYlFzZzlpUHlnTEZ3RmYzcEUrQjFaUE5Ob1Zqdzdj?=
- =?utf-8?B?aFVaQXhreitMaWYydCtuT0dEcDAvSzV0WmhpeWdwVXIrYk1neVRmSkdMcS9i?=
- =?utf-8?B?ZGoyWE10UEdNV21qQTZWUU5TN3NPVlRSNndkNHhrU21YWmtVSExpR2NJS0ZJ?=
- =?utf-8?B?L2Z5V0FrV2ZLSXpOb3RiY2tWQkFZRzBhRnZ1akt2MnBzSHVZOG82c1lzejdw?=
- =?utf-8?Q?6XBPAyYVRXtv0ru4=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33dc18b1-d537-4717-178b-08de69751484
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2026 13:54:31.2182
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aLjetJEDs8J7fwsQNhlpDHqfQNsVf4CATH25SwijWqCM1uyc2/RzZGtZ+6MGTgrgZWybqfmpbNRxi0HBToR2xVf6uiZTy9OiXHPcbQYRbXU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5312
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 0/3] Separate tests that need error injection
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Jordan Rome <linux@jordanrome.com>, Qais Yousef <qyousef@layalina.io>,
+ Hou Tao <houtao1@huawei.com>
+References: <cover.1770736390.git.vmalik@redhat.com>
+ <CAADnVQLfV3PPYA8=EXDKwoQ925_W9HANf7gSn2=_fd42HD_FiA@mail.gmail.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <CAADnVQLfV3PPYA8=EXDKwoQ925_W9HANf7gSn2=_fd42HD_FiA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Jakub Kicinski <kuba@kernel.org>
-Date: Tue, 10 Feb 2026 20:24:58 -0800
-
-Hi,
-
-> This is an AI-generated review of your patch. The human sending this
-> email has considered the AI review valid, or at least plausible.
-> 
-> For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
-> ---
-> ice: migrate to netdev ops lock
-> 
-> This commit migrates the ice driver to use the netdev ops lock by
-> requesting ops locking and using _locked counterparts of NAPI
-> configuration functions to avoid deadlocks during suspend/resume, queue
-> rebuild and resets.
-> 
->> diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
->> --- a/drivers/net/ethernet/intel/ice/ice_lib.c
->> +++ b/drivers/net/ethernet/intel/ice/ice_lib.c
-> 
-> [ ... ]
-> 
->> @@ -2308,10 +2308,14 @@ static int ice_vsi_cfg_tc_lan(struct ice_pf *pf, struct ice_vsi *vsi)
->> }
+On 2/11/26 03:42, Alexei Starovoitov wrote:
+> On Tue, Feb 10, 2026 at 7:14 AM Viktor Malik <vmalik@redhat.com> wrote:
 >>
->> /**
->> - * ice_vsi_cfg_def - configure default VSI based on the type
->> + * ice_vsi_cfg_def_locked - configure default VSI based on the type
->>  * @vsi: pointer to VSI
->> + *
->> + * Should be called only with the netdev lock taken.
->> + *
->> + * Return: 0 on success, -errno on failure.
->>  */
->> -static int ice_vsi_cfg_def(struct ice_vsi *vsi)
->> +static int ice_vsi_cfg_def_locked(struct ice_vsi *vsi)
+>> Some enterprise kernels (such as RHEL) do not enable error injection via
+>> BPF (CONFIG_FUNCTION_ERROR_INJECTION and CONFIG_BPF_KPROBE_OVERRIDE).
+>> When running test_progs on such kernels, a lot of test cases fail since
+>> they use sleepable fentry or fmod_ret program types which require error
+>> injection to be enabled. While it is possible to skip these via custom
+>> DENYLIST, some test_progs are not properly split into subtests and
+>> therefore must be entirely skipped.
 > 
-> [ ... ]
+> Something is wrong.
+> -SEC("fentry/" SYS_PREFIX "sys_nanosleep")
+> -int do_probe_read(void *ctx)
+> +SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
+> +int probe_read(void *ctx)
+>  {
+>         char buf[8];
 > 
->> +unroll_vector_base:
->> +	/* reclaim SW interrupts back to the common pool */
->> +unroll_alloc_q_vector:
->> +	ice_vsi_free_q_vectors(vsi);
+> @@ -37,19 +37,19 @@ int do_probe_read(void *ctx)
+>         return 0;
+>  }
 > 
-> Should this be ice_vsi_free_q_vectors_locked(vsi)?
+> -SEC("fentry.s/" SYS_PREFIX "sys_nanosleep")
+> -int do_copy_from_user(void *ctx)
+> +SEC("?fentry.s/" SYS_PREFIX "sys_nanosleep")
 > 
-> ice_vsi_cfg_def_locked() is called with the netdev lock held (either by
-> ice_vsi_cfg_def() wrapper or directly from callers like
-> ice_vsi_rebuild_locked()). The error path here calls ice_vsi_free_q_vectors()
-> which tries to acquire the netdev lock:
-> 
-> ice_vsi_cfg_def_locked() [netdev lock held]
->   -> ice_vsi_free_q_vectors()
->      -> netdev_lock(dev)  /* deadlock - already held */
-> 
-> This would deadlock when an error triggers unroll_vector_base or
-> unroll_alloc_q_vector paths (e.g., memory allocation failure in
-> ice_vsi_alloc_rings() or ice_vsi_alloc_ring_stats()).
-> 
-> [ ... ]
-> 
->> @@ -2703,7 +2748,7 @@ void ice_vsi_close(struct ice_vsi *vsi)
->> {
->> 	if (!test_and_set_bit(ICE_VSI_DOWN, vsi->state))
->> 		ice_down(vsi);
->>
->> -	ice_vsi_clear_napi_queues(vsi);
->> +	ice_vsi_clear_napi_queues_locked(vsi);
-> 
-> ice_vsi_clear_napi_queues_locked() expects the netdev lock to be held.
-> Are all callers of ice_vsi_close() holding the netdev lock?
-> 
-> Looking at ice_sf_dev_remove():
-> 
-> ice_sf_dev_remove()
->   -> ice_vsi_close(vsi)  /* no netdev_lock held */
->   -> ice_sf_decfg_netdev()  /* unregisters netdev later */
-> 
-> And ice_dis_vsi() when !netif_running(vsi->netdev):
-> 
-> ice_dis_vsi(vsi, false)
->   -> ice_vsi_close(vsi)  /* rtnl_lock only taken when netif_running */
-> 
-> Both paths call ice_vsi_close() without holding the netdev lock while
-> the netdev is still registered, which could trigger
-> netdev_assert_locked_or_invisible warnings.
-> 
-> [ ... ]
-> 
->> @@ -3069,16 +3152,17 @@
->> }
->>
->> /**
->> - * ice_vsi_rebuild - Rebuild VSI after reset
->> + * ice_vsi_rebuild_locked - Rebuild VSI after reset
->>  * @vsi: VSI to be rebuild
->>  * @vsi_flags: flags used for VSI rebuild flow
->>  *
->>  * Set vsi_flags to ICE_VSI_FLAG_INIT to initialize a new VSI, or
->>  * ICE_VSI_FLAG_NO_INIT to rebuild an existing VSI in hardware.
->> + * Should be called only under the netdev lock.
->>  *
->>  * Returns 0 on success and negative value on failure
->>  */
->> -int ice_vsi_rebuild(struct ice_vsi *vsi, u32 vsi_flags)
->> +int ice_vsi_rebuild_locked(struct ice_vsi *vsi, u32 vsi_flags)
-> 
-> [ ... ]
-> 
->> +free_coalesce:
->> +	kfree(coalesce);
->> +decfg:
->> +	if (ret)
->> +		ice_vsi_decfg(vsi);
-> 
-> Should this be ice_vsi_decfg_locked(vsi)?
-> 
-> ice_vsi_rebuild_locked() is called with the netdev lock already held
-> (either by the ice_vsi_rebuild() wrapper or by callers like
-> ice_vsi_recfg_qs()). The error path at label 'decfg:' calls ice_vsi_decfg()
-> which tries to acquire the lock again:
-> 
-> ice_vsi_rebuild_locked() [netdev lock held]
->   -> ice_vsi_decfg()
->      -> netdev_lock(dev)  /* deadlock - already held */
-> 
-> This would deadlock when an error occurs after ice_vsi_cfg_def_locked()
-> succeeds but a later operation fails.
+> sleepable should have nothing to do with CONFIG_FUNCTION_ERROR_INJECTION.
 
-Tony also fed the series to AI, two times, and each time he got a
-different answer.
-The series was on iwl-next for 1.5 months and only one bug was reported,
-which I fixed immediately.
+I may be missing something but I think it is directly dependent, at
+least for fentry.
 
-I can take a look into this, but wouldn't be better if we take the
-series now and then have 2 months to fix bugs if any appears?
+In bpf_check_attach_target (kernel/bpf/verifier.c), we have:
 
-Thanks,
-Olek
+    if (prog->sleepable) {
+            ret = -EINVAL;
+            switch (prog->type) {
+            case BPF_PROG_TYPE_TRACING:
+
+                /* fentry/fexit/fmod_ret progs can be sleepable if they are
+                 * attached to ALLOW_ERROR_INJECTION and are not in denylist.
+                 */
+                if (!check_non_sleepable_error_inject(btf_id) &&
+                    within_error_injection_list(addr))
+                    ret = 0;
+                /* fentry/fexit/fmod_ret progs can also be sleepable if they are
+                 * in the fmodret id set with the KF_SLEEPABLE flag.
+                 */
+                else {
+                    u32 *flags = btf_kfunc_is_modify_return(btf, btf_id,
+                                        prog);
+
+                    if (flags && (*flags & KF_SLEEPABLE))
+                        ret = 0;
+                }
+                break;
+            [...]
+            }
+            if (ret) {
+                module_put(mod);
+                bpf_log(log, "%s is not sleepable\n", tname);
+                return ret;
+            }
+    }
+
+If I read that correctly, fentry must be on the error injection list
+(which is populated by functions marked with ALLOW_ERROR_INJECTION when
+CONFIG_FUNCTION_ERROR_INJECTION=y) to be allowed as sleepable.
+
+The other branch for fmodret id set seems to be only relevant for
+kernel modules which explicily register their functions into
+BTF_KFUNC_HOOK_FMODRET set.
+
+> While CONFIG_BPF_KPROBE_OVERRIDE affects a single helper.
+> 
+> Both fentry and fentry.s should work fine on sys_nanosleep.
+> fmod_ret is also completely independent of these two flags.
+
+For fmod_ret, we have a very similar code:
+
+    } else if (prog->expected_attach_type == BPF_MODIFY_RETURN) {
+            [...]
+            ret = -EINVAL;
+            if (btf_kfunc_is_modify_return(btf, btf_id, prog) ||
+                !check_attach_modify_return(addr, tname))
+                ret = 0;
+            if (ret) {
+                module_put(mod);
+                bpf_log(log, "%s() is not modifiable\n", tname);
+                return ret;
+            }
+    }
+
+with
+
+    static int check_attach_modify_return(unsigned long addr, const char *func_name)
+    {
+        if (within_error_injection_list(addr) ||
+            !strncmp(SECURITY_PREFIX, func_name, sizeof(SECURITY_PREFIX) - 1))
+            return 0;
+
+        return -EINVAL;
+    }
+
+So, again, the function needs to be on the error injection list to be
+allowed as modifiable.
+
+> 
+> Please root cause it instead of hacking the tests.
+
+My question is: are sleepable and fmod_ret functions supposed to work
+without error injection turned on? I'm happy to discuss that instead of
+hacking the tests but it seems to me that it doesn't work at the moment
+(also confirmed experimentally - turning CONFIG_FUNCTION_ERROR_INJECTION
+off will make many tests fail with "... is not modifiable" or "... is
+not sleepable").
+
+Viktor
+
+> 
+> pw-bot: cr
+> 
+
