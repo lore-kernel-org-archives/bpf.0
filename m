@@ -1,231 +1,285 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from out-189.mta1.migadu.com (out-189.mta1.migadu.com [95.215.58.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705B6330B00;
-	Wed, 11 Feb 2026 06:07:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1724A34D90E
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 06:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770790045; cv=none; b=A4o0WQckFwBNfedqvP44cGZQ06M8pCel2y40/4gmQipDWm5gWdSeZFXt7lv9rtDeQq/idksNZRWYAddBmuXJv9qkbFsp0BWUVPcoesgYS0f9vSTnAc1yWKoAUnBlw8pVVV2h6g+TWdnFStAoqljQS834aH90HBFk8Occ0wMRz74=
+	t=1770792287; cv=none; b=l5ya+2q+l2rMLQ4OY2bIXRb5Qn+F7gOJmjrCYnGvgrA2QEpd9rcSDLx6ID8T8W+xhNNwJoT16uwX04zrH7kju5CqOyi0okiCOyZ0KCdJrY6YA7gUYqQOs/Nbvcsn5MoXvSgtyIdsNzz/OPWwtXuzrEKnviDOLXeLwKGTk+7O5/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770790045; c=relaxed/simple;
-	bh=xM91Tfu8SEyUDujMWffkdlLQ6abgiRKLRx//M74JqmM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NzLJlPl4dPq1ds5wsAzT4CHgo6mb6tuiauDi28CA4dHXIE3TJ6doLIX+5VZSEZrVFfdow6GkUOpq51b8zqzD3OV4IDMk3uLNuMaYkTFezhSvdyQRC6SLMxR4CrNEGO1ra2WXBRLr7Qjg4wGtBWIKW4xIJruuYgFgP92WCiHngis=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EHCfkFBg; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770792287; c=relaxed/simple;
+	bh=es7xphAPp7MCzcf+ygDmKUby9RHA6YgkjJFtPWEUQG0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VDWUDL+haPNIZmmvZKV1YJ1YJeqCJLIa7R75nUb5ZqPRT7z0V1Jl3vGI16iD9effeFhU2fbsp7h8rSytj1zBoPZeXCyRTcQ0XzSSF1NyRyqC2ZvGrsuBNFvZOmVrXbt5pLxRjfvX/6+5Tm0y5mR+AISOnmueR84IUBtDlguwVP4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=um9YBDJY; arc=none smtp.client-ip=95.215.58.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EHCfkFBg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770790043; x=1802326043;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xM91Tfu8SEyUDujMWffkdlLQ6abgiRKLRx//M74JqmM=;
-  b=EHCfkFBgjhh0oWXSG0zvbTJIG3FxhxN2T1PA1rjTb1FY6LQcCzYHIS0x
-   77POvjnSOZ3HhhZq31X6T/tx72O3dBX/fKeeVkxGHgHH+eWLp9EoQQpxx
-   1M7rlcM1QMqZNWgUhjVJptEUM+UuD2zbX9cadY4tD1+xS1KCmW3FyAiz1
-   efyXx9KhRf5VzngM05sD6+HBL0QMbz1KkksoQxSwY3xvwePsmtxCiTS+v
-   B1W0DEJ1IC9ZiOSOR0QsAEP3G+DbJNYZRG6wtRdHNH942SBVrl7YLPQ1Y
-   Hpvu4nSujeqEKtzifPUFzvrPUF0DIoiIJpGE0IhtR1yp7LxgfyL5L9X0J
-   w==;
-X-CSE-ConnectionGUID: lcwJZVmPTLmcNsNOH1MfDQ==
-X-CSE-MsgGUID: 3QQmpGMJRHCMh4mSq1Hklw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11697"; a="71916406"
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="71916406"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2026 22:07:23 -0800
-X-CSE-ConnectionGUID: iCFmfES2RPi7IUyc5cpXeA==
-X-CSE-MsgGUID: Q/uPc977Sg2laEKdR2gC0g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,283,1763452800"; 
-   d="scan'208";a="216678499"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 10 Feb 2026 22:07:16 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vq3NZ-00000000pjI-1CEq;
-	Wed, 11 Feb 2026 06:07:13 +0000
-Date: Wed, 11 Feb 2026 14:07:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Lorenzo Bianconi <lorenzo@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="um9YBDJY"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770792274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Glx29GEJDVPsp3i/lwxoAn/rA8zTw+bBrY8zLpxWSUw=;
+	b=um9YBDJYe88gGn1uKD5tZRaD3iuvTjN9PTnjLbI64TnlUs5hJ9umZ9f5u/NBmvFm7VItm/
+	fj7Jc9Rh75wSq7gRxZb4l7nCtt6LGOqy4dHUZsd8qjO8cBbd4ChxjEITCG1Sx+nZ99hrzz
+	Yfe1qrEfcsR1A1MQhT4RXTnZAoUivQE=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@shopee.com>,
+	syzbot+2b3391f44313b3983e91@syzkaller.appspotmail.com,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-	Jakub Sitnicki <jakub@cloudflare.com>, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [Intel-wired-lan] [PATCH bpf-next 3/5] net: ice: Add
- xmo_rx_checksum callback
-Message-ID: <202602111429.7z0nNd0Q-lkp@intel.com>
-References: <20260210-bpf-xdp-meta-rxcksum-v1-3-e5d55caa0541@kernel.org>
+	Kees Cook <kees@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH bpf v1] bpf: cpumap: fix race in bq_flush_to_queue on PREEMPT_RT
+Date: Wed, 11 Feb 2026 14:44:16 +0800
+Message-ID: <20260211064417.196401-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260210-bpf-xdp-meta-rxcksum-v1-3-e5d55caa0541@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Lorenzo,
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-kernel test robot noticed the following build warnings:
+On PREEMPT_RT kernels, the per-CPU xdp_bulk_queue (bq) can be accessed
+concurrently by multiple preemptible tasks on the same CPU.
 
-[auto build test WARNING on db975debcb8c4cd367a78811bc1ba84c83f854bd]
+The original code assumes bq_enqueue() and __cpu_map_flush() run
+atomically with respect to each other on the same CPU, relying on
+local_bh_disable() to prevent preemption. However, on PREEMPT_RT,
+local_bh_disable() only calls migrate_disable() and does not disable
+preemption. spin_lock() also becomes a sleeping rt_mutex. Together,
+this allows CFS scheduling to preempt a task during bq_flush_to_queue(),
+enabling another task on the same CPU to enter bq_enqueue() and operate
+on the same per-CPU bq concurrently.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lorenzo-Bianconi/netlink-specs-Add-XDP-RX-checksum-capability-to-XDP-metadata-specs/20260211-012550
-base:   db975debcb8c4cd367a78811bc1ba84c83f854bd
-patch link:    https://lore.kernel.org/r/20260210-bpf-xdp-meta-rxcksum-v1-3-e5d55caa0541%40kernel.org
-patch subject: [Intel-wired-lan] [PATCH bpf-next 3/5] net: ice: Add xmo_rx_checksum callback
-config: i386-randconfig-063-20260211 (https://download.01.org/0day-ci/archive/20260211/202602111429.7z0nNd0Q-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260211/202602111429.7z0nNd0Q-lkp@intel.com/reproduce)
+This leads to several races:
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602111429.7z0nNd0Q-lkp@intel.com/
+1. Double __list_del_clearprev(): after spin_unlock() in
+ bq_flush_to_queue(), a preempting task can call bq_enqueue() ->
+ bq_flush_to_queue() on the same bq when bq->count reaches
+ CPU_MAP_BULK_SIZE. Both tasks then call __list_del_clearprev()
+ on the same bq->flush_node, the second call dereferences the
+ prev pointer that was already set to NULL by the first.
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/net/ethernet/intel/ice/ice_txrx_lib.c:109:29: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned int [usertype] @@     got restricted __wsum @@
-   drivers/net/ethernet/intel/ice/ice_txrx_lib.c:109:29: sparse:     expected unsigned int [usertype]
-   drivers/net/ethernet/intel/ice/ice_txrx_lib.c:109:29: sparse:     got restricted __wsum
->> drivers/net/ethernet/intel/ice/ice_txrx_lib.c:181:27: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __wsum [usertype] csum @@     got unsigned int [addressable] [usertype] cksum_meta @@
-   drivers/net/ethernet/intel/ice/ice_txrx_lib.c:181:27: sparse:     expected restricted __wsum [usertype] csum
-   drivers/net/ethernet/intel/ice/ice_txrx_lib.c:181:27: sparse:     got unsigned int [addressable] [usertype] cksum_meta
-   drivers/net/ethernet/intel/ice/ice_txrx_lib.c:515:9: sparse: sparse: context imbalance in 'ice_finalize_xdp_rx' - different lock contexts for basic block
+2. bq->count and bq->q[] races: concurrent bq_enqueue() can corrupt
+ the packet queue while bq_flush_to_queue() is processing it.
 
-vim +109 drivers/net/ethernet/intel/ice/ice_txrx_lib.c
+The race between task A (__cpu_map_flush -> bq_flush_to_queue) and
+task B (bq_enqueue -> bq_flush_to_queue) on the same CPU:
 
-    83	
-    84	static void
-    85	ice_get_rx_csum(const union ice_32b_rx_flex_desc *rx_desc, u16 ptype,
-    86			struct ice_rx_ring *ring, enum xdp_checksum *ip_summed,
-    87			u32 *cksum_meta)
-    88	{
-    89		struct libeth_rx_pt decoded = libie_rx_pt_parse(ptype);
-    90		u16 rx_status0, rx_status1;
-    91		bool ipv4, ipv6;
-    92	
-    93		if (!libeth_rx_pt_has_checksum(ring->netdev, decoded))
-    94			goto checksum_none;
-    95	
-    96		rx_status0 = le16_to_cpu(rx_desc->wb.status_error0);
-    97		rx_status1 = le16_to_cpu(rx_desc->wb.status_error1);
-    98		if ((ring->flags & ICE_RX_FLAGS_RING_GCS) &&
-    99		    rx_desc->wb.rxdid == ICE_RXDID_FLEX_NIC &&
-   100		    (decoded.inner_prot == LIBETH_RX_PT_INNER_TCP ||
-   101		     decoded.inner_prot == LIBETH_RX_PT_INNER_UDP ||
-   102		     decoded.inner_prot == LIBETH_RX_PT_INNER_ICMP)) {
-   103			const struct ice_32b_rx_flex_desc_nic *desc;
-   104			u16 csum;
-   105	
-   106			desc = (struct ice_32b_rx_flex_desc_nic *)rx_desc;
-   107			*ip_summed = XDP_CHECKSUM_COMPLETE;
-   108			csum = (__force u16)desc->raw_csum;
- > 109			*cksum_meta = csum_unfold((__force __sum16)swab16(csum));
-   110			return;
-   111		}
-   112	
-   113		/* check if HW has decoded the packet and checksum */
-   114		if (!(rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_L3L4P_S)))
-   115			goto checksum_none;
-   116	
-   117		ipv4 = libeth_rx_pt_get_ip_ver(decoded) == LIBETH_RX_PT_OUTER_IPV4;
-   118		ipv6 = libeth_rx_pt_get_ip_ver(decoded) == LIBETH_RX_PT_OUTER_IPV6;
-   119	
-   120		if (ipv4 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_EIPE_S)))) {
-   121			ring->vsi->back->hw_rx_eipe_error++;
-   122			goto checksum_none;
-   123		}
-   124	
-   125		if (ipv4 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_IPE_S))))
-   126			goto checksum_fail;
-   127	
-   128		if (ipv6 && (rx_status0 & (BIT(ICE_RX_FLEX_DESC_STATUS0_IPV6EXADD_S))))
-   129			goto checksum_fail;
-   130	
-   131		/* check for L4 errors and handle packets that were not able to be
-   132		 * checksummed due to arrival speed
-   133		 */
-   134		if (rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_L4E_S))
-   135			goto checksum_fail;
-   136	
-   137		/* check for outer UDP checksum error in tunneled packets */
-   138		if ((rx_status1 & BIT(ICE_RX_FLEX_DESC_STATUS1_NAT_S)) &&
-   139		    (rx_status0 & BIT(ICE_RX_FLEX_DESC_STATUS0_XSUM_EUDPE_S)))
-   140			goto checksum_fail;
-   141	
-   142		/* If there is an outer header present that might contain a checksum
-   143		 * we need to bump the checksum level by 1 to reflect the fact that
-   144		 * we are indicating we validated the inner checksum.
-   145		 */
-   146		if (decoded.tunnel_type >= LIBETH_RX_PT_TUNNEL_IP_GRENAT)
-   147			*cksum_meta = 1;
-   148	
-   149		*ip_summed = XDP_CHECKSUM_UNNECESSARY;
-   150		return;
-   151	
-   152	checksum_fail:
-   153		ring->vsi->back->hw_csum_rx_error++;
-   154	checksum_none:
-   155		*ip_summed = XDP_CHECKSUM_NONE;
-   156		*cksum_meta = 0;
-   157	}
-   158	
-   159	/**
-   160	 * ice_rx_csum - Indicate in skb if checksum is good
-   161	 * @ring: the ring we care about
-   162	 * @skb: skb currently being received and modified
-   163	 * @rx_desc: the receive descriptor
-   164	 * @ptype: the packet type decoded by hardware
-   165	 *
-   166	 * skb->protocol must be set before this function is called
-   167	 */
-   168	static void
-   169	ice_rx_csum(struct ice_rx_ring *ring, struct sk_buff *skb,
-   170		    union ice_32b_rx_flex_desc *rx_desc, u16 ptype)
-   171	{
-   172		enum xdp_checksum ip_summed;
-   173		u32 cksum_meta;
-   174	
-   175		ice_get_rx_csum(rx_desc, ptype, ring, &ip_summed, &cksum_meta);
-   176		switch (ip_summed) {
-   177		case XDP_CHECKSUM_UNNECESSARY:
-   178			skb->csum_level = cksum_meta;
-   179			break;
-   180		case XDP_CHECKSUM_COMPLETE:
- > 181			skb->csum = cksum_meta;
-   182			break;
-   183		default:
-   184			break;
-   185		}
-   186		skb->ip_summed = ip_summed;
-   187	}
-   188	
+Task A (xdp_do_flush)          Task B (cpu_map_enqueue)
+----------------------         ------------------------
+bq_flush_to_queue(bq)
+  spin_lock(&q->producer_lock)
+  /* flush bq->q[] to ptr_ring */
+  bq->count = 0
+  spin_unlock(&q->producer_lock)
+                                 bq_enqueue(rcpu, xdpf)
+  <-- CFS preempts Task A -->      bq->q[bq->count++] = xdpf
+                                   /* ... more enqueues until full ... */
+                                   bq_flush_to_queue(bq)
+                                     spin_lock(&q->producer_lock)
+                                     /* flush to ptr_ring */
+                                     spin_unlock(&q->producer_lock)
+                                     __list_del_clearprev(flush_node)
+                                       /* sets flush_node.prev = NULL */
+  <-- Task A resumes -->
+  __list_del_clearprev(flush_node)
+    flush_node.prev->next = ...
+    /* prev is NULL -> kernel oops */
 
+Fix this by adding a local_lock_t to xdp_bulk_queue and acquiring it
+in bq_enqueue() and __cpu_map_flush(). On non-RT kernels, local_lock
+maps to preempt_disable/enable with zero additional overhead. On
+PREEMPT_RT, it provides a per-CPU sleeping lock that serializes
+access to the bq.
+
+An alternative approach of snapshotting bq->count and bq->q[] before
+releasing the producer_lock was considered, but it requires copying
+the entire bq->q[] array on every flush, adding unnecessary overhead.
+
+To reproduce, insert an mdelay(100) between spin_unlock() and
+__list_del_clearprev() in bq_flush_to_queue(), then run reproducer
+provided by syzkaller.
+
+Panic:
+===
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+PF: supervisor write access in kernel mode
+PF: error_code(0x0002) - not-present page
+PGD 0 P4D 0
+Oops: Oops: 0002 [#1] SMP PTI
+CPU: 0 UID: 0 PID: 377 Comm: a.out Not tainted 6.19.0+ #21 PREEMPT_RT
+RIP: 0010:bq_flush_to_queue+0x145/0x200
+RSP: 0018:ffffc90000eb78e8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffffc90000eb7a10 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffffc90000eb7928 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: ffffe8ffffc255c0 R14: 0000000000000000 R15: ffff88800c01b800
+FS:  00007fae0762d6c0(0000) GS:ffff8880f9c75000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000d698005 CR4: 0000000000770ef0
+PKRU: 55555554
+Call Trace:
+ <TASK>
+ __cpu_map_flush+0x2c/0x70
+ xdp_do_flush+0x64/0x1b0
+ xdp_test_run_batch.constprop.0+0x4d4/0x6d0
+ bpf_test_run_xdp_live+0x24b/0x3e0
+ ? get_page_from_freelist+0x5ea/0x1cf0
+ ? __pfx_xdp_test_run_init_page+0x10/0x10
+ ? __check_object_size+0x25e/0x320
+ ? bpf_dispatcher_change_prog+0x20d/0x4e0
+ bpf_prog_test_run_xdp+0x4a1/0x6e0
+ ? rt_spin_unlock+0x61/0xb0
+ __sys_bpf+0x44a/0x2760
+ ? set_ptes.isra.0+0x3b/0x90
+ ? rt_spin_unlock+0x61/0xb0
+ ? do_anonymous_page+0x106/0x430
+ __x64_sys_bpf+0x1a/0x30
+ x64_sys_call+0x146c/0x26e0
+ do_syscall_64+0xd5/0x5a0
+ ? do_user_addr_fault+0x1d0/0x870
+ ? irqentry_exit+0x3e/0x670
+ ? clear_bhb_loop+0x30/0x80
+ entry_SYSCALL_64_after_hwframe+0x76/0x7e
+RIP: 0033:0x7fae0777928d
+RSP: 002b:00007fae0762ce68 EFLAGS: 00000206 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 00007fae0762dcdc RCX: 00007fae0777928d
+RDX: 0000000000000050 RSI: 0000200000000000 RDI: 000000000000000a
+RBP: 00007fae0762ce90 R08: 00007fae0762d6c0 R09: 203a6362696c6720
+R10: 0000000000000000 R11: 0000000000000206 R12: 00007fae0762d6c0
+R13: ffffffffffffff88 R14: 000000000000006e R15: 00007ffdd6e54110
+ </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:bq_flush_to_queue+0x145/0x200
+RSP: 0018:ffffc90000eb78e8 EFLAGS: 00010246
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffffc90000eb7a10 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffffc90000eb7928 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000001
+R13: ffffe8ffffc255c0 R14: 0000000000000000 R15: ffff88800c01b800
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000d698005 CR4: 0000000000770ef0
+PKRU: 55555554
+Kernel panic - not syncing: Fatal exception in interrupt
+Kernel Offset: disabled
+---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+
+Fixes: d2d6422f8bd1 ("x86: Allow to enable PREEMPT_RT.")
+Reported-by: syzbot+2b3391f44313b3983e91@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/69369331.a70a0220.38f243.009d.GAE@google.com/T/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ kernel/bpf/cpumap.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 04171fbc39cb..7fda8421ec40 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -29,6 +29,7 @@
+ #include <linux/sched.h>
+ #include <linux/workqueue.h>
+ #include <linux/kthread.h>
++#include <linux/local_lock.h>
+ #include <linux/completion.h>
+ #include <trace/events/xdp.h>
+ #include <linux/btf_ids.h>
+@@ -52,6 +53,7 @@ struct xdp_bulk_queue {
+ 	struct list_head flush_node;
+ 	struct bpf_cpu_map_entry *obj;
+ 	unsigned int count;
++	local_lock_t bq_lock;
+ };
+ 
+ /* Struct for every remote "destination" CPU in map */
+@@ -451,6 +453,7 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
+ 	for_each_possible_cpu(i) {
+ 		bq = per_cpu_ptr(rcpu->bulkq, i);
+ 		bq->obj = rcpu;
++		local_lock_init(&bq->bq_lock);
+ 	}
+ 
+ 	/* Alloc queue */
+@@ -714,6 +717,7 @@ const struct bpf_map_ops cpu_map_ops = {
+ 	.map_redirect		= cpu_map_redirect,
+ };
+ 
++/* Caller must hold bq->bq_lock */
+ static void bq_flush_to_queue(struct xdp_bulk_queue *bq)
+ {
+ 	struct bpf_cpu_map_entry *rcpu = bq->obj;
+@@ -750,10 +754,16 @@ static void bq_flush_to_queue(struct xdp_bulk_queue *bq)
+ 
+ /* Runs under RCU-read-side, plus in softirq under NAPI protection.
+  * Thus, safe percpu variable access.
++ *
++ * On PREEMPT_RT, local_bh_disable() does not disable preemption,
++ * so we use local_lock to serialize access to the per-CPU bq.
+  */
+ static void bq_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *xdpf)
+ {
+-	struct xdp_bulk_queue *bq = this_cpu_ptr(rcpu->bulkq);
++	struct xdp_bulk_queue *bq;
++
++	local_lock(&rcpu->bulkq->bq_lock);
++	bq = this_cpu_ptr(rcpu->bulkq);
+ 
+ 	if (unlikely(bq->count == CPU_MAP_BULK_SIZE))
+ 		bq_flush_to_queue(bq);
+@@ -774,6 +784,8 @@ static void bq_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *xdpf)
+ 
+ 		list_add(&bq->flush_node, flush_list);
+ 	}
++
++	local_unlock(&rcpu->bulkq->bq_lock);
+ }
+ 
+ int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *xdpf,
+@@ -810,7 +822,9 @@ void __cpu_map_flush(struct list_head *flush_list)
+ 	struct xdp_bulk_queue *bq, *tmp;
+ 
+ 	list_for_each_entry_safe(bq, tmp, flush_list, flush_node) {
++		local_lock(&bq->obj->bulkq->bq_lock);
+ 		bq_flush_to_queue(bq);
++		local_unlock(&bq->obj->bulkq->bq_lock);
+ 
+ 		/* If already running, costs spin_lock_irqsave + smb_mb */
+ 		wake_up_process(bq->obj->kthread);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.43.0
+
