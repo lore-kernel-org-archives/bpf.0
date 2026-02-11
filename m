@@ -1,191 +1,242 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DDE634404F
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 03:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770780584; cv=none; b=Y6s0J7YFILcy66XRE3w3K2UVaDq0OWNeHaaWK4tW8yhUlGO0dwlFoKFzz3l7MnYfMv569XbvF0FOUp3D0FvaeAvwA7vHsFf/u35zXHliplOZlqRResTUppWfOXXKMsAeLtokBWKqGPx4mkNKd0TA4ET42q6EEbq8CfrzdjyBtSA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770780584; c=relaxed/simple;
-	bh=eTi4JROsHDj0/pfq10QKnfiv1HKb2l/10UvJcOFjImM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FRxwYQwOV2DP5yk3esQhdEe0o0Y7Z+l8CWKYezgPtUMqyrbFDIsiItmrtiE3JJx+S8rGYfgZXB+Wmr1CgdWIA8ctJcuahpCa5U1lzuKRNEccW2ikgMoWWm6fymiQH446f9JoEL9vYrC2pwexySI6yBLGkZv29+rU1NTbsUNKq5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WyrjSTqG; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B06A1DF742
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 04:23:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770783810; cv=pass; b=Y145KNjLkFE+TnHATinGE4jQU06CqlZsEtTHG+GNqPW7OmxPgUlKQ35Xe7va4FSxxpjiOeEugh9rPmmq4l4sERNNU72yv/Y3RM2/Os9xNwX6Eq+lFnt0Drj+k1AyMKfRvgA8dorxGPtVjQZP9avnmuFw1yssMmRpZhi0UBs9aiU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770783810; c=relaxed/simple;
+	bh=5feqezYq4DtXKK86LxTBwiMMXMb/AYlWKlYvgZI8o5E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uKNGCFivg9l8oyq7QJTzwIa//l78iyZe2nF36L/Z83FUPM9XPkRfz44+SSdFsXgNo//ctDysGHAz8RRO82fJlwv0XpgR8K8xNdNzxsuXf1g1WMPx4m8tGzWRY8FVsgqYpvtwSfxlL+u6IS6lE4OsTbE5RhgaYJLWOpbV6WCQ8tA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hew9ZV54; arc=pass smtp.client-ip=74.125.82.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WyrjSTqG"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2aaecf9c325so3035275ad.1
-        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 19:29:42 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hew9ZV54"
+Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1233b953bebso1596690c88.1
+        for <bpf@vger.kernel.org>; Tue, 10 Feb 2026 20:23:29 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770783808; cv=none;
+        d=google.com; s=arc-20240605;
+        b=FMEWZAKDPGr0Vnw5AIgRV+ueEuw5lNM94cS8cZwgkS9EeZsrJp0mjqsqyK98CjC+VY
+         qtlhJJLngvV/+i2AwNKklFKYShaZYzmdjKKB++lR0fj+JOIshh0DQ27N3W3TsvmtdaEq
+         gPljzC6Jb2d6j6sw1b1qh8mUM/6887BS1G/3vVdOFQzhEB/Z4u/PQXd86X4zMxQ9PsLB
+         CNmaByxyZN94BeihX7CuGD+jKfGkXfWEV61Wl9ADYBRTdLkbYksG0EW/5JwT0nMAf2Fi
+         0oL+S+sZ6y3xsQDVKqiG/FsPj0nez496z5IpMzET8rbfu0wYGXDIpNmGAZtP4d31qB4X
+         XsKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=onR670WObIKN1WaDZsvnS8cFGX6eA30W7fb0qX5OToY=;
+        fh=Q16yz6hO15zekXV9Kp6AhLotmWciyubk8WGZdr28ZpQ=;
+        b=MAnJTU86/vzuOvfxWsBk/ILXmY6/nJm54DjQpSswfXAGHu1atBZSiAcYsG9kRnMJpO
+         D8pdpj/eCZh6j2vuIx9IqV1yp6qEaWVRkzmqGBpJxewVawbKaV23qeAwPjFqOtOFAXnh
+         K4n9ibajOW7bccMfsnnPSr7d4SRrV3Fze1WxjfARnOxEUduZlQHNOYIdh2GicVOliOB7
+         Dqmw+yce1zYDI7b4nqufwXHqJ36QD486KZXEz+uYh2wtWy/NV61E/GnNPEXMlVUCik8/
+         RXkxc5VTv0Lp5UPdfFDzM5RH3sCSSg5VZS769qmjz5lBdBsbfmtpK15caeOfRrRKbstP
+         n4Zw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770780582; x=1771385382; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=90vK4hRsQbOEWhjyWZWh7PNBRWM1stlexJ0eSfCPejs=;
-        b=WyrjSTqGxTqTa1PITpf1lHqWyyXku+pwur0waEOC3F61l0bcFMokwdioJqCNTfrMhn
-         15rRYoRXgh3kHEGGTBvKgB1z3Y2eGvuf1EzKvR4f4ZbPkDee+cBzhMiij/uf1yDuGFD4
-         Az3PShYKsagFnvRIzhS1+1mI2Ba5PYUczHdfZmsL6VUibW6XeEBwwH7pFKmd3IfdibSN
-         28aUhd1kh/13qgsWn6Q6dQ4VWAGlwiFhpbipFm/HonBFu2wpoZY5qHQWeXsk414GyA9H
-         42bUvk1YX8Rr7ezuVsWwLkZo82ZHpV3CDpHyMa8eWyBvbHwXDDNWsUpYd9s+ofXUACgj
-         YWjQ==
+        d=google.com; s=20230601; t=1770783808; x=1771388608; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=onR670WObIKN1WaDZsvnS8cFGX6eA30W7fb0qX5OToY=;
+        b=hew9ZV54DwhTTQVL+Wi45ZRDYJyD4EOMa03BqsooyU98LFfwmN+tkcX85lUGnD+u/0
+         9ZtVpxZQdTCEeE3vuIu7kokLH3eVh3QIwJ7OCignzkGFMcOX+AfNIdYyz4H/pcMy5F/Z
+         QToLWwakQVj5jEqBEv6o9rKGDA3f5/7dlGgvd2WE+irmd8aignrsNAVkTGPNGlEYZCcl
+         uPx6kDwX45G6OcMhc+IrkWrkyho/DRJTuz24G2vd+/NBPpf6BAGjG0U+Md/aH8OosJAe
+         0e6hRBg8dPL8O+mp+zIyQ+CZEKUFSJ5ESCxiPsIDkQTQM7KeduWqGJQnerJppIM5snAQ
+         5JGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770780582; x=1771385382;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=90vK4hRsQbOEWhjyWZWh7PNBRWM1stlexJ0eSfCPejs=;
-        b=PM56u7AcXK+202OfnsnnzTN7+jpItXpWchSchGIta0jWipy192BQ6Kcr7Gjln5wTE4
-         DutP2IEgj1MBkt3ps8KpyqpdfoZospyaKtsj7/NhrwP4hU4igdRWN8VOLXiXd5pd/xST
-         NBdzqNbscRVKpUI2bdhUKsjAVLJoaYAMrQpqe8SszTLgRBVlqiZy1xwrL+HFds6T7dDd
-         UQk84+lGLC3fsmhodD19cWtBF1BBDG9pvXbTsud73OxxfXfVbZDdF4I9ePs+QkpmEPGc
-         cbjOQdy4ygs3986sjRyYzZC9sX0as20ckaCrBXoVYe+NCrRM0muPNrIyd6Nohk4yRf7M
-         wJmw==
-X-Gm-Message-State: AOJu0YzjgNJUgBhn2pEngnrgEq52GJDjuOfjTpCakzHAOUvCl6NR5Blg
-	IrM7crBlrQiTqA/GlPLQFqjwPGunKnZ2lRV0FzlX2Fk2tByVyV30tlIu
-X-Gm-Gg: AZuq6aI4MW3+m55Xybz5N443rxXXV0z93Iv+yHm3G0TyHTYd4H8opHShE2UcrlWjHyc
-	VuHZ5KRrKoHL35fk8zoTkSrQ+ZUQ2Lon7Z+n4UKaWsX5ZRr40q87oZCJmNRT9c4W5Yi6RR4lZEm
-	QEGWDsZpjdjzf6ktzEuAO780VuLUoIgswFhodaR/ziHcVDjzeUO4m6M7kbbrV0utDpRYil/TKem
-	FkPOrM9hOuefN/h28ZdLTMWCldn7eBSf8VFm60wN1ZeaMf9NXnzgwKxYV6ik5ene8SHqX/Flywb
-	A9epd/wk9zzlnuKj7u9NyLjxl0TQyaqf7//GFFlrv8YAs0hJTqyISKcEj0sLaOMVZEsCqtsmpSy
-	zjKeV6NLSxYqJkEUSWyvfs6LmLFTbfDFNlf5hERK8H94/dabrhsBXuxhcmjftiJtksh1SPvOhtF
-	61CwRyoVaqI7K2AA5/5C6qotwsIJ2Z2VpdNQ==
-X-Received: by 2002:a17:902:d58d:b0:2a3:e7d3:810b with SMTP id d9443c01a7336-2ab0fc9ff95mr52923055ad.12.1770780582358;
-        Tue, 10 Feb 2026 19:29:42 -0800 (PST)
-Received: from [10.22.64.186] ([122.11.166.8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ab2997b3cdsm5968295ad.70.2026.02.10.19.29.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Feb 2026 19:29:41 -0800 (PST)
-Message-ID: <2a241e1b-fa8a-430c-80a1-6c8d12d7b92c@gmail.com>
-Date: Wed, 11 Feb 2026 11:29:38 +0800
+        d=1e100.net; s=20230601; t=1770783808; x=1771388608;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=onR670WObIKN1WaDZsvnS8cFGX6eA30W7fb0qX5OToY=;
+        b=jl5vHaxjVEBizCI/FUqGQXXKN45C8+dmPqHAYExOpEK4kEkcX4ijBFat2Hl9BgeKvv
+         o8P0mECIhKowvqd3nubQJbrWuWFt48rbhetOs11+nl9HXmUvES/7WSHqUF7ylxHdeLk4
+         RWenQJ4OLiUNIxEm9D8hmC/Uaik099OYNuj9gOLJL/T6V1jBHSM0Vp6C8vnjx2qY2doy
+         V3iXyNtFlDZeGpAhtnNAhRZGLnM8zlPwB4qDUnNli96tXJLppLi1IeMJhyyW7YpSMLCQ
+         Di0swwLIESfZ223g53YBGGVCNQSAhGjPUKYGL+WS+gqR9YoGFYlEAaKw3lmZy8Oq9THx
+         t+1A==
+X-Forwarded-Encrypted: i=1; AJvYcCVZxAbm8TfglYwME+f42rPG9CpWhifOXJm/5wPtNxxBqtIngEXkpeXkkbJ6gt70QzvfnOg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjPWv7E9Rzk8/vXp+qYmaI1WsqDfItApHcmd1kVyz0V9aZA4C7
+	oryNnlsR6bNQhmS1DpNplRZkKvL1/DlRMO+VdlO9pKWswj187yMJL5CGjpNNivQf+etZPf/ZOfh
+	dKODeV7bBKL7nfiwG5f7LtRIkUaiVLweEWi45fp9r
+X-Gm-Gg: AZuq6aLQ6j42Vcvqre9BNxlhXwOodzvIyxbf7dO757LMDg/G/Yd4r6sOCTFzI0YbGO5
+	krOCcLvGI2Fy/WXoFH6gdsIn1F9WO4UAgmx7dJz4QgcdCVnqgwY+tJ/N9lCy+WZ9CQQ6ye17r+Y
+	AnyBXt+t6RDtMU4vZVSbuielyd0N9CodSBhfX2wx8CwU+yiXZ9AXZXxcC3B/m+9lLeYl55gTw2U
+	7UytHyRirHadruPRUZH9mMlxTz8cW19eWZ9b4W8GGwB/qJDofxnEjIf965erliJtamGUuBJNK0c
+	D7R2r5BfNK7EyJWfE4Ys6WwEQpMRdWu1TMdPt0+GTh1FOU23970fiEinNBz0HtD3lhoHV/ps
+X-Received: by 2002:a05:7022:4597:b0:123:348b:979c with SMTP id
+ a92af1059eb24-12703fe453emr7638450c88.6.1770783807886; Tue, 10 Feb 2026
+ 20:23:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH bpf-next 1/4] bpf: Introduce 64bit bitops kfuncs
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>
-References: <20260209155919.19015-1-leon.hwang@linux.dev>
- <20260209155919.19015-2-leon.hwang@linux.dev>
- <CAADnVQKvoLtURPXWg=CyycE=TcuZggcpMhP=Lcc0wGsj2_tZuw@mail.gmail.com>
-From: Leon Hwang <hffilwlqm@gmail.com>
-In-Reply-To: <CAADnVQKvoLtURPXWg=CyycE=TcuZggcpMhP=Lcc0wGsj2_tZuw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260207230720.2542943-1-kuniyu@google.com> <20260207230720.2542943-2-kuniyu@google.com>
+ <CAADnVQK_93g_KkNFYXSr8ZvA1fYh4hoFRJCJFPS-zs4ox0HhAA@mail.gmail.com>
+ <CAAVpQUAfUQJsBzqTah8+LhTciGrHnLx3pg_xEqD4=wBuEEEXUQ@mail.gmail.com> <CAADnVQLMiQFb7SAxgDNFXwoJ4sYLi1DWVHwq4ftAbBxLAa5enQ@mail.gmail.com>
+In-Reply-To: <CAADnVQLMiQFb7SAxgDNFXwoJ4sYLi1DWVHwq4ftAbBxLAa5enQ@mail.gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Tue, 10 Feb 2026 20:23:15 -0800
+X-Gm-Features: AZwV_Qj_Pvlk5Eij40X708nf6kEiOvBwwkZhZ9dI8ZMRlvtA6GhnVJcn0q8u5zo
+Message-ID: <CAAVpQUDCd1fTHfBdzmk2msrMnQTL-EzH6VH0RyHoL1V8qz1y3Q@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf 1/2] bpf: Reject access to unix_sk(sk)->peer.
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Michal Luczaj <mhal@rbox.co>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+On Tue, Feb 10, 2026 at 6:47=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Feb 9, 2026 at 5:19=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.c=
+om> wrote:
+> >
+> > On Mon, Feb 9, 2026 at 3:00=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Sat, Feb 7, 2026 at 3:07=E2=80=AFPM Kuniyuki Iwashima <kuniyu@goog=
+le.com> wrote:
+> > > >
+> > > > Michal Luczaj reported use-after-free of unix_sk(sk)->peer by
+> > > > bpf_skc_to_unix_sock(). [0]
+> > > >
+> > > > Accessing unix_sk(sk)->peer is safe only under unix_state_lock(),
+> > > > but there are many functions where bpf prog can access the field
+> > > > locklessly via fentry/fexit.
+> > > >
+> > > > unix_dgram_connect() could clear unix_sk(sk)->peer and release
+> > > > the last refcnt of the peer sk while a bpf prog is accessing it,
+> > > > resulting in use-after-free.
+> > > >
+> > > > Another problematic scenario is that unix_sk(sk)->peer could
+> > > > go away while being passed to bpf_setsockopt() in bpf iter.
+> > > >
+> > > > To avoid such issues, let's reject access to unix_sk(sk)->peer
+> > > > by marking the pointer with PTR_UNTRUSTED.
+> > > >
+> > > > If needed, we could add a new helper later that uses unix_peer_get(=
+)
+> > > > and requires bpf_sk_release().
+> > > >
+> > > > [0]:
+> > > > BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa4/0xb0
+> > > > Read of size 2 at addr ffff888147d38890 by task test_progs/2495
+> > > > Call Trace:
+> > > >  dump_stack_lvl+0x5d/0x80
+> > > >  print_report+0x170/0x4f3
+> > > >  kasan_report+0xe1/0x180
+> > > >  bpf_skc_to_unix_sock+0xa4/0xb0
+> > > >  bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
+> > > >  bpf_trampoline_6442564662+0x47/0xab
+> > > >  unix_shutdown+0x9/0x880
+> > > >  __sys_shutdown+0xe1/0x160
+> > > >  __x64_sys_shutdown+0x52/0x90
+> > > >  do_syscall_64+0x6b/0x3a0
+> > > >  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> > > >
+> > > > Fixes: 9eeb3aa33ae0 ("bpf: Add bpf_skc_to_unix_sock() helper")
+> > > > Reported-by: Michal Luczaj <mhal@rbox.co>
+> > > > Closes: https://lore.kernel.org/all/408569e7-2b82-4eff-b767-79ce6ef=
+6cae0@rbox.co/
+> > > > Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
+> > > > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > > ---
+> > > >  kernel/bpf/verifier.c                         | 18 +++++++++++++
+> > > >  .../selftests/bpf/progs/verifier_sock.c       | 25 +++++++++++++++=
+++++
+> > > >  2 files changed, 43 insertions(+)
+> > > >
+> > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > index 3135643d5695..b328a1640c82 100644
+> > > > --- a/kernel/bpf/verifier.c
+> > > > +++ b/kernel/bpf/verifier.c
+> > > > @@ -7076,6 +7076,7 @@ static int bpf_map_direct_read(struct bpf_map=
+ *map, int off, int size, u64 *val,
+> > > >  #define BTF_TYPE_SAFE_RCU_OR_NULL(__type)  __PASTE(__type, __safe_=
+rcu_or_null)
+> > > >  #define BTF_TYPE_SAFE_TRUSTED(__type)  __PASTE(__type, __safe_trus=
+ted)
+> > > >  #define BTF_TYPE_SAFE_TRUSTED_OR_NULL(__type)  __PASTE(__type, __s=
+afe_trusted_or_null)
+> > > > +#define BTF_TYPE_SAFE_UNTRUSTED(__type)  __PASTE(__type, __safe_un=
+trusted)
+> > > >
+> > > >  /*
+> > > >   * Allow list few fields as RCU trusted or full trusted.
+> > > > @@ -7154,6 +7155,10 @@ BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct vm_area=
+_struct) {
+> > > >         struct file *vm_file;
+> > > >  };
+> > > >
+> > > > +BTF_TYPE_SAFE_UNTRUSTED(struct unix_sock) {
+> > > > +       struct sock *peer;
+> > > > +};
+> > > > +
+> > >
+> > > That's just one out of many. It's not really a fix,
+> > > but a bandaid for one case.
+> >
+> > Right, this is only one example where a pointer lifetime
+> > does not match with bpf prog.
+> >
+> > > We discussed it in the past and the only way forward is to make
+> > > helpers only accept trusted args.
+> > > Recently we made KF_TRUSTED_ARGS a default for all kfuncs.
+> > > We should do the same for helpers.
+> >
+> > What about just reading an untrusted pointer ?
+>
+> What do you mean 'untrusted' ?
+> There are 3 types of ptr_to_btf_id:
+> trusted, untrusted, legacy (without either trusted or untrusted flags).
+
+Ah sorry, I used 'untrusted' since the pointer is not always
+valid, but I think legacy is the one I meant in this case.
 
 
+>
+> kfuncs now accept only trusted, while helpers still accept
+> trusted and legacy. The legacy should be disallowed.
+> That might break some bpf programs, so it has to be done carefully.
+>
+> > I used bpf_skc_to_unix_sock() in selftest in case compiler
+> > could optimise out branches that always return 0.
+> >
+> > Currently, this passes the verifier and can trigger UAF.
+> >
+> > u =3D bpf_skc_to_unix_sock(sock->sk);
+> > if (!u || !u->peer)
+> >     return 0;
+> > if (u->peer->__sk_common.skc_family) # unsafe access
+> >     return 0;
+>
+> No. It's fine. Both legacy and untrusted ptr_to_btf_id get probe_mem
+> treatment. So above works and won't crash the kernel.
+> It's effectively inlined probe_read_kernel.
 
-On 11/2/26 11:05, Alexei Starovoitov wrote:
-> On Mon, Feb 9, 2026 at 7:59 AM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
+Yes, it doesn't crash.
 
-[...]
+I was just unsure about the bpf expectation [0] like how we
+should treat KASAN use-after-free report by bpf prog reading
+a pointer whose lifetime is not guaranteed by bpf helper/verifier.
 
->> diff --git a/include/linux/btf.h b/include/linux/btf.h
->> index 48108471c5b1..8ac1dc59ca85 100644
->> --- a/include/linux/btf.h
->> +++ b/include/linux/btf.h
->> @@ -79,6 +79,7 @@
->>  #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its first argument */
->>  #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
->>  #define KF_IMPLICIT_ARGS (1 << 16) /* kfunc has implicit arguments supplied by the verifier */
->> +#define KF_MUST_INLINE  (1 << 17) /* kfunc must be inlined by JIT backend */
-> 
-> UX is not great.
-> Just keep kfuncs in C as fallback when JIT cannot inline them
-> and don't remove spill/fills that llvm leaves for fastcall.
-> 
+So, if this is WAI, I'm fine with that.
 
-Ack.
-
-I’ll drop KF_MUST_INLINE in the next revision and keep the C kfunc
-implementation as the fallback when the JIT cannot inline it.
-
->>
->>  /*
->>   * Tag marking a kernel function as a kfunc. This is meant to minimize the
->> diff --git a/include/linux/filter.h b/include/linux/filter.h
->> index 4e1cb4f91f49..ff6c0cf68dd3 100644
->> --- a/include/linux/filter.h
->> +++ b/include/linux/filter.h
->> @@ -514,6 +514,25 @@ static inline bool insn_is_cast_user(const struct bpf_insn *insn)
->>                 .off   = 0,                                     \
->>                 .imm   = 0 })
->>
->> +/* bitops */
->> +#define BPF_BITOPS     0xe0    /* opcode for alu64 */
->> +#define BPF_CLZ64      0x00    /* imm for clz64 */
->> +#define BPF_CTZ64      0x01    /* imm for ctz64 */
->> +#define BPF_FFS64      0x02    /* imm for ffs64 */
->> +#define BPF_FLS64      0x03    /* imm for fls64 */
->> +#define BPF_BITREV64   0x04    /* imm for bitrev64 */
->> +#define BPF_POPCNT64   0x05    /* imm for popcnt64 */
->> +#define BPF_ROL64      0x06    /* imm for rol64 */
->> +#define BPF_ROR64      0x07    /* imm for ror64 */
->> +
->> +#define BPF_BITOPS_INSN(IMM)                                   \
->> +       ((struct bpf_insn) {                                    \
->> +               .code  = BPF_ALU64 | BPF_BITOPS,                \
->> +               .dst_reg = 0,                                   \
->> +               .src_reg = 0,                                   \
->> +               .off   = 0,                                     \
->> +               .imm   = IMM })
->> +
-> 
-> why introduce pseudo instructions and this encoding?
-> Just let JIT identify kfunc calls by address.
-> bpf_jit_get_func_addr()
-> if (addr == bpf_clz64) ...
-> 
-
-Thanks for pointing me to bpf_jit_get_func_addr().
-
-I’ll drop the BPF_BITOPS encoding and BPF_BITOPS_INSN, and instead
-let the JIT identify the bitops kfuncs by their resolved function
-address via bpf_jit_get_func_addr().
-
-That should keep things simpler and avoid introducing a new internal
-opcode.
-
->>  /* Internal classic blocks for direct assignment */
->>
->>  #define __BPF_STMT(CODE, K)                                    \
-
-[...]
-
->> @@ -4578,6 +4620,14 @@ BTF_ID_FLAGS(func, bpf_key_put, KF_RELEASE)
->>  BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
->>  #endif
->>  #endif
->> +BTF_ID_FLAGS(func, bpf_clz64, KF_FASTCALL | KF_MUST_INLINE)
->> +BTF_ID_FLAGS(func, bpf_ctz64, KF_FASTCALL | KF_MUST_INLINE)
->> +BTF_ID_FLAGS(func, bpf_ffs64, KF_FASTCALL | KF_MUST_INLINE)
->> +BTF_ID_FLAGS(func, bpf_fls64, KF_FASTCALL | KF_MUST_INLINE)
->> +BTF_ID_FLAGS(func, bpf_popcnt64, KF_FASTCALL | KF_MUST_INLINE)
->> +BTF_ID_FLAGS(func, bpf_bitrev64, KF_FASTCALL | KF_MUST_INLINE)
->> +BTF_ID_FLAGS(func, bpf_rol64, KF_MUST_INLINE)
->> +BTF_ID_FLAGS(func, bpf_ror64, KF_MUST_INLINE)
-> 
-> Mark all of them as fastcall and do push/pop in JIT when necessary.
-> 
-
-Good idea.
-
-I’ll mark all bitops kfuncs as KF_FASTCALL and handle any required
-save/restore in the JIT.
-
-In particular, for bpf_rol64() and bpf_ror64() on x86_64, we do need
-to use rcx (CL) for variable rotates, so pushing/popping rcx in the
-JIT when needed makes sense.
-
-Thanks,
-Leon
-
+[0]: https://lore.kernel.org/all/CAAVpQUDrC1rO2diM3gVg5GV5CTVAUS2RbLP+SpHBG=
+qKcUT0iMA@mail.gmail.com/
