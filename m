@@ -1,224 +1,400 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA6B359705
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 10:11:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48F8228505E
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 10:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770804695; cv=none; b=mxX4iXRT24aSY3XWHSbCY56K8eiHJEAqm+IVDkJpd8MZu8svveuAmGKG6G6DPbM1OKyRg7n0vnITaz5eBOWQsZ0mjPPcbRBanQnThn3uI+U8v8YHmaHaq/tymySZVn+o/is8CLOS/niLNDOjdXGN/1G+EXwnSJ4yi1mX/ah3T7E=
+	t=1770805018; cv=none; b=l16xRCAAR5ivdg/324p04lV6GXC4+gwilKZIu7Boj44f2RmaFgMclkB2x2hOfeAlnmTDOdKhXm+Ty1gZCul8tnmPa9eIXG+njAOMm4hvOzb+AUK+pRqNce+ud6mxk2hmlng+OucgAeJBbiLaqhIXLGjy9Bnd8TpREpYnsIU+GxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770804695; c=relaxed/simple;
-	bh=BmrKY88RA44qBiFPniVS3X4o1q98MiP9r2hyBl4pPZo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J2TfUA3jFM51J4d3Yek2up90u+lRNv9Z4yZquabWH1dqQP1YdiiDk60o6n8d3Hz7a6v9Zd/2cupZAiRh89FscXt5H57lMisQxvAM1aNKCeoHsrb9oB5chYw0sq25i4qT31h5qUvb4NnQW4y7/uTBoxGY7zrPKoyqPF0Vgy4J6YY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=T0ELd9rp; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3kfR7uDB; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=T0ELd9rp; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=3kfR7uDB; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+	s=arc-20240116; t=1770805018; c=relaxed/simple;
+	bh=f9T/vTqYrhfenx3QQeCmgFCY6qkXEsi9qXftduN0ey4=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WB3cSArsKATTznRMTJlvD5JT2qKk4SQM+S0cKA/EBy8UN3yI3Ryj7wVfRfmHRpcoZBTATJ3Wba2/C4iFt4x9GQzZA5qj/HyflrQr5e1RnInMKsG09NglGFSkE2UfOqqDFD+bv3WPlGjdBW1m4NQmY6yF9qT7HA6QGDrf+30Qmzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VWtKqGP3; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="T0ELd9rp";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3kfR7uDB";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="T0ELd9rp";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="3kfR7uDB"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id AEC213E714;
-	Wed, 11 Feb 2026 10:11:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1770804691; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=nruCXAx74WveJM2K/8+k0Dm+0X0usQHifZgTPdJV990=;
-	b=T0ELd9rp3GeVuj4TLdR3dr/hNb0Cika9yzBgRs0FhiSWSc1MqQAnL97RrY4vOwPUe2vk7I
-	i8LRVFFyq//INL2tUz0svYT+yDeB8UMWTAXYhOJeUmKub3ubxVRg0j+o4+X5aZdFMrFsx2
-	RsZJHaYUr9Yo2a31l+htisFCRymCH50=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1770804691;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=nruCXAx74WveJM2K/8+k0Dm+0X0usQHifZgTPdJV990=;
-	b=3kfR7uDB3xl6HUy45/FpCoJY0wRcFUNW+QVuq26A6tfrURWVGS+PtqpD5CklnjcKYrVyci
-	o6e6rzNfZUyDu7Bg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=T0ELd9rp;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=3kfR7uDB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1770804691; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=nruCXAx74WveJM2K/8+k0Dm+0X0usQHifZgTPdJV990=;
-	b=T0ELd9rp3GeVuj4TLdR3dr/hNb0Cika9yzBgRs0FhiSWSc1MqQAnL97RrY4vOwPUe2vk7I
-	i8LRVFFyq//INL2tUz0svYT+yDeB8UMWTAXYhOJeUmKub3ubxVRg0j+o4+X5aZdFMrFsx2
-	RsZJHaYUr9Yo2a31l+htisFCRymCH50=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1770804691;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=nruCXAx74WveJM2K/8+k0Dm+0X0usQHifZgTPdJV990=;
-	b=3kfR7uDB3xl6HUy45/FpCoJY0wRcFUNW+QVuq26A6tfrURWVGS+PtqpD5CklnjcKYrVyci
-	o6e6rzNfZUyDu7Bg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 3CBE93EA62;
-	Wed, 11 Feb 2026 10:11:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id jH8IDtNVjGkKbQAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Wed, 11 Feb 2026 10:11:31 +0000
-Message-ID: <183f1ce7-d45f-49cf-8dec-570a7e11dc9f@suse.cz>
-Date: Wed, 11 Feb 2026 11:11:30 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VWtKqGP3"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-59e4993e00aso1789376e87.3
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 02:16:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770805014; x=1771409814; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/bpz+fockC+/IFBLnG8M7+Uj5fbJveug8L/H6uDYPmc=;
+        b=VWtKqGP3tknm+cuHufk5ufd8UBykkcT+Wjb4XC1G5AD30RocQX2KQ+sbnCNY5P6WTu
+         hzkDMUGkPRlpopwYxcVpFjhlCIEciYkvrgfem8S5ISv75kP8bvb+Gcr40sCHzTU0yZpR
+         ZK02LWSEzprc59Ld5zwCcBWB/zT81N3zwP5/QD2z/9k40qqntnPGZ/hH8Nytu7bF2w+3
+         NiGbhrPwZu6k+C1SnDxFFuE8n33yyKlhQMUJ2A9UBvagI3/qNDPi+u6VraRz6TRu2xo/
+         0AdnNIR6uqvjjYq1rLFy8zb9mpznNn4LjXlzl1ZU57KohvTZqAAaf8DFXkPtfkNfHuF5
+         Hu5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770805014; x=1771409814;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/bpz+fockC+/IFBLnG8M7+Uj5fbJveug8L/H6uDYPmc=;
+        b=njvjfkBpef1KRtwfuXYjyuXFNNe4qoa/NSjx8SjpmZf58VWN++u1a78piAG3CC+Juv
+         uvE3ATFyEr+Fdvuqi/bY20RkqUxBW/f5nFix16peWyMZ6pFwmeT1eSkx75eKErQLJx+2
+         VJPsdcRL58KYmQzSkwqB8yHfkOv7qxMB/i8r9uj91QthMAG6NXeXMMFK82zr2fk5pbgL
+         YDGtdTmgj8lHL3/KyqVXJy+/mjeQ5vaWnLOHQFHrZRTbVCn28xkueQ6U7BTbUIO1tDFu
+         RGYJ7xZFMrjgYt1278IxGDePLGA87STDUQbyCc3kVH7sBUVluVJlquAQiSMUORhZHkgZ
+         TxLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWCy7Zg3Gntom1QHihkyL4oJ8LVzyphEKWcAa0OCExaBtoxGKaQzid2vf0pcaXAgLIfEU0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7msnSj0MyVCESmZ3b5rXb/wSJYAlXsV9lyWUMPhHYwWLLaeke
+	VAR6bhI8g8u7ripkGUcMflyx2WxNVuvqcQdKNxFWDUcPJJQ45swIj2bo
+X-Gm-Gg: AZuq6aLgyS4/6LuR08Jc3V1O07k9YrXo2Dk5oyKyma+fTeLI+OvNcPrP8UWLuclObID
+	3efXGvBniyRrlE18Q/WiiQIyy7g+a4gV08kWHyL+sRgt/V+9LMtZ5QJHcMIzmLUPhp3+rkQrkXS
+	fzH4Q/fT5RGa1QYuKdB7HNc4kS5DTBrvAMmH8AnZbwRvw1EQ1xHQ45cn+gea7m/mnXNOI2okSL3
+	5mqNpIyBQ2jdTPsCkCh2EosXSxt7YHVHjvDUbIhNccbyBbWMXczNKSPzoiqsCp4ki2jzVqeCLMT
+	6CN+tbXvFs+e253nvsFZWd9Gns7bsw420QWyJFbOd3/E7YDJQ2nRNy2ic1UMMjUKBQXsiY1ImQ8
+	bFPgQENK/S8pQUDwf1WiUyMaHfmBx4Z56ThKdj/INVHehaaF1niiJZq5ajGoERAeP
+X-Received: by 2002:a05:6512:b1b:b0:59b:7185:757d with SMTP id 2adb3069b0e04-59e4516eaffmr5943215e87.50.1770805014074;
+        Wed, 11 Feb 2026 02:16:54 -0800 (PST)
+Received: from milan ([2001:9b1:d5a0:a500::24b])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59e5f56312csm254910e87.6.2026.02.11.02.16.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Feb 2026 02:16:53 -0800 (PST)
+From: Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@milan>
+Date: Wed, 11 Feb 2026 11:16:51 +0100
+To: Harry Yoo <harry.yoo@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@gentwo.org>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Michal Hocko <mhocko@kernel.org>, Hao Li <hao.li@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Amery Hung <ameryhung@gmail.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	"Paul E . McKenney" <paulmck@kernel.org>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
+	Joel Fernandes <joelagnelf@nvidia.com>,
+	Josh Triplett <josh@joshtriplett.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Zqiang <qiang.zhang@linux.dev>, Dave Chinner <david@fromorbit.com>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Muchun Song <muchun.song@linux.dev>, rcu@vger.kernel.org,
+	linux-mm@kvack.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 1/7] mm/slab: introduce k[v]free_rcu() with struct
+ rcu_ptr
+Message-ID: <aYxXE6CC0XQr1KNK@milan>
+References: <20260206093410.160622-1-harry.yoo@oracle.com>
+ <20260206093410.160622-2-harry.yoo@oracle.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] mm: introduce a new page type for page pool in page
- type
-Content-Language: en-US
-To: Byungchul Park <byungchul@sk.com>, linux-mm@kvack.org,
- akpm@linux-foundation.org, netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
- harry.yoo@oracle.com, ast@kernel.org, daniel@iogearbox.net,
- davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
- john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
- leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
- andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
- david@redhat.com, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, horms@kernel.org,
- jackmanb@google.com, hannes@cmpxchg.org, ziy@nvidia.com,
- ilias.apalodimas@linaro.org, willy@infradead.org, brauner@kernel.org,
- kas@kernel.org, yuzhao@google.com, usamaarif642@gmail.com,
- baolin.wang@linux.alibaba.com, almasrymina@google.com, toke@redhat.com,
- asml.silence@gmail.com, bpf@vger.kernel.org, linux-rdma@vger.kernel.org,
- sfr@canb.auug.org.au, dw@davidwei.uk, ap420073@gmail.com, dtatulea@nvidia.com
-References: <20260210114712.55072-1-byungchul@sk.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- m6M14QORSWTLRg==
-In-Reply-To: <20260210114712.55072-1-byungchul@sk.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[47];
-	RCVD_COUNT_TWO(0.00)[2];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[vger.kernel.org,skhynix.com,oracle.com,kernel.org,iogearbox.net,davemloft.net,gmail.com,fomichev.me,nvidia.com,lunn.ch,google.com,redhat.com,suse.com,cmpxchg.org,linaro.org,infradead.org,linux.alibaba.com,canb.auug.org.au,davidwei.uk];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[netdev];
-	DKIM_TRACE(0.00)[suse.cz:+];
-	R_RATELIMIT(0.00)[to_ip_from(RL7bkbc99c155spsfc817cj34k)];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -3.01
-X-Rspamd-Queue-Id: AEC213E714
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260206093410.160622-2-harry.yoo@oracle.com>
 
-On 2/10/26 12:47, Byungchul Park wrote:
-> Currently, the condition 'page->pp_magic == PP_SIGNATURE' is used to
-> determine if a page belongs to a page pool.  However, with the planned
-> removal of @pp_magic, we should instead leverage the page_type in struct
-> page, such as PGTY_netpp, for this purpose.
+On Fri, Feb 06, 2026 at 06:34:04PM +0900, Harry Yoo wrote:
+> k[v]free_rcu() repurposes two fields of struct rcu_head: 'func' to store
+> the start address of the object, and 'next' to link objects.
 > 
-> Introduce and use the page type APIs e.g. PageNetpp(), __SetPageNetpp(),
-> and __ClearPageNetpp() instead, and remove the existing APIs accessing
-> @pp_magic e.g. page_pool_page_is_pp(), netmem_or_pp_magic(), and
-> netmem_clear_pp_magic().
+> However, using 'func' to store the start address is unnecessary:
 > 
-> Plus, add @page_type to struct net_iov at the same offset as struct page
-> so as to use the page_type APIs for struct net_iov as well.  While at it,
-> reorder @type and @owner in struct net_iov to avoid a hole and
-> increasing the struct size.
+>   1. slab can get the start address from the address of struct rcu_head
+>      field via nearest_obj(), and
 > 
-> This work was inspired by the following link:
+>   2. vmalloc and large kmalloc can get the start address by aligning
+>      down the address of the struct rcu_head field to the page boundary.
 > 
->   https://lore.kernel.org/all/582f41c0-2742-4400-9c81-0d46bf4e8314@gmail.com/
+> Therefore, allow an 8-byte (on 64-bit) field (of a new type called
+> struct rcu_ptr) to be used with k[v]free_rcu() with two arguments.
 > 
-> While at it, move the sanity check for page pool to on the free path.
+> Some users use both call_rcu() and k[v]free_rcu() to process callbacks
+> (e.g., maple tree), so it makes sense to have struct rcu_head field
+> to handle both cases. However, many users that simply free objects via
+> kvfree_rcu() can save one pointer by using struct rcu_ptr instead of
+> struct rcu_head.
 > 
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Co-developed-by: Pavel Begunkov <asml.silence@gmail.com>
-> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-> Signed-off-by: Byungchul Park <byungchul@sk.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+> Note that struct rcu_ptr is a single pointer only when
+> CONFIG_KVFREE_RCU_BATCHED=y. To keep kvfree_rcu() implementation minimal
+> when CONFIG_KVFREE_RCU_BATCHED is disabled, struct rcu_ptr is the size
+> as struct rcu_head, and the implementation of kvfree_rcu() remains
+> unchanged in that configuration.
+> 
+> Suggested-by: Alexei Starovoitov <ast@kernel.org>
+> Signed-off-by: Harry Yoo <harry.yoo@oracle.com>
 > ---
-> The following 'Acked-by's were given only for mm part:
+>  include/linux/rcupdate.h | 61 +++++++++++++++++++++++++++-------------
+>  include/linux/types.h    |  9 ++++++
+>  mm/slab_common.c         | 40 +++++++++++++++-----------
+>  3 files changed, 75 insertions(+), 35 deletions(-)
 > 
->   Acked-by: David Hildenbrand <david@redhat.com>
->   Acked-by: Zi Yan <ziy@nvidia.com>
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index c5b30054cd01..8924edf7e8c1 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -1059,22 +1059,30 @@ static inline void rcu_read_unlock_migrate(void)
+>  /**
+>   * kfree_rcu() - kfree an object after a grace period.
+>   * @ptr: pointer to kfree for double-argument invocations.
+> - * @rhf: the name of the struct rcu_head within the type of @ptr.
+> + * @rf: the name of the struct rcu_head or struct rcu_ptr within the type of @ptr.
+>   *
+>   * Many rcu callbacks functions just call kfree() on the base structure.
+>   * These functions are trivial, but their size adds up, and furthermore
+>   * when they are used in a kernel module, that module must invoke the
+>   * high-latency rcu_barrier() function at module-unload time.
+> + * The kfree_rcu() function handles this issue by batching.
+>   *
+> - * The kfree_rcu() function handles this issue. In order to have a universal
+> - * callback function handling different offsets of rcu_head, the callback needs
+> - * to determine the starting address of the freed object, which can be a large
+> - * kmalloc or vmalloc allocation. To allow simply aligning the pointer down to
+> - * page boundary for those, only offsets up to 4095 bytes can be accommodated.
+> - * If the offset is larger than 4095 bytes, a compile-time error will
+> - * be generated in kvfree_rcu_arg_2(). If this error is triggered, you can
+> - * either fall back to use of call_rcu() or rearrange the structure to
+> - * position the rcu_head structure into the first 4096 bytes.
+> + * Typically, struct rcu_head is used to process RCU callbacks, but it requires
+> + * two pointers. However, since kfree_rcu() uses kfree() as the callback
+> + * function, it can process callbacks with struct rcu_ptr, which is only
+> + * one pointer in size (unless !CONFIG_KVFREE_RCU_BATCHED).
+> + *
+> + * The type of @rf can be either struct rcu_head or struct rcu_ptr, and when
+> + * possible, it is recommended to use struct rcu_ptr due to its smaller size.
+> + *
+> + * In order to have a universal callback function handling different offsets
+> + * of @rf, the callback needs to determine the starting address of the freed
+> + * object, which can be a large kmalloc or vmalloc allocation. To allow simply
+> + * aligning the pointer down to page boundary for those, only offsets up to
+> + * 4095 bytes can be accommodated. If the offset is larger than 4095 bytes,
+> + * a compile-time error will be generated in kvfree_rcu_arg_2().
+> + * If this error is triggered, you can either fall back to use of call_rcu()
+> + * or rearrange the structure to position @rf into the first 4096 bytes.
+>   *
+>   * The object to be freed can be allocated either by kmalloc() or
+>   * kmem_cache_alloc().
+> @@ -1084,8 +1092,8 @@ static inline void rcu_read_unlock_migrate(void)
+>   * The BUILD_BUG_ON check must not involve any function calls, hence the
+>   * checks are done in macros here.
+>   */
+> -#define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
+> -#define kvfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
+> +#define kfree_rcu(ptr, rf) kvfree_rcu_arg_2(ptr, rf)
+> +#define kvfree_rcu(ptr, rf) kvfree_rcu_arg_2(ptr, rf)
+>  
+>  /**
+>   * kfree_rcu_mightsleep() - kfree an object after a grace period.
+> @@ -1107,22 +1115,37 @@ static inline void rcu_read_unlock_migrate(void)
+>  #define kfree_rcu_mightsleep(ptr) kvfree_rcu_arg_1(ptr)
+>  #define kvfree_rcu_mightsleep(ptr) kvfree_rcu_arg_1(ptr)
+>  
+> -/*
+> - * In mm/slab_common.c, no suitable header to include here.
+> - */
+> -void kvfree_call_rcu(struct rcu_head *head, void *ptr);
+> +
+> +#ifdef CONFIG_KVFREE_RCU_BATCHED
+> +void kvfree_call_rcu_ptr(struct rcu_ptr *head, void *ptr);
+> +#define kvfree_call_rcu(head, ptr) \
+> +	_Generic((head), \
+> +		struct rcu_head *: kvfree_call_rcu_ptr,		\
+> +		struct rcu_ptr *: kvfree_call_rcu_ptr,		\
+> +		void *: kvfree_call_rcu_ptr			\
+> +	)((struct rcu_ptr *)(head), (ptr))
+> +#else
+> +void kvfree_call_rcu_head(struct rcu_head *head, void *ptr);
+> +static_assert(sizeof(struct rcu_head) == sizeof(struct rcu_ptr));
+> +#define kvfree_call_rcu(head, ptr) \
+> +	_Generic((head), \
+> +		struct rcu_head *: kvfree_call_rcu_head,	\
+> +		struct rcu_ptr *: kvfree_call_rcu_head,		\
+> +		void *: kvfree_call_rcu_head			\
+> +	)((struct rcu_head *)(head), (ptr))
+> +#endif
+>  
+>  /*
+>   * The BUILD_BUG_ON() makes sure the rcu_head offset can be handled. See the
+>   * comment of kfree_rcu() for details.
+>   */
+> -#define kvfree_rcu_arg_2(ptr, rhf)					\
+> +#define kvfree_rcu_arg_2(ptr, rf)					\
+>  do {									\
+>  	typeof (ptr) ___p = (ptr);					\
+>  									\
+>  	if (___p) {							\
+> -		BUILD_BUG_ON(offsetof(typeof(*(ptr)), rhf) >= 4096);	\
+> -		kvfree_call_rcu(&((___p)->rhf), (void *) (___p));	\
+> +		BUILD_BUG_ON(offsetof(typeof(*(ptr)), rf) >= 4096);	\
+> +		kvfree_call_rcu(&((___p)->rf), (void *) (___p));	\
+>  	}								\
+>  } while (0)
+>  
+> diff --git a/include/linux/types.h b/include/linux/types.h
+> index d4437e9c452c..e5596ebab29c 100644
+> --- a/include/linux/types.h
+> +++ b/include/linux/types.h
+> @@ -245,6 +245,15 @@ struct callback_head {
+>  } __attribute__((aligned(sizeof(void *))));
+>  #define rcu_head callback_head
+>  
+> +
+> +struct rcu_ptr {
+> +#ifdef CONFIG_KVFREE_RCU_BATCHED
+> +	struct rcu_ptr *next;
+> +#else
+> +	struct callback_head;
+> +#endif
+> +} __attribute__((aligned(sizeof(void *))));
+> +
+>  typedef void (*rcu_callback_t)(struct rcu_head *head);
+>  typedef void (*call_rcu_func_t)(struct rcu_head *head, rcu_callback_t func);
+>  
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index d5a70a831a2a..3ec99a5463d3 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -1265,7 +1265,7 @@ EXPORT_TRACEPOINT_SYMBOL(kmem_cache_free);
+>  
+>  #ifndef CONFIG_KVFREE_RCU_BATCHED
+>  
+> -void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+> +void kvfree_call_rcu_head(struct rcu_head *head, void *ptr)
+>  {
+>  	if (head) {
+>  		kasan_record_aux_stack(ptr);
+> @@ -1278,7 +1278,7 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+>  	synchronize_rcu();
+>  	kvfree(ptr);
+>  }
+> -EXPORT_SYMBOL_GPL(kvfree_call_rcu);
+> +EXPORT_SYMBOL_GPL(kvfree_call_rcu_head);
+>  
+>  void __init kvfree_rcu_init(void)
+>  {
+> @@ -1346,7 +1346,7 @@ struct kvfree_rcu_bulk_data {
+>  
+>  struct kfree_rcu_cpu_work {
+>  	struct rcu_work rcu_work;
+> -	struct rcu_head *head_free;
+> +	struct rcu_ptr *head_free;
+>  	struct rcu_gp_oldstate head_free_gp_snap;
+>  	struct list_head bulk_head_free[FREE_N_CHANNELS];
+>  	struct kfree_rcu_cpu *krcp;
+> @@ -1381,8 +1381,7 @@ struct kfree_rcu_cpu_work {
+>   */
+>  struct kfree_rcu_cpu {
+>  	// Objects queued on a linked list
+> -	// through their rcu_head structures.
+> -	struct rcu_head *head;
+> +	struct rcu_ptr *head;
+>  	unsigned long head_gp_snap;
+>  	atomic_t head_count;
+>  
+> @@ -1523,18 +1522,28 @@ kvfree_rcu_bulk(struct kfree_rcu_cpu *krcp,
+>  }
+>  
+>  static void
+> -kvfree_rcu_list(struct rcu_head *head)
+> +kvfree_rcu_list(struct rcu_ptr *head)
+>  {
+> -	struct rcu_head *next;
+> +	struct rcu_ptr *next;
+>  
+>  	for (; head; head = next) {
+> -		void *ptr = (void *) head->func;
+> -		unsigned long offset = (void *) head - ptr;
+> +		void *ptr;
+> +		unsigned long offset;
+> +		struct slab *slab;
+> +
+> +		slab = virt_to_slab(head);
+> +		if (is_vmalloc_addr(head) || !slab)
+> +			ptr = (void *)PAGE_ALIGN_DOWN((unsigned long)head);
+> +		else
+> +			ptr = nearest_obj(slab->slab_cache, slab, head);
+> +		offset = (void *)head - ptr;
+>  
+>  		next = head->next;
+>  		debug_rcu_head_unqueue((struct rcu_head *)ptr);
+>  		rcu_lock_acquire(&rcu_callback_map);
+> -		trace_rcu_invoke_kvfree_callback("slab", head, offset);
+> +		trace_rcu_invoke_kvfree_callback("slab",
+> +						(struct rcu_head *)head,
+> +						offset);
+>  
+>  		kvfree(ptr);
+>  
+> @@ -1552,7 +1561,7 @@ static void kfree_rcu_work(struct work_struct *work)
+>  	unsigned long flags;
+>  	struct kvfree_rcu_bulk_data *bnode, *n;
+>  	struct list_head bulk_head[FREE_N_CHANNELS];
+> -	struct rcu_head *head;
+> +	struct rcu_ptr *head;
+>  	struct kfree_rcu_cpu *krcp;
+>  	struct kfree_rcu_cpu_work *krwp;
+>  	struct rcu_gp_oldstate head_gp_snap;
+> @@ -1675,7 +1684,7 @@ kvfree_rcu_drain_ready(struct kfree_rcu_cpu *krcp)
+>  {
+>  	struct list_head bulk_ready[FREE_N_CHANNELS];
+>  	struct kvfree_rcu_bulk_data *bnode, *n;
+> -	struct rcu_head *head_ready = NULL;
+> +	struct rcu_ptr *head_ready = NULL;
+>  	unsigned long flags;
+>  	int i;
+>  
+> @@ -1938,7 +1947,7 @@ void __init kfree_rcu_scheduler_running(void)
+>   * be free'd in workqueue context. This allows us to: batch requests together to
+>   * reduce the number of grace periods during heavy kfree_rcu()/kvfree_rcu() load.
+>   */
+> -void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+> +void kvfree_call_rcu_ptr(struct rcu_ptr *head, void *ptr)
+>  {
+>  	unsigned long flags;
+>  	struct kfree_rcu_cpu *krcp;
+> @@ -1960,7 +1969,7 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+>  	// Queue the object but don't yet schedule the batch.
+>  	if (debug_rcu_head_queue(ptr)) {
+>  		// Probable double kfree_rcu(), just leak.
+> -		WARN_ONCE(1, "%s(): Double-freed call. rcu_head %p\n",
+> +		WARN_ONCE(1, "%s(): Double-freed call. rcu_ptr %p\n",
+>  			  __func__, head);
+>  
+>  		// Mark as success and leave.
+> @@ -1976,7 +1985,6 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+>  			// Inline if kvfree_rcu(one_arg) call.
+>  			goto unlock_return;
+>  
+> -		head->func = ptr;
+>  		head->next = krcp->head;
+>  		WRITE_ONCE(krcp->head, head);
+>  		atomic_inc(&krcp->head_count);
+> @@ -2012,7 +2020,7 @@ void kvfree_call_rcu(struct rcu_head *head, void *ptr)
+>  		kvfree(ptr);
+>  	}
+>  }
+> -EXPORT_SYMBOL_GPL(kvfree_call_rcu);
+> +EXPORT_SYMBOL_GPL(kvfree_call_rcu_ptr);
+>  
+>  static inline void __kvfree_rcu_barrier(void)
+>  {
+> -- 
+> 2.43.0
+> 
+If this is supposed to be invoked from NMI, should we better just detect
+such context in the kvfree_call_rcu()? There are lot of "allow_spin" checks
+which make it easy to get lost.
 
-Also for the mm parts:
+As i see you maintain llist and the idea is simply to re-enter to the
+kvfree_rcu() again with allow-spin=true, since then it will be "normal"
+context.
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
-
-Thanks.
+--
+Uladzislau Rezki
