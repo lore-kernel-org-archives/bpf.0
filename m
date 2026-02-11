@@ -1,256 +1,168 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 891C136212B
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 21:26:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 953E66F2F2
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 21:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770845169; cv=pass; b=FrIpu59BHsR8O2B2hdmg8VvBaXtrV2C/1I6sSNwU/uPygWi9pOFAVxDwsknTkIyJGRza0MEZX0+q8KAsc5p5qIW347s5fuimFokW0Bnw+u4ZZmarcfXprcYCLS26iiNnzPcx7TrrQKcuw4lCFou4sxX5v3cZWnCA4FtzBhakK0E=
+	t=1770845313; cv=pass; b=QF73jPOGwk/rFBk+eHlapgwMzApZvA0jKJBOCRMJVmrH0n8OLNfI8dz/dkzj6QarxrdFSOKLy9K/ssCjoGlBIqvCIDupVhBhEXRMMK6WfHklIeS0f6qwMZ3rKEODyDZf3I1gzZrFW38kR2Tp4SLjzFDmAR5JuOsaheEmEX0LzTc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770845169; c=relaxed/simple;
-	bh=F2M7aQlFoZH0cgy1kFODhyqS8nrF6gbB7NAYuBeaUTw=;
+	s=arc-20240116; t=1770845313; c=relaxed/simple;
+	bh=KuCIVLvdDNnKNRZQQzjobSvmP6FxBIR3hKhQpN+acdk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VJwn9jMZDmxGTcPJ+M0zD4UPiV9f+FodcGRs1ttp00ME9xm2EHkseqNnp+6f4tSHo1UL9OD9FRn5gf6fOHFkVsNxqnh2C/vFOyUsLilRr969D7mhLwgnEVsOJul3GfjKqhqH0BsyDI6GZcXGyQi3XmT3kXWwsw3PEqWsolnpB+4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MR2unsBn; arc=pass smtp.client-ip=209.85.221.44
+	 To:Cc:Content-Type; b=JbAqadZMpNMvi9cRzbbGRsaU6O+/F//viMp1IymhiMW7b1uhSD8HNe2Riadje/PB+NzK9m2PIZBkFafgPoti9Fa+0XSgMvPEDq43de0NUVX9uvNo6ku2gSzqCW6qBnDZAcb29FNisCkmvgxcrxHPI/F4JHnxxfrRTJLwj4RKy1E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FMOPFYFS; arc=pass smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MR2unsBn"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43621bf67ceso3650627f8f.2
-        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 13:26:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770845166; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FMOPFYFS"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-34c93e0269cso940722a91.1
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 13:28:32 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770845312; cv=none;
         d=google.com; s=arc-20240605;
-        b=g6HMSl9kB6uZIg/KQ5lRJqF1wLfvUzO+aEqHft1ilXPrCf/wzC4Z9SkAdG4WeOa1X1
-         pI8Z2WUOyFELVZ/+7IF2DjoC3r5hoBYDgu9ktAcspzXzW2mvOftv/ysIWhiwm2GdlE9s
-         lxO2Kv7jDUYCG392RnUaIJQeAXuoICzDDfv4tdxJcphJJkzLwQrF7yaPjt8iNrFVURdF
-         7sgFNqQX9aPSEMWoW5v9NMG3C4GAheLkSSjCpoWU5F5bbhYvIPV8c7fCMd8RXVGq04/G
-         v6k7lm9rtX5ph+zFBSIxhGhBQiXLOdxdLqYPmXh82tFNEGmlznX2mFdfPxcV91+NATgV
-         ly3A==
+        b=V1Tfn39GjehEqFYGT30NRsRDjJXtGMXmWAdIePzlz2uQXzJ0siQj0UmTTp1s1bPMkx
+         azApt40A7+UrcRIUoFbN0UqQZFcwVYjjkSiP1hZyjvPyB/OjfqMCbwXpfYF8AZdrlnq8
+         u6R3gloJXLipIacqVvZXB3yrzJ36mW29a+nJ4Rfm9Sb7qcd47YVWFt9m1p0Hpl8PiNGl
+         S2GIHuzisB8pmyU4TS5+bZse5YefHMcgaYBjGYaa3LVk4ohJ+VC4bvrYFtSmj/1GMEHP
+         zfWc4aMJTg7KV7gidt2tOlDN7WRVPhQZxskZ9HvBXBh+3b4iZT39//nE+us2acHN5H4B
+         sUjQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=65Nvr87DM3NpPKCY/DERxSJtqtoSj0DAfyvi6/s8EBs=;
-        fh=MUSpCTkcgqFZhC387zZEkbFL+/cAutN/2Ppb7QuMxZI=;
-        b=Zb+qbtuoVphZwTm3kAlxTcO8uCKDY/NssVB7VA081Ruaz8WPWIncpaZ1hLk+ljXKQH
-         S2iOzV1uxWo4412l7+ea0kanwtDzQJTrRJ5eyOnJFk3aQnkZALbljkoBMdtPqWAXGjpL
-         uaMAgeGFPpyfMKdxhZvAdsUxJRB34kjv2It/Lrz/fS4aSa3LR+BU5R804+OjYxBPfgRg
-         xw7abfblETARgxgNF4VDkYQvbpJorzA+WdU99gvCtfXqgDTYO8gDd/sELnJUvVDk747l
-         I42TGmgXKPbzGvhVTpFcoaMVc+ctjruEZOvKGU3JRD+syLusn0HLf/ttfZyX4dnZ9fbm
-         LB/g==;
+        bh=P3LyzeTYjk/aozxENlII5MtSiJ1rf+EsjccZeddQK9Q=;
+        fh=YXhxD3wyK33+PQ10KTCk2H4vVOOakTCPA9bwY3a/OaM=;
+        b=aSsch2TwOs5L+3R9cLb+f9XfP+uBqybOvsuBpYFUTJYt0QwMo+wsoslBceoT4mFPwP
+         +QaVSJ/9OM48PyJGc2zdl/o9ivus168cwkEO4aVZ83R1kBKSAsDZt0Ws7vxQsNcO6RMe
+         cZ2WY3k+xdJp4dPG8330J2MScOehSMC6RuxEoVoxEZVlDDx8H4QbbV9HNz+SqTf4ssK6
+         rO6KhR/dHr8kYR5LqLoi3aei1ABiK5EN7g6HDGER7nEYAriWrRJdpF4gK8z5AebuSGPv
+         sQGJPMGF8wzCBBhwpAuBSs8WR8L5pUO6pTZ+z4t0d02zc1/fpmYMlroD+8C4KwXMdL5B
+         6fRg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770845166; x=1771449966; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770845312; x=1771450112; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=65Nvr87DM3NpPKCY/DERxSJtqtoSj0DAfyvi6/s8EBs=;
-        b=MR2unsBnLBM1+CzuSXpvL09F3V+2/OoVR58SFRX31FgaVFtixoWaUZ/WFu7ZVOU8on
-         GU7Z7Ix2onbMJWmVBxPV2dcO38gafRGbYqCmo05ykJR7zuL00/m7/UqeR1Wu11597X4B
-         9rOe/F9shJzqcOyqA2ND9P2Pzq+s8QNl97LjIZQV/VsVnL5Ma89eCEXZFlUVRcVP9EBp
-         gJtfSvU8VPsqmRNCERLgfNbHyXP0Ok5pmAgBhjhw+r1nznH2Esd4lXV+Ci7Y1x4gIVpq
-         oerEqk96n9h/NH7dCd7Kn8+BkIK5ne93uiA7hOxSf7/RjdbXzkzJG6xW/7C3ILy9o2iH
-         sSXg==
+        bh=P3LyzeTYjk/aozxENlII5MtSiJ1rf+EsjccZeddQK9Q=;
+        b=FMOPFYFSJqUd+aMb4pySZuKJ7luvt399v6Vdxsdn1jCvg1ZJPkmGwnS49kplDT4d7v
+         7SCa/PUnLi33/ucg/JBG+XgfObyde/SdBPh0+AHJ0C6plsiME13fAcUEtANYrCK/H13q
+         n+kt1y1Drz0181LQ62AKCnimJgBs9HSO6Kryl9a3rzwdQQ0DqtAser/wgxWI4pagdsTD
+         JeHEODjbRef1T2IBRA2ybptaouXh5JEZ2YLgXMaXkb40U8P5qv56B1tohZHha/9JpnN8
+         ybxxhLzOK8fOpKcgcnYje4xWVKJFT28EUHl/+hQ48A8JchNRLtEwzlanXYlmczh05Mq7
+         oF7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770845166; x=1771449966;
+        d=1e100.net; s=20230601; t=1770845312; x=1771450112;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=65Nvr87DM3NpPKCY/DERxSJtqtoSj0DAfyvi6/s8EBs=;
-        b=aYiVIKF/Fkh3Xt3zezRTNOxfDDXnvVT4uQdKf7HDl4FuVvh6Q9kXuejpVetjVBvUAZ
-         YJTKA1j6XmfGxQ25cR4FGXeoVztYrf533JowQjGapTFvrLQTb92uscsxlaIiRIrP9PUi
-         Hvigyz4eV3rGyZLoHrMhjQHVSZKsTTNzNvhIFI1biI8thtN9Nb32+Kc/OIEczg9ckaB1
-         hj6Lr3KvLIFkdDBXWVoJpwTJ0Tl/kq5wPPs2oRnTUGDJQu304z8mtylNCLY36elNekYK
-         ThcsoU0OIVoy9wisTMBgNxdRZO00zdJMY2zVm9w36A9Duf3TUi/Sdu5V9+ueBe6PN3i6
-         w7Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCVO3Jx9pc0hFYvdnxmoh/mCA9Y6SW+J+uajlNZuJG6bkfbNR1lbsp0hOXCQbc4F0eUL3Fs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFAjUgC2FT5+2sL7d5Cj0wNqKsHmrQCwDzsTH/VLcBZr9dTKOH
-	Vmqgum8l17nOaasTbs1CTMofn4M2SVKvnhdzD+diDFCoHEhUq+/1r4kGbPY6R43fkjX+iKxJ9MS
-	NkguGj00VUNeuaSkcjR+xFy4Sld2X1gg=
-X-Gm-Gg: AZuq6aJlCyApf8eJZLIs+ghQhzsq50NZyCdqMbKdc4kFpo8M83uNp26kJ9E0wczC33W
-	On608KSMX16fZb9yi3P1YDzes/P2TJ86LZcx/h/WlUP4h5nVaRMZVBm03GawazNx+r8+kFxtUKK
-	CQIgEnRDGNqFZLUO09rD6maFTATl4HgrXymneVdbITI81ldARi4UpFd34l98rW6VBG7chquPgXQ
-	GwQ6nqij/e1jPiEMU/5xbkn2dKJ7+XNJmASA9HTwR4KA5k/vFL5OZISm8tlcdEAr1+S/z2K2y5P
-	5SbeENbh8sLESle4VvQFOATvLytJvPNc9g0p+P8GJcQz4dGAPOT5ArgfyF5ixgI5/7AR6f3JA3Z
-	lbrks/Pe+md723S0Itn2iKIrv7w==
-X-Received: by 2002:a05:6000:2dc6:b0:436:3475:4737 with SMTP id
- ffacd0b85a97d-4378ac830dbmr1118836f8f.30.1770845165507; Wed, 11 Feb 2026
- 13:26:05 -0800 (PST)
+        bh=P3LyzeTYjk/aozxENlII5MtSiJ1rf+EsjccZeddQK9Q=;
+        b=SSl2Xc4lOOhQii/oHE0/2re1v2V5tfdSqfWuRm2rlgQlLa7Tv35XJSkAtBvay4dVuG
+         ybvOt5Gh0Igw9xWgE0bpPstgNim7cIYqW8AtTkRRoF7srZ9g4Y25CLguIkbgp3UqSSUR
+         C0ZpVlV6ywgwNeRBdPA/b2yH+i6OPGawChkczh5eefwcwHt4J2ZTYdHfyjKaHbCkCXhI
+         sfW20waDmFTenR/mjBkQwOtr3ij2kHhznd99X304AI1x8mt1PgfeI7wwXi5tpIj6yYbj
+         H41trtvNVIWS3kUo6A9nAO/5pBYvxjoLTdAcDYu7WlYAZLoIPkr9u15LpEgNxW0xJBFE
+         ss6A==
+X-Gm-Message-State: AOJu0YxpZUxWRIZaAdUFnj68pcHc1h/+OcJAyitssLS3x6bV4sWbOJ0t
+	trVmjQLBFNqn/QvbzqBFmKlqm7F615PJCHZTJvuQIeHitLtEfni0hMlro61IFzT7Z3O+lvuvx0S
+	309aqvRd5ZGHVd7V2mXKMgfpA4wP9Xts=
+X-Gm-Gg: AZuq6aKGcud4qMy2NTIl6d2YyvPpJJFbN3aw1+cVwSlN800DmbewdcaDWmN2r4DxNvq
+	fzZxJXRQVkDvomyCT/33XAgvGNoe8EaYPd2vgOAynIPAMGlIrDsxdwvd0WIFvMu5UD3nRIHkZ0t
+	q/Iv3/m5lbHdINQzgNNAVVd8dZj620P68B1FLbKh5Cibe9AK3gxc2JPtZ2WjBy6EHjXa3NpWLhq
+	+9oJOwx/zfLGJIaTBoxqhYluff6ZpuUGqZmoDEWM5ppSX57bZcaF587leEq0r6rF5WKsDeG+jeX
+	Hh5iReu1mQSn0i+XyktkbUk=
+X-Received: by 2002:a17:90b:548f:b0:34a:be93:72ee with SMTP id
+ 98e67ed59e1d1-35692c6ab98mr201328a91.8.1770845311785; Wed, 11 Feb 2026
+ 13:28:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260207230720.2542943-1-kuniyu@google.com> <20260207230720.2542943-2-kuniyu@google.com>
- <CAADnVQK_93g_KkNFYXSr8ZvA1fYh4hoFRJCJFPS-zs4ox0HhAA@mail.gmail.com>
- <CAAVpQUAfUQJsBzqTah8+LhTciGrHnLx3pg_xEqD4=wBuEEEXUQ@mail.gmail.com>
- <CAADnVQLMiQFb7SAxgDNFXwoJ4sYLi1DWVHwq4ftAbBxLAa5enQ@mail.gmail.com> <CAAVpQUDCd1fTHfBdzmk2msrMnQTL-EzH6VH0RyHoL1V8qz1y3Q@mail.gmail.com>
-In-Reply-To: <CAAVpQUDCd1fTHfBdzmk2msrMnQTL-EzH6VH0RyHoL1V8qz1y3Q@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 11 Feb 2026 13:25:54 -0800
-X-Gm-Features: AZwV_QjLi8Bv6mmZLoIJpsm3LgwONesQYtRLMgT6WXTmt9Mr1zAQ9ZKNptCgiO0
-Message-ID: <CAADnVQK8_P9x7HoKb0GxH1dSSnMFDsSgoV04MSkhcUPFw2uViA@mail.gmail.com>
-Subject: Re: [PATCH v1 bpf 1/2] bpf: Reject access to unix_sk(sk)->peer.
-To: Kuniyuki Iwashima <kuniyu@google.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Michal Luczaj <mhal@rbox.co>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>
+References: <20260211163927.665785-1-mykyta.yatsenko5@gmail.com> <20260211163927.665785-3-mykyta.yatsenko5@gmail.com>
+In-Reply-To: <20260211163927.665785-3-mykyta.yatsenko5@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 11 Feb 2026 13:28:18 -0800
+X-Gm-Features: AZwV_QjaAXG7wyisolMZ34Wr7TOQmyzY_b4M8yNoEicuzDtXFG6EquNwV3W8W8E
+Message-ID: <CAEf4BzYZUnansvKncz=8MFYmjdodu2zd0ZPWskkq45otpqv0hw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 2/2] bpf: Use kmalloc_nolock for
+ bpf_task_work_ctx allocation
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, eddyz87@gmail.com, 
+	memxor@gmail.com, Mykyta Yatsenko <yatsenko@meta.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 10, 2026 at 8:23=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.co=
-m> wrote:
+On Wed, Feb 11, 2026 at 8:40=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
 >
-> On Tue, Feb 10, 2026 at 6:47=E2=80=AFPM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Feb 9, 2026 at 5:19=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google=
-.com> wrote:
-> > >
-> > > On Mon, Feb 9, 2026 at 3:00=E2=80=AFPM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Sat, Feb 7, 2026 at 3:07=E2=80=AFPM Kuniyuki Iwashima <kuniyu@go=
-ogle.com> wrote:
-> > > > >
-> > > > > Michal Luczaj reported use-after-free of unix_sk(sk)->peer by
-> > > > > bpf_skc_to_unix_sock(). [0]
-> > > > >
-> > > > > Accessing unix_sk(sk)->peer is safe only under unix_state_lock(),
-> > > > > but there are many functions where bpf prog can access the field
-> > > > > locklessly via fentry/fexit.
-> > > > >
-> > > > > unix_dgram_connect() could clear unix_sk(sk)->peer and release
-> > > > > the last refcnt of the peer sk while a bpf prog is accessing it,
-> > > > > resulting in use-after-free.
-> > > > >
-> > > > > Another problematic scenario is that unix_sk(sk)->peer could
-> > > > > go away while being passed to bpf_setsockopt() in bpf iter.
-> > > > >
-> > > > > To avoid such issues, let's reject access to unix_sk(sk)->peer
-> > > > > by marking the pointer with PTR_UNTRUSTED.
-> > > > >
-> > > > > If needed, we could add a new helper later that uses unix_peer_ge=
-t()
-> > > > > and requires bpf_sk_release().
-> > > > >
-> > > > > [0]:
-> > > > > BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa4/0xb0
-> > > > > Read of size 2 at addr ffff888147d38890 by task test_progs/2495
-> > > > > Call Trace:
-> > > > >  dump_stack_lvl+0x5d/0x80
-> > > > >  print_report+0x170/0x4f3
-> > > > >  kasan_report+0xe1/0x180
-> > > > >  bpf_skc_to_unix_sock+0xa4/0xb0
-> > > > >  bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
-> > > > >  bpf_trampoline_6442564662+0x47/0xab
-> > > > >  unix_shutdown+0x9/0x880
-> > > > >  __sys_shutdown+0xe1/0x160
-> > > > >  __x64_sys_shutdown+0x52/0x90
-> > > > >  do_syscall_64+0x6b/0x3a0
-> > > > >  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-> > > > >
-> > > > > Fixes: 9eeb3aa33ae0 ("bpf: Add bpf_skc_to_unix_sock() helper")
-> > > > > Reported-by: Michal Luczaj <mhal@rbox.co>
-> > > > > Closes: https://lore.kernel.org/all/408569e7-2b82-4eff-b767-79ce6=
-ef6cae0@rbox.co/
-> > > > > Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
-> > > > > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
-> > > > > ---
-> > > > >  kernel/bpf/verifier.c                         | 18 +++++++++++++
-> > > > >  .../selftests/bpf/progs/verifier_sock.c       | 25 +++++++++++++=
-++++++
-> > > > >  2 files changed, 43 insertions(+)
-> > > > >
-> > > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > > > index 3135643d5695..b328a1640c82 100644
-> > > > > --- a/kernel/bpf/verifier.c
-> > > > > +++ b/kernel/bpf/verifier.c
-> > > > > @@ -7076,6 +7076,7 @@ static int bpf_map_direct_read(struct bpf_m=
-ap *map, int off, int size, u64 *val,
-> > > > >  #define BTF_TYPE_SAFE_RCU_OR_NULL(__type)  __PASTE(__type, __saf=
-e_rcu_or_null)
-> > > > >  #define BTF_TYPE_SAFE_TRUSTED(__type)  __PASTE(__type, __safe_tr=
-usted)
-> > > > >  #define BTF_TYPE_SAFE_TRUSTED_OR_NULL(__type)  __PASTE(__type, _=
-_safe_trusted_or_null)
-> > > > > +#define BTF_TYPE_SAFE_UNTRUSTED(__type)  __PASTE(__type, __safe_=
-untrusted)
-> > > > >
-> > > > >  /*
-> > > > >   * Allow list few fields as RCU trusted or full trusted.
-> > > > > @@ -7154,6 +7155,10 @@ BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct vm_ar=
-ea_struct) {
-> > > > >         struct file *vm_file;
-> > > > >  };
-> > > > >
-> > > > > +BTF_TYPE_SAFE_UNTRUSTED(struct unix_sock) {
-> > > > > +       struct sock *peer;
-> > > > > +};
-> > > > > +
-> > > >
-> > > > That's just one out of many. It's not really a fix,
-> > > > but a bandaid for one case.
-> > >
-> > > Right, this is only one example where a pointer lifetime
-> > > does not match with bpf prog.
-> > >
-> > > > We discussed it in the past and the only way forward is to make
-> > > > helpers only accept trusted args.
-> > > > Recently we made KF_TRUSTED_ARGS a default for all kfuncs.
-> > > > We should do the same for helpers.
-> > >
-> > > What about just reading an untrusted pointer ?
-> >
-> > What do you mean 'untrusted' ?
-> > There are 3 types of ptr_to_btf_id:
-> > trusted, untrusted, legacy (without either trusted or untrusted flags).
+> From: Mykyta Yatsenko <yatsenko@meta.com>
 >
-> Ah sorry, I used 'untrusted' since the pointer is not always
-> valid, but I think legacy is the one I meant in this case.
+> Replace bpf_mem_alloc/bpf_mem_free with kmalloc_nolock/kfree_nolock for
+> allocating and freeing bpf_task_work_ctx. Now that kmalloc can be used
+> from NMI context, it is the right generic mechanism for memory allocation
+> in BPF kfuncs, even in restricted contexts like tracing programs.
 >
+> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+> ---
+>  kernel/bpf/helpers.c | 9 +++------
+>  1 file changed, 3 insertions(+), 6 deletions(-)
 >
-> >
-> > kfuncs now accept only trusted, while helpers still accept
-> > trusted and legacy. The legacy should be disallowed.
-> > That might break some bpf programs, so it has to be done carefully.
-> >
-> > > I used bpf_skc_to_unix_sock() in selftest in case compiler
-> > > could optimise out branches that always return 0.
-> > >
-> > > Currently, this passes the verifier and can trigger UAF.
-> > >
-> > > u =3D bpf_skc_to_unix_sock(sock->sk);
-> > > if (!u || !u->peer)
-> > >     return 0;
-> > > if (u->peer->__sk_common.skc_family) # unsafe access
-> > >     return 0;
-> >
-> > No. It's fine. Both legacy and untrusted ptr_to_btf_id get probe_mem
-> > treatment. So above works and won't crash the kernel.
-> > It's effectively inlined probe_read_kernel.
->
-> Yes, it doesn't crash.
->
-> I was just unsure about the bpf expectation [0] like how we
-> should treat KASAN use-after-free report by bpf prog reading
-> a pointer whose lifetime is not guaranteed by bpf helper/verifier.
->
-> So, if this is WAI, I'm fine with that.
->
-> [0]: https://lore.kernel.org/all/CAAVpQUDrC1rO2diM3gVg5GV5CTVAUS2RbLP+SpH=
-BGqKcUT0iMA@mail.gmail.com/
 
-That's different. That's the actual UAF inside bpf_skc_to_unix_sock().
-That needs to be fixed with what I described above by allowing
-only trusted pointers into helpers.
-In my earlier reply I meant that:
-if (u->peer->__sk_common.skc_family) # unsafe access
-is fine. It's safe access, because it's sanitized by the verifier/JIT.
-The code inside helpers is a normal kernel code,
-so kfuncs/helpers should only accept trusted pointers.
+LGTM
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+BTW, file dynptr is also still using bpf_mem_free, consider changing
+that to kmallock_nolock as a follow up as well, please (and I guess in
+general we should do an audit pass on what are the other bpf_mem_alloc
+places that should be converted, but Alexei is a more authoritative on
+what are the remaining constraints that would prevent some
+functionality to be switched to kmallock_nolock).
+
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 414e5b55cd37..d25aa51c80d3 100644
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
+> @@ -4165,10 +4165,7 @@ static void bpf_task_work_ctx_free_rcu(struct rcu_=
+head *rcu)
+>         struct bpf_task_work_ctx *ctx =3D container_of(rcu, struct bpf_ta=
+sk_work_ctx, rcu);
+>
+>         bpf_task_work_ctx_reset(ctx);
+> -       /* bpf_mem_free expects migration to be disabled */
+> -       migrate_disable();
+> -       bpf_mem_free(&bpf_global_ma, ctx);
+> -       migrate_enable();
+> +       kfree_nolock(ctx);
+>  }
+>
+>  static void bpf_task_work_ctx_free_rcu_tasks_trace(struct rcu_head *rcu)
+> @@ -4295,7 +4292,7 @@ static struct bpf_task_work_ctx *bpf_task_work_fetc=
+h_ctx(struct bpf_task_work *t
+>         if (ctx)
+>                 return ctx;
+>
+> -       ctx =3D bpf_mem_alloc(&bpf_global_ma, sizeof(struct bpf_task_work=
+_ctx));
+> +       ctx =3D kmalloc_nolock(sizeof(struct bpf_task_work_ctx), 0, map->=
+numa_node);
+>         if (!ctx)
+>                 return ERR_PTR(-ENOMEM);
+>
+> @@ -4309,7 +4306,7 @@ static struct bpf_task_work_ctx *bpf_task_work_fetc=
+h_ctx(struct bpf_task_work *t
+>                  * tw->ctx is set by concurrent BPF program, release allo=
+cated
+>                  * memory and try to reuse already set context.
+>                  */
+> -               bpf_mem_free(&bpf_global_ma, ctx);
+> +               kfree_nolock(ctx);
+>                 return old_ctx;
+>         }
+>
+> --
+> 2.47.3
+>
