@@ -1,63 +1,63 @@
 Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 968E334FF45
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 22:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818F534F462
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 22:32:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770849121; cv=none; b=J11otNvn2fJDw/rbXKG2NjuFaDQQ19St5Eaq25no+msLGZkD217jMHIm1l1UgprJSPl2v6+X3/juNO4VllIKLhH3veui/YQQEAFwD+rVxIRusQ3VrHEbZb63cz3u1wTrcR1Eacuym1QXRyLkfUM2tq0/nN3i5oIDImxWx5z7wtU=
+	t=1770849124; cv=none; b=l9U1q7a1dXMnJFgvkHcEJTLhmfPb8UwGr/ODM+XBVCeVIHufSawxChXNLojEViUQCN+zPo9eA385S8N3w2Mz9sYPNDlTOMDPEvUQbJZ+Eg0uBydOVzn3Qz5GcWImVWuGW4UBIVX0HWaVBJZJw0Rg4ipchSI5Pt0ah1YdUQIerwE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770849121; c=relaxed/simple;
-	bh=PWcsGkkBas/kitkyh/QQxkct7fNFJh5foQKYS8edH48=;
+	s=arc-20240116; t=1770849124; c=relaxed/simple;
+	bh=2PFZyi7InxAQcPnQHJZiTdBJzORhx1XwoHMQmCXzpbo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mGXbvYYYFMo1CEcaGgoZ4wLeYY8wtlIvy4pBxzYSXP/aTC3QfYj5gFWarvbaI8uVhVYQ0DIjZq2sR2x3mhHC4cpTtHMz4yeTX7MUq1Ls8V6em4SB47Mt15ujOsBsgCd5PAfcUpjNgYZWleskPu+s60YohmuAvDgwcuVWSOxz6xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ktg4rMeB; arc=none smtp.client-ip=74.125.82.176
+	 MIME-Version:Content-Type; b=tW/hAZmroJuZe1QtkIs+7rajNdRBj/Ng6Rhyd/rUHeUcgrwFtg7amHyCbQPalR/WpLjoBPq9Rbct34OIXZTX4HH9x2ulMpv2hhZEfjaJZvtY5LC15yoWVHNZHgHiIETf8c6hVueSxsddgvi6F3IHY6iZUCJvHP0m5Kj5YBaY3WQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kGk/E/Wl; arc=none smtp.client-ip=74.125.82.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ktg4rMeB"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2baa6ec5638so291133eec.0
-        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 14:32:00 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kGk/E/Wl"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2b82c605dbdso5181370eec.0
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 14:32:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770849119; x=1771453919; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770849122; x=1771453922; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ljU8FyYrq629B/3hbVIvRNnIg24HIn2TxWfUdn1jDAw=;
-        b=Ktg4rMeBjoMegqkLBoxnswRVjqp5aDDw1Ah97dwq1kHOw0IxdIVboyNm1/oaji6aFz
-         j8lmM6ftidVe6k12YPd3kFF+RiO78pDArYNB1Ht0Qf44XYlkPUgimMl/NDESuenP8Z+u
-         LhJTtERTv1zDSQLwfjuQl9M/osZ7ANjkGFMvWX8BAlWhn3DY4wotKeCPWQe3Gqh/AF3D
-         2/Jo8tIWzTy0cCeaT8p6nc/N5GVfIoX0UW+24Y1VWYOV/5vSX825ZHr6JsuOKw464+4x
-         VbxNVKyu+9m+jR4Y9uhpXTDzBNZycIaXqh+XUlCVAlGYomKIV/NaUTTObGO6Yx2V9ust
-         UhPA==
+        bh=Zuu3zoTWf52wdIAimocQ+1eOtd74hE4mgFBkYURpqAA=;
+        b=kGk/E/Wl4sOSstYd4ueHL3K3rStYBs2RDIQo59ud972BfnKINunr4O5joIhJSpi4f/
+         UGLxKHJL3uTGwUGc3H1KD7aFThX1l1oHTpQEDzpw/HCxa41l+sFeJQ2Z6/VRAQRzunrF
+         cYRXEUvqYngrMl8CeoeY2D7b7FMXJC567UAKFwGm06KGJPjBz8h3KBt8cDtg3Ny9sDKt
+         tOnG+sLnwIz0j1gH73T/7uaVZoTPqMGYJ1PDY2GMqIFQqWjLLThEnrBQN9nFbWiGiuFk
+         kTTIn80l8PEoGnxWle3Szca0a0lCQFQZRKY8nPc5H2nhDP5kBEKS/lr0p23ByzmjWnpz
+         1jRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770849119; x=1771453919;
+        d=1e100.net; s=20230601; t=1770849122; x=1771453922;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=ljU8FyYrq629B/3hbVIvRNnIg24HIn2TxWfUdn1jDAw=;
-        b=l+zufjF4u3Xv+ez3t0t16o9k0ftHEZIbSz+a5/91fPeS5lPckeutr/MwWK5tbOJb1t
-         rgT0Lh6PSceZibeLXuNoQJV8eFQh7d6mTopcrAR8IkVi9jnEUnPzvwj2zCP26bSNZoOm
-         fPRsqG0kNzKicLmnzajMTvuYppvLxoPWzOw2gVNZOeTGmFRNOAPaRuvBKi3p7OOJOuK9
-         Vmc4AqrDCPO1ZdyTlHwk263OFEE+lVReKir5bbTdA+8jNU5IPAI6EQHtgGjII6fNDcq8
-         K3ITypMZWdY1NiY1MmVjmeZk9YMQY0oKXsBxAOT1ySvXDammLdA8k8TzH1Z/sI+KeaHf
-         DHrQ==
-X-Gm-Message-State: AOJu0Yy1L4coF+pUEcXKZgs3RVjO0Fb75GN8O53BncYMF6MC453Rl6QF
-	v+1SZOrojmCvQn3J5TDTJ7Sm+Z1wyy7ffxL/Np4JiUNxUtNNmAUhPNEW6YEzJrVL
-X-Gm-Gg: AZuq6aKPvtFcGEmBpIrJ7TdkGup4FQ1eZN3/Rgw2miys3NHeSjeLtX/C1lI0YnYBIfb
-	fK1K9uf/G8JaE1pWjblTW3yEXM5+Ht4LGGJGee19f7HP3fJe/nvop/hosNZTrbcyg3mFO1hePxo
-	LDxj4Pr4sVnbo4/ZwBCVEbpp8pNoZn6XoTbGXpwtz292gqetBNd7ooiO7bG8hAECw1tufKtHyFU
-	Qd23XWft/j0JRmBibTlcklB10XXuZNRtm/wA6hYw40ram83pdxyEEJKDCZIaVzBNNYjgyiWG87B
-	dURnA/EkwjPEPMzohRlGyeElrRrEhrTJPA2wuOXapQEN2tEOriHt+OIFaKrHSVzbijRtaBDpn+S
-	FIy4BkxclNSjgMYkSjmZrgjXel9X7WdRWpDhBrvsF1bIK1BM0Uxw6zzjuiv5itZvZ5Es43WZUJO
-	xQ1cNBOzX2F2L77zWsGirVyNtKkRm3m+6V3bB4TEHOZrin7eE4kRIpj8fWh0m8Wb+xrBgyHXWtr
-	0jyCXE=
-X-Received: by 2002:a05:7300:7493:b0:2b7:5a7f:f74c with SMTP id 5a478bee46e88-2baab72308dmr233474eec.9.1770849119508;
-        Wed, 11 Feb 2026 14:31:59 -0800 (PST)
+        bh=Zuu3zoTWf52wdIAimocQ+1eOtd74hE4mgFBkYURpqAA=;
+        b=nOFsOGfbyte5zpKNlbfL46x+j/yeWyQ0UF7ArAOUSx+1dLG57jp4pHhzDALASWFM+z
+         AeLZ4dS2TSDIuLOteExmRoHS4il4PZGC9DLkM3ibopAqVJLpQsLrJW3OoCXYfy3ic7Z4
+         qVXj5ErG7No8Q1EAiUHI1EHvqu4tWbusuHR390trdmroGMaGbOwgrW+BzLlh20MTaoiy
+         JzEmkMedbisu0sq4+evPMN0IBGgOb7BYKq+Lmh1nLZReGZPXDlXrrEUpA3AlJW2TsykI
+         onKw8KkALY30U3Hs8dl88Z3TQk5g/aJurUXGhUOOaRRP66Gkpac2TvtM7bh1pQMVcVB9
+         md/w==
+X-Gm-Message-State: AOJu0Yy1v7RCIa4VUt8k2Vq+omzLWWrvcCInar1S+bYLNYLWKrpSyHlw
+	dnnhtTlmZz57eKSPMWL4dOtFaE0rJlKCg+krQIivVdogxg46/ZCQdzTNnu3w8R2B
+X-Gm-Gg: AZuq6aIZuUYKATCTu6S62s1JihuVPs9+RZslAiiQ0dV+SUxuRG5WJ91Y7S6HBaR139w
+	Uwon0LhuxXSXMeWSZoWWXPg3MswyRfe9bdM1fU22TAAblTU0JdJ2AJ2gWz3O5Ns5mb3RNzDVHSo
+	JQxrXIkKI/f1vFl/dCwiFvGyZQWk2X5zgr1WvJiNo/uH7Th5+blaazoRIIqXlR9cdvYs1ZpTZIB
+	MqS7s9Oqoxq2IY72hOKL6kseHyehSc9DvuvRe9QzXHDLrBqt2QQcdLgHg9wnW8TZWTJvyPBQCtz
+	uydY2XEtCwaMoMtp7qniedAnkNH/FPTIn5plAJsoey/O+blYRaKme5F7RLU+3QvezXtOn7PN48n
+	8raVXdkE+HO0sniEAEzfE4crVKvaF0D6OWyyQfZT8Fz2iIXeshs5eY+g2JLLag7wDZKWZK2NM2s
+	5QKgMoy3b9VWj7+8ycep06FY7rC9ndjxt6Uo4wonQ1YDVLt/0yBVtC8Oo+6BUBg5LpO0F2j8DS2
+	9QkzcU=
+X-Received: by 2002:a05:7301:7c12:b0:2b8:711:ae5c with SMTP id 5a478bee46e88-2baac57c505mr146000eec.7.1770849122414;
+        Wed, 11 Feb 2026 14:32:02 -0800 (PST)
 Received: from ezingerman-fedora-PF4V722J.thefacebook.com ([2620:10d:c090:500::2:8141])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dcd0609sm2639306eec.16.2026.02.11.14.31.58
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dcd0609sm2639306eec.16.2026.02.11.14.32.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Feb 2026 14:31:59 -0800 (PST)
+        Wed, 11 Feb 2026 14:32:02 -0800 (PST)
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: bpf@vger.kernel.org,
 	ast@kernel.org,
@@ -67,9 +67,9 @@ Cc: daniel@iogearbox.net,
 	kernel-team@fb.com,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com
-Subject: [PATCH bpf-next 1/3] bpf: split check_reg_sane_offset() in two parts
-Date: Wed, 11 Feb 2026 14:31:38 -0800
-Message-ID: <20260211-ptrs-off-migration-v1-1-996c2a37b063@gmail.com>
+Subject: [PATCH bpf-next 3/3] bpf: rename bpf_reg_state->off to bpf_reg_state->delta
+Date: Wed, 11 Feb 2026 14:31:40 -0800
+Message-ID: <20260211-ptrs-off-migration-v1-3-996c2a37b063@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260211-ptrs-off-migration-v1-0-996c2a37b063@gmail.com>
 References: <20260211-ptrs-off-migration-v1-0-996c2a37b063@gmail.com>
@@ -82,102 +82,143 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-check_reg_sane_offset() is used when verifying operations like:
-
-  dst_reg += src_reg
-  ^          ^
-  |          '-------- scalar
-  '------------------- pointer
-
-To verify range for both dst_reg and src_reg. Split it in two parts:
-- one to check a pointer offset
-- another to check scalar offset
-
-This would be useful for further refactoring.
+This field is now used only for linked scalar registers tracking.
+Rename it to 'delta' to better describe it's purpose:
+constant delta between "linked" scalars with the same ID.
 
 Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 39 +++++++++++++++++++++++++++------------
- 1 file changed, 27 insertions(+), 12 deletions(-)
+ include/linux/bpf_verifier.h |  2 +-
+ kernel/bpf/log.c             |  8 ++++----
+ kernel/bpf/verifier.c        | 18 +++++++++---------
+ 3 files changed, 14 insertions(+), 14 deletions(-)
 
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index a97bdbf3a07b63246ebf2021816e81c147989381..170a5f71b55043698e5a7f7e042f30dd5579715f 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -40,7 +40,7 @@ struct bpf_reg_state {
+ 	/*
+ 	 * Constant delta between "linked" scalars with the same ID.
+ 	 */
+-	s32 off;
++	s32 delta;
+ 	union {
+ 		/* valid when type == PTR_TO_PACKET */
+ 		int range;
+diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
+index 39a731392d6520a1345fc3d79e86fc43f63e426a..37d72b0521920daf6f3274ad77d055c8b3aafa1b 100644
+--- a/kernel/bpf/log.c
++++ b/kernel/bpf/log.c
+@@ -694,7 +694,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 		if (state->frameno != reg->frameno)
+ 			verbose(env, "[%d]", reg->frameno);
+ 		if (tnum_is_const(reg->var_off)) {
+-			verbose_snum(env, reg->var_off.value + reg->off);
++			verbose_snum(env, reg->var_off.value + reg->delta);
+ 			return;
+ 		}
+ 	}
+@@ -704,7 +704,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 	if (reg->id)
+ 		verbose_a("id=%d", reg->id & ~BPF_ADD_CONST);
+ 	if (reg->id & BPF_ADD_CONST)
+-		verbose(env, "%+d", reg->off);
++		verbose(env, "%+d", reg->delta);
+ 	if (reg->ref_obj_id)
+ 		verbose_a("ref_obj_id=%d", reg->ref_obj_id);
+ 	if (type_is_non_owning_ref(reg->type))
+@@ -716,9 +716,9 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 			  reg->map_ptr->key_size,
+ 			  reg->map_ptr->value_size);
+ 	}
+-	if (t != SCALAR_VALUE && reg->off) {
++	if (t != SCALAR_VALUE && reg->delta) {
+ 		verbose_a("off=");
+-		verbose_snum(env, reg->off);
++		verbose_snum(env, reg->delta);
+ 	}
+ 	if (type_is_pkt_pointer(t)) {
+ 		verbose_a("r=");
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index edf5342b982f676567579ed6349ccd5391eee7c8..3bf72eacbec2407fc79e22f62098755415bdf61c 100644
+index fe7598b0eef94eb0b0a4f4e7fd18e5de3209d882..8d47eb000459e363d20f8d44a2e326ccc8a1c29e 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -14426,9 +14426,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 	return 0;
- }
- 
--static bool check_reg_sane_offset(struct bpf_verifier_env *env,
--				  const struct bpf_reg_state *reg,
--				  enum bpf_reg_type type)
-+static bool check_reg_sane_offset_scalar(struct bpf_verifier_env *env,
-+					 const struct bpf_reg_state *reg,
-+					 enum bpf_reg_type type)
- {
- 	bool known = tnum_is_const(reg->var_off);
- 	s64 val = reg->var_off.value;
-@@ -14440,12 +14440,6 @@ static bool check_reg_sane_offset(struct bpf_verifier_env *env,
- 		return false;
+@@ -5095,7 +5095,7 @@ static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
+ 		 * Cleared it, since multiple rX += const are not supported.
+ 		 */
+ 		src_reg->id = 0;
+-		src_reg->off = 0;
++		src_reg->delta = 0;
  	}
  
--	if (reg->off >= BPF_MAX_VAR_OFF || reg->off <= -BPF_MAX_VAR_OFF) {
--		verbose(env, "%s pointer offset %d is not allowed\n",
--			reg_type_str(env, type), reg->off);
--		return false;
--	}
--
- 	if (smin == S64_MIN) {
- 		verbose(env, "math between %s pointer and register with unbounded min value is not allowed\n",
- 			reg_type_str(env, type));
-@@ -14461,6 +14455,27 @@ static bool check_reg_sane_offset(struct bpf_verifier_env *env,
- 	return true;
+ 	if (!src_reg->id && !tnum_is_const(src_reg->var_off))
+@@ -16217,14 +16217,14 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 			 * we cannot accumulate another val into rx->off.
+ 			 */
+ clear_id:
+-			dst_reg->off = 0;
++			dst_reg->delta = 0;
+ 			dst_reg->id = 0;
+ 		} else {
+ 			if (alu32)
+ 				dst_reg->id |= BPF_ADD_CONST32;
+ 			else
+ 				dst_reg->id |= BPF_ADD_CONST64;
+-			dst_reg->off = off;
++			dst_reg->delta = off;
+ 		}
+ 	} else {
+ 		/*
+@@ -17292,18 +17292,18 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 		if ((reg->id & ~BPF_ADD_CONST) != (known_reg->id & ~BPF_ADD_CONST))
+ 			continue;
+ 		if ((!(reg->id & BPF_ADD_CONST) && !(known_reg->id & BPF_ADD_CONST)) ||
+-		    reg->off == known_reg->off) {
++		    reg->delta == known_reg->delta) {
+ 			s32 saved_subreg_def = reg->subreg_def;
+ 
+ 			copy_register_state(reg, known_reg);
+ 			reg->subreg_def = saved_subreg_def;
+ 		} else {
+ 			s32 saved_subreg_def = reg->subreg_def;
+-			s32 saved_off = reg->off;
++			s32 saved_off = reg->delta;
+ 			u32 saved_id = reg->id;
+ 
+ 			fake_reg.type = SCALAR_VALUE;
+-			__mark_reg_known(&fake_reg, (s64)reg->off - (s64)known_reg->off);
++			__mark_reg_known(&fake_reg, (s64)reg->delta - (s64)known_reg->delta);
+ 
+ 			/* reg = known_reg; reg += delta */
+ 			copy_register_state(reg, known_reg);
+@@ -17311,7 +17311,7 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 			 * Must preserve off, id and subreg_def flag,
+ 			 * otherwise another sync_linked_regs() will be incorrect.
+ 			 */
+-			reg->off = saved_off;
++			reg->delta = saved_off;
+ 			reg->id = saved_id;
+ 			reg->subreg_def = saved_subreg_def;
+ 
+@@ -19616,7 +19616,7 @@ static void clear_singular_ids(struct bpf_verifier_env *env,
+ 			continue;
+ 		if (idset_cnt_get(idset, reg->id & ~BPF_ADD_CONST) == 1) {
+ 			reg->id = 0;
+-			reg->off = 0;
++			reg->delta = 0;
+ 		}
+ 	}));
  }
+@@ -19753,7 +19753,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 			return false;
  
-+static bool check_reg_sane_offset_ptr(struct bpf_verifier_env *env,
-+				      const struct bpf_reg_state *reg,
-+				      enum bpf_reg_type type)
-+{
-+	s64 smin = reg->smin_value;
-+
-+	if (reg->off >= BPF_MAX_VAR_OFF || reg->off <= -BPF_MAX_VAR_OFF) {
-+		verbose(env, "%s pointer offset %d is not allowed\n",
-+			reg_type_str(env, type), reg->off);
-+		return false;
-+	}
-+
-+	if (smin >= BPF_MAX_VAR_OFF || smin <= -BPF_MAX_VAR_OFF) {
-+		verbose(env, "%s pointer offset %lld is not allowed\n",
-+			reg_type_str(env, type), smin);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
- enum {
- 	REASON_BOUNDS	= -1,
- 	REASON_TYPE	= -2,
-@@ -14874,8 +14889,8 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 	dst_reg->type = ptr_reg->type;
- 	dst_reg->id = ptr_reg->id;
+ 		/* Both have offset linkage: offsets must match */
+-		if ((rold->id & BPF_ADD_CONST) && rold->off != rcur->off)
++		if ((rold->id & BPF_ADD_CONST) && rold->delta != rcur->delta)
+ 			return false;
  
--	if (!check_reg_sane_offset(env, off_reg, ptr_reg->type) ||
--	    !check_reg_sane_offset(env, ptr_reg, ptr_reg->type))
-+	if (!check_reg_sane_offset_scalar(env, off_reg, ptr_reg->type) ||
-+	    !check_reg_sane_offset_ptr(env, ptr_reg, ptr_reg->type))
- 		return -EINVAL;
- 
- 	/* pointer types do not carry 32-bit bounds at the moment. */
-@@ -15004,7 +15019,7 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env,
- 		return -EACCES;
- 	}
- 
--	if (!check_reg_sane_offset(env, dst_reg, ptr_reg->type))
-+	if (!check_reg_sane_offset_ptr(env, dst_reg, ptr_reg->type))
- 		return -EINVAL;
- 	reg_bounds_sync(dst_reg);
- 	bounds_ret = sanitize_check_bounds(env, insn, dst_reg);
+ 		if (!check_scalar_ids(rold->id, rcur->id, idmap))
 
 -- 
 2.53.0
