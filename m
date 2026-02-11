@@ -1,260 +1,96 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8F52C11E1
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 15:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11442DB7A6
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 15:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770822859; cv=none; b=Wyz/IXRNbne2MdEEIRgAObm2Q43vGpMewFRdYDAbeqyAtA5ejFlzEu1QN+0zduF8Ww4Eo88/NG75u2a2pmEqMY8Ck1jR4mqIx/XgFiywz+XhA8Qqlu7gzBb3fxayQ43Jn/5TdVhcm4YY0t556Jrana8elB2JtCSKqdjiUsM4LCI=
+	t=1770823322; cv=none; b=EYwfe9skMrYM5tU0GNrra/r2L9SSROC1JhGi0+kqqSWVUMQ9T3cYWV3k5oV+jjGG46kfnKmLIzJXzcq1FjTPmMvlDcdY2wE5Ij6FML/TFhQSzNTpkY9h6iyNMqGwpBmMsXTqJwt3ESyYy1OK16jclEX9lSgHA1vbvlxWMe1qt0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770822859; c=relaxed/simple;
-	bh=Xbuo0FEpNgg2KvKrlkPAzBRG1hOjRZTYZrlBKdxpLfg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CRbxRzlsKSvbd9F8JEjfTO9BWQjylra8BIO58FXhcATohvBDDKIRQSMVHF1sMjQQnhW6DTBX2jjTPmfKp3UE3N/jJkOl0veDoL/Qa+xBzV3soHyqZqxIwbz4JS9dNq+LoC+WISQu8W98qSPPOMbdXMO7HTjyANXMt9JwYHgi9lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wpdZeo8d; arc=none smtp.client-ip=91.218.175.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770823322; c=relaxed/simple;
+	bh=Y7SlTxzS2VnMDuAASMDM/Pc7J/4udBIFLvJlJIOJobA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DkeUMXMsauphDUV1g+XnTN8O9KRu1m0bC+3S6XQKDR8y7Mi5jeccno0vSbVaTKNXgXEqS9wpmdB9V8TzqivvHlESISMvepkFPZdVd/E94O/6Rsga0VjBJAF0lWzLV9U8oXmKmgRMomlVEKELTWzt1CNV7uL47jG45IoYljlh0lY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=EK54rvKq; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wpdZeo8d"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770822855;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a5In126ErDNUVM/dknzqOxFVFJMm2FSnEOt8BQhQYkg=;
-	b=wpdZeo8do+KS5ANCddRxS7Ag4bCm2/yv/POl8agOb6SzqiHbgUyHDmATFj9DH3BQjsArlt
-	CtYUWTo8PnNoug6sys0CTEjbGQCCjjFgzc7wrP/zDB5BBMuWcxhi7C4jMlrvxdWPs1H5WF
-	rgR98psbfFwGUo14xK1u72IK9yiB/xg=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Seth Forshee <sforshee@kernel.org>,
-	Yuichiro Tsuji <yuichtsu@amazon.com>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Tao Chen <chen.dylane@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Rong Tao <rongtao@cestc.cn>,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v10 8/8] selftests/bpf: Add tests to verify map create failure log
-Date: Wed, 11 Feb 2026 23:11:15 +0800
-Message-ID: <20260211151115.78013-9-leon.hwang@linux.dev>
-In-Reply-To: <20260211151115.78013-1-leon.hwang@linux.dev>
-References: <20260211151115.78013-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="EK54rvKq"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-45f015a3259so1998007b6e.2
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 07:22:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1770823320; x=1771428120; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uQsZus6B6A2LGmBZfcvwZ5r04q2Vs4rLburhJBVv+Qo=;
+        b=EK54rvKqXRcj27ID2/ELDBPIaEGh2PE7Owr0N1zTNLC7Am21SrwExpwilO1ZOSy+f1
+         CIPpUh0h0dsb/nWyZAJZEnIaqj9mVGAj1u5H4CN5gWBhjXsO9bQJpifndEvuj7HeyWgr
+         zbmN9s+mFzqEDfMdgWX/EmTkVw88nQrFkyyDSibPFztLLvV3LnssgQvu/Wg3QgUZtvkO
+         EW7JTKhbt6QLncCSDRccDEP+gUulUn6WGCU43f1+gxWNIHH78IpUd2n0K4UHv2FktuDE
+         Ad80FQs8+e1qE+R8QIArPq3Ly39uz7piNvq8UXRP/0uX0pkteJjoD5SIKkWP+rIUlFo8
+         FfMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770823320; x=1771428120;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uQsZus6B6A2LGmBZfcvwZ5r04q2Vs4rLburhJBVv+Qo=;
+        b=cvKj1g7wRx7jFLSWAk9CvTMDdom9v17Rx7LETSj36zS0GxDmi9LxKjR4R13NYELJUp
+         wucbq+2m+T9e+wRrzzQMOeV/hcErL46aaegpfeErkMHkBqmu28JTOvvDrXIda9gj+O7G
+         uEXGHRfRpIg6nz/RHPg+P/RGkbCqSL29RSDu8dTCmcuujH/MRry6rhttE5pBFmDA4rDm
+         H4MAGf5mFO8/BencJcBB/xDahXOP5yihgn5Ja7u4jffXqlIpRf29rvTViyi6PXNEzKxL
+         PIrfBnHkM8bMy3zwd7d2QZUFcqFle1Y1tq00kTV976n/EeDPsJWYLSGKEtJ+dHkaCnmd
+         fTvg==
+X-Gm-Message-State: AOJu0YzFgO0oAhr7T+04HIXBBVBWubX6PUnldI76Dlo9xfr9aULXYWty
+	YwqmebpS5r8WGoFpefJkbASytDPZdGj/fePJQMGC4YjBP+znpBpLg7/BEGzEgCMiqF4=
+X-Gm-Gg: AZuq6aLnPaoWtFA9rylPrTDb35i04T2iYkkcUrPTgVAMP2Yj+GL8IgPvpQH00iMFxt+
+	/SyFGOcTyjEsSqEpXIx+pwiFXu3xO/eiA752jTw2sOU6iCezy8OUTFdE8UyX3WRNm725mazrjrN
+	3cPS71hk2fk2d7jD5oIAEo2dTRtVwRbwOyZkz59lirBAwrFcOnkYpdkzrbuw4L0HRrPQ2oeFpwl
+	UXXodgMi54kxHPnBtTme2X6CUyN0PzemiqLD/p7V7OtHRSjbawbS3JkzQ1spJZZUOyNMkbtGQqo
+	1tcV1cS7AE2YlwkFLUeA2Z0fLrUMbenObZzunP+zWfLpexcQo5PEpTenQdCg5nAvQmHFqb5+0Ow
+	DQP/W+eTxRU2CBOIiZprDJzdwN1971Ebjrrel/fbTuKBvTAVECOI+MD0VbC2TVJHet3rOYjgRun
+	a3cLm+0ADFu0P8BM4iWZobhG4Cwz1N7GOZuacq8JJwMCC7rC/0imHR2VGmdSRrmufS721WXrGh3
+	ZzEzeZ41g==
+X-Received: by 2002:a05:6808:c23a:b0:45f:1387:973b with SMTP id 5614622812f47-4636627303fmr1352710b6e.6.1770823319741;
+        Wed, 11 Feb 2026 07:21:59 -0800 (PST)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4636b0c8606sm1116368b6e.18.2026.02.11.07.21.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Feb 2026 07:21:59 -0800 (PST)
+Message-ID: <55db7c09-5bc8-4dda-818d-53130400ee50@kernel.dk>
+Date: Wed, 11 Feb 2026 08:21:58 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/5] io_uring/bpf-ops: implement bpf ops registration
+To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>
+References: <cover.1770818588.git.asml.silence@gmail.com>
+ <7ca5070830c022493eaf45948e146f418aceb747.1770818588.git.asml.silence@gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <7ca5070830c022493eaf45948e146f418aceb747.1770818588.git.asml.silence@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add tests to verify that the kernel reports the expected error messages
-when map creation fails.
+On 2/11/26 7:32 AM, Pavel Begunkov wrote:
+> +static void io_eject_bpf(struct io_ring_ctx *ctx)
+> +{
+> +	struct io_uring_bpf_ops *ops = ctx->bpf_ops;
+> +
+> +	if (!WARN_ON_ONCE(!ops))
+> +		return;
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/map_init.c       | 166 ++++++++++++++++++
- 1 file changed, 166 insertions(+)
+	if (WARN_ON_ONCE(!ops))
+		return;
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_init.c b/tools/testing/selftests/bpf/prog_tests/map_init.c
-index 14a31109dd0e..b8b727e24b5e 100644
---- a/tools/testing/selftests/bpf/prog_tests/map_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/map_init.c
-@@ -212,3 +212,169 @@ void test_map_init(void)
- 	if (test__start_subtest("pcpu_lru_map_init"))
- 		test_pcpu_lru_map_init();
- }
-+
-+static void test_map_create(enum bpf_map_type map_type, const char *map_name,
-+			    struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	const int key_size = 4, value_size = 4, max_entries = 1;
-+	char log_buf[128];
-+	int fd;
-+	LIBBPF_OPTS(bpf_log_opts, log_opts);
-+
-+	log_buf[0] = '\0';
-+	log_opts.log_buf = log_buf;
-+	log_opts.log_size = sizeof(log_buf);
-+	log_opts.log_level = 1;
-+	opts->log_opts = &log_opts;
-+	fd = bpf_map_create(map_type, map_name, key_size, value_size, max_entries, opts);
-+	if (!ASSERT_LT(fd, 0, "bpf_map_create")) {
-+		close(fd);
-+		return;
-+	}
-+
-+	ASSERT_STREQ(log_buf, exp_msg, "log_buf");
-+	ASSERT_EQ(log_opts.log_true_size, strlen(exp_msg) + 1, "log_true_size");
-+}
-+
-+static void test_map_create_array(struct bpf_map_create_opts *opts, const char *exp_msg)
-+{
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test_map_create", opts, exp_msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_struct_ops(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id can only be used with struct_ops maps.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_vmlinux_value_type_id_kv_type_id(void)
-+{
-+	const char *msg = "btf_vmlinux_value_type_id is mutually exclusive with btf_key_type_id and btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_vmlinux_value_type_id = 1,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create(BPF_MAP_TYPE_STRUCT_OPS, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_value_type_id(void)
-+{
-+	const char *msg = "Invalid btf_value_type_id.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_key_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_extra(void)
-+{
-+	const char *msg = "Invalid map_extra.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_extra = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_numa_node(void)
-+{
-+	const char *msg = "Invalid numa_node.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_NUMA_NODE,
-+		    .numa_node = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_type(void)
-+{
-+	const char *msg = "Invalid map_type.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(__MAX_BPF_MAP_TYPE, "test_map_create", &opts, msg);
-+}
-+
-+static void test_invalid_token_fd(void)
-+{
-+	const char *msg = "Invalid map_token_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .map_flags = BPF_F_TOKEN_FD,
-+		    .token_fd = 0xFF,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_invalid_map_name(void)
-+{
-+	const char *msg = "Invalid map_name.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+
-+	test_map_create(BPF_MAP_TYPE_ARRAY, "test-!@#", &opts, msg);
-+}
-+
-+static void test_invalid_btf_fd(void)
-+{
-+	const char *msg = "Invalid btf_fd.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .btf_fd = -1,
-+		    .btf_key_type_id = 1,
-+		    .btf_value_type_id = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_1(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	const char *hash = "DEADCODE";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash = hash,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+static void test_excl_prog_hash_size_2(void)
-+{
-+	const char *msg = "Invalid excl_prog_hash_size.\n";
-+	LIBBPF_OPTS(bpf_map_create_opts, opts,
-+		    .excl_prog_hash_size = 1,
-+	);
-+
-+	test_map_create_array(&opts, msg);
-+}
-+
-+void test_map_create_failure(void)
-+{
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_struct_ops"))
-+		test_invalid_vmlinux_value_type_id_struct_ops();
-+	if (test__start_subtest("invalid_vmlinux_value_type_id_kv_type_id"))
-+		test_invalid_vmlinux_value_type_id_kv_type_id();
-+	if (test__start_subtest("invalid_value_type_id"))
-+		test_invalid_value_type_id();
-+	if (test__start_subtest("invalid_map_extra"))
-+		test_invalid_map_extra();
-+	if (test__start_subtest("invalid_numa_node"))
-+		test_invalid_numa_node();
-+	if (test__start_subtest("invalid_map_type"))
-+		test_invalid_map_type();
-+	if (test__start_subtest("invalid_token_fd"))
-+		test_invalid_token_fd();
-+	if (test__start_subtest("invalid_map_name"))
-+		test_invalid_map_name();
-+	if (test__start_subtest("invalid_btf_fd"))
-+		test_invalid_btf_fd();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_1"))
-+		test_excl_prog_hash_size_1();
-+	if (test__start_subtest("invalid_excl_prog_hash_size_2"))
-+		test_excl_prog_hash_size_2();
-+}
+?
+
 -- 
-2.52.0
-
+Jens Axboe
