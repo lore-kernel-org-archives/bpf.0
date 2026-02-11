@@ -1,89 +1,216 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13AB355058;
-	Wed, 11 Feb 2026 09:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BC131B130
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 09:33:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770801237; cv=none; b=Wb+1PBlkUYR5CaPFvYhMFUPACAT+3bG6i13oYrfjOIBx98eOb6BDQjiZ6UZzLKi9Qm98uWiDl0rEdIFdXlX/cAhqLW0FTO5fGLAqFj9XHQHRniG48QeiyFszpMN6Nzw1/YO1hO58WcatwMCH+LX88smRZ3OmsVVaq7rAylHyFoY=
+	t=1770802405; cv=none; b=N1aPM2T0LxtK+5A7IdfLDgVLBl5/iabXa3vj78Q2n99hvAKh6DzQ/oJPEA1ACCcEi29igW/rMgWd5s0gdHCvqZOzOd5ENHF9bmL5z8RQmrLaMLn784AiH1uEJ5/iFwy9zzb7IeL0LCEc4ZFH09pdBEVslCnkZW0aCP26YRZr3Bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770801237; c=relaxed/simple;
-	bh=jNlgvzf8r1rQ4Ylev5DBYztIK9dHpUIDgD9CjTGsq0M=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GWoaWqd9sxSe/XwmXBBpKwvpaFf0aJlOCXlcuZG+AJ++6zCURJRaq5ui54Tu6B3erhZVzI4unMrMqJhA4yIVtUgd+c+Wr/ANASwwvrxFTna5r+czBF4jxOR9ppOO7lTxNVXS6S+0m7JlYRbjkyFZW/PI4nZ8EKwbegQni484zjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U23KCS0z; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U23KCS0z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE907C4CEF7;
-	Wed, 11 Feb 2026 09:13:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770801237;
-	bh=jNlgvzf8r1rQ4Ylev5DBYztIK9dHpUIDgD9CjTGsq0M=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=U23KCS0zPPSDB/i5bueZEe6YJcYrZaegFg1QtzZ1WZ4LfaDLWvEjXwjqH6ct6HPaC
-	 Gi1g8S2hV9+RZSdclqWQH6BZTQ9lA6omlGTqe1jkku2R9oZLF83DPqars1sQJsFv+W
-	 ySUsAgZPYU5iV1IbQtgQF5HZJQUUm8ta1bVeHcscPE5KhPGFB1LtDjUO0YGj49Er25
-	 ISW1FoyA34KOsVraiV6IYGZOlrzEvqL3GbP8pFFf2hq6P7Fud7cgbuz6wkPQxRYcOl
-	 vyJ1kTVNeanDDz+yDu1dGydrHillntUz24FNJsImHfj4LLvrrmCepfCNZOE7R0E6k7
-	 OgnoBQUItH47g==
-Content-Type: multipart/mixed; boundary="===============5553883724585232446=="
+	s=arc-20240116; t=1770802405; c=relaxed/simple;
+	bh=CIV6hLoagvtbv1tUJpke1K0ryIwXsU0MKLJAINK0sNs=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=RMbgoAWyVxcaKdmPhUROkZmoQTJlYkde4YFhi63iOxxtTYqQqITQOpv59CkPN2PDkq4PnK+MVPLDXOH1nmZb1oU0hLGBBiapgc779FuP7WJGKeV2bp4Bg+asYEQYw6SOH6js9Xz3t8VBO2sBATQt4sZvK5Z3YtBecEJh0sKihJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.160.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-4041c362f15so7968664fac.0
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 01:33:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770802403; x=1771407203;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=E3g0WJXP05lXN0ERetws976C8zfGXTtafPxC90nebHU=;
+        b=MOcRC1+slNptxJVPJorpr0tIpqawlrWCwDq/hbRORAcyvFpSkW4vC6rFKLi6GBrQjo
+         5iZLc8cqWV7gbamBxb8ipDvVY3LtduPcCW5XkNXs5qc6Z5RGMd+Mn8ucCCyag156TiHd
+         BWOmpp4XZOmuNfLZnnjE0i1uDppKoPyc4WrzTPvGeZlmIRJuZ1rKJ4NdTbJHzNK33tmN
+         i67Byngu+w2E/Nu8y3t2EmbeJAXvspF6QfA+pNqSrupIK/9JBPuL6C9O7n/L7xh1UefQ
+         2E/2oTXrDPm2Lv6auPTHDZUR4pUSiV7AtOgAI9dmglHgE8lvvfxW6emJTWi3vn2EwjfR
+         DseA==
+X-Forwarded-Encrypted: i=1; AJvYcCVek/vL1cCxAFI9vWXw5enF2f0TogSqLL3OPpCxM5mk7gYwqNSQnoF6U0vH27Ms51ZKq6k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSMgEeKdA0nzmpYj8rALSyAyvc5J6vvoEwIfvmjD08P9YtYTAP
+	i8+iRGvM4DvQDqQ9jsPp7dyhZzTjhtXEOcRqSiKnLycTqglUkohugWEvj0hOLwsrFuCwEZBXhC3
+	NNbhtgfvfnzAjnel4WpjTfsjkXq5VDl51cLNaLJsO9lZ4VHafGmQDhoybB2M=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <81ed1ebeb5d6e1661ccc0804079f31ec57653ba10477b453c88ded2bb2f85945@mail.kernel.org>
-In-Reply-To: <20260211084858.750950-5-jolsa@kernel.org>
-References: <20260211084858.750950-5-jolsa@kernel.org>
-Subject: Re: [PATCHv3 bpf-next 4/5] selftests/bpf: Add test for checking correct nop of optimized usdt
-From: bot+bpf-ci@kernel.org
-To: jolsa@kernel.org,andrii@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,songliubraving@fb.com,yhs@fb.com,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 11 Feb 2026 09:13:56 +0000 (UTC)
+X-Received: by 2002:a05:6820:408a:b0:672:7258:c4f0 with SMTP id
+ 006d021491bc7-6727258c72amr2827330eaf.53.1770802403077; Wed, 11 Feb 2026
+ 01:33:23 -0800 (PST)
+Date: Wed, 11 Feb 2026 01:33:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <698c4ce3.050a0220.340abe.000b.GAE@google.com>
+Subject: [syzbot] [bpf?] [net?] KASAN: stack-out-of-bounds Write in dev_map_redirect_multi
+From: syzbot <syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
+	haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
+	jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
+	sdf@fomichev.me, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
---===============5553883724585232446==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello,
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/usdt.c b/tools/testing/selftests/bpf/prog_tests/usdt.c
-> --- a/tools/testing/selftests/bpf/prog_tests/usdt.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/usdt.c
+syzbot found the following issue on:
 
-[ ... ]
+HEAD commit:    24cf78c73831 net/mlx5e: SHAMPO, Switch to header memcpy
+git tree:       net-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1092c65a580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2c36acc86fd56a9d
+dashboard link: https://syzkaller.appspot.com/bug?extid=10cc7f13760b31bd2e61
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
 
-> +static void subtest_optimized_attach(void)
-> +{
-> +	struct test_usdt *skel;
-> +	__u8 *addr_1, *addr_2;
-> +
-> +	/* usdt_1 USDT probe has single nop instruction */
-> +	addr_1 = find_instr(usdt_1, nop1_nop5_combo, 6);
-> +	if (!ASSERT_NULL(addr_1, "usdt_1_find_nop1_nop5_combo"))
-> +		return;
-> +
-> +	addr_1 = find_instr(usdt_1, nop1, 1);
-> +	if (!ASSERT_OK_PTR(addr_1, "usdt_1_find_nop1"))
-> +		return;
-> +
-> +	/* usdt_1 USDT probe has nop,nop5 instructions combo */
-> +	addr_2 = find_instr(usdt_2, nop1_nop5_combo, 6);
+Unfortunately, I don't have any reproducer for this issue yet.
 
-This comment says "usdt_1" but the code operates on "usdt_2". Should this
-say "usdt_2 USDT probe has nop,nop5 instructions combo" to match the code?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/9514a76ff576/disk-24cf78c7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/5f26244320f5/vmlinux-24cf78c7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/e0823b49ca48/bzImage-24cf78c7.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
+
+netlink: 'syz.1.9102': attribute type 1 has an invalid length.
+==================================================================
+BUG: KASAN: stack-out-of-bounds in get_upper_ifindexes kernel/bpf/devmap.c:601 [inline]
+BUG: KASAN: stack-out-of-bounds in dev_map_redirect_multi+0x1bb/0xa00 kernel/bpf/devmap.c:736
+Write of size 4 at addr ffffc9000b117164 by task syz.1.9102/9450
+
+CPU: 1 UID: 0 PID: 9450 Comm: syz.1.9102 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/24/2026
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xba/0x230 mm/kasan/report.c:482
+ kasan_report+0x117/0x150 mm/kasan/report.c:595
+ get_upper_ifindexes kernel/bpf/devmap.c:601 [inline]
+ dev_map_redirect_multi+0x1bb/0xa00 kernel/bpf/devmap.c:736
+ xdp_do_generic_redirect_map net/core/filter.c:4556 [inline]
+ xdp_do_generic_redirect+0x669/0x820 net/core/filter.c:4619
+ do_xdp_generic+0xcf7/0x12e0 net/core/dev.c:5612
+ __netif_receive_skb_core+0x10e5/0x3150 net/core/dev.c:5961
+ __netif_receive_skb_one_core net/core/dev.c:6149 [inline]
+ __netif_receive_skb net/core/dev.c:6264 [inline]
+ netif_receive_skb_internal net/core/dev.c:6350 [inline]
+ netif_receive_skb+0x1fe/0xbb0 net/core/dev.c:6409
+ tun_rx_batched+0x1de/0x790 drivers/net/tun.c:1485
+ tun_get_user+0x2a78/0x3dd0 drivers/net/tun.c:1953
+ tun_chr_write_iter+0x113/0x200 drivers/net/tun.c:1999
+ new_sync_write fs/read_write.c:593 [inline]
+ vfs_write+0x61d/0xb90 fs/read_write.c:686
+ ksys_write+0x150/0x270 fs/read_write.c:738
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f937215b78e
+Code: 08 0f 85 a5 a8 ff ff 49 89 fb 48 89 f0 48 89 d7 48 89 ce 4c 89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
+RSP: 002b:00007f9372ffafb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007f9372ffb6c0 RCX: 00007f937215b78e
+RDX: 0000000000000086 RSI: 0000200000000780 RDI: 00000000000000c8
+RBP: 00007f9372208c1f R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007f9372416038 R14: 00007f9372415fa0 R15: 00007fffe06ef058
+ </TASK>
+
+The buggy address belongs to stack of task syz.1.9102/9450
+ and is located at offset 100 in frame:
+ dev_map_redirect_multi+0x0/0xa00 include/linux/skbuff.h:2833
+
+This frame has 2 objects:
+ [32, 40) 'iter.i'
+ [64, 100) 'excluded_devices'
+
+The buggy address belongs to a 8-page vmalloc region starting at 0xffffc9000b110000 allocated at copy_process+0x508/0x3980 kernel/fork.c:2052
+The buggy address belongs to the physical page:
+page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x94807
+memcg:ffff88814237e782
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff ffff88814237e782
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x29c2(GFP_NOWAIT|__GFP_HIGHMEM|__GFP_IO|__GFP_FS|__GFP_ZERO), pid 2, tgid 2 (kthreadd), ts 1433078116205, free_ts 1432956594052
+ set_page_owner include/linux/page_owner.h:32 [inline]
+ post_alloc_hook+0x228/0x280 mm/page_alloc.c:1884
+ prep_new_page mm/page_alloc.c:1892 [inline]
+ get_page_from_freelist+0x24dc/0x2580 mm/page_alloc.c:3945
+ __alloc_frozen_pages_noprof+0x18d/0x380 mm/page_alloc.c:5240
+ alloc_pages_mpol+0x232/0x4a0 mm/mempolicy.c:2486
+ alloc_frozen_pages_noprof mm/mempolicy.c:2557 [inline]
+ alloc_pages_noprof+0xa8/0x190 mm/mempolicy.c:2577
+ vm_area_alloc_pages mm/vmalloc.c:3649 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3863 [inline]
+ __vmalloc_node_range_noprof+0x79b/0x1730 mm/vmalloc.c:4051
+ __vmalloc_node_noprof+0xc2/0x100 mm/vmalloc.c:4111
+ alloc_thread_stack_node kernel/fork.c:354 [inline]
+ dup_task_struct+0x228/0x9a0 kernel/fork.c:923
+ copy_process+0x508/0x3980 kernel/fork.c:2052
+ kernel_clone+0x248/0x870 kernel/fork.c:2651
+ kernel_thread+0x13f/0x1b0 kernel/fork.c:2712
+ create_kthread kernel/kthread.c:486 [inline]
+ kthreadd+0x4f9/0x6f0 kernel/kthread.c:844
+ ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+page last free pid 8089 tgid 8089 stack trace:
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1433 [inline]
+ __free_frozen_pages+0xbf8/0xd70 mm/page_alloc.c:2973
+ __folio_put+0x414/0x4f0 mm/swap.c:112
+ put_netmem include/net/netmem.h:420 [inline]
+ skb_page_unref include/linux/skbuff_ref.h:43 [inline]
+ __skb_frag_unref include/linux/skbuff_ref.h:56 [inline]
+ skb_release_data+0x4cb/0x940 net/core/skbuff.c:1122
+ skb_release_all net/core/skbuff.c:1203 [inline]
+ __kfree_skb+0x5d/0x210 net/core/skbuff.c:1217
+ kfree_skb_reason include/linux/skbuff.h:1322 [inline]
+ __skb_queue_purge_reason include/linux/skbuff.h:3426 [inline]
+ __skb_queue_purge include/linux/skbuff.h:3431 [inline]
+ virtio_transport_remove_sock net/vmw_vsock/virtio_transport_common.c:1224 [inline]
+ virtio_transport_cancel_close_work net/vmw_vsock/virtio_transport_common.c:1237 [inline]
+ virtio_transport_do_close+0x251/0x3c0 net/vmw_vsock/virtio_transport_common.c:1255
+ virtio_transport_recv_connected+0x3c4/0xf10 net/vmw_vsock/virtio_transport_common.c:1464
+ virtio_transport_recv_pkt+0x17a4/0x2b70 net/vmw_vsock/virtio_transport_common.c:1693
+ vsock_loopback_work+0x32c/0x3f0 net/vmw_vsock/vsock_loopback.c:142
+ process_one_work kernel/workqueue.c:3257 [inline]
+ process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3340
+ worker_thread+0xda6/0x1360 kernel/workqueue.c:3421
+ kthread+0x726/0x8b0 kernel/kthread.c:463
+ ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
+
+Memory state around the buggy address:
+ ffffc9000b117000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc9000b117080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffffc9000b117100: f1 f1 f1 f1 00 f2 f2 f2 00 00 00 00 04 f3 f3 f3
+                                                       ^
+ ffffc9000b117180: f3 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc9000b117200: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
 
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21898612624
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-AI-authorship-score: low
-AI-authorship-explanation: The code follows standard kernel selftest patterns with natural commit message style, and the copy-paste comment error is a characteristically human mistake.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Comment/code mismatch in test file where comment says usdt_1 but code operates on usdt_2; does not affect test functionality.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
---===============5553883724585232446==--
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
