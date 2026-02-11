@@ -1,216 +1,208 @@
-Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com [209.85.160.72])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BC131B130
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 09:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CF893559EC
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 09:55:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770802405; cv=none; b=N1aPM2T0LxtK+5A7IdfLDgVLBl5/iabXa3vj78Q2n99hvAKh6DzQ/oJPEA1ACCcEi29igW/rMgWd5s0gdHCvqZOzOd5ENHF9bmL5z8RQmrLaMLn784AiH1uEJ5/iFwy9zzb7IeL0LCEc4ZFH09pdBEVslCnkZW0aCP26YRZr3Bo=
+	t=1770803741; cv=none; b=XqRT3Rds48CIAXl2woimSfPS7Sk4PzWf5SR7AyJ+GHcq5zbDfO/77JLASABlEQjsOyNLpPhF1wiMXkgCnxCl2E87oas7whG0LFsGct1Ya2R5X+4EvQW9vvRJt8hvvA1FYoFjI9c7WrlHCmRbBolnTGdtrzHjt02m0Qymonr/b+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770802405; c=relaxed/simple;
-	bh=CIV6hLoagvtbv1tUJpke1K0ryIwXsU0MKLJAINK0sNs=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=RMbgoAWyVxcaKdmPhUROkZmoQTJlYkde4YFhi63iOxxtTYqQqITQOpv59CkPN2PDkq4PnK+MVPLDXOH1nmZb1oU0hLGBBiapgc779FuP7WJGKeV2bp4Bg+asYEQYw6SOH6js9Xz3t8VBO2sBATQt4sZvK5Z3YtBecEJh0sKihJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.160.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-4041c362f15so7968664fac.0
-        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 01:33:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770802403; x=1771407203;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=E3g0WJXP05lXN0ERetws976C8zfGXTtafPxC90nebHU=;
-        b=MOcRC1+slNptxJVPJorpr0tIpqawlrWCwDq/hbRORAcyvFpSkW4vC6rFKLi6GBrQjo
-         5iZLc8cqWV7gbamBxb8ipDvVY3LtduPcCW5XkNXs5qc6Z5RGMd+Mn8ucCCyag156TiHd
-         BWOmpp4XZOmuNfLZnnjE0i1uDppKoPyc4WrzTPvGeZlmIRJuZ1rKJ4NdTbJHzNK33tmN
-         i67Byngu+w2E/Nu8y3t2EmbeJAXvspF6QfA+pNqSrupIK/9JBPuL6C9O7n/L7xh1UefQ
-         2E/2oTXrDPm2Lv6auPTHDZUR4pUSiV7AtOgAI9dmglHgE8lvvfxW6emJTWi3vn2EwjfR
-         DseA==
-X-Forwarded-Encrypted: i=1; AJvYcCVek/vL1cCxAFI9vWXw5enF2f0TogSqLL3OPpCxM5mk7gYwqNSQnoF6U0vH27Ms51ZKq6k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSMgEeKdA0nzmpYj8rALSyAyvc5J6vvoEwIfvmjD08P9YtYTAP
-	i8+iRGvM4DvQDqQ9jsPp7dyhZzTjhtXEOcRqSiKnLycTqglUkohugWEvj0hOLwsrFuCwEZBXhC3
-	NNbhtgfvfnzAjnel4WpjTfsjkXq5VDl51cLNaLJsO9lZ4VHafGmQDhoybB2M=
+	s=arc-20240116; t=1770803741; c=relaxed/simple;
+	bh=M+3eS+0CQ57uJJp31goIB867jpOJ3JZSrh6Hq6ODEDc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E3B8GKL6YTD+TygptueVAZGMDcQpYzcfkivFglW+5WqcTfwdm9Mb7YcYHqpw65QpbblTveRXqWPjMOFEG3JUq88KIQLc+ujJc7VrU1nftTlrOlVAHpNLCYhWb2NL2E91KRSI/PdIdBMvqUdozPboU7G6EOyLdsarAajOtVgX7Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=WlVAYeH2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=1u7Y5xHk; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=WlVAYeH2; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=1u7Y5xHk; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="WlVAYeH2";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="1u7Y5xHk";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="WlVAYeH2";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="1u7Y5xHk"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id D368C5BD8B;
+	Wed, 11 Feb 2026 09:55:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770803738; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=898l2kNBLwLT/cEDuaztbrg3Plv0whiKcCcpSo3dc/w=;
+	b=WlVAYeH2n9GNpytFw++ml+lbeok4zNXE8LFwu3OZl7GVYpNeh1Q4aRlcsywCnQ+t4/5o9Z
+	IUuGM0Pe8ZSYqleqs6Qo6qBKrP56HF2RU9QodbBleLbte0oKAbJ43+nv6e+e1tajGJEd6L
+	N4Iwp/B4I8RYOV6LO5lFsg7LK4o6CFo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770803738;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=898l2kNBLwLT/cEDuaztbrg3Plv0whiKcCcpSo3dc/w=;
+	b=1u7Y5xHkk9EDIq/NEaJ4p17IB/GM2Jnh2PLYPPfWqoGoSw/FnUDiyem+MjccT9n81AKp2p
+	CARDiOHPaEGfm1Bw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1770803738; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=898l2kNBLwLT/cEDuaztbrg3Plv0whiKcCcpSo3dc/w=;
+	b=WlVAYeH2n9GNpytFw++ml+lbeok4zNXE8LFwu3OZl7GVYpNeh1Q4aRlcsywCnQ+t4/5o9Z
+	IUuGM0Pe8ZSYqleqs6Qo6qBKrP56HF2RU9QodbBleLbte0oKAbJ43+nv6e+e1tajGJEd6L
+	N4Iwp/B4I8RYOV6LO5lFsg7LK4o6CFo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1770803738;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=898l2kNBLwLT/cEDuaztbrg3Plv0whiKcCcpSo3dc/w=;
+	b=1u7Y5xHkk9EDIq/NEaJ4p17IB/GM2Jnh2PLYPPfWqoGoSw/FnUDiyem+MjccT9n81AKp2p
+	CARDiOHPaEGfm1Bw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id BBA223EA64;
+	Wed, 11 Feb 2026 09:55:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id S3/KLRpSjGmdbQAAD6G6ig
+	(envelope-from <jack@suse.cz>); Wed, 11 Feb 2026 09:55:38 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 755E0A0A4E; Wed, 11 Feb 2026 10:55:34 +0100 (CET)
+Date: Wed, 11 Feb 2026 10:55:34 +0100
+From: Jan Kara <jack@suse.cz>
+To: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
+Cc: "jack@suse.cz" <jack@suse.cz>, 
+	"linux-mm@kvack.org" <linux-mm@kvack.org>, "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"lsf-pc@lists.linux-foundation.org" <lsf-pc@lists.linux-foundation.org>, "chrisl@kernel.org" <chrisl@kernel.org>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, Pavan Rallabhandi <Pavan.Rallabhandi@ibm.com>, 
+	"clm@meta.com" <clm@meta.com>
+Subject: Re: [Lsf-pc] [LSF/MM/BPF TOPIC] Machine Learning (ML) library in
+ Linux kernel
+Message-ID: <kw4qco6aq4bq55nmb4c5ibicmj7ga77vtgzlj65jtdhzowks5m@buhefb6m4eqx>
+References: <47d21a6821c4b2d085f7b97bcdaa205bfcb0e0ad.camel@ibm.com>
+ <CACePvbVH0ovOcBqCN7kJ3n0QFmvuf+_5tMeRXs-JAQ+m5fdoCg@mail.gmail.com>
+ <a994bdedca7d966168076044249a58e52754c6ac.camel@ibm.com>
+ <6ek3nhulz72niscw2iz2n5xhczz4ta6a6hvyrlneuyk2d36ngx@4ymlemzifugr>
+ <11f659fd88f887b9fe4c88a386f1a5c2157968a6.camel@ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:408a:b0:672:7258:c4f0 with SMTP id
- 006d021491bc7-6727258c72amr2827330eaf.53.1770802403077; Wed, 11 Feb 2026
- 01:33:23 -0800 (PST)
-Date: Wed, 11 Feb 2026 01:33:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <698c4ce3.050a0220.340abe.000b.GAE@google.com>
-Subject: [syzbot] [bpf?] [net?] KASAN: stack-out-of-bounds Write in dev_map_redirect_multi
-From: syzbot <syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, eddyz87@gmail.com, 
-	haoluo@google.com, hawk@kernel.org, john.fastabend@gmail.com, 
-	jolsa@kernel.org, kpsingh@kernel.org, kuba@kernel.org, 
-	linux-kernel@vger.kernel.org, martin.lau@linux.dev, netdev@vger.kernel.org, 
-	sdf@fomichev.me, song@kernel.org, syzkaller-bugs@googlegroups.com, 
-	yonghong.song@linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <11f659fd88f887b9fe4c88a386f1a5c2157968a6.camel@ibm.com>
+X-Spam-Score: -3.80
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	FROM_EQ_ENVFROM(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email]
+X-Spam-Level: 
+X-Spam-Flag: NO
 
-Hello,
+On Tue 10-02-26 21:02:12, Viacheslav Dubeyko wrote:
+> On Tue, 2026-02-10 at 14:47 +0100, Jan Kara wrote:
+> > On Mon 09-02-26 22:28:59, Viacheslav Dubeyko via Lsf-pc wrote:
+> > > The idea is to have ML model running in user-space and kernel subsystem can
+> > > interact with ML model in user-space. As the next step, I am considering two
+> > > real-life use-cases: (1) GC subsystem of LFS file system, (2) ML-based DAMON
+> > > approach. So, for example, GC can be represented by ML model in user-space. GC
+> > > can request data (segments state) from kernel-space and ML model in user-space
+> > > can do training or/and inference. As a result, ML model in user-space can select
+> > > victim segments and instruct kernel-space logic of moving valid data from victim
+> > > segment(s) into clean/current one(s). 
+> > 
+> > To be honest I'm skeptical about how generic this can be. Essentially
+> > you're describing a generic interface to offload arbitrary kernel decision
+> > to userspace. ML is a userspace bussiness here and not really relevant for
+> > the concept AFAICT. And we already have several ways of kernel asking
+> > userspace to do something for it and unless it is very restricted and well
+> > defined it is rather painful, prone to deadlocks, security issues etc.
+> 
+> Scepticism is normal reaction. :) So, nothing wrong is to be sceptical.
+> 
+> I believe it can be pretty generic from the data flow point of view. Probably,
+> different kernel subsystems could require different ways of interaction with
+> user-space. However, if we are talking about data flow but NOT execution flow,
+> then it could be generic enough. And if it can be generic, then we can suggest
+> generic way of extending any kernel subsystem by ML support.
+> 
+> I don't think that we need to consider the ML library appraoch like "kernel
+> asking userspace to do something". Rather it needs to consider the model like
+> "kernel share data with user-space and user-space recommends something to
+> kernel". So, user-space agent (ML model) can request data from kernel space or
+> kernel subsystem can notify the user-space agent that data is available. And
+> it's up to kernel subsystem implementation which data could be shared with user-
+> space. So, ML model can be trained in user-space and, then, share
+> recommendations (or eBPF code, for example) with kernel space. Finally, it's up
+> to kernel subsystem how and when to apply these recommendations on kernel side.
 
-syzbot found the following issue on:
+I guess I have to see some examples. Because so far it sounds so generic
+that I'm failing to see a value in this :)
 
-HEAD commit:    24cf78c73831 net/mlx5e: SHAMPO, Switch to header memcpy
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1092c65a580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=2c36acc86fd56a9d
-dashboard link: https://syzkaller.appspot.com/bug?extid=10cc7f13760b31bd2e61
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+> > So by all means if you want to do GC decisions for your filesystem in
+> > userspace by ML, be my guest, it does make some sense although I'd be wary
+> > of issues where we need to writeback dirty pages to free memory which may
+> > now depend on your userspace helper to make a decision which may need the
+> > memory to do the decision... But I don't see why you need all the ML fluff
+> > around it when it seems like just another way to call userspace helper and
+> > why some of the existing methods would not suffice.
+> > 
+> 
+> OK. I see. :) You understood GC like a subsystem that helps to kernel
+> memory subsystem to manage the writeback dirty memory pages. :) It's
+> potential direction and I like your suggestion. :) But I meant something
+> different because I consider of LFS file system's GC subsystem. So, if we
+> are using Copy-On-Write (COW) policy, then we have segments or erase
+> blocks with a mixture of valid and invalid logical blocks after update
+> operations. And we need GC subsystem to clean old segments by means of
+> moving valid logical blocks from exhausted segments into clean/current
+> ones. The problem here is to find an efficient algorithm of selecting
+> victim segments with smallest amount of valid blocks with the goal of
+> decreasing write amplification. So, file system needs to share the
+> metadata details (segments state, for example), ML model can share the
+> recommendations, and kernel code of file system can finally move valid
+> blocks in the background.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+No, I actually meant the LFS file system GC as you talk about it. But I was
+just too terse about my concerns: As you said an LFS with COW needs to
+select a new position to write each block. When there is no free block
+available, it has to select partially used erase block (some logical blocks
+in it became invalid) to reuse. And for this selection you want to use ML
+AFAIU. Hence we have a dependency folio writeback -> COW block allocation ->
+GC to make some block free -> ML decision. And now you have to be really
+careful so that "ML decision" doesn't even indirectly depend on folio
+writeback to complete. And bear in mind that e.g. if the code doing "ML
+decision" dirties some mmaped file pages it *will* block waiting for page
+writeback to complete to get the system below the limit of dirty pages.
+This is the kind of deadlock I'm talking about that is hard to avoid when
+offloading kernel decisions to userspace (and yes, I've seen these kind of
+deadlocks in practice in various shapes and forms with various methods when
+kernel depended on userspace to make forward progress).
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9514a76ff576/disk-24cf78c7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5f26244320f5/vmlinux-24cf78c7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/e0823b49ca48/bzImage-24cf78c7.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
-
-netlink: 'syz.1.9102': attribute type 1 has an invalid length.
-==================================================================
-BUG: KASAN: stack-out-of-bounds in get_upper_ifindexes kernel/bpf/devmap.c:601 [inline]
-BUG: KASAN: stack-out-of-bounds in dev_map_redirect_multi+0x1bb/0xa00 kernel/bpf/devmap.c:736
-Write of size 4 at addr ffffc9000b117164 by task syz.1.9102/9450
-
-CPU: 1 UID: 0 PID: 9450 Comm: syz.1.9102 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/24/2026
-Call Trace:
- <TASK>
- dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:378 [inline]
- print_report+0xba/0x230 mm/kasan/report.c:482
- kasan_report+0x117/0x150 mm/kasan/report.c:595
- get_upper_ifindexes kernel/bpf/devmap.c:601 [inline]
- dev_map_redirect_multi+0x1bb/0xa00 kernel/bpf/devmap.c:736
- xdp_do_generic_redirect_map net/core/filter.c:4556 [inline]
- xdp_do_generic_redirect+0x669/0x820 net/core/filter.c:4619
- do_xdp_generic+0xcf7/0x12e0 net/core/dev.c:5612
- __netif_receive_skb_core+0x10e5/0x3150 net/core/dev.c:5961
- __netif_receive_skb_one_core net/core/dev.c:6149 [inline]
- __netif_receive_skb net/core/dev.c:6264 [inline]
- netif_receive_skb_internal net/core/dev.c:6350 [inline]
- netif_receive_skb+0x1fe/0xbb0 net/core/dev.c:6409
- tun_rx_batched+0x1de/0x790 drivers/net/tun.c:1485
- tun_get_user+0x2a78/0x3dd0 drivers/net/tun.c:1953
- tun_chr_write_iter+0x113/0x200 drivers/net/tun.c:1999
- new_sync_write fs/read_write.c:593 [inline]
- vfs_write+0x61d/0xb90 fs/read_write.c:686
- ksys_write+0x150/0x270 fs/read_write.c:738
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7f937215b78e
-Code: 08 0f 85 a5 a8 ff ff 49 89 fb 48 89 f0 48 89 d7 48 89 ce 4c 89 c2 4d 89 ca 4c 8b 44 24 08 4c 8b 4c 24 10 4c 89 5c 24 08 0f 05 <c3> 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 80 00 00 00 00 48 83 ec 08
-RSP: 002b:00007f9372ffafb8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 00007f9372ffb6c0 RCX: 00007f937215b78e
-RDX: 0000000000000086 RSI: 0000200000000780 RDI: 00000000000000c8
-RBP: 00007f9372208c1f R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007f9372416038 R14: 00007f9372415fa0 R15: 00007fffe06ef058
- </TASK>
-
-The buggy address belongs to stack of task syz.1.9102/9450
- and is located at offset 100 in frame:
- dev_map_redirect_multi+0x0/0xa00 include/linux/skbuff.h:2833
-
-This frame has 2 objects:
- [32, 40) 'iter.i'
- [64, 100) 'excluded_devices'
-
-The buggy address belongs to a 8-page vmalloc region starting at 0xffffc9000b110000 allocated at copy_process+0x508/0x3980 kernel/fork.c:2052
-The buggy address belongs to the physical page:
-page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x94807
-memcg:ffff88814237e782
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff ffff88814237e782
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x29c2(GFP_NOWAIT|__GFP_HIGHMEM|__GFP_IO|__GFP_FS|__GFP_ZERO), pid 2, tgid 2 (kthreadd), ts 1433078116205, free_ts 1432956594052
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x228/0x280 mm/page_alloc.c:1884
- prep_new_page mm/page_alloc.c:1892 [inline]
- get_page_from_freelist+0x24dc/0x2580 mm/page_alloc.c:3945
- __alloc_frozen_pages_noprof+0x18d/0x380 mm/page_alloc.c:5240
- alloc_pages_mpol+0x232/0x4a0 mm/mempolicy.c:2486
- alloc_frozen_pages_noprof mm/mempolicy.c:2557 [inline]
- alloc_pages_noprof+0xa8/0x190 mm/mempolicy.c:2577
- vm_area_alloc_pages mm/vmalloc.c:3649 [inline]
- __vmalloc_area_node mm/vmalloc.c:3863 [inline]
- __vmalloc_node_range_noprof+0x79b/0x1730 mm/vmalloc.c:4051
- __vmalloc_node_noprof+0xc2/0x100 mm/vmalloc.c:4111
- alloc_thread_stack_node kernel/fork.c:354 [inline]
- dup_task_struct+0x228/0x9a0 kernel/fork.c:923
- copy_process+0x508/0x3980 kernel/fork.c:2052
- kernel_clone+0x248/0x870 kernel/fork.c:2651
- kernel_thread+0x13f/0x1b0 kernel/fork.c:2712
- create_kthread kernel/kthread.c:486 [inline]
- kthreadd+0x4f9/0x6f0 kernel/kthread.c:844
- ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
-page last free pid 8089 tgid 8089 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1433 [inline]
- __free_frozen_pages+0xbf8/0xd70 mm/page_alloc.c:2973
- __folio_put+0x414/0x4f0 mm/swap.c:112
- put_netmem include/net/netmem.h:420 [inline]
- skb_page_unref include/linux/skbuff_ref.h:43 [inline]
- __skb_frag_unref include/linux/skbuff_ref.h:56 [inline]
- skb_release_data+0x4cb/0x940 net/core/skbuff.c:1122
- skb_release_all net/core/skbuff.c:1203 [inline]
- __kfree_skb+0x5d/0x210 net/core/skbuff.c:1217
- kfree_skb_reason include/linux/skbuff.h:1322 [inline]
- __skb_queue_purge_reason include/linux/skbuff.h:3426 [inline]
- __skb_queue_purge include/linux/skbuff.h:3431 [inline]
- virtio_transport_remove_sock net/vmw_vsock/virtio_transport_common.c:1224 [inline]
- virtio_transport_cancel_close_work net/vmw_vsock/virtio_transport_common.c:1237 [inline]
- virtio_transport_do_close+0x251/0x3c0 net/vmw_vsock/virtio_transport_common.c:1255
- virtio_transport_recv_connected+0x3c4/0xf10 net/vmw_vsock/virtio_transport_common.c:1464
- virtio_transport_recv_pkt+0x17a4/0x2b70 net/vmw_vsock/virtio_transport_common.c:1693
- vsock_loopback_work+0x32c/0x3f0 net/vmw_vsock/vsock_loopback.c:142
- process_one_work kernel/workqueue.c:3257 [inline]
- process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3340
- worker_thread+0xda6/0x1360 kernel/workqueue.c:3421
- kthread+0x726/0x8b0 kernel/kthread.c:463
- ret_from_fork+0x51b/0xa40 arch/x86/kernel/process.c:158
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:246
-
-Memory state around the buggy address:
- ffffc9000b117000: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000b117080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffffc9000b117100: f1 f1 f1 f1 00 f2 f2 f2 00 00 00 00 04 f3 f3 f3
-                                                       ^
- ffffc9000b117180: f3 f3 f3 f3 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000b117200: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
