@@ -1,94 +1,93 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D75227E045
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 22:02:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A65E2DBF47
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 22:04:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770847352; cv=pass; b=LA1vWOJ3o6Rj6WziEioH0bsRs7wS4HR0iIhJcbXAzmtw+20e8eJt+VRenpzL/5hi0dtHyAOs0UDHP9BZJkk6XzTA/hez6QxRhPvEqIW5OSR0KNZGkPdnJcNPq8pTV6NpEQx5lqxA17isvDAn85xMrItONuExyjGiaVxnZ+NzYX4=
+	t=1770847479; cv=pass; b=Yujv7sKnoYtfHnsNtKyixOv4wAa7FT5dlCSwh7kHwg2H28FuaJ/kDpQkrpj83C/49VRnkH7uJ9JAXiOBoaY9chwqm9cuNw9z49FD61kGpqoQkJjQ5zqfKWhxQ0kGFbMDTTVpNkT699UBBrXxKRYfaXlz0CPCuz7WWxESYrpIXgk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770847352; c=relaxed/simple;
-	bh=5tJM/IOFmTBwEk6KRwggw12K8xJbGofyaznpROU0Gdw=;
+	s=arc-20240116; t=1770847479; c=relaxed/simple;
+	bh=xYLITwmQkBHZuyWBinrWhpg72zDbwiwLJN9i99eG/4M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=i7Kitoav2IkkOVrmfG2PXe08BS+krb9ivHnwkPu9XOBSE+Y9NC74oHwix3qa99QiSSxLDWSaEocHaRJr9F8K53dP7iZYFkXL7BbzMyO7ZQ9H0l3ezbkfhLWaKd7s5pfB2cO6lgx5QRuStBMf2PeykSRwb2PPOv5Lq3seCzzJOJc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iALz2aLc; arc=pass smtp.client-ip=209.85.221.48
+	 To:Cc:Content-Type; b=OiW8qHbyvesZpBa7XUI4/shuNes3CmJYPGl5yXvsuKGFGTO/fl7vssetsHXUUI2sfiZXMAsoo1PUVhALQSi+PnnwSPeZ8+/s1zN54qBo3Zn8JWbkI4JwD0m+cIf1D61i/PjllnZlIL5K06jzLv/tbaF3qRDvQ6Hwpa4DgUm1VJk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WmpJkNxD; arc=pass smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iALz2aLc"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-4362507f0feso3789865f8f.0
-        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 14:02:31 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770847350; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WmpJkNxD"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-436234ef0f0so4487469f8f.1
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 14:04:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770847477; cv=none;
         d=google.com; s=arc-20240605;
-        b=eX8lePILR/fIOnXW4LMq7sPFwbsHe1Zyq3uijCQCc7gxD8Zbm8yhR055wLBX7NAgS0
-         l3ooa24bDBjcMNmJYpIk65W6CFgtc6hPqVJ5PEiTvtgplR7s+TSnfyCwDo/xZAXoD6Xq
-         gtCFdHgH0ITdn3nbonPQCFg12JLcecejXlpoPH66bauZbpR3htd038XQEcU6I2xQBx7U
-         rLTVaSuNrgSMh4K3Mrdo+o6Hp2zODmXc5DQQFtAvdSmJgJkA8bgqLwTYXyfRBhrvkvOB
-         NtsFd9Yv2JCd5b25izvQGpTiuXg5MeYk3szsJ7Ra+W5NcA783cxNb+myujKJq0dMVTiF
-         nmkw==
+        b=OUzAkeOXlmMB0bdQoDB5SZjIj0FS6gnU4TwMhWqfD/dfu4r7hcmkX0ktKHIyCh2XuN
+         1BC1NDBKXMGn98nB7OiV5KZeWzcV8eZISQVF/W191rJB5HiXI29iYM8LllTjukyUog5U
+         oPwQwRC24rCQsqWW2Js5QiAGdkZBcRdRy/MURRc9eO846klTZJoNuPvUOJoBaB4aSyH4
+         NvIKITuNZDXPA2P30SymuP5jfMPf+ZAtjEp8wKgFG4sgmeGEz/+1uyPDWy3WJknkhxYx
+         DINN6xAzJrVbt1vkBNHAUngB4zT1ZrFHBJ7OYmb37MsF7iug0JLGEjf9pWmjX6Jqs9bK
+         +2fQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=T+yfShl3sVpZ+ZRUdesJYeDCGWqSYwJ/bLXn/Dcorsg=;
+        bh=FR6+el64FV3XLWEDv2HPciNXzhYlgVXQsT8sq8aBxGs=;
         fh=/vcNYrAJJb439dsZ7iBfi10x9/H/MJg6e/sjvEyepHc=;
-        b=baDaMx6z1+iC5T+5VEyTnd6DvDx4HGvaBDOhix1QFkKHRg8RNpYt0ur+DP8jOcqUMX
-         8tqjoojo69Sx9ChaKzKtnBXOjp/QhGDQ5785+8QRIilQxmENZyWD0owuB3s9d9E6F7si
-         BtSvsJm9Hf08P927TkDBRrlHy9JGaQNbpQr6LOxhaCcZzZYPUYNwCcie6EZT5L9Sw3/i
-         d9nEsR9tH+YBpaeIQn6cdaLKMSy8tsZ0s4arKgPSjESU11kjd9gIoabptWjc70ujTKAF
-         xrpV1usAfr5MnHSvDjz0uuoDIJMHcC4x+AOwhLqGCW8DbK6dc+xoDne0pnqVJEdc2eIq
-         wSYg==;
+        b=S8KX1ShrR8HoiTL/ELqq/sWeEH5bJkaBfnlKgUCFdKZmAII6Vtf70You1ESYoTAPLH
+         XVhYX25UEwuZ+qZ7CjMckepTfsM4w4r0GSD87rEMXI60w+jGICwWZNUgxK3xHxYUfR6i
+         AaC6vyC9osaCEktabyqJ/t28pwAswQ5lrsTTjE/GJVFfvB6c1wE/NlBTooAa5oRsy9jz
+         ARaMtm8od5tD6I5Qvp6q81JhfP2H7vUlvfYGSARtTaD11swuNY+u9LcTMCdWgTXZ0KuU
+         3kIZ4lHauBu2JxB/NJ+Nu5ZMRVVc4kAX2eUgjSKg+CyT2NfWL5tWnvSB2soZ7ggdhx7i
+         2RRA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770847350; x=1771452150; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770847477; x=1771452277; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=T+yfShl3sVpZ+ZRUdesJYeDCGWqSYwJ/bLXn/Dcorsg=;
-        b=iALz2aLcZl7PuIflChZet/e3bI8zbRMoEAWYKK1IIDI43sOfgqokcRR1q/xW3+VVUJ
-         ex3uhbSId5TJKARUiF7mdGCHtqGaoVAcuKhg7M6aDu82cDD8IwfLmwmCn2IlQJiC3FQu
-         KP89zbGdTeLtMCjfPT4gedu77I3k3nCaPMngK6EjbaDGdSDY0uLRqXarRkhao0PuwYGs
-         VjScP3KISDMpnBnUtlAEFXfx2Ed5VMWVJwl3eEcC1wx1QRiLxgWCiCCCd6ZEm8J93nUA
-         sTi5yVLxayNrD+vXLEmVYLBkTH0cnNGxC56fQlN4nhqo7F9NGOFh4s8KbNW3NNYWNlUL
-         9rpQ==
+        bh=FR6+el64FV3XLWEDv2HPciNXzhYlgVXQsT8sq8aBxGs=;
+        b=WmpJkNxDzBNxis3JDJ3YbfmW+rhtFv7uByoXeWvWoKLf3MZk0sUdau3HNqbOK0vacI
+         on/wTZ5GS0ufe3NLZ/4nMtP+6Fv6K0IDdIyAsJkU1xA0PkodLewQ5KoDHP1LGoO5+qPu
+         qWdnUCN+zlWZAa6RIL92P3N/qWfBB6Smhoh64bpBDaQloQB+sK2YhfNA4lY1hdoU1CDk
+         u71WdTm6yxj/wVhbMmYZ3nWZVdBL/G422DUBAF/DhBe/Ner5waBmB3A2TcqCG7V3tevk
+         pofxlRlbxLitfCfsP3aSvIFBQxxAUC3gpA0XBzPvCNj9nCERxj9X64LHuj/0UzMtf3nO
+         921w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770847350; x=1771452150;
+        d=1e100.net; s=20230601; t=1770847477; x=1771452277;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=T+yfShl3sVpZ+ZRUdesJYeDCGWqSYwJ/bLXn/Dcorsg=;
-        b=pTLgdA7MBnYgjzaOb/oq9qaRhNofTbjoeHULXHuztxrTzEGKkSojl6/bAh7VwEwf5C
-         KKxDAooHnnbshTTUstQPKac1cBYmrHNYjVx60uBmzp1/lgVCoSmE/jCatUG91mfZTcxA
-         8r3MOOlgrCya01cH+FVmoaCHaG1zqPwAkbttDmZaF/v4ftmQ5lUVhIBa5fg37CJe7bOz
-         JgWBt4RTmv2ds2PR/OJY/6Zy4iK2+0YEypHi1wCRucvZKFRiqnD/kz3pDW3UFGahDuDV
-         FaewwF26xEUeWECzKEk2zfT2KufILSEUCRxVR55eaXrih/x4+NHEVzh7b+yXiLhhh8FA
-         07/A==
-X-Gm-Message-State: AOJu0Yz7RwG8YWNRCcVGMdd48x+4paytVyXtrieHwbISh3FqRwsorP4X
-	2FjsQMXQ0saXTfNa0myX3SrcigelyQkpXXE2fc4yd1e+iaByqdCIUvAg7Oq32O2E5X4vpoPyoyB
-	mBlZCZy2vTu6AfxB9CuGDleHYxMQ9Bw8=
-X-Gm-Gg: AZuq6aIcA8hvPcox6mPut5QzoRiZDdbmsExn7uVMjRflEtry3xM4neRKYfBPUmQzD8H
-	Yr9Vnrhb11c05pdyjrP3qP7EH5H32pD/92JRQItAbajozTLC6s4KbwGsduEuoXz7E2pZCan8w2/
-	MZetlXJejyE33wzCrH6U7/VfLm7QmEkSauyHIMYiJBO3FIyC571T+GfIGSeb2MEeREXOstuHJR4
-	88cv/AyL5tZNxRjOo06vHAj1TurokoZxcrgWitO2Xc24XnnbP4rai3oP/4DOGwKvGeEft+cmvp0
-	+BQ9JTT4uCEonz7f8Onqs9WDRKMjFRp3sRJVUzXDUwseLfMO+g13pORCaDEcj/rdr9pmzJyZl1M
-	cn1ViDjPQtlRB+cNpAMcdD9zHlA==
-X-Received: by 2002:a05:6000:2884:b0:429:c14f:5f7d with SMTP id
- ffacd0b85a97d-4378ac8f35dmr1447269f8f.29.1770847349571; Wed, 11 Feb 2026
- 14:02:29 -0800 (PST)
+        bh=FR6+el64FV3XLWEDv2HPciNXzhYlgVXQsT8sq8aBxGs=;
+        b=ifALuWbkU0gaGOl1kUXnkFv+MRb0CriNBgPT74oeju46PkGUYM+CGfIjMoh/mPJd90
+         TxCXu2PQ/vFXQ8cdWHPUB5TwXvRZDeqgACV7C+97AZzGHA2lIuJ5ZJZ96KSR1UKv/ZY4
+         Qq53DRqflD8tcRE3GBUBXCKLrNT1GDaZNYBUbOMBbT0ptDa4sKa9v/NYVbUVYSBdMUga
+         ZcZtCo1wUfuc4DMu2sDn7UoMq0wYODDEsChLi/5TmHp5Sddjgu7fW4RWB4RKu30Kmz0e
+         KsCM1uoN9EAPEohAsfs2R8RcIeF0XsSUgBklgefVnOl2uSmQX7RChQ7w3r1PYQgPhKlG
+         EswA==
+X-Gm-Message-State: AOJu0YzafJXTpceaoLhr1uN20dVogusIxTHj0GZRc7kNceqhRR3FMLoE
+	hJ6H0gE5CG5Ap4MD1XG8IoijJ7WdUqLRGjz9V7BeAswuWlpW50SD3v9K9oc2YEGfymyJ5VvRTxR
+	kEkiMnHveCBJuGIgShAmEd1qVo2bIFcI=
+X-Gm-Gg: AZuq6aIV5URB8ZSFAnMHHNWYcbuizwTHN6QQ5u48Xr6pp+tu3GBjoY1D+vyy5vGzaN/
+	eQpwArIAR2ng14Ejd8RVP6bfdErHChZmOXSN2QT4bth0pmwszo6uHRRYLpLjY/+J22AyVX67sOi
+	UlywlO8B3OqKRibN1qJuvcGxZGbVN9mRHCsW76xDN2WO6+DGYnDtWmPCRzKEyVSmc7zH/RdGPVE
+	p2s0Rnk5V4Hl8nBmHW/Fc+i4BMohnoXjxpSr6uqAs7W7Uyld7siC8bmihfcvYqzzODsh5VSMcAh
+	fjcWYOHS9pbkbPPpve3Yj6jOIB4nmtWE+tiW1RjuPOWACa0MTkSzxNb4Y1YXsMbUrUWT3tJNPM+
+	79dwstXND9FqSGLZWPtMrMCx+TA==
+X-Received: by 2002:a05:6000:4381:b0:436:42cc:25ef with SMTP id
+ ffacd0b85a97d-4378a9eca8cmr1301638f8f.13.1770847476626; Wed, 11 Feb 2026
+ 14:04:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260211181248.3040142-1-memxor@gmail.com> <20260211181248.3040142-2-memxor@gmail.com>
-In-Reply-To: <20260211181248.3040142-2-memxor@gmail.com>
+References: <20260211181248.3040142-1-memxor@gmail.com> <20260211181248.3040142-4-memxor@gmail.com>
+In-Reply-To: <20260211181248.3040142-4-memxor@gmail.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 11 Feb 2026 14:02:18 -0800
-X-Gm-Features: AZwV_QiLtXnzNgr0f-ufObU7DGCZpoCcnpmlX0xmchdVM27Ei1P6asmlx3cAkjY
-Message-ID: <CAADnVQLBwsi4uPJukTWPmKF7gG56Qz7kWXcqQkSpkqMTjFk0aw@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next v1 1/6] bpf: Support repeat, duration fields
- for syscall prog runs
+Date: Wed, 11 Feb 2026 14:04:25 -0800
+X-Gm-Features: AZwV_QidD527w6s22qwIRJNVNmYf3srIe60M7xk892AK67HlPeK55rJHXUhwrxk
+Message-ID: <CAADnVQKbp1FXQTAFkHt_T+AaxSnNGsjX6=cguvNip6ZNEetCiA@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v1 3/6] bpf: Enable rqspinlock in tracing progs
 To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -100,112 +99,12 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Feb 11, 2026 at 10:12=E2=80=AFAM Kumar Kartikeya Dwivedi
 <memxor@gmail.com> wrote:
 >
-> Currently, BPF syscall programs do not support specifying the repeat
-> field to repeat the test inside the kernel multiple times. Use the
-> test_timer infra for other prog run tests and make it with RCU tasks
-> trace to allow usage for syscall programs. Also make the duration field
-> available for use.
->
-> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> ---
->  net/bpf/test_run.c | 92 +++++++++++++++++++++++++++++++++++++---------
->  1 file changed, 74 insertions(+), 18 deletions(-)
->
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 178c4738e63b..4e06e516d9f2 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -33,23 +33,27 @@ struct bpf_test_timer {
->         u64 time_start, time_spent;
->  };
->
-> -static void bpf_test_timer_enter(struct bpf_test_timer *t)
-> -       __acquires(rcu)
-> +static void __bpf_test_timer_enter(struct bpf_test_timer *t, bool trace)
->  {
-> -       rcu_read_lock_dont_migrate();
-> +       if (trace)
-> +               rcu_read_lock_trace();
-> +       else
-> +               rcu_read_lock_dont_migrate();
->         t->time_start =3D ktime_get_ns();
->  }
->
-> -static void bpf_test_timer_leave(struct bpf_test_timer *t)
-> -       __releases(rcu)
-> +static void __bpf_test_timer_leave(struct bpf_test_timer *t, bool trace)
->  {
->         t->time_start =3D 0;
-> -       rcu_read_unlock_migrate();
-> +       if (trace)
-> +               rcu_read_unlock_trace();
-> +       else
-> +               rcu_read_unlock_migrate();
->  }
->
-> -static bool bpf_test_timer_continue(struct bpf_test_timer *t, int iterat=
-ions,
-> -                                   u32 repeat, int *err, u32 *duration)
-> -       __must_hold(rcu)
-> +static bool __bpf_test_timer_continue(struct bpf_test_timer *t,
-> +                                     int iterations, u32 repeat,
-> +                                     int *err, u32 *duration, bool trace=
-)
->  {
->         t->i +=3D iterations;
->         if (t->i >=3D repeat) {
-> @@ -70,9 +74,9 @@ static bool bpf_test_timer_continue(struct bpf_test_tim=
-er *t, int iterations,
->         if (need_resched()) {
->                 /* During iteration: we need to reschedule between runs. =
-*/
->                 t->time_spent +=3D ktime_get_ns() - t->time_start;
-> -               bpf_test_timer_leave(t);
-> +               __bpf_test_timer_leave(t, trace);
->                 cond_resched();
-> -               bpf_test_timer_enter(t);
-> +               __bpf_test_timer_enter(t, trace);
->         }
->
->         /* Do another round. */
-> @@ -83,6 +87,45 @@ static bool bpf_test_timer_continue(struct bpf_test_ti=
-mer *t, int iterations,
->         return false;
->  }
->
-> +static void bpf_test_timer_enter(struct bpf_test_timer *t)
-> +       __acquires(rcu)
-> +{
-> +       __bpf_test_timer_enter(t, false);
-> +}
-> +
-> +static void bpf_test_timer_leave(struct bpf_test_timer *t)
-> +       __releases(rcu)
-> +{
-> +       __bpf_test_timer_leave(t, false);
-> +}
-> +
-> +static bool bpf_test_timer_continue(struct bpf_test_timer *t, int iterat=
-ions,
-> +                                   u32 repeat, int *err, u32 *duration)
-> +       __must_hold(rcu)
-> +{
-> +       return __bpf_test_timer_continue(t, iterations, repeat, err, dura=
-tion, false);
-> +}
-> +
-> +static void bpf_test_timer_enter_trace(struct bpf_test_timer *t)
-> +       __acquires(rcu_trace)
-> +{
-> +       __bpf_test_timer_enter(t, true);
-> +}
+> Allow using rqspinlock in tracing programs, since it is safe to acquire
 
-rcu_task_trace doesn't exist any more. We should move away
-from that name as well.
-Especially here '_trace' is misleading. What you meant is task_trace
-and that it's sleepable.
-So let's use either "_sleepable" suffix and replace 'bool trace'
-to 'bool sleepable'?
-or use "_srcu" if you want to describe the logic inside rcu_read_lock_trace=
-().
-At least "s" in srcu also means sleepable.
+...
+
+> -               if (is_tracing_prog_type(prog_type)) {
+> +               if (is_tracing_prog_type(prog_type) &&
+> +                   btf_record_has_field(map->record, BPF_SPIN_LOCK)) {
+
+hmm. Did you mean BPF_RES_SPIN_LOCK ?
