@@ -1,237 +1,303 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f43.google.com (mail-dl1-f43.google.com [74.125.82.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8C95347FDE;
-	Wed, 11 Feb 2026 22:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986D12FFF94
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 23:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770850686; cv=fail; b=TIfaaZt1nMWutG2oCCiBJQdFahoeyNhS2jYILsbCuI8hmCqkdAJlnT640zEgBiDpsLTkkqEg4tX22EHgR4Y3FhrcN2zUiC4oCjBox8e1+mKeFnJzwIce8eNu5lP0q3lvoZnV23o3t0Mp93gMvoojFkOdUPCvVTYrLOCTcYX9/OE=
+	t=1770850905; cv=pass; b=jJ5lkvEsu2vuhFW3CtnKkNA4nAnyYZbVRAH7NsWzi4832O7Fb6woNJ2WvR6kBHO8R8KMetSqr8OgiRpZa4rosf+yh+72AuEgclgWNQ+1Jsshvtu/H67jcvTbN+DlZWpxOpvB2z61JTiGadzLRsm10p04vYEF9gQgkj/dhwz4rIs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770850686; c=relaxed/simple;
-	bh=8BcbLxQRVBp1yzeKOu7ZVD0JS/2HvmomwCN1ewuUi14=;
-	h=References:From:To:Cc:Subject:In-reply-to:Message-ID:Date:
-	 Content-Type:MIME-Version; b=rBAr2x492mJPXC4OLhEpTrgBhWGInkpRt7kNNQi7XwPaa4waK7I0I2KUTOJiNnpYssalM4MoIEx8WIHe3joPjSZWHTfiRmUCRxUSXS8aaDGz/jJojkiahTmLu2ZvQljgTJ7aOqtf8tVY9rr/cCuYJJnjmgD+V0sUyTaNdui7TZM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=ZCl4ctd8; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=PZAb2sNg; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1770850905; c=relaxed/simple;
+	bh=1udlOiyE/Ppx2kNUZ2ygSNvFIXtyAU8H42LORwBeYA0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=eyt/OANfJIIscSS8FgYPWQOc2dvPI9n1inmGBH0VeZaAjITmEDeU//pklqPZ67q7DD09HG+4Hfbay1M7Ya/RQKBoUl+PsjNHqW3FeWh5vqdxAL7r5Mm2YHGi+7DEWWj9AhAz17EZHrL9NGEfqP2C6r2u407CiKRkoNV+bqqcwtg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GTT1eM9x; arc=pass smtp.client-ip=74.125.82.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="ZCl4ctd8";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="PZAb2sNg"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61BJUfcp1998041;
-	Wed, 11 Feb 2026 22:57:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2025-04-25; bh=2jCcXroO0SwX/hraob
-	JKeKYxndJeX6JUNOHJqOSFafY=; b=ZCl4ctd8XNw4ElZt53+xoayf4MB7GDfWDh
-	60mutMySwZecxV7Gfgxy7DyeJ8uFbGqh6gWdBWRu+IruCoKuzHFAlI+5ZIBwrxI7
-	EQuWbVeo80tYjh9I6UnGAhQFrK0cOiB8lPl5uW6yr3GSjWoX5ONHzacDeXtU4fT5
-	hB6N/XdpxMSZDd881dDLd1iuMyAEzeE2O+hBrEoo87Ur947xFgG1Y+sgzcW1WRGV
-	gREK3jPNAS0MQ5HMQxGWsh1+TUP+/M7JHzJ8AYB8NRlvnc8Iv9RzU/JVSOkrCSUa
-	Ljb0ix/dlDWAHmd2HGV0uXWRL+aXFM9kjzA7xBba3ye+nCBlHeSg==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4c7s7rux1a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 11 Feb 2026 22:57:34 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61BLceGE030205;
-	Wed, 11 Feb 2026 22:57:33 GMT
-Received: from bl2pr02cu003.outbound.protection.outlook.com (mail-eastusazon11011027.outbound.protection.outlook.com [52.101.52.27])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4c822a6ftk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 11 Feb 2026 22:57:33 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=knKTZbVN0FlCV3mWqCFI8KFWx0hLh++j4MZQqZC2E/rCmdYCo/kGjvFtMPkHAy4n3rur7zHWRPBta5DqdVb9ZlPuctf0Gb7UOnyoqd3oM1JbzceTgQgnkPIGV32WdaE8HWIWRZ/qCFgks9um890n+VHAHG5LzW/Nuw6xzqZWPyq83fMiUNXdtfY/shfKPevXu5BTwJYrwOGOurZRcgsLesLEtgbzVRmuyZjYqYEy4tR/RFyjrIWhi5Oz/cemgHnIWx3mJMXU4aqg18eI45atKsvXp2zC1GF0JHe4GY7YyaDqliCWRRA7I6733Jtc/5zRA2qpmuDA9rlVA5TZMTKWVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2jCcXroO0SwX/hraobJKeKYxndJeX6JUNOHJqOSFafY=;
- b=hvXMXTVG11FDPQON8soLRFY4oOdZ3EWyduWwouFU3GBSZfYNpOxs5/t0CLUe2vMUWaqf8tQL8rk7I+r1Yh2K0wqwDsPBQqq7wIXPfRDEj6b5ZmZj/jscfyfSvs4HAOMyV+4XzdVPdLauJ6I9H17XXS6VnQ0Y9i6JR/f+dmhavkLsddT1mpnAsXGHGo7ap1gZk492LNpv7elJlNAIdMM9DLjVH4i1ZfZm6qAfVSG0EQBPJDpFxkQSmrsOzqJzdpFy5JSEB+5C0vz50TzMMqSYwEawwXzSwgn+FbpVXhU2TsKxfJJhS4Gn3CFzgrJWWIRjtI2qP95IHUc6mUej9bQ6qA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GTT1eM9x"
+Received: by mail-dl1-f43.google.com with SMTP id a92af1059eb24-12336c0a8b6so84482c88.1
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 15:01:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770850902; cv=none;
+        d=google.com; s=arc-20240605;
+        b=F8p5kaBY7o5Ie54VlwyNmtxknHLsa/A/8rx7SVWW2k+qJAk1gU3E3vUCOrOFWa0WI1
+         DXhoYJv1mBrKshIqO0iDnGwdux5UrlxuHD7X/P84Wj3gsxKjkpVqO/ocT0xDgEj0WUBy
+         jRzNe8xH1jKAWEnmtgQFXI7+d/tOK7t4A2rIf/nkhL+PJsVxQmER3ceoTOvv0oOy0FOH
+         9bVXQ4gNrF+EQIgtloFfWZn1aZjnU+C4qiypdZ9lp1oYRBkupJx6LjTyk/ZDGcttoOMC
+         rM272XN2SpdHHxbJZvbb2YTWH5rok/vPQZUFb+DViHYus7jKbVjqN1wMNb2a1dMTf2bg
+         QmOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=E6m9F/dx48LqXuQRNg/m8pIzXhJQNC52svY/pA72kE0=;
+        fh=aWuMTHW6IHu/PIiYSGswYQRUXAqIgEvISs3q1asaq/M=;
+        b=EkMaFykvB5zJR7t2z67MTyAWBwIkoGRkVg+wUConfChtueNui1Fv+IZjSkBi9k/VdD
+         7A+9AVGyFJtT0MISZibjDBC+ODFEHfPtryZzolma4Rowy8hiuXwaAvh85GMBMncuKTth
+         cmKisIIxzhzY6fv+jADJgmXYi3ryY0y7xw5GUVHRvsg3w/Nlq/2IvryBTsLalOjS4UcO
+         +6QTKZYhNqQIEw9QM2FpENLnw5vqHWe/CIePYd8toebG336AgMRL6YnAbUWmxWtUBP7n
+         YmUh9Oe2IQ9n1UlVeab5WtrwgOUlktDjAZbXpZ3nrG//oPcKr5kWPLtm+RBcyj+d/oWM
+         ZUxg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2jCcXroO0SwX/hraobJKeKYxndJeX6JUNOHJqOSFafY=;
- b=PZAb2sNg25XwI8fNbOvdPqKiQf8bA8FsiSJyWZH/BL4zHk38wT37IjeG4T9CjTNSXvy1oXpXHqqP8orQdrw0v7gqYuHlBpJN0eM51VQL+W2dQReIMk48VEby7vAyRuZuNAXD2jovMqYapn8oWcbBoMZmyOYBTRne8NvQatX0dX8=
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com (2603:10b6:5:357::14)
- by SA1PR10MB7553.namprd10.prod.outlook.com (2603:10b6:806:376::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.10; Wed, 11 Feb
- 2026 22:57:26 +0000
-Received: from CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574]) by CO6PR10MB5409.namprd10.prod.outlook.com
- ([fe80::3c92:21f3:96a:b574%4]) with mapi id 15.20.9611.008; Wed, 11 Feb 2026
- 22:57:24 +0000
-References: <20260209023153.2661784-1-ankur.a.arora@oracle.com>
- <20260209023153.2661784-3-ankur.a.arora@oracle.com>
- <aYymMze6Vchxe6jK@arm.com>
-User-agent: mu4e 1.4.10; emacs 27.2
-From: Ankur Arora <ankur.a.arora@oracle.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Ankur Arora <ankur.a.arora@oracle.com>, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org, arnd@arndb.de,
-        will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
-        mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org,
-        ast@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-        memxor@gmail.com, zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
-        joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
-        konrad.wilk@oracle.com
-Subject: Re: [PATCH v9 02/12] arm64: barrier: Support
- smp_cond_load_relaxed_timeout()
-In-reply-to: <aYymMze6Vchxe6jK@arm.com>
-Message-ID: <87ecmq99d8.fsf@oracle.com>
-Date: Wed, 11 Feb 2026 14:57:23 -0800
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0335.namprd03.prod.outlook.com
- (2603:10b6:303:dc::10) To CO6PR10MB5409.namprd10.prod.outlook.com
- (2603:10b6:5:357::14)
+        d=google.com; s=20230601; t=1770850902; x=1771455702; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E6m9F/dx48LqXuQRNg/m8pIzXhJQNC52svY/pA72kE0=;
+        b=GTT1eM9xyOI64gbEHWAlGC13XWHAh4jaXcswlafdvjtpF2qw17YtHOTIzlUFJhPQp5
+         5M5AGUJDFXaxpl3W7BFEbVTcm+urUlLa2RbxKKGhmMCuE8mU9IOC4hxFQq/icQ0vkAz3
+         S+AGutSSCi7VwvmIraNVs60FJheykGfbR0AndRnneUshbYxxgG3MHowcsTZpl5yDtl8C
+         CrkSXOj/gz3L0SxdGmhh+5pcqTizWFPDDh3dhvw2wZV8mUxOC+g/X1jPIAywZ5WfZ2ML
+         zhKl5GYYfmtajoQf/ArRyeq4XOpMwE9+fAyR5P1W5EWhZR9bTtf0xSRBU2Re4eFGevZe
+         +PKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770850902; x=1771455702;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=E6m9F/dx48LqXuQRNg/m8pIzXhJQNC52svY/pA72kE0=;
+        b=iS9FDvCFEND7L5JEKbvakNFotFsmfXOwOwsajPdoD9aFpEbWc1pzmo7fFeriTNODG8
+         tH+53LQza6wE/NdgPSz/ZpeormvT7+0dZID2tEvr7BO/mjyOs+ES+432lCCIPwRX97zu
+         PBG+w9cxlzULEh47l9TYF4JPq+U5rQ8a7dV2Mam6XSCO1/79Q1oyslJrgx7mpyb1FXuB
+         1zLVrEvLewH148sQBaL19XQdX665BcUP0VTQ84iBgaxcwsZGiL/P3sZ46VyjYnAWIt8J
+         Owk9hEphugDcFnMJxaoq9RPwvgqyphAiEn/5tGkY/+iRzjisVQC3l8IE6BLAJBQwnm4Y
+         MSvA==
+X-Forwarded-Encrypted: i=1; AJvYcCXXPnJe1C5Cgk8uf/naARt3qAl1MuyoHtB9IGhgqbotq3GKHqlLDCZJJ6sTJBpcvoWBTAs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsk8E1MgLydKII6/Vt8ygNlpbYBgm1ufl3RUkPF3+iKwyuULyc
+	BQoVIKDOlMJVhii6FGKlfFvTPL3nlR1St6umegox+wHaPQN/kMCIZbIzMFsnGwgoeI2vszRuHJf
+	C1Mmg9Sy78WnBOoPHSim7SrpOy0aQq9w9ddPq41on
+X-Gm-Gg: AZuq6aIDoArrKMrt4mhrrkxG2z+h6aqUksU/1mmyEJeRFdlX1oewlJPdUJ/pEBkth8G
+	3oWCp7tg2zq2k5LQheGix/eFe7M8XaZWXiRzUwKFUEAWEsA3H9SrO79cM4IxPlWlSP0O3pyvRUJ
+	hIc1q3ertd04dE0i8dPA0lWcUWNDe8v1FymWSIgAuLlrec9yk+mw2/zQYG8DZisS2bDoTUYKepg
+	wXZccoYqZ7WiTzDnYLmqjd+uhe49mWfWBXLxAF/E6xhk+DyzzeSxyYGjvytrRunri6TxiHvGcR3
+	cv8wY/3z39BDptQzgbfsqNAooPqYm6EpvJpjWgi16z7u/gQPHIY5nn6FdZ5H8y0ZQ99S4/pj
+X-Received: by 2002:a05:7022:61a1:b0:11b:9386:a3cb with SMTP id
+ a92af1059eb24-1272f79d964mr331465c88.44.1770850901221; Wed, 11 Feb 2026
+ 15:01:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO6PR10MB5409:EE_|SA1PR10MB7553:EE_
-X-MS-Office365-Filtering-Correlation-Id: 50461840-2542-455f-2567-08de69c0ebba
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Z2ql/S7Rabi5ziZKLNd26etxA4JiwD9cjPIgqtyQmoJ42+KAYSRpxCV4FXwv?=
- =?us-ascii?Q?aJiDSyrhBYhrK6zmIo5Qvy5DZ+IswJkU7F+XqfvZpvhEt6TIqW+xpmWI9und?=
- =?us-ascii?Q?api0TIdzUuPaIL+Fd8HLGIWzuo9THV3OZ4KRNkymiINZYLv2Lls5X2nIO7og?=
- =?us-ascii?Q?p3679WNhemUJ2B+h/CE5cd4D+ImFZ+UJoGXsJBtYkajQ/1VQVg9UqblrGvya?=
- =?us-ascii?Q?peJocnMVNQMRzLSgrcHC34k+oB8aXnDxcUaLMCmZC2NIKH4zZe4kNGlZFLo+?=
- =?us-ascii?Q?Zla+Z+G3zGJbBTu7z0vIoqxo1Ozf2nqW9zOwrb3TMWOSp53QG64KOTqlusrs?=
- =?us-ascii?Q?6lLl++pgud1iV/FANh2Qnt4nNGxlelAUkkmW6jdWXLHdE+WtPQBXfuIXDUln?=
- =?us-ascii?Q?N+w7jeqBaa6n0XVDvTgXgJFVG65IN23mfuVv7bB8+gzAkGnjdAt7HIzQpa1e?=
- =?us-ascii?Q?N+j/jZXUz+Kls0BLuePrURfvgJDKH0vltrfR+eD4tjtM4NZACFnELBW4OsCF?=
- =?us-ascii?Q?R7ylxk5e7st6u+12Z0Gy96YZzOzENYrHOnGd9QS6jp10xASODmGNHJav6J04?=
- =?us-ascii?Q?AsGI66fXqvEkQ4CQUC6bInxsxSXOuwn3CWAu3Prhe3k/w5jg8O9BA95FLWIo?=
- =?us-ascii?Q?XrWeiXY0VbuqK4nFYDj6r1aGH8HNtVgjEJkkcBbZ+4A9/iWPuWJjTLD/3cS0?=
- =?us-ascii?Q?t5MJRK50mINw+T0wwMLLeeHqD1vz/Sw48RK7Dc0padNqpALTkzfH8/TTdfcg?=
- =?us-ascii?Q?w9igkzKxq6Sf7DR5ynLWtyEWeh+9zdtRpBqxBLLTyCjHfNnoSenAVYBXFuzd?=
- =?us-ascii?Q?Flk1ky/iiz9mIuCy2Y4DUrHXiw4hGCuvtV1yNZZSXqOL+YRPx4nOGeBrQjBI?=
- =?us-ascii?Q?OFQ78uwVoZ3LdoTVTM+kDz3WTx/OeT1Y0eSxF5TPT7J//HgkuxW93AHJoTkA?=
- =?us-ascii?Q?CMOHI2rRWyOuhPRFcO+3YXJVg4GkKsz3Bj2X7JM5DD6myD5+Ivv8VfFeOLVc?=
- =?us-ascii?Q?Cuz+mlr3UES9QSqyyrX9N87ast018Fs+gLAATbMUtlc/ZCDbxuwfJfL0/xli?=
- =?us-ascii?Q?WUyO3Pn8zVk/k8uHLsRU1z5qQXRrgu3Gqea6cskTslk+CiOgAYF+7m3399LA?=
- =?us-ascii?Q?pH4aTldU9YnA27igYNc5tkYNG0B4VqvTIZdnYXqfQxekwzY4kUH9WBiUA/jo?=
- =?us-ascii?Q?TA1cYkzp87FMKPkcSwMIrnB3njTi6yA3Lrjtra8Knd7b2FlxVvl0rt4qhdc+?=
- =?us-ascii?Q?j2SG3K4rwXeEoBBKzorj9VFuLz5NGgok7NXAvXHZsWEutEse/K32UvVL7epF?=
- =?us-ascii?Q?cQfEEkyC8Lsy0jNE39XPiACXXRTqK2NWdzxJOgcvJJHIrUTzE/jIpOw/unvi?=
- =?us-ascii?Q?fDuIjNAKbuGIEATni19ljfdpmNhLsKWdxNsQOU92Blp8WRhT+CtiKLbWmq+z?=
- =?us-ascii?Q?v3b7AkotpOJALUYbnfvbZSicYboqZ8lW5GPcsNL64Lt3VOLJkbwV0oFaR5Gb?=
- =?us-ascii?Q?+/Z3ctV7n1AzqOIR7A3lN9YGXITCvnmKiLEfqYAqLhj7wHy9oKpC0IGUfl7u?=
- =?us-ascii?Q?c6OJIidnQctujblmgrY=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO6PR10MB5409.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?2BT9fBPdBlhcPgJyR32qAy01ajwPXTFc36bzuGMORByuXGdFdG4C027UbPpE?=
- =?us-ascii?Q?QxHmH9mES+hEfx+HYCz9tbEW7po4cw9mZigdcflxiZGjPv7jmqlB2R9SePp9?=
- =?us-ascii?Q?wWR0vWKqstTG1jcJno83tAw9JFNMdQrslukbDVmKPVLYvw7eYm6pj0dl6oFg?=
- =?us-ascii?Q?5WpgVNrc+e9I5U6xMFMMgHK2Ic1m1dvjtrwshpIV+vYrUSGr7xvwp9L/rISI?=
- =?us-ascii?Q?MrULYV0z5GDAXKg0jYI3EsnRxHidxTegM1E/+oIezAhfWg/5CGlaIbKAr6tz?=
- =?us-ascii?Q?rtJn/cpWnpqqrtQueYxk1Zv3+lWnLe8THOwXPDBhkPbKEb+9xqP5qAj4YZBw?=
- =?us-ascii?Q?OtD1G7nwJqPtUfZpStqpnhsElfGe6QaGBIlt52Xse9/wPWftfjiwRtIv85u/?=
- =?us-ascii?Q?XHTX+Jgrkzs9N29w7V6FENWWbCbkg+5Zd1AmMNSxxVW9LFbXXdbQg1qcdWFC?=
- =?us-ascii?Q?/OLfKsb/NkcaAXTH/zjFwciaDmUZo1bf2Qu02CODex5/1CREc+wYQL8a3GPz?=
- =?us-ascii?Q?q2e12XoE1kd3dmMnEUUYjCn7VI+lmgrDCDc12K68loOam2Biv+T1SVw+X10f?=
- =?us-ascii?Q?A/SMgXXmqTamoBvbRCJCL0sIa5YcBjSUzLH1sXHmA5pXOczWnBeToryLWB9R?=
- =?us-ascii?Q?OqFhek/r7sn5Q/JCxzfbG18MkYxL6NycD8gj6Cgks3xk2EoTm2qfL6ztBvyR?=
- =?us-ascii?Q?HB5UwlNPRTO8cI5auQn2zYjJidMjscMF7xC1unUQ+8hNVBd8giuKWYxj9dnU?=
- =?us-ascii?Q?/pHY1ctvrWQd+G8Y3agd7D0eMJK+cTXRhBnarDQ9gW0CJh8jMYLi8kEVfZR6?=
- =?us-ascii?Q?MtgwQ1gLyq4e5yQ5jB4tuQZW6O99RHEizeF7T0Rg8GEaMbafylhGG+Ni2gIo?=
- =?us-ascii?Q?N1q/Ylfc5yh+oiC0HfGgqpxUvzgfaRvqaBXPk/xLM+KTrn9NigI2NZlfS7/Z?=
- =?us-ascii?Q?yZqRFPpWaAvY9HASCI7fUIdSkQxipZhZnbY4cZATQN9D7JYodXbC7D6vPdtV?=
- =?us-ascii?Q?UGFcZngTsFtJmFXxk34OBT1lCrmD7vwKXk8EeefyO4yRo5cLd7v36ilFywio?=
- =?us-ascii?Q?cgFhmLToyGCddFsChv4BntyVlA9xlhxuGy2NEy3YxlwMvAEUbeY2Z1LcsEYS?=
- =?us-ascii?Q?Ob4+mzjsMgz+1mSF7DWLtzAHC82JXFxPv+A9iQLgVk/EzKbb1/PS1uclUhKf?=
- =?us-ascii?Q?HwJfF8sK9HAZlwyzNqtIiKys1O6m/AJ/9xOaX47Y+3YQlfETAxomYXRE1YDq?=
- =?us-ascii?Q?Y+3He7tmZd3hl3CcM7pAuN/bMjuDL4EL69kDx8WB2zxiOB1Md0WQ/Fla9Nx/?=
- =?us-ascii?Q?khARaI1EDm2Dyd5QY+mfcbivdOv/QWWw4CL1D+yM9byyNt+NC+lYAP4LU5Vg?=
- =?us-ascii?Q?WZemC+9fFf37oZc1P2of1uFM9ZXYuhk6DlxQ8y33vV7weLqOdbsIGcR3V4VV?=
- =?us-ascii?Q?I8ITQ1dYXSU1i4p449IHBGvmSQuoc3fwDSgEEZgsRfs9fsxnioem8m/xuvOw?=
- =?us-ascii?Q?YkFoirURmNQYHks7gOFa+e3nk2G6dFKkpQcgE60D7ECCVFkZvOkHZX52sqwl?=
- =?us-ascii?Q?x8deRZ0rCBGFeHDsqtQyGTSAiOQRQOpEUspJuynQIy3pspF/fJOBYAHR5/lN?=
- =?us-ascii?Q?asUxPhgiADgBJ+hnGOaMmt1kwJmLl/6rX1wsqICoLffOV7TAgtBQWj8+TuWC?=
- =?us-ascii?Q?N4T1a8+dtV+qkgN4e2ELQx20gJ0UKaIghUYJY57JmiukfzATJwfJHp54ztWq?=
- =?us-ascii?Q?LsShj8om/VeGJYN0yfYE2AewUP1eTyM=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	wBiXwWGY68Qm/CDR7ylv2FKu+zc2+mLCaFc1oJ4vOw/GgXmMqwI6TXJ2+DPCnPK06B/Ngui7meG9qcQ9PjKzN/uv8Hl7zKjmccBkdCdF/djcxvxQG+bih1dX58aAeEdPS/5WmdaOczR0rvXEGOXOG3ckRUjxl9rEsukSEo6RS3gNIm9rfhgfxKlJU8RMWXvggeNFE0/2xhsNjHQUI86XsDzoPZxegovedA3aXb3RvTvA/uPXKT/oa5g76RUqpNWKy4QKatJsyxva5FIvVrGmpiF2BE8mXOcztFQuYVpYWgSJdfj0poKy1uKs8FBd8PewFh80wbNYtwJRxmdVDvv0pfQ9mQLFZo9PWrspPIK5+jUMDIl+4F1pIAetF6N+qRWnTT/Lnu+I1uxCYhPZIIcWOVoL4ramTVXtBeefcrF6wJHYz7ktdxjYkY3tJHPoMBnj7G8Fw+oiPMIV100dkjuGpBqC8lcUkufI3cXygoFXm38IDDKAfZDhSJ+p1HbJE8cJcAMfXp+8GsA5E7EytCTrFj+G7vK9qQh1uFWXaE8EANhR9+kfaQeVEd+Mrw8BFLqGfexA7eX6c7qw9KTlxQ5ZhWg9JaKh6A2Hhh4SLITZH/Q=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 50461840-2542-455f-2567-08de69c0ebba
-X-MS-Exchange-CrossTenant-AuthSource: CO6PR10MB5409.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2026 22:57:24.4125
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: j/NzyxxNt+Dj6dLqbDBfEr/lDaJkfKdVg2Vbpz4YAcBO3O6Ef6KSyP7c8XSvZjy24tbuE3Yi6EGQ2fvKCizZ/NYXn2sQlYUg5RSc91G2xOE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR10MB7553
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-11_03,2026-02-11_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0
- mlxlogscore=999 malwarescore=0 phishscore=0 suspectscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2601150000 definitions=main-2602110177
-X-Authority-Analysis: v=2.4 cv=PZbyRyhd c=1 sm=1 tr=0 ts=698d095e cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=HzLeVaNsDn8A:10
- a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=7CQSdrXTAAAA:8 a=7mqamtKPcH-GI9Xig8UA:9
- a=a-qgeE7W1pNrGK8U0ZQC:22
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjExMDE3NyBTYWx0ZWRfX42NW2k82KTh4
- sLWxaAC3OImM9nWSZYjNEHfT22ck706ihe02dbemYdHhxMugvTUbmtehNS/DtzJbW/5F/4wYZbo
- RKL2A+u6YbUcYc6kfI0wt6kaxU/Lp6dTUR66FB5BHM0RJSxOapG9YckWjXmTfoLaviO+uU89ECI
- c2bgrthHIKp7FZSpfaOqeZKEWhKw8wqNMY17pSPZv2mUyM/o25os58qNWhXEeRIAV2pkYXcUtnQ
- Px/JGWhw8olF0FyPEbcBFr02q/wVRzWTAVtkbdJhYUfk0M0D739gn5msKPNbRSKxGS/DR/Oi8kV
- kuvAyaI1HAk0YMhbSCdZrFcQs5o73uxHZXpyalwsUssQukzcJRlNKrSmt8Xno7Ed3x//Wo4R/6N
- Jm3/2sVDGc55Hu+5rNuu4CP05S6DXRlt662SZfR+NIwGyaAXpRTjTLVW13qfoDAEjaNRSx1CUkD
- 3OAagvWcrlDSDO6QnMw==
-X-Proofpoint-ORIG-GUID: Twk411wjypVN5b4WiJt7VWlPiX8MPxrO
-X-Proofpoint-GUID: Twk411wjypVN5b4WiJt7VWlPiX8MPxrO
+References: <20260207230720.2542943-1-kuniyu@google.com> <20260207230720.2542943-2-kuniyu@google.com>
+ <CAADnVQK_93g_KkNFYXSr8ZvA1fYh4hoFRJCJFPS-zs4ox0HhAA@mail.gmail.com>
+ <CAAVpQUAfUQJsBzqTah8+LhTciGrHnLx3pg_xEqD4=wBuEEEXUQ@mail.gmail.com>
+ <CAADnVQLMiQFb7SAxgDNFXwoJ4sYLi1DWVHwq4ftAbBxLAa5enQ@mail.gmail.com>
+ <CAAVpQUDCd1fTHfBdzmk2msrMnQTL-EzH6VH0RyHoL1V8qz1y3Q@mail.gmail.com>
+ <CAADnVQK8_P9x7HoKb0GxH1dSSnMFDsSgoV04MSkhcUPFw2uViA@mail.gmail.com>
+ <CAAVpQUC8Xx2aGsqzOeBnevzytEPTqUJQkyxsWbX8tqCoERx1qA@mail.gmail.com> <CAADnVQLBWUyrp5n_mPJFnOAx1kMnZjJR5nTL_8UL-8KLE+DnbA@mail.gmail.com>
+In-Reply-To: <CAADnVQLBWUyrp5n_mPJFnOAx1kMnZjJR5nTL_8UL-8KLE+DnbA@mail.gmail.com>
+From: Kuniyuki Iwashima <kuniyu@google.com>
+Date: Wed, 11 Feb 2026 15:01:29 -0800
+X-Gm-Features: AZwV_QhvnyTfpo7ZeXE5tz6CWfHDm_tDg0QmL3FSO5v1u6Lfo4ma72i6m6j-1Io
+Message-ID: <CAAVpQUB5mGbD79ZLVCi0G8UDpwjQW15=BV9maB6ikLzCYTjA0A@mail.gmail.com>
+Subject: Re: [PATCH v1 bpf 1/2] bpf: Reject access to unix_sk(sk)->peer.
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Michal Luczaj <mhal@rbox.co>, Kuniyuki Iwashima <kuni1840@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-
-Catalin Marinas <catalin.marinas@arm.com> writes:
-
-> On Sun, Feb 08, 2026 at 06:31:43PM -0800, Ankur Arora wrote:
->> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
->> index 93173f0a09c7..239fdca8e2cf 100644
->> --- a/arch/arm64/Kconfig
->> +++ b/arch/arm64/Kconfig
->> @@ -22,6 +22,7 @@ config ARM64
->>  	select ARCH_HAS_CACHE_LINE_SIZE
->>  	select ARCH_HAS_CC_PLATFORM
->>  	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
->> +	select ARCH_HAS_CPU_RELAX
+On Wed, Feb 11, 2026 at 2:39=E2=80=AFPM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> AFAICT, ARCH_HAS_CPU_RELAX is only defined for x86. You can't just
-> select it here. Either make the definition global somewhere or add this
-> to arm64 Kconfig:
+> On Wed, Feb 11, 2026 at 2:23=E2=80=AFPM Kuniyuki Iwashima <kuniyu@google.=
+com> wrote:
+> >
+> > On Wed, Feb 11, 2026 at 1:26=E2=80=AFPM Alexei Starovoitov
+> > <alexei.starovoitov@gmail.com> wrote:
+> > >
+> > > On Tue, Feb 10, 2026 at 8:23=E2=80=AFPM Kuniyuki Iwashima <kuniyu@goo=
+gle.com> wrote:
+> > > >
+> > > > On Tue, Feb 10, 2026 at 6:47=E2=80=AFPM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > >
+> > > > > On Mon, Feb 9, 2026 at 5:19=E2=80=AFPM Kuniyuki Iwashima <kuniyu@=
+google.com> wrote:
+> > > > > >
+> > > > > > On Mon, Feb 9, 2026 at 3:00=E2=80=AFPM Alexei Starovoitov
+> > > > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > > > >
+> > > > > > > On Sat, Feb 7, 2026 at 3:07=E2=80=AFPM Kuniyuki Iwashima <kun=
+iyu@google.com> wrote:
+> > > > > > > >
+> > > > > > > > Michal Luczaj reported use-after-free of unix_sk(sk)->peer =
+by
+> > > > > > > > bpf_skc_to_unix_sock(). [0]
+> > > > > > > >
+> > > > > > > > Accessing unix_sk(sk)->peer is safe only under unix_state_l=
+ock(),
+> > > > > > > > but there are many functions where bpf prog can access the =
+field
+> > > > > > > > locklessly via fentry/fexit.
+> > > > > > > >
+> > > > > > > > unix_dgram_connect() could clear unix_sk(sk)->peer and rele=
+ase
+> > > > > > > > the last refcnt of the peer sk while a bpf prog is accessin=
+g it,
+> > > > > > > > resulting in use-after-free.
+> > > > > > > >
+> > > > > > > > Another problematic scenario is that unix_sk(sk)->peer coul=
+d
+> > > > > > > > go away while being passed to bpf_setsockopt() in bpf iter.
+> > > > > > > >
+> > > > > > > > To avoid such issues, let's reject access to unix_sk(sk)->p=
+eer
+> > > > > > > > by marking the pointer with PTR_UNTRUSTED.
+> > > > > > > >
+> > > > > > > > If needed, we could add a new helper later that uses unix_p=
+eer_get()
+> > > > > > > > and requires bpf_sk_release().
+> > > > > > > >
+> > > > > > > > [0]:
+> > > > > > > > BUG: KASAN: slab-use-after-free in bpf_skc_to_unix_sock+0xa=
+4/0xb0
+> > > > > > > > Read of size 2 at addr ffff888147d38890 by task test_progs/=
+2495
+> > > > > > > > Call Trace:
+> > > > > > > >  dump_stack_lvl+0x5d/0x80
+> > > > > > > >  print_report+0x170/0x4f3
+> > > > > > > >  kasan_report+0xe1/0x180
+> > > > > > > >  bpf_skc_to_unix_sock+0xa4/0xb0
+> > > > > > > >  bpf_prog_564a1c39c35d86a2_unix_shutdown_entry+0x8a/0x8e
+> > > > > > > >  bpf_trampoline_6442564662+0x47/0xab
+> > > > > > > >  unix_shutdown+0x9/0x880
+> > > > > > > >  __sys_shutdown+0xe1/0x160
+> > > > > > > >  __x64_sys_shutdown+0x52/0x90
+> > > > > > > >  do_syscall_64+0x6b/0x3a0
+> > > > > > > >  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+> > > > > > > >
+> > > > > > > > Fixes: 9eeb3aa33ae0 ("bpf: Add bpf_skc_to_unix_sock() helpe=
+r")
+> > > > > > > > Reported-by: Michal Luczaj <mhal@rbox.co>
+> > > > > > > > Closes: https://lore.kernel.org/all/408569e7-2b82-4eff-b767=
+-79ce6ef6cae0@rbox.co/
+> > > > > > > > Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
+> > > > > > > > Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > > > > > > ---
+> > > > > > > >  kernel/bpf/verifier.c                         | 18 +++++++=
+++++++
+> > > > > > > >  .../selftests/bpf/progs/verifier_sock.c       | 25 +++++++=
+++++++++++++
+> > > > > > > >  2 files changed, 43 insertions(+)
+> > > > > > > >
+> > > > > > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > > > > > > > index 3135643d5695..b328a1640c82 100644
+> > > > > > > > --- a/kernel/bpf/verifier.c
+> > > > > > > > +++ b/kernel/bpf/verifier.c
+> > > > > > > > @@ -7076,6 +7076,7 @@ static int bpf_map_direct_read(struct=
+ bpf_map *map, int off, int size, u64 *val,
+> > > > > > > >  #define BTF_TYPE_SAFE_RCU_OR_NULL(__type)  __PASTE(__type,=
+ __safe_rcu_or_null)
+> > > > > > > >  #define BTF_TYPE_SAFE_TRUSTED(__type)  __PASTE(__type, __s=
+afe_trusted)
+> > > > > > > >  #define BTF_TYPE_SAFE_TRUSTED_OR_NULL(__type)  __PASTE(__t=
+ype, __safe_trusted_or_null)
+> > > > > > > > +#define BTF_TYPE_SAFE_UNTRUSTED(__type)  __PASTE(__type, _=
+_safe_untrusted)
+> > > > > > > >
+> > > > > > > >  /*
+> > > > > > > >   * Allow list few fields as RCU trusted or full trusted.
+> > > > > > > > @@ -7154,6 +7155,10 @@ BTF_TYPE_SAFE_TRUSTED_OR_NULL(struct=
+ vm_area_struct) {
+> > > > > > > >         struct file *vm_file;
+> > > > > > > >  };
+> > > > > > > >
+> > > > > > > > +BTF_TYPE_SAFE_UNTRUSTED(struct unix_sock) {
+> > > > > > > > +       struct sock *peer;
+> > > > > > > > +};
+> > > > > > > > +
+> > > > > > >
+> > > > > > > That's just one out of many. It's not really a fix,
+> > > > > > > but a bandaid for one case.
+> > > > > >
+> > > > > > Right, this is only one example where a pointer lifetime
+> > > > > > does not match with bpf prog.
+> > > > > >
+> > > > > > > We discussed it in the past and the only way forward is to ma=
+ke
+> > > > > > > helpers only accept trusted args.
+> > > > > > > Recently we made KF_TRUSTED_ARGS a default for all kfuncs.
+> > > > > > > We should do the same for helpers.
+> > > > > >
+> > > > > > What about just reading an untrusted pointer ?
+> > > > >
+> > > > > What do you mean 'untrusted' ?
+> > > > > There are 3 types of ptr_to_btf_id:
+> > > > > trusted, untrusted, legacy (without either trusted or untrusted f=
+lags).
+> > > >
+> > > > Ah sorry, I used 'untrusted' since the pointer is not always
+> > > > valid, but I think legacy is the one I meant in this case.
+> > > >
+> > > >
+> > > > >
+> > > > > kfuncs now accept only trusted, while helpers still accept
+> > > > > trusted and legacy. The legacy should be disallowed.
+> > > > > That might break some bpf programs, so it has to be done carefull=
+y.
+> > > > >
+> > > > > > I used bpf_skc_to_unix_sock() in selftest in case compiler
+> > > > > > could optimise out branches that always return 0.
+> > > > > >
+> > > > > > Currently, this passes the verifier and can trigger UAF.
+> > > > > >
+> > > > > > u =3D bpf_skc_to_unix_sock(sock->sk);
+> > > > > > if (!u || !u->peer)
+> > > > > >     return 0;
+> > > > > > if (u->peer->__sk_common.skc_family) # unsafe access
+> > > > > >     return 0;
+> > > > >
+> > > > > No. It's fine. Both legacy and untrusted ptr_to_btf_id get probe_=
+mem
+> > > > > treatment. So above works and won't crash the kernel.
+> > > > > It's effectively inlined probe_read_kernel.
+> > > >
+> > > > Yes, it doesn't crash.
+> > > >
+> > > > I was just unsure about the bpf expectation [0] like how we
+> > > > should treat KASAN use-after-free report by bpf prog reading
+> > > > a pointer whose lifetime is not guaranteed by bpf helper/verifier.
+> > > >
+> > > > So, if this is WAI, I'm fine with that.
+> > > >
+> > > > [0]: https://lore.kernel.org/all/CAAVpQUDrC1rO2diM3gVg5GV5CTVAUS2Rb=
+LP+SpHBGqKcUT0iMA@mail.gmail.com/
+> > >
+> > > That's different. That's the actual UAF inside bpf_skc_to_unix_sock()=
+.
+> > > That needs to be fixed with what I described above by allowing
+> > > only trusted pointers into helpers.
+> >
+> > I got this point.
+> >
+> > > In my earlier reply I meant that:
+> > > if (u->peer->__sk_common.skc_family) # unsafe access
+> > > is fine. It's safe access, because it's sanitized by the verifier/JIT=
+.
+> >
+> > but I'm a bit confused here..
+> >
+> > Even though the verifier makes sure the pointer is not NULL,
+> > u->peer can be freed concurrently by another thread,
+> > then how can verifier/JIT prevent UAF ?
+> >
+> > Or can this be still called 'safe access' regardless of runtime UAF
+> > because the user-provided bpf prog was verified once and not in-tree
+> > kernel code ?
 >
-> config ARCH_HAS_CPU_RELAX
-> 	def_bool y
+> The verifier/JIT are not preventing UAF. They're preventing crashes.
+> u->peer->__sk_common.skc_family is equivalent to two
+> copy_from_kernel_nofault(). They may read garbage, but won't crash
+> and won't cause any ill kernel effects. It's up to the program
+> to use the values in a sane way.
 
-Ack. I had added config ARCH_HAS_CPU_RELAX in arch/Kconfig
-for my test builds but got rid of that when sending out the
-series. Will fix.
-
-> Otherwise,
->
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-
-Thanks.
-
---
-ankur
+I see, that's fair.  Thanks for explaining !
