@@ -1,187 +1,127 @@
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C3D126B741
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 23:17:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B51E033C528
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 23:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770851841; cv=none; b=Jafk0sJmEel+cFnDi6q20JaCjjcHxC6l0H//t1QryVF4zaDrnrlnqKbuBdzZmFASisej9uknkCZpSeO89s9xg4GnnVgGewhgW3GAWEMOOAflbGz6JRfkP2oPCH5KozxRvieJHBIPtrWwvWmWHcrxz1C2cqEFgq0/2N9t6M8SlJs=
+	t=1770853612; cv=none; b=ueW53oWNyp9AplGkaNEWiagDfg7cuELPoyFAPz6ue7+srhwUkq1KYmeT4BwBpbL5gMh4xJrOW0IKjT3ahE2sx7iRRBIihSxR4Zv89OQnbUsw9uXY6drhZGCQSL6RX3QVbl2xfOHQZbFwQHwq3npUkURRogB60F/24sPmzGXZXoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770851841; c=relaxed/simple;
-	bh=sUQHabvXbHb5u7I/b1Of0e8FimSV4sOt43YO4E0umP4=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=MwYq7N7WDtIw3WXZEhDaS6DFIG1mOr/76dDIo2aG+pQOrglF+aJtCAwgT7pZZIWHGZ5LnBirhzblpfjli7YTHw/+Dc3+GVotYRdCdlE5Qc08uxJIP+v7R1hdKQ1udTWuLiVV0DiZi+/emIrBkN/iNe/pxaFCmt7P9CgARu6yETs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QpuSZIDy; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1770853612; c=relaxed/simple;
+	bh=uKFp3S4VhPQDRDIqG7t6XPgMhT7MK902dEW6crTPgKI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OXACZCaEBRSMa/CGgbdBaA33gUF1pAsWs82aFVQyYoI7tA0arE0FaKFufi55AS6H6HmlPA+5G/HNZPFKdM5WgpXq0jC5N1tucHDgDvR4h5NKP1w6x2GWQrCZDS/O7ZQdQ42vPIPFAKoiehgN0XaV0rsPjlgpLblNaKXvqdn5HCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DxXbxR5X; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QpuSZIDy"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id B0640C23D8A;
-	Wed, 11 Feb 2026 23:17:24 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id B1479606B1;
-	Wed, 11 Feb 2026 23:17:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 65CC21194956A;
-	Thu, 12 Feb 2026 00:17:13 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1770851834; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=MboFByo2KiRht1OZ+sIoIwC5SQo6Vfy1RGQanSlgaFc=;
-	b=QpuSZIDyzm3rj/4JUIMmFv5AGvU+FEom0JW/7/A873OoxR9XAaXHsc/GzxzRExy/nASs1v
-	NSHPWzzf8BCrTDs52jjmjw+eNTy7Ga9oOqQfVf1cIaCoA/gwfxoKoR7ZBuI0qPeUw2KHc0
-	bcqWG7VcKZW/d5/tMB6eue4Bq1GAs2h5eqCYo03kgKtCCdrPWIqqwM4sMA6jTd+8fsRa34
-	RumHyRMRqlDni6tvghOGFye1T3zyGHOklaLgXz6mtSK/RWPm+/RWdk7VCHf2xMuOO/CAjm
-	oT9Lus4QNaLOu9mnA8U2GngmxEuZf7X6WYC08B+rPVWoyfmjsOOtAnGR+tGVfw==
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DxXbxR5X"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-47edd6111b4so109771095e9.1
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 15:46:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770853609; x=1771458409; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SNiJ8/0ZZ/fEThLSok06MI/kbgOPt4mcJz11Wg17Xpk=;
+        b=DxXbxR5XxPMx8fMfdnEMfsbkuxQwxfBxTwdXNy9Vw/1cXC5bPoaMWVPuEUgCRR6CCb
+         K+VE4BLTTYwUNcDPwM6iZDqkzP8c10dzo8T0Ck+j7iKc2Y/MMeR517I6aRIFQESQ1yNH
+         1h0p4K4Zio6A1G3FLR31YzvbUO5eipoXXsgxkd71bW1WbWzJuHB96yKXIm8RThCHEtiu
+         iYo+YMrgeNuZTsrV/2p7oFSC9Ep5eTQQ5sOJfjXaRZSLJ898HU1Opuc2QJje/hlYb9+O
+         KXVPrnVKlx49q+CM07YlJ4VM9QEN9CcEzgCXItJpFrLL5OwSLfnH+CGFBep4ttLUMo7C
+         zbGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770853609; x=1771458409;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SNiJ8/0ZZ/fEThLSok06MI/kbgOPt4mcJz11Wg17Xpk=;
+        b=BX6eN+wAgoGYMRhApWmL+ifaZVvnTIPaFgM84bN60wkQd26x4/jkLABkZdSYxuQim8
+         W/vHzzFJMlIp/xB/ebEK1/6HFlmDuNbrdZg6lLx3bB+AcoAPQpIj/I486yV6GQ3yGTz3
+         X/378UTWpQrG8pU0OnBM+vVzSUSW/e+rukiMqadSpDHvcELE4dDy3kNIQmpX+Ol12quM
+         wHa2tP6ru7Nk09e7fxglDc6y+uFxDbHAKA19YhmN1+EXpFRsggrxu4E9ClYghH4+K8lG
+         JvZL048DYh4Ax3fHlLs8RtvbscYAwVxZZTX0JcVAZTekgA78AHh+BmKa1moe+n4H55TT
+         59Yw==
+X-Gm-Message-State: AOJu0YzbuaXy7aKeDZwqeQ/6l+quXAt4+BKhOto8lxiIp/ggxq9NQ1jP
+	KVVYbFCYhMcuIRU2WuMpfy3jxLh2zwX42xJVZ5z6bqiwjg5sMYwaJLfN
+X-Gm-Gg: AZuq6aKdhu8ys05c0pVVs7K0BmHvyrutBxBFmDeb2bzZoJIptbdP+EuudvJ+sn7mpw4
+	TufeTCn8pI2iRuBxtB9Jb0dgIxk2VgGgzHGCeTI/c8H0P3AB51GZX2mYLJDMN4/qzUhbtIKdHyx
+	XJGXKbCTwsUZ0G15hsgEiR4ttvYVjIM4xdRY8N2zQJ5PJuxXhG2P1jJt3F0/Pdw2zNSeW8/GOVz
+	CMgKYWv7cnqjD/n9mToDotvIgU3KllYcjg3Ah63V4HlwuAGOVSsWXgFWhgZr7CA82vlMnXWqOXA
+	WKm8HmSZZluRvteSVodZ7XadnCscbzJaiI+UOEUH7UuMpKyXmmdV7gkIgV5xkAw6tPNM9MCJQd/
+	J7p2+buBPEtx/0bUd8oUvlDxh1JiBzKpYVF6dInWOUj+/u57nOwpT1mWIVn+m39jL02R0ntbTBD
+	B7NGo5YjS6Q3Vsx95iTt50SDR/x7Ws3j1LzOWpGs3D0zcgY/pNn00Ga7ufhqtwmNbVRhq5/Lc5I
+	D/n9bndW1jV5Ng=
+X-Received: by 2002:a05:600c:19c6:b0:480:6941:d38c with SMTP id 5b1f17b1804b1-483657159c9mr10588785e9.29.1770853608926;
+        Wed, 11 Feb 2026 15:46:48 -0800 (PST)
+Received: from ?IPV6:2a01:4b00:bd1f:f500:e85d:a828:282d:d5c7? ([2a01:4b00:bd1f:f500:e85d:a828:282d:d5c7])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4836131d4e8sm17108345e9.31.2026.02.11.15.46.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Feb 2026 15:46:48 -0800 (PST)
+Message-ID: <15f98c92-99e0-41d0-ac9f-4fe4f1065565@gmail.com>
+Date: Wed, 11 Feb 2026 23:46:47 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 12 Feb 2026 00:17:12 +0100
-Message-Id: <DGCIL1452266.2618L8NG0SLPN@bootlin.com>
-Subject: Re: [RFC] adding KASAN support to JIT compiler(s)
-Cc: "bpf" <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Bastien Curutchet (eBPF
- Foundation)" <bastien.curutchet@bootlin.com>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Daniel Borkmann" <daniel@iogearbox.net>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
- =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <DG7UG112AVBC.JKYISDTAM30T@bootlin.com>
- <CAADnVQLX7RSnOqQuU32Cgq-e0MVqyeNrtCQSBbk0W2xGkE-ZNw@mail.gmail.com>
- <DGAQHE0JQEA4.1UVPB2DUTFPJD@bootlin.com>
- <CAADnVQKrXL2QNMoxTQ+nN1-dAEk0oHYBLy+h8J=mDSYXtVomPw@mail.gmail.com>
-In-Reply-To: <CAADnVQKrXL2QNMoxTQ+nN1-dAEk0oHYBLy+h8J=mDSYXtVomPw@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v1 2/2] bpf: Use kmalloc_nolock for
+ bpf_task_work_ctx allocation
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin Lau <kafai@meta.com>, Kernel Team <kernel-team@meta.com>,
+ Eduard <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260211163927.665785-1-mykyta.yatsenko5@gmail.com>
+ <20260211163927.665785-3-mykyta.yatsenko5@gmail.com>
+ <CAEf4BzYZUnansvKncz=8MFYmjdodu2zd0ZPWskkq45otpqv0hw@mail.gmail.com>
+ <CAADnVQ+6-82Pe9Q9zLAq2rbNFrVVp=zBRCKHErWVjXduVnt0wQ@mail.gmail.com>
+Content-Language: en-US
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CAADnVQ+6-82Pe9Q9zLAq2rbNFrVVp=zBRCKHErWVjXduVnt0wQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue Feb 10, 2026 at 10:43 PM CET, Alexei Starovoitov wrote:
-> On Mon, Feb 9, 2026 at 1:03=E2=80=AFPM Alexis Lothor=C3=A9
-> <alexis.lothore@bootlin.com> wrote:
+On 2/11/26 21:37, Alexei Starovoitov wrote:
+> On Wed, Feb 11, 2026 at 1:28 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+>> On Wed, Feb 11, 2026 at 8:40 AM Mykyta Yatsenko
+>> <mykyta.yatsenko5@gmail.com> wrote:
+>>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>>
+>>> Replace bpf_mem_alloc/bpf_mem_free with kmalloc_nolock/kfree_nolock for
+>>> allocating and freeing bpf_task_work_ctx. Now that kmalloc can be used
+>>> from NMI context, it is the right generic mechanism for memory allocation
+>>> in BPF kfuncs, even in restricted contexts like tracing programs.
+>>>
+>>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>>> ---
+>>>   kernel/bpf/helpers.c | 9 +++------
+>>>   1 file changed, 3 insertions(+), 6 deletions(-)
+>>>
+>> LGTM
 >>
->> >> - bpf stack: when a program allocate some memory on its own stack, it=
- is
->> >>   not tracked by KASAN. To be able to track stack memory misusage, JI=
-T
->> >>   compiler must insert some red zones around the variables on the sta=
-ck.
->> >>   This point looks more complex than the previous ones, as we need to=
-:
->> >>   - identify variables that live on bpf program stack instead of
->> >>     registers
->> >>   - insert asan left/right red zones, and possibly inter-variables re=
-d zones
->> >>   - and so account for this "stack overhead", eg in the verifier
->> >>   I then propose to put this "stack monitoring" as a next step, to be
->> >>   implemented once we have a basic kasan monitoring integrated in x86
->> >>   JIT compiler.
->> >
->> > I'm not sure it can be deferred. Pretty much all bpf programs
->> > access stack with load/stores.
->> > So all of such instructions should not be instrumented.
+>> Acked-by: Andrii Nakryiko <andrii@kernel.org>
 >>
->> I am not sure to get your point here. If the matter can not be deferred
->> (because pretty much all bpf programs access stack with load/stores),
->> then all of such instructions _should_ be instrumented (so that we
->> detect invalid stack accesses), right ? Or am I getting it wrong ?
+>> BTW, file dynptr is also still using bpf_mem_free, consider changing
+>> that to kmallock_nolock as a follow up as well, please (and I guess in
+>> general we should do an audit pass on what are the other bpf_mem_alloc
+>> places that should be converted, but Alexei is a more authoritative on
+>> what are the remaining constraints that would prevent some
+>> functionality to be switched to kmallock_nolock).
+> After reading 2nd patch I realized what 1st one is for.
+> Let's first wait for sheaves and Harry's follow up to land:
+> https://lore.kernel.org/all/20260206093410.160622-1-harry.yoo@oracle.com/
 >
-> As far as I understand compilers don't sanitize stack access
-> because there is no shadow memory behind it.
-
-Is that so ? Because if I take a look at kasan tests in the kernel, I
-find for example this kasan_stack_oob in mm/kasan/kasan_test_c.c:
-
-static void kasan_stack_oob(struct kunit *test)
-{
-        char stack_array[10];
-        /* See comment in kasan_global_oob_right. */
-        char *volatile array =3D stack_array;
-        char *p =3D &array[ARRAY_SIZE(stack_array) + OOB_TAG_OFF];
-
-        KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_STACK);
-
-        KUNIT_EXPECT_KASAN_FAIL(test, *(volatile char *)p);
-}
-
-which gives me, for x86:
-
-0000000000000340 <kasan_stack_oob>:
-     340:       f3 0f 1e fa             endbr64
-     344:       e8 00 00 00 00          call   349 <kasan_stack_oob+0x9>
-     349:       48 ba 00 00 00 00 00    movabs $0xdffffc0000000000,%rdx
-     350:       fc ff df
-     353:       41 56                   push   %r14
-     355:       31 c9                   xor    %ecx,%ecx
-     357:       4c 8d b7 e0 01 00 00    lea    0x1e0(%rdi),%r14
-     35e:       41 55                   push   %r13
-     360:       41 54                   push   %r12
-     362:       55                      push   %rbp
-     363:       48 89 fd                mov    %rdi,%rbp
-     366:       53                      push   %rbx
-     367:       48 81 ec c0 00 00 00    sub    $0xc0,%rsp
-     36e:       48 89 e0                mov    %rsp,%rax
-     371:       48 c7 04 24 b3 8a b5    movq   $0x41b58ab3,(%rsp)
-     378:       41
-     379:       48 c7 44 24 08 00 00    movq   $0x0,0x8(%rsp)
-     380:       00 00
-     382:       48 c1 e8 03             shr    $0x3,%rax
-     386:       48 c7 44 24 10 00 00    movq   $0x0,0x10(%rsp)
-     38d:       00 00
-     38f:       48 89 c3                mov    %rax,%rbx
-     392:       48 01 d0                add    %rdx,%rax 		<=3D %rax =3D (%=
-rsp >> 3) + SHADOW_OFFSET
-     395:       c7 00 f1 f1 f1 f1       movl   $0xf1f1f1f1,(%rax) 	<=3D lef=
-t red zone
-     39b:       c7 40 04 f1 f1 01 f2    movl   $0xf201f1f1,0x4(%rax) 	<=3D =
-left red zone, ??? (1 byte unpoisoned), mid red zone
-     3a2:       c7 40 08 00 f2 f2 f2    movl   $0xf2f2f200,0x8(%rax)	<=3D m=
-id red zone, array unpoisoned ?
-     3a9:       c7 40 0c 00 00 f2 f2    movl   $0xf2f20000,0xc(%rax) 	<=3D =
-??? (16 bytes unpoisoned), mid red zone
-     3b0:       c7 40 10 00 02 f3 f3    movl   $0xf3f30200,0x10(%rax)	<=3D =
-stack_array unpoisoned ? right red zone
-     [...]
-
-Am I misinterpreting something here ?
-
-For the record, my kernel is compiled with GCC, for x86, with generic,
-inlined kasan. Digging a bit more in the corresponding commits and
-Kconfig file, I see that this stack monitoring is not enabled for all
-architectures and compilers, though.  For example, I see that it is
-deemed "unsafe" when using clang.
-
-> There is no "allocation of stack" or "deallocation", so no UAF
-> or things like that.
-> The kernel already has guard pages for stack overflow and that's
-> about it.
->
->> I am not familiar yet with the verifier code, but I then expect this
->> work to potentially bring some changes into it as well (aside from the
->> info to pass to JIT comp. mentioned above). Eg, if adding red zones
->> around stack variables is indeed required, it will increase stack usage,
->> and so the verifier may have to account for those (eg when validating
->> max stack depth ?). I'll have to clarify this kind of point.
->
-> Redzones? Around what? There is no way to tell where variables
-> are and that one access aliases into another.
-> imo existing stack guard pages are enough here.
-> So no instrumentation of stack ldx/stx.
-
-Aside from the point above, if guard pages are considered enough, ok
-then, I can make sure to make JIT comp ignore stack accesses when
-instrumenting load/store insns (with the data passing from the verifier
-to be implemented, related to Xu's work).
-
-Thanks,
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> then we don't need patches 1 and 2 and can just use
+> kmalloc_nolock() to allocate task_work_ctx
+> and kfree_rcu() to free it with defer to irq_work when irqs disabled.
+> kfree_rcu_nolock() will hopefully be introduced in 7.1
+> then we can clean it up even further.
+Got it, thanks!
 
