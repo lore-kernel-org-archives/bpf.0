@@ -1,60 +1,62 @@
-Received: from mail-oo1-f68.google.com (mail-oo1-f68.google.com [209.85.161.68])
+Received: from mail-oi1-f194.google.com (mail-oi1-f194.google.com [209.85.167.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3DA633F38D
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 18:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A109346A0A
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 18:12:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770833572; cv=none; b=f0PCLDq/bZhyKUWdY7/14aKXj58C54qZP6UngoRxrJsmDqSfcZ9UOhW0PkbjeJULl4EnfTmZ/+c2cIPenhgjlaFFxw0YAvJmEHWHDJrV/MLw76MyqOdNzmBO4tCXgovPoh6LO0xh4gWmhQ2I24+cfPajuU07jKoQCZigYuB/v+o=
+	t=1770833573; cv=none; b=vAZUA+Ih7Llf4PtuGezTmIBrBX0zg5/q2EnV/iri+O31smJPBsuDbBWGp1JjS5b9wR+KpvHcvJ6fqzqLH+9J/KN83jDMD/03evvAKRsF88W2e4wxhhoKuI2Tcwc5wj9Rvc6Zp4dxQhlDAHgBwo+i0D6OtoyPEIduhPCm/T3mkAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770833572; c=relaxed/simple;
-	bh=+FImT2JqL5MF2aTFK+gy7xnXT3pLCCaWkicQk8bsRdU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q6Uto2AUeS8TsjYweP0qlteNCiU0I8EIvz92V6qoD9V7VV8YWwppuCL1pcZhcS+zzuol5axFJ3anvasMFyL3B+0iZ3VWa7z5H98pJoi4kvBw7ZMRbx/A7/2kUg1/n7Q30zqA5KH56wZWWtGb15JW1/iNCdRa6H5NxZHLr53CYLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OojrPqEd; arc=none smtp.client-ip=209.85.161.68
+	s=arc-20240116; t=1770833573; c=relaxed/simple;
+	bh=x2sbND/j0tPQKkynjYI6nbzU2ehJAO43GVI/dZLBSMc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oK+3sHbUSV2G1A0OphEa4xNHs9XURxz2RBQHNC98m8ISAlp1fWBXeNDAXc1w4hVVuFZ12GTQwuBdLEtP2hk//g5ZS83sW1cWAthxdDKJNts/KRJYS+A0divNwn0pExjgVWiV+ZngJBxwgQf7jxlMi47IR5EN5C/H4RNb0nXQI+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bRCad7nD; arc=none smtp.client-ip=209.85.167.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OojrPqEd"
-Received: by mail-oo1-f68.google.com with SMTP id 006d021491bc7-6726f320b4fso1545069eaf.2
-        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 10:12:50 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bRCad7nD"
+Received: by mail-oi1-f194.google.com with SMTP id 5614622812f47-460f3f9fdb1so796822b6e.0
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 10:12:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770833569; x=1771438369; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3/bC2N65B/RP/RDL60qo+MBcjz1FPAv0fayDtbaHq8U=;
-        b=OojrPqEdChLYU48SxvFaMO609I7oK2YGSNyy6ZUGuQnynjtV+votEbWGcbhFfMWGTX
-         ulFBL3WaKJ7D2SWzRuefHh8jnCOUOHaY/l8XaQdgS8nVUOVBCEHHUbrtU+Ysihtm1kdi
-         g9OSlW+C4TEwoFBVn/IBTm2yqchxZVg4Ibwx/gpWCetYlkDnum+GtmRCIZb5KQvUS1wq
-         r+7NAsKK29VLZredRh0onJ9HswMZLPqgBfLd88DMnNhyxatoDGeInBvLl0SX+wFaUehr
-         KY8RTHL/p0Bj6S5Wb/nqLTTQySiW72OnOEf6PqjdnF6wNWt0Hle+fRFOsgpZOC9+Yoy3
-         abMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770833569; x=1771438369;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1770833571; x=1771438371; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3/bC2N65B/RP/RDL60qo+MBcjz1FPAv0fayDtbaHq8U=;
-        b=u9CgQRUxoFysolOb9zFsXZJjDyWHOGr/c72MoqUHSZJo1HCaQicOdV+p3us/rN8Cke
-         b5oXIjd8gGJjnIxiHMxfUCOftojz7P5El7KDRf2HLlmSs2pbf484PjcIzuhFTU27YnIn
-         /sR2synvHVUW+SxsUv7CfTxUge3eGEQ+yLqb5gcjhTXAroucveJZQCeTiw8Zb9sU5/NF
-         uTe2ssYcVlbNil6/KFamrip8fkcFzIp3lvXIIrgzKzKf0tOi1LwZIheOxo+9BjAtS1WL
-         84yN7obGNwl9mIBCy55ZmP+FMvlQV8BPVUnkVakBo4Pyb5QjbPUIvci94ySwTsTRRyAA
-         uOmA==
-X-Gm-Message-State: AOJu0Yz1sIHVEY43Pn96uzpKEyPzE6et0DDghO4PMpG5JUpDFwgecN39
-	TvrTP0B+Wt0nBxK+XRfgelV9xSvR/RGx1q18lfAbSAkaJTzfLBZjcudzr3TiYMKi
-X-Gm-Gg: AZuq6aJ59w6Gq2vY8Q/CqlAyDJraMtJsoxdhvQbvExPPxm6qri00D9jjoE/4MC/4Qij
-	qmwCXcIgR6cNBT6dA+2MSMxCReD0/in1WJIN7kL1QKgHz9ZiXzvpTw/TCoocyq7awCuIGT48JcD
-	DqI3T9aj1W9YgoJ45L9KzEl6bnPRaQhDzhrMoa+sse9wChFGFOYs8kPPyYF83/YKWi0iMdHjXK4
-	oNuMoWeTYdqlfdaFlcxB76LOaPrmj30CEb4sYR6Noo/1+i3S7FatAbrDLs9DHflFo67aUfA6Iop
-	KZXYRK0wqycjmYhkRthF/JTS3kOoxssHC1BZBNGq7UCrxbnjnWeWWdrjwR/uT8y/AuwCS972NxB
-	HIuS/FV14Af4e7LmtTfyBcKzxh/0Oi1cp0SyaP4dYJ9gCP0V0Wk1inAfCYbI9xs1WF1X7Yzlb/T
-	A/aeso47uxGGzH1PW6uNjBqGGQCl1jB07sf5CoP5Xb1QHXQPBiXNiAnBc=
-X-Received: by 2002:a05:6820:987:b0:663:c86:e9e2 with SMTP id 006d021491bc7-67598a3d443mr46947eaf.35.1770833569354;
-        Wed, 11 Feb 2026 10:12:49 -0800 (PST)
-Received: from localhost ([2a03:2880:10ff:53::])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6746fa59538sm1146330eaf.0.2026.02.11.10.12.48
+        bh=xxDdvjnGHno7eZfVF/Lv2e/xCApsCsIdvzVno6nsjaI=;
+        b=bRCad7nDLK+uM47GoqPp/lc8FjdLuYJ6wqZGX73BxUmNNB2IUC9thXnONCbJrYzWsd
+         TXmPPzl3kFCbguA3QzDfscxaFgxUBv18WWAz/RbRdJ8HamFOEzDQN/MakOUQZZk59gAb
+         1lULz0i1zRWTL6OFRuUqhk8z2JUYkn/36ANu5fiq14UMTa/PJFaDT4OV8n4UWfiejX4s
+         HzAzRHANbVnJyJS9dn5LoPkvfmdBDFeAx5XzPI6StB7/oBGe/yzpYEUdhATnE6BH1U6A
+         +ZNF4pCY1qufnxl42fI5FyhEWXnQPrnaM7pysaJgJF9ksr4Nixg1NavhycN3AcUg61BD
+         aQdg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770833571; x=1771438371;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=xxDdvjnGHno7eZfVF/Lv2e/xCApsCsIdvzVno6nsjaI=;
+        b=oe4fB9RYu2JcvoC7rQ/bZNIQ+setAFCLDEnJ68RjmgUiA67q/tvV04e3qs+zSkQmW7
+         flzzZ+Alt5FmrUGYIIAe9CaT26/tRTKYO4D/u1BVI+TdW35+JalBawS+PExtlPvrGAYH
+         WsGYPLTvQFTZuIqXCYSrTJx48pOa/wDwbp6UY3VdIknjA4elNpS1igucdZe1tW1l0UH+
+         BO/sRkdxl9C2CX5qIDHSbrOdOwVqi3NvMmFGx4j+pt/YJAu1YG1ywsXbWv1/5qfE7rkx
+         IO4LCZKBzkvUOaI5i26V3dpmspn4T54USkBmc3X2x3VA2d3djch/IHeY7wCJpsorpB57
+         czuA==
+X-Gm-Message-State: AOJu0YwMP0io6NUz2EGVIaT+NGcGRPiUUPK7IMc6u4yGzE/HytXIkcGS
+	5Lcg4i1rTrO1Rm7g0hIuB/H/KTY0SwRydPc5LIHc3aZIZHWDuwolgClFKoS0dxMZ
+X-Gm-Gg: AZuq6aKXfF9va0d8siLRyNpMBoF8o2TEvuJUUPGhHw90BRfx2iwWZ9yVJ3hHyAtjFaW
+	XgxRQgGO9ThUvu9pIrp4EFdex2JiEFq7RnQQX/OWKrJjGji2erg/GAEjawCym/Ht8r2NH+akgIi
+	I9zKbjq3h6tFH0t/G/55op5wLmlHmA0Uvl2XDwrdee+kKudGOMwWgWbjeN6fi8k7Ui+FalnZY4x
+	mlhTx1PhG44z3t5B+ma7H67/KdFI1NQQj7yDM6RkahUZBw0qaQIZ+eiFnuNyf72J7xMDcoi/p8g
+	hqSHMfkUpHnoqOyx/2z0VGph1gGJI3DGifIsqEClzCWeg1JbeSzFvW1olFI0Q6HVCcxeuzooH/w
+	hQe3omxIELCn7/s+XGfMKGc2wHSP9rWT9FlTd2nFItxmKw+ITuWpia3NLyz6MHHROFsi0YzJK15
+	MgV+agNEcTc3n52c6CYrhbdDvWYK6V+TfDH1tH7lG7QJPn
+X-Received: by 2002:a05:6808:168a:b0:45e:fff5:89b4 with SMTP id 5614622812f47-463520d9509mr3730228b6e.10.1770833570878;
+        Wed, 11 Feb 2026 10:12:50 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:5c::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4636b065d5csm1379587b6e.13.2026.02.11.10.12.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Feb 2026 10:12:48 -0800 (PST)
+        Wed, 11 Feb 2026 10:12:50 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -65,51 +67,182 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Mykyta Yatsenko <yatsenko@meta.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [RFC PATCH bpf-next v1 0/6] Concurrency Testing
-Date: Wed, 11 Feb 2026 10:12:40 -0800
-Message-ID: <20260211181248.3040142-1-memxor@gmail.com>
+Subject: [RFC PATCH bpf-next v1 1/6] bpf: Support repeat, duration fields for syscall prog runs
+Date: Wed, 11 Feb 2026 10:12:41 -0800
+Message-ID: <20260211181248.3040142-2-memxor@gmail.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260211181248.3040142-1-memxor@gmail.com>
+References: <20260211181248.3040142-1-memxor@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1605; h=from:subject; bh=+FImT2JqL5MF2aTFK+gy7xnXT3pLCCaWkicQk8bsRdU=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpjMUeaCOTry/q4Rc/4C9GEq2nkJ/Yn8H5pWKtI2Zu B8ftcbqJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaYzFHgAKCRBM4MiGSL8Ryo1OD/ kBoc3VukS9uFyL1oi7lsV7u1LWl+0OG8y4AnrZxEP8R92VDyRqiS4Sz3aiLXa9K2sp36CY1CGjsPrG mFYyGAr5ZUjen/jV4xIkZefyChcIDSvGxWoMMzNqMDR3wXjBSZABBKgScz1N+tIcbFH/dJWFiEaqE4 OGjfccgO09YvgXKj8FE55PFGpncXxk/GTfNaL9D++Pfz5QKC0ybscG8iHx9E/OuGYwRI7iyfs2dQth N1KADm1EwfFe8NqvDA1qnIzcgYW9cXT8FDeFGjN6QnAaBKdBtDh1oT15hM/9vYghoiiSBh7NO04eBA qQ3mB9CZIT8oJBq6sUWVrX0EIueA1RH2FNGyfJn2Z/M31V218Byfj9pgLDgRxvUcgxlt8bjPRrMZuw PjkCvJiAUJl5rtCCVdXhXZNcFTsR/0LNgdgUQV1vR71pAwPAh8BdxCF2v+apO8xfvEehRHP7qy7vyv BhXiaTHU1LcGtkZhpqRI21SJgsiZqMDW2c6msffujP+7Cjfpg3VGJ0d7kznlR5udw/0y4K8CxTuYwb OHyXhWB/kIq6x8yu5u3Yv/B7WJDvX56m3HjAN/inMT1KFB0zxpG49R3XiyYDov+ILaCljdxcjYAEmh v9jcFqdgZD141tJDjBGsR9IWcrH2wHoC582B/g49utSRK8me4i8AsrGwDxbw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5009; h=from:subject; bh=x2sbND/j0tPQKkynjYI6nbzU2ehJAO43GVI/dZLBSMc=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpjMUexpLWfh7MTsJmtNjllsyfN7I3ZRGdFnAiQWxu Gno7sgiJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaYzFHgAKCRBM4MiGSL8RyjTFD/ wO+vtEtj80s6lRUEDEzsNj5tgukbPW60UGkcgKndZvQBap/vKE50YKOUZBN7xiG5vm8yEQzg+unNz1 S/89sVmRvkWJc18AmmqwkAqwWlAtZZRIBMXxOpkveFI/1phol5FiICJbLVfHtW1xUREQMMPDlsmQqM cYdbY3AOmlgnc83G7cQ6sshczsHg2F/uCOl2gOgfaSXmp2w3GnAYAeiBusMZgIEZc068zIJ36iw7AR 1NCkpeZGMynTHdh5O3JU1bvhE4t8fI3kSHfipU/WhCmJOKLXNPpsFibDuTlkO9GfSdGzW0QfP56Kbq NDCviPoM7LAAS8CgMOVLIbPcPhEw7KBFS24jTSbom6wo8sUoJEqJKg8d4QYKPHWqhdgDH+cS2v9+21 eCOE4gu13AUhh8iCngNBj+5JfyYrf8mOTxJ7Qv/FkXhPUtDiWiRiaoiaxmPVIa84Mjf5swnTJlj63a WGRXFZTUmEY/YaE04G19tfTQZVPMnqbYxcnVViXIex+5Uq0QB+Ru8c3SA6ztbUjgC9cK6NLBVhenM+ HZRiTkEfXVG8tNacf2b7OinozN/mldWQZ6sh5nxlr/EC7C4NtqC6gnsFyuLnzrZZkYx/3tQngp+3Gz RGiE0imJ6XV6GDCeGM4ij2VE4kXEHkYQ7yaRta38k6BUlDpE/mLowRdLJg0Q==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-This set introduces basic tooling to generate more exhaustive test cases
-for task<->NMI reentrancy and parallel invocation of various operations
-associated with rqspinlock, timer, wq, and task_work. For now, the
-approach is simple: test cases are generated up to a maximum specified
-level of parallelism for the operations to be invoked vertically against
-each other (on the same CPU, in different contexts), and horizontally
-(in parallel). To cut down test time, similar cases are pruned out after
-generation (e.g. start vs cancel and cancel vs start in parallel on two
-CPUs are similar, thus only one combination should be tested).
+Currently, BPF syscall programs do not support specifying the repeat
+field to repeat the test inside the kernel multiple times. Use the
+test_timer infra for other prog run tests and make it with RCU tasks
+trace to allow usage for syscall programs. Also make the duration field
+available for use.
 
-More details are in the commit log.
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ net/bpf/test_run.c | 92 +++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 74 insertions(+), 18 deletions(-)
 
-Kumar Kartikeya Dwivedi (6):
-  bpf: Support repeat, duration fields for syscall prog runs
-  bpf: Allow timing functions in lock critical sections
-  bpf: Enable rqspinlock in tracing progs
-  selftests/bpf: Introduce concurrency testing tool
-  selftests/bpf: Generate various conctest permutations
-  selftests/bpf: Extend conctest to wq and task_work
-
- kernel/bpf/verifier.c                        |    9 +-
- net/bpf/test_run.c                           |   92 +-
- tools/testing/selftests/bpf/Makefile         |    6 +
- tools/testing/selftests/bpf/conctest.c       | 1110 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/conctest.c |  758 ++++++++++++
- 5 files changed, 1955 insertions(+), 20 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/conctest.c
- create mode 100644 tools/testing/selftests/bpf/progs/conctest.c
-
-
-base-commit: dc855b77719fe452d670cae2cf64da1eb51f16cc
+diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+index 178c4738e63b..4e06e516d9f2 100644
+--- a/net/bpf/test_run.c
++++ b/net/bpf/test_run.c
+@@ -33,23 +33,27 @@ struct bpf_test_timer {
+ 	u64 time_start, time_spent;
+ };
+ 
+-static void bpf_test_timer_enter(struct bpf_test_timer *t)
+-	__acquires(rcu)
++static void __bpf_test_timer_enter(struct bpf_test_timer *t, bool trace)
+ {
+-	rcu_read_lock_dont_migrate();
++	if (trace)
++		rcu_read_lock_trace();
++	else
++		rcu_read_lock_dont_migrate();
+ 	t->time_start = ktime_get_ns();
+ }
+ 
+-static void bpf_test_timer_leave(struct bpf_test_timer *t)
+-	__releases(rcu)
++static void __bpf_test_timer_leave(struct bpf_test_timer *t, bool trace)
+ {
+ 	t->time_start = 0;
+-	rcu_read_unlock_migrate();
++	if (trace)
++		rcu_read_unlock_trace();
++	else
++		rcu_read_unlock_migrate();
+ }
+ 
+-static bool bpf_test_timer_continue(struct bpf_test_timer *t, int iterations,
+-				    u32 repeat, int *err, u32 *duration)
+-	__must_hold(rcu)
++static bool __bpf_test_timer_continue(struct bpf_test_timer *t,
++				      int iterations, u32 repeat,
++				      int *err, u32 *duration, bool trace)
+ {
+ 	t->i += iterations;
+ 	if (t->i >= repeat) {
+@@ -70,9 +74,9 @@ static bool bpf_test_timer_continue(struct bpf_test_timer *t, int iterations,
+ 	if (need_resched()) {
+ 		/* During iteration: we need to reschedule between runs. */
+ 		t->time_spent += ktime_get_ns() - t->time_start;
+-		bpf_test_timer_leave(t);
++		__bpf_test_timer_leave(t, trace);
+ 		cond_resched();
+-		bpf_test_timer_enter(t);
++		__bpf_test_timer_enter(t, trace);
+ 	}
+ 
+ 	/* Do another round. */
+@@ -83,6 +87,45 @@ static bool bpf_test_timer_continue(struct bpf_test_timer *t, int iterations,
+ 	return false;
+ }
+ 
++static void bpf_test_timer_enter(struct bpf_test_timer *t)
++	__acquires(rcu)
++{
++	__bpf_test_timer_enter(t, false);
++}
++
++static void bpf_test_timer_leave(struct bpf_test_timer *t)
++	__releases(rcu)
++{
++	__bpf_test_timer_leave(t, false);
++}
++
++static bool bpf_test_timer_continue(struct bpf_test_timer *t, int iterations,
++				    u32 repeat, int *err, u32 *duration)
++	__must_hold(rcu)
++{
++	return __bpf_test_timer_continue(t, iterations, repeat, err, duration, false);
++}
++
++static void bpf_test_timer_enter_trace(struct bpf_test_timer *t)
++	__acquires(rcu_trace)
++{
++	__bpf_test_timer_enter(t, true);
++}
++
++static void bpf_test_timer_leave_trace(struct bpf_test_timer *t)
++	__releases(rcu_trace)
++{
++	__bpf_test_timer_leave(t, true);
++}
++
++static bool bpf_test_timer_continue_trace(struct bpf_test_timer *t,
++					  int iterations, u32 repeat,
++					  int *err, u32 *duration)
++	__must_hold(rcu_trace)
++{
++	return __bpf_test_timer_continue(t, iterations, repeat, err, duration, true);
++}
++
+ /* We put this struct at the head of each page with a context and frame
+  * initialised when the page is allocated, so we don't have to do this on each
+  * repetition of the test run.
+@@ -1615,14 +1658,14 @@ int bpf_prog_test_run_syscall(struct bpf_prog *prog,
+ {
+ 	void __user *ctx_in = u64_to_user_ptr(kattr->test.ctx_in);
+ 	__u32 ctx_size_in = kattr->test.ctx_size_in;
++	struct bpf_test_timer t = {};
++	u32 retval, duration, repeat;
+ 	void *ctx = NULL;
+-	u32 retval;
+ 	int err = 0;
+ 
+-	/* doesn't support data_in/out, ctx_out, duration, or repeat or flags */
++	/* doesn't support data_in/out, ctx_out, or flags */
+ 	if (kattr->test.data_in || kattr->test.data_out ||
+-	    kattr->test.ctx_out || kattr->test.duration ||
+-	    kattr->test.repeat || kattr->test.flags ||
++	    kattr->test.ctx_out || kattr->test.flags ||
+ 	    kattr->test.batch_size)
+ 		return -EINVAL;
+ 
+@@ -1636,14 +1679,27 @@ int bpf_prog_test_run_syscall(struct bpf_prog *prog,
+ 			return PTR_ERR(ctx);
+ 	}
+ 
+-	rcu_read_lock_trace();
+-	retval = bpf_prog_run_pin_on_cpu(prog, ctx);
+-	rcu_read_unlock_trace();
++	repeat = kattr->test.repeat;
++	if (!repeat)
++		repeat = 1;
++
++	bpf_test_timer_enter_trace(&t);
++	do {
++		retval = bpf_prog_run_pin_on_cpu(prog, ctx);
++	} while (bpf_test_timer_continue_trace(&t, 1, repeat, &err, &duration));
++	bpf_test_timer_leave_trace(&t);
++
++	if (err)
++		goto out;
+ 
+ 	if (copy_to_user(&uattr->test.retval, &retval, sizeof(u32))) {
+ 		err = -EFAULT;
+ 		goto out;
+ 	}
++	if (copy_to_user(&uattr->test.duration, &duration, sizeof(duration))) {
++		err = -EFAULT;
++		goto out;
++	}
+ 	if (ctx_size_in)
+ 		if (copy_to_user(ctx_in, ctx, ctx_size_in))
+ 			err = -EFAULT;
 -- 
 2.47.3
 
