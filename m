@@ -1,170 +1,163 @@
-Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f196.google.com (mail-pf1-f196.google.com [209.85.210.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D1B33A708
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 12:26:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1F836B06C
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 12:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770812802; cv=none; b=KzKPHLHCvnI7w40nrnE15oCrpGTxGtjszTCNcRjDxS2uqd6801aSlsTawCr/rXf3D5WnPt+YFG0Fmg8hPuzrHirmPANwRnCtNB7BU22YbLFUY4Gaq4rJYEiuoPya6+oSSN3sojrpelUtfMXZO1p7w3kdRcgYZOAwxLOat3vPbBc=
+	t=1770814669; cv=none; b=Lu/DGogCjM0szYdJNd9v8QdW3H80fZbcxn9oKgJRSGlNb4j3zMOasfwyHX14nyykX8ZJ5qab8fMJ8j0RSdEt4QHXIx6Q2vb4MNAm/na26vztOo/OBA3mZPJ7PmoZevZhyPwTQjHOP+RWIQeVDAYDR8/ThUF73hCCAA0YVFcnouM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770812802; c=relaxed/simple;
-	bh=LJRpeV/A1fxlnnZUB3wTrAHsDxAi+EZccFnu8ySHu/Y=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=QiWW7Y1bQR5UypgbryzZxmGpfiQV0MxsRQqIrExAl+HyUlHP8NMBAKRSUa+WN0eLh85pd/bNoWKqo9cpV8sy1mB9yeS2xK/IjcF5xUl5nZu34xGhEnkSlhz1kQ1B5skB7L3ykwMqKoC2WSujhAfY608+2GU+5nWUFJW+S5zgfD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rwYXqi0/; arc=none smtp.client-ip=95.215.58.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770814669; c=relaxed/simple;
+	bh=hCVSHo9DQGfxm2r1+JG9k4GYwgUeT8hz5Nu8FnCJYIY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Waj9K8tmLE+x5DGAuR1dRP7cg+4BZR1EtvXEi+WzXeLOi0eunINz6kaMaOpMHSRcXQKcZ1f65reIJvUHHFx2aoIdvKIv7mWAyU1izHjA4Bd7zio6iIzJMgmuvrDj77IyxZDr/VLG4xC6BZ1nE0unXfMVDLwo19Hh1OBZu0m+gj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hoj7hFRN; arc=none smtp.client-ip=209.85.210.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rwYXqi0/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hoj7hFRN"
+Received: by mail-pf1-f196.google.com with SMTP id d2e1a72fcca58-823081bb15fso2672823b3a.3
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 04:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770814667; x=1771419467; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1TtYZ5EC3dCtBT+uwBuJa6C5l//iYphnHtWsOZ40juE=;
+        b=Hoj7hFRNGBZYhz4I25fS2BFRaWmQanTXW2Ax9MCL3ooK+hrwj8VK+ZQoMmdYAZ/T19
+         cIW9+2wqltp0MYyjy9sgzZO7KYEYFgqALHzfJRTJ5Y8mf6tYe1S7kqJfLm8LupH/EN/6
+         DgQUYiYAeH4cka6oDZSJhtHMQrAVRb4brzq/vVeIENZBKwcb+tPGnTGbJOG48U6a14xj
+         PqFTtmXAq9TN/LXpqX+L/8Q46JToue0igEoYbJksN8Fq6X1HajnCdOYxwTFBDpMWtCsF
+         DWC4HOq18c/tBF7vIq2WcG0C5XUdvzj3IPg8WYM7xpBQqcCgjWQzfq6gaX4I1AAYUZm8
+         j3sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770814667; x=1771419467;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1TtYZ5EC3dCtBT+uwBuJa6C5l//iYphnHtWsOZ40juE=;
+        b=AlpG4vR6r/eVTaVgpXVrf/5P11nQ1RUyc46R7nWe3eIEVqC5Yt5AgdBacY+oxgYbgV
+         zxoVZVhb4q6xm0UxvXowspLORWs1l7ezCMgh4Fyj5YI5oSU2lgz9YTzJddi/6luL+vXy
+         7fYMUTBenePFyHJ21/ZnXLFe1s+F0KHTQ60WHjbuVvZ5e9mzK9EhgZz5t6gF/RX2syNI
+         Uwm7h/3LL/5xDc0EknJsQXIZwIw3iFRO3MHRiZZLQrTMdBbUHXEEC65q8ibXbxifuTDW
+         LvXqHDL57/FxivOxo7YcD53iow92aW7ZDC0P9xYSYGcS517QUHYiM3FSn524DKX6cLp6
+         +Gew==
+X-Forwarded-Encrypted: i=1; AJvYcCX0OiwG6oKm2CilaienTOkKaLOg8BqaWAUuYANZ0u54d2tV0dr/EA5gGd3TmuMAri1M3OY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQvT/tKOLvaiUaC7sOAmU5W4gV1+OLeXnEXb1DsbWvY31I4h6T
+	/l431MwsuMQyt2xNSOi7vySgNr5PgGowWphkutidMBQWgpiBOxS2kFa6
+X-Gm-Gg: AZuq6aIM9V7eR/LpPqvIodZi8Nrl/eHVcGMJP2xxG7sRWHodYe6HqBgOo+LfjAMunoS
+	ndLfKeKiKpU2GreEMwP3HiC4eIqzhV9ckM3/ALkmwzfzsOGwW5TGyIopoh4pCF27sc7PVj5WoCS
+	3OxxN8pKWeMMdB1+xxFSPTkziuofp49crRzC7QVixZbRZwrEmxFSPV38f0U6W0q6uY4dpeVjPl5
+	hLmDWL9tghzEeoX2JVTgvU321oo9hbJ3SauEbcASzTW6otU5jUCgfYXBGq0n/Cu2Dn1LIhOudMN
+	rvbnOBYqY+ZUpg7G2oDOygI9obiiwb7lU6QwAdKMOeka8xYUz3SYaRfogJXXx2lKN+Dil2sPM6e
+	jPaJHHSO3q3pLgwFUWnUsJttcOCbusT3EURRnhnP7SoGWrted0p8r3XkX5BnzGFlnHhJPkr56qA
+	qcf9+Bww57kvrXjIkZ9KRB
+X-Received: by 2002:a05:6a21:4612:b0:38e:7422:ac83 with SMTP id adf61e73a8af0-3942e35ffe9mr2443996637.10.1770814667430;
+        Wed, 11 Feb 2026 04:57:47 -0800 (PST)
+Received: from 7950hx ([103.173.155.241])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c6e1969f314sm2198284a12.8.2026.02.11.04.57.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Feb 2026 04:57:47 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
+To: andrii@kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] libbpf: skip compat check for session kfuncs
+Date: Wed, 11 Feb 2026 20:57:37 +0800
+Message-ID: <20260211125737.1315848-1-dongml2@chinatelecom.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770812788;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=juP12CPu5no4sJn3GXK23Vcmd+0s4QSQdQ9JTIQubAU=;
-	b=rwYXqi0/CVyLw7kczTCLZo8jyq63PuT8zrg+bMz0vGm2UFcucyrJRfSchgEzcnTLO6C/Qu
-	pU9Pt8f1MhsJ+89uccS3nooe/wDXJ6bEQDheGN9jq4YRLqadf+A/HS8HwNOKvEmOv7IMZY
-	8+Nwtx2YGtkH+DgQcgof2NPIwKgH9Fo=
-Date: Wed, 11 Feb 2026 12:26:23 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <82e29f76816971cfad92167c97afb437e1996aea@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH bpf v1] bpf: cpumap: fix race in bq_flush_to_queue on
- PREEMPT_RT
-To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>
-Cc: bpf@vger.kernel.org, "Jiayuan Chen" <jiayuan.chen@shopee.com>,
- syzbot+2b3391f44313b3983e91@syzkaller.appspotmail.com, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "David S. Miller" <davem@davemloft.net>, "Jakub Kicinski"
- <kuba@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "John
- Fastabend" <john.fastabend@gmail.com>, "Stanislav Fomichev"
- <sdf@fomichev.me>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin KaFai
- Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "KP Singh" <kpsingh@kernel.org>, "Hao Luo" <haoluo@google.com>, "Jiri
- Olsa" <jolsa@kernel.org>, "Kees Cook" <kees@kernel.org>, "Gustavo A. R.
- Silva" <gustavoars@kernel.org>, "Clark Williams" <clrkwllms@kernel.org>,
- "Steven Rostedt" <rostedt@goodmis.org>, "Thomas Gleixner"
- <tglx@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org, linux-rt-devel@lists.linux.dev
-In-Reply-To: <20260211114418.xnfx8M-t@linutronix.de>
-References: <20260211064417.196401-1-jiayuan.chen@linux.dev>
- <20260211114418.xnfx8M-t@linutronix.de>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
-February 11, 2026 at 19:44, "Sebastian Andrzej Siewior" <bigeasy@linutron=
-ix.de mailto:bigeasy@linutronix.de?to=3D%22Sebastian%20Andrzej%20Siewior%=
-22%20%3Cbigeasy%40linutronix.de%3E > wrote:
+The function prototype of bpf_session_{cookie,is_return} is changed in
+the commit 8fe4dc4f6456 ("bpf: change prototype of
+bpf_session_{cookie,is_return}"), which is not friendly to the old kernel,
+as the libbpf will fail on the compatible checking.
 
+Therefore, let's skip the checking of bpf_session_{cookie,is_return} in
+libbpf, and just let the kernel do the checking.
 
->=20
->=20On 2026-02-11 14:44:16 [+0800], Jiayuan Chen wrote:
->=20
->=20>=20
->=20> From: Jiayuan Chen <jiayuan.chen@shopee.com>
-> >=20=20
->=20>  On PREEMPT_RT kernels, the per-CPU xdp_bulk_queue (bq) can be acce=
-ssed
-> >  concurrently by multiple preemptible tasks on the same CPU.
-> >=20=20
->=20>  The original code assumes bq_enqueue() and __cpu_map_flush() run
-> >  atomically with respect to each other on the same CPU, relying on
-> >  local_bh_disable() to prevent preemption. However, on PREEMPT_RT,
-> >  local_bh_disable() only calls migrate_disable() and does not disable
-> >  preemption. spin_lock() also becomes a sleeping rt_mutex. Together,
-> >  this allows CFS scheduling to preempt a task during bq_flush_to_queu=
-e(),
-> >  enabling another task on the same CPU to enter bq_enqueue() and oper=
-ate
-> >  on the same per-CPU bq concurrently.
-> >=20
->=20=E2=80=A6
->=20
->=20>=20
->=20> Fixes: d2d6422f8bd1 ("x86: Allow to enable PREEMPT_RT.")
-> >=20
->=20Can you reproduce this? It should not trigger with the commit above.
-> It should trigger starting with
->  3253cb49cbad4 ("softirq: Allow to drop the softirq-BKL lock on PREEMPT=
-_RT")
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+---
+ tools/lib/bpf/libbpf.c | 31 ++++++++++++++++++++-----------
+ 1 file changed, 20 insertions(+), 11 deletions(-)
 
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index 0c8bf0b5cce4..71bdd1c1ac39 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -8557,6 +8557,12 @@ static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
+ 	return id;
+ }
+ 
++static bool kfunc_skip_compat_check(const char *name)
++{
++	return name && (strcmp(name, "bpf_session_cookie") == 0 ||
++			strcmp(name, "bpf_session_is_return") == 0);
++}
++
+ static int bpf_object__resolve_ksym_var_btf_id(struct bpf_object *obj,
+ 					       struct extern_desc *ext)
+ {
+@@ -8617,12 +8623,13 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
+ 	struct module_btf *mod_btf = NULL;
+ 	const struct btf_type *kern_func;
+ 	struct btf *kern_btf = NULL;
++	const char *kfunc_name;
+ 	int ret;
+ 
+ 	local_func_proto_id = ext->ksym.type_id;
+ 
+-	kfunc_id = find_ksym_btf_id(obj, ext->essent_name ?: ext->name, BTF_KIND_FUNC, &kern_btf,
+-				    &mod_btf);
++	kfunc_name = ext->essent_name ?: ext->name;
++	kfunc_id = find_ksym_btf_id(obj, kfunc_name, BTF_KIND_FUNC, &kern_btf, &mod_btf);
+ 	if (kfunc_id < 0) {
+ 		if (kfunc_id == -ESRCH && ext->is_weak)
+ 			return 0;
+@@ -8634,16 +8641,18 @@ static int bpf_object__resolve_ksym_func_btf_id(struct bpf_object *obj,
+ 	kern_func = btf__type_by_id(kern_btf, kfunc_id);
+ 	kfunc_proto_id = kern_func->type;
+ 
+-	ret = bpf_core_types_are_compat(obj->btf, local_func_proto_id,
+-					kern_btf, kfunc_proto_id);
+-	if (ret <= 0) {
+-		if (ext->is_weak)
+-			return 0;
++	if (!kfunc_skip_compat_check(kfunc_name)) {
++		ret = bpf_core_types_are_compat(obj->btf, local_func_proto_id,
++						kern_btf, kfunc_proto_id);
++		if (ret <= 0) {
++			if (ext->is_weak)
++				return 0;
+ 
+-		pr_warn("extern (func ksym) '%s': func_proto [%d] incompatible with %s [%d]\n",
+-			ext->name, local_func_proto_id,
+-			mod_btf ? mod_btf->name : "vmlinux", kfunc_proto_id);
+-		return -EINVAL;
++			pr_warn("extern (func ksym) '%s': func_proto [%d] incompatible with %s [%d]\n",
++				ext->name, local_func_proto_id,
++				mod_btf ? mod_btf->name : "vmlinux", kfunc_proto_id);
++			return -EINVAL;
++		}
+ 	}
+ 
+ 	/* set index for module BTF fd in fd_array, if unset */
+-- 
+2.53.0
 
-Thanks for the review, Sebastian.
-
-You are right. The race only becomes possible after the softirq BKL is dr=
-opped.
-
-> >=20
->=20> Reported-by: syzbot+2b3391f44313b3983e91@syzkaller.appspotmail.com
-> >  Closes: https://lore.kernel.org/all/69369331.a70a0220.38f243.009d.GA=
-E@google.com/T/
-> >  Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
-> >  Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> >  ---
-> >  kernel/bpf/cpumap.c | 16 +++++++++++++++-
-> >  1 file changed, 15 insertions(+), 1 deletion(-)
-> >=20=20
->=20>  diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-> >  index 04171fbc39cb..7fda8421ec40 100644
-> >  --- a/kernel/bpf/cpumap.c
-> >  +++ b/kernel/bpf/cpumap.c
-> >  @@ -714,6 +717,7 @@ const struct bpf_map_ops cpu_map_ops =3D {
-> >  .map_redirect =3D cpu_map_redirect,
-> >  };
-> >=20=20
->=20>  +/* Caller must hold bq->bq_lock */
-> >=20
->=20If this information is important please use lockdep_assert_held() in =
-the
-> function below. This can be used by lockdep and is understood by humans
-> while the comment is only visible to humans.
-
-
-Will add lockdep_assert_held() in bq_flush_to_queue() and drop the
-comment.
-
-> >=20
->=20> static void bq_flush_to_queue(struct xdp_bulk_queue *bq)
-> >  {
-> >  struct bpf_cpu_map_entry *rcpu =3D bq->obj;
-> >  @@ -750,10 +754,16 @@ static void bq_flush_to_queue(struct xdp_bulk_=
-queue *bq)
-> >=20=20
->=20>  /* Runs under RCU-read-side, plus in softirq under NAPI protection=
-.
-> >  * Thus, safe percpu variable access.
-> >=20
->=20+ PREEMPT_RT relies on local_lock_nested_bh().
->=20
->=20>=20
->=20> + *
-> >  + * On PREEMPT_RT, local_bh_disable() does not disable preemption,
-> >  + * so we use local_lock to serialize access to the per-CPU bq.
-> >  */
-> >  static void bq_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_fr=
-ame *xdpf)
-> >  {
-> >  - struct xdp_bulk_queue *bq =3D this_cpu_ptr(rcpu->bulkq);
-> >  + struct xdp_bulk_queue *bq;
-> >  +
-> >  + local_lock(&rcpu->bulkq->bq_lock);
-> >=20
->=20local_lock_nested_bh() & the matching unlock here and in the other
-> places, please.
-
-
-Makes sense. Since these paths already run under local_bh_disable(),
-local_lock_nested_bh() is the correct primitive.
-
-> Sebastian
->
