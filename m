@@ -1,76 +1,65 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75F132BE643
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 14:33:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7AF28C037;
+	Wed, 11 Feb 2026 15:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770820387; cv=none; b=LFQeBGMtINSaYUwJcw0gGcOj6y2nmc+w5ZrHaC+Vt9qy4b5jthMZfZ9yaCEEDPPNyXA/AcnpeJL3R1GJ6D9FLdHGEsW8ZGNu4UawB0GUcS2lxBl3ULwScmV9ytyrL9P30tf97ZMYncBwCTGNziZYunSYdak7DYDjCQfLKaDtaTI=
+	t=1770822733; cv=none; b=gRMi1UKuRP7bXhOqiuhIr0zWl81pi0ryfpJ8oIGEVVWUOd2ncFUPeJVVhEKgmbtqQLHt5937niVUjEq8oBNXgzc5dGUvz3fhprTB5hrx/mhSMTnflzeU2n+UB6DCkBwxmuSUbBm1fMdJW0smzjDietgBW+Ul5PsVT/4LIjvgdm4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770820387; c=relaxed/simple;
-	bh=aNzFudzQK5tGnXC0ZbNNOc8AyLJqpWwwbWMmFF2KeSY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kH+r6k50txJYFBQ8zUl+Z2bfIyvOWKtBrMpGVoFEXa2bbSezAPjPG8e+gPEERIP9RZB1m0YftRpykGBp2HD/dRjKjLzYGSWYt//32ZzzV8fm7gkI3WnPZ7GN+N+OnUtC4+IpTZknove+KbWOo1rzeACQQU2sWgDO210I9zEVpYk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GfgCfs7X; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770822733; c=relaxed/simple;
+	bh=67qwVq5ULsKu/M0wW4+5NY2mPkH+V4oSdLoPwlXWw1c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Mtq4iMdB9G/m+RGm1HpFlf2wi+bVrBg8cNcrZRULXrL20+syQTZ/DdHkR8ayp6E8wxudoBtvFd1FPk505er48QACDtQvujIln/+njNMWzIaZ7Z74tPf/fRn+hgh9n4yHboN0pPlDaW5FYb+QR/tzaEU+/mtGAriwl4sz7VAz45A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=whcz8Td1; arc=none smtp.client-ip=95.215.58.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GfgCfs7X"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-43767807cf3so2699387f8f.1
-        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 06:33:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770820384; x=1771425184; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GpbA0GcFew4HF8OvK40+MRhrkR3DXNpjHJcCmsEnR9M=;
-        b=GfgCfs7XRzEdFaIZYMvnZ0mFTmHLCOu22VIbvQLv0QAZGumxCX9DjuwM/eEZAwEf20
-         M6bG+zVCbxBXCzLwzJJzYXm7I4NPDMWxi/X/DD54yjmah0O3AQCQRtgNIdjlTU9+rgBj
-         RK6aC+ePr+Ib5yq2eHoe948QPdkzHxQHDTSd8/p7zQ9eZn1X5EugpG0OP5vRgh5/XrlQ
-         SOsPZ6aAWcUjW2j1hHuvgFfxfKBws/TIZLJGlzm6pGcSmxE9hZ3S3fAtUuOEAL9dSIAs
-         Cp1yHx7Z5BHfLm81qqc0QjbyV3+vtK+Omv2hMqlFXnb4LkS1NjWASjwDplRIpTriWfeD
-         RUbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770820384; x=1771425184;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=GpbA0GcFew4HF8OvK40+MRhrkR3DXNpjHJcCmsEnR9M=;
-        b=qSmYz2KK0TqW4ep7KadIW2FgTQUu37b9THyJnyqTx2nill5OTb9ZmE1rvhQaNwcSdS
-         oDI3FLui2XQaVHikp/xPJ3QzdwHnXW884BTLhbE+Mt15jstIwifF6FPHLwgh3ZmwzwM5
-         1T1ixr2ZTolP2q+xrRLNqclhE2bCjhDea6tljmRsmtLfPTD/EdPUFs2XXHj4vz7E3M5y
-         AVtfC290RdtY4sXaBKWMQy3x0iRtk2eXudD85eKJW+7DVAuil/RKh9z3v06KGW3db87V
-         FX9kzvjPfQUWSdbibo8nDqZOsEfsMiR1tYhuGx25/MrN5BrrDYOmoXFlaH8i9h7h+Qoq
-         b/mw==
-X-Forwarded-Encrypted: i=1; AJvYcCWE6l7jhac0WUHVpawiXRiXoUroHpoC2fOK2EOLMrs5R8EMidMBHESG+yiJf28xHSGQd9U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBxkStkAQ2GDFsjKxNFLUg6AFfkJVJcJ8Ijxd/oIHH5/e/Yzdl
-	/Ygq4LDHhNyqs7rpgydEKqzmAfZ5GSy0BK3N7XLcCGdrC8i9UDEU4lWE
-X-Gm-Gg: AZuq6aKLSOr4HqdJ6E5FalV1+JfILPZyxCfw+yxjHalKFhZw9cZhxD0Tx4DGdurH7ld
-	CSaQ+XEms5cMtdUg+ahgh8bITkLgelKnQHUY0dLatUPsGof1zjmMIWOeQiGbTRgOELOF9UdIuoj
-	+AOoLKP4rLNG42MVj7jEhdz6rjqzzcFsD6t7PMJZ71s8zjHu17dtNno/GhgMKj3bf1JXMgSbjl1
-	8SLSOL+Dd1iMdskeU9WcP6S5jfh1gjF0gsjQ/q5kWhdffMzoP1yCoFn9dKwr+K3MaTHMOI19Chl
-	mRd6pqe3LJkGoa+vIteXH9e+hwvmBQNB+mrW3j+z4oc2Cv+81v++9G0oP7RtBU1vapnbQNjcA2q
-	zSWEwYMDh84V0dkh3kHHM1M/i7G1bIFQjI6EWiQdw8KX/Kgt2B+mRbC34eGgxvh2ekc4pUo4yVJ
-	FwWJtrNuPYdrIy32kdP9yNnLYrSNIkMgXxqF5O0AyhEMASDcCm0pNjzNG5kIFpglOxUyzcjpHJd
-	g4hKn4pe2mALc5XfhAT
-X-Received: by 2002:a05:6000:248a:b0:436:d824:6218 with SMTP id ffacd0b85a97d-43782cc0d98mr3936123f8f.55.1770820383667;
-        Wed, 11 Feb 2026 06:33:03 -0800 (PST)
-Received: from 127.com ([2620:10d:c092:600::1:b997])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43783e39c75sm4973747f8f.29.2026.02.11.06.33.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Feb 2026 06:33:03 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com,
-	bpf@vger.kernel.org,
-	axboe@kernel.dk,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH v5 5/5] selftests/io_uring: add a bpf io_uring selftest
-Date: Wed, 11 Feb 2026 14:32:44 +0000
-Message-ID: <52d39c60d06ee9d02ddb04521382045a6b1d543d.1770818588.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1770818588.git.asml.silence@gmail.com>
-References: <cover.1770818588.git.asml.silence@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="whcz8Td1"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770822719;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=nnTMAxFAxcOBp4KtWyRFMVTHNvpbJ209/s71toTMntE=;
+	b=whcz8Td14J/auITkJHeKHzxsr3GJOYWCJmh0NPXgIdMgtlRhPGWTO9qjU14bu3hU1x5BYN
+	ELXVhvt3l1Le1V87DXXbQJF9SFJyNHwpPfLveR2CkjrPJSCimBvWV0rMMpduN11ioPYN8h
+	NUL+W9ZZZd2xl5ck2mI/bmcLXICTntM=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v10 0/8] bpf: Extend BPF syscall with common attributes support
+Date: Wed, 11 Feb 2026 23:11:07 +0800
+Message-ID: <20260211151115.78013-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,476 +67,158 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add a simple io_uring BPF selftest, where the BPF program implemented in
-basic.bpf.c executes a given number of NOP requests with QD=1, writes
-some stats and returns back. The makefile is borrowed from sched_ext
-tests.
+This patch series builds upon the discussion in
+"[PATCH bpf-next v4 0/4] bpf: Improve error reporting for freplace attachment failure" [1].
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- tools/testing/selftests/Makefile             |   3 +-
- tools/testing/selftests/io_uring/Makefile    | 162 +++++++++++++++++++
- tools/testing/selftests/io_uring/basic.bpf.c | 131 +++++++++++++++
- tools/testing/selftests/io_uring/common.h    |   6 +
- tools/testing/selftests/io_uring/runner.c    | 107 ++++++++++++
- 5 files changed, 408 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/io_uring/Makefile
- create mode 100644 tools/testing/selftests/io_uring/basic.bpf.c
- create mode 100644 tools/testing/selftests/io_uring/common.h
- create mode 100644 tools/testing/selftests/io_uring/runner.c
+This patch series introduces support for *common attributes* in the BPF
+syscall, providing a unified mechanism for passing shared metadata across
+all BPF commands, and uses it for BPF_PROG_LOAD, BPF_BTF_LOAD, and
+BPF_MAP_CREATE.
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 56e44a98d6a5..5e965ba3697c 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -130,6 +130,7 @@ TARGETS += vfio
- TARGETS += x86
- TARGETS += x86/bugs
- TARGETS += zram
-+TARGETS += io_uring
- #Please keep the TARGETS list alphabetically sorted
- # Run "make quicktest=1 run_tests" or
- # "make quicktest=1 kselftest" from top level Makefile
-@@ -147,7 +148,7 @@ endif
- # User can optionally provide a TARGETS skiplist. By default we skip
- # targets using BPF since it has cutting edge build time dependencies
- # which require more effort to install.
--SKIP_TARGETS ?= bpf sched_ext
-+SKIP_TARGETS ?= bpf sched_ext io_uring
- ifneq ($(SKIP_TARGETS),)
- 	TMP := $(filter-out $(SKIP_TARGETS), $(TARGETS))
- 	override TARGETS := $(TMP)
-diff --git a/tools/testing/selftests/io_uring/Makefile b/tools/testing/selftests/io_uring/Makefile
-new file mode 100644
-index 000000000000..f3b9fb653973
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/Makefile
-@@ -0,0 +1,162 @@
-+# SPDX-License-Identifier: GPL-2.0
-+include ../../../build/Build.include
-+include ../../../scripts/Makefile.arch
-+include ../../../scripts/Makefile.include
-+
-+TEST_GEN_PROGS := runner
-+
-+# override lib.mk's default rules
-+OVERRIDE_TARGETS := 1
-+include ../lib.mk
-+
-+CURDIR := $(abspath .)
-+REPOROOT := $(abspath ../../../..)
-+TOOLSDIR := $(REPOROOT)/tools
-+LIBDIR := $(TOOLSDIR)/lib
-+BPFDIR := $(LIBDIR)/bpf
-+TOOLSINCDIR := $(TOOLSDIR)/include
-+BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
-+APIDIR := $(TOOLSINCDIR)/uapi
-+GENDIR := $(REPOROOT)/include/generated
-+GENHDR := $(GENDIR)/autoconf.h
-+
-+OUTPUT_DIR := $(OUTPUT)/build
-+OBJ_DIR := $(OUTPUT_DIR)/obj
-+INCLUDE_DIR := $(OUTPUT_DIR)/include
-+BPFOBJ_DIR := $(OBJ_DIR)/libbpf
-+IOUOBJ_DIR := $(OBJ_DIR)/io_uring
-+LIBBPF_OUTPUT := $(OBJ_DIR)/libbpf/libbpf.a
-+BPFOBJ := $(BPFOBJ_DIR)/libbpf.a
-+
-+DEFAULT_BPFTOOL := $(OUTPUT_DIR)/host/sbin/bpftool
-+HOST_OBJ_DIR := $(OBJ_DIR)/host/bpftool
-+HOST_LIBBPF_OUTPUT := $(OBJ_DIR)/host/libbpf/
-+HOST_LIBBPF_DESTDIR := $(OUTPUT_DIR)/host/
-+HOST_DESTDIR := $(OUTPUT_DIR)/host/
-+
-+VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)					\
-+		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)		\
-+		     ../../../../vmlinux					\
-+		     /sys/kernel/btf/vmlinux					\
-+		     /boot/vmlinux-$(shell uname -r)
-+VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-+ifeq ($(VMLINUX_BTF),)
-+$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
-+endif
-+
-+BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+
-+ifneq ($(wildcard $(GENHDR)),)
-+  GENFLAGS := -DHAVE_GENHDR
-+endif
-+
-+CFLAGS += -g -O2 -rdynamic -pthread -Wall -Werror $(GENFLAGS)			\
-+	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)				\
-+	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(CURDIR)/include
-+
-+# Silence some warnings when compiled with clang
-+ifneq ($(LLVM),)
-+CFLAGS += -Wno-unused-command-line-argument
-+endif
-+
-+LDFLAGS = -lelf -lz -lpthread -lzstd
-+
-+IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null |				\
-+			grep 'define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__')
-+
-+# Get Clang's default includes on this system, as opposed to those seen by
-+# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-+#
-+# Use '-idirafter': Don't interfere with include mechanics except where the
-+# build would have failed anyways.
-+define get_sys_includes
-+$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
-+	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
-+endef
-+
-+ifneq ($(CROSS_COMPILE),)
-+CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
-+endif
-+
-+CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-+
-+BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
-+	     $(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)		\
-+	     -I$(CURDIR)/include -I$(CURDIR)/include/bpf-compat			\
-+	     -I$(INCLUDE_DIR) -I$(APIDIR) 	\
-+	     -I$(REPOROOT)/include						\
-+	     $(CLANG_SYS_INCLUDES) 						\
-+	     -Wall -Wno-compare-distinct-pointer-types				\
-+	     -Wno-incompatible-function-pointer-types				\
-+	     -O2 -mcpu=v3
-+
-+# sort removes libbpf duplicates when not cross-building
-+MAKE_DIRS := $(sort $(OBJ_DIR)/libbpf $(OBJ_DIR)/libbpf				\
-+	       $(OBJ_DIR)/bpftool $(OBJ_DIR)/resolve_btfids			\
-+	       $(HOST_OBJ_DIR) $(INCLUDE_DIR) $(IOUOBJ_DIR))
-+
-+$(MAKE_DIRS):
-+	$(call msg,MKDIR,,$@)
-+	$(Q)mkdir -p $@
-+
-+$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
-+	   $(APIDIR)/linux/bpf.h						\
-+	   | $(OBJ_DIR)/libbpf
-+	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(OBJ_DIR)/libbpf/	\
-+		    ARCH=$(ARCH) CC="$(CC)" CROSS_COMPILE=$(CROSS_COMPILE)	\
-+		    EXTRA_CFLAGS='-g -O0 -fPIC'					\
-+		    DESTDIR=$(OUTPUT_DIR) prefix= all install_headers
-+
-+$(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
-+		    $(LIBBPF_OUTPUT) | $(HOST_OBJ_DIR)
-+	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
-+		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD)		\
-+		    EXTRA_CFLAGS='-g -O0'					\
-+		    OUTPUT=$(HOST_OBJ_DIR)/					\
-+		    LIBBPF_OUTPUT=$(HOST_LIBBPF_OUTPUT)				\
-+		    LIBBPF_DESTDIR=$(HOST_LIBBPF_DESTDIR)			\
-+		    prefix= DESTDIR=$(HOST_DESTDIR) install-bin
-+
-+$(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
-+ifeq ($(VMLINUX_H),)
-+	$(call msg,GEN,,$@)
-+	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-+else
-+	$(call msg,CP,,$@)
-+	$(Q)cp "$(VMLINUX_H)" $@
-+endif
-+
-+$(IOUOBJ_DIR)/%.bpf.o: %.bpf.c $(INCLUDE_DIR)/vmlinux.h | $(BPFOBJ) $(IOUOBJ_DIR)
-+	$(call msg,CLNG-BPF,,$(notdir $@))
-+	$(Q)$(CLANG) $(BPF_CFLAGS) -target bpf -c $< -o $@
-+
-+$(INCLUDE_DIR)/%.bpf.skel.h: $(IOUOBJ_DIR)/%.bpf.o $(INCLUDE_DIR)/vmlinux.h $(BPFTOOL) | $(INCLUDE_DIR)
-+	$(eval sched=$(notdir $@))
-+	$(call msg,GEN-SKEL,,$(sched))
-+	$(Q)$(BPFTOOL) gen object $(<:.o=.linked1.o) $<
-+	$(Q)$(BPFTOOL) gen object $(<:.o=.linked2.o) $(<:.o=.linked1.o)
-+	$(Q)$(BPFTOOL) gen object $(<:.o=.linked3.o) $(<:.o=.linked2.o)
-+	$(Q)diff $(<:.o=.linked2.o) $(<:.o=.linked3.o)
-+	$(Q)$(BPFTOOL) gen skeleton $(<:.o=.linked3.o) name $(subst .bpf.skel.h,,$(sched)) > $@
-+	$(Q)$(BPFTOOL) gen subskeleton $(<:.o=.linked3.o) name $(subst .bpf.skel.h,,$(sched)) > $(@:.skel.h=.subskel.h)
-+
-+override define CLEAN
-+	rm -rf $(OUTPUT_DIR)
-+	rm -f $(TEST_GEN_PROGS)
-+endef
-+
-+all_test_bpfprogs := $(foreach prog,$(wildcard *.bpf.c),$(INCLUDE_DIR)/$(patsubst %.c,%.skel.h,$(prog)))
-+
-+$(IOUOBJ_DIR)/runner.o: runner.c $(all_test_bpfprogs) | $(IOUOBJ_DIR) $(BPFOBJ)
-+	$(CC) $(CFLAGS) -c $< -o $@
-+
-+$(OUTPUT)/runner: $(IOUOBJ_DIR)/runner.o $(BPFOBJ)
-+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
-+
-+.DEFAULT_GOAL := all
-+
-+.DELETE_ON_ERROR:
-+
-+.SECONDARY:
-diff --git a/tools/testing/selftests/io_uring/basic.bpf.c b/tools/testing/selftests/io_uring/basic.bpf.c
-new file mode 100644
-index 000000000000..f1bccf3b5f42
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/basic.bpf.c
-@@ -0,0 +1,131 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/types.h>
-+#include <linux/stddef.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "vmlinux.h"
-+#include "common.h"
-+
-+char LICENSE[] SEC("license") = "Dual BSD/GPL";
-+
-+#define REQ_TOKEN 0xabba1741
-+
-+const unsigned max_inflight = 8;
-+const volatile unsigned cq_hdr_offset;
-+const volatile unsigned sq_hdr_offset;
-+const volatile unsigned cqes_offset;
-+
-+int reqs_to_run;
-+unsigned inflight;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 3);
-+	__type(key, u32);
-+	__type(value, s64);
-+} res_map SEC(".maps");
-+
-+#define t_min(a, b) ((a) < (b) ? (a) : (b))
-+
-+static inline void set_cq_wait(struct iou_loop_params *lp,
-+			       struct io_uring *cq_hdr, unsigned to_wait)
-+{
-+	lp->cq_wait_idx = cq_hdr->head + to_wait;
-+}
-+
-+static inline void write_result(int res)
-+{
-+	u32 key = SLOT_RES;
-+	u64 *val;
-+
-+	val = bpf_map_lookup_elem(&res_map, &key);
-+	if (val)
-+		*val = res;
-+}
-+
-+static inline void write_stats(int idx, unsigned int v)
-+{
-+	u32 key = idx;
-+	u64 *val;
-+
-+	val = bpf_map_lookup_elem(&res_map, &key);
-+	if (val)
-+		*val += v;
-+}
-+
-+SEC("struct_ops.s/link_loop")
-+int BPF_PROG(link_loop, struct io_ring_ctx *ring, struct iou_loop_params *ls)
-+{
-+	struct io_uring *sq_hdr, *cq_hdr;
-+	struct io_uring_sqe *sqes;
-+	struct io_uring_cqe *cqes;
-+	void *rings;
-+	int ret;
-+
-+	sqes = (void *)bpf_io_uring_get_region(ring, IOU_REGION_SQ,
-+				SQ_ENTRIES * sizeof(struct io_uring_sqe));
-+	rings = (void *)bpf_io_uring_get_region(ring, IOU_REGION_CQ,
-+				cqes_offset + CQ_ENTRIES * sizeof(struct io_uring_cqe));
-+	if (!rings || !sqes) {
-+		write_result(-1);
-+		return IOU_LOOP_STOP;
-+	}
-+
-+	sq_hdr = rings + (sq_hdr_offset & 63);
-+	cq_hdr = rings + (cq_hdr_offset & 63);
-+	cqes = rings + cqes_offset;
-+
-+	unsigned to_wait = cq_hdr->tail - cq_hdr->head;
-+	to_wait = t_min(to_wait, CQ_ENTRIES);
-+	for (int i = 0; i < to_wait; i++) {
-+		struct io_uring_cqe *cqe = &cqes[cq_hdr->head & (CQ_ENTRIES - 1)];
-+
-+		if (cqe->user_data != REQ_TOKEN) {
-+			write_result(-3);
-+			return IOU_LOOP_STOP;
-+		}
-+		cq_hdr->head++;
-+	}
-+
-+	reqs_to_run -= to_wait;
-+	inflight -= to_wait;
-+	write_stats(SLOT_NR_CQES, to_wait);
-+
-+	if (reqs_to_run <= 0) {
-+		write_result(1);
-+		return IOU_LOOP_STOP;
-+	}
-+
-+	if (inflight < max_inflight) {
-+		unsigned to_submit = max_inflight - inflight;
-+
-+		to_submit = t_min(to_submit, reqs_to_run);
-+
-+		for (int i = 0; i < to_submit; i++) {
-+			struct io_uring_sqe *sqe = sqes + i;
-+
-+			sqe = &sqes[sq_hdr->tail & (SQ_ENTRIES - 1)];
-+			*sqe = (struct io_uring_sqe){};
-+			sqe->opcode = IORING_OP_NOP;
-+			sqe->user_data = REQ_TOKEN;
-+			sq_hdr->tail++;
-+		}
-+
-+		ret = bpf_io_uring_submit_sqes(ring, to_submit);
-+		if (ret != to_submit) {
-+			write_result(-2);
-+			return IOU_LOOP_STOP;
-+		}
-+
-+		inflight += to_submit;
-+		write_stats(SLOT_NR_SQES, to_submit);
-+	}
-+
-+	set_cq_wait(ls, cq_hdr, 1);
-+	return IOU_LOOP_CONTINUE;
-+}
-+
-+SEC(".struct_ops.link")
-+struct io_uring_bpf_ops basic_ops = {
-+	.loop_step = (void *)link_loop,
-+};
-diff --git a/tools/testing/selftests/io_uring/common.h b/tools/testing/selftests/io_uring/common.h
-new file mode 100644
-index 000000000000..40e3182b8e5a
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/common.h
-@@ -0,0 +1,6 @@
-+#define CQ_ENTRIES 8
-+#define SQ_ENTRIES 8
-+
-+#define SLOT_RES	0
-+#define SLOT_NR_CQES	1
-+#define SLOT_NR_SQES	2
-diff --git a/tools/testing/selftests/io_uring/runner.c b/tools/testing/selftests/io_uring/runner.c
-new file mode 100644
-index 000000000000..5fc25ddc20e8
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/runner.c
-@@ -0,0 +1,107 @@
-+#include <linux/stddef.h>
-+#include <errno.h>
-+#include <signal.h>
-+#include <stdlib.h>
-+
-+#include <bpf/libbpf.h>
-+#include <io_uring/mini_liburing.h>
-+
-+#include "basic.bpf.skel.h"
-+#include "common.h"
-+
-+static struct io_uring_params params;
-+static struct basic *skel;
-+static struct bpf_link *basic_link;
-+
-+#define NR_ITERS 10
-+
-+static void setup_ring(struct io_uring *ring)
-+{
-+	int ret;
-+
-+	memset(&params, 0, sizeof(params));
-+	params.cq_entries = CQ_ENTRIES;
-+	params.flags = IORING_SETUP_SINGLE_ISSUER |
-+			IORING_SETUP_DEFER_TASKRUN |
-+			IORING_SETUP_NO_SQARRAY |
-+			IORING_SETUP_CQSIZE;
-+
-+	ret = io_uring_queue_init_params(SQ_ENTRIES, ring, &params);
-+	if (ret) {
-+		fprintf(stderr, "ring init failed\n");
-+		exit(1);
-+	}
-+}
-+
-+static void setup_bpf_ops(struct io_uring *ring)
-+{
-+	int ret;
-+
-+	skel = basic__open();
-+	if (!skel) {
-+		fprintf(stderr, "can't generate skeleton\n");
-+		exit(1);
-+	}
-+
-+	skel->struct_ops.basic_ops->ring_fd = ring->ring_fd;
-+	skel->bss->reqs_to_run = NR_ITERS;
-+	skel->rodata->sq_hdr_offset = params.sq_off.head;
-+	skel->rodata->cq_hdr_offset = params.cq_off.head;
-+	skel->rodata->cqes_offset = params.cq_off.cqes;
-+
-+	ret = basic__load(skel);
-+	if (ret) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
-+	basic_link = bpf_map__attach_struct_ops(skel->maps.basic_ops);
-+	if (!basic_link) {
-+		fprintf(stderr, "failed to attach ops\n");
-+		exit(1);
-+	}
-+}
-+
-+static void run_ring(struct io_uring *ring)
-+{
-+	__s64 res[3] = {};
-+	int i, ret;
-+
-+	ret = io_uring_enter(ring->ring_fd, 0, 0, IORING_ENTER_GETEVENTS, NULL);
-+	if (ret) {
-+		fprintf(stderr, "run failed\n");
-+		exit(1);
-+	}
-+
-+	for (i = 0; i < 3; i++) {
-+		__u32 key = i;
-+
-+		ret = bpf_map__lookup_elem(skel->maps.res_map,
-+					&key, sizeof(key),
-+					&res[i], sizeof(res[i]), 0);
-+		if (ret)
-+			fprintf(stderr, "can't read map idx %i: %i\n", i, ret);
-+	}
-+
-+	if (res[SLOT_RES] != 1)
-+		fprintf(stderr, "run failed: %i\n", (int)res[SLOT_RES]);
-+	if (res[SLOT_NR_CQES] != NR_ITERS)
-+		fprintf(stderr, "unexpected number of CQEs: %i\n",
-+			(int)res[SLOT_NR_CQES]);
-+	if (res[SLOT_NR_SQES] != NR_ITERS)
-+		fprintf(stderr, "unexpected submitted number: %i\n",
-+			(int)res[SLOT_NR_SQES]);
-+}
-+
-+int main() {
-+	struct io_uring ring;
-+
-+	setup_ring(&ring);
-+	setup_bpf_ops(&ring);
-+
-+	run_ring(&ring);
-+
-+	bpf_link__destroy(basic_link);
-+	basic__destroy(skel);
-+	return 0;
-+}
+The initial set of common attributes includes:
+
+1. 'log_buf': User-provided buffer for storing log output.
+2. 'log_size': Size of the provided log buffer.
+3. 'log_level': Verbosity level for logging.
+4. 'log_true_size': Actual log size reported by kernel.
+
+With this extension, the BPF syscall will be able to return meaningful
+error messages (e.g., failures of creating map), improving debuggability
+and user experience.
+
+Links:
+[1] https://lore.kernel.org/bpf/20250224153352.64689-1-leon.hwang@linux.dev/
+
+Changes:
+v9 -> v10:
+* Collect Acked-by from Andrii, thanks.
+* Address comments from Andrii:
+  * Drop log NULL check in bpf_log_attr_finalize().
+  * Return -EFAULT early in bpf_log_attr_finalize().
+  * Validate whether log_buf, log_size, and log_level are set.
+  * Keep log_buf, log_size, log_level, and user-pointer log_true_size in struct
+    bpf_log_attr.
+  * Make prog_load and btf_load work with the new struct bpf_log_attr.
+  * Add comment to log_true_size of struct bpf_log_opts in libbpf.
+* Address comment from Alexei:
+  * Avoid using BPF_LOG_FIXED as log_level in tests.
+* v9: https://lore.kernel.org/bpf/20260202144046.30651-1-leon.hwang@linux.dev/
+
+v8 -> v9:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create to
+  simplify struct bpf_log_attr (per Alexei).
+* v8: https://lore.kernel.org/bpf/20260126151409.52072-1-leon.hwang@linux.dev/
+
+v7 -> v8:
+* Return 0 when fd < 0 and errno != EFAULT in probe_sys_bpf_ext(), then simplify
+  probe_bpf_syscall_common_attrs() (per Alexei and Andrii).
+* v7: https://lore.kernel.org/bpf/20260123032445.125259-1-leon.hwang@linux.dev/
+
+v6 -> v7:
+* Return -errno when fd < 0 and errno != EFAULT in probe_sys_bpf_ext().
+* Convert return value of probe_sys_bpf_ext() to bool in
+  probe_bpf_syscall_common_attrs().
+* Address comments from Andrii:
+  * Drop the comment, and handle fd >= 0 case explicitly in
+    probe_sys_bpf_ext().
+  * Return an error when fd >= 0 in probe_sys_bpf_ext().
+* v6: https://lore.kernel.org/bpf/20260120152424.40766-1-leon.hwang@linux.dev/
+
+v5 -> v6:
+* Address comments from Andrii:
+  * Update some variables' name.
+  * Drop unnecessary 'close(fd)' in libbpf.
+  * Rename FEAT_EXTENDED_SYSCALL to FEAT_BPF_SYSCALL_COMMON_ATTRS with
+    updated description in libbpf.
+  * Use EINVAL instead of EUSERS, as EUSERS is not used in bpf yet.
+  * Rename struct bpf_syscall_common_attr_opts to bpf_log_opts in libbpf.
+  * Add 'OPTS_SET(log_opts, log_true_size, 0);' in libbpf's 'bpf_map_create()'.
+* v5: https://lore.kernel.org/bpf/20260112145616.44195-1-leon.hwang@linux.dev/
+
+v4 -> v5:
+* Rework reporting 'log_true_size' for prog_load, btf_load, and map_create
+  (per Alexei).
+* v4: https://lore.kernel.org/bpf/20260106172018.57757-1-leon.hwang@linux.dev/
+
+RFC v3 -> v4:
+* Drop RFC.
+* Address comments from Andrii:
+  * Add parentheses in 'sys_bpf_ext()'.
+  * Avoid creating new fd in 'probe_sys_bpf_ext()'.
+  * Add a new struct to wrap log fields in libbpf.
+* Address comments from Alexei:
+  * Do not skip writing to user space when log_true_size is zero.
+  * Do not use 'bool' arguments.
+  * Drop the adding WARN_ON_ONCE()'s.
+* v3: https://lore.kernel.org/bpf/20251002154841.99348-1-leon.hwang@linux.dev/
+
+RFC v2 -> RFC v3:
+* Rename probe_sys_bpf_extended to probe_sys_bpf_ext.
+* Refactor reporting 'log_true_size' for prog_load.
+* Refactor reporting 'btf_log_true_size' for btf_load.
+* Add warnings for internal bugs in map_create.
+* Check log_true_size in test cases.
+* Address comment from Alexei:
+  * Change kvzalloc/kvfree to kzalloc/kfree.
+* Address comments from Andrii:
+  * Move BPF_COMMON_ATTRS to 'enum bpf_cmd' alongside brief comment.
+  * Add bpf_check_uarg_tail_zero() for extra checks.
+  * Rename sys_bpf_extended to sys_bpf_ext.
+  * Rename sys_bpf_fd_extended to sys_bpf_ext_fd.
+  * Probe the new feature using NULL and -EFAULT.
+  * Move probe_sys_bpf_ext to libbpf_internal.h and drop LIBBPF_API.
+  * Return -EUSERS when log attrs are conflict between bpf_attr and
+    bpf_common_attr.
+  * Avoid touching bpf_vlog_init().
+  * Update the reason messages in map_create.
+  * Finalize the log using __cleanup().
+  * Report log size to users.
+  * Change type of log_buf from '__u64' to 'const char *' and cast type
+    using ptr_to_u64() in bpf_map_create().
+  * Do not return -EOPNOTSUPP when kernel doesn't support this feature
+    in bpf_map_create().
+  * Add log_level support for map creation for consistency.
+* Address comment from Eduard:
+  * Use common_attrs->log_level instead of BPF_LOG_FIXED.
+* v2: https://lore.kernel.org/bpf/20250911163328.93490-1-leon.hwang@linux.dev/
+
+RFC v1 -> RFC v2:
+* Fix build error reported by test bot.
+* Address comments from Alexei:
+  * Drop new uapi for freplace.
+  * Add common attributes support for prog_load and btf_load.
+  * Add common attributes support for map_create.
+* v1: https://lore.kernel.org/bpf/20250728142346.95681-1-leon.hwang@linux.dev/
+
+Leon Hwang (8):
+  bpf: Extend BPF syscall with common attributes support
+  libbpf: Add support for extended bpf syscall
+  bpf: Refactor reporting log_true_size for prog_load
+  bpf: Add syscall common attributes support for prog_load
+  bpf: Add syscall common attributes support for btf_load
+  bpf: Add syscall common attributes support for map_create
+  libbpf: Add syscall common attributes support for map_create
+  selftests/bpf: Add tests to verify map create failure log
+
+ include/linux/bpf.h                           |   4 +-
+ include/linux/bpf_verifier.h                  |  15 ++
+ include/linux/btf.h                           |   3 +-
+ include/linux/syscalls.h                      |   3 +-
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/btf.c                              |  30 +---
+ kernel/bpf/log.c                              |  84 +++++++++
+ kernel/bpf/syscall.c                          | 114 +++++++++---
+ kernel/bpf/verifier.c                         |  17 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/bpf.c                           |  52 +++++-
+ tools/lib/bpf/bpf.h                           |  17 +-
+ tools/lib/bpf/features.c                      |   8 +
+ tools/lib/bpf/libbpf_internal.h               |   3 +
+ .../selftests/bpf/prog_tests/map_init.c       | 166 ++++++++++++++++++
+ 15 files changed, 471 insertions(+), 61 deletions(-)
+
 -- 
 2.52.0
 
