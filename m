@@ -1,35 +1,49 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749201514F8
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 01:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0D31E511;
+	Wed, 11 Feb 2026 01:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770772810; cv=none; b=M8ULJ16slSZnkDs4r73Vz/FR1wRM/gUAoLyOihZUf1v977bDscaVjpm1AySC9azBkYCZc/bM+PTgqimpPvXXJinO0j6Aepx6Oe8GvqUTsdwRM6wLc/d53f5iXIQbRbC9C6oGPyPcP3C5T+O5g1JXB+KLC6/dn5cv6tpfjLr/NuU=
+	t=1770773448; cv=none; b=Pg44Zj72fqUQi5V8xyUTMEJzfKilcYqNeYN5oFZ4kGQ7kLc/DWgVLa25AUAJDa3HtRWK1TUSO1r8q4AkXRWDStMM7zAb8HHnGYvv+vwziOWEoeyip/aOd3xKyHRtGu0XUCaClOEyqysplCV23H+cNR64TOawogbERXsaxh+S84A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770772810; c=relaxed/simple;
-	bh=2+kOBv14T4+MJxF5An/0izFpaACfILg63WHmlWE6RFE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=pkLr+J9KQ+EfrEOgBEIlmPLlROIUmoGDg9IJHBhWRkW3v45xKKMxHZqyo32goE+AtqN7GCMJZH0i1K4ml5kClsLeNIYnN6OFJyP4wkCOGl0n3i4BqXh+aqD46HUh6HNmhQqz0h0tNYogSnh+UlYTDsSp/0zLg5PbgOXLrbdSWbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GcqR34BB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770773448; c=relaxed/simple;
+	bh=Fi1WNYnUwJRuTNrA01/0llli4cFlbNWkNf0uzzIfG1o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=VDs/ivK6xJxtonpy6Nzl/rpn3qMFgoHR3itzwiiFneDsGwxVC9QY422MmX+Z9ozdQBNNt+iTgji0ptVi03gXS3TbqelVkNGRT7D7gQ0FPmnsukdnDd847s0CXO69gLKwctnhhDG9YVozgHJlM2/6h2nJXwOltzk8nJgtuyJ/E6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qj/oc/a5; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GcqR34BB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8E96C116C6;
-	Wed, 11 Feb 2026 01:20:09 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qj/oc/a5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59A06C19423;
+	Wed, 11 Feb 2026 01:30:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770772810;
-	bh=2+kOBv14T4+MJxF5An/0izFpaACfILg63WHmlWE6RFE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=GcqR34BB7wwd73iv6fk6+RS/XPzCBOZE09DGMbqo4NCyPaNdhc6wNmzwFaeMIUzCl
-	 A7Hi/YcJcrVL7eLapfzqkWu/eIK5GJ/gs7JVUGFRIuFh1nuwzpfT/C3nxZYocTxxPZ
-	 e0vfF/Dqq3JymP1whtDncmDQODfQWCzPrh0mJHbgKKb1Fn9pIsFVdLsuPbU+JV3Y3T
-	 w+p6Tj2wFrzfPyGkZOFxU4okKW4GTjHfjbFVSFOEXCVsJW5RIcSK0IwIk1RHqJXqMl
-	 zPx/+4qVY1vjI1XZ5VDWFVmCUpDxWJZ5Dt4bqYY1+IPt8z9dGqHb4GPyo5wEB7v6uB
-	 ERzWWXL9CGVQA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 4806039E3B79;
-	Wed, 11 Feb 2026 01:20:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1770773447;
+	bh=Fi1WNYnUwJRuTNrA01/0llli4cFlbNWkNf0uzzIfG1o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Qj/oc/a5754lLv4yItnshbjodvBlITYun3IA8xek2ttqA/zlqBju/Fe664ap2i6xc
+	 Y7MpTcU5VyBn5UnDqE1r4+GlCs7VRA2G7VnjEzYz7YWb9qJM4XQMMSPRIusF0KTwwb
+	 oQR2G8nN3drVkvDc9gA0jH4YL5PtYG6AUKHikDnT2852PSkpCmsg+dxa0dZfB6Ze5L
+	 JjxWRATC2apsvTFM8/Ef3u5QU3hn3DJA3cfFUJzCP1IgcqnwPBQ0FC/PR77CogTx8V
+	 QA/xhmTAnZtVNjORc2XtYu8zsvuQAuWr9FTVljDVAtdIXaxu4RdGBL33qv1u9f3BEd
+	 dVYq/uD7Lmp/A==
+From: SeongJae Park <sj@kernel.org>
+To: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	"jack@suse.cz" <jack@suse.cz>,
+	"clm@meta.com" <clm@meta.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"chrisl@kernel.org" <chrisl@kernel.org>,
+	Pavan Rallabhandi <Pavan.Rallabhandi@ibm.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"lsf-pc@lists.linux-foundation.org" <lsf-pc@lists.linux-foundation.org>
+Subject: RE: [Lsf-pc] [LSF/MM/BPF TOPIC] Machine Learning (ML) library in Linux kernel
+Date: Tue, 10 Feb 2026 17:30:38 -0800
+Message-ID: <20260211013039.68143-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <c24a209d5a4af0c4cc08f30098998ce16c668b58.camel@ibm.com>
+References: 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,40 +51,17 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 bpf-next] bpf: Fix a potential use-after-free
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177077280509.4144399.16811384962218556577.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Feb 2026 01:20:05 +0000
-References: <20260209132904.63908-1-a.s.protopopov@gmail.com>
-In-Reply-To: <20260209132904.63908-1-a.s.protopopov@gmail.com>
-To: Anton Protopopov <a.s.protopopov@gmail.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, aspsk@isovalent.com,
- syzbot+5a0f1995634f7c1dadbf@syzkaller.appspotmail.com
 
-Hello:
+On Tue, 10 Feb 2026 22:36:35 +0000 Viacheslav Dubeyko <Slava.Dubeyko@ibm.com> wrote:
 
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+> Exactly, ML-based DAMON approach by using ML library is my next
+> implementation/exploring step.
 
-On Mon,  9 Feb 2026 13:29:04 +0000 you wrote:
-> Refcounting in the check_pseudo_btf_id() function is incorrect:
-> the __check_pseudo_btf_id() function might get called with a zero
-> refcounted btf. Fix this, and patch related code accordingly.
-> 
-> v3: rephrase a comment (AI)
-> v2: fix a refcount leak introduced in v1 (AI)
-> 
-> [...]
-
-Here is the summary with links:
-  - [v3,bpf-next] bpf: Fix a potential use-after-free
-    https://git.kernel.org/bpf/bpf/c/c81e4322acf0
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Glad to hear this.  If you find any question or need help for DAMON while doing
+this, please feel free to reach out.  I will be more than happy to help :)
 
 
+Thanks,
+SJ
+
+[...]
