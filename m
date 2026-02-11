@@ -1,243 +1,128 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7FDC34F46F;
-	Wed, 11 Feb 2026 08:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 475773446AF
+	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 08:50:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770799794; cv=none; b=q/QcPgx+u7u7CXzZSbaKpCq+raxbqNd54Xx0AGgbjNIhr0mcoBKcY3prMRo0C1stEdZ3U4eFH+OiDat/WeKgOV4Kqq06dSZFkh4xS8cB71+vLN7g96e3Fw33Udt9ajhUdqv/WlrtDybU8FB96SwYZWZy4oq9NTDFXyMHDx42biM=
+	t=1770799859; cv=none; b=VSgMZy39kaG2siAOqCx9//hnaDSPzvNL8/IJlZXsVVUuE8FCP+/0XZFZAicC2YPAQJo5vZSyCJpAvV4q1OROrhXXVeNMXSSDHBTXH7Z7vUHox+bEjQC5xfSOjCQ4+q+zvGZ5yaw8ZXPelsG+za+HD6GSvVndK8FEkeqy+H//HgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770799794; c=relaxed/simple;
-	bh=tm8jIm/op7KXojpHNfv0TiK5xp5jE9hh1pFrepEOWO8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e+h+9sNJUDuvcFdt/0guNuF/KcnoiBCQi9cbJIkv7I7LlqXMGgT/W2zfHMVZi1pU/cSHxnnDlNW8G+cGeRaj9+xRdlxPMc82zpMm5viM93w/hftsc5r/fNYK9blhQ0r2DprCI95881F6grteCaHJD0prr9DPF5TTFaJIaJozF/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aw3A8jOG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770799859; c=relaxed/simple;
+	bh=E7dZn11UnsXXsFzX/ltgj6TrTuL6RFRnhzRJQUZKAYc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tCHcZ1fODJtQrRUfgMnLEOXPDSiRKPHHhp/vaSqJistwpXXyIkewtAGxlj5Cs0OA1dGQbf7OeXHfc6SPE5asRAnaCVHfA1EKwbqoSnqmq6XCe38pkAAVKVJq2eHA6lVXI+Le9Zt6BgEuq364ZAmAN5LRTOLnVuTC/D9PaMUznWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=XSvWN7LW; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=BFOVYaPG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aw3A8jOG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9B9DC4CEF7;
-	Wed, 11 Feb 2026 08:49:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770799794;
-	bh=tm8jIm/op7KXojpHNfv0TiK5xp5jE9hh1pFrepEOWO8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aw3A8jOGk11zeCEhYkjR42mjjT8pf1bgBThQQA8NDvYiba/pcHBlQPNMd5H7Wxmz9
-	 3ccUG6cw3iB7yspEHFbL/Jb+Fhe3SZrVVyXps/02LdKvHfCG9VrJwnbyadICtHgcLy
-	 4LqXh6w44a2as0QBjL6ndI9uwICf29RuR/x27nvOyDtLFPwAzkeg8sQrRCvGEQKsII
-	 RjsY+3RzW1kYJesyMz7VXop6FvCBiX1GGJdmvMIfGM54YjQ+peL4v+NfdfuiYbZoHd
-	 ZvK8BhTr45tFVnMyB577fKbSJ5NJA8B+a7vsf3RWeZAwY332vOO8A7oSCdCIolAanE
-	 /7uSNDZt01iXg==
-From: Jiri Olsa <jolsa@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Song Liu <songliubraving@fb.com>,
-	Yonghong Song <yhs@fb.com>,
-	John Fastabend <john.fastabend@gmail.com>
-Subject: [PATCHv3 bpf-next 5/5] selftests/bpf: Add usdt trigger bench
-Date: Wed, 11 Feb 2026 09:48:58 +0100
-Message-ID: <20260211084858.750950-6-jolsa@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260211084858.750950-1-jolsa@kernel.org>
-References: <20260211084858.750950-1-jolsa@kernel.org>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="XSvWN7LW";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="BFOVYaPG"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770799857;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=N+yV3LiHwvo0TdX0nZb4kx1fDWzSnhxc2PkisRPoz5g=;
+	b=XSvWN7LWWHNMR9UOacabTWew+fKduAS5zlTZ95Bj2WnzdenlQmzKMAAbUkfrD4wFUZyWXc
+	gLjw9jVqrD8AfrmPIuU0NmZJhqtcJ5QMkM/QbIVQ3SDzRyUvJphMUe5oeHxmRgY9QhLGx5
+	liYduxVeB8tH3Hwil7RDaW8eiyUwV+w=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-272-r6TrOFm3P8iZt4G-y_IG3Q-1; Wed, 11 Feb 2026 03:50:55 -0500
+X-MC-Unique: r6TrOFm3P8iZt4G-y_IG3Q-1
+X-Mimecast-MFC-AGG-ID: r6TrOFm3P8iZt4G-y_IG3Q_1770799854
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-4358f90fe8dso435206f8f.0
+        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 00:50:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770799854; x=1771404654; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N+yV3LiHwvo0TdX0nZb4kx1fDWzSnhxc2PkisRPoz5g=;
+        b=BFOVYaPGOj1wg83jwlQDQAbjj8N39QHrRcjpI9Vmp7pXPTZw36TJDRcySQ4Zutslg3
+         0LYmVnpWqX8YpKrI5o4mpXS5WT7h5ITMmGB09d3UuvEhCWK9z5qp3lB12auTJcHcOpxW
+         L63gxOZ15LHpGTFhxZKeyCucbbOWtqJwXe8jFatQxsBAzcbm1C67r0tjuFHj8JR30Kvm
+         SA8jeXUnVC9u9vjaPbo581odpTNTNdTLAVCzL2kR32POudrYNw1QgbVl069VzpuV6pO8
+         /v/Zk6kdDK5+0K6fJYRC3idCFUIbwoqD9+5YfGdFGS0IgcZJAXUdcK2H0/GGr/EoM+vC
+         ceIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770799854; x=1771404654;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N+yV3LiHwvo0TdX0nZb4kx1fDWzSnhxc2PkisRPoz5g=;
+        b=RkeCvn7VkApjqjBpSG2W5c7ibbh5K+Rmsv3b8STxcDWjjm4u09WDu/Ie/MvOPqwfKN
+         z1agO8Kw7QLLd5HN25VGmA8b63fRSSmqUXxJuW3DT7nKK96BowMj9fH5eH9WsOzD0/1N
+         inHhOKeXZdBf+5P/Gw2G1XCihmjmPeQ/MFRhO8alAR29MkI1nILbxDbOK5CspJ5q+AVH
+         kGOGnqtRwTJSa+a1fpcWvFm/gvpgdUCiTtYYdl1MLj6hrLjWaLxW3n7rDwOADNGTHaaz
+         hoWRMp+Fl/OxlmKQH7LKrr5tH7krchPcrEsW6xdiSRJ1wwpfRFJ0bCosY7tQDENG3WK7
+         Q+bQ==
+X-Gm-Message-State: AOJu0YzetCWP6L97jnk90jHmozbvlT05I1QijpvsKFluYaH5RMSKxkXt
+	vBB/GmS4HbyEy3X98/BTqNC8OHjoU/HAk/zeMEtkCiU20ZFSIMhsK4ceZ8bDTTHmqYZozszYFQz
+	rt6h7HiqJwg8ADfksgD4HPbTvVkEOjCTua78Z6C7iYUBLnN3Uuxgczg==
+X-Gm-Gg: AZuq6aJMn7OT4gUdjQK8V3QTAj0XGTLEY5iLjkKNbOz9+S0VKNgbfCU5rdDVB9mZjDP
+	4G9icKV7imrMqSkOsl0DB1jTTD0NuJwBSPakglFqZbvcpQuCIsZo2Sc+Fn3OD0z930jh0oJvIPS
+	lMBdYPZbxIVb+IoU2dHxVpZO5qwd+tpa2ruYvLXB3gea/jLrMLBDiXUIlaG+W+njFJpwdDMs5Q4
+	Vt+uaM4m7LyVcHJWjruOa707M6umHdOOubAF8xuSCYNuPfUAl0DIr/2DGS/BRb5jj3ml5aHbMdl
+	Kr9HAS+7l8d7GHyrhh9nXJqrjC65+9SvanAGkQb6G2FoDiBNkjs0qlbOSMX99zQZB7y6LxMvC09
+	7BXy2smqNfb0UEkU5IIXfIHIK8A==
+X-Received: by 2002:a05:6000:40e1:b0:430:fdc8:8bd6 with SMTP id ffacd0b85a97d-4377a20004dmr8338966f8f.31.1770799854195;
+        Wed, 11 Feb 2026 00:50:54 -0800 (PST)
+X-Received: by 2002:a05:6000:40e1:b0:430:fdc8:8bd6 with SMTP id ffacd0b85a97d-4377a20004dmr8338919f8f.31.1770799853750;
+        Wed, 11 Feb 2026 00:50:53 -0800 (PST)
+Received: from [192.168.88.32] ([212.105.155.220])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43783dfc8b9sm2993554f8f.24.2026.02.11.00.50.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Feb 2026 00:50:53 -0800 (PST)
+Message-ID: <36d9d3f0-2a26-4b9c-b6b6-f50610fbaa31@redhat.com>
+Date: Wed, 11 Feb 2026 09:50:51 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v3 1/6] net: sched: introduce qdisc-specific drop
+ reason tracing
+To: Jesper Dangaard Brouer <hawk@kernel.org>, netdev@vger.kernel.org,
+ Eric Dumazet <eric.dumazet@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
+ <toke@toke.dk>
+Cc: bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, horms@kernel.org,
+ jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
+ jhs@mojatatu.com, atenart@redhat.com, carges@cloudflare.com,
+ kernel-team@cloudflare.com
+References: <177039500964.2258217.2989656069254156812.stgit@firesoul>
+ <177039506239.2258217.7863252279149995024.stgit@firesoul>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <177039506239.2258217.7863252279149995024.stgit@firesoul>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-Adding usdt trigger bench for usdt:
- trig-usdt_nop - usdt on top of nop1 instruction
- trig-usdt_nop_combo - usdt on top of nop1/nop5 combo
+On 2/6/26 5:24 PM, Jesper Dangaard Brouer wrote:
+> Create new enum qdisc_drop_reason and trace_qdisc_drop tracepoint
+> for qdisc layer drop diagnostics with direct qdisc context visibility.
+> 
+> The new tracepoint includes qdisc handle, parent, kind (name), and
+> device information. Existing SKB_DROP_REASON_QDISC_DROP is retained
+> for backwards compatibility via kfree_skb_reason().
+> 
+> Convert FQ, FQ_CoDel, CoDel, SFB, and pfifo_fast to use the new
+> infrastructure.
+> 
+> Reported-by: syzbot+ci335f183b8446659a@syzkaller.appspotmail.com
+> Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
+> ---
+>  include/net/dropreason-core.h  |   42 ++----------------
+>  include/net/dropreason-qdisc.h |   95 ++++++++++++++++++++++++++++++++++++++++
 
-Adding it to benchs/run_bench_uprobes.sh script.
+I think it would be useful to add dropreason-qdisc.h to the net/sched
+maintainer's entry.
 
-Example run on x86_64 kernel with uprobe syscall:
-
-  # ./benchs/run_bench_uprobes.sh
-  usermode-count :  152.507 ± 0.098M/s
-  syscall-count  :   14.309 ± 0.093M/s
-  uprobe-nop     :    3.190 ± 0.012M/s
-  uprobe-push    :    3.057 ± 0.004M/s
-  uprobe-ret     :    1.095 ± 0.009M/s
-  uprobe-nop5    :    7.305 ± 0.034M/s
-  uretprobe-nop  :    2.175 ± 0.005M/s
-  uretprobe-push :    2.109 ± 0.003M/s
-  uretprobe-ret  :    0.945 ± 0.002M/s
-  uretprobe-nop5 :    3.530 ± 0.006M/s
-  usdt_nop       :    3.235 ± 0.008M/s   <-- added
-  usdt_nop_combo :    7.511 ± 0.045M/s   <-- added
-
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
----
- tools/testing/selftests/bpf/Makefile          |  2 +
- tools/testing/selftests/bpf/bench.c           |  4 ++
- .../selftests/bpf/benchs/bench_trigger.c      | 60 +++++++++++++++++++
- .../selftests/bpf/benchs/run_bench_uprobes.sh |  2 +-
- .../selftests/bpf/progs/trigger_bench.c       | 10 +++-
- 5 files changed, 76 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 306949162a5b..9b2ca0028322 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -874,6 +874,8 @@ $(OUTPUT)/bench: $(OUTPUT)/bench.o \
- 		 $(OUTPUT)/bench_bpf_crypto.o \
- 		 $(OUTPUT)/bench_sockmap.o \
- 		 $(OUTPUT)/bench_lpm_trie_map.o \
-+		 $(OUTPUT)/usdt_1.o \
-+		 $(OUTPUT)/usdt_2.o \
- 		 #
- 	$(call msg,BINARY,,$@)
- 	$(Q)$(CC) $(CFLAGS) $(LDFLAGS) $(filter %.a %.o,$^) $(LDLIBS) -o $@
-diff --git a/tools/testing/selftests/bpf/bench.c b/tools/testing/selftests/bpf/bench.c
-index 8368bd3a0665..4dacb87e464e 100644
---- a/tools/testing/selftests/bpf/bench.c
-+++ b/tools/testing/selftests/bpf/bench.c
-@@ -541,6 +541,8 @@ extern const struct bench bench_trig_uprobe_nop5;
- extern const struct bench bench_trig_uretprobe_nop5;
- extern const struct bench bench_trig_uprobe_multi_nop5;
- extern const struct bench bench_trig_uretprobe_multi_nop5;
-+extern const struct bench bench_trig_usdt_nop;
-+extern const struct bench bench_trig_usdt_nop_combo;
- #endif
- 
- extern const struct bench bench_rb_libbpf;
-@@ -617,6 +619,8 @@ static const struct bench *benchs[] = {
- 	&bench_trig_uretprobe_nop5,
- 	&bench_trig_uprobe_multi_nop5,
- 	&bench_trig_uretprobe_multi_nop5,
-+	&bench_trig_usdt_nop,
-+	&bench_trig_usdt_nop_combo,
- #endif
- 	/* ringbuf/perfbuf benchmarks */
- 	&bench_rb_libbpf,
-diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-index aeec9edd3851..b4b03fe1f61d 100644
---- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-@@ -405,6 +405,23 @@ static void *uprobe_producer_nop5(void *input)
- 		uprobe_target_nop5();
- 	return NULL;
- }
-+
-+void usdt_1(void);
-+void usdt_2(void);
-+
-+static void *uprobe_producer_usdt_nop(void *input)
-+{
-+	while (true)
-+		usdt_1();
-+	return NULL;
-+}
-+
-+static void *uprobe_producer_usdt_nop_combo(void *input)
-+{
-+	while (true)
-+		usdt_2();
-+	return NULL;
-+}
- #endif
- 
- static void usetup(bool use_retprobe, bool use_multi, void *target_addr)
-@@ -542,6 +559,47 @@ static void uretprobe_multi_nop5_setup(void)
- {
- 	usetup(true, true /* use_multi */, &uprobe_target_nop5);
- }
-+
-+static void usdt_setup(const char *name)
-+{
-+	struct bpf_link *link;
-+	int err;
-+
-+	setup_libbpf();
-+
-+	ctx.skel = trigger_bench__open();
-+	if (!ctx.skel) {
-+		fprintf(stderr, "failed to open skeleton\n");
-+		exit(1);
-+	}
-+
-+	bpf_program__set_autoload(ctx.skel->progs.bench_trigger_usdt, true);
-+
-+	err = trigger_bench__load(ctx.skel);
-+	if (err) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
-+	link = bpf_program__attach_usdt(ctx.skel->progs.bench_trigger_usdt,
-+					0 /*self*/, "/proc/self/exe",
-+					"optimized_attach", name, NULL);
-+	if (libbpf_get_error(link)) {
-+		fprintf(stderr, "failed to attach optimized_attach:%s usdt probe\n", name);
-+		exit(1);
-+	}
-+	ctx.skel->links.bench_trigger_usdt = link;
-+}
-+
-+static void usdt_nop_setup(void)
-+{
-+	usdt_setup("usdt_1");
-+}
-+
-+static void usdt_nop_combo_setup(void)
-+{
-+	usdt_setup("usdt_2");
-+}
- #endif
- 
- const struct bench bench_trig_syscall_count = {
-@@ -609,4 +667,6 @@ BENCH_TRIG_USERMODE(uprobe_nop5, nop5, "uprobe-nop5");
- BENCH_TRIG_USERMODE(uretprobe_nop5, nop5, "uretprobe-nop5");
- BENCH_TRIG_USERMODE(uprobe_multi_nop5, nop5, "uprobe-multi-nop5");
- BENCH_TRIG_USERMODE(uretprobe_multi_nop5, nop5, "uretprobe-multi-nop5");
-+BENCH_TRIG_USERMODE(usdt_nop, usdt_nop, "usdt_nop");
-+BENCH_TRIG_USERMODE(usdt_nop_combo, usdt_nop_combo, "usdt_nop_combo");
- #endif
-diff --git a/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh b/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh
-index 03f55405484b..3656676d99d2 100755
---- a/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh
-+++ b/tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh
-@@ -2,7 +2,7 @@
- 
- set -eufo pipefail
- 
--for i in usermode-count syscall-count {uprobe,uretprobe}-{nop,push,ret,nop5}
-+for i in usermode-count syscall-count {uprobe,uretprobe}-{nop,push,ret,nop5} usdt_nop usdt_nop_combo
- do
- 	summary=$(sudo ./bench -w2 -d5 -a trig-$i | tail -n1 | cut -d'(' -f1 | cut -d' ' -f3-)
- 	printf "%-15s: %s\n" $i "$summary"
-diff --git a/tools/testing/selftests/bpf/progs/trigger_bench.c b/tools/testing/selftests/bpf/progs/trigger_bench.c
-index 4ea0422d1042..3225b4aee8ff 100644
---- a/tools/testing/selftests/bpf/progs/trigger_bench.c
-+++ b/tools/testing/selftests/bpf/progs/trigger_bench.c
-@@ -1,10 +1,11 @@
- // SPDX-License-Identifier: GPL-2.0
- // Copyright (c) 2020 Facebook
--#include <linux/bpf.h>
-+#include "vmlinux.h"
- #include <asm/unistd.h>
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
- #include "bpf_misc.h"
-+#include "bpf/usdt.bpf.h"
- 
- char _license[] SEC("license") = "GPL";
- 
-@@ -180,3 +181,10 @@ int bench_trigger_rawtp(void *ctx)
- 	handle(ctx);
- 	return 0;
- }
-+
-+SEC("?usdt")
-+int bench_trigger_usdt(void *ctx)
-+{
-+	inc_counter();
-+	return 0;
-+}
--- 
-2.53.0
+/P
 
