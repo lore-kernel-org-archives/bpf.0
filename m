@@ -1,712 +1,225 @@
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A19E4295D90
-	for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 19:05:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770836705; cv=none; b=g8k08GqTjQQ9XV9JGYUIgDAY7jFL/qRnxIoeL71bLOAD1Srn3R93bq7UQ2z8tU1dvqtpHCCj0CLBBTGqy4KFDXcWP1dbxnYVZdWnyDLCJwX8f0JlsQK88G9hxE7vCaWhCKCk2Q23PgPci00yDtSQIgb4yXdrLcyEkN52pn312+w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770836705; c=relaxed/simple;
-	bh=KJtKd1KGmJYYrWIqh/HfajENl6KXQvABlGfdviM0aWE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QxeUdkMoeWWtXzhsjzEatTdpEAWhok8E8/PsCExABIf7Gu2IfZkWY+xii/iyq1Kgz1TeJVh/aKyPib6Nlhu80Y3qZQSwIN7MC/n/j/GAcJwcWQMEwDHMGzoiE53o9s7yTEgSOjzo7QYF9nbaUn73T4yIcJs3GTVmDe/WgX7XJUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HvYazG8W; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACCDF346AC0;
+	Wed, 11 Feb 2026 20:29:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.158.5
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770841764; cv=fail; b=Bk6KD0hvhYY/yxKeL/brCPcf2ovQnICWv9plmz7NPnfNrwkk1sHpcUgEzau6CFD6z7QYVxSHEvIG8hRZH3F1DjWk0O9d27lT8Fqity0PkYGWO4lrfEQJHINwiS8raIei86QYroXG1VclCxvM1tqIbCO+6II20vVyyz22URszZb0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770841764; c=relaxed/simple;
+	bh=gQjFfFTA04P3KBaeK7u3UMjQvBwt1othUGLU01JJWD4=;
+	h=From:To:CC:Date:Message-ID:References:In-Reply-To:Content-Type:
+	 MIME-Version:Subject; b=B0+Aoys/ktfiIx6iKdeRLVmMTQAuyHga7Jg3Uzuv5jjsG66IWPiQC5jhjXPior+V4JvqZAU6u7ZBH480WjDNAVDb+4ot3BXt3OSYxGJusfQ8CmnT8nGZaJehupPESu/lngNRDlYm8S0K2jqUs/AAek8+FLBt6ixrfutaDwoU2RY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ibm.com; spf=pass smtp.mailfrom=ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=KVSG8Rlw; arc=fail smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HvYazG8W"
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-436234ef0f0so4375018f8f.1
-        for <bpf@vger.kernel.org>; Wed, 11 Feb 2026 11:05:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770836702; x=1771441502; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wdBdwsVxWNNKNCyWp6pnznrp93RIrThkOlfNRSRS63U=;
-        b=HvYazG8WfglXuIbobIYHGzXVsLxsdeCAHi7y+3Ke6637NWxT2n23u6AkpfKsKM/S8X
-         uDVMSPv2MOKbTSYTShP+hQLb73ZCVAq2YKZBgQEcepAmociZvUl3sWXUWaQsvu563cFo
-         hxZ6cqik05cfhbS6XV1UjZnyaiz5H0TbUs0Jl5bJLS3SObImsLRA6Gm3jYRyb4+rRtRC
-         GoZsdp9ZMIUqzh77cTfpVwlThiK3m6KUD8UgRtcjX3kKr7gSQbG5If9Uvi9b56CfsySk
-         LFcozEGGsX0X9ozydEbuwJNhP5XsQYQoZiYVMr3aRW9Bv+Q79SoWobVRAR+mG4m+Oba7
-         68wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770836702; x=1771441502;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wdBdwsVxWNNKNCyWp6pnznrp93RIrThkOlfNRSRS63U=;
-        b=NJE9rY3mcyDhYTE66oakEJ58U1tWybQ0y4pmC+C2U46Adssu7Wc8HTKvRAa9bwpezb
-         hcskwbWl9C8IhYt0gVHA999ClAl+3oNXfMtJ9LJqHjKaZ5Nabp/BJwDcPfIl+9G4nPXR
-         qrKmWmSDznWkqW9L1Di6SlUnoCjh8hczLylcA+exHkfU4zGfGC5ZC8SSRE0ZNoNuTm4x
-         B8X+Ef6k90TeqHs1gIfP7p960y4ifqznlY8cDEaXIPgRhUlUNmMNAkqN+zljy56qSv95
-         MkwLT5XFDvoN3GefkA3QaJZH22pwA53o+v9gle/hgjB9ZsW5tZ9TOiYCTwGeGfKtu7Ul
-         FR5w==
-X-Forwarded-Encrypted: i=1; AJvYcCXUM8ExmmGM4AJ1CtX8yraWobcOzKSp9AmRZ61A+vEuPtCrRxWteq0iGV1P3uaUydKLT6s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfTPq59IpjIZfthQCTOXbx4omFiBovao2aEtEJip1BvabvRIeR
-	Ix69XXyD+jojh/SL514cIF2L5yRJqEPaUGsjMewUsHMGczAS25mEsBXw
-X-Gm-Gg: AZuq6aIdU6Z2Tcg4ANe7GDy4qfIPX05OeUOKDCEt2PG2sxPW5bJWCYMwSNpoxLyq1s2
-	QprU7zDtXvHsPDFdqgtKc2NybwS0TYProGpVPXz+rAP+6a+8hZhZD8XxCckJ2h484XkvubNVQL3
-	nsQwymzuPx5465VzYGGkIlBGMSuf5mI2sqrxJ0dTY6sKUhgFU4emulovrIiLeJlhQZmC6aq2QcF
-	X9SwHeJzz9pGZYbgcHPkdUmNX1mMGc6aAmhzWS24tUKS32EWU0cU1umLiulu7p1SN/geUUDa9KJ
-	sjM77azVzlgEfcLNt1rWyzLYSTu0H9aPh2VVuj4m/oe5oBJq7enhLUOc11XzvSFDjJFIBTdLD+D
-	PZ1B0miwgQKy4x17B4kChvfl9aiRM8VXsBrWnwmFgAUyaPHsNtFhBEx3vuABiNt2xI0G4BJskhZ
-	OYrL80/GXAdITgJZaizVQO2i4kZ38U2aNwUJEms+n37XthLr028Fx5a2z4fFU7SvXRSNgZWVbze
-	luY5H2TTs5UXhJU1dMiTYLgY8uhHg==
-X-Received: by 2002:a05:6000:240f:b0:430:fdc8:8be3 with SMTP id ffacd0b85a97d-4378ac716a1mr797733f8f.29.1770836701815;
-        Wed, 11 Feb 2026 11:05:01 -0800 (PST)
-Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43783dfc8b9sm6174169f8f.24.2026.02.11.11.05.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Feb 2026 11:05:00 -0800 (PST)
-From: Pavel Begunkov <asml.silence@gmail.com>
-To: io-uring@vger.kernel.org
-Cc: asml.silence@gmail.com,
-	bpf@vger.kernel.org,
-	axboe@kernel.dk,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH v6 5/5] selftests/io_uring: add a bpf io_uring selftest
-Date: Wed, 11 Feb 2026 19:04:56 +0000
-Message-ID: <82bd9cd01352c83db37a62d5564033d788ba0d78.1770836401.git.asml.silence@gmail.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <cover.1770836401.git.asml.silence@gmail.com>
-References: <cover.1770836401.git.asml.silence@gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="KVSG8Rlw"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61BGsGfv2890525;
+	Wed, 11 Feb 2026 20:29:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	pp1; bh=gQjFfFTA04P3KBaeK7u3UMjQvBwt1othUGLU01JJWD4=; b=KVSG8Rlw
+	6by7cDqQHFNctoyNN1GxRSzzjovHRXa3pgvdz1Ynechcga5E55k48EiK5ZHyrP5K
+	DiQ2vVTiiBgVOupo8xGZZERnU/ZS34FjC7oOOQLxoPsRpTWFgCXDKKWK3YApUDLJ
+	RkgMUGzpcgt90Y+A4mr2ejYW5AX8pDhuXbps9xP7mT4SOa7+3/OLCtX8TO5YSEG5
+	m4dqSmDT9Rk7WH06XZDNO2dFNqhD04ObnXTzrSyYt/EWezDjX/jSEvFgMk0DQ81E
+	t7cyNZUczKprSpM0BCq2LzoB5f8SMReEKpkMtZdR8R1a7jE9PLSEKXzcSog4cyeg
+	6KtQeJL0EjmZtQ==
+Received: from co1pr03cu002.outbound.protection.outlook.com (mail-westus2azon11010050.outbound.protection.outlook.com [52.101.46.50])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696x0j38-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Wed, 11 Feb 2026 20:29:10 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lZkIC0XfMbrFS0GyqzR/FFFufESdFijYSAWF0nb2crDIfHhrGJvdfJz1V/iWPGwLhYB7A/A2jEMf6LDHCfm6ijuFWdqF+WLdgMsStEQmWju+Hi2jdaBPzpgcd+w2yijpn+6Hx4sO0ra+p+1vbrncjiYPD3L+fvVvL7vlajw0y5Ia79F41ivMiPo+7hRhokjOPkLRZMgB5cWOIT2l8D9GdKo6CcjlnfAHEaKAXEqiaaWugzAdfTbVdgr+xh5wWS33htoMMGDFYf8kI9JroorYDZJptZMeTDXgXMxFG024y1D0OWtnyLe003XcKyby0AdoiyMI4bK63GyCbgqyycPSZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gQjFfFTA04P3KBaeK7u3UMjQvBwt1othUGLU01JJWD4=;
+ b=DqgvMMF604UKu5F33lka+XVx3a6BjktC0+hU/rbGUecuayodkeUfhpw3xcDAw3wscBf+89KOzbDazvZZTGZkMJr1Q150JQzc8Pt9LHREsq9w6xWdujJNO0cDL0AUw1ZyMeJGGNJSDk1z9iHi83OAY7QQLqoKq6+b0j0WF73YoEBJ0ee6ghSNh3UCPiRuJO/P2S1ig9F0oN7G76/oHf4rvKogb9w1ZpW+6tPbSvPpG07jp0hVrrG6tBHvYTM0rWo6fhTdm4FlFsEWEFniPjICgoj2Rq2pXfNjDBIEFWO0I9svZLKa46qF7o8mQfrEkhCL9lWOn3zAXOz5YC5jCSCuBA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=ibm.com; dmarc=pass action=none header.from=ibm.com; dkim=pass
+ header.d=ibm.com; arc=none
+Received: from SA1PR15MB5819.namprd15.prod.outlook.com (2603:10b6:806:338::8)
+ by PH7PR15MB5476.namprd15.prod.outlook.com (2603:10b6:510:1f4::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.10; Wed, 11 Feb
+ 2026 20:29:06 +0000
+Received: from SA1PR15MB5819.namprd15.prod.outlook.com
+ ([fe80::920c:d2ba:5432:b539]) by SA1PR15MB5819.namprd15.prod.outlook.com
+ ([fe80::920c:d2ba:5432:b539%7]) with mapi id 15.20.9587.017; Wed, 11 Feb 2026
+ 20:29:06 +0000
+From: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
+To: "sj@kernel.org" <sj@kernel.org>
+CC: "jack@suse.cz" <jack@suse.cz>,
+        "linux-fsdevel@vger.kernel.org"
+	<linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "lsf-pc@lists.linux-foundation.org" <lsf-pc@lists.linux-foundation.org>,
+        "chrisl@kernel.org" <chrisl@kernel.org>,
+        "bpf@vger.kernel.org"
+	<bpf@vger.kernel.org>,
+        Pavan Rallabhandi <Pavan.Rallabhandi@ibm.com>,
+        "clm@meta.com" <clm@meta.com>
+Thread-Topic: [EXTERNAL] RE: [Lsf-pc] [LSF/MM/BPF TOPIC] Machine Learning (ML)
+ library in Linux kernel
+Thread-Index: AQHcmpPXPV+chNeGskiA4zJOQ4d3LbV7+8WAgACKfgCAADCiAIABPhWA
+Date: Wed, 11 Feb 2026 20:29:06 +0000
+Message-ID: <a8a3b50620945dfa3ded3d6cd91c5ef9fadfd55e.camel@ibm.com>
+References: <20260211013039.68143-1-sj@kernel.org>
+In-Reply-To: <20260211013039.68143-1-sj@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5819:EE_|PH7PR15MB5476:EE_
+x-ms-office365-filtering-correlation-id: c97e469d-1605-4c11-a368-08de69ac341e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|366016|10070799003|1800799024|38070700021;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?T3lNT3BpTTdaVm9iN3hnTjJ6SlRmZm93RXRYeWVJOFJqUjBZR1dDTkduTGVL?=
+ =?utf-8?B?bVBMZXh6ci9PdU9RT1kzbWdBeVY1cHZLNFNVZ2M1SFlMc09rbnZINFV5T2Ru?=
+ =?utf-8?B?MXU2YmRISTlRMVpLcWFyaE95ZUFTTTdJTmdRZDFsb1hOczI1RGRCV01zZGVN?=
+ =?utf-8?B?YTljMFpuQmMzVURRdGZ4Q21pNW5FejRVTTlFOXpxd2ZXZmNoc1NqejNmRDQ4?=
+ =?utf-8?B?MEFRanFtYUFQZGJpbURlN3JvMEp3WDRaYXB6aG9ra0lhWktnazkxN24rTUpk?=
+ =?utf-8?B?NnhLdUVVUVlNVEtrRlNzKzFVTXdWbEhkUjJTYm5LcmUxcDBIdUpQVi8zNWFk?=
+ =?utf-8?B?YmJBVTZtWU53d0d5T2lIQjkxdFhHNUpHLzllTklaWDJxaDJ0MjVuYzhnSlJL?=
+ =?utf-8?B?aElLRU5jQ1ZSQUxqMmlPRlpPYVU0cngzSXRmN2I5dnNoTmFCNXpLVVY2cysv?=
+ =?utf-8?B?MmtjTE5oZTVzR0l3eU8wb1RWMlFEVmw5MTU0YkFIOXZMNk84VDYzcTFaL3ZO?=
+ =?utf-8?B?bUhRSjQ2Y2pTNjFGTnYrTU1OdUZLWkFHWHBuT0dydUJSMTd0aVhHR1BxUTZj?=
+ =?utf-8?B?dkxDdVhIeThYcTk0SDVPMDhvY2tpTXN5SnViVFMyZTYwSmdxb2swVDRENXRT?=
+ =?utf-8?B?d1F5L3I0QjYyVTgvajI4aDdSMEtXS2hvU0RLQk1PTTNGdW9STUQ3MWVLS0hT?=
+ =?utf-8?B?TVlzVFdOYStIVzN1b1JheWRQb0RHMFdWZ3BveFV5TGgzc2FZU2NtbnZtZzFP?=
+ =?utf-8?B?ZnJRQ3BWZm92RVVNNDlRTUZITnFCS0lhNUVlWEpIV1JLOWJUdUZoL2dUUGx0?=
+ =?utf-8?B?RUpPcjNqUVMzZXRjaHNnOXpQZGE2VFNGVjFhZXFWUFRyQWN6UUl1ODF2NHdY?=
+ =?utf-8?B?RHpkSFNaMUFIRFdDR3pwWGwrY3ovUWtkUW81dHZZVjRBc3U3bWEvN20zU1Zi?=
+ =?utf-8?B?Y3k4aTY3OTd0YkRNWlVzRE5IamRoeld0aWt5ZzRwNk9xWm1FOENDTkt2Wmp5?=
+ =?utf-8?B?bUtrY3Y2V0ZHMFMzYkdGaW5Qdyt5NFZXNGpmeDZFUXAvcDQ5KzZ5R2RqZWw5?=
+ =?utf-8?B?NjRCdENaQUhGWFhxOXB3Z2krak5Zekw2dmtKTWdiMExTc0VVV0dRUi9vSTM5?=
+ =?utf-8?B?VElkdXpwT3Q2VnBtU2lvZW5GOTBOeEEwLzNvcTh5cFR5cUlJT3hVdU1TMkM2?=
+ =?utf-8?B?MWhJZEhVWmNhVTY1YWVFUE9PWTZyTUJqQzZlQ0FJR08vMmxMQTJDOCtXY0c4?=
+ =?utf-8?B?THU1ZTRLOGtBcHdCRE5Rd3dWK3RxbUZoTlFuM1JCZVdVMXl3TDZWMy9JU21T?=
+ =?utf-8?B?aGxyNHZvNllQMjVTaWgvYzA1QlJ2N0t3MTlzemlIaVIyWUQrTHMrbE5kQml0?=
+ =?utf-8?B?WmludG16ZmQ5UlpyYnhXaDM2Ylk4bmxJcEZEK21LV3VlOFBDS0hEbWxLeTVK?=
+ =?utf-8?B?eXluRSs2VTBWRjdBaVJQbFZyVnUyVDI1dXNQZjFSbldGcVkxOHM2eGJ2azRL?=
+ =?utf-8?B?K2Y2TENKRXVXSTUrcEt5NVZsOW5Ha2hHMStVUmpOOHJ1dVBpSWQzOWlDYjUr?=
+ =?utf-8?B?YUkvbVY4OHd6QTBuWkIwOU8waVVUYUFEL0JRNW9SQTB3Tjg5TDZxZzBTK0N2?=
+ =?utf-8?B?eHhBdlFIK3FaTUtDM3B0dWpIUitzL3E0dk8zaVVka3RTTzBvalpkRTcwc0RL?=
+ =?utf-8?B?UktIdjlTRnlQWm5rSDNOMmYvVUZLdGFEdWVIUjB0MzduRVVCdVZGK2lDdUdX?=
+ =?utf-8?B?N2Nac2o0M2ZMUU9qSkMrSXJ0V3Y3SkZpQnpmNUdlK0dTbkVsZUQwb2E3UUIy?=
+ =?utf-8?B?dXlSdkpmM2srQ2d4ZU8vYW4wUkRibU9KdytZb2tzUGxCSldBc0dRcHQ0UC9j?=
+ =?utf-8?B?Qm14aUFDeVBQT1JvbFJZV3lzYzA3cEx6UWFIRzZiRm1idzZVSVF5RjlWNkNM?=
+ =?utf-8?B?WGtveGxTckw1MUUyWFpLVUFFVTUxcXduK0JpUG1QWElhTXNoZktRc0kzQmw5?=
+ =?utf-8?B?Ykk3UmhSbzhnM2cxaGFlZytEdTF6SjJEUkRGVzJUTHVPdVBZK04rU1I5eith?=
+ =?utf-8?B?bUdjcDZodTFvRlVVQk9mbTFQSFBlK2hPam44aUNORkh4UXdtbUVUcWhRZjJo?=
+ =?utf-8?B?L3o5Y1ovT3ljYmhHWWpmVjJFbGMwNUt1ZlAzc3U5S0RkdjFxS21xVDlsTVdD?=
+ =?utf-8?Q?qUUlS1RbIpjF+k+ZvYFbrio=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5819.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(10070799003)(1800799024)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?UWlxS3MwSXZrWkdPUktPSDZ1MnJmS3RLY04vMTFEdWVlc09SOWl0UHVoVmkx?=
+ =?utf-8?B?WWNaNk83TVZmTFBLR0pDeUFEdVU3ZjJrQzhsWFhoc2hoQjN3K3E3TWFDSldI?=
+ =?utf-8?B?NEJoREhFUm9ZRkFOVlJHRHpYZlJLcEdoVGdYUjIxdjY1UjBySzRzd2dUK0N4?=
+ =?utf-8?B?Z1RGQ0I5encwME9yQXd2ei95U1czUS9CK1ZrTEMxeWtybm8vVUZQSXJyaDN4?=
+ =?utf-8?B?RHYrbzVrbTZDM1RQNi9JNjVXUUxwa2J1QzJlbk5GR0R2NWxLRVJXak41ekp1?=
+ =?utf-8?B?ZDVIOUx3VFNBRmxIZm41RlBjdVNCdU1DclByOVk0NjZRemR1b0pRYVZZQWx2?=
+ =?utf-8?B?ZVVGZnBpMzVtcTYzMmFndGRvVXVyVE5CSlFEZ0VUOEtaL0V3Q2h0V2hoN1Rz?=
+ =?utf-8?B?MmZWeEExZDdOaUREVVBwbENTck9pWlpTZGJaYzRZc2lzR3NYczdxcUgrWXZC?=
+ =?utf-8?B?NTNDNDFIT1Y1MnMzSFpxWTk4K1B1KzJ1eklDUzE0Y2RwdFIyWUJyZFIvREdW?=
+ =?utf-8?B?di9LTmhXR0tpNTlLcUs5cUpYaDJOVmR6WU8rSm1GUEtycSs0OVB5TzlaYjE4?=
+ =?utf-8?B?OXIxVlczUkFNSkxaR0lSYVY1STQ0ekIrTVo3NkovQm9zTjJqdTdCYVdHNXdJ?=
+ =?utf-8?B?Q1NNSFZQZ3gxMS9TcGE1TW9BQm1adHc0bEM2OTdyckJuclcxOW0zSk85R2hE?=
+ =?utf-8?B?QkQ1amFBS2tGZTlqZnJjSHQ2Wm5ZU3lUUlUwZnlhNU5wSUo1M09mdFlQRGFE?=
+ =?utf-8?B?VTRYdDhEaEtaRSt5NHI1Rmp2Q3FycTU2Q1pwem4xS1dzWEx2OHJVYlQ2c2x3?=
+ =?utf-8?B?WEx0RHhzOUFmYmUzbWl4SmUrUnp0cDIvVm14NWIvR016MGVoUHBNUkMrVmxL?=
+ =?utf-8?B?MzVSMmMwOFhmUVNsMGVjaHhzNVBydWorUWN0V2wyTGZzdHhkREZNcVAvcDFw?=
+ =?utf-8?B?L0FQS0RJV1MzRUZ3OTNpNWp0M3htWFp4cElGejVJWlhnT2F4NkZtSU4zb2po?=
+ =?utf-8?B?VlRvVTg3aEhRdzBQb3QxbTJRM3ZIdEF5bU5EK254QUR1YmppNDFOaVFMOGYz?=
+ =?utf-8?B?TG1ScW5jSUducStsekJNeVlqZEtxbFlRZlk3VFdmdzJnU3lVOEVsWEhyeXBU?=
+ =?utf-8?B?Rk1JTGlnNEdVWU9iaEptUmJKWjd2M0lNY0tvUk9BYkRFUXczenc3OFJ2RUxS?=
+ =?utf-8?B?MWZoMjIwb0ZyZDRHVTR6Vm03UVlGS1dEYkhUMFYzY0o0eml4MWFkekdlb3Rq?=
+ =?utf-8?B?ZkRHMFdFcS9obnNCVm43LzdtQnkzdGwwMmRnOU9ZU01PaWd2d3BXMFk3aXlr?=
+ =?utf-8?B?QTJNVjJXYXB6NE90ZEVKaUlLU0hYZzg5cWFPbGFGZWdWSkNPWTNyRFZWeDNo?=
+ =?utf-8?B?dDUrS3RGVGhrYWVsU01xTmxHanVJUTh2dm9rL2xzL0ZjZHZoejVLTjZkSzd4?=
+ =?utf-8?B?U1l2RUNCWkZVcy9UbEVBU1UxdHhHSlIvU3VFaDgwbDBLWE80T3JBRWt4d1lW?=
+ =?utf-8?B?UjkzWnFVNTdsT1NPSysrc0MzOEJ6SytHV2NHRHZGUlloLzQzdmdINWo5Q2Y5?=
+ =?utf-8?B?a3FSVWRrZkxITERBMnRjVk0rRXg1V0t3YUdyaDNBNUpZZVl0WFJJNnQwNmJB?=
+ =?utf-8?B?OWdEeVA2bHh5UzYrODdEYWJwQmZsL1JON0lac0ozcnJQMlc5Z2VBR2FVeS8x?=
+ =?utf-8?B?TmZDRlhOWW9LenYrRTRqVFFLTXJoWjY1cEg4YUMzOE9LYTF5ZXlxMno0QkhT?=
+ =?utf-8?B?bndVT3ByMkZ2VmluMHA2ZTNLSGwxVHdhMUwzbm9TakZ2VHNWc0dRTndJQUlC?=
+ =?utf-8?B?RmpQVXloYjg3bGExR2c1TTZSQ0xvVzFhQTlJZnpnTlc2VDVVeVNIc2hEL2lx?=
+ =?utf-8?B?SVEzU3BLcFIxYWxIU2NYSWlOcTEzSDFkN2dOWXFoL3hwZFZLL3ZhaFRyci9s?=
+ =?utf-8?B?OWhFanlPeWxteURiSSs2WW1jVW15Qjh0RGcxV2hIcHRBUkpVM05GK2xORXpV?=
+ =?utf-8?B?bUFKSi9jQnM2N0dNQU5zWUF0Zm5ZU0ErSTBObzErRC9WU2hLWU15dkQ0WEhM?=
+ =?utf-8?B?bHlPdlFJUm1SV2ZTSjZGZjU5anp3QnQxU0NGTWl1dTV1UFlBR042QzdQNGx0?=
+ =?utf-8?B?NEpwWktRTjFHNm9lYWViYWovQ3lIWm5OT0c5TUd6alZHQnV4NFMwK1Z5N0JS?=
+ =?utf-8?B?SlozSm4rU24yZmVRYWplbllBRUFiVDBIb1pVbFpyZlZSSkh5c0M1K3R1UGFV?=
+ =?utf-8?B?eWVhQ2wzQldPeTFTakluNm5nT3RnNW1rU0pqZG5jZVZ6dmMrNnJ5cWZPSENi?=
+ =?utf-8?B?aG1udVhtVW1xOXdxTkVId0paMFZuc0dnU1c0OEpzU0NUeHV2Wk91TzZSMy9S?=
+ =?utf-8?Q?f+QY5sWpfErTFaS7GDhWJYu20g1fXzNAcnepF?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <07993F6672033C43BCB29493C2FFB436@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: ibm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5819.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c97e469d-1605-4c11-a368-08de69ac341e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Feb 2026 20:29:06.2154
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: fcf67057-50c9-4ad4-98f3-ffca64add9e9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ChBtsQj9Qoqp2mgEhDKpSi6ivB0jQWEn0QtHYvCmiyCo+4kTuUbl1o3YGK8qBNydJVeXtKAPR2L5oHLP0yEcFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR15MB5476
+X-Authority-Analysis: v=2.4 cv=WZYBqkhX c=1 sm=1 tr=0 ts=698ce696 cx=c_pps
+ a=MMVmnpyRbxvAcRc6a9dgEg==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=xACqMCxL0gE2XpbJGaIA:9
+ a=QEXdDO2ut3YA:10 a=0lgtpPvCYYIA:10
+X-Proofpoint-GUID: ChX0-z9AB94aNATWjSTns6ZHmk0KmXA-
+X-Proofpoint-ORIG-GUID: ChX0-z9AB94aNATWjSTns6ZHmk0KmXA-
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjExMDE1NiBTYWx0ZWRfX0AikS8KE4Yee
+ JG2Toc6Vv0jP7yUhwH+5nWcRq8e7DZQwd7sp3uP7p3L7qRWj1J+NIRwJkENLs3qvMgbP0/folKs
+ 2YZzud2vOFsN9YvnXif/f8lXwU+on1Tf+3fWC7Ed0B2bl40TTxShGmN7fi9P2wPnoF1z/qn9sAL
+ qKx80eydvK7q7opYu+BwRavsjtaIA1zeNcv6xDqElYzZemKazAxnnIcQ878ZqDAdq+zAEaDEfB0
+ rKji7NO1qrcwjnLwGqNVdpia7l8wgmQZ0krlIlICItJjLih6MQiuRBZlRFd7Ysy+J8kkYK1wpn+
+ KS7R7yw0qHB29Jj/RxEua5ywbPOr+K+AOWEjtzpxUbZWP0Nd/CkPlLgaFIK7x3V8M8jUECwHpML
+ /9u5talPkTClK4TsK1UVKZX/q49NDP8b0HxRK4iKWHNr86F/UqY/LitkG40vWP8J2e2wzDDkLVG
+ zmOXtL6g/DmRf+w45/w==
+Subject: RE: [Lsf-pc] [LSF/MM/BPF TOPIC] Machine Learning (ML) library in
+ Linux kernel
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-11_02,2026-02-11_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 clxscore=1011 phishscore=0 bulkscore=0 adultscore=0
+ priorityscore=1501 lowpriorityscore=0 suspectscore=0 impostorscore=0
+ malwarescore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602110156
 
-Add a simple io_uring BPF selftest, where the BPF program implemented in
-basic.bpf.c executes a given number of NOP requests with QD=1, writes
-some stats and returns back. The makefile is borrowed from sched_ext
-tests.
-
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
----
- tools/testing/selftests/Makefile              |   3 +-
- tools/testing/selftests/io_uring/Makefile     | 162 ++++++++++++++++++
- tools/testing/selftests/io_uring/common.h     |   7 +
- .../selftests/io_uring/nops_loop.bpf.c        | 131 ++++++++++++++
- tools/testing/selftests/io_uring/nops_loop.c  | 110 ++++++++++++
- tools/testing/selftests/io_uring/unreg.bpf.c  |  26 +++
- tools/testing/selftests/io_uring/unreg.c      | 113 ++++++++++++
- 7 files changed, 551 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/io_uring/Makefile
- create mode 100644 tools/testing/selftests/io_uring/common.h
- create mode 100644 tools/testing/selftests/io_uring/nops_loop.bpf.c
- create mode 100644 tools/testing/selftests/io_uring/nops_loop.c
- create mode 100644 tools/testing/selftests/io_uring/unreg.bpf.c
- create mode 100644 tools/testing/selftests/io_uring/unreg.c
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 56e44a98d6a5..5e965ba3697c 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -130,6 +130,7 @@ TARGETS += vfio
- TARGETS += x86
- TARGETS += x86/bugs
- TARGETS += zram
-+TARGETS += io_uring
- #Please keep the TARGETS list alphabetically sorted
- # Run "make quicktest=1 run_tests" or
- # "make quicktest=1 kselftest" from top level Makefile
-@@ -147,7 +148,7 @@ endif
- # User can optionally provide a TARGETS skiplist. By default we skip
- # targets using BPF since it has cutting edge build time dependencies
- # which require more effort to install.
--SKIP_TARGETS ?= bpf sched_ext
-+SKIP_TARGETS ?= bpf sched_ext io_uring
- ifneq ($(SKIP_TARGETS),)
- 	TMP := $(filter-out $(SKIP_TARGETS), $(TARGETS))
- 	override TARGETS := $(TMP)
-diff --git a/tools/testing/selftests/io_uring/Makefile b/tools/testing/selftests/io_uring/Makefile
-new file mode 100644
-index 000000000000..2b4f8d5bc5bc
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/Makefile
-@@ -0,0 +1,162 @@
-+# SPDX-License-Identifier: GPL-2.0
-+include ../../../build/Build.include
-+include ../../../scripts/Makefile.arch
-+include ../../../scripts/Makefile.include
-+
-+TEST_GEN_PROGS := unreg nops_loop
-+
-+# override lib.mk's default rules
-+OVERRIDE_TARGETS := 1
-+include ../lib.mk
-+
-+CURDIR := $(abspath .)
-+REPOROOT := $(abspath ../../../..)
-+TOOLSDIR := $(REPOROOT)/tools
-+LIBDIR := $(TOOLSDIR)/lib
-+BPFDIR := $(LIBDIR)/bpf
-+TOOLSINCDIR := $(TOOLSDIR)/include
-+BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
-+APIDIR := $(TOOLSINCDIR)/uapi
-+GENDIR := $(REPOROOT)/include/generated
-+GENHDR := $(GENDIR)/autoconf.h
-+
-+OUTPUT_DIR := $(OUTPUT)/build
-+OBJ_DIR := $(OUTPUT_DIR)/obj
-+INCLUDE_DIR := $(OUTPUT_DIR)/include
-+BPFOBJ_DIR := $(OBJ_DIR)/libbpf
-+IOUOBJ_DIR := $(OBJ_DIR)/io_uring
-+LIBBPF_OUTPUT := $(OBJ_DIR)/libbpf/libbpf.a
-+BPFOBJ := $(BPFOBJ_DIR)/libbpf.a
-+
-+DEFAULT_BPFTOOL := $(OUTPUT_DIR)/host/sbin/bpftool
-+HOST_OBJ_DIR := $(OBJ_DIR)/host/bpftool
-+HOST_LIBBPF_OUTPUT := $(OBJ_DIR)/host/libbpf/
-+HOST_LIBBPF_DESTDIR := $(OUTPUT_DIR)/host/
-+HOST_DESTDIR := $(OUTPUT_DIR)/host/
-+
-+VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)					\
-+		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)		\
-+		     ../../../../vmlinux					\
-+		     /sys/kernel/btf/vmlinux					\
-+		     /boot/vmlinux-$(shell uname -r)
-+VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-+ifeq ($(VMLINUX_BTF),)
-+$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
-+endif
-+
-+BPFTOOL ?= $(DEFAULT_BPFTOOL)
-+
-+ifneq ($(wildcard $(GENHDR)),)
-+  GENFLAGS := -DHAVE_GENHDR
-+endif
-+
-+CFLAGS += -g -O2 -rdynamic -pthread -Wall -Werror $(GENFLAGS)			\
-+	  -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)				\
-+	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(CURDIR)/include
-+
-+# Silence some warnings when compiled with clang
-+ifneq ($(LLVM),)
-+CFLAGS += -Wno-unused-command-line-argument
-+endif
-+
-+LDFLAGS = -lelf -lz -lpthread -lzstd
-+
-+IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null |				\
-+			grep 'define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__')
-+
-+# Get Clang's default includes on this system, as opposed to those seen by
-+# '-target bpf'. This fixes "missing" files on some architectures/distros,
-+# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
-+#
-+# Use '-idirafter': Don't interfere with include mechanics except where the
-+# build would have failed anyways.
-+define get_sys_includes
-+$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
-+	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
-+endef
-+
-+ifneq ($(CROSS_COMPILE),)
-+CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
-+endif
-+
-+CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-+
-+BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
-+	     $(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)		\
-+	     -I$(CURDIR)/include -I$(CURDIR)/include/bpf-compat			\
-+	     -I$(INCLUDE_DIR) -I$(APIDIR) 	\
-+	     -I$(REPOROOT)/include						\
-+	     $(CLANG_SYS_INCLUDES) 						\
-+	     -Wall -Wno-compare-distinct-pointer-types				\
-+	     -Wno-incompatible-function-pointer-types				\
-+	     -O2 -mcpu=v3
-+
-+# sort removes libbpf duplicates when not cross-building
-+MAKE_DIRS := $(sort $(OBJ_DIR)/libbpf $(OBJ_DIR)/libbpf				\
-+	       $(OBJ_DIR)/bpftool $(OBJ_DIR)/resolve_btfids			\
-+	       $(HOST_OBJ_DIR) $(INCLUDE_DIR) $(IOUOBJ_DIR))
-+
-+$(MAKE_DIRS):
-+	$(call msg,MKDIR,,$@)
-+	$(Q)mkdir -p $@
-+
-+$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
-+	   $(APIDIR)/linux/bpf.h						\
-+	   | $(OBJ_DIR)/libbpf
-+	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(OBJ_DIR)/libbpf/	\
-+		    ARCH=$(ARCH) CC="$(CC)" CROSS_COMPILE=$(CROSS_COMPILE)	\
-+		    EXTRA_CFLAGS='-g -O0 -fPIC'					\
-+		    DESTDIR=$(OUTPUT_DIR) prefix= all install_headers
-+
-+$(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
-+		    $(LIBBPF_OUTPUT) | $(HOST_OBJ_DIR)
-+	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
-+		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD)		\
-+		    EXTRA_CFLAGS='-g -O0'					\
-+		    OUTPUT=$(HOST_OBJ_DIR)/					\
-+		    LIBBPF_OUTPUT=$(HOST_LIBBPF_OUTPUT)				\
-+		    LIBBPF_DESTDIR=$(HOST_LIBBPF_DESTDIR)			\
-+		    prefix= DESTDIR=$(HOST_DESTDIR) install-bin
-+
-+$(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
-+ifeq ($(VMLINUX_H),)
-+	$(call msg,GEN,,$@)
-+	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
-+else
-+	$(call msg,CP,,$@)
-+	$(Q)cp "$(VMLINUX_H)" $@
-+endif
-+
-+$(IOUOBJ_DIR)/%.bpf.o: %.bpf.c $(INCLUDE_DIR)/vmlinux.h | $(BPFOBJ) $(IOUOBJ_DIR)
-+	$(call msg,CLNG-BPF,,$(notdir $@))
-+	$(Q)$(CLANG) $(BPF_CFLAGS) -target bpf -c $< -o $@
-+
-+$(INCLUDE_DIR)/%.bpf.skel.h: $(IOUOBJ_DIR)/%.bpf.o $(INCLUDE_DIR)/vmlinux.h $(BPFTOOL) | $(INCLUDE_DIR)
-+	$(eval sched=$(notdir $@))
-+	$(call msg,GEN-SKEL,,$(sched))
-+	$(Q)$(BPFTOOL) gen object $(<:.o=.linked1.o) $<
-+	$(Q)$(BPFTOOL) gen object $(<:.o=.linked2.o) $(<:.o=.linked1.o)
-+	$(Q)$(BPFTOOL) gen object $(<:.o=.linked3.o) $(<:.o=.linked2.o)
-+	$(Q)diff $(<:.o=.linked2.o) $(<:.o=.linked3.o)
-+	$(Q)$(BPFTOOL) gen skeleton $(<:.o=.linked3.o) name $(subst .bpf.skel.h,,$(sched)) > $@
-+	$(Q)$(BPFTOOL) gen subskeleton $(<:.o=.linked3.o) name $(subst .bpf.skel.h,,$(sched)) > $(@:.skel.h=.subskel.h)
-+
-+override define CLEAN
-+	rm -rf $(OUTPUT_DIR)
-+	rm -f $(TEST_GEN_PROGS)
-+endef
-+
-+all_test_bpfprogs := $(foreach prog,$(wildcard *.bpf.c),$(INCLUDE_DIR)/$(patsubst %.c,%.skel.h,$(prog)))
-+
-+$(OUTPUT)/%: $(IOUOBJ_DIR)/%.o $(BPFOBJ)
-+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
-+
-+$(IOUOBJ_DIR)/%.o: %.c $(all_test_bpfprogs) | $(IOUOBJ_DIR) $(BPFOBJ)
-+	$(CC) $(CFLAGS) -c $< -o $@
-+
-+.DEFAULT_GOAL := all
-+
-+.DELETE_ON_ERROR:
-+
-+.SECONDARY:
-diff --git a/tools/testing/selftests/io_uring/common.h b/tools/testing/selftests/io_uring/common.h
-new file mode 100644
-index 000000000000..9e726ca72d0c
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/common.h
-@@ -0,0 +1,7 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#define CQ_ENTRIES 8
-+#define SQ_ENTRIES 8
-+
-+#define SLOT_RES	0
-+#define SLOT_NR_CQES	1
-+#define SLOT_NR_SQES	2
-diff --git a/tools/testing/selftests/io_uring/nops_loop.bpf.c b/tools/testing/selftests/io_uring/nops_loop.bpf.c
-new file mode 100644
-index 000000000000..7bec9de54c7b
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/nops_loop.bpf.c
-@@ -0,0 +1,131 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/types.h>
-+#include <linux/stddef.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "vmlinux.h"
-+#include "common.h"
-+
-+char LICENSE[] SEC("license") = "Dual BSD/GPL";
-+
-+#define REQ_TOKEN 0xabba1741
-+
-+const unsigned max_inflight = 8;
-+const volatile unsigned cq_hdr_offset;
-+const volatile unsigned sq_hdr_offset;
-+const volatile unsigned cqes_offset;
-+
-+int reqs_to_run;
-+unsigned inflight;
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 3);
-+	__type(key, u32);
-+	__type(value, s64);
-+} res_map SEC(".maps");
-+
-+#define t_min(a, b) ((a) < (b) ? (a) : (b))
-+
-+static inline void set_cq_wait(struct iou_loop_params *lp,
-+			       struct io_uring *cq_hdr, unsigned to_wait)
-+{
-+	lp->cq_wait_idx = cq_hdr->head + to_wait;
-+}
-+
-+static inline void write_result(int res)
-+{
-+	u32 key = SLOT_RES;
-+	u64 *val;
-+
-+	val = bpf_map_lookup_elem(&res_map, &key);
-+	if (val)
-+		*val = res;
-+}
-+
-+static inline void write_stats(int idx, unsigned int v)
-+{
-+	u32 key = idx;
-+	u64 *val;
-+
-+	val = bpf_map_lookup_elem(&res_map, &key);
-+	if (val)
-+		*val += v;
-+}
-+
-+SEC("struct_ops.s/link_loop")
-+int BPF_PROG(link_loop, struct io_ring_ctx *ring, struct iou_loop_params *ls)
-+{
-+	struct io_uring *sq_hdr, *cq_hdr;
-+	struct io_uring_sqe *sqes;
-+	struct io_uring_cqe *cqes;
-+	void *rings;
-+	int ret;
-+
-+	sqes = (void *)bpf_io_uring_get_region(ring, IOU_REGION_SQ,
-+				SQ_ENTRIES * sizeof(struct io_uring_sqe));
-+	rings = (void *)bpf_io_uring_get_region(ring, IOU_REGION_CQ,
-+				cqes_offset + CQ_ENTRIES * sizeof(struct io_uring_cqe));
-+	if (!rings || !sqes) {
-+		write_result(-1);
-+		return IOU_LOOP_STOP;
-+	}
-+
-+	sq_hdr = rings + (sq_hdr_offset & 63);
-+	cq_hdr = rings + (cq_hdr_offset & 63);
-+	cqes = rings + cqes_offset;
-+
-+	unsigned to_wait = cq_hdr->tail - cq_hdr->head;
-+	to_wait = t_min(to_wait, CQ_ENTRIES);
-+	for (int i = 0; i < to_wait; i++) {
-+		struct io_uring_cqe *cqe = &cqes[cq_hdr->head & (CQ_ENTRIES - 1)];
-+
-+		if (cqe->user_data != REQ_TOKEN) {
-+			write_result(-3);
-+			return IOU_LOOP_STOP;
-+		}
-+		cq_hdr->head++;
-+	}
-+
-+	reqs_to_run -= to_wait;
-+	inflight -= to_wait;
-+	write_stats(SLOT_NR_CQES, to_wait);
-+
-+	if (reqs_to_run <= 0) {
-+		write_result(1);
-+		return IOU_LOOP_STOP;
-+	}
-+
-+	if (inflight < max_inflight) {
-+		unsigned to_submit = max_inflight - inflight;
-+
-+		to_submit = t_min(to_submit, reqs_to_run);
-+
-+		for (int i = 0; i < to_submit; i++) {
-+			struct io_uring_sqe *sqe;
-+
-+			sqe = &sqes[sq_hdr->tail & (SQ_ENTRIES - 1)];
-+			*sqe = (struct io_uring_sqe){};
-+			sqe->opcode = IORING_OP_NOP;
-+			sqe->user_data = REQ_TOKEN;
-+			sq_hdr->tail++;
-+		}
-+
-+		ret = bpf_io_uring_submit_sqes(ring, to_submit);
-+		if (ret != to_submit) {
-+			write_result(-2);
-+			return IOU_LOOP_STOP;
-+		}
-+
-+		inflight += to_submit;
-+		write_stats(SLOT_NR_SQES, to_submit);
-+	}
-+
-+	set_cq_wait(ls, cq_hdr, 1);
-+	return IOU_LOOP_CONTINUE;
-+}
-+
-+SEC(".struct_ops.link")
-+struct io_uring_bpf_ops nops_loop_ops = {
-+	.loop_step = (void *)link_loop,
-+};
-diff --git a/tools/testing/selftests/io_uring/nops_loop.c b/tools/testing/selftests/io_uring/nops_loop.c
-new file mode 100644
-index 000000000000..cd93851c37db
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/nops_loop.c
-@@ -0,0 +1,110 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/stddef.h>
-+#include <errno.h>
-+#include <signal.h>
-+#include <stdlib.h>
-+
-+#include <bpf/libbpf.h>
-+#include <io_uring/mini_liburing.h>
-+
-+#include "nops_loop.bpf.skel.h"
-+#include "common.h"
-+
-+static struct io_uring_params params;
-+static struct nops_loop *skel;
-+static struct bpf_link *nops_loop_link;
-+
-+#define NR_ITERS 1000
-+
-+static void setup_ring(struct io_uring *ring)
-+{
-+	int ret;
-+
-+	memset(&params, 0, sizeof(params));
-+	params.cq_entries = CQ_ENTRIES;
-+	params.flags = IORING_SETUP_SINGLE_ISSUER |
-+			IORING_SETUP_DEFER_TASKRUN |
-+			IORING_SETUP_NO_SQARRAY |
-+			IORING_SETUP_CQSIZE;
-+
-+	ret = io_uring_queue_init_params(SQ_ENTRIES, ring, &params);
-+	if (ret) {
-+		fprintf(stderr, "ring init failed\n");
-+		exit(1);
-+	}
-+}
-+
-+static void setup_bpf_ops(struct io_uring *ring)
-+{
-+	int ret;
-+
-+	skel = nops_loop__open();
-+	if (!skel) {
-+		fprintf(stderr, "can't generate skeleton\n");
-+		exit(1);
-+	}
-+
-+	skel->struct_ops.nops_loop_ops->ring_fd = ring->ring_fd;
-+	skel->bss->reqs_to_run = NR_ITERS;
-+	skel->rodata->sq_hdr_offset = params.sq_off.head;
-+	skel->rodata->cq_hdr_offset = params.cq_off.head;
-+	skel->rodata->cqes_offset = params.cq_off.cqes;
-+
-+	ret = nops_loop__load(skel);
-+	if (ret) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
-+	nops_loop_link = bpf_map__attach_struct_ops(skel->maps.nops_loop_ops);
-+	if (!nops_loop_link) {
-+		fprintf(stderr, "failed to attach ops\n");
-+		exit(1);
-+	}
-+}
-+
-+static void run_ring(struct io_uring *ring)
-+{
-+	__s64 res[3] = {};
-+	int i, ret;
-+
-+	ret = io_uring_enter(ring->ring_fd, 0, 0, IORING_ENTER_GETEVENTS, NULL);
-+	if (ret) {
-+		fprintf(stderr, "run failed\n");
-+		exit(1);
-+	}
-+
-+	for (i = 0; i < 3; i++) {
-+		__u32 key = i;
-+
-+		ret = bpf_map__lookup_elem(skel->maps.res_map,
-+					&key, sizeof(key),
-+					&res[i], sizeof(res[i]), 0);
-+		if (ret)
-+			fprintf(stderr, "can't read map idx %i: %i\n", i, ret);
-+	}
-+
-+	if (res[SLOT_RES] != 1)
-+		fprintf(stderr, "run failed: %i\n", (int)res[SLOT_RES]);
-+	if (res[SLOT_NR_CQES] != NR_ITERS)
-+		fprintf(stderr, "unexpected number of CQEs: %i\n",
-+			(int)res[SLOT_NR_CQES]);
-+	if (res[SLOT_NR_SQES] != NR_ITERS)
-+		fprintf(stderr, "unexpected submitted number: %i\n",
-+			(int)res[SLOT_NR_SQES]);
-+}
-+
-+int main()
-+{
-+	struct io_uring ring;
-+
-+	setup_ring(&ring);
-+	setup_bpf_ops(&ring);
-+
-+	run_ring(&ring);
-+
-+	bpf_link__destroy(nops_loop_link);
-+	nops_loop__destroy(skel);
-+	io_uring_queue_exit(&ring);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/io_uring/unreg.bpf.c b/tools/testing/selftests/io_uring/unreg.bpf.c
-new file mode 100644
-index 000000000000..01e836af506d
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/unreg.bpf.c
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/types.h>
-+#include <linux/stddef.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "vmlinux.h"
-+#include "common.h"
-+
-+char LICENSE[] SEC("license") = "Dual BSD/GPL";
-+
-+SEC("struct_ops.s/dummy")
-+int BPF_PROG(dummy, struct io_ring_ctx *ring, struct iou_loop_params *ls)
-+{
-+	struct io_uring_sqe *sqes;
-+
-+	sqes = (void *)bpf_io_uring_get_region(ring, IOU_REGION_SQ,
-+						sizeof(struct io_uring_sqe));
-+	if (sqes)
-+		sqes->user_data++;
-+	return IOU_LOOP_STOP;
-+}
-+
-+SEC(".struct_ops.link")
-+struct io_uring_bpf_ops unreg_ops = {
-+	.loop_step = (void *)dummy,
-+};
-diff --git a/tools/testing/selftests/io_uring/unreg.c b/tools/testing/selftests/io_uring/unreg.c
-new file mode 100644
-index 000000000000..b0e75e671a5c
---- /dev/null
-+++ b/tools/testing/selftests/io_uring/unreg.c
-@@ -0,0 +1,113 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#include <linux/stddef.h>
-+#include <errno.h>
-+#include <signal.h>
-+#include <stdlib.h>
-+
-+#include <bpf/libbpf.h>
-+#include <io_uring/mini_liburing.h>
-+
-+#include "unreg.bpf.skel.h"
-+#include "common.h"
-+
-+static void setup_ring(struct io_uring *ring)
-+{
-+	struct io_uring_params params;
-+	int ret;
-+
-+	memset(&params, 0, sizeof(params));
-+	params.cq_entries = CQ_ENTRIES;
-+	params.flags = IORING_SETUP_SINGLE_ISSUER |
-+			IORING_SETUP_DEFER_TASKRUN |
-+			IORING_SETUP_NO_SQARRAY |
-+			IORING_SETUP_CQSIZE;
-+
-+	ret = io_uring_queue_init_params(SQ_ENTRIES, ring, &params);
-+	if (ret) {
-+		fprintf(stderr, "ring init failed\n");
-+		exit(1);
-+	}
-+}
-+
-+static struct unreg *load_unreg(struct io_uring *ring)
-+{
-+	struct unreg *skel;
-+	int ret;
-+
-+	skel = unreg__open();
-+	if (!skel) {
-+		fprintf(stderr, "can't generate skeleton\n");
-+		exit(1);
-+	}
-+
-+	skel->struct_ops.unreg_ops->ring_fd = ring->ring_fd;
-+
-+	ret = unreg__load(skel);
-+	if (ret) {
-+		fprintf(stderr, "failed to load skeleton\n");
-+		exit(1);
-+	}
-+
-+	return skel;
-+}
-+
-+static void run_ring(struct io_uring *ring)
-+{
-+	io_uring_enter(ring->ring_fd, 0, 0, IORING_ENTER_GETEVENTS, NULL);
-+}
-+
-+int main()
-+{
-+	struct bpf_link *link1, *link2;
-+	struct unreg *skel1, *skel2;
-+	struct io_uring_sqe *sqe;
-+	struct io_uring ring;
-+
-+	setup_ring(&ring);
-+	sqe = &ring.sq.sqes[0];
-+	sqe->user_data = 0;
-+
-+	skel1 = load_unreg(&ring);
-+	skel2 = load_unreg(&ring);
-+
-+	link1 = bpf_map__attach_struct_ops(skel1->maps.unreg_ops);
-+	if (!link1) {
-+		fprintf(stderr, "failed to attach ops\n");
-+		return 1;
-+	}
-+
-+	run_ring(&ring);
-+	if (sqe->user_data != 1) {
-+		fprintf(stderr, "failed to run BPF\n");
-+		return 1;
-+	}
-+
-+	/* remove the program and give the kernel time to actually destroy it */
-+	bpf_link__destroy(link1);
-+	unreg__destroy(skel1);
-+	sleep(1);
-+
-+	run_ring(&ring);
-+	if (sqe->user_data != 1) {
-+		fprintf(stderr, "Executed removed BPF\n");
-+		return 1;
-+	}
-+
-+	/* try to attach another program */
-+	link2 = bpf_map__attach_struct_ops(skel2->maps.unreg_ops);
-+	if (!link2) {
-+		fprintf(stderr, "failed to reattach ops\n");
-+		return 1;
-+	}
-+
-+	run_ring(&ring);
-+	if (sqe->user_data != 2) {
-+		fprintf(stderr, "failed to run reattached BPF\n");
-+		return 1;
-+	}
-+
-+	bpf_link__destroy(link2);
-+	unreg__destroy(skel2);
-+	io_uring_queue_exit(&ring);
-+	return 0;
-+}
--- 
-2.52.0
-
+T24gVHVlLCAyMDI2LTAyLTEwIGF0IDE3OjMwIC0wODAwLCBTZW9uZ0phZSBQYXJrIHdyb3RlOg0K
+PiBPbiBUdWUsIDEwIEZlYiAyMDI2IDIyOjM2OjM1ICswMDAwIFZpYWNoZXNsYXYgRHViZXlrbyA8
+U2xhdmEuRHViZXlrb0BpYm0uY29tPiB3cm90ZToNCj4gDQo+ID4gRXhhY3RseSwgTUwtYmFzZWQg
+REFNT04gYXBwcm9hY2ggYnkgdXNpbmcgTUwgbGlicmFyeSBpcyBteSBuZXh0DQo+ID4gaW1wbGVt
+ZW50YXRpb24vZXhwbG9yaW5nIHN0ZXAuDQo+IA0KPiBHbGFkIHRvIGhlYXIgdGhpcy4gIElmIHlv
+dSBmaW5kIGFueSBxdWVzdGlvbiBvciBuZWVkIGhlbHAgZm9yIERBTU9OIHdoaWxlIGRvaW5nDQo+
+IHRoaXMsIHBsZWFzZSBmZWVsIGZyZWUgdG8gcmVhY2ggb3V0LiAgSSB3aWxsIGJlIG1vcmUgdGhh
+biBoYXBweSB0byBoZWxwIDopDQo+IA0KPiANCg0KU291bmRzIGdvb2QhIExldCBtZSBzdGFydCBt
+eSBpbXBsZW1lbnRhdGlvbiBlZmZvcnRzIGFuZCBJJ2xsIHNoYXJlIG15IHF1ZXN0aW9ucy4NCjop
+DQoNClRoYW5rcywNClNsYXZhLg0K
