@@ -1,66 +1,66 @@
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FAB277C96
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 22:00:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DAD2E36F3
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 23:08:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770933635; cv=none; b=u8lv9VqTQig3fZX3vseO/ZDZI9RCYK5ucF7Q9rr2OkTeRXkRvNibkt6Icjp7e4uGT9Xl46Ns6KK2XL0m1wuD5BatSlra5w82/080WBmpbdPYYLNEiLCy4SJMW9JHX0+/8qR/0OD2OWc66t5NNcOb3wcZPMjtSCw23N5vaW9181k=
+	t=1770937699; cv=none; b=hOIVCAldwDZSbdI/R1IvPs2SN9HCtNAEmxAH0Gv2H3/544J3jNIokKZ1/PLwpEZR6RqO6OLNNw8zYTbr1nsllGuejpqP110aYdinVBw3+6nqMapAYVDnpK56HTml9/+bKhjXIiFfpMswXqHTzgUD191fQ+sw4d2iUgXHnyNYTFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770933635; c=relaxed/simple;
-	bh=6vS5vqItIC1vDu0x5wT1q2geIhUhMvtak5ngDTLmqdI=;
+	s=arc-20240116; t=1770937699; c=relaxed/simple;
+	bh=+2qQ4Lqt58YN0m8NGbzAX704gO2yCJz3ZLqmn2FvBUI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=M6FgyhEEe/j48O1FblMYb2gpyUGoaVqY72ipdlynqxAMDIencYXnRd4HwxgmVKP4oTT5V6NmL61rdK4wW7dvmAwhUg4R3vXAsIXjHI02Qa/PQn49N9rdMsOdB+fpuT1mr4jCOtBrXhbIEZvK2q+uR+cRhgPh/vingbln6oWxOlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FiPAiVa5; arc=none smtp.client-ip=209.85.215.173
+	 Content-Type:MIME-Version; b=FYrcMYsCdm47u2kWDolY4ppAUunaA9yQuxhqT1zJ/gfTG5qPt8vrMfxBgkZkRyxuVrSLvfij2LffSaKX11hpH/AMl5UDdeozUlNoV4yk7kdWSXfC6Y6xM/wGF3qmiMJqUqEk2eAKwJ8PZOePwKpC4keyy5oKk8od5UiK3xH4adE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DMZxXFWE; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FiPAiVa5"
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c6e1a67d4b8so159548a12.0
-        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 14:00:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DMZxXFWE"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2aaf9191da3so2046615ad.2
+        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 15:08:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770933634; x=1771538434; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1770937697; x=1771542497; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=pRNqJQw+tkJ3hFVQXokGgbRqtvLCppLJT7t4ENUrgog=;
-        b=FiPAiVa5lNa2mta89XqqRWujscN8qtTRq35LkK9qeAZw3mrAYrnHaLO3Nv+k/qKeZU
-         vpR8qcI+efZxmmFKMj3cbyQMWyKa5At7j/NosLi10NPHVXXrXDx+k+EIvAUJ0R5lwiS4
-         mnPt04LsvkGkeAMsvALOQ49YCKfRagUtqM1i5E5YBq0dtrA/ADUECKIGViqNYiDDJ6Hg
-         zkRk+sslvMjCQzRL+lT5965JbF4s8BYQGJWXif5Rvo0VbmHlWzdrx5eBcj9dr5njg1Bq
-         sgZ2HJTkQLbzqQnT5YHXe5/j/NzKtWsetQTEcJ7L8yHV/tthNco6bNhc5+PVX0ItYT6B
-         EA8Q==
+        bh=NWqY5z6+CItkRRdlJX+08xGLqf2S+uEzXHa8ErcapMA=;
+        b=DMZxXFWEFBEmWetI+KNI4lMwsDy2HSTB39ft41eCS7U0HkP/ei+JssxyEs0L/WqyvK
+         lFhFzWIm2l5Frt/YiWLd+ntybd/dA95BAqaJgidolVwj9pw9FBAT1/gxpC8ENxSDE+5c
+         2Eb8wxtULBlermd45xxJYMPG7ilCXY/0z+B3N+31LTMfrNq1AkxkiYVQ2qQgY7uFvpl6
+         sGmo50akRDO6jdH/Vy2tDtT/V9xa6k7xZgXOfHwcJzHbDrlAc+GrbZ4Lv6Rs4hyZKN7S
+         hkgkbtFH7Wy73NcdaXUu87p8KDiPBn4yYGa2GqN8Bmtrjav6UzogJ356vW6kmuUmmeAW
+         pnCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770933634; x=1771538434;
+        d=1e100.net; s=20230601; t=1770937697; x=1771542497;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pRNqJQw+tkJ3hFVQXokGgbRqtvLCppLJT7t4ENUrgog=;
-        b=OkDlWbLkehR2zAfFsgjKwbK+5x/28MnNRd+38it2rIf49n44k3nlupMciMLsqTMaps
-         9upfJcnYymO6Q/Qaf1F15HtesKdqcXh6mpQRB+Fo9PFBaj5fNicyhAY4meXoiMwGU75s
-         Oog4A1bFTJRb9EIEpvncFR13ttY0IBBAnqEAEGDsTmeajPq2DYdspQrDxHpWVgJ/KKvv
-         R/tf7cldiWE8+QzB2pLIin3jo4lyZ4yH5VO4UT3VNz/CGvAcN6wnJvIlBtVULHgYEJu9
-         K6X7a5/z3Qv5+3/Ej71YpyPdsx5qw1QyiULI8lyJgjzpnEALlbC/AW0ve6U7VUhUwgft
-         YTaw==
-X-Forwarded-Encrypted: i=1; AJvYcCVsZrigvrOJky6l2K87XAjO1GZ0BIpDRZKQm3Rmm/zeQHfn54JfVF6LcA2J11cx/NvjBIA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMnXUbdm7S2ZqLwGFne0vLI755GCUKkyikF91xAHKTF0lxwuwp
-	t6zN/+4/owsMlk1CDZsBEXe8sEGqKnInMW8cJvc1/UPQcmnNDgNzWHZE
-X-Gm-Gg: AZuq6aKitMrObgEs5K8VqaicW1GKyNRIT62eTnmvrSdf5E8aJW6GWsbvHBg8uyBUPdV
-	RO7g3WvNmfNKKKqJS4c7ujeRK0HNPivo3VaAxynN1In+e+dffb5s7GVPG5UFS0Aohklep9tghc8
-	zF6ff6g4Z8DkS1n1IaPWRXUHW78IJpbV+Hfo0VrM3KG8fjJ+6nihs2Jsm4BShj7sw+D3mjcK0ik
-	dIVPTZxNV03XcW3IQ5+WuIuK7qaEl44obtzADEV68Ig9NoQA771VGVz2tB8EmxE6essuHuGAwoT
-	6pGxe/UQGN+HNrqt1or+VF3sQZ34n5aRya1JBeJV5RWDrec7g17b9IzKN0yAMVUdagxIhXgacyx
-	1VosvgWE18V+4Iq/+tada/wMu9bFr+DxqlAokpy4UIommk9mY6MQQWA29h4VHEQJyevSxLu3yWv
-	FLNPHCUQsdbhzIaz2vXLL7U9VSbEVHtsb22ynK+d/QTOxKpxsOuQ4=
-X-Received: by 2002:a17:90b:2810:b0:34a:a65e:e6ad with SMTP id 98e67ed59e1d1-356a765b9fbmr467430a91.1.1770933634101;
-        Thu, 12 Feb 2026 14:00:34 -0800 (PST)
+        bh=NWqY5z6+CItkRRdlJX+08xGLqf2S+uEzXHa8ErcapMA=;
+        b=I3HMfuSRAM82Lpdh9qwAJ7RJiI/Mj3yOtOqfsgh8lq21J7eIAbLMxV6WMl+eEzRAJy
+         mhf0gZUHy+plukZq4CzrpJ1WAluKb+mO16FpchA5P6kZlQVhnYhTXcIs8C2kX86c9w0Q
+         /iEc5nzOD8uarYmXaNfTMuCEvRODQKbDaxEXZnE1y9DLlzZ3BIupXAMZ3nmot8WbyS/s
+         8mwaCk9/Dm0RljroWyWplNKm7Cf7BS3VpyMjG2fhJj/l+cSwU/4BiKkHivsAB3hqiQ8F
+         3i9Yw7BxyrSaj6gWi7PlwAX4wobDKOYQy/DFmA6AVubEnvodZ+YezfJc310sLKYtBz0L
+         u5nw==
+X-Forwarded-Encrypted: i=1; AJvYcCWLThYHUzY0YoG1YNYowOnn+6FyY0AOZ2gi7qRSRet6sK6fJBlIF2vHRLygeKzsfTE0IjU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPXTwLyHe6A3RsBrXIZYoGC7HlstDYv/KNDbPKyyTiOmVTqE5X
+	rI2ggu3KAEp6UIiVlar1x5B/6PoKZjpfGbp/3sDV/Tb4vepd24JkszO+
+X-Gm-Gg: AZuq6aLePI3XPVNi0mui6RfMh4/scxy4UsCcvMawdlStJMTBd2nPCScp/3jzxEbocfK
+	qTRYwA2zqTp+A36Q2b0S8fy1yIh4IU2hQBfHsHtNR/FpvKdG6PneTuzjcyof1oOdX5Tul2ukzLT
+	ad3ZFRDysduuvscsvIcI6HluIaRp2qiBrlbmW4BH5fzWigydn3FAbcB+T8EJmGIAYX9nSodP0MZ
+	c43q1lI6IUPqEgLuCvdzEunEKQGC5fiMIdSe9M7kVepiUGO070LWC7uYtB6vl0KSoewpotnWjFV
+	MziR/hp3KoTC+r+dvWVOPAESB7V0leqmOoQQ56P4kzFJvcKXsFuOS+i96UFjaap7BJvgF0bLyYL
+	9BY8XQdMfya2LPQoxKaWFw1nnENEvS3aYzSseX/JqaSEAVAmhace+lImbOQVhZ45XXrG8OTMhtW
+	Q80TAUXT1AKrD0Aa4eRAoDJ1YDVyso+SoZ1Uv4NSnjmmQPpJ7JQk0=
+X-Received: by 2002:a17:903:2441:b0:2a2:d2e7:1601 with SMTP id d9443c01a7336-2ab4d0193admr4925935ad.48.1770937697280;
+        Thu, 12 Feb 2026 15:08:17 -0800 (PST)
 Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3567eba9b2esm6279778a91.9.2026.02.12.14.00.33
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ab29873c5esm64375435ad.36.2026.02.12.15.08.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Feb 2026 14:00:33 -0800 (PST)
-Message-ID: <59d226c413864ec7229e4a74af7e663e9982c534.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 00/14] selftests/bpf: Fixes for userspace
- ASAN
+        Thu, 12 Feb 2026 15:08:16 -0800 (PST)
+Message-ID: <95a233fe9a6058fb800cd0abca17f79e9bfa0c97.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 05/14] selftests/bpf: Fix memory leaks in
+ tests
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
  <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
@@ -68,9 +68,10 @@ To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
 Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
  Alexis =?ISO-8859-1?Q?Lothor=E9?=	 <alexis.lothore@bootlin.com>,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 	kernel-team@meta.com
-Date: Thu, 12 Feb 2026 14:00:30 -0800
-In-Reply-To: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+Date: Thu, 12 Feb 2026 15:08:14 -0800
+In-Reply-To: <20260212011356.3266753-6-ihor.solodrai@linux.dev>
 References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+	 <20260212011356.3266753-6-ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
@@ -82,75 +83,47 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Wed, 2026-02-11 at 17:13 -0800, Ihor Solodrai wrote:
-> This series includes various fixes aiming to enable test_progs run
-> with userspace address sanitizer on BPF CI.
->=20
-> The first patch fixes the selftests/bpf/test_progs build with:
->=20
-> =C2=A0=C2=A0=C2=A0 SAN_CFLAGS=3D"-fsanitize=3Daddress -fno-omit-frame-poi=
-nter"
->=20
-> The subsequent patches fix bugs reported by the address sanitizer on
-> attempt to run the tests.
->=20
-> The series is a pre-requisite for enabling "test_progs with ASAN"
-> workflow on BPF CI.
-
-I did an experiment:
-- applied the diff as at the bottom of the email;
-- compiled with export SAN_CFLAGS=3D"-fsanitize=3Daddress -fno-omit-frame-p=
-ointer"
-  (using gcc 15.2.1);
-- double-checked that resulting executable depends on libasan;
-- did a test run: ./test_progs -a verifier_and.
-
-The error report looks as follows:
-
-  Caught signal #11!
-  Stack trace:
-  /lib64/libasan.so.8(+0x525e7) [0x7f6a506525e7]
-  ./test_progs(crash_handler+0xb5) [0xd152c9]
-  /lib64/libc.so.6(+0x19c30) [0x7f6a50427c30]
-  /lib64/libasan.so.8(+0xdf4a) [0x7f6a5060df4a]
-  /lib64/libasan.so.8(+0xe5bba) [0x7f6a506e5bba]
-  ./test_progs() [0xd19ccc]
-  ./test_progs(main+0xcf6) [0xd1aa79]
-  /lib64/libc.so.6(+0x35f5) [0x7f6a504115f5]
-  /lib64/libc.so.6(__libc_start_main+0x88) [0x7f6a504116a8]
-  ./test_progs(_start+0x25) [0x401935]
-
-Am I doing something wrong, or does test_progs signal handler
-interfere with ASAN reporting?
 
 [...]
 
----
+> @@ -2005,6 +2005,7 @@ int testapp_stats_rx_full(struct test_spec *test)
+> =C2=A0{
+> =C2=A0	if (pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_B=
+UFFERS / 2, MIN_PKT_SIZE))
+> =C2=A0		return TEST_FAILURE;
+> +	pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests=
-/bpf/Makefile
-index a0a594de9007..3820077e74e4 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -46,7 +46,7 @@ srctree :=3D $(patsubst %/,%,$(dir $(srctree)))
- endif
-=20
- CFLAGS +=3D -g $(OPT_FLAGS) -rdynamic -std=3Dgnu11                        =
- \
--         -Wall -Werror -fno-omit-frame-pointer                         \
-+         -Wall -fno-omit-frame-pointer                         \
-          -Wno-unused-but-set-variable                                  \
-          $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)                    \
-          -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)          \
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selft=
-ests/bpf/test_progs.c
-index 02a85dda30e6..8839e00167fa 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -1924,7 +1924,7 @@ static void free_test_states(void)
-                        free_subtest_state(&test_state->subtest_states[j]);
-=20
-                free(test_state->subtest_states);
--               free(test_state->log_buf);
-+               free(test_state->log_buf + 10);
-                test_state->subtest_states =3D NULL;
-                test_state->log_buf =3D NULL;
+This one is a bit strange.
+pkt_stream_replace() allocates test->ifobj_rx->xsk->pkt_stream and
+test->ifobj_tx->xsk->pkt_stream (rx and tx streams), and proceeds to
+immediately free the rx stream and allocate another one for it.
+The following seem to be a better fit:
+
+  -       if (pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_=
+BUFFERS / 2, MIN_PKT_SIZE))
+  -               return TEST_FAILURE;
+  -       pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
+  +       test->ifobj_tx->xsk->pkt_stream =3D pkt_stream_generate(DEFAULT_U=
+MEM_BUFFERS + DEFAULT_UMEM_BUFFERS / 2, MIN_PKT_SIZE);
+          test->ifobj_rx->xsk->pkt_stream =3D pkt_stream_generate(DEFAULT_U=
+MEM_BUFFERS, MIN_PKT_SIZE);
+
+(I effectively inlined pkt_stream_replace()).
+
+> =C2=A0	test->ifobj_rx->xsk->pkt_stream =3D pkt_stream_generate(DEFAULT_UM=
+EM_BUFFERS, MIN_PKT_SIZE);
+> =C2=A0
+> =C2=A0	test->ifobj_rx->xsk->rxqsize =3D DEFAULT_UMEM_BUFFERS;
+> @@ -2017,6 +2018,7 @@ int testapp_stats_fill_empty(struct test_spec *test=
+)
+> =C2=A0{
+> =C2=A0	if (pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_B=
+UFFERS / 2, MIN_PKT_SIZE))
+> =C2=A0		return TEST_FAILURE;
+> +	pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
+> =C2=A0	test->ifobj_rx->xsk->pkt_stream =3D pkt_stream_generate(DEFAULT_UM=
+EM_BUFFERS, MIN_PKT_SIZE);
+
+Same here.
+
+[...]
