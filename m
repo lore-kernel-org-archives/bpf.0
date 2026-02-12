@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA50C19B5A7;
-	Thu, 12 Feb 2026 01:10:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E321E8826;
+	Thu, 12 Feb 2026 01:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770858604; cv=none; b=G7Z6I41NONBAgZnpGnxm6H1QJIrXEta7pK40GRN8MdRN1b6zuddCFlMGN6RqZYXBDTMb3fXNWo7si+28WZqNTJYU88NAROlXTPE6een8QLkBMnLHgpq9aHit37yIu5CvBMHYiEDJdYfJJZ+dVlGUl064oRFlmdERaNXEvrl0PUI=
+	t=1770858616; cv=none; b=FTntgMB5wZn0ADOqOMK+PBYCGdVMMxtHLi2SukTujyZN8ODdbzJ5GR/VPZCQ/7UDOy85xWv/RxDxDiS4PjL5WvhcB7pymJvd8ldOmtPfmGrKPEzEH2MxqaC6nBxBYY+Id9OlWyjfvxX6/tYRIuwekL81q8AlpsuZOGbPTTAEf6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770858604; c=relaxed/simple;
-	bh=MSdPoqU9C0vn5lMVrOrSdHYuJ/gSKrvg6bz9j0Oq3s0=;
+	s=arc-20240116; t=1770858616; c=relaxed/simple;
+	bh=9QpUfoGBFUgI+aI9SJipx7pdiJQITD9AX/BNdWbpuI0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fKsRAewA8WgdEKsn6P6xqRT9+yLPKuK+H43PR+RfWMJOTExHxQH1Vq+H6SguhFQymJB5GdsQt9fU3FsMBmhlzmjA8fDFcRoAUhVBfD9g3seKNFQvtJ1EZV5IXUWVsCkVkorb+mhUSShN8SkuaOKirMDSwjVedqOFf9IWScXJ83Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ql2Tcs5T; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=pY4AX5eBo/1dDPVijjld6BUry+EXtpomHDo6r2FVHggCm8bQ6o3At280W2EzxccqDcY+PxQljnAkjvpFcAdy/SSMu3xr2ajh9ODv0XYMyn5J4RG8BQRKbX82fwCqChg4QcsgGW5uFuNKDrLlECXJQZlZF5FJwg/MojThDgNwGr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ei6iUwuV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ql2Tcs5T"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83328C2BC87;
-	Thu, 12 Feb 2026 01:10:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ei6iUwuV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92421C2BC9E;
+	Thu, 12 Feb 2026 01:10:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770858604;
-	bh=MSdPoqU9C0vn5lMVrOrSdHYuJ/gSKrvg6bz9j0Oq3s0=;
+	s=k20201202; t=1770858615;
+	bh=9QpUfoGBFUgI+aI9SJipx7pdiJQITD9AX/BNdWbpuI0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ql2Tcs5TZEqt43OlGiMk9shYOgqLil34jEHzGRBG8aXc8JgyxQ11qIMT733a9kr9r
-	 rJoevFgRa6aDt+OXvVWaeVwpH43+9HZYTamyKwfUWPhoUgCPUqoftZ0RM47clDCX9g
-	 p+zmaH14gcCFbkT1Dc741P5A4eMDh5vwIyu/o8hHjVF7HBoXZR9/pgxdUjgK2HcI+M
-	 HJaTyluuUITihPHrndMazB9iTLdET8uqC/22KYHY++duPmDxgJSRDUB6sKyBasZsHU
-	 NyMbc6vdFqjQMqqVd7JJl8eGRHQzDK6SDkfJTNbAfnVUN6VdiGsUj++2wh3lu2MQmm
-	 9bNAGUl3WISLw==
+	b=ei6iUwuVTmFou/r2ZjLBDNgT6YbQlglj5ETZAGCuuXTUnQlKXShSkWhBHpM9mNbOT
+	 kp0xNZJ8cWJGAmnFo1FjGLcmok80pmETaqVV8M8aGdMli9vyxe1GyKpORS9ASD9Dba
+	 bDNYmX2kvu7sJUJ70oeoZrDPb/VB9auK9i1aQp9rPNJY+ERS43Zm8qbpo/nxGFRm5I
+	 t/2ycVNXaF1CihvvUa58O2zAmpLFJ9oj5FkiMfkPAfWdFYv7El3rArmjLhOl2vZb30
+	 06T2UcBkgqjT4RYz/n6k4XskOWnjrnSG6F25llyC31ugMpud/Vm9legtkH5UZz88Fq
+	 i54edokl0u7ww==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
-Cc: Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
+Cc: Anton Protopopov <a.s.protopopov@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	qmo@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.19-6.18] bpftool: Fix dependencies for static build
-Date: Wed, 11 Feb 2026 20:09:27 -0500
-Message-ID: <20260212010955.3480391-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.19-6.18] bpf: Properly mark live registers for indirect jumps
+Date: Wed, 11 Feb 2026 20:09:34 -0500
+Message-ID: <20260212010955.3480391-11-sashal@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260212010955.3480391-1-sashal@kernel.org>
 References: <20260212010955.3480391-1-sashal@kernel.org>
@@ -49,157 +50,142 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.19
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
+From: Anton Protopopov <a.s.protopopov@gmail.com>
 
-[ Upstream commit 08a7491843224f8b96518fbe70d9e48163046054 ]
+[ Upstream commit d1aab1ca576c90192ba961094d51b0be6355a4d6 ]
 
-When building selftests/bpf with EXTRA_LDFLAGS=-static the follwoing
-error happens:
+For a `gotox rX` instruction the rX register should be marked as used
+in the compute_insn_live_regs() function. Fix this.
 
-  LINK    /ws/linux/tools/testing/selftests/bpf/tools/build/bpftool/bootstrap/bpftool
-/usr/bin/x86_64-linux-gnu-ld.bfd: /usr/lib/gcc/x86_64-linux-gnu/15/../../../x86_64-linux-gnu/libcrypto.a(libcrypto-lib-dso_dlfcn.o): in function `dlfcn_globallookup':
-   [...]
-/usr/bin/x86_64-linux-gnu-ld.bfd: /usr/lib/gcc/x86_64-linux-gnu/15/../../../x86_64-linux-gnu/libcrypto.a(libcrypto-lib-c_zlib.o): in function `zlib_oneshot_expand_block':
-(.text+0xc64): undefined reference to `uncompress'
-/usr/bin/x86_64-linux-gnu-ld.bfd: /usr/lib/gcc/x86_64-linux-gnu/15/../../../x86_64-linux-gnu/libcrypto.a(libcrypto-lib-c_zlib.o): in function `zlib_oneshot_compress_block':
-(.text+0xce4): undefined reference to `compress'
-collect2: error: ld returned 1 exit status
-make[1]: *** [Makefile:252: /ws/linux/tools/testing/selftests/bpf/tools/build/bpftool/bootstrap/bpftool] Error 1
-make: *** [Makefile:327: /ws/linux/tools/testing/selftests/bpf/tools/sbin/bpftool] Error 2
-make: *** Waiting for unfinished jobs....
-
-This is caused by wrong order of dependencies in the Makefile. Fix it.
-
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
-Link: https://lore.kernel.org/bpf/20260128211255.376933-1-ihor.solodrai@linux.dev
+Signed-off-by: Anton Protopopov <a.s.protopopov@gmail.com>
+Link: https://lore.kernel.org/r/20260114162544.83253-2-a.s.protopopov@gmail.com
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
 
 LLM Generated explanations, may be completely bogus:
 
-Now I have all the information needed for a complete analysis.
+Now I have a complete picture. Let me summarize my analysis.
 
-## Analysis
+---
+
+## Detailed Analysis
 
 ### 1. Commit Message Analysis
 
-The commit subject "bpftool: Fix dependencies for static build" clearly
-identifies this as a **build fix**. The message includes the full linker
-error output showing undefined references to `compress` and `uncompress`
-when building with `EXTRA_LDFLAGS=-static`. This is a concrete,
-reproducible build failure.
+The commit fixes `compute_insn_live_regs()` so that for a `gotox rX`
+instruction (BPF indirect jump via register), the register `rX` is
+properly marked as "used" in the DFA-based liveness analysis.
 
 ### 2. Code Change Analysis
 
-The change is extremely minimal -- two lines are modified in
-`tools/bpf/bpftool/Makefile`:
+The change is to the `BPF_JMP`/`BPF_JMP32` → `BPF_JA` case within
+`compute_insn_live_regs()`.
 
-```133:134:tools/bpf/bpftool/Makefile
-LIBS = $(LIBBPF) -lelf -lz -lcrypto
-LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lz -lcrypto
-```
+**Before the fix**: `BPF_JA` fell through to `BPF_JCOND`, both setting
+`def=0, use=0`. This means for a `gotox rX` instruction (`BPF_JA |
+BPF_X`), the destination register was **not** marked as "used" — the
+liveness analysis treated it as if no register was read.
 
-Changed to:
-```
-LIBS = $(LIBBPF) -lelf -lcrypto -lz
-LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lcrypto -lz
-```
+**After the fix**: `BPF_JA` gets its own case block that distinguishes
+between:
+- `BPF_SRC == BPF_X` (gotox rX): `use = dst` — marks the destination
+  register as used (correct)
+- `BPF_SRC == BPF_K` (regular goto): `use = 0` — no register used (same
+  as before)
 
-The fix is swapping the order of `-lcrypto` and `-lz`. This is the
-classic GNU static linker dependency ordering issue: when statically
-linking, `ld` resolves symbols left-to-right. Since `libcrypto` depends
-on `libz` (it calls `compress`/`uncompress`), `-lcrypto` must appear
-**before** `-lz` on the command line. The original order (`-lz
--lcrypto`) leaves `libcrypto`'s references to `compress`/`uncompress`
-unresolved because `libz` has already been processed.
+### 3. Impact Assessment
 
-### 3. Origin of the Bug
+The liveness data (`live_regs_before`) is consumed in two critical
+verifier functions:
 
-The `-lcrypto` dependency was introduced by commit `40863f4d6ef2c`
-("bpftool: Add support for signing BPF programs") which first appeared
-in **v6.18**. That commit added `-lcrypto` at the end of the LIBS line,
-putting it after `-lz`, which is the wrong order for static linking.
+- **`clean_func_state()`** (line 18980): Clears registers that aren't
+  live, calling `__mark_reg_not_init()`. If the gotox register is
+  incorrectly marked as not-live, its state gets cleared before state
+  comparison.
+- **`func_states_equal()`** (line 19450): Only compares registers that
+  are live. If the gotox register is incorrectly marked not-live, two
+  states that differ in that register will be considered equal —
+  potentially causing **incorrect state pruning**.
 
-### 4. Affected Stable Trees
+Incorrect state pruning in the BPF verifier is a **security-relevant
+bug**: it could cause the verifier to accept BPF programs that should be
+rejected, since it might skip verification paths where the gotox
+register has a different (potentially unsafe) value.
 
-- **v6.17 and earlier**: NOT affected -- they do not have `-lcrypto` at
-  all (confirmed: `git show v6.17:tools/bpf/bpftool/Makefile` has only
-  `-lelf -lz`)
-- **v6.18.y**: AFFECTED -- confirmed the buggy ordering `LIBS =
-  $(LIBBPF) -lelf -lz -lcrypto` is present in `stable/linux-6.18.y`
-- **v6.19.y**: AFFECTED -- same buggy ordering confirmed in
-  `stable/linux-6.19.y` and `v6.19`
+### 4. Feature Timeline / Dependency Analysis
 
-### 5. Stable Criteria Evaluation
+| Feature | Commit | First Appears |
+|---------|--------|---------------|
+| DFA live regs analysis | `14c8552db644` | v6.15 |
+| `gotox` (indirect jumps) | `493d9e0d60833` | v6.19 |
+| **This fix** | `d1aab1ca576c` | Not yet in mainline (only in next
+tree) |
 
-| Criterion | Assessment |
-|-----------|-----------|
-| Obviously correct and tested | **YES** -- standard linker ordering
-fix, the error output confirms the root cause |
-| Fixes a real bug | **YES** -- static builds fail completely with
-linker errors |
-| Important issue | **YES** -- build fix category (prevents
-compilation/linking) |
-| Small and contained | **YES** -- 2 lines changed, only reordering
-flags |
-| No new features | **YES** -- pure fix, no new behavior |
-| Applies cleanly | **YES** -- the affected lines are identical in
-6.18.y and 6.19.y |
+Key findings:
+- **v6.19** (released Feb 8, 2026) contains both the liveness analysis
+  AND the gotox feature — meaning v6.19.y has this bug
+- **v6.18.y and earlier** do NOT have `gotox` at all — the
+  `BPF_JA|BPF_X` instruction cannot appear in programs on those kernels,
+  making the bug unreachable
+- The fix is **only relevant to 6.19.y stable**
 
-### 6. Risk Assessment
+### 5. Fix Quality
 
-**Risk: Near zero.** This change only affects static linking behavior.
-Dynamic linking is unaffected by library ordering because the dynamic
-linker resolves all symbols at runtime. The fix is trivially correct --
-it's a well-known requirement that in static linking, if library A
-depends on library B, then `-lA` must precede `-lB`.
+- **Small and surgical**: +6 lines, -0 lines of logic; just splits a
+  case label and adds a condition
+- **Obviously correct**: An instruction that reads a register must mark
+  that register as "used" in liveness analysis
+- **No risk to existing paths**: The regular `goto` (BPF_K) path still
+  gets `use=0`, and `BPF_JCOND` still gets `use=0` — behavior unchanged
+  for all non-gotox instructions
+- **Self-contained**: No dependencies on other patches
 
-### 7. User Impact
+### 6. Stable Tree Applicability
 
-Users building bpftool statically (common in container/embedded
-environments where static binaries are preferred) are completely blocked
-from building on 6.18+ without this fix. The selftests/bpf build is also
-broken when `EXTRA_LDFLAGS=-static` is passed.
+- **6.19.y**: YES — has both the liveness analysis and gotox feature;
+  this bug is live
+- **6.18.y and earlier**: NOT applicable — no gotox feature exists, bug
+  is unreachable
+- **Risk**: Very low — the change is minimal and only affects the new
+  gotox code path
 
-### 8. Dependency Check
+### 7. Verdict
 
-The fix is completely self-contained. It has no dependencies on any
-other commit and can be applied independently. It only requires that the
-`-lcrypto` dependency exists in the target tree (which it does in 6.18.y
-and 6.19.y).
-
-### Summary
-
-This is a textbook stable backport candidate: a small, obvious, zero-
-risk build fix that prevents a complete static linking failure in
-bpftool on kernels 6.18+. Build fixes are explicitly listed as
-appropriate for stable trees in the stable kernel rules. The fix applies
-cleanly to the affected stable trees (6.18.y and 6.19.y) since the buggy
-lines are identical.
+This is a genuine BPF verifier correctness bug with potential security
+implications (incorrect state pruning could allow unsafe programs). The
+fix is small, obviously correct, and self-contained. It applies to
+v6.19.y stable where the gotox instruction exists. While the bug only
+affects the relatively new `gotox` feature, that feature shipped in
+v6.19 which is now a released kernel with an active stable tree. The BPF
+verifier is a security-critical component and correctness bugs in it are
+treated seriously.
 
 **YES**
 
- tools/bpf/bpftool/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index 5442073a2e428..519ea5cb8ab1c 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -130,8 +130,8 @@ include $(FEATURES_DUMP)
- endif
- endif
- 
--LIBS = $(LIBBPF) -lelf -lz -lcrypto
--LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lz -lcrypto
-+LIBS = $(LIBBPF) -lelf -lcrypto -lz
-+LIBS_BOOTSTRAP = $(LIBBPF_BOOTSTRAP) -lelf -lcrypto -lz
- 
- ifeq ($(feature-libelf-zstd),1)
- LIBS += -lzstd
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index f90bf8b5d0ddd..c9c76c1672157 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -24844,6 +24844,12 @@ static void compute_insn_live_regs(struct bpf_verifier_env *env,
+ 	case BPF_JMP32:
+ 		switch (code) {
+ 		case BPF_JA:
++			def = 0;
++			if (BPF_SRC(insn->code) == BPF_X)
++				use = dst;
++			else
++				use = 0;
++			break;
+ 		case BPF_JCOND:
+ 			def = 0;
+ 			use = 0;
 -- 
 2.51.0
 
