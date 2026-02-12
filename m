@@ -1,125 +1,123 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E2C3EBF3F
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 19:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770923767; cv=pass; b=m+O90rMSpZmbSR2Dcaq6rVe+XlA6BMX+D4bwY/bfVbgqgVkV8+cEOXgWHqp7naw6lp8Zf7xowIUAgU2hK0wCMjdQhBQoONaCWY6+FO22O7iLslGAjrqfsXJDeQ2/6S26tsZfk2ZDN2Q53749kKI4SD2ecG2T5amZXct5WNHO1Iw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770923767; c=relaxed/simple;
-	bh=qlrNwdBTPBiHmIII6NewTsfdeTe+gakww2NBTJP2Qwg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BeE4nXE4w6OUXJt+ZjI4MUDDWzW0LQJJfi3KJUkGBIIvrQJBDd33iymqnHH7oFsOsw+rD80nS/WTdKYlIogTTocNQjnLMbYfXV0L44p8dOWyQMfvcwspgAgx1m9gg4ZP59rI+Ja5tZhFSBAP/NCMn8ejfi5cdhA+m92Z02mfdTc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R/2skPy3; arc=pass smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C9CBA21;
+	Thu, 12 Feb 2026 19:31:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770924663; cv=none; b=JqsodY5isXaBJ6KjOBZynyJRF+A94T+PoEpnOYh8yICsZHy2znilxh7v+5y91Fg/2yBUI5YsLGYpRFy6vm1OiPwArGND3zNlWjMDG0MqdLqC/98KAcG5vRDR1phgMPa4vK3oHrz6Hy+NhJ/pJxdvmny58Fi0w3lGWzQZj0kcpI4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770924663; c=relaxed/simple;
+	bh=CfyMoN19AB34Wz5ReWi6alLjCIlR82xPRObwiwQjs/0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pUHHyZlrLKScOX7OP8S1DKWtXcHcR77d/QqH1SSOQOQcSRaJS3j2cXR5Jf2cglmdmM5fqyBBe7vOUxMSdEgszWj/kWuRcQe9KHbe1MqfSchVRsjr/4y0s4EZE3PVCze/iqDGZhpcAgFp3KjUKKhDXfW5N+qZ2mLVhzk7KGMXcts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uAwqP0ZN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R/2skPy3"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4833115090dso1408015e9.3
-        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 11:16:05 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770923764; cv=none;
-        d=google.com; s=arc-20240605;
-        b=USgq+Gt3YHXyw7s0diyVZKnrgCjoD1a9q3Fnwnw4Im6BPe0CXaWexeck76x4v5HFEv
-         sQ682ki3WMAA5X9uB/6mbxiNCbswYSSgBwSWBsTphIFtzz9KVYb4yvumpyQ5GbgXHQpZ
-         vdfoQhH7pDKx7Onvck7y0AFJfcmbhgbEfs92NGCdaZCBQ9WxeWz9g4y9pD95d9fw3QU0
-         6Cios67Odto+y5TTQY+0OoIh9hI8nmjNkrMRltiJ6t615KSA3fCDXEpEDSJItgq0AM2T
-         1a61ilpLuxxS/Sx8MiLsF1xUB8d8ntgdsb50o7RqDTwHGxS+55zk3id6Yrg7GGhy9R4g
-         trjQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=34GBq/w9QEN1MAXl5GyaptaVmrZQSD6tth2MQtzvH/8=;
-        fh=Js/lXSWFGbP9Pp7uqTii2fUX7J/w8Xa9afWubABXZtY=;
-        b=R9/1xzShb9JGmrQTxR4gZp4A9sH+dusA6qIyB6MapvCeo9iMUaSZWqVY0qdtTyPgea
-         xfDeUpuVNBNkJXKU96pbvosUL+4dJQgWHGHBz24ThkeWhfNfABiNOLkIV+C5vvQRgBee
-         a5SSlKJs7jIQb6j4yEIVDwytRXqxlGxiD5gT6SsLujAFvEM3iQE2XDLRa9Sw9oJOpXLE
-         LL1xVnjOj/1CWafL+Wbxmtls/1aZGwaUIdRc1pgz0mneRDFkhm76PyRDbNoKQjYdGg/D
-         CO7xChQx1XiqFvVZBrjXAQq1iIbVVjZn5H2EVhNp+u+qdV3pQeDeQzUK74y/Qnb5zEtc
-         4nqQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770923764; x=1771528564; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=34GBq/w9QEN1MAXl5GyaptaVmrZQSD6tth2MQtzvH/8=;
-        b=R/2skPy3uXvqYVtqfCJRs6dpYyqOTrYjF6iG3TokMqiZ0D1222ppXLe9FZGSAgRxkD
-         mJbKwUeEqT0hUidskUQd9/v9WMd9gE5NtVmYG5lGPfoZi/i8j64ZD6FZ52G1yI0EiGIx
-         xliOUyqu0TzKqbnMShW+w3ntGzTiBConyWsBwCzUym7R31d8lIW2d4s1BYP94Nay6G5T
-         LqMEkgAw4E+tyIA7263bMGz/IJGBBH/ec61iZGW04j5hL/3CsXO8Wd90ybhvpNI9kX5c
-         /8ul67iY23lVii5EeL6r5tY++rKRmSqpHVwlTkFaJNzk52a2Zs5EW0wIo41Nfz8N8kif
-         LpCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770923764; x=1771528564;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=34GBq/w9QEN1MAXl5GyaptaVmrZQSD6tth2MQtzvH/8=;
-        b=AyMuqDYSHCUFz94C1k0s5ALIS90OHgwQ7z+2hJBSdqhhPZaM57vNSZhkP1384YxH3n
-         aRshe/ske761AK1AKuEBHeyb8C/aGDNFCJYQNrNSkKyotugKa+yP+Nu/yKpPyUa4bUpa
-         LIP6YuKQYRjq9OckkkG/k0C7O+Sp9kES0y6nM2g95g2hzDjoNXeWRX+O0OgTFebd2ivA
-         mBtdUgJA0I8t9s0a5Mog84xwxzyJJbeGpVv8nrEPR7oWAhXuskVaRlbOHmE7PceVMkYa
-         VdOWfgj23DswqU+7sDUQI6601watd+c0BOrQWYoHMIpNptdpw+SC2FUZ5pn1hFXP1zzr
-         g+Zw==
-X-Forwarded-Encrypted: i=1; AJvYcCXxi93o5dsqGJ5TxCHMpwDOgCeQUOUfrbQ3pYbQynNRIB1RWfYP2wq1FIyXBv44k7FBElo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfmFW5sOZE4zrdmOtd0KG6aSz9c+rifWu53FX+yxdd6YaNVL/W
-	8IY+zALawx0hGajOFA5+vS5UCFPH9yrWHsvmWEP4EFyDwDwZvM9Q4NiANv4tPbr9FoCy0kzrk4p
-	eMSyOqomfbOSIY8k+s/6lNKLHPaMAtt8=
-X-Gm-Gg: AZuq6aLNT/9if9SR4IN9l5DegjOgTO5Q/aGWwD2GKIzBrHCz1hnLrezBWth55L//3+U
-	/VwhV5Lv5L+z+IUSkzg7f3CjS4ucP76NKxg50fWIpE6o++K1T+WDqsFFbMroQG4R0GBMlDoR/4o
-	hcI6ExMcOT44thNOy3d0IVypzSJEpQYJSlAjKOgRk2QicTktmmRK85CBXqmc4dDesl7ibCdS6TR
-	y1ydvMntel/r/BX3jsLSaH8tkB1xfKN/TXrLvZpdZazywgAqFjvyXhf7gmfgNDss10G1yDWKY4H
-	qDxY1XhcPTBhyFDoJtAlcDKZYE8hEpcOhlXfaZDJQ+t+YVpYI4o8aDRjyuTjovB3IgESmnfMmIR
-	MwCLBKVUn
-X-Received: by 2002:a05:600c:4f0b:b0:47a:935f:61a0 with SMTP id
- 5b1f17b1804b1-48370cc979bmr3868275e9.0.1770923764039; Thu, 12 Feb 2026
- 11:16:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uAwqP0ZN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32734C4CEF7;
+	Thu, 12 Feb 2026 19:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770924662;
+	bh=CfyMoN19AB34Wz5ReWi6alLjCIlR82xPRObwiwQjs/0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=uAwqP0ZNhEW5Vagfetvw+PvGC8DYBv2pnSNHyd1ovIS88pn9ifnTiDPBYMEgDtfBi
+	 156V17wRWRf5GaA0M4JDS5ELgZFPsToJluBFN1XLAGhKW8KgCeXz5gDB6+vnQ/qdzt
+	 ErH1JSBmG1tJomT9882swyU1xVor44SJj2wBmtUfim4nUsRCLmHH2crP79+8i/KLrJ
+	 RL96EddJ5mcRRkjR+VGWrMdsl2IvJvHtDwUCqRRaZyXq0yzheA5CtI69vZAFbKLgJb
+	 Kx+0YVrKWQsw/ZPaeChxh75VEwtzllV+os7CJyqECsn8HZNcyzJPsZEB+oOKEDJZrK
+	 ZKgv9CAsQkFjA==
+Content-Type: multipart/mixed; boundary="===============3404291497187834089=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260206093410.160622-1-harry.yoo@oracle.com> <20260206093410.160622-8-harry.yoo@oracle.com>
-In-Reply-To: <20260206093410.160622-8-harry.yoo@oracle.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 12 Feb 2026 11:15:52 -0800
-X-Gm-Features: AZwV_QheBogDYj3hjqCT8mZg95VywPTWK4lWyWbkX01r20D5GbhYKN4gZGkX0C8
-Message-ID: <CAADnVQKRVD5ZSnEKbZZU7w86gHbGHUug2pvzpgZTngNS+fg4rw@mail.gmail.com>
-Subject: Re: [RFC PATCH 7/7] mm/slab: make kfree_rcu_nolock() work with sheaves
-To: Harry Yoo <harry.yoo@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	Christoph Lameter <cl@gentwo.org>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Michal Hocko <mhocko@kernel.org>, Hao Li <hao.li@linux.dev>, 
-	Alexei Starovoitov <ast@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Amery Hung <ameryhung@gmail.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, "Paul E . McKenney" <paulmck@kernel.org>, 
-	Frederic Weisbecker <frederic@kernel.org>, Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, 
-	Joel Fernandes <joelagnelf@nvidia.com>, Josh Triplett <josh@joshtriplett.org>, 
-	Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>, 
-	Dave Chinner <david@fromorbit.com>, Qi Zheng <zhengqi.arch@bytedance.com>, 
-	Muchun Song <muchun.song@linux.dev>, rcu@vger.kernel.org, linux-mm <linux-mm@kvack.org>, 
-	bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <105606c43804c23ec856f4ec17a08286f182061e547f954359e2e0325d0d3a6f@mail.kernel.org>
+In-Reply-To: <20260212183328.1883148-5-larysa.zaremba@intel.com>
+References: <20260212183328.1883148-5-larysa.zaremba@intel.com>
+Subject: Re: [PATCH bpf v2 3/9] ice: fix rxq info registering in mbuf packets
+From: bot+bpf-ci@kernel.org
+To: larysa.zaremba@intel.com,bpf@vger.kernel.org
+Cc: larysa.zaremba@intel.com,claudiu.manoil@nxp.com,vladimir.oltean@nxp.com,wei.fang@nxp.com,xiaoning.wang@nxp.com,andrew+netdev@lunn.ch,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,horms@kernel.org,shuah@kernel.org,aleksander.lobakin@intel.com,maciej.fijalkowski@intel.com,bastien.curutchet@bootlin.com,tushar.vyavahare@intel.com,kernelxing@tencent.com,rbm@suse.com,echaudro@redhat.com,lorenzo@kernel.org,toke@redhat.com,imx@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,intel-wired-lan@lists.osuosl.org,linux-kselftest@vger.kernel.org,aleksandr.loktionov@intel.com,dtatulea@nvidia.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 12 Feb 2026 19:31:02 +0000 (UTC)
 
-On Fri, Feb 6, 2026 at 1:35=E2=80=AFAM Harry Yoo <harry.yoo@oracle.com> wro=
-te:
+--===============3404291497187834089==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/drivers/net/ethernet/intel/ice/ice_base.c b/drivers/net/ethernet/intel/ice/ice_base.c
+> index eadb1e3d12b3..511d803cf0a4 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_base.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_base.c
+> @@ -663,23 +663,12 @@ static int ice_vsi_cfg_rxq(struct ice_rx_ring *ring)
+>  	int err;
 >
->         } else {
-> +               if (unlikely(!allow_spin)) {
-> +                       /* call_rcu() does not support NMI context */
-> +                       rcu_sheaf->size--;
-> +                       local_unlock(&s->cpu_sheaves->lock);
-> +                       goto fail;
+>  	if (ring->vsi->type == ICE_VSI_PF || ring->vsi->type == ICE_VSI_SF) {
 
-As a first step it's ok, but we need to make call_rcu() work too.
-Shouldn't be too hard. It protects itself with local_irq_save,
-so if (irqs_disabled()) defer to irq_work and call_rcu there
-or guard reentrance into __call_rcu_common() with per-cpu busy counter.
-rcu_head can be reused to form list of objects to be processed in irq work.
+[ ... ]
+
+> @@ -702,14 +691,13 @@ static int ice_vsi_cfg_rxq(struct ice_rx_ring *ring)
+>  			if (err)
+>  				return err;
+>
+> -			if (!xdp_rxq_info_is_reg(&ring->xdp_rxq)) {
+> -				err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
+> -							 ring->q_index,
+> -							 ring->q_vector->napi.napi_id,
+> -							 ring->rx_buf_len);
+> -				if (err)
+> -					goto err_destroy_fq;
+> -			}
+> +			err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
+> +						 ring->q_index,
+> +						 ring->q_vector->napi.napi_id,
+> +						 ring->rx_buf_len);
+> +			if (err)
+> +				goto err_destroy_fq;
+
+The registration condition check was removed, so __xdp_rxq_info_reg() is
+now called unconditionally. This works correctly when cleanup properly
+unregisters the xdp_rxq, but there appears to be a gap for ICE_VSI_SF
+in non-XSK mode.
+
+Looking at ice_clean_rx_ring() in ice_txrx.c:
+
+    if (rx_ring->vsi->type == ICE_VSI_PF &&
+        xdp_rxq_info_is_reg(&rx_ring->xdp_rxq)) {
+        xdp_rxq_info_detach_mem_model(&rx_ring->xdp_rxq);
+        xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
+    }
+
+This only unregisters for ICE_VSI_PF, not ICE_VSI_SF. With the old code,
+the conditional registration skipped re-registration for ICE_VSI_SF. With
+this change, for ICE_VSI_SF in non-XSK mode during reconfiguration:
+
+1. ice_clean_rx_ring() - doesn't unregister (only checks ICE_VSI_PF)
+2. ice_vsi_cfg_rxq() - unconditionally calls __xdp_rxq_info_reg()
+3. __xdp_rxq_info_reg() sees REG_STATE_REGISTERED and triggers:
+
+    WARN(1, "Missing unregister, handled but fix driver");
+
+While this is handled gracefully by the XDP core (it unregisters internally
+before re-registering), will this cause spurious WARN splats for subfunction
+devices on every reconfiguration?
+
+Should the ICE_VSI_PF check in ice_clean_rx_ring() be updated to also
+include ICE_VSI_SF to match the registration path?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21960574055
+
+AI-authorship-score: low
+AI-authorship-explanation: The commit shows domain-specific knowledge of ice driver internals and XDP subsystem, with targeted changes that suggest human authorship by an Intel driver developer.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: The issue causes WARN splats for ICE_VSI_SF devices during reconfiguration, but is handled gracefully by XDP core without functional impact.
+
+--===============3404291497187834089==--
