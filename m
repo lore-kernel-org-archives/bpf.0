@@ -1,170 +1,228 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA7F28B4F0;
-	Thu, 12 Feb 2026 09:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE962E6CA5
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 09:56:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770888712; cv=none; b=oVP5AYYVR3pc44ksIw+zrVwX/XDneI8kl0+f2EX0wJbH4mhkWVzxAWNj8XdbXm5lihFDSwnKye/CoPu7m6QJhkgWWT5ju3VwUuzCF8zl1hShtNMYjHhMjVSsy1oVFziqPwIcDNzZ2vqDPx5hOozFj9u/dQp1ZvX5dzvFteZiaE4=
+	t=1770890187; cv=none; b=tWY9zvCCGvf//1orWpKUT7U1aqtyMzJ9VouZPJoCGSyNlMCYIjAqSfEtiMpNfNfe7j5qoCWcaUTd9suguhOVPQj6DufSegW3Gm5xdbIAbMr+RG6qo2RRinUQXnlEcuirwBU6CIJteKP8J9PiywQIsvo6qgHQ8dGDnkzqi7sxqMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770888712; c=relaxed/simple;
-	bh=6v5ueOuoizItCs4xbX6/bBRRJfIi3+966dfqYFUcPaM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T+lM0ymiXb6BnoY84MvSMZEYn45zaqw9gFy4ctBhMFo5ORiJJH1kzodESoa920A/z5gYHBl73bvME6B3e8BTnsojrCcPK9UEBqDzCIhSh+D/0WxDXmRMIvxQxMNsgpDz+d7uW5/z921hDXdoHyumh8iuZT3Cc5W++oP3tyfesxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=afpRfTWP; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1770890187; c=relaxed/simple;
+	bh=bm5c2DB94uUyrmyglOpsvupAxM8sAv2B1xXqGM1GJFs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=FuhN+x3v7VrGRv34oOy7oHWk9/BNyJCM8OrK4I0LJaGZZ5VyR+EsHinaFAvJifKwNUPJQXvPuQG7cfcdTk48rnFnlXlcmUsguhN5knegTR1vPDcMDH5OaImMTju/wdbWU51vEmc4Ha5YpPKo+nyKs+xpS03qiA40DpfFHK/QIgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NBX1+q3s; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="afpRfTWP"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61C7u78n806309;
-	Thu, 12 Feb 2026 09:26:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=ks4BWxfs6IP6kZxAGA0CrXgQnXf5n4rU8aglfzaiF
-	S4=; b=afpRfTWPxTn+G7zuh3Y7TNVBuAa0tLiJUZr895YQUL8ErYQxrh5nYh0mn
-	5G5gkUSHaFHcuRK/CVXeSOZAGjTNM0GeeaqdPPGtcJnTNE7Ov23e23ihmN0QCYO+
-	u2FrpKSlT2DdH9DnFJx5KEMnzImayAMqN1WDdcBhlESSbQqEDEB0ivlt8RXK1Uc3
-	Z96yUG3L695RauHq4NuvTD+TgWhWBTf76Zv/Ndc70EaM61EVmQ6Mud72jiH9ytBQ
-	CdpuZC0mC6Q/crnHea7UZ0HbgZRlLLuhPD4b06IO8hnlxcZhk/BF6FY+3/mWh2w0
-	9AfB/3cmQbADZRCU/IlVkANuAtdIQ==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696unc74-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Feb 2026 09:26:09 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61C4jsf9012626;
-	Thu, 12 Feb 2026 09:26:08 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4c6h7khnka-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 12 Feb 2026 09:26:08 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61C9Q4Jl39518520
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Feb 2026 09:26:04 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6E77E20040;
-	Thu, 12 Feb 2026 09:26:04 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CD6F220043;
-	Thu, 12 Feb 2026 09:25:59 +0000 (GMT)
-Received: from li-1cb9f04c-2ae1-11b2-a85c-a8a0a83790a8.in.ibm.com (unknown [9.109.207.131])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 12 Feb 2026 09:25:59 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
-        andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org,
-        daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org,
-        yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
-        christophe.leroy@csgroup.eu, maddy@linux.ibm.com, mpe@ellerman.id.au
-Subject: [PATCH v2] selftests/bpf: Add powerpc support for get_preempt_count() in selftest
-Date: Thu, 12 Feb 2026 14:55:58 +0530
-Message-ID: <20260212092558.370623-1-skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NBX1+q3s"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48327b8350dso56715065e9.1
+        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:56:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770890183; x=1771494983; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Phtp8Z4ei388aKllZFARYn5zwlBsIT6J1/fUx6EVP8E=;
+        b=NBX1+q3sG3mz5yo+4PTok6RS0Rp9dEpR09+Y/JRk3u6e/64D04ue1Vm9XVkCusdVXu
+         NU3WJvXA/Q+dK+oBZz+2re44DDJ0aNRgUR8oq0glWiZvELc11mKMFW0ZNXaRiz1FwbDl
+         3kum0bbwFJHel7oltVfP+rxyeZEgtlPDoU9m4kCOJ1mKK/Rx/N9WnOd74jf+d8M7g2au
+         yscatCcL8N2Ntt7JN2wdoT5baluHz8sx6Y751dwHYyRknl84qrPr/ABBiYzpydA2evGn
+         5l4w9ak5lIPOuSfe8gbBTLD9GwhQ7CX8KHMX2+xVE9uTBBISVe4xnzhgArj9Ln1esdZF
+         yFYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770890183; x=1771494983;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Phtp8Z4ei388aKllZFARYn5zwlBsIT6J1/fUx6EVP8E=;
+        b=aMZrdyezm7X4J1dtyO2YdHiX45VZC0iL1q9cNZH1mdzh2ey1gHFI2/XUMZ5+kkSRjc
+         LjFa1tJw5We5N6LYJHXAIjFLBjEdROIxfN07uQW0wHKEXf6kz6jfKSRHELASvFak4uKH
+         loQ9C1Oxx8C+MBzyHc6JSo6H/MUjuoHbzSC4cke9xFG0iE8Qgj1eTVFYKbkFewirK+XE
+         0BEk+8JdIH4lRVGHLiEBozBnzL5J2qQIodzIQP8DkYaiZ4JI2bYOG3zNopK0YtFQLDdD
+         b76O/sYqbD0Z9zXm82XU26V5iVBZ/vnCTOeknWRGHw7QWyPskwIVPZxu2TiAS2A58q4L
+         8Avw==
+X-Forwarded-Encrypted: i=1; AJvYcCVB7wKdWDB33fAlz5slLO54iRXLOOvybSVvOh3byvnDNcxLEzIdbVeZxKEPjTy6lc55Nhk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEIcpQ10hZGaJsgCXeDkPdFM4o9ZayU2hJ9dJXusau7Qotl4ZF
+	8UxgbXImUY/Hbm8qABS16XbUOEDKUq1nZhUTrW/ty+KY2G8GmOEJ0+HZ
+X-Gm-Gg: AZuq6aKOITRj5Cjfti918cIBBJ+nM0xJQUtq+C1cPAcXUTILHckREbWygZNWMNbxWYv
+	Kf0U4vmcXJMAYctOkGi/kUmN/hGANcAiNfzS3ckdocfiFfvSrw2YRbTKhb+EPmqzE/CaxR3PU6w
+	6uA6l9uW7LeRB4vwnJOQGnDBMa0Txm/shLd1WJmCnVbe18udd3uTlx4fqOimz6zQSlb6BpbImb0
+	8CaE66/8dWEK8IjJM0NpRZqFI4tfSE0QtqC6Zv/mYnWbvZA4v6NdzGyO2MlAHRghVn7MHwOs3Li
+	ulxxwdtSv2ZQ7iIcCCrxrojRu47luO3jR4V3WF/GWRVWPvklGkMPesPA5rhZeuX92fgG3c6j/Qx
+	H+OxTClA5udh8qyhiI02aN1mLAqphNgNlhdCAqk7siMg5Is8wt/hxzwdYbYv7qvkFNZz51JUHQS
+	VrkdrN3RfBZsT3JOmT/UuV5K/Vat5s1eOxppkzKspmePiOxJOjSf0PwvDgW06Nv6I4
+X-Received: by 2002:a05:600c:4fcb:b0:480:1a9a:e571 with SMTP id 5b1f17b1804b1-4836570e48amr25658585e9.22.1770890183038;
+        Thu, 12 Feb 2026 01:56:23 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d82a4c4sm330608855e9.10.2026.02.12.01.56.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Feb 2026 01:56:22 -0800 (PST)
+Date: Thu, 12 Feb 2026 09:56:21 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+ will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
+ mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
+ rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
+ zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
+ joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+ konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 01/12] asm-generic: barrier: Add
+ smp_cond_load_relaxed_timeout()
+Message-ID: <20260212095621.4d99317b@pumpkin>
+In-Reply-To: <20260209023153.2661784-2-ankur.a.arora@oracle.com>
+References: <20260209023153.2661784-1-ankur.a.arora@oracle.com>
+	<20260209023153.2661784-2-ankur.a.arora@oracle.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=YZiwJgRf c=1 sm=1 tr=0 ts=698d9cb2 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=RLNl__C_HODNSpg9kEgA:9
-X-Proofpoint-ORIG-GUID: LFwYoB5YgqT2ivpOH70C3OkLaxkxwh9W
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEyMDA2OCBTYWx0ZWRfX2TEliqCAk0cE
- ZzqxsGG/rmSvlc1lN191Xxb3pfmkkN9PxUYiu3w3gtfOuwTBXx0PzOpNoms1QWBeZjfxhoGnROx
- Zy0NKDu5axiwdWqw141pR6Bl2d725Fd4mhpZuFyK/SkylnoJa7dO2gqNt0kRJLlT2G/iAbe4Aot
- mDaUO8okuoj4TWh6h3UrZ/py0ldNtposaqllqyspW5NFAFlztdFU8XYhePDz0aWFiP87ak9Aq1G
- xTsFdMaoFUR9XgXKzPrCsJZFKiBBK18+eg9P2q5Obv4mO8+e6NAX3/adcHBhl0cClUBpK2NgNQ+
- ApZm4qkTl4JC9wUdhDXNzm/VMUoGkfxWNNGslW3NBZ48TCogfB1pOf/0fEiBvaapd0gDPY86xSf
- MXW4mRyV6RvgnUNdnoJM3QsgphG7/kemVwvTnFxABnt5ro1NY9AnjQNaDh37WHBT4Vt6vkxZKjP
- FODi8FhR/aNN2oVU5mg==
-X-Proofpoint-GUID: i1J05qq25vvJNc-Aa6lbYJrB11DndFMM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-12_02,2026-02-11_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 spamscore=0 impostorscore=0 suspectscore=0 malwarescore=0
- phishscore=0 bulkscore=0 adultscore=0 clxscore=1015 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602120068
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-get_preempt_count() is enabled to return preempt_count for powerpc,
-so that bpf_in_interrupt()/bpf_in_nmi()/bpf_in_serving_softirq()/
-bpf_in_task()/bpf_in_hardirq()/get_preempt_count() works for
-powerpc as well.
+On Sun,  8 Feb 2026 18:31:42 -0800
+Ankur Arora <ankur.a.arora@oracle.com> wrote:
 
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
----
-Changes since v1:
-* Updated the comments to include powerpc for the APIs.
+> Add smp_cond_load_relaxed_timeout(), which extends
+> smp_cond_load_relaxed() to allow waiting for a duration.
+> 
+> We loop around waiting for the condition variable to change while
+> peridically doing a time-check. The loop uses cpu_poll_relax() to slow
+> down the busy-waiting, which, unless overridden by the architecture
+> code, amounts to a cpu_relax().
+> 
+> Note that there are two ways for the time-check to fail: the usual
+> timeout case or, @time_expr_ns returning an invalid value (negative
+> or zero). The second failure mode allows for clocks attached to the
+> clock-domain of @cond_expr, which might cease to operate meaningfully
+> once some state internal to @cond_expr has changed.
+> 
+> Evaluation of @time_expr_ns: in the fastpath we want to keep the
+> performance close to smp_cond_load_relaxed(). To do that we defer
+> evaluation of the potentially costly @time_expr_ns to when we hit
+> the slowpath.
+> 
+> This also means that there will always be some hardware dependent
+> duration that has passed in cpu_poll_relax() iterations at the time of
+> first evaluation. Additionally cpu_poll_relax() is not guaranteed to
+> return at timeout boundary. In sum, expect timeout overshoot when we
+> exit due to expiration of the timeout.
+> 
+> The number of spin iterations before time-check, SMP_TIMEOUT_POLL_COUNT
+> is chosen to be 200 by default. With a cpu_poll_relax() iteration
+> taking ~20-30 cycles (measured on a variety of x86 platforms), we expect
+> a tim-check every ~4000-6000 cycles.
+    ^ time-check
 
-v1: https://lore.kernel.org/bpf/20260129054035.168078-1-skb99@linux.ibm.com/
----
- tools/testing/selftests/bpf/bpf_experimental.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+Plus the cost of evaluating cond_expr 200 times.
+I guess that isn't expected to contain a PCIe read :-)
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index 4b7210c318dd..9df77e59d4f5 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -645,6 +645,8 @@ static inline int get_preempt_count(void)
- 			bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
- #elif defined(bpf_target_arm64)
- 	return bpf_get_current_task_btf()->thread_info.preempt.count;
-+#elif defined(bpf_target_powerpc)
-+	return bpf_get_current_task_btf()->thread_info.preempt_count;
- #endif
- 	return 0;
- }
-@@ -653,6 +655,7 @@ static inline int get_preempt_count(void)
-  *	Report whether it is in interrupt context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_interrupt(void)
- {
-@@ -672,6 +675,7 @@ static inline int bpf_in_interrupt(void)
-  *	Report whether it is in NMI context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_nmi(void)
- {
-@@ -682,6 +686,7 @@ static inline int bpf_in_nmi(void)
-  *	Report whether it is in hard IRQ context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_hardirq(void)
- {
-@@ -692,6 +697,7 @@ static inline int bpf_in_hardirq(void)
-  *	Report whether it is in softirq context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_serving_softirq(void)
- {
-@@ -710,6 +716,7 @@ static inline int bpf_in_serving_softirq(void)
-  *	Report whether it is in task context. Only works on the following archs:
-  *	* x86
-  *	* arm64
-+ *	* powerpc64
-  */
- static inline int bpf_in_task(void)
- {
--- 
-2.52.0
+	David
+
+> 
+> The outer limit of the overshoot is double that when working with the
+> parameters above. This might be higher or lower depending on the
+> implementation of cpu_poll_relax() across architectures.
+> 
+> Lastly, config option ARCH_HAS_CPU_RELAX indicates availability of a
+> cpu_poll_relax() that is cheaper than polling. This might be relevant
+> for cases with a prolonged timeout.
+> 
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: linux-arch@vger.kernel.org
+> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+> ---
+> Notes:
+>   - Defer evaluation of @time_expr_ns to when we hit the slowpath.
+>   - This also helps get rid of the labelled gotos which were used to
+>     handle the early failure case (since now there's no early init
+>     to be concerned with.)
+>   - Add a comment mentioning that the cpu_poll_relax() implementation
+>     is better than polling if ARCH_HAS_CPU_RELAX.
+> 
+>  include/asm-generic/barrier.h | 72 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+> 
+> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
+> index d4f581c1e21d..2738fe35c1df 100644
+> --- a/include/asm-generic/barrier.h
+> +++ b/include/asm-generic/barrier.h
+> @@ -273,6 +273,68 @@ do {									\
+>  })
+>  #endif
+>  
+> +/*
+> + * Number of times we iterate in the loop before doing the time check.
+> + */
+> +#ifndef SMP_TIMEOUT_POLL_COUNT
+> +#define SMP_TIMEOUT_POLL_COUNT		200
+> +#endif
+> +
+> +/*
+> + * Platforms with ARCH_HAS_CPU_RELAX have a cpu_poll_relax() implementation
+> + * that is expected to be cheaper (lower power) than pure polling.
+> + */
+> +#ifndef cpu_poll_relax
+> +#define cpu_poll_relax(ptr, val, timeout_ns)	cpu_relax()
+> +#endif
+> +
+> +/**
+> + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
+> + * guarantees until a timeout expires.
+> + * @ptr: pointer to the variable to wait on.
+> + * @cond: boolean expression to wait for.
+> + * @time_expr_ns: expression that evaluates to monotonic time (in ns) or,
+> + *  on failure, returns a negative value.
+> + * @timeout_ns: timeout value in ns
+> + * Both of the above are assumed to be compatible with s64; the signed
+> + * value is used to handle the failure case in @time_expr_ns.
+> + *
+> + * Equivalent to using READ_ONCE() on the condition variable.
+> + *
+> + * Callers that expect to wait for prolonged durations might want to
+> + * take into account the availability of ARCH_HAS_CPU_RELAX.
+> + */
+> +#ifndef smp_cond_load_relaxed_timeout
+> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
+> +				      time_expr_ns, timeout_ns)		\
+> +({									\
+> +	typeof(ptr) __PTR = (ptr);					\
+> +	__unqual_scalar_typeof(*ptr) VAL;				\
+> +	u32 __n = 0, __spin = SMP_TIMEOUT_POLL_COUNT;			\
+> +	s64 __timeout = (s64)timeout_ns;				\
+> +	s64 __time_now, __time_end = 0;					\
+> +									\
+> +	for (;;) {							\
+> +		VAL = READ_ONCE(*__PTR);				\
+> +		if (cond_expr) 						\
+> +			break;						\
+> +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\
+> +		if (++__n < __spin)					\
+> +			continue;					\
+> +		__time_now = (s64)(time_expr_ns);			\
+> +		if (unlikely(__time_end == 0))				\
+> +			__time_end = __time_now + __timeout;		\
+> +		__timeout = __time_end - __time_now;			\
+> +		if (__time_now <= 0 || __timeout <= 0) {		\
+> +			VAL = READ_ONCE(*__PTR);			\
+> +			break;						\
+> +		}							\
+> +		__n = 0;						\
+> +	}								\
+> +	(typeof(*ptr))VAL;						\
+> +})
+> +#endif
+> +
+>  /*
+>   * pmem_wmb() ensures that all stores for which the modification
+>   * are written to persistent storage by preceding instructions have
 
