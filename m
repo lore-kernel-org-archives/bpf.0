@@ -1,105 +1,132 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8453A262A6
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 23:26:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F04F52DE711
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 23:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770938770; cv=none; b=fte2ab9Q/rzsIpO7/1xUq1Dpujd7PIjIrHOoWfh8tLL82cMAe3P1YPr7WMNd0d64s0nfNRfgJnPC4Dcww4QcwXpBD1zvFJE1Gk8G/8G4y6CAg7uTyZ/k8MskClYiDXnWgo17A4lToZn2Ra6Cd+npBvvonPNfk5NSVmFyTlDA89w=
+	t=1770940346; cv=none; b=g6ZA0z1hc05L7iYxRthMB8Dp9g3X3Ya8YgH+YffEYrAsIqzg1N2gLikR6z8lsvnInUVdjt5c4W3mLkLdsxBDqcqbiVDJ/LyTWHYykKuPyynm7Sds7COo6ZIDgSalWaZK0Aipv2Bzo3Go0CM+NbyiUTt9beT2lZMwTuBQC9JmsIc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770938770; c=relaxed/simple;
-	bh=z8dHSwHwhdOTtyV1Osl7N2pAku1iDM9LNRdtorAttaU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bLYcfgcB+DCgmfJaqCKvnhc5BB1Qt5Is6sAqT9r4kGFQQveCvZOSWZJljBzK8RgZwSJsqVV6QOzwwWBsOWak5wLqKnycKP3E+wPuhUwJo8QgTTT85/SNWJSMUzOkudgi6CO2pIkWkRa3vKM8L+GJULHE13OymSY570CoBCn7/uo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ehq/E01r; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770940346; c=relaxed/simple;
+	bh=1Gv34DN+wpw2vQsxJlIaG2grupH6BycIl6ffM7xkWLA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UtPYaLch59h5rAGQtlH1hdtX2NesHTiU/1zn5HxAx9cUwmxfUnRTDXhUtbyfFCABSvVX2aXLkIOBr+/y3fbLohp2EmnzD/8rNINa+2R/tXPZli70TpZcLb0JD/QAYvojYK0sz4/AWWDdZP7vt5i7IPyj3yV1rp1sM2ztMOpB+wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F+8nzL6V; arc=none smtp.client-ip=91.218.175.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ehq/E01r"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-824adf81fa6so166078b3a.3
-        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 15:26:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770938769; x=1771543569; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=z8dHSwHwhdOTtyV1Osl7N2pAku1iDM9LNRdtorAttaU=;
-        b=ehq/E01r2+OxGim/vuHFXz/dcgSry5M8+lLYNBFjfzxPoPBI35tK2aihamnm+CdPMf
-         CcTxP6mULPJap1adLZa4kF+9qJBfHsJq6xL6l5Qx7YVEQKZd/Qs3vHkcNHX1SbP4H9lH
-         q/Je7Hf2vOBNbJnvbHp2ortsy8h/FMQtXyKYeMxXNa2QCNfOs+CnWMPdZicrcVt+YVba
-         9RmU6yLrQBD6aBun6s2ApVu4S6upfr+nqYw2RuVBCWYRxy/pNR0/EEHKelr9oZO2yeGZ
-         Cdms94iFO9A71AG80akilAIsSl+ZO9UFZ5L4QrXEAwqSQ0ACTRVSCBETXVqA+chLsvCS
-         JRyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770938769; x=1771543569;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z8dHSwHwhdOTtyV1Osl7N2pAku1iDM9LNRdtorAttaU=;
-        b=tJ0naGznSrbB140dMzZoys9NEpcIpAJTH2eNhmyjGVlyfXGV8ijaQR3PnbSflwKDJA
-         kDU56ng+DK7gvlgqUQORI+ky5g3qPkX1dukX9dDTAdr19oHg9nzyWaMFgLfymP5WTApo
-         NAlHwvyOyTTeMY893Hslj8S4nzxpU+0Vf+relphhgZ9SbcYumtf36RlvT5LEpTzz6hXh
-         OSu1ZO2Fnj3qrUBoNlmKZBhU2mnXYkN6rxbH9VnmC0wCXgTEEVrqS8pONRUea0u9kEBS
-         DPt47EpjNovgt+0dVKfhmmdf2FhTaLf3T48Tc3JZ9THBKJHC6WWI5QVWW+gQrA6Bl6Nt
-         W1ng==
-X-Forwarded-Encrypted: i=1; AJvYcCVSRqxjdrhdzgcV6yALnKAcTOOWT2PffJXbWYrubSeM8khLIQcrjUTpeM3I/JQQ8lndrao=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhPCrfLWjMZuQC4gI6CQmG+3GhMWU3nOrHNH18snrO5S6C/3md
-	af4UnchnbaaoAilv0w+kdoZ3KICVegeOF0PTcwenKaV57Fq3GJkowaVl
-X-Gm-Gg: AZuq6aIP5lwow/kpBJk4yP240Crsjiwv/smFGXvIVbiSx0Ee9rM6dXCEzPlZMZZGhaX
-	3tzDqERhjDguKrVJbpjp7F0LR2M8OQecypwd527Kt3b9fxShRHq5CGmcuqPvWnL7RSFfdylN+vj
-	9PopTeujibH6AR+pTzJl3Zo8/t7uQb7spnWKi7eJcdPaSqqck5+GLD1KFZF20Q5O2jjNgxcU/vY
-	Na4PKIAQ88Ys/yEMw3cuHhPRU8sdhYHlb62JVedtIbMXXrvfLofYs21EpA8x9+j9BKJVGsiR9hp
-	yzTWoAbmwP3UH3fc5kex5JyBhGt1mDZD4O/k6G/sJ/nr7ylK1FiwIO90N48GUOpDWu0iBCUIT3Y
-	C5TgUHqMd0Va0b2/j/d/A21mXkcbn9KLuJQM52IlETCxgXyO5rkP5jYVYLuR0ieA99LyMExCbjH
-	/MeymyxcWxUnojOF5hDPRsl52o+klScguB6cX7CfCBjLSlrjQFP6s=
-X-Received: by 2002:a05:6a00:855:b0:81f:8084:7ea0 with SMTP id d2e1a72fcca58-824c9458dd1mr83234b3a.7.1770938768866;
-        Thu, 12 Feb 2026 15:26:08 -0800 (PST)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6b94562sm327968b3a.54.2026.02.12.15.26.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Feb 2026 15:26:08 -0800 (PST)
-Message-ID: <4150f31f020710932def63e2857ebab1e311b597.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v1 00/14] selftests/bpf: Fixes for userspace
- ASAN
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>
-Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
- Alexis =?ISO-8859-1?Q?Lothor=E9?=	 <alexis.lothore@bootlin.com>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 	kernel-team@meta.com
-Date: Thu, 12 Feb 2026 15:26:05 -0800
-In-Reply-To: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
-References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F+8nzL6V"
+Message-ID: <a3dfdbc2-bd72-412d-83b4-f17d68949c6b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770940333;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1xQI/Fr3XtpQFzHaYiW8tEPZj7GG6uqufZbmsGpsNuo=;
+	b=F+8nzL6VuN/9C+H8xOTeUws+J2lN3fCcDtq/8xVHSnu/kueFQJ9rnkDiSzxP+YY/TlALnU
+	pQAlBOf/PL9rAFc50w5Mj7MPm2IIGKC5ZmoUbOyJcDLxpuluuJhH7hatQfnjIRsQw27bC+
+	zVXz3Rei2l2NR5xlhDhN7A5wKAxVptM=
+Date: Thu, 12 Feb 2026 15:52:01 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: Re: [PATCH v2] selftests/bpf: Add powerpc support for
+ get_preempt_count() in selftest
+Content-Language: en-GB
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
+ andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev, song@kernel.org, john.fastabend@gmail.com,
+ kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+ christophe.leroy@csgroup.eu, maddy@linux.ibm.com, mpe@ellerman.id.au
+References: <20260212092558.370623-1-skb99@linux.ibm.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260212092558.370623-1-skb99@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, 2026-02-11 at 17:13 -0800, Ihor Solodrai wrote:
-> This series includes various fixes aiming to enable test_progs run
-> with userspace address sanitizer on BPF CI.
->=20
-> The first patch fixes the selftests/bpf/test_progs build with:
->=20
-> =C2=A0=C2=A0=C2=A0 SAN_CFLAGS=3D"-fsanitize=3Daddress -fno-omit-frame-poi=
-nter"
->=20
-> The subsequent patches fix bugs reported by the address sanitizer on
-> attempt to run the tests.
->=20
-> The series is a pre-requisite for enabling "test_progs with ASAN"
-> workflow on BPF CI.
 
-Also, do we want to have ASAN enabled by default?
-If it would be enabled for CI, people will need to deal with local
-configuration anyway. It might make sense to put the default flags in
-to save everyone the trouble of figuring out which flags CI uses.
-Wdyt?
 
-[...]
+On 2/12/26 1:25 AM, Saket Kumar Bhaskar wrote:
+> get_preempt_count() is enabled to return preempt_count for powerpc,
+> so that bpf_in_interrupt()/bpf_in_nmi()/bpf_in_serving_softirq()/
+> bpf_in_task()/bpf_in_hardirq()/get_preempt_count() works for
+> powerpc as well.
+>
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+> ---
+> Changes since v1:
+> * Updated the comments to include powerpc for the APIs.
+>
+> v1: https://lore.kernel.org/bpf/20260129054035.168078-1-skb99@linux.ibm.com/
+> ---
+>   tools/testing/selftests/bpf/bpf_experimental.h | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> index 4b7210c318dd..9df77e59d4f5 100644
+> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> @@ -645,6 +645,8 @@ static inline int get_preempt_count(void)
+>   			bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
+>   #elif defined(bpf_target_arm64)
+>   	return bpf_get_current_task_btf()->thread_info.preempt.count;
+> +#elif defined(bpf_target_powerpc)
+> +	return bpf_get_current_task_btf()->thread_info.preempt_count;
+>   #endif
+
+Maybe do
+   #elif defined(bpf_target_arm64) || defined(bpf_target_powerpc)
+?
+
+>   	return 0;
+>   }
+> @@ -653,6 +655,7 @@ static inline int get_preempt_count(void)
+>    *	Report whether it is in interrupt context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_interrupt(void)
+>   {
+> @@ -672,6 +675,7 @@ static inline int bpf_in_interrupt(void)
+>    *	Report whether it is in NMI context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_nmi(void)
+>   {
+> @@ -682,6 +686,7 @@ static inline int bpf_in_nmi(void)
+>    *	Report whether it is in hard IRQ context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_hardirq(void)
+>   {
+> @@ -692,6 +697,7 @@ static inline int bpf_in_hardirq(void)
+>    *	Report whether it is in softirq context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_serving_softirq(void)
+>   {
+> @@ -710,6 +716,7 @@ static inline int bpf_in_serving_softirq(void)
+>    *	Report whether it is in task context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_task(void)
+>   {
+
