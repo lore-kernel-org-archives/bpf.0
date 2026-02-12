@@ -1,157 +1,164 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27ABE573
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 18:14:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770920060; cv=none; b=WoJ9ZBhlvnGdauFJvM2J7t5mO6Bcq/YniqXcLXOwjG0VxHBz1UDAMFYNmWf0LMuY3xwi+xaTykcuB0cy5m+jZ3jaNblpXLxpiArx89pN81cObGo5aqVJhbWC5zHccqdh16ak8XvH4WAzxJ7TEbbORouiKAoXx1mWM5hHb/HJrd0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770920060; c=relaxed/simple;
-	bh=49/VR3Nb+6MGxgEYoaUIKYYX4teBb+AOfHNS9MPE3e8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SOjtsmLH6LcZpX0FPG6eJLKW65Oll5TFwMrQ0QXYBp0IrnjFGKxLEJZjCl3xE+YSjqcE44m+877SDd/PUl6jMvvS29enJHkTB8Ui+h0xYH9fTIp4SGTg8Oae3/Ahtm6Rq/3q5uenE1RwQpXfjzS5pbzY9j7hcKuJMafaPh55lq8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WyAgySc5; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41AFE2580D1
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 18:37:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770921444; cv=pass; b=hkJTHw9iBW2F8mB9C6H2061iKL2ZN6UxyLRMVC6826tAGnVBDU3T98J+ur0hN+gnUy6IdXT7QEUWZYNWyu3hptdjfzLX6S4fpaN/R/WKsbN6OXSzG9+wMGRrTqIWFdXnW5/ihSAwUwWObzHgU0d58nuZSdAvlnH6BCx7Agv+RIU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770921444; c=relaxed/simple;
+	bh=8RSIkLh4GsoooN/yb1oGir5mc9kJx1x8aBpmeC22QhA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fyvTl2I/7McwCjqYpizwBUevELhwe0ThmgeUrpb3EyK65dlAY+TR4CyVAEiUeMQxmkJ/G5kXK/hr3aA8vJC6pLMmAXr6M4YqS6qVdhGAYsEIWfLUY0cvGEd3RHLo+fj1CySINmPs+S1q/ruh6sZZbP1ZBtPfDq3QowaKmZi7e/o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b77Wba/m; arc=pass smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WyAgySc5"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770920059; x=1802456059;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=49/VR3Nb+6MGxgEYoaUIKYYX4teBb+AOfHNS9MPE3e8=;
-  b=WyAgySc5Y33JEpgQhEGuo5Xro7Fy8zXLmHjHFl/XF9UDxvjiVc0Oe78v
-   w08OykarOyzxC5NXcE8xcFfwytU2SiyLbDavP1OTq6Dy+ZdeyCbTPpGgm
-   aLCsdH/teBqECIZepOl+4SakYk+0z6e9pkbg7Z4HV2FM0zZPogLYSjbLz
-   qW2lCm8KoqSKiU/7euzx87ilSQiQxKOGdX7zAtOtM/bhgxlTEc+h+XUIZ
-   npGB4i/pIFUb88f0Lz2WkVvAPHtclI9qlo6DgGF5XMViNuUXKRHeRPbjV
-   U+5jBd026a1Ag+Q60qBQaH7WYJMTXecaxfa8iTawt0CxKtyhtaRNRKZcW
-   g==;
-X-CSE-ConnectionGUID: +akxaLfJQI2+2261Ly2dbQ==
-X-CSE-MsgGUID: 9XTNdp6FTTmS1gwGvr5TaA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11699"; a="72284428"
-X-IronPort-AV: E=Sophos;i="6.21,287,1763452800"; 
-   d="scan'208";a="72284428"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 10:14:18 -0800
-X-CSE-ConnectionGUID: OlYWUcH1QOiJNlr9+Lr7xQ==
-X-CSE-MsgGUID: YyWr5ChGRJ+efFirdVAiJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,287,1763452800"; 
-   d="scan'208";a="211459613"
-Received: from ssimmeri-mobl2.amr.corp.intel.com (HELO [10.125.108.202]) ([10.125.108.202])
-  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 10:14:18 -0800
-Message-ID: <d6d37293-592f-4109-90e9-20b77b023476@intel.com>
-Date: Thu, 12 Feb 2026 10:14:17 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b77Wba/m"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso1251245e9.1
+        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 10:37:22 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1770921441; cv=none;
+        d=google.com; s=arc-20240605;
+        b=K6NJXFcBsETyMzlTwEXItuF4XuT/8RdXQH0RrG076lbmZn/uG67PLl/D6ObFehXGEW
+         hXRVLGOxBW2Mqk/GU/XI/aDo98OKB3MdnE4iDCvJtvJAvgRhurGcKWuMJeEJhbZoGO8K
+         zck25Lx+0yQcZunBPxoO61/K9oetWII7cfj9Hu4O7DPYlqMZb6DGtdIBC+hWnQgiEBnv
+         oYLVhE6pnTK16zmwb6XpwtBPYZAQwBwoz/Fn0/0yNd3glY9mnqPmxEJjA+LV7dvWtCt+
+         qzCYOXI8DgKHGOKtzvwXbAhDD3ArblJlu60rxT1Mz9g6fU5rPiG+uSesX1FNPzgRCbNm
+         7eSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WLnTkMoihnLKB9Wj8wWo21U9EDR8kDp4XW1jqwP0b5c=;
+        fh=ZLGt8C9NED3BoUXhQbDdKP85091iG5xiWdPX4KHcZLY=;
+        b=MS9B8fRB+DTavzKTZMEouWlqGqiKHot9UWL8mW9A3ibFfjmC9vL7HADdO9H/SUa7HC
+         FI6mobjwaeibvxSQENvgzRTmtOS1rPjCi1GJuwoa4YOeTlN2Tz+9owmKrpH6HrPNulHZ
+         4nt9/3hHmu+Yh9UEHki6dCiToydLrab44pdKzzWfHAzJHam1mnQ9o2gm0bm8q/UPcltW
+         CMXgCSQYSDDNrpmTirLyiVfnx69gVG9WKdi5TnicA10mgVzPwRKABWGMDU+JLExkzGG5
+         HDqx0MPrLskyCNeJin9z9/86q8Vvzh3bj5ZVYkey7kOYJt5cQs0DWUbu2dZ68oxer0ut
+         IPvQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770921441; x=1771526241; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WLnTkMoihnLKB9Wj8wWo21U9EDR8kDp4XW1jqwP0b5c=;
+        b=b77Wba/mziic6qB7uGMNXbXpJc7nNoJBDh8Jit1CjeMPcVf5adEtb7vnXpWnUi1MH9
+         1cQmL+kcf1az9pl7CN3vIq06T3u/teZdKXqHFaDePC3oR6Etl/Tj/t8ye+NSuXbgV5bI
+         +33tL1THI4Ep3eGxaf+qRhG51Cfqxqzl9KCIpXPull0zSC7TawIxWBY5LfsgCcDtw2TO
+         CNtiovfkWa9CsRri1/yiGtq2l/HfG4oDWsOuUqrh+KRP8qZ6jzToRAtVCDT9IACQ87LO
+         7dE9FhXR2vjTVr3nAGJmAowku3lg0PkoFFFadISBczQouNBPeZon1Z/LtttRupIWyypP
+         RhmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770921441; x=1771526241;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WLnTkMoihnLKB9Wj8wWo21U9EDR8kDp4XW1jqwP0b5c=;
+        b=FunLl1Ehr7ykVg9QMRwy0G6mPkquv8xVziTbZbZfyaZdVqo0HBMGKR9MUY0h9Fk+7A
+         VXmfb4jWlDaVMpxjOjbpK15NlvLP2VNRHHnP0N9CTit3B7mSxCsD/DB+H0pbWNH2L/K6
+         Jm/EEsKQKRrbD1GB8Z881e2aCAv7kXUqFMpakmCZxhsAdDZ05tjsWh8vA+TP35fdFaCa
+         U4ykXdEQfxHj64iU5BROcuSIexuw3JzRXwZxWqjkMQx2uUUy7mrnuNrvte/m427aOrXn
+         MdzXASUA3but77RM3jY/9DJcYUnEQoy/4vg215M3CtqlYGqEORd88WRPF11+oz97WRM8
+         fdBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXZEKJ4qP62TKp/C1WlEZlNb7U1MfamMW6714lg0HfRNLEC92qB4zrl2RUDbcGCUZNCiT8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9pk1oMTndSjWglVuNHxUGn6It+ypcLxj8LLVzirTXkYQA5BIF
+	7yeb7j0UcDefZZE8xjnQ15w5jDlM37mBscih2tiHlQFTiLTawUOeWVv1qTr2m3C4CzBCr3UvlNq
+	Txn4o4ZEIjOsRJ4JZwLRgSJ2Wb1LGIc8=
+X-Gm-Gg: AZuq6aIm950lEpED8LeJpg11BS/UrJpieIm9n8WzaJTK2TjhDbT5Xg9CqsVg+hyPS7e
+	3m3SPG1ifAC6rdawbtSTU0s8Q/Ss7WmiYzgu8bQ8Ubi2g7SfGcncOBbzjivP1xMnsLVzyyISzGw
+	MdK22JhIbqumzOCnVl+PrN/Bc00/lYX/Mb8K0pji25qNSFS+oO7Rc1O4ANToa1i6CJ7FjEdTlu8
+	xnUR1eXm3uRF6FETWXTsbMKC/dXaBjd/AT6fAC/SIm2Yc6GGsk4dt9CAbaXmBzzmt9GR/SXPgrd
+	CvzpZ28oWITe7JnwPin9jAR2BAJYftUeujDuh0xmdDZi4tLPbn9fQxkz58qTY7ovr0iCGqQ5qBU
+	eleLcntpj
+X-Received: by 2002:a05:600c:4584:b0:471:700:f281 with SMTP id
+ 5b1f17b1804b1-4837103f325mr1212805e9.25.1770921441384; Thu, 12 Feb 2026
+ 10:37:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+References: <aY3+Raf8eZqipCd6@e129823.arm.com> <CAADnVQ+D7v+sGFFyTfSxFSEEcnGV111NeSaVtASYHfP-mDnV4w@mail.gmail.com>
+ <aY4Vipl+4rGa+u6D@e129823.arm.com>
+In-Reply-To: <aY4Vipl+4rGa+u6D@e129823.arm.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 12 Feb 2026 10:37:10 -0800
+X-Gm-Features: AZwV_Qh2H9arrkEzFgzvlw2KMGFV_EufEVAdwcgyUIVoqVCpCV_6wxWLmvz8MGY
+Message-ID: <CAADnVQ+ad1Eu34hS21HNLgzA5eeFHMvQmoC33xKpP0z247MaHA@mail.gmail.com>
 Subject: Re: [LSF/MM/BPF TOPIC] eBPF isolation with pkeys
 To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: lsf-pc@lists.linux-foundation.org, linux-mm@kvack.org,
- bpf@vger.kernel.org, catalin.marinas@arm.com, david@kernel.org,
- ryan.roberts@arm.com, kevin.brodsky@arm.com, sebastian.osterlund@intel.com,
- dave.hansen@linux.intel.com, rick.p.edgecombe@intel.com
-References: <aY3+Raf8eZqipCd6@e129823.arm.com>
- <f20ec2ee-90f2-4ef7-bc3d-088f9ef6c38a@intel.com>
- <aY4KfM6wFaSjHWri@e129823.arm.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <aY4KfM6wFaSjHWri@e129823.arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Cc: lsf-pc <lsf-pc@lists.linux-foundation.org>, linux-mm <linux-mm@kvack.org>, 
+	bpf <bpf@vger.kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, david@kernel.org, 
+	ryan.roberts@arm.com, kevin.brodsky@arm.com, sebastian.osterlund@intel.com, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-BTW, one high-level thing: what you're talking about here really is a
-kind of hardening or kernel self-protection. It's in the spirit of Kees
-Cook's work: how can kernel security be resilient even in the face of
-kernel bugs and attackers exploiting those bugs?
+On Thu, Feb 12, 2026 at 10:03=E2=80=AFAM Yeoreum Yun <yeoreum.yun@arm.com> =
+wrote:
+>
+> Hi Alexei,
+>
+> > On Thu, Feb 12, 2026 at 8:24=E2=80=AFAM Yeoreum Yun <yeoreum.yun@arm.co=
+m> wrote:
+> > >
+> > > Hi all,
+> > >
+> > > I would like to propose the topic of eBPF isolation with pkeys at the
+> > > upcoming LSF/MM/BPF summit.
+> > >
+> > >
+> > > Background
+> > > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > >
+> > > Today, eBPF programs provide powerful capabilities to extend kernel
+> > > functionality without requiring modifications to the kernel itself.
+> > > These capabilities are largely enabled by the eBPF verifier, which
+> > > enforces memory safety and other constraints to protect the kernel.
+> > >
+> > > However, vulnerabilities in the verifier have repeatedly demonstrated=
+ that
+> > > eBPF programs can also become a serious attack surface.  In several c=
+ases,
+> > > flaws in verifier logic have allowed malicious eBPF programs to bypas=
+s
+> > > safety guarantees and compromise kernel security.
+> >
+> > eBPF was restricted to root for many years, so the above is simply not =
+true.
+> >
+> > > Representative CVEs include:
+> > >
+> > >      - CVE-2020-8835   [1]
+> > >      - CVE-2021-3490   [2]
+> > >      - CVE-2022-23222  [3]
+> > >      - CVE-2023-2163   [4]
+> >
+> > None of them are security issues. They're just bugs.
+> > Like all those found by syzbot.
+> >
+> > > An RFC series is planned for around Q2 2026, and the experimental
+> > > implementations for eBPF isolation with pkey and pkey-aware memory
+> > > allocators have already been completed internally.  Using these
+> > > implementations, we verified that eBPF programs running under isolati=
+on
+> > > successfully execute several sched_ext applications provided by
+> > > tools/sched_ext, as well as some bpf kselftest cases.
+> >
+> > The stated goal is wrong, hence not interested in patches
+> > or discussion at lsfmm.
+> >
+> > arm has a nice hw feature. Sure, but this is not a place to apply it.
+>
+> That is correct =E2=80=94 this is a verifier bug.
+> However, the concern is that such a bug can lead to a security incident.
+> Not only root, but also users with CAP_BPF who are allowed to
+> load eBPF programs could potentially trigger additional security issues
+> through such bugs.
 
-Those who buy into the idea of Kees's work will likely agree with the
-premise of this patch set. Those that don't, won't. :)
-
-On 2/12/26 09:14, Yeoreum Yun wrote:
->>> To that end, this discussion introduces a set of new allocator APIs and
->>> explores more extensible API designs:
->>>
->>>   - kmalloc_pkey series
->>>   - vmalloc_pkey series
->>>   - alloc_percpu_pkey series
->>
->> It all sounds fun, but this doesn't exactly seem very generic. The memory
->> that sched_ext needs to access is super different from, say, what a
->> socket-filtering eBPF program would need.
->>
->> So this doesn't seem to be likely to be true "eBPF isolation" as much as
->> sched_ext+eBPP isolation.
-> 
-> Our current isolation model focuses on restricting writes and execution.
-> Therefore, if we allocate only the memory that eBPF programs must write
-> directly with a separate pkey (e.g., packet data or sock),
-> it seems to me that socket-filtering programs could also benefit from
-> the same isolation.
-This means that subsystems using eBPF need to allocate their data
-structures separately, or at least in a pkey-aware manner. They either
-need to declare the memory at allocation time, or need to be able to pay
-the cost (and the collateral damage) of changing its pkey after allocation.
-
-This _might_ be doable for the scheduler. It probably has a limited set
-of things that get written to. Most of it is statically allocated.
-
-Networking isn't my strong suit, but packet memory seems rather
-dynamically allocated and also needs to be written to by eBPF programs.
-I suspect anything that slows packet allocation down by even a few
-cycles is a non-starter.
-
-IMNHO, _any_ approach to solving this problem that start with: we just
-need a new allocator or modification to existing kernel allocators to
-track a new memory type makes it a dead end. Or, best case, a very
-surgical, targeted solution.
+Again. They are not security issues. cap_bpf is effectively root.
+Just like cap_perfmon in tracing space is a root.
