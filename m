@@ -1,32 +1,32 @@
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 505E91C28E
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA4E223DC6
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770858876; cv=none; b=MfB0bs0pSVGgNGlIVTYh0d3n6k8ew631eB8lLOI+1EB1w4CHuEi82LW/xDleHDDvu59t67NGUERTtNANUMM6FPWFfo0lARgScMUhhGalRo0nBpmhwXxOn6ZcO9tmYVIN1mSVnj3TjAVTiRT4SWYWqnqcyXsOn6e7L4v1oai4lfI=
+	t=1770858878; cv=none; b=EYuYOnx9LqgEL9e7dir6rg6UtODE5MCCD8M88QqjbD80flfdmBLLk5cDYdZs7OQxFgR5kVN6PLVF49nmsYWOZGVER2mb8FLLLJ1cwY1nKJqW0+HtlLae2aUl//J0lLaW7p7xL/Olxy9dZ9szPPwDzhQC6WIG2C+rYwJIloN6P/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770858876; c=relaxed/simple;
-	bh=Oohu9IsctUk6dZrEbLhnkff8ZOoO0y7lszSYXVT5uiY=;
+	s=arc-20240116; t=1770858878; c=relaxed/simple;
+	bh=g7k6s+Jhg2seZSYi0ABnHIK0XOugLdtOMln5ROgXUQg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ql9r9EBgxZDsZR+IKOM54y25UMRlhr7//FJ/+Dbge7CqzC4CNfYFG0csesQXOe77G/0wnMTM/oncxlQ2FnlbSbANmJCroA7kr3hZmWCp160/aqMtwkZDQgPQEmqOrBgimxo1wfNsw4hRCtKfckCSlM8cmMAA0yY63MSwG2JjDAE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bmhQgjSt; arc=none smtp.client-ip=95.215.58.170
+	 MIME-Version; b=Qfozf5R4HSoSHaZKb+W/GNpXe4fK/NwW8ci/dPsamiLdHGkhAhL5TFW1i2eFWhGPQKYzXbt5bOM92MTF4cPVfJ222gA3F6wYfLWLEa9t7xx5K6i8P3+rHKf17R4wg5f4YmE27kiNIHONf6zJ+alZjyB0k4t2c97a0xyXmQcpyvw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g8hhpCQi; arc=none smtp.client-ip=95.215.58.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bmhQgjSt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g8hhpCQi"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770858872;
+	t=1770858870;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8RYJyENWs1ZudeDBODTP1Tg5qAi1DxUPNeH2H4e0hzs=;
-	b=bmhQgjStbRcKXE8muJK3tUf5EkPKUzkPuW80V9AExeNr+vSe/abmF68bZcaRk6WstBnM+7
-	3APjeC3SworF/FZi7LLiqVEQGkekmFtgVYgrLfoNJT7LsECH2CcKnpXpwMxD/86hde2qBt
-	tIgd1JAAkkXiVC3MBcbOgvtDl2HpxWY=
+	bh=l9qBLiY/Zeub/nKSwb5e2A5gOFzgjSOE8+Pl+IoBz1c=;
+	b=g8hhpCQid7kAYX0pocTwwuAtT4gv+g4FI37OQAl50czuaoyVTt9cm3rIfguFcNfNZ+ufl4
+	CQd1aYu0mN/Ot293OZ5jOy+j69kYOqICch+i0NNV5pYjesUhOvKa4HBH4F+PmUi58GFtBv
+	hTg79QaryoFKMPiTJmwZdAHU67sQfzc=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -38,9 +38,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 07/14] veristat: Fix a memory leak for preset ENUMERATOR
-Date: Wed, 11 Feb 2026 17:13:49 -0800
-Message-ID: <20260212011356.3266753-8-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 06/14] selftests/bpf: Fix cleanup in check_fd_array_cnt__fd_array_too_big()
+Date: Wed, 11 Feb 2026 17:13:48 -0800
+Message-ID: <20260212011356.3266753-7-ihor.solodrai@linux.dev>
 In-Reply-To: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
 References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -52,27 +52,33 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-ASAN detected a memory leak in veristat. The cleanup code handling
-ENUMERATOR value missed freeing strdup-ed svalue. Fix it.
+The Close() macro uses the passed in expression three times, which
+leads to repeated execution in case it has side effects. That is,
+Close(i--) would decrement i three times.
+
+ASAN caught a stack-buffer-undeflow error at a point where this was
+overlooked. Fix it.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/veristat.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/bpf/prog_tests/fd_array.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
-index 1be1e353d40a..75f85e0362f5 100644
---- a/tools/testing/selftests/bpf/veristat.c
-+++ b/tools/testing/selftests/bpf/veristat.c
-@@ -3378,6 +3378,8 @@ int main(int argc, char **argv)
- 			}
- 		}
- 		free(env.presets[i].atoms);
-+		if (env.presets[i].value.type == ENUMERATOR)
-+			free(env.presets[i].value.svalue);
- 	}
- 	free(env.presets);
- 	return -err;
+diff --git a/tools/testing/selftests/bpf/prog_tests/fd_array.c b/tools/testing/selftests/bpf/prog_tests/fd_array.c
+index c534b4d5f9da..3078d8264deb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fd_array.c
++++ b/tools/testing/selftests/bpf/prog_tests/fd_array.c
+@@ -412,8 +412,8 @@ static void check_fd_array_cnt__fd_array_too_big(void)
+ 	ASSERT_EQ(prog_fd, -E2BIG, "prog should have been rejected with -E2BIG");
+ 
+ cleanup_fds:
+-	while (i > 0)
+-		Close(extra_fds[--i]);
++	while (i-- > 0)
++		Close(extra_fds[i]);
+ }
+ 
+ void test_fd_array_cnt(void)
 -- 
 2.53.0
 
