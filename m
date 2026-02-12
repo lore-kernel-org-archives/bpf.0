@@ -1,129 +1,86 @@
-Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CE862BE647
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 08:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3496C3EBF31;
+	Thu, 12 Feb 2026 08:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770884646; cv=none; b=eXF7t8bA/DdEYChhaMGgJJiESYMLocNh58qmCMY/YjVigzLt+BABa1ym8x+fECkBOFosD+/cxpAvXNejxnCfgeqc7U6oggoTFEK6xUp8m3vhQ6WYRtOetoTKQPlCmNhVce56RcME5cORxS6sJt1a04/rdGSxuTgpSNIqvyMlqao=
+	t=1770886235; cv=none; b=W2qzc7R4+mI9VIqwKqSdf8NoDmR+iKbl0qY3Z/IdmGpwPc7Szh5SwLe71+EExQRLnHa6f5NPFMD0lBnWJhk8k3H862FKWBh0Hhz4hXTZ/IzqpDZPidRrfES9IN3wKPKSMCaqKPsO3KJYHix5Cl+hgRAfen/mkJpRVlyt9DBEagQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770884646; c=relaxed/simple;
-	bh=Yw/U2u1kO0ZIn9Mc2bMQ0zLjlvy7XjdcIIQ7GR3MAd4=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YlXqiaZq2HzeE+wqENaLTQXCW14H06XyLjd/GXhj2Xq8tCu8hVJyxCaD1SSC9Pc8jELuxpNgSdjn2NpgPON8hYpTu2iW0W/cC2ddTbThq48lZ3YpUuRrlGanNkyoOMqig4u+t/7N4vH6lJqnODzRv0BwPhjX0vm4AhMxU92ncKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mtLG1Cj7; arc=none smtp.client-ip=95.215.58.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1770886235; c=relaxed/simple;
+	bh=tFZNX6x5kQa3R5bh2C+SIIXI/4UmBn0oMjHEk4eUOEs=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=lXvFF0BX3yajI4TOFW+4MRSiIspqdWrkcm80dG/+hbMKdsTWSZ3kWl6WCF8xzVFyyLzYIe4YBOt2/cjfzVGIteN83sJp/xfSeP4iFURPGOTlHdGhwgIyL/oQ4HcESrddNFsllYoSWkv5uNyMieaB0mWDvpJ+60PSXqm3x6PzkKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XNDmJQoV; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mtLG1Cj7"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770884643;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Qa7yRxcpGL3PnKF4R1l2meMqj6ZYK13/0dyEKREpmhI=;
-	b=mtLG1Cj7F/NN0pQvl1k5tAmMqtzQ0Q7TM4SCVi9GMjgpIDSLSvRuNgxNUBKEWiMccVbj7z
-	K8W4rDks82e97Z8KcgkhM8a3y1wY/HTQgqGjhSAkMrndvzi66dbkI4Pxi7c8hQrM0ljZR8
-	mAMheL03KE5ojdB75JZXNKsapNcnw0A=
-From: Hui Zhu <hui.zhu@linux.dev>
-To: Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Hui Zhu <zhuhui@kylinos.cn>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] selftests/bpf: Skip test_kmem when cgroup.memory=nokmem
-Date: Thu, 12 Feb 2026 16:23:16 +0800
-Message-ID: <2f6ee1db173b67a636b2caa85744cb4ce8114e64.1770883926.git.zhuhui@kylinos.cn>
-In-Reply-To: <cover.1770883926.git.zhuhui@kylinos.cn>
-References: <cover.1770883926.git.zhuhui@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XNDmJQoV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379E7C4CEF7;
+	Thu, 12 Feb 2026 08:50:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770886234;
+	bh=tFZNX6x5kQa3R5bh2C+SIIXI/4UmBn0oMjHEk4eUOEs=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=XNDmJQoV2PMqhuDh97GJvfMGlGBF7Q4ElssERNNNLKV2ldSnj4QlGhLAA9YAvptAG
+	 4sTNQ55sWaWq9ec3QQPI+mvBLBCPKrLZ1WrcV8AuLDz3F7ojRZPae8DDf4HXxKBnrd
+	 /KB9ua7da3oyfyjNSG7JGNdiWChdRIK0EYJ1yFoNBUYjK4Ts/BkMzFhFWZl1Loyl4r
+	 EtvR6WUW/0tR63+S4ugd29vq+hmqVkrJzI0H/Z/Ion2miO6+CgocvMp7vrzl/EVhAQ
+	 llK68uWfw68MNc4uXAJtGuyS5EmJ83OabHpPpA6SNX3xHXosfD+nnKagX/WuXvUELv
+	 f3UNhYxZ1Zq9A==
+Content-Type: multipart/mixed; boundary="===============4217100397236680912=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <0d926bdc5b5e030fafc82de73c3f3e5412c051fc6763f77da9ea6aa316bd8f13@mail.kernel.org>
+In-Reply-To: <042df9438d9e78bcd66f1fa0e7043b9ea8cda96c.1770883926.git.zhuhui@kylinos.cn>
+References: <042df9438d9e78bcd66f1fa0e7043b9ea8cda96c.1770883926.git.zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Check bpf_mem_cgroup_page_state return value
+From: bot+bpf-ci@kernel.org
+To: hui.zhu@linux.dev,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,akpm@linux-foundation.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,zhuhui@kylinos.cn,inwardvessel@gmail.com,cgroups@vger.kernel.org,linux-mm@kvack.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org
+Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 12 Feb 2026 08:50:34 +0000 (UTC)
 
-From: Hui Zhu <zhuhui@kylinos.cn>
+--===============4217100397236680912==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-When cgroup.memory=nokmem is set in kernel command line, kmem
-accounting is disabled and the test_kmem subtest will fail.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
 
-Add a check to skip this test when the parameter is present.
+[ ... ]
 
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> @@ -170,6 +180,8 @@ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
+>  	if (!ASSERT_OK(read_stats(link), "read stats"))
+>  		goto cleanup;
+>
+> +	ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_page_state PGFAULT");
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The assertion message references bpf_mem_cgroup_page_state(), but the BPF
+program actually uses bpf_mem_cgroup_vm_events() to retrieve the pgfault
+value:
+
+tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c:
+    memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, PGFAULT);
+
+Should the message be "bpf_mem_cgroup_vm_events PGFAULT" instead?
+
+
 ---
- .../bpf/prog_tests/cgroup_iter_memcg.c        | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-index 13b299512429..203e6b091a21 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-@@ -134,11 +134,39 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
- 	shm_unlink("/tmp_shmem");
- }
- 
-+static bool cmdline_has(const char *arg)
-+{
-+	char cmdline[4096];
-+	int fd;
-+	ssize_t len;
-+	bool ret = false;
-+
-+	fd = open("/proc/cmdline", O_RDONLY);
-+	if (fd < 0)
-+		return false;
-+
-+	len = read(fd, cmdline, sizeof(cmdline) - 1);
-+	close(fd);
-+	if (len < 0)
-+		return false;
-+
-+	cmdline[len] = '\0';
-+	if (strstr(cmdline, arg))
-+		ret = true;
-+
-+	return ret;
-+}
-+
- #define NR_PIPES 64
- static void test_kmem(struct bpf_link *link, struct memcg_query *memcg_query)
- {
- 	int fds[NR_PIPES][2], i;
- 
-+	if (cmdline_has("cgroup.memory=nokmem")) {
-+		test__skip();
-+		return;
-+	}
-+
- 	/*
- 	 * Increase kmem value by creating pipes which will allocate some
- 	 * kernel buffers.
--- 
-2.43.0
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21939182103
 
+AI-authorship-score: low
+AI-authorship-explanation: The commit message uses first-person narrative describing a real back-porting scenario, and the code changes are simple repetitive assertions typical of human-written test improvements.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Minor documentation issue where an assertion message references the wrong BPF function name; does not affect test correctness or system behavior.
+
+--===============4217100397236680912==--
