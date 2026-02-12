@@ -1,32 +1,32 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D967F202C48
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EE335972
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770858868; cv=none; b=esWsF8Ub9MMjKl67r5odkSra/8ueP78nyFfNXckLzmmz5FgsAWaJJwMwtUhFsXfUUNGUKk2GR+FoQTuGQPe4AL5T8BLprN2ejuStf8XHiASdyBmOShBVLrhvdekrmLU5MZ20kXav6yGs71/WO3FjM/0Wes4MfIP8UFiiKnJnJ9Y=
+	t=1770858870; cv=none; b=irUgCxU63obwWJjJ9u2ar3nAfCLLmlxOXEcudSghVhdV4TnP81Rd8EVINgl6Kh8YJ2vEAo+tmHBemeiC+6/irk+MMfMoUhQqbcLsNbmC66lH7t6oYGKWPiJEQu1oZn+6nLrPQWtmcrD3QPDQ3lSYvis28LFcXchWM6WCXwYuArU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770858868; c=relaxed/simple;
-	bh=lPyYPrrNVHUnp3/TjV13IZjKwulQXgWU8U/0Si78MI4=;
+	s=arc-20240116; t=1770858870; c=relaxed/simple;
+	bh=yllfhc5T0VQ81mYt1TnAnZSV8uFx28Iu5IiEUOiqLu4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bRioumR5jtYjWsQNbU4BpnDChk7sBSdpnG0CnnQYRWACsTrGYKIhCHvg2PM5hMtjeRGrfOhx6kNo2Az1zIKMIRvvEAJ4MIeTrcMlxVb+2nawg0963+a96/7izZiaJuExJsvi/3pN2EkgFhuW07K3CN9m8x37auJltLPy2f57NLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Qx46iqDt; arc=none smtp.client-ip=95.215.58.174
+	 MIME-Version; b=YHIsllDSz2saGJGEzrE3/5HFclJNBG9tD8jGyAkx4HyD6Hbt5Hcl0aTv/nXSXJLRtz3GYgLhSHUNt1Bk2FDQ7BVYmW7qZqJ4cYAiGc8Oe29steDqZ9IlYJNLrWu+6NH/Crv2MJfp+ZsQ7cxxWlUBXP9cb1Mv/Kcaq1KmIP9OLVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RwmWqZdE; arc=none smtp.client-ip=95.215.58.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Qx46iqDt"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RwmWqZdE"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770858864;
+	t=1770858867;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=31Wz8HDrP9wCB6gLMwU1J4DdJqc2QlNSNRZBp7Ebx7Y=;
-	b=Qx46iqDt8ftKmdiQV/lItmK7JPbYTBCszXfJFHqi/rkQN9ZEcaU720G9wVAcGXIVNA1BLt
-	iE4vadUjJvLJ/+6ka+NdkKsnHjgGFSZdGcZYnssmU/RK7zhgMC7+1ipp4s2TW98mv9p//T
-	+rkbcyfhGPjgJ7q2QD8VcfKIlthb4wU=
+	bh=C3UryONr82QOcsDXQInSLfyd4LBGQNlvXlWMbeH0b5Y=;
+	b=RwmWqZdEJnc/EgwLvLCEJDIGl84npgyqDfJwy7eoHZJ9Vjws9z9W0hDeTohBTV69IhK0O3
+	2htYrSyOpltiI2Kb2MG3f3dI6QaMH0BQGDY8dLf8IUFxbR7IqSR9nFBNoeRv924q3dlfxu
+	mr83mSXtajJg+qcT0mKGQG5OIhL+KAo=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -38,9 +38,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 04/14] selftests/bpf: Refactor bpf_get_ksyms() trace helper
-Date: Wed, 11 Feb 2026 17:13:46 -0800
-Message-ID: <20260212011356.3266753-5-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 05/14] selftests/bpf: Fix memory leaks in tests
+Date: Wed, 11 Feb 2026 17:13:47 -0800
+Message-ID: <20260212011356.3266753-6-ihor.solodrai@linux.dev>
 In-Reply-To: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
 References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -52,188 +52,63 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-ASAN reported a memory leak in bpf_get_ksyms(): it allocates a struct
-ksyms internally and never frees it.
-
-Moe struct ksyms to trace_helpers.h and return it from the
-bpf_get_ksyms(), giving ownership to the caller. Add filtered_syms and
-filtered_cnt fields to the ksyms to hold the filtered array of
-symbols, previously returned by bpf_get_ksyms().
-
-Fixup the call sites: kprobe_multi_test and bench_trigger.
+Fix trivial memory leaks detected by userspace ASAN:
+  - htab_update: free value buffer in test_reenter_update cleanup
+  - test_xsk: delete old pkt_stream before replacing in stats tests
+  - testing_helpers: free buffer allocated by getline() in
+    parse_test_list_file
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../selftests/bpf/benchs/bench_trigger.c      |  9 ++++----
- .../bpf/prog_tests/kprobe_multi_test.c        | 12 ++++------
- tools/testing/selftests/bpf/trace_helpers.c   | 23 ++++++++++---------
- tools/testing/selftests/bpf/trace_helpers.h   | 11 +++++++--
- 4 files changed, 30 insertions(+), 25 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/htab_update.c | 1 +
+ tools/testing/selftests/bpf/prog_tests/test_xsk.c    | 2 ++
+ tools/testing/selftests/bpf/testing_helpers.c        | 1 +
+ 3 files changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-index aeec9edd3851..7231b88cf21a 100644
---- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
-+++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
-@@ -230,8 +230,7 @@ static void trigger_fentry_setup(void)
- static void attach_ksyms_all(struct bpf_program *empty, bool kretprobe)
- {
- 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
--	char **syms = NULL;
--	size_t cnt = 0;
-+	struct ksyms *ksyms = NULL;
+diff --git a/tools/testing/selftests/bpf/prog_tests/htab_update.c b/tools/testing/selftests/bpf/prog_tests/htab_update.c
+index d0b405eb2966..ea1a6766fbe9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/htab_update.c
++++ b/tools/testing/selftests/bpf/prog_tests/htab_update.c
+@@ -61,6 +61,7 @@ static void test_reenter_update(void)
  
- 	/* Some recursive functions will be skipped in
- 	 * bpf_get_ksyms -> skip_entry, as they can introduce sufficient
-@@ -241,13 +240,13 @@ static void attach_ksyms_all(struct bpf_program *empty, bool kretprobe)
- 	 * So, don't run the kprobe-multi-all and kretprobe-multi-all on
- 	 * a debug kernel.
- 	 */
--	if (bpf_get_ksyms(&syms, &cnt, true)) {
-+	if (bpf_get_ksyms(&ksyms, true)) {
- 		fprintf(stderr, "failed to get ksyms\n");
- 		exit(1);
- 	}
- 
--	opts.syms = (const char **) syms;
--	opts.cnt = cnt;
-+	opts.syms = (const char **)ksyms->filtered_syms;
-+	opts.cnt = ksyms->filtered_cnt;
- 	opts.retprobe = kretprobe;
- 	/* attach empty to all the kernel functions except bpf_get_numa_node_id. */
- 	if (!bpf_program__attach_kprobe_multi_opts(empty, NULL, &opts)) {
-diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-index 9caef222e528..f81dcd609ee9 100644
---- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
-@@ -456,25 +456,23 @@ static void test_kprobe_multi_bench_attach(bool kernel)
- {
- 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
- 	struct kprobe_multi_empty *skel = NULL;
--	char **syms = NULL;
--	size_t cnt = 0;
-+	struct ksyms *ksyms = NULL;
- 
--	if (!ASSERT_OK(bpf_get_ksyms(&syms, &cnt, kernel), "bpf_get_ksyms"))
-+	if (!ASSERT_OK(bpf_get_ksyms(&ksyms, kernel), "bpf_get_ksyms"))
- 		return;
- 
- 	skel = kprobe_multi_empty__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "kprobe_multi_empty__open_and_load"))
- 		goto cleanup;
- 
--	opts.syms = (const char **) syms;
--	opts.cnt = cnt;
-+	opts.syms = (const char **)ksyms->filtered_syms;
-+	opts.cnt = ksyms->filtered_cnt;
- 
- 	do_bench_test(skel, &opts);
- 
- cleanup:
- 	kprobe_multi_empty__destroy(skel);
--	if (syms)
--		free(syms);
-+	free_kallsyms_local(ksyms);
+ 	ASSERT_EQ(skel->bss->update_err, -EDEADLK, "no reentrancy");
+ out:
++	free(value);
+ 	htab_update__destroy(skel);
  }
  
- static void test_kprobe_multi_bench_attach_addr(bool kernel)
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index eeaab7013ca2..0e63daf83ed5 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -24,12 +24,6 @@
- #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
- #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
- 
--struct ksyms {
--	struct ksym *syms;
--	size_t sym_cap;
--	size_t sym_cnt;
--};
--
- static struct ksyms *ksyms;
- static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
- 
-@@ -54,6 +48,8 @@ void free_kallsyms_local(struct ksyms *ksyms)
- 	if (!ksyms)
- 		return;
- 
-+	free(ksyms->filtered_syms);
-+
- 	if (!ksyms->syms) {
- 		free(ksyms);
- 		return;
-@@ -610,7 +606,7 @@ static int search_kallsyms_compare(const void *p1, const struct ksym *p2)
- 	return compare_name(p1, p2->name);
- }
- 
--int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel)
-+int bpf_get_ksyms(struct ksyms **ksymsp, bool kernel)
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+index bab4a31621c7..dac90ddcdd7e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+@@ -2005,6 +2005,7 @@ int testapp_stats_rx_full(struct test_spec *test)
  {
- 	size_t cap = 0, cnt = 0;
- 	char *name = NULL, *ksym_name, **syms = NULL;
-@@ -637,8 +633,10 @@ int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel)
- 	else
- 		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
+ 	if (pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_BUFFERS / 2, MIN_PKT_SIZE))
+ 		return TEST_FAILURE;
++	pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
+ 	test->ifobj_rx->xsk->pkt_stream = pkt_stream_generate(DEFAULT_UMEM_BUFFERS, MIN_PKT_SIZE);
  
--	if (!f)
-+	if (!f) {
-+		free_kallsyms_local(ksyms);
- 		return -EINVAL;
-+	}
+ 	test->ifobj_rx->xsk->rxqsize = DEFAULT_UMEM_BUFFERS;
+@@ -2017,6 +2018,7 @@ int testapp_stats_fill_empty(struct test_spec *test)
+ {
+ 	if (pkt_stream_replace(test, DEFAULT_UMEM_BUFFERS + DEFAULT_UMEM_BUFFERS / 2, MIN_PKT_SIZE))
+ 		return TEST_FAILURE;
++	pkt_stream_delete(test->ifobj_rx->xsk->pkt_stream);
+ 	test->ifobj_rx->xsk->pkt_stream = pkt_stream_generate(DEFAULT_UMEM_BUFFERS, MIN_PKT_SIZE);
  
- 	map = hashmap__new(symbol_hash, symbol_equal, NULL);
- 	if (IS_ERR(map)) {
-@@ -679,15 +677,18 @@ int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel)
- 		syms[cnt++] = ksym_name;
+ 	test->ifobj_rx->use_fill_ring = false;
+diff --git a/tools/testing/selftests/bpf/testing_helpers.c b/tools/testing/selftests/bpf/testing_helpers.c
+index 16eb37e5bad6..66af0d13751a 100644
+--- a/tools/testing/selftests/bpf/testing_helpers.c
++++ b/tools/testing/selftests/bpf/testing_helpers.c
+@@ -212,6 +212,7 @@ int parse_test_list_file(const char *path,
+ 			break;
  	}
  
--	*symsp = syms;
--	*cntp = cnt;
-+	ksyms->filtered_syms = syms;
-+	ksyms->filtered_cnt = cnt;
-+	*ksymsp = ksyms;
- 
- error:
- 	free(name);
++	free(buf);
  	fclose(f);
- 	hashmap__free(map);
--	if (err)
-+	if (err) {
- 		free(syms);
-+		free_kallsyms_local(ksyms);
-+	}
  	return err;
  }
- 
-diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
-index a5576b2dfc26..d5bf1433675d 100644
---- a/tools/testing/selftests/bpf/trace_helpers.h
-+++ b/tools/testing/selftests/bpf/trace_helpers.h
-@@ -23,7 +23,14 @@ struct ksym {
- 	long addr;
- 	char *name;
- };
--struct ksyms;
-+
-+struct ksyms {
-+	struct ksym *syms;
-+	size_t sym_cap;
-+	size_t sym_cnt;
-+	char **filtered_syms;
-+	size_t filtered_cnt;
-+};
- 
- typedef int (*ksym_cmp_t)(const void *p1, const void *p2);
- typedef int (*ksym_search_cmp_t)(const void *p1, const struct ksym *p2);
-@@ -53,7 +60,7 @@ ssize_t get_rel_offset(uintptr_t addr);
- 
- int read_build_id(const char *path, char *build_id, size_t size);
- 
--int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel);
-+int bpf_get_ksyms(struct ksyms **ksymsp, bool kernel);
- int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel);
- 
- #endif
 -- 
 2.53.0
 
