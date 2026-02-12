@@ -1,32 +1,32 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA94D20ADD6
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D967F202C48
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770858866; cv=none; b=QlbTAwQX4NETKLQFbm8VuNUosRzI9Y1DZPT4l445lZneAAghbzhAGOhDQqDv16oLp9XaCQ9YZ0UYZRmmCNCbpzu86qH2WDyBcF7WQlwZsoUlHdTn75Le0kFk4UzYeffuGYduiHjHet+rZdDtnPRCna6e89u3LRUJQ5iCIp7ckRI=
+	t=1770858868; cv=none; b=esWsF8Ub9MMjKl67r5odkSra/8ueP78nyFfNXckLzmmz5FgsAWaJJwMwtUhFsXfUUNGUKk2GR+FoQTuGQPe4AL5T8BLprN2ejuStf8XHiASdyBmOShBVLrhvdekrmLU5MZ20kXav6yGs71/WO3FjM/0Wes4MfIP8UFiiKnJnJ9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770858866; c=relaxed/simple;
-	bh=M+dUUNDfpAIzgLSnvfWveVIwWVTjzjuQu5215zF1QPw=;
+	s=arc-20240116; t=1770858868; c=relaxed/simple;
+	bh=lPyYPrrNVHUnp3/TjV13IZjKwulQXgWU8U/0Si78MI4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NQekrUHiqXgsxqRGSI+ByLzZUAstebt/cf6ZNRjp9C1rH7oWT8G/lxdBckTR6WX9Y/vTP9aGNTrIU6UNVyLIQhV6TicOzh13TQO2DfSrd01/vprgZ2jyMOAOdm7sQ0AhXHSSAQKxrPkuQS5NdhXiGn6j5bMCMpnhXzZpGw0Bf1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=T4JPOcUa; arc=none smtp.client-ip=95.215.58.187
+	 MIME-Version; b=bRioumR5jtYjWsQNbU4BpnDChk7sBSdpnG0CnnQYRWACsTrGYKIhCHvg2PM5hMtjeRGrfOhx6kNo2Az1zIKMIRvvEAJ4MIeTrcMlxVb+2nawg0963+a96/7izZiaJuExJsvi/3pN2EkgFhuW07K3CN9m8x37auJltLPy2f57NLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Qx46iqDt; arc=none smtp.client-ip=95.215.58.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="T4JPOcUa"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Qx46iqDt"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770858862;
+	t=1770858864;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Isk3MgJEdESYLCNKsJ/YFa6h9vV90ljBAfMCZ/hOcpY=;
-	b=T4JPOcUaSu/ujXXPp4R4wXZX23a4Myxc0mo/Qw1X9j901BNS8IxRyu/GT6MzpLYQbjkVXq
-	5Xidjk/p9Vpa2RqH7ykMIQpWkw/xHFiwp/mO84Z/fsY6VO1DZ5uYSB0IxfkLykX1CqzzCo
-	uyukM4pAsnaa2kAZXkIpZAxVcPoWXSY=
+	bh=31Wz8HDrP9wCB6gLMwU1J4DdJqc2QlNSNRZBp7Ebx7Y=;
+	b=Qx46iqDt8ftKmdiQV/lItmK7JPbYTBCszXfJFHqi/rkQN9ZEcaU720G9wVAcGXIVNA1BLt
+	iE4vadUjJvLJ/+6ka+NdkKsnHjgGFSZdGcZYnssmU/RK7zhgMC7+1ipp4s2TW98mv9p//T
+	+rkbcyfhGPjgJ7q2QD8VcfKIlthb4wU=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -38,9 +38,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 03/14] selftests/bpf: Add DENYLIST.asan
-Date: Wed, 11 Feb 2026 17:13:45 -0800
-Message-ID: <20260212011356.3266753-4-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 04/14] selftests/bpf: Refactor bpf_get_ksyms() trace helper
+Date: Wed, 11 Feb 2026 17:13:46 -0800
+Message-ID: <20260212011356.3266753-5-ihor.solodrai@linux.dev>
 In-Reply-To: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
 References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -52,36 +52,188 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add a denylist file for tests that should be skipped when built with
-userspace ASAN:
+ASAN reported a memory leak in bpf_get_ksyms(): it allocates a struct
+ksyms internally and never frees it.
 
-    $ make ... SAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+Moe struct ksyms to trace_helpers.h and return it from the
+bpf_get_ksyms(), giving ownership to the caller. Add filtered_syms and
+filtered_cnt fields to the ksyms to hold the filtered array of
+symbols, previously returned by bpf_get_ksyms().
 
-Skip the following tests:
-
-- *arena*: userspace ASAN does not understand BPF arena maps and gets
-  confused particularly when map_extra is non-zero
-  - non-zero map_extra leads to mmap with MAP_FIXED, and ASAN treats
-    this as an unknown memory region
-- task_local_data: ASAN complains about "incorrect" aligned_alloc()
-  usage, but it's intentional in the test
-- uprobe_multi_test: very slow with ASAN enabled
+Fixup the call sites: kprobe_multi_test and bench_trigger.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/DENYLIST.asan | 3 +++
- 1 file changed, 3 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/DENYLIST.asan
+ .../selftests/bpf/benchs/bench_trigger.c      |  9 ++++----
+ .../bpf/prog_tests/kprobe_multi_test.c        | 12 ++++------
+ tools/testing/selftests/bpf/trace_helpers.c   | 23 ++++++++++---------
+ tools/testing/selftests/bpf/trace_helpers.h   | 11 +++++++--
+ 4 files changed, 30 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/DENYLIST.asan b/tools/testing/selftests/bpf/DENYLIST.asan
-new file mode 100644
-index 000000000000..d7fe372a2293
---- /dev/null
-+++ b/tools/testing/selftests/bpf/DENYLIST.asan
-@@ -0,0 +1,3 @@
-+*arena*
-+task_local_data
-+uprobe_multi_test
+diff --git a/tools/testing/selftests/bpf/benchs/bench_trigger.c b/tools/testing/selftests/bpf/benchs/bench_trigger.c
+index aeec9edd3851..7231b88cf21a 100644
+--- a/tools/testing/selftests/bpf/benchs/bench_trigger.c
++++ b/tools/testing/selftests/bpf/benchs/bench_trigger.c
+@@ -230,8 +230,7 @@ static void trigger_fentry_setup(void)
+ static void attach_ksyms_all(struct bpf_program *empty, bool kretprobe)
+ {
+ 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
+-	char **syms = NULL;
+-	size_t cnt = 0;
++	struct ksyms *ksyms = NULL;
+ 
+ 	/* Some recursive functions will be skipped in
+ 	 * bpf_get_ksyms -> skip_entry, as they can introduce sufficient
+@@ -241,13 +240,13 @@ static void attach_ksyms_all(struct bpf_program *empty, bool kretprobe)
+ 	 * So, don't run the kprobe-multi-all and kretprobe-multi-all on
+ 	 * a debug kernel.
+ 	 */
+-	if (bpf_get_ksyms(&syms, &cnt, true)) {
++	if (bpf_get_ksyms(&ksyms, true)) {
+ 		fprintf(stderr, "failed to get ksyms\n");
+ 		exit(1);
+ 	}
+ 
+-	opts.syms = (const char **) syms;
+-	opts.cnt = cnt;
++	opts.syms = (const char **)ksyms->filtered_syms;
++	opts.cnt = ksyms->filtered_cnt;
+ 	opts.retprobe = kretprobe;
+ 	/* attach empty to all the kernel functions except bpf_get_numa_node_id. */
+ 	if (!bpf_program__attach_kprobe_multi_opts(empty, NULL, &opts)) {
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index 9caef222e528..f81dcd609ee9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -456,25 +456,23 @@ static void test_kprobe_multi_bench_attach(bool kernel)
+ {
+ 	LIBBPF_OPTS(bpf_kprobe_multi_opts, opts);
+ 	struct kprobe_multi_empty *skel = NULL;
+-	char **syms = NULL;
+-	size_t cnt = 0;
++	struct ksyms *ksyms = NULL;
+ 
+-	if (!ASSERT_OK(bpf_get_ksyms(&syms, &cnt, kernel), "bpf_get_ksyms"))
++	if (!ASSERT_OK(bpf_get_ksyms(&ksyms, kernel), "bpf_get_ksyms"))
+ 		return;
+ 
+ 	skel = kprobe_multi_empty__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "kprobe_multi_empty__open_and_load"))
+ 		goto cleanup;
+ 
+-	opts.syms = (const char **) syms;
+-	opts.cnt = cnt;
++	opts.syms = (const char **)ksyms->filtered_syms;
++	opts.cnt = ksyms->filtered_cnt;
+ 
+ 	do_bench_test(skel, &opts);
+ 
+ cleanup:
+ 	kprobe_multi_empty__destroy(skel);
+-	if (syms)
+-		free(syms);
++	free_kallsyms_local(ksyms);
+ }
+ 
+ static void test_kprobe_multi_bench_attach_addr(bool kernel)
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index eeaab7013ca2..0e63daf83ed5 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -24,12 +24,6 @@
+ #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+ #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+ 
+-struct ksyms {
+-	struct ksym *syms;
+-	size_t sym_cap;
+-	size_t sym_cnt;
+-};
+-
+ static struct ksyms *ksyms;
+ static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
+ 
+@@ -54,6 +48,8 @@ void free_kallsyms_local(struct ksyms *ksyms)
+ 	if (!ksyms)
+ 		return;
+ 
++	free(ksyms->filtered_syms);
++
+ 	if (!ksyms->syms) {
+ 		free(ksyms);
+ 		return;
+@@ -610,7 +606,7 @@ static int search_kallsyms_compare(const void *p1, const struct ksym *p2)
+ 	return compare_name(p1, p2->name);
+ }
+ 
+-int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel)
++int bpf_get_ksyms(struct ksyms **ksymsp, bool kernel)
+ {
+ 	size_t cap = 0, cnt = 0;
+ 	char *name = NULL, *ksym_name, **syms = NULL;
+@@ -637,8 +633,10 @@ int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel)
+ 	else
+ 		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
+ 
+-	if (!f)
++	if (!f) {
++		free_kallsyms_local(ksyms);
+ 		return -EINVAL;
++	}
+ 
+ 	map = hashmap__new(symbol_hash, symbol_equal, NULL);
+ 	if (IS_ERR(map)) {
+@@ -679,15 +677,18 @@ int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel)
+ 		syms[cnt++] = ksym_name;
+ 	}
+ 
+-	*symsp = syms;
+-	*cntp = cnt;
++	ksyms->filtered_syms = syms;
++	ksyms->filtered_cnt = cnt;
++	*ksymsp = ksyms;
+ 
+ error:
+ 	free(name);
+ 	fclose(f);
+ 	hashmap__free(map);
+-	if (err)
++	if (err) {
+ 		free(syms);
++		free_kallsyms_local(ksyms);
++	}
+ 	return err;
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/trace_helpers.h b/tools/testing/selftests/bpf/trace_helpers.h
+index a5576b2dfc26..d5bf1433675d 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.h
++++ b/tools/testing/selftests/bpf/trace_helpers.h
+@@ -23,7 +23,14 @@ struct ksym {
+ 	long addr;
+ 	char *name;
+ };
+-struct ksyms;
++
++struct ksyms {
++	struct ksym *syms;
++	size_t sym_cap;
++	size_t sym_cnt;
++	char **filtered_syms;
++	size_t filtered_cnt;
++};
+ 
+ typedef int (*ksym_cmp_t)(const void *p1, const void *p2);
+ typedef int (*ksym_search_cmp_t)(const void *p1, const struct ksym *p2);
+@@ -53,7 +60,7 @@ ssize_t get_rel_offset(uintptr_t addr);
+ 
+ int read_build_id(const char *path, char *build_id, size_t size);
+ 
+-int bpf_get_ksyms(char ***symsp, size_t *cntp, bool kernel);
++int bpf_get_ksyms(struct ksyms **ksymsp, bool kernel);
+ int bpf_get_addrs(unsigned long **addrsp, size_t *cntp, bool kernel);
+ 
+ #endif
 -- 
 2.53.0
 
