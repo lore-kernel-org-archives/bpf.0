@@ -1,228 +1,247 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EE962E6CA5
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 09:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E454333985A;
+	Thu, 12 Feb 2026 11:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770890187; cv=none; b=tWY9zvCCGvf//1orWpKUT7U1aqtyMzJ9VouZPJoCGSyNlMCYIjAqSfEtiMpNfNfe7j5qoCWcaUTd9suguhOVPQj6DufSegW3Gm5xdbIAbMr+RG6qo2RRinUQXnlEcuirwBU6CIJteKP8J9PiywQIsvo6qgHQ8dGDnkzqi7sxqMo=
+	t=1770894104; cv=none; b=aRMtQPriessY4ptKRAmD42XEvtVcU7lwwxouq0fq+BH7bq7Ih8NDGHq8TwxrB167/fDCvd0CegUFp1AhdpoKyANtaOVpRQyKeYqLY2haTApqYnxYT/cHbGFzMLpw7qB/S2j+XW3m4z30pa+lP4kfwUme6KpCzW98vrhX7ZdU720=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770890187; c=relaxed/simple;
-	bh=bm5c2DB94uUyrmyglOpsvupAxM8sAv2B1xXqGM1GJFs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FuhN+x3v7VrGRv34oOy7oHWk9/BNyJCM8OrK4I0LJaGZZ5VyR+EsHinaFAvJifKwNUPJQXvPuQG7cfcdTk48rnFnlXlcmUsguhN5knegTR1vPDcMDH5OaImMTju/wdbWU51vEmc4Ha5YpPKo+nyKs+xpS03qiA40DpfFHK/QIgo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NBX1+q3s; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770894104; c=relaxed/simple;
+	bh=a6m8qaYBgeEpzg6g8VMPD+I3VU2nLvfu9LzlA00n+8w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CWPqb5aG2R00IgwK3K4qMmuCd7o9q4M7OAT3TBtuKanzZ5ocJbzQ/vj9UJxJPELi2rvR5JfI9y7KgI4Gqu/qaaH7MtIbkABHMfTfspoN8btAE6KKNGI4MJm7uiiysEYgpLzbWaaGiQ5zSbnDa/7DyMwWm3A20qJ+95CHoNtBg9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=W6deOLrS; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NBX1+q3s"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48327b8350dso56715065e9.1
-        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:56:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770890183; x=1771494983; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Phtp8Z4ei388aKllZFARYn5zwlBsIT6J1/fUx6EVP8E=;
-        b=NBX1+q3sG3mz5yo+4PTok6RS0Rp9dEpR09+Y/JRk3u6e/64D04ue1Vm9XVkCusdVXu
-         NU3WJvXA/Q+dK+oBZz+2re44DDJ0aNRgUR8oq0glWiZvELc11mKMFW0ZNXaRiz1FwbDl
-         3kum0bbwFJHel7oltVfP+rxyeZEgtlPDoU9m4kCOJ1mKK/Rx/N9WnOd74jf+d8M7g2au
-         yscatCcL8N2Ntt7JN2wdoT5baluHz8sx6Y751dwHYyRknl84qrPr/ABBiYzpydA2evGn
-         5l4w9ak5lIPOuSfe8gbBTLD9GwhQ7CX8KHMX2+xVE9uTBBISVe4xnzhgArj9Ln1esdZF
-         yFYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770890183; x=1771494983;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Phtp8Z4ei388aKllZFARYn5zwlBsIT6J1/fUx6EVP8E=;
-        b=aMZrdyezm7X4J1dtyO2YdHiX45VZC0iL1q9cNZH1mdzh2ey1gHFI2/XUMZ5+kkSRjc
-         LjFa1tJw5We5N6LYJHXAIjFLBjEdROIxfN07uQW0wHKEXf6kz6jfKSRHELASvFak4uKH
-         loQ9C1Oxx8C+MBzyHc6JSo6H/MUjuoHbzSC4cke9xFG0iE8Qgj1eTVFYKbkFewirK+XE
-         0BEk+8JdIH4lRVGHLiEBozBnzL5J2qQIodzIQP8DkYaiZ4JI2bYOG3zNopK0YtFQLDdD
-         b76O/sYqbD0Z9zXm82XU26V5iVBZ/vnCTOeknWRGHw7QWyPskwIVPZxu2TiAS2A58q4L
-         8Avw==
-X-Forwarded-Encrypted: i=1; AJvYcCVB7wKdWDB33fAlz5slLO54iRXLOOvybSVvOh3byvnDNcxLEzIdbVeZxKEPjTy6lc55Nhk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEIcpQ10hZGaJsgCXeDkPdFM4o9ZayU2hJ9dJXusau7Qotl4ZF
-	8UxgbXImUY/Hbm8qABS16XbUOEDKUq1nZhUTrW/ty+KY2G8GmOEJ0+HZ
-X-Gm-Gg: AZuq6aKOITRj5Cjfti918cIBBJ+nM0xJQUtq+C1cPAcXUTILHckREbWygZNWMNbxWYv
-	Kf0U4vmcXJMAYctOkGi/kUmN/hGANcAiNfzS3ckdocfiFfvSrw2YRbTKhb+EPmqzE/CaxR3PU6w
-	6uA6l9uW7LeRB4vwnJOQGnDBMa0Txm/shLd1WJmCnVbe18udd3uTlx4fqOimz6zQSlb6BpbImb0
-	8CaE66/8dWEK8IjJM0NpRZqFI4tfSE0QtqC6Zv/mYnWbvZA4v6NdzGyO2MlAHRghVn7MHwOs3Li
-	ulxxwdtSv2ZQ7iIcCCrxrojRu47luO3jR4V3WF/GWRVWPvklGkMPesPA5rhZeuX92fgG3c6j/Qx
-	H+OxTClA5udh8qyhiI02aN1mLAqphNgNlhdCAqk7siMg5Is8wt/hxzwdYbYv7qvkFNZz51JUHQS
-	VrkdrN3RfBZsT3JOmT/UuV5K/Vat5s1eOxppkzKspmePiOxJOjSf0PwvDgW06Nv6I4
-X-Received: by 2002:a05:600c:4fcb:b0:480:1a9a:e571 with SMTP id 5b1f17b1804b1-4836570e48amr25658585e9.22.1770890183038;
-        Thu, 12 Feb 2026 01:56:23 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d82a4c4sm330608855e9.10.2026.02.12.01.56.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Feb 2026 01:56:22 -0800 (PST)
-Date: Thu, 12 Feb 2026 09:56:21 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Ankur Arora <ankur.a.arora@oracle.com>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
- will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
- mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
- rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
- zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
- joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
- konrad.wilk@oracle.com
-Subject: Re: [PATCH v9 01/12] asm-generic: barrier: Add
- smp_cond_load_relaxed_timeout()
-Message-ID: <20260212095621.4d99317b@pumpkin>
-In-Reply-To: <20260209023153.2661784-2-ankur.a.arora@oracle.com>
-References: <20260209023153.2661784-1-ankur.a.arora@oracle.com>
-	<20260209023153.2661784-2-ankur.a.arora@oracle.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="W6deOLrS"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61C6UE1H394028;
+	Thu, 12 Feb 2026 10:54:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=kC5PBC
+	rX/sgH2Fq02LEGV9wm5gA5lKwK+RKOC9phkJk=; b=W6deOLrSmmtVXSPitFAh/t
+	/yBHKrAlcNTtI9G2w3XSfMQ6B1/zODmHq06iD+ZfKumubAs6nV6iTliB+UEp0Ntl
+	8Cs7U338COVX2cWNF+AIo6nyGVtLY0smGBojDsAH/hRyXDcp6lL7X7O8vpRrnt9a
+	oYu8b7RW2DFx0998nUBXhu0s7m3sl2kWFiPw/K9pi6jJA0Pfh/pjKvUINHi26nim
+	l/j+HsqLiL385OXH5hHyXP4/xh8COWTuL7cY6ke5qKFjUYhpvo81VJ6KQbTb+Ctg
+	/mFfB/IqEHmolK7w6f/4lowqdRGlStPCg3TQngK9BSyhKJkWqD1R7SDBthKZX5xg
+	==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4c696wdq7f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Feb 2026 10:54:48 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61C7nV98002631;
+	Thu, 12 Feb 2026 10:54:47 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4c6fqst8v0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 12 Feb 2026 10:54:47 +0000
+Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61CAsjQH34538186
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 12 Feb 2026 10:54:45 GMT
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 86C0C5803F;
+	Thu, 12 Feb 2026 10:54:45 +0000 (GMT)
+Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1985158054;
+	Thu, 12 Feb 2026 10:54:37 +0000 (GMT)
+Received: from [9.61.249.62] (unknown [9.61.249.62])
+	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 12 Feb 2026 10:54:36 +0000 (GMT)
+Message-ID: <ab6ee329-ca59-4765-b309-22e64dfca861@linux.ibm.com>
+Date: Thu, 12 Feb 2026 16:24:32 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/bpf: Add powerpc support for
+ get_preempt_count() in selftest
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, andrii@kernel.org,
+        eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+        martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+        haoluo@google.com, jolsa@kernel.org, christophe.leroy@csgroup.eu,
+        maddy@linux.ibm.com, mpe@ellerman.id.au
+References: <20260212092558.370623-1-skb99@linux.ibm.com>
+Content-Language: en-GB
+From: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+In-Reply-To: <20260212092558.370623-1-skb99@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=YeCwJgRf c=1 sm=1 tr=0 ts=698db178 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=dEnyWooXetdK__wXnIsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: vWFzbJ8g7-APD3QRBeCM2NAPYlHWG-t7
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEyMDA4MCBTYWx0ZWRfXwEgo77BKqPdE
+ iImaK5TJ1OnJGXC4bb24zqQOdCkx9cxPxpk3CGWIxYa+4qjLLH1ncmwATrKAV6eS9TAXWQaFs72
+ Hwwklk+/t/hvrJBGI+AtNCWScJrctvdEs7FCX+Zws1VMi5seAibiLj6TIL6T9YYQDzpGtn3FBHQ
+ 2idSMCok3s10aRKZHvAYvMvDgIsoV3QCsPZmICDbox7Vmo3qCksV2bdFhtWMd3piPReKu7dpK7i
+ xOf+X0GNlfVo4jL/H0CQX4fBxq/PoI4E6r7hI9o3l/eEzZB24rRoMhplPBbjNFiKjkdIq/IMaOS
+ Z6oCVzDQpFsDvhkIQ7Izb763jSfBmbrE7jpTpCrJZXij2DhsPv5sT75PkIFhdob4PMKqKSzFFh4
+ 4btmZDOx4kh74MxS0BQ4Z58Koc8ilQpcxRFWhwPXpY1oczIlUbcKlJz4fYLRzFCGRwkG+Jp4xTr
+ fYPuyaT/ott0OGgxu9w==
+X-Proofpoint-ORIG-GUID: 2WhUC-_kZ49qYXhZKIZ4D9ah3Ix5TocJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-12_03,2026-02-11_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ suspectscore=0 adultscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 impostorscore=0
+ spamscore=0 classifier=typeunknown authscore=0 authtc= authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602120080
 
-On Sun,  8 Feb 2026 18:31:42 -0800
-Ankur Arora <ankur.a.arora@oracle.com> wrote:
 
-> Add smp_cond_load_relaxed_timeout(), which extends
-> smp_cond_load_relaxed() to allow waiting for a duration.
-> 
-> We loop around waiting for the condition variable to change while
-> peridically doing a time-check. The loop uses cpu_poll_relax() to slow
-> down the busy-waiting, which, unless overridden by the architecture
-> code, amounts to a cpu_relax().
-> 
-> Note that there are two ways for the time-check to fail: the usual
-> timeout case or, @time_expr_ns returning an invalid value (negative
-> or zero). The second failure mode allows for clocks attached to the
-> clock-domain of @cond_expr, which might cease to operate meaningfully
-> once some state internal to @cond_expr has changed.
-> 
-> Evaluation of @time_expr_ns: in the fastpath we want to keep the
-> performance close to smp_cond_load_relaxed(). To do that we defer
-> evaluation of the potentially costly @time_expr_ns to when we hit
-> the slowpath.
-> 
-> This also means that there will always be some hardware dependent
-> duration that has passed in cpu_poll_relax() iterations at the time of
-> first evaluation. Additionally cpu_poll_relax() is not guaranteed to
-> return at timeout boundary. In sum, expect timeout overshoot when we
-> exit due to expiration of the timeout.
-> 
-> The number of spin iterations before time-check, SMP_TIMEOUT_POLL_COUNT
-> is chosen to be 200 by default. With a cpu_poll_relax() iteration
-> taking ~20-30 cycles (measured on a variety of x86 platforms), we expect
-> a tim-check every ~4000-6000 cycles.
-    ^ time-check
+On 12/02/26 2:55 pm, Saket Kumar Bhaskar wrote:
+> get_preempt_count() is enabled to return preempt_count for powerpc,
+> so that bpf_in_interrupt()/bpf_in_nmi()/bpf_in_serving_softirq()/
+> bpf_in_task()/bpf_in_hardirq()/get_preempt_count() works for
+> powerpc as well.
+>
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
 
-Plus the cost of evaluating cond_expr 200 times.
-I guess that isn't expected to contain a PCIe read :-)
 
-	David
+Tested this patch by applying on mainline kernel, and below selftests 
+passes.
 
-> 
-> The outer limit of the overshoot is double that when working with the
-> parameters above. This might be higher or lower depending on the
-> implementation of cpu_poll_relax() across architectures.
-> 
-> Lastly, config option ARCH_HAS_CPU_RELAX indicates availability of a
-> cpu_poll_relax() that is cheaper than polling. This might be relevant
-> for cases with a prolonged timeout.
-> 
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: linux-arch@vger.kernel.org
-> Signed-off-by: Ankur Arora <ankur.a.arora@oracle.com>
+
+Please add below tag.
+
+
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+
+
+
+./test_progs -t exe_ctx
+[  610.897388] bpf_testmod: loading out-of-tree module taints kernel.
+[  610.907373] audit: type=1334 audit(1771408772.036:229): prog-id=72 
+op=LOAD
+[  610.907385] audit: type=1334 audit(1771408772.036:230): prog-id=72 
+op=UNLOAD
+[  610.907461] audit: type=1334 audit(1771408772.036:231): prog-id=73 
+op=LOAD
+[  610.907467] audit: type=1334 audit(1771408772.036:232): prog-id=73 
+op=UNLOAD
+[  610.941282] audit: type=1334 audit(1771408772.076:233): prog-id=74 
+op=LOAD
+[  610.941290] audit: type=1334 audit(1771408772.076:234): prog-id=74 
+op=UNLOAD
+[  610.956474] audit: type=1334 audit(1771408772.086:235): prog-id=75 
+op=LOAD
+[  610.956481] audit: type=1334 audit(1771408772.086:236): prog-id=75 
+op=UNLOAD
+[  610.956964] audit: type=1334 audit(1771408772.086:237): prog-id=76 
+op=LOAD
+[  610.956970] audit: type=1334 audit(1771408772.086:238): prog-id=76 
+op=UNLOAD
+#109     exe_ctx:OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+
+./test_progs -t timer_interrupt
+[  730.106678] kauditd_printk_skb: 6 callbacks suppressed
+[  730.106685] audit: type=1334 audit(1771408891.236:245): prog-id=80 
+op=LOAD
+[  730.106700] audit: type=1334 audit(1771408891.236:246): prog-id=80 
+op=UNLOAD
+[  730.106787] audit: type=1334 audit(1771408891.236:247): prog-id=81 
+op=LOAD
+[  730.106794] audit: type=1334 audit(1771408891.236:248): prog-id=81 
+op=UNLOAD
+[  730.136150] audit: type=1334 audit(1771408891.266:249): prog-id=82 
+op=LOAD
+[  730.136158] audit: type=1334 audit(1771408891.266:250): prog-id=82 
+op=UNLOAD
+[  730.151245] audit: type=1334 audit(1771408891.286:251): prog-id=83 
+op=LOAD
+[  730.151252] audit: type=1334 audit(1771408891.286:252): prog-id=83 
+op=UNLOAD
+[  730.151572] audit: type=1334 audit(1771408891.286:253): prog-id=84 
+op=LOAD
+[  730.151578] audit: type=1334 audit(1771408891.286:254): prog-id=84 
+op=UNLOAD
+#490     timer_interrupt:OK
+Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+
+
+Regards,
+
+Venkat.
+
 > ---
-> Notes:
->   - Defer evaluation of @time_expr_ns to when we hit the slowpath.
->   - This also helps get rid of the labelled gotos which were used to
->     handle the early failure case (since now there's no early init
->     to be concerned with.)
->   - Add a comment mentioning that the cpu_poll_relax() implementation
->     is better than polling if ARCH_HAS_CPU_RELAX.
-> 
->  include/asm-generic/barrier.h | 72 +++++++++++++++++++++++++++++++++++
->  1 file changed, 72 insertions(+)
-> 
-> diff --git a/include/asm-generic/barrier.h b/include/asm-generic/barrier.h
-> index d4f581c1e21d..2738fe35c1df 100644
-> --- a/include/asm-generic/barrier.h
-> +++ b/include/asm-generic/barrier.h
-> @@ -273,6 +273,68 @@ do {									\
->  })
->  #endif
->  
-> +/*
-> + * Number of times we iterate in the loop before doing the time check.
-> + */
-> +#ifndef SMP_TIMEOUT_POLL_COUNT
-> +#define SMP_TIMEOUT_POLL_COUNT		200
-> +#endif
-> +
-> +/*
-> + * Platforms with ARCH_HAS_CPU_RELAX have a cpu_poll_relax() implementation
-> + * that is expected to be cheaper (lower power) than pure polling.
-> + */
-> +#ifndef cpu_poll_relax
-> +#define cpu_poll_relax(ptr, val, timeout_ns)	cpu_relax()
-> +#endif
-> +
-> +/**
-> + * smp_cond_load_relaxed_timeout() - (Spin) wait for cond with no ordering
-> + * guarantees until a timeout expires.
-> + * @ptr: pointer to the variable to wait on.
-> + * @cond: boolean expression to wait for.
-> + * @time_expr_ns: expression that evaluates to monotonic time (in ns) or,
-> + *  on failure, returns a negative value.
-> + * @timeout_ns: timeout value in ns
-> + * Both of the above are assumed to be compatible with s64; the signed
-> + * value is used to handle the failure case in @time_expr_ns.
-> + *
-> + * Equivalent to using READ_ONCE() on the condition variable.
-> + *
-> + * Callers that expect to wait for prolonged durations might want to
-> + * take into account the availability of ARCH_HAS_CPU_RELAX.
-> + */
-> +#ifndef smp_cond_load_relaxed_timeout
-> +#define smp_cond_load_relaxed_timeout(ptr, cond_expr,			\
-> +				      time_expr_ns, timeout_ns)		\
-> +({									\
-> +	typeof(ptr) __PTR = (ptr);					\
-> +	__unqual_scalar_typeof(*ptr) VAL;				\
-> +	u32 __n = 0, __spin = SMP_TIMEOUT_POLL_COUNT;			\
-> +	s64 __timeout = (s64)timeout_ns;				\
-> +	s64 __time_now, __time_end = 0;					\
-> +									\
-> +	for (;;) {							\
-> +		VAL = READ_ONCE(*__PTR);				\
-> +		if (cond_expr) 						\
-> +			break;						\
-> +		cpu_poll_relax(__PTR, VAL, (u64)__timeout);		\
-> +		if (++__n < __spin)					\
-> +			continue;					\
-> +		__time_now = (s64)(time_expr_ns);			\
-> +		if (unlikely(__time_end == 0))				\
-> +			__time_end = __time_now + __timeout;		\
-> +		__timeout = __time_end - __time_now;			\
-> +		if (__time_now <= 0 || __timeout <= 0) {		\
-> +			VAL = READ_ONCE(*__PTR);			\
-> +			break;						\
-> +		}							\
-> +		__n = 0;						\
-> +	}								\
-> +	(typeof(*ptr))VAL;						\
-> +})
-> +#endif
-> +
->  /*
->   * pmem_wmb() ensures that all stores for which the modification
->   * are written to persistent storage by preceding instructions have
-
+> Changes since v1:
+> * Updated the comments to include powerpc for the APIs.
+>
+> v1: https://lore.kernel.org/bpf/20260129054035.168078-1-skb99@linux.ibm.com/
+> ---
+>   tools/testing/selftests/bpf/bpf_experimental.h | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+> index 4b7210c318dd..9df77e59d4f5 100644
+> --- a/tools/testing/selftests/bpf/bpf_experimental.h
+> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
+> @@ -645,6 +645,8 @@ static inline int get_preempt_count(void)
+>   			bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
+>   #elif defined(bpf_target_arm64)
+>   	return bpf_get_current_task_btf()->thread_info.preempt.count;
+> +#elif defined(bpf_target_powerpc)
+> +	return bpf_get_current_task_btf()->thread_info.preempt_count;
+>   #endif
+>   	return 0;
+>   }
+> @@ -653,6 +655,7 @@ static inline int get_preempt_count(void)
+>    *	Report whether it is in interrupt context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_interrupt(void)
+>   {
+> @@ -672,6 +675,7 @@ static inline int bpf_in_interrupt(void)
+>    *	Report whether it is in NMI context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_nmi(void)
+>   {
+> @@ -682,6 +686,7 @@ static inline int bpf_in_nmi(void)
+>    *	Report whether it is in hard IRQ context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_hardirq(void)
+>   {
+> @@ -692,6 +697,7 @@ static inline int bpf_in_hardirq(void)
+>    *	Report whether it is in softirq context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_serving_softirq(void)
+>   {
+> @@ -710,6 +716,7 @@ static inline int bpf_in_serving_softirq(void)
+>    *	Report whether it is in task context. Only works on the following archs:
+>    *	* x86
+>    *	* arm64
+> + *	* powerpc64
+>    */
+>   static inline int bpf_in_task(void)
+>   {
