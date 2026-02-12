@@ -1,147 +1,199 @@
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70A4F2DE711
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 23:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1819F2D0614
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 23:57:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770940453; cv=none; b=d4y3J85frcJfe/pmJVm/2U8zKkt0FZ0xBwD4jcohcwqLiwAdykC7LNoxeFLdMIzrlxZOwbHx23S4Lw5yaGqUqeh9Aq6tuobE11Amce57nhqikfFXu8aF4Xk1nmFNTiaQL1QMgyWOWCv2V1BPVajP+NTvtM8SW9dZ4vgNtMSydrU=
+	t=1770940672; cv=none; b=icrCjoK6nhXKnk6BaCJPBwE21FgYZJVczAA3nelLBfDYhh6Z8Wl/7qgNgGOPhsK7EdV++9rhwhkFdS08oMRizDjPOiL7AKtpRhzgHQOZEw4I4QQTMPtqlRLG+ZYnuiZpKG2JrtPaXG4LZmcls9qKAYBCGEVZfKrcS7950X8m7+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770940453; c=relaxed/simple;
-	bh=lnYa/cNhp1qzkDQhGAce/iSN26Ny+OqWiG9zUO+ihPI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=V6jT+9OgMhWSVnBjaP/F/qchYudQMo1YZvUSCpnS2c88wTBWYp9z28MVxRtUD6eT92JFDP0CqdorPX4l0jQBvBl1nXqC2twRrp2f8maSPO/92w65ISMwUHv3Ohm/e9DC2r4lxs8JDGY9Gns/Nlv8CqB+JBFyuuBaVkgO1cOALSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZlwWRC4t; arc=none smtp.client-ip=95.215.58.173
+	s=arc-20240116; t=1770940672; c=relaxed/simple;
+	bh=PajcFVsvFt23r8TLHfyurkIfJaAbM8tqyZzhLNzcd2I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U/OIDU3mDyZpkUGGHqtDn70fVYTQBUzf+hvfquisY8YYFr5TnbxueDxEAzIsIMtotdLEYTHZVUo/wbMAhI208rKBKQE8A2ZBrR5Ue/2MXxKKrAnR/KYKeLL9bvs3CKzN5wxw1VuGnWzQAjRJif/KCM9MPtDqV3yz7uJ+TM4/KAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eHsVHfxJ; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZlwWRC4t"
-Message-ID: <2e8a8754-5b4e-45c4-a54a-488f0a7b1633@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eHsVHfxJ"
+Message-ID: <2a532f02-a7ed-43d5-a0fc-129ee4eeb0c1@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770940439;
+	t=1770940669;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ECZ3Gr3aPzDdLph7XL37lAMGWK6WSXx8uq0q0FNltrM=;
-	b=ZlwWRC4t9UIkaxR129QlAsVOcFIufN3uopaEVE6kKLVKI4UQseHqGC6gXhLlEOaUZWjnY8
-	K7oLkZiG0VfXrf8shahIoskBgaEYOXuHK+ZerzqWmuUPb8sgGo2Piah/RXxJYAw1+B5ETy
-	tlmP/xiJ+Ls/LJu24WrA0Gp9gZuUDrA=
-Date: Thu, 12 Feb 2026 15:53:49 -0800
+	bh=IyuyX9gbm7FsXqvdBZYVsroWaPrFZwuUVzD+4Ni+R1U=;
+	b=eHsVHfxJuka5FlcqyAubrtcmkN4/yKJQppqi25oo1LiJIEFeA5m+vIwUShbwsLnNC1gxU8
+	Sh2ANgJ8ryjrY2yJC7NvvzUQ7gSLXwwEsmjBQ5DkaYIHzfYslukOcDlavbEuO99WOxXR3c
+	2PrQjZPSu5lPkn8DGs58iruO4Hu52IQ=
+Date: Thu, 12 Feb 2026 15:57:41 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2] selftests/bpf: Add powerpc support for
- get_preempt_count() in selftest
-Content-Language: en-GB
+Subject: Re: [PATCH bpf-next v1 00/14] selftests/bpf: Fixes for userspace ASAN
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>,
+ =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+ <59d226c413864ec7229e4a74af7e663e9982c534.camel@gmail.com>
+Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, sachinpb@linux.ibm.com, venkat88@linux.ibm.com,
- andrii@kernel.org, eddyz87@gmail.com, ast@kernel.org, daniel@iogearbox.net,
- martin.lau@linux.dev, song@kernel.org, john.fastabend@gmail.com,
- kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
- christophe.leroy@csgroup.eu, maddy@linux.ibm.com, mpe@ellerman.id.au
-References: <20260212092558.370623-1-skb99@linux.ibm.com>
- <a3dfdbc2-bd72-412d-83b4-f17d68949c6b@linux.dev>
-In-Reply-To: <a3dfdbc2-bd72-412d-83b4-f17d68949c6b@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <59d226c413864ec7229e4a74af7e663e9982c534.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-
-On 2/12/26 3:52 PM, Yonghong Song wrote:
->
->
-> On 2/12/26 1:25 AM, Saket Kumar Bhaskar wrote:
->> get_preempt_count() is enabled to return preempt_count for powerpc,
->> so that bpf_in_interrupt()/bpf_in_nmi()/bpf_in_serving_softirq()/
->> bpf_in_task()/bpf_in_hardirq()/get_preempt_count() works for
->> powerpc as well.
+On 2/12/26 2:00 PM, Eduard Zingerman wrote:
+> On Wed, 2026-02-11 at 17:13 -0800, Ihor Solodrai wrote:
+>> This series includes various fixes aiming to enable test_progs run
+>> with userspace address sanitizer on BPF CI.
 >>
->> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
->> ---
->> Changes since v1:
->> * Updated the comments to include powerpc for the APIs.
+>> The first patch fixes the selftests/bpf/test_progs build with:
 >>
->> v1: 
->> https://lore.kernel.org/bpf/20260129054035.168078-1-skb99@linux.ibm.com/
->> ---
->>   tools/testing/selftests/bpf/bpf_experimental.h | 7 +++++++
->>   1 file changed, 7 insertions(+)
+>>     SAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
 >>
->> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h 
->> b/tools/testing/selftests/bpf/bpf_experimental.h
->> index 4b7210c318dd..9df77e59d4f5 100644
->> --- a/tools/testing/selftests/bpf/bpf_experimental.h
->> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
->> @@ -645,6 +645,8 @@ static inline int get_preempt_count(void)
->> bpf_this_cpu_ptr(&pcpu_hot))->preempt_count;
->>   #elif defined(bpf_target_arm64)
->>       return bpf_get_current_task_btf()->thread_info.preempt.count;
->> +#elif defined(bpf_target_powerpc)
->> +    return bpf_get_current_task_btf()->thread_info.preempt_count;
->>   #endif
->
-> Maybe do
->   #elif defined(bpf_target_arm64) || defined(bpf_target_powerpc)
-> ?
+>> The subsequent patches fix bugs reported by the address sanitizer on
+>> attempt to run the tests.
+>>
+>> The series is a pre-requisite for enabling "test_progs with ASAN"
+>> workflow on BPF CI.
+> 
+> I did an experiment:
+> - applied the diff as at the bottom of the email;
+> - compiled with export SAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+>   (using gcc 15.2.1);
+> - double-checked that resulting executable depends on libasan;
+> - did a test run: ./test_progs -a verifier_and.
+> 
+> The error report looks as follows:
+> 
+>   Caught signal #11!
+>   Stack trace:
+>   /lib64/libasan.so.8(+0x525e7) [0x7f6a506525e7]
+>   ./test_progs(crash_handler+0xb5) [0xd152c9]
+>   /lib64/libc.so.6(+0x19c30) [0x7f6a50427c30]
+>   /lib64/libasan.so.8(+0xdf4a) [0x7f6a5060df4a]
+>   /lib64/libasan.so.8(+0xe5bba) [0x7f6a506e5bba]
+>   ./test_progs() [0xd19ccc]
+>   ./test_progs(main+0xcf6) [0xd1aa79]
+>   /lib64/libc.so.6(+0x35f5) [0x7f6a504115f5]
+>   /lib64/libc.so.6(__libc_start_main+0x88) [0x7f6a504116a8]
+>   ./test_progs(_start+0x25) [0x401935]
+> 
+> Am I doing something wrong, or does test_progs signal handler
+> interfere with ASAN reporting?
+> 
+> [...]
+> 
+> ---
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index a0a594de9007..3820077e74e4 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -46,7 +46,7 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
+>  endif
+>  
+>  CFLAGS += -g $(OPT_FLAGS) -rdynamic -std=gnu11                         \
+> -         -Wall -Werror -fno-omit-frame-pointer                         \
+> +         -Wall -fno-omit-frame-pointer                         \
 
-Sorry, my bad. Please ignore as missing preempt.count vs. preempt_count.
+I think you've cheated a little bit here, because with -Werror 
 
->
->>       return 0;
->>   }
->> @@ -653,6 +655,7 @@ static inline int get_preempt_count(void)
->>    *    Report whether it is in interrupt context. Only works on the 
->> following archs:
->>    *    * x86
->>    *    * arm64
->> + *    * powerpc64
->>    */
->>   static inline int bpf_in_interrupt(void)
->>   {
->> @@ -672,6 +675,7 @@ static inline int bpf_in_interrupt(void)
->>    *    Report whether it is in NMI context. Only works on the 
->> following archs:
->>    *    * x86
->>    *    * arm64
->> + *    * powerpc64
->>    */
->>   static inline int bpf_in_nmi(void)
->>   {
->> @@ -682,6 +686,7 @@ static inline int bpf_in_nmi(void)
->>    *    Report whether it is in hard IRQ context. Only works on the 
->> following archs:
->>    *    * x86
->>    *    * arm64
->> + *    * powerpc64
->>    */
->>   static inline int bpf_in_hardirq(void)
->>   {
->> @@ -692,6 +697,7 @@ static inline int bpf_in_hardirq(void)
->>    *    Report whether it is in softirq context. Only works on the 
->> following archs:
->>    *    * x86
->>    *    * arm64
->> + *    * powerpc64
->>    */
->>   static inline int bpf_in_serving_softirq(void)
->>   {
->> @@ -710,6 +716,7 @@ static inline int bpf_in_serving_softirq(void)
->>    *    Report whether it is in task context. Only works on the 
->> following archs:
->>    *    * x86
->>    *    * arm64
->> + *    * powerpc64
->>    */
->>   static inline int bpf_in_task(void)
->>   {
->
->
+    free(test_state->log_buf + 10);
+
+doesn't compile:
+
+    test_progs.c: In function ‘free_test_states’:
+    test_progs.c:1927:17: error: ‘free’ called on pointer ‘*test_state.log_buf’ with nonzero offset 10 [-Werror=free-nonheap-object]
+     1927 |                 free(test_state->log_buf + 10);
+          |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    cc1: all warnings being treated as errors
+    make: *** [Makefile:767: /home/isolodrai/kernels/bpf-next/tools/testing/selftests/bpf/test_progs.o] Error 1
+    make: *** Waiting for unfinished jobs....
+
+If it's removed, then I can reproduce the same stacktrace, which AFAIU
+is an invalid dereference inside the ASAN itself.
+
+I'm no expert here, but it appears ASAN only tracks exact pointers? Or
+maybe the assumption is that dumb errors like this one are caught at
+compile time, so no need to check for them at runtime?
+
+It could also be a bug in ASAN or gcc. I don't want to assume that, but
+after unexpected adventures with llvm-objcopy I wouldn't be surprised.
+
+I think a conclusion here is that ASAN doesn't guarantee the absence
+of segfaults at runtime. It just helps to catch certain bugs.
+
+I tried to trigger use-after-free, but also get a segfault.
+Apparently at that point log_buf is already NULL.
+
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 02a85dda30e6..5ff1d9fc5e4d 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1924,7 +1924,10 @@ static void free_test_states(void)
+                        free_subtest_state(&test_state->subtest_states[j]);
+ 
+                free(test_state->subtest_states);
++               printf("log_buf = %p\n", test_state->log_buf);
+                free(test_state->log_buf);
++               char c = test_state->log_buf[0];
++               printf("c: %c\n", c);
+                test_state->subtest_states = NULL;
+                test_state->log_buf = NULL;
+        }
+
+
+#522/1   verifier_and/invalid and of negative number:OKtest_progs -v -a verifier_and
+#522/2   verifier_and/invalid and of negative number @unpriv:OK
+#522/3   verifier_and/invalid range check:OK
+#522/4   verifier_and/invalid range check @unpriv:OK
+#522/5   verifier_and/check known subreg with unknown reg:OK
+#522/6   verifier_and/check known subreg with unknown reg @unpriv:OK
+#522     verifier_and:OK
+Summary: 1/6 PASSED, 0 SKIPPED, 0 FAILED
+log_buf = (nil)
+tester_init:PASS:tester_log_buf 0 nsec
+process_subtest:PASS:obj_open_mem 0 nsec
+process_subtest:PASS:specs_alloc 0 nsec
+#522     verifier_and:FAIL
+Caught signal #11!
+Stack trace:
+/lib64/libasan.so.8(+0x525e7) [0x7f311290e5e7]
+./test_progs(crash_handler+0xb5) [0xd15af6]
+/lib64/libc.so.6(+0x1a290) [0x7f311269f290]
+./test_progs() [0xd1a595]
+./test_progs(main+0xcf6) [0xd1b35d]
+/lib64/libc.so.6(+0x35b5) [0x7f31126885b5]
+/lib64/libc.so.6(__libc_start_main+0x88) [0x7f3112688668]
+./test_progs(_start+0x25) [0x401865]
+[  246.835249] test_progs[232]: segfault at 0 ip 0000000000d1a595 sp 00007ffd8e64cc00 error 4 in test_progs[91a595,400000+a34000] likely on CPU 0 (core 0, socket 0)
+[  246.838738] Code: 48 81 c2 00 80 ff 7f 0f b6 12 84 d2 40 0f 95 c6 48 89 c7 83 e7 07 40 38 d7 0f 9d c2 21 f2 84 d2 74 08 48 89 c7 e8 1b 6a 6e ff <0f> b6 01 88 45 ef 0f be 45 ef 89 c6 bf c0 58 b2 01 b8 00 00 00 00
+Segmentation fault         ./test_progs -a verifier_and
+
+
+>           -Wno-unused-but-set-variable                                  \
+>           $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)                    \
+>           -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)          \
+> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> index 02a85dda30e6..8839e00167fa 100644
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
+> @@ -1924,7 +1924,7 @@ static void free_test_states(void)
+>                         free_subtest_state(&test_state->subtest_states[j]);
+>  
+>                 free(test_state->subtest_states);
+> -               free(test_state->log_buf);
+> +               free(test_state->log_buf + 10);
+>                 test_state->subtest_states = NULL;
+>                 test_state->log_buf = NULL;
 
