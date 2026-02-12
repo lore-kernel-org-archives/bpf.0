@@ -1,32 +1,32 @@
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A49213E89
-	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF59426AAAB
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 01:14:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770858893; cv=none; b=bD3tFn1PFlDsfznN5qQeRSB5dev7320wme8FMNVXVYl5ZnFH0uVue3Da+b3aYBxmbfaRCvRtVChhtnTcHFPA5S0MFzUCrN4MFZDiAMM1uhWXWLCNuf8d9GhvX5ySA8hCyHwi2AF5hiSjnhQGuc7lY48A/WnMlfQEm8HSkhWWqSA=
+	t=1770858896; cv=none; b=OiUsBpLH71meKI9S4CC9+QmWZvgPl9t3TBCkhsN9lDgLI0hPdzciemN9vUoOyF/KYOsTbjQReP9H4sknhC+6xjLZKXH8QZd1aokr/rXbdm2aROoyZZt5nTzs7/LchI0Qp8ddyzIuMz6hv+w79NfClMe28hfi5PsWG1r8gnGzSR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770858893; c=relaxed/simple;
-	bh=JVwx4R4xDv82eW4A0cXQYBdTcGQAkR8CL86gxjBWH48=;
+	s=arc-20240116; t=1770858896; c=relaxed/simple;
+	bh=JhWpkW+RBS4CdBILjprhBmN5mYv1DZA64wlcJPzPyIY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mzsN3bA6wycpLIwafweHjHANU+yQUxcjBdOq30RU6veLSR4ls7WKmwgU+UWjEkN0mUAtQFyPd2PnOmIG/P5gM0cyFpFMulTHiGwUYgKuSmU2WS4bWku+6+FHjS1rqw4SjRwyreDN/Dahk6tnWNSI1kUec9Nj0uF+/gHEsZMMZoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=an4SuMML; arc=none smtp.client-ip=95.215.58.178
+	 MIME-Version; b=MGMxP+LqTLdSPwcIzGOqA4an1hKEE5bMSnEDGd5N9nCAmsi5g96eLmG+Dir6P3wCvZnmBmwaYz1vJoTs4acCNeEJOB7y8oUxpzwjCKTf1KsuCmWOHHHiWvJ7mkrqpnrFPUzldzr6t1mZFYvyBFGDf0MFpGuIOAcS//I/GKRJ1yE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hm7X0r+B; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="an4SuMML"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hm7X0r+B"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770858890;
+	t=1770858893;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=SgJGj1e5r8Ic5UgYIk8jqHxDyaomw15BU7zWi2kJTtc=;
-	b=an4SuMMLvqUvd1f5dXY7k1jifDCne2Nz1NrXPR44b47vrEHiEbSoUy3Nl1shkccYHRiQ+J
-	6BMZejrN/PIFzx2F5gLIK6aJaaacualVDpeCBk3z9zY0A3I/fcZ92hwQVypn9uzw6Dhl+4
-	2g/ScceIeBv/NAXK1X1tjdZcadIoKtc=
+	bh=TYateGUYWZT4rVCY9MRSYAbu22ESy2nd9yzyOUitGHE=;
+	b=hm7X0r+BvmsCtZ775mK4d194tSwnprvL2mzSJrGozF2/uKZJWRz8yCAzYRsN6JjwzPIqe6
+	e7EV6aESyd5+uw3IPsh4tSUNHW3u2bWNyngYvMMfNQ/2AoXOLR6IsGLsUM8foUyFIaO4Ys
+	ZzWHD6HIVEBnrWer1MAJtqAG2rGkwb8=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -38,9 +38,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 13/14] selftests/bpf: Fix out-of-bounds array access bugs reported by ASAN
-Date: Wed, 11 Feb 2026 17:13:55 -0800
-Message-ID: <20260212011356.3266753-14-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf-next v1 14/14] selftests/bpf: Check BPFTOOL env var in detect_bpftool_path()
+Date: Wed, 11 Feb 2026 17:13:56 -0800
+Message-ID: <20260212011356.3266753-15-ihor.solodrai@linux.dev>
 In-Reply-To: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
 References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -52,65 +52,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-- kmem_cache_iter: remove unnecessary debug output
-- lwt_seg6local: change the type of foobar to char[]
-  - the sizeof(foobar) returned the pointer size and not a string
-    length as intended
-- verifier_log: increase prog_name buffer size in verif_log_subtest()
-  - compiler has a conservative estimate of fixed_log_sz value, making
-    ASAN complain on snprint() call
+The bpftool_maps_access and bpftool_metadata tests may fail on BPF CI
+with "command not found", depending on a workflow.
+This happens because detect_bpftool_path() only checks two hardcoded
+relative paths:
+  - ./tools/sbin/bpftool
+  - ../tools/sbin/bpftool
+
+Add support for a BPFTOOL environment variable that allows specifying
+the exact path to the bpftool binary.
+
+Also replace strncpy() with snprintf() for proper null-termination.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c | 7 ++-----
- tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c   | 2 +-
- tools/testing/selftests/bpf/prog_tests/verifier_log.c    | 2 +-
- 3 files changed, 4 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/bpftool_helpers.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c b/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
-index 6e35e13c2022..399fe9103f83 100644
---- a/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
-@@ -104,11 +104,8 @@ void test_kmem_cache_iter(void)
- 	if (!ASSERT_GE(iter_fd, 0, "iter_create"))
- 		goto destroy;
- 
--	memset(buf, 0, sizeof(buf));
--	while (read(iter_fd, buf, sizeof(buf)) > 0) {
--		/* Read out all contents */
--		printf("%s", buf);
--	}
-+	while (read(iter_fd, buf, sizeof(buf)) > 0)
-+		; /* Read out all contents */
- 
- 	/* Next reads should return 0 */
- 	ASSERT_EQ(read(iter_fd, buf, sizeof(buf)), 0, "read");
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c b/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c
-index 3bc730b7c7fa..1b25d5c5f8fb 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c
-@@ -117,7 +117,7 @@ void test_lwt_seg6local(void)
- 	const char *ns1 = NETNS_BASE "1";
- 	const char *ns6 = NETNS_BASE "6";
- 	struct nstoken *nstoken = NULL;
--	const char *foobar = "foobar";
-+	const char foobar[] = "foobar";
- 	ssize_t bytes;
- 	int sfd, cfd;
- 	char buf[7];
-diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-index 8337c6bc5b95..aaa2854974c0 100644
---- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-+++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
-@@ -47,7 +47,7 @@ static int load_prog(struct bpf_prog_load_opts *opts, bool expect_load_error)
- static void verif_log_subtest(const char *name, bool expect_load_error, int log_level)
+diff --git a/tools/testing/selftests/bpf/bpftool_helpers.c b/tools/testing/selftests/bpf/bpftool_helpers.c
+index a5824945a4a5..5435ecd720d1 100644
+--- a/tools/testing/selftests/bpf/bpftool_helpers.c
++++ b/tools/testing/selftests/bpf/bpftool_helpers.c
+@@ -12,13 +12,21 @@
+ static int detect_bpftool_path(char *buffer)
  {
- 	LIBBPF_OPTS(bpf_prog_load_opts, opts);
--	char *exp_log, prog_name[16], op_name[32];
-+	char *exp_log, prog_name[24], op_name[32];
- 	struct test_log_buf *skel;
- 	struct bpf_program *prog;
- 	size_t fixed_log_sz;
+ 	char tmp[BPFTOOL_PATH_MAX_LEN];
++	const char *env_path;
++
++	/* First, check if BPFTOOL environment variable is set */
++	env_path = getenv("BPFTOOL");
++	if (env_path && access(env_path, X_OK) == 0) {
++		snprintf(buffer, BPFTOOL_PATH_MAX_LEN, "%s", env_path);
++		return 0;
++	}
+ 
+ 	/* Check default bpftool location (will work if we are running the
+ 	 * default flavor of test_progs)
+ 	 */
+ 	snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "./%s", BPFTOOL_DEFAULT_PATH);
+ 	if (access(tmp, X_OK) == 0) {
+-		strncpy(buffer, tmp, BPFTOOL_PATH_MAX_LEN);
++		snprintf(buffer, BPFTOOL_PATH_MAX_LEN, "%s", tmp);
+ 		return 0;
+ 	}
+ 
+@@ -27,7 +35,7 @@ static int detect_bpftool_path(char *buffer)
+ 	 */
+ 	snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "../%s", BPFTOOL_DEFAULT_PATH);
+ 	if (access(tmp, X_OK) == 0) {
+-		strncpy(buffer, tmp, BPFTOOL_PATH_MAX_LEN);
++		snprintf(buffer, BPFTOOL_PATH_MAX_LEN, "%s", tmp);
+ 		return 0;
+ 	}
+ 
 -- 
 2.53.0
 
