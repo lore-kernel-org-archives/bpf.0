@@ -1,123 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48C9CBA21;
-	Thu, 12 Feb 2026 19:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D90F326E71E
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 19:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770924663; cv=none; b=JqsodY5isXaBJ6KjOBZynyJRF+A94T+PoEpnOYh8yICsZHy2znilxh7v+5y91Fg/2yBUI5YsLGYpRFy6vm1OiPwArGND3zNlWjMDG0MqdLqC/98KAcG5vRDR1phgMPa4vK3oHrz6Hy+NhJ/pJxdvmny58Fi0w3lGWzQZj0kcpI4=
+	t=1770925896; cv=none; b=JlC+0SdkMxoxwBFHbZTWN8pDPykrs39ntKb7ZpIB2sFIGtgtLMW2/nzP42ClKSeOrK198r9FPgfPWDGxS7j1HV0lhPmqD1nWQ0JjcrzOtwaRcLob9pbKrArVt0VfjpnMFUZiYA5Z/tnoEgivdzVy1co+aEHsLAg9I2mksqcg5cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770924663; c=relaxed/simple;
-	bh=CfyMoN19AB34Wz5ReWi6alLjCIlR82xPRObwiwQjs/0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=pUHHyZlrLKScOX7OP8S1DKWtXcHcR77d/QqH1SSOQOQcSRaJS3j2cXR5Jf2cglmdmM5fqyBBe7vOUxMSdEgszWj/kWuRcQe9KHbe1MqfSchVRsjr/4y0s4EZE3PVCze/iqDGZhpcAgFp3KjUKKhDXfW5N+qZ2mLVhzk7KGMXcts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uAwqP0ZN; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770925896; c=relaxed/simple;
+	bh=NmMgFLcW5nYNy4thm118Jnz/rUv/qOKosA46S6z+5pg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Tn2ActAMb1YRa4WGVCSs7bQ9KxEdhihR8YVB+ezxq+RMS7W/nmx8Ez6dlExioxbeYvcndelcTd3a6BqdpRL+s4cZBeYP3drQZmioYBpGCIiOlXf6LH8x/PO6Y9yOESXcC9co3GdobDC45a5Z6T3KU/dtg99fQKJ/5VMbwAMKTCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iIQ05QsF; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uAwqP0ZN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32734C4CEF7;
-	Thu, 12 Feb 2026 19:31:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770924662;
-	bh=CfyMoN19AB34Wz5ReWi6alLjCIlR82xPRObwiwQjs/0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=uAwqP0ZNhEW5Vagfetvw+PvGC8DYBv2pnSNHyd1ovIS88pn9ifnTiDPBYMEgDtfBi
-	 156V17wRWRf5GaA0M4JDS5ELgZFPsToJluBFN1XLAGhKW8KgCeXz5gDB6+vnQ/qdzt
-	 ErH1JSBmG1tJomT9882swyU1xVor44SJj2wBmtUfim4nUsRCLmHH2crP79+8i/KLrJ
-	 RL96EddJ5mcRRkjR+VGWrMdsl2IvJvHtDwUCqRRaZyXq0yzheA5CtI69vZAFbKLgJb
-	 Kx+0YVrKWQsw/ZPaeChxh75VEwtzllV+os7CJyqECsn8HZNcyzJPsZEB+oOKEDJZrK
-	 ZKgv9CAsQkFjA==
-Content-Type: multipart/mixed; boundary="===============3404291497187834089=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iIQ05QsF"
+Message-ID: <64e56f03-bc93-46c1-8d5e-fa9720821620@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770925892;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZjLn5wIj9coH3h+DlcNBjJcyYQgJzJNYhtRL0NoCUKQ=;
+	b=iIQ05QsFhxDOPR9BDn0FMx097l7BUzGms0xcnPeEBEi0AQ/dqpcAUyrVOdJC9VWLFNKlcq
+	n2Ek5CWHbD4suZKuUHNo0kHDHL1kOD9ohOJxhZpVKtj/N/4wLqhVW7DfIN0e22dX0P0FQB
+	h6KBlXvri6aSJTXA3s9WJecYYJvaOL4=
+Date: Thu, 12 Feb 2026 11:51:14 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <105606c43804c23ec856f4ec17a08286f182061e547f954359e2e0325d0d3a6f@mail.kernel.org>
-In-Reply-To: <20260212183328.1883148-5-larysa.zaremba@intel.com>
-References: <20260212183328.1883148-5-larysa.zaremba@intel.com>
-Subject: Re: [PATCH bpf v2 3/9] ice: fix rxq info registering in mbuf packets
-From: bot+bpf-ci@kernel.org
-To: larysa.zaremba@intel.com,bpf@vger.kernel.org
-Cc: larysa.zaremba@intel.com,claudiu.manoil@nxp.com,vladimir.oltean@nxp.com,wei.fang@nxp.com,xiaoning.wang@nxp.com,andrew+netdev@lunn.ch,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,horms@kernel.org,shuah@kernel.org,aleksander.lobakin@intel.com,maciej.fijalkowski@intel.com,bastien.curutchet@bootlin.com,tushar.vyavahare@intel.com,kernelxing@tencent.com,rbm@suse.com,echaudro@redhat.com,lorenzo@kernel.org,toke@redhat.com,imx@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,intel-wired-lan@lists.osuosl.org,linux-kselftest@vger.kernel.org,aleksandr.loktionov@intel.com,dtatulea@nvidia.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 12 Feb 2026 19:31:02 +0000 (UTC)
-
---===============3404291497187834089==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Subject: Re: [PATCH] bpf: fix: Race condition in
+ bpf_trampoline_unlink_cgroup_shim
+To: xulang <xulang@uniontech.com>
+Cc: ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+ dddddd@hust.edu.cn, dzm91@hust.edu.cn,
+ hust-os-kernel-patches@googlegroups.com, kaiyanm@hust.edu.cn, sdf@fomichev.me
+References: <dd71a6ff-929d-4958-ac73-99b4852808e4@linux.dev>
+ <68AC3CE38AB1BD07+20260206071357.4075301-1-xulang@uniontech.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Content-Language: en-US
+In-Reply-To: <68AC3CE38AB1BD07+20260206071357.4075301-1-xulang@uniontech.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-
-> diff --git a/drivers/net/ethernet/intel/ice/ice_base.c b/drivers/net/ethernet/intel/ice/ice_base.c
-> index eadb1e3d12b3..511d803cf0a4 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_base.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_base.c
-> @@ -663,23 +663,12 @@ static int ice_vsi_cfg_rxq(struct ice_rx_ring *ring)
->  	int err;
->
->  	if (ring->vsi->type == ICE_VSI_PF || ring->vsi->type == ICE_VSI_SF) {
-
-[ ... ]
-
-> @@ -702,14 +691,13 @@ static int ice_vsi_cfg_rxq(struct ice_rx_ring *ring)
->  			if (err)
->  				return err;
->
-> -			if (!xdp_rxq_info_is_reg(&ring->xdp_rxq)) {
-> -				err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
-> -							 ring->q_index,
-> -							 ring->q_vector->napi.napi_id,
-> -							 ring->rx_buf_len);
-> -				if (err)
-> -					goto err_destroy_fq;
-> -			}
-> +			err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
-> +						 ring->q_index,
-> +						 ring->q_vector->napi.napi_id,
-> +						 ring->rx_buf_len);
-> +			if (err)
-> +				goto err_destroy_fq;
-
-The registration condition check was removed, so __xdp_rxq_info_reg() is
-now called unconditionally. This works correctly when cleanup properly
-unregisters the xdp_rxq, but there appears to be a gap for ICE_VSI_SF
-in non-XSK mode.
-
-Looking at ice_clean_rx_ring() in ice_txrx.c:
-
-    if (rx_ring->vsi->type == ICE_VSI_PF &&
-        xdp_rxq_info_is_reg(&rx_ring->xdp_rxq)) {
-        xdp_rxq_info_detach_mem_model(&rx_ring->xdp_rxq);
-        xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
-    }
-
-This only unregisters for ICE_VSI_PF, not ICE_VSI_SF. With the old code,
-the conditional registration skipped re-registration for ICE_VSI_SF. With
-this change, for ICE_VSI_SF in non-XSK mode during reconfiguration:
-
-1. ice_clean_rx_ring() - doesn't unregister (only checks ICE_VSI_PF)
-2. ice_vsi_cfg_rxq() - unconditionally calls __xdp_rxq_info_reg()
-3. __xdp_rxq_info_reg() sees REG_STATE_REGISTERED and triggers:
-
-    WARN(1, "Missing unregister, handled but fix driver");
-
-While this is handled gracefully by the XDP core (it unregisters internally
-before re-registering), will this cause spurious WARN splats for subfunction
-devices on every reconfiguration?
-
-Should the ICE_VSI_PF check in ice_clean_rx_ring() be updated to also
-include ICE_VSI_SF to match the registration path?
+X-Migadu-Flow: FLOW_OUT
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21960574055
+On 2/5/26 11:13 PM, xulang wrote:
+> Based on Martin KaFai Lau's suggestions, I have created a simple patch.
 
-AI-authorship-score: low
-AI-authorship-explanation: The commit shows domain-specific knowledge of ice driver internals and XDP subsystem, with targeted changes that suggest human authorship by an Intel driver developer.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: The issue causes WARN splats for ICE_VSI_SF devices during reconfiguration, but is handled gracefully by XDP core without functional impact.
+Thanks for the patch.
 
---===============3404291497187834089==--
+> 
+> The root cause of this bug is that when `bpf_link_put` reduces the
+> refcount of `shim_link->link.link` to zero, the resource is considered
+> released but may still be referenced via `tr->progs_hlist` in
+> `cgroup_shim_find`. The actual cleanup of `tr->progs_hlist` in
+> `bpf_shim_tramp_link_release` is deferred. During this window, another
+> process can cause a use-after-free via `bpf_trampoline_link_cgroup_shim`.
+> 
+> To fix this:
+> 1. Add an atomic non-zero check in `bpf_trampoline_link_cgroup_shim`.
+>     Only increment the refcount if it is not already zero.
+
+This makes sense.
+
+> 2. Guard the freeing of `shim_link` with `tr->mutex` to prevent release
+>     while the mutex is held.
+
+I am not sure about this one (details below).
+
+> 
+> Testing:
+> I used a non-rigorous method to verify the fix by adding a delay in
+> `bpf_link_put` to make the bug easier to trigger:
+> 
+> void bpf_link_put(struct bpf_link *link)
+> {
+>          if (!atomic64_dec_and_test(&link->refcnt))
+>                  return;
+> +       msleep(100);
+>          INIT_WORK(&link->work, bpf_link_put_deferred);
+>          schedule_work(&link->work);
+> }
+> 
+> Before the patch, running a PoC easily reproduced the crash (often within
+> dozens of iterations) with a call trace similar to KaiyanM's report.
+> After the patch, the bug no longer occurs even after millions of
+> iterations.
+> 
+> Signed-off-by: xulang <xulang@uniontech.com>
+> ---
+>   kernel/bpf/trampoline.c | 14 ++++++++++----
+>   1 file changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index 976d89011b15..c16a53cca5e0 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -702,15 +702,23 @@ static void bpf_shim_tramp_link_release(struct bpf_link *link)
+>   		return;
+>   
+>   	WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link, shim_link->trampoline, NULL));
+
+bpf_trampoline_unlink_prog() will hold (/wait) for tr->mutex before 
+unlinking from tr. The link's refcnt is already 0 here.
+
+
+> -	bpf_trampoline_put(shim_link->trampoline);
+>   }
+>   
+>   static void bpf_shim_tramp_link_dealloc(struct bpf_link *link)
+>   {
+>   	struct bpf_shim_tramp_link *shim_link =
+>   		container_of(link, struct bpf_shim_tramp_link, link.link);
+> +	struct bpf_trampoline *tr = shim_link->trampoline;
+>   
+> +	if (!tr) {
+> +		kfree(shim_link);
+> +		return;
+> +	}
+> +
+> +	mutex_lock(&tr->mutex);
+
+The link_release is done before the link_dealloc. Why it needs to hold 
+(/wait) for the tr->mutex again?
+
+>   	kfree(shim_link);
+> +	mutex_unlock(&tr->mutex);
+> +	bpf_trampoline_put(tr);
+>   }
+>   
+>   static const struct bpf_link_ops bpf_shim_tramp_link_lops = {
+> @@ -800,10 +808,8 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
+>   	mutex_lock(&tr->mutex);
+>   
+>   	shim_link = cgroup_shim_find(tr, bpf_func);
+> -	if (shim_link) {
+> +	if (shim_link && atomic64_inc_not_zero(&shim_link->link.link.refcnt)) {
+
+Use bpf_link_inc_not_zero().
+
+pw-bot: cr
+
+>   		/* Reusing existing shim attached by the other program. */
+> -		bpf_link_inc(&shim_link->link.link);
+> -
+>   		mutex_unlock(&tr->mutex);
+>   		bpf_trampoline_put(tr); /* bpf_trampoline_get above */
+>   		return 0;
+
