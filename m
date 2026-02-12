@@ -1,210 +1,234 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010065.outbound.protection.outlook.com [52.101.84.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E8635293D;
-	Thu, 12 Feb 2026 16:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770915082; cv=none; b=USBLiHKotrJFFTVvesNQjVFaRPvcKSDOnFQzpS9PhpF80jWpbWvKymVyrr2Q4YW2w9VPd1WhAKzV+7VvIKROEjzml2rxzSX61iET6o/dt79MiIC3iU1MI0ypjyGkutItX6IaYK4fv5eeC3d7bweldDAtexLQflz6SkO+I35Qww4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770915082; c=relaxed/simple;
-	bh=XdxVG+YXGaMS3AWMGOWVYDuXvjuKlsGk0gHHkVYXoBE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XHmyzQpriZbfgKw+7KZsf8A8lIE2AFSae8xeUI/INNmENgZxXJE9F5xoplBV74naRYgLJWN3RoXSLSYUQIRqPxlIG/2q0iAO7C4iV2m7AvWMX0jmwP9T7miabhB+rgMsjS4m4q4LtxW3dNZSrpIaWOdR2STx4Tr/XgbhODVM0qk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g301/aHx; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E832134AB
+	for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 17:15:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.65
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770916549; cv=fail; b=K9bEowl2LBaTq1m8EOIbREo33IeJRw3Qm1AEleas1k7nVu5QbDE82M/egXb5cm0VgrF1NW5VFN4IzXL9oMtMKCy+zBXOFASDCse95MCKw67lslNBLxCwJwbkx5L6Le4YxfWMHuNHNa4Kwx6ZOiItIwuJ9Ive5pkumgOZWI9b6DM=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770916549; c=relaxed/simple;
+	bh=4Er+m21/MX9H5Fe7Jpz7QtZIt/4sk3OI8/PY3amAXxg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=TLK8hS4YvIVkMSKRj2IKeSi5lumgfOUvKcv2rPigSr3Tl1TTRyDaindCSf5OUFuNaTM3/cVtK5GjmicDjlaAtEE+UcB9HPsnq4b3gFXBGQY9aIC6o11YTZFkwvthuAb3RitjltLzTdujhBDARipNyqGwfDI6bc3XQ4SDUyGyY7A=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=jnmtte1X; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=jnmtte1X; arc=fail smtp.client-ip=52.101.84.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g301/aHx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DE26C4CEF7;
-	Thu, 12 Feb 2026 16:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770915082;
-	bh=XdxVG+YXGaMS3AWMGOWVYDuXvjuKlsGk0gHHkVYXoBE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=g301/aHxOBg/tZoPaoIo39YQf6X3yf/bDbcpa60KjMq6uJblkjbFxXdfsoMG8aTBn
-	 nlwV7lbuECo+Mv9r5Kk484RzEJleTWEL0UWNOeOomzwDmP1ZcORj3OW2batpf6uiFA
-	 FMhVTI5BQs4yfi6qfcJmiINE42oRNQfLcZBxaFclppUqy/bQn1aafFpob6bcLbBzEr
-	 ZkZHWziHAccDsvfcp7A85qp34HZJxItkFXVKl9KzYf2sQ4dXSG2DjYkn6XNd3V6Jsj
-	 5SgHidUP7eTxjL/wKPAV7aos/RXsrc8CJ9uYaP2Tpp/uVBzWPv7Um3Yf7zIgfR1INM
-	 0w2O4FVC4LexA==
-Date: Thu, 12 Feb 2026 17:51:19 +0100
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Stanislav Fomichev <stfomichev@gmail.com>
-Cc: Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	netdev@vger.kernel.org, bpf@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC bpf-next v2 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-Message-ID: <aY4FB_Gf31V-VYiF@lore-desk>
-References: <20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org>
- <20250925-bpf-xdp-meta-rxcksum-v2-1-6b3fe987ce91@kernel.org>
- <aNYUqdaIJV1cvFCb@mini-arch>
- <e03d6d69-73ea-46dc-b632-149ef5831f85@kernel.org>
- <aNcZdfCivLR2slFw@mini-arch>
- <aYtqKfv0F0l2-hgy@lore-desk>
- <aY0zd4Esewxa-8hw@mini-arch>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="jnmtte1X";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="jnmtte1X"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=iPwCrarGlMpYUS/O2ZuGh30zs9Lh/Xj83EuHlMayIgepmMN9pgoyeshm1smxMkZkFbMJXbLSzTUULz0e6iEdtlKsNQMYQGJFjfWFl3+xibc24LNuuCg622VHDzqM+pAKCX01ZIFIugG9cc4g5Ibk3y8CxxmBl4ez+LDo2owaYRdmlft1SkEbd3rcRpE9FLT2P3edLxo7pivYpVINh2RDyYfDevYDgYpmFMCdFKv1Motkl2QS2hYEvE16gitfxkgkteLJUHcTZX9Lhm1N3md74RWa9LUACQtiHH1cFWSU62L5Tlccrt/2lSKhHOCGbD/jnQxPzeLFDvKYP9qQEoT6ng==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z4KITi8w1ED3WUyFYlQminu1HKB35REd5XRAh01dGLM=;
+ b=W8Uf+7zF+9oW3Y1aX+oaPyVtUVEAARFuKXb2kOvydhnByPBHKsl7wO76Ytj3UQ1YOkdK2nPotOhZPmu/ERInxOm/odUCVKCSMnQYbrc1otWWiX2GEYxoS9w+IHwWfmSgtQUerE0ErZbjfMeJvi7ui0HNnZmlPWb0sdx0A/gaCnlsvce1UHFZADRCCiO5LWQCuZGoXuArPSfytKqCVv5nALacyF7/VAytlvOr4mIBODaLnXFLsohPHqdDP3CLbC06cieBRUnORAkMDaX+09hl5HNqn0+XFhhTDuVJibvRoaSaY4v+E1xNia6v6wl+ltjEBg4O5uvTY1gBHAv2jNXFjA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=intel.com smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z4KITi8w1ED3WUyFYlQminu1HKB35REd5XRAh01dGLM=;
+ b=jnmtte1XHl2R6ibtXVXIy2feXrCfLVK+KJOAmG202VyKCeEIKXd2w6k5auYfSB5eoPBZBx+ZCKpkYTVbfCJZ2NfmhJT0otVHks33xjidyO9/DvqnTU2Clur0pVwJGXlgVdfcIQCh4TETbx8LE54H71XijWPEyi+Fqr2S3FEYyfg=
+Received: from AM9P192CA0014.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:21d::19)
+ by GVXPR08MB7679.eurprd08.prod.outlook.com (2603:10a6:150:6f::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.12; Thu, 12 Feb
+ 2026 17:15:43 +0000
+Received: from AMS0EPF0000019D.eurprd05.prod.outlook.com
+ (2603:10a6:20b:21d:cafe::c5) by AM9P192CA0014.outlook.office365.com
+ (2603:10a6:20b:21d::19) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9611.10 via Frontend Transport; Thu,
+ 12 Feb 2026 17:15:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AMS0EPF0000019D.mail.protection.outlook.com (10.167.16.249) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9611.8
+ via Frontend Transport; Thu, 12 Feb 2026 17:15:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=d5JKDI07wYlCvoFVUDVAepVvztrkDj05QtnlQYHnNb+U7He7O/ztCQ0IfbSgvUea0AaLH7x+PArAJdSTazDUceu1mbFYRKhQ54dGuQ7kHs0BT1wRcrqWJ1EPyDC6fSWXJr0cGpsV00nUxDV078C3+A43r3/zxnTT0qN8Wi/izgA5X5x4QSSPQrR8hAXKgGYTcBYT6y8TGjtqkDN/u2mC14cR1rtKgYUlaSA9VJE2E44DLX4UKqR/n/kJrq1MY/lBYqnPkALAsqnOHNX+tjSwThOEvWzvy5CSYJiXqloIzjIWNNGPBxqvdM11kvcWn4yUvOhF99M6vyqIaVQftTY8Mw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=z4KITi8w1ED3WUyFYlQminu1HKB35REd5XRAh01dGLM=;
+ b=CFIGlj7kh40m0rqyumS4EPued9V03wVjRHVnsOUo81R/oe0PrlilZmQfr2MuMkwG+nYTD/BLe6FslXEXueHug7+XFbB/51klNfNn4Zo6H3VqqDvfIshpWvoM0L3I0SUrz8hwOzVfDK5Vl6JR3lpZNAIMtF4kN65cV5OYcPor8F+I3V3MIgdefykLwRyJYebKoM037WnddASCQ9ZMUd4Zr/6SQrw2m5Pf6WRgbWfyom9atP6PvUOELaCwtK55yIQCgIpyT0FqFwQh7qkTFzYoEBGd8cAUrJNvzGIB7akSvMrp9YuITuvIjrkVkXKvPqHl+6w0Srt3VA9qfDxpekm5jw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=z4KITi8w1ED3WUyFYlQminu1HKB35REd5XRAh01dGLM=;
+ b=jnmtte1XHl2R6ibtXVXIy2feXrCfLVK+KJOAmG202VyKCeEIKXd2w6k5auYfSB5eoPBZBx+ZCKpkYTVbfCJZ2NfmhJT0otVHks33xjidyO9/DvqnTU2Clur0pVwJGXlgVdfcIQCh4TETbx8LE54H71XijWPEyi+Fqr2S3FEYyfg=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
+ (2603:10a6:150:163::20) by AM8PR08MB6324.eurprd08.prod.outlook.com
+ (2603:10a6:20b:315::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.10; Thu, 12 Feb
+ 2026 17:14:40 +0000
+Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
+ ([fe80::8c9b:58d2:2080:eb98]) by GV1PR08MB10521.eurprd08.prod.outlook.com
+ ([fe80::8c9b:58d2:2080:eb98%3]) with mapi id 15.20.9611.008; Thu, 12 Feb 2026
+ 17:14:39 +0000
+Date: Thu, 12 Feb 2026 17:14:36 +0000
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: lsf-pc@lists.linux-foundation.org, linux-mm@kvack.org,
+	bpf@vger.kernel.org, catalin.marinas@arm.com, david@kernel.org,
+	ryan.roberts@arm.com, kevin.brodsky@arm.com,
+	sebastian.osterlund@intel.com, dave.hansen@linux.intel.com,
+	rick.p.edgecombe@intel.com
+Subject: Re: [LSF/MM/BPF TOPIC] eBPF isolation with pkeys
+Message-ID: <aY4KfM6wFaSjHWri@e129823.arm.com>
+References: <aY3+Raf8eZqipCd6@e129823.arm.com>
+ <f20ec2ee-90f2-4ef7-bc3d-088f9ef6c38a@intel.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f20ec2ee-90f2-4ef7-bc3d-088f9ef6c38a@intel.com>
+X-ClientProxiedBy: LO4P123CA0441.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a9::14) To GV1PR08MB10521.eurprd08.prod.outlook.com
+ (2603:10a6:150:163::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="8qT/NFgXfwBYc55E"
-Content-Disposition: inline
-In-Reply-To: <aY0zd4Esewxa-8hw@mini-arch>
-
-
---8qT/NFgXfwBYc55E
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-MS-TrafficTypeDiagnostic:
+	GV1PR08MB10521:EE_|AM8PR08MB6324:EE_|AMS0EPF0000019D:EE_|GVXPR08MB7679:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8e7b0e65-bbbf-484d-6bcf-08de6a5a5a5e
+x-checkrecipientrouted: true
 Content-Transfer-Encoding: quoted-printable
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info-Original:
+ =?us-ascii?Q?t/4BXeI/Y7m1RZwBCbld7pimFP6YdwfSU7g+GBAHB3WP0UDcGIVeLvklMtg1?=
+ =?us-ascii?Q?8UnOEDErXO3Hx22BTzlsCaIWyAN2FvniEjSMN+EqUHNn/myl3qjLrKH7qZjU?=
+ =?us-ascii?Q?3jARqByNVsT8CJDz2vqz1vzX7yJTngmxVeua0+sqGK4fsw8rgsAAxojZpg1U?=
+ =?us-ascii?Q?anAQXliSBerk1DjLnPCftxKZUkV6gF6518Dd1Ny6h4Gxrh8nbKu+zTxFPJqj?=
+ =?us-ascii?Q?h4GO0LobFldPzNbObha1ipovslEci9YV+YWk9/wj+SF2J1jv2SbAKLDklNRh?=
+ =?us-ascii?Q?tyoc5jItZD5EEuMzeXE/IxqyKrJ7hDg5AC46EseTULcZeSs8ralpuoEuR43/?=
+ =?us-ascii?Q?BsUSE7/77xNG95/A2MVdi7oDyVcsiUQoUwtS1ptlFA5iMNjKFDi2MjRpTuP1?=
+ =?us-ascii?Q?AtCwnA4rMRNlGABAWisyX0AmSoS2gUPZevebkES/LwiTmqErzlIGm+c8utEy?=
+ =?us-ascii?Q?a9sBCfjC9Ln8b51jstbomVbZoG9Z4V56uNIJVDNup3mCdxn5YByk3tvNMrmp?=
+ =?us-ascii?Q?XgKjrl1b/myvLNAF5mxGW/3IjRWZ4WwfnNmEvHvhXGje/64DRck86VGEjAYP?=
+ =?us-ascii?Q?QFG4zRtkX67yb9/F711yom1D6PgarSBEvSSRaLkMaxDFqOUAXXaKdAMtoRPU?=
+ =?us-ascii?Q?Wr8nPVUZ/ZrHRpla71UBfaP+Bf4J3ieNncZprzUtUIqf1848orECl8rLadwT?=
+ =?us-ascii?Q?yKDhQEyvdLF0mCId4jKK08fcKVVknZLAr77yaKeUEbXseTwbcfqPRSp3+Snt?=
+ =?us-ascii?Q?bOHM55addEWKaQv2Togq1mMFgExoP9/4lFnhkKPw1yNiPoymMm1SJEceQtIF?=
+ =?us-ascii?Q?8fjADxMAOoKWiy8uFkzywOoZaV7/V5aRMKzZ+SkambrtFZVQfeYpah7o4ZRJ?=
+ =?us-ascii?Q?bvwjVVBTYkdShO7Gi2fUhpUo1z2P3YO9wLfxjCSPlq/wyWBTM6KAvLuwm/3E?=
+ =?us-ascii?Q?GEKmZ9tHmrS4rDMP6UMBtbLL/6ez0gZ5GJVx8EspcFVEhDIHXI3EkfEf87tJ?=
+ =?us-ascii?Q?KEAsjUouSLRRzkLPbw03gaOPTRtwmsRbWjpF0fzS71/g4czp188yqzmui4ty?=
+ =?us-ascii?Q?15WhnAQMmrkLwjT/+hgvBXfO17MuPvScb+Qr7plJd4audHI9LpsGDJEEgGxK?=
+ =?us-ascii?Q?xhH4NV18q6yKVaQeVFJgPlsXobrP1x3nJAx4UK/xV8y+NUl2daQ63ZphO5yv?=
+ =?us-ascii?Q?rs6awpVjC/pW9VnlgPgEjsYrjJZJiR/fAikt5CpcEswcERP55f57JyA84Fi3?=
+ =?us-ascii?Q?ILGM6SYC4Zo18wMEBfQg59LqQsavesESOr2ZADigDOcS4rpW7Yh1uWSUHta7?=
+ =?us-ascii?Q?jO1CVacoVnyRhTVWl0170WtEMb3Ui6b+3yEQs+n6ITgTm2ssjPGQbukNX48B?=
+ =?us-ascii?Q?oXEStJmRMVcW/64pO/bgDA46OsOpZTR1j+NnC9ClfsrVRzAoH6DwOT7+5oC+?=
+ =?us-ascii?Q?MU0z6Lolc/M6neLBTBFlkiqQfyLbAW9Bp3uXoQytBQ8xnZHwlV8R+RsVfwiN?=
+ =?us-ascii?Q?/iUTudZ1SSwoWI6HVN89Z31FQYLuwWA1xJmR6PMZmBoJGCLUE2ayo3Qo/WpN?=
+ =?us-ascii?Q?fq2GGd91FZY2YdsZujo=3D?=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR08MB10521.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB6324
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AMS0EPF0000019D.eurprd05.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	0e5f1f99-69f9-4485-bf77-08de6a5a34b1
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|35042699022|82310400026|1800799024|14060799003;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?2RI83Ba2IE0lEdCLxsX7RoaloFtAqe+Q6PE8h/eOqWybVR/VawkfoyOftQaf?=
+ =?us-ascii?Q?dBVV/162BEaeZ5zsxwrgtDjoLNq44EM68r1KOQlafbvagb21Ev3Pjy7rrbgO?=
+ =?us-ascii?Q?e7s+pAcISTrnkDETCQH470iJns4FO9u9Q7VolJ6C0TPh7aj96E6O43bq7s2d?=
+ =?us-ascii?Q?lEZJ4AZx+kig9o4qnsoqsuOfQHE2wNoPe4vg5jUqm9VbUwm31XCHEeqCF0Tg?=
+ =?us-ascii?Q?NZMIfJdgmvnzbNASAUuPYJ++K/0BjBM0gOJ4Hu9t4hf92r5s9clALb/SiRbw?=
+ =?us-ascii?Q?BnKfuNiBFMeDgkY4UeQpHP10as6jlH6gnPiPlPRUEpc4twHqv7mgSZp7rjpt?=
+ =?us-ascii?Q?0WQQOJD5ZcqWvFalO0UArxgwziFtfRFREX7KanSM4w/JnXeQ3d2daP0U9oB2?=
+ =?us-ascii?Q?BMkG/oHq8uy1V3SenJZMKqnTggVlbVLLlPSzyMTOFnvrfGON4Pto6WPlsn91?=
+ =?us-ascii?Q?s6H8nVEkddA1Ps0RqjHwOem1W4czXBkVOr9GOqELqOOi6Y+6SDUxrsoxeHSK?=
+ =?us-ascii?Q?kPoC5sQTdUgpb/8J+/bLo1hVh5JvspRupgkfRbSjT/01l4AcAty95grPJAfW?=
+ =?us-ascii?Q?XsTaTZnKI7rs+4l7nQpZegd3Q5UDaJdioGborgP56SQ2iBH6qKv9PezqeCTd?=
+ =?us-ascii?Q?BW0I5cpnmqF3vQQEaf5NabUt3yN6Z6SrkEENkX+M6kdu6V7oXb1ZAHOnpTkW?=
+ =?us-ascii?Q?y8DGEIwwJ4/vKW416o9zECasjtqUmYtUwxh5RcZd1Uro1ND+ZNR2cCKdZevI?=
+ =?us-ascii?Q?UoglCuF1tdykYND3pqHQaSdi8GTlzzJYfX6fr1Xo9kS1mmwxbmbWFIGdEpA0?=
+ =?us-ascii?Q?OqdjOHKDwrpzhQdwQftknfaPhbjMf+x9sOBA+JbhsxP5aT5bQhdegLw/B12a?=
+ =?us-ascii?Q?kTI9kmtFuHnje1CKMbXV6FtQEK0V37jydAxGuR2Bm2tfMVi52pROHIqZXfNk?=
+ =?us-ascii?Q?nr+KN+jKvSQ3AtskV8++QEA8ABRGY970EitBmX3JtUXZy+cbuofA3PBv2uuU?=
+ =?us-ascii?Q?YYel2wZpukh1Ovzi6fKRTKOfZc29ydRhxhdXymf3Vj0ip+ts/HMQ5bUkymQC?=
+ =?us-ascii?Q?N3EIGS9owI3OP7pE03OIrIB9p8inPF4BXW8srMlp3/P6nnWQvN14b4XkPYEG?=
+ =?us-ascii?Q?C2DqYNvdu3/zfc0kAamdbv/O+YIUaWAqxNcWWPeVgc8TLhnYnJzGs6YgsXNS?=
+ =?us-ascii?Q?2qLIymbKGnwXMRASfqKpksw7r1ngonC1x2H/t+eidPTcyDos4DO/pcR9RvYx?=
+ =?us-ascii?Q?F14lX7yIS0nePdaGgm5vUZO50ZT+wYVNG3Z8rH2WoSXzjiBbo8RFs1spAaPr?=
+ =?us-ascii?Q?N609WXiTuGjNi/NgW0sKK4ClJ1Iedmav3MFPwfR+6YntzOcj8Y9c5i9k0cNg?=
+ =?us-ascii?Q?OzaM/H6/ufiBCSlKHPNXfLmNc9A7hAG28TC6PYxzO45/ZaG81sZD3e5EhMsy?=
+ =?us-ascii?Q?hWdIo8iKcSQJMRCM9v0aHsmKS7ddOYQ/8yLFukpNz1vZxnupr/xRF4VEVcPT?=
+ =?us-ascii?Q?KpWUctyOq5bxBDcMb4Y6EpHj9iwDc7l9GaM4vzwG2e1e04xApt5jSVGPRHft?=
+ =?us-ascii?Q?Vb5Ic76oLNC0lMf4qLOignx70pk7psy8An6YEm/BMvNb34OEHodNb0I7x7U9?=
+ =?us-ascii?Q?xrPZiJ7sF+l37vH1+XU6VGWQk3yOCLXVoh6NvTp12sP6YFZxWEkjlF7K935X?=
+ =?us-ascii?Q?eLJV6g=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(35042699022)(82310400026)(1800799024)(14060799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	o+fumS8cIIrBoXTyohXz80DEBBrePGZjQfUJo7cAoYEXwKvIERN2jsBPNbMhIan8I/F6xaLIUHTsUyOlILh0zTc1QqNVx3N4mdsq1P49EM90FHiPY4NdcFmLQXAAttI1w/9tC/4VoovpxNScFvvSsVMlQfHY3aD6RNNN9/DrERVxl81bDF0Tt/rl2WPbjP5RgnNOnGYLzF8yciV2jCOHde6rVWOcRJHEqI6ArSrKY7TdVxM11Ev2hWbkkrKPM7QOjESSFPR8swLQWnRNINeqh0XBi++bswhjzKg5E+QtxKPoVGxiulgd46GD6wq4L/HLnMs8GMg3P7E1ExHxGfRo27CfuvYUM2fLLA6IkwiPVfk/1TnQS6jMlc8S11BNVHL3HeSl1KSVF39zzvWBp7nnq9RuuSS0lg0gaFUlnvUwK21VtsNPsd8M8sdDq7Ty0Lpg
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2026 17:15:42.8066
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8e7b0e65-bbbf-484d-6bcf-08de6a5a5a5e
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AMS0EPF0000019D.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR08MB7679
 
-> On 02/10, Lorenzo Bianconi wrote:
-> > > On 09/26, Jesper Dangaard Brouer wrote:
-> > > >=20
-> > > >=20
-> > > > On 26/09/2025 06.20, Stanislav Fomichev wrote:
-> > > > > On 09/25, Lorenzo Bianconi wrote:
-> > > > > > Introduce XDP RX checksum capability to XDP metadata specs. XDP=
- RX
-> > > > > > checksum will be use by devices capable of exposing receive che=
-cksum
-> > > > > > result via bpf_xdp_metadata_rx_checksum().
-> > > > > > Moreover, introduce xmo_rx_checksum netdev callback in order al=
-low the
-> > > > > > eBPF program bounded to the device to retrieve the RX checksum =
-result
-> > > > > > computed by the hw NIC.
-> > > > > >=20
-> > > > > > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
-> > > > > > ---
-> > > > > >   Documentation/netlink/specs/netdev.yaml |  5 +++++
-> > > > > >   include/net/xdp.h                       | 14 ++++++++++++++
-> > > > > >   net/core/xdp.c                          | 29 ++++++++++++++++=
-+++++++++++++
-> > > > > >   3 files changed, 48 insertions(+)
-> > > > > >=20
-> > > > > > diff --git a/Documentation/netlink/specs/netdev.yaml b/Document=
-ation/netlink/specs/netdev.yaml
-> > > > > > index e00d3fa1c152d7165e9485d6d383a2cc9cef7cfd..00699bf4a7fdb67=
-c6b9ee3548098b0c933fd39a4 100644
-> > > > > > --- a/Documentation/netlink/specs/netdev.yaml
-> > > > > > +++ b/Documentation/netlink/specs/netdev.yaml
-> > > > > > @@ -61,6 +61,11 @@ definitions:
-> > > > > >           doc: |
-> > > > > >             Device is capable of exposing receive packet VLAN t=
-ag via
-> > > > > >             bpf_xdp_metadata_rx_vlan_tag().
-> > > > > > +      -
-> > > > > > +        name: checksum
-> > > > > > +        doc: |
-> > > > > > +          Device is capable of exposing receive checksum resul=
-t via
-> > > > > > +          bpf_xdp_metadata_rx_checksum().
-> > > > > >     -
-> > > > > >       type: flags
-> > > > > >       name: xsk-flags
-> > > > > > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > > > > > index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2074b=
-70618a9d4f32544d8b9a30b63 100644
-> > > > > > --- a/include/net/xdp.h
-> > > > > > +++ b/include/net/xdp.h
-> > > > > > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attac=
-hment_info *info,
-> > > > > >   			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
-> > > > > >   			   bpf_xdp_metadata_rx_vlan_tag, \
-> > > > > >   			   xmo_rx_vlan_tag) \
-> > > > > > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
-> > > > > > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
-> > > > > > +			   bpf_xdp_metadata_rx_checksum, \
-> > > > > > +			   xmo_rx_checksum)
-> > > > > >   enum xdp_rx_metadata {
-> > > > > >   #define XDP_METADATA_KFUNC(name, _, __, ___) name,
-> > > > > > @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
-> > > > > >   	XDP_RSS_TYPE_L4_IPV6_SCTP_EX =3D XDP_RSS_TYPE_L4_IPV6_SCTP |=
- XDP_RSS_L3_DYNHDR,
-> > > > > >   };
-> > > > > > +enum xdp_checksum {
-> > > > > > +	XDP_CHECKSUM_NONE		=3D CHECKSUM_NONE,
-> > > > > > +	XDP_CHECKSUM_UNNECESSARY	=3D CHECKSUM_UNNECESSARY,
-> > > > > > +	XDP_CHECKSUM_COMPLETE		=3D CHECKSUM_COMPLETE,
-> > > > > > +	XDP_CHECKSUM_PARTIAL		=3D CHECKSUM_PARTIAL,
-> > > > > > +};
-> > > > >=20
-> > > > > Btw, might be worth mentioning, awhile ago we had settled on a sm=
-aller set of
-> > > > > exposed types:
-> > > > >=20
-> > > > > https://lore.kernel.org/netdev/20230811161509.19722-13-larysa.zar=
-emba@intel.com/
-> > > > >=20
-> > > > > Maybe go through the previous postings and check if the arguments=
- are
-> > > > > still relevant? (or explain why we want more checksum now)
-> > > >=20
-> > > > IHMO the linked proposal reduced the types too much.
-> > >=20
-> > > IIRC, PARTIAL was removed because it's mostly (or only) a TX feature?
-> > > So no real need to expose it as an rx hint. And I think empty xdp_csu=
-m_status
-> > > in that proposal might have indicated NONE?
-> >=20
-> > Sorry for the (very) late reply. According to [0] CHECKSUM_PARTIAL can =
-be used
-> > even on Rx side, right?
->=20
-> So is this for virtio (which I don't think you need)? Or something else?
+Hi Dave,
 
-I forgot to mention before CHECKSUM_PARTIAL is used for the veth use-case
-when the packet is coming from the networking stack.
+[...]
+>
+> > To that end, this discussion introduces a set of new allocator APIs and
+> > explores more extensible API designs:
+> >
+> >   - kmalloc_pkey series
+> >   - vmalloc_pkey series
+> >   - alloc_percpu_pkey series
+>
+> It all sounds fun, but this doesn't exactly seem very generic. The meory
+> that sched_ext needs to access is super different from, say, what a
+> socket-filtering eBPF program would need.
+>
+> So this doesn't seem to be likely to be true "eBPF isolation" as much as
+> sched_ext+eBPP isolation.
 
-> Can we start with the "easy" cases of UNNECESSARY/COMPLETE/NONE? I'm not =
-even
-> sure we need to expose the csum_level (start with level=3D0 and handle
-> encap if/when there is a real usecase). With kfuncs we should be able to
-> change/extend the API when needed.
+Our current isolation model focuses on restricting writes and execution.
+Therefore, if we allocate only the memory that eBPF programs must write
+directly with a separate pkey (e.g., packet data or sock),
+it seems to me that socket-filtering programs could also benefit from
+the same isolation.
 
-ack, I am fine to drop csum_level for the moment but I am not sure if it ca=
-n be
-useful for the use-case described by Jesper.
-@Jesper: any input on it?
+Is there anything I might be overlooking?
 
-Regards,
-Lorenzo
-
->=20
-> (for PARTIAL, not even sure what the BPF prog is supposed to do with it)
-
---8qT/NFgXfwBYc55E
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaY4FBwAKCRA6cBh0uS2t
-rLgyAQDNKqpoeLWazkdUXhQHQ1Jjc9nNvo0J0et1ZcPKGvP2RgD/aGy9hpI/I7tJ
-HHNGMx9dyMNBjMP6TKwbgmwxuYvj9As=
-=RLM+
------END PGP SIGNATURE-----
-
---8qT/NFgXfwBYc55E--
+--
+Sincerely,
+Yeoreum Yun
+IMPORTANT NOTICE: The contents of this email and any attachments are confid=
+ential and may also be privileged. If you are not the intended recipient, p=
+lease notify the sender immediately and do not disclose the contents to any=
+ other person, use it for any purpose, or store or copy the information in =
+any medium. Thank you.
