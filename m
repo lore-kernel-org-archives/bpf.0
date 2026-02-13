@@ -1,183 +1,188 @@
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BAFF274641
-	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 18:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A383626F293
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 18:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771006686; cv=none; b=TXIDl5bVY9lg4iCBI9emrctS42GkmjGQPVzFDVTaVK9oW3ECo0jw95kghXIBcZ7kx0ogaVjtZf0iZY2uyNgEeOGf86tvQ83m3Rcs9et7BpAGP/L4DGwcZ2lm7s2E02pcytCZNXD4tnJoVMjdBW4YVXnj25T8479htXkY3uGMIis=
+	t=1771006922; cv=none; b=LLldaCBFrR+E/gNAKq1Ta0k/+dYV2s3ZuucKP+1GIgcV6FI2pByyTRh3nXaqn0LgGKkcUTgJEjSJO0NfH9r8JKOHmlU21CJ3cCOT/qZw/lLnEuk3CbriPhHbOPgOv3avdx7h2V8PVOf1ZCHX/uU+eifl1MLxFFW8WECV06GiHqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771006686; c=relaxed/simple;
-	bh=Am6LJN+Vmd/w7uLfRvgjVF9sOoZDF4nC2fygJfuwSc0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=orwG8jPVHordEfRrPFzYLS34B3I2xt+fB9aeNdQrYjaYH9F2X3pMNM00uKXgFjBm/ATG6XelVtm4D078hLoM66prvsgbLqwhgTRg4bjU1/Tdviadl9GDB2Ox3nty1d172ZwX12JC+YxTV9M9khciDThsORk3I2OMqPUiLKDn+Po=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=ypdcBJAr; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1771006922; c=relaxed/simple;
+	bh=b6qG9EkxjWgb5lk8lrjhixv0Dssc0WySfpEN9RkT1Hw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=blsSkEirtzPUQCDLF6DuSeDkelUxiJ2mb+Rxi5Y0YsnvdhF+Jvju6w2ouPFW8IhTGtdK/rblH8n8vmOg5JoIPjD07FFphfL1GQ2cH2AKBfxNmAGRQ1vYIc2hOl8hu6qaceDGep5qEe94ZjeMnoqrt+QLr6S7n6JqEkOFrkKD6+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iHjtBgVU; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="ypdcBJAr"
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-8cb39f64348so114889585a.0
-        for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 10:18:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1771006684; x=1771611484; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sm6AUKu2HnNd5hqM78UUttsHFFTZhykbANFHDcg2csg=;
-        b=ypdcBJAr+PcaGoEkAZRtR9V7QAN85ht+HyNY/arddQG96vHJohfjC8Pf6YIoLT++1U
-         NCcdZTCT+rWoaoXxttfQwsU82a9ta1ENaE+/VkCfbMa6VaDol5CynHqOhyWjL9br23/g
-         qyTKmto3yPzIPC04rlpi77ndv9lMhRP1+SgftDRA+dqfpZH0rj0ZaqN+Chkwdy+ycZbi
-         +NCjLV4JbB1ZbqEl6OM3ud20Ay1KkU6qqs+tJquNWZgDUpqReMlkHzmvGf6uRm+f0M8C
-         L9gH9Ym+oRzV/5VqMyi2Zp+gctbJ0KBdCVE4HNt9DZP0A7rnoxrvKh91s7oBsAjwja+9
-         vKsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771006684; x=1771611484;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=sm6AUKu2HnNd5hqM78UUttsHFFTZhykbANFHDcg2csg=;
-        b=Gvex7OwgVtxgBLL8TnXqVx8exXmI4lybI5LA0ZxV4GlYvFMgkGw1kISNZ+52fxc41v
-         QRXOLhqbjZ6ia3ULcJr7ww0sUlZZokKNkMuvSirD4d+A8ZK88obN3v/9DfP14y4UIvYu
-         zOCurnt01Z6UuydTY8NAqKRZjSaovC5+qdE27fzlNGpTDJiDPRJJle9AFUwet+gYWeO4
-         0Vc28+tMiQ600sKpWk6D3CtFFXu9Y6TUIER9g1gyEPM2SVFuK5zSs5XgQwnXIYUGaE1f
-         mv+bOQbUHdo/6hVdVJ+kgJc3qNaWhcz4ENc4qAc7Pj5mO0gew73vfLUmc07fKeLgHTPV
-         3kcg==
-X-Gm-Message-State: AOJu0Ywu1crDHz4LSnC8t4LSNy9GVnk6o42JKCe9UvEQdIoBiL2EKOFm
-	xWuUMwEm6lLjftpLsL9nf7wrpx3o1rEEXL4EzbqSWcf9kQg7BQ9V8BMncoVSlnGBIquncsVA1PD
-	ESy3O
-X-Gm-Gg: AZuq6aLZgmRetyz/LBF9VNVErWBvBNshqIglqzznONZgUhalXzdzZjOPrMtSBMN28jc
-	l1PrLb6omK+UP1LDeBWOVD8qBEgjKoZfXq3tiLn4ZEeg3KvBb1zlo8fp3UQ6T0j9b12iBp26ZNY
-	5VBaqzjQTf9GjWDpEXnqG2oiwhEsUHiGgQSMMe4Lg1OnE4RsZ2RlL1sAG6h8C8TfZ4FF6KinA+y
-	sAB6SlOW9misr3SLPBEGcypO49EXWfjyyc+tpjEEzE5c75pPAcqnYBJ4lY7NuEp1YIW0rMypVzX
-	adQVKy1GdmmLKfpdaE/nq027M/04LvQ1UEaszNQ6e0UFyz3htD/a4+FiJ5hmfXeSy/rkdSLzVy6
-	7xhuDRQMxXFsaWBq6VktRjYUg84bmDJdW0Bv9inB4MEk5ACsAa1DFHaA59W9TpnZxmlPWJ9XQ1H
-	zFKm+RkzJoCPTmWPKe1clOHw==
-X-Received: by 2002:a05:620a:3947:b0:8bb:a960:a6fd with SMTP id af79cd13be357-8cb4081fab2mr434931785a.10.1771006684332;
-        Fri, 13 Feb 2026 10:18:04 -0800 (PST)
-Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8971cc91eccsm67337166d6.13.2026.02.13.10.18.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Feb 2026 10:18:03 -0800 (PST)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	john.fastabend@gmail.com,
-	memxor@gmail.com,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf 2/2] libbpf: Delay feature gate check until object prepare time
-Date: Fri, 13 Feb 2026 13:17:52 -0500
-Message-ID: <20260213181752.505318-3-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20260213181752.505318-1-emil@etsalapatis.com>
-References: <20260213181752.505318-1-emil@etsalapatis.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iHjtBgVU"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771006918;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=BJQM94TmWpOrifxNmgYC4ZJZ4gp+CDLVgPGe/Z/I7n8=;
+	b=iHjtBgVU8YxOYZ5l8wTzMLWai5UQHnypEzW3Wxq2i6lWqihN9gBKH1kA6sW32ysbfNu1/q
+	5LOZNz0qu2BnRXIbWbUsNaoA8hcQT7bnjbGqiHxgYciyK2qjLiawM9LkgkACPUIqxYvE2y
+	tpM58nyXtzE1i4TJTnsySTXyI3qIplU=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	David Vernet <void@manifault.com>,
+	Tejun Heo <tj@kernel.org>
+Cc: sched-ext@lists.linux.dev,
+	bpf@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH v1] selftests/sched_ext: Fix rt_stall flaky failure
+Date: Fri, 13 Feb 2026 10:21:36 -0800
+Message-ID: <20260213182136.1388270-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Commit 677755d502df ("libbpf: Add gating for arena globals relocation feature")
-adds a feature gate check that loads a map and BPF program to
-test the running kernel supports large direct offsets for LDIMM64
-instructions. This check is currently used to calculate arena symbol
-offsets during bpf_object__collect_relos, itself called by
-bpf_object_open.
+The rt_stall test measures the runtime ratio between an EXT and an RT
+task pinned to the same CPU, verifying that the deadline server prevents
+RT tasks from starving SCHED_EXT tasks. It expects the EXT task to get
+at least 4% of CPU time.
 
-However, the program calling bpf_object_open may not have the permissions to
-load maps and programs. This is the case with the BPF selftests, where
-bpftool is invoked at compilation time during skeleton generation. This
-causes errors as the feature gate unexpectedly fails with -EPERM.
+The test is flaky because sched_stress_test() calls sleep(RUN_TIME)
+immediately after fork(), without waiting for the RT child to complete
+its setup (set_affinity + set_sched). If the RT child experiences
+scheduling latency before completing setup, that delay eats into the
+measurement window: the RT child runs for less than RUN_TIME seconds,
+and the EXT task's measured ratio drops below the 4% threshold.
 
-Avoid this by moving all uses of the FEAT_LDIMM64_FULL_RANGE_OFF feature gate
-to BPF object preparation time instead.
+For example, in the failing CI run [1]:
+  EXT=0.140s RT=4.750s total=4.890s (expected ~5.0s)
+  ratio=2.86% < 4% → FAIL
 
-Fixes: 677755d502df ("libbpf: Add gating for arena globals relocation feature")
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+The 110ms gap (5.0 - 4.89) corresponds to the RT child's setup time
+being counted inside the measurement window, during which fewer
+deadline server ticks fire for the EXT task.
+
+Fix by using pipes to synchronize: each child signals the parent after
+completing its setup, and the parent waits for both signals before
+starting sleep(RUN_TIME). This ensures the measurement window only
+counts time when both tasks are fully configured and competing.
+
+[1] https://github.com/kernel-patches/bpf/actions/runs/21961895809/job/63442490449
+
+Fixes: be621a76341c ("selftests/sched_ext: Add test for sched_ext dl_server")
+Assisted-by: claude-opus-4-6-v1
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+
 ---
- tools/lib/bpf/libbpf.c | 31 +++++++++++++++++++++++--------
- 1 file changed, 23 insertions(+), 8 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 93e59ed8d9a1..ff38a9db1b13 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -3009,11 +3009,11 @@ static int init_arena_map_data(struct bpf_object *obj, struct bpf_map *map,
- 	memcpy(obj->arena_data, data, data_sz);
- 	obj->arena_data_sz = data_sz;
+BPF CI caught the failure, I fed the logs to Claude Code and this is
+what it came up with. I ran this 3 times on CI, and the failure didn't
+happen again. The change makes sense to me, although synchronization
+via pipes might be an overkill?
+
+Please let me know if this is too sloppy, I'll try to refine.
+
+Thanks!
+
+---
+ tools/testing/selftests/sched_ext/rt_stall.c | 49 ++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+
+diff --git a/tools/testing/selftests/sched_ext/rt_stall.c b/tools/testing/selftests/sched_ext/rt_stall.c
+index 015200f80f6e..ab772e336f86 100644
+--- a/tools/testing/selftests/sched_ext/rt_stall.c
++++ b/tools/testing/selftests/sched_ext/rt_stall.c
+@@ -23,6 +23,30 @@
+ #define CORE_ID		0	/* CPU to pin tasks to */
+ #define RUN_TIME        5	/* How long to run the test in seconds */
  
--	/* place globals at the end of the arena (if supported) */
--	if (kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_OFF))
--		obj->arena_data_off = mmap_sz - data_alloc_sz;
--	else
--		obj->arena_data_off = 0;
-+	/*
-+	 * possible offset for arena globals into the arena,
-+	 * if supported at load time
-+	 */
-+	obj->arena_data_off = mmap_sz - data_alloc_sz;
- 
- 	/* make bpf_map__init_value() work for ARENA maps */
- 	map->mmaped = obj->arena_data;
-@@ -4672,7 +4672,7 @@ static int bpf_program__record_reloc(struct bpf_program *prog,
- 		reloc_desc->type = RELO_DATA;
- 		reloc_desc->insn_idx = insn_idx;
- 		reloc_desc->map_idx = obj->arena_map_idx;
--		reloc_desc->sym_off = sym->st_value + obj->arena_data_off;
-+		reloc_desc->sym_off = sym->st_value;
- 
- 		map = &obj->maps[obj->arena_map_idx];
- 		pr_debug("prog '%s': found arena map %d (%s, sec %d, off %zu) for insn %u\n",
-@@ -5556,6 +5556,7 @@ bpf_object__create_maps(struct bpf_object *obj)
++/* Signal the parent that setup is complete by writing to a pipe */
++static void signal_ready(int fd)
++{
++	char c = 1;
++
++	if (write(fd, &c, 1) != 1) {
++		perror("write to ready pipe");
++		exit(EXIT_FAILURE);
++	}
++	close(fd);
++}
++
++/* Wait for a child to signal readiness via a pipe */
++static void wait_ready(int fd)
++{
++	char c;
++
++	if (read(fd, &c, 1) != 1) {
++		perror("read from ready pipe");
++		exit(EXIT_FAILURE);
++	}
++	close(fd);
++}
++
+ /* Simple busy-wait function for test tasks */
+ static void process_func(void)
  {
- 	struct bpf_map *map;
- 	unsigned int i, j;
-+	char *arena_globals;
- 	int err;
- 	bool retried;
+@@ -122,14 +146,24 @@ static bool sched_stress_test(bool is_ext)
  
-@@ -5633,7 +5634,15 @@ bpf_object__create_maps(struct bpf_object *obj)
- 					return err;
- 				}
- 				if (obj->arena_data) {
--					memcpy(map->mmaped + obj->arena_data_off, obj->arena_data,
-+					/*
-+					 * Only relocate the globals to the end of the arena
-+					 * if the kernel supports it.
-+					 */
-+					arena_globals = map->mmaped;
-+					if (kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_OFF))
-+						arena_globals += obj->arena_data_off;
-+
-+					memcpy(arena_globals, obj->arena_data,
- 						obj->arena_data_sz);
- 					zfree(&obj->arena_data);
- 				}
-@@ -6386,6 +6395,12 @@ bpf_object__relocate_data(struct bpf_object *obj, struct bpf_program *prog)
- 		case RELO_DATA:
- 			map = &obj->maps[relo->map_idx];
- 			insn[1].imm = insn[0].imm + relo->sym_off;
-+
-+			if (relo->map_idx == obj->arena_map_idx &&
-+			    kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_OFF)) {
-+				insn[1].imm += obj->arena_data_off;
-+			}
-+
- 			if (obj->gen_loader) {
- 				insn[0].src_reg = BPF_PSEUDO_MAP_IDX_VALUE;
- 				insn[0].imm = relo->map_idx;
-@@ -14456,7 +14471,7 @@ int bpf_object__load_skeleton(struct bpf_object_skeleton *s)
- 		if (!map_skel->mmaped)
- 			continue;
+ 	float ext_runtime, rt_runtime, actual_ratio;
+ 	int ext_pid, rt_pid;
++	int ext_ready[2], rt_ready[2];
  
--		if (map->def.type == BPF_MAP_TYPE_ARENA)
-+		if (map->def.type == BPF_MAP_TYPE_ARENA && kernel_supports(*s->obj, FEAT_LDIMM64_FULL_RANGE_OFF))
- 			*map_skel->mmaped = map->mmaped + map->obj->arena_data_off;
- 		else
- 			*map_skel->mmaped = map->mmaped;
+ 	ksft_print_header();
+ 	ksft_set_plan(1);
+ 
++	if (pipe(ext_ready) || pipe(rt_ready)) {
++		perror("pipe");
++		ksft_exit_fail();
++	}
++
+ 	/* Create and set up a EXT task */
+ 	ext_pid = fork();
+ 	if (ext_pid == 0) {
++		close(ext_ready[0]);
++		close(rt_ready[0]);
++		close(rt_ready[1]);
+ 		set_affinity(CORE_ID);
++		signal_ready(ext_ready[1]);
+ 		process_func();
+ 		exit(0);
+ 	} else if (ext_pid < 0) {
+@@ -140,8 +174,12 @@ static bool sched_stress_test(bool is_ext)
+ 	/* Create an RT task */
+ 	rt_pid = fork();
+ 	if (rt_pid == 0) {
++		close(ext_ready[0]);
++		close(ext_ready[1]);
++		close(rt_ready[0]);
+ 		set_affinity(CORE_ID);
+ 		set_sched(SCHED_FIFO, 50);
++		signal_ready(rt_ready[1]);
+ 		process_func();
+ 		exit(0);
+ 	} else if (rt_pid < 0) {
+@@ -149,6 +187,17 @@ static bool sched_stress_test(bool is_ext)
+ 		ksft_exit_fail();
+ 	}
+ 
++	/*
++	 * Wait for both children to complete their setup (affinity and
++	 * scheduling policy) before starting the measurement window.
++	 * This prevents flaky failures caused by the RT child's setup
++	 * time eating into the measurement period.
++	 */
++	close(ext_ready[1]);
++	close(rt_ready[1]);
++	wait_ready(ext_ready[0]);
++	wait_ready(rt_ready[0]);
++
+ 	/* Let the processes run for the specified time */
+ 	sleep(RUN_TIME);
+ 
 -- 
-2.49.0
+2.53.0
 
