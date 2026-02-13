@@ -1,143 +1,96 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B370532C331
-	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 10:21:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46172D3727
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 10:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770978115; cv=none; b=EGnipYGoYQfCKR3Iju5vh3BVd0X2HhEvDN0XIoLWsoFs1eR0TtAB5jWKcwa/q9t7rGa2lEsJp/QJ3g2V0H5VdGuKmprinB+NwjWOtrY5rpwOeQ4dZkpRUFwvC1HLsDinxHZavdncFu1zDYkbMSIvfh8owlM5qtal5lwI9JGOdXw=
+	t=1770979008; cv=none; b=eE21PTHKLTjKo53LU+4jO5MAuMa1c5IKwQPn2n0DXVMY/6JMzTTvRXcj12M9XY+fl1GpOQ2Br+ZNdikdshyD/0Ze3+R139Hl/vywfaQEQfw8oxKJViQ00/Idt0Hx9s2PuOeA+E06ULVS8xKmSF2P137S5myL7PCLXMh0B+Hs0EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770978115; c=relaxed/simple;
-	bh=So9xWeFEUrm58wRB5ilqa33PpLzyw90FIza6V2SASy8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JG/mgrywvJQ0kYU90Yr+RgMmGN7i/jEZA12q7SOVOD/bSNtCajJvrb0k33vtztbJLgogHbjkaWSUpSyHpLKYKWNr0+x/IuU4AVSxCEygz8Xo06lLPXNrbOW5Ue6r0ZBC31wJ/E045nkqzrXzJUNvLvi4rbDCOz2K86H495U0pW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FMdr5p8Q; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1770979008; c=relaxed/simple;
+	bh=gtFKar3JokpwbpwXY2DM893EmJhKPw2OCF87e0TS25Y=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
+	 References:In-Reply-To; b=XslfTsMcw2+Ov9ofWL24/nB5xmZLjN+87L7zbMZotV75oAhs0GsaQ5U+EBHj7n/v81HZdxOn/sQ3aYGaCKdWeLzNNxGFQGFxiNwdoXiz7DyExRfZ1M4e1JJ6kHg7cwoySk00qG6Mh/t2VZYhFoABQZsm21PFg/W3SRCphHKB4gU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LQc31tmG; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FMdr5p8Q"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4801c2fae63so6116555e9.2
-        for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 02:21:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770978113; x=1771582913; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zin/vneRUguhBG4fcbrCXY8+exjw7aASRCjjvjBSKHw=;
-        b=FMdr5p8QGyPvmmg/yxe8o2d4vfqxtKGnZZ5T7wAaR1z0Ixhrzv/wLQuASUONP1UXoF
-         O3HZwuYNEvAK34kFVvIGlAFMsfNGYUFshDtN/27TuH0txdOvJIMj/LLSRfoiaA+UYUmM
-         asCezMH347OGH+2lnmboaI8vIUMETw11aH+z1UDJ0EoabMHL79bTkqoWj3GVSX5cvH62
-         eoE4fiOY6bXL3BiVVmlkdfBl1ZZQTtNuwQVdQHRwmdE0uoLYZdihoUEsUfu5rjs+dG43
-         d0RvYjGvoWGeE9nxInY2yrW7GuSragLdFbe3Q55nSVi8P19XYTZi2Soa9GjQ5G1Y/Wzk
-         NqmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770978113; x=1771582913;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zin/vneRUguhBG4fcbrCXY8+exjw7aASRCjjvjBSKHw=;
-        b=TR0841iCcpQTYdeE5iLT+pxwgDa729EyUXLFaIV3+A4zoZpRMIxbwEwsBkJDJ6xbgk
-         ilfjYBeRcMDkrV78QrqKfv9vY8IVVjJhnLl7CP31cAIrWY/2vuW/JAZoZtWlgWRaeSOo
-         2N/5SY1x1Bk4zo8EWFrkLjTbF8NP6uRss+nkDCvLfQiGyuoWQ4TnblgLTTRRInrfyHHv
-         L/hmHOvuBSSmDhqaWDM0XSDn1wcRX89DuyEpW8a2sGZfM1Q0nwXH6O0lnwukaeUG55Jk
-         lYhsF7kZZS0mSVdQq8/gMMaorvB7nPEjaXmWWcQy4nrR6wkB923aGcv5R/WAydxXBeBM
-         tCCQ==
-X-Gm-Message-State: AOJu0YxOfRVK5xjRqt5SaTRuqNcZgsgl/rtlzIq4W3UMhMiucEOf+3gR
-	a+KhU/oz8g8HiWAqMowuOQrsCGwIxWmuPHUinQSTkQvJhtjK1x8tTsF9
-X-Gm-Gg: AZuq6aINCptk4aTmTLGT+758rLnRjb0XpRXLoNKsDVwd7Wdh3M71y+UNCOvXlLj8b71
-	9zyKLI1Yr4nKtFcIX7bW6sLhcYA4ynWyxfueUN0IZdz5eoAo+ByCAkgjnQdvjEcTxtqI93P3Wxn
-	5T9PN3f8OAub5RrnvPZFYOzgCYVxWUzzINFpmqpJOPIPDaZeQxXWqcRLQcO1GH5zJyNLXFrI+Q4
-	iicT4PmPGtIIvGJ1AEc+/EEUdDeS7HJ1GKReBLQ4H6jycsBzxRcn/LF/fMucNWVDhMR/Eifqzil
-	6/QPkX2eHW0Yp2TcavoIfpF8CYmolO7Yl9XCVyHx8OALJeB/BqmghvcgjlS5E99hO5bEk619oaW
-	JFd4v9xNBuqFm2rcE6y68oXde/uRBUoVVxC/jHRMAIIWFikqZwaf41JDLnCFGCdj7cVnU+j65bF
-	5XKCqvccvk/xSj8Di4X3JvPqLREbbAU/i8ftdbOfHrrmg=
-X-Received: by 2002:a05:600c:474e:b0:479:3a86:dc1f with SMTP id 5b1f17b1804b1-4837109740amr34875915e9.37.1770978112880;
-        Fri, 13 Feb 2026 02:21:52 -0800 (PST)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d5e11f5sm243862745e9.4.2026.02.13.02.21.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Feb 2026 02:21:52 -0800 (PST)
-Date: Fri, 13 Feb 2026 10:29:57 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: bpf@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [bug report] bpf: Fix a potential use-after-free of BTF object
-Message-ID: <aY79JehckdNVA2ND@mail.gmail.com>
-References: <caa37f28-a2e8-4e0a-a9ce-a365ce805e4b@stanley.mountain>
- <aY689z7gHNv8rgVO@stanley.mountain>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LQc31tmG"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 5B5331A0E9D;
+	Fri, 13 Feb 2026 10:36:44 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 2F6EF606BE;
+	Fri, 13 Feb 2026 10:36:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2F35C10368E46;
+	Fri, 13 Feb 2026 11:36:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1770979003; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=R+Gz77eSNs1pW6kJTPF09TLKAhyrAS3oNHmhLKWUZK8=;
+	b=LQc31tmGQv3ahE975Hzj89CmZfGqxzNVDVQrcbVtBAyZ9aMYILQkTagkVmZZ6XWZMCJO34
+	gkHJu9KyfZpn2HFvrRYhKi3r5kI6t2VTtziO+ILDV5HGHLdpyLrPJMbGQ/lMzMJH7bJLtn
+	izzJfGCi9ZeM1mHDtDPs4W1/Fu3E9V8S1Emv8jlHuGhkbWk49h4iXTY05kyANgoI9hTn0g
+	lytQtfxvUSE9SlEnhrbUzhB8DIgCgCcTlUYOTf+QLkii1hboEwJPkjBwD1CDJ28+ReZr9m
+	YGE2nc5cOUWqeY4U0EFF6o74W0/eSRxRhKmioIC4YLoUEsRJvT6qwLRRO102/g==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aY689z7gHNv8rgVO@stanley.mountain>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 13 Feb 2026 11:36:40 +0100
+Message-Id: <DGDRNT32OY1Z.19IC8XK7DWJ0Y@bootlin.com>
+To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei Starovoitov"
+ <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>
+Subject: Re: [PATCH bpf-next v1 14/14] selftests/bpf: Check BPFTOOL env var
+ in detect_bpftool_path()
+Cc: "Amery Hung" <ameryhung@gmail.com>, "Mykyta Yatsenko"
+ <yatsenko@meta.com>, =?utf-8?q?Alexis_Lothor=C3=A9?=
+ <alexis.lothore@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <kernel-team@meta.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+ <20260212011356.3266753-15-ihor.solodrai@linux.dev>
+In-Reply-To: <20260212011356.3266753-15-ihor.solodrai@linux.dev>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 26/02/13 08:56AM, Dan Carpenter wrote:
-> [ Smatch checking is paused while we raise funding. #SadFace
->   https://lore.kernel.org/all/aTaiGSbWZ9DJaGo7@stanley.mountain/ -dan ]
-> 
-> Hello Anton Protopopov,
-> 
-> Commit c81e4322acf0 ("bpf: Fix a potential use-after-free of BTF
-> object") from Feb 9, 2026 (linux-next), leads to the following Smatch
-> static checker warning:
-> 
-> 	kernel/bpf/verifier.c:25375 add_fd_from_fd_array()
-> 	warn: double fget(): 'fd'
-> 
-> kernel/bpf/verifier.c
->     25360 static int add_fd_from_fd_array(struct bpf_verifier_env *env, int fd)
->     25361 {
->     25362         struct bpf_map *map;
->     25363         struct btf *btf;
->     25364         CLASS(fd, f)(fd);
-> 
-> This assigns f = fdget(fd);
-> 
->     25365         int err;
->     25366 
->     25367         map = __bpf_map_get(f);
->     25368         if (!IS_ERR(map)) {
->     25369                 err = __add_used_map(env, map);
->     25370                 if (err < 0)
->     25371                         return err;
->     25372                 return 0;
->     25373         }
->     25374 
-> --> 25375         btf = btf_get_by_fd(fd);
->                                       ^^
-> This re-uses the fd.  The reason behind the warning is that the user
-> could have changed the fd to point to a different file from the
-> start of the function.
+Hi Ihor,
 
-True, this could happen. Not sure this is a real problem (if a user
-replaced this by a valid BTF, well...)
+On Thu Feb 12, 2026 at 2:13 AM CET, Ihor Solodrai wrote:
+> The bpftool_maps_access and bpftool_metadata tests may fail on BPF CI
+> with "command not found", depending on a workflow.
+> This happens because detect_bpftool_path() only checks two hardcoded
+> relative paths:
+>   - ./tools/sbin/bpftool
+>   - ../tools/sbin/bpftool
+>
+> Add support for a BPFTOOL environment variable that allows specifying
+> the exact path to the bpftool binary.
+>
+> Also replace strncpy() with snprintf() for proper null-termination.
+>
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
->     25376         if (!IS_ERR(btf))
->     25377                 return __add_used_btf(env, btf);
+LGTM, thanks for the improvement.
 
-The problem with this piece of code is that originally I wanted to
-keep naming/appearance in sync, but the corresponding map/btf
-functions, historically, behave a bit different...
+For the record, another issue that this path harcoding is aiming to
+solve is that we definitely want a full bpftool binary (as those bpftool
+helpers are used to find the binary under test), and not a _bootstrap_
+version, which only exposes a few subcommands instead of the whole set.
+So I'd say that it is not an issue yet, but it may be worth in the
+future to enrich the checks in detect_bpftool_path to make sure that any
+bpftool binary path provided by BPFTOOL env var is not pointing to a
+bootstrap version.
 
-To keep things working and to address the bug report in this
-thread, one fix is required:
+Alexis
 
--       btf = btf_get_by_fd(fd);
--       if (!IS_ERR(btf))
-+       btf = __btf_get_by_fd(f);
-+       if (!IS_ERR(btf)) {
-+               btf_get(btf);
-                return __add_used_btf(env, btf);
-+       }
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-I will send this fix later.
-
->     25379         verbose(env, "fd %d is not pointing to valid bpf_map or btf\n", fd);
->     25380         return PTR_ERR(map);
->     25381 }
-> 
-> regards,
-> dan carpenter
