@@ -1,283 +1,217 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6064326FD93
-	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 06:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828D1944F
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 06:15:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770963214; cv=none; b=gNV/lUgo7qGjphfjJj+BM4eeKeHLzQzp/XpKMouJGBqUwU/6UkL2kcgTRNHYVuHtG8vv98KVvNuErxuaXEOQxw5+eUMfp6gFtf+j7CAZbjdBi1Vjr97lkaxo+owkKVH6asbKePDD1JSmQhJj4M1OQZZhwLvHWCJ0Ay+y1jxBNrE=
+	t=1770963325; cv=none; b=DD9ejgFSnjPlSYzHXOmz3essl0Bf0ROGWoVDCEuiyJeQvhXVGTHma6LEclGmBtBBCq8ZRH5a502fIaKpF55QyK9LmAqh2tXmEWoC9L5s66FIgDMxw70kIBAfUaE6eFiNeha5YxqYyUZap6Dn2yDAan9fC22zMimXl2r8HOPJBj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770963214; c=relaxed/simple;
-	bh=FxYaHbZOahP5KM8dCLOZuLbyNPRUlc/HoBMEp6Wlc4A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a/+scOnZ5DI9io5mdEDYGHHwJJFijoXJOK/fZ+VHHa7kAby7kBIcCXTmIizieLxj/KC2zrauBJKLiAyUDKnehAAsof1pybwVkESD2/tgYiPTUSc6oEEDQReobo/5lZn/L9969y4uU4t7P6d4s55AlTm1fE5RnB7EAiEDZ/M35+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bdh8eb7K; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1770963325; c=relaxed/simple;
+	bh=3lipCT2HxywmwAlwTT9F2ZYPT4Jh+fuPYFH5Sg22xwQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=G5BdFQNJVGkjK2FoStFPVqeVDly3Usr1qanwWbHQsmduILtPKo51sptvvD0nFEaOHJMlF0vURfh8Gq1PUNJDibu182lsMPPO4bG07f3Sb69VsqL5gWsMJcg70MtMhE42060NNpEZ0e6kfRcuQEPxHqNYrL0qtvFOHH2NOR/iyiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUNciswC; arc=none smtp.client-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bdh8eb7K"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1770963210; x=1802499210;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FxYaHbZOahP5KM8dCLOZuLbyNPRUlc/HoBMEp6Wlc4A=;
-  b=bdh8eb7KzMvlQHLU6U+0Y/iU39IkAFdpUxK4G1yyQC3FS/LAJWvrICL0
-   HzA7teCN8KgWnV7aiohD0tysFqFBvakOdn9AelM8bayJnbDSuhXQp0WHv
-   EF0xZ2NXE4E5q3wxz+FDAV4owjW+2gZk0a6xq6G9eohqTssB+3Jg8uMwx
-   b2cApRX5sj4p1fpxi6vrhEosXSTlA9yd7uH05OAsfgsmL3Uwx9tCHGSnN
-   MWN3kAJu18Z7JuSNr3i8MGohOm4Sh4+lmu71jlBSgSuyqHc53L72cmqZe
-   ee/vIHmLWm4q479UTScr2tOeG8qlBmKzdJHaK0fXEu9wrhzHpVkdwGI//
-   Q==;
-X-CSE-ConnectionGUID: 00CyV9yeQYGcC2ryzMHBDw==
-X-CSE-MsgGUID: whbkBd7TQvKAdHuW83QIuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11699"; a="75988947"
-X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
-   d="scan'208";a="75988947"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2026 22:13:29 -0800
-X-CSE-ConnectionGUID: 2p5EqpDhTE6x8A9jgYuEhg==
-X-CSE-MsgGUID: YGybm8eWSk2nBmsYvfQZow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
-   d="scan'208";a="212012838"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 12 Feb 2026 22:13:17 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vqmQU-00000000v9U-2Nn8;
-	Fri, 13 Feb 2026 06:13:14 +0000
-Date: Fri, 13 Feb 2026 14:12:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: Larysa Zaremba <larysa.zaremba@intel.com>, bpf@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Larysa Zaremba <larysa.zaremba@intel.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Simon Horman <horms@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Subject: Re: [Intel-wired-lan] [PATCH bpf v2 6/9] i40e: use xdp.frame_sz as
- XDP RxQ info frag_size
-Message-ID: <202602131407.iwRQooFn-lkp@intel.com>
-References: <20260212183328.1883148-8-larysa.zaremba@intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUNciswC"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2baa6ec5638so283322eec.0
+        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 22:15:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770963323; x=1771568123; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:date:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hSnBEUwlsGlmG4S8Ga4XvSPQWvsOEXNThh4UUMWSecA=;
+        b=UUNciswCkt3IYL2wtIrakjmxQiVTCfP8DLYcImmkMMTVS9+d18qRzLvayW+PbL/ig8
+         CDbQo4u9U98JdZ2vF1j/AegsUdQH6B6kem/kKmesWIBfeSBqSo1wjxOZRoDW9f6jfAc4
+         LSO35gwnJCHjY3qCBeI/azse8cvz6r+BvuhA9JllcrK41GtulbNSUy6evx9FUGKma85b
+         ZicQvpKoWCjMeNjrR3yVe5Fv7AMtX2qasZCEX4XMxu5Gh9N+vTPO76kpv41hTvCEumNN
+         g81yvmPonTgA/XNH2Nqoa7RT8eF5Lyqnf1Rwuxn6QChigycE3uPkLhWlNjXXiJrAhpsQ
+         Kugw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770963323; x=1771568123;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=hSnBEUwlsGlmG4S8Ga4XvSPQWvsOEXNThh4UUMWSecA=;
+        b=hxOWXdpOrmmApfQZ3kBsTkwVljPsAwjJKNCUVgnMyY1hrWIJh/a/TdsE1dbuXqA7Hd
+         UYbuUP3QSJmbgEJzpusC/aJC4cupJXFMi3Vj2N3kRDKhp6qQCHj1z0myq/DTne0TwYgA
+         bNRBedaiPsKDxkV5+GsnZvWoBuWpCYVyb/74th4JSWS7fInkxT229mgU2CpUpybxNxMe
+         ROCQVllaJYa83DHFY+5Q/PkNI5jMONsROnq3qM9FefXADAgMyelzdVFMqzCkjKIA8I+s
+         BZAFg5sIYowS5o+lIk2FefwaNyBqywnz3+9VYtUta12U2+f4fwMzA9Hqy4VQLpKjyttT
+         EBhw==
+X-Gm-Message-State: AOJu0YzgVqV+83Zcwpt916l/cooDwY4V1AMoNc4+n2fIT6pZJggSAGUw
+	sGChtg1g+4jHns5vZ3jFmaW2wZKaLeHt5U5Otzcc4nHeB0csYD4obdoVx0QQ
+X-Gm-Gg: AZuq6aI3eVglqVmqjHAa4rqDnWoE8tXgZlu+FwngLpZWkQFpFBAPf2pf8eRPC2zRojG
+	6BpJtZXyHAe0z3rK7/AtlKmZLcrtZoeCdmdpPyqsG/S7WyrONZqXKqLSs7XayhkECAqeh/3xXo4
+	oud4SO7U451QMjIdhNLX2CBGVJEQRAxXvp/HzbivFWy4QChMZkOKpehA3mudHUyQ7us2U2XxzJO
+	5TY7sq8QpSlQcV5+CNIawPdyse/qOliFpY2rskuvU5J6hmYhV7JurGQ/ecl+E2QJ7Dwf8Mgg1Qu
+	+k9IplgTKQv+zIDG4vnBUm4UCOHp0CV3WBgtvuoPFD/+ljg0FFU+qDUmS1UkEhO2SKsYMZSpHUI
+	wdi/QX6c3caanNCj98rbxuaozELiDJ1QdovQFLTc9sec8L0Jf7WQZy9fjcxPwCM2UUQEIFfLRLf
+	JtpVeZ3cJAyGds/nobdozVC6qGj+1yfw8Fr8iiSlFdM0f/Ko7LdcSc0Tj/LguKZdNCVSmoFDQ7e
+	b/ET+RQlvKwG2PW+mcZcQ4p0NV2
+X-Received: by 2002:a05:693c:2297:b0:2a4:3593:ccba with SMTP id 5a478bee46e88-2babc00de20mr294609eec.1.1770963323442;
+        Thu, 12 Feb 2026 22:15:23 -0800 (PST)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dccfe0esm4903464eec.18.2026.02.12.22.15.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Feb 2026 22:15:23 -0800 (PST)
+From: stfomichev@gmail.com
+Date: Thu, 12 Feb 2026 22:15:22 -0800
+To: bpf@vger.kernel.org
+Cc: kuba@kernel.org
+Subject: [ANN] bpf development stats for 7.0
+Message-ID: <aY7Beg9U_jEg8Iz1@mini-arch>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260212183328.1883148-8-larysa.zaremba@intel.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Larysa,
+Regular development statistics update, similar Jakub's netdev post:
+https://lore.kernel.org/netdev/20260212124208.187e53ae@kernel.org/
 
-kernel test robot noticed the following build errors:
+Previous cycle:
+29 Sep to 30 Nov: 5851 mailing list messages, 62 days, 94 messages per day
+415 repo commits (7 commits/day, 42.41% of these are selftests)
+https://lore.kernel.org/bpf/aTBxuQSvtATrr3mu@mini-arch/
 
-[auto build test ERROR on bpf/master]
+Current cycle:
+1 Dec to 8 Feb: 6133 mailing list messages, 69 days, 89 messages per day
+205 repo commits (3 commits/day, 44.39% of these are selftests)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Larysa-Zaremba/xdp-use-modulo-operation-to-calculate-XDP-frag-tailroom/20260213-030652
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git master
-patch link:    https://lore.kernel.org/r/20260212183328.1883148-8-larysa.zaremba%40intel.com
-patch subject: [Intel-wired-lan] [PATCH bpf v2 6/9] i40e: use xdp.frame_sz as XDP RxQ info frag_size
-config: i386-buildonly-randconfig-001-20260213 (https://download.01.org/0day-ci/archive/20260213/202602131407.iwRQooFn-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260213/202602131407.iwRQooFn-lkp@intel.com/reproduce)
+Testing
+-------
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602131407.iwRQooFn-lkp@intel.com/
+Top contributors of selftests:
+   1 [ 15] Bastien Curutchet
+   2 [ 12] Alexis Lothoré
+   3 [  7] Jakub Sitnicki
+   4 [  6] Kumar Kartikeya Dwivedi
+   5 [  6] Mykyta Yatsenko
+   6 [  5] Hoyeon Lee
+   7 [  5] Anton Protopopov
+   8 [  4] Puranjay Mohan
+   9 [  4] Matt Bobrowski
+  10 [  3] Alexei Starovoitov
 
-All errors (new ones prefixed by >>):
+Developer rankings
+------------------
 
->> drivers/net/ethernet/intel/i40e/i40e_main.c:3583:18: error: call to undeclared function 'xsk_pool_get_rx_frag_step'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-    3583 |                 xdp_frame_sz = xsk_pool_get_rx_frag_step(ring->xsk_pool);
-         |                                ^
-   drivers/net/ethernet/intel/i40e/i40e_main.c:3583:18: note: did you mean 'xsk_pool_get_rx_frame_size'?
-   include/net/xdp_sock_drv.h:340:19: note: 'xsk_pool_get_rx_frame_size' declared here
-     340 | static inline u32 xsk_pool_get_rx_frame_size(struct xsk_buff_pool *pool)
-         |                   ^
-   1 error generated.
+Top reviewers (cs):                  Top reviewers (msg):                
+   1 (   ) [11] Alexei Starovoitov      1 ( +1) [25] Alexei Starovoitov  
+   2 ( +1) [ 4] Andrii Nakryiko         2 ( +1) [21] Andrii Nakryiko     
+   3 ( -1) [ 3] Eduard Zingerman        3 ( -2) [16] Eduard Zingerman    
+   4 ( +1) [ 2] Yonghong Song           4 (   ) [ 6] Jakub Kicinski      
+   5 ( -1) [ 2] Jakub Kicinski          5 (+46) [ 6] Aleksandr Loktionov 
+   6 (+14) [ 2] Kumar Kartikeya Dwivedi    6 ( +1) [ 5] Yonghong Song       
+   7 ( -1) [ 1] Martin KaFai Lau        7 ( -2) [ 4] Martin KaFai Lau    
+   8 ( +6) [ 1] Steven Rostedt          8 (+16) [ 4] Harry Yoo           
+   9 (+13) [ 1] Toke Høiland-Jørgensen    9 (   ) [ 4] Steven Rostedt      
+  10 (   ) [ 1] Paolo Abeni            10 (+20) [ 3] Kumar Kartikeya Dwivedi
+  11 ( -2) [ 1] Alan Maguire           11 (***) [ 3] Hao Li              
+  12 (+16) [ 1] Menglong Dong          12 (***) [ 3] Matt Bobrowski      
+  13 ( +3) [ 1] Ihor Solodrai          13 (***) [ 3] Michael S. Tsirkin  
+  14 (+28) [ 1] Mykyta Yatsenko        14 (***) [ 3] Suren Baghdasaryan  
+  15 ( +4) [ 1] Amery Hung             15 (***) [ 2] Hari Bathini        
 
+Top authors (cs):                    Top authors (msg):                  
+   1 ( +1) [2] Puranjay Mohan           1 ( +8) [17] Menglong Dong       
+   2 (+11) [1] Leon Hwang               2 ( +6) [14] Leon Hwang          
+   3 (+22) [1] Ihor Solodrai            3 (+14) [13] Puranjay Mohan      
+   4 ( +4) [1] Alan Maguire             4 ( +2) [12] Chia-Yu Chang       
+   5 (***) [1] Emil Tsalapatis          5 (***) [11] Wei Fang            
+   6 ( +6) [1] Mykyta Yatsenko          6 ( +1) [10] Amery Hung          
+   7 ( -4) [1] Alexei Starovoitov       7 (+17) [ 9] Jens Remus          
+   8 (+12) [1] Matt Bobrowski           8 (+11) [ 9] Ihor Solodrai       
+   9 ( -8) [1] Menglong Dong            9 ( -5) [ 9] Mykyta Yatsenko     
+  10 ( -6) [1] Jiri Olsa               10 ( +2) [ 7] Daniel Borkmann     
 
-vim +/xsk_pool_get_rx_frag_step +3583 drivers/net/ethernet/intel/i40e/i40e_main.c
+Top scores (positive):               Top scores (negative):              
+   1 (   ) [173] Alexei Starovoitov     1 ( +8) [58] Menglong Dong       
+   2 ( +1) [ 97] Andrii Nakryiko        2 ( +4) [51] Leon Hwang          
+   3 ( -1) [ 69] Eduard Zingerman       3 ( +2) [50] Chia-Yu Chang       
+   4 ( +1) [ 35] Jakub Kicinski         4 (+12) [49] Puranjay Mohan      
+   5 ( -1) [ 32] Yonghong Song          5 (***) [45] Wei Fang            
+   6 (   ) [ 26] Martin KaFai Lau       6 (+12) [37] Jens Remus          
+   7 (***) [ 22] Kumar Kartikeya Dwivedi    7 ( +5) [28] Amery Hung          
 
-  3552	
-  3553	/**
-  3554	 * i40e_configure_rx_ring - Configure a receive ring context
-  3555	 * @ring: The Rx ring to configure
-  3556	 *
-  3557	 * Configure the Rx descriptor ring in the HMC context.
-  3558	 **/
-  3559	static int i40e_configure_rx_ring(struct i40e_ring *ring)
-  3560	{
-  3561		struct i40e_vsi *vsi = ring->vsi;
-  3562		u32 chain_len = vsi->back->hw.func_caps.rx_buf_chain_len;
-  3563		u16 pf_q = vsi->base_queue + ring->queue_index;
-  3564		struct i40e_hw *hw = &vsi->back->hw;
-  3565		struct i40e_hmc_obj_rxq rx_ctx;
-  3566		u32 xdp_frame_sz = 0;
-  3567		int err = 0;
-  3568		bool ok;
-  3569	
-  3570		bitmap_zero(ring->state, __I40E_RING_STATE_NBITS);
-  3571	
-  3572		/* clear the context structure first */
-  3573		memset(&rx_ctx, 0, sizeof(rx_ctx));
-  3574	
-  3575		ring->rx_buf_len = vsi->rx_buf_len;
-  3576	
-  3577		/* XDP RX-queue info only needed for RX rings exposed to XDP */
-  3578		if (ring->vsi->type != I40E_VSI_MAIN)
-  3579			goto skip;
-  3580	
-  3581		ring->xsk_pool = i40e_xsk_pool(ring);
-  3582		if (ring->xsk_pool) {
-> 3583			xdp_frame_sz = xsk_pool_get_rx_frag_step(ring->xsk_pool);
-  3584			ring->rx_buf_len = xsk_pool_get_rx_frame_size(ring->xsk_pool);
-  3585			err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
-  3586						 ring->queue_index,
-  3587						 ring->q_vector->napi.napi_id,
-  3588						 xdp_frame_sz);
-  3589			if (err)
-  3590				return err;
-  3591			err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
-  3592							 MEM_TYPE_XSK_BUFF_POOL,
-  3593							 NULL);
-  3594			if (err)
-  3595				goto unreg_xdp;
-  3596			dev_info(&vsi->back->pdev->dev,
-  3597				 "Registered XDP mem model MEM_TYPE_XSK_BUFF_POOL on Rx ring %d\n",
-  3598				 ring->queue_index);
-  3599	
-  3600		} else {
-  3601			xdp_frame_sz = i40e_rx_pg_size(ring) / 2;
-  3602			err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
-  3603						 ring->queue_index,
-  3604						 ring->q_vector->napi.napi_id,
-  3605						 xdp_frame_sz);
-  3606			if (err)
-  3607				return err;
-  3608			err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
-  3609							 MEM_TYPE_PAGE_SHARED,
-  3610							 NULL);
-  3611			if (err)
-  3612				goto unreg_xdp;
-  3613		}
-  3614	
-  3615	skip:
-  3616		xdp_init_buff(&ring->xdp, xdp_frame_sz, &ring->xdp_rxq);
-  3617	
-  3618		rx_ctx.dbuff = DIV_ROUND_UP(ring->rx_buf_len,
-  3619					    BIT_ULL(I40E_RXQ_CTX_DBUFF_SHIFT));
-  3620	
-  3621		rx_ctx.base = (ring->dma / 128);
-  3622		rx_ctx.qlen = ring->count;
-  3623	
-  3624		/* use 16 byte descriptors */
-  3625		rx_ctx.dsize = 0;
-  3626	
-  3627		/* descriptor type is always zero
-  3628		 * rx_ctx.dtype = 0;
-  3629		 */
-  3630		rx_ctx.hsplit_0 = 0;
-  3631	
-  3632		rx_ctx.rxmax = min_t(u16, vsi->max_frame, chain_len * ring->rx_buf_len);
-  3633		if (hw->revision_id == 0)
-  3634			rx_ctx.lrxqthresh = 0;
-  3635		else
-  3636			rx_ctx.lrxqthresh = 1;
-  3637		rx_ctx.crcstrip = 1;
-  3638		rx_ctx.l2tsel = 1;
-  3639		/* this controls whether VLAN is stripped from inner headers */
-  3640		rx_ctx.showiv = 0;
-  3641		/* set the prefena field to 1 because the manual says to */
-  3642		rx_ctx.prefena = 1;
-  3643	
-  3644		/* clear the context in the HMC */
-  3645		err = i40e_clear_lan_rx_queue_context(hw, pf_q);
-  3646		if (err) {
-  3647			dev_info(&vsi->back->pdev->dev,
-  3648				 "Failed to clear LAN Rx queue context on Rx ring %d (pf_q %d), error: %d\n",
-  3649				 ring->queue_index, pf_q, err);
-  3650			err = -ENOMEM;
-  3651			goto unreg_xdp;
-  3652		}
-  3653	
-  3654		/* set the context in the HMC */
-  3655		err = i40e_set_lan_rx_queue_context(hw, pf_q, &rx_ctx);
-  3656		if (err) {
-  3657			dev_info(&vsi->back->pdev->dev,
-  3658				 "Failed to set LAN Rx queue context on Rx ring %d (pf_q %d), error: %d\n",
-  3659				 ring->queue_index, pf_q, err);
-  3660			err = -ENOMEM;
-  3661			goto unreg_xdp;
-  3662		}
-  3663	
-  3664		/* configure Rx buffer alignment */
-  3665		if (!vsi->netdev || test_bit(I40E_FLAG_LEGACY_RX_ENA, vsi->back->flags)) {
-  3666			if (I40E_2K_TOO_SMALL_WITH_PADDING) {
-  3667				dev_info(&vsi->back->pdev->dev,
-  3668					 "2k Rx buffer is too small to fit standard MTU and skb_shared_info\n");
-  3669				err = -EOPNOTSUPP;
-  3670				goto unreg_xdp;
-  3671			}
-  3672			clear_ring_build_skb_enabled(ring);
-  3673		} else {
-  3674			set_ring_build_skb_enabled(ring);
-  3675		}
-  3676	
-  3677		ring->rx_offset = i40e_rx_offset(ring);
-  3678	
-  3679		/* cache tail for quicker writes, and clear the reg before use */
-  3680		ring->tail = hw->hw_addr + I40E_QRX_TAIL(pf_q);
-  3681		writel(0, ring->tail);
-  3682	
-  3683		if (ring->xsk_pool) {
-  3684			xsk_pool_set_rxq_info(ring->xsk_pool, &ring->xdp_rxq);
-  3685			ok = i40e_alloc_rx_buffers_zc(ring, I40E_DESC_UNUSED(ring));
-  3686		} else {
-  3687			ok = !i40e_alloc_rx_buffers(ring, I40E_DESC_UNUSED(ring));
-  3688		}
-  3689		if (!ok) {
-  3690			/* Log this in case the user has forgotten to give the kernel
-  3691			 * any buffers, even later in the application.
-  3692			 */
-  3693			dev_info(&vsi->back->pdev->dev,
-  3694				 "Failed to allocate some buffers on %sRx ring %d (pf_q %d)\n",
-  3695				 ring->xsk_pool ? "AF_XDP ZC enabled " : "",
-  3696				 ring->queue_index, pf_q);
-  3697		}
-  3698	
-  3699		return 0;
-  3700	unreg_xdp:
-  3701		if (ring->vsi->type == I40E_VSI_MAIN)
-  3702			xdp_rxq_info_unreg(&ring->xdp_rxq);
-  3703	
-  3704		return err;
-  3705	}
-  3706	
+Company rankings
+----------------
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Top reviewers (cs):                  Top reviewers (msg):                
+   1 (   ) [16] Meta                    1 (   ) [77] Meta                
+   2 (   ) [ 4] Intel                   2 ( +2) [17] Google              
+   3 (   ) [ 3] RedHat                  3 (   ) [16] Intel               
+   4 (   ) [ 3] Google                  4 ( -2) [12] RedHat              
+   5 ( +4) [ 2] Linux Foundation        5 (   ) [ 7] Oracle              
+   6 (   ) [ 2] Isovalent               6 (   ) [ 3] Isovalent           
+   7 ( -2) [ 1] Oracle                  7 (+10) [ 3] Unknown             
+
+Top authors (cs):                    Top authors (msg):                  
+   1 (   ) [5] Meta                     1 (   ) [38] Meta                
+   2 (   ) [3] Google                   2 ( +4) [19] Tencent             
+   3 ( +3) [2] Amazon                   3 (+15) [18] Amazon              
+   4 (   ) [1] Isovalent                4 ( -1) [16] Isovalent           
+   5 (   ) [1] Oracle                   5 (   ) [14] Google              
+   6 ( +9) [1] Shopee                   6 (+10) [14] IBM                 
+   7 ( +4) [1] IBM                      7 ( +7) [14] Shopee              
+
+Top scores (positive):               Top scores (negative):              
+   1 (   ) [218] Meta                   1 (+12) [68] Amazon              
+   2 (   ) [ 73] Intel                  2 ( +6) [63] Tencent             
+   3 ( +5) [ 41] RedHat                 3 (+13) [51] IBM                 
+   4 ( -1) [ 21] Linux Foundation       4 ( +2) [51] Shopee              
+   5 (***) [ 17] Google                 5 (   ) [50] Nokia               
+   6 ( -1) [  9] Hedgehog               6 (***) [43] NXP                 
+   7 (***) [  6] Loongson               7 ( -5) [36] Isovalent           
+
+More raw stats
+--------------
+
+Prev: start: Mon, 29 Sep 2025 10:22:06 +0800
+	end: Sun, 30 Nov 2025 21:06:29 +0800
+Prev: messages: 5851 days: 62 (94 msg/day)
+Prev: direct commits: 415 (7 commits/day)
+Prev: test commits: 176 (42.41%)
+Prev: people: 289  {'author': 105, 'commenter': 120, 'both': 64, 'none': 19}
+Prev: people pct: {'author': 0.341, 'commenter': 0.39, 'both': 0.208, 'none': 0.062}
+Prev: review pct: 36.39%  x-corp pct: 26.51%
+Prev: avg revisions: single patch: 1.41 patch set: 2.11
+
+Curr: start: Mon, 01 Dec 2025 21:44:16 -0800
+	end: Sun, 08 Feb 2026 20:59:08 -0800
+Curr: messages: 6133 days: 69 (89 msg/day)
+Curr: direct commits: 205 (3 commits/day)
+Curr: test commits: 91 (44.39%)
+Curr: people: 310  {'author': 122, 'commenter': 132, 'both': 56, 'none': 22}
+Curr: people pct: {'author': 0.367, 'commenter': 0.398, 'both': 0.169, 'none': 0.066}
+Curr: review pct: 42.44%  x-corp pct: 31.22%
+Curr: avg revisions: single patch: 1.44 patch set: 2.57
+
+Diff: -13.5% linux-next size
+Diff:  -5.8% ( +8.8%) msg/day
+Diff: -55.6% (-48.7%) commits/day
+Diff:  -3.6% (+11.4%) people/day
+Diff: review pct: +6.0%
+      x-corp pct: +4.7%
+Diff: avg revisions: single patch: +1.7% patch set: +21.8%
+
+Contributions to selftests: total individuals: 31 (was 46, -32.61%)
+Contributions to selftests:
+   1 [ 15] Bastien Curutchet
+   2 [ 12] Alexis Lothoré
+   3 [  7] Jakub Sitnicki
+   4 [  6] Kumar Kartikeya Dwivedi
+   5 [  6] Mykyta Yatsenko
+   6 [  5] Hoyeon Lee
+   7 [  5] Anton Protopopov
+   8 [  4] Puranjay Mohan
+   9 [  4] Matt Bobrowski
+  10 [  3] Alexei Starovoitov
