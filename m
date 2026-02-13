@@ -1,53 +1,65 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BBD22ACEB;
-	Fri, 13 Feb 2026 02:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819D821D590
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 03:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770950785; cv=none; b=M0RiTS8g2JbcNhYzaj0GVuaVxzNzTDAhV2Q9zPsfHK/+RqZwk5yvrmdIcIleaJxArmIIu4tXnFisS0G2BexagE1od/3exvjEx33CFheR4yVgQtpGpS1ZoMe2EDSyd3F7uUojHsR3fo6oH4oBU2vPzJWwxMo9TV7FDSIlXTToCts=
+	t=1770954042; cv=none; b=MP0n/KZkugSPTCUObZt0y3QD64lVcFPiYQL/d4iyy4uYRdcm7ds4LN6w4xEILiZycZURG1m/hApwbyxhSySe0eu1yHdvQGSosropmX1FVDjYwjZuycUu5vKsKlDCIu+GU2I9XLqjBEEf5ug4NRCa2hWIgB7F3kWWCMWbPDaVGMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770950785; c=relaxed/simple;
-	bh=LDZ94JtoHMM1UEYU5Q90klCQ7sVAFPEQpBpyLjSIKFY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Yb4si6CSQrvtYiQBOWgBZfOYgplfJXmGEqTQePBDKQ8WtABsZUMNk0I0rGIYM19y39H95WxlSPBy9EsVYZ7nu6OP3cC+KGL2VTdPVqpWEVHHh0D2v3AkGGTZ6vYFyBqqLESeti8gs7n8UpvLqNVOt80CwP/JYWgStq/BQ60L7wk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=dE2ZlQ7i; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1770954042; c=relaxed/simple;
+	bh=h4tB2FuczzrOeHFXhHQlzKasIsViE2BISHrWjHObg/k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nLoCRuY7GEEH3umL3Q6NA4AHJkGuOEO/zevTQ5SrJvoO6vk14r8XUdy0ZbbCrH5wGLaXvQNY+NExOQ9LkrqlnHFBm4XbG3wIXfy/om9lm0EhX0pPdlqRiqPF3pvOzQnyNLjI1rfKAKdJXUqhBfom+WoGP374Mj3T7+hDx0LXGJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ay4w3Q0j; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="dE2ZlQ7i"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=4e
-	RwFhUgku6857Z68xn0kodvZ/XzFvUeVFNaJo7REB4=; b=dE2ZlQ7i0edP11WknB
-	LWkXHmBBKZyTlM2+OE4VJ83j5hWivqA0fnD2lN5Zy7tO57/UbpPuPrcp/+mTbHVx
-	xhb5/OAITU6aTRW0BDBJyvr1KojB16h1Qcv72f9C4MHMThNDEG/qAEbypwphruii
-	Ey9F4VSGtkmRmLit2W++xibX0=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAnZNoNkI5pvhZSLw--.1343S4;
-	Fri, 13 Feb 2026 10:44:32 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	posk@google.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com
-Cc: bpf@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ay4w3Q0j"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770954038;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UEwHgkofFI3GyTbx0AZpgpNTggFN1Eq6XWcD5g/Mo3Y=;
+	b=Ay4w3Q0jup0TDh7RkX6tZW6s96ELo0xclhA3o1v0+mkVj1FSjPNvvMzWDFJattX7Vm3ja1
+	nEo2kjpmaGSowXspYybIjcuzlPq9eUFXKFvbxLqPsh8vP2hJmlx0oFberFD0OqusKKi0R0
+	+b0FyGmGB5DZ7Nt+J0pIZ+c7pvVUCAY=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: xxx@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,
+	jiayuan.chen@shopee.com,
+	syzbot+2b3391f44313b3983e91@syzkaller.appspotmail.com,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@kernel.org>,
 	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	yangfeng59949@163.com
-Subject: [PATCH v6 bpf-next 2/2] selftests/bpf: Add selftests for the invocation of bpf_lwt_xmit_push_encap
-Date: Fri, 13 Feb 2026 10:44:29 +0800
-Message-Id: <20260213024429.39972-3-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260213024429.39972-1-yangfeng59949@163.com>
-References: <20260213024429.39972-1-yangfeng59949@163.com>
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH bpf v3 1/2] bpf: cpumap: fix race in bq_flush_to_queue on PREEMPT_RT
+Date: Fri, 13 Feb 2026 11:40:14 +0800
+Message-ID: <20260213034018.284146-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260213034018.284146-1-jiayuan.chen@linux.dev>
+References: <20260213034018.284146-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,51 +67,151 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAnZNoNkI5pvhZSLw--.1343S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7XF4kCFWxXF4rArW3Wr48JFb_yoWkWrg_tr
-	sYga4kCrWxGFnIyayjkr1UCryakwsxWr9rJFsrJr1kCw4UX3Z8GFs7Gr1DJas2g3y3Kr9x
-	Aa909F1Iyr42qjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRCrWFDUUUUU==
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC8RAmnmmOkBBaUgAA32
+X-Migadu-Flow: FLOW_OUT
 
-From: Feng Yang <yangfeng@kylinos.cn>
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-Calling bpf_lwt_xmit_push_encap will not cause a crash when dst is missing.
+On PREEMPT_RT kernels, the per-CPU xdp_bulk_queue (bq) can be accessed
+concurrently by multiple preemptible tasks on the same CPU.
 
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
+The original code assumes bq_enqueue() and __cpu_map_flush() run
+atomically with respect to each other on the same CPU, relying on
+local_bh_disable() to prevent preemption. However, on PREEMPT_RT,
+local_bh_disable() only calls migrate_disable() (when
+PREEMPT_RT_NEEDS_BH_LOCK is not set) and does not disable
+preemption, which allows CFS scheduling to preempt a task during
+bq_flush_to_queue(), enabling another task on the same CPU to enter
+bq_enqueue() and operate on the same per-CPU bq concurrently.
+
+This leads to several races:
+
+1. Double __list_del_clearprev(): after bq->count is reset in
+   bq_flush_to_queue(), a preempting task can call bq_enqueue() ->
+   bq_flush_to_queue() on the same bq when bq->count reaches
+   CPU_MAP_BULK_SIZE. Both tasks then call __list_del_clearprev()
+   on the same bq->flush_node, the second call dereferences the
+   prev pointer that was already set to NULL by the first.
+
+2. bq->count and bq->q[] races: concurrent bq_enqueue() can corrupt
+   the packet queue while bq_flush_to_queue() is processing it.
+
+The race between task A (__cpu_map_flush -> bq_flush_to_queue) and
+task B (bq_enqueue -> bq_flush_to_queue) on the same CPU:
+
+  Task A (xdp_do_flush)          Task B (cpu_map_enqueue)
+  ----------------------         ------------------------
+  bq_flush_to_queue(bq)
+    spin_lock(&q->producer_lock)
+    /* flush bq->q[] to ptr_ring */
+    bq->count = 0
+    spin_unlock(&q->producer_lock)
+                                   bq_enqueue(rcpu, xdpf)
+    <-- CFS preempts Task A -->      bq->q[bq->count++] = xdpf
+                                     /* ... more enqueues until full ... */
+                                     bq_flush_to_queue(bq)
+                                       spin_lock(&q->producer_lock)
+                                       /* flush to ptr_ring */
+                                       spin_unlock(&q->producer_lock)
+                                       __list_del_clearprev(flush_node)
+                                         /* sets flush_node.prev = NULL */
+    <-- Task A resumes -->
+    __list_del_clearprev(flush_node)
+      flush_node.prev->next = ...
+      /* prev is NULL -> kernel oops */
+
+Fix this by adding a local_lock_t to xdp_bulk_queue and acquiring it
+in bq_enqueue() and __cpu_map_flush(). These paths already run under
+local_bh_disable(), so use local_lock_nested_bh() which on non-RT is
+a pure annotation with no overhead, and on PREEMPT_RT provides a
+per-CPU sleeping lock that serializes access to the bq.
+
+To reproduce, insert an mdelay(100) between bq->count = 0 and
+__list_del_clearprev() in bq_flush_to_queue(), then run reproducer
+provided by syzkaller.
+
+Fixes: 3253cb49cbad ("softirq: Allow to drop the softirq-BKL lock on PREEMPT_RT")
+Reported-by: syzbot+2b3391f44313b3983e91@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/69369331.a70a0220.38f243.009d.GAE@google.com/T/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- .../selftests/bpf/progs/verifier_lwt.c        | 20 +++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ kernel/bpf/cpumap.c | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_lwt.c b/tools/testing/selftests/bpf/progs/verifier_lwt.c
-index 5ab746307309..9cef07e6eceb 100644
---- a/tools/testing/selftests/bpf/progs/verifier_lwt.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_lwt.c
-@@ -231,4 +231,24 @@ __naked void not_permitted_for_lwt_prog(void)
- 	: __clobber_all);
+diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
+index 04171fbc39cb..32b43cb9061b 100644
+--- a/kernel/bpf/cpumap.c
++++ b/kernel/bpf/cpumap.c
+@@ -29,6 +29,7 @@
+ #include <linux/sched.h>
+ #include <linux/workqueue.h>
+ #include <linux/kthread.h>
++#include <linux/local_lock.h>
+ #include <linux/completion.h>
+ #include <trace/events/xdp.h>
+ #include <linux/btf_ids.h>
+@@ -52,6 +53,7 @@ struct xdp_bulk_queue {
+ 	struct list_head flush_node;
+ 	struct bpf_cpu_map_entry *obj;
+ 	unsigned int count;
++	local_lock_t bq_lock;
+ };
+ 
+ /* Struct for every remote "destination" CPU in map */
+@@ -451,6 +453,7 @@ __cpu_map_entry_alloc(struct bpf_map *map, struct bpf_cpumap_val *value,
+ 	for_each_possible_cpu(i) {
+ 		bq = per_cpu_ptr(rcpu->bulkq, i);
+ 		bq->obj = rcpu;
++		local_lock_init(&bq->bq_lock);
+ 	}
+ 
+ 	/* Alloc queue */
+@@ -722,6 +725,8 @@ static void bq_flush_to_queue(struct xdp_bulk_queue *bq)
+ 	struct ptr_ring *q;
+ 	int i;
+ 
++	lockdep_assert_held(&bq->bq_lock);
++
+ 	if (unlikely(!bq->count))
+ 		return;
+ 
+@@ -749,11 +754,15 @@ static void bq_flush_to_queue(struct xdp_bulk_queue *bq)
  }
  
-+SEC("lwt_xmit")
-+__description("missing dst when calling bpf_lwt_xmit_push_encap")
-+__success __retval(0)
-+__naked void missing_dst_call_bpf_lwt_xmit_push_encap(void)
-+{
-+	asm volatile ("					\
-+	r9 = 69;					\
-+	r3 = r10;					\
-+	r3 += -32;					\
-+	*(u64 *)(r3 + 0) = r9;				\
-+	r2 = 2;						\
-+	r4 = 20;					\
-+	call %[bpf_lwt_push_encap];			\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_lwt_push_encap)
-+	: __clobber_all);
-+}
+ /* Runs under RCU-read-side, plus in softirq under NAPI protection.
+- * Thus, safe percpu variable access.
++ * Thus, safe percpu variable access. PREEMPT_RT relies on
++ * local_lock_nested_bh() to serialise access to the per-CPU bq.
+  */
+ static void bq_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *xdpf)
+ {
+-	struct xdp_bulk_queue *bq = this_cpu_ptr(rcpu->bulkq);
++	struct xdp_bulk_queue *bq;
 +
- char _license[] SEC("license") = "GPL";
++	local_lock_nested_bh(&rcpu->bulkq->bq_lock);
++	bq = this_cpu_ptr(rcpu->bulkq);
+ 
+ 	if (unlikely(bq->count == CPU_MAP_BULK_SIZE))
+ 		bq_flush_to_queue(bq);
+@@ -774,6 +783,8 @@ static void bq_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *xdpf)
+ 
+ 		list_add(&bq->flush_node, flush_list);
+ 	}
++
++	local_unlock_nested_bh(&rcpu->bulkq->bq_lock);
+ }
+ 
+ int cpu_map_enqueue(struct bpf_cpu_map_entry *rcpu, struct xdp_frame *xdpf,
+@@ -810,7 +821,9 @@ void __cpu_map_flush(struct list_head *flush_list)
+ 	struct xdp_bulk_queue *bq, *tmp;
+ 
+ 	list_for_each_entry_safe(bq, tmp, flush_list, flush_node) {
++		local_lock_nested_bh(&bq->obj->bulkq->bq_lock);
+ 		bq_flush_to_queue(bq);
++		local_unlock_nested_bh(&bq->obj->bulkq->bq_lock);
+ 
+ 		/* If already running, costs spin_lock_irqsave + smb_mb */
+ 		wake_up_process(bq->obj->kthread);
 -- 
 2.43.0
 
