@@ -1,150 +1,172 @@
-Received: from mail-dy1-f172.google.com (mail-dy1-f172.google.com [74.125.82.172])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E40B72F85B
-	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 00:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A4283BB48
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 00:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770943301; cv=none; b=WIVDlKQFss3cThQb4UF3Holnnea2NeujjXpg1Ymmfb+apzHaun7b4esU9ligJcchc0TXa6RJn3358sSBSP2Z/7b0LwMr8CtB0FPLE+XkQ8wQnnltjigzCDORWWhRIocdIEuITTbf83G0GG6pKxgRPVePXbOh4a8oCXZDEcI2Reo=
+	t=1770943525; cv=none; b=uaqbwuXIwy0ZQX/eqAm7EVkK8SZ2tiynu5GzMYg75FBBDKe4M2efVKkY9J6zIu5A6kqxe8zsHnlC0eLNOp7/WJsOjGdz7YFX04PbcEszb1OJcuDskTo+L0m6TlPZFYIqKl9IqGG1CIBXdBg7Y/Jn37SASk+7zlS8H6qOGBIWEnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770943301; c=relaxed/simple;
-	bh=6D8tgjI9PBm1BFXqhi50JPEsbcI0pqJf1KyyVtXlYsA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=bx8+OkFeUld3k9tfuDG8Zt+LOWcVUIxfrsCWF5Tkl+xauNm9SPs/LbSXe7ubfZmHNN5DVx25Dwx0Mrozmy8fLBOoSjaK3u3r9EIuDZ2n0/cyz04yFkgx0f/U7x8EE1LCd62J3nqodPvQInsKgq/uaAeushLANnVvXdgsf1yXDcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SqMmRtrL; arc=none smtp.client-ip=74.125.82.172
+	s=arc-20240116; t=1770943525; c=relaxed/simple;
+	bh=Ak8NZRmMWh/S73zUnGZcHNvDX7uvi7KMDvTG6IFownk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Co9uEHHD6yy1ElgemGZC+iHAcIFWjh30tI4dqqj+yhh4y9vIhfZ1AzkHLcvW59Nax0NqGhb/ET6TDNJz4TNl08Wx0VC7YlVE1ZylP/umAHKj5Bkf7ZZFTSdyU43FYtY9LTkiGUR+yy18QSDCmKcJwhqmvWb05oSPactXbmCmilI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MHblshg5; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SqMmRtrL"
-Received: by mail-dy1-f172.google.com with SMTP id 5a478bee46e88-2baab3137bcso415705eec.0
-        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 16:41:39 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MHblshg5"
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2aaecf9c325so2523585ad.1
+        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 16:45:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770943299; x=1771548099; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DwqSI1RFCMIyBtnekhVRj3/LtP3LLhrY9w2W+ftU2B8=;
-        b=SqMmRtrLf2GRx7c0nMR9aamB/ORqM+JwkEn5N0Gq0gj50anx15gDCgRsACcacevOwP
-         A8XcZuQFq9vdldl5KasK3szj4GJM1PWw5jr+UwVnHcIPniP46syn5WaKbKS9nqeD/u8a
-         amL5UK1zMnv8/rLiuS6B+VPVlK5rOPvvt8Qy3SDF9YgfMkhbEJnXcO5W4Iy1PsL8zBRL
-         ERlXAeGv472zt9Uwepr7y87W9eP5sMzPEjLFvo1Cy3f/OpdFQILX2VxJ7PqfHkWMyAtt
-         hsgi31GcqGToy8ZPsbM1LQjpSwQ9w0Fmq2nEhx4kv3vFB5MhvxU8Ll591mFlsmSqzfBU
-         VLFQ==
+        d=gmail.com; s=20230601; t=1770943524; x=1771548324; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SbNvfRVIMsuYFwVUGN+A3CzhBTKvVW4WK9rLQ9YjjD4=;
+        b=MHblshg52Av080kkCUdPCSd0QhXd45Ys4C0ztAG/R1OTR5KCvxx4kAXw9lgjzTq9Ar
+         huYJbgRVzpxlKUELU1YEk0fRL2pSDBEl8yq+dar8WaecuZomziWrr3OFYlCwm1Nob1WW
+         l8rAkTwA7DxMJXpBjmhrEdoX7XPlse49l+ZdPhFAg+04ve/mTkVyZzaRvMvbMCdbT4Fj
+         XNRIw5Ef9IjA2MgCC0V29o7ZWdKBLZbwfjWftg2+LKC0qgZaJfsjkcYO39UH7z4AvJ3a
+         m4D3+DSX4If86bKDss3wif9OKrDk4bXqO7gRkr4an0hcVnO0bdoxxkbB0qWeG93jfYXF
+         maOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770943299; x=1771548099;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DwqSI1RFCMIyBtnekhVRj3/LtP3LLhrY9w2W+ftU2B8=;
-        b=YNz9GvGMB/msxES7jqVrifm7l0IeGw/O9OwUBeNjMYAlSzh/De7/hsMt3EKyqRGwgW
-         hbAufbeIw9655WNDVW1oCB4JdcGtlODBLDf7iyYHPoRZfoGtbCEAJBpOQ/mfQDEU9j0+
-         ZKUe0Qfo7eQ22z6YlqGEUghlL6Gks+6+x8sRYD1zXbBVMIQS1HXzG7dMXAwTl6BuAOJa
-         Y6ks2gGhvmFJgVQ5IEl/gh++XkN7j2ER7ASdwMGJN40B4P4IB+ULxFKl68VQ8i0AlbVA
-         BZiFC37OZZCmMQtVJcvNGpA1vZETiOLcJmMrhYTufBfqlth+WIBnlJ8JZBHoXQtqw4Aj
-         6rNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVmOdIkxvetAnXlEXg3LsiyJ5B4Op7XtPuAAYSYv3hfdnvcT2/SBipvEfyGZOaNwVPm7js=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzN4sfLq/XZIajzMVaejzGa7thHfXert+EtFY2VpMxOU0wgp7RG
-	VcEzYsYyc40TDROKzO0xaCc0T3iEg0cg/NqYvHUJpiDiH/F8WdFGD/rN
-X-Gm-Gg: AZuq6aK/4VQ32uN6kg94tq//6YbcHgf2KLondgF2ID0oS6J6qT5iNveFX18duPxedXk
-	h4R0uKjnVrxohJ6ZpoQKYN+zRi0obQS8aZ9WzIe1iB+m6FzAgrdwm6S5chbaUv3umWGDXTmoUiB
-	cu1bzCee/jTD2vZtw1pumqpOtz7JuSdzfMHejBuq/hsVBmWuUFqsUfhhUdj7mQcpOD7GTEq/9UR
-	8PGXTDpkss8IvGxrEnnohgp+K0Bm1VCfDPCY144pd6KEqsqxizPZ0uK63+tcRRIiVTI5YYdHbkR
-	7Ew3SBxKUwrx5WtfGIvLSMAwi4buBURsWPFkDu2N8Iv/bNbmQhcRU+MxhFjDRoMu58VF4FLpQVQ
-	EACuIpoNhX/Q7Dxfc8x24tGsrVp4A/ZPhebGX2ZbSj0JAoeTNYN8ZYoWK+JY7NQsqlUny7KY2Z8
-	u0dOCNRlfIUn+M8FqZp2GghFl9Sle01I6R
-X-Received: by 2002:a05:7300:ca4:b0:2b7:857:db6a with SMTP id 5a478bee46e88-2babc47cb8amr28835eec.21.1770943298947;
-        Thu, 12 Feb 2026 16:41:38 -0800 (PST)
-Received: from [192.168.4.196] ([73.222.117.172])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dcd0609sm5409175eec.16.2026.02.12.16.41.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Feb 2026 16:41:38 -0800 (PST)
-Message-ID: <f587b319-fc6c-44f5-94b0-350c1aadaa3c@gmail.com>
-Date: Thu, 12 Feb 2026 16:41:37 -0800
+        d=1e100.net; s=20230601; t=1770943524; x=1771548324;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SbNvfRVIMsuYFwVUGN+A3CzhBTKvVW4WK9rLQ9YjjD4=;
+        b=NZNFH6ud82/xAE8V/WqLDeSWtR3Wlso7pMtYVEnlfM9PmQbAIJnVS3iPkbMk2LVyrx
+         5SBt+YNGXn6DPsbGXlgVe0AZ3VHw+lmTIeozxXT5tjvWSFayV7CJcq9663Sd2KJsPKEF
+         +fRK7Z5WSc5c9e3Sv7b0li1RT+HQk+dizpPgtr6f2UL+rW3LsdCXFrrITBAOsYe54XMd
+         kmhpM5LLO74zpA+NjEMjcPYwKtsG+UpVIMxhrdRohqVV7DL6iQcW/f9I6FUXsQ8eBFc6
+         VqK6o3KjM1OoTcsLOQML7UwMbIRPc4WDBRxedY4WQhL0KuDoCLZEtUntLxJ4K3Fq17h2
+         ZRXw==
+X-Forwarded-Encrypted: i=1; AJvYcCUb67+uWaw4yCtzNTh056JgWJMuiRUajMYwDN+atDS/axp28u3Uac7RRKxxA9CkUeRlQOc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3SY+KXXklCXyT0hA40t8ZhL9tysK3HSkrSDm3SXY91S93Ydru
+	l+Vmx/gqpS/laZ+Ez+EkW/2uE0pvMzyoYsoMc8zZOeiJQ60oAy8o9Cxe
+X-Gm-Gg: AZuq6aI8TRxRoXX3qiPuaAl/rFd+pEL+gAzAx887XoX+bo8kkHdXODRYGNTiRIfrFmy
+	jeI2c7AXRKx57GghxPt9Az/YvvjoT/SGN1vhzjySPMtwV7Hv1re9TH9YABGctnFYXWsQF3XYtPs
+	AzvIEP6GLdosNMR99LBGy4XfeibGm+mSj0JM4fMnFQDHcXW9W7bJfd0Fo2qyRzsVNw6+A3BJse5
+	omBxggMG3OtBZnxB4sxHrf2/bHBmRmYrUt/jnvTTa2wjOX+3xRM2wAHTuUzUDuAt4X3T+LCFEd5
+	dWn2bBSSMfHCk2aFpN/cTi9vPBE6Oh9nYrIpaGpZ1v4GKMmfByNfaF4RNma/beg2r5Q1iL93x0b
+	ba3BwO2VU3wkPrwPGa7ZtvykbY8dKzuglA4kknN0OW4GE2LAeNveenJIwpEdMyG+66XyieHpLky
+	mgMUn4+MNVPGCCGj/P001lmhBCTqh6Dp0dNPi6i6eqjXoUCv8fG20=
+X-Received: by 2002:a17:903:3bcf:b0:2aa:e238:e20c with SMTP id d9443c01a7336-2ab4ffa4ecbmr1660345ad.19.1770943523797;
+        Thu, 12 Feb 2026 16:45:23 -0800 (PST)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ab2997aebdsm63427175ad.66.2026.02.12.16.45.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Feb 2026 16:45:23 -0800 (PST)
+Message-ID: <834d266c1bce8d08484780d825136c7f51caf52e.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 10/14] selftests/bpf: Fix resource leaks
+ caused by missing cleanups
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>
+Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
+ Alexis =?ISO-8859-1?Q?Lothor=E9?=	 <alexis.lothore@bootlin.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 	kernel-team@meta.com
+Date: Thu, 12 Feb 2026 16:45:20 -0800
+In-Reply-To: <20260212011356.3266753-11-ihor.solodrai@linux.dev>
+References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+	 <20260212011356.3266753-11-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Skip test_kmem when
- cgroup.memory=nokmem
-To: Hui Zhu <hui.zhu@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>,
- Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Hui Zhu <zhuhui@kylinos.cn>, cgroups@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <cover.1770883926.git.zhuhui@kylinos.cn>
- <2f6ee1db173b67a636b2caa85744cb4ce8114e64.1770883926.git.zhuhui@kylinos.cn>
-Content-Language: en-US
-From: "JP Kobryn (Meta)" <inwardvessel@gmail.com>
-In-Reply-To: <2f6ee1db173b67a636b2caa85744cb4ce8114e64.1770883926.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 2/12/26 12:23 AM, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
-> 
-> When cgroup.memory=nokmem is set in kernel command line, kmem
-> accounting is disabled and the test_kmem subtest will fail.
-> 
-> Add a check to skip this test when the parameter is present.
-> 
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+On Wed, 2026-02-11 at 17:13 -0800, Ihor Solodrai wrote:
+> ASAN reported a number of resource leaks:
+> =C2=A0 - Add missing=C2=A0 *__destroy(skel) calls
+> =C2=A0 - Replace bpf_link__detach() with bpf_link__destroy() where approp=
+riate
+> =C2=A0 - cgrp_local_storage: Add bpf_link__destroy() when bpf_iter_create=
+ fails
+> =C2=A0 - dynptr: Add missing bpf_object__close()
+>=20
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 > ---
->   .../bpf/prog_tests/cgroup_iter_memcg.c        | 28 +++++++++++++++++++
->   1 file changed, 28 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> index 13b299512429..203e6b091a21 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> @@ -134,11 +134,39 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
->   	shm_unlink("/tmp_shmem");
->   }
->   
-> +static bool cmdline_has(const char *arg)
-> +{
-> +	char cmdline[4096];
-> +	int fd;
-> +	ssize_t len;
-> +	bool ret = false;
-> +
-> +	fd = open("/proc/cmdline", O_RDONLY);
-> +	if (fd < 0)
-> +		return false;
-> +
-> +	len = read(fd, cmdline, sizeof(cmdline) - 1);
-> +	close(fd);
-> +	if (len < 0)
-> +		return false;
-> +
-> +	cmdline[len] = '\0';
-> +	if (strstr(cmdline, arg))
-> +		ret = true;
-> +
-> +	return ret;
-> +}
-> +
->   #define NR_PIPES 64
->   static void test_kmem(struct bpf_link *link, struct memcg_query *memcg_query)
->   {
->   	int fds[NR_PIPES][2], i;
->   
-> +	if (cmdline_has("cgroup.memory=nokmem")) {
-> +		test__skip();
-> +		return;
-> +	}
 
-Instead of just skipping what if we proceed and then confirm we get a
-zero value after the allocations?
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+
+[...]
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> index 256707e7d20d..ce010602a443 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
+
+[...]
+
+> @@ -763,12 +763,15 @@ static void test_sockmap_unconnected_unix(void)
+> =C2=A0	map =3D bpf_map__fd(skel->maps.sock_map_rx);
+> =C2=A0
+> =C2=A0	stream =3D xsocket(AF_UNIX, SOCK_STREAM, 0);
+> -	if (stream < 0)
+> +	if (stream < 0) {
+> +		test_sockmap_pass_prog__destroy(skel);
+> =C2=A0		return;
+> +	}
+> =C2=A0
+> =C2=A0	dgram =3D xsocket(AF_UNIX, SOCK_DGRAM, 0);
+> =C2=A0	if (dgram < 0) {
+> =C2=A0		close(stream);
+> +		test_sockmap_pass_prog__destroy(skel);
+> =C2=A0		return;
+> =C2=A0	}
+
+Nit: initialize `stream` and `dgram` as -1 and add an exit label?
+
+> @@ -780,6 +783,7 @@ static void test_sockmap_unconnected_unix(void)
+> =C2=A0
+> =C2=A0	close(stream);
+> =C2=A0	close(dgram);
+> +	test_sockmap_pass_prog__destroy(skel);
+> =C2=A0}
+
+[...]
+
+> diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_st=
+ack.c
+> b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+> index 4006879ca3fe..c36aa2354d2f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
+> @@ -56,6 +56,7 @@ static void test_private_stack_fail(void)
+> =C2=A0	err =3D struct_ops_private_stack_fail__load(skel);
+> =C2=A0	if (!ASSERT_ERR(err, "struct_ops_private_stack_fail__load"))
+> =C2=A0		goto cleanup;
+> +	struct_ops_private_stack_fail__destroy(skel);
+> =C2=A0	return;
+
+Nit: just remove 'return' instead?
+     `cleanup` already calls `destroy`.
+
+> =C2=A0
+> =C2=A0cleanup:
+> diff --git a/tools/testing/selftests/bpf/prog_tests/tc_opts.c
+> b/tools/testing/selftests/bpf/prog_tests/tc_opts.c
+> index dd7a138d8c3d..2a4fd367da0a 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/tc_opts.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/tc_opts.c
+> @@ -1363,6 +1363,7 @@ static void test_tc_opts_dev_cleanup_target(int tar=
+get)
+> =C2=A0	ASSERT_OK(system("ip link del dev tcx_opts1"), "del veth");
+> =C2=A0	ASSERT_EQ(if_nametoindex("tcx_opts1"), 0, "dev1_removed");
+> =C2=A0	ASSERT_EQ(if_nametoindex("tcx_opts2"), 0, "dev2_removed");
+> +	test_tc_link__destroy(skel);
+
+Nit: this is exact copy of the `cleanup` label below.
+     One can replace the three ASSERTs and the `destroy` call
+     with `goto cleanup`.
+
+
+[...]
