@@ -1,180 +1,131 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43B82D6E58
-	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 16:13:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4829F22ACEB
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 16:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770999228; cv=none; b=cQxGbTIxmNAACZVUBdRImnCK2OsAYyMJyCmJMBE84vW08XjVQQk2P0FE072lIpdcmb7A5i6V9c1XwX4wCDouO49G8pG58XbMwUaEfE83WJ2Xg/mQn5GZBTghIKA5oB8xfRnHC3z8U+m6H5bfhJrsW9Jj/DmMkKW0X/UYDgMf2jM=
+	t=1771001324; cv=none; b=a1RbskB/h7FOpeDpS7vLwaTNglRZ9fmfR1I1EWZXqIqEqZKdJpzLawkvW5f51DvvXc9SkeP5phKxNDiBbVkL0GhxvWq8TMyGVXNa08N4WQL1L2unHT6zufpYsBlJZKXPY1wxPxndX6s0A+uPtNU3SnywWIszcKpxvUZ+T48mK6I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770999228; c=relaxed/simple;
-	bh=QDH5BqE+Huqq1nEVLGcqRBuhKMbz6qneCSo8+ctPFHw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ggAyubyYpd8K40tH1qfiV8O+d6II51E75+w3ngfD8N3zTcRiFZLs3TW3UpILT/MRoIILMC5z2OYxGDR7//Cc0R9vwTacSkivO1lamG2gf5RRWhJxEP1JkA1fmel9cUICVJX/DmpCXdVHYBi77tR1l0mR29OQHSr8YlBzOCP30yw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DLaRgM+M; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771001324; c=relaxed/simple;
+	bh=VqkMT+8fM812y9UPjSz+55ow5pFiS3AhD+KW7aaxE2w=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wq2yAMuFHzUX9a2POWN4igzjY70zu5zcxMN+q6n8MIVR0XLkXJtT0ZSIfWKdnP70nHJwNLcboXgdtScKbaJUQJRozLwAh3fCjW5Z46/YVaX35qIT0E5qcTo9mYmyuGYo8KO5uzUVdNvrKosT2OUJocPfyWd8v2xiU0diF0PRiow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gjucjs6G; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DLaRgM+M"
-Message-ID: <de259393-c414-4834-bd62-b65774e201a7@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1770999224;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5IAFvfP6T9H5d9tUk5GebB/MCFzZPtLOUJ6Nl3pHbmM=;
-	b=DLaRgM+MyYq1rAI0hPXlPqyCeCQTHdllAeJOssNQoFdJr03RAxurrtYw12k8hwDKZkEBup
-	KRg/F8Vqfy1LLnT/qLstKLjrvVl/hwERfTE/D8xism5pht1yYLLzyZdpylzq/cYOXcvSNa
-	AFFfBY02BNIUXLCP4HeSy/bTe/3dIkE=
-Date: Fri, 13 Feb 2026 08:13:38 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gjucjs6G"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-4836f4cbe0bso9660705e9.3
+        for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 08:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771001321; x=1771606121; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CvmEWuyZCrem0YY4YLx4j6EDY4JGfS/eFVbWJ68FPAM=;
+        b=gjucjs6Gaz+sjVB5nUl8bDqeW02YbyfQifePOW7gUdUbLKcCzONvW2w2uggsEztpLT
+         ZGPob8jQo08J9+AHiE2OZU2Uws6DLuNE6duojuuRgbI5twYl6muwvY0+3oRINsxkOBa3
+         ZlyVwuQNKAGwWqPoqWvXy2McSyq+cUFWnmskQJhrVf5PrDhrgz5bpsa+J51kP50lxSAW
+         H4g09jTpHnZ1wN6LB/mVgWT9gU12kpUz6szUJdr+x+KwucbKLBYDtGqfI4USsuCj1ins
+         EU495XI+zg0VMnM+d8fHKJTivnJSfEQQXJyuIG9tfuYQVotJVbfubwQCVONYk731iHf9
+         WRww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771001321; x=1771606121;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CvmEWuyZCrem0YY4YLx4j6EDY4JGfS/eFVbWJ68FPAM=;
+        b=tqmhTQYEl8GD0xEsEUGssERbsNzfQAvpJhxUYVGqd5aY4CXCP3WAozRM7cP+JH2+/B
+         SH7oNf5nD2vt9oBrvsNKs0RDACHwERstKjIczKl8zzYhs2eQ3iylbn/FLVSjYRcprrJE
+         /NygiLNbGoKvkXtDMzeJtwLWN3wMEHNEJJnOfB9yJHmOn5IhCyeiYstJC6xBCVT31y03
+         gesMTkRiQynG7Xsqrerfb0oFDychK+WIjG8pnxzzTSrJko2jDaMBcsa2y0o49LCCt3IW
+         HCtWcBe0KOf4yfHsXVdLNQXvCqbU1gKfy2zIsPmhjiITrwmvKL58byZTABuzM6Y4f+7p
+         HNvw==
+X-Forwarded-Encrypted: i=1; AJvYcCXj/7BOkMnnaAtkUBz0QIg30GJf5JP/XyHSo1qP0/WMeA96iUvkEq2ImhuoCXObigAhdC8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw//2Ur5dyjZKAOd2da7jzFmthwKQZ4OcYTuiPgYnEbGQv5AUqA
+	NA58LwnbrBoaqaygnDy5h2ZO+AMbUiGdLGmwVGQ99dIy1gYV8ESYwvpl
+X-Gm-Gg: AZuq6aLsHi3kPtcTolPZox5bL/5XUbs4nSn5RfbEI+RxKakfGM0ejyQf0Zb75oC2oGN
+	zGEJpHZ7Myh+RS3qRpjUAzRn97d7yCPXxUQdiF17Lj4bdl4lukzuSZkjT7xWsEwpxfUw6bwvTxz
+	WYTNrq+Bj2n5auIRe2UVxncfpD7uyD+8RreCW8KThTOue+1ylN7098/7z46QYBlTq/HwZlAOBbe
+	itWJJ9MopAvo90NZ2b0vLWhcw7AVD6D23vggQkIASKjTwHgThDiq1UqRR3P0tVze2B1bpLcvf5s
+	jyFkRE85nATRDFZOItXAYyzLSJ20XRnlNOpIuW5RVwxnMoMh6bIw1c+EfylvwqYXtKY5LOp5unx
+	wwsH+FEMgGtATvrpVGDTLgwqEY7QsXCWjehRNAnUWKk2HzNg6zB3v2/eClaz9nW6tQESe9HZHKP
+	ll3icGFBO3GKwjlmV1vD0HWhNDC0Q=
+X-Received: by 2002:a05:600c:1e1d:b0:477:7ab8:aba with SMTP id 5b1f17b1804b1-48373a15f1bmr40067995e9.1.1771001320336;
+        Fri, 13 Feb 2026 08:48:40 -0800 (PST)
+Received: from krava ([2a00:102a:403e:bc0a:6cae:b7c0:c276:c265])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4834d5ebd34sm291847895e9.7.2026.02.13.08.48.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Feb 2026 08:48:39 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Fri, 13 Feb 2026 17:48:36 +0100
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Alexis =?iso-8859-1?Q?Lothor=E9?= <alexis.lothore@bootlin.com>,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: Re: [PATCH bpf-next v1 09/14] selftests/bpf: Fix double thread join
+ in uprobe_multi_test
+Message-ID: <aY9V5FOElHHmBvbZ@krava>
+References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+ <20260212011356.3266753-10-ihor.solodrai@linux.dev>
+ <5de2e9e7-2898-49a8-ba1a-253dceddeedd@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1 00/14] selftests/bpf: Fixes for userspace ASAN
-To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>,
- =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
- <59d226c413864ec7229e4a74af7e663e9982c534.camel@gmail.com>
- <2a532f02-a7ed-43d5-a0fc-129ee4eeb0c1@linux.dev>
- <b1399390b3e34961c3afd5a6a06c3c7bb3a4666a.camel@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <b1399390b3e34961c3afd5a6a06c3c7bb3a4666a.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5de2e9e7-2898-49a8-ba1a-253dceddeedd@gmail.com>
 
-On 2/12/26 4:23 PM, Eduard Zingerman wrote:
-> On Thu, 2026-02-12 at 15:57 -0800, Ihor Solodrai wrote:
-> 
-> [...]
-> 
->>>  CFLAGS += -g $(OPT_FLAGS) -rdynamic -std=gnu11                         \
->>> -         -Wall -Werror -fno-omit-frame-pointer                         \
->>> +         -Wall -fno-omit-frame-pointer                         \
->>
->> I think you've cheated a little bit here, because with -Werror
-> 
-> It's just a model of a memory error, see below an example that does
-> not generate compiler warnings.
-> 
->> If it's removed, then I can reproduce the same stacktrace, which AFAIU
->> is an invalid dereference inside the ASAN itself.
-> 
-> See below, if I remove custom signal handler there is a regular ASAN
-> error message:
-> 
->   ==156==ERROR: AddressSanitizer: SEGV on unknown address 0xfffffffffffffffa (pc 0x7fa03160df4a bp 0x7fa0317bc980 sp 0x7ffee7c85170 T0)
->   ==156==The signal is caused by a WRITE memory access.
->       #0 0x7fa03160df4a in __asan::Allocator::Deallocate(void*, unsigned long, unsigned long, __sanitizer::BufferedStackTrace*, __asan::AllocType) (/lib64/libasan.so.8+0xdf4a) (BuildId: d3cb6206dff19da52969c009f4cd93611901c478)
->       #1 0x7fa0316e5bb9 in free.part.0 (/lib64/libasan.so.8+0xe5bb9) (BuildId: d3cb6206dff19da52969c009f4cd93611901c478)
->       #2 0x000000d19cd9 in free_test_states /home/eddy/work/bpf-next/tools/testing/selftests/bpf/test_progs.c:1930
->       #3 0x000000d1a897 in main /home/eddy/work/bpf-next/tools/testing/selftests/bpf/test_progs.c:2107
->       #4 0x7fa0313c45f4 in __libc_start_call_main (/lib64/libc.so.6+0x35f4) (BuildId: a1dda014206b55b07f58fe8db80121b752dc3d03)
->       #5 0x7fa0313c46a7 in __libc_start_main@@GLIBC_2.34 (/lib64/libc.so.6+0x36a7) (BuildId: a1dda014206b55b07f58fe8db80121b752dc3d03)
->       #6 0x000000401934 in _start (/home/eddy/work/bpf-next/tools/testing/selftests/bpf/test_progs+0x401934) (BuildId: 9190db005d475ee7a8e9294bb32cfbd520c330dc)
->   
->   ==156==Register values:
->   rax = 0x0000000000000002  rbx = 0x000000000000000a  rcx = 0x0000000000000000  rdx = 0x0000000000000003  
->   rdi = 0x000000000000000a  rsi = 0x000000000000000a  rbp = 0x00007fa0317bc980  rsp = 0x00007ffee7c85170  
->    r8 = 0x00007ffee7c851d0   r9 = 0x0000000000000001  r10 = 0x0000000000000005  r11 = 0x0000000000401935  
->   r12 = 0x00007ffee7c851d0  r13 = 0xfffffffffffffffa  r14 = 0x0000000000000001  r15 = 0x0000000000000000  
->   AddressSanitizer can not provide additional info.
->   SUMMARY: AddressSanitizer: SEGV /home/eddy/work/bpf-next/tools/testing/selftests/bpf/test_progs.c:1930 in free_test_states
-> 
-> So, there is indeed a conflict between test_progs signal handler and
-> ASAN default signal handler.
+On Thu, Feb 12, 2026 at 02:49:09PM +0000, Mykyta Yatsenko wrote:
+> On 2/12/26 01:13, Ihor Solodrai wrote:
+> > ASAN reported a "joining already joined thread" error. The
+> > release_child() may be called multiple times for the same struct
+> > child.
+> > 
+> > Fix by setting child->thread to 0 after pthread_join.
+> > 
+> > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> > ---
+> >   tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c | 4 +++-
+> >   1 file changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> > index 2ee17ef1dae2..17881e009eee 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+> > @@ -62,8 +62,10 @@ static void release_child(struct child *child)
+> >   		return;
+> >   	close(child->go[1]);
+> >   	close(child->go[0]);
+> > -	if (child->thread)
+> > +	if (child->thread) {
+> >   		pthread_join(child->thread, NULL);
+> > +		child->thread = 0;
+> > +	}
+> >   	close(child->c2p[0]);
+> >   	close(child->c2p[1]);
+> >   	if (child->pid > 0)
+> As far as I understand the problem is due to `static struct child child` in
+> the test_attach_api(), once we initialize thread field of the child
+> it's not reset before the next test run.
+> Maybe we should also add memset(&child, 0, sizeof(child));
+> in test_attach_api() before each test to make sure all fields are reset.
 
-As it turns out, only one signal handler can be installed at a time [1].
-From man [2]:
+right, perhaps we could do memset right away in release_child,
 
-    The sigaction() system call is used to *change* the action taken by
-    a process on receipt of a specific signal.
-
-So what happens is test_prog's custom signal handler *overwrites* ASAN's
-signal handler leading to the weirdness we are seeing.
-
-[1] https://stackoverflow.com/questions/17102919/is-it-valid-to-have-multiple-signal-handlers-for-same-signal
-[2] https://man7.org/linux/man-pages/man2/sigaction.2.html
-
-We should probably do then:
-
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 02a85dda30e6..77a36f6ca352 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -1672,14 +1672,15 @@ static void server_main(void)
- {
-        pthread_t *dispatcher_threads;
-        struct dispatch_data *data;
-+       int i;
-+
-+#ifndef __SANITIZE_ADDRESS__
-        struct sigaction sigact_int = {
-                .sa_handler = sigint_handler,
-                .sa_flags = SA_RESETHAND,
-        };
--       int i;
--
-        sigaction(SIGINT, &sigact_int, NULL);
--
-+#endif
-        dispatcher_threads = calloc(sizeof(pthread_t), env.workers);
-        data = calloc(sizeof(struct dispatch_data), env.workers);
-
+jirka
 
 > 
-> [...]
+> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 > 
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
-> @@ -1913,6 +1913,8 @@ static int worker_main(int sock)
->         return 0;
->  }
->  
-> +void *ptr;
-> +
->  static void free_test_states(void)
->  {
->         int i, j;
-> @@ -1924,7 +1926,8 @@ static void free_test_states(void)
->                         free_subtest_state(&test_state->subtest_states[j]);
->  
->                 free(test_state->subtest_states);
-> -               free(test_state->log_buf);
-> +               ptr = test_state->log_buf + 10;
-> +               free(ptr);
->                 test_state->subtest_states = NULL;
->                 test_state->log_buf = NULL;
->         }
-> @@ -1944,13 +1947,15 @@ int main(int argc, char **argv)
->                 .parser = parse_arg,
->                 .doc = argp_program_doc,
->         };
-> -       struct sigaction sigact = {
-> -               .sa_handler = crash_handler,
-> -               .sa_flags = SA_RESETHAND,
-> -               };
-> +       /*
-> +        * struct sigaction sigact = {
-> +        *      .sa_handler = crash_handler,
-> +        *      .sa_flags = SA_RESETHAND,
-> +        *      };
-> +        */
->         int err, i;
->  
-> -       sigaction(SIGSEGV, &sigact, NULL);
-> +       //sigaction(SIGSEGV, &sigact, NULL);
->  
->         env.stdout_saved = stdout;
->         env.stderr_saved = stderr;
-
