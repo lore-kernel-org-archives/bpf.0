@@ -1,262 +1,193 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDB6330D54;
-	Fri, 13 Feb 2026 11:56:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770983796; cv=fail; b=mwYRuwwkeXc64STIpKaF/eOp+HpNQ0rBqFncbpXoL71cqfkwdKTR2gL3xTvZKHJ2U3HTl+umT9dVizPPAvqZP1xUaMuPg6Pve7Sjs/i7yrWQg2MUdCST1lejS9oq34/aPd6aqmlZ40KOVh8v9dqEdYDWsUDLxa0pfy1lGiV1+PQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770983796; c=relaxed/simple;
-	bh=MjM91KQPEt9sjLrzO+npm3Z4nivDox7F7kvfgMaUycE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=YSJ3HlvX9HxQzrmHaUc9EzENJx6BrfouCtgntFdbHOx2+RR9nLkV0dMtpldSvWgeT/Cfm9u4gjujLoOpIJHiWwJPNkF9LuyaWYLkm4EGcUgfph5XeXMufWqeqaX5E2XnSbaDft+81ZvPk+cKgYhWoeRXlXqLWsuWDr4reRkTGTk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=o7RrBMPA; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=V+8AfOzm; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B6CA29A30E
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 13:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770989490; cv=none; b=gkUPIbxY1tuIBLqr8z35EIs5vXQ4zFzmILRS4bI1Gek89ESFMSkwIpygGcq7UZD5FtFmjK06IMrFb2zopNRXkhJ6lLL5DkBstACP5BBZqZdQi0Jd1snzI2f55HyHSGOv4Q6S8DXGNZNq0Y+Wid4QHI/xDZXVwP3gEmR2XtubIWU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770989490; c=relaxed/simple;
+	bh=7ORPbNA8YS+x2330HYPMQLGeO7+C3Lc67adICDN5+J0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
+	 References:In-Reply-To; b=cE8VX5NDvHZhfn7LNiXNwmeMXKmTrZU1EEd4rckLwRcDlYu3rlH5NOb48vk2oTHlvUGKokZGwr0knEEq/75xonizVTlllxzyvnv5FiOby1EgLCiFori1ReybAd+6IAWvJ+rWAnlyuSvkq+4DELOVqPx8aoG0bKG5LCqkbv/ZVxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=iD7NZrz7; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="o7RrBMPA";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="V+8AfOzm"
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61D6B7Gm594184;
-	Fri, 13 Feb 2026 11:55:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=g3NqcGnuZ5+6V9T6nBisgNGpikspmvyl/GUyx/oWqjs=; b=
-	o7RrBMPAAWJLGZudHpig2d5DJPT/55f9VL4UgDDj6fKkxJMb8vUxXeJrW1Vs2vt6
-	pKskQfAiIJITGVGWouYoT9/3MX1biWBjBDLzVB8l47DoKSJqY6zq5xCpjE35Kcms
-	viKk8JGfpDG8yBw3rIy91NfUxtbwXP3mpoLpxFml4FeGk1nA0EZac1uQdhiY9WGl
-	eQ2Z/wzUO1XMas00VC36A7t7mNwRSm9A+5fQWPC3JOK6fcPSdr/VQdknsSOUm+JP
-	VQBEM3FcL1n+uLS953vHyQPIniLP8uGqSIbabxC9FNIievbyqW1nQNHUxqJGthBI
-	CSoWrT1WqAQOikpOdkjRDw==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4c88qt530p-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Feb 2026 11:55:54 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61D9mt0E030224;
-	Fri, 13 Feb 2026 11:55:53 GMT
-Received: from sj2pr03cu001.outbound.protection.outlook.com (mail-westusazon11012018.outbound.protection.outlook.com [52.101.43.18])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4c822c85tc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Feb 2026 11:55:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YjC+MqnCgxDOz3Ev03bTXslGVVg/DZaXzYiUq1snaIreZP2fc1XJ09CQF6e318jDYb69hzqYOleua/2jru11Ke2PEErOOhdRrpb8ZCmeRs+lSfNsZ4eaolrM0bOZcXutivbzFU+qsW8QeRRoxCstUS0165MwaEBGhTNYpiP7yOvPSbxtjsueXrbd7L2Nl+oPqBYZDHuc5lkV0AErxeFBJlgA0iyQxnqfTpUNh8QxDXYiqsEF9H1HT1UYYxpa1ClsdUHSJYUCUA4Zc0pVQucuqJcqjLB4bK/M2Y1Ge34pg/Ul3+A+lNagPtYme79zNvkuhFxq33uc10NLCsv54y5wow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g3NqcGnuZ5+6V9T6nBisgNGpikspmvyl/GUyx/oWqjs=;
- b=cL7DfMALd3EQMjc5998GMOUHOry7IcGdPruXlTjfJ+NX2ryJ8W3wVJv66pUZJcnmificj0k5UjIzCcYO1pVuXQnuig0yAX4XGGlYJRDf1Ped5xqBsNBQnQFA6GGAUEULm5Jv/DNQ5PerWAci5My/43nVNKykLo+J4bgr9aeMQzPu/3wRe7sjDaw6cAw/NFvWR+py7CqutYV3meaC2FwBDHcteSYfHhZOpnzVoOSJcsA/XDjC3T58TkbeKsjudl3j8wmdR9UGpLySi6PIgOe4THr2xsxmJNCdCIDE31D2LfNFPGQOBw6Q5Pd+08DQd0HH5yjuANHCMJSK/ZToHzO/5w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g3NqcGnuZ5+6V9T6nBisgNGpikspmvyl/GUyx/oWqjs=;
- b=V+8AfOzmIrfmxuz1WpZSMbLVuT/YS3qnnngoDP5Eiqbbdg+DxdyikE+KyM69M759jmYavIyS6AlNk9hczqcX9vCKocHuRm8iGZ9A+WGJoqcW35eKWXjzNd9XweIoJcqqo5Yh2+ZUW6HgZ3am3GlzPh/IA4dHYSyqvTf3L/n7esM=
-Received: from CH3PR10MB7329.namprd10.prod.outlook.com (2603:10b6:610:12c::16)
- by MN6PR10MB7468.namprd10.prod.outlook.com (2603:10b6:208:47b::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.14; Fri, 13 Feb
- 2026 11:55:49 +0000
-Received: from CH3PR10MB7329.namprd10.prod.outlook.com
- ([fe80::c2a4:fdda:f0c2:6f71]) by CH3PR10MB7329.namprd10.prod.outlook.com
- ([fe80::c2a4:fdda:f0c2:6f71%7]) with mapi id 15.20.9611.008; Fri, 13 Feb 2026
- 11:55:49 +0000
-Date: Fri, 13 Feb 2026 20:55:39 +0900
-From: Harry Yoo <harry.yoo@oracle.com>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@gentwo.org>,
-        David Rientjes <rientjes@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shakeel Butt <shakeel.butt@linux.dev>,
-        Michal Hocko <mhocko@kernel.org>, Hao Li <hao.li@linux.dev>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Puranjay Mohan <puranjay@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, Amery Hung <ameryhung@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-        Joel Fernandes <joelagnelf@nvidia.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, Zqiang <qiang.zhang@linux.dev>,
-        Dave Chinner <david@fromorbit.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Muchun Song <muchun.song@linux.dev>, rcu@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>, bpf <bpf@vger.kernel.org>
-Subject: Re: [RFC PATCH 7/7] mm/slab: make kfree_rcu_nolock() work with
- sheaves
-Message-ID: <aY8RO5vZeZQyRata@hyeyoo>
-References: <20260206093410.160622-1-harry.yoo@oracle.com>
- <20260206093410.160622-8-harry.yoo@oracle.com>
- <CAADnVQKRVD5ZSnEKbZZU7w86gHbGHUug2pvzpgZTngNS+fg4rw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKRVD5ZSnEKbZZU7w86gHbGHUug2pvzpgZTngNS+fg4rw@mail.gmail.com>
-X-ClientProxiedBy: SE2P216CA0009.KORP216.PROD.OUTLOOK.COM
- (2603:1096:101:117::15) To CH3PR10MB7329.namprd10.prod.outlook.com
- (2603:10b6:610:12c::16)
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="iD7NZrz7"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 7AB981A0E6C;
+	Fri, 13 Feb 2026 13:31:25 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 4FC44606BE;
+	Fri, 13 Feb 2026 13:31:25 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 807BD10368E92;
+	Fri, 13 Feb 2026 14:31:23 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1770989484; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=+VkGexTFiMl4GTjkhWi4NIEwOEPfIA3ju4QM9Ebu1dw=;
+	b=iD7NZrz7ARniqczpvyq+JISpX5tN+RCxXoNR7G5jebWoN5ld5BBxh5D/9sMPPoILK9+Gbp
+	BFCKBg7wCKT9XLDxAKRMWPlLdNs+/mEbWn4HWI1U1IDRZ5uLfixq5Qhyhqmv7Fs5Hf6psh
+	6bkoL3z1w5ek/AQrPn7EflWVL/4N4iGKydcmoQ9wVAL1Ms8Sec1zoN5toMSFQGkZRQlvNu
+	h27bdwQdtPY12yfvKk1+0o9Kvtw0YdRQB9X50K5OjN3ZRFPM091dWSiRxdn5fBaZEKduSL
+	XA9+6uCdGn4RBK8bRGoTcWaFxBXlu7Z9i3BBLdjBU4lB0WxPrMc9/quGZLUtrg==
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR10MB7329:EE_|MN6PR10MB7468:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5e89d7b7-cf87-48ba-99c4-08de6af6d3ff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?clJnVk1tN2JVbE5JN2lNdzlUK3Y1cW1zSVhleGg5SlhlNGI4WDkvTHRhVWdP?=
- =?utf-8?B?N3lTVjRFUWVMOHZnZmM0WXBTNFBkdWxHRzJzRDJRZHh4QWRxcnRsdlhRQUtW?=
- =?utf-8?B?MkdkaHlKYi9kNlRLMzI0V2lhU2oxOWp5ZjJrZlhKQ25jU0ExWWZPVDJ4am5a?=
- =?utf-8?B?cmVNTWN3a1RHWTFNdWVPMzI2UllsdmxaVVJJS2lXTW9VeXFRVkVNTTY4L05L?=
- =?utf-8?B?eG9JZ1U2NC9raXZJaGt4V0VQTENIUlZ6NENlWE80RThsaXFETlpWWERFdlZS?=
- =?utf-8?B?MVlpV0JNaFlkS1JaSzFVZkxxcC9lZ29VelNNZWlMTzNjVkFkdGovNGQrdnBY?=
- =?utf-8?B?TlZlbW1SeGV4NnZNNVgyWjdqTm8reWVYK0V6OEpwY1ExS3dBV1V4TUJuYXNm?=
- =?utf-8?B?NWlFbW4vUlJycDF1WUM4clp6Nk43dHJLL3gwU3UwSzNXaXFMck5xNFcyamZU?=
- =?utf-8?B?dVBNRFVXNGNYYis1TDBSRzU1R3RUYUVrL0lhMTI1TEwvWU9qMjZkZklMRGZu?=
- =?utf-8?B?TTEyaGZLOEpsMzRBZkNJM2U5aTg3ZnN0cjYrcWJxN0VLZE41R0lkK1I1Q3Er?=
- =?utf-8?B?ck5PODc3UWVMYnpGZ0hjc1E4YkdydmhZR09aTUFENFJxWUZqckxqbWhkMS9p?=
- =?utf-8?B?ZHV4K0g1M2NUaEJSV281MnVrdHhZdFZ4azdQcVU3WlRXNG5CMTBzdjBiQ0FY?=
- =?utf-8?B?SXNNK1JlVlVBeFhqeHRqak0zQ3hGcTdjTjloY3VxTnNuMERReGh3dHM3QXNI?=
- =?utf-8?B?eXQvb1NTT2JJUDhNMWlxZW5UZ01SRloySk5UaXRCUHpoY2k5UWVoSGtGQXJQ?=
- =?utf-8?B?dWpnNmNMT2h4V25Qam9UNko0dWJINW1NNXZCaFkvZEJuQ04vNEFTejJoU0xP?=
- =?utf-8?B?RUlsKzM5MUgxK3kzelZZMUI0UkdEV3pOUWJ0cjVUVVlsTnJHclZIWlpNcDFT?=
- =?utf-8?B?cXhEN0JWa0piVHFzek1CdDZFakpQY1RGTTdReWpmUjhUejNlVkRFWi8vd1c4?=
- =?utf-8?B?MXFrQWxzMUIwT29Lck5zMXlXV09aNFVNemY0RHpXbGQwdFRQOS9sWGx1Vzk2?=
- =?utf-8?B?RnY4b2IvZW5MZnppSWNlZDc1LzBFcGx6Y253Q0Nxc0hZM3VaOUNwZkp4QmZN?=
- =?utf-8?B?bEhSYXlpQzJzQjhISDlwVWxSMTVHUTM4MWpaNHRvSytlOENiVExDakFueklL?=
- =?utf-8?B?eFVKeDB0UFgxK1VjVkx0bFVud2J4bCt0cFlYdUR3alV3UkU5WXgvL1lpRmhI?=
- =?utf-8?B?QWhWSVpYU1NGVk1PRUVsSEo2UE16Q29oL1FaNzI2Wk5aUXpBdUdOdnZrK1pE?=
- =?utf-8?B?Q05CaTFlektHUmJoM3g4TWFSK1VqYzExUTZkWkZSK2srVGFkNGRGVlVnMXlH?=
- =?utf-8?B?TlBDcjM4bnlza284a08yZWFCY3RMNlVpL05BMHpwZXhRWFhXTFdJRTdWYUVm?=
- =?utf-8?B?SVliWHJXbkRqWGI3TUp1QjJzL0ZoOGRqSTczenQwU2preUN6djRMMUtyV3RF?=
- =?utf-8?B?UTl2R09TTzg1ZXNyM3NEQ1l6SnREUzRQS1RVdmtXemlQRkYwQmwxbU01S3Rw?=
- =?utf-8?B?eHpqTGIvZDlGRGs1MzN5UnhBK0lVK1dLUVZWbFZtS21rR0FhcnkvTnVyNDBK?=
- =?utf-8?B?RlQxY3pKcFlwWjZSeTRiNjhxKzl3UmlKb3hXZnpwWE5aNWw0ck9tclNJbTBQ?=
- =?utf-8?B?SlgvejZKZGVoRG5IcVJXZnJqWjJzbDJNaW5ycVV5T3F6clV2dmU3Z1NIcFZk?=
- =?utf-8?B?S1ZyT2srWjNEN2l2SXRpQlQ0KzhwWUU0OFJtcFdHbEhmN25Na3NqWkpDUHV0?=
- =?utf-8?B?UEpzamxxcnBPVENNRFkwejc1VUFmNVZxWlIzdVhVNS9tb241M2xTNmFReEhw?=
- =?utf-8?B?T3Q2RE1WSVJHREtseEFvUkZWUjhKaUN0R2oyaGc3dW5Ta0I2Y1NsaG1YMEpv?=
- =?utf-8?B?VzdxL21pOWhzNVVETGlHM0QydkNNUFlFaitwSnFWd0N6NVJ3S0dsNFpRd2FR?=
- =?utf-8?B?UklOUERWUmNxV29iS0x6N0RjN0JVSFY5Y01qdzN5cU9QMjYyVzhjWk00ZW8z?=
- =?utf-8?B?cjllMnpQOGp0LzVkZmliZGxqV3FOR0Q1TnZTQkxaVzRNbTZHeGhYZVRIeFAz?=
- =?utf-8?Q?4FRo=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR10MB7329.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?bTJ0djl5V05xVHQ0d1lEa2FHQUVRVWhPbDR3QnBEQWgxbEtyM3h3a1BJUG9H?=
- =?utf-8?B?Mk1SUHQxR1F4S0piODhKREIvSUpzd3MrNXRnc3cwOGxwLzhITjNDT2t0Um0w?=
- =?utf-8?B?TXVtMGFyQzZGQ1lTaXE0TjdodzY2OEd3eUtnd0thdExJTjNXOGp3c29ibVlp?=
- =?utf-8?B?a3VwMzBXeU9iRnlwQktzUEFWT2dEdlNJL2h6WTVHOXJxeUw3ZFQ0ZjQyVUI5?=
- =?utf-8?B?UStnUGxaWkt2anNsbHoyc201S0VFM2RoZWduMWJYbGtYOTFKOHNpYlg0b2dK?=
- =?utf-8?B?SzVFUXRRdXNxbmU4enRzMk5zbThVVU4zQWVzVU91RDRBUzhDZ3B5eENhb3pR?=
- =?utf-8?B?MUNjSHk0ekZPUytudzY2MFVtd0ptb0JNYUtkQ1llOEtZOWNwRlhkcVQvY0Np?=
- =?utf-8?B?OC8wWXZlZUhNaHBVelNUQkFmOW90RG9sbDdkTmJqbTc2OGNMNVFTMXkvNWVj?=
- =?utf-8?B?MXcwNGNrTnpDWkIvdytYdE9LdUcvK09GdnNSSWVPMTZlaTJWUUQrcDI3UXQv?=
- =?utf-8?B?TWRxUWt6ZE96SlgwT3Vlb3NzaWtFaUZ1Smlvdmt6aHlmTE04ZzZuZ3hyYXhO?=
- =?utf-8?B?c0RCbkVoaEJjQXEva1FLOUljNGZ3WFFwUlJPOHFGVWFNaENlSUtOYWJUeHFT?=
- =?utf-8?B?U0sxOXdETVFCbVQ1OExqNU9hMXpjRGJBeTVPbDVtNlRnNTlVaGRvUWxsOXgv?=
- =?utf-8?B?RnZvWmlzWmRYT0NMOTlTbEttcUF3RFp0QnR6bVpCc1RVdVJoUFo3MmpxUG9N?=
- =?utf-8?B?dE90YktmVml2Z0IzUVJLZkxoOGtReHFmVkRReHRCdUo3clRUVU8xTHR6VTcr?=
- =?utf-8?B?YkN5cGpwSVZkeEZtOUs0c0kxSStUcEYwWHN4d3kramh6TWtqN0k5ZElYM1Ix?=
- =?utf-8?B?UmJPU2RkTld6VnhNRVlIQWZ1U0dnSmRQRk1hQzlNd1NoRUh2Um9jVnZLWFVk?=
- =?utf-8?B?MC9OdnlINllyVDBCOFdSOUMwZzhnc2VaM2RUbSs4YUJKSU1KblNnU1dzN0tm?=
- =?utf-8?B?UDNnejVMSVFSSUEvOTlHdTdaNlVwZUlCRG12dURnZCtJN1hmVit5R1hPRTlt?=
- =?utf-8?B?eW13bllmMHBtWFJjVFpYcjk0eTJsUW4rYzM0MkZKS3hoK1dhTWtBT3JXRFAr?=
- =?utf-8?B?QS8xYXJhRkJsUkZtaUxRVndPVzFkNE1CUjFZVEI4Z3I0amNsSERWZVpUbU9G?=
- =?utf-8?B?WUxTdGlaQTkrYTFVbmt0V0o1emtnODNOaWlxNzBKUXBEakVsRG0zekQ5clhL?=
- =?utf-8?B?YmQ1VlhHdjkzdmhkTkRpOXQ1MG9kL2VzalZqU1BPSnhKNFZJeVdsNUJ2SE5P?=
- =?utf-8?B?WCsvb3g5cXFpYWtwTCtvcG10blBxZHNWTjdLUCtJL3Q3ZWsreWdVYW1vYm53?=
- =?utf-8?B?a2JjOTBic3h0UlZleDhEMDBGOVpMNW9BNFRHdlVrOFlXc3dZaXhsdlJLSlJm?=
- =?utf-8?B?WDZ3OTUzYlRMeFpBQUNIa1luWE1EV1Y5UXhEUkhtL0tNZWVEU3lDb2RLdFd0?=
- =?utf-8?B?RHZqamJLUkxCbjlDU3U1UHY2dHFiUnJSVkp4VGxSbkRBTmhNM1JYR1poNWk2?=
- =?utf-8?B?TDRGb3hqKzlpN0x6YWNBSWRONnd0dFJERlZPYnRiL09ZZnE4ZkZvRlVBUFkz?=
- =?utf-8?B?bUxwS3NOL05JaVNXaWF3d3VHTzJhMHhmS01mVEpsRjdlc0dTZE1oRFp3aUpr?=
- =?utf-8?B?c0s2MTNQNkdYZDBXZWNoZGI3MWIvV1N4QmxYZC9BTkhvQ252VXJWeVZ1ai9v?=
- =?utf-8?B?bmRQaHU4RzRnaTBxTXJ4cGoxanZQRC9RVDhYYkdHdm1ad3VCdWYwMU9GRnJG?=
- =?utf-8?B?TjJkWi9yT0ZHZmRyRk1kU0ljOUFXUTlaWnVjeUdRdVc3eHFXMHpmYmJUMTNV?=
- =?utf-8?B?c09KbnZFU3FaMDE3QW9HdTVSbEltcVU4MzF5SW91eDE5NzdJNE1Ua2o1SnpJ?=
- =?utf-8?B?WFJSMUpkTHlaczE3ejJqN0hOcDhNa0xkMzBNVTZsZWEyVGI4d0N4YWRCK0VJ?=
- =?utf-8?B?SnYvVldCUVBJZWNxU0NtYmlaNTgrYlpGelZaZDlFc1I1Tk94ME1rZ0RFZHlx?=
- =?utf-8?B?ZXMrcFUwSlUvMnRiWGVMaEdqc095VUFjbGtLaW9rN2toUUIzY3IxelhFRkVD?=
- =?utf-8?B?eXd0bDBwaExqTHlRWjJTa245OUd3MFdPZW5Xa2VtbHhoS01pQlRqNXNJM3ND?=
- =?utf-8?B?TjZQcmc0SWxCTWRSeTI4TkpMcEM1eWZMQkRSeXdzOGdVNVJvUHpUdDBBQk9s?=
- =?utf-8?B?SXg0NHpGcWRGQWtXbXBJQlluQllFY1hTSkVqd3pjaDh3akdVcWhubFZHS2Ry?=
- =?utf-8?B?UkZ2YUx2S2hlNGpzVkxUeGNEZmR4L2Jrb1JBUHdNOHdkd0Rja2liUT09?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	wZKd+ktHfqfcMIcegALntO/PK75tHpMxaiE8uJ2y7ik4O7nP+ixNcDF6Czl2dBMhnMhV58JxQ+5gmq/YTX/SrCQ1FzaTLTEREnJivLEnkW7HTfh+Ds8lglIm6sF/hc3HCK7jevdx0UaDnKDYRiN3EIcSZWFqLb7OaGqGGAk/arCIw6w9b9cZW4IlYNFVjTEpbKUtVaNqpNcl86AiK6UKugHRfb831HUN1YkRWrjmXBhFjU/18KKtjyz+W/ozQ/gP+xeR04RVvCL9PKysPPz7l43Fmj1lTNXoEfFsr6RAvBpd0G9oz+bc41lsYwJ+BRoq4ELwBibPUL2Dp0pGyJ/lcuoRK7pkhVQHJe0uJhJJwXiYunW85O1rrIA/EcJ8swf6u+eIki55UrXshpZtLgR/S7q9rAOfM0N8kzacoJQDKajNIT/+el0n21W0lp6My6sRziCJ2oWT5vDkde6gHz1CTlm5EmpRiM1qHzJEcwqVQh4GXTM6FDDpECKpBbSjMbhDyguecx+Sb6lAMMHjPN86nUs5UbjFbIfF6+/J2wh10Fj0LF0LPrlUp3CodSUB/Ncr1VzSboCd8VCWEKgte4BQ2BjYAab+jAGvFeHqBRsDbKg=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e89d7b7-cf87-48ba-99c4-08de6af6d3ff
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR10MB7329.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2026 11:55:48.9340
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LXCSalOwjJI3t0hD84hKLiA2dZpZ+ATTU8ElQX2tBKfUk8rH8y0I8J0/ToOLar2G1BJMgkRqDAq8OdWq60QGZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR10MB7468
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-13_02,2026-02-12_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0
- mlxlogscore=880 malwarescore=0 phishscore=0 suspectscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2601150000 definitions=main-2602130091
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjEzMDA5MSBTYWx0ZWRfXxjlAXBLkcOlZ
- DjvT+wbe91AGUBUhJKGk7eUKyBt3vMng4uqnG7l4s69ezxAeOADsBiiNE5tnEloV7YoBqf2Syt6
- UbWUVOVSwjQ7K3pbiGr6DkWF9kDGB5TYAVqI4MirLAzFMgMnhdVZe0g/XVmNpxN5HD2Q18/Wo5n
- GEzD3wRwpbeEo3IzSY2LYlnIqK3BxVkpzjAg/tY0PNsrxUaZSMnhWlFkEpxl4x2x73oWPwoAhfB
- VXWTMgHkiIsm5lt+VbuNE/lIqlB9iKSjkIkORzia/xZNFwsePzqYPAkcuimNWfld6WrK72hZTKr
- Ewa24Z7xZbIYYxA3oABPzs10WcVqzN6Ll3EMm2MyYSH6n54ISvxV6kKXiZiWdH6kU3K2o2+QvGw
- zyE39FN2oQtDT4oix1cX17N7U06hXLUAtx2o8IsNOTinK35FR059wswuucalQRtpCLDQOC6ivbQ
- e4TTzmMxRvFmdltJe/w==
-X-Proofpoint-GUID: eIVOh0f7NxeWKdLU9Y2umUDuV_dJM08Q
-X-Authority-Analysis: v=2.4 cv=Mehhep/f c=1 sm=1 tr=0 ts=698f114a cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=HzLeVaNsDn8A:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=yPCof4ZbAAAA:8
- a=ZjnedAPQjhg5HCaBv10A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: eIVOh0f7NxeWKdLU9Y2umUDuV_dJM08Q
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 13 Feb 2026 14:31:22 +0100
+Message-Id: <DGDVDKRNKOZX.1TKXZO951OFH1@bootlin.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Subject: Re: [RFC] adding KASAN support to JIT compiler(s)
+Cc: "bpf" <bpf@vger.kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Bastien Curutchet (eBPF
+ Foundation)" <bastien.curutchet@bootlin.com>, "Emil Tsalapatis"
+ <emil@etsalapatis.com>, "Daniel Borkmann" <daniel@iogearbox.net>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <DG7UG112AVBC.JKYISDTAM30T@bootlin.com>
+ <CAADnVQLX7RSnOqQuU32Cgq-e0MVqyeNrtCQSBbk0W2xGkE-ZNw@mail.gmail.com>
+ <DGAQHE0JQEA4.1UVPB2DUTFPJD@bootlin.com>
+ <CAADnVQKrXL2QNMoxTQ+nN1-dAEk0oHYBLy+h8J=mDSYXtVomPw@mail.gmail.com>
+ <DGCIL1452266.2618L8NG0SLPN@bootlin.com>
+ <CAADnVQKS78vbwdN4Z3Hmt6C9jvY=k0V9rO18M-n6NvLBgsyuuw@mail.gmail.com>
+In-Reply-To: <CAADnVQKS78vbwdN4Z3Hmt6C9jvY=k0V9rO18M-n6NvLBgsyuuw@mail.gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, Feb 12, 2026 at 11:15:52AM -0800, Alexei Starovoitov wrote:
-> On Fri, Feb 6, 2026 at 1:35 AM Harry Yoo <harry.yoo@oracle.com> wrote:
-> >
-> >         } else {
-> > +               if (unlikely(!allow_spin)) {
-> > +                       /* call_rcu() does not support NMI context */
-> > +                       rcu_sheaf->size--;
-> > +                       local_unlock(&s->cpu_sheaves->lock);
-> > +                       goto fail;
-> 
-> As a first step it's ok, but we need to make call_rcu() work too.
+On Thu Feb 12, 2026 at 3:06 AM CET, Alexei Starovoitov wrote:
+> On Wed, Feb 11, 2026 at 3:17=E2=80=AFPM Alexis Lothor=C3=A9
+> <alexis.lothore@bootlin.com> wrote:
+>>
+>> On Tue Feb 10, 2026 at 10:43 PM CET, Alexei Starovoitov wrote:
+>> > On Mon, Feb 9, 2026 at 1:03=E2=80=AFPM Alexis Lothor=C3=A9
+>> > <alexis.lothore@bootlin.com> wrote:
+>> >>
+>> >> >> - bpf stack: when a program allocate some memory on its own stack,=
+ it is
+>> >> >>   not tracked by KASAN. To be able to track stack memory misusage,=
+ JIT
+>> >> >>   compiler must insert some red zones around the variables on the =
+stack.
+>> >> >>   This point looks more complex than the previous ones, as we need=
+ to:
+>> >> >>   - identify variables that live on bpf program stack instead of
+>> >> >>     registers
+>> >> >>   - insert asan left/right red zones, and possibly inter-variables=
+ red zones
+>> >> >>   - and so account for this "stack overhead", eg in the verifier
+>> >> >>   I then propose to put this "stack monitoring" as a next step, to=
+ be
+>> >> >>   implemented once we have a basic kasan monitoring integrated in =
+x86
+>> >> >>   JIT compiler.
+>> >> >
+>> >> > I'm not sure it can be deferred. Pretty much all bpf programs
+>> >> > access stack with load/stores.
+>> >> > So all of such instructions should not be instrumented.
+>> >>
+>> >> I am not sure to get your point here. If the matter can not be deferr=
+ed
+>> >> (because pretty much all bpf programs access stack with load/stores),
+>> >> then all of such instructions _should_ be instrumented (so that we
+>> >> detect invalid stack accesses), right ? Or am I getting it wrong ?
+>> >
+>> > As far as I understand compilers don't sanitize stack access
+>> > because there is no shadow memory behind it.
+>>
+>> Is that so ? Because if I take a look at kasan tests in the kernel, I
+>> find for example this kasan_stack_oob in mm/kasan/kasan_test_c.c:
+>>
+>> static void kasan_stack_oob(struct kunit *test)
+>> {
+>>         char stack_array[10];
+>>         /* See comment in kasan_global_oob_right. */
+>>         char *volatile array =3D stack_array;
+>>         char *p =3D &array[ARRAY_SIZE(stack_array) + OOB_TAG_OFF];
+>>
+>>         KASAN_TEST_NEEDS_CONFIG_ON(test, CONFIG_KASAN_STACK);
+>>
+>>         KUNIT_EXPECT_KASAN_FAIL(test, *(volatile char *)p);
+>> }
+>>
+>> which gives me, for x86:
+>>
+>> 0000000000000340 <kasan_stack_oob>:
+>>      340:       f3 0f 1e fa             endbr64
+>>      344:       e8 00 00 00 00          call   349 <kasan_stack_oob+0x9>
+>>      349:       48 ba 00 00 00 00 00    movabs $0xdffffc0000000000,%rdx
+>>      350:       fc ff df
+>>      353:       41 56                   push   %r14
+>>      355:       31 c9                   xor    %ecx,%ecx
+>>      357:       4c 8d b7 e0 01 00 00    lea    0x1e0(%rdi),%r14
+>>      35e:       41 55                   push   %r13
+>>      360:       41 54                   push   %r12
+>>      362:       55                      push   %rbp
+>>      363:       48 89 fd                mov    %rdi,%rbp
+>>      366:       53                      push   %rbx
+>>      367:       48 81 ec c0 00 00 00    sub    $0xc0,%rsp
+>>      36e:       48 89 e0                mov    %rsp,%rax
+>>      371:       48 c7 04 24 b3 8a b5    movq   $0x41b58ab3,(%rsp)
+>>      378:       41
+>>      379:       48 c7 44 24 08 00 00    movq   $0x0,0x8(%rsp)
+>>      380:       00 00
+>>      382:       48 c1 e8 03             shr    $0x3,%rax
+>>      386:       48 c7 44 24 10 00 00    movq   $0x0,0x10(%rsp)
+>>      38d:       00 00
+>>      38f:       48 89 c3                mov    %rax,%rbx
+>>      392:       48 01 d0                add    %rdx,%rax                =
+<=3D %rax =3D (%rsp >> 3) + SHADOW_OFFSET
+>>      395:       c7 00 f1 f1 f1 f1       movl   $0xf1f1f1f1,(%rax)       =
+<=3D left red zone
+>>      39b:       c7 40 04 f1 f1 01 f2    movl   $0xf201f1f1,0x4(%rax)    =
+<=3D left red zone, ??? (1 byte unpoisoned), mid red zone
+>>      3a2:       c7 40 08 00 f2 f2 f2    movl   $0xf2f2f200,0x8(%rax)    =
+<=3D mid red zone, array unpoisoned ?
+>>      3a9:       c7 40 0c 00 00 f2 f2    movl   $0xf2f20000,0xc(%rax)    =
+<=3D ??? (16 bytes unpoisoned), mid red zone
+>>      3b0:       c7 40 10 00 02 f3 f3    movl   $0xf3f30200,0x10(%rax)   =
+<=3D stack_array unpoisoned ? right red zone
+>>      [...]
+>
+> hmm. indeed. For arrays on stack passed by pointer deeper
+> into calls the compiler creates these run-time zones.
+> The other stack accesses are not instrumented.
+>
+> How do you propose to support this in JIT?
+> I see no workable way of doing it.
 
-Yeah I was thinking it would be nice to have call_rcu_nolock()...
+I did not think deeply enough about it to identify clear blockers, but I
+was imagining quite some difficulties to do it, hence my initial
+proposal to "postpone" this specific monitoring :) (before you suggested
+to rather take it into account to actually make sure to _ignore_ all the
+corresponding stack accesss insns in the monitoring).
 
-> Shouldn't be too hard. It protects itself with local_irq_save,
-> so if (irqs_disabled()) defer to irq_work and call_rcu there
-> or guard reentrance into __call_rcu_common() with per-cpu busy counter.
-> rcu_head can be reused to form list of objects to be processed in irq work.
+I was initially imagining that I could somehow benefit from a program
+BTF info to identify variables on stack and their location, but it would
+not work on this kind of example, as this really is a local variable,
+not a function argument, and so this is not described in the BTF info. I
+guess this is only one issue amongst all those I did not even think of,
+but remembering about the issues encountered when working on trampolines
+for ARM64, I guess there's also a wide variety of corner cases about
+variables location and size, eg when they have custom attributes...
+On top of that, I am not sure how frequent could the example I mentioned
+above be present in in BPF programs. More likely pretty uncommon ?
 
-I'll take a look at that, thanks!
+So as for myself, I'm fine with your proposal to rather make JIT comp
+aware of stack-related insns and just ignore those :)
 
--- 
-Cheers,
-Harry / Hyeonggon
+Thanks,
+
+Alexis
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
