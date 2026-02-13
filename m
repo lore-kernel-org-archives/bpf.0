@@ -1,102 +1,285 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42006314A95;
-	Fri, 13 Feb 2026 07:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770969417; cv=none; b=YfP3LNX31bFIXm5++057LFujHvak4LILAXDI4vQA+TIAyfFcDQYVH1FH03EiJYVhCJhNifpbcYXLvNTiryRbIPPxwuEV0k/xu68lxTPz/q0UivCNKWpfVCM+M27xC+NckRhizZ/Ms/yFdz0gwYOaAu8rXfEpfmXhGaAQdOmbwag=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770969417; c=relaxed/simple;
-	bh=PpQWvYCrQta7omtcLnAeHaRE+LVjwufS1aP9UvbTMQA=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=D1/NkbbX/wme9bh/Oe6sKdRKPvbMkvU8X26nosXLPyBJvPb++Vr94uSc+KsOryN5sphiASjIXAZMtSslDG4jn8//YWZPHcn1G4Phod6iRSUBrkCzC5MspilRv9vsjI4+MlGqzzANuoTZ4quipexF2D+0eKysrP1cQGgbXATov3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dj0ruJXc; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8634A33D6EC;
+	Fri, 13 Feb 2026 08:41:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770972104; cv=fail; b=nl8JecKB/2be8S/hdAZu3x72B0qwgoeqW6EqOYr99Elp8buhJHdayzMkXOlx9Ho7L01b5Mxjrxy61IZcMwc5vxfSpARUBYP4kC9q2TB/14XaiTfe5xJxKDgFTA2Z8xvUO1+JKfyQJm6yXd3R9TOFnOW6PXC+Q4zlOTmv/Sl1Y/A=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770972104; c=relaxed/simple;
+	bh=CmUTTNR6XKvpizkVHMJ6HT2etnrNw5Bw6QozyoqaBE4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=uCcC6vP18eKmf7kp+54giSYJbF7R+Aey0OgxUBrmx/zLaGC8JUfrAfcxcKTTJomqrbnnwPC8491PrAr0/ZTjcT1SSz/oW/xqbhrR7rNTGyqDp/SXn7eZ/ylFPGr3KpAxtIACBiamLP/bh0WXrUQVnlRYRY0IAVIJas0WSQWLdTc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=F7xr4B8h; arc=fail smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dj0ruJXc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6798C2BC86;
-	Fri, 13 Feb 2026 07:56:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770969417;
-	bh=PpQWvYCrQta7omtcLnAeHaRE+LVjwufS1aP9UvbTMQA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Dj0ruJXcAKlcq/8kwv/FD7QRg5vxmqV7VF3eF8+UgOpcVkQXVZU57zwM9H6nqivEG
-	 fUeDyj6+Fi5MrsHqR5qNpy+eK6N2XXvaNTp2DyP3FUl4ewGkX6+2lHwKHzUqR89e0s
-	 bYWQ3DfnyzZstdvVar2Tf8feoi7ySq8bnEQKBUzT8Gj4l2ahDFpyUf1Lm3QLQyfsIu
-	 XGKvpRxaHH3qzh2W7I7NjjQN4AcAezIGkmyh0PF/FXP/U/S8QEKZtOutvZzsXwBaEp
-	 ZYtioZHBCvbOisz0mgJvGwsu6IR/5zWN4L700WmT58qzu9fDkkbkbyu8DqFQcDxnQG
-	 IyFyvuDLLQPvQ==
-Content-Type: multipart/mixed; boundary="===============6972505930256429267=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F7xr4B8h"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1770972101; x=1802508101;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=CmUTTNR6XKvpizkVHMJ6HT2etnrNw5Bw6QozyoqaBE4=;
+  b=F7xr4B8hlYvJ7UMHSqqdxTnHB/kkPlqYvY5JzevRKAetSFbc07e9VDss
+   lHag7tDJ9URe9OELKwBMOixTjmUca3VG9WbSqt03f6KUi5DZ+EOXRjRqp
+   hJVctDQ8d0O806m+N/QnVkbNaL7DNEydBk8elzJxEJR/5H9sSxmJSXs+Y
+   PjnId6qn1c6c26xG3whIFzI4v9WTNU0TqhXMsUGG8RnKuKvkWVIJz4giI
+   bMkqNozD5IXC6p8aKo1gv5poW6C1VTiVP1r7A1vLIsHIJCmcrUXFB5znq
+   qhXT6Ex1B+0suutU1oK9/3qW1irQGj0dn2bDhIoEmSLf9MNDCB0CoW8p8
+   w==;
+X-CSE-ConnectionGUID: KAK/tVgGRpSnpu2gkECGwQ==
+X-CSE-MsgGUID: gtdaV4DrREe0n9RYeh+T/w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11699"; a="83253997"
+X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
+   d="scan'208";a="83253997"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2026 00:41:40 -0800
+X-CSE-ConnectionGUID: 1pdMgHLLSvyo6eb8Z6qSQQ==
+X-CSE-MsgGUID: o5jycjOBSPu/6n8O8gVpGQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,288,1763452800"; 
+   d="scan'208";a="212963329"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2026 00:41:40 -0800
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Fri, 13 Feb 2026 00:41:39 -0800
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Fri, 13 Feb 2026 00:41:39 -0800
+Received: from PH0PR06CU001.outbound.protection.outlook.com (40.107.208.13) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Fri, 13 Feb 2026 00:41:39 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=vE33YQ8qPSkavcHywPt/In0UFbpCnWICpxgaxZEhw7Ossm3djF6OBgtQfiZvtrp93IjosI3MN6tZ+potJdDNNczIIv2DSp8qwxxWC4h7ZQtZWbcJNIPCHFMhvUDDltddeOzwWySuqe88oE4Nrba5yqaM5QE8at+l7q9rwrXSulvC5AmlnLtMrSQyN0wSmJAZuXZYlZ5Pe2cN61CJo/KuMulelp+NYDbSXmp6e/t6B8JPtcG3KywGOnZF+h2j8LZZupfFsg7R6KNNhCDjD5gSOgepYZlftC2vAKLHhbXddYcrN9fdWVwdgb8hbsV3Dy/SlHg8OTcnpWdHHCO5781DUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M8z7qZ6OGlhHdQKcukDS3ZipZp9D3mgHbxTj2jQaxA4=;
+ b=XITCfSYCYnTFK6sbl/3ENE0u3ukXKBiK0Qlrkrsb1Kv4L4abUMu05g2XedOxrZTMuFNl6jVslhK45T53eR3y8ZL2530eJGDDYhSkqZYWBuk9l53+vYhH0Lm5RweMJSOKlDmNYpEB8cX8xjmNW2m5n1g/uASi3kZjS7elroTR6bEkt36ht8kKdhuqXT7BHm2EJrSZEwaofM98L09Nl+Vsapqkbh+a3UxwtcUpy5zjeLbWGlUa2Ayc0+nxh70mbiasNQ8l1gL2QpVRWgmfhY9x8Jh1+MZ5HQvzDCfLtfYLtPoYQF7sMYkftxe0G4RbML96Gi63vjmIPetV4uMWg4w0KQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SN7PR11MB7540.namprd11.prod.outlook.com (2603:10b6:806:340::7)
+ by SA2PR11MB4858.namprd11.prod.outlook.com (2603:10b6:806:f9::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.13; Fri, 13 Feb
+ 2026 08:41:36 +0000
+Received: from SN7PR11MB7540.namprd11.prod.outlook.com
+ ([fe80::2edd:5c6d:169c:389b]) by SN7PR11MB7540.namprd11.prod.outlook.com
+ ([fe80::2edd:5c6d:169c:389b%4]) with mapi id 15.20.9611.013; Fri, 13 Feb 2026
+ 08:41:36 +0000
+Date: Fri, 13 Feb 2026 09:41:22 +0100
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: "Loktionov, Aleksandr" <aleksandr.loktionov@intel.com>
+CC: "bpf@vger.kernel.org" <bpf@vger.kernel.org>, Claudiu Manoil
+	<claudiu.manoil@nxp.com>, Vladimir Oltean <vladimir.oltean@nxp.com>, Wei Fang
+	<wei.fang@nxp.com>, Clark Wang <xiaoning.wang@nxp.com>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+	"Kitszel, Przemyslaw" <przemyslaw.kitszel@intel.com>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "Jesper Dangaard
+ Brouer" <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+	<eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
+	<horms@kernel.org>, Shuah Khan <shuah@kernel.org>, "Lobakin, Aleksander"
+	<aleksander.lobakin@intel.com>, "Fijalkowski, Maciej"
+	<maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF Foundation)"
+	<bastien.curutchet@bootlin.com>, "Vyavahare, Tushar"
+	<tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>, Ricardo
+ =?iso-8859-1?Q?B=2E_Marli=E8re?= <rbm@suse.com>, Eelco Chaudron
+	<echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, "Toke
+ Hoiland-Jorgensen" <toke@redhat.com>, "imx@lists.linux.dev"
+	<imx@lists.linux.dev>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Dragos
+ Tatulea" <dtatulea@nvidia.com>
+Subject: Re: [PATCH bpf v2 4/9] ice: change XDP RxQ frag_size from DMA write
+ length to xdp.frame_sz
+Message-ID: <aY7jssd2jAm8MLC7@soc-5CG4396X81.clients.intel.com>
+References: <20260212183328.1883148-2-larysa.zaremba@intel.com>
+ <20260212183328.1883148-6-larysa.zaremba@intel.com>
+ <IA3PR11MB8986F7044E60C1DF4DFD44A3E561A@IA3PR11MB8986.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <IA3PR11MB8986F7044E60C1DF4DFD44A3E561A@IA3PR11MB8986.namprd11.prod.outlook.com>
+X-ClientProxiedBy: VI1PR06CA0131.eurprd06.prod.outlook.com
+ (2603:10a6:803:a0::24) To SN7PR11MB7540.namprd11.prod.outlook.com
+ (2603:10b6:806:340::7)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1d048c48e087e02590e6943bdfed93db4202f3c600155483cc38cea21e565f8b@mail.kernel.org>
-In-Reply-To: <ba61b77c71b6285eefa022a84bf80c5913b313de.1770965805.git.zhuhui@kylinos.cn>
-References: <ba61b77c71b6285eefa022a84bf80c5913b313de.1770965805.git.zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v2 2/3] selftests/bpf: Check bpf_mem_cgroup_page_state return value
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,hannes@cmpxchg.org,mhocko@kernel.org,roman.gushchin@linux.dev,shakeel.butt@linux.dev,muchun.song@linux.dev,akpm@linux-foundation.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,zhuhui@kylinos.cn,inwardvessel@gmail.com,cgroups@vger.kernel.org,linux-mm@kvack.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 13 Feb 2026 07:56:56 +0000 (UTC)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN7PR11MB7540:EE_|SA2PR11MB4858:EE_
+X-MS-Office365-Filtering-Correlation-Id: 375eaedd-42b2-4fe4-511f-08de6adbb26e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|10070799003|376014|7416014|366016|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?4mwVGpW3CvRsBbgAG+JnUg2OHs5LfouEp3uu1/YCSY9+BIgGdIJ5fu5Sv/?=
+ =?iso-8859-1?Q?uBnBoj6d1aWxUTr4LUUJXpcvH9Pn4c0q3kVsCAwjkupf2ER2562Wc0FaAw?=
+ =?iso-8859-1?Q?EKPo8yMyKmBaWjmtOAGofam6boRJZB0wfvUdUR7a9rCN/dOyFZQvrZldHu?=
+ =?iso-8859-1?Q?y2FWu51CzGCcRHA2vBdQ2c2lNeGgSDEh51Dd1eEnYzeWEK+LgLmFo7w75Q?=
+ =?iso-8859-1?Q?k1sVI7H9BHlUBeIs5B/w7I5YaEyeWnVTUzkMwIqALjZ8VxTk6TdmXF+EIv?=
+ =?iso-8859-1?Q?WBW7bMb8bhYNaXS6M10Yoxii6cgjiR2q0Ar5nfewEvE4U8uExNOcE2dVgN?=
+ =?iso-8859-1?Q?IOQEDnmnwUbcbU85VyIGsWNhEzAMVBO/lkJXwExFr2TYagt8VMgv7UEJfD?=
+ =?iso-8859-1?Q?N0z/HRpfxAaTFwFAqA7DwGarJ1OdiGa6ov0lx64MYx4Uuv3QWTPS3CMXQ7?=
+ =?iso-8859-1?Q?ZVdpH5X54Rz9SJgkJay+IMikDpoGDV4Pyc9gSXxYj2FqJFr+aCS7gQ5sCT?=
+ =?iso-8859-1?Q?7DQxJ6iMWQE5LN9sKuTHEbwM6PHRzA7ehHzVR1eOpH10vhV4F0MD2C+c9E?=
+ =?iso-8859-1?Q?LyQbcAvfU5guPyPDeYA+XZoXBI8wO7gzJ9Ea0zWT0/chGPhsps4mRsaxlN?=
+ =?iso-8859-1?Q?ULe5YuLUUXrGmOikP4PaxLIiOEA9aZx/d08gmipPCOKS/kVhlfB7G943in?=
+ =?iso-8859-1?Q?lSq3U7QR2hhuc2SLvPWGP4UYour5uPeW2XfMbjLnlTv2dEqgljvVP//gyr?=
+ =?iso-8859-1?Q?qw1IsQ4zREtLN+qaW30i9q+XbX5x/Mshf60THiQKy17Jir3TSseLzx1DeY?=
+ =?iso-8859-1?Q?YR8t1wsDnGoaus9esGYQ9nE4KyrsHq1imTejltWpL4LNdCbhfTUN/gjvSl?=
+ =?iso-8859-1?Q?k/mRxkc8lgme7gGD5Q0f9XHIO5HmBwVxXsE4SN+urxuEWpyqAFDSyE3iXg?=
+ =?iso-8859-1?Q?Ta9jD4QKII3JrhejkjZn8VutX2ZVQZapSyQ8Xxw7CaIjYgXFCkRDotktBk?=
+ =?iso-8859-1?Q?D8jFHQFrTtGT+HAufq7a8KuVBYwA01SzuUp0d2eFMGewUo02LyJdNAeHl0?=
+ =?iso-8859-1?Q?bLHFpcymnsDa79/NPgkaaNljyQvVMaEr2TjmXwp71I1oztuUZACf5F+TAD?=
+ =?iso-8859-1?Q?AvVvw/OdlA95E5obxpqV8XEC1q7RGw4yC08YbLh4vAl/dCccNRX6UkmEYR?=
+ =?iso-8859-1?Q?ZV2ZhIITCgHHbM0P5TWgk2s9n2SswfurbE2xzPKV1QNMW8Q34P5LgHESKy?=
+ =?iso-8859-1?Q?j3BoRKalJ3WZKuKfbFOio3Za0qvVxGKDL7ToqU0gzKT/bnZ7UMn0Fh3Szn?=
+ =?iso-8859-1?Q?sswReRP6yDwUpSOYtDHNlBy/rvZOwjnI0l3aCOaaPVkApHVJPhPCWmZ2xS?=
+ =?iso-8859-1?Q?vKw7Fym2peC/rFX+kL+0gyWvv8vph3nR4EohkD1b1UbmNPoPWoX/b5imQM?=
+ =?iso-8859-1?Q?+Mu/5JIxODyIyjFHJqdI5vSfiEhLrxX2V1L+HsrPIRIqhkE1E0JT+L33uS?=
+ =?iso-8859-1?Q?R5V0w/GAQmoRmW4HTf8D5cRnQcEp8E0dk4HHt6b8ijzuRNv5BTkoAFc5mB?=
+ =?iso-8859-1?Q?FdYCzXq8AW6rUWNOciQb/tmLM3cAGnL6HU2P7A9njuif9eZ/CIfQ11u5pX?=
+ =?iso-8859-1?Q?VUxrE+DX1b4JA=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(376014)(7416014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?EVs7Hib/YQrZocOwzz+x23CyPWEr0UI8r3LB840xlBbf4FRKXEYCJIrbeQ?=
+ =?iso-8859-1?Q?Ay355t6XQxmaOebOIfy7e7m/mEd0mGt1LYObIGKjvEW8eYPOOoJ03zinRc?=
+ =?iso-8859-1?Q?tuN3WFEUNCJlpjNsIIvfdTe7PYAFIgCnarthkfToVsgkmHAl9Tj69tF5R6?=
+ =?iso-8859-1?Q?TuuYj/ha7pn7irCFCHvRlOOI8ADqgLjOSnEUvePHEslVA++iV2rkP6IqvV?=
+ =?iso-8859-1?Q?Ex5iaga3mv+/SM67KmvqvJxG69kMQbMIYB7EM9Pn6gyoetxsCi/9mfBAHL?=
+ =?iso-8859-1?Q?voMip2ReyR1ubqCbBpAMCN0QgJ2xH+5wCxoBSCTi0uhpZpnvBu9tntiddQ?=
+ =?iso-8859-1?Q?mVNPMOc6SojQShmVJhzPbqgTPepRAAjiZzDSP7V0AAbNQNGmvVgop3XXLF?=
+ =?iso-8859-1?Q?5K5uC8ymyrQUKHrMOfLixJ1Wly9Oor5eBEHystgQbDbInsqsMu7/ShSSB7?=
+ =?iso-8859-1?Q?24Rll7MycNIeD/mj5mFNg6PnBwWq3jz+WIcOCLMF1Ee/AsV0m/TEmcegQg?=
+ =?iso-8859-1?Q?H9iobEwxuNC63feN2ec33ct5aLR82Z7osvlNo2fwgxv3guE/HeXQV425z4?=
+ =?iso-8859-1?Q?Z0lrfiZLGVMRySdpR3U/oSJbSHokTiVG3NhTknp2ryJXqCH4Hq86bmOjYE?=
+ =?iso-8859-1?Q?kVIksiDx/0vu9sDg49tOddE6NbQ8Aug7t8JtgvTusf2TfzTCPZaqe/54oR?=
+ =?iso-8859-1?Q?xqS8j+dbfrZ5ppB8TcQeRYJU/ljTg3U3a7ioLCqV/z3KM8MFVT8iP46OV5?=
+ =?iso-8859-1?Q?GoMLeHLRA+y1k1Pce8JpORc4lK10iioQND87GosIUxtiHIwQ/MtZ1e2Tc8?=
+ =?iso-8859-1?Q?hDTZ9ItDgaBbvGMYKsdI9vU0ZAw5PGaVXH2vVYSjzTHAQulxszxS4W32tc?=
+ =?iso-8859-1?Q?ColI4hWjTye6JoqbAinoSiX7zywkdX7yuwtOkChPN2r26Tuu1Rfbn4okYE?=
+ =?iso-8859-1?Q?EI19FkGFColX+5muZFkkUa/fSLZCGKCWqIScTGWAQ1rs1ngiCoPaYmhsEf?=
+ =?iso-8859-1?Q?r/s1sXrQ9VTSWcuuDZizJHUvXPflI4FBB4RqHpBff6AMefip0hlbkPrnw+?=
+ =?iso-8859-1?Q?dNR6laZgTsOchdnLGiOMlu7aflgoRI+STXG97/cRG6FnKtSEdB4LeOD5wo?=
+ =?iso-8859-1?Q?g1Z/Bd1cVRMz083uy5mb/1V1rZliuf94NdGHjPuelp+AChioqaAFh5gTRr?=
+ =?iso-8859-1?Q?kQyXNViMuhId6MRzBOzlMYiy59frXYnr2528az/0V/v5hH1wffkRx25TwX?=
+ =?iso-8859-1?Q?GGtWCTRAi9Ky+/yifp8EGOcPCgU5DLjQUJutjdCl6sV+YXXXnjjduA79TI?=
+ =?iso-8859-1?Q?gpiiluy1MsXflDM3BQyO6USh7TIF21o/LWRUzpfn4kf9gLpUE/wogEcPbK?=
+ =?iso-8859-1?Q?uQrxblSyckJcXMYdhg+e4V7Ql1eIT0IAq6Hg6J+u5ElPZ9aNE6XXHBuAYD?=
+ =?iso-8859-1?Q?FNWSUs5UHmfR7w7d6us38PTVrPnG+Gz6pVOWnuq5IHO5t3n1bCynL4rkU1?=
+ =?iso-8859-1?Q?Js96I5v1b2Xf/61VnTwPAKETBtghlVXSPLfvdl2irfv4+go2JcFcPBbDpX?=
+ =?iso-8859-1?Q?IE9Jjok2dzdgWKrzTKNK7AnGpRZd/DKuEVVTiFP+nhsgncBgiBO50y3nQI?=
+ =?iso-8859-1?Q?3gJLj1iN35sGutwVDLJjjUIXEGpNDGsmfCWyUZ1IjWhE8ETQEOBSM2g0k5?=
+ =?iso-8859-1?Q?PIBEzHwzB8ip/BCEYWKe8XIxUdv/daDZME2rMd5fzR1FuVyBqLnzrRN4gn?=
+ =?iso-8859-1?Q?fM9U7BVAgbYXKNrZaIRdTgf9XZcn+IrDQsJUW4b6KpxgwZJn0R3/6yWxXv?=
+ =?iso-8859-1?Q?hdGAHhpuOswSk8ZAxWnG+5uSZjbN3Ma7w8+NCZ+SaKwk4lVHsh2rgvyE86?=
+ =?iso-8859-1?Q?cR?=
+X-MS-Exchange-AntiSpam-MessageData-1: 3GWBIFOM3hmEOjtDXqOl2Vm7Sdqdys7abXc=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 375eaedd-42b2-4fe4-511f-08de6adbb26e
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7540.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Feb 2026 08:41:36.0649
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Fo40hzmO9pRSSsUjmx1Q9hJSK4YFaIeRi5gqELHfj9ujAAwuZU6qpDqgaDwGAzGGJd+RjtgPsbDx+6oC7GSjL35+/Xxx8UMpNLfQJtOthcg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4858
+X-OriginatorOrg: intel.com
 
---===============6972505930256429267==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Fri, Feb 13, 2026 at 04:57:25AM +0100, Loktionov, Aleksandr wrote:
+> 
+> 
+> > -----Original Message-----
+> > From: Zaremba, Larysa <larysa.zaremba@intel.com>
+> > Sent: Thursday, February 12, 2026 7:33 PM
+> > To: bpf@vger.kernel.org
+> > Cc: Zaremba, Larysa <larysa.zaremba@intel.com>; Claudiu Manoil
+> > <claudiu.manoil@nxp.com>; Vladimir Oltean <vladimir.oltean@nxp.com>;
+> > Wei Fang <wei.fang@nxp.com>; Clark Wang <xiaoning.wang@nxp.com>;
+> > Andrew Lunn <andrew+netdev@lunn.ch>; David S. Miller
+> > <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub
+> > Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Nguyen,
+> > Anthony L <anthony.l.nguyen@intel.com>; Kitszel, Przemyslaw
+> > <przemyslaw.kitszel@intel.com>; Alexei Starovoitov <ast@kernel.org>;
+> > Daniel Borkmann <daniel@iogearbox.net>; Jesper Dangaard Brouer
+> > <hawk@kernel.org>; John Fastabend <john.fastabend@gmail.com>;
+> > Stanislav Fomichev <sdf@fomichev.me>; Andrii Nakryiko
+> > <andrii@kernel.org>; Martin KaFai Lau <martin.lau@linux.dev>; Eduard
+> > Zingerman <eddyz87@gmail.com>; Song Liu <song@kernel.org>; Yonghong
+> > Song <yonghong.song@linux.dev>; KP Singh <kpsingh@kernel.org>; Hao Luo
+> > <haoluo@google.com>; Jiri Olsa <jolsa@kernel.org>; Simon Horman
+> > <horms@kernel.org>; Shuah Khan <shuah@kernel.org>; Lobakin, Aleksander
+> > <aleksander.lobakin@intel.com>; Fijalkowski, Maciej
+> > <maciej.fijalkowski@intel.com>; Bastien Curutchet (eBPF Foundation)
+> > <bastien.curutchet@bootlin.com>; Vyavahare, Tushar
+> > <tushar.vyavahare@intel.com>; Jason Xing <kernelxing@tencent.com>;
+> > Ricardo B. Marlière <rbm@suse.com>; Eelco Chaudron
+> > <echaudro@redhat.com>; Lorenzo Bianconi <lorenzo@kernel.org>; Toke
+> > Hoiland-Jorgensen <toke@redhat.com>; imx@lists.linux.dev;
+> > netdev@vger.kernel.org; linux-kernel@vger.kernel.org; intel-wired-
+> > lan@lists.osuosl.org; linux-kselftest@vger.kernel.org; Loktionov,
+> > Aleksandr <aleksandr.loktionov@intel.com>; Dragos Tatulea
+> > <dtatulea@nvidia.com>
+> > Subject: [PATCH bpf v2 4/9] ice: change XDP RxQ frag_size from DMA
+> > write length to xdp.frame_sz
+> > 
+> > The only user of frag_size field in XDP RxQ info is
+> > bpf_xdp_frags_increase_tail(). It clearly expects whole buff size
+> > instead of DMA write size. Different assumptions in ice driver
+> > configuration lead to negative tailroom.
+> > 
+> > This allows to trigger kernel panic, when using
+> > XDP_ADJUST_TAIL_GROW_MULTI_BUFF xskxceiver test and changing packet
+> > size to
+> > 6912 and the requisted offset to a huge value, e.g.
+> 
+> "requisted offset" -> "requested offset"
+> 
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+I am curious why codespell thinks this is fine.
 
-[ ... ]
+Will fix, bot has correctly identified that u32 rx_buf_len; is not longer needed 
+after this patch.
 
-> @@ -143,6 +151,8 @@ static void test_kmem(struct bpf_link *link, struct memcg_query *memcg_query)
->  	if (!ASSERT_OK(read_stats(link), "read stats"))
->  		goto cleanup;
->
-> +	ASSERT_NEQ(memcg_query->memcg_kmem, (unsigned long)-1,
-> +		  "bpf_mem_cgroup_vm_events MEMCG_KMEM");
-
-Should this assertion string say "bpf_mem_cgroup_page_state MEMCG_KMEM"
-instead?  The BPF program in progs/cgroup_iter_memcg.c populates
-memcg_kmem using bpf_mem_cgroup_page_state(), not
-bpf_mem_cgroup_vm_events():
-
-    idx = bpf_core_enum_value(enum memcg_stat_item, MEMCG_KMEM);
-    ...
-    memcg_query.memcg_kmem = bpf_mem_cgroup_page_state(memcg, idx);
-
-> @@ -170,6 +180,8 @@ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
->  	if (!ASSERT_OK(read_stats(link), "read stats"))
->  		goto cleanup;
->
-> +	ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
-> +		  "bpf_mem_cgroup_page_state PGFAULT");
-
-Similarly, should this say "bpf_mem_cgroup_vm_events PGFAULT"?  The BPF
-program retrieves pgfault using bpf_mem_cgroup_vm_events():
-
-    idx = bpf_core_enum_value(enum vm_event_item, PGFAULT);
-    ...
-    memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, idx);
-
-It looks like the two assertion description strings for test_kmem and
-test_pgfault were swapped.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21978734425
-
-AI-authorship-score: low
-AI-authorship-explanation: The commit describes a specific back-porting scenario, and the copy-paste error in swapped assertion strings is characteristic of human authorship.
-issues-found: 2
-issue-severity-score: low
-issue-severity-explanation: Two assertion description strings are swapped between test_kmem and test_pgfault, producing misleading diagnostics on test failure but not affecting test correctness or system stability.
-
---===============6972505930256429267==--
+> Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+> > XSK_UMEM__MAX_FRAME_SIZE * 100.
+> > 
+> > Due to other quirks of the ZC configuration in ice, panic is not
+> > observed in ZC mode, but tailroom growing still fails when it should
+> > not.
+> > 
+> > Use fill queue buffer truesize instead of DMA write size in XDP RxQ
+> > info.
+> > Fix ZC mode too by using the new helper.
+> > 
+> > Fixes: 2fba7dc5157b ("ice: Add support for XDP multi-buffer on Rx
+> > side")
+> > Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+> > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+> > ---
+> 
+> ...
+>  
+> > --
+> > 2.52.0
+> 
