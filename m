@@ -1,72 +1,180 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87E2E2C21F1;
-	Fri, 13 Feb 2026 16:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D43B82D6E58
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 16:13:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770998408; cv=none; b=USNI2anhDSJ2fbVMm33onnSBxzBs3iHD6o9yDINCEmPnu8sZ78NGhpotjeGc5hJKJpX8JJi0dxEuqJxHNJ7x08X2xZED1iyQVRzBMpDEKR0ZnnkeRNR4Eob4uEQeF0q+y5XzXrlOFUgZ6TbvwZZSg3yXG963VmjVWJeMHhY3IxM=
+	t=1770999228; cv=none; b=cQxGbTIxmNAACZVUBdRImnCK2OsAYyMJyCmJMBE84vW08XjVQQk2P0FE072lIpdcmb7A5i6V9c1XwX4wCDouO49G8pG58XbMwUaEfE83WJ2Xg/mQn5GZBTghIKA5oB8xfRnHC3z8U+m6H5bfhJrsW9Jj/DmMkKW0X/UYDgMf2jM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770998408; c=relaxed/simple;
-	bh=umAF/ss9ZcJMBNAXS2atoM4+Zm2UxJfpsD4eEBlFQgU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Xn29ak3WWQUk1Ti6QQtskWjfZEjn97aMn+tZiaoSwdgMSDbA5jiWmF76JhPrkf76ajizIofb/sLvvZ4pSx4orcOQQklhv1/a/WUf0XzHykBqO9M+mrLed3tPdsYg981/A97kR6UWSXqUjsGRPSacA1Evh5MoFmODnr5GJJT2f1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dOCDmnZv; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1770999228; c=relaxed/simple;
+	bh=QDH5BqE+Huqq1nEVLGcqRBuhKMbz6qneCSo8+ctPFHw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ggAyubyYpd8K40tH1qfiV8O+d6II51E75+w3ngfD8N3zTcRiFZLs3TW3UpILT/MRoIILMC5z2OYxGDR7//Cc0R9vwTacSkivO1lamG2gf5RRWhJxEP1JkA1fmel9cUICVJX/DmpCXdVHYBi77tR1l0mR29OQHSr8YlBzOCP30yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DLaRgM+M; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dOCDmnZv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCFFEC116C6;
-	Fri, 13 Feb 2026 16:00:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770998408;
-	bh=umAF/ss9ZcJMBNAXS2atoM4+Zm2UxJfpsD4eEBlFQgU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=dOCDmnZvocrVImcWNhWqNPAF4totSSPUucNKUsGS7iDIJta2veoCndZ0s6FbWPuUQ
-	 z+rFcHPQPQGHBT6YTqMj86RNJPFcgaW2oFmdcclf9R/+taQlTcD/YwhcwC0K7JwYMA
-	 P22PZjf6e0c+YJhILTjngzjfr3h9P2yHkdnZHyYN7iha8HW0XRdCfMK2tXCqSJWB9b
-	 nf2wV82FA1iTdsjNArs7z8cUTOkqxSro3B9bgCcX1IwY21obnbDpEVyV42fLNjU6r4
-	 MSQI6U5Avn5BZDkGuctNOgDmD2QsKsE5RH8zrwZdIl4R+Y1ltsbpkUaAwZElq1F9EP
-	 jXlcOsROuQGHA==
-Content-Type: multipart/mixed; boundary="===============2200788076600515838=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DLaRgM+M"
+Message-ID: <de259393-c414-4834-bd62-b65774e201a7@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1770999224;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5IAFvfP6T9H5d9tUk5GebB/MCFzZPtLOUJ6Nl3pHbmM=;
+	b=DLaRgM+MyYq1rAI0hPXlPqyCeCQTHdllAeJOssNQoFdJr03RAxurrtYw12k8hwDKZkEBup
+	KRg/F8Vqfy1LLnT/qLstKLjrvVl/hwERfTE/D8xism5pht1yYLLzyZdpylzq/cYOXcvSNa
+	AFFfBY02BNIUXLCP4HeSy/bTe/3dIkE=
+Date: Fri, 13 Feb 2026 08:13:38 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2b50829f1fb3dd6374d7f7a3bd10073560752f79b56029e9ab1d02e0d7febdcd@mail.kernel.org>
-In-Reply-To: <20260213-bpf-xdp-meta-rxcksum-v2-3-a82c4802afbe@kernel.org>
-References: <20260213-bpf-xdp-meta-rxcksum-v2-3-a82c4802afbe@kernel.org>
-Subject: Re: [PATCH bpf-next v2 3/5] net: ice: Add xmo_rx_checksum callback
-From: bot+bpf-ci@kernel.org
-To: lorenzo@kernel.org,donald.hunter@gmail.com,kuba@kernel.org,davem@davemloft.net,edumazet@google.com,pabeni@redhat.com,horms@kernel.org,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrew+netdev@lunn.ch,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,aleksander.lobakin@intel.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,maciej.fijalkowski@intel.com
-Cc: jakub@cloudflare.com,netdev@vger.kernel.org,bpf@vger.kernel.org,intel-wired-lan@lists.osuosl.org,linux-kselftest@vger.kernel.org,lorenzo@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 13 Feb 2026 16:00:07 +0000 (UTC)
+Subject: Re: [PATCH bpf-next v1 00/14] selftests/bpf: Fixes for userspace ASAN
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>,
+ =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+ <59d226c413864ec7229e4a74af7e663e9982c534.camel@gmail.com>
+ <2a532f02-a7ed-43d5-a0fc-129ee4eeb0c1@linux.dev>
+ <b1399390b3e34961c3afd5a6a06c3c7bb3a4666a.camel@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <b1399390b3e34961c3afd5a6a06c3c7bb3a4666a.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
---===============2200788076600515838==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 2/12/26 4:23 PM, Eduard Zingerman wrote:
+> On Thu, 2026-02-12 at 15:57 -0800, Ihor Solodrai wrote:
+> 
+> [...]
+> 
+>>>  CFLAGS += -g $(OPT_FLAGS) -rdynamic -std=gnu11                         \
+>>> -         -Wall -Werror -fno-omit-frame-pointer                         \
+>>> +         -Wall -fno-omit-frame-pointer                         \
+>>
+>> I think you've cheated a little bit here, because with -Werror
+> 
+> It's just a model of a memory error, see below an example that does
+> not generate compiler warnings.
+> 
+>> If it's removed, then I can reproduce the same stacktrace, which AFAIU
+>> is an invalid dereference inside the ASAN itself.
+> 
+> See below, if I remove custom signal handler there is a regular ASAN
+> error message:
+> 
+>   ==156==ERROR: AddressSanitizer: SEGV on unknown address 0xfffffffffffffffa (pc 0x7fa03160df4a bp 0x7fa0317bc980 sp 0x7ffee7c85170 T0)
+>   ==156==The signal is caused by a WRITE memory access.
+>       #0 0x7fa03160df4a in __asan::Allocator::Deallocate(void*, unsigned long, unsigned long, __sanitizer::BufferedStackTrace*, __asan::AllocType) (/lib64/libasan.so.8+0xdf4a) (BuildId: d3cb6206dff19da52969c009f4cd93611901c478)
+>       #1 0x7fa0316e5bb9 in free.part.0 (/lib64/libasan.so.8+0xe5bb9) (BuildId: d3cb6206dff19da52969c009f4cd93611901c478)
+>       #2 0x000000d19cd9 in free_test_states /home/eddy/work/bpf-next/tools/testing/selftests/bpf/test_progs.c:1930
+>       #3 0x000000d1a897 in main /home/eddy/work/bpf-next/tools/testing/selftests/bpf/test_progs.c:2107
+>       #4 0x7fa0313c45f4 in __libc_start_call_main (/lib64/libc.so.6+0x35f4) (BuildId: a1dda014206b55b07f58fe8db80121b752dc3d03)
+>       #5 0x7fa0313c46a7 in __libc_start_main@@GLIBC_2.34 (/lib64/libc.so.6+0x36a7) (BuildId: a1dda014206b55b07f58fe8db80121b752dc3d03)
+>       #6 0x000000401934 in _start (/home/eddy/work/bpf-next/tools/testing/selftests/bpf/test_progs+0x401934) (BuildId: 9190db005d475ee7a8e9294bb32cfbd520c330dc)
+>   
+>   ==156==Register values:
+>   rax = 0x0000000000000002  rbx = 0x000000000000000a  rcx = 0x0000000000000000  rdx = 0x0000000000000003  
+>   rdi = 0x000000000000000a  rsi = 0x000000000000000a  rbp = 0x00007fa0317bc980  rsp = 0x00007ffee7c85170  
+>    r8 = 0x00007ffee7c851d0   r9 = 0x0000000000000001  r10 = 0x0000000000000005  r11 = 0x0000000000401935  
+>   r12 = 0x00007ffee7c851d0  r13 = 0xfffffffffffffffa  r14 = 0x0000000000000001  r15 = 0x0000000000000000  
+>   AddressSanitizer can not provide additional info.
+>   SUMMARY: AddressSanitizer: SEGV /home/eddy/work/bpf-next/tools/testing/selftests/bpf/test_progs.c:1930 in free_test_states
+> 
+> So, there is indeed a conflict between test_progs signal handler and
+> ASAN default signal handler.
 
-> Implement xmo_rx_checksum callback in ice driver to report RX checksum
-> result to the eBPF program bounded to the NIC.
-> Introduce ice_get_rx_csum utility routine in order to rx cksum codebase
-> available in ice_rx_csum().
+As it turns out, only one signal handler can be installed at a time [1].
+From man [2]:
 
-This isn't a bug, but the second sentence appears to have missing words.
-Should it read something like "in order to make the rx checksum code
-reusable from ice_rx_csum()"?
+    The sigaction() system call is used to *change* the action taken by
+    a process on receipt of a specific signal.
+
+So what happens is test_prog's custom signal handler *overwrites* ASAN's
+signal handler leading to the weirdness we are seeing.
+
+[1] https://stackoverflow.com/questions/17102919/is-it-valid-to-have-multiple-signal-handlers-for-same-signal
+[2] https://man7.org/linux/man-pages/man2/sigaction.2.html
+
+We should probably do then:
+
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 02a85dda30e6..77a36f6ca352 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1672,14 +1672,15 @@ static void server_main(void)
+ {
+        pthread_t *dispatcher_threads;
+        struct dispatch_data *data;
++       int i;
++
++#ifndef __SANITIZE_ADDRESS__
+        struct sigaction sigact_int = {
+                .sa_handler = sigint_handler,
+                .sa_flags = SA_RESETHAND,
+        };
+-       int i;
+-
+        sigaction(SIGINT, &sigact_int, NULL);
+-
++#endif
+        dispatcher_threads = calloc(sizeof(pthread_t), env.workers);
+        data = calloc(sizeof(struct dispatch_data), env.workers);
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> [...]
+> 
+> --- a/tools/testing/selftests/bpf/test_progs.c
+> +++ b/tools/testing/selftests/bpf/test_progs.c
+> @@ -1913,6 +1913,8 @@ static int worker_main(int sock)
+>         return 0;
+>  }
+>  
+> +void *ptr;
+> +
+>  static void free_test_states(void)
+>  {
+>         int i, j;
+> @@ -1924,7 +1926,8 @@ static void free_test_states(void)
+>                         free_subtest_state(&test_state->subtest_states[j]);
+>  
+>                 free(test_state->subtest_states);
+> -               free(test_state->log_buf);
+> +               ptr = test_state->log_buf + 10;
+> +               free(ptr);
+>                 test_state->subtest_states = NULL;
+>                 test_state->log_buf = NULL;
+>         }
+> @@ -1944,13 +1947,15 @@ int main(int argc, char **argv)
+>                 .parser = parse_arg,
+>                 .doc = argp_program_doc,
+>         };
+> -       struct sigaction sigact = {
+> -               .sa_handler = crash_handler,
+> -               .sa_flags = SA_RESETHAND,
+> -               };
+> +       /*
+> +        * struct sigaction sigact = {
+> +        *      .sa_handler = crash_handler,
+> +        *      .sa_flags = SA_RESETHAND,
+> +        *      };
+> +        */
+>         int err, i;
+>  
+> -       sigaction(SIGSEGV, &sigact, NULL);
+> +       //sigaction(SIGSEGV, &sigact, NULL);
+>  
+>         env.stdout_saved = stdout;
+>         env.stderr_saved = stderr;
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21992879200
-
-AI-authorship-score: low
-AI-authorship-explanation: Garbled commit message sentence and non-native English errors are characteristic of human authorship; AI tools typically produce grammatically correct output.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: The only issue found is a garbled sentence in the commit message; no functional code regressions were identified.
-
---===============2200788076600515838==--
