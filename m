@@ -1,65 +1,65 @@
-Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCA7A26738B
-	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 18:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48D221B394F
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 18:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771005975; cv=none; b=sm7dtmyupEQ4glj0MMD/4IwYs8Zh0R6fnp96sfzU1Iv8220rXYPiFXzsOz3iNOjeA+KzOjeG8CYofakB3Vg8N7HXr6dsrihLV+oGQny+RgoqKiHcpR83n7Z7r2DBd4rzq9N61cX8z4/HJsttUrqaw30eNhp0hBUIPdLNNcJunmo=
+	t=1771006194; cv=none; b=b3+emdDkEQd+gVU6JxGcSRT7rirpPzu/w8M6SJUBopMwoHDeMV7Nsbxs5Kh7cIZn16Djc42dyMIOfyJM1jpRSFF8wD0j2E/hkUk8KoXdwUoZS5H1SKQxckLttlUkkczHUqZdCkVzozdS8E58ORwnirXIoVtxyCjzrYwiHdWolsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771005975; c=relaxed/simple;
-	bh=Qqz+Z6qDHdduMATre+/3ILrfrF2RoZdEoBC6jxCpcmA=;
+	s=arc-20240116; t=1771006194; c=relaxed/simple;
+	bh=rA+ZGUwf97oKWuIzYbm3bITITE+6t/DJLp8nSkOBXIE=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HKYpQuyAPiBwj82PytsRBG9PBvIM6z9ia6trnMGGYIu3y3Ago7GrDOd3O6LjB+8w1MekYQGABCMcKHXe/AoPY7VTsvmoHhe46sjmSFalMjF+jMe28HuB7eayURvrZe1bsGFfRJpJb76d/euXj8lfhugjWtcXSxjC8H/wvRKSrfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XBlzhttl; arc=none smtp.client-ip=74.125.82.178
+	 Content-Type:MIME-Version; b=LdGKExYdhB5vSwJfacH35xFDNt5siAdhWsOk7yzH35sW888Ry3RssxrBLU+4BFpMrR848WsKRdMoJeAsbyVvNszPPpL7eFqzP8jqoS6HtPitZ40VpWsYB6Y4eZjK4S5ahrgEwse2q7yCfqv8jOsjcgFwGU9tkJmu3Pi3GZ6tRAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SxS0Rrs6; arc=none smtp.client-ip=74.125.82.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XBlzhttl"
-Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2b82c605dbdso2392709eec.0
-        for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 10:06:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SxS0Rrs6"
+Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-1273349c56bso1675363c88.0
+        for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 10:09:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771005974; x=1771610774; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771006192; x=1771610992; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=3QTkGi0UBhaK6O0FpMNS7IlNxRnMRqJemfzCR4VAA3E=;
-        b=XBlzhttlcqPr5fFniegoOPURzTvkMIq9G6MOJBRTcKxqebsh+1sbowewyVJ7DxEJnu
-         IlNQg2o1JrwFcpZ0rziRF/oG6Xj4GA2Eu4HspB5H0oLxQ2YFKOH/dTCjvNPVWkt4HP5X
-         P+jk3+ErZA5Ewv8FeO6G8feHuzUZc4bDME2cpcNPnO6AFs/arWaOq3Z79pxvwRpARp0a
-         ZfRy01JuvOhT4fCchEwtuNvk0y7WlieQcAPeH4SrYHLktUXUgeLfAEqy/AtSzOZWGU/n
-         S3NDN4hOZ3HvwZoAU+wx2XE+jBtI5KOH01KdiDU5tV+mC4Hc6+HJZemzEJlqmJzesXuA
-         0Ahw==
+        bh=rA+ZGUwf97oKWuIzYbm3bITITE+6t/DJLp8nSkOBXIE=;
+        b=SxS0Rrs6eN5mF+JGIwwQidYghilkvUqHXDzWFxLuy4YroEmQF66PyMwiXfdBlyQKYs
+         01RSGrcXeVFiiy2iRg4bUOOMNtgZ/HqDeEVRZNj7krWjlDsbdp8e8W+RMmpNJvPxFawr
+         B42fzSGjUAoXUoPoAdqyDLpcTd6uoM8p2W4xvGlHiooLF3/gxHKTZzBsul8i9TbbZI2S
+         XuY0VWC5odJy1mAF9TA+kPPXlq06/z8MMkLYdgQnYBkrXFauzc4vv7inYUux79gBmaKb
+         0Cj1GF2sHMm8qzxr0ZyTOfvlHA5eVQe45x3j9NQVxJ2XM9ALnKJe7YcI1HztOHmI7POK
+         YJIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771005974; x=1771610774;
+        d=1e100.net; s=20230601; t=1771006192; x=1771610992;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3QTkGi0UBhaK6O0FpMNS7IlNxRnMRqJemfzCR4VAA3E=;
-        b=YskY41p54kuFkMy0RAateQLh7FrrxtHLNnYvmPPUg0FphEX4k5RqW8nl9cNwMgd5KY
-         lg8QK3YhPQgd+OS1Bvr8vddYRKSK2v60mi+P35o/5oA/Y8u2CWLjtQC0JNoU91bexbeP
-         oh8vntF5PMweQGLkGlSWdnfS25BhWeorOPsJ7XxX2fmRDZ7DVqOFXgQ8KBkW/rkeUhDu
-         YvMrcR8dpGaTU+Brd2f/e7Z8IHkL8qCHJJ5/xrrieHAP5NJawCfb2g17czXEnet/+XNf
-         S9xW3vkMomzToGjMA8AqQ6U6R6hP6sPB11iv0bOkynzjitdclSP3SO1u1askYmbS3kW7
-         USDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXnIC6cY3U1V/Zx3dMoQtVRnu6gUAbO/RW2HgIt6gd8ULW6jV0KLROo7HSvawID9yWc1Zk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzww1oyVWjgffn2IVbFHwQcebuAe36hy77dP5xrzutEQgvwIcL5
-	2lnrIfaCMkiHQe742DJAFIYHumaNCh5Biivbudd2v4gt7VCB5hPzbkb3
-X-Gm-Gg: AZuq6aLYqMUrrzwvSRnN26YxTiBEQkYZ9x1TRQpvEWiW2ZpTRHe+IUeqW3EQcq51Kv+
-	v3YWQzX4Yh5Wub4bMr+DAKWnDTi3RxtGB4WGvk9zrBkVdrUpr4Mk9cDzfvGxLEgdDXD1awrF9L0
-	UxFs9VlIe9biu52qsoTCd+VYsLjWxPsq3iXyyvhS+VSaFJomSIXiP8WCu91A/ShFw+zgpP22btG
-	deeFlObno2sxgspv+qnelhvEX5ynIQkbjyTICAmXQq9ppgfDf0xe421FCWQ9DqpSSw3IjNrbMqB
-	EQZBqiA8MUZ6RmSBwBFXUDUMSelpej+wBTYyVK0U3A+jMDrjCk1YQop4/pxtLI4jxscvEg+jB4F
-	4Y1rF9yE9Xn5NNeRq0TO34dDE4BInP1+/j7I/M7B0i20E4CvBqLGtmAkzqEQs+ITx5R4Jiu9m4S
-	4+oQpLukdICUXnYP3F1WbwSEKOIFYpAPxxXb8mgv0zvPDJdVlqdG0xuGnSLv2kivPddk3IrSWOH
-	71WoZAn1VAi1SwmrhQ=
-X-Received: by 2002:a05:7301:4888:b0:2b0:53e5:89df with SMTP id 5a478bee46e88-2babc3b6a8fmr1211392eec.5.1771005973846;
-        Fri, 13 Feb 2026 10:06:13 -0800 (PST)
+        bh=rA+ZGUwf97oKWuIzYbm3bITITE+6t/DJLp8nSkOBXIE=;
+        b=Ga4ib1h/edZkQnoKsdR+dC3N2mr11HSnMaxqZxh0uYSgc9zXiV6CL2HNTE3CiFg8f0
+         Sydrg3/sKk16wtKcFbWOkdwFJ/807UIH28Ve4Nr8dCCB5J4VhuhLBrnXIMV0NiLOtjq7
+         NOFpIAjeBKjzA/mJXMr0galE3UeNbyb1sKW/VXgonPa1lh+thk500YQhOYrR1dnOR66a
+         KBs13+a9Xs/pzlpK1IKpEfXPChXFlVBevGMIbBmoQ4Ov28MWUBhbmr6/11cBL6ViOum8
+         zCWyDD/2gaWlaT4yia1zT9MO5BPXyeCTZlUgd4VqRMDrCTiIPe8l7qhUt5IJvDqf+U/e
+         WtiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXWqPfX98J5NLlvGEhqszX6gQi1z9eKuqUjWjpUaX3tCPwNP9rwRPYqoPUQpcudi2FK3io=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzP8SvrJctCQ9S42xc5h6culdDIppkf2DI92Y9busg5CeQIChUs
+	3bJZsEXt8jZKXPeH6XNK184lP9xE0HLgoNGkKqol4V5ocQUuQLrlQy6s
+X-Gm-Gg: AZuq6aJT4m+Kbz33uIz6RH4U7un0ovtInPvx/OxrDhTaSqyQgzbaaa5LQqNB3Fbfmy1
+	MzNpGT2yXsyn5NPDeSYyvDzrZ20CXmVxVzDoZ6n6jiw+rDIPhm/d8kvQM9rOmLRDHS8Qst/mAyA
+	EJH4UQgj14HzClthHHA4etSjekwK3AbuoNtJu/jOEfLokf+sH73IU4tYV/SnZXbkQkBdO2/ia8L
+	suMXVndDjO27DSCq0gWsQY3tMLsPJAf0RGPIGTmLvNwzX7gOx1hdYuDvcIfta2Yg76OJpDVydAF
+	C4mfaxwkwMjGHw+aeqsfRRdIMCPjgLrboEz5mc24DISznQN2MjZWV6NjSBqTydIqBDK34/qYxx3
+	s8eBVlZki2YXMDd4KxZe8nqEhY2KCoXD8W30rsNZ26bLbu9qmYnQcaSTUNwgoOOjkOIm9jkjY/j
+	QzSDvnHRXCZ/DR86BsAsKWridsgQDsFEWVGFNQTQqioEIwi0GlN5mRjDmZFoixUynhYslMtNMRH
+	V5InkKq
+X-Received: by 2002:a05:7022:45a8:b0:119:e569:f626 with SMTP id a92af1059eb24-12741bc8629mr153992c88.31.1771006192199;
+        Fri, 13 Feb 2026 10:09:52 -0800 (PST)
 Received: from ?IPv6:2a03:83e0:115c:1:8da8:cd8b:c759:e11f? ([2620:10d:c090:500::2:357a])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dcfb804sm6009142eec.28.2026.02.13.10.06.12
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1272a6e943fsm6787843c88.11.2026.02.13.10.09.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Feb 2026 10:06:13 -0800 (PST)
-Message-ID: <73d832948b01dbc0ebc60d85574bdf8537f3a810.camel@gmail.com>
+        Fri, 13 Feb 2026 10:09:51 -0800 (PST)
+Message-ID: <f73c28386eedc3ad462906041a4962e3465b1a1e.camel@gmail.com>
 Subject: Re: [PATCH bpf-next v1 00/14] selftests/bpf: Fixes for userspace
  ASAN
 From: Eduard Zingerman <eddyz87@gmail.com>
@@ -69,13 +69,11 @@ To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
 Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
  Alexis =?ISO-8859-1?Q?Lothor=E9?=	 <alexis.lothore@bootlin.com>,
  bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 	kernel-team@meta.com
-Date: Fri, 13 Feb 2026 10:06:11 -0800
-In-Reply-To: <de259393-c414-4834-bd62-b65774e201a7@linux.dev>
+Date: Fri, 13 Feb 2026 10:09:50 -0800
+In-Reply-To: <d80a723b-6fe5-4dfc-8a9c-20fdb37b5341@linux.dev>
 References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
-	 <59d226c413864ec7229e4a74af7e663e9982c534.camel@gmail.com>
-	 <2a532f02-a7ed-43d5-a0fc-129ee4eeb0c1@linux.dev>
-	 <b1399390b3e34961c3afd5a6a06c3c7bb3a4666a.camel@gmail.com>
-	 <de259393-c414-4834-bd62-b65774e201a7@linux.dev>
+	 <4150f31f020710932def63e2857ebab1e311b597.camel@gmail.com>
+	 <d80a723b-6fe5-4dfc-8a9c-20fdb37b5341@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
@@ -86,51 +84,49 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Fri, 2026-02-13 at 08:13 -0800, Ihor Solodrai wrote:
-
-[...]
-
-> So what happens is test_prog's custom signal handler *overwrites* ASAN's
-> signal handler leading to the weirdness we are seeing.
-
-That's what I meant by conflict.
-
+On Fri, 2026-02-13 at 09:56 -0800, Ihor Solodrai wrote:
+> On 2/12/26 3:26 PM, Eduard Zingerman wrote:
+> > On Wed, 2026-02-11 at 17:13 -0800, Ihor Solodrai wrote:
+> > > This series includes various fixes aiming to enable test_progs run
+> > > with userspace address sanitizer on BPF CI.
+> > >=20
+> > > The first patch fixes the selftests/bpf/test_progs build with:
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0 SAN_CFLAGS=3D"-fsanitize=3Daddress -fno-omit-frame=
+-pointer"
+> > >=20
+> > > The subsequent patches fix bugs reported by the address sanitizer on
+> > > attempt to run the tests.
+> > >=20
+> > > The series is a pre-requisite for enabling "test_progs with ASAN"
+> > > workflow on BPF CI.
+> >=20
+> > Also, do we want to have ASAN enabled by default?
 >=20
-> [1] https://stackoverflow.com/questions/17102919/is-it-valid-to-have-mult=
-iple-signal-handlers-for-same-signal
-> [2] https://man7.org/linux/man-pages/man2/sigaction.2.html
+> I don't think so. At least not right away.
 >=20
-> We should probably do then:
+> > If it would be enabled for CI, people will need to deal with local
+> > configuration anyway. It might make sense to put the default flags in
+> > to save everyone the trouble of figuring out which flags CI uses.
+> > Wdyt?
 >=20
-> diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/sel=
-ftests/bpf/test_progs.c
-> index 02a85dda30e6..77a36f6ca352 100644
-> --- a/tools/testing/selftests/bpf/test_progs.c
-> +++ b/tools/testing/selftests/bpf/test_progs.c
-> @@ -1672,14 +1672,15 @@ static void server_main(void)
->  {
->         pthread_t *dispatcher_threads;
->         struct dispatch_data *data;
-> +       int i;
-> +
-> +#ifndef __SANITIZE_ADDRESS__
->         struct sigaction sigact_int =3D {
->                 .sa_handler =3D sigint_handler,
->                 .sa_flags =3D SA_RESETHAND,
->         };
-> -       int i;
-> -
->         sigaction(SIGINT, &sigact_int, NULL);
-> -
-> +#endif
->         dispatcher_threads =3D calloc(sizeof(pthread_t), env.workers);
->         data =3D calloc(sizeof(struct dispatch_data), env.workers);
+> WIP CI changes add an *additional* test job, that builds only
+> test_progs default flavor with ASAN and runs it. Previous test jobs,
+> built with -static, are still there as usual.
+>=20
+> There are tests that don't play well with ASAN such as BPF arena
+> tests, and some tests may be much slower when ASAN is enabled.
+> We still want to run them on CI.
 
-ASAN's stack trace looks nicer compared to what libunwind generates.
-On the other hand, test_progs.c:carsh_handler() prints pending test log.
-There is an option to remember old handler returned by sigaction and
-call it from the crash_handler (thus invoking ASAN's handler),
-but the complication is probably not worth it.
-I think this part is good as it is, sorry for the noise.
+Fair enough.
 
-[...]
+> I don't see why we should pick between asan everywhere or
+> nowhere. At the very least, CI should make sure selftests can build
+> successfully without the asan flags.
+>=20
+> Additional job will catch most of bugs of the sort covered in this
+> series, and that is good enough I think.
+
+My main concern is that when this fails on CI I will have to dig
+through CI config to recover exact SAN_CFLAGS used. If not enabled by
+default I'd still like to have a single knob like 'ASAN=3Dt'.
