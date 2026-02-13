@@ -1,96 +1,239 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46172D3727
-	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 10:36:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29110352C2E;
+	Fri, 13 Feb 2026 10:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770979008; cv=none; b=eE21PTHKLTjKo53LU+4jO5MAuMa1c5IKwQPn2n0DXVMY/6JMzTTvRXcj12M9XY+fl1GpOQ2Br+ZNdikdshyD/0Ze3+R139Hl/vywfaQEQfw8oxKJViQ00/Idt0Hx9s2PuOeA+E06ULVS8xKmSF2P137S5myL7PCLXMh0B+Hs0EQ=
+	t=1770979230; cv=none; b=mfSOSMiMkk1Z+xmrEYS8eag/fBaavLLCkeHsTwq26WPSifNE7dnm2ZWq6yoOQus9tiY8n7phy1zSvRp04/NhX2cPA/6JDcMFLwsUemyrmp7B12shHZJF7J+8946Sdj8Axi1x8IgFieGiK/BSjEBbPomoEKG+Z6GNbAGa21l81Sg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770979008; c=relaxed/simple;
-	bh=gtFKar3JokpwbpwXY2DM893EmJhKPw2OCF87e0TS25Y=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
-	 References:In-Reply-To; b=XslfTsMcw2+Ov9ofWL24/nB5xmZLjN+87L7zbMZotV75oAhs0GsaQ5U+EBHj7n/v81HZdxOn/sQ3aYGaCKdWeLzNNxGFQGFxiNwdoXiz7DyExRfZ1M4e1JJ6kHg7cwoySk00qG6Mh/t2VZYhFoABQZsm21PFg/W3SRCphHKB4gU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LQc31tmG; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1770979230; c=relaxed/simple;
+	bh=SC2ovmnTmN31BJMgWSDQstBBBIerODPENfDec9d9YDM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I3ZlsLbtYmkKdh4m8BaK91ryObnUi74AvjEDIGC4Arc5t3g1MblYyLhHsJ+ovyDVqNrqL0hRB/M7BejbORDK8xGFvSYtY8aipVYjTpaPAsSlHkTz/+peH3jlbiOO+TZs+giIRQV8tddFnfBO23PWyDAZCPhltdE+OSlLsMX4aZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mAdbZlLl; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LQc31tmG"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 5B5331A0E9D;
-	Fri, 13 Feb 2026 10:36:44 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 2F6EF606BE;
-	Fri, 13 Feb 2026 10:36:44 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2F35C10368E46;
-	Fri, 13 Feb 2026 11:36:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1770979003; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=R+Gz77eSNs1pW6kJTPF09TLKAhyrAS3oNHmhLKWUZK8=;
-	b=LQc31tmGQv3ahE975Hzj89CmZfGqxzNVDVQrcbVtBAyZ9aMYILQkTagkVmZZ6XWZMCJO34
-	gkHJu9KyfZpn2HFvrRYhKi3r5kI6t2VTtziO+ILDV5HGHLdpyLrPJMbGQ/lMzMJH7bJLtn
-	izzJfGCi9ZeM1mHDtDPs4W1/Fu3E9V8S1Emv8jlHuGhkbWk49h4iXTY05kyANgoI9hTn0g
-	lytQtfxvUSE9SlEnhrbUzhB8DIgCgCcTlUYOTf+QLkii1hboEwJPkjBwD1CDJ28+ReZr9m
-	YGE2nc5cOUWqeY4U0EFF6o74W0/eSRxRhKmioIC4YLoUEsRJvT6qwLRRO102/g==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mAdbZlLl"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15CD8C116C6;
+	Fri, 13 Feb 2026 10:40:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770979229;
+	bh=SC2ovmnTmN31BJMgWSDQstBBBIerODPENfDec9d9YDM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mAdbZlLlE2sYlveU4i9kF08qSHcQUHP3CpPs4Zj5+WqKzalKAeEPuvX3K6k4peRql
+	 gMK+S09NxnEhq0iJwR0aCKlws6UHTq3w2hQIQ84G2TlbZpnYApfNxmGSSMCa0CNrBs
+	 2S0ZMe2kAWouyXlIlaffTcNyEdDn7SzDB89hFurup7S6g/iBz0nuX0VImNEJtXP0Mu
+	 TqpfuXbE+xaDpMelpayQ7cAy4ED9vDGY53FTrfuHKvlFRl+MBlZB4jBii+bv/KMlmf
+	 2RSUbDfzvtovAQ8+N0BuOxsMz+P/ZEDFUGYQun0kN+scYNscoHdeboWsYY1hPMBzN3
+	 yT5cvSKD0p3VA==
+Date: Fri, 13 Feb 2026 11:40:27 +0100
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+To: Stanislav Fomichev <stfomichev@gmail.com>
+Cc: Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <aY7_m0CEjL9zTQ45@lore-desk>
+References: <20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org>
+ <20260210-bpf-xdp-meta-rxcksum-v1-1-e5d55caa0541@kernel.org>
+ <aY60QrE6DpXVecze@mini-arch>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="qwJIGiRKX8fs1N5o"
+Content-Disposition: inline
+In-Reply-To: <aY60QrE6DpXVecze@mini-arch>
+
+
+--qwJIGiRKX8fs1N5o
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 13 Feb 2026 11:36:40 +0100
-Message-Id: <DGDRNT32OY1Z.19IC8XK7DWJ0Y@bootlin.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Alexei Starovoitov"
- <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Eduard Zingerman" <eddyz87@gmail.com>
-Subject: Re: [PATCH bpf-next v1 14/14] selftests/bpf: Check BPFTOOL env var
- in detect_bpftool_path()
-Cc: "Amery Hung" <ameryhung@gmail.com>, "Mykyta Yatsenko"
- <yatsenko@meta.com>, =?utf-8?q?Alexis_Lothor=C3=A9?=
- <alexis.lothore@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <kernel-team@meta.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
- <20260212011356.3266753-15-ihor.solodrai@linux.dev>
-In-Reply-To: <20260212011356.3266753-15-ihor.solodrai@linux.dev>
-X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Ihor,
+On Feb 12, Stanislav Fomichev wrote:
+> On 02/10, Lorenzo Bianconi wrote:
+> > Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
+> > checksum will be use by devices capable of exposing receive checksum
+> > result via bpf_xdp_metadata_rx_checksum().
+> > Moreover, introduce xmo_rx_checksum netdev callback in order allow the
+> > eBPF program bounded to the device to retrieve the RX checksum result
+> > computed by the hw NIC.
+> >=20
+> > Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
+> > ---
+> >  Documentation/netlink/specs/netdev.yaml |  5 +++++
+> >  include/net/xdp.h                       | 14 ++++++++++++++
+> >  include/uapi/linux/netdev.h             |  3 +++
+> >  net/core/xdp.c                          | 29 +++++++++++++++++++++++++=
+++++
+> >  tools/include/uapi/linux/netdev.h       |  3 +++
+> >  5 files changed, 54 insertions(+)
+> >=20
+> > diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/ne=
+tlink/specs/netdev.yaml
+> > index 596c306ce52b8303b20680ff0cd34d4fd9db0e48..58eda634668a07860447a65=
+d9fc2284839af6244 100644
+> > --- a/Documentation/netlink/specs/netdev.yaml
+> > +++ b/Documentation/netlink/specs/netdev.yaml
+> > @@ -61,6 +61,11 @@ definitions:
+> >          doc: |
+> >            Device is capable of exposing receive packet VLAN tag via
+> >            bpf_xdp_metadata_rx_vlan_tag().
+> > +      -
+> > +        name: checksum
+> > +        doc: |
+> > +          Device is capable of exposing receive checksum result via
+> > +          bpf_xdp_metadata_rx_checksum().
+> >    -
+> >      type: flags
+> >      name: xsk-flags
+> > diff --git a/include/net/xdp.h b/include/net/xdp.h
+> > index aa742f413c358575396530879af4570dc3fc18de..9ab9ac10ae2074b70618a9d=
+4f32544d8b9a30b63 100644
+> > --- a/include/net/xdp.h
+> > +++ b/include/net/xdp.h
+> > @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_in=
+fo *info,
+> >  			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
+> >  			   bpf_xdp_metadata_rx_vlan_tag, \
+> >  			   xmo_rx_vlan_tag) \
+> > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
+> > +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
+> > +			   bpf_xdp_metadata_rx_checksum, \
+> > +			   xmo_rx_checksum)
+> > =20
+> >  enum xdp_rx_metadata {
+> >  #define XDP_METADATA_KFUNC(name, _, __, ___) name,
+> > @@ -643,12 +647,22 @@ enum xdp_rss_hash_type {
+> >  	XDP_RSS_TYPE_L4_IPV6_SCTP_EX =3D XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_=
+L3_DYNHDR,
+> >  };
+> > =20
+> > +enum xdp_checksum {
+> > +	XDP_CHECKSUM_NONE		=3D CHECKSUM_NONE,
+> > +	XDP_CHECKSUM_UNNECESSARY	=3D CHECKSUM_UNNECESSARY,
+> > +	XDP_CHECKSUM_COMPLETE		=3D CHECKSUM_COMPLETE,
+> > +	XDP_CHECKSUM_PARTIAL		=3D CHECKSUM_PARTIAL,
+> > +};
+> > +
+> >  struct xdp_metadata_ops {
+> >  	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
+> >  	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
+> >  			       enum xdp_rss_hash_type *rss_type);
+> >  	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, __be16 *vlan_proto,
+> >  				   u16 *vlan_tci);
+> > +	int	(*xmo_rx_checksum)(const struct xdp_md *ctx,
+> > +				   enum xdp_checksum *ip_summed,
+> > +				   u32 *cksum_meta);
+> >  };
+> > =20
+> >  #ifdef CONFIG_NET
+> > diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
+> > index e0b579a1df4f2126acec6c44c299e97bbbefe640..d20da430cfd57bc26b5ea2f=
+406c27b48d8a81693 100644
+> > --- a/include/uapi/linux/netdev.h
+> > +++ b/include/uapi/linux/netdev.h
+> > @@ -47,11 +47,14 @@ enum netdev_xdp_act {
+> >   *   hash via bpf_xdp_metadata_rx_hash().
+> >   * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing rec=
+eive
+> >   *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
+> > + * @NETDEV_XDP_RX_METADATA_CHECKSUM: Device is capable of exposing rec=
+eive
+> > + *   checksum result via bpf_xdp_metadata_rx_checksum().
+> >   */
+> >  enum netdev_xdp_rx_metadata {
+> >  	NETDEV_XDP_RX_METADATA_TIMESTAMP =3D 1,
+> >  	NETDEV_XDP_RX_METADATA_HASH =3D 2,
+> >  	NETDEV_XDP_RX_METADATA_VLAN_TAG =3D 4,
+> > +	NETDEV_XDP_RX_METADATA_CHECKSUM =3D 8,
+> >  };
+> > =20
+> >  /**
+> > diff --git a/net/core/xdp.c b/net/core/xdp.c
+> > index fee6d080ee85fc2d278bfdddfd1365633058ec06..e51346ad3031f28d11c11f8=
+205da6cd954da82de 100644
+> > --- a/net/core/xdp.c
+> > +++ b/net/core/xdp.c
+> > @@ -961,6 +961,35 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const=
+ struct xdp_md *ctx,
+> >  	return -EOPNOTSUPP;
+> >  }
+> > =20
+> > +/**
+> > + * bpf_xdp_metadata_rx_checksum - Read XDP frame RX checksum.
+> > + * @ctx: XDP context pointer.
+> > + * @ip_summed: Return value pointer indicating checksum result.
+> > + * @cksum_meta: Return value pointer indicating checksum result metada=
+ta.
+> > + *
+> > + * In case of success, ``ip_summed`` is set to the RX checksum result.=
+ Possible
+> > + * values are:
+> > + * ``XDP_CHECKSUM_NONE``
+> > + * ``XDP_CHECKSUM_UNNECESSARY``
+> > + * ``XDP_CHECKSUM_COMPLETE``
+> > + * ``XDP_CHECKSUM_PARTIAL``
+> > + *
+> > + * In case of success, ``cksum_meta`` contains the hw computed checksu=
+m value
+> > + * for ``XDP_CHECKSUM_COMPLETE`` or the ``csum_level`` for
+> > + * ``XDP_CHECKSUM_UNNECESSARY``. It is set to 0 for ``XDP_CHECKSUM_NON=
+E`` and
+> > + * ``XDP_CHECKSUM_PARTIAL``.
+> > + *
+> > + * Return:
+> > + * * Returns 0 on success or ``-errno`` on error.
+> > + * * ``-EOPNOTSUPP`` : means device driver does not implement kfunc
+> > + * * ``-ENODATA``    : means no RX-timestamp available for this frame
+> > + */
+> > +__bpf_kfunc int bpf_xdp_metadata_rx_checksum(const struct xdp_md *ctx,
+> > +					     u8 *ip_summed, u32 *cksum_meta)
+> > +{
+>=20
+> Any reason not to do enum xdp_checksum *ip_summed here as well?
 
-On Thu Feb 12, 2026 at 2:13 AM CET, Ihor Solodrai wrote:
-> The bpftool_maps_access and bpftool_metadata tests may fail on BPF CI
-> with "command not found", depending on a workflow.
-> This happens because detect_bpftool_path() only checks two hardcoded
-> relative paths:
->   - ./tools/sbin/bpftool
->   - ../tools/sbin/bpftool
->
-> Add support for a BPFTOOL environment variable that allows specifying
-> the exact path to the bpftool binary.
->
-> Also replace strncpy() with snprintf() for proper null-termination.
->
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+ack, I will fix it in v2.
 
-LGTM, thanks for the improvement.
+Regards,
+Lorenzo
 
-For the record, another issue that this path harcoding is aiming to
-solve is that we definitely want a full bpftool binary (as those bpftool
-helpers are used to find the binary under test), and not a _bootstrap_
-version, which only exposes a few subcommands instead of the whole set.
-So I'd say that it is not an issue yet, but it may be worth in the
-future to enrich the checks in detect_bpftool_path to make sure that any
-bpftool binary path provided by BPFTOOL env var is not pointing to a
-bootstrap version.
 
-Alexis
+--qwJIGiRKX8fs1N5o
+Content-Type: application/pgp-signature; name=signature.asc
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaY7/mwAKCRA6cBh0uS2t
+rPcoAQCb7m6pbv19sIu76bYil26EtBbnmmstPmm4RPxwfLKneAEA63LE9ex6Lo4S
+bBOpGzrQF7VzBTabcYLSnAVzI5jkiQI=
+=YHsg
+-----END PGP SIGNATURE-----
+
+--qwJIGiRKX8fs1N5o--
