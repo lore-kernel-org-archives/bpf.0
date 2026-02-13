@@ -1,91 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BAE117555;
-	Fri, 13 Feb 2026 17:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC2323183B
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 17:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771005015; cv=none; b=bw/Qaz1bqGlhum04iHpwdCrKmR/OJ/YkP3I6NpDL2ENK4nOnpTcxTBKZDHZ4BTzmPuBt39ohzvJFB4+KUvxwe1Yl9dDrpVClSy94NBMzeYoD+8SoJtzxV7DC44Zi4TvoM9VBrZ0QYbSC+v05eBwfiNsoyyc4JiAdBXVXvh8ntjM=
+	t=1771005400; cv=none; b=OBpWyHlyihif4E8ca/mNUvr1uMDH9sKyTZ9YTK7/a1zru0Ik5LcUs9lHKvCBU0PWs2ptwfTRhtqyLZ/LJAoKoKURIyfqLWu7ga8rnH7dvxGvL03Dnpl44dtxHBzlSGmIAtKMF/RctsItVXOz/s4W5MVZkj8/z0ozHBz/1VP6/io=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771005015; c=relaxed/simple;
-	bh=yV+n5t3bhZiNowfgdaluBYucTqAeFF0YgQPwfgowN1s=;
+	s=arc-20240116; t=1771005400; c=relaxed/simple;
+	bh=JOG0L6Gq172CISkGRDxZLPMMC58Hf7DbleGEwo6XYAg=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XNzJoSMNQ79uEKe/xnImSu6nIKTR0IAfnrPgvACfrw/OaDR7QQ34NgRPyw1suxoVK/MAn1AXqMvJXeb+qn4s3jwweAi+kxH9X1bIpwCp6veoKg5NexA7pgdaoG6D3W7zvyTPWRCsEsHeQ7+xPMBIcXFr1lYCL2QVA7I6Qdm+s64=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bUPi1LNk; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:Content-Type; b=HXISDkbx8c+nCUii22oT8I0xhJ+ga3oUJPKpdVJLL8Iy3ys+qmgYz9i8k9rKHjYJ2TZQ/rYrYGk8lttb7Oe6xXYM6nYJiQEe3im2gjHFx8ekSJTiH1hM2DC/f8PTDMczWJN8OnYLG0EiMygiSeVzvUaWxlwGsn32ki6pVhmN0ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=XFS2PsEK; arc=none smtp.client-ip=95.215.58.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bUPi1LNk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9B99C116C6;
-	Fri, 13 Feb 2026 17:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771005015;
-	bh=yV+n5t3bhZiNowfgdaluBYucTqAeFF0YgQPwfgowN1s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=bUPi1LNkE7jZCCQU2LXR+gJvBN7Iq7Lle+VGZ4jeLizNCXmi8zEC72/e5evMOgoOr
-	 LkwmdP+9fCdfmdxVAxiscNnlL+D0mDMGfkOxr3ay08CBnwniwJvN9aA33/0NBBqGj3
-	 avzStgkmpaTLR/WOFBQKWsx2vwenPNu2GUZq+CAqGSPsDQZKNpCrWByKQ9xiBHrKyN
-	 NxoCGW8QUuThGdKnDpnIOnm7pVGAAHTF+SwvNLSIuoyA4MHarVvx3LQWt4Uo89OOk/
-	 vtHK248MPDsN6gbxzBC+w/M6Dj0q6c5BndOowlras0u9f/WFbCIiqHLfVv8cJp2j5L
-	 ny/gl8S07LFoA==
-Message-ID: <25d8d1ab-b01c-4416-9f8d-9f29e59dc781@kernel.org>
-Date: Fri, 13 Feb 2026 18:50:09 +0100
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="XFS2PsEK"
+Message-ID: <d80a723b-6fe5-4dfc-8a9c-20fdb37b5341@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771005397;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5oj0gz0dDZJWBDOQszLpH4UWW9G8IfCRFCz6fuZZNlA=;
+	b=XFS2PsEKg99Xc9zPWZe4hHvfXu012f0XjLw7naVFh3LegYZ++5yz/vXdDS9RduOrrU+uDe
+	aPTtJ7nKYEGsOuOWLTwC5cSnEKAxcon0Qc/GbAJzEpQ4kxTHaOlupedqeb0CAM7wfJmYG1
+	dePb6ydT2qNHp7VvRQQ9wj3DCul1R+8=
+Date: Fri, 13 Feb 2026 09:56:26 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v3 1/6] net: sched: introduce qdisc-specific drop
- reason tracing
-To: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
- Eric Dumazet <eric.dumazet@gmail.com>, "David S. Miller"
- <davem@davemloft.net>, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?=
- <toke@toke.dk>
-Cc: bpf@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>, horms@kernel.org,
- jiri@resnulli.us, edumazet@google.com, xiyou.wangcong@gmail.com,
- jhs@mojatatu.com, atenart@redhat.com, carges@cloudflare.com,
- kernel-team@cloudflare.com
-References: <177039500964.2258217.2989656069254156812.stgit@firesoul>
- <177039506239.2258217.7863252279149995024.stgit@firesoul>
- <f1827414-b6c4-47de-827a-9f9f4c796cf8@redhat.com>
- <dda23104-3ca9-4f81-aa79-b0517a9cc5a2@redhat.com>
+Subject: Re: [PATCH bpf-next v1 00/14] selftests/bpf: Fixes for userspace ASAN
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>,
+ =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+ <4150f31f020710932def63e2857ebab1e311b597.camel@gmail.com>
 Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <dda23104-3ca9-4f81-aa79-b0517a9cc5a2@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <4150f31f020710932def63e2857ebab1e311b597.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-
-
-On 11/02/2026 09.46, Paolo Abeni wrote:
-> On 2/11/26 9:36 AM, Paolo Abeni wrote:
->> On 2/6/26 5:24 PM, Jesper Dangaard Brouer wrote:
->>> @@ -593,7 +591,7 @@ static struct sk_buff *dualpi2_qdisc_dequeue(struct Qdisc *sch)
->>>   	while ((skb = dequeue_packet(sch, q, &credit_change, now))) {
->>>   		if (!q->drop_early && must_drop(sch, q, skb)) {
->>>   			drop_and_retry(q, skb, sch,
->>> -				       SKB_DROP_REASON_QDISC_CONGESTED);
->>> +				       QDISC_DROP_CONGESTED);
+On 2/12/26 3:26 PM, Eduard Zingerman wrote:
+> On Wed, 2026-02-11 at 17:13 -0800, Ihor Solodrai wrote:
+>> This series includes various fixes aiming to enable test_progs run
+>> with userspace address sanitizer on BPF CI.
 >>
->> An explicit cast is needed above to avoid compiler warning (or you can
->> change drop_and_retry() signature).
+>> The first patch fixes the selftests/bpf/test_progs build with:
+>>
+>>     SAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+>>
+>> The subsequent patches fix bugs reported by the address sanitizer on
+>> attempt to run the tests.
+>>
+>> The series is a pre-requisite for enabling "test_progs with ASAN"
+>> workflow on BPF CI.
 > 
-> I see that the type confusion issues are handled for good by later
-> patches in the series, but I still think it would be better to avoid
-> introducing them with explicit casts as needed (removed by later patches).
+> Also, do we want to have ASAN enabled by default?
+
+I don't think so. At least not right away.
+
+> If it would be enabled for CI, people will need to deal with local
+> configuration anyway. It might make sense to put the default flags in
+> to save everyone the trouble of figuring out which flags CI uses.
+> Wdyt?
+
+WIP CI changes add an *additional* test job, that builds only
+test_progs default flavor with ASAN and runs it. Previous test jobs,
+built with -static, are still there as usual.
+
+There are tests that don't play well with ASAN such as BPF arena
+tests, and some tests may be much slower when ASAN is enabled.
+We still want to run them on CI.
+
+I don't see why we should pick between asan everywhere or
+nowhere. At the very least, CI should make sure selftests can build
+successfully without the asan flags.
+
+Additional job will catch most of bugs of the sort covered in this
+series, and that is good enough I think.
+
+
 > 
->> Also a few lines below there is another drop_and_retry() calls that is
->> not converted.
-> 
-> I see it's handled by a later patch. I guess it would be useful to
-> mention such fact in the commit message.
+> [...]
 
-Yes, this is handled in patch 3/6.  I acknowledge this is annoying from
-a review perspective, and also wrong because I'm leaving compiler
-warning that I'm fixing up later.  The reason for splitting it out into
-a separate patch was because I wanted document (in commit desc) the
-special usage of SKB_NOT_DROPPED_YET as a sentinel value.
-
-I'm leaning towards folding patch 3 into this patch 1, as suggested by Toke.
-
---Jesper
