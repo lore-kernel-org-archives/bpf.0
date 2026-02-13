@@ -1,111 +1,193 @@
-Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 974B51EA84
-	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 00:14:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24B118EB0
+	for <bpf@vger.kernel.org>; Fri, 13 Feb 2026 00:23:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770941693; cv=none; b=o/AyCG655rhD4RdGfHWvPW1/ZTh4wgKpIjNsG6hM5axbsh/WGK4c5pvCcwq+U2TnIOYj7QZYirkzF3cZTqPMrHsNBytZMtn+c28a3rOjy1owehFKgrx51dIGTc9PPbRlQt8wy6gSBkVGZ8UWNjVaDe02AxQ+3InSnQTHDkl5u1I=
+	t=1770942231; cv=none; b=E+zyHC3MoHWkAZKFYcpfgBPCwL0i+lIiLTQiSw8iJ2COgWSQW5CZSKuSICHYGXvpGSYgyPByydktw1eN6PgZxu61gq5cuE7r3Eq9eELqZpE80EoLw2409JS3KfuAfm3FbAa5JMmw3/gKKQRbNBkPiA07cB1jLuycD1zk9AKtjjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770941693; c=relaxed/simple;
-	bh=m2a6CuMCos/13elBxE7xrPOeupdB2O8QuOfKeNHD2Rk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=nnf0EWfUy0hghEV+kV0O/otbYdkykYxPT/xs6jNVs196Ei3Kbl0jtmnRXyj5THtheJvZFzlKfPi4FKabARi7tLOP+nK+DUzSOTwyBy5BxYjxuTpaC4jO6BLy+YUC8S9HkS1FnhGerPLdOYekV8+m3rNXUFAHBHQpwFDFA7zd+nc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZjI057fn; arc=none smtp.client-ip=74.125.82.45
+	s=arc-20240116; t=1770942231; c=relaxed/simple;
+	bh=hS0xLmOlT/fTSABi7ZBrYJj6FrfO7xt7pHWko+W2yM0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=srJR3ixzpiHX56EL1kpYLPXjC8xUv31jvyf7JMvL/QUEZR8EMN4wPheoOdcO7yzxevrbibZ8XZe1aSuD0U1xQduWTgLrEuWoirjlQnqGfPsWcMMrHkiCaPnNE0EBTaA4NrhXWqtl0HiixqPGHh57hn7RfeXY65iINrxOQDRS8As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ndyHP+KT; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZjI057fn"
-Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-124a95e592fso1319988c88.0
-        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 16:14:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ndyHP+KT"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-824a3ba5222so237633b3a.2
+        for <bpf@vger.kernel.org>; Thu, 12 Feb 2026 16:23:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770941691; x=1771546491; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=IZOOjMHRTBJzKVIedfGL7gf236fJildms0DgDpjegcI=;
-        b=ZjI057fn6h9yR2vnjUPjY/WBMFRNYjcB0lvj0WYarA4n5O8S0CUIPG3pMALzhbnmYh
-         Sqzut951tUjbWUZk9dc02lmbBJx0XNiwLMiMoAZB51aCOnSN+1XmmZlEXCbvBZs8POZJ
-         EYtlvQvTOuy5A8kFDIf5L68JoRhlejB/UL4hj7s7BLIvvIddePoDe68yomwbwuq5Z+ji
-         Mqc9q7U7VWFYjELWCOv4RBPlWtUOuSkvds2xHY1mSu3JyFv6yaI6kQgxTkG2AqoWSfUZ
-         MPp34XsQrBIy1v49tNXMl4AnnRBlT0cJKE5zy0AFTQIWfIfdmcHVO9qfHrPrScZ9svLv
-         gDqA==
+        d=gmail.com; s=20230601; t=1770942229; x=1771547029; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BHzLXUW1J4UMi2J1ReqgoNKrsN3W9FO3n6QaRcEMXrI=;
+        b=ndyHP+KTVN+gu4l24v5AmKZylPqCJ/WN9xu5LiJ3HLum4RgwP9tdoX3ilNX+WX1Xhi
+         Ejfs2mKj7SvhRhnerlD5tFUoytaMI69kzucbpxz7TT+IYp8AZSA27ZLxPbE4XJ+pqRpV
+         tHHWMpBCUcw3XFJpeBUXO0KgzxkDuGO5OPxY33EAB57654XSATc/J/sY6Zz9+wkm7Ecd
+         WCa/PrmwNt+IZ1YhkNBk/gpTo/kSnE0AXinX5n2i7IDOPAEGkLjRN8y/jdE6lY+yHeqF
+         lMChLy/lBPxWz0TA8W5DYH/CbCmEMsF+uiTHHo56RG/uFY7JTb1Il1z/ZhcsKXSFEMxl
+         DM/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770941691; x=1771546491;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IZOOjMHRTBJzKVIedfGL7gf236fJildms0DgDpjegcI=;
-        b=R1liLd2bAk0JjY3i/aoQWma5rURm8TGcRx4XFEwmVWgH1vJQFO6At8MS+9oGuNIjlj
-         PbtWpp33VwBoFUcpxLZ7XSQV2W+Ml4fZohi5z6maHrr5WSX/t4SxNgSbwl4/CnVM5DvF
-         asoEO9OuCG0WZBQ4uEo70kiQ5Oh02g3Tor+Vv3Wf1OMcnD8jyzmtA939uOsSUTaA+ui6
-         76iKvkwdQ3Ae2v89P+sZKAVICexrSdIm8w97UpBgWvjHgf42Xa8RKyq2DGR0CTGm99fB
-         WvJ/QAnY1lIQthimhaoGOY1ykEMLy6U/QA3Uk1qsfor5gLIkn8g2ao/FY57fomZKHSXb
-         7CxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXkey4ZeX08tL0kEO42eRym3yQbaxQn3sAnDcYX31En6pSUBy4canaWb3Q+cpVg0/Gy2Xc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZrcSe6nnYtz4geMIAVvb7mqnAZI/6IIzRb9ozzf7aAzCtUENq
-	FHKvAx2msZQ4ghGpdMFvRbNTbXSt7QrA/ROc9Aj4lDiT5+MgqtyGNrtB
-X-Gm-Gg: AZuq6aJRC2JPKgbykkhsSUD7m7S8pQWJklLeC4cveOTGbP6Zt3aodHVIqr4FNL57MZF
-	MlsnbIlQlCv8V9YIekCciyKTJXO/0lZrYx+idykHD59EcDdrRvOQoZrWjSGNaIeHGvUFASIOwIV
-	7xsKLKSfM2+al69S9t+zBnbapTO5q+pyUzeU5XAX4EB1oHF+e5WYb5ywXeZjCeslWkQX5cOYzpc
-	WvDl1al5FEw+sZC5pbT51QCwhKPieFAtWZuKAg4ykciOgwZgT/DITiY5RvmTSoksWrHyzLZESK+
-	z+aPeC94bZAXweaiizgK2K3/P5f0zwoAxUw6UGfzkDXLapMcmSwyc/nQoXrAK0cvcYBmb4q0C84
-	aBK5nFyOXQBaT1vpMCpe0/k3iMqF1Xu1aUozje3zcYBO38JRkBcwVCyCNzQICHLxexA1sGOpicU
-	F+Z6RXZJWCwvcJVA58IT7zbO+j8k+n1Kq9
-X-Received: by 2002:a05:7022:690:b0:11b:7824:5c97 with SMTP id a92af1059eb24-12739846637mr323128c88.40.1770941690599;
-        Thu, 12 Feb 2026 16:14:50 -0800 (PST)
-Received: from [192.168.4.196] ([73.222.117.172])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1272a636095sm6909624c88.0.2026.02.12.16.14.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Feb 2026 16:14:50 -0800 (PST)
-Message-ID: <e49fc187-0ef8-4557-abac-0082653fa645@gmail.com>
-Date: Thu, 12 Feb 2026 16:14:48 -0800
+        d=1e100.net; s=20230601; t=1770942229; x=1771547029;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BHzLXUW1J4UMi2J1ReqgoNKrsN3W9FO3n6QaRcEMXrI=;
+        b=iVh5DIvDZjo8vxzXZ1KtRighHmpkqTtw7CfXV5uumpozMrrq+IUfwBD+97EEcn+f3l
+         zT+RfLcVOHL3xM5tmzPcBMvJHGdVauBVztdanbqXW6ur+oB+9YzB8PHuzmesyqX9yMXw
+         RssHbWOXvg56rlEfue7UG3cIZsb2/yjgQTWPD+s6aYupg/KexocwVv4aOxZsgt3JjGhr
+         NEHMfI93V1e+SxLnNEIdMQ4WK10xaCy3BONz/QADxYag+GSsXYsRViqAaDC6kQudksbz
+         9cGDx/8mv4ypOjDPG9QsvREnIJN6+58L5j6hrQg6bBxyQ4GzndAau9TxzhOkTcL2Aa6q
+         fLOA==
+X-Forwarded-Encrypted: i=1; AJvYcCVmOQ+Tgx7wJV2eI7pyiD2rmInQd3diRQAAbWUqeD88qQb9GPTovMAoQjklPKC2eCvFmu0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwEtFWJG3Qr3py9uO/wRKOQSvQzCUHKycYII10MWIJH8JA9GEm
+	n5di3VtssYmIwIB/6GN0KaRhDTExKra5AOfssZ2WGDkJhrTdUBmFYmpVfS/c0qn2
+X-Gm-Gg: AZuq6aKU7YvevOxiOwtzMsB0S3rs/jYJYkHrVq8a6w+QwNT1jcP2yTLnMycKNMOSDSz
+	z9Z92kCkd52TO+7FKT75lSMR2MTWJMxuHaH0u4g06AHDCYTi2aLjDE791NKnUUY8SrVshSoNTsW
+	uicxT7ZRBOe94nadmNQIwGaZDat64+wEVwIQzzS5jEIpy63Mb7aYL97aDHnDY7q64a3OCpPPRou
+	SmCOp+5YG3ZIQc9K+L5bc5BROetMPffYi4K8zf4WlhIXjLeOcZlaRf5vSEalfyKGc+9nrjcDX2r
+	GLwGNVNcEum9SFYbF4kfoMtv6i18GXbkfjiBuaNdC/saj8P7SNlHJMDmUPqmVIJrZRCpyQkbRw5
+	MgdmXZbs274mBNIhSnuFr3n1MjflYujiFi19GGPhlw3UGTN4T20gQ4Xxyw9XX0EusL1HCavv5yA
+	bh+65M/A8jJLO/PH4FQkL15/umRIhK0XYvWDgIFkk41bWzUeAcWL61M22QZdGh0g==
+X-Received: by 2002:a05:6a00:4507:b0:81f:4a06:6f5 with SMTP id d2e1a72fcca58-824c9450c37mr237847b3a.4.1770942229140;
+        Thu, 12 Feb 2026 16:23:49 -0800 (PST)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a2ac83sm443782b3a.12.2026.02.12.16.23.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Feb 2026 16:23:48 -0800 (PST)
+Message-ID: <b1399390b3e34961c3afd5a6a06c3c7bb3a4666a.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v1 00/14] selftests/bpf: Fixes for userspace
+ ASAN
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>
+Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>, 
+ Alexis =?ISO-8859-1?Q?Lothor=E9?=	 <alexis.lothore@bootlin.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 	kernel-team@meta.com
+Date: Thu, 12 Feb 2026 16:23:46 -0800
+In-Reply-To: <2a532f02-a7ed-43d5-a0fc-129ee4eeb0c1@linux.dev>
+References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+	 <59d226c413864ec7229e4a74af7e663e9982c534.camel@gmail.com>
+	 <2a532f02-a7ed-43d5-a0fc-129ee4eeb0c1@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/3] selftests/bpf: Check
- bpf_mem_cgroup_page_state return value
-To: Hui Zhu <hui.zhu@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>,
- Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Hui Zhu <zhuhui@kylinos.cn>, cgroups@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <cover.1770883926.git.zhuhui@kylinos.cn>
- <042df9438d9e78bcd66f1fa0e7043b9ea8cda96c.1770883926.git.zhuhui@kylinos.cn>
-Content-Language: en-US
-From: JP Kobryn <inwardvessel@gmail.com>
-In-Reply-To: <042df9438d9e78bcd66f1fa0e7043b9ea8cda96c.1770883926.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 2/12/26 12:23 AM, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
-> 
-> When back-porting test_progs to different kernel versions, I encountered
-> an issue where the test_cgroup_iter_memcg test would falsely pass even
-> when bpf_mem_cgroup_page_state() failed.
-> 
-> The problem occurs when test_progs compiled on one kernel version is
-> executed on another kernel with different enum values for memory
-> statistics (e.g., NR_ANON_MAPPED, NR_FILE_PAGES). [...]
+On Thu, 2026-02-12 at 15:57 -0800, Ihor Solodrai wrote:
 
-This patch looks good but I think to fully solve this cross-kernel issue
-we should use co-re in the bpf program. In your second revision, can you
-add an additional patch to make use of bpf_core_enum_value()? This way
-instead of relying on enum values in vmlinux.h at compile-time, we use
-the btf info at load-time instead to get the proper value for the given
-kernel.
+[...]
+
+> > =C2=A0CFLAGS +=3D -g $(OPT_FLAGS) -rdynamic -std=3Dgnu11=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -Wall -Werror -fno-om=
+it-frame-pointer=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 \
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 -Wall -fno-omit-frame=
+-pointer=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 \
+>=20
+> I think you've cheated a little bit here, because with -Werror
+
+It's just a model of a memory error, see below an example that does
+not generate compiler warnings.
+
+> If it's removed, then I can reproduce the same stacktrace, which AFAIU
+> is an invalid dereference inside the ASAN itself.
+
+See below, if I remove custom signal handler there is a regular ASAN
+error message:
+
+  =3D=3D156=3D=3DERROR: AddressSanitizer: SEGV on unknown address 0xfffffff=
+ffffffffa (pc 0x7fa03160df4a bp 0x7fa0317bc980 sp 0x7ffee7c85170 T0)
+  =3D=3D156=3D=3DThe signal is caused by a WRITE memory access.
+      #0 0x7fa03160df4a in __asan::Allocator::Deallocate(void*, unsigned lo=
+ng, unsigned long, __sanitizer::BufferedStackTrace*, __asan::AllocType) (/l=
+ib64/libasan.so.8+0xdf4a) (BuildId: d3cb6206dff19da52969c009f4cd93611901c47=
+8)
+      #1 0x7fa0316e5bb9 in free.part.0 (/lib64/libasan.so.8+0xe5bb9) (Build=
+Id: d3cb6206dff19da52969c009f4cd93611901c478)
+      #2 0x000000d19cd9 in free_test_states /home/eddy/work/bpf-next/tools/=
+testing/selftests/bpf/test_progs.c:1930
+      #3 0x000000d1a897 in main /home/eddy/work/bpf-next/tools/testing/self=
+tests/bpf/test_progs.c:2107
+      #4 0x7fa0313c45f4 in __libc_start_call_main (/lib64/libc.so.6+0x35f4)=
+ (BuildId: a1dda014206b55b07f58fe8db80121b752dc3d03)
+      #5 0x7fa0313c46a7 in __libc_start_main@@GLIBC_2.34 (/lib64/libc.so.6+=
+0x36a7) (BuildId: a1dda014206b55b07f58fe8db80121b752dc3d03)
+      #6 0x000000401934 in _start (/home/eddy/work/bpf-next/tools/testing/s=
+elftests/bpf/test_progs+0x401934) (BuildId: 9190db005d475ee7a8e9294bb32cfbd=
+520c330dc)
+ =20
+  =3D=3D156=3D=3DRegister values:
+  rax =3D 0x0000000000000002  rbx =3D 0x000000000000000a  rcx =3D 0x0000000=
+000000000  rdx =3D 0x0000000000000003 =20
+  rdi =3D 0x000000000000000a  rsi =3D 0x000000000000000a  rbp =3D 0x00007fa=
+0317bc980  rsp =3D 0x00007ffee7c85170 =20
+   r8 =3D 0x00007ffee7c851d0   r9 =3D 0x0000000000000001  r10 =3D 0x0000000=
+000000005  r11 =3D 0x0000000000401935 =20
+  r12 =3D 0x00007ffee7c851d0  r13 =3D 0xfffffffffffffffa  r14 =3D 0x0000000=
+000000001  r15 =3D 0x0000000000000000 =20
+  AddressSanitizer can not provide additional info.
+  SUMMARY: AddressSanitizer: SEGV /home/eddy/work/bpf-next/tools/testing/se=
+lftests/bpf/test_progs.c:1930 in free_test_states
+
+So, there is indeed a conflict between test_progs signal handler and
+ASAN default signal handler.
+
+[...]
+
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1913,6 +1913,8 @@ static int worker_main(int sock)
+        return 0;
+ }
+=20
++void *ptr;
++
+ static void free_test_states(void)
+ {
+        int i, j;
+@@ -1924,7 +1926,8 @@ static void free_test_states(void)
+                        free_subtest_state(&test_state->subtest_states[j]);
+=20
+                free(test_state->subtest_states);
+-               free(test_state->log_buf);
++               ptr =3D test_state->log_buf + 10;
++               free(ptr);
+                test_state->subtest_states =3D NULL;
+                test_state->log_buf =3D NULL;
+        }
+@@ -1944,13 +1947,15 @@ int main(int argc, char **argv)
+                .parser =3D parse_arg,
+                .doc =3D argp_program_doc,
+        };
+-       struct sigaction sigact =3D {
+-               .sa_handler =3D crash_handler,
+-               .sa_flags =3D SA_RESETHAND,
+-               };
++       /*
++        * struct sigaction sigact =3D {
++        *      .sa_handler =3D crash_handler,
++        *      .sa_flags =3D SA_RESETHAND,
++        *      };
++        */
+        int err, i;
+=20
+-       sigaction(SIGSEGV, &sigact, NULL);
++       //sigaction(SIGSEGV, &sigact, NULL);
+=20
+        env.stdout_saved =3D stdout;
+        env.stderr_saved =3D stderr;
