@@ -1,96 +1,123 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA2D221F1F
-	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 05:25:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24011C860A;
+	Sat, 14 Feb 2026 08:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771046750; cv=none; b=HH2bmY1mCCrW5OFs8UI71ttpcKIzaKG/X4+PcSezVcNvA6L8W1JkrDKfgFRLxCLYx2X6QloGF5qkLVN4q9+XMiuZ+64Fo6B7mG4WKgINCS6b3NLOu6tPkb+RBy5pwlfGWmgt7n6pNv2BOG5iy4D60C5tQ2eEUQZZJEbu7Ng4qlI=
+	t=1771056064; cv=none; b=qZppbN0B4osD4mt6Kkq3PENrLGb+HUOKK6aLgAWqrd9in04q/Af6amddO2usURytqbaHaRBXad/bWIUSvCTHHAwC2pJY2M7+aQxq2Y3gOoczGlyWg+rkwh/ZOS+2nZXHAIEq8M5wvpENvwJf2IX+72VF9WqgeWTUDP7ApvWkrDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771046750; c=relaxed/simple;
-	bh=wcUoxwPfT1Uw/weaHYkjd+h6xf8NBJfe451UDd3hvSU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aokX3skjpHxPWAjIojIngUIHkxDd2OWLH4DgnrOV5s2hgIgO8n8/fkU0m3Iuwx83njEi6wp8gP3twuV3zt8sXHELPBrPKJumIapuWp1BxXfvU2WfWOGtO05d7Cpt20MAWqeTUkmgwiZ0RV+A7757f0u6BUu8BOr1HPms3STrMR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xY4F8Zkn; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771056064; c=relaxed/simple;
+	bh=zHHZHSpFNz8VdD6TZxtjd43NGQRTsenYiTPnEOHMl00=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TCNDm85pT0/p6SAAjGW0yJo1FhUt7HjgKdvCl0GhjF3wIYg0dOQmobk2AfppyTKcUWNNY/ZbwF2AMgUJy8z+3RwbK1HNNRSywepvDtzmboTcq2bB1ha4fwd+rRaJxaeaIbg0Ik9qMy+cTfKsnqj0IQoKlqJniFFKeXDKtlORN5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WR3Zi17l; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xY4F8Zkn"
-Message-ID: <a1655fee-4ed8-41bd-ab48-cf22db76c586@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771046737;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=wcUoxwPfT1Uw/weaHYkjd+h6xf8NBJfe451UDd3hvSU=;
-	b=xY4F8ZknEXem5unamh0KOuxDLkw1wkSioBIZexZ/T88NdgdXwVfMel1ATrdwtCE3l/JY/C
-	OywGd7awdq058fUUJBOGqgT6HJIKSXrydkCPcPM499I7dRHhjDpy6M5ewIF1nufKFL6enG
-	9/KHzf+q4izG2PeJmX7mugWe7TZIDhk=
-Date: Fri, 13 Feb 2026 21:25:30 -0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WR3Zi17l"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771056062; x=1802592062;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zHHZHSpFNz8VdD6TZxtjd43NGQRTsenYiTPnEOHMl00=;
+  b=WR3Zi17l6yKhLNn8oAzrJ6IU1SFJi9wDbgRubQzq8m0D5IMFLHRfCkGH
+   SoM8/GmfM9naWTcIafCDUSOQ8fw/VRaXl4RxZHLFHshS5DdUJJU7zgUWT
+   VDeTDIrOn7GZ0MRmGjy3m+lHNYiDEMZE0Gi+uIw2+dlNGSKRSdp9wZs1t
+   R06yxIKDN/qnqk+DdsgmCEt4jT31MTip95Sgh/K+W4sjJgKxYF2fiJ8s3
+   hJzz4/Wx5NbQflmYo2MAdm0GoKRzBCycNCmdGj5XqPPAGPev/dZiDmFBy
+   SOWJqwJBcogU7zkyxe8WV1m0oBdT1ah8GxQzVH6r0jJzvIlxtzWk5XfH9
+   A==;
+X-CSE-ConnectionGUID: VTujn0GVTYKjHnLoQTE/0Q==
+X-CSE-MsgGUID: GTkqIN2dQZCrasuPib9wQQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="83595507"
+X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
+   d="scan'208";a="83595507"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 00:01:01 -0800
+X-CSE-ConnectionGUID: oNpYrDVRR7WyI3DWrXNRKg==
+X-CSE-MsgGUID: leycIjwNQ5iXJiU9xiBbNw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
+   d="scan'208";a="213231962"
+Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
+  by orviesa007.jf.intel.com with ESMTP; 14 Feb 2026 00:00:57 -0800
+Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vrAaE-000000001nt-0zKp;
+	Sat, 14 Feb 2026 08:00:54 +0000
+Date: Sat, 14 Feb 2026 09:00:05 +0100
+From: kernel test robot <lkp@intel.com>
+To: Chris J Arges <carges@cloudflare.com>, michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com, hawk@kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	kernel-team@cloudflare.com, jbrandeburg@cloudflare.com,
+	Chris J Arges <carges@cloudflare.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 2/2] bnxt_en: Implement XDP RSS hash metadata extraction
+Message-ID: <202602140829.b2xx1hxx-lkp@intel.com>
+References: <20260213192449.1294830-3-carges@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [RFC PATCH bpf-next 1/1] libbpf: Auto-upgrade uprobes to
- multi-uprobes when supported
-Content-Language: en-GB
-To: Varun R Mallya <varunrmallya@gmail.com>
-Cc: andrii@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
- daniel@iogearbox.net, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260212152013.17351-1-varunrmallya@gmail.com>
- <20260212152013.17351-2-varunrmallya@gmail.com>
- <82d31503-24d8-45b8-b1dd-2cb35bd28509@linux.dev> <aY9dxEBCvurRfzJU@roxy>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <aY9dxEBCvurRfzJU@roxy>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260213192449.1294830-3-carges@cloudflare.com>
+
+Hi Chris,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on v6.19]
+[cannot apply to linus/master next-20260213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-J-Arges/bnxt_en-use-bnxt_xdp_buff-for-xdp-context/20260214-032849
+base:   v6.19
+patch link:    https://lore.kernel.org/r/20260213192449.1294830-3-carges%40cloudflare.com
+patch subject: [PATCH 2/2] bnxt_en: Implement XDP RSS hash metadata extraction
+config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260214/202602140829.b2xx1hxx-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602140829.b2xx1hxx-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602140829.b2xx1hxx-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:476:12: error: static declaration of 'bnxt_xdp_rx_hash' follows non-static declaration
+     476 | static int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+         |            ^~~~~~~~~~~~~~~~
+   In file included from drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:22:
+   drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h:44:5: note: previous declaration of 'bnxt_xdp_rx_hash' with type 'int(const struct xdp_md *, u32 *, enum xdp_rss_hash_type *)' {aka 'int(const struct xdp_md *, unsigned int *, enum xdp_rss_hash_type *)'}
+      44 | int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+         |     ^~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:476:12: warning: 'bnxt_xdp_rx_hash' defined but not used [-Wunused-function]
+     476 | static int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+         |            ^~~~~~~~~~~~~~~~
 
 
+vim +/bnxt_xdp_rx_hash +476 drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
 
-On 2/13/26 9:22 AM, Varun R Mallya wrote:
-> On Thu, Feb 12, 2026 at 04:06:22PM -0800, Yonghong Song wrote:
->>
->> On 2/12/26 7:20 AM, Varun R Mallya wrote:
->>> This patch modifies libbpf to automatically "upgrade" standard
->>> SEC("uprobe") and SEC("uretprobe") programs to use the multi-uprobe
->>> infrastructure (BPF_TRACE_UPROBE_MULTI) at load time if the kernel
->>> supports it, making them compatible with BPF tokens.
->>>
->>> To maintain backward compatibility and handle rare cases where singular
->>> uprobes are required, new SEC("uprobe.single") and SEC("uretprobe.single")
->>> section types are introduced. These force libbpf to use the legacy
->>> perf_event_open() attachment path.
->> Maybe you can have bpf programs for both uprobe/uretprobe
->> and uprobe.multi/uretprobe.multi?
->>
->> You can add "?" before the section name (e.g., SEC("?uprobe") so you can
->> selectively enable those programs before loading. This one if one choice
->> e.g. uprobe/uretprobe is not working, you can then try
->> uprobe.multi/uretprobe.multi.
-> This is a good idea, but isn't making the upgradation built-in a better
-> choice ?
-> This way, anyone writing the program does not have to rewrite
-> the same thing twice, keeping their programs pretty clean. This also
-> moves the upgradation logic (which is probably going to be repeated multiple times)
-> into the library which makes it easier for anyone to have something BPF
-> Token compatible without having to write all this extra logic. Since "uprobe.multi"
-> is compatible with "uprobe", I don't think anything will break as well.
-> (The current breakages in the selftests are due to the patch being in
-> nascent stages and I'll fix it after I get some feedback on my
-> questions.)
+   475	
+ > 476	static int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
 
-I still feel this is a hack, esp. for libbpf. The libbpf provides various
-APIs as the building block. Automatic upgrading inside libbpf does not
-sound right. These upgrading thing should happen in applications.
-
- From bpf program side, you can have progs for both uprobe and uprobe_multi.
-You can have static function which can be used for both uprobe and uprobe_multi.
-It should not be hard. Looks at bpf selftest, there are quite some programs
-with prefix "?" which gives application a choice whether it should be
-enabled or not during to kernel probing or other things.
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
