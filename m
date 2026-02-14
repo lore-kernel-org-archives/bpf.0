@@ -1,128 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01B091DDC37;
-	Sat, 14 Feb 2026 05:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA2D221F1F
+	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 05:25:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771045694; cv=none; b=S3LzLod17RkZ+Jt/LNYwyrf/obSf5g6TRbdw88GVVQFNgSjzk4SmUv2R4cpw47Gukf5uiXPsaBA2KTMw41mlvW8m5jTDo9cQ54WWa7wQkQoiFrK4H6j8TxPaH4s3shhyJ63dNexOxQwvnuAhAErRMGB/zaA0s8avCTlHhdTknJQ=
+	t=1771046750; cv=none; b=HH2bmY1mCCrW5OFs8UI71ttpcKIzaKG/X4+PcSezVcNvA6L8W1JkrDKfgFRLxCLYx2X6QloGF5qkLVN4q9+XMiuZ+64Fo6B7mG4WKgINCS6b3NLOu6tPkb+RBy5pwlfGWmgt7n6pNv2BOG5iy4D60C5tQ2eEUQZZJEbu7Ng4qlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771045694; c=relaxed/simple;
-	bh=cG9lVPnYSpbBWu/gq0zqn+bklzX5Z7JBWWyEOC+3fV4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=XSRXgnxyHqLUPCyBe8Mw1R0qF1uPMgW4mIrZ53E2RSeYZ6pSt/izPL90kFcxz/AVaeB3MCQzUTgLsVHuzSzVmxBypzUxOSvD3j4P6Xu1/d8dmRpL0GnNad7bSiWXdvFDBglWxE4E2tjFzSJNzskLrYl8RZ6mqnFttR4mQ90Nh8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZgwICbvZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771046750; c=relaxed/simple;
+	bh=wcUoxwPfT1Uw/weaHYkjd+h6xf8NBJfe451UDd3hvSU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aokX3skjpHxPWAjIojIngUIHkxDd2OWLH4DgnrOV5s2hgIgO8n8/fkU0m3Iuwx83njEi6wp8gP3twuV3zt8sXHELPBrPKJumIapuWp1BxXfvU2WfWOGtO05d7Cpt20MAWqeTUkmgwiZ0RV+A7757f0u6BUu8BOr1HPms3STrMR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xY4F8Zkn; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZgwICbvZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D1BFC19421;
-	Sat, 14 Feb 2026 05:08:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771045693;
-	bh=cG9lVPnYSpbBWu/gq0zqn+bklzX5Z7JBWWyEOC+3fV4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=ZgwICbvZ971Uq5lYSKBCoAbYqHWeHohO94elNZqukipVvcdhBTb+L3rnM19LbmTnG
-	 07/eBcVtFfX2AXXb4tMLALUa1Cao10rheXUIfiANTCTtJX9p2xXkyPnH4qUUNRwYY4
-	 AuuDogJg8fyDRR/6ZGBG49fineBSRanhKzi8h6KsEs4JfG/KYcLO/NMbboOjh+IkBf
-	 DYgquEMUFxsvSG3qTsx0F5JOLi7rSHbvRYAC4FnVhv0klu7yCULBIoq2TIgDutzoMj
-	 nZrWIwUrZdEzVWjVBiFpouGfLt5RFANFlwXn6o/LWhydINtqujdUvjPaqvb4eKfFrT
-	 QEkcFcEB+VsBA==
-Content-Type: multipart/mixed; boundary="===============8914052136563185622=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xY4F8Zkn"
+Message-ID: <a1655fee-4ed8-41bd-ab48-cf22db76c586@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771046737;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wcUoxwPfT1Uw/weaHYkjd+h6xf8NBJfe451UDd3hvSU=;
+	b=xY4F8ZknEXem5unamh0KOuxDLkw1wkSioBIZexZ/T88NdgdXwVfMel1ATrdwtCE3l/JY/C
+	OywGd7awdq058fUUJBOGqgT6HJIKSXrydkCPcPM499I7dRHhjDpy6M5ewIF1nufKFL6enG
+	9/KHzf+q4izG2PeJmX7mugWe7TZIDhk=
+Date: Fri, 13 Feb 2026 21:25:30 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a0c7639f60a2a769bee6ea3c211ba98515ddec243d7ab97feae8453b2636e299@mail.kernel.org>
-In-Reply-To: <20260214044155.38820-1-pilgrimtao@gmail.com>
-References: <20260214044155.38820-1-pilgrimtao@gmail.com>
-Subject: Re: [PATCH v7 4/5] bpf: allow using bpf_kptr_xchg even if the MEM_RCU flag is set
-From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,alexei.starovoitov@gmail.com
-Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 14 Feb 2026 05:08:13 +0000 (UTC)
-
---===============8914052136563185622==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9300,6 +9300,7 @@
->  		PTR_TO_BTF_ID | MEM_PERCPU,
->  		PTR_TO_BTF_ID | MEM_PERCPU | MEM_RCU,
->  		PTR_TO_BTF_ID | MEM_PERCPU | PTR_TRUSTED,
-> +		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU,
->  	}
->  };
-
-Was the new type added to the correct array?  This hunk adds the entry
-to percpu_btf_ptr_types, which backs ARG_PTR_TO_PERCPU_BTF_ID in
-compatible_reg_types[].  That array is used by bpf_per_cpu_ptr and
-bpf_this_cpu_ptr, not by bpf_kptr_xchg.
-
-For bpf_kptr_xchg arg1 (ARG_KPTR_XCHG_DEST), the verifier looks up
-kptr_xchg_dest_types instead:
-
-kernel/bpf/verifier.c:check_reg_type() {
-    ...
-    compatible = compatible_reg_types[base_type(arg_type)];
-    ...
-    for (i = 0; i < ARRAY_SIZE(compatible->types); i++) {
-        expected = compatible->types[i];
-        ...
-        if (type == expected)
-            goto found;
-    }
-    ...
-    return -EACCES;
-
-kptr_xchg_dest_types currently contains only:
-
-static const struct bpf_reg_types kptr_xchg_dest_types = {
-    .types = {
-        PTR_TO_MAP_VALUE,
-        PTR_TO_BTF_ID | MEM_ALLOC,
-        PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF,
-    }
-};
-
-A register with PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU will
-not match any of these entries, so check_reg_type() returns -EACCES
-before ever reaching the found: label and the switch statement below.
-
-It looks like the entry should be added to kptr_xchg_dest_types rather
-than percpu_btf_ptr_types.  Alexei made the same suggestion on v6 of
-this series:
-
-https://lore.kernel.org/bpf/CAADnVQJdwqeoqi+mPjQjmNbUqz2RxAjq-dVsGb7c_MCqpqmwhA@mail.gmail.com/
-
-> @@ -9475,6 +9476,7 @@
->  	case PTR_TO_BTF_ID | MEM_ALLOC:
->  	case PTR_TO_BTF_ID | MEM_PERCPU | MEM_ALLOC:
->  	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
-> +	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU:
->  		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock &&
->  		    meta->func_id != BPF_FUNC_kptr_xchg) {
-
-This switch case is correct, but it can only be reached via the found:
-label after the type-matching loop succeeds.  Since the first hunk
-adds the type to the wrong array, the loop never matches for
-bpf_kptr_xchg and this case is unreachable for its intended purpose.
+Subject: Re: [RFC PATCH bpf-next 1/1] libbpf: Auto-upgrade uprobes to
+ multi-uprobes when supported
+Content-Language: en-GB
+To: Varun R Mallya <varunrmallya@gmail.com>
+Cc: andrii@kernel.org, alan.maguire@oracle.com, ast@kernel.org,
+ daniel@iogearbox.net, bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260212152013.17351-1-varunrmallya@gmail.com>
+ <20260212152013.17351-2-varunrmallya@gmail.com>
+ <82d31503-24d8-45b8-b1dd-2cb35bd28509@linux.dev> <aY9dxEBCvurRfzJU@roxy>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <aY9dxEBCvurRfzJU@roxy>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22011467184
+On 2/13/26 9:22 AM, Varun R Mallya wrote:
+> On Thu, Feb 12, 2026 at 04:06:22PM -0800, Yonghong Song wrote:
+>>
+>> On 2/12/26 7:20 AM, Varun R Mallya wrote:
+>>> This patch modifies libbpf to automatically "upgrade" standard
+>>> SEC("uprobe") and SEC("uretprobe") programs to use the multi-uprobe
+>>> infrastructure (BPF_TRACE_UPROBE_MULTI) at load time if the kernel
+>>> supports it, making them compatible with BPF tokens.
+>>>
+>>> To maintain backward compatibility and handle rare cases where singular
+>>> uprobes are required, new SEC("uprobe.single") and SEC("uretprobe.single")
+>>> section types are introduced. These force libbpf to use the legacy
+>>> perf_event_open() attachment path.
+>> Maybe you can have bpf programs for both uprobe/uretprobe
+>> and uprobe.multi/uretprobe.multi?
+>>
+>> You can add "?" before the section name (e.g., SEC("?uprobe") so you can
+>> selectively enable those programs before loading. This one if one choice
+>> e.g. uprobe/uretprobe is not working, you can then try
+>> uprobe.multi/uretprobe.multi.
+> This is a good idea, but isn't making the upgradation built-in a better
+> choice ?
+> This way, anyone writing the program does not have to rewrite
+> the same thing twice, keeping their programs pretty clean. This also
+> moves the upgradation logic (which is probably going to be repeated multiple times)
+> into the library which makes it easier for anyone to have something BPF
+> Token compatible without having to write all this extra logic. Since "uprobe.multi"
+> is compatible with "uprobe", I don't think anything will break as well.
+> (The current breakages in the selftests are due to the patch being in
+> nascent stages and I'll fix it after I get some feedback on my
+> questions.)
 
-AI-authorship-score: low
-AI-authorship-explanation: The patch went through 7 revisions on the mailing list with human reviewer interaction, and the type of mistake (adding to the wrong array) is characteristic of human error in a codebase with many similarly structured type arrays.
-issues-found: 1
-issue-severity-score: medium
-issue-severity-explanation: The new type was added to percpu_btf_ptr_types instead of kptr_xchg_dest_types, so the patch does not achieve its stated goal of allowing bpf_kptr_xchg on MEM_RCU pointers; there is no user-visible crash or security issue, but the feature is silently broken.
+I still feel this is a hack, esp. for libbpf. The libbpf provides various
+APIs as the building block. Automatic upgrading inside libbpf does not
+sound right. These upgrading thing should happen in applications.
 
---===============8914052136563185622==--
+ From bpf program side, you can have progs for both uprobe and uprobe_multi.
+You can have static function which can be used for both uprobe and uprobe_multi.
+It should not be hard. Looks at bpf selftest, there are quite some programs
+with prefix "?" which gives application a choice whether it should be
+enabled or not during to kernel probing or other things.
+
