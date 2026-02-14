@@ -1,109 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9683F3EBF2D;
-	Sat, 14 Feb 2026 13:09:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198C72DBF75
+	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 17:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771074570; cv=none; b=pF52fEaZHOOXHBdBrw5UuDb4EZH2wsMLS3o8hOH9d8d4WyUtD88u46zjIBsyY1Txt5YBSFgWD38pMqZy1pvPy3CSDGknMI/nLQQKlONQ7rU0X3UEEA0i6XLZsCbJV3BI5f4o5CclBwNnL7zyFfidlbrqBCTshDfwZ0+CHke/kCM=
+	t=1771089594; cv=none; b=S1WA72+/Lh7kA+AldojWsWtLGIwpUfKnLcP8JpnRUIJb06dIgGTAZ2UpKN9M6zkqxf0FbgsHigSOh9oB6KVxeLmzwCN7k2c8d5sY8+xTxyTpEs5586AfQtbr8ifG8vaP03iuMCKFXobH0HYN3dVhvyfnufE8Gn6N6JG8FlebYb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771074570; c=relaxed/simple;
-	bh=qqVkKbbpS5aqSOAqslTjnEIqyeZKiJucjiO9bqg/BZs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=W1SWKAsXdTWCqDkVJ+qo2WDfbSVjO9QAlnS05Zc0gd7Nx66iApBCL48yLFUUD8eGdsJsFLVJT//UrWRZAAz0HiVEGBA+uPRTjaWTsoZL1VXs9UveikBg6k4T6lHW/TQNLF8ml9AB7WwgTzmMaGZbzxVf6rWusbUiDEr6Y8WnRcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YKH2B40t; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771089594; c=relaxed/simple;
+	bh=f1rti9oeH7A6CzK1t+w7fJBpf/AnV39jCnE+N+mIK6g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DY6Iz3xhJfb4C7XjIUM1BLbrfay7Z1dpC/npISk1E/MzIIpndQ23fBC1qMZOBIeGZCTys8LdEeeQFXqAiSDig5KlLv8LOq5qPU2g23OVIWcD5qSopYuaWDL37Ebqd0QFTs3+RuSPjqntUgs4qdfkn4U56Y6eEJIlerECEoI01iM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d7tBfm1v; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YKH2B40t"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03CBC16AAE;
-	Sat, 14 Feb 2026 13:09:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771074570;
-	bh=qqVkKbbpS5aqSOAqslTjnEIqyeZKiJucjiO9bqg/BZs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=YKH2B40tkE2/poyzX5aC2hkUfHjTAtGlE5gyxtwWTNY2Vl/wiKI/fXWVQOiZNyC7X
-	 YfvIrw5QFZYzzs8iORai7XxtsQ5mIhBGH2lAZR6C4emImf0bINhRKfsQPyfUocNHFB
-	 JxSViF1cZEBudL2ZFk+J+R/8BlTPSOqS0uXDEp+a2HUoJdUO0eUeF4v9eJAbvA2Q8Y
-	 piASD8xBK66Cs/tSh/d7vO+ZiudvTbkD0CkQ5MtEmjvVZlUpDVfgX5gwmod4BqXgfO
-	 K++k3CRwvuziqjupZr1bZRsnAMj0mSmeW8gkR2x+0msMsMAvRHeMTg2doG4hUlj+jw
-	 bzPcOYaXOSqbA==
-Content-Type: multipart/mixed; boundary="===============4190754977872176744=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d7tBfm1v"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-45f053b7b90so1280764b6e.0
+        for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 09:19:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771089592; x=1771694392; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=deQy1Gi8bD3NohJGM3hXhCAHB18lIGL5Lign1o6SSv8=;
+        b=d7tBfm1v6xftvuMKAyYKcDKB/dq5dIR089aTrTsfwa+oPf558V+O068Ie8MC/aIzCv
+         h/RH1qLrbkeFELsTfBcFDonyeCMkmjYjdNCFA3ZEXM2rc81BfgnOiwEEpbR0z59QEbBr
+         hSapsiFwNvxOyPI+GjO4/ymkuSr+a9eRSbw2UOaWpmvlAuJrzxnTVW3DGukn8C1MyIGC
+         vPGveVeAR8r5FDIqMf+wQv3xXaQRRsy4T6L8weYbEXAUwx+pqiXkXg59Ol3WCSq//zsG
+         njVDMBGzpJVxiMrrcLm89GaPoKp0wclNSsQT34kffYave9Co6EQPW3ECISfo5t8dbT0n
+         V1og==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771089592; x=1771694392;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=deQy1Gi8bD3NohJGM3hXhCAHB18lIGL5Lign1o6SSv8=;
+        b=pGMVk5tUeFv/n83fIyy23tTsreKwHeUwp4AwWuu53bgW2zt13SocTao+Qbb3dQ2/qA
+         mbIsbuj63FLrZTU+BEfS7xXjeOG8YEQDZp9tQ4AfXcHnv/qwaM4lPQEgIm09Dz3Snvg2
+         wO22PJd3MU7ZOnaxxIwzJU1G/rWhFEY2smZyaXU4m26HvfYi47QhRtx5ztFkczEY5gNc
+         v2L1HWj21p8fWm1lVnRGPVBLm6s3o0EnrvQxtxj6W4EETxZoSC7D4BYjoXU9u/QAqTfA
+         3mepHTIPZpbccbAkTy67vynVn5MknUv0aRJoZ8JO4qEOPsg9YrHOOuMYRZT0DhIddCvT
+         VWOw==
+X-Forwarded-Encrypted: i=1; AJvYcCU2J/e0kmxYi0Zm6Pe8Z9TGB/xVAq5mdMX07JJl2/nq1W2tvZokSxF1wrGkDhiG1Nd3UXU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXIdqEP39n7FgZ0uDQ0sm1iTLV6PbgERYS15MTODviQKDzTc0j
+	lPpvt/ekLNh3CaQYlEvgJUv1yZWcEYC9a0W04RgCyePpGxgjHp5qOf36
+X-Gm-Gg: AZuq6aJcwcY5SnsR9Im1Y6mR30vLWWzOjo83gzzoD2R48zxvDHi1/tGiZgk6Xct1ASv
+	mm2Ig4FyFtprAySGQAo810XFZ/kNXDE4yvFn9YNysrbEYiw9WQ83bvaQJEjoDw1DS8yth2tD4cD
+	nd4WOacS5vcvlkZdYy28jGliyZKSzvLKAmZDTzWJ9h4+DjPPGF6meDYorIM3YRe1Nbhc6+X/+zQ
+	YMzIAtKb5wUzus15SbWRFNeIkOGpTeqYxHCBPRWCdidUqOc/d0Kspim+TmjamEn3P7Ovs1BFza6
+	g0AqBwQ/xKFGAeY4xmrofVnR61HS0+6X27gsAHEpRzyM/000szeC7ha11QdUySdUP/q5r1ylRvA
+	VZWbLYiYSbBKu0DOeWWKjdq5kbEPYFW7vCtLLVk0tWACDiCYZeD8xk8sT3sDepnuPmyjI921rbq
+	ca32vZc9X7H7IXtTY5hUtDXYOF91bU2w==
+X-Received: by 2002:a05:6808:5087:b0:450:41ca:6bd8 with SMTP id 5614622812f47-4639f08bb97mr3037172b6e.25.1771089592019;
+        Sat, 14 Feb 2026 09:19:52 -0800 (PST)
+Received: from localhost ([2a03:2880:12ff:4b::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-463be5433ebsm1009337b6e.17.2026.02.14.09.19.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Feb 2026 09:19:51 -0800 (PST)
+From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>
+Cc: Alexander Duyck <alexanderduyck@fb.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Mohsin Bashir <mohsin.bashr@gmail.com>,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net] eth: fbnic: Add validation for MTU changes
+Date: Sat, 14 Feb 2026 09:19:49 -0800
+Message-ID: <20260214171949.772493-1-dimitri.daskalakis1@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c58e67aaf6b28ce4682ee9dc5fe367295313d02c926fe34d04344751b783f71a@mail.kernel.org>
-In-Reply-To: <20260214124042.62229-3-pilgrimtao@gmail.com>
-References: <20260214124042.62229-3-pilgrimtao@gmail.com>
-Subject: Re: [PATCH RESEND v7 2/5] bpf: allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
-From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,alexei.starovoitov@gmail.com
-Cc: linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,chengkaitao@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 14 Feb 2026 13:09:29 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============4190754977872176744==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Increasing the MTU beyond the HDS threshold causes the hardware to
+fragment packets across multiple buffers. If a single-buffer XDP program
+is attached, the driver will drop all multi-frag frames. While we can't
+prevent a remote sender from sending non-TCP packets larger than the MTU,
+this will prevent users from inadvertently breaking new TCP streams.
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -9309,7 +9309,8 @@
->  static const struct bpf_reg_types kptr_xchg_dest_types = {
->  	.types = {
->  		PTR_TO_MAP_VALUE,
-> -		PTR_TO_BTF_ID | MEM_ALLOC
-> +		PTR_TO_BTF_ID | MEM_ALLOC,
-> +		PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF,
->  	}
->  };
+Traditionally, drivers supported XDP with MTU less than 4Kb
+(packet per page). Fbnic currently prevents attaching XDP when MTU is too high.
+But it does not prevent increasing MTU after XDP is attached.
 
-ref_set_non_owning() adds MEM_RCU to non-owning references when
-the btf_record has a refcount field (refcount_off >= 0):
-
-    ref_set_non_owning() {
-        reg->type |= NON_OWN_REF;
-        if (rec->refcount_off >= 0)
-            reg->type |= MEM_RCU;
-    }
-
-For such objects, the register type would be
-PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU, which has no
-matching entry in kptr_xchg_dest_types and would be rejected by
-the verifier.
-
-Should PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU also be
-added here? check_func_arg_reg_off() already handles this type
-combination, and Alexei Starovoitov requested this addition during
-v6 review:
-
-https://lore.kernel.org/bpf/CAADnVQJdwqeoqi+mPjQjmNbUqz2RxAjq-dVsGb7c_MCqpqmwhA@mail.gmail.com/
-
-> @@ -9473,6 +9474,7 @@
->  	}
->  	case PTR_TO_BTF_ID | MEM_ALLOC:
->  	case PTR_TO_BTF_ID | MEM_PERCPU | MEM_ALLOC:
-> +	case PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF:
->  		if (meta->func_id != BPF_FUNC_spin_lock && meta->func_id != BPF_FUNC_spin_unlock &&
->  		    meta->func_id != BPF_FUNC_kptr_xchg) {
-
-Similarly, this switch would also need a case for
-PTR_TO_BTF_ID | MEM_ALLOC | NON_OWN_REF | MEM_RCU to handle the
-refcounted path.
-
-
+Fixes: 1b0a3950dbd4 ("eth: fbnic: Add XDP pass, drop, abort support")
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ drivers/net/ethernet/meta/fbnic/fbnic_netdev.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22017669804
+diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+index 81c9d5c9a4b2..e3ca5fcfabef 100644
+--- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
++++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
+@@ -262,6 +262,23 @@ static int fbnic_set_mac(struct net_device *netdev, void *p)
+ 	return 0;
+ }
+ 
++static int fbnic_change_mtu(struct net_device *dev, int new_mtu)
++{
++	struct fbnic_net *fbn = netdev_priv(dev);
++
++	if (fbnic_check_split_frames(fbn->xdp_prog, new_mtu, fbn->hds_thresh)) {
++		dev_err(&dev->dev,
++			"MTU %d is larger than HDS threshold %d in XDP mode\n",
++			new_mtu, fbn->hds_thresh);
++
++		return -EINVAL;
++	}
++
++	WRITE_ONCE(dev->mtu, new_mtu);
++
++	return 0;
++}
++
+ void fbnic_clear_rx_mode(struct fbnic_dev *fbd)
+ {
+ 	struct net_device *netdev = fbd->netdev;
+@@ -533,6 +550,7 @@ static const struct net_device_ops fbnic_netdev_ops = {
+ 	.ndo_start_xmit		= fbnic_xmit_frame,
+ 	.ndo_features_check	= fbnic_features_check,
+ 	.ndo_set_mac_address	= fbnic_set_mac,
++	.ndo_change_mtu		= fbnic_change_mtu,
+ 	.ndo_set_rx_mode	= fbnic_set_rx_mode,
+ 	.ndo_get_stats64	= fbnic_get_stats64,
+ 	.ndo_bpf		= fbnic_bpf,
+-- 
+2.47.3
 
-AI-authorship-score: low
-AI-authorship-explanation: The patch went through 7 revisions with genuine maintainer interaction, uses natural technical language, and shows iterative human development.
-issues-found: 1
-issue-severity-score: medium
-issue-severity-explanation: Missing MEM_RCU type variant causes the verifier to reject valid programs using bpf_kptr_xchg on non-owning references to objects with refcount fields, making the feature incomplete for a subset of BPF object types.
-
---===============4190754977872176744==--
