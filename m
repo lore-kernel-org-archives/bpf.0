@@ -1,83 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C273238C3B
-	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 20:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 545E5318EF8;
+	Sat, 14 Feb 2026 22:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771100415; cv=none; b=MLcgDS0rK+rT/TQQSwhF/WdFlkM3lrnFW2MmpITw8qtxfKSD1SjbxVzYZ5Kk2Y/nIOpi481ZyrewVdFlIcEjI6rxX07JkkRIG7R7B1kFlku7Z8NKfB18DzHWiipvgaworTmSZ0C/7nTFiYv7aoIiTDMt0crguSsuHQzrGUys5Bg=
+	t=1771108682; cv=none; b=fwUS4g8pbBqg802pgIpxqJXxjR1VqRzYz80XvOE+D6psCMWIMZXm23jVKlxBO2RGnfLxE8IyNcUilN51Vf8Um4GutjAXdCmZ5xhzl2ARJYorcykxI0w12U4uUGvNseyoFRC518w8/IKFRS/oEZfxdYavE+Ch5apPmKDQeJqBOFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771100415; c=relaxed/simple;
-	bh=di9avxp4Xf73AaPz063PE+8L+oxPCKL8+JhydPSr8GE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=cfHejXLtDrwYLl+lsE0QHX1FEza8cIfAMj4ekBC/xWp0LbaPIgsZSFA4BI3olVI/sSVg/lo+cy7/NxGLHmP9roWmhHTEsDHNvacx7xo9DBI8Qy91+SnhrO/V3+EiO00NMIQJltut1IWeror+qug5MYSiTuCdfoFRBwzZ+R90Ooc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U4MMr7pK; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771108682; c=relaxed/simple;
+	bh=sfeKRemoRP6AGEZUVLY7EUXiLIlvcJ1lUcv39EjqSMc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M8BEyoWsA13bnEYSv9Fan3oe1R8aj7AZcGE0X6VKbzjX/vgxwHtbR+tB2qMugmUOjg9AVNFAH9KWtJTopcP01K+Tay/HOVIQVSntz4vwWoN5XQKZxxtnQhh2teo93/reebE/uaXZ1RFiU7FmWJiGSWGqboN8ugW0Yp7rEu4382k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c5d2CgS/; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U4MMr7pK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08FE1C16AAE;
-	Sat, 14 Feb 2026 20:20:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771100415;
-	bh=di9avxp4Xf73AaPz063PE+8L+oxPCKL8+JhydPSr8GE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=U4MMr7pKY2sBPVKNXYEbsytd1pOcXBJ47VmnlW+VizOKn9qDdyJkCvWjb96XM/8U9
-	 4PHFa8sYs3DMOxz7r4MC2peXCgVAelBO2Fz/u+Om2retHa/hZs/bYBsCztcWrLGDjF
-	 hdSDSa6WvvtyFoVmQQFPbfWOX34YATzndf68iadkDZaykXnso7lmWIw1dZzJtLUAn2
-	 XJu/9kW7WB+9V7vd/aWV+ozkzIrCsASt+2Yke2jya1noo9aDXv6YtrouYFhRz+HkOK
-	 twHG0oBKL4rwRNeFfWJQEjVHIgkvC+MzpZ0eKTKVLVuLviLkrVKmslbgYsXODU1SDd
-	 oQnslp7vR6nOg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 852443806668;
-	Sat, 14 Feb 2026 20:20:09 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c5d2CgS/"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771108681; x=1802644681;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sfeKRemoRP6AGEZUVLY7EUXiLIlvcJ1lUcv39EjqSMc=;
+  b=c5d2CgS/eXcKQNk+TdEDdTId9wOk6sKwIkKfGvidSRnXUxfb7ljvb9je
+   UJ1xwvmZQX3bjhAuZDhoy7eO0B/ggEfstu3c/KVzd97kMy6of71SrcCbv
+   FhlCydBdWozrZhc9aAm+5re3bRnFpfDUyM+jS8waXz5WQIFuwXd8zbsbM
+   9aYT0G1Zi/Zy2jEt3V3GbjEapH4U3+lHTAKPFfsY6C+/cCLDIbCAWXpGx
+   cC62yxPxkkh4ys54JLtzoykeGgQc/Pk6zYAs5sjIMgJfQ3KEya9mPqUVp
+   jhY1nMHEYGTHi1OIkdYtV/0V2lINCG5qoeM7x64DUbNmi4mL4Po1JM2uQ
+   Q==;
+X-CSE-ConnectionGUID: 4NsjmrPYTOybQ7ZABGo4lA==
+X-CSE-MsgGUID: mgVXMR+iTK6ZF745tLaB6A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11701"; a="83354015"
+X-IronPort-AV: E=Sophos;i="6.21,291,1763452800"; 
+   d="scan'208";a="83354015"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 14:38:01 -0800
+X-CSE-ConnectionGUID: oYm+91+EQvy97mKuuZOM8g==
+X-CSE-MsgGUID: Si/FvinmTdWUIhox4TQ8qw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,291,1763452800"; 
+   d="scan'208";a="217787009"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 14 Feb 2026 14:37:56 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vrOGw-00000000x32-0UiW;
+	Sat, 14 Feb 2026 22:37:54 +0000
+Date: Sun, 15 Feb 2026 06:37:49 +0800
+From: kernel test robot <lkp@intel.com>
+To: Chris J Arges <carges@cloudflare.com>, michael.chan@broadcom.com,
+	pavan.chebbi@broadcom.com, hawk@kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	kernel-team@cloudflare.com, jbrandeburg@cloudflare.com,
+	Chris J Arges <carges@cloudflare.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 2/2] bnxt_en: Implement XDP RSS hash metadata extraction
+Message-ID: <202602150651.wYfne7oq-lkp@intel.com>
+References: <20260213192449.1294830-3-carges@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf 0/2] libbpf: Fix perm errors for
- LDIMM_64_FULL_RANGE_OFF
- use
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177110040832.2887638.10770311086642120216.git-patchwork-notify@kernel.org>
-Date: Sat, 14 Feb 2026 20:20:08 +0000
-References: <20260214021014.15670-1-emil@etsalapatis.com>
-In-Reply-To: <20260214021014.15670-1-emil@etsalapatis.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
- daniel@iogearbox.net, john.fastabend@gmail.com, memxor@gmail.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260213192449.1294830-3-carges@cloudflare.com>
 
-Hello:
+Hi Chris,
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+kernel test robot noticed the following build errors:
 
-On Fri, 13 Feb 2026 21:10:11 -0500 you wrote:
-> Commit 728ff167910e ("libbpf: Add gating for arena globals relocation feature")
-> adds a feature flag for testing whether the running kernel supports LDIMM64
-> instructions with large direct offsets. Fix two edge cases that can
-> cause unexpected -EPERM errors in two ways:
-> 
-> 1) The probe program used for the feature has type TRACEPOINT, but it's
-> possible the caller does not have permission to load it, even if it is
-> able to do so for generic BPF programs. Use the SOCKET_FILTER type
-> instead that requires fewer permissions. This does not affect the check
-> itself, which will always fail verification anyway.
-> 
-> [...]
+[auto build test ERROR on v6.19]
+[cannot apply to linus/master next-20260213]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Here is the summary with links:
-  - [bpf,v2,1/2] libbpf: Do not use PROG_TYPE_TRACEPOINT program for feature gating
-    https://git.kernel.org/bpf/bpf/c/623e7b898a0b
-  - [bpf,v2,2/2] libbpf: Delay feature gate check until object prepare time
-    https://git.kernel.org/bpf/bpf/c/9e07e5f57d93
+url:    https://github.com/intel-lab-lkp/linux/commits/Chris-J-Arges/bnxt_en-use-bnxt_xdp_buff-for-xdp-context/20260214-032849
+base:   v6.19
+patch link:    https://lore.kernel.org/r/20260213192449.1294830-3-carges%40cloudflare.com
+patch subject: [PATCH 2/2] bnxt_en: Implement XDP RSS hash metadata extraction
+config: openrisc-allmodconfig (https://download.01.org/0day-ci/archive/20260215/202602150651.wYfne7oq-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 15.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260215/202602150651.wYfne7oq-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602150651.wYfne7oq-lkp@intel.com/
+
+All error/warnings (new ones prefixed by >>):
+
+>> drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:476:12: error: static declaration of 'bnxt_xdp_rx_hash' follows non-static declaration
+     476 | static int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+         |            ^~~~~~~~~~~~~~~~
+   In file included from drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:22:
+   drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h:44:5: note: previous declaration of 'bnxt_xdp_rx_hash' with type 'int(const struct xdp_md *, u32 *, enum xdp_rss_hash_type *)' {aka 'int(const struct xdp_md *, unsigned int *, enum xdp_rss_hash_type *)'}
+      44 | int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+         |     ^~~~~~~~~~~~~~~~
+>> drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:476:12: warning: 'bnxt_xdp_rx_hash' defined but not used [-Wunused-function]
+     476 | static int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+         |            ^~~~~~~~~~~~~~~~
+
+
+vim +/bnxt_xdp_rx_hash +476 drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
+
+   475	
+ > 476	static int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
