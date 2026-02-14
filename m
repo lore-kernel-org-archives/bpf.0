@@ -1,61 +1,63 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C851626CE2B
-	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 12:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22D7526D4CA
+	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 12:40:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771072853; cv=none; b=AvTOUAXXpFeVz8LVmnawR1OTmHbp7UcP7uJW9dw5bhoSif3zDRjp8y74pG+58Ku8UQID4k7mwjRu0ECNJqgn7Li+PahosynNl1kS249DoSphXNOViJeHYLdm7M7JRYP9EkAQnEIXltM5MematC/CPl7GY1YQqMHSuRrriNgNNLk=
+	t=1771072859; cv=none; b=j13vTtKazuSkBWdtRDXfFOmKUC9d7cDbpXPdLw2JKd27dvBw0e6jitB6gZK8+mYcJ7lJeCX8PpCD5M9SbgPKayHyNBaJyqm8ZQbUlfTcqIeR/iworLcN4fSFT4ft5BhY6Gc5ocgE0ky6YRiZpLTNa2bIbhjQe10izKoF0P+6gD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771072853; c=relaxed/simple;
-	bh=kUZ3TAp/44GbGN69+FneMpT4zG8HXhDlDcPA1PDxXd8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VtkARb6+Ckx56PmnZGE5RVPpYXApMot4G+IBFOArTJOthMcP7YcD64U6VNdl603rREzFFc2Nx3INYF/+IULJSGSClVjedG/uwknPRiaKLOQ+2fQZF84dbFdrs50jthPhsEqaqFPEzcQpv0efUj91S+OrHiq7fCItszS5CYBqoYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RwwadwWy; arc=none smtp.client-ip=209.85.216.54
+	s=arc-20240116; t=1771072859; c=relaxed/simple;
+	bh=0Ut/Yd2xFzBBknyWQqwazN3LxjtJIbDOmzRkADmWq9U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cUiFH865NslaU71A+OB9h6PIPWQZCyo0QSPOKq0NgRi7x7M2SG+BiAUnarpcG53Gj2t/rUM7S3Ibi2rFA30RqANJx6K54rvNGkl6m5+VWyV1a5Jh9mm4hIg73RQlUWRwfekwD/nODQc+cjZZLsgPrWDvk1mlmA4+F76+hF3hnGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YGS6ldIa; arc=none smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RwwadwWy"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-354bb7d2cb1so1880070a91.0
-        for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 04:40:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YGS6ldIa"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-824a6f2d816so874374b3a.3
+        for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 04:40:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771072852; x=1771677652; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K4gRHmoXRE/fcFPdbacL9d9KCJ6JNq7p//h36U0/+hs=;
-        b=RwwadwWyNxlHX+EkQqbJB9JpybnDui2N7keDPf7ILW444Pc3mGuEz1i3+reDQGz3P0
-         lEJndqlGbQYM9jMxqEXrmzUmgYu28z0gqpbnzawAF9XAgL5qiS4FUWu7Ua/yARh09Zvr
-         rYLiZ9D4nleLlDlrRbYNQHOZuXbrEzvWpF/Rze+O1eLwnpA/SrazPSxLN45D2MUEs1kt
-         87o7fc1jywidnYPGoXzMGOzG3s4WTJMzzS2plx+TTNZFCxRYjjGx+vnWvGG7tqsvmr/b
-         I8ck0CxyO5ZJX3WdzpT3FdSGekpldUETyf+/fQMJO1zjOc6Q7oft24owdVw+vqoO9lch
-         PNWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771072852; x=1771677652;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1771072857; x=1771677657; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K4gRHmoXRE/fcFPdbacL9d9KCJ6JNq7p//h36U0/+hs=;
-        b=jD3rpFom7FPAVlwLeW6Y8HhSEeEAqZvenj02MBN5gq6pSIGhd5d3DipBBg8gQhhqNX
-         6IvHb82dVIgQVSE9AR2cagYnlGxZmtkcmCS8IK+QRhMTI3VKRnH2K2CDMK9E9HFtHPpf
-         yTTeem5UE0y5tCsI+23xzF5PC9wYpkPFLK8sreNTzwWzbceNgzEjbqLbC9zrTZeTEZgA
-         zQskf5QHfCqPA1pCblpurG/KM4zl8at63nM5QQZSxEsIUnYBPa1W63thap9zmlwJybQp
-         MJyrdvS+lT54fHL1azCghRotVuZqThlnHOqsGKYgK1b+eBKEB1xzTi2QFUH7EP9RfjE4
-         v7mg==
-X-Forwarded-Encrypted: i=1; AJvYcCXOPTX8I4BS3f6kZuirVtSU4spMMpj/HzH0se15zBrU/utGwVewBzcUTLj8HguxMGVTFAo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrYF6SPncnDHwAXSWw6Qe6C3re1H7piTcDCVD4Wvn4t3dPkg38
-	X6WEon7ZHp4p4NK1OPbG4W++UJgMNvTHQzM/l3LIKMvYvx2YovH/zpBW
-X-Gm-Gg: AZuq6aKbiq6cn1Foi707bVsQPmtDKUfs2Ou6skkcA5Udy1VGdktct0ElhujGjn+Sre0
-	7laVhlUQC0/MZ53GZz52PGczD93Ys0gZ4uDxeg/ZGhVsgefMHJXMyZmbtHauPUnE+OrwUB/6cbr
-	gJLOiVx9br4KVISWLQ+YdvBN0zEzyMrtvmnKLYzOS5CshyxYLnah3MPhIrUU77tpbvpazR8wYjL
-	7fBPMWpdLetkyh+5bG6wjp8kE7hM9s2RTCZmqBRZK+YpjX0G3rww4f6SBHrQ6h8qDyrWNbwD/Uq
-	iD1b0og10plRlYC5dueUDrfOOY9GiesgVsJKE3Ql/2YdCQluosNqM8hyjfjm72pdBVSHhSLXMK5
-	pRMW9TRy1sV3zg6B2qRt/mVHIp9pjJObIfTKLfnnPnI/YG7RnCCkXMvG/Y4nTHYedzMOHwCGQe8
-	CwCv1p0vJo0igtBKOWFHE1L6MMQBSvV0IvU/9K3yxadqzXucvkEWru
-X-Received: by 2002:a17:90b:2544:b0:356:256c:4bf0 with SMTP id 98e67ed59e1d1-357b51d0e56mr2341557a91.17.1771072852134;
-        Sat, 14 Feb 2026 04:40:52 -0800 (PST)
+        bh=nxayVJFfRrkf5xz/bcJOQ8q9k4PoLRBwxedlXN2B8nI=;
+        b=YGS6ldIaH3HUgjfUbozVr+n1fSt367nLyfwEJ6KQx3MTNAU2T5CQiTGyM9RdrC/g9t
+         EEv2YcTTB13whz1OSIE0S4bcjhNxfqbhyNB8yUuxfSQhd1/fmPDVaI1MGhFZJ9mADfrT
+         2qhohANm/hMyMQp5Mo3xkM8crTj5cSZBMBKlfuuz3RHZYF2It1g3c1cBwimYThj4+T92
+         0lE8tRvrWqP1Ewe3T/H9Qa1p2b8kj3pibac6CUSzpPKFg8jQZnRclotn2c8OKeiPreQF
+         0jSjfFN4gdM2CbiWFafazZYnZ8No39eFIXJ1Jd4DQgU/cq2Q4Yy6r+FRWv74iR4D7grX
+         pNVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771072857; x=1771677657;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=nxayVJFfRrkf5xz/bcJOQ8q9k4PoLRBwxedlXN2B8nI=;
+        b=I3lkjuE64a38TrKhmrP/AE5AIbna/s4lpGEQFYUUQnoH0rPAE4NRUGAPriK2nI09qp
+         Af70b7jZBcC4mffL6vuNphFDFAQbuTYCgcVUlfHTetSefISTbePPJjiieJDUbDuoLT0w
+         0/N+QH38yTo4raYUnFTcof4IGuyI445bxYctERPTvoGDZ+906zs53d/Dp7guJKeWrZ17
+         IZDknogyJx5R0fPqj+mEUx0G+OpXLc8+SN5kQjsiHzfEnizaECzousn503SAU4r9vEwK
+         tGfCvDF18nmTC+wXRtU+1VO3FqevsHJ+H0uG8A4aZ4+5LntPokZATOdLT9xA5kKgz44p
+         nJ1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWA6+LCo4Rj7yup8Fv11zofPDw4rjPY8TqyiqwitUKZN5yQ2xg8Jv5aM9CKL5KRDto76+I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeIGQHrMJ9q6Zr8HvS5SSY3AxrxaGEfS4aSm11mta++N2qgNZW
+	v7zKgTi2Qu5pSnGHSAF0EwxcCbqu26W2f+dv95ExO+mISoXH8BWAY9ao
+X-Gm-Gg: AZuq6aI2ZOkAXQTg4JuUdqhUigO0ll+En4u5Chln2C1mACnf6icM9pEDI2TPCFbI7fC
+	pWLt7h85+MJN1j/u+WzGPVz5m/c4rzxsyvHJWDtNPSAgA6g8WgVJOPPaHZVFe17qnfL0jNZ/ArT
+	5m8rrsg1IXNM+J0F/V1wwuZ1eNth3HeKP+8pxAS0l6Flmu0DywkyfAZ6oRh5B2gyN6liwwS7sPn
+	OBoe4LzIzBwezgeOYUYL480kWMiZqQSt6LSMxTtIht9zd0Ig5c5NOToVjPqjG5wfspu/f2KhN74
+	DUQ0fhvuyLJpzRL5uuM3yJq/GMgj9UTtxi3zFfnyeAzMOq7tdV7N2sjpG/7jeq2g++PZn2aHLGg
+	X0DF0acRwMVMHZzLbOlAG4xWIZspxqqecDY+VT+VB+m9fQ8vNJVwZLqfGCjPBslCSm5IyHIXwXe
+	pbiEU/32PwQbElui/NBgWEiFdUC/LOPD0mR7Eg46nE087gvdF633EJ
+X-Received: by 2002:a05:6a21:7014:b0:387:5daf:b312 with SMTP id adf61e73a8af0-3946c797422mr4752317637.35.1771072857350;
+        Sat, 14 Feb 2026 04:40:57 -0800 (PST)
 Received: from localhost.localdomain ([113.218.252.61])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a2e40bsm7064497b3a.11.2026.02.14.04.40.46
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a2e40bsm7064497b3a.11.2026.02.14.04.40.52
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 14 Feb 2026 04:40:51 -0800 (PST)
+        Sat, 14 Feb 2026 04:40:57 -0800 (PST)
 From: Chengkaitao <pilgrimtao@gmail.com>
 To: ast@kernel.org,
 	daniel@iogearbox.net,
@@ -76,10 +78,12 @@ Cc: linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Kaitao Cheng <chengkaitao@kylinos.cn>
-Subject: [PATCH RESEND v7 0/5] bpf: Expand the usage scenarios of bpf_kptr_xchg
-Date: Sat, 14 Feb 2026 20:40:37 +0800
-Message-ID: <20260214124042.62229-1-pilgrimtao@gmail.com>
+Subject: [PATCH RESEND v7 1/5] bpf: allow calling bpf_kptr_xchg while holding a lock
+Date: Sat, 14 Feb 2026 20:40:38 +0800
+Message-ID: <20260214124042.62229-2-pilgrimtao@gmail.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260214124042.62229-1-pilgrimtao@gmail.com>
+References: <20260214124042.62229-1-pilgrimtao@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -90,92 +94,41 @@ Content-Transfer-Encoding: 8bit
 
 From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-When using bpf_kptr_xchg, we triggered the following error:
-    31: (85) call bpf_kptr_xchg#194
-    function calls are not allowed while holding a lock
-bpf_kptr_xchg can now be used in lock-held contexts, so we extended
-its usage scope in [patch 1/5].
+For the following scenario:
+struct tree_node {
+    struct bpf_rb_node node;
+    struct request __kptr *req;
+    u64 key;
+};
+struct bpf_rb_root tree_root __contains(tree_node, node);
+struct bpf_spin_lock tree_lock;
 
-When writing test cases using bpf_kptr_xchg and bpf_rbtree_*, the
-following approach must be followed:
+If we need to traverse all nodes in the rbtree, retrieve the __kptr
+pointer from each node, and read kernel data from the referenced
+object, using bpf_kptr_xchg appears unavoidable.
 
-	bpf_spin_lock(&lock);
-	rb_n = bpf_rbtree_root(&root);
-	while (rb_n && can_loop) {
-		rb_n = bpf_rbtree_remove(&root, rb_n);
-		if (!rb_n)
-			goto fail;
+This patch skips the BPF verifier checks for bpf_kptr_xchg when
+called while holding a lock.
 
-		tnode = container_of(rb_n, struct tree_node, node);
-		node_data = bpf_kptr_xchg(&tnode->node_data, NULL);
-		if (!node_data)
-			goto fail;
+Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+---
+ kernel/bpf/verifier.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-		data = node_data->data;
-		/* use data to do something */
-
-		node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
-		if (node_data)
-			goto fail;
-
-		bpf_rbtree_add(&root, rb_n, less);
-
-		if (lookup_key < tnode->key)
-			rb_n = bpf_rbtree_left(&root, rb_n);
-		else
-			rb_n = bpf_rbtree_right(&root, rb_n);
-	}
-	bpf_spin_unlock(&lock);
-
-The above illustrates a lock-remove-read-add-unlock workflow, which
-exhibits lower performance. To address this, we introduced support
-for a streamlined lock-read-unlock operation in [patch 2/5] and
-[patch 4/5].
-
-Changes in v7:
-- Add a comma to the variable declaration in enum bpf_reg_type
-- Modify the prefixes
-Changes in v6:
-- allow using bpf_kptr_xchg even if the MEM_RCU flag is set
-- Add test case
-Changes in v5:
-- add lastname
-Changes in v4:
-- Fix the dead logic issue in the test case
-Changes in v3:
-- Fix compilation errors
-Changes in v2:
-- Allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
-- Add test case
-
-Link to v6:
-https://lore.kernel.org/all/20260208024846.18653-1-pilgrimtao@gmail.com/
-Link to v5:
-https://lore.kernel.org/all/20260203022712.99347-1-pilgrimtao@gmail.com/
-Link to v4:
-https://lore.kernel.org/all/20260202090051.87802-1-pilgrimtao@gmail.com/
-Link to V3:
-https://lore.kernel.org/all/20260202055818.78231-1-pilgrimtao@gmail.com/
-Link to V2:
-https://lore.kernel.org/all/20260201031607.32940-1-pilgrimtao@gmail.com/
-Link to V1:
-https://lore.kernel.org/all/20260122081426.78472-1-pilgrimtao@gmail.com/
-
-Kaitao Cheng (5):
-  bpf: allow calling bpf_kptr_xchg while holding a lock
-  bpf: allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
-  selftests/bpf: Add supplementary tests for bpf_kptr_xchg
-  bpf: allow using bpf_kptr_xchg even if the MEM_RCU flag is set
-  selftests/bpf: Add test case for rbtree nodes that contain both
-    bpf_refcount and kptr fields.
-
- kernel/bpf/verifier.c                         |   9 +-
- .../testing/selftests/bpf/prog_tests/rbtree.c |   6 +
- tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
- .../selftests/bpf/progs/rbtree_search_kptr.c  | 290 ++++++++++++++++++
- 4 files changed, 307 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index edf5342b982f..2927a4622ff8 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -21044,7 +21044,8 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 
+ 			if (env->cur_state->active_locks) {
+ 				if ((insn->src_reg == BPF_REG_0 &&
+-				     insn->imm != BPF_FUNC_spin_unlock) ||
++				     insn->imm != BPF_FUNC_spin_unlock &&
++				     insn->imm != BPF_FUNC_kptr_xchg) ||
+ 				    (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
+ 				     (insn->off != 0 || !kfunc_spin_allowed(insn->imm)))) {
+ 					verbose(env,
 -- 
 2.50.1 (Apple Git-155)
 
