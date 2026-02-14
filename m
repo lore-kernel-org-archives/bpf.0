@@ -1,143 +1,118 @@
-Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 198C72DBF75
-	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 17:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771089594; cv=none; b=S1WA72+/Lh7kA+AldojWsWtLGIwpUfKnLcP8JpnRUIJb06dIgGTAZ2UpKN9M6zkqxf0FbgsHigSOh9oB6KVxeLmzwCN7k2c8d5sY8+xTxyTpEs5586AfQtbr8ifG8vaP03iuMCKFXobH0HYN3dVhvyfnufE8Gn6N6JG8FlebYb8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771089594; c=relaxed/simple;
-	bh=f1rti9oeH7A6CzK1t+w7fJBpf/AnV39jCnE+N+mIK6g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DY6Iz3xhJfb4C7XjIUM1BLbrfay7Z1dpC/npISk1E/MzIIpndQ23fBC1qMZOBIeGZCTys8LdEeeQFXqAiSDig5KlLv8LOq5qPU2g23OVIWcD5qSopYuaWDL37Ebqd0QFTs3+RuSPjqntUgs4qdfkn4U56Y6eEJIlerECEoI01iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d7tBfm1v; arc=none smtp.client-ip=209.85.167.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF182765F8
+	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 18:57:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771095440; cv=pass; b=lT+MMQubwr5sHwjwkcTFJXOeW+5DvfelWVfsEyN+nSvIKQkHZJgRgeFDr6RER65WXNDhB7U13E0NFXeiMswvg+9E4Z3tNfybckQ4jzo9e2oVE0jNHnqdUqvxqQsfrUlyK47ShU1FKLzLwxDBRWWg2JDMwB1deAm/6dOLQX30YoE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771095440; c=relaxed/simple;
+	bh=vIfLepEI+CPnCKqAN4vP/GmXxHUQ3v/RKMM4Vri69kM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sSXvGAr/FoPham4+3hrS6WXI4ajmQCrL5eUR4V2RCJI5GaJkbJOugUGmPi1b4MqnsscNoe48Z6a4h6iLpR/gtoaRdFyUaNXh6+4+YnKmwfhZzOechc1liOQU/HScQNPGKcoXWjtfi9aE66lr/C2pI96zJzfGd19aOxY5xYj/mxo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sb07cG4W; arc=pass smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d7tBfm1v"
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-45f053b7b90so1280764b6e.0
-        for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 09:19:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sb07cG4W"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48371bb515eso19533455e9.1
+        for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 10:57:19 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771095438; cv=none;
+        d=google.com; s=arc-20240605;
+        b=QWUXeFI+Y5il4QDip+x4Y1xCaWVm/V1l5ZCS8qGwKn1RdqX+XuuUR0+OvakezsTY/M
+         tVAKX1xbmOQtrVbkGfS1nf1mKTfK+3FDPxLlsDItWYrvcIuqg66flvJ2/FFs6MmfCf00
+         pMQ6B4E/7vWgUBffXmSSnk49OLGNHvNqVnZ7nsMrGSDD5Z1NA1atoO61gMkG2uPRRYwk
+         O6DAvg42+QmHcO4qA9gfAU3Jd3COApqnknIfspcEEp12Z5K+x0rTAzHst1f9amFC+TdX
+         2VElLG3BYADKcz8ZVhTbnVOeLsVlMgOsSN+lvKmSYq1iBTijXWbAjyDXyUxCYFPAhs28
+         jDLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=vIfLepEI+CPnCKqAN4vP/GmXxHUQ3v/RKMM4Vri69kM=;
+        fh=T0qSikEWR9T4ogKe5FN8tCXCfHM/78J4UBwlACUESzc=;
+        b=dCDCWmrmDQjkJCedbk1rkv/gkDZtBjnEwakU8vns+SiGQ6xq1ETqGfaULz9+H9ei+1
+         7u/HLDRTLtv8/u36TSMFG1/jfbEr7PWmQacLxaWjivAbRF6IUnS8CY9HnaMx9DYrwhou
+         nt6EQqGDgdC5o4t8mFQ2jAW7aaYXvopLx7wbZ4KlHNwM29cqIogAw8yagBbt/wx3kufw
+         AvZKJEy0Tfn6TSthozl7D/4mtOzvJrpfKrT65pvkQi7YJfWfN8pC+hWkIa6/T2WX2OZ9
+         9abjEr8eDXp+145ncrlpx9yv2DmkYns8xFYd19akYufev/iZ8v0FvzBS8F6gBRWjy2ha
+         uaGw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771089592; x=1771694392; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=deQy1Gi8bD3NohJGM3hXhCAHB18lIGL5Lign1o6SSv8=;
-        b=d7tBfm1v6xftvuMKAyYKcDKB/dq5dIR089aTrTsfwa+oPf558V+O068Ie8MC/aIzCv
-         h/RH1qLrbkeFELsTfBcFDonyeCMkmjYjdNCFA3ZEXM2rc81BfgnOiwEEpbR0z59QEbBr
-         hSapsiFwNvxOyPI+GjO4/ymkuSr+a9eRSbw2UOaWpmvlAuJrzxnTVW3DGukn8C1MyIGC
-         vPGveVeAR8r5FDIqMf+wQv3xXaQRRsy4T6L8weYbEXAUwx+pqiXkXg59Ol3WCSq//zsG
-         njVDMBGzpJVxiMrrcLm89GaPoKp0wclNSsQT34kffYave9Co6EQPW3ECISfo5t8dbT0n
-         V1og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771089592; x=1771694392;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1771095438; x=1771700238; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=deQy1Gi8bD3NohJGM3hXhCAHB18lIGL5Lign1o6SSv8=;
-        b=pGMVk5tUeFv/n83fIyy23tTsreKwHeUwp4AwWuu53bgW2zt13SocTao+Qbb3dQ2/qA
-         mbIsbuj63FLrZTU+BEfS7xXjeOG8YEQDZp9tQ4AfXcHnv/qwaM4lPQEgIm09Dz3Snvg2
-         wO22PJd3MU7ZOnaxxIwzJU1G/rWhFEY2smZyaXU4m26HvfYi47QhRtx5ztFkczEY5gNc
-         v2L1HWj21p8fWm1lVnRGPVBLm6s3o0EnrvQxtxj6W4EETxZoSC7D4BYjoXU9u/QAqTfA
-         3mepHTIPZpbccbAkTy67vynVn5MknUv0aRJoZ8JO4qEOPsg9YrHOOuMYRZT0DhIddCvT
-         VWOw==
-X-Forwarded-Encrypted: i=1; AJvYcCU2J/e0kmxYi0Zm6Pe8Z9TGB/xVAq5mdMX07JJl2/nq1W2tvZokSxF1wrGkDhiG1Nd3UXU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXIdqEP39n7FgZ0uDQ0sm1iTLV6PbgERYS15MTODviQKDzTc0j
-	lPpvt/ekLNh3CaQYlEvgJUv1yZWcEYC9a0W04RgCyePpGxgjHp5qOf36
-X-Gm-Gg: AZuq6aJcwcY5SnsR9Im1Y6mR30vLWWzOjo83gzzoD2R48zxvDHi1/tGiZgk6Xct1ASv
-	mm2Ig4FyFtprAySGQAo810XFZ/kNXDE4yvFn9YNysrbEYiw9WQ83bvaQJEjoDw1DS8yth2tD4cD
-	nd4WOacS5vcvlkZdYy28jGliyZKSzvLKAmZDTzWJ9h4+DjPPGF6meDYorIM3YRe1Nbhc6+X/+zQ
-	YMzIAtKb5wUzus15SbWRFNeIkOGpTeqYxHCBPRWCdidUqOc/d0Kspim+TmjamEn3P7Ovs1BFza6
-	g0AqBwQ/xKFGAeY4xmrofVnR61HS0+6X27gsAHEpRzyM/000szeC7ha11QdUySdUP/q5r1ylRvA
-	VZWbLYiYSbBKu0DOeWWKjdq5kbEPYFW7vCtLLVk0tWACDiCYZeD8xk8sT3sDepnuPmyjI921rbq
-	ca32vZc9X7H7IXtTY5hUtDXYOF91bU2w==
-X-Received: by 2002:a05:6808:5087:b0:450:41ca:6bd8 with SMTP id 5614622812f47-4639f08bb97mr3037172b6e.25.1771089592019;
-        Sat, 14 Feb 2026 09:19:52 -0800 (PST)
-Received: from localhost ([2a03:2880:12ff:4b::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-463be5433ebsm1009337b6e.17.2026.02.14.09.19.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Feb 2026 09:19:51 -0800 (PST)
-From: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
-To: "David S . Miller" <davem@davemloft.net>
-Cc: Alexander Duyck <alexanderduyck@fb.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Mohsin Bashir <mohsin.bashr@gmail.com>,
-	netdev@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net] eth: fbnic: Add validation for MTU changes
-Date: Sat, 14 Feb 2026 09:19:49 -0800
-Message-ID: <20260214171949.772493-1-dimitri.daskalakis1@gmail.com>
-X-Mailer: git-send-email 2.47.3
+        bh=vIfLepEI+CPnCKqAN4vP/GmXxHUQ3v/RKMM4Vri69kM=;
+        b=Sb07cG4Wtf2iRUaK3nljM+C05lokgqCVPJkn9RGeUDQBf1sNX9f+jgFWl1QWjorC+c
+         Vc3pv/WdUNkKRU8mmaFaSrzRlOnikLIXWRWBe9Y+UlJ6YNbcD2C6jTcOb7dIwWZa9NSw
+         8yMtKDs4+oBvEQS35sV6/EAwzkxTiYn14fEpRVmwk9OwHYiJ8UCNfnI65glhqF9A5GEx
+         pxp7f8YLHw6+s1yL/Q4aVAnHSvbO4LdSjHbR4pfO6Rvk4L7Qxa+g8jM5vhf2cH/drIXL
+         SR1SmO2cdmhVKJhmx7/u8SNU8+usYJHUJaWxEJopkkaGzWqYx6NYsVnoG2DQBIlcSd5a
+         6JNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771095438; x=1771700238;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=vIfLepEI+CPnCKqAN4vP/GmXxHUQ3v/RKMM4Vri69kM=;
+        b=oWjkUdqLJWrN4W3LvyvX4fksSHrBoNv0nnHjuTuNtYj3kyBQdvZhG+fnYp8SpJSb32
+         ZR3c5KvXGvaQFOftX3lQojlnW17WvvSX0V+j3cMvysuTXfXmHcc2leF8zEiJ8LXEkDCY
+         r74rDOeJ0AVuIuCPcyNYoZEdJzc9CDiDAHG+4FW+tdXOSWOarCPUvhWaZJxH4g8D5Mv/
+         oza+SpRPgFkAnuKrJ/JTP49J3gOINkulvTbJa7UBBuTs1jkipzZKzuCX8hnO3HK8czxn
+         biQcStlmFpnwXGXLgdeG3cisF4nLG/LuU4ZHVzQqlehp2WODSESAy7ige+0MdTFaofZn
+         koUA==
+X-Gm-Message-State: AOJu0YzWsxTxF4RamQSrDG3azgo3inexM79tysOf4BpyeBDzoZF/OpWs
+	90SWkLPYYJFqRY7O1u1nGQHxc6fIX/7sbbKuQGvgxMe6Pi6diIGZPCzoZC63Zfr+l67OtQEq513
+	87+bnMvNsDVGkIYiXtSTaO1GrjmaNWkQ=
+X-Gm-Gg: AZuq6aJ3kXsN4ag6017U6eP+GFiCcXgTOElMKWhK7c8ek6f7DzkSKaMAsTZaUhKnOWC
+	kUhr19kLqnV5flaqbHUx+ukCjRfLCeBHqxyRdGLwJ20kPO3yeaeG4cvcZ+PvxV4VfAjjDPTdP7X
+	kUGQWNuYggEPbPbDuPa9ktac9saY0ylpjM4gYXOTrIXYQap3BvNXEcDTMBQTOS0GknZQuVGQ9XI
+	RzNYFjvmltzbnQMBpz65Xi7T4Tcylp7fXXdZsTbcC2XwU75dtrvWUp9Y5MCI8ni4eGofMpku4KO
+	08gKOTbgtjxTYiX8ojrpr7GUugnhQstit5dXkcMHcdOxzQoFAds/Lea79MxZjfrXWcJzDG6lSVi
+	oymz8QLynHz+asgkdDxnhYWyckQ==
+X-Received: by 2002:a05:600c:1909:b0:480:4a90:1af2 with SMTP id
+ 5b1f17b1804b1-48373a78e7amr99696475e9.35.1771095437570; Sat, 14 Feb 2026
+ 10:57:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260214115431.55574-1-anandkrshawheritage@gmail.com>
+In-Reply-To: <20260214115431.55574-1-anandkrshawheritage@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 14 Feb 2026 10:57:06 -0800
+X-Gm-Features: AaiRm539bjiX9dqVXUAYw3s0ZVhaVMbaDETFDrJyUdUXB3KeDpMAwmZnBMsEyFI
+Message-ID: <CAADnVQKFHW09Y_mGYVa8wLD-1+W915WmZA_toO8+BUzJDR73rw@mail.gmail.com>
+Subject: Re: [PATCH] bpf: expose original requested max_entries in bpf_map_info
+To: Anand Kumar Shaw <anandkrshawheritage@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Increasing the MTU beyond the HDS threshold causes the hardware to
-fragment packets across multiple buffers. If a single-buffer XDP program
-is attached, the driver will drop all multi-frag frames. While we can't
-prevent a remote sender from sending non-TCP packets larger than the MTU,
-this will prevent users from inadvertently breaking new TCP streams.
+On Sat, Feb 14, 2026 at 3:54=E2=80=AFAM Anand Kumar Shaw
+<anandkrshawheritage@gmail.com> wrote:
+>
+> When creating LRU hash maps with BPF_F_NO_COMMON_LRU, the kernel
+> silently rounds max_entries up to a multiple of num_possible_cpus()
+> in htab_map_alloc() to ensure each per-CPU LRU list has at least one
+> element. However, the original value requested by the caller is lost --
+> map->max_entries is overwritten with the rounded value.
+>
+> This creates a problem for userspace map managers (e.g., Cilium) that
+> reconcile map parameters against their configured values. When the
+> kernel-reported max_entries differs from the originally requested value,
+> the reconciliation logic detects a "mismatch" and may enter an infinite
+> delete-recreate loop, as seen in production incidents where non-power-
+> of-2 CPU counts caused small but persistent rounding differences.
 
-Traditionally, drivers supported XDP with MTU less than 4Kb
-(packet per page). Fbnic currently prevents attaching XDP when MTU is too high.
-But it does not prevent increasing MTU after XDP is attached.
+Clearly a user space issue.
+The kernel side never promised to keep max_entries constant.
 
-Fixes: 1b0a3950dbd4 ("eth: fbnic: Add XDP pass, drop, abort support")
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
----
- drivers/net/ethernet/meta/fbnic/fbnic_netdev.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-index 81c9d5c9a4b2..e3ca5fcfabef 100644
---- a/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-+++ b/drivers/net/ethernet/meta/fbnic/fbnic_netdev.c
-@@ -262,6 +262,23 @@ static int fbnic_set_mac(struct net_device *netdev, void *p)
- 	return 0;
- }
- 
-+static int fbnic_change_mtu(struct net_device *dev, int new_mtu)
-+{
-+	struct fbnic_net *fbn = netdev_priv(dev);
-+
-+	if (fbnic_check_split_frames(fbn->xdp_prog, new_mtu, fbn->hds_thresh)) {
-+		dev_err(&dev->dev,
-+			"MTU %d is larger than HDS threshold %d in XDP mode\n",
-+			new_mtu, fbn->hds_thresh);
-+
-+		return -EINVAL;
-+	}
-+
-+	WRITE_ONCE(dev->mtu, new_mtu);
-+
-+	return 0;
-+}
-+
- void fbnic_clear_rx_mode(struct fbnic_dev *fbd)
- {
- 	struct net_device *netdev = fbd->netdev;
-@@ -533,6 +550,7 @@ static const struct net_device_ops fbnic_netdev_ops = {
- 	.ndo_start_xmit		= fbnic_xmit_frame,
- 	.ndo_features_check	= fbnic_features_check,
- 	.ndo_set_mac_address	= fbnic_set_mac,
-+	.ndo_change_mtu		= fbnic_change_mtu,
- 	.ndo_set_rx_mode	= fbnic_set_rx_mode,
- 	.ndo_get_stats64	= fbnic_get_stats64,
- 	.ndo_bpf		= fbnic_bpf,
--- 
-2.47.3
-
+pw-bot: cr
