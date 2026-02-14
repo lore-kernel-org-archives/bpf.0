@@ -1,75 +1,85 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1E181FC7FB
-	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 11:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C851626CE2B
+	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 12:40:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771070080; cv=none; b=AhVKJiUEFbxyubgX1l1g5ZJRM9DXgmn1e5A+kPta0n04bE85l1TNadLrZD9w/wxWrWAgaLY5nuMd4NtcfTaotqqufFxiHepM/HkrqqZ2aYJ6oEsmypFZRQI/BoIUHkoAWfRBzlZIxwtPbWT1Brw2/Mqn5ABmVXRhlG6HjhrR3NY=
+	t=1771072853; cv=none; b=AvTOUAXXpFeVz8LVmnawR1OTmHbp7UcP7uJW9dw5bhoSif3zDRjp8y74pG+58Ku8UQID4k7mwjRu0ECNJqgn7Li+PahosynNl1kS249DoSphXNOViJeHYLdm7M7JRYP9EkAQnEIXltM5MematC/CPl7GY1YQqMHSuRrriNgNNLk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771070080; c=relaxed/simple;
-	bh=ETwWE2zGiCyxqLrpfs5oEAad45Yec1pEQzZLq/vFMNc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=s/MZMu5l2f136QaE8Pj+IKdEqNVGA7l5izJny/bt3Zhr/JnSbP+3+JMMLXrwmTWvzGWfhIyAuSKFmI9aoadmoMHjpRtAGK1tkvL5BrOSJOsbyi0v5b3AydLYJlm6GKAS9OS6EuyF7EIyP8hxwzibs9lJzXUS4+hmDsvxRBPiGhE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uh0Q6U1w; arc=none smtp.client-ip=209.85.215.182
+	s=arc-20240116; t=1771072853; c=relaxed/simple;
+	bh=kUZ3TAp/44GbGN69+FneMpT4zG8HXhDlDcPA1PDxXd8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VtkARb6+Ckx56PmnZGE5RVPpYXApMot4G+IBFOArTJOthMcP7YcD64U6VNdl603rREzFFc2Nx3INYF/+IULJSGSClVjedG/uwknPRiaKLOQ+2fQZF84dbFdrs50jthPhsEqaqFPEzcQpv0efUj91S+OrHiq7fCItszS5CYBqoYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RwwadwWy; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uh0Q6U1w"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-c2a9a9b43b1so1265394a12.2
-        for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 03:54:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RwwadwWy"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-354bb7d2cb1so1880070a91.0
+        for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 04:40:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771070078; x=1771674878; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771072852; x=1771677652; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NdOBKkhf8j9XMo1theBb8rs2ln4eW0jY+4jxw6Dwd1g=;
-        b=Uh0Q6U1wTR60WUhGfT+4lm7N1ZvVYlXmykYFiVW/O/T1P6AY7vsgHKQAPdzXJVYHMO
-         g+fbKzWVe/QkCj1qZgE8JEWwriUnT6WHyUeXo1eqK85HevSUu6DPchMHwmXaRtTXisRt
-         Glh8jUiI7gXUxziHel9FIk3JNfkfKjfGbsNLOX+ISahf/sSyZod0jUTRMGPxOYDVR8iD
-         qWEZ/WplSiC8clT3QIvQvNPhu7P+u51GHKNOUhJraXelhZre/hMRbD30VEoV1taXeV4d
-         bgTKNOd6BMLIaQfyPz9vHzWAZ9seR3gBt24uc+gn3NY5on+9CNZtI1v01SYM5V1QdeGB
-         9Yug==
+        bh=K4gRHmoXRE/fcFPdbacL9d9KCJ6JNq7p//h36U0/+hs=;
+        b=RwwadwWyNxlHX+EkQqbJB9JpybnDui2N7keDPf7ILW444Pc3mGuEz1i3+reDQGz3P0
+         lEJndqlGbQYM9jMxqEXrmzUmgYu28z0gqpbnzawAF9XAgL5qiS4FUWu7Ua/yARh09Zvr
+         rYLiZ9D4nleLlDlrRbYNQHOZuXbrEzvWpF/Rze+O1eLwnpA/SrazPSxLN45D2MUEs1kt
+         87o7fc1jywidnYPGoXzMGOzG3s4WTJMzzS2plx+TTNZFCxRYjjGx+vnWvGG7tqsvmr/b
+         I8ck0CxyO5ZJX3WdzpT3FdSGekpldUETyf+/fQMJO1zjOc6Q7oft24owdVw+vqoO9lch
+         PNWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771070078; x=1771674878;
+        d=1e100.net; s=20230601; t=1771072852; x=1771677652;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NdOBKkhf8j9XMo1theBb8rs2ln4eW0jY+4jxw6Dwd1g=;
-        b=J1olI4DNsef6+mUA8vRIV8UwRtDayTzP2Rz0zVT62StA0fp4pYQUOg18v0qpHf58oq
-         OVpJb1l/vRN/fMTm3T9ef1pkvgqRn+aLmGDeuCt+oYSmqYw11ULwIRVK0uvZofsIVAZt
-         tn63ysbvGsYMtvIzoNhv/lVuQoqVRNek4Ns2S0lzbwddeBNXdu7EEcjFjpAbuP5VWOuy
-         GDQEj/s2B3J/V0Ro78MLvebezpejkGzyvj1MrUXmJZx80Ve6oG8Ls30FV2EurCp+VhSF
-         hT3BYGg0Za+AXYX2v8nMrCDjeS2FOKNMj4CljD6eo9VF1VNby8ItN4SAz+xIL9k/rgoa
-         DfJw==
-X-Gm-Message-State: AOJu0YxvXnq3tSDrA3ybPn12SSiNKsf5BQXkBLj+KatwFMC5f1IoQlwz
-	gce0U1hQ/1WOvFPsAXukQ5WpvOOCJMagVhXf6vV4zJmHWrgmtKC06rwQ1CZ2p+1s
-X-Gm-Gg: AZuq6aLIz88Ne3sXCY3g0woMqaE+lEVSY9UPJR+n2o3yBcZZ+lQiJPbRAe5ozTGyaes
-	8fHKIHaKI50imuZpvxHGPHwRy6IKw5HYdl87biV8aGsDRUSAPkUgIMSf+r+z6oQEgFQiwYEPLew
-	6Qn7DE8/9uyup3S69xdgEjB/Os2zWMuUfTLheOi7nedx8DFxAliDb0NXGaAaw1SzFiUEtq4JGp5
-	GbJ6ZNs6Nt7GQW67qyW9+OFP21zrHMds7fMNdQ68dz69jchdwVvXR57RQ6UbYk5fWLXtEYbkdAB
-	YRE41Vzt0ntK4KmPYUWiKXpA66lmaqC/lRQqSjYx0KWfckJ/7VT4dnoQRV8SDSsJwNIrKuRnpMI
-	J0NqZCvUQbTyRJO2RH7qFoSuItK40mw0WfV5X+QEUU9Hxd1MoBS64F44sf6G3TkxVLynCWzJd/d
-	J1lvsA87pkAStn+HoJbDxvZBdc/PFO4h1uUpG8qDcSkJrOCIKK01W+8QtRakcoULsc2kuPfje3v
-	Ho1nMCjYWHEEYAOBl4=
-X-Received: by 2002:a05:6a20:cf88:b0:361:28dd:a9ff with SMTP id adf61e73a8af0-39483a5a85dmr2075763637.38.1771070077690;
-        Sat, 14 Feb 2026 03:54:37 -0800 (PST)
-Received: from localhost.localdomain ([49.207.200.48])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6b95278sm6444760b3a.53.2026.02.14.03.54.34
+        bh=K4gRHmoXRE/fcFPdbacL9d9KCJ6JNq7p//h36U0/+hs=;
+        b=jD3rpFom7FPAVlwLeW6Y8HhSEeEAqZvenj02MBN5gq6pSIGhd5d3DipBBg8gQhhqNX
+         6IvHb82dVIgQVSE9AR2cagYnlGxZmtkcmCS8IK+QRhMTI3VKRnH2K2CDMK9E9HFtHPpf
+         yTTeem5UE0y5tCsI+23xzF5PC9wYpkPFLK8sreNTzwWzbceNgzEjbqLbC9zrTZeTEZgA
+         zQskf5QHfCqPA1pCblpurG/KM4zl8at63nM5QQZSxEsIUnYBPa1W63thap9zmlwJybQp
+         MJyrdvS+lT54fHL1azCghRotVuZqThlnHOqsGKYgK1b+eBKEB1xzTi2QFUH7EP9RfjE4
+         v7mg==
+X-Forwarded-Encrypted: i=1; AJvYcCXOPTX8I4BS3f6kZuirVtSU4spMMpj/HzH0se15zBrU/utGwVewBzcUTLj8HguxMGVTFAo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrYF6SPncnDHwAXSWw6Qe6C3re1H7piTcDCVD4Wvn4t3dPkg38
+	X6WEon7ZHp4p4NK1OPbG4W++UJgMNvTHQzM/l3LIKMvYvx2YovH/zpBW
+X-Gm-Gg: AZuq6aKbiq6cn1Foi707bVsQPmtDKUfs2Ou6skkcA5Udy1VGdktct0ElhujGjn+Sre0
+	7laVhlUQC0/MZ53GZz52PGczD93Ys0gZ4uDxeg/ZGhVsgefMHJXMyZmbtHauPUnE+OrwUB/6cbr
+	gJLOiVx9br4KVISWLQ+YdvBN0zEzyMrtvmnKLYzOS5CshyxYLnah3MPhIrUU77tpbvpazR8wYjL
+	7fBPMWpdLetkyh+5bG6wjp8kE7hM9s2RTCZmqBRZK+YpjX0G3rww4f6SBHrQ6h8qDyrWNbwD/Uq
+	iD1b0og10plRlYC5dueUDrfOOY9GiesgVsJKE3Ql/2YdCQluosNqM8hyjfjm72pdBVSHhSLXMK5
+	pRMW9TRy1sV3zg6B2qRt/mVHIp9pjJObIfTKLfnnPnI/YG7RnCCkXMvG/Y4nTHYedzMOHwCGQe8
+	CwCv1p0vJo0igtBKOWFHE1L6MMQBSvV0IvU/9K3yxadqzXucvkEWru
+X-Received: by 2002:a17:90b:2544:b0:356:256c:4bf0 with SMTP id 98e67ed59e1d1-357b51d0e56mr2341557a91.17.1771072852134;
+        Sat, 14 Feb 2026 04:40:52 -0800 (PST)
+Received: from localhost.localdomain ([113.218.252.61])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a2e40bsm7064497b3a.11.2026.02.14.04.40.46
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 14 Feb 2026 03:54:37 -0800 (PST)
-From: Anand Kumar Shaw <anandkrshawheritage@gmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
+        Sat, 14 Feb 2026 04:40:51 -0800 (PST)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: ast@kernel.org,
 	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
 	andrii@kernel.org,
 	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
 	shuah@kernel.org,
+	yangfeng@kylinos.cn,
+	alexei.starovoitov@gmail.com
+Cc: linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Anand Kumar Shaw <anandkrshawheritage@gmail.com>
-Subject: [PATCH] bpf: expose original requested max_entries in bpf_map_info
-Date: Sat, 14 Feb 2026 17:24:31 +0530
-Message-Id: <20260214115431.55574-1-anandkrshawheritage@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	Kaitao Cheng <chengkaitao@kylinos.cn>
+Subject: [PATCH RESEND v7 0/5] bpf: Expand the usage scenarios of bpf_kptr_xchg
+Date: Sat, 14 Feb 2026 20:40:37 +0800
+Message-ID: <20260214124042.62229-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,284 +88,94 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When creating LRU hash maps with BPF_F_NO_COMMON_LRU, the kernel
-silently rounds max_entries up to a multiple of num_possible_cpus()
-in htab_map_alloc() to ensure each per-CPU LRU list has at least one
-element. However, the original value requested by the caller is lost --
-map->max_entries is overwritten with the rounded value.
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-This creates a problem for userspace map managers (e.g., Cilium) that
-reconcile map parameters against their configured values. When the
-kernel-reported max_entries differs from the originally requested value,
-the reconciliation logic detects a "mismatch" and may enter an infinite
-delete-recreate loop, as seen in production incidents where non-power-
-of-2 CPU counts caused small but persistent rounding differences.
+When using bpf_kptr_xchg, we triggered the following error:
+    31: (85) call bpf_kptr_xchg#194
+    function calls are not allowed while holding a lock
+bpf_kptr_xchg can now be used in lock-held contexts, so we extended
+its usage scope in [patch 1/5].
 
-Add a new 'requested_max_entries' field to struct bpf_map (kernel-
-internal) and struct bpf_map_info (UAPI) that preserves the caller's
-original max_entries value. The field is set in bpf_map_init_from_attr()
-before any map-type-specific adjustments, and exposed to userspace
-via BPF_OBJ_GET_INFO_BY_FD.
+When writing test cases using bpf_kptr_xchg and bpf_rbtree_*, the
+following approach must be followed:
 
-This is a purely additive, backward-compatible change:
-- Old callers that don't know about the new field see it zeroed (via
-  memset in bpf_map_get_info_by_fd) and can safely ignore it.
-- New callers can compare requested_max_entries vs max_entries to detect
-  kernel adjustments and avoid false reconciliation mismatches.
+	bpf_spin_lock(&lock);
+	rb_n = bpf_rbtree_root(&root);
+	while (rb_n && can_loop) {
+		rb_n = bpf_rbtree_remove(&root, rb_n);
+		if (!rb_n)
+			goto fail;
 
-The new field is placed between max_entries (u32) and map_extra (u64)
-in struct bpf_map, filling the existing alignment padding hole -- no
-increase in struct size.
+		tnode = container_of(rb_n, struct tree_node, node);
+		node_data = bpf_kptr_xchg(&tnode->node_data, NULL);
+		if (!node_data)
+			goto fail;
 
-Also update the BPF_F_NO_COMMON_LRU documentation to describe the
-rounding behavior and the new field.
+		data = node_data->data;
+		/* use data to do something */
 
-Selftests are included covering LRU hash maps with and without
-BPF_F_NO_COMMON_LRU, LRU per-CPU hash maps with BPF_F_NO_COMMON_LRU,
-and regular hash maps.
+		node_data = bpf_kptr_xchg(&tnode->node_data, node_data);
+		if (node_data)
+			goto fail;
 
-Signed-off-by: Anand Kumar Shaw <anandkrshawheritage@gmail.com>
----
- include/linux/bpf.h                           |   1 +
- include/uapi/linux/bpf.h                      |  12 ++
- kernel/bpf/syscall.c                          |   2 +
- tools/include/uapi/linux/bpf.h                |  12 ++
- .../prog_tests/map_requested_max_entries.c    | 134 ++++++++++++++++++
- 5 files changed, 161 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/map_requested_max_entries.c
+		bpf_rbtree_add(&root, rb_n, less);
 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index cd9b96434..8606b2c40 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -304,6 +304,7 @@ struct bpf_map {
- 	u32 key_size;
- 	u32 value_size;
- 	u32 max_entries;
-+	u32 requested_max_entries; /* original max_entries before kernel adjustment */
- 	u64 map_extra; /* any per-map-type extra fields */
- 	u32 map_flags;
- 	u32 id;
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index c8d400b76..39cd781c2 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -1405,6 +1405,12 @@ enum {
-  * which can scale and perform better.
-  * Note, the LRU nodes (including free nodes) cannot be moved
-  * across different LRU lists.
-+ *
-+ * When this flag is set, the kernel rounds max_entries up to a multiple
-+ * of num_possible_cpus() so that each per-CPU LRU list has at least one
-+ * element. The actual (possibly adjusted) value is reported via
-+ * bpf_map_info.max_entries, while the original requested value is
-+ * preserved in bpf_map_info.requested_max_entries.
-  */
- 	BPF_F_NO_COMMON_LRU	= (1U << 1),
- /* Specify numa node during map creation */
-@@ -6717,6 +6723,12 @@ struct bpf_map_info {
- 	__u64 map_extra;
- 	__aligned_u64 hash;
- 	__u32 hash_size;
-+	/* Original max_entries as requested by the caller. May differ from
-+	 * max_entries if the kernel adjusted it (e.g., rounded up to a
-+	 * multiple of num_possible_cpus() for per-CPU LRU hash maps when
-+	 * BPF_F_NO_COMMON_LRU is set).
-+	 */
-+	__u32 requested_max_entries;
- } __attribute__((aligned(8)));
- 
- struct bpf_btf_info {
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index dd89bf809..66a518f3a 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -439,6 +439,7 @@ void bpf_map_init_from_attr(struct bpf_map *map, union bpf_attr *attr)
- 	map->key_size = attr->key_size;
- 	map->value_size = attr->value_size;
- 	map->max_entries = attr->max_entries;
-+	map->requested_max_entries = attr->max_entries;
- 	map->map_flags = bpf_map_flags_retain_permanent(attr->map_flags);
- 	map->numa_node = bpf_map_attr_numa_node(attr);
- 	map->map_extra = attr->map_extra;
-@@ -5301,6 +5302,7 @@ static int bpf_map_get_info_by_fd(struct file *file,
- 	info.key_size = map->key_size;
- 	info.value_size = map->value_size;
- 	info.max_entries = map->max_entries;
-+	info.requested_max_entries = map->requested_max_entries;
- 	info.map_flags = map->map_flags;
- 	info.map_extra = map->map_extra;
- 	memcpy(info.name, map->name, sizeof(map->name));
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 5e38b4887..bea369e10 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -1405,6 +1405,12 @@ enum {
-  * which can scale and perform better.
-  * Note, the LRU nodes (including free nodes) cannot be moved
-  * across different LRU lists.
-+ *
-+ * When this flag is set, the kernel rounds max_entries up to a multiple
-+ * of num_possible_cpus() so that each per-CPU LRU list has at least one
-+ * element. The actual (possibly adjusted) value is reported via
-+ * bpf_map_info.max_entries, while the original requested value is
-+ * preserved in bpf_map_info.requested_max_entries.
-  */
- 	BPF_F_NO_COMMON_LRU	= (1U << 1),
- /* Specify numa node during map creation */
-@@ -6717,6 +6723,12 @@ struct bpf_map_info {
- 	__u64 map_extra;
- 	__aligned_u64 hash;
- 	__u32 hash_size;
-+	/* Original max_entries as requested by the caller. May differ from
-+	 * max_entries if the kernel adjusted it (e.g., rounded up to a
-+	 * multiple of num_possible_cpus() for per-CPU LRU hash maps when
-+	 * BPF_F_NO_COMMON_LRU is set).
-+	 */
-+	__u32 requested_max_entries;
- } __attribute__((aligned(8)));
- 
- struct bpf_btf_info {
-diff --git a/tools/testing/selftests/bpf/prog_tests/map_requested_max_entries.c b/tools/testing/selftests/bpf/prog_tests/map_requested_max_entries.c
-new file mode 100644
-index 000000000..e54e88326
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/map_requested_max_entries.c
-@@ -0,0 +1,134 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Test that bpf_map_info.requested_max_entries correctly reports the
-+ * original max_entries value requested by the caller, even when the
-+ * kernel adjusts max_entries internally (e.g., rounding up for per-CPU
-+ * LRU hash maps with BPF_F_NO_COMMON_LRU).
-+ */
-+#include <test_progs.h>
-+#include <bpf/bpf.h>
-+
-+static void test_lru_hash_no_common_lru(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	/* Use a prime number to guarantee rounding on any SMP system */
-+	__u32 requested = 997;
-+	int map_fd, err;
-+
-+	opts.map_flags = BPF_F_NO_COMMON_LRU;
-+
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_LRU_HASH, "test_lru_pcpu",
-+				sizeof(__u32), sizeof(__u32),
-+				requested, &opts);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
-+		return;
-+
-+	err = bpf_map_get_info_by_fd(map_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "bpf_map_get_info_by_fd"))
-+		goto out;
-+
-+	ASSERT_EQ(info.requested_max_entries, requested,
-+		  "requested_max_entries");
-+	ASSERT_GE(info.max_entries, requested,
-+		  "max_entries >= requested");
-+
-+out:
-+	close(map_fd);
-+}
-+
-+static void test_lru_percpu_hash_no_common_lru(void)
-+{
-+	LIBBPF_OPTS(bpf_map_create_opts, opts);
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	__u32 requested = 997;
-+	int map_fd, err;
-+
-+	opts.map_flags = BPF_F_NO_COMMON_LRU;
-+
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_LRU_PERCPU_HASH,
-+				"test_lru_pcpu_v",
-+				sizeof(__u32), sizeof(__u32),
-+				requested, &opts);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
-+		return;
-+
-+	err = bpf_map_get_info_by_fd(map_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "bpf_map_get_info_by_fd"))
-+		goto out;
-+
-+	ASSERT_EQ(info.requested_max_entries, requested,
-+		  "requested_max_entries");
-+	ASSERT_GE(info.max_entries, requested,
-+		  "max_entries >= requested");
-+
-+out:
-+	close(map_fd);
-+}
-+
-+static void test_lru_hash_common_lru(void)
-+{
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	__u32 requested = 997;
-+	int map_fd, err;
-+
-+	/* Without BPF_F_NO_COMMON_LRU, max_entries should not be rounded */
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_LRU_HASH, "test_lru_common",
-+				sizeof(__u32), sizeof(__u32),
-+				requested, NULL);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
-+		return;
-+
-+	err = bpf_map_get_info_by_fd(map_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "bpf_map_get_info_by_fd"))
-+		goto out;
-+
-+	ASSERT_EQ(info.requested_max_entries, requested,
-+		  "requested_max_entries");
-+	ASSERT_EQ(info.max_entries, requested,
-+		  "max_entries == requested (no rounding)");
-+
-+out:
-+	close(map_fd);
-+}
-+
-+static void test_hash_map(void)
-+{
-+	struct bpf_map_info info = {};
-+	__u32 info_len = sizeof(info);
-+	__u32 requested = 256;
-+	int map_fd, err;
-+
-+	/* Regular hash map: max_entries should equal requested */
-+	map_fd = bpf_map_create(BPF_MAP_TYPE_HASH, "test_hash",
-+				sizeof(__u32), sizeof(__u32),
-+				requested, NULL);
-+	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
-+		return;
-+
-+	err = bpf_map_get_info_by_fd(map_fd, &info, &info_len);
-+	if (!ASSERT_OK(err, "bpf_map_get_info_by_fd"))
-+		goto out;
-+
-+	ASSERT_EQ(info.requested_max_entries, requested,
-+		  "requested_max_entries");
-+	ASSERT_EQ(info.max_entries, requested,
-+		  "max_entries == requested");
-+
-+out:
-+	close(map_fd);
-+}
-+
-+void test_map_requested_max_entries(void)
-+{
-+	if (test__start_subtest("lru_hash_no_common_lru"))
-+		test_lru_hash_no_common_lru();
-+	if (test__start_subtest("lru_percpu_hash_no_common_lru"))
-+		test_lru_percpu_hash_no_common_lru();
-+	if (test__start_subtest("lru_hash_common_lru"))
-+		test_lru_hash_common_lru();
-+	if (test__start_subtest("hash_map"))
-+		test_hash_map();
-+}
+		if (lookup_key < tnode->key)
+			rb_n = bpf_rbtree_left(&root, rb_n);
+		else
+			rb_n = bpf_rbtree_right(&root, rb_n);
+	}
+	bpf_spin_unlock(&lock);
+
+The above illustrates a lock-remove-read-add-unlock workflow, which
+exhibits lower performance. To address this, we introduced support
+for a streamlined lock-read-unlock operation in [patch 2/5] and
+[patch 4/5].
+
+Changes in v7:
+- Add a comma to the variable declaration in enum bpf_reg_type
+- Modify the prefixes
+Changes in v6:
+- allow using bpf_kptr_xchg even if the MEM_RCU flag is set
+- Add test case
+Changes in v5:
+- add lastname
+Changes in v4:
+- Fix the dead logic issue in the test case
+Changes in v3:
+- Fix compilation errors
+Changes in v2:
+- Allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
+- Add test case
+
+Link to v6:
+https://lore.kernel.org/all/20260208024846.18653-1-pilgrimtao@gmail.com/
+Link to v5:
+https://lore.kernel.org/all/20260203022712.99347-1-pilgrimtao@gmail.com/
+Link to v4:
+https://lore.kernel.org/all/20260202090051.87802-1-pilgrimtao@gmail.com/
+Link to V3:
+https://lore.kernel.org/all/20260202055818.78231-1-pilgrimtao@gmail.com/
+Link to V2:
+https://lore.kernel.org/all/20260201031607.32940-1-pilgrimtao@gmail.com/
+Link to V1:
+https://lore.kernel.org/all/20260122081426.78472-1-pilgrimtao@gmail.com/
+
+Kaitao Cheng (5):
+  bpf: allow calling bpf_kptr_xchg while holding a lock
+  bpf: allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
+  selftests/bpf: Add supplementary tests for bpf_kptr_xchg
+  bpf: allow using bpf_kptr_xchg even if the MEM_RCU flag is set
+  selftests/bpf: Add test case for rbtree nodes that contain both
+    bpf_refcount and kptr fields.
+
+ kernel/bpf/verifier.c                         |   9 +-
+ .../testing/selftests/bpf/prog_tests/rbtree.c |   6 +
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |   4 +
+ .../selftests/bpf/progs/rbtree_search_kptr.c  | 290 ++++++++++++++++++
+ 4 files changed, 307 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/rbtree_search_kptr.c
+
 -- 
-2.39.5 (Apple Git-154)
+2.50.1 (Apple Git-155)
 
