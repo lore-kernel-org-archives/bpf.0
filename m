@@ -1,123 +1,109 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B24011C860A;
-	Sat, 14 Feb 2026 08:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104C97260F
+	for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 11:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771056064; cv=none; b=qZppbN0B4osD4mt6Kkq3PENrLGb+HUOKK6aLgAWqrd9in04q/Af6amddO2usURytqbaHaRBXad/bWIUSvCTHHAwC2pJY2M7+aQxq2Y3gOoczGlyWg+rkwh/ZOS+2nZXHAIEq8M5wvpENvwJf2IX+72VF9WqgeWTUDP7ApvWkrDs=
+	t=1771068688; cv=none; b=jY047GCyt/UnAP7BYjkCDZa47nVsoHLr0zonadhsI1zlEClOqHe64arZHTLl30F8dd2YrQ2CFJBo5piDaHs5DU0naK3VbL5xvcpgsuIO/WhXyirZd7oaW9NQHQ5sGWGgrnlLpIy4g7vnpBkBRbik+TQc9mVNPuglSZpSBpA3Xnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771056064; c=relaxed/simple;
-	bh=zHHZHSpFNz8VdD6TZxtjd43NGQRTsenYiTPnEOHMl00=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TCNDm85pT0/p6SAAjGW0yJo1FhUt7HjgKdvCl0GhjF3wIYg0dOQmobk2AfppyTKcUWNNY/ZbwF2AMgUJy8z+3RwbK1HNNRSywepvDtzmboTcq2bB1ha4fwd+rRaJxaeaIbg0Ik9qMy+cTfKsnqj0IQoKlqJniFFKeXDKtlORN5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WR3Zi17l; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1771068688; c=relaxed/simple;
+	bh=jgsb6aSE7WPnfxKv5PMCEz/G0xsKQZzyhcPwhL0OMgo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=W+VaA9rrOSM5vPljnxr4ZoqmW1YMc6VUsibLBtZNo4BAXPQWY1rmdhe8Fe+qpOzyzdIadlm+vqtWDLrNnRbDk3y0BvC55EZvyYpGk8f+Z4hynuCHXhw53o3vHJkNjEqWEW9txGMEv6R+Y37i5/t/Ta1N8whISxeBRBZDdNF8R/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j+veXALJ; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WR3Zi17l"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771056062; x=1802592062;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zHHZHSpFNz8VdD6TZxtjd43NGQRTsenYiTPnEOHMl00=;
-  b=WR3Zi17l6yKhLNn8oAzrJ6IU1SFJi9wDbgRubQzq8m0D5IMFLHRfCkGH
-   SoM8/GmfM9naWTcIafCDUSOQ8fw/VRaXl4RxZHLFHshS5DdUJJU7zgUWT
-   VDeTDIrOn7GZ0MRmGjy3m+lHNYiDEMZE0Gi+uIw2+dlNGSKRSdp9wZs1t
-   R06yxIKDN/qnqk+DdsgmCEt4jT31MTip95Sgh/K+W4sjJgKxYF2fiJ8s3
-   hJzz4/Wx5NbQflmYo2MAdm0GoKRzBCycNCmdGj5XqPPAGPev/dZiDmFBy
-   SOWJqwJBcogU7zkyxe8WV1m0oBdT1ah8GxQzVH6r0jJzvIlxtzWk5XfH9
-   A==;
-X-CSE-ConnectionGUID: VTujn0GVTYKjHnLoQTE/0Q==
-X-CSE-MsgGUID: GTkqIN2dQZCrasuPib9wQQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11700"; a="83595507"
-X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="83595507"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2026 00:01:01 -0800
-X-CSE-ConnectionGUID: oNpYrDVRR7WyI3DWrXNRKg==
-X-CSE-MsgGUID: leycIjwNQ5iXJiU9xiBbNw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,290,1763452800"; 
-   d="scan'208";a="213231962"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
-  by orviesa007.jf.intel.com with ESMTP; 14 Feb 2026 00:00:57 -0800
-Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vrAaE-000000001nt-0zKp;
-	Sat, 14 Feb 2026 08:00:54 +0000
-Date: Sat, 14 Feb 2026 09:00:05 +0100
-From: kernel test robot <lkp@intel.com>
-To: Chris J Arges <carges@cloudflare.com>, michael.chan@broadcom.com,
-	pavan.chebbi@broadcom.com, hawk@kernel.org,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>
-Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-	kernel-team@cloudflare.com, jbrandeburg@cloudflare.com,
-	Chris J Arges <carges@cloudflare.com>, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH 2/2] bnxt_en: Implement XDP RSS hash metadata extraction
-Message-ID: <202602140829.b2xx1hxx-lkp@intel.com>
-References: <20260213192449.1294830-3-carges@cloudflare.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j+veXALJ"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-483770e0b25so10771165e9.0
+        for <bpf@vger.kernel.org>; Sat, 14 Feb 2026 03:31:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771068685; x=1771673485; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OiZwlgtBXqE7LEsN2nlgf0AbHOoRJSUt9gOPy7eO3jU=;
+        b=j+veXALJDkt8Dv94RwJ93S6+z5F1N3shcNGHNyUGucVq6CEWAt8DHu6S4lCZzFvwLN
+         hR36fbgT0F38L58OaU67n1bpI62qdMJkrbm98OSKNS+TenaUriw14dWxiKYbvtE34ILh
+         03oT6oLRRE9jab/l2tDf0WgiTkheAxO9dAYTczezqhuREFn+nNFIG7cqWiM6KVFgBHcr
+         Iw5DfMM8WHEB9mFkDLtfJsNYbivZJ829JVUBGmLUVpXI5T3gFFz+jM7v41Jdvkmuk5Dy
+         0Ikenfn7STop8Q0TC+1Tf0CzUmfAq2K9AJIZ5SBZT7TDxk+SmfwrkJjcRnwVe8RwOZYK
+         kX9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771068685; x=1771673485;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=OiZwlgtBXqE7LEsN2nlgf0AbHOoRJSUt9gOPy7eO3jU=;
+        b=EvWHtuEopBQgU+cJwJjs0KETKGeNvAOhiLgBxBQNzpkqXNAw0RJ1iQnqclJDVIkMbX
+         TPSoApork3rOrKI17ocZhGLqOZRvqhF9CR4EgdMOfKwrGyU+wQbHgjyVrlVx/sYEQzgH
+         Lu9gNTj1+4UGf0LtgO3y8lao6mFT3+TgyH135Vz0EPEX51BEDmmLEF+C6h/bjEk8zIja
+         TMg/m6njyfpFH2Doh7ItIxY9dDDt2uZxzsNZEi0HPL3YZqZRlEqoOVoWlbH1Dx7+P2nT
+         q3f1dnhJfOl+YRmDqWQH6JdNoPM01QWB9n18RmsS24mkroVLPIG+uQZUoz8gk8UIxgsG
+         qBRg==
+X-Forwarded-Encrypted: i=1; AJvYcCXmVvot/s8o13gRDMnDdOBEqNES8XJW5CSLOONqySSrN07UhCs6dZw12SZmpPjzRuR4WgQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKut91CgGbvp5iHhES0Iok4H0VpX2/f2L2wWjHTR77FiFN3QSj
+	NH7f9hC+i8GzsJHWUev6z+6/VlNHYFvJxrdDDQAlIbDFP763h7WMh2xg
+X-Gm-Gg: AZuq6aLk/x2DoLs1rsGNXGnJdNevUHj1suTg3bPRPgWG4m+9iUOObKQuor0vc71+ghn
+	ySN5X5Jr2WnjaQtKPi6MiBx8NDxrNbiex1de2aN4GDqh8UbDAyXOZv62a8y0wcZydpXgKcFLQc2
+	2NJoXT3lb6rtaRu4y7l89neBYATOEp1NpoIMAuuzF109xdXOdTpLS9FM7VUS4zRBwJpLKXN7rTC
+	eLj08A/+aH3s1yOogXBVswJfQJoyS8sbdFObB1tveN6RxblfgmarC4zOnm3WjESPpOg5nIk2fnm
+	026sYHynI2gRjmbhApVwofC0mKjQrlwbRk+axnawq7RwcXMXeNunSqOHl7hwl+SuL4z4UtXnpWQ
+	FGxAjo1GdgyDd6dc9bVUII5S1V8GVhHUoLM9uNG+Jrhz+4W9kn0E2sD2EOJ5d3+75QdlGWy7grW
+	q3rkHpnon6QQMNDZvZ14nXfrFXUXv533/p5r/AfEaJgiE7nbgulMnTHKtMeM5eddlV
+X-Received: by 2002:a05:600c:3f1b:b0:480:68ed:1e70 with SMTP id 5b1f17b1804b1-48371096d3amr84223035e9.35.1771068685196;
+        Sat, 14 Feb 2026 03:31:25 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4836aa0847asm237182465e9.3.2026.02.14.03.31.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 14 Feb 2026 03:31:24 -0800 (PST)
+Date: Sat, 14 Feb 2026 11:31:22 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ bpf@vger.kernel.org, arnd@arndb.de, catalin.marinas@arm.com,
+ will@kernel.org, peterz@infradead.org, akpm@linux-foundation.org,
+ mark.rutland@arm.com, harisokn@amazon.com, cl@gentwo.org, ast@kernel.org,
+ rafael@kernel.org, daniel.lezcano@linaro.org, memxor@gmail.com,
+ zhenglifeng1@huawei.com, xueshuai@linux.alibaba.com,
+ joao.m.martins@oracle.com, boris.ostrovsky@oracle.com,
+ konrad.wilk@oracle.com
+Subject: Re: [PATCH v9 01/12] asm-generic: barrier: Add
+ smp_cond_load_relaxed_timeout()
+Message-ID: <20260214113122.70627a8b@pumpkin>
+In-Reply-To: <87tsvj6hwf.fsf@oracle.com>
+References: <20260209023153.2661784-1-ankur.a.arora@oracle.com>
+	<20260209023153.2661784-2-ankur.a.arora@oracle.com>
+	<20260212095621.4d99317b@pumpkin>
+	<87tsvj6hwf.fsf@oracle.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260213192449.1294830-3-carges@cloudflare.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Chris,
+On Fri, 13 Feb 2026 20:58:08 -0800
+Ankur Arora <ankur.a.arora@oracle.com> wrote:
 
-kernel test robot noticed the following build errors:
+> David Laight <david.laight.linux@gmail.com> writes:
+...
+> > Plus the cost of evaluating cond_expr 200 times.
+> > I guess that isn't expected to contain a PCIe read :-)  
+> 
+> :). Good point. I'll see if I can add something like "when polling on
+> a memory address".
 
-[auto build test ERROR on v6.19]
-[cannot apply to linus/master next-20260213]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+I've only timed PCIe reads into an fpga (Cyclone V) target, but those
+are about 1 micro-second - which is a lot of clocks.
+Hard logic will be somewhat faster - but still slow.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Chris-J-Arges/bnxt_en-use-bnxt_xdp_buff-for-xdp-context/20260214-032849
-base:   v6.19
-patch link:    https://lore.kernel.org/r/20260213192449.1294830-3-carges%40cloudflare.com
-patch subject: [PATCH 2/2] bnxt_en: Implement XDP RSS hash metadata extraction
-config: x86_64-rhel-9.4 (https://download.01.org/0day-ci/archive/20260214/202602140829.b2xx1hxx-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260214/202602140829.b2xx1hxx-lkp@intel.com/reproduce)
+There might be other places where 200 isn't a good value.
+Perhaps add an extra #define that drops in the loop count?
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602140829.b2xx1hxx-lkp@intel.com/
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:476:12: error: static declaration of 'bnxt_xdp_rx_hash' follows non-static declaration
-     476 | static int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-         |            ^~~~~~~~~~~~~~~~
-   In file included from drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:22:
-   drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h:44:5: note: previous declaration of 'bnxt_xdp_rx_hash' with type 'int(const struct xdp_md *, u32 *, enum xdp_rss_hash_type *)' {aka 'int(const struct xdp_md *, unsigned int *, enum xdp_rss_hash_type *)'}
-      44 | int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-         |     ^~~~~~~~~~~~~~~~
->> drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c:476:12: warning: 'bnxt_xdp_rx_hash' defined but not used [-Wunused-function]
-     476 | static int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-         |            ^~~~~~~~~~~~~~~~
-
-
-vim +/bnxt_xdp_rx_hash +476 drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c
-
-   475	
- > 476	static int bnxt_xdp_rx_hash(const struct xdp_md *ctx, u32 *hash,
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	David
