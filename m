@@ -1,53 +1,51 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949871FE45A;
-	Mon, 16 Feb 2026 02:51:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD8B2C11D9;
+	Mon, 16 Feb 2026 04:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771210280; cv=none; b=i9cbj9KO2sRQKfvz0EA9M+c2+spdrFyRRHN0EKJqW1LaFH2LqBqrRPjva+MlqmZskM9od1+0lHVJGcEReAe2M0Y5udwR0EM/uYmQXBhM2O1rTfH/4RVRM4IhYO7qOG9MK6qYXHc/N8tooUwhd9Yqy4TFjgV8WkEHn2YJJuCDR/0=
+	t=1771216044; cv=none; b=O0C457rP39pRygAu5HILXNuWFFiCx+4UFJa8F3ediE7z4Z4VwJxdMx7++6EMCktUKiuMaD7omg18AlWolwHZsnhK1wpQAGfs8Sdb8qurmerD2znnbxBpbzP+AlVEllc9ZbnGbNHGbt29F4m93FdbsE1/ctoSZuIt6wfOhyqoSLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771210280; c=relaxed/simple;
-	bh=BtfTy6wRVU5oGY/Ndnmcii+F9Cr6tuNhG9rNllvi4qc=;
+	s=arc-20240116; t=1771216044; c=relaxed/simple;
+	bh=zS5aTFEiXNs11x2klWT5blaxKck2RbkmlTT/mT+crYE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kyYD5DAR7qe2TW7NM40AWXQ3xzdwQMpMTihrf0d4fZBNaF8/EybEvkpma7mZCzp9MPAoVReN2LYANqIGWcFwMp514GNyqrJxdmkPeQB/5a9jp5lhYnkTQJpMBH+dGFHrwXDW3Be/nhIksfodNNJkc13rOhxYF2nRfsWeRj7W/nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=elXhlZWI; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=OC+YGIFuoFULQIM2BeHcpGVgHtyW1l032wX9bwcfHb2rKLq+PNAr4IH+rM5HiSe2rBpDHvLAgH+NOYp7HK8xxV8JRauq/SoW10SeYLtgVcIdOyU/efwZglP2TMY10xTCA7qrbqxvYf7du6e/jnOlwP6eRQQScxrU9xz7OqKGGD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DGe9xKos; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="elXhlZWI"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DGe9xKos"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771210278; x=1802746278;
+  t=1771216043; x=1802752043;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=BtfTy6wRVU5oGY/Ndnmcii+F9Cr6tuNhG9rNllvi4qc=;
-  b=elXhlZWIqGZdVYezHJlXyGQP/fLW6CBS//3d3N657xryz0jBaC6KyaQE
-   hnoDaw5wBijYWYFJ5rw6bNSHszqcp/tJNjumYDk9L97JawGG/ZRFnVKHo
-   EmMqKEauxRWTyLiRr2+0K7Ld1ZAqBnlrcF/e2WeC8cw/XyIUUvSp5kCo4
-   eVyv1wbbRkwWVejWkHbXb2ZgBsxc3LqT+R8YJPF2wyYWKWq8yL/xIUn+Z
-   U3Dm69BGRGUHH5TLm86f4Uh6jDm57FD5LxBbFYM3zWl7xBBEJLItucuZE
-   Pe1XlcNHQwwyswP4Z15yRDEsQ6XY9GT+82yFKPVId2ittjItAuNfO4aho
-   Q==;
-X-CSE-ConnectionGUID: kkDbzrYHT62WaR1SqdF+QA==
-X-CSE-MsgGUID: hsYGbQNGQf21eeAOQUhWOg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11702"; a="83017453"
+  bh=zS5aTFEiXNs11x2klWT5blaxKck2RbkmlTT/mT+crYE=;
+  b=DGe9xKosj47Os+ywuQnFF6XT6wqWaCyKQZE8i1ozsF1WGYo9S3IJmWG5
+   eDFLopUJYKXVTm7I0JQg66IrFCM0kvYoYzQYR8ZEuh8RwmtwXk1SxTpDC
+   jnh/6h6ZX+mVdo3Nc0aLUMm+fHd14YmxeLst3AN3a9q5pHjJxO0y0To99
+   H8LlMj/g8nYxuuVZf3RfEkcLvmp0v9wMVALvOcO13NVXLEP8N6G75oG9o
+   lMpiPTr6temx1S51tYCTu9wAJH/Zk06RRiHBv3v1rq05rLCGO1ZYSRHgJ
+   tWk3irrJRUJcHVdQWsUNrE2zdJzll4u8cJbD9zQr4THlzlzYnax36/4TN
+   w==;
+X-CSE-ConnectionGUID: 6XdSMm8KQE28g2yxWGOEmw==
+X-CSE-MsgGUID: 4HLEbecnSKKnlVs6jXHoAA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11702"; a="72468994"
 X-IronPort-AV: E=Sophos;i="6.21,293,1763452800"; 
-   d="scan'208";a="83017453"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2026 18:51:17 -0800
-X-CSE-ConnectionGUID: GznNaG7zRl6//c+ESuiY3A==
-X-CSE-MsgGUID: vto2SdazRru5aXc1oO9+Fw==
+   d="scan'208";a="72468994"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Feb 2026 20:27:22 -0800
+X-CSE-ConnectionGUID: EV1xUuohR4Slxdcg/tTu7g==
+X-CSE-MsgGUID: 34AHIvdUQZKD3IQxzWa6iw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,293,1763452800"; 
-   d="scan'208";a="236487695"
 Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by fmviesa002.fm.intel.com with ESMTP; 15 Feb 2026 18:51:16 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 15 Feb 2026 20:27:19 -0800
 Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
 	(envelope-from <lkp@intel.com>)
-	id 1vrohd-00000000zL4-3S9V;
-	Mon, 16 Feb 2026 02:51:13 +0000
-Date: Mon, 16 Feb 2026 10:50:32 +0800
+	id 1vrqCb-00000000zOK-39zz;
+	Mon, 16 Feb 2026 04:27:17 +0000
+Date: Mon, 16 Feb 2026 12:26:28 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kuniyuki Iwashima <kuniyu@google.com>,
 	John Fastabend <john.fastabend@gmail.com>,
@@ -60,7 +58,7 @@ Cc: oe-kbuild-all@lists.linux.dev,
 	syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com
 Subject: Re: [PATCH v1 bpf/net 6/6] sockmap: Fix broken memory accounting for
  UDP.
-Message-ID: <202602161010.ohfwdwoo-lkp@intel.com>
+Message-ID: <202602161215.LxHBWhAv-lkp@intel.com>
 References: <20260215204353.3645744-7-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -87,19 +85,74 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/sockmap
 base:   linus/master
 patch link:    https://lore.kernel.org/r/20260215204353.3645744-7-kuniyu%40google.com
 patch subject: [PATCH v1 bpf/net 6/6] sockmap: Fix broken memory accounting for UDP.
-config: x86_64-buildonly-randconfig-002-20260216 (https://download.01.org/0day-ci/archive/20260216/202602161010.ohfwdwoo-lkp@intel.com/config)
-compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260216/202602161010.ohfwdwoo-lkp@intel.com/reproduce)
+config: x86_64-buildonly-randconfig-004-20260216 (https://download.01.org/0day-ci/archive/20260216/202602161215.LxHBWhAv-lkp@intel.com/config)
+compiler: gcc-13 (Debian 13.3.0-16) 13.3.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260216/202602161215.LxHBWhAv-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602161010.ohfwdwoo-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602161215.LxHBWhAv-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   ld: vmlinux.o: in function `sk_psock_skb_ingress':
->> skmsg.c:(.text+0x8fc777): undefined reference to `udp_sock_rfree'
+   ld: net/core/skmsg.o: in function `sk_psock_skb_ingress':
+>> net/core/skmsg.c:608:(.text+0x2037): undefined reference to `udp_sock_rfree'
+
+
+vim +608 net/core/skmsg.c
+
+   575	
+   576	static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
+   577					u32 off, u32 len, gfp_t gfp_flags, bool take_ref)
+   578	{
+   579		struct sock *sk = psock->sk;
+   580		bool is_udp = sk_is_udp(sk);
+   581		struct sk_msg *msg;
+   582		int err = -EAGAIN;
+   583	
+   584		msg = alloc_sk_msg(gfp_flags);
+   585		if (!msg)
+   586			goto out;
+   587	
+   588		if (is_udp)
+   589			spin_lock_bh(&sk->sk_receive_queue.lock);
+   590	
+   591		if (skb->sk != sk || is_udp) {
+   592			if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
+   593				goto unlock;
+   594	
+   595			if (!sk_rmem_schedule(sk, skb, skb->truesize))
+   596				goto unlock;
+   597		}
+   598	
+   599		/* This will transition ownership of the data from the socket where
+   600		 * the BPF program was run initiating the redirect to the socket
+   601		 * we will eventually receive this data on. The data will be released
+   602		 * from skb_consume found in __tcp_bpf_recvmsg() after its been copied
+   603		 * into user buffers.
+   604		 */
+   605		skb_set_owner_r(skb, sk);
+   606	
+   607		if (is_udp) {
+ > 608			skb->destructor = udp_sock_rfree;
+   609			spin_unlock_bh(&sk->sk_receive_queue.lock);
+   610		}
+   611	
+   612		err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
+   613		if (err < 0)
+   614			goto free;
+   615	out:
+   616		return err;
+   617	
+   618	unlock:
+   619		if (is_udp)
+   620			spin_unlock_bh(&sk->sk_receive_queue.lock);
+   621	free:
+   622		kfree(msg);
+   623		goto out;
+   624	}
+   625	
 
 -- 
 0-DAY CI Kernel Test Service
