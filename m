@@ -1,67 +1,67 @@
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E99E22C08AB;
-	Mon, 16 Feb 2026 06:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39B62EAD15
+	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 06:57:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771225029; cv=none; b=rfTX8eJsqjQssesyeFmRvqFvF7B5kItW5/BQBa0GtCKFSK2r+imSmb6cHM/ov1RwDYiU3rACz/xTz8IjpBlDayBpGa1cFksMBzZqguupTvOPqCE+D0poXn7QFYU02oLCXAGDirs0xs+2JrYfwCQSEMGYBba8j3g6E76Kr6Xc+Uo=
+	t=1771225032; cv=none; b=akghLSAcwNLttnsrvw9Bdd4qNgj1O/Wz0IWIrG/BBhIXh6ytbB2wtJVh/hry8bs+NTnYsbgxkZ5mVJuJjsBkXhFbHf3A+VVkt3EBOzb6rTGXkQUWsbpfWg9R2+eE27W7EO2aWSuFQxeRYos+0xJnqdDWfsfS7OXiFlrJ+moYnJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771225029; c=relaxed/simple;
-	bh=GWtDO8ebIYnpSqaiS2eI3hhO8Tfy3e2PsmYQ7UhhaDo=;
+	s=arc-20240116; t=1771225032; c=relaxed/simple;
+	bh=sE013MK4XNvk0qYqtiMrekLru4gI04s5soTiVuZnMSg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=leL/EGZadaIYJEiptnJT4T55lJPlqUk9SXX5eruiG6EXAL+6xtyBXFFMgIgdCKVVeTwu1aAPSnhnYOMUF6cArRCXOhZPrDKTdXFCfRmPD90TW9MdXZ3yVNj8WUMc8IkTkSCWlipBMrhx2T8k9PyxK8F8o4NVbUO5wyA4ltprcxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=n7nHu35x; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=Y+3xFm3NzSTIjtDIjVA2qdpREQSePIZUIvgJgbjYUzxXHSWaofBK9WlFtmGb8IRPmceCqoaajGaDuBb4qufV5W/Nthw2+TIBLgLpGVpaWOGB4Eiq7c7D9vR1zxRbRjMfxfGpPrA8D1IZSlFZCSSae3dgwoDpjbOE//6tQe4cCYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Q5zPazu5; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="n7nHu35x"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61FCZloe2534882;
-	Mon, 16 Feb 2026 06:56:50 GMT
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Q5zPazu5"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61FDsE2H4098074;
+	Mon, 16 Feb 2026 06:56:54 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=2XX0R9TtZrIBWJXgK
-	I/YKmAKnVgu8iZtTRCdZ43Gui4=; b=n7nHu35xIL5ZnNFc/5bSfc6UbN66tO7eK
-	IweFt55+6LEEwtg5NYjkKp20mKSQSQBl0dgUQlYV/SYUDcnvPxq3ftJv2LOEx1XS
-	VWgrhmNnA79Y+23nw3mhIcHVEmW0lRprZtS43SUfhZTpqVZTzaJHt1ZYZa2yweP9
-	44v4876zeIPMbCZnCQraAqglkJ4tlW6Xv0A2ErIyU2nhaDoqohqaXZJiictgHf+9
-	ib5L8ezOhoYjgy+heD02q6KgieJHc3CpyGAY2j3yGb0jVdKu54+zOX/8f3/xFwmm
-	tRIRdVuiGh1Oxr/tYZOWPInRAhdkPTrtYQ3zuKCOG61lZ/NpBta7A==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4caj63x3wk-1
+	:mime-version:references:subject:to; s=pp1; bh=q2V+99nyaot7BphJZ
+	8iTDLlxZs2yw+uT/Pev7jRFbfw=; b=Q5zPazu5GNbjProwDjiLwVV197tie6oAV
+	psz7WY1P+T+aYFGuKZM7e4O9KlJTe7nEfC94rzk+k4df3WIQ4A8oHsv3ykMCuD1n
+	ggt8jyz7jcYys4k1IFV5D/T1LwmkCRxkr09c1323GxtxTMJKzsMeDoE7KSgHDlAi
+	eb8upGjts5MSPjL82IG1mnur9V7tiE76Xx8rpj63S0merRmlcfzyAncvurLWyX8d
+	5jypVy8f/l/+uLR3zM4crRkOhoDB4yddpHy9OCjY6c1XO2ihhafTGgtTQg1/KTLn
+	QlSosIZb4wYlDLJ5W2M1htqLJByuwbWvYTGQVRJ26AIqAILzuyXEg==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cajcj6367-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 06:56:50 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61G32vEd002838;
-	Mon, 16 Feb 2026 06:56:49 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cb5kj45h9-1
+	Mon, 16 Feb 2026 06:56:54 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61G6NTLO012683;
+	Mon, 16 Feb 2026 06:56:53 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cb3crvg47-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 06:56:49 +0000
+	Mon, 16 Feb 2026 06:56:53 +0000
 Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61G6ujHZ38338836
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61G6unf325559316
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 16 Feb 2026 06:56:45 GMT
+	Mon, 16 Feb 2026 06:56:49 GMT
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BD9A820040;
-	Mon, 16 Feb 2026 06:56:45 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 9AC292004E;
+	Mon, 16 Feb 2026 06:56:49 +0000 (GMT)
 Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 02FA520043;
-	Mon, 16 Feb 2026 06:56:44 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 098F920040;
+	Mon, 16 Feb 2026 06:56:48 +0000 (GMT)
 Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.in.ibm.com (unknown [9.78.106.17])
 	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 16 Feb 2026 06:56:43 +0000 (GMT)
+	Mon, 16 Feb 2026 06:56:47 +0000 (GMT)
 From: Hari Bathini <hbathini@linux.ibm.com>
 To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
 Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
         Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-        Abhishek Dubey <adubey@linux.ibm.com>, stable@vger.kernel.org
-Subject: [PATCH 2/5] powerpc64/bpf: fix the address returned by bpf_get_func_ip
-Date: Mon, 16 Feb 2026 12:26:36 +0530
-Message-ID: <20260216065639.1750181-3-hbathini@linux.ibm.com>
+        Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH 4/5] powerpc64/bpf: remove BPF redzone protection in trampoline stack
+Date: Mon, 16 Feb 2026 12:26:38 +0530
+Message-ID: <20260216065639.1750181-5-hbathini@linux.ibm.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260216065639.1750181-1-hbathini@linux.ibm.com>
 References: <20260216065639.1750181-1-hbathini@linux.ibm.com>
@@ -73,105 +73,299 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: s-Hs2wh5xqKazuuC3CIC-OGV1YGxtEXq
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDA1NCBTYWx0ZWRfX63se1cveZzgM
- adpG9gnLyx8a1l3IPGVCzPPhPbGd4cuiYT0LV0oUgR819E3PkTD2c0M0Q6cKDUogZ7FIPHh788h
- iTQGQik3kDTKPR7D+hJhbavfJ7rGhy2oBsKOEB+sB4epnzdbHFraTV3zaYRl2KK1bnm2gpYaM55
- si3QErh080PMCdwIqn/JwWUQb27G185ZJIHmLLMMMDUW39YDZHeM8fqTpDMQO5L97+8WXtFKVQ1
- BW6qLQXaBBuXVT5ZulLa0ePG2T3FbNsrRrZ7w/UEJ5/a6kn6vg4HiZHrlcvVbLnJMJenmRvmIv2
- rNuaJBeY1f4WUn8le1RXMjS3b8/9I5gzSGjBpM6/8I6F+6+jIlsjS9q3fQudfnOj2hyzkA1j54Q
- pbvnWivLXH5OxzK+F6iMnr+wkci4CM/7rzHCFaK/gEzIkZ6j7tMc8FTVPZPT7NBXaR6DD+w1/X5
- On6+qgQYb2IEGVgzQ1w==
-X-Proofpoint-GUID: s-Hs2wh5xqKazuuC3CIC-OGV1YGxtEXq
-X-Authority-Analysis: v=2.4 cv=U+mfzOru c=1 sm=1 tr=0 ts=6992bfb2 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+X-Proofpoint-ORIG-GUID: GD2UqYAReUkTm68UZDsy2D3__uPOmgep
+X-Authority-Analysis: v=2.4 cv=Md9hep/f c=1 sm=1 tr=0 ts=6992bfb6 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
  a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=VwQbUJbxAAAA:8
- a=SO5buJ7TJInmnl-hmdUA:9
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=CS0pCN-D_OTInOCri3QA:9
+ a=4dzhEfGzQiddGgL9:21
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDA1NCBTYWx0ZWRfX8lhKwJJxUNhs
+ 1+eHVKWeQACG9Jx6xq6tKTWycCER3xH+CLQXnZB8sI06BjJYGYYlOCz1+k1WPkdK4CKMR5W34cV
+ P/ryo8n3EdZrnEcZ4CsNj6FH85PIxLCOz2PV2r+SdeQjH3OeQtEyMop8dZ6/4YAGgmqqjZ6R1D/
+ mo0gDVVojN4Wfis90RQIR3VhBll2C3vZ2KvFx+aVbRCn/glks+x+iBCA9HVgXpYG+OfWye5REB2
+ i4cc3EE6M9BdZKKrh2xxQFzkg8rirSgQL65Zys1I7tAZ6IpSvVTSvcW+0OphqnMtbydzsjzDd8o
+ CMoGcSVsr4blqmyWz48N0y9ebzpNZHFFOY7pec+x9zc7eFjGiSOIyaEhz6dssGd66Nf0li7zOY2
+ WS1GzT5za/bisXmGL0+9ssLfZBjmEuhLTeB9tmQQuUoPqbiyzHuxjLuTF+POPZYXf+kzwATspjP
+ l788uTlZrudXKe1T3uA==
+X-Proofpoint-GUID: GD2UqYAReUkTm68UZDsy2D3__uPOmgep
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
  definitions=2026-02-16_03,2026-02-13_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 bulkscore=0 impostorscore=0 malwarescore=0 spamscore=0
- adultscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
- suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
- definitions=main-2602160054
+ clxscore=1015 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602160054
 
-bpf_get_func_ip() helper function returns the address of the traced
-function. It relies on the IP address stored at ctx - 16 by the bpf
-trampoline. On 64-bit powerpc, this address is recovered from LR
-accounting for OOL trampoline. But the address stored here was off
-by 4-bytes. Ensure the address is the actual start of the traced
-function.
+Since bpf2bpf tailcall support is enabled for 64-bit powerpc with
+kernel commit 2ed2d8f6fb38 ("powerpc64/bpf: Support tailcalls with
+subprogs"), 'tailcalls/tailcall_bpf2bpf_hierarchy_fexit' BPF selftest
+is triggering "corrupted stack end detected inside scheduler" with the
+config option CONFIG_SCHED_STACK_END_CHECK enabled. While reviewing
+the stack layout for BPF trampoline, observed that the dummy frame is
+trying to protect the redzone of BPF program. This is because tail
+call info and NVRs save area are in redzone at the time of tailcall
+as the current BPF program stack frame is teared down before the
+tailcall. But saving this redzone in the dummy frame of trampoline
+is unnecessary because of the follow reasons:
 
-Reported-by: Abhishek Dubey <adubey@linux.ibm.com>
-Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
-Cc: stable@vger.kernel.org
+  1) Firstly, trampoline can be attached to BPF entry/main program
+     or subprog. Prologue part of the BPF entry/main program, where
+     the trampoline attachpoint is, is skipped during tailcall. So,
+     protecting the redzone does not arise when the trampoline is
+     not even triggered in this scenario.
+  2) In case of subprog, the caller's stackframe is already setup
+     and the subprog's stackframe is yet to be setup. So, nothing
+     on the redzone to be protected.
+
+Also, using dummy frame in BPF trampoline, wastes critically scarce
+kernel stack space, especially in tailcall sequence, for marginal
+benefit in stack unwinding. So, drop setting up the dummy frame.
+Instead, save return address in bpf trampoline frame and use it as
+appropriate. Pruning this unnecessary stack usage mitigates the
+likelihood of stack overflow in scenarios where bpf2bpf tailcalls
+and fexit programs are mixed.
+
+Reported-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Fixes: 2ed2d8f6fb38 ("powerpc64/bpf: Support tailcalls with subprogs")
 Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
 ---
- arch/powerpc/net/bpf_jit_comp.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ arch/powerpc/net/bpf_jit_comp.c | 84 ++++++++++++---------------------
+ 1 file changed, 30 insertions(+), 54 deletions(-)
 
 diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index 987cd9fb0f37..fb6cc1f832a8 100644
+index 1ff8030faf1f..35cea97a1bcd 100644
 --- a/arch/powerpc/net/bpf_jit_comp.c
 +++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -786,8 +786,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 	 *                              [ reg argN          ]
- 	 *                              [ ...               ]
- 	 *       regs_off               [ reg_arg1          ] prog ctx context
--	 *       nregs_off              [ args count        ]
--	 *       ip_off                 [ traced function   ]
-+	 *       nregs_off              [ args count        ] ((u64 *)prog_ctx)[-1]
-+	 *       ip_off                 [ traced function   ] ((u64 *)prog_ctx)[-2]
- 	 *                              [ ...               ]
- 	 *       run_ctx_off            [ bpf_tramp_run_ctx ]
- 	 *                              [ reg argN          ]
-@@ -895,7 +895,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+@@ -638,15 +638,10 @@ static int invoke_bpf_mod_ret(u32 *image, u32 *ro_image, struct codegen_context
+  * for the traced function (BPF subprog/callee) to fetch it.
+  */
+ static void bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_context *ctx,
+-						int func_frame_offset,
+-						int bpf_dummy_frame_size, int r4_off)
++						int bpf_frame_size, int r4_off)
+ {
+ 	if (IS_ENABLED(CONFIG_PPC64)) {
+-		/*
+-		 * func_frame_offset =                                   ...(1)
+-		 *      bpf_dummy_frame_size + trampoline_frame_size
+-		 */
+-		EMIT(PPC_RAW_LD(_R4, _R1, func_frame_offset));
++		EMIT(PPC_RAW_LD(_R4, _R1, bpf_frame_size));
+ 		/* Refer to trampoline's Generated stack layout */
+ 		EMIT(PPC_RAW_LD(_R3, _R4, -BPF_PPC_TAILCALL));
  
- 	bpf_trampoline_save_args(image, ctx, func_frame_offset, nr_regs, regs_off);
+@@ -657,21 +652,12 @@ static void bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_conte
+ 		EMIT(PPC_RAW_CMPLWI(_R3, MAX_TAIL_CALL_CNT));
+ 		PPC_BCC_CONST_SHORT(COND_GT, 8);
+ 		EMIT(PPC_RAW_ADDI(_R3, _R4, -BPF_PPC_TAILCALL));
++
+ 		/*
+-		 * From ...(1) above:
+-		 * trampoline_frame_bottom =                            ...(2)
+-		 *      func_frame_offset - bpf_dummy_frame_size
+-		 *
+-		 * Using ...(2) derived above:
+-		 * trampoline_tail_call_info_offset =                  ...(3)
+-		 *      trampoline_frame_bottom - tailcallinfo_offset
+-		 *
+-		 * From ...(3):
+ 		 * Use trampoline_tail_call_info_offset to write reference of main's
+ 		 * tail_call_info in trampoline frame.
+ 		 */
+-		EMIT(PPC_RAW_STL(_R3, _R1, (func_frame_offset - bpf_dummy_frame_size)
+-								- BPF_PPC_TAILCALL));
++		EMIT(PPC_RAW_STL(_R3, _R1, bpf_frame_size - BPF_PPC_TAILCALL));
+ 	} else {
+ 		/* See bpf_jit_stack_offsetof() and BPF_PPC_TC */
+ 		EMIT(PPC_RAW_LL(_R4, _R1, r4_off));
+@@ -679,7 +665,7 @@ static void bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_conte
+ }
  
--	/* Save our return address */
-+	/* Save our LR/return address */
+ static void bpf_trampoline_restore_tail_call_cnt(u32 *image, struct codegen_context *ctx,
+-						 int func_frame_offset, int r4_off)
++						 int bpf_frame_size, int r4_off)
+ {
+ 	if (IS_ENABLED(CONFIG_PPC32)) {
+ 		/*
+@@ -690,12 +676,12 @@ static void bpf_trampoline_restore_tail_call_cnt(u32 *image, struct codegen_cont
+ 	}
+ }
+ 
+-static void bpf_trampoline_save_args(u32 *image, struct codegen_context *ctx, int func_frame_offset,
+-				     int nr_regs, int regs_off)
++static void bpf_trampoline_save_args(u32 *image, struct codegen_context *ctx,
++				     int bpf_frame_size, int nr_regs, int regs_off)
+ {
+ 	int param_save_area_offset;
+ 
+-	param_save_area_offset = func_frame_offset; /* the two frames we alloted */
++	param_save_area_offset = bpf_frame_size;
+ 	param_save_area_offset += STACK_FRAME_MIN_SIZE; /* param save area is past frame header */
+ 
+ 	for (int i = 0; i < nr_regs; i++) {
+@@ -718,11 +704,11 @@ static void bpf_trampoline_restore_args_regs(u32 *image, struct codegen_context
+ 
+ /* Used when we call into the traced function. Replicate parameter save area */
+ static void bpf_trampoline_restore_args_stack(u32 *image, struct codegen_context *ctx,
+-					      int func_frame_offset, int nr_regs, int regs_off)
++					      int bpf_frame_size, int nr_regs, int regs_off)
+ {
+ 	int param_save_area_offset;
+ 
+-	param_save_area_offset = func_frame_offset; /* the two frames we alloted */
++	param_save_area_offset = bpf_frame_size;
+ 	param_save_area_offset += STACK_FRAME_MIN_SIZE; /* param save area is past frame header */
+ 
+ 	for (int i = 8; i < nr_regs; i++) {
+@@ -739,10 +725,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 					 void *func_addr)
+ {
+ 	int regs_off, nregs_off, ip_off, run_ctx_off, retval_off, nvr_off, alt_lr_off, r4_off = 0;
+-	int i, ret, nr_regs, bpf_frame_size = 0, bpf_dummy_frame_size = 0, func_frame_offset;
+ 	struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+ 	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+ 	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
++	int i, ret, nr_regs, retaddr_off, bpf_frame_size = 0;
+ 	struct codegen_context codegen_ctx, *ctx;
+ 	u32 *image = (u32 *)rw_image;
+ 	ppc_inst_t branch_insn;
+@@ -768,16 +754,11 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 	 * Generated stack layout:
+ 	 *
+ 	 * func prev back chain         [ back chain        ]
+-	 *                              [                   ]
+-	 * bpf prog redzone/tailcallcnt [ ...               ] 64 bytes (64-bit powerpc)
+-	 *                              [                   ] --
+-	 * LR save area                 [ r0 save (64-bit)  ]   | header
+-	 *                              [ r0 save (32-bit)  ]   |
+-	 * dummy frame for unwind       [ back chain 1      ] --
+ 	 *                              [ tail_call_info    ] optional - 64-bit powerpc
+ 	 *                              [ padding           ] align stack frame
+ 	 *       r4_off                 [ r4 (tailcallcnt)  ] optional - 32-bit powerpc
+ 	 *       alt_lr_off             [ real lr (ool stub)] optional - actual lr
++	 *       retaddr_off            [ return address    ]
+ 	 *                              [ r26               ]
+ 	 *       nvr_off                [ r25               ] nvr save area
+ 	 *       retval_off             [ return value      ]
+@@ -841,6 +822,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 	nvr_off = bpf_frame_size;
+ 	bpf_frame_size += 2 * SZL;
+ 
++	/* Save area for return address */
++	retaddr_off = bpf_frame_size;
++	bpf_frame_size += SZL;
++
+ 	/* Optional save area for actual LR in case of ool ftrace */
+ 	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE)) {
+ 		alt_lr_off = bpf_frame_size;
+@@ -867,16 +852,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 	/* Padding to align stack frame, if any */
+ 	bpf_frame_size = round_up(bpf_frame_size, SZL * 2);
+ 
+-	/* Dummy frame size for proper unwind - includes 64-bytes red zone for 64-bit powerpc */
+-	bpf_dummy_frame_size = STACK_FRAME_MIN_SIZE + 64;
+-
+-	/* Offset to the traced function's stack frame */
+-	func_frame_offset = bpf_dummy_frame_size + bpf_frame_size;
+-
+-	/* Create dummy frame for unwind, store original return value */
++	/*  Store original return value */
+ 	EMIT(PPC_RAW_STL(_R0, _R1, PPC_LR_STKOFF));
+-	/* Protect red zone where tail call count goes */
+-	EMIT(PPC_RAW_STLU(_R1, _R1, -bpf_dummy_frame_size));
+ 
+ 	/* Create our stack frame */
+ 	EMIT(PPC_RAW_STLU(_R1, _R1, -bpf_frame_size));
+@@ -891,14 +868,14 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 	if (IS_ENABLED(CONFIG_PPC32) && nr_regs < 2)
+ 		EMIT(PPC_RAW_STL(_R4, _R1, r4_off));
+ 
+-	bpf_trampoline_save_args(image, ctx, func_frame_offset, nr_regs, regs_off);
++	bpf_trampoline_save_args(image, ctx, bpf_frame_size, nr_regs, regs_off);
+ 
+ 	/* Save our LR/return address */
  	EMIT(PPC_RAW_MFLR(_R3));
  	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE))
  		EMIT(PPC_RAW_STL(_R3, _R1, alt_lr_off));
-@@ -903,24 +903,29 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
- 		EMIT(PPC_RAW_STL(_R3, _R1, bpf_frame_size + PPC_LR_STKOFF));
+ 	else
+-		EMIT(PPC_RAW_STL(_R3, _R1, bpf_frame_size + PPC_LR_STKOFF));
++		EMIT(PPC_RAW_STL(_R3, _R1, retaddr_off));
  
  	/*
--	 * Save ip address of the traced function.
--	 * We could recover this from LR, but we will need to address for OOL trampoline,
--	 * and optional GEP area.
-+	 * Get IP address of the traced function.
-+	 * In case of CONFIG_PPC_FTRACE_OUT_OF_LINE or BPF program, LR
-+	 * points to the instruction after the 'bl' instruction in the OOL stub.
-+	 * Refer to ftrace_init_ool_stub() and bpf_arch_text_poke() for OOL stub
-+	 * of kernel functions and bpf programs respectively.
-+	 * Recover kernel function/bpf program address from the unconditional
-+	 * branch instruction at the end of OOL stub.
- 	 */
- 	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) || flags & BPF_TRAMP_F_IP_ARG) {
- 		EMIT(PPC_RAW_LWZ(_R4, _R3, 4));
- 		EMIT(PPC_RAW_SLWI(_R4, _R4, 6));
- 		EMIT(PPC_RAW_SRAWI(_R4, _R4, 6));
- 		EMIT(PPC_RAW_ADD(_R3, _R3, _R4));
--		EMIT(PPC_RAW_ADDI(_R3, _R3, 4));
- 	}
- 
- 	if (flags & BPF_TRAMP_F_IP_ARG)
+ 	 * Get IP address of the traced function.
+@@ -920,9 +897,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
  		EMIT(PPC_RAW_STL(_R3, _R1, ip_off));
  
--	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE))
-+	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE)) {
- 		/* Fake our LR for unwind */
-+		EMIT(PPC_RAW_ADDI(_R3, _R3, 4));
- 		EMIT(PPC_RAW_STL(_R3, _R1, bpf_frame_size + PPC_LR_STKOFF));
-+	}
+ 	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE)) {
+-		/* Fake our LR for unwind */
++		/* Fake our LR for BPF_TRAMP_F_CALL_ORIG case */
+ 		EMIT(PPC_RAW_ADDI(_R3, _R3, 4));
+-		EMIT(PPC_RAW_STL(_R3, _R1, bpf_frame_size + PPC_LR_STKOFF));
++		EMIT(PPC_RAW_STL(_R3, _R1, retaddr_off));
+ 	}
  
  	/* Save function arg count -- see bpf_get_func_arg_cnt() */
- 	EMIT(PPC_RAW_LI(_R3, nr_regs));
+@@ -961,20 +938,19 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 	/* Call the traced function */
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+ 		/*
+-		 * The address in LR save area points to the correct point in the original function
++		 * retaddr on trampoline stack points to the correct point in the original function
+ 		 * with both PPC_FTRACE_OUT_OF_LINE as well as with traditional ftrace instruction
+ 		 * sequence
+ 		 */
+-		EMIT(PPC_RAW_LL(_R3, _R1, bpf_frame_size + PPC_LR_STKOFF));
++		EMIT(PPC_RAW_LL(_R3, _R1, retaddr_off));
+ 		EMIT(PPC_RAW_MTCTR(_R3));
+ 
+ 		/* Replicate tail_call_cnt before calling the original BPF prog */
+ 		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
+-			bpf_trampoline_setup_tail_call_info(image, ctx, func_frame_offset,
+-								bpf_dummy_frame_size, r4_off);
++			bpf_trampoline_setup_tail_call_info(image, ctx, bpf_frame_size, r4_off);
+ 
+ 		/* Restore args */
+-		bpf_trampoline_restore_args_stack(image, ctx, func_frame_offset, nr_regs, regs_off);
++		bpf_trampoline_restore_args_stack(image, ctx, bpf_frame_size, nr_regs, regs_off);
+ 
+ 		/* Restore TOC for 64-bit */
+ 		if (IS_ENABLED(CONFIG_PPC64_ELF_ABI_V2) && !IS_ENABLED(CONFIG_PPC_KERNEL_PCREL))
+@@ -988,7 +964,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 
+ 		/* Restore updated tail_call_cnt */
+ 		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
+-			bpf_trampoline_restore_tail_call_cnt(image, ctx, func_frame_offset, r4_off);
++			bpf_trampoline_restore_tail_call_cnt(image, ctx, bpf_frame_size, r4_off);
+ 
+ 		/* Reserve space to patch branch instruction to skip fexit progs */
+ 		if (ro_image) /* image is NULL for dummy pass */
+@@ -1040,7 +1016,7 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 		EMIT(PPC_RAW_LD(_R2, _R1, 24));
+ 	if (flags & BPF_TRAMP_F_SKIP_FRAME) {
+ 		/* Skip the traced function and return to parent */
+-		EMIT(PPC_RAW_ADDI(_R1, _R1, func_frame_offset));
++		EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_frame_size));
+ 		EMIT(PPC_RAW_LL(_R0, _R1, PPC_LR_STKOFF));
+ 		EMIT(PPC_RAW_MTLR(_R0));
+ 		EMIT(PPC_RAW_BLR());
+@@ -1048,13 +1024,13 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im, void *rw_im
+ 		if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE)) {
+ 			EMIT(PPC_RAW_LL(_R0, _R1, alt_lr_off));
+ 			EMIT(PPC_RAW_MTLR(_R0));
+-			EMIT(PPC_RAW_ADDI(_R1, _R1, func_frame_offset));
++			EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_frame_size));
+ 			EMIT(PPC_RAW_LL(_R0, _R1, PPC_LR_STKOFF));
+ 			EMIT(PPC_RAW_BLR());
+ 		} else {
+-			EMIT(PPC_RAW_LL(_R0, _R1, bpf_frame_size + PPC_LR_STKOFF));
++			EMIT(PPC_RAW_LL(_R0, _R1, retaddr_off));
+ 			EMIT(PPC_RAW_MTCTR(_R0));
+-			EMIT(PPC_RAW_ADDI(_R1, _R1, func_frame_offset));
++			EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_frame_size));
+ 			EMIT(PPC_RAW_LL(_R0, _R1, PPC_LR_STKOFF));
+ 			EMIT(PPC_RAW_MTLR(_R0));
+ 			EMIT(PPC_RAW_BCTR());
 -- 
 2.53.0
 
