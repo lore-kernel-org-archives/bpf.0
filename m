@@ -1,145 +1,119 @@
-Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D5E21A434
-	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 05:19:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771219146; cv=pass; b=SVPNc5Ztsi9QtPi47kh3bXReuCFOYiyxyYJWdpXZb5Qz7JFGXY/FvtWHocXmZxMIX4xPi2w0zbV2fN4dDN5N/id/MGOgkUAgX0Hc5RxIMF4ElbYAqKMnPTr4fB4aIssu9pgW75zzl2rjt+ShhJNXjUt7b6I/vZrL4Z1PKgbIZyY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771219146; c=relaxed/simple;
-	bh=cTydM6llwe17dEOjiDWqAOfd5hLsCH5gFvItqj94xXM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d01jfDLLvA4iNZiJ5mBBzKuSQhSyvxdQTle2oIr+/SuNgdxOs9zQPmIQzIBEE+XweWQK9iYLvDVyggqh0jX8iGIfAewB9rKE5Y8A0XEKamKEkO+7cSK/2jPzXrJnuitu9cAZUcIV/LQzc34ZWnVcxcV1rOfIoGB6xj7uLBNe7FE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=h6EKho63; arc=pass smtp.client-ip=74.125.82.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F222242D89
+	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 06:57:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771225025; cv=none; b=aE2ObMKPcI1T60YvetniM6gDDrZ32YzxgVYSmJLbFbTSF4Pe5MfTirCKwz6qUoBeDjKIbWY87dqZ6znyec6iSdDCK/rP9d2hD7EyBjAHhNBsogo6x4dpiGEi+/C+fiAPX5+nCd14WOW4gTCthRj9NNx5HSCksuTxA0L4IOGa9TM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771225025; c=relaxed/simple;
+	bh=2n8FYHxnjTDlV7Lqq3M8RqPdP/0YiIdsPQ9bVDIUiFA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fgakGtv3jru76O7vek07NqbUpqXCWm9btYNAHbnEVkguw1qF3rBIQATYda4HQGMDZbg19tWGPTfOO58Nm9m5IQyXaf06yRlAGolZtzkZmTEDQVQIjpKoy24ut8pdWKHFj0DRJg0TQhiVazdUJLnisFZQjy91emrDOG7ojkhhOw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=f27KTx8s; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="h6EKho63"
-Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-127380532eeso7374767c88.1
-        for <bpf@vger.kernel.org>; Sun, 15 Feb 2026 21:19:03 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771219143; cv=none;
-        d=google.com; s=arc-20240605;
-        b=IgwRlpJQotKVFrlqce7TRrvEgRbN1ORvFxQkXkyKSCU6jkHrs8bgPWgio+CBRX5gSk
-         tzVzaT5hA0XS8/J6PlGLZPOSwPUAI6eDJKDJbAGLR3ytfbUvwjKrM4oYQN591svddmdR
-         rEEmuKBRH78wVj0+l8eKM4WUi21+CfXFMnLqkgeIGlwVh5HrTprqcmI7Jmgtv/n+XB7m
-         mcryI/BdIcpTccr1x2bVMjtPe9qg0HtUCl7Blqv6r2aAb/bokJOqby3cWEq54HRpV7q6
-         PPZRhyI4njiwJorCABYOcnfOMaCcLgHgHeEoNbao+dofA4FNG9jh62O3Y9rWBS4AsvEs
-         CGCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=byzn3mYrXH2f08drE1WkmiXr5JyMmD4IsRirzVhSrPA=;
-        fh=469kP6mktMUNyn7chkFIAy5l3FQhFGQ/VS524vOVjYU=;
-        b=SJcaXbLNhD79PQufoOmDPzf1GYVa8sD5ocr8kg+//ZF5aNuyaeObGSVzwW5pcnibSR
-         rq8iKhVuer39NfACjJZ8LOXTDM8WgsUr08FbhuaUKZIfUUHSUfe5FRDlYCg9sldwK27a
-         odVgsJOB+CvkKToPMSfq/hfSLpBQF4hyG4xIaQl9F99bBpB0W+SnRiRgxqbszVJoLcWi
-         Ma1ZtBRX6VRESureL7KojHco5LO4bTsspIs/xSkTTKSnbdS6Sf914LPR+ZaqrE2xkmOF
-         XuPnQTJvm7xzgjgOXFYnxX7eGGj6iKGtxLTR3UQUcXz/X4X3pCKk25ywmzfAGNt+anf4
-         pzOw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771219143; x=1771823943; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=byzn3mYrXH2f08drE1WkmiXr5JyMmD4IsRirzVhSrPA=;
-        b=h6EKho63I5TnD1ikWcNLyhgyfC+oQDTBlzk63i2HXzwM8AOiHsp75mpkoKJnOZ8XPD
-         zEZTYfHps8kdI7bI0VV1+5nJvOMaRdcdXdR/S0V56mLrsASjKE45+MK5VwvDPROVMtlE
-         8zfk1IF64aA14SfqeU8IHc8Jup+McfyWXdi7u41iSzOHiNMplJsCgOleCGzieHEw9ox4
-         Uja1cJ38TF+wn8jAYppNqpr7eJGSOKLsk0ETOS1dyHmWFJJpdGNtF1YKuYPssj1YETkB
-         UiotzUuV1Lx6wz19xktzqFjRQqQbzqVXZo8t6PwRMbD+V36rrXtwR6JC3J2hoDyHsiPN
-         PJfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771219143; x=1771823943;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=byzn3mYrXH2f08drE1WkmiXr5JyMmD4IsRirzVhSrPA=;
-        b=wM+TMmmjPf8WM0rScuP1Rfj16tIgAYWW96w60ghSUHV3O7JMSFIAZbiySO1E+n5UHB
-         v/edQxw3xXwJlU6pXEMfr/Z8yI5fksqJjxZE7DfaMLLlt97ojOQkdKB6/SqXKxnE3sBQ
-         jGrPPi8B/Ejtz8eFrWP8//BOy/BJGO/JHKfaPC7t3zqqyGXhhmJNpLGjdjsyE4/uS6Vf
-         yeB2O9KiB52wBVc4Fs6fvDu2sWHJiLVM57LzrXBBJ3CzW9c7IvyG37qyGpp7MmeCOizm
-         +fvgGl/JkOva4e9Mo/3l6eDcdGEon1FUnehUGUW/SU6OYoFnwI0h/4zkngjNleybEp/y
-         NzPw==
-X-Forwarded-Encrypted: i=1; AJvYcCXNegsCIim2rgMcLNgdmVMWWJvNJOnMv6+rh6HH7pBXp2zCkOpiSAFvFqto92Z2y+q0RI4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDBsO0wb3x+o/umtRD9X7MNMe0fh3HZTJ1ROY1Oe4u7TzBeVBy
-	ckYLlaJVPhp/9RstdSYK8iXX54mRXrcCf/mL8jZi+zJzIH6i4tpzw7zEQnIoN/wWTmovG6yo1fN
-	wnYhd1bD12JmvfMaAK6pLAObXeuzhLAv9fpoUuIys
-X-Gm-Gg: AZuq6aI8CQg5F51C/TkcbszOd93jGK3c6qGG9uhLb1MJtn2/B7MrDLc4wGCPsJjIzAi
-	refrZhZqeoI3f8ahdySVxl84c2zXdvr3BIVYuymq9Ti9GwIZJfaQIp7gC+uFRUm2krh3OEvuNyX
-	jFkLeUHqQNGeqbKXYkOvexWMpQHXhjqGya83vDpNaAmz1v5YmO0sEualReQ7QFCNswfpdcPW/ug
-	nAgSZ5dH6k5U+LRu0OWSc0cRoJcc4Sb7j29aGSCZsVDtNw+R5H+HwyTqj40Jnfb1WE8eDC+6vlQ
-	qYrvqNxZD12ZnqdWZyR041PrEGj0ypwLsO0YIgNCBqDj1Qi/HbPyJrIFuIeOsIuT7j11Mg==
-X-Received: by 2002:a05:7022:41aa:b0:119:e56b:c74d with SMTP id
- a92af1059eb24-1273ae20572mr5446447c88.18.1771219142650; Sun, 15 Feb 2026
- 21:19:02 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="f27KTx8s"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61FKD3q43368131;
+	Mon, 16 Feb 2026 06:56:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=SfHWKWB1JzriRGsl3w+kqCVO0uJak/1RnASCWfq7V
+	CE=; b=f27KTx8sXPoHLdcrsRoWY57dSyOoFqxuFKeh9wfsfUDVLmLkdCnk0usEw
+	jd+JC2CsrKyylOFE+mNgSvpLRBXHA1lgaM1+6mhjRp2Q4yLaieUQaTwIkxgHzkU5
+	hlREh1aONq2jbV2di4oiCIJSGoWEaqcjhn0gNikLlqHQIWvRKog98cdK5Ox52Uov
+	UX6z9S4YD9Q9iy4/VviNu3Ou3Rn/8xdVs2Gl1eKrpoKZTKj3nVnmkMp5btfL49fL
+	+2tQo5lt9f//7zIXsjD8NeY0bmnXbH739u+UjMmMvqVCCqpKZTkoZXJk2I/p6Nek
+	HEOHFInNd8i+IhEAs5HH5O5NRA0Ig==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4caj6uef42-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Feb 2026 06:56:46 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61G6IR3v012624;
+	Mon, 16 Feb 2026 06:56:45 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cb3crvg41-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Feb 2026 06:56:45 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61G6ufrs44892456
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 16 Feb 2026 06:56:41 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D0B7C2004B;
+	Mon, 16 Feb 2026 06:56:41 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4D62C2004D;
+	Mon, 16 Feb 2026 06:56:40 +0000 (GMT)
+Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.in.ibm.com (unknown [9.78.106.17])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 16 Feb 2026 06:56:40 +0000 (GMT)
+From: Hari Bathini <hbathini@linux.ibm.com>
+To: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+        Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH 0/5] powerpc64/bpf: various fixes
+Date: Mon, 16 Feb 2026 12:26:34 +0530
+Message-ID: <20260216065639.1750181-1-hbathini@linux.ibm.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260215204353.3645744-7-kuniyu@google.com> <202602161010.ohfwdwoo-lkp@intel.com>
-In-Reply-To: <202602161010.ohfwdwoo-lkp@intel.com>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Sun, 15 Feb 2026 21:18:51 -0800
-X-Gm-Features: AaiRm53TuLLrj5i07WCfZaVSzTTG-oZE_UcBw7XWP_S2gWKmb775mn2vrkqu9BY
-Message-ID: <CAAVpQUCBY=rcJdBKNb5nMWnFvak7dVzsF4_SpKfJKSWkqXaPmQ@mail.gmail.com>
-Subject: Re: [PATCH v1 bpf/net 6/6] sockmap: Fix broken memory accounting for UDP.
-To: kernel test robot <lkp@intel.com>
-Cc: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	oe-kbuild-all@lists.linux.dev, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Cong Wang <cong.wang@bytedance.com>, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=E+/AZKdl c=1 sm=1 tr=0 ts=6992bfae cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=oGHz_WyVdRSB3F18xrQA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDA1NCBTYWx0ZWRfX2gZYZ9yyZB2P
+ qO1amFd8pYaHP7824vNHBJXErtsbAPvJnm8zzsUXBMGd5D2KCzcREsX3JjSqZ8QhosQVNh4vf8C
+ xp8RmvqVJvNXHzzUYHeWjIyBtrcbTqzLWyG1rY9BFvXBE5y1wWhfgSoDI5KeZvhAHRdYCvhSeyl
+ vjSsjh1if650/yagb8O0EmY8qjQDOdMx4zBRgClaWwk3O6hUpjymUbGL5EJfrILzmosMXhDOeq0
+ XuzjbthYdOkI/x8QdO77IspfOvHcMD5U6kY3BxvR1vKRyIokYq6/QSHyhC5dDTWxpcB1TxID1Wr
+ RssRagOmUZAgJC7zPQnqI6mF/uKY1FNzrYH+LXRcoYmeRKiDHAUpGdvL4VMeDscMG5rROdpErpV
+ 3nr5fQeiiiEECDD8GAzXitfJ77svTRZwWooFzCh+WPMDHG1VX6irMW4eF5fnDEiVZMIonFaTwbD
+ 8mbKgLxz1wbSJsPeIdQ==
+X-Proofpoint-ORIG-GUID: P4lboRg9RZ-XA9UPo2hBW0V0hKQriCKa
+X-Proofpoint-GUID: P4lboRg9RZ-XA9UPo2hBW0V0hKQriCKa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-16_03,2026-02-13_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ lowpriorityscore=0 priorityscore=1501 malwarescore=0 phishscore=0 bulkscore=0
+ suspectscore=0 spamscore=0 clxscore=1015 impostorscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602160054
 
-On Sun, Feb 15, 2026 at 6:51=E2=80=AFPM kernel test robot <lkp@intel.com> w=
-rote:
->
-> Hi Kuniyuki,
->
-> kernel test robot noticed the following build errors:
->
-> [auto build test ERROR on linus/master]
-> [also build test ERROR on next-20260213]
-> [cannot apply to horms-ipvs/master v6.19]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Kuniyuki-Iwashima/=
-sockmap-Annotate-sk-sk_data_ready-for-UDP/20260216-044819
-> base:   linus/master
-> patch link:    https://lore.kernel.org/r/20260215204353.3645744-7-kuniyu%=
-40google.com
-> patch subject: [PATCH v1 bpf/net 6/6] sockmap: Fix broken memory accounti=
-ng for UDP.
-> config: x86_64-buildonly-randconfig-002-20260216 (https://download.01.org=
-/0day-ci/archive/20260216/202602161010.ohfwdwoo-lkp@intel.com/config)
-
-Okay, CONFIG_INET is not set.  Will fix it.
+List of fixes for powerpc64 BPF JIT:
+- Patches 1 & 2 fix issues with existing powerpc64 JIT and are tagged
+  for -stable.
+- Patches 3 & 4 resolve issues with bpf2bpf tailcall support added
+  recently.
+- Patch 5 resolves an issue reported by bot+bpf-ci@kernel.org while
+  adding exceptions support on powerpc64 BPF JIT.
 
 
-> compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-> reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/archi=
-ve/20260216/202602161010.ohfwdwoo-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202602161010.ohfwdwoo-lkp=
-@intel.com/
->
-> All errors (new ones prefixed by >>):
->
->    ld: vmlinux.o: in function `sk_psock_skb_ingress':
-> >> skmsg.c:(.text+0x8fc777): undefined reference to `udp_sock_rfree'
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+Hari Bathini (5):
+  powerpc64/bpf: do not increment tailcall count when prog is NULL
+  powerpc64/bpf: fix the address returned by bpf_get_func_ip
+  powerpc64/bpf: use consistent tailcall offset in trampoline
+  powerpc64/bpf: remove BPF redzone protection in trampoline stack
+  powerpc64/bpf: fix handling of BPF stack in exception callback
+
+ arch/powerpc/net/bpf_jit.h        |   5 --
+ arch/powerpc/net/bpf_jit_comp.c   | 113 ++++++++++++------------------
+ arch/powerpc/net/bpf_jit_comp64.c |  74 ++++++++++++-------
+ 3 files changed, 93 insertions(+), 99 deletions(-)
+
+-- 
+2.53.0
+
