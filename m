@@ -1,163 +1,284 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEF8814A60F
-	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 10:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771237372; cv=none; b=psjugKBpQsB/jSjrH9gqG7cCuMO26kRCwlN5CLtVL0cjafHg4tYlWWgRWV1ifLEp5nnC/96WZb6XA/XZNuVOzQtax0roC7nvJ26um0gNEEmt/B4fgvEnGfNF2a2Isa7Y1jBW9gdcRLortoXzVngkXKeQwrfXrbQ3dyjWTGoSiRw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771237372; c=relaxed/simple;
-	bh=i02zKRwEFzS2GoNNvjIM96LN+Mz4mKgI6VqBmHMuSKc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fjlT2Tix/6Bx7u+fiokpWrHY6W+/5Qw7grjfmE3bdCRx1TbNEImaJ+tDtWUnYoKzSCxjyMoXNzHZt9294mjH0zTRept+bmq8A+ALyl8+bYcQARERs2Skah9j46vqJs0BMQKcEWiupAE4S80Bx1O6X0B4MbUILrBJiEZjstnGyCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bA5R2KBp; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768541D5CD1;
+	Mon, 16 Feb 2026 10:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771238963; cv=fail; b=iXnsLjV0u76/eHKpxYaM/bRTVXl4nk6HonhUH8MwwwilqwqTzsfo2fbs0Bd6j0lgmwI5kLLYhvArpS2dHBMY1zeV4evEFvXkcxPn3x2HpEybn4BwEhrWrKOxuRpoF1WQAb7bq4luJeWe5c4+tm4Xb/WpfK0ATykmBIWZGqpvUlw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771238963; c=relaxed/simple;
+	bh=zlgrkSEQ9XAlfk/jW7QK0BiIxOEiHQe1aTviDXJz86Q=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=jJWDXEBvfwPNGIrwWiQH62Ko7UcXvqZT9l05TjWwod37yMCJpDRxkjEzAhFACEI1jT0i4XkwGRwk2NFh28ZVJqJShUNXJj5ZFv0z4Kn92P4Wt61d2qsJV0VPkOb2wxdMhcZx90wblMopKQJZU/VYc9EqB63Hj2GjvjvTIa0MxR8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gwmqdHKh; arc=fail smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bA5R2KBp"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61G3KU1K1709464;
-	Mon, 16 Feb 2026 10:22:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=sL11sx23Rcy5IgZ8B
-	9tWiGZp8lNaf1EwggY4I08LQUE=; b=bA5R2KBpvKzAUssB2F2dOLp7QXnzdbLte
-	lJ1tzoT+TU6gjzRT4ssqQvwURhtGVyDDa1YxpKKzqK5EaFCVo3y6ov/nXhzsdaoZ
-	220uQ5utQb7e4wpWk8f34bVBYOGPZUhwveKX4xCx6taEMzRPbsc7tml19r3+ykla
-	sxZHSoaZDgJz6VveGHR+yfZBwtSHny6wPLu0sbCguhKSn6ExcbyEJRtyW+70z9D9
-	zUPm1bEI31aQQvlMU23knnFap8VcMzLMsQYKKGuDb7reN295uaNDu5D0EbIAgeBm
-	DxFlLNupW2m2OfU7uHjwQlklUYF1FSHdf4L/GZDvfZLVfdbqa0cWQ==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cajcj6qnc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 10:22:26 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61G6Y5pj025024;
-	Mon, 16 Feb 2026 10:22:26 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cb3rxn2v5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 10:22:25 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61GAMLbY29622906
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 16 Feb 2026 10:22:22 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DC92F20040;
-	Mon, 16 Feb 2026 10:22:21 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 877A720049;
-	Mon, 16 Feb 2026 10:22:19 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 16 Feb 2026 10:22:19 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: bpf@vger.kernel.org
-Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
-        eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com,
-        ihor.solodrai@linux.dev, chleroy@kernel.org,
-        Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH 2/2] selftests/bpf: Enable private stack tests for powerpc64
-Date: Mon, 16 Feb 2026 10:22:34 -0500
-Message-ID: <20260216152234.36632-2-adubey@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260216152234.36632-1-adubey@linux.ibm.com>
-References: <20260216152234.36632-1-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gwmqdHKh"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771238961; x=1802774961;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=zlgrkSEQ9XAlfk/jW7QK0BiIxOEiHQe1aTviDXJz86Q=;
+  b=gwmqdHKh72+sS1W00k/zZ28BpWbcBB1sIDP/VvdADoShKfup1VF3ebFZ
+   +LDd+xgSNZc9uLPHDHhjofnID47MDhOFgnGQFDO6pBqwY6pEqW4z+THJN
+   1AEltvlrFFqylsaR7qOc51aOnEE8Q1AN3t1YIuDJ44lRE1Y+Rza3pMBjP
+   qKMP8T7Iy059aWcyFawN4tFzqd3cVGxrW2Sri8c6IsP6ZT7GYuHSr8ZZB
+   zMHuCPP0SfijLCMz5jtHG+dIyhmbkcFJz7I1942RFY+OV54ulnm7PQocs
+   Sb8RzN/wxXFhS3suk9IBMDVjhiW7YzhFpr48Y7UEKfucrWIhvNwsd5p+W
+   g==;
+X-CSE-ConnectionGUID: fJwm/2QYTfittOJuHx9r+A==
+X-CSE-MsgGUID: OV/5RhRbTUiD/kndBZIJFg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11702"; a="59885082"
+X-IronPort-AV: E=Sophos;i="6.21,294,1763452800"; 
+   d="scan'208";a="59885082"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2026 02:49:20 -0800
+X-CSE-ConnectionGUID: DuYcu9TiQmaCywaZpl72lw==
+X-CSE-MsgGUID: VvOIbJ+7Qh2H+k8FfbDpSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,294,1763452800"; 
+   d="scan'208";a="244143914"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2026 02:49:20 -0800
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Mon, 16 Feb 2026 02:49:19 -0800
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Mon, 16 Feb 2026 02:49:19 -0800
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.37)
+ by edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Mon, 16 Feb 2026 02:49:19 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DKvWkRqXIHsdMQz7rBwpi9aqa116ZKStUp+mr2tIxYY0SgOj5d43GUqNK6njTbckiHH+fvUgd7OUJWPO44rD+brRNWlEl9SJ+wvTbQ79E01+/mDcCq3Qw8Ibex92dM48TCfvjTUkj8Rix4WHH0BvdUNtiUOulkERnazm+0FJp0tLp8OFH896XJ7f48Ipa95PdMP8vPUfQIajG4+s4GgLZNQ3rJmO4vNBke2+FU+nI+d7K5Z9veEp9yYy5eF4Zt1etrQ5JWtLLxkH9qpinLZI8o4MRG6k8jRnV1mrqCng9T6r1cQpX0fXraWmwwXmLxw/k0ySigQSfy7TUubLjJkQbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Sl+WnXusKHGgFhdoCNduxBbpNlniVdOlx7fvM8cmu2o=;
+ b=xhxCbjza01quWE+6MwJFpUGv5V9eEMvLdWR99B/fsceDJQW1nsrCVAhQatyyn02vIbf/IRl6mZbeIF0QuqVgJZiZy0SuncT0Z/mH3V4yvTjO9y8oDJgSn36eLo5+vK8tgzJIhHdLNxwQxSKHLmPNsRZVyJGbAXZWWyb77O9UWsiUF/Yw9ekq0P79YJGR2UgYLOx0+kFv90AJwArDEEkr+lttCQDCtzfAgZpS8Dpm0gjjGXDZKdWx+O6vcXVIHQCXcusOg48OINAt9i/9z81V6nw0ZcyRuiRiLesBP3LjhgAh94bKb1niJqVG1mCEz8t45jtvcipQ2sD/aOVc9HL0Ig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by DS7PR11MB7908.namprd11.prod.outlook.com (2603:10b6:8:ea::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9611.16; Mon, 16 Feb 2026 10:49:17 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c%5]) with mapi id 15.20.9611.013; Mon, 16 Feb 2026
+ 10:49:17 +0000
+Message-ID: <5b7b1746-54e7-4281-a008-aa3496610ccc@intel.com>
+Date: Mon, 16 Feb 2026 11:46:05 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2 7/9] idpf: use truesize as XDP RxQ info frag_size
+To: Larysa Zaremba <larysa.zaremba@intel.com>
+CC: <bpf@vger.kernel.org>, Claudiu Manoil <claudiu.manoil@nxp.com>, "Vladimir
+ Oltean" <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
+	<xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Tony Nguyen
+	<anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "Andrii
+ Nakryiko" <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong
+ Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
+	<horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Maciej Fijalkowski
+	<maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF Foundation)"
+	<bastien.curutchet@bootlin.com>, Tushar Vyavahare
+	<tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>,
+	=?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>, Eelco Chaudron
+	<echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, "Toke
+ Hoiland-Jorgensen" <toke@redhat.com>, <imx@lists.linux.dev>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<intel-wired-lan@lists.osuosl.org>, <linux-kselftest@vger.kernel.org>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Dragos Tatulea
+	<dtatulea@nvidia.com>
+References: <20260212183328.1883148-2-larysa.zaremba@intel.com>
+ <20260212183328.1883148-9-larysa.zaremba@intel.com>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <20260212183328.1883148-9-larysa.zaremba@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: VI1PR03CA0044.eurprd03.prod.outlook.com
+ (2603:10a6:803:50::15) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: uq8toAYtRcXOZJEv3DZWGNwdnPdm11On
-X-Authority-Analysis: v=2.4 cv=Md9hep/f c=1 sm=1 tr=0 ts=6992efe3 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=EpsnbLDfARfeqce_9zcA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDA4NSBTYWx0ZWRfXzZGWrRpEcYiI
- +/4LXmVPNZ++J+aRrMv4stwH85DHzGO1939F2U+hTt9Y86p7cqR4eMXmekvPiMF7UPYqxlgfCx1
- GzAfWO0TBguDyZMMXpeuUcNCeeFaLlmo5AyyEEAJCpjb4MlzR8d9PJBJ4pRXmxntYOJBT12J0zG
- uWFfahQ8wOiWTrN7CiRk1xZcAYOqrTRhgrly+Oo2C2dFDb6+x/gjQbB/66kvyABYCgICi8hqmmv
- 9H3BdHKwjnauwQMaOneGkSIOQ6VJbKVXBvLssejr7azRh6bNsiGawebQok8nNp40X2MqJSVe3Qb
- tHkLTQS5WqlRF5CaHaYblkUcLXT+C6hIOz1a5xVZJgFZ2tvDLGQBDwKXVlOQ2lrFSVUpuDHxGi8
- XTvfcKLW6JpW2jirrOVeEYCv4fhJtwH0EPvNLKTerSMwPhhhpRXWNWZ+sOH79WIkpfjZcUsLrRP
- ePhUJA+M7gqDLxz3QaA==
-X-Proofpoint-GUID: hobbV_8NgA7Gjz-qHDS_pAbe9aXTBpKN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-16_04,2026-02-16_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602160085
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|DS7PR11MB7908:EE_
+X-MS-Office365-Filtering-Correlation-Id: b7022d1e-6a4c-4d9f-5cce-08de6d490835
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016|7416014;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?cklwUWl3Z09NZEFNclNES3cwZFQwOWpTWUtoeXdXbnV2bS9UMExKVUhWOGw4?=
+ =?utf-8?B?dnFvelpPc1R5UE9aejNUZFpWZ1E2R082SDhPbEJ2eXB4U1JhN1pnLzZHb1dq?=
+ =?utf-8?B?SnRPRC90eHZhdGdSL3hWRVozdTJueTBybWFybFFtaDE3bmt2UDlDN2NCVkdh?=
+ =?utf-8?B?alNBaXhCQ2k5cndvd0owVmgvNy9SZ2MrWW5zUXQ4d29VclBmaEtXaGVyN3Js?=
+ =?utf-8?B?QXlyTTdpdUtGZUs2ZFBaS0E5eWdHOTNzeWtWaEE5YWtQRVc1L29ONGdFOHRy?=
+ =?utf-8?B?ZnpEUno5YU1Ud2FLdHFxOUdHeFFPcVh6WVJhekJPSUxXV0NmWXZ0bDdSM3Z3?=
+ =?utf-8?B?SEhUOHVNUzZoR1d2Vkd0dE5CQmxTNStaK05jSU5kTG43QXRDSXVXY2JYMEs2?=
+ =?utf-8?B?NlJNRWZDbFZNeEVqVkhwd3VxMS8rYjJuR1RsVisyQUJYd3F5SGhvampMUVJq?=
+ =?utf-8?B?a05IanRXZHE5aHU4K3ZBcjBlQjBONWJTc05kSG9pV016L2UwUTVwdnE3MnZC?=
+ =?utf-8?B?VFNNZVlrNGFxR29ML2xFS0dQais0bllvVTI3ZHovVUxoL3JoUE1iWU5PeGg3?=
+ =?utf-8?B?TlNrbGM1QWpjMWFZaUY0YXRRdE5LSWcwZU1GSzV3OUlJYmFwdk5uSDBxR2F6?=
+ =?utf-8?B?ZWtzNmZ5Qm9JbG1iN2lZZ3RqNlBTM3Y5SjI4WDRwOHdVdUh1ak9uMlVTOVpL?=
+ =?utf-8?B?TUVwZXptYXJ4ZzhScTl6MjlpUUplV3A1eklGNmE4RDBtQ01vY0dCdkZqd0Jw?=
+ =?utf-8?B?OERLYkdtazhaeFhiT2VEY3RQUE8vUXd1ZDlhcDhXaEJMNjNmYnpWeVdNd2dh?=
+ =?utf-8?B?V0NRZ2VTRjQ2YjYzWGlUSEZvZjhNZmNnUnU5Qlo4N3Fsa05rcjZVYWd6UTZY?=
+ =?utf-8?B?MU85VXRMTUZML05HNWptRCtmT0hWVHZOVzYyQ2IvZURlT0F2clRXdEpJT0lN?=
+ =?utf-8?B?Q0dEV2ZsbEJjb1FYK1pTZnI5NENCUHR1VUtnTlRhU3BUU2N2UGxwOVJkLzVT?=
+ =?utf-8?B?L0g4NDd5TXVlS2EyN1gwVmpOQVl0aStsYXVaL1NqNlNqeGFpRVhsZ05sNVhT?=
+ =?utf-8?B?RDIvSWdQWFIvYk55VFEvTkN4ajhyTzZoT2JrRXJSbFRNenNPNDllZHFpeUsr?=
+ =?utf-8?B?UVVacWpZajB4VTJ5M0lJSGVXczJTeWtHTGRwZmRYeW9rQ3Q0SnVRbzJvWEd5?=
+ =?utf-8?B?bks0T2t5TnBoeG5nMTVkSWdSZnpkZzFmaXpKMGJsd3lLRU5UeXRaR1VhY1Ji?=
+ =?utf-8?B?bWgzYWFhT2lsTVZDekJielk0S3d5YXV3MnJ4VE9RN1ErNGlQTVgxRzRRZVhB?=
+ =?utf-8?B?QjcxSXlLL1p6eExFZUwyZUY0T1Z0T2VQelp6VmZ3aUt6SWZELzJLNjJ6NEZ2?=
+ =?utf-8?B?elVtVUtIMCtPZ0cvUVhFbFYvTEtEdlVIV3p5cjBYL0V6bmNlMVhoRGw3RG4v?=
+ =?utf-8?B?Ri8vL1BnWHpzcnh3VnhobmZnWjZrMWE0MTBUTm5EbnlOYkFXNFRpUWhTWFFr?=
+ =?utf-8?B?NmozNTQ3NVZJWC81MXFIbUlIWE56T3VrUVBZaGduaVM5dGZablIzMkJ5aHNv?=
+ =?utf-8?B?Ykw0MitaYS8xdDFzTlFDVHA5ZGFuVUVPaUNIRUlRbFNRZ1ZwMUVobkJnTHVh?=
+ =?utf-8?B?ckdFRGNzdDc4TXFBN2wxdDlWelpjdmE2ZzE3KzhiSkZqRlhhbnMvOFkvOFgr?=
+ =?utf-8?B?WDFtRGx0TGhzQkw0bDFXakZObGI0UnJlUFFoOFFxVjVkVlYvU1VacnVLTWZt?=
+ =?utf-8?B?RytBcktqeHRuUUhkZGVLUDhkQk9yaTBmSzBiR1FtVzlWMFNuenlXNUNOR1lR?=
+ =?utf-8?B?RitsaHcxenJ2T000Mm8xN09Ja0VFR2t3STNhalJncjI5WVFRTENZYTJJWHBZ?=
+ =?utf-8?B?ZWc2K3hycGV0bi8zOGNwWUhQUEQ5NGgreFgxN3NGWDNCZlE3bFAvbWgxRUFB?=
+ =?utf-8?B?cFZSTFlHR1lac1gxZWdjUTJZZjdVaDVYN0dmZHo3OTdwV21yQUVoQWpSWWdB?=
+ =?utf-8?B?eDNzNWlqNDZmN3Y1TXUwYTVVUitXMjk1cXhDd3Z5VEF5UkxrMkFiRG8vZHd4?=
+ =?utf-8?B?dGlqQ2ZyTkMwc0tQRUx3Wm5VM1d4a3UzbnJ6ZE9VOGs4WVZMMldlVkEzK1dR?=
+ =?utf-8?Q?2eKM=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d21yQzVPcUhjTUpWcjRzZHRwZGIxN0xPVW5sT29ZWHBZenRwZ2hWeTJKcklJ?=
+ =?utf-8?B?SnhHakdlZEpnNjZoaXRNdllpeFlDbDZpRVJGTnFhWU9IUkh4c3lnejNLV2I1?=
+ =?utf-8?B?aFlNdmhGVHJnVWF6NkFITmlFM01IaHFoa0FzSmVidnF2bVlCZFBzdHFuNG9B?=
+ =?utf-8?B?bWRKZ1ZkL2Q1NTYwVVF3N0RBNkU2QW82cUFVWHE5VTJ3RUJwNmNrV0RkeHgz?=
+ =?utf-8?B?MVg0V0pnN3pTclFqSGhHc1hkL0tVaWFXdkZ5UC9ZTXZTVXMrQ2ZoMmxNcUJ0?=
+ =?utf-8?B?cWxmS0dEd2xtMTdCbmlISjNic3pDbG5sZFphamVNWGx1WkFVZGRPMlVDT3k4?=
+ =?utf-8?B?emJURGlQUWJRdUMyOGxJRWx0aU9GZVhnVkh6VnlSazdRMFh5ZFRRdlVpbytt?=
+ =?utf-8?B?Z2NHaHB4NE1GSVpTRUcxdWp5MmQydE50RWZoUWowdWRJVDdzK0lEaUtJRld2?=
+ =?utf-8?B?YWxhTVR4RXpidm1seERzdkN5K2VUbUg0UVZRbUdtNm1QSDZRWUJtbUgyenNG?=
+ =?utf-8?B?Ui9FMlFkWUV4eEpwYWVDN2JBaVhrWk5rMFFtMEJPczEzK2dzY2ZBdEI4a0FM?=
+ =?utf-8?B?LzhOUEFnTXNWbEJvNlVUeDlxQXVrNFhGSHdJd1Q3bnYvYkRCb3ZaVGZPZC9W?=
+ =?utf-8?B?R0o0d2I4WDFUaEtNRHlkK01KSS9hWHRBSnFRU1RnT01kYVZmbDhZaFRGMG9R?=
+ =?utf-8?B?R011aFBFekRDTXByQnpqaG5mNXovSW1vZ0h0c3ZpNFRUdzJpSlVOZUFSZHl5?=
+ =?utf-8?B?ZEU3dHVMdE9wRWIrSTYwRm5kS0hMM3NsTm9rS2dxa3I2NXJ1UVoyM1E3ZWwr?=
+ =?utf-8?B?VmpXMzEyRC9FTGoxRzUxbFJ3MHRoVUNpNmQzRmRKNkkzRFZDdk1WOU0wRFNT?=
+ =?utf-8?B?amRXRjVkbmd6cWhFTWRsRThGSWdodDlVV3FOMmtmQ1BLcldWbVdjWEpKT2Nz?=
+ =?utf-8?B?dXFCTjJFR1FmazdPR3JlKzZ5MkY3dnliTGpRNEY4VHUxakdQVTZTN0FHZEpu?=
+ =?utf-8?B?RmVSTHBYdlFsNWtoOUtFRkxRRCtKNy8xaVN4aTZXZzArbHA4RzJKYURVdEdt?=
+ =?utf-8?B?VHoyaDhnam5uUmRaS2pGeWlKNTMzVDlhTTltVU1tSEZIdndiM2p1QlZiK3dU?=
+ =?utf-8?B?eTB6RXdqcXBXZDdTOHJ0WjhwZVdaa3RTTEpmRUxZOFhqcENNL2djSlJrUi9Z?=
+ =?utf-8?B?SU1HLzdoNzRxSGQ2MVBqZ2I0eFFnTHZ5OURqWnhUMXRYNWRJN1RZZUZYWGNP?=
+ =?utf-8?B?T2pxSXR6TXBWUG1OejM0QWx2UUN6SkFFN0k4dTdDcFFuZVVGVWU2U3l5Rnpq?=
+ =?utf-8?B?Nm1paVhJNFZoTjBNeDliejN1ZnhBcit0MkJnMjVLMzUrT1lIZWhtYXNYM0RC?=
+ =?utf-8?B?NWJMelFUU0FrT1lRdkNYd3dhcFVYNUV6enVOZCtMd3Z1Tk9QeUhQb0kzd2RL?=
+ =?utf-8?B?ODU3WDlpVExuVkgyakh3LzFrUjNqejl6aG55Tk1iYWJJMUMxUUkzQzBqejVC?=
+ =?utf-8?B?MTFWQndEbzlkUTBSMnlTbWtuSFJXWE9EMU85UnVRVlpjRGVrRmIzajBHN3hS?=
+ =?utf-8?B?RXBBUnFpNkpGQnlXTlNEalA2bVlYUEJxdkZjTzdmdmVkSXBwT0ZYcXBUUllO?=
+ =?utf-8?B?RGF4RlJxN3FGbUFPM3l4aXhSSU5kNkZEUmRvTnpEai9hM1VhNXFRUDY5dXpu?=
+ =?utf-8?B?ellPUFR0cU0yMFhhMEk4OFBqalIyZXQrYmlTSFdOQ01nV2tSRUVQVlc1TlYy?=
+ =?utf-8?B?S0NiM2xjNmNZOFRGVHBPLzF1NGZ0NkhXRTVxZUJzREk0c2NtOEF0bi9WRE14?=
+ =?utf-8?B?cFZVQUlzSGRTTDhMQzdiaEVjcU9QTVFNalA1VGVGeS9ITWdFbldFdGpLaUY3?=
+ =?utf-8?B?RHRlUStVdkNCNGo2UWNJK1ZXVXB6b2xmall5WUNQUHB0bGdML1J6bjN0SmtJ?=
+ =?utf-8?B?KzFQU3NDWmxpNm1qd2d3aWNQcStjclloV2RqS292eTVSN2VlYXBZN0M2TTlN?=
+ =?utf-8?B?czI5NmdtRlNaSXZhK0VWYVVvaVRLa29MckU4alQwSVN3STE0ZWhKRFN2Q1NV?=
+ =?utf-8?B?aUJOd3UzUTV3VEFBV01SdHZUdFp0ckQ1ejFvREZ5OUJYOGZZSnJTKzhBb1pB?=
+ =?utf-8?B?TWpkK09uQm1JdXliMCswWHNVTEJoc2p6a3IxVFRQWkxUY2ZTanlzUE1HWm5D?=
+ =?utf-8?B?cS9pMzZVTjNKMW81WHIwS2N3L1JSNGhnSWNmZXgwdjlQRjRvUkpXLzBINGFG?=
+ =?utf-8?B?NDRZWVJUdzd5OEZtYjd3RmRsYVBIcmluc3pncGhGUGMycVkwOHVzc2s1WS9z?=
+ =?utf-8?B?bTBhcjhHaEdSd1JIOUJycnFlUGZIMHRPWXRwSm5OeTdMc0dnS2lpdHhtbm5i?=
+ =?utf-8?Q?h4u+9lx21fThJxUE=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7022d1e-6a4c-4d9f-5cce-08de6d490835
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2026 10:49:17.3443
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: u5hSJ2h9JBbMqwVQXXXvJOGBQo2ndM794bVaAZJRrOu20VnTsKzd0+V6yCX6BpJNS4vYfF87SiruUgAgWAGiEHotT0GVLWCgGUEfBmiShgo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7908
+X-OriginatorOrg: intel.com
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+From: Zaremba, Larysa <larysa.zaremba@intel.com>
+Date: Thu, 12 Feb 2026 19:33:22 +0100
 
-With support of private stack, relevant tests must pass
-on powerpc64.
+> The only user of frag_size field in XDP RxQ info is
+> bpf_xdp_frags_increase_tail(). It clearly expects whole buffer size instead
+> of DMA write size. Different assumptions in idpf driver configuration lead
+> to negative tailroom.
+> 
+> To make it worse, buffer sizes are not actually uniform in idpf when
+> splitq is enabled, as there are several buffer queues, so rxq->rx_buf_size
+> is meaningless in this case.
+> 
+> Use rxq->truesize as a frag_size for singleq and truesize of the first bufq
+> in AF_XDP ZC, as there is only one. Disable growinf tail for regular
+> splitq.
+> 
+> Fixes: ac8a861f632e ("idpf: prepare structures to support XDP")
+> Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+> ---
+>  drivers/net/ethernet/intel/idpf/xdp.c | 8 +++++++-
+>  drivers/net/ethernet/intel/idpf/xsk.c | 1 +
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/idpf/xdp.c b/drivers/net/ethernet/intel/idpf/xdp.c
+> index 958d16f87424..a152c9a26976 100644
+> --- a/drivers/net/ethernet/intel/idpf/xdp.c
+> +++ b/drivers/net/ethernet/intel/idpf/xdp.c
+> @@ -46,11 +46,17 @@ static int __idpf_xdp_rxq_info_init(struct idpf_rx_queue *rxq, void *arg)
+>  {
+>  	const struct idpf_vport *vport = rxq->q_vector->vport;
+>  	bool split = idpf_is_queue_model_split(vport->rxq_model);
+> +	u32 frag_size = 0;
+>  	int err;
+>  
+> +	if (idpf_queue_has(XSK, rxq) && split)
+> +		frag_size = rxq->bufq_sets[0].bufq.truesize;
+> +	else if (!split)
+> +		frag_size = rxq->truesize;
 
-#./test_progs -t struct_ops_private_stack
-#434/1   struct_ops_private_stack/private_stack:OK
-#434/2   struct_ops_private_stack/private_stack_fail:OK
-#434/3   struct_ops_private_stack/private_stack_recur:OK
-#434     struct_ops_private_stack:OK
-Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+XDP and XSk are supported only in mode splitq mode, so you can remove
+the second condition and change the first one to just `has(XSK)`.
 
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
----
- tools/testing/selftests/bpf/progs/struct_ops_private_stack.c   | 3 ++-
- .../selftests/bpf/progs/struct_ops_private_stack_fail.c        | 3 ++-
- .../selftests/bpf/progs/struct_ops_private_stack_recur.c       | 3 ++-
- 3 files changed, 6 insertions(+), 3 deletions(-)
+> +
+>  	err = __xdp_rxq_info_reg(&rxq->xdp_rxq, vport->netdev, rxq->idx,
+>  				 rxq->q_vector->napi.napi_id,
+> -				 rxq->rx_buf_size);
+> +				 frag_size);
+>  	if (err)
+>  		return err;
+>  
+> diff --git a/drivers/net/ethernet/intel/idpf/xsk.c b/drivers/net/ethernet/intel/idpf/xsk.c
+> index fd2cc43ab43c..febe1073b9b4 100644
+> --- a/drivers/net/ethernet/intel/idpf/xsk.c
+> +++ b/drivers/net/ethernet/intel/idpf/xsk.c
+> @@ -401,6 +401,7 @@ int idpf_xskfq_init(struct idpf_buf_queue *bufq)
+>  	bufq->pending = fq.pending;
+>  	bufq->thresh = fq.thresh;
+>  	bufq->rx_buf_size = fq.buf_len;
+> +	bufq->truesize = xsk_pool_get_rx_frag_step(fq.pool);
+>  
+>  	if (!idpf_xskfq_refill(bufq))
+>  		netdev_err(bufq->pool->netdev,
 
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-index dbe646013811..1df1111cd029 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-@@ -7,7 +7,8 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
-+				|| defined(__TARGET_ARCH_powerpc)
- bool skip __attribute((__section__(".data"))) = false;
- #else
- bool skip = true;
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-index 3d89ad7cbe2a..e09c1a8782b4 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-@@ -7,7 +7,8 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
-+				|| defined(__TARGET_ARCH_powerpc)
- bool skip __attribute((__section__(".data"))) = false;
- #else
- bool skip = true;
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-index b1f6d7e5a8e5..791800835673 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-@@ -7,7 +7,8 @@
- 
- char _license[] SEC("license") = "GPL";
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
-+				|| defined(__TARGET_ARCH_powerpc)
- bool skip __attribute((__section__(".data"))) = false;
- #else
- bool skip = true;
--- 
-2.52.0
-
+Thanks,
+Olek
