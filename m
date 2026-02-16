@@ -1,178 +1,275 @@
-Received: from mail-dl1-f54.google.com (mail-dl1-f54.google.com [74.125.82.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE9827F4CA
-	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 18:30:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7D96A8D2
+	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 19:04:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771266621; cv=none; b=Sx7DEZ2i32sPMWhJXNP8ctBTmRhTcQKIx1fI5cPOqMZWTOkF32fAcQDfjkuXxNq6xD80slu9EfQ+KLZ2frsnZ+X+wrX1vedfisSa74eFziUKt2YmvBjOIoolgvPqplnOirMN4EuT0uUpQAbte8OVox8G3UPYlYzKrmZUqF4ZWtM=
+	t=1771268683; cv=none; b=DFwBh6m9WyY7GfFjxlSZuNHWChy2cTQDKv60SUrEMZZ7pRkT7GUpXLlGYIBc0p9IzC4VbzSFya5/WqY6yJan3bg0ziMI67rNvqPrhokSoQRy+HBie1VQzEU6nq3CkECfOqOCww6uKdXwL5xEmL4EsF7biGCV2PXQ+LFk678Smz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771266621; c=relaxed/simple;
-	bh=MAEs3Jddu85q70yGwvGJmRXFIyW3shtR1hg+pghMVm4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=VhwftFpEp7Me8f5xSETZtvQdn85msyjnycvQA4+lF2/Hs+3f+l7Cj4OcySvrOh9CGPI3FWiMV7vKbORvMg908L7RTNpWmk8RDw06Ac9I2qjvLRXHK6OGohjq2T4r17GbnIuRen41v5UkobW/GmQwiR2Vyc7gQ51EK8gnJbJEiYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dMLJktL2; arc=none smtp.client-ip=74.125.82.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771268683; c=relaxed/simple;
+	bh=yjI1pebaI6r7KQ2q6CILtkaWvaMMBPInfZh8nsKzr9s=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=tLbM0WWlHLhTWLl2WvdseLFjzhMNTmCzWcNs2jMJ793FmmSPWG2YuMcWtrLftUZuuFKBnljRyghUEJqoAasJ/Hl4Bojq1yFHsbAQWzs+AGc3Af1Jp/5KHP/VopvqVY0Nc5KYuzcV+6KMDIaeajKCr9Y5UtYJfb4P3YdSZeTP3Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EThKEibe; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dMLJktL2"
-Received: by mail-dl1-f54.google.com with SMTP id a92af1059eb24-124a635476fso3846493c88.0
-        for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 10:30:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771266619; x=1771871419; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=EkJWUx4iz20mHMlM7dqbfruMTcGOgRj83PoFq0CJCIQ=;
-        b=dMLJktL2qRHJHkLBftVGBt/ill/K2ExeWTvtZA/hZ1YMOwn9BPr0tXAhoCOoJDX+2E
-         6FaWkjwiege15sgemLCZKR4DkHPqeGqOjbxeGjC+tOtZMWY1hJx38Zw6i9Ak1+C6c4hL
-         DKqnQtuSrUE87hEQC6F/P9X2EUZZNeXkayRwR0QgQijMKjwvKF+sjsfEbNm+bZC6CZCV
-         Y9KPtK60qsyAOGgmDG+SJobr7u//1MTnYeRTUiVa7/hW8uy95zbT+r9CObAMa1AgGTOt
-         HPEkquwTmfsIIM4zz2V7B4GG+chjM7KRV+mYwAiND/qKsQ9lJe03DBT1m62bEtZofAcb
-         ChZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771266619; x=1771871419;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EkJWUx4iz20mHMlM7dqbfruMTcGOgRj83PoFq0CJCIQ=;
-        b=RQ7Qa7rMkFrQ5e9jWoscD1o2T2g/zViHBClPcl0KR4670pw3VNPQtQuA0zziB50P5/
-         vUfxowMZ7hqJPIcyNPpPxm5Ovdk0BgAeLFg3cqWcj4q1fi93ewTB1AnDsOu4wB/vpiyd
-         eArJ37O+oWXCvOtUKITIThOk754bAfgGjQbQ2ivpl/D8Bsgy5+tI+knNH8SZelD2+SQQ
-         OmAgstM723ebpDQyVH82YvswQd9Nz93sxyAtHSKOhStTV9U3LiYdVTMtEGopDoUeMR5j
-         Aa2YJv/mG5eU8e0mk2NTDFnDghLuDtx6E80gmNZrrIicBsRnVncC2KWcarmqS541tovr
-         dSSg==
-X-Forwarded-Encrypted: i=1; AJvYcCW4VKcyQu0QmhB9NmR5z5Ulxeci5VWOxNWV//IEyJRln6sJfj/D3aoWXw8smKLJGatwOPg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx866i5Yg5/4YKHJdZfz88LZpF8CdzTCC0tga49fA/cv1FnZK3Q
-	4PUxdGNg3FsELHmUdh9kGZ9DpHZfOprjL2OFF0K3V94ChyAE4u8l94tz
-X-Gm-Gg: AZuq6aJl4l9HF6xxjRAQE1fjs+DHErNhRjXLu9tzbVZblMN93aZSCIBJ2SPoANe/4r+
-	Vrd2UWbzBMRNAD6mzzDgsIvW8KPxLbZeu65q9F/b0g8SiQ+mFdBQV3THn1rmJM2kLwGZg3ukTr8
-	2jSpKtBbn5YE52G2B9vJa+LZRzt4TNpv7Shy3QgYmIvYCU+RUOXTpvEUglPnXr0Dyg9Gz41pFgo
-	cDBL0u7RAQzsZ9fe4d7vKxuAn/7w0muC7Z0CLDC46M8C+aUhyuvs6AKBWN/8pPwcLVi98k4RtlX
-	soZIcWAe9EaFOOf3UWjshpmTzeQFTBO1u71a8/zE9wxoyHuEDP+sygngGIkKTAH2vusS1IqhMpA
-	+b7HE2Zen55uncCkSZiuVKh+CoFIszB2LhN5DYexCwaJkCrZl8rk6HmQSIGM8BRe/PzLOsm2z1j
-	dLXqRkTmK49J2AkHkq9KtiN0YB90AbztlF
-X-Received: by 2002:a05:7022:692:b0:11b:a36d:a7f7 with SMTP id a92af1059eb24-1273add4230mr3788461c88.16.1771266619112;
-        Mon, 16 Feb 2026 10:30:19 -0800 (PST)
-Received: from [192.168.4.196] ([73.222.117.172])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12742cc83e6sm11517513c88.15.2026.02.16.10.30.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Feb 2026 10:30:18 -0800 (PST)
-Message-ID: <ac9ccc1c-acb1-4439-8db2-eafe757c4f9e@gmail.com>
-Date: Mon, 16 Feb 2026 10:30:17 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EThKEibe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E34BC116C6;
+	Mon, 16 Feb 2026 19:04:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771268682;
+	bh=yjI1pebaI6r7KQ2q6CILtkaWvaMMBPInfZh8nsKzr9s=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=EThKEibemDxLo+tGw8ZUDqUS+Yv/ylWGFCUrJTXOJoYALAl0tiyRqOtqF0yHFYHco
+	 yLTewKZOtrpFPQfHKFJtt3oQF0BqRCsNhXn8mlm+MsgS5XaYOsUyQj8VA6ycM5uNWw
+	 fZysvq/LC+qCyqUtQ0GCFiiVLRJJm6KXzp7udgLD0dxritkL6/wqDu9LtUUukT+yb9
+	 ltHTW0+aOtP66n5+m7Z77Prn4uMBLfycYkwWkUNOJZhxb1FfnG2+raEPKzti8W6ydA
+	 7PJT8XoftHqRuX9hk7zeqEqZ/MRMSo0765UvFxaUIFJCJiuaepufYfg8ycWQQVGkJT
+	 tvcb6Ms25oP1g==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, martin.lau@kernel.org, memxor@gmail.com,
+ song@kernel.org, yonghong.song@linux.dev, Emil Tsalapatis
+ <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v2] bpf: Bump maximum runtime call stack depth
+ to 16
+In-Reply-To: <20260210213606.475415-1-emil@etsalapatis.com>
+References: <20260210213606.475415-1-emil@etsalapatis.com>
+Date: Mon, 16 Feb 2026 19:04:25 +0000
+Message-ID: <m2ms18h5mu.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/3] bpf: Use bpf_core_enum_value for stats in
- cgroup_iter_memcg
-To: Hui Zhu <hui.zhu@linux.dev>, Johannes Weiner <hannes@cmpxchg.org>,
- Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Hui Zhu <zhuhui@kylinos.cn>, cgroups@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <cover.1770965805.git.zhuhui@kylinos.cn>
- <24ac7bab25d8d2a24a35ab87a5283263eb6a4575.1770965805.git.zhuhui@kylinos.cn>
-Content-Language: en-US
-From: "JP Kobryn (Meta)" <inwardvessel@gmail.com>
-In-Reply-To: <24ac7bab25d8d2a24a35ab87a5283263eb6a4575.1770965805.git.zhuhui@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 2/12/26 11:23 PM, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
-> 
-> Replace hardcoded enum values with bpf_core_enum_value() calls in
-> cgroup_iter_memcg test to improve portability across different
-> kernel versions.
-> 
-> The change adds runtime enum value resolution for:
-> - node_stat_item: NR_ANON_MAPPED, NR_SHMEM, NR_FILE_PAGES,
->    NR_FILE_MAPPED
-> - memcg_stat_item: MEMCG_KMEM
-> - vm_event_item: PGFAULT
-> 
-> This ensures the BPF program can adapt to enum value changes
-> between kernel versions, returning early if any enum value is
-> unavailable (returns 0).
-> 
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+Emil Tsalapatis <emil@etsalapatis.com> writes:
+
+> The BPF verifier currently limits the maximum runtime call stack to
+> 8 frames. Larger BPF programs like sched-ext schedulers routinely
+> fail verification because they exceed this limit, even as they use
+> very little actual stack space for each frame.
+>
+> Bump the maximum runtime call stack depth to 16 stack frames. Also
+> adjust selftests that assume the max runtime call stack depth is 8.
+>
+> This patch does not change the verification time limit of 8 stack
+> frames. Static functions that are inlined for verification purposes
+> still only go 8 frames deep to avoid changing the verifier's internal
+> data structures used for verification. These data structures only
+> support holding information on up to 8 stack frames.
+>
+> Global functions are each verified in isolation, so the old 8 stack
+> frame limit now only applies to call stacks composed entirely of
+> static function calls.
+>
+> This patch also does not adjust the actual maximum stack size of 512.
+>
+> CHANGELOG
+> =========
+>
+> v1 -> v2 (https://lore.kernel.org/bpf/DG510ANGXEZH.BJ9EMMKHP5WT@etsalapatis.com)
+>
+> - Adjust patch to only increase the runtime stack depth, leaving the
+> verification-time stack depth unchanged (Alexei)
+
+If I am not mistaken, writing the Changelog here will get it into the
+commit history. I always put it below the --- line below Signed-off-by:
+
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 > ---
->   .../selftests/bpf/progs/cgroup_iter_memcg.c   | 41 +++++++++++++++----
->   1 file changed, 34 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-> index 59fb70a3cc50..b020951dd7e6 100644
-> --- a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-> +++ b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-> @@ -15,6 +15,8 @@ int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
->   	struct cgroup *cgrp = ctx->cgroup;
->   	struct cgroup_subsys_state *css;
->   	struct mem_cgroup *memcg;
-> +	int ret = 1;
-> +	int idx;
->   
->   	if (!cgrp)
->   		return 1;
-> @@ -26,14 +28,39 @@ int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
->   
->   	bpf_mem_cgroup_flush_stats(memcg);
->   
-> -	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(memcg, NR_ANON_MAPPED);
-> -	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
-> -	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(memcg, NR_FILE_PAGES);
-> -	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(memcg, NR_FILE_MAPPED);
-> -	memcg_query.memcg_kmem = bpf_mem_cgroup_page_state(memcg, MEMCG_KMEM);
-> -	memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, PGFAULT);
-> +	idx = bpf_core_enum_value(enum node_stat_item, NR_ANON_MAPPED);
-> +	if (idx == 0)
-> +		goto out;
-> +	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(memcg, idx);
->   
-> +	idx = bpf_core_enum_value(enum node_stat_item, NR_SHMEM);
-> +	if (idx == 0)
-> +		goto out;
-> +	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(memcg, idx);
+>  include/linux/bpf_verifier.h                  |  3 +-
+>  kernel/bpf/verifier.c                         | 40 +++++++++-----
+>  .../selftests/bpf/progs/test_global_func3.c   | 52 ++++++++++++++++++-
+>  3 files changed, 78 insertions(+), 17 deletions(-)
+>
+> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+> index ef8e45a362d9..057f52a6b840 100644
+> --- a/include/linux/bpf_verifier.h
+> +++ b/include/linux/bpf_verifier.h
+> @@ -321,7 +321,8 @@ struct bpf_func_state {
+>  	int allocated_stack;
+>  };
+>  
+> -#define MAX_CALL_FRAMES 8
+> +#define MAX_CALL_FRAMES 8 /* How many frames we can verify at the same time */
+> +#define MAX_CALL_DEPTH 16 /* How deep of a stack we can have at runtime */
+>  
+>  /* instruction history flags, used in bpf_jmp_history_entry.flags field */
+>  enum {
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index edf5342b982f..7e41d1dad284 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -6660,17 +6660,17 @@ static int round_up_stack_depth(struct bpf_verifier_env *env, int stack_depth)
+>   * and recursively walk all callees that given function can call.
+>   * Ignore jump and exit insns.
+>   * Since recursion is prevented by check_cfg() this algorithm
+> - * only needs a local stack of MAX_CALL_FRAMES to remember callsites
+> + * only needs a local stack of MAX_CALL_DEPTH to remember callsites
+>   */
+>  static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  					 bool priv_stack_supported)
+>  {
+>  	struct bpf_subprog_info *subprog = env->subprog_info;
+>  	struct bpf_insn *insn = env->prog->insnsi;
+> -	int depth = 0, frame = 0, i, subprog_end, subprog_depth;
+> +	int depth = 0, frame = 0, calldepth = 0, i, subprog_end, subprog_depth;
+>  	bool tail_call_reachable = false;
+> -	int ret_insn[MAX_CALL_FRAMES];
+> -	int ret_prog[MAX_CALL_FRAMES];
+> +	int ret_insn[MAX_CALL_DEPTH];
+> +	int ret_prog[MAX_CALL_DEPTH];
+>  	int j;
+>  
+>  	i = subprog[idx].start;
+> @@ -6724,7 +6724,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  		depth += subprog_depth;
+>  		if (depth > MAX_BPF_STACK) {
+>  			verbose(env, "combined stack size of %d calls is %d. Too large\n",
+> -				frame + 1, depth);
+> +				calldepth + 1, depth);
+>  			return -EACCES;
+>  		}
+>  	}
+> @@ -6740,7 +6740,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  				continue;
+>  			if (subprog[idx].is_cb)
+>  				err = true;
+> -			for (int c = 0; c < frame && !err; c++) {
+> +			for (int c = 0; c < calldepth && !err; c++) {
+>  				if (subprog[ret_prog[c]].is_cb) {
+>  					err = true;
+>  					break;
+> @@ -6757,8 +6757,8 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  		if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
+>  			continue;
+>  		/* remember insn and function to return to */
+> -		ret_insn[frame] = i + 1;
+> -		ret_prog[frame] = idx;
+> +		ret_insn[calldepth] = i + 1;
+> +		ret_prog[calldepth] = idx;
+>  
+>  		/* find the callee */
+>  		next_insn = i + insn[i].imm + 1;
+> @@ -6786,7 +6786,17 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  		if (subprog[idx].has_tail_call)
+>  			tail_call_reachable = true;
+>  
+> -		frame++;
+> +		if (!subprog_is_global(env, sidx))
+> +			frame++;
+> +		calldepth++;
+> +		/* Total call depth including globals */
+> +		if (calldepth >= MAX_CALL_DEPTH) {
+> +			verbose(env, "total call depth is %d frames, too deep\n",
+> +				calldepth);
+> +			return -E2BIG;
+> +		}
 > +
-> +	idx = bpf_core_enum_value(enum node_stat_item, NR_FILE_PAGES);
-> +	if (idx == 0)
-> +		goto out;
-> +	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(memcg, idx);
-> +
-> +	idx = bpf_core_enum_value(enum node_stat_item, NR_FILE_MAPPED);
-> +	if (idx == 0)
-> +		goto out;
-> +	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(memcg, idx);
-> +
-> +	idx = bpf_core_enum_value(enum memcg_stat_item, MEMCG_KMEM);
-> +	if (idx == 0)
-> +		goto out;
-> +	memcg_query.memcg_kmem = bpf_mem_cgroup_page_state(memcg, idx);
-> +
-> +	idx = bpf_core_enum_value(enum vm_event_item, PGFAULT);
-> +	if (idx == 0)
-> +		goto out;
+> +		/* Total stack frames in use (globals not included). */
+>  		if (frame >= MAX_CALL_FRAMES) {
+>  			verbose(env, "the call stack of %d frames is too deep !\n",
+>  				frame);
+> @@ -6800,7 +6810,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  	 * tail call counter throughout bpf2bpf calls combined with tailcalls
+>  	 */
+>  	if (tail_call_reachable)
+> -		for (j = 0; j < frame; j++) {
+> +		for (j = 0; j < calldepth; j++) {
+>  			if (subprog[ret_prog[j]].is_exception_cb) {
+>  				verbose(env, "cannot tail call within exception cb\n");
+>  				return -EINVAL;
+> @@ -6813,13 +6823,15 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
+>  	/* end of for() loop means the last insn of the 'subprog'
+>  	 * was reached. Doesn't matter whether it was JA or EXIT
+>  	 */
+> -	if (frame == 0)
+> +	if (calldepth == 0)
+>  		return 0;
+>  	if (subprog[idx].priv_stack_mode != PRIV_STACK_ADAPTIVE)
+>  		depth -= round_up_stack_depth(env, subprog[idx].stack_depth);
+> -	frame--;
+> -	i = ret_insn[frame];
+> -	idx = ret_prog[frame];
+> +	if (!subprog_is_global(env, idx))
+> +		frame--;
+> +	calldepth--;
+> +	i = ret_insn[calldepth];
+> +	idx = ret_prog[calldepth];
+>  	goto continue_func;
+>  }
+>  
+> diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
+> index 142b682d3c2f..9cef3ee3b473 100644
+> --- a/tools/testing/selftests/bpf/progs/test_global_func3.c
+> +++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
+> @@ -53,9 +53,57 @@ int f8(struct __sk_buff *skb)
+>  	return f7(skb);
+>  }
+>  
+> +__attribute__ ((noinline))
 
-This is getting messy. Most of these values should be on any system
-regardless of boot-params. I was expecting you would make the call
-inline.
+Using __noinline is better but the file already has this pattern so we
+can  leave it.
 
-Let's simplify this whole series. This selftest only needs to exercise
-bpf_mem_cgroup_page_state() and bpf_mem_cgroup_vm_events(). I think we
-can remove the kmem subtest altogether and still have the coverage we
-need. You could then call bpf_core_enum_value() inline as an argument to
-the kfuncs above and not need to check if they exist (just let them give
-you the host-specific co-re value).
+> +int f9(struct __sk_buff *skb)
+> +{
+> +	return f8(skb);
+> +}
+> +
+> +__attribute__ ((noinline))
+> +int f10(struct __sk_buff *skb)
+> +{
+> +	return f9(skb);
+> +}
+> +
+> +__attribute__ ((noinline))
+> +int f11(struct __sk_buff *skb)
+> +{
+> +	return f10(skb);
+> +}
+> +
+> +__attribute__ ((noinline))
+> +int f12(struct __sk_buff *skb)
+> +{
+> +	return f11(skb);
+> +}
+> +
+> +__attribute__ ((noinline))
+> +int f13(struct __sk_buff *skb)
+> +{
+> +	return f12(skb);
+> +}
+> +
+> +__attribute__ ((noinline))
+> +int f14(struct __sk_buff *skb)
+> +{
+> +	return f13(skb);
+> +}
+> +
+> +__attribute__ ((noinline))
+> +int f15(struct __sk_buff *skb)
+> +{
+> +	return f14(skb);
+> +}
+> +
+> +__attribute__ ((noinline))
+> +int f16(struct __sk_buff *skb)
+> +{
+> +	return f15(skb);
+> +}
+> +
+>  SEC("tc")
+> -__failure __msg("the call stack of 8 frames")
+> +__failure __msg("total call depth is 16 frames, too deep")
+>  int global_func3(struct __sk_buff *skb)
+>  {
+> -	return f8(skb);
+> +	return f16(skb);
+>  }
+> -- 
+> 2.49.0
