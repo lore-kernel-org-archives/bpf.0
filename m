@@ -1,136 +1,138 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD4E923D7F5;
-	Mon, 16 Feb 2026 09:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A43D22798E8
+	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 09:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771232901; cv=none; b=pEFQFNeKj05v/CQDkuJ/OCdqvO91nT+PsTzPO0ayTB36Q/sdnbWtwqX6WgNVf2FVfBH3v4FxBBYQly0XGoaC0pFBQe4aSxZB7rU6/f4RSPJq7Ak+E3nZRl/SkNf4c3RLZX+NiJORnWiOBuDJHCVvdQKsVKIIgm7laNfalJ0Hw2I=
+	t=1771235885; cv=none; b=TbPhZwAKScUJPLD7w4AhfGsCiunAzLldBmnh0yxhM/Ns8P9S5keXWtj4Y7jzFm7AwZhQKDwD8PrihTtBOgi65JyEU2QYkRbC31wtsyZKMWw/KQZActHmx+TKrUZ0iz+1D6GYY3vW/AtEFFrdZ9J8GL/NxBbpmRLuENNrG68ZXjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771232901; c=relaxed/simple;
-	bh=EmsBpwZcswJp831dNKU5TIkfzO4uVWk/FxZY7FFgZZ0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WNlL7PgRYRm/AqSXdth1Kz4hJzHN9uZsqc7W1oI7fwTFbzD5SsC47DkguMS5ilbqARIbTE6jyvX322prMADB7JEj3yf20g3ZIXPZgo6RCKbOHjg0BblqlkSvxgWCInw/34yVQgEbKKTZ4UBAYTTXYkWzQrrZOxZluCfXyf8UqmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TL6rn1n9; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1771235885; c=relaxed/simple;
+	bh=xSc0sod2kmwnOQ/GIn0ZIvsaKVu7872SZl9Isg81E+U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JdMDXI94kG0LA302q/Z98jeyCQGa0UgbNt7Xam7/XWmaEUcxnq8mTwCgorW9JzLyyizKFUZ9xyeE06UKs5q6IEwa1sXovSSyU27FPcg1UKgH9dotAD8yE+ix08ow0beFxw7geLaTZolaDci4vC+selpft0prcrwMH0BV2D2bxFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LbTwxe/Q; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TL6rn1n9"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61FM1Jvd3669128;
-	Mon, 16 Feb 2026 09:08:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=6hXNBiqZPkQbA6Le8ee7aa29addL5XUf1lWMgYRQj
-	Ag=; b=TL6rn1n9N9Aum70yTltJ22ntjvMcfqWztrrbI6EhesvuWpVKqpzGt8zq6
-	ry8R4ArTG4+APAAruT+WTDikwhDYJXeItWRiGGIolQm4tJ/F5mpaTPwHmXm2vNiz
-	G3aTLS+Uu+kQsS+C/oe1OODw/7rDfZjpKOmDNiBd/JsEzpbQd7l10NcLhwLycLIg
-	ZKTpRosoogWJvgWBOf+eN6JLBD2x0Ac/A9wRLz3+Y/vxsGpf1NBJF1u+JZGmxjqF
-	j97SQ1RkbCl9Rhh4cHHFDGV+q8ZS6LzQAZEUurC+0euTyHK6xeMP3+vbkFi/Cyg9
-	htuetmtsY0zT7DsaZNVdJlKnWZcfQ==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cajcj6fxq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 09:08:07 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61G8Ih5K002845;
-	Mon, 16 Feb 2026 09:08:06 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cb5kj4hev-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 16 Feb 2026 09:08:06 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61G984ih31785248
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 16 Feb 2026 09:08:05 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D349A2004D;
-	Mon, 16 Feb 2026 09:08:04 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 807CF20040;
-	Mon, 16 Feb 2026 09:08:03 +0000 (GMT)
-Received: from li-bd3f974c-2712-11b2-a85c-df1cec4d728e.in.ibm.com (unknown [9.78.106.17])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 16 Feb 2026 09:08:03 +0000 (GMT)
-From: Hari Bathini <hbathini@linux.ibm.com>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, linux-kselftest@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] selftests/bpf: test accounting of tail calls when prog is NULL
-Date: Mon, 16 Feb 2026 14:38:02 +0530
-Message-ID: <20260216090802.1805655-1-hbathini@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LbTwxe/Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B97C116C6;
+	Mon, 16 Feb 2026 09:58:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771235885;
+	bh=xSc0sod2kmwnOQ/GIn0ZIvsaKVu7872SZl9Isg81E+U=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=LbTwxe/QpP5dOdIgBd+1W5/tW702h+4C5RyBg6Fuc/T0RYJYgH8gCA7SzBWt7t5Cn
+	 lEJ1iroylySxy803yiuTaWooIzi2p3nY+MqEhm7nL8yzv+j08Buep06mOB2+IsNeGL
+	 T2yMf+nnm9Zgbr6+QUAtq2L0uJKoBzLM1oIvqBENkgG6YlZlJ6YZ9AjDF5DH+CFSgg
+	 rb641xre5z48jfzsjcuHIGLRjoRV9IUcsyS9bHeG2fx5FLdeYq1pWcDhSZpvzX6LAq
+	 QBUINjyMpSGkBCJMW+JA72cj6BQuqEOLB+N9p/Mjfsc6EV3EF3qKp0Fcwen80rFvyj
+	 aVtf14syzZywA==
+Message-ID: <8c8f6906-e6b1-4a8a-98dc-51d467b16a53@kernel.org>
+Date: Mon, 16 Feb 2026 09:58:01 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: izJ6T4ANjzNO_Jtcwb4tZE7v10NiLpcI
-X-Authority-Analysis: v=2.4 cv=Md9hep/f c=1 sm=1 tr=0 ts=6992de77 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=75Qkm2aBJpJ5KZQQUp8A:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDA3MiBTYWx0ZWRfX4BHKTMk2uXyI
- 1uU8cRtPPLDOs/Vvsn/Gw6q2Mb9C4Oxb69W42eugDARzLAxk7XVeGYcncnXRw+NaSdmb0M8NayH
- pBOXQDIN9MdzdewFwNUhQ9yBaiFSpCTTxgnDhcAvNQQBQmojsYgzbyFSxN8HMZKHDHjgapOKCSf
- hZJ7+gIiH/0GXHFopueFqBNaVpmUuoCjBpY+e+Oe9X3Yj+f3zfqsBPZUwGeVh7TeEfM76StcL6v
- SJfA4GoC80SK2ETCdPHNrmBHig9YWlYrN2zEKGbLVreuwM5dFprcrdT9KfuczogOWamrf4HOG+c
- QetgGyWajJlCNv8B/bQsTnEAXTb1cBCz99Adv2hXmtESJHpXmgrPa23e3QkkAaRfUEBm/EAtl1p
- VaiREgvntBqlMYl7mmuWbSQm12px9siOjrRjo6UQJTkGQevM4YOfGjiNyZlYn+T8Vp8Lcj/aQC2
- mO7H5sXOEwlOqoJxH8g==
-X-Proofpoint-GUID: izJ6T4ANjzNO_Jtcwb4tZE7v10NiLpcI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-16_03,2026-02-16_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602160072
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v2] tools: bpftool: fix truncated netlink dumps
+To: Jakub Kicinski <kuba@kernel.org>, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org
+References: <20260215000656.323486-1-kuba@kernel.org>
+From: Quentin Monnet <qmo@kernel.org>
+Content-Language: en-GB
+In-Reply-To: <20260215000656.323486-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Test whether tail call count is incorrectly accounted for, when the
-tail call fails due to a missing BPF program.
+2026-02-14 16:06 UTC-0800 ~ Jakub Kicinski <kuba@kernel.org>
+> Netlink requires that the recv buffer used during dumps is at least
+> min(PAGE_SIZE, 8k) (see the man page). Otherwise the messages will
+> get truncated. Make sure bpftool follows this requirement, avoid
+> missing information on systems with large pages.
+> 
+> Fixes: 7084566a236f ("tools/bpftool: Remove libbpf_internal.h usage in bpftool")
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> Sorry for the long delay! I haven't CCed netdev@ on v1, and it appears
+> that CC: bpf@ + kuba@ gets misfiled in my inbox.
+> 
+> v2:
+>  - make the same change in libbpf_netlink_recv()
+>    note that libbpf_netlink_recv() does a PEEK and then realloc
+>    if the message is larger, so it's technically already safe
+>    but probably better if we are consistent
+>  - fprintf(stderr) -> p_err()
+>  - adjust msg
+> v1: https://lore.kernel.org/bpf/20251205011823.751868-1-kuba@kernel.org/
+> 
+> CC: qmo@kernel.org
+> CC: ast@kernel.org
+> CC: daniel@iogearbox.net
+> CC: andrii@kernel.org
+> CC: martin.lau@linux.dev
+> CC: eddyz87@gmail.com
+> CC: song@kernel.org
+> CC: yonghong.song@linux.dev
+> CC: john.fastabend@gmail.com
+> CC: kpsingh@kernel.org
+> CC: sdf@fomichev.me
+> CC: haoluo@google.com
+> CC: jolsa@kernel.org
+> CC: bpf@vger.kernel.org
+> ---
+>  tools/bpf/bpftool/net.c | 5 ++++-
+>  tools/lib/bpf/netlink.c | 4 +++-
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/bpf/bpftool/net.c b/tools/bpf/bpftool/net.c
+> index f25d66c8395e..974189da8a91 100644
+> --- a/tools/bpf/bpftool/net.c
+> +++ b/tools/bpf/bpftool/net.c
+> @@ -156,7 +156,7 @@ static int netlink_recv(int sock, __u32 nl_pid, __u32 seq,
+>  	bool multipart = true;
+>  	struct nlmsgerr *err;
+>  	struct nlmsghdr *nh;
+> -	char buf[4096];
+> +	char buf[8192];
+>  	int len, ret;
+>  
+>  	while (multipart) {
+> @@ -201,6 +201,9 @@ static int netlink_recv(int sock, __u32 nl_pid, __u32 seq,
+>  					return ret;
+>  			}
+>  		}
+> +
+> +		if (len)
+> +			p_err("Invalid message or trailing data in Netlink response: %d bytes left", len);
+>  	}
+>  	ret = 0;
+>  done:
+> diff --git a/tools/lib/bpf/netlink.c b/tools/lib/bpf/netlink.c
+> index c997e69d507f..96c6b09c433e 100644
+> --- a/tools/lib/bpf/netlink.c
+> +++ b/tools/lib/bpf/netlink.c
+> @@ -143,7 +143,7 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
+>  	struct nlmsghdr *nh;
+>  	int len, ret;
+>  
+> -	ret = alloc_iov(&iov, 4096);
+> +	ret = alloc_iov(&iov, 8192);
+>  	if (ret)
+>  		goto done;
+>  
+> @@ -212,6 +212,8 @@ static int libbpf_netlink_recv(int sock, __u32 nl_pid, int seq,
+>  				}
+>  			}
+>  		}
+> +		if (len)
+> +			pr_warn("Invalid message or trailing data in Netlink response: %d bytes left", len);
 
-Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
----
 
-- powerpc64 BPF JIT has been incorrectly accounting for tailcall count
-  even when BPF program to tailcall into is missing. A simple change
-  to one of the tailcall selftests could have flagged it earlier.
+CI bot is right about libbpf's pr_warn() not adding the line break
+automatically. Other than that, it looks good to me, thanks!
 
-    https://lore.kernel.org/all/20260216065639.1750181-2-hbathini@linux.ibm.com/
-
- tools/testing/selftests/bpf/progs/tailcall3.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/testing/selftests/bpf/progs/tailcall3.c
-index f60bcd7b8d4b..204f19c30a3e 100644
---- a/tools/testing/selftests/bpf/progs/tailcall3.c
-+++ b/tools/testing/selftests/bpf/progs/tailcall3.c
-@@ -5,7 +5,7 @@
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
--	__uint(max_entries, 1);
-+	__uint(max_entries, 2);
- 	__uint(key_size, sizeof(__u32));
- 	__uint(value_size, sizeof(__u32));
- } jmp_table SEC(".maps");
-@@ -23,6 +23,9 @@ int classifier_0(struct __sk_buff *skb)
- SEC("tc")
- int entry(struct __sk_buff *skb)
- {
-+	/* prog == NULL case */
-+	bpf_tail_call_static(skb, &jmp_table, 1);
-+
- 	bpf_tail_call_static(skb, &jmp_table, 0);
- 	return 0;
- }
--- 
-2.53.0
-
+Acked-by: Quentin Monnet <qmo@kernel.org>
