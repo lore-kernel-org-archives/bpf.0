@@ -1,275 +1,292 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F7D96A8D2
-	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 19:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42DFB6A8D2
+	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 19:15:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771268683; cv=none; b=DFwBh6m9WyY7GfFjxlSZuNHWChy2cTQDKv60SUrEMZZ7pRkT7GUpXLlGYIBc0p9IzC4VbzSFya5/WqY6yJan3bg0ziMI67rNvqPrhokSoQRy+HBie1VQzEU6nq3CkECfOqOCww6uKdXwL5xEmL4EsF7biGCV2PXQ+LFk678Smz8=
+	t=1771269332; cv=none; b=hE9O6dEgOrQVKlvUZ0twyICc44qWBB2v74SLXmyZU/zfI3tH9Q+jT8Jd7XPyiIaou2hYjKkm2bDKyE15QG7LZhAc53I5rvS01gwswMn+neLPA9dBWP9ugobCnODd6gDj8Fsc7cE+rRddy9usrv1EnSU89Ijnu/blXPuGM4oqmn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771268683; c=relaxed/simple;
-	bh=yjI1pebaI6r7KQ2q6CILtkaWvaMMBPInfZh8nsKzr9s=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=tLbM0WWlHLhTWLl2WvdseLFjzhMNTmCzWcNs2jMJ793FmmSPWG2YuMcWtrLftUZuuFKBnljRyghUEJqoAasJ/Hl4Bojq1yFHsbAQWzs+AGc3Af1Jp/5KHP/VopvqVY0Nc5KYuzcV+6KMDIaeajKCr9Y5UtYJfb4P3YdSZeTP3Rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EThKEibe; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771269332; c=relaxed/simple;
+	bh=5se4Iu/7ubFuyPU7cpRyrrJpTks1JWXd3S01JarPDrg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c+c3oup3lwADh+9KGRQgP571h2uZJSOZmfUtry09ZIyHOkJ7GVzbeV8YTV13+zZR4OIIw5jgKrj00Cgin9uSZ6F9oK7lMV0mc6Imta/EH8RKhBETcEwiy5wSJsaAH1Fh6DrR7vJkhsLoJDxoEATdfflybOTtoMBWwR6RImXlEsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U0f/zRba; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EThKEibe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E34BC116C6;
-	Mon, 16 Feb 2026 19:04:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771268682;
-	bh=yjI1pebaI6r7KQ2q6CILtkaWvaMMBPInfZh8nsKzr9s=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=EThKEibemDxLo+tGw8ZUDqUS+Yv/ylWGFCUrJTXOJoYALAl0tiyRqOtqF0yHFYHco
-	 yLTewKZOtrpFPQfHKFJtt3oQF0BqRCsNhXn8mlm+MsgS5XaYOsUyQj8VA6ycM5uNWw
-	 fZysvq/LC+qCyqUtQ0GCFiiVLRJJm6KXzp7udgLD0dxritkL6/wqDu9LtUUukT+yb9
-	 ltHTW0+aOtP66n5+m7Z77Prn4uMBLfycYkwWkUNOJZhxb1FfnG2+raEPKzti8W6ydA
-	 7PJT8XoftHqRuX9hk7zeqEqZ/MRMSo0765UvFxaUIFJCJiuaepufYfg8ycWQQVGkJT
-	 tvcb6Ms25oP1g==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, martin.lau@kernel.org, memxor@gmail.com,
- song@kernel.org, yonghong.song@linux.dev, Emil Tsalapatis
- <emil@etsalapatis.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Bump maximum runtime call stack depth
- to 16
-In-Reply-To: <20260210213606.475415-1-emil@etsalapatis.com>
-References: <20260210213606.475415-1-emil@etsalapatis.com>
-Date: Mon, 16 Feb 2026 19:04:25 +0000
-Message-ID: <m2ms18h5mu.fsf@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U0f/zRba"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771269328; x=1802805328;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5se4Iu/7ubFuyPU7cpRyrrJpTks1JWXd3S01JarPDrg=;
+  b=U0f/zRbaWFigKrpleeNRmqa155oFoBU0xhya9gCd2TRiRbgYhFDcJOdN
+   WD5NFS9+k/xNRVPYwRq8G6R7wyN915bIMv1HMoWiUEXBgPOwa4yIEFqbb
+   pMbraFjHE+CJJnbCstuyn6PsqlEleDiIiEmI1kev3P0O9CdgDBLiuPvRp
+   pKzgCA5Z5vRWw17O3u471HpxtHKfKlrFEaGiGgQC1IgwOz9QWBspR7Oka
+   VZKuqjdNXbfBpAq/qSFARCoG9GakPcazf0SD966png9AyvOEnefDgv/2/
+   ll/kQeGVRLgN0jrcjki+ZL2tGaIxs3QueOfUFpBfeVfcbRizwRuu3q5Ll
+   w==;
+X-CSE-ConnectionGUID: RSajPZtlRzOGLhWsIhcU0w==
+X-CSE-MsgGUID: 01JJF9seTOq/zCzN61pjZA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="83075266"
+X-IronPort-AV: E=Sophos;i="6.21,294,1763452800"; 
+   d="scan'208";a="83075266"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2026 11:15:28 -0800
+X-CSE-ConnectionGUID: g389iGY3QYOLVaC38m3Aqw==
+X-CSE-MsgGUID: QgXzA+KSRYmFUvCkDRvOTA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,294,1763452800"; 
+   d="scan'208";a="218674562"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 16 Feb 2026 11:15:26 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vs444-000000010Ci-091H;
+	Mon, 16 Feb 2026 19:15:24 +0000
+Date: Tue, 17 Feb 2026 03:14:34 +0800
+From: kernel test robot <lkp@intel.com>
+To: adubey@linux.ibm.com, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, hbathini@linux.ibm.com,
+	linuxppc-dev@lists.ozlabs.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, martin.lau@kernel.org, eddyz87@gmail.com,
+	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev,
+	chleroy@kernel.org, Abhishek Dubey <adubey@linux.ibm.com>
+Subject: Re: [PATCH 1/2] powerpc64/bpf: Implement JIT support for private
+ stack
+Message-ID: <202602170316.V2RZWuVa-lkp@intel.com>
+References: <20260216152234.36632-1-adubey@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260216152234.36632-1-adubey@linux.ibm.com>
 
-Emil Tsalapatis <emil@etsalapatis.com> writes:
+Hi,
 
-> The BPF verifier currently limits the maximum runtime call stack to
-> 8 frames. Larger BPF programs like sched-ext schedulers routinely
-> fail verification because they exceed this limit, even as they use
-> very little actual stack space for each frame.
->
-> Bump the maximum runtime call stack depth to 16 stack frames. Also
-> adjust selftests that assume the max runtime call stack depth is 8.
->
-> This patch does not change the verification time limit of 8 stack
-> frames. Static functions that are inlined for verification purposes
-> still only go 8 frames deep to avoid changing the verifier's internal
-> data structures used for verification. These data structures only
-> support holding information on up to 8 stack frames.
->
-> Global functions are each verified in isolation, so the old 8 stack
-> frame limit now only applies to call stacks composed entirely of
-> static function calls.
->
-> This patch also does not adjust the actual maximum stack size of 512.
->
-> CHANGELOG
-> =========
->
-> v1 -> v2 (https://lore.kernel.org/bpf/DG510ANGXEZH.BJ9EMMKHP5WT@etsalapatis.com)
->
-> - Adjust patch to only increase the runtime stack depth, leaving the
-> verification-time stack depth unchanged (Alexei)
+kernel test robot noticed the following build warnings:
 
-If I am not mistaken, writing the Changelog here will get it into the
-commit history. I always put it below the --- line below Signed-off-by:
+[auto build test WARNING on bpf-next/master]
+[also build test WARNING on bpf/master powerpc/next linus/master next-20260216]
+[cannot apply to bpf-next/net powerpc/fixes v6.19]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
->  include/linux/bpf_verifier.h                  |  3 +-
->  kernel/bpf/verifier.c                         | 40 +++++++++-----
->  .../selftests/bpf/progs/test_global_func3.c   | 52 ++++++++++++++++++-
->  3 files changed, 78 insertions(+), 17 deletions(-)
->
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index ef8e45a362d9..057f52a6b840 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -321,7 +321,8 @@ struct bpf_func_state {
->  	int allocated_stack;
->  };
->  
-> -#define MAX_CALL_FRAMES 8
-> +#define MAX_CALL_FRAMES 8 /* How many frames we can verify at the same time */
-> +#define MAX_CALL_DEPTH 16 /* How deep of a stack we can have at runtime */
->  
->  /* instruction history flags, used in bpf_jmp_history_entry.flags field */
->  enum {
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index edf5342b982f..7e41d1dad284 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -6660,17 +6660,17 @@ static int round_up_stack_depth(struct bpf_verifier_env *env, int stack_depth)
->   * and recursively walk all callees that given function can call.
->   * Ignore jump and exit insns.
->   * Since recursion is prevented by check_cfg() this algorithm
-> - * only needs a local stack of MAX_CALL_FRAMES to remember callsites
-> + * only needs a local stack of MAX_CALL_DEPTH to remember callsites
->   */
->  static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->  					 bool priv_stack_supported)
->  {
->  	struct bpf_subprog_info *subprog = env->subprog_info;
->  	struct bpf_insn *insn = env->prog->insnsi;
-> -	int depth = 0, frame = 0, i, subprog_end, subprog_depth;
-> +	int depth = 0, frame = 0, calldepth = 0, i, subprog_end, subprog_depth;
->  	bool tail_call_reachable = false;
-> -	int ret_insn[MAX_CALL_FRAMES];
-> -	int ret_prog[MAX_CALL_FRAMES];
-> +	int ret_insn[MAX_CALL_DEPTH];
-> +	int ret_prog[MAX_CALL_DEPTH];
->  	int j;
->  
->  	i = subprog[idx].start;
-> @@ -6724,7 +6724,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->  		depth += subprog_depth;
->  		if (depth > MAX_BPF_STACK) {
->  			verbose(env, "combined stack size of %d calls is %d. Too large\n",
-> -				frame + 1, depth);
-> +				calldepth + 1, depth);
->  			return -EACCES;
->  		}
->  	}
-> @@ -6740,7 +6740,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->  				continue;
->  			if (subprog[idx].is_cb)
->  				err = true;
-> -			for (int c = 0; c < frame && !err; c++) {
-> +			for (int c = 0; c < calldepth && !err; c++) {
->  				if (subprog[ret_prog[c]].is_cb) {
->  					err = true;
->  					break;
-> @@ -6757,8 +6757,8 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->  		if (!bpf_pseudo_call(insn + i) && !bpf_pseudo_func(insn + i))
->  			continue;
->  		/* remember insn and function to return to */
-> -		ret_insn[frame] = i + 1;
-> -		ret_prog[frame] = idx;
-> +		ret_insn[calldepth] = i + 1;
-> +		ret_prog[calldepth] = idx;
->  
->  		/* find the callee */
->  		next_insn = i + insn[i].imm + 1;
-> @@ -6786,7 +6786,17 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->  		if (subprog[idx].has_tail_call)
->  			tail_call_reachable = true;
->  
-> -		frame++;
-> +		if (!subprog_is_global(env, sidx))
-> +			frame++;
-> +		calldepth++;
-> +		/* Total call depth including globals */
-> +		if (calldepth >= MAX_CALL_DEPTH) {
-> +			verbose(env, "total call depth is %d frames, too deep\n",
-> +				calldepth);
-> +			return -E2BIG;
-> +		}
-> +
-> +		/* Total stack frames in use (globals not included). */
->  		if (frame >= MAX_CALL_FRAMES) {
->  			verbose(env, "the call stack of %d frames is too deep !\n",
->  				frame);
-> @@ -6800,7 +6810,7 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->  	 * tail call counter throughout bpf2bpf calls combined with tailcalls
->  	 */
->  	if (tail_call_reachable)
-> -		for (j = 0; j < frame; j++) {
-> +		for (j = 0; j < calldepth; j++) {
->  			if (subprog[ret_prog[j]].is_exception_cb) {
->  				verbose(env, "cannot tail call within exception cb\n");
->  				return -EINVAL;
-> @@ -6813,13 +6823,15 @@ static int check_max_stack_depth_subprog(struct bpf_verifier_env *env, int idx,
->  	/* end of for() loop means the last insn of the 'subprog'
->  	 * was reached. Doesn't matter whether it was JA or EXIT
->  	 */
-> -	if (frame == 0)
-> +	if (calldepth == 0)
->  		return 0;
->  	if (subprog[idx].priv_stack_mode != PRIV_STACK_ADAPTIVE)
->  		depth -= round_up_stack_depth(env, subprog[idx].stack_depth);
-> -	frame--;
-> -	i = ret_insn[frame];
-> -	idx = ret_prog[frame];
-> +	if (!subprog_is_global(env, idx))
-> +		frame--;
-> +	calldepth--;
-> +	i = ret_insn[calldepth];
-> +	idx = ret_prog[calldepth];
->  	goto continue_func;
->  }
->  
-> diff --git a/tools/testing/selftests/bpf/progs/test_global_func3.c b/tools/testing/selftests/bpf/progs/test_global_func3.c
-> index 142b682d3c2f..9cef3ee3b473 100644
-> --- a/tools/testing/selftests/bpf/progs/test_global_func3.c
-> +++ b/tools/testing/selftests/bpf/progs/test_global_func3.c
-> @@ -53,9 +53,57 @@ int f8(struct __sk_buff *skb)
->  	return f7(skb);
->  }
->  
-> +__attribute__ ((noinline))
+url:    https://github.com/intel-lab-lkp/linux/commits/adubey-linux-ibm-com/selftests-bpf-Enable-private-stack-tests-for-powerpc64/20260216-182353
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260216152234.36632-1-adubey%40linux.ibm.com
+patch subject: [PATCH 1/2] powerpc64/bpf: Implement JIT support for private stack
+config: powerpc-randconfig-001-20260217 (https://download.01.org/0day-ci/archive/20260217/202602170316.V2RZWuVa-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 8.5.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260217/202602170316.V2RZWuVa-lkp@intel.com/reproduce)
 
-Using __noinline is better but the file already has this pattern so we
-can  leave it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602170316.V2RZWuVa-lkp@intel.com/
 
-> +int f9(struct __sk_buff *skb)
-> +{
-> +	return f8(skb);
-> +}
-> +
-> +__attribute__ ((noinline))
-> +int f10(struct __sk_buff *skb)
-> +{
-> +	return f9(skb);
-> +}
-> +
-> +__attribute__ ((noinline))
-> +int f11(struct __sk_buff *skb)
-> +{
-> +	return f10(skb);
-> +}
-> +
-> +__attribute__ ((noinline))
-> +int f12(struct __sk_buff *skb)
-> +{
-> +	return f11(skb);
-> +}
-> +
-> +__attribute__ ((noinline))
-> +int f13(struct __sk_buff *skb)
-> +{
-> +	return f12(skb);
-> +}
-> +
-> +__attribute__ ((noinline))
-> +int f14(struct __sk_buff *skb)
-> +{
-> +	return f13(skb);
-> +}
-> +
-> +__attribute__ ((noinline))
-> +int f15(struct __sk_buff *skb)
-> +{
-> +	return f14(skb);
-> +}
-> +
-> +__attribute__ ((noinline))
-> +int f16(struct __sk_buff *skb)
-> +{
-> +	return f15(skb);
-> +}
-> +
->  SEC("tc")
-> -__failure __msg("the call stack of 8 frames")
-> +__failure __msg("total call depth is 16 frames, too deep")
->  int global_func3(struct __sk_buff *skb)
->  {
-> -	return f8(skb);
-> +	return f16(skb);
->  }
-> -- 
-> 2.49.0
+All warnings (new ones prefixed by >>):
+
+   arch/powerpc/net/bpf_jit_comp.c: In function 'bpf_int_jit_compile':
+>> arch/powerpc/net/bpf_jit_comp.c:266:35: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     cgctx.priv_sp = priv_stack_ptr ? (u64)priv_stack_ptr : 0;
+                                      ^
+
+
+vim +266 arch/powerpc/net/bpf_jit_comp.c
+
+   164	
+   165	struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+   166	{
+   167		u32 proglen;
+   168		u32 alloclen;
+   169		u8 *image = NULL;
+   170		u32 *code_base;
+   171		u32 *addrs;
+   172		struct powerpc_jit_data *jit_data;
+   173		struct codegen_context cgctx;
+   174		int pass;
+   175		int flen;
+   176		int priv_stack_alloc_size;
+   177		void __percpu *priv_stack_ptr = NULL;
+   178		struct bpf_binary_header *fhdr = NULL;
+   179		struct bpf_binary_header *hdr = NULL;
+   180		struct bpf_prog *org_fp = fp;
+   181		struct bpf_prog *tmp_fp;
+   182		bool bpf_blinded = false;
+   183		bool extra_pass = false;
+   184		u8 *fimage = NULL;
+   185		u32 *fcode_base;
+   186		u32 extable_len;
+   187		u32 fixup_len;
+   188	
+   189		if (!fp->jit_requested)
+   190			return org_fp;
+   191	
+   192		tmp_fp = bpf_jit_blind_constants(org_fp);
+   193		if (IS_ERR(tmp_fp))
+   194			return org_fp;
+   195	
+   196		if (tmp_fp != org_fp) {
+   197			bpf_blinded = true;
+   198			fp = tmp_fp;
+   199		}
+   200	
+   201		jit_data = fp->aux->jit_data;
+   202		if (!jit_data) {
+   203			jit_data = kzalloc(sizeof(*jit_data), GFP_KERNEL);
+   204			if (!jit_data) {
+   205				fp = org_fp;
+   206				goto out;
+   207			}
+   208			fp->aux->jit_data = jit_data;
+   209		}
+   210	
+   211		if (!priv_stack_ptr && fp->aux->jits_use_priv_stack) {
+   212			/*
+   213			 * Allocate private stack of size equivalent to
+   214			 * verifier-calculated stack size plus two memory
+   215			 * guard regions to detect private stack overflow
+   216			 * and underflow.
+   217			 */
+   218			priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
+   219								2 * PRIV_STACK_GUARD_SZ;
+   220			priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_size, 16, GFP_KERNEL);
+   221			if (!priv_stack_ptr) {
+   222				fp = org_fp;
+   223				goto out_priv_stack;
+   224			}
+   225	
+   226			priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_size);
+   227			fp->aux->priv_stack_ptr = priv_stack_ptr;
+   228		}
+   229	
+   230		flen = fp->len;
+   231		addrs = jit_data->addrs;
+   232		if (addrs) {
+   233			cgctx = jit_data->ctx;
+   234			/*
+   235			 * JIT compiled to a writable location (image/code_base) first.
+   236			 * It is then moved to the readonly final location (fimage/fcode_base)
+   237			 * using instruction patching.
+   238			 */
+   239			fimage = jit_data->fimage;
+   240			fhdr = jit_data->fhdr;
+   241			proglen = jit_data->proglen;
+   242			hdr = jit_data->hdr;
+   243			image = (void *)hdr + ((void *)fimage - (void *)fhdr);
+   244			extra_pass = true;
+   245			/* During extra pass, ensure index is reset before repopulating extable entries */
+   246			cgctx.exentry_idx = 0;
+   247			goto skip_init_ctx;
+   248		}
+   249	
+   250		addrs = kcalloc(flen + 1, sizeof(*addrs), GFP_KERNEL);
+   251		if (addrs == NULL) {
+   252			fp = org_fp;
+   253			goto out_addrs;
+   254		}
+   255	
+   256		memset(&cgctx, 0, sizeof(struct codegen_context));
+   257		bpf_jit_init_reg_mapping(&cgctx);
+   258	
+   259		/* Make sure that the stack is quadword aligned. */
+   260		cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
+   261		cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux->arena);
+   262		cgctx.user_vm_start = bpf_arena_get_user_vm_start(fp->aux->arena);
+   263		cgctx.is_subprog = bpf_is_subprog(fp);
+   264		cgctx.exception_boundary = fp->aux->exception_boundary;
+   265		cgctx.exception_cb = fp->aux->exception_cb;
+ > 266		cgctx.priv_sp = priv_stack_ptr ? (u64)priv_stack_ptr : 0;
+   267	
+   268		/* Scouting faux-generate pass 0 */
+   269		if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+   270			/* We hit something illegal or unsupported. */
+   271			fp = org_fp;
+   272			goto out_addrs;
+   273		}
+   274	
+   275		/*
+   276		 * If we have seen a tail call, we need a second pass.
+   277		 * This is because bpf_jit_emit_common_epilogue() is called
+   278		 * from bpf_jit_emit_tail_call() with a not yet stable ctx->seen.
+   279		 * We also need a second pass if we ended up with too large
+   280		 * a program so as to ensure BPF_EXIT branches are in range.
+   281		 */
+   282		if (cgctx.seen & SEEN_TAILCALL || !is_offset_in_branch_range((long)cgctx.idx * 4)) {
+   283			cgctx.idx = 0;
+   284			if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+   285				fp = org_fp;
+   286				goto out_addrs;
+   287			}
+   288		}
+   289	
+   290		bpf_jit_realloc_regs(&cgctx);
+   291		/*
+   292		 * Pretend to build prologue, given the features we've seen.  This will
+   293		 * update ctgtx.idx as it pretends to output instructions, then we can
+   294		 * calculate total size from idx.
+   295		 */
+   296		bpf_jit_build_prologue(NULL, &cgctx);
+   297		addrs[fp->len] = cgctx.idx * 4;
+   298		bpf_jit_build_epilogue(NULL, &cgctx);
+   299	
+   300		fixup_len = fp->aux->num_exentries * BPF_FIXUP_LEN * 4;
+   301		extable_len = fp->aux->num_exentries * sizeof(struct exception_table_entry);
+   302	
+   303		proglen = cgctx.idx * 4;
+   304		alloclen = proglen + FUNCTION_DESCR_SIZE + fixup_len + extable_len;
+   305	
+   306		fhdr = bpf_jit_binary_pack_alloc(alloclen, &fimage, 4, &hdr, &image,
+   307						      bpf_jit_fill_ill_insns);
+   308		if (!fhdr) {
+   309			fp = org_fp;
+   310			goto out_addrs;
+   311		}
+   312	
+   313		if (extable_len)
+   314			fp->aux->extable = (void *)fimage + FUNCTION_DESCR_SIZE + proglen + fixup_len;
+   315	
+   316	skip_init_ctx:
+   317		code_base = (u32 *)(image + FUNCTION_DESCR_SIZE);
+   318		fcode_base = (u32 *)(fimage + FUNCTION_DESCR_SIZE);
+   319	
+   320		/* Code generation passes 1-2 */
+   321		for (pass = 1; pass < 3; pass++) {
+   322			/* Now build the prologue, body code & epilogue for real. */
+   323			cgctx.idx = 0;
+   324			cgctx.alt_exit_addr = 0;
+   325			bpf_jit_build_prologue(code_base, &cgctx);
+   326			if (bpf_jit_build_body(fp, code_base, fcode_base, &cgctx, addrs, pass,
+   327					       extra_pass)) {
+   328				bpf_arch_text_copy(&fhdr->size, &hdr->size, sizeof(hdr->size));
+   329				bpf_jit_binary_pack_free(fhdr, hdr);
+   330				fp = org_fp;
+   331				goto out_addrs;
+   332			}
+   333			bpf_jit_build_epilogue(code_base, &cgctx);
+   334	
+   335			if (bpf_jit_enable > 1)
+   336				pr_info("Pass %d: shrink = %d, seen = 0x%x\n", pass,
+   337					proglen - (cgctx.idx * 4), cgctx.seen);
+   338		}
+   339	
+   340		if (bpf_jit_enable > 1)
+   341			/*
+   342			 * Note that we output the base address of the code_base
+   343			 * rather than image, since opcodes are in code_base.
+   344			 */
+   345			bpf_jit_dump(flen, proglen, pass, code_base);
+   346	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
