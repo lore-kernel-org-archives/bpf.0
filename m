@@ -1,282 +1,380 @@
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11013006.outbound.protection.outlook.com [52.101.83.6])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1FE22E7BCC
-	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 09:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.6
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771235950; cv=fail; b=FYMd8RPoX4W3AeGluXXO+GmQgsMMIjTinCW9hgUgSPG22g4PY2f5FKkGBv172u12RDvLPF390xHz+ncYrZfIQ1XoZcMxjGhMkrFQLIt9HFq94xNzSFb5saYGP3SR56D4kujvHopabc+d6N3vWcGU/m3vWXTXJ2AV1cHFGs/Br0s=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771235950; c=relaxed/simple;
-	bh=TM8tlDmPCb0iwus0AgJdnF8CXYwmnoF6140YerVQtLU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Ja8pkLrVugbdmR3FxGKVrMWP+gJ08x/P6/Z+LeKS+yF8FlsqUjAAmwf81vISwe9F8Cs2eae9pkNl9PqlJDwlOficJQQL3tZmR92nEV/Qc/EaSBnSwMOTDOjGUM9cLNHSxTK7mUHVBq64p8S/n6wWd4JepytS3OSsogeWPF8fsJs=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=F1MXo3rW; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=F1MXo3rW; arc=fail smtp.client-ip=52.101.83.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5308814A60F
+	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 10:22:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771237369; cv=none; b=fW+dcA0J4waa+RhlNQMORrxgGNkjJQP4vqvfyoByeuI5ctlbZpGUG+H03Hy8khCuqdB6DautVaTI9g2xQWrGCwCMSb9SIKPWSlfPHntpRnNuHl6Zt+WHMp+2VTqaXG1SuM7GMNNJ23iplw+H5U0gnb+4CL8/OKqqmPxuUO6EBx4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771237369; c=relaxed/simple;
+	bh=rp6zjrGGeJAsEc3YqhkDn1jrkX8EbnG/Wrglyfp3iBE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PsBPSEh3Hl//WB2niOY/WpUQWvZaajr1SOCN8LfR8Bt2kHPRdx2Mg8KcjxGdpOKXUF8Md6k1c/x1VSeHpznoNs6s59tkCtzjXupimj/fuGpPjJm9CT+trCR/1ifJRpFXqJ9nfiCsmmsMUEjymLaqt0JV+z+wJazHt3YxpSzo60Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=UMCBjrxl; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="F1MXo3rW";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="F1MXo3rW"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=J2XAKL4L0ErIPYB0ZgM+Wdl1D2439SnnPuf8qcwvgsBkrCBHXRTurNaWPdKPkc695xVb7AMMPnOzjNC6Q/VNYwZgkLSyqY08CrNVaTLIWJfczpcYkvsegGyj0IkXnf8tufUfz5Yri8QPuxbUIFuLaO4Ae/tZImq5i3r5s1QTCED9KraK0sHgl/LO9kYyja/g2xxa7pBaMnSalNdDx+U35a5ShE/fKy1SFT/D+oHddBeZUis6UhbVO6PegT5Rs/3EDtrCBFjXLI+aYDBAMGnPVhWFxDI0BoX8moTZe/70Zcpfb8KQrmOoQs5MZdSylvk/6GaHWY1mb8mh2hYf0M3/mA==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ty+3epNN581HoMWzYFQ3C5GBD2Muwt4FWLup/QUOb1M=;
- b=NjIWzabgOYrpZIF0VDO8wSLwl083d7/WUrKZU4ojPEQ0W1fxeyKgNmg4pUryZFJTJ3WlAAgwKQC6jmn2qc1UGZYwhE1+6YAqUhRe0tu82fKn4G57lmg+gADkUg3o/YbW5YyTb7kuuHosOm7XuXKp+8D17/DSO/kqRmgsrUTGFNZ4/gRds+KklIYaMEDDQfREw91E6iIsxAV5N9ipfwnpm55wgw6iVjZH9yTKjmQhPtWpUZz5wyXmBhsyt63wmaXf31X+4S/N5B0edTAiMS1xyyUuu4k94pflfDYoimlpL+Ddhu/fOzdBuPbaJKHRWWTeWQSQNUK+XBbeXOGor75hEg==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=intel.com smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ty+3epNN581HoMWzYFQ3C5GBD2Muwt4FWLup/QUOb1M=;
- b=F1MXo3rWn7u/o4lIBcK2wz5+YXsV+Pj8hABdDH6cbKlk6dM9wVxxmTA9QhMtMD9rtqyQOWsv59fBjx91prUpEkZgA5LTKn5/cjfI5W/xqwRdpdqv6dlw7vpJ6GgxI+78OKS7qGngeHyXJ0SmKXy7AcT1PDvLHnbVbErHCy3U/Es=
-Received: from AM6P192CA0091.EURP192.PROD.OUTLOOK.COM (2603:10a6:209:8d::32)
- by DB9PR08MB9921.eurprd08.prod.outlook.com (2603:10a6:10:3d3::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.16; Mon, 16 Feb
- 2026 09:59:01 +0000
-Received: from AM4PEPF00027A6C.eurprd04.prod.outlook.com
- (2603:10a6:209:8d:cafe::e5) by AM6P192CA0091.outlook.office365.com
- (2603:10a6:209:8d::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.9611.16 via Frontend Transport; Mon,
- 16 Feb 2026 09:59:01 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AM4PEPF00027A6C.mail.protection.outlook.com (10.167.16.90) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.12
- via Frontend Transport; Mon, 16 Feb 2026 09:59:00 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=G7e3Ssau77sowUqUclx3e6CCZN5g4SYRr9kYDLeeEUKS08xhC0sLhaiMeA9I3PwDqClk8OBBgyerJfkZEpg3Rl9jEvKCFalYjhnrmYqLxyWygbeyMqGHXyodCmQyeU1x6sqpcvRRiM4DI+VJmiltFoL2bbD61hZDABy+Zh3ZOCLcCKdg/pQ+oodMQzg4BK1KkTQqP80YNtXNgL/onZggqsKIPcVJ/YlF2Y1p5Kr5BjgBzc+zzZKp2XPbE7oEHUFzA6YJHKSemeqBcVRm9Zo1gCW7qMoR6SRQVSQ+3qjHDeqiIbijYhwt0jj7cIt68HW+l6LjF952N4pRnsW8OIkpVQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ty+3epNN581HoMWzYFQ3C5GBD2Muwt4FWLup/QUOb1M=;
- b=qpgTFIZPntGXIm3AM/CRYk5VUJ9fDFEuFCHKlEHFM/MH4R9sbIn1K5fFyYltXsrpaGY9lhmWrhSkMKElpd3HPzzzi6g3rxFaMk9XeqrmZRT56CrPdcz9YIEcU7g67IYjWX0bV5OQi+1Jd+6knk5CUY9ZyyivPkpcFag/FNIQhI2Haep1ZRiFehC4zmW+luQVSAZqUONKidVjFkUf0CVy0VUbEPwgB7Oy64qKihQfazPbr0iPbxH4DAcy2cp6ERLg35N5qKHxj7nMfdmv++eCguFPAFudqtXWUdHQenmvfKQtcuRWLZpBAVil6uuCnwXTKGAQ5Pdia5MqbqFKiAYniQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ty+3epNN581HoMWzYFQ3C5GBD2Muwt4FWLup/QUOb1M=;
- b=F1MXo3rWn7u/o4lIBcK2wz5+YXsV+Pj8hABdDH6cbKlk6dM9wVxxmTA9QhMtMD9rtqyQOWsv59fBjx91prUpEkZgA5LTKn5/cjfI5W/xqwRdpdqv6dlw7vpJ6GgxI+78OKS7qGngeHyXJ0SmKXy7AcT1PDvLHnbVbErHCy3U/Es=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20) by PAXPR08MB7672.eurprd08.prod.outlook.com
- (2603:10a6:102:246::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9611.15; Mon, 16 Feb
- 2026 09:57:57 +0000
-Received: from GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::8c9b:58d2:2080:eb98]) by GV1PR08MB10521.eurprd08.prod.outlook.com
- ([fe80::8c9b:58d2:2080:eb98%3]) with mapi id 15.20.9611.013; Mon, 16 Feb 2026
- 09:57:55 +0000
-Date: Mon, 16 Feb 2026 09:57:52 +0000
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: lsf-pc@lists.linux-foundation.org, linux-mm@kvack.org,
-	bpf@vger.kernel.org, catalin.marinas@arm.com, david@kernel.org,
-	ryan.roberts@arm.com, kevin.brodsky@arm.com,
-	sebastian.osterlund@intel.com, dave.hansen@linux.intel.com,
-	rick.p.edgecombe@intel.com
-Subject: Re: [LSF/MM/BPF TOPIC] eBPF isolation with pkeys
-Message-ID: <aZLqIOsHeAUfFjXJ@e129823.arm.com>
-References: <aY3+Raf8eZqipCd6@e129823.arm.com>
- <f20ec2ee-90f2-4ef7-bc3d-088f9ef6c38a@intel.com>
- <aY4KfM6wFaSjHWri@e129823.arm.com>
- <d6d37293-592f-4109-90e9-20b77b023476@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d6d37293-592f-4109-90e9-20b77b023476@intel.com>
-X-ClientProxiedBy: LO4P123CA0462.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1aa::17) To GV1PR08MB10521.eurprd08.prod.outlook.com
- (2603:10a6:150:163::20)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="UMCBjrxl"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61FNiNml1731753;
+	Mon, 16 Feb 2026 10:22:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=Eom+h3mB7WCszSDoHhlS/sDtmGmLLxyusAv+KtbCs
+	GA=; b=UMCBjrxlCjlh3ZTlsbvcNlmAI23Bk+VeMPoQ9a3RWihhnT73AUefghxSU
+	RLHF/cxpqCXxgE2OxLDtKklJgimHULfUnarPxjX347qyVVvsVYsQz99vgTpnvZ9/
+	RiKOOiisKK+QC4NLK/g3FGMf6y5mb59JtUXxNAtRXdYXDdV/pBdAwBm6surCyXXr
+	hldsVwKi28v4TY3sM923xG18RHyoDMq+i1cLkoFrikUCAyZLQ18NxUdY0GsDPXF2
+	jR4mqjXFNpKfKxq7x61r7/QgYWxM4lV5HNeSdhWJkrTk2Uewdi11vRA+9Vsw39FJ
+	Ta3jpS7sKU2OWH4QiRX13pDVT/8wA==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cajcj6qn1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Feb 2026 10:22:20 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61G6baxO012709;
+	Mon, 16 Feb 2026 10:22:19 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cb3crw39j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Feb 2026 10:22:19 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61GAMFUX57606504
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 16 Feb 2026 10:22:15 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A18E720049;
+	Mon, 16 Feb 2026 10:22:15 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4D0CD2004B;
+	Mon, 16 Feb 2026 10:22:13 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 16 Feb 2026 10:22:13 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+        eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com,
+        ihor.solodrai@linux.dev, chleroy@kernel.org,
+        Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH 1/2] powerpc64/bpf: Implement JIT support for private stack
+Date: Mon, 16 Feb 2026 10:22:33 -0500
+Message-ID: <20260216152234.36632-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	GV1PR08MB10521:EE_|PAXPR08MB7672:EE_|AM4PEPF00027A6C:EE_|DB9PR08MB9921:EE_
-X-MS-Office365-Filtering-Correlation-Id: f0437516-2186-46ec-5bf6-08de6d42022a
-x-checkrecipientrouted: true
-Content-Transfer-Encoding: quoted-printable
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info-Original:
- =?us-ascii?Q?38ohGb/rU54PZgEllZ/wVU3TmrhICE6liZ6ZZWTIqZIkEU4MLTxCKjeJG8EW?=
- =?us-ascii?Q?fhNBCTdZKlTUTgF3K0+TTB5a8zqpuvf7B0jZRzO2aPDBD0pAkn3xeLh5bGyO?=
- =?us-ascii?Q?zJIsssOwWERAKwzo9KCUGzghLuar7Aee0bhjnvV+ty5SHQF4usWFbTFi+X68?=
- =?us-ascii?Q?S+pKdEt4tPqZa77pbEWx/yzaewGeZaRafeDIi8RcozyUq9p7fbaXdmpCTF0t?=
- =?us-ascii?Q?uEufi6xPSI0XM20Up1KnoxeIqmQv3BwEPBvjJVmjLhjjNHdQ83II3BF3bIW1?=
- =?us-ascii?Q?jIE/DnUV7kcLN0KfSCUhNq0ad0dLvTOVP+WvKb9SiEq63TbVU4B1tkAuj2b4?=
- =?us-ascii?Q?PtkBgoQCoCkZ8gop6u3ij30Nlv7Rz8vhmEF/9i9rN4A5XFyXebCUJbWQUQSp?=
- =?us-ascii?Q?HXgr3Vog1M3vPgxnAoRm+EzwMPyWUBUH4An/dSxHde6iO4j3DmWJIUmCLNNg?=
- =?us-ascii?Q?DLKn0vPk4Oxr3G9k4QVQ70U8u+SEpBYznnURpZ0nFVqsKXjtOv/XWYNRh7T3?=
- =?us-ascii?Q?tRLjeykKY//IeCQ/U0SndSGA1c5Q9jg5z8wAZxpRgjEBkDXGsn4Bz0jJ9Zj5?=
- =?us-ascii?Q?lVJbVrPKwR+E4qsecqNfa9/IOjoiuFd9yGgipjtzIW6qT2vD7zHTzAwTFMjS?=
- =?us-ascii?Q?8VYYC+jzgLL6NfmXIKphUaEn0FiemJR+585EutyMqM8LlIvUUK3F9blmjRL5?=
- =?us-ascii?Q?RxWIeRsZXlGJTCwrYGbqoufs7aC5POileStE7g6arjSPI/+eNMG1qH+txPNM?=
- =?us-ascii?Q?RMZYjudecUMpF8VF4MEWA3D8h2eP3UbcutsgKYRnId0BOzEhl8kcSaUY4Hbc?=
- =?us-ascii?Q?Y6WbIc8wpeSbSPUPuuMXngh3oOsQFdTpXbJQiCunsT+DvJbmGZqNIUoFv9wH?=
- =?us-ascii?Q?31pONlH30rsThxmLR9CcBB7AUOjdfzeOk4aSCUS4pvB0fGl8GEwrBEYO7Lk/?=
- =?us-ascii?Q?vzAs4+FoJ5WWrEM9NLSom/LBX4Gl8ebGu0gEbWtwHAWU6GFeSWUjHEJBk9at?=
- =?us-ascii?Q?lDPteceFWKybLyE4yMgrCWFT1g45C2TyTJgCQ/aFs2xHJfDI2i45ET/E5u9G?=
- =?us-ascii?Q?MigYoIzDFZmqeZISTlHajMP7VTamLbqlDi4Sv6DDwBckcZQgJpS+cpCeiPPy?=
- =?us-ascii?Q?fNYXlSOkTMlWWItfgodqCgA6Uf+JGlcBR4SjEODlL1rGnsS/8KcqCELRujfm?=
- =?us-ascii?Q?3LeJqdWA/V0mYT9bF9+lFrvoKS2+CRaGjWRzJynCY8d5jelG4Q5DZ2HYoUjT?=
- =?us-ascii?Q?YhtzJF8qAOrGqBYI/yVoQDYXoGqMCrKqKrql45M9LxQAXg85DCXkYyK5udTG?=
- =?us-ascii?Q?YXPTKXabkU+Zi8b8FIYyFV/3L3vL//3EkDWDu9MVW8/jnHroZFv0d+INcFou?=
- =?us-ascii?Q?XFuIFyKZ1CJRHZm8kldl8l0AnjjvzOYLgyvhnSYr1hg6rrL1w/lUspyYf8tb?=
- =?us-ascii?Q?2d0KW1eF34VrN6v6ccmrTQtEE5Aswbt5QPJKXWYnzCgZRuYDtghUf1ZTQaKP?=
- =?us-ascii?Q?xw3Z3smDo7PT40v+hYudj7WhZ0Zaq/d/jpN7DM08icS/sNT3FpDGdpCMebj4?=
- =?us-ascii?Q?lyUEHkLUrRC2PmkB1Kw=3D?=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR08MB10521.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR08MB7672
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AM4PEPF00027A6C.eurprd04.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	767914f0-7743-4378-a154-08de6d41db67
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|14060799003|376014|35042699022|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?oT+RymUAKiGHEWKHQkvD0RJ3D6Fio3Qz2sIU4YCGDjVBFLVGr0opa69bnBh+?=
- =?us-ascii?Q?aWlc5opdnuU3+JT5pSQUWjWnkr0gpcpfnseRwXw5FL5fDjOKGYUOCUgBwdAp?=
- =?us-ascii?Q?gKR8ClPmFV6WZtUZewrn+3etdXfVyjDLLbDeA6Etu2Dp68TjyWV9s2/k8qes?=
- =?us-ascii?Q?hqNkRgFFyEZ4F4qbSwX3zHwLUScq2Kh7Ofr4t2csoiLFn5VIGwf9LnawIvo0?=
- =?us-ascii?Q?V3zXpHJVOPtY6vOT0dIqsTJ3L4f1iR1T3DULwfb3Okvo9zCWBzBPDM/XmPpG?=
- =?us-ascii?Q?k271BEQwgiqZOnPua83wlPN/GedciKZeXPHkZbsrq1seqVRYojBt/LLCErNC?=
- =?us-ascii?Q?wIFSNjyRHlFvvkJOjxTKsRoSvpwTH8X5i8tfTyBUod41Urq3id5QZf4tpjiw?=
- =?us-ascii?Q?zrqflse6o/y23ZNlKfc2P4E32eUxlHHQnPytzSYzUErkHZ663xebb6hECEXO?=
- =?us-ascii?Q?wYKb25wI77ovN6mLP5GkHQ6rm/MaraXx0fhey42RPzwGIxwrRUL2Ex4EW4ay?=
- =?us-ascii?Q?1bATdKG493dte4MZNw3eJLcUl16CM4ujG9nCX4QA1CKDGVesiJdl4YnkXV6A?=
- =?us-ascii?Q?bK2GDRPBjHAtM9y0z/QqGa56uAw/pXhja5BmkEsqhgxl/K6tgiBnO1dd0Qmo?=
- =?us-ascii?Q?12FhBD/l+xwpcgXDfyGS2Q4SGmSNbr6dJrMJ27jo+leWks5383fD4563pvM6?=
- =?us-ascii?Q?UtgcrLbEr5l35R25Pf0AIPdRfh+oBZ8wcfxA8zmo/NIWppbSms8UQ7yUTU0I?=
- =?us-ascii?Q?nZVBEOUM4U5d/x2tpOdE383QRvILqP9TKfzxvPsFX4kkRwoTWLhKh+cRXAxQ?=
- =?us-ascii?Q?Imclq3rOMQMDyen7vzVJ2ClPCwQzpdWcJmea4EMH81SyZbacEpxfL+L9prYN?=
- =?us-ascii?Q?nM2/yvJw0O67KB6qWNv8JBhyedYCzqvB2q6YO0MxBWH8+v3yOb/L0poVlhrC?=
- =?us-ascii?Q?46g9FqWqYtwmKr0usp2mg4eE5hY/CN0neTyiEfU1+fqw6tVBl13costr7/EA?=
- =?us-ascii?Q?KPfSz251izRGulxj8292081wgcCeV/79wotBivhWjOm+enCX7V+cAVGS20nW?=
- =?us-ascii?Q?s9ykPdfdrxiZrXPDwK9K4eZ8kSNfSG5TKYZoGfNorHQkWpxH5pj7KWF7gJ/L?=
- =?us-ascii?Q?tLv2Cp2Z20qokwrPGtARvgCjNSP2zNOKXC34vPgOoF0p7M6KtoS76OKtHE/a?=
- =?us-ascii?Q?p4ixnmbNOq5Zj26DB1bAoYAWMXugVIn5iV1cAQJD7Vy2c46v4G9srHZy2hD+?=
- =?us-ascii?Q?hzH0wvGumCU3JKVqbkxA1C7nZpugAWV3vcSr3sHoh/DjwjBESIW0D9XE0gfy?=
- =?us-ascii?Q?vDIoc1hiAuqeE6QvH537eBNBuj3Vm2LbcpOx8zXr+HHNyFHM8uuZ9RkPoUxI?=
- =?us-ascii?Q?bHbavphlDqJcV8Na04GKYT5wMAIM3KtMhA60bNJhv3Q6KK3CA3HHZ0c3gLd3?=
- =?us-ascii?Q?pKEviMsVyJtcRQCJshIDGeYl2IliQEfyAbgtzTjmOQLkfP/ebHfvIWsZ0R03?=
- =?us-ascii?Q?9Ucvlit63/X082KmyHiLpcK6LVd/bVWrX/2Rzi8zLHRC2zUZSousvDadZ1C9?=
- =?us-ascii?Q?MuwJraxj6fnkrcMRym9Ny8E7cSYgrO02cMGjWeUdEp0UfyYBYjl1U/4edl0l?=
- =?us-ascii?Q?3Ut6o8P7Yq/bOv/9oeknmGA5U/b0PfGmNL7AftY5rcwI2/TaoRIa/GTU4i4/?=
- =?us-ascii?Q?KjAHww=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(14060799003)(376014)(35042699022)(36860700013);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	G/HgPCIN2KqXMCXoJ56aJMoErSjHizfsCrk2niz10+K5kk06rgHW+6s61XZloTgZlw3UaJ3T8zVm6gf76fHdLEHNRAYRL/UDWwq7CxvuYGAOaNgp02W+ChPsyYEmREKja0OTAn7S+z920SCgdLpEw6vM7g08JpbYi+BGAHI6sDu6dW+D3XuObzHVuM+ui/rjJPwa/IxiJc97q3nTJVmi6/GHhiVtPZBozb7JETiVmvTcFDXb3e9+OHaAGG94cBFBLs7ABEjcjYcqbGvuLmLSdIp+Kiv8lERVYSzXDbtptltYyb6UJM9yNK8gmniVODmG/rHvZT9TvRxQhuzIiC3/mBZCH7UJPG7wPe4uswuc8PVtKPNarFAyG6OldNWm5px3fxT7TEr2isX7g/nBZqpIij98elR3MdOlrk6fT+BOqRZVQut2v4ExirgLv5ZCfOHT
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2026 09:59:00.4000
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f0437516-2186-46ec-5bf6-08de6d42022a
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM4PEPF00027A6C.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR08MB9921
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: XzMDQ7tZ9W1Kqg5mOl3Dep3viRcScAxZ
+X-Authority-Analysis: v=2.4 cv=Md9hep/f c=1 sm=1 tr=0 ts=6992efdc cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=A8mRDSlWM7J1pTn1j8wA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE2MDA4NSBTYWx0ZWRfX2KxewgMASKc4
+ tGjnJhX0zbHl9t8mZAgySd9zdlebnE4WyTuVmcsilHvKKmQl8ouaL7MSebgGLoTUwoaLmfBe1+P
+ BijvN1nOe2Z2JnODVq/hwdQVtnZ/Mno507Oq7Mbz4K35F6LBjmzPsHWc5UG1Bw2d7OPsoUewh/C
+ aIKAsY6uGxDk4nsqpvqV3Jv9qeeKc2x7d6bEHbJZO7ngNXlzy7PWgyVe49xTy20SSJ7/3Wr3f9g
+ 8sliAxFKylqA2afPTxNXP0n4BrGa3OIjuFyy951QjllPKnqvjX3fJ6XQwwb7vCGG69VAkWpz77O
+ RvWd5J4Sp7d6FbtTtet39Oqz37JVozXf1XsSQFeiedSkKbFCAmIVOZaW98U3e0WubnUFhCzW6Y+
+ t1LmdQrG/V9f1n7vQ3ofD2XsnOi6uS+1oZOvVO3U67hOdlrYnT/2E5fOZtEYQ2f1n0YdJ+v4vkF
+ 10v0Fewe95Q0DBTLC4w==
+X-Proofpoint-GUID: 9FbaGHNwQ_D3s_ZrsejfcYXGMDOZ_R9k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-16_04,2026-02-16_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602160085
 
-Hi Dave,
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-> BTW, one high-level thing: what you're talking about here really is a
-> kind of hardening or kernel self-protection. It's in the spirit of Kees
-> Cook's work: how can kernel security be resilient even in the face of
-> kernel bugs and attackers exploiting those bugs?
->
-> Those who buy into the idea of Kees's work will likely agree with the
-> premise of this patch set. Those that don't, won't. :)
+Provision the private stack as a per-CPU allocation during
+bpf_int_jit_compile(). Align the stack to 16 bytes and place guard
+regions at both ends to detect runtime stack overflow and underflow.
 
-Yes exactly. But one of my small wish is most people view this positively..=
-.
+Round the private stack size up to the nearest 16-byte boundary.
+Make each guard region 16 bytes to preserve the required overall
+16-byte alignment. When private stack is set, skip bpf stack size
+accounting in kernel stack.
 
->
-> On 2/12/26 09:14, Yeoreum Yun wrote:
-> >>> To that end, this discussion introduces a set of new allocator APIs a=
-nd
-> >>> explores more extensible API designs:
-> >>>
-> >>>   - kmalloc_pkey series
-> >>>   - vmalloc_pkey series
-> >>>   - alloc_percpu_pkey series
-> >>
-> >> It all sounds fun, but this doesn't exactly seem very generic. The mem=
-ory
-> >> that sched_ext needs to access is super different from, say, what a
-> >> socket-filtering eBPF program would need.
-> >>
-> >> So this doesn't seem to be likely to be true "eBPF isolation" as much =
-as
-> >> sched_ext+eBPP isolation.
-> >
-> > Our current isolation model focuses on restricting writes and execution=
-.
-> > Therefore, if we allocate only the memory that eBPF programs must write
-> > directly with a separate pkey (e.g., packet data or sock),
-> > it seems to me that socket-filtering programs could also benefit from
-> > the same isolation.
-> This means that subsystems using eBPF need to allocate their data
-> structures separately, or at least in a pkey-aware manner. They either
-> need to declare the memory at allocation time, or need to be able to pay
-> the cost (and the collateral damage) of changing its pkey after allocatio=
-n.
->
-> This _might_ be doable for the scheduler. It probably has a limited set
-> of things that get written to. Most of it is statically allocated.
->
-> Networking isn't my strong suit, but packet memory seems rather
-> dynamically allocated and also needs to be written to by eBPF programs.
-> I suspect anything that slows packet allocation down by even a few
-> cycles is a non-starter.
->
-> IMNHO, _any_ approach to solving this problem that start with: we just
-> need a new allocator or modification to existing kernel allocators to
-> track a new memory type makes it a dead end. Or, best case, a very
-> surgical, targeted solution.
+There is no stack pointer in powerpc. Stack referencing during JIT
+is done using frame pointer. Frame pointer calculation goes like:
 
-TBH, I think there is no difference for a _memory_ usage between
-Network packet and scheduler since most of BPF program uses
-"MAPs" and this is needed to be written directly by them and
-"MAPs" are always allocated dynamically not statically and uses
-existing allocators' feature.
+BPF frame pointer = Priv stack allocation start address +
+                    Overflow guard +
+                    Actual stack size defined by verifier
 
-IMHO, I think it would be better to make existed memory allocator
-aware pkey than make a new allocator since the there is no difference
-except pkey-aware with existing allocator (and I think
-this would make a more code duplication and add more complexity).
+Memory layout:
 
-Thus, I would like to discuss with the way to extension of
-existing allocators first.
+High Addr          +--------------------------------------------------+
+                   |                                                  |
+                   | 16 bytes Underflow guard (0xEB9F12345678eb9fULL) |
+                   |                                                  |
+         BPF FP -> +--------------------------------------------------+
+                   |                                                  |
+                   | Private stack - determined by verifier           |
+                   | 16-bytes aligned                                 |
+                   |                                                  |
+                   +--------------------------------------------------+
+                   |                                                  |
+Lower Addr         | 16 byte Overflow guard (0xEB9F12345678eb9fULL)   |
+                   |                                                  |
+Priv stack alloc ->+--------------------------------------------------+
+start
 
+Update BPF_REG_FP to point to the calculated offset within the
+allocated private stack buffer. Now, BPF stack usage reference
+in the allocated private stack.
 
---
-Sincerely,
-Yeoreum Yun
-IMPORTANT NOTICE: The contents of this email and any attachments are confid=
-ential and may also be privileged. If you are not the intended recipient, p=
-lease notify the sender immediately and do not disclose the contents to any=
- other person, use it for any purpose, or store or copy the information in =
-any medium. Thank you.
+The patch is rebase over fixes by Hari:
+https://lore.kernel.org/bpf/20260216065639.1750181-1-hbathini@linux.ibm.com/T/#mf02cad9096fa4ad1f05610b1f464da1cddf7445a
+
+Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+---
+ arch/powerpc/net/bpf_jit.h        |  5 +++
+ arch/powerpc/net/bpf_jit_comp.c   | 74 +++++++++++++++++++++++++++++++
+ arch/powerpc/net/bpf_jit_comp64.c | 38 +++++++++++++---
+ 3 files changed, 112 insertions(+), 5 deletions(-)
+
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index 7354e1d72f79..5a115c54e43a 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -178,8 +178,13 @@ struct codegen_context {
+ 	bool is_subprog;
+ 	bool exception_boundary;
+ 	bool exception_cb;
++	u64 priv_sp;
+ };
+ 
++/* Memory size & magic-value to detect private stack overflow/underflow */
++#define PRIV_STACK_GUARD_SZ    16
++#define PRIV_STACK_GUARD_VAL   0xEB9F12345678eb9fULL
++
+ #define bpf_to_ppc(r)	(ctx->b2p[r])
+ 
+ #ifdef CONFIG_PPC32
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index 278e09b57560..7a78e03d482f 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -129,6 +129,39 @@ bool bpf_jit_needs_zext(void)
+ 	return true;
+ }
+ 
++static void priv_stack_init_guard(void __percpu *priv_stack_ptr, int alloc_size)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
++
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		stack_ptr[0] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[1] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx + 1] = PRIV_STACK_GUARD_VAL;
++	}
++}
++
++static void priv_stack_check_guard(void __percpu *priv_stack_ptr, int alloc_size,
++								struct bpf_prog *fp)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
++
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		if (stack_ptr[0] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[1] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[underflow_idx] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[underflow_idx + 1] != PRIV_STACK_GUARD_VAL) {
++			pr_err("BPF private stack overflow/underflow detected for prog %sx\n",
++			bpf_jit_get_prog_name(fp));
++			break;
++		}
++	}
++}
++
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ {
+ 	u32 proglen;
+@@ -140,6 +173,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	struct codegen_context cgctx;
+ 	int pass;
+ 	int flen;
++	int priv_stack_alloc_size;
++	void __percpu *priv_stack_ptr = NULL;
+ 	struct bpf_binary_header *fhdr = NULL;
+ 	struct bpf_binary_header *hdr = NULL;
+ 	struct bpf_prog *org_fp = fp;
+@@ -173,6 +208,25 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		fp->aux->jit_data = jit_data;
+ 	}
+ 
++	if (!priv_stack_ptr && fp->aux->jits_use_priv_stack) {
++		/*
++		 * Allocate private stack of size equivalent to
++		 * verifier-calculated stack size plus two memory
++		 * guard regions to detect private stack overflow
++		 * and underflow.
++		 */
++		priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
++							2 * PRIV_STACK_GUARD_SZ;
++		priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_size, 16, GFP_KERNEL);
++		if (!priv_stack_ptr) {
++			fp = org_fp;
++			goto out_priv_stack;
++		}
++
++		priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_size);
++		fp->aux->priv_stack_ptr = priv_stack_ptr;
++	}
++
+ 	flen = fp->len;
+ 	addrs = jit_data->addrs;
+ 	if (addrs) {
+@@ -209,6 +263,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	cgctx.is_subprog = bpf_is_subprog(fp);
+ 	cgctx.exception_boundary = fp->aux->exception_boundary;
+ 	cgctx.exception_cb = fp->aux->exception_cb;
++	cgctx.priv_sp = priv_stack_ptr ? (u64)priv_stack_ptr : 0;
+ 
+ 	/* Scouting faux-generate pass 0 */
+ 	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+@@ -306,7 +361,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		}
+ 		bpf_prog_fill_jited_linfo(fp, addrs);
+ out_addrs:
++		if (!image && priv_stack_ptr) {
++			free_percpu(priv_stack_ptr);
++			fp->aux->priv_stack_ptr = NULL;
++		}
+ 		kfree(addrs);
++out_priv_stack:
+ 		kfree(jit_data);
+ 		fp->aux->jit_data = NULL;
+ 	} else {
+@@ -419,6 +479,8 @@ void bpf_jit_free(struct bpf_prog *fp)
+ 	if (fp->jited) {
+ 		struct powerpc_jit_data *jit_data = fp->aux->jit_data;
+ 		struct bpf_binary_header *hdr;
++		void __percpu *priv_stack_ptr;
++		int priv_stack_alloc_size;
+ 
+ 		/*
+ 		 * If we fail the final pass of JIT (from jit_subprogs),
+@@ -432,6 +494,13 @@ void bpf_jit_free(struct bpf_prog *fp)
+ 		}
+ 		hdr = bpf_jit_binary_pack_hdr(fp);
+ 		bpf_jit_binary_pack_free(hdr, NULL);
++		priv_stack_ptr = fp->aux->priv_stack_ptr;
++		if (priv_stack_ptr) {
++			priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
++							2 * PRIV_STACK_GUARD_SZ;
++			priv_stack_check_guard(priv_stack_ptr, priv_stack_alloc_size, fp);
++			free_percpu(priv_stack_ptr);
++		}
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
+ 	}
+ 
+@@ -453,6 +522,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
+ }
+ 
++bool bpf_jit_supports_private_stack(void)
++{
++	return IS_ENABLED(CONFIG_PPC64);
++}
++
+ bool bpf_jit_supports_arena(void)
+ {
+ 	return IS_ENABLED(CONFIG_PPC64);
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index 640b84409687..206ef43b4090 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -183,6 +183,20 @@ void bpf_jit_realloc_regs(struct codegen_context *ctx)
+ {
+ }
+ 
++static void emit_fp_priv_stack(u32 *image, struct codegen_context *ctx, void __percpu *ptr)
++{
++	/* Load percpu data offset */
++	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R13,
++			offsetof(struct paca_struct, data_offset)));
++	PPC_LI64(bpf_to_ppc(BPF_REG_FP), (u64)ptr);
++	/*
++	 * Set frame pointer with percpu allocated
++	 * buffer for private stack.
++	 */
++	EMIT(PPC_RAW_ADD(bpf_to_ppc(BPF_REG_FP),
++			bpf_to_ppc(TMP_REG_1), bpf_to_ppc(BPF_REG_FP)));
++}
++
+ /*
+  * For exception boundary & exception_cb progs:
+  *     return increased size to accommodate additional NVRs.
+@@ -197,6 +211,12 @@ static int bpf_jit_stack_size(struct codegen_context *ctx)
+ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ {
+ 	int i;
++	void __percpu *priv_frame_ptr = NULL;
++
++	if (ctx->priv_sp) {
++		priv_frame_ptr = (void*) ctx->priv_sp + PRIV_STACK_GUARD_SZ +
++					round_up(ctx->stack_size, 16);
++	}
+ 
+ 	/* Instruction for trampoline attach */
+ 	EMIT(PPC_RAW_NOP());
+@@ -251,7 +271,7 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ 		}
+ 
+ 		EMIT(PPC_RAW_STDU(_R1, _R1,
+-				-(bpf_jit_stack_size(ctx) + ctx->stack_size)));
++			-(bpf_jit_stack_size(ctx) + (ctx->priv_sp ? 0 : ctx->stack_size))));
+ 	}
+ 
+ 	/*
+@@ -307,9 +327,16 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ 	 * Exception_cb not restricted from using stack area or arena.
+ 	 * Setup frame pointer to point to the bpf stack area
+ 	 */
+-	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+-		EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+-			STACK_FRAME_MIN_SIZE + ctx->stack_size));
++	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP))) {
++		if (ctx->priv_sp && priv_frame_ptr) {
++			/* Set up private stack pointer */
++			emit_fp_priv_stack(image, ctx, priv_frame_ptr);
++		} else {
++			/* Setup frame pointer to point to the bpf stack area */
++			EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
++				STACK_FRAME_MIN_SIZE + ctx->stack_size));
++		}
++	}
+ 
+ 	if (ctx->arena_vm_start)
+ 		PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
+@@ -339,7 +366,8 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+ 
+ 	/* Tear down our stack frame */
+ 	if (bpf_has_stack_frame(ctx)) {
+-		EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_jit_stack_size(ctx) + ctx->stack_size));
++		EMIT(PPC_RAW_ADDI(_R1, _R1,
++			bpf_jit_stack_size(ctx) + (ctx->priv_sp ? 0 : ctx->stack_size)));
+ 
+ 		if (ctx->seen & SEEN_FUNC || ctx->exception_cb) {
+ 			EMIT(PPC_RAW_LD(_R0, _R1, PPC_LR_STKOFF));
+-- 
+2.52.0
+
