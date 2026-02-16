@@ -1,104 +1,109 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD294251793
-	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 19:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B61B61A2389
+	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 19:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771269485; cv=none; b=FBDOLuKOSbKNl8y4odztYn0P3bwr3vBVJ91ATgazgii9JGOAx3OSt8Yza0Fcjl0rC5R0K6gkRgZPJlayd6YSiZ+U0x3RH6gUXC6e3ewr7dY3HY9CYmJIQ6/tVnEjv0b/W+k07gc22/FwzH8aiqagEZDKo7oXjzKopEb9eDgYLhU=
+	t=1771271303; cv=none; b=o989e/QUfCeVY+Fl6uZintBq+zsQXYpQXBfuXM6iInXCYXfLNPP+Odjn01Rt80PM1GPWPSiOYya0YZuAZnXlHiY60X/jRCOlYt4zlTMN6WxOSudNjeVfVLaKI2ojxtorShZJBN8H/8TGW4phmu4YiHKoibSuzLYe9uzNd1pS+bM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771269485; c=relaxed/simple;
-	bh=o078/X5wm82OPWgguQA+ZgRmaoQTdJPdi6+Y1Uf2YlY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=drTJt25fNTFP9VpdrFvyhPRKSiPPm2B33ZDBTkQqt9a55S41+SbpDinLFMqoiUS6W1vRBWiMDuKSzQO/88QZPV6aKWlV4sYjsf04miUEiGURhWcoFboWqu9sAxNgxjHmpou7PuSi37cGz9B7BBcTXhGt/oIF2TPkWwtLSRXQ4is=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CLoi8cVY; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1771271303; c=relaxed/simple;
+	bh=iE/senEhoxa6F/+zSepLUtgGVKbTKHld1W5C98hyw0Y=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=pnekgHB+YS4ZNYc5ujwkMGffTKtzGSMsnTLQiOHko31i0rfi8AuddxlGbWUNb2VnCyVhrz6YGTEWW9hVNdow7T42g0KAkWyHqAzOQM2gdTW/aA8Q7iJ6go7RQc+a9HExv3RTy+/4oSciTZx+FViS90Gwb0lJLfBbnnAFJqxKRDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GpRTc1QR; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CLoi8cVY"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771269482;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3ITufXC05vOjs5DlZjeQXK2W8zqVewmQ1l83ijhbX0s=;
-	b=CLoi8cVYVi1iKZsKf8X72S6Nk5PVNaM3IzaJPAXjT4MXmSznKIKLf0O+FplwnJ2XUSggq3
-	5ROwFwJrx5Ecp4GLLpCCIBjw9DDnU+d13D2sLXdcwVgUtccLEUzbvhgM9AQ3fs931qEoCf
-	ftAqj+nL/z1XGSwbwLQzAE3/NnXxsM0=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-263-GMOTIeZHNCyS76fw4i2IZQ-1; Mon,
- 16 Feb 2026 14:17:59 -0500
-X-MC-Unique: GMOTIeZHNCyS76fw4i2IZQ-1
-X-Mimecast-MFC-AGG-ID: GMOTIeZHNCyS76fw4i2IZQ_1771269477
-Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 853901956053;
-	Mon, 16 Feb 2026 19:17:57 +0000 (UTC)
-Received: from grbell-thinkpadx1carbongen9.rmtusnh.csb (unknown [10.22.65.177])
-	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3E3C71955F43;
-	Mon, 16 Feb 2026 19:17:54 +0000 (UTC)
-From: Gregory Bell <grbell@redhat.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	eddyz87@gmail.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	Gregory Bell <grbell@redhat.com>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: align build_id test mapping to 64K page size
-Date: Mon, 16 Feb 2026 14:17:24 -0500
-Message-ID: <3fbc35d6e8382011e6d7e8d8c2a3e7717da40437.1771267122.git.grbell@redhat.com>
-In-Reply-To: <cover.1771267122.git.grbell@redhat.com>
-References: <cover.1771267122.git.grbell@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GpRTc1QR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7EA0C116C6;
+	Mon, 16 Feb 2026 19:48:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771271303;
+	bh=iE/senEhoxa6F/+zSepLUtgGVKbTKHld1W5C98hyw0Y=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=GpRTc1QRTd1MIKxZTZWEL9TyoPsnUDkS/cf0NS4lxl4gg1mJYMmaXpkDPZkS3Sjkn
+	 gjDH8n4exbdkJO5n1PBYSBCDftYtok/d8BQH4XeV2I9mN+RKAx531DqOq3KA7nJhN6
+	 YvgOYlIKjEEVav53w7ija/yz37yYFegu+HiTp7BSQEYZawH6UYv65TulKR3UK8X7Uz
+	 8wivObSgOVzf2v61x0sqLQWitpxUtmg7/Hb2tKh/XHCQrLMq5qPTsXTHyw84GFCbpg
+	 1N4kqKsj2E4CtKObZbf+VsV8HVm88dq8vTDyclwz+q1H+Iyqs3+r/yvGf1XIkCYQr1
+	 ZHrcY+uLfvzyQ==
+Content-Type: multipart/mixed; boundary="===============2541967855067606124=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
+Message-Id: <2939ac8db314e2befc27036e0611d82c95706e5c73b915addf087825363e3cd0@mail.kernel.org>
+In-Reply-To: <885ba23ec2bb641329efdd179a12bca14818384a.1771267122.git.grbell@redhat.com>
+References: <885ba23ec2bb641329efdd179a12bca14818384a.1771267122.git.grbell@redhat.com>
+Subject: Re: [PATCH bpf-next 1/2] selftests/bpf: fix flaky build_id test
+From: bot+bpf-ci@kernel.org
+To: grbell@redhat.com,bpf@vger.kernel.org
+Cc: andrii@kernel.org,eddyz87@gmail.com,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,grbell@redhat.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 16 Feb 2026 19:48:22 +0000 (UTC)
 
-Some architectures require mappings to be aligned to the system page size.
-The build_id selftest currently uses a smaller alignment, which can result
-in madvise operations executing on a different page than intended.
+--===============2541967855067606124==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Increase the mapping alignment to 64K so the buffer is page-aligned on
-all supported architectures.
+> diff --git a/tools/testing/selftests/bpf/uprobe_multi.c b/tools/testing/selftests/bpf/uprobe_multi.c
+> index dd38dc68f635..ba0a9dcc7b1a 100644
+> --- a/tools/testing/selftests/bpf/uprobe_multi.c
+> +++ b/tools/testing/selftests/bpf/uprobe_multi.c
+> @@ -100,6 +100,9 @@ int __attribute__((weak)) trigger_uprobe(bool build_id_resident)
+>  	int page_sz = sysconf(_SC_PAGESIZE);
+>  	void *addr;
+>
+> +	unsigned char vec[1];
+> +    int poll = 0;
 
-Signed-off-by: Gregory Bell <grbell@redhat.com>
+This line uses spaces for indentation instead of a tab.
+
+> @@ -108,9 +111,19 @@ int __attribute__((weak)) trigger_uprobe(bool build_id_resident)
+
+[ ... ]
+
+> +	if (!build_id_resident){
+
+Missing a space before the opening brace.
+
+> +        do {
+
+Spaces used for indentation here and on several other lines below
+(mincore, the if/break, and usleep).  The rest of the file and the
+other lines in this same block use tabs.
+
+> +			madvise(addr, page_sz, MADV_PAGEOUT);
+> +			/* check if page has been evicted */
+> +            mincore(addr, page_sz, vec);
+> +            if (!(vec[0] & 1))
+> +                break;
+
+Trailing whitespace at the end of this line.
+
+> +			/* if page is still resident re-attempt MADV_POPULATE_READ/MADV_PAGEOUT */
+> +			madvise(addr, page_sz, MADV_POPULATE_READ);
+> +			poll++;
+> +            usleep(100);
+> +		}while (poll < 500);
+
+Should there be a space between the closing brace and "while"?
+The usual kernel style is "} while".
+
+> +	}
+
+
 ---
- tools/testing/selftests/bpf/uprobe_multi.ld | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/uprobe_multi.ld b/tools/testing/selftests/bpf/uprobe_multi.ld
-index a2e94828bc8c..2063714b2899 100644
---- a/tools/testing/selftests/bpf/uprobe_multi.ld
-+++ b/tools/testing/selftests/bpf/uprobe_multi.ld
-@@ -1,8 +1,8 @@
- SECTIONS
- {
--	. = ALIGN(4096);
-+	. = ALIGN(65536);
- 	.note.gnu.build-id : { *(.note.gnu.build-id) }
--	. = ALIGN(4096);
-+	. = ALIGN(65536);
- }
- INSERT AFTER .text;
- 
--- 
-2.52.0
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22075174977
 
+AI-authorship-score: medium
+AI-authorship-explanation: Mixed spaces/tabs indentation within the same code block is a common pattern in AI-generated code, though editor misconfiguration could also explain it.
+issues-found: 4
+issue-severity-score: low
+issue-severity-explanation: Coding style violations (mixed tabs/spaces, missing brace spacing, trailing whitespace) in a selftest with no functional or system impact.
+
+--===============2541967855067606124==--
