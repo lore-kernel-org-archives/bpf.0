@@ -1,165 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73358330679;
-	Mon, 16 Feb 2026 15:31:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2983191BF
+	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 15:49:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771255860; cv=none; b=GVy8SWV3AEldyZ2DdSVI1lc9tMQ9+Hs+9Luh13KTzs6g7X+1hFrpdoUP3mCdz5xviF9lQlTIxuu65crczYUGNcaeo3MkmbRsLr4yDsguW7X82LgP6taYQ+nR1FBc4mtbwbGHDZyjr4e5fg5ibyZBQgAB5JRpVkPtHUajUtGLvm0=
+	t=1771256960; cv=none; b=HToRPIBNFjjCaPLdcsC+jNmkkq/sLIcThZGcgn3HpFbl3rt0YEm5f7EBLuE+rJSEBrdvl1g/8ozFdVGhGdOSvdt24TjDRk/wMW4f1ZQK2Unp6JeEhbGatHKZjdjCzGsW/pWILKly/cDhjZWXLrKUSpwsxyhZ98Y4tMYMppWvEGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771255860; c=relaxed/simple;
-	bh=Quyklt0OpgDW5NcjhvRx5Josr55CGYucwL1ahUwcM5Y=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HdW9XGA9ZARQfSs9iTQCbZmqlxyNFcp2Uqe+qnBhKnK3w76QLueXRmCGTy9EcTd6JvYdEN0KwXu3NCMqpaUD7s1uUrK66u/tJLqCo5p0gpdeOTeEhtwGSM6viHPHiYJAKsIaHeCl7DyEDDvdZE0gOU96PbmqGrMUbc7NLrsWXSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wbc7bVEl; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771256960; c=relaxed/simple;
+	bh=S7FCPDNRTuTokYbVmtUw1wt5LCxHACHp92odx4zAsRE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jPP1MkREAoG9T0LPuHsFZ4h/vPerpnRXPIOaxntWk7h5sQrsBJIGwEn255Gj36Ru8num4l1/R5C9VvrsXH9Hzxm5JF0N2HdtXfl7xq0uEn/Das7JCzcvHMmLbMZiNA0n78oazEseqBI7cM6MnIXX6iLlmxSyV1wiS9pe3VrZ+lw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=YMqmGNgc; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wbc7bVEl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1638C116C6;
-	Mon, 16 Feb 2026 15:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771255860;
-	bh=Quyklt0OpgDW5NcjhvRx5Josr55CGYucwL1ahUwcM5Y=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=Wbc7bVElf0xKKa6Wv1UGbA3Pqh60qFdYPVQHcyZzmO5bCCAJXy1Gf/3NwxDflh1sy
-	 muY1WpL9o9ADYgDFECry2N2mDA2C+i5++daKSug/yiIH/eAlVEkdcew5yBaRiVgp8t
-	 xpI7EAsflfEj57TCCoSkK04C6EvbzbSa0SpjugEWnN77MBDlACrh+hyyVoOXBIkFIi
-	 /f+0f2Qr20ERCJP1bLIeTvelEHkRjEQh38n8mtUQZ+CrA/uZ5DXzGvlpCuWlb31a2p
-	 ZTkVbFV2VZxY1Zaty49O8+o71ZnZmFokQ6QbfwjM2PsM+onRXBIARyTJv+1BZqlKxo
-	 Rg6o+WVBERYPA==
-Subject: [PATCH net-next v4 5/5] net: sched: sch_dualpi2: use
- qdisc_dequeue_drop() for dequeue drops
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-To: netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-Cc: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
- Jakub Kicinski <kuba@kernel.org>, horms@kernel.org, jiri@resnulli.us,
- edumazet@google.com, xiyou.wangcong@gmail.com, jhs@mojatatu.com,
- atenart@redhat.com, carges@cloudflare.com, kernel-team@cloudflare.com
-Date: Mon, 16 Feb 2026 16:30:55 +0100
-Message-ID: <177125585500.2500844.3560416262684938063.stgit@firesoul>
-In-Reply-To: <177125575993.2500844.8718737675156179479.stgit@firesoul>
-References: <177125575993.2500844.8718737675156179479.stgit@firesoul>
-User-Agent: StGit/1.5
+	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="YMqmGNgc"
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-662fe3ff6f6so1532052eaf.0
+        for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 07:49:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1771256956; x=1771861756; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SYsmHXReoW9BrXI3fnboPaB0P/FfcginaDYlFc3JCAU=;
+        b=YMqmGNgcw/q09739d6onWHvYU3GFDWr+k8OeoGJj1xp9j3W/DtBRQCs/O0qM4tqoQu
+         lHpoLaIpujaGOoZ3Qrtuf35F305O1UoVvO+f3SS+iNXiAOY0l5SqsiMP9uVY2F+KPzqq
+         bzX/nxhwZD2wGuQGyTaMArujccpCYLezrEwu0utbko4/tb8nORiF4f479zPQwlmTluH0
+         3OoKRk4TLHWh96f0bQgkr/aaGVQItZxaJWIuLvpC55BbhNVfaSGq0cvl+s9p53Yn2QpY
+         LZJ5L/2/gQPlU+QSUyngy5X4N0bI0jWYuHqUCsq3i20RHrfjpLJvyBjLZYTzebFIBq2A
+         pUkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771256956; x=1771861756;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SYsmHXReoW9BrXI3fnboPaB0P/FfcginaDYlFc3JCAU=;
+        b=qbg93sqThDNAhqAZ6Uq+m76aSseTHnZLgAsDQhmKFnh3ZjzTl9J/gapHbJSxEFO+nl
+         CbL7e4WWoShwUwKL0eLViTvMffjxLU3gh+gI6rNXNN2RM+RvVIRCkM8mKNEzlohTMUGx
+         IsmlRveu3OZQ3UolQ0rg7EpPsKxAl9xaQ9Nyk1c5IcXAuc0YnipUkq8fvF7ZUcMp46Je
+         Ze0B9U69DwCJ8z9xSetZk1WhxJWG1M4AnVeq2ZVHjY7H3dBKBChyxlW/9KeHwThK6LUN
+         l28Xq5YjpfoGDTwmuuhkpdkS7YtcwHP39h53Xq7tiNFmbxgauSJ8VWb7jVS2rKk4JypY
+         VIaA==
+X-Gm-Message-State: AOJu0YyLzTw39e1AxkvhSGx2hmBqZ5J76EyhqVYF3Qr/DqB5oplEAPt9
+	cKRcjBj9KPC2Lznin/7chzmiLj4VH9ryzgiJOHtTJeT56MGb0quAyBAKgPlzU9MQzwc=
+X-Gm-Gg: AZuq6aKHHkraiQP9Fka14G9D6Qm/FCahWqm+U1Rn+Of8y/zi+rxLhVoVBn0XFxZLA0h
+	R0J5B9gyAD2ZwGWUl3LHWRqJTcq+g9U491sWMhswgGqmO313BNF3rZgs5uMaW4aDzf34ZK05ajz
+	PL27wWTtPvl4jWmQk3b4jgjj4WfhwrVDnVDBwFPkEWnKGhK9DjvEEOokpklfsP3LpBC7sWfcu29
+	mFn25z74a7/8Df3dCh/woUfhjNKbclwgwhYOM0z/LtqkGQrpAgkcfonB+CNIREClxQmnla7l0f7
+	5aI6TDqKe1Qmibta1Wo2ipb0wKgsT9TPpi9BgpjSDtNMuz/SqoGS4Q0Nq+GDVTdyRI6cyMEdWsx
+	V3R3WVhgOiOS76pHl1IOkdgGsjVnPqdP16nanEHql13d3aJrnAKezBrq+MkHHd+0nr7RNGC/Gj4
+	GGDolgd4GQL1U/6qo8bD1fz3zL1DybM7p1DYWRWEkd1cH7+aZePCcvag5ezWitCgGtWbxJYWrUF
+	LXjrJ8BSQ==
+X-Received: by 2002:a05:6820:1b08:b0:679:1eef:96f with SMTP id 006d021491bc7-6791eef0fefmr3551041eaf.29.1771256956100;
+        Mon, 16 Feb 2026 07:49:16 -0800 (PST)
+Received: from [192.168.1.150] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-40eaeb42708sm15529092fac.0.2026.02.16.07.49.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Feb 2026 07:49:15 -0800 (PST)
+Message-ID: <0b2d5fa2-77b8-4b0d-b90f-d073ea671fbe@kernel.dk>
+Date: Mon, 16 Feb 2026 08:49:14 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/5] io_uring: introduce callback driven main loop
+To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>
+References: <cover.1770836401.git.asml.silence@gmail.com>
+ <efa65f15822f686bc2a8abda7ba799d3cf46f6c3.1770836401.git.asml.silence@gmail.com>
+Content-Language: en-US
+From: Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <efa65f15822f686bc2a8abda7ba799d3cf46f6c3.1770836401.git.asml.silence@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-DualPI2 drops packets during dequeue but was using kfree_skb_reason()
-directly, bypassing trace_qdisc_drop. Convert to qdisc_dequeue_drop()
-and add QDISC_DROP_L4S_STEP_NON_ECN to the qdisc drop reason enum.
+On 2/11/26 12:04 PM, Pavel Begunkov wrote:
+> +static int __io_run_loop(struct io_ring_ctx *ctx)
+> +{
+> +	struct iou_loop_state ls = {};
+> +
+> +	while (true) {
+> +		unsigned nr_wait;
+> +		int step_res;
+> +
+> +		if (unlikely(!ctx->loop_step))
+> +			return -EFAULT;
+> +
+> +		step_res = ctx->loop_step(ctx, &ls.p);
+> +		if (step_res == IOU_LOOP_STOP)
+> +			break;
+> +		if (step_res != IOU_LOOP_CONTINUE)
+> +			return -EINVAL;
+> +
+> +		nr_wait = io_loop_nr_cqes(ctx, &ls);
+> +		if (nr_wait > 0)
+> +			io_loop_wait(ctx, &ls, nr_wait);
+> +
+> +		if (task_work_pending(current)) {
+> +			mutex_unlock(&ctx->uring_lock);
+> +			io_run_task_work();
+> +			mutex_lock(&ctx->uring_lock);
+> +		}
+> +		if (unlikely(task_sigpending(current)))
+> +			return -EINTR;
+> +
+> +		nr_wait = max(nr_wait, 0);
+> +		io_run_local_work_locked(ctx, nr_wait);
+> +
+> +		if (READ_ONCE(ctx->check_cq) & BIT(IO_CHECK_CQ_OVERFLOW_BIT))
+> +			io_cqring_do_overflow_flush(ctx);
 
-- Set TCQ_F_DEQUEUE_DROPS flag in dualpi2_init()
-- Use enum qdisc_drop_reason in drop_and_retry()
-- Replace kfree_skb_reason() with qdisc_dequeue_drop()
+We need a __io_cqring_do_overflow_flush() or similar here that already
+has ->uring_lock held. Or The same dropping/regetting of the lock as is
+done for io_run_task_work().
 
-Signed-off-by: Jesper Dangaard Brouer <hawk@kernel.org>
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
----
- include/net/dropreason-core.h  |    6 ------
- include/net/dropreason-qdisc.h |    8 ++++++++
- net/sched/sch_dualpi2.c        |   12 ++++++------
- 3 files changed, 14 insertions(+), 12 deletions(-)
-
-diff --git a/include/net/dropreason-core.h b/include/net/dropreason-core.h
-index 3d8d284e05c8..5c8c2eb3d2c5 100644
---- a/include/net/dropreason-core.h
-+++ b/include/net/dropreason-core.h
-@@ -121,7 +121,6 @@
- 	FN(CANFD_RX_INVALID_FRAME)	\
- 	FN(CANXL_RX_INVALID_FRAME)	\
- 	FN(PFMEMALLOC)	\
--	FN(DUALPI2_STEP_DROP)		\
- 	FN(PSP_INPUT)			\
- 	FN(PSP_OUTPUT)			\
- 	FNe(MAX)
-@@ -579,11 +578,6 @@ enum skb_drop_reason {
- 	 * reached a path or socket not eligible for use of memory reserves
- 	 */
- 	SKB_DROP_REASON_PFMEMALLOC,
--	/**
--	 * @SKB_DROP_REASON_DUALPI2_STEP_DROP: dropped by the step drop
--	 * threshold of DualPI2 qdisc.
--	 */
--	SKB_DROP_REASON_DUALPI2_STEP_DROP,
- 	/** @SKB_DROP_REASON_PSP_INPUT: PSP input checks failed */
- 	SKB_DROP_REASON_PSP_INPUT,
- 	/** @SKB_DROP_REASON_PSP_OUTPUT: PSP output checks failed */
-diff --git a/include/net/dropreason-qdisc.h b/include/net/dropreason-qdisc.h
-index 84f19a51382c..fb151cd31751 100644
---- a/include/net/dropreason-qdisc.h
-+++ b/include/net/dropreason-qdisc.h
-@@ -14,6 +14,7 @@
- 	FN(BAND_LIMIT)		\
- 	FN(HORIZON_LIMIT)		\
- 	FN(FLOW_LIMIT)			\
-+	FN(L4S_STEP_NON_ECN)		\
- 	FNe(MAX)
- 
- #undef FN
-@@ -93,6 +94,13 @@ enum qdisc_drop_reason {
- 	 * monopolizing queue resources.
- 	 */
- 	QDISC_DROP_FLOW_LIMIT,
-+	/**
-+	 * @QDISC_DROP_L4S_STEP_NON_ECN: DualPI2 qdisc dropped a non-ECN-capable
-+	 * packet because the L4S queue delay exceeded the step threshold.
-+	 * Since the packet cannot be ECN-marked, it must be dropped to signal
-+	 * congestion. See RFC 9332 for the DualQ Coupled AQM step mechanism.
-+	 */
-+	QDISC_DROP_L4S_STEP_NON_ECN,
- 	/**
- 	 * @QDISC_DROP_MAX: the maximum of qdisc drop reasons, which
- 	 * shouldn't be used as a real 'reason' - only for tracing code gen
-diff --git a/net/sched/sch_dualpi2.c b/net/sched/sch_dualpi2.c
-index 0b6a38704a3b..fe6f5e889625 100644
---- a/net/sched/sch_dualpi2.c
-+++ b/net/sched/sch_dualpi2.c
-@@ -571,11 +571,11 @@ static int do_step_aqm(struct dualpi2_sched_data *q, struct sk_buff *skb,
- }
- 
- static void drop_and_retry(struct dualpi2_sched_data *q, struct sk_buff *skb,
--			   struct Qdisc *sch, enum skb_drop_reason reason)
-+			   struct Qdisc *sch, enum qdisc_drop_reason reason)
- {
- 	++q->deferred_drops_cnt;
- 	q->deferred_drops_len += qdisc_pkt_len(skb);
--	kfree_skb_reason(skb, reason);
-+	qdisc_dequeue_drop(sch, skb, reason);
- 	qdisc_qstats_drop(sch);
- }
- 
-@@ -590,15 +590,13 @@ static struct sk_buff *dualpi2_qdisc_dequeue(struct Qdisc *sch)
- 
- 	while ((skb = dequeue_packet(sch, q, &credit_change, now))) {
- 		if (!q->drop_early && must_drop(sch, q, skb)) {
--			drop_and_retry(q, skb, sch,
--				       QDISC_DROP_CONGESTED);
-+			drop_and_retry(q, skb, sch, QDISC_DROP_CONGESTED);
- 			continue;
- 		}
- 
- 		if (skb_in_l_queue(skb) && do_step_aqm(q, skb, now)) {
- 			qdisc_qstats_drop(q->l_queue);
--			drop_and_retry(q, skb, sch,
--				       SKB_DROP_REASON_DUALPI2_STEP_DROP);
-+			drop_and_retry(q, skb, sch, QDISC_DROP_L4S_STEP_NON_ECN);
- 			continue;
- 		}
- 
-@@ -915,6 +913,8 @@ static int dualpi2_init(struct Qdisc *sch, struct nlattr *opt,
- 	struct dualpi2_sched_data *q = qdisc_priv(sch);
- 	int err;
- 
-+	sch->flags |= TCQ_F_DEQUEUE_DROPS;
-+
- 	q->l_queue = qdisc_create_dflt(sch->dev_queue, &pfifo_qdisc_ops,
- 				       TC_H_MAKE(sch->handle, 1), extack);
- 	if (!q->l_queue)
-
-
+-- 
+Jens Axboe
