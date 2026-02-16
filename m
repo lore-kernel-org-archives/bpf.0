@@ -1,116 +1,188 @@
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B44EE313E34
-	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 15:06:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3403161AA
+	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 15:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771254370; cv=none; b=qO6GpbzLKgetJbgamI1PIwTK0Rj6VFwfc6YXlK9rVSMMpi5BF+6fcs7fmkWeiE1nkdY17b96ZKLxdAZhcHaK7DJO2TWXVaucjVBEb/8z97qwV2vBsnF5KcXH5lkvEosPOPKijJagGbbANP6SRSmoyW0uQv8PPAMUOPCFOpl58DI=
+	t=1771254376; cv=none; b=Pb95DYsRAPc0pk7tfrDP602qCARpOyOXDNJXC2TUzzn7fC56BM9h0mzbVnSE9Bl9UOa15zX4eGNj5Ex2GGW2/kp+Cg35ZTuzFulbyMAjkWkDFYDAR17uzfX71iuX402IfKevmZro13ul0CpbKWVJkMddxiHRR7zhJzwUIULOucc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771254370; c=relaxed/simple;
-	bh=vR+QAy7ow7IUpEgJolTV+0NwGmXjYUXcNxGeHlD4+bY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=uajedk34CDY7PijYVo9kWyzpr72vs6dnJo504H8lexyY55vejB/PkA20YtKj6G7nnLeYgcwKw4JYSvRMiDGKxfyD9kXdqcZaoJMQYK8LbJY8wpu6Lp+4GJv7D0ijL8a0i/8EEC50H4G6HfvoGMKJ1oWcVx59SxhbyV9CuWRFSg8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PeYC6NMn; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771254376; c=relaxed/simple;
+	bh=+rpFprJBjV+nkGhaF+kJyg6eUDCUKexcnfBuSKsRM0U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nKTipGSTwlSE4hYpZQqtF1cG9wOjEtvIo1/M8DTktUIUkM7xQizaINsEF3YSpSB8EjUHvy3eF0C42e5SEqZGvt3/IUARSM4gq/tpibTrs1G9X4YvfWKp4xoNmvncHOQlWv9Ah6gceWMignZNSW2pdAjYtQNAI4DV2opQCkN6/+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=P+YhlP9+; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PeYC6NMn"
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-824484dba4dso2960215b3a.0
-        for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 07:06:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771254369; x=1771859169; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=A6uX9Uhp5KRzO30Ht+YfFjNfPHQX7eMbhvwH7Wme3Gw=;
-        b=PeYC6NMng7hwREe+mXzuhL299CBpZLX72afhw2eZrPHMplOi1C1L7uQUKisFeCSqgE
-         /fmwCVS8H7to3Au2o7vra4IXxorsm1qIMi8aCIY61AkNR7OK69SIm2JYfkX1hs44oTQp
-         i+Ue8trpUPUnjfWvRBQS0KgwJaJuxKiZ2b7SG72MNy1lq7u5lDB1wGMJ2U7/JMVuG0eR
-         GiM2yYISNV9vSTwFkx8x4w29w47D8wmLmQCokdEjnJKZiq13EOD71FenO86T2btlxdGV
-         yFOJJSd1Saq3nad73Vf1LuYOJZE6drkA7SEz0S6cBDi/PUJaaG72R8XaLjavfLtCOGSh
-         s8BQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771254369; x=1771859169;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A6uX9Uhp5KRzO30Ht+YfFjNfPHQX7eMbhvwH7Wme3Gw=;
-        b=lMfBIq8N/HUxxEp7xRzZwk+RnBMuZ1JzmzLxerXAS0dc7gaB2b6WztHyy1NsAYuelY
-         hk+a0LFgnfYNM7bLo7R0oHy1dJwWDadLriLt9NELKLA9CC83AO8nBh0T/a4P7mI6XhTT
-         frhanLDmRqcRTY2tcx6pZdGDeuyRvxR3Wxlv2fcDgEkRyHyaYqG3lUg8zvA/xH6TpqXX
-         lBpwLk0DfuJtG+QeAeZetkVjXvz/qFsHoT5b90VlXxZL7VjQcj87vDtKnHRhp/owrmHP
-         H8AVYKqOm7VtqqYHE9/LrLnkDN4ployicrVd7IqmdA08WnVPxsLk+GyWy7kVoYU2jqTN
-         KCGA==
-X-Gm-Message-State: AOJu0YzSGJf26gw0o9rCoQnkpm+T0vDpQttY/Xr2QYmX6Goe9BAYeGgG
-	xKP3nDYc9nB2belotWJguO9wL/p1SBehnTE2uJM25Me9CPV+Bi0qSFo/Cc3jkKbl
-X-Gm-Gg: AZuq6aJpHjCa7aBUtedsDVI+dG1kS0IM6YLH+yp0+aoTJ2/ezKg+iClfgIff9Klma66
-	kGwP6Qci7wy3gZuQObmcIis87bYJBVv/1pEH0gJuelcXCNIisIv+q4cZZ9ZuIBOPqFB4KZGrzt6
-	OhWoypiQjmuiT3JKPf0JEB308ftw3PJdSqsnoZk5IH09ZDpEgDndVcLhv38HQ7bfvVwjUnTgrdu
-	634dI9x0MUxcMWHkBvai7D0hPGOsX6pHI99xn620Jlfs21slBJqfXcJaW7Ota4mKkXDxpyXVBHI
-	Pj6735ZkBOpjc3VO3yPzlnF6CNwel6rSbdl8VOsGNAP/hC4vueD4FiFfxClIzh9n64AxDCGIlhc
-	Y8scHwYuatBHFgoIkaM3FsV5EVfLcpux+vtmi7uqhr6PvNX9zLy++/Gtssg3hVPC6ktH++Xdc6q
-	vJ1y8VBhazRAN8KYciCHaz6MVin/1zo0pyLkyd20a1075FsscXgYq8XJaitOZC9Hdiu1Uz/TqYS
-	m0Q2uc2M3wPi4wj5G0=
-X-Received: by 2002:a05:6a21:600b:b0:35e:fce6:46e7 with SMTP id adf61e73a8af0-3946c6f4be8mr10229646637.5.1771254368847;
-        Mon, 16 Feb 2026 07:06:08 -0800 (PST)
-Received: from localhost.localdomain ([49.207.200.48])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-356a86f7217sm6697952a91.5.2026.02.16.07.06.04
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 16 Feb 2026 07:06:08 -0800 (PST)
-From: Anand Kumar Shaw <anandkrshawheritage@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="P+YhlP9+"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771254372;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z226B2XpSmq8CSurWwANapKEljmLoPyyQ4nyb6ASTzE=;
+	b=P+YhlP9+zLY5jgc+mxcRPgEtZeahM2kPCrCsbholOWeQNj3O9LOSwL8D5mwkBcD0kgoLh5
+	8zurFu6IjPf5oW0EZ846rlRBEZYtYDbBC2Kpewv077i3tEq0b5QOmt8EyWWv0aVCNE77bc
+	wjAeFN7gvA9IrqwD3V6GpQZfHlVcQLI=
+From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
-Cc: netdev@vger.kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	kuba@kernel.org,
-	davem@davemloft.net,
-	sdf@fomichev.me,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	Anand Kumar Shaw <anandkrshawheritage@gmail.com>
-Subject: [PATCH] bpf: cpumap: add missing XDP_ABORTED handling in xdp prog runner
-Date: Mon, 16 Feb 2026 20:36:01 +0530
-Message-Id: <20260216150601.9454-1-anandkrshawheritage@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Seth Forshee <sforshee@kernel.org>,
+	Yuichiro Tsuji <yuichtsu@amazon.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v11 2/8] libbpf: Add support for extended BPF syscall
+Date: Mon, 16 Feb 2026 23:04:39 +0800
+Message-ID: <20260216150445.68278-3-leon.hwang@linux.dev>
+In-Reply-To: <20260216150445.68278-1-leon.hwang@linux.dev>
+References: <20260216150445.68278-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-cpu_map_bpf_prog_run_xdp() does not handle XDP_ABORTED, causing it
-to fall through to the default case which calls
-bpf_warn_invalid_xdp_action(). XDP_ABORTED is a valid action that
-signals an exception in the BPF program — it should fire
-trace_xdp_exception() and drop the frame without a spurious warning.
+To support the extended BPF syscall introduced in the previous commit,
+introduce the following internal APIs:
 
-The SKB path in the same file (cpu_map_bpf_prog_run_skb) and devmap's
-dev_map_bpf_prog_run() both handle XDP_ABORTED correctly. Add the
-missing case to match.
+* 'sys_bpf_ext()'
+* 'sys_bpf_ext_fd()'
+  They wrap the raw 'syscall()' interface to support passing extended
+  attributes.
+* 'probe_sys_bpf_ext()'
+  Check whether current kernel supports the BPF syscall common attributes.
 
-Signed-off-by: Anand Kumar Shaw <anandkrshawheritage@gmail.com>
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/cpumap.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/lib/bpf/bpf.c             | 36 +++++++++++++++++++++++++++++++++
+ tools/lib/bpf/features.c        |  8 ++++++++
+ tools/lib/bpf/libbpf_internal.h |  3 +++
+ 3 files changed, 47 insertions(+)
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 04171fbc3..b1fe83eeb 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -223,6 +223,9 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
- 		default:
- 			bpf_warn_invalid_xdp_action(NULL, rcpu->prog, act);
- 			fallthrough;
-+		case XDP_ABORTED:
-+			trace_xdp_exception(xdpf->dev_rx, rcpu->prog, act);
-+			fallthrough;
- 		case XDP_DROP:
- 			xdp_return_frame(xdpf);
- 			stats->drop++;
+diff --git a/tools/lib/bpf/bpf.c b/tools/lib/bpf/bpf.c
+index 5846de364209..9d8740761b7a 100644
+--- a/tools/lib/bpf/bpf.c
++++ b/tools/lib/bpf/bpf.c
+@@ -69,6 +69,42 @@ static inline __u64 ptr_to_u64(const void *ptr)
+ 	return (__u64) (unsigned long) ptr;
+ }
+ 
++static inline int sys_bpf_ext(enum bpf_cmd cmd, union bpf_attr *attr,
++			      unsigned int size,
++			      struct bpf_common_attr *attr_common,
++			      unsigned int size_common)
++{
++	cmd = attr_common ? (cmd | BPF_COMMON_ATTRS) : (cmd & ~BPF_COMMON_ATTRS);
++	return syscall(__NR_bpf, cmd, attr, size, attr_common, size_common);
++}
++
++static inline int sys_bpf_ext_fd(enum bpf_cmd cmd, union bpf_attr *attr,
++				 unsigned int size,
++				 struct bpf_common_attr *attr_common,
++				 unsigned int size_common)
++{
++	int fd;
++
++	fd = sys_bpf_ext(cmd, attr, size, attr_common, size_common);
++	return ensure_good_fd(fd);
++}
++
++int probe_sys_bpf_ext(void)
++{
++	const size_t attr_sz = offsetofend(union bpf_attr, prog_token_fd);
++	union bpf_attr attr;
++	int fd;
++
++	memset(&attr, 0, attr_sz);
++	fd = syscall(__NR_bpf, BPF_PROG_LOAD | BPF_COMMON_ATTRS, &attr, attr_sz, NULL,
++		     sizeof(struct bpf_common_attr));
++	if (fd >= 0) {
++		close(fd);
++		return -EINVAL;
++	}
++	return errno == EFAULT ? 1 : 0;
++}
++
+ static inline int sys_bpf(enum bpf_cmd cmd, union bpf_attr *attr,
+ 			  unsigned int size)
+ {
+diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+index b842b83e2480..e0d646a9e233 100644
+--- a/tools/lib/bpf/features.c
++++ b/tools/lib/bpf/features.c
+@@ -506,6 +506,11 @@ static int probe_kern_arg_ctx_tag(int token_fd)
+ 	return probe_fd(prog_fd);
+ }
+ 
++static int probe_bpf_syscall_common_attrs(int token_fd)
++{
++	return probe_sys_bpf_ext();
++}
++
+ typedef int (*feature_probe_fn)(int /* token_fd */);
+ 
+ static struct kern_feature_cache feature_cache;
+@@ -581,6 +586,9 @@ static struct kern_feature_desc {
+ 	[FEAT_BTF_QMARK_DATASEC] = {
+ 		"BTF DATASEC names starting from '?'", probe_kern_btf_qmark_datasec,
+ 	},
++	[FEAT_BPF_SYSCALL_COMMON_ATTRS] = {
++		"BPF syscall common attributes support", probe_bpf_syscall_common_attrs,
++	},
+ };
+ 
+ bool feat_supported(struct kern_feature_cache *cache, enum kern_feature_id feat_id)
+diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
+index fc59b21b51b5..aa16be869c4f 100644
+--- a/tools/lib/bpf/libbpf_internal.h
++++ b/tools/lib/bpf/libbpf_internal.h
+@@ -392,6 +392,8 @@ enum kern_feature_id {
+ 	FEAT_ARG_CTX_TAG,
+ 	/* Kernel supports '?' at the front of datasec names */
+ 	FEAT_BTF_QMARK_DATASEC,
++	/* Kernel supports BPF syscall common attributes */
++	FEAT_BPF_SYSCALL_COMMON_ATTRS,
+ 	__FEAT_CNT,
+ };
+ 
+@@ -757,4 +759,5 @@ int probe_fd(int fd);
+ #define SHA256_DWORD_SIZE SHA256_DIGEST_LENGTH / sizeof(__u64)
+ 
+ void libbpf_sha256(const void *data, size_t len, __u8 out[SHA256_DIGEST_LENGTH]);
++int probe_sys_bpf_ext(void);
+ #endif /* __LIBBPF_LIBBPF_INTERNAL_H */
 -- 
-2.39.5 (Apple Git-154)
+2.52.0
 
