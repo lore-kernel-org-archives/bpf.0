@@ -1,123 +1,121 @@
-Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F2983191BF
-	for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 15:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E818E26D4F7;
+	Mon, 16 Feb 2026 16:30:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771256960; cv=none; b=HToRPIBNFjjCaPLdcsC+jNmkkq/sLIcThZGcgn3HpFbl3rt0YEm5f7EBLuE+rJSEBrdvl1g/8ozFdVGhGdOSvdt24TjDRk/wMW4f1ZQK2Unp6JeEhbGatHKZjdjCzGsW/pWILKly/cDhjZWXLrKUSpwsxyhZ98Y4tMYMppWvEGo=
+	t=1771259451; cv=none; b=dH8DuFzoatwG9bNvLJZZv/iejEkQqlCIi2GWvSKE68yJNOAnzdM7IrFnJXSvBoCADeZdI390ucj8faMgAUw6EvLor/IQ+VuVUKLSZjqd5I8XkjzLJ3KJbTzqhkaMXL8j2m5uu0vOvD/SONjhiNlh2IOW3Ot6MnPc9276/7RBSqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771256960; c=relaxed/simple;
-	bh=S7FCPDNRTuTokYbVmtUw1wt5LCxHACHp92odx4zAsRE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jPP1MkREAoG9T0LPuHsFZ4h/vPerpnRXPIOaxntWk7h5sQrsBJIGwEn255Gj36Ru8num4l1/R5C9VvrsXH9Hzxm5JF0N2HdtXfl7xq0uEn/Das7JCzcvHMmLbMZiNA0n78oazEseqBI7cM6MnIXX6iLlmxSyV1wiS9pe3VrZ+lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=YMqmGNgc; arc=none smtp.client-ip=209.85.161.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
+	s=arc-20240116; t=1771259451; c=relaxed/simple;
+	bh=MsKOd84lx8EjiCfSFR1Ya3sszEAE9ECuXfRSNEv16ws=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=N8ccrX+CO8GfcYjjWx4ai9pZQzGIBQ5hlfcotGKtkpZL8QWZXO+PPV/FB6sDUeLRnJlLeHQd+XGgbv0xEzRtHdn5Jt1Ld7ADbYVpRbCg+Tc/TKwH5FwSxDr6bnjcEDd67C8qpqW7BA/2VBg/K7UHh5OUDWBGxOpfUZjM6IPkmgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MjqksDIZ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="YMqmGNgc"
-Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-662fe3ff6f6so1532052eaf.0
-        for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 07:49:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1771256956; x=1771861756; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SYsmHXReoW9BrXI3fnboPaB0P/FfcginaDYlFc3JCAU=;
-        b=YMqmGNgcw/q09739d6onWHvYU3GFDWr+k8OeoGJj1xp9j3W/DtBRQCs/O0qM4tqoQu
-         lHpoLaIpujaGOoZ3Qrtuf35F305O1UoVvO+f3SS+iNXiAOY0l5SqsiMP9uVY2F+KPzqq
-         bzX/nxhwZD2wGuQGyTaMArujccpCYLezrEwu0utbko4/tb8nORiF4f479zPQwlmTluH0
-         3OoKRk4TLHWh96f0bQgkr/aaGVQItZxaJWIuLvpC55BbhNVfaSGq0cvl+s9p53Yn2QpY
-         LZJ5L/2/gQPlU+QSUyngy5X4N0bI0jWYuHqUCsq3i20RHrfjpLJvyBjLZYTzebFIBq2A
-         pUkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771256956; x=1771861756;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SYsmHXReoW9BrXI3fnboPaB0P/FfcginaDYlFc3JCAU=;
-        b=qbg93sqThDNAhqAZ6Uq+m76aSseTHnZLgAsDQhmKFnh3ZjzTl9J/gapHbJSxEFO+nl
-         CbL7e4WWoShwUwKL0eLViTvMffjxLU3gh+gI6rNXNN2RM+RvVIRCkM8mKNEzlohTMUGx
-         IsmlRveu3OZQ3UolQ0rg7EpPsKxAl9xaQ9Nyk1c5IcXAuc0YnipUkq8fvF7ZUcMp46Je
-         Ze0B9U69DwCJ8z9xSetZk1WhxJWG1M4AnVeq2ZVHjY7H3dBKBChyxlW/9KeHwThK6LUN
-         l28Xq5YjpfoGDTwmuuhkpdkS7YtcwHP39h53Xq7tiNFmbxgauSJ8VWb7jVS2rKk4JypY
-         VIaA==
-X-Gm-Message-State: AOJu0YyLzTw39e1AxkvhSGx2hmBqZ5J76EyhqVYF3Qr/DqB5oplEAPt9
-	cKRcjBj9KPC2Lznin/7chzmiLj4VH9ryzgiJOHtTJeT56MGb0quAyBAKgPlzU9MQzwc=
-X-Gm-Gg: AZuq6aKHHkraiQP9Fka14G9D6Qm/FCahWqm+U1Rn+Of8y/zi+rxLhVoVBn0XFxZLA0h
-	R0J5B9gyAD2ZwGWUl3LHWRqJTcq+g9U491sWMhswgGqmO313BNF3rZgs5uMaW4aDzf34ZK05ajz
-	PL27wWTtPvl4jWmQk3b4jgjj4WfhwrVDnVDBwFPkEWnKGhK9DjvEEOokpklfsP3LpBC7sWfcu29
-	mFn25z74a7/8Df3dCh/woUfhjNKbclwgwhYOM0z/LtqkGQrpAgkcfonB+CNIREClxQmnla7l0f7
-	5aI6TDqKe1Qmibta1Wo2ipb0wKgsT9TPpi9BgpjSDtNMuz/SqoGS4Q0Nq+GDVTdyRI6cyMEdWsx
-	V3R3WVhgOiOS76pHl1IOkdgGsjVnPqdP16nanEHql13d3aJrnAKezBrq+MkHHd+0nr7RNGC/Gj4
-	GGDolgd4GQL1U/6qo8bD1fz3zL1DybM7p1DYWRWEkd1cH7+aZePCcvag5ezWitCgGtWbxJYWrUF
-	LXjrJ8BSQ==
-X-Received: by 2002:a05:6820:1b08:b0:679:1eef:96f with SMTP id 006d021491bc7-6791eef0fefmr3551041eaf.29.1771256956100;
-        Mon, 16 Feb 2026 07:49:16 -0800 (PST)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-40eaeb42708sm15529092fac.0.2026.02.16.07.49.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Feb 2026 07:49:15 -0800 (PST)
-Message-ID: <0b2d5fa2-77b8-4b0d-b90f-d073ea671fbe@kernel.dk>
-Date: Mon, 16 Feb 2026 08:49:14 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MjqksDIZ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07703C116C6;
+	Mon, 16 Feb 2026 16:30:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771259450;
+	bh=MsKOd84lx8EjiCfSFR1Ya3sszEAE9ECuXfRSNEv16ws=;
+	h=From:Date:Subject:To:Cc:From;
+	b=MjqksDIZDTgSG5AN8vPNGTNRAzH6y5hI4HzgmmWzrvsoDNlgF/j+vFnZ+OqUccA1k
+	 tNq9Xh3aIHu+di9WUBuzyG9d5eMQzNp78q6Mu9mYw1Gf+KkmBcxm0NmKkVIhhhpDCT
+	 kX7O1rYKpppjZSTubUO6GkXwVapp0IoYfYUWBbDIs4CSOQ9sSJa7s9vgmoaJZ+AAXU
+	 lcvk4Ir0P+ATovPtM+o3q0nMHYfXh82KkCOeuy4COtRbtwrcDcr/Us8jqWbQ3arQXy
+	 VAkyXqcedRvPq0pZtvJQKPNf5c+IlgBS1fFMNqXoDZqFf1qcFl21Kb3NoQEUVoi5KW
+	 H7umKkp5U1SSA==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Date: Mon, 16 Feb 2026 17:30:34 +0100
+Subject: [PATCH bpf] selftests/bpf: Remove hexdump dependency
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/5] io_uring: introduce callback driven main loop
-To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <cover.1770836401.git.asml.silence@gmail.com>
- <efa65f15822f686bc2a8abda7ba799d3cf46f6c3.1770836401.git.asml.silence@gmail.com>
-Content-Language: en-US
-From: Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <efa65f15822f686bc2a8abda7ba799d3cf46f6c3.1770836401.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260216-bpf-sft-hexdump-od-v1-1-f8cebd8eb9d0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACpGk2kC/x2MQQqAIBAAvxJ7bsEMCvpKdNBccw+VaIUQ/r2l4
+ 8DMvJApMWWYmhcSPZz5PAS6toE1mGMjZCcMWulB6W5AGz1mf2Gg4u494unQWKdG01svDkgYE3k
+ u/3QG8WGp9QOzbhYbaQAAAA==
+X-Change-ID: 20260216-bpf-sft-hexdump-od-abd07a3bf026
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Mykyta Yatsenko <yatsenko@meta.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2728; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=MsKOd84lx8EjiCfSFR1Ya3sszEAE9ECuXfRSNEv16ws=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDInu5lfLK9Y+8iXV8r1/qQN8XxKzy2CLN73u8htufbof
+ rX0hu8HO0pZGMS4GGTFFFmk2yLzZz6v4i3x8rOAmcPKBDKEgYtTACaSH8fIcCX6bcPqvWZT/Y6F
+ zLyp85Ij8HenrqqC1R052a/fpnxYVMnwz+Cn+zNfm54Ft5dYu0nHnup4dfRNJtc3XfsOH+6e56I
+ /uAA=
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On 2/11/26 12:04 PM, Pavel Begunkov wrote:
-> +static int __io_run_loop(struct io_ring_ctx *ctx)
-> +{
-> +	struct iou_loop_state ls = {};
-> +
-> +	while (true) {
-> +		unsigned nr_wait;
-> +		int step_res;
-> +
-> +		if (unlikely(!ctx->loop_step))
-> +			return -EFAULT;
-> +
-> +		step_res = ctx->loop_step(ctx, &ls.p);
-> +		if (step_res == IOU_LOOP_STOP)
-> +			break;
-> +		if (step_res != IOU_LOOP_CONTINUE)
-> +			return -EINVAL;
-> +
-> +		nr_wait = io_loop_nr_cqes(ctx, &ls);
-> +		if (nr_wait > 0)
-> +			io_loop_wait(ctx, &ls, nr_wait);
-> +
-> +		if (task_work_pending(current)) {
-> +			mutex_unlock(&ctx->uring_lock);
-> +			io_run_task_work();
-> +			mutex_lock(&ctx->uring_lock);
-> +		}
-> +		if (unlikely(task_sigpending(current)))
-> +			return -EINTR;
-> +
-> +		nr_wait = max(nr_wait, 0);
-> +		io_run_local_work_locked(ctx, nr_wait);
-> +
-> +		if (READ_ONCE(ctx->check_cq) & BIT(IO_CHECK_CQ_OVERFLOW_BIT))
-> +			io_cqring_do_overflow_flush(ctx);
+The verification signature header generation requires converting a
+binary certificate to a C array. Previously this only worked with xxd,
+and a switch to hexdump has been done in commit b640d556a2b3
+("selftests/bpf: Remove xxd util dependency").
 
-We need a __io_cqring_do_overflow_flush() or similar here that already
-has ->uring_lock held. Or The same dropping/regetting of the lock as is
-done for io_run_task_work().
+hexdump is a more common utility program, yet it might not be installed
+by default. When it is not installed, BPF selftests build without
+errors, but tests_progs is unusable: it exits with the 255 code and
+without any error messages. When manually reproducing the issue, it is
+not too hard to find out that the generated verification_cert.h file is
+incorrect, but that's time consuming. When digging the BPF selftests
+build logs, this line can be seen amongst thousands others, but ignored:
 
+  /bin/sh: 2: hexdump: not found
+
+Here, od is used with awk, instead of hexdump with sed. od is coming
+from the core utils package, and this new od command produces the same
+output when using od from GNU coreutils, uutils, and even busybox. This
+is more portable, and it produces the same results as what was done
+before with hexdump (without trailing whitespaces as a bonus).
+
+Fixes: b640d556a2b3 ("selftests/bpf: Remove xxd util dependency")
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Originally, I was going to add a check to stop the build if hexdump was
+not available, but switching to 'od' seems to be a better solution while
+not adding a new dependency.
+
+Because test_progs was not reporting why it became unusable, I added a
+Fixes tag to have this backported, to help others. Feel free to remove
+it, or even drop the patch if you prefer to stick with hexdump.
+---
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index c6bf4dfb1495..5a618d14243e 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -723,7 +723,7 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
+ # Generates a header with C array declaration, containing test_progs_verification_cert bytes
+ $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+ 	$(Q)(echo "unsigned char test_progs_verification_cert[] = {"; \
+-	 hexdump -v -e '12/1 "  0x%02x," "\n"' $< | sed 's/0x  ,//g; $$s/,$$//'; \
++	 od -v -t 'xC' -w12 $< | awk 'NF > 1 {for (i=2; i<=NF; i++) { printf "  0x%s,", $$i }; printf "\n"}'; \
+ 	 echo "};"; \
+ 	 echo "unsigned int test_progs_verification_cert_len = $$(wc -c < $<);") > $@
+ 
+
+---
+base-commit: 886bf921ecfc30f8f31341bc26560d8bf08b937b
+change-id: 20260216-bpf-sft-hexdump-od-abd07a3bf026
+
+Best regards,
 -- 
-Jens Axboe
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
