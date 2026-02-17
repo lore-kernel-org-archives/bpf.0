@@ -1,228 +1,124 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36BD936BCE8;
-	Tue, 17 Feb 2026 13:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F22B265623
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 14:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771336506; cv=none; b=jNILKzkkUY4fA//tn++Z8tH8HIM3lKmg6lYlHZBxDspRajTiV0HujgRLHvGMAYTkMua6x8Ghi7Ga34enN1d/wwxtDBWpcbrTje9cSqPtsq2/whWWHMa8Di2nRyrZUX6HXTboaoi5o/b1KNhb6qV0gd6POW5GtiLh9pZVQyZV6pA=
+	t=1771338774; cv=none; b=sixY2xxikc8udcMVkkA9QyBAosveBC6TuTUCGIMwD4Z/EZAKI/tTbwcDF7Py8jykYcMzIm78t2xJyUNYEb8/3xMgDcmOdfa2Q1+CEgaMz5Zb6AvO+1c9Eo7EFDyDmOFsqHNTfBscsgK0PxDf8z7vZXYC9BvtdW2PFFulHT45qgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771336506; c=relaxed/simple;
-	bh=ge7gIG8IIRQWGUGHw6qwZgqeXDldxXzM/a5Ov/Y7Rr4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cGhuNfQZbeiYuHYnKrzV5yyzYXZska36IRkHIIFMarKUSPwvF4ktDPCdTs9dtDDqh4z8Y5TOPXEJkDr4Fg8NGOIidrudPeawrVyCSe5FuZvWIHyHv38WWixGPrQMYJsqSZjrcW2qsqTOpL19vWF7AO+ZSiYfM9QojN0D3G15pRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GCGtgM/F; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1771338774; c=relaxed/simple;
+	bh=51regzvlTrVRH572VciJP3Jr6oOu0PTdqVUzOG+7Q04=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qmpY7Gjifs/qNZH2L3cFOFr9WILeuIKl9Vl85d582XP4f5afo41/Ch4n3vnXX29Uu+dM+u2cNpb7RzutbluMbiepiIHY25sm5d+0hmWNuPPSYTr+TidsOaGNrNHgPzDJjstfC3W6F+UHm8Ms6nguPhR0DwJ6FJYZxBFfXADEEyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ex99wPKg; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GCGtgM/F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771336506; x=1802872506;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ge7gIG8IIRQWGUGHw6qwZgqeXDldxXzM/a5Ov/Y7Rr4=;
-  b=GCGtgM/FmyQ3VvGHeRqti8T5m744PEpJGb2MUlVu/QL3FMlK4IFgconr
-   tOhwXJWIM60K9xG6tlCrltLMdLghfVUFO8xBjyg25cHoPt2knEeH5RMvI
-   ILLFfMfvNR1+l1p/dx4rqLox/bM1tXbsv0ETE+T74FnAvfnsVUt5IewGq
-   CCeyBshvSuf0DT4whbuCbi69VHEOE81draCDN8AyTHvTdWSib8/hlaFzM
-   ofE2orlCUkpkPb3nfeo7qt/qkCmya+RvwNeZU9orpWrtN9UnsfOxzswFZ
-   ce1kBZCfr9g1zG7Q1Cssb3TB0jhkGtCY1c8NYMV9NpUxNMeTj5h8reuPr
-   A==;
-X-CSE-ConnectionGUID: WYXU1u4DS02LdJLqL9qTyA==
-X-CSE-MsgGUID: Sx9IsUw7S3egCMjg8qtzoQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="72470556"
-X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
-   d="scan'208";a="72470556"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 05:55:05 -0800
-X-CSE-ConnectionGUID: McvEJOwdRVyWWokjnxn1vA==
-X-CSE-MsgGUID: GnTaJH0OS/WfbqRKhldZQg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
-   d="scan'208";a="213904726"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orviesa008.jf.intel.com with ESMTP; 17 Feb 2026 05:54:56 -0800
-Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id E2F5128795;
-	Tue, 17 Feb 2026 13:54:52 +0000 (GMT)
-From: Larysa Zaremba <larysa.zaremba@intel.com>
-To: bpf@vger.kernel.org
-Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Wei Fang <wei.fang@nxp.com>,
-	Clark Wang <xiaoning.wang@nxp.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
-	Tushar Vyavahare <tushar.vyavahare@intel.com>,
-	Jason Xing <kernelxing@tencent.com>,
-	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
-	Eelco Chaudron <echaudro@redhat.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Toke Hoiland-Jorgensen <toke@redhat.com>,
-	imx@lists.linux.dev,
-	netdev@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ex99wPKg"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-82318702afbso3043722b3a.1
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 06:32:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771338772; x=1771943572; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PK3wDL94RvHZRaijVfhwQjim8sVJxa74bWIAAhmdngQ=;
+        b=ex99wPKg+lacYDsbqnotYbdhN4dKn4VV6owBRBU8C/ftWz48u3R+0dMm5GOCbFgMDS
+         Wh8HQrqDkXYrftzuKjPqcG3Ac2ZsTkeB6TAgZphCNBFcVaNmeEMbkA5KWzGcOj2ClICa
+         OWQloX+gN2Qn1Z9LOSq1A0exgdbVA4KcJ1KWjcVgPwHrItugsc+8BlO+IBtB7xtQuIsr
+         tHzkMmPe1mCgpzPz012mF2gAGA/InXEZ/xKfJzouyO49tCdCvSiY7jnjdk+kR8OB9v0Z
+         cD47ufU4/7TOB+ojRl5M7E1CLe3p4u4i6HfCEx1iARCAkWf0y+byy8OeoRrHEhEPkNS6
+         8pZQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771338772; x=1771943572;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PK3wDL94RvHZRaijVfhwQjim8sVJxa74bWIAAhmdngQ=;
+        b=lQkowfskkyzogbedVc5rQlBfslEz9PCVb4wV25XwabNacs3r9EzDOlogbBFbYS2QYN
+         Fq/1vKnMgDmN9Oqg1cD427HGxMofiPfu8ZqBQ/uQJv3uSx4vqXfr0bw3LHIwf6j1QqBD
+         TzW/gxI34GvCH3q/TjfktkB0fWilV0yEpVlpYk/Rs7zuhAMTfFDwyie9Njcxi1QCkk33
+         WX5vdk53IWBk/pUJk7qx+DjmV1V2bljBXtNPZRnSoy6XoHCvZryO4jV4IWhSYAb0wxvG
+         U3zXtxD9A9zaHWMCvou1DN7R+L/8nqYaZDf6dMY062So0mA4FDdNSH18AkJRwRj6nqLX
+         iWQQ==
+X-Gm-Message-State: AOJu0YyjL4pRDq9gqPKcoMvkdp+reZS50ipgvo0RVhpXiZHqZjac2pQy
+	wMcpPHCj2ZipjqM311eJvd2TLcpnrjFFMIXcp9lV+8nlaL8R0tRjZYWFBzT76jGM
+X-Gm-Gg: AZuq6aJHZKck56+9CKLpFP/1Qcu8nksb0uvgKAqcbng3TxxRVjGv217ZXpz3V5mrLqR
+	hz2ctqE9+IqYxbtnGP5WEGycHCuBO08/MX+fRMY+FHK7SbxF+c5Nw16yG1uoo065MVkklFgMr+u
+	3Ay7gdvejdhl+0o382IMDXLj+fTC5NJgpF2WW20L/26GntTaH1lztHE2mAqAH90MdP4r6wZfxvc
+	52FRofJdf7ClOphYq6O8dFMyF8CmI1320vq4XFwxzygebnBIhoSG6spcSDbt/qZx6P3Rzhb36cz
+	b68JjBvorn77rRzuAvYWGF8Ra1gxlYgFbG2Envzg582P/gxFx1ew5VqStkybYHoGc/11zyTxlQp
+	4aSS3O4X29xgwE31/kQX0Pup7Ccl4adiZNE0OsykJ5jbVoeay1v9nrOmd92OIG1ZasRBGFX+sft
+	otpSjJ3cP92ytBlXJrb0o28xEOmpeGkythsb5V77gv94i6zV8in/k6QmJQg5Tgbzohck3Bp9usU
+	XEhaCnHA1ikzlVdh+/I
+X-Received: by 2002:a05:6a00:3c90:b0:81f:2140:136d with SMTP id d2e1a72fcca58-824d951713emr10954343b3a.23.1771338772337;
+        Tue, 17 Feb 2026 06:32:52 -0800 (PST)
+Received: from localhost.localdomain ([49.207.200.244])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6b935c6sm14770821b3a.47.2026.02.17.06.32.45
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 17 Feb 2026 06:32:51 -0800 (PST)
+From: Anand Kumar Shaw <anandkrshawheritage@gmail.com>
+To: bpf@vger.kernel.org,
+	netdev@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	sdf@fomichev.me,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	haoluo@google.com,
+	jolsa@kernel.org,
 	linux-kernel@vger.kernel.org,
-	intel-wired-lan@lists.osuosl.org,
-	linux-kselftest@vger.kernel.org,
-	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
-	Dragos Tatulea <dtatulea@nvidia.com>,
-	Martin KaFai Lau <martin.lau@kernel.org>
-Subject: [PATCH bpf v3 9/9] xdp: produce a warning when calculated tailroom is negative
-Date: Tue, 17 Feb 2026 14:24:47 +0100
-Message-ID: <20260217132450.1936200-10-larysa.zaremba@intel.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260217132450.1936200-1-larysa.zaremba@intel.com>
-References: <20260217132450.1936200-1-larysa.zaremba@intel.com>
+	Anand Kumar Shaw <anandkrshawheritage@gmail.com>
+Subject: [PATCH 0/2] xdp: propagate rx queue_index through xdp_frame
+Date: Tue, 17 Feb 2026 20:02:40 +0530
+Message-Id: <20260217143242.4404-1-anandkrshawheritage@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Many ethernet drivers report xdp Rx queue frag size as being the same as
-DMA write size. However, the only user of this field, namely
-bpf_xdp_frags_increase_tail(), clearly expects a truesize.
+When an XDP frame is redirected via cpumap or devmap, the original RX
+queue index is lost. BPF programs running on the second-stage
+(SEC("xdp/cpumap") or SEC("xdp/devmap")) always see ctx->rx_queue_index
+as 0, and SKBs built from xdp_frame lack proper RX queue metadata.
 
-Such difference leads to unspecific memory corruption issues under certain
-circumstances, e.g. in ixgbevf maximum DMA write size is 3 KB, so when
-running xskxceiver's XDP_ADJUST_TAIL_GROW_MULTI_BUFF, 6K packet fully uses
-all DMA-writable space in 2 buffers. This would be fine, if only
-rxq->frag_size was properly set to 4K, but value of 3K results in a
-negative tailroom, because there is a non-zero page offset.
+This series adds a queue_index field to struct xdp_frame, populates it
+during the xdp_buff to xdp_frame conversion (both normal and zero-copy
+paths), and consumes it in cpumap and devmap when reconstructing
+xdp_rxq_info. It also calls skb_record_rx_queue() in
+__xdp_build_skb_from_frame(), resolving a documented gap.
 
-We are supposed to return -EINVAL and be done with it in such case, but due
-to tailroom being stored as an unsigned int, it is reported to be somewhere
-near UINT_MAX, resulting in a tail being grown, even if the requested
-offset is too much (it is around 2K in the abovementioned test). This later
-leads to all kinds of unspecific calltraces.
+Patch 1 adds the field and populates it in the conversion paths.
+Patch 2 sets rxq.queue_index in cpumap and devmap, resolving a TODO
+left since the original cpumap implementation.
 
-[ 7340.337579] xskxceiver[1440]: segfault at 1da718 ip 00007f4161aeac9d sp 00007f41615a6a00 error 6
-[ 7340.338040] xskxceiver[1441]: segfault at 7f410000000b ip 00000000004042b5 sp 00007f415bffecf0 error 4
-[ 7340.338179]  in libc.so.6[61c9d,7f4161aaf000+160000]
-[ 7340.339230]  in xskxceiver[42b5,400000+69000]
-[ 7340.340300]  likely on CPU 6 (core 0, socket 6)
-[ 7340.340302] Code: ff ff 01 e9 f4 fe ff ff 0f 1f 44 00 00 4c 39 f0 74 73 31 c0 ba 01 00 00 00 f0 0f b1 17 0f 85 ba 00 00 00 49 8b 87 88 00 00 00 <4c> 89 70 08 eb cc 0f 1f 44 00 00 48 8d bd f0 fe ff ff 89 85 ec fe
-[ 7340.340888]  likely on CPU 3 (core 0, socket 3)
-[ 7340.345088] Code: 00 00 00 ba 00 00 00 00 be 00 00 00 00 89 c7 e8 31 ca ff ff 89 45 ec 8b 45 ec 85 c0 78 07 b8 00 00 00 00 eb 46 e8 0b c8 ff ff <8b> 00 83 f8 69 74 24 e8 ff c7 ff ff 8b 00 83 f8 0b 74 18 e8 f3 c7
-[ 7340.404334] Oops: general protection fault, probably for non-canonical address 0x6d255010bdffc: 0000 [#1] SMP NOPTI
-[ 7340.405972] CPU: 7 UID: 0 PID: 1439 Comm: xskxceiver Not tainted 6.19.0-rc1+ #21 PREEMPT(lazy)
-[ 7340.408006] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.17.0-5.fc42 04/01/2014
-[ 7340.409716] RIP: 0010:lookup_swap_cgroup_id+0x44/0x80
-[ 7340.410455] Code: 83 f8 1c 73 39 48 ba ff ff ff ff ff ff ff 03 48 8b 04 c5 20 55 fa bd 48 21 d1 48 89 ca 83 e1 01 48 d1 ea c1 e1 04 48 8d 04 90 <8b> 00 48 83 c4 10 d3 e8 c3 cc cc cc cc 31 c0 e9 98 b7 dd 00 48 89
-[ 7340.412787] RSP: 0018:ffffcc5c04f7f6d0 EFLAGS: 00010202
-[ 7340.413494] RAX: 0006d255010bdffc RBX: ffff891f477895a8 RCX: 0000000000000010
-[ 7340.414431] RDX: 0001c17e3fffffff RSI: 00fa070000000000 RDI: 000382fc7fffffff
-[ 7340.415354] RBP: 00fa070000000000 R08: ffffcc5c04f7f8f8 R09: ffffcc5c04f7f7d0
-[ 7340.416283] R10: ffff891f4c1a7000 R11: ffffcc5c04f7f9c8 R12: ffffcc5c04f7f7d0
-[ 7340.417218] R13: 03ffffffffffffff R14: 00fa06fffffffe00 R15: ffff891f47789500
-[ 7340.418229] FS:  0000000000000000(0000) GS:ffff891ffdfaa000(0000) knlGS:0000000000000000
-[ 7340.419489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 7340.420286] CR2: 00007f415bfffd58 CR3: 0000000103f03002 CR4: 0000000000772ef0
-[ 7340.421237] PKRU: 55555554
-[ 7340.421623] Call Trace:
-[ 7340.421987]  <TASK>
-[ 7340.422309]  ? softleaf_from_pte+0x77/0xa0
-[ 7340.422855]  swap_pte_batch+0xa7/0x290
-[ 7340.423363]  zap_nonpresent_ptes.constprop.0.isra.0+0xd1/0x270
-[ 7340.424102]  zap_pte_range+0x281/0x580
-[ 7340.424607]  zap_pmd_range.isra.0+0xc9/0x240
-[ 7340.425177]  unmap_page_range+0x24d/0x420
-[ 7340.425714]  unmap_vmas+0xa1/0x180
-[ 7340.426185]  exit_mmap+0xe1/0x3b0
-[ 7340.426644]  __mmput+0x41/0x150
-[ 7340.427098]  exit_mm+0xb1/0x110
-[ 7340.427539]  do_exit+0x1b2/0x460
-[ 7340.427992]  do_group_exit+0x2d/0xc0
-[ 7340.428477]  get_signal+0x79d/0x7e0
-[ 7340.428957]  arch_do_signal_or_restart+0x34/0x100
-[ 7340.429571]  exit_to_user_mode_loop+0x8e/0x4c0
-[ 7340.430159]  do_syscall_64+0x188/0x6b0
-[ 7340.430672]  ? __do_sys_clone3+0xd9/0x120
-[ 7340.431212]  ? switch_fpu_return+0x4e/0xd0
-[ 7340.431761]  ? arch_exit_to_user_mode_prepare.isra.0+0xa1/0xc0
-[ 7340.432498]  ? do_syscall_64+0xbb/0x6b0
-[ 7340.433015]  ? __handle_mm_fault+0x445/0x690
-[ 7340.433582]  ? count_memcg_events+0xd6/0x210
-[ 7340.434151]  ? handle_mm_fault+0x212/0x340
-[ 7340.434697]  ? do_user_addr_fault+0x2b4/0x7b0
-[ 7340.435271]  ? clear_bhb_loop+0x30/0x80
-[ 7340.435788]  ? clear_bhb_loop+0x30/0x80
-[ 7340.436299]  ? clear_bhb_loop+0x30/0x80
-[ 7340.436812]  ? clear_bhb_loop+0x30/0x80
-[ 7340.437323]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
-[ 7340.437973] RIP: 0033:0x7f4161b14169
-[ 7340.438468] Code: Unable to access opcode bytes at 0x7f4161b1413f.
-[ 7340.439242] RSP: 002b:00007ffc6ebfa770 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
-[ 7340.440173] RAX: fffffffffffffe00 RBX: 00000000000005a1 RCX: 00007f4161b14169
-[ 7340.441061] RDX: 00000000000005a1 RSI: 0000000000000109 RDI: 00007f415bfff990
-[ 7340.441943] RBP: 00007ffc6ebfa7a0 R08: 0000000000000000 R09: 00000000ffffffff
-[ 7340.442824] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-[ 7340.443707] R13: 0000000000000000 R14: 00007f415bfff990 R15: 00007f415bfff6c0
-[ 7340.444586]  </TASK>
-[ 7340.444922] Modules linked in: rfkill intel_rapl_msr intel_rapl_common intel_uncore_frequency_common skx_edac_common nfit libnvdimm kvm_intel vfat fat kvm snd_pcm irqbypass rapl iTCO_wdt snd_timer intel_pmc_bxt iTCO_vendor_support snd ixgbevf virtio_net soundcore i2c_i801 pcspkr libeth_xdp net_failover i2c_smbus lpc_ich failover libeth virtio_balloon joydev 9p fuse loop zram lz4hc_compress lz4_compress 9pnet_virtio 9pnet netfs ghash_clmulni_intel serio_raw qemu_fw_cfg
-[ 7340.449650] ---[ end trace 0000000000000000 ]---
+struct xdp_frame grows by 4 bytes (40 -> 44 bytes), still within a
+single 64-byte cacheline.
 
-The issue can be fixed in all in-tree drivers, but we cannot just trust OOT
-drivers to not do this. Therefore, make tailroom a signed int and produce a
-warning when it is negative to prevent such mistakes in the future.
+Anand Kumar Shaw (2):
+  xdp: propagate queue_index through xdp_frame
+  bpf: report queue_index to xdp_rxq_info in cpumap and devmap
 
-Fixes: bf25146a5595 ("bpf: add frags support to the bpf_xdp_adjust_tail() API")
-Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Acked-by: Martin KaFai Lau <martin.lau@kernel.org>
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
----
- net/core/filter.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/net/xdp.h   | 2 ++
+ kernel/bpf/cpumap.c | 2 +-
+ kernel/bpf/devmap.c | 1 +
+ net/core/xdp.c      | 3 ++-
+ 4 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/net/core/filter.c b/net/core/filter.c
-index 5f5489665c58..e93d9dc0471a 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -4151,13 +4151,14 @@ static int bpf_xdp_frags_increase_tail(struct xdp_buff *xdp, int offset)
- 	struct skb_shared_info *sinfo = xdp_get_shared_info_from_buff(xdp);
- 	skb_frag_t *frag = &sinfo->frags[sinfo->nr_frags - 1];
- 	struct xdp_rxq_info *rxq = xdp->rxq;
--	unsigned int tailroom;
-+	int tailroom;
- 
- 	if (!rxq->frag_size || rxq->frag_size > xdp->frame_sz)
- 		return -EOPNOTSUPP;
- 
- 	tailroom = rxq->frag_size - skb_frag_size(frag) -
- 		   skb_frag_off(frag) % rxq->frag_size;
-+	WARN_ON_ONCE(tailroom < 0);
- 	if (unlikely(offset > tailroom))
- 		return -EINVAL;
- 
 -- 
-2.52.0
+2.39.5 (Apple Git-154)
 
