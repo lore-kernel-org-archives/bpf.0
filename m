@@ -1,158 +1,243 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0B3136CDEC
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 16:11:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771344680; cv=none; b=ehBCLJ37gHJ5oDKdLhKQgoGb8GAlALkrELhIaTe8aHY/Gl4IhrkK8VFagznnia/1Awu4uHQGiof6N6QnY34naMUHuH/v2dPaIoOP2ifzz0hfSxCqKxDrnvZyXxu0o+WZPp4olxL4VL9+GDDxXhrmmWLfFqMWoXgVuNVnn9juIqc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771344680; c=relaxed/simple;
-	bh=ZPyMbeH74CfATelwbvRR/WDTmfrH8DIuF2c4UvyXpNA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sr/HpU02l/DHq0cWJCBG5BgLmvBV74EW4PyeaXdKqDvCmuIpOgvnJKWRiWKoXQOsu1PMHgTEDmzZ4pKBZbLQebec88ZycybZ4UcenSPXDZkytRYkJiwpGEGIuTlzQ4z72gCGia2UMELSRwDLFMSZcRISJD6kGarYIPiQA7crhYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Sob93a7L; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185502DB7A1;
+	Tue, 17 Feb 2026 16:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771345277; cv=fail; b=pOzFo2M+LI1ittJL/gjGHweQf+AniyVNzbs9owUi7wr7bX526QFqAgJrnWX7IsBpe/mAAxkOI3pIKFL8FWY3C0Rl2affebNW2WzH51eD5CFgXYyLEgcf7W948cxV06mN+Um3Zgohn8pYsJyHezdhfm+oQLncBfvqBGsImeUJJjU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771345277; c=relaxed/simple;
+	bh=Jqd1ICiMlTAPo4mQPbXtfkfQuSuIl6ZZERtzswnd1WI=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=X0lIMWZcrP1lYSG5rNgetvhBY/Rlqr26vFuTf40qGZisrvvZFY3yv0QX29MzRXQKv/giLvT/aJHcdDkUNnIhJ9QA+YC/K8NKRvh69/gQ4YVqMHnNdBQe5ChqyiCkr1Hh2xO6Kt6uqy6IFOxCyk2ABYNEEw8ayGMB7uBYvolvarE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OwLzuB0x; arc=fail smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Sob93a7L"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61H98FR03945141;
-	Tue, 17 Feb 2026 16:11:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=hMj8qY259c5QXaQCpk0YnlVNOES+xwzxln+C0r5Qc
-	rM=; b=Sob93a7LcnbSs9liNz0bfA2HQSn+ClYfciZ3tcRi7SAK3i1kaI5bvPXmu
-	6TL5bsR3DF7kNxWXuVsAOR4Ptf8mbT0wCEeWVBad3snMJyqJbD56cIwBWt7C17VN
-	hslZhrl/ANm4g9KoFoMnSOCIKBuZZ9W1D/qdvnjumIxZfJEO/RzfqVjCvZUvPf5z
-	e9KlIlorS7Y0jL50AGrnVesz85pNgmg8UAD4cz5jwUFgmPJYQaTT3UVsmhLbrPOi
-	KZWUDrobmJShZFbPWEUqDyYCLEPW+eSdCYCL2wHK2SqX1Omg5nzMkzu8gN8nvRaq
-	ZVYWajuUrgKSf0CHnPhNjoN+l++rg==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cajcjc741-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Feb 2026 16:11:05 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61HFrw70017834;
-	Tue, 17 Feb 2026 16:11:04 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ccb28bkpn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Feb 2026 16:11:04 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61HGB0Yu40894830
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Feb 2026 16:11:01 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C7C5F20049;
-	Tue, 17 Feb 2026 16:11:00 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 840D020040;
-	Tue, 17 Feb 2026 16:11:00 +0000 (GMT)
-Received: from heavy.ibm.com (unknown [9.87.136.123])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 17 Feb 2026 16:11:00 +0000 (GMT)
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc: bpf@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Hari Bathini <hbathini@linux.ibm.com>
-Subject: [PATCH] s390/bpf: Do not increment tailcall count when prog is NULL
-Date: Tue, 17 Feb 2026 17:10:06 +0100
-Message-ID: <20260217161058.101346-1-iii@linux.ibm.com>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OwLzuB0x"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771345275; x=1802881275;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Jqd1ICiMlTAPo4mQPbXtfkfQuSuIl6ZZERtzswnd1WI=;
+  b=OwLzuB0xClKCbWW9BiS7GZgnDPeUtqXKFOnr7Z75mzqqIZIz6BaugfeI
+   Hgim+/U9aYZJIsNLp4/O03POPI87rexWNKWRiIJ+68VYuVKMcZL1oOgt5
+   OFihxuZUwH+wp3g7EL+JEMG54JUo4HYDmA/GdwlXz3lUZVYeLhBMcQXBE
+   BP9dsCmdbTvbUh0eV/jWTUFK1NXztAqozZEJocI4JMjlG/1SOhM5ahvHn
+   t5atKYlBYu7VEpGmrJR1AbO10autkOXAcj2nUyTppNiRqMG0/9WSiownH
+   /Oa3AbXv4iPkbDdcZ5cuUjUPleA0eLqmQVW6991rT01Xkm+719A/xvlwQ
+   w==;
+X-CSE-ConnectionGUID: Ip0b3HBmTlCRtXjUjk/0Yg==
+X-CSE-MsgGUID: rydvGT8MSViSS1MpBISXIQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="72407583"
+X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
+   d="scan'208";a="72407583"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 08:21:15 -0800
+X-CSE-ConnectionGUID: AKYTvGbnR0i7/K31mPj+dA==
+X-CSE-MsgGUID: Ld5Z6Bv1SJOsV/oZIkrZQA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
+   d="scan'208";a="213765198"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 08:21:14 -0800
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 17 Feb 2026 08:21:13 -0800
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Tue, 17 Feb 2026 08:21:13 -0800
+Received: from DM1PR04CU001.outbound.protection.outlook.com (52.101.61.20) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 17 Feb 2026 08:21:13 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=U8Whkia9i7gXkBRP9Vyh6tjc/vsDrHCHxinTYrl03xNyPEQ+PhrNzMy6PyS1hPBY3nunZ6+KUTKuFdh3k0I+1mkEAaMigAjJqRCmUSuHcVZltgpRSruDzRomrJCwVWoCDDwEIvLndosxMmtyZJTE0ISTMXqiZ7YYT2fG+sw++zz2V3YBuOLfJYCOQGTctlwITu9Msa/P1KEhh6R7903qXI6KpEzTYrTdE60vVUdKi3H1hRFKp0+x+YFQEgYKFUl0pThkII24YAD0BpEW0ekqyws5pv+iv9FjnyPqAoQ4o4HbxxLCU/3RLiOKhO4xyisdGKfZOFZg94V89gx8am8yaQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AqDprMxTyn8r3b/jg4DYvOSG4kSRMpq5NkvqiqDGYs8=;
+ b=jkTifV6qPjiHrc73M32ZUDUflpFcVn8cc7MRoy7XuNtL4T4rgwA2ArXLArFaDV/D0Sy0m0gbF0tB97MZFXGrJVcZzjikcDlTVIae/lks8sEIAmiAd5HJC1jBDOka6FPZ6xf43jNg0AZ/Kx0Oqd8lgn5hFIb4vvAuHrprYwgKdRHYr1yc4uPD6uw2gEl+rBC6Wfp+naCCQ6iGQYcz1l9P/DDlA1Uwun2IWS2yJbEUxcXG7kIBzpO7128qr+2MxpOQmAnyI4M+0n9rgXM7a1r/iCGPhJoDAoJke3+DdkFS7x4zFN8iSlCa1xsIAnbUHONQUrmulZwm5omPvG3oQa65Gw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com (2603:10b6:8:1b9::20)
+ by PH7PR11MB5861.namprd11.prod.outlook.com (2603:10b6:510:133::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9587.12; Tue, 17 Feb
+ 2026 16:21:08 +0000
+Received: from DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c]) by DS0PR11MB8718.namprd11.prod.outlook.com
+ ([fe80::6aa:411d:4bfa:619c%5]) with mapi id 15.20.9611.013; Tue, 17 Feb 2026
+ 16:21:08 +0000
+Message-ID: <6c1c575b-9f47-446c-ba91-8491c1211670@intel.com>
+Date: Tue, 17 Feb 2026 17:19:07 +0100
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 7/9] libeth, idpf: use truesize as XDP RxQ info
+ frag_size
+To: Larysa Zaremba <larysa.zaremba@intel.com>
+CC: <bpf@vger.kernel.org>, Claudiu Manoil <claudiu.manoil@nxp.com>, "Vladimir
+ Oltean" <vladimir.oltean@nxp.com>, Wei Fang <wei.fang@nxp.com>, Clark Wang
+	<xiaoning.wang@nxp.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Tony Nguyen
+	<anthony.l.nguyen@intel.com>, Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>, "Andrii
+ Nakryiko" <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
+	"Eduard Zingerman" <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong
+ Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, Hao Luo
+	<haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Simon Horman
+	<horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Maciej Fijalkowski
+	<maciej.fijalkowski@intel.com>, "Bastien Curutchet (eBPF Foundation)"
+	<bastien.curutchet@bootlin.com>, Tushar Vyavahare
+	<tushar.vyavahare@intel.com>, Jason Xing <kernelxing@tencent.com>,
+	=?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>, Eelco Chaudron
+	<echaudro@redhat.com>, Lorenzo Bianconi <lorenzo@kernel.org>, "Toke
+ Hoiland-Jorgensen" <toke@redhat.com>, <imx@lists.linux.dev>,
+	<netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<intel-wired-lan@lists.osuosl.org>, <linux-kselftest@vger.kernel.org>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>, Dragos Tatulea
+	<dtatulea@nvidia.com>
+References: <20260217132450.1936200-1-larysa.zaremba@intel.com>
+ <20260217132450.1936200-8-larysa.zaremba@intel.com>
+From: Alexander Lobakin <aleksander.lobakin@intel.com>
+Content-Language: en-US
+In-Reply-To: <20260217132450.1936200-8-larysa.zaremba@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: DUZPR01CA0006.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:3c3::13) To DS0PR11MB8718.namprd11.prod.outlook.com
+ (2603:10b6:8:1b9::20)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: TUCbrJuKkxpKm_L9n0JGyZBmzxzZNh3O
-X-Authority-Analysis: v=2.4 cv=Md9hep/f c=1 sm=1 tr=0 ts=69949319 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=3VfLUtj-Zce8GtbBNYUA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDEzMSBTYWx0ZWRfX7mGVoJE4Fb3n
- CPLTU8BHZUeP/U3jr1ASFgrgKhnDJPZpPWjXNGwdegPMKVgxWPFdaoMo7fsBLTzWdgWyFgcNui/
- jRY8KZf8tdyTqZHxp/LGLCOQpBmzSWlWxPZDdDNgllovHYKoWtmBTR4mVND6pt9Xi7SBYl2BuEq
- HPLCbndlmi88AJ5yHofgcfjDKx8dvTF/YSKB/MQuOsdTnDA0ZzpY6KcxJ6Xt/Ld82OYMox1+UNO
- DqO1VKtfj9W5topiO1DemXUvgeM6qs8cxz5F7kDbCb9THWILwQA4Nq2Kjfkb+VeaOviHKKkESds
- /hfg4qCkYm4jBlZgRM6l4al/cFqo9Yvej0G2LPfV+zDRmCry3HSQzdDc5qiDFbwm2xsAzG534pt
- ZqAZBaffUf2nhqEaY/5ZFBj7cJ2LAoCMXVk/l8yEmWhXXz65hODo2b5hNjaVdpON42HXSROSXnm
- 74mYlrZcMogFMits+GA==
-X-Proofpoint-GUID: TUCbrJuKkxpKm_L9n0JGyZBmzxzZNh3O
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-17_02,2026-02-16_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 impostorscore=0 lowpriorityscore=0 spamscore=0 adultscore=0
- priorityscore=1501 suspectscore=0 malwarescore=0 phishscore=0 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602170131
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8718:EE_|PH7PR11MB5861:EE_
+X-MS-Office365-Filtering-Correlation-Id: e37919ab-73ce-44ec-9797-08de6e408e09
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?cGszazdqMlk0ZmNkQUt2STFKRklXbnRNKzE2eFV3eVVlTjBPOStXVnlnQksr?=
+ =?utf-8?B?bFBCNmNPN3U5Qm9rZ1dIOVFnQ0hFSWp0dklTbHd2eCtBbjBWcDl3d1UzekZG?=
+ =?utf-8?B?RDNQTEI0NkNzU3RGQytVZGlCT2JNZ3BndnNra25oKzh3MkZxaXZoZ3JkYmlk?=
+ =?utf-8?B?dVA3aXlhWWVMSE9kQlRUU0NoVkpVNGtDcC8rbGxrV2J4MExseStuMVlvbTVr?=
+ =?utf-8?B?a3ZscWdtdHZLRUJpaFFLc1lzdlFwYlR1SkYybURWaEltTllFQU5uT2NGSEgy?=
+ =?utf-8?B?bXBzWXJrS1ZPZk9FTXE3ZWcyUUtVb2I2MzM0cVByUk93eXVWcUtjdWFFTVpU?=
+ =?utf-8?B?K3M1TEN1elVYY3lISWh1MTh6djBqcG9FS0lWTXRxWER2M04rUTBQSUZTMVFk?=
+ =?utf-8?B?c3NJVFlFOTkwZ2dzVmZRck54aWdpZG91WDhpa3IvVW1HNEZ2bnZweVNwT0tH?=
+ =?utf-8?B?TnNuZDZmOTRkMmpPeFlLTlhTRGZpdnpJYit4WmVqSk5UN3g0UUdmalFNcUht?=
+ =?utf-8?B?bUJOYkZMOHZzTE1TTmZianNhN3J6OWlIL2FQOFR2T1VlV3RUK3lKd0R1ZFFE?=
+ =?utf-8?B?N3pHeFRtbzlybDBJb2wxc2FYMTdncUZBei9lQkV2SXY2Qmc0dVluN0ZETDZG?=
+ =?utf-8?B?c2l1YkhiUzBkaFE2QVRLWDhHT29VQThoN3V6Z0pWOVdtYjhOaVdQQk1xbzUz?=
+ =?utf-8?B?a2RETlhudEVuZi92aGFqcHFLVHEzNU9CSHhTNk8rcGJIY3FScHIzaGgzOFJW?=
+ =?utf-8?B?TVhGam9yRmkvaCtuY2liTXAwd2o0N01qVFRxdCtMR3BNUjhhYlBvY2FZUE4r?=
+ =?utf-8?B?djZoT1hpYUIwVXFydXBySmdlSWd5MmlVVlpqeDByRGVPR1cyT1pkQ2pEcTFJ?=
+ =?utf-8?B?MC9vWkdpSENtQ0hCaS9zaFErbFZETHpXMDlJazdzQzRFNHdYYkU5aUdoSUh6?=
+ =?utf-8?B?T1lHWGcxaENRVDhnREFFMm8wK0NyblkzeHNnWXRjbDJaSlhselNJV085emMw?=
+ =?utf-8?B?WGZQT3YzTHkvNmE2TXhqbXlSemZpa2FhSlpKczhkVzFlQjU4SDh6UGlXbldM?=
+ =?utf-8?B?cmo1cGJUaGFoRENOckxwY0V2bExrL293Mi9WY05DUm10WGxRZFRSUm0zd3FO?=
+ =?utf-8?B?YWlLenVhb01WRE1TVktkaWw0S1BFNmladVQ3b2FZZFhjc0Vsd2pQMG9uTGZh?=
+ =?utf-8?B?cHluS0NTbnFiRVppYlE3ekJKb0poVHQ5WDBGUHBaVUsyQThMVGZFQXVkcmxv?=
+ =?utf-8?B?ZjBmc3BSdmJkU3hNMWxyaVV4a2kvTnFMN09aQURGV09PYUttU1lvQU5aRTNP?=
+ =?utf-8?B?OWgzRVBzdTI5VllUeFVpbEx2OU9BR1BIZ1BGTG82WEdocERpRVBVck5Sczd0?=
+ =?utf-8?B?WTRkbUZqdGh1TlpoUjE0RTdNeGZrL3ZrZlBCV0gzYXVZZ2svU3lFTW93NStO?=
+ =?utf-8?B?Y3VmZER0V2oyR0NWZDBqVzJhMzZ3b0lHVUh5UG5mbTBNYTVPOTIvdi9WdmVl?=
+ =?utf-8?B?d0lHNVlkLy9YenNoKzl5S01uQ2lBejZFbEhDVnBmWWx4WlYwbFVYck54SS91?=
+ =?utf-8?B?a0FLL09xeTBIcGk4WTl2VXp2UjUrV2xQQ2dpd0l6MVJ6VCtQMnR3am83MHdY?=
+ =?utf-8?B?V2cyeEZPTkwxbVI3ZkRkZk1xUUhDRFlMT3g2NmFPZWZFeW82eS9kTWFhakRH?=
+ =?utf-8?B?SFFBY25McllRU281c3AxbVQ5dzZiclV6MTYzcC9FZkNEQmIrR1Y2cTVLZkVy?=
+ =?utf-8?B?QVBxMUhKRERwczdFNHRaMENoNWtLVzBPZ2U5V2NMaGYrTnYxOUN1Y28rNXpL?=
+ =?utf-8?B?d0V5Vm5meHFEampmQ0E4SmhIL3QxeElBbmV5MzdhSDdhVTNiYlVtSlI4Yk56?=
+ =?utf-8?B?anN6M01kd0tIQlVwL2lhNzFFS25Db05FQ0pXcExZeDVKdFVJMDNaY1RlUVdw?=
+ =?utf-8?B?VHkrR0U1Vi9LNkswY0h5WlN6NUphMHBkSUdubExzZ1ovSHhsMCtEaHFFbjBN?=
+ =?utf-8?B?SEJXRm9nVysxQnRQMjgzYWJQMUVTQ3pZTlpyV1hmdytmOWlMTTBqN1R2OGFz?=
+ =?utf-8?B?OWIzTEFDbUY5OHgxaWxabHNueTlnY3Zvd0xheFk5cHpyN05GUEZjZ2p1ektH?=
+ =?utf-8?Q?7t5Q=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8718.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SlRKOVMwSU1QSWVrL3VtelRVcmZBZ1FvRXc2M2E5Z1BZQXpLaHpvUHMyR1Rs?=
+ =?utf-8?B?NE5mTXVSdUl2eUF0RFJmTHZpRWN2cG1HdXJxTVUyS2Fyc3pxdHY2SUU1RWFx?=
+ =?utf-8?B?cGNsRW5jL2FHcjFQQy85TVlFUjREeFBHT3QybWczS0xDOVZOZGpLYzVGN0Na?=
+ =?utf-8?B?dThJMUJtK3l2UUpmcnlSZWx1R0lBYUFLeXE0UlVsRk41OW5MUlhpbjZGOGxr?=
+ =?utf-8?B?ZzVmZnZKSFhmVk9kMVIrWGN3czAzZHlWTUFGWW1VVEcxZHp4L3dicDRLNmhZ?=
+ =?utf-8?B?VzVJeExVRi9DL1lGMTdkVS9OYWJ6aC80R1RFQk1SN3JhZWtnQmh4VUF0VGM1?=
+ =?utf-8?B?b0JudE1Uc1pNbGluV2pxWFlxZzJncjNscEpDRkptSU9wblBBRlF3MS9nZG93?=
+ =?utf-8?B?UnhpVml1OGlYa1hTRlNkcjRzUDFmdUhyTm9UVEZMZUUvYjN4WTRXbTFIZE5j?=
+ =?utf-8?B?cXFZOWZwSVM3WXhYa0NYTW53RGNhb0dkeXA3WFc3OTd3N2FqdldnM241dys2?=
+ =?utf-8?B?TUZqVnJUTmZyNmNEcEpseSswY1A5Z1VHSEhhUDNPdHcvYklTR2l2NVBSUFJJ?=
+ =?utf-8?B?cnRBN2dWZ2RqVzQ1ZWtpMWk1NHNDQXNCNlVCRlNsNVUyRFBmVVZ5TzQwbWVt?=
+ =?utf-8?B?amttSlEwM25lVTdlZHlScDZyM09oRzRGOEpkUTVQOGlvUk9yWWJIRW1ya21x?=
+ =?utf-8?B?S2U0QjFrcnpQZytnYSs5NnVBRzExT1Zab3h1ZEcvaFh1ejRTanFxamlzQ2lB?=
+ =?utf-8?B?VTZPUlJ4Q1dGNW9jU2RySDJpZzM1ZVlqTVE0WHgzc0RndTUwQUpPZnVoQzRK?=
+ =?utf-8?B?dkI4aTB1cUtWQmFkVWNNVEtZKy85c003NFQwZXZXL2tQOFJXcWJ5ZmFhMFdN?=
+ =?utf-8?B?RzhNS014MTR5OTVJeEQ2L0o3aHNXa2hpK09BNE5rZVU0TUdoeTkvakJiNEV4?=
+ =?utf-8?B?d215RlBkNGVuRDY3aTVoQktjb2tOdDU0ZGYxbExUbmlDa2tFQ1lROVNuMXN0?=
+ =?utf-8?B?S1ZzS2wrMUdTRkpMai8weHBZaHozUldlMWhjcDNwdnlDV1laWFV1SExKMk1j?=
+ =?utf-8?B?OHkweG1TckFTYXFzRFg4UEFIdS9QVWxlNkpMRlh5MUNEZ28xVElJVkdWckd1?=
+ =?utf-8?B?bzhBSTRqZVF4OVdqTVhaSk8ybVNKalQzcWE2VzlnTmRWcURYdFMzZWNtUVkz?=
+ =?utf-8?B?bkMyTjdldjNGb1JqTW4xU29vTFh4QWFGdGpRVGVQMUo5UzR2cjFzSldaRFVs?=
+ =?utf-8?B?V0c5NVJmYmVZN2FTaHM4MDlNNUZnM3BkemxsQWk3VEVKbmJ1NHdFbDk2MzBj?=
+ =?utf-8?B?RUxoOUZxaDFQZ0JvV0JReWd1bzVYdWhuV2xnZWJlVjZrbmFKL21aY1VrUE05?=
+ =?utf-8?B?bk1tUk1ab1UxSUUxNlRnTVNZTmdnT1AvREJTa3hMaXFTNUVmZ3JUM1ZtK1pW?=
+ =?utf-8?B?cDJIZkpOZ2dubHVVN3ZuQXlMWDBqcm9jRnduTDRhdlRaMElKN3gya1c4RkFt?=
+ =?utf-8?B?UHppdkFaZzlQSjgwaGNmUVAxbGlPSk9WMkxTKzUvN2twQzBsa2pOUUFRMWlt?=
+ =?utf-8?B?TzhvQUswK280ekoxaDFWOWhtbEUydVlUZlNyNyttTWhQK2N3bWpnMjdpYmtD?=
+ =?utf-8?B?WkFLaFF2Y3FCSUlBNUdweGlyeDRYQ1NkeVpET3VXQzl2V0JSTURXN0hwOENN?=
+ =?utf-8?B?NXVCY0V2KzM3cHV3Q01JZXNBSzBqdUIxU3p6NlptU0pheG9FQTNWaEltOGM3?=
+ =?utf-8?B?U3ZKRnRKMTZVNjNCdEw0dmJMK1piazZEZ2pSTkFteVozZkNUNWFjVGZJR3Yx?=
+ =?utf-8?B?bjdURmdTRlpZSjJnSkZsSjRhc0J5a0k4ZkROejFOYlRMYUI1NCtMT2ZrWUhE?=
+ =?utf-8?B?NFo1S3N1K3poRFNjazBtMlR5aGZOY2tQT3pGRktRcUozMGFOQ2dhZ0VUOE95?=
+ =?utf-8?B?TWMyQzZ6L2dQR3FsNlBFajNnTjBkanFJcHVhZHNRd1FiR3NNakx5SEthOUll?=
+ =?utf-8?B?bUdnV2krdmFQZm5yWXV3ZTRXdlMvTDJtdzl3bUU0VWl4WGdXT0VZSVF2SjNF?=
+ =?utf-8?B?MlhiUVhGU1pvVDRSYWllMW56UGI5cFpoVTB0emMxdEUrZ0dOaG5WL3JROGta?=
+ =?utf-8?B?bHo5OEdTUVo5dnRscVM2QUFzLzZ0enpZZDNZVWxubEVWVlhTbmd2Mmtwa1U3?=
+ =?utf-8?B?UG9ySGllM2JkU0RYVFR1ZnRBSEhON1ZJbi9OUTZ0THJvTExld0duYzFoYWRv?=
+ =?utf-8?B?eTI4WDhFblBiK0xJMXFMbGt1QWtDUEd3dTRwZjVtenVMT0Ewd1ZTSi9UNVcr?=
+ =?utf-8?B?VFJ0VmlEUG9xRVhLOTdzYjlrMUMzYXZkdGREZDN5V0pTVEgxV3kweFkwQW82?=
+ =?utf-8?Q?zwq+F6RrOUXAXLHM=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e37919ab-73ce-44ec-9797-08de6e408e09
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8718.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2026 16:21:08.1963
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: AXZVvLQ1YCK7gRZn1aKLPkGbEKZWDIlPnIUWs2cLuv6PBQyszzbmb3lp+XRUVFJQJZD9afs3Q54QeJVWiQWhSwkDA4gw4BLPamLtUQIqZbE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5861
+X-OriginatorOrg: intel.com
 
-Currently tail calling a non-existent prog results in tailcall count
-increment. This is what the interpreter is doing, but this is clearly
-wrong, so replace load-and-increment and compare-and-jump with load
-and compare-and-jump, conditionally followed by increment and store.
+From: Zaremba, Larysa <larysa.zaremba@intel.com>
+Date: Tue, 17 Feb 2026 14:24:45 +0100
 
-Reported-by: Hari Bathini <hbathini@linux.ibm.com>
-Signed-off-by: Ilya Leoshkevich <iii@linux.ibm.com>
----
- arch/s390/net/bpf_jit_comp.c | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
+> The only user of frag_size field in XDP RxQ info is
+> bpf_xdp_frags_increase_tail(). It clearly expects whole buffer size instead
+> of DMA write size. Different assumptions in idpf driver configuration lead
+> to negative tailroom.
+> 
+> To make it worse, buffer sizes are not actually uniform in idpf when
+> splitq is enabled, as there are several buffer queues, so rxq->rx_buf_size
+> is meaningless in this case.
+> 
+> Use truesize of the first bufq in AF_XDP ZC, as there is only one. Disable
+> growinf tail for regular splitq.
+> 
+> Fixes: ac8a861f632e ("idpf: prepare structures to support XDP")
+> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 
-diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-index 579461d471bba..c754ae4f41a98 100644
---- a/arch/s390/net/bpf_jit_comp.c
-+++ b/arch/s390/net/bpf_jit_comp.c
-@@ -1862,20 +1862,21 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 				 jit->prg);
- 
- 		/*
--		 * if (tail_call_cnt++ >= MAX_TAIL_CALL_CNT)
-+		 * if (tail_call_cnt >= MAX_TAIL_CALL_CNT)
- 		 *         goto out;
-+		 *
-+		 * tail_call_cnt is read into %w0, which needs to be preserved
-+		 * until it's incremented and flushed.
- 		 */
- 
- 		off = jit->frame_off +
- 		      offsetof(struct prog_frame, tail_call_cnt);
--		/* lhi %w0,1 */
--		EMIT4_IMM(0xa7080000, REG_W0, 1);
--		/* laal %w1,%w0,off(%r15) */
--		EMIT6_DISP_LH(0xeb000000, 0x00fa, REG_W1, REG_W0, REG_15, off);
--		/* clij %w1,MAX_TAIL_CALL_CNT-1,0x2,out */
-+		/* ly %w0,off(%r15) */
-+		EMIT6_DISP_LH(0xe3000000, 0x0058, REG_W0, REG_0, REG_15, off);
-+		/* clij %w0,MAX_TAIL_CALL_CNT,0xa,out */
- 		patch_2_clij = jit->prg;
--		EMIT6_PCREL_RIEC(0xec000000, 0x007f, REG_W1, MAX_TAIL_CALL_CNT - 1,
--				 2, jit->prg);
-+		EMIT6_PCREL_RIEC(0xec000000, 0x007f, REG_W0, MAX_TAIL_CALL_CNT,
-+				 0xa, jit->prg);
- 
- 		/*
- 		 * prog = array->ptrs[index];
-@@ -1894,6 +1895,12 @@ static noinline int bpf_jit_insn(struct bpf_jit *jit, struct bpf_prog *fp,
- 		patch_3_brc = jit->prg;
- 		EMIT4_PCREL_RIC(0xa7040000, 8, jit->prg);
- 
-+		/* tail_call_cnt++; */
-+		/* ahi %w0,1 */
-+		EMIT4_IMM(0xa70a0000, REG_W0, 1);
-+		/* sty %w0,off(%r15) */
-+		EMIT6_DISP_LH(0xe3000000, 0x0050, REG_W0, REG_0, REG_15, off);
-+
- 		/*
- 		 * Restore registers before calling function
- 		 */
--- 
-2.53.0
+Acked-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 
+Thanks for handling this!
+
+Olek
