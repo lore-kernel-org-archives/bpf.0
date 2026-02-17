@@ -1,73 +1,73 @@
 Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01E1833438D
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 11:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF909334C27
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 11:33:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771328038; cv=none; b=sYtXbtGrjdbVCFztnN/FYdHOF5f/DTLJpoXvQDRgG8TTHG/oMsFHkeczUOniaBDyVTFt8mOOC9zwMi4b2IQh4cqESd2vjWDdPLFhP/Wdw4aymHT6ICcmzI3evrOW7YdEYwkl0i/Y1wdoI8osBpAK2w9YLnK7CoGJaxHuCPDVaiM=
+	t=1771328039; cv=none; b=PP5xp+6qb8Jo1cxZGoe5wQsud219p04AIZeDTepH1wzjyFkENM/FfZzuzMnUmsRkq05VAJHgqxf+29bxTgYqPNE2LozM4j0B4Aybslbo9D6Jz/fDOji7H0RW6Jy/JQswU98oOM1lq1dVYGtA8AIvry8pH98E+dhj8T4wOTS/eO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771328038; c=relaxed/simple;
-	bh=0On/O/JwrdhLe9LQEIpHxWB6lwVhQOmEdQjLmrIM6Bs=;
+	s=arc-20240116; t=1771328039; c=relaxed/simple;
+	bh=FXnktX6iI9F9MCvVYyjxyRN0DuKuhlPhArCuw2Hg4KA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XsUF6X4wo3QJpVjZ+W5wrq1SiKsY6jNqmxoz4lBtWuaasw3weyRKarrwyOC4Tjm0tqo40tvuvUuvm88QDBzxm1DSvvFx7+PBoveNJMlzgOvC/VNo+FpuGbFBDEMlzTCNrQIYXZ9OLEl9digcbu4PAZXUYZVfkxzFbnQFJwo+zMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LsTQMwdU; arc=none smtp.client-ip=209.85.221.52
+	 MIME-Version; b=FxTV/CLkYUDOHToHxrfoJqxQ6P8PeRsHsdRNZ41OUQFeHykhM/0ghDSdTUBCKnJjerzmS1iWZ/o891GjLbg+lKd3a4U85maLHWFVaUvnWiyH1TC/f+tYpvRAPGx7wL+qHoK6w/QYPW9XQlzChSo3TkCHSMynmlZomrmcLyilYeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bML03YVU; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LsTQMwdU"
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-43591b55727so4649644f8f.3
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 03:33:56 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bML03YVU"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-4359249bbacso4080067f8f.0
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 03:33:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771328035; x=1771932835; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771328036; x=1771932836; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nHo+GhzwemN1oIIYYrO9jf01kzrJwN539Cek687xENU=;
-        b=LsTQMwdUO7R/oHp53J/BkdOX8FqB2/4KcaQ2t4e7Z6lTX1u0AMH+4XPhVfrKNBHh0R
-         lm//1G1aKhSklRvvx9waFlTibXW6LpFIHS6kXPdUugbQ+77PtngISLZfwFVH3JF2s0vI
-         Qx0LebE+qpuUhr83Ts2NTsE4/VRTCX6e8t62o0nulyjanBT3HtOpWhlN28NwILBC/NCb
-         3RCb3qfmxYnNsz9CzW+6M4RCGCs7dMWOHthi9Z3F6PCYegOTD02/Otyt5g60l63MyZOn
-         j4F23P+Rqe5gSvcGL6/NHlV/ZwkxDbjuRSW1cX24s3nNqQIN+Tr117doQ0hQoVGOgK6u
-         kPtQ==
+        bh=5rFGI29TUm/XHZMUUq+bMECbjvA2fMBfcIenQ+N9bZU=;
+        b=bML03YVU5QNeNJbh+Xi5q2MuX/vTNvChTgv+FBR+r+GJNtNs/nKLtFhtJU2Q4msJvQ
+         CjXrJzf9/LdDFG935yN46qHEOKLr8MSKnUMQoZW883uTI80uyWMRSgKkBTZqnqEmUxNw
+         PhvB/p8+b6NOweE9kQdpyq46Ip/TmFcX7jDXl5X1NxYPy60H3j/nYkvBImGM3op/1RAX
+         ePb6F1wKP+KmgoRucxl1V2dEOHvqYt92OfJWA3gQ0/Lo2pZ1vK4UMG6qYRd2FG0EdOI2
+         tWh3AJRQsgtfLv7mhcpR6w9pfGiWjHiZ6D0VlEq4O+6OBAF27EPipAOXQY5LdbZ++4hN
+         iBig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771328035; x=1771932835;
+        d=1e100.net; s=20230601; t=1771328036; x=1771932836;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=nHo+GhzwemN1oIIYYrO9jf01kzrJwN539Cek687xENU=;
-        b=hhFj1rOkVyx0OgstKXZmw27x9udo0MzDPTB5/RB49ntxio9vrXoDbKvksnil1WwWEa
-         MQSsVwG2zdryjUlremaipli/wmbvXAHvEsRbtZl9tNlJfQvahvr9PpyJalha3fkiiVOK
-         SxtfX42IAJg5f1ZrzsbsarzVrv8asr84evFByj2/vMTg6JgH3GqUGbOU5RuEn4/srkmH
-         YdjodoJG8B0puxwLKPPqYVtSCzJoAe5XWaj2g8B1rMea2Sv2irDnWEE5CvZZoVjpQxrc
-         +/S+2SYFIfVbexsEMsMj9/VTOVAnkiTrYp27qhvKUxxsuEDpBcBAUvtinsClmvKL+VX9
-         9ppA==
-X-Forwarded-Encrypted: i=1; AJvYcCVZXZtmP4vjH9nu/Ef8os93BZwrwqOKFksLQ1T9IdSoEy5Vm5QpaUBq2+ppH4ZdtJEbFgY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDIPNK8QdG06wOx/4YnXxPJKl6wKtq+TJ1OZUSMXpub7+yCELQ
-	qneqqOyKC0KR8bVLkEesU4XYerdSLpvCTrFbbfJRdwCnx4h6biRk6rOZd56NfA==
-X-Gm-Gg: AZuq6aJCw2Kcbri32o2m8g5vx3UEHpnurL+GM7XpfNQ2ETYMcekknXoeI4NwPsqAv5k
-	euD9L9HcP0ifvdCTYXKjX0MshQFUbNPJJdqIPzhB7tycKPvPug2Fm3Dq4/WJ2oNW1NU/WhQ88JT
-	pLcwioqPAO4WDtCkOXpMbkdrwRUYXNSEL0iDbMa8/cdTSWpYlGHGwl1Cca0S7BOXKhZ/KcnD/w/
-	Q3YE3+K+9BNI9ZwzQ0W0CcmyIwYDvSwzBGnjtRebwfOeQbwWZKYwtX869QnnAo1tGR1RGuP2ohj
-	bosWbRIg17dfWpxN3aifcxB/a1hTNe7MemmnlZ++PBFNDq33fo/3wk3DsyodkrcSq7x9NtgGi9S
-	63gVM9lUw0j0r1i/7DwSU/wHs2eSGFtbWNJxgqIuI5TPPjh9FvtStLTiQqgIKVRXfTcFNOf7cmv
-	LkqNU7v8UJAaCx6owumCFWng1++Xjw1LwVj6TXzXbgfBVNi794uJokZbeOZn6TcdsUHY/BHWl9S
-	qPP3jXjSDrs/6uXGjM6aUjafmRDwg==
-X-Received: by 2002:a05:6000:2c0c:b0:435:dba0:7c0b with SMTP id ffacd0b85a97d-4379db31b43mr18479219f8f.3.1771328035155;
-        Tue, 17 Feb 2026 03:33:55 -0800 (PST)
+        bh=5rFGI29TUm/XHZMUUq+bMECbjvA2fMBfcIenQ+N9bZU=;
+        b=aI12UTXleCa1/ybYLtO8/8gVX/25SLi4oqHImQ9lENd/B1D0ItD5lp6Vkvntx44SoE
+         AM2BJcHl8gnsKPTmIQuLx1GEuPbNBWGuzIskVIL+xTZ8I9gVYdZMVRJ2xz94tdyL4sOO
+         5TWPRXi86vz9fHsOHIRXMSwC9Snux4yoQP5VW4iG44OQcEK51Q/U+b4NFVippJvnv8zu
+         LBZxMISOlHrsII/M2zUi8rTNBxqn8VFuAkaVXh2uIL0iRsNVGVAnmVcZMAPa4ZeXnzhN
+         43hgWXGemBYXz+jpXiaamB0jSuw8udBo85/G6h3eZViVRWqmmdjFD85r300Ung0Kj2uC
+         8wIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXHGDfLzFEEgxjj+FOLgou/LLrwt5xjwNq+G0dO/zI6Ec6fE1t1m+tT2IN5PyhoFIYr6d8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeTX+V+VyuI9qIwPSlRKjfw0lxs6ePqpqKdIsM7k3cAbohKGFV
+	/bRT54XLrX2uuJDLJj3WVrm9nOqtOYbGd4RWyoSojiezRarC/k25HZoYr8Bfig==
+X-Gm-Gg: AZuq6aL9dXBP0ECvKMgtcZc0YRsed+NmwrdHedO3mqB7s/WyLg1wFtEzGiz2q9XuDpj
+	ZYFY54G8BoB2XHEs+W/G3PVyHw4D6GV+bo+fnLvJ9ZuhZ3Iv5XFBgKms6ji52rzixkYgu8Ceq7z
+	QXOAAIjpQieVzbwVsRddvlKwrvNVbs354UE8oYWZ1TUTdePfVav7mj3zOubgzlyyZu9b/hHMgXE
+	PXYLNegx5IRE/56CWp6v1nmWiGK13yalZ0ymuleY3gvpAibsLB+jb63G969XXSfCC7vL30EDScG
+	HSFdNaEraE1j04JB7AtVzPIdM8dyo4uOedG99DYYpyLmfXwTmQSU3HGssc6QrOZhgI018+GWt+n
+	Qf3929B8fPsAIixqLdDi++NEhYxkoX1dKl4jdnaMkwH9EZlG2Ac9/j8j6jUkG0Zc+HexM/pnUFH
+	0qKoSTPWREp0cGYL/dFKjXRb4w39FjnrooE/bBA/1PF5btxYjU871hLge+mJfmu/MQlvo0D8dzY
+	mLH5yWtOdkL4PMcntH0JIfj1ryKHg==
+X-Received: by 2002:a05:6000:40da:b0:436:339a:9a9f with SMTP id ffacd0b85a97d-4379d5e3fadmr22571463f8f.10.1771328036138;
+        Tue, 17 Feb 2026 03:33:56 -0800 (PST)
 Received: from 127.mynet ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796ac800esm36258343f8f.27.2026.02.17.03.33.54
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796ac800esm36258343f8f.27.2026.02.17.03.33.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Feb 2026 03:33:54 -0800 (PST)
+        Tue, 17 Feb 2026 03:33:55 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	bpf@vger.kernel.org,
 	axboe@kernel.dk,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH v8 3/5] io_uring/bpf-ops: add kfunc helpers
-Date: Tue, 17 Feb 2026 11:33:45 +0000
-Message-ID: <60c053a451afc4307230a7e8bf08a97567cd5d96.1771327059.git.asml.silence@gmail.com>
+Subject: [PATCH v8 4/5] io_uring/bpf-ops: implement bpf ops registration
+Date: Tue, 17 Feb 2026 11:33:46 +0000
+Message-ID: <2aafe124e44c0acf5d3b412abe74101ca2c0aa29.1771327059.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <cover.1771327059.git.asml.silence@gmail.com>
 References: <cover.1771327059.git.asml.silence@gmail.com>
@@ -79,139 +79,194 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add two kfuncs that should cover most of the needs:
-
-1. bpf_io_uring_submit_sqes(), which allows to submit io_uring requests.
-   It mirrors the normal user space submission path and follows all
-   related io_uring_enter(2) rules. i.e. SQEs are taken from the SQ
-   according to head/tail values. In case of IORING_SETUP_SQ_REWIND,
-   it'll submit first N entries.
-
-2. bpf_io_uring_get_region() returns a pointer to the specified region,
-   where io_uring regions are kernel-userspace shared chunks of memory.
-   It takes the size as an argument, which should be a load time
-   constant. There are 3 types of regions:
-   - IOU_REGION_SQ returns the submission queue.
-   - IOU_REGION_CQ stores the CQ, SQ/CQ headers and the sqarray. In
-     other words, it gives same memory that would normally be mmap'ed
-     with IORING_FEAT_SINGLE_MMAP enabled IORING_OFF_SQ_RING.
-   - IOU_REGION_MEM represents the memory / parameter region. It can be
-     used to store request indirect parameters and for kernel - user
-     communication.
-
-It intentionally provides a thin but flexible API and expects BPF
-programs to implement CQ/SQ header parsing, CQ walking, etc. That
-mirrors how the normal user space works with rings and should help
-to minimise kernel / kfunc helpers changes while introducing new generic
-io_uring features.
+Implement BPF struct ops registration. It's registered off the BPF
+path, and can be removed by BPF as well as io_uring. To protect it,
+introduce a global lock synchronising registration. ctx->uring_lock can
+be nested under it. ctx->bpf_ops is write protected by both locks and
+so it's safe to read it under either of them.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- io_uring/bpf-ops.c | 55 ++++++++++++++++++++++++++++++++++++++++++++++
- io_uring/bpf-ops.h |  6 +++++
- 2 files changed, 61 insertions(+)
+ include/linux/io_uring_types.h |  5 ++
+ io_uring/bpf-ops.c             | 91 +++++++++++++++++++++++++++++++++-
+ io_uring/bpf-ops.h             |  8 +++
+ io_uring/io_uring.c            |  1 +
+ 4 files changed, 104 insertions(+), 1 deletion(-)
 
+diff --git a/include/linux/io_uring_types.h b/include/linux/io_uring_types.h
+index cceac329fcfd..976d85f82f86 100644
+--- a/include/linux/io_uring_types.h
++++ b/include/linux/io_uring_types.h
+@@ -8,6 +8,9 @@
+ #include <linux/llist.h>
+ #include <uapi/linux/io_uring.h>
+ 
++struct iou_loop_params;
++struct io_uring_bpf_ops;
++
+ enum {
+ 	/*
+ 	 * A hint to not wake right away but delay until there are enough of
+@@ -481,6 +484,8 @@ struct io_ring_ctx {
+ 	DECLARE_HASHTABLE(napi_ht, 4);
+ #endif
+ 
++	struct io_uring_bpf_ops		*bpf_ops;
++
+ 	/*
+ 	 * Protection for resize vs mmap races - both the mmap and resize
+ 	 * side will need to grab this lock, to prevent either side from
 diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
-index 975db5a78188..17518f4ecca9 100644
+index 17518f4ecca9..1ffe7ba73b89 100644
 --- a/io_uring/bpf-ops.c
 +++ b/io_uring/bpf-ops.c
-@@ -5,11 +5,58 @@
+@@ -5,10 +5,12 @@
  
  #include "io_uring.h"
  #include "register.h"
-+#include "memmap.h"
++#include "loop.h"
+ #include "memmap.h"
  #include "bpf-ops.h"
  #include "loop.h"
  
++static DEFINE_MUTEX(io_bpf_ctrl_mutex);
  static const struct btf_type *loop_params_type;
  
-+__bpf_kfunc_start_defs();
+ __bpf_kfunc_start_defs();
+@@ -143,16 +145,103 @@ static int bpf_io_init_member(const struct btf_type *t,
+ 			       const struct btf_member *member,
+ 			       void *kdata, const void *udata)
+ {
++	u32 moff = __btf_member_bit_offset(t, member) / 8;
++	const struct io_uring_bpf_ops *uops = udata;
++	struct io_uring_bpf_ops *ops = kdata;
 +
-+__bpf_kfunc int bpf_io_uring_submit_sqes(struct io_ring_ctx *ctx, u32 nr)
-+{
-+	return io_submit_sqes(ctx, nr);
++	switch (moff) {
++	case offsetof(struct io_uring_bpf_ops, ring_fd):
++		ops->ring_fd = uops->ring_fd;
++		return 1;
++	}
++	return 0;
 +}
 +
-+__bpf_kfunc
-+__u8 *bpf_io_uring_get_region(struct io_ring_ctx *ctx, __u32 region_id,
-+			      const size_t rdwr_buf_size)
++static int io_install_bpf(struct io_ring_ctx *ctx, struct io_uring_bpf_ops *ops)
 +{
-+	struct io_mapped_region *r;
++	if (ctx->flags & (IORING_SETUP_SQPOLL | IORING_SETUP_IOPOLL))
++		return -EOPNOTSUPP;
++	if (!(ctx->flags & IORING_SETUP_DEFER_TASKRUN))
++		return -EOPNOTSUPP;
 +
-+	lockdep_assert_held(&ctx->uring_lock);
++	if (ctx->bpf_ops)
++		return -EBUSY;
++	if (WARN_ON_ONCE(!ops->loop_step))
++		return -EINVAL;
 +
-+	switch (region_id) {
-+	case IOU_REGION_MEM:
-+		r = &ctx->param_region;
-+		break;
-+	case IOU_REGION_CQ:
-+		r = &ctx->ring_region;
-+		break;
-+	case IOU_REGION_SQ:
-+		r = &ctx->sq_region;
-+		break;
-+	default:
-+		return NULL;
-+	}
-+
-+	if (unlikely(rdwr_buf_size > io_region_size(r)))
-+		return NULL;
-+	return io_region_get_ptr(r);
-+}
-+
-+__bpf_kfunc_end_defs();
-+
-+BTF_KFUNCS_START(io_uring_kfunc_set)
-+BTF_ID_FLAGS(func, bpf_io_uring_submit_sqes, KF_SLEEPABLE);
-+BTF_ID_FLAGS(func, bpf_io_uring_get_region, KF_RET_NULL);
-+BTF_KFUNCS_END(io_uring_kfunc_set)
-+
-+static const struct btf_kfunc_id_set bpf_io_uring_kfunc_set = {
-+	.owner = THIS_MODULE,
-+	.set = &io_uring_kfunc_set,
-+};
-+
- static int io_bpf_ops__loop_step(struct io_ring_ctx *ctx,
- 				 struct iou_loop_params *lp)
- {
-@@ -68,12 +115,20 @@ io_lookup_struct_type(struct btf *btf, const char *name)
- 
- static int bpf_io_init(struct btf *btf)
- {
-+	int ret;
-+
- 	loop_params_type = io_lookup_struct_type(btf, "iou_loop_params");
- 	if (!loop_params_type) {
- 		pr_err("io_uring: Failed to locate iou_loop_params\n");
- 		return -EINVAL;
- 	}
- 
-+	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_STRUCT_OPS,
-+					&bpf_io_uring_kfunc_set);
-+	if (ret) {
-+		pr_err("io_uring: Failed to register kfuncs (%d)\n", ret);
-+		return ret;
-+	}
++	ops->priv = ctx;
++	ctx->bpf_ops = ops;
++	ctx->loop_step = ops->loop_step;
  	return 0;
  }
  
+ static int bpf_io_reg(void *kdata, struct bpf_link *link)
+ {
+-	return -EOPNOTSUPP;
++	struct io_uring_bpf_ops *ops = kdata;
++	struct io_ring_ctx *ctx;
++	struct file *file;
++	int ret = -EBUSY;
++
++	file = io_uring_register_get_file(ops->ring_fd, false);
++	if (IS_ERR(file))
++		return PTR_ERR(file);
++	ctx = file->private_data;
++
++	scoped_guard(mutex, &io_bpf_ctrl_mutex) {
++		guard(mutex)(&ctx->uring_lock);
++		ret = io_install_bpf(ctx, ops);
++	}
++
++	fput(file);
++	return ret;
++}
++
++static void io_eject_bpf(struct io_ring_ctx *ctx)
++{
++	struct io_uring_bpf_ops *ops = ctx->bpf_ops;
++
++	if (WARN_ON_ONCE(!ops))
++		return;
++	if (WARN_ON_ONCE(ops->priv != ctx))
++		return;
++
++	ops->priv = NULL;
++	ctx->bpf_ops = NULL;
++	ctx->loop_step = NULL;
+ }
+ 
+ static void bpf_io_unreg(void *kdata, struct bpf_link *link)
+ {
++	struct io_uring_bpf_ops *ops = kdata;
++	struct io_ring_ctx *ctx;
++
++	guard(mutex)(&io_bpf_ctrl_mutex);
++	ctx = ops->priv;
++	if (ctx) {
++		guard(mutex)(&ctx->uring_lock);
++		if (WARN_ON_ONCE(ctx->bpf_ops != ops))
++			return;
++
++		io_eject_bpf(ctx);
++	}
++}
++
++void io_unregister_bpf_ops(struct io_ring_ctx *ctx)
++{
++	/*
++	 * ->bpf_ops is write protected by io_bpf_ctrl_mutex and uring_lock,
++	 * and read protected by either. Try to avoid taking the global lock
++	 * for rings that never had any bpf installed.
++	 */
++	scoped_guard(mutex, &ctx->uring_lock) {
++		if (!ctx->bpf_ops)
++			return;
++	}
++
++	guard(mutex)(&io_bpf_ctrl_mutex);
++	guard(mutex)(&ctx->uring_lock);
++	if (ctx->bpf_ops)
++		io_eject_bpf(ctx);
+ }
+ 
+ static struct bpf_struct_ops bpf_ring_ops = {
 diff --git a/io_uring/bpf-ops.h b/io_uring/bpf-ops.h
-index e8a08ae2df0a..b9e589ad519a 100644
+index b9e589ad519a..b39b3fd3acda 100644
 --- a/io_uring/bpf-ops.h
 +++ b/io_uring/bpf-ops.h
-@@ -4,6 +4,12 @@
+@@ -17,4 +17,12 @@ struct io_uring_bpf_ops {
+ 	void *priv;
+ };
  
- #include <linux/io_uring_types.h>
- 
-+enum {
-+	IOU_REGION_MEM,
-+	IOU_REGION_CQ,
-+	IOU_REGION_SQ,
-+};
++#ifdef CONFIG_IO_URING_BPF_OPS
++void io_unregister_bpf_ops(struct io_ring_ctx *ctx);
++#else
++static inline void io_unregister_bpf_ops(struct io_ring_ctx *ctx)
++{
++}
++#endif
 +
- struct io_uring_bpf_ops {
- 	int (*loop_step)(struct io_ring_ctx *ctx, struct iou_loop_params *lp);
+ #endif /* IOU_BPF_OPS_H */
+diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+index 548ea5a080a0..b154dac396d3 100644
+--- a/io_uring/io_uring.c
++++ b/io_uring/io_uring.c
+@@ -2154,6 +2154,7 @@ static __cold void io_req_caches_free(struct io_ring_ctx *ctx)
  
+ static __cold void io_ring_ctx_free(struct io_ring_ctx *ctx)
+ {
++	io_unregister_bpf_ops(ctx);
+ 	io_sq_thread_finish(ctx);
+ 
+ 	mutex_lock(&ctx->uring_lock);
 -- 
 2.52.0
 
