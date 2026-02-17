@@ -1,93 +1,93 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73719625
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 19:04:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D55625
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 19:05:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.181
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771355049; cv=pass; b=hVU9K7g5kpu31eq5iy17WEazncs4FMTWzeQwZetiJu/6Y3uWUutFnSOo5bA61pmkQxod3ng9d4qQg4JRaOf2ih2LPvwfceY3Pi49NrvSRsh26HPGt5U/pSk7SrhC6LzxCxZU51DXCTW5IXXrJqtFWzEgD0juUy4lEdSBxwv5w+c=
+	t=1771355112; cv=pass; b=RxQ5fMR6Ss5F1xBE2gTKOleCWks+SiiQqrdI0DAtlVmLpC6MOHUGUjxvKn7VJLGRYrry5fxMPrPNIQphpJFaJexedRmWSNhbxSxdcoSc/WJlapyY3ssUGZVxjmxi9pvHjulKkQj5EIx/m/M6aEuRNwjV+RiClcKmoBalKIuCMLQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771355049; c=relaxed/simple;
-	bh=aNTC6ITGPfV/BJ+vHWm7NjW/vn00Y3xxPtrhNCTGl84=;
+	s=arc-20240116; t=1771355112; c=relaxed/simple;
+	bh=xBE2TSsTPsqB7Mtk6zE5tAycoOMC35uli/y22UX1+zE=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nJulPwgbgjgj/pOAYHBFogylw8+rTiRTr9dFmOm4Mpp5bRcrizJG2ucAtmjb/H+idfLEz/XwGafH4XPvTwaCe63XeuZSUTwzH+jHOAUKKS5abiE8GHQ6d1yVmfhYLx02WcCJSFQA4n66oKtUDPrGExZdXzravT6HszwxgTqVdP0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uz7D29sk; arc=pass smtp.client-ip=209.85.214.178
+	 To:Cc:Content-Type; b=jrIbgkwBrQXBqqwSRS1wbGrsv8sOAxZuA1BlOxOgt600JHLoczgfqYt9MVhMDiwnX8t+AkfXNa8B7FPFZ/MbO0CSXz9Q+9clZ8h7U5zm9EH+FU1pSUzshED8wP6hjnyVhgryaHGjAcBlD6ngz1QCPe1/b7dZzdvVBLq9bAfYngw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eGmT3Yyb; arc=pass smtp.client-ip=209.85.215.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uz7D29sk"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2aaf5d53eaaso28071465ad.0
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 11:04:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771355048; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eGmT3Yyb"
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-c2a9a9b43b1so3067406a12.2
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 11:05:11 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771355110; cv=none;
         d=google.com; s=arc-20240605;
-        b=bK36QM445GyWtr/kuh423QaTIiB9GO8VDLD2DLTphxVd+sh5TuDIi9sri23ZqDGNDg
-         9FuYowW6UIvv3nOPsw1TwNP2WX2q1Gcq3swfJWX8id3XAwMQ0aVYAuXpdFGpLB31v8Rf
-         gXgz8d7irE59Vdn7vXSwYnVNts9g8Hld4cnjIHjBn9699/p8oquAXepSRSHxNAybJBb1
-         Vj9N12RNKPC43CXrIhUjl2sK1T5MUhen55xhC53FMQIFyCb0d3pRYGak3VM+xX9lJKAO
-         kUied+uRVZD5aYSL8eOtdzsSDwxER91sLILxhvqBHMKQogz4Vvg+bLZGYX9Kq8KYcGmb
-         ExjA==
+        b=Tjykcdbk8g71nNQlLKiqVDTsc4bCSAyZ882QmHQVQGQyfgj2CHqo/RahOD3lRS20S9
+         LO/AvnP6BMGLJaTlvYNe5hjB7TKkuaPsmJnNZvatlLsMuqWTEi2rDD9xzxW/oA1W5wKz
+         eP2O6O1SH4xeU/MyVAcrJXFM4LiqHeniTluBJOo8Dc6WT5i+BvMzd94lDO/VuaeDl1ks
+         Q0iEtNq9z3Sswq48kJkpr2Mq9hBcFfP6tINDLOtgDvzViTRM7tdwf8y7eS6idP551gLP
+         GqPaEPHcDAgU9UWzGkw3d9NOKCzG+J9hH+GhY1mnIrqsPYpIr8UOyLkWu+TBEe8RmIg1
+         LDDw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=cIzXWvJW3gTgj3tbXop58Iuft7SR/IuYSvAwAIZIAE0=;
+        bh=d5CX0BVyYhnUjcQxMQdv3o1MzA2r+tV/cZOpNmoI9xI=;
         fh=kQJoHmciZhFE410Bsj90HR7sS6L9VfCXE26CeirnTkI=;
-        b=DHPQqSgpW2yQBAe07wOMv5GjYhOrSZrKUzLxDjo2LuzM2i41db5ssvjwKEFgggu395
-         bNP1/jXikupSBH6D8UJZ6JzzINNy3l71bpBQx8/vKfsuwWYTOK6zGNfED8fb6wEFYC7a
-         6GDlX2yOtqRVO/iP5Jq6IOOl6XKiUI0oz0WQcdJl+219tZtSHEPwbV0zP/2cMGUkMhXD
-         35tDvOdzl6WApmsoTQOorNadJhGy2Il8zsuQGiEOZjKbvz14q3i+pOfXUFA40bbbEC8Y
-         km2bP04Vil6/l+Z6z7I8u7j1MlUGBQXDgUzbarBq+Gt81VzHPp9LXmgnnTcfFDIGc7J0
-         KnEQ==;
+        b=NmEDyhvX1rrWzzr//yzuV8ozPftriqgvHRVquVoXPqxickz8NGIXrU94uP8BFZ8EgH
+         B9Asx5xXFcMPLaxEFA6QQ/tdL9vDvtOcaxPX93xLiEJuSHmM/Ek2+64m4PaOJkJ+sS/y
+         Dp9O5ltf/LUSrO6FeRY7SsaXFJhudz5nsdSHsmXKSLLCIFMcQjPt5tcSnBSRBmgomyPq
+         o0qtG87RfTUTFDqbxzVY/0E3ciMJdLRtlSxLA+Yyn5RGLRstWD1fbz+NqhyuO7BS+/mS
+         C+MSyZvjMt0oXD5svGiP9HexUx09xeI42d7QOlO9JLiXqQiBBp3PbEdHUJ7ihLCpf0Ew
+         XvHA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771355048; x=1771959848; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771355110; x=1771959910; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cIzXWvJW3gTgj3tbXop58Iuft7SR/IuYSvAwAIZIAE0=;
-        b=Uz7D29sko7XQyYqB+mJXvOXLz/stqkAzzd0wmA7pCdP72r52E3GMM/XtrWE9LJP5Xp
-         +ckIjWJuFd3KsmOgelHS8KcIC+A+QgL0OJheFm54QlZn6LxNxRyhrrdkXmvT3azMwkeK
-         FOvt22VYrP2JYxEp+lMbz/smXpQF2IvYTl2vlMUi2gYsImZ3AwOQBuFvuOVMTOTSlg4I
-         JBXRexSio43yZFZIvET3neMxCinlQhGLTEbd5I7CZmRMAy6Uuii15Fd039NtBRIIWRby
-         bUF58xyoclSEffSYt8Fme02LqEGueJ9EE2fM4Fb338tkSw8gcfhNyo+T2GZ8G+kESL4a
-         +RxQ==
+        bh=d5CX0BVyYhnUjcQxMQdv3o1MzA2r+tV/cZOpNmoI9xI=;
+        b=eGmT3YybxixW6LVrwwDv5baXgO+VG0lH5YoZQ3TJx6HK61KNBGW2KBivG6R1mEXv2J
+         8VwpIr7+1UjKAdpnOSdpwJTuw9f5l1hRTcRS58CHNQWvCOSEt/qLubi/BUvPrZNC8Xw8
+         pTYG/rE7MypPgjORZZccOyxmYqGSSw5TtQdxo8tKnNMcTaUaAO0GvFBX9u1hR3L3v63V
+         bEO0xhwptj6qe/1uAos5yOL7UqisPSHnv4+oxIw3QdehxF64WDd8jsWOxz+2v+aqICdL
+         fubRUF2y5qTrYLdxv67NRPQxZ4wFDFa+DyXgHDmqaX7dw7CRXL3Uk5KpercjmG0aynvc
+         SP8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771355048; x=1771959848;
+        d=1e100.net; s=20230601; t=1771355110; x=1771959910;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=cIzXWvJW3gTgj3tbXop58Iuft7SR/IuYSvAwAIZIAE0=;
-        b=szkpefHFnz+ivf1g7zRb2HYVaFt/DFtigNgwhUV2NhNPAHIxDFiOw2hdglwcjHHeOy
-         cqmvmfrXWfKW0MUOana2/B6t4e3SHcMOGWJ6hEJdWdd7ZNaORnD3fqaKNJhA6znYxN/8
-         qWmDO0UAO0YbpeWz/4D0HRQprzplbEyfYWmfUsb+tA7BEmGLgXFRRtEdWuC1uAVl+kNT
-         24LZEijqKsw5vbDuOdtt7Okbn+/MGA8nH19sMp6DMQ+D8ZwHqtQzZWMVNVdDomuOh+8x
-         dynd/teA+QDPIWmESDIDPE5IGknncAOndbisyyHvE+ci/ap5rks2KjREMbnZHP9DTu3V
-         L+zw==
-X-Gm-Message-State: AOJu0YyaQvOeDnIwl1cTTbQlKB29gIPsdbQ3MmSrhZwf4WmMq9Sf/Sab
-	QI5cw59VJdWzdIJnBdQNtaj1rKjju19+X8tY+oxNk64VcUke1sbtLcuT+b06lB41qcgoMIfdg1k
-	VSXxIR8f+aC6NhICe5DxB3ZbjzZMnxPlUjWuD
-X-Gm-Gg: AZuq6aKUU/8nBws/zW7Bsd02sF93woZUznDY+p2oXSzTt6peQ0NAv9Fj9/cLmrm+WUr
-	j/zRgRonyyeJDi+Ja6wm12kvYQ5Oa3vsmShI29/kbtc7ywqmXCwIjUsnssU4NM/ygkxmziuVORF
-	VtZludfZS4u/JfWSf9GBJzmT6oXr9I8B47ZWkzJ1ATbpBIUt1ZOAFgj97iZVI1lqJbUuaDCfQQC
-	cVLccYPQ4+ODvsRmtzcd063663i+aq5/4jRn/ir+ptaJI7sj7qBy1G3mCL8hqWIkBr5nf9F/ztX
-	8UWNDOTgCt6UlI3SgKMG8MY=
-X-Received: by 2002:a17:903:41cc:b0:2aa:e7fe:63b8 with SMTP id
- d9443c01a7336-2ad174dd3b7mr122815105ad.33.1771355047692; Tue, 17 Feb 2026
- 11:04:07 -0800 (PST)
+        bh=d5CX0BVyYhnUjcQxMQdv3o1MzA2r+tV/cZOpNmoI9xI=;
+        b=CAHjY5vXEyJKFLaY+ZiPqyUl2q7jLjbLQNXV6GPB00q+Gczxrq3DmEfc4YpKgE3ezd
+         JsL2FbpuSiaIxVn5p7yrx3AcOqIeeRHPsCbdGc5YEy5pit6OP6gpe03fculGIsDsM3az
+         ohMu/2qwoctZVBz8zk9QjOPRJwvESOW8JfkQ/48qQLpnGlEcsOOyMptDnh/I7+6EHJbo
+         8WGCUK0KA1nruT1neYcir481Q80dMRtADK8M9ogDCi0HC8L53srQ2vvIiu5RMWyFVilk
+         JfsTbSLk/QHJ0yih/H8sC05BX+MuGddeQjbwAPYRapg0YX6o38fk9AMc9dbplpfKs7EO
+         SpHQ==
+X-Gm-Message-State: AOJu0YyxMfvYfl1Q0YoRg9HlN+CbZBhFTB9ShBO7lXq8T2IP73Tn0NTz
+	YYjOqkDryHbQXfroLtEQgVA1WtL3vgsCxwf7q0WP4b/gNpdHXl7v73AiER7A/uIeubvAOYHISZP
+	8AJfflmYciq2tclE0rR2/P79JZIn2da0=
+X-Gm-Gg: AZuq6aIFUvbqwA1YluJ4V7qC2G45/9Ok/SxB/Uom/Rzr0IXzXvLkBoMWsxgYa0UKDvm
+	I+yEapu4fWBD1I0rSx0hoOzxmEdn4if5SvRjqPsid1QShIo5U6XXhauS0AQKFGsheb2XaqXFnG5
+	MdVv0V2/iL365ICG9N31yLliiicdVBwO5tcgABtC/AGHRgnIUOIPvFTx6sbnIAXWJE3fEyA8maq
+	sTsg/EB9vPIZnlNF8+89OkohpXv7g6gX3H3s/c9QmQvH4BjxxdqLBtjq6sq28g+zBDnDNTHV1/X
+	MYYMNCpjW1dxaM2Ek6cAYfY=
+X-Received: by 2002:a17:903:1447:b0:2aa:dbf7:7449 with SMTP id
+ d9443c01a7336-2ad17501fbemr150297075ad.37.1771355110520; Tue, 17 Feb 2026
+ 11:05:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260214021014.15670-1-emil@etsalapatis.com> <20260214021014.15670-3-emil@etsalapatis.com>
-In-Reply-To: <20260214021014.15670-3-emil@etsalapatis.com>
+References: <20260214021014.15670-1-emil@etsalapatis.com> <20260214021014.15670-2-emil@etsalapatis.com>
+In-Reply-To: <20260214021014.15670-2-emil@etsalapatis.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 17 Feb 2026 11:03:54 -0800
-X-Gm-Features: AaiRm51DRNA0shiHFI68AcxoaAaCBDalre3EKZTXRci9-PLmSpJ29_DqMB5YCV8
-Message-ID: <CAEf4BzYVWzQJ5p2ryGZGj-s6BfxS+qrKyKCS6JrMbVJZGd5KTQ@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] libbpf: Delay feature gate check until object
- prepare time
+Date: Tue, 17 Feb 2026 11:04:58 -0800
+X-Gm-Features: AaiRm53DRjR8U8g10QGiSysKgq7l0CbLsL6bbjDmpnqiJTjKxPpNIg8_rDAeLBM
+Message-ID: <CAEf4BzbxSRCxT9+3pjU_kN0K6R30RBXJ4UKOMZaRZe9FofBoRQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 1/2] libbpf: Do not use PROG_TYPE_TRACEPOINT
+ program for feature gating
 To: Emil Tsalapatis <emil@etsalapatis.com>
 Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
 	daniel@iogearbox.net, john.fastabend@gmail.com, memxor@gmail.com
@@ -97,159 +97,77 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Feb 13, 2026 at 6:11=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
 om> wrote:
 >
-> Commit 728ff167910e ("libbpf: Add gating for arena globals relocation fea=
-ture")
-> adds a feature gate check that loads a map and BPF program to
-> test the running kernel supports large direct offsets for LDIMM64
-> instructions. This check is currently used to calculate arena symbol
-> offsets during bpf_object__collect_relos, itself called by
-> bpf_object_open.
+> Commit 728ff167910e uses a PROG_TYPE_TRACEPOINT BPF test program to
+> check whether the running kernel supports large LDIMM64 offsets. The
+> feature gate incorrectly assumes that the program will fail at
+> verification time with one of two messages, depending on whether the
+> feature is supported by the running kernel. However,
+> PROG_TYPE_TRACEPOINT programs may fail to load before verification even
+> starts, e.g., if the shell does not have the appropriate capabilities.
+> Use a BPF_PROG_TYPE_SOCKET_FILTER program for the feature gate instead.
 >
-> However, the program calling bpf_object_open may not have the permissions=
- to
-> load maps and programs. This is the case with the BPF selftests, where
-> bpftool is invoked at compilation time during skeleton generation. This
-> causes errors as the feature gate unexpectedly fails with -EPERM.
+> Also fix two minor issues. First, ensure the log buffer for the test is
+> initialized: Failing program load before verification led to libbpf dumpi=
+ng
+> uninitialized data to stdout. Also, ensure that close() is only called
+> for program_fd in the probe if the program load actually succeeded. The
+> call was currently failing silently with -EBADF most of the time.
 >
-> Avoid this by moving all uses of the FEAT_LDIMM64_FULL_RANGE_OFF feature =
-gate
-> to BPF object preparation time instead.
->
+> Reported-by: Alexei Starovoitov <ast@kernel.org>
 > Fixes: 728ff167910e ("libbpf: Add gating for arena globals relocation fea=
 ture")
 > Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 > ---
->  tools/lib/bpf/libbpf.c | 31 +++++++++++++++++++++++--------
->  1 file changed, 23 insertions(+), 8 deletions(-)
+>  tools/lib/bpf/features.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 >
-
-This works, but see some suggestions for a follow up to contain
-feature-checking a bit better
-
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> index 93e59ed8d9a1..ff38a9db1b13 100644
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
-> @@ -3009,11 +3009,11 @@ static int init_arena_map_data(struct bpf_object =
-*obj, struct bpf_map *map,
->         memcpy(obj->arena_data, data, data_sz);
->         obj->arena_data_sz =3D data_sz;
+> diff --git a/tools/lib/bpf/features.c b/tools/lib/bpf/features.c
+> index b65ab109e3ff..cf3937e08520 100644
+> --- a/tools/lib/bpf/features.c
+> +++ b/tools/lib/bpf/features.c
+> @@ -508,7 +508,7 @@ static int probe_kern_arg_ctx_tag(int token_fd)
 >
-> -       /* place globals at the end of the arena (if supported) */
-> -       if (kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_OFF))
-> -               obj->arena_data_off =3D mmap_sz - data_alloc_sz;
-> -       else
-> -               obj->arena_data_off =3D 0;
-> +       /*
-> +        * possible offset for arena globals into the arena,
-> +        * if supported at load time
-> +        */
-> +       obj->arena_data_off =3D mmap_sz - data_alloc_sz;
-
-I'd keep this obj->arena_data_off at zero at this point (we don't use
-it until prepare step, skeleton also just uses obj->arena_data
-directly without offset during open phase)...
-
->
->         /* make bpf_map__init_value() work for ARENA maps */
->         map->mmaped =3D obj->arena_data;
-> @@ -4672,7 +4672,7 @@ static int bpf_program__record_reloc(struct bpf_pro=
-gram *prog,
->                 reloc_desc->type =3D RELO_DATA;
->                 reloc_desc->insn_idx =3D insn_idx;
->                 reloc_desc->map_idx =3D obj->arena_map_idx;
-> -               reloc_desc->sym_off =3D sym->st_value + obj->arena_data_o=
-ff;
-> +               reloc_desc->sym_off =3D sym->st_value;
-
-this is good, relos don't need to record this offset...
-
->
->                 map =3D &obj->maps[obj->arena_map_idx];
->                 pr_debug("prog '%s': found arena map %d (%s, sec %d, off =
-%zu) for insn %u\n",
-> @@ -5556,6 +5556,7 @@ bpf_object__create_maps(struct bpf_object *obj)
+>  static int probe_ldimm64_full_range_off(int token_fd)
 >  {
->         struct bpf_map *map;
->         unsigned int i, j;
-> +       char *arena_globals;
->         int err;
->         bool retried;
+> -       char log_buf[1024];
+> +       char log_buf[1024] =3D {};
+
+minor nit: this will clear whole log_buf, but we really just need to
+set first character to zero, so instead I'd do
+
+log_buf[0] =3D '\0';
+
+before program load
+
+
+minor, because this is not performance critical code, but it's a bit
+wasteful nevertheless
+
+>         int prog_fd, map_fd;
+>         int ret;
+>         LIBBPF_OPTS(bpf_map_create_opts, map_opts,
+> @@ -536,14 +536,14 @@ static int probe_ldimm64_full_range_off(int token_f=
+d)
+>         }
+>         insns[0].imm =3D map_fd;
 >
-> @@ -5633,7 +5634,15 @@ bpf_object__create_maps(struct bpf_object *obj)
->                                         return err;
->                                 }
->                                 if (obj->arena_data) {
-> -                                       memcpy(map->mmaped + obj->arena_d=
-ata_off, obj->arena_data,
-> +                                       /*
-> +                                        * Only relocate the globals to t=
-he end of the arena
-> +                                        * if the kernel supports it.
-> +                                        */
-> +                                       arena_globals =3D map->mmaped;
-> +                                       if (kernel_supports(obj, FEAT_LDI=
-MM64_FULL_RANGE_OFF))
-> +                                               arena_globals +=3D obj->a=
-rena_data_off;
-
-and here I'd instead set arena_data_off to its final value (zero or
-proper offset), something like
-
-if (kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_OFF)
-    obj->arena_data_off =3D bpf_map_mmap_sz(map) -
-roundup(sysconf(_SC_PAGE_SIZE), sysconf(_SC_PAGE_SIZE));
-
-(note, we did all the correctness checks early in init_arena_map_data,
-we don't have to do any more here)
-
-and then the rest of the code stays exactly the same, down to the
-original memcpy(map->mmaped + obj->arena_data_off, ...), and no extra
-variables
-
-
-> +
-> +                                       memcpy(arena_globals, obj->arena_=
-data,
->                                                 obj->arena_data_sz);
->                                         zfree(&obj->arena_data);
->                                 }
-> @@ -6386,6 +6395,12 @@ bpf_object__relocate_data(struct bpf_object *obj, =
-struct bpf_program *prog)
->                 case RELO_DATA:
->                         map =3D &obj->maps[relo->map_idx];
->                         insn[1].imm =3D insn[0].imm + relo->sym_off;
-> +
-> +                       if (relo->map_idx =3D=3D obj->arena_map_idx &&
-> +                           kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_=
-OFF)) {
-> +                               insn[1].imm +=3D obj->arena_data_off;
-> +                       }
-> +
-
-here too we don't need feature checking, our obj->arena_data_off
-should have a valid value (might be zero, that's fine)
-
->                         if (obj->gen_loader) {
->                                 insn[0].src_reg =3D BPF_PSEUDO_MAP_IDX_VA=
-LUE;
->                                 insn[0].imm =3D relo->map_idx;
-> @@ -14456,7 +14471,7 @@ int bpf_object__load_skeleton(struct bpf_object_s=
-keleton *s)
->                 if (!map_skel->mmaped)
->                         continue;
+> -       prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_TRACEPOINT, "global_reloc=
+", "GPL", insns, insn_cnt, &prog_opts);
+> +       prog_fd =3D bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, "global_re=
+loc", "GPL", insns, insn_cnt, &prog_opts);
+>         ret =3D -errno;
 >
-> -               if (map->def.type =3D=3D BPF_MAP_TYPE_ARENA)
-> +               if (map->def.type =3D=3D BPF_MAP_TYPE_ARENA && kernel_sup=
-ports(*s->obj, FEAT_LDIMM64_FULL_RANGE_OFF))
->                         *map_skel->mmaped =3D map->mmaped + map->obj->are=
-na_data_off;
-
-and here as well, no need to expose feature check here, we have
-map->obj->arena_data_off set correctly
-
->                 else
->                         *map_skel->mmaped =3D map->mmaped;
+>         close(map_fd);
+> -       close(prog_fd);
+>
+>         if (prog_fd >=3D 0) {
+>                 pr_warn("Error in %s(): Program loading unexpectedly succ=
+eeded.\n", __func__);
+> +               close(prog_fd);
+>                 return -EINVAL;
+>         }
+>
 > --
 > 2.49.0
+>
 >
