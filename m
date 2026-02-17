@@ -1,106 +1,198 @@
 Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31E129463
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 00:07:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99321288D6
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 00:07:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771286827; cv=none; b=Q3wjmZXtdDzcn8PffuzQYSlZxIyG810vFp/qLXH8nviJXC3wZZwGjF8kII+QE5Ooml8RZl8DuVI3AVrwaESyGi7QjgaStVW49WoBSCVtUtfgkqk0PDwO4tCQ/j74xTjJ/gtYlaYNwu+cFEo4b6Y7XC94kU9FE6LNwxNsikp7aWw=
+	t=1771286827; cv=none; b=d+BrQGitTdLuxmwyf2iToCW9G4HNQcWLDhXcReZfmTkmRGEONSps57JkYQ3BafQ2Qt4BVoFwLbqM1blvM6hC9Sy5XTJxyhWBbr2Yoqhh6qnl/riqgwtGQVNko+F+skpuH6ak7699yLw45B7dhFF+ksSOc91eCOPMDViLLKrthoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1771286827; c=relaxed/simple;
-	bh=8pCxpRyqM45J4HG13TljFBU1L/g23s6hvGeHJ/EXEmE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=EOEyn5cZlzC51QYTzZ+22RwCsIiehn44NcIpkWSFFKeYQWum+5SnX0xWo+ZDtC3be+GZIPGHNNYo03owaFtMuzW92Sb+MwrcgRVLXik/j5tTR6C16N63+l2F7iNAhp4/NZNfFRZFHCTVf416gOGHZCHw5U8UA54UbtK+yCqdB/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=d91ndUML; arc=none smtp.client-ip=209.85.216.74
+	bh=9WwxYTvU0ICfF4/a5nCU6u37GEw+WPFnlpiEnf0Hyyc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=cx+qlZ7XjYBDs/EH0NJY0srfLDc1z88ngt+QMAyKF/FQe6D8w9QaAJWypsrWpx53Iia1LwLBofDIgFG/7pqWpjOOI7Bir/zkpX0GcJ2xOKS1Pe9DBEmnCnK5Wv0yeADRCa7droZ4Kwg4PyHD47QXIYkkIdrwCHhlfIScWD/39+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W2EAhqoW; arc=none smtp.client-ip=209.85.216.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="d91ndUML"
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-354c44bf176so3461798a91.0
-        for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 16:07:04 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W2EAhqoW"
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-3562171b56dso3785564a91.2
+        for <bpf@vger.kernel.org>; Mon, 16 Feb 2026 16:07:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771286824; x=1771891624; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=kHogz3X18n3wVg8pGsHsR4TK5Q9EDl5Af3JaeD24/1s=;
-        b=d91ndUMLg5jN3VZ5OsOmeH5a+BVbZvuWxHAsb2smbPoXA0tDozCsKz7aKKGLtlr73d
-         6rm8MhLVJ53m1D0ro0sWP/bPXphlxbTViwHlgm7e6rOz52LZ91w6flAEENBwyDYkg5ab
-         5hsyhOuc+RVY0DOVFQE5t69VS9/iS4TInsH/Q2oBuXQTnUhPTlPV/Aw7T8c5WwFdLqup
-         V+pgCGEemLDs6Ic44BuTzgxO4BMhJlW+OnaAsiir3I00RA9YxenvjJxCdy1ZaMk1+3st
-         Mh2YCO1lX15EtCLIT5kAzrWeECQlGeiq/d4cN8g+BAc0kduNfr701SDPKKFvbaHEn7Zp
-         fkBQ==
+        d=google.com; s=20230601; t=1771286826; x=1771891626; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=C04qXG+D2q8FT5aYTRV2rlnYFGaBCXPfOpTMiADC68E=;
+        b=W2EAhqoWs+7ZEkpAXbA0D08g2QHW5A8wvn2WNr8LXHL8wfzGP532kEolDdQCPPmypw
+         xix8o+hXr0Z5oS8Vz1uBtqHYUmtXdh6g+lu/r9w7UFYa4LIzhMJ2NzIhpyoSFqyBItJK
+         jxUSilk1dMLKSbGM3S5yS9IBXh9YYsZTKERoSGRIp5GKKTc4VMuMddUaATB0taoE9Bca
+         CMjobIcNtxfLU/9ytcrDnwQF1+D57IgWWHgC3e+ggQDuJ16xVXFsMtjy4UFNBxcmx/PY
+         K8zYcr+N9vGRGSYUDP2LI2kmltcTXUCPoLeAxgvNws5JOumqJ9eF7vhapo22lIHD28cB
+         cIhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771286824; x=1771891624;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kHogz3X18n3wVg8pGsHsR4TK5Q9EDl5Af3JaeD24/1s=;
-        b=fXcAK2y4z2VQtX2MQ0hSYtx5EbetQDHJHWrp98HaQxIblhMOiisRwDlwG0zb1oWKBM
-         hUexOIeP47BXOqJaH091whTDyHoawdFTnJjj0853tCkQNnBD8d8+ju1jOD3DA0JZf0Hb
-         N5Z07Tt3iB0RaE01Dd0lVhJ1YuF2POS7w3LqvG4hVz9QgqQ7Lu5/DslIMJKK0A+ZPDx1
-         Wq1Qh7Yn8mzVtGFH4frQfuw/zvzDvadm/05rpESTRyQm34qNhhJazHZ92Z9V+SF2fN35
-         6ufa2DfFZFRJ7wQVnvz88y3h4Bf9O20DPbNppj8XSvr7yvwpaM960ww4SAG3KgadzI/X
-         pOjg==
-X-Forwarded-Encrypted: i=1; AJvYcCU9dW/HKzdZakS4zColjMLrsz0GNgON+cC3hYNJm3gZykUdt5g6slHIcfKBRWwmPCNSVMg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyptvdKApcPRlVSNCPQrB62QbytrkvZBMokun4Cg9j6nBjrYEvU
-	fMu5bORKcbkOEvebvX5UNWfKuZj8oJviLlUGUP2WwRtIOtTFwWeuYQyUF+5iXYkE9bbS36qymJX
-	qvAm1dA==
-X-Received: from pjbpc11.prod.google.com ([2002:a17:90b:3b8b:b0:352:ed03:9879])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4b43:b0:340:b912:536
- with SMTP id 98e67ed59e1d1-35844fcc0ebmr7982530a91.31.1771286824245; Mon, 16
- Feb 2026 16:07:04 -0800 (PST)
-Date: Tue, 17 Feb 2026 00:05:12 +0000
+        d=1e100.net; s=20230601; t=1771286826; x=1771891626;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=C04qXG+D2q8FT5aYTRV2rlnYFGaBCXPfOpTMiADC68E=;
+        b=FRTFBWRg3AE5/eFAFg0OHqSvwWFi9/n2Fy6uBUlaNzzEbvoobL11ts/NdUpJbwrR1C
+         2hIg/2y3+oKCmF6xeJmUIr+IAolYDdJv84gcKkiSORpYsVPXHHugHfb/vGcsyc9PzIu7
+         n9JdgPT+YQGO2KZdXckW1omUgcdeFnBRGOiAxCh3loMdRpj05ptjMnWHTjVPAe3eRbnE
+         Rzp8+SfK81PPasIHKEACTh6OhOjwCcJKjLCknsUwCwL0l0A+zcb+9caBKcxw3Mirl/x+
+         /KL/BjBJplcFckkHQJzfJ+rWho3Qkcqh+TemNdFJ/8bku2f0LFt8gjXNSYFqM9RqhgMg
+         Bkeg==
+X-Forwarded-Encrypted: i=1; AJvYcCWefgq/vOT0+b4HLJ+u9NAF6egQtDO/rLzY22BvMTt5fYUfzMBDk+UfMoCQksDSjh9DFf8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxF3aW4DpiGZfTk2O9s0kxDq2vT/387oqZoqFvp5GoFQMWjXF4H
+	5HW3jLUFdUx4xzixOLyoW9pqvP/J/lD7YTR1P7i/RZ4TafmsTitVW8HfwqAOvxYJvZ0qNcAxNxS
+	Q0ehSlQ==
+X-Received: from pjbkk11.prod.google.com ([2002:a17:90b:4a0b:b0:354:e865:5165])
+ (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1812:b0:34a:47d0:9a82
+ with SMTP id 98e67ed59e1d1-356aad5f894mr10553336a91.23.1771286825729; Mon, 16
+ Feb 2026 16:07:05 -0800 (PST)
+Date: Tue, 17 Feb 2026 00:05:13 +0000
+In-Reply-To: <20260217000701.791189-1-kuniyu@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260217000701.791189-1-kuniyu@google.com>
 X-Mailer: git-send-email 2.53.0.310.g728cabbaf7-goog
-Message-ID: <20260217000701.791189-1-kuniyu@google.com>
-Subject: [PATCH v2 bpf/net 0/6] sockmap: Fix UAF and broken memory accounting
- for UDP.
+Message-ID: <20260217000701.791189-2-kuniyu@google.com>
+Subject: [PATCH v2 bpf/net 1/6] sockmap: Annotate sk->sk_data_ready() for UDP.
 From: Kuniyuki Iwashima <kuniyu@google.com>
 To: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
+	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
+	syzbot+113cea56c13a8a1e95ab@syzkaller.appspotmail.com
 Content-Type: text/plain; charset="UTF-8"
 
-syzbot reported 3 issues in SOCKMAP for UDP.
+syzbot reported data race of sk->sk_data_ready(). [0]
 
-Patch 1 - 2 fix lockless accesses to sk->sk_data_ready()
-and sk->sk_write_space().
+UDP fast path does not hold bh_lock_sock(), instead
+spin_lock_bh(&sk->sk_receive_queue.lock) is used.
 
-Patch 3 fixes UAF in sk_msg_recvmsg().
+Let's use WRITE_ONCE() and READ_ONCE() for sk->sk_data_ready().
 
-Patch 4 - 5 consolidate sk_psock_skb_ingress_self() into
-sk_psock_skb_ingress() as prep.
+Another option is to hold sk->sk_receive_queue.lock in
+sock_map_sk_acquire() if sk_is_udp() is true, but this is
+overkill and also does not work for sk->sk_write_space().
 
-Patch 6 fixes broken memory accounting.
+[0]:
+BUG: KCSAN: data-race in __udp_enqueue_schedule_skb / sk_psock_drop
 
+write to 0xffff88811d063048 of 8 bytes by task 23114 on cpu 0:
+ sk_psock_stop_verdict net/core/skmsg.c:1287 [inline]
+ sk_psock_drop+0x12f/0x270 net/core/skmsg.c:873
+ sk_psock_put include/linux/skmsg.h:473 [inline]
+ sock_map_unref+0x2a5/0x300 net/core/sock_map.c:185
+ __sock_map_delete net/core/sock_map.c:426 [inline]
+ sock_map_delete_from_link net/core/sock_map.c:439 [inline]
+ sock_map_unlink net/core/sock_map.c:1608 [inline]
+ sock_map_remove_links+0x228/0x340 net/core/sock_map.c:1623
+ sock_map_close+0xa1/0x340 net/core/sock_map.c:1684
+ inet_release+0xcd/0xf0 net/ipv4/af_inet.c:437
+ __sock_release net/socket.c:662 [inline]
+ sock_close+0x6b/0x150 net/socket.c:1455
+ __fput+0x29b/0x650 fs/file_table.c:468
+ ____fput+0x1c/0x30 fs/file_table.c:496
+ task_work_run+0x130/0x1a0 kernel/task_work.c:233
+ resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+ __exit_to_user_mode_loop kernel/entry/common.c:44 [inline]
+ exit_to_user_mode_loop+0x1f7/0x6f0 kernel/entry/common.c:75
+ __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
+ syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
+ syscall_exit_to_user_mode_work include/linux/entry-common.h:159 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:194 [inline]
+ do_syscall_64+0x1d3/0x2a0 arch/x86/entry/syscall_64.c:100
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-Changes:
-  v2:
-    Patch 2: Cache sk->sk_write_space in sock_wfree()
-    Patch 5: Keep msg->sk assignment
-    Patch 6: Fix build failure when CONFIG_INET=n
+read to 0xffff88811d063048 of 8 bytes by task 23117 on cpu 1:
+ __udp_enqueue_schedule_skb+0x6c1/0x840 net/ipv4/udp.c:1789
+ __udp_queue_rcv_skb net/ipv4/udp.c:2346 [inline]
+ udp_queue_rcv_one_skb+0x709/0xc20 net/ipv4/udp.c:2475
+ udp_queue_rcv_skb+0x20e/0x2b0 net/ipv4/udp.c:2493
+ __udp4_lib_mcast_deliver+0x6e8/0x790 net/ipv4/udp.c:2585
+ __udp4_lib_rcv+0x96f/0x1260 net/ipv4/udp.c:2724
+ udp_rcv+0x4f/0x60 net/ipv4/udp.c:2911
+ ip_protocol_deliver_rcu+0x3f9/0x780 net/ipv4/ip_input.c:207
+ ip_local_deliver_finish+0x1fc/0x2f0 net/ipv4/ip_input.c:241
+ NF_HOOK include/linux/netfilter.h:318 [inline]
+ ip_local_deliver+0xe8/0x1e0 net/ipv4/ip_input.c:262
+ dst_input include/net/dst.h:474 [inline]
+ ip_sublist_rcv_finish net/ipv4/ip_input.c:584 [inline]
+ ip_list_rcv_finish net/ipv4/ip_input.c:628 [inline]
+ ip_sublist_rcv+0x42b/0x6d0 net/ipv4/ip_input.c:644
+ ip_list_rcv+0x261/0x290 net/ipv4/ip_input.c:678
+ __netif_receive_skb_list_ptype net/core/dev.c:6195 [inline]
+ __netif_receive_skb_list_core+0x4dc/0x500 net/core/dev.c:6242
+ __netif_receive_skb_list net/core/dev.c:6294 [inline]
+ netif_receive_skb_list_internal+0x47d/0x5f0 net/core/dev.c:6385
+ netif_receive_skb_list+0x31/0x1f0 net/core/dev.c:6437
+ xdp_recv_frames net/bpf/test_run.c:269 [inline]
+ xdp_test_run_batch net/bpf/test_run.c:350 [inline]
+ bpf_test_run_xdp_live+0x104c/0x1360 net/bpf/test_run.c:379
+ bpf_prog_test_run_xdp+0x57b/0xa10 net/bpf/test_run.c:1396
+ bpf_prog_test_run+0x204/0x340 kernel/bpf/syscall.c:4703
+ __sys_bpf+0x4c0/0x7b0 kernel/bpf/syscall.c:6182
+ __do_sys_bpf kernel/bpf/syscall.c:6274 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6272 [inline]
+ __x64_sys_bpf+0x41/0x50 kernel/bpf/syscall.c:6272
+ x64_sys_call+0x28e1/0x3000 arch/x86/include/generated/asm/syscalls_64.h:322
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xc0/0x2a0 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
-  v1: https://lore.kernel.org/netdev/20260215204353.3645744-1-kuniyu@google.com/
+value changed: 0xffffffff847b24d0 -> 0xffffffff84673410
 
+Reported by Kernel Concurrency Sanitizer on:
+CPU: 1 UID: 0 PID: 23117 Comm: syz.8.5085 Tainted: G        W           syzkaller #0 PREEMPT(voluntary)
+Tainted: [W]=WARN
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/25/2025
 
-Kuniyuki Iwashima (6):
-  sockmap: Annotate sk->sk_data_ready() for UDP.
-  sockmap: Annotate sk->sk_write_space() for UDP.
-  sockmap: Fix use-after-free in udp_bpf_recvmsg().
-  sockmap: Pass gfp_t flag to sk_psock_skb_ingress().
-  sockmap: Consolidate sk_psock_skb_ingress_self().
-  sockmap: Fix broken memory accounting for UDP.
+Fixes: 7b98cd42b049 ("bpf: sockmap: Add UDP support")
+Reported-by: syzbot+113cea56c13a8a1e95ab@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/netdev/69922ac9.a70a0220.2c38d7.00e1.GAE@google.com/
+Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
+---
+ net/core/skmsg.c | 4 ++--
+ net/ipv4/udp.c   | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
- include/net/udp.h  |  9 +++++
- net/core/skmsg.c   | 97 ++++++++++++++++++++--------------------------
- net/core/sock.c    |  8 +++-
- net/ipv4/udp.c     | 11 +++++-
- net/ipv4/udp_bpf.c |  9 +++++
- 5 files changed, 76 insertions(+), 58 deletions(-)
-
+diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+index ddde93dd8bc6..75fa94217e1e 100644
+--- a/net/core/skmsg.c
++++ b/net/core/skmsg.c
+@@ -1296,7 +1296,7 @@ void sk_psock_start_verdict(struct sock *sk, struct sk_psock *psock)
+ 		return;
+ 
+ 	psock->saved_data_ready = sk->sk_data_ready;
+-	sk->sk_data_ready = sk_psock_verdict_data_ready;
++	WRITE_ONCE(sk->sk_data_ready, sk_psock_verdict_data_ready);
+ 	sk->sk_write_space = sk_psock_write_space;
+ }
+ 
+@@ -1308,6 +1308,6 @@ void sk_psock_stop_verdict(struct sock *sk, struct sk_psock *psock)
+ 	if (!psock->saved_data_ready)
+ 		return;
+ 
+-	sk->sk_data_ready = psock->saved_data_ready;
++	WRITE_ONCE(sk->sk_data_ready, psock->saved_data_ready);
+ 	psock->saved_data_ready = NULL;
+ }
+diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+index b96e47f1c8a2..422c96fea249 100644
+--- a/net/ipv4/udp.c
++++ b/net/ipv4/udp.c
+@@ -1787,7 +1787,7 @@ int __udp_enqueue_schedule_skb(struct sock *sk, struct sk_buff *skb)
+ 		 * using prepare_to_wait_exclusive().
+ 		 */
+ 		while (nb) {
+-			INDIRECT_CALL_1(sk->sk_data_ready,
++			INDIRECT_CALL_1(READ_ONCE(sk->sk_data_ready),
+ 					sock_def_readable, sk);
+ 			nb--;
+ 		}
 -- 
 2.53.0.310.g728cabbaf7-goog
 
