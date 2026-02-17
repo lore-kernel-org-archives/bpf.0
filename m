@@ -1,129 +1,141 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7462A2D3750
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 08:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D1502D2381;
+	Tue, 17 Feb 2026 08:34:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771315448; cv=none; b=rX6FsKZ0Z/PMaKo1oZ0eV1TDovv/RwrlPjYyhbPO66Fnw961fSBIiMjAMrvU67L0dYdeqXuN7vedMr/SI6l+odVKeFuLF+IVPhaIeZVGEv/uL+blUGGQFia1g41+2Al0n36CKd/t/Z7SPZA1XIGSfRAr0Ho6UhkWQkuIcdfKtos=
+	t=1771317274; cv=none; b=eujyhas03BFrZoJvM7CGBqLdZyreVE+65kd7V1HUco7YLtVjbKGRA3QW+U0mDh4Eo63lnOyH6hMYHHfIiZT1+jaPVoucrNLgUhlTtaiN7AuY9RHQuGEq5Kt0bDzp8JwPB1c3TlLHYnGn0F3k8qvWtNdEAnUUPrZFPA8ButLKZ5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771315448; c=relaxed/simple;
-	bh=Yweqh5Ie4qKFEMSdJJSbslC8AC9nlGFb9nntTg3vI9E=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=o/st8nvVbXyRhrn2iblhakKXkuKyki8xg8uRlIEFQh+LSDYAktDtEtpHL+vSm2Ngo6FsD/V7ZLe64lQ4/8LUQzN2CdEUOdEqwFRpE6JQFqLBWkIRv+0/2ERKJ3WUeN+b3J5JplH3xtMeKAu9PUTBrB3uLXonjfWFNHvJPTWGSJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h5IJXhWe; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771317274; c=relaxed/simple;
+	bh=uL4DxKFzQP1l9k3Kk1Acq3jftmgv8xT3AxsRIN0UWhQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HQ9t7IIf7XVMN2MqnVMPN5j+nm8yx+Wl0KX5dNJz+f1IHTTrxrv3ANHJOsA70++YQETBYXRJZ6iWXJ8DOBeLNQXRVQPqBsyXLw/YcqPpqj8oySZphMoWlh5oeOK5LQHeGhnI5fX8gz7cqCmZN1YEiCP5le0edOUFgfRm6r86pjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J1G+E8Ge; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h5IJXhWe"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4837584120eso25332865e9.1
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 00:04:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771315445; x=1771920245; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rwu0RtjJnSjfYWXl8NymM6GUAIv3FYMND1I3ZXXKY24=;
-        b=h5IJXhWeXPgNXBaJqsmQEZad1xmCvDSjgV/fe7sHT8JajF7LsbPVsZld2vFsIe9GkH
-         elKXbnygIo+o8PPR0myZIaJx9w0ybb5J9KhJ8EN/FDOp1+sjp3mDjf6R0RzxgIrooRTf
-         iBcnfJxv09kWEr9w0vgNsSLbpDmtO6Bay59o7CX3gA7gpbCqyfYJGnLXPzZ4SKtCGaJU
-         KF86HmTULY288/ZSJz7blkXGQ168Q2wEzATv9EdDqKDyA/B46ILMRNCEyOZj0TK6QcQA
-         W7Vn9UcS+SIWJDtnVFKjSfmpdUWNFTXEldr9FhpgaIcUZ6EjQyzVjEQyIlymN24PA85D
-         3V7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771315445; x=1771920245;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rwu0RtjJnSjfYWXl8NymM6GUAIv3FYMND1I3ZXXKY24=;
-        b=T6YGIJuKgb1p2OHmnmkVPCH6rdAttjzkHEKEP+iZ+PlJs8CHwsdE5oPp/BowCK893d
-         mutrHYYFW1oSemcGUXct2JLVhY/F+BVkizAi5ftdnk7ScdZOQAQSt4z8CDsYpdwlAjS2
-         +2HObRjOXpwVrmcdXpV3/53CWPQOTZvVyhMeVQYc2PWFbOOgDDcXbETE/W+Sona+kYGd
-         KQ47wqmek/3ZlA8WJ8oynYgNM7pQmDK558+kfzxS0sXjStwAVDz+TiOxztdsledQD+Ti
-         MU/yJ71t+CTqX10cMykLIVp5AsUPRcxfWQLpGlk4Hr/obnBDbIoC1nlKyI+lKFh44w+C
-         HHEw==
-X-Gm-Message-State: AOJu0YyOeTuMDnDsoOhaHUWfTr1/t3OVB6g2UDjr3NZWoOFq2MpPkjIW
-	MPytKlr13pSGsuDLZ903tqKZH4fViBY3dOuLxw+VI4aqvrc29VwjQCiApxrXeFl7
-X-Gm-Gg: AZuq6aKgHoDfNTfz1jQiuzDdI4m1yseKBwc9Eb3Fv2BTSAeXZnfT5Qz576IXlJ8vQ6Q
-	ImJCcqAonwkWeHn1kRoZ7dkUu9Lh6FOuQshEqzVOvCb6CGLApsgNd52JEX5IzzfgQhEgX6MvWXx
-	uC2liQOwXh8/2+Gw1yUD03Gb7dH36g9wtzx0C1DEJxyrRHPMFTAwzbiDG3JcZInmvTX6I0BZvXE
-	cIdi1l2D6Gkpd5nZt0LPv3LWw9WhbJbDZOO1IjAZTOV4VGttsml3LYg5mutQIhbNFgFtI15Mf6M
-	lpf2oz020ZIbDCM4y44q9pCND5OEUPhPxVugUlLMajE3bTxQF0Zee3IdV0a10QqTrSWP6RKZRrj
-	yNjvDbR5XSizGU0HzD+B6sJuYxKE1GmySQnXKTQuGEhgScbnXa0Y1JvlX1wEOkM5KedmhixL/vW
-	7WEe35WUo+jo3qTVM5VSSE5Zyn+JOgz8QbZ4U5aaOfHUSwezZUN0VUKvvP0gFk
-X-Received: by 2002:a05:600c:3496:b0:47e:e779:36d with SMTP id 5b1f17b1804b1-48379bd72a9mr155342395e9.23.1771315444665;
-        Tue, 17 Feb 2026 00:04:04 -0800 (PST)
-Received: from wdesk. (static.169.76.13.49.clients.your-server.de. [49.13.76.169])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48370a3f077sm102996985e9.2.2026.02.17.00.04.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Feb 2026 00:04:04 -0800 (PST)
-From: Mahdi Faramarzpour <mahdifrmx@gmail.com>
-X-Google-Original-From: Mahdi Faramarzpour <mahdifrmz@gmail.com>
-To: bpf@vger.kernel.org
-Cc: Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mahdi Faramarzpour <mahdifrmx@gmail.com>
-Subject: [PATCH bpf] bpf: fix selftest/xsk single test selection
-Date: Tue, 17 Feb 2026 11:33:26 +0330
-Message-Id: <20260217080326.50564-1-mahdifrmz@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J1G+E8Ge"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5960C4CEF7;
+	Tue, 17 Feb 2026 08:34:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771317274;
+	bh=uL4DxKFzQP1l9k3Kk1Acq3jftmgv8xT3AxsRIN0UWhQ=;
+	h=From:Subject:Date:To:Cc:From;
+	b=J1G+E8GemW3j3SNkjeWUN98fLzNofnJDINU6InSnvliGxzY2vnwomAKb/qQVHgYvN
+	 bzHF0jxCfdhntCI1I6H6zVwhzmT5LWbYXx/ZCL+QlOTELVbhNiz+wrfjHSQoY90Ykh
+	 VwaVy26CmMK3kune0GOQ64+uYrfqOrmsSwKum7jTWZj9Znxm5e4SS6ZRNBC+CDpESj
+	 C7lELU7R6rLVRf/A+L/ocgrKROy03GXkaGzlxbJj77nN1LQ/iTpK1wjPo5cLaaR92L
+	 0xHAStfTeWy2FnJizFlKA5SjGojKYM6/fj8SlJ2KYCe1Z1HGjk/nQeoRR8VbWFSvOV
+	 oTYX7ZDLwIHcQ==
+From: Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: [PATCH bpf-next v3 0/5] Add the the capability to load HW RX
+ checsum in eBPF programs
+Date: Tue, 17 Feb 2026 09:33:55 +0100
+Message-Id: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WOyw6CMBREf4V0bc3lQpG68j8Mi1Iu0CCPtEgwh
+ H+3kJjoQl3OJOfMLMyRNeTYOViYpck403c+RIeA6Vp1FXFT+MwQUIBEwfOh5HMx8JZGxe2sG3d
+ vuQRIUkEoQRbMo4Ol0sy79pr5XBs39vaxr0y4tX+EE3LgSR6VJNOTJhleGrId3Y69rbYBTyeAY
+ fSDVinqOAVUZU7v9PZnCl8fNgt8sYTeQqIQQisFIv74kK3r+gRUGBv5PQEAAA==
+X-Change-ID: 20250925-bpf-xdp-meta-rxcksum-900685e2909d
+To: Donald Hunter <donald.hunter@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+ Tony Nguyen <anthony.l.nguyen@intel.com>, 
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+ Alexander Lobakin <aleksander.lobakin@intel.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org, 
+ linux-kselftest@vger.kernel.org, Lorenzo Bianconi <lorenzo@kernel.org>, 
+ Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+X-Mailer: b4 0.14.2
 
-From: Mahdi Faramarzpour <mahdifrmx@gmail.com>
+Introduce bpf_xdp_metadata_rx_checksum() kfunc in order to load the HW
+RX cheksum results in the eBPF program binded to the NIC.
+Implement xmo_rx_checksum callback for veth and ice drivers.
 
-This commit fixes the integer parsing of -t option. The cli parser
-only relies on errno to detect parsing errors. The manpage for
-strtol (https://man7.org/linux/man-pages/man3/strtol.3.html)
-states that the said function "MAY" set errno to EINVAL in case the
-conversion fails. Currently on some systems, this leads to a silent
-failure with return value not being exactly documented in the
-manpages (probably zero). The reliable way to validate the input is
-to check whether the endptr has been bumped all the way to the end
-of the string or not.
+If the hardware detects a wrong/failed checksum, it will report
+CHECKSUM_NONE in the packet metadata. Moreover, CHECKSUM_NONE will be
+returned even if the NIC can't parse the packet (e.g. if it does not
+support a specific protocol). A possible use case for
+bpf_xdp_metadata_rx_checksum() would be to implement a XDP DDoS
+application [1] combining the info from bpf_xdp_metadata_rx_checksum()
+and bpf_xdp_metadata_rx_hash() kfuncs in order to filter packets with a
+wrong/failed checksum.
 
-Signd-off-by: Mahdi Faramarzpour <mahdifrmx@gmail.com>
-Fixes: 146e30554a53 ("selftests/xsk: add option to run single test")
+[1] https://blog.cloudflare.com/unimog-cloudflares-edge-load-balancer/
+
 ---
- tools/testing/selftests/bpf/xskxceiver.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Changes in v3:
+- Remoe leftover assignment from v2 in veth_xdp_rx_checksum()
+- Fix typos
+- Fix commit logs
+- Link to v2: https://lore.kernel.org/r/20260213-bpf-xdp-meta-rxcksum-v2-0-a82c4802afbe@kernel.org
 
-diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
-index 05b3cebc5..f2d5c4dd2 100644
---- a/tools/testing/selftests/bpf/xskxceiver.c
-+++ b/tools/testing/selftests/bpf/xskxceiver.c
-@@ -247,9 +247,10 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
- 			opt_print_tests = true;
- 			break;
- 		case 't':
-+			char *eptr;
- 			errno = 0;
--			opt_run_test = strtol(optarg, NULL, 0);
--			if (errno)
-+			opt_run_test = strtol(optarg, &eptr, 0);
-+			if (errno || *eptr)
- 				print_usage(argv);
- 			break;
- 		case 'h':
+Changes in v2:
+- Remove XDP_CHECKSUM_PARTIAL definition
+- Improve veth_xdp_rx_checksum() callback
+- Fix uninitialized case for cksum_meta in ice_get_rx_csum()
+- Fix sparse warnings in ice driver
+- Fix typos
+- Link to v1: https://lore.kernel.org/r/20260210-bpf-xdp-meta-rxcksum-v1-0-e5d55caa0541@kernel.org
+
+Changes in v1:
+- Rebase on top of bpf-next
+- Test ice driver using xdp_hw_metadata tool available in the bpf
+  kernel selftest
+- Improve cover letter with an use-case for
+  bpf_xdp_metadata_rx_checksum()
+- Link to RFC v2: https://lore.kernel.org/r/20250925-bpf-xdp-meta-rxcksum-v2-0-6b3fe987ce91@kernel.org
+
+Changes in RFC v2:
+- Squash patch 1/6 and 2/6
+- Introduce enum xdp_checksum definitions
+- Rework ice support to reuse ice_rx_csum codebase
+
+---
+Lorenzo Bianconi (5):
+      netlink: specs: Add XDP RX checksum capability to XDP metadata specs
+      net: veth: Add xmo_rx_checksum callback to veth driver
+      net: ice: Add xmo_rx_checksum callback
+      selftests/bpf: Add selftest support for bpf_xdp_metadata_rx_checksum
+      selftests/bpf: Add bpf_xdp_metadata_rx_checksum support to xdp_hw_metadat prog
+
+ Documentation/netlink/specs/netdev.yaml            |   5 +
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c      | 118 +++++++++++++--------
+ drivers/net/veth.c                                 |  29 +++++
+ include/net/xdp.h                                  |  13 +++
+ include/uapi/linux/netdev.h                        |   3 +
+ net/core/xdp.c                                     |  28 +++++
+ tools/include/uapi/linux/netdev.h                  |   3 +
+ .../selftests/bpf/prog_tests/xdp_metadata.c        |   6 ++
+ .../testing/selftests/bpf/progs/xdp_hw_metadata.c  |   8 ++
+ tools/testing/selftests/bpf/progs/xdp_metadata.c   |   3 +
+ tools/testing/selftests/bpf/xdp_hw_metadata.c      |  25 +++++
+ tools/testing/selftests/bpf/xdp_metadata.h         |  12 +++
+ 12 files changed, 211 insertions(+), 42 deletions(-)
+---
+base-commit: 192c0159402e6bfbe13de6f8379546943297783d
+change-id: 20250925-bpf-xdp-meta-rxcksum-900685e2909d
+
+Best regards,
 -- 
-2.34.1
+Lorenzo Bianconi <lorenzo@kernel.org>
 
