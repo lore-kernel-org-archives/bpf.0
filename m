@@ -1,244 +1,255 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517C929B8E8
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 18:58:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73719625
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 19:04:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771354695; cv=pass; b=fN1c9wziJ5Tcw2Omb4wD8m3ALWsJp3c93iPhz3V8yY+PPz2ounOF5fwffadDkH9PBE0ZynBgBnQgkPVoHZ9btB6q9GYFpZrmKUoVu8GNhH3WoYQR4k4cY7Y1WqSgnNfbugQhKk27E2ApUHvWQG466cR1uwfP2FJxUc3v7LcYAuo=
+	t=1771355049; cv=pass; b=hVU9K7g5kpu31eq5iy17WEazncs4FMTWzeQwZetiJu/6Y3uWUutFnSOo5bA61pmkQxod3ng9d4qQg4JRaOf2ih2LPvwfceY3Pi49NrvSRsh26HPGt5U/pSk7SrhC6LzxCxZU51DXCTW5IXXrJqtFWzEgD0juUy4lEdSBxwv5w+c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771354695; c=relaxed/simple;
-	bh=M5Ys+PO3/tJZ8/pE+ALfDEHv+EVJMT4UwYxEyrQUYA0=;
+	s=arc-20240116; t=1771355049; c=relaxed/simple;
+	bh=aNTC6ITGPfV/BJ+vHWm7NjW/vn00Y3xxPtrhNCTGl84=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HxB13MPRoS5kJsaB7CmkiGcbIOCSUYVj6MSR2zSY1RlEOpM+q3ej8qgsb7rHvVt272NaC/z9erOvfMeq35EyRUWT9lBk9TjfIVN5uzyalyoAxkk9wlIgoFcXSgOuTxjZlD34GVSpt7Wtoa/ZmRS2swQTfE0+UB6Kx9jmmpvehJg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PPb5J4Pu; arc=pass smtp.client-ip=209.85.221.41
+	 To:Cc:Content-Type; b=nJulPwgbgjgj/pOAYHBFogylw8+rTiRTr9dFmOm4Mpp5bRcrizJG2ucAtmjb/H+idfLEz/XwGafH4XPvTwaCe63XeuZSUTwzH+jHOAUKKS5abiE8GHQ6d1yVmfhYLx02WcCJSFQA4n66oKtUDPrGExZdXzravT6HszwxgTqVdP0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uz7D29sk; arc=pass smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PPb5J4Pu"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-4362197d174so3042983f8f.3
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 10:58:14 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771354693; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uz7D29sk"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2aaf5d53eaaso28071465ad.0
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 11:04:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771355048; cv=none;
         d=google.com; s=arc-20240605;
-        b=HobK2HfQhwRy8+KzTlhQ5mhnec9nptlFwzpw0qeDGWttMAQMdPgmEQpu0QwphwZUd2
-         doNCriTrt6tOJoMCVCX6uJjCau8LwbLK7XQkWLrvduSEudED8q0pD1lFrEa+1i0psWIM
-         hq8DfgmltlrEtYcjfMgm2jXwhFZrfH9lRA+yiJFVAQaeQw6ZMXy0FYM7HcOeP2wkMKBE
-         J8wrjPuIrM4yFMBlKuoDWv5qBvD0xWcL/JUoFLrl9QqRIgq3NpCZOhhKzFvjGwj/pydc
-         oZwko7WDkDdK6ju2ogTfBw2sIExZ40J1dE+yd8THUjmKaW3a8MLYwwEyI6eJKi30t+Md
-         5vqg==
+        b=bK36QM445GyWtr/kuh423QaTIiB9GO8VDLD2DLTphxVd+sh5TuDIi9sri23ZqDGNDg
+         9FuYowW6UIvv3nOPsw1TwNP2WX2q1Gcq3swfJWX8id3XAwMQ0aVYAuXpdFGpLB31v8Rf
+         gXgz8d7irE59Vdn7vXSwYnVNts9g8Hld4cnjIHjBn9699/p8oquAXepSRSHxNAybJBb1
+         Vj9N12RNKPC43CXrIhUjl2sK1T5MUhen55xhC53FMQIFyCb0d3pRYGak3VM+xX9lJKAO
+         kUied+uRVZD5aYSL8eOtdzsSDwxER91sLILxhvqBHMKQogz4Vvg+bLZGYX9Kq8KYcGmb
+         ExjA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=uHkmiz5Su/OEfdd8CZ6a29UKN8Fnr0S/oBpsWCKhn+U=;
-        fh=extpnKZ1pg1ygBwBVETna2nBc+9ThSvzGGNpUDi6fKI=;
-        b=PJEYLLE+lr1BjogBR+ZLvnURAgUgqh731+NzeCTqg9+LJjTHbaJN4BF+m8ZkQ5UwMM
-         6WBE/t3eLXUpjjxukS284lu0/fayovYnLSLUlerGZIfCE8KO9fd6mZx224iZpggmPXzp
-         u8jobyBz2Ml9ukpzRHjihB/xAsY3bj1wAawr+RgJTFvtO8zJwVTFx+O8GqJrhAZRDchh
-         FCf9JNcWOolvTtDrX0DuzqQwTgDL7XgPdIcDuGeCfvDWjltNhWhaEYMidMMB2/CozKUn
-         EXZO/di+HMOXKhzf3Ja3TS0SRv7HuZ+NBUU7yizbv2ZT9qTTK/nX2jDhWkFUQYvEhNqH
-         eT/g==;
+        bh=cIzXWvJW3gTgj3tbXop58Iuft7SR/IuYSvAwAIZIAE0=;
+        fh=kQJoHmciZhFE410Bsj90HR7sS6L9VfCXE26CeirnTkI=;
+        b=DHPQqSgpW2yQBAe07wOMv5GjYhOrSZrKUzLxDjo2LuzM2i41db5ssvjwKEFgggu395
+         bNP1/jXikupSBH6D8UJZ6JzzINNy3l71bpBQx8/vKfsuwWYTOK6zGNfED8fb6wEFYC7a
+         6GDlX2yOtqRVO/iP5Jq6IOOl6XKiUI0oz0WQcdJl+219tZtSHEPwbV0zP/2cMGUkMhXD
+         35tDvOdzl6WApmsoTQOorNadJhGy2Il8zsuQGiEOZjKbvz14q3i+pOfXUFA40bbbEC8Y
+         km2bP04Vil6/l+Z6z7I8u7j1MlUGBQXDgUzbarBq+Gt81VzHPp9LXmgnnTcfFDIGc7J0
+         KnEQ==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771354693; x=1771959493; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771355048; x=1771959848; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uHkmiz5Su/OEfdd8CZ6a29UKN8Fnr0S/oBpsWCKhn+U=;
-        b=PPb5J4PuXhLEioIrsMIYd6sxRNJIsjouOilUDodX016CbD5BIVOR8a/enVQ1fxLY0C
-         IkS5YeGIcPDW0C06Yb19SoytFLzUXBHQe5P234yynnoqEp2ZjGj1BBMaHRvQp3IrbtTp
-         6M/Axq0uEbkBojbkOK8k0okQgyhB5/UQsMCHFPK2EHJpZS/YmPsEGaKGV2bzHR3kNKHl
-         SU6yhTBIpiDQeqxxfILYwVAvjLmlGMbrKLJgJUqjIyR7L+/jd5VDrXPmSYu/4ERBDYlm
-         /7NZK+SOaYPhZBT/p2zS+ED+sdmVeNAcl/XhPfSArzwmsIUjrWdEKyTPMTK6mdo8HzeB
-         j6VQ==
+        bh=cIzXWvJW3gTgj3tbXop58Iuft7SR/IuYSvAwAIZIAE0=;
+        b=Uz7D29sko7XQyYqB+mJXvOXLz/stqkAzzd0wmA7pCdP72r52E3GMM/XtrWE9LJP5Xp
+         +ckIjWJuFd3KsmOgelHS8KcIC+A+QgL0OJheFm54QlZn6LxNxRyhrrdkXmvT3azMwkeK
+         FOvt22VYrP2JYxEp+lMbz/smXpQF2IvYTl2vlMUi2gYsImZ3AwOQBuFvuOVMTOTSlg4I
+         JBXRexSio43yZFZIvET3neMxCinlQhGLTEbd5I7CZmRMAy6Uuii15Fd039NtBRIIWRby
+         bUF58xyoclSEffSYt8Fme02LqEGueJ9EE2fM4Fb338tkSw8gcfhNyo+T2GZ8G+kESL4a
+         +RxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771354693; x=1771959493;
+        d=1e100.net; s=20230601; t=1771355048; x=1771959848;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=uHkmiz5Su/OEfdd8CZ6a29UKN8Fnr0S/oBpsWCKhn+U=;
-        b=aDfZ9Q2y2O3ktywNUEiTW4COfltf8dw7FdN5jJk2pv0iyxQYbSdQwaAd4isnnsC3jR
-         6ItKWfuXJEOmQ/8wU4Ac4aHRFSbzRbhHqCVSaGtG5H8jfXJ0L3zlU5kSjqt3/xor8/yP
-         nlI1mHlA+tlcipKrTK80X1Im8AFRgl7HgK1Q1aeDy6kXuX2mSMavWCCTibM6CqrspXZa
-         Mk+tQbw4cprc8vSsxWBwiPL33B5S8q+QGuGZ14v7ylhZqWI2ISndlIoj+dSVCu8ueHXx
-         CK92B0mPbs9RmMYz7wvwRtTXzKQk4n4b74Af6XUglq4ux+YJLH/XCmaeeSOvxTvqpV8c
-         3zeQ==
-X-Gm-Message-State: AOJu0YzRWasN23mvqA32nQHoHaV/onDuRaHgcBWUME6wsqCwHozjQgYt
-	aDiHzVAtfqYgHU0lHtUD4cb8JEr51sK2utyj7XZD0lSJyxmrUfol91tDavfca73B+nsSu0e+KN6
-	3psjLV9vUuJHX39DtSJC2HKD/pacx06g=
-X-Gm-Gg: AZuq6aI7ZjWXNcwxVGjyVr49qMAGCwcTAd8HbOCQ0avw0PtKldEEkCcALLQdqo1ZiGl
-	E6PixbjufsanCALOGAwPtNE7dgBZC3Isvcqov6NawvGRWYwR+lrShNLcoSNEfp3A1DnH7Y/Veww
-	TLJBzLBUPggJAYS2FYz2kC2nPbr7YctJzNyAqB0rQVap3jrEy1/zv0bSlBIm+PFi6heKNcXczTg
-	KpvEA8tFpGJ9yXOtaKRMfIOJa2s+BXXfj9KPMbeex+CK2d3p3xAMkaugDCCdPHNEuhXTZDPqQoU
-	kWpKBelStzh9Z5HYnRQDRDYsR6FInl+mgs9nGAYYBDZ06CtYcjvTTFu+heZywqT1nLcsRDtaoso
-	Jk3lb
-X-Received: by 2002:a05:6000:1863:b0:437:893f:3361 with SMTP id
- ffacd0b85a97d-437978cd4c3mr26515828f8f.20.1771354692216; Tue, 17 Feb 2026
- 10:58:12 -0800 (PST)
+        bh=cIzXWvJW3gTgj3tbXop58Iuft7SR/IuYSvAwAIZIAE0=;
+        b=szkpefHFnz+ivf1g7zRb2HYVaFt/DFtigNgwhUV2NhNPAHIxDFiOw2hdglwcjHHeOy
+         cqmvmfrXWfKW0MUOana2/B6t4e3SHcMOGWJ6hEJdWdd7ZNaORnD3fqaKNJhA6znYxN/8
+         qWmDO0UAO0YbpeWz/4D0HRQprzplbEyfYWmfUsb+tA7BEmGLgXFRRtEdWuC1uAVl+kNT
+         24LZEijqKsw5vbDuOdtt7Okbn+/MGA8nH19sMp6DMQ+D8ZwHqtQzZWMVNVdDomuOh+8x
+         dynd/teA+QDPIWmESDIDPE5IGknncAOndbisyyHvE+ci/ap5rks2KjREMbnZHP9DTu3V
+         L+zw==
+X-Gm-Message-State: AOJu0YyaQvOeDnIwl1cTTbQlKB29gIPsdbQ3MmSrhZwf4WmMq9Sf/Sab
+	QI5cw59VJdWzdIJnBdQNtaj1rKjju19+X8tY+oxNk64VcUke1sbtLcuT+b06lB41qcgoMIfdg1k
+	VSXxIR8f+aC6NhICe5DxB3ZbjzZMnxPlUjWuD
+X-Gm-Gg: AZuq6aKUU/8nBws/zW7Bsd02sF93woZUznDY+p2oXSzTt6peQ0NAv9Fj9/cLmrm+WUr
+	j/zRgRonyyeJDi+Ja6wm12kvYQ5Oa3vsmShI29/kbtc7ywqmXCwIjUsnssU4NM/ygkxmziuVORF
+	VtZludfZS4u/JfWSf9GBJzmT6oXr9I8B47ZWkzJ1ATbpBIUt1ZOAFgj97iZVI1lqJbUuaDCfQQC
+	cVLccYPQ4+ODvsRmtzcd063663i+aq5/4jRn/ir+ptaJI7sj7qBy1G3mCL8hqWIkBr5nf9F/ztX
+	8UWNDOTgCt6UlI3SgKMG8MY=
+X-Received: by 2002:a17:903:41cc:b0:2aa:e7fe:63b8 with SMTP id
+ d9443c01a7336-2ad174dd3b7mr122815105ad.33.1771355047692; Tue, 17 Feb 2026
+ 11:04:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1771316309.git.paul.chaignon@gmail.com> <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
-In-Reply-To: <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 17 Feb 2026 10:58:01 -0800
-X-Gm-Features: AaiRm503-7WL70NCEcadG_6MJOimcR6ozh3PZ0SJxce8xaagwN7aAHPVCk-GUzE
-Message-ID: <CAADnVQ+yXOJejFAPHyezd8u-8SizSHUN5kU5HAj=KDrfbj2Zdg@mail.gmail.com>
-Subject: Re: [PATCH bpf 2/4] bpf: Improve bounds when tnum has a single
- possible value
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, 
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+References: <20260214021014.15670-1-emil@etsalapatis.com> <20260214021014.15670-3-emil@etsalapatis.com>
+In-Reply-To: <20260214021014.15670-3-emil@etsalapatis.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 17 Feb 2026 11:03:54 -0800
+X-Gm-Features: AaiRm51DRNA0shiHFI68AcxoaAaCBDalre3EKZTXRci9-PLmSpJ29_DqMB5YCV8
+Message-ID: <CAEf4BzYVWzQJ5p2ryGZGj-s6BfxS+qrKyKCS6JrMbVJZGd5KTQ@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 2/2] libbpf: Delay feature gate check until object
+ prepare time
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, memxor@gmail.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 17, 2026 at 1:01=E2=80=AFAM Paul Chaignon <paul.chaignon@gmail.=
-com> wrote:
+On Fri, Feb 13, 2026 at 6:11=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
+om> wrote:
 >
-> We're hitting an invariant violation in Cilium that sometimes leads to
-> BPF programs being rejected and Cilium failing to start [1]. The
-> following extract from verifier logs shows what's happening:
+> Commit 728ff167910e ("libbpf: Add gating for arena globals relocation fea=
+ture")
+> adds a feature gate check that loads a map and BPF program to
+> test the running kernel supports large direct offsets for LDIMM64
+> instructions. This check is currently used to calculate arena symbol
+> offsets during bpf_object__collect_relos, itself called by
+> bpf_object_open.
 >
->   from 201 to 236: R1=3D0 R6=3Dctx() R7=3D1 R9=3Dscalar(smin=3Dumin=3Dsmi=
-n32=3Dumin32=3D3584,smax=3Dumax=3Dsmax32=3Dumax32=3D3840,var_off=3D(0xe00; =
-0x100)) R10=3Dfp0
->   236: R1=3D0 R6=3Dctx() R7=3D1 R9=3Dscalar(smin=3Dumin=3Dsmin32=3Dumin32=
-=3D3584,smax=3Dumax=3Dsmax32=3Dumax32=3D3840,var_off=3D(0xe00; 0x100)) R10=
-=3Dfp0
->   ; if (magic =3D=3D MARK_MAGIC_HOST || magic =3D=3D MARK_MAGIC_OVERLAY |=
-| magic =3D=3D MARK_MAGIC_ENCRYPT) @ bpf_host.c:1337
->   236: (16) if w9 =3D=3D 0xe00 goto pc+45   ; R9=3Dscalar(smin=3Dumin=3Ds=
-min32=3Dumin32=3D3585,smax=3Dumax=3Dsmax32=3Dumax32=3D3840,var_off=3D(0xe00=
-; 0x100))
->   237: (16) if w9 =3D=3D 0xf00 goto pc+1
->   verifier bug: REG INVARIANTS VIOLATION (false_reg1): range bounds viola=
-tion u64=3D[0xe01, 0xe00] s64=3D[0xe01, 0xe00] u32=3D[0xe01, 0xe00] s32=3D[=
-0xe01, 0xe00] var_off=3D(0xe00, 0x0)
+> However, the program calling bpf_object_open may not have the permissions=
+ to
+> load maps and programs. This is the case with the BPF selftests, where
+> bpftool is invoked at compilation time during skeleton generation. This
+> causes errors as the feature gate unexpectedly fails with -EPERM.
 >
-> We reach instruction 236 with two possible values for R9, 0xe00 and
-> 0xf00. This is perfectly reflected in the tnum, but of course the ranges
-> are less accurate and cover [0xe00; 0xf00]. Taking the fallthrough path
-> at instruction 236 allows the verifier to reduce the range to
-> [0xe01; 0xf00]. The tnum is however not updated.
+> Avoid this by moving all uses of the FEAT_LDIMM64_FULL_RANGE_OFF feature =
+gate
+> to BPF object preparation time instead.
 >
-> With these ranges, at instruction 237, the verifier is not able to
-> deduce that R9 is always equal to 0xf00. Hence the fallthrough pass is
-> explored first, the verifier refines the bounds using the assumption
-> that R9 !=3D 0xf00, and ends up with an invariant violation.
->
-> This pattern of impossible branch + bounds refinement is common to all
-> invariant violations seen so far. The long-term solution is likely to
-> rely on the refinement + invariant violation check to detect dead
-> branches, as started by Eduard. To fix the current issue, we need
-> something with less refactoring that we can backport.
->
-> This patch uses the tnum_step helper introduced in the previous patch to
-> detect the above situation. In particular, three cases are now detected
-> in the bounds refinement:
->
-> 1. The u64 range and the tnum only overlap in umin.
->    u64:  ---[xxxxxx]-----
->    tnum: --xx----------x-
->
-> 2. The u64 range and the tnum only overlap in the maximum value
->    represented by the tnum, called tmax.
->    u64:  ---[xxxxxx]-----
->    tnum: xx-----x--------
->
-> 3. The u64 range and the tnum only overlap
->    u64:  ---[xxxxxx]-----
->    tnum: xx----x-------x-
->
-> To detect these three cases, we call tnum_step(tnum, umin), which
-> returns the largest member of the tnum greater than umin, called
-> tnum_next here. We're in case (1) if umin uis part of the tnum and
-> tnum_next is greater than umax. We're in case (2) if umin is not part of
-> the tnum and tnum_next is equal to tmax. Finally, we're in case (3) if
-> tnum_next is inferior or equal to umax AND calling tnum_step a second
-> time gives us a value past umax.
->
-> This change implements these three cases. With it, the above bytecode
-> looks as follows:
->
->   0: (85) call bpf_get_prandom_u32#7    ; R0=3Dscalar()
->   1: (47) r0 |=3D 3584                    ; R0=3Dscalar(smin=3D0x80000000=
-00000e00,umin=3Dumin32=3D3584,smin32=3D0x80000e00,var_off=3D(0xe00; 0xfffff=
-ffffffff1ff))
->   2: (57) r0 &=3D 3840                    ; R0=3Dscalar(smin=3Dumin=3Dsmi=
-n32=3Dumin32=3D3584,smax=3Dumax=3Dsmax32=3Dumax32=3D3840,var_off=3D(0xe00; =
-0x100))
->   3: (15) if r0 =3D=3D 0xe00 goto pc+2      ; R0=3D3840
->   4: (15) if r0 =3D=3D 0xf00 goto pc+1
->   4: R0=3D3840
->   6: (95) exit
->
-> In addition to the new selftests, this change was also verified with
-> Agni [3]. For the record, the raw SMT is available at [4]. The property
-> it verifies is that: If a concrete value x is contained in all input
-> abstract values, after __update_reg_bounds, it will continue to be
-> contained in all output abstract values.
->
-> Link: https://github.com/cilium/cilium/issues/44216 [1]
-> Link: https://pchaigno.github.io/test-verifier-complexity.html [2]
-> Link: https://github.com/bpfverif/agni [3]
-> Link: https://pastebin.com/raw/9BJAi6Rw [4]
-> Co-developed-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail=
-.com>
-> Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.c=
-om>
-> Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
+> Fixes: 728ff167910e ("libbpf: Add gating for arena globals relocation fea=
+ture")
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 > ---
->  kernel/bpf/verifier.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+>  tools/lib/bpf/libbpf.c | 31 +++++++++++++++++++++++--------
+>  1 file changed, 23 insertions(+), 8 deletions(-)
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index dbaafb64d3bd..c4478c874616 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -2379,6 +2379,8 @@ static void __update_reg32_bounds(struct bpf_reg_st=
-ate *reg)
+
+This works, but see some suggestions for a follow up to contain
+feature-checking a bit better
+
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 93e59ed8d9a1..ff38a9db1b13 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -3009,11 +3009,11 @@ static int init_arena_map_data(struct bpf_object =
+*obj, struct bpf_map *map,
+>         memcpy(obj->arena_data, data, data_sz);
+>         obj->arena_data_sz =3D data_sz;
 >
->  static void __update_reg64_bounds(struct bpf_reg_state *reg)
+> -       /* place globals at the end of the arena (if supported) */
+> -       if (kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_OFF))
+> -               obj->arena_data_off =3D mmap_sz - data_alloc_sz;
+> -       else
+> -               obj->arena_data_off =3D 0;
+> +       /*
+> +        * possible offset for arena globals into the arena,
+> +        * if supported at load time
+> +        */
+> +       obj->arena_data_off =3D mmap_sz - data_alloc_sz;
+
+I'd keep this obj->arena_data_off at zero at this point (we don't use
+it until prepare step, skeleton also just uses obj->arena_data
+directly without offset during open phase)...
+
+>
+>         /* make bpf_map__init_value() work for ARENA maps */
+>         map->mmaped =3D obj->arena_data;
+> @@ -4672,7 +4672,7 @@ static int bpf_program__record_reloc(struct bpf_pro=
+gram *prog,
+>                 reloc_desc->type =3D RELO_DATA;
+>                 reloc_desc->insn_idx =3D insn_idx;
+>                 reloc_desc->map_idx =3D obj->arena_map_idx;
+> -               reloc_desc->sym_off =3D sym->st_value + obj->arena_data_o=
+ff;
+> +               reloc_desc->sym_off =3D sym->st_value;
+
+this is good, relos don't need to record this offset...
+
+>
+>                 map =3D &obj->maps[obj->arena_map_idx];
+>                 pr_debug("prog '%s': found arena map %d (%s, sec %d, off =
+%zu) for insn %u\n",
+> @@ -5556,6 +5556,7 @@ bpf_object__create_maps(struct bpf_object *obj)
 >  {
-> +       u64 tnum_next;
-> +
->         /* min signed is max(sign bit) | min(other bits) */
->         reg->smin_value =3D max_t(s64, reg->smin_value,
->                                 reg->var_off.value | (reg->var_off.mask &=
- S64_MIN));
-> @@ -2388,6 +2390,20 @@ static void __update_reg64_bounds(struct bpf_reg_s=
-tate *reg)
->         reg->umin_value =3D max(reg->umin_value, reg->var_off.value);
->         reg->umax_value =3D min(reg->umax_value,
->                               reg->var_off.value | reg->var_off.mask);
-> +
-> +       /* Check if u64 and tnum overlap in a single value */
-> +       tnum_next =3D tnum_step(reg->var_off, reg->umin_value);
-> +       if ((reg->umin_value & ~reg->var_off.mask) =3D=3D reg->var_off.va=
-lue) {
-> +               /* The only overlap is umin */
-> +               if (tnum_next > reg->umax_value)
-> +                       ___mark_reg_known(reg, reg->umin_value);
-> +       } else if (tnum_next =3D=3D (reg->var_off.value | reg->var_off.ma=
-sk)) {
-> +               /* The only overlap is tmax */
-> +               ___mark_reg_known(reg, tnum_next);
-> +       } else if (tnum_next <=3D reg->umax_value &&
-> +                  tnum_step(reg->var_off, tnum_next) > reg->umax_value) =
-{
-> +               ___mark_reg_known(reg, tnum_next);
-> +       }
->  }
+>         struct bpf_map *map;
+>         unsigned int i, j;
+> +       char *arena_globals;
+>         int err;
+>         bool retried;
+>
+> @@ -5633,7 +5634,15 @@ bpf_object__create_maps(struct bpf_object *obj)
+>                                         return err;
+>                                 }
+>                                 if (obj->arena_data) {
+> -                                       memcpy(map->mmaped + obj->arena_d=
+ata_off, obj->arena_data,
+> +                                       /*
+> +                                        * Only relocate the globals to t=
+he end of the arena
+> +                                        * if the kernel supports it.
+> +                                        */
+> +                                       arena_globals =3D map->mmaped;
+> +                                       if (kernel_supports(obj, FEAT_LDI=
+MM64_FULL_RANGE_OFF))
+> +                                               arena_globals +=3D obj->a=
+rena_data_off;
 
-Looks like it's causing a big regression in one of sched_ext progs:
-scx_cosmos-5c590c8858df35e1_out_bpf.bpf.o cosmos_select_cpu success +542.86=
- %
+and here I'd instead set arena_data_off to its final value (zero or
+proper offset), something like
 
-Please investigate. It needs to be understood.
+if (kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_OFF)
+    obj->arena_data_off =3D bpf_map_mmap_sz(map) -
+roundup(sysconf(_SC_PAGE_SIZE), sysconf(_SC_PAGE_SIZE));
+
+(note, we did all the correctness checks early in init_arena_map_data,
+we don't have to do any more here)
+
+and then the rest of the code stays exactly the same, down to the
+original memcpy(map->mmaped + obj->arena_data_off, ...), and no extra
+variables
+
+
+> +
+> +                                       memcpy(arena_globals, obj->arena_=
+data,
+>                                                 obj->arena_data_sz);
+>                                         zfree(&obj->arena_data);
+>                                 }
+> @@ -6386,6 +6395,12 @@ bpf_object__relocate_data(struct bpf_object *obj, =
+struct bpf_program *prog)
+>                 case RELO_DATA:
+>                         map =3D &obj->maps[relo->map_idx];
+>                         insn[1].imm =3D insn[0].imm + relo->sym_off;
+> +
+> +                       if (relo->map_idx =3D=3D obj->arena_map_idx &&
+> +                           kernel_supports(obj, FEAT_LDIMM64_FULL_RANGE_=
+OFF)) {
+> +                               insn[1].imm +=3D obj->arena_data_off;
+> +                       }
+> +
+
+here too we don't need feature checking, our obj->arena_data_off
+should have a valid value (might be zero, that's fine)
+
+>                         if (obj->gen_loader) {
+>                                 insn[0].src_reg =3D BPF_PSEUDO_MAP_IDX_VA=
+LUE;
+>                                 insn[0].imm =3D relo->map_idx;
+> @@ -14456,7 +14471,7 @@ int bpf_object__load_skeleton(struct bpf_object_s=
+keleton *s)
+>                 if (!map_skel->mmaped)
+>                         continue;
+>
+> -               if (map->def.type =3D=3D BPF_MAP_TYPE_ARENA)
+> +               if (map->def.type =3D=3D BPF_MAP_TYPE_ARENA && kernel_sup=
+ports(*s->obj, FEAT_LDIMM64_FULL_RANGE_OFF))
+>                         *map_skel->mmaped =3D map->mmaped + map->obj->are=
+na_data_off;
+
+and here as well, no need to expose feature check here, we have
+map->obj->arena_data_off set correctly
+
+>                 else
+>                         *map_skel->mmaped =3D map->mmaped;
+> --
+> 2.49.0
+>
