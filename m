@@ -1,75 +1,76 @@
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBF2E303A18
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 22:05:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202DC30B52B
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 22:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771365912; cv=none; b=V+EEXydL6ymP3qkzhoWoxSUqhow/XWG5EM2wUFad0Ce68R4AHLP1NsBjq5hQSN77kkYOq0cXcwvR14zbaKhBya+5ShI3otfjUEYaY8KVDjTpJ4q/oRizIi/1aCTae2oEgb2JDl/vz+IC2MwD+AX8ETdS0jBLnYVeHefKWKFLm/8=
+	t=1771365930; cv=none; b=E+0DvTJriQdsMxJaCIixDQTrgrQUxTSW6jY6FUTKRreeyy5qFw3srLUJY/mShzrb0wGpMEVKm8XNx7twnX+SbBXuITIQ9JrmqZFXnAhhUu2OFgaUy04Rjvho4Ykem6wuEdfa/bBpSLxGnLgZqxvKIqgn4hIGIWLlYBiIuypZcrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771365912; c=relaxed/simple;
-	bh=eRJGi/3EYvgsGuMw1/YWY8Hw9h/WwehRbzwbSM56p0Q=;
+	s=arc-20240116; t=1771365930; c=relaxed/simple;
+	bh=8VTOp+JpA3YEgtR1igmL1BYWs323gtKL9YQ1bDjbsy0=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VICX9lMM08xvSmkZpjtpYs2a550jAKRVkfoL1E3FMMl4n/AH5lbMeTlH6n5Ab1ExQ8eFcbm/g8sP17yDCe/BkED/g3fVjGdk5dw5rGqeuRhfJ51zte1Vx7YkhDPx97n6FmRmpkrb8KMr3ji+vJ+AkYzSJVaxxjddt+LwaE01zq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EcI9987g; arc=none smtp.client-ip=209.85.128.54
+	 Content-Type:Content-Disposition:In-Reply-To; b=GtWDussD5+RLy2iMn1m891PXchyXBfvZ830zvWCZtW6jlmczzq3LSai7gsSW1mWSP0nuxOh2UAcFDMZMz7cBbY3pfp/jxC28wfi4Sfv3xw+QnZAaKRJe6gQuk9MZOx9RCugy/KOSOfhoCHV7O58CMpjavkU9Xn6iu/xnNuLjAtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tw693UJD; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EcI9987g"
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4806cc07ce7so43913645e9.1
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 14:05:10 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tw693UJD"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4837907f535so33606775e9.3
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 14:05:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771365909; x=1771970709; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771365926; x=1771970726; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pb9TCnVBIZiNkTZbCbry7FrvZQcTN63m7K6gzOiYf58=;
-        b=EcI9987gTm7BTt0PGUJM5g79UR+3Td5Wx1IPiv6zE9t5lxMLDyfDpMB52h6Io+Ox1S
-         lnW4n9vmqd2T6EpaYbhTyYrezW/sqB0dANvcW5p9KmWdOhukhPhGHMsZncluuomCYapV
-         zwe0YO+dWPhmzcrJGSSEfTXlmlYxq2WBTLURQCPiOZ6iOvnh0G6lkvfwUTn57bDjh463
-         XBQ7l68kLMe+Nm8fabl+pkWhqxPRtC/mGBhPOp2tUpDBYT3vIKDeisoLroC0mvui5C0/
-         +p9hOBKnAS4ehLcMHykGB0wwbdgQOTef00OlW2IKEkbiJ2T+SOxaBzZXCPFZgipx2bKu
-         wlZA==
+        bh=1GIaSpSdncseBCd6oA9HXpHh/dLjSz2BM+1lYLoTGM8=;
+        b=Tw693UJDnUUuMrTKXjDPzYd2k4MAn03HHZ5f/DyUYIgJHzEYdrzhyqpfHUQsmxdJh1
+         zRG51fUWSDGmdA5S9h+kxOcNfjQSJ0KVGZmxjrX0gotwWJg5QF89Hi8bpcIlkWhCP6Kg
+         4og4IoSKdGxE3N6Oqpdh9xE+VQihgHaGxMnBmFWighJT/v38ERgE5DSlLu9Rs+FMW4jd
+         vceoeRMiG5ffMX1s26mfToRmpIlr3MIRvo88UOlYkJoNTgtnO6gSphzWk3hzOhcA7esD
+         bxS48rbG/oQ/CZM8zdgHq5kGDoM5yaGzucunSTZJpNUo3Bp3MOzJJ718fPMJYJK91YDY
+         aVRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771365909; x=1771970709;
+        d=1e100.net; s=20230601; t=1771365926; x=1771970726;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pb9TCnVBIZiNkTZbCbry7FrvZQcTN63m7K6gzOiYf58=;
-        b=Q4v78ZvqE3fptxveTsP0YBP0JNwnb4PTE4ZHUTMQ/wECPQccSIRQMRBQm6PU8kTsF2
-         2GaVmKuWfa/RNnZTATnAOLvQ8EIY9CsT+A+kVIUhT1Sv3gMwIkgMf9kPhxPUmal/NjST
-         oI7HZ8dG9GRQkKYEsTU19t1Ju8cEx0j9RFxA72IusQo7jP+DWOfZ6bMyXOSDwz1hvr0L
-         9cRz/vvxeshfAtQ1U0nEf0AhSBdlJDYUhxdvIP4lIOm9pSJ+2FTjgxkUbO3HB0dwVuck
-         MpWzZIzkQrrR8EoxtTWIQA+Pc89P6ol5VZB/Jl0wb+VnfHJYk9ou8mfbRYZPFW56H/Qi
-         EqWg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1HmhR5rXzkRvJQYp5NEDDWOtrD6qXMwfacs7Cjqb/vyzeRN3ukUeuPngLRpMN0x91T+8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxzxah+mvewDWt65Ep3uVbUwDWGZECkWaifTV2jy3SJFhZblgqt
-	t1Xiy8ieanT4k8u4Dju7sRSh/XiX8zx2SQTQHp3K/N7asXd4ddHiu+Mu
-X-Gm-Gg: AZuq6aIJeKcRHaCAH0mAcsRFkvlZT697xpLRFthGNnSSzroR+cJxVMfPhWGRBBbMbdO
-	1Im52Y6oq+QGN4yl93Zt2ZP5Cqw3ojsYs+vXEb0miAHb7Xqz6SdGciVGZYZ4yqXox8prQigtuBv
-	rtErerI9TDmztkjaRE4w4q1WTVR++rlcmNeF4Oilaaz6ATJ/Ww+8SMf2j6ZSm5Hth08986aye6Q
-	CPIEVLuwtLxNhgfKmERv6ByOkFgKBUqg3k8/tuLUEyLdwkHX7F5mqrckI1NCotkfWobq6poSUJp
-	LbtfvkmRmtR5NSPtYqy2tVZqiqb6/BecV8PioN+vX8kmGkOE8PyJcP5DGEixVN4ZxVoLnv1zv21
-	l2skXg1XhLUIQz1Su1eiYQeLFOt8Zbq3LSrvqZyPutePb8cNsntCS4llwE3l8n1GfLHP8N2ppIZ
-	Nr8/QFygLVghr4EigmkDXVjtNfEV31FXQJk5Be8KDhSUg=
-X-Received: by 2002:a05:600c:5295:b0:483:9139:4c29 with SMTP id 5b1f17b1804b1-48398a48450mr545325e9.2.1771365909130;
-        Tue, 17 Feb 2026 14:05:09 -0800 (PST)
+        bh=1GIaSpSdncseBCd6oA9HXpHh/dLjSz2BM+1lYLoTGM8=;
+        b=Bimoq4CiZMrm5beI0onpebm91zhOJZ5sFgdPvkjDQZM5T/eb4XLBX2d9kzUZD2FTaT
+         L1XPqyogjjwPXw2CfThee4798dTg11WSVk7C2aNdBgTkenUaJTkXGseGT3OTe7OJhYmI
+         pVvh5YltJha0hYyYVvkGu+pGrmBkWMvJfJYgfaue6N3ji7iHB6TgtAxQ/6LT9fl26cW+
+         hYmpJnPab+Wt3+dL2FqiSXUixN9ftHAe6SgQM5/G6UPebNUckoCX5F4AojtUxZ5pl78K
+         mAj1o91jsknY/aayBYqjtny/9WTwWs+iy4qVKaqz55s9Pzp5OHEyfdelckNamcLCg5bg
+         KFfw==
+X-Forwarded-Encrypted: i=1; AJvYcCVg7ye99FUMHr7wHKtQUpEzS4MsZz0ClvEDXfYgvdKwIjcZaB72Hb2FNAi1anewydv91PU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVPIk2P6pE9ib+TJoX0A7pXpaqMSSgqIKM8c1KlCIvp7/HZt1U
+	SJNCbZLSPzkyvY7OkBzK593D6S1eOq2SAQNVS3kQRwvj6DHSyYCaMJr+2H9lPq//
+X-Gm-Gg: AZuq6aLAvIQCgfXpcAelkDCh5OWvMpugylv0KQ8Ju9HBHkjK7pZxWb4YyhiR5BDVmUA
+	W7qc7LXi6ZyUFJvrsdJSv+AuwOZnDQlfAvWR+RlCHW0krn56SAZYjZMB8djaJ2HQQbKY8Xzn8Sa
+	W/TER7zOp4cCwpSSKpaUgLA2n6p2oOjTjuTp8DWC4lzcm9NSP4paKJU3ATyxjpij0trV0Ho5X1W
+	3i+1F+ODtPV8bVWLKN3RN9aQUuBurz4xLSTcoXB/HOVODmRmC6vb/ACIaPnxUEJGpYi4XOXFLlL
+	PyUM3XKP4sXwdNfdTuWnWCwKQSdN95vRfQUa0w1yF9VrySClCyzsUtJMhHEUqIHwGpqIxC1jRoJ
+	U5OQOi3LQJC8bqB8XR4HJlvqhoOL9/GyBTxu6c9f24SolIJ50PDQRcugQT36SdMaVZxx2HpXv6Q
+	KV0zuE9YhtyPMl0tBdLP8JHQ74zFvrI1zB
+X-Received: by 2002:a05:600c:3e0d:b0:477:7b16:5f9f with SMTP id 5b1f17b1804b1-48379be7576mr209543885e9.31.1771365926470;
+        Tue, 17 Feb 2026 14:05:26 -0800 (PST)
 Received: from krava (37-188-249-12.red.o2.cz. [37.188.249.12])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796abd259sm39593310f8f.24.2026.02.17.14.05.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48397423bb4sm4170935e9.8.2026.02.17.14.05.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Feb 2026 14:05:08 -0800 (PST)
+        Tue, 17 Feb 2026 14:05:26 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 17 Feb 2026 23:05:01 +0100
+Date: Tue, 17 Feb 2026 23:05:17 +0100
 To: bot+bpf-ci@kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
 	kafai@fb.com, eddyz87@gmail.com, songliubraving@fb.com, yhs@fb.com,
 	menglong8.dong@gmail.com, rostedt@kernel.org, martin.lau@kernel.org,
 	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [RFC bpf-next 05/12] bpf: Add multi tracing attach types
-Message-ID: <aZTmDU9nKhYsKEKd@krava>
-References: <20260203093819.2105105-6-jolsa@kernel.org>
- <9df0acf7860b7e4a90b3e93e2d6924e9bad35fe307bef0bf9b50f8afb5cccacc@mail.kernel.org>
+Subject: Re: [RFC bpf-next 06/12] bpf: Add bpf_trampoline_multi_attach/detach
+ functions
+Message-ID: <aZTmHdWSNxuBktKP@krava>
+References: <20260203093819.2105105-7-jolsa@kernel.org>
+ <bfbbb9ef3aa022d56e5777597b48b596c4a959e606fcbc9d63f4ee1e6c07941f@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,32 +79,82 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <9df0acf7860b7e4a90b3e93e2d6924e9bad35fe307bef0bf9b50f8afb5cccacc@mail.kernel.org>
+In-Reply-To: <bfbbb9ef3aa022d56e5777597b48b596c4a959e606fcbc9d63f4ee1e6c07941f@mail.kernel.org>
 
-On Tue, Feb 03, 2026 at 10:13:53AM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > index 6b62b6d57..fb52ba2f7 100644
-> > --- a/kernel/bpf/verifier.c
-> > +++ b/kernel/bpf/verifier.c
+On Tue, Feb 03, 2026 at 10:14:02AM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > index 2be2f1d0b..b76bb5450 100644
+> > --- a/kernel/bpf/trampoline.c
+> > +++ b/kernel/bpf/trampoline.c
 > 
 > [ ... ]
 > 
-> > @@ -25069,7 +25074,8 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
-> >  		return 0;
-> >  	} else if (prog->expected_attach_type == BPF_TRACE_ITER) {
-> >  		return bpf_iter_prog_supported(prog);
-> > -	}
-> > +	} else if (is_tracing_multi(prog->expected_attach_type))
-> > +		return prog->type == BPF_PROG_TYPE_TRACING ? 0 : -EINVAL;
+> > +int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+> > +				struct bpf_tracing_multi_link *link)
+> > +{
+> > +	struct bpf_attach_target_info tgt_info = {};
+> > +	struct bpf_tracing_multi_node *mnode;
+> > +	int j, i, err, cnt = link->nodes_cnt;
+> > +	struct fentry_multi_data data = {};
+> > +	struct bpf_trampoline *tr;
+> > +	u64 key;
+> > +
+> > +	data.reg = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
+> > +	if (!data.reg)
+> > +		return -ENOMEM;
+> > +
+> > +	data.modify = alloc_ftrace_hash(FTRACE_HASH_DEFAULT_BITS);
+> > +	if (!data.modify) {
+> > +		free_ftrace_hash(data.reg);
+> > +		return -ENOMEM;
+> > +	}
+> > +
+> > +	for (i = 0; i < cnt; i++) {
+> > +		mnode = &link->nodes[i];
+> > +		err = bpf_check_attach_target(NULL, prog, NULL, ids[i], &tgt_info);
+> > +		if (err)
+> > +			goto rollback_put;
+> > +
+> > +		key = bpf_trampoline_compute_key(NULL, prog->aux->attach_btf, ids[i]);
+> > +
+> > +		tr = bpf_trampoline_get(key, &tgt_info);
+> > +		if (!tr)
+> > +			goto rollback_put;
 > 
-> This isn't a bug, but should this branch have braces for consistency with the
-> preceding branches in the same if/else chain? The BPF_TRACE_RAW_TP and
-> BPF_TRACE_ITER branches both use braces.
+> When bpf_trampoline_get() returns NULL here, the code jumps to
+> rollback_put without setting err. If bpf_check_attach_target() succeeded
+> on this iteration (setting err to 0), the function will return 0 instead
+> of an error code.
+> 
+> Should this be something like:
+> 
+>     tr = bpf_trampoline_get(key, &tgt_info);
+>     if (!tr) {
+>         err = -ENOMEM;
+>         goto rollback_put;
+>     }
+> 
 
-right, will add it, thnx
+yep, we should, will add, thnx
 
 jirka
 
+> > +
+> > +		mnode->trampoline = tr;
+> > +		mnode->node.prog = prog;
+> > +	}
+> 
+> [ ... ]
+> 
+> > +rollback_put:
+> > +	for (j = 0; j < i; j++) {
+> > +		mnode = &link->nodes[j];
+> > +		bpf_trampoline_put(mnode->trampoline);
+> > +	}
+> > +
+> > +	free_fentry_multi_data(&data);
+> > +	return err;
+> > +}
 > 
 > 
 > ---
@@ -113,8 +164,8 @@ jirka
 > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/21625440628
 > 
 > AI-authorship-score: low
-> AI-authorship-explanation: The commit message contains natural colloquial language and personal attribution typical of human kernel developers, and the code follows established BPF patterns with typical human oversights in style consistency.
+> AI-authorship-explanation: The code follows established kernel patterns and contains a human-typical oversight error (missing error assignment); the commit message has a minor copy-paste error typical of human editing.
 > issues-found: 1
 > issue-severity-score: low
-> issue-severity-explanation: Minor coding style inconsistency with missing braces in an else-if branch that does not affect functionality.
+> issue-severity-explanation: Missing error code when bpf_trampoline_get fails causes silent failure under memory pressure, but does not cause crashes or data corruption.
 
