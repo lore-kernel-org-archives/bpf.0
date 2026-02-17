@@ -1,142 +1,169 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f171.google.com (mail-dy1-f171.google.com [74.125.82.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC20260580;
-	Tue, 17 Feb 2026 22:48:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2AEC2D0C9D
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 22:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771368481; cv=none; b=ITFCNUEbk5AO11oeQU538RP2qIa6UmhC+Gow6ZYp51Sz7Z4P4ctt0+jxoK0D7x2o8HS+pOZdrzAmPJb1c6Gyd/AeaeA1Ot9QVDjcFCknyZZS2xKRHite6mzT1ghtySzozv/rWvbDx3P6pXajQY832r0xVlzDLLzQNmZR2bm1qeI=
+	t=1771369083; cv=none; b=uSbj4p+OCIhdJARUmzJWLP5HMeDt0Oyv3of+Oyyeu+xioblFL0c0C/4hsTARIIy/7kUAkSGVqapMBH6xD9rg2y5JP7H17/gaKhVGEV7CzKcjU/CoBTmneI+7p4L2FZfhdNo8w+hNcNWjFDv1Fc3WRjiHd5KdRWTJDgr5J3KzTxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771368481; c=relaxed/simple;
-	bh=/TSbYnClUOGqOMdBA09jRDl19YeOcTbGhgJNn2/YoNM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Q/U+Jtv5Gghg8uLB5zvJHLvoC321aHkZDI/8iPZuRFohNGAqeLFmvJQygdBC9/haWrJcWibOCwHvf8kwZ3MIv8j8pxuB+Ww8rjKi8zEzTfEU/BXQjGlKAPCmc7G4drrwfV4UYiunzvbDSuNsDgMVRx7JzgSqwE6RW0k/tNUDLBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gYh+zUQ8; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771369083; c=relaxed/simple;
+	bh=9XrtBsod0I/3fBhcyEq8mH3xVwvu4zQF14+8RTeoPOY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=smScctgOzThUQsmWSrcs7qVkP3aK2ljvIy5ZK0COAlI/ShuxYGW29dUxsir4Pux3rR06ZFSM3FaX3QARrWUXKUMcPBU5p3XGhsNW4R91PRjbctpLbAesecWvoZz2fb1xuuUmF9lVD+O600RpynoLHtCadSpFBx43B+5vt6tIDrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jR66r0Ug; arc=none smtp.client-ip=74.125.82.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gYh+zUQ8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE400C4CEF7;
-	Tue, 17 Feb 2026 22:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771368480;
-	bh=/TSbYnClUOGqOMdBA09jRDl19YeOcTbGhgJNn2/YoNM=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gYh+zUQ8kvdOkk1BIxp/8pKWCkdX754d7//jzfPyWIvVBpXNMknJ9GfEJw48Te8d2
-	 e1QmAzpZchsQ4+Mer+SbFq2tp/su7+A9s9T0qs7vor8bc1rMhmBCNOyesNzvhWSxac
-	 9e/9AQ2Ic0Ofngz/UDrQjWwXc7FjIXJAyWxQyCPYXrXFzrM5EoKL6e78e08NMRGaqg
-	 KVd79OXeE0FLrzvcKwIKG+NC8mfNZafjGASIoWbcdaRqmhh9sNuKU6c6cLx9tSKMsx
-	 Ms1MUuepWjuVjPzwbr9w+qozkKd2Rx0TGW28BbNCclG72T2RsvhzCYUCA9HOP2B79K
-	 pe4tQuTYdT/Lw==
-Content-Type: multipart/mixed; boundary="===============8598547615559900769=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jR66r0Ug"
+Received: by mail-dy1-f171.google.com with SMTP id 5a478bee46e88-2b740872a01so10340545eec.1
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 14:58:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771369082; x=1771973882; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QBVt90Nt5jqou80A9zdI53ouVfTUp0C4JYiSzNZSvnc=;
+        b=jR66r0UgzuO0fqcILDUnyYB3BtZdWEvK6Ys8zFPpChxKMLQ83UU3pmYvQHSkVylCPy
+         s0BPB73Z1b7Ate1558iNkIgWKjRYEGUUCIE8luXGn4QnhPM76OizZfkVRkjc3YwkigX8
+         YwXLfhODWF5H4uK6bzo39uL3KiwEYX5QahSdmlL243zt+KMvhKHXsbs/1dPujiTjfaIf
+         MlKSldIpkI6fNqVXEMoeTg0FxklrS5KTRKxfE4LbOzB0eeXTfOlWB6/U67xAFI+BIRrz
+         zeHiHBJfPnhsVvcH6MxRx4uzT1UHeUV3NUswJv/3Sosc4Np4s5aYYG28VaG6ZEp2G948
+         UBxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771369082; x=1771973882;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QBVt90Nt5jqou80A9zdI53ouVfTUp0C4JYiSzNZSvnc=;
+        b=qGPQd86HaIK1dHE42fentdZDuA+HJSG6drcG7SWIiRB7zKi/802TSCzs4Q474Au5fF
+         w3qZgp+QZsB/tO8Xet4aBB+pjSZkuauWFrjarF1oK6rP91NXjtcOSASgG7sjz075vgSG
+         9b6kUF4TAFe+X6pJd1Fc5wTEGkdF/g8AzebrsNnnSTBKY/9PXITTQ2l4S504ZxK7Ui9l
+         M5j6Qjdc+gbMJgKcwrxBZ3YalnPYsJwN7vtjpchrFsVfyqmvAagHZT+0pchbz8AzoHOh
+         oP4VGP7HNckEiv3BBDzH2sa3lNlTXVYAE5EIAk1urSwE0zEEgY4dzrucQoMMCdALURA1
+         Zuqg==
+X-Forwarded-Encrypted: i=1; AJvYcCWd5CPNchOB/rHJWiyQSX8FmrozNIwjc26u02pSMCW5s4v9WsCnWg8uq/VUiFatuaObfnM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzz/1JqbYxHc+/SpsD2wc6mtSUw0dDd/NktrOT6bH/cybmEzVfO
+	yTN4E76hAizzQ5M71moSLpfES7FCS/SeK+vElF4LG17S7gLK/rz1Ehkz
+X-Gm-Gg: AZuq6aLJJzGKU81m9pfVZnOAvHs9mKhE32670fxw2jzpuP/nx3pCSabE0mxR5xPtOKC
+	1ffXo0jbX2Sk8Sp8DQfGuBhvqUFDghupltABdU/Hnsf0svXGQyJdIMYG/3RbB6Ski4Hru9GVtvg
+	DoYgnMY6yXEgzdustwCjqvGcpGxGDDrJSmLbcQV/+ep0v+SB1vvJfVHeLE6ssnL2pSz0NWrNFvk
+	K6tzfpzVjYDwqeJ+tYjXQ8nLMHPGzRVPk6kMIkeBsjIbtsuHKpWZkWT7P++sCB/q+LPYrQp/Diz
+	j4LnUh30ifJkbXnCAZMcVwn9/QCy7cL8vVRq5D9lnLL7T0eY8ukMLrRFXjulRwvsntpwyonWBeb
+	stOZSJweHGdWljt5dgY0clNR2o0Z8PJ3vUA/yqJoy43JdIxkHmcFNvUeaVV+IXkYyLw+nDhSHcj
+	1/wrLaWhX5Zgqrr9zvGZGGh8jBv76r+R0k7aDr27XY75YYPs3ULFJ/xesrTYYAJOyM/llHs6ABp
+	SYiX/gL3qzxgqTHbw==
+X-Received: by 2002:a05:693c:2d88:b0:2ba:7783:d1cd with SMTP id 5a478bee46e88-2bd5004bc7cmr83017eec.12.1771369081669;
+        Tue, 17 Feb 2026 14:58:01 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:ea8a:2651:c8f:99eb? ([2620:10d:c090:500::3:3a6d])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bacb658fb9sm15805045eec.20.2026.02.17.14.58.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Feb 2026 14:58:01 -0800 (PST)
+Message-ID: <12705b3d58569685048804c33e90755c17667cbf.camel@gmail.com>
+Subject: Re: [PATCH bpf 2/4] bpf: Improve bounds when tnum has a single
+ possible value
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Harishankar
+ Vishwanathan <harishankar.vishwanathan@gmail.com>, Srinivas Narayana
+ <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
+ <santosh.nagarakatte@rutgers.edu>
+Date: Tue, 17 Feb 2026 14:57:59 -0800
+In-Reply-To: <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
+References: <cover.1771316309.git.paul.chaignon@gmail.com>
+	 <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <c0aa6a42eb9fa557fc375b858d91dbadd74bbd6534be1b32fc9e0d05e540ee63@mail.kernel.org>
-In-Reply-To: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
-References: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add trampolines multi-level pointer params test coverage
-From: bot+bpf-ci@kernel.org
-To: slava.imameev@crowdstrike.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org
-Cc: martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,shuah@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-open-source@crowdstrike.com,slava.imameev@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 17 Feb 2026 22:47:59 +0000 (UTC)
 
---===============8598547615559900769==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, 2026-02-17 at 10:01 +0100, Paul Chaignon wrote:
 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> index 178c4738e63b..19c82ae9bfe6 100644
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
+[...]
 
-[ ... ]
+> This patch uses the tnum_step helper introduced in the previous patch to
+> detect the above situation. In particular, three cases are now detected
+> in the bounds refinement:
+>
+> 1. The u64 range and the tnum only overlap in umin.
+>    u64:  ---[xxxxxx]-----
+>    tnum: --xx----------x-
+>
+> 2. The u64 range and the tnum only overlap in the maximum value
+>    represented by the tnum, called tmax.
+>    u64:  ---[xxxxxx]-----
+>    tnum: xx-----x--------
+>
+> 3. The u64 range and the tnum only overlap
+>    u64:  ---[xxxxxx]-----
+>    tnum: xx----x-------x-
 
-> +static void *create_bad_kaddr(void)
-> +{
-> +	/*
-> +	 * Try to get an address that passes kernel range checks but causes
-> +	 * a page fault handler invocation if accessed from a BPF program.
-> +	 */
-> +#if defined(CONFIG_ARCH_HAS_SET_MEMORY) && defined(CONFIG_X86)
+Nit: please put these diagrams in the source code.
 
-The first branch requires both CONFIG_ARCH_HAS_SET_MEMORY and
-CONFIG_X86.  The second branch requires CONFIG_ARCH_HAS_SET_DIRECT_MAP.
+[...]
 
-PowerPC selects ARCH_HAS_SET_MEMORY (arch/powerpc/Kconfig) but not
-ARCH_HAS_SET_DIRECT_MAP, so neither branch compiles in and the function
-always returns NULL on that architecture.
-
-> +	void *addr = vmalloc(PAGE_SIZE);
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index dbaafb64d3bd..c4478c874616 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -2379,6 +2379,8 @@ static void __update_reg32_bounds(struct bpf_reg_st=
+ate *reg)
+>
+>  static void __update_reg64_bounds(struct bpf_reg_state *reg)
+>  {
+> +	u64 tnum_next;
 > +
-> +	if (!addr)
-> +		return NULL;
-> +	/* Make it non-present - any access will fault */
-> +	if (set_memory_np((unsigned long)addr, 1)) {
-> +		vfree(addr);
-> +		return NULL;
+>  	/* min signed is max(sign bit) | min(other bits) */
+>  	reg->smin_value =3D max_t(s64, reg->smin_value,
+>  				reg->var_off.value | (reg->var_off.mask & S64_MIN));
+> @@ -2388,6 +2390,20 @@ static void __update_reg64_bounds(struct bpf_reg_s=
+tate *reg)
+>  	reg->umin_value =3D max(reg->umin_value, reg->var_off.value);
+>  	reg->umax_value =3D min(reg->umax_value,
+>  			      reg->var_off.value | reg->var_off.mask);
+> +
+> +	/* Check if u64 and tnum overlap in a single value */
+> +	tnum_next =3D tnum_step(reg->var_off, reg->umin_value);
+> +	if ((reg->umin_value & ~reg->var_off.mask) =3D=3D reg->var_off.value) {
+> +		/* The only overlap is umin */
+> +		if (tnum_next > reg->umax_value)
+> +			___mark_reg_known(reg, reg->umin_value);
+> +	} else if (tnum_next =3D=3D (reg->var_off.value | reg->var_off.mask)) {
+> +		/* The only overlap is tmax */
+> +		___mark_reg_known(reg, tnum_next);
+> +	} else if (tnum_next <=3D reg->umax_value &&
+> +		   tnum_step(reg->var_off, tnum_next) > reg->umax_value) {
+> +		___mark_reg_known(reg, tnum_next);
 > +	}
-> +	return addr;
-> +#elif defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP)
+>  }
 
-[ ... ]
+I think this hunk should be rewritten as follows:
 
-> +#endif
-> +	return NULL;
-> +}
+        tnum_next =3D tnum_step(reg->var_off, reg->umin_value);
+        tnum_max =3D reg->var_off.value | reg->var_off.mask;
+        tnum_min =3D reg->var_off.value;
+        if (tnum_next > reg->umax_value) {
+                /* The only overlap is umin */
+                ___mark_reg_known(reg, tnum_min);
+        } else if (tnum_min < reg->umin_value && tnum_next =3D=3D tnum_max)=
+ {
+                /* The only overlap is tmax */
+                ___mark_reg_known(reg, tnum_next);
+        } else if (tnum_next <=3D reg->umax_value &&
+                   tnum_step(reg->var_off, tnum_next) > reg->umax_value) {
+                ___mark_reg_known(reg, tnum_next);
+        }
 
-[ ... ]
+- At-least to me, it easier to understand this way.
+- There is no need to gate the condition `tnum_next > reg->umax_value`,
+  if next tnum overshoots the reg->umax_value then only tnum_min is left.
+- Accidentally, it fixes the scx_cosmos regression
+  (probably, because first condition is relaxed).
 
-> +static void free_bad_kaddr(void *addr)
-> +{
-> +	if (!addr)
-> +		return;
-> +
-> +	/*
-> +	 * Free an invalid test address created by get_invalid_address().
-> +	 * Restores the page to present state before freeing.
-> +	 */
-
-The comment references get_invalid_address() but the function that
-creates the address is create_bad_kaddr().
-
-> +#if defined(CONFIG_ARCH_HAS_SET_MEMORY) && defined(CONFIG_X86)
-
-[ ... ]
-
-> +#endif
-> +}
-
-[ ... ]
-
-> +		} else if (!strcmp(attach_name, "bpf_fentry_test13_pptr")) {
-> +			kaddr = create_bad_kaddr();
-> +			WARN_ON(!kaddr);
-
-Since create_bad_kaddr() returns NULL on PowerPC (which supports BPF
-trampolines via HAVE_DYNAMIC_FTRACE_WITH_ARGS), would this WARN_ON fire
-every time the bpf_fentry_test13_pptr test runs on that architecture?
-
-> +			CONSUME(bpf_fentry_test13_pptr(kaddr));
-> +			CONSUME(bpf_fentry_test13_pptr((void **)19));
-> +			CONSUME(bpf_fentry_test13_pptr(ERR_PTR(-ENOMEM)));
-> +			break;
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22118172993
-
-AI-authorship-score: low
-AI-authorship-explanation: Stale comment referencing a renamed function and an architecture coverage gap with WARN_ON are characteristic of human-authored code that underwent refactoring.
-issues-found: 2
-issue-severity-score: medium
-issue-severity-explanation: WARN_ON(!kaddr) fires unconditionally on PowerPC where create_bad_kaddr() always returns NULL, producing kernel warnings on every test run and potential panics with panic_on_warn.
-
---===============8598547615559900769==--
+Wdyt?
