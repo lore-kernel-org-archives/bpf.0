@@ -1,119 +1,160 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D9E32D0CE
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 11:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0263254BA
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 11:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771326316; cv=none; b=IJucXWrDUS+T9UzJU9k54l3ummvMdV1Rbz1gZOSXCNQaARhSnPeg7QntQiu/DBCYTUYof5ixUiSoL3cfTEm8RUuX9kAszH/RlvmSRxN0wdKxHjL5WIJtiljZmAFkxaSceYdbrT+uTWXrmMqAZGgwKHwz4HrkJxS8kR5Aq1vzt70=
+	t=1771327789; cv=none; b=AEsBvSG47K95cKRo11x9OIn4yCCu9yjYcqklvzgZRieA/jI9lb7lMEBPdbfDpDjfOKPqA7/qxIGIYuuAzKEoI9dYhWiAdqiWpqSDp4TgERFYsRptJid5M4l4eWqoMtEUzrwXnksYj5XpMPLpbjgmQJcfBvgZQdQNpxKM2s4oms8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771326316; c=relaxed/simple;
-	bh=uDBiU2C7+3Rgh9Df39HuQ5kfSjmQotATp66mNAM7j+A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AvjJoJHx9zcfnmKNoKsGu8Es0QC2FquevjtwR66oRT6fCR9eyJLyaXsW5bk+cZvj3x51LtEQspgrelMQdKUIpZK8TVS8TypiewKi1ww6/Vfc3IruOusu5gA3Ik+JN45qke/LYJSkUa1DFAzxHQGrI9KDWBKu0En5kPOCZWnTsxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d6m0Iqfh; arc=none smtp.client-ip=209.85.128.53
+	s=arc-20240116; t=1771327789; c=relaxed/simple;
+	bh=cMuSWvxYR5eb7V3y4b4uzhhpMV1mgsYv1SOkM72p9tY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Oipjff5KsQagzCqpcl4vD77HSQoaXO/eDJqT9iUZX7UTdK9uvSuDr41GcOHnAIEu3+YHLIGQKFru7AVw3iuRGDAbtF3+ocxUcsg090hzbTl/+iZUbH7fCa6QKhC8DTwWUb3IGGeozo9fowbfYTlhLyvaFdtoG1EXyvfpPrUm3SY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fyWyEd8q; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6m0Iqfh"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4836e3288cdso25146035e9.0
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 03:05:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fyWyEd8q"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-4362d4050c1so4722593f8f.2
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 03:29:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771326313; x=1771931113; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DdieY3TeFCCP2lBrqX6SK0NNMt0g0Rj48YaZz/Wekss=;
-        b=d6m0Iqfh7Q7FLdQvn7j4u9+mc8uypIKu7fdIjvm086jUWQ3X15wNwtJuvtEPjKEE46
-         hJkYZFnfDVCR8ZZPdB3hVsHOOgNoVUXsAh3cYW+ZhHBcyyUMGY6XalocGtDS5BputbD6
-         aIa5L81V6cN8A7fdzZ8dxP3ws9Z55zmTWrDtmqa5u2DRZNEh7dCj+0oFEajpibhhKwCc
-         hYlpjZSi3xGr6tnCQT1VXEtTFcyZQhXGb0ijnQ7uwxntrym4+fxGhEmVfnbdtX2u8SUj
-         SxcfUdHMiAmq4pBBGLy+9knivJE8CQgLlJTsnHYm6nXzCMeys2PScYJBM+BJIAYtH5lr
-         dOuQ==
+        d=gmail.com; s=20230601; t=1771327787; x=1771932587; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7QTNpRHxHGxeoSqckXDTYVg2ZKwL+NMU+Mba7FsgZ2g=;
+        b=fyWyEd8qZ83xItAZlaWMohAPCbg0n7E2FS+SCzkMnWD6he3s4zZMIxcIf+LCKKitW8
+         QK2bu5ak4Xavel2Iwu4M/S/UuwMutPagKQ9yfzrcRCdP9Ba3jbXRxdWgeQ+Em2180pmM
+         MtMQiXyY2PecDg8FNc01SCZ2obyOt/tCkU78kik1US8I0UVgTEzvAqzNQ4kxjUCSK+jT
+         CATviNwIM4BWJouzoCQuGia6SJJxMZ3r90E94S2YZGwCpJHshtRAc/pPMi9ALB8Fxtmg
+         qD8yvQkjSBiGvRdlDoYVSsbcTtxVQBSb80ZV3sB7DNi3JPNLR6cjDvu/0WfTjstFKng0
+         8lKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771326313; x=1771931113;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DdieY3TeFCCP2lBrqX6SK0NNMt0g0Rj48YaZz/Wekss=;
-        b=vg0o6ETp9mwlIZdQDHD1Tmicl+k+hs+jpSm7jiFY0MWVuCwqXAvh3LC98hR6y1m/Fp
-         NBcUIz75qUFh/qDwi8qbD6nIq0gZaso6bQSWLTcSk497F/VzEN0dOp/pxJ5smWuMQfle
-         +bN0insy5L0k6gEVQZhfqC8qsfjhDPMLfgC8zdIWfcu0OfYEso8UCVOWew3VLzW/wfvX
-         2CsPnPsKOSHeNF/wdFMAr6KYV+WZx95RhbZSFX3cHzgq2fmz3eSO+WGdfHkJDUp0xgLR
-         slo0Dv2uR/ExXI9G+SlUsttuCkxSjJAIg1XhKE7DAVbO+E8m6M9mS+f+yF/VCBVtvqc4
-         j4qw==
-X-Forwarded-Encrypted: i=1; AJvYcCXaf+Uuq/DCJSztohYZtVxlIzAdM0EPZx0rXcI0KaDpdW3fQkG8ADU7h17Q4el6yosGxqM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YznVxcwXcuhC5MvgMF0IdJphpVWAnpGwEmDOqiblvMbjaX9dGqY
-	UA6N34siMy9CyAbl2qeaiZWVqMajGJsZQf9j3rSpW9d9UiCkM/jlhGZJ
-X-Gm-Gg: AZuq6aJnbtZ4iakFrYApWLpRQLOcf/lu3uZo79x4yTDq9ZHk9q1iJS3i4lLQ5bU7sT1
-	90PNmdD9H98lNV9s3pEIzUO/w0ubFoRI/97eljJMAWeeDXjCt0WV3iiW7s3rn3/Wm/SbGVkl11g
-	368MrjfOXCFTW7Wm+SZHkYNWIQm4D/mOwEOa35Q/YDxCI4bde9D+pNbtFiDwuvmgHFwHy4f712k
-	Oc0ygQu7ARgJLDCgnpJS4M5icwDIo+kg+xvunCToyAosVjMjF1CJ8rUKc9Nm8tb74+t2dn4do/J
-	kqsNQPjurdSQqfqUF0Zf/03CST8nAK2J11+U2U4sDiwDdh6RBs2cgu9rvNcGCh+w0km5+k/1GFZ
-	NOHMAO6Al9RgkJ9mDvRItLllvZdvAQAAXmqielk2no7GWwVcFghgR2Bd9iJsgtBpvm9ZRHkn4xJ
-	6cdvlrT52pYU+hWyliX95pYcauYlbvIt0e3GYxHI7I3LYcmszGzfY47XhX3IVHXBE3AsyUwBwEt
-	/Lia6HS3Vqd1wWgAAYGeKtzAR+bo0IfySuiU/f+xr26bh5JLrE7UbIu1fdrVTdYkei5o9kKopxq
-	yQ==
-X-Received: by 2002:a7b:c356:0:b0:47d:52ef:c572 with SMTP id 5b1f17b1804b1-48378d4f631mr137622535e9.1.1771326313228;
-        Tue, 17 Feb 2026 03:05:13 -0800 (PST)
-Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4837b68e5adsm310486565e9.9.2026.02.17.03.05.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Feb 2026 03:05:12 -0800 (PST)
-Message-ID: <47684e50-d7c6-4f20-9206-366c9c343eb3@gmail.com>
-Date: Tue, 17 Feb 2026 11:05:10 +0000
+        d=1e100.net; s=20230601; t=1771327787; x=1771932587;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=7QTNpRHxHGxeoSqckXDTYVg2ZKwL+NMU+Mba7FsgZ2g=;
+        b=i8U8M6m9MdhlwJnWAPo2c8q87by2myAlXsSLXaNQi12X0JRU6Bjh//tyOkCN5XYTen
+         cgZ9nWzg/THWiMU/iMxMPRx07cAOczC9LQZ7FM5H+jJhveyYBDu5grtvo0Yhge4knhoE
+         mKmhCogcn1TCebhsBFJnOep3cKb+5pg9eeEdzcOMgkQF1vMjqdDkQ9LpAIYoaXsxqPNY
+         cM0Gu6lEFmEmsnrxIdNl7KLQxnuxgd/cBPiuFhrtsrMSEaUj/Ijl9yjvyl82Q+6rlMQ4
+         nymxUSce/ZOUzlemhmSJCxd1Qgtx/unx97xtauBIeFxb3NmexiaMSRBLZ+dr/NVCu6By
+         xWEg==
+X-Forwarded-Encrypted: i=1; AJvYcCXYpvrUWILVxySYe1ABb5WUOZKoORXURqmScAL0E0NoQvhPeRY6e5AUcI93fL9L7iLErQc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhPi5KTnqCBrcto2Zr1a8qAUL6nAgMPxxrOFV6iYsbOoZ/OYcy
+	DiMMgeR4IZa9T7ELT2layul2cKy5psGXoF+ymfvQHEDR99eTWiqjSimy
+X-Gm-Gg: AZuq6aIAMINIYziyQfpWgulQEvGslz8tsYkyu7avKNrRvLGavFKkMSVC1FqcNPZde5U
+	0Am1+H+SP+G+eJBkkRDlmhDxT0UEIFcVj0pzbq7C2dF4jgbMGnQtP4n+7quYZjGjRQpc9f90DnZ
+	tXkyKTa6oteO6xDdCFstVs0ggbaXdhZPueY5073MH00ZumGFctkVWBcyYu8OEuULBjU6SCJIi9k
+	MmhKfNR/VKvO8Q1AfAwPNnd+c9DgreTlZKS2ZumL/tjGMYDBALVY9rFcBlOxBvbTbFMUSsjE8tS
+	2qL4m/x+y4PyOiDYFjXBYOY/vDLKzQft2zJqnn4+Qu+UFqv+jX9meOTBXvON/FWawi3KrBUtn2P
+	rkKQHZlf6mzIKIIM2gviZ0xz0p8zFqgvwJdAHZBi8xOUX1ysATV3VNxl4MtvYh3pKVHRhANlCHk
+	4hbgqtg3+WjpujFza9ujnIVw/9If3Lj42ZL7RN6xM+aEcK+MsaQNaG2YWRcJ8KpGAP
+X-Received: by 2002:a05:600c:8b2f:b0:46f:c55a:5a8d with SMTP id 5b1f17b1804b1-483739ff865mr193668865e9.4.1771327786470;
+        Tue, 17 Feb 2026 03:29:46 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-48371a29982sm104891805e9.15.2026.02.17.03.29.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Feb 2026 03:29:46 -0800 (PST)
+Date: Tue, 17 Feb 2026 11:29:44 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
+ Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko
+ <yatsenko@meta.com>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf] selftests/bpf: Remove hexdump dependency
+Message-ID: <20260217112944.75610d2b@pumpkin>
+In-Reply-To: <20260216-bpf-sft-hexdump-od-v1-1-f8cebd8eb9d0@kernel.org>
+References: <20260216-bpf-sft-hexdump-od-v1-1-f8cebd8eb9d0@kernel.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 2/5] io_uring/bpf-ops: implement loop_step with BPF
- struct_ops
-To: kernel test robot <lkp@intel.com>, io-uring@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org, axboe@kernel.dk,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <ec7d21e6e16c49165fa1e8af2aa09d01c111ea97.1771260487.git.asml.silence@gmail.com>
- <202602171315.iJKYSSFe-lkp@intel.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <202602171315.iJKYSSFe-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 2/17/26 05:24, kernel test robot wrote:
-> io_uring/bpf-ops.c:45 bpf_io_btf_struct_access() warn: always true condition '(off >= $expr_0x7fb415932650(30)) => (s32min-s32max >= 0)'
+On Mon, 16 Feb 2026 17:30:34 +0100
+"Matthieu Baerts (NGI0)" <matttbe@kernel.org> wrote:
 
-Got me confused at first, but it's the first field => offsetof() == 0,
-and after type promotions it compares an unsigned type with 0.
-
-I think smatch is too strict, and it's better the current way,
-i.e. handling all fileds in the same way, but I'll respin to
-silence smatch.
-
+> The verification signature header generation requires converting a
+> binary certificate to a C array. Previously this only worked with xxd,
+> and a switch to hexdump has been done in commit b640d556a2b3
+> ("selftests/bpf: Remove xxd util dependency").
 > 
-> vim +45 io_uring/bpf-ops.c
+> hexdump is a more common utility program, yet it might not be installed
+> by default. When it is not installed, BPF selftests build without
+> errors, but tests_progs is unusable: it exits with the 255 code and
+> without any error messages. When manually reproducing the issue, it is
+> not too hard to find out that the generated verification_cert.h file is
+> incorrect, but that's time consuming. When digging the BPF selftests
+> build logs, this line can be seen amongst thousands others, but ignored:
 > 
->      37	
->      38	static int bpf_io_btf_struct_access(struct bpf_verifier_log *log,
->      39					    const struct bpf_reg_state *reg, int off,
->      40					    int size)
->      41	{
->      42		const struct btf_type *t = btf_type_by_id(reg->btf, reg->btf_id);
->      43	
->      44		if (t == loop_params_type) {
->    > 45			if (off >= offsetof(struct iou_loop_params, cq_wait_idx) &&
->      46			    off + size <= offsetofend(struct iou_loop_params, cq_wait_idx))
->      47				return SCALAR_VALUE;
->      48		}
->      49	
->      50		return -EACCES;
->      51	}
->      52	
+>   /bin/sh: 2: hexdump: not found
 > 
+> Here, od is used with awk, instead of hexdump with sed. od is coming
+> from the core utils package, and this new od command produces the same
+> output when using od from GNU coreutils, uutils, and even busybox. This
+> is more portable, and it produces the same results as what was done
+> before with hexdump (without trailing whitespaces as a bonus).
+> 
+> Fixes: b640d556a2b3 ("selftests/bpf: Remove xxd util dependency")
+> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> ---
+> Originally, I was going to add a check to stop the build if hexdump was
+> not available, but switching to 'od' seems to be a better solution while
+> not adding a new dependency.
+> 
+> Because test_progs was not reporting why it became unusable, I added a
+> Fixes tag to have this backported, to help others. Feel free to remove
+> it, or even drop the patch if you prefer to stick with hexdump.
+> ---
+>  tools/testing/selftests/bpf/Makefile | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index c6bf4dfb1495..5a618d14243e 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -723,7 +723,7 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
+>  # Generates a header with C array declaration, containing test_progs_verification_cert bytes
+>  $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+>  	$(Q)(echo "unsigned char test_progs_verification_cert[] = {"; \
+> -	 hexdump -v -e '12/1 "  0x%02x," "\n"' $< | sed 's/0x  ,//g; $$s/,$$//'; \
+> +	 od -v -t 'xC' -w12 $< | awk 'NF > 1 {for (i=2; i<=NF; i++) { printf "  0x%s,", $$i }; printf "\n"}'; \
 
--- 
-Pavel Begunkov
+That is subtly different.
+The hexdump version deletes the final ',' from the last full line.
+But not a partial line because there are trailing spaces (from before
+the '0x  ,' that get removed).
+That may not matter, it is valid C, but not C++ (unless they've changed
+the rules recently).
+
+od could be used with:
+	sed -e 's/ /,  0x/g; s/$/,/; s/^[0-7]*,//'
+which outputs an empty line as well as the trailing ','.
+Both removable with a more complex command line.
+
+	David
+
+
+>  	 echo "};"; \
+>  	 echo "unsigned int test_progs_verification_cert_len = $$(wc -c < $<);") > $@
+>  
+> 
+> ---
+> base-commit: 886bf921ecfc30f8f31341bc26560d8bf08b937b
+> change-id: 20260216-bpf-sft-hexdump-od-abd07a3bf026
+> 
+> Best regards,
 
