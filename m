@@ -1,139 +1,119 @@
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC64E326957
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 10:37:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771324655; cv=pass; b=TZ5UMtw7szv70jz2xcYpeq4G6OXRiqTY3W5vWvh+nkn6E0vFe5rKiLr2Cj8RT1qlNZunA8mSoU2niLP2y8daIS1/FEI14jmaCXxa/Vrmfcu7A+BVT7LhB9PPXa8EfCtJEs96KGs7Tfvf8oBBS1fi3iRaRbYYMtAiZMk/o4G1hbU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771324655; c=relaxed/simple;
-	bh=dPjtly+ZxqrcgnTcKSIFDHsF1hA5MWE73lwPbiR8+3U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C0fsjCO/bTjm3LZvTGfvj3RKqYnrmk93+fOmtDoV5chHdOxDkU0OzIlBKc9pwtC+wzDgIEuxSxqXZ/zGT6iKpoorpe+1hm+VLco9LHFNwYSmclbKavNRccoZy1GQo63mW7fyRyb/n/Qq/1QUjbNMIYSeR//Q2nT41Ua1KYfAmGo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ionos.com; spf=pass smtp.mailfrom=ionos.com; dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b=dmYLmGrQ; arc=pass smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ionos.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ionos.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D9E32D0CE
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 11:05:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771326316; cv=none; b=IJucXWrDUS+T9UzJU9k54l3ummvMdV1Rbz1gZOSXCNQaARhSnPeg7QntQiu/DBCYTUYof5ixUiSoL3cfTEm8RUuX9kAszH/RlvmSRxN0wdKxHjL5WIJtiljZmAFkxaSceYdbrT+uTWXrmMqAZGgwKHwz4HrkJxS8kR5Aq1vzt70=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771326316; c=relaxed/simple;
+	bh=uDBiU2C7+3Rgh9Df39HuQ5kfSjmQotATp66mNAM7j+A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AvjJoJHx9zcfnmKNoKsGu8Es0QC2FquevjtwR66oRT6fCR9eyJLyaXsW5bk+cZvj3x51LtEQspgrelMQdKUIpZK8TVS8TypiewKi1ww6/Vfc3IruOusu5gA3Ik+JN45qke/LYJSkUa1DFAzxHQGrI9KDWBKu0En5kPOCZWnTsxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d6m0Iqfh; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ionos.com header.i=@ionos.com header.b="dmYLmGrQ"
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-3870c7479c6so25852961fa.3
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 02:37:33 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771324652; cv=none;
-        d=google.com; s=arc-20240605;
-        b=PxVeeL+RFNx0LJwCT1WvlQOgAg+2Wh2qh2xltW44t+EFBtrpy2iE+yNC4Z+f6twN4y
-         ZHJBEG/dwnlIzp+GT3bf4ZozWxMROKPf+ReDcQzawE/HiIGBmTKkEx/KiKnmDfsYBOUD
-         aZxXu84o7bbEmsbfRR3scj8H0nImcPNaNhvMQmvKIDrSN8YtCv0f8df13q4hxhCLOQhf
-         wDH9iEGdi5PjIfRQ0iYV+wILR2WjhfGs222ovtA2j4/ZJU0WKi3U/lh6y6sMHoTfygqM
-         tuzMtT3CqGlu8xx+jvM8DueJGOXyIe6dhd+6zNFjXDP7fY+AoSsWDsOMgu3Wo7QxyNeI
-         iowQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NZMo/PtOIzSJeD+bvKh62aH9xtqgsP4XaPk4C2v4d9E=;
-        fh=f42nl7U4RjOa/iP4gRMN9ztKVKaDtGsPfs7lMSVpSpo=;
-        b=U8r4UQ2wlqFc0SpPLYGR+bBf3UWUZUfBKQnNq6jPN9CsrRcble0yfjfLNoxqxTd7wE
-         wnI2pEqYueLDQENXAbk8z/aNYnXXsM8CeyhAmHR/k/xAkyIZyF0i8RyLCaZanU6aX1iu
-         YfKjlAWbeLPmdUb1/QtBvsW2DIH36fjtPRitC5euSvJr/ZER6/FkF8/cZfaMURgxdEs7
-         Wq0aA0D1EGSkdBCwOSB1OUn4Z35eOedi/6o2j2Kf0xG+8bt9rdMtfDT2xcshe1iCFmWW
-         RXXfwZIsUQY5yQ9K/EpOFz5OaC67evA9y3Fbu3LuVgircCg2YZG66dp8uZ3Gn3pEoAFk
-         cTRg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d6m0Iqfh"
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4836e3288cdso25146035e9.0
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 03:05:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google; t=1771324652; x=1771929452; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NZMo/PtOIzSJeD+bvKh62aH9xtqgsP4XaPk4C2v4d9E=;
-        b=dmYLmGrQL6EpWGinGmazJYZO2mJYS/9YAtjKAkQYVsYcu67/5AA8mkj764LmfULiGy
-         Bq1tyIlasq5pw9UoS4Sr+XCwvWTBbwX8s+hIVYntsZPYoiwNa3nVU4Db6qMzN0KObR5u
-         +szP0cw+XNRlcTzTNf4B5GXh2CK1xmRAFYDmrGhbKeZ1DNZbm24/fY6wlyVWhzNOgLOX
-         /tZInKxJH3v+wzSCU2v2Mk1DEhlRMMh0/0h0X+K4aDFEi0cYkMFereA5+SHXhdwt9Ejn
-         m9++REQio3HlLCp4R4ZiLcPl3WV10drQ7hxCz+iw3pxBnEx/RC6cNykCWYgpsliYzvIg
-         1YKA==
+        d=gmail.com; s=20230601; t=1771326313; x=1771931113; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DdieY3TeFCCP2lBrqX6SK0NNMt0g0Rj48YaZz/Wekss=;
+        b=d6m0Iqfh7Q7FLdQvn7j4u9+mc8uypIKu7fdIjvm086jUWQ3X15wNwtJuvtEPjKEE46
+         hJkYZFnfDVCR8ZZPdB3hVsHOOgNoVUXsAh3cYW+ZhHBcyyUMGY6XalocGtDS5BputbD6
+         aIa5L81V6cN8A7fdzZ8dxP3ws9Z55zmTWrDtmqa5u2DRZNEh7dCj+0oFEajpibhhKwCc
+         hYlpjZSi3xGr6tnCQT1VXEtTFcyZQhXGb0ijnQ7uwxntrym4+fxGhEmVfnbdtX2u8SUj
+         SxcfUdHMiAmq4pBBGLy+9knivJE8CQgLlJTsnHYm6nXzCMeys2PScYJBM+BJIAYtH5lr
+         dOuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771324652; x=1771929452;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NZMo/PtOIzSJeD+bvKh62aH9xtqgsP4XaPk4C2v4d9E=;
-        b=b1LchNYwRkHuIEzU4mUlf1uytKfEorJj3eCNy0eRybuNYNL5rygxGeR/jWeBqlJWhc
-         pBUtAJnKgM+0kUQ1AxAqeAJB9CHjRuD1g4coR/fzIUygAf94ZMC1olL9bf2wqma1xnU6
-         TZ+2zMgwdPN5tRd6/Yv3KeZiHpjMM4fqDRoDGKg7uwZuNOYp6bUSWFGidrOJKCOWRdPU
-         Qu2GSAD0mHXz4F084RVM3Cx23OJnA2ymdfnsQgo3/+Pek14kYhwluPrwYtLwzoJqZ7Mb
-         /IOu7gBYHjudTIprMClHRObzQzZVbcAhEObWFn323ZMVa2ALUWuZ/FruG2Zenp91BOfy
-         8XRA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdvdmMJ/yA3sejl+JSxE3ecv34QHN+A15jP4swu87/mmvVJma/GuGEaXwJZ4S64QVqglA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq42ldIkU3S2bfNJwMjWVyc89BJ/TMVfAXywcl/F1Zh64wF4I7
-	Va5gbA/3/DtK4aMV6NeIMKvywSSO9khUBQCK2lDGSmhz8kmBQfUkAo0K/QMCi+zmpfwGR8Mvp03
-	OI4zPhPrhZXaaRJUzWbDiS+3lS/Fr1ll42eqlTg0Kuw==
-X-Gm-Gg: AZuq6aI1Lxlp0cpc0/cfF9b+mM5O2F8ranw8DDx8eWaPp4uk8nBGRvPhyWnn2W1n1x2
-	cU6IYNUk30VcjuwnvQLxprbjV6aKpZoMVWWcTl3xaK/WuH0ardf7bsS+pkHa2WoxHsikX2Ygt0/
-	FBvW+TnneHrZNRQrqpy2VZpHMcFtA+ddkpLVruBx/M8D6UXj+lzQQwyOplmoCJ7aXj2rL8KjS/C
-	VFFdUZfl0OYZm28g0Mwy5QYyXTCRD89tT0rV/fj8O/NSMvZ6fe4dlM0WJHCzi8plx5oE3rNzglR
-	E2B3d72Iwne/ZFacBOL1JxToFZEdAFZB+G1FgJ/HHgkDuNV0WQVqlqvYnGgu8ggXcUwL
-X-Received: by 2002:a05:651c:1ca:b0:386:ec21:c87f with SMTP id
- 38308e7fff4ca-3881b99cc9cmr30135731fa.42.1771324651832; Tue, 17 Feb 2026
- 02:37:31 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771326313; x=1771931113;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DdieY3TeFCCP2lBrqX6SK0NNMt0g0Rj48YaZz/Wekss=;
+        b=vg0o6ETp9mwlIZdQDHD1Tmicl+k+hs+jpSm7jiFY0MWVuCwqXAvh3LC98hR6y1m/Fp
+         NBcUIz75qUFh/qDwi8qbD6nIq0gZaso6bQSWLTcSk497F/VzEN0dOp/pxJ5smWuMQfle
+         +bN0insy5L0k6gEVQZhfqC8qsfjhDPMLfgC8zdIWfcu0OfYEso8UCVOWew3VLzW/wfvX
+         2CsPnPsKOSHeNF/wdFMAr6KYV+WZx95RhbZSFX3cHzgq2fmz3eSO+WGdfHkJDUp0xgLR
+         slo0Dv2uR/ExXI9G+SlUsttuCkxSjJAIg1XhKE7DAVbO+E8m6M9mS+f+yF/VCBVtvqc4
+         j4qw==
+X-Forwarded-Encrypted: i=1; AJvYcCXaf+Uuq/DCJSztohYZtVxlIzAdM0EPZx0rXcI0KaDpdW3fQkG8ADU7h17Q4el6yosGxqM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YznVxcwXcuhC5MvgMF0IdJphpVWAnpGwEmDOqiblvMbjaX9dGqY
+	UA6N34siMy9CyAbl2qeaiZWVqMajGJsZQf9j3rSpW9d9UiCkM/jlhGZJ
+X-Gm-Gg: AZuq6aJnbtZ4iakFrYApWLpRQLOcf/lu3uZo79x4yTDq9ZHk9q1iJS3i4lLQ5bU7sT1
+	90PNmdD9H98lNV9s3pEIzUO/w0ubFoRI/97eljJMAWeeDXjCt0WV3iiW7s3rn3/Wm/SbGVkl11g
+	368MrjfOXCFTW7Wm+SZHkYNWIQm4D/mOwEOa35Q/YDxCI4bde9D+pNbtFiDwuvmgHFwHy4f712k
+	Oc0ygQu7ARgJLDCgnpJS4M5icwDIo+kg+xvunCToyAosVjMjF1CJ8rUKc9Nm8tb74+t2dn4do/J
+	kqsNQPjurdSQqfqUF0Zf/03CST8nAK2J11+U2U4sDiwDdh6RBs2cgu9rvNcGCh+w0km5+k/1GFZ
+	NOHMAO6Al9RgkJ9mDvRItLllvZdvAQAAXmqielk2no7GWwVcFghgR2Bd9iJsgtBpvm9ZRHkn4xJ
+	6cdvlrT52pYU+hWyliX95pYcauYlbvIt0e3GYxHI7I3LYcmszGzfY47XhX3IVHXBE3AsyUwBwEt
+	/Lia6HS3Vqd1wWgAAYGeKtzAR+bo0IfySuiU/f+xr26bh5JLrE7UbIu1fdrVTdYkei5o9kKopxq
+	yQ==
+X-Received: by 2002:a7b:c356:0:b0:47d:52ef:c572 with SMTP id 5b1f17b1804b1-48378d4f631mr137622535e9.1.1771326313228;
+        Tue, 17 Feb 2026 03:05:13 -0800 (PST)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4837b68e5adsm310486565e9.9.2026.02.17.03.05.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Feb 2026 03:05:12 -0800 (PST)
+Message-ID: <47684e50-d7c6-4f20-9206-366c9c343eb3@gmail.com>
+Date: Tue, 17 Feb 2026 11:05:10 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260110-lsfmm-2026-cfp-ae970765d60e@brauner> <20260119-bagger-desaster-e11c27458c49@brauner>
- <20260129-beidseitig-unwohl-9ae543e9f9f5@brauner> <20260216-ruhelosigkeit-umlegen-548e2a107686@brauner>
-In-Reply-To: <20260216-ruhelosigkeit-umlegen-548e2a107686@brauner>
-From: Haris Iqbal <haris.iqbal@ionos.com>
-Date: Tue, 17 Feb 2026 11:37:19 +0100
-X-Gm-Features: AaiRm52ye33PKO28CcExseV6coNOG-rZ2nBeMP78z80h8Dwp-N455yQLK7UlhmY
-Message-ID: <CAJpMwyg-3-Z=ZDC60Vn0s-8Z78VOPKYmvX9s=Nnvcoao4T5zbg@mail.gmail.com>
-Subject: Re: LSF/MM/BPF: 2026: Call for Proposals
-To: Christian Brauner <brauner@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-block@vger.kernel.org, linux-ide@vger.kernel.org, 
-	linux-scsi@vger.kernel.org, linux-nvme@lists.infradead.org, 
-	bpf@vger.kernel.org, lsf-pc@lists.linux-foundation.org, 
-	linux-kernel@vger.kernel.org, lwn@lwn.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 2/5] io_uring/bpf-ops: implement loop_step with BPF
+ struct_ops
+To: kernel test robot <lkp@intel.com>, io-uring@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org, axboe@kernel.dk,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>
+References: <ec7d21e6e16c49165fa1e8af2aa09d01c111ea97.1771260487.git.asml.silence@gmail.com>
+ <202602171315.iJKYSSFe-lkp@intel.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <202602171315.iJKYSSFe-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 16, 2026 at 3:28=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Thu, Jan 29, 2026 at 05:13:52PM +0100, Christian Brauner wrote:
-> > On Mon, Jan 19, 2026 at 03:26:39PM +0100, Christian Brauner wrote:
-> > > > (1) Fill out the following Google form to request attendance and
-> > > >     suggest any topics for discussion:
-> > > >
-> > > >           https://forms.gle/hUgiEksr8CA1migCA
-> > > >
-> > > >     If advance notice is required for visa applications, please poi=
-nt
-> > > >     that out in your proposal or request to attend, and submit the =
-topic
-> > > >     as soon as possible.
->
-> This is (likely) the final reminder to put in your invitation request!
-> The invitation request form closes this Friday, 20th February.
+On 2/17/26 05:24, kernel test robot wrote:
+> io_uring/bpf-ops.c:45 bpf_io_btf_struct_access() warn: always true condition '(off >= $expr_0x7fb415932650(30)) => (s32min-s32max >= 0)'
 
-Hello,
+Got me confused at first, but it's the first field => offsetof() == 0,
+and after type promotions it compares an unsigned type with 0.
 
-What is the announcement date for accepted topics and invitations?
+I think smatch is too strict, and it's better the current way,
+i.e. handling all fileds in the same way, but I'll respin to
+silence smatch.
 
->
-> Fever has struck me down so all you get is a bad limerick:
->
-> There's a conference called LSFMM,
-> Where maintainers debate and condemn,
-> They argue till dawn
-> What's merged or withdrawn,
-> Then next year do it over again!
->
-> Don't forget to pester^wask^wremind your respective organizations to
-> sponsor LSF/MM/BPF 2026! If it helps, you can tell them that we're
-> considering renaming it LSF/MM/BPF/AI.
->
-> Thanks!
-> Christian
->
+> 
+> vim +45 io_uring/bpf-ops.c
+> 
+>      37	
+>      38	static int bpf_io_btf_struct_access(struct bpf_verifier_log *log,
+>      39					    const struct bpf_reg_state *reg, int off,
+>      40					    int size)
+>      41	{
+>      42		const struct btf_type *t = btf_type_by_id(reg->btf, reg->btf_id);
+>      43	
+>      44		if (t == loop_params_type) {
+>    > 45			if (off >= offsetof(struct iou_loop_params, cq_wait_idx) &&
+>      46			    off + size <= offsetofend(struct iou_loop_params, cq_wait_idx))
+>      47				return SCALAR_VALUE;
+>      48		}
+>      49	
+>      50		return -EACCES;
+>      51	}
+>      52	
+> 
+
+-- 
+Pavel Begunkov
+
