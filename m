@@ -1,83 +1,102 @@
-Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F34280A5A
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 23:26:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDDF260580
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 23:27:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771370815; cv=none; b=POvz/tz5gThx1Xzuy4mgRpuvSOAMVzsW03vgssfuRyDZESnalhFUDVcEM8LWJjbSz2TpK5sU472H7Kl3LYg1p9rQqwymdRImr7COVtOzrZjSmrqkOHA2dKXv26s11G82KLcxAs12XuUuKqYyo1GNlaHEq9YrrU7q4tJbsHDFeHU=
+	t=1771370852; cv=none; b=W6EdU7jQDd1l15zvA0blLikKeL8nohKxfPMtGREB56uXp4KFhVdgqeFM4fIHgvLHqMvS2RFWGDcX6hSakfD96wH1CvXEoKbdEflM/2IYbIDG8zRUrIiVMbjD0+h/yCssxFBbLvJdjcvWcul2yrttbVCMpmUQF8bf9QI5P8fqH1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771370815; c=relaxed/simple;
-	bh=j/RworCfYk3woL5j7jSZnA+8/H6/CtqlnalefOGhQ0w=;
+	s=arc-20240116; t=1771370852; c=relaxed/simple;
+	bh=fZp2PFJJAnBaNXnIodTPiCY3HfzveyNPIaZmF0/pRto=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dN7wli/175nygjMXpDUb9QIkFyEpGWxhp/ei/vWpY/U3u0Mw66THakIi5hp7cyO1VxgQozEt1QXhb81wfsdgmNUKNBszVob547e0ButFU1iQ4Y+J4RO5+GGb94DBrlm0PShGb7fWQzf3bjl6Vvnz5crHZMc6oVNdeZg/8V94A4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dvUgKJjp; arc=none smtp.client-ip=95.215.58.182
+	 In-Reply-To:Content-Type; b=Vi3aENZy4045/T/gNTqnopIbYN3jMybC35yVJ0evN1BDhoPIUCgXIn2CW133TsJdjtqZovZQjCRQ9vAQTfmyOIFqB38GILHbJwlatzS5lPJqv07u5xoEnaYOyLJX4qdeORMdru7uJutxS3TjrgrOpYosjeI78+Rj5heClHPY2ZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qjLfFglR; arc=none smtp.client-ip=91.218.175.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dvUgKJjp"
-Message-ID: <1bc24867-edde-408e-ac1b-2ca2a41622b5@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qjLfFglR"
+Message-ID: <aaa45c92-d8dd-42be-8569-e3abaddffa22@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771370801;
+	t=1771370848;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=izRud62R72/Q2Ixi4S6gHYCThWIGKo49JaBchMF76Ec=;
-	b=dvUgKJjppqqboXgBoZKaB4cz2Esw42wpPBtkPU6knhjUY3Ytr5JrgAkXRmkCmGDPJvglJb
-	eqEu9t+/BQCH2FCdPQAPF4IqKb+K3biw+N26A4IzBVv4lh3FgpQiQ6teOYmTe7qVJ6gPXR
-	tdFSB1BpLVg+pypxTGQYPEAJlLTq3WQ=
-Date: Tue, 17 Feb 2026 15:26:33 -0800
+	bh=p3PL4+vuvrWhTslRypNTa3ipy/HPHV3MfgKQlMWnh7M=;
+	b=qjLfFglRSuJJiXeW4/f92y7jqLtLqtETo8rTwZqZ6Ue19DRHeP4uDVXDMl/D+MDfpYzjks
+	A3k2rrTns8KSs2P8Dzgb21rIcpsZmpT+LMyjVNVcUvGUqM27csIi9Ri2MOfiThccD8kmv1
+	jOYk52PhyFROb28lXmqjdfEqaQmz1yI=
+Date: Tue, 17 Feb 2026 15:27:23 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v5] bpf: test_run: Fix the null pointer dereference issue
- in bpf_lwt_xmit_push_encap
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Feng Yang <yangfeng59949@163.com>, andrii@kernel.org, ast@kernel.org,
- bpf@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net,
- edumazet@google.com, horms@kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com
-References: <249d6576-2259-4785-87b6-619052b4ce75@linux.dev>
- <20260211075240.70095-1-yangfeng59949@163.com>
- <6528c028-1224-4737-b902-e631641ddb37@linux.dev>
- <20260217140831.52fac4ca@kernel.org>
+Subject: Re: [PATCH bpf-next v1 13/14] selftests/bpf: Fix out-of-bounds array
+ access bugs reported by ASAN
+To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: Amery Hung <ameryhung@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>,
+ =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260212011356.3266753-1-ihor.solodrai@linux.dev>
+ <20260212011356.3266753-14-ihor.solodrai@linux.dev>
+ <59f6faf52bd77c01a96f495eea3c7389c3455b50.camel@gmail.com>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20260217140831.52fac4ca@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <59f6faf52bd77c01a96f495eea3c7389c3455b50.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-On 2/17/26 2:08 PM, Jakub Kicinski wrote:
-> On Tue, 17 Feb 2026 10:08:29 -0800 Martin KaFai Lau wrote:
->>> The reason for the CI test failure.
+On 2/12/26 5:11 PM, Eduard Zingerman wrote:
+> On Wed, 2026-02-11 at 17:13 -0800, Ihor Solodrai wrote:
+>> - kmem_cache_iter: remove unnecessary debug output
+>> - lwt_seg6local: change the type of foobar to char[]
+>>   - the sizeof(foobar) returned the pointer size and not a string
+>>     length as intended
+>> - verifier_log: increase prog_name buffer size in verif_log_subtest()
+>>   - compiler has a conservative estimate of fixed_log_sz value, making
+>>     ASAN complain on snprint() call
 >>
->> Make sense, but the early point stays the same: the user-provided skb
->> can have unexpected data. Either an skb->protocol is not handled here,
->> or the earlier dst lookup has an error. I don't know what the current
->> active users left in lwt are. Unless there is an issue with missing
->> skb_dst() in other mainstream program types (e.g., tc), I would prefer
->> to add a check in bpf_lwt_push_ip_encap() instead of complicating
->> bpf_prog_test_run_skb() further.
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>> ---
 > 
-> Can bpf_prog_test_run_skb() simply not support LWT then?
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+> 
+> [...]
+> 
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
+>> b/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
+>> index 6e35e13c2022..399fe9103f83 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
+>> @@ -104,11 +104,8 @@ void test_kmem_cache_iter(void)
+>>  	if (!ASSERT_GE(iter_fd, 0, "iter_create"))
+>>  		goto destroy;
+>>  
+>> -	memset(buf, 0, sizeof(buf));
+>> -	while (read(iter_fd, buf, sizeof(buf)) > 0) {
+>> -		/* Read out all contents */
+>> -		printf("%s", buf);
+>> -	}
+>> +	while (read(iter_fd, buf, sizeof(buf)) > 0)
+>> +		; /* Read out all contents */
+> 
+> Nit:
+>   -       while (read(iter_fd, buf, sizeof(buf)) > 0) {
+>   +       while (read(iter_fd, buf, sizeof(buf) - 1) > 0) {
+> 
+>   And keep the log?
 
-It is a bold move. If we are open to this idea, we can consider to 
-retire the lwt support completely instead of only retiring lwt in the 
-test_run_skb alone. I think it will still take time to announce and 
-deprecate it?
+AFAIU it's not necessary for the test, it seems to be a debug print.
 
-> Having fastpath checks for test harness really feels like duct tape
+There is an exact copy of this loop without printf in dmabuf_iter.c.
 
-Adding route lookup on ip[v6]_hdr does not work well either and is a 
-larger duct tape on the test_run_skb side.
+> 
+> [...]
 
-An option is to always set skb to 'some' dst (loopback or 
-ipv6.fib6_null_entry) on all is_lwt cases without doing the lookup. It 
-is only to get it going. It is a duct tape also imo but maybe a middle 
-ground.
