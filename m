@@ -1,118 +1,111 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F55E13B293;
-	Tue, 17 Feb 2026 05:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96245FDA7;
+	Tue, 17 Feb 2026 07:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771305858; cv=none; b=SD1kXWvWTZrnKC70puwZsbqs3ZhkeLov0MspbpyKfRWtl7WzYErbLsvOXJHSD2a5EK5If8E1brJ0F1lM5jUyF+TTQkYwvHAded3nQLs514+rG76PZuiw1pkTp8TQTzZ+S5z2lutEjX5fQ2tJ8ksTxzHdW+HEsbLvYMyx0WYD8Rs=
+	t=1771314137; cv=none; b=ebZOSDuRqvt3lEol3JGzgX0+N0TlPJZYHNVcdwxX065+8hl4Y6QGuqGYtXVCcEc9w/6grxFmmlRkXGjMPh9xEGp1F2YIvjUG8+uSh0Rf3Da2K6d6kW16R09YVkBd76UZJ9j2eBPHOrSIGFkB+P8hhA0nT440dt09nG1z4bLnSzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771305858; c=relaxed/simple;
-	bh=xnzvI0dvY1F6SzS6tkE5JdjTYwIWYLKs5Ofc48sGVdA=;
+	s=arc-20240116; t=1771314137; c=relaxed/simple;
+	bh=qE+yPLi1ykHRmeRwIOIeQFhMzLFO6SYvRavMwSbG0w4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uxAnSE6MKWdACM0o+giDX1Es9tfYymyAmukMONqcNejatCa23UAnz8eys4M+UpGTbg4PnMYIlEXJJerfIOJyVC1vhm/wlDp/62I3rXWk88N5t6PxEmlfpR45PR9ZDphBkDyeD1U3B/AIRZIU113VDP/H526H6815VnO3d5Nh/cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cqUHBRWI; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=BSqyn41qbbCZ5TuUuskxACVBIp7kXwRJ3iRgoBrwMDMwXhAYBGb9LpzMiI+Lr0beXFe/c50xSDZFwVow3C9W9AMjjqSMW7QZ9Ov1qKhWfLPiI87k1/UnqI2FPu6U2W+aTeaRogfEcfEmrcUHU5wVsug2TG7zm8HBBsLkWSH+jBY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=T4vCRWzp; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MZJR/ak/; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cqUHBRWI"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771305857; x=1802841857;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xnzvI0dvY1F6SzS6tkE5JdjTYwIWYLKs5Ofc48sGVdA=;
-  b=cqUHBRWIwFMth5YZgu/vEncNfPXq3aKmxyL4jal3FnE7DChJjetLsRmA
-   1jTx/EFvoMqvzMyyAVGywHaTNZm39i0FOYKWJSG9HS8zj99rrCjwz+sbc
-   VzMwbHLWT51XPzhsiWHOH54nvuPFvaPyuGI2gcRb5JJYh55aPOiGQp4YZ
-   BRjiRwhmS7Oxm/p22t5Je/AWkPEQOJS5cNDfL/QnO0G2oL6Rqm4w1orcQ
-   LcCgtpQaD747NHSMMnu5iTYOn48xXwkI+xKHR/xQ5TroToW8wzliR2YAA
-   d0/dDMEkkyNyg5TEheVpmLfy6rAU1V7RV8AMm8DHhBL6MefjFsiAbDWOT
-   Q==;
-X-CSE-ConnectionGUID: /2O2lvHHS168sZ0zOAKVyA==
-X-CSE-MsgGUID: xdX3OfQrSmqQDlgOxNRxuQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="72279700"
-X-IronPort-AV: E=Sophos;i="6.21,295,1763452800"; 
-   d="scan'208";a="72279700"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Feb 2026 21:24:17 -0800
-X-CSE-ConnectionGUID: +RfV6L2hToyQWGU8Gz6V9w==
-X-CSE-MsgGUID: mkNANzXsT9ydo831Z9v36A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,295,1763452800"; 
-   d="scan'208";a="212869103"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 16 Feb 2026 21:24:15 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vsDZE-000000010do-3W9j;
-	Tue, 17 Feb 2026 05:24:12 +0000
-Date: Tue, 17 Feb 2026 13:24:03 +0800
-From: kernel test robot <lkp@intel.com>
-To: Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, asml.silence@gmail.com,
-	bpf@vger.kernel.org, axboe@kernel.dk,
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: Re: [PATCH v7 2/5] io_uring/bpf-ops: implement loop_step with BPF
- struct_ops
-Message-ID: <202602171315.iJKYSSFe-lkp@intel.com>
-References: <ec7d21e6e16c49165fa1e8af2aa09d01c111ea97.1771260487.git.asml.silence@gmail.com>
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="T4vCRWzp";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MZJR/ak/"
+Date: Tue, 17 Feb 2026 08:42:12 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1771314134;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lv3UGO8zu50i+N0PRvq/5skPPM6bB0wzdtk2hzdWxGw=;
+	b=T4vCRWzpDkVcYoVW4KYZnOHXdfnzD9xIAT5Qph4gtHB+H9YazGRbBuHjiSmBNNlPq787iD
+	AAujql3SQIaEdfbKeruZYI46KdjF1GWF0enebTsCkGUe6ISGFiC3qGotPHYKulacvJG1me
+	ok34Vv23E7sYrCFH2p1X28O7wldD6ducnCW8fVOTIM8R1DxdNodKr414bP2wQNtqvkBczF
+	k7qzApJstXs1na1GFDZttqNI0nZIG/M3ApDkJImhAimhIQSKps3bq4xUJihkH2inReRZpj
+	dR38SD9uJph9I8W4Vevf/7/A54p8NArchddQuBUxqjaw+audUgSfb+3OqNScQQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1771314134;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=lv3UGO8zu50i+N0PRvq/5skPPM6bB0wzdtk2hzdWxGw=;
+	b=MZJR/ak/FNQkBzxbm8t5YrYs2t/S6mdM0vJTCtxkqUN6d4Wa19fb517/k8Z0UtBqIRBCPA
+	JLbA/1NpYqOG8+CQ==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: xxx@vger.kernel.org, jiayuan.chen@shopee.com,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@kernel.org>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH bpf v3 2/2] bpf: devmap: fix race in bq_xmit_all on
+ PREEMPT_RT
+Message-ID: <20260217074212.95wNTgR7@linutronix.de>
+References: <20260213034018.284146-1-jiayuan.chen@linux.dev>
+ <20260213034018.284146-3-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ec7d21e6e16c49165fa1e8af2aa09d01c111ea97.1771260487.git.asml.silence@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260213034018.284146-3-jiayuan.chen@linux.dev>
 
-Hi Pavel,
+On 2026-02-13 11:40:15 [+0800], Jiayuan Chen wrote:
+=E2=80=A6
+> timeslicing during the mdelay window causes interleaving. Without the
+> fix, KASAN reports null-ptr-deref due to operating on freed frames:
+>=20
+>   BUG: KASAN: null-ptr-deref in __build_skb_around+0x22d/0x340
+>   Write of size 32 at addr 0000000000000d50 by task devmap_race_rep/449
+>=20
+>   CPU: 0 UID: 0 PID: 449 Comm: devmap_race_rep Not tainted 6.19.0+ #31 PR=
+EEMPT_RT
+>   Call Trace:
+>    <TASK>
+>    __build_skb_around+0x22d/0x340
+>    build_skb_around+0x25/0x260
+>    __xdp_build_skb_from_frame+0x103/0x860
+>    veth_xdp_rcv_bulk_skb.isra.0+0x162/0x320
+>    veth_xdp_rcv.constprop.0+0x61e/0xbb0
+>    veth_poll+0x280/0xb50
+>    __napi_poll.constprop.0+0xa5/0x590
+>    net_rx_action+0x4b0/0xea0
+>    handle_softirqs.isra.0+0x1b3/0x780
+>    __local_bh_enable_ip+0x12a/0x240
+>    xdp_test_run_batch.constprop.0+0xedd/0x1f60
+>    bpf_test_run_xdp_live+0x304/0x640
+>    bpf_prog_test_run_xdp+0xd24/0x1b70
+>    __sys_bpf+0x61c/0x3e00
+>    </TASK>
+>=20
+>   Kernel panic - not syncing: Fatal exception in interrupt
 
-kernel test robot noticed the following build warnings:
+I would move this next to the diffstat (same as with the previous
+patch) since it is obvious once you described it.
 
-[auto build test WARNING on axboe/for-next]
-[also build test WARNING on linus/master next-20260216]
-[cannot apply to shuah-kselftest/next shuah-kselftest/fixes v6.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Pavel-Begunkov/io_uring-introduce-callback-driven-main-loop/20260217-005705
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux.git for-next
-patch link:    https://lore.kernel.org/r/ec7d21e6e16c49165fa1e8af2aa09d01c111ea97.1771260487.git.asml.silence%40gmail.com
-patch subject: [PATCH v7 2/5] io_uring/bpf-ops: implement loop_step with BPF struct_ops
-config: parisc-randconfig-r071-20260217 (https://download.01.org/0day-ci/archive/20260217/202602171315.iJKYSSFe-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 8.5.0
-smatch version: v0.5.0-8994-gd50c5a4c
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602171315.iJKYSSFe-lkp@intel.com/
-
-smatch warnings:
-io_uring/bpf-ops.c:45 bpf_io_btf_struct_access() warn: always true condition '(off >= $expr_0x7fb415932650(30)) => (s32min-s32max >= 0)'
-
-vim +45 io_uring/bpf-ops.c
-
-    37	
-    38	static int bpf_io_btf_struct_access(struct bpf_verifier_log *log,
-    39					    const struct bpf_reg_state *reg, int off,
-    40					    int size)
-    41	{
-    42		const struct btf_type *t = btf_type_by_id(reg->btf, reg->btf_id);
-    43	
-    44		if (t == loop_params_type) {
-  > 45			if (off >= offsetof(struct iou_loop_params, cq_wait_idx) &&
-    46			    off + size <= offsetofend(struct iou_loop_params, cq_wait_idx))
-    47				return SCALAR_VALUE;
-    48		}
-    49	
-    50		return -EACCES;
-    51	}
-    52	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Sebastian
