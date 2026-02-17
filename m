@@ -1,159 +1,224 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECA52848BB;
-	Tue, 17 Feb 2026 12:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771332972; cv=none; b=kUwZ5SQC10HreLIQDOkQexesgYtxF4DitWBh5t0nGIOiKzA+sbQi3q+SQz90gIge2a9RuPXu+8f6E27CVK2khSpMXWzA0+RPmsjJsbcsDrmxJedM3hMKs6kFOoFOaAxJzri7nF6aZ/kMAGmN2xh6RAlYnVcCn5M0SrPGstFMduI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771332972; c=relaxed/simple;
-	bh=KKmXqRdnf9otsggV2CwzQEXQbyGFlIsjANsPVJNvC/8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uTtwCO/TXngh0T4ASjPOJ5QcHmCnCqeTamDSwbx7NvY1VrO4UX8QkLxhrSqeBY37RjEBBrA5Ufiyb+wdFXrf6XbAfJUbGQu0+H4u0QJ33PryEWi4qZLePD31yCvmqewwnYl3H2yrh6yT3SOVu9qmoBRRjhaE2PBjie0alvp0G4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Bl/3p1aT; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E4C29AB15;
+	Tue, 17 Feb 2026 13:03:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771333404; cv=fail; b=WLBWSloPHx24gqVbm74YLploYokc7cxJXVagh3lhY82/yDDa32OkbqodEr/UBtkr24JHO9YLJi3yT8+L4HQxyJpmMxvnDyJkMJM5KaQteD/EkEh04i5fDXapLalcXpOQeI/oEUpX2+1NBdXfw7IQAWT5cGLKGgpw8RuB09zX/IE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771333404; c=relaxed/simple;
+	bh=GblqocFWWCbBQo61ih/4u2YzrSlq9qzRsnblgzt/LHU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=AxqBo46eulPka/cUQj4DY6tKMyPz302fZLIFPsr8SYN6GqJVRFlnt3Q9h6+MUMhb7d3mOQEEfjNgMFcz7AxiSjdoe8TO9ofhsvbmYaRw2l4iFVYQ2CN/OaYK0/7lTkgsWMtF5uvUpdox1aavW2miu57a1ym1XRmufEJmunkueiU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZEVNY9bq; arc=fail smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Bl/3p1aT"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61GNZGpP2711260;
-	Tue, 17 Feb 2026 12:53:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=sQ+uVO
-	jbsI8+hN/+N+grsJoubrT4r9Lkm3o+6FEB1BU=; b=Bl/3p1aTZg9GNboxn1XOix
-	5PjAMYOr2HoGGeUhnOXmXP4NT0NxHOJ0mXlOFBRmIZKOnWSQlwEWJH2Kj8kb8SCn
-	UOPLdyNXt5E4cD7NslyqMpNT/gUKYoFiPD8bBtT2Fb5ZHtCalT95UIMvGJx7bELK
-	NkHHqRNiLdvkoVXk4sHTarOKeeA+tKuX6ERMM9w4/9RlushfTd2ROw3UlCgWvC7M
-	iPA3ibLSPY2iHfDC1T6eQ5+2N16a0i2blz11d4bM39B5CKCOe+K3Ipi80D8na7hj
-	xg+Ns1m88DyHppFxzqZvnMq24lRXPCYpGygNYIZryH8K63hf7NaamubECErSrWLQ
-	==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cajcqux1g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Feb 2026 12:53:51 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61H8nVm5011920;
-	Tue, 17 Feb 2026 12:53:50 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ccb26tf01-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Feb 2026 12:53:50 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61HCrm2s16712168
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Feb 2026 12:53:48 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 24F0C200A7;
-	Tue, 17 Feb 2026 12:53:48 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A6E89200A9;
-	Tue, 17 Feb 2026 12:53:47 +0000 (GMT)
-Received: from [0.0.0.0] (unknown [9.87.136.123])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 17 Feb 2026 12:53:47 +0000 (GMT)
-Message-ID: <4085b3b0-3f3f-4d4c-8b10-78d144ed0883@linux.ibm.com>
-Date: Tue, 17 Feb 2026 13:53:47 +0100
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZEVNY9bq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771333404; x=1802869404;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=GblqocFWWCbBQo61ih/4u2YzrSlq9qzRsnblgzt/LHU=;
+  b=ZEVNY9bqUKkVzBu4IHRngK0WQawQM/ZISIU6ZkQkRwVxrCMBAij6i6gh
+   OyCvze+fyWSaABOQ5oMVII1ay1cVbr6cXoKwkhyUtHdfn234soDYBbKFf
+   x3thOXj+w3JpypJJyCwJlPeKJQ7TUfAMLrsjsgJbGgjrJ9SfiRl2HqJLR
+   qz8KfcPhgUxTqh5BTRT/LgXh4lVX6E5ENYurKavf/YPg1hkD2YTGxy3Wo
+   r9qp4rJOQ6gc+cEiMO47jSPsdQK6Yx2R35alYnM3cxgmsLxOsKT7Pr3dn
+   d4HMyNRaCalMckW0jCJlWFArwLR2gfz8+lerfF+XH9SRI2CABgv8EjoSs
+   A==;
+X-CSE-ConnectionGUID: I40RQcfmRjaLmI00fg+l/Q==
+X-CSE-MsgGUID: lPy513OsTLGTghW0Bc0m0g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11703"; a="72391204"
+X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
+   d="scan'208";a="72391204"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 05:03:23 -0800
+X-CSE-ConnectionGUID: nWUAMib5R2uJFeI/iKGebw==
+X-CSE-MsgGUID: 1HEhmCJ/Ry+JKw6zkHeemg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,296,1763452800"; 
+   d="scan'208";a="218881709"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Feb 2026 05:03:24 -0800
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 17 Feb 2026 05:03:23 -0800
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Tue, 17 Feb 2026 05:03:23 -0800
+Received: from DM5PR21CU001.outbound.protection.outlook.com (52.101.62.58) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Tue, 17 Feb 2026 05:03:22 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UbmidR0XoRqkUuSTSEoGo89S3OoAxi7dTq+OrZsiM4MI0AUzlhIEsHXjO0OlOiurbIo83QEWMnStuxvrVlvaRv6X+FOMKH5eLkEGLAYvmih3hN34VWNwLjP8L+nQogNa4KaPA3tTpob9DLBNBzTTv5VT5zJP86U76XGHmp3aTFU81kYJFgY1pdShGTgB7iAmDLc2lbPKooWsY0y4bS1PX0Qp7Ai7/tN67A1kXXGfgxEOot3J1ikfVvNDBE0FsiaIwSIzvFdVBOIpAP4+Lh3UkHPMqJ8xC+m6kJKZ4fMyrfyV0SjJOZ9ohqfTp3/ggcy4JCrE8DXPguYZBxGG7u2zog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xlV3HW1R62//0zQqq6T6vOHS0RdjLN1Fq2GPBKJ3bAQ=;
+ b=RRzsDyfTiVm69G3vO60ZtIWeEyMaAw9od6nO/uwVgTPODZZEuQK1v8vCxe2Y+PGFKH+P9KPzkb0AVV3Q8g9fZatFw6Ehg9Tpi6/EtbI8SNYtZRjCf1Vk02hVxmOe6jsF3xtoONp+BYnjesBBS3uVsWt/0c1UQ3wpaydO6uHpIPCpBCoH7CJd8XKTeWfeufcZD4C8b+siQxBPwVItjqyS6OYaDky4HTbPsD08vJOvLyqMEr6/pvqwa5PaK7TOaeozIW5euDre4pkJXM5kCo4iksBEDpVbIWY04aU8DGV9sueDYTV99WB7pLPG1XGJIfA0dFSyG5waVLhtJKroPC4H5g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ SA1PR11MB8320.namprd11.prod.outlook.com (2603:10b6:806:37c::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9611.16; Tue, 17 Feb 2026 13:03:18 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::d9b3:e942:2686:3cdd%6]) with mapi id 15.20.9632.010; Tue, 17 Feb 2026
+ 13:03:18 +0000
+Date: Tue, 17 Feb 2026 14:03:08 +0100
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To: Mahdi Faramarzpour <mahdifrmx@gmail.com>
+CC: <bpf@vger.kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau
+	<martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
+	<yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, "KP
+ Singh" <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+	<jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, <netdev@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf] bpf: fix selftest/xsk single test selection
+Message-ID: <aZRnDPYs7Xm6KjvK@boxer>
+References: <20260217080326.50564-1-mahdifrmz@gmail.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260217080326.50564-1-mahdifrmz@gmail.com>
+X-ClientProxiedBy: TL2P290CA0015.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:2::18) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/bpf: test accounting of tail calls when prog is
- NULL
-To: Hari Bathini <hbathini@linux.ibm.com>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, linux-kselftest@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>
-References: <20260216090802.1805655-1-hbathini@linux.ibm.com>
-Content-Language: en-US
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-In-Reply-To: <20260216090802.1805655-1-hbathini@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tptXIinyHf7B6l2YqZ8WTbW5oCCab6O2
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDEwNSBTYWx0ZWRfX1EJin8Vt6GwS
- CnvGTXGuv00FuBP+h4iBxV+u1u09oEwQJlMi/+HnFLLGAnykZBAvNvgj50UXvEAkKa6V2i741Qv
- q/wBGxnzEaBEfAPH/BxjDJTAcBsnqht8ru4tZisU2DooSdKueOxTWfv2LO9oiGbTlsJMg2WxJfp
- GetCHMC3PbhKY1p7lDLyMuyvRHAOASrp1gjjoeLs31xzo+fyWNpnZsPIb9eM/mLX2XLYdxP6Fqt
- WjMGN2+XSa+RfiewtNyYWY1SjSTP/wdvhRzf12KnfGXO4wRjoDtwRpxhlKsRzOmoQrnQBeZC5zW
- XlC7guLIfuNQ9OzsBDg9Hz06A8IXpt8Lz5kqKvWTYev1ry+3CHevvqNYIkapYLVZzBDzMk1aQt+
- DJV8nRdmGPoA4vGUYtYDoTW5nzycMRysvbWID3ELfkCEu9nBuJkClWwuwcdn5Uo3roWj3Byn8lB
- y+MVZ6z3n9p5WtpHYoA==
-X-Authority-Analysis: v=2.4 cv=UPXQ3Sfy c=1 sm=1 tr=0 ts=699464df cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=pqbiIwGrAfcC34Az2vkA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: tptXIinyHf7B6l2YqZ8WTbW5oCCab6O2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-17_01,2026-02-16_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 phishscore=0 impostorscore=0 adultscore=0
- bulkscore=0 clxscore=1011 lowpriorityscore=0 priorityscore=1501 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602170105
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|SA1PR11MB8320:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b907f85-fce9-4121-4933-08de6e24eb78
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016|7053199007;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?H9VnWVJFwwLWWDGKy3Z6Mof8j4ameOf0KXfq0Dshe7bzDqPGM26eP/zJljJ5?=
+ =?us-ascii?Q?9QJE4c7jTFE0SFt53xTFqIVMU2dIj/KYue+UfmyDqzBkDdNSQu6zixrncqaa?=
+ =?us-ascii?Q?HrlynZmfVRP4RGZFvKEQQobeMZKxH89ycTKmsTOjdHGbWeCG31IhfmKgmsLh?=
+ =?us-ascii?Q?ySN6loJZQNCJn8AsWC77AnfRL/ViO1MAluZHswyXhSysMlzD07xnSpRaWd/v?=
+ =?us-ascii?Q?y5k81g32i4CUhuRm1gtuie5Y35v1Dvub5ieMqxz7xD8Px5ydm5AdMPckkldR?=
+ =?us-ascii?Q?nWIRDrYCdBDtyKvz7JpNzo3ohuM9r5vBq1rNqGl2MRvdqXlDNLELl/TQVqjf?=
+ =?us-ascii?Q?GoGsgAQbECiP0stcPuYs/hzIkVeTQAEBrFxBCp70QfqSfj8QQNd6qmylLkZb?=
+ =?us-ascii?Q?IZvo1gnFG5y0IOg8MQvcBZvVRA79l1Ngd67acSeBsXFpHAc18bJtOwZUFfhh?=
+ =?us-ascii?Q?GVkKW9V0C4/fsU4GsNPuol0M3pajZD42K5Z2KARvRy7swYYxJrEU7Wvr2CaZ?=
+ =?us-ascii?Q?kdJkPswCOyCd/hnhAXiGOJtsyhh+3tIWHtxXEQphl/Ehqxt5C2OkFyspeUF/?=
+ =?us-ascii?Q?/Lqa4foff+uMzrs741zp4mVbClvcCnZNAcVgMlZ/cAP4t4LqDO84wuPbAW+q?=
+ =?us-ascii?Q?TEKuWEMiKlRZcLy95dLMiVAfDbJC23xHIQkCIilgqesQ+WCnvg4A02fpSrLl?=
+ =?us-ascii?Q?cdw+3KPfBB3weBYJicDqN+5Q8AZtMFCbfSCdoLgx4iKMaS6CH7WtSCRhlJR0?=
+ =?us-ascii?Q?Q3uy7QVcLRy/QfOB4GBhH9AgEimfb9UAJgxURJRkdMw8jUO52g+iEPdIpM1h?=
+ =?us-ascii?Q?FOzJLMcKN4r9YJO5jjpCSJ/EGjuiSC/ZPDtUOaU4Uk2+oErW3vsK+nFWrvJp?=
+ =?us-ascii?Q?km1YD4Y9e8BZmdkWyuoAMbf0NybRVtZpXWE5ovucGkrIGEbxIy7Z/32wtNVS?=
+ =?us-ascii?Q?C2o0W0cCdtZHlAzZQ3yldt1dpg3qCw4j4JqnATHlu8EccjOY2u+N3TqRo/S/?=
+ =?us-ascii?Q?osVl+sGzg/rsI179WA6fN/eSYm/lLlLNfoY5nf1v/aHOiaCHzAqdABGvBN7V?=
+ =?us-ascii?Q?0WbhMNmOCN9xi0aiWBTWqNoRwy87oSkNxU9ty8MwDnHuRdDUuT5ij2m72Xzz?=
+ =?us-ascii?Q?ZsWLD5MSToKfw6AfPMBYpKOvgG7lkzt/wBwEgeXJcUZ53Ml2BYhhbN4qFn59?=
+ =?us-ascii?Q?R6cZxMz3Z+oRRXLH61IvhIiuecEufNThzrhWKAADIE2UFxPC2C8KXypG6UD0?=
+ =?us-ascii?Q?UOKarULNxuU96/i7HxjQZ9tGr2Gue/Z3NQU6FSYF3YbeC4Kydmf+U68Xh4CU?=
+ =?us-ascii?Q?hcWzWyHz6UugJmPu1uohLJtliF1X0kfZOZToNCpxFq++FWl0uwtdOGstIQ7G?=
+ =?us-ascii?Q?Npgiyrzq1dBlwpdUlA6BE6jCeVFY9ilkKjm95fgBH/BgS7W/H5MFHGogVX95?=
+ =?us-ascii?Q?gtLBjJuIlRiAzoa0wPhVLL8DfnxHNqP59useYnqFcpgNv1CFYwM1JTAeHOlP?=
+ =?us-ascii?Q?Fpd5g5WcX6HeQdCUw2iFSvrQw8hS4Hciff0fLjN3Fgg+aphTUO94r+P8CZWr?=
+ =?us-ascii?Q?H+Hq5TqLt4Jb5fXltY4=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qLQlu3yAkW3BQurWaomXiU2Sxwj/UaZB3DvlfYcUd9zBggN9fn/lBNQoBMa/?=
+ =?us-ascii?Q?n32MLuKVYcjZdpv0+txSVK3R5H1ZL1sF/ZQvYFYkNWnV1M2KDvDlOuZpkSM0?=
+ =?us-ascii?Q?kh02h2SLlv7HTgSAANp9CEdQFMvYj5FN57EbTacR7q5umfku3RBpzFk6hiNv?=
+ =?us-ascii?Q?EyYWMLdjdPcYPno7TjmDd569OzUw+IySBDQO8fH18zQb8G9zb1flSMBXtjj2?=
+ =?us-ascii?Q?eHUaozEj8JUtHCxdpBBoI4NUpaVTHfMVYkx3yfV/yEgibH9jjzVTL6b2tMI9?=
+ =?us-ascii?Q?qCC4F9Td7FycYcroIxyc4NtdqtlJJ9SD0ItaTxHHCMFrfNWZ2Jz9EjLOBNzm?=
+ =?us-ascii?Q?vkx60+bSo1vdgbjZbGDmyVoTTFHn3zunCFDdh2N9/DfJFuiP9jy90q3opWx/?=
+ =?us-ascii?Q?c1E0ND8VHe+CilgbDTWX9d+iKV92/gwIAF6twawg8pLFe3m/yfHjF/Ea9XqF?=
+ =?us-ascii?Q?ZZuoqhRl5spNVYUIb7yrYNrqyxzg1e9/JWjhWVnYeopKzk2Tek3nIxPU1tfR?=
+ =?us-ascii?Q?Tjp4fK/+SVeSr5v7IXyRklv9aA1iezUvFv0B1VvVbJirvluvaiaCFQapiIpP?=
+ =?us-ascii?Q?g1qbIiu5Zx6kRVOEzag9Bh2uUIwVOLnGqkZwxV/x2c6oxrKursDOds1UuDdl?=
+ =?us-ascii?Q?/7kUG0NiY9pa+T2LG1boVCsBegRhGh7jFCOiE5EmnnCU8mtO5ST+aJ3iifhz?=
+ =?us-ascii?Q?J1Zvm+hxdPxFPWg8oc49B3x5dW82a07uGVYYJWU88nW0LaacbbwSjo+a0ke2?=
+ =?us-ascii?Q?rBlQeEtWFn/bjKXRCeg8hDn9NgVQ6thxWM/gg/RGD386785WZ/tO72u5EJXI?=
+ =?us-ascii?Q?a1SrYrUlCVaj7RZ7YRrP9jIRgtQu34q7c17rBkpjMqeCY3KfHaLmyabkik4I?=
+ =?us-ascii?Q?cRNr59aHslGboNpznUXp5x3TLjFGbTCj809KGMO3zMhuAEwAyGCR5ml0Nwae?=
+ =?us-ascii?Q?G56IhkVV3npbE+I3q43YAza39mhQO0vbOfAADLseBA7++1XWlUIFZ929zp2z?=
+ =?us-ascii?Q?eVVEMAxN4CMWz9dCWYR5drx8DV2krpPw1Y3FBWpBZz7Bc7/y7Zvg+2NLNA5n?=
+ =?us-ascii?Q?+5wP1yvheC1SYTv2DeRcuEku8ixqT4aw21do4ZoGIHMQJsRlH0u7O65e1lTs?=
+ =?us-ascii?Q?+XeAVngbAYpObhDx9PPwIpoAbbjx/6AcbKQKtm/OxLUUS973A519ppHHvnKO?=
+ =?us-ascii?Q?T26bAwI+ohgXumCIVR6kOxs3kRkNEcwp2SSxT3A6nuVYy/5GFaVmh8sDdyds?=
+ =?us-ascii?Q?BQL2GEJen9qhV1ckksSdY1j66hjklQkl8CHyl/axYll74ER68oab0E+DYrAw?=
+ =?us-ascii?Q?7JCqGeP/Ylvr3SPWN2FLjx2eegBza7AQ+cfzOLpBDT2uYe4RpGcNgQyj8y71?=
+ =?us-ascii?Q?hUdssj6xD7PjfEl3LrluES834Mw+gnWWiA0T0N/yC8puFSwI+rrmNspMrep4?=
+ =?us-ascii?Q?V7NdR6qOflX71z/Y8rLJM+vFqP5YPLLY4GL3801psgVOZ2vqvPjRAldi+A7c?=
+ =?us-ascii?Q?XZJ/z7YrrAnxDtMCYTscpKkXTIV03mL6bYStHKSlesvvtdOKS5v/zRNs2gPm?=
+ =?us-ascii?Q?VZt6oZjFB+VgCPOSfooIcChLNtxhVRS1ZphxwXPDbviCvq9jafCE4IjARG4t?=
+ =?us-ascii?Q?1fl3FXjVpGlcgFJepOzbQBLrK6tWkY/FXyGPzDHgtYFreI4D8ZYGvebkRRUG?=
+ =?us-ascii?Q?4qJoXOBElCCUQnny8ay8op5VyaQVdGHYoP2fmpxBy4NK8FT0HPsLVA2GhVtD?=
+ =?us-ascii?Q?kYo4keE9KNk42U5ZZNHF9ZxVdbzmXlI=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b907f85-fce9-4121-4933-08de6e24eb78
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2026 13:03:18.2782
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gfShC3bo/0jOds0BclfTDhzvBpsRJqDg0YDT7pRtnSiXT8o9xvGJWE6uuBXEHaGyITysXMli0LW3wtaYGQYR4f1QIOhlvMMtIXBft2Ve0Eg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8320
+X-OriginatorOrg: intel.com
 
+On Tue, Feb 17, 2026 at 11:33:26AM +0330, Mahdi Faramarzpour wrote:
+> From: Mahdi Faramarzpour <mahdifrmx@gmail.com>
+> 
+> This commit fixes the integer parsing of -t option. The cli parser
+> only relies on errno to detect parsing errors. The manpage for
+> strtol (https://man7.org/linux/man-pages/man3/strtol.3.html)
+> states that the said function "MAY" set errno to EINVAL in case the
+> conversion fails. Currently on some systems, this leads to a silent
+> failure with return value not being exactly documented in the
+> manpages (probably zero). The reliable way to validate the input is
+> to check whether the endptr has been bumped all the way to the end
+> of the string or not.
+> 
+> Signd-off-by: Mahdi Faramarzpour <mahdifrmx@gmail.com>
+> Fixes: 146e30554a53 ("selftests/xsk: add option to run single test")
 
-On 2/16/26 10:08, Hari Bathini wrote:
-> Test whether tail call count is incorrectly accounted for, when the
-> tail call fails due to a missing BPF program.
->
-> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+Hi Mahdi, selftests related patches are supposed to be routed via
+bpf-next tree. Also your SoB line should be last in the set of tags.
+
 > ---
->
-> - powerpc64 BPF JIT has been incorrectly accounting for tailcall count
->    even when BPF program to tailcall into is missing. A simple change
->    to one of the tailcall selftests could have flagged it earlier.
->
->      https://lore.kernel.org/all/20260216065639.1750181-2-hbathini@linux.ibm.com/
->
->   tools/testing/selftests/bpf/progs/tailcall3.c | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/testing/selftests/bpf/progs/tailcall3.c
-> index f60bcd7b8d4b..204f19c30a3e 100644
-> --- a/tools/testing/selftests/bpf/progs/tailcall3.c
-> +++ b/tools/testing/selftests/bpf/progs/tailcall3.c
-> @@ -5,7 +5,7 @@
->   
->   struct {
->   	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-> -	__uint(max_entries, 1);
-> +	__uint(max_entries, 2);
->   	__uint(key_size, sizeof(__u32));
->   	__uint(value_size, sizeof(__u32));
->   } jmp_table SEC(".maps");
-> @@ -23,6 +23,9 @@ int classifier_0(struct __sk_buff *skb)
->   SEC("tc")
->   int entry(struct __sk_buff *skb)
->   {
-> +	/* prog == NULL case */
-> +	bpf_tail_call_static(skb, &jmp_table, 1);
-> +
->   	bpf_tail_call_static(skb, &jmp_table, 0);
->   	return 0;
->   }
-
-Seems like the x86_64 JIT passes this already, but the interpreter still 
-has:
-
-         if (unlikely(tail_call_cnt >= MAX_TAIL_CALL_CNT))
-             goto out;
-
-         tail_call_cnt++;
-
-         prog = READ_ONCE(array->ptrs[index]);
-         if (!prog)
-             goto out;
-
-Should it be changed too? Regardless:
-
-Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
-
+>  tools/testing/selftests/bpf/xskxceiver.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/xskxceiver.c b/tools/testing/selftests/bpf/xskxceiver.c
+> index 05b3cebc5..f2d5c4dd2 100644
+> --- a/tools/testing/selftests/bpf/xskxceiver.c
+> +++ b/tools/testing/selftests/bpf/xskxceiver.c
+> @@ -247,9 +247,10 @@ static void parse_command_line(struct ifobject *ifobj_tx, struct ifobject *ifobj
+>  			opt_print_tests = true;
+>  			break;
+>  		case 't':
+> +			char *eptr;
+>  			errno = 0;
+> -			opt_run_test = strtol(optarg, NULL, 0);
+> -			if (errno)
+> +			opt_run_test = strtol(optarg, &eptr, 0);
+> +			if (errno || *eptr)
+>  				print_usage(argv);
+>  			break;
+>  		case 'h':
+> -- 
+> 2.34.1
+> 
