@@ -1,115 +1,154 @@
-Received: from mail-dl1-f47.google.com (mail-dl1-f47.google.com [74.125.82.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB10D2EDD50
-	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 23:28:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D21205E26
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 23:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771370888; cv=none; b=P704AEUiCBb/WEyrModVQwjItUrs8D8m7PVqSGXyYQ7HYISM7h5QtA0yy6TH814pCm8En8LKKx9wQUop+d8XiCgm7C3qXd8visJ3uWi7CzpTXZatQjr8BoghB2WphQGhzoCmQdpjYLTFd46Gvo3szsXtzw9f+sUGXo+fQ/0NUV8=
+	t=1771371282; cv=none; b=JSljGoVAgElRCalhCpJRqdON3PK2OsMmt65JgR5zwwFQ/qiAOGuuSUn+RTIqIqnD8CDEMcICBudEqhKkUFXkaqEZZPgO6esvhKoRJQ4K9FREEu5BN3nF6ZESKHcyKsWxc9rTyjCpOm9VPN1rOeBigmnQdRX6dX7VV6ZsSiV1+cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771370888; c=relaxed/simple;
-	bh=Dn5ZMVN2m7Xv0kBeqjJWHzDcNTO+5r7O645fooOQ1RQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rbH+lDbEuLwlt4dVDi3lVzoRln7dvXcvb8NEFQynk2DTtZUrZVntPsbUtRvjyNZ4oYcKVOqyX8/v8Adqhglc/LXBybL8R5qXHG+hAX+K1d4+6qYtvS+UJhveoZQSbbt+StG4yjhP28a0Bw9mZFZykYLFMVooFAjKLNBH9rntxDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EF4x68GA; arc=none smtp.client-ip=74.125.82.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771371282; c=relaxed/simple;
+	bh=CcS/kxsfajUasC+xWKvnCzA00pnD+22nBT7gj0Ko1js=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=V0+BOgmU8a15CcBsI/QGe6mUiHtYQ+uFr1jxiqTN4NS7k9wpoOJa3UXeG/o69GBRaaOymGw4LnaKFl6pZxdibvODhNuD2SueD2qarnWS9XM0QDxEdy9PxfT6xduqg4n2bytoHIgTBSI0gjn2+a3yOf2Hjg/9FPUjm/X9iKfe/jA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZIq6LsEU; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EF4x68GA"
-Received: by mail-dl1-f47.google.com with SMTP id a92af1059eb24-127380532eeso11859652c88.1
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 15:28:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771370887; x=1771975687; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=fwIV4WkGKhMjgCj5N1IJGLGYMBOb6c8vJ/cO4wSvJa4=;
-        b=EF4x68GAuyaRhS9lsqJcHXL8DtOzum9I7+HJt9Ci/O6lkza9p4uKlG8BiLLW247OSK
-         1BbdCPyOXX+oxaL3j41dSKq1FGO0gtztq44gN+zbStyMnF5xl2ncPOzwDRmqPIbfUaH6
-         cUAMQ3IEwXJ3N8u3tCTZJxTrduHicmaB5kdCxn9jzKPGZtz5Rqi7oDpxnVBpxwy0bjyI
-         UTrxvouM5l9eJZziKBXe3e5ywoP1914Shzsg3WFnup4RG14XkdikX57pF+tbDrzXlH0S
-         NJ2+BfjdVPWfrdqCAq/bMW4PKwStXjgFSYv/YsQhXa28qtFpWPxl2ZsMYWAlY3mTTGZz
-         KFaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771370887; x=1771975687;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fwIV4WkGKhMjgCj5N1IJGLGYMBOb6c8vJ/cO4wSvJa4=;
-        b=mrYlnCqyBw44hBXx2xIhvFuBNLvuxuSLED0qMW2cX3W2aarvQMJHDaM8ByDrNPH/GE
-         XZ9cceb/lbbIkrhtdnUDIHLgbj21PXy4RI/qu+OvzIFdb5jYQFzszfXgIS2QOAaU6ZGd
-         2nx+m68pOURqtdXinGaIiTf9JDUUNhGN9390atHsVjSTNjLlAUSj78BRVaZk2AoOtFvg
-         eXwkn8AjXOmGBOM8GCFxcxaOqN6JNRUmbpA7sOeSU0RJVdHZOO6TApEsiZ3r6hBCG/x+
-         AsmN2TAEUL2v5nXytE7jEpu9KGtrercIu2v3heMc/AS9hA0fiDgXpMobb3zVnyZxfV2S
-         wPdw==
-X-Forwarded-Encrypted: i=1; AJvYcCXAJGI22Gy52XHbEukP4j2o9uNKHfC4tHuCRHsRiz3QF1uSU4MSRw3t4Gkuc58mEtF0nzI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzF7MhMlhO3VRywrJgIk/pTvjNLOA9wt2CNcxuVc0XkKz+8mEN
-	fzDITiApXL/L4YutWHF5TmiS4s1Yj4lGCq0fOktpK958V+330iatTh1l
-X-Gm-Gg: AZuq6aKWn5UqZw0CxOPVg71qfxQ7jlcsgDNASr5oiI0z5YVuqJIyhSjfm5HtGBaNbJ7
-	1gjzfDzf5pABAGmy54kUi3yKEgkW2pXHvXFmeGgjqz6ChHUJPLnVi280sZ3Qjrz7/H9Rc13jLqz
-	w995zYIkFbbF/K1L8U8Lz4jfKA9mUmnQAcnlEa9mLOTvqEACCxSBxwWDviy2+2DzPRL7hjSqJ+P
-	LIyr+8P1IRmFk4BcpL5cM3E5xbg5QwcNhQ6mlwehPwRKoWpVP7iO6RamhazKtOFniYFzoOWQZ5Z
-	ICmXe9cHv+bMEg8Sw2F9LU/3sX0vzrJhTA0TApAB5ErySzdY3zhEEUCo5LFeyItzaeOwHGtc9SN
-	B2xnxa1Gw9WXpWFcF9Vts6avu452l/hHXTcPdrhiWwB4Oiu0Sz7poIOq4V5uTLNFV4r8whYXXvb
-	WQMuqhqAVpe7AYbk1+QhLHTJrV+I6BaqZ1mvXIdGrTVcDb/GbMCFf4Gqn9fGH61SPep0N49BHuS
-	MR6nkk=
-X-Received: by 2002:a05:7022:6090:b0:119:e56b:c73e with SMTP id a92af1059eb24-12759a10252mr14417c88.3.1771370886693;
-        Tue, 17 Feb 2026 15:28:06 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:ea8a:2651:c8f:99eb? ([2620:10d:c090:500::3:3a6d])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12742c6430asm17519980c88.6.2026.02.17.15.28.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Feb 2026 15:28:06 -0800 (PST)
-Message-ID: <7296fd49e2505e9695781cb8eab726a36ddcc3c1.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2] bpf: Bump maximum runtime call stack depth
- to 16
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@kernel.org, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev
-Date: Tue, 17 Feb 2026 15:28:04 -0800
-In-Reply-To: <20260210213606.475415-1-emil@etsalapatis.com>
-References: <20260210213606.475415-1-emil@etsalapatis.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZIq6LsEU"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61HJ0FRR3501462;
+	Tue, 17 Feb 2026 23:34:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=PZAVOf
+	FK5Emb48FAREiQ1gk/JpwXIXoPKzfBXir/I68=; b=ZIq6LsEU2zQTgyBA6/PEkM
+	O36EXwbn10UTSfAcokEbqV3j80403/3jf/dc3Tl8fm+KtuGZzujnyA3MVCSpTf7X
+	tuseg/871EZpWZj3MnJ1BXxMAojqnpWpWc/fvAv8CqjMcY0Oy5O2VsQwbdwFLN0S
+	oLa6XJQ2vAVMnC9aX271QBJmDIB5wc9E6frWmaGZI87yh5Rkbo1b3SBumzHypXce
+	yTdnnUPBfk1X690iq6/BkrBzScWvm9C6oUChGaPQ7TwSZYf/gOJYTT86EI0U2skN
+	CuBodnzUVjpKqM+w+vTVvzovvOuRsH83laZwh8oD/RKuZf4foTxfmQkZEgiyvs1w
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4caj6461qu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Feb 2026 23:34:26 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61HLL4Tq017804;
+	Tue, 17 Feb 2026 23:34:26 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4ccb28dpwe-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Feb 2026 23:34:25 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61HNYMj735979614
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Feb 2026 23:34:22 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 135DC20040;
+	Tue, 17 Feb 2026 23:34:22 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 830E120043;
+	Tue, 17 Feb 2026 23:34:21 +0000 (GMT)
+Received: from [0.0.0.0] (unknown [9.111.89.76])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 17 Feb 2026 23:34:21 +0000 (GMT)
+Message-ID: <b8b35dd7-fd17-4145-b81d-b58b466d9174@linux.ibm.com>
+Date: Wed, 18 Feb 2026 00:34:21 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] bpf/s390: Implement get_preempt_count()
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+References: <20260217160813.100855-1-iii@linux.ibm.com>
+ <your-ad-here.call-01771350933-ext-9929@work.hours>
+ <CAADnVQ+TB09AU3VTmjZ97xNFPG=3eOpoHut-dsnPSsJRLPPStg@mail.gmail.com>
+Content-Language: en-US
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+In-Reply-To: <CAADnVQ+TB09AU3VTmjZ97xNFPG=3eOpoHut-dsnPSsJRLPPStg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: jdKHfFpfE_V2Tg9KkgCMGeepwXhfDdoJ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDE5MiBTYWx0ZWRfX9apv6G0NG9j7
+ PNc+Ki6OyEakII3bD1XG/rHggsbmJpape5bQ1qxr75Qj9Dic4kgtVKNE93McKNlZyThPqKd8SwI
+ pqDVIgUxT4G4Xqyi6EWkujG1Owbjh/u9Z396jQUQ/m6hS/vttk6lYxYVA6MIs9ljTZoPX7zAQ5L
+ 0+lJNmijZxoYoTBZetQMUlx5xPo32xvJQ/NgxQ7hdpDbsmvDI59LecERYrFLUVF/xeq2vpkTSif
+ JGDr/7Vwg35j5+Xf3uEL8b9FMLcJTTa5D8+LQT2CG76Z5BgodH//UP0BxIp7ATUcEvYaEdF6RM4
+ jN8OUvGPbjvLsOYIV3X6vpeE3IPXCnq7V/tWXUIUiKk8OiYhvH898cNoJewYWFH0DHmoN/QB2q7
+ HhWvZNdPdmB5RzOv4DmSE0ggjG1r1R6ERSsW2b/sTKYJMqsha5r90MuktOr8+a7of+IcnnGswKg
+ LaQaQdieKrTrwqAHg5g==
+X-Proofpoint-GUID: kKFFhEJ6kYfQVlOg4-eFWAtd5g2OhPTE
+X-Authority-Analysis: v=2.4 cv=U+mfzOru c=1 sm=1 tr=0 ts=6994fb03 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
+ a=0cfurAl689Pog5GcEVQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-17_03,2026-02-16_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 bulkscore=0 impostorscore=0 malwarescore=0 spamscore=0
+ adultscore=0 phishscore=0 lowpriorityscore=0 priorityscore=1501
+ suspectscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602170192
 
-On Tue, 2026-02-10 at 16:36 -0500, Emil Tsalapatis wrote:
 
-[...]
+On 2/17/26 20:32, Alexei Starovoitov wrote:
+> On Tue, Feb 17, 2026 at 9:55 AM Vasily Gorbik <gor@linux.ibm.com> wrote:
+>> On Tue, Feb 17, 2026 at 05:05:07PM +0100, Ilya Leoshkevich wrote:
+>>> Hi,
+>>>
+>>> This series adds get_preempt_count() BPF implementation for s390.
+>>> On s390 preempt_count lives in lowcore: a per-cpu data structure
+>>> mapped at virtual address 0 or 0x70000 depending on the kernel
+>>> command line.
+>>>
+>>> Patch 1 adds a kfunc to obtain lowcore address.
+>>> Patch 2 is the implementation that delegates to it.
+>> Hi Ilya,
+>>
+>> do we really want to expose bpf_get_lowcore() (full lowcore) to BPF just
+>> to implement get_preempt_count()?
+> I think there are no other options. For this and other cases.
+> Like to inline bpf_get_smp_processor_id(), current_task, etc.
+>
+> arch/s390/kernel/bpf.c is a good place for such arch specific kfunc.
+>
+> I cannot really tell by looking at the implementation of get_lowcore(),
+> but can this kfunc be marked as KF_FASTCALL to further improve performance?
 
-> @@ -6786,7 +6786,17 @@ static int check_max_stack_depth_subprog(struct bp=
-f_verifier_env *env, int idx,
->  		if (subprog[idx].has_tail_call)
->  			tail_call_reachable =3D true;
-> =20
-> -		frame++;
-> +		if (!subprog_is_global(env, sidx))
-> +			frame++;
 
-I think that the call to a global subprogram should reset the frame
-counter if you want to allow 8 stack frames for each global subprogram.
-Meaning that 'frame' has to be tracked in some ret_frame array.
+I think so.
 
-Also, maybe add some test cases?
+KF_FASTCALL will require inlining in the JIT, right?
 
-> +		calldepth++;
-> +		/* Total call depth including globals */
-> +		if (calldepth >=3D MAX_CALL_DEPTH) {
-> +			verbose(env, "total call depth is %d frames, too deep\n",
-> +				calldepth);
-> +			return -E2BIG;
-> +		}
-> +
-> +		/* Total stack frames in use (globals not included). */
->  		if (frame >=3D MAX_CALL_FRAMES) {
->  			verbose(env, "the call stack of %d frames is too deep !\n",
->  				frame);
+Then bpf_get_preempt_count() might be a little bit better, because 
+inlined bpf_get_lowcore() followed by preempt_count access will look 
+like this:
 
-[...]
+     LGFI %r2,0x70000
+
+     LY %r2,preempt_count(%r2)
+
+and inlined bpf_s390_get_preempt_count() will be one instruction shorter:
+
+     LY %r2,0x70000+preempt_count
+
+Do you think it is worth the while pursuing this?
+
+If yes, would it make sense to add an implementation delegating to 
+preempt_count() to BPF common code and use it only for s390 for now?
+
