@@ -1,214 +1,150 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E44E3148C1;
-	Tue, 17 Feb 2026 22:22:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771366938; cv=none; b=t7YHPQW3SB3zOmiNT2mYwC7mIOHORVoeVRd6H/oswC4olh/gS3FOF3h2Q+7WviQW3fhPHhRZCXuMZVrZ3LWIG3o8RJgJrUeAa/M3IeAzASh4sins10NZ+K6OokHkYELyCRaSC94XC7OdLXW9z3OM+bz6zmeWs1fMguB0FD34prI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771366938; c=relaxed/simple;
-	bh=+f6vWP5n2iuxcVn5Eb+A0Ae7lVjiuQzxuG5d1Mepuo4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cRTThXpCXpjc0iIJuTh/3T66wHFo6KIeIVwz0biinN5GQGMydvU8vgfN93DY6bReellChTA13Efv3MnjfYddRWCFj/7dbdCxEPfHvkdJEmuTKX6FfBuKMZ+AtM1BXLD3qNbq5CY+zvd08NcEuXFeTjDBFySFn9zfwZg57D/I8w0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=sX4Pawn0; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427853161AA
+	for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 22:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771367099; cv=pass; b=FfGbtYK6rVkXZGUs2NvSh69R7q7NjQfWMIjT5jQXTbZDZl1O3JyEcWFduZgrk/6FlevmHI1QG4hjByzxxqqqJpIhHgs5WflCXdHzQcdDvXiRu+f/n8UfFMXoBl4r5HMAnwp7i2a1bG5VRGiczoEBbVA6siqUIqr9nJz05dGNCKs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771367099; c=relaxed/simple;
+	bh=Xpfrmba/zM1tgXneNopEuu3FbsEteTuc4oBvkMv+lYo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BP4ul2WvcYvaCqIUwRi1dNaKSim6KLLqe+YoqBwCPKtTgzSSAnupn827ekYzmai2bkZMGwtOCl1qXjL1aKyQ7k25oX6ii2dvk7/0j8KtL+a/tWQsrnJetm0h8/k6z7U1OtSw/U6bs1QR2ARSgUsALro9bAQLKiDLmd+BeCku+oY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XsiS+Z/3; arc=pass smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="sX4Pawn0"
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61HLM4vQ2984819;
-	Tue, 17 Feb 2026 22:14:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:message-id:mime-version:subject:to; s=default; bh=lsPWRwvi1Apst
-	YXAnabIsBrC5j/PcBe1u4Orn/wFF6Q=; b=sX4Pawn0kMR1OqkajuDkDUj0trYLu
-	gGeWdTV7ql88Tv2rNORLt6t9PfdQEowJToNDyS6TnBKuOZQYGru1x7Ntms28X5TL
-	6y09pAlMes5pEO3VAsuSYZ+6BZG8YW3ukja6nNfNIelyX3OtwL3Vgw92XyGEd4p1
-	fFvLrIGM04fX2hEQqjui/IuhXtRpm0EBX83pQ8vdwwwWTBCAqzZymNRy2Dxqqamu
-	KT+uyqDXNxogTn2XXIvPcNKUW9pfwdMrEV2hVzGdhM5AlX3hD6NjRMdl1VteV9W1
-	MUiqSHr/hgknYf/4VLGIioahEZWTCF52PAnPwsnbLXEstRIoHG8GbHbzA==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cd06c85dm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Feb 2026 22:14:39 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Tue, 17 Feb 2026 22:14:33 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>
-CC: <martin.lau@linux.dev>, <eddyz87@gmail.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>, <john.fastabend@gmail.com>,
-        <kpsingh@kernel.org>, <sdf@fomichev.me>, <haoluo@google.com>,
-        <jolsa@kernel.org>, <davem@davemloft.net>, <edumazet@google.com>,
-        <kuba@kernel.org>, <pabeni@redhat.com>, <horms@kernel.org>,
-        <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
-        Slava Imameev
-	<slava.imameev@crowdstrike.com>
-Subject: [PATCH bpf-next v2 0/2] bpf: Add multi-level pointer parameter support for trampolines
-Date: Wed, 18 Feb 2026 09:13:55 +1100
-Message-ID: <20260217221357.18215-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XsiS+Z/3"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2a9296b3926so32261085ad.1
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 14:24:58 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771367098; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LewFwcPm/UoJFeF7bTJ2hXm4qjngZSxPebwK2uA10xh5y7cTdolaxXF4vd85BzZacf
+         RzWfp5Dxa+RENlxxynU+zsGeVLwA87+Va9w3SuTL/265quFYDJkCBEku2QazGzipzzDB
+         iFBUbP10qbLjLFRKzY8TtGhEtGUTkZe+llOCBpRFoR+3nPAq0RKlCI2bzvmzPUrNPrPo
+         G0Mc8pPmjVuTCy4HDRCEdvrlNM6cJRWgf9kbX2tje/b1EVBqxDH6wxT8OyfGM1o+vojY
+         BXCJqJmCNEV7BvufnpkDKbrO59Y+TjcHVo5z2AlwFFzRZrvlYypn7hnI4VfB+kSbowVY
+         Je5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=I12MYasv6izFgKW7w4OMvpOk+LgzhwIdK1OcGqMNwzQ=;
+        fh=kQJoHmciZhFE410Bsj90HR7sS6L9VfCXE26CeirnTkI=;
+        b=JADB125iOvlBqdk1yxw44+X/yH0gm0aCLf5MkRLe0rldD/DwbLlTES0kr5TOs+t/ak
+         yoMb5iEu6hUt9XIZUSRuu0RFXKQZ5tDOrt6waglcQGjbNO94jszBPEVLqwp2cWmp3DLr
+         Yn57tIWpRDxnM0O7ZgRDN8ZNiWdtxMkrEcWG4h1jL9Ekj/zvCUpWw3V4sHcJgkUO5DeV
+         e30NSJLZ9Oo5lyzIf0IWUAwCutHbkyiwM0cEbqHLbO/NkzLXGlTdfRU54vN+Pq4k/5/F
+         rIduS4zeCRzqkPY8OlKgQahY5WZj1Fg12gcu/r4Z9twuF3E58HezWXOda+gBfArPPSku
+         PEoA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771367098; x=1771971898; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I12MYasv6izFgKW7w4OMvpOk+LgzhwIdK1OcGqMNwzQ=;
+        b=XsiS+Z/3oh4HybZawIcUcFBdyIufla+6TQV4I4Vi0jVbih+vwtoom/tGEiwlMhGKvO
+         HBonlvDw9AHo8BvDaZIKuL528oqvaIEc0achUkQzqQzIZ5FS5w2u9deersj9HVDtHqRA
+         FmSOJBUE9ghZPyOMGBCPaXJvONYZuNEazU9nKU5bfJ8siOGkdV7ijn0AA11y8pJKfTEN
+         przRhbcH9Taswi4+R0z87F01c5UgqKuScxxC9zUYGW8o5aH1rx4v8eYS197IH62EYNrL
+         g32/gyuAXZfWtxnon41xMaadvUTyBjrbav873O3EAhArusxMB2F5US6qDyvSMAPQbgvp
+         7DnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771367098; x=1771971898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=I12MYasv6izFgKW7w4OMvpOk+LgzhwIdK1OcGqMNwzQ=;
+        b=Xl/Jo3Tj8AUpUj+6ROb47ROqVB8uleHhIxT40GYWqBP9PhwAksqXHHjupMUuF2KYYt
+         9GmsS1Q8FMuaDq3DDtjqPplK+V9LsmWSKsH155hklvwPYNx/2ib3nZVnTNtvjZ5JaT2k
+         u01JfSZab131nnSEpKsb1uUrWL4mBTzsMuGdt2RLZQLnsjkX1VnEruU/I8iGkh9RO/T3
+         Y+ZVcSJ1v5va6Cb02+WKY5/O65iNf7QkQYiNw6dmzpmuXYWqMchRoKeUS5zloi8lneGl
+         zonAB43Sh2HQhYg8rSqMfVlg7N7lFnNj4RCzY1+lkz2H9nqNKRPRTcbr2ppBhLo2QBOQ
+         ljqg==
+X-Gm-Message-State: AOJu0YzLOQ2NLXGRQXutsgweWt5lFc/4pZmq/3BPSYlGP5I8eV7ENXKA
+	2I1XB0Zu+/1pK1KGCox1tFONVm3PQiTZ7RwHHsdL5XKxloRxmXu7c0aANM+cYbmsSx0Ocp/cvoV
+	N+rdMqgRMvxftDaYJd3IK4CMXzi3mrtk=
+X-Gm-Gg: AZuq6aKx0g1HzxJ+uE7PSAP3GDuf5mPn4eAT625ghiDcSloQhdaCAkA7kN13aEihV6E
+	A7u0ciTDT4dO1bJ+eHgMu515uqq83yTPgobU7msTaThsVWs73CQU7VH2yPnYIOPhlwFrMeyaKic
+	exRFj7QZGSAaMHhA5YxrM9ZK7kmgM1wuomCXiqtkP+opsXyooLPwTivOxIrrd5bj9qzRZnhemDP
+	11fswp4uYKiOk3WoZDDMjHQRS5mw2WneSfYrwQRlqp+Xo1h9pUiC++ju/P9vI+/mfc6b4KpZfCb
+	uFaoxsJ2uk1ZVC2UyWj9UEghrgj2uvkwAQ==
+X-Received: by 2002:a17:903:41c6:b0:2ab:2633:d986 with SMTP id
+ d9443c01a7336-2ab506100a5mr150181515ad.49.1771367097566; Tue, 17 Feb 2026
+ 14:24:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH016.crowdstrike.sys (10.100.11.68) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Authority-Analysis: v=2.4 cv=UfxciaSN c=1 sm=1 tr=0 ts=6994e84f cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=Vjdy_2d24l28D3FOwqMA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE3MDE4MyBTYWx0ZWRfXz9H+wj+U8lhW
- wCVAE7kqOmZZ9eMLjmZsbVgRQJEjbwWZGKiQp7jopI1qARLY8P45CnS4xuf8UPvDNN93ZiA/c/j
- 48d+U5D0sNpXjT+Hi+8ESYoWzGteI+XWOAIkc4oBmywQ97zUR4H5mcr+Zmhnh4Ru03A8dQwusfA
- dM6/mrlu5YXbNHTU6t7lGXapBxO58bSecjTpr/ohE4ZfROPwAqmVppIZijTjG4VJvbvKvNtgawu
- GZJD/guwi/rvUsQxejgGM19CXirIrIneIVz4GwCvVcWXioemYB7zALIHqzaabfuqYNuzC+xfSP7
- cAFe++6xFGsVorDf80sxBSmeGcbfAb2u8XVMPCvPJvVONHMduLAC9lJ8wZfz5gZ1OXVH891psgq
- E3wsScGEILORbrNO/vMD0tTIV5JYmHJSEC4J47jqtAKLWOWlq10A2a24ZD5obu9f4oS1rWiTQTc
- yEg/4ZFQVD4e/rtwlUg==
-X-Proofpoint-GUID: d7PcW570uhuaLRhdCZMMygrt5v40S1Jh
-X-Proofpoint-ORIG-GUID: d7PcW570uhuaLRhdCZMMygrt5v40S1Jh
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11704
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 adultscore=0 clxscore=1011 suspectscore=0 impostorscore=0
- phishscore=0 bulkscore=0 spamscore=0 priorityscore=1501 malwarescore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602170183
+References: <20260217204345.548648-1-emil@etsalapatis.com>
+In-Reply-To: <20260217204345.548648-1-emil@etsalapatis.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 17 Feb 2026 14:24:45 -0800
+X-Gm-Features: AaiRm50vV6cfNqn7eQ_UUopWxMZ-De1Dzis99LgU5Yi1aX5r6fnz3qiifpr2hYc
+Message-ID: <CAEf4Bza6QyG-y_Pm7RdZTKEGEOqfCK5JCg8o67-aGsBsz4a8oA@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 0/2] libbpf: Fix perm errors for LDIMM_64_FULL_RANGE_OFF
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
+	daniel@iogearbox.net, john.fastabend@gmail.com, memxor@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch adds BPF verifier support for multi-level pointer parameters
-and return values in BPF trampolines. The implementation treats these
-parameters as PTR_TO_MEM with read-only semantics, applying either
-untrusted or trusted access patterns while honoring __nullable
-annotations. Runtime safety is ensured through existing exception
-handling mechanisms for untrusted memory reads, with the verifier
-enforcing bounds checking and null validation. The series includes
-selftests covering double and triple pointer arguments across
-fentry/fexit/lsm programs and verifier context validation.
+On Tue, Feb 17, 2026 at 12:43=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.=
+com> wrote:
+>
+> Commit 728ff167910e ("libbpf: Add gating for arena globals relocation fea=
+ture")
+> adds a feature flag for testing whether the running kernel supports LDIMM=
+64
+> instructions with large direct offsets. Fix two edge cases that can
+> cause unexpected -EPERM errors in two ways:
+>
+> 1) The probe program used for the feature has type TRACEPOINT, but it's
+> possible the caller does not have permission to load it, even if it is
+> able to do so for generic BPF programs. Use the SOCKET_FILTER type
+> instead that requires fewer permissions. This does not affect the check
+> itself, which will always fail verification anyway.
+>
+> 2) The probe is triggered during bpf_object__collect_relos(), itself
+> called in bpf_object_open(), to compute the arena relocation offsets of
+> arena variables. However, the caller may not have permissions to load
+> BPF programs. This is the case in some systems with the bpftool calls mad=
+e
+> by the BPF selftests during compilation, e.g., for skeleton generation.
+> Move all uses of the feature check to bpf_object_prepare() time instead.
+>
+> Fixes: 728ff167910e ("libbpf: Add gating for arena globals relocation fea=
+ture")
+> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>
+> v2 -> v3: https://lore.kernel.org/bpf/20260214021014.15670-1-emil@etsalap=
+atis.com/
+>
+> - Only zero out the first byte of the log buffer (Andrii)
+> - Minimize invocations of the feature gate (Andrii)
 
-Background:
+applied to bpf tree, thanks!
 
-Prior to these changes, accessing multi-level pointer parameters or
-return values through BPF trampoline context arrays resulted in
-verification failures in btf_ctx_access, producing errors such as:
-
-func '%s' arg%d type %s is not a struct
-
-For example, consider a BPF program that logs an input parameter of type
-struct posix_acl **:
-
-SEC("fentry/__posix_acl_chmod")
-int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
-             umode_t mode)
-{
-    bpf_printk("__posix_acl_chmod ppacl = %px\n", ppacl);
-    return 0;
-}
-
-This program failed BPF verification with the following error:
-
-libbpf: prog 'trace_posix_acl_chmod': -- BEGIN PROG LOAD LOG --
-0: R1=ctx() R10=fp0
-; int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl,
-gfp_t gfp, umode_t mode) @ posix_acl_monitor.bpf.c:23
-0: (79) r6 = *(u64 *)(r1 +16)         ; R1=ctx() R6_w=scalar()
-1: (79) r1 = *(u64 *)(r1 +0)
-func '__posix_acl_chmod' arg0 type PTR is not a struct
-invalid bpf_context access off=0 size=8
-processed 2 insns (limit 1000000) max_states_per_insn 0 total_states 0
-peak_states 0 mark_read 0
--- END PROG LOAD LOG --
-
-The common workaround involved using helper functions to fetch parameter
-values by passing the address of the context array entry:
-
-SEC("fentry/__posix_acl_chmod")
-int BPF_PROG(trace_posix_acl_chmod, struct posix_acl **ppacl, gfp_t gfp,
-             umode_t mode)
-{
-    struct posix_acl **p;
-    bpf_probe_read_kernel(&p, sizeof(ppacl), &ctx[0]);
-    bpf_printk("__posix_acl_chmod before %px\n", p);
-    return 0;
-}
-
-This approach introduced helper call overhead and created inconsistency
-with parameter access patterns.
-
-Improvements:
-
-With this patch, trampoline programs can directly read parameters and
-dereference memory using load instructions, eliminating helper call
-overhead and ensuring consistent parameter handling. For example, the
-following helper call sequence:
-
-{
-    struct posix_acl **pp;
-    struct posix_acl *p;
-    bpf_probe_read_kernel(&pp, sizeof(pp), &ctx[0]);
-    bpf_probe_read_kernel(&p, sizeof(p), pp);
-    ...
-}
-
-can be replaced by two load instructions implementing a single C
-statement:
-
-{
-    struct posix_acl *p = *ppacl;
-    ...
-}
-
-Design Rationale: PTR_TO_MEM vs SCALAR
-
-The verifier assigns SCALAR type to single-level pointers (void*, int*).
-For multi-level pointers, I selected PTR_TO_MEM to enable memory access
-through a single load instruction for the first level of dereference,
-with subsequent dereferences becoming SCALAR. This design eliminates
-helper call for parameter dereference, replacing it with a load
-instruction (e.g., void* ptr = *pptr).
-
-Access safety is maintained through existing verify-time checks,
-exception handling, and kernel virtual address range boundary checks:
-- User-mode memory address access is prevented by runtime virtual
-  address range checks for untrusted PTR_TO_MEM
-- Invalid kernel address space accesses are intercepted by the
-  exception handler for untrusted PTR_TO_MEM
-- Trusted PTR_TO_MEM access safety is maintained at verify time
-
-v1 -> v2: corrected maintainer's email
-
-Slava Imameev (2):
-  bpf: Support multi-level pointer params via PTR_TO_MEM for trampolines
-  selftests/bpf: Add trampolines multi-level pointer params test
-    coverage
-
- include/linux/bpf.h                           |   3 +-
- kernel/bpf/btf.c                              |  54 ++-
- kernel/bpf/verifier.c                         |   4 +-
- net/bpf/test_run.c                            | 128 ++++++
- .../prog_tests/fentry_fexit_multi_level_ptr.c | 204 +++++++++
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- .../progs/fentry_fexit_pptr_nullable_test.c   |  52 +++
- .../bpf/progs/fentry_fexit_pptr_test.c        |  60 +++
- .../bpf/progs/fentry_fexit_void_ppptr_test.c  |  31 ++
- .../bpf/progs/fentry_fexit_void_pptr_test.c   |  64 +++
- .../bpf/progs/verifier_ctx_multilevel_ptr.c   | 429 ++++++++++++++++++
- 11 files changed, 1021 insertions(+), 10 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/fentry_fexit_multi_level_ptr.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_pptr_nullable_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_pptr_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_void_ppptr_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_fexit_void_pptr_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_ctx_multilevel_ptr.c
-
--- 
-2.50.1 (Apple Git-155)
-
+>
+> v1 -> v2: https://lore.kernel.org/bpf/20260213181752.505318-1-emil@etsala=
+patis.com/
+>
+> - Adjust the hash of the original commit post-tree rebase
+> - Ensure close() is not called on invalid prog_fd in feature probe (Cover=
+ity)
+>
+> Emil Tsalapatis (2):
+>   libbpf: Do not use PROG_TYPE_TRACEPOINT program for feature gating
+>   libbpf: Delay feature gate check until object prepare time
+>
+>  tools/lib/bpf/features.c | 10 ++++++++--
+>  tools/lib/bpf/libbpf.c   | 26 +++++++++++++++++++-------
+>  2 files changed, 27 insertions(+), 9 deletions(-)
+>
+> --
+> 2.49.0
+>
