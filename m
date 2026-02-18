@@ -1,109 +1,91 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AFA7329E70
-	for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 16:39:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DCD334C09
+	for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 16:39:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771432793; cv=none; b=RvWOHl/R031vmZWWIW4YJXZAJx6rFsLz4lLDi5mMdV6Ut14kW8iBXnLaAcD/oLCnXeF83/mLL7iJnXdAOpy/AJDE62D8aBQwB47VG0a4+6pkr58j0oyR0kNzk5TFFITZIivksZrSv1a6UMpAgk5phSbNLR96LoBVy2zRuRZGDuM=
+	t=1771432795; cv=none; b=uS6MLt8wpew22Q5p4crNZFYbi+OMfzc15P5HF76jWNhR/1gWpTaX7Aoc1m3l8qBuJPUC80bJysBOiF1alv/u6SWpTnzacx2P2Zbvt83tONayUHY1Sid091Sav2qmn32Sgn8C4R9L3v1cspfPCknN4kQsTXhTUbH4sOvblPMdr7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771432793; c=relaxed/simple;
-	bh=B/3/8L4+CAGl98Z/pNpGGWjEAg81ivOoiLbgFDxO7go=;
+	s=arc-20240116; t=1771432795; c=relaxed/simple;
+	bh=NlSDiJr33ehDGjxJ09xDjQU0T4fFY34dpbKtaNGgyvc=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=GLYnDhrzEk8cnq8B88yyE46ffDk0iodSVd0dInm1bRIZE7CtwTP+lxOTBzbITKi6RgGRxbFuFPs1hAIuEGo2OBJ0+srUFfF0V8fYVpKU6vlbNhhU4Yu9VVO8CNrKUvZhtO8PBH/t0oeVBKxa8C24RRgIAQ5i/j0Il+xguIKk7YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpjUuwf+; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=tcwbm4urte2O3OpkMgYEgUDF/YMnw8MzzPWsEnpVEWdbk8CBe9MsFe23ecSqta6WkjlSdE/cuT0f4WAz6ZU9v8ar8MvYsP/mkFOsTf9nC8VIk9JPIvPqPkbuL6HT+l0o0VThDsjEI13ntthhIt0XwK3RwjrGkGyZv/GZOfGRKDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gVXvYOxL; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpjUuwf+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 002F7C19422;
-	Wed, 18 Feb 2026 16:39:52 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gVXvYOxL"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 486F7C116D0;
+	Wed, 18 Feb 2026 16:39:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771432793;
-	bh=B/3/8L4+CAGl98Z/pNpGGWjEAg81ivOoiLbgFDxO7go=;
+	s=k20201202; t=1771432795;
+	bh=NlSDiJr33ehDGjxJ09xDjQU0T4fFY34dpbKtaNGgyvc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=gpjUuwf+I5g5EPks0mfBTBUftvLdV5HVS28z/3WAjXOzBf2dEszw2nIqOvSiwv1O6
-	 2kir/kAEa0Nkd3eybf3H4TMnHxT4FnPwemRgpu7qJdj1KYvNsj0LvLcqN5CH2xDczy
-	 y22cLsHqaJrHgwgzTnFzfQe4usbV8GZ3/47RueoEQl6WTHk5dAW28k6B/2TbB9+3gb
-	 ENMKfFfJJiNnZfiDF1MiLN7R/3+0spjq+DhPQ49j+zdJTY3J1akf1q8X1z6NPAQgNN
-	 tcFxq7zk/S3NjFaq8kMh8w6EeNmOw2whV28I2yvNOu+xWjGiaP2iXzTadk8qRzTP7w
-	 Yp241IgAKsV7A==
-Content-Type: multipart/mixed; boundary="===============5825352445138964626=="
+	b=gVXvYOxLG9V3Ymzf2gnQy+wgv/IlSNIk3r0F6nDSc1lccMlGI7mnME/PWnhNiVVOQ
+	 kRBCU4rcOhqOsBAjbzy/WapxGDKA6Iq2pPDNyzn+cT2T4pueK0stF8cwkFNgGUuEhP
+	 4Fl/GAJ4H7BwrudMYVPS9jbqaQmHlWDg/ZZyO7H/zNZXtgy+eEz2Oe2TIHeW05Te4F
+	 AqhWHekl2p5ZVec6KsJn8uYvPh0esOdxALc11e3Z9PJATvm245XPhM7vLabvgWCZaK
+	 ZdNBLZoryqHKe2R3DkOtZGE7Pxf8CKGwYelZcSAwVwf5HOdEt/s662GQm8c1WtRS53
+	 tSYZTaTFF8yjA==
+Content-Type: multipart/mixed; boundary="===============4635727485845967774=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3b6f45f4af6b2ed6a5b3b39e734cc88490c9bbd0f2d63d67601895d8b31ba0bb@mail.kernel.org>
-In-Reply-To: <20260218-sleepable_tracepoints-v1-3-ec2705497208@meta.com>
-References: <20260218-sleepable_tracepoints-v1-3-ec2705497208@meta.com>
-Subject: Re: [PATCH RFC bpf-next 3/6] bpf: Remove preempt_disable from faultable tracepoint BPF callbacks
+Message-Id: <93d3beffa6257d070935d2e2d6be55a32dcc6a33e6b22ab393c4085167cdb7f3@mail.kernel.org>
+In-Reply-To: <20260218-sleepable_tracepoints-v1-1-ec2705497208@meta.com>
+References: <20260218-sleepable_tracepoints-v1-1-ec2705497208@meta.com>
+Subject: Re: [PATCH RFC bpf-next 1/6] bpf: Allow sleepable programs for BPF_TRACE_RAW_TP attach type
 From: bot+bpf-ci@kernel.org
 To: mykyta.yatsenko5@gmail.com,bpf@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,kafai@meta.com,kernel-team@meta.com,eddyz87@gmail.com,ameryhung@gmail.com,puranjay@kernel.org
 Cc: yatsenko@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 18 Feb 2026 16:39:52 +0000 (UTC)
+Date: Wed, 18 Feb 2026 16:39:55 +0000 (UTC)
 
---===============5825352445138964626==
+--===============4635727485845967774==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/include/trace/bpf_probe.h b/include/trace/bpf_probe.h
-> index 9391d54d3f12..d1de8f9aa07f 100644
-> --- a/include/trace/bpf_probe.h
-> +++ b/include/trace/bpf_probe.h
-> @@ -58,9 +58,7 @@ static notrace void							\
->  __bpf_trace_##call(void *__data, proto)					\
->  {									\
->  	might_fault();							\
-> -	preempt_disable_notrace();					\
->  	CONCATENATE(bpf_trace_run, COUNT_ARGS(args))(__data, CAST_TO_U64(args));	\
-> -	preempt_enable_notrace();					\
->  }
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 0162f946032f..1973184306e4 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -25186,6 +25186,7 @@ static bool can_be_sleepable(struct bpf_prog *prog)
+>  		case BPF_MODIFY_RETURN:
+>  		case BPF_TRACE_ITER:
+>  		case BPF_TRACE_FSESSION:
+> +		case BPF_TRACE_RAW_TP:
+>  			return true;
+>  		default:
+>  			return false;
 
-At this commit, __bpf_trace_run() still uses cant_sleep() and
-rcu_read_lock() without any migrate_disable():
+With this change, a sleepable BPF_TRACE_RAW_TP program can be loaded
+and then attached to any raw tracepoint, including non-faultable ones,
+because bpf_raw_tp_link_attach() does not check whether the target
+tracepoint is faultable when prog->sleepable is set.
 
-kernel/trace/bpf_trace.c:__bpf_trace_run() {
+The verifier sets in_sleepable based on prog->sleepable, so sleepable
+helpers like bpf_copy_from_user() would be allowed. At runtime, the
+dispatch goes through __bpf_trace_run() in kernel/trace/bpf_trace.c:
+
     cant_sleep();
-    if (unlikely(!bpf_prog_get_recursion_context(prog))) {
-        ...
-        goto out;
-    }
     ...
     rcu_read_lock();
     (void) bpf_prog_run(prog, args);
     rcu_read_unlock();
-    ...
-out:
-    bpf_prog_put_recursion_context(prog);
-}
 
-The per-cpu recursion counter in bpf_prog_get_recursion_context() uses
-this_cpu_inc_return(), and bpf_prog_put_recursion_context() uses
-this_cpu_dec(). Both operations are outside the rcu_read_lock() region.
+If the program calls a sleepable helper here, would that result in
+sleeping in atomic context?
 
-Faultable tracepoint callbacks run under guard(rcu_tasks_trace) which
-does not disable preemption. With the preempt_disable_notrace() removed
-and no migrate_disable() added yet, can the task be preempted and
-migrated between the per-cpu increment and decrement on PREEMPT_RCU
-configs, corrupting the recursion counter?
+This appears to be addressed by patch 2/6 of this series on lore
+("bpf: Reject sleepable raw_tp programs on non-faultable tracepoints")
+which adds the missing attach-time check, but that patch is not present
+in this tree.
 
-The next commit in the series (3c61c093bde8 "bpf: Add sleepable
-execution path for raw tracepoint programs") adds migrate_disable()
-to __bpf_trace_run(), which would address this. Should these two
-patches be reordered, or combined, so that the protection is not
-removed before its replacement is added?
+> @@ -25215,7 +25216,7 @@ static int check_attach_btf_id(struct bpf_verifier_env *env)
 
-> The preemption management is now handled inside __bpf_trace_run()
-> on a per-program basis: migrate_disable() for sleepable programs,
-> rcu_read_lock() (which implies preempt-off in non-PREEMPT_RCU
-> configs) for non-sleepable programs.
-
-This description does not match __bpf_trace_run() at this commit.
-The function has no migrate_disable() and does not differentiate
-between sleepable and non-sleepable programs. Should the commit
-message describe the state at this commit rather than after the
-subsequent patch?
+[ ... ]
 
 
 ---
@@ -112,10 +94,10 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22147696553
 
-AI-authorship-score: medium
-AI-authorship-explanation: The commit message describes per-program preemption handling (migrate_disable/rcu_read_lock) that does not exist at this commit, reading like an auto-generated summary of the series rather than this specific patch; the code change itself is a simple two-line deletion consistent with human authorship.
-issues-found: 2
+AI-authorship-score: low
+AI-authorship-explanation: Small, targeted change with natural technical language consistent with domain expertise; no markers of AI generation.
+issues-found: 1
 issue-severity-score: medium
-issue-severity-explanation: Patch ordering leaves per-cpu recursion counters unprotected from migration on PREEMPT_RCU configs between this commit and the next, which could silently disable BPF programs on affected CPUs; the issue is fixed by the subsequent commit in the series.
+issue-severity-explanation: Sleepable BPF program can attach to non-faultable tracepoint and sleep in atomic context due to missing attach-time enforcement; fix exists in series patch 2/6 but is not present in this tree.
 
---===============5825352445138964626==--
+--===============4635727485845967774==--
