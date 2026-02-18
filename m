@@ -1,213 +1,128 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51A0C27713;
-	Wed, 18 Feb 2026 10:59:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C7E12DC323;
+	Wed, 18 Feb 2026 12:01:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771412342; cv=none; b=bavKAHo5ekrJ8KkL6STBS+VsJYU8/X1CpAWuvkfGuvA/1amcqHhFpZBoo162HYGMz+xTCiqDUP4hc8KQ/UalyF1qFABfbIB+YdA3y/CuMAGLqlTAaec94JxTcUCd5yMmKKpd7ystFquxvWoiKueHVmO5dY8/4u5vtI9z3/C07Pg=
+	t=1771416115; cv=none; b=cZ5wfGtYnY2p5DnCDXJPgaxAttNU8WfEb7Y0YnQKpkJHjbaKFOWpz7k84DXaNACUn4q7pYmaD6VAKFG066OtoYCbDxPZ4/zoCIX0gRzZvbdbea6OrfSFfgoXrYf+X1HFfm73ICzJC1BI9r6PQ+hJEgDTwa6oCZMVVSzxkJJAAi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771412342; c=relaxed/simple;
-	bh=ExYM4GllfmADUjEjQoM2UYVUP6BlZRRL6bd+IQoD24U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u+JGL6e1jaZdTGtPLl6e4VJlplG3SPZcq6rgpR0gtHZasbVa005uHGujvuYS3vEyIxhit640SrvLtUTs56eMJ1Nov8wTyg5K62vGWsNje2oyYlWMtMU/cIPeQl6aVRl3KMm6y54Le87JzccgRq8oDAhEMyVlvVGA6+7v/gDLK3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oZpUFL7U; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771416115; c=relaxed/simple;
+	bh=hwo75hzr9UpfvK2MdDMYdnKzKKS3Lj3XB2mQQM63I1Y=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RLKIxwks7Kw0FsFHXgRwv9AYSkP21+ZLlu6tCXkg4a9n7Zg61Ij1jrMlzH+7PQCpS6Jaup60USbO6zqd/tL/x5FCcViN2QYvv5bqKhWnUVCGi7fm3idoDEmSp4tByfUKbPNrpS5Y1Ij7xAkzoDLNF5My0DU6PyERspHvGV+5wV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BhexMEBE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oZpUFL7U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7038CC19423;
-	Wed, 18 Feb 2026 10:58:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BhexMEBE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2861EC19421;
+	Wed, 18 Feb 2026 12:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771412341;
-	bh=ExYM4GllfmADUjEjQoM2UYVUP6BlZRRL6bd+IQoD24U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oZpUFL7UbeSg9oxx+5ocBW10Hez4rK8Ywn1GTIJvuvO1VAfuPqKCtELpHKDIxBncs
-	 KJ4vtX2edWTa0l5u7iBN93TrkRXf6dVi4M1aAAmJnDiBDDV/QPWh/5YrDIHwGGYx2r
-	 aF5bVrkGvkBprxjVeOIVYmgcqx/6TafGUQPuVHur18V6fBZGyu1f6djmo9C2MlaUfv
-	 oTZQDU1HbZIQ3syH4WHyc+pQHNJIZu0X/gUbwVmj61uun+juAMQcirK2NsKP4R7B16
-	 /BaCu41DMGuoBBTKJk5s3lRe60sThdtIeJJBB1p1XVErSA0FAMGwCIwWqFhihIKxh1
-	 E8R3wRzIaiePg==
-Message-ID: <cd3d6e59-c103-4279-8e01-8792a78981c3@kernel.org>
-Date: Wed, 18 Feb 2026 11:58:52 +0100
+	s=k20201202; t=1771416114;
+	bh=hwo75hzr9UpfvK2MdDMYdnKzKKS3Lj3XB2mQQM63I1Y=;
+	h=From:Date:Subject:To:Cc:From;
+	b=BhexMEBETX9K4JwR/Kz4GKBnhzaZKp0qvmMXUb0dFXpTZU/6Z7iWr4BQcz7azq+zM
+	 /0wGoutno9h6JovA40VG1xz1HYk46/vF9TP7Y2I/CmAfSK8KEUYpQNbCXvT3KLtbdy
+	 0/CaIRyn/cp9Eo9D3JX4RaBnTPHEHiHQ2Y/L4MuVipo5IPvq0V32wyoPdXD4ni2p1x
+	 /zHbyNNBjs5IpLJMNpueUOuTHqBxmwTZl5tRP4UWqNh7UqlsK8RyoIIWAVELq5lxsX
+	 I9QivG27FDDPb31P+2A6dB2uGtqafy3kTa85Nt25kFRjRIMFEsAPOg3v2PrVQD0h3s
+	 PG8RH/AwwNrgQ==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Date: Wed, 18 Feb 2026 13:01:44 +0100
+Subject: [PATCH bpf v2] selftests/bpf: Remove hexdump dependency
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-To: Stanislav Fomichev <stfomichev@gmail.com>,
- Jesse Brandeburg <jbrandeburg@cloudflare.com>,
- Arthur Fabre <arthur@arthurfabre.com>
-Cc: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski
- <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Lorenzo Bianconi
- <lorenzo@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Tony Nguyen <anthony.l.nguyen@intel.com>,
- Przemek Kitszel <przemyslaw.kitszel@intel.com>,
- Alexander Lobakin <aleksander.lobakin@intel.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
- bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
- linux-kselftest@vger.kernel.org, kernel-team <kernel-team@cloudflare.com>,
- Willem Ferguson <wferguson@cloudflare.com>
-References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
- <20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
- <aZUPUwYMRNXSg-eI@mini-arch>
-Content-Language: en-US
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <aZUPUwYMRNXSg-eI@mini-arch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20260218-bpf-sft-hexdump-od-v2-1-2f9b3ee5ab86@kernel.org>
+X-B4-Tracking: v=1; b=H4sIACeqlWkC/32NQQ7CIBREr9L8td8AJrW68h5NF1A+haiFQCU1D
+ XeXcACXM/Nm5oBE0VGCe3dApOyS82sV4tTBbOW6EDpdNQgmeiZ4jyoYTGZDS7v+vAN6jVJpdpU
+ XZSoDtRgiGbe30REqD1M1rUubj992lHmL/m1mjhzNMJPSA6mbZo8nxZVeZx8XmEopP8U+rUO6A
+ AAA
+X-Change-ID: 20260216-bpf-sft-hexdump-od-abd07a3bf026
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Mykyta Yatsenko <yatsenko@meta.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2977; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=hwo75hzr9UpfvK2MdDMYdnKzKKS3Lj3XB2mQQM63I1Y=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGDKnrtK/s/H5l5N/Qxaf0n8TfH2haqTh3YRFW8La5KSv8
+ ni5Kej0dpSyMIhxMciKKbJIt0Xmz3xexVvi5WcBM4eVCWQIAxenAExkcTcjw259qyg5NZvl7U5F
+ T/tPNknF3mjycuE+fWe3zoTP6ovbWhn+x65v0Fh09GLOsQlf5TZsntIo9inEgiFAIelIt93ivhv
+ 5vAA=
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
+The verification signature header generation requires converting a
+binary certificate to a C array. Previously this only worked with xxd,
+and a switch to hexdump has been done in commit b640d556a2b3
+("selftests/bpf: Remove xxd util dependency").
 
+hexdump is a more common utility program, yet it might not be installed
+by default. When it is not installed, BPF selftests build without
+errors, but tests_progs is unusable: it exits with the 255 code and
+without any error messages. When manually reproducing the issue, it is
+not too hard to find out that the generated verification_cert.h file is
+incorrect, but that's time consuming. When digging the BPF selftests
+build logs, this line can be seen amongst thousands others, but ignored:
 
-On 18/02/2026 02.01, Stanislav Fomichev wrote:
-> On 02/17, Lorenzo Bianconi wrote:
->> Introduce XDP RX checksum capability to XDP metadata specs. XDP RX
->> checksum will be use by devices capable of exposing receive checksum
->> result via bpf_xdp_metadata_rx_checksum().
->> Moreover, introduce xmo_rx_checksum netdev callback in order to allow
->> the eBPF program bound to the device to retrieve the RX checksum result
->> computed by the hw NIC.
->>
->> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
->> ---
->>   Documentation/netlink/specs/netdev.yaml |  5 +++++
->>   include/net/xdp.h                       | 13 +++++++++++++
->>   include/uapi/linux/netdev.h             |  3 +++
->>   net/core/xdp.c                          | 28 ++++++++++++++++++++++++++++
->>   tools/include/uapi/linux/netdev.h       |  3 +++
->>   5 files changed, 52 insertions(+)
->>
->> diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
->> index 596c306ce52b8303b20680ff0cd34d4fd9db0e48..58eda634668a07860447a65d9fc2284839af6244 100644
->> --- a/Documentation/netlink/specs/netdev.yaml
->> +++ b/Documentation/netlink/specs/netdev.yaml
->> @@ -61,6 +61,11 @@ definitions:
->>           doc: |
->>             Device is capable of exposing receive packet VLAN tag via
->>             bpf_xdp_metadata_rx_vlan_tag().
->> +      -
->> +        name: checksum
->> +        doc: |
->> +          Device is capable of exposing receive checksum result via
->> +          bpf_xdp_metadata_rx_checksum().
->>     -
->>       type: flags
->>       name: xsk-flags
->> diff --git a/include/net/xdp.h b/include/net/xdp.h
->> index aa742f413c358575396530879af4570dc3fc18de..00abb2e1e85514b4080d0e4e6e3b8f5f67f73b61 100644
->> --- a/include/net/xdp.h
->> +++ b/include/net/xdp.h
->> @@ -586,6 +586,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
->>   			   NETDEV_XDP_RX_METADATA_VLAN_TAG, \
->>   			   bpf_xdp_metadata_rx_vlan_tag, \
->>   			   xmo_rx_vlan_tag) \
->> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CHECKSUM, \
->> +			   NETDEV_XDP_RX_METADATA_CHECKSUM, \
->> +			   bpf_xdp_metadata_rx_checksum, \
->> +			   xmo_rx_checksum)
->>   
->>   enum xdp_rx_metadata {
->>   #define XDP_METADATA_KFUNC(name, _, __, ___) name,
->> @@ -643,12 +647,21 @@ enum xdp_rss_hash_type {
->>   	XDP_RSS_TYPE_L4_IPV6_SCTP_EX = XDP_RSS_TYPE_L4_IPV6_SCTP | XDP_RSS_L3_DYNHDR,
->>   };
->>   
->> +enum xdp_checksum {
->> +	XDP_CHECKSUM_NONE		= CHECKSUM_NONE,
->> +	XDP_CHECKSUM_UNNECESSARY	= CHECKSUM_UNNECESSARY,
->> +	XDP_CHECKSUM_COMPLETE		= CHECKSUM_COMPLETE,
->> +};
->> +
->>   struct xdp_metadata_ops {
->>   	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
->>   	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
->>   			       enum xdp_rss_hash_type *rss_type);
->>   	int	(*xmo_rx_vlan_tag)(const struct xdp_md *ctx, __be16 *vlan_proto,
->>   				   u16 *vlan_tci);
->> +	int	(*xmo_rx_checksum)(const struct xdp_md *ctx,
->> +				   enum xdp_checksum *ip_summed,
->> +				   u32 *cksum_meta);
->>   };
->>   
->>   #ifdef CONFIG_NET
->> diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
->> index e0b579a1df4f2126acec6c44c299e97bbbefe640..d20da430cfd57bc26b5ea2f406c27b48d8a81693 100644
->> --- a/include/uapi/linux/netdev.h
->> +++ b/include/uapi/linux/netdev.h
->> @@ -47,11 +47,14 @@ enum netdev_xdp_act {
->>    *   hash via bpf_xdp_metadata_rx_hash().
->>    * @NETDEV_XDP_RX_METADATA_VLAN_TAG: Device is capable of exposing receive
->>    *   packet VLAN tag via bpf_xdp_metadata_rx_vlan_tag().
->> + * @NETDEV_XDP_RX_METADATA_CHECKSUM: Device is capable of exposing receive
->> + *   checksum result via bpf_xdp_metadata_rx_checksum().
->>    */
->>   enum netdev_xdp_rx_metadata {
->>   	NETDEV_XDP_RX_METADATA_TIMESTAMP = 1,
->>   	NETDEV_XDP_RX_METADATA_HASH = 2,
->>   	NETDEV_XDP_RX_METADATA_VLAN_TAG = 4,
->> +	NETDEV_XDP_RX_METADATA_CHECKSUM = 8,
->>   };
->>   
->>   /**
->> diff --git a/net/core/xdp.c b/net/core/xdp.c
->> index fee6d080ee85fc2d278bfdddfd1365633058ec06..7d1e08d8ab4151ab42c91203def2afafc66d3149 100644
->> --- a/net/core/xdp.c
->> +++ b/net/core/xdp.c
->> @@ -961,6 +961,34 @@ __bpf_kfunc int bpf_xdp_metadata_rx_vlan_tag(const struct xdp_md *ctx,
->>   	return -EOPNOTSUPP;
->>   }
->>   
->> +/**
->> + * bpf_xdp_metadata_rx_checksum - Read XDP frame RX checksum.
->> + * @ctx: XDP context pointer.
->> + * @ip_summed: Return value pointer indicating checksum result.
->> + * @cksum_meta: Return value pointer indicating checksum result metadata.
->> + *
->> + * In case of success, ``ip_summed`` is set to the RX checksum result. Possible
->> + * values are:
->> + * ``XDP_CHECKSUM_NONE``
->> + * ``XDP_CHECKSUM_UNNECESSARY``
->> + * ``XDP_CHECKSUM_COMPLETE``
->> + *
->> + * In case of success, ``cksum_meta`` contains the hw computed checksum value
->> + * for ``XDP_CHECKSUM_COMPLETE`` or the ``csum_level`` for
->> + * ``XDP_CHECKSUM_UNNECESSARY``. It is set to 0 for ``XDP_CHECKSUM_NONE``
-> 
-> The only thing I'm still not sure about is the csum_level and whether
-> we need to export it or just start with csum_level=0 and extend later
-> when needed. The rest looks good.
-> 
-> Jesper, Lorenzo mentioned that you might need it? Can you clarify?
+  /bin/sh: 2: hexdump: not found
 
-At Cloudflare our load-balancer Unimog[1] does GUE (Generic UDP
-Encapsulation) when XDP_TX'ing packets to neighboring servers.
-Thus, I assume we want to know the csum_level, as this is for
-encapsulated packets, right?
+Here, od is used instead of hexdump. od is coming from the coreutils
+package, and this new od command produces the same output when using od
+from GNU coreutils, uutils, and even busybox. This is more portable, and
+it produces a similar results to what was done before with hexdump:
+there is an extra comma at the end instead of trailing whitespaces,
+but the C code is not impacted.
 
-Cc Jesse, as he knows more about the hardware and csum_level. To Jesse,
-we need to test how hardware handles our GUE packet format (which is
-slightly modified).
+Fixes: b640d556a2b3 ("selftests/bpf: Remove xxd util dependency")
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Originally, I was going to add a check to stop the build if hexdump was
+not available, but switching to 'od' seems to be a better solution while
+not adding a new dependency.
 
-Cc Arthur + Willem, as they knows the details around how Unimog
-currently have to recalc packet checksums in software.  Hopefully this
-patchset can help us avoid doing this in some cases.
+Because test_progs was not reporting why it became unusable, I added a
+Fixes tag to have this backported, to help others. Feel free to remove
+it, or even drop the patch if you prefer to stick with hexdump.
 
---Jesper
+Changes in v2:
+- use a shorter 'sed' command instead of 'awk' (David Laight)
+- I didn't add Mykyta's Tested-by because the code has changed.
+- Link to v1: https://patch.msgid.link/20260216-bpf-sft-hexdump-od-v1-1-f8cebd8eb9d0@kernel.org
+---
+ tools/testing/selftests/bpf/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  [1] 
-https://blog.cloudflare.com/unimog-cloudflares-edge-load-balancer/#encapsulation
-  [Patch-0/5] 
-https://lore.kernel.org/all/20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org/
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index c6bf4dfb1495..6776158f1f3e 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -723,7 +723,7 @@ $(VERIFICATION_CERT) $(PRIVATE_KEY): $(VERIFY_SIG_SETUP)
+ # Generates a header with C array declaration, containing test_progs_verification_cert bytes
+ $(VERIFY_SIG_HDR): $(VERIFICATION_CERT)
+ 	$(Q)(echo "unsigned char test_progs_verification_cert[] = {"; \
+-	 hexdump -v -e '12/1 "  0x%02x," "\n"' $< | sed 's/0x  ,//g; $$s/,$$//'; \
++	 od -v -t 'xC' -w12 $< | sed 's/ \(\S\+\)/ 0x\1,/g;s/^\S\+/ /;$$d'; \
+ 	 echo "};"; \
+ 	 echo "unsigned int test_progs_verification_cert_len = $$(wc -c < $<);") > $@
+ 
+
+---
+base-commit: 886bf921ecfc30f8f31341bc26560d8bf08b937b
+change-id: 20260216-bpf-sft-hexdump-od-abd07a3bf026
+
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
