@@ -1,66 +1,66 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB53B309EE9
-	for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 18:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956021A239A
+	for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 18:47:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771440300; cv=none; b=R4A6g0faZQT5U3G5NqFJyILPqpFKbg6zVaNgf2e3UWMTlrVnrW9dhQJjqlK5S8hg/DgrW7Gx8I8cq7+//QvK+slNeUIUnWDD9jqdHQPHhDJ0UPgzbXxAgKiD/PEaWJ4GKbY43HESvDbIRlkOjv34fmPu7QpQTURmV0kewME4NEc=
+	t=1771440435; cv=none; b=VkNxY5ohs0IfU1ohOTuyiDsWm6+4pWfrx3RHK95eWbmBnI52+Txgj20aA012+9A0Hs9VhawMX4mmrXhBrmCWk9aL376OL3vo5dg1DrISWv4brgoKFKNBRAKp+YWGsjtETo4X48iuufUwoAbEBvsTTwIBOKbQEcucL3rP3CapIuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771440300; c=relaxed/simple;
-	bh=ogfoW9MUXTSwe11BLGGgmfwEaAoPwtxM6by4xdaw7jI=;
+	s=arc-20240116; t=1771440435; c=relaxed/simple;
+	bh=Iv+hIlAezaKfnuKpXvopMXCkXB721UOrG1pM8I359lc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T+81DyQX2+leNELT4bBFpTCsBqBz0usTsMIeBu+UcZjeDjgxXow27JUe0i4Ay0wkxS9CEqw04uVgb7ocdNbBLEvEzBDwu4IFGXVQOoB9cU68UJT9ejyEUwirq9D19EwsTcoFwKnozkCcfeGm2nM5pzNIM/cBIKLvMsBwTNQiVaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=He4AJ2x2; arc=none smtp.client-ip=209.85.221.53
+	 In-Reply-To:Content-Type; b=tJCda9f8fsI0CIXpklo7RVsvQ+1w5sBQLkQ2GkZVR9ugX6GgDJHYSh5QVgLdPfvYTw99Hi+D88X5PfmLkEX75Q70SZ2+UOeIhRF6sOTZRNI6cXrhJXS8GyVOLw2LZNiyvHVqQ3jjizvUY5zu0DZ3da+xxqZucb5FucgfodzUoNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=euH1egHf; arc=none smtp.client-ip=209.85.221.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="He4AJ2x2"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-436e8758b91so139511f8f.0
-        for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 10:44:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="euH1egHf"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4376de3f128so125876f8f.0
+        for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 10:47:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771440297; x=1772045097; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771440433; x=1772045233; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=v3s3O3JA7uoRa09ryG1QganQd8+Dtdx7mw2xkEaGC04=;
-        b=He4AJ2x2tkKWVlfo19JtcNKTH9+InLGQdxytDQwNtBYQeG2hRnkzeh0T9Vi9TOhdMP
-         PEoeZRuzMtcdynPXfF6A2phtpnU22Z1afQPbxu8Mu+pOv8XBUM0BUyV85l6cU6lo0w++
-         m3YtpWk/QGHmDXRZWWJoV6Ed+eeSFF7SgHCX41npKUvJip+g5Gg276ommbtVAGbOrv2a
-         lWfjMCQKyaf5nouEn6Gh4Bj2gYczssa5Y629BlOVSsgAOTxu/z/SMqAvgsPjMmk1aNcQ
-         D9d3J7vv9Nqw1SeAR9aEFE9iCMuJe6spcGvLqIOV12d544J6m9IBZkvlAgL9vJyGaaMc
-         rC9A==
+        bh=u8ZKglBvPnhFbBjcuYSWRHqG1F2jNJyd9TBe00BveAo=;
+        b=euH1egHf2J+DUayxaS3eRHI4kFRMweC5o8wdzVBbsLviOVwxLsexTwHF8fl5OyKSvI
+         yDqJtfmlK69Z9QGpoP6p/VltuSw/DuSlJC82Anxp2/74w2UZ6g6YSTfup/YZZ6SIvGuo
+         3xH7eU90nALwAldsHRY/KpX2hmLjPAWQ48Jl1m7+S3raNRIq24SRZ9t9mmzd72dBVMI5
+         4VU8YEPcXJa0arJ5n0KhCNXRRtUgrk3XVrxGUUDoA8llX294oRUk4HP8yBXclpxB83Jd
+         /4FFtIW00hLb4TKj+ACIE22aymJ3YRwOKciPmzj7E2puKpz3HVcvhHE/YnZ5fXRr2hWm
+         ANJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771440297; x=1772045097;
+        d=1e100.net; s=20230601; t=1771440433; x=1772045233;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=v3s3O3JA7uoRa09ryG1QganQd8+Dtdx7mw2xkEaGC04=;
-        b=iKOQHmH4mkRHISk1AuZKKBQo7Q4yS3xBiWJuwUwj+azhZ0seHQPRJhakhS2pZdu71i
-         Br5E1jtQPpU80Yvh8ZN5I5M+wBBxSSajcWVNnDa7uaXQasrNOqEPwLXdYl+lSO9k3SNH
-         ++XvOQp26fqKiyG0aMvWLFs6zFsU38YUTlPa3tqZEpgYEDKzp5ILriSNdnUFXPkk5yiX
-         Cp6PWvD1Z11wyCR/yoPk5VU2uUOxVEFy4gWtDFnn7Kni5FFP6NIfIkJRJbKeq/NVNjzU
-         N3CKTHvZ/rhrhcDtknEmIAjmTCGHrpbmFAZ3M7ZMUj5HRF4ayMr3CAop0IipoMPM3SuX
-         Zz3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXL4POvIYwZl2aAQz/bscjDNZa74iFBpli6HaG4uZqaIVRTseRwIfvzG5pQPlZiuOAJ+ew=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySVrpzYWRzch1LPCs5NYBo/HWLW6hc0NlNffcDqgsh4LO+iATe
-	iuzQ/IBvXQ+XYD5IV56/9QFEFTZeKsgtuTOQtqRyAjYsFF6Ft7VR1ldz
-X-Gm-Gg: AZuq6aLiroYTKVQvL/qKEIhP8Qlb3PFQoI5YJaey2QwHPlN2jbjMXZeiwqS6WbQElpe
-	aRZSxzhmvhoBNPV5ofKYVn/iRyXdtrMTGsPh9VA4pslhZIwBd5/tChamrT5lS7yrXujHYtJnrdY
-	zL3pXcBhhwOwelXFHRENZPcp1gG1c05q4aw6i9JNyy79jnKeZfSNWIiT6gDBE7M5LBMWu9nVSXk
-	biR+9n+/To6bBPuVOEcLnFPVgW4SQnCd+e+ptnBuXBdATzLeyPESkiF+XwMWzztBitKOhtY4zgi
-	0HX7VEhbQhxdY8IzJblPaZdExy6wZt9C0DyNBPgA2b5SxHuk3aZjD8aJ/16qKjA8oMG/ThdQAAz
-	kGJqtRr9pKfGEQD81Vsr5+r0tqWSg5YBCWuEsIXQeP1/hylx4AyCOjZtV3b9Pna3b/ROwMBLFVZ
-	2Nasm+KmGhGvooidtZvmenb/jFrxCtqKtNgxKe9Sd84U/PDYb3hcnlxalOJ8ZDOKs=
-X-Received: by 2002:a5d:5f47:0:b0:436:3475:473f with SMTP id ffacd0b85a97d-4379db8cd9cmr27366698f8f.36.1771440296775;
-        Wed, 18 Feb 2026 10:44:56 -0800 (PST)
+        bh=u8ZKglBvPnhFbBjcuYSWRHqG1F2jNJyd9TBe00BveAo=;
+        b=taIA3NAHmjl47PJvi7AhXb4aB8VKzbSOzVJMl0pVrdP70HSpHjWfb0YobkvcnoR6JW
+         P95lBlv6nnkeduc2jTdSjNphvPmnDPEGQHkfNlO1a6S0KY8g4xGUlapD13FiuOhhST4a
+         YmWhAZez4O6Hi3lBetUXITffPUB7f9yi8687Mr3K+MIhfpgc8DVoaY/Q+N5tQ8BxmtYU
+         Xyjfbpsy70IIO3eh/esPa3k/b8cYUJKm3P3i6E064a4GbZZdSeX1xSANnf27EBcMlEZQ
+         kd0EtZi1QC/hwgGPnvqfEwkkA1Ux4hGh+eG/yNLyzAcJ5F3jd/+2MAL7sfMOhKovQjKn
+         yz3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVYyJamODU9tjVn7ksHcYq+5LppSvBRTEJ8Gobi3KeIZkObIYqwLtrg7BDOI+LjuyLPLHo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNRaKMMlGeCc6o4R4AlsS54vxJ0jAa7GG84CrGVcMXHgNkWa7B
+	wsGpV0YXYwqiwf1B8bOQ1ObZg50Z5u9rAQ4hzJt82siyYVxNSuoduNV8
+X-Gm-Gg: AZuq6aIktpnR0qJco9WCy2VWW9A3dKIVVNe7gDBaNNuS03pWfS9n7aZ+d0N5mqbcVnm
+	Pu2lAj8VR2uf2a7UBUi/ye+fnymcCOwLpBWafDJinKslMRyviWJHt8YNzCEZZa8bpmtN2ybEFtG
+	yCvVmWYWdU/UgIq4rnx2ZW0wEBhQJP+bYbr9+2FYy/FXC/m3TjBMOxNKC0J2YTSHnOuSt6kzHfF
+	6a1yGy+ZNnbMQpYA1Co85dpxWETkc/6axTI46Ag5SrsBj7AuCoEvCZobg7b196y17nM8+Q5La7h
+	ixCzbcZHBlxxLzep0/+1pADlATjnxQ+N9gSZxX9Dh6HGXITuucRSBkbyjoZuNojypxT7uI2pUAX
+	mxF89FdeegENKI3SejfX1xpJ5P+qTC3/ZO+bPStEWP+9c/lZynTZDXMfrGS3b5jkGmzTUfBYCvw
+	j6zJ/7q8FcX2k0AebhCCNPgXJHrzUeCDKk6OgcZ0SnuNRYJ6ft8Aik81blX0F7KE8=
+X-Received: by 2002:a05:6000:2c0c:b0:437:6a74:3e4e with SMTP id ffacd0b85a97d-4379db33f5fmr29583655f8f.12.1771440432728;
+        Wed, 18 Feb 2026 10:47:12 -0800 (PST)
 Received: from ?IPV6:2a03:83e0:1126:4:93ab:614:2c34:ab35? ([2620:10d:c092:500::6:66e8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796a74918sm43650762f8f.17.2026.02.18.10.44.56
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43796a6a5e5sm41264845f8f.9.2026.02.18.10.47.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Feb 2026 10:44:56 -0800 (PST)
-Message-ID: <7990bafe-d72c-47de-a711-0c8a888d4ed9@gmail.com>
-Date: Wed, 18 Feb 2026 18:44:55 +0000
+        Wed, 18 Feb 2026 10:47:12 -0800 (PST)
+Message-ID: <745c48cc-e8e9-4d31-8a4c-acfaec89cb41@gmail.com>
+Date: Wed, 18 Feb 2026 18:47:10 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,80 +68,67 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Use bpf_prog_clone() in
- veristat
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin Lau <kafai@meta.com>, Kernel Team <kernel-team@meta.com>,
- Eduard <eddyz87@gmail.com>, Amery Hung <ameryhung@gmail.com>,
- Puranjay Mohan <puranjay@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260212-veristat_prepare-v1-0-c351023fb0db@meta.com>
- <20260212-veristat_prepare-v1-2-c351023fb0db@meta.com>
- <CAADnVQJqBqBaUZjQAGdchePKZMT5BMop8Sn1W5jmVOKUUdv0OA@mail.gmail.com>
- <02973092-a718-4374-a6ee-e31e8c046ade@gmail.com>
- <CAEf4BzYFGdpdPP+HV085mhPmujW7kcE4TBxLtwu1PegOz_QAZw@mail.gmail.com>
+Subject: Re: [PATCH bpf v2 09/15] selftests/bpf: Fix double thread join in
+ uprobe_multi_test
+To: Ihor Solodrai <ihor.solodrai@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Jiri Olsa <olsajiri@gmail.com>,
+ Mykyta Yatsenko <yatsenko@meta.com>
+Cc: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com,
+ =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+References: <20260218003041.1156774-1-ihor.solodrai@linux.dev>
+ <20260218003041.1156774-10-ihor.solodrai@linux.dev>
+ <53f7ac2f-3e7f-485e-ae46-040518ee7610@linux.dev>
 Content-Language: en-US
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <CAEf4BzYFGdpdPP+HV085mhPmujW7kcE4TBxLtwu1PegOz_QAZw@mail.gmail.com>
+In-Reply-To: <53f7ac2f-3e7f-485e-ae46-040518ee7610@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 2/18/26 18:33, Andrii Nakryiko wrote:
-> On Thu, Feb 12, 2026 at 8:22 AM Mykyta Yatsenko
-> <mykyta.yatsenko5@gmail.com> wrote:
->> On 2/12/26 02:45, Alexei Starovoitov wrote:
->>> On Wed, Feb 11, 2026 at 4:45 PM Mykyta Yatsenko
->>> <mykyta.yatsenko5@gmail.com> wrote:
->>>> From: Mykyta Yatsenko <yatsenko@meta.com>
->>>>
->>>> Replace veristat's per-program object re-opening with bpf_prog_clone().
->>>>
->>>> Previously, veristat opened a separate bpf_object for every program in a
->>>> multi-program object file, iterated all programs to enable only the
->>>> target one, and then loaded the entire object.
->>>>
->>>> Use bpf_object__prepare() once, then call bpf_prog_clone() for each
->>>> program individually. This lets veristat load programs one at a time from
->>>> a single prepared object.
->>> Any performance numbers that prove that it makes a difference?
->> it's neutral, I did not manage to record any difference.
+On 2/18/26 17:54, Ihor Solodrai wrote:
+> On 2/17/26 4:30 PM, Ihor Solodrai wrote:
+>> ASAN reported a "joining already joined thread" error. The
+>> release_child() may be called multiple times for the same struct
+>> child.
 >>
-> How did you measure? I just ran
+>> Fix with a memset(0) call at the end of release_child().
+>>
+>> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> Acked-by: Jiri Olsa <jolsa@kernel.org>
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>> ---
+>>   tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+>> index 2ee17ef1dae2..be6ff1d4a75b 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/uprobe_multi_test.c
+>> @@ -68,6 +68,7 @@ static void release_child(struct child *child)
+>>   	close(child->c2p[1]);
+>>   	if (child->pid > 0)
+>>   		waitpid(child->pid, &child_status, 0);
+>> +	memset(child, 0, sizeof(*child));
+> The CI is failing because of this change.
 >
-> time sudo ./veristat *.bpf.o
+> Apparently, there are asserts on child object after it's released in
+> kick_child(), so we can't just memset it (without changing the test
+> logic).  The previous version of the fix [1], resetting only
+> child->thread, is more appropriate I think.
 >
-> across BPF selftests object files:
+> I missed this because uprobe_multi is in DENYLIST.asan
 >
-> WITHOUT bpf_prog_clone()
-> ========================
+> I'll wait a bit in case there is more feedback and send a v3.
+I think it's more logical to memset it before the test run,
+not after (in release_child()).
 >
-> Done. Processed 905 files, 4327 programs. Skipped 11 files, 0 programs.
-> sudo ./veristat *.bpf.o  0.01s user 0.08s system 0% cpu 54.512 total
+> [1] https://lore.kernel.org/bpf/20260212011356.3266753-10-ihor.solodrai@linux.dev/
 >
-> WITH bpf_prog_clone()
-> =====================
->
-> Done. Processed 905 files, 4045 programs. Skipped 11 files, 0 programs.
-> sudo ./veristat *.bpf.o  0.01s user 0.11s system 0% cpu 17.883 total
+>>   }
+>>   
+>>   static void kick_child(struct child *child)
 >
 >
-> 54 vs 17 seconds. Though it's curious we have much less programs
-> loaded (according to veristat reporting). Still, those 300 programs
-> (if the difference is real and we should check why we have the
-> difference in the first place) should account for 37 second
-> difference.
-Thanks for remeasuring, I might have made mistake, will retry.
-Regarding the smaller number of programs with bpf_prog_clone(), that is 
-by design(ish),
-now if bpf_object__prepare() fails, we just fail entire file and do not 
-print a separate
-failure for each program, while base version of the veristat prints a 
-message per
-program, because it tries bpf_object__prepare() for each program in the 
-object.
-If we really need to be on par, I can iterate over progs if 
-bpf_object__prepare()
-fails, it just looks a bit awkward.
 
