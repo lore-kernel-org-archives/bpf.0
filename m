@@ -1,136 +1,146 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB0922EBB99
-	for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 04:29:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771388979; cv=none; b=F3XfmubvtzSAqvbe5mIJYmQ8gL8P8d6AkevM1MNA4vHxgt/nH8y8Im05/UO4g6177GP6RItFDuutf6Ske5JfK7S7Thi9DqMyLcq8ay8D4v5hp/bLr4tDEZxJeIyDNsI2hb648/0iM3wQT99paCUi6zSRD5W12uEYfvPhyRNkeG0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771388979; c=relaxed/simple;
-	bh=dhvoDsSh7tHUJR13TIhX9yNmWVj8+ijL2aeiCvX8TbY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Qh9TdtaR0MC60h9p+evgzxHcGelMgwcrfOY6ORBhcBj2Wlw9gPA+8l/AApbE2x4MCqdOem5i5TlQrFYB+S3+eAteiEET15LP+7ll/OX0kAlIqv5RJL6E7JnIpHcK9cFYUAl9h1ZFKgFuN2Dde5+SW9+w5RBzOk0PACldoVKlt20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B1Dbwot5; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096B4238C23
+	for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 06:06:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771394812; cv=pass; b=Wq9cAq1QK+AP3/p7pALA2iDO1c69GNz10/DjlVtKW+6r/fZnPe/63TNPljPEZxekKxdwuRExITXh3hJHH3KEaV7J4Nk+9ZQFfLRzZtM4KR+SNcUAgTjAyNIeuIM7NrHekXrUgVmoXfnbmTj2lK++smQgqbQpi0ccZYRtG0N4GPo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771394812; c=relaxed/simple;
+	bh=A+bwLkCnLCUwDa0P8W68NBhf4YBnGFUw0xw++Rw1naA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ISs7HZwhlOrf3D0lan2Kj+hK63nTZ6yT2QZ7+qfU1Xg5lD8skhowQJZff1FgL/7bFCzW8YB+S5fSe3dXxuHgXsKNaIDGe7ZawJWlIKqfGHUZIvkTF/fvYinyRXhr0pf8uskVN/rTRQYjGDJ/594bOCJmMMI9+RkgPh29DLPU9fE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cIGFguPh; arc=pass smtp.client-ip=209.85.222.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B1Dbwot5"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2ab46931cf1so2939715ad.0
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 20:29:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cIGFguPh"
+Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-948ba5ccf54so2781819241.1
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 22:06:50 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771394810; cv=none;
+        d=google.com; s=arc-20240605;
+        b=H45BzBTSawZdZv5QgnnDxDIgoEENWoSbqNURtmVdawODDStAnFu28EystpX0e6EGc9
+         R9SHdy59v8L8XrhQSfMtugj/hp6RRpbnn9lKr8EHoRau6d58L6Y0CGXizn1PA+HEpCOr
+         bBykTOxVtP2FE0gbJez9yZmQe4S0uJPXWYt6d5ikhYKrjE08zyvK64YYA/U8/nCvmK7x
+         1v28yEVqXsKJAxC2IHhBBtDPzjvmAzHnUx3MxJDjBn6rNsdECtadFHwxLFxOQJmodST8
+         FpNGyUyyQf9AkiZj1z5spYLVg8tKLl/U+9bIJVyNkvmC4KQmbFer0PHmmdzk/uvPoOfK
+         xW4A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=x7ObbrphFjVg5XfcUk8shmVxjXtRriYQrOO1ZYbMNzM=;
+        fh=7BdvuVjblzFWSm+FQrzzvSdJfy/Pp8mwXvrAgAkr0Zg=;
+        b=VRbGiIOFen1zePjKshGWGPvmJDgHsqrXCRph4yFrCtqM7KFnYqSbNPY2L4KaCSxUEj
+         j88M1zRwv3z6GEINkHdgv+15KEoqNQHYhgoyW1HiM21igD5gor4P3m0536aeTvGi8EbZ
+         yuhI0Jqt6VUyYQAOKhfIL8Y+701KcxtMZQ0Amobd1sc9bVS9VRlHbIpqSebTvC+nb3xG
+         /VWwEM9NPeVGEE4kBJstX2We18H9cKR6T/9KILR65zgIB6wgM55vLsQP7xQ+OqDLhn2j
+         L5K4+iXdv/QIICgOVD9IdrQ/hkDr2BH67jjDcLTThE6HQlcsPKsSikT7fTuIQMkud45+
+         oyMA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771388978; x=1771993778; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VvzlN98l7/BarHSO/majX6xw5/psg69bWsbBzuUD8gg=;
-        b=B1Dbwot5Lr0a9OnjCsmRGbs6P48d771jwb6vrPlSrBXpO8HdEpVzr5IF2FmN9uCNmL
-         oqZoGkEEXibQPdc5EZQLxLDgDPJp4VmDHWOhVKo+bdJ30GUVqik1I6VqsiRn4dbJsH+b
-         PPpI6Wca2fPzQ2KifDVQHCiTxn8fWvzdDLuvGBiMWCivMaKg/5tODs1vuJepZSCq+8YK
-         OipWI5cmcslx3Qz8RyhGeev3nDxwOCBdMCs7+V3Mt+49EXYnNQFFuLjyi+Hpcgg5EVJk
-         WtN5bjtXp1WOVclhUm51+REi0d50tY7Xm8NeUTsUoRNtyyYRJrFeqDsUfCmSljDoXtAQ
-         Iuaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771388978; x=1771993778;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1771394810; x=1771999610; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VvzlN98l7/BarHSO/majX6xw5/psg69bWsbBzuUD8gg=;
-        b=YjVu96dwy6cS8S0MWg5oL9NhhGrGTWLrAnbnHWPH8k1Itp2QN/w6FOhPV4hdP1rIRH
-         oofUUJ9ofl1U9zRnawOqzThgYSJfI8OCpYZ1oxPYJ31Kk9hK78dkJuLnodLLwOI7wkM4
-         5mBrOnoINgdA/8Wkg5qDH6cksV2V0AdB6bUCgprhr3E383TepJi3E37mtZD2c9TYu0Fe
-         rxxBcrNh+/Xw6JMLhX84RY3FLC8BVdG44b8/lAn/u5OXxVPl4bryWpMYBZ/wxm3QNRoA
-         Tlcc8Ufb2DbXL3rN9XM7U6xkKx8U6RWPsHKE0tP3Mt2bf8qMsfkE16iA9+cjNZa+FBZQ
-         5JEA==
-X-Gm-Message-State: AOJu0Yw/yFEYMJOnos3Vy0rsUtl/vkrUp1q3eHMeG920AMaSyW/Qitet
-	x5QjYGUn8YdIIzlPschKYfBn/fiYC0CiVgTUuLqOZYYvqrv79aif2QLcCDUMOKyR
-X-Gm-Gg: AZuq6aL2NqruCQMW6Dib3SripuYJLxwOFsZHDpjTG7N8zRaqEsOKex/sY+naOqmgmWl
-	tOOreEIIA3gihYFukiQLtvkgFMrHNgs2Nm0wpt78WqTQmSKVXsKhoBj0Webfg70CVeF5haqLlFr
-	C/5aKwb7OlGNVd2ssnYam4ywXwjGqcjC366Mby5sMOV1yjSGZum/bd+I7w29KRyYfUBap2ukX4Y
-	Ohe/m2LnvnKQ8+HlWcy5P4kl/V6KEajykMbDbDHVgAUmhJ6j3veoTUNoGkcZ42kmdPXxNUMSA1k
-	r4DZ4nVZo0dyMNALcSQG9zAs0/tS5MrKnAkUN+6dmvVoHxG11dLcsSAPX/Ox5hwqyc8R533mknq
-	xy+RXHiUCy345XJ4a13ljYs09x+FIhLDK+Cdll/3bsWOT+MZS9aC0HL8QsEKOKHq8hIoRu7Pitq
-	2ce3NlYWSzGd24kLgmGI2RG3L+ufNKgqui+q1USkrrdVuZ1E/XA+ifwP2fjZ3JES6Ce/cN0AB5s
-	RZCdi+A8dOH3/M/Ko4aydkFqK4HHg==
-X-Received: by 2002:a17:903:2c05:b0:2aa:e3d1:1430 with SMTP id d9443c01a7336-2ad50c3d06dmr5488015ad.23.1771388977806;
-        Tue, 17 Feb 2026 20:29:37 -0800 (PST)
-Received: from localhost.localdomain ([2401:4900:c906:adbd:f506:1dbc:e3f3:e38e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad1aaeb759sm105165865ad.83.2026.02.17.20.29.29
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 17 Feb 2026 20:29:37 -0800 (PST)
-From: Anand Kumar Shaw <anandkrshawheritage@gmail.com>
-To: bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: kuba@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	davem@davemloft.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	linux-kernel@vger.kernel.org,
-	Anand Kumar Shaw <anandkrshawheritage@gmail.com>
-Subject: [PATCH v3] bpf: cpumap: add missing XDP_ABORTED handling in xdp prog runner
-Date: Wed, 18 Feb 2026 09:59:24 +0530
-Message-Id: <20260218042924.42931-1-anandkrshawheritage@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+        bh=x7ObbrphFjVg5XfcUk8shmVxjXtRriYQrOO1ZYbMNzM=;
+        b=cIGFguPhNETfXLCtK6eXYRoN033Go8IdTPMMqT5SR2Aa87oUTddK1Bx/pZjJgVFCbu
+         f/KBCtqyh2dw0YDXFjFR8I9bdjGzggrzWOdEvy4wNKLN788nzpG2ipIoLA5cQHUhOXZe
+         18z6cCplrr3m5LjG99MfTEx8uMBhBNWPXZ983kUR98UZpmZURohkeln/lmg7onW+AE/P
+         rvX7j76pRdllgAbAP4bLaH09cyt1LoljQfmLK8lYtJ5th8w7K4PRs9s2n7btBNLzRB6y
+         jyfS3P0SLoo8ErZT1mSNuTplkhJ1uC4IOGmbMvKsirIoktrAF8Yfrkx6ozBLrdW29+WQ
+         Ghlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771394810; x=1771999610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=x7ObbrphFjVg5XfcUk8shmVxjXtRriYQrOO1ZYbMNzM=;
+        b=DrUDBoefHz04sRo25o6pDEckxRsoJydexj9P/oe+sMUCN90cqkiK+atSqjXlcF/Xy6
+         IQjnNwgnqs1UIPLjx1EcLOavWaAwZfwGwF3LK+JKbufK24P0pbTrCDX3NtU6UDyuy0FN
+         mc+YRl/WAT9RRmOLxYmH0rIG1gzHTIW4hGIT7VjP+P941cyr2Koi/1KcirbCatrz4wXf
+         mldKEkxRqLdkdME/lXKcQtytmgR0rX79MLCTYhh02uvX73Wguk+w8ZTT8nHfxh07TBl+
+         +YDUj7yiyzXAF5f6jr03vq9SId5pSzFBjCYuUfXtvA3VFfKp8UOGcKcr42wiIT+kuOyg
+         vsxg==
+X-Forwarded-Encrypted: i=1; AJvYcCVKzTEMKW4hgqFDwJj4LOid1CqnwBHve81ymCpmmDXxUQPjTfsjHuKjBIACB3OqsrGm84A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJNlVopCWrQx15c3DCBa/qcBHf4uX6D+qv9/0AItXXOffgI6Uy
+	JyS+HIav2i0p9KuKkJKcIUxGTWNBhmDuIVLJ0/FSBnVR+LwE9x1vDYLyeVCKYQ/SctcB3e3zjVD
+	FzyUR6yyWboFYwRm4vZ6ojhPAIDkxNiE=
+X-Gm-Gg: AZuq6aJ2sVngd7KtAfjRDDOOVC42GeDlgnVYX7+xLn1tdvIyLWLscJAVQ09ZPiXc6My
+	IDLaDc+doGkKkh5V94cit9Ub8/Z/O/5Af6/I3yslb7I2716aT5sQCyS6mILe/6ddXq4qLH7BbJp
+	dGzloiMYgMx+7pJuCqLZZG3k/oZGdHDD55TcKh3dwhSp9Qeb9h5+LcRs57PN3x2A5yho5v3Jk2j
+	7ubDyY1hy7sxNoGWgEMV6tRD6ArRvc3/tLSOGpexYhVNAXavp9gnW70A2dKwxFslJcZjxHElN6s
+	smbh7u5q8E8nCau8i7CEpARpipok13ZoSnSEbpcdWg4bo2/2uojw
+X-Received: by 2002:a05:6102:41a3:b0:5fd:f0d2:9ef7 with SMTP id
+ ada2fe7eead31-5fe7fd5b009mr408412137.42.1771394809842; Tue, 17 Feb 2026
+ 22:06:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1771316309.git.paul.chaignon@gmail.com> <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
+ <12705b3d58569685048804c33e90755c17667cbf.camel@gmail.com>
+In-Reply-To: <12705b3d58569685048804c33e90755c17667cbf.camel@gmail.com>
+From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Date: Wed, 18 Feb 2026 01:06:39 -0500
+X-Gm-Features: AaiRm51vbetbvEW2g5uZWCjiWu_IpNlmvEIgwLs_LlAbkHyw5hql0ZZvvjSA6lM
+Message-ID: <CAM=Ch06Vg-faG9ukU4DAsF9FRG2PeUtYHh3BkG0dOzYi=WDCyg@mail.gmail.com>
+Subject: Re: [PATCH bpf 2/4] bpf: Improve bounds when tnum has a single
+ possible value
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-cpu_map_bpf_prog_run_xdp() handles XDP_PASS, XDP_REDIRECT, and
-XDP_DROP but is missing an XDP_ABORTED case. Without it, XDP_ABORTED
-falls into the default case which logs a misleading "invalid XDP
-action" warning instead of tracing the abort via trace_xdp_exception().
+On Tue, Feb 17, 2026 at 5:58=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+[...]
+> > 1. The u64 range and the tnum only overlap in umin.
+> >    u64:  ---[xxxxxx]-----
+> >    tnum: --xx----------x-
+> I think this hunk should be rewritten as follows:
+>
+>         tnum_next =3D tnum_step(reg->var_off, reg->umin_value);
+>         tnum_max =3D reg->var_off.value | reg->var_off.mask;
+>         tnum_min =3D reg->var_off.value;
+>         if (tnum_next > reg->umax_value) {
+>                 /* The only overlap is umin */
+>                 ___mark_reg_known(reg, tnum_min);
+>         } else if (tnum_min < reg->umin_value && tnum_next =3D=3D tnum_ma=
+x) {
+>                 /* The only overlap is tmax */
+>                 ___mark_reg_known(reg, tnum_next);
+>         } else if (tnum_next <=3D reg->umax_value &&
+>                    tnum_step(reg->var_off, tnum_next) > reg->umax_value) =
+{
+>                 ___mark_reg_known(reg, tnum_next);
+>         }
+>
+> - At-least to me, it easier to understand this way.
 
-Add the missing XDP_ABORTED case with trace_xdp_exception(), matching
-the handling already present in the skb path (cpu_map_bpf_prog_run_skb),
-devmap (dev_map_bpf_prog_run), and the generic XDP path (do_xdp_generic).
+We can also use tmin and tmax, like tnum_step from the previous commit does=
+,
+to keep things consistent.
 
-Also pass xdpf->dev_rx instead of NULL to bpf_warn_invalid_xdp_action()
-in the default case, so the warning includes the actual device name.
-This aligns with the generic XDP path in net/core/dev.c which already
-passes the real device.
+> - There is no need to gate the condition `tnum_next > reg->umax_value`,
+>   if next tnum overshoots the reg->umax_value then only tnum_min is left.
 
-Signed-off-by: Anand Kumar Shaw <anandkrshawheritage@gmail.com>
----
-Changes in v3:
-- Dropped unrelated queue_index changes that were accidentally
-  included in v2
+The guard helps avoid the case where u64 and tnum have no intersection:
+u64:  ---[xxxxxx]-----
+tnum: x------------x-
 
-Changes in v2:
-- Pass xdpf->dev_rx to bpf_warn_invalid_xdp_action() instead of NULL
-  (Jakub Kicinski)
----
- kernel/bpf/cpumap.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+The entire condition for "only overlap of tnum is with umin" needs to check=
+ both
+(1) if umin is a member of var_off
+(2) if the next member of var_off after umin > umax.
 
-diff --git a/kernel/bpf/cpumap.c b/kernel/bpf/cpumap.c
-index 04171fbc39cb..39959bf542f9 100644
---- a/kernel/bpf/cpumap.c
-+++ b/kernel/bpf/cpumap.c
-@@ -221,7 +221,10 @@ static int cpu_map_bpf_prog_run_xdp(struct bpf_cpu_map_entry *rcpu,
- 			}
- 			break;
- 		default:
--			bpf_warn_invalid_xdp_action(NULL, rcpu->prog, act);
-+			bpf_warn_invalid_xdp_action(xdpf->dev_rx, rcpu->prog, act);
-+			fallthrough;
-+		case XDP_ABORTED:
-+			trace_xdp_exception(xdpf->dev_rx, rcpu->prog, act);
- 			fallthrough;
- 		case XDP_DROP:
- 			xdp_return_frame(xdpf);
--- 
-2.39.5 (Apple Git-154)
-
+> - Accidentally, it fixes the scx_cosmos regression
+>   (probably, because first condition is relaxed).
+>
+> Wdyt?
