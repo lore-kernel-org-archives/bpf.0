@@ -1,148 +1,76 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42212C11EE;
-	Wed, 18 Feb 2026 09:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A3933DEE5;
+	Wed, 18 Feb 2026 09:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771406752; cv=none; b=cM8Rn/z+Oqdy4TYxwyWEonh2vmc9wtMVkeCWyJ4sJlgwEYUof+wGOSCItZvGBMbFBJ6NDONW66w5YumGj3BFvdDtdlHdBKthQpFIBntTjGYNqi03GeW8J5zwc7wuzcPnF/FIx3+Bz+NrcxTkab/obk2UsicIrnWNKLL+UHSeY7w=
+	t=1771408608; cv=none; b=cJVW5fpzKdLb9tJHzi7np/x1HUlIAVF1hP0fiTaqOxBNsrL406k7vR2KcSdaMtkGmqDCQIVSs2BWIZQCtGbhp2cg4YtTrvJ6QFsoDocPc6C/b7MmCUm8cEjKjoRneMIlUCq+7UMe4hCs5O4yTdiTljlh2paVIh1TwJ/+AQLHl6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771406752; c=relaxed/simple;
-	bh=7Mi9qac5ReGqC6chwcM+0FI8Kzvlyju/4bHh3m/uhJU=;
+	s=arc-20240116; t=1771408608; c=relaxed/simple;
+	bh=2M/oHwf738t/3QfICnitZIlKcPZTFwrhHKLEPVnncmI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BzkLZiHijh4m9+bbToFMGBfzUOVsKggtUiOaUwk1aRT72nvdxpotX4TZTAzzh/034gBdmXBgmVQI3xeLUAv3MWaTYw1WZrYhN8Bxdns9ef97gRVFSDcK17KnZr2+zJefBYT7FnF7rPaOQ+Ymyva1rzmViH8vHW4oe5zyRA6P3Bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hKShtMU2; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=IdQrYLsDp61jZZOPVbZwOvgGfBtFzDJj0bUOGMCCXHQQKQF+andAJEZ/7QNOjlv8T8KHbyUE0THRZYi7m6iRpcbu49GO+mSdkF9UNPlErTj+6zNtN8cZuIEkgpOLbnN/FEfWOPnhWB/K+ewHN5jT6MnXpkntHQoqgd1XQqAg1uo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fgQ128kW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hKShtMU2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771406751; x=1802942751;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7Mi9qac5ReGqC6chwcM+0FI8Kzvlyju/4bHh3m/uhJU=;
-  b=hKShtMU2KvSWIwYpXgsQaTqtm5saMnvTy3iFVnUUqkly+7dxQOrA61Mw
-   ELGSasdoFtMoTgfK2PeoyfqdtbfKOpsbDV6G8z7blr+jzP59mUvARmMZj
-   qTxXlJCflb25kDXnrvAR4AGiT6rwCQJ5YHLjxY47sbgMfqj/QxldQd53+
-   ksUXyI4Ic96gPHZv+/1mgu/b7YWRYo6J7xLqtZBdUZTbQN0Imj+Y/5vmk
-   qABe/QMMG0huf/CEzvv6YD6XjN861E2WiOguI0qyadG6g5bDSJ8Myof4v
-   xxYu9uhvvqYgxCRmfWbwjGsTbdF+CfWu8+2xLtii/KC+mSHe24vZG0B+3
-   w==;
-X-CSE-ConnectionGUID: rByOHHPcSvmBjEfvmyaGXQ==
-X-CSE-MsgGUID: Eq50VlS5SOCo31P2xmJx6A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11704"; a="75088896"
-X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
-   d="scan'208";a="75088896"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2026 01:25:50 -0800
-X-CSE-ConnectionGUID: Rh52ltp/RYiXXH6MzyV6iw==
-X-CSE-MsgGUID: wkye9/XKQ3iuGwpAWVPCsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,297,1763452800"; 
-   d="scan'208";a="214136496"
-Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 18 Feb 2026 01:25:45 -0800
-Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vsdoT-000000012EC-3hfd;
-	Wed, 18 Feb 2026 09:25:41 +0000
-Date: Wed, 18 Feb 2026 17:25:10 +0800
-From: kernel test robot <lkp@intel.com>
-To: Slava Imameev <slava.imameev@crowdstrike.com>, ast@kernel.org,
-	daniel@iogearbox.net, andrii@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
-	yonghong.song@linux.dev, john.fastabend@gmail.com,
-	kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-	jolsa@kernel.org, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
-	shuah@kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-open-source@crowdstrike.com,
-	Slava Imameev <slava.imameev@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add trampolines
- multi-level pointer params test coverage
-Message-ID: <202602181710.tEK6nOl6-lkp@intel.com>
-References: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fgQ128kW"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62380C19421;
+	Wed, 18 Feb 2026 09:56:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771408608;
+	bh=2M/oHwf738t/3QfICnitZIlKcPZTFwrhHKLEPVnncmI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fgQ128kWu65YDpWegMGfZb53YMJOn37hIRSVFfGx+pX+XzlqcyAlnYaoU4+6+1DmR
+	 RORpysuoN+2jc/iElKEHzTyrk0kzgPds9IeF8VxQJ+oNH9GOwItJ1Z3Oxdd7tUBcVN
+	 gc5Nrt9uyY/DSO/rlnEeiwkHWl3ev1N5AM2HgxyK3ZUZYnYyxqmq25m1NcF14MNeOg
+	 cCpyzWOtZJzVvtGzG8/VOLvy1VOmg3CHRMe8f06ebQMRHR55fCCvgN/TodM6lois0T
+	 F2PEVMj7VwCi7XlgOy78HPknik2Fxg643Q0kw2U9PSjATb6snf0OTVTdqf2Er++Lkg
+	 qhpQKFaFxakhg==
+Date: Wed, 18 Feb 2026 10:56:42 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Haris Iqbal <haris.iqbal@ionos.com>
+Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-block@vger.kernel.org, linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-nvme@lists.infradead.org, bpf@vger.kernel.org, lsf-pc@lists.linux-foundation.org, 
+	linux-kernel@vger.kernel.org, lwn@lwn.net
+Subject: Re: LSF/MM/BPF: 2026: Call for Proposals
+Message-ID: <20260218-haben-protokollieren-d4b5d2a1f8c9@brauner>
+References: <20260110-lsfmm-2026-cfp-ae970765d60e@brauner>
+ <20260119-bagger-desaster-e11c27458c49@brauner>
+ <20260129-beidseitig-unwohl-9ae543e9f9f5@brauner>
+ <20260216-ruhelosigkeit-umlegen-548e2a107686@brauner>
+ <CAJpMwyg-3-Z=ZDC60Vn0s-8Z78VOPKYmvX9s=Nnvcoao4T5zbg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260217221357.18215-3-slava.imameev@crowdstrike.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJpMwyg-3-Z=ZDC60Vn0s-8Z78VOPKYmvX9s=Nnvcoao4T5zbg@mail.gmail.com>
 
-Hi Slava,
+On Tue, Feb 17, 2026 at 11:37:19AM +0100, Haris Iqbal wrote:
+> On Mon, Feb 16, 2026 at 3:28 PM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Thu, Jan 29, 2026 at 05:13:52PM +0100, Christian Brauner wrote:
+> > > On Mon, Jan 19, 2026 at 03:26:39PM +0100, Christian Brauner wrote:
+> > > > > (1) Fill out the following Google form to request attendance and
+> > > > >     suggest any topics for discussion:
+> > > > >
+> > > > >           https://forms.gle/hUgiEksr8CA1migCA
+> > > > >
+> > > > >     If advance notice is required for visa applications, please point
+> > > > >     that out in your proposal or request to attend, and submit the topic
+> > > > >     as soon as possible.
+> >
+> > This is (likely) the final reminder to put in your invitation request!
+> > The invitation request form closes this Friday, 20th February.
+> 
+> Hello,
+> 
+> What is the announcement date for accepted topics and invitations?
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on bpf-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Slava-Imameev/bpf-Support-multi-level-pointer-params-via-PTR_TO_MEM-for-trampolines/20260218-062417
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260217221357.18215-3-slava.imameev%40crowdstrike.com
-patch subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add trampolines multi-level pointer params test coverage
-config: loongarch-defconfig (https://download.01.org/0day-ci/archive/20260218/202602181710.tEK6nOl6-lkp@intel.com/config)
-compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260218/202602181710.tEK6nOl6-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602181710.tEK6nOl6-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> net/bpf/test_run.c:737:2: error: call to undeclared function 'flush_tlb_kernel_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     737 |         flush_tlb_kernel_range((unsigned long)page_address(page),
-         |         ^
-   net/bpf/test_run.c:760:2: error: call to undeclared function 'flush_tlb_kernel_range'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     760 |         flush_tlb_kernel_range((unsigned long)addr,
-         |         ^
-   2 errors generated.
-
-
-vim +/flush_tlb_kernel_range +737 net/bpf/test_run.c
-
-   709	
-   710	static void *create_bad_kaddr(void)
-   711	{
-   712		/*
-   713		 * Try to get an address that passes kernel range checks but causes
-   714		 * a page fault handler invocation if accessed from a BPF program.
-   715		 */
-   716	#if defined(CONFIG_ARCH_HAS_SET_MEMORY) && defined(CONFIG_X86)
-   717		void *addr = vmalloc(PAGE_SIZE);
-   718	
-   719		if (!addr)
-   720			return NULL;
-   721		/* Make it non-present - any access will fault */
-   722		if (set_memory_np((unsigned long)addr, 1)) {
-   723			vfree(addr);
-   724			return NULL;
-   725		}
-   726		return addr;
-   727	#elif defined(CONFIG_ARCH_HAS_SET_DIRECT_MAP)
-   728		struct page *page = alloc_page(GFP_KERNEL);
-   729	
-   730		if (!page)
-   731			return NULL;
-   732		/* Remove from direct map - any access will fault */
-   733		if (set_direct_map_invalid_noflush(page)) {
-   734			__free_page(page);
-   735			return NULL;
-   736		}
- > 737		flush_tlb_kernel_range((unsigned long)page_address(page),
-   738				       (unsigned long)page_address(page) + PAGE_SIZE);
-   739		return page_address(page);
-   740	#endif
-   741		return NULL;
-   742	}
-   743	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+We will very likely aim to get the initial batch of invitations out the
+middle or end of February.
