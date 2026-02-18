@@ -1,146 +1,118 @@
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com [209.85.222.41])
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096B4238C23
-	for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 06:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE5630B533
+	for <bpf@vger.kernel.org>; Wed, 18 Feb 2026 06:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771394812; cv=pass; b=Wq9cAq1QK+AP3/p7pALA2iDO1c69GNz10/DjlVtKW+6r/fZnPe/63TNPljPEZxekKxdwuRExITXh3hJHH3KEaV7J4Nk+9ZQFfLRzZtM4KR+SNcUAgTjAyNIeuIM7NrHekXrUgVmoXfnbmTj2lK++smQgqbQpi0ccZYRtG0N4GPo=
+	t=1771395449; cv=pass; b=jzOncY/PuJxXIm5o0M5lHWFP1UCFR/gAAgc2Hem6COtnCUBtLeGEa8Gw14MzLerCjRJ+8NlVceQRMwAGtizky4CNIjcEMZY2TvB5sB7vLliYoRtpn/hCxSGWoHksJWriEdZkzBGr8UR6SU90Kq1A9zBV8QCDsYJTyMEKLFZcQNU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771394812; c=relaxed/simple;
-	bh=A+bwLkCnLCUwDa0P8W68NBhf4YBnGFUw0xw++Rw1naA=;
+	s=arc-20240116; t=1771395449; c=relaxed/simple;
+	bh=K26xy6UK86TRjo/lLzaA7N0VhGh8ikpsVYPWkfJ/THg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ISs7HZwhlOrf3D0lan2Kj+hK63nTZ6yT2QZ7+qfU1Xg5lD8skhowQJZff1FgL/7bFCzW8YB+S5fSe3dXxuHgXsKNaIDGe7ZawJWlIKqfGHUZIvkTF/fvYinyRXhr0pf8uskVN/rTRQYjGDJ/594bOCJmMMI9+RkgPh29DLPU9fE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cIGFguPh; arc=pass smtp.client-ip=209.85.222.41
+	 To:Cc:Content-Type; b=rsINB+JBKZ2ADGdTGKZTtpfntsSiq1O3y3yIjsaJEfbJ/vFlHrZLC5F2DX3b1bKRiHYc8UNzgZ3N0rWdKBWXBiraE7lv97Jiz6YHRiTBOQvs87gfs4OWzydLedHcqndAkOCdMyNhtzb8A4KbI/1YfwMNGMkx+FTbQCCk5dz5Ukg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iL7RHtnD; arc=pass smtp.client-ip=209.85.221.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cIGFguPh"
-Received: by mail-ua1-f41.google.com with SMTP id a1e0cc1a2514c-948ba5ccf54so2781819241.1
-        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 22:06:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771394810; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iL7RHtnD"
+Received: by mail-vk1-f177.google.com with SMTP id 71dfb90a1353d-5673fd077b4so2185669e0c.0
+        for <bpf@vger.kernel.org>; Tue, 17 Feb 2026 22:17:26 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771395446; cv=none;
         d=google.com; s=arc-20240605;
-        b=H45BzBTSawZdZv5QgnnDxDIgoEENWoSbqNURtmVdawODDStAnFu28EystpX0e6EGc9
-         R9SHdy59v8L8XrhQSfMtugj/hp6RRpbnn9lKr8EHoRau6d58L6Y0CGXizn1PA+HEpCOr
-         bBykTOxVtP2FE0gbJez9yZmQe4S0uJPXWYt6d5ikhYKrjE08zyvK64YYA/U8/nCvmK7x
-         1v28yEVqXsKJAxC2IHhBBtDPzjvmAzHnUx3MxJDjBn6rNsdECtadFHwxLFxOQJmodST8
-         FpNGyUyyQf9AkiZj1z5spYLVg8tKLl/U+9bIJVyNkvmC4KQmbFer0PHmmdzk/uvPoOfK
-         xW4A==
+        b=bAWrf0ImmfIX9+pI3+ltu+O0Lr0vQKyVNG1tHINh9UUc0Ouipjcxp8YM8Ri/eyFZLJ
+         HqvF0k0O+vFe0CfcwCGz8+u30pYI0aqnVH9qrz8YciMReR1oNZC3amdsWr6LdRwOBlEw
+         0YpoeRoxr252GDqAk+8xs4GmvIeaN0CdFH3OnkUVVlE1NkuuWfPW4SXKDLj+HiG1sSPf
+         n8eQJRG6vixzWVlEjDEUHEzVi7BIQn5ic9zMBxWcKUxvKatqSr10H/U12uMWIRAFUzo0
+         TeZ1TGf1KcubPgkWaUO0vUvIkZkSXll48A3BTfts/1ojG2fZrKVLVtwZ/izTcNAvjY7I
+         ewTg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=x7ObbrphFjVg5XfcUk8shmVxjXtRriYQrOO1ZYbMNzM=;
-        fh=7BdvuVjblzFWSm+FQrzzvSdJfy/Pp8mwXvrAgAkr0Zg=;
-        b=VRbGiIOFen1zePjKshGWGPvmJDgHsqrXCRph4yFrCtqM7KFnYqSbNPY2L4KaCSxUEj
-         j88M1zRwv3z6GEINkHdgv+15KEoqNQHYhgoyW1HiM21igD5gor4P3m0536aeTvGi8EbZ
-         yuhI0Jqt6VUyYQAOKhfIL8Y+701KcxtMZQ0Amobd1sc9bVS9VRlHbIpqSebTvC+nb3xG
-         /VWwEM9NPeVGEE4kBJstX2We18H9cKR6T/9KILR65zgIB6wgM55vLsQP7xQ+OqDLhn2j
-         L5K4+iXdv/QIICgOVD9IdrQ/hkDr2BH67jjDcLTThE6HQlcsPKsSikT7fTuIQMkud45+
-         oyMA==;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=K26xy6UK86TRjo/lLzaA7N0VhGh8ikpsVYPWkfJ/THg=;
+        fh=Z5O2W4KopKd7y0e3ruTj3zZ1fswuqzAtVDfLK65ahrI=;
+        b=MXTB2+bHYsTiTrkrHpMmbaS4mGwGtezEpmnrmeRybG3P5/hKPZsYfAjbSWP6RrtBPI
+         O7tJyqdjwE9KxTxBaa+86jTcTb+RNILQdSpqpQQzTPgEGfhi2bMgfogBsXSsRfNDflTF
+         4CYvWd/dgd4epUxlZBLvB8aVhDzsQMS9qGrek6CB5AjzbpVte+h4xgURx5IdTDB7vM7x
+         aM71pUlgecSfa/SjTCprO7/HY84mFzYowCKCO/sgRaa8MVa+EMQ87LGXMgAZIwfz4N0x
+         fOGN36ubkJR3umrk+YzMXruPVWzR4cAt+cjLfaHwgMDbhbBIfuedTpEibtbS/RM1MKKd
+         0hIg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771394810; x=1771999610; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x7ObbrphFjVg5XfcUk8shmVxjXtRriYQrOO1ZYbMNzM=;
-        b=cIGFguPhNETfXLCtK6eXYRoN033Go8IdTPMMqT5SR2Aa87oUTddK1Bx/pZjJgVFCbu
-         f/KBCtqyh2dw0YDXFjFR8I9bdjGzggrzWOdEvy4wNKLN788nzpG2ipIoLA5cQHUhOXZe
-         18z6cCplrr3m5LjG99MfTEx8uMBhBNWPXZ983kUR98UZpmZURohkeln/lmg7onW+AE/P
-         rvX7j76pRdllgAbAP4bLaH09cyt1LoljQfmLK8lYtJ5th8w7K4PRs9s2n7btBNLzRB6y
-         jyfS3P0SLoo8ErZT1mSNuTplkhJ1uC4IOGmbMvKsirIoktrAF8Yfrkx6ozBLrdW29+WQ
-         Ghlg==
+        d=gmail.com; s=20230601; t=1771395445; x=1772000245; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K26xy6UK86TRjo/lLzaA7N0VhGh8ikpsVYPWkfJ/THg=;
+        b=iL7RHtnDAOHjYkSNPUlGH53p53OhPcnIfeS6zEkL/2xqlvoZ8T6UOb2lOKu5D2YDmP
+         W4BqJLO3IVrBX7DdS0gA6EOJ9djgq5VGrwj4XIJjWdZJl9zYJAGy5HoDNVMb67HF3jIg
+         8D7AoID3KyxPAx1ujQ7yXcBzilVrvxkGCF1NwDZtCrEpZdhMpj+RIPxtAkvi9eYsBX6f
+         ENGfybVDHWgBqRMXPX7scwPrcgxwbQ0lZiJk1Pck800CLRcmVg4XXP+XUSNoPh0+KvGd
+         7qQVMwNy7pW1QRpkAGGJnC43f5sNu++QZKwVFxlQvQeG7r6ok7kIEH+Z0681VqJw7zo1
+         B1rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771394810; x=1771999610;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=x7ObbrphFjVg5XfcUk8shmVxjXtRriYQrOO1ZYbMNzM=;
-        b=DrUDBoefHz04sRo25o6pDEckxRsoJydexj9P/oe+sMUCN90cqkiK+atSqjXlcF/Xy6
-         IQjnNwgnqs1UIPLjx1EcLOavWaAwZfwGwF3LK+JKbufK24P0pbTrCDX3NtU6UDyuy0FN
-         mc+YRl/WAT9RRmOLxYmH0rIG1gzHTIW4hGIT7VjP+P941cyr2Koi/1KcirbCatrz4wXf
-         mldKEkxRqLdkdME/lXKcQtytmgR0rX79MLCTYhh02uvX73Wguk+w8ZTT8nHfxh07TBl+
-         +YDUj7yiyzXAF5f6jr03vq9SId5pSzFBjCYuUfXtvA3VFfKp8UOGcKcr42wiIT+kuOyg
-         vsxg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKzTEMKW4hgqFDwJj4LOid1CqnwBHve81ymCpmmDXxUQPjTfsjHuKjBIACB3OqsrGm84A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxJNlVopCWrQx15c3DCBa/qcBHf4uX6D+qv9/0AItXXOffgI6Uy
-	JyS+HIav2i0p9KuKkJKcIUxGTWNBhmDuIVLJ0/FSBnVR+LwE9x1vDYLyeVCKYQ/SctcB3e3zjVD
-	FzyUR6yyWboFYwRm4vZ6ojhPAIDkxNiE=
-X-Gm-Gg: AZuq6aJ2sVngd7KtAfjRDDOOVC42GeDlgnVYX7+xLn1tdvIyLWLscJAVQ09ZPiXc6My
-	IDLaDc+doGkKkh5V94cit9Ub8/Z/O/5Af6/I3yslb7I2716aT5sQCyS6mILe/6ddXq4qLH7BbJp
-	dGzloiMYgMx+7pJuCqLZZG3k/oZGdHDD55TcKh3dwhSp9Qeb9h5+LcRs57PN3x2A5yho5v3Jk2j
-	7ubDyY1hy7sxNoGWgEMV6tRD6ArRvc3/tLSOGpexYhVNAXavp9gnW70A2dKwxFslJcZjxHElN6s
-	smbh7u5q8E8nCau8i7CEpARpipok13ZoSnSEbpcdWg4bo2/2uojw
-X-Received: by 2002:a05:6102:41a3:b0:5fd:f0d2:9ef7 with SMTP id
- ada2fe7eead31-5fe7fd5b009mr408412137.42.1771394809842; Tue, 17 Feb 2026
- 22:06:49 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771395446; x=1772000246;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K26xy6UK86TRjo/lLzaA7N0VhGh8ikpsVYPWkfJ/THg=;
+        b=ZcCdQvzolHtwoD0kQAqo1O77iO+40HxlOBvvLrzvm3A353U3iOhywXUyM/Xt0KjdNR
+         83K6YAOdqAikngMiOule/pQPD0KEz+CfiLT5IfAvru7jZpt5qNpI5X+uwAY9AhMaP0nN
+         kcAHRh28IVJ3kWQCULraGxv4uewLo7JhpT8VX1/FTdND739LodQJtNkq+MgomvCw4iHk
+         R2eUkhgUhcyu/xkc5K6wqnQ1uFtDfP9tlpzezw9GsHr3BSTu3nNGyIS7piefZ6z2ziAu
+         4lXE47YO16DrlW4TbZvgzNFxFHb9CP64bMss9IFG+Cyz33HHk4uIqTOkSHilTTGCkcEy
+         bleQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXG2OONfdTnQX0KPtnHPUons3xghE4GsPDl4VajxYV2D47nYIN184VAmv7WXsRpVIU6Mnk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwC1Sc9TgbZ7JD0iQVRy0uyZ2TnyIV9OMLFV8Cnq5WF8ahSJHDY
+	1m3ghu4tFWaGA1x85FSFD5vbZnFAyj5ksotwT/kKExX/cnNJVfD0YcbpAjyXSMCQrEyk0Zs6GVt
+	gsAyMEOaBiXtnHWInj240O3FBdvdDJzo=
+X-Gm-Gg: AZuq6aLovrPcIa6HBVUnbXicMoPjh88a6g3EC0iJLO8djfwkKbIitlhVheJ0BzZ4iVZ
+	fW0hD/dFC36wVvEUGCyQiHTjTHczSgLFxXEev12MTqzddi+A+Nm5tnFVkEeByy42B+o7fKL3vtp
+	ERiU5pBq/vsKs1DUY7I6oIAd6cFffo//F9hUW3ziMUlEqRUsgtvWphnk2RU7UPn0TPwyxU5cdho
+	Cn+EqBeUEwo8TVbRvq9LPjed3DX/nYzvDxUpfq2Jw7+uLF4/feWt9/Li+bCuM+tKN2Il2AN2HeL
+	5tWctFNpqY2bX+Bawg+yTMFwg03VzbPic5YTHbEHxg==
+X-Received: by 2002:a05:6102:3f4c:b0:5fe:8b4:19a9 with SMTP id
+ ada2fe7eead31-5fe16f68260mr6064301137.37.1771395445625; Tue, 17 Feb 2026
+ 22:17:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1771316309.git.paul.chaignon@gmail.com> <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
- <12705b3d58569685048804c33e90755c17667cbf.camel@gmail.com>
-In-Reply-To: <12705b3d58569685048804c33e90755c17667cbf.camel@gmail.com>
+References: <42397d01c3662e85437ffdfa41f5e0c0799189fb.1771316309.git.paul.chaignon@gmail.com>
+ <70e49d1210d1aa77ccf713bb39c5b6a19c0081553a2fad41a581714077663c0e@mail.kernel.org>
+ <CAM=Ch05qfhEzxCoKBK6MhQza4vPdCus76gt1=vGqEOzkFJRtOA@mail.gmail.com> <CAADnVQ+wZhriWAcHtXvVL8FRF0E-2iPu+Cdj8KqkDKKeHA+w9A@mail.gmail.com>
+In-Reply-To: <CAADnVQ+wZhriWAcHtXvVL8FRF0E-2iPu+Cdj8KqkDKKeHA+w9A@mail.gmail.com>
 From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Date: Wed, 18 Feb 2026 01:06:39 -0500
-X-Gm-Features: AaiRm51vbetbvEW2g5uZWCjiWu_IpNlmvEIgwLs_LlAbkHyw5hql0ZZvvjSA6lM
-Message-ID: <CAM=Ch06Vg-faG9ukU4DAsF9FRG2PeUtYHh3BkG0dOzYi=WDCyg@mail.gmail.com>
-Subject: Re: [PATCH bpf 2/4] bpf: Improve bounds when tnum has a single
- possible value
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Date: Wed, 18 Feb 2026 01:17:14 -0500
+X-Gm-Features: AaiRm51hxwlZEIHpuN3ECVc_uNFBEZlHuAgGk5MKdImkYqnF09YaNBUwsNqRKXU
+Message-ID: <CAM=Ch06n7=bv71dH_4b+opvbk2KU7LgaGNxM3WwBON2Pem29tw@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/4] bpf: Introduce tnum_step to step through tnum's members
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bot+bpf-ci@kernel.org, Paul Chaignon <paul.chaignon@gmail.com>, 
+	bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Eduard <eddyz87@gmail.com>, 
+	Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
+	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Chris Mason <clm@meta.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 17, 2026 at 5:58=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
-[...]
-> > 1. The u64 range and the tnum only overlap in umin.
-> >    u64:  ---[xxxxxx]-----
-> >    tnum: --xx----------x-
-> I think this hunk should be rewritten as follows:
->
->         tnum_next =3D tnum_step(reg->var_off, reg->umin_value);
->         tnum_max =3D reg->var_off.value | reg->var_off.mask;
->         tnum_min =3D reg->var_off.value;
->         if (tnum_next > reg->umax_value) {
->                 /* The only overlap is umin */
->                 ___mark_reg_known(reg, tnum_min);
->         } else if (tnum_min < reg->umin_value && tnum_next =3D=3D tnum_ma=
-x) {
->                 /* The only overlap is tmax */
->                 ___mark_reg_known(reg, tnum_next);
->         } else if (tnum_next <=3D reg->umax_value &&
->                    tnum_step(reg->var_off, tnum_next) > reg->umax_value) =
-{
->                 ___mark_reg_known(reg, tnum_next);
->         }
->
-> - At-least to me, it easier to understand this way.
+[ ... ]
+> Something that you should keep in mind when relying so much on SMT.
+> Shift by 64 on x86 is a nop while on arm64 it results in zero.
 
-We can also use tmin and tmax, like tnum_step from the previous commit does=
-,
-to keep things consistent.
+That is a fair point; a good reminder of the semantic gap between SMT
+abstractions
+and real hardware.
 
-> - There is no need to gate the condition `tnum_next > reg->umax_value`,
->   if next tnum overshoots the reg->umax_value then only tnum_min is left.
+I missed a standard constraint here: explicitly model the undefined
+behavior by adding
+an assertion that the shift amount is strictly < width. That would
+have forced the solver
+to flag any execution with shift amount >= 64 as a verification failure.
 
-The guard helps avoid the case where u64 and tnum have no intersection:
-u64:  ---[xxxxxx]-----
-tnum: x------------x-
-
-The entire condition for "only overlap of tnum is with umin" needs to check=
- both
-(1) if umin is a member of var_off
-(2) if the next member of var_off after umin > umax.
-
-> - Accidentally, it fixes the scx_cosmos regression
->   (probably, because first condition is relaxed).
->
-> Wdyt?
+Having said that, I will say that SMT was still instrumental in
+developing this; it did help
+cover cases that would have been difficult to hit with testing or fuzzing.
