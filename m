@@ -1,32 +1,32 @@
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD532FE57B
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 14:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D2B133FE04
+	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 14:32:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771511520; cv=none; b=nNkOnSieoVDmX5wraR4PmaF4RDyp5gvVRSWljZyrbLTOk9XceJlvkDuQEIm33seqOm6t+BgI/YuRMIZnRAeGEi4qHOvQaymnFUCSHgpOQkxnWIHcB3u9+Hn4ma6Rfy6D2AKygWBtBsGI6YyyNpOiXXOwyvQ/nsnx6BbtnWvBYUA=
+	t=1771511550; cv=none; b=I0BcE1YSduLw7JwZWeu+4ZXrqhoTPfE1Nd44sMJ97AMUnc2iabRyn1KbQ2Jug4urSe6/w8OnC7tCljqs6Lc6KH1lxammBMBWia2snDmkawNyHYUhTfgfrRRR6zjDgyQGF5MX35g8L0E/hyv5NC8+SWwpCG8O3jNe+dr90pLESfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771511520; c=relaxed/simple;
-	bh=4nZ/Hxz+9njS2oPp6AwC1Vd/k0sBQjMCSloOzzXzEmE=;
+	s=arc-20240116; t=1771511550; c=relaxed/simple;
+	bh=Rwu0/Q5O6sDify4vtHE7EgDx/HdSGFfyoKuhTksF7Ao=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ub88jA8EwYMnG2V39x7wUJ6yYTnWQ3IcomL1rboYcmqWeOhjwXpOuClW6EiTajAWD+AlPKOXfcBh88tFfJB9p1cPAdRtNbOscA7cnf8MD3DZPPec9lCA7YxG52rgydx+qTXMZJmjOERccnWgw9JXWGtf5q7I2s/FYauYIS6lC6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eSagwInd; arc=none smtp.client-ip=95.215.58.171
+	 MIME-Version; b=EREeY+vaNTlRbjQg6y+ByIVZuoqlO8H+F1CqVP0fYQJnpzMOwLI+3AYioNu74dOzIGqCEk4+h8y9aGV5QMGY19CIC0FwNf7EbgkFWniu48KYeSIcH8tdaIumXIt1DJAq/BgV7hYxCco6iFNlghvgKAWsQdJE2ukqtNIHcAiONnU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sr5M0+63; arc=none smtp.client-ip=95.215.58.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eSagwInd"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sr5M0+63"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771511516;
+	t=1771511547;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TDysQwXc7CzQOBmT/kFdKL3V02JclHexDCmLhDyq0UI=;
-	b=eSagwIndy6NTov4HnTmGveVQ7Qn3mncFyVvmyz6/94sXxh9PvILdu/4ZsjM/jt0WTU9S2a
-	BLdhXtWb30gxjHiVKtHZ/zt/WN0NAILwChi84PC8tvqHMBEEPCQsRcj3+ZmZh4gq04SNWw
-	ALGgmG0EwvspQPRPbgdPHikpTLSCxls=
+	bh=q2bRCV7yDeBf8GuOUBEvMnX2Y0xlNieUH03bOqMBKOs=;
+	b=sr5M0+63Wsz/ZZW1ycof/LgoMgshho1gsH8aRzB8qzGyjBs7rbmGy5s3WQDYQs8NGiSTHH
+	mq0TRXvTdlSZkV6BWgnSjsF3wTVpux4bX3ZZf61jgHFh7IQrelrkdZ8gq8t86l0TpmxOZm
+	hR78dUiXmERnYMyYvwn87pHpaqddEYo=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -61,9 +61,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 5/6] selftests/bpf: Add __cpu_feature annotation for CPU-feature-gated tests
-Date: Thu, 19 Feb 2026 22:29:27 +0800
-Message-ID: <20260219142933.13904-6-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 6/6] selftests/bpf: Add JIT disassembly tests for 64-bit bitops kfuncs
+Date: Thu, 19 Feb 2026 22:29:28 +0800
+Message-ID: <20260219142933.13904-7-leon.hwang@linux.dev>
 In-Reply-To: <20260219142933.13904-1-leon.hwang@linux.dev>
 References: <20260219142933.13904-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -75,268 +75,197 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add a new __cpu_feature("...") test annotation and parse it in
-selftests/bpf test_loader.
-
-Behavior:
-- Annotation value is matched against CPU feature tokens from
-  /proc/cpuinfo (case-insensitive).
-- Multiple __cpu_feature annotations can be specified for one test; all
-  required features must be present.
-- If any required feature is missing, the test is skipped.
-
-Limitation:
-- __cpu_feature is evaluated per test function and is not scoped per
-  __arch_* block. A single test that combines multiple architectures
-  cannot express different per-arch feature requirements.
-
-This lets JIT/disassembly-sensitive tests declare explicit CPU feature
-requirements and avoid false failures on unsupported systems.
+Add bitops_jit selftests that verify JITed instruction sequences for
+supported 64-bit bitops kfuncs on x86_64 and arm64, including
+CPU-feature-gated coverage on x86 where required.
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- tools/testing/selftests/bpf/progs/bpf_misc.h |   7 +
- tools/testing/selftests/bpf/test_loader.c    | 150 +++++++++++++++++++
- 2 files changed, 157 insertions(+)
+ .../testing/selftests/bpf/prog_tests/bitops.c |   6 +
+ .../testing/selftests/bpf/progs/bitops_jit.c  | 153 ++++++++++++++++++
+ 2 files changed, 159 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/bitops_jit.c
 
-diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
-index c9bfbe1bafc1..75e66373a64d 100644
---- a/tools/testing/selftests/bpf/progs/bpf_misc.h
-+++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
-@@ -126,6 +126,12 @@
-  *                   Several __arch_* annotations could be specified at once.
-  *                   When test case is not run on current arch it is marked as skipped.
-  * __caps_unpriv     Specify the capabilities that should be set when running the test.
-+ * __cpu_feature     Specify required CPU feature for test execution.
-+ *                   Multiple __cpu_feature annotations could be specified.
-+ *                   Value must match a CPU feature token exposed by
-+ *                   /proc/cpuinfo (case-insensitive).
-+ *                   Can't be used together with multiple __arch_* tags.
-+ *                   If any required feature is not present, test case is skipped.
-  *
-  * __linear_size     Specify the size of the linear area of non-linear skbs, or
-  *                   0 for linear skbs.
-@@ -156,6 +162,7 @@
- #define __arch_riscv64		__arch("RISCV64")
- #define __arch_s390x		__arch("s390x")
- #define __caps_unpriv(caps)	__attribute__((btf_decl_tag("comment:test_caps_unpriv=" EXPAND_QUOTE(caps))))
-+#define __cpu_feature(feat)	__attribute__((btf_decl_tag("comment:test_cpu_feature=" feat)))
- #define __load_if_JITed()	__attribute__((btf_decl_tag("comment:load_mode=jited")))
- #define __load_if_no_JITed()	__attribute__((btf_decl_tag("comment:load_mode=no_jited")))
- #define __stderr(msg)		__attribute__((btf_decl_tag("comment:test_expect_stderr=" XSTR(__COUNTER__) "=" msg)))
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 338c035c3688..3729d1572589 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -4,6 +4,7 @@
- #include <stdlib.h>
+diff --git a/tools/testing/selftests/bpf/prog_tests/bitops.c b/tools/testing/selftests/bpf/prog_tests/bitops.c
+index 9acc3cb1908c..2c203904880d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bitops.c
++++ b/tools/testing/selftests/bpf/prog_tests/bitops.c
+@@ -2,6 +2,7 @@
+ 
  #include <test_progs.h>
- #include <bpf/btf.h>
-+#include <ctype.h>
+ #include "bitops.skel.h"
++#include "bitops_jit.skel.h"
  
- #include "autoconf_helper.h"
- #include "disasm_helpers.h"
-@@ -44,6 +45,7 @@
- #define TEST_TAG_EXPECT_STDOUT_PFX "comment:test_expect_stdout="
- #define TEST_TAG_EXPECT_STDOUT_PFX_UNPRIV "comment:test_expect_stdout_unpriv="
- #define TEST_TAG_LINEAR_SIZE "comment:test_linear_size="
-+#define TEST_TAG_CPU_FEATURE_PFX "comment:test_cpu_feature="
- 
- /* Warning: duplicated in bpf_misc.h */
- #define POINTER_VALUE	0xbadcafe
-@@ -67,6 +69,11 @@ enum load_mode {
- 	NO_JITED	= 1 << 1,
- };
- 
-+struct cpu_feature_set {
-+	char **names;
-+	size_t cnt;
-+};
-+
- struct test_subspec {
- 	char *name;
- 	bool expect_failure;
-@@ -93,6 +100,7 @@ struct test_spec {
- 	int linear_sz;
- 	bool auxiliary;
- 	bool valid;
-+	struct cpu_feature_set cpu_features;
- };
- 
- static int tester_init(struct test_loader *tester)
-@@ -145,6 +153,16 @@ static void free_test_spec(struct test_spec *spec)
- 	free(spec->unpriv.name);
- 	spec->priv.name = NULL;
- 	spec->unpriv.name = NULL;
-+
-+	if (spec->cpu_features.names) {
-+		size_t i;
-+
-+		for (i = 0; i < spec->cpu_features.cnt; i++)
-+			free(spec->cpu_features.names[i]);
-+		free(spec->cpu_features.names);
-+		spec->cpu_features.names = NULL;
-+		spec->cpu_features.cnt = 0;
-+	}
+ struct bitops_case {
+ 	__u64 x;
+@@ -180,3 +181,8 @@ void test_bitops(void)
+ 	if (test__start_subtest("ror64"))
+ 		test_ror64();
  }
- 
- /* Compiles regular expression matching pattern.
-@@ -394,6 +412,122 @@ static int get_current_arch(void)
- 	return ARCH_UNKNOWN;
- }
- 
-+static int cpu_feature_set_add(struct cpu_feature_set *set, const char *name)
++
++void test_bitops_jit(void)
 +{
-+	char **tmp, *norm;
-+	size_t i, len;
++	RUN_TESTS(bitops_jit);
++}
+diff --git a/tools/testing/selftests/bpf/progs/bitops_jit.c b/tools/testing/selftests/bpf/progs/bitops_jit.c
+new file mode 100644
+index 000000000000..9f414e56b1e8
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/bitops_jit.c
+@@ -0,0 +1,153 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+	if (!name || !name[0]) {
-+		PRINT_FAIL("bad cpu feature spec: empty string");
-+		return -EINVAL;
-+	}
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_experimental.h"
++#include "bpf_misc.h"
 +
-+	len = strlen(name);
-+	norm = malloc(len + 1);
-+	if (!norm)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < len; i++) {
-+		if (isspace(name[i])) {
-+			free(norm);
-+			PRINT_FAIL("bad cpu feature spec: whitespace is not allowed in '%s'", name);
-+			return -EINVAL;
-+		}
-+		norm[i] = tolower((unsigned char)name[i]);
-+	}
-+	norm[len] = '\0';
-+
-+	for (i = 0; i < set->cnt; i++) {
-+		if (strcmp(set->names[i], norm) == 0) {
-+			free(norm);
-+			return 0;
-+		}
-+	}
-+
-+	tmp = realloc(set->names, (set->cnt + 1) * sizeof(*set->names));
-+	if (!tmp) {
-+		free(norm);
-+		return -ENOMEM;
-+	}
-+	set->names = tmp;
-+	set->names[set->cnt++] = norm;
-+	return 0;
++SEC("syscall")
++__description("bitops jit: clz64 uses lzcnt on x86 with abm")
++__success __retval(63)
++__arch_x86_64
++__cpu_feature("abm")
++__jited("	lzcnt{{.*}}")
++int bitops_jit_clz64_x86(void *ctx)
++{
++	return bpf_clz64(1);
 +}
 +
-+static bool cpu_feature_set_has(const struct cpu_feature_set *set, const char *name)
++SEC("syscall")
++__description("bitops jit: ctz64 uses tzcnt on x86 with bmi1")
++__success __retval(4)
++__arch_x86_64
++__cpu_feature("bmi1")
++__jited("	tzcnt{{.*}}")
++int bitops_jit_ctz64_x86(void *ctx)
 +{
-+	size_t i;
-+
-+	for (i = 0; i < set->cnt; i++) {
-+		if (strcmp(set->names[i], name) == 0)
-+			return true;
-+	}
-+	return false;
++	return bpf_ctz64(0x10);
 +}
 +
-+static bool cpu_feature_set_includes(const struct cpu_feature_set *have,
-+				     const struct cpu_feature_set *need)
++SEC("syscall")
++__description("bitops jit: ffs64 uses tzcnt on x86 with bmi1")
++__success __retval(5)
++__arch_x86_64
++__cpu_feature("bmi1")
++__jited("	tzcnt{{.*}}")
++int bitops_jit_ffs64_x86(void *ctx)
 +{
-+	size_t i;
-+
-+	for (i = 0; i < need->cnt; i++) {
-+		if (!cpu_feature_set_has(have, need->names[i]))
-+			return false;
-+	}
-+	return true;
++	return bpf_ffs64(0x10);
 +}
 +
-+static const struct cpu_feature_set *get_current_cpu_features(void)
++SEC("syscall")
++__description("bitops jit: fls64 uses lzcnt on x86 with abm")
++__success __retval(5)
++__arch_x86_64
++__cpu_feature("abm")
++__jited("	lzcnt{{.*}}")
++int bitops_jit_fls64_x86(void *ctx)
 +{
-+	static struct cpu_feature_set set;
-+	static bool initialized;
-+	char *line = NULL;
-+	size_t len = 0;
-+	FILE *fp;
-+	int err;
-+
-+	if (initialized)
-+		return &set;
-+
-+	initialized = true;
-+	fp = fopen("/proc/cpuinfo", "r");
-+	if (!fp)
-+		return &set;
-+
-+	while (getline(&line, &len, fp) != -1) {
-+		char *p = line, *colon, *tok;
-+
-+		while (*p && isspace(*p))
-+			p++;
-+		if (!str_has_pfx(p, "flags") &&
-+		    !str_has_pfx(p, "Features") &&
-+		    !str_has_pfx(p, "features"))
-+			continue;
-+
-+		colon = strchr(p, ':');
-+		if (!colon)
-+			continue;
-+
-+		for (tok = strtok(colon + 1, " \t\n"); tok; tok = strtok(NULL, " \t\n")) {
-+			err = cpu_feature_set_add(&set, tok);
-+			if (err) {
-+				PRINT_FAIL("failed to parse cpu feature from '/proc/cpuinfo': '%s'",
-+					   tok);
-+				break;
-+			}
-+		}
-+	}
-+
-+	free(line);
-+	fclose(fp);
-+	return &set;
++	return bpf_fls64(0x10);
 +}
 +
-+static int parse_cpu_feature(const char *name, struct cpu_feature_set *set)
++SEC("syscall")
++__description("bitops jit: popcnt64 uses popcnt on x86")
++__success __retval(3)
++__arch_x86_64
++__cpu_feature("popcnt")
++__jited("	popcnt{{.*}}")
++int bitops_jit_popcnt64_x86(void *ctx)
 +{
-+	return cpu_feature_set_add(set, name);
++	return bpf_popcnt64(0x1011);
 +}
 +
- /* Uses btf_decl_tag attributes to describe the expected test
-  * behavior, see bpf_misc.h for detailed description of each attribute
-  * and attribute combinations.
-@@ -650,9 +784,20 @@ static int parse_test_spec(struct test_loader *tester,
- 				err = -EINVAL;
- 				goto cleanup;
- 			}
-+		} else if (str_has_pfx(s, TEST_TAG_CPU_FEATURE_PFX)) {
-+			val = s + sizeof(TEST_TAG_CPU_FEATURE_PFX) - 1;
-+			err = parse_cpu_feature(val, &spec->cpu_features);
-+			if (err)
-+				goto cleanup;
- 		}
- 	}
- 
-+	if (spec->cpu_features.cnt && __builtin_popcount(arch_mask) != 1) {
-+		PRINT_FAIL("__cpu_feature requires exactly one __arch_* tag");
-+		err = -EINVAL;
-+		goto cleanup;
-+	}
++SEC("syscall")
++__description("bitops jit: rol64 uses rol on x86")
++__success __retval(6)
++__arch_x86_64
++__jited("	rol{{.*}}")
++int bitops_jit_rol64_x86(void *ctx)
++{
++	return bpf_rol64(3, 1);
++}
 +
- 	spec->arch_mask = arch_mask ?: -1;
- 	spec->load_mask = load_mask ?: (JITED | NO_JITED);
- 
-@@ -1161,6 +1306,11 @@ void run_subtest(struct test_loader *tester,
- 		return;
- 	}
- 
-+	if (!cpu_feature_set_includes(get_current_cpu_features(), &spec->cpu_features)) {
-+		test__skip();
-+		return;
-+	}
++SEC("syscall")
++__description("bitops jit: ror64 uses ror on x86")
++__success __retval(3)
++__arch_x86_64
++__jited("	ror{{.*}}")
++int bitops_jit_ror64_x86(void *ctx)
++{
++	return bpf_ror64(6, 1);
++}
 +
- 	if (unpriv) {
- 		if (!can_execute_unpriv(tester, spec)) {
- 			test__skip();
++SEC("syscall")
++__description("bitops jit: clz64 uses clz on arm64")
++__success __retval(63)
++__arch_arm64
++__jited("	clz	{{.*}}")
++int bitops_jit_clz64_arm64(void *ctx)
++{
++	return bpf_clz64(1);
++}
++
++SEC("syscall")
++__description("bitops jit: ctz64 uses ctz or rbit+clz on arm64")
++__success __retval(4)
++__arch_arm64
++__jited("	{{(ctz|rbit)}}	{{.*}}")
++int bitops_jit_ctz64_arm64(void *ctx)
++{
++	return bpf_ctz64(0x10);
++}
++
++SEC("syscall")
++__description("bitops jit: ffs64 uses ctz or rbit+clz on arm64")
++__success __retval(5)
++__arch_arm64
++__jited("	{{(ctz|rbit)}}	{{.*}}")
++int bitops_jit_ffs64_arm64(void *ctx)
++{
++	return bpf_ffs64(0x10);
++}
++
++SEC("syscall")
++__description("bitops jit: fls64 uses clz on arm64")
++__success __retval(5)
++__arch_arm64
++__jited("	clz	{{.*}}")
++int bitops_jit_fls64_arm64(void *ctx)
++{
++	return bpf_fls64(0x10);
++}
++
++SEC("syscall")
++__description("bitops jit: bitrev64 uses rbit on arm64")
++__success __retval(1)
++__arch_arm64
++__jited("	rbit	{{.*}}")
++int bitops_jit_bitrev64_arm64(void *ctx)
++{
++	return bpf_bitrev64(0x8000000000000000ULL);
++}
++
++SEC("syscall")
++__description("bitops jit: rol64 uses rorv on arm64")
++__success __retval(6)
++__arch_arm64
++__jited("	ror	{{.*}}")
++int bitops_jit_rol64_arm64(void *ctx)
++{
++	return bpf_rol64(3, 1);
++}
++
++SEC("syscall")
++__description("bitops jit: ror64 uses rorv on arm64")
++__success __retval(3)
++__arch_arm64
++__jited("	ror	{{.*}}")
++int bitops_jit_ror64_arm64(void *ctx)
++{
++	return bpf_ror64(6, 1);
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.52.0
 
