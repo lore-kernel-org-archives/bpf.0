@@ -1,139 +1,156 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44B59350D55
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 17:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771523419; cv=pass; b=S6snlbsb+bq4TfvOhnWvD9xlBmKQbDs8R1vfeh01o/uORCm/hdLNimVddwWW+Fp12Qtre7t/uEObDKOSpA5GYXOT6VvfEz2oco+o7uZVqU2vPdemtwY5bJbGuZKkYkQFfRa5MVzGZaWe4cqjRi3/XChOg+LnWAjQU+fKva4mFTA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771523419; c=relaxed/simple;
-	bh=gHUWgff7WmvTx55hmvJ5HXD9obcxHan7DBI288vZwm0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oeiplBrm5YZLxmvHsOCds8kiM0Q0pbGVeJxztd8teYWsirAdsq6/smjud9gNKrij/YPFiJ6X/NLejFWR6tkeY72ypY35hSPb8eGVfN1EAspp3RAaR5zaoCDfMHQGuAUkuuHB8yHrBetA6JLJ6C6AjMQasQOIlsxl2RfeHc/so4k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LhMOtR1+; arc=pass smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF480235071;
+	Thu, 19 Feb 2026 18:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771524659; cv=none; b=hEbmAnDiqqGiLHJooIKvRxrVj/iGdANygcXy5f6jNEPSKa5mknJ8/yRyLoz3sEWyVELVy0QVCjYfxN/OOij0+5BY0L56ua6aZIhgt7C5agp8MMTg39zZ3S14E1iFxpZW9cCJEbw/v7stVwcoSr+zIirEDLmuZ9837FJANWvHp38=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771524659; c=relaxed/simple;
+	bh=ZdR+XCWWCEE+0mQLk/14clIF1WSqOWjK0Y7yNhb9UUc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=sQaPpV2S0zYlKJ86vnnB1xRqwrS7RTNTSDQA+bKHE0jp6mM/AHZ9htEcdANWI7mJWZ5n4z7OPShkM+1VFWm7wKwYHD7+QaEjAc9L4yHtoveuGvY43WmPrSb49HmgUaOXsaWJ8zWMOpJqgvJ5cvBcvJE1J/W3aph9ez7HHX6RxSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IiEqsA2M; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LhMOtR1+"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-4375d4fb4d4so828885f8f.0
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 09:50:18 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771523416; cv=none;
-        d=google.com; s=arc-20240605;
-        b=cxNqq6PpjJrL3FjrSruvfgtyuDJt4LAdKIj/yXxPsgckcUoe6QLpRq9ncirHvb2C2r
-         okmV6fyZFG8nlsIVx910r7nYVI8Ek4sFAhaS1puad5WVw98rUV3tbANGZj+Qa9DbR1T6
-         Fvb9AAbpNRMzcgz6W1KO0ZYh0+IMUXKguvip41FCxV1e5el35ti9227Q3+w+aMwziuEo
-         wpOWiiD1Pd7nXANsGeUWjjFRTHbdpL6ls/lyUJZ0jV1lWxcEsxDfhTyPqxHYolBnsP31
-         EixvleRhegj5oUPOji+t90scePeZ44RiTJ6WQ62gB1urseCFfmwvKfS5Afu1nkC5VqZp
-         qs/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=J7HYm9xMVGBBywh4oao6tB7DD0AcczRTLXxlLGbI01c=;
-        fh=RfyL9753mxwlFzZ2AM2nqAyVKxmRN7jY8rNOcnPmHW4=;
-        b=aM7ex1NB9iK3+o/+EqpFfRdcRKJMD6I7Gi0ooFe7O8qjb3ZIm5KpKzq410Zv60FsfK
-         OPoMCaK00QZcXavrq/ZIZb4cBFN1OB4FBwEY5ln/52zRTe+GYpsdKZMUtVRYkxY/Ihow
-         PhgVg46b/nXifHOKg7y+S6ojSLQm39qrZu1UaDp807PNTOG8fJTxWGBSG96/dQmelhzd
-         KLgf8P2XHp17SdJ0560czC+Uf85KprllihA85xwDmo7A3DsqpU1h6R0MP9V0x6c4jPrl
-         dtpoYLu3o0yjVGBE/N0RivVlZTfiPgILZh2+O80moys7uRYF3bT07wXYPS0BuSH70PRW
-         MTTg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771523416; x=1772128216; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J7HYm9xMVGBBywh4oao6tB7DD0AcczRTLXxlLGbI01c=;
-        b=LhMOtR1+9guo1eQK1OTU359aYVJIzWHP+A6INFY5Ngm9CKD5Rh9RH5719/aDkuiIGZ
-         wG/wPUtrGauG5iD1/uFuAP6GpCvyxNTmB0PG2CISjEQElUk9lrHCLcwDzlPWbbRv7UEW
-         59DquBhiP6PTDtMovW2C9vLYjWgA76mCX3m+CBOgPzAL2eEr93kdsHuL9H2gEEL6FaJP
-         HtY6kAvaKRRn9qLxnfOmM0+kiNHrYd54yPtPeBKyuvoj/1CsT4RbLjRG1unJN860svwb
-         vawH19/uNZGdqr0N1/+QU7c5LW+UwS+bObPjhxI/Apva2IV8PYwLYjZ/H0I6zmv7uWKJ
-         gRNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771523416; x=1772128216;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=J7HYm9xMVGBBywh4oao6tB7DD0AcczRTLXxlLGbI01c=;
-        b=U8rOrDoG+sGc7vS+QS7VTI/ws5oGMVlAr9QUmFW8vbCMToBTnMGyrw3wwsxanb44Qp
-         Ei2qbSd5lFDeu8c5WJhF/HU34+NizFx5vfiLQHJGStQJtvH/PwpSpXd1jZXO1S5bz61x
-         Vd9E6NKDTqzI5tpZY7LEjgXfPP6n+ryICOmStjZhzVOqdAAJwY92Biw6jKmAgWzq2aul
-         jlZkYDPNfk5JDmZzeH7GB62Gzvojq//EFPyTuQdX/e2v1Wqr86jL1sr68s/uzNfIcFe/
-         X19r/oPAh3HtBmn47dU/mXTT+ScbV2KCUcAmAvNVOYUwo/qS/A9vgqXYlgwMc95V1ur4
-         5dVg==
-X-Gm-Message-State: AOJu0Yzj/IpN3dqfOOC1UmILHS5ED2L8uhsrg5+ksuB+a6xCU6BygmNL
-	i0NXn7ISzxQDDPY70ayq/bxzz/1zkUawGwfLcOFZxZ/PwnheKIQnjVptkMZ2Uad2ndAv0O1y8+x
-	2GLfZXz1XpzZn4tlVhkZP8BPfeq2o5Gqkxg==
-X-Gm-Gg: AZuq6aJp/oO5efX6f3X8ugIvaf8Bpmbu9gGMkECrbo6pztT/qha3uolaPTaeX5AUKy3
-	0k6l8j4iks6sGRu12IMokf0EW03HvoHVaSr4H7eAhFcvZ8p6pQ3AmXuQI7h0m8jz3prnqiIVXXo
-	Ztl8d+4NYxgIeLnay0HB7ZOVLtMg55l7OgJATtCTpMdvzx5wtgaqieGMpnQAwAOtCEwvGPTrC/Z
-	lAmohGyft4OwzXnbAwxwtJzVIB1oqGTvS5xvWsoominwJ5EyusYUnqfiDua/s6HfWre5rU/aG7s
-	XG41jZ+pPzfJx/EWDWV9ijxFhHnNUj3ciOcj6jUJ563Z8lkOxqS6eJLZ/kcTExRZvtIOzOpmOLP
-	XdLSWWPUr
-X-Received: by 2002:a05:6000:40db:b0:436:cea:6165 with SMTP id
- ffacd0b85a97d-43958df4415mr9935730f8f.6.1771523416533; Thu, 19 Feb 2026
- 09:50:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IiEqsA2M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 151DDC4CEF7;
+	Thu, 19 Feb 2026 18:10:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771524659;
+	bh=ZdR+XCWWCEE+0mQLk/14clIF1WSqOWjK0Y7yNhb9UUc=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=IiEqsA2M94+iRE5Y7F3CJrCsL8irEKRxD/xKNmbzfiFzyXpk/Q0epRqe8guFbY8BH
+	 hCZ1DcvT+Or8VtpxfmoDUSr8DyhQf/mRL8wYWsKev0wMafyfcS+k8Mnmf+JgQct1Au
+	 CsiazsyL+aYwo5G1R9VzoNw31VXuLEPn2yyHkb/DODINs860KUsPbgMpcaZn9Ka7/M
+	 Ji+ZtetZgg1+seI8AOZGKqP0MTPTKpclWA3wmdkxrzeZqZpwgmFSM+O7XFSSpzlxCu
+	 WfVSw8bK7f8nWtl/vRYT2cm/im3HscJdOfHCpjIbjewaXgkMQbmn3Bg+vJAjaP/cYJ
+	 wOwDtGgiy+DIQ==
+Content-Type: multipart/mixed; boundary="===============1189534981472302392=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260219142933.13904-1-leon.hwang@linux.dev> <20260219142933.13904-2-leon.hwang@linux.dev>
-In-Reply-To: <20260219142933.13904-2-leon.hwang@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 19 Feb 2026 09:50:05 -0800
-X-Gm-Features: AaiRm52i-YIC0PVoZrigOcdI1PlDGl9FQnJThWLdjntzeSoTM5oZkoYI1MwTO7Q
-Message-ID: <CAADnVQK=5Gb3w_QG4Vq32EfvpqAK_DPwCHtzzt7DzRkJ5_h6JQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Introduce 64-bit bitops kfuncs
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>, 
-	Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <b8d59a7285647804e2c8484dc8cb118abf0ecd69657edab42393389088e349c5@mail.kernel.org>
+In-Reply-To: <20260219173756.315077-7-kuniyu@google.com>
+References: <20260219173756.315077-7-kuniyu@google.com>
+Subject: Re: [PATCH v3 bpf/net 6/6] sockmap: Fix broken memory accounting for UDP.
+From: bot+bpf-ci@kernel.org
+To: kuniyu@google.com,john.fastabend@gmail.com,jakub@cloudflare.com
+Cc: willemdebruijn.kernel@gmail.com,kuniyu@google.com,kuni1840@gmail.com,bpf@vger.kernel.org,netdev@vger.kernel.org,syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 19 Feb 2026 18:10:59 +0000 (UTC)
 
-On Thu, Feb 19, 2026 at 6:30=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
+--===============1189534981472302392==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/net/core/skmsg.c b/net/core/skmsg.c
+> --- a/net/core/skmsg.c
+> +++ b/net/core/skmsg.c
+
+[ ... ]
+
+> @@ -576,6 +577,7 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
+>  				u32 off, u32 len, gfp_t gfp_flags, bool take_ref)
+>  {
+>  	struct sock *sk = psock->sk;
+> +	bool is_udp = sk_is_udp(sk);
+>  	struct sk_msg *msg;
+>  	int err = -EAGAIN;
 >
+> @@ -583,12 +585,15 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
+>  	if (!msg)
+>  		goto out;
 >
-> +static bool bpf_kfunc_is_fastcall(struct bpf_verifier_env *env, u32 func=
-_id, u32 flags)
+> -	if (skb->sk != sk) {
+> +	if (is_udp)
+> +		spin_lock_bh(&sk->sk_receive_queue.lock);
+> +
+> +	if (skb->sk != sk || is_udp) {
+>  		if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
+> -			goto free;
+> +			goto unlock;
+>
+>  		if (!sk_rmem_schedule(sk, skb, skb->truesize))
+> -			goto free;
+> +			goto unlock;
+>  	}
+
+[ ... ]
+
+>  	skb_set_owner_r(skb, sk);
+                        ^^^
+
+If sk_psock_skb_ingress_enqueue() fails after this point (for
+example, skb_to_sgvec() fails and skb_linearize() also fails under
+GFP_ATOMIC memory pressure), the error path frees msg and returns
+-EAGAIN, but the skb is kept with skb->destructor set to
+udp_sock_rfree.
+
+The caller sk_psock_verdict_apply() then queues this skb onto
+psock->ingress_skb for retry via sk_psock_backlog().
+
+On retry, sk_psock_handle_skb() calls sk_psock_skb_ingress()
+again. The function acquires sk->sk_receive_queue.lock, then calls
+skb_set_owner_r() which calls skb_orphan(). skb_orphan() invokes
+the current skb->destructor, which is now udp_sock_rfree():
+
+  sk_psock_skb_ingress()
+    spin_lock_bh(&sk->sk_receive_queue.lock)   <-- held
+    skb_set_owner_r(skb, sk)
+      skb_orphan(skb)
+        skb->destructor(skb)           [= udp_sock_rfree]
+          spin_lock_bh(&sk->sk_receive_queue.lock)  <-- deadlock
+
+Could this self-deadlock on the receive queue lock?
+
+> +	if (is_udp) {
+> +		skb->destructor = udp_sock_rfree;
+> +		spin_unlock_bh(&sk->sk_receive_queue.lock);
+> +	}
+> +
+>  	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
+>  	if (err < 0)
+>  		goto free;
+>  out:
+>  	return err;
+> +
+> +unlock:
+> +	if (is_udp)
+> +		spin_unlock_bh(&sk->sk_receive_queue.lock);
+>  free:
+>  	kfree(msg);
+>  	goto out;
+
+> diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
+> --- a/net/ipv4/udp.c
+> +++ b/net/ipv4/udp.c
+
+[ ... ]
+
+> +void udp_sock_rfree(struct sk_buff *skb)
 > +{
-> +       if (!(flags & KF_FASTCALL))
-> +               return false;
+> +	struct sock *sk = skb->sk;
 > +
-> +       if (!env->prog->jit_requested)
-> +               return true;
-> +
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_clz64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_clz64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_ctz64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_ctz64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_ffs64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_ffs64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_fls64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_fls64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_bitrev64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_bitrev64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_popcnt64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_popcnt64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_rol64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_rol64);
-> +       if (func_id =3D=3D special_kfunc_list[KF_bpf_ror64])
-> +               return bpf_jit_inlines_kfunc_call(bpf_ror64);
+> +	spin_lock_bh(&sk->sk_receive_queue.lock);
+> +	sock_rfree(skb);
+> +	spin_unlock_bh(&sk->sk_receive_queue.lock);
+> +}
 
-This is too ugly. Find a way to do it differently.
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22193327667
+
+AI-authorship-score: low
+AI-authorship-explanation: The commit demonstrates deep understanding of UDP memory accounting internals and references a specific syzbot report, consistent with an experienced kernel networking developer.
+issues-found: 1
+issue-severity-score: high
+issue-severity-explanation: Self-deadlock on sk->sk_receive_queue.lock when sk_psock_skb_ingress is retried after enqueue failure for UDP, causing a system hang.
+
+--===============1189534981472302392==--
