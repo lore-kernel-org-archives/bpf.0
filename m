@@ -1,188 +1,108 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7A742D3A93
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 22:19:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAC6329E4D
+	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 22:58:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771539566; cv=none; b=FWSVu+/Xetr0CoXYx9KygFNjRu6lUwx6PmmMiRQ27yuDZT9KKvL8zERiCHxaxMUtqJJkzbu0RYSvx0P8Zip7qfVi9psq94lkfGcqlrI5mXB4N92+oZ+0nYLmT829oxl9/qb77Cnsq8pCR3GEedMIR9bBp2UIIeU43k0pwQwecn0=
+	t=1771541933; cv=none; b=PC7czB8aJ0tBzMmJPiPWRAvD4PfCM0E5mF9jsS6RnoVFO1mQW/DVAz4M+TorNCAg0vTYawhB3EWsduK1LkvwG8DovItgDaP0Xcz7EkROK5glxYtWo/UfNNPqSAcZQ8rD4gLE1mJnPcGSzKyoMNpzp1hhbFn7LdSIAz/Lad72v08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771539566; c=relaxed/simple;
-	bh=bbzWzc8xHJrdQgDPXXj+4ItdwmwMkrRzopVU7QhGr+0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UODTsAey/bOdiq+IIIVeTjRN5rSrPxXA5pOpgjeTGt8lY6eSrzx7/PGq3UtwuPaeMsPooeD9WmO0NAvf5tnXNMz4oaz5re5AjCUSITFdBJ9d42Kl4JWpKmSsE8ztZ/p1NAGyyiRGF/PsmKBDh/jQdE5bOZB+L9Qk63sCIc2WMYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GDmgKyP7; arc=none smtp.client-ip=209.85.210.182
+	s=arc-20240116; t=1771541933; c=relaxed/simple;
+	bh=+fmL2hnvMOGQECYwZKoazIdyGcgxGx3G6cg+I74SA8s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D8wbsnUX2bRLqb7bcs8AkcHGaD4fiP0AqSaQ+8eSOAaWz3ONTksj1E7O2TvqakcKmVZMX73pAeD4g4YwatcQp/bxbz0J7J4ba4Pd8AvE4z4Kv2QPVJZ0xBwhzROfqahuEP6LrBsDT9lJMzPp+VY10HpGh7IyIvrcOyqeIcNsFp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IF6CeThy; arc=none smtp.client-ip=209.85.210.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GDmgKyP7"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-824af5e5c81so1435182b3a.0
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 14:19:25 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IF6CeThy"
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-82418b0178cso880825b3a.1
+        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 14:58:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771539565; x=1772144365; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hi0Ni2krJfbIM3+nNIDFTvEx8TLbKRoLbTYrx9Ru3VU=;
-        b=GDmgKyP7/oVvtZE7LGrUhUJjKzApJE8ILDCyin7JFLkvF2Zy6neu6QH5Vgxw6n5C1V
-         io6XMVB3PhL7cZmRBj+YoZga0CCBXkxagzPjgaIaCJahAGv+0qe38NzyfVl/tS5iHbe/
-         zoxP20HBQ4zz0wZ/L4Np1t5iU/Wtw8sO5ulIXsL82laR+pRt2JooCvFuNU3HEU/SPuJ1
-         p8d0/7F+LSzIOlmq1E8H4RhnKxpzwxAFn/9MOg+e/Uzlxev0EqCdd0oxBtmHnYOXAVtF
-         obiqYVog7tePK0WvuTQvl2p32js7QJUCVfHDUr9Jn6achUEGQHOlVqUfgEqhoAOiKviI
-         b1yA==
+        d=gmail.com; s=20230601; t=1771541931; x=1772146731; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bvc/w3vwrKRRThkocodt50I3xdPGIFrYWWu+Wd3osyA=;
+        b=IF6CeThy4Lrzlt41GEocFI6/ooJN+Fd0ilbPg8ekX+Nqu8EIhPy1i8uMWy9Cy+Q4cL
+         9ly/CzlhvGhaafGZ9rz6KD6pq/d+ZKscTjw/tPKkWHZJyAnqocty/1c7SAUnpE6sBAi0
+         xtkBeoPPFqXUICR2GF6Wj1no971XCd6jBjZZ0HKvVh4HFzNpuh493mmBWVyWsmgVfFXA
+         uEIOpNlwIhC/TuovQh1w4nymOHpquMrBoEfERfd7F3eBhUZNvKkidz7W2h8NYV/0WqkU
+         UmvzDA90c3jl87TVCuCeOJy/M4w3iC5D+ZOeH7YZVDw3kp198v7MG81PP+qInrmMgVzk
+         fuzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771539565; x=1772144365;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hi0Ni2krJfbIM3+nNIDFTvEx8TLbKRoLbTYrx9Ru3VU=;
-        b=Ud+sqzBFGVjKC8OOHbqYe4JFpxrDPN/43sA8bMyNZk0jYEfAZMTib8R6L/FoVLIhAP
-         BiSdjhSdadRXJ+SqKassMhZeNgD7GJGQg2yZbOzyJPsdAzdVGXdGYPLFy0qW0+uvu8sV
-         jQSwSKkiLaewxpGh3JJGK3V7hB251xaejtYpANaTQ0kZFWOlest75vnozUCND/NCISPi
-         VSMtr0+yazNZjtmLLXRCZXH6K5z10W59SpH/5il4eKf6YTzc1sLLSsn6WNftWRvI9m2M
-         P7vXxrw3AbN8Td7OGG6snLGLKFKVTbxkQAqOkE1g0JC2MsjG6S0ITF6KXG3H5KVXB7AM
-         tMzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWItjfIABFspeVk7w+LZ9tAWItrRTVqwXw8Mv586I6l1wICzl0qeiks4rPnp23uU2PIho0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqjoTVpSlBcERycBbmGKkjZbsnUtRf605PfcuLj0l7NkuT5x91
-	k3MP1A2v7XXhlS9lByvWoZRxorCu/Yt/e+lbBiEuynHG35yGVgn+wQEV/vskAwTE
-X-Gm-Gg: AZuq6aJql3w/8ZkoAvAWh3t20BeHrBgC5IrFJcSUP7ird82ydvjhDbAZbdtMsj3el8u
-	vT7uJxCIEI31QwrNH+uHxe8cUy45UF5b7OOms4Ic81eytwfvWGEPSkb04PPsfN/fSymkMc9tHeF
-	NAGmEJ33P6bvKvqwgZIVA7Jv157NrMyd1E5/MmM/WfTN8/7VE0dYgbjEL5dmHSAe8iJ/dkj/gzw
-	xaO6K0FFdwxtr47TTFQ3omzxiRCioHKXayWSJzQBBRHZt77/3tXOmAKinkjLOMIqeG72iPCZGCu
-	YfDH/sWIdHhm1w/gyOXDm+Utubio+vkchpG7scSC02vGfXAL6Rwf6HLro81FZqnI8yGa5gEQ/y5
-	CXOWkN0sZSwwBQfBSwntRx2zYL92BJ0iqhd/GVmkWYYJ3VACuY0e45giRxeQN+OqXmVuza4W36S
-	NRpidzgu9kAzeZEPRL/IM1LD8Ms1bz4Upwi3pZ1Y/C537/sMPBGpd3
-X-Received: by 2002:a05:6a00:3a02:b0:81f:9b23:3d1c with SMTP id d2e1a72fcca58-824c5f11872mr19020181b3a.23.1771539565039;
-        Thu, 19 Feb 2026 14:19:25 -0800 (PST)
-Received: from [192.168.0.226] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6b9a661sm20242049b3a.50.2026.02.19.14.19.24
+        d=1e100.net; s=20230601; t=1771541931; x=1772146731;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bvc/w3vwrKRRThkocodt50I3xdPGIFrYWWu+Wd3osyA=;
+        b=eRZC7kQTBYIRmsnlIw6iMDtv1MvCX6NZ8oNfUKih9P1zMJ+IVMGGXapJwozFW0AaaQ
+         HWBSULjILL7Bwvjo7QT7Gg4H36+e0XwdTs3o1Y8VhcPNT5M1EGTweYDsZzF3hKcrCF2/
+         mQ+KTHApd2YZshssDuaAUMgHDbFh1D7Nq1g20vGCVsZquc6mGQ+S21oG4y8562QQm5E2
+         ovJKDvlJyHUEXN1mw/8jEvJlfIIZrXClR8XbF4doBq8KJHhI2cLQH+C103dhM7r4l48G
+         IX3LRVOcyCJ2U9kBaPFxkmboQw3CJD59Y5THku8rKbVwK4BPOImZwLdZudTWoqBchFbc
+         9xrA==
+X-Gm-Message-State: AOJu0YwBGhSjQS4+nu195mnQjRVADJfMDA0QqzlbJ/dfXMtzo7/6qPr1
+	uMXcIVXYOxHtcFuOCX/FeHAFPLbP1iG/P2UmvI4rdmRq/TWDK0mnDUYPq2EPkQ==
+X-Gm-Gg: AZuq6aIgoH/Ju11sma4UCmsjw0cOvmhsQJi51W3o4asS7J74h1V6BgDYhvqJiTKGbe+
+	D1TTJA/9plrkzcb339Kcn6ERrkIPRYMjTLx/TWFAh1cdXd3m6O8gdNFyLO8XGalKtlc1cj8hTQ/
+	nm15lI4Rq6KWpYweK5/zbmPnWSRD3ZUbmtfPLn49Q30XgjEAG0fmN2wDOx3NGkiuh3XbmFO/OGQ
+	s2tldwdKmnAWKOiH1kNzB15zc95IQ4/JqX8+89RwfTqd89SZ/OgHobaQBun1JnL6sbNCzRR9yCd
+	B4A+BWPD3Mj3eb1vsXTzdFIjiDkJiX4BOeZ/6Phu/vW3ZoDWw4PlDrau6eX3mPvDMjlFuP5MgY9
+	pPscx7GlBkFU4Iu82jlEgsDjkWWmGzYF1zm58Fb8GyuU0JXqVh4DF7t4r6+axO9bHkYTYhly+RW
+	N0Ja28+i1GkKGUk2cZH4+GTbB5
+X-Received: by 2002:a05:6a00:218b:b0:81f:44bb:8aa with SMTP id d2e1a72fcca58-8252748906amr5527383b3a.8.1771541931203;
+        Thu, 19 Feb 2026 14:58:51 -0800 (PST)
+Received: from localhost ([2a03:2880:ff:52::])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a2ac83sm19196160b3a.12.2026.02.19.14.58.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Feb 2026 14:19:24 -0800 (PST)
-Message-ID: <99fd7227e0abc0558a2954e95c1e049edc9ba7b3.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 2/5] bpf: Add KF_FORBID_SLEEP modifier for
- KF_ACQUIRE kfuncs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko
- <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
-Date: Thu, 19 Feb 2026 14:19:21 -0800
-In-Reply-To: <20260218182555.1501495-3-puranjay@kernel.org>
-References: <20260218182555.1501495-1-puranjay@kernel.org>
-	 <20260218182555.1501495-3-puranjay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+        Thu, 19 Feb 2026 14:58:50 -0800 (PST)
+From: Amery Hung <ameryhung@gmail.com>
+To: bpf@vger.kernel.org
+Cc: alexei.starovoitov@gmail.com,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	ameryhung@gmail.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next 1/1] selftests/bpf: Change task local data library license
+Date: Thu, 19 Feb 2026 14:58:49 -0800
+Message-ID: <20260219225849.2426421-1-ameryhung@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Wed, 2026-02-18 at 10:25 -0800, Puranjay Mohan wrote:
+Change the license of task local data library to LGPL-2.1 or
+BSD-2-Clause to allow it being in a wider range of projects.
 
-[...]
+Signed-off-by: Amery Hung <ameryhung@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/task_local_data.h | 2 +-
+ tools/testing/selftests/bpf/progs/task_local_data.bpf.h  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-> @@ -10510,6 +10514,8 @@ static int release_reference_nomark(struct bpf_ve=
-rifier_state *state, int ref_ob
->  		if (state->refs[i].type !=3D REF_TYPE_PTR)
->  			continue;
->  		if (state->refs[i].id =3D=3D ref_obj_id) {
-> +			if (state->refs[i].forbid_sleep)
-> +				state->forbid_sleep_count--;
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
+index 0f86b9275cf9..b91fd3bc4d4d 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
++++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
+@@ -1,4 +1,4 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
++/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+ #ifndef __TASK_LOCAL_DATA_H
+ #define __TASK_LOCAL_DATA_H
+ 
+diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
+index fed53d63a7e5..8b6f7af43648 100644
+--- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
++++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
+@@ -1,4 +1,4 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
++/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
+ #ifndef __TASK_LOCAL_DATA_BPF_H
+ #define __TASK_LOCAL_DATA_BPF_H
+ 
+-- 
+2.47.3
 
-Nit: I'd do it inside release_reference_state() just to have a
-     fool-proof point for decrementing this counter.
-     As it stands release_reference_state() is called from two
-     more places and one need to think if .forbid_sleep_count
-     needs to be handled there as well (it is not, at the moment).
-
->  			release_reference_state(state, i);
->  			return 0;
->  		}
-> @@ -10847,7 +10853,8 @@ static int check_func_call(struct bpf_verifier_en=
-v *env, struct bpf_insn *insn,
-> =20
->  		if (env->subprog_info[subprog].might_sleep &&
->  		    (env->cur_state->active_rcu_locks || env->cur_state->active_preemp=
-t_locks ||
-> -		     env->cur_state->active_irq_id || !in_sleepable(env))) {
-> +		     env->cur_state->active_irq_id || env->cur_state->forbid_sleep_cou=
-nt ||
-> +		     !in_sleepable(env))) {
-
-The whole expression is the same as '!in_sleepable_context(env)', right?
-
->  			verbose(env, "global functions that may sleep are not allowed in non-=
-sleepable context,\n"
->  				     "i.e., in a RCU/IRQ/preempt-disabled section, or in\n"
->  				     "a non-sleepable BPF program context\n");
-> @@ -11435,6 +11442,11 @@ static int check_resource_leak(struct bpf_verifi=
-er_env *env, bool exception_exit
->  		return -EINVAL;
->  	}
-> =20
-> +	if (check_lock && env->cur_state->forbid_sleep_count) {
-> +		verbose(env, "%s cannot be used inside nosleep region\n", prefix);
-> +		return -EINVAL;
-> +	}
-> +
-
-Is this check really necessary?
-Some resource is forbidding sleep here, so there would be an error report a=
-lready.
-
-[...]
-
-> @@ -11658,6 +11671,14 @@ static int check_helper_call(struct bpf_verifier=
-_env *env, struct bpf_insn *insn
->  		}
->  	}
-> =20
-> +	if (env->cur_state->forbid_sleep_count) {
-> +		if (fn->might_sleep) {
-> +			verbose(env, "sleepable helper %s#%d in nosleep region\n",
-> +				func_id_name(func_id), func_id);
-> +			return -EINVAL;
-> +		}
-> +	}
-> +
-
-Wdyt about consolidating this code as something like:
-
-  if (fn->might_sleep && !in_sleepable_context(env)) {
-	verbose(env, "sleepable helper %s#%d in %s region\n",
-		func_id_name(func_id), func_id, non_sleepable_context_description(env));
-	return -EINVAL;
-  }
-
-?
-
-[...]
-
-> @@ -14113,6 +14139,11 @@ static int check_kfunc_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn,
->  		return -EACCES;
->  	}
-> =20
-> +	if (sleepable && env->cur_state->forbid_sleep_count) {
-> +		verbose(env, "sleepable kfunc %s in nosleep region\n", func_name);
-> +		return -EACCES;
-> +	}
-> +
-
-Above this check there is:
-
-        if (sleepable && !in_sleepable(env)) {
-                verbose(env, "program must be sleepable to call sleepable k=
-func %s\n", func_name);
-                return -EACCES;
-        }
-
-Should it be `sleepable && !in_sleepable_context(env)` instead?
-If it should, then this hunk would be redundant.
-
-[...]
