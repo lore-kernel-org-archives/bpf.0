@@ -1,224 +1,165 @@
-Received: from mail-dl1-f42.google.com (mail-dl1-f42.google.com [74.125.82.42])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3B8A2BD031
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 18:29:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.82.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771525792; cv=pass; b=A+oZY4lBNLgzF4TzOXaSvd5+rPMsZO5LdN5nLpzyRGtf4zzT0l/q3xribkCOjJUYeRJwhaONRSThTNMcc6489NVZYxpj9uot5F2C7yTjfO/jPZrV1qAn9R/lpTbf4S5LMRAJLjk0krlREAp8bDF4LQ9AGfBHt4eLfafT6O2hASM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771525792; c=relaxed/simple;
-	bh=sK3dATEtRYJyU9O0GvBO2UZs/ma4Y5ooKNy6Ml5uPSE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zt/MZTO48q7ygyYTr5iCHXs21CLToWTyn5MCgWhJ+3lr/0vmt7fTKc7h8HERTGkWBiqxcE2HY9K52YbaqnmIvrg5nZ5v4wpG9zEUO8euW42KHvoUypPRJCDpCwJi313mIziUYtIXUWmpWkWfgHufaE3ZDzxXiHo7LriHGnOIz9s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hYHfI8Xc; arc=pass smtp.client-ip=74.125.82.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85151257ACF
+	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 18:32:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771525944; cv=none; b=R3u+D5szupe07KdvSi+45bQtuQ75tKJQu3ZfHTguDDAWgOWK+q10GYceCc5obXdT2gyjb8iRRl2k0sBptmom6FHgsx0+ENgE+HIo6z+0hdzY8QPaIAaql4X2zCN0u/vcYLLy88RdBGTmBU+MPFhk6fn/Zls2CLq0CKhLRQJAy54=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771525944; c=relaxed/simple;
+	bh=d/loSqGrfoIUmuxA1mTLBpz0rRJGFZ8XGWBSR5teRDo=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=C1dLITsQHRE1V3FcLYFY95vmTEOyUvPGMZvfs8O8zDGLJnLpLdiNt+xYENeuIL3VG+NEyzQgsVQz9aCmmjNnAIzjwLkcDjKTRUFR+V9jMw2RmY8Mm96ddbj+EAR5zlmXKd/gxU1RKW7GqLit3AQTaK8d8LrP6W8uog13gMQFy+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IzwoGJR4; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hYHfI8Xc"
-Received: by mail-dl1-f42.google.com with SMTP id a92af1059eb24-126ea4e9694so371995c88.1
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 10:29:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771525790; cv=none;
-        d=google.com; s=arc-20240605;
-        b=bP0654cImCsZR6I8Hal1PnPWmYKQqBt0QKfyAru7wGt4Gkqkct9AHDzsVmiYBaFV7u
-         DImJr7DZ/aE7oPNtWwj+M67Hgg3nOp1DgbRJde63N2tgzDXeZxVpTPxaQ0L6bWjAUHrR
-         5fnFV++6USXBYiXzj4lgCA1a3tdN1za4Ce93YQHib2YW2D9AnMeK/QGbQhsS/U0p6q8N
-         uIoaHxz37DDZvWYxonn8dyx/AGpYJRLENGjVkRl/vqWnLCxMIS8fE69lGZGwbnTtPZ2g
-         ECDsFyw0glRiX5CE9kl36bPOpziHcq+se7bspaCx0Ba+iE5aPYZRIeUPDVQnAf5KTFFj
-         BmzQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kmQQqYT/CltjIjkNPl9I+pPorzYiaHn8DkgthxVsmOo=;
-        fh=vRgXcWzbbrwlSKYMnn/Y3horSIsgqMp2vU1ZdVtZJHk=;
-        b=HVr6Y/ve0FAUpEtnYsTvSBBIQh+GJlai9eYTFGxfNA/F3fnQpRi5CprYTc4fQ7hC0P
-         EVZgDMGuKra3cnBzYEDQKxeGbdlrp640a7y0fK+zehHrShrqdDHnU+soKCT40zq+vNO+
-         jg/KZqpoHTRD09UrgknqjwgXjVw0q+LeJzRLClQTJ7ErrWP8Ig/QKLmpL764ZE8mq7Ub
-         AtPasWhCiiuPGRosc/FlXZKGl3QSvD8qZpiOKMozAMwe0D81nEfysACIyTsnlNNO5Hkm
-         GjBxg2IyycYLt1OaPzwCci5h7AjQlXdxpL25p/zM6oXkXDN3wLGREliLSsLkHz8DLZiM
-         7sPQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IzwoGJR4"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8230c2d3128so593569b3a.0
+        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 10:32:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771525790; x=1772130590; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kmQQqYT/CltjIjkNPl9I+pPorzYiaHn8DkgthxVsmOo=;
-        b=hYHfI8XcG57vIo0gB3FT5Q216wtoEM/WO3NeMF1AjawvfOGCq+aUl0/WwdYSw3+U/M
-         iR6U1MEPJ3B9X3k70MGyMyQit8BLQPtj8rTPCOrkqfk/7VYhULfNoLfjdoxxKxSkGluk
-         6Nhakm5U4LCht+R69eV///fAayuN8gGZoVNlNsgzHlJjANV1YK7t3DPtfXsMoMiBqVtB
-         +UH514VWE2ELygMz6nk3xNzESjYumRhb/Q2L+vVSMTJ2nlvJqtY5nOEbAVqodI2rdzXy
-         10dtKWTrBQTkW6VQnYkG490Faq4MK9/P7bNti/IHzI/LKyhPEnNBMCDelsJUyTKVU88w
-         MIIw==
+        d=gmail.com; s=20230601; t=1771525943; x=1772130743; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cV9YP510KWkL1HbmoAzcJBKIBvJE97QPOxOHgbh9NmM=;
+        b=IzwoGJR4V2yNH/GKZ7+i8roxmyKeUILcKJ1ONATX3RtycvfIZS87biT8QaX8qnrjQE
+         pXs62RdAWWqKxH3HduLPypgxrs9ZBFn0wwUwCH/ZRf6dIerTDTa27F1gkgj/20L8N5BO
+         rbwtSOqFdgeP6206GnqJuWl3RRsb4NyIhzjkY3g1duZj9oMQY/2kqA+tOHtdRdUAsGXL
+         fMhXoJsS4POymazKasrhkhclN0g5lqhnT1BbuTB/h/mY23x/aY99Z7hLo07i1dUA9LKx
+         Tjr1vwjt0rBDMSGhkO84lICxNc5+nxXyXxvoe+zx5rQeVkQovbDpp0lAW61DWz8iyPdZ
+         EUmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771525790; x=1772130590;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=kmQQqYT/CltjIjkNPl9I+pPorzYiaHn8DkgthxVsmOo=;
-        b=pO04BiERrhMbMpyESe+C8NXR0y3WaNjlGUulY0JYdagtTDdqgGd4fDkarPrxVVP7nT
-         YtU9AbZgkdukWOCY5YJGj2f4s7BdFUVycglnRzc+6JB4y1z53KhHN6VeoPt15yPYYATp
-         jDARMc9E8fVWKwro5r2jmuTC6R00AsVEsT8KSaljktGqpqTW4N1sRVYEmnkgMDLOjdkE
-         BgmhuXXrFCXaH0YMnbKYZKM2yJFMiC/llY1bOxkeKyKmaMv2y6EgIkO0VPDEZ6QrThiQ
-         iuNx0ZdCAv5rd+T0USxOVaoFfJDhWepiYlwGE3jBLQK/ycWeMHNceGS1q2D/J6Zqvgsv
-         kfIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWpcVO7aggaT3Q/1qQt58Pr1jAR5h8AX/nv0P55l56WztbxiOkaQJgD7i55UzysalPL+Lg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxtVVb2A2yhRPfSNqWhOkBbNMDQzjxj33Im7NpGwhuoxLiGxHy
-	FL+LPWkbQFy4mo9L4f4ADIWFDvPC3EmcGoV7pXX+N4PxR9Ym6hVQKfiBeV/uIdJknPPrBJoa3xu
-	WC17ZqeXkTAlENVcfBiBewjDk2FfKJiXB7DI9Capf
-X-Gm-Gg: AZuq6aLZzgPSgoaabkbA0h8O/B1j7MpaXNDdAk3bK1RjVkj7y/Ixcsk4wV/rJ1UHYkt
-	jzVAa4H1ve+Ll1g7cAcweDRU5xdT5IDQcDo3wkLt4Y3z2GxU+JIz8fmWzpSnUHgS2MBKArMyCjP
-	HAiFHaTIRY4A3375ilFYy8wX4AZST9lSzJfBbTgtg3R/cyTo2uDLQoJ+9IdowYtmfQ64opTl6Is
-	Ax0X040AgpTidoB0K4+EwAl6tDpKO3riAXW971zdRrtZBY/U6PRiTvOV+plx4CczAdNnO4NmBam
-	4dAVLa0a6bEvxFSsR3MAiOVFnCj00P3ZErM69kfkKfHO9h5LQBIbOJp8ugYZs0qZ1Ks/vOgF
-X-Received: by 2002:a05:7022:4584:b0:11b:9386:8262 with SMTP id
- a92af1059eb24-1273ae8d7dbmr8589275c88.47.1771525789334; Thu, 19 Feb 2026
- 10:29:49 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771525943; x=1772130743;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cV9YP510KWkL1HbmoAzcJBKIBvJE97QPOxOHgbh9NmM=;
+        b=ZRRM+KRaJmCRnrOToWRE9RMcoUWiioHDtZ+noEOTYV3DFFXlIIeYbQBXxxIAldQe2x
+         /nfdnKqrgI4Tivd6IMSbHYVpedjDgVe+6CqWEqLSMdSxC6dDDLsTK0F2PZFzMTszxh9D
+         ZzGloxw9wDaT9/8ITlrX7IVvM7z0Iov9EAE5y8cp5jEw6VNNKeIvwkF6k2TZi+O1Bx5i
+         4Qasw7kgUMrX+BkUuz60RikuLq2B3rD6YvqkUzIT/jbcQ4AXZMlpgqoitqQCAKBrwtag
+         r43zwvkguhaFIGV3bOdM0iyB8dvnz55/DHef4pTHXb5r/wZyfCWgJ2zdl67FyI1BJHqr
+         Jyjg==
+X-Forwarded-Encrypted: i=1; AJvYcCVfpFrLOZNpYlXcj0VL05aMTYufRuPla36iGQmDy6zOJtfuMavc5i9czjDpx2kNJt8KXdk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBWieIPJDvE83GgoRS3lVlfWbqAmpkvUooBGUSJsMIWM73havI
+	UslBDmD3alJXP1cVaBejSvWEtzi9KFqTKL2dslV9ezpafitJw1r9Tpj2
+X-Gm-Gg: AZuq6aJ8pH3KxGCCKpZ+rv9z6mSQnp3YygyvP6bGfs/l8fqW+5nXAaDlEKsVOsGZtAd
+	yckctO8qf69Pkj+GMMDj9SmnoHggaOM7EXwZPtVmwIMXOp77gM2hvfCymhE+nD2sLaJEwUkK29t
+	uul2ha9FLpVxBceczYY20BqkLpICBeEGH0sFUG1TTSnxQdrPfaL871+9HVyfNG0zAWcsO4+DStp
+	klzWj6+psosy4BJYXgJhMp0QzL9WZOjKtxmytPaS3aMqn3q7bve4gYJuK1L+RJfSYUYTS6ySi0m
+	cn8G7DDT9i+ArWcCTKZjaRZjvFYcn0a7YcN7kzqK1tw1Nczs5hQ+jb45p4pkUZr4lKlLX7gTtmG
+	/GViGGUa/t4x7nL2tBQBCE8FWklnxicbG4ick8LJfDj9fdE9bz8ASnlh1eTTi8ywu4m+QBr+6HZ
+	DoK7NqJ+a/srbLHaeW/Q6NsKuxbZzNa9iAlQsNCe5HU6JvMC7yPlWF
+X-Received: by 2002:a05:6a20:748c:b0:35f:b96d:af06 with SMTP id adf61e73a8af0-394fc201126mr7274272637.14.1771525942835;
+        Thu, 19 Feb 2026 10:32:22 -0800 (PST)
+Received: from [192.168.0.226] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c6e5331ba14sm16411985a12.29.2026.02.19.10.32.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Feb 2026 10:32:22 -0800 (PST)
+Message-ID: <5044b1d83c3c916c0754eb5556008316c36c15ae.camel@gmail.com>
+Subject: Re: [PATCH bpf 2/4] bpf: Improve bounds when tnum has a single
+ possible value
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>,  Srinivas Narayana
+ <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte
+ <santosh.nagarakatte@rutgers.edu>
+Date: Thu, 19 Feb 2026 10:32:19 -0800
+In-Reply-To: <CAM=Ch06Vg-faG9ukU4DAsF9FRG2PeUtYHh3BkG0dOzYi=WDCyg@mail.gmail.com>
+References: <cover.1771316309.git.paul.chaignon@gmail.com>
+		 <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
+		 <12705b3d58569685048804c33e90755c17667cbf.camel@gmail.com>
+		 <CAM=Ch06Vg-faG9ukU4DAsF9FRG2PeUtYHh3BkG0dOzYi=WDCyg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260219173756.315077-7-kuniyu@google.com> <b8d59a7285647804e2c8484dc8cb118abf0ecd69657edab42393389088e349c5@mail.kernel.org>
-In-Reply-To: <b8d59a7285647804e2c8484dc8cb118abf0ecd69657edab42393389088e349c5@mail.kernel.org>
-From: Kuniyuki Iwashima <kuniyu@google.com>
-Date: Thu, 19 Feb 2026 10:29:37 -0800
-X-Gm-Features: AaiRm51l5uXrAtzog4Z0HbOXUmQRvcMtG17AuUmBL8-1sZuW6YVF6_oOduK8z6E
-Message-ID: <CAAVpQUDHx1PYUvDeO+AdUWBBfQ8LBNqF9VpX2_Y2_2qpa+-cXw@mail.gmail.com>
-Subject: Re: [PATCH v3 bpf/net 6/6] sockmap: Fix broken memory accounting for UDP.
-To: bot+bpf-ci@kernel.org
-Cc: john.fastabend@gmail.com, jakub@cloudflare.com, 
-	willemdebruijn.kernel@gmail.com, kuni1840@gmail.com, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, syzbot+5b3b7e51dda1be027b7a@syzkaller.appspotmail.com, 
-	ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, 
-	martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev, 
-	clm@meta.com, ihor.solodrai@linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 19, 2026 at 10:11=E2=80=AFAM <bot+bpf-ci@kernel.org> wrote:
->
-> > diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-> > --- a/net/core/skmsg.c
-> > +++ b/net/core/skmsg.c
->
-> [ ... ]
->
-> > @@ -576,6 +577,7 @@ static int sk_psock_skb_ingress(struct sk_psock *ps=
-ock, struct sk_buff *skb,
-> >                               u32 off, u32 len, gfp_t gfp_flags, bool t=
-ake_ref)
-> >  {
-> >       struct sock *sk =3D psock->sk;
-> > +     bool is_udp =3D sk_is_udp(sk);
-> >       struct sk_msg *msg;
-> >       int err =3D -EAGAIN;
-> >
-> > @@ -583,12 +585,15 @@ static int sk_psock_skb_ingress(struct sk_psock *=
-psock, struct sk_buff *skb,
-> >       if (!msg)
-> >               goto out;
-> >
-> > -     if (skb->sk !=3D sk) {
-> > +     if (is_udp)
-> > +             spin_lock_bh(&sk->sk_receive_queue.lock);
-> > +
-> > +     if (skb->sk !=3D sk || is_udp) {
-> >               if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
-> > -                     goto free;
-> > +                     goto unlock;
-> >
-> >               if (!sk_rmem_schedule(sk, skb, skb->truesize))
-> > -                     goto free;
-> > +                     goto unlock;
-> >       }
->
-> [ ... ]
->
-> >       skb_set_owner_r(skb, sk);
->                         ^^^
->
-> If sk_psock_skb_ingress_enqueue() fails after this point (for
-> example, skb_to_sgvec() fails and skb_linearize() also fails under
-> GFP_ATOMIC memory pressure), the error path frees msg and returns
-> -EAGAIN, but the skb is kept with skb->destructor set to
-> udp_sock_rfree.
->
-> The caller sk_psock_verdict_apply() then queues this skb onto
-> psock->ingress_skb for retry via sk_psock_backlog().
->
-> On retry, sk_psock_handle_skb() calls sk_psock_skb_ingress()
-> again. The function acquires sk->sk_receive_queue.lock, then calls
-> skb_set_owner_r() which calls skb_orphan(). skb_orphan() invokes
-> the current skb->destructor, which is now udp_sock_rfree():
->
->   sk_psock_skb_ingress()
->     spin_lock_bh(&sk->sk_receive_queue.lock)   <-- held
->     skb_set_owner_r(skb, sk)
->       skb_orphan(skb)
->         skb->destructor(skb)           [=3D udp_sock_rfree]
->           spin_lock_bh(&sk->sk_receive_queue.lock)  <-- deadlock
->
-> Could this self-deadlock on the receive queue lock?
+On Wed, 2026-02-18 at 01:06 -0500, Harishankar Vishwanathan wrote:
+> On Tue, Feb 17, 2026 at 5:58=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
+om> wrote:
+> [...]
+> > > 1. The u64 range and the tnum only overlap in umin.
+> > >    u64:  ---[xxxxxx]-----
+> > >    tnum: --xx----------x-
+> > I think this hunk should be rewritten as follows:
+> >=20
+> >         tnum_next =3D tnum_step(reg->var_off, reg->umin_value);
+> >         tnum_max =3D reg->var_off.value | reg->var_off.mask;
+> >         tnum_min =3D reg->var_off.value;
+> >         if (tnum_next > reg->umax_value) {
+> >                 /* The only overlap is umin */
+> >                 ___mark_reg_known(reg, tnum_min);
+> >         } else if (tnum_min < reg->umin_value && tnum_next =3D=3D tnum_=
+max) {
+> >                 /* The only overlap is tmax */
+> >                 ___mark_reg_known(reg, tnum_next);
+> >         } else if (tnum_next <=3D reg->umax_value &&
+> >                    tnum_step(reg->var_off, tnum_next) > reg->umax_value=
+) {
+> >                 ___mark_reg_known(reg, tnum_next);
+> >         }
+> >=20
+> > - At-least to me, it easier to understand this way.
+>=20
+> We can also use tmin and tmax, like tnum_step from the previous commit do=
+es,
+> to keep things consistent.
+>=20
+> > - There is no need to gate the condition `tnum_next > reg->umax_value`,
+> >   if next tnum overshoots the reg->umax_value then only tnum_min is lef=
+t.
+>=20
 
-Oh exactly...
-Will short-circuit to sk_psock_skb_ingress_enqueue()
-in that case.
+Hi Harishankar,
 
+Sorry for delayed response.
 
->
-> > +     if (is_udp) {
-> > +             skb->destructor =3D udp_sock_rfree;
-> > +             spin_unlock_bh(&sk->sk_receive_queue.lock);
-> > +     }
-> > +
-> >       err =3D sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, ms=
-g, take_ref);
-> >       if (err < 0)
-> >               goto free;
-> >  out:
-> >       return err;
-> > +
-> > +unlock:
-> > +     if (is_udp)
-> > +             spin_unlock_bh(&sk->sk_receive_queue.lock);
-> >  free:
-> >       kfree(msg);
-> >       goto out;
->
-> > diff --git a/net/ipv4/udp.c b/net/ipv4/udp.c
-> > --- a/net/ipv4/udp.c
-> > +++ b/net/ipv4/udp.c
->
-> [ ... ]
->
-> > +void udp_sock_rfree(struct sk_buff *skb)
-> > +{
-> > +     struct sock *sk =3D skb->sk;
-> > +
-> > +     spin_lock_bh(&sk->sk_receive_queue.lock);
-> > +     sock_rfree(skb);
-> > +     spin_unlock_bh(&sk->sk_receive_queue.lock);
-> > +}
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/221933=
-27667
->
-> AI-authorship-score: low
-> AI-authorship-explanation: The commit demonstrates deep understanding of =
-UDP memory accounting internals and references a specific syzbot report, co=
-nsistent with an experienced kernel networking developer.
-> issues-found: 1
-> issue-severity-score: high
-> issue-severity-explanation: Self-deadlock on sk->sk_receive_queue.lock wh=
-en sk_psock_skb_ingress is retried after enqueue failure for UDP, causing a=
- system hang.
+> The guard helps avoid the case where u64 and tnum have no intersection:
+> u64:  ---[xxxxxx]-----
+> tnum: x------------x-
+>=20
+> The entire condition for "only overlap of tnum is with umin" needs to che=
+ck both
+> (1) if umin is a member of var_off
+> (2) if the next member of var_off after umin > umax.
+
+Right before the hunk there is:
+
+  reg->umin_value =3D max(reg->umin_value, reg->var_off.value);
+
+Which implies that:
+
+  tnum_min <=3D reg->umin_value
+
+My mental model for register sync functions is that all ranges are
+considered valid, hence I suggested dropping the check.
+If you think the check should be preserved, maybe still rewrite it like:
+
+  tnum_min =3D=3D reg->umin_value && tnum_next > reg->umax_value
+
+That's a bit easier to parse compared to
+'(reg->umin_value & ~reg->var_off.mask) =3D=3D reg->var_off.value'.
+Wdyt?
+
+>=20
+> > - Accidentally, it fixes the scx_cosmos regression
+> >   (probably, because first condition is relaxed).
+
+I double-checked scx_cosmos with current master, patch as posted and
+patch with my changes, in all three cases I see:
+
+File              Program             Verdict  Insns
+----------------  ------------------  -------  -----
+scx_cosmos.bpf.o  cosmos_select_cpu   success    475
+
+So, I'm not sure why CI flagged this as +500%.
