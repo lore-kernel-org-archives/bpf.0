@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6471F33F39C;
-	Thu, 19 Feb 2026 15:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50CA3033FD;
+	Thu, 19 Feb 2026 15:20:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771513855; cv=none; b=e6Ctkr2iRvbmim+TZQpmewu5+4nEZQiSEfpTiFbZ/GgITro/iHitzFYN26b2udRamMy9mjQppOCn764YYqqmJdzwSMrG+PBPqEQQWBaUFDniunIzBGIxS99VfyMAgHWg1Daby0zh6x6FZ188v9jiqwUWfjOE8SO6xR6ofgP6jqg=
+	t=1771514423; cv=none; b=qHoWKx3LLhSf59q2rHDRbVVLsWPfHFwIunO8erCjfZRIBTligpw7iEij90iz1iThJqQmtGZlQvazUpCART+R8mDmdU5tSPN1ITXLSOWJN5huBBoYG9ChElJED3h1eRj+0b2hIwqmcO/WgYtrPmWCmF8s7/uAEKPXCItCI56BYl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771513855; c=relaxed/simple;
-	bh=07DWOhOE5gQM6B0UCSGd3a69H29OOZIAhDMZ1+LO25I=;
+	s=arc-20240116; t=1771514423; c=relaxed/simple;
+	bh=c3Y9GTRH+k4/VYLEFnoafUvNK9Y+FEq4L75YnvIin04=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=a3iUSfgfRT6A+W1zEZLgTcvAE3ouFHCToioE0A2BHt4pjfSMsS9cMncFqcB4g2arrvFgyeiNBFPFjXXW4purmCQHK3rbC/KgKVH0lKDqbrgtp+nfKVyjMpHe5WYshJ5ddTbzRiraWxTy8htP5unNq+v/tzftpzh39wqzel12IFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j7Xpw3wr; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version:Content-Type; b=qHjzZZS1L70csZsHzM4vFED+SZDe0OfvE8bX6QEZSJsRrZtYbymQs4FrVJyJHpYMS2ClBqJE/9eIo4lS2bq0ToXori0VlRZ09j7uR3dHGS1cQcDXsyMzKw245xGYPMfjjgt2YJxRZl6MIvObW/+RhxpW3k4c/vhvnDr6ovgG31o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u2y/ZZvG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j7Xpw3wr"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BFFAC4CEF7;
-	Thu, 19 Feb 2026 15:10:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u2y/ZZvG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5127C4CEF7;
+	Thu, 19 Feb 2026 15:20:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771513855;
-	bh=07DWOhOE5gQM6B0UCSGd3a69H29OOZIAhDMZ1+LO25I=;
+	s=k20201202; t=1771514423;
+	bh=c3Y9GTRH+k4/VYLEFnoafUvNK9Y+FEq4L75YnvIin04=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=j7Xpw3wrHYOOCsQXEfznBjD3kYlM79NuIrLbasjZdQk0uBrsrnOQXM/AbsgRRcb8U
-	 d7R02l1R+GTJlgpiFu6iWKMqQ8aAhx0GdPXZJwOJJ+x37CaRKhQat/8xOhGLKFrbTN
-	 fS5DkYPBGD75JO955oLJODqfK/id9BaTPYO34FKmt0DVeUhPNCHFzSmURan9xoaPQw
-	 kqy20ZZPotf2uYoHqeEOv6kqbjuuS99BnldraRM9vOSwKeuu5pRibw8F2g0mi8pBem
-	 aBbk1ohzDlP1/Tfzf9aApk8XFkcfn0vJ9AYHeSvdUUAfc20NnXNlhe2LKtxr3+d9Z3
-	 eaCNyEUgJlB9w==
+	b=u2y/ZZvGGyCA0ZMal4I6Yh2MPUePHSoIbhn7GRgZqpPuSEQN1+eJSk3v+91Nr6EtH
+	 piuBM6wQrpNhrHD7XWGBDmo3HHe2Jc+7pBA5ngEwD7MnECFOUVigIi4jIFC+hg0ns5
+	 i6p3lFvWVVmlfGe8cW9dmCv13GsW/3wQeS6uqWZ0bb67qYvkPcc25XTcc3WUc/DZ7k
+	 drP0I8MfcWjLUb0mPszi6xVpWDE6mNnJ7u3dS4gQqLoDFX8VkyDhEpcEKzfaYJks5R
+	 tZ+itm1KlS+3NU5tgYTMfOYB2x+bXQ0kK3DWfFUcJGDPksXqPjwvS9CgX5ZdA4XG9H
+	 GKpyLqDoSlZkA==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
@@ -49,8 +49,8 @@ Subject: Re: [PATCH bpf-next v2 3/6] bpf, arm64: Add 64-bit bitops kfuncs
 In-Reply-To: <20260219142933.13904-4-leon.hwang@linux.dev>
 References: <20260219142933.13904-1-leon.hwang@linux.dev>
  <20260219142933.13904-4-leon.hwang@linux.dev>
-Date: Thu, 19 Feb 2026 15:10:27 +0000
-Message-ID: <m2342wpy58.fsf@kernel.org>
+Date: Thu, 19 Feb 2026 15:20:09 +0000
+Message-ID: <m24incoj4m.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -59,6 +59,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
 
+Leon Hwang <leon.hwang@linux.dev> writes:
 
 > Implement JIT inlining of the 64-bit bitops kfuncs on arm64.
 >
@@ -148,8 +149,9 @@ Content-Type: text/plain
 > +	return 0xdac00000 | (rn << 5) | rd;
 > +}
 
-Instead of hardcoding the instructions with the above functions, do it the
-proper way something like the following patch (not compile tested):
+I don't think adding the above three functions is the best to JIT these
+intructions, do it like the other data1 and data2 instructions and add
+them to the generic framework like the following patch(untested) does:
 
 -- >8 --
 
@@ -172,11 +174,11 @@ index 18c7811774d3..b2696af0b817 100644
  __AARCH64_INSN_FUNCS(rev32,	0x7FFFFC00, 0x5AC00800)
  __AARCH64_INSN_FUNCS(rev64,	0x7FFFFC00, 0x5AC00C00)
 +__AARCH64_INSN_FUNCS(rbit,	0x7FFFFC00, 0x5AC00000)
-+__AARCH64_INSN_FUNCS(clz,      0x7FFFFC00, 0x5AC01000)
-+__AARCH64_INSN_FUNCS(ctz,      0x7FFFFC00, 0x5AC01800)
- __AARCH64_INSN_FUNCS(and,      0x7F200000, 0x0A000000)
- __AARCH64_INSN_FUNCS(bic,      0x7F200000, 0x0A200000)
- __AARCH64_INSN_FUNCS(orr,      0x7F200000, 0x2A000000)
++__AARCH64_INSN_FUNCS(clz,	0x7FFFFC00, 0x5AC01000)
++__AARCH64_INSN_FUNCS(ctz,	0x7FFFFC00, 0x5AC01800)
+ __AARCH64_INSN_FUNCS(and,	0x7F200000, 0x0A000000)
+ __AARCH64_INSN_FUNCS(bic,	0x7F200000, 0x0A200000)
+ __AARCH64_INSN_FUNCS(orr,	0x7F200000, 0x2A000000)
 diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
 index 4e298baddc2e..2229ab596cda 100644
 --- a/arch/arm64/lib/insn.c
