@@ -1,238 +1,83 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD6C345758
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 15:37:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F74148850;
+	Thu, 19 Feb 2026 17:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771515447; cv=none; b=XwEW7vvGv9dYnlm44tzT14ikrfOvPBbP2mDG8baoS4Fz36+xSpgaKMgUvlrpVsEDT77xdP1V4+bkz0ZEqUixw7ZJHkAHtsLWubMiCiwMLrNcXGjXXfkURTHr39BLbgMB94co1DsyiHKvnq3iLtKJRrX92W2uTj9bKsqenlIFvDo=
+	t=1771521014; cv=none; b=Via4lf5ip/+XMy0hcBMbkKgtmjLbYO9I/pN6Iw/+cJffqqdHMjwsJA7pCC7w22C2gG9CV4dhJJbOGa/15r1gPGvlY3Sx9RWu6cu6p215xihyQJwB9Ro7/oxkEuTDNccJvmXxwzfI+ZQ7zE/Ckba9JY2rfjysGo0qdTujBu9/FGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771515447; c=relaxed/simple;
-	bh=ixhP+oBrva5ygcp2hjhyaCOAT/lLVs3Df/zIr2l4nqY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JsmFaJQwn/hynLxFPJ05fRdzn1iLsoTBidSooSVGVrXTmKZM/H5EXO6DNQ8lLjGTQSAqcnAAM0Rm3wDMuKdeTlfJuXi14Hx6N3v66u6pzmZKCMjQeAxpVkGrt8ItLKPWwH9AoDDDowF9YsrCkUHScck1sHE8azsqvhy9hGRdJ/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dbRrhdJj; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771521014; c=relaxed/simple;
+	bh=4rWC649bPHWDwbAUy6fyZ7LfezATYtqNzYp84uIcB20=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Fdmobf15S2xgQaE2sHEQNYi/5FP4CluKE1zbiEMqpRfAZnNef8F5pWY/ifPOf2K9HKgTDEr2DTd2OK1/cTkM1hCpNpnlPPCengad/64n4l9vwDN67mBItXjXPek/sbLgKJ81sem+c2xyfgbEyTW8qXw0XhHxkfcjbznrF2PJl4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g4YmZzZC; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dbRrhdJj"
-Message-ID: <10911cdf-d951-41a6-82c1-1c0ecd47c5f5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771515433;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dar0RQt4M278UggC4OmngN9+vjxlsvXau8VM1wIA7Uc=;
-	b=dbRrhdJj1yu9EW96WbowLTZvrGwoJeZ7bRWKOGHU/itw/cjdE7WOq4Ghc+D/CbDuq+msoC
-	c83WPqh3xLBfArsVfWotrWTNWoRHXy/uOQoj6nTQRkxVU2JEhLwB4JYXtwA4p7lW3W2PKx
-	HWJM5Y+mUQOy0MQlOl7geSIZqE/ws/U=
-Date: Thu, 19 Feb 2026 23:36:51 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g4YmZzZC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64CE7C4CEF7;
+	Thu, 19 Feb 2026 17:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771521014;
+	bh=4rWC649bPHWDwbAUy6fyZ7LfezATYtqNzYp84uIcB20=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=g4YmZzZCRSFVjObEPAdBYaA6NiPtulw4WVlNQSEY66Dti6oVEXIaZYG3+B6SfWaUw
+	 JI8ilFC5GZZmri2Kc/NTQfVoE9gjAZR+qDh9aQTqZ9ko/kFSeWJv2mn3EYy+EZzrqn
+	 npi8UpEjs3v50uinHoZ7RiEZTIZGFdLnA2eErYNoFcYVa2dDMsxWWmmOnjQxYxbsHK
+	 B3wSpQBc+3E1xCMqKVRmlk3GeyMkjBreQzwMMn8B9AZgXPvnhRfWIJI8bevq3AXPVv
+	 14tuQbh5aPZN/dDV1MIEtPEDUmL/i/AHPQoAoZYN6avFmP1FNKNU5Edqny6I+6SttY
+	 vMuuJf92/zSoQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 85263380CEF3;
+	Thu, 19 Feb 2026 17:10:06 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 3/6] bpf, arm64: Add 64-bit bitops kfuncs
- support
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>,
- Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20260219142933.13904-1-leon.hwang@linux.dev>
- <20260219142933.13904-4-leon.hwang@linux.dev> <m2342woiw9.fsf@kernel.org>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <m2342woiw9.fsf@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] eth: fbnic: Advertise supported XDP features.
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177152100533.2305599.11657483743425478987.git-patchwork-notify@kernel.org>
+Date: Thu, 19 Feb 2026 17:10:05 +0000
+References: <20260218030620.3329608-1-dimitri.daskalakis1@gmail.com>
+In-Reply-To: <20260218030620.3329608-1-dimitri.daskalakis1@gmail.com>
+To: Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>
+Cc: davem@davemloft.net, alexanderduyck@fb.com, kuba@kernel.org,
+ edumazet@google.com, pabeni@redhat.com, andrew+netdev@lunn.ch,
+ horms@kernel.org, ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, mohsin.bashr@gmail.com,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, kernel-team@meta.com
 
+Hello:
 
+This patch was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-On 2026/2/19 23:25, Puranjay Mohan wrote:
-> Leon Hwang <leon.hwang@linux.dev> writes:
+On Tue, 17 Feb 2026 19:06:20 -0800 you wrote:
+> Drivers are supposed to advertise the XDP features they support. This was
+> missed while adding XDP support.
 > 
->> Implement JIT inlining of the 64-bit bitops kfuncs on arm64.
->>
->> bpf_clz64(), bpf_ffs64(), bpf_fls64(), and bpf_bitrev64() are always
->> inlined using mandatory ARMv8 CLZ/RBIT instructions. bpf_ctz64() is
->> inlined via RBIT + CLZ, or via the native CTZ instruction when
->> FEAT_CSSC is available. bpf_rol64() and bpf_ror64() are always inlined
->> via RORV.
->>
->> bpf_popcnt64() is not inlined as the native population count instruction
->> requires NEON/SIMD registers, which should not be touched from BPF
->> programs. It therefore falls back to a regular function call.
->>
->> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
->> ---
->>  arch/arm64/net/bpf_jit_comp.c | 123 ++++++++++++++++++++++++++++++++++
->>  1 file changed, 123 insertions(+)
->>
->> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
->> index 7a530ea4f5ae..f03f732063d9 100644
->> --- a/arch/arm64/net/bpf_jit_comp.c
->> +++ b/arch/arm64/net/bpf_jit_comp.c
->> @@ -1192,6 +1192,127 @@ static int add_exception_handler(const struct bpf_insn *insn,
->>  	return 0;
->>  }
->>  
->> +static inline u32 a64_clz64(u8 rd, u8 rn)
->> +{
->> +	/*
->> +	 * Arm Architecture Reference Manual for A-profile architecture
->> +	 * (Document number: ARM DDI 0487)
->> +	 *
->> +	 *   A64 Base Instruction Descriptions
->> +	 *   C6.2 Alphabetical list of A64 base instructions
->> +	 *
->> +	 *   C6.2.91 CLZ
->> +	 *
->> +	 *     Count leading zeros
->> +	 *
->> +	 *     This instruction counts the number of consecutive binary zero bits,
->> +	 *     starting from the most significant bit in the source register,
->> +	 *     and places the count in the destination register.
->> +	 */
->> +	/* CLZ Xd, Xn */
->> +	return 0xdac01000 | (rn << 5) | rd;
->> +}
->> +
->> +static inline u32 a64_ctz64(u8 rd, u8 rn)
->> +{
->> +	/*
->> +	 * Arm Architecture Reference Manual for A-profile architecture
->> +	 * (Document number: ARM DDI 0487)
->> +	 *
->> +	 *   A64 Base Instruction Descriptions
->> +	 *   C6.2 Alphabetical list of A64 base instructions
->> +	 *
->> +	 *   C6.2.144 CTZ
->> +	 *
->> +	 *     Count trailing zeros
->> +	 *
->> +	 *     This instruction counts the number of consecutive binary zero bits,
->> +	 *     starting from the least significant bit in the source register,
->> +	 *     and places the count in the destination register.
->> +	 *
->> +	 *     This instruction requires FEAT_CSSC.
->> +	 */
->> +	/* CTZ Xd, Xn */
->> +	return 0xdac01800 | (rn << 5) | rd;
->> +}
->> +
->> +static inline u32 a64_rbit64(u8 rd, u8 rn)
->> +{
->> +	/*
->> +	 * Arm Architecture Reference Manual for A-profile architecture
->> +	 * (Document number: ARM DDI 0487)
->> +	 *
->> +	 *   A64 Base Instruction Descriptions
->> +	 *   C6.2 Alphabetical list of A64 base instructions
->> +	 *
->> +	 *   C6.2.320 RBIT
->> +	 *
->> +	 *     Reverse bits
->> +	 *
->> +	 *     This instruction reverses the bit order in a register.
->> +	 */
->> +	/* RBIT Xd, Xn */
->> +	return 0xdac00000 | (rn << 5) | rd;
->> +}
+> Before:
+> $ ynl --family netdev --dump dev-get
+> ...
+>  {'ifindex': 3,
+>   'xdp-features': set(),
+>   'xdp-rx-metadata-features': set(),
+>   'xsk-features': set()},
+> ...
 > 
-> I don't think adding the above three functions is the best to JIT these
-> intructions, do it like the other data1 and data2 instructions and add
-> them to the generic framework like the following patch(untested) does:
-> > -- >8 --
-> 
-> diff --git a/arch/arm64/include/asm/insn.h b/arch/arm64/include/asm/insn.h
-> index 18c7811774d3..b2696af0b817 100644
-> --- a/arch/arm64/include/asm/insn.h
-> +++ b/arch/arm64/include/asm/insn.h
-> @@ -221,6 +221,9 @@ enum aarch64_insn_data1_type {
->  	AARCH64_INSN_DATA1_REVERSE_16,
->  	AARCH64_INSN_DATA1_REVERSE_32,
->  	AARCH64_INSN_DATA1_REVERSE_64,
-> +	AARCH64_INSN_DATA1_RBIT,
-> +	AARCH64_INSN_DATA1_CLZ,
-> +	AARCH64_INSN_DATA1_CTZ,
->  };
-> 
->  enum aarch64_insn_data2_type {
-> @@ -389,6 +392,9 @@ __AARCH64_INSN_FUNCS(rorv,	0x7FE0FC00, 0x1AC02C00)
->  __AARCH64_INSN_FUNCS(rev16,	0x7FFFFC00, 0x5AC00400)
->  __AARCH64_INSN_FUNCS(rev32,	0x7FFFFC00, 0x5AC00800)
->  __AARCH64_INSN_FUNCS(rev64,	0x7FFFFC00, 0x5AC00C00)
-> +__AARCH64_INSN_FUNCS(rbit,	0x7FFFFC00, 0x5AC00000)
-> +__AARCH64_INSN_FUNCS(clz,	0x7FFFFC00, 0x5AC01000)
-> +__AARCH64_INSN_FUNCS(ctz,	0x7FFFFC00, 0x5AC01800)
->  __AARCH64_INSN_FUNCS(and,	0x7F200000, 0x0A000000)
->  __AARCH64_INSN_FUNCS(bic,	0x7F200000, 0x0A200000)
->  __AARCH64_INSN_FUNCS(orr,	0x7F200000, 0x2A000000)
-> diff --git a/arch/arm64/lib/insn.c b/arch/arm64/lib/insn.c
-> index 4e298baddc2e..2229ab596cda 100644
-> --- a/arch/arm64/lib/insn.c
-> +++ b/arch/arm64/lib/insn.c
-> @@ -1008,6 +1008,15 @@ u32 aarch64_insn_gen_data1(enum aarch64_insn_register dst,
->  		}
->  		insn = aarch64_insn_get_rev64_value();
->  		break;
-> +	case AARCH64_INSN_DATA1_CLZ:
-> +		insn = aarch64_insn_get_clz_value();
-> +		break;
-> +	case AARCH64_INSN_DATA1_RBIT:
-> +		insn = aarch64_insn_get_rbit_value();
-> +		break;
-> +	case AARCH64_INSN_DATA1_CTZ:
-> +		insn = aarch64_insn_get_ctz_value();
-> +		break;
->  	default:
->  		pr_err("%s: unknown data1 encoding %d\n", __func__, type);
->  		return AARCH64_BREAK_FAULT;
-> diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-> index bbea4f36f9f2..af806c39dadb 100644
-> --- a/arch/arm64/net/bpf_jit.h
-> +++ b/arch/arm64/net/bpf_jit.h
-> @@ -248,6 +248,12 @@
->  #define A64_REV16(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, REVERSE_16)
->  #define A64_REV32(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, REVERSE_32)
->  #define A64_REV64(Rd, Rn)     A64_DATA1(1, Rd, Rn, REVERSE_64)
-> +/* Rd = RBIT(Rn) */
-> +#define A64_RBIT(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, RBIT)
-> +/* Rd = CLZ(Rn) */
-> +#define A64_CLZ(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, CLZ)
-> +/* Rd = CTZ(Rn) */
-> +#define A64_CTZ(sf, Rd, Rn) A64_DATA1(sf, Rd, Rn, CTZ)
-> 
->  /* Data-processing (2 source) */
->  /* Rd = Rn OP Rm */
-> 
-> -- 8< --
-> 
-> Thanks,
-> Puranjay
+> [...]
 
-Ack.
+Here is the summary with links:
+  - [net] eth: fbnic: Advertise supported XDP features.
+    https://git.kernel.org/netdev/net/c/e977fcb3a318
 
-I'll do it in the next revision.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Thanks,
-Leon
 
