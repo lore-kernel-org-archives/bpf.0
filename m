@@ -1,330 +1,257 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63627325496
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 21:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.152.16
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771538280; cv=pass; b=VAPZ0ipJPaK1Bq+roZ1p3n9UySAVkpvSDH9bR8jj9XeSAAzMbM13wshS1upiTqIDfG+PGeiVW9LdADqStWWHcMQPKmGhnmvGLxIITcVx8AkksR+ZXwPDTHcReurSCI00nYDbZ6JPYOU1h1dNnKrqLqKfQCUsSxsQQ3pzjwwG/WY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771538280; c=relaxed/simple;
-	bh=njC9rGOg72rhNBenR2HPHTHK/v1nLUCjBbTgnjT55sI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RVHrol4Tp2bWeaJOndHZJB7XX4Jd3vxvPuLdTpEnOS2cHcbBJzuwq5eTXuYsnGVIN9WeqAmeF9Fihqiv3ztPQi80lNNVGvZizs00Pck3qU+zmmYVCwHi+FCWCXvIzxJrdYILjDi4puX4eC/DlokFuXGknRl10P07S4IEWRKoKTU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=GL7GqrSs; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=kkUVJaHP; arc=pass smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01762F5A06;
+	Thu, 19 Feb 2026 22:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771538758; cv=none; b=iX7xbIs79ik3PrfTFIe/rl8fLYjm5d5B/B7B2Z6j6kGQ2wTPZRzu7noIwfXG4oz/UcfDGOvqqvVHHwbPjhMMEyIpEmiVwpGVRq3FEhvC80H6lOslh1lgVkeE4ny4HNE5v/6RXjFd3Zuiw6tRJxBkiUtGP6EMCmc/Vjp9FBsJ8eM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771538758; c=relaxed/simple;
+	bh=xNuRCdmIcI9DWfIUR4spe/tz7x/2mIOXeyKXOf2vRbM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mAz8L0FaflYwmP1m0RYnEDocsXWzdgeTSxulHzBKKjvrvyYtU9vtYqxYu8TxhSVSgXdE9EsZp6VdBcmMT+0hqMYzXukjUuvC/lLIKEoLpZr05Jj/oRzQrFulYc25dtnftfNF2NqZMXzYKLQ65J4kz5kRYQs8dwAF65Md0p5svUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Un/fJ9tq; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="GL7GqrSs";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="kkUVJaHP"
-Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61JLlV6e2890800
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 21:57:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=0uFIrY2cXd/EPYssOwKwR0auG6gdWTwluyqlj+VnGFM=; b=GL7G
-	qrSsxO85JPn5fzqA0MpoINF1mtnGj/5uhYH4NSNeSHYG0/Sf957Qz1Xwnm/XzaJV
-	FEt0SOSUi+LBll6+r7Jjk42+7qzBOfC++PhSZ92aWdu/6dO7oNlADUrQuQmLKHC1
-	bkdV5G3th4lrGwAOzRwSJaHHMrTiv9+BxNPMijn53iZYeKMq9XVpkF/feUp+UK2D
-	wYWUXLcwNH4B61RiP/D/ursIr8AvtfdB61LDzHfS5VxW18UbmyubfAeTtOTNJ4sU
-	0gs6csXFdgY2j3y+kjlMaLzsgQq1bwgJ0MoJyBPhcL5kXFZYS+kAlqG1y/4EVwrO
-	SXhEqhKa+UZPMe5iqg==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4ce0eatw1s-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 21:57:58 +0000 (GMT)
-Received: from 04wpexch002.crowdstrike.sys (10.100.11.77) by
- 04WPEXCH008.crowdstrike.sys (10.100.11.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Thu, 19 Feb 2026 21:57:56 +0000
-Received: from 04WPEXCH014.crowdstrike.sys (10.100.11.87) by
- 04wpexch002.crowdstrike.sys (10.100.11.77) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Thu, 19 Feb 2026 21:57:56 +0000
-Received: from mail-yw1-f200.google.com (10.100.11.78) by
- 04WPEXCH014.crowdstrike.sys (10.100.11.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Thu, 19 Feb 2026 21:57:56 +0000
-Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-797d2f736f3so25904127b3.3
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 13:57:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771538276; cv=none;
-        d=google.com; s=arc-20240605;
-        b=jC8FVvkNtoitw9Pln3t2OOqoLRrLQfSb/5xVCugmpMyjIJHAVgd5aLvcp92Xt33qUu
-         v6OhWe3SuA1ahaIjwvdZr/m1JS8DB14JDqNZFB9EccfZ7qFykN8VQosXyKnvkh870zc5
-         0LnFNgNfq31UiNgZTul9C3OzMHSGAXWZFiTjoolPau+Qk7zZYJ5uZwks+mweND//3d8p
-         rZ0XygnCMaSeGMBOLrJaOnsYcNCaUJiyEBhi37rMCEcl7/X0NLMq/9DDnfZOoDLjT4td
-         zAj/7BhP99r60jFkiftSrN5+jUWgOEXqKduE0MpwQU1Ds6VSalt03uDmHNcK6zZDXICq
-         1CbA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0uFIrY2cXd/EPYssOwKwR0auG6gdWTwluyqlj+VnGFM=;
-        fh=dg8Y6TqrhGGPoMuiFQvhjrc+AXR5n5qC1MDLD7sU4Qw=;
-        b=cDpMnEvT7eUjmPO+RA3hOtMQW/KwxQwA8YC5G0D6CpAf08Lx6n4QxbF78kEQnV58B2
-         uxhOFQzanewIE1yEESB1rtxigVELAhC8P8pNKu3Ww3AQm5/9n7ydDW33/dqHWfSYPt3M
-         mmkQ0gEtNIXSyW5/7p0jqgUk4XOeOag1A0U6zP84l0ZcNCZvreMX7LZ1se2lUsWwfndw
-         kRiBIgSyKQ6/UnHBl4xUPmmoz2rhuaeMCpjl0EFzyanKB7TBf9+M61Cbykj+6Ynll57T
-         LD7XOh07ro3CGFskIaRs7/0K3yE5bEkIN8TAPO3zS0KmZp2ay/0op4MRJ/tvqnK0UtsM
-         tysg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1771538276; x=1772143076; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0uFIrY2cXd/EPYssOwKwR0auG6gdWTwluyqlj+VnGFM=;
-        b=kkUVJaHPoTbDpzlrWpyIZnGPnsss6veaVNJ3jXzN0X0p9vXqxeaeI1SjMV+r9hbzQ/
-         pBUHuogBaCrF68W4z/w6FqMDKKPiTHCVKDFssJh49xqw/AWRmuTncJTFj3pXN1zFUQJj
-         YrQBerMRuO8HmeIOdExT44SinT6FHmQmaDh3FXgGHzHyyEQHwhLsWVnZcMySuZWE6UZA
-         w2QAPtkkWIE9eMIGuQKdqfQ1Ek8NCPqf5g89G6O07esA0QWvmyA2CEn8K0NRrfiWqZsL
-         7oXEdtHG+c+3g+SphzZqKY9v8KpQnh5nGVmJlJcYqlOlo4T3+UDH8GYusERyWE9zkCXX
-         XMJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771538276; x=1772143076;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0uFIrY2cXd/EPYssOwKwR0auG6gdWTwluyqlj+VnGFM=;
-        b=npmueuK9QV0B7zO/tpn1ldOgSKEFiCUDvvoEMbM579vIz8K/ZluWeMsspDsdNheYd3
-         8cTPeu/1I9sGdHDAgochsssFBLyVkrGD4qBWs7+752xSX0zvSjXkhXUgmCs+F7b5mWRZ
-         kCgc15xdoGxR2vu/cSfy/cC3gTzGSCFkvrC1RSPUs9Z/MmkX+3Kfh/s/RKhOE5QktoE/
-         FK0dkM/D40G7Z76RuSVbXrcIi1VQiXx5WJ0/9XhahAFfGGyEkmvl93wJ3m65c1OBYwVY
-         Tcf1ElPxXr/CH1itrkOxfUwNOXCssQELvVXSlFH8ABkgy27VznHI0PIibvkwLWSNaHSP
-         kHxw==
-X-Gm-Message-State: AOJu0YxaIb63W29w/PPBNADsAi/pm0z1XT1S+1ynHEUn9nnD5qB9v7zS
-	4i3E3mchxvry5e89r6s7cLgzQJqGo6JDi9kUCT6JkKTZsm4550bTH5Drya/D1JmslJQGQ5ia56a
-	1lbtJAiYP/I/9Cne7YTR/bg6uoTwFp1WMRohpM15sRAAK+Pau1p2pXe6dVFR2K/nP2ZRu0RvYAP
-	T4cQtgi8ToL35RoNIrR+c4PCyez/vOmYKvs64buLskxiw=
-X-Gm-Gg: AZuq6aLvzpBte/yny1cfzT3MzDjuKHUGxqd7uR6jiXoJS6EppzXHaMBuAtKVQsyD1TX
-	CsshdlA90sazKBR1jXN0P4oV00GVj4tboMUJX4xi6tpVVgFqI9oG/iWhBd9lJrk6ebsGQj7Bumq
-	mkwEvcb2iUPx2gOM6uz29NigBRfXYqyD+DHISQEMcZ9cLJJ1gE0tvVSPNY7AH/vYqkOh6hVI4OC
-	v7d
-X-Received: by 2002:a05:690c:360a:b0:796:3787:39ad with SMTP id 00721157ae682-79803b602d9mr38246877b3.27.1771538275629;
-        Thu, 19 Feb 2026 13:57:55 -0800 (PST)
-X-Received: by 2002:a05:690c:360a:b0:796:3787:39ad with SMTP id
- 00721157ae682-79803b602d9mr38246657b3.27.1771538275041; Thu, 19 Feb 2026
- 13:57:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Un/fJ9tq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771538757; x=1803074757;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=xNuRCdmIcI9DWfIUR4spe/tz7x/2mIOXeyKXOf2vRbM=;
+  b=Un/fJ9tqAcUXzzBEIxTZjhdIb+hXte5kj3fDywnjXA0ZZx3F0Ktt+UoV
+   qHHuh3XOnEJph9WJJi8aZ86lul6mluQjUAzs/WL5cDdNRzdcnoFd7V1qd
+   v5bWPQ9m8ivmOnLFvIwuH9T5cb7DhRmnRfCNBAZtqhl1AmSp8i0BGb1pH
+   dOTZ4Y5rFvxidMQG/tubAmMWIOpQzWOkawVUJZAMDuridAAoTOMSY8sVj
+   zCP6/KU0frbWN7QGhxKCEzrdcwO1PptpU+tfR9aX5NGaHsvAlBtjkmGAp
+   eSWUFsgOTDXsyDVRXRT3qXv5SzUdVOJZisAQFUI0fWlc4AhUpCp4mCxDP
+   A==;
+X-CSE-ConnectionGUID: 7hbq64MySxyXthoxAX1qNQ==
+X-CSE-MsgGUID: 3VUKPljSTnWVEyMm4bF60g==
+X-IronPort-AV: E=McAfee;i="6800,10657,11706"; a="98101309"
+X-IronPort-AV: E=Sophos;i="6.21,300,1763452800"; 
+   d="scan'208";a="98101309"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2026 14:05:56 -0800
+X-CSE-ConnectionGUID: rMe7/UydR8quK7ptMGxeUw==
+X-CSE-MsgGUID: f9ybEvIFS4Ww19OssGq9QA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,300,1763452800"; 
+   d="scan'208";a="219220500"
+Received: from lkp-server01.sh.intel.com (HELO 765f4a05e27f) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 19 Feb 2026 14:05:49 -0800
+Received: from kbuild by 765f4a05e27f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vtC9b-000000013ae-1rXj;
+	Thu, 19 Feb 2026 22:05:47 +0000
+Date: Fri, 20 Feb 2026 06:05:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Leon Hwang <leon.hwang@linux.dev>, Peilin Ye <yepeilin@google.com>,
+	Luis Gerhorst <luis.gerhorst@fau.de>,
+	Viktor Malik <vmalik@redhat.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 2/6] bpf, x86: Add 64-bit bitops kfuncs
+ support for x86_64
+Message-ID: <202602200536.JWzGHAc6-lkp@intel.com>
+References: <20260219142933.13904-3-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260218225617.354858-1-andrey.grodzovsky@crowdstrike.com>
- <20260218225617.354858-2-andrey.grodzovsky@crowdstrike.com> <DGIIHMD5LE8T.ADJM2OXAWCGZ@etsalapatis.com>
-In-Reply-To: <DGIIHMD5LE8T.ADJM2OXAWCGZ@etsalapatis.com>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Thu, 19 Feb 2026 16:57:44 -0500
-X-Gm-Features: AaiRm51LlK7NEcf6FewERzcp5O5csreyFAfT2faXWsEhUGNXXMS9k3LKPcUM7v8
-Message-ID: <CAOu3gNg3XKtZNCiwt7OarHrTLgKH7KZO_X6bAtrtFQuL+FZppQ@mail.gmail.com>
-Subject: Re: [External] Re: [RFC PATCH bpf-next 1/2] libbpf: Handle duplicate
- kprobe symbols in attach_kprobe_opts
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, jolsa@kernel.org, linux-open-source@crowdstrike.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Disclaimer: USA
-X-Authority-Analysis: v=2.4 cv=DJiCIiNb c=1 sm=1 tr=0 ts=69978766 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=KZhmPCYDdY0A:10
- a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22
- a=CWErhr8FAAAA:8 a=pl6vuDidAAAA:8 a=AJ_swzq5JW5wrpRvgZEA:9 a=QEXdDO2ut3YA:10
- a=I-g_0vLIplkVOQ0FYkeP:22
-X-Proofpoint-ORIG-GUID: CaS4WlJQhz-wJpfQnRYjoBzqR-AXtyXk
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjE5MDE5OSBTYWx0ZWRfXx8HWCNLRBtOH
- IVp9uTowRYst2jPM7gjb31jtJ+KAcUsJFFnMe1T8RkljOyCwtK/rtG7pslIUQ42XHoKNsjz2Mf+
- M81Mb9zYt+9oOKSk9TrQHefo18xgheGLCPRVPHk91SdZRJ6Y6iu+Mf7+zXHbbDhtc08+bLEzM5o
- 00nOT5d7HULUqCMDdDro0m4JqeSCCbzyI32xSTwX03HRNusvDKICOHmx53uv0iNbJgtx9ghLhGI
- /uxRLj0moKfSZCGMfOY0DR9wmX21r/YwytyqH6RjOceBvBZ2ev+xBFoyyOXMnH7OmnDrbq7Ypk+
- h5FbBNsQU1j+rleAKh/D8zI05yJBEC6QEk1ACg1qIcJA0PcOsTeTKWhNa6wUCSicwUlNtGm11M/
- 9NMKLnb37aEZpMEre0itzOJCmACNfTxNltsE+rSVOOtNh3H84IqKrNeAZNGDlbyR9nDsJffbdTD
- +Xcfhr7NnssdVaARcGQ==
-X-Proofpoint-GUID: CaS4WlJQhz-wJpfQnRYjoBzqR-AXtyXk
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11706
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 spamscore=0 adultscore=0 clxscore=1015 impostorscore=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602190199
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260219142933.13904-3-leon.hwang@linux.dev>
 
-On Wed, Feb 18, 2026 at 7:28=E2=80=AFPM Emil Tsalapatis <emil@etsalapatis.c=
-om> wrote:
->
-> On Wed Feb 18, 2026 at 5:56 PM EST, Andrey Grodzovsky wrote:
-> > Add fallback to handle EADDRNOTAVAIL by retrying with absolute
-> > kernel addresses from kallsyms when symbol names are ambiguous.
-> >
-> > When kprobe attachment fails with EADDRNOTAVAIL (or EINVAL in
-> > legacy mode) and a symbol name was used, the kernel encountered
-> > duplicate symbols in kallsyms. This patch:
-> >
-> > - Adds module_name parameter to kallsyms_cb_t callback and
-> >   parser to distinguish vmlinux from module symbols
-> > - Implements find_kaddr_cb() to look up symbol addresses in
-> >   kallsyms, rejecting ambiguous symbol names
-> > - Modifies add_kprobe_event_legacy() to support absolute
-> >   address format
-> > - Implements retry logic in attach_kprobe_opts() that falls
-> >   back to address-based attachment on failure
-> > - Updates avail_kallsyms_cb() callback signature
-> >
-> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-> > ---
-> >  tools/lib/bpf/libbpf.c | 150 ++++++++++++++++++++++++++++++++++++-----
-> >  1 file changed, 133 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > index 0c8bf0b5cce4..684781d25859 100644
-> > --- a/tools/lib/bpf/libbpf.c
-> > +++ b/tools/lib/bpf/libbpf.c
-> > @@ -8449,11 +8449,12 @@ static int bpf_object__sanitize_maps(struct bpf=
-_object *obj)
-> >  }
-> >
-> >  typedef int (*kallsyms_cb_t)(unsigned long long sym_addr, char sym_typ=
-e,
-> > -                          const char *sym_name, void *ctx);
-> > +                          const char *sym_name, const char *module_nam=
-e, void *ctx);
-> >
-> >  static int libbpf_kallsyms_parse(kallsyms_cb_t cb, void *ctx)
-> >  {
-> >       char sym_type, sym_name[500];
-> > +     char module_name[128];
->
-> Why 128? __MODULE_NAME_LEN is defined as (64 - sizeof(unsigned long)) in
-> moduleparam.h.
+Hi Leon,
 
-I see your point, I didn't see this one. I searched UAPI headers and
-found nothing, so I basically
-'appealed to authority' in the existing code, and I found that perf in
-kernel_get_module_dso defines
-Set the length arbitrarily to 128. SO i followed this. I am worried
-that if we just redefine
-__MODULE_NAME_LEN  (64 - sizeof(unsigned long)) locally here and use
-it, if in future kernel
-If this version definition gets longer, we will start failing the
-parsing on those long names. So it seems
-It seems reasonable to give this an extra length buffer. It's just a
-stack variable and also it has no
-performance penalty as we terminate the moment we see closing ']' anyway.
-If you still strongly feel this needs to be changed I will do it. In
-this case are you ok with me
-locally define  __MODULE_NAME_LEN  (64 - sizeof(unsigned long))
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-Introduce-64-bit-bitops-kfuncs/20260219-223550
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260219142933.13904-3-leon.hwang%40linux.dev
+patch subject: [PATCH bpf-next v2 2/6] bpf, x86: Add 64-bit bitops kfuncs support for x86_64
+config: x86_64-randconfig-073-20260220 (https://download.01.org/0day-ci/archive/20260220/202602200536.JWzGHAc6-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260220/202602200536.JWzGHAc6-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602200536.JWzGHAc6-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   ld: arch/x86/net/bpf_jit_comp.o: in function `bpf_inlines_func_call':
+>> arch/x86/net/bpf_jit_comp.c:1621:(.text+0xe70b): undefined reference to `bpf_clz64'
+>> ld: arch/x86/net/bpf_jit_comp.c:1647:(.text+0xe718): undefined reference to `bpf_ctz64'
+>> ld: arch/x86/net/bpf_jit_comp.c:1673:(.text+0xe725): undefined reference to `bpf_ffs64'
+>> ld: arch/x86/net/bpf_jit_comp.c:1677:(.text+0xe732): undefined reference to `bpf_fls64'
+>> ld: arch/x86/net/bpf_jit_comp.c:1683:(.text+0xe743): undefined reference to `bpf_popcnt64'
+>> ld: arch/x86/net/bpf_jit_comp.c:1707:(.text+0xe758): undefined reference to `bpf_rol64'
+>> ld: arch/x86/net/bpf_jit_comp.c:1714:(.text+0xe765): undefined reference to `bpf_ror64'
+   ld: arch/x86/net/bpf_jit_comp.c:1647:(.text+0x10e85): undefined reference to `bpf_ctz64'
+   ld: arch/x86/net/bpf_jit_comp.c:1673:(.text+0x10e92): undefined reference to `bpf_ffs64'
+   ld: arch/x86/net/bpf_jit_comp.o: in function `bpf_jit_inlines_kfunc_call':
+>> arch/x86/net/bpf_jit_comp.c:4247:(.text+0x177c8): undefined reference to `bpf_ffs64'
+   ld: arch/x86/net/bpf_jit_comp.c:4247:(.text+0x177d1): undefined reference to `bpf_ctz64'
+   ld: arch/x86/net/bpf_jit_comp.c:4250:(.text+0x177da): undefined reference to `bpf_fls64'
+>> ld: arch/x86/net/bpf_jit_comp.c:4250:(.text+0x177e3): undefined reference to `bpf_clz64'
+   ld: arch/x86/net/bpf_jit_comp.c:4253:(.text+0x177ec): undefined reference to `bpf_popcnt64'
+   ld: arch/x86/net/bpf_jit_comp.c:4256:(.text+0x177f5): undefined reference to `bpf_ror64'
+   ld: arch/x86/net/bpf_jit_comp.c:4256:(.text+0x177ff): undefined reference to `bpf_rol64'
 
 
->
-> >       unsigned long long sym_addr;
-> >       int ret, err =3D 0;
-> >       FILE *f;
-> > @@ -8465,18 +8466,39 @@ static int libbpf_kallsyms_parse(kallsyms_cb_t =
-cb, void *ctx)
-> >               return err;
-> >       }
-> >
-> > -     while (true) {
-> > -             ret =3D fscanf(f, "%llx %c %499s%*[^\n]\n",
-> > -                          &sym_addr, &sym_type, sym_name);
-> > -             if (ret =3D=3D EOF && feof(f))
-> > +     while (!feof(f)) {
-> > +             /* Position indicator - will be updated by %n if format f=
-ully matches */
-> > +             int n =3D 0;
-> > +             /*
-> > +              * The module name and symbol name are both without white=
-space,
-> > +              * but we cannot use %s to capture, as it consumes the cl=
-osing ']'
-> > +              * of the module format. Hence the %127[^] \t\n\r\v\f] wh=
-ich provides
-> > +              * the equivalent effect.
-> > +              */
-> > +             ret =3D fscanf(f, "%llx %c %499s [%127[^] \t\n\r\v\f]] %n=
-",
-> > +                          &sym_addr, &sym_type, sym_name, module_name,=
- &n);
-> > +
->
->
-> The following:
->
-> > +             if (ret =3D=3D 4 && n > 0) {
-> > +                     /*
-> > +                      * Module symbol: all 4 fields matched AND we rea=
-ched %n.
-> > +                      * n > 0 means we successfully parsed up to the c=
-losing ']'.
-> > +                      */
-> > +                     err =3D cb(sym_addr, sym_type, sym_name, module_n=
-ame, ctx);
-> > +             } else if (ret =3D=3D 3) {
-> > +                     /*
-> > +                      * vmlinux symbol: 3 fields matched, next is matc=
-hing failure against
-> > +                      * '[', but we don't care as we got what we neede=
-d. Also note that the
-> > +                      * trailing newline was consumed by the space aft=
-er the symbol name.
-> > +                      */
-> > +                     err =3D cb(sym_addr, sym_type, sym_name, NULL, ct=
-x);
-> > +             } else if (ret =3D=3D EOF && feof(f)) {
-> >                       break;
-> > -             if (ret !=3D 3) {
-> > -                     pr_warn("failed to read kallsyms entry: %d\n", re=
-t);
-> > +             } else {
-> > +                     pr_warn("failed to read kallsyms entry: ret=3D%d =
-n=3D%d\n", ret, n);
-> >                       err =3D -EINVAL;
-> >                       break;
-> >               }
-> >
-> > -             err =3D cb(sym_addr, sym_type, sym_name, ctx);
-> >               if (err)
-> >                       break;
-> >       }
->
->
-> is pretty difficult to follow. Can avoid the long if-else chain
-> immediately after the fscanf? Maybe something like the following:
->
-> char *name;
->
-> while (
->         ret =3D fscanf(...);
->         if (ret !=3D 3 && ret !=3D 4)
->                 break;
+vim +1621 arch/x86/net/bpf_jit_comp.c
 
-All in all looks much better! Will do. One point: we still need to add
+  1607	
+  1608	static bool bpf_inlines_func_call(u8 **pprog, void *func)
+  1609	{
+  1610		bool has_popcnt = boot_cpu_has(X86_FEATURE_POPCNT);
+  1611		bool has_bmi1 = boot_cpu_has(X86_FEATURE_BMI1);
+  1612		bool has_abm = boot_cpu_has(X86_FEATURE_ABM);
+  1613		bool inlined = true;
+  1614		u8 *prog = *pprog;
+  1615	
+  1616		/*
+  1617		 * x86 Bit manipulation instruction set
+  1618		 * https://en.wikipedia.org/wiki/X86_Bit_manipulation_instruction_set
+  1619		 */
+  1620	
+> 1621		if (func == bpf_clz64 && has_abm) {
+  1622			/*
+  1623			 * Intel® 64 and IA-32 Architectures Software Developer's Manual (June 2023)
+  1624			 *
+  1625			 *   LZCNT - Count the Number of Leading Zero Bits
+  1626			 *
+  1627			 *     Opcode/Instruction
+  1628			 *     F3 REX.W 0F BD /r
+  1629			 *     LZCNT r64, r/m64
+  1630			 *
+  1631			 *     Op/En
+  1632			 *     RVM
+  1633			 *
+  1634			 *     64/32-bit Mode
+  1635			 *     V/N.E.
+  1636			 *
+  1637			 *     CPUID Feature Flag
+  1638			 *     LZCNT
+  1639			 *
+  1640			 *     Description
+  1641			 *     Count the number of leading zero bits in r/m64, return
+  1642			 *     result in r64.
+  1643			 */
+  1644			/* emit: x ? 64 - fls64(x) : 64 */
+  1645			/* lzcnt rax, rdi */
+  1646			EMIT5(0xF3, 0x48, 0x0F, 0xBD, 0xC7);
+> 1647		} else if (func == bpf_ctz64 && has_bmi1) {
+  1648			/*
+  1649			 * Intel® 64 and IA-32 Architectures Software Developer's Manual (June 2023)
+  1650			 *
+  1651			 *   TZCNT - Count the Number of Trailing Zero Bits
+  1652			 *
+  1653			 *     Opcode/Instruction
+  1654			 *     F3 REX.W 0F BC /r
+  1655			 *     TZCNT r64, r/m64
+  1656			 *
+  1657			 *     Op/En
+  1658			 *     RVM
+  1659			 *
+  1660			 *     64/32-bit Mode
+  1661			 *     V/N.E.
+  1662			 *
+  1663			 *     CPUID Feature Flag
+  1664			 *     BMI1
+  1665			 *
+  1666			 *     Description
+  1667			 *     Count the number of trailing zero bits in r/m64, return
+  1668			 *     result in r64.
+  1669			 */
+  1670			/* emit: x ? __ffs64(x) : 64 */
+  1671			/* tzcnt rax, rdi */
+  1672			EMIT5(0xF3, 0x48, 0x0F, 0xBC, 0xC7);
+> 1673		} else if (func == bpf_ffs64 && has_bmi1) {
+  1674			/* emit: __ffs64(x); x == 0 has been handled in verifier */
+  1675			/* tzcnt rax, rdi */
+  1676			EMIT5(0xF3, 0x48, 0x0F, 0xBC, 0xC7);
+> 1677		} else if (func == bpf_fls64 && has_abm) {
+  1678			/* emit: fls64(x) */
+  1679			/* lzcnt rax, rdi */
+  1680			EMIT5(0xF3, 0x48, 0x0F, 0xBD, 0xC7);
+  1681			EMIT3(0x48, 0xF7, 0xD8);       /* neg rax */
+  1682			EMIT4(0x48, 0x83, 0xC0, 0x40); /* add rax, 64 */
+> 1683		} else if (func == bpf_popcnt64 && has_popcnt) {
+  1684			/*
+  1685			 * Intel® 64 and IA-32 Architectures Software Developer's Manual (June 2023)
+  1686			 *
+  1687			 *   POPCNT - Return the Count of Number of Bits Set to 1
+  1688			 *
+  1689			 *     Opcode/Instruction
+  1690			 *     F3 REX.W 0F B8 /r
+  1691			 *     POPCNT r64, r/m64
+  1692			 *
+  1693			 *     Op/En
+  1694			 *     RM
+  1695			 *
+  1696			 *     64 Mode
+  1697			 *     Valid
+  1698			 *
+  1699			 *     Compat/Leg Mode
+  1700			 *     N.E.
+  1701			 *
+  1702			 *     Description
+  1703			 *     POPCNT on r/m64
+  1704			 */
+  1705			/* popcnt rax, rdi */
+  1706			EMIT5(0xF3, 0x48, 0x0F, 0xB8, 0xC7);
+> 1707		} else if (func == bpf_rol64) {
+  1708			EMIT1(0x51);             /* push rcx */
+  1709			/* emit: rol64(x, s) */
+  1710			EMIT3(0x48, 0x89, 0xF1); /* mov rcx, rsi */
+  1711			EMIT3(0x48, 0x89, 0xF8); /* mov rax, rdi */
+  1712			EMIT3(0x48, 0xD3, 0xC0); /* rol rax, cl */
+  1713			EMIT1(0x59);             /* pop rcx */
+> 1714		} else if (func == bpf_ror64) {
+  1715			EMIT1(0x51);             /* push rcx */
+  1716			/* emit: ror64(x, s) */
+  1717			EMIT3(0x48, 0x89, 0xF1); /* mov rcx, rsi */
+  1718			EMIT3(0x48, 0x89, 0xF8); /* mov rax, rdi */
+  1719			EMIT3(0x48, 0xD3, 0xC8); /* ror rax, cl */
+  1720			EMIT1(0x59);             /* pop rcx */
+  1721		} else {
+  1722			inlined = false;
+  1723		}
+  1724	
+  1725		*pprog = prog;
+  1726		return inlined;
+  1727	}
+  1728	
 
- if (ret =3D=3D 4 && n =3D=3D 0)
-          break;
-
-here because we don't want to skip validation where we see the opening '['
-of [module_name] matched but the closing ']' didn't.
-
-Andrey
-
->
->         if (ret =3D=3D 4 && n > 0)
->                 name =3D module_name;
->         else
->                 name =3D NULL;
->
->         err =3D cb(..., name, ctx);
->         if (err)
->                 ...
-> }
->
-> if (!feof(f)) {
->         pr_warn(...)
->         ret =3D EINVAL;
-> }
->
-> It's also closer to the original code.
->
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
