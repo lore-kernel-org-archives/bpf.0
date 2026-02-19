@@ -1,108 +1,98 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAC6329E4D
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 22:58:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5124232AAC5
+	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 23:58:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771541933; cv=none; b=PC7czB8aJ0tBzMmJPiPWRAvD4PfCM0E5mF9jsS6RnoVFO1mQW/DVAz4M+TorNCAg0vTYawhB3EWsduK1LkvwG8DovItgDaP0Xcz7EkROK5glxYtWo/UfNNPqSAcZQ8rD4gLE1mJnPcGSzKyoMNpzp1hhbFn7LdSIAz/Lad72v08=
+	t=1771545519; cv=none; b=s+/g0yXV1cIzFqMHMS29pErNFgUNpAaOts2+z+1QiebIPxHDbCh1/Y7moYoEbdkqJuZjiyXSpsgVGfGG2A6dROi8D6OD3FJ5IoaU025XiaqquPQ7Oydku58d+uSg0eSUaXMaTBx//tB3qfZL4teh35hjv869qgoFVvDhpMg9qgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771541933; c=relaxed/simple;
-	bh=+fmL2hnvMOGQECYwZKoazIdyGcgxGx3G6cg+I74SA8s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D8wbsnUX2bRLqb7bcs8AkcHGaD4fiP0AqSaQ+8eSOAaWz3ONTksj1E7O2TvqakcKmVZMX73pAeD4g4YwatcQp/bxbz0J7J4ba4Pd8AvE4z4Kv2QPVJZ0xBwhzROfqahuEP6LrBsDT9lJMzPp+VY10HpGh7IyIvrcOyqeIcNsFp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IF6CeThy; arc=none smtp.client-ip=209.85.210.176
+	s=arc-20240116; t=1771545519; c=relaxed/simple;
+	bh=vRdnW7tjDzy33A0ooReCpXuBd+lajSwc2FO/ZvCsIMY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TRf0Tx8zSNm1M0zyAXbRm+yCA0IaxzaYXhe2Zu1nQQ+O93kTZIxM/8KH5oQECJ96yPpGdoAVTitvuXbfir7/iJLzNslKDNkt61OjOirLQUfcqsevtHF7rXEU8zhnZDLn4Ln8zR6lCKV7lvNyrn7stWyui/my4XqCHknj3GNYLbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LgxE2Ej0; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IF6CeThy"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-82418b0178cso880825b3a.1
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 14:58:52 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LgxE2Ej0"
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2a929245b6aso14573855ad.0
+        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 15:58:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771541931; x=1772146731; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=bvc/w3vwrKRRThkocodt50I3xdPGIFrYWWu+Wd3osyA=;
-        b=IF6CeThy4Lrzlt41GEocFI6/ooJN+Fd0ilbPg8ekX+Nqu8EIhPy1i8uMWy9Cy+Q4cL
-         9ly/CzlhvGhaafGZ9rz6KD6pq/d+ZKscTjw/tPKkWHZJyAnqocty/1c7SAUnpE6sBAi0
-         xtkBeoPPFqXUICR2GF6Wj1no971XCd6jBjZZ0HKvVh4HFzNpuh493mmBWVyWsmgVfFXA
-         uEIOpNlwIhC/TuovQh1w4nymOHpquMrBoEfERfd7F3eBhUZNvKkidz7W2h8NYV/0WqkU
-         UmvzDA90c3jl87TVCuCeOJy/M4w3iC5D+ZOeH7YZVDw3kp198v7MG81PP+qInrmMgVzk
-         fuzQ==
+        d=gmail.com; s=20230601; t=1771545516; x=1772150316; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vRdnW7tjDzy33A0ooReCpXuBd+lajSwc2FO/ZvCsIMY=;
+        b=LgxE2Ej0hmKGho3+Z2s9XTA8c9DPSvqw5huypRD1Dxo/BqcgPlX99HHf69lGTy4tEM
+         TlTdlttykAn88JZB8xFBAk0XYBdf8lCTwQ3VeE4LkHHQ9RbQr++EkTEssVBOophkrBf2
+         sA9VL9eEGnKHf5bTfAQiHlSmed362hq1kbWYU9U0j5QO89VKk1BVlbsTL89xGXGyFboA
+         Qwg3FB8gUmNInwJYLII3brsob2RovOzF1Gs9EZ2xAP3MM3C3Iy8l8Pv53sWT4nkXzWUX
+         pKx+XgjOANsppV9q9QLl2+uvgcPex9kWdID6yoA47Q6SwWUkCyjIp4zop6VyGtEcZ9wg
+         ciUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771541931; x=1772146731;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bvc/w3vwrKRRThkocodt50I3xdPGIFrYWWu+Wd3osyA=;
-        b=eRZC7kQTBYIRmsnlIw6iMDtv1MvCX6NZ8oNfUKih9P1zMJ+IVMGGXapJwozFW0AaaQ
-         HWBSULjILL7Bwvjo7QT7Gg4H36+e0XwdTs3o1Y8VhcPNT5M1EGTweYDsZzF3hKcrCF2/
-         mQ+KTHApd2YZshssDuaAUMgHDbFh1D7Nq1g20vGCVsZquc6mGQ+S21oG4y8562QQm5E2
-         ovJKDvlJyHUEXN1mw/8jEvJlfIIZrXClR8XbF4doBq8KJHhI2cLQH+C103dhM7r4l48G
-         IX3LRVOcyCJ2U9kBaPFxkmboQw3CJD59Y5THku8rKbVwK4BPOImZwLdZudTWoqBchFbc
-         9xrA==
-X-Gm-Message-State: AOJu0YwBGhSjQS4+nu195mnQjRVADJfMDA0QqzlbJ/dfXMtzo7/6qPr1
-	uMXcIVXYOxHtcFuOCX/FeHAFPLbP1iG/P2UmvI4rdmRq/TWDK0mnDUYPq2EPkQ==
-X-Gm-Gg: AZuq6aIgoH/Ju11sma4UCmsjw0cOvmhsQJi51W3o4asS7J74h1V6BgDYhvqJiTKGbe+
-	D1TTJA/9plrkzcb339Kcn6ERrkIPRYMjTLx/TWFAh1cdXd3m6O8gdNFyLO8XGalKtlc1cj8hTQ/
-	nm15lI4Rq6KWpYweK5/zbmPnWSRD3ZUbmtfPLn49Q30XgjEAG0fmN2wDOx3NGkiuh3XbmFO/OGQ
-	s2tldwdKmnAWKOiH1kNzB15zc95IQ4/JqX8+89RwfTqd89SZ/OgHobaQBun1JnL6sbNCzRR9yCd
-	B4A+BWPD3Mj3eb1vsXTzdFIjiDkJiX4BOeZ/6Phu/vW3ZoDWw4PlDrau6eX3mPvDMjlFuP5MgY9
-	pPscx7GlBkFU4Iu82jlEgsDjkWWmGzYF1zm58Fb8GyuU0JXqVh4DF7t4r6+axO9bHkYTYhly+RW
-	N0Ja28+i1GkKGUk2cZH4+GTbB5
-X-Received: by 2002:a05:6a00:218b:b0:81f:44bb:8aa with SMTP id d2e1a72fcca58-8252748906amr5527383b3a.8.1771541931203;
-        Thu, 19 Feb 2026 14:58:51 -0800 (PST)
-Received: from localhost ([2a03:2880:ff:52::])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-824c6a2ac83sm19196160b3a.12.2026.02.19.14.58.50
+        d=1e100.net; s=20230601; t=1771545516; x=1772150316;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRdnW7tjDzy33A0ooReCpXuBd+lajSwc2FO/ZvCsIMY=;
+        b=Nr1nG6vS9L/enlVwT8WP4SybM41SV/2YyJFK6iS1C7Wu4fvkCS+Bj3lGri5HuuoW2Z
+         EkfenELMsxn20MveTCsyQl08GDyiazScLGD9/WeGHTAEBRiMsmZI4kjUZYj/ml0bjO0K
+         E4n8k8ZbBkW+rbfXmWLudTDAhbosC8qDSvkNZ5C4Uz8BOgEUeOCaUS+BHWwUdfaFOVRW
+         Dj7NyzJ+xbIK0a0wu7IUrPQi83IJoZ5cgHWclKNoaqmLkpHfzmvtcKLcgWN6bFjD1D8f
+         /lyc3zW7yK4tEWQiulau6UUwVvoZnV1dYjObch7NEeM1mcM3MVsbTaB1P5TxIHKcBF4n
+         qy5A==
+X-Forwarded-Encrypted: i=1; AJvYcCU7HE7M3BR3C2wm+1APGhOJMjcSrkw+ff7/bRHJRG1p9ypartwbYnh84FQguuVs5YYYuGE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvkMuhujcbb3xEcOHyYETz/YE4i/c3e05RQh9/zeNmzCnJFMk7
+	pi2ADSifh/Tivb0E+qz8YPWKGP6iCAFJbZoNDJfBZgQ8FOHe2/Yk7GeN
+X-Gm-Gg: AZuq6aKkReQwk8QfI+dwjGfuLeJryLWmkg7mQ+GQ1Wy80HksSj/jkOhFhZFfeD0W536
+	VPNxgC8XXlutCjLsykd0JHS18+anGl8P/zPRk5mSiMBg4gEzY/wXZU6tVohpDJkZg7eK5xDiBT4
+	aKnyCbX/Wi3GukRUnlJZsSuIgoLbvrWnusdhm5L9A5MpH3t8q10t8gT1A8Z4BEoS5vOKKZIuPpQ
+	oGJMJt0cZpnPUMjrJyZ96IXkmCAZhDKcYGQHPg+Kbk7BTD9vkb1gYqkxaqHj/nIsIBMoHR236Ax
+	3EMEr2ofcMfp4NepQsyrBvVhjHJdtJdhQnk6rk+acCTUdm69DbWyhcYlmrfgV2CGJKQ1xRoHitI
+	Y9UzkoVZ0iYgd0Tb0AR53deQTXf+wdbKtOUpFYj/lue/L4cVwM/FxMrehzsR84RCwj2XFYKZerl
+	EZmByBmhEOlZt9lQhUbT2YE1DtxHMSVENRlVu/AeXKyx4L+CSjgAQ=
+X-Received: by 2002:a17:903:1447:b0:2aa:dbf7:7449 with SMTP id d9443c01a7336-2ad17501fbemr236536735ad.37.1771545516504;
+        Thu, 19 Feb 2026 15:58:36 -0800 (PST)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad1a7145cbsm240834805ad.30.2026.02.19.15.58.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Feb 2026 14:58:50 -0800 (PST)
-From: Amery Hung <ameryhung@gmail.com>
-To: bpf@vger.kernel.org
-Cc: alexei.starovoitov@gmail.com,
-	andrii@kernel.org,
-	daniel@iogearbox.net,
-	ameryhung@gmail.com,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next 1/1] selftests/bpf: Change task local data library license
-Date: Thu, 19 Feb 2026 14:58:49 -0800
-Message-ID: <20260219225849.2426421-1-ameryhung@gmail.com>
-X-Mailer: git-send-email 2.47.3
+        Thu, 19 Feb 2026 15:58:36 -0800 (PST)
+Message-ID: <d2f4204bb2207b85856d93b8a6cc6f0285a1dfe7.camel@gmail.com>
+Subject: Re: [PATCH bpf v2 05/15] selftests/bpf: Fix memory leaks in tests
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jiri Olsa <olsajiri@gmail.com>,  Mykyta Yatsenko
+ <yatsenko@meta.com>, Alexis =?ISO-8859-1?Q?Lothor=E9?=
+ <alexis.lothore@bootlin.com>
+Cc: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, kernel-team@meta.com
+Date: Thu, 19 Feb 2026 15:58:33 -0800
+In-Reply-To: <20260218003041.1156774-6-ihor.solodrai@linux.dev>
+References: <20260218003041.1156774-1-ihor.solodrai@linux.dev>
+	 <20260218003041.1156774-6-ihor.solodrai@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Change the license of task local data library to LGPL-2.1 or
-BSD-2-Clause to allow it being in a wider range of projects.
+On Tue, 2026-02-17 at 16:30 -0800, Ihor Solodrai wrote:
+> Fix trivial memory leaks detected by userspace ASAN:
+> =C2=A0 - htab_update: free value buffer in test_reenter_update cleanup
+> =C2=A0 - test_xsk: inline pkt_stream_replace() in testapp_stats_rx_full()
+> =C2=A0=C2=A0=C2=A0 and testapp_stats_fill_empty()
+> =C2=A0 - testing_helpers: free buffer allocated by getline() in
+> =C2=A0=C2=A0=C2=A0 parse_test_list_file
+>=20
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> ---
 
-Signed-off-by: Amery Hung <ameryhung@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/task_local_data.h | 2 +-
- tools/testing/selftests/bpf/progs/task_local_data.bpf.h  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-index 0f86b9275cf9..b91fd3bc4d4d 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-+++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-@@ -1,4 +1,4 @@
--/* SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
- #ifndef __TASK_LOCAL_DATA_H
- #define __TASK_LOCAL_DATA_H
- 
-diff --git a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-index fed53d63a7e5..8b6f7af43648 100644
---- a/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-+++ b/tools/testing/selftests/bpf/progs/task_local_data.bpf.h
-@@ -1,4 +1,4 @@
--/* SPDX-License-Identifier: GPL-2.0 */
-+/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
- #ifndef __TASK_LOCAL_DATA_BPF_H
- #define __TASK_LOCAL_DATA_BPF_H
- 
--- 
-2.47.3
-
+[...]
