@@ -1,190 +1,101 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 701E42F8BEE
-	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 19:01:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771527675; cv=pass; b=ewQTVQz1SantDlHfx1dIZxm6W2mp6jp4Awml8asajmrwWsWQ4unBOL0202jYGNVmzrMQujNj99IKcvXJPcdqVhaCKfhmFIofnxzFJ0H0ZTpitBrIPzpPuCdFCIwLbdvFev9skZ1JgoKWkf/4IL/iar7fIiGSUhc4mAWssV8/McM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771527675; c=relaxed/simple;
-	bh=tquMu6jYPhyKiV1i8LjJLyLv/MbogEbCgjm7Io9nkKo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=azDQ5vTnNPGW2amboPKnGBWd4fkp0LaMfx7NPXLM1nQk55uQmiF9jgmNDT/LzgBnjkQoZ1IxnHeNJ9+NofeNu9hiyWaV7s1RUyBLQcnhWxeQiY9QjEkv4orTtOjXb7w6S5CjjL3VSKaOVgsJIBrx835+9upMSUCXs9hJsR4rvKY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QuNXci6o; arc=pass smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2F82C0294
+	for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 19:15:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771528518; cv=none; b=UI2J8OY06cjATTXidLGUBHEPG+xPumzZHiA3hfxGSBL0f9glDDEmIbw9X5bviVS7PhcUjodbfuVcGbcpejlpNr0MbtaS68w/MkqxNjKkgW2Ixxn8jEimCeDV/W6M/rS503FHNeG/l8/ICXzhydYSMaXGdqZqVkuDYnTEUaYLsZI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771528518; c=relaxed/simple;
+	bh=0gkmir7Dg84DIj2NqS7pC8gGD0qGSz0cFFvUXtQdQMQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u5O1U0CCpKh7myft0xKztoTEeQB35St+XsFVAVR2VqxBzYudBCXVIY8Mt+80xbBdPubnUvm9qwmS85bTFvIk2QfiMVE3D3F5WhsOOXA9y1G3JiHBI/UCLy89D2i2EOv39495Db2qFgKy2reuNeK7SIAJGNBUPEK9bbSUddoC//I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WL+zcT/h; arc=none smtp.client-ip=74.125.82.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QuNXci6o"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48371bb515eso17102775e9.1
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 11:01:13 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771527671; cv=none;
-        d=google.com; s=arc-20240605;
-        b=BQ1ZDRUJpE/dbyMixV1S/CK4msD2YDVhhfhLECWj1joPTj8m66eKjMTbQ6c5QShaJx
-         EJrBObaG8u4pzPx9MeavB+ag7BQn4udmzDKTTu1XX/Ar97lB8D/5Bsx/tgHOE1jcYXCg
-         imeVLtdgwKbEPrihVXtPdqehqRL4Sd+WIXiY8AwREjzUIxmsxl7pwsN7903b0FshzmCb
-         TdfVSaN0ASwgN8aWfUb/j4ANAmp1OxU4D200HWJ/1CTUNcUH8fmICR4SmnHpSTrUHKOu
-         ynhYmgRLD51toQgxF64eXfTf5MlMnSOS8xBWopn2KHu3zn8FsPHt2piqoAHNWtsgo+8/
-         2sTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=jfcXHM8vdeHdLJ0TPx+8IcJlGEwAdq3TJvZNt0rkyx8=;
-        fh=XwGciU4R2575puGPagD/LyKBHnuLIZP4bC+2LFeMsUU=;
-        b=LdKD642fPN/5j3h6noi17bLYbCV6iAfRL12Itsqbml2/5tbAhvImtuFJ2acOgdEtAg
-         CKlFz/IOcQGs1AZHIRgg1xibunp51ryGFbQyoN/9Kgp6EGp3uE7enhGQDFQ9xmMspLG1
-         NazDczKN5PY4vVrU9aKNbkMg+jWQw9/CH0qEzez3m+NBHfo4VMaR9e6FRnOfGo+0haEb
-         bDk2CfD+nfP/GXm+WmSMfXTVvPaUxaW2ZT42oN7EKO9Wsvr58CcOInQ46cjYH0S4L9tW
-         GxrlekkhCnUdFxB2qQH5c+C21049tpWSvd44LkRt/qhclY7r942hO5nJpJcVSS2nNtND
-         YG9Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WL+zcT/h"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2baab3137bcso1171692eec.0
+        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 11:15:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771527671; x=1772132471; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jfcXHM8vdeHdLJ0TPx+8IcJlGEwAdq3TJvZNt0rkyx8=;
-        b=QuNXci6onMnS/dus66FiRDgQd9ioInjcmqzg/w8D9kZBxRxyxRE30XI0RQA9t0UfoK
-         aIUz800PMYN77/nDdloie2fg6W1nsd2yjV1P/xHuIHnxR5Zw1L3oV+uhpcU3zs6koZUV
-         DlGxH+m+Scnbh2GrTiI9GI0wN6ua58aXAyPeI1zLBmOsJeiGywdhKKKJ4LLwlhQNgll1
-         0G3T7SaWnMdu9GQDiUDSwQlQiPv/p5tjoCtf0T58q9BV4YhB/cIq3LOSNZYK/0/frsum
-         RKXI+fRgnwRdsFuSH6FfeY/XaP+wmAl3y5TRFkK9+7lYUhC5tYsT0cEl6Oyi/XtAS1hZ
-         ewLg==
+        d=gmail.com; s=20230601; t=1771528516; x=1772133316; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=SKXPKRIMQX0M/LU7nK6tMFNe40zI+JHq9z0mH/36x9E=;
+        b=WL+zcT/hlNDs7HDTTsYFfGTB8g/0kik6EvUdgHmLCaYcbUnr3QBYqUo3dGf4GDYE11
+         m74cl//wYTy0mujBgrv8iN/t7eXz12N2ZM+Yvf/xnsZ+gaIgrQsK+M1EZpCeSQpTiAfG
+         S8S8Qw9IaRPMM0zymw5y/VWxmuKF+LSYMl3jFVLMYPbZ+Ox9fVkLsTX+fAV4fdIJ/OuP
+         HduJIk/6eDlr5XkmQYDlfwLNPF5P9BPHJhhcG93ndtOXi6+UXRnZVVS5u6Lm6TadiI4/
+         21qBeQ4XR2pKjHnLiS2+4S6dcOCFg7oPCdcurZX6qJTMt9HQPKyrKnDlZozj7gPEwMSa
+         VKxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771527671; x=1772132471;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jfcXHM8vdeHdLJ0TPx+8IcJlGEwAdq3TJvZNt0rkyx8=;
-        b=hxfJuZO6zDUqloAfHASGBnePxzKupgQp7lVSm6qBwZ/Zwl9Zh4Q62fWj1dTwU5IaO9
-         5plQLsKnyfe5kndViI3/SAlOoB7L+1iKoJWwKgdYOnLZsp4xX+cDc9fpA1PiuWJb4Ut3
-         LKIBq+izrXX/U8aTnKI/AzRP9qg48DL19qXkIcbuzC+/JufKeSpGWJNtOfOA/4VVpMHn
-         wmZLANdD5pWDQRaubV9VoK2hzPON0zf/4zjYHE+FkoGas0v2IFTtV1XU0RuTC0nvTooP
-         qcXWbSD7Xzk1I+sd9RMSUrBBLzPx1g5iSgyX0ydPcbiXEzUdDFZxEIEOmUGhpq8cXX9Q
-         iJJg==
-X-Forwarded-Encrypted: i=1; AJvYcCVw91PVep0TeLuSy1jMMijTyktd4aDSwZpPSi9UvY6JZEKBaFvjtnEVRcKWU5tQ8FfuGlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq1x3DDMNTbCe5e823PcamgZxzW92tYKOq2CkBhDE/um4uecpB
-	d8q+XEzZX8w8nrXrSG2myrBGoNe9NoK03/KNPZsiloObBm6Zck6mVo33HozqqmHk/2PnCfb5lLJ
-	PSdmHFoIrcJjfv66lsdr8x4Lb3pkiaXqVJPsf
-X-Gm-Gg: AZuq6aJ3PsJHnNhviRaqiew6kNoSl3+xhQFYjYAvlr3kjV7icqArSUIY/KYZrqvitW9
-	+Nrux9HYokKJOTOp+UdTzNL+td2PYsF/T/J9l/OVYlU67rBFTAvV5RPy2ycBXjneYJ9vX8oYMlT
-	kFOali3t/QFkK4T9kgqI217FyrRUoU9VlprN+HCGNf2HAoIUX34vmT5hh7atvwTGJ3szbK9DlKQ
-	RnfF00d7w/oZqAk4v5V/KgobRZNyCS7EV4MtxIVZlNENgEi4NqyG4DR/bCQk4MZ6LkKiMLQf0MQ
-	Rzo7CGdGUlrjGXlcWy0qrjrt6uY5FsMASgKwoDPsO2FdJ5iys971iQcnCi4pWEP9rEZ/nFAvFwr
-	1+J/mIFYq
-X-Received: by 2002:a05:600c:458a:b0:477:5c58:3d42 with SMTP id
- 5b1f17b1804b1-48398a7e1e2mr111256305e9.10.1771527671269; Thu, 19 Feb 2026
- 11:01:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771528516; x=1772133316;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SKXPKRIMQX0M/LU7nK6tMFNe40zI+JHq9z0mH/36x9E=;
+        b=w57NuAOyQzC5oHCAyy704sQZuTTzVMahTTlquWpNWz6MR2bP1Gd61eqfSZtQ02dt88
+         K+GLQt5+VjMy9uhhk160SB1P1Q5fB/rodED0c+wwBG5NQMbOO5dYDjcsl3DO11qKuYhz
+         JKfpu2HDpR61dkacFVPxHv4bIVZYVQ9ezshLnwRh4zeVydehw/EdYsRmqhv21tsqFxDF
+         mAtvXlRwDML8mtdplcmyZcb7sR+zQUtrJRdYN4WHlXQSldM+808NFJ4a9T8idx3AQUnE
+         VvUqA4keC7ClV16XnCowFU6bCpOGF80hAoS745pq4Vyv4lanX+fHfsYTn8iukRHPRDpv
+         50Hw==
+X-Gm-Message-State: AOJu0YwK8dbjzyS/JQjWbFNRU/SwttQF4O1QId9m9ViHtOjWrSIZJMt6
+	bv8Qn0gQ47EQy2a5Sivn/XYX90p6f1Rlx2Su0h6R7Mr4pJixOIj0Qys=
+X-Gm-Gg: AZuq6aK6kyi2iAmYpTrb57pbhBpwYj895IyQe62OP1LbHVVfOQ2um5Lhd/+17Qioowf
+	t9CXw4Q87JbdoOxM+8kPptAOzkbwwTtUl85HjEGu1sIiAwkbfJV+hDOBZNADgwTEEL9/ZX5LjJQ
+	1OWqH6Fyh5v9gVmUuBPSWL9XmVzH615VC7u8tZc5kANPMEQlvbJEgbfUV7s9dF0yKX4BnGDAQGv
+	YGBEF44SI9LCaayL8PqBctxIGtq0boWRV2Z/ajMDJz5I9hR2uXCptJNvDzUvvhEW8AZt8f0My7a
+	KWzGM1c4tTEPImZc+jaVnQ5/maIKHAl/YA5YCZWnPTlDPvYKnOzw35eibOedYLgS2ICD/cX/Rox
+	EPFeKYJ+N3L/OedbVi5gsZ92kcrLOW86Uq+1cbsh3ckG0EYdfcVVkRZ/INPh3iDtQq6viNGO9bY
+	ct3aaW7WOO+vHy7ll8KNfDfC9tA9kbnBfMfddO8sqfbmrogynoZL+S78x0DJKXJHyGx7Bez7OD1
+	8dW1iFwSRoYqZ7klw==
+X-Received: by 2002:a05:7301:d1a:b0:2ba:8f0d:cfe with SMTP id 5a478bee46e88-2bac933a6femr9943515eec.9.1771528515983;
+        Thu, 19 Feb 2026 11:15:15 -0800 (PST)
+Received: from localhost (c-76-102-12-149.hsd1.ca.comcast.net. [76.102.12.149])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bacb658fc4sm25299392eec.22.2026.02.19.11.15.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Feb 2026 11:15:15 -0800 (PST)
+Date: Thu, 19 Feb 2026 11:15:14 -0800
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, netdev@vger.kernel.org,
+	magnus.karlsson@intel.com
+Subject: Re: [PATCH bpf-next] xsk: avoid double checking against rx queue
+ being full
+Message-ID: <aZdhQv_VEc5VgsSU@mini-arch>
+References: <20260218150000.301176-1-maciej.fijalkowski@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1771327059.git.asml.silence@gmail.com> <7cc147a959ac068c55dae4f540e38e9e4ab121e0.1771327059.git.asml.silence@gmail.com>
-In-Reply-To: <7cc147a959ac068c55dae4f540e38e9e4ab121e0.1771327059.git.asml.silence@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 19 Feb 2026 11:01:00 -0800
-X-Gm-Features: AaiRm537YFUuP5smuHEyCnxqI_hW-J5HXpVLTTziLuOVjoC_dPmNvZaoVrYmNHE
-Message-ID: <CAADnVQK0RaOA9ZYZdYyQxOzLde9MR8HpMM0SexcW59A9u7X2Jw@mail.gmail.com>
-Subject: Re: [PATCH v8 5/5] selftests/io_uring: add a bpf io_uring selftest
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: io-uring <io-uring@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Jens Axboe <axboe@kernel.dk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260218150000.301176-1-maciej.fijalkowski@intel.com>
 
-On Tue, Feb 17, 2026 at 3:33=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
-com> wrote:
->
-> +
-> +struct {
-> +       __uint(type, BPF_MAP_TYPE_ARRAY);
-> +       __uint(max_entries, 3);
-> +       __type(key, u32);
-> +       __type(value, s64);
-> +} res_map SEC(".maps");
-> +
-> +#define t_min(a, b) ((a) < (b) ? (a) : (b))
-> +
-> +static inline void set_cq_wait(struct iou_loop_params *lp,
-> +                              struct io_uring *cq_hdr, unsigned to_wait)
-> +{
-> +       lp->cq_wait_idx =3D cq_hdr->head + to_wait;
-> +}
-> +
-> +static inline void write_result(int res)
-> +{
-> +       u32 key =3D SLOT_RES;
-> +       u64 *val;
-> +
-> +       val =3D bpf_map_lookup_elem(&res_map, &key);
-> +       if (val)
-> +               *val =3D res;
-> +}
-> +
-> +static inline void write_stats(int idx, unsigned int v)
-> +{
-> +       u32 key =3D idx;
-> +       u64 *val;
-> +
-> +       val =3D bpf_map_lookup_elem(&res_map, &key);
-> +       if (val)
-> +               *val +=3D v;
-> +}
+On 02/18, Maciej Fijalkowski wrote:
+> Currently non-zc xsk rx path for multi-buffer case checks twice if xsk
+> rx queue has enough space for producing descriptors:
+> 1.
+> 	if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
+> 		xs->rx_queue_full++;
+> 		return -ENOBUFS;
+> 	}
+> 2.
+> 	__xsk_rcv_zc(xs, xskb, copied - meta_len, rem ? XDP_PKT_CONTD : 0);
+> 	-> err = xskq_prod_reserve_desc(xs->rx, addr, len, flags);
+> 	  -> if (xskq_prod_is_full(q))
+> 
+> Second part is redundant as in 1. we already peeked onto rx queue and
+> checked that there is enough space to produce given amount of
+> descriptors.
+> 
+> Provide helper functions that will skip it and therefore optimize code.
+> 
+> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-Since these examples will be copied around, let's use
-good coding practices. Use properly named global variables
-for stats and counters, and drop this opaque array.
-
-Also bpf_map_lookup_elem() doesn't need if (val) check
-when key is a constant and lookup is from array map.
-
-> +
-> +SEC("struct_ops.s/nops_loop_step")
-> +int BPF_PROG(nops_loop_step, struct io_ring_ctx *ring, struct iou_loop_p=
-arams *ls)
-> +{
-> +       struct io_uring *sq_hdr, *cq_hdr;
-> +       struct io_uring_sqe *sqes;
-> +       struct io_uring_cqe *cqes;
-> +       void *rings;
-> +       int ret;
-> +
-> +       sqes =3D (void *)bpf_io_uring_get_region(ring, IOU_REGION_SQ,
-> +                               SQ_ENTRIES * sizeof(struct io_uring_sqe))=
-;
-> +       rings =3D (void *)bpf_io_uring_get_region(ring, IOU_REGION_CQ,
-> +                               cqes_offset + CQ_ENTRIES * sizeof(struct =
-io_uring_cqe));
-> +       if (!rings || !sqes) {
-> +               write_result(-1);
-> +               return IOU_LOOP_STOP;
-> +       }
-> +
-> +       sq_hdr =3D rings + (sq_hdr_offset & 63);
-> +       cq_hdr =3D rings + (cq_hdr_offset & 63);
-> +       cqes =3D rings + cqes_offset;
-> +
-> +       unsigned to_wait =3D cq_hdr->tail - cq_hdr->head;
-> +       to_wait =3D t_min(to_wait, CQ_ENTRIES);
-> +       for (int i =3D 0; i < to_wait; i++) {
-> +               struct io_uring_cqe *cqe =3D &cqes[cq_hdr->head & (CQ_ENT=
-RIES - 1)];
-> +
-> +               if (cqe->user_data !=3D REQ_TOKEN) {
-> +                       write_result(-3);
-> +                       return IOU_LOOP_STOP;
-> +               }
-> +               cq_hdr->head++;
-> +       }
-
-CQ_ENTRIES is just 8.
-Is it enough for real progs?
-Does the above approach scale ?
-I mean the above works as a bounded loop because loop
-count is small, but for 100+ you want open coded iterators.
-
-In general all progs seem to be toy progs.
-Would be good to have something more realistic.
+Acked-by: Stanislav Fomichev <sdf@fomichev.me>
