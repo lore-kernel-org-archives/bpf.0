@@ -1,63 +1,64 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C0232D0EE
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 13:56:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DD833EB07
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 13:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771595786; cv=none; b=HJ2Lh9Zj4pIQEI0GukYvYiEDGdA0FN+ZSZu0RjPDKH5DdOPgCJZ++XoFE5Pcffb80tR+kpJonfMhRGR48og3UZL18NHwnY0Nt63ON1yvdFaXLrV0zISmoUbEcMM83RLKOXMRrp+U6UVfn/foLosOnKtiZdUTD6UVoFeKBHfvm2w=
+	t=1771595841; cv=none; b=Sg1laGGMuX9Q22w5asFht3O58KGRZwXrMCfE6fS42z8sAiRs6Ha/TRR7tiNIn6cYQ3DtF7rUueVcUEr+w/igM+aU6h+BwTFw39Olg7512OagIvR6+1gclN2ush00oyBGSIpze6O0GIKH+XzlChpWx5sGlH5p9XyES6uyixUnth8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771595786; c=relaxed/simple;
-	bh=zl+MABHtn6KFbrs9oNnq9qibo2CNhwoaC+vCKxEfG88=;
+	s=arc-20240116; t=1771595841; c=relaxed/simple;
+	bh=x7qBooprF5SzStK+yVfsMi7AcgJb+EU1deIgh5LIPmo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fizmw37R5qZuerTsud96sFw3PInw436w4ySHAaF8OwR/IErKeB33UnWEVCtUNBUo5LY37wjBDeKG8Lq7ZHfaRAI1HVC3TSxUEJivCzbdUJp5BHkN7BPshFuQw+WIRtlattI+0aWBf70I+ZRkdPMt6qroOt/E/1b8Em+yk9TkSVI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HN7dAmgm; arc=none smtp.client-ip=209.85.128.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=oqBYJDYDiy2vfDPIvHDh1pPL9lrTceAvv5pRzapRgGSaakx7nGxjoQdEoDWZu4aXw0mBdfPHQ7yi6SxLoOsKMwj5UXxJ0tJ0E/xtiy7gq/9I+cuIIkW5YB621eAtGJ7os9WM9g9kzHtLI/GUIwtGLSGANGj/MLKK+Cezm2VuHzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PeIkFyKV; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HN7dAmgm"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-483487335c2so19915295e9.2
-        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 05:56:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PeIkFyKV"
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-48375f1defeso15024205e9.0
+        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 05:57:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771595783; x=1772200583; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771595838; x=1772200638; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2xxxY2FOaVF+0DSrW+h3a+RsDAZyrNJWKJC6uQ+nJEg=;
-        b=HN7dAmgmrefbCkC8xW1t47lf0wtgw8cLC+yuYKC5XuIChJIL8eLdXonLTWbV0Z3YRK
-         tXuWB67HPHE/za2wVvfK4t51BfP8Y5NDgX1npYduokzOxWvQUVf7dAOrBTl51lPduARD
-         1/B9TSD9UED2gOifmrFevMma+fLGZJJxkbCe5j1yWq0CLOhl7lhSVWgnomJfSpVA/mfj
-         95HYIXndVpKa1bXM7g3eVbpB0n7kxJqpeE9g8HuzpSpEUbCmesOaw76HZ19J1TxGZkd1
-         Yubekl+Fo8xbjmI9sYQqZJT94tv8ZIOqRk+ZL6gcZT7tNezpnCRFRRnXu6wwH3jhY5aK
-         zBhg==
+        bh=3+t//HF3ahDzp4tphypKA0WpedxlXn4Q/UiCT6kbuFU=;
+        b=PeIkFyKVdGP0VL4LPPIBSR9pV6TzxF6I219s2BeJ7qYmOAooxP75sfsHlKdAkYIBJm
+         /hR7dnjrdoOfTCLUJyQlcPXiHly3HV2VZfqRB1fIHu6a9GLS0/jmxb2MXuAWGtVpkKk5
+         1K1h0vlx7yZWWIH14zAPanNX7tieH9q1fYL0ftw14XhgvYHs3y5t6hAKBVPSYZd6xhIe
+         kCiuygn9hD+2xQxXAdmS62Re1TCeZHS+LsLw2m9wVgvgRzLs1h593dvqg8ZfCKM22TvZ
+         VP5wvDA+Enjv5/UxsL/5JgMZWF50/1d9frgmtQF257ar2Xj6BbOmBYoHDUXtdILhfOrh
+         Akzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771595783; x=1772200583;
+        d=1e100.net; s=20230601; t=1771595838; x=1772200638;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2xxxY2FOaVF+0DSrW+h3a+RsDAZyrNJWKJC6uQ+nJEg=;
-        b=Xb5mJtsRMTXtJPxwNmvraFlFdUzd3lipbXUHxaQq2kuZK49BfsSZwhk2EPHb3qmmTK
-         QgmMkWdpDgkpLak2EyBoLlmPEIw+aKxhRPuEmaBw1yQnzelSeAQqeOMfelAjHeYwm63J
-         bZb/oFm4MvBWw3qdVz24BdFJBwCgVqXehwIg3qVbGZqM/FuTaiqzR1brTP9XDFR4kpE/
-         M3ByskKaB6PpiQ+G+h66zp7nCwK4lnQWDhQdONf+ft3tkkYndqpB25aACBLNHRqlx5pQ
-         qlA1vqOi8kMxDtpMK7g7L9a29aKyrAlN3BgdysZ+KWEqJEbg24ooJMjcIaCAD+aKwpvj
-         enBg==
-X-Gm-Message-State: AOJu0YzmS0/Kt8bktxfjg6nhyS4qdQWeBA3+BfAK1cWsjhuVn84mn9d4
-	DzWGTx2ucKasuRkv5lSJ5OWcJW34UHNP5MUb5DwJOehhIZ6gL2N8v8825+BAPQ==
-X-Gm-Gg: AZuq6aKXzlS5s4Kid/mGcc26gAYhlrchdHmc8R2AEh8T+VzJOIjVe1LfVu5HNbzR2+0
-	EsQxDJgfmQNAY30SM2HWzPEjH0hcRNyC2lGidOyX12iYRA84U80uOpHcuzG38e/v0U2vi5TlmeE
-	9fMff8LoMyIcBTdB8s6psxUHdCq4h6ifY5Goj+C2Lea82xEbj+2SymSHZoEuoo5C7H9D7gFRYmK
-	t9w/ItjnYwdBZJyq6uUDScydwYPCdy0uqrVQbfRtSIibjoHUYW33WuQZxI6Pc27YDmZ7fMknsHZ
-	knWi0KKC8RVs4v0hUBogl3lJ2NpPDx0QPwDI2FBjMx/lvo4NP5ZmYqvMf8GiM+1aXn+CrGAb8Qi
-	IFF3HZ3DeSG9VB8H3GFBXEAmrBUt8eZ0qWAlfatyTYX4d9Vca/bW1ODlkhb4N3T4yDkFJFhPIbT
-	bQNr9YZn3CV1pdYHNsR7CpXY4Z+B3GlP+9rMqRJyksWnvj1ckCR93h2DaXQ9Q6D7x8i7JIsBK2X
-	ay88o/Rl4zCgrasl12ZMuIrFvYlhkVk3T4ute44oRAiQCOo/4Ka132ouIvSBy1UkE0Y2n04mHM=
-X-Received: by 2002:a05:600c:1c06:b0:483:703e:4ad5 with SMTP id 5b1f17b1804b1-4839e661509mr97045555e9.22.1771595782871;
-        Fri, 20 Feb 2026 05:56:22 -0800 (PST)
+        bh=3+t//HF3ahDzp4tphypKA0WpedxlXn4Q/UiCT6kbuFU=;
+        b=cJ7e1HLkPzGZ5knXuJgvfKpY0SouiOmvjlEa++MTr4JqI+P9MTK7Wc4tcsW092+Mkb
+         lUqMAVTrrffxYjNDWBM/Kre14Ql90ga5AbzwrEzPUtkIvqGuoJt4GPBToyuh0Ab8iSzq
+         4SspwqM5UwEhr0sJx9kZy8jgfQgFa4sZ+4Z+nwtODVa1kNoUVshV7XPM8z97lji8brw6
+         9T0hEhkMrw8dh8OsJNHow0jANzkHEAXUDtxdN5D40iI7DlRY168zB3rEWe6TWP2BG2Eh
+         9qapjzMqA8JgFeJjrYkNWjhDNRE4Cc1XezcbbkJkOaQ39O1MxNDuMzkqzqZfy8/1RK2y
+         +ZHg==
+X-Gm-Message-State: AOJu0YzT5TVbK4CYL/1PM2zAq9NvByT5S9w+4mTaGVaOiWmff0+bftSx
+	7+hZghie2J7LrLRsCjVQjjociCLjq9ROdfZVx/ZUnW12XCVX0IOtzPOihbDH/A==
+X-Gm-Gg: AZuq6aLjPWC33/X+TJ/50/8Wy5/GeWLMiB3+EbL+/wKsUeWkn2QYQ/V6ft1dAIio9RQ
+	s3y2HiHLVmwGuwc8RRtnMQgx+LmOzQUFIbgvJ0ewJp+EoPDUGnx1ZkCbuLtd20EupkrwwIpwZj5
+	zKmYKIQ5XzZRuNfMpR3Vc0tfmCB0CZuT+v9+0k9auZb6moBVGdWb6LVTyoscaI5+qlE3LO51tTD
+	FiJDxzGeVWXFfv8uQrdqWvROQc3AnnCv1FuWWPcF/1xOrQTxbMmgV25EOwM2gyTAtTk6pHufK4Q
+	onTabXZ5qRn5Ig87qrI3ubSXypFBlGLM7qzal2vnP3/A7PyH1w+bXwKWpy1e/ECunKyRKzo8BCX
+	7ubN53OI12ePRpIUHnxL1fVaGFaNTfluQ9mfhxmzYcZq1dVJxARMMVqNJoJufHIRGBreRlT0n3O
+	J0Ea+EjatfDaEmdVjhxxRyi7+p/iD/WTI3FFp9wc7DbfxeneDWg0CQU6Q4+k4OKEnNJOGK5rQPS
+	pTx9VFf+nEDurBqxkt2MGZCtBf6U0IW4BchavgsEnh4ksZShYb1zHe3vf6IbIyONWMNKoOJxu5W
+	ziO5q118dA==
+X-Received: by 2002:a05:600c:c0c6:b0:483:a2ce:f461 with SMTP id 5b1f17b1804b1-483a2cef4b8mr53143325e9.4.1771595838114;
+        Fri, 20 Feb 2026 05:57:18 -0800 (PST)
 Received: from Tunnel (2a01cb09b01c9b546fd5ffb86f392ee0.ipv6.abo.wanadoo.fr. [2a01:cb09:b01c:9b54:6fd5:ffb8:6f39:2ee0])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31b3e0dsm124578355e9.1.2026.02.20.05.56.15
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31c51ddsm76334365e9.8.2026.02.20.05.57.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Feb 2026 05:56:20 -0800 (PST)
-Date: Fri, 20 Feb 2026 14:56:08 +0100
+        Fri, 20 Feb 2026 05:57:16 -0800 (PST)
+Date: Fri, 20 Feb 2026 14:57:01 +0100
 From: Paul Chaignon <paul.chaignon@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -67,9 +68,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
 	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
 	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Subject: [PATCH v2 bpf 1/4] bpf: Introduce tnum_step to step through tnum's
- members
-Message-ID: <906638fa331c22cacc976ad3f747ab2e02bb196b.1771594636.git.paul.chaignon@gmail.com>
+Subject: [PATCH v2 bpf 2/4] bpf: Improve bounds when tnum has a single
+ possible value
+Message-ID: <ff1f2d06609189ce93bbf8702031069b986ddd99.1771594636.git.paul.chaignon@gmail.com>
 References: <cover.1771594636.git.paul.chaignon@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -81,237 +82,137 @@ Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <cover.1771594636.git.paul.chaignon@gmail.com>
 
-From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+We're hitting an invariant violation in Cilium that sometimes leads to
+BPF programs being rejected and Cilium failing to start [1]. The
+following extract from verifier logs shows what's happening:
 
-This commit introduces tnum_step(), a function that, when given t, and a
-number z returns the smallest member of t larger than z. The number z
-must be greater or equal to the smallest member of t and less than the
-largest member of t.
+  from 201 to 236: R1=0 R6=ctx() R7=1 R9=scalar(smin=umin=smin32=umin32=3584,smax=umax=smax32=umax32=3840,var_off=(0xe00; 0x100)) R10=fp0
+  236: R1=0 R6=ctx() R7=1 R9=scalar(smin=umin=smin32=umin32=3584,smax=umax=smax32=umax32=3840,var_off=(0xe00; 0x100)) R10=fp0
+  ; if (magic == MARK_MAGIC_HOST || magic == MARK_MAGIC_OVERLAY || magic == MARK_MAGIC_ENCRYPT) @ bpf_host.c:1337
+  236: (16) if w9 == 0xe00 goto pc+45   ; R9=scalar(smin=umin=smin32=umin32=3585,smax=umax=smax32=umax32=3840,var_off=(0xe00; 0x100))
+  237: (16) if w9 == 0xf00 goto pc+1
+  verifier bug: REG INVARIANTS VIOLATION (false_reg1): range bounds violation u64=[0xe01, 0xe00] s64=[0xe01, 0xe00] u32=[0xe01, 0xe00] s32=[0xe01, 0xe00] var_off=(0xe00, 0x0)
 
-The first step is to compute j, a number that keeps all of t's known
-bits, and matches all unknown bits to z's bits. Since j is a member of
-the t, it is already a candidate for result. However, we want our result
-to be (minimally) greater than z.
+We reach instruction 236 with two possible values for R9, 0xe00 and
+0xf00. This is perfectly reflected in the tnum, but of course the ranges
+are less accurate and cover [0xe00; 0xf00]. Taking the fallthrough path
+at instruction 236 allows the verifier to reduce the range to
+[0xe01; 0xf00]. The tnum is however not updated.
 
-There are only two possible cases:
+With these ranges, at instruction 237, the verifier is not able to
+deduce that R9 is always equal to 0xf00. Hence the fallthrough pass is
+explored first, the verifier refines the bounds using the assumption
+that R9 != 0xf00, and ends up with an invariant violation.
 
-(1) Case j <= z. In this case, we want to increase the value of j and
-make it > z.
-(2) Case j > z. In this case, we want to decrease the value of j while
-keeping it > z.
+This pattern of impossible branch + bounds refinement is common to all
+invariant violations seen so far. The long-term solution is likely to
+rely on the refinement + invariant violation check to detect dead
+branches, as started by Eduard. To fix the current issue, we need
+something with less refactoring that we can backport.
 
-(Case 1) j <= z
+This patch uses the tnum_step helper introduced in the previous patch to
+detect the above situation. In particular, three cases are now detected
+in the bounds refinement:
 
-t = xx11x0x0
-z = 10111101 (189)
-j = 10111000 (184)
-         ^
-         k
+1. The u64 range and the tnum only overlap in umin.
+   u64:  ---[xxxxxx]-----
+   tnum: --xx----------x-
 
-(Case 1.1) Let's first consider the case where j < z. We will address j
-== z later.
+2. The u64 range and the tnum only overlap in the maximum value
+   represented by the tnum, called tmax.
+   u64:  ---[xxxxxx]-----
+   tnum: xx-----x--------
 
-Since z > j, there had to be a bit position that was 1 in z and a 0 in
-j, beyond which all positions of higher significance are equal in j and
-z. Further, this position could not have been unknown in a, because the
-unknown positions of a match z. This position had to be a 1 in z and
-known 0 in t.
+3. The u64 range and the tnum only overlap in between umin (excluded)
+   and umax.
+   u64:  ---[xxxxxx]-----
+   tnum: xx----x-------x-
 
-Let k be position of the most significant 1-to-0 flip. In our example, k
-= 3 (starting the count at 1 at the least significant bit).  Setting (to
-1) the unknown bits of t in positions of significance smaller than
-k will not produce a result > z. Hence, we must set/unset the unknown
-bits at positions of significance higher than k. Specifically, we look
-for the next larger combination of 1s and 0s to place in those
-positions, relative to the combination that exists in z. We can achieve
-this by concatenating bits at unknown positions of t into an integer,
-adding 1, and writing the bits of that result back into the
-corresponding bit positions previously extracted from z.
+To detect these three cases, we call tnum_step(tnum, umin), which
+returns the largest member of the tnum greater than umin, called
+tnum_next here. We're in case (1) if umin is part of the tnum and
+tnum_next is greater than umax. We're in case (2) if umin is not part of
+the tnum and tnum_next is equal to tmax. Finally, we're in case (3) if
+umin is not part of the tnum, tnum_next is inferior or equal to umax,
+and calling tnum_step a second time gives us a value past umax.
 
->From our example, considering only positions of significance greater
-than k:
+This change implements these three cases. With it, the above bytecode
+looks as follows:
 
-t =  xx..x
-z =  10..1
-    +    1
-     -----
-     11..0
+  0: (85) call bpf_get_prandom_u32#7    ; R0=scalar()
+  1: (47) r0 |= 3584                    ; R0=scalar(smin=0x8000000000000e00,umin=umin32=3584,smin32=0x80000e00,var_off=(0xe00; 0xfffffffffffff1ff))
+  2: (57) r0 &= 3840                    ; R0=scalar(smin=umin=smin32=umin32=3584,smax=umax=smax32=umax32=3840,var_off=(0xe00; 0x100))
+  3: (15) if r0 == 0xe00 goto pc+2      ; R0=3840
+  4: (15) if r0 == 0xf00 goto pc+1
+  4: R0=3840
+  6: (95) exit
 
-This is the exact combination 1s and 0s we need at the unknown bits of t
-in positions of significance greater than k. Further, our result must
-only increase the value minimally above z. Hence, unknown bits in
-positions of significance smaller than k should remain 0. We finally
-have,
+In addition to the new selftests, this change was also verified with
+Agni [3]. For the record, the raw SMT is available at [4]. The property
+it verifies is that: If a concrete value x is contained in all input
+abstract values, after __update_reg_bounds, it will continue to be
+contained in all output abstract values.
 
-result = 11110000 (240)
-
-(Case 1.2) Now consider the case when j = z, for example
-
-t = 1x1x0xxx
-z = 10110100 (180)
-j = 10110100 (180)
-
-Matching the unknown bits of the t to the bits of z yielded exactly z.
-To produce a number greater than z, we must set/unset the unknown bits
-in t, and *all* the unknown bits of t candidates for being set/unset. We
-can do this similar to Case 1.1, by adding 1 to the bits extracted from
-the masked bit positions of z. Essentially, this case is equivalent to
-Case 1.1, with k = 0.
-
-t =  1x1x0xxx
-z =  .0.1.100
-    +       1
-    ---------
-     .0.1.101
-
-This is the exact combination of bits needed in the unknown positions of
-t. After recalling the known positions of t, we get
-
-result = 10110101 (181)
-
-(Case 2) j > z
-
-t = x00010x1
-z = 10000010 (130)
-j = 10001011 (139)
-	^
-	k
-
-Since j > z, there had to be a bit position which was 0 in z, and a 1 in
-j, beyond which all positions of higher significance are equal in j and
-z. This position had to be a 0 in z and known 1 in t. Let k be the
-position of the most significant 0-to-1 flip. In our example, k = 4.
-
-Because of the 0-to-1 flip at position k, a member of t can become
-greater than z if the bits in positions greater than k are themselves >=
-to z. To make that member *minimally* greater than z, the bits in
-positions greater than k must be exactly = z. Hence, we simply match all
-of t's unknown bits in positions more significant than k to z's bits. In
-positions less significant than k, we set all t's unknown bits to 0
-to retain minimality.
-
-In our example, in positions of greater significance than k (=4),
-t=x000. These positions are matched with z (1000) to produce 1000. In
-positions of lower significance than k, t=10x1. All unknown bits are set
-to 0 to produce 1001. The final result is:
-
-result = 10001001 (137)
-
-This concludes the computation for a result > z that is a member of t.
-
-The procedure for tnum_step() in this commit implements the idea
-described above. As a proof of correctness, we verified the algorithm
-against a logical specification of tnum_step. The specification asserts
-the following about the inputs t, z and output res that:
-
-1. res is a member of t, and
-2. res is strictly greater than z, and
-3. there does not exist another value res2 such that
-	3a. res2 is also a member of t, and
-	3b. res2 is greater than z
-	3c. res2 is smaller than res
-
-We checked the implementation against this logical specification using
-an SMT solver. The verification formula in SMTLIB format is available
-at [1]. The verification returned an "unsat": indicating that no input
-assignment exists for which the implementation and the specification
-produce different outputs.
-
-In addition, we also automatically generated the logical encoding of the
-C implementation using Agni [2] and verified it against the same
-specification. This verification also returned an "unsat", confirming
-that the implementation is equivalent to the specification. The formula
-for this check is also available at [3].
-
-Link: https://pastebin.com/raw/2eRWbiit [1]
-Link: https://github.com/bpfverif/agni [2]
-Link: https://pastebin.com/raw/EztVbBJ2 [3]
-Co-developed-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
-Signed-off-by: Srinivas Narayana <srinivas.narayana@rutgers.edu>
-Co-developed-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Signed-off-by: Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
+Link: https://github.com/cilium/cilium/issues/44216 [1]
+Link: https://pchaigno.github.io/test-verifier-complexity.html [2]
+Link: https://github.com/bpfverif/agni [3]
+Link: https://pastebin.com/raw/naCfaqNx [4]
+Fixes: 0df1a55afa83 ("bpf: Warn on internal verifier errors")
+Co-developed-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
 Signed-off-by: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
+Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
 ---
- include/linux/tnum.h |  3 +++
- kernel/bpf/tnum.c    | 56 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 59 insertions(+)
+ kernel/bpf/verifier.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/include/linux/tnum.h b/include/linux/tnum.h
-index fa4654ffb621..ca2cfec8de08 100644
---- a/include/linux/tnum.h
-+++ b/include/linux/tnum.h
-@@ -131,4 +131,7 @@ static inline bool tnum_subreg_is_const(struct tnum a)
- 	return !(tnum_subreg(a)).mask;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index dbaafb64d3bd..7eb6b94dfa11 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2379,6 +2379,9 @@ static void __update_reg32_bounds(struct bpf_reg_state *reg)
+ 
+ static void __update_reg64_bounds(struct bpf_reg_state *reg)
+ {
++	u64 tnum_next, tmax;
++	bool umin_in_tnum;
++
+ 	/* min signed is max(sign bit) | min(other bits) */
+ 	reg->smin_value = max_t(s64, reg->smin_value,
+ 				reg->var_off.value | (reg->var_off.mask & S64_MIN));
+@@ -2388,6 +2391,33 @@ static void __update_reg64_bounds(struct bpf_reg_state *reg)
+ 	reg->umin_value = max(reg->umin_value, reg->var_off.value);
+ 	reg->umax_value = min(reg->umax_value,
+ 			      reg->var_off.value | reg->var_off.mask);
++
++	/* Check if u64 and tnum overlap in a single value */
++	tnum_next = tnum_step(reg->var_off, reg->umin_value);
++	umin_in_tnum = (reg->umin_value & ~reg->var_off.mask) == reg->var_off.value;
++	tmax = reg->var_off.value | reg->var_off.mask;
++	if (umin_in_tnum && tnum_next > reg->umax_value) {
++		/* The u64 range and the tnum only overlap in umin.
++		 * u64:  ---[xxxxxx]-----
++		 * tnum: --xx----------x-
++		 */
++		___mark_reg_known(reg, reg->umin_value);
++	} else if (!umin_in_tnum && tnum_next == tmax) {
++		/* The u64 range and the tnum only overlap in the maximum value
++		 * represented by the tnum, called tmax.
++		 * u64:  ---[xxxxxx]-----
++		 * tnum: xx-----x--------
++		 */
++		___mark_reg_known(reg, tmax);
++	} else if (!umin_in_tnum && tnum_next <= reg->umax_value &&
++		   tnum_step(reg->var_off, tnum_next) > reg->umax_value) {
++		/* The u64 range and the tnum only overlap in between umin
++		 * (excluded) and umax.
++		 * u64:  ---[xxxxxx]-----
++		 * tnum: xx----x-------x-
++		 */
++		___mark_reg_known(reg, tnum_next);
++	}
  }
  
-+/* Returns the smallest member of t larger than z */
-+u64 tnum_step(struct tnum t, u64 z);
-+
- #endif /* _LINUX_TNUM_H */
-diff --git a/kernel/bpf/tnum.c b/kernel/bpf/tnum.c
-index 26fbfbb01700..4abc359b3db0 100644
---- a/kernel/bpf/tnum.c
-+++ b/kernel/bpf/tnum.c
-@@ -269,3 +269,59 @@ struct tnum tnum_bswap64(struct tnum a)
- {
- 	return TNUM(swab64(a.value), swab64(a.mask));
- }
-+
-+/* Given tnum t, and a number z such that tmin <= z < tmax, where tmin
-+ * is the smallest member of the t (= t.value) and tmax is the largest
-+ * member of t (= t.value | t.mask), returns the smallest member of t
-+ * larger than z.
-+ *
-+ * For example,
-+ * t      = x11100x0
-+ * z      = 11110001 (241)
-+ * result = 11110010 (242)
-+ *
-+ * Note: if this function is called with z >= tmax, it just returns
-+ * early with tmax; if this function is called with z < tmin, the
-+ * algorithm already returns tmin.
-+ */
-+u64 tnum_step(struct tnum t, u64 z)
-+{
-+	u64 tmax, j, p, q, r, s, v, u, w, res;
-+	u8 k;
-+
-+	tmax = t.value | t.mask;
-+
-+	/* if z >= largest member of t, return largest member of t */
-+	if (z >= tmax)
-+		return tmax;
-+
-+	/* if z < smallest member of t, return smallest member of t */
-+	if (z < t.value)
-+		return t.value;
-+
-+	/* keep t's known bits, and match all unknown bits to z */
-+	j = t.value | (z & t.mask);
-+
-+	if (j > z) {
-+		p = ~z & t.value & ~t.mask;
-+		k = fls64(p); /* k is the most-significant 0-to-1 flip */
-+		q = U64_MAX << k;
-+		r = q & z; /* positions > k matched to z */
-+		s = ~q & t.value; /* positions <= k matched to t.value */
-+		v = r | s;
-+		res = v;
-+	} else {
-+		p = z & ~t.value & ~t.mask;
-+		k = fls64(p); /* k is the most-significant 1-to-0 flip */
-+		q = U64_MAX << k;
-+		r = q & t.mask & z; /* unknown positions > k, matched to z */
-+		s = q & ~t.mask; /* known positions > k, set to 1 */
-+		v = r | s;
-+		/* add 1 to unknown positions > k to make value greater than z */
-+		u = v + (1ULL << k);
-+		/* extract bits in unknown positions > k from u, rest from t.value */
-+		w = (u & t.mask) | t.value;
-+		res = w;
-+	}
-+	return res;
-+}
+ static void __update_reg_bounds(struct bpf_reg_state *reg)
 -- 
 2.43.0
 
