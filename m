@@ -1,302 +1,446 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EB362D1911;
-	Fri, 20 Feb 2026 21:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382E93093C9
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 21:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771621559; cv=none; b=KutcbZWSIXevwutxSFPiJd9XDUa9/QVtDQA+gwUnDN3E6Cws0DFtdHBm9ph7sAR0S5odpJsak+x98cnzLisSdQ4KgS9D2XHDuwVgzhvljh2hMRE01e9TwLWghMpy0BSYsFaHmhnVlBAgt8PWoZkUYhi/83msdmpr4F6EK+2ahi8=
+	t=1771621721; cv=none; b=AIXkGZqW7dE0kkjyDXYpZ0ZbNPFMyJNMw4FIvxjL+0oozk8uJcczAh/BNw1GJK3BTm+QY/2oFhnAC+P9Jl1s80SE2UjQnqWMX36PhV20Ke6A+au5TLmfyUSmo+JkcveZyUspJ+Bxcf8mrSLsJ7nhN1vkkQMDem6SVeoAcVGN24U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771621559; c=relaxed/simple;
-	bh=mFptfznoJXpcR+E0Htj4dfRl3M076Dua632A3J4rRLo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BR57mdnqAMUHApPJNSMR2jsUOEYUbfyZNZOGf925F0WNQF2oQbXrRUs6auP00P7zH5MpRCEiyYDsBz1dv0wPBha1S3M0tBw8UuhhwA6UZwzoGQTaNmNaLFDc087KOuFAVYs+CRFILbkPwgMeZuaEWP6WnE1wriednzpsOK76Wo4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PpA0g1er; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1771621721; c=relaxed/simple;
+	bh=/8HvE3vCxdzdWm/JsStTvcluTkDHCiHnP72zux1Mdms=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=MOzUcnrAd5ujjNggN73zhMO4z2AZSs8oSrsYoIgOSXCBOkcJOTNMgcSulolavpqmSss3S2+0TILxc25u7Xgbyc2snkpXueZoQVMYV7MC54o5sECbtZ/ol30j303eQvdMAC3OkgLDm8nUh7PbMFsx+Bdrv08rUM8gZJMr1/o80Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SVcFJgSw; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PpA0g1er"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771621558; x=1803157558;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=mFptfznoJXpcR+E0Htj4dfRl3M076Dua632A3J4rRLo=;
-  b=PpA0g1eryY46G+QGE1Nb6AQqb57cYLadKs4I9oChRfLyOKT50dNQi+ob
-   MqqnPMGfdhPq46gl8/wRGFTUFum7ndlHOxn4SGtDuL0TYC0OKUWqCKAab
-   e0d50ushme9tl0UiCAhNeVgGh5nd6mLwyovEZevNMlCSlEIsfholj1ert
-   L2vqlB6G9x6vKLCYlI253Y8nN1n6frJuxQpWfVnZktbIWkNZm6mUrvmXO
-   pS3DRY4y1WIWpch1kySljQpU2m5vh7g6SqMsn45xwohEKT4aFQ7pBTk2Q
-   BWyMAIz1v1kz4oKSq6L6ZtuVuJZUiUf3Yj6UoDxORMcd/+/k4+zDHf+cy
-   A==;
-X-CSE-ConnectionGUID: PN+V1QxfQpq+BQ6wqOArGg==
-X-CSE-MsgGUID: pOwxZhNOSLKzSMA5KdCC7g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11707"; a="90126666"
-X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="90126666"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2026 13:05:57 -0800
-X-CSE-ConnectionGUID: 9qyvXURCRT6+xJzCVaBkrQ==
-X-CSE-MsgGUID: sh2fQiEwRdaYHZkL9Wzpwg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,302,1763452800"; 
-   d="scan'208";a="213470627"
-Received: from igk-lkp-server01.igk.intel.com (HELO e5404a91d123) ([10.211.93.152])
-  by fmviesa010.fm.intel.com with ESMTP; 20 Feb 2026 13:05:54 -0800
-Received: from kbuild by e5404a91d123 with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vtXh9-000000004H3-32SI;
-	Fri, 20 Feb 2026 21:05:51 +0000
-Date: Fri, 20 Feb 2026 22:05:48 +0100
-From: kernel test robot <lkp@intel.com>
-To: Jiri Olsa <jolsa@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, Martin KaFai Lau <kafai@fb.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH bpf-next 04/17] bpf: Add struct bpf_tramp_node object
-Message-ID: <202602202212.yC5wLunx-lkp@intel.com>
-References: <20260220100649.628307-5-jolsa@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SVcFJgSw"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-797afd2e872so25849937b3.0
+        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 13:08:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771621718; x=1772226518; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q2EGZamZDx/aCj7NdoMVkEVtbfocL8KiwqS4ak9o7qI=;
+        b=SVcFJgSwD8dVKLsOKQ2GlzU6hyY2vA3Dr+MDfA14NzkEYgtV1cRQ2jiou9kvrYyujH
+         DT/7st1nyf5y11PW9OHis5VVZZe69M/Y7nlaMybSlx8/e2nYgdm/eC4ZTdlpKsJefGTv
+         DBfl3WCWX4LV6hM6TJEIRf2ZA9ORVWLCGwmJow+VFg912EBXc33LoabjfbtIb3p9pqn/
+         il0bQZMwA/s1r5ReW//szSpCGlHkH/bGitH0dPTKgox6SWwpX14xdFh42KwiqwsqX6TG
+         HrjC0Z5Ga+7NN+fe8+kgQ2XskWiN84WhKojNSmW413kbi8ccIQ2exog1IkZweqSg0Lvm
+         QNXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771621718; x=1772226518;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Q2EGZamZDx/aCj7NdoMVkEVtbfocL8KiwqS4ak9o7qI=;
+        b=es0NIdZQnRH5uKcvavkJt7oB7g1IvgcCeiF0OV7+Vd7lOgAg4ZIAz/G0UlpNn6CK/5
+         BEhXReXRCEUtH++n/SynUyxlBbkC2N+6pjXJI4/mT5rW78dWWKSowPzfOdc5uJRw9Ke8
+         qXEi/xv5PP2CldXVHssI6eBQi3AG05yIjEj7Wfw06GP4m9JmL0uQzAmh/W07YG+UAgYe
+         nr7excUR3yBKeaRC/SsuUhWiJXWbH0HKuKWSOvYpBGlLw9fIbrRzjoeppC8BSGYlQvLl
+         hSonICLfZyj+fNUAy/HBIkxXl9lkb4S0tZhyUfxjGt5Tdw9h6MVasyhW1SGbJvXd7Cr+
+         O/ew==
+X-Forwarded-Encrypted: i=1; AJvYcCXNDlIM4HEtm9YjF1phax0dK8eCflk/2Y9dNC1QXrw572IrU+XuXhvk6dqGWw5pDwg/46A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTzDsRx8Cg9Ej4Is0yBaFrDWvvB0SHqlckCLxZp2byQbmSzKQu
+	wPZPUGsMWd4q5jcnip/oaqwIWI0YNzMgO6cJyHTejlpvkXUS8DzOc0h9
+X-Gm-Gg: AZuq6aJ0+zcPI1ayWs38PNATCwLq5sE060tqdYQIpWrGNV4+uB/ANUrt+DWf1iHJxFk
+	fXKk2ev3DFRtN+WddzwawCnPYnVD+zUFzki8OnlN+yDcSxX33XeORl2z8X3Hdsxu/3hCkZ84LSE
+	nCo8aINlyz088b1GL5Injqz/fXRApREaxI0SxecV3aauSSTXWs91VFMyvcH4bnC2hMuFrV5wQj/
+	bONtbr6GG5PDwR+bIyD4VFDkQgonHCc2bZqekI6degkDsonrBzAQgvmMFm9l4JIuBmqn3kyMZ+C
+	Qgp6ohwMGjwp5Yh6T1rJZWM06y4yw9RbJZAn+Qyy1+9GGt2/plnTiElHnF9ZjLjj67gK4K+1eXc
+	iVsfval1BYc+kpY8n2u3XC8LxAdmMkEcwk5kEd8Yo68nbQUCsT+uHxm54zKNuUoVMmqh0lcdh8R
+	0UJrQtAaAzM7ZpeVt4YWZgbVkXUdy1Wi4LzHCozRXpkUvSt7syey6lwBO8IzWfn3c0CQWVRM4=
+X-Received: by 2002:a05:690c:4b85:b0:794:fb7:d572 with SMTP id 00721157ae682-798291813c4mr11680567b3.66.1771621718139;
+        Fri, 20 Feb 2026 13:08:38 -0800 (PST)
+Received: from gmail.com (15.60.86.34.bc.googleusercontent.com. [34.86.60.15])
+        by smtp.gmail.com with UTF8SMTPSA id 00721157ae682-7982de13c91sm1419477b3.47.2026.02.20.13.08.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Feb 2026 13:08:36 -0800 (PST)
+Date: Fri, 20 Feb 2026 16:08:35 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Nick Hudson <nhudson@akamai.com>
+Cc: Nick Hudson <nhudson@akamai.com>, 
+ Anna Glasgall <aglasgal@akamai.com>, 
+ Max Tottenham <mtottenh@akamai.com>, 
+ Josh Hunt <johunt@akamai.com>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Jason Xing <kerneljasonxing@gmail.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ Paul Chaignon <paul.chaignon@gmail.com>, 
+ Mykyta Yatsenko <yatsenko@meta.com>, 
+ Tao Chen <chen.dylane@linux.dev>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Anton Protopopov <a.s.protopopov@gmail.com>, 
+ Tobias Klauser <tklauser@distanz.ch>, 
+ bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.5766d0a10c73@gmail.com>
+In-Reply-To: <20260219104710.1490304-2-nhudson@akamai.com>
+References: <20260219104710.1490304-1-nhudson@akamai.com>
+ <20260219104710.1490304-2-nhudson@akamai.com>
+Subject: Re: [RFC PATCH 1/1] bpf: Add tunnel decapsulation and GSO state
+ updates per new flags
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260220100649.628307-5-jolsa@kernel.org>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Hi Jiri,
+Nick Hudson wrote:
+> Enable BPF programs to properly handle GSO state when decapsulating
+> tunneled packets by adding selective GSO flag clearing and a trusted
+> mode for GSO handling.
+> 
+> New decapsulation flags:
+> 
+> - BPF_F_ADJ_ROOM_DECAP_L4_UDP: Clear UDP tunnel GSO flags
+>   (SKB_GSO_UDP_TUNNEL, SKB_GSO_UDP_TUNNEL_CSUM)
+> - BPF_F_ADJ_ROOM_DECAP_L4_GRE: Clear GRE tunnel GSO flags
+>   (SKB_GSO_GRE, SKB_GSO_GRE_CSUM)
+> - BPF_F_ADJ_ROOM_DECAP_IPXIP4: Clear SKB_GSO_IPXIP4 flag for
+>   IPv4-in-IPv4 (IPIP) and IPv6-in-IPv4 (SIT) tunnels
+> - BPF_F_ADJ_ROOM_DECAP_IPXIP6: Clear SKB_GSO_IPXIP6 flag for
+>   IPv6-in-IPv6 and IPv4-in-IPv6 tunnels
+> - BPF_F_ADJ_ROOM_NO_DODGY: Preserve gso_segs and don't set
+>   SKB_GSO_DODGY when the BPF program is trusted and modifications
+>   are known to be valid
+> 
+> The existing anonymous enum for BPF_FUNC_skb_adjust_room flags is
+> renamed to enum bpf_adj_room_flags to enable CO-RE (Compile Once -
+> Run Everywhere) lookups in BPF programs.
+> 
+> By default, bpf_skb_adjust_room sets SKB_GSO_DODGY and resets
+> gso_segs to 0, forcing revalidation. The NO_DODGY flag bypasses this
+> for trusted programs that guarantee GSO correctness.
+> 
+> Usage example (decapsulating UDP tunnel with IPv4 inner packet):
+>   bpf_skb_adjust_room(skb, -hdr_len, BPF_ADJ_ROOM_NET,
+>                       BPF_F_ADJ_ROOM_DECAP_L3_IPV4 |
+>                       BPF_F_ADJ_ROOM_DECAP_L4_UDP);
 
-kernel test robot noticed the following build errors:
+This patch is doing to much in one patch.
 
-[auto build test ERROR on bpf-next/master]
+Also not convinced of the need for the NO_DODGY flag.
+ 
+> Co-developed-by: Anna Glasgall <aglasgal@akamai.com>
+> Signed-off-by: Anna Glasgall <aglasgal@akamai.com>
+> Co-developed-by: Max Tottenham <mtottenh@akamai.com>
+> Signed-off-by: Max Tottenham <mtottenh@akamai.com>
+> Signed-off-by: Josh Hunt <johunt@akamai.com>
+> Signed-off-by: Nick Hudson <nhudson@akamai.com>
+> ---
+>  include/uapi/linux/bpf.h       | 45 +++++++++++++++++++--
+>  net/core/filter.c              | 73 ++++++++++++++++++++++++++++------
+>  tools/include/uapi/linux/bpf.h | 45 +++++++++++++++++++--
+>  3 files changed, 145 insertions(+), 18 deletions(-)
+> 
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index c8d400b7680a..0cb24ab70af7 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -3010,8 +3010,42 @@ union bpf_attr {
+>   *
+>   *		* **BPF_F_ADJ_ROOM_DECAP_L3_IPV4**,
+>   *		  **BPF_F_ADJ_ROOM_DECAP_L3_IPV6**:
+> - *		  Indicate the new IP header version after decapsulating the outer
+> - *		  IP header. Used when the inner and outer IP versions are different.
+> + *		  Indicate the new IP header version after decapsulating the
+> + *		  outer IP header. Used when the inner and outer IP versions
+> + *		  are different. These flags only trigger a protocol change
+> + *		  without clearing any tunnel-specific GSO flags.
+> + *
+> + *		* **BPF_F_ADJ_ROOM_DECAP_L4_GRE**:
+> + *		  Clear GRE tunnel GSO flags (SKB_GSO_GRE and SKB_GSO_GRE_CSUM)
+> + *		  when decapsulating a GRE tunnel.
+> + *
+> + *		* **BPF_F_ADJ_ROOM_DECAP_L4_UDP**:
+> + *		  Clear UDP tunnel GSO flags (SKB_GSO_UDP_TUNNEL and
+> + *		  SKB_GSO_UDP_TUNNEL_CSUM) when decapsulating a UDP tunnel.
+> + *
+> + *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP4**:
+> + *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) when decapsulating
+> + *		  a tunnel with an outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
+> + *
+> + *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP6**:
+> + *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) when
+> + *		  decapsulating a tunnel with an outer IPv6 header (IPv6-in-IPv6
+> + *		  or IPv4-in-IPv6).
+> + *
+> + *		When using the decapsulation flags above, the skb->encapsulation
+> + *		flag is automatically cleared if all tunnel-specific GSO flags
+> + *		(SKB_GSO_UDP_TUNNEL, SKB_GSO_UDP_TUNNEL_CSUM, SKB_GSO_GRE,
+> + *		SKB_GSO_GRE_CSUM, SKB_GSO_IPXIP4, SKB_GSO_IPXIP6) have been
+> + *		removed from the packet. This handles cases where all tunnel
+> + *		layers have been decapsulated.
+> + *
+> + *		* **BPF_F_ADJ_ROOM_NO_DODGY**:
+> + *		  Do not mark the packet as dodgy (untrusted) and preserve
+> + *		  the existing gso_segs count. By default, packet modifications
+> + *		  set SKB_GSO_DODGY and reset gso_segs to 0, forcing
+> + *		  revalidation. This flag is useful when decapsulating the
+> + *		  tunnel, the BPF program is trusted, and the modifications
+> + *		  are known to be valid.
+>   *
+>   * 		A call to this helper is susceptible to change the underlying
+>   * 		packet buffer. Therefore, at load time, all checks on pointers
+> @@ -6209,7 +6243,7 @@ enum {
+>  };
+>  
+>  /* BPF_FUNC_skb_adjust_room flags. */
+> -enum {
+> +enum bpf_adj_room_flags {
+>  	BPF_F_ADJ_ROOM_FIXED_GSO	= (1ULL << 0),
+>  	BPF_F_ADJ_ROOM_ENCAP_L3_IPV4	= (1ULL << 1),
+>  	BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	= (1ULL << 2),
+> @@ -6219,6 +6253,11 @@ enum {
+>  	BPF_F_ADJ_ROOM_ENCAP_L2_ETH	= (1ULL << 6),
+>  	BPF_F_ADJ_ROOM_DECAP_L3_IPV4	= (1ULL << 7),
+>  	BPF_F_ADJ_ROOM_DECAP_L3_IPV6	= (1ULL << 8),
+> +	BPF_F_ADJ_ROOM_DECAP_L4_GRE	= (1ULL << 9),
+> +	BPF_F_ADJ_ROOM_DECAP_L4_UDP	= (1ULL << 10),
+> +	BPF_F_ADJ_ROOM_DECAP_IPXIP4	= (1ULL << 11),
+> +	BPF_F_ADJ_ROOM_DECAP_IPXIP6	= (1ULL << 12),
+> +	BPF_F_ADJ_ROOM_NO_DODGY		= (1ULL << 13),
+>  };
+>  
+>  enum {
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index ba019ded773d..681dd53ab841 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -3484,14 +3484,28 @@ static u32 bpf_skb_net_base_len(const struct sk_buff *skb)
+>  #define BPF_F_ADJ_ROOM_DECAP_L3_MASK	(BPF_F_ADJ_ROOM_DECAP_L3_IPV4 | \
+>  					 BPF_F_ADJ_ROOM_DECAP_L3_IPV6)
+>  
+> -#define BPF_F_ADJ_ROOM_MASK		(BPF_F_ADJ_ROOM_FIXED_GSO | \
+> -					 BPF_F_ADJ_ROOM_ENCAP_L3_MASK | \
+> +#define BPF_F_ADJ_ROOM_DECAP_L4_MASK	(BPF_F_ADJ_ROOM_DECAP_L4_UDP | \
+> +					 BPF_F_ADJ_ROOM_DECAP_L4_GRE)
+> +
+> +#define BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK	(BPF_F_ADJ_ROOM_DECAP_IPXIP4 | \
+> +					 BPF_F_ADJ_ROOM_DECAP_IPXIP6)
+> +
+> +#define BPF_F_ADJ_ROOM_ENCAP_MASK	(BPF_F_ADJ_ROOM_ENCAP_L3_MASK | \
+>  					 BPF_F_ADJ_ROOM_ENCAP_L4_GRE | \
+>  					 BPF_F_ADJ_ROOM_ENCAP_L4_UDP | \
+>  					 BPF_F_ADJ_ROOM_ENCAP_L2_ETH | \
+>  					 BPF_F_ADJ_ROOM_ENCAP_L2( \
+> -					  BPF_ADJ_ROOM_ENCAP_L2_MASK) | \
+> -					 BPF_F_ADJ_ROOM_DECAP_L3_MASK)
+> +					  BPF_ADJ_ROOM_ENCAP_L2_MASK))
+> +
+> +#define BPF_F_ADJ_ROOM_DECAP_MASK	(BPF_F_ADJ_ROOM_DECAP_L3_MASK | \
+> +					 BPF_F_ADJ_ROOM_DECAP_L4_MASK | \
+> +					 BPF_F_ADJ_ROOM_DECAP_IPXIP_MASK)
+> +
+> +#define BPF_F_ADJ_ROOM_MASK		(BPF_F_ADJ_ROOM_FIXED_GSO | \
+> +					 BPF_F_ADJ_ROOM_ENCAP_MASK | \
+> +					 BPF_F_ADJ_ROOM_DECAP_MASK | \
+> +					 BPF_F_ADJ_ROOM_NO_CSUM_RESET | \
+> +					 BPF_F_ADJ_ROOM_NO_DODGY)
+>  
+>  static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  			    u64 flags)
+> @@ -3503,6 +3517,10 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  	unsigned int gso_type = SKB_GSO_DODGY;
+>  	int ret;
+>  
+> +	if (unlikely(flags & (BPF_F_ADJ_ROOM_DECAP_MASK |
+> +			      BPF_F_ADJ_ROOM_NO_DODGY)))
+> +		return -EINVAL;
+> +
+>  	if (skb_is_gso(skb) && !skb_is_gso_tcp(skb)) {
+>  		/* udp gso_size delineates datagrams, only allow if fixed */
+>  		if (!(skb_shinfo(skb)->gso_type & SKB_GSO_UDP_L4) ||
+> @@ -3588,8 +3606,10 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  	if (skb_is_gso(skb)) {
+>  		struct skb_shared_info *shinfo = skb_shinfo(skb);
+>  
+> -		/* Header must be checked, and gso_segs recomputed. */
+> +		/* Add tunnel GSO type flags as appropriate. */
+>  		shinfo->gso_type |= gso_type;
+> +
+> +		/* Header must be checked, and gso_segs recomputed. */
+>  		shinfo->gso_segs = 0;
+>  
+>  		/* Due to header growth, MSS needs to be downgraded.
+> @@ -3610,11 +3630,14 @@ static int bpf_skb_net_grow(struct sk_buff *skb, u32 off, u32 len_diff,
+>  static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
+>  			      u64 flags)
+>  {
+> +	bool no_dodgy = flags & BPF_F_ADJ_ROOM_NO_DODGY;
+>  	int ret;
+>  
+>  	if (unlikely(flags & ~(BPF_F_ADJ_ROOM_FIXED_GSO |
+>  			       BPF_F_ADJ_ROOM_DECAP_L3_MASK |
+> -			       BPF_F_ADJ_ROOM_NO_CSUM_RESET)))
+> +			       BPF_F_ADJ_ROOM_DECAP_MASK |
+> +			       BPF_F_ADJ_ROOM_NO_CSUM_RESET |
+> +			       BPF_F_ADJ_ROOM_NO_DODGY)))
+>  		return -EINVAL;
+>  
+>  	if (skb_is_gso(skb) && !skb_is_gso_tcp(skb)) {
+> @@ -3647,9 +3670,36 @@ static int bpf_skb_net_shrink(struct sk_buff *skb, u32 off, u32 len_diff,
+>  		if (!(flags & BPF_F_ADJ_ROOM_FIXED_GSO))
+>  			skb_increase_gso_size(shinfo, len_diff);
+>  
+> -		/* Header must be checked, and gso_segs recomputed. */
+> -		shinfo->gso_type |= SKB_GSO_DODGY;
+> -		shinfo->gso_segs = 0;
+> +		/* Selective GSO flag clearing based on decap type.
+> +		 * Only clear the flags for the tunnel layer being removed.
+> +		 */
+> +		if (flags & BPF_F_ADJ_ROOM_DECAP_L4_UDP)
+> +			shinfo->gso_type &= ~(SKB_GSO_UDP_TUNNEL |
+> +					      SKB_GSO_UDP_TUNNEL_CSUM);
+> +		if (flags & BPF_F_ADJ_ROOM_DECAP_L4_GRE)
+> +			shinfo->gso_type &= ~(SKB_GSO_GRE |
+> +					      SKB_GSO_GRE_CSUM);
+> +		if (flags & BPF_F_ADJ_ROOM_DECAP_IPXIP4)
+> +			shinfo->gso_type &= ~SKB_GSO_IPXIP4;
+> +		if (flags & BPF_F_ADJ_ROOM_DECAP_IPXIP6)
+> +			shinfo->gso_type &= ~SKB_GSO_IPXIP6;
+> +
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jiri-Olsa/ftrace-Add-ftrace_hash_count-function/20260220-181324
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260220100649.628307-5-jolsa%40kernel.org
-patch subject: [PATCH bpf-next 04/17] bpf: Add struct bpf_tramp_node object
-config: riscv-allnoconfig-bpf (https://download.01.org/0day-ci/archive/20260220/202602202212.yC5wLunx-lkp@intel.com/config)
-compiler: riscv64-linux-gnu-gcc (Debian 14.2.0-19) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260220/202602202212.yC5wLunx-lkp@intel.com/reproduce)
+Probably check that the flags were set in the first place.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602202212.yC5wLunx-lkp@intel.com/
+And perhaps that length_diff >= the minimum length that would match
+tunnel header removal.
 
-All errors (new ones prefixed by >>):
-
-   arch/riscv/net/bpf_jit_comp64.c: In function 'invoke_bpf_prog':
->> arch/riscv/net/bpf_jit_comp64.c:944:14: error: 'struct bpf_tramp_link' has no member named 'cookie'
-     944 |         if (l->cookie)
-         |              ^~
-   arch/riscv/net/bpf_jit_comp64.c:945:79: error: 'struct bpf_tramp_link' has no member named 'cookie'
-     945 |                 emit_store_stack_imm64(RV_REG_T1, -run_ctx_off + cookie_off, l->cookie, ctx);
-         |                                                                               ^~
-   arch/riscv/net/bpf_jit_comp64.c: At top level:
-   arch/riscv/net/bpf_jit_comp64.c:999:30: warning: 'struct bpf_tramp_links' declared inside parameter list will not be visible outside of this definition or declaration
-     999 | static int invoke_bpf(struct bpf_tramp_links *tl, int args_off, int retval_off,
-         |                              ^~~~~~~~~~~~~~~
-   arch/riscv/net/bpf_jit_comp64.c: In function 'invoke_bpf':
->> arch/riscv/net/bpf_jit_comp64.c:1005:27: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1005 |         for (i = 0; i < tl->nr_links; i++) {
-         |                           ^~
-   arch/riscv/net/bpf_jit_comp64.c:1008:53: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1008 |                 if (bpf_prog_calls_session_cookie(tl->links[i])) {
-         |                                                     ^~
-   arch/riscv/net/bpf_jit_comp64.c:1014:41: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1014 |                 err = invoke_bpf_prog(tl->links[i], args_off, retval_off, run_ctx_off,
-         |                                         ^~
-   arch/riscv/net/bpf_jit_comp64.c: At top level:
-   arch/riscv/net/bpf_jit_comp64.c:1024:49: warning: 'struct bpf_tramp_links' declared inside parameter list will not be visible outside of this definition or declaration
-    1024 |                                          struct bpf_tramp_links *tlinks,
-         |                                                 ^~~~~~~~~~~~~~~
-   arch/riscv/net/bpf_jit_comp64.c: In function '__arch_prepare_bpf_trampoline':
-   arch/riscv/net/bpf_jit_comp64.c:1033:49: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1033 |         struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-         |                                                 ^
-   arch/riscv/net/bpf_jit_comp64.c:1034:48: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1034 |         struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
-         |                                                ^
-   arch/riscv/net/bpf_jit_comp64.c:1035:51: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1035 |         struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-         |                                                   ^
-   arch/riscv/net/bpf_jit_comp64.c:1118:46: error: passing argument 1 of 'bpf_fsession_cookie_cnt' from incompatible pointer type [-Wincompatible-pointer-types]
-    1118 |         cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
-         |                                              ^~~~~~
-         |                                              |
-         |                                              struct bpf_tramp_links *
-   In file included from arch/riscv/net/bpf_jit_comp64.c:9:
-   ./include/linux/bpf.h:2207:67: note: expected 'struct bpf_tramp_nodes *' but argument is of type 'struct bpf_tramp_links *'
-    2207 | static inline int bpf_fsession_cookie_cnt(struct bpf_tramp_nodes *nodes)
-         |                                           ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   arch/riscv/net/bpf_jit_comp64.c:1175:30: error: passing argument 1 of 'bpf_fsession_cnt' from incompatible pointer type [-Wincompatible-pointer-types]
-    1175 |         if (bpf_fsession_cnt(tlinks)) {
-         |                              ^~~~~~
-         |                              |
-         |                              struct bpf_tramp_links *
-   ./include/linux/bpf.h:2189:60: note: expected 'struct bpf_tramp_nodes *' but argument is of type 'struct bpf_tramp_links *'
-    2189 | static inline int bpf_fsession_cnt(struct bpf_tramp_nodes *nodes)
-         |                                    ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~
-   arch/riscv/net/bpf_jit_comp64.c:1190:19: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1190 |         if (fentry->nr_links) {
-         |                   ^~
-   arch/riscv/net/bpf_jit_comp64.c:1191:34: error: passing argument 1 of 'invoke_bpf' from incompatible pointer type [-Wincompatible-pointer-types]
-    1191 |                 ret = invoke_bpf(fentry, args_off, retval_off, run_ctx_off, func_meta_off,
-         |                                  ^~~~~~
-         |                                  |
-         |                                  struct bpf_tramp_links *
-   arch/riscv/net/bpf_jit_comp64.c:999:47: note: expected 'struct bpf_tramp_links *' but argument is of type 'struct bpf_tramp_links *'
-     999 | static int invoke_bpf(struct bpf_tramp_links *tl, int args_off, int retval_off,
-         |                       ~~~~~~~~~~~~~~~~~~~~~~~~^~
-   arch/riscv/net/bpf_jit_comp64.c:1197:21: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1197 |         if (fmod_ret->nr_links) {
-         |                     ^~
-   In file included from ./include/linux/workqueue.h:9,
-                    from ./include/linux/bpf.h:11:
-   arch/riscv/net/bpf_jit_comp64.c:1198:48: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1198 |                 branches_off = kcalloc(fmod_ret->nr_links, sizeof(int), GFP_KERNEL);
-         |                                                ^~
-   ./include/linux/alloc_tag.h:251:16: note: in definition of macro 'alloc_hooks_tag'
-     251 |         typeof(_do_alloc) _res;                                         \
-         |                ^~~~~~~~~
-   ./include/linux/slab.h:1115:49: note: in expansion of macro 'alloc_hooks'
-    1115 | #define kmalloc_array(...)                      alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
-         |                                                 ^~~~~~~~~~~
-   ./include/linux/slab.h:1154:41: note: in expansion of macro 'kmalloc_array'
-    1154 | #define kcalloc(n, size, flags)         kmalloc_array(n, size, (flags) | __GFP_ZERO)
-         |                                         ^~~~~~~~~~~~~
-   arch/riscv/net/bpf_jit_comp64.c:1198:32: note: in expansion of macro 'kcalloc'
-    1198 |                 branches_off = kcalloc(fmod_ret->nr_links, sizeof(int), GFP_KERNEL);
-         |                                ^~~~~~~
-   arch/riscv/net/bpf_jit_comp64.c:1198:48: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1198 |                 branches_off = kcalloc(fmod_ret->nr_links, sizeof(int), GFP_KERNEL);
-         |                                                ^~
-   ./include/linux/alloc_tag.h:255:24: note: in definition of macro 'alloc_hooks_tag'
-     255 |                 _res = _do_alloc;                                       \
-         |                        ^~~~~~~~~
-   ./include/linux/slab.h:1115:49: note: in expansion of macro 'alloc_hooks'
-    1115 | #define kmalloc_array(...)                      alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
-         |                                                 ^~~~~~~~~~~
-   ./include/linux/slab.h:1154:41: note: in expansion of macro 'kmalloc_array'
-    1154 | #define kcalloc(n, size, flags)         kmalloc_array(n, size, (flags) | __GFP_ZERO)
-         |                                         ^~~~~~~~~~~~~
-   arch/riscv/net/bpf_jit_comp64.c:1198:32: note: in expansion of macro 'kcalloc'
-    1198 |                 branches_off = kcalloc(fmod_ret->nr_links, sizeof(int), GFP_KERNEL);
-         |                                ^~~~~~~
-   arch/riscv/net/bpf_jit_comp64.c:1198:48: error: invalid use of undefined type 'struct bpf_tramp_links'
-    1198 |                 branches_off = kcalloc(fmod_ret->nr_links, sizeof(int), GFP_KERNEL);
-         |                                                ^~
-   ./include/linux/alloc_tag.h:258:24: note: in definition of macro 'alloc_hooks_tag'
-     258 |                 _res = _do_alloc;                                       \
-         |                        ^~~~~~~~~
-   ./include/linux/slab.h:1115:49: note: in expansion of macro 'alloc_hooks'
-    1115 | #define kmalloc_array(...)                      alloc_hooks(kmalloc_array_noprof(__VA_ARGS__))
-         |                                                 ^~~~~~~~~~~
-   ./include/linux/slab.h:1154:41: note: in expansion of macro 'kmalloc_array'
-    1154 | #define kcalloc(n, size, flags)         kmalloc_array(n, size, (flags) | __GFP_ZERO)
-         |                                         ^~~~~~~~~~~~~
-   arch/riscv/net/bpf_jit_comp64.c:1198:32: note: in expansion of macro 'kcalloc'
-    1198 |                 branches_off = kcalloc(fmod_ret->nr_links, sizeof(int), GFP_KERNEL);
-         |                                ^~~~~~~
+Basically, maximize guard rails against misuse.
+> +		/* Clear encapsulation flag only when no tunnel GSO flags remain */
+> +		if (flags & BPF_F_ADJ_ROOM_DECAP_MASK) {
+> +			if (!(shinfo->gso_type & (SKB_GSO_UDP_TUNNEL |
+> +						  SKB_GSO_UDP_TUNNEL_CSUM |
+> +						  SKB_GSO_GRE |
+> +						  SKB_GSO_GRE_CSUM |
+> +						  SKB_GSO_IPXIP4 |
+> +						  SKB_GSO_IPXIP6)))
+> +				skb->encapsulation = 0;
+> +		}
+> +
+> +		/* NO_DODGY: preserve gso_segs, don't mark as dodgy. */
+> +		if (!no_dodgy) {
+> +			shinfo->gso_type |= SKB_GSO_DODGY;
+> +			shinfo->gso_segs = 0;
+> +		}
+>  	}
+>  
+>  	return 0;
+> @@ -3709,8 +3759,7 @@ BPF_CALL_4(bpf_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
+>  	u32 off;
+>  	int ret;
+>  
+> -	if (unlikely(flags & ~(BPF_F_ADJ_ROOM_MASK |
+> -			       BPF_F_ADJ_ROOM_NO_CSUM_RESET)))
+> +	if (unlikely(flags & ~BPF_F_ADJ_ROOM_MASK))
+>  		return -EINVAL;
+>  	if (unlikely(len_diff_abs > 0xfffU))
+>  		return -EFAULT;
+> @@ -3729,7 +3778,7 @@ BPF_CALL_4(bpf_skb_adjust_room, struct sk_buff *, skb, s32, len_diff,
+>  		return -ENOTSUPP;
+>  	}
+>  
+> -	if (flags & BPF_F_ADJ_ROOM_DECAP_L3_MASK) {
+> +	if (flags & BPF_F_ADJ_ROOM_DECAP_MASK) {
+>  		if (!shrink)
+>  			return -EINVAL;
+>  
+> diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+> index 5e38b4887de6..664bc8438186 100644
+> --- a/tools/include/uapi/linux/bpf.h
+> +++ b/tools/include/uapi/linux/bpf.h
+> @@ -3010,8 +3010,42 @@ union bpf_attr {
+>   *
+>   *		* **BPF_F_ADJ_ROOM_DECAP_L3_IPV4**,
+>   *		  **BPF_F_ADJ_ROOM_DECAP_L3_IPV6**:
+> - *		  Indicate the new IP header version after decapsulating the outer
+> - *		  IP header. Used when the inner and outer IP versions are different.
+> + *		  Indicate the new IP header version after decapsulating the
+> + *		  outer IP header. Used when the inner and outer IP versions
+> + *		  are different. These flags only trigger a protocol change
+> + *		  without clearing any tunnel-specific GSO flags.
+> + *
+> + *		* **BPF_F_ADJ_ROOM_DECAP_L4_GRE**:
+> + *		  Clear GRE tunnel GSO flags (SKB_GSO_GRE and SKB_GSO_GRE_CSUM)
+> + *		  when decapsulating a GRE tunnel.
+> + *
+> + *		* **BPF_F_ADJ_ROOM_DECAP_L4_UDP**:
+> + *		  Clear UDP tunnel GSO flags (SKB_GSO_UDP_TUNNEL and
+> + *		  SKB_GSO_UDP_TUNNEL_CSUM) when decapsulating a UDP tunnel.
+> + *
+> + *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP4**:
+> + *		  Clear IPIP/SIT tunnel GSO flag (SKB_GSO_IPXIP4) when decapsulating
+> + *		  a tunnel with an outer IPv4 header (IPv4-in-IPv4 or IPv6-in-IPv4).
+> + *
+> + *		* **BPF_F_ADJ_ROOM_DECAP_IPXIP6**:
+> + *		  Clear IPv6 encapsulation tunnel GSO flag (SKB_GSO_IPXIP6) when
+> + *		  decapsulating a tunnel with an outer IPv6 header (IPv6-in-IPv6
+> + *		  or IPv4-in-IPv6).
+> + *
+> + *		When using the decapsulation flags above, the skb->encapsulation
+> + *		flag is automatically cleared if all tunnel-specific GSO flags
+> + *		(SKB_GSO_UDP_TUNNEL, SKB_GSO_UDP_TUNNEL_CSUM, SKB_GSO_GRE,
+> + *		SKB_GSO_GRE_CSUM, SKB_GSO_IPXIP4, SKB_GSO_IPXIP6) have been
+> + *		removed from the packet. This handles cases where all tunnel
+> + *		layers have been decapsulated.
+> + *
+> + *		* **BPF_F_ADJ_ROOM_NO_DODGY**:
+> + *		  Do not mark the packet as dodgy (untrusted) and preserve
+> + *		  the existing gso_segs count. By default, packet modifications
+> + *		  set SKB_GSO_DODGY and reset gso_segs to 0, forcing
+> + *		  revalidation. This flag is useful when decapsulating the
+> + *		  tunnel, the BPF program is trusted, and the modifications
+> + *		  are known to be valid.
+>   *
+>   * 		A call to this helper is susceptible to change the underlying
+>   * 		packet buffer. Therefore, at load time, all checks on pointers
+> @@ -6209,7 +6243,7 @@ enum {
+>  };
+>  
+>  /* BPF_FUNC_skb_adjust_room flags. */
+> -enum {
+> +enum bpf_adj_room_flags {
+>  	BPF_F_ADJ_ROOM_FIXED_GSO	= (1ULL << 0),
+>  	BPF_F_ADJ_ROOM_ENCAP_L3_IPV4	= (1ULL << 1),
+>  	BPF_F_ADJ_ROOM_ENCAP_L3_IPV6	= (1ULL << 2),
+> @@ -6219,6 +6253,11 @@ enum {
+>  	BPF_F_ADJ_ROOM_ENCAP_L2_ETH	= (1ULL << 6),
+>  	BPF_F_ADJ_ROOM_DECAP_L3_IPV4	= (1ULL << 7),
+>  	BPF_F_ADJ_ROOM_DECAP_L3_IPV6	= (1ULL << 8),
+> +	BPF_F_ADJ_ROOM_DECAP_L4_GRE	= (1ULL << 9),
+> +	BPF_F_ADJ_ROOM_DECAP_L4_UDP	= (1ULL << 10),
+> +	BPF_F_ADJ_ROOM_DECAP_IPXIP4	= (1ULL << 11),
+> +	BPF_F_ADJ_ROOM_DECAP_IPXIP6	= (1ULL << 12),
+> +	BPF_F_ADJ_ROOM_NO_DODGY		= (1ULL << 13),
+>  };
+>  
+>  enum {
+> -- 
+> 2.34.1
+> 
 
 
-vim +944 arch/riscv/net/bpf_jit_comp64.c
-
-93fd420d71beed Menglong Dong 2026-02-08   936  
-49b5e77ae3e214 Pu Lehui      2023-02-15   937  static int invoke_bpf_prog(struct bpf_tramp_link *l, int args_off, int retval_off,
-49b5e77ae3e214 Pu Lehui      2023-02-15   938  			   int run_ctx_off, bool save_ret, struct rv_jit_context *ctx)
-49b5e77ae3e214 Pu Lehui      2023-02-15   939  {
-49b5e77ae3e214 Pu Lehui      2023-02-15   940  	int ret, branch_off;
-49b5e77ae3e214 Pu Lehui      2023-02-15   941  	struct bpf_prog *p = l->link.prog;
-49b5e77ae3e214 Pu Lehui      2023-02-15   942  	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
-49b5e77ae3e214 Pu Lehui      2023-02-15   943  
-93fd420d71beed Menglong Dong 2026-02-08  @944  	if (l->cookie)
-93fd420d71beed Menglong Dong 2026-02-08   945  		emit_store_stack_imm64(RV_REG_T1, -run_ctx_off + cookie_off, l->cookie, ctx);
-93fd420d71beed Menglong Dong 2026-02-08   946  	else
-49b5e77ae3e214 Pu Lehui      2023-02-15   947  		emit_sd(RV_REG_FP, -run_ctx_off + cookie_off, RV_REG_ZERO, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   948  
-49b5e77ae3e214 Pu Lehui      2023-02-15   949  	/* arg1: prog */
-49b5e77ae3e214 Pu Lehui      2023-02-15   950  	emit_imm(RV_REG_A0, (const s64)p, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   951  	/* arg2: &run_ctx */
-49b5e77ae3e214 Pu Lehui      2023-02-15   952  	emit_addi(RV_REG_A1, RV_REG_FP, -run_ctx_off, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   953  	ret = emit_call((const u64)bpf_trampoline_enter(p), true, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   954  	if (ret)
-49b5e77ae3e214 Pu Lehui      2023-02-15   955  		return ret;
-49b5e77ae3e214 Pu Lehui      2023-02-15   956  
-10541b374aa05c Xu Kuohai     2024-04-16   957  	/* store prog start time */
-10541b374aa05c Xu Kuohai     2024-04-16   958  	emit_mv(RV_REG_S1, RV_REG_A0, ctx);
-10541b374aa05c Xu Kuohai     2024-04-16   959  
-49b5e77ae3e214 Pu Lehui      2023-02-15   960  	/* if (__bpf_prog_enter(prog) == 0)
-49b5e77ae3e214 Pu Lehui      2023-02-15   961  	 *	goto skip_exec_of_prog;
-49b5e77ae3e214 Pu Lehui      2023-02-15   962  	 */
-49b5e77ae3e214 Pu Lehui      2023-02-15   963  	branch_off = ctx->ninsns;
-49b5e77ae3e214 Pu Lehui      2023-02-15   964  	/* nop reserved for conditional jump */
-49b5e77ae3e214 Pu Lehui      2023-02-15   965  	emit(rv_nop(), ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   966  
-49b5e77ae3e214 Pu Lehui      2023-02-15   967  	/* arg1: &args_off */
-49b5e77ae3e214 Pu Lehui      2023-02-15   968  	emit_addi(RV_REG_A0, RV_REG_FP, -args_off, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   969  	if (!p->jited)
-49b5e77ae3e214 Pu Lehui      2023-02-15   970  		/* arg2: progs[i]->insnsi for interpreter */
-49b5e77ae3e214 Pu Lehui      2023-02-15   971  		emit_imm(RV_REG_A1, (const s64)p->insnsi, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   972  	ret = emit_call((const u64)p->bpf_func, true, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   973  	if (ret)
-49b5e77ae3e214 Pu Lehui      2023-02-15   974  		return ret;
-49b5e77ae3e214 Pu Lehui      2023-02-15   975  
-7112cd26e606c7 Björn Töpel   2023-10-04   976  	if (save_ret) {
-7112cd26e606c7 Björn Töpel   2023-10-04   977  		emit_sd(RV_REG_FP, -retval_off, RV_REG_A0, ctx);
-7112cd26e606c7 Björn Töpel   2023-10-04   978  		emit_sd(RV_REG_FP, -(retval_off - 8), regmap[BPF_REG_0], ctx);
-7112cd26e606c7 Björn Töpel   2023-10-04   979  	}
-49b5e77ae3e214 Pu Lehui      2023-02-15   980  
-49b5e77ae3e214 Pu Lehui      2023-02-15   981  	/* update branch with beqz */
-49b5e77ae3e214 Pu Lehui      2023-02-15   982  	if (ctx->insns) {
-49b5e77ae3e214 Pu Lehui      2023-02-15   983  		int offset = ninsns_rvoff(ctx->ninsns - branch_off);
-49b5e77ae3e214 Pu Lehui      2023-02-15   984  		u32 insn = rv_beq(RV_REG_A0, RV_REG_ZERO, offset >> 1);
-49b5e77ae3e214 Pu Lehui      2023-02-15   985  		*(u32 *)(ctx->insns + branch_off) = insn;
-49b5e77ae3e214 Pu Lehui      2023-02-15   986  	}
-49b5e77ae3e214 Pu Lehui      2023-02-15   987  
-49b5e77ae3e214 Pu Lehui      2023-02-15   988  	/* arg1: prog */
-49b5e77ae3e214 Pu Lehui      2023-02-15   989  	emit_imm(RV_REG_A0, (const s64)p, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   990  	/* arg2: prog start time */
-49b5e77ae3e214 Pu Lehui      2023-02-15   991  	emit_mv(RV_REG_A1, RV_REG_S1, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   992  	/* arg3: &run_ctx */
-49b5e77ae3e214 Pu Lehui      2023-02-15   993  	emit_addi(RV_REG_A2, RV_REG_FP, -run_ctx_off, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   994  	ret = emit_call((const u64)bpf_trampoline_exit(p), true, ctx);
-49b5e77ae3e214 Pu Lehui      2023-02-15   995  
-49b5e77ae3e214 Pu Lehui      2023-02-15   996  	return ret;
-49b5e77ae3e214 Pu Lehui      2023-02-15   997  }
-49b5e77ae3e214 Pu Lehui      2023-02-15   998  
-35b3515be0ecb9 Menglong Dong 2026-02-08   999  static int invoke_bpf(struct bpf_tramp_links *tl, int args_off, int retval_off,
-35b3515be0ecb9 Menglong Dong 2026-02-08  1000  		      int run_ctx_off, int func_meta_off, bool save_ret, u64 func_meta,
-35b3515be0ecb9 Menglong Dong 2026-02-08  1001  		      int cookie_off, struct rv_jit_context *ctx)
-35b3515be0ecb9 Menglong Dong 2026-02-08  1002  {
-35b3515be0ecb9 Menglong Dong 2026-02-08  1003  	int i, cur_cookie = (cookie_off - args_off) / 8;
-35b3515be0ecb9 Menglong Dong 2026-02-08  1004  
-35b3515be0ecb9 Menglong Dong 2026-02-08 @1005  	for (i = 0; i < tl->nr_links; i++) {
-35b3515be0ecb9 Menglong Dong 2026-02-08  1006  		int err;
-35b3515be0ecb9 Menglong Dong 2026-02-08  1007  
-35b3515be0ecb9 Menglong Dong 2026-02-08  1008  		if (bpf_prog_calls_session_cookie(tl->links[i])) {
-35b3515be0ecb9 Menglong Dong 2026-02-08  1009  			u64 meta = func_meta | ((u64)cur_cookie << BPF_TRAMP_COOKIE_INDEX_SHIFT);
-35b3515be0ecb9 Menglong Dong 2026-02-08  1010  
-35b3515be0ecb9 Menglong Dong 2026-02-08  1011  			emit_store_stack_imm64(RV_REG_T1, -func_meta_off, meta, ctx);
-35b3515be0ecb9 Menglong Dong 2026-02-08  1012  			cur_cookie--;
-35b3515be0ecb9 Menglong Dong 2026-02-08  1013  		}
-35b3515be0ecb9 Menglong Dong 2026-02-08  1014  		err = invoke_bpf_prog(tl->links[i], args_off, retval_off, run_ctx_off,
-35b3515be0ecb9 Menglong Dong 2026-02-08  1015  				      save_ret, ctx);
-35b3515be0ecb9 Menglong Dong 2026-02-08  1016  		if (err)
-35b3515be0ecb9 Menglong Dong 2026-02-08  1017  			return err;
-35b3515be0ecb9 Menglong Dong 2026-02-08  1018  	}
-35b3515be0ecb9 Menglong Dong 2026-02-08  1019  	return 0;
-35b3515be0ecb9 Menglong Dong 2026-02-08  1020  }
-35b3515be0ecb9 Menglong Dong 2026-02-08  1021  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
