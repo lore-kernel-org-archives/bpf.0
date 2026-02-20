@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFEF32BCF4C;
-	Fri, 20 Feb 2026 10:09:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCC1D2BCF4C;
+	Fri, 20 Feb 2026 10:10:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771582193; cv=none; b=DJP7kcXkcFO1lUSYjt2JzCvZfQbNFBDUkoiVBgoP3WpGT7cAAuk+2MRCTFCFxh2mhsCVNzVkTDbyv6JRrIzysgHKN8wDeBt445Dr7wjT5sKizbBI+lTP/kQ5t27HXdCSLQz6ipL3yfOBChuCEVMVX7TFr/3sgZkZKXS/Y4Lw8UA=
+	t=1771582207; cv=none; b=u2mpB+2Y6cHFSitzxbIaiS2BrVbyrTZCHs55xnGxg7L08IB+kV6nfvkzD+ynmd/vJfKwPz4rJwY4QivLYAmSwwYUqpJ9Ld++iIWiy+siq+waFNysxhwhyRbUsEy7eW65nicmMbqpZ/3AG9QuFCCnen5XqUy0fnmInJdUVk9HC+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771582193; c=relaxed/simple;
-	bh=YeNTaZ1uj9MFJHuvyyZAUQP/XcuKZ/edXoVCylx6Fac=;
+	s=arc-20240116; t=1771582207; c=relaxed/simple;
+	bh=wCWIPFiU8i/oswMowCZVEEPEUYz3eS0nTkEPq2/TN+o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fs2/RkjuefVjtj2tP7x3TeUBypB4SYH6Tuao/aNzqMWKQhOKoTqPb1RGz9rn1R59jN0p2+YeMVSrDdbIu+4XVxcXRxd7ZbF1mcCw3xd2MN0HPjddQlQZ2K9/aRIL5KBv+ti5OmURUfSYZNno66AU3ua2cKG9X2A4rc7d109pqfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F9PQWwUT; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=mZOSZ6jSKX4takrMUmKoSRZMiTlQaWLB0ZRev9ZGbIVLfxCMZ1ErUtye0G52BJMHjRlmOkXRfky7G+fgat/HCQx9LFL+m+osR60aHc1nNGlyo85bFFyWCb23R1LkOqRxdwMPY4PQJhJtVzkqgdRrcQSyEXZvjaeFxuaL6hnc2p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OHL//v3K; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F9PQWwUT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAC99C19425;
-	Fri, 20 Feb 2026 10:09:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OHL//v3K"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DEFCC116D0;
+	Fri, 20 Feb 2026 10:10:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771582193;
-	bh=YeNTaZ1uj9MFJHuvyyZAUQP/XcuKZ/edXoVCylx6Fac=;
+	s=k20201202; t=1771582207;
+	bh=wCWIPFiU8i/oswMowCZVEEPEUYz3eS0nTkEPq2/TN+o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=F9PQWwUTfLXfJBcetZzk0nqM7eUQBKAjB9Lex5RI9XtxV6iHLgPBfai6rfjHUCa6p
-	 GbSzHNGm2TSRt1OT1DkS1Rym6FkdD/zKt2/Px4vskp0iPTL4QuUuzWkLQLf0S9ZMti
-	 /+1UW+nT0mk7ekouXlcl2jadLT/H4IVfMhWg+gfi1CM/R1EGKcDDAzGuzTqq/u+n5R
-	 uRP5ZrrfnwRMA3rVHNMUMJX2C5mN3YV+zdkt0Kzq2wQ2BzztoEA8LKDq1IdxuyMXmM
-	 Ev3OnRYtTCP0gtkrKzoSndxJEvWUahHEDtsH9z+ltuthc1SCtC+rTdTCFKGz0zuD1Y
-	 kIpNgQ9HdlFkA==
+	b=OHL//v3KF1iWZYd59u9zZTvR0gPjxWZ2lGNWQpRiGbNfVSlsPEs+ab+jOaKJG5RKo
+	 GEp2Hf1PITHWXKKpUpjDYgLUNZZO9qylK5EYV59HxUoXUQkMC+Ls0GAobYpe2pb3WR
+	 dGKJDJqF0oj/u7bHCZ7LwcTCJ798FxnC8Up2vLpMpvQmQHSSqIZ4g6AN8YdBUnuPsG
+	 MBsKGithIdy8QDUGyA6b4erSVoI040GXAAct7nE6yIlhLLdrVoUN+kHbenEQhOW1Gw
+	 47R7P5hbslQ9OvANT09YxPkRPJaRjT8vCh4aMjN8EzYS3dQWn7iJxoaCFpY+eIiT1a
+	 k5y7rqfB6Qwvw==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -38,9 +38,9 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [PATCH bpf-next 13/17] selftests/bpf: Add tracing multi intersect tests
-Date: Fri, 20 Feb 2026 11:06:45 +0100
-Message-ID: <20260220100649.628307-14-jolsa@kernel.org>
+Subject: [PATCH bpf-next 14/17] selftests/bpf: Add tracing multi cookies test
+Date: Fri, 20 Feb 2026 11:06:46 +0100
+Message-ID: <20260220100649.628307-15-jolsa@kernel.org>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260220100649.628307-1-jolsa@kernel.org>
 References: <20260220100649.628307-1-jolsa@kernel.org>
@@ -52,219 +52,174 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding tracing multi tests for intersecting attached functions.
-
-Using bits from (from 1 to 16 values) to specify (up to 4) attached
-programs, and randomly choosing bpf_fentry_test* functions they are
-attached to.
+Adding tests for using cookies on tracing multi link.
 
 Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
- tools/testing/selftests/bpf/Makefile          |  4 +-
- .../selftests/bpf/prog_tests/tracing_multi.c  | 99 +++++++++++++++++++
- .../progs/tracing_multi_intersect_attach.c    | 42 ++++++++
- 3 files changed, 144 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
+ .../selftests/bpf/prog_tests/tracing_multi.c  | 23 +++++++++++++++++--
+ .../selftests/bpf/progs/tracing_multi_check.c | 15 +++++++++++-
+ 2 files changed, 35 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 849c585fc2a1..0cbc9bcb9a2e 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -481,7 +481,8 @@ SKEL_BLACKLIST := btf__% test_pinning_invalid.c test_sk_assign.c
- LINKED_SKELS := test_static_linked.skel.h linked_funcs.skel.h		\
- 		linked_vars.skel.h linked_maps.skel.h 			\
- 		test_subskeleton.skel.h test_subskeleton_lib.skel.h	\
--		test_usdt.skel.h tracing_multi.skel.h
-+		test_usdt.skel.h tracing_multi.skel.h			\
-+		tracing_multi_intersect.skel.h
- 
- LSKELS := fexit_sleep.c trace_printk.c trace_vprintk.c map_ptr_kern.c 	\
- 	core_kern.c core_kern_overflow.c test_ringbuf.c			\
-@@ -508,6 +509,7 @@ xsk_xdp_progs.skel.h-deps := xsk_xdp_progs.bpf.o
- xdp_hw_metadata.skel.h-deps := xdp_hw_metadata.bpf.o
- xdp_features.skel.h-deps := xdp_features.bpf.o
- tracing_multi.skel.h-deps := tracing_multi_attach.bpf.o tracing_multi_check.bpf.o
-+tracing_multi_intersect.skel.h-deps := tracing_multi_intersect_attach.bpf.o tracing_multi_check.bpf.o
- 
- LINKED_BPF_OBJS := $(foreach skel,$(LINKED_SKELS),$($(skel)-deps))
- LINKED_BPF_SRCS := $(patsubst %.bpf.o,%.c,$(LINKED_BPF_OBJS))
 diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-index 79b84701d38f..f6ff1668d88f 100644
+index f6ff1668d88f..1bab4c3ea808 100644
 --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
 +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-@@ -5,6 +5,7 @@
- #include <search.h>
- #include "bpf/libbpf_internal.h"
- #include "tracing_multi.skel.h"
-+#include "tracing_multi_intersect.skel.h"
+@@ -8,6 +8,19 @@
+ #include "tracing_multi_intersect.skel.h"
  #include "trace_helpers.h"
  
++static __u64 bpf_fentry_test_cookies[] = {
++	8,  /* bpf_fentry_test1 */
++	9,  /* bpf_fentry_test2 */
++	7,  /* bpf_fentry_test3 */
++	5,  /* bpf_fentry_test4 */
++	4,  /* bpf_fentry_test5 */
++	2,  /* bpf_fentry_test6 */
++	3,  /* bpf_fentry_test7 */
++	1,  /* bpf_fentry_test8 */
++	10, /* bpf_fentry_test9 */
++	6,  /* bpf_fentry_test10 */
++};
++
  static const char * const bpf_fentry_test[] = {
-@@ -22,6 +23,20 @@ static const char * const bpf_fentry_test[] = {
- 
- #define FUNCS_CNT (ARRAY_SIZE(bpf_fentry_test))
- 
-+static int get_random_funcs(const char **funcs)
-+{
-+	int i, cnt = 0;
-+
-+	for (i = 0; i < FUNCS_CNT; i++) {
-+		if (rand() % 2)
-+			funcs[cnt++] = bpf_fentry_test[i];
-+	}
-+	/* we always need at least one.. */
-+	if (!cnt)
-+		funcs[cnt++] = bpf_fentry_test[rand() % FUNCS_CNT];
-+	return cnt;
-+}
-+
- static int compare(const void *ppa, const void *ppb)
- {
- 	const char *pa = *(const char **) ppa;
-@@ -197,6 +212,88 @@ static void test_link_api_ids(void)
+ 	"bpf_fentry_test1",
+ 	"bpf_fentry_test2",
+@@ -176,7 +189,7 @@ static void test_link_api_pattern(void)
  	tracing_multi__destroy(skel);
  }
  
-+static bool is_set(__u32 mask, __u32 bit)
-+{
-+	return (1 << bit) & mask;
-+}
-+
-+static void __test_intersect(__u32 mask, const struct bpf_program *progs[4], __u64 *test_results[4])
-+{
-+	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct bpf_link *links[4] = { NULL };
-+	const char *funcs[FUNCS_CNT];
-+	__u64 expected[4];
-+	__u32 *ids, i;
-+	int err, cnt;
-+
-+	/*
-+	 * We have 4 programs in progs and the mask bits pick which
-+	 * of them gets attached to randomly chosen functions.
-+	 */
-+	for (i = 0; i < 4; i++) {
-+		if (!is_set(mask, i))
-+			continue;
-+
-+		cnt = get_random_funcs(funcs);
-+		ids = get_ids(funcs, cnt);
-+		if (!ASSERT_OK_PTR(ids, "get_ids"))
-+			goto cleanup;
-+
-+		opts.ids = ids;
-+		opts.cnt = cnt;
-+		links[i] = bpf_program__attach_tracing_multi(progs[i], NULL, &opts);
-+		free(ids);
-+
-+		if (!ASSERT_OK_PTR(links[i], "bpf_program__attach_tracing_multi"))
-+			goto cleanup;
-+
-+		expected[i] = *test_results[i] + cnt;
-+	}
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(progs[0]), &topts);
-+	ASSERT_OK(err, "test_run");
-+
-+	for (i = 0; i < 4; i++) {
-+		if (!is_set(mask, i))
-+			continue;
-+		ASSERT_EQ(*test_results[i], expected[i], "test_results");
-+	}
-+
-+cleanup:
-+	for (i = 0; i < 4; i++)
-+		bpf_link__destroy(links[i]);
-+}
-+
-+static void test_intersect(void)
-+{
-+	const struct bpf_program *progs[4];
-+	struct tracing_multi_intersect *skel;
-+	__u64 *test_results[4];
-+	__u32 i;
-+
-+	skel = tracing_multi_intersect__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tracing_multi_intersect__open_and_load"))
-+		return;
-+
-+	skel->bss->pid = getpid();
-+
-+	progs[0] = skel->progs.fentry_1;
-+	progs[1] = skel->progs.fexit_1;
-+	progs[2] = skel->progs.fentry_2;
-+	progs[3] = skel->progs.fexit_2;
-+
-+	test_results[0] = &skel->bss->test_result_fentry_1;
-+	test_results[1] = &skel->bss->test_result_fexit_1;
-+	test_results[2] = &skel->bss->test_result_fentry_2;
-+	test_results[3] = &skel->bss->test_result_fexit_2;
-+
-+	for (i = 1; i < 16; i++)
-+		__test_intersect(i, progs, test_results);
-+
-+	tracing_multi_intersect__destroy(skel);
-+}
-+
- void test_tracing_multi_test(void)
+-static void test_link_api_ids(void)
++static void test_link_api_ids(bool test_cookies)
  {
- #ifndef __x86_64__
-@@ -210,4 +307,6 @@ void test_tracing_multi_test(void)
+ 	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+ 	struct tracing_multi *skel = NULL;
+@@ -188,6 +201,7 @@ static void test_link_api_ids(void)
+ 		return;
+ 
+ 	skel->bss->pid = getpid();
++	skel->bss->test_cookies = test_cookies;
+ 
+ 	ids = get_ids(bpf_fentry_test, cnt);
+ 	if (!ASSERT_OK_PTR(ids, "get_ids"))
+@@ -196,6 +210,9 @@ static void test_link_api_ids(void)
+ 	opts.ids = ids;
+ 	opts.cnt = cnt;
+ 
++	if (test_cookies)
++		opts.cookies = bpf_fentry_test_cookies;
++
+ 	skel->links.test_fentry = bpf_program__attach_tracing_multi(skel->progs.test_fentry,
+ 						NULL, &opts);
+ 	if (!ASSERT_OK_PTR(skel->links.test_fentry, "bpf_program__attach_tracing_multi"))
+@@ -306,7 +323,9 @@ void test_tracing_multi_test(void)
+ 	if (test__start_subtest("link_api_pattern"))
  		test_link_api_pattern();
  	if (test__start_subtest("link_api_ids"))
- 		test_link_api_ids();
-+	if (test__start_subtest("intersect"))
-+		test_intersect();
+-		test_link_api_ids();
++		test_link_api_ids(false);
+ 	if (test__start_subtest("intersect"))
+ 		test_intersect();
++	if (test__start_subtest("cookies"))
++		test_link_api_ids(true);
  }
-diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-new file mode 100644
-index 000000000000..bbd052b02559
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
-@@ -0,0 +1,42 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdbool.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__hidden extern int tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return);
-+
-+__u64 test_result_fentry_1 = 0;
-+__u64 test_result_fentry_2 = 0;
-+__u64 test_result_fexit_1 = 0;
-+__u64 test_result_fexit_2 = 0;
-+
-+SEC("fentry.multi")
-+int BPF_PROG(fentry_1)
-+{
-+	tracing_multi_arg_check(ctx, &test_result_fentry_1, false);
-+	return 0;
-+}
-+
-+SEC("fentry.multi")
-+int BPF_PROG(fentry_2)
-+{
-+	tracing_multi_arg_check(ctx, &test_result_fentry_2, false);
-+	return 0;
-+}
-+
-+SEC("fexit.multi")
-+int BPF_PROG(fexit_1)
-+{
-+	tracing_multi_arg_check(ctx, &test_result_fexit_1, true);
-+	return 0;
-+}
-+
-+SEC("fexit.multi")
-+int BPF_PROG(fexit_2)
-+{
-+	tracing_multi_arg_check(ctx, &test_result_fexit_2, true);
-+	return 0;
-+}
+diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_check.c b/tools/testing/selftests/bpf/progs/tracing_multi_check.c
+index fe7d1708cda5..c800e537b6b5 100644
+--- a/tools/testing/selftests/bpf/progs/tracing_multi_check.c
++++ b/tools/testing/selftests/bpf/progs/tracing_multi_check.c
+@@ -7,6 +7,7 @@
+ char _license[] SEC("license") = "GPL";
+ 
+ int pid = 0;
++bool test_cookies = false;
+ 
+ extern const void bpf_fentry_test1 __ksym;
+ extern const void bpf_fentry_test2 __ksym;
+@@ -22,7 +23,7 @@ extern const void bpf_fentry_test10 __ksym;
+ int tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
+ {
+ 	void *ip = (void *) bpf_get_func_ip(ctx);
+-	__u64 value = 0, ret = 0;
++	__u64 value = 0, ret = 0, cookie = 0;
+ 	long err = 0;
+ 
+ 	if (bpf_get_current_pid_tgid() >> 32 != pid)
+@@ -30,6 +31,8 @@ int tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
+ 
+ 	if (is_return)
+ 		err |= bpf_get_func_ret(ctx, &ret);
++	if (test_cookies)
++		cookie = test_cookies ? bpf_get_attach_cookie(ctx) : 0;
+ 
+ 	if (ip == &bpf_fentry_test1) {
+ 		int a;
+@@ -38,6 +41,7 @@ int tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
+ 		a = (int) value;
+ 
+ 		err |= is_return ? ret != 2 : 0;
++		err |= test_cookies ? cookie != 8 : 0;
+ 
+ 		*test_result += err == 0 && a == 1;
+ 	} else if (ip == &bpf_fentry_test2) {
+@@ -50,6 +54,7 @@ int tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
+ 		b = value;
+ 
+ 		err |= is_return ? ret != 5 : 0;
++		err |= test_cookies ? cookie != 9 : 0;
+ 
+ 		*test_result += err == 0 && a == 2 && b == 3;
+ 	} else if (ip == &bpf_fentry_test3) {
+@@ -65,6 +70,7 @@ int tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
+ 		c = value;
+ 
+ 		err |= is_return ? ret != 15 : 0;
++		err |= test_cookies ? cookie != 7 : 0;
+ 
+ 		*test_result += err == 0 && a == 4 && b == 5 && c == 6;
+ 	} else if (ip == &bpf_fentry_test4) {
+@@ -83,6 +89,7 @@ int tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
+ 		d = value;
+ 
+ 		err |= is_return ? ret != 34 : 0;
++		err |= test_cookies ? cookie != 5 : 0;
+ 
+ 		*test_result += err == 0 && a == (void *) 7 && b == 8 && c == 9 && d == 10;
+ 	} else if (ip == &bpf_fentry_test5) {
+@@ -104,6 +111,7 @@ int tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
+ 		e = value;
+ 
+ 		err |= is_return ? ret != 65 : 0;
++		err |= test_cookies ? cookie != 4 : 0;
+ 
+ 		*test_result += err == 0 && a == 11 && b == (void *) 12 && c == 13 && d == 14 && e == 15;
+ 	} else if (ip == &bpf_fentry_test6) {
+@@ -128,22 +136,27 @@ int tracing_multi_arg_check(__u64 *ctx, __u64 *test_result, bool is_return)
+ 		f = value;
+ 
+ 		err |= is_return ? ret != 111 : 0;
++		err |= test_cookies ? cookie != 2 : 0;
+ 
+ 		*test_result += err == 0 && a == 16 && b == (void *) 17 && c == 18 && d == 19 && e == (void *) 20 && f == 21;
+ 	} else if (ip == &bpf_fentry_test7) {
+ 		err |= is_return ? ret != 0 : 0;
++		err |= test_cookies ? cookie != 3 : 0;
+ 
+ 		*test_result += err == 0 ? 1 : 0;
+ 	} else if (ip == &bpf_fentry_test8) {
+ 		err |= is_return ? ret != 0 : 0;
++		err |= test_cookies ? cookie != 1 : 0;
+ 
+ 		*test_result += err == 0 ? 1 : 0;
+ 	} else if (ip == &bpf_fentry_test9) {
+ 		err |= is_return ? ret != 0 : 0;
++		err |= test_cookies ? cookie != 10 : 0;
+ 
+ 		*test_result += err == 0 ? 1 : 0;
+ 	} else if (ip == &bpf_fentry_test10) {
+ 		err |= is_return ? ret != 0 : 0;
++		err |= test_cookies ? cookie != 6 : 0;
+ 
+ 		*test_result += err == 0 ? 1 : 0;
+ 	}
 -- 
 2.52.0
 
