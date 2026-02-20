@@ -1,111 +1,90 @@
-Received: from www2881.sakura.ne.jp (www2881.sakura.ne.jp [49.212.198.91])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 272B9340DA6
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 11:09:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.198.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D27F30AAB3;
+	Fri, 20 Feb 2026 11:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771585777; cv=none; b=Fvd9Sqg1V7uNqN2tpWSv1iADYTDWK+idbirE3BRcaaXvM7axbSJNouJ0jJzlZDxPNq6+qwFeocvW0OUezLjE5HfCYJaDN/gMi0ILZyUHE3qeCDCY7CHGmWwyX/0R31Kd2cQiWvJOcnSJCbzyVLfKTUR7LATNzuFzcSJXYnriqzc=
+	t=1771586686; cv=none; b=ex/TYlhR6TLhIm5E4qS8PWdNT7bYGkKTQLgERrZb9+eXC9OmzS7Wtwly5KNrusv/dPc/CNzm1021lkDQRCXjmKhMDdJYwuG7/nqjgybAgTctYweH4NBRhM08RgnH1c+tzqOzf99qsi4ds1k1fEfNPYPykm6HhOzOKr01AGJ/qGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771585777; c=relaxed/simple;
-	bh=9Vd/vU2OOT5YdMAIsfa4uj1uXtxEkk9tOj+MqX6QAzQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o1ZSb8Y66nU6xn4nJTsE5cqbIhR80DKw7dH3BgMqo3icB63mfI4qvUJdbqaSTv/anTmWUScdSeX/NkYQn4aCSaAQwoGSEPXvwPQceYdJvro/hwMVV/imd9737jS/8nEasBgbS1+4g1iBIcZp0NRA8thkTeskJWY4W7eTdBcPZFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp; spf=pass smtp.mailfrom=enjuk.jp; dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b=nwlE0XfE; arc=none smtp.client-ip=49.212.198.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enjuk.jp
+	s=arc-20240116; t=1771586686; c=relaxed/simple;
+	bh=OXkTL93WModJU3+hk+gCyP6KaBofCe3tCh3x9Dblwy0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=VFTKyVXXxkex2qMioQgxvW7Jw5lJiY/umweCpQed1zdnlgWWcCwAp5S3ZRCf4s6KYenXY/o0tos3sz78hLJYgSObsPGnk9lDqfTxkULVQOiGIECdI+ftIzc7PX0UWhq8X4SXYZUXHeH1r2W2WadAPU59/3K5KWF9r0qq6YSF3Fc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cjDIKXT4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b="nwlE0XfE"
-Received: from ms-a2 (54.52.30.125.dy.iij4u.or.jp [125.30.52.54])
-	(authenticated bits=0)
-	by www2881.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 61KB9NnI040209
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Fri, 20 Feb 2026 20:09:25 +0900 (JST)
-	(envelope-from kohei@enjuk.jp)
-DKIM-Signature: a=rsa-sha256; bh=wTepkiaRF/hdxZuhpHfCAhj6kmf4sZflDY7X5BlhPCE=;
-        c=relaxed/relaxed; d=enjuk.jp;
-        h=From:To:Subject:Date:Message-ID;
-        s=rs20251215; t=1771585766; v=1;
-        b=nwlE0XfEmpGymRX1tpzxeqddRsbvAqyLC+cIR4WrUGW4MNbAJPs1ixw/1u3ziYEu
-         UvHsjQBMr+LMKg+XJcFLRg5hsdGM06H4dTGqxC/YipLP8ytQBaeydQQMw1FTEqRg
-         SFs5ntTbkhk1zprf8VPpkk9yMAb6PF5dvz0fYlqaviruHjoKqP1qB1qSIbXIUqxV
-         9nX7rKSHhWilw33mRwm+E0ohvYMV2+wxhjAUlxyyzS24h/h4kRJu/5K2wHWVg47s
-         zBYCTcp1lS0KkmaJ8BexgWtSrqTAtjEmCeklT6tu5AtSFv0zcAkR7vNIsIMo+l2+
-         hPfrZjZ4wCFz7/NJXDFVDQ==
-From: Kohei Enju <kohei@enjuk.jp>
-To: netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        kohei.enju@gmail.com, Kohei Enju <kohei@enjuk.jp>
-Subject: [PATCH v1 bpf-next] net: core: allow netdev_upper_get_next_dev_rcu from bh context
-Date: Fri, 20 Feb 2026 11:09:17 +0000
-Message-ID: <20260220110922.94781-1-kohei@enjuk.jp>
-X-Mailer: git-send-email 2.51.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cjDIKXT4"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F6FDC116C6;
+	Fri, 20 Feb 2026 11:24:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771586685;
+	bh=OXkTL93WModJU3+hk+gCyP6KaBofCe3tCh3x9Dblwy0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=cjDIKXT4MMxKR/ldjE5GuawfcXF+5wrMCBxLJKM6vH/g5Eg09icOrCFFZlJdNLDdb
+	 43m8BI/DPio4VYCyWfkiCA89445bwlncBf374vdr8FZBIOhdfIErUpWoFT36X6g9RE
+	 B9Ul0Do+RGNilKIovbOQIXZyWG2auEC2F4cTdWCNIaHuoh9uf6BvM+1F5UPI+/QWtM
+	 unnjtcSpel+tNeNhEp4zvp6LbNp/SYaFTVBv3KEzwXpyVX/B4yzi9eHrjOPQP7yeMR
+	 gFoFS3QwFO6jGuxwNdgH9A8YEbOjUytZM2Gsv/BsLhkk41OyRP/z68E8yIioSkRPWV
+	 vLpq1xX8GMbNg==
+Content-Type: multipart/mixed; boundary="===============6439054443298596662=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <e46ea28bf48fb9ff5ba205036a6baf0427f7646870cafc98b387940f99a848d8@mail.kernel.org>
+In-Reply-To: <20260220104220.634154-3-jolsa@kernel.org>
+References: <20260220104220.634154-3-jolsa@kernel.org>
+Subject: Re: [PATCHv4 bpf-next 2/5] libbpf: Add support to detect nop,nop5 instructions combo for usdt probe
+From: bot+bpf-ci@kernel.org
+To: jolsa@kernel.org,andrii@kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,songliubraving@fb.com,yhs@fb.com,john.fastabend@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 20 Feb 2026 11:24:45 +0000 (UTC)
 
-Since XDP programs are called from a NAPI poll context, the RCU
-reference liveness is ensured by local_bh_disable().
+--===============6439054443298596662==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Commit aeea1b86f936 ("bpf, devmap: Exclude XDP broadcast to master
-device") started to call netdev_upper_get_next_dev_rcu() from this
-context, but missed adding rcu_read_lock_bh_held() as a condition to the
-RCU checks.
-While both bh_disabled and rcu_read_lock() provide RCU protection,
-lockdep complains since the check condition is insufficient [1].
+> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+> index d1524f6f54ae..c81e0a58caf5 100644
+> --- a/tools/lib/bpf/usdt.c
+> +++ b/tools/lib/bpf/usdt.c
 
-Add rcu_read_lock_bh_held() as condition to help lockdep to understand
-the dereference is safe, in the same way as commit 694cea395fde ("bpf:
-Allow RCU-protected lookups to happen from bh context").
+[ ... ]
 
-[1]
- WARNING: net/core/dev.c:8099 at netdev_upper_get_next_dev_rcu+0x96/0xd0, CPU#0: swapper/0/0
- ...
- RIP: 0010:netdev_upper_get_next_dev_rcu+0x96/0xd0
- ...
-  <IRQ>
-  dev_map_enqueue_multi+0x411/0x970
-  xdp_do_redirect+0xdf2/0x1030
-  __igc_xdp_run_prog+0x6a0/0xc80
-  igc_poll+0x34b0/0x70b0
-  __napi_poll.constprop.0+0x98/0x490
-  net_rx_action+0x8f2/0xfa0
-  handle_softirqs+0x1c7/0x710
-  __irq_exit_rcu+0xb1/0xf0
-  irq_exit_rcu+0x9/0x20
-  common_interrupt+0x7f/0x90
-  </IRQ>
+> +#if defined(__x86_64__)
+> +static bool has_nop_combo(int fd, long off)
+> +{
+> +	static unsigned char nop_combo[6] = {
+           ^^^^^^^^^^^^^^^^^^^^^^
 
-Signed-off-by: Kohei Enju <kohei@enjuk.jp>
+Should nop_combo be declared const? It is a read-only lookup table
+used only in the memcmp() below.
+
+> +		0x90, 0x0f, 0x1f, 0x44, 0x00, 0x00 /* nop,nop5 */
+> +	};
+> +	unsigned char buf[6] = {};
+> +
+> +	if (pread(fd, buf, 6, off) != 6)
+> +		return false;
+> +	return memcmp(buf, nop_combo, 6) == 0;
+> +}
+
+[ ... ]
+
+
 ---
- net/core/dev.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 096b3ff13f6b..b99d46b682c6 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -8103,7 +8103,8 @@ struct net_device *netdev_upper_get_next_dev_rcu(struct net_device *dev,
- {
- 	struct netdev_adjacent *upper;
- 
--	WARN_ON_ONCE(!rcu_read_lock_held() && !lockdep_rtnl_is_held());
-+	WARN_ON_ONCE(!rcu_read_lock_held() && !rcu_read_lock_bh_held() &&
-+		     !lockdep_rtnl_is_held());
- 
- 	upper = list_entry_rcu((*iter)->next, struct netdev_adjacent, list);
- 
--- 
-2.51.0
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22221513473
 
+AI-authorship-score: low
+AI-authorship-explanation: Domain-specific optimization from established BPF/tracing maintainer with iterative lore review history and deep x86_64 uprobe internals knowledge.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Missing const qualifier on a static read-only byte array is a minor C best practice deviation with no runtime impact.
+
+--===============6439054443298596662==--
