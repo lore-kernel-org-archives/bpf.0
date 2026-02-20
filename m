@@ -1,77 +1,115 @@
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B36E634F479;
-	Fri, 20 Feb 2026 18:28:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD4BE223702
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 18:34:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771612110; cv=none; b=rBfjmdUAipeeLc05SwpMsR2kDOR5iZoBL+adYDeIwVvCzFtPxNFT0iby+rhOROMdyE7UPrNcBHI7We91+icxVxWp4+j7RO2qprSsiKZBWDjhynh5zXHXOek2L3Ifl2dYV4lR3HjC+iQDF63ehIxBuHndAxeFtRT/kDTJGpjS+ek=
+	t=1771612458; cv=none; b=aUy6jHg8kIXoUtonZxBusWN79O3afsDNpGP9SjqVW1svOshcUCdLitiNOR+/wZ3uANztM7cmQZacKNKA8JWfcblZieQ2MeUuqZG/RR2Pib3pCjvOAJQ8N40v/0/5OPdPTYohh/V8FhBdikcWM0kfWvw/E4oy/ouZv61mjlNzql0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771612110; c=relaxed/simple;
-	bh=m1B7IjwHd7P9eeRDkclzvbQ/s9rpmimty+kSqSIM/KU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KUTJTKy1fEZht4+SPTNDKWJMAr5uECRIpe+MZ4z2i2KWmOlSx91m4bdoM34/MHjcXWJWbAl8R7ID9HBb2uMNAoPm06Q4wDX4zw4/yhw2JEB/Hwf7GRWOTPRCgA9E4p+fceTdxrcTjr4n12g5fTsVJMbhwcj/RHxusRtFnNf7Utw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QYwbcF1G; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
+	s=arc-20240116; t=1771612458; c=relaxed/simple;
+	bh=7fFboDtHFza8pMHIPa5EiZf2os8gnU4vNFnuiWBqX48=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hYaeih+vXUZ1oo8k4xT4SFq0PYs2ppRyVuZiZ0j5Pwi7eUcNC+b4qX0waS3Ez+s7f26Ob+UC4k3q3eWvaSBZ7dumLTvyZfGlh670iRg2kuMAkmPxZSmtuyaEsfRH871nyVnplzj/E6m3ep5661x+C9uB4mY5itX7CHxCmNeXAtw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=L9XW445U; arc=none smtp.client-ip=91.218.175.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QYwbcF1G"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=uyk3xwbgiSeXZHnGDF/a11B1FWH7ZQom9dewwH1g4Yw=; b=QYwbcF1Gd8uJrgk8pSTyDDMWWm
-	tZxueje393rPDTGR4wEQo4lzl5youjcXmiax2gus034QwwF1jOtk5AoDE8SWoIm17S87J5av6wk2g
-	nt24ffAHIgEQSU0bR8HHzAEH1lW6kHS0lnOeKB9j8/6dwUc3FYoY2xt72muOqPD4pCsDMDA8T4Xug
-	Mvjh3GN4hALONMnhejm3m1jKSTOymg6EL4bWXz81lK7fc8ig2rWiYWThmarDL0kZvuuzt4qgh5VAL
-	BFRTJ8lubPzop4JTrEhCy/mjnQbvfjTw7nTgQwsY2Q1GJwli4l2Ivwbv681iYQwzNiJaztG7AermF
-	DmAwaKyg==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vtVEm-0000000FS2u-2XYZ;
-	Fri, 20 Feb 2026 18:28:24 +0000
-Date: Fri, 20 Feb 2026 10:28:24 -0800
-From: Christoph Hellwig <hch@infradead.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-	KP Singh <kpsingh@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] bpf: classify block device hooks appropriately
-Message-ID: <aZinyCqhKYSFLj43@infradead.org>
-References: <20260220-work-bpf-bdev-v1-0-c53e852c4702@kernel.org>
- <20260220-work-bpf-bdev-v1-1-c53e852c4702@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="L9XW445U"
+Message-ID: <5fdee5fd-aff1-4764-820e-3b1f3ad00941@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771612453;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EcxT8imdMfZkikPDM0dfVYGxwygSXNnJNQIDYYcR5tc=;
+	b=L9XW445UXq7HLi3ZcLb7UqfFOyeMnNhe0yORsiITLzZ5wZm3ctdrQTYDOszzaiZa1eF637
+	AQPcUXyLdcTtLzME6p0XtI5/TTOy4YOhOMLOFlTLiBnYJZONCrNdmJf/pHwV58pByB7ZCT
+	dJs1kuXow+83ybW0fYyo1EzeKZa/EOY=
+Date: Fri, 20 Feb 2026 10:34:09 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220-work-bpf-bdev-v1-1-c53e852c4702@kernel.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+Subject: Re: [LSF/MM/BPF TOPIC] BPF local storage for every packet
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com,
+ lsf-pc@lists.linux-foundation.org
+References: <87ecmffopy.fsf@cloudflare.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <87ecmffopy.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Feb 20, 2026 at 06:48:48PM +0100, Christian Brauner wrote:
-> A bunch of new hooks for managing block devices were added a while ago
-> but they weren't actually appropriately classified.
-
+On 2/20/26 6:56 AM, Jakub Sitnicki wrote:
+> In the upcoming days we are going to post an RFC which proposes to
+> extend the concept of BPF local storage to socket buffers (sk_buff, skb)
+> as means to attach arbitrary metadata to packets from BPF programs [1]
+> (slides 41-55).
 > 
-> * bpf_lsm_bdev_alloc() is called when the inode for the block
->   device is allocated. This happens from a sleepable context so mark the
->   function as sleepable. When this function is called the memory for the
->   block device storage embedded into the inode is zeroed. That block
->   device cannot be meaningfully reference or interacted with at this
->   point. So mark it as untrusted for now.
+> Design wise, BPF local storage is a great fit for a packet metadata
+> container, as it that avoids some of the shortcoming of the the XDP
+> metadata interface:
 > 
-> * bpf_lsm_bdev_free() is called when the inode for the block
->   device is freed. A bunch of memory associated with the block device
->   has already been freed and there's dangling pointers in there. So mark
->   it as untrusted. It cannot be meaningfully referenced or interacted
->   with anymore. It is also called from sb->s_op->free_inode:: which
->   means it runs in rcu context (most of the times). So leave it as
->   non-sleepable.
+> 1. Users interact with storage through BPF maps and can take advantage
+>     of existing built-in BPF map types, while still being able to
+>     implement a custom data format,
+> 
+> 2. Maps within local storage can have different properties controlled by
+>     map flags. For example, maps with BPF_F_CLONE set can survive packet
+>     cloning. Other flags could allow map contents to survive sk_buff
+>     scrubbing during encapsulation/decapsulation or pass across network
+>     namespace boundaries.
+> 
+> 3. Local storage supports multiple users out of the box - each user
+>     creates their own map, eliminating the need to coordinate data
+>     layout,
+> 
+> 4. Local storage has its own backing memory, so persisting it across
+>     network stack layers requires no changes to the network stack.
+> 
+> However, this flexibility comes at a cost. While XDP metadata requires
+> no allocations [2], an initial write to BPF local storage requires two:
+> one for bpf_local_storage_elem, and one for bpf_local_storage itself.
+> 
+> We would like to align this work with the needs of other BPF local
+> storage users (socks, cgroups, tasks, inodes), where allocation overhead
+> has been a concern as well [2].
+> 
+> Optimization ideas we would like to put up for discussion:
+> - slimming down bpf_local_storage so it can be embedded as an skb
+>    extension chunk,
+> - making the bpf_local_storage cache size configurable,
+> - allowing bpf_local_storage to be pre-allocated,
+> - co-allocating bpf_local_storage and bpf_local_storage_elem for the
+>    single-map case.
 
-How did this even get added?  None of this should be of any business
-to LSM hooks :(
+The sk/cgroup/task storage has a much longer lifetime. Meaning once 
+allocation is done, the storage stays in the sk until the sk is closed. 
+The length of lifetime is quite different from the skb. I am afraid we 
+are re-purposing bpf_local_storage for a very different use case where 
+skb lifecycle is much shorter.
+
+We are planning to increase the 'sizeof(struct sock)' for perf reason. 
+Saving an allocation is an upside but not the major one we are looking 
+(or care) for sk. We are more looking for cacheline efficiency and 
+probably remove the need for bpf_local_storage[_elem] if the user 
+chooses to use the in-place spaces of a sk.
+
+If 'sizeof(struct sk_buff)' can be increased, this should align on where 
+sk local storage is going. If skb will solely depend on the existing 
+bpf_local_storage and has no plan to raise sizeof(struct sk_buff) for 
+perf purpose, the existing bpf_local_storage may be the wrong place to 
+repurpose/optimize because the lifecycle of skb is very different.
+
+> [1] https://fosdem.org/2026/schedule/event/DSC9L3-rich-packet-metadata/
+> [2] Assuming sufficient free headroom in the skb linear buffer.
+> [3] http://msgid.link/ad835a9b-e544-48d3-b6e2-ffe172fcfa6d@linux.dev
+> 
 
