@@ -1,160 +1,147 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C65D17BCA
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 00:13:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771546439; cv=none; b=twiuvW2ZTI5sKM2aI88bxm/L7E3XHI5q1OrEShkFUTrqQ3aeRICf5eAb6RyiQ+Mc0ZNS8T+ogAxSN4Q8hvS9GJB6uTR3UsajjqBUrsdqItX8X53+BvBQkVxrRN4iF8sMpPKMqN1J7+AE+uYo+JdlMD6iFQwQluxBf0qvGCXxdXs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771546439; c=relaxed/simple;
-	bh=eK3pUJ5mNcioiln/Ma5A7kx3CZN2lRZnlxLCoGat76w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RFRBQ5kUVbU5KDIAbojKke+3KhrkA5wVBlsoQHBEJ9FUUggBhgeoLYhQR2o/rTRdgRHq+V3qFO1MtxWWJoQ9cNt6qDdQNns0DJcYNdrfe6/WkvSqj3A2Q0lTlXThX8nUHIdL5LTQP1QWiB+0ApWevYqZmT5OIBnb+dvq9T8116E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LTq37hCf; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63FA8B652
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 00:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771546472; cv=pass; b=h0C1c6iC45eE13nQpSJG78Os4f94xiKVHWx0SVQNzApXw2cOgG8O8I0EJfhTUBFbGC15K/M7ZMlg5VAdDPp77XrFMuh43RA+B6VrkvRdIez9by8fWr+jFNYEzJZgAwdGRWlfClITfCJg3qja2d76lR3bPXRPRZfJwV++WulAywk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771546472; c=relaxed/simple;
+	bh=T+JYFM/fE7mWSDoHnbeykdnAnGFWjNpCiqVMedTXXPo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rVuKM+OhGV6XXw36AgLT1GhN36WSJgg/ygbARLhtYHIuC3HAR9NuAfJdY3mXc9Qec2WApJ3A0O2QXsjhEZAezMPRfgfDUECPXSCeQRzXnvA9/NtaiMBQq1bpk1jJuxaIF0iDhqZjpYhzczk0Likl+tG+8ogCxX1L8+8QDRkOxOE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lVEPpG2y; arc=pass smtp.client-ip=209.85.218.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LTq37hCf"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48375f10628so9292365e9.1
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 16:13:58 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lVEPpG2y"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-b8f7a30515aso189348066b.0
+        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 16:14:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771546469; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Fdr774SicXzC7UnEEANTbLwdhNLBBmNTNDO072ItozFNB75gxY8UGXcGwd1YXWhWny
+         pmx6USzQb7hUOf/XVoPtN2qy7PKXzNHJha2QfzLUx01IWOPJBR1bbzSnHuhoCLq2FdAt
+         8Gj3AMmIImV9tQ4L0sFZRu6LQGAdqmZNwrCFjhzXKsN57x1PyrLwX+Revc6UsRkCPipA
+         LQPExNuqM3RvkjivxykcX+ms3AIZmi/CpQzQDY2rrpEHXAMDO5EktihWmZ2yN2ojALQZ
+         BiSyB1RdEkqSuuQ1NrVie4yO6Qs4+2jfCxhf++x1LTwcPCyyZ2LPKNcz6bszPud7hi6z
+         St8g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Y4E5EpOC6or/ObLpk4NJH78O0YyNQJkWuGFNUhMCSCc=;
+        fh=8DoVh3Iyt0R+s2t7XOny+wXcz6YPk7eroGHcz2JdAg4=;
+        b=T6WpgfwFKyHQfMNUXdGDrZC6ggNob7a2xUs7qLK5bk0/RYykKaQHdzsuvl/XtiYGeE
+         kDtY/YJfprrhh/glXpiueqZwhgnKBeUYoONd0MLfo9vWQ01lgYxDuXnp4GutgYD6cv2N
+         /tu5qYkEAgrfc0wH0PVzHV+FMDBVTnKuNSY87GAfaJmH3u1czO45fe09Zl0RqvoovCfD
+         AUDHPXGjtvwT6BcpkG8/LvMwdvGvjVMKXCwSde2YU43ROArD9cPWUC/1lZUrSFQESuTR
+         D5Y0akRT0GLmV3a5VfaW/Cv92wIdra9AoX7z4+D9J+oLZ7iBit/IP2PyRlEnx5S/aM0y
+         PB2g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771546436; x=1772151236; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=vWvZhz8mK3Ad3Q3KFYJIxCj2PkwY67Pk3Eem0L4tNqY=;
-        b=LTq37hCfWlk4lI0eCIZ0YWOZ4SEtXwcGOTn6soML5ofqSPZ6g5hTQUgEj+mX1sB4Eh
-         sh1vA24labbFvr3eiysxNxYgcoHd7osVxOndJhV3rQHyGT0krlP2mW3G6rMJRj88eRnX
-         xFcTN+7FS01Y8VheRbYVI8b+WqPvgQ6J1haF2MU2U1CeqgD0Ik+XjR46oHuahq/AeOyT
-         o4gfKBFE2QdEZ30zDLuaR5tE5TQfuxkRMiVgG0W0lDj3dWFJcXpEEVtgBOTAYvCjlvqN
-         zH6eW4j2/ByqgVRyRToV6NPnu3OqZC2MO/9Cu3MWNLbb1MSHXJ331Xgkx85LtUsrPXYY
-         8t5g==
+        d=gmail.com; s=20230601; t=1771546469; x=1772151269; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y4E5EpOC6or/ObLpk4NJH78O0YyNQJkWuGFNUhMCSCc=;
+        b=lVEPpG2y7d+9YK+CWYxwZOu1yXIJGV29RU73TSrotXNVedd2TL1A3+SM8ayYQksQdb
+         KrvetMKeQEAmJvOozctBK4XdFc7MyeWA1BzHinRqLm6jb/Gq9oNC5S62FJJElO0IPZST
+         3swbBxRHJ8UZkBwm9Lzdrj7c4Kyywlz/vR2dvYI3aFow8TeLyxQhnipzSNtv8AvAes7v
+         d0hWXCggP4s2+PfKLx9v8N6jG0sE8CsngaVuOTVcpWx+UNuSt+CZUL379IlcyYegXfNl
+         wqChQwCqmL00ypgBvG6h/w0RHNxKGyTQ2ToJ9QPFP9ywSZSqWX1G5Neyd+YW6e2zoc7s
+         sJ1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771546436; x=1772151236;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vWvZhz8mK3Ad3Q3KFYJIxCj2PkwY67Pk3Eem0L4tNqY=;
-        b=NyqsF8RLKdJWMdTo+t8ruOu0V0raIqFC6BubZmwmULQrx1jyKotHNW0lecsctTAyiv
-         bAVwbfIAnqNp4k7VvQYiLHDCHfTh/YAc51egOJqfBABqCghKfJGFDioOP/OJkAo7EpNu
-         jKmEaxkwtZtP8QtJIruu88uUYAAqRW8EAqKD+EwwQHgqwMqLPiKl4DxmnmLFoqai5Wdu
-         rafuCgnAaFqUOpPn3yhN3MPfVclgHK8UAnwa7EbVTIQbRea7Q9d05ps3gryN1ZV1UZtt
-         rURe2cUOswmdDV+TN+GQab+CIGwxtAwJyXYsE+8TqDhmx3zr3HcKlQyeE4XixfaiO+Eh
-         atvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUfKLKrcEk+LupAh1SG9JkXXtuFFoJ4ympa7ZWUsQ1CsAauUWXmtg5DdeRYTAH5i/V+B+U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwF2n5tBywL5OHgffcI2ySe1cHZXmGDBjwGmjZ3X6G3+l8fuOC5
-	jLHFDCK9sdrELQ9aUniKRlxhKOxrj/txh7ZHV1d8K2QQsWiUez2X8g4l
-X-Gm-Gg: AZuq6aK9kk/8YrJQcAAB++zekTzG5Mg1LBbDzt8Jw9BNED+q22iXlosqaoFFWXHjI7g
-	DaTDU+GX+EwQB+NCN6rq5PUxfOhlI1ErY5vdx2SOp+p/NMfPmXGeY9n5bbbxI0KPnPHw5275U21
-	HpwYH5md/AKdvVDjoLvPLfHMKY34TiI3YWw2f+qF3mzTUKmYp8ZGy3ml7gendm89a5GhO7Mpolp
-	7eLerkJb0QfBm8YJxFsJGnHq+NB8XaAYTIkFQfkRKn/4SQKNBZPINDPPGzmN99LRE5tzkwn4jgD
-	O3i9qYrUacsKVSKZXBLP2sA3vYtBRledQ5dt6nJuSMKEanxmGJCCfaftBWw9+CHdVy/3c+QaKlu
-	OWahjw4TmiU5aZU05o9U0+49N8ha9n2Y+MXfqPfE4xuD/ilFdjnGqWkM0jTbIyx5GO6sLDvLT66
-	DJvkYH+dCUQ73uchN3dpZIZWSpg7fJPfkgRFImtEtoaf1Rn0+61V62vzbMwtYE1vtcrC/3NobVy
-	wo+W5h4sjo23/B57UK4Q2mvuHe+SQ8XGVAh4xBuDycABrl/7C1pGlbtuNHTE7ooQnbzYqbKPcWb
-	+4p5+urb56Xy9LOAc50fCQ==
-X-Received: by 2002:a05:600c:83c6:b0:47e:e8c2:905f with SMTP id 5b1f17b1804b1-4839e636fa5mr51770195e9.8.1771546436270;
-        Thu, 19 Feb 2026 16:13:56 -0800 (PST)
-Received: from mail.gmail.com (2a01cb0889497e009fdf63486ebff0d3.ipv6.abo.wanadoo.fr. [2a01:cb08:8949:7e00:9fdf:6348:6ebf:f0d3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31ff4d7sm35341505e9.15.2026.02.19.16.13.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Feb 2026 16:13:55 -0800 (PST)
-Date: Fri, 20 Feb 2026 01:13:53 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
-	bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Subject: Re: [PATCH bpf 2/4] bpf: Improve bounds when tnum has a single
- possible value
-Message-ID: <aZenQb3H5g73Bhz9@mail.gmail.com>
-References: <cover.1771316309.git.paul.chaignon@gmail.com>
- <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
- <12705b3d58569685048804c33e90755c17667cbf.camel@gmail.com>
- <CAM=Ch06Vg-faG9ukU4DAsF9FRG2PeUtYHh3BkG0dOzYi=WDCyg@mail.gmail.com>
- <5044b1d83c3c916c0754eb5556008316c36c15ae.camel@gmail.com>
- <aZdcoaH9ERUNpln1@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1771546469; x=1772151269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Y4E5EpOC6or/ObLpk4NJH78O0YyNQJkWuGFNUhMCSCc=;
+        b=LwzTOPwqkI287wRF6xCd0qPv2zoTJzighR8FED1742uaqHk0xZF0seoWMjVhP0UyjX
+         2RC36eiF2tjod8ghPw6SjfeCxfDFJXdvF1VgGW1WMnjDz6uHVUU0Nkrb2zNMR95UhDAT
+         uEAo46mEXofxllXOuqDI0jz2I6THkIeQNlnQhIlAXycbionuCeMzFoMmCmQzAa5yP2/S
+         NNwCy0qKctw87Q3uCBUFTkqdA71eO3llF7yp193IVZbcldFuYgJHdeJcOle/DNHW15n4
+         YGCK83Cr1HV2Y0jmzPzIjTxDWpyxU+r+HS45pEB3OKuAm2r/bsGlCM2tgfCAu1mzw/qh
+         R5zQ==
+X-Gm-Message-State: AOJu0Yz1Ud6h0f4uwvHWgiqEnHXehhSuwaQ7usjtVwdAwyH1DB3FF7IP
+	SIP4tOk4OhlQbvWzciMEWib04damaMMFuFnN/zbtrwsmdImugSfj0JXBrlAzOG7OSen8xAVcTVn
+	nz3y6tPLhhaIVTcbxxVtWtmtVJpaMPqQ=
+X-Gm-Gg: AZuq6aIaY7tlNHfBBXltEk169sBF4bNY8/wJx2hoafB/s3gG0fYux07oEi5v4cYihMC
+	Q72noQTOnbeWa+UCczzy9yQ8kwiZwXL+u3uGKPKiFmFhAN6Y9RlSFu88rYLUl4m5V3Wy9j1DHlT
+	NQev6IICX7XgQzu8t4Uc0XnlOYoCXMkpwQnmR3iC7vcAuqaqP5fRePa3ukRcPhOxy2c4/MsRn08
+	8HkfrgL44OeC2RE7NjVNz/YnfotrhINejwhebiKv9soBG2eBPWAr5dDRAMcql7+K3OMf7+BgF9j
+	I2Rzx2d7
+X-Received: by 2002:a17:907:2d8e:b0:b3b:5fe6:577a with SMTP id
+ a640c23a62f3a-b8fc38f91fdmr1073952666b.8.1771546469202; Thu, 19 Feb 2026
+ 16:14:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aZdcoaH9ERUNpln1@mail.gmail.com>
+References: <20260218182555.1501495-1-puranjay@kernel.org> <20260218182555.1501495-3-puranjay@kernel.org>
+ <CAADnVQKm+oNX704R8sZrbaHFnmvjC2yBw-UT+T3O4FQ0Rxuavg@mail.gmail.com>
+In-Reply-To: <CAADnVQKm+oNX704R8sZrbaHFnmvjC2yBw-UT+T3O4FQ0Rxuavg@mail.gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Fri, 20 Feb 2026 00:14:17 +0000
+X-Gm-Features: AaiRm53rOzSxAXmwTx7CMt0vHzKN6RJK3Xpxc7Jqoapohg67Kmz-gYKSxm5sa0A
+Message-ID: <CANk7y0jPK1oNNsQy8J1uLRaHcakLQvpdx2hze+zhw_5k+0zgTw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/5] bpf: Add KF_FORBID_SLEEP modifier for
+ KF_ACQUIRE kfuncs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
+	Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 19, 2026 at 07:55:33PM +0100, Paul Chaignon wrote:
-> On Thu, Feb 19, 2026 at 10:32:19AM -0800, Eduard Zingerman wrote:
-> > On Wed, 2026-02-18 at 01:06 -0500, Harishankar Vishwanathan wrote:
-> > > On Tue, Feb 17, 2026 at 5:58 PM Eduard Zingerman <eddyz87@gmail.com> wrote:
-> > > [...]
-> > > > > 1. The u64 range and the tnum only overlap in umin.
-> > > > >    u64:  ---[xxxxxx]-----
-> > > > >    tnum: --xx----------x-
-> > > > I think this hunk should be rewritten as follows:
-> > > > 
-> > > >         tnum_next = tnum_step(reg->var_off, reg->umin_value);
-> > > >         tnum_max = reg->var_off.value | reg->var_off.mask;
-> > > >         tnum_min = reg->var_off.value;
-> > > >         if (tnum_next > reg->umax_value) {
-> > > >                 /* The only overlap is umin */
-> > > >                 ___mark_reg_known(reg, tnum_min);
-> > > >         } else if (tnum_min < reg->umin_value && tnum_next == tnum_max) {
-> > > >                 /* The only overlap is tmax */
-> > > >                 ___mark_reg_known(reg, tnum_next);
-> > > >         } else if (tnum_next <= reg->umax_value &&
-> > > >                    tnum_step(reg->var_off, tnum_next) > reg->umax_value) {
-> > > >                 ___mark_reg_known(reg, tnum_next);
+On Thu, Feb 19, 2026 at 3:24=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Feb 18, 2026 at 10:26=E2=80=AFAM Puranjay Mohan <puranjay@kernel.=
+org> wrote:
+> > @@ -20054,6 +20086,9 @@ static bool refsafe(struct bpf_verifier_state *=
+old, struct bpf_verifier_state *c
+> >         if (old->active_rcu_locks !=3D cur->active_rcu_locks)
+> >                 return false;
+> >
+> > +       if (old->forbid_sleep_count !=3D cur->forbid_sleep_count)
+> > +               return false;
+> > +
+> >         if (!check_ids(old->active_irq_id, cur->active_irq_id, idmap))
+> >                 return false;
+> >
+> > @@ -20067,6 +20102,9 @@ static bool refsafe(struct bpf_verifier_state *=
+old, struct bpf_verifier_state *c
+> >                         return false;
+> >                 switch (old->refs[i].type) {
+> >                 case REF_TYPE_PTR:
+> > +                       if (old->refs[i].forbid_sleep !=3D cur->refs[i]=
+.forbid_sleep)
+> > +                               return false;
+> > +                       break;
+>
+> I don't like yet another special case.
+> We already have active_locks, active_rcu_locks, etc.
+> All that is way too specific. Let's figure out a generic way
+> or piggy back on existing active*, since all of them already prevent slee=
+ping:
+> static inline bool in_sleepable_context(struct bpf_verifier_env *env)
+> {
+>         return !env->cur_state->active_rcu_locks &&
+>                !env->cur_state->active_preempt_locks &&
+>                !env->cur_state->active_locks &&
+>                !env->cur_state->active_irq_id &&
+>                in_sleepable(env);
+> }
 
-Actually, that last condition is not enough. In the original patch we
-also would check that umin is not part of the tnum. That's needed for
-example if we have R3=(u64=[0; 1], var_off=unknown) (a case possible
-because __update_reg_bounds is the first refinement step in
-reg_bounds_sync). With those values, we would match the third condition
-and set R3=1.
-
-Checking that tmin < reg->umin_value in the third condition would also
-not work. For example R3=(u64=[0xffff; 0x10000], var_off=(0; 0x1ffff))
-would be incorrectly simplified to R3=0x10000 because tmin=0,
-umin=0xffff.
-
-What we really want is to check that umin is not already part of the
-tnum, as in the original patch. I think we can however improve
-readability as you did. Here's what I have in mind:
-
-    tnum_next = tnum_step(reg->var_off, reg->umin_value);
-    umin_in_tnum = (reg->umin_value & ~reg->var_off.mask) == reg->var_off.value;
-    tmax = reg->var_off.value | reg->var_off.mask;
-    if (tnum_next > reg->umax_value) {
-        /* The u64 range and the tnum only overlap in umin.
-         * u64:  ---[xxxxxx]-----
-         * tnum: --xx----------x-
-         */
-        ___mark_reg_known(reg, reg->umin_value);
-    } else if (!umin_in_tnum && tnum_next == tmax) {
-        /* The u64 range and the tnum only overlap in the maximum value
-         * represented by the tnum, called tmax.
-         * u64:  ---[xxxxxx]-----
-         * tnum: xx-----x--------
-         */
-        ___mark_reg_known(reg, tmax);
-    } else if (!umin_in_tnum && tnum_next <= reg->umax_value &&
-       tnum_step(reg->var_off, tnum_next) > reg->umax_value) {
-        /* The u64 range and the tnum only overlap once in between umin
-         * (excluded) and umax.
-         * u64:  ---[xxxxxx]-----
-         * tnum: xx----x-------x-
-         */
-        ___mark_reg_known(reg, tnum_next);
-    }
-
-Wdyt?
-
-[...]
-
+I thought about this and looked at how each of these are used. Each of
+these carry semantics beyond sleep prevention, so they can't simply be
+consolidated or reused. But forbid_sleep_count is not strictly needed
+as we can just loop over every reference in the refs array and see if
+any reference has the nosleep flag set, but this would mean iterating
+the list every time. I tried using one of these already existing
+active* but it would add more complexity.
