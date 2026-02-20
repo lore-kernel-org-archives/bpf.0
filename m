@@ -1,130 +1,102 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC63A13FEE
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 00:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FA3914B08A;
+	Fri, 20 Feb 2026 00:38:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771547778; cv=none; b=Pp+BEOPldhUb+uqVD0U1MtuoBvcqkBha6DIxM+EGDiMm7BqhBkL9XpBCRTtTVxXkneGY8LD+fPb2sR3Y+bj7KLnuYR3NC226hMa9MZ2q/Dm6NiG+LqsT0S7De07XpkuJN2YFqDsfGuIWUbIFrBu3xH2P9vyUmp0OfU+dhb86nHA=
+	t=1771547923; cv=none; b=jvPlUE3RNLUJOhnfohvuSV4nlujsTvH93KvzL2faLNJtmFJVBc3Uhl+hP/uZ8qnb6M4ZJxBrTQEzoElf8LIeS9LofUV/55qttiYen0NffV7QSDk1x68DjRLZfip2Qore3yu0Qxho3XUMOxEw+02LPwyHfrQAMANQs3zG0yHslEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771547778; c=relaxed/simple;
-	bh=A0MAPiQYVDMW3RhATshGKPJHmNGNM19hc3gYKN9JAWE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RpYzFY5TVw79wDOhRRowc/h3cpXeedDJCC/s4Qp5wnBXImlT/E4cl8LLsXzN8L9rawULMhJYvo/k7whabchTj0e2O0hu4bayrkTPkH0v9NLb6VVehy8y0+arZH57CMea2RPpqGTVN2m4CLWbWkmSDVflE250Iam26c0E77WkPIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZqhZ14Rj; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771547923; c=relaxed/simple;
+	bh=vlTenuIT5SSnNn15C84tA21ttMtcfFEsbxxqa059xCA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=KPen3sozRo79TvetFeURi89bISmXfdWW6ciQ2WpnV3eqkuiGEU8Wxcn3+y185zMfwXiU6iFho4w+Ul1HX71ucOnabWZYiJMRs0EN++K3yAksVSLaAONIRE9o5hK+hmyQWRd0QCh93Hwt19CpXQhggGR7wyodL4d+Cagela0/PxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d9hUZAP0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZqhZ14Rj"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3562e858da5so674104a91.2
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 16:36:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771547777; x=1772152577; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YkGvPx+K90ehvO/fjwy2/54thuEFALpI2jco2nWtLIk=;
-        b=ZqhZ14RjdZN4LYaZwi1Fkz7t/0fErAAsu1LKpLWhOe89jH2FpLdIQC9d64cN5ZFhut
-         4ScPfeJmBPuCTtCZBL4wtuUDLUHWHc5WIIfOYVpc48ZkhLwWsXHinhhyBxFyYCCC3U3G
-         Yw0scwHXQuVj6KThk+D20Qo7BLaAOcTvpLDUMnzR3pQva+/nfdwaC+tfIKUahwJS5dtE
-         FQQyBb5vnyoxHufY7s+kplKE6Ls9vmmvg2s9BJwWQ2HkM+mbnEM0KTiOg17IuYZi/KLh
-         0iHyTdlo08/mbUpFRIx41f8UNA2S8OhP91h5/ys6rmzAt+KqOj87Jj21BVKTbFWYDZ/l
-         96lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771547777; x=1772152577;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YkGvPx+K90ehvO/fjwy2/54thuEFALpI2jco2nWtLIk=;
-        b=BZX7Nr0j6x3LtIh5ZFsqlrToBHxCrzm3PYIt0PHPqwZIS+JNnAnazWzlzjaz7FpOPB
-         CHRQifAs4IpqUkdsQPYQE0aGvZUX6NQ2PBbWyOaif8DsPXyVMzKm5gcW9XeIEG0ytqS2
-         s5c3Pg8alL02SAafNvyZrJYYA+IwQ9oDRxOsSDYo+ZMHhtDNAM/HxAEZ+7lGjbpev5E2
-         k7OlpidvLIueQgh2w/tUOw9bq7eBfo7ZcyGKQY2Op6AZSpwI6JrLECZd3daji+PX7FOo
-         GtfGi/HEYd2hx46PndbDPFWpvM/g+5p1GmbXdMqoUe22K5A/kejIGYVZEQXJqeVjy1YL
-         Ms5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV2NmGhTbd+AaxosNKBRO4rdnxdqll1YID7YzDuLZnlhuMIG2/28AKhzwUz7mES3C3acP4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywh319yv4WTZHFR9FP/LQErkcYgJTt5VFwOKPwVjDcMSLcNOdRB
-	7bT0ooBdYVEz7STtUNNc/MT1QPcV528Yv7uBRtlUteC9RmQOqClj4/Vz
-X-Gm-Gg: AZuq6aJ+UlGADrhR5MDdSMQZZebTHNQg6urN4XXnhqm3/eVZ7gl02EDd9SR+42U4KyB
-	oty2rAMNGbq7w0jL6wOS7EsFZMLCQqMP0Dkm99j7mKqrxk+JJY6rHGwokvD/2QX/UMmmGAJEruK
-	t/iKeAAIBhHI0R/f1MChkPT8UHt9kmxhBHNEgKWRjMU7/xupxu5p8TEUDSSq7ktTCXNXOusUpJQ
-	bSEMn4qj9noBjgAiEKWeTylCibo6oSdoPEB0tVElOYbj5nxmhcjsatNt+wGxBDxY9bk5CrmPvGM
-	czvg2tYnnq4U7mpV9kRebaBiWRKe53s+hfs6rxPRyQV867Z0MM3MwbN9uaafgxhlTYknGJKN2Gd
-	jmaEegp2d8fHRsMzmLEzrUatdOD65gDL41+Qt2pzmp/RQ6RY9R9SB2leHNjQbfMo4wctd/IN0ma
-	kHhVEEWWqK1+Gllzgs0cQaQ/6niMkiq9ct7zY3WrRyXnjKxThTV7w=
-X-Received: by 2002:a17:90b:58ce:b0:33b:b078:d6d3 with SMTP id 98e67ed59e1d1-35844f85caamr18409475a91.23.1771547776985;
-        Thu, 19 Feb 2026 16:36:16 -0800 (PST)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3589d8c622dsm1154743a91.11.2026.02.19.16.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Feb 2026 16:36:16 -0800 (PST)
-Message-ID: <ba46ee9253091fd8c83ae5c5a96b85615306a93d.camel@gmail.com>
-Subject: Re: [PATCH bpf v2 15/15] selftests/bpf: Don't override SIGSEGV
- handler with ASAN
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Ihor Solodrai	
- <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko	 <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jiri
- Olsa	 <olsajiri@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>, Alexis
- =?ISO-8859-1?Q?Lothor=E9?=	 <alexis.lothore@bootlin.com>
-Cc: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel-team@meta.com
-Date: Thu, 19 Feb 2026 16:36:13 -0800
-In-Reply-To: <a017dd5b-eb7e-4724-8f8a-cb6a6c970118@gmail.com>
-References: <20260218003041.1156774-1-ihor.solodrai@linux.dev>
-	 <20260218003041.1156774-16-ihor.solodrai@linux.dev>
-	 <a017dd5b-eb7e-4724-8f8a-cb6a6c970118@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9hUZAP0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C484C4CEF7;
+	Fri, 20 Feb 2026 00:38:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771547923;
+	bh=vlTenuIT5SSnNn15C84tA21ttMtcfFEsbxxqa059xCA=;
+	h=From:Subject:Date:To:Cc:From;
+	b=d9hUZAP0kyh390LlYpk/oCoF9m2QeXQq4k1vJ2pAASus6W2o7EgHzYXcUG3JAcU06
+	 tkHFMtiHCU73+SLGycVU7eAsCUSfw6zgCDguf9TYAfpgSA1TDp6kkFt41fOFzbYEwq
+	 eQvab0+AILt1xYYdtC2geQhS07m9eTBICpPI4Gr3nwSJk4PvGMGJEvJWtu4FHDqtBK
+	 kz7KWj76iHZKfzB6NgxKzO6KbC3axdT+/HKtX1UdDO82O0TNcrdINBwtl2sj982/BO
+	 RaxWnNGBFCuMopAsZ+j0u+uomGPSREhwDRV3aNOdK0yWiYqRnznKME7PLSwFMlCqmX
+	 7x7MvvXZjHYgg==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/4] bpf: add a few hooks for sandboxing
+Date: Fri, 20 Feb 2026 01:38:28 +0100
+Message-Id: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAStl2kC/yWNQQ7CIBBFr9LMWsxAWgJexbgY6GDRSBuo2qTp3
+ aV1NXk//79ZoXCOXODSrJD5E0scUwV5asAPlO4sYl8ZFCqNSlrxHfNTuCmIRC8uE3kWrtPWBup
+ Vhwx1OGUOcTmk19ufy9s92M+7aW84KnWWKflhjw4dL/MZZWeUNtJJ1qae1vamNUGSZoXI9Zkm8
+ uhh2345N4WHugAAAA==
+X-Change-ID: 20260219-work-bpf-namespace-b5699fad250e
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>
+Cc: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+ Lennart Poettering <lennart@poettering.net>, 
+ Christian Brauner <brauner@kernel.org>
+X-Mailer: b4 0.15-dev-47773
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1896; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=vlTenuIT5SSnNn15C84tA21ttMtcfFEsbxxqa059xCA=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWROX8uvsvaq7QmJxSaTfrI/Wlb34LJ5j5Xx253JqTO1U
+ yrYYwovdpSyMIhxMciKKbI4tJuEyy3nqdhslKkBM4eVCWQIAxenAEykfyEjw0cBpivNvtHhD1fe
+ 2z+jwrlcu1IqxHXuXKVj4fsqOsWi8hn+Rx1frBC/giurU9aP83+h0dLvroXL+F6xNZbxpS8t4ZX
+ gBwA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-On Wed, 2026-02-18 at 15:12 +0000, Mykyta Yatsenko wrote:
-> On 2/18/26 00:30, Ihor Solodrai wrote:
-> > test_progs has custom SIGSEGV handler, which interferes with the
-> > address sanitizer [1]. Add an #ifndef to avoid this.
-> >=20
-> > [1] https://lore.kernel.org/bpf/73d832948b01dbc0ebc60d85574bdf8537f3a81=
-0.camel@gmail.com/
-> >=20
-> > Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> > ---
-> > =C2=A0 tools/testing/selftests/bpf/test_progs.c | 8 +++++---
-> > =C2=A0 1 file changed, 5 insertions(+), 3 deletions(-)
-> >=20
-> > diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/s=
-elftests/bpf/test_progs.c
-> > index 02a85dda30e6..b533cede933d 100644
-> > --- a/tools/testing/selftests/bpf/test_progs.c
-> > +++ b/tools/testing/selftests/bpf/test_progs.c
-> > @@ -1944,13 +1944,15 @@ int main(int argc, char **argv)
-> > =C2=A0=C2=A0		.parser =3D parse_arg,
-> > =C2=A0=C2=A0		.doc =3D argp_program_doc,
-> > =C2=A0=C2=A0	};
-> > +	int err, i;
-> > +
-> > +#ifndef __SANITIZE_ADDRESS__
-> > =C2=A0=C2=A0	struct sigaction sigact =3D {
-> > =C2=A0=C2=A0		.sa_handler =3D crash_handler,
-> > =C2=A0=C2=A0		.sa_flags =3D SA_RESETHAND,
-> > -		};
-> > -	int err, i;
-> > -
-> > +	};
-> > =C2=A0=C2=A0	sigaction(SIGSEGV, &sigact, NULL);
-> > +#endif
-> > =C2=A0=20
-> > =C2=A0=C2=A0	env.stdout_saved =3D stdout;
-> > =C2=A0=C2=A0	env.stderr_saved =3D stderr;
-> I think this is reasonable for the use case. We may try dumping logs
-> in |__asan_on_error(), if that proves useful.
-> Acked-by: Mykyta Yatsenko <yatsenko@meta.com>|
+Hey,
 
-Agree with Mykyta, crash_handler() can be split in two parts and
-__asan_on_error() can be defined, calling the part doing
-dump_test_log().
+I'm in the process of adding "universal truths" bpf lsm programs to
+systemd that implement and enforce core system assumptions.
+
+One aspect of this will be advanced namespace management so we can have
+things like systemd-nsresourced tightly manage namespaces it allocates
+and implement advanced access policies for them. We already do parts of
+that but it's rather limited and relies on some workarounds as well
+because we don't have the infrastructure for it. We also currently need
+to rely on ugly workarounds such as attaching to very arcane tracing
+hooks to be notified when namespaces go away.
+
+The second aspect is managing cgroup attaches. This is a core feature
+that has been demanded for a long time in systemd. We want to be able to
+ensure that some services cannot ever escape their cgroups.
+
+The new hooks are available to bpf lsm programs. Selftests included.
+
+Signed-off-by: Christian Brauner <brauner@kernel.org>
+---
+Christian Brauner (4):
+      ns: add bpf hooks
+      cgroup: add bpf hook for attach
+      selftests/bpf: add ns hook selftest
+      selftests/bpf: add cgroup attach selftests
+
+ include/linux/bpf_lsm.h                            |  36 ++
+ kernel/bpf/bpf_lsm.c                               |  37 +++
+ kernel/cgroup/cgroup.c                             |  18 +-
+ kernel/nscommon.c                                  |   9 +-
+ kernel/nsproxy.c                                   |   7 +
+ .../selftests/bpf/prog_tests/cgroup_attach.c       | 362 +++++++++++++++++++++
+ .../testing/selftests/bpf/prog_tests/ns_sandbox.c  |  99 ++++++
+ .../selftests/bpf/progs/test_cgroup_attach.c       |  85 +++++
+ .../testing/selftests/bpf/progs/test_ns_sandbox.c  |  91 ++++++
+ 9 files changed, 736 insertions(+), 8 deletions(-)
+---
+base-commit: 01582681b1e6881b49d848f1a6e200eace6aac0c
+change-id: 20260219-work-bpf-namespace-b5699fad250e
+
