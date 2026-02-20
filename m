@@ -1,32 +1,32 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E88E3128CF
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F226C315D35
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:27:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771626426; cv=none; b=qoNgvspWqS/DWioTodsTZPNtMe2ddJUY3Vwe1ZGws1vqiqpXxnqlElJM2xJ4QpUfVB+NHV5/HX4Mt2gIM2CL11BjtAumwyovDOx4YLaArZ+McVzpBs6SBlcG/9AOmv6RglX6x8fUQD9xV6l4IhjLSCWXo9t24Kwu2cuJdHELEYM=
+	t=1771626429; cv=none; b=TXIuFxlx2o2gyrdN5g/lMDGhbFOidtC8SPOscQ5OsjIRxRi5ZwKmgYWtEMl0zn7YvgWtPPWllED6vaKDQ7xP4exeDonmJKvbAiDdvo3kzc4izUjZUvS878dygYgLPbi/+11mIp/NVvo/Os0vyFAm6xd21rt7IXUAY1vkK9VadsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771626426; c=relaxed/simple;
-	bh=nkZ7EIP6LGyWvfc3u9kgQem5wfwCiKQ9vXWuzdwQiws=;
+	s=arc-20240116; t=1771626429; c=relaxed/simple;
+	bh=OhwXEJpa4nTUiXqwkxQqB+DAIjkR6dlqqn333NLbtts=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bLFU+QLK9qihNYAH8eT56lK15xbx/mkUGkowE/akunaK78xkG8U9jBH+Re1ZuPKjf4JDmcivslNZVCRSWe2HAFNrmiT6+JrtMEYo/NCW83ztrTgMjLyKe70wRj6NyfklG4w7mpIeqGxyH7ZgW9OR0kmNt4aigpyHytg/3kitZgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Zy8r8Fr/; arc=none smtp.client-ip=91.218.175.170
+	 MIME-Version; b=DyREka1Udj/jNlfTblrEBON9aevnYeh6neTzuxfsGvOVl5FWhhSu2VphrwU0dQMtlch/k23wmwKPaQ6ZHOV/md1TbtHrOWj3i2kGogQLo1RABrvaUD7A0J8L2/fjrllWWSDUsuG9xNCZr4Cx1fi8K39oJnHsVpcDVaELEX9Vt7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fiK2MRSP; arc=none smtp.client-ip=91.218.175.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Zy8r8Fr/"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fiK2MRSP"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771626422;
+	t=1771626425;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=TNjpWtD8/OLKVZY+IfnvHA3Q+we+RTPqutZ3CXBQMnM=;
-	b=Zy8r8Fr/OheLcEexl8oMSib2Ps19aLxcXXYvonER6PcIjQM5pnngzGqiLqYGWxR/f7ocZU
-	pmRPfymoPR5+/JQTwa+bwTgT7pW4y7v1MZU79s2lR0qQmzRZc+cFSLoG7k5dldu1UeSCQO
-	sraSP58KreE9Fs7hb7haX9mYW67AI/w=
+	bh=TB4ypzf99oYRqj7vX8THS7uO7MYjSRJ+wJRwvR9VB+Y=;
+	b=fiK2MRSPi+zwV0GbEV9J4DzJTk4eSYaeJlZjimSby7F5L4Spp3zOdAi/X6eszkjctYaMLa
+	aTZ586Tey6Nj49XxqxKPnXWlS4/maFHglYMQ0g2C7TVoqrgizWhFIM8XMu6Dz3OyajUbsV
+	LEq+X3NG/w3dQW2O+4gzZjWB0xfyt3Y=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v3 12/15] selftests/bpf: Fix array bounds warning in jit_disasm_helpers
-Date: Fri, 20 Feb 2026 14:26:01 -0800
-Message-ID: <20260220222604.1155148-13-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v3 13/15] selftests/bpf: Fix out-of-bounds array access bugs reported by ASAN
+Date: Fri, 20 Feb 2026 14:26:02 -0800
+Message-ID: <20260220222604.1155148-14-ihor.solodrai@linux.dev>
 In-Reply-To: <20260220222604.1155148-1-ihor.solodrai@linux.dev>
 References: <20260220222604.1155148-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -53,46 +53,66 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Compiler cannot infer upper bound for labels.cnt and warns about
-potential buffer overflow in snprintf. Add an explicit bounds
-check (... && i < MAX_LOCAL_LABELS) in the loop condition to fix the
-warning.
+- kmem_cache_iter: remove unnecessary debug output
+- lwt_seg6local: change the type of foobar to char[]
+  - the sizeof(foobar) returned the pointer size and not a string
+    length as intended
+- verifier_log: increase prog_name buffer size in verif_log_subtest()
+  - compiler has a conservative estimate of fixed_log_sz value, making
+    ASAN complain on snprint() call
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../testing/selftests/bpf/jit_disasm_helpers.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c | 7 ++-----
+ tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c   | 2 +-
+ tools/testing/selftests/bpf/prog_tests/verifier_log.c    | 2 +-
+ 3 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
-index febd6b12e372..364c557c5115 100644
---- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
-+++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
-@@ -122,15 +122,15 @@ static int disasm_one_func(FILE *text_out, uint8_t *image, __u32 len)
- 		pc += cnt;
- 	}
- 	qsort(labels.pcs, labels.cnt, sizeof(*labels.pcs), cmp_u32);
--	for (i = 0; i < labels.cnt; ++i)
--		/* gcc is unable to infer upper bound for labels.cnt and assumes
--		 * it to be U32_MAX. U32_MAX takes 10 decimal digits.
--		 * snprintf below prints into labels.names[*],
--		 * which has space only for two digits and a letter.
--		 * To avoid truncation warning use (i % MAX_LOCAL_LABELS),
--		 * which informs gcc about printed value upper bound.
--		 */
--		snprintf(labels.names[i], sizeof(labels.names[i]), "L%d", i % MAX_LOCAL_LABELS);
-+	/* gcc is unable to infer upper bound for labels.cnt and
-+	 * assumes it to be U32_MAX. U32_MAX takes 10 decimal digits.
-+	 * snprintf below prints into labels.names[*], which has space
-+	 * only for two digits and a letter.  To avoid truncation
-+	 * warning use (i < MAX_LOCAL_LABELS), which informs gcc about
-+	 * printed value upper bound.
-+	 */
-+	for (i = 0; i < labels.cnt && i < MAX_LOCAL_LABELS; ++i)
-+		snprintf(labels.names[i], sizeof(labels.names[i]), "L%d", i);
+diff --git a/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c b/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
+index 6e35e13c2022..399fe9103f83 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
+@@ -104,11 +104,8 @@ void test_kmem_cache_iter(void)
+ 	if (!ASSERT_GE(iter_fd, 0, "iter_create"))
+ 		goto destroy;
  
- 	/* now print with labels */
- 	labels.print_phase = true;
+-	memset(buf, 0, sizeof(buf));
+-	while (read(iter_fd, buf, sizeof(buf)) > 0) {
+-		/* Read out all contents */
+-		printf("%s", buf);
+-	}
++	while (read(iter_fd, buf, sizeof(buf)) > 0)
++		; /* Read out all contents */
+ 
+ 	/* Next reads should return 0 */
+ 	ASSERT_EQ(read(iter_fd, buf, sizeof(buf)), 0, "read");
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c b/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c
+index 3bc730b7c7fa..1b25d5c5f8fb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c
+@@ -117,7 +117,7 @@ void test_lwt_seg6local(void)
+ 	const char *ns1 = NETNS_BASE "1";
+ 	const char *ns6 = NETNS_BASE "6";
+ 	struct nstoken *nstoken = NULL;
+-	const char *foobar = "foobar";
++	const char foobar[] = "foobar";
+ 	ssize_t bytes;
+ 	int sfd, cfd;
+ 	char buf[7];
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+index 8337c6bc5b95..aaa2854974c0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+@@ -47,7 +47,7 @@ static int load_prog(struct bpf_prog_load_opts *opts, bool expect_load_error)
+ static void verif_log_subtest(const char *name, bool expect_load_error, int log_level)
+ {
+ 	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+-	char *exp_log, prog_name[16], op_name[32];
++	char *exp_log, prog_name[24], op_name[32];
+ 	struct test_log_buf *skel;
+ 	struct bpf_program *prog;
+ 	size_t fixed_log_sz;
 -- 
 2.53.0
 
