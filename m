@@ -1,72 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3521F8AC5;
-	Fri, 20 Feb 2026 15:16:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D678130AAB3
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 15:34:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771600575; cv=none; b=bNfA3lnGpkZ1MaFdgY5JWkbM5OZI9TuZfCH9gZOdkreytpYb73C1tKCvYTZS+7tn7cnEu4DvAOkQcCE9ly+Is3y4kw+PW2Ny70J9qBWziD4ALkn8PRdg578rkW14kvogCr4Un90l99/WYRBAW4OkNxOEegeA3+egbSPi4HhqP5o=
+	t=1771601694; cv=none; b=F+T5hlQmU33rs79xPg53LaRXJtslZNfAvz6XVGaJNtar1CtMm6+9CirIi91ZquA1o2AZ1P3o9PAL9IdWgQd58vruNYjUPSpAoTMGSlc2hPpqyFoCBPYETJ+3xHXeMG+uQlV08TF9L6mp7lA0+XibrUo+cQHepl0SZB9ptdVpTkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771600575; c=relaxed/simple;
-	bh=oJZ5mIZ3ij+o3W18OBkwZ5UnpiFkSZVFTsT01xsl0to=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dYkGS2xdlCfKKUO6KKLn4YKvoTsMSixQ3OV54s809H3QI3hHgzpimkOiwMKKm9T0V8VyBtW4wJvIKo/FkoZe/uSpjfVjfTi/H6zdBXygR6vMOiHvDfSdkDb8bnPOjstlgsgwfrr9OM9DoNQ8ZZSOgdfHzBBDoCeem+M8cXmtoZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ngyze6Dx; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771601694; c=relaxed/simple;
+	bh=pI1O8R9NQmElqnZf7f9jqAr1JKxcuC8TjAmVVLVErWE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Jx6sAL0T0btwGvu7Cnfok8uycgrN0kSVx7avrvt7s+5SGqH2ALJJf3Rh2hHsBLsfAQVTT3s7L2QNBTV7U2Ft4m6HePHff1w15Co1sUvm1p6XAV0QJrNmUkRBwd/gWnkVCa4VravFOrqeRL3L4RLQrqFKZ3L5Dqw6FUCf+QgxU0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pq1jHNkx; arc=none smtp.client-ip=95.215.58.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ngyze6Dx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73915C116C6;
-	Fri, 20 Feb 2026 15:16:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771600574;
-	bh=oJZ5mIZ3ij+o3W18OBkwZ5UnpiFkSZVFTsT01xsl0to=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Ngyze6Dxy3vg+Zm+5uszt9yY4cI2qmN5WCKD9pctPfF3+S4X9NW/CtMsr64KtJZvC
-	 zyuiWJeFZ8mz94+2BYnvUFNEklpAp1hmoM/4HVo2Q/LqwJCqQZBzTkrr1JvgEeH7M/
-	 GqjFk0pGtIJNy0yXPFpwWXRSePQG12JwLIB3SktQFnui0cGxVc9eRkjKaEvTvI24SW
-	 nIcvmGS/X8d8295PxHBgzArP30Nry01Y/krJMKjDF3MDaBVByRw9mqdCUrpj4xUqtk
-	 XY8zBLfF1pHNZFJJTP1hEviYPhNB/RgMkPUIZmhr6zKIAxDJiS/sL2YLmzZ3H0M0G7
-	 g9+SHAl6MDf5w==
-Date: Fri, 20 Feb 2026 05:16:13 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	Lennart Poettering <lennart@poettering.net>
-Subject: Re: [PATCH 2/4] cgroup: add bpf hook for attach
-Message-ID: <aZh6vebjDcrccqNP@slm.duckdns.org>
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
- <20260220-work-bpf-namespace-v1-2-866207db7b83@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pq1jHNkx"
+Message-ID: <e617cdaa-049a-453b-8f52-1966d350f907@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771601679;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z943trj5fRXyCPYj1ZkF6pjisLAiil83x3fUBjHtWMM=;
+	b=pq1jHNkxADK2dq95ZhyKT83WWsDHhuAU9Tk7GgkqH3T9xhFYuhT/xltBiGx4vnSB6psZG9
+	mIcOrCU5w+8U9+VIJBy/0AT2mJIzS9OqpoZ7YzjSqS+5FgjD7J4hZ7u7S2FD6sYgP4+qEX
+	ir5KmvMrEex2xcOtCALbiOVA35HY59Q=
+Date: Fri, 20 Feb 2026 23:34:22 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220-work-bpf-namespace-v1-2-866207db7b83@kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Introduce 64-bit bitops kfuncs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
+ Xu Kuohai <xukuohai@huaweicloud.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ X86 ML <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>,
+ Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>,
+ linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ kernel-patches-bot@fb.com
+References: <20260219142933.13904-1-leon.hwang@linux.dev>
+ <20260219142933.13904-2-leon.hwang@linux.dev>
+ <CAADnVQK=5Gb3w_QG4Vq32EfvpqAK_DPwCHtzzt7DzRkJ5_h6JQ@mail.gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAADnVQK=5Gb3w_QG4Vq32EfvpqAK_DPwCHtzzt7DzRkJ5_h6JQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello,
 
-On Fri, Feb 20, 2026 at 01:38:30AM +0100, Christian Brauner wrote:
-> Add a hook to manage attaching tasks to cgroup. I'm in the process of
-> adding various "universal truth" bpf programs to systemd that will make
-> use of this.
+
+On 2026/2/20 01:50, Alexei Starovoitov wrote:
+> On Thu, Feb 19, 2026 at 6:30 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>>
+>> +static bool bpf_kfunc_is_fastcall(struct bpf_verifier_env *env, u32 func_id, u32 flags)
+>> +{
+>> +       if (!(flags & KF_FASTCALL))
+>> +               return false;
+>> +
+>> +       if (!env->prog->jit_requested)
+>> +               return true;
+>> +
+>> +       if (func_id == special_kfunc_list[KF_bpf_clz64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_clz64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_ctz64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_ctz64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_ffs64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_ffs64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_fls64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_fls64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_bitrev64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_bitrev64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_popcnt64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_popcnt64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_rol64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_rol64);
+>> +       if (func_id == special_kfunc_list[KF_bpf_ror64])
+>> +               return bpf_jit_inlines_kfunc_call(bpf_ror64);
 > 
-> This has been a long-standing request (cf. [1] and [2]). It will allow us to
-> enforce cgroup migrations and ensure that services can never escape their
-> cgroups. This is just one of many use-cases.
+> This is too ugly. Find a way to do it differently.
 
-From cgroup POV, this looks fine to me but I'm curious whether something
-dumber would also work. With CLONE_INTO_CGROUP, cgroup migration isn't
-necessary at all. Would something dumber like a mount option disabling
-cgroup migrations completely work too or would that be too restrictive?
+Agreed.
 
-Thanks.
+I'd like to introduce a new flag KF_JIT_MAY_INLINE to indicate the kfunc
+will be inlined by JIT backends if possible. As for those kfuncs w/
+KF_FASTCALL w/o KF_JIT_MAY_INLINE, they are fastcall always.
 
--- 
-tejun
+Thanks,
+Leon
+
