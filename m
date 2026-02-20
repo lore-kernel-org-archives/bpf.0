@@ -1,68 +1,72 @@
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576013064A0
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:44:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 893D93115B1
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:44:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771627448; cv=none; b=Zj24t46RqthQCM1CrQcifU3hNb/2kBN4dOIgLZmovIblB+kgNAhN0bVeUP9zahMGKETCQaKmO6v2ZM3CX+7E8m4PC51Zb04wYNibqyA5Ev2zYL+eUHmRRmKhT7/z03GIEK/wHlb7GirfqiRS0R1mGhpvQvVxwqFcULD5z7FXUmY=
+	t=1771627449; cv=none; b=pnpbL+24kjpEN9Tqpr4a19q1OT20ekdf30kPbBeZiDRvUhEyTnsIUFo4yqdnqo3VG6fk/lvVYERMogiLGlUtM8t2is3e0a4yYjMYHGD3FpAVEIgveP0mp2MO9n44yZk0aLR+OyHikt8Jb0a6+75+jaaYQoLnTpJvki+GWtqTRnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771627448; c=relaxed/simple;
-	bh=S1E0087t99p95WNwjQXspddV7lztKT5zMRb1wyj71js=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=pYDSG8qIE/VIRuXfo/737x8OJ2R7Aj21iELsNY0dbPeDoMMNZsXMV5qZ/5vvumV5rdxU6SKdEyR+XTEnvn9bD6ea49UoVbqvBGKG2PRPMpZAhdNf9ncCJ9EuAjbxRU/rWgZJlXhHXYcHjDDrxi+6TRAXOhb3234w6Xozog286/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=HkAkjQ/c; arc=none smtp.client-ip=74.125.224.43
+	s=arc-20240116; t=1771627449; c=relaxed/simple;
+	bh=hMR9IAQwhkGqCy1oREp82WSjMX5ExMyDjl9mLlBO0aU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gwMMiBU/T3ZQjAqOe2mazFFDu/rypbu7AormVT9n1gkDTFE6phhIZwLXzCaVBXOv3EqobzIWNvhO99bedZ8fWt8E06OHfUc5vOlWq2BEwkvboEfgVu5codn7oCLPlC8I9Az9xA3ejFN8CooeuYFOui5Wp/N0E2QNvwCnaS9r2jY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=F3QTFqb6; arc=none smtp.client-ip=209.85.128.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="HkAkjQ/c"
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-649b5f5570fso3219527d50.0
-        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 14:44:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="F3QTFqb6"
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-794719afcd4so26071657b3.1
+        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 14:44:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1771627446; x=1772232246; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DtKE80gtp9vrGL1FpV8sNa/5aSvK/Go76g+/LxqG4c0=;
-        b=HkAkjQ/cid7vTFltgyZjYLrd2H4ObaZemBvboTjAAdasxJqQpqPG17RyeaJVb9wCnm
-         4qakkj44uWH+uJxa0GIaajYQHmYpdtw9hpZzrupx7+HhdWyuobgf9qxn8XWsUlvpNDGz
-         7SkWeBxbZnQj+CCnbVrCUAVV3/3d0owshJca/SzEXiPfIkN4y6tiDMXShrcb2kRXPP5j
-         C1JxOXUqStiAYyql+19euQJ5E3XBhWCt1YRQgF/yf5IkyCGeqVzhOrc7/YKt9DyVIWnh
-         efG6IW+XwjpDutiDvsjpyskXjRS7H2pmweV/U/fheJkzmjRiAZIBg0ubyNnrm4lXcebG
-         ffQw==
+        d=toxicpanda.com; s=google; t=1771627447; x=1772232247; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jYQ5IAubDMdLPsVFlzdChYlT28VXOg78XPNK14nREYs=;
+        b=F3QTFqb60ztIMlrvc3r91Yy9kioz19XNpb4fuKR4VXRlvg+t48c2WDuT7FJmGLRyDz
+         rVWP1cxumQW1bhGwMpbozHwHS8qUvV4c2PLsMp0FyBDK7K93ArSk5v6eUWMi77HHCA+O
+         wC7urybVqM48H+XsB7sTWMCCnKfcmSLNOUd0nnTqT8wsiSk38Yd4Kz1wUmzeycD9il9C
+         4np1UmPABz3aC/Bx1SwDB45GO01lb4HIX+9GcMo5B91fs1Pgi52LsUNVljTUDRRQWUAG
+         HtOO4cuXRIOXg5gC/soskHgEiG81Fk6eHUQl0DP2VyAQ4sW1MAcjRsOK/iLTUEQg1DBI
+         68PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771627446; x=1772232246;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DtKE80gtp9vrGL1FpV8sNa/5aSvK/Go76g+/LxqG4c0=;
-        b=Mhltb37IiFciinK3Ak8nkWrNvhkxj/nTXzELwIl13mAhCg7ouK3uZYWvHD2+eIYoTE
-         4ayQf2hhqaxwp09wZvwPJnAHkDaCnISsBITd3BkKZ++4i/BX7lJTR/UVNA8klwxLw1vr
-         A0ppl/HI4duK2GN2odeHighU1jNeiN+MpHEkzIKcwqSn+JNN1wKsEwD9fGl0wZdMiLUT
-         qX5iMFqSLzUAtnjLtUDTfPswEHkQMyI/1Lrub4SsgU2j6f3i7rtd5nZ9t3hM4jxxhPPO
-         Og+rV6wNaCHS/5QtQJMPPHxY3XaYfKHjir0C8GspNuBTssisy1XAZwWAdQ/INyohYqzC
-         6rZA==
-X-Gm-Message-State: AOJu0YxFyWQ+tVC3E8dGCFG7RHkgdpVl+9k4B//C46+yZLWYFbchJdLE
-	qyC+fBGCu7cE/2tqvrH8uvrS3jMvG+Txd8+JCJsE9q99vr4ZgbyITt8ljpoVFeHqGLZ8bfhDJiO
-	Lb0GXJlKnszT/
-X-Gm-Gg: AZuq6aIe3099UYzSGWiVKOWpLymH8y2n/0TIsjiL4FtsR3439ENQGe9u24qp9VQ5SII
-	8Qc+KxakemmfbRbf/Y3E1LwSPmZo+9wZlnpq5e4ggkx7As+os8HVrfroPP/wkSnfTCtqGzT6Oau
-	lKvVWoDOG02ZY8WVDycE163xki7luaFAE1dcEspdUJlBTDQTGDHMx7alATc+9V4L8e2EEnyz/nL
-	jxzC0PO2EJAHZd2tZduw1ouoyzaAyJvCT2KPdEvNfx9gohjnXKzjk+s0BgmkZL2Zw0721G8BWsu
-	AgNynJEmwIuz9ThwaO7Sjm/4skv9Hyq9vOrT7eN85yGndOrU/wSb+9hVFD+CvYSAHa4VOi0uyKA
-	/TE5/PgyEovn6Jq8FCApSUHPDNhzwk82ebSL7/80JhdZAA1bEb1B+3F4hArbAJafrfMjcWdxAc2
-	LmlWrt7gQw6M1WpgiG+Umr78RDzQ==
-X-Received: by 2002:a05:690e:14c1:b0:649:dc5c:1919 with SMTP id 956f58d0204a3-64c63fe7866mr5241047d50.10.1771627445971;
-        Fri, 20 Feb 2026 14:44:05 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771627447; x=1772232247;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=jYQ5IAubDMdLPsVFlzdChYlT28VXOg78XPNK14nREYs=;
+        b=Oa3zcTDcTY28MEDi+uj8xjCZzg+5ARpM0G9PCRVwzzwX7/C6t+cqD9jXesyqOFtC9s
+         RKUSQQx86lhvpNLHjFiK1N8R6L5VqjIqasyG9dK36mO0YO1tZRsDOy7S5MvKVs2GZVv4
+         2WrDzk/j6j2saeWVIXl1qr5SlB2nLHOGjykCPmp4/VJ0CGxtCCCmoGJrKQOKu69EC774
+         wTT5UzX6ZUE8v6UwbIPxtdvD8jkBwFXNfMdGMYi0mM+vK0Zww6N3D8x4Qauw54ypbnxz
+         fYYPWy+5QDH1g/CtMZMa90XXbmRSSQzXAyIXdQwyFcgh6rCm6WYwQC04xBOaL3j0C1FK
+         dE9Q==
+X-Gm-Message-State: AOJu0Yzr6YxGnz1qd36l0VNpoeT+c8Nh5r0kG9XReWZIO3oSSY3AMho1
+	1/OnjmaiJw83uUV+HPOiNZLGKykieYycFfX282qnaMFJyxEpvQDewkZ8ycLiKK9CBCGZ1vQgOiA
+	Xnxtr/I0fplrP
+X-Gm-Gg: AZuq6aLJanPHNRvytoYBtY4FXNp84Gr6Ie1QfwOI7NAKkWdqhMDtOVc+Y0Rd2rz6rxD
+	nOXp32y7TRZtGE2fvV8+IE3eiQtozZTV2Vj+y16c04z7spTgT7AC/zBtcQTcIy4QFA6H1HF1C2k
+	e5yp7QNW7bfRWQFSYycvV+w9sPcg4rfswQ5TqYzaRPTGcfdSYCP4jEymk9K1uI2SMkx9wEUeWjp
+	Jsp7TerM45jlOvTTKg6UAfPDwE7f2dw1r0TTOOynECDTZjquw1r1PI1LMc+jY4IEr911aex6GcG
+	vPtIkblrY0vwOFamsuWigPSWVhjKGg6SS/ZWl+eykcpselAb1g/ZYGIdRPd0hLeRr2oZY++010M
+	eZknwbivUs6h9iEP8f2LJuFAH+Tv2cbg8ftJYYzD9JPPR0pnZNbb9eqwb849Gw/ODZKUd04cqMH
+	wwPuxbS5MuiUsvubaq3IZklcgB4qOJyZQqKxg9
+X-Received: by 2002:a05:690c:60c7:b0:797:d286:2cd with SMTP id 00721157ae682-79828f2777fmr15384777b3.18.1771627447314;
+        Fri, 20 Feb 2026 14:44:07 -0800 (PST)
 Received: from localhost ([2603:6080:7702:ce00:96ef:dc7e:bb84:bc5a])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64c7a252484sm289306d50.4.2026.02.20.14.44.05
-        for <bpf@vger.kernel.org>
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-7982de0fd63sm2251797b3.46.2026.02.20.14.44.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Feb 2026 14:44:05 -0800 (PST)
+        Fri, 20 Feb 2026 14:44:06 -0800 (PST)
 From: Josef Bacik <josef@toxicpanda.com>
 To: bpf@vger.kernel.org
-Subject: [PATCH v4 0/3] libbpf/bpftool: support merging split BTFs
-Date: Fri, 20 Feb 2026 17:43:56 -0500
-Message-ID: <cover.1771625484.git.josef@toxicpanda.com>
+Cc: "Claude Opus 4.6" <noreply@anthropic.com>
+Subject: [PATCH v4 1/3] libbpf: support appending split BTF in btf__add_btf()
+Date: Fri, 20 Feb 2026 17:43:57 -0500
+Message-ID: <c0c2c805042fe889daca6dd43b86ba5e18725021.1771625484.git.josef@toxicpanda.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <cover.1771625484.git.josef@toxicpanda.com>
+References: <cover.1771625484.git.josef@toxicpanda.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -71,55 +75,116 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-v1: https://lore.kernel.org/bpf/cover.1771605821.git.josef@toxicpanda.com/
-v2: https://lore.kernel.org/bpf/cover.1771616227.git.josef@toxicpanda.com/
-v3: https://lore.kernel.org/bpf/cover.1771622266.git.josef@toxicpanda.com/
+btf__add_btf() currently rejects split BTF sources with -ENOTSUP.
+This prevents merging types from multiple kernel module BTFs that
+are all split against the same vmlinux base.
 
-v1->v2:
-- Added a btf__dedup() call to btf__add_btf() to ensure that we don't have
-  duplicate types in the merged BTF.
-v2->v3:
-- AI review got confused about the UAF comment, so the comment was expanded to
-  clarify the UAF potential.
-- Fixed potential clobbering of errno in the error path.
-v3->v4:
-- Fixed a potential silent corruption pointed out by the AI review bot.
+Extend btf__add_btf() to handle split BTF sources by:
 
---- Original email ---
+- Replacing the blanket -ENOTSUP with a validation that src and dst
+  share the same base BTF pointer when both are split.
 
-Hello,
+- Computing src_start_id from the source's base to distinguish base
+  type ID references (which must remain unchanged) from split type
+  IDs (which must be remapped to new positions in the destination).
 
-I'm extending systing to do introspection on vfio devices, which requires having
-the structs I need from the kernel available in userspace. Normally these are
-loadable modules, but in the case of vfio there's multiple structs across
-multiple modules. Normally you'd do the following to generate your vmlinux.h
-with a module
+- Using src_btf->nr_types instead of btf__type_cnt()-1 for the type
+  count, which is correct for both split and non-split sources.
 
-bpftool btf dump file /sys/kernel/btf/<module> format c \
-	--base /sys/kernel/btf/vmlinux > vmlinux.h
+- Pre-emptively calling btf_ensure_modifiable() on the destination's
+  base BTF to prevent a use-after-free: btf_rewrite_str() resolves
+  strings via btf__str_by_offset(src) which may return pointers into
+  the shared base's string data; btf__add_str(dst) then calls
+  btf__find_str(base) which can trigger btf_ensure_modifiable(base),
+  reallocating that string data and invalidating the pointer.
 
-but if you need multiple modules you have to hack together multiple dumps and
-merge them together. This patch series adds support for merging multiple BTF
-sources together, so you can do
+For non-split sources the behavior is identical: src_start_id is 1,
+the type_id < 1 guard is never true (VOID is already skipped), and
+the remapping formula reduces to the original.
 
-bpftool btf dump file /sys/kernel/btf/<module1> \
-	file /sys/kernel/btf/<module2> format c \
-	--base /sys/kernel/btf/vmlinux > vmlinux.h
+Signed-off-by: Josef Bacik <josef@toxicpanda.com>
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+---
+ tools/lib/bpf/btf.c | 44 ++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 36 insertions(+), 8 deletions(-)
 
-I tested this with my usecase and it works. Thanks,
-
-Josef
-
-Josef Bacik (3):
-  libbpf: support appending split BTF in btf__add_btf()
-  bpftool: support merging multiple module BTFs in btf dump
-  selftests/bpf: add test for btf__add_btf() with split BTF sources
-
- tools/bpf/bpftool/btf.c                       | 135 ++++++++++++++++--
- tools/lib/bpf/btf.c                           |  44 ++++--
- .../selftests/bpf/prog_tests/btf_write.c      |  89 ++++++++++++
- 3 files changed, 247 insertions(+), 21 deletions(-)
-
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 83fe79ffcb8f..654fb9ffa01f 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -2004,24 +2004,47 @@ int btf__add_btf(struct btf *btf, const struct btf *src_btf)
+ {
+ 	struct btf_pipe p = { .src = src_btf, .dst = btf };
+ 	int data_sz, sz, cnt, i, err, old_strs_len;
++	__u32 src_start_id;
+ 	__u32 *off;
+ 	void *t;
+ 
+-	/* appending split BTF isn't supported yet */
+-	if (src_btf->base_btf)
+-		return libbpf_err(-ENOTSUP);
++	/* When appending split BTF, the destination must share the same base
++	 * BTF so that base type ID references remain valid.
++	 */
++	if (src_btf->base_btf &&
++	    src_btf->base_btf != btf->base_btf)
++		return libbpf_err(-EINVAL);
++
++	src_start_id = src_btf->base_btf ? btf__type_cnt(src_btf->base_btf) : 1;
+ 
+ 	/* deconstruct BTF, if necessary, and invalidate raw_data */
+ 	if (btf_ensure_modifiable(btf))
+ 		return libbpf_err(-ENOMEM);
+ 
++	/* If dst has a base BTF, ensure it is modifiable now so that
++	 * btf__str_by_offset() on the base returns pointers from the
++	 * strset copy rather than from raw_data.
++	 *
++	 * Without this, the first btf_rewrite_str() call that encounters
++	 * a base string offset resolves it via btf__str_by_offset(src),
++	 * which for split src returns a pointer into base->raw_data.
++	 * That pointer is then passed to btf__add_str(dst), which calls
++	 * btf__find_str(base) -> btf_ensure_modifiable(base).  The
++	 * first btf_ensure_modifiable() call copies strings into a
++	 * strset but then frees raw_data via btf_invalidate_raw_data(),
++	 * leaving the pointer dangling before strset__find_str() uses
++	 * it.
++	 */
++	if (btf->base_btf && btf_ensure_modifiable(btf->base_btf))
++		return libbpf_err(-ENOMEM);
++
+ 	/* remember original strings section size if we have to roll back
+ 	 * partial strings section changes
+ 	 */
+ 	old_strs_len = btf->hdr->str_len;
+ 
+ 	data_sz = src_btf->hdr->type_len;
+-	cnt = btf__type_cnt(src_btf) - 1;
++	cnt = src_btf->nr_types;
+ 
+ 	/* pre-allocate enough memory for new types */
+ 	t = btf_add_type_mem(btf, data_sz);
+@@ -2074,11 +2097,16 @@ int btf__add_btf(struct btf *btf, const struct btf *src_btf)
+ 			if (!*type_id) /* nothing to do for VOID references */
+ 				continue;
+ 
+-			/* we haven't updated btf's type count yet, so
+-			 * btf->start_id + btf->nr_types - 1 is the type ID offset we should
+-			 * add to all newly added BTF types
++			/* For split BTF sources, type IDs referencing the
++			 * base BTF (< src_start_id) remain unchanged since
++			 * dst shares the same base.  Only remap IDs in the
++			 * split portion.  For non-split sources src_start_id
++			 * is 1 so all IDs are remapped as before.
+ 			 */
+-			*type_id += btf->start_id + btf->nr_types - 1;
++			if (*type_id < src_start_id)
++				continue;
++
++			*type_id += btf->start_id + btf->nr_types - src_start_id;
+ 		}
+ 
+ 		/* go to next type data and type offset index entry */
 -- 
 2.53.0
 
