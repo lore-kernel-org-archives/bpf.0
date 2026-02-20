@@ -1,528 +1,251 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9418B1F4180;
-	Fri, 20 Feb 2026 00:38:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771547934; cv=none; b=gta2CEIjNkrzxDNcP0C30ZV31oU9xFSlUZ1awoifL4DhzO6Yhn/DOfmiJ8fAGC2QS18MZROxzNeAg9OqOgAtfLs8aG1ZuohA8H5A50BHJFwOpYr3YMBQe7bwQImBd1paTBZb9d27ZYT822H9Ww+2FWy6pksZ2f4sT9wcj5XvIQQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771547934; c=relaxed/simple;
-	bh=mQc8EiFwm60GFoFhfzxR1JRaHCQHgCBHuPjqBgX857M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qp4e7wM0dKsVUipypVL/THmxI40T48V3vKCBH8SKgpTbamNTjQBu+e9bXirSwD3pD0SgVj6z8lXgbFnwj2PeZ78e7dZbC7sei5R8PGRyZ+bY990tJCEvi4+xF4IhmsunkxACKXLizOLQVyYDFlhV2H9VDbvMyEyOmTGAveWNm/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gL+2sGWj; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25E455474F
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 00:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.47
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771548730; cv=pass; b=iSTvsGoVI5Q9SMaVaDqVoOVj/pwcln1VaXq5l3sPXsBW13R9SxKSZgeet/pfVw2TE/J/Ns2R6vE8D9P3yHnf7mBGmYkKo6pNmaDBhsNqC4CSFR90hYIsjUy11icMEoKLFhksg52mcNOWAz9pg/XiywXmhFep76iQRwd6MuOEfb4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771548730; c=relaxed/simple;
+	bh=HFULCdGsLGiP7G4bYPVeClIHj1xRjR7NKVjvo5m2Ts8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZHR4dXhQ75eOqEqWGq6+4y+l3xDAYjc5v9i0rj6WSRzGsWrw1xsVbUi5N2H6wKuNjcj6vbYW7lyVMCno4Mh2msMYTQQl+4LwNNM15nJR1X/sfBKQlG49RLTmjXYE4mq1+mHFXRKvbHjMZwSRoa4lQkPjghBEi1/F8yj5C1p7N8o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S2CJE5Pp; arc=pass smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gL+2sGWj"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 064D9C4CEF7;
-	Fri, 20 Feb 2026 00:38:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771547934;
-	bh=mQc8EiFwm60GFoFhfzxR1JRaHCQHgCBHuPjqBgX857M=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=gL+2sGWjZCvJ7vGGBvagZx90u2ZhzAePGvsfep9cOMK7bMd9vSHYwn7OonqenSeKC
-	 67zhpe+gnmZKBfV92Sc4IxCLHJVl4+/ZzAIsQ7+y1R/NxmeoID1btlrHQyFhguou23
-	 AifF4yXZHf/sD9CvjfI0YrM/AkMWPb4Eb9z7h7G6MwNohJxrR5KmMpL4hgwJQmX1jK
-	 5pne5Oz/Z3WXfstYJJtiTW3FhwCms22kk4q/aU5peIw97Gxuz4ysiLMLn09ULj6ojz
-	 m8cRXszic3//7ay9h8Pcn/UyP0+edzED/Hu35mYs6lmiS+sfkaxvzI/s0PgVzlCbdR
-	 dW5aVtZ9pWvLQ==
-From: Christian Brauner <brauner@kernel.org>
-Date: Fri, 20 Feb 2026 01:38:32 +0100
-Subject: [PATCH 4/4] selftests/bpf: add cgroup attach selftests
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S2CJE5Pp"
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-65a380b554bso2934148a12.2
+        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 16:52:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771548727; cv=none;
+        d=google.com; s=arc-20240605;
+        b=HimzXqXD5VwIsOpelWZQN3l3UIpVV5NUmdpoESOxtTynCFyJaAuoQyptiesfQ2ITjC
+         FABXCbmWOmXV4152iC3ZuTV2GNk6W961Xhb5iAZapDxDAu1LuuzGAsJzD8xWm1BLiyce
+         CPjwMJXaBxkmkCoRVdW6QnXYrE6sEouLnRQKbGPUQqlZGwp/xieuJdoqBQUhe0DdYyA1
+         aYJDMwrvWJJS4eDL78mVgMS5DcmShA2MGzX8H/W6jiPUK94yz0pJLpBLnZPneQxATktz
+         z9NQSju8W/OUPtJzEdQklJ5LMejJoyWUS/0l7eLXi4mBOaDSmCVrnrBBhccDZSuqB+1D
+         fsGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=lCRQFPi65X2kBYMRgvLmUnHgz7hQXjO6ZCppODpxZMA=;
+        fh=cKMUHX+7uaxJJpnCJTUj05r6u3b5LIa8H8LPnjF8mDI=;
+        b=ln/6k5pD5MHbzTa6JjO9gAPH/BSmZZnhd9OSqd3anmVefD0O3cr3qQEGc9l6ArAsLt
+         o9JwSwHETI2pX+HmRtjuZFURAYDNa2wA8bAicGlt5Msoz+GXh0CC+VMlEBWbTzrUkA8C
+         YTgnzRuvUTWmiTbskKJz+HIH061JTr9LySCQIAheu+sXVqo1EWKoIr+3YYQEXtdpvAc6
+         v1OCzvitMittye1G6CyI+/dE9gQtG+MNfywieIpNFA6s3AvfEVwC+KAqj9//B/f5/aia
+         Dy+6UwDUPYkeMrFYwKMnjR8lNNkv+L2N53B+uUpgPk3mkDkIU46flgPlLwIieqdlRlTh
+         1w5g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771548727; x=1772153527; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lCRQFPi65X2kBYMRgvLmUnHgz7hQXjO6ZCppODpxZMA=;
+        b=S2CJE5PpcAffuaYQJy1+slS/i22Tu/WazvszUYIyavSUkGf+6sZMTASm1XQ89z+e8b
+         svOYokG7IHdCi2KAJb8Heuo0bMxAr0ZWcR9f17iybvNftYEBe5XIBAD9FJvEAuGQ8qLm
+         aHF/A2Q3XX3Mi82TOFToJmKU8ZDPAQiYjt5RTeRXAglgmzXtJgNcqvog+jq8S0JtAvBJ
+         QVKJSsB3Gi8hIchzwTm8aYNEBcj74Z4R6KEeoXiClu0x66C4DFbn8noJtNKGg9x1JHfS
+         hJHIVtwT23cJnx9B0mElKPDy1akb+Xr11XngCi4wg+bklQcqRKud5Nh6doC/Xv9Dh/gM
+         2f9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771548727; x=1772153527;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=lCRQFPi65X2kBYMRgvLmUnHgz7hQXjO6ZCppODpxZMA=;
+        b=AB84RSN7DW7SQ6aEl58hIWkVV8Bvu6jCH4YuPYZzwo4Tz4cZjPBv904oKOzyMmyr/n
+         9A5UEi1J9FQcN2HOXC0G2KL/Sil1Yid8Jojn8AdMjCHK4E3voQbrPNEq6zrXSOACn0Yy
+         e6hXdwRqB5suQk2AWDf46hK4o57PZTLYwiKuMyAXfPCG8SYPQq3MPLpn6ZNPYGu8E+Xe
+         Eh/FSW918/i6eEB7r2M8MuUhmZqiz0//ACZEKNFNRn4q1TUNqJeqVC+aVAqCRDeXzXIP
+         /g81+5jKhc1VmPdkbm6ud9pFfTpGP1Mh0+roCgDjATgJ4+cyaCHm9WxDieX3ZqZGU54g
+         Dg9g==
+X-Gm-Message-State: AOJu0Ywk4xapIXLxyqhU9dcIwbW4HYqVClYtYLLKfgwTB5VXdy026csR
+	op4WbDWUpLtONRN12eIBXd5o0gB2hKpCl0HIVXJ6+uCvTZ4UDeJ3wg1xgAakG/L3WSnlbiqpi8N
+	e82/U99fX1V5JogGGh5LY/NVWVEG/mpg=
+X-Gm-Gg: AZuq6aI+bjL30+5Pa3xsbJpBhMFWJxpkrkhV7+8mS+aBf4n7EnE0j9mLfCMA5EkrXy1
+	F7towXdMklr6TGJG/aV64AXPsNZZr1/CAK3+4duUd4zxO2ZbkH/ftfo22DzLI2vcSqVyuv39IK6
+	Fxz2mWu5pA4K4KyxgtoTPQ3iVdSyTiAVSC9VH7r9RldRk6cY7zm3mNmBauBsJzCLmBwbDi0x+0s
+	Dcw9SKQNbI+nmiYu0MMl/lmmhJl1o/4p2HiqSvwVniT/4y3+/2FcPVPHKCYXG15nHtZFL9wa5fD
+	uWeH4Qp3
+X-Received: by 2002:a17:906:7314:b0:b8e:d4ed:5eab with SMTP id
+ a640c23a62f3a-b904dc686a6mr321757566b.31.1771548726992; Thu, 19 Feb 2026
+ 16:52:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260220-work-bpf-namespace-v1-4-866207db7b83@kernel.org>
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
-In-Reply-To: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>
-Cc: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
- Lennart Poettering <lennart@poettering.net>, 
- Christian Brauner <brauner@kernel.org>
-X-Mailer: b4 0.15-dev-47773
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13245; i=brauner@kernel.org;
- h=from:subject:message-id; bh=mQc8EiFwm60GFoFhfzxR1JRaHCQHgCBHuPjqBgX857M=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWROXyvAt7/kxAmdY6zyehaLr1VKcP/TvHm2y36nqxbbG
- veO60eFO0pZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACZSzc/IcOjdr5B0H9FZSy4z
- z633Cl6sxxO5Ru3lxJsfVwvPrHnpH8HIMD9X7/T+xcW3OpIObzLhuKORwNcp9s5wM1NHiFI1x/F
- bjAA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+References: <20260218182555.1501495-1-puranjay@kernel.org> <20260218182555.1501495-3-puranjay@kernel.org>
+ <99fd7227e0abc0558a2954e95c1e049edc9ba7b3.camel@gmail.com>
+In-Reply-To: <99fd7227e0abc0558a2954e95c1e049edc9ba7b3.camel@gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Fri, 20 Feb 2026 00:51:55 +0000
+X-Gm-Features: AaiRm53B_cdA8ZJc6taTOhVTyfdFAcNww6_mHJ11BIQIZvjVHUu8ZBQMfCbpHY0
+Message-ID: <CANk7y0jJnUhp8yDW_CJQ2icm590hdSim+gmvou1A66244JtxeQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/5] bpf: Add KF_FORBID_SLEEP modifier for
+ KF_ACQUIRE kfuncs
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Christian Brauner <brauner@kernel.org>
----
- .../selftests/bpf/prog_tests/cgroup_attach.c       | 362 +++++++++++++++++++++
- .../selftests/bpf/progs/test_cgroup_attach.c       |  85 +++++
- 2 files changed, 447 insertions(+)
+On Thu, Feb 19, 2026 at 10:19=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.co=
+m> wrote:
+>
+> On Wed, 2026-02-18 at 10:25 -0800, Puranjay Mohan wrote:
+>
+> [...]
+>
+> > @@ -10510,6 +10514,8 @@ static int release_reference_nomark(struct bpf_=
+verifier_state *state, int ref_ob
+> >               if (state->refs[i].type !=3D REF_TYPE_PTR)
+> >                       continue;
+> >               if (state->refs[i].id =3D=3D ref_obj_id) {
+> > +                     if (state->refs[i].forbid_sleep)
+> > +                             state->forbid_sleep_count--;
+>
+> Nit: I'd do it inside release_reference_state() just to have a
+>      fool-proof point for decrementing this counter.
+>      As it stands release_reference_state() is called from two
+>      more places and one need to think if .forbid_sleep_count
+>      needs to be handled there as well (it is not, at the moment).
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_attach.c b/tools/testing/selftests/bpf/prog_tests/cgroup_attach.c
-new file mode 100644
-index 000000000000..05addf93af46
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_attach.c
-@@ -0,0 +1,362 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Christian Brauner <brauner@kernel.org> */
-+
-+/*
-+ * Test the bpf_lsm_cgroup_attach hook.
-+ *
-+ * Verifies that a BPF LSM program can supervise cgroup migration
-+ * through both the cgroup.procs write path and the clone3 +
-+ * CLONE_INTO_CGROUP path.
-+ */
-+
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/sched.h>
-+#include <linux/types.h>
-+#include <sched.h>
-+#include <signal.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <syscall.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+
-+#include <test_progs.h>
-+#include "cgroup_helpers.h"
-+#include "test_cgroup_attach.skel.h"
-+
-+/* Must match the definition in progs/test_cgroup_attach.c */
-+struct attach_event {
-+	__u32 task_pid;
-+	__u64 src_cgrp_id;
-+	__u64 dst_cgrp_id;
-+	__u8  threadgroup;
-+	__u32 hook_count;
-+};
-+
-+#ifndef CLONE_INTO_CGROUP
-+#define CLONE_INTO_CGROUP 0x200000000ULL
-+#endif
-+
-+#ifndef __NR_clone3
-+#define __NR_clone3 435
-+#endif
-+
-+struct __clone_args {
-+	__aligned_u64 flags;
-+	__aligned_u64 pidfd;
-+	__aligned_u64 child_tid;
-+	__aligned_u64 parent_tid;
-+	__aligned_u64 exit_signal;
-+	__aligned_u64 stack;
-+	__aligned_u64 stack_size;
-+	__aligned_u64 tls;
-+	__aligned_u64 set_tid;
-+	__aligned_u64 set_tid_size;
-+	__aligned_u64 cgroup;
-+};
-+
-+static pid_t do_clone3(int cgroup_fd)
-+{
-+	struct __clone_args args = {
-+		.flags = CLONE_INTO_CGROUP,
-+		.exit_signal = SIGCHLD,
-+		.cgroup = cgroup_fd,
-+	};
-+
-+	return syscall(__NR_clone3, &args, sizeof(args));
-+}
-+
-+/*
-+ * Subtest: deny_migration
-+ *
-+ * Verify that the BPF hook can deny cgroup migration through cgroup.procs
-+ * and that detaching the BPF program removes enforcement.
-+ */
-+static void test_deny_migration(void)
-+{
-+	struct test_cgroup_attach *skel = NULL;
-+	int allowed_fd = -1, denied_fd = -1;
-+	unsigned long long denied_cgid;
-+	int err, status;
-+	__u64 key;
-+	__u8 val = 1;
-+	pid_t child;
-+
-+	if (!ASSERT_OK(setup_cgroup_environment(), "setup_cgroup_env"))
-+		return;
-+
-+	allowed_fd = create_and_get_cgroup("/allowed");
-+	if (!ASSERT_GE(allowed_fd, 0, "create /allowed"))
-+		goto cleanup;
-+
-+	denied_fd = create_and_get_cgroup("/denied");
-+	if (!ASSERT_GE(denied_fd, 0, "create /denied"))
-+		goto cleanup;
-+
-+	skel = test_cgroup_attach__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
-+		goto cleanup;
-+
-+	err = test_cgroup_attach__attach(skel);
-+	if (!ASSERT_OK(err, "skel attach"))
-+		goto cleanup;
-+
-+	skel->bss->monitored_pid = getpid();
-+
-+	denied_cgid = get_cgroup_id("/denied");
-+	if (!ASSERT_NEQ(denied_cgid, 0ULL, "get denied cgroup id"))
-+		goto cleanup;
-+
-+	key = denied_cgid;
-+	err = bpf_map__update_elem(skel->maps.denied_cgroups,
-+				   &key, sizeof(key), &val, sizeof(val), 0);
-+	if (!ASSERT_OK(err, "add denied cgroup"))
-+		goto cleanup;
-+
-+	/*
-+	 * Forked children must use join_parent_cgroup() because the
-+	 * cgroup workdir was created under the parent's PID and
-+	 * join_cgroup() constructs paths using getpid().
-+	 */
-+
-+	/* Child migrating to /allowed should succeed */
-+	child = fork();
-+	if (!ASSERT_GE(child, 0, "fork child allowed"))
-+		goto cleanup;
-+	if (child == 0) {
-+		if (join_parent_cgroup("/allowed"))
-+			_exit(1);
-+		_exit(0);
-+	}
-+	err = waitpid(child, &status, 0);
-+	ASSERT_GT(err, 0, "waitpid allowed");
-+	ASSERT_TRUE(WIFEXITED(status), "allowed child exited");
-+	ASSERT_EQ(WEXITSTATUS(status), 0, "allowed migration succeeds");
-+
-+	/* Child migrating to /denied should fail */
-+	child = fork();
-+	if (!ASSERT_GE(child, 0, "fork child denied"))
-+		goto cleanup;
-+	if (child == 0) {
-+		if (join_parent_cgroup("/denied") == 0)
-+			_exit(1); /* Should have failed */
-+		if (errno != EPERM)
-+			_exit(2); /* Wrong errno */
-+		_exit(0);
-+	}
-+	err = waitpid(child, &status, 0);
-+	ASSERT_GT(err, 0, "waitpid denied");
-+	ASSERT_TRUE(WIFEXITED(status), "denied child exited");
-+	ASSERT_EQ(WEXITSTATUS(status), 0, "denied migration blocked");
-+
-+	/* Detach BPF — /denied should now be accessible */
-+	test_cgroup_attach__detach(skel);
-+
-+	child = fork();
-+	if (!ASSERT_GE(child, 0, "fork child post-detach"))
-+		goto cleanup;
-+	if (child == 0) {
-+		if (join_parent_cgroup("/denied"))
-+			_exit(1);
-+		_exit(0);
-+	}
-+	err = waitpid(child, &status, 0);
-+	ASSERT_GT(err, 0, "waitpid post-detach");
-+	ASSERT_TRUE(WIFEXITED(status), "post-detach child exited");
-+	ASSERT_EQ(WEXITSTATUS(status), 0, "post-detach migration free");
-+
-+cleanup:
-+	if (skel)
-+		test_cgroup_attach__destroy(skel);
-+	if (allowed_fd >= 0)
-+		close(allowed_fd);
-+	if (denied_fd >= 0)
-+		close(denied_fd);
-+	cleanup_cgroup_environment();
-+}
-+
-+/*
-+ * Subtest: verify_hook_args
-+ *
-+ * Verify that the hook receives correct src_cgrp, dst_cgrp, task pid,
-+ * and threadgroup values.
-+ */
-+static void test_verify_hook_args(void)
-+{
-+	struct test_cgroup_attach *skel = NULL;
-+	struct attach_event evt = {};
-+	unsigned long long src_cgid, dst_cgid;
-+	int src_fd = -1, dst_fd = -1;
-+	__u32 map_key = 0;
-+	char pid_str[32];
-+	int err;
-+
-+	if (!ASSERT_OK(setup_cgroup_environment(), "setup_cgroup_env"))
-+		return;
-+
-+	src_fd = create_and_get_cgroup("/src");
-+	if (!ASSERT_GE(src_fd, 0, "create /src"))
-+		goto cleanup;
-+
-+	dst_fd = create_and_get_cgroup("/dst");
-+	if (!ASSERT_GE(dst_fd, 0, "create /dst"))
-+		goto cleanup;
-+
-+	/* Move ourselves to /src first */
-+	if (!ASSERT_OK(join_cgroup("/src"), "join /src"))
-+		goto cleanup;
-+
-+	skel = test_cgroup_attach__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
-+		goto cleanup;
-+
-+	err = test_cgroup_attach__attach(skel);
-+	if (!ASSERT_OK(err, "skel attach"))
-+		goto cleanup;
-+
-+	skel->bss->monitored_pid = getpid();
-+
-+	src_cgid = get_cgroup_id("/src");
-+	dst_cgid = get_cgroup_id("/dst");
-+	if (!ASSERT_NEQ(src_cgid, 0ULL, "get src cgroup id"))
-+		goto cleanup;
-+	if (!ASSERT_NEQ(dst_cgid, 0ULL, "get dst cgroup id"))
-+		goto cleanup;
-+
-+	/* Migrate self to /dst via cgroup.procs (threadgroup=true) */
-+	snprintf(pid_str, sizeof(pid_str), "%d", getpid());
-+	if (!ASSERT_OK(write_cgroup_file("/dst", "cgroup.procs", pid_str),
-+		       "migrate to /dst"))
-+		goto cleanup;
-+
-+	/* Read the recorded event */
-+	err = bpf_map__lookup_elem(skel->maps.last_event,
-+				   &map_key, sizeof(map_key),
-+				   &evt, sizeof(evt), 0);
-+	if (!ASSERT_OK(err, "read last_event"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(evt.src_cgrp_id, src_cgid, "src_cgrp_id matches");
-+	ASSERT_EQ(evt.dst_cgrp_id, dst_cgid, "dst_cgrp_id matches");
-+	ASSERT_EQ(evt.task_pid, (__u32)getpid(), "task_pid matches");
-+	ASSERT_EQ(evt.threadgroup, 1, "threadgroup is true for cgroup.procs");
-+	ASSERT_GE(evt.hook_count, (__u32)1, "hook fired at least once");
-+
-+cleanup:
-+	if (skel)
-+		test_cgroup_attach__destroy(skel);
-+	if (src_fd >= 0)
-+		close(src_fd);
-+	if (dst_fd >= 0)
-+		close(dst_fd);
-+	cleanup_cgroup_environment();
-+}
-+
-+/*
-+ * Subtest: clone_into_cgroup
-+ *
-+ * Verify the hook fires on the clone3(CLONE_INTO_CGROUP) path and can
-+ * deny spawning a child directly into a cgroup.
-+ */
-+static void test_clone_into_cgroup(void)
-+{
-+	struct test_cgroup_attach *skel = NULL;
-+	int allowed_fd = -1, denied_fd = -1;
-+	unsigned long long denied_cgid, allowed_cgid;
-+	struct attach_event evt = {};
-+	__u32 map_key = 0;
-+	__u64 key;
-+	__u8 val = 1;
-+	int err, status;
-+	pid_t child;
-+
-+	if (!ASSERT_OK(setup_cgroup_environment(), "setup_cgroup_env"))
-+		return;
-+
-+	allowed_fd = create_and_get_cgroup("/clone_allowed");
-+	if (!ASSERT_GE(allowed_fd, 0, "create /clone_allowed"))
-+		goto cleanup;
-+
-+	denied_fd = create_and_get_cgroup("/clone_denied");
-+	if (!ASSERT_GE(denied_fd, 0, "create /clone_denied"))
-+		goto cleanup;
-+
-+	skel = test_cgroup_attach__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel open_and_load"))
-+		goto cleanup;
-+
-+	err = test_cgroup_attach__attach(skel);
-+	if (!ASSERT_OK(err, "skel attach"))
-+		goto cleanup;
-+
-+	skel->bss->monitored_pid = getpid();
-+
-+	denied_cgid = get_cgroup_id("/clone_denied");
-+	allowed_cgid = get_cgroup_id("/clone_allowed");
-+	if (!ASSERT_NEQ(denied_cgid, 0ULL, "get denied cgroup id"))
-+		goto cleanup;
-+	if (!ASSERT_NEQ(allowed_cgid, 0ULL, "get allowed cgroup id"))
-+		goto cleanup;
-+
-+	key = denied_cgid;
-+	err = bpf_map__update_elem(skel->maps.denied_cgroups,
-+				   &key, sizeof(key), &val, sizeof(val), 0);
-+	if (!ASSERT_OK(err, "add denied cgroup"))
-+		goto cleanup;
-+
-+	/* clone3 into denied cgroup should fail */
-+	child = do_clone3(denied_fd);
-+	if (child >= 0) {
-+		waitpid(child, NULL, 0);
-+		ASSERT_LT(child, 0, "clone3 into denied should fail");
-+		goto cleanup;
-+	}
-+	if (errno == ENOSYS || errno == E2BIG) {
-+		test__skip();
-+		goto cleanup;
-+	}
-+	ASSERT_EQ(errno, EPERM, "clone3 denied errno");
-+
-+	/* clone3 into allowed cgroup should succeed */
-+	child = do_clone3(allowed_fd);
-+	if (!ASSERT_GE(child, 0, "clone3 into allowed"))
-+		goto cleanup;
-+	if (child == 0)
-+		_exit(0);
-+
-+	err = waitpid(child, &status, 0);
-+	ASSERT_GT(err, 0, "waitpid clone3 allowed");
-+	ASSERT_TRUE(WIFEXITED(status), "clone3 child exited");
-+	ASSERT_EQ(WEXITSTATUS(status), 0, "clone3 child ok");
-+
-+	/* Verify the hook recorded the allowed clone */
-+	err = bpf_map__lookup_elem(skel->maps.last_event,
-+				   &map_key, sizeof(map_key),
-+				   &evt, sizeof(evt), 0);
-+	if (!ASSERT_OK(err, "read last_event"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(evt.dst_cgrp_id, allowed_cgid, "clone3 dst_cgrp_id");
-+
-+cleanup:
-+	if (skel)
-+		test_cgroup_attach__destroy(skel);
-+	if (allowed_fd >= 0)
-+		close(allowed_fd);
-+	if (denied_fd >= 0)
-+		close(denied_fd);
-+	cleanup_cgroup_environment();
-+}
-+
-+void test_cgroup_attach(void)
-+{
-+	if (test__start_subtest("deny_migration"))
-+		test_deny_migration();
-+	if (test__start_subtest("verify_hook_args"))
-+		test_verify_hook_args();
-+	if (test__start_subtest("clone_into_cgroup"))
-+		test_clone_into_cgroup();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_attach.c b/tools/testing/selftests/bpf/progs/test_cgroup_attach.c
-new file mode 100644
-index 000000000000..90915d1d7d64
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/test_cgroup_attach.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Christian Brauner <brauner@kernel.org> */
-+
-+/*
-+ * BPF LSM cgroup attach policy: supervise cgroup migration.
-+ *
-+ * A designated process populates a denied_cgroups map with cgroup IDs
-+ * that should reject migration.  The cgroup_attach hook checks every
-+ * migration and returns -EPERM when the destination cgroup is denied.
-+ * It also records the last hook invocation into last_event for the
-+ * userspace test to verify arguments.
-+ */
-+
-+#include "vmlinux.h"
-+#include <errno.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <bpf/bpf_core_read.h>
-+
-+struct attach_event {
-+	__u32 task_pid;
-+	__u64 src_cgrp_id;
-+	__u64 dst_cgrp_id;
-+	__u8  threadgroup;
-+	__u32 hook_count;
-+};
-+
-+/*
-+ * Cgroups that should reject migration.
-+ * Key:   cgroup kn->id (u64).
-+ * Value: unused marker.
-+ */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(max_entries, 16);
-+	__type(key, __u64);
-+	__type(value, __u8);
-+} denied_cgroups SEC(".maps");
-+
-+/*
-+ * Record the last hook invocation for argument verification.
-+ * Key:   0.
-+ * Value: struct attach_event.
-+ */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct attach_event);
-+} last_event SEC(".maps");
-+
-+__u32 monitored_pid;
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("lsm.s/cgroup_attach")
-+int BPF_PROG(cgroup_attach, struct task_struct *task,
-+	     struct cgroup *src_cgrp, struct cgroup *dst_cgrp,
-+	     struct super_block *sb, bool threadgroup,
-+	     struct cgroup_namespace *ns)
-+{
-+	struct task_struct *current = bpf_get_current_task_btf();
-+	struct attach_event *evt;
-+	__u64 dst_id;
-+	__u32 key = 0;
-+
-+	dst_id = BPF_CORE_READ(dst_cgrp, kn, id);
-+
-+	if (bpf_map_lookup_elem(&denied_cgroups, &dst_id))
-+		return -EPERM;
-+
-+	if (!monitored_pid || current->tgid != monitored_pid)
-+		return 0;
-+
-+	evt = bpf_map_lookup_elem(&last_event, &key);
-+	if (evt) {
-+		evt->task_pid = task->pid;
-+		evt->src_cgrp_id = BPF_CORE_READ(src_cgrp, kn, id);
-+		evt->dst_cgrp_id = dst_id;
-+		evt->threadgroup = threadgroup ? 1 : 0;
-+		evt->hook_count++;
-+	}
-+
-+	return 0;
-+}
+Yes, I will move it there.
 
--- 
-2.47.3
+>
+> >                       release_reference_state(state, i);
+> >                       return 0;
+> >               }
+> > @@ -10847,7 +10853,8 @@ static int check_func_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+> >
+> >               if (env->subprog_info[subprog].might_sleep &&
+> >                   (env->cur_state->active_rcu_locks || env->cur_state->=
+active_preempt_locks ||
+> > -                  env->cur_state->active_irq_id || !in_sleepable(env))=
+) {
+> > +                  env->cur_state->active_irq_id || env->cur_state->for=
+bid_sleep_count ||
+> > +                  !in_sleepable(env))) {
+>
+> The whole expression is the same as '!in_sleepable_context(env)', right?
 
+Yes, in this case because if (env->cur_state->active_locks) { already
+prints for this specific case, and if  active_locks=3D=3D0 then all this
+hunk is equivalent to  !in_sleepable_context(env), will change it in
+next version.
+
+>
+> >                       verbose(env, "global functions that may sleep are=
+ not allowed in non-sleepable context,\n"
+> >                                    "i.e., in a RCU/IRQ/preempt-disabled=
+ section, or in\n"
+> >                                    "a non-sleepable BPF program context=
+\n");
+> > @@ -11435,6 +11442,11 @@ static int check_resource_leak(struct bpf_veri=
+fier_env *env, bool exception_exit
+> >               return -EINVAL;
+> >       }
+> >
+> > +     if (check_lock && env->cur_state->forbid_sleep_count) {
+> > +             verbose(env, "%s cannot be used inside nosleep region\n",=
+ prefix);
+> > +             return -EINVAL;
+> > +     }
+> > +
+>
+> Is this check really necessary?
+> Some resource is forbidding sleep here, so there would be an error report=
+ already.
+
+Yeah, maybe we will support KF_FORBID_SLEEP in future without
+reference tracking, but for now I will remove it in the next version.
+
+>
+> [...]
+>
+> > @@ -11658,6 +11671,14 @@ static int check_helper_call(struct bpf_verifi=
+er_env *env, struct bpf_insn *insn
+> >               }
+> >       }
+> >
+> > +     if (env->cur_state->forbid_sleep_count) {
+> > +             if (fn->might_sleep) {
+> > +                     verbose(env, "sleepable helper %s#%d in nosleep r=
+egion\n",
+> > +                             func_id_name(func_id), func_id);
+> > +                     return -EINVAL;
+> > +             }
+> > +     }
+> > +
+>
+> Wdyt about consolidating this code as something like:
+
+I agree, will add a preparatory patch that does this and will use it in thi=
+s one
+
+>
+>   if (fn->might_sleep && !in_sleepable_context(env)) {
+>         verbose(env, "sleepable helper %s#%d in %s region\n",
+>                 func_id_name(func_id), func_id, non_sleepable_context_des=
+cription(env));
+>         return -EINVAL;
+>   }
+>
+> ?
+>
+> [...]
+>
+> > @@ -14113,6 +14139,11 @@ static int check_kfunc_call(struct bpf_verifie=
+r_env *env, struct bpf_insn *insn,
+> >               return -EACCES;
+> >       }
+> >
+> > +     if (sleepable && env->cur_state->forbid_sleep_count) {
+> > +             verbose(env, "sleepable kfunc %s in nosleep region\n", fu=
+nc_name);
+> > +             return -EACCES;
+> > +     }
+> > +
+>
+> Above this check there is:
+>
+>         if (sleepable && !in_sleepable(env)) {
+>                 verbose(env, "program must be sleepable to call sleepable=
+ kfunc %s\n", func_name);
+>                 return -EACCES;
+>         }
+>
+> Should it be `sleepable && !in_sleepable_context(env)` instead?
+> If it should, then this hunk would be redundant.
+
+This is just for printing the correct kind of message. Actually this
+should go below after
+
+=C2=BB       if (env->cur_state->active_irq_id && sleepable) {
+=C2=BB       =C2=BB       verbose(env, "kernel func %s is sleepable within
+IRQ-disabled region\n", func_name);
+=C2=BB       =C2=BB       return -EACCES;
+=C2=BB       }
+
+=C2=BB       if (is_kfunc_rcu_protected(&meta) && !in_rcu_cs(env)) {
+=C2=BB       =C2=BB       verbose(env, "kernel func %s requires RCU critica=
+l
+section protection\n", func_name);
+=C2=BB       =C2=BB       return -EACCES;
+=C2=BB       }
+
+
+sleepable && !in_sleepable_context(env) will catch all of them
+together, so maybe I could  consolidate all of then with a helper
+like: non_sleepable_context_description()
+but some of these checks and intermingled and would make reviewing
+difficult so I will send it as a follow-up.
