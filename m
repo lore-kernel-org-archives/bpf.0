@@ -1,143 +1,171 @@
-Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E5F1D555
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 06:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771569280; cv=pass; b=f9yS/zgDdgRbXZ7OnTO6vrWtjGzSX81geNAcbhdvdYXt+7Le0EXBjGxbtYtNb7rsPMAzhFl6ugIUOiE/SmlfoNG9JO84Qw+uuRhx4Y6aQgA2gdVsauXgUQ++MEJetr+5xgXLMLuLLeO8Z+zWtV+M0k5FXz/bD64SV5boJcmXWPU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771569280; c=relaxed/simple;
-	bh=NKgnPurdkip5P21bX0VgS2dSmB1YYbUttO2mE0YX/9o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=saGH9S968aAKeS4to3nFdq9xY4lGUCylM27Zdp8U4XsrxEvetgvJG0kOvYzmIiMupe6u5BPEb+NAFqKscE8HbQseP9wNVUVkwmBmQD56tGjivlPBLuGc0SgvaiVvKYCb9JWXjsjK+POE+ihGcwwLomIY6QSFp2gnKzGoAoRwxNo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=StXNn935; arc=pass smtp.client-ip=209.85.222.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0620322A;
+	Fri, 20 Feb 2026 06:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771569299; cv=none; b=I+vDBYvbK/KuUUM4ipG/uMJM8yIIF1TZyxiErSgP0IZZuIniO0jdtJxpuNiss/L+xNdOk8Q30IgVx5n6o/4OvFcDlNM3MSbUUocuq66wvV953UqIcdltDCOmQKDFzNjV04PQLAcnjsyEfUcjvp4IitvpNaRq+FS7M4c872m2M0E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771569299; c=relaxed/simple;
+	bh=jcRFhBKmpxrt8/eYhbeF09z16jzOHC4vUYCwKmlwxbw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aMWrpTVIkE4fh7YyBfuWt5y22WUga/qLjI5UDxa8+oIfGzFq3i2N3jBKGWKd9BsDp3AvCNL2wOnUBOvxWklpY3yWNWVr3jpXB66fcKAsF9dWRpS0D1RyZjir/QLoRiJGZ7aZMTDnIo57IBmHZZCSv+fl/poOa+Br04MRQqcpi6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=gn1ferNn; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="StXNn935"
-Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-94a231b285dso911828241.1
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 22:34:38 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771569278; cv=none;
-        d=google.com; s=arc-20240605;
-        b=GJV79PsAElpJayKSJnJkKOQJWFOaLl1jzi3qFyGgChWnItbaZ752ObEyF/PUzODLXQ
-         /+TlBicRLxUeh+lYuD6NfnJsqrUJPbFFbPtGTKdieL62chLKXtwhEqsLdhGkkSUwyuWs
-         NtHQQ5inTXz2Q8epcd3BIyZiF0QpUxCO/L0eBggrP9GTdWnwivnU30uOxCLjVGd7BNmG
-         0dFH91Gn50d2o8CZp5DOGxgGUVPvQd86l62ZJiJISPZabNgvwTLizIYgVeeeztVTvj2d
-         /Zf7kB8LCt3KIfNoZRxjtT93nzD00czJbbIwKNjQDq96pMyPNCmijG1+0ThebbF2r4Xr
-         hfvA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=nDYpme8tSO4KdIort3ZYVWM2MiJetiXNYajIJmviPTw=;
-        fh=rXGzJJakM+nDAyjL3So/L4zu3cCKu4AZes1G31hugkM=;
-        b=C+mLlihr2m8toYkusKQJX5ckwgJxjJBVbzFM7rXf+u+GTtN9fnmeOtIE5dmOp3Ynnm
-         qrbedq8ucX08P3slfe/R/mXXw9lOhdJVq5d8KCQgbSLhiZZw2PJQ1Q7+UYsYbOtFTloA
-         G0jJ3/elXm63r8zGoud1gnNQJqGcW+qMhfaHWPo1bq/+hkb/lDUyucm/dd2ob5smUEkl
-         353ec46QxUPl73ohThqrckAqs6GflouACn3T0xcBM7UdX/ZsBlzWaIc/vh8tm2INNtDr
-         CspqC4FOwcmxMnZRETUePtQWzqHw1JnP2dWwE0paRO2S7V/W8Pl6KqQg4jzHpvDJuQuX
-         5yhg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771569278; x=1772174078; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nDYpme8tSO4KdIort3ZYVWM2MiJetiXNYajIJmviPTw=;
-        b=StXNn935kBM3SjT0XdVeDg0pJBm5Nfs5D28Oi9FZkWTQsTbFt15VKNP+wVjC6f9nMy
-         o0sNaA39fKhPz3w8qLVJVKiU5zsThHEvbOIrL0WpzG8tmk0m6V8gnEXAx7oTVmfMzg6E
-         y6U1GuJPfwLqliwH2MyHyHME8eoTrvvP2pPvZsoF4+G1E4J0rAPCzCG6rrK1Rsb2DsFb
-         MHCDQjuzigkDr5swZmSjdqkMJ1WAifIzt/LErAErpRS4PkQnxb/ZstGGgqKmv+QyuxJA
-         p4MxoWV9f0sQ/EjjeqCZDJBa86SU3q6RxK1lSHbZWLSQ2VQIAVTEpTE1slMLbpvmLuea
-         +nbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771569278; x=1772174078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=nDYpme8tSO4KdIort3ZYVWM2MiJetiXNYajIJmviPTw=;
-        b=OcS9FzKzm1akd73HOsT4ds8UMqZl1flxiwgBN46XHABfhLA2us0AbqSIpLgPNQKwIT
-         wp7NRbW/SGGawz7EYEOlGHvfBaEq2D10ymN5gOpTYgqTQHRtgflQeYqgk9K09dvJStGD
-         Gw9AMyn3FYUfVIlHQiU0ouzLoYJ8CpSsGldvfU0CJZ4YhGHXY8HedWqYgEaGYV0EaSQV
-         5lslhVh4Q3224kVb+s+l9fMdDQlgjlGzylnDbF+3tvCS8Wlk2doVUPwmEkZMicFYtfNV
-         X6lW/cOT3W4ahysOGnxt4ZEw1VcWWYoyRvJ3LamcnzvO+9mToqZRy0byaXlNwK+ePVKB
-         PhWA==
-X-Forwarded-Encrypted: i=1; AJvYcCXpJchWMMgHVvlr21ROCTORS8EwOoGwR9XXrVZHMaByJT9CAVF0XiH8ezj710kiI+OBxLE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdtRzyUmi3FEJKoWYROokuosLMSXE9z+8WPQ+UOdioKB5bAKRQ
-	hk51fXrEAb7GaQ2qVUseTZ+mVUk+EiQIMW5hXKrPO6Mlb/lxnad6NnV3ib7/+fXzdoBcXwhmxhA
-	qAI4strYxFO8ckI+cVpAKpuyLhEk334DIimaA
-X-Gm-Gg: AZuq6aL35wzahZujBQOOD6XOgNw14U/gvJGFvcg+oTLrX5yEAY2uMuINOfohJv/CWVv
-	2bx81NI4KVb+F7Ksq3M36cplgsI9u+K42/GAJl2fQ6+hsuGw5uOLPKSqFL4ivA9aD8B97zIO3aY
-	a0S8YQ3uhosAwtot8nu/DLaVzObZ643mkkv7aT05/KLNvSF9AOtD2/j9WR7mEhq9F6AeTJp9Cql
-	T2EVgEa/u8grqNM/AukSU/wR3KZ0kAJ4LdbHK+D/3yfqrvJKgoGRIHmGCVV3XFF0ae7/b16lKJK
-	kyy+reZo9SaclWTO1WYW5vKnU3gbSBQqMxojfF4MQA==
-X-Received: by 2002:a05:6102:3f42:b0:5fc:2b29:b00f with SMTP id
- ada2fe7eead31-5fe7fc6591dmr4591578137.19.1771569277681; Thu, 19 Feb 2026
- 22:34:37 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="gn1ferNn"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61JKdbi31271172;
+	Fri, 20 Feb 2026 06:34:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=NzL2GO
+	FdTGigo5lRA4Nbr0a7EdpbCkmRbPJyX9DjPig=; b=gn1ferNnsRudTICjFwkpcG
+	m/weMlxHqoc6UWMyPy7er4ufmjhV7sSKg0Ff46OVP0iZ+d+cmUmCo2CiPXsVSW8T
+	qbEq6KZYOhXcxPVWBkXUIQgSReqZsMyxfTpCdAiDhZ5unUFkfsCZCAVGCqOc9H4E
+	i2TERrAIp8mYgF2IichdbkFSbwHFeYm281I0Lm6uH6wgR3VZQXu0cG+nQB0eCihc
+	3P2th9QJOBekeiEJdXLSOawSBFT3h1u8/HLJbk0tvPbg5Q/yJ0CJ1Pm4MCRQPZaW
+	/Tyrs44ErIBf+2Wo0lO3CYBxnzR327UICUstlcP1bqh0euzgrgpFpMWe1yDHGlGA
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4caj4kra16-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Feb 2026 06:34:44 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61K4GbsM030711;
+	Fri, 20 Feb 2026 06:34:43 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4ccb45fbt5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 20 Feb 2026 06:34:43 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61K6YgZq51708314
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 20 Feb 2026 06:34:42 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 0B88720043;
+	Fri, 20 Feb 2026 06:34:42 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7CA6E20040;
+	Fri, 20 Feb 2026 06:34:40 +0000 (GMT)
+Received: from [9.43.64.63] (unknown [9.43.64.63])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 20 Feb 2026 06:34:40 +0000 (GMT)
+Message-ID: <83243860-4c05-4a16-aeb2-7cc07fa1252e@linux.ibm.com>
+Date: Fri, 20 Feb 2026 12:04:39 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1771316309.git.paul.chaignon@gmail.com> <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
- <12705b3d58569685048804c33e90755c17667cbf.camel@gmail.com>
- <CAM=Ch06Vg-faG9ukU4DAsF9FRG2PeUtYHh3BkG0dOzYi=WDCyg@mail.gmail.com>
- <5044b1d83c3c916c0754eb5556008316c36c15ae.camel@gmail.com>
- <aZdcoaH9ERUNpln1@mail.gmail.com> <aZenQb3H5g73Bhz9@mail.gmail.com> <7b696c92e56dc560154818484cb35def2639cbf2.camel@gmail.com>
-In-Reply-To: <7b696c92e56dc560154818484cb35def2639cbf2.camel@gmail.com>
-From: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>
-Date: Fri, 20 Feb 2026 01:34:26 -0500
-X-Gm-Features: AaiRm52txNGnggIOoddNlQ9kLMIH-xSK3JTS3RTpbbqoG0i2oIaxGq5uFenp0-Y
-Message-ID: <CAM=Ch04aEBi0eCtemGRBO0xFcPs5Av5T=AqQwQxGcNSJ2nAQ9Q@mail.gmail.com>
-Subject: Re: [PATCH bpf 2/4] bpf: Improve bounds when tnum has a single
- possible value
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Paul Chaignon <paul.chaignon@gmail.com>, bpf@vger.kernel.org, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Srinivas Narayana <srinivas.narayana@rutgers.edu>, 
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/bpf: test accounting of tail calls when prog is
+ NULL
+To: Ilya Leoshkevich <iii@linux.ibm.com>, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, linux-kselftest@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>
+References: <20260216090802.1805655-1-hbathini@linux.ibm.com>
+ <4085b3b0-3f3f-4d4c-8b10-78d144ed0883@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <4085b3b0-3f3f-4d4c-8b10-78d144ed0883@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIwMDA1MiBTYWx0ZWRfX1zxgThUJFmuQ
+ y/+QtLX6XIAv1YXcUwljg2z0cdUsQJkEcOjLRdQGSrCu6/r9iynUa8HhShzHZfFZVJMnZW8MgQS
+ 4Uk8oaUa0MrVJ90LyQJnN7lFKnRs8/9tELF+R4k1Wh9vvhv4kucl+cmKvWbseU2oj/d5Ru6ysZL
+ 4lBMuCVaKI0wgsu4qAMtnyy7cSRb+mqjo5e8+gTaq4JbFzHkiKkhe350n1dadbXdLrw4vMci8ej
+ kmGLPUn9EbUeU9ym1EVJ52eAzuWQJehU5JBxwtZZ4Sdw4uihi6pUviXfek1UVeLxZGaUvAGCYRQ
+ c77AtRVkgL/p8jfjheokQfsZqi471lnDGG/pQ2kJAsuJV3NEvrYO4UVojXYiMzp+/z/6PzfYQPO
+ MxGNxEDyOsHgP9ZKyFO+QCnkrSsRn5J4wn2AuSmtB5Z2GmDmhYGCHP10UIGT2E2wQ/NGQA8ZJPD
+ z4XrdW4f2yVbGvtpG3Q==
+X-Proofpoint-ORIG-GUID: 960GySMTQiB8PS3P6cKv-r31fTILX4Kx
+X-Proofpoint-GUID: 960GySMTQiB8PS3P6cKv-r31fTILX4Kx
+X-Authority-Analysis: v=2.4 cv=M7hA6iws c=1 sm=1 tr=0 ts=69980084 cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=5pFfz3ocJ-uwvMfrsKAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-19_06,2026-02-20_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 malwarescore=0 lowpriorityscore=0 clxscore=1015 phishscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 adultscore=0 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602200052
 
-On Thu, Feb 19, 2026 at 8:29=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
-[...]
-> >     tnum_next =3D tnum_step(reg->var_off, reg->umin_value);
-> >     umin_in_tnum =3D (reg->umin_value & ~reg->var_off.mask) =3D=3D reg-=
->var_off.value;
-> >     tmax =3D reg->var_off.value | reg->var_off.mask;
-> >     if (tnum_next > reg->umax_value) {
-> >         /* The u64 range and the tnum only overlap in umin.
-> >          * u64:  ---[xxxxxx]-----
-> >          * tnum: --xx----------x-
-> >          */        ^
-> >         ___mark_reg_known(reg, reg->umin_value);
-> >     } else if (!umin_in_tnum && tnum_next =3D=3D tmax) {
-> >         /* The u64 range and the tnum only overlap in the maximum value
-> >          * represented by the tnum, called tmax.
-> >          * u64:  ---[xxxxxx]-----
-> >          * tnum: xx-----x--------
-> >          */
-> >         ___mark_reg_known(reg, tmax);
-> >     } else if (!umin_in_tnum && tnum_next <=3D reg->umax_value &&
-> >        tnum_step(reg->var_off, tnum_next) > reg->umax_value) {
-> >         /* The u64 range and the tnum only overlap once in between umin
-> >          * (excluded) and umax.
-> >          * u64:  ---[xxxxxx]-----
-> >          * tnum: xx----x-------x-
-> >          */
-> >         ___mark_reg_known(reg, tnum_next);
-> >     }
-> >
-> > Wdyt?
->
-> This makes sense, I missed this nuance in the original patch.
-> Maybe keep the first check as 'umin_in_tnum && tnum_next > reg->umax_valu=
-e',
-> then?
 
-I too think Eduard's suggestion makes sense. We will be explicit in
-the code that
-we want umin to be part of the tnum.
+
+On 17/02/26 6:23 pm, Ilya Leoshkevich wrote:
+> 
+> On 2/16/26 10:08, Hari Bathini wrote:
+>> Test whether tail call count is incorrectly accounted for, when the
+>> tail call fails due to a missing BPF program.
+>>
+>> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+>> ---
+>>
+>> - powerpc64 BPF JIT has been incorrectly accounting for tailcall count
+>>    even when BPF program to tailcall into is missing. A simple change
+>>    to one of the tailcall selftests could have flagged it earlier.
+>>
+>>      https://lore.kernel.org/all/20260216065639.1750181-2- 
+>> hbathini@linux.ibm.com/
+>>
+>>   tools/testing/selftests/bpf/progs/tailcall3.c | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/progs/tailcall3.c b/tools/ 
+>> testing/selftests/bpf/progs/tailcall3.c
+>> index f60bcd7b8d4b..204f19c30a3e 100644
+>> --- a/tools/testing/selftests/bpf/progs/tailcall3.c
+>> +++ b/tools/testing/selftests/bpf/progs/tailcall3.c
+>> @@ -5,7 +5,7 @@
+>>   struct {
+>>       __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+>> -    __uint(max_entries, 1);
+>> +    __uint(max_entries, 2);
+>>       __uint(key_size, sizeof(__u32));
+>>       __uint(value_size, sizeof(__u32));
+>>   } jmp_table SEC(".maps");
+>> @@ -23,6 +23,9 @@ int classifier_0(struct __sk_buff *skb)
+>>   SEC("tc")
+>>   int entry(struct __sk_buff *skb)
+>>   {
+>> +    /* prog == NULL case */
+>> +    bpf_tail_call_static(skb, &jmp_table, 1);
+>> +
+>>       bpf_tail_call_static(skb, &jmp_table, 0);
+>>       return 0;
+>>   }
+> 
+> Seems like the x86_64 JIT passes this already, but the interpreter still 
+> has:
+> 
+>          if (unlikely(tail_call_cnt >= MAX_TAIL_CALL_CNT))
+>              goto out;
+> 
+>          tail_call_cnt++;
+> 
+>          prog = READ_ONCE(array->ptrs[index]);
+>          if (!prog)
+>              goto out;
+> 
+> Should it be changed too? Regardless:
+
+Yeah, I guess. Posted 
+https://lore.kernel.org/bpf/20260220062959.195101-1-hbathini@linux.ibm.com/
+
+> 
+> Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
+
+Thanks, Ilya.
+
+- Hari
