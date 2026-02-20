@@ -1,216 +1,120 @@
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0259113D503
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 01:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771549637; cv=pass; b=EGkF3Vx36r5NpRihj7zf0dq5pSdW+sTJx3lsrzkaOnTTXK+XwhkaxyV5R90QiurhnwK0oTCYso6XqYQlikscdNactYHF6bzyxPHXLsWFqev5f+806Y0Hx54KZotV24EEy3QHNlboY0N9mc2+10PEVazB05uJ4SM8Ezlc6C+EelI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771549637; c=relaxed/simple;
-	bh=4Du0OQoVDfLifz3GYSC+YkUNdNJ2Et5vb/FwjYsvS+8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HpxVsRP+lLfyriytp7g5uJdC54GIp7CJHZjiPaQWoifzmLDPbQo9dikOZEiS9ZYWssfLVSLgCLKyhT8+ESpO6qNH15pl5ob+gMgq40F5AEF9MuNDKYetwVrvHjwuBDbTNM+H/0uWcYjjqCawqdi49kPrspzDQbQGTcrWFNsa/3M=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X7Y1Ryfc; arc=pass smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE87E7262F
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 01:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771549793; cv=none; b=Js4tXS6wxmixb8BRLMX/glfKrUTUfAA5Xx5B6xvF/OResXxT7BSGKXuAaJgpmrGAzHZABnNT7xbq+65hICZOP0VUZlYK65ysYLbckIfLKZgCLGDtls4RNDu7NgtuBtinwwA8SPJqCqBBa5pH9eIhhuq+wLUHftn8Cp9DcUcN8AE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771549793; c=relaxed/simple;
+	bh=/bBk1D9FyTZRycI3nbdGSzmQwwRETyWhWyjZcn6ZWBc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Q9ner1A3kJtufOgz7rViqTmunsLCN8q3qzzx9vCor6JBLv2/VVabGMPi4MOQd/vgIKuIg5oUH0CQyrsUz5pJCEcQgtnmFm5BpL76p/4cYRh5oy7h583X27f9SVGliBCN99C7+a+vn1wT3XTTbIDR/SJeBsdBXQETP2yIuRTIhJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hqRzt8IK; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X7Y1Ryfc"
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-59de0b7c28aso1879057e87.1
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 17:07:15 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771549634; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ckK4mCurf5rDwRNk14OVDN3T0vB3pJYm00luisF3zUwJXNE9j8Y3sKC+3ZMKkJ5CEx
-         /7ltwT1/oM/AZ6HgSfrHfH1Of+inYObqlWEPHrIXoFutMN55G3traIKX1SbD1hlG3Zgu
-         ecXYRvgGtEtzF9o1/OPxJXBaybMptnwh2EE+nS+FpJre/hpQwVUw8907tvbWZKbvhgE+
-         OTA8zEZPkS/JpLGR8Z1ywxN+6S/gD/sR8Jd8q1sqM15B2PiyyC1X7ATqjBhicf9TkirP
-         9wWPv1/ZpUSO/fmx8Sib/KpMVDayz+XzVdWGxBvdYXJBZ1TKvUDBmQECpKEt8G2FYFyH
-         TUKA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ZmIxyr54D/I58TGB2aA1a9CohmKJ72f48z84M3gqW7U=;
-        fh=J4yJzGLNfB6IrTf4kTD1UUuCgV2yNq6dxdgJfdD/hQI=;
-        b=UBBNtEcuzStLqQXV7WIdydGAiqWYGcw0jCO11NXLcufBAfEz4hSDiXzKfIjKrGUVFh
-         58tpAVyfsQJgyUINID+O++bqYh94rcqrDTg/8roKZxdFT3GGBTwwu5UCcKdJLRahIu9L
-         e9AnW3rRdO+INDz9z5kpHItn6FJUH/7rheJMobV3c59QV+Pr/xzZjfJk4M3hd++BhIs0
-         H6C9M+QbWm0NIL1KhYdDKXzcIB0r3FFJLXudcpCLnvyx++9vqaX5FWPgVoD25BkAHLJa
-         /FzCb6GYy0iCzVdr35OzIFw20e+b2Y6XJiNr3EciX+yM4bBLxFmXvUjTXEs+Y7BQXtw7
-         g2bQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hqRzt8IK"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2a8a7269547so15232945ad.0
+        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 17:09:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771549634; x=1772154434; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZmIxyr54D/I58TGB2aA1a9CohmKJ72f48z84M3gqW7U=;
-        b=X7Y1RyfcJ62vtQeELeBpgIsqIwySUL3qfTkhS6exJ8wW/Tx5Bw6aWPvFRVq0FnHJeQ
-         oy5zlKhBqqIU/VFinM6b00Z1+3r4bYLRjM2UcyK5wwhY8BsJi+0q2T/m+9rchldlgd3u
-         jjyOZHrursfa+h7/GoeiBuFmGY3KSqQTael0bByPDHARXiRKEmEZqLZHSiZT5ylPGxS2
-         YAxYsPSlPli03X1L1dbLmjNM87EfSdS5oBhErJRGRtkYvE7dCfsj6jXYX04xIIMAb09d
-         /Icrhq2+lOYdO7kKHlcCeCeYj4Y3Rcu5VwhR8Jt4VdmHrk8UsOFzbn3zMTnmmOO/nzS2
-         qlZQ==
+        d=gmail.com; s=20230601; t=1771549791; x=1772154591; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=/bBk1D9FyTZRycI3nbdGSzmQwwRETyWhWyjZcn6ZWBc=;
+        b=hqRzt8IKueEqIFM/qeRu2daqGtnl/dB+MkWTHJPL+xuSAKuJQPmMHyBDSpt5SAs7V7
+         g7rEAn6c2wu95Kb7wZGlGag5j0dLFNwerA8UB/6guggplOyJvNRcS6Kw7AcrHUo6y8Cf
+         TGvLMBz3rcAzB842NuRupk3X7YSETNXNkAvNAH9V5VNyZ7PNFHR/HdxPH0UtILZRxUg/
+         tdsL16RfqYIp4k867iRyG72oX+asRIamlGbjVRq7lOLGBbHRGnbqRa8CWojGYUE2qMP8
+         ZMy3lD32VYMhNkDMuF0pJahLqCzJ6NeKwi7j4g5YkX4V2aAV3RHOl/iizFpLIY6tmY7V
+         l3jQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771549634; x=1772154434;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ZmIxyr54D/I58TGB2aA1a9CohmKJ72f48z84M3gqW7U=;
-        b=d5f2lJo7ztb09e7EV06aHHQRRQjXAazP5bO8ewVw8u2mmlE9yyC4iBkTWFmkcAqlyE
-         4Z7KxNQcIbaWFonyavVjNDe2oFwpyHfg4oZP6MjBhN3S8OUCjsBN3QnSIme0ZVb6/jfM
-         WgbAk2MmT5TVsfM4gWvXtC1alDf8adYKhs/oNOmPTqYAWjiOn8ty6K5CyhSk9V5w1Las
-         fJrojKYhgwpPuJvl4ZQOrlhfB6ebDUx6TUbRwFJVhBPvqk6wS2Zzs+zIBBlJAbymJsPO
-         SzxjaAB8AwSUqyqRiwvDwOqqgatokOB6yr/TA30xOLS93s9dPeKZFRT5NKLbH9j5Agb5
-         ArDg==
-X-Gm-Message-State: AOJu0YyQvJfNjqw8AxWT2srJ6axjE0bdZfsHXfjIXj2RJVo/uFbK8aIL
-	3Lwl8r2r/TjJt5N9OOHhKFHh0j/fFYWJgFHdbC+Y3P4bjnqpj4stfpjs7/8W9H/m65LvhVY7HMv
-	9xNim4tFt5FQ2dfQowYJfPcRagbYMEbk=
-X-Gm-Gg: AZuq6aImwXoqRHn2DK6OjhYwfXn8SZQuDlkv/kNgEPydPyobc0zhfF+sZ9YP0qniYmM
-	mUACWVfCq7acuBudFGOYgICbzrtb5+EN75gwlk0h3jiR+GTDYyq2Wb1mPkrbqv/MERzNZ96Jlza
-	ucR++gy5Jl7DJwbdrAZJie6rwmyROhne6UG1EmsktS9hrKaFcSHp3Bw1tD4k5mpzsFqli9/sUXm
-	zqfen9UBq5f8Zi83MXmUOzAAPXsKLnB+mBkVd63pgZtxKU0NQF6XuwXZv89xwDh9LcIHjBPZZx1
-	J/aO04Q=
-X-Received: by 2002:a05:6512:3087:b0:59d:e9df:6dcd with SMTP id
- 2adb3069b0e04-59f83b9da63mr2099271e87.15.1771549633590; Thu, 19 Feb 2026
- 17:07:13 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771549791; x=1772154591;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/bBk1D9FyTZRycI3nbdGSzmQwwRETyWhWyjZcn6ZWBc=;
+        b=tQ3gUxyA6VsgjKujGUIX2vTQt3tuOX0fQpzQQRQLOEl8WX4UgbiRvmCRl9l9zgOoJB
+         Z9xBlNTrfBoBxKiB/bHZhNhQuD0ViGJBViBZanaNKpb+C3ATSE4OOOiYjgXu+wtFQ2HO
+         3CjwFgvZVqqO2A0TD/qLRf5H4GzbaNuwVSUeUHn/+H6PWnZalKVHlgAzqCWjTC6SZgc3
+         sUHn3KA0JMGoRKmazvBFUigZ4X3fspa7axoRVcsI78aANurSenyaoUSE6GYvE2RWxYgO
+         9NKCtqIBhx3yVDqmjRWUgaoT9aQKudrjXwf9VhL7xhYgTejuwdI9U5TJAUxZqGGltVeD
+         yIMw==
+X-Gm-Message-State: AOJu0YyhmWidEuR7YHNbUzLmdkU2L0tvh8tA+pegA42eBJ8mk3mCXa7Z
+	3yRa/iFDUsWrXwsOlIRNugZ4rRXf3G0suUggkxRobE9yY+mgu6ltIDZR
+X-Gm-Gg: AZuq6aK5sU+eH+CIe53QZl8Eta1amDJMvSqcNz2l7vHIXPZ6qObipoNYFNN6V731in3
+	Ungdlk1zNauJq6WSql486GLrtf2FY+q+VduU9OZp8rbJo9aZDB4IUJcpq7QbPv8j240qS9k61nZ
+	iD+DRn50RDJ2p7XYJN7eOTbcPLjN6NxfcnnGr+gQMqCChB8wJAkDsH+FHSqHjSswnFnOvTNx8PY
+	1n6S/QAH0g7zQAPaBLQ55IZlHUTzYNb18uMqp6mdhn7cvmMCpdqhyNKTnst1HNFMfatRwoOjEIP
+	bvKhj06iq+7ciFOrjebuPjYX2kcW5ofYT+s3hvLvn7Bl9PgBx/DXHZh6vgruBxOJ9bvtLEXNQuL
+	BR3hgNB1HT8s0Spwy6PEmW7rbeyr4HVuqV3OT7jNH2QzTzL81neffG7I78rK9KNetZULPWWXW5y
+	smXoudYGoaCFpYiYOjytLO5cui8yhj7mH5y0/chBzu7+tNw2uLa/s=
+X-Received: by 2002:a17:902:ccce:b0:29f:2f40:76c4 with SMTP id d9443c01a7336-2ad6cde75f1mr396175ad.34.1771549791199;
+        Thu, 19 Feb 2026 17:09:51 -0800 (PST)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad1aadc755sm178097315ad.63.2026.02.19.17.09.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Feb 2026 17:09:50 -0800 (PST)
+Message-ID: <0d16f1af1b7b499b587ce7a5beef6bdbf1ddbccf.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/5] bpf: Add KF_ACQUIRE and KF_RELEASE support
+ for iterators
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Andrii
+ Nakryiko	 <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi
+ <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+ kernel-team@meta.com
+Date: Thu, 19 Feb 2026 17:09:47 -0800
+In-Reply-To: <CANk7y0hiddq=eiViLF6c4kGUBNS-vdHoWXK7PEAvTyb9W5rshA@mail.gmail.com>
+References: <20260218182555.1501495-1-puranjay@kernel.org>
+	 <20260218182555.1501495-2-puranjay@kernel.org>
+	 <b36ca4ba2eada11a9b5cd5dc1f44e9217a86add3.camel@gmail.com>
+	 <CANk7y0hiddq=eiViLF6c4kGUBNS-vdHoWXK7PEAvTyb9W5rshA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260218150000.301176-1-maciej.fijalkowski@intel.com>
-In-Reply-To: <20260218150000.301176-1-maciej.fijalkowski@intel.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Fri, 20 Feb 2026 09:06:36 +0800
-X-Gm-Features: AaiRm52_xb6kFQorOBbTSas6w9BZ_ZFswXRYRYP9SzorGa659iuDtN-NAWW3y58
-Message-ID: <CAL+tcoCYMzNtAqgrdOHVNPBO4H5mCtvwhYj5kGdhJ5CCRgRd5A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] xsk: avoid double checking against rx queue
- being full
-To: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	andrii@kernel.org, netdev@vger.kernel.org, magnus.karlsson@intel.com, 
-	stfomichev@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Maciej,
+On Fri, 2026-02-20 at 01:05 +0000, Puranjay Mohan wrote:
+> On Thu, Feb 19, 2026 at 8:37=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
+om> wrote:
+> >=20
+> > On Wed, 2026-02-18 at 10:25 -0800, Puranjay Mohan wrote:
+> >=20
+> > [...]
+> >=20
+> > > @@ -13797,7 +13826,7 @@ static int check_kfunc_args(struct bpf_verifi=
+er_env *env, struct
+> > > bpf_kfunc_call_
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 }
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+> > >=20
+> > > -=C2=A0=C2=A0=C2=A0=C2=A0 if (is_kfunc_release(meta) && !meta->releas=
+e_regno) {
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0 if (is_kfunc_release(meta) && !meta->releas=
+e_regno && !meta->has_iter_arg) {
+> >=20
+> > This makes the check too strict, right?
+> > E.g. for most of the release kfuncs there would be no iter arg,
+> > hence the check won't ever be true for those kfuncs.
+> > Do we have tests for this check?
+> > Either we don't have the tests or the check itself is redundant.
+>=20
+> A release kfunc should either have meta->release_regno set or it
+> should take an __iter arg, that is what this is checking. If we leave
+> it like it was then every release function that take __iter would fail
+> her.
 
-On Wed, Feb 18, 2026 at 11:03=E2=80=AFPM Maciej Fijalkowski
-<maciej.fijalkowski@intel.com> wrote:
->
-> Currently non-zc xsk rx path for multi-buffer case checks twice if xsk
-> rx queue has enough space for producing descriptors:
-> 1.
->         if (xskq_prod_nb_free(xs->rx, num_desc) < num_desc) {
->                 xs->rx_queue_full++;
->                 return -ENOBUFS;
->         }
-> 2.
->         __xsk_rcv_zc(xs, xskb, copied - meta_len, rem ? XDP_PKT_CONTD : 0=
-);
->         -> err =3D xskq_prod_reserve_desc(xs->rx, addr, len, flags);
->           -> if (xskq_prod_is_full(q))
->
-> Second part is redundant as in 1. we already peeked onto rx queue and
-> checked that there is enough space to produce given amount of
-> descriptors.
->
-> Provide helper functions that will skip it and therefore optimize code.
->
-> Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Oh, right, I missed the point here.
 
-Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
-
-> ---
->  net/xdp/xsk.c       | 14 +++++++++++++-
->  net/xdp/xsk_queue.h | 16 +++++++++++-----
->  2 files changed, 24 insertions(+), 6 deletions(-)
->
-> diff --git a/net/xdp/xsk.c b/net/xdp/xsk.c
-> index f093c3453f64..aaadc13649e1 100644
-> --- a/net/xdp/xsk.c
-> +++ b/net/xdp/xsk.c
-> @@ -160,6 +160,17 @@ static int __xsk_rcv_zc(struct xdp_sock *xs, struct =
-xdp_buff_xsk *xskb, u32 len,
->         return 0;
->  }
->
-> +static void __xsk_rcv_zc_safe(struct xdp_sock *xs, struct xdp_buff_xsk *=
-xskb,
-> +                             u32 len, u32 flags)
-
-This helper is used only here, so I wonder what the need of it is?
-
-Thanks,
-Jason
-
-
-> +{
-> +       u64 addr;
-> +
-> +       addr =3D xp_get_handle(xskb, xskb->pool);
-> +       __xskq_prod_reserve_desc(xs->rx, addr, len, flags);
-> +
-> +       xp_release(xskb);
-> +}
-> +
->  static int xsk_rcv_zc(struct xdp_sock *xs, struct xdp_buff *xdp, u32 len=
-)
->  {
->         struct xdp_buff_xsk *xskb =3D container_of(xdp, struct xdp_buff_x=
-sk, xdp);
-> @@ -292,7 +303,8 @@ static int __xsk_rcv(struct xdp_sock *xs, struct xdp_=
-buff *xdp, u32 len)
->                 rem -=3D copied;
->
->                 xskb =3D container_of(xsk_xdp, struct xdp_buff_xsk, xdp);
-> -               __xsk_rcv_zc(xs, xskb, copied - meta_len, rem ? XDP_PKT_C=
-ONTD : 0);
-> +               __xsk_rcv_zc_safe(xs, xskb, copied - meta_len,
-> +                                 rem ? XDP_PKT_CONTD : 0);
->                 meta_len =3D 0;
->         } while (rem);
->
-> diff --git a/net/xdp/xsk_queue.h b/net/xdp/xsk_queue.h
-> index 1eb8d9f8b104..4f764b5748d2 100644
-> --- a/net/xdp/xsk_queue.h
-> +++ b/net/xdp/xsk_queue.h
-> @@ -440,20 +440,26 @@ static inline void xskq_prod_write_addr_batch(struc=
-t xsk_queue *q, struct xdp_de
->         q->cached_prod =3D cached_prod;
->  }
->
-> -static inline int xskq_prod_reserve_desc(struct xsk_queue *q,
-> -                                        u64 addr, u32 len, u32 flags)
-> +static inline void __xskq_prod_reserve_desc(struct xsk_queue *q,
-> +                                           u64 addr, u32 len, u32 flags)
->  {
->         struct xdp_rxtx_ring *ring =3D (struct xdp_rxtx_ring *)q->ring;
->         u32 idx;
->
-> -       if (xskq_prod_is_full(q))
-> -               return -ENOBUFS;
-> -
->         /* A, matches D */
->         idx =3D q->cached_prod++ & q->ring_mask;
->         ring->desc[idx].addr =3D addr;
->         ring->desc[idx].len =3D len;
->         ring->desc[idx].options =3D flags;
-> +}
-> +
-> +static inline int xskq_prod_reserve_desc(struct xsk_queue *q,
-> +                                        u64 addr, u32 len, u32 flags)
-> +{
-> +       if (xskq_prod_is_full(q))
-> +               return -ENOBUFS;
-> +
-> +       __xskq_prod_reserve_desc(q, addr, len, flags);
->
->         return 0;
->  }
-> --
-> 2.43.0
->
->
+> But anyway I will be doing it the better way how Mykyta
+> Suggested, so this will be gone.
