@@ -1,32 +1,32 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EFF366556
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 18:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A9B313959D
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 18:20:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771611641; cv=none; b=o1anRAk7cYNZwzSxAQkK3GlWmtzZpUVmeujxxVNP308zMoy8TowRDW4oEabc1JiUGlZ9SEpSXoZbsWwfmiuRzR2m67PnplYJlm5GfrGeM9RQs/jwGK/HfpUFqYE2LGnYvaTtR7NZHAlYHHcqVgE0ZENFJKij9qMspNp7iVxoLmM=
+	t=1771611644; cv=none; b=Tvi4x4nREXTKyIA4Amj+zNpKzxeweMOHnqlOr2TxhcTQFxa162W+OuDz4CGTrsBw1gvCrNPqRAdO2ALXcKEv8VfQZIgPa6RAmHn1dYJqaK6wFuMfgwhgVxsPtxJO1Q1pSmCy+zmlJZFiMBKQpzJ6JiDw6e7hnWqYXgIhdp8jfa0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771611641; c=relaxed/simple;
-	bh=B70Dg1KnWId+84nKzdvSCzbx9v8OOTz5PhxPUSIWwmg=;
+	s=arc-20240116; t=1771611644; c=relaxed/simple;
+	bh=0movS6g8APFRjZGKZxVGfx4aQ9pQCEmIriIwrf/tT1Q=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IW0eGF/wPhcUqdq4d4qmbhQaxaDTRJH/oEXCndrV5EEahSKZNce7xEFGFsnx+6I7YIwsUWJlagvWtkItUx+UP+ZE4+/8b3kh9FkkiaX3y5K0PQ2h9cufSiF/iZ3OWqydnzarCWTqkRkXAIOJPpNQZUudf/qFATmwpkC8+hD5a2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G8VI7y3h; arc=none smtp.client-ip=91.218.175.172
+	 MIME-Version; b=NnIHsctwVsXbFnZS/jw+RCq65X2dSCjVk76GQWPvMWTwXrYdF24JWN2SY6jXzc1yscunfNimcK5BoYLf61/ceFrFEowLpjf8HvDa53P4sZ41DioSMPhlNUWWA0/XZidcla2uks0yVESVXbqtFujAc8o25ulSgfy3NSoMcO/u+W8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OIPISkkZ; arc=none smtp.client-ip=91.218.175.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G8VI7y3h"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OIPISkkZ"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771611636;
+	t=1771611639;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=RaXcc3pAAHmc8PSgdViMdDRL6D0Fzy3EW/WYrcZC0ac=;
-	b=G8VI7y3hAwkBLiZZYr4HkjydRWseGSN9qmA3N/uBhIeWhpK0y6C0dpebiZCZMIKu7Z0Tm/
-	aTcVSMVIXMYNaKN2JJ/6N+dnCCbqOmbWLJwbX3xwwWQyF4LIGtGzKZQZ5cvTmmw6xFDdLC
-	1XX/YcSiuLmlSSDr64oWzEyzThC4X+Q=
+	bh=xCpZCnCQl1G+f+btfDm78pmpn5ENUAINv/Yhi6LMNhQ=;
+	b=OIPISkkZdjhjaEEOBCxu3AyLwlH0mo/IA/m44DTQN2sdvp0fjZIznUcDsvJ5q5FeVQR3Dk
+	lRsT58XHdkv4/TzeEm7Nq+51gA0Lj2zQjhOmJPOEGpDNWmulJZBz4crdEnZRGzKJJOnxxy
+	pllVSu6U3ogk6+/efm/neJAr9Akx6H8=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -35,9 +35,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 5/7] selftests/bpf: Use strscpy_cat() in the test_loader
-Date: Fri, 20 Feb 2026 10:20:09 -0800
-Message-ID: <20260220182011.802116-6-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v1 6/7] selftests/bpf: Use strscpy in bpftool_helpers.c
+Date: Fri, 20 Feb 2026 10:20:10 -0800
+Message-ID: <20260220182011.802116-7-ihor.solodrai@linux.dev>
 In-Reply-To: <20260220182011.802116-1-ihor.solodrai@linux.dev>
 References: <20260220182011.802116-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -49,42 +49,72 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Replace a pair of strcpy() calls that construct the unpriv test name
-with a single strscpy_cat() call. This simplifies the code and adds
-bounds checking.
+Replace strncpy() and snprintf() calls in bpftool_helpers.c with
+strscpy() and strscpy_cat() respectively.
+
+Pass the destination buffer size to detect_bpftool_path() instead of
+hardcoding BPFTOOL_PATH_MAX_LEN.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/test_loader.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/bpf/bpftool_helpers.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
-index 338c035c3688..af4319566fea 100644
---- a/tools/testing/selftests/bpf/test_loader.c
-+++ b/tools/testing/selftests/bpf/test_loader.c
-@@ -673,18 +673,18 @@ static int parse_test_spec(struct test_loader *tester,
+diff --git a/tools/testing/selftests/bpf/bpftool_helpers.c b/tools/testing/selftests/bpf/bpftool_helpers.c
+index a5824945a4a5..c99776b03f52 100644
+--- a/tools/testing/selftests/bpf/bpftool_helpers.c
++++ b/tools/testing/selftests/bpf/bpftool_helpers.c
+@@ -1,33 +1,35 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+-#include "bpftool_helpers.h"
+ #include <unistd.h>
+ #include <string.h>
+ #include <stdbool.h>
  
- 	if (spec->mode_mask & UNPRIV) {
- 		int descr_len = strlen(description);
--		const char *suffix = " @unpriv";
-+		static const char suffix[] = " @unpriv";
-+		int name_len = descr_len + sizeof(suffix) + 1;
- 		char *name;
++#include "bpf_util.h"
++#include "bpftool_helpers.h"
++
+ #define BPFTOOL_PATH_MAX_LEN		64
+ #define BPFTOOL_FULL_CMD_MAX_LEN	512
  
--		name = malloc(descr_len + strlen(suffix) + 1);
-+		name = malloc(name_len);
- 		if (!name) {
- 			PRINT_FAIL("failed to allocate memory for unpriv.name\n");
- 			err = -ENOMEM;
- 			goto cleanup;
- 		}
+ #define BPFTOOL_DEFAULT_PATH		"tools/sbin/bpftool"
  
--		strcpy(name, description);
--		strcpy(&name[descr_len], suffix);
-+		strscpy_cat(name, name_len, description, suffix);
- 		spec->unpriv.name = name;
+-static int detect_bpftool_path(char *buffer)
++static int detect_bpftool_path(char *buffer, size_t size)
+ {
+ 	char tmp[BPFTOOL_PATH_MAX_LEN];
+ 
+ 	/* Check default bpftool location (will work if we are running the
+ 	 * default flavor of test_progs)
+ 	 */
+-	snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "./%s", BPFTOOL_DEFAULT_PATH);
++	strscpy_cat(tmp, sizeof(tmp), "./", BPFTOOL_DEFAULT_PATH);
+ 	if (access(tmp, X_OK) == 0) {
+-		strncpy(buffer, tmp, BPFTOOL_PATH_MAX_LEN);
++		strscpy(buffer, tmp, size);
+ 		return 0;
  	}
  
+ 	/* Check alternate bpftool location (will work if we are running a
+ 	 * specific flavor of test_progs, e.g. cpuv4 or no_alu32)
+ 	 */
+-	snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "../%s", BPFTOOL_DEFAULT_PATH);
++	strscpy_cat(tmp, sizeof(tmp), "../", BPFTOOL_DEFAULT_PATH);
+ 	if (access(tmp, X_OK) == 0) {
+-		strncpy(buffer, tmp, BPFTOOL_PATH_MAX_LEN);
++		strscpy(buffer, tmp, size);
+ 		return 0;
+ 	}
+ 
+@@ -44,7 +46,7 @@ static int run_command(char *args, char *output_buf, size_t output_max_len)
+ 	int ret;
+ 
+ 	/* Detect and cache bpftool binary location */
+-	if (bpftool_path[0] == 0 && detect_bpftool_path(bpftool_path))
++	if (bpftool_path[0] == 0 && detect_bpftool_path(bpftool_path, sizeof(bpftool_path)))
+ 		return 1;
+ 
+ 	ret = snprintf(command, BPFTOOL_FULL_CMD_MAX_LEN, "%s %s%s",
 -- 
 2.53.0
 
