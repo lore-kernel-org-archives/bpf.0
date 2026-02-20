@@ -1,65 +1,66 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BCC223B63C
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 19:18:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7147D1862A
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 19:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771615099; cv=none; b=U458F4c+tDFue3522M6r53yLtpWGwEqdgFeLIHPRqZLgIEO1at54rDAskEXtm1gIhLClxvEmhw8Q0qWjF60wtSXrMUIeKW57bfO/WLWd9P7Fo4Zy8g2lKbHglGQhH2dzIy6F56wFDiJoxfpJ0Teqo6/5oR25lfFESMeZjReVQXo=
+	t=1771615101; cv=none; b=DzD1fMsV6uul+u4vWTtE81UzL1x4LuVvW75pWqnTjt2XzO/BvNJVRSsC7CxE17SDtuoUt7bxZn2AJ6Rvn4R6fZ9l1vJ5XiLe2X6r0EvODqc3gVBtKTvbrXGvcPw2YhQEtZUCwYkElKZJ22GAKjgs1eDUiX/nukDMOBbWQViLeIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771615099; c=relaxed/simple;
-	bh=NZ8Yj65RvlY0GVbCZ2twS7zm5k5JhP8Sh38XTEk0Ckk=;
+	s=arc-20240116; t=1771615101; c=relaxed/simple;
+	bh=C1vOiLSrKnU9+xmlRGvJmI/1bCGCaQBHbdTtfVc6e4A=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ehNusR2NK7j4v8k0XzUSRq6wYUKJAiaP/07mCdEyCyKvbvFyy/rgp71LyRkoS3/GLqkAMYzBci16J1lxFFKXq1KfqQAyvu0QboAZoNwLGruM3lknA8eFfwCcm2puod0rPilmJ6RlYQ+pi6Y1S3+Ggj3o75vN3sh+ijch3bWE5s0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IWM+YYVf; arc=none smtp.client-ip=209.85.221.44
+	 In-Reply-To:To:Cc; b=d4iX5xtDOnqrAlAyvfjs0qcbibnbDEthmbrK/6RRn463cZDszTcuYnFF6adyV0uX3q2A65UmY8By92JxYmdAScpUJCDNIq8YlhYkswAwEVjLCxeHxHwvx3Fiq84NbgXrRVcsANqIKKAM/KCF7bnQU3Ex/m8yAkLZYuuTFwD4Vwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rq7015iq; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IWM+YYVf"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-43638a33157so2239546f8f.1
-        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 11:18:17 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rq7015iq"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-483770e0b25so24875395e9.0
+        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 11:18:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771615096; x=1772219896; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771615098; x=1772219898; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=6XTqf/2q4e3+bsnVwet0RKOGTdYGkA4n32Q29UjsPII=;
-        b=IWM+YYVffSxdSwGG05qhl+VVAXKvNL5q4WmR0+zXKnFS7ZgtJCpspaAjjqXFyobK7a
-         nywHA7yCkeRjJb8IPwjvV9ICap0duAwc9X3bmnMqf8ygfRfRn2x+I1xPeRphdtmFamCV
-         FIypT1y8Lyrqs539w77WFImpgtsqjwpRGTXAdF68WPPfB0K4wV0kAXBWor27KPbI5sUk
-         LhG7nOamg3BdPmQg6IiVKj1/o2yT6Gz9jHH59KTga7LT3Q89z8nCSMETWBrpzi6RQuuq
-         IbWBZnRr3mmvzABu71vHcgZtKCU2Ae2V0Irtst1MvSmwAzMW3i2/tKoxhURlF3bSJDFX
-         ADMw==
+        bh=nlyCex2d/xQgNUFStbGAJOM5b1o9hCsUV78xyL/PLgw=;
+        b=Rq7015iqTOrWtXQFtA714bnmtuLIRWnq6OVxvv3SymIK0LiT3Qkh3/uCA22TAC2j9Z
+         vSODooemcHXzO2X5w309C8iFFDOUW9B1+zoOOyIpoPwR1ur/2SAs1ODVdVYsZBKrEOtI
+         DohqhNoGYi6IIJa64iWpAaWEmUWTnwx9DuRBqE8zJCEORSp9OGUFIlUHFs78+/z4qnP3
+         25Q+E/feoRuMCfm3l7cKJT7S4mQiqwbmmmDTM77UcwRinuvPvP6kWhqzFCN8ritC7tln
+         RKtWsckVlDg1ttvErnOsyJmftHJG4Sa1mGBowu2j5V2QeKSsHLPQ8pLUknUBXmTOqZw+
+         lquw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771615096; x=1772219896;
+        d=1e100.net; s=20230601; t=1771615098; x=1772219898;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=6XTqf/2q4e3+bsnVwet0RKOGTdYGkA4n32Q29UjsPII=;
-        b=Qqo6h35sy/EOFBTM506vrs9zkY/njG4dh8wUX9wdxBq0aIhuGldpacr8vB8/t8HFGV
-         pF1bD7bN7GZRimVk53k4a7jE26z2uG7wJGuwHzz6CTtSdFM6upH83WtizDp6W90xjykI
-         AJz0hHVW2SPAUOXYBAT/0tb/FCHK8AcNCMXx1XdmP1fFaDvBBomWPB7C0Uk8MlRrLOFQ
-         1RjpaxPRJN0Ip75G5FIi/f1tHoUKbwDq57/QAa7PEROyyHaavRN1shSXrIGz8LIELV31
-         N5mjHlFnB3PLJeKa6djQGyDsvbUHn4tMFkN9x6DBxp7TVs8ufPMTy/KTYSc+IlJUjXsY
-         kWxA==
-X-Gm-Message-State: AOJu0YwfhtlnQ2LMFBhlCOGZR9gOqjBtpzsvwqYa6TBfULy/xzOl9Ot0
-	nVsOwvMm2AAM4GQoZUJMAW4Lr9n54KtXCnxBj4sd6YO92K0n/A/+62+O
-X-Gm-Gg: AZuq6aJHKdkky1SaJgFiVcaIW1y34W63Q1E5B4c7b6kr1C8L4ldhdIFSu+rAkJjR6MI
-	6RP4LWAUMVgJSjvgK1NLMSPP4kEI2X0HGRwaW0GWEWfBvIHiPJNwKmSVZ74iso4Ihe408MumM8L
-	jWsOngnBXf5LeTFZyqKNfHpw7occcc+30e4afwWmrr2boovfGR3guJtJNsSk9MIhbcQClGpBFY/
-	N1l6bt7fQRywzWrebhTTUbeLAqsldeMiRNiv0rakLe5XIwbkrtzQrj4NCJVuMlkjPkTezuT/4ZG
-	ah3cfVL3ofHOgcmEU8O8el5G7crQwQreQZ/pHcZbzXBj2vurJBlKRP/nYuh13N6VgPVYVzAr66v
-	rrw8VGITIhXm3me1INuZBr9cCH5r/uzef/IFTQ8sJin10x46XoqwJZER69r1DfXNO6wdtdddmbJ
-	e18WDWtb91UAl9DnfZ6B8Xtuii3dV/
-X-Received: by 2002:a05:6000:188e:b0:436:34e8:e665 with SMTP id ffacd0b85a97d-4396f1819e1mr1644064f8f.54.1771615096241;
-        Fri, 20 Feb 2026 11:18:16 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:70::])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970d401aasm92260f8f.23.2026.02.20.11.18.15
+        bh=nlyCex2d/xQgNUFStbGAJOM5b1o9hCsUV78xyL/PLgw=;
+        b=PXNk1Vaw8i/Jzzvi85+sGMoGVRy+FLVbj7ypO401rYWJZp4Ks73XCcdmPbToyQ81+4
+         +vCDsW/K2aIQRLzOyPyeGiulYCg7EY8TKBGl+yq22gaYzW+TgwCcqi8pfj3GGjVXVsqU
+         2a/Ul+v3OzCPk/pxhp0l/0GlBKUkB0fdhZkBDBvkTn4BvFNkd8P6AJaRFM425JuIRx80
+         ndebkarIkMkrYH9r9uwaQBnse/8lVEe4OqRlyrmLj8DRApcBr+fpirf2vnOeDDN+50G5
+         v+kS2gdNNY3lXmgjfLRVVhfy8iPZtIW/mCUFge0TUykEWvWKPkWcnyzcHFXCLfR3WYSb
+         YpSg==
+X-Gm-Message-State: AOJu0YzytKtkwNxI1J1fO55fSvtkFiAIfk1sLjteq0qtlrNzUYAAL1lt
+	lLKkleHALOE2NE+SUlX2RNcsJTAQolF7r5fs1gcqFUBHeN2yLos+hC9n
+X-Gm-Gg: AZuq6aL7w0o7uxEOFFvf9J3t1FviRMLOHSuo4qzgJWsK1pSWDQC94FFK3mlHuxqdmlA
+	qCVUD8WFUgsHrb7kfl55cgaYg0c4Tb1NklovWM34EeX7L6WlT3JIm4/eRg9kZnW8sbhqvtu1N0U
+	R/Jf/HZkBtnEBl5iaiVviIMq0vVduBkHA9Fb7WyG038MoEtEXa7FMZpZX5UdsHncBkP1Xt/EDFG
+	bKfxaDc1rgxH7H9cTL2qz8M0kaT6MLP1mEmCttqUuzT2y72xcy82rLFogcVQ+Z2HSNVHiGkVaVv
+	a5hxp2QotpdPUvQVYHX55DXJnBWT9PljNlCFK1YM1tcdcqrz2EeDf1wLEG55CNtzv7gdyF2UD7u
+	VVHxJvkjklO3uYpHRRTRV4spqyEfOZ0oy2UwDIs3dhMvu9qDJ6ojXBFPRHvTcsuPfnKngm+/vAS
+	Pqo75W7oNpmTJvVqtjE3D1Amt0+HI=
+X-Received: by 2002:a05:600c:1e09:b0:480:25ae:9993 with SMTP id 5b1f17b1804b1-483a962e3c9mr10777065e9.20.1771615097575;
+        Fri, 20 Feb 2026 11:18:17 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31f9af5sm80998205e9.12.2026.02.20.11.18.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Feb 2026 11:18:15 -0800 (PST)
+        Fri, 20 Feb 2026 11:18:17 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Date: Fri, 20 Feb 2026 11:18:04 -0800
-Subject: [PATCH bpf-next v2 1/2] libbpf: Introduce bpf_program__clone()
+Date: Fri, 20 Feb 2026 11:18:05 -0800
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Use bpf_program__clone() in
+ veristat
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,7 +69,7 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260220-veristat_prepare-v2-1-15bff49022a7@meta.com>
+Message-Id: <20260220-veristat_prepare-v2-2-15bff49022a7@meta.com>
 References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
 In-Reply-To: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
@@ -76,153 +77,241 @@ To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
  eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1771615092; l=5804;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1771615092; l=7619;
  i=yatsenko@meta.com; s=20260220; h=from:subject:message-id;
- bh=AFWRnGO1Nrg6jk5nKzIH/ILjyICfh61CLE0imX3oLtY=;
- b=pfVdjk2O5+OlGj2eQQ9LHj41F1xjsZ8pbVh++Stomi2YgMUpB1GH/zzz2VMCvQpHqaGnaj4GI
- yd+k6+IiEvXBcQYFe/JYfoKI2hOeowU35EVkEm2xnJrtySVCzMITPax
+ bh=pEPp5uE25nA3S6MrzU4RO+8hL2LQKOW0vLFCqJ5f+Eo=;
+ b=lkN1mRbIzeV1G1fJ495riHBszw1IAtK/nmD/QfbMwKCiKSTKLGeZ1/AR20cGTIX9Ix6ewaODJ
+ 8cvBcMFEHHhAKWxRVVqKuG2s/QaRZRW87SbpjW2y5utzSsvQ3+Wn7Ru
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=QUfct6THKRRhwIGGKcldE2w7zXPci1gMPcF7qij1gwA=
 
 From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Add bpf_program__clone() API that loads a single BPF program from a
-prepared BPF object into the kernel, returning a file descriptor owned
-by the caller.
+Replace veristat's per-program object re-opening with
+bpf_program__clone().
 
-After bpf_object__prepare(), callers can use bpf_program__clone() to
-load individual programs with custom bpf_prog_load_opts, instead of
-loading all programs at once via bpf_object__load(). Non-zero fields in
-opts override the defaults derived from the program and object
-internals; passing NULL opts populates everything automatically.
+Previously, veristat opened a separate bpf_object for every program in a
+multi-program object file, iterated all programs to enable only the
+target one, and then loaded the entire object.
 
-Internally, bpf_program__clone() resolves BTF-based attach targets
-(attach_btf_id, attach_btf_obj_fd) and the sleepable flag, fills
-func/line info, fd_array, license, and kern_version from the
-prepared object before calling bpf_prog_load().
+Use bpf_object__prepare() once, then call bpf_program__clone() for each
+program individually. This lets veristat load programs one at a time
+from a single prepared object.
+
+The caller now owns the returned fd and closes it after collecting stats.
+Remove the special single-program fast path and the per-file early exit
+in handle_verif_mode() so all files are always processed.
+
+Split fixup_obj() into fixup_obj_maps() for object-wide map fixups that
+must run before bpf_object__prepare(), and fixup_obj() for per-program
+fixups (struct_ops masking, freplace type guessing) that run before each
+bpf_program__clone() call.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
- tools/lib/bpf/libbpf.c   | 64 ++++++++++++++++++++++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h   | 17 +++++++++++++
- tools/lib/bpf/libbpf.map |  1 +
- 3 files changed, 82 insertions(+)
+ tools/testing/selftests/bpf/veristat.c | 104 ++++++++++++++-------------------
+ 1 file changed, 44 insertions(+), 60 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0c8bf0b5cce4..4b084bda3f47 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -9793,6 +9793,70 @@ __u32 bpf_program__line_info_cnt(const struct bpf_program *prog)
- 	return prog->line_info_cnt;
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index 1be1e353d40a..7d7eb56e04d0 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -1236,7 +1236,7 @@ static void mask_unrelated_struct_ops_progs(struct bpf_object *obj,
+ 	}
  }
  
-+int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts *opts)
-+{
-+	LIBBPF_OPTS(bpf_prog_load_opts, attr);
-+	struct bpf_prog_load_opts *pattr = &attr;
-+	struct bpf_object *obj;
-+	int err, fd;
-+
-+	if (!prog)
-+		return libbpf_err(-EINVAL);
-+
-+	if (!OPTS_VALID(opts, bpf_prog_load_opts))
-+		return libbpf_err(-EINVAL);
-+
-+	obj = prog->obj;
-+	if (obj->state < OBJ_PREPARED)
-+		return libbpf_err(-EINVAL);
-+
-+	/* Copy caller opts, fall back to prog/object defaults */
-+	OPTS_SET(pattr, expected_attach_type,
-+		 OPTS_GET(opts, expected_attach_type, 0) ?: prog->expected_attach_type);
-+	OPTS_SET(pattr, attach_btf_id, OPTS_GET(opts, attach_btf_id, 0) ?: prog->attach_btf_id);
-+	OPTS_SET(pattr, attach_btf_obj_fd,
-+		 OPTS_GET(opts, attach_btf_obj_fd, 0) ?: prog->attach_btf_obj_fd);
-+	OPTS_SET(pattr, attach_prog_fd, OPTS_GET(opts, attach_prog_fd, 0) ?: prog->attach_prog_fd);
-+	OPTS_SET(pattr, prog_flags, OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags);
-+	OPTS_SET(pattr, prog_ifindex, OPTS_GET(opts, prog_ifindex, 0) ?: prog->prog_ifindex);
-+	OPTS_SET(pattr, kern_version, OPTS_GET(opts, kern_version, 0) ?: obj->kern_version);
-+	OPTS_SET(pattr, fd_array, OPTS_GET(opts, fd_array, NULL) ?: obj->fd_array);
-+	OPTS_SET(pattr, token_fd, OPTS_GET(opts, token_fd, 0) ?: obj->token_fd);
-+	if (attr.token_fd)
-+		attr.prog_flags |= BPF_F_TOKEN_FD;
-+
-+	/* BTF func/line info */
-+	if (obj->btf && btf__fd(obj->btf) >= 0) {
-+		OPTS_SET(pattr, prog_btf_fd, OPTS_GET(opts, prog_btf_fd, 0) ?: btf__fd(obj->btf));
-+		OPTS_SET(pattr, func_info, OPTS_GET(opts, func_info, NULL) ?: prog->func_info);
-+		OPTS_SET(pattr, func_info_cnt,
-+			 OPTS_GET(opts, func_info_cnt, 0) ?: prog->func_info_cnt);
-+		OPTS_SET(pattr, func_info_rec_size,
-+			 OPTS_GET(opts, func_info_rec_size, 0) ?: prog->func_info_rec_size);
-+		OPTS_SET(pattr, line_info, OPTS_GET(opts, line_info, NULL) ?: prog->line_info);
-+		OPTS_SET(pattr, line_info_cnt,
-+			 OPTS_GET(opts, line_info_cnt, 0) ?: prog->line_info_cnt);
-+		OPTS_SET(pattr, line_info_rec_size,
-+			 OPTS_GET(opts, line_info_rec_size, 0) ?: prog->line_info_rec_size);
-+	}
-+
-+	OPTS_SET(pattr, log_buf, OPTS_GET(opts, log_buf, NULL));
-+	OPTS_SET(pattr, log_size, OPTS_GET(opts, log_size, 0));
-+	OPTS_SET(pattr, log_level, OPTS_GET(opts, log_level, 0));
-+
-+	/* Resolve BTF attach targets, set sleepable/XDP flags, etc. */
-+	if (prog->sec_def && prog->sec_def->prog_prepare_load_fn) {
-+		err = prog->sec_def->prog_prepare_load_fn(prog, pattr, prog->sec_def->cookie);
-+		if (err)
-+			return libbpf_err(err);
-+	}
-+
-+	fd = bpf_prog_load(prog->type, prog->name, obj->license, prog->insns, prog->insns_cnt,
-+			   pattr);
-+
-+	return libbpf_err(fd);
+-static void fixup_obj(struct bpf_object *obj, struct bpf_program *prog, const char *filename)
++static void fixup_obj_maps(struct bpf_object *obj)
+ {
+ 	struct bpf_map *map;
+ 
+@@ -1251,15 +1251,23 @@ static void fixup_obj(struct bpf_object *obj, struct bpf_program *prog, const ch
+ 		case BPF_MAP_TYPE_INODE_STORAGE:
+ 		case BPF_MAP_TYPE_CGROUP_STORAGE:
+ 		case BPF_MAP_TYPE_CGRP_STORAGE:
+-			break;
+ 		case BPF_MAP_TYPE_STRUCT_OPS:
+-			mask_unrelated_struct_ops_progs(obj, map, prog);
+ 			break;
+ 		default:
+ 			if (bpf_map__max_entries(map) == 0)
+ 				bpf_map__set_max_entries(map, 1);
+ 		}
+ 	}
 +}
 +
- #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
- 	.sec = (char *)sec_pfx,						    \
- 	.prog_type = BPF_PROG_TYPE_##ptype,				    \
-diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-index dfc37a615578..0be34852350f 100644
---- a/tools/lib/bpf/libbpf.h
-+++ b/tools/lib/bpf/libbpf.h
-@@ -2021,6 +2021,23 @@ LIBBPF_API int libbpf_register_prog_handler(const char *sec,
-  */
- LIBBPF_API int libbpf_unregister_prog_handler(int handler_id);
- 
-+/**
-+ * @brief **bpf_program__clone()** loads a single BPF program from a prepared
-+ * BPF object into the kernel, returning its file descriptor.
-+ *
-+ * The BPF object must have been previously prepared with
-+ * **bpf_object__prepare()**. If @opts is provided, any non-zero field
-+ * overrides the defaults derived from the program/object internals.
-+ * If @opts is NULL, all fields are populated automatically.
-+ *
-+ * The returned FD is owned by the caller and must be closed with close().
-+ *
-+ * @param prog BPF program from a prepared object
-+ * @param opts Optional load options; non-zero fields override defaults
-+ * @return program FD (>= 0) on success; negative error code on failure
-+ */
-+LIBBPF_API int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts *opts);
++static void fixup_obj(struct bpf_object *obj, struct bpf_program *prog, const char *filename)
++{
++	struct bpf_map *map;
 +
- #ifdef __cplusplus
- } /* extern "C" */
- #endif
-diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
-index d18fbcea7578..e727a54e373a 100644
---- a/tools/lib/bpf/libbpf.map
-+++ b/tools/lib/bpf/libbpf.map
-@@ -452,6 +452,7 @@ LIBBPF_1.7.0 {
- 		bpf_map__set_exclusive_program;
- 		bpf_map__exclusive_program;
- 		bpf_prog_assoc_struct_ops;
-+		bpf_program__clone;
- 		bpf_program__assoc_struct_ops;
- 		btf__permute;
- } LIBBPF_1.6.0;
++	bpf_object__for_each_map(map, obj) {
++		if (bpf_map__type(map) == BPF_MAP_TYPE_STRUCT_OPS)
++			mask_unrelated_struct_ops_progs(obj, map, prog);
++	}
+ 
+ 	/* SEC(freplace) programs can't be loaded with veristat as is,
+ 	 * but we can try guessing their target program's expected type by
+@@ -1608,6 +1616,7 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 	const char *base_filename = basename(strdupa(filename));
+ 	const char *prog_name = bpf_program__name(prog);
+ 	long mem_peak_a, mem_peak_b, mem_peak = -1;
++	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+ 	char *buf;
+ 	int buf_sz, log_level;
+ 	struct verif_stats *stats;
+@@ -1647,9 +1656,6 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 	}
+ 	verif_log_buf[0] = '\0';
+ 
+-	bpf_program__set_log_buf(prog, buf, buf_sz);
+-	bpf_program__set_log_level(prog, log_level);
+-
+ 	/* increase chances of successful BPF object loading */
+ 	fixup_obj(obj, prog, base_filename);
+ 
+@@ -1658,15 +1664,21 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 	if (env.force_reg_invariants)
+ 		bpf_program__set_flags(prog, bpf_program__flags(prog) | BPF_F_TEST_REG_INVARIANTS);
+ 
+-	err = bpf_object__prepare(obj);
+-	if (!err) {
+-		cgroup_err = reset_stat_cgroup();
+-		mem_peak_a = cgroup_memory_peak();
+-		err = bpf_object__load(obj);
+-		mem_peak_b = cgroup_memory_peak();
+-		if (!cgroup_err && mem_peak_a >= 0 && mem_peak_b >= 0)
+-			mem_peak = mem_peak_b - mem_peak_a;
++	opts.log_buf = buf;
++	opts.log_size = buf_sz;
++	opts.log_level = log_level;
++
++	cgroup_err = reset_stat_cgroup();
++	mem_peak_a = cgroup_memory_peak();
++	fd = bpf_program__clone(prog, &opts);
++	if (fd < 0) {
++		err = fd;
++		fprintf(stderr, "Failed to load program %s %d\n", prog_name, err);
+ 	}
++	mem_peak_b = cgroup_memory_peak();
++	if (!cgroup_err && mem_peak_a >= 0 && mem_peak_b >= 0)
++		mem_peak = mem_peak_b - mem_peak_a;
++
+ 	env.progs_processed++;
+ 
+ 	stats->file_name = strdup(base_filename);
+@@ -1678,7 +1690,6 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 	stats->stats[MEMORY_PEAK] = mem_peak < 0 ? -1 : mem_peak / (1024 * 1024);
+ 
+ 	memset(&info, 0, info_len);
+-	fd = bpf_program__fd(prog);
+ 	if (fd > 0 && bpf_prog_get_info_by_fd(fd, &info, &info_len) == 0) {
+ 		stats->stats[JITED_SIZE] = info.jited_prog_len;
+ 		if (env.dump_mode & DUMP_JITED)
+@@ -1699,7 +1710,8 @@ static int process_prog(const char *filename, struct bpf_object *obj, struct bpf
+ 
+ 	if (verif_log_buf != buf)
+ 		free(buf);
+-
++	if (fd > 0)
++		close(fd);
+ 	return 0;
+ }
+ 
+@@ -2182,8 +2194,8 @@ static int set_global_vars(struct bpf_object *obj, struct var_preset *presets, i
+ static int process_obj(const char *filename)
+ {
+ 	const char *base_filename = basename(strdupa(filename));
+-	struct bpf_object *obj = NULL, *tobj;
+-	struct bpf_program *prog, *tprog, *lprog;
++	struct bpf_object *obj = NULL;
++	struct bpf_program *prog;
+ 	libbpf_print_fn_t old_libbpf_print_fn;
+ 	LIBBPF_OPTS(bpf_object_open_opts, opts);
+ 	int err = 0, prog_cnt = 0;
+@@ -2222,51 +2234,26 @@ static int process_obj(const char *filename)
+ 	env.files_processed++;
+ 
+ 	bpf_object__for_each_program(prog, obj) {
++		bpf_program__set_autoload(prog, true);
+ 		prog_cnt++;
+ 	}
+ 
+-	if (prog_cnt == 1) {
+-		prog = bpf_object__next_program(obj, NULL);
+-		bpf_program__set_autoload(prog, true);
+-		err = set_global_vars(obj, env.presets, env.npresets);
+-		if (err) {
+-			fprintf(stderr, "Failed to set global variables %d\n", err);
+-			goto cleanup;
+-		}
+-		process_prog(filename, obj, prog);
++	fixup_obj_maps(obj);
++
++	err = set_global_vars(obj, env.presets, env.npresets);
++	if (err) {
++		fprintf(stderr, "Failed to set global variables %d\n", err);
+ 		goto cleanup;
+ 	}
+ 
+-	bpf_object__for_each_program(prog, obj) {
+-		const char *prog_name = bpf_program__name(prog);
+-
+-		tobj = bpf_object__open_file(filename, &opts);
+-		if (!tobj) {
+-			err = -errno;
+-			fprintf(stderr, "Failed to open '%s': %d\n", filename, err);
+-			goto cleanup;
+-		}
+-
+-		err = set_global_vars(tobj, env.presets, env.npresets);
+-		if (err) {
+-			fprintf(stderr, "Failed to set global variables %d\n", err);
+-			goto cleanup;
+-		}
+-
+-		lprog = NULL;
+-		bpf_object__for_each_program(tprog, tobj) {
+-			const char *tprog_name = bpf_program__name(tprog);
+-
+-			if (strcmp(prog_name, tprog_name) == 0) {
+-				bpf_program__set_autoload(tprog, true);
+-				lprog = tprog;
+-			} else {
+-				bpf_program__set_autoload(tprog, false);
+-			}
+-		}
++	err = bpf_object__prepare(obj);
++	if (err) {
++		fprintf(stderr, "Failed to prepare BPF object for loading %d\n", err);
++		goto cleanup;
++	}
+ 
+-		process_prog(filename, tobj, lprog);
+-		bpf_object__close(tobj);
++	bpf_object__for_each_program(prog, obj) {
++		process_prog(filename, obj, prog);
+ 	}
+ 
+ cleanup:
+@@ -3264,17 +3251,14 @@ static int handle_verif_mode(void)
+ 	create_stat_cgroup();
+ 	for (i = 0; i < env.filename_cnt; i++) {
+ 		err = process_obj(env.filenames[i]);
+-		if (err) {
++		if (err)
+ 			fprintf(stderr, "Failed to process '%s': %d\n", env.filenames[i], err);
+-			goto out;
+-		}
+ 	}
+ 
+ 	qsort(env.prog_stats, env.prog_stat_cnt, sizeof(*env.prog_stats), cmp_prog_stats);
+ 
+ 	output_prog_stats();
+ 
+-out:
+ 	destroy_stat_cgroup();
+ 	return err;
+ }
 
 -- 
 2.47.3
