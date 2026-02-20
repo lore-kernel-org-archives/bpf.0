@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 731B33126D0;
-	Fri, 20 Feb 2026 10:07:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D55923373D;
+	Fri, 20 Feb 2026 10:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771582022; cv=none; b=OS9g1JzSqTUTIrH0DlB8BMhlvedvony8u156MwYms+mEGY1NFvtLmszCUxOJX0V6+prT7FgGB+b4/OmV/qBfbhWldnZbPuMbdWLgvTlX59MCZJJVfeNsGo43Jwl4a3IPydNcRPyAFff/RYjyGv5ef/cPt8qHf6yaLKEYm8+Ed/8=
+	t=1771582036; cv=none; b=tMOddw6o5CxjhIMSZCraUdIzwvvoynVIVOBjdNvq+LUnD/uHfYDqxtO1lhRNuT1kExKQX8gaWtir0k9XVBsdPFh9KY6uCPd93ISVvO0mDb8IFqjiss7YW3i7BuT47EabesSIjuVqODSu0SDH73VKynQvjAlVryZGYyGk20Ec8Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771582022; c=relaxed/simple;
-	bh=dyLfv74ffFlC0iRJbIq2TYh3KF7JEMQDAIfx0yKdH80=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L7XqrtuAVcU96Yxtf28VEbZD8ZmVhAO4GstZVTElcmSVFbfW6014d0oWShLPBAD9mVqUtWA24VLtz+LXiRxnBPOEuqWMVI3fixO3LypX4tA59Fa1d1KU/WOEbOfYQhWKlWIl86V48+UkCOvhkppK6sbYRVH5CGAoGYDFcjUXdNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lWostxBf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771582036; c=relaxed/simple;
+	bh=KxDz3h523nv40MBpfPVEzEu0k65BxaB/Q6Im9CTJMxU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=X8nS56E99IsOLOt7WMd8lI7DMg8QJwaHA/S079y3nzfWlTqJpN3kDeXTipn6iKBOqdc4qTSyjEOoc/+YXlGaH3HGZRFYxbsLErwKBeIapWvcwVdLSjhJK3Vb5NDdn3ZYC/cnVzIhtBFDpkm7Gh/uDy/f5EJ00v4txldBH2aZY6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tvi8niWH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lWostxBf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEBD1C116C6;
-	Fri, 20 Feb 2026 10:06:57 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tvi8niWH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14E2DC116C6;
+	Fri, 20 Feb 2026 10:07:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771582022;
-	bh=dyLfv74ffFlC0iRJbIq2TYh3KF7JEMQDAIfx0yKdH80=;
-	h=From:To:Cc:Subject:Date:From;
-	b=lWostxBfQeNo1CwfVALgU3K1/zbfvVP1yakJB7/pPz3rO2x76OZrPhh3uUQ/r8EdK
-	 seVT+Ogo44wCYkOLAtN2AWoktpvGxw6EsF+nlaMaFGKFpFrPZjcI3lXRV6OB8rvNe+
-	 OWsXBDHbd0x27xKmN5/nn6R6oGYWW1yK3DBR2AUTtsWcT3FfN09v+2XKOSvKDcqwXQ
-	 enhaPmBgvWSEW1beRHLpq9F5gENaNytSPfGCKoyYgCZlzT7RUnu1KqzcyAvY3jX5T3
-	 c5e2dGKIzF4Y7xY81dSFigNB9h2lNF8DLaU3uWaxWdY19XoQYwo3OcvVhno3IiOA4O
-	 +gWUCQc8Q4Z+g==
+	s=k20201202; t=1771582035;
+	bh=KxDz3h523nv40MBpfPVEzEu0k65BxaB/Q6Im9CTJMxU=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=Tvi8niWHHo5Bz5/ZYIB6d56RhOq4jYssZoO5vOV0QpSe/6HtxIBtohzg3BpPOrfpl
+	 +x3peMWiB/kUgDkXA8DAOKHMgLxmuxMOUhLZAHJ9DwpoaRQKvj9XywvFSoQSt90wr6
+	 DSeCXEGkUuzvCFBVmwsDJjLQLrWxzO3iFDb+UJ4nWHkJaV/UpwHYtdo6RTlN0nBJ+/
+	 ftaI3u8T8wxq7OEVvYYIod23/hgBHpO6BrEryJJODrAEXCM0yp4u4MQj+bjAJ3s2Jq
+	 EYMKS+HVlnktW16Fy6SEpD+PuuBL4Z3fu1BehEfeql3wOoUL+0GjiMuchssSQBEX9U
+	 uteFo61HQJIIg==
 From: Jiri Olsa <jolsa@kernel.org>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -37,10 +38,12 @@ Cc: bpf@vger.kernel.org,
 	Yonghong Song <yhs@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Steven Rostedt <rostedt@kernel.org>
-Subject: [PATCH bpf-next 00/17] bpf: tracing_multi link
-Date: Fri, 20 Feb 2026 11:06:32 +0100
-Message-ID: <20260220100649.628307-1-jolsa@kernel.org>
+Subject: [PATCH bpf-next 01/17] ftrace: Add ftrace_hash_count function
+Date: Fri, 20 Feb 2026 11:06:33 +0100
+Message-ID: <20260220100649.628307-2-jolsa@kernel.org>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260220100649.628307-1-jolsa@kernel.org>
+References: <20260220100649.628307-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,87 +52,49 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hi,
-adding tracing_multi link support that allows fast attachment
-of tracing program to many functions.
+Adding external ftrace_hash_count function so we could get hash
+count outside of ftrace object.
 
-RFC version: https://lore.kernel.org/bpf/20260203093819.2105105-1-jolsa@kernel.org/
-
-Changes to RFC:
-- added ftrace_hash_count as wrapper for hash_count [Steven]
-- added trampoline mutex pool [Andrii]
-- reworked 'struct bpf_tramp_node' separatoin [Andrii]
-  - the 'struct bpf_tramp_node' now holds pointer to bpf_link,
-    which is similar to what we do for uprobe_multi;
-    I understand it's not a fundamental change compared to previous
-    version which used bpf_prog pointer instead, but I don't see better
-    way of doing this.. I'm happy to discuss this further if there's
-    better idea
-- reworked 'struct bpf_fsession_link' based on bpf_tramp_node
-- made btf__find_by_glob_kind function internal helper [Andrii]
-- many small assorted fixes [Andrii,CI]
-- added session support [Leon Hwang]
-- added cookies support
-- added more tests
-
-Note I plan to send linkinfo/fdinfo support separately.
-
-TODO: add rollback tests, add f*.multi.s tests, add trigger bench
-
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 ---
-Jiri Olsa (17):
-      ftrace: Add ftrace_hash_count function
-      bpf: Use mutex lock pool for bpf trampolines
-      bpf: Add struct bpf_trampoline_ops object
-      bpf: Add struct bpf_tramp_node object
-      bpf: Factor fsession link to use struct bpf_tramp_node
-      bpf: Add multi tracing attach types
-      bpf: Add bpf_trampoline_multi_attach/detach functions
-      bpf: Add support for tracing multi link
-      bpf: Add support for tracing_multi link cookies
-      bpf: Add support for tracing_multi link session
-      libbpf: Add support to create tracing multi link
-      selftests/bpf: Add tracing multi skel/pattern/ids attach tests
-      selftests/bpf: Add tracing multi intersect tests
-      selftests/bpf: Add tracing multi cookies test
-      selftests/bpf: Add tracing multi session test
-      selftests/bpf: Add tracing multi attach fails test
-      selftests/bpf: Add tracing multi attach benchmark test
+ include/linux/ftrace.h | 1 +
+ kernel/trace/ftrace.c  | 7 ++++++-
+ 2 files changed, 7 insertions(+), 1 deletion(-)
 
- arch/arm64/net/bpf_jit_comp.c                                      |  58 ++++-----
- arch/s390/net/bpf_jit_comp.c                                       |  42 +++---
- arch/x86/net/bpf_jit_comp.c                                        |  54 ++++----
- include/linux/bpf.h                                                |  87 +++++++++----
- include/linux/bpf_types.h                                          |   1 +
- include/linux/ftrace.h                                             |   1 +
- include/linux/trace_events.h                                       |   6 +
- include/uapi/linux/bpf.h                                           |   9 ++
- kernel/bpf/bpf_struct_ops.c                                        |  27 ++--
- kernel/bpf/btf.c                                                   |   4 +
- kernel/bpf/syscall.c                                               |  91 ++++++++-----
- kernel/bpf/trampoline.c                                            | 457 ++++++++++++++++++++++++++++++++++++++++++++++++++++------------
- kernel/bpf/verifier.c                                              |  26 +++-
- kernel/trace/bpf_trace.c                                           | 120 ++++++++++++++++-
- kernel/trace/ftrace.c                                              |   7 +-
- net/bpf/bpf_dummy_struct_ops.c                                     |  14 +-
- net/bpf/test_run.c                                                 |   3 +
- tools/include/uapi/linux/bpf.h                                     |  10 ++
- tools/lib/bpf/bpf.c                                                |   9 ++
- tools/lib/bpf/bpf.h                                                |   5 +
- tools/lib/bpf/libbpf.c                                             | 200 ++++++++++++++++++++++++++++
- tools/lib/bpf/libbpf.h                                             |  15 +++
- tools/lib/bpf/libbpf.map                                           |   1 +
- tools/testing/selftests/bpf/Makefile                               |   7 +-
- tools/testing/selftests/bpf/prog_tests/tracing_multi.c             | 595 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/tracing_multi_attach.c           |  26 ++++
- tools/testing/selftests/bpf/progs/tracing_multi_bench.c            |  13 ++
- tools/testing/selftests/bpf/progs/tracing_multi_check.c            | 165 ++++++++++++++++++++++++
- tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c |  42 ++++++
- tools/testing/selftests/bpf/progs/tracing_multi_session_attach.c   |  27 ++++
- 30 files changed, 1874 insertions(+), 248 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/tracing_multi.c
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_attach.c
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bench.c
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_check.c
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_intersect_attach.c
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_session_attach.c
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 1a4d36fc9085..a1ea6ab29407 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -415,6 +415,7 @@ struct ftrace_hash *alloc_ftrace_hash(int size_bits);
+ void free_ftrace_hash(struct ftrace_hash *hash);
+ struct ftrace_func_entry *add_ftrace_hash_entry_direct(struct ftrace_hash *hash,
+ 						       unsigned long ip, unsigned long direct);
++unsigned long ftrace_hash_count(struct ftrace_hash *hash);
+ 
+ /* The hash used to know what functions callbacks trace */
+ struct ftrace_ops_hash {
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index 1ce17c8af409..dd1844f882cd 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -6288,11 +6288,16 @@ int modify_ftrace_direct(struct ftrace_ops *ops, unsigned long addr)
+ }
+ EXPORT_SYMBOL_GPL(modify_ftrace_direct);
+ 
+-static unsigned long hash_count(struct ftrace_hash *hash)
++static inline unsigned long hash_count(struct ftrace_hash *hash)
+ {
+ 	return hash ? hash->count : 0;
+ }
+ 
++unsigned long ftrace_hash_count(struct ftrace_hash *hash)
++{
++	return hash_count(hash);
++}
++
+ /**
+  * hash_add - adds two struct ftrace_hash and returns the result
+  * @a: struct ftrace_hash object
+-- 
+2.52.0
+
