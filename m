@@ -1,49 +1,41 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5770337B8B;
-	Fri, 20 Feb 2026 10:10:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31B0C33DED5;
+	Fri, 20 Feb 2026 10:42:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771582246; cv=none; b=tx4LXqyOyVmVWlrhUnKtA9e0bZDH9VJb4UhVqX/3pdQ6piLmwQneXK88fpRDRz6KCfxzt07vk3exoEmm2Z7XaKAiV8S42hR0z7Ogiafg3z62FwQW2U0lNL+aKhXhJxL7xiGk8n6Uxc4Gm0c10nVRSgjwxJBFguzrG37ACdk542w=
+	t=1771584155; cv=none; b=ScTta9lG1S1tUgorxh20oBhUsL+CNwfgCHGrlhsacN/0ijC+P0qeGlg+jN6+NF8AXWmKaArye7GFw6RG2VDSEpxagFMIbVrZaGvEwQxFxBIQfuHnlF1q2qVmRBNu1KuK+Vn6LE6sD/2p/44HPC0dQSXvTADJXDRNNpNb14NPj6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771582246; c=relaxed/simple;
-	bh=5kZxLUUsK+4byot9lXEsgov8GWOKciSu7L2n8dBdT4Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZtRmSGA8fC5eZRHuUbxFv7gz8ewfJgmb7VHsgS7fZ0wIb4UAFt2yXrR/AfSEJwvOzSKR51EJQ5bXSBys+3Ahd7WDPZ5mYCec4vrIIgrmPkG+98pFamLlsZtTmh911OVCH/B9Din/JQdphTU1HVFsAn12XMNONImLU6Kwu8RIuz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RKwR5HrW; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771584155; c=relaxed/simple;
+	bh=tompSC6g/UXBTVpbYdy0yj/sKeNpbx12I7UgsW5y0os=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P1HrhmAJaJFDukHQkJgC6op2thooo05CsQShiEV+OqR4/VKtE+t7QfTWOsEBacoiDKalF+vNk7gzV8lDMljrvUOdAsx/Uzxf/7ju6EOT/Xr928WPqPPhK83XjGTfbVEaItqtc5ef+HAJ5A6JMhXg8ES97QF6t9q5I6KfD0OGJ/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2m/6+A9; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RKwR5HrW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A3DC116C6;
-	Fri, 20 Feb 2026 10:10:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2m/6+A9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D693EC116C6;
+	Fri, 20 Feb 2026 10:42:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771582246;
-	bh=5kZxLUUsK+4byot9lXEsgov8GWOKciSu7L2n8dBdT4Q=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RKwR5HrWwIuYkVCUXHcSoevSFLD3a3wF/0GnfiOfwb3X4CApkYpAjB8eX8jGeVfqH
-	 Q+8QDuGwNQMI6Bnl1E43zqYswpWMRocfhiPJL2vtfZyb95g4K+3RF2mCAEe7xZEId7
-	 siTplfGr7pUilQEIkr7umUc5EwyIifIcf4aJBdy23dy1/M3J9mq/xybUV05AFUlGh1
-	 2t1iU/DZCZj2+vEFKtQa9uskkgqRFqo3fVIrWPfpXvgJf8dth4SqZnGW8G0G4ZS2sz
-	 HpM6GcGqtcOmdpas7Xsq5XeNVGXkLHAekdsgA+AWR/BervTCf/atMR2nweyeSHiPhU
-	 qaWfUpIPlyXig==
+	s=k20201202; t=1771584154;
+	bh=tompSC6g/UXBTVpbYdy0yj/sKeNpbx12I7UgsW5y0os=;
+	h=From:To:Cc:Subject:Date:From;
+	b=G2m/6+A9AJJtLpC8V3n3hpSOfLHdldWq+GBbEuSq+roSkVkMAPgl/Amht1A0b5T61
+	 eHcUAP9bGdmRzec5WeH3AGhhz7IEzlXgPvHpTPW+nA/i18QlJdmUBaPWrsWwbW1IMZ
+	 8fVUSs2j9LnA0KjSg1iNAozMqPkLFrvPTkZO74J6E9NXStaEl8UKWxrw5qZ6DRq4WC
+	 4GbjjOrISCvKsn19w7dBlVdL3rFwJBGecj52c1uDVjrvZ5HyntrR2G1v/suHiyb07b
+	 YsXFrPwMO0tydE33zYY3Ye4Z7fI+29E7h3XEyiInV73SrAY1JPpyHatCcvrfrOhVUB
+	 3KDrtFd0qp4yQ==
 From: Jiri Olsa <jolsa@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>
+To: Andrii Nakryiko <andrii@kernel.org>
 Cc: bpf@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	Martin KaFai Lau <kafai@fb.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
+	linux-kernel@vger.kernel.org,
 	Song Liu <songliubraving@fb.com>,
 	Yonghong Song <yhs@fb.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Steven Rostedt <rostedt@kernel.org>
-Subject: [PATCH bpf-next 17/17] selftests/bpf: Add tracing multi attach benchmark test
-Date: Fri, 20 Feb 2026 11:06:49 +0100
-Message-ID: <20260220100649.628307-18-jolsa@kernel.org>
+	John Fastabend <john.fastabend@gmail.com>
+Subject: [PATCHv4 bpf-next 0/5] libbpf: Make optimized uprobes backward compatible
+Date: Fri, 20 Feb 2026 11:42:15 +0100
+Message-ID: <20260220104220.634154-1-jolsa@kernel.org>
 X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260220100649.628307-1-jolsa@kernel.org>
-References: <20260220100649.628307-1-jolsa@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,245 +44,77 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Adding benchmark test that attaches to (almost) all allowed tracing
-functions and display attach/detach times.
+hi,
+we can currently optimize uprobes on top of nop5 instructions,
+so application can define USDT_NOP to nop5 and use USDT macro
+to define optimized usdt probes.
 
-  # ./test_progs -t tracing_multi_bench_attach -v
-  bpf_testmod.ko is already unloaded.
-  Loading bpf_testmod.ko...
-  Successfully loaded bpf_testmod.ko.
-  serial_test_tracing_multi_bench_attach:PASS:btf__load_vmlinux_btf 0 nsec
-  serial_test_tracing_multi_bench_attach:PASS:tracing_multi_bench__open_and_load 0 nsec
-  serial_test_tracing_multi_bench_attach:PASS:get_syms 0 nsec
-  serial_test_tracing_multi_bench_attach:PASS:bpf_program__attach_tracing_multi 0 nsec
-  serial_test_tracing_multi_bench_attach: found 51186 functions
-  serial_test_tracing_multi_bench_attach: attached in   1.295s
-  serial_test_tracing_multi_bench_attach: detached in   0.243s
-  #507     tracing_multi_bench_attach:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-  Successfully unloaded bpf_testmod.ko.
+This works fine on new kernels, but could have performance penalty
+on older kernels, that do not have the support to optimize and to
+emulate nop5 instruction.
 
-Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+This patchset adds support to workaround the performance penalty
+on older kernels that do not support uprobe optimization, please
+see detailed description in patch 2.
+
+v1: https://lore.kernel.org/bpf/20251117083551.517393-1-jolsa@kernel.org/
+v2: https://lore.kernel.org/bpf/20260210133649.524292-1-jolsa@kernel.org/
+v3: https://lore.kernel.org/bpf/20260211084858.750950-1-jolsa@kernel.org/T/#t
+
+v4 changes:
+- rebased on latest bpf-next/master
+- use pread for nop combo read [Andrii]
+- renamed usdt triger benchmark names [Andrii]
+- added more ip address checks to tests [Andrii]
+
+v3 changes:
+- fix __x86_64 define and other typos [CI]
+- add missing '?' to usdt trigger program [CI]
+
+v2 changes:
+- after more investigation we realized there are some versions of
+  bpftrace and stap that does not work with solution suggested in
+  version 1, so we decided to switch to following solution:
+
+  - change USDT macro [1] emits nop,nop5 instructions combo by
+    default
+  - libbpf detects nop,nop5 instructions combo for USDT probe,
+    if there is and if uprobe syscall is detected libbpf installs
+    usdt probe on top of nop5 instruction to get it optimized
+
+- added usdt trigger benchmarks [Andrii]
+- several small fixes on uprobe syscall detection, tests and other places [Andrii]
+- true usdt.h source [1] updated [Andrii]
+- compile usdt_* objects unconditionally [Andrii]
+
+
+thanks,
+jirka
+
+
+[1] https://github.com/libbpf/usdt
 ---
- .../selftests/bpf/prog_tests/tracing_multi.c  | 177 ++++++++++++++++++
- .../selftests/bpf/progs/tracing_multi_bench.c |  13 ++
- 2 files changed, 190 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bench.c
+Jiri Olsa (5):
+      libbpf: Add uprobe syscall feature detection
+      libbpf: Add support to detect nop,nop5 instructions combo for usdt probe
+      selftests/bpf: Emit nop,nop5 instructions combo for x86_64 arch
+      selftests/bpf: Add test for checking correct nop of optimized usdt
+      selftests/bpf: Add usdt trigger bench
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-index ba86a88844e6..ac8ef41586f0 100644
---- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
-@@ -7,6 +7,7 @@
- #include "tracing_multi.skel.h"
- #include "tracing_multi_intersect.skel.h"
- #include "tracing_multi_session.skel.h"
-+#include "tracing_multi_bench.skel.h"
- #include "trace_helpers.h"
- 
- static __u64 bpf_fentry_test_cookies[] = {
-@@ -394,6 +395,182 @@ static void test_attach_api_fails(void)
- 	tracing_multi__destroy(skel);
- }
- 
-+/*
-+ * Skip several kernel symbols that might not be safe or could cause delays.
-+ */
-+static bool skip_symbol(char *name)
-+{
-+	if (!strcmp(name, "arch_cpu_idle"))
-+		return true;
-+	if (!strcmp(name, "default_idle"))
-+		return true;
-+	if (!strncmp(name, "rcu_", 4))
-+		return true;
-+	if (!strcmp(name, "bpf_dispatcher_xdp_func"))
-+		return true;
-+	if (strstr(name, "rcu"))
-+		return true;
-+	if (strstr(name, "trace"))
-+		return true;
-+	if (strstr(name, "irq"))
-+		return true;
-+	if (strstr(name, "bpf_lsm_"))
-+		return true;
-+	if (!strcmp(name, "migrate_enable"))
-+		return true;
-+	if (!strcmp(name, "migrate_disable"))
-+		return true;
-+	if (!strcmp(name, "preempt_count_sub"))
-+		return true;
-+	if (!strcmp(name, "preempt_count_add"))
-+		return true;
-+	return false;
-+}
-+
-+#define MAX_BPF_FUNC_ARGS 12
-+
-+static bool btf_type_is_modifier(const struct btf_type *t)
-+{
-+	switch (BTF_INFO_KIND(t->info)) {
-+	case BTF_KIND_TYPEDEF:
-+	case BTF_KIND_VOLATILE:
-+	case BTF_KIND_CONST:
-+	case BTF_KIND_RESTRICT:
-+	case BTF_KIND_TYPE_TAG:
-+		return true;
-+	}
-+	return false;
-+}
-+
-+static bool is_allowed_func(const struct btf *btf, const struct btf_type *t)
-+{
-+	const struct btf_type *proto;
-+	const struct btf_param *args;
-+	__u32 i, nargs;
-+	__s64 ret;
-+
-+	proto = btf_type_by_id(btf, t->type);
-+	if (BTF_INFO_KIND(proto->info) != BTF_KIND_FUNC_PROTO)
-+		return false;
-+
-+	args = (const struct btf_param *)(proto + 1);
-+	nargs = btf_vlen(proto);
-+	if (nargs > MAX_BPF_FUNC_ARGS)
-+		return false;
-+
-+	t = btf__type_by_id(btf, proto->type);
-+	while (t && btf_type_is_modifier(t))
-+		t = btf__type_by_id(btf, t->type);
-+
-+	if (btf_is_struct(t) || btf_is_union(t))
-+		return false;
-+
-+	for (i = 0; i < nargs; i++) {
-+		/* No support for variable args */
-+		if (i == nargs - 1 && args[i].type == 0)
-+			return false;
-+
-+		/* No support of struct argument size greater than 16 bytes */
-+		ret = btf__resolve_size(btf, args[i].type);
-+		if (ret < 0 || ret > 16)
-+			return false;
-+	}
-+
-+	return true;
-+}
-+
-+void serial_test_tracing_multi_bench_attach(void)
-+{
-+	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
-+	struct tracing_multi_bench *skel = NULL;
-+	size_t i, syms_cnt, cap = 0, cnt = 0;
-+	long attach_start_ns, attach_end_ns;
-+	long detach_start_ns, detach_end_ns;
-+	double attach_delta, detach_delta;
-+	struct bpf_link *link = NULL;
-+	void *root = NULL;
-+	__u32 *ids = NULL;
-+	__u32 nr, type_id;
-+	struct btf *btf;
-+	char **syms;
-+	int err;
-+
-+#ifndef __x86_64__
-+	test__skip();
-+	return;
-+#endif
-+
-+	btf = btf__load_vmlinux_btf();
-+	if (!ASSERT_OK_PTR(btf, "btf__load_vmlinux_btf"))
-+		return;
-+
-+	skel = tracing_multi_bench__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "tracing_multi_bench__open_and_load"))
-+		goto cleanup;
-+
-+	if (!ASSERT_OK(bpf_get_ksyms(&syms, &syms_cnt, true), "get_syms"))
-+		goto cleanup;
-+
-+	for (i = 0; i < syms_cnt; i++) {
-+		if (skip_symbol(syms[i]))
-+			continue;
-+		tsearch(&syms[i], &root, compare);
-+	}
-+
-+	nr = btf__type_cnt(btf);
-+	for (type_id = 1; type_id < nr; type_id++) {
-+		const struct btf_type *type;
-+		const char *str;
-+
-+		type = btf__type_by_id(btf, type_id);
-+		if (!type)
-+			break;
-+
-+		if (BTF_INFO_KIND(type->info) != BTF_KIND_FUNC)
-+			continue;
-+
-+		str = btf__name_by_offset(btf, type->name_off);
-+		if (!str)
-+			break;
-+
-+		if (!tfind(&str, &root, compare))
-+			continue;
-+
-+		if (!is_allowed_func(btf, type))
-+			continue;
-+
-+		err = libbpf_ensure_mem((void **) &ids, &cap, sizeof(*ids), cnt + 1);
-+		if (err)
-+			break;
-+
-+		ids[cnt++] = type_id;
-+	}
-+
-+	opts.ids = ids;
-+	opts.cnt = cnt;
-+
-+	attach_start_ns = get_time_ns();
-+	link = bpf_program__attach_tracing_multi(skel->progs.bench, NULL, &opts);
-+	attach_end_ns = get_time_ns();
-+
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_tracing_multi"))
-+		goto cleanup;
-+
-+	detach_start_ns = get_time_ns();
-+	bpf_link__destroy(link);
-+	detach_end_ns = get_time_ns();
-+
-+	attach_delta = (attach_end_ns - attach_start_ns) / 1000000000.0;
-+	detach_delta = (detach_end_ns - detach_start_ns) / 1000000000.0;
-+
-+	printf("%s: found %lu functions\n", __func__, cnt);
-+	printf("%s: attached in %7.3lfs\n", __func__, attach_delta);
-+	printf("%s: detached in %7.3lfs\n", __func__, detach_delta);
-+
-+cleanup:
-+	tracing_multi_bench__destroy(skel);
-+}
-+
- void test_tracing_multi_test(void)
- {
- #ifndef __x86_64__
-diff --git a/tools/testing/selftests/bpf/progs/tracing_multi_bench.c b/tools/testing/selftests/bpf/progs/tracing_multi_bench.c
-new file mode 100644
-index 000000000000..067ba668489b
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/tracing_multi_bench.c
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <stdbool.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+SEC("fentry.multi")
-+int BPF_PROG(bench)
-+{
-+	return 0;
-+}
--- 
-2.52.0
-
+ tools/lib/bpf/features.c                                | 24 ++++++++++++++++++++++++
+ tools/lib/bpf/libbpf_internal.h                         |  2 ++
+ tools/lib/bpf/usdt.c                                    | 47 +++++++++++++++++++++++++++++++++++++++++++----
+ tools/testing/selftests/bpf/.gitignore                  |  2 ++
+ tools/testing/selftests/bpf/Makefile                    |  5 ++++-
+ tools/testing/selftests/bpf/bench.c                     |  4 ++++
+ tools/testing/selftests/bpf/benchs/bench_trigger.c      | 60 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/benchs/run_bench_uprobes.sh |  2 +-
+ tools/testing/selftests/bpf/prog_tests/usdt.c           | 92 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/test_usdt.c           | 12 ++++++++++++
+ tools/testing/selftests/bpf/progs/trigger_bench.c       | 10 +++++++++-
+ tools/testing/selftests/bpf/usdt.h                      |  2 ++
+ tools/testing/selftests/bpf/usdt_1.c                    | 18 ++++++++++++++++++
+ tools/testing/selftests/bpf/usdt_2.c                    | 16 ++++++++++++++++
+ 14 files changed, 289 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/usdt_1.c
+ create mode 100644 tools/testing/selftests/bpf/usdt_2.c
