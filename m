@@ -1,195 +1,131 @@
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649E63115B1
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771627452; cv=none; b=Wlqc/gwUfYtp6p7wxxFup5yLUXvr6a2Epoggjv24Ei/wceXoUY8h3U4zKw7UhDlfi+j7wKpkuVTLrPyvxCPcWSC4t6R71zvl2gbVrgAxSH+IQ1zBqXpPAfoW+ZnByq4ZmAAOrDrRoAtQ5jSpghfJoSNh/l1Kk8X31pXlGo2QFxk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771627452; c=relaxed/simple;
-	bh=COcMQYnWEJRPhOFNkMrgGoiFrAEoZ+lJpA3deTPp6Dw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Wz3bGZr2iTxJliKgx6R+gEu5jkeUuto9FGliBV8pC88gmZRsVp1PN0NZX/0DvOroKW6ao9SkJ/u43l6VAjEMJvbrIij+U1PWU5IHts+6+YTfh81RpMyZfAszBm3HYnGfVFBpjuDarhmn8HHAn5oQhDtPi82FHOOStUEAjLzvbBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=hcSltzDz; arc=none smtp.client-ip=209.85.128.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7193819DF8D
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:48:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771627738; cv=pass; b=o8JCwaxXlsobevJKl09ZJXgX2nf7bH7JVxAV0A4PXC9Ji2D7I1r8eQkNOCTEVIl1q2SXlxYEjdassqfhbzAXWludjeJ9MlRZEnuV4ogV4IOUTKmSsLk+U5ttVLtHKO/BsyLjnYyJ46UgI7YZ5icFurHtQHf/g6I59oIPnib1Fv4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771627738; c=relaxed/simple;
+	bh=Zk0TkRoGfJVRXA/Xt0PgtI4eew4BSdOTfIpj5z5Fnes=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CR21hmNT6eSSGbmywj/YfNuISdEYdV2/q8Izrsnoq7zaGUTdj3T0fJKTrfXdsOFrI7FGzPCnCqY7dJusqIoqOvyj7lm/7b8YuZWdpi8gXeLExaFdeD3bPusfJjoXphX6XaH/BghcrrKJ73Fxfq97jcB5mIgdEgFpIiePs3tePi4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BSCa1ph9; arc=pass smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="hcSltzDz"
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-797d857e3f4so25961797b3.3
-        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 14:44:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BSCa1ph9"
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-436e8758b91so1907341f8f.0
+        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 14:48:57 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771627736; cv=none;
+        d=google.com; s=arc-20240605;
+        b=eznFSl/uKUrfQMISB2sSoVanTr7EL6qXDnCqtq46qBu22itYxgfiiW7F4lRIDH+NE7
+         rRU6tcpPRkx9WiM9m+w78dZElPyhbp4w+QxnRn2VRqoyNENQVsZ3Ut322zu3DDE9Oqjk
+         qgElaorB0C1zDQXimq/MYJUAspckvkheB/9wYKylmTeVaI8lne9hclw+VvPmHfm3Cfj/
+         tWkAmybt+uRZOiHZ68BdK0ggBsHzY6Oq7hSe0FUV6wA20ADmOPtS83QKAu9f/z53mpNa
+         YWpnDQRkJST3zqGDF69pEUjLK8aA5nth4tV/kzl3tSYThWJAIYLytETrou57vDUO4K5k
+         EDDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=hvVSN1bBI2OWfGQjoSdR4/GA9VFoz8O0r7dIRH0tiJI=;
+        fh=AEU61cLxum+kXVi0izUQVJgEb5jnfIlexyFisEqSqR4=;
+        b=Er8CqlOaK5i5sUcprQNGht3rr9OKyo/WhNxQEnJj2RwvqoOUMm2XFkLbACQabTtVXE
+         GeTm7aP9Wkzxc339Gd/XIDqBpCv9trw9HLZLWek813Am7XHG2GbyfGE/ZBCfk+6qg8w8
+         OIUMrAqoVDTqclqJgPjATQa7BXYSucoa0MvG6/dttvTV/51jsB8/3FRI0mejFDYK3u43
+         odVzKH++1VxqXPUI2ZomE+H69ggXx5A8W2uKCBCGwtSPCb3Uuhlbi4sIA0oXJgfAQfAU
+         d7o9W5M0wfaVmW0F900ELkR968THuvMTNvKyYvwShvIajIrtvlfqrHDLpZVb3+cXTKk7
+         GCUA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=toxicpanda.com; s=google; t=1771627450; x=1772232250; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1771627736; x=1772232536; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3vO48Vp1qmu9W9gedi8k4I6iGoYK/r+wqKE7+DgaeNM=;
-        b=hcSltzDzaLexvyx1OCSWgfMKFfbnRXCSTCYmHoS0SOiMmsWlT53ACYua7hr0ANqsoy
-         i9sC802c9rNMPJKs1ycp8y0kN7+XDUazZMBBHComCVyp9KkiGu9d3VN4vVI6cMY5NPIM
-         VrAKvHDIrUFDsurpOt8jVxQQjo3nE3ryb+vhKLTNOP576gFs9ri/2emO8ZAGRABDDo4d
-         j+YN43qy4e4ndVzD7gAJ9xIWTYUlqPMQ2TNAyAw0tX/E6FWyy5Hx6m7Fo3v0cG++aKs0
-         0TeyiKqbLl379Ps1X9bMo5WET7jtvxi+vuLTsW5qdk1HjKnzXQYqzfQoFVqETocdom2H
-         AYOw==
+        bh=hvVSN1bBI2OWfGQjoSdR4/GA9VFoz8O0r7dIRH0tiJI=;
+        b=BSCa1ph9y6dmUlS3o7sEucQY1gA7m0nJ/0wqY6jiP7Fc41YGRkmxXuk/P9TfFkjGey
+         GAwWao8T5wq2ZZtLMRnnOKVCA7gDFuYs9LX+Ewj74aIPBLNt2JgZe7arz0fUmQG76Db7
+         aqfhDxl8mMguAbeY/l5txrEUbhf9D1iySOskxet45cajDzOhV7PaEieCatWhfnRMtzOA
+         F84iUnKDFq369L2D7xKSmKGMseroSfP6QrnreZiRsIoiBhXg9KioKFsO1OluJcVEyCBZ
+         aS6B/Kdspqk9OxuUeQdRRBttviWyhGay2BN8AP4oKH/CiNGKU/SGIuEsfNHxphRoZ4U7
+         Bt/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771627450; x=1772232250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+        d=1e100.net; s=20230601; t=1771627736; x=1772232536;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=3vO48Vp1qmu9W9gedi8k4I6iGoYK/r+wqKE7+DgaeNM=;
-        b=TtWwX9A/wAxEE2feYzWvK9G85+as9dlCj8Ebx89BYMvS/rEfS9SWejfaXGDyrysKjl
-         wWbHX7OmKaBuTnnMuU71+HOQiy1YroYBFi9dvQ9SRDLpvRZ9CXIYNTsQjpNCz4XzWzUv
-         r+qU46d96AyI9QWT8O40nVugsu9bIertyRoTLGPaOBQxJM3s/ruvz+mHUnOWIIajQhOt
-         Wq37JynVOvzDCqb0N3eOj3JQ2lhg/TcR70ajlKyzt3/eHXCOvWnbsHoev2b9OFCq611i
-         g4XsxP53J2dvuuti3KxdjpWcn668be6JQaHwqz6z2cd123U/vTa1T0yseSofQiSx9nBw
-         JTnQ==
-X-Gm-Message-State: AOJu0YzZTNasoinJZoyzKPGaIDhC94NDP8k2F9M8cgckzHDUJbXPYxzc
-	rqLbRF1VOBXCkBVYrNsd7tr/2s7wm4n/obmpAJAOq8DxG09dsG+CExivFj55GtZGBT9RONkoDey
-	aSeyDPcOX7WkD
-X-Gm-Gg: AZuq6aIhNKO6MSeDeS6kVhLm53TK2r8XrmOC3aT1PQRVUvryMRPiLSoF/wGuVTRMdC9
-	X3KvF0FIgHOGdxS4o+rJ+UjPdcDA/xSLEDvLam1rPc37u1vFCeEEJT2on7IyUvW1F5v06l8gPck
-	xNcGK95NYUG5tu3JPXNwhFo3OyQkgjkWISPFbvNUDL4p1VjCp0F6I43HsYdaEOZlN5aU/wMdy3l
-	wlnDrK1X8J1oFAIBKvYkqJ2+nFWjg1S48TNbUDmGmc2Px8YUAdNldomWh16D4HbdR+9etbE4UQ3
-	DOkQPwHELabthgmpP2H8/WyKjCFEnbQVSjaXjbWgA5qminAlDzPhL/uOJNCvWHb4S/bZkrWo66O
-	9J07pIbXwG15uugtGd8qF9I+Ee37d/2NwCqunErYi2qvSBv+5Nqqp0mbZbD3iVa8OZTQbY4GccZ
-	IJr19rXLtoX/P2VGqX0mWAy7VjXu6PC2XBTyxr
-X-Received: by 2002:a05:690c:7407:b0:796:6784:82cb with SMTP id 00721157ae682-79828cf92camr16100657b3.2.1771627450018;
-        Fri, 20 Feb 2026 14:44:10 -0800 (PST)
-Received: from localhost ([2603:6080:7702:ce00:96ef:dc7e:bb84:bc5a])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-7982dbdf23dsm2462697b3.21.2026.02.20.14.44.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Feb 2026 14:44:09 -0800 (PST)
-From: Josef Bacik <josef@toxicpanda.com>
-To: bpf@vger.kernel.org
-Cc: "Claude Opus 4.6" <noreply@anthropic.com>
-Subject: [PATCH v4 3/3] selftests/bpf: add test for btf__add_btf() with split BTF sources
-Date: Fri, 20 Feb 2026 17:43:59 -0500
-Message-ID: <e582d9289c7b7c2682808db22da6bc3ba907d884.1771625484.git.josef@toxicpanda.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <cover.1771625484.git.josef@toxicpanda.com>
-References: <cover.1771625484.git.josef@toxicpanda.com>
+        bh=hvVSN1bBI2OWfGQjoSdR4/GA9VFoz8O0r7dIRH0tiJI=;
+        b=eQ3ARiHmCNprRCDlpKtW4aTM3bQMPcWel8iMNqNfkqSQMUiU1tWJ1SzMOPFZDCGlob
+         8ii48Mz7HHjy6kIpucSHkcekTgJ4iFaNVdfScro45AKseNDcgiX+EJOgYskrfPeuAfM7
+         xZ2yzzyEgPxRUcJcaoWAyavGVIk3YGPsTWHO8yNxWU/JN/2gNMzlksQ7LP0ql3U+fWj6
+         A1gPYyL78ysgNTcOddn+F1ZgFHFMyM9SLP2+vEyiDVkmpRtvTz4y8QoUbhVLQJyf8eJS
+         LSBwB6w66pzVLK/KP8YSQyEO7AYpkbvtu/zQEzvhlvfqY7oyiKT56GNTwhVLqi1KcP40
+         NPog==
+X-Gm-Message-State: AOJu0YxgEgP5dkqIY6PymH7s38CL5g/PWr7MVC3rd5Fl0BBHqLuAgPRR
+	Zzb4ctg517EBE12KnnP8HhqkaaWTL6IbXwTI7gtcjrhzXQ2CzV4Gko93dL2IViLs692W3GBuKhg
+	bJ15nn67pX3VNcPTMtt+ZfZvrWOF9Knw0jg==
+X-Gm-Gg: AZuq6aLAqsV15sn+Q9qTjPPdGKktuWCV2jQ7RgHz7zMEnXrGDl6acB1VAzK48KBjdvA
+	z1HeV357EAjBbUjWZDi9ccfVXYsPI56N0ay8d4+HCLB/EjFrqE1vhkAB8PhyrUycFTsrKD2wM3H
+	AesVte0WyS4B5dlnGMCWXTiwuum0DxA3xHvSqX+KsNN/xqr0dbVm98veAkEOKLfp/95iaYOp99n
+	HE+qpkwtP+4vO1tK9qtl6mzkIcUiRrQ7ss0Srh1BxdU9PlJuPt/b3PppP9N5dz1pY8P8344JJZO
+	FW32E8EUknM4IacnJ2oP83ByMSFfskbDhxWrRuaBlyTAkajhZvoaWwh7Kqqu/RpJ9KtNF0qUdFj
+	aQn4SFgXpHR2YGd6iq4tX5hSnwQ==
+X-Received: by 2002:a05:6000:25c2:b0:435:b7ca:7521 with SMTP id
+ ffacd0b85a97d-4396f15b019mr2566435f8f.15.1771627735580; Fri, 20 Feb 2026
+ 14:48:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
+In-Reply-To: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 20 Feb 2026 14:48:44 -0800
+X-Gm-Features: AaiRm523CpdbVxcWFlxA4ENEC6v7QEZI_dhCgR8cUwCJKYqQVHleDKqGFrwR9I8
+Message-ID: <CAADnVQJFHzGQX0xh5pSVm1AKH=ONM4NYRnv=+qdWOAW4PmrVQg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 0/2] libbpf: Add bpf_program__clone() for
+ individual program loading
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Martin Lau <kafai@meta.com>, 
+	Kernel Team <kernel-team@meta.com>, Eduard <eddyz87@gmail.com>, 
+	Mykyta Yatsenko <yatsenko@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a test that verifies btf__add_btf() correctly handles merging
-multiple split BTF objects that share the same base BTF. The test
-creates two sibling split BTFs on a common base, merges them into
-a combined split BTF, and validates that base type references are
-preserved while split type references are properly remapped.
+On Fri, Feb 20, 2026 at 11:18=E2=80=AFAM Mykyta Yatsenko
+<mykyta.yatsenko5@gmail.com> wrote:
+>
+> This series adds bpf_program__clone() to libbpf and converts veristat to
+> use it, replacing the costly per-program object re-opening pattern.
+>
+> veristat needs to load each BPF program in isolation to collect
+> per-program verification statistics. Previously it achieved this by
+> opening a fresh bpf_object for every program, disabling autoload on all
+> but the target, and loading the whole object. For object files with many
+> programs this meant repeating ELF parsing and BTF processing N times.
+>
+> Patch 1 introduces bpf_program__clone(), which loads a single program
+> from a prepared object into the kernel and returns an fd owned by the
+> caller. It resolves BTF attach targets, fills in func/line info,
+> fd_array, and other load parameters from the prepared object
+> automatically, while letting callers override any field via
+> bpf_prog_load_opts.
+>
+> Patch 2 converts veristat to prepare the object once and clone each
+> program individually, eliminating redundant work.
+>
+> Performance
+> Tested on selftests: 918 objects, ~4270 programs:
+>  - Wall time:   36.88s -> 23.18s (37% faster)
+>  - User time:   20.80s -> 16.07s (23% faster)
+>  - Kernel time: 12.07s ->  6.06s (50% faster)
+>
+> Per-program loading also improves coverage: 83 programs that previously
+> failed now succeed.
 
-Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
----
- .../selftests/bpf/prog_tests/btf_write.c      | 89 +++++++++++++++++++
- 1 file changed, 89 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_write.c b/tools/testing/selftests/bpf/prog_tests/btf_write.c
-index 6e36de1302fc..80353a545cdd 100644
---- a/tools/testing/selftests/bpf/prog_tests/btf_write.c
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_write.c
-@@ -497,10 +497,99 @@ static void test_btf_add_btf()
- 	btf__free(btf2);
- }
- 
-+static void test_btf_add_btf_split()
-+{
-+	struct btf *base = NULL, *split1 = NULL, *split2 = NULL;
-+	struct btf *combined = NULL;
-+	int id;
-+
-+	/* Create a base BTF with an INT and a PTR to it */
-+	base = btf__new_empty();
-+	if (!ASSERT_OK_PTR(base, "base"))
-+		return;
-+
-+	id = btf__add_int(base, "int", 4, BTF_INT_SIGNED);
-+	ASSERT_EQ(id, 1, "base_int_id");
-+	id = btf__add_ptr(base, 1);
-+	ASSERT_EQ(id, 2, "base_ptr_id");
-+
-+	/* base has 2 types, type IDs 1..2 */
-+	ASSERT_EQ(btf__type_cnt(base), 3, "base_type_cnt");
-+
-+	/* Create split1 on base: a STRUCT referencing base's int (ID 1) */
-+	split1 = btf__new_empty_split(base);
-+	if (!ASSERT_OK_PTR(split1, "split1"))
-+		goto cleanup;
-+
-+	id = btf__add_struct(split1, "s1", 4);
-+	/* split types start at base_type_cnt = 3 */
-+	ASSERT_EQ(id, 3, "split1_struct_id");
-+	btf__add_field(split1, "x", 1, 0, 0); /* refers to base int */
-+
-+	id = btf__add_ptr(split1, 3);
-+	ASSERT_EQ(id, 4, "split1_ptr_id"); /* ptr to the struct (split self-ref) */
-+
-+	/* Create split2 on base: a TYPEDEF referencing base's ptr (ID 2) */
-+	split2 = btf__new_empty_split(base);
-+	if (!ASSERT_OK_PTR(split2, "split2"))
-+		goto cleanup;
-+
-+	id = btf__add_typedef(split2, "int_ptr", 2); /* refers to base ptr */
-+	ASSERT_EQ(id, 3, "split2_typedef_id");
-+
-+	id = btf__add_struct(split2, "s2", 8);
-+	ASSERT_EQ(id, 4, "split2_struct_id");
-+	btf__add_field(split2, "p", 3, 0, 0); /* refers to split2's own typedef */
-+
-+	/* Create combined split BTF on same base and merge both */
-+	combined = btf__new_empty_split(base);
-+	if (!ASSERT_OK_PTR(combined, "combined"))
-+		goto cleanup;
-+
-+	/* Merge split1: its types (3,4) should land at IDs 3,4 in combined */
-+	id = btf__add_btf(combined, split1);
-+	if (!ASSERT_GE(id, 0, "add_split1"))
-+		goto cleanup;
-+	ASSERT_EQ(id, 3, "split1_first_id");
-+
-+	/* Merge split2: its types (3,4) should be remapped to IDs 5,6 */
-+	id = btf__add_btf(combined, split2);
-+	if (!ASSERT_GE(id, 0, "add_split2"))
-+		goto cleanup;
-+	ASSERT_EQ(id, 5, "split2_first_id");
-+
-+	/* combined should have: base (2 types) + split1 (2) + split2 (2) = 6 types + void */
-+	ASSERT_EQ(btf__type_cnt(combined), 7, "combined_type_cnt");
-+
-+	VALIDATE_RAW_BTF(
-+		combined,
-+		/* base types (IDs 1-2) */
-+		"[1] INT 'int' size=4 bits_offset=0 nr_bits=32 encoding=SIGNED",
-+		"[2] PTR '(anon)' type_id=1",
-+
-+		/* split1 types (IDs 3-4): base refs unchanged */
-+		"[3] STRUCT 's1' size=4 vlen=1\n"
-+		"\t'x' type_id=1 bits_offset=0",      /* refers to base int=1 */
-+		"[4] PTR '(anon)' type_id=3",          /* refers to split1's struct=3 */
-+
-+		/* split2 types (IDs 5-6): remapped from 3,4 to 5,6 */
-+		"[5] TYPEDEF 'int_ptr' type_id=2",     /* base ptr=2, unchanged */
-+		"[6] STRUCT 's2' size=8 vlen=1\n"
-+		"\t'p' type_id=5 bits_offset=0");      /* split2 typedef: 3->5 */
-+
-+cleanup:
-+	btf__free(combined);
-+	btf__free(split2);
-+	btf__free(split1);
-+	btf__free(base);
-+}
-+
- void test_btf_write()
- {
- 	if (test__start_subtest("btf_add"))
- 		test_btf_add();
- 	if (test__start_subtest("btf_add_btf"))
- 		test_btf_add_btf();
-+	if (test__start_subtest("btf_add_btf_split"))
-+		test_btf_add_btf_split();
- }
--- 
-2.53.0
-
+Wait what? How is that possible?
