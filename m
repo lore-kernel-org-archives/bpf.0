@@ -1,113 +1,138 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BF772BEFEF
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 18:02:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771610527; cv=pass; b=NUQI3nmis30B7stxIhqQVfr0yAuOeSuGEqxYadqg2n+81keovqPnWznk4QrHPHru+sDI+bWfpxDljJSGGWh4KPf7sCmNt9dTBihgsJ6P2HuNGOCzqR9ALE76gr1QlQcrTONWdghvRbCUJRBd469gJiq1BqzylLPKY30y7t62MoA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771610527; c=relaxed/simple;
-	bh=RlnS9GM2D1Do3rQ9pLqi2yNjdGaDFT+y0URV7WHLObk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CWx9oU07KvYhIEVJ+W4RlIzoLgzgQrhc8hjuVWbYexxkj/5N2cuvGwPX93evmB7czdXl8ieV9eI0PTcrhQKvd9eZ3BIPE9+S4ffgheessQkxe+QyRKHz3R/j5XHN+dQ9Ink5AnxJ3IniWcr9zTe+FFgDvY3ghZ3IQsLzAinZi+E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CR6IHW2W; arc=pass smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352F936654E
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 18:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771611630; cv=none; b=VcsYC6jkDks5BxX+pRo4r1LfqmO7N0ZakYgQz8F+RWIKk2GWcutvenqjrXJRqgkUOz9gUJsLmnNHIBoUy9UfIQtyUrGLEwz0jal4j6IQpaOTJDAFrDrxO8LViubb3NNogkfWOe8muHZm51hm+HOisCoZnwNyb39pfovdiyaRVn4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771611630; c=relaxed/simple;
+	bh=5rGPeJPf6w4YpvFN5Ca2c5lafn9ScyA2xpGvxTnzCmQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ju/YNPIEoW+S6P8jMM2SyHUnadyVXi0iHrrm6nKPLQgwIgLzPUl6YxHBWRMAAwGOv09Jj1d+MJ+1coP9jVyZL6MKFwLmpzPTEYRqrx2rBE1KqkrnAGnWE3ReYW8iKgEXKAXhTcxUYR8OD5FBJaEDiS1GhKmYcZN94PJKjRc22p0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jMfe4WZS; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CR6IHW2W"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-4359a302794so1829891f8f.1
-        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 10:02:06 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771610525; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aDpHKVLWlNa1rUN7HAvqBu94Os8iIMZ++GRiZDBAoYYwrofCVsPAxr8o7ztIChvq7H
-         h4GZJib0d5ixH/FMl13ivYU6MqD0zNa67q3O4chx3tsG9D8uogRLDi08LDjA2JQbE6Ro
-         EL3o4JadYlYLaD/GvaIxbQpOVB8o+Il3mxcZtv3wwgOeJiY9+MlvortRbrl45joKTixc
-         XI/PwCnWQFSS6q2avaPS8ByWK9yCXWu3Qo2cU6cPmMZDM2IvqFXfuoN6T+zR0207Ug8X
-         81zq4+P4b+p68S4WHlbTiVXwFL1uC4ON2oMlJPpkPC/Bp1Z6U2tTvEHrqrkpuSj233Rm
-         4vNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=RlnS9GM2D1Do3rQ9pLqi2yNjdGaDFT+y0URV7WHLObk=;
-        fh=BkMKMQlECH0BmFswuqi1KksooManfVinQ6QsQMEHmOw=;
-        b=FB0Qn4tZ1fWqOhkWvV0yXGMRgje1EmNcBZe0b+ox42ySqwVx47SaOY/mZKWJFHxSfP
-         LU+yzV/nS6Ti28XQHXDRa7Tp+AbHZsVFEHYJNySriizQ7MLhaB+Q30D+EEf0/lz5lhYd
-         veekGKTXjDoM8LhHCHTe1RcLBHnWqEcogG/jvDxCffOKu/UaPQTcgLkLuXIjPjDSI6Sn
-         L+AkHiYGFvpxEVg/TgqdJgyqX+ogBK3xjF2UPmgXsxeXs2hos/J7NWNBiKx9wYq9XoeE
-         kU/HYDddp2wv+E2wlWOtw/QiE8rG0PzJYVLg9WZwokT4SegptJ3LeXUO+SoRpq7yJO+H
-         Zx+A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771610525; x=1772215325; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RlnS9GM2D1Do3rQ9pLqi2yNjdGaDFT+y0URV7WHLObk=;
-        b=CR6IHW2WyAXGYUwZzmSNYdzaDk4kCyfzmtsTuhVMN8bdgfjTpF58oxUXLMQgWsjQiq
-         Wys8jsSqrBDSQIs7u1X8Co5Vzh3KeCuirKYbYPCq5LfGupzW88bNxUoXIdZdPO0+DPTK
-         S6S4SCHox7izU9DoJXZQAUuyOrvJX0qF/ryVuE4u8gWmS4Uo5ahOWL3KCTKZjv4yYHut
-         J3mLMV8nshCUO7mRqsPqmDkY8WvK8FM5SmyNOLOM/yJkgHaEC3gXGV0pYETO4cik1iHz
-         b07aMKzTxCiHXekmRPjNxigaS4gYKvKCyU1yamb5Z739fQeZAhkexjbUNfShXZegltts
-         kaCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771610525; x=1772215325;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RlnS9GM2D1Do3rQ9pLqi2yNjdGaDFT+y0URV7WHLObk=;
-        b=JwCu2RBy5O11fK2Y6O4uuemEvFS9fY0bUfgE4DyeW6N2pZ2Qgd0Uhot5Mz8CxYgcn+
-         Zh44yzaPMpMg7fjz5535/TqCyVXKPVycmxidhHP0GD1dYGLBdzPpjUtgHInIrTmGEBFa
-         hF6MzJGFeIo1QeIQi6ETTVX95v0QZGT3R4aazmXvZZvIr+vW15AD4SjG33zjPzHNEo1u
-         uayXsjVHbtdyhJNu9XWNEwntD54AzOklwAcEgTecZ2r8gDEm+NGVWxMo8/6T6lT5fl7v
-         h3OT9LohR2msQ4bKhmCh93LbQo5v9CNXglCPymaQxvOrkf6iQYvcIP5X5s6iAobMu8F7
-         ah6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUrKft5Q5q3D1WSJfaPnwZRiXxe1rZUSqv67/o+e6VYVau6c9vglvIbKEBTc3U5FufNXf8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/eJJn19egJvMb1rjjD2/ZPGSQ0Q/ceS1D5OEkcVKzlCe0rHPL
-	0CahfbTe1fLM2cZ+lnn75AMJoqlJY12c6KzoYTJ2S01kId8n0OwU0OHemQFx9NmEn2S8DUhFLgE
-	Sa9alkwZ6s897hWZUCpf53sP5hvLmX28=
-X-Gm-Gg: AZuq6aK+Q6TSVvGcWwCbNmmMXYxB9ychDCCG3cyEGCJ2HfaqZQHFX0DOmgz20NLv6Ir
-	zDKQkYjQPO5MKncj19Azo5rUIhe9Mq3+decwSXQ9LL2G3G0mbQG5QcC0NfiGcH+sE4yZLPLGLqR
-	L+VBT6ppakiviUYrWjSosmiOwBJNlVr6rv1Tky/HJFgXwXHD5FA2uyJAWaj2yv9AIJ8yHVrlNhL
-	wpzhOkevdd+Md51AJUXPBsYaOea4m+aeHF01EWXUIFJ1IyFp03Krsmtc3NbpcuvrigQi4HNEsxf
-	2gXszO/9yRa5FiICbZ/MDYSTz1UYcWmkMdzjxUQGcN6nYXgqnAm7fL3I4DT1L0VAgKAQ6ss5JGr
-	ljD99kcqt0vggFMoO1XL9SswLfw==
-X-Received: by 2002:a5d:5e01:0:b0:437:68d5:f165 with SMTP id
- ffacd0b85a97d-4396f18f81fmr1472813f8f.55.1771610524629; Fri, 20 Feb 2026
- 10:02:04 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jMfe4WZS"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771611626;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zM4hi2wr/55oi9+YRDxF/pe1IGahl9NLf8Kax2WDvcs=;
+	b=jMfe4WZS/NXHkZAUUZl4D3nvFHAiNwZvy0H3NAgo6reMRtAYxpcgdk7nkX87w5c/ICr4Fi
+	9w+Rb0b+ge6LnFTcfKzzfx89DxOr66uKFKTo1nSYJekw84D0SN02ryTtNHswsh1b8cegUx
+	WR+o716VgMubZxMQqkEQ5EdvhYpaJBI=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf v1 1/7] selftests/bpf: Add simple strscpy() implementation
+Date: Fri, 20 Feb 2026 10:20:05 -0800
+Message-ID: <20260220182011.802116-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20260220182011.802116-1-ihor.solodrai@linux.dev>
+References: <20260220182011.802116-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <de152bf4-a168-4017-98bc-d5f64b0a01e6@linux.dev>
-In-Reply-To: <de152bf4-a168-4017-98bc-d5f64b0a01e6@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 20 Feb 2026 10:01:52 -0800
-X-Gm-Features: AaiRm511z7iA54I8TmA_kvKmQWhFaG1KcZe13Seki_XTPsYnO-2wU6Y_K01Mi7s
-Message-ID: <CAADnVQJwJwnwU0uOVqrdfj=n40YBNVt5HpERGw8Lqa3NtvGFdA@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] Recover true signatures in pahole
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: lsf-pc <lsf-pc@lists.linux-foundation.org>, bpf <bpf@vger.kernel.org>, 
-	Kernel Team <kernel-team@fb.com>, Alan Maguire <alan.maguire@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Feb 20, 2026 at 8:10=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
->
-> People often trace kernel functions in order to get some insight in kerne=
-l
-> from corresponding bpf progs. But if the kernel function signature
-> has changed due to compiler optimization, users may be confused about
-> why their prog won't work.
+Replace bpf_strlcpy() in bpf_util.h with a sized_strscpy(), which is a
+simplified sized_strscpy() from the kernel (lib/string.c). It:
+  * takes a count (destination size) parameter
+  * guarantees NULL-termination
+  * returns the number of characters copied or -E2BIG
 
-This is all good, but what is the status of recording
-inlined and partially inlined in BTF ?
-I think it's a higher priority.
-I'm talking about this patch set:
-https://lore.kernel.org/bpf/20251008173512.731801-1-alan.maguire@oracle.com=
-/
-I think it should be finished first.
+Re-define strscpy macro to sized_strscpy.
+
+Fixup the single existing bpf_strlcpy() call in cgroup_helpers.c
+
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+---
+ tools/testing/selftests/bpf/bpf_util.h       | 38 +++++++++++++-------
+ tools/testing/selftests/bpf/cgroup_helpers.c |  2 +-
+ 2 files changed, 26 insertions(+), 14 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+index 4bc2d25f33e1..8c95ef7ed7c0 100644
+--- a/tools/testing/selftests/bpf/bpf_util.h
++++ b/tools/testing/selftests/bpf/bpf_util.h
+@@ -21,25 +21,37 @@ static inline unsigned int bpf_num_possible_cpus(void)
+ 	return possible_cpus;
+ }
+ 
+-/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
+- * is zero-terminated string no matter what (unless sz == 0, in which case
+- * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
+- * in what is returned. Given this is internal helper, it's trivial to extend
+- * this, when necessary. Use this instead of strncpy inside libbpf source code.
++/*
++ * Simplified strscpy() implementation. The kernel one is in lib/string.c
+  */
+-static inline void bpf_strlcpy(char *dst, const char *src, size_t sz)
++static inline ssize_t sized_strscpy(char *dest, const char *src, size_t count)
+ {
+-	size_t i;
++	long res = 0;
+ 
+-	if (sz == 0)
+-		return;
++	if (count == 0)
++		return -E2BIG;
+ 
+-	sz--;
+-	for (i = 0; i < sz && src[i]; i++)
+-		dst[i] = src[i];
+-	dst[i] = '\0';
++	while (count > 1) {
++		char c;
++
++		c = src[res];
++		dest[res] = c;
++		if (!c)
++			return res;
++		res++;
++		count--;
++	}
++
++	/* Force NUL-termination. */
++	dest[res] = '\0';
++
++	/* Return E2BIG if the source didn't stop */
++	return src[res] ? -E2BIG : res;
+ }
+ 
++#undef strscpy /* Redefine the placeholder from tools/include/linux/string.h */
++#define strscpy sized_strscpy
++
+ #define __bpf_percpu_val_align	__attribute__((__aligned__(8)))
+ 
+ #define BPF_DECLARE_PERCPU(type, name)				\
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 20cede4db3ce..9661cceb62be 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -86,7 +86,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
+ 		enable[len] = 0;
+ 		close(fd);
+ 	} else {
+-		bpf_strlcpy(enable, controllers, sizeof(enable));
++		strscpy(enable, controllers, sizeof(enable));
+ 	}
+ 
+ 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
+-- 
+2.53.0
+
