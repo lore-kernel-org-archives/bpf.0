@@ -1,32 +1,32 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4698930F547;
-	Fri, 20 Feb 2026 22:26:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5822FF153
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771626392; cv=none; b=r6Kfuqy4vJ5KFggz/79a17v41qJ5jl7bBnVxmOq608CKG+B9bL+mDwk6evAYKVVt+HNiWR0HqTskiMAnzuU61/AYZnziAouaHU9ouY2tEzMDuX9SZA5nEQutr6NXR+fMt9TnTK++x4vUhIboOc8XduAi0PYb/hwNtZyjtJJcsYs=
+	t=1771626395; cv=none; b=Ua9sTBN+Ep956D75uE3/0zdGK9TTIH9uHXxkBq6x532GnlUZAVTqiFROHn4Ex4+kCIYfLr8Qki+e44us50s/THeq2T0RTX/l8zeCV5bh3I55Ms/I9Nem8tcLagkhObXm9StHhMOfArzKUP87J+afjt+I1qWKh8jSJP2V1LkIRwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771626392; c=relaxed/simple;
-	bh=HICa71eTyoGa2gtWWBPBm61GreXnEJiLwdqfTHeS+2U=;
+	s=arc-20240116; t=1771626395; c=relaxed/simple;
+	bh=dM4QGEXT/D9pDurHifV8OTpDMd4fGbpvmLcO5PvDpxQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JOeN97g04paAFqLekpDmpN5x0Pht/HfR/d2kngtUc/7k7dFhg0p0f6rmKryN+UMgUeLjFKPdO4JJngKcAdxbjKVYvuA36Cghmt+CFSrsiAevIYrYLWZej6yi/xcVvDXMzExtLR9PeBYIsITTLLk1w9I1l66fR8TGKc/Z0VfZItU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u+5f4V3l; arc=none smtp.client-ip=91.218.175.186
+	 MIME-Version; b=HOITFHKC2exVZep1sVNaVBqfvRxvunsMzuT4I7wd0/t1BseL8hh1WN2L/OBwQqiQuXRP5GBNRn0VCkH6eq4X/kvhFESAOPdwa2UVkQ/+kZEMv/kNHS61AAWJ3Iac+A5KFioEi3thC4m/buQzwn6YrmnxzRy6n6eOV7uEvY8wdr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sZI0NY1r; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u+5f4V3l"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sZI0NY1r"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771626388;
+	t=1771626391;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=zSgXN6cPXd9AY0ySct74Vg374gm0gtf3x3gbJSUR/r4=;
-	b=u+5f4V3l2LpOdAdW7Hr6Y+P92qI6tyMODabAh9HNfCrNI45FOLhEaeg+E244JJ5NSydTYa
-	NSON+1AetSchhvdL3PeDIYNCJtik+K9MII2qmZkeUmU8lGZZV/EcIeX0Ga0GOIAripFwBf
-	ztb6ez5I+7pN10TX0Ws059zytmvnJb0=
+	bh=6zvv5GEAcoBWd42ld/hJY9KlCqYIxZFl5fK7TBTDqRg=;
+	b=sZI0NY1rZoyThseWElaP38M/WOq5rTW2l9GD42S/Vfna0WKpIID+a15+LupKV0S7CgDdHP
+	CY0Ocmw2C2mU7NP2sbDwd0nS6b090AbpTZPWqjJDTOZwJLHs/EldR9LU2DzUnKGuhvBoe4
+	SRDf1ku9n/qvoJ1we8otUSfwN5CFucw=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v3 01/15] selftests/bpf: Pass through build flags to bpftool and resolve_btfids
-Date: Fri, 20 Feb 2026 14:25:50 -0800
-Message-ID: <20260220222604.1155148-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v3 02/15] resolve_btfids: Fix memory leaks reported by ASAN
+Date: Fri, 20 Feb 2026 14:25:51 -0800
+Message-ID: <20260220222604.1155148-3-ihor.solodrai@linux.dev>
 In-Reply-To: <20260220222604.1155148-1-ihor.solodrai@linux.dev>
 References: <20260220222604.1155148-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -53,103 +53,166 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-EXTRA_* and SAN_* build flags were not correctly propagated to bpftool
-and resolve_btids when building selftests/bpf. This led to various
-build errors on attempt to build with SAN_CFLAGS="-fsanitize=address",
-for example.
+Running resolve_btfids with ASAN reveals memory leaks in btf_id
+handling.
 
-Fix the makefiles to address this:
-  - Pass SAN_CFLAGS/SAN_LDFLAGS to bpftool and resolve_btfids build
-  - Propagate EXTRA_LDFLAGS to resolve_btfids link command
-  - Use pkg-config to detect zlib and zstd for resolve_btfids, similar
-    libelf handling
+- Change get_id() to use a local buffer
+- Make btf_id__add() strdup the name internally
+- Add btf_id__free_all() that frees all nodese of a tree
+- Call the cleanup function on exit for every tree
 
-Also check for ASAN flag in selftests/bpf/Makefile for convenience.
-
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/bpf/resolve_btfids/Makefile    |  7 +++++--
- tools/testing/selftests/bpf/Makefile | 13 +++++++++----
- 2 files changed, 14 insertions(+), 6 deletions(-)
+ tools/bpf/resolve_btfids/main.c | 81 ++++++++++++++++++++++-----------
+ 1 file changed, 54 insertions(+), 27 deletions(-)
 
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 1733a6e93a07..ef083602b73a 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -65,6 +65,9 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
- LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
- LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
+index ca7fcd03efb6..5208f650080f 100644
+--- a/tools/bpf/resolve_btfids/main.c
++++ b/tools/bpf/resolve_btfids/main.c
+@@ -226,7 +226,7 @@ static struct btf_id *btf_id__find(struct rb_root *root, const char *name)
+ }
  
-+ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
-+ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null || echo -lzstd)
+ static struct btf_id *__btf_id__add(struct rb_root *root,
+-				    char *name,
++				    const char *name,
+ 				    enum btf_id_kind kind,
+ 				    bool unique)
+ {
+@@ -250,7 +250,11 @@ static struct btf_id *__btf_id__add(struct rb_root *root,
+ 	id = zalloc(sizeof(*id));
+ 	if (id) {
+ 		pr_debug("adding symbol %s\n", name);
+-		id->name = name;
++		id->name = strdup(name);
++		if (!id->name) {
++			free(id);
++			return NULL;
++		}
+ 		id->kind = kind;
+ 		rb_link_node(&id->rb_node, parent, p);
+ 		rb_insert_color(&id->rb_node, root);
+@@ -258,17 +262,21 @@ static struct btf_id *__btf_id__add(struct rb_root *root,
+ 	return id;
+ }
+ 
+-static inline struct btf_id *btf_id__add(struct rb_root *root, char *name, enum btf_id_kind kind)
++static inline struct btf_id *btf_id__add(struct rb_root *root,
++					 const char *name,
++					 enum btf_id_kind kind)
+ {
+ 	return __btf_id__add(root, name, kind, false);
+ }
+ 
+-static inline struct btf_id *btf_id__add_unique(struct rb_root *root, char *name, enum btf_id_kind kind)
++static inline struct btf_id *btf_id__add_unique(struct rb_root *root,
++						const char *name,
++						enum btf_id_kind kind)
+ {
+ 	return __btf_id__add(root, name, kind, true);
+ }
+ 
+-static char *get_id(const char *prefix_end)
++static int get_id(const char *prefix_end, char *buf, size_t buf_sz)
+ {
+ 	/*
+ 	 * __BTF_ID__func__vfs_truncate__0
+@@ -277,28 +285,28 @@ static char *get_id(const char *prefix_end)
+ 	 */
+ 	int len = strlen(prefix_end);
+ 	int pos = sizeof("__") - 1;
+-	char *p, *id;
++	char *p;
+ 
+ 	if (pos >= len)
+-		return NULL;
++		return -1;
+ 
+-	id = strdup(prefix_end + pos);
+-	if (id) {
+-		/*
+-		 * __BTF_ID__func__vfs_truncate__0
+-		 * id =            ^
+-		 *
+-		 * cut the unique id part
+-		 */
+-		p = strrchr(id, '_');
+-		p--;
+-		if (*p != '_') {
+-			free(id);
+-			return NULL;
+-		}
+-		*p = '\0';
+-	}
+-	return id;
++	if (len - pos >= buf_sz)
++		return -1;
 +
- HOSTCFLAGS_resolve_btfids += -g \
-           -I$(srctree)/tools/include \
-           -I$(srctree)/tools/include/uapi \
-@@ -73,7 +76,7 @@ HOSTCFLAGS_resolve_btfids += -g \
-           $(LIBELF_FLAGS) \
-           -Wall -Werror
++	strcpy(buf, prefix_end + pos);
++	/*
++	 * __BTF_ID__func__vfs_truncate__0
++	 * buf =           ^
++	 *
++	 * cut the unique id part
++	 */
++	p = strrchr(buf, '_');
++	p--;
++	if (*p != '_')
++		return -1;
++	*p = '\0';
++
++	return 0;
+ }
  
--LIBS = $(LIBELF_LIBS) -lz
-+LIBS = $(LIBELF_LIBS) $(ZLIB_LIBS) $(ZSTD_LIBS)
+ static struct btf_id *add_set(struct object *obj, char *name, enum btf_id_kind kind)
+@@ -335,10 +343,9 @@ static struct btf_id *add_set(struct object *obj, char *name, enum btf_id_kind k
  
- export srctree OUTPUT HOSTCFLAGS_resolve_btfids Q HOSTCC HOSTLD HOSTAR
- include $(srctree)/tools/build/Makefile.include
-@@ -83,7 +86,7 @@ $(BINARY_IN): fixdep FORCE prepare | $(OUTPUT)
+ static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
+ {
+-	char *id;
++	char id[KSYM_NAME_LEN];
  
- $(BINARY): $(BPFOBJ) $(SUBCMDOBJ) $(BINARY_IN)
- 	$(call msg,LINK,$@)
--	$(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
-+	$(Q)$(HOSTCC) $(BINARY_IN) $(KBUILD_HOSTLDFLAGS) $(EXTRA_LDFLAGS) -o $@ $(BPFOBJ) $(SUBCMDOBJ) $(LIBS)
+-	id = get_id(name + size);
+-	if (!id) {
++	if (get_id(name + size, id, sizeof(id))) {
+ 		pr_err("FAILED to parse symbol name: %s\n", name);
+ 		return NULL;
+ 	}
+@@ -346,6 +353,21 @@ static struct btf_id *add_symbol(struct rb_root *root, char *name, size_t size)
+ 	return btf_id__add(root, id, BTF_ID_KIND_SYM);
+ }
  
- clean_objects := $(wildcard $(OUTPUT)/*.o                \
-                             $(OUTPUT)/.*.o.cmd           \
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 6776158f1f3e..72a9ba41f95e 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -27,7 +27,11 @@ ifneq ($(wildcard $(GENHDR)),)
- endif
- 
- BPF_GCC		?= $(shell command -v bpf-gcc;)
-+ifdef ASAN
-+SAN_CFLAGS 	?= -fsanitize=address -fno-omit-frame-pointer
-+else
- SAN_CFLAGS	?=
-+endif
- SAN_LDFLAGS	?= $(SAN_CFLAGS)
- RELEASE		?=
- OPT_FLAGS	?= $(if $(RELEASE),-O2,-O0)
-@@ -326,8 +330,8 @@ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)    \
- 		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)			       \
- 		    ARCH= CROSS_COMPILE= CC="$(HOSTCC)" LD="$(HOSTLD)" 	       \
--		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(EXTRA_CFLAGS)'	       \
--		    EXTRA_LDFLAGS='$(EXTRA_LDFLAGS)'			       \
-+		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)'	       \
-+		    EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)'			       \
- 		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/			       \
- 		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/		       \
- 		    LIBBPF_DESTDIR=$(HOST_SCRATCH_DIR)/			       \
-@@ -338,8 +342,8 @@ $(CROSS_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
- 		    $(BPFOBJ) | $(BUILD_DIR)/bpftool
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
- 		    ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE)			\
--		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(EXTRA_CFLAGS)'		\
--		    EXTRA_LDFLAGS='$(EXTRA_LDFLAGS)'				\
-+		    EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)'	       \
-+		    EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)'			       \
- 		    OUTPUT=$(BUILD_DIR)/bpftool/				\
- 		    LIBBPF_OUTPUT=$(BUILD_DIR)/libbpf/				\
- 		    LIBBPF_DESTDIR=$(SCRATCH_DIR)/				\
-@@ -404,6 +408,7 @@ $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids	\
- 	$(Q)$(MAKE) $(submake_extras) -C $(TOOLSDIR)/bpf/resolve_btfids	\
- 		CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)" \
- 		LIBBPF_INCLUDE=$(HOST_INCLUDE_DIR) \
-+		EXTRA_LDFLAGS='$(SAN_LDFLAGS) $(EXTRA_LDFLAGS)' \
- 		OUTPUT=$(HOST_BUILD_DIR)/resolve_btfids/ BPFOBJ=$(HOST_BPFOBJ)
- 
- # Get Clang's default includes on this system, as opposed to those seen by
++static void btf_id__free_all(struct rb_root *root)
++{
++	struct rb_node *next;
++	struct btf_id *id;
++
++	next = rb_first(root);
++	while (next) {
++		id = rb_entry(next, struct btf_id, rb_node);
++		next = rb_next(&id->rb_node);
++		rb_erase(&id->rb_node, root);
++		free(id->name);
++		free(id);
++	}
++}
++
+ static void bswap_32_data(void *data, u32 nr_bytes)
+ {
+ 	u32 cnt, i;
+@@ -1547,6 +1569,11 @@ int main(int argc, const char **argv)
+ out:
+ 	btf__free(obj.base_btf);
+ 	btf__free(obj.btf);
++	btf_id__free_all(&obj.structs);
++	btf_id__free_all(&obj.unions);
++	btf_id__free_all(&obj.typedefs);
++	btf_id__free_all(&obj.funcs);
++	btf_id__free_all(&obj.sets);
+ 	if (obj.efile.elf) {
+ 		elf_end(obj.efile.elf);
+ 		close(obj.efile.fd);
 -- 
 2.53.0
 
