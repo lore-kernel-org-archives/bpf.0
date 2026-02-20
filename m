@@ -1,171 +1,111 @@
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D25D2EA468
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 23:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B66C419D092
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 23:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.54
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771628679; cv=pass; b=J+28hclFAIX2IOdrG6J2Fx6vHVZ31MTon3r+iEV5OMDHvPghRdDis2oNEMbb+Z1+pLdAV6mn0x8omsBGbnb6dAClKDdlq2I+xPFjQBSwSDDB0PxpLCfquC5yv4KMpd7K3PkrXdVsDz9eeDpsEK4oSfF1izqgWeg4/hJxlo+GBiU=
+	t=1771628860; cv=pass; b=GYuZ4cAOX0tFEplOj03qGX3XxSgIfuXb1Ev0IJngM88BFREki88DKfiTKDnOtVWBWKVZyOTHXHXuFPFx1xmph7+dTZVg2BubvlTMCtS9PXrpXetKsTLtNJ+e8h9fj20EKWbhb3QNkj1M/pItWTZ5x1GBIzX3sBYAmo/OZeeJ/h0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771628679; c=relaxed/simple;
-	bh=o1PSwEqlQFu4PMd73N09DWDWcH91RMVfhVxESBCLNNs=;
+	s=arc-20240116; t=1771628860; c=relaxed/simple;
+	bh=l8f98VYpmJJa6wT9VBWM9nPIpJ4oRx+gqC/ZRfD0vJ4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j9fgdRr5oU+nFKUXzVE/3qahC0pdCctlSk55kq/fSVkeos5sFNRbScD/BYhBWmDuFH3S4f0XMXEBKyT1Eh/DGgjlTw7715UM+JLRtGIQdHWiyb66A2p9you0b5fAWwCx52Jpqua797ts9i6/ROaR4+xvDv7Q2F7mb0LDNi/lfpc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gS4udWDI; arc=pass smtp.client-ip=209.85.221.48
+	 To:Cc:Content-Type; b=V3qfiKZsksfhkYoQVo0UaYoCKsgG/CWH0sn3MAh1GqrQ1qcKTMp19hQs1rKjg/ZX1gQFx6PIZdng4O1nJX2De2CW9ucyBW56h74ws9veUUUG+d2U8WJu0GP9+UtJXTIPbFgtW2Rz4AUtWeDT1JbUGHCInTNcpQyJTifTsJFebq4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MI4FSiaF; arc=pass smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gS4udWDI"
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-43626796202so2293005f8f.3
-        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 15:04:37 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771628676; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MI4FSiaF"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-4362c635319so2334033f8f.2
+        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 15:07:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771628857; cv=none;
         d=google.com; s=arc-20240605;
-        b=Otbyn4MGv8cMmFfQen8yI73pfrdppBSfAFGIc3CkNbSliECeF0ASE6K/KmUsdbDx6N
-         Lp/nS3Upz2IrTOlueSp2sgKqaiLUGIenU7wkVuQsbg/ytKeZHzgBua+DBzo3uOY2bB5K
-         u5lNPJF8ckT2N0//vKB0agzZMmlebrG5NKq7bwvW8OiAyFObfjhFPmrzDS5dBxXjUiOR
-         nnqSZc8Y8wi2roKLXXwcXq5JE2YwStgOiWPCEmOX6pc2E//jAmr4PGXSK3fecAELlTag
-         wpdNe/wrMVRLg/N9of4NLODr9QL/swswWupMbjRP3bdR8LkcJl5voAmw2oKm+S+eQfRr
-         c9GA==
+        b=em+jdKo+vna0CoPTktWWQYqrgcQViAccNSAo/sfmPCSXNU8A9qd6lXbVkp73SG8hIG
+         7TFk8UxhMNmEipOXugdkuJsccsBa99WZ+WTMTUhgKJJKjFrvXbm5FOKNNBC50zeAXeXw
+         xoGK/6tLuXIhjSdKqA+jVLTYw3lY8QIgf79Fh0ovNT2Pk0txMVymg79fVPt6ZU+JQkk1
+         Rfu2CrAPUnKuTmXAcMlJSGAqLGY8PhaY4E9cpy/7/RWPNOAwwAcxU34D/xb65kZPXdWY
+         LFsHi0NEejeTxO8HiVDp9vG6wjITFJdqeL4vWtd1Lx7SoLzcso8h4umUqAy7Sp2TfVCx
+         KXSQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=0xxEqMeNHQPDehpi+Iv7LuQVJPrGMivlZviDytQ+j2M=;
-        fh=iNGJXngWUPIj2qluOM64QXkQSMt3jewt6uz29WDbjqU=;
-        b=bEKMzclGzlwLyucrv7/qBbpeYPNDSf7q0uUBqx+SMQEKXk0ijzCbCuLj51N9Gpf2ix
-         0qWC2b/q84FLxt5U4S1fQ9RcnfxIkf16GV2TQA/Kj7U1kjCFrOweDukMZoRmYU20+C+B
-         vdwEaGORfwp2omwiz+bcCLqliwKF4nWJ/QsUwrC/eDs9f6QH4eqVVJQo80OL4LU2bqXf
-         +TGm9onLzhJj3nziUJRviZaBQhMpk+3EZXHqKFCak9y9xYiG0xz+xVioWhxZynFcjq/D
-         7NTs+PC48MEN13jXEkvYpN+hckAP2HdAVbltOWuDbdhzaGr4LZe4yW8QFXaVoyB7TjRA
-         0j1Q==;
+        bh=l8f98VYpmJJa6wT9VBWM9nPIpJ4oRx+gqC/ZRfD0vJ4=;
+        fh=qJCppzjQQA5UevqmIUyfulDAr5UuFNtm4ivrYNuqSEg=;
+        b=A5c4+CdH4P4dx28XXIG1bcyzREWrEyyu+C/cHo+htE9s48abtS0P+HmcNflZlDri+F
+         ZYt4d7Z7t1zUvHMZAE6KW200JLqrdxJSl3IXDjPEdwYtuZ31TilQKStd6+rIhOEx28Ko
+         X5u6bD40HPscOLaXuzF0Zl6Kc1xZrEaGQyEuoph021jw10Ey1G7IXqYucXrhRuFN7fDH
+         3Z/d2eDM15BU5k4aR+g9rl8Hme4h88dQOrURVkkpW0j02b4jFcHLu3GrvBS4eIQoX+SI
+         v7I6jEOAU1MdHa/L/hFOV+tMo7/mnUiaq+gJPKmRKQv619WibGsRaehcJ1ttk5WJAruT
+         1t1Q==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771628676; x=1772233476; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771628857; x=1772233657; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0xxEqMeNHQPDehpi+Iv7LuQVJPrGMivlZviDytQ+j2M=;
-        b=gS4udWDICAaw77pPTnRPnDkzNmbckcyjxMGHILCKbdPFPA8vRKx65kppw0bWI7MfBS
-         WpHxQn9mzd8LUJaVuCovTZ25jEQn/EUQOg3Xq8a1m0Br7aJm/QxP/Z753FG8UAXW2lFP
-         v/uH3PH1oACAFeOB4lioPGMx8qXYzp5TwaDHKbTggwauJ9qY5mCY+a63XBh71UAIncQS
-         xsKXuFU4ulTJ3J6GoTgAhpIARsJY7b7YCV+HU5jLijL2cN7/QXljhb/H6dP1rv2r/eiR
-         u0wxGK4jka981apIx8O6+vP790TXHHbscOscjCFaE8EIRaZkQaZylraOfRbpOF6TOY/2
-         Pd7A==
+        bh=l8f98VYpmJJa6wT9VBWM9nPIpJ4oRx+gqC/ZRfD0vJ4=;
+        b=MI4FSiaFNvKQdbzr8DSy9lCp4ROjoYomYXrf5Rk6eZQnJTbvbkLfXBl8VMz/sv6ArX
+         6qeu2NFrs8APqoJJSjM4oehQLgK2UG+T83iF8L5rhVfMdLN4cLm4ijK7OWXwOukB+cDL
+         IkI5DGPehM8HYaa/KWi8m97Am5fE+yIkTUWemHdbx46qP+14F9fbxRZk7d5ZQUN1l56z
+         pnfNbXYNUJ4Mfi3GfDVNS4SHcSlmG5/Ey/Sz2ChlOcAEjrgZ20d/GbpEQgTOk9tAR2kl
+         wA0Fiy1JQX7Xw7SuWlDQqZhBkYFeWMu885chst9nKFaV0M4gYSltP9C0LrUnOPg0K0NL
+         tTxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771628676; x=1772233476;
+        d=1e100.net; s=20230601; t=1771628857; x=1772233657;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=0xxEqMeNHQPDehpi+Iv7LuQVJPrGMivlZviDytQ+j2M=;
-        b=v0aINPSAFkinAjbgn82dSsM9fl77jLvW5wvjRqUyxwwiorNIMvtCUifop3+K0F0h/9
-         J3ZjqY8+hACHG48jvLEFQqb2m4xUjgRBWYvxWZ61Vs6qEndC6FJhpVL0FiGx98cV/i88
-         E2UwjcU6NoaVtL4KqT8mqPQBweMeo4mZNl5o3IykSh/hRAcjVG+VwlmgGK0jkbS1940U
-         M5fji9mvFYsWeYK0BmJJWfTTqWn5TV2FNjtpua4sul2v42kxbgkWTKIn3ywQChDm812E
-         vHApYj0AFcTTQRjUNi9u++lACmJzoaR0v86fngRKApdJRTC0mYoJXZ+cwOtjCDCiLmkV
-         kKcg==
-X-Forwarded-Encrypted: i=1; AJvYcCVyQP/djyUACQ094js3mwO0liSKCoS8SutCogNrYCrF5gq5xDQqrzSWZKEu7o7FYfKsxLQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIZ+97foUJ0jyqvest7B+mO6XYhND6YeDGeSqdrwEiQ3XCmKim
-	NSv3t+wE9svsII48li5brGIaPvMxkEkUaC4rQ7N6swezhAzsctiL56A1a7Ko5fSvOqDifIJHhBy
-	9Lj+/N9MF0MkFP6h67u4eeMW9OxDWlx0=
-X-Gm-Gg: AZuq6aKQLEBhl4i9x3WAvv338jCffbtGHnkyjKovlcb648GPjEX3y3ZwvMsmFsnWGlO
-	29qtD7FUhEWfllwxeFmPRPAdAIeOJSbI82XiraFx+gpV+/v+QtTVlAgvQuelX5u0wvyecteuUpo
-	v3U3cCq793AGhm4EibXtp8rJf4txpw5dbOM/U6miAMlxTtiUl1VUVfcx4D9FGBnc7146S5D0UVc
-	C3+Y7QVM4MQ+YcOMXdz7jIe/McTT9PCBjcr4G3HMbmlg/cjeG88TTqbD7kIEGYsInHR2uR8x3Db
-	xKCUjKwWSxt96cuPkAbj5uGkDkCm6/0b/GAj8FncirilVYaGjFo6xv/rKEpTKnkZAJeHQLYFLWw
-	0WQOZo5Ayo3jlmTS8i9XN/fO/yA==
-X-Received: by 2002:a05:6000:2507:b0:436:1a23:3949 with SMTP id
- ffacd0b85a97d-4396f14c9f0mr3128730f8f.10.1771628676363; Fri, 20 Feb 2026
- 15:04:36 -0800 (PST)
+        bh=l8f98VYpmJJa6wT9VBWM9nPIpJ4oRx+gqC/ZRfD0vJ4=;
+        b=h6MQeYmvM4PJlGq65QXqdjxF9kjd7wuDRoVmVoy/KdPnyYgKj+ZvZ9jbiRGOXgg8Gz
+         AoWdjZLiwsaKgTDOxOMHKAnmkSFkqaGnC8fBSMdKgWm1z++FS44I42CE5VIhPEOFuY3R
+         /YwX70LNxqRnT4OrBKQgYOdBxlg0SshjeoDKNPj8MObTtfIa8vKQpBOAjsFq6sIGH9q0
+         CIdEywOr8lvL1/kopXteSQgbBj8PhcJXG0bEJ3uc4nih1hrEu6WHiZX323Tuk+2WRE5H
+         Tr6vyh/Yob/Pcfu8Wwve9g86ZQHvP5Hr2KscJmwplktio3Pqs46qSZDbYj3vfU5hy80n
+         t4WQ==
+X-Gm-Message-State: AOJu0YzAKtJTw2ct+ktph9Lf+3q/vu7qgx0vjfwIo6OELxpgj7VKDZSO
+	D2ilasvInVhyZN42LPuFMIYTluxmIyT8+HKe9cZJ7zq0kugvg/58K0XirAo6Rs8xXiiY4MN0459
+	wxUxyDa2iYu3VFJSLNL7/W+y7oYUjHco=
+X-Gm-Gg: AZuq6aJCQ+MtQY3/Y7SgAC8h5a7sKR73l1xAaoY3Qm4ziyc5cenNxedxMTvnx+aMgDg
+	GJBuxorKuZYkcNsKxFDfRiSm9kYVdtFMqFfH2bFpLnADsq6H4q+4MFFl1AO+YoEIEVQzfpqswUS
+	YNUtg2DtQa8/48224pO0nJ632IGYUAjFYcqvWuYVGbvAE+Fx+bTC8551JwokRhOTG7ahi1iGvyR
+	QRyR9+3v/qSqqYv/BD829o39OHhdxa0hQpj4UYvJi6WZbTFA4L1pBs4DaHMoptxOWvjn5Fuh6OI
+	7mwDo4uarMugR/pEO/fuXz3cMMQF81GALjOhNqs4OmyQFx610lmMplSHBUQh0m0n1VSXQB1YrzL
+	QvLjRT/iKx4EkV7HWVVIboRtImg==
+X-Received: by 2002:a05:6000:2890:b0:436:37e4:594d with SMTP id
+ ffacd0b85a97d-4396f14cb64mr2813280f8f.6.1771628856921; Fri, 20 Feb 2026
+ 15:07:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260220182011.802116-1-ihor.solodrai@linux.dev> <20260220182011.802116-3-ihor.solodrai@linux.dev>
-In-Reply-To: <20260220182011.802116-3-ihor.solodrai@linux.dev>
+References: <cover.1771625484.git.josef@toxicpanda.com> <e582d9289c7b7c2682808db22da6bc3ba907d884.1771625484.git.josef@toxicpanda.com>
+In-Reply-To: <e582d9289c7b7c2682808db22da6bc3ba907d884.1771625484.git.josef@toxicpanda.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 20 Feb 2026 15:04:25 -0800
-X-Gm-Features: AaiRm51IrlognAPzrrNojtkEiTSM06FjF37xKtXRcGD1D0poaTrF91MyMbaY9AE
-Message-ID: <CAADnVQ+VhXCM0DuDz7nRb2iMoA68igMrgeTwE3c14x7FmFJYVw@mail.gmail.com>
-Subject: Re: [PATCH bpf v1 2/7] selftests/bpf: Add strscpy_cat()
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Kernel Team <kernel-team@meta.com>
+Date: Fri, 20 Feb 2026 15:07:26 -0800
+X-Gm-Features: AaiRm51MEpBQw2fGc6XhQVU07A87qjZ7YTvUv9qAX4TTLRK7FQChlvwuGhN_T84
+Message-ID: <CAADnVQJuyryVdvS7wKHGoC4nePxrtg45441fDyKTFUwRDxk65g@mail.gmail.com>
+Subject: Re: [PATCH v4 3/3] selftests/bpf: add test for btf__add_btf() with
+ split BTF sources
+To: Josef Bacik <josef@toxicpanda.com>, Chris Mason <clm@meta.com>
+Cc: bpf <bpf@vger.kernel.org>, "Claude Opus 4.6" <noreply@anthropic.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 20, 2026 at 10:20=E2=80=AFAM Ihor Solodrai <ihor.solodrai@linux=
-.dev> wrote:
+On Fri, Feb 20, 2026 at 2:44=E2=80=AFPM Josef Bacik <josef@toxicpanda.com> =
+wrote:
 >
-> Add sized_strscpy_cat() to bpf_util.h, which concatenates multiple
-> strings into a destination buffer with strscpy().
+> Add a test that verifies btf__add_btf() correctly handles merging
+> multiple split BTF objects that share the same base BTF. The test
+> creates two sibling split BTFs on a common base, merges them into
+> a combined split BTF, and validates that base type references are
+> preserved while split type references are properly remapped.
 >
-> Add strscpy_cat() macro with varargs.
->
-> This is a convenient helper that provides the same guarantees as
-> strscpy(), but for a case when multiple strings need to be
-> concatenated into destination.
->
-> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> ---
->  tools/testing/selftests/bpf/bpf_util.h | 28 ++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selft=
-ests/bpf/bpf_util.h
-> index 8c95ef7ed7c0..61bb22c3e517 100644
-> --- a/tools/testing/selftests/bpf/bpf_util.h
-> +++ b/tools/testing/selftests/bpf/bpf_util.h
-> @@ -52,6 +52,34 @@ static inline ssize_t sized_strscpy(char *dest, const =
-char *src, size_t count)
->  #undef strscpy /* Redefine the placeholder from tools/include/linux/stri=
-ng.h */
->  #define strscpy sized_strscpy
->
-> +/*
-> + * strscpy() analogue that concatenates multiple strings into a buffer
-> + */
-> +static inline ssize_t sized_strscpy_cat(char *dest, size_t dest_sz,
-> +                                       const char * const *srcs, size_t =
-n)
-> +{
-> +       ssize_t pos =3D 0;
-> +
-> +       if (dest_sz =3D=3D 0)
-> +               return -E2BIG;
-> +
-> +       for (size_t i =3D 0; i < n; i++) {
-> +               ssize_t res =3D strscpy(dest + pos, srcs[i], dest_sz - po=
-s);
-> +
-> +               if (res < 0)
-> +                       return res;
-> +               pos +=3D res;
-> +       }
-> +
-> +       return pos;
-> +}
-> +
-> +#define strscpy_cat(dest, count, ...)                                  \
-> +       sized_strscpy_cat(dest, count,                                  \
-> +                         (const char * const[]){ __VA_ARGS__ },        \
-> +                         ARRAY_SIZE(((const char * const[]){ __VA_ARGS__=
- })))
+> Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 
-Interesting idea, but this is not bpf material anymore,
-and api needs to be discussed.
-Let's drop it for now and corresponding changes in later patches.
+v4 and it is still missing your SOB.
 
-Re: patch 1.
-I think we can do kernel's trick:
-        CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS=
-__)
-
-We have ___bpf_apply and ___bpf_narg in bpf_helpers.h
-so strscpy() can be 2 args and it will make patch 3 less churny.
-
-Also combine both patch sets, since the ASAN one depends on this one.
-
-pw-bot: cr
+Chris,
+would be great if AI catch this.
