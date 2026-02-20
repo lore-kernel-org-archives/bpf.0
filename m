@@ -1,121 +1,125 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CD332C2356
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:35:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576013064A0
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771626927; cv=none; b=KFN2AnQIXGvguQ8rCELua1/gg3E28G3Gwg+aMrZOHuS/fHzwI1FYCHx3IOAl3HwpWuydHZ4nME5PC9lFKwO7/bT31Ex4yGwY8/R0malanruNKqykTwpCYK0UUdneDqjatQjGro374caQtoFal0YiOPjL6aAK26yvl4B3SwwfenE=
+	t=1771627448; cv=none; b=Zj24t46RqthQCM1CrQcifU3hNb/2kBN4dOIgLZmovIblB+kgNAhN0bVeUP9zahMGKETCQaKmO6v2ZM3CX+7E8m4PC51Zb04wYNibqyA5Ev2zYL+eUHmRRmKhT7/z03GIEK/wHlb7GirfqiRS0R1mGhpvQvVxwqFcULD5z7FXUmY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771626927; c=relaxed/simple;
-	bh=smZcoEAnOnGbWYQjTEx4wx5SsMpqu349Lu3q9NZylXE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R8aCYxZ4qwM29RjifDPhv8t/m38v16bzsmnowtNMGZtMFRHnX7tw6e7m+WsS8x/nJJbrGZTC3PdHRGyErkVzxtuoFXN7mUNNLm8v6c8wyFK3YKcKovyRhCRCrpmEOmmznHW3Sl7ef9fIDnd9wpHhLRp4bcAM6smrZ6jwv+e8w4M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LuMGdiZt; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771627448; c=relaxed/simple;
+	bh=S1E0087t99p95WNwjQXspddV7lztKT5zMRb1wyj71js=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=pYDSG8qIE/VIRuXfo/737x8OJ2R7Aj21iELsNY0dbPeDoMMNZsXMV5qZ/5vvumV5rdxU6SKdEyR+XTEnvn9bD6ea49UoVbqvBGKG2PRPMpZAhdNf9ncCJ9EuAjbxRU/rWgZJlXhHXYcHjDDrxi+6TRAXOhb3234w6Xozog286/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=HkAkjQ/c; arc=none smtp.client-ip=74.125.224.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LuMGdiZt"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4834826e5a0so29737275e9.2
-        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 14:35:26 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="HkAkjQ/c"
+Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-649b5f5570fso3219527d50.0
+        for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 14:44:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771626925; x=1772231725; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G2s/8SzLr1kQgVOYkjFZAPLW+HaH7/zQRc6LGXmo8T8=;
-        b=LuMGdiZtIGXiPOqiMTVh85w5df5SxWALOuHvXa8LYn8GM6OnPCRLFNrOqEuqYBXOjb
-         m5nbiQfpYj3zF2Sjx9s8u3iloTRDiwk9Az/iJbKEZDi3woDcFX0rcgTteG91TJzIqCJ0
-         bEZCQ0tI/05Q5Oofze0LQLj/4rllL/D5DwblPlZcgrwa8xTNoazSGy1fU9jVSeuvDCqg
-         VAWM0/rUfK8HgOn2yN2V1qTjUISkKnAVy5a2IRR1LHFxQZnd1S91wZMYzWpAVmB7F5zU
-         Iv/hYRtDMcTiuharygouoedW5F6YJsbu5tmvvo/7K/j4ACjuvHrKarTalwhZEWFhk2IN
-         krcw==
+        d=toxicpanda.com; s=google; t=1771627446; x=1772232246; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DtKE80gtp9vrGL1FpV8sNa/5aSvK/Go76g+/LxqG4c0=;
+        b=HkAkjQ/cid7vTFltgyZjYLrd2H4ObaZemBvboTjAAdasxJqQpqPG17RyeaJVb9wCnm
+         4qakkj44uWH+uJxa0GIaajYQHmYpdtw9hpZzrupx7+HhdWyuobgf9qxn8XWsUlvpNDGz
+         7SkWeBxbZnQj+CCnbVrCUAVV3/3d0owshJca/SzEXiPfIkN4y6tiDMXShrcb2kRXPP5j
+         C1JxOXUqStiAYyql+19euQJ5E3XBhWCt1YRQgF/yf5IkyCGeqVzhOrc7/YKt9DyVIWnh
+         efG6IW+XwjpDutiDvsjpyskXjRS7H2pmweV/U/fheJkzmjRiAZIBg0ubyNnrm4lXcebG
+         ffQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771626925; x=1772231725;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1771627446; x=1772232246;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G2s/8SzLr1kQgVOYkjFZAPLW+HaH7/zQRc6LGXmo8T8=;
-        b=hpNnDz4KS2Alr7NVMbM+LR66L+OULalmcVlC6v+BnIsUCx7mGlKc1mgeOQgkNFj0tz
-         hoJZBd4tD2cArRVjnFCOtLpaVzcIiQ1bvTptpC5sy7jltDYVSKYH0JeJ2fmaH7WR1W9P
-         PayopjzlfWK4xuM+5Yl5pQ1iDzkJHLBmy6tzYCVcPk/1YDWBp0NcndBLCF0kbaNJD2l6
-         PeGe7LuvnKEM66aHsv41Fkh4estxpm2uARh/o1uskwov1rEqhCgD2hADSIiOk3wpd2OY
-         4LidF36NcApM9qolPe1Yz89OQXND7c8YCIvaEMKAnb755sH+etVbOowqQ5L7GJDBGpQa
-         6DUg==
-X-Forwarded-Encrypted: i=1; AJvYcCULQOATxJbaeT0X6wV7BC7fTplTBS5OIGjK3Db6fzJvISi+9HxZbv4qzyZXoYmO1Uv9yI8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgPbg/YCYb43xgXgzkL1ILU1RK5BTKjRGo0c3wyGY14PuZWNTH
-	iP9sdRUrBFIRlJbNpzGnMM0rzuRVih9b95CRTP4YAmgi3G1iFE7BCHUb
-X-Gm-Gg: AZuq6aIPiQwsua+gTeDWeqyZ4PTi5poV3It0D9CRDrn+oHmiJ9c/b47LF1K4WDbVJ/0
-	P306jbjluREdwXjiNUfoQgGBE+egNp0ij0e6A0fQwxmeTug9N3WYgW9GPLR1z6B0Cux5wzPgIad
-	/EKRT5RCACv9rFnB3ICYZhgMKrPsX9CvilP8U0s1k983e9yMv9yiXAFTrag3nduDAkHzuFnWAoH
-	4G88UbF1K6V6jQSEeT1YVrsSnADuUhISzi295UGB+vUuqprqEeOQAkDGRoSrPMbUV5dCpHBl+0Q
-	9KJR+XMJz4Phe6y4y7+wAQppQmc7z/I/zdIOr0wRbG1x8EhLLV2AlNPH6tTDRepi1R4KZza6i6X
-	ptyRdA/Cm+CZYnBjicOtZgiuVypJ4xkC+juSbgIUiPYBq6ocGxjdmMAgsPuhLCpRXZ9Pd4IgIIZ
-	JPIzYtBLLsG64fBTqKVsppZvty4EfWD1fgpERX0igu1WTOFxn2QLC1HkGb0Rs3aSQKubknRP4T8
-	389ZlGJrdY/jPv3gFc8RXBcQUHyGQX5YI5SAUUkaBhL3irwTq/tbwsPWGEkpWnHHDbIXrvqgcFY
-	Nw==
-X-Received: by 2002:a05:600c:8a0a:20b0:483:7903:c3b1 with SMTP id 5b1f17b1804b1-483aaa168b0mr1609075e9.20.1771626924446;
-        Fri, 20 Feb 2026 14:35:24 -0800 (PST)
-Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31b3dd7sm101429365e9.2.2026.02.20.14.35.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 20 Feb 2026 14:35:22 -0800 (PST)
-Message-ID: <591a7f0e-7b78-42f1-9486-163249f5e306@gmail.com>
-Date: Fri, 20 Feb 2026 22:35:21 +0000
+        bh=DtKE80gtp9vrGL1FpV8sNa/5aSvK/Go76g+/LxqG4c0=;
+        b=Mhltb37IiFciinK3Ak8nkWrNvhkxj/nTXzELwIl13mAhCg7ouK3uZYWvHD2+eIYoTE
+         4ayQf2hhqaxwp09wZvwPJnAHkDaCnISsBITd3BkKZ++4i/BX7lJTR/UVNA8klwxLw1vr
+         A0ppl/HI4duK2GN2odeHighU1jNeiN+MpHEkzIKcwqSn+JNN1wKsEwD9fGl0wZdMiLUT
+         qX5iMFqSLzUAtnjLtUDTfPswEHkQMyI/1Lrub4SsgU2j6f3i7rtd5nZ9t3hM4jxxhPPO
+         Og+rV6wNaCHS/5QtQJMPPHxY3XaYfKHjir0C8GspNuBTssisy1XAZwWAdQ/INyohYqzC
+         6rZA==
+X-Gm-Message-State: AOJu0YxFyWQ+tVC3E8dGCFG7RHkgdpVl+9k4B//C46+yZLWYFbchJdLE
+	qyC+fBGCu7cE/2tqvrH8uvrS3jMvG+Txd8+JCJsE9q99vr4ZgbyITt8ljpoVFeHqGLZ8bfhDJiO
+	Lb0GXJlKnszT/
+X-Gm-Gg: AZuq6aIe3099UYzSGWiVKOWpLymH8y2n/0TIsjiL4FtsR3439ENQGe9u24qp9VQ5SII
+	8Qc+KxakemmfbRbf/Y3E1LwSPmZo+9wZlnpq5e4ggkx7As+os8HVrfroPP/wkSnfTCtqGzT6Oau
+	lKvVWoDOG02ZY8WVDycE163xki7luaFAE1dcEspdUJlBTDQTGDHMx7alATc+9V4L8e2EEnyz/nL
+	jxzC0PO2EJAHZd2tZduw1ouoyzaAyJvCT2KPdEvNfx9gohjnXKzjk+s0BgmkZL2Zw0721G8BWsu
+	AgNynJEmwIuz9ThwaO7Sjm/4skv9Hyq9vOrT7eN85yGndOrU/wSb+9hVFD+CvYSAHa4VOi0uyKA
+	/TE5/PgyEovn6Jq8FCApSUHPDNhzwk82ebSL7/80JhdZAA1bEb1B+3F4hArbAJafrfMjcWdxAc2
+	LmlWrt7gQw6M1WpgiG+Umr78RDzQ==
+X-Received: by 2002:a05:690e:14c1:b0:649:dc5c:1919 with SMTP id 956f58d0204a3-64c63fe7866mr5241047d50.10.1771627445971;
+        Fri, 20 Feb 2026 14:44:05 -0800 (PST)
+Received: from localhost ([2603:6080:7702:ce00:96ef:dc7e:bb84:bc5a])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-64c7a252484sm289306d50.4.2026.02.20.14.44.05
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Feb 2026 14:44:05 -0800 (PST)
+From: Josef Bacik <josef@toxicpanda.com>
+To: bpf@vger.kernel.org
+Subject: [PATCH v4 0/3] libbpf/bpftool: support merging split BTFs
+Date: Fri, 20 Feb 2026 17:43:56 -0500
+Message-ID: <cover.1771625484.git.josef@toxicpanda.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 5/5] selftests/io_uring: add a bpf io_uring selftest
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: io-uring <io-uring@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
- Jens Axboe <axboe@kernel.dk>
-References: <cover.1771327059.git.asml.silence@gmail.com>
- <7cc147a959ac068c55dae4f540e38e9e4ab121e0.1771327059.git.asml.silence@gmail.com>
- <CAADnVQK0RaOA9ZYZdYyQxOzLde9MR8HpMM0SexcW59A9u7X2Jw@mail.gmail.com>
- <84e2f3ad-28f0-4e9a-804f-2647cba9b30f@gmail.com>
- <CAADnVQLSEoZ0V1m5j3ggX0o0gzVKyiDHL=J6F0wRXB8qk-MCGA@mail.gmail.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CAADnVQLSEoZ0V1m5j3ggX0o0gzVKyiDHL=J6F0wRXB8qk-MCGA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2/20/26 17:45, Alexei Starovoitov wrote:
-> On Fri, Feb 20, 2026 at 3:41 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
->>
->> I had such examples, but selftests is not the best place for that.
->> It can use abstractions, and I want to make them reusable instead
->> of people copy-pasting from selftests.
-> 
-> Sure, but please still post them as extra patches so it's easier
-> to see what's the end result.
-> 
-> Also please reply to that thread:
-> https://lore.kernel.org/bpf/CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com/
-> 
-> It's not clear to me whether your io_uring+bpf setup will work
-> for Xiao's use case.
-> I don't think we need 2 ways of doing it.
+v1: https://lore.kernel.org/bpf/cover.1771605821.git.josef@toxicpanda.com/
+v2: https://lore.kernel.org/bpf/cover.1771616227.git.josef@toxicpanda.com/
+v3: https://lore.kernel.org/bpf/cover.1771622266.git.josef@toxicpanda.com/
 
-We discussed this with Ming on the list before, that's one of the use
-cases I target as well, there is no reason why it shouldn't work. The
-difference is that this approach gives a flexible framework for
-extensibility and covers a good bunch of other needs, which is exactly
-the reason I moved from a BPF opcode approach, while Ming's proposal is
-more specific but argued to be a way easier to plug into ublk servers.
-If you ask me, we need a solution that covers a broader spectrum of
-use cases, but I guess it all can be argued in either way.
+v1->v2:
+- Added a btf__dedup() call to btf__add_btf() to ensure that we don't have
+  duplicate types in the merged BTF.
+v2->v3:
+- AI review got confused about the UAF comment, so the comment was expanded to
+  clarify the UAF potential.
+- Fixed potential clobbering of errno in the error path.
+v3->v4:
+- Fixed a potential silent corruption pointed out by the AI review bot.
 
-But it'd be interesting to discuss how a BPF abstraction around
-registered buffers should look like. E.g. passing an index to
-all kfuncs like that, or making it a KF_ACQUIRE/RELEASE object, or
-maybe something else. I'll reply later.
+--- Original email ---
+
+Hello,
+
+I'm extending systing to do introspection on vfio devices, which requires having
+the structs I need from the kernel available in userspace. Normally these are
+loadable modules, but in the case of vfio there's multiple structs across
+multiple modules. Normally you'd do the following to generate your vmlinux.h
+with a module
+
+bpftool btf dump file /sys/kernel/btf/<module> format c \
+	--base /sys/kernel/btf/vmlinux > vmlinux.h
+
+but if you need multiple modules you have to hack together multiple dumps and
+merge them together. This patch series adds support for merging multiple BTF
+sources together, so you can do
+
+bpftool btf dump file /sys/kernel/btf/<module1> \
+	file /sys/kernel/btf/<module2> format c \
+	--base /sys/kernel/btf/vmlinux > vmlinux.h
+
+I tested this with my usecase and it works. Thanks,
+
+Josef
+
+Josef Bacik (3):
+  libbpf: support appending split BTF in btf__add_btf()
+  bpftool: support merging multiple module BTFs in btf dump
+  selftests/bpf: add test for btf__add_btf() with split BTF sources
+
+ tools/bpf/bpftool/btf.c                       | 135 ++++++++++++++++--
+ tools/lib/bpf/btf.c                           |  44 ++++--
+ .../selftests/bpf/prog_tests/btf_write.c      |  89 ++++++++++++
+ 3 files changed, 247 insertions(+), 21 deletions(-)
 
 -- 
-Pavel Begunkov
+2.53.0
 
