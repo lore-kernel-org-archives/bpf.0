@@ -1,189 +1,212 @@
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7099F1E5B7A
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 01:29:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771550963; cv=none; b=QwjrEUy7vmS2LVWk1u1aR+Dd5EOeubb37j5ilVqE7jT/Ve5Rj4Bb7ADMgtQxgumRbV0o90VqhHau/sr9HBVP4pUSH2mUmx9tfdjqC+Ovs+9w2uWioMRZvfQhDHlcjeyAKvZ8D7wT6H+7517jrzVS0ehoUHwexPy5dVsuCi+RtDk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771550963; c=relaxed/simple;
-	bh=IbY/oQ621o/cWvg1s9HGNVxbXfODWXbvzFNpzy2PkpU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DmLaf7hfZ+WbOSyc7+AYO6KbPWGGxLjtQANiqrdRzp1P9kfs10aZ75S9k9aHdgsdHysyYsV3TUsqzJR4HVNGsn6LXn8RoX2icDFxOPF+/KDQRnAoP+pfkShCQXRlcHYnK29ZK5kXgsv0YZoX+QzOQUvjtBo3iXoZPcIv7OgLDSQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XB8D/3dQ; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 623DE275B18
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 02:42:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771555329; cv=pass; b=MiZ/FTEpsF21+c+TLFdbdz2+iVNVRbe7RlHHUp+Fjl2KRwgwlTPZSduhZI/eHXjlmpRTbixXfwiAHzaS2s50ezW2d9UATi0zYKS+IKZ4WpMVjXnP3CYJDmBKDZDVxeii8ZQGtzafJ3ZevqF1c49ouF+YyHu3uwgeCFhXXFGDrU4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771555329; c=relaxed/simple;
+	bh=eSIDcTndojuucPxxP0lRzGLmt5jXlY5cGrpufpEVE+A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PzKcm5XFAeBJ6w/0iXzjAZTJR1ekGDC+Qx+oEFG+R6vMmctopTsP2csTmKgUzWvkFD3X8DsbXLUpTMmK7VGVbmaMxU4Xm/uDwinJfvL6JV5C/5JEg0LiAllmVzBbcqNc4Po3RqM9tDz771c7Ixu+lrNb3PgGiw3kUoWKX8Qtf4A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VwkiIDLG; arc=pass smtp.client-ip=209.85.128.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XB8D/3dQ"
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-3567e2b4159so801094a91.0
-        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 17:29:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VwkiIDLG"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-483487335c2so14906795e9.2
+        for <bpf@vger.kernel.org>; Thu, 19 Feb 2026 18:42:08 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771555326; cv=none;
+        d=google.com; s=arc-20240605;
+        b=YqBz+OxmYsQw3hKNyxzG8mlJe32LlFBmLFk3WgpAbYvynbb7UPaaQEPFODJfT6SYRa
+         7md1XPfXTmJ2Sj7SxXh8KPsJOQ/IVQbIsSgANTFm+OhI9596M4wno11i9S5rpKlHYSG7
+         4iyTgSuoksuJIq+D5r32l0XgaH7vFPP5uuMxZJK9ZWxmqsS3Do7N6mi8xeoV9uswCaw2
+         eKhyt9z08Uu3SAM4S1y5RimtR8KvbIZ1Vd/ZNGMM4XxXr8TnyLvTBRwsmFds2rVWqC06
+         8rortPUnYLZR+rxk5U19x72lu3RaXrs+WVoIoCnBYp438IPbmYv/QoAlab4Zng4NELkR
+         Kdjw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=SHrzT+fir9eST8UykRQwYBKwpHHr0uRgiPrfgHLzZ3I=;
+        fh=FGhusMok0qAzlzvwPkHL+ZT9QPxNaGEeDf3EAmiLCFw=;
+        b=UY7PAYZevGO/N+Dmi6mHgw33HmSfN1RtMYkNjgmn2d7aZbimJPUeJ8gf9+HpTTTEz5
+         LpxYklfhE6msC7WygOEd/JhVEo2XSDH+lJHIwBvOkmKXNjOtUk1q9aPZVw1/r1JnULof
+         ykVVKwn4ydXdM00FQaY14iqCfSm+phXqjIwGY/8TZHJwZH8fkTdf8XTDDFpiVUvbJSTI
+         Ioqebe8UCr/LufoPlpxsfZfxjaN9xV2MaE0MkR4egJObSXXreXnPFd7Vtpr2HP7CzM2J
+         w4Igi6GfA5bIlX99v8wPRkiggfzBL+TST8q++E/tDxHUSg7z5iJNH0fWo5ly01XTCZOu
+         mAHw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771550962; x=1772155762; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=LK55KW6nvdDoUkgeO/XCLk9QNEnyqBleKMeXNXa/jfo=;
-        b=XB8D/3dQbxNHzQd1c2GpIPG/wXVOZY1SlpfmGq4S9+MIhes+iLOtKglYf1eoubNL3V
-         IXA7Th0OQ6OlS+cYuINOuc2NxDUQs14NNWJOrtL7/5aKS5HjsbPaZShZvKIudCkdMpAf
-         XRjukPLmujGMDZaPz1e5dZvLU212ZW7ArhLRd28UX287ws4h8wLfTYok6ywg2qMFB2Sh
-         wjlF49ouxWrQcm+J6vllG1aCUMUPg0N5jgymXIMkwfbCsRWYTULC5FNMwHWtHy3gtlQA
-         F9nUnNE//r2mUIbnXSsbrJ29FnM2XvIbgb6hIR2DRgAFNjLMx3kY85y8KAWqH/ZIYeT/
-         +/Xw==
+        d=gmail.com; s=20230601; t=1771555326; x=1772160126; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SHrzT+fir9eST8UykRQwYBKwpHHr0uRgiPrfgHLzZ3I=;
+        b=VwkiIDLGJmBDKv8m6vpFKQpaIMXhjd3EHfEgLDIU0zCwxeBG3fc6GcMGwclrJF2+vl
+         YNhHXrsOkmW7tamzuL60XCGHgHxvQLDxHxmLE8Qk9uOmEoAWld9lqOaj+yXA+y0+msh8
+         eHuBWFm5meKSqTtYchZatYqfAgRqM0v/I/Nuyqg38LzWU5nbttlZnzu+QbDEl+12vbq/
+         DFofZFVUnUdknB2qjYSrLithlnqFsb2D7FWZQYPZynocO+5TQtScXhY6u5yUst36hFE3
+         /0ieP/z9tlLOG5BgPPQZLWxJ550E2HVC4pv+TxRy/Vn9wU/XqpukQkqTCfxO1P5r1QtW
+         +OKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771550962; x=1772155762;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LK55KW6nvdDoUkgeO/XCLk9QNEnyqBleKMeXNXa/jfo=;
-        b=gdB8P7bR92sqqfsIG04fA1gThgVh0Xa0rUtyF81Wi9XFqFBJgv5O4qoWoZGrMKC6Ez
-         ip8qDT6/0HLjX2NJ4NiGsryJrD3FVGsprP2pT4mmwvy4sZdGQay/H0inX0R6U6oB7QMk
-         Urv1iK4W85ZkjEWKFkkjvaE5zRdQkYNFV2smHsPlKpIjvOYtpW7/JXxaXXg/fkQkWwYe
-         qC1OvHcYfvkI9BurdnM0Mr0d871LYDCIUio6q031nMUKCvgElK9ijlTSUk8rISUMQ/xa
-         y41ChtncATgvtPTkGIgylJJL2wJQ00/qmj/vgG5ZwCP3HGJoB/smIzJyPlIoZnJKI+5A
-         uJAA==
-X-Forwarded-Encrypted: i=1; AJvYcCX9Y80Y3aIZn7ihhqzobeFW2JmU8V6yJR5uucAXBL2DRuVUtNMC5fuW6/HfgeMYaYZa0IM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVEUiQ7WQ+TZ/yKiM1zH/CUsVX8yjtneKZB/8QgVSYRXMQMMis
-	ZE/VBLASW7n9fCcFGU3GEPQYABznttKM+YkN21J1PjARIYgMQ3CEsabzzEhPnw5e
-X-Gm-Gg: AZuq6aLFfb4mU57VCEnqaHNjykur7NFTHseUUBwk+dl7Xs5e2tnXiQ+RcCHu3vt8Q8V
-	6Sf3atWrcowNeXCJuFFxtPpWN86CKRSY1RoP1RM4Ct3bBdtsYKxMVaI0b//nhILZ9hQn3PyLKdU
-	vjxTav0as12hHoEkpevFrQ2H+DyLzWv9Rl0X8d8XWwEJ8ZnR1OaV26WSYKtEW7vlys53e57ruzM
-	ro3AJc8+actA0rwmrfwHFmRsg0jRKt8NKfLYKohKWxvnRUrNroC0ZDEb+bEZ19K5Eu9jakwydUe
-	6Vjxji+Dj2Qg0WlI5aK5sfa+id1qN1D4Y/vvxy/+RVzwk+zwbiYuNDhF2MoeKa1brYtXtgIL7sw
-	miIPiNs/qJlI6rSZ1l0pJpeOnwhvi6dHVGgmIsmUubdEZw9FnDBHx20TIB70kOcsqnpHVgyAKoE
-	5f95sfq9rNL2ShemkMgSvKi+obw6xbRGzd+6hjP4qVPehBh43B9dg=
-X-Received: by 2002:a17:90b:4b05:b0:354:c3a4:3a2 with SMTP id 98e67ed59e1d1-3588916d1c6mr5883767a91.29.1771550961426;
-        Thu, 19 Feb 2026 17:29:21 -0800 (PST)
-Received: from [192.168.0.56] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3589d811f3fsm1215894a91.8.2026.02.19.17.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Feb 2026 17:29:21 -0800 (PST)
-Message-ID: <7b696c92e56dc560154818484cb35def2639cbf2.camel@gmail.com>
-Subject: Re: [PATCH bpf 2/4] bpf: Improve bounds when tnum has a single
- possible value
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Paul Chaignon <paul.chaignon@gmail.com>
-Cc: Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>, 
-	bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann	
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Srinivas
- Narayana	 <srinivas.narayana@rutgers.edu>, Santosh Nagarakatte	
- <santosh.nagarakatte@rutgers.edu>
-Date: Thu, 19 Feb 2026 17:29:18 -0800
-In-Reply-To: <aZenQb3H5g73Bhz9@mail.gmail.com>
-References: <cover.1771316309.git.paul.chaignon@gmail.com>
-	 <5299e75f8807c7c49ec048e821f25a6dfef2c6cc.1771316309.git.paul.chaignon@gmail.com>
-	 <12705b3d58569685048804c33e90755c17667cbf.camel@gmail.com>
-	 <CAM=Ch06Vg-faG9ukU4DAsF9FRG2PeUtYHh3BkG0dOzYi=WDCyg@mail.gmail.com>
-	 <5044b1d83c3c916c0754eb5556008316c36c15ae.camel@gmail.com>
-	 <aZdcoaH9ERUNpln1@mail.gmail.com> <aZenQb3H5g73Bhz9@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
+        d=1e100.net; s=20230601; t=1771555326; x=1772160126;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=SHrzT+fir9eST8UykRQwYBKwpHHr0uRgiPrfgHLzZ3I=;
+        b=AYauWgvV3+u7FOFV/vKXYXuCr5uYeLczopeCwj8FwV2LKYrg+SWvpZ2uqSKIyu0QvD
+         ECOMaSANhGyoqsh6UhyxqoZx7J4pZDm14Rs5Lu4CmaFuYKdBczc/KSify/gk5J86Bjji
+         lTrtBVUNxMlcpmSmC/lBM+M4ZwplbHg+aEugY0E3hS6CFCTi4zceHL/xvewfu2sBcd13
+         nwOlGGPLWfX/XOaAs/sgSBQZK5R8N0uqVV1mWZ04GyTY/l8WPoTCgDUS/DD1mGUxE37F
+         y9n8jVwkjSYde9WjAvUDoEhOoQHF7yMBxYlsX9/YbD2AW69YIVDGQ7yb6cfpDTPr1Az3
+         9FzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX6KcwcYS3uSrRssq8s+bh9DkMJj0jEBpcWhHRvE/rbAI1hdhSDAG8hXFJVE9JnLd4Ni6A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+7lqy9Zn6R/sFXZFJ41Kqj7B4Jn8DphiUgfoZpbqRy0/daOyo
+	S07ytqVV+kaRTADCx9Ypvb/a6VXXzbc4WCSuAoSR/qhLHG4TFKbKiPIF3l4hiD93OfZAKPdBHF6
+	2d92z+RTf2XaQLQMbasVopodxpciUocA=
+X-Gm-Gg: AZuq6aJpVFddtuV4Jqu7CutBVuFO2btd/oghCPDesKxa8NmtC3LuBVs38b7MLOCLOTA
+	ycwsiIBhYoI6lgdnH8qw9mokA+nKZoxod3vjLDeukwgktem1pumJg8Q44Z9za5+bj91jlF2OPHH
+	6zzYtitmfPa2PYJ44qr/OdmPfwUXNtG/9lRik51ovDNBxX0SlHkD2zj5dWSz6Wv0E2JBWel6R3P
+	rQo1NlCeHYTRfK/4+vYesSu/XyiCsrVuXodSapl5zfRFHhgNC+LH2A/KpMAD2R1TKHAG1yi1qg5
+	v6hYLXbCfNqJe5RMnDPzT5K2TnmbErl0A5faJ9a3SdzZNXCBX0VT5/9Ap9Vv59stXkVhjN1VCjA
+	76Xa/x9xwtdVt+etEyRVQAmS1Kw==
+X-Received: by 2002:a05:600c:1f0e:b0:47d:92bb:2723 with SMTP id
+ 5b1f17b1804b1-4839e636f4cmr69681405e9.3.1771555326221; Thu, 19 Feb 2026
+ 18:42:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <87fr7e15l0.fsf@gnu.org> <6ac7e425-cf75-4706-9906-4c23eb4f0f41@linux.dev>
+ <b77afbde-b6d6-4728-9090-af31027846b2@linux.dev>
+In-Reply-To: <b77afbde-b6d6-4728-9090-af31027846b2@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Thu, 19 Feb 2026 18:41:55 -0800
+X-Gm-Features: AaiRm52oqjoPs6aUgD_P2SwMtgfqFFvtz0QOB_T8lX1Js0g_JZq4X59icQ6oguU
+Message-ID: <CAADnVQLKXawH8nuSkXGcafS9d66hYfLF_zjKCVdO5WoQ8TxrGw@mail.gmail.com>
+Subject: Re: Function Return ABI (was Re: Argument passing and ABI: GCC vs clang)
+To: Vineet Gupta <vineet.gupta@linux.dev>, bpf <bpf@vger.kernel.org>
+Cc: "Jose E. Marchesi" <jemarch@gnu.org>, bpf@gcc.gnu.org, Alexei Starovoitov <ast@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Andrew Pinski <andrew.pinski@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2026-02-20 at 01:13 +0100, Paul Chaignon wrote:
-> On Thu, Feb 19, 2026 at 07:55:33PM +0100, Paul Chaignon wrote:
-> > On Thu, Feb 19, 2026 at 10:32:19AM -0800, Eduard Zingerman wrote:
-> > > On Wed, 2026-02-18 at 01:06 -0500, Harishankar Vishwanathan wrote:
-> > > > On Tue, Feb 17, 2026 at 5:58=E2=80=AFPM Eduard Zingerman <eddyz87@g=
-mail.com> wrote:
-> > > > [...]
-> > > > > > 1. The u64 range and the tnum only overlap in umin.
-> > > > > > =C2=A0=C2=A0 u64:=C2=A0 ---[xxxxxx]-----
-> > > > > > =C2=A0=C2=A0 tnum: --xx----------x-
-> > > > > I think this hunk should be rewritten as follows:
-> > > > >=20
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tnum_next =3D tnum_ste=
-p(reg->var_off, reg->umin_value);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tnum_max =3D reg->var_=
-off.value | reg->var_off.mask;
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tnum_min =3D reg->var_=
-off.value;
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (tnum_next > reg->u=
-max_value) {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* The only overlap is umin */
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ___mark_reg_known(reg, tnum_min);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else if (tnum_min < =
-reg->umin_value && tnum_next =3D=3D tnum_max) {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* The only overlap is tmax */
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ___mark_reg_known(reg, tnum_next);
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } else if (tnum_next <=
-=3D reg->umax_value &&
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tnum_step(reg->var_off, tnum_=
-next) > reg->umax_value) {
-> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0 ___mark_reg_known(reg, tnum_next);
->=20
-> Actually, that last condition is not enough. In the original patch we
-> also would check that umin is not part of the tnum. That's needed for
-> example if we have R3=3D(u64=3D[0; 1], var_off=3Dunknown) (a case possibl=
-e
-> because __update_reg_bounds is the first refinement step in
-> reg_bounds_sync). With those values, we would match the third condition
-> and set R3=3D1.
->=20
-> Checking that tmin < reg->umin_value in the third condition would also
-> not work. For example R3=3D(u64=3D[0xffff; 0x10000], var_off=3D(0; 0x1fff=
-f))
-> would be incorrectly simplified to R3=3D0x10000 because tmin=3D0,
-> umin=3D0xffff.
->=20
-> What we really want is to check that umin is not already part of the
-> tnum, as in the original patch. I think we can however improve
-> readability as you did. Here's what I have in mind:
->=20
-> =C2=A0=C2=A0=C2=A0 tnum_next =3D tnum_step(reg->var_off, reg->umin_value)=
-;
-> =C2=A0=C2=A0=C2=A0 umin_in_tnum =3D (reg->umin_value & ~reg->var_off.mask=
-) =3D=3D reg->var_off.value;
-> =C2=A0=C2=A0=C2=A0 tmax =3D reg->var_off.value | reg->var_off.mask;
-> =C2=A0=C2=A0=C2=A0 if (tnum_next > reg->umax_value) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* The u64 range and the tnum =
-only overlap in umin.
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * u64:=C2=A0 ---[xxxxxx]=
------
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * tnum: --xx----------x-
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */        ^
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ___mark_reg_known(reg, reg->um=
-in_value);
-> =C2=A0=C2=A0=C2=A0 } else if (!umin_in_tnum && tnum_next =3D=3D tmax) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* The u64 range and the tnum =
-only overlap in the maximum value
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * represented by the tnu=
-m, called tmax.
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * u64:=C2=A0 ---[xxxxxx]=
------
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * tnum: xx-----x--------
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ___mark_reg_known(reg, tmax);
-> =C2=A0=C2=A0=C2=A0 } else if (!umin_in_tnum && tnum_next <=3D reg->umax_v=
-alue &&
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 tnum_step(reg->var_off, tnum_next) >=
- reg->umax_value) {
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* The u64 range and the tnum =
-only overlap once in between umin
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * (excluded) and umax.
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * u64:=C2=A0 ---[xxxxxx]=
------
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * tnum: xx----x-------x-
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ___mark_reg_known(reg, tnum_ne=
-xt);
-> =C2=A0=C2=A0=C2=A0 }
->=20
-> Wdyt?
+On Thu, Feb 19, 2026 at 3:11=E2=80=AFPM Vineet Gupta <vineet.gupta@linux.de=
+v> wrote:
+>
+> On 2/8/26 9:11 PM, Vineet Gupta wrote:
+> > On 2/6/26 03:20, Jose E. Marchesi wrote:
+> >> Hello people!
+> >>
+> >> Yesterday evening Vineet pointed out in IRC some differences between t=
+he
+> >> way GCC handles argument passing compared to clang/LLVM.
+> > For illustration, here's what a simple test looks like across clang, gc=
+c and x86
+> > and aarch64
+> > https://godbolt.org/z/oerG3eT6f
+> >
+> > typedef struct {
+> >      int a;
+> >      short b;
+> >      signed char c;
+> > } my_t;
+> >
+> > void foo(signed char, short, int);
+> >
+> > char args_setup(my_t *s)
+> > {
+> >      foo(s->c, s->b, s->a);
+> > }
+> >
+> > int args_consume (signed char a, short b, int c)
+> > {
+> >    int x =3D a;
+> >    int y =3D b;
+> >    int z =3D c;
+> >
+> >    return x + y + z;
+> > }
+> >
+> > clang: -O2 -mcpu=3Dv4            |  gcc: -O2 -mcpu=3Dv4
+> >                                 |
+> > args_setup:                    | args_setup:
+> >          r2 =3D *(s16 *)(r1 + 4)  |         r3 =3D *(u32 *) (r1+0)
+> >          w3 =3D *(u32 *)(r1 + 0)  |         r2 =3D *(u16 *) (r1+4)
+> >          r1 =3D *(s8 *)(r1 + 6)   |         r1 =3D *(u8 *) (r1+6)
+> >          call foo               |         call foo
+> >          exit                   |         exit
+> >                                 |
+> > args_consume:                  | args_consume:
+> >          w0 =3D w2                |         r2 =3D (s16) r2
+> >          w0 +=3D w1               |         r0 =3D r3
+> >          w0 +=3D w3               |         r1 =3D (s8) r1
+> >          exit                   |         w1 +=3D w2
+> >                                 |         w0 +=3D w1
+> >                                 |         exit
+> >
+> >
+> > So clang is narrowing the args on caller site while gcc is doing this i=
+n caller.
+> > This is not consistent and needs to fixed in one of the compilers.
+> > Doing this in callee seems like a better/safer approach as doesn't assu=
+me caller
+> > to always be doing the right thing, specially when mixing bpf user code=
+ with
+> > kernel etc.
+> >
+> > BTW where is the w<N> assembler notation and semantics (32-bit, zero ex=
+tension
+> > etc) documented. I don't anything relevant in [1]
+> > Presumably it is just a compiler notation so [1] might not be the ideal=
+ place.
+> >
+> > [1] https://docs.kernel.org/bpf/standardization/instruction-set.html
+> So the function arguments issue is captured as PR/124171 and I have a
+> tentative fix for that, but...
+> There's second half of the problem which is promotion of narrow function
+> return values.
+>
+> It seems the existing clang ABI is not symmetrical. The function
+> arguments promotion is handled in callee, but function return is handled
+> in caller [1] which is a bit atypical IMO and would need to be handled
+> in gcc as well.
 
-This makes sense, I missed this nuance in the original patch.
-Maybe keep the first check as 'umin_in_tnum && tnum_next > reg->umax_value'=
-,
-then?
+hmm. I thought we already concluded that for clang-x86 and clang-bpf
+argument extension is handled in *caller*.
+The same thing for returns. It's a caller responsibility.
+gcc-bpf doing args in the callee only is broken and has to be fixed.
+
+> Since we are on the topic of ABI change, I wanted to surface that as
+> well before we go off and tackle that.
+>
+> Simple example
+>
+> _Bool bar_bool(void);
+>
+> int ret_caller(void) {
+>        if (bar_bool() !=3D 1) return 0; else return 1;
+> }
+>
+> char ret_callee(my_t *s)
+> {
+>      return s->c;    // c is a char in a struct
+> }
+>
+> ret_caller:
+>      call    bar_bool
+>      r0 &=3D 0xff        <-- ret promotion in caller
+>      exit
+>
+> ret_callee:
+>      r0 =3D *(u8 *) (r1+6) <-- no ret promotion in callee
+>      exit
+
+Exactly as it should be because x86 will populate 8-bit sub
+registers in the callee and bpf side has to do r0 &=3D 0xff
+in the caller.
