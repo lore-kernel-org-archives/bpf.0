@@ -1,32 +1,32 @@
-Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33049310784
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8842D3126D7
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 22:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771626421; cv=none; b=oFKhFiMruuPN3hfQzGU3GVwIrXQsBMVI7Oih6GirVPEJqaQw4tW98w66jj+l7vI/gQ7IpD7oO3nGAieSzw7Z/MtPusP921HGXc2pyMG+ciQQY6rUk75GzXPQ6RDhMhZROo2EtkMMxYFxWnUTE2o+B8enSRiOi1cVIX+jQYBhnAc=
+	t=1771626423; cv=none; b=imdptgQgwRMlWObEpJdIOsnDbo4EUAPbaRMUaGlqGCI7kVDwVbhmVsLtFAlaUCqC5ZjJbsVBOKdIq2PWJXgMq23VZx7BSAzesJcOmj5Y26zxxL/cn49ZYvDTPTGd77SlZh7/awQe5bWtKWZHahS22rUtRsDxdvUerHDvdOJhIjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771626421; c=relaxed/simple;
-	bh=OXctf3NUqnAZuAxu1aLlPz/j7koALTJtVbkyAmLEJIw=;
+	s=arc-20240116; t=1771626423; c=relaxed/simple;
+	bh=b91pEac6YrQf6AA0BkSypFpVCQSBxS1GtFd+o1jKsNg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QaND2mubbpglGM9LV+uH9uCYdKk5ttGnhbXCiWqjNrr8tns7tCFwWM1nrwaYeycpYB0mbreKtfC2VNxhs/9XBeq38NB9H+6a6TxoKdP2EvvHrV6Kztb7POiaNYqS72QZbH3cPSWMFfBxHYl9zJ1iCV1G2q9/vK3vFh/MVAPDVmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ljuHGxCS; arc=none smtp.client-ip=91.218.175.171
+	 MIME-Version; b=ZIOK2MH4LKh57Db8kY7AFztSXDoI0u+PUBAZURZ/pDuLMP1aWg1M3DGxWA7Tgie+eY+l002i5uz4boyB/q9LR0RLvAVTUvn3XfBsOGyxI7lBhik1tc75DDlR1Uxbij0sVS/8jyQTGTU6Pbi9RJwPSxU376Fazmm5DOph9//tCfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KA6h99nr; arc=none smtp.client-ip=91.218.175.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ljuHGxCS"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KA6h99nr"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771626416;
+	t=1771626419;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Sv9Qc5Ceahl9eBJ7mgculwLxJBZp6JCNQGrz4aDmn0w=;
-	b=ljuHGxCSMRiPFbSGvezNK3TeubUztO0YB2VRGqaw6mRLn2CKQXVTgzt88/qesPq3b7pcPN
-	eJJoC4Ld42oDb/i/Si2M6AEYqorY9lr/Y9fRTPUwqzUFQPRSkiDhpzgHmJUnlTNoaIskm2
-	6+PQ6hJitcCNMfzWarxVVAX1Qn/raoI=
+	bh=aF3XpM5Vp8Ae6GR1ZtZNYmZ1UwRARFZZQsmTjQhrewc=;
+	b=KA6h99nr3OpKSOHhBN4nWmF9Crwf8vreYTxv7+UQE80tAfuEzhesTkHwmA9YmH13Sk9YRb
+	7sZLh1vLRaGS6LobrcOftpF33hBMFpNJ3EHU5D8vptTu4pbVr4h0SC5+5TbwLeN6KVPUuK
+	YSBEnTuhLHK4P38OenLgau58rlN2DrY=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v3 10/15] selftests/bpf: Fix resource leaks caused by missing cleanups
-Date: Fri, 20 Feb 2026 14:25:59 -0800
-Message-ID: <20260220222604.1155148-11-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v3 11/15] selftests/bpf: Free bpf_object in test_sysctl
+Date: Fri, 20 Feb 2026 14:26:00 -0800
+Message-ID: <20260220222604.1155148-12-ihor.solodrai@linux.dev>
 In-Reply-To: <20260220222604.1155148-1-ihor.solodrai@linux.dev>
 References: <20260220222604.1155148-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -53,227 +53,44 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-ASAN reported a number of resource leaks:
-  - Add missing  *__destroy(skel) calls
-  - Replace bpf_link__detach() with bpf_link__destroy() where appropriate
-  - cgrp_local_storage: Add bpf_link__destroy() when bpf_iter_create fails
-  - dynptr: Add missing bpf_object__close()
+ASAN reported a resource leak due to the bpf_object not being tracked
+in test_sysctl. Add obj field to struct sysctl_test to properly clean
+it up.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- .../bpf/prog_tests/cgrp_local_storage.c       |  4 ++-
- .../testing/selftests/bpf/prog_tests/dynptr.c |  5 +++-
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 28 +++++++++----------
- .../selftests/bpf/prog_tests/sockmap_listen.c |  2 +-
- .../bpf/prog_tests/struct_ops_private_stack.c |  4 +--
- .../selftests/bpf/prog_tests/tc_opts.c        |  6 ++--
- .../selftests/bpf/prog_tests/test_tc_tunnel.c |  5 +++-
- 7 files changed, 29 insertions(+), 25 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/test_sysctl.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgrp_local_storage.c b/tools/testing/selftests/bpf/prog_tests/cgrp_local_storage.c
-index 9015e2c2ab12..478a77cb67e6 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgrp_local_storage.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgrp_local_storage.c
-@@ -202,7 +202,7 @@ static void test_cgroup_iter_sleepable(int cgroup_fd, __u64 cgroup_id)
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_sysctl.c b/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
+index 273dd41ca09e..2a1ff821bc97 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
+@@ -27,6 +27,7 @@ struct sysctl_test {
+ 		OP_EPERM,
+ 		SUCCESS,
+ 	} result;
++	struct bpf_object *obj;
+ };
  
- 	iter_fd = bpf_iter_create(bpf_link__fd(link));
- 	if (!ASSERT_GE(iter_fd, 0, "iter_create"))
--		goto out;
-+		goto out_link;
- 
- 	/* trigger the program run */
- 	(void)read(iter_fd, buf, sizeof(buf));
-@@ -210,6 +210,8 @@ static void test_cgroup_iter_sleepable(int cgroup_fd, __u64 cgroup_id)
- 	ASSERT_EQ(skel->bss->cgroup_id, cgroup_id, "cgroup_id");
- 
- 	close(iter_fd);
-+out_link:
-+	bpf_link__destroy(link);
- out:
- 	cgrp_ls_sleepable__destroy(skel);
- }
-diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-index b9f86cb91e81..5fda11590708 100644
---- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
-+++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
-@@ -137,11 +137,14 @@ static void verify_success(const char *prog_name, enum test_setup_type setup_typ
- 		);
- 
- 		link = bpf_program__attach(prog);
--		if (!ASSERT_OK_PTR(link, "bpf_program__attach"))
-+		if (!ASSERT_OK_PTR(link, "bpf_program__attach")) {
-+			bpf_object__close(obj);
- 			goto cleanup;
-+		}
- 
- 		err = bpf_prog_test_run_opts(aux_prog_fd, &topts);
- 		bpf_link__destroy(link);
-+		bpf_object__close(obj);
- 
- 		if (!ASSERT_OK(err, "test_run"))
- 			goto cleanup;
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index 256707e7d20d..dd3c757859f6 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -204,7 +204,7 @@ static void test_skmsg_helpers_with_link(enum bpf_map_type map_type)
- 	/* Fail since bpf_link for the same prog type has been created. */
- 	link2 = bpf_program__attach_sockmap(prog_clone, map);
- 	if (!ASSERT_ERR_PTR(link2, "bpf_program__attach_sockmap")) {
--		bpf_link__detach(link2);
-+		bpf_link__destroy(link2);
- 		goto out;
+ static struct sysctl_test tests[] = {
+@@ -1471,6 +1472,7 @@ static int load_sysctl_prog_file(struct sysctl_test *test)
+ 		return -1;
  	}
  
-@@ -230,7 +230,7 @@ static void test_skmsg_helpers_with_link(enum bpf_map_type map_type)
- 	if (!ASSERT_OK(err, "bpf_link_update"))
- 		goto out;
- out:
--	bpf_link__detach(link);
-+	bpf_link__destroy(link);
- 	test_skmsg_load_helpers__destroy(skel);
++	test->obj = obj;
+ 	return prog_fd;
  }
  
-@@ -417,7 +417,7 @@ static void test_sockmap_skb_verdict_attach_with_link(void)
- 	if (!ASSERT_OK_PTR(link, "bpf_program__attach_sockmap"))
- 		goto out;
- 
--	bpf_link__detach(link);
-+	bpf_link__destroy(link);
- 
- 	err = bpf_prog_attach(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT, 0);
- 	if (!ASSERT_OK(err, "bpf_prog_attach"))
-@@ -426,7 +426,7 @@ static void test_sockmap_skb_verdict_attach_with_link(void)
- 	/* Fail since attaching with the same prog/map has been done. */
- 	link = bpf_program__attach_sockmap(prog, map);
- 	if (!ASSERT_ERR_PTR(link, "bpf_program__attach_sockmap"))
--		bpf_link__detach(link);
-+		bpf_link__destroy(link);
- 
- 	err = bpf_prog_detach2(bpf_program__fd(prog), map, BPF_SK_SKB_STREAM_VERDICT);
- 	if (!ASSERT_OK(err, "bpf_prog_detach2"))
-@@ -747,13 +747,13 @@ static void test_sockmap_skb_verdict_peek_with_link(void)
- 	test_sockmap_skb_verdict_peek_helper(map);
- 	ASSERT_EQ(pass->bss->clone_called, 1, "clone_called");
- out:
--	bpf_link__detach(link);
-+	bpf_link__destroy(link);
- 	test_sockmap_pass_prog__destroy(pass);
- }
- 
- static void test_sockmap_unconnected_unix(void)
- {
--	int err, map, stream = 0, dgram = 0, zero = 0;
-+	int err, map, stream = -1, dgram = -1, zero = 0;
- 	struct test_sockmap_pass_prog *skel;
- 
- 	skel = test_sockmap_pass_prog__open_and_load();
-@@ -764,22 +764,22 @@ static void test_sockmap_unconnected_unix(void)
- 
- 	stream = xsocket(AF_UNIX, SOCK_STREAM, 0);
- 	if (stream < 0)
--		return;
-+		goto out;
- 
- 	dgram = xsocket(AF_UNIX, SOCK_DGRAM, 0);
--	if (dgram < 0) {
--		close(stream);
--		return;
--	}
-+	if (dgram < 0)
-+		goto out;
- 
- 	err = bpf_map_update_elem(map, &zero, &stream, BPF_ANY);
--	ASSERT_ERR(err, "bpf_map_update_elem(stream)");
-+	if (!ASSERT_ERR(err, "bpf_map_update_elem(stream)"))
-+		goto out;
- 
- 	err = bpf_map_update_elem(map, &zero, &dgram, BPF_ANY);
- 	ASSERT_OK(err, "bpf_map_update_elem(dgram)");
--
-+out:
- 	close(stream);
- 	close(dgram);
-+	test_sockmap_pass_prog__destroy(skel);
- }
- 
- static void test_sockmap_many_socket(void)
-@@ -1027,7 +1027,7 @@ static void test_sockmap_skb_verdict_vsock_poll(void)
- 	if (xrecv_nonblock(conn, &buf, 1, 0) != 1)
- 		FAIL("xrecv_nonblock");
- detach:
--	bpf_link__detach(link);
-+	bpf_link__destroy(link);
- close:
- 	xclose(conn);
- 	xclose(peer);
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index f1bdccc7e4e7..cc0c68bab907 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -899,7 +899,7 @@ static void test_msg_redir_to_listening_with_link(struct test_sockmap_listen *sk
- 
- 	redir_to_listening(family, sotype, sock_map, verdict_map, REDIR_EGRESS);
- 
--	bpf_link__detach(link);
-+	bpf_link__destroy(link);
- }
- 
- static void redir_partial(int family, int sotype, int sock_map, int parser_map)
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-index 4006879ca3fe..d42123a0fb16 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-@@ -54,9 +54,7 @@ static void test_private_stack_fail(void)
- 	}
- 
- 	err = struct_ops_private_stack_fail__load(skel);
--	if (!ASSERT_ERR(err, "struct_ops_private_stack_fail__load"))
--		goto cleanup;
--	return;
-+	ASSERT_ERR(err, "struct_ops_private_stack_fail__load");
- 
- cleanup:
- 	struct_ops_private_stack_fail__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_opts.c b/tools/testing/selftests/bpf/prog_tests/tc_opts.c
-index dd7a138d8c3d..2955750ddada 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_opts.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_opts.c
-@@ -1360,10 +1360,8 @@ static void test_tc_opts_dev_cleanup_target(int target)
- 
- 	assert_mprog_count_ifindex(ifindex, target, 4);
- 
--	ASSERT_OK(system("ip link del dev tcx_opts1"), "del veth");
--	ASSERT_EQ(if_nametoindex("tcx_opts1"), 0, "dev1_removed");
--	ASSERT_EQ(if_nametoindex("tcx_opts2"), 0, "dev2_removed");
--	return;
-+	goto cleanup;
-+
- cleanup3:
- 	err = bpf_prog_detach_opts(fd3, loopback, target, &optd);
- 	ASSERT_OK(err, "prog_detach");
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-index 0fe0a8f62486..7fc4d7dd70ef 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_tc_tunnel.c
-@@ -699,7 +699,7 @@ void test_tc_tunnel(void)
- 		return;
- 
- 	if (!ASSERT_OK(setup(), "global setup"))
--		return;
-+		goto out;
- 
- 	for (i = 0; i < ARRAY_SIZE(subtests_cfg); i++) {
- 		cfg = &subtests_cfg[i];
-@@ -711,4 +711,7 @@ void test_tc_tunnel(void)
- 		subtest_cleanup(cfg);
- 	}
- 	cleanup();
-+
-+out:
-+	test_tc_tunnel__destroy(skel);
- }
+@@ -1573,6 +1575,7 @@ static int run_test_case(int cgfd, struct sysctl_test *test)
+ 	/* Detaching w/o checking return code: best effort attempt. */
+ 	if (progfd != -1)
+ 		bpf_prog_detach(cgfd, atype);
++	bpf_object__close(test->obj);
+ 	close(progfd);
+ 	printf("[%s]\n", err ? "FAIL" : "PASS");
+ 	return err;
 -- 
 2.53.0
 
