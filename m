@@ -1,32 +1,32 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352F936654E
-	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 18:20:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54FC92F49FD
+	for <bpf@vger.kernel.org>; Fri, 20 Feb 2026 18:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771611630; cv=none; b=VcsYC6jkDks5BxX+pRo4r1LfqmO7N0ZakYgQz8F+RWIKk2GWcutvenqjrXJRqgkUOz9gUJsLmnNHIBoUy9UfIQtyUrGLEwz0jal4j6IQpaOTJDAFrDrxO8LViubb3NNogkfWOe8muHZm51hm+HOisCoZnwNyb39pfovdiyaRVn4=
+	t=1771611632; cv=none; b=CAw1dgmkmSt6rZQnyvpJrj4v5Jm1Oci4alb6D/GQuAJVo2BxE2blHumrlcamf7SC03+LpbH/sOs+zfq83fleLAkwmjg22w0VY1DtIEhWyL6PI4ze/VCB4MdgZzPzGWtPtHmVeTW4fGovCRBvY352NKTx41mvcXRCEWNw5tF3p4M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771611630; c=relaxed/simple;
-	bh=5rGPeJPf6w4YpvFN5Ca2c5lafn9ScyA2xpGvxTnzCmQ=;
+	s=arc-20240116; t=1771611632; c=relaxed/simple;
+	bh=h63tPitGQTOEsgp7IyxevOgPfZ7aaGbP/6iva5qm2dk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ju/YNPIEoW+S6P8jMM2SyHUnadyVXi0iHrrm6nKPLQgwIgLzPUl6YxHBWRMAAwGOv09Jj1d+MJ+1coP9jVyZL6MKFwLmpzPTEYRqrx2rBE1KqkrnAGnWE3ReYW8iKgEXKAXhTcxUYR8OD5FBJaEDiS1GhKmYcZN94PJKjRc22p0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jMfe4WZS; arc=none smtp.client-ip=91.218.175.183
+	 MIME-Version; b=inTDTjjNkmXJ9vqxjc0ROHZ/RqPO9iFPlgGfBOZ+JnghuA+BI1Fd6MW8rQxDfnc0KZq19FjyKodgM0mo/3L0CRO6gdgMDdn4D2Co0iqdzTkkfjPXRYCfwhm9Mg0u66NIhQ8qnukLisUMvmN3Mq+Y2xOUdvJYld9nZ6//4L5qCDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=M3TEKyAl; arc=none smtp.client-ip=91.218.175.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jMfe4WZS"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="M3TEKyAl"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771611626;
+	t=1771611629;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=zM4hi2wr/55oi9+YRDxF/pe1IGahl9NLf8Kax2WDvcs=;
-	b=jMfe4WZS/NXHkZAUUZl4D3nvFHAiNwZvy0H3NAgo6reMRtAYxpcgdk7nkX87w5c/ICr4Fi
-	9w+Rb0b+ge6LnFTcfKzzfx89DxOr66uKFKTo1nSYJekw84D0SN02ryTtNHswsh1b8cegUx
-	WR+o716VgMubZxMQqkEQ5EdvhYpaJBI=
+	bh=kCihQ6qjS+RPI+DS8xNyMGMASH1EpWMeASa7I1Y5ymw=;
+	b=M3TEKyAlq2KYqv7OxiLyaq5/kwV9YSYrV2bJttbmrwX0C1fPvOzg1fPF2Otw6h22SNsjgS
+	qOqMEuKb8zHWQTSKAZK/OLSg2xnXln1G6fUeOrxdLPnnIQ90ARg3JDb0a70s1OudnNO6hr
+	5VH0+AprWFhW6ZyybhapRVff26FDInE=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -35,9 +35,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v1 1/7] selftests/bpf: Add simple strscpy() implementation
-Date: Fri, 20 Feb 2026 10:20:05 -0800
-Message-ID: <20260220182011.802116-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v1 2/7] selftests/bpf: Add strscpy_cat()
+Date: Fri, 20 Feb 2026 10:20:06 -0800
+Message-ID: <20260220182011.802116-3-ihor.solodrai@linux.dev>
 In-Reply-To: <20260220182011.802116-1-ihor.solodrai@linux.dev>
 References: <20260220182011.802116-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -49,90 +49,59 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Replace bpf_strlcpy() in bpf_util.h with a sized_strscpy(), which is a
-simplified sized_strscpy() from the kernel (lib/string.c). It:
-  * takes a count (destination size) parameter
-  * guarantees NULL-termination
-  * returns the number of characters copied or -E2BIG
+Add sized_strscpy_cat() to bpf_util.h, which concatenates multiple
+strings into a destination buffer with strscpy().
 
-Re-define strscpy macro to sized_strscpy.
+Add strscpy_cat() macro with varargs.
 
-Fixup the single existing bpf_strlcpy() call in cgroup_helpers.c
+This is a convenient helper that provides the same guarantees as
+strscpy(), but for a case when multiple strings need to be
+concatenated into destination.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/bpf_util.h       | 38 +++++++++++++-------
- tools/testing/selftests/bpf/cgroup_helpers.c |  2 +-
- 2 files changed, 26 insertions(+), 14 deletions(-)
+ tools/testing/selftests/bpf/bpf_util.h | 28 ++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
-index 4bc2d25f33e1..8c95ef7ed7c0 100644
+index 8c95ef7ed7c0..61bb22c3e517 100644
 --- a/tools/testing/selftests/bpf/bpf_util.h
 +++ b/tools/testing/selftests/bpf/bpf_util.h
-@@ -21,25 +21,37 @@ static inline unsigned int bpf_num_possible_cpus(void)
- 	return possible_cpus;
- }
+@@ -52,6 +52,34 @@ static inline ssize_t sized_strscpy(char *dest, const char *src, size_t count)
+ #undef strscpy /* Redefine the placeholder from tools/include/linux/string.h */
+ #define strscpy sized_strscpy
  
--/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
-- * is zero-terminated string no matter what (unless sz == 0, in which case
-- * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
-- * in what is returned. Given this is internal helper, it's trivial to extend
-- * this, when necessary. Use this instead of strncpy inside libbpf source code.
 +/*
-+ * Simplified strscpy() implementation. The kernel one is in lib/string.c
-  */
--static inline void bpf_strlcpy(char *dst, const char *src, size_t sz)
-+static inline ssize_t sized_strscpy(char *dest, const char *src, size_t count)
- {
--	size_t i;
-+	long res = 0;
- 
--	if (sz == 0)
--		return;
-+	if (count == 0)
-+		return -E2BIG;
- 
--	sz--;
--	for (i = 0; i < sz && src[i]; i++)
--		dst[i] = src[i];
--	dst[i] = '\0';
-+	while (count > 1) {
-+		char c;
++ * strscpy() analogue that concatenates multiple strings into a buffer
++ */
++static inline ssize_t sized_strscpy_cat(char *dest, size_t dest_sz,
++					const char * const *srcs, size_t n)
++{
++	ssize_t pos = 0;
 +
-+		c = src[res];
-+		dest[res] = c;
-+		if (!c)
++	if (dest_sz == 0)
++		return -E2BIG;
++
++	for (size_t i = 0; i < n; i++) {
++		ssize_t res = strscpy(dest + pos, srcs[i], dest_sz - pos);
++
++		if (res < 0)
 +			return res;
-+		res++;
-+		count--;
++		pos += res;
 +	}
 +
-+	/* Force NUL-termination. */
-+	dest[res] = '\0';
++	return pos;
++}
 +
-+	/* Return E2BIG if the source didn't stop */
-+	return src[res] ? -E2BIG : res;
- }
- 
-+#undef strscpy /* Redefine the placeholder from tools/include/linux/string.h */
-+#define strscpy sized_strscpy
++#define strscpy_cat(dest, count, ...)					\
++	sized_strscpy_cat(dest, count,					\
++			  (const char * const[]){ __VA_ARGS__ },	\
++			  ARRAY_SIZE(((const char * const[]){ __VA_ARGS__ })))
++
 +
  #define __bpf_percpu_val_align	__attribute__((__aligned__(8)))
  
  #define BPF_DECLARE_PERCPU(type, name)				\
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index 20cede4db3ce..9661cceb62be 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -86,7 +86,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
- 		enable[len] = 0;
- 		close(fd);
- 	} else {
--		bpf_strlcpy(enable, controllers, sizeof(enable));
-+		strscpy(enable, controllers, sizeof(enable));
- 	}
- 
- 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
 -- 
 2.53.0
 
