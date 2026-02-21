@@ -1,274 +1,87 @@
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DE0352938
-	for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 16:51:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771692706; cv=pass; b=n+ULg2fMcm0AJdQXsUhoCyDOfi2KHIcrWIEhG/rfZhg4XUoTZ371rjFnsWThQtipFsTKg1n5tPTHnQnjh488DLMg4HxGYvBoVVJiCvhvzQRq1lk6EY46D3nVsJKjvTGnXpCMGmbdPF0btcduSQ9EfLNMee7S3o2W7XL/U7CKTWw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771692706; c=relaxed/simple;
-	bh=ISMeaFGkM1t/rcoHTy00tzcyFwk6QjXPrYp0XSfWpw0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=bUKjmUkKfce5wza1FzxYUzuAte9tXBSjke8YQluLEyBC78TWaGRFtlMEQO4sMrX8GhoN+2VaRyYrSgOuQ5bqEhECxtQJdsAm5g8VuW5BU0lkdUWDRbfpKO87JMPnesH/hr1kVUXvE74C5P5WPK8fUaGXOLf1F89ed4jGyG6yO8Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LNvXGSvp; arc=pass smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E9791DEFE7;
+	Sat, 21 Feb 2026 17:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771696649; cv=none; b=kEp39czo4+Ryg3M5lt9cMvlAggU6QyPtFygCnhC1STtcIW7V0xa0GCpzdbubtWXRWLK21IAv84c5C7pfR4yfdx68Jo3OZ0ohf5rgor/MLJZM0QKu5mvWSG+jCPfw1hWAX9dy8eF2exWyXNi7K3mliNxwwaZN+Vu3CWP5erlu4NA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771696649; c=relaxed/simple;
+	bh=O+AE15WvIgEMw98m/o+ma1tw18+b69pKGmAY39S8DK4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RaJ1z5PIIpWX2+AgKYL/JQtrfj20Z72Wxml7YPFLaPFE6XgUeQkABPjEXljLkRU0LzRgDSakpk73l6JDcvyzu6QSdZpBDiJpJY8C7eTPPcF2Fomp33fsQ2FtWeTMeej74NNHa/+ECun3GU32dWI0HFhtJLWOLC0Px7f6tqEiEgA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dzZocsBx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LNvXGSvp"
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4376c0bffc1so2284310f8f.0
-        for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 08:51:44 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771692703; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Itg8GDYX/kAQTxZIMNZfdb3IdRlvsl6hgO/l48jmmJ9WSTOEGaF44TL1HqqaHEiAOD
-         oLIu5d47HxWH2fsrp7MaUtRL8BFpDR6ib7ttNIzHsKzumcnGUdLrwVLiYHDeTCBb3UNb
-         dXcAdS4EPs7peHTMSgm87ucBGj/DgIEAp/hvhpv4/zxuJm4QSM5QCdCbgZ3DSc0YV95d
-         73iNd8QCuznnJKH4sLb1W9hfKYMnlUG1aOXPzPXsxWV3cERW9j5nAS/VqWle8NPbl0eB
-         FPF7a7qvz87TU6awK08WN6TbxVo70vNqmHIlqsP+xL9k03eyJfwhYHQBFDfU27Uh7Whm
-         JuxQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=6IS/94CiUdqXhdBEGqJ8zPaf2eO5R4ltg/JKS5ZLlyY=;
-        fh=Cc1HODhKxZl60+BCzxAzeulka8s7K9c3wr0kUQiFLkI=;
-        b=kSg+9ZouNKnAGwnFgKDWIDEVIGMWvzTzMgDrThIMIS8xGmSMbIsz5Ko4iyDG+CxTrR
-         kk4bFD7XmBSRX4ShwYBk6Dbg2GqXSml6FOKQ4wHNcz/i7w6jrPyYasAb60YqtZGdVE1Q
-         0naQJ4vPMh7qzY2CUMcKLbElcXEtwqBa5NdrvG9dBM12mQPHtZer/65CtIHPTChTbHLJ
-         en9lF1k64PrwV+Ic0szYuNXLwMMGqsN3XAIjg/ZRLDWQUIqxgF1bMmSXcERNUywwU2qj
-         //uXvSUx6EGUNY85F1ZvO33317R1V5k7/2mI1xNf2BwzKp79bxEWFE7SXyzUa6SaRjfQ
-         pC4g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771692703; x=1772297503; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6IS/94CiUdqXhdBEGqJ8zPaf2eO5R4ltg/JKS5ZLlyY=;
-        b=LNvXGSvp4GOwg6mfUO74scnJBC/+3xWm+aXloNBxUpptrpV4cGiiQOzLDtZ1y4GTZx
-         9QBWZxZTKnjZpYgjCLZ3gL0/DgpFPwjfHaGv9MNsGItGue262zIWumgw1y8+ffnrqD3s
-         dH5PFsFl35H4voTKs5XIzCBaeL02EZTy3lDbskMTXGZ2ISj+pd45dPE6ep2XJ75qtprq
-         lHjcmp80MlFj7Lc3rmUUrDtO0Trgaw8vhXTiHuXJw4ipVYC3aKeH/Gwvts+yM7Mg7ImL
-         7kOAbJXcGMrfNLuzTRcb795Ol4YT+MuKe+m/uFDykUyifgjL5zrIsevxBwZb8Ej8ewhj
-         eEaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771692703; x=1772297503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=6IS/94CiUdqXhdBEGqJ8zPaf2eO5R4ltg/JKS5ZLlyY=;
-        b=CRU07VGCgk4YvY2vh1H7YDghuIi36SfGhBw+CGSkhKi/hYOmfb3Zt+wug+iHO6DM3W
-         TRQMI+PxRflZ9HWpSwhvvFrXOyUlWru7enqSmZkGdsEB/MBHbaWKFe7M7AoTPw0TdZVd
-         QZTqfq+RiaqNecXcTTQgDt1RReNWesmxh3sRd+jSiQbBbkLzpW2IWOXxnMqtD+aqYFNa
-         mhIpmm3TldSXp3BM8AW20qMhp5g4qzIXygicRK52vx2uW7dFD/Wl79PcIbEwNIqQNCQ6
-         HuY/emfnd2LcqQUq5nLbhWu+qqCZ4k0HrsqCaT5Bgjh53VCNzT/KrO9jIZGwPN7Xh+/k
-         VpxA==
-X-Forwarded-Encrypted: i=1; AJvYcCW9NXKdi6ozwZ+e0C97ZXzVZ00xiBg3Ef+ATbX58Ms3OI++KUM3eB/0QKE9rtthMtHIh5s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwbrSq2Rh3Kbfdw5Ax5mvxe9vqytBqi2iuDR1QF1AlEOgkM+l8
-	VHMTF+2XJ1FMSmWoODwTl3xz+LP0w/6UjYeE/JUMH9ENtw2eJdrWu0cCMiMKa+ljcPRgrRXqE6Q
-	KlRT/U4oEJIxPVA5KpKq8bg3n1F2NDaE=
-X-Gm-Gg: AZuq6aJLUDFlabgXzh+H0nQwebz6jKwBpbWek+42B08kwnGb5MvY18EdcZY7QnQEQZq
-	fTzgRaRJhNF4nWJxHQQOcNNqlu57QXB/Lbg9bs9okNWvohFsxBIH1x9AiuTpuT+6/4ssdNHcdUj
-	OPAaJKr5uqV3owO5DAdFApxpkbdL8uAPp4QY+l9NY2fJDB3qA4gUQ/TYaVop6wbbC9G2Ypy3WCV
-	g41BNoHVoFtUAmgk5dIKYvYWHOw1O5+eyiVYmP6a6EoV3zjWxi3mkTfcpRr/DXj/+zsSn2CMk4m
-	pse5K5mMhRH0+WTnxx5jM2UxE1VLbvqyATgI84VwbOaPEDW+sYRKnuLOmslcyvkmsCu9ba9/pCB
-	u7wx1adHVq5Jg5Vm45MzCGzjKxQ==
-X-Received: by 2002:a05:6000:290c:b0:437:7168:af50 with SMTP id
- ffacd0b85a97d-4396f182e99mr5976364f8f.37.1771692703222; Sat, 21 Feb 2026
- 08:51:43 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dzZocsBx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB7F3C19421;
+	Sat, 21 Feb 2026 17:57:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771696649;
+	bh=O+AE15WvIgEMw98m/o+ma1tw18+b69pKGmAY39S8DK4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dzZocsBxfbp4aXPxn5bjx04RTNIbrWbHf+Rx8ogoZPljjhzaS2j+XrXePA2YehGLo
+	 x24kGk6WfBoEhfHgYrtIvrcFMIDUyPijpZIdftnE2psUqpTJJwlRSTah0xfQRkrM8P
+	 nwy3UeSzJgTFlK6fI2Gsk75D/Nby3o+7GhiMQa87o0vAdiNEnpfC0BP525XKuEPaag
+	 dhov6yIGE+vG5ikPcl5yyfEsMIaI9k+UqLai423HZ5I99mHwSzTCiSKiAQWALzlHW3
+	 qPItYd2tsC+BHlkQ2qZLGK4cYVtGcoMdtVxKdGB+Mcek7riXAX7lzs4axCbWb80Bih
+	 NlGKgiOBo+qmQ==
+Date: Sat, 21 Feb 2026 18:57:24 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Tejun Heo <tj@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
+	Lennart Poettering <lennart@poettering.net>
+Subject: Re: [PATCH 2/4] cgroup: add bpf hook for attach
+Message-ID: <20260221-salat-meiden-1283869d1038@brauner>
+References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
+ <20260220-work-bpf-namespace-v1-2-866207db7b83@kernel.org>
+ <aZh6vebjDcrccqNP@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260219142933.13904-1-leon.hwang@linux.dev> <20260219142933.13904-3-leon.hwang@linux.dev>
- <CAADnVQLNmQGKf5S5ZNwHYzScYBhnWFmnzLg=5Xxy4SgYKE3EfQ@mail.gmail.com>
- <c6c2ffcf-acdf-4bda-ad82-dc4cc1a9260e@linux.dev> <CAADnVQ+iQkvb9-wOchuPrUOneqzx9Rrqto88=R7GUOqih6PhZQ@mail.gmail.com>
- <4c40705a-4e6a-47ea-b420-223318d1ad09@linux.dev>
-In-Reply-To: <4c40705a-4e6a-47ea-b420-223318d1ad09@linux.dev>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Sat, 21 Feb 2026 08:51:32 -0800
-X-Gm-Features: AaiRm52nj1X-_nBJIgAQ9NCx4CHzjnra7QF_C1bGfU9ssH2LC_icyswN6XymldQ
-Message-ID: <CAADnVQLsJV8OaLCxznwbnxdLVOQ+t=MmAr2O8Y89iPErCvphFQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/6] bpf, x86: Add 64-bit bitops kfuncs
- support for x86_64
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: Ilya Leoshkevich <iii@linux.ibm.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>, 
-	Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aZh6vebjDcrccqNP@slm.duckdns.org>
 
-On Sat, Feb 21, 2026 at 4:45=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
-rote:
->
->
->
-> On 2026/2/21 01:50, Alexei Starovoitov wrote:
-> > On Fri, Feb 20, 2026 at 7:54=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
-v> wrote:
-> >>
-> >>
-> >>
-> >> On 2026/2/20 01:47, Alexei Starovoitov wrote:
-> >>> On Thu, Feb 19, 2026 at 6:30=E2=80=AFAM Leon Hwang <leon.hwang@linux.=
-dev> wrote:
-> >>>>
-> >>>> Implement JIT inlining of the 64-bit bitops kfuncs on x86_64.
-> >>>>
-> >>>> bpf_rol64() and bpf_ror64() are always supported via ROL/ROR.
-> >>>>
-> >>>> bpf_ctz64() and bpf_ffs64() are supported when the CPU has
-> >>>> X86_FEATURE_BMI1 (TZCNT).
-> >>>>
-> >>>> bpf_clz64() and bpf_fls64() are supported when the CPU has
-> >>>> X86_FEATURE_ABM (LZCNT).
-> >>>>
-> >>>> bpf_popcnt64() is supported when the CPU has X86_FEATURE_POPCNT.
-> >>>>
-> >>>> bpf_bitrev64() is not inlined as x86_64 has no native bit-reverse
-> >>>> instruction, so it falls back to a regular function call.
-> >>>>
-> >>>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> >>>> ---
-> >>>>  arch/x86/net/bpf_jit_comp.c | 141 +++++++++++++++++++++++++++++++++=
-+++
-> >>>>  1 file changed, 141 insertions(+)
-> >>>>
-> >>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp=
-.c
-> >>>> index 070ba80e39d7..193e1e2d7aa8 100644
-> >>>> --- a/arch/x86/net/bpf_jit_comp.c
-> >>>> +++ b/arch/x86/net/bpf_jit_comp.c
-> >>>> @@ -19,6 +19,7 @@
-> >>>>  #include <asm/text-patching.h>
-> >>>>  #include <asm/unwind.h>
-> >>>>  #include <asm/cfi.h>
-> >>>> +#include <asm/cpufeatures.h>
-> >>>>
-> >>>>  static bool all_callee_regs_used[4] =3D {true, true, true, true};
-> >>>>
-> >>>> @@ -1604,6 +1605,127 @@ static void emit_priv_frame_ptr(u8 **pprog, =
-void __percpu *priv_frame_ptr)
-> >>>>         *pprog =3D prog;
-> >>>>  }
-> >>>>
-> >>>> +static bool bpf_inlines_func_call(u8 **pprog, void *func)
-> >>>> +{
-> >>>> +       bool has_popcnt =3D boot_cpu_has(X86_FEATURE_POPCNT);
-> >>>> +       bool has_bmi1 =3D boot_cpu_has(X86_FEATURE_BMI1);
-> >>>> +       bool has_abm =3D boot_cpu_has(X86_FEATURE_ABM);
-> >>>> +       bool inlined =3D true;
-> >>>> +       u8 *prog =3D *pprog;
-> >>>> +
-> >>>> +       /*
-> >>>> +        * x86 Bit manipulation instruction set
-> >>>> +        * https://en.wikipedia.org/wiki/X86_Bit_manipulation_instru=
-ction_set
-> >>>> +        */
-> >>>> +
-> >>>> +       if (func =3D=3D bpf_clz64 && has_abm) {
-> >>>> +               /*
-> >>>> +                * Intel=C2=AE 64 and IA-32 Architectures Software D=
-eveloper's Manual (June 2023)
-> >>>> +                *
-> >>>> +                *   LZCNT - Count the Number of Leading Zero Bits
-> >>>> +                *
-> >>>> +                *     Opcode/Instruction
-> >>>> +                *     F3 REX.W 0F BD /r
-> >>>> +                *     LZCNT r64, r/m64
-> >>>> +                *
-> >>>> +                *     Op/En
-> >>>> +                *     RVM
-> >>>> +                *
-> >>>> +                *     64/32-bit Mode
-> >>>> +                *     V/N.E.
-> >>>> +                *
-> >>>> +                *     CPUID Feature Flag
-> >>>> +                *     LZCNT
-> >>>> +                *
-> >>>> +                *     Description
-> >>>> +                *     Count the number of leading zero bits in r/m6=
-4, return
-> >>>> +                *     result in r64.
-> >>>> +                */
-> >>>> +               /* emit: x ? 64 - fls64(x) : 64 */
-> >>>> +               /* lzcnt rax, rdi */
-> >>>> +               EMIT5(0xF3, 0x48, 0x0F, 0xBD, 0xC7);
-> >>>
-> >>> Instead of emitting binary in x86 and arm JITs,
-> >>> let's use in kernel disasm to check that all these kfuncs
-> >>> conform to kf_fastcall (don't use unnecessary registers,
-> >>> don't have calls to other functions) and then copy the binary
-> >>> from code and skip the last 'ret' insn.
-> >>> This way we can inline all kinds of kfuncs.
-> >>>
-> >>
-> >> Good idea.
-> >>
-> >> Quick question on =E2=80=9Cin-kernel disasm=E2=80=9D: do you mean addi=
-ng a kernel
-> >> instruction decoder/disassembler to validate a whitelist of kfuncs at
-> >> load time?
-> >>
-> >> I=E2=80=99m trying to understand the intended scope:
-> >>
-> >> * Is the expectation that we add an in-kernel disassembler/validator f=
-or
-> >>   a small set of supported instructions and patterns (no calls/jumps,
-> >>   only arg/ret regs touched, etc.)?
-> >> * Or is there already infrastructure you had in mind that we can reuse=
-?
-> >>
-> >> Once I understand that piece, I can rework the series to inline by
-> >> copying validated machine code (minus the final ret), rather than
-> >> emitting raw opcodes in the JITs.
-> >>
-> >> I also noticed you mentioned a similar direction in "bpf/s390: Impleme=
-nt
-> >> get_preempt_count()" [1], so I=E2=80=99ve added Ilya to the thread to =
-discuss
-> >> this approach further.
-> >
-> > You really sound like LLM. Do your homework as a human.
->
-> Got it.
->
-> I polished my draft using ChatGPT, which would leave LLM smell in my repl=
-y.
+On Fri, Feb 20, 2026 at 05:16:13AM -1000, Tejun Heo wrote:
+> Hello,
+> 
+> On Fri, Feb 20, 2026 at 01:38:30AM +0100, Christian Brauner wrote:
+> > Add a hook to manage attaching tasks to cgroup. I'm in the process of
+> > adding various "universal truth" bpf programs to systemd that will make
+> > use of this.
+> > 
+> > This has been a long-standing request (cf. [1] and [2]). It will allow us to
+> > enforce cgroup migrations and ensure that services can never escape their
+> > cgroups. This is just one of many use-cases.
+> 
+> >From cgroup POV, this looks fine to me but I'm curious whether something
+> dumber would also work. With CLONE_INTO_CGROUP, cgroup migration isn't
+> necessary at all. Would something dumber like a mount option disabling
+> cgroup migrations completely work too or would that be too restrictive?
 
-... and for anyone reading it the smell is ohh too strong.
+It would be too restrictive. I've played with various policies. For
+example, a small set of tasks (like PID 1 or the session manager) are
+allowed to move processes between cgroups (detectable via e.g., xattrs).
+No other task is allowd. But that's already too restrictive because it
+fscks over delegated subcgroups were tasks need to be moved around
+(container managers etc.). IOW, any policy must be quite modular and
+dynamic so a simple mount option wouldn't cover it.
 
-> Here's my original draft:
->
-> Good idea. But I concern about the "in kernel disasm". Do you mean we
-> will build a disassembler for whitelist kfuncs at starting?
->
-> I noticed you've mentioned the same direction in "bpf/s390: Implement
-> get_preempt_count()" [1]. So, I added Ilya here to discuss this direction=
-.
+As a sidenote, there would be other mount options that would be useful
+but that currently aren't that easy to support/implement because of the
+way cgroupfs (for historical reasons ofc) is architected where it shares
+a single superblock.
 
-Much better. Keep it human.
-
-"in kernel disasm" already exists for some architectures
-(at least x86 and arm64) since it's being used by kprobes.
-The ask here is to figure out whether they're usable for such
-insn analysis. x86 disasm is likely capable.
-
-re:"whitelist kfunc"
-I suspect an additional list is not necessary.
-kf_fastcall is a good enough signal that such kfunc should
-be inlinable.
+I have a series (from quite some time ago) that makes cgroupfs truly
+multi-instance. It would effectively behave just like tmpfs does. A new
+mount gets you a new superblock. But once you have that you can e.g.,
+simplify cgroup namespaces as well. I've done that work originally to
+support idmapped mounts with cgroupfs but I can't find that branch
+anymore.
