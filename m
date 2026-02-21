@@ -1,132 +1,163 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 462C683A14
-	for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 12:51:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2A019DFAB
+	for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 13:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771678273; cv=none; b=hIQLWDPcWC1R0n+Eb9sXWva1h+rGdHz5cXci+5wEDC89DA+n5is72URDE0LhTEl53bspPyideFNWPAyP2g5GPDndU9mN3jOJKa8vTeI/DkNCoM1PKyepzJyShXaH9KX9ZXdsq9ePxp21E5P8nsFKerFh3pKv51cX3xYz7A9BuTs=
+	t=1771681334; cv=none; b=Pat3g0V/fw7eiT6dA2PGq22YiNg0IjASkVDZcZgBDYqICEVQfdu8YNkhVpRdsbm02pHtV43fuURZ2PdSpBgI0KHtc7kNjDRbxGOBZ7VDbZYF8q/C2nuyVjuge1B0rjS2oFKFOVVLG3M/U1kunIckA1MmIt+00Vym+nQV3CYZ0JE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771678273; c=relaxed/simple;
-	bh=EKERHVHJC4NJMe7ZGw3YG6p1liQYgkkEoRV8QXf/eTw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lDmsG5oRZ4XG+02ui+7HmCZmjpYCTWFuj7k42Smon8vl4kMwZEyq27DiN6frttu1FcOe/KpvY04GKDBQl1CTCI49A2VOGV+G1cQh50864QK81LoOZyvKhlJXoU8N/wAcERpVflLpbpBgr4XPIN95T5n/M16VY6EkyfktEjo4BbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=icNCDIkP; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771681334; c=relaxed/simple;
+	bh=eUB3TmBjdU3RDXUIbB7RJMKu2zNCckp2YQ9uVjU9d1s=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=sDjRk2RTsRZflHxp/x1O1VuSgCSAEv3R8c63xu3vrkkN5r+Ba22tlizmrnzEbcCPm61ULTOJtdqhC7O+jC/xXJ1QyAwWPxI6CnvsD8Y895/0YQ3TuuzliebPlNYR5JbQ6sEbKmVCKpgq1bI/2ixlVLp0Av/B7AKkmrg910JFwN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Xedk4Oju; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="icNCDIkP"
-Message-ID: <206609d9-7bd7-4923-999a-2402388b8f64@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771678260;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=br9Fo1dfeEMPffvOKFoumObqBOWwJq2Nx+QuBTPepjc=;
-	b=icNCDIkPBixppTwoG2YRcxRBDOFrPHs5wl46DQZbCCKYEWDIpUUWJM7LrHCsqbdvez2lmt
-	WcCr1ulB0f+kojp7ZyhjC+MKcy9vB9VrxcbDpMvUyc53mrxYFmfh27ZI2hgt1hDiDW+KSc
-	uYnmHfX2R4fnoSi9mpjtw/Jhc05YLnw=
-Date: Sat, 21 Feb 2026 20:50:35 +0800
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Xedk4Oju"
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b8f96f6956aso409903766b.3
+        for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 05:42:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google09082023; t=1771681331; x=1772286131; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FTJ7mEU8ZxJdWX7snIcPnyH3PcO4cHVmQhTIJPXf4UQ=;
+        b=Xedk4OjuSwO/hT3Rrywo8YisIDeAHNgIv4hwsBKajQ97SwCgwKWJwm9vGbJ7dNRUYN
+         hMfS5Sq8dqQKzn7MOK43yp+RBV8l2GjiZPuzZ/VtQFK3ZmoC3fHl4E71iinwMG70/plf
+         2VJpqi2M4uv25X5RR+sQDrw0eCJE1HihuPU1Ce2vDX5wSDw/7fJn5EPa4ZT4UXHJFNz+
+         AIyxvwhieYgKTs9m7VO7Q0mSou/mUQ/yYMnxN8QYsmezxHHB0ovOBobVSI7zZZfhMk6z
+         CtekL4VJ0B0lPaVZzhDwVWKjP6WENfm6YDNmLDi/CfaagN58ub0mcucBMmqY8qusBvrQ
+         tKsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771681331; x=1772286131;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FTJ7mEU8ZxJdWX7snIcPnyH3PcO4cHVmQhTIJPXf4UQ=;
+        b=UlrHT0Zt2SNmls8ZqMXDV3Asd6eTVKKwR3kiR/gVdOBphcEJBNxbfQK8BxJH5Bwc2O
+         eZhouQ0QOUjvawmyjsmA/7xAwcwUxJK12vmj7U/uwH/Y8sR98oCqIZo6/Lql+/sF3jUQ
+         +teTuLSQFU0h6qq8JxiUjUrtMU6xBvxD6oxzyZwy+c7xNkaQ8ORLe2z8i/bCmRRnZqQK
+         Oa/l1UXBLCZIwd5Jk+99lcu6/f73cJRT3JHSAWbGuabhbkMml8c7dC4SQjI/9i1TswHA
+         OVDvtWblPrVV1VmlM8kwbSOyyZLYqAi4Enx0tWzXKV8EJYiFyXPxzf2xQeMg631adpSp
+         0FDw==
+X-Gm-Message-State: AOJu0YzD3KbgnIKkQb4U5SqOljTpGo9Jh7cCdrW+ft5M4rlkz8mvLtKO
+	K6gpOxSUJwVWmB2doSnGBCZ1LH7GWYgcFEvnxT0sEneJ8TcLbbc3zg20oP0kpYKrVsLKsONXODP
+	QC6Iu
+X-Gm-Gg: AZuq6aLOvGEgV06/XeGZxr6ff0QI4F8A147aZ+2yhLAJDfEXQGdZu8M4hCPry9obWYF
+	pz1rJHLxuEhtH988F+1bWJBEFT3faAodVUOYRrLYwkX1jU6Lo//rNix3WVnk/8AgZ4BEHGkOiH0
+	Bb+VFrQKNCva/tl3PmsGbzGLV0b/ell8zJJ1cNbgyKNxzKqd0oBndRZ11avOO4CyO5xwh2LZsU4
+	cmH3cAUEr5iqIjNCunZXk91fMlBotZ2FogD1/7w/CHHz+RAiscv7VVsKM/3nEAa6SXGJmtweX0V
+	ViDPSQPtMqAQDe1pZ+wU7E5nlk7kXZou9NUY1awVxdpHOkkI4o9QjfxLkUQX3IiYC/7uby2qnka
+	FBIFGV2pYylI9emcxOtnYowmr5Qt3uOnI98nZ4eokmctvj7LUbWc+xiak/yHOdQCOOVkMUWe7sO
+	OQgF9AFYDm2zJ1jUJpRtalncYkum1DEwtJ50bFGA==
+X-Received: by 2002:a17:907:d94:b0:b8e:2a8a:4320 with SMTP id a640c23a62f3a-b9081c00aa1mr169530866b.49.1771681331159;
+        Sat, 21 Feb 2026 05:42:11 -0800 (PST)
+Received: from cloudflare.com ([104.28.225.185])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084ea031bsm99876166b.54.2026.02.21.05.42.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Feb 2026 05:42:10 -0800 (PST)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: bpf@vger.kernel.org,  kernel-team@cloudflare.com,
+  lsf-pc@lists.linux-foundation.org
+Subject: Re: [LSF/MM/BPF TOPIC] BPF local storage for every packet
+In-Reply-To: <5fdee5fd-aff1-4764-820e-3b1f3ad00941@linux.dev> (Martin KaFai
+	Lau's message of "Fri, 20 Feb 2026 10:34:09 -0800")
+References: <87ecmffopy.fsf@cloudflare.com>
+	<5fdee5fd-aff1-4764-820e-3b1f3ad00941@linux.dev>
+Date: Sat, 21 Feb 2026 14:42:10 +0100
+Message-ID: <877bs6fc25.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 1/6] bpf: Introduce 64-bit bitops kfuncs
-To: Dan Carpenter <dan.carpenter@linaro.org>, oe-kbuild@lists.linux.dev,
- bpf@vger.kernel.org
-Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>,
- Xu Kuohai <xukuohai@huaweicloud.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <skhan@linuxfoundation.org>, Peilin Ye <yepeilin@google.com>,
- Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <202602210241.E7Q88vvq-lkp@intel.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <202602210241.E7Q88vvq-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Feb 20, 2026 at 10:34 AM -08, Martin KaFai Lau wrote:
+> On 2/20/26 6:56 AM, Jakub Sitnicki wrote:
+>> In the upcoming days we are going to post an RFC which proposes to
+>> extend the concept of BPF local storage to socket buffers (sk_buff, skb)
+>> as means to attach arbitrary metadata to packets from BPF programs [1]
+>> (slides 41-55).
+>> Design wise, BPF local storage is a great fit for a packet metadata
+>> container, as it that avoids some of the shortcoming of the the XDP
+>> metadata interface:
+>> 1. Users interact with storage through BPF maps and can take advantage
+>>     of existing built-in BPF map types, while still being able to
+>>     implement a custom data format,
+>> 2. Maps within local storage can have different properties controlled by
+>>     map flags. For example, maps with BPF_F_CLONE set can survive packet
+>>     cloning. Other flags could allow map contents to survive sk_buff
+>>     scrubbing during encapsulation/decapsulation or pass across network
+>>     namespace boundaries.
+>> 3. Local storage supports multiple users out of the box - each user
+>>     creates their own map, eliminating the need to coordinate data
+>>     layout,
+>> 4. Local storage has its own backing memory, so persisting it across
+>>     network stack layers requires no changes to the network stack.
+>> However, this flexibility comes at a cost. While XDP metadata requires
+>> no allocations [2], an initial write to BPF local storage requires two:
+>> one for bpf_local_storage_elem, and one for bpf_local_storage itself.
+>> We would like to align this work with the needs of other BPF local
+>> storage users (socks, cgroups, tasks, inodes), where allocation overhead
+>> has been a concern as well [2].
+>> Optimization ideas we would like to put up for discussion:
+>> - slimming down bpf_local_storage so it can be embedded as an skb
+>>    extension chunk,
+>> - making the bpf_local_storage cache size configurable,
+>> - allowing bpf_local_storage to be pre-allocated,
+>> - co-allocating bpf_local_storage and bpf_local_storage_elem for the
+>>    single-map case.
+>
+> The sk/cgroup/task storage has a much longer lifetime. Meaning once alloc=
+ation
+> is done, the storage stays in the sk until the sk is closed. The length of
+> lifetime is quite different from the skb. I am afraid we are re-purposing
+> bpf_local_storage for a very different use case where skb lifecycle is mu=
+ch
+> shorter.
+>
+> We are planning to increase the 'sizeof(struct sock)' for perf reason. Sa=
+ving an
+> allocation is an upside but not the major one we are looking (or care) for
+> sk. We are more looking for cacheline efficiency and probably remove the =
+need
+> for bpf_local_storage[_elem] if the user chooses to use the in-place spac=
+es of a
+> sk.
+>
+> If 'sizeof(struct sk_buff)' can be increased, this should align on where =
+sk
+> local storage is going. If skb will solely depend on the existing
+> bpf_local_storage and has no plan to raise sizeof(struct sk_buff) for perf
+> purpose, the existing bpf_local_storage may be the wrong place to
+> repurpose/optimize because the lifecycle of skb is very different.
 
+The lifetime difference is undeniable, but I still see common ground.
+To make it more concrete:
 
-On 2026/2/21 17:58, Dan Carpenter wrote:
-> Hi Leon,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-Introduce-64-bit-bitops-kfuncs/20260219-223550
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-> patch link:    https://lore.kernel.org/r/20260219142933.13904-2-leon.hwang%40linux.dev
-> patch subject: [PATCH bpf-next v2 1/6] bpf: Introduce 64-bit bitops kfuncs
-> config: i386-randconfig-141-20260220 (https://download.01.org/0day-ci/archive/20260221/202602210241.E7Q88vvq-lkp@intel.com/config)
-> compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-> smatch version: v0.5.0-8994-gd50c5a4c
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> | Closes: https://lore.kernel.org/r/202602210241.E7Q88vvq-lkp@intel.com/
-> 
-> smatch warnings:
-> kernel/bpf/verifier.c:18245 bpf_kfunc_is_fastcall() error: buffer overflow 'special_kfunc_list' 64 <= 64
-> 
-> vim +/special_kfunc_list +18245 kernel/bpf/verifier.c
-> 
-> 966e89879bbea4 Leon Hwang       2026-02-19  18223  static bool bpf_kfunc_is_fastcall(struct bpf_verifier_env *env, u32 func_id, u32 flags)
-> 966e89879bbea4 Leon Hwang       2026-02-19  18224  {
-> 966e89879bbea4 Leon Hwang       2026-02-19  18225  	if (!(flags & KF_FASTCALL))
-> 966e89879bbea4 Leon Hwang       2026-02-19  18226  		return false;
-> 966e89879bbea4 Leon Hwang       2026-02-19  18227  
-> 966e89879bbea4 Leon Hwang       2026-02-19  18228  	if (!env->prog->jit_requested)
-> 966e89879bbea4 Leon Hwang       2026-02-19  18229  		return true;
-> 966e89879bbea4 Leon Hwang       2026-02-19  18230  
-> 966e89879bbea4 Leon Hwang       2026-02-19  18231  	if (func_id == special_kfunc_list[KF_bpf_clz64])
-> 966e89879bbea4 Leon Hwang       2026-02-19  18232  		return bpf_jit_inlines_kfunc_call(bpf_clz64);
-> 966e89879bbea4 Leon Hwang       2026-02-19  18233  	if (func_id == special_kfunc_list[KF_bpf_ctz64])
-> 966e89879bbea4 Leon Hwang       2026-02-19  18234  		return bpf_jit_inlines_kfunc_call(bpf_ctz64);
-> 966e89879bbea4 Leon Hwang       2026-02-19  18235  	if (func_id == special_kfunc_list[KF_bpf_ffs64])
-> 966e89879bbea4 Leon Hwang       2026-02-19  18236  		return bpf_jit_inlines_kfunc_call(bpf_ffs64);
-> 966e89879bbea4 Leon Hwang       2026-02-19  18237  	if (func_id == special_kfunc_list[KF_bpf_fls64])
-> 966e89879bbea4 Leon Hwang       2026-02-19  18238  		return bpf_jit_inlines_kfunc_call(bpf_fls64);
-> 966e89879bbea4 Leon Hwang       2026-02-19  18239  	if (func_id == special_kfunc_list[KF_bpf_bitrev64])
-> 966e89879bbea4 Leon Hwang       2026-02-19  18240  		return bpf_jit_inlines_kfunc_call(bpf_bitrev64);
-> 966e89879bbea4 Leon Hwang       2026-02-19  18241  	if (func_id == special_kfunc_list[KF_bpf_popcnt64])
-> 966e89879bbea4 Leon Hwang       2026-02-19  18242  		return bpf_jit_inlines_kfunc_call(bpf_popcnt64);
-> 966e89879bbea4 Leon Hwang       2026-02-19  18243  	if (func_id == special_kfunc_list[KF_bpf_rol64])
-> 966e89879bbea4 Leon Hwang       2026-02-19  18244  		return bpf_jit_inlines_kfunc_call(bpf_rol64);
-> 966e89879bbea4 Leon Hwang       2026-02-19 @18245  	if (func_id == special_kfunc_list[KF_bpf_ror64])
->                                                                                           ^^^^^^^^^^^^
-> special_kfunc_list[] has 64 elements and KF_bpf_ror64 is 64 so
-> this is out of bounds.
-> 
+1. IIRC you've mentioned wanting more bpf_local_storage->cache entries
+   for socks in some scenarios, while for skbs I'd expect we need
+   fewer. We could make the cache size configurable via a flexible
+   array.
 
-Ack.
+2. Embedding bpf_local_storage is another overlap I had in mind. For
+   socks that in within the same memory blob as struct sock, while for
+   skbs we'd want to embed it in skb_ext (once it's small enough). This
+   depends on whether you end up dropping bpf_local_storage for
+   sk_local_storage entirely, which I didn't know about until now.
 
-I'll try a new way using KF_JIT_MAY_INLINE flag in the next revision,
-which will avoid adding these kfuncs to special_kfunc_list btw.
+3. I've heard the idea of allocating skb_ext memory together with
+   sk_buff was floated in the past. While trimming skb_ext at build-time
+   is hard today =E2=80=94 say I need XFRM but don't care about crypto offl=
+oads
+   keeping state in skb_ext =E2=80=94 the idea is similar to what you're
+   proposing for struct sock.
 
 Thanks,
-Leon
-
-> 966e89879bbea4 Leon Hwang       2026-02-19  18246  		return bpf_jit_inlines_kfunc_call(bpf_ror64);
-> 966e89879bbea4 Leon Hwang       2026-02-19  18247  
-> 966e89879bbea4 Leon Hwang       2026-02-19  18248  	return true;
-> 966e89879bbea4 Leon Hwang       2026-02-19  18249  }
-> 
-
+-jkbs
