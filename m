@@ -1,202 +1,157 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB24226CFD
-	for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 09:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771665125; cv=pass; b=ANlEGXbnYOQgQFSACtW3gk6YMMC/QktiVxxUVm55JJVMmALvgNnpa0Oa6C98T2muThRInuGtSNIeqjomxLYZL6/cXaVv8q3kiyUrBsjitMBDrrlmPfrrsTm2F10du4Cuo4ocv9AS2/PIQybuQI12u4Q79+OK3Uq+t3zZLPFszv8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771665125; c=relaxed/simple;
-	bh=YLMy/eJC33SeA+X6nkHRGtxREcz9ZXeGvlp94b9j/OM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mM3RIS779lz8nYciNgD1gwSsDmkhlzASN1eDeDbu+etfnM/DSrjUTGtl5w1Jg0RwURaiCWTnHM8iNobIPJcMGy3qNh5OozuBML5K/u63j7EJXh4eoQaTTFSxDingTb167b5DOuKJ1mpuzQsPXDqpDGAplA7CALRUriBBBeJjxos=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WvOk4n7a; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=eUwZIYWz; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA2882FDC28
+	for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 09:58:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771667889; cv=none; b=Jr73lGk3DRwQPiYFNVt6aGlXw3dc3jTDbP4NvLrhdn6QCbhzCB6dk6xtrbbGPVRQI5hx/+e5ikP1O7Ce8tC/hwAVUnGQhIk3bMyKMC/E7TCXroG2KuhpB5AXvQn8rGgBP/xlfCgriFfKmg7nlYbhH5yJADclgdUY1p/UVbvX4VI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771667889; c=relaxed/simple;
+	bh=yeFPaj6dVZUGfQ6mk7TVN6TVYypxiVGLknPgkecZgsE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=DG1UtGPp3GsREzMp1itxFC+pBvjsBVJKfxmgkwzScVHjXuy9XxJyaU/J4vdgPZuw9MTVSiheN1HMY59VD+S0DpnEvm1J6ijGi7Jj2v1OPb/l/T1n5Eago4MViJz87fTgp2kf8YXEKockqZ3ctMWW2SbVzTNOKoBlBccUtPBrpA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ivACR9+o; arc=none smtp.client-ip=209.85.221.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WvOk4n7a";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="eUwZIYWz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771665122;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=8Med7MAxXcpqee2OOIkX9OPTkN8DI7LIqce9DvMMQG8=;
-	b=WvOk4n7ay2Rx4BZRdJiL2sbIeSYEVkzfUTg4tuTZo3InWJ656gC8KnxqRSKVBrfR5JPA5Z
-	1UKAwSfmqUdF/xdl6qUjAtDnG9pCA8QV20htWXdT+S4PX2ycz6izRWVJv1LPDQC/isCOJI
-	4P/07kLX2UYGA9E8ISnLE5BRvGh4pv4=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-94-BtXnYMDrP5K8cXJl_bOpCw-1; Sat, 21 Feb 2026 04:11:59 -0500
-X-MC-Unique: BtXnYMDrP5K8cXJl_bOpCw-1
-X-Mimecast-MFC-AGG-ID: BtXnYMDrP5K8cXJl_bOpCw_1771665118
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-59f752b8b22so1997059e87.1
-        for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 01:11:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771665118; cv=none;
-        d=google.com; s=arc-20240605;
-        b=I1lbuu24ssCz4G7NmDdv273xLvWtbApCwuYfVEmsvZwJPRJgKuF+5DKAki4f0+9B66
-         upr31+viL+SXFIjLKLun87cln9Qub7phIoVQcEpGKWL7BybXxHWuZn9dbctrzHmI4lIG
-         2Fx8nJMd4kDT+LeVVLW2IHegw4vV7LeqLqQGR1zLbRdNHObxuJVlfhvQH9GcPCvXO+rI
-         PBdjbLDovkmfjFmmIvQVlRBGwhp0oXxSzRX0Ai1LpU6/09Xr38fQN0dDQh4A8Kmh/1JR
-         ydLfyj3sfdAYgyxZPedTichm5oAEqsXG/GC6P9kR5nHQmVeHeH/eFdTmx8XuthaJh51+
-         /jhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=8Med7MAxXcpqee2OOIkX9OPTkN8DI7LIqce9DvMMQG8=;
-        fh=3uxQoQ/KcFAONFFjOGJ882RsADReOo5JOInp4FXYJUU=;
-        b=Ups8YExCUozW8y5PRB8c3IidDnxjSdxVFA6BjSL+UXXGPNkQV+qQm5dzvWKdkagKxO
-         ml1en4Z+XFmX6tWTqMsPpMuh7/b4ISqAGEfTODQ7bk5OgTyT2Es5jXOPFjzurpCRzt91
-         xeuqwgKJLYESArUVRmaLsKpui9sS2MAksx2hTKK7uU0z2wdLPfB7dO9/x3teddbyO6w2
-         lYFm1/FafJzBBxVUvkA5w5b89vYpTIJzCcQkdMUV9DB26wEEQrdUt1wt8jAkXwcRxhKe
-         Jgw2vCUgjEXcz2Ng9j6EuONr1HecZIYhwV5wGv3nDShSwn6rDOW5gWvQc0aUwfOgvWgm
-         fu3g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ivACR9+o"
+Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-4375d4fb4d4so1821183f8f.0
+        for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 01:58:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1771665118; x=1772269918; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8Med7MAxXcpqee2OOIkX9OPTkN8DI7LIqce9DvMMQG8=;
-        b=eUwZIYWz8kVvqHRqIyucU44mxnCfw6vQz/2tzMC5pVdYGeMSAg9WYzGXGiwtNm7Sww
-         66dF6KGmcfa1M6GjQwO6B6HGwO0QQS5qt6xvSaYNfX9mc2X2cnWJ6kRe3DZwwI2R7iEc
-         QSJjjPC7k/96qpyK5JuigawI8Cj6SBT3HiFDfpPJjxBDLrKrPPh859ZilwptQXUCILQD
-         SIlNXlmVuYjrA/bqTfReaKx+x0Wn/j8CWUZBkkNH9CXi3Q/jWd64zux264En+RpxNCIx
-         sBShO/aj8G7zqjAyK7nkE8SGK0NTfEsVkoZMF3i7y+lYPwispS+dTqLQsmHnIAgkjlpb
-         5Mmg==
+        d=linaro.org; s=google; t=1771667886; x=1772272686; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iG95ysl0cBzDn6owjLxKJa0jdHI3ZVF2zQtfxEizLIg=;
+        b=ivACR9+od9eRUrJG63DqbiQqLAQFLtDJadN5yijOImnnyZWVVhj9j7hEkaB+q1+rvw
+         cBArlN/iUZGKSO9aqO5IogD+8WuG2k7mcuru9b1TYwVhZTTK/GL+eAcTjG7Z2H8nViep
+         85s3ddO0ERyZ+U5hQHGi8hVvbSQaJLPkh9g5jZEA2jnmr3L6IGULIl6xEJmCTWGv6pQv
+         ftvPRH6vx5asQpyfDNhx9NGJWZhpwrquX45hoAvirJCBbOHXRFBszN1jSD2AkgqcpHyd
+         AXH7MIVGwzcpbTyHbgvCgmhBVUBbf/3rC4jSMWvRfySL824yaM1DtNNSmczKnKAodYNP
+         Y4Lw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771665118; x=1772269918;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=8Med7MAxXcpqee2OOIkX9OPTkN8DI7LIqce9DvMMQG8=;
-        b=nTW5xaFhsag0DnrWIL51DrfqDczplUcB3V9Vp35dwz7FSq4FeFFNrQ1g3ROQOy/8VT
-         iA9qHLwlqr3VXmicd26+ChqS8pSfaCghVRrfmPgWltLPj6q560JUG8mDN8u3sGEvub2E
-         Y4kNm0vuGlJi3PJIabq2kXnSHUgEI+5DxCiMb1uNdXh2ll6D4yy+dNAvh54nY/amaWfw
-         99nK47Ar+xlsQ9eW4pNfqugiA+0i6XL9UUe7qFprBNQranLpPdR6i0TPKOAX8QJ6pWhH
-         9zmjUh/gYcI/5FOnkO5k90keg6LmjoS9foXm2km/MGzyjkMMJ+c06PP8pn3J1cke6d0F
-         RTVg==
-X-Forwarded-Encrypted: i=1; AJvYcCVBK5+iMb7RPKClD7hQfCEpC+XlgR2pHun9+vUSWV02LzmNwUWkK72E3N6LenXeCKRA0i8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyieonQS3OAtFcH5H43WY+DuaJZyuvE2+ujusIBpGOTXznuTL5p
-	15IskDHKL5g2ZhiLMeElczZ5Hd3+EB1e217vZ3EryrNXeyG7yeJWiVWt1owxUQJLNPm2pIi1tEG
-	A+bln5fAD4mgBDGFTWpBmk+YP4Oz3Q+2EkV9fvjX0YYDxxh9A72LI+a9OnHOTqbb20bLs4IxEkI
-	rE8q1FGsB4QV9PVRetyoG9evJknKRl
-X-Gm-Gg: AZuq6aJiUpcZfl2p2FXcy9PtvPhcruCn3QCYDVFVdyDfsAQuETEEeUUPjT4nN8GeEZp
-	Gb6TaTAbKCy/GMVU+6W7a8+HMUxs/aZ/v7PnWH0cRrVwxy6jdd0ZfAJnVwM/sh7shc5IKvLtjw7
-	0Ps2/JW04aN+eVdZLkUYB9zHv3gerI6K/YZLbn8vcsho69hKrVyhM3EfygjskW/yRprG42pq28j
-	xHOkYgS+Cyo5zBVbzPZvrG9bDr+AIsfb3eYFFC0cWgLAo6QDgH/OVi+abV8VgwS1a65FLphr4Gy
-	MAX7kA==
-X-Received: by 2002:a05:6512:ac5:b0:59e:64d2:71a0 with SMTP id 2adb3069b0e04-5a0ed8973d0mr739520e87.18.1771665117771;
-        Sat, 21 Feb 2026 01:11:57 -0800 (PST)
-X-Received: by 2002:a05:6512:ac5:b0:59e:64d2:71a0 with SMTP id
- 2adb3069b0e04-5a0ed8973d0mr739509e87.18.1771665117295; Sat, 21 Feb 2026
- 01:11:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771667886; x=1772272686;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iG95ysl0cBzDn6owjLxKJa0jdHI3ZVF2zQtfxEizLIg=;
+        b=t/2AnLZKtSm92geifmgSgKs5zjydCNAFKAVygayUdxoJ3N20J0Xm2aiqgeSI3iArLK
+         PZAn/3kaMEUmKlw8ggargkA+P22lb1SZzZmCs7/PJIxtbuI9rVafou7JybUwgJkKFSXk
+         C3UpXuS+1DzQDJwYJQxN3L7+dQWz2XY81ewj41/NGXHUEqNpY8mZdsUgNqupPrFKdX4h
+         eDvCLYiLkPB0/Vn0hF3cS9sWfufjpMQLBtr24JyS/XiJv2DW2C7hti85g6gVGJCPgXg5
+         p7j0wWFYBzPXTy738YMjlVoHDXHQPxKu/UIeYcwM4PCmoRDx5rVBIa/JZFgZt4CkbDre
+         L6xQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/oQv8vIMWvItzp98DyEN5EFKwpgNCCJgUwwNRg5z88lASVARitUbUFL3dS+ndBbvOUU4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSdN+MLoCvHDKCvHS7iwyB/k9Vp2EJXd/eBpZsnZvU7tUVj27B
+	NohP0i6YKE3autzL8oHMrXttrUSGcXFWtF7CLMcWvFqEG1Sbk2M5A46Q9fbTUSuqHcXqvd4whkp
+	YDQi7
+X-Gm-Gg: AZuq6aKNunVBH7qrhID2gOcY5a4ztENOQGlgLwInU5eSVLyWbyRrbjEz1ohnEjK67Cr
+	AxGcvTpYEncYRNQI/ACo0FSgmhosBnRFcDCD63Jwd5FiM6EUNVRvXew75Vt86PtLPdhbUctQIjT
+	Y0meIKEuIorhffTjvfUUP0wgNHAEwEh8YNeHeKyLuLNFh4c9bCcXDytHrL52I1iRStd6HuL+KIM
+	I/9OhvyjMHQUcaILTQksmiMOy377PRJOdLo7gRG9oOOdi+x61WxWnbosInhdCSxAHJLqSSwD3Ki
+	XRXTGHlY7lc+Bf8KMABrknLqhB7ShPMv5hquuMSiIUGPcN4p6HWVnkllW0An9N2Rm+yhKWdKb3d
+	mkKTn2FLBaQUxUkTufUnBAPPJRZ0bToTwGmP2OV+IoUnsP6Nq8rJl7uRnMQw0gwuKvVS1eaVk7M
+	Gxwa9ZC1EaJdd/XKPfF0ijMpJKjxepSbm9zL+iV8o=
+X-Received: by 2002:a05:6000:2601:b0:437:81b0:6638 with SMTP id ffacd0b85a97d-4396f188767mr4885393f8f.59.1771667886111;
+        Sat, 21 Feb 2026 01:58:06 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970bfa015sm4427011f8f.8.2026.02.21.01.58.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 21 Feb 2026 01:58:05 -0800 (PST)
+Date: Sat, 21 Feb 2026 12:58:02 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Leon Hwang <leon.hwang@linux.dev>,
+	bpf@vger.kernel.org
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Puranjay Mohan <puranjay@kernel.org>,
+	Xu Kuohai <xukuohai@huaweicloud.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Leon Hwang <leon.hwang@linux.dev>, Peilin Ye <yepeilin@google.com>,
+	Luis Gerhorst <luis.gerhorst@fau.de>,
+	Viktor Malik <vmalik@redhat.com>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 1/6] bpf: Introduce 64-bit bitops kfuncs
+Message-ID: <202602210241.E7Q88vvq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
- <aZhsIVa2TJ9-bMhj@fedora>
-In-Reply-To: <aZhsIVa2TJ9-bMhj@fedora>
-From: Xiao Ni <xni@redhat.com>
-Date: Sat, 21 Feb 2026 17:11:45 +0800
-X-Gm-Features: AaiRm53ma7jtT6vamly0SrGhEI1ssRVkr2jsQhQTJq5DZzr5sP6W0rlDwudIYu0
-Message-ID: <CALTww2_8B=rZbGgJCDjG7bqa64RfE3tK9MdCKkJBzW8qXomkdQ@mail.gmail.com>
-Subject: Re: [LSF/MM/BPF TOPIC] User space RAID5 with ublk and io_uring BPF
-To: Ming Lei <ming.lei@redhat.com>
-Cc: lsf-pc@lists.linux-foundation.org, 
-	linux-block <linux-block@vger.kernel.org>, bpf@vger.kernel.org, 
-	Caleb Sander Mateos <csander@purestorage.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260219142933.13904-2-leon.hwang@linux.dev>
 
-On Fri, Feb 20, 2026 at 10:14=E2=80=AFPM Ming Lei <ming.lei@redhat.com> wro=
-te:
->
-> Hi Xiao,
->
-> On Thu, Feb 19, 2026 at 01:38:46PM +0800, Xiao Ni wrote:
-> > Hi all
-> >
-> > I'm doing some work on user-space RAID recently. I'd like to propose a
-> > topic for LSF/MM 2026 regarding the implementation of RAID5 in user
-> > space using ublk and io_uring bpf[1], particularly focusing on the
-> > challenges encountered and potential kernel improvements needed.
-> >
-> > Ublk raid5 uses the ublk framework (tools/testing/selftests/ublk/),
-> > with the goal of leveraging io_uring's zero-copy capabilities and
-> > BPF[1] for performance optimization. The implementation includes:
-> > * RAID5 stripe handling with configurable chunk sizes
-> > * Multi-queue support via io_uring
-> > * Degraded mode for single disk failure tolerance
-> > * Integration with io_uring BPF struct_ops framework
-> >
-> > During the implementation, I encountered several technical challenges.
-> > The primary challenge is performing XOR parity calculations in a true
-> > zero-copy manner:
-> >
-> > 1. Bpf program support
-> > Raid5 needs to calculate parity with data. Now io_uring already
-> > supports zero copy. For targets such as raid0/raid1, it's enough. But
-> > for targets such as raid5, it still needs to copy data to userspace
-> > and calculate the parity. Bpf program is a nice solution[1] to resolve
-> > this issue. Besides the patch set[1], it still needs another bpf kfunc
-> > uring_bpf_xor() support.
-> >
-> > 2. Register buffer per io
-> > Raid5 needs to calculate parity with data. So it still needs to
-> > pre-alloc buffer and register it for each io. The total memory is
-> > controlled by queue number and queue depth. With the pre-alloc memory
-> > and bpf program support, target such as raid5 can support true
-> > zero-copy manner.
-> >
-> > Question for discussion:
-> > * Should the kernel provide XOR operation kfuncs for io_uring BPF?
-> > * What would be the appropriate API design?
-> > * Are there security or verification concerns with BPF performing XOR
-> > on registered buffers?
-> >
-> > Current Status:
-> > * Basic RAID5 functionality: implemented
-> > * BPF struct_ops framework: successfully integrated
-> > * Performance testing: in progress
-> > * Main blocker: zero-copy XOR implementation waiting for kernel
-> > support I've written a patch for testing based on [1]
-> >
-> > Why this matters
-> > User-space block devices (ublk) offer several advantages:
-> > * Faster development and iteration
-> > * Easier debugging
-> > *  Ability to leverage user-space libraries
-> > * No kernel panic risks during development
-> > * Easy to evaluate/compare performance between kernel raid and ublk
-> > based userspace raid.
-> >
-> > Desired Outcome
-> > * If proposal in [1] would be acceptable
-> > * Get feedback on whether `uring_bpf_xor()` kfunc would be acceptable
-> > * Discuss API design for BPF-based computation on io_uring buffers
-> > * Understand the roadmap for io_uring + BPF capabilities
-> > * Learn best practices from the community for similar implementations
->
-> I am interested in this topic, and looks Caleb Sander Mateos has similar
-> requirement too.
+Hi Leon,
 
-Hi Ming
+kernel test robot noticed the following build warnings:
 
-Thanks and any suggestion is welcome :)
+url:    https://github.com/intel-lab-lkp/linux/commits/Leon-Hwang/bpf-Introduce-64-bit-bitops-kfuncs/20260219-223550
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260219142933.13904-2-leon.hwang%40linux.dev
+patch subject: [PATCH bpf-next v2 1/6] bpf: Introduce 64-bit bitops kfuncs
+config: i386-randconfig-141-20260220 (https://download.01.org/0day-ci/archive/20260221/202602210241.E7Q88vvq-lkp@intel.com/config)
+compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
+smatch version: v0.5.0-8994-gd50c5a4c
 
-Best Regards
-Xiao
->
->
-> Thanks,
-> Ming
->
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202602210241.E7Q88vvq-lkp@intel.com/
+
+smatch warnings:
+kernel/bpf/verifier.c:18245 bpf_kfunc_is_fastcall() error: buffer overflow 'special_kfunc_list' 64 <= 64
+
+vim +/special_kfunc_list +18245 kernel/bpf/verifier.c
+
+966e89879bbea4 Leon Hwang       2026-02-19  18223  static bool bpf_kfunc_is_fastcall(struct bpf_verifier_env *env, u32 func_id, u32 flags)
+966e89879bbea4 Leon Hwang       2026-02-19  18224  {
+966e89879bbea4 Leon Hwang       2026-02-19  18225  	if (!(flags & KF_FASTCALL))
+966e89879bbea4 Leon Hwang       2026-02-19  18226  		return false;
+966e89879bbea4 Leon Hwang       2026-02-19  18227  
+966e89879bbea4 Leon Hwang       2026-02-19  18228  	if (!env->prog->jit_requested)
+966e89879bbea4 Leon Hwang       2026-02-19  18229  		return true;
+966e89879bbea4 Leon Hwang       2026-02-19  18230  
+966e89879bbea4 Leon Hwang       2026-02-19  18231  	if (func_id == special_kfunc_list[KF_bpf_clz64])
+966e89879bbea4 Leon Hwang       2026-02-19  18232  		return bpf_jit_inlines_kfunc_call(bpf_clz64);
+966e89879bbea4 Leon Hwang       2026-02-19  18233  	if (func_id == special_kfunc_list[KF_bpf_ctz64])
+966e89879bbea4 Leon Hwang       2026-02-19  18234  		return bpf_jit_inlines_kfunc_call(bpf_ctz64);
+966e89879bbea4 Leon Hwang       2026-02-19  18235  	if (func_id == special_kfunc_list[KF_bpf_ffs64])
+966e89879bbea4 Leon Hwang       2026-02-19  18236  		return bpf_jit_inlines_kfunc_call(bpf_ffs64);
+966e89879bbea4 Leon Hwang       2026-02-19  18237  	if (func_id == special_kfunc_list[KF_bpf_fls64])
+966e89879bbea4 Leon Hwang       2026-02-19  18238  		return bpf_jit_inlines_kfunc_call(bpf_fls64);
+966e89879bbea4 Leon Hwang       2026-02-19  18239  	if (func_id == special_kfunc_list[KF_bpf_bitrev64])
+966e89879bbea4 Leon Hwang       2026-02-19  18240  		return bpf_jit_inlines_kfunc_call(bpf_bitrev64);
+966e89879bbea4 Leon Hwang       2026-02-19  18241  	if (func_id == special_kfunc_list[KF_bpf_popcnt64])
+966e89879bbea4 Leon Hwang       2026-02-19  18242  		return bpf_jit_inlines_kfunc_call(bpf_popcnt64);
+966e89879bbea4 Leon Hwang       2026-02-19  18243  	if (func_id == special_kfunc_list[KF_bpf_rol64])
+966e89879bbea4 Leon Hwang       2026-02-19  18244  		return bpf_jit_inlines_kfunc_call(bpf_rol64);
+966e89879bbea4 Leon Hwang       2026-02-19 @18245  	if (func_id == special_kfunc_list[KF_bpf_ror64])
+                                                                                          ^^^^^^^^^^^^
+special_kfunc_list[] has 64 elements and KF_bpf_ror64 is 64 so
+this is out of bounds.
+
+966e89879bbea4 Leon Hwang       2026-02-19  18246  		return bpf_jit_inlines_kfunc_call(bpf_ror64);
+966e89879bbea4 Leon Hwang       2026-02-19  18247  
+966e89879bbea4 Leon Hwang       2026-02-19  18248  	return true;
+966e89879bbea4 Leon Hwang       2026-02-19  18249  }
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
