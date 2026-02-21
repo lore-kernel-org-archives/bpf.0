@@ -1,163 +1,274 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2A019DFAB
-	for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 13:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771681334; cv=none; b=Pat3g0V/fw7eiT6dA2PGq22YiNg0IjASkVDZcZgBDYqICEVQfdu8YNkhVpRdsbm02pHtV43fuURZ2PdSpBgI0KHtc7kNjDRbxGOBZ7VDbZYF8q/C2nuyVjuge1B0rjS2oFKFOVVLG3M/U1kunIckA1MmIt+00Vym+nQV3CYZ0JE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771681334; c=relaxed/simple;
-	bh=eUB3TmBjdU3RDXUIbB7RJMKu2zNCckp2YQ9uVjU9d1s=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=sDjRk2RTsRZflHxp/x1O1VuSgCSAEv3R8c63xu3vrkkN5r+Ba22tlizmrnzEbcCPm61ULTOJtdqhC7O+jC/xXJ1QyAwWPxI6CnvsD8Y895/0YQ3TuuzliebPlNYR5JbQ6sEbKmVCKpgq1bI/2ixlVLp0Av/B7AKkmrg910JFwN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=Xedk4Oju; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18DE0352938
+	for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 16:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771692706; cv=pass; b=n+ULg2fMcm0AJdQXsUhoCyDOfi2KHIcrWIEhG/rfZhg4XUoTZ371rjFnsWThQtipFsTKg1n5tPTHnQnjh488DLMg4HxGYvBoVVJiCvhvzQRq1lk6EY46D3nVsJKjvTGnXpCMGmbdPF0btcduSQ9EfLNMee7S3o2W7XL/U7CKTWw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771692706; c=relaxed/simple;
+	bh=ISMeaFGkM1t/rcoHTy00tzcyFwk6QjXPrYp0XSfWpw0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bUKjmUkKfce5wza1FzxYUzuAte9tXBSjke8YQluLEyBC78TWaGRFtlMEQO4sMrX8GhoN+2VaRyYrSgOuQ5bqEhECxtQJdsAm5g8VuW5BU0lkdUWDRbfpKO87JMPnesH/hr1kVUXvE74C5P5WPK8fUaGXOLf1F89ed4jGyG6yO8Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LNvXGSvp; arc=pass smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="Xedk4Oju"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b8f96f6956aso409903766b.3
-        for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 05:42:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LNvXGSvp"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4376c0bffc1so2284310f8f.0
+        for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 08:51:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771692703; cv=none;
+        d=google.com; s=arc-20240605;
+        b=Itg8GDYX/kAQTxZIMNZfdb3IdRlvsl6hgO/l48jmmJ9WSTOEGaF44TL1HqqaHEiAOD
+         oLIu5d47HxWH2fsrp7MaUtRL8BFpDR6ib7ttNIzHsKzumcnGUdLrwVLiYHDeTCBb3UNb
+         dXcAdS4EPs7peHTMSgm87ucBGj/DgIEAp/hvhpv4/zxuJm4QSM5QCdCbgZ3DSc0YV95d
+         73iNd8QCuznnJKH4sLb1W9hfKYMnlUG1aOXPzPXsxWV3cERW9j5nAS/VqWle8NPbl0eB
+         FPF7a7qvz87TU6awK08WN6TbxVo70vNqmHIlqsP+xL9k03eyJfwhYHQBFDfU27Uh7Whm
+         JuxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=6IS/94CiUdqXhdBEGqJ8zPaf2eO5R4ltg/JKS5ZLlyY=;
+        fh=Cc1HODhKxZl60+BCzxAzeulka8s7K9c3wr0kUQiFLkI=;
+        b=kSg+9ZouNKnAGwnFgKDWIDEVIGMWvzTzMgDrThIMIS8xGmSMbIsz5Ko4iyDG+CxTrR
+         kk4bFD7XmBSRX4ShwYBk6Dbg2GqXSml6FOKQ4wHNcz/i7w6jrPyYasAb60YqtZGdVE1Q
+         0naQJ4vPMh7qzY2CUMcKLbElcXEtwqBa5NdrvG9dBM12mQPHtZer/65CtIHPTChTbHLJ
+         en9lF1k64PrwV+Ic0szYuNXLwMMGqsN3XAIjg/ZRLDWQUIqxgF1bMmSXcERNUywwU2qj
+         //uXvSUx6EGUNY85F1ZvO33317R1V5k7/2mI1xNf2BwzKp79bxEWFE7SXyzUa6SaRjfQ
+         pC4g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1771681331; x=1772286131; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FTJ7mEU8ZxJdWX7snIcPnyH3PcO4cHVmQhTIJPXf4UQ=;
-        b=Xedk4OjuSwO/hT3Rrywo8YisIDeAHNgIv4hwsBKajQ97SwCgwKWJwm9vGbJ7dNRUYN
-         hMfS5Sq8dqQKzn7MOK43yp+RBV8l2GjiZPuzZ/VtQFK3ZmoC3fHl4E71iinwMG70/plf
-         2VJpqi2M4uv25X5RR+sQDrw0eCJE1HihuPU1Ce2vDX5wSDw/7fJn5EPa4ZT4UXHJFNz+
-         AIyxvwhieYgKTs9m7VO7Q0mSou/mUQ/yYMnxN8QYsmezxHHB0ovOBobVSI7zZZfhMk6z
-         CtekL4VJ0B0lPaVZzhDwVWKjP6WENfm6YDNmLDi/CfaagN58ub0mcucBMmqY8qusBvrQ
-         tKsA==
+        d=gmail.com; s=20230601; t=1771692703; x=1772297503; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6IS/94CiUdqXhdBEGqJ8zPaf2eO5R4ltg/JKS5ZLlyY=;
+        b=LNvXGSvp4GOwg6mfUO74scnJBC/+3xWm+aXloNBxUpptrpV4cGiiQOzLDtZ1y4GTZx
+         9QBWZxZTKnjZpYgjCLZ3gL0/DgpFPwjfHaGv9MNsGItGue262zIWumgw1y8+ffnrqD3s
+         dH5PFsFl35H4voTKs5XIzCBaeL02EZTy3lDbskMTXGZ2ISj+pd45dPE6ep2XJ75qtprq
+         lHjcmp80MlFj7Lc3rmUUrDtO0Trgaw8vhXTiHuXJw4ipVYC3aKeH/Gwvts+yM7Mg7ImL
+         7kOAbJXcGMrfNLuzTRcb795Ol4YT+MuKe+m/uFDykUyifgjL5zrIsevxBwZb8Ej8ewhj
+         eEaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771681331; x=1772286131;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=FTJ7mEU8ZxJdWX7snIcPnyH3PcO4cHVmQhTIJPXf4UQ=;
-        b=UlrHT0Zt2SNmls8ZqMXDV3Asd6eTVKKwR3kiR/gVdOBphcEJBNxbfQK8BxJH5Bwc2O
-         eZhouQ0QOUjvawmyjsmA/7xAwcwUxJK12vmj7U/uwH/Y8sR98oCqIZo6/Lql+/sF3jUQ
-         +teTuLSQFU0h6qq8JxiUjUrtMU6xBvxD6oxzyZwy+c7xNkaQ8ORLe2z8i/bCmRRnZqQK
-         Oa/l1UXBLCZIwd5Jk+99lcu6/f73cJRT3JHSAWbGuabhbkMml8c7dC4SQjI/9i1TswHA
-         OVDvtWblPrVV1VmlM8kwbSOyyZLYqAi4Enx0tWzXKV8EJYiFyXPxzf2xQeMg631adpSp
-         0FDw==
-X-Gm-Message-State: AOJu0YzD3KbgnIKkQb4U5SqOljTpGo9Jh7cCdrW+ft5M4rlkz8mvLtKO
-	K6gpOxSUJwVWmB2doSnGBCZ1LH7GWYgcFEvnxT0sEneJ8TcLbbc3zg20oP0kpYKrVsLKsONXODP
-	QC6Iu
-X-Gm-Gg: AZuq6aLOvGEgV06/XeGZxr6ff0QI4F8A147aZ+2yhLAJDfEXQGdZu8M4hCPry9obWYF
-	pz1rJHLxuEhtH988F+1bWJBEFT3faAodVUOYRrLYwkX1jU6Lo//rNix3WVnk/8AgZ4BEHGkOiH0
-	Bb+VFrQKNCva/tl3PmsGbzGLV0b/ell8zJJ1cNbgyKNxzKqd0oBndRZ11avOO4CyO5xwh2LZsU4
-	cmH3cAUEr5iqIjNCunZXk91fMlBotZ2FogD1/7w/CHHz+RAiscv7VVsKM/3nEAa6SXGJmtweX0V
-	ViDPSQPtMqAQDe1pZ+wU7E5nlk7kXZou9NUY1awVxdpHOkkI4o9QjfxLkUQX3IiYC/7uby2qnka
-	FBIFGV2pYylI9emcxOtnYowmr5Qt3uOnI98nZ4eokmctvj7LUbWc+xiak/yHOdQCOOVkMUWe7sO
-	OQgF9AFYDm2zJ1jUJpRtalncYkum1DEwtJ50bFGA==
-X-Received: by 2002:a17:907:d94:b0:b8e:2a8a:4320 with SMTP id a640c23a62f3a-b9081c00aa1mr169530866b.49.1771681331159;
-        Sat, 21 Feb 2026 05:42:11 -0800 (PST)
-Received: from cloudflare.com ([104.28.225.185])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084ea031bsm99876166b.54.2026.02.21.05.42.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 21 Feb 2026 05:42:10 -0800 (PST)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: bpf@vger.kernel.org,  kernel-team@cloudflare.com,
-  lsf-pc@lists.linux-foundation.org
-Subject: Re: [LSF/MM/BPF TOPIC] BPF local storage for every packet
-In-Reply-To: <5fdee5fd-aff1-4764-820e-3b1f3ad00941@linux.dev> (Martin KaFai
-	Lau's message of "Fri, 20 Feb 2026 10:34:09 -0800")
-References: <87ecmffopy.fsf@cloudflare.com>
-	<5fdee5fd-aff1-4764-820e-3b1f3ad00941@linux.dev>
-Date: Sat, 21 Feb 2026 14:42:10 +0100
-Message-ID: <877bs6fc25.fsf@cloudflare.com>
+        d=1e100.net; s=20230601; t=1771692703; x=1772297503;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6IS/94CiUdqXhdBEGqJ8zPaf2eO5R4ltg/JKS5ZLlyY=;
+        b=CRU07VGCgk4YvY2vh1H7YDghuIi36SfGhBw+CGSkhKi/hYOmfb3Zt+wug+iHO6DM3W
+         TRQMI+PxRflZ9HWpSwhvvFrXOyUlWru7enqSmZkGdsEB/MBHbaWKFe7M7AoTPw0TdZVd
+         QZTqfq+RiaqNecXcTTQgDt1RReNWesmxh3sRd+jSiQbBbkLzpW2IWOXxnMqtD+aqYFNa
+         mhIpmm3TldSXp3BM8AW20qMhp5g4qzIXygicRK52vx2uW7dFD/Wl79PcIbEwNIqQNCQ6
+         HuY/emfnd2LcqQUq5nLbhWu+qqCZ4k0HrsqCaT5Bgjh53VCNzT/KrO9jIZGwPN7Xh+/k
+         VpxA==
+X-Forwarded-Encrypted: i=1; AJvYcCW9NXKdi6ozwZ+e0C97ZXzVZ00xiBg3Ef+ATbX58Ms3OI++KUM3eB/0QKE9rtthMtHIh5s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwbrSq2Rh3Kbfdw5Ax5mvxe9vqytBqi2iuDR1QF1AlEOgkM+l8
+	VHMTF+2XJ1FMSmWoODwTl3xz+LP0w/6UjYeE/JUMH9ENtw2eJdrWu0cCMiMKa+ljcPRgrRXqE6Q
+	KlRT/U4oEJIxPVA5KpKq8bg3n1F2NDaE=
+X-Gm-Gg: AZuq6aJLUDFlabgXzh+H0nQwebz6jKwBpbWek+42B08kwnGb5MvY18EdcZY7QnQEQZq
+	fTzgRaRJhNF4nWJxHQQOcNNqlu57QXB/Lbg9bs9okNWvohFsxBIH1x9AiuTpuT+6/4ssdNHcdUj
+	OPAaJKr5uqV3owO5DAdFApxpkbdL8uAPp4QY+l9NY2fJDB3qA4gUQ/TYaVop6wbbC9G2Ypy3WCV
+	g41BNoHVoFtUAmgk5dIKYvYWHOw1O5+eyiVYmP6a6EoV3zjWxi3mkTfcpRr/DXj/+zsSn2CMk4m
+	pse5K5mMhRH0+WTnxx5jM2UxE1VLbvqyATgI84VwbOaPEDW+sYRKnuLOmslcyvkmsCu9ba9/pCB
+	u7wx1adHVq5Jg5Vm45MzCGzjKxQ==
+X-Received: by 2002:a05:6000:290c:b0:437:7168:af50 with SMTP id
+ ffacd0b85a97d-4396f182e99mr5976364f8f.37.1771692703222; Sat, 21 Feb 2026
+ 08:51:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20260219142933.13904-1-leon.hwang@linux.dev> <20260219142933.13904-3-leon.hwang@linux.dev>
+ <CAADnVQLNmQGKf5S5ZNwHYzScYBhnWFmnzLg=5Xxy4SgYKE3EfQ@mail.gmail.com>
+ <c6c2ffcf-acdf-4bda-ad82-dc4cc1a9260e@linux.dev> <CAADnVQ+iQkvb9-wOchuPrUOneqzx9Rrqto88=R7GUOqih6PhZQ@mail.gmail.com>
+ <4c40705a-4e6a-47ea-b420-223318d1ad09@linux.dev>
+In-Reply-To: <4c40705a-4e6a-47ea-b420-223318d1ad09@linux.dev>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sat, 21 Feb 2026 08:51:32 -0800
+X-Gm-Features: AaiRm52nj1X-_nBJIgAQ9NCx4CHzjnra7QF_C1bGfU9ssH2LC_icyswN6XymldQ
+Message-ID: <CAADnVQLsJV8OaLCxznwbnxdLVOQ+t=MmAr2O8Y89iPErCvphFQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/6] bpf, x86: Add 64-bit bitops kfuncs
+ support for x86_64
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Ilya Leoshkevich <iii@linux.ibm.com>, bpf <bpf@vger.kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
+	Xu Kuohai <xukuohai@huaweicloud.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, X86 ML <x86@kernel.org>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Peilin Ye <yepeilin@google.com>, 
+	Luis Gerhorst <luis.gerhorst@fau.de>, Viktor Malik <vmalik@redhat.com>, 
+	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, kernel-patches-bot@fb.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 20, 2026 at 10:34 AM -08, Martin KaFai Lau wrote:
-> On 2/20/26 6:56 AM, Jakub Sitnicki wrote:
->> In the upcoming days we are going to post an RFC which proposes to
->> extend the concept of BPF local storage to socket buffers (sk_buff, skb)
->> as means to attach arbitrary metadata to packets from BPF programs [1]
->> (slides 41-55).
->> Design wise, BPF local storage is a great fit for a packet metadata
->> container, as it that avoids some of the shortcoming of the the XDP
->> metadata interface:
->> 1. Users interact with storage through BPF maps and can take advantage
->>     of existing built-in BPF map types, while still being able to
->>     implement a custom data format,
->> 2. Maps within local storage can have different properties controlled by
->>     map flags. For example, maps with BPF_F_CLONE set can survive packet
->>     cloning. Other flags could allow map contents to survive sk_buff
->>     scrubbing during encapsulation/decapsulation or pass across network
->>     namespace boundaries.
->> 3. Local storage supports multiple users out of the box - each user
->>     creates their own map, eliminating the need to coordinate data
->>     layout,
->> 4. Local storage has its own backing memory, so persisting it across
->>     network stack layers requires no changes to the network stack.
->> However, this flexibility comes at a cost. While XDP metadata requires
->> no allocations [2], an initial write to BPF local storage requires two:
->> one for bpf_local_storage_elem, and one for bpf_local_storage itself.
->> We would like to align this work with the needs of other BPF local
->> storage users (socks, cgroups, tasks, inodes), where allocation overhead
->> has been a concern as well [2].
->> Optimization ideas we would like to put up for discussion:
->> - slimming down bpf_local_storage so it can be embedded as an skb
->>    extension chunk,
->> - making the bpf_local_storage cache size configurable,
->> - allowing bpf_local_storage to be pre-allocated,
->> - co-allocating bpf_local_storage and bpf_local_storage_elem for the
->>    single-map case.
+On Sat, Feb 21, 2026 at 4:45=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> w=
+rote:
 >
-> The sk/cgroup/task storage has a much longer lifetime. Meaning once alloc=
-ation
-> is done, the storage stays in the sk until the sk is closed. The length of
-> lifetime is quite different from the skb. I am afraid we are re-purposing
-> bpf_local_storage for a very different use case where skb lifecycle is mu=
-ch
-> shorter.
 >
-> We are planning to increase the 'sizeof(struct sock)' for perf reason. Sa=
-ving an
-> allocation is an upside but not the major one we are looking (or care) for
-> sk. We are more looking for cacheline efficiency and probably remove the =
-need
-> for bpf_local_storage[_elem] if the user chooses to use the in-place spac=
-es of a
-> sk.
 >
-> If 'sizeof(struct sk_buff)' can be increased, this should align on where =
-sk
-> local storage is going. If skb will solely depend on the existing
-> bpf_local_storage and has no plan to raise sizeof(struct sk_buff) for perf
-> purpose, the existing bpf_local_storage may be the wrong place to
-> repurpose/optimize because the lifecycle of skb is very different.
+> On 2026/2/21 01:50, Alexei Starovoitov wrote:
+> > On Fri, Feb 20, 2026 at 7:54=E2=80=AFAM Leon Hwang <leon.hwang@linux.de=
+v> wrote:
+> >>
+> >>
+> >>
+> >> On 2026/2/20 01:47, Alexei Starovoitov wrote:
+> >>> On Thu, Feb 19, 2026 at 6:30=E2=80=AFAM Leon Hwang <leon.hwang@linux.=
+dev> wrote:
+> >>>>
+> >>>> Implement JIT inlining of the 64-bit bitops kfuncs on x86_64.
+> >>>>
+> >>>> bpf_rol64() and bpf_ror64() are always supported via ROL/ROR.
+> >>>>
+> >>>> bpf_ctz64() and bpf_ffs64() are supported when the CPU has
+> >>>> X86_FEATURE_BMI1 (TZCNT).
+> >>>>
+> >>>> bpf_clz64() and bpf_fls64() are supported when the CPU has
+> >>>> X86_FEATURE_ABM (LZCNT).
+> >>>>
+> >>>> bpf_popcnt64() is supported when the CPU has X86_FEATURE_POPCNT.
+> >>>>
+> >>>> bpf_bitrev64() is not inlined as x86_64 has no native bit-reverse
+> >>>> instruction, so it falls back to a regular function call.
+> >>>>
+> >>>> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> >>>> ---
+> >>>>  arch/x86/net/bpf_jit_comp.c | 141 +++++++++++++++++++++++++++++++++=
++++
+> >>>>  1 file changed, 141 insertions(+)
+> >>>>
+> >>>> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp=
+.c
+> >>>> index 070ba80e39d7..193e1e2d7aa8 100644
+> >>>> --- a/arch/x86/net/bpf_jit_comp.c
+> >>>> +++ b/arch/x86/net/bpf_jit_comp.c
+> >>>> @@ -19,6 +19,7 @@
+> >>>>  #include <asm/text-patching.h>
+> >>>>  #include <asm/unwind.h>
+> >>>>  #include <asm/cfi.h>
+> >>>> +#include <asm/cpufeatures.h>
+> >>>>
+> >>>>  static bool all_callee_regs_used[4] =3D {true, true, true, true};
+> >>>>
+> >>>> @@ -1604,6 +1605,127 @@ static void emit_priv_frame_ptr(u8 **pprog, =
+void __percpu *priv_frame_ptr)
+> >>>>         *pprog =3D prog;
+> >>>>  }
+> >>>>
+> >>>> +static bool bpf_inlines_func_call(u8 **pprog, void *func)
+> >>>> +{
+> >>>> +       bool has_popcnt =3D boot_cpu_has(X86_FEATURE_POPCNT);
+> >>>> +       bool has_bmi1 =3D boot_cpu_has(X86_FEATURE_BMI1);
+> >>>> +       bool has_abm =3D boot_cpu_has(X86_FEATURE_ABM);
+> >>>> +       bool inlined =3D true;
+> >>>> +       u8 *prog =3D *pprog;
+> >>>> +
+> >>>> +       /*
+> >>>> +        * x86 Bit manipulation instruction set
+> >>>> +        * https://en.wikipedia.org/wiki/X86_Bit_manipulation_instru=
+ction_set
+> >>>> +        */
+> >>>> +
+> >>>> +       if (func =3D=3D bpf_clz64 && has_abm) {
+> >>>> +               /*
+> >>>> +                * Intel=C2=AE 64 and IA-32 Architectures Software D=
+eveloper's Manual (June 2023)
+> >>>> +                *
+> >>>> +                *   LZCNT - Count the Number of Leading Zero Bits
+> >>>> +                *
+> >>>> +                *     Opcode/Instruction
+> >>>> +                *     F3 REX.W 0F BD /r
+> >>>> +                *     LZCNT r64, r/m64
+> >>>> +                *
+> >>>> +                *     Op/En
+> >>>> +                *     RVM
+> >>>> +                *
+> >>>> +                *     64/32-bit Mode
+> >>>> +                *     V/N.E.
+> >>>> +                *
+> >>>> +                *     CPUID Feature Flag
+> >>>> +                *     LZCNT
+> >>>> +                *
+> >>>> +                *     Description
+> >>>> +                *     Count the number of leading zero bits in r/m6=
+4, return
+> >>>> +                *     result in r64.
+> >>>> +                */
+> >>>> +               /* emit: x ? 64 - fls64(x) : 64 */
+> >>>> +               /* lzcnt rax, rdi */
+> >>>> +               EMIT5(0xF3, 0x48, 0x0F, 0xBD, 0xC7);
+> >>>
+> >>> Instead of emitting binary in x86 and arm JITs,
+> >>> let's use in kernel disasm to check that all these kfuncs
+> >>> conform to kf_fastcall (don't use unnecessary registers,
+> >>> don't have calls to other functions) and then copy the binary
+> >>> from code and skip the last 'ret' insn.
+> >>> This way we can inline all kinds of kfuncs.
+> >>>
+> >>
+> >> Good idea.
+> >>
+> >> Quick question on =E2=80=9Cin-kernel disasm=E2=80=9D: do you mean addi=
+ng a kernel
+> >> instruction decoder/disassembler to validate a whitelist of kfuncs at
+> >> load time?
+> >>
+> >> I=E2=80=99m trying to understand the intended scope:
+> >>
+> >> * Is the expectation that we add an in-kernel disassembler/validator f=
+or
+> >>   a small set of supported instructions and patterns (no calls/jumps,
+> >>   only arg/ret regs touched, etc.)?
+> >> * Or is there already infrastructure you had in mind that we can reuse=
+?
+> >>
+> >> Once I understand that piece, I can rework the series to inline by
+> >> copying validated machine code (minus the final ret), rather than
+> >> emitting raw opcodes in the JITs.
+> >>
+> >> I also noticed you mentioned a similar direction in "bpf/s390: Impleme=
+nt
+> >> get_preempt_count()" [1], so I=E2=80=99ve added Ilya to the thread to =
+discuss
+> >> this approach further.
+> >
+> > You really sound like LLM. Do your homework as a human.
+>
+> Got it.
+>
+> I polished my draft using ChatGPT, which would leave LLM smell in my repl=
+y.
 
-The lifetime difference is undeniable, but I still see common ground.
-To make it more concrete:
+... and for anyone reading it the smell is ohh too strong.
 
-1. IIRC you've mentioned wanting more bpf_local_storage->cache entries
-   for socks in some scenarios, while for skbs I'd expect we need
-   fewer. We could make the cache size configurable via a flexible
-   array.
+> Here's my original draft:
+>
+> Good idea. But I concern about the "in kernel disasm". Do you mean we
+> will build a disassembler for whitelist kfuncs at starting?
+>
+> I noticed you've mentioned the same direction in "bpf/s390: Implement
+> get_preempt_count()" [1]. So, I added Ilya here to discuss this direction=
+.
 
-2. Embedding bpf_local_storage is another overlap I had in mind. For
-   socks that in within the same memory blob as struct sock, while for
-   skbs we'd want to embed it in skb_ext (once it's small enough). This
-   depends on whether you end up dropping bpf_local_storage for
-   sk_local_storage entirely, which I didn't know about until now.
+Much better. Keep it human.
 
-3. I've heard the idea of allocating skb_ext memory together with
-   sk_buff was floated in the past. While trimming skb_ext at build-time
-   is hard today =E2=80=94 say I need XFRM but don't care about crypto offl=
-oads
-   keeping state in skb_ext =E2=80=94 the idea is similar to what you're
-   proposing for struct sock.
+"in kernel disasm" already exists for some architectures
+(at least x86 and arm64) since it's being used by kprobes.
+The ask here is to figure out whether they're usable for such
+insn analysis. x86 disasm is likely capable.
 
-Thanks,
--jkbs
+re:"whitelist kfunc"
+I suspect an additional list is not necessary.
+kf_fastcall is a good enough signal that such kfunc should
+be inlinable.
