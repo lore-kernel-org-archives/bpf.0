@@ -1,255 +1,188 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F42223D2A1
-	for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 13:07:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8642915ADB4
+	for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 14:16:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771765674; cv=none; b=IV9MtY2njDwxGYkkbRg/SUb/d4GJvWyhn3FpGl4KsECGbqrdvovYt4KdMnVd/VLk8H8Mwmqgu2eboyiYAptrqm2pHkaFXqeYmWkVOy2QaHAz0/bOzMH5bf+y7bmEJFC8L84GxjkOdD/7C2UoAub8fWQFJt8oyGEXa7ZvmDOL5+E=
+	t=1771769774; cv=none; b=Dc/CEzNGdc7DrjwiPs21Zjvtek+3eixMoi2qD4zmqWskwL69upxeYXleWQRZ1AKHrUE1KT+Jlu4ijVY4JJiMSNxtY+YPZAchc3xpREIZNvbVXwvQdIMBgcLrFLOMr4Q1tBn/3WQOGl7snfbzHII6F7d70gIKgQVnJTvtkRftzA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771765674; c=relaxed/simple;
-	bh=cM+yR2B/fWzOYyyIlrG8UBHWW60ojPw60JNlYQWnOzw=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=tdDyzQYle8/RYmQLFhsVg6V3wDzc4FjNZyGrr6ikKZYqJDbkkzLe1JKzhzHPneAww3Q6452GKZKCAzeqy109NX7GCA+ECqr6NfBK588HKEfQEliCnb0k8SwtQDb7kIA9AVA/T+DZKgl1E5rfOxUaXXUCl5rsd6HvnfnCr5soVN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=AZZQDAld; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1771769774; c=relaxed/simple;
+	bh=P6+x2JCI0XgY8eTiHkzC1Ih09fcwNts0YCHdq7vCkUQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HpAThU3PZ6ixa+fKUGpjysce0Fsg10iPCJ09+HGRwGmNUZtZL06MGiJvcEgogf4vqrzcjIj3xHhVRc0IzADKZRfroiAK9rzgEvXvdNtg5hQQuVcfx6CPzkZvZhHLTbUBlrxonqAT+oFLhqucm0+FjxQgvLvCznRZK+OQuJCoJkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jRksPRRn; arc=none smtp.client-ip=95.215.58.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="AZZQDAld"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61M9oWBb1234657;
-	Sun, 22 Feb 2026 13:07:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=WmJ4Ju
-	XeOZ1GuAGOjZblCGapDVUhPAA+kvkexcJSHVA=; b=AZZQDAldm4b4vDiuk49t8a
-	5w9tVynXET+YrPbW4WIqvWS2eOyf9CVM1dsC6cbVw14IvIKnOr4Gx2ZtsQg/p6bC
-	ttJXttwF+fxRoQbZorLdgtbm9ZOANJrKCnA/t60VYNxIQMVWqwbOBhwWMxiSgalB
-	CiE6fQR4qOiHgaOjk+S+TkuheYhTr5lRlcRXmQUs4ScQt0ORjsgQFpGGrSDjssch
-	2ARmrrAkzGrokZ+cM04Nr1ppO1w9k4Nw+/2V+7Qjr/msVnoQPAnj3kEV7Eflp1fT
-	AzZ8yUkMuXNgBXQcrmrpBbfW4WcQn9Pox7xIVX9JdKg844X0qEsJLr5QrYlWqRTw
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4cqm04g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 22 Feb 2026 13:07:36 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61MA35d1003413;
-	Sun, 22 Feb 2026 13:07:35 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfs8jh8as-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 22 Feb 2026 13:07:35 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61MD7XoZ50135522
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 22 Feb 2026 13:07:33 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 63A3058052;
-	Sun, 22 Feb 2026 13:07:33 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CF84158056;
-	Sun, 22 Feb 2026 13:07:32 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Sun, 22 Feb 2026 13:07:32 +0000 (GMT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jRksPRRn"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771769760;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JTcE7cImlUfDma6jCiahvSoAx7rEh3DKwZ/3MHwndRc=;
+	b=jRksPRRn+1bSynHR/MMSvRzbVCzPTKdbEDNUA6pUfmmleMjh6YH9/YgaPy1uP6a2G70mw8
+	2EheG+xd43rgG3/l4uKXxgXD6TfkUv5Uy5Kasw3KEbZpENdsjUYkYqAQbxsq3j3SNmDTQf
+	e9Qx4Ki9cLfiNPq/aEO5yFRy01PJN9o=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Menglong Dong <menglong8.dong@gmail.com>,
+ Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] libbpf: skip compat check for session kfuncs
+Date: Sun, 22 Feb 2026 18:59:47 +0800
+Message-ID: <5968554.DvuYhMxLoT@7950hx>
+In-Reply-To:
+ <CAEf4Bzb6ay+gLD0gqZ8j8-=9onZE396YQmyGX-ZLELqF73iDGA@mail.gmail.com>
+References:
+ <20260211125737.1315848-1-dongml2@chinatelecom.cn>
+ <CAEf4Bzb6ay+gLD0gqZ8j8-=9onZE396YQmyGX-ZLELqF73iDGA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sun, 22 Feb 2026 18:37:32 +0530
-From: adubey <adubey@linux.ibm.com>
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Alexei Starovoitov
- <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko
- <andrii@kernel.org>,
-        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-        Venkat Rao
- Bagalkote <venkat88@linux.ibm.com>
-Subject: Re: [PATCH v2 3/5] powerpc64/bpf: use consistent tailcall offset in
- trampoline
-In-Reply-To: <20260220063933.196141-4-hbathini@linux.ibm.com>
-References: <20260220063933.196141-1-hbathini@linux.ibm.com>
- <20260220063933.196141-4-hbathini@linux.ibm.com>
-Message-ID: <2f33ecbbe8272184111c5406d167b6b0@linux.ibm.com>
-X-Sender: adubey@linux.ibm.com
-Organization: IBM
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: zimw1UcenesGq_9vDw0hsCmB7TgGwsmh
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIyMDEyMiBTYWx0ZWRfX6hPz8RpSoNj4
- xaHI7LmAV2lfvUUPTG/ShJ9Hs4j34gqqwg2mvVmDscwNa3iFUgJ8FAJIvJyOVGzEITXVRr88/hs
- xlXCWZV4irjIUrZ2qRj9pYmDqYcDA5PnIS26u54azCun2JN7aSU0BT5Z3UmAGXWbs2TpcAmzang
- tVDZH2JBOofgCV5yK2+bWtk4WpLcjaxg+m1nMxp2bPrHpcTdwf0iL7EbKbLZDcyYXpUB9Dpnf4F
- 0XZXexeBfPtGL9QHVSHSWa6lblyT2sSYEHUqF3vMLP3maDSzROrf5OLRVBue8qCi1HuLMA8qA4H
- MCPgGs/B/mlysyZuBSNvfT8TnuBsmc+GaEq5nnYwfmU29wB4KBMbe+hJ6FPp6EO/UhYFRl7ydxf
- DRPOXc+AA/irXFyu8AwPeXe6SOKE9yKJwsJP4KQZtSqmoC+pekQtC52Fh7pA7NaPNSH3+vNdVPV
- b7eXedZf0qsQ6MWyNpA==
-X-Proofpoint-GUID: zimw1UcenesGq_9vDw0hsCmB7TgGwsmh
-X-Authority-Analysis: v=2.4 cv=bbBmkePB c=1 sm=1 tr=0 ts=699aff98 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
- a=i829aTDIuGoFdt9u9B4A:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-22_02,2026-02-20_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 phishscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602220122
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On 2026-02-20 12:09, Hari Bathini wrote:
-> Ideally, the offset used to load the tail call info field and to find
-> the pass by reference address for tail call field should be the same.
-> But while setting up the tail call info in the trampoline, this was
-> not followed. This can be misleading and can lead to unpredictable
-> results if and when bpf_has_stack_frame() ends up returning true
-> for trampoline frame. Since commit 15513beeb673 ("powerpc64/bpf:
-> Moving tail_call_cnt to bottom of frame") and commit 2ed2d8f6fb38
-> ("powerpc64/bpf: Support tailcalls with subprogs") ensured tail call
-> field is at the bottom of the stack frame for BPF programs as well as
-> BPF trampoline, avoid relying on bpf_jit_stack_tailcallinfo_offset()
-> and bpf_has_stack_frame() for trampoline frame and always calculate
-> tail call field offset with reference to older frame.
+On 2026/2/12 01:20, Andrii Nakryiko wrote:
+> On Wed, Feb 11, 2026 at 4:57=E2=80=AFAM Menglong Dong <menglong8.dong@gma=
+il.com> wrote:
+> >
+> > The function prototype of bpf_session_{cookie,is_return} is changed in
+> > the commit 8fe4dc4f6456 ("bpf: change prototype of
+> > bpf_session_{cookie,is_return}"), which is not friendly to the old kern=
+el,
+> > as the libbpf will fail on the compatible checking.
+> >
+> > Therefore, let's skip the checking of bpf_session_{cookie,is_return} in
+> > libbpf, and just let the kernel do the checking.
+> >
+> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 31 ++++++++++++++++++++-----------
+> >  1 file changed, 20 insertions(+), 11 deletions(-)
+> >
+>=20
+> This is not the way. Use bpf_ksym_exists() check and have custom
+> legacy bpf_session_cookie___legacy() definition with old prototype.
+> You can then detect whether
+> bpf_ksym_exists(bpf_session_cookie___legacy) is true and use the
+> legacy version, otherwise use the current version.
 
-It's good to add comment about padding field placed after tailcall_info
-in the trampoline stack layout. Visibly padding is following 
-tailcall_info
-but tailcall_info is bottom-most field. Clear comment around this
-will be really helpful.
+Great! I found that there are already similar usages in kernel.
+I did some tests, and it works well. Thanks!
 
-> 
-> Fixes: 2ed2d8f6fb38 ("powerpc64/bpf: Support tailcalls with subprogs")
-> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-> ---
-> 
-> Changes since v1:
-> * Fixed spelling error in changelog.
-> * Fixed a comment in bpf_trampoline_setup_tail_call_info().
-> 
-> 
->  arch/powerpc/net/bpf_jit.h        |  5 -----
->  arch/powerpc/net/bpf_jit_comp.c   | 12 +++++-------
->  arch/powerpc/net/bpf_jit_comp64.c |  5 ++++-
->  3 files changed, 9 insertions(+), 13 deletions(-)
-> 
-> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
-> index 82bbf63f0e57..7354e1d72f79 100644
-> --- a/arch/powerpc/net/bpf_jit.h
-> +++ b/arch/powerpc/net/bpf_jit.h
-> @@ -81,9 +81,6 @@
-> 
->  #ifdef CONFIG_PPC64
-> 
-> -/* for gpr non volatile registers BPG_REG_6 to 10 */
-> -#define BPF_PPC_STACK_SAVE	(6 * 8)
-> -
->  /* If dummy pass (!image), account for maximum possible instructions 
-> */
->  #define PPC_LI64(d, i)		do {					      \
->  	if (!image)							      \
-> @@ -219,8 +216,6 @@ int bpf_jit_emit_exit_insn(u32 *image, struct
-> codegen_context *ctx, int tmp_reg,
->  int bpf_add_extable_entry(struct bpf_prog *fp, u32 *image, u32
-> *fimage, int pass,
->  			  struct codegen_context *ctx, int insn_idx,
->  			  int jmp_off, int dst_reg, u32 code);
-> -
-> -int bpf_jit_stack_tailcallinfo_offset(struct codegen_context *ctx);
->  #endif
-> 
->  #endif
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c 
-> b/arch/powerpc/net/bpf_jit_comp.c
-> index fb6cc1f832a8..860b118391ed 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -642,15 +642,13 @@ static void
-> bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_conte
->  						int bpf_dummy_frame_size, int r4_off)
->  {
->  	if (IS_ENABLED(CONFIG_PPC64)) {
-> -		/* See Generated stack layout */
-> -		int tailcallinfo_offset = BPF_PPC_TAILCALL;
-> -
->  		/*
->  		 * func_frame_offset =                                   ...(1)
->  		 *      bpf_dummy_frame_size + trampoline_frame_size
->  		 */
->  		EMIT(PPC_RAW_LD(_R4, _R1, func_frame_offset));
-> -		EMIT(PPC_RAW_LD(_R3, _R4, -tailcallinfo_offset));
-> +		/* Refer to trampoline's Generated stack layout */
-> +		EMIT(PPC_RAW_LD(_R3, _R4, -BPF_PPC_TAILCALL));
-> 
->  		/*
->  		 * Setting the tail_call_info in trampoline's frame
-> @@ -658,7 +656,7 @@ static void
-> bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_conte
->  		 */
->  		EMIT(PPC_RAW_CMPLWI(_R3, MAX_TAIL_CALL_CNT));
->  		PPC_BCC_CONST_SHORT(COND_GT, 8);
-> -		EMIT(PPC_RAW_ADDI(_R3, _R4, 
-> bpf_jit_stack_tailcallinfo_offset(ctx)));
-> +		EMIT(PPC_RAW_ADDI(_R3, _R4, -BPF_PPC_TAILCALL));
->  		/*
->  		 * From ...(1) above:
->  		 * trampoline_frame_bottom =                            ...(2)
-> @@ -666,14 +664,14 @@ static void
-> bpf_trampoline_setup_tail_call_info(u32 *image, struct codegen_conte
->  		 *
->  		 * Using ...(2) derived above:
->  		 * trampoline_tail_call_info_offset =                  ...(3)
-> -		 *      trampoline_frame_bottom - tailcallinfo_offset
-> +		 *      trampoline_frame_bottom - BPF_PPC_TAILCALL
->  		 *
->  		 * From ...(3):
->  		 * Use trampoline_tail_call_info_offset to write reference of main's
->  		 * tail_call_info in trampoline frame.
->  		 */
->  		EMIT(PPC_RAW_STL(_R3, _R1, (func_frame_offset - 
-> bpf_dummy_frame_size)
-> -								- tailcallinfo_offset));
-> +								- BPF_PPC_TAILCALL));
->  	} else {
->  		/* See bpf_jit_stack_offsetof() and BPF_PPC_TC */
->  		EMIT(PPC_RAW_LL(_R4, _R1, r4_off));
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c
-> b/arch/powerpc/net/bpf_jit_comp64.c
-> index 44ce8a8783f9..5d4d2bb23cef 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-> @@ -42,6 +42,9 @@
->   * exception boundary.
->   */
-> 
-> +/* BPF non-volatile registers save area size */
-> +#define BPF_PPC_STACK_SAVE	(6*8)
-Please maintain space beside *, suggested by Christophe in tailcall 
-reviews
-> +
->  /* for bpf JIT code internal usage */
->  #define BPF_PPC_STACK_LOCALS	24
->  /*
-> @@ -148,7 +151,7 @@ static int bpf_jit_stack_local(struct 
-> codegen_context *ctx)
->  	}
->  }
-> 
-> -int bpf_jit_stack_tailcallinfo_offset(struct codegen_context *ctx)
-> +static int bpf_jit_stack_tailcallinfo_offset(struct codegen_context 
-> *ctx)
->  {
->  	return bpf_jit_stack_local(ctx) + BPF_PPC_STACK_LOCALS + 
-> BPF_PPC_STACK_SAVE;
->  }
--Abhishek
+BTW, do you think that if we need do some wrapper for bpf_session_{cookie,i=
+s_return}
+like this in case that someone else don't know the compatible problem?
+
+extern bool bpf_session_is_return___legacy(void) __weak __ksym;
+extern __u64 *bpf_session_cookie___legacy(void) __weak __ksym;
+
+
+#define bpf_session_is_return(ctx)								\
+	(bpf_ksym_exists(bpf_session_is_return___legacy) ? bpf_session_is_return__=
+_legacy() :	\
+							   bpf_session_is_return(ctx))
+#define bpf_session_cookie(ctx)								\
+	(bpf_ksym_exists(bpf_session_cookie___legacy) ? bpf_session_cookie___legac=
+y() :	\
+							bpf_session_cookie(ctx))
+
+Thanks!
+Menglong Dong
+
+>=20
+> pw-bot: cr
+>=20
+>=20
+> > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > index 0c8bf0b5cce4..71bdd1c1ac39 100644
+> > --- a/tools/lib/bpf/libbpf.c
+> > +++ b/tools/lib/bpf/libbpf.c
+> > @@ -8557,6 +8557,12 @@ static int find_ksym_btf_id(struct bpf_object *o=
+bj, const char *ksym_name,
+> >         return id;
+> >  }
+> >
+> > +static bool kfunc_skip_compat_check(const char *name)
+> > +{
+> > +       return name && (strcmp(name, "bpf_session_cookie") =3D=3D 0 ||
+> > +                       strcmp(name, "bpf_session_is_return") =3D=3D 0);
+> > +}
+> > +
+> >  static int bpf_object__resolve_ksym_var_btf_id(struct bpf_object *obj,
+> >                                                struct extern_desc *ext)
+> >  {
+> > @@ -8617,12 +8623,13 @@ static int bpf_object__resolve_ksym_func_btf_id=
+(struct bpf_object *obj,
+> >         struct module_btf *mod_btf =3D NULL;
+> >         const struct btf_type *kern_func;
+> >         struct btf *kern_btf =3D NULL;
+> > +       const char *kfunc_name;
+> >         int ret;
+> >
+> >         local_func_proto_id =3D ext->ksym.type_id;
+> >
+> > -       kfunc_id =3D find_ksym_btf_id(obj, ext->essent_name ?: ext->nam=
+e, BTF_KIND_FUNC, &kern_btf,
+> > -                                   &mod_btf);
+> > +       kfunc_name =3D ext->essent_name ?: ext->name;
+> > +       kfunc_id =3D find_ksym_btf_id(obj, kfunc_name, BTF_KIND_FUNC, &=
+kern_btf, &mod_btf);
+> >         if (kfunc_id < 0) {
+> >                 if (kfunc_id =3D=3D -ESRCH && ext->is_weak)
+> >                         return 0;
+> > @@ -8634,16 +8641,18 @@ static int bpf_object__resolve_ksym_func_btf_id=
+(struct bpf_object *obj,
+> >         kern_func =3D btf__type_by_id(kern_btf, kfunc_id);
+> >         kfunc_proto_id =3D kern_func->type;
+> >
+> > -       ret =3D bpf_core_types_are_compat(obj->btf, local_func_proto_id,
+> > -                                       kern_btf, kfunc_proto_id);
+> > -       if (ret <=3D 0) {
+> > -               if (ext->is_weak)
+> > -                       return 0;
+> > +       if (!kfunc_skip_compat_check(kfunc_name)) {
+> > +               ret =3D bpf_core_types_are_compat(obj->btf, local_func_=
+proto_id,
+> > +                                               kern_btf, kfunc_proto_i=
+d);
+> > +               if (ret <=3D 0) {
+> > +                       if (ext->is_weak)
+> > +                               return 0;
+> >
+> > -               pr_warn("extern (func ksym) '%s': func_proto [%d] incom=
+patible with %s [%d]\n",
+> > -                       ext->name, local_func_proto_id,
+> > -                       mod_btf ? mod_btf->name : "vmlinux", kfunc_prot=
+o_id);
+> > -               return -EINVAL;
+> > +                       pr_warn("extern (func ksym) '%s': func_proto [%=
+d] incompatible with %s [%d]\n",
+> > +                               ext->name, local_func_proto_id,
+> > +                               mod_btf ? mod_btf->name : "vmlinux", kf=
+unc_proto_id);
+> > +                       return -EINVAL;
+> > +               }
+> >         }
+> >
+> >         /* set index for module BTF fd in fd_array, if unset */
+> > --
+> > 2.53.0
+> >
+>=20
+>=20
+
+
+
+
