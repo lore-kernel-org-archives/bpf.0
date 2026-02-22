@@ -1,159 +1,196 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F9B61A23B1
-	for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 14:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 987A125A359
+	for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 14:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771770793; cv=none; b=fCxA6nmTLPYhSA3P4eZQO/B84GnHBRaD5NPfTnoKgJMuda+4ygBLPGjMeGv/iAu2/w6HQ0wo6m7uadHb3ea4VML7gwaeZ9A4mXAyd2//j5+FdLfJh3llxQpLpetr1DpuuZ6UOgU6CPcSlg+b8iuzHhDzK++ZWcDOYJexTk9XwO0=
+	t=1771770865; cv=none; b=iQPLWu//Bxyo9HRgASf+Pk0CQV9vz53j0/RQuevRITD9rWIVXmageEBUNymY+PqSJU4vTrQhRt83pW2cNQcOnupDR/IpCWowBMJ8FJx3tYeJFK88kwamZ4AZe2KC/QL7BU6BAwwk46eBPxNqXlQKONtnRA8aBnmTFYlkuEs5Igw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771770793; c=relaxed/simple;
-	bh=czVHbnoAPhj+wxT7p2LEcTixzxrEOSy0xW85qyu9Ko8=;
+	s=arc-20240116; t=1771770865; c=relaxed/simple;
+	bh=iwC5COgwgzXREL+HSnwzvudbLCHxhnMrCuFn8rsYa3c=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IEU1LpE5icjvb5wLJ4NgZ4ArfIH6SOG/EXC4qa+aOrSd6jMwElWE3hlHY+ePhKn0ZQiYOU8otFPpg3RLLIDzSOrRC/AUsu2X+yIyGer3BMyOUdFh5W8+PT6GxAuDk212YorSGgZcsPou1BuMQwpfXZHM3fvAKlJUIESAsq859FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BNn5xRH2; arc=none smtp.client-ip=209.85.128.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=qvPnGxMIBv6Kqv1dgDusVv6LUDu1Ja2wMccSA8rIt9avzMLJbMEDGr53Cnlp+nDC7T03YgSSNG6UyYkc9dBMYwzmHoTx+Wp+2qnhWVi3dW9hokNjI2PbTiQDbTJvQlQOdi+U0MoBe6hMBqW9s3LeM7I4bsivUna4mEuC63mF5VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l5jmP0nz; arc=none smtp.client-ip=209.85.128.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BNn5xRH2"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4836f4cbe0bso26316965e9.3
-        for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 06:33:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l5jmP0nz"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-4834826e5a0so42862725e9.2
+        for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 06:34:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771770790; x=1772375590; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pFV/yKqgozlTVDw9n+tXH1WNqCj3KoDrgyjsea85h+8=;
-        b=BNn5xRH2rqLFVdRTw91ILK/DNVpjYAuad/MSp8e/HMK5YgxQwV4srPxJcx8oO3yuG3
-         JOlb3O+mThBXtKyonw4XfzU/DQDo73yoMjPPDzAM9e2Xj/G8SOic9o5DEsAP8SDzoxOW
-         tDCGbtt5T85I4swi9mf6Cq1VKXJOTGgvTgNXit311mi8Rn41papMaHEkQQ2T/1GGq/2v
-         iQVIVi8Si7zZ8z9BZ4JtNtoIGF70HU+axcunTRyYue7hq9GjvirD7hlkJIdZ5CygSqpu
-         XiHlGowQm9XT3NKtEfBG7p0lvPTjIzO1IM5J+HHckRUTL0nn5uGiurIGEiWFLHuva6HC
-         aCBw==
+        d=gmail.com; s=20230601; t=1771770862; x=1772375662; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=f2iREcOuZFZngTRWXBomV3xMPmiBBixK0bNapJAqgEM=;
+        b=l5jmP0nzVfONvwdPp1psmBtTgx/u9f9s42ewxUbvTmNW9D8F1ogxGsmrVEXjaGTFMp
+         eoNjSvF/kUIOM7noOWXrq+HaisTmTFu2thoKVBj2CxqkYaUhrD2g6S9c3YlFYj2bG405
+         QCnuRqOu7J0EloBW2RijiCmaeUQyHA0TFx/CduNSItsejXcKZ+7DvvXuuIpV+piXMEMI
+         vvcAYq1+wMWhbPipvNQydYYP6SRB1vz33aXOzxY0tcyEjk5UaizuFIb0+k58de4HFH0h
+         jHTOiVAD+Ffw3WxD6vwc8oHLQb+7rjIrZTfBOBkTF0+nmyzm4a4mIpPZ/DlY4uEAQDZ0
+         n+sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771770790; x=1772375590;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pFV/yKqgozlTVDw9n+tXH1WNqCj3KoDrgyjsea85h+8=;
-        b=kwFAPqILRDVLsqqoUUVLR8Tj7suOWeCEUxeQj/WXRfo7uDRrmYIjc2WX2T6zuURPpn
-         1NcHbdyLO9UKWcLmfKLZOVzb13hvvRHARUN0wSbV8ktlOZhSmQvthcrNfDJRXjapYAjW
-         4ETgh3ttFspYiilEaFld4QcvrAFeBSOVdJyJV0Tx2+iGlxhcs4rhvW97R00v34j/BEmu
-         Ic5Pa37ARWLEFZHxwQw0ET5OcZr05qPimYzP/m0ggyOoBavGJIXJm3o839TMKx+2x7h2
-         e0lxTrwET0sYQsJDWnOeqOsTBDfR1H5+hU82seyBwatVNrdlpNKkGZiwQq6mCrTdPRBf
-         3qSw==
-X-Forwarded-Encrypted: i=1; AJvYcCXLJfG9/XZJagDGHOCITGgtvX49Pp28hqP68A2jPe89hEmWlj2s312PoZO+KwwCcDUz5dk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSLx8zXv7F41XFa3qFVoc+PG11UJrbwyulHvaiJVSY2IRPpy4q
-	zuJkMr28aEuC2GFYd9jGi1jgKZAiXDYexeuhH0VpmfXOEdZMRyKxhiSh
-X-Gm-Gg: AZuq6aJdk8iXNKVDmAWg8RmNtvEqZvrVNNp2PhrkCMPrWj8UrIlbARPdKvCDqmQWRHY
-	TqDvQoRT/L6IQV17f5SKoxBWTGH4AKY3GRFE3LO8tvipHuyeF/tMPsLyEyMs6R6tkuePPkXNJMM
-	UL4rlLkVf7/aCmtJTxNz+15sQYnUVmTSXSo2kcCyv7YF8P8fgHKamkzpyAT2pBSE0rJ56+0lEEd
-	B9RT8cvcK7oBQsW/SeI/4xOomfi6qvMeUbgcS2HoJJrilEwZ58elk0+pgSPS3fR0OXMzc6FSN7F
-	AMPl7XG2oX7fTgAYJva/hEY8iOLoSjN171V8PRM8Mqsw5zCdcbeL1sMvZBflhSmL5PAkWtgDuqM
-	ydfvTL7g951LxIDKlq+cn+QbY7pxnoDi7ER8dPMJB9bFiYfW24Rh725O7JZvhk6WRyh63sshQrb
-	TLn49DsVU=
-X-Received: by 2002:a05:600c:4749:b0:480:69b6:dfed with SMTP id 5b1f17b1804b1-483a95e5ab8mr98760325e9.24.1771770790322;
-        Sun, 22 Feb 2026 06:33:10 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771770862; x=1772375662;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f2iREcOuZFZngTRWXBomV3xMPmiBBixK0bNapJAqgEM=;
+        b=orPwkNociQrXrDjkQHjiLjHrnNQw6R5Dx87RyJ+oFAHICXW+qm9hNZVKIfUOSHnvQL
+         ++Vy11upT+pVQesDl6+LJmIE81sn4yjbJ5lgPZTDTLl9S82XzpTCJKokk0NOZ4LxaWoA
+         HG2nJ/pOGywTLDHxcJ/bFaAssR7raWQvGcUKCb54KTSEWUWPhPlGers8kCN+llnoMI+2
+         4NYzTGy8fObNtw8fDSx9fj29pMHcJMmYahpE9MyKzc0bo7oNR2HZyVHxnlJ5p43Lx+4W
+         jGnhQA6Cry8ow60DIZ7PwOry7i7k/EHmemwqUaSKDe6KA9nu/hU1WdwH7Ain9oqgAH62
+         RvSg==
+X-Forwarded-Encrypted: i=1; AJvYcCWkqIincu538Ll+V8pHPGiti4yHviFeOrFBKFw0Y54tCN+NF8TstQmk70yB4R+V9UlNjPo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx27G+ytNKJWwAL6YXUm4ztk+xLB57KDFUETiCA0cQxSpoq8kvJ
+	6Jsy5AxuH8qQTS5bcHAKguqPizjoTasDxes7JBpmXohrGPyGNjw8lJN1
+X-Gm-Gg: AZuq6aKrGMFDdWG20gn+lL/VjVvC44D2c8+b0h2JCt62B+yttif+lOXxAF13+/CkOJT
+	TLRhox2ydHiy4vIg2x5onqjgAwUOEkKdVd5+joszBdgZvpAOihaCOABFLuJqgO7+aFMlvuLigeh
+	jOmLzScL2LGPvDWqpANnaIomN+2klj+T17VESbAKFjvrKUbDXRuW9t5q4yqP7adepMqbvoInfUB
+	GfZ7dJoDHR+UHX9Wr8Owg04wVAb5j8ufDiu5QNwMws92HIS+JQPwO/uKpiW3MhEWZdtWaKLp0aT
+	kLZJpCfuxajVRzSLaeaJbqJg87Y1S2gusPB3ZpdXyM8IAFNwRyQGKkA459DOvmQsKaIPPa2JDxW
+	FOIk1jiUyqRHGAlqNkvhYc24dGVEfx05N8jiv8BNiJlm+nfcDUHGrUfXwFGH14VsTTzeG1lNn
+X-Received: by 2002:a05:600c:c4a2:b0:480:20f1:7aa6 with SMTP id 5b1f17b1804b1-483a95e96e4mr88757775e9.21.1771770861802;
+        Sun, 22 Feb 2026 06:34:21 -0800 (PST)
 Received: from krava ([2a02:8308:a00c:e200::b44f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a9b75e63sm211947645e9.6.2026.02.22.06.33.09
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a3dd3391sm128593645e9.1.2026.02.22.06.34.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Feb 2026 06:33:10 -0800 (PST)
+        Sun, 22 Feb 2026 06:34:21 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 22 Feb 2026 15:33:08 +0100
-To: bot+bpf-ci@kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	kafai@fb.com, eddyz87@gmail.com, songliubraving@fb.com, yhs@fb.com,
-	menglong8.dong@gmail.com, rostedt@kernel.org, martin.lau@kernel.org,
-	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
+Date: Sun, 22 Feb 2026 15:34:19 +0100
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
+	Martin KaFai Lau <kafai@fb.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Steven Rostedt <rostedt@kernel.org>
 Subject: Re: [PATCH bpf-next 02/17] bpf: Use mutex lock pool for bpf
  trampolines
-Message-ID: <aZsTpDAaSnDzxNTL@krava>
-References: <20260220100649.628307-3-jolsa@kernel.org>
- <aa8d95a4f3b4fa59b0cca8b65faa300ab18d956d32443985e8e09f506a8cb1ad@mail.kernel.org>
+Message-ID: <aZsT6_3tkli3SPsI@krava>
+References: <20260220100649.628307-1-jolsa@kernel.org>
+ <20260220100649.628307-3-jolsa@kernel.org>
+ <CAADnVQ+2-DtgWqeKmrbsP0O7Rz2ZkDjkh1kfHDSxF0K8Xs+1ww@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aa8d95a4f3b4fa59b0cca8b65faa300ab18d956d32443985e8e09f506a8cb1ad@mail.kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ+2-DtgWqeKmrbsP0O7Rz2ZkDjkh1kfHDSxF0K8Xs+1ww@mail.gmail.com>
 
-On Fri, Feb 20, 2026 at 10:57:51AM +0000, bot+bpf-ci@kernel.org wrote:
+On Fri, Feb 20, 2026 at 11:58:13AM -0800, Alexei Starovoitov wrote:
+> On Fri, Feb 20, 2026 at 2:07 AM Jiri Olsa <jolsa@kernel.org> wrote:
+> >
+> > Adding mutex lock pool that replaces bpf trampolines mutex.
+> >
+> > For tracing_multi link coming in following changes we need to lock all
+> > the involved trampolines during the attachment. This could mean thousands
+> > of mutex locks, which is not convenient.
+> >
+> > As suggested by Andrii we can replace bpf trampolines mutex with mutex
+> > pool, where each trampoline is hash-ed to one of the locks from the pool.
+> >
+> > It's better to lock all the pool mutexes (64 at the moment) than
+> > thousands of them.
+> >
+> > Removing the mutex_is_locked in bpf_trampoline_put, because we removed
+> > the mutex from bpf_trampoline.
+> >
+> > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > ---
+> >  include/linux/bpf.h     |  2 --
+> >  kernel/bpf/trampoline.c | 74 +++++++++++++++++++++++++++++++----------
+> >  2 files changed, 56 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > index cd9b96434904..46bf3d86bdb2 100644
+> > --- a/include/linux/bpf.h
+> > +++ b/include/linux/bpf.h
+> > @@ -1335,8 +1335,6 @@ struct bpf_trampoline {
+> >         /* hlist for trampoline_ip_table */
+> >         struct hlist_node hlist_ip;
+> >         struct ftrace_ops *fops;
+> > -       /* serializes access to fields of this trampoline */
+> > -       struct mutex mutex;
+> >         refcount_t refcnt;
+> >         u32 flags;
+> >         u64 key;
 > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > index 952cd7932461..05dc0358654d 100644
 > > --- a/kernel/bpf/trampoline.c
 > > +++ b/kernel/bpf/trampoline.c
-> 
-> [ ... ]
-> 
-> > @@ -71,7 +110,7 @@ static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, unsigned long ip,
-> >  		/* This is called inside register_ftrace_direct_multi(), so
-> >  		 * tr->mutex is already locked.
-> >  		 */
-> > -		lockdep_assert_held_once(&tr->mutex);
-> > +		lockdep_assert_held_once(trampoline_locks_lookup(tr));
-> 
-> This comment still references tr->mutex, but the field was removed from
-> struct bpf_trampoline by this patch. Should the comment say the
-> trampoline pool lock is already held instead?
-
-yes, I overlooked the comments..
-
-> 
-> [ ... ]
-> 
-> > @@ -102,7 +141,7 @@ static int bpf_tramp_ftrace_ops_func(struct ftrace_ops *ops, unsigned long ip,
-> >  	/* The normal locking order is
-> >  	 *    tr->mutex => direct_mutex (ftrace.c) => ftrace_lock (ftrace.c)
-> >  	 *
-> >  	 * The following two commands are called from
-> >  	 *
-> >  	 *   prepare_direct_functions_for_ipmodify
-> >  	 *   cleanup_direct_functions_after_ipmodify
-> >  	 *
-> >  	 * In both cases, direct_mutex is already locked. Use
-> >  	 * mutex_trylock(&tr->mutex) to avoid deadlock in race condition
-> >  	 * (something else is making changes to this same trampoline).
-> >  	 */
-> > -	if (!mutex_trylock(&tr->mutex)) {
-> > +	if (!mutex_trylock(trampoline_locks_lookup(tr))) {
-> >  		/* sleep 1 ms to make sure whatever holding tr->mutex makes
-> >  		 * some progress.
-> >  		 */
-> 
-> The locking order comment and the two references to tr->mutex in this
-> block also appear to need updating. The locking order is now pool lock
-> rather than tr->mutex, and the trylock and sleep comments still name the
-> removed field.
-
-yes, will fix
-
-> 
-> [ ... ]
-> 
-> > @@ -1026,11 +1065,11 @@ struct bpf_attach_target_info tgt_info = {};
-> >  	/* note, we're still holding tr refcnt from above */
+> > @@ -30,6 +30,45 @@ static struct hlist_head trampoline_ip_table[TRAMPOLINE_TABLE_SIZE];
+> >  /* serializes access to trampoline tables */
+> >  static DEFINE_MUTEX(trampoline_mutex);
 > >
-> > -	mutex_unlock(&tr->mutex);
-> > +	trampoline_unlock(tr);
-> >
-> >  	return 0;
-> >  err:
-> > -	mutex_unlock(&tr->mutex);
-> > +	trampoline_unlock(tr);
-> >
-> >  	if (shim_link)
-> >  		bpf_link_put(&shim_link->link.link);
-> >
-> >  	/* have to release tr while _not_ holding its mutex */
-> >  	bpf_trampoline_put(tr); /* bpf_trampoline_get above */
+> > +#define TRAMPOLINE_LOCKS_BITS 6
+> > +#define TRAMPOLINE_LOCKS_TABLE_SIZE (1 << TRAMPOLINE_LOCKS_BITS)
+> > +
+> > +static struct {
+> > +       struct mutex mutex;
+> > +       struct lock_class_key key;
+> > +} *trampoline_locks;
+> > +
+> > +static struct mutex *trampoline_locks_lookup(struct bpf_trampoline *tr)
 > 
-> Similarly, this comment in bpf_trampoline_link_cgroup_shim() references
-> "its mutex" which no longer exists as a per-trampoline field.
+> select_trampoline_lock() ?
 
-right, will fix
+ok
 
-thanks,
+> 
+> > +{
+> > +       return &trampoline_locks[hash_64((u64) tr, TRAMPOLINE_LOCKS_BITS)].mutex;
+> > +}
+> > +
+> > +static void trampoline_lock(struct bpf_trampoline *tr)
+> > +{
+> > +       mutex_lock(trampoline_locks_lookup(tr));
+> > +}
+> > +
+> > +static void trampoline_unlock(struct bpf_trampoline *tr)
+> > +{
+> > +       mutex_unlock(trampoline_locks_lookup(tr));
+> > +}
+> > +
+> > +static int __init trampoline_locks_init(void)
+> > +{
+> > +       int i;
+> > +
+> > +       trampoline_locks = kmalloc_array(TRAMPOLINE_LOCKS_TABLE_SIZE,
+> > +                                        sizeof(trampoline_locks[0]), GFP_KERNEL);
+> 
+> why bother with memory allocation? This is just 64 mutexes.
+
+ok, I could probably use __mutex_init directly for static key
+
+about 64.. not sure how I missed that but there's lockdep limit for
+maximum locks depth and it's 48.. so we'll need to use 32 locks,
+which is probably still ok
+
+> 
+> > +       if (!trampoline_locks)
+> > +               return -ENOMEM;
+> > +
+> > +       for (i = 0; i < TRAMPOLINE_LOCKS_TABLE_SIZE; i++) {
+> > +               lockdep_register_key(&trampoline_locks[i].key);
+> 
+> why special key?
+
+if we keep single key we will get lockdep 'recursive locking' warning
+during bpf_trampoline_multi_attach, because lockdep will think we lock
+the same mutex
+
+there's support to annotate nested locking with mutex_lock_nested but
+it allows maximum of 8 nested instances
+
 jirka
