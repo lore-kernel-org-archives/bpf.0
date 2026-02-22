@@ -1,75 +1,75 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71578223702
-	for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 14:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A9D2253EC
+	for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 14:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771770912; cv=none; b=KjOCNyuBmZ7SfihWUnhAj6LVVxOVjBf4/peo/gB2C8lMuNTYF8MYfkHoqR0tu6hRpLvARe6sE5C/jY6v7ImLr456ppHZhoV6OFZZEGB9lQedzpfOIZlO0ORQPKLlyYj74wFdqps9avrZxjhM7+l3iRuyRf3s4GLFEOqwXWlVSRs=
+	t=1771770931; cv=none; b=FIuDJIq31bXc/cQLLRqzvfYpSirZmtMXO6ioxhBsr7BVprR726E9CuQe5H8J4Sqwn2amy8XZCozIAGJtoDFd0iLP0mDPMLJDVNZQ0IEnaPyCBx4PsYct4bTsYz66/Q/mdIy17/S2ro0dswYEey0BjlAi+P66d/P3ZIDz/Wl64JQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771770912; c=relaxed/simple;
-	bh=vktM7BRk058T9EgqkKWWszp5qZZmm5bzsA9nWsQ334E=;
+	s=arc-20240116; t=1771770931; c=relaxed/simple;
+	bh=7cdWsvVouZdci2tuBuZCRf9vT20zQ4iz3OMRvwePt+Y=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Px0L46nSzshEKUXUe5IbkGKpeWUYcqW493BpyrfI8MHAMMKgZ/l0WPzASQqHKmKvs4wX0hgzUtr6iuf0ew3CLvHdAoJhSVrNdOhG1X/UGA3oq1KY8V2g4MaKlts+XQS4MgRZjJ3eRx0sI+E2IzpdPSeZ6sEcO94XsLeiiMRFYAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ga9RQDEg; arc=none smtp.client-ip=209.85.128.50
+	 Content-Type:Content-Disposition:In-Reply-To; b=F8YWl9WUdraMjJh4wMsz5gJns/oSVL7VP5Qo95AloXWxYbuCuaOUUHKnYglM4RCAvX08E66eZx7/tWpPcQMf62/iUB/ltxiH1TP6KBM4Ww87SdQ+l6pwQOJBBv4qAijH84ho0d3PqKYCBRUZ1B9Md0w5RM7lkgAjs63sa3awrWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WA8PhoiT; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ga9RQDEg"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4833115090dso33467165e9.3
-        for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 06:35:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WA8PhoiT"
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso25882555e9.1
+        for <bpf@vger.kernel.org>; Sun, 22 Feb 2026 06:35:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771770910; x=1772375710; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771770928; x=1772375728; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ObkTvvTUXDhmbm+XB5jZaN2+4troEqpoA0rJxjwXv7I=;
-        b=ga9RQDEgCckqnCR/qnc/zRrxHSOa0GuVBXZ9i2WyxV5PbVNWteT50flwmALIM7NAuo
-         AOnGaEMfSCWZc/6e3PJrqzzJgAFYAE9LuTXHospBlxw9m+1nsbPggkt2oFouD10vB0vV
-         JjGSrmuL6+Se9qCLLaNlB30WhrhcVvnr2P8GyS3Wf15BgFKajuKUOUTYx+ghtk48Ai0K
-         AMzpBedG2ifyjNNohf+KKt3O5TcqgTKUfenZ42LstTrZE8CyHCyiXGzFSuwDFCkxymda
-         y+tbV8/2jxj1hckz+5sXrKpGu6pHGDES09VxtxnTgYy3TARqfaRDvoyfwkLuNo3J9NLF
-         vBVA==
+        bh=mKOt9R7P3WfV391G39qPHz/kg+9iqxJyHBFj36QYW+c=;
+        b=WA8PhoiT596c5BWEuvo9ReTJWfi7t6MEKxx3zZEtjBskc0ckgqOdx7umGf1EZRUROW
+         /EeoUqejihr2vTM0iud2uWFpkqKEMzKjijJgaVb+j0kyk8DHD+SEe64B5f5lYq893qeV
+         pPyBckAeTl0yzLaCMcfDeR9gqCSPUQwyxCt4PsedoPJYMk8eGKDpPR8cWkS+h1QuQLMb
+         QkuhKVXM2p6drNootLWo8iA06BKDDBS2vNgcEm4eaaBpvLLYQRYgfGETGXu4mCoqywQS
+         u5FCstORS6zEqYE48m2qVCusUFP5HKh/9P28gwKX2HqONrUMmNpqYAMUfhaI29/cUH/5
+         /PWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771770910; x=1772375710;
+        d=1e100.net; s=20230601; t=1771770928; x=1772375728;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ObkTvvTUXDhmbm+XB5jZaN2+4troEqpoA0rJxjwXv7I=;
-        b=GlLzIOQOcBmJe5PNZhm+jDkAZScfNtGt9rpLVk4cnL+FF+Lzf3gJXoOtq8XIP7IxGb
-         ehENXos4UEDbVADQjU0saYV/hrn39otb9SsZJRjggddU00NYJ+CJX+N0GhRwU8zZplOi
-         l9hv5EVmC/6KKfpMo4vDF6bzPTHxfF899FsreyMc8NWucMpDJDB4xs5Hz4yYq/jOI+r3
-         5tXJ+nyY2iCWunehnsQNFAxNIJwYIE5kb+OyaceiTOcQnwacrzWq7O59bkdQYrtnV9Jt
-         bFzDPovqj3CPQ/r0Gj4TtvK9PYGcF760gjVhNet41aTmNlGdw6hHcfFwtDhpqDMyD2Tm
-         v5vA==
-X-Forwarded-Encrypted: i=1; AJvYcCVJbV++T3encTAteTrDm9NJNm0xmp8w8L0RPVNrUjbUvppW0ePYsdrSof2rW085d3JBJao=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyT4FAnnTelN7wRGDZKzhL6UGmg/yIB2JaQi5ZevVetiawhASS6
-	cEqe2v1Ci7fyl6nyxvsJLX+N1/fDHeXKfirK/ZtFgtoqpxXngHrhi6T0
-X-Gm-Gg: AZuq6aI5DYYZYNdqZqM3XHgBaLXC+LG96VZHQrd1pY1mRCHVKaMzzFKTiAQrcjitogo
-	yDMtBXW4nCoALFA3kzcWQIb7rc/7gnDD2QDR6EVzWLYAi+ZTHkcWkTpQ+O58yDDQ63zTGh53V9H
-	/zw7zk3lGLHq62j0Bv6/iTE6Jq/wjQoAA9+L7wBZwDC5h4vLH7com4B5e3diJGgjSTvexibzswu
-	zDdQakLPSAn7T5wcUUPoRGDhqL9iiuaYQ2WYH/ATlSULMjmgrETDZQNXSlXS9LSQK3RJT8NRSSH
-	JRGW5ucREWDo9oUv4sXwp1Fko1ykFOx+jEkGmvXQnAUrZJ1jM0RQZGjf5NCOyaSfegdc/il92PY
-	6S0SxVt7yfXDMKRjO9QaYwG54bz/8Z+tRktZg5n3RuPG2RhzzqRA6PNLa2jgXIJppWVwK+zETrK
-	HMbt6wJpI=
-X-Received: by 2002:a05:600c:45cc:b0:477:7a53:f493 with SMTP id 5b1f17b1804b1-483a95f554amr95193665e9.23.1771770909621;
-        Sun, 22 Feb 2026 06:35:09 -0800 (PST)
+        bh=mKOt9R7P3WfV391G39qPHz/kg+9iqxJyHBFj36QYW+c=;
+        b=QpcvGpQ9vTGsnyPetLwWTt9mJel4sLlrx9umVaffyshWAU/KSuLlETr8WMWDgiMVxY
+         xwoVwnNiYahKbN7IN3o6iUapAI2HHNko8cHSmsAIZ4ov1Lz9veI5R0MHb/gB5efcwXmy
+         FTPzPBe1aPkfqFv6nMURGkpQrs2qVoKBZWDfxyAefTuMQ1KW1ZYx8+Kn91pHMoJMBa/o
+         7hIowuIDFmL8tHpdqBZAAKsj/f1YThvc5pbe+TAfW/C+of0/wvwz1hLS6/RfRlZGfpyN
+         pyNQ7k80HWuONFAE9HLpOS+uf8s7J9+/YgZAk+3aQD5wQ6fIMLwatsC9XcKQgY3zbtDB
+         pccQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUu790VvyjqxwczJGPwHQ4YITWKmK0aG0lzeYkSJMIyQTU+Fm1z2rY35H01f/ANyBC7CO0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/0woqDIiMSlHweFh2eJPjBChGMqg6FMfW9p4u4B+TosCOA0Sk
+	mBdeiGWvH9kbdpVzGngFNsJiqzgMuTEkkweuBDObGqH3gjaxBn0bH3KR4bHuufEP
+X-Gm-Gg: AZuq6aLLwb1pGsZ6tkoWA9rENwn7iEBZzIYO4SEjhByKFbmWQjNGFkLKAFan1f4dFKY
+	ZrF16UuDxaZy5P/WO2AeczhPsApVW2WcRe1EV4Sjk2AJpiCxDHmwJFeUk6sWGZeeDLEU2hVR6DS
+	2oycQM+ACMiCTs2zKyYvf9d8z1LOI7MdpQXbqsqPOph4s+mJ3PGe2qdzh7VRmZHwk+Qjk6n8h+q
+	QlhAU+6bB83QKI7VtAESG44ZUKHqHlaE1kEevB+CG6Dh2/zsWwY0qqxX9IZdc2gAdWHtzXmrGTm
+	60ejHgoTE40qAddgsXsr8wEtvwEbWyIGETS05+MTj1CTf419ow/sAo5D11+9/xTYNABsdSB77V9
+	QrSvTkXDhnFtoM0jgQki0So48d2CdHDpnKsRZsUyKLSEsyvlxinKLDqUWympHkI37pMepOSUs
+X-Received: by 2002:a05:600c:8b02:b0:477:7ab8:aba with SMTP id 5b1f17b1804b1-483a95aa31dmr91911095e9.1.1771770928501;
+        Sun, 22 Feb 2026 06:35:28 -0800 (PST)
 Received: from krava ([2a02:8308:a00c:e200::b44f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a9cb3f31sm120803945e9.13.2026.02.22.06.35.08
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970d3ff1csm11408066f8f.20.2026.02.22.06.35.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Feb 2026 06:35:09 -0800 (PST)
+        Sun, 22 Feb 2026 06:35:28 -0800 (PST)
 From: Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Sun, 22 Feb 2026 15:35:07 +0100
+Date: Sun, 22 Feb 2026 15:35:26 +0100
 To: bot+bpf-ci@kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
 	bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
 	kafai@fb.com, eddyz87@gmail.com, songliubraving@fb.com, yhs@fb.com,
 	menglong8.dong@gmail.com, rostedt@kernel.org, martin.lau@kernel.org,
 	yonghong.song@linux.dev, clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH bpf-next 08/17] bpf: Add support for tracing multi link
-Message-ID: <aZsUG16KRLWzpQO-@krava>
-References: <20260220100649.628307-9-jolsa@kernel.org>
- <e41633c6d6d32fabb08ecc4ae8432a45afaa72aa61756601f4cdb9aebd039f86@mail.kernel.org>
+Subject: Re: [PATCH bpf-next 10/17] bpf: Add support for tracing_multi link
+ session
+Message-ID: <aZsULjQcIO-PModZ@krava>
+References: <20260220100649.628307-11-jolsa@kernel.org>
+ <0520af2c467a82b82aa3014b7e721f95bfde9e91324bb2e183b099e5a37bbc3e@mail.kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -78,71 +78,79 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e41633c6d6d32fabb08ecc4ae8432a45afaa72aa61756601f4cdb9aebd039f86@mail.kernel.org>
+In-Reply-To: <0520af2c467a82b82aa3014b7e721f95bfde9e91324bb2e183b099e5a37bbc3e@mail.kernel.org>
 
-On Fri, Feb 20, 2026 at 10:57:58AM +0000, bot+bpf-ci@kernel.org wrote:
-> > diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-> > --- a/include/linux/bpf_types.h
-> > +++ b/include/linux/bpf_types.h
+On Fri, Feb 20, 2026 at 10:57:56AM +0000, bot+bpf-ci@kernel.org wrote:
+> > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > index 5892dca20b7e..1cd6c1457bd3 100644
+> > --- a/kernel/bpf/syscall.c
+> > +++ b/kernel/bpf/syscall.c
+> > @@ -3611,6 +3611,7 @@ static int bpf_tracing_prog_attach(struct bpf_prog *prog,
+> >  		if (prog->expected_attach_type != BPF_TRACE_FENTRY &&
+> >  		    prog->expected_attach_type != BPF_TRACE_FEXIT &&
+> >  		    prog->expected_attach_type != BPF_TRACE_FSESSION &&
+> > +		    prog->expected_attach_type != BPF_TRACE_FSESSION_MULTI &&
+> >  		    prog->expected_attach_type != BPF_TRACE_FENTRY_MULTI &&
+> >  		    prog->expected_attach_type != BPF_TRACE_FEXIT_MULTI &&
+> >  		    prog->expected_attach_type != BPF_MODIFY_RETURN) {
 > 
-> [ ... ]
+> BPF_TRACE_FSESSION_MULTI is now accepted here, which means
+> a program with this type can enter bpf_tracing_prog_attach()
+> via BPF_RAW_TRACEPOINT_OPEN:
 > 
-> > +BPF_LINK_TYPE(BPF_LINK_TYPE_TRACING_MULTI, tracing)
+> bpf_raw_tracepoint_open()
+>   bpf_raw_tp_link_attach()       /* name == NULL */
+>     bpf_tracing_prog_attach()    /* BPF_TRACE_FSESSION_MULTI */
 > 
-> The existing BPF_LINK_TYPE_TRACING also uses "tracing" as its name
-> argument:
+> Further down in bpf_tracing_prog_attach(), the fexit node
+> initialization only checks for BPF_TRACE_FSESSION:
 > 
->     BPF_LINK_TYPE(BPF_LINK_TYPE_TRACING, tracing)
+> kernel/bpf/syscall.c:bpf_tracing_prog_attach() {
+>     ...
+>     if (prog->expected_attach_type == BPF_TRACE_FSESSION) {
+>         link->fexit.link = &link->link.link;
+>         link->fexit.cookie = bpf_cookie;
+>     }
+>     ...
+> }
 > 
-> This means bpf_link_type_strs[] will contain "tracing" for both
-> BPF_LINK_TYPE_TRACING and BPF_LINK_TYPE_TRACING_MULTI, making them
-> indistinguishable in fdinfo output via bpf_link_show_fdinfo().
+> So for BPF_TRACE_FSESSION_MULTI, link->fexit.link stays NULL
+> (from kzalloc). When __bpf_trampoline_link_prog() later calls
+> fsession_exit(), it returns &link->fexit with a NULL link
+> field. This node gets added to the trampoline FEXIT list, and
+> bpf_trampoline_get_progs() then dereferences it:
 > 
-> The libbpf side correctly uses "tracing_multi":
+> kernel/bpf/trampoline.c:bpf_trampoline_get_progs() {
+>     ...
+>     hlist_for_each_entry(node, &tr->progs_hlist[kind], tramp_hlist) {
+>         *ip_arg |= node->link->prog->call_get_func_ip;
+>                    ^^^^^^^^^^
+>     ...
+> }
 > 
->     [BPF_LINK_TYPE_TRACING_MULTI] = "tracing_multi",
-> 
-> Should this be BPF_LINK_TYPE(BPF_LINK_TYPE_TRACING_MULTI, tracing_multi)
-> to match?
+> Would it make sense to either add BPF_TRACE_FSESSION_MULTI to
+> the fexit initialization, or reject this type in
+> bpf_tracing_prog_attach() since it should only be used through
+> bpf_tracing_multi_attach()?
 
-it should, fixed
+yes, I think we need to reject or MULTI types in bpf_raw_tracepoint_open,
+it's allowed to attach only through new multi_link attach api,
 
-> 
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> 
-> [ ... ]
-> 
-> > +int bpf_tracing_multi_attach(struct bpf_prog *prog, const union bpf_attr *attr)
-> > +{
-> 
-> [ ... ]
-> 
-> > +	ids = kvmalloc_array(cnt, sizeof(*ids), GFP_KERNEL);
-> 
-> [ ... ]
-> 
-> > +	link = kzalloc(struct_size(link, nodes, cnt), GFP_KERNEL);
->                 ^^^^^^
-> 
-> The ids array above uses kvmalloc_array() to handle large allocations,
-> but the link struct uses kzalloc(). With MAX_TRACING_MULTI_CNT at 1M
-> and each bpf_tracing_multi_node being roughly 40 bytes,
-> struct_size() can request up to ~40MB of contiguous memory. kzalloc()
-> is limited to KMALLOC_MAX_SIZE (~4MB on x86_64), so this will fail
-> for cnt values above roughly 100K.
-> 
-> Would kvzalloc() work here instead? bpf_tracing_multi_link_dealloc()
-> would need to use kvfree() accordingly:
-> 
-> > +static void bpf_tracing_multi_link_dealloc(struct bpf_link *link)
-> > +{
-> > +	struct bpf_tracing_multi_link *tr_link =
-> > +		container_of(link, struct bpf_tracing_multi_link, link);
-> > +
-> > +	kfree(tr_link);
-
-yes, makes sense, will fix, thnx
+good catch, thnx
 
 jirka
+
+> 
+> 
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+> 
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22220470181
+> 
+> AI-authorship-score: low
+> AI-authorship-explanation: Code follows established kernel BPF patterns for adding new attach types, written by a well-known BPF maintainer with terse, practical commit message style.
+> issues-found: 1
+> issue-severity-score: high
+> issue-severity-explanation: NULL pointer dereference reachable from BPF_RAW_TRACEPOINT_OPEN syscall when BPF_TRACE_FSESSION_MULTI enters bpf_tracing_prog_attach without fexit initialization, leading to kernel crash.
+
