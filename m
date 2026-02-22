@@ -1,200 +1,207 @@
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C536307AF4
-	for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 23:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2C714F9FB;
+	Sun, 22 Feb 2026 12:22:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771716770; cv=none; b=cPTYK5hNIunTCUEu8mUmYiAIEeCwFvGrMXqO0sesPjiTumWd9ohGLESgd+UVB2LREgKsQxESb8yQQj5aNVDpm9MyGjfAbgg9eck7RdfxmqlFyQ9/LYz0t3MJ2+hHcyyt2Gss+BE8ehCwh1GvFgw4A9yZCKRROeE72v7+G9o3nvk=
+	t=1771762939; cv=none; b=shwzockfTIIReU/Rly6lq1fr63+cKfE9dYRbDgNqmZCE7HKNqPwB8BaWWPGR+zXYkiBMkNUzQQJG1Afr9cL+N9sfXYx7h2tjGbibLUCy/t6n4zsRNuHW0RCAJ3V9qRDUoj3Ugj4i+zlmFgqYWdCtoaIoz07Ma8rm6VYfjqk6VRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771716770; c=relaxed/simple;
-	bh=5qIeLn0udmUQ0lAH7ymvh4bwzedo3+XdQggsGBEBQeQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Iz6GhUQEdkaN8VxqEh9sa6jUugLyfZ1QtAnDo7CxXVbOx7jBGJrhSMBPI1qkV7m2fckxy5XMemZNE4U23PMS3Zw/AiNRoQ+fnVcyHM2rB0o4iTnjOhBaLd+pAx3hyGvR0UGIfUit/9Mytqw4g3Xiw+gZnvVeoh2LraTdbG3N3YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NdyrYand; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kuniyu.bounces.google.com
+	s=arc-20240116; t=1771762939; c=relaxed/simple;
+	bh=HStVimIBZcTfWDwn3rn/FzWejp91R9WXQ1Ij2jOs3yc=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=lQOYzwNMciGoU7kk+m0UJGW9/04A74e7FWIdtFgYiY9Lf79jVOZNQ9lR1Ze2MuTHfFeFDiCwZ4c53gmIpP65bO88c0xPCbS7azt4/FcksRY8+obla0dLA0apO08e2nZqa4ufEJB/R/Lwn/EVn+Hk2hlEV2tcInNUzADRjCMMajI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=BVgrSz3g; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NdyrYand"
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-354c44bf176so3266634a91.0
-        for <bpf@vger.kernel.org>; Sat, 21 Feb 2026 15:32:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771716766; x=1772321566; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SRZJLtlywpr8r14Jsy3Lpf4GPuEEfot66fEIP/mfghw=;
-        b=NdyrYandaoDBcBdreAM+tl+s+0egVZ+FNp7LW3OF6u0Y2cQBsLBgdjyaPIU+4YLBOw
-         SW5t+11osgGcopFPuB8YsPZe0e8JCVO08Fen8AMTPtciLtw4YWwqC/qcFyhJQyzBUDFq
-         Gz5/6aQtdSwwEutPF/HUpWwggJCyVWq/V5UT6yuEgkG679BvLahUFPQ9H7vxzthTMCZG
-         fBOe7W8oT43RFjTXBzfyadxPtD+2QWh9fld2+OmMkTrgkFc1yoiCBetqJI+YL214IIEr
-         hlGjum+yHQKJG91mti6Kg1cF3M11ESliI8Tlx8hHgZnkzR+ZR+yqjSMM7qV+diBE1u2v
-         cB0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771716766; x=1772321566;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SRZJLtlywpr8r14Jsy3Lpf4GPuEEfot66fEIP/mfghw=;
-        b=siX/ExNafUbTD+8Mee2/9bDH06rB3+ObI3vLTxiek0BnfTlSBkdc3QJBfVPuIpLOpR
-         uuzJouxOFWBoM9XxSJun+7dYZQ6A7UPk8t5ALr1KYf9fpeiU0gng+5ik1wFKAC1TMUDt
-         Wmvtuad2GyCtpZXMqJVu15Yu4YLXsb5rXsIPDDBLuz2oIZ4yQExMa5LUIPd5zDSeRF4X
-         1doxf1Tql6ltsPvSeicn4B861W0ktK5aLizmD0aKQHnS5r6c/czQurSVEse609/PnJac
-         /NqUugQdf1BSxRBqpv2w9fqVY4ThCV9fzRvgTvQnpWXwBW5C50UdVMg3dRH7mn1FPThn
-         44MA==
-X-Forwarded-Encrypted: i=1; AJvYcCVIZ+ZWW5eb4oc51L0cMNrIN5iL36GXBf1ELBrslzEGTJolIz1Y8D3jWrTtYjZXXUT4QmQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSNmIPKCmYNNi2dZcSdsn9i72EfuANrErICO78OLqmycu7D1QR
-	ivK6kF2SfJEKQa8AIdGD07zZ0ProqVDQFcu449dZu3Q8BQQ5abxYIMZnX2+r1baP70d0TN80p9I
-	VYGn0sQ==
-X-Received: from pjm13.prod.google.com ([2002:a17:90b:2fcd:b0:354:bde2:b529])
- (user=kuniyu job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5112:b0:356:2eac:b649
- with SMTP id 98e67ed59e1d1-358ae7bc5efmr3691684a91.7.1771716765435; Sat, 21
- Feb 2026 15:32:45 -0800 (PST)
-Date: Sat, 21 Feb 2026 23:30:52 +0000
-In-Reply-To: <20260221233234.3814768-1-kuniyu@google.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="BVgrSz3g"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61M9Llr11191599;
+	Sun, 22 Feb 2026 12:22:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=rXjejD
+	Wrq7IPZo9PdMF10tAzhPn8ttHft2CPrcS7Lgo=; b=BVgrSz3gFG7fWw/NOEvhkW
+	2qrOjJDJu6x1ZdqVfg3Icw1/pO0ftwMml0y+E4dzdjK5qZ1QJH9epvUneO8mr6+p
+	gxTqK9BcGGMYiRKktjhKSjj49Mn55HrhXwdM11EeI9pYLkeYc8sJ5qSqPdhlQpRe
+	VbN1obakuc/XzY/FNmoS7Rjc5EANgO77HKXLOyX3RTM8XDMAiYpUesrUOArhrlR+
+	nKynA7+tz1o6bZENI0bfYVscmgUNryzaOV59+lHlx+JU5uaU9J/NZYCyvRmbSHtq
+	bKhdlkMN9MC7MwwUastpjnqADMyPfpcVTMDsCLoUb8O/spoO4qoAAtFhsxIeRG5w
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4e33wcd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 22 Feb 2026 12:21:59 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61M8jZps001607;
+	Sun, 22 Feb 2026 12:21:58 GMT
+Received: from smtprelay07.dal12v.mail.ibm.com ([172.16.1.9])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfr1msa8j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 22 Feb 2026 12:21:58 +0000
+Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
+	by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61MCLvw718350756
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sun, 22 Feb 2026 12:21:57 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 514A55805E;
+	Sun, 22 Feb 2026 12:21:57 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C854358052;
+	Sun, 22 Feb 2026 12:21:56 +0000 (GMT)
+Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
+	by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Sun, 22 Feb 2026 12:21:56 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260221233234.3814768-1-kuniyu@google.com>
-X-Mailer: git-send-email 2.53.0.371.g1d285c8824-goog
-Message-ID: <20260221233234.3814768-6-kuniyu@google.com>
-Subject: [PATCH v4 bpf/net 5/6] sockmap: Consolidate sk_psock_skb_ingress_self().
-From: Kuniyuki Iwashima <kuniyu@google.com>
-To: John Fastabend <john.fastabend@gmail.com>, Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
-	Kuniyuki Iwashima <kuni1840@gmail.com>, bpf@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Date: Sun, 22 Feb 2026 17:51:56 +0530
+From: adubey <adubey@linux.ibm.com>
+To: Hari Bathini <hbathini@linux.ibm.com>
+Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Alexei Starovoitov
+ <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko
+ <andrii@kernel.org>,
+        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+        Venkat Rao
+ Bagalkote <venkat88@linux.ibm.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] powerpc64/bpf: fix the address returned by
+ bpf_get_func_ip
+In-Reply-To: <20260220063933.196141-3-hbathini@linux.ibm.com>
+References: <20260220063933.196141-1-hbathini@linux.ibm.com>
+ <20260220063933.196141-3-hbathini@linux.ibm.com>
+Message-ID: <1c1e950c3513176c99a2a9b027c3be21@linux.ibm.com>
+X-Sender: adubey@linux.ibm.com
+Organization: IBM
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=XMs9iAhE c=1 sm=1 tr=0 ts=699af4e7 cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=vzIvt4CvfZBVuRaKyhAA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-GUID: xpfEw_kcP__nZcGDNwprFmhQRz6TNl3O
+X-Proofpoint-ORIG-GUID: xpfEw_kcP__nZcGDNwprFmhQRz6TNl3O
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIyMDExNyBTYWx0ZWRfX7xDt10zT7jME
+ gBR6D66W/Bn9MW+NIdcn8FnCQ0iLrozYpEVGRU8UuSqV8T8GrLf0+GkVQxAGv+abkRqdIVfWd63
+ 5yOt/jHeuTqdd1duS1TxkL9Q3SLwo2gm5HgXbkPi//3M5iCmdeiR0ncFNdbOo5KBBnNii8X9LNz
+ FuJlyJOopAXwKuDT2iTxNlEDx21ydte6huaQBQt5N7uRLXMG4qn+Utk6rZdvmtT6hO6Coo6IiV7
+ UVhc8qicVpMrbh6rnXRDPUsKYiqCW+tLxZ3BobeaPAlgXYQTRQvKcpDc34sAanbXzreTSLcK9xD
+ DjocyTUO488w1oQpR+Tp9m4emkp0y9R+Trxh0ETsRdV5mWWxXZtVAPwjvzLhyarY3HsvTbXujNA
+ j07uVUHnzpXuq5Y4hKr4VD77WCRi3TWXGXd53Nc6RkhwKtExHNSqLUqJeMTOo6XZ0pd5ADrWGPB
+ 9niGbiX7Q5R3RaHua9A==
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-22_02,2026-02-20_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ clxscore=1011 adultscore=0 spamscore=0 priorityscore=1501 bulkscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602220117
 
-SOCKMAP memory accounting for UDP is broken, and
-sk_psock_skb_ingress_self() should not be used for UDP.
-
-Let's consolidate sk_psock_skb_ingress_self() to
-sk_psock_skb_ingress() so we can centralise the fix.
-
-Note that now sk_psock_skb_ingress() always use GFP_KERNEL
-if called from sk_psock_backlog().
-
-Signed-off-by: Kuniyuki Iwashima <kuniyu@google.com>
----
-v4: Fix memory accounting condition from (skb->sk != sk) to
-    (skb->sk != sk && take_ref), the cause of selftest failure
-v2: Keep msg->sk assignment
----
- net/core/skmsg.c | 62 +++++++++++++-----------------------------------
- 1 file changed, 17 insertions(+), 45 deletions(-)
-
-diff --git a/net/core/skmsg.c b/net/core/skmsg.c
-index 6b1fef6ef85b..96f43e0dbb17 100644
---- a/net/core/skmsg.c
-+++ b/net/core/skmsg.c
-@@ -572,32 +572,30 @@ static int sk_psock_skb_ingress_enqueue(struct sk_buff *skb,
- 	return copied;
- }
- 
--static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb,
--				     u32 off, u32 len, bool take_ref);
--
- static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
--				u32 off, u32 len)
-+				u32 off, u32 len, bool take_ref)
- {
- 	struct sock *sk = psock->sk;
- 	struct sk_msg *msg;
- 	int err = -EAGAIN;
- 
--	/* If we are receiving on the same sock skb->sk is already assigned,
--	 * skip memory accounting and owner transition seeing it already set
--	 * correctly.
--	 */
--	if (unlikely(skb->sk == sk))
--		return sk_psock_skb_ingress_self(psock, skb, off, len, true);
--
--	msg = alloc_sk_msg(GFP_KERNEL);
-+	msg = alloc_sk_msg(take_ref ? GFP_KERNEL : GFP_ATOMIC);
- 	if (!msg)
- 		goto out;
- 
--	if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
--		goto free;
-+	if (skb->sk != sk && take_ref) {
-+		if (atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf)
-+			goto free;
- 
--	if (!sk_rmem_schedule(sk, skb, skb->truesize))
--		goto free;
-+		if (!sk_rmem_schedule(sk, skb, skb->truesize))
-+			goto free;
-+	} else {
-+		/* This is used in tcp_bpf_recvmsg_parser() to determine whether the
-+		 * data originates from the socket's own protocol stack. No need to
-+		 * refcount sk because msg's lifetime is bound to sk via the ingress_msg.
-+		 */
-+		msg->sk = sk;
-+	}
- 
- 	/* This will transition ownership of the data from the socket where
- 	 * the BPF program was run initiating the redirect to the socket
-@@ -606,7 +604,7 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
- 	 * into user buffers.
- 	 */
- 	skb_set_owner_r(skb, sk);
--	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, true);
-+	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
- 	if (err < 0)
- 		goto free;
- out:
-@@ -616,32 +614,6 @@ static int sk_psock_skb_ingress(struct sk_psock *psock, struct sk_buff *skb,
- 	goto out;
- }
- 
--/* Puts an skb on the ingress queue of the socket already assigned to the
-- * skb. In this case we do not need to check memory limits or skb_set_owner_r
-- * because the skb is already accounted for here.
-- */
--static int sk_psock_skb_ingress_self(struct sk_psock *psock, struct sk_buff *skb,
--				     u32 off, u32 len, bool take_ref)
--{
--	struct sk_msg *msg = alloc_sk_msg(GFP_ATOMIC);
--	struct sock *sk = psock->sk;
--	int err;
--
--	if (unlikely(!msg))
--		return -EAGAIN;
--	skb_set_owner_r(skb, sk);
--
--	/* This is used in tcp_bpf_recvmsg_parser() to determine whether the
--	 * data originates from the socket's own protocol stack. No need to
--	 * refcount sk because msg's lifetime is bound to sk via the ingress_msg.
--	 */
--	msg->sk = sk;
--	err = sk_psock_skb_ingress_enqueue(skb, off, len, psock, sk, msg, take_ref);
--	if (err < 0)
--		kfree(msg);
--	return err;
--}
--
- static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
- 			       u32 off, u32 len, bool ingress)
- {
-@@ -651,7 +623,7 @@ static int sk_psock_handle_skb(struct sk_psock *psock, struct sk_buff *skb,
- 		return skb_send_sock(psock->sk, skb, off, len);
- 	}
- 
--	return sk_psock_skb_ingress(psock, skb, off, len);
-+	return sk_psock_skb_ingress(psock, skb, off, len, true);
- }
- 
- static void sk_psock_skb_state(struct sk_psock *psock,
-@@ -1058,7 +1030,7 @@ static int sk_psock_verdict_apply(struct sk_psock *psock, struct sk_buff *skb,
- 				off = stm->offset;
- 				len = stm->full_len;
- 			}
--			err = sk_psock_skb_ingress_self(psock, skb, off, len, false);
-+			err = sk_psock_skb_ingress(psock, skb, off, len, false);
- 		}
- 		if (err < 0) {
- 			spin_lock_bh(&psock->ingress_lock);
--- 
-2.53.0.371.g1d285c8824-goog
-
+On 2026-02-20 12:09, Hari Bathini wrote:
+> bpf_get_func_ip() helper function returns the address of the traced
+> function. It relies on the IP address stored at ctx - 16 by the bpf
+> trampoline. On 64-bit powerpc, this address is recovered from LR
+> accounting for OOL trampoline. But the address stored here was off
+> by 4-bytes. Ensure the address is the actual start of the traced
+> function.
+> 
+> Reported-by: Abhishek Dubey <adubey@linux.ibm.com>
+> Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+> ---
+> 
+> * No changes since v1.
+> 
+> 
+>  arch/powerpc/net/bpf_jit_comp.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c 
+> b/arch/powerpc/net/bpf_jit_comp.c
+> index 987cd9fb0f37..fb6cc1f832a8 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -786,8 +786,8 @@ static int __arch_prepare_bpf_trampoline(struct
+> bpf_tramp_image *im, void *rw_im
+>  	 *                              [ reg argN          ]
+>  	 *                              [ ...               ]
+>  	 *       regs_off               [ reg_arg1          ] prog ctx 
+> context
+prog ctx context/prog_ctx context/prog_ctx, to be in sync with tags 
+below.
+please refer s390's field tagging
+> -	 *       nregs_off              [ args count        ]
+> -	 *       ip_off                 [ traced function   ]
+> +	 *       nregs_off              [ args count        ] ((u64 
+> *)prog_ctx)[-1]
+> +	 *       ip_off                 [ traced function   ] ((u64 
+> *)prog_ctx)[-2]
+>  	 *                              [ ...               ]
+>  	 *       run_ctx_off            [ bpf_tramp_run_ctx ]
+>  	 *                              [ reg argN          ]
+> @@ -895,7 +895,7 @@ static int __arch_prepare_bpf_trampoline(struct
+> bpf_tramp_image *im, void *rw_im
+> 
+>  	bpf_trampoline_save_args(image, ctx, func_frame_offset, nr_regs, 
+> regs_off);
+> 
+> -	/* Save our return address */
+> +	/* Save our LR/return address */
+>  	EMIT(PPC_RAW_MFLR(_R3));
+>  	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE))
+>  		EMIT(PPC_RAW_STL(_R3, _R1, alt_lr_off));
+> @@ -903,24 +903,29 @@ static int __arch_prepare_bpf_trampoline(struct
+> bpf_tramp_image *im, void *rw_im
+>  		EMIT(PPC_RAW_STL(_R3, _R1, bpf_frame_size + PPC_LR_STKOFF));
+> 
+>  	/*
+> -	 * Save ip address of the traced function.
+> -	 * We could recover this from LR, but we will need to address for
+> OOL trampoline,
+> -	 * and optional GEP area.
+> +	 * Get IP address of the traced function.
+Get/Derive
+> +	 * In case of CONFIG_PPC_FTRACE_OUT_OF_LINE or BPF program, LR
+> +	 * points to the instruction after the 'bl' instruction in the OOL 
+> stub.
+> +	 * Refer to ftrace_init_ool_stub() and bpf_arch_text_poke() for OOL 
+> stub
+> +	 * of kernel functions and bpf programs respectively.
+> +	 * Recover kernel function/bpf program address from the unconditional
+> +	 * branch instruction at the end of OOL stub.
+>  	 */
+>  	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) || flags & 
+> BPF_TRAMP_F_IP_ARG) {
+>  		EMIT(PPC_RAW_LWZ(_R4, _R3, 4));
+Please add comment what R4 points to; for easy referencing
+>  		EMIT(PPC_RAW_SLWI(_R4, _R4, 6));
+>  		EMIT(PPC_RAW_SRAWI(_R4, _R4, 6));
+>  		EMIT(PPC_RAW_ADD(_R3, _R3, _R4));
+> -		EMIT(PPC_RAW_ADDI(_R3, _R3, 4));
+>  	}
+> 
+>  	if (flags & BPF_TRAMP_F_IP_ARG)
+>  		EMIT(PPC_RAW_STL(_R3, _R1, ip_off));
+> 
+> -	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE))
+> +	if (IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE)) {
+>  		/* Fake our LR for unwind */
+> +		EMIT(PPC_RAW_ADDI(_R3, _R3, 4));
+>  		EMIT(PPC_RAW_STL(_R3, _R1, bpf_frame_size + PPC_LR_STKOFF));
+> +	}
+> 
+>  	/* Save function arg count -- see bpf_get_func_arg_cnt() */
+>  	EMIT(PPC_RAW_LI(_R3, nr_regs));
+-Abhishek
