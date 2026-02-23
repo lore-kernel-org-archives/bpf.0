@@ -1,290 +1,283 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94523659F4;
-	Mon, 23 Feb 2026 12:15:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064233659FA
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 12:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771848903; cv=none; b=DTVOvrMrFBHd7/PDS6Go++hjUTsWDWhIQvP4XKB9HpEAOWeaHFrEwxZR17rPuVLkKSdm99C+O+G5T6XdMV8LprXISe1rVX3S0GNhJ44spSoM4oE56hQWqFf9xxJ8D24SemB94/xFLQbDq93ab1tJKclRfDvK+zequ/Kq449oJv8=
+	t=1771850689; cv=none; b=u1My3R5btnGH0crO1rvQl7S7oI6PNlGGJOdOGVyCD8i5RlgZAY+osK/BgEpz3g1iuCabrt7l5GeGu+ooEqUjcQbA24j/Pe23TmQx+x8Ce2jrB9h09cCwho6mPZOGIiqllBniwXt74UzauA/vcqGGs7LGR5t4tABkHeSj6BuZTQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771848903; c=relaxed/simple;
-	bh=36cWsecT1qUgOLTpdU6JzUMxBxZWBjM/D7IujN/u1qY=;
+	s=arc-20240116; t=1771850689; c=relaxed/simple;
+	bh=M68f3APN5bd7LHloA6NrKBqIULn49u+ujIMSnSth66g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PoWUKCTtshHVvjETRbgCGVqote1sV+O1cHGNqiCCD/GUPhXCzDwhQusGvvJJF/dspPPEe71nQ6+cFGAe76r5BmUnnSRIQleb+GKTFDhYJ3wYizDBBobXLmtcDY/v5lsA7c3gH2dh34259GV7dE6LjWgBXqYUHtsSjMuMTzR7elY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jmSHJpDz; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 In-Reply-To:Content-Type; b=I6rgzjwX0ziqqPgeP+SO9huv6WUCIirE04m2AqikSUgCFy7lXt0pD8OB1nnQE01WIa1o6+nWWjgVlG4adrwa+kEOnxuGxcFQkj+6R2cWqOGNOLzwK9s3zUxTJBOXIqGiiFs8L27vanVPEIFDMe8kD1iw2y4IQt6zlrw+Wb3IuiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZkgpyZJ; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jmSHJpDz"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61N3Fab53184352;
-	Mon, 23 Feb 2026 12:14:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=B7n7tb
-	tuq8gVlMaNwM7zMnYoFVVP0uXAjpdAB3YYewM=; b=jmSHJpDzpORS3K/nw8UPRH
-	yNTnSMpwww6HkGx+RGbjaecwb+vi11LqxC2Q33mNPQ19ROggJ49Ag6xL+SWYnR1b
-	UWya60UvkUdyDUsng0B1H9UXdtEgUx3nIRaJUmEM82UUk5eU+gX6PTYiw6avjEGs
-	zuxNvvepaZqL/x0+dvbSh6MFx0PcIR8+8ZRkqOkRJtVyJ+aToplMDtxGQcLCD7fx
-	9ANLli6BTQH+nHHstQkHDAmOGlm3DR+PL+S7cPu0d9H1ALAXu+i70uuQuSo8Rsp0
-	zEeFuS2+VmioHfO0wE+0gcruNIL0VF43Ioc9VXIPFWzWmBEZkvXmhyGa5QOwj8Sw
-	==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf24g6sv5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 12:14:34 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61NCALHb027800;
-	Mon, 23 Feb 2026 12:14:33 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfsr1mcnh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 12:14:33 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61NCET9w49545494
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Feb 2026 12:14:29 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C2B482004D;
-	Mon, 23 Feb 2026 12:14:29 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9858B2004B;
-	Mon, 23 Feb 2026 12:14:28 +0000 (GMT)
-Received: from [0.0.0.0] (unknown [9.87.140.60])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 23 Feb 2026 12:14:28 +0000 (GMT)
-Message-ID: <10367bd9-4b9f-48d1-9ee7-8e8b1ec57909@linux.ibm.com>
-Date: Mon, 23 Feb 2026 13:14:28 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZkgpyZJ"
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-483487335c2so39500235e9.2
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 04:44:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771850686; x=1772455486; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xnW1Wqd58lECj55tVKLq7KbjiXWb8oIkcZq5dzctHUw=;
+        b=lZkgpyZJMyM09+sAtaO3V0UzXHQP7CQNT2IjG9sVc0wdU3F2kGV3pfKFY9HSkqdsgi
+         C+MemvkbIzd2+99eyd3Bv8rvgpHGilq6mrKLLATwQ960y/BvCvErppPryVvqOHXKgyJR
+         sj0G+g/4vyM/EmCNhlqe4W/3KY3QnlxsH4omkH2nxdrrXZbDMa60It4wZC2j0tyHRLaU
+         s70Yve3MKnM5umkzfIlPaxV5utVf7L+e8Kw7/iQF9XwgXyQW8+KCgb/HZwkHXnrjV7sq
+         hT8APpHXZW49WjW1a4ZEWTMRHfoThs//HarOUfgFeSQE1KrVVuqtFXCTb1s0geIovADD
+         oJNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771850686; x=1772455486;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xnW1Wqd58lECj55tVKLq7KbjiXWb8oIkcZq5dzctHUw=;
+        b=DgILRpkRmM99UpD3F1tutEuDjTklJ0kQYDUqhlTsn7uXsd2j67NfopsTkioGtJYF4e
+         u1UqhbebljDAWZayYgBxv26XqmdsaQoBps41zZdSZSK9uHaNJvfrUH0SRF+7YNMqXmza
+         +ofpfbieJJjNoWNlpaNT3b+a9AYu5e8yN9ZscW7LgGTBxDac3WSfuQvQ94cPlfQYOLmB
+         VoFsBuc4iod9BY6jOaoiqKYAjoMv+AYMzS2LkmPIe74xVXGx3iPUeqJ0ProOIEZByNiG
+         jvRzV9dxd0lbscYFaDkwm2ALqVhx0J2ucNKV+5LTx+no/K0QnPcK+QWdGVBq0Ceb2wvt
+         m9RQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6Nj6pOLSm1ENajmyq3v4Tvt45UAvvwwu/ss2IXv+jf6T6myL2T48I2FQ8wYMXiaUnNb4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtMWKBFgxYLLiC0TehVa0ZsWiKrYAeKUAf3fHoOGhZcshLRgGD
+	PT6uXt2Fz7Y5rGJJHpOzTGuDmhqmqaeRio9wtPnWEGzEtQ5E+WhLzSB8
+X-Gm-Gg: AZuq6aIvn1v9t4WjpydN+t1viXT6JRK51mHUi1jqdnI40DbJ7fR5iassem/Qg3abWzO
+	u5wsi3hIdVYXZhzx94a2c5J62UYt8+gxI2pDkv5qyxUb3mhRqPOW5ocrFfqednEnq7CQzlUbO1Y
+	HR4t89eIlRpXCSR5B90JeGTyUCBtB8xxO3yLJocqrYerejLfzV1gtvQ1Z3cBe1i+fkn4jG5bQS7
+	LJiZdlZDqhEUTu5qBVfsJJ3YAf7oesc33s66BR80kSt1937XGwLk4elH4Kl1C3XNRCuo6PdqbRJ
+	VpP1AZsk7Hu8KSzAV9YbfxHkUeboseHYQNr1l+1dX80h3updkJolrXyojdUnQcdhkDnoJDetcof
+	mPQm0T3dJmuQLkoQqd9yg6vhpaiwfUWMZVgVpdK3cItGzBRODRaF8oR8j3AnP2FCDOqLFno9wNz
+	e5Onq+xuWX3Xy1RkPgLqUZHhm+LcFpBWY2ELlPrMSnd6AxgA==
+X-Received: by 2002:a05:600c:638d:b0:480:1e40:3d2 with SMTP id 5b1f17b1804b1-483a95f5a62mr129387105e9.29.1771850685905;
+        Mon, 23 Feb 2026 04:44:45 -0800 (PST)
+Received: from [10.2.0.2] ([146.70.48.20])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a3deb73bsm83621845e9.3.2026.02.23.04.44.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Feb 2026 04:44:45 -0800 (PST)
+Message-ID: <6f4af118-ecb1-422e-a8db-8e6f50d6d988@gmail.com>
+Date: Mon, 23 Feb 2026 13:44:23 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 2/3] bpf,s390: add fsession support for
- trampolines
-To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-        haoluo@google.com, jolsa@kernel.org, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, bpf@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20260223084022.653186-1-dongml2@chinatelecom.cn>
- <20260223084022.653186-3-dongml2@chinatelecom.cn>
+Subject: Re: [PATCH 1/4] ns: add bpf hooks
+To: Christian Brauner <brauner@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>
+Cc: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+ Lennart Poettering <lennart@poettering.net>
+References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
+ <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
 Content-Language: en-US
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-In-Reply-To: <20260223084022.653186-3-dongml2@chinatelecom.cn>
+From: Djalal Harouni <tixxdz@gmail.com>
+In-Reply-To: <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=TNRIilla c=1 sm=1 tr=0 ts=699c44ab cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=JiIl2gRODhJS3gKvde8A:9
- a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: oR92738kPA7ueINngB0n8_-9BFV3Xzqw
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDEwNCBTYWx0ZWRfXzy/OWVwK8kMg
- D3NyYkBVRB8bsXjJIUnfOIGefi2fV4f/AJm3zdNCE5X+RkgA59epuGAHJ3Uplqq6FdS4IiRDmgQ
- FPF/Ng0S6V02p+Gm1JWiH5wWhCVH2Efl8nNfr0njfJHWHRA6n/xmNC2kso0XfNOaSnDmQ5ZFfbU
- z9MWQoxQ5ChjETbl1VlGc2Ns5glKOgFJxD5k8PJyzCsWMiQtx23yz/e5gxCHvUlbDB+IjMwnaFB
- 3o9gNQsfRdxCrK0u7TleOEFKmu/+UGnugBIdWROq3VVYXMaO0IL1ebQDny1WZROwvF/2qpNTDrV
- GS4y0zzoHbcPon5ndarTFWs7H2s0KI4I5468ALrbQHgUlCLC4lQFGO9Vun/avDDo8ay+cSvXCuO
- tm7hnuwSsiAtWooADRcCpLp7WBulwP16gjBSV4qksB6ymw/uVYrSdxnjWAqc9E6mYnB9P0MkWbK
- 9qVDRYUAlzZDRsXvwIA==
-X-Proofpoint-ORIG-GUID: cmrsWhzXOMdcSLVsLbMslXilLpA109xW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-23_02,2026-02-20_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 adultscore=0 priorityscore=1501 impostorscore=0
- spamscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602230104
+
+On 2/20/26 01:38, Christian Brauner wrote:
+> Add the three namespace lifecycle hooks and make them available to bpf
+> lsm program types. This allows bpf to supervise namespace creation. I'm
+> in the process of adding various "universal truth" bpf programs to
+> systemd that will make use of this. This e.g., allows to lock in a
+> program into a given set of namespaces.
+
+Thank you Christian, so if this feature is added we will also
+use it.
+
+The commit log says lock in a given set of namespaces where I see
+only setns path am I right? would it make sense to also have the
+check around some callers of create_new_namespaces() where
+appropriate befor nsproxy switch if we don't want to go deep, but
+allow a bit of control or easy checks around
+CLONE_NEWNS/mount/pivot_root fs combinations?
+
+Or defering the combination checks to userspace makes more sense?
+
+The other clone flags are presumably nested so safe, for userns
+there is already a check, and cgroup+sb you added in the other
+patch is great!
+
+Thank you!
 
 
-On 2/23/26 09:40, Menglong Dong wrote:
-> Implement BPF_TRACE_FSESSION support for s390. The logic here is similar
-> to what we did in x86_64.
->
-> In order to simply the logic, we factor out the function invoke_bpf() for
-> fentry and fexit.
->
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
 > ---
->   arch/s390/net/bpf_jit_comp.c | 68 +++++++++++++++++++++++++++++++-----
->   1 file changed, 59 insertions(+), 9 deletions(-)
-
-
-Thank you for contributing this series!
-
-
-In general this all looks very reasonable; I believe I found a few nits, 
-please take a look at my comments below.
-
-
->
-> diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-> index 763d2491dfa3..ea0c81f18ece 100644
-> --- a/arch/s390/net/bpf_jit_comp.c
-> +++ b/arch/s390/net/bpf_jit_comp.c
-> @@ -2480,8 +2480,8 @@ struct bpf_tramp_jit {
->   	int ip_off;		/* For bpf_get_func_ip(), has to be at
->   				 * (ctx - 16)
->   				 */
-> -	int arg_cnt_off;	/* For bpf_get_func_arg_cnt(), has to be at
-> -				 * (ctx - 8)
-> +	int func_meta_off;	/* For bpf_get_func_arg_cnt()/fsession, has
-> +				 * to be at (ctx - 8)
->   				 */
->   	int bpf_args_off;	/* Offset of BPF_PROG context, which consists
->   				 * of BPF arguments followed by return value
-> @@ -2585,6 +2585,28 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
->   	return 0;
->   }
+>   include/linux/bpf_lsm.h | 21 +++++++++++++++++++++
+>   kernel/bpf/bpf_lsm.c    | 25 +++++++++++++++++++++++++
+>   kernel/nscommon.c       |  9 ++++++++-
+>   kernel/nsproxy.c        |  7 +++++++
+>   4 files changed, 61 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> index 643809cc78c3..5ae438fdf567 100644
+> --- a/include/linux/bpf_lsm.h
+> +++ b/include/linux/bpf_lsm.h
+> @@ -12,6 +12,9 @@
+>   #include <linux/bpf_verifier.h>
+>   #include <linux/lsm_hooks.h>
 >   
-> +static int invoke_bpf(struct bpf_tramp_jit *tjit,
-> +		      const struct btf_func_model *m,
-> +		      struct bpf_tramp_links *tl, bool save_ret,
-> +		      u64 func_meta, int cookie_off)
+> +struct ns_common;
+> +struct nsset;
+> +
+>   #ifdef CONFIG_BPF_LSM
+>   
+>   #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
+> @@ -48,6 +51,11 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func)
+>   
+>   int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
+>   			     struct bpf_retval_range *range);
+> +
+> +int bpf_lsm_namespace_alloc(struct ns_common *ns);
+> +void bpf_lsm_namespace_free(struct ns_common *ns);
+> +int bpf_lsm_namespace_install(struct nsset *nsset, struct ns_common *ns);
+> +
+>   int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
+>   				const struct bpf_dynptr *value_p, int flags);
+>   int bpf_remove_dentry_xattr_locked(struct dentry *dentry, const char *name__str);
+> @@ -104,6 +112,19 @@ static inline bool bpf_lsm_has_d_inode_locked(const struct bpf_prog *prog)
+>   {
+>   	return false;
+>   }
+> +
+> +static inline int bpf_lsm_namespace_alloc(struct ns_common *ns)
 > +{
-> +	int i, cur_cookie = (tjit->bpf_args_off - cookie_off) / sizeof(u64);
-> +	struct bpf_jit *jit = &tjit->common;
+> +	return 0;
+> +}
+> +static inline void bpf_lsm_namespace_free(struct ns_common *ns)
+> +{
+> +}
+> +static inline int bpf_lsm_namespace_install(struct nsset *nsset,
+> +					    struct ns_common *ns)
+> +{
+> +	return 0;
+> +}
+>   #endif /* CONFIG_BPF_LSM */
+>   
+>   #endif /* _LINUX_BPF_LSM_H */
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index 0c4a0c8e6f70..f6378db46220 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -30,10 +30,32 @@ __weak noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
+>   #include <linux/lsm_hook_defs.h>
+>   #undef LSM_HOOK
+>   
+> +__bpf_hook_start();
 > +
-> +	for (i = 0; i < tl->nr_links; i++) {
-> +		if (bpf_prog_calls_session_cookie(tl->links[i])) {
-> +			u64 meta = func_meta | ((u64)cur_cookie << BPF_TRAMP_COOKIE_INDEX_SHIFT);
-> +
-> +			emit_store_stack_imm64(jit, REG_0, tjit->func_meta_off, meta);
-> +			cur_cookie--;
-> +		}
-> +		if (invoke_bpf_prog(tjit, m, tl->links[i], save_ret))
-> +			return -EINVAL;
-> +	}
-> +
+> +__weak noinline int bpf_lsm_namespace_alloc(struct ns_common *ns)
+> +{
 > +	return 0;
 > +}
 > +
->   static int alloc_stack(struct bpf_tramp_jit *tjit, size_t size)
->   {
->   	int stack_offset = tjit->stack_size;
-> @@ -2614,8 +2636,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
->   	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
->   	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
->   	int nr_bpf_args, nr_reg_args, nr_stack_args;
-> +	int cookie_cnt, cookie_off, fsession_cnt;
->   	struct bpf_jit *jit = &tjit->common;
->   	int arg, bpf_arg_off;
-> +	u64 func_meta;
->   	int i, j;
->   
->   	/* Support as many stack arguments as "mvc" instruction can handle. */
-> @@ -2647,6 +2671,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
->   			return -ENOTSUPP;
->   	}
->   
-> +	cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
-> +	fsession_cnt = bpf_fsession_cnt(tlinks);
-> +
->   	/*
->   	 * Calculate the stack layout.
->   	 */
-> @@ -2659,8 +2686,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
->   	tjit->backchain_off = tjit->stack_size - sizeof(u64);
->   	tjit->stack_args_off = alloc_stack(tjit, nr_stack_args * sizeof(u64));
->   	tjit->reg_args_off = alloc_stack(tjit, nr_reg_args * sizeof(u64));
-> +	cookie_off = alloc_stack(tjit, cookie_cnt * sizeof(u64));
->   	tjit->ip_off = alloc_stack(tjit, sizeof(u64));
-> -	tjit->arg_cnt_off = alloc_stack(tjit, sizeof(u64));
-> +	tjit->func_meta_off = alloc_stack(tjit, sizeof(u64));
->   	tjit->bpf_args_off = alloc_stack(tjit, nr_bpf_args * sizeof(u64));
->   	tjit->retval_off = alloc_stack(tjit, sizeof(u64));
->   	tjit->r7_r8_off = alloc_stack(tjit, 2 * sizeof(u64));
-> @@ -2749,7 +2777,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
->   
->   	if (flags & BPF_TRAMP_F_IP_ARG)
->   		emit_store_stack_imm64(jit, REG_0, tjit->ip_off, (u64)func_addr);
-> -	emit_store_stack_imm64(jit, REG_0, tjit->arg_cnt_off, nr_bpf_args);
-> +	func_meta = nr_bpf_args;
-> +	emit_store_stack_imm64(jit, REG_0, tjit->func_meta_off, func_meta);
->   
->   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
->   		/*
-> @@ -2762,10 +2791,19 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
->   		EMIT6_PCREL_RILB_PTR(0xc0050000, REG_14, __bpf_tramp_enter);
->   	}
->   
-> -	for (i = 0; i < fentry->nr_links; i++)
-> -		if (invoke_bpf_prog(tjit, m, fentry->links[i],
-> -				    flags & BPF_TRAMP_F_RET_FENTRY_RET))
-> +	if (fsession_cnt) {
-> +		/* clear all the session cookies' value */
-
-Here and below: please use the existing style for single-line comments: 
-full sentence starting with a capital letter and ending with a dot. 
-Unfortunately the JIT is somewhat inconsistent in this area, but let's 
-at least not introduce a new comment style here.
-
-> +		for (i = 0; i < cookie_cnt; i++)
-> +			emit_store_stack_imm64(jit, REG_0, cookie_off + 8 * i, 0);
-> +		/* clear the return value to make sure fentry always gets 0 */
-> +		emit_store_stack_imm64(jit, REG_0, tjit->retval_off, 0);
-> +	}
-
-Would it make sense to clear cookies right after invoke_bpf_prog() and 
-only if bpf_prog_calls_session_cookie() is true?
-
-Going one step further and reducing the size of cookies array would 
-probably be ideal, but I guess this will complicate things 
-significantly, so I'm not suggesting to do this.
-
-> +
-> +	if (fentry->nr_links) {
-
-I think it's okay to drop this condition, invoke_bpf() is most likely 
-inlined and the loop will automatically have 0 iterations in this case.
-
-> +		if (invoke_bpf(tjit, m, fentry, flags & BPF_TRAMP_F_RET_FENTRY_RET,
-> +			       func_meta, cookie_off))
->   			return -EINVAL;
-> +	}
->   
->   	if (fmod_ret->nr_links) {
->   		/*
-> @@ -2842,11 +2880,18 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
->   		EMIT6_PCREL_RILC(0xc0040000, 0, (u64)im->ip_epilogue);
->   	}
->   
-> +	/* set the "is_return" flag for fsession */
-> +	func_meta |= (1ULL << BPF_TRAMP_IS_RETURN_SHIFT);
-> +	if (fsession_cnt)
-> +		emit_store_stack_imm64(jit, REG_W0, tjit->func_meta_off,
-> +				       func_meta);
-> +
->   	/* do_fexit: */
->   	tjit->do_fexit = jit->prg;
-> -	for (i = 0; i < fexit->nr_links; i++)
-> -		if (invoke_bpf_prog(tjit, m, fexit->links[i], false))
-> +	if (fexit->nr_links) {
-Same as for fentry.
-> +		if (invoke_bpf(tjit, m, fexit, false, func_meta, cookie_off))
->   			return -EINVAL;
-> +	}
->   
->   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
->   		im->ip_epilogue = jit->prg_buf + jit->prg;
-> @@ -2951,6 +2996,11 @@ bool bpf_jit_supports_arena(void)
->   	return true;
->   }
->   
-> +bool bpf_jit_supports_fsession(void)
+> +__weak noinline void bpf_lsm_namespace_free(struct ns_common *ns)
 > +{
-> +	return true;
 > +}
 > +
->   bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+> +__weak noinline int bpf_lsm_namespace_install(struct nsset *nsset,
+> +					  struct ns_common *ns)
+> +{
+> +	return 0;
+> +}
+> +
+> +__bpf_hook_end();
+> +
+>   #define LSM_HOOK(RET, DEFAULT, NAME, ...) BTF_ID(func, bpf_lsm_##NAME)
+>   BTF_SET_START(bpf_lsm_hooks)
+>   #include <linux/lsm_hook_defs.h>
+>   #undef LSM_HOOK
+> +BTF_ID(func, bpf_lsm_namespace_alloc)
+> +BTF_ID(func, bpf_lsm_namespace_free)
+> +BTF_ID(func, bpf_lsm_namespace_install)
+>   BTF_SET_END(bpf_lsm_hooks)
+>   
+>   BTF_SET_START(bpf_lsm_disabled_hooks)
+> @@ -383,6 +405,8 @@ BTF_ID(func, bpf_lsm_task_prctl)
+>   BTF_ID(func, bpf_lsm_task_setscheduler)
+>   BTF_ID(func, bpf_lsm_task_to_inode)
+>   BTF_ID(func, bpf_lsm_userns_create)
+> +BTF_ID(func, bpf_lsm_namespace_alloc)
+> +BTF_ID(func, bpf_lsm_namespace_install)
+>   BTF_SET_END(sleepable_lsm_hooks)
+>   
+>   BTF_SET_START(untrusted_lsm_hooks)
+> @@ -395,6 +419,7 @@ BTF_ID(func, bpf_lsm_sk_alloc_security)
+>   BTF_ID(func, bpf_lsm_sk_free_security)
+>   #endif /* CONFIG_SECURITY_NETWORK */
+>   BTF_ID(func, bpf_lsm_task_free)
+> +BTF_ID(func, bpf_lsm_namespace_free)
+>   BTF_SET_END(untrusted_lsm_hooks)
+>   
+>   bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+> diff --git a/kernel/nscommon.c b/kernel/nscommon.c
+> index bdc3c86231d3..c3613cab3d41 100644
+> --- a/kernel/nscommon.c
+> +++ b/kernel/nscommon.c
+> @@ -1,6 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   /* Copyright (c) 2025 Christian Brauner <brauner@kernel.org> */
+>   
+> +#include <linux/bpf_lsm.h>
+>   #include <linux/ns_common.h>
+>   #include <linux/nstree.h>
+>   #include <linux/proc_ns.h>
+> @@ -77,6 +78,7 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
+>   		ret = proc_alloc_inum(&ns->inum);
+>   	if (ret)
+>   		return ret;
+> +
+>   	/*
+>   	 * Tree ref starts at 0. It's incremented when namespace enters
+>   	 * active use (installed in nsproxy) and decremented when all
+> @@ -86,11 +88,16 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
+>   		atomic_set(&ns->__ns_ref_active, 1);
+>   	else
+>   		atomic_set(&ns->__ns_ref_active, 0);
+> -	return 0;
+> +
+> +	ret = bpf_lsm_namespace_alloc(ns);
+> +	if (ret && !inum)
+> +		proc_free_inum(ns->inum);
+> +	return ret;
+>   }
+>   
+>   void __ns_common_free(struct ns_common *ns)
 >   {
->   	if (!in_arena)
+> +	bpf_lsm_namespace_free(ns);
+>   	proc_free_inum(ns->inum);
+>   }
+>   
+> diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
+> index 259c4b4f1eeb..5742f9664dbb 100644
+> --- a/kernel/nsproxy.c
+> +++ b/kernel/nsproxy.c
+> @@ -9,6 +9,7 @@
+>    *             Pavel Emelianov <xemul@openvz.org>
+>    */
+>   
+> +#include <linux/bpf_lsm.h>
+>   #include <linux/slab.h>
+>   #include <linux/export.h>
+>   #include <linux/nsproxy.h>
+> @@ -379,6 +380,12 @@ static int prepare_nsset(unsigned flags, struct nsset *nsset)
+>   
+>   static inline int validate_ns(struct nsset *nsset, struct ns_common *ns)
+>   {
+> +	int ret;
+> +
+> +	ret = bpf_lsm_namespace_install(nsset, ns);
+> +	if (ret)
+> +		return ret;
+> +
+>   	return ns->ops->install(nsset, ns);
+>   }
+>   
+> 
+
