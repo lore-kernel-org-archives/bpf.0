@@ -1,110 +1,166 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928C6306B11
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 15:54:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760B52EC09B
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 16:03:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771862095; cv=none; b=PKngAkmyRYWPAnTn8leepn4RLo4Wby7Rhc79gHlCm/FA1FndFacLZ3ECEcIKqUKqeu642gvumKa5pUQtLwxW9Su91aKana/2BQ2WNiwPp36KeLvQSSrWgPbpm6nAIZElMCtVEbMdR9cjthQqIhtWJJeFDT6kgSnZR8B8i7GV50w=
+	t=1771862608; cv=none; b=UmwpKsha5agXvo9pZ62Mhn95yDin30x9rK4Ah3oiAzat1ONCDk0hFP5CZSbA4XCTkQX2vczMobnKvQOx5gY/1yaiqVlzDFrz1gGMqe3IY4UO9d3KU3SnoW8HFhMDxbiZqZLQqFTJfQcHBxrJxNdPbeRJ4l+eOStXH4uysNGD1cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771862095; c=relaxed/simple;
-	bh=R1AUHGXxe3dGgZHbFkQxH0f/b1HLtXH7ZZMS1myvRDw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H5FbxRkRX4EpFl9WCTWQ+Lt0D69xidHud5bpzvPpcNiBv2vYBPUEs/Qh0S7qzxEjQtyf/5HNtXV8FCWbCHeKeTibHq4QEUEIj/GOrgg+F/mDSf/LPdaHw7uDSMkHVEpVWxPH/SImAqyxPHo2uGPUSIIelwr8/dgJGHQI3xaj0+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AV/trNVK; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771862608; c=relaxed/simple;
+	bh=Puusm8IkaDN3s9SIb+X/OpPy7el/20BL8fchVpP43AA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=V1NUFpp29B7NuTlXNKEV9dBdagAqJds74JFFG4w5//z/3SINjyFnV9SJzHpfUhNRTWMAUCQQwzOv3pgIrxiW+14gS2rogs85A4726xMs/EfhC0xhcEjcjkZH6PGUCHQP9JzW09D12PsjtZKGzY8A8fQHTVQ0UP3aBY0YdKdND/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VIkGLdJG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AV/trNVK"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-65a40f3f048so8340492a12.3
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 07:54:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771862091; x=1772466891; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cyQb0+priOw9IUD9vV+F9EltCgHvh5WCMeDq2M8hato=;
-        b=AV/trNVK+3bVsOKnp5bahBdRAH07bioQbb+KQdhDdReRC6BRzawScBjHSwKs+AhGUB
-         iZ9AQZGG3s1e+nAmEEy0xHhD3d4xIMx8y6Z/yQ+wTJ4cVxHc/yg6MwgGVLPyxT8IAAou
-         uhFX6ih3LF71xZRew+arQeEsEDozLUMo0ojuRIG+gJWYkQ5RxV+70Hk9wxWOgbNJv9qb
-         MhGWm8RpXByui/rR61Hket8H6wtRBMr7N9b1zwc3gputqFhlSuzGn+NSwyrtYpPRpk/h
-         VJ3oaez6xGsaRenOEca1c0+yQ/C/yHzImvR9FrZ7toR2aDszDqjbeA8idHsvmj2D/i1e
-         QYXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771862091; x=1772466891;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cyQb0+priOw9IUD9vV+F9EltCgHvh5WCMeDq2M8hato=;
-        b=BJFCG/yFGbW8N6ZeZhwuXJw6kcqpAaVcjUNF5fuZxtZsjwluv1kNYEavBo3/2oaVLq
-         ccCCS1G5gN4yMVux/KX6vnblmuiddTMIC9GRIzGbZt0ri6imxyoMA3ZRYZpQOJd2E4K/
-         Vg8z1HWRi7u7Vm4TWXLXiJCR0vhnOGoLAFxqeXEr+jH6oVeLoIzXnxz3HNiIsG19u5aT
-         pGsIzLcWrEZJvfbpaEFTidVr4J+MM/KAB7DwO73DofCgGAc5T1eFlS+uXoW1uc+6W5fn
-         3x/9WlYaGw+NAi086sReCaV0Q8KlKlRM1mGcestKTyFUVa3LicsTpY4FgnsJC4ZJJDpR
-         0KoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUOZK0PV15s/eIdP0kpCvljeFLsTfoaGKkMTugAdmKQX5RIuGtnBPKtq6QYi2C/fl7E9b8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXDXbYHZXgRnQ4vMc3+NodpslDayzQqYok3qRzkWmEjQD+CxTi
-	Ne9yWACsgKbGQ4dTOTRwJIS0Q0JilSp5o4qWxbFdox2XbZ4iy2wS6I/5
-X-Gm-Gg: AZuq6aJ1NnSFZCMy/eN4K1N9bwml2cD5ABNTpYqTdJ2e72Sec5wlId7Lx4aMGdCwR3q
-	4YfE3IQkyh/HJ+nzhM4LcSLGHZhMuyCM3Y1MlZ2MYql93N8OI/fz5AsafGjMp2zdaQbhIKLAD39
-	Obaruh9jfchRwF5lVdfZ3RPdWXvuaGJItpv2Ze80wBOpnuCNMzswCzH7+11TV1v+HsGFCCaOhhb
-	rg10XT3LMXkg/lK9xoqvA8wXf6m8IiiVhMO5cHBsVeaEflnHSO9TDHzMKEmMj0Ra4alKKjJvd1R
-	rD/YYxUdc07ecEN9NrJxoDQo976oLdyZNmNP/yAAqVe0TR5d0QaaSOU9Om+YHhwTACyrzNQBCj7
-	1gM/xZqvjVd7uuUWcrgeX4lJm2bh+Iq+9hxp3duPBVo3z4jKewz7PEoaaxIKryKJP2ZfMKt9LQh
-	BVF2IR4eXVi8466hU+clFPtPMGyJbAI3wtCS3oY6h1wCQFa/rnDXzVAUOyG50P416eRVUiR9f4B
-	r7q7cfguO2Tit/i8Y+u47TPH+QKvlQsHiBX99Q2iW8GY5/r7DHIJxGsSC66RyyFSshuRzZ5sL6w
-	Ww==
-X-Received: by 2002:a17:906:19cb:b0:b8f:8e99:7860 with SMTP id a640c23a62f3a-b9081ba9436mr397974566b.46.1771862090575;
-        Mon, 23 Feb 2026 07:54:50 -0800 (PST)
-Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084a4d6e1sm341510066b.0.2026.02.23.07.54.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Feb 2026 07:54:50 -0800 (PST)
-Message-ID: <7e772d91-a546-40ed-90c0-29e2a9721c53@gmail.com>
-Date: Mon, 23 Feb 2026 15:54:46 +0000
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VIkGLdJG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07674C116C6;
+	Mon, 23 Feb 2026 16:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771862608;
+	bh=Puusm8IkaDN3s9SIb+X/OpPy7el/20BL8fchVpP43AA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=VIkGLdJGn2OQczqyeP2ZhrqPtGC2aNg5DAhOrPcmuHGJcRyokl8YlksvShwbzU/kp
+	 9CuCYtnUgxy90eiCUoVDU/gK3PDM05wJnPzulOGPNNj0+/aDZd6RhYS3dYdYRiyYRo
+	 z8GcLwpNr1+UR3hR+NsCUqDt6zqVNbTh08f4EzlyTPeWkfxKftnSi8VhNjKwg1sv1W
+	 b6jx0++VxtH2TLD/oO5d7XJbNcNfYHNbXuetaellDFsHigo8hoosOySqMPVZPg0XU0
+	 t5uszd/EdO6ngeBfO9unP/rFqVoWy3x+De5iA8Tft0i2XI8ss+KowkRj+J63pqmYXB
+	 2idwJFzJqAxTA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2 0/6] Introduce KF_FORBID_SLEEP modifier for acquire/release kfuncs
+Date: Mon, 23 Feb 2026 08:02:48 -0800
+Message-ID: <20260223160300.2109907-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [LSF/MM/BPF TOPIC] User space RAID5 with ublk and io_uring BPF
-To: Xiao Ni <xni@redhat.com>, lsf-pc@lists.linux-foundation.org,
- linux-block <linux-block@vger.kernel.org>, bpf@vger.kernel.org
-Cc: Ming Lei <ming.lei@redhat.com>
-References: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2/19/26 05:38, Xiao Ni wrote:
-> Hi all
-> 
-> I'm doing some work on user-space RAID recently. I'd like to propose a
-> topic for LSF/MM 2026 regarding the implementation of RAID5 in user
-> space using ublk and io_uring bpf[1], particularly focusing on the
-> challenges encountered and potential kernel improvements needed.
-> 
-> Ublk raid5 uses the ublk framework (tools/testing/selftests/ublk/),
-> with the goal of leveraging io_uring's zero-copy capabilities and
-> BPF[1] for performance optimization. The implementation includes:
-> * RAID5 stripe handling with configurable chunk sizes
-> * Multi-queue support via io_uring
-> * Degraded mode for single disk failure tolerance
-> * Integration with io_uring BPF struct_ops framework
-> 
-> During the implementation, I encountered several technical challenges.
-> The primary challenge is performing XOR parity calculations in a true
-> zero-copy manner:
+Changelog:
+v1: https://lore.kernel.org/all/20260218182555.1501495-1-puranjay@kernel.org/
+Changes in v1 -> v2:
+- Add a patch to consolidate sleepable context error message printing in
+  check_helper_call(), has no functional changes (Eduard)
+- In check_kfunc_call() for KF_RELEASE and __iter arg, use release_regno
+  like dynptr rather than custom handling (Mykyta)
+- Fix some comments to follow correct style (Mykyta)
+- Move state->forbid_sleep_count-- to release_reference_state() (Eduard)
+- Remove error message in check_resource_leak() for forbid_sleep_count
+  because it is redundant and will never trigger (Eduard)
+- Consolidated some checks and prints (Eduard)
 
-I aim at similar use cases, i.e. interacting with registered buffers
-from BPF, but based on a different BPF-io_uring implementation. I'd be
-interesting to discuss how the kfunc API should look like.
+Some BPF kfuncs acquire resources that prevent sleeping - a lock, a
+reference to an object under a lock, a preempt-disable section. Today there
+is no way for the verifier to know that holding a particular acquired
+reference means sleeping is forbidden. Programs either run entirely in
+sleepable or non-sleepable context, with no way to express "sleeping is
+forbidden right now, but will be allowed once I release this reference."
 
+This series adds KF_FORBID_SLEEP, a new kfunc flag that can be combined
+with KF_ACQUIRE. When a kfunc annotated with KF_ACQUIRE | KF_FORBID_SLEEP
+is called, the verifier tags the acquired reference with forbid_sleep and
+increments a per-state forbid_sleep_count counter. When the reference is
+released (through corresponding KF_RELEASE kfunc), the counter is
+decremented.  The verifier checks this counter everywhere it decides
+whether sleeping is allowed — sleepable helpers, sleepable kfuncs, global
+function calls, and resource leak checks.
+
+This is fully generic. Any pair of KF_ACQUIRE/KF_RELEASE kfuncs can opt
+into sleep prohibition by adding KF_FORBID_SLEEP to the acquire side.
+
+To make this useful for iterators specifically, the series first extends
+the verifier's iterator support to allow KF_ACQUIRE on _next and KF_RELEASE
+on a separate kfunc taking an __iter argument. The verifier tracks the
+acquired reference on the iterator's stack slot (st->id) and auto-releases
+it on the next _next call and on the DRAINED (NULL) path, so the
+acquire/release is transparent to programs that don't need mid-loop
+release.
+
+Iterator KF_ACQUIRE support is not useful on its own right now, but it
+becomes the foundation for KF_FORBID_SLEEP: an iterator whose _next is
+annotated with KF_ACQUIRE | KF_FORBID_SLEEP can now express "holding this
+pointer forbids sleeping; calling _release invalidates the pointer and
+re-enables sleeping."
+
+The task_vma iterator is the first user. It holds mmap_lock during
+iteration, preventing sleepable helpers like bpf_copy_from_user().
+Currently, this can lead to a deadlock as the fault path also takes
+mmap_lock.
+
+With this series, a BPF program can release the lock mid-iteration:
+
+    bpf_for_each(task_vma, vma, task, 0) {
+        u64 start = vma->vm_start;
+
+        /* sleeping forbidden, but vma pointer access allowed */
+        bpf_iter_task_vma_release(&___it);
+        /* mmap_lock released, vma pointer invalidated */
+        /* sleeping is fine here */
+
+        bpf_copy_from_user(&buf, sizeof(buf), (void *)start);
+    }
+
+The series is organized as:
+
+  Patch 1: KF_ACQUIRE/KF_RELEASE plumbing for iterators in the
+           verifier. Pure infrastructure, no behavioral change to
+           existing iterators.
+
+  Patch 2: Consolidate sleepable context error message printing
+           in check_helper_call(), no functional changes
+
+  Patch 3: KF_FORBID_SLEEP flag and forbid_sleep_count machinery.
+           Generic, works for any KF_ACQUIRE kfunc - iterator or not.
+
+  Patch 4: Move mmap_lock acquisition from _new to _next in the
+           task_vma iterator, preparing for re-acquisition after
+           release.
+
+  Patch 5: Wire up task_vma as the first user: annotate _next with
+           KF_ACQUIRE | KF_FORBID_SLEEP, add bpf_iter_task_vma_release().
+
+  Patch 6: Selftests covering the runtime path (release + copy_from_user)
+           and verifier rejection of invalid patterns (sleeping without
+           release, VMA access after release, double release, release
+           without acquire, nested iterator interaction).
+
+Puranjay Mohan (6):
+  bpf: Add KF_ACQUIRE and KF_RELEASE support for iterators
+  bpf: consolidate sleepable context error message printing
+  bpf: Add KF_FORBID_SLEEP modifier for KF_ACQUIRE kfuncs
+  bpf: Move locking to bpf_iter_task_vma_next()
+  bpf: Add split iteration support to task_vma iterator
+  selftests/bpf: Add tests for split task_vma iterator
+
+ include/linux/bpf_verifier.h                  |   2 +
+ include/linux/btf.h                           |   1 +
+ kernel/bpf/btf.c                              |   3 +
+ kernel/bpf/helpers.c                          |   3 +-
+ kernel/bpf/task_iter.c                        |  44 ++++--
+ kernel/bpf/verifier.c                         | 147 +++++++++++++-----
+ .../testing/selftests/bpf/bpf_experimental.h  |   1 +
+ .../testing/selftests/bpf/prog_tests/iters.c  |  13 ++
+ .../selftests/bpf/progs/iters_task_vma.c      |  39 +++++
+ .../bpf/progs/iters_task_vma_nosleep.c        | 125 +++++++++++++++
+ 10 files changed, 331 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/iters_task_vma_nosleep.c
+
+
+base-commit: 9cd168a2720bc614647dd20bc5d1c308c56a44ec
 -- 
-Pavel Begunkov
+2.47.3
 
