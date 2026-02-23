@@ -1,185 +1,245 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DF823EA8B
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:33:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771875192; cv=none; b=cWdt4AmiUD4118v0g+bzh8O3P4B4gEDF45RX1oXGzzAOjuGi4q8/vvNibUdV33db77Mlnu77y37KzKcFiUUa/8VoSzAQ7cOuoA3YOQHqYOStx1/YWRMxy8CQn1EywH4Gp1ln/el4foYnNE5v6t3D0VhM2EGn6uTAtbW75gdn0a0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771875192; c=relaxed/simple;
-	bh=H92Fngy2jMaCQ9z6mHQcAPKLql/LE6cWbhzQviHkSeM=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=Gk5Zn/352Z/at0TR3tbdsnduOkaU2mU41Mq9EzQge8UvAFbqOQlMf+lEA/4NI+OjpliJHwlsnBd9Y5b4XJCPnI4tXlGwNG8fIbe5ZsqfsEWUPJlzG4LcvW2CBBycedDesQok1yEfjpSVxwXYa8k5BSXOGsGy0C4cvWCP53ngTMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=KL5ZFkgq; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEFB221726
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:35:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771875345; cv=pass; b=XkuCEISyBwFHempN2e/Z9lGTERgp2u0UYPz328QH7p6QoJMHWLy0u4sQnn76IS1ABN3ktIzxm4UyknKoFBAT1y5zVC0pc6AONFzEPpP5wVKU5k6HYjBVohJrBC0V7kwvLKxPKdbs9FIM3u6uiuw38WDNEKr9JdtZbnB3AGwPqys=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771875345; c=relaxed/simple;
+	bh=axPKsj973CJEnsqXW6JO5OGkwmZLoejWq3/4vMg+PHg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fmjVP1W83Ou6LaOe6UpTIGza41/kyh71Gdut2//zl9Fi7zDsV8Xt+q4S3zrAx5A6CHu2Si+PriYRZCBq0GELX70ImeAYhTam6PdCYHIzRwws+pfdUb3QKYShtmCfTvJQ6e2vCIHIJuOzcMkrMGF2e7QRQ0alImXwjkr5lsEVn0I=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UkXHs/PV; arc=pass smtp.client-ip=209.85.221.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="KL5ZFkgq"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61NITKG23172107;
-	Mon, 23 Feb 2026 19:32:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=+HAthE
-	MD6C8u01c3UOpX9clz4coYeUnj/3U5RORe4cs=; b=KL5ZFkgqbKK8ko+Ncz0rsk
-	OPQtmpgf3kPFesiDhR/mxfHNGaEG+eGum+khcj68nFWXs/4WHDXQlJ3EpZUhbPrw
-	JkvKzfC4H9xNcWZCcLtj4YcmsW3kgu2BAaizYaho1a1hIMAOkT+VBiqAnumaAUQS
-	8QSqNFcxui/QchcbmUKA0oCggUEHfqumMxzlidkAMj02bzufd0RQ/4oFANqhDFLU
-	9HafE6IfPOcQ++fs0D7m9Rz7U2QPanqgn8EtlAyjZCDOb8lYcz/dUgzowNGx0VQY
-	SgoBgo173eFueWUxPgWl9lMiVhmUOxvtv/re6sPZGFHqJ84CTRXIA1gyL5Ta/fbg
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4cqrhhk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 19:32:41 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61NG6JRs030298;
-	Mon, 23 Feb 2026 19:32:40 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfrhk5xhu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 19:32:40 +0000
-Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61NJWdQW20120074
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Feb 2026 19:32:40 GMT
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A2FE35805F;
-	Mon, 23 Feb 2026 19:32:39 +0000 (GMT)
-Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A15BA58043;
-	Mon, 23 Feb 2026 19:32:38 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 23 Feb 2026 19:32:38 +0000 (GMT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UkXHs/PV"
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-4359108fd24so2924892f8f.2
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 11:35:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771875341; cv=none;
+        d=google.com; s=arc-20240605;
+        b=SGV21ReG6+dkUXGhcjx15FhtgO7i0yCJScAD00G1gBISAN7W766U8/lGFxNhk2ikRb
+         YFucej3fzc1SkJI6Wl9nXK/Fl+SXhOdESiaMHD/n1lZCxgcTGC63MkESMb8DQW090BLz
+         Lf7jXjeMoiKvFDMura3ZElSrMAB02ogmOSVC9ixQAuLFoLlmuwOBvHsNNnTKKoiBSOx1
+         h+Glat3ab2Ty/IsXwOtdarmYbzSOQzey5OOuzu1JkQzqqn+bMs4e9l5DN5DhbjtK7hwS
+         jvWtkstRjmCxf43ay35BHcu87Cs1uJuLPkJ7YJlDjTB4XZ+EDgFrMwHGTccu6jotQsRM
+         bVXQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=MBHq3GUoAOL0w6S711awWfpqNru5IpSsWmVFqqx/NGE=;
+        fh=xurMgHsUwzR9+N2vE2Tw20HHVFVZxj9KfU7TvlUK79M=;
+        b=bjOHhF8cNjyfVTmGRv8Nx6h8xzd3OEBP9JFCWb4X+wqG0yS0VAidrMyH2ec4fsEz/3
+         U93QdAyoFH7AyofXR5iRMDJFuwDry8hc77kd/7dADkS+XPtVZZyropD6VJnUDs2QoC7V
+         XF6/YjOJiHEJJ5OOmBI+246CXsaQI0RW2PKP2ilISE0W1eSu7DhTSUFrLpFPSnc9RWug
+         n6kn2YiHz4DFuSu0AmgipAOMexigSTb4AUiCgz+jJ1O2cHpI81G94lX5IdCJPfiAByoY
+         Ods2uQ9wsPBH3FiYxtJI/5WFakohUqS6W3PrscMnfALkwRAvRt4tY3GO4vgla5lO0WXF
+         yXcg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771875341; x=1772480141; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MBHq3GUoAOL0w6S711awWfpqNru5IpSsWmVFqqx/NGE=;
+        b=UkXHs/PVkUBHkVYAv7JRvfAqkX+EdQmgAQsp/+c63qBkNyPsmaFXe9OKSdBLP5x/jk
+         kEXYrqFju+cbkM5CSRapouhOz+h9Q6uPXLuCfYSd9e4iaZ22wKA56+DX5yKv/ePmj+HL
+         CiAnGMEHr4y9a1EwrE8SGVcccibnX9KM5JbTlM4lHBnVHPAiu3gEMaRBkXS4Lur3qee2
+         bOcQiIhwlTlsGAANkpudi5U0kYO7UpwfmdtRBn13kk/0pfkmX39bqY1nt2kSoE8/wPpv
+         qvgzVMXl9nN7zC10X6Ygt/uYxSZjkf0S8Zg6ZwurTWjth7LkLwN6egBRvqHPUIOGMZ19
+         lGCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771875341; x=1772480141;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=MBHq3GUoAOL0w6S711awWfpqNru5IpSsWmVFqqx/NGE=;
+        b=NMYML/CjsYexgVT0dGrxg1IGAz01JeegJZp22DESqEq1d0xnnf09xuTM7eIVfUv3QI
+         GNqyixqlLwzBOdPaJZuoMdS17vXO1995Ga7Rm916lv2ayWJvxAorkdAFkQ9qF6NaXXJC
+         xoumwJGpOpV8rRFBPiULc0l2gK8Sh4lOV1rKrqupTrYYdFgRFPt7z+2RDDRvzbqj7zfQ
+         Hg8WCUhB7VnIDwYZGPkHU4P7I9IMXLES43VhHBH/WnPof1kfP0Dj+3bWv4m6a9Y+WlKH
+         k/Tlhs8VsOcn/WDI5CqT/Ja4xlssfIcyKgpCnjknM3zEZhcTebRAerpxnhlPKG5+7Txk
+         xRRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVgD2K4vHg3jieFdBnMsAkbDQb9trJuuHBoNRTA5BjTltaBRQWEAOyLhBc8BvhmhK0wS3o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZtQUxiJIBZiW6qGOFkSJL0gXRQa01nRHMo7EXc9PsF625l6V3
+	i74JkmQuAEyN/YQ5bQkWAzqOUaYSKFe4eRQG70MFfXHVKHopmTwtc3nlbBsh5cq4Pnn93X/mfkY
+	YPOiCE7MQ7SsWYfGWGe9MjpgdlBd0xkc=
+X-Gm-Gg: ATEYQzwha+aYUMFf5PjnHuzt5kBKLg7bJOqdRuzP+lFoafeMpIFxOESQRDVQkJuvXuI
+	GA9ceVFbaGwVjXbT/Qd8E1WduLhDSbyK9uMLvNnPzNXL47nIH5BsKQtxdU80CM42UrIYcZeL3Eo
+	xa2khwE7t1bRbklRuaD7FUBErDGTTgLy5jF1BkdypOLTLVsO7tymZmhborMNeUhF+EIldq2y9fj
+	8WuPo6QqwI1VDgL3to0EpSjqWPyiOITZ5VRDAPbi8WxSn9d70M9KM6fk9YKK78KHBEtxgoivQ5t
+	tR5VTVTcAnrAfk85bfExdIiEQKhxss6itSFXg3br7ZoFQEltFCdiFhZu+jCdN2hmC1XlPTjLbZ2
+	44+BM6iH/
+X-Received: by 2002:a05:6000:26c3:b0:437:67b5:9bab with SMTP id
+ ffacd0b85a97d-4396f1954b4mr19136260f8f.56.1771875340626; Mon, 23 Feb 2026
+ 11:35:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 24 Feb 2026 01:02:38 +0530
-From: adubey <adubey@linux.ibm.com>
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: bpf@vger.kernel.org, hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
-        clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH 2/2] selftests/bpf: Enable private stack tests for
- powerpc64
-In-Reply-To: <1956c912-c880-4214-9bc3-e205902459b5@kernel.org>
-References: <20260216152234.36632-1-adubey@linux.ibm.com>
- <20260216152234.36632-2-adubey@linux.ibm.com>
- <1956c912-c880-4214-9bc3-e205902459b5@kernel.org>
-Message-ID: <4cfdd14fac3c4091c6616decfc5d6ab9@linux.ibm.com>
-X-Sender: adubey@linux.ibm.com
-Organization: IBM
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: EXtVg3WTOAebkMJ6Cyw6AXFkRhwBRc3L
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDE2NiBTYWx0ZWRfX2rC4xsxuUKjX
- xb2ITekNjn3DAZocQdBP7qq8+tfePxbCdSi2X5fZetY7yGEiI8cB4pzyrLY54YKyHfw6ymnynJR
- d6u8jzIkMW4vlA/PmtDdzzJWsCEQuxrHXuQzHD1kshmwWvH64UxOQxvkDv0pJjHx5ODgCprSOXm
- 9cVqyDzTvm8FFOcXzJBdPAvro5ntVD/OT8FYX2dWlM8gZxCgtMuswTxxKhHQE446h5ovAVUDemj
- 4CHHDx2mx1rvg7+n0DYOdCNMuQynycG1rvzkYENVROTfoXytmqvSo9EKVObq7zwW9vUNZiSFg0T
- ERogrBcunTlJlrDii/6bRVIWUxzNhQ7nQYatvR13jKvYlmArCw+OYQYqZs0fzwwPrLpAtDtVE2v
- c9JDltkZAsbj1X6o5pi9tR0ACLhB+HQg3tGKWWDjl/2LIa59Ehss77ERWhtedWcAk5jFjRm+Drz
- vjaWWUPcf7vg5u2Xn+w==
-X-Proofpoint-GUID: gUw0PTrM_Pjy2ZOqm6Xa5dgujYzcmh57
-X-Authority-Analysis: v=2.4 cv=bbBmkePB c=1 sm=1 tr=0 ts=699cab5a cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
- a=qmUj5T3_vRBoYhgTJiUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-23_04,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 phishscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602230166
+References: <20260220100649.628307-1-jolsa@kernel.org> <20260220100649.628307-3-jolsa@kernel.org>
+ <CAADnVQ+2-DtgWqeKmrbsP0O7Rz2ZkDjkh1kfHDSxF0K8Xs+1ww@mail.gmail.com> <aZsT6_3tkli3SPsI@krava>
+In-Reply-To: <aZsT6_3tkli3SPsI@krava>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 23 Feb 2026 11:35:29 -0800
+X-Gm-Features: AaiRm52XzWV142EilgaigHV4dPqGxP7EWSSexa4oS_s3WmGsUCX0T2Q1_V9DwOI
+Message-ID: <CAADnVQL_Jpe_7a55HTn5CyYoxWcHahiK3+CDeOeURqZAuf+teA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 02/17] bpf: Use mutex lock pool for bpf trampolines
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, Martin KaFai Lau <kafai@fb.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>, 
+	Menglong Dong <menglong8.dong@gmail.com>, Steven Rostedt <rostedt@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-02-23 16:41, Christophe Leroy (CS GROUP) wrote:
-> Le 16/02/2026 à 16:22, adubey@linux.ibm.com a écrit :
->> From: Abhishek Dubey <adubey@linux.ibm.com>
->> 
->> With support of private stack, relevant tests must pass
->> on powerpc64.
->> 
->> #./test_progs -t struct_ops_private_stack
->> #434/1   struct_ops_private_stack/private_stack:OK
->> #434/2   struct_ops_private_stack/private_stack_fail:OK
->> #434/3   struct_ops_private_stack/private_stack_recur:OK
->> #434     struct_ops_private_stack:OK
->> Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
->> 
->> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
->> ---
->>   tools/testing/selftests/bpf/progs/struct_ops_private_stack.c   | 3 
->> ++-
->>   .../selftests/bpf/progs/struct_ops_private_stack_fail.c        | 3 
->> ++-
->>   .../selftests/bpf/progs/struct_ops_private_stack_recur.c       | 3 
->> ++-
->>   3 files changed, 6 insertions(+), 3 deletions(-)
->> 
->> diff --git 
->> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c 
->> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
->> index dbe646013811..1df1111cd029 100644
->> --- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
->> +++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
->> @@ -7,7 +7,8 @@
->>     char _license[] SEC("license") = "GPL";
->>   -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
->> +#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
->> +				|| defined(__TARGET_ARCH_powerpc)
-> 
-> Won't this also trigger the test on powerpc/32 ?
-We have patch ready marking test separation b/w 32/64-bit ppc.
-Planning to post it immediately after few concurrent patches are frozen.
-With current tag, yes it does invoke on 32 bit. Our intent is to
-support private stack for ppc64 only in this series.
-> 
-> 
->>   bool skip __attribute((__section__(".data"))) = false;
->>   #else
->>   bool skip = true;
->> diff --git 
->> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c 
->> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
->> index 3d89ad7cbe2a..e09c1a8782b4 100644
->> --- 
->> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
->> +++ 
->> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
->> @@ -7,7 +7,8 @@
->>     char _license[] SEC("license") = "GPL";
->>   -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
->> +#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
->> +				|| defined(__TARGET_ARCH_powerpc)
->>   bool skip __attribute((__section__(".data"))) = false;
->>   #else
->>   bool skip = true;
->> diff --git 
->> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c 
->> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
->> index b1f6d7e5a8e5..791800835673 100644
->> --- 
->> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
->> +++ 
->> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
->> @@ -7,7 +7,8 @@
->>     char _license[] SEC("license") = "GPL";
->>   -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
->> +#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
->> +				|| defined(__TARGET_ARCH_powerpc)
->>   bool skip __attribute((__section__(".data"))) = false;
->>   #else
->>   bool skip = true;
--Abhishek
+On Sun, Feb 22, 2026 at 6:34=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Fri, Feb 20, 2026 at 11:58:13AM -0800, Alexei Starovoitov wrote:
+> > On Fri, Feb 20, 2026 at 2:07=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wr=
+ote:
+> > >
+> > > Adding mutex lock pool that replaces bpf trampolines mutex.
+> > >
+> > > For tracing_multi link coming in following changes we need to lock al=
+l
+> > > the involved trampolines during the attachment. This could mean thous=
+ands
+> > > of mutex locks, which is not convenient.
+> > >
+> > > As suggested by Andrii we can replace bpf trampolines mutex with mute=
+x
+> > > pool, where each trampoline is hash-ed to one of the locks from the p=
+ool.
+> > >
+> > > It's better to lock all the pool mutexes (64 at the moment) than
+> > > thousands of them.
+> > >
+> > > Removing the mutex_is_locked in bpf_trampoline_put, because we remove=
+d
+> > > the mutex from bpf_trampoline.
+> > >
+> > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > ---
+> > >  include/linux/bpf.h     |  2 --
+> > >  kernel/bpf/trampoline.c | 74 +++++++++++++++++++++++++++++++--------=
+--
+> > >  2 files changed, 56 insertions(+), 20 deletions(-)
+> > >
+> > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> > > index cd9b96434904..46bf3d86bdb2 100644
+> > > --- a/include/linux/bpf.h
+> > > +++ b/include/linux/bpf.h
+> > > @@ -1335,8 +1335,6 @@ struct bpf_trampoline {
+> > >         /* hlist for trampoline_ip_table */
+> > >         struct hlist_node hlist_ip;
+> > >         struct ftrace_ops *fops;
+> > > -       /* serializes access to fields of this trampoline */
+> > > -       struct mutex mutex;
+> > >         refcount_t refcnt;
+> > >         u32 flags;
+> > >         u64 key;
+> > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> > > index 952cd7932461..05dc0358654d 100644
+> > > --- a/kernel/bpf/trampoline.c
+> > > +++ b/kernel/bpf/trampoline.c
+> > > @@ -30,6 +30,45 @@ static struct hlist_head trampoline_ip_table[TRAMP=
+OLINE_TABLE_SIZE];
+> > >  /* serializes access to trampoline tables */
+> > >  static DEFINE_MUTEX(trampoline_mutex);
+> > >
+> > > +#define TRAMPOLINE_LOCKS_BITS 6
+> > > +#define TRAMPOLINE_LOCKS_TABLE_SIZE (1 << TRAMPOLINE_LOCKS_BITS)
+> > > +
+> > > +static struct {
+> > > +       struct mutex mutex;
+> > > +       struct lock_class_key key;
+> > > +} *trampoline_locks;
+> > > +
+> > > +static struct mutex *trampoline_locks_lookup(struct bpf_trampoline *=
+tr)
+> >
+> > select_trampoline_lock() ?
+>
+> ok
+>
+> >
+> > > +{
+> > > +       return &trampoline_locks[hash_64((u64) tr, TRAMPOLINE_LOCKS_B=
+ITS)].mutex;
+> > > +}
+> > > +
+> > > +static void trampoline_lock(struct bpf_trampoline *tr)
+> > > +{
+> > > +       mutex_lock(trampoline_locks_lookup(tr));
+> > > +}
+> > > +
+> > > +static void trampoline_unlock(struct bpf_trampoline *tr)
+> > > +{
+> > > +       mutex_unlock(trampoline_locks_lookup(tr));
+> > > +}
+> > > +
+> > > +static int __init trampoline_locks_init(void)
+> > > +{
+> > > +       int i;
+> > > +
+> > > +       trampoline_locks =3D kmalloc_array(TRAMPOLINE_LOCKS_TABLE_SIZ=
+E,
+> > > +                                        sizeof(trampoline_locks[0]),=
+ GFP_KERNEL);
+> >
+> > why bother with memory allocation? This is just 64 mutexes.
+>
+> ok, I could probably use __mutex_init directly for static key
+>
+> about 64.. not sure how I missed that but there's lockdep limit for
+> maximum locks depth and it's 48.. so we'll need to use 32 locks,
+> which is probably still ok
+>
+> >
+> > > +       if (!trampoline_locks)
+> > > +               return -ENOMEM;
+> > > +
+> > > +       for (i =3D 0; i < TRAMPOLINE_LOCKS_TABLE_SIZE; i++) {
+> > > +               lockdep_register_key(&trampoline_locks[i].key);
+> >
+> > why special key?
+>
+> if we keep single key we will get lockdep 'recursive locking' warning
+> during bpf_trampoline_multi_attach, because lockdep will think we lock
+> the same mutex
+>
+> there's support to annotate nested locking with mutex_lock_nested but
+> it allows maximum of 8 nested instances
+
+yeah. subclass limit of 8 is there for a different use case.
+
+
+I guess you never validated your earlier approach of "let's take
+all trampoline mutexes" with lockdep ? ;)
+MAX_LOCK_DEPTH is indeed 48.
+
+See fs/configfs/inode.c and default_group_class.
+It does:
+                        lockdep_set_class(&inode->i_rwsem,
+                                          &default_group_class[depth - 1]);
+
+the idea here is that the number of lockdep keys doesn't have
+to be equal to the actual number of mutexes.
+
+I guess we can keep a total of 32 mutexes to avoid making it too fancy.
+Please add a comment explaining 32 and why it needs lockdep_key.
+
+I thought declaring all mutexes as static will avoid the need for the key,
+but DEFINE_MUTEX doesn't support an array.
+So since we need a loop anyway to init mutex and the key,
+let's keep kmalloc_array() above. Which is now renamed to kmalloc_objs()
+after 7.0-rc1.
