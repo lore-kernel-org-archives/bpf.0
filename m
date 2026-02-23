@@ -1,32 +1,32 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC81736A037
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E4536A03E
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:08:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771873687; cv=none; b=XH8upKKdwMWPimWsXDIbXLO8WVyoHyHEpV9if5NBV87ihnpFHgbMw6tq5aY8zXaEfUbrDVCI/hJJ7TVg3u1cMY3Nz7+X8K9PczZ7v2zJhcUvVAqV+Ft8txUZoHeOtqtVBrSyc+VB5bU7R7k/Z0E/xebWQtBYHsJuSiYaJ6NwM+4=
+	t=1771873690; cv=none; b=E13MV6DKhanfyAl+Sq5mZDUQtqdIk2S6clNs1Iqv45kH9jpbOkr31gEXdyi1xObVHY9n2QpZnKSJJ9xPMyKfdC8jSWr2zeX2ZgDpuOj79ELB1mWEb9WO1x01geCAFWvid1Jq03XFYOsPyilvFBx98vmWdQcvU3OChQxfwCGiVo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771873687; c=relaxed/simple;
-	bh=a6HINtjSXQrvpKAVWLLy6PuIyYT9nya5BlVlrZH1A9E=;
+	s=arc-20240116; t=1771873690; c=relaxed/simple;
+	bh=nL9fNv8ceOeOxooMuKNnBuBIiAwCq8vILhKnk7cD+bw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WHLFyXwln7WFgXDbz5T4GWvduiTrESDhlpmOpgNmgDyXQ12adsgblIeFUhmnUjMJZauDok5rEpEAOm42bn6hhcJekWpvRVve8jXIUTobeVLzCYF6uxjJD8rBzZ7MQoHM1p7PeRo2x7PgZlqZHyE4ABKMnyTDKK4UX93F2WnspzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oWoU7COU; arc=none smtp.client-ip=91.218.175.186
+	 MIME-Version; b=QCmY6RrpIvt4fDFqdDklUjOzIjpWRfYaf1eLZRQBNy5fm3RKB3J0A9hVDkse3IkT2zkZFRHGd6uWlz05cFhfloRMvNkyKE/3PQNMeFTKFNtfC0SZA2MF1Q6/XPRUN50xuMLBVwB9PHwS3PZIDrY3wugcbwgiWhhsPCzVcsr3idg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CLbczP03; arc=none smtp.client-ip=91.218.175.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oWoU7COU"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CLbczP03"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771873684;
+	t=1771873687;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pbYroRv2vwXLKO8WfCFzIsl8nhanqAWqNNoAKIDihcQ=;
-	b=oWoU7COUmvS2fohJNQgli2MnUXT/iO9s+aEeqfScAQGx75LrV7IVvG4zNzZe251pxg4OEp
-	z/uss1slxq7/AhE8I3DoPTDbexm4sfTaEtPIuFC7Xfn47lkZRGJNjAyXNq3USenWlRYO2w
-	BK/dfMX2e1BKfrn37KFWMgFYdLqcYJ4=
+	bh=XRmqhruTyQ4dkQ9qQRrgrVBM+JiDjFeye9z/j9b866s=;
+	b=CLbczP03wcnNKE5D5XA+WCx5NhaaA+DbaNK/YcsLPpOG6fCm+Lfn5TBGvKwfA6E5lL5rYm
+	x18YOHgAmLye9UB5lkPczVB7y4zXw1b9NvbxKBtO5eNx2iWAAxHEYM3jL2bH01KU5kIhJn
+	N6k6SFH/FI5cH2gNEXdy7iL9DUsL7b0=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v4 03/20] selftests/bpf: Replace strncpy() with strscpy()
-Date: Mon, 23 Feb 2026 11:07:19 -0800
-Message-ID: <20260223190736.649171-4-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v4 04/20] selftests/bpf: Use strscpy in bpftool_helpers.c
+Date: Mon, 23 Feb 2026 11:07:20 -0800
+Message-ID: <20260223190736.649171-5-ihor.solodrai@linux.dev>
 In-Reply-To: <20260223190736.649171-1-ihor.solodrai@linux.dev>
 References: <20260223190736.649171-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -53,178 +53,67 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-strncpy() does not guarantee NULL-termination and is considered
-deprecated [1]. Replace strncpy() calls with strscpy().
+Replace strncpy() calls in bpftool_helpers.c with strscpy().
 
-[1] https://docs.kernel.org/process/deprecated.html#strncpy-on-nul-terminated-strings
+Pass the destination buffer size to detect_bpftool_path() instead of
+hardcoding BPFTOOL_PATH_MAX_LEN.
 
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/network_helpers.c             | 3 +--
- tools/testing/selftests/bpf/prog_tests/align.c            | 2 +-
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c         | 3 +--
- tools/testing/selftests/bpf/prog_tests/flow_dissector.c   | 4 ++--
- tools/testing/selftests/bpf/prog_tests/queue_stack_map.c  | 4 ++--
- tools/testing/selftests/bpf/prog_tests/skc_to_unix_sock.c | 2 +-
- tools/testing/selftests/bpf/prog_tests/task_local_data.h  | 2 +-
- tools/testing/selftests/bpf/prog_tests/tc_redirect.c      | 2 +-
- tools/testing/selftests/bpf/test_progs.c                  | 2 +-
- tools/testing/selftests/bpf/xdp_hw_metadata.c             | 4 ++--
- 10 files changed, 13 insertions(+), 15 deletions(-)
+ tools/testing/selftests/bpf/bpftool_helpers.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-index 5374b7e16d53..b82f572641b7 100644
---- a/tools/testing/selftests/bpf/network_helpers.c
-+++ b/tools/testing/selftests/bpf/network_helpers.c
-@@ -581,8 +581,7 @@ int open_tuntap(const char *dev_name, bool need_mac)
- 		return -1;
+diff --git a/tools/testing/selftests/bpf/bpftool_helpers.c b/tools/testing/selftests/bpf/bpftool_helpers.c
+index a5824945a4a5..595a636fa13b 100644
+--- a/tools/testing/selftests/bpf/bpftool_helpers.c
++++ b/tools/testing/selftests/bpf/bpftool_helpers.c
+@@ -1,15 +1,17 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+-#include "bpftool_helpers.h"
+ #include <unistd.h>
+ #include <string.h>
+ #include <stdbool.h>
  
- 	ifr.ifr_flags = IFF_NO_PI | (need_mac ? IFF_TAP : IFF_TUN);
--	strncpy(ifr.ifr_name, dev_name, IFNAMSIZ - 1);
--	ifr.ifr_name[IFNAMSIZ - 1] = '\0';
-+	strscpy(ifr.ifr_name, dev_name);
++#include "bpf_util.h"
++#include "bpftool_helpers.h"
++
+ #define BPFTOOL_PATH_MAX_LEN		64
+ #define BPFTOOL_FULL_CMD_MAX_LEN	512
  
- 	err = ioctl(fd, TUNSETIFF, &ifr);
- 	if (!ASSERT_OK(err, "ioctl(TUNSETIFF)")) {
-diff --git a/tools/testing/selftests/bpf/prog_tests/align.c b/tools/testing/selftests/bpf/prog_tests/align.c
-index 24c509ce4e5b..841a166b8081 100644
---- a/tools/testing/selftests/bpf/prog_tests/align.c
-+++ b/tools/testing/selftests/bpf/prog_tests/align.c
-@@ -633,7 +633,7 @@ static int do_test_single(struct bpf_align_test *test)
- 	} else {
- 		ret = 0;
- 		/* We make a local copy so that we can strtok() it */
--		strncpy(bpf_vlog_copy, bpf_vlog, sizeof(bpf_vlog_copy));
-+		strscpy(bpf_vlog_copy, bpf_vlog);
- 		start = strstr(bpf_vlog_copy, main_pass_start);
- 		if (!start) {
- 			ret = 1;
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index 5225d69bf79b..c69080ca14f5 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -346,8 +346,7 @@ static void test_task_sleepable(void)
- 		close(finish_pipe[1]);
+ #define BPFTOOL_DEFAULT_PATH		"tools/sbin/bpftool"
  
- 		test_data = malloc(sizeof(char) * 10);
--		strncpy(test_data, "test_data", 10);
--		test_data[9] = '\0';
-+		strscpy(test_data, "test_data", 10);
+-static int detect_bpftool_path(char *buffer)
++static int detect_bpftool_path(char *buffer, size_t size)
+ {
+ 	char tmp[BPFTOOL_PATH_MAX_LEN];
  
- 		test_data_long = malloc(sizeof(char) * 5000);
- 		for (int i = 0; i < 5000; ++i) {
-diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-index 08bae13248c4..fb4892681464 100644
---- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-+++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
-@@ -570,7 +570,7 @@ static int create_tap(const char *ifname)
- 	};
- 	int fd, ret;
- 
--	strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
-+	strscpy(ifr.ifr_name, ifname);
- 
- 	fd = open("/dev/net/tun", O_RDWR);
- 	if (fd < 0)
-@@ -599,7 +599,7 @@ static int ifup(const char *ifname)
- 	struct ifreq ifr = {};
- 	int sk, ret;
- 
--	strncpy(ifr.ifr_name, ifname, sizeof(ifr.ifr_name));
-+	strscpy(ifr.ifr_name, ifname);
- 
- 	sk = socket(PF_INET, SOCK_DGRAM, 0);
- 	if (sk < 0)
-diff --git a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-index a043af9cd6d9..41441325e179 100644
---- a/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-+++ b/tools/testing/selftests/bpf/prog_tests/queue_stack_map.c
-@@ -28,9 +28,9 @@ static void test_queue_stack_map_by_type(int type)
- 		vals[i] = rand();
- 
- 	if (type == QUEUE)
--		strncpy(file, "./test_queue_map.bpf.o", sizeof(file));
-+		strscpy(file, "./test_queue_map.bpf.o");
- 	else if (type == STACK)
--		strncpy(file, "./test_stack_map.bpf.o", sizeof(file));
-+		strscpy(file, "./test_stack_map.bpf.o");
- 	else
- 		return;
- 
-diff --git a/tools/testing/selftests/bpf/prog_tests/skc_to_unix_sock.c b/tools/testing/selftests/bpf/prog_tests/skc_to_unix_sock.c
-index 3eefdfed1db9..657d897958b6 100644
---- a/tools/testing/selftests/bpf/prog_tests/skc_to_unix_sock.c
-+++ b/tools/testing/selftests/bpf/prog_tests/skc_to_unix_sock.c
-@@ -34,7 +34,7 @@ void test_skc_to_unix_sock(void)
- 
- 	memset(&sockaddr, 0, sizeof(sockaddr));
- 	sockaddr.sun_family = AF_UNIX;
--	strncpy(sockaddr.sun_path, sock_path, strlen(sock_path));
-+	strscpy(sockaddr.sun_path, sock_path);
- 	sockaddr.sun_path[0] = '\0';
- 
- 	err = bind(sockfd, (struct sockaddr *)&sockaddr, sizeof(sockaddr));
-diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_data.h b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-index 0f86b9275cf9..8342e2fe5260 100644
---- a/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-+++ b/tools/testing/selftests/bpf/prog_tests/task_local_data.h
-@@ -262,7 +262,7 @@ static tld_key_t __tld_create_key(const char *name, size_t size, bool dyn_data)
- 		if (!atomic_compare_exchange_strong(&tld_meta_p->cnt, &cnt, cnt + 1))
- 			goto retry;
- 
--		strncpy(tld_meta_p->metadata[i].name, name, TLD_NAME_LEN);
-+		strscpy(tld_meta_p->metadata[i].name, name);
- 		atomic_store(&tld_meta_p->metadata[i].size, size);
- 		return (tld_key_t){(__s16)off};
+@@ -18,7 +20,7 @@ static int detect_bpftool_path(char *buffer)
+ 	 */
+ 	snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "./%s", BPFTOOL_DEFAULT_PATH);
+ 	if (access(tmp, X_OK) == 0) {
+-		strncpy(buffer, tmp, BPFTOOL_PATH_MAX_LEN);
++		strscpy(buffer, tmp, size);
+ 		return 0;
  	}
-diff --git a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-index 76d72a59365e..64fbda082309 100644
---- a/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-+++ b/tools/testing/selftests/bpf/prog_tests/tc_redirect.c
-@@ -1095,7 +1095,7 @@ static int tun_open(char *name)
  
- 	ifr.ifr_flags = IFF_TUN | IFF_NO_PI;
- 	if (*name)
--		strncpy(ifr.ifr_name, name, IFNAMSIZ);
-+		strscpy(ifr.ifr_name, name);
+@@ -27,7 +29,7 @@ static int detect_bpftool_path(char *buffer)
+ 	 */
+ 	snprintf(tmp, BPFTOOL_PATH_MAX_LEN, "../%s", BPFTOOL_DEFAULT_PATH);
+ 	if (access(tmp, X_OK) == 0) {
+-		strncpy(buffer, tmp, BPFTOOL_PATH_MAX_LEN);
++		strscpy(buffer, tmp, size);
+ 		return 0;
+ 	}
  
- 	err = ioctl(fd, TUNSETIFF, &ifr);
- 	if (!ASSERT_OK(err, "ioctl TUNSETIFF"))
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index 02a85dda30e6..d1418ec1f351 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -1799,7 +1799,7 @@ static int worker_main_send_subtests(int sock, struct test_state *state)
+@@ -44,7 +46,7 @@ static int run_command(char *args, char *output_buf, size_t output_max_len)
+ 	int ret;
  
- 		msg.subtest_done.num = i;
+ 	/* Detect and cache bpftool binary location */
+-	if (bpftool_path[0] == 0 && detect_bpftool_path(bpftool_path))
++	if (bpftool_path[0] == 0 && detect_bpftool_path(bpftool_path, sizeof(bpftool_path)))
+ 		return 1;
  
--		strncpy(msg.subtest_done.name, subtest_state->name, MAX_SUBTEST_NAME);
-+		strscpy(msg.subtest_done.name, subtest_state->name, MAX_SUBTEST_NAME);
- 
- 		msg.subtest_done.error_cnt = subtest_state->error_cnt;
- 		msg.subtest_done.skipped = subtest_state->skipped;
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index 3d8de0d4c96a..6db3b5555a22 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -550,7 +550,7 @@ static int rxq_num(const char *ifname)
- 	struct ifreq ifr = {
- 		.ifr_data = (void *)&ch,
- 	};
--	strncpy(ifr.ifr_name, ifname, IF_NAMESIZE - 1);
-+	strscpy(ifr.ifr_name, ifname);
- 	int fd, ret;
- 
- 	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
-@@ -571,7 +571,7 @@ static void hwtstamp_ioctl(int op, const char *ifname, struct hwtstamp_config *c
- 	struct ifreq ifr = {
- 		.ifr_data = (void *)cfg,
- 	};
--	strncpy(ifr.ifr_name, ifname, IF_NAMESIZE - 1);
-+	strscpy(ifr.ifr_name, ifname);
- 	int fd, ret;
- 
- 	fd = socket(AF_UNIX, SOCK_DGRAM, 0);
+ 	ret = snprintf(command, BPFTOOL_FULL_CMD_MAX_LEN, "%s %s%s",
 -- 
 2.53.0
 
