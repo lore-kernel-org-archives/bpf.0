@@ -1,142 +1,110 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D3D30148C
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 15:47:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928C6306B11
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 15:54:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771861636; cv=none; b=XewkQPp3fG2nVDH0rk4T3GPoTNEg4Fg/WBQm1y71kbNNccw2CNZ/0dZxQTvqf66pb/k0sfZOblwTDHI9nIcy0x+Njm0fo3mtSPgQ3ge/7qyLTgjJJv2i8n+HYwUEDWd+/lwazuX2E7RnQhydTDuQPQQQOZPtDSF+NZagoQ6n2UA=
+	t=1771862095; cv=none; b=PKngAkmyRYWPAnTn8leepn4RLo4Wby7Rhc79gHlCm/FA1FndFacLZ3ECEcIKqUKqeu642gvumKa5pUQtLwxW9Su91aKana/2BQ2WNiwPp36KeLvQSSrWgPbpm6nAIZElMCtVEbMdR9cjthQqIhtWJJeFDT6kgSnZR8B8i7GV50w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771861636; c=relaxed/simple;
-	bh=c0nyUek6XngwBcngRXOLG+sC35+BhxbRusJXFp7/xuA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kA5Z9LC3gzTUuFKhD7tDisFmbSczOClnkuSEMQu/0kU2gzl2wGH5VqRUlHzihC1SMh2dIspJCNUv3zISoZB3QAf8EH/IeBW+p62yG8B4/xe73XqNSglOap935wYal16Ff7Ee3NQ4qEbNrDVsTfGXhV5f7KADx+HZ0I7I5zEmZnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=g/oOi0Rq; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	s=arc-20240116; t=1771862095; c=relaxed/simple;
+	bh=R1AUHGXxe3dGgZHbFkQxH0f/b1HLtXH7ZZMS1myvRDw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H5FbxRkRX4EpFl9WCTWQ+Lt0D69xidHud5bpzvPpcNiBv2vYBPUEs/Qh0S7qzxEjQtyf/5HNtXV8FCWbCHeKeTibHq4QEUEIj/GOrgg+F/mDSf/LPdaHw7uDSMkHVEpVWxPH/SImAqyxPHo2uGPUSIIelwr8/dgJGHQI3xaj0+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AV/trNVK; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="g/oOi0Rq"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4806f3fc50bso51131095e9.0
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 07:47:14 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AV/trNVK"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-65a40f3f048so8340492a12.3
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 07:54:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1771861633; x=1772466433; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c0nyUek6XngwBcngRXOLG+sC35+BhxbRusJXFp7/xuA=;
-        b=g/oOi0RqoAlO3Z46H3kTAU97REQETAqZMSHBBPNZGCyxrWXXX3JW4R1xlP8mnkftAT
-         b1Pj1IIU/TpoxpKumpDuDGc+o8DygE9ULAGQ8Zba3J8+mLqgsox9+KG3AsZ6IqedG8Mf
-         qEB3CUIMZuWmsdOK3ihGFi3+vFA/4E5P0DW56QktJp3PdEWVCdorrts1zHoHGGHawVpr
-         kgUFM8zY+oXqwJJt9PzHhA/obyYcMlgdzwjWI4Zheimwoq07FaUahA2NSqeuBkte4nOL
-         tIbhVGdh8o/72L6AeS/rJzTZaR4B9mY3VZaYScL09lXLG/UD7BCbCJmwo4NBJKqS/HXm
-         Bz0A==
+        d=gmail.com; s=20230601; t=1771862091; x=1772466891; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cyQb0+priOw9IUD9vV+F9EltCgHvh5WCMeDq2M8hato=;
+        b=AV/trNVK+3bVsOKnp5bahBdRAH07bioQbb+KQdhDdReRC6BRzawScBjHSwKs+AhGUB
+         iZ9AQZGG3s1e+nAmEEy0xHhD3d4xIMx8y6Z/yQ+wTJ4cVxHc/yg6MwgGVLPyxT8IAAou
+         uhFX6ih3LF71xZRew+arQeEsEDozLUMo0ojuRIG+gJWYkQ5RxV+70Hk9wxWOgbNJv9qb
+         MhGWm8RpXByui/rR61Hket8H6wtRBMr7N9b1zwc3gputqFhlSuzGn+NSwyrtYpPRpk/h
+         VJ3oaez6xGsaRenOEca1c0+yQ/C/yHzImvR9FrZ7toR2aDszDqjbeA8idHsvmj2D/i1e
+         QYXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771861633; x=1772466433;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c0nyUek6XngwBcngRXOLG+sC35+BhxbRusJXFp7/xuA=;
-        b=C5Da69vTaLDY2N1B8SmPTxGDfGe/6XQk8k11+WOMncEX+oacKS+2DSkYy2kPhEoLoK
-         y7GpvFhXoCtjcERDJMxvCmT7rFD2IH4yPdyjiDLjx9TitmsCef0Bbunf2IhUqbcEJ3aM
-         YEM9U/j8MgLCrbc0gzIxVK9JyanoccdVN4YfU5IEQxTNTfiCIz7zVanJCCQP+l3PRMdy
-         +CL3OIf0O1oXikCCdqKLuxhW2m2AUrRKU1zmKwNoU8qJSpv9guqcoFiOSRo3feOHNx5U
-         jhLDrqgI9PJN7gMsIqljb66f/uDAsi3+R9yW83V1gFgiVPEZ/PtBdjToa/rERKj91UdE
-         55Dw==
-X-Forwarded-Encrypted: i=1; AJvYcCULhlVVQoxzXkXFL323MKxP85FO7A1IyUeFWEW8UgQGKk2/k6DzU7FVZDbT4o8I8dWSen4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUpXE4+cVrofROr0L47L4ejB26b/7dT2tl6Kr8lv58+aOzykc6
-	XlmGT8wNkoXjsWUK5GnFbAbi1/Fvpq4prtR6SoBVLEck/MsvSXp7NIsroD4DHbH1Jhs=
-X-Gm-Gg: AZuq6aJ6KEXvVEtEW98pEr+/CT93GOhGnOmFVJ9xKI0JU2I+mZiWvfyKGNFXZalAahp
-	wvhCs1B/czDhUCuc8nXuaCnglPgrZXE+B9zZ8ccHmz1qjKxb0eGPhO2KisvyaNUZUwV2Z+O5xrq
-	qKUq5jUm2WPDQZD6O/aRPjNFkE19UaPRBK8Dahq7T4RF6obCzVh+Mc4QAT6hPmlJgLb/cZHoZZM
-	dGGda5yGGbqFuOZGoVVGeKI9YIndMaydZcU1sFFllk34ho1WdWTmYSlH+GrBYI2wGav7dvYRmqI
-	5BkgBpmqG0/4RQblEwwX0YNVvruZ+ng0eAA1rgyC4OLpJ7COyMM1j1kXJ+1nAuh1dqZkB3DIaaC
-	1/OCplUxlwfsy0TbBOChNTW3cQ938SRQa/lMvmkwzl3YjwfmttrWKeCXXQ5cc9e/HsTFVVvCIbH
-	L/gOxX0enhln/4aEGeBjhwjr0uHALKyprs51YPuScbeMA=
-X-Received: by 2002:a05:600c:3150:b0:483:b3d7:2e87 with SMTP id 5b1f17b1804b1-483b3d72f25mr43253175e9.10.1771861633331;
-        Mon, 23 Feb 2026 07:47:13 -0800 (PST)
-Received: from blackdock.suse.cz (nat2.prg.suse.com. [195.250.132.146])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a8df83bcsm223479215e9.13.2026.02.23.07.47.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 07:47:12 -0800 (PST)
-Date: Mon, 23 Feb 2026 16:47:11 +0100
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	Lennart Poettering <lennart@poettering.net>
-Subject: Re: [PATCH 2/4] cgroup: add bpf hook for attach
-Message-ID: <tmihfspwvvxv6sle27br4dgsbvepacnqj74zfscndkz722ssby@244dku2izea7>
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
- <20260220-work-bpf-namespace-v1-2-866207db7b83@kernel.org>
+        d=1e100.net; s=20230601; t=1771862091; x=1772466891;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cyQb0+priOw9IUD9vV+F9EltCgHvh5WCMeDq2M8hato=;
+        b=BJFCG/yFGbW8N6ZeZhwuXJw6kcqpAaVcjUNF5fuZxtZsjwluv1kNYEavBo3/2oaVLq
+         ccCCS1G5gN4yMVux/KX6vnblmuiddTMIC9GRIzGbZt0ri6imxyoMA3ZRYZpQOJd2E4K/
+         Vg8z1HWRi7u7Vm4TWXLXiJCR0vhnOGoLAFxqeXEr+jH6oVeLoIzXnxz3HNiIsG19u5aT
+         pGsIzLcWrEZJvfbpaEFTidVr4J+MM/KAB7DwO73DofCgGAc5T1eFlS+uXoW1uc+6W5fn
+         3x/9WlYaGw+NAi086sReCaV0Q8KlKlRM1mGcestKTyFUVa3LicsTpY4FgnsJC4ZJJDpR
+         0KoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUOZK0PV15s/eIdP0kpCvljeFLsTfoaGKkMTugAdmKQX5RIuGtnBPKtq6QYi2C/fl7E9b8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXDXbYHZXgRnQ4vMc3+NodpslDayzQqYok3qRzkWmEjQD+CxTi
+	Ne9yWACsgKbGQ4dTOTRwJIS0Q0JilSp5o4qWxbFdox2XbZ4iy2wS6I/5
+X-Gm-Gg: AZuq6aJ1NnSFZCMy/eN4K1N9bwml2cD5ABNTpYqTdJ2e72Sec5wlId7Lx4aMGdCwR3q
+	4YfE3IQkyh/HJ+nzhM4LcSLGHZhMuyCM3Y1MlZ2MYql93N8OI/fz5AsafGjMp2zdaQbhIKLAD39
+	Obaruh9jfchRwF5lVdfZ3RPdWXvuaGJItpv2Ze80wBOpnuCNMzswCzH7+11TV1v+HsGFCCaOhhb
+	rg10XT3LMXkg/lK9xoqvA8wXf6m8IiiVhMO5cHBsVeaEflnHSO9TDHzMKEmMj0Ra4alKKjJvd1R
+	rD/YYxUdc07ecEN9NrJxoDQo976oLdyZNmNP/yAAqVe0TR5d0QaaSOU9Om+YHhwTACyrzNQBCj7
+	1gM/xZqvjVd7uuUWcrgeX4lJm2bh+Iq+9hxp3duPBVo3z4jKewz7PEoaaxIKryKJP2ZfMKt9LQh
+	BVF2IR4eXVi8466hU+clFPtPMGyJbAI3wtCS3oY6h1wCQFa/rnDXzVAUOyG50P416eRVUiR9f4B
+	r7q7cfguO2Tit/i8Y+u47TPH+QKvlQsHiBX99Q2iW8GY5/r7DHIJxGsSC66RyyFSshuRzZ5sL6w
+	Ww==
+X-Received: by 2002:a17:906:19cb:b0:b8f:8e99:7860 with SMTP id a640c23a62f3a-b9081ba9436mr397974566b.46.1771862090575;
+        Mon, 23 Feb 2026 07:54:50 -0800 (PST)
+Received: from ?IPV6:2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c? ([2a01:4b00:bd21:4f00:7cc6:d3ca:494:116c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084a4d6e1sm341510066b.0.2026.02.23.07.54.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Feb 2026 07:54:50 -0800 (PST)
+Message-ID: <7e772d91-a546-40ed-90c0-29e2a9721c53@gmail.com>
+Date: Mon, 23 Feb 2026 15:54:46 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6ticusy7dzjxckmp"
-Content-Disposition: inline
-In-Reply-To: <20260220-work-bpf-namespace-v1-2-866207db7b83@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [LSF/MM/BPF TOPIC] User space RAID5 with ublk and io_uring BPF
+To: Xiao Ni <xni@redhat.com>, lsf-pc@lists.linux-foundation.org,
+ linux-block <linux-block@vger.kernel.org>, bpf@vger.kernel.org
+Cc: Ming Lei <ming.lei@redhat.com>
+References: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 2/19/26 05:38, Xiao Ni wrote:
+> Hi all
+> 
+> I'm doing some work on user-space RAID recently. I'd like to propose a
+> topic for LSF/MM 2026 regarding the implementation of RAID5 in user
+> space using ublk and io_uring bpf[1], particularly focusing on the
+> challenges encountered and potential kernel improvements needed.
+> 
+> Ublk raid5 uses the ublk framework (tools/testing/selftests/ublk/),
+> with the goal of leveraging io_uring's zero-copy capabilities and
+> BPF[1] for performance optimization. The implementation includes:
+> * RAID5 stripe handling with configurable chunk sizes
+> * Multi-queue support via io_uring
+> * Degraded mode for single disk failure tolerance
+> * Integration with io_uring BPF struct_ops framework
+> 
+> During the implementation, I encountered several technical challenges.
+> The primary challenge is performing XOR parity calculations in a true
+> zero-copy manner:
 
---6ticusy7dzjxckmp
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 2/4] cgroup: add bpf hook for attach
-MIME-Version: 1.0
+I aim at similar use cases, i.e. interacting with registered buffers
+from BPF, but based on a different BPF-io_uring implementation. I'd be
+interesting to discuss how the kfunc API should look like.
 
-Hi.
+-- 
+Pavel Begunkov
 
-On Fri, Feb 20, 2026 at 01:38:30AM +0100, Christian Brauner <brauner@kernel=
-=2Eorg> wrote:
-> Add a hook to manage attaching tasks to cgroup. I'm in the process of
-> adding various "universal truth" bpf programs to systemd that will make
-> use of this.
->=20
-> This has been a long-standing request (cf. [1] and [2]). It will allow us=
- to
-> enforce cgroup migrations and ensure that services can never escape their
-> cgroups. This is just one of many use-cases.
->=20
-> Link: https://github.com/systemd/systemd/issues/6356 [1]
-> Link: https://github.com/systemd/systemd/issues/22874 [2]
-
-These two issues are misconfigured/misunderstood PAM configs. I don't
-think those warrant introduction of another permissions mechanism,
-furthermore they're relatively old and I estimate many of such configs
-must have been fixed in the course of time.
-
-As for services escaping their cgroups -- they needn't run as root, do
-they? And if you seek a mechanism how to prevent even root from
-migrations, there are cgroupnses for that. (BTW what would prevent a
-root detaching/disabling these hook progs anyway?)
-
-I think that the cgroup file permissions are sufficient for many use
-cases and this BPF hook is too tempting in unnecessary cases (like
-masking other issues).
-Could you please expand more about some other reasonable use cases not
-covered by those?
-
-(BTW I notice there's already a very similar BPF hook in sched_ext's
-cgroup_prep_move. It'd be nicer to have only one generic approach to
-these checks.)
-
-Regards,
-Michal
-
---6ticusy7dzjxckmp
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaZx2exsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMSwyLDIACgkQfj0C55Tb+AhAeAEA8Aq7m0kUaH8/11aeQCi2
-Kcf9qiMNA7emVmbHom+CgsIA/ArQMUoO726+PLAGwdRfAUfSOtGMOCgl3iEeMphP
-OqYP
-=fksS
------END PGP SIGNATURE-----
-
---6ticusy7dzjxckmp--
