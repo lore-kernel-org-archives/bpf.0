@@ -1,166 +1,193 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f45.google.com (mail-dl1-f45.google.com [74.125.82.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 713F03793C3;
-	Mon, 23 Feb 2026 21:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0283F378D84
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 22:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771883495; cv=none; b=FFPotqKYE33+R27oIMx6GuENlWyPGz311hikrRLHIZrWnvzhUZSKAu8YJ2hCMXYiXWFMiPFAdOMj9lVNxL2FocZyv9dU5c0dJwzPfsBv0xfcD/Hk86IAzyzSDd5eryCI6tasG82crc02rHJQPn9aX41l2oxNQQDuYNkgZ2J5SJM=
+	t=1771884904; cv=none; b=JerpJYPkO50v3smYndUWOIsBfIz5ZvKqjPNwNZdFr5AVL7PneTUo7+fX9VaDP9Qvm27+qmP+ZicN/1OYnXg2MVjexhbCbTPT3lg3P/pF4Np4tZgoRp4tWyQ9Twque+eaRfOnvy/N3NHOG7jTRjAXoyzeafJoGU2lyeYzIgskdFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771883495; c=relaxed/simple;
-	bh=LvAdBpDs6vSAN4K4YvZ3iYdFC3e/+5gaMzB3XS9ogbM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PogjeBeh+kApDlB69DfwyhOHVuEzDJvE9MGF4Mzmb8XAAuSwCqs6h5FGFHtxsdK7Addh+9STWQdFjHsK0EPUCg5OxhBps6vkNWztwUrtsp1gpkJq3LRuw21xof1mP7V2XDverL+yVa2B5r4rX8CFO/QJev93W0t8kDf8YGT3aNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=latA5aUs; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1771884904; c=relaxed/simple;
+	bh=NIfloqoIHGILusvHkncmOzyJvUhitou5tJ92AtIzHeI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Op6PrNzi9dBpafK8cLJ4ZcBQgjSxYkcmBOQu/cAQQJScMFG7Ltbio5czPkmRxQnzm9xDV70HS7wFp9uCH3i3afB5u2IFS9f2m07wXIag1DulX9o2u6ULNkGWU3PMB10eTu6rnIquLkyCaTPacN4D1RsSSbAI+cpBZnzDYf+tKds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j8fywv6T; arc=none smtp.client-ip=74.125.82.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="latA5aUs"
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61NJFoot2269294;
-	Mon, 23 Feb 2026 21:51:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=G1n7wtz08npFDwHXdRj3gkHg2quclTG+HOfjYrGS+i0=; b=latA
-	5aUszgMCs9KyG17SqTZtT34T02K2bDp0FP7oTZ/9ABzSqesBzVEnNOcg7dFqf/LF
-	zaMJUYnllStIAFuuXV5RDIQSi4QfeANEQahBnuoLjqZGaMwWvva1fVKN22OT9N2w
-	sq+ftMJUIJWNiKFAPh2lfEkWTHhoSsK9lnOzKJ9lnN7SVf+FFioWGGQKhJbh9ZAQ
-	A/8y4/ejR+xLm6qzGhcjEeIhNcqhmA+48dCxZRJ2jPcW9mIkdBLiIO5KHYWyt1jg
-	jTXRxWYwISWkorAbNS/HRl2/eoKcXRPzJI4QtYKub91dLLWgJqkm7tnFHe5LY77S
-	Ncr9kYvoP01MEZQBIA==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cfqnjf34y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 21:51:18 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 23 Feb 2026 21:51:16 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <jolsa@kernel.org>, <rostedt@goodmis.org>,
-        <linux-trace-kernel@vger.kernel.org>,
-        <linux-open-source@crowdstrike.com>
-Subject: [RFC PATCH bpf-next 2/3] ftrace: Use kallsyms binary search for single-symbol lookup
-Date: Mon, 23 Feb 2026 16:51:12 -0500
-Message-ID: <20260223215113.924599-3-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260223215113.924599-1-andrey.grodzovsky@crowdstrike.com>
-References: <20260223215113.924599-1-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j8fywv6T"
+Received: by mail-dl1-f45.google.com with SMTP id a92af1059eb24-1273349c56bso5818006c88.0
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 14:15:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771884902; x=1772489702; darn=vger.kernel.org;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=s7OtEWr3bp/4rUR7xDgbO0CI7eE4cq8/LSgsx9wDy/s=;
+        b=j8fywv6T0Eghrh0RPbVWuOI5q/vzRQ+5ZJbAsSOR2H7XHA3zO+QJ9uEUUHrsqjTKxY
+         VXdXJoEQHKT5R1Sb/g0qM7d6Ba5of0ylIUE1pyUHpVPAnyX2B8j4UEgwKUnYHq/hisg9
+         WYrTgukni4wz12RJZjd+TemHArjBA0z66QbUYviq5ViISagGyW4J6vhcVQZ0xQ9Vtq7U
+         /PsSCTqv7k3+1oAuFth99TPLbJfKeZNmVBR2Ob1wmXrq9/2/16AhP7sTxm22Ga01Vxaz
+         zmSAPHXOB/6/UpCpHJJ7qapHGeogwAet9QkdA2Hi2VlACvSm+Pd3iSui1M97qYYxAXAz
+         rYwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771884902; x=1772489702;
+        h=mime-version:user-agent:references:in-reply-to:date:cc:to:from
+         :subject:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=s7OtEWr3bp/4rUR7xDgbO0CI7eE4cq8/LSgsx9wDy/s=;
+        b=EfXx9KUWPIvpx21H4Asj6HFrQLuRKhnvwwCgXTLG+V1ik+B0uc54pI5tNBvfFYyD0W
+         IB2CVvTpshBgNNUmWg7K5IuLhIcNJBSe/bhP2KOiww9UbBkcyn22cybXVrAcqMtI8Ejr
+         H8NZB7arYLJcRr+n1jUlMMqfYXGbO7Q0P/gFdggchE8c0n/pwitrZnPckrhxrLtYtNL6
+         Jjzafd0+nY6XVUyjQJroLTOf2TmIAlSFv+b06Mw9XucXYw/8Y1FBY9McTDtFt2JpfDqd
+         5ta2skZfgqZrzRYxtqk3gam8B0oo2COuV7nTFKPzqP6FIUjGaytNPj6CYmDCmicyQ18V
+         J45A==
+X-Forwarded-Encrypted: i=1; AJvYcCWWhIhlw+iHMIhzFhWwrfBkkjn26eHXYUzzf6Q/Wxz+Lxycf7AYzS3XRWlg/gPrx/ATOm8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMW8az9m0NSbcwHK3praxmc9M/db/fI6vivKJQBp8zGTyHrnuE
+	C2bYjZYcWcmkxnyJ/OfGjIrV614+6TsluPl4qfkCAmg4Vw4EYLArtcGs
+X-Gm-Gg: AZuq6aLhlUHmriZG/QYmMO+p1KxnN5sdvt3fvrYLoUOU1MtLN+3AzmBapl6lDXN0a1y
+	0CBh5kVfPQzzKquvHLcsVFpN8AwHL7u9DphdVY5lSA3DwF+mXFtQbiEoa4/yliTOfjlKx5esf8B
+	rUeKPLxuetWrA9srBd4c/evrk5FaM66CjVDHHbmlUlMB6zYkvNKvVAEaPH/M2xjHk9jxmWPCRZu
+	tWwpes/GSRY99DTRPs3vycr+hRo3rXy0NxnFNNZYU3kEvPrq4D2QYpf7i/QAvG6AkQH391eG3E6
+	8M9LkEY7C3qFbxVyBRNsO8pnKJBg3m1Koaka84fp9MHM+ak0gfKsJXKzlcCBj/0RumXBaLkS3JV
+	bLTmdEc54lTlf9ApNycp6moMF5w3ZlTw0bJLe6FjMKbQThSof3dl0pQuBRcNOwR62wAcvappBYf
+	eWUHdKOyDLbTNn7Dh207s0mRjg+/wzO96d3LI49h6vR3YoeKacyiG+QBzl7x3Quz6RUm/vvyB8Q
+	C9Bt4oL4QOBucQtz30=
+X-Received: by 2002:a05:7022:f9e:b0:127:5c57:cffc with SMTP id a92af1059eb24-1276ad18534mr3788063c88.26.1771884901987;
+        Mon, 23 Feb 2026 14:15:01 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:7bec:d612:85a2:37de? ([2620:10d:c090:500::1:3a66])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1276af7b4c7sm8915171c88.9.2026.02.23.14.15.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Feb 2026 14:15:01 -0800 (PST)
+Message-ID: <562fc6aeef17412ba8965bc4938fe9c0dbbe0f9e.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 3/6] bpf: Add KF_FORBID_SLEEP modifier for
+ KF_ACQUIRE kfuncs
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko
+ <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Date: Mon, 23 Feb 2026 14:14:59 -0800
+In-Reply-To: <20260223174659.2749964-4-puranjay@kernel.org>
+References: <20260223174659.2749964-1-puranjay@kernel.org>
+	 <20260223174659.2749964-4-puranjay@kernel.org>
+Content-Type: multipart/mixed; boundary="=-0jUP7s9Y9U4w+NXx40eU"
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDE5MCBTYWx0ZWRfX/gsPjydiW6XQ
- ZbIcXUywPMauxActOkqPDT8LbuggTqdhk4vHQCNlsPGqZ3fp2TbPIaiFsTqI9eJEX7HlytRl9/f
- lQsv8dtS2KOxz/G+B1nLQubgzbke+TJL98c03rbUeeQws+WL2qFC49ckHlOWvZLPJv0eeL88FhF
- 1IjSvqSaPH5t7/rfcAjU1xN2paBHRklooKJBf6XmmdrbcgIsZkXnzPy/b5Gyuwebes6jZLPAKtC
- RM0ltP8xjypoZU/s0iaf4qRbC1Z23eV1wdA0LfB3ZHU4ufVB/fn22t+fgNzhH3eTBiAetAqfPb9
- 7xYUQO+uEuKiMlNrK/KERJ5ZIs+zu7ZyUMmmooBqiQewM/GpprpES8JY8DI/8RTd5hDqvhgdv+B
- FTZJ0cpJCK2wMGU300uEOpGmy9wRX0ZZxAwSwpOrP4NNSBY24PENBt2wWOxuo3/O46Amzi1rbQb
- dkXFrM85I8OM7TK9fuw==
-X-Proofpoint-ORIG-GUID: 4sJjqqNsDmmqzcXXPstpmJhXErwvL7iN
-X-Authority-Analysis: v=2.4 cv=UoJu9uwB c=1 sm=1 tr=0 ts=699ccbd6 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=pl6vuDidAAAA:8
- a=QmtXynS4W5m_fGnND4MA:9
-X-Proofpoint-GUID: 4sJjqqNsDmmqzcXXPstpmJhXErwvL7iN
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11710
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 bulkscore=0 suspectscore=0 malwarescore=0 clxscore=1015
- adultscore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
- definitions=main-2602230190
 
-When ftrace_lookup_symbols() is called with a single symbol (cnt == 1),
-use kallsyms_lookup_name() for O(log N) binary search instead of the
-full linear scan via kallsyms_on_each_symbol().
+--=-0jUP7s9Y9U4w+NXx40eU
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-ftrace_lookup_symbols() was designed for batch resolution of many
-symbols in a single pass.  For large cnt this is efficient: a single
-O(N) walk over all symbols with O(log cnt) binary search into the
-sorted input array.  But for cnt == 1 it still decompresses all ~200K
-kernel symbols only to match one.
+On Mon, 2026-02-23 at 09:46 -0800, Puranjay Mohan wrote:
 
-kallsyms_lookup_name() uses the sorted kallsyms index and needs only
-~17 decompressions for a single lookup.
+[...]
 
-This is the common path for kprobe.session with exact function names,
-where libbpf sends one symbol per BPF_LINK_CREATE syscall.
+Would it be possible to move regular spin locks to similar semantics
+(reference forbidding sleep)?
 
-If binary lookup fails (duplicate symbol names where the first match
-is not ftrace-instrumented, or module symbols), the function falls
-through to the existing linear scan path.
+[...]
 
-Before (cnt=1, 50 kprobe.session programs):
-  Attach: 858 ms  (kallsyms_expand_symbol 25% of CPU)
+> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> index 4872d2a6c42d..65327d2f19c1 100644
+> --- a/kernel/bpf/btf.c
+> +++ b/kernel/bpf/btf.c
+> @@ -8644,6 +8644,9 @@ static int btf_check_kfunc_protos(struct btf *btf, =
+u32 func_id, u32 func_flags)
+>  			return err;
+>  	}
+> =20
+> +	if ((func_flags & KF_FORBID_SLEEP) && !(func_flags & KF_ACQUIRE))
+> +		return -EINVAL;
+> +
 
-After:
-  Attach:  52 ms  (16x faster)
+Are you sure this check is necessary?
 
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- kernel/trace/ftrace.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+>  	return 0;
+>  }
+> =20
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index c2a63f8c8984..a90c3d1b2d72 100644
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 827fb9a0bf0d..bfd7670669c2 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -9263,6 +9263,19 @@ static int kallsyms_callback(void *data, const char *name, unsigned long addr)
-  * @addrs array, which needs to be big enough to store at least @cnt
-  * addresses.
-  *
-+ * For a single symbol (cnt == 1), uses kallsyms_lookup_name() which
-+ * performs an O(log N) binary search via the sorted kallsyms index.
-+ * This avoids the full O(N) linear scan over all kernel symbols that
-+ * the multi-symbol path requires.
-+ *
-+ * For multiple symbols, uses a single-pass linear scan via
-+ * kallsyms_on_each_symbol() with binary search into the sorted input
-+ * array.  While individual lookups are O(log N), doing K lookups
-+ * totals O(K * log N) which loses to a single sequential O(N) pass
-+ * at scale due to cache-friendly memory access patterns of the linear
-+ * walk.  Empirical testing shows the linear scan is faster for batch
-+ * lookups even well below 10K symbols.
-+ *
-  * Returns: 0 if all provided symbols are found, -ESRCH otherwise.
-  */
- int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs)
-@@ -9270,6 +9283,21 @@ int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *a
- 	struct kallsyms_data args;
- 	int found_all;
- 
-+	/* Fast path: single symbol uses O(log N) binary search */
-+	if (cnt == 1) {
-+		addrs[0] = kallsyms_lookup_name(sorted_syms[0]);
-+		if (addrs[0])
-+			addrs[0] = ftrace_location(addrs[0]);
-+		if (addrs[0])
-+			return 0;
-+		/*
-+		 * Binary lookup can fail for duplicate symbol names
-+		 * where the first match is not ftrace-instrumented,
-+		 * or for module symbols.  Retry with linear scan.
-+		 */
-+	}
-+
-+	/* Batch path: single-pass O(N) linear scan */
- 	memset(addrs, 0, sizeof(*addrs) * cnt);
- 	args.addrs = addrs;
- 	args.syms = sorted_syms;
--- 
-2.34.1
+[...]
 
+> @@ -14214,6 +14228,11 @@ static int check_kfunc_call(struct bpf_verifier_=
+env *env, struct bpf_insn *insn,
+>  		return -EACCES;
+>  	}
+> =20
+> +	if (sleepable && env->cur_state->forbid_sleep_count) {
+> +		verbose(env, "sleepable kfunc %s in nosleep region\n", func_name);
+> +		return -EACCES;
+> +	}
+> +
+
+Instead of adding this hunk please do the following:
+- add a refactoring patch as in the attachment;
+- remove the following check from do_check_insn():
+
+  >   if (env->cur_state->active_locks) {
+  >       if ((insn->src_reg =3D=3D BPF_REG_0 &&
+  >            insn->imm !=3D BPF_FUNC_spin_unlock) ||
+  >           (insn->src_reg =3D=3D BPF_PSEUDO_KFUNC_CALL &&
+  >            (insn->off !=3D 0 || !kfunc_spin_allowed(insn->imm)))) {
+  >           verbose(env,
+  >               "function calls are not allowed while holding a lock\n");
+  >           return -EINVAL;
+  >       }
+  >   }
+
+  Relying instead on `sleepable && !in_sleepable_context()` checks in
+  check_kfunc_call() and check_helper_call(). (As one more refactoring patc=
+h).
+
+[...]
+
+--=-0jUP7s9Y9U4w+NXx40eU
+Content-Disposition: attachment; filename="check-kfunc-call.diff"
+Content-Type: text/x-patch; name="check-kfunc-call.diff"; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2tlcm5lbC9icGYvdmVyaWZpZXIuYyBiL2tlcm5lbC9icGYvdmVyaWZpZXIu
+YwppbmRleCAyZWYwMGY5Yjk0ZmUuLjRhNWQ3NDJmZTRhNCAxMDA2NDQKLS0tIGEva2VybmVsL2Jw
+Zi92ZXJpZmllci5jCisrKyBiL2tlcm5lbC9icGYvdmVyaWZpZXIuYwpAQCAtMTQxNTMsMzQgKzE0
+MTY2LDIyIEBAIHN0YXRpYyBpbnQgY2hlY2tfa2Z1bmNfY2FsbChzdHJ1Y3QgYnBmX3ZlcmlmaWVy
+X2VudiAqZW52LCBzdHJ1Y3QgYnBmX2luc24gKmluc24sCiAJCQkJfQogCQkJfSkpOwogCQl9Ci0J
+fSBlbHNlIGlmIChzbGVlcGFibGUgJiYgZW52LT5jdXJfc3RhdGUtPmFjdGl2ZV9yY3VfbG9ja3Mp
+IHsKLQkJdmVyYm9zZShlbnYsICJrZXJuZWwgZnVuYyAlcyBpcyBzbGVlcGFibGUgd2l0aGluIHJj
+dV9yZWFkX2xvY2sgcmVnaW9uXG4iLCBmdW5jX25hbWUpOwotCQlyZXR1cm4gLUVBQ0NFUzsKLQl9
+Ci0KLQlpZiAoaW5fcmJ0cmVlX2xvY2tfcmVxdWlyZWRfY2IoZW52KSAmJiAocmN1X2xvY2sgfHwg
+cmN1X3VubG9jaykpIHsKLQkJdmVyYm9zZShlbnYsICJDYWxsaW5nIGJwZl9yY3VfcmVhZF97bG9j
+ayx1bmxvY2t9IGluIHVubmVjZXNzYXJ5IHJidHJlZSBjYWxsYmFja1xuIik7Ci0JCXJldHVybiAt
+RUFDQ0VTOwotCX0KLQotCWlmIChlbnYtPmN1cl9zdGF0ZS0+YWN0aXZlX3ByZWVtcHRfbG9ja3Mp
+IHsKLQkJaWYgKHByZWVtcHRfZGlzYWJsZSkgewotCQkJZW52LT5jdXJfc3RhdGUtPmFjdGl2ZV9w
+cmVlbXB0X2xvY2tzKys7Ci0JCX0gZWxzZSBpZiAocHJlZW1wdF9lbmFibGUpIHsKLQkJCWVudi0+
+Y3VyX3N0YXRlLT5hY3RpdmVfcHJlZW1wdF9sb2Nrcy0tOwotCQl9IGVsc2UgaWYgKHNsZWVwYWJs
+ZSkgewotCQkJdmVyYm9zZShlbnYsICJrZXJuZWwgZnVuYyAlcyBpcyBzbGVlcGFibGUgd2l0aGlu
+IG5vbi1wcmVlbXB0aWJsZSByZWdpb25cbiIsIGZ1bmNfbmFtZSk7Ci0JCQlyZXR1cm4gLUVBQ0NF
+UzsKLQkJfQogCX0gZWxzZSBpZiAocHJlZW1wdF9kaXNhYmxlKSB7CiAJCWVudi0+Y3VyX3N0YXRl
+LT5hY3RpdmVfcHJlZW1wdF9sb2NrcysrOwogCX0gZWxzZSBpZiAocHJlZW1wdF9lbmFibGUpIHsK
+LQkJdmVyYm9zZShlbnYsICJ1bm1hdGNoZWQgYXR0ZW1wdCB0byBlbmFibGUgcHJlZW1wdGlvbiAo
+a2VybmVsIGZ1bmN0aW9uICVzKVxuIiwgZnVuY19uYW1lKTsKLQkJcmV0dXJuIC1FSU5WQUw7CisJ
+CWlmIChlbnYtPmN1cl9zdGF0ZS0+YWN0aXZlX3ByZWVtcHRfbG9ja3MgPT0gMCkgeworCQkJdmVy
+Ym9zZShlbnYsICJ1bm1hdGNoZWQgYXR0ZW1wdCB0byBlbmFibGUgcHJlZW1wdGlvbiAoa2VybmVs
+IGZ1bmN0aW9uICVzKVxuIiwgZnVuY19uYW1lKTsKKwkJCXJldHVybiAtRUlOVkFMOworCQl9CisJ
+CWVudi0+Y3VyX3N0YXRlLT5hY3RpdmVfcHJlZW1wdF9sb2Nrcy0tOworCX0gZWxzZSBpZiAoc2xl
+ZXBhYmxlICYmICFpbl9zbGVlcGFibGVfY29udGV4dChlbnYpKSB7CisJCXZlcmJvc2UoZW52LCAi
+a2VybmVsIGZ1bmMgJXMgaXMgc2xlZXBhYmxlIHdpdGhpbiAlc1xuIiwKKwkJCWZ1bmNfbmFtZSwg
+bm9uX3NsZWVwYWJsZV9jb250ZXh0X2Rlc2NyaXB0aW9uKGVudikpOworCQlyZXR1cm4gLUVBQ0NF
+UzsKIAl9CiAKLQlpZiAoZW52LT5jdXJfc3RhdGUtPmFjdGl2ZV9pcnFfaWQgJiYgc2xlZXBhYmxl
+KSB7Ci0JCXZlcmJvc2UoZW52LCAia2VybmVsIGZ1bmMgJXMgaXMgc2xlZXBhYmxlIHdpdGhpbiBJ
+UlEtZGlzYWJsZWQgcmVnaW9uXG4iLCBmdW5jX25hbWUpOworCWlmIChpbl9yYnRyZWVfbG9ja19y
+ZXF1aXJlZF9jYihlbnYpICYmIChyY3VfbG9jayB8fCByY3VfdW5sb2NrKSkgeworCQl2ZXJib3Nl
+KGVudiwgIkNhbGxpbmcgYnBmX3JjdV9yZWFkX3tsb2NrLHVubG9ja30gaW4gdW5uZWNlc3Nhcnkg
+cmJ0cmVlIGNhbGxiYWNrXG4iKTsKIAkJcmV0dXJuIC1FQUNDRVM7CiAJfQogCg==
+
+
+--=-0jUP7s9Y9U4w+NXx40eU--
