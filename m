@@ -1,61 +1,63 @@
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB61834D4CA
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 08:40:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB2E134D903
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 08:40:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771836036; cv=none; b=StTRnGiOPHqp9QtUfgl0mSgqmL5VvX9Vy+vLxIoGSn/hHIgA665tsT9woof4zZu5UHPAI4tvLwblcAFzaXrfr3RfxEssAfoh+Dg2ZeOiBL8YtUd/9hTwv64yueHF5es22QNF1RykdGAsKSdGJMZfu29LPlfD6X/pewdFyBW1Km0=
+	t=1771836045; cv=none; b=gesANjWv0RbkQg3tQLj5IOs+U1mbtQGFC+D0ZMi+aqYozFBmYUHLjOsazPatzlyZx9ON8Bf9LghH/0Ak2FnDSrHt0T5vx2RmfbFS0PQoF3frO5H6V2PuT4yc+JOrOT2rCVFbhzh8XiWZtNBRM27scK9PJAnSzxp8VW/jk0WeYHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771836036; c=relaxed/simple;
-	bh=dsGJfsX/lCAwZRvqmeMK/TH1AGNiHGT2CsWkKbbh2Ok=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Lxou5N2i/Yl6cyKh7porDDkhJDfYMBVN2NWwowh0Cni/SgjLp71UuPaHuC+7RQLrbMlPeobl5hkd+bO4ecQOBMN8Odu2h5F4EpBf3VdCkipngK4DQXSgVgD6gTV/BVBzdOrJFy+ooDV2dnLR2rCIjJoaSM25Mh9kZcSWqwJw/RU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WqnCFg0p; arc=none smtp.client-ip=209.85.214.196
+	s=arc-20240116; t=1771836045; c=relaxed/simple;
+	bh=nEKT87239/0oP7+UDsczkgsNom6oeFHqhXSC4GmgIow=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Xs1bw/HqaW/EqaQtDFZsskhknfe7+TM4k523Ofv2G2gTeFYf3oLh9QeW2y13ZYZd0z4fYAJg2OwRQUBsONV/gg5DfsuQ3N/mL8SfzZPgcWbeCifszQyBeljmXuvrpwxWf3tJJIAinKPSgY9ZCkSSrzH5p1KN/FlnaXw6xMN+0jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lL0AflJe; arc=none smtp.client-ip=209.85.214.193
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WqnCFg0p"
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-2aaf9191da3so25930565ad.2
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 00:40:35 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lL0AflJe"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2ab46931cf1so30680505ad.0
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 00:40:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771836035; x=1772440835; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pl7yMndGbyVFIY7fGiOCgU/GCIceKT3c7JUljTjpt6Y=;
-        b=WqnCFg0ppH8VvtpPnRbwJdj81NVtBvMrb+W8vI5bq5OMPvKkJgyPrIuRm4OBUdABq+
-         Az5JpuJOei2RzFChY1pg7nT0JYjj07PX1Bn7ShnWWontK+vyI+R+ljej4dKAZD4Pb0zm
-         VEMf9NaqwgbIW+jNOUdqjFnjvSW/dpH1jpbs7KvsDAVG6xyfRfL7QBgaftB25YUCXU5B
-         uaM1XI4C60r5P8rHyDp5rFg64xl6kh9dUtrnSpXDTfbAKB7L7Qdt+ew41LPMCU0/yTLn
-         sKdwuhg+KFNEFCpM/n+RjzzxfhWdVuvCXTcqoHpQyI6tNErbMQ98wHaO/mL4nrYqq4SP
-         F5qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771836035; x=1772440835;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1771836043; x=1772440843; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pl7yMndGbyVFIY7fGiOCgU/GCIceKT3c7JUljTjpt6Y=;
-        b=URb3gidG2/IpJYhAAg2IvDGO0HkSH2IBNuJEFEYla+XMezwdQT7VTQSFQBhMyPBVP1
-         k/76tXxVJF1BW7ldybz4FcG78avW5L2aK8DnCm+U7fncEN6pZ0fk1hwYM3GAbmkG+g2b
-         8cTiLqELgGdcKGzBUn4WSOQfFOTe+ECr+RrIwNWUOkfSwcM6KUn+zCtA7VIegiG4vr8J
-         sG+11lTxWqZT1v7EpSRbUdChV4Utu7f5viSGj0OUS3CJzrlhgnOamZx68nwvCbEavJXL
-         pPYK0cI1RgZ4FBfIlWRMBkp1ez0C0cfQF7qNqUI8Wo8Jdg2B5timGUesim86Eq5KZxmm
-         00PQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUrJdLnLnI7JgXds9AwDdtoMGgU6BavdIxIRlVL0/KFyzbymHcA70/PC+eAByW+Y+J5zxY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRaeO5cx8zJAQALntN37Y+huqg0v5yx2kCOFmc92hOEK/D3v9q
-	JChNVYYhN7LPmSvamt0JCKD9NrnQCNZdtQj24T6Y5IyKrvUbs1ou9kBP
-X-Gm-Gg: ATEYQzzfnex5Nvx9iqF5vNg7nv/UtzqtffRf4wgvSmgtdhHzlMExLekCBUnxo6cWC3a
-	vct0abV9PJkHJa6EGN/LvgoXw7CHIRXBCW4E60X2oYRgQKY4hVWAvJgYtTWjRt0mOeZlrXaJvJV
-	wk0YDZ43tjPSG93sl/bh9YZt6DOK9wKEe2d25hII/maL40xGMSj+UE1XtKKU7ooSWAWFax6t26M
-	WVwoJvk4CVkF9C+RgWumhhTOUQImAY9aaWd7XUuHQtZdjVo+tqL1K3QlBLpnpPEoylb/8tKBEQV
-	+wd12Jz5dKAIvd69ZcpIYKiBeMxGNaIFhQalAyDg91pxyFukr9dSJsNzgFpCSK1KFLiy5L7PLVQ
-	ixMkAC2jYJjAyakrEbRqY3k9HxRm3e0T0WJZSaeE7qM8apUnL7Zx7XUiasRivyI+V2LIPz2jNIz
-	5nXXPzrgmgsClmIEZfWu6l
-X-Received: by 2002:a17:903:191:b0:2aa:ea8d:a0f9 with SMTP id d9443c01a7336-2ad7455ed01mr62685085ad.51.1771836035021;
-        Mon, 23 Feb 2026 00:40:35 -0800 (PST)
+        bh=DJMqZhTw+6tfgh3M5mC64dvgKIeBryvh3KcIHfyE5f8=;
+        b=lL0AflJeEkevNniuKe641iyJiuA7l17hJ1EPbvVzFbWMzrOjpCQ5xelcPMmO5gv1bB
+         iM7coXX/mn2FslusCaIUGnBJCh4FPq72JMfIJndFBSt0f0nLMJFjMgJqkPYsvzSIEemy
+         zhRREC2c1p7PB3vGxskwgX0NhA3+CGDrKIat1uBQmzwFZkfWOzNxjXi2UqqdBYC34XiZ
+         9Il6CKXYRMQ3oZJvOuZbNF+KhkH/ZhMNrhBwy33u/Jv76tAjqPKu57NCuCMfCQO8vK6j
+         0kmaFIdeRsvRyoxqdLkSRNa9rZgeWIm3uMHvXLxsLN817jUXSd3LSL6ZFRgG0RhU4um0
+         T3JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771836043; x=1772440843;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DJMqZhTw+6tfgh3M5mC64dvgKIeBryvh3KcIHfyE5f8=;
+        b=OGKMVjSIcyWoa+0AXVfaNJwXQ/fsU+iovkQyHe+zppuTPc/GW4/o2RoGPkITb11PJ5
+         I5DowrUSEdB5qO/9ZgCAaVW/Lf6WNdvgEZPOEVwQIlk77G6KeKpVNkYCiQI6mcbF0bDD
+         ZdaRfUkbyYo9HUggEcStl6JJVr97ptk+z6EtXLCVX9/yNGvrLBuOzZJ+++T0AtQ28Wjw
+         mk0FIfyenXDeLj2vAfXsRm57jdIGACS2QGz11SQOt8J6pwGlnHzFEUkocCacovtZNM6W
+         mE+aokG860zUlcJDyRa8qu1ppvUtMeuy2rqPCD7WkgOAJURt4jbTjKUiFTpgqnLJkA+W
+         Av7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVkFyY3VOgf6ym+VhSTjwfjSUEy3LaQjVsAGXtw+8SY66DW64ac5jWbA6BrrCbdX0Q+qNI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyec23+dazxhQo1r5UvRe9UKk0DLvUBOQ/+F6hgsYJk3gc43V1Y
+	aeET8d7VauNBQkcyJd+8JU+UmUS16VooMzVioKz/jXbkSSgCPIQryeSc
+X-Gm-Gg: ATEYQzy7ya5Yt8RX9QhZVzNwTVIYN01Mt18qSAECRfzgNCX0SV81HptR47OZDvDqFKt
+	mXz98EAKJFgO9hGjgF3lOMZAzbN6sdTtfLiN8zjUAYb6+rM7rmnBDZ52Xzzm0GJJA5yNAw3W4V3
+	w/pPWlGWJQqaLO7b80ZrZGENyrsSSg2HnlMsUZdlo0DxkQS4GeFlVvXOX6M8dlLvDZbXtzDA6Sf
+	LziNKFA3qIAMl5XVaxD3a0ic3tkMp0jpPDmV5VyxWFNxcAIQCUj5Iv8DeiGJUoQ3VPcYqyGjlz1
+	+3xnI6Se0UeEP4Sr0Jc6TMOX5isSqZDufvCFXS1R/R+OW5hK8VgfrNqnbjqc8RnZGI/xfAQ9a9F
+	P4KaTQCqRpzeJdyvlqSOu595CWN5NSe+GJStE5WmU1yTB4Gk/ND2h8JbVdGT5nCzAQHoj8VFQMI
+	zDjr/VaAHsOKWsXN9of1ss1JPBE3d/1Vg=
+X-Received: by 2002:a17:902:f70c:b0:2a9:5ac3:a925 with SMTP id d9443c01a7336-2ad741c8be7mr72170345ad.3.1771836043135;
+        Mon, 23 Feb 2026 00:40:43 -0800 (PST)
 Received: from 7950hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad750591e2sm65725405ad.91.2026.02.23.00.40.27
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad750591e2sm65725405ad.91.2026.02.23.00.40.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 00:40:34 -0800 (PST)
+        Mon, 23 Feb 2026 00:40:42 -0800 (PST)
 From: Menglong Dong <menglong8.dong@gmail.com>
 X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
 To: ast@kernel.org,
@@ -79,10 +81,12 @@ Cc: daniel@iogearbox.net,
 	bpf@vger.kernel.org,
 	linux-s390@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 0/3] bpf: fsession support for s390
-Date: Mon, 23 Feb 2026 16:40:19 +0800
-Message-ID: <20260223084022.653186-1-dongml2@chinatelecom.cn>
+Subject: [PATCH bpf-next 1/3] bpf,s390: introduce emit_store_stack_imm64() for trampoline
+Date: Mon, 23 Feb 2026 16:40:20 +0800
+Message-ID: <20260223084022.653186-2-dongml2@chinatelecom.cn>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260223084022.653186-1-dongml2@chinatelecom.cn>
+References: <20260223084022.653186-1-dongml2@chinatelecom.cn>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -91,18 +95,66 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement bpf fsession for the s390 architecture.
+Introduce a helper to store 64-bit immediate on the trampoline stack with
+a help of a register.
 
-Menglong Dong (3):
-  bpf,s390: introduce emit_store_stack_imm64() for trampoline
-  bpf,s390: add fsession support for trampolines
-  selftests/bpf: enable fsession_test on s390
+Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+---
+ arch/s390/net/bpf_jit_comp.c | 27 +++++++++++----------------
+ 1 file changed, 11 insertions(+), 16 deletions(-)
 
- arch/s390/net/bpf_jit_comp.c                  | 97 ++++++++++++++-----
- .../selftests/bpf/progs/get_func_args_test.c  |  2 +-
- .../selftests/bpf/progs/get_func_ip_test.c    |  2 +-
- 3 files changed, 75 insertions(+), 26 deletions(-)
-
+diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+index 579461d471bb..763d2491dfa3 100644
+--- a/arch/s390/net/bpf_jit_comp.c
++++ b/arch/s390/net/bpf_jit_comp.c
+@@ -2506,6 +2506,13 @@ static void load_imm64(struct bpf_jit *jit, int dst_reg, u64 val)
+ 	EMIT6_IMM(0xc00d0000, dst_reg, val);
+ }
+ 
++static void emit_store_stack_imm64(struct bpf_jit *jit, int tmp_reg, int stack_off, u64 imm)
++{
++	load_imm64(jit, tmp_reg, imm);
++	/* stg %tmp_reg,stack_off(%r15) */
++	EMIT6_DISP_LH(0xe3000000, 0x0024, tmp_reg, REG_0, REG_15, stack_off);
++}
++
+ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
+ 			   const struct btf_func_model *m,
+ 			   struct bpf_tramp_link *tlink, bool save_ret)
+@@ -2520,10 +2527,7 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
+ 	 * run_ctx.cookie = tlink->cookie;
+ 	 */
+ 
+-	/* %r0 = tlink->cookie */
+-	load_imm64(jit, REG_W0, tlink->cookie);
+-	/* stg %r0,cookie_off(%r15) */
+-	EMIT6_DISP_LH(0xe3000000, 0x0024, REG_W0, REG_0, REG_15, cookie_off);
++	emit_store_stack_imm64(jit, REG_W0, cookie_off, tlink->cookie);
+ 
+ 	/*
+ 	 * if ((start = __bpf_prog_enter(p, &run_ctx)) == 0)
+@@ -2743,18 +2747,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+ 	 * arg_cnt = m->nr_args;
+ 	 */
+ 
+-	if (flags & BPF_TRAMP_F_IP_ARG) {
+-		/* %r0 = func_addr */
+-		load_imm64(jit, REG_0, (u64)func_addr);
+-		/* stg %r0,ip_off(%r15) */
+-		EMIT6_DISP_LH(0xe3000000, 0x0024, REG_0, REG_0, REG_15,
+-			      tjit->ip_off);
+-	}
+-	/* lghi %r0,nr_bpf_args */
+-	EMIT4_IMM(0xa7090000, REG_0, nr_bpf_args);
+-	/* stg %r0,arg_cnt_off(%r15) */
+-	EMIT6_DISP_LH(0xe3000000, 0x0024, REG_0, REG_0, REG_15,
+-		      tjit->arg_cnt_off);
++	if (flags & BPF_TRAMP_F_IP_ARG)
++		emit_store_stack_imm64(jit, REG_0, tjit->ip_off, (u64)func_addr);
++	emit_store_stack_imm64(jit, REG_0, tjit->arg_cnt_off, nr_bpf_args);
+ 
+ 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+ 		/*
 -- 
 2.53.0
 
