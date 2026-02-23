@@ -1,73 +1,73 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E887B224AF9
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 14:10:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D57280A5C
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 14:10:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771855850; cv=none; b=U4aQKmvZT7fuyd7s9RUwOyNzV8TOrusa9b33UPnEH4GDvIVsV9HpQoHMdCOYMVEc19JiwhtqeRB4q1IcSn0780va3Ti8qOtQTNoT6NQ//emTXzN/17RRDuOIUDloACwtkssMZoY+L4Lez/3oJdsalDm5srnao2qEBM7r+jNuMHQ=
+	t=1771855852; cv=none; b=Ar7C8ENcQd+lloKDPp+TcJ6X49yAK88BZh1aFVhk+qV3zQ3V9qnkLWv6ZtOZBgoBzFHSjFGqlCiscMfODLZ9vDNmkEXgeuoJV59O5MgiJCroqdWO8bZeDbQFCRf/3crrEQFJU1iorOsH4HRve5r0j3xEaZ05lpt+kh8uFq+j/yo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771855850; c=relaxed/simple;
-	bh=L2fL7Kic+qNzkKWXtXTN7Xpq3HDKl14ycD3fr43StE0=;
+	s=arc-20240116; t=1771855852; c=relaxed/simple;
+	bh=sDzcjQkzAWw7X5rlfIzEibzN2rOuTI+BfzLbseUS4II=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kwhOtHQGNjErBrrne8CaMiSs+Q7oii69TXI5oCdkSKTXXYsdtBnI+X+E9FVzNd1JxYpUI8qGLyAlX3vC7WFyj7iTdTxZ+HSzn7iRVY4VWG2AsDHUDyhqTWRn0WZv6/iYUTUIcuFMOk+uvKiQxb1Fi6wa6UGEEaGWpPbPYkku+54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GBPKtoee; arc=none smtp.client-ip=209.85.221.42
+	 MIME-Version; b=qyH5vR6ik83Cxv+cgbJ7l3egSO2bfWCYAexodUB/wZESGfK7Yij54k4iDbdJ0n9LFuhHapsule4RFAqqwjhWiXzFFB+JFKS954YCagkR1w0flGGOq3IVwaRHTRTLe3ofNNHjTJYgGdufBVOC38u9tNt9cpHFRjmQarNHW1xsUwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CMkO3VCg; arc=none smtp.client-ip=209.85.221.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GBPKtoee"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4359a16a400so3979056f8f.1
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 06:10:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CMkO3VCg"
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-43591b55727so4300967f8f.3
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 06:10:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771855847; x=1772460647; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771855849; x=1772460649; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s2L+RGBoI09w854zek6LVZ4E2MfPbfE0YM15RuJvb2s=;
-        b=GBPKtoeeiM9C0Hnb/EJhzvpMj43UMKxLpy4kmcXcwTEAlTeef8IBZBHCFiWaLIa2MN
-         nuG9kbYk/Wp4tUB5I+3pxEosVakd/Rac7vllUtJoso71obCCz7yUq9sZlSiZssIoZ00t
-         EmWNyzgF4uES17mrZ7UFCr8yJya1iRO950FM2WPVo2aZBGdJ5J4HgURXk2ylsR8+LGqI
-         bsjhF9zstAJw+U950BRmkGkNLFDWiRMj54u6U2UoWUpzyXCtM4IbROztqGBzSdoBCaRL
-         Xx1gKHzqQHy9uv5akft4rbWiQREnbgrbrn34BDQ857cO+B4jfF64iKC05AUJUjNzoMfV
-         YR9Q==
+        bh=xjRrv3KM8xQowe6y2+mGh/Bq1IBsIN9ajRwFWDh4DBw=;
+        b=CMkO3VCgMa4XMujbXbwYm0lhMhUPX/d9p/ypJA37gG4oQgthM3vHaT35cdcA9vdFv1
+         8J4p45gjCRiU+tF/hWfHI4rVZB19HniUrlBGzzujWpETMxUFqnB2covHDJGMprrVu4Om
+         U7qM7vNj1UjI1t/R2yNfq8G0eobjk4Z3nvUhHezvHF44GaZg3MahpIPOySm7FG5bexof
+         REOLUMmyK2RQ1NU/SaITAfhj1fT3vBsR+LAttmVdJSH3vhHMmry+ZhZc0s2es9iuJ5gu
+         nqGa6ITplJZAuaSBDadHFu8X1pKRROXnxPBJJj4x3KNgQleRFl7S7b5KSlIEYJEiJNIV
+         6b0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771855847; x=1772460647;
+        d=1e100.net; s=20230601; t=1771855849; x=1772460649;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=s2L+RGBoI09w854zek6LVZ4E2MfPbfE0YM15RuJvb2s=;
-        b=VAUQ7uNpFFIttxSwQeXeJ7CR2Tpui98m6BnJEmtS8cxs/S4abPNNY+aMIIOzVJWdgT
-         GIICDlY9W2e/FytGYWa24wg4Y1tq5tFyjbch7Ca83OLckEEazPNFddCkTT+rjNZBgKxr
-         hbcA7oqDTPpnWRuQaqgwUz0qUqjsqubVaJOTDAYA19iC4i6ksHtdOuiSUgtHgi+626Fp
-         j8l2/lN9Xcf5FvU8ZVmhev4EdL0MsKUSZgEdIduseBLIp0YBWgxSuSJXSS+c8KGcXTiz
-         BY1pkoMpEXVpQvY5503bG9jywKhwbaacMr94gQkmRuDXnyDNX3A623tMjGlQCaN2St0A
-         NHPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjGOp83FgvNxdb1q8VJHz6NMibOdGFmOIKE4Ot+eoSGnRhkPWb7HsxUbjoJ6dKSLkuGLw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUrMhERmVzqoK/bhzwriGa/NLtzbhK9bz7emCTBfI9VLoCjGI9
-	21UGAEkM9G2YBDyLX4AFKd1ybhFdg38nVzqK/arDQh1lrT93/CABKGyP
-X-Gm-Gg: ATEYQzzJl9XzW6ISaS38/YGmh8dIxGghItf/yTpdJwmGCl4YIHhLEe4912U38gMMwWF
-	pipXHhbcJoyiQ0dLHxxeHU5r2/8RfEyyYMd14vcEO0eKak7mcNKPL7fYN2/oJUk6/7ujjSKGJiX
-	hTHMIAGlodaKb7w5zufoSynWTfK0Nicpuh7tATc6GKgTc51Td8PTOkAcwFKR1avRpbBC+hjMUja
-	1C4VXpxtMPVm4fvXe93WKSFgZkrdjsCpABbQY5OAvkUtpPwC17srn993eILme+zbA6VZICxSTK+
-	5fzmig8aYbfcDI6EwytaT5DC7Rof+gvZ8NXgPUlFTS1z2h1v7/baXIPlknR7lfG8XiQ3OdVN3E1
-	oy8kCtyLCpheOGMAfBgMu7ktakpqgF/daAbc5Wr/1bl11FZTSJg4VylGWG26WsDppBgMHWIYN8F
-	TpdS25HTGOl5H7IMnKLz2iqs5+zdNmFUkw6QW3koiCw33IJrq091ZTvD67/qu5ZLq6NW0GXrKh/
-	uf6o7giHlrw7W3C/85j
-X-Received: by 2002:a05:6000:3107:b0:436:34d9:4627 with SMTP id ffacd0b85a97d-4396f17baf1mr15862427f8f.37.1771855847192;
-        Mon, 23 Feb 2026 06:10:47 -0800 (PST)
+        bh=xjRrv3KM8xQowe6y2+mGh/Bq1IBsIN9ajRwFWDh4DBw=;
+        b=RZCYgkqfT3QEQQHybNXZtVBr4ICZXHdy5Vgzzzq7VXKoO6LkoiQgKSYt77OCgU2qRr
+         tyn/insILtepABhIJnZ6Cjb18djFi4dckKTHGpBX4/5Th4OzF9ACHR7pVZUjQiz6MnRh
+         5FTyYK59NV0JmX0In00VLb46Llt10/tCeNZ4k3FvIHo7EU/+1+QtZO9uXm+Gl9NYOkEM
+         ifJaR+wRBp/FPSeGx6Q6bvTqzrQasSUefUgXcIGq/1BlYGdQhFd+sz1Fy5GP+yITgNIV
+         osDjuTZxQij+wMVuNioGnOmuRXQcIbX7cYfFJ3Arj0HAORQrx4i7wc8FmPgHMU538knA
+         I0Hw==
+X-Forwarded-Encrypted: i=1; AJvYcCXzsfI4S6RhKFaBRKCNYlosWutgQHpejGuNv0jzdZTjpZ/QkyEP4gNIetAEe4Hhyu5gpR8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqWl0JrZVTxtyZe0oznYBzwtpTMHv9pou+rcTaV7E26Ui623Vt
+	TRf+FK3a/4bBWMKUTTNX4+Mzu6tE64Mwq+gBlbaNeOMLX8sMb+cAPSGY
+X-Gm-Gg: ATEYQzxiOUXImH4uAuOL4DqRZC0RUsRr1tvG0xlP0WwxNs18oBGqjfD/fRKSuy/ZGiZ
+	1dRXq9fXR+t8WIqbva2KA4Wp1IM2F0BKiMDoOCMxHlbMHuuwjJUokbjLTDqLCdmVmxMOBUi5Fgq
+	T4X9sJrpQf40+G7b5YMvu2lAKIadbmZsz9KtTIO+v/femWdHd0ifWaSFN2EKA/1CTEe7yfgvynA
+	kdLVNDqIY8Sku79ZcW8poPz0ABwunxTPIfyBXZz1ccVwD8RCkPxz2pAc8VHn6w4BUC02iE9qQZ4
+	rZ6lQl3hmpB3rcCfmtyVyvgkydGwROGh/3P+QXxg2dWf4E6R2c7fBiL7p6VtCyZ+Zbf3YKj1Bo4
+	9tWVO12jd9yh6h0QOOvLvdijunwZNJnVUorxkC56vnXN7dWj42ET/PknIf59lcXRT5Nt4FRc7TG
+	CuqAR6d/RwT+gD/A6LXSAvTXmeCnjT3Kh2rLkg8HtD4BSR5a/kpE3dfn8YjMOXb7zipKW0HPYYJ
+	pEhDSYjmA==
+X-Received: by 2002:a05:6000:4026:b0:436:173c:b8e3 with SMTP id ffacd0b85a97d-4396f178732mr15944711f8f.29.1771855849129;
+        Mon, 23 Feb 2026 06:10:49 -0800 (PST)
 Received: from 127.com ([2620:10d:c092:600::1:36ea])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970bf9feasm19464640f8f.6.2026.02.23.06.10.45
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970bf9feasm19464640f8f.6.2026.02.23.06.10.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 06:10:46 -0800 (PST)
+        Mon, 23 Feb 2026 06:10:47 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	bpf@vger.kernel.org,
 	axboe@kernel.dk,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH v9 05/10] io_uring: update tools uapi headers
-Date: Mon, 23 Feb 2026 14:10:16 +0000
-Message-ID: <8aef9b7a8da1ea5ba7af04b513aa70479f6dfb55.1771855761.git.asml.silence@gmail.com>
+Subject: [PATCH v9 06/10] io_uring/mini_liburing: add include guards
+Date: Mon, 23 Feb 2026 14:10:17 +0000
+Message-ID: <9ff4284f5819ac7bec25e88e8909073058626435.1771855761.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1771855760.git.asml.silence@gmail.com>
 References: <cover.1771855760.git.asml.silence@gmail.com>
@@ -79,142 +79,33 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Update the tools/ io_uring.h uapi header to include the region API and
-new registration opcodes.
+Add include guards, it makes it easier to write tests with multiple
+headers.
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- tools/include/uapi/linux/io_uring.h | 96 ++++++++++++++++++++++++++++-
- 1 file changed, 95 insertions(+), 1 deletion(-)
+ tools/include/io_uring/mini_liburing.h | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/tools/include/uapi/linux/io_uring.h b/tools/include/uapi/linux/io_uring.h
-index f1c16f817742..d1b649caed48 100644
---- a/tools/include/uapi/linux/io_uring.h
-+++ b/tools/include/uapi/linux/io_uring.h
-@@ -198,6 +198,33 @@ enum {
-  */
- #define IORING_SETUP_NO_SQARRAY		(1U << 16)
+diff --git a/tools/include/io_uring/mini_liburing.h b/tools/include/io_uring/mini_liburing.h
+index 44be4446feda..81513b82433a 100644
+--- a/tools/include/io_uring/mini_liburing.h
++++ b/tools/include/io_uring/mini_liburing.h
+@@ -1,5 +1,8 @@
+ /* SPDX-License-Identifier: MIT */
  
-+/* Use hybrid poll in iopoll process */
-+#define IORING_SETUP_HYBRID_IOPOLL	(1U << 17)
++#ifndef IOU_TOOLS_MINI_LIBURING_H
++#define IOU_TOOLS_MINI_LIBURING_H
 +
-+/*
-+ * Allow both 16b and 32b CQEs. If a 32b CQE is posted, it will have
-+ * IORING_CQE_F_32 set in cqe->flags.
-+ */
-+#define IORING_SETUP_CQE_MIXED		(1U << 18)
+ #include <linux/io_uring.h>
+ #include <sys/mman.h>
+ #include <sys/syscall.h>
+@@ -309,3 +312,5 @@ static inline void io_uring_cqe_seen(struct io_uring *ring)
+ 	*(&ring->cq)->khead += 1;
+ 	write_barrier();
+ }
 +
-+/*
-+ * Allow both 64b and 128b SQEs. If a 128b SQE is posted, it will have
-+ * a 128b opcode.
-+ */
-+#define IORING_SETUP_SQE_MIXED		(1U << 19)
-+
-+/*
-+ * When set, io_uring ignores SQ head and tail and fetches SQEs to submit
-+ * starting from index 0 instead from the index stored in the head pointer.
-+ * IOW, the user should place all SQE at the beginning of the SQ memory
-+ * before issuing a submission syscall.
-+ *
-+ * It requires IORING_SETUP_NO_SQARRAY and is incompatible with
-+ * IORING_SETUP_SQPOLL. The user must also never change the SQ head and tail
-+ * values and keep it set to 0. Any other value is undefined behaviour.
-+ */
-+#define IORING_SETUP_SQ_REWIND		(1U << 20)
-+
- enum io_uring_op {
- 	IORING_OP_NOP,
- 	IORING_OP_READV,
-@@ -253,7 +280,17 @@ enum io_uring_op {
- 	IORING_OP_FUTEX_WAIT,
- 	IORING_OP_FUTEX_WAKE,
- 	IORING_OP_FUTEX_WAITV,
--
-+	IORING_OP_FIXED_FD_INSTALL,
-+	IORING_OP_FTRUNCATE,
-+	IORING_OP_BIND,
-+	IORING_OP_LISTEN,
-+	IORING_OP_RECV_ZC,
-+	IORING_OP_EPOLL_WAIT,
-+	IORING_OP_READV_FIXED,
-+	IORING_OP_WRITEV_FIXED,
-+	IORING_OP_PIPE,
-+	IORING_OP_NOP128,
-+	IORING_OP_URING_CMD128,
- 	/* this goes last, obviously */
- 	IORING_OP_LAST,
- };
-@@ -558,6 +595,38 @@ enum {
- 	/* register a range of fixed file slots for automatic slot allocation */
- 	IORING_REGISTER_FILE_ALLOC_RANGE	= 25,
- 
-+	/* return status information for a buffer group */
-+	IORING_REGISTER_PBUF_STATUS		= 26,
-+
-+	/* set/clear busy poll settings */
-+	IORING_REGISTER_NAPI			= 27,
-+	IORING_UNREGISTER_NAPI			= 28,
-+
-+	IORING_REGISTER_CLOCK			= 29,
-+
-+	/* clone registered buffers from source ring to current ring */
-+	IORING_REGISTER_CLONE_BUFFERS		= 30,
-+
-+	/* send MSG_RING without having a ring */
-+	IORING_REGISTER_SEND_MSG_RING		= 31,
-+
-+	/* register a netdev hw rx queue for zerocopy */
-+	IORING_REGISTER_ZCRX_IFQ		= 32,
-+
-+	/* resize CQ ring */
-+	IORING_REGISTER_RESIZE_RINGS		= 33,
-+
-+	IORING_REGISTER_MEM_REGION		= 34,
-+
-+	/* query various aspects of io_uring, see linux/io_uring/query.h */
-+	IORING_REGISTER_QUERY			= 35,
-+
-+	/* auxiliary zcrx configuration, see enum zcrx_ctrl_op */
-+	IORING_REGISTER_ZCRX_CTRL		= 36,
-+
-+	/* register bpf filtering programs */
-+	IORING_REGISTER_BPF_FILTER		= 37,
-+
- 	/* this goes last */
- 	IORING_REGISTER_LAST,
- 
-@@ -578,6 +647,31 @@ struct io_uring_files_update {
- 	__aligned_u64 /* __s32 * */ fds;
- };
- 
-+enum {
-+	/* initialise with user provided memory pointed by user_addr */
-+	IORING_MEM_REGION_TYPE_USER		= 1,
-+};
-+
-+struct io_uring_region_desc {
-+	__u64 user_addr;
-+	__u64 size;
-+	__u32 flags;
-+	__u32 id;
-+	__u64 mmap_offset;
-+	__u64 __resv[4];
-+};
-+
-+enum {
-+	/* expose the region as registered wait arguments */
-+	IORING_MEM_REGION_REG_WAIT_ARG		= 1,
-+};
-+
-+struct io_uring_mem_region_reg {
-+	__u64 region_uptr; /* struct io_uring_region_desc * */
-+	__u64 flags;
-+	__u64 __resv[2];
-+};
-+
- /*
-  * Register a fully sparse file space, rather than pass in an array of all
-  * -1 file descriptors.
++#endif /* IOU_TOOLS_MINI_LIBURING_H */
 -- 
 2.53.0
 
