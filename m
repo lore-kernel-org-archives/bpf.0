@@ -1,375 +1,246 @@
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D5C334029C
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 18:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771872887; cv=none; b=puV7aePpgH+PL+O1aflpxM1IGqkclsKLmIFNfTXdSC1NHQOmk2luGit2pYIvTj50ARKu4/OKh+WTHMJFDrMnbAyvn6a/NsMBRifwIvU11D3kxGIo4bB6hEn1/pEkooW3HYYSYOgkINzTFSrpiQWVxRYeUv3kfFExI1+pZvJkB4M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771872887; c=relaxed/simple;
-	bh=I400pkuIKrqV/7ZJKCDNk8VkJUfJ4F6OOUYUZk8bx9k=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=KbHCH264TJGaEgbvBwExvDa7swKmRTyt7pchuoKYzfwtvcreteAEMrifedjtMfv5Oig86H/+PKJXIlsudLviy9kFm+/QEtbmGzhmaprFIdhOjEc45WL0ytJ0Ebm6iic/qJGXHmtn7QRybi+BrVXBGFVr6mquOTNTxm08PGIdL3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=a1HvoWTR; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2185923EAAD
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 18:57:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.152.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771873044; cv=pass; b=eI9X2Mltlc6zigyOqLWnkBklepz3bJch5jMyOCuvnJlm/pV0Iox1jGmqTPaaua8VfAroVW2qyl6OeAvy0HviefQQ3nSbrhSphzX0lX+rH3S5KDcYJjLLlCF2UbuH6UKML2eHZ2odThwMH1xzD5nu40uUfhVwcgOx5HgKC40Ojok=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771873044; c=relaxed/simple;
+	bh=0lYsCJZYmlrXENi/P9CsVLSpTSqMJmaLmV8FVryJ8/Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QPq+FWGTgJrQDNScwpOR695GfOCiBfegE2MX4q2lNaDjsm27RsLuHfsGZjVf9UT8U7QqSrcFBg/FREJVqvMbYWuqzpKk+YW2PAddrt+Kg0npnEayTVZx2817zDRze4+T/FuCWc56m0CXN0wGW+mt66ojW6Cqb21OTF9tib+8hhM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=c5+YNtIZ; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=YFTIl0XW; arc=pass smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="a1HvoWTR"
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-8cb420f7500so470736685a.2
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 10:54:45 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="c5+YNtIZ";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="YFTIl0XW"
+Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61NGqYuj2268388
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 18:57:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=pdF6sW9eyhPOn6Xj5jXUmbHQ03YhPMarl8djCrb0PJk=; b=c5+Y
+	NtIZ/u0OedqVltVizx779py6qQX1/ZVCNGMvxU1rbK+aE/u+PkiWrnqR3N9aIrTI
+	bjw2k6kBvsidKxY5ij0sIOtWmA2EJfKLozzI4EKWriOAcVXopYj8WrRb0kzdnAye
+	n71OkA8dDagt5S/ytgVh5+/Tvqai5fTXfQZXi18glsTvwFX4awYYaE3//YIolubv
+	Aw41WT2lolBDRfbikBSt9qi4Joxq2cmzXyljPUPrUen3JpVdoxDNQVtgqp5FD4C/
+	C+U71JrYd8P3+niH/QXBWC0IjBxCPvPWcQi5/1O8GVxbpB8j8CFLNgOPlgn5XiRQ
+	6rKNjY5aAIrFAVQ0+g==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cfqnjebv0-5
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 18:57:18 +0000 (GMT)
+Received: from 04WPEXCH011.crowdstrike.sys (10.100.11.81) by
+ 04WPEXCH010.crowdstrike.sys (10.100.11.80) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Mon, 23 Feb 2026 18:56:29 +0000
+Received: from mail-yw1-f199.google.com (10.100.11.78) by
+ 04WPEXCH011.crowdstrike.sys (10.100.11.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Mon, 23 Feb 2026 18:56:29 +0000
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-7962a21167dso82273197b3.3
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 10:56:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771872988; cv=none;
+        d=google.com; s=arc-20240605;
+        b=JLp3i4tpEijgSFm7S37V9FHWByUcMmgpqtPnkqMsi6S+01B9PsTfKWrHZqsYXfJAJE
+         Tl/dPhuFzxB6FYNz/WdqeR8nIupx701Crz8Z8gc/GEbvhyObtAAzxINxPwv2wMmxuwRt
+         zE3Dt0ruxvVmyDkV3b3y7H78Gf6SOu+PJE4Pa0wJo8u4D445QhxVLvXTIoc7t7LuUuXG
+         9rnT6XuXRFNEVW/FGuTLp3l6x3aR9ZCmnJ07fK5vbUkZZodNNcEfNJcPL4uY2oXtMP0V
+         SVEig104sPTn4F8DeoOZ1jqo30ikkKeQq8DBmR/jlmteDDz9x6oBcjDCPuMkMJB9Wcyo
+         pB/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=pdF6sW9eyhPOn6Xj5jXUmbHQ03YhPMarl8djCrb0PJk=;
+        fh=vTwoLV+vwMk+/vhSU8Xr1TcF1uom00Hue6hGxhxQk78=;
+        b=j1YIW8VRPOtiepCr00Ffq6edSnKicf2p9myuOgZPV+TuoNVgKoHjgJZOumxI+IhTsi
+         bdIoVx4DHZogeXGMohs0ZJWZD7yjVU4gCQE++ZALG+IRBCprKLrbzjSs0sAGP2JrLGfo
+         WGJntYB1Vy/zf9pUK4e8zJ9LX7ltUDyickDVdgzNZCvP88gUt/Wzj1BarJb5TerzTes5
+         iBjWTSakqiYM+NFFMdyjYbeOB3vV3RzlUIEh5HUQEdZKj1D9b0e08YNgQZAnZ5r+UlgL
+         Dgj1FuLHf39tpmr0laN6oKwSciVLTsW31ntGSizWoh+qWCvbuCHphqzBioGV8Or177h8
+         FYFA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1771872884; x=1772477684; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+        d=crowdstrike.com; s=google; t=1771872988; x=1772477788; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MKJ5Et66U6w6xNucpu6Q22s7IDRlebwXgTXFW59cKFk=;
-        b=a1HvoWTRG3vwOt69/QhHPGjtFAjIWzNEeTZGx6SnUMCpO0VU/xXpEpPHSbGRuJq8an
-         PJsnegP+pDjs5CBYBBwlx6VId6vknabnTgsDMWk/R+XNolDgtggk6SdTK5zk695mlCpt
-         h7PPSKdS40GK8M2RZxEcLv6L27OgsweDx6qt1yOegA5tCsUjiDMPfwQtuspa4ewXCXFi
-         7P8+Can9S85Vt3DYGyecv9wo/57PUVBgOQ2ta5DIb+Px4uE+OBCP6qExssoxep4N0xdv
-         8UkVR93agFlS6LYiSv53S8/EcWWMq+TjTEwEP+Z0SHT69d6zVznxDp14oNFyIcrFZaC2
-         Hhzg==
+        bh=pdF6sW9eyhPOn6Xj5jXUmbHQ03YhPMarl8djCrb0PJk=;
+        b=YFTIl0XW6ma8/kkDk8VlW+IBJnsNUkNTO3mT8PyHZe6RQriI4RThqrpWnWs9/q5CgF
+         sU9yB3+x0IDxuSzv4Umq0IjSwszLTpP8VNYY58dLXtG9Mwp4MgZkPVcneOvxPE1xrmre
+         k4zC1QURTXpU1I/Ro+49umKH6hzpxvJ0uIzqmGBAfSVmsWpNynBMJYToyJmypkYcaANY
+         G19+G9rhkUjzNIToMS6qRUFo4WjGVopXG3EIAoFAXwd13esa36xVLI6/Vj8JG/Mzxru0
+         qHeAFiTBOxIsnSwjqgeFc83BI0ui13NLmkmixoRrYKwFOoF1RtDVEuGN0Sv6GSHu8bIb
+         RKZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771872884; x=1772477684;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MKJ5Et66U6w6xNucpu6Q22s7IDRlebwXgTXFW59cKFk=;
-        b=G+sUArhFP1bwzhQghJd1Xj3T6p6gpVkK/58pXpmUKugvBBkxAOVhBNK1tXG9+oDS22
-         dLhO8mKPD+wr7Raz3jpeAkLacWF+rl0+AOFuDJuGdS1M4fSAybgDQzU5lkeRk7hmCsYO
-         hDvtbTTJoy+2bn11eYPyD9J1V7G5wQjhzyw5dSl0CJtjSghMzPx1DF8Jg2rLZ+zDTqeQ
-         qor9Ujgi9RG9Pu6V6u4m1rIjnnziCaTmc2oHK2urcu0hYePklAKArRtAHVDqn9tWs0nX
-         iPy4ZRgW5BwRNoKhU2z/v/iBK1D8yJobOYeeZeuGkTdQf2EgbyHtML0HU35t9uVBfm80
-         1iYg==
-X-Forwarded-Encrypted: i=1; AJvYcCVWjDd7A0ZtDPSfOrIEyRCOUQpfeMYGFo05xL3VR7Ptoncv1L7ff+aVWZMxgjGIsegsw8c=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4E0Ix/yOsgOswCMZLhkleW4bX4s8KpQS13f+f8VE/HyWm/Lsi
-	BD5IRVB2x5aGK9DhLOJidnAfpV+7UluMb7H2zZjTUPpAiANeuGVR4vz3fnjwG/L1KbQ=
-X-Gm-Gg: AZuq6aIKoXdmPDZL4+JpcEQNXCr9zKwh+A3VLA3rNG3W+xzKa0KjOntgZNe032c1NmQ
-	unDERjIO0M+V1pZa4hFRnbl79rB77Dfr44E4cQIM4ssLzdyNsEklm+o9hs8dt1cAXGia7Ud2567
-	srsTNcp/t+DtJZnG9H1fggkE7dpiG78jb0omBBa548bIJe4DBQDDBWbPmM4/br4Nunpd+0BaYik
-	P1Pmmr/hht2MsLu2nXBvQntKbCLeUnf3GpLZ/auZhg7+ZptL7knzRRP4evDx2nBlD83P2tXCLGk
-	xu4j6ES50ZJRdm3vpCSGCzoSTImjR6CGH9gVmxspAcUOologjNOnKQZiSJi3JmaLL6Ib6xfe5/3
-	M/4k0SQtaTfxPHLEBJteXndOmdJWuMVKbTYXUJ7ZSItn2lqbMyq3lnmQEnxU2T7nQi861NkpwE7
-	RpA3lP0YwxhRzxySS5hhoX5WI=
-X-Received: by 2002:a05:620a:489b:b0:8cb:68ed:cc28 with SMTP id af79cd13be357-8cb8c9d1c8bmr1123091385a.11.1771872883904;
-        Mon, 23 Feb 2026 10:54:43 -0800 (PST)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb8d120020sm771529285a.45.2026.02.23.10.54.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Feb 2026 10:54:43 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771872988; x=1772477788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pdF6sW9eyhPOn6Xj5jXUmbHQ03YhPMarl8djCrb0PJk=;
+        b=PhtB+BC738JqDC4xvKo0rodVWizLo9/yIuNkgojBz44Oio4X6M9+e7FxHhKg89qOn2
+         tmIell7ci4FzkmXr4n0gX+fFIqJd/0Nf9x7YNDOJwHZK7AjYYzgfj8P7JNmTtxmD9y5G
+         NQKnpnIBtoD8hNbZklDfewzG/h9UVbKCgQs6x3f2hCXrY/LqsIqU8wZaWGDztYrtv+Ng
+         ulRWI4MfXc+e8SGU/InIzVReCJR+n+QRTsoBLmF/ZR0oNLWn8epXrPTZAZIJVWLfIHLc
+         nSbxaM/T36XqpgE29TZOPxDFnFntD3dE9n8qOZbqj6pEUSi0W4VWpdthZ5xZYNcgL4gu
+         w9cQ==
+X-Gm-Message-State: AOJu0YzM1oAhu3oxkW7c6tCnaLdoLdHNZ7zRowYI4lGqWUkn32QaFXWq
+	NwElS1iS4bYtlEyLq6KpEEB/YiBXZczwyLY4zpm908k+0EDR+aUTIq6dCq7+mwMSfCOfcSGhg/E
+	ZPYDJJgXnJJE6CSP87aQncRAJGHyubSqdlsXUQM+gK/FWoNLPTA3HY0YaTup0Mf9KBS4rLG7Qji
+	8IocbvxP9ScDJWufL/S6vyNmGxB9/Bq3S3gdzErdC9EQY=
+X-Gm-Gg: ATEYQzwx0PdTnOVzlQPDOvEZLNkEewr4eFpKp+UbZ3l5xjVprLPZRAwil0AUSJSqmfs
+	HhlikJFrHiEkIoPV8RAVE0H1O3f6/XbRNFzr1IEiGEj0MyRBQv2lO/WDBxdKykyHNnZzNF7meg+
+	G35O/DmFbVg9ZkKw9lYo6ypKUlVf52jXH5/FhORtAquYcGojT9U5VuNe1DESDE/byoWuqXk5G76
+	KPO
+X-Received: by 2002:a05:690e:d4c:b0:64a:d1bd:8c64 with SMTP id 956f58d0204a3-64c789c7d59mr7362961d50.36.1771872988436;
+        Mon, 23 Feb 2026 10:56:28 -0800 (PST)
+X-Received: by 2002:a05:690e:d4c:b0:64a:d1bd:8c64 with SMTP id
+ 956f58d0204a3-64c789c7d59mr7362939d50.36.1771872987892; Mon, 23 Feb 2026
+ 10:56:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260218225617.354858-1-andrey.grodzovsky@crowdstrike.com>
+ <20260218225617.354858-3-andrey.grodzovsky@crowdstrike.com> <aZwbhsJ1PgL21oXr@krava>
+In-Reply-To: <aZwbhsJ1PgL21oXr@krava>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Mon, 23 Feb 2026 13:56:15 -0500
+X-Gm-Features: AaiRm53If8q9quJ3DmtY-96gZEDHM_qLBOdArr2UAKSMvdSQB7Vqql5GkvI0SDU
+Message-ID: <CAOu3gNhZrtgVU=Vt-Eu972RL0fh9j1BRRt0QYjwN7QnfGQAjaw@mail.gmail.com>
+Subject: Re: [External] Re: [RFC PATCH bpf-next 2/2] selftests/bpf: Add tests
+ for duplicate kprobe symbol handling
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, linux-open-source@crowdstrike.com
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 23 Feb 2026 13:54:42 -0500
-Message-Id: <DGMKIL113GDG.31MM5NSHVXNAH@etsalapatis.com>
-Cc: "Mykyta Yatsenko" <yatsenko@meta.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Use bpf_program__clone()
- in veristat
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Mykyta Yatsenko" <mykyta.yatsenko5@gmail.com>, <bpf@vger.kernel.org>,
- <ast@kernel.org>, <andrii@kernel.org>, <daniel@iogearbox.net>,
- <kafai@meta.com>, <kernel-team@meta.com>, <eddyz87@gmail.com>
-X-Mailer: aerc 0.20.1
-References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
- <20260220-veristat_prepare-v2-2-15bff49022a7@meta.com>
- <DGMJ4DNC556M.16VOPU824MANQ@etsalapatis.com> <874in7cniu.fsf@gmail.com>
-In-Reply-To: <874in7cniu.fsf@gmail.com>
+X-Disclaimer: USA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDE2NCBTYWx0ZWRfX3ZqHIr0FbHbX
+ NTl/+uqcdAw2Zg7e7R+tUmY6QZLuzHoOrkjLUpXDcFI7Niw54rMtMbILgQkLWYAxGi+gUtH2hRg
+ 2DmZD3Uk7W/S4qmU69AcFOgxJWlNsDn53V5WwafzsBaR0mZiEebGKgH+3CAPNsOePJ3yDPYupWc
+ 6lmW0CHRNmWw0f+HYES5DAD/nkbeYhQjWX6fcGj80HRor7nxbqtu7rr3Gc3whqgw8CSjVDDdSph
+ mXcU4eeshdzgOIYdSUj8HWwA+YKRiFKLGvPAGRh06IGviOf7bwuWRi8vlj1iSXHIVmwv19STGQ2
+ lp1p1NdDihXF+KQD7J8g/5tkjrrCKI/WIVD2jpT0MB52pWMLF2TkaEH/lYPtJO/UJoWTvnedHXd
+ 35wa44niI1qBFpn8bZLeJPgqP7JPPwnwxR/R0X+8xZ0F+EgxGu6u5KOfL7WYwIPjLR09Q5wwnqg
+ ADwAVrLD8AR7xj4MyWw==
+X-Proofpoint-ORIG-GUID: oUz2B-5YgPSQuOiOuHWrZ3PQ26v0s8Qp
+X-Authority-Analysis: v=2.4 cv=UoJu9uwB c=1 sm=1 tr=0 ts=699ca30e cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=KZhmPCYDdY0A:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22
+ a=NEAV23lmAAAA:8 a=pGLkceISAAAA:8 a=rytgDo7t5E_5Z9sAIMUA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: oUz2B-5YgPSQuOiOuHWrZ3PQ26v0s8Qp
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11710
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 bulkscore=0 suspectscore=0 malwarescore=0 clxscore=1015
+ adultscore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
+ phishscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
+ definitions=main-2602230164
 
-On Mon Feb 23, 2026 at 1:39 PM EST, Mykyta Yatsenko wrote:
-> "Emil Tsalapatis" <emil@etsalapatis.com> writes:
+On Mon, Feb 23, 2026 at 4:19=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
 >
->> On Fri Feb 20, 2026 at 2:18 PM EST, Mykyta Yatsenko wrote:
->>> From: Mykyta Yatsenko <yatsenko@meta.com>
->>>
->>> Replace veristat's per-program object re-opening with
->>> bpf_program__clone().
->>>
->>> Previously, veristat opened a separate bpf_object for every program in =
-a
->>> multi-program object file, iterated all programs to enable only the
->>> target one, and then loaded the entire object.
->>>
->>> Use bpf_object__prepare() once, then call bpf_program__clone() for each
->>> program individually. This lets veristat load programs one at a time
->>> from a single prepared object.
->>>
->>> The caller now owns the returned fd and closes it after collecting stat=
-s.
->>> Remove the special single-program fast path and the per-file early exit
->>> in handle_verif_mode() so all files are always processed.
->>>
->>> Split fixup_obj() into fixup_obj_maps() for object-wide map fixups that
->>> must run before bpf_object__prepare(), and fixup_obj() for per-program
->>> fixups (struct_ops masking, freplace type guessing) that run before eac=
-h
->>> bpf_program__clone() call.
->>>
->>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->>> ---
->>>  tools/testing/selftests/bpf/veristat.c | 104 ++++++++++++++-----------=
---------
->>>  1 file changed, 44 insertions(+), 60 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/sel=
-ftests/bpf/veristat.c
->>> index 1be1e353d40a..7d7eb56e04d0 100644
->>> --- a/tools/testing/selftests/bpf/veristat.c
->>> +++ b/tools/testing/selftests/bpf/veristat.c
->>> @@ -1236,7 +1236,7 @@ static void mask_unrelated_struct_ops_progs(struc=
-t bpf_object *obj,
->>>  	}
->>>  }
->>> =20
->>> -static void fixup_obj(struct bpf_object *obj, struct bpf_program *prog=
-, const char *filename)
->>> +static void fixup_obj_maps(struct bpf_object *obj)
->>>  {
->>>  	struct bpf_map *map;
->>> =20
->>> @@ -1251,15 +1251,23 @@ static void fixup_obj(struct bpf_object *obj, s=
-truct bpf_program *prog, const ch
->>>  		case BPF_MAP_TYPE_INODE_STORAGE:
->>>  		case BPF_MAP_TYPE_CGROUP_STORAGE:
->>>  		case BPF_MAP_TYPE_CGRP_STORAGE:
->>> -			break;
->>>  		case BPF_MAP_TYPE_STRUCT_OPS:
->>> -			mask_unrelated_struct_ops_progs(obj, map, prog);
->>>  			break;
->>>  		default:
->>>  			if (bpf_map__max_entries(map) =3D=3D 0)
->>>  				bpf_map__set_max_entries(map, 1);
->>>  		}
->>>  	}
->>> +}
->>> +
->>> +static void fixup_obj(struct bpf_object *obj, struct bpf_program *prog=
-, const char *filename)
->>> +{
->>> +	struct bpf_map *map;
->>> +
->>> +	bpf_object__for_each_map(map, obj) {
->>> +		if (bpf_map__type(map) =3D=3D BPF_MAP_TYPE_STRUCT_OPS)
->>> +			mask_unrelated_struct_ops_progs(obj, map, prog);
->>> +	}
->>> =20
->>>  	/* SEC(freplace) programs can't be loaded with veristat as is,
->>>  	 * but we can try guessing their target program's expected type by
->>> @@ -1608,6 +1616,7 @@ static int process_prog(const char *filename, str=
-uct bpf_object *obj, struct bpf
->>>  	const char *base_filename =3D basename(strdupa(filename));
->>>  	const char *prog_name =3D bpf_program__name(prog);
->>>  	long mem_peak_a, mem_peak_b, mem_peak =3D -1;
->>> +	LIBBPF_OPTS(bpf_prog_load_opts, opts);
->>>  	char *buf;
->>>  	int buf_sz, log_level;
->>>  	struct verif_stats *stats;
->>> @@ -1647,9 +1656,6 @@ static int process_prog(const char *filename, str=
-uct bpf_object *obj, struct bpf
->>>  	}
->>>  	verif_log_buf[0] =3D '\0';
->>> =20
->>> -	bpf_program__set_log_buf(prog, buf, buf_sz);
->>> -	bpf_program__set_log_level(prog, log_level);
->>> -
->>>  	/* increase chances of successful BPF object loading */
->>>  	fixup_obj(obj, prog, base_filename);
->>> =20
->>> @@ -1658,15 +1664,21 @@ static int process_prog(const char *filename, s=
-truct bpf_object *obj, struct bpf
->>>  	if (env.force_reg_invariants)
->>>  		bpf_program__set_flags(prog, bpf_program__flags(prog) | BPF_F_TEST_R=
-EG_INVARIANTS);
->>> =20
->>> -	err =3D bpf_object__prepare(obj);
->>> -	if (!err) {
->>> -		cgroup_err =3D reset_stat_cgroup();
->>> -		mem_peak_a =3D cgroup_memory_peak();
->>> -		err =3D bpf_object__load(obj);
->>> -		mem_peak_b =3D cgroup_memory_peak();
->>> -		if (!cgroup_err && mem_peak_a >=3D 0 && mem_peak_b >=3D 0)
->>> -			mem_peak =3D mem_peak_b - mem_peak_a;
->>> +	opts.log_buf =3D buf;
->>> +	opts.log_size =3D buf_sz;
->>> +	opts.log_level =3D log_level;
->>> +
->>> +	cgroup_err =3D reset_stat_cgroup();
->>> +	mem_peak_a =3D cgroup_memory_peak();
->>> +	fd =3D bpf_program__clone(prog, &opts);
->>> +	if (fd < 0) {
->>> +		err =3D fd;
->>> +		fprintf(stderr, "Failed to load program %s %d\n", prog_name, err);
->>>  	}
->>> +	mem_peak_b =3D cgroup_memory_peak();
->>> +	if (!cgroup_err && mem_peak_a >=3D 0 && mem_peak_b >=3D 0)
->>> +		mem_peak =3D mem_peak_b - mem_peak_a;
->>> +
->>
->> AFAICT the meaning of mem_peak changes with this patch, right? Before it=
- was the diff between=20
->> prepare() and load(), with the patch as it is now it is max(prepare,
->> load) since mem_peak_a is reset right above. If we do not automatically
->> load OBJ_PREPARED programs (see the review for patch 1/2) we can keep
->> the old behavior by storing mem_peak_a after the first prepare and
->> reading mem_peak_b after clone+load.
->>
-> I'm not sure if I understand why the meaning of mem_peak changed. Before
-> it was:
->    bpf_object__prepare()
->    peak_reset()
->    a =3D mem_peak()
->    bpf_object__load();
->    mem_peak =3D mem_peak() - a;
+> On Wed, Feb 18, 2026 at 05:56:17PM -0500, Andrey Grodzovsky wrote:
 >
-> and now:
->    bpf_object__prepare()
->    ...
->    peak_reset()
->    a =3D mem_peak()
->    bpf_program__clone();
->    mem_peak =3D mem_peak() - a;
+> SNIP
 >
-> I understand this code is supposed to measure the memory overhead for
-> the loading a single program.
+> > diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym=
+.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c
+> > new file mode 100644
+> > index 000000000000..98b3e085ae90
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c
+> > @@ -0,0 +1,45 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/* Copyright (c) 2025 CrowdStrike */
+> > +/* Test module for duplicate kprobe symbol handling */
+> > +#include <linux/init.h>
+> > +#include <linux/module.h>
+> > +#include <linux/kernel.h>
+> > +
+> > +/* Duplicate symbol to test kprobe attachment with duplicate symbols.
+> > + * This creates a duplicate of the syscall wrapper used in attach_prob=
+e tests.
+> > + * The libbpf fix should handle this by preferring the vmlinux symbol.
+> > + * This function should NEVER be called - kprobes should attach to vml=
+inux version.
+> > + */
+> > +#ifdef __x86_64__
+> > +noinline int __x64_sys_nanosleep(void)
+> > +#elif defined(__s390x__)
+> > +noinline int __s390x_sys_nanosleep(void)
+> > +#elif defined(__aarch64__)
+> > +noinline int __arm64_sys_nanosleep(void)
+> > +#elif defined(__riscv)
+> > +noinline int __riscv_sys_nanosleep(void)
+> > +#else
+> > +noinline int sys_nanosleep(void)
+> > +#endif
+> > +{
+> > +     WARN_ONCE(1, "bpf_testmod_dup_sym: dummy nanosleep symbol called =
+- this should never execute!\n");
+> > +     return -EINVAL;
+> > +}
 >
-> Could you please elaborate what the issue is? Maybe some example?
+> hi,
+> this fails to build for me:
+>
+>   CC [M]  bpf_testmod_dup_sym.o
+> bpf_testmod_dup_sym.c:14:14: error: no previous prototype for =E2=80=98__=
+x64_sys_nanosleep=E2=80=99 [-Werror=3Dmissing-prototypes]
+>    14 | noinline int __x64_sys_nanosleep(void)
+>       |              ^~~~~~~~~~~~~~~~~~~
+>
+> jirka
 
-You're right, I misread this - behavior is identical. With that:
+Hey Jiri, ran i on my local mirror of CI repo  with latest rebased to
+origin/bpf-next_base with command
+tools/testing/selftests/bpf/vmtest.sh -- ./test_progs -t attach_probe
+and (arch is x86) and eveyrhing pass.
+Then i also ran in guthub
+https://github.com/kernel-patches/bpf/pull/11138 and the only single
+failure i got
+is during runtime is some unrealted test failure.
+https://github.com/kernel-patches/bpf/actions/runs/22318486040/job/64571209=
+293?pr=3D11138
+This seems to be because of me defining sys_nanosleep duplicate
+without static qualifier and so if your
+local build has -Werror=3Dmissing-prototypes,  this warning cause a
+failure? Do you think we should
+add static here ?
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Andrey
 
->>>  	env.progs_processed++;
->>> =20
->>>  	stats->file_name =3D strdup(base_filename);
->>> @@ -1678,7 +1690,6 @@ static int process_prog(const char *filename, str=
-uct bpf_object *obj, struct bpf
->>>  	stats->stats[MEMORY_PEAK] =3D mem_peak < 0 ? -1 : mem_peak / (1024 * =
-1024);
->>> =20
->>>  	memset(&info, 0, info_len);
->>> -	fd =3D bpf_program__fd(prog);
->>>  	if (fd > 0 && bpf_prog_get_info_by_fd(fd, &info, &info_len) =3D=3D 0)=
- {
->>>  		stats->stats[JITED_SIZE] =3D info.jited_prog_len;
->>>  		if (env.dump_mode & DUMP_JITED)
->>> @@ -1699,7 +1710,8 @@ static int process_prog(const char *filename, str=
-uct bpf_object *obj, struct bpf
->>> =20
->>>  	if (verif_log_buf !=3D buf)
->>>  		free(buf);
->>> -
->>> +	if (fd > 0)
->>> +		close(fd);
->>>  	return 0;
->>>  }
->>> =20
->>> @@ -2182,8 +2194,8 @@ static int set_global_vars(struct bpf_object *obj=
-, struct var_preset *presets, i
->>>  static int process_obj(const char *filename)
->>>  {
->>>  	const char *base_filename =3D basename(strdupa(filename));
->>> -	struct bpf_object *obj =3D NULL, *tobj;
->>> -	struct bpf_program *prog, *tprog, *lprog;
->>> +	struct bpf_object *obj =3D NULL;
->>> +	struct bpf_program *prog;
->>>  	libbpf_print_fn_t old_libbpf_print_fn;
->>>  	LIBBPF_OPTS(bpf_object_open_opts, opts);
->>>  	int err =3D 0, prog_cnt =3D 0;
->>> @@ -2222,51 +2234,26 @@ static int process_obj(const char *filename)
->>>  	env.files_processed++;
->>> =20
->>>  	bpf_object__for_each_program(prog, obj) {
->>> +		bpf_program__set_autoload(prog, true);
->>>  		prog_cnt++;
->>>  	}
->>> =20
->>> -	if (prog_cnt =3D=3D 1) {
->>> -		prog =3D bpf_object__next_program(obj, NULL);
->>> -		bpf_program__set_autoload(prog, true);
->>> -		err =3D set_global_vars(obj, env.presets, env.npresets);
->>> -		if (err) {
->>> -			fprintf(stderr, "Failed to set global variables %d\n", err);
->>> -			goto cleanup;
->>> -		}
->>> -		process_prog(filename, obj, prog);
->>> +	fixup_obj_maps(obj);
->>> +
->>> +	err =3D set_global_vars(obj, env.presets, env.npresets);
->>> +	if (err) {
->>> +		fprintf(stderr, "Failed to set global variables %d\n", err);
->>>  		goto cleanup;
->>>  	}
->>> =20
->>> -	bpf_object__for_each_program(prog, obj) {
->>> -		const char *prog_name =3D bpf_program__name(prog);
->>> -
->>> -		tobj =3D bpf_object__open_file(filename, &opts);
->>> -		if (!tobj) {
->>> -			err =3D -errno;
->>> -			fprintf(stderr, "Failed to open '%s': %d\n", filename, err);
->>> -			goto cleanup;
->>> -		}
->>> -
->>> -		err =3D set_global_vars(tobj, env.presets, env.npresets);
->>> -		if (err) {
->>> -			fprintf(stderr, "Failed to set global variables %d\n", err);
->>> -			goto cleanup;
->>> -		}
->>> -
->>> -		lprog =3D NULL;
->>> -		bpf_object__for_each_program(tprog, tobj) {
->>> -			const char *tprog_name =3D bpf_program__name(tprog);
->>> -
->>> -			if (strcmp(prog_name, tprog_name) =3D=3D 0) {
->>> -				bpf_program__set_autoload(tprog, true);
->>> -				lprog =3D tprog;
->>> -			} else {
->>> -				bpf_program__set_autoload(tprog, false);
->>> -			}
->>> -		}
->>> +	err =3D bpf_object__prepare(obj);
->>> +	if (err) {
->>> +		fprintf(stderr, "Failed to prepare BPF object for loading %d\n", err=
-);
->>> +		goto cleanup;
->>> +	}
->>> =20
->>> -		process_prog(filename, tobj, lprog);
->>> -		bpf_object__close(tobj);
->>> +	bpf_object__for_each_program(prog, obj) {
->>> +		process_prog(filename, obj, prog);
->>>  	}
->>> =20
->>>  cleanup:
->>> @@ -3264,17 +3251,14 @@ static int handle_verif_mode(void)
->>>  	create_stat_cgroup();
->>>  	for (i =3D 0; i < env.filename_cnt; i++) {
->>>  		err =3D process_obj(env.filenames[i]);
->>> -		if (err) {
->>> +		if (err)
->>>  			fprintf(stderr, "Failed to process '%s': %d\n", env.filenames[i], e=
-rr);
->>> -			goto out;
->>> -		}
->>
->> This means we now do not stop on the first failure - this I assume is
->> deliberate since it is an improvement over existing behavior imo, but
->> still pointing it out in case it isn't.
->>
->>>  	}
->>> =20
->>>  	qsort(env.prog_stats, env.prog_stat_cnt, sizeof(*env.prog_stats), cmp=
-_prog_stats);
->>> =20
->>>  	output_prog_stats();
->>> =20
->>> -out:
->>>  	destroy_stat_cgroup();
->>>  	return err;
->>>  }
-
+>
+> > +
+> > +static int __init bpf_testmod_dup_sym_init(void)
+> > +{
+> > +     pr_info("bpf_testmod_dup_sym: loaded (duplicate symbol test modul=
+e)\n");
+> > +     return 0;
+> > +}
+> > +
+> > +static void __exit bpf_testmod_dup_sym_exit(void)
+> > +{
+> > +     pr_info("bpf_testmod_dup_sym: unloaded\n");
+> > +}
+> > +
+> > +module_init(bpf_testmod_dup_sym_init);
+> > +module_exit(bpf_testmod_dup_sym_exit);
+> > +
+> > +MODULE_AUTHOR("Andrey Grodzovsky");
+> > +MODULE_DESCRIPTION("BPF selftest duplicate symbol module");
+> > +MODULE_LICENSE("GPL");
+> > --
+> > 2.34.1
+> >
