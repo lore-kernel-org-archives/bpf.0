@@ -1,32 +1,32 @@
 Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6404B36AB6E
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 949F236AB75
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:08:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771873727; cv=none; b=QNdXowoZD9AuTzTjmqfegmbzZkz6FUWd2mwZ8xta8H6cyWXnLW2KGP0uXVGM+CmaOCeLxKRs3fEv/UTCulbxJAA2cYnpztMAMDszxAl/3R5SXevJCtNV/u87ZDSc8Mbzqvz0iwvpaWeClEdLqQT+FBsoU32o6LKN2ygPngc2gbM=
+	t=1771873731; cv=none; b=LmqrZjYWvsVd8T3ucm/5M0gHVlR4jNmTiO2bkc4PTawSJqcmyZu5CVVr5rd2db3/oL+UYYFwWYkv4bD6wg7D2F5dqJGP7DLqSlmqVbgEzj5cJYtix4w7VFOgFOlzwd/zBVKhhRAbKahv0BcjNnWpKs9ElUbQaMCum6P0Pbmds94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771873727; c=relaxed/simple;
-	bh=b91pEac6YrQf6AA0BkSypFpVCQSBxS1GtFd+o1jKsNg=;
+	s=arc-20240116; t=1771873731; c=relaxed/simple;
+	bh=nkZ7EIP6LGyWvfc3u9kgQem5wfwCiKQ9vXWuzdwQiws=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fAybTS/bnhrlnPx67vRXtWdbw6QLGpkJkx6wQrC21i+rQXnTHCuuLcF8Z3AdBs4cAIGpz2vVd4h8E2qc33c75cUXHRfHlAa/3T6iwnSq+oUPEvhAR92ziywlYDO0TI2+W1iPy8BDuvTQXgB2OYp4wDM0B5g6NZqbEe6Gn8UgEow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Sw9OjxTY; arc=none smtp.client-ip=91.218.175.172
+	 MIME-Version; b=XLVUaLcY2OdqkBoaRmXNG27L1Nnwl4JNmCj6WwctJlEsDcQvsLO3TuaqCCSHnR7rTfhz+wzwfUAG0PNqy2iCApV6ZTtambi7NSL7f3PdNwX00gIZKmSHI/2a7Cvfq6zA49FWEHWbXJFbpFa7AgFA1ULR8X9EcUMiJQjUuznm2mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KHNniA1K; arc=none smtp.client-ip=91.218.175.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Sw9OjxTY"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KHNniA1K"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771873724;
+	t=1771873727;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aF3XpM5Vp8Ae6GR1ZtZNYmZ1UwRARFZZQsmTjQhrewc=;
-	b=Sw9OjxTYjL/iwrHcGkluAm+GpZzMTYNjgUOsodoKOZNLPXyp7ViFltl5HR0YK3tEjPO1L4
-	2+WzwkkX+wIN6qBCR8TfXkIMNVPwnPQtkKF15/2hgSzlxNm7aFuJvIUpTsYSVxKpLuW4/b
-	YpLicLhlhUYQdTUn2Bth1McYgZlxtX0=
+	bh=TNjpWtD8/OLKVZY+IfnvHA3Q+we+RTPqutZ3CXBQMnM=;
+	b=KHNniA1KwgUAf/yEaLNrnQYJ/oc+D6eDR/RfEHZ1pcuwuBamNXy0ZPB+qwcjAXfQGRV20F
+	A8WbyXKPWMq/RgRiUyCBYz5rZgTENIzNQafQgnPQWh8RkjjavX7A7RBLr4gZGLSlqycvSq
+	Vi9RZvIs44ZO2lj7QHsWTqe9VjIUYiY=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v4 16/20] selftests/bpf: Free bpf_object in test_sysctl
-Date: Mon, 23 Feb 2026 11:07:32 -0800
-Message-ID: <20260223190736.649171-17-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v4 17/20] selftests/bpf: Fix array bounds warning in jit_disasm_helpers
+Date: Mon, 23 Feb 2026 11:07:33 -0800
+Message-ID: <20260223190736.649171-18-ihor.solodrai@linux.dev>
 In-Reply-To: <20260223190736.649171-1-ihor.solodrai@linux.dev>
 References: <20260223190736.649171-1-ihor.solodrai@linux.dev>
 Precedence: bulk
@@ -53,44 +53,46 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-ASAN reported a resource leak due to the bpf_object not being tracked
-in test_sysctl. Add obj field to struct sysctl_test to properly clean
-it up.
+Compiler cannot infer upper bound for labels.cnt and warns about
+potential buffer overflow in snprintf. Add an explicit bounds
+check (... && i < MAX_LOCAL_LABELS) in the loop condition to fix the
+warning.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/prog_tests/test_sysctl.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../testing/selftests/bpf/jit_disasm_helpers.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_sysctl.c b/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
-index 273dd41ca09e..2a1ff821bc97 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_sysctl.c
-@@ -27,6 +27,7 @@ struct sysctl_test {
- 		OP_EPERM,
- 		SUCCESS,
- 	} result;
-+	struct bpf_object *obj;
- };
- 
- static struct sysctl_test tests[] = {
-@@ -1471,6 +1472,7 @@ static int load_sysctl_prog_file(struct sysctl_test *test)
- 		return -1;
+diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+index febd6b12e372..364c557c5115 100644
+--- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
++++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+@@ -122,15 +122,15 @@ static int disasm_one_func(FILE *text_out, uint8_t *image, __u32 len)
+ 		pc += cnt;
  	}
+ 	qsort(labels.pcs, labels.cnt, sizeof(*labels.pcs), cmp_u32);
+-	for (i = 0; i < labels.cnt; ++i)
+-		/* gcc is unable to infer upper bound for labels.cnt and assumes
+-		 * it to be U32_MAX. U32_MAX takes 10 decimal digits.
+-		 * snprintf below prints into labels.names[*],
+-		 * which has space only for two digits and a letter.
+-		 * To avoid truncation warning use (i % MAX_LOCAL_LABELS),
+-		 * which informs gcc about printed value upper bound.
+-		 */
+-		snprintf(labels.names[i], sizeof(labels.names[i]), "L%d", i % MAX_LOCAL_LABELS);
++	/* gcc is unable to infer upper bound for labels.cnt and
++	 * assumes it to be U32_MAX. U32_MAX takes 10 decimal digits.
++	 * snprintf below prints into labels.names[*], which has space
++	 * only for two digits and a letter.  To avoid truncation
++	 * warning use (i < MAX_LOCAL_LABELS), which informs gcc about
++	 * printed value upper bound.
++	 */
++	for (i = 0; i < labels.cnt && i < MAX_LOCAL_LABELS; ++i)
++		snprintf(labels.names[i], sizeof(labels.names[i]), "L%d", i);
  
-+	test->obj = obj;
- 	return prog_fd;
- }
- 
-@@ -1573,6 +1575,7 @@ static int run_test_case(int cgfd, struct sysctl_test *test)
- 	/* Detaching w/o checking return code: best effort attempt. */
- 	if (progfd != -1)
- 		bpf_prog_detach(cgfd, atype);
-+	bpf_object__close(test->obj);
- 	close(progfd);
- 	printf("[%s]\n", err ? "FAIL" : "PASS");
- 	return err;
+ 	/* now print with labels */
+ 	labels.print_phase = true;
 -- 
 2.53.0
 
