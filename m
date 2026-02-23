@@ -1,30 +1,32 @@
-Received: from out-174.mta0.migadu.com (out-174.mta0.migadu.com [91.218.175.174])
+Received: from out-179.mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A044369216
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB15E36A02C
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:07:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771873677; cv=none; b=RfK0ZSMigHOW5AIThNXAd4bJfgrp/hU9Z9NV8mziE2dn3t9KSG/ZGL94xrk9CmEPaYqsylUjJ7RoMr9InIRbDqPKAoyd4b2b1BNIy612oRXRZbDjkRf3vtqfl0PXx7m80Zjp9sYoP9/5O9F6p4njLR03pRUSQjtmGji9fBxSuho=
+	t=1771873681; cv=none; b=C9WINx5LpP1a68ohyQTQadfpqAwkdoXgrvVTCQrcz+Cl6duxZ8nXNc82peR5MirDMX7Pw7FYqMANww4/0nvgGse87oJS3k20YoJNkXoNtcTjWk2/3RlQCr1d9GUy1zNmJSl0mCTv5wZwrg0IcoFV68aq2BS5h6wHYUXYQxXV0As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771873677; c=relaxed/simple;
-	bh=BfQoMTQmk6Gix/4PAU+IKi+T+apkNEa9jaC4e30EJLY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mCyizYFJhbkrwytQuo8pPEJ8TlL0/2smi2q2nrgmxWmBteEKKCVQ1GGWn0Ylfuop1kZD+UO00dWkdo4ESXS/L7Qmsd/399C+iQWFpLGDM7p2Rs2fsCgEZeL8st0e6mFIN0vDKqMzE4OK2sXr3yNvW0FSvHnkva6QcL4SgPLc8SM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OHapdMKc; arc=none smtp.client-ip=91.218.175.174
+	s=arc-20240116; t=1771873681; c=relaxed/simple;
+	bh=353PHU8UO2Z7Mx4DxBGCc6/1Hgo31WK6JuMpfS43IrQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=c1eyQqfxsfOgw4pKo9yMjCVzEyLmWKLzy9uNcISPurK6gDkrrb1izjHZZep/u1LjGBS412x1ZjjbGuANIP7Kx7Eawmn+OB5uJVOUFvHSY0IuYpXECDaM7TFNT9DWxZtosjh+dsLOtOOfthiP9g0UAoYdDeCmLlH4i0/5GC0xMTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cqRANo2a; arc=none smtp.client-ip=91.218.175.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OHapdMKc"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cqRANo2a"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771873673;
+	t=1771873677;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=LAUDXIchVbH1skRajklMeB3JqUeYZ5onT5pRPNpzJ/A=;
-	b=OHapdMKcEv7ExpYrFdeEDGYrkjvYMwv6tQIh12z13ML+ScGP1tTuX9KHSHLTUjoQVQ4RD0
-	LXv3byfEL8cnrgfBHBW2U192IZ8zB/dmUfwIuiqLLGFJwMMh1qy957ntm6FntBwoCIoqUw
-	wokZDeqnsNdxYBBXSl0CQuwc5MIv2eI=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y++r09/3hti2gUSHEUw6btcoGNMDBhPsbUv8ShjBP7E=;
+	b=cqRANo2asZT0wP+VaayFGg5fMyaDAYght0WWzMgeG7vSymSZjV8flVZs0XYSPpUTRE0U2u
+	X9kqwIvXOveaF3l7szCoNDD2PxquJerd5q2bYY6ErfeIKBeUb1hrsZYR63al2wx+ygqmFP
+	EpFAeBnm63lYbcxSxC2DLKZDkezYxLY=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -37,9 +39,11 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v4 00/20] selftests/bpf: Fixes for userspace ASAN
-Date: Mon, 23 Feb 2026 11:07:16 -0800
-Message-ID: <20260223190736.649171-1-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v4 01/20] selftests/bpf: Add simple strscpy() implementation
+Date: Mon, 23 Feb 2026 11:07:17 -0800
+Message-ID: <20260223190736.649171-2-ihor.solodrai@linux.dev>
+In-Reply-To: <20260223190736.649171-1-ihor.solodrai@linux.dev>
+References: <20260223190736.649171-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,130 +53,128 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-This series includes various fixes aiming to enable test_progs run
-with userspace address sanitizer on BPF CI.
+Replace bpf_strlcpy() in bpf_util.h with a sized_strscpy(), which is a
+simplified sized_strscpy() from the kernel (lib/string.c [1]). It:
+  * takes a count (destination size) parameter
+  * guarantees NULL-termination
+  * returns the number of characters copied or -E2BIG
 
-The first five patches add a simplified implementation of strscpy() to
-selftests/bpf and then replace strcpy/strncpy usages across the tests
-with it. See relevant discussions [1][2].
+Re-define strscpy macro similar to in-kernel implementation [2]: allow
+the count parameter to be optional.
 
-Patch #6 fixes the selftests/bpf/test_progs build with:
+Add #ifdef-s to tools/include/linux/args.h, as they may be defined in
+other system headers (for example, __CONCAT in sys/cdefs.h).
 
-    SAN_CFLAGS="-fsanitize=address -fno-omit-frame-pointer"
+Fixup the single existing bpf_strlcpy() call in cgroup_helpers.c
 
-The subsequent patches fix bugs reported by the address sanitizer on
-attempt to run the tests.
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/lib/string.c?h=v6.19#n113
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/string.h?h=v6.19#n91
 
-[1] https://lore.kernel.org/bpf/CAADnVQ+9uw2_o388j43EWiAPdMB=3FLx2jq-9zRSvqrv-wgRag@mail.gmail.com/
-[2] https://lore.kernel.org/bpf/20260220182011.802116-1-ihor.solodrai@linux.dev/
-
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
+ tools/include/linux/args.h                   |  4 ++
+ tools/testing/selftests/bpf/bpf_util.h       | 45 ++++++++++++++------
+ tools/testing/selftests/bpf/cgroup_helpers.c |  2 +-
+ 3 files changed, 37 insertions(+), 14 deletions(-)
 
-v3->v4:
-  - combine strscpy and ASAN series into one (Alexei)
-  - make the count arg of strscpy() optional via macro and fixup
-    relevant call sites (Alexei)
-  - remove strscpy_cat() from this series (Alexei)
-
-v3: https://lore.kernel.org/bpf/20260220222604.1155148-1-ihor.solodrai@linux.dev/
-
-v2->v3:
-  - rebase on top of "selftests/bpf: Add and use strscpy()"
-    - https://lore.kernel.org/bpf/20260220182011.802116-1-ihor.solodrai@linux.dev/
-  - uprobe_multi_test.c: memset static struct child at the beginning
-    of a test *and* zero out child->thread in release_child (patch #9,
-    Mykyta)
-  - nits in test_sysctl.c (patch #11, Eduard)
-  - bpftool_helpers.c: update to use strscpy (patch #14, Alexei)
-  - add __asan_on_error handler to still dump test logs even with ASAN
-    build (patch #15, Mykyta)
-
-v2: https://lore.kernel.org/bpf/20260218003041.1156774-1-ihor.solodrai@linux.dev/
-
-v1->v2:
-  - rebase on bpf (v1 was targeting bpf-next)
-  - add ASAN flag handling in selftests/bpf/Makefile (Eduard)
-  - don't override SIGSEGV handler in test_progs with ASAN (Eduard)
-  - add error messages in detect_bpftool_path (Mykyta)
-  - various nits (Eduard, Jiri, Mykyta, Alexis)
-
-v1: https://lore.kernel.org/bpf/20260212011356.3266753-1-ihor.solodrai@linux.dev/
-
----
-
-Ihor Solodrai (20):
-  selftests/bpf: Add simple strscpy() implementation
-  selftests/bpf: Replace strcpy() calls with strscpy()
-  selftests/bpf: Replace strncpy() with strscpy()
-  selftests/bpf: Use strscpy in bpftool_helpers.c
-  selftests/bpf: Use memcpy() for bounded non-NULL-terminated copies
-  selftests/bpf: Pass through build flags to bpftool and resolve_btfids
-  resolve_btfids: Fix memory leaks reported by ASAN
-  selftests/bpf: Add DENYLIST.asan
-  selftests/bpf: Refactor bpf_get_ksyms() trace helper
-  selftests/bpf: Fix memory leaks in tests
-  selftests/bpf: Fix cleanup in check_fd_array_cnt__fd_array_too_big()
-  veristat: Fix a memory leak for preset ENUMERATOR
-  selftests/bpf: Fix use-after-free in xdp_metadata test
-  selftests/bpf: Fix double thread join in uprobe_multi_test
-  selftests/bpf: Fix resource leaks caused by missing cleanups
-  selftests/bpf: Free bpf_object in test_sysctl
-  selftests/bpf: Fix array bounds warning in jit_disasm_helpers
-  selftests/bpf: Fix out-of-bounds array access bugs reported by ASAN
-  selftests/bpf: Check BPFTOOL env var in detect_bpftool_path()
-  selftests/bpf: Don't override SIGSEGV handler with ASAN
-
- tools/bpf/resolve_btfids/Makefile             |  7 +-
- tools/bpf/resolve_btfids/main.c               | 81 ++++++++++++-------
- tools/include/linux/args.h                    |  4 +
- tools/testing/selftests/bpf/DENYLIST.asan     |  3 +
- tools/testing/selftests/bpf/Makefile          | 13 ++-
- .../selftests/bpf/benchs/bench_trigger.c      | 14 ++--
- tools/testing/selftests/bpf/bpf_util.h        | 45 ++++++++---
- tools/testing/selftests/bpf/bpftool_helpers.c | 25 ++++--
- tools/testing/selftests/bpf/cgroup_helpers.c  |  2 +-
- .../selftests/bpf/jit_disasm_helpers.c        | 18 ++---
- tools/testing/selftests/bpf/network_helpers.c |  5 +-
- .../testing/selftests/bpf/prog_tests/align.c  |  2 +-
- .../selftests/bpf/prog_tests/bpf_iter.c       |  3 +-
- .../selftests/bpf/prog_tests/bpf_tcp_ca.c     |  2 +-
- .../bpf/prog_tests/cgrp_local_storage.c       |  4 +-
- .../selftests/bpf/prog_tests/ctx_rewrite.c    |  6 +-
- .../testing/selftests/bpf/prog_tests/dynptr.c |  5 +-
- .../selftests/bpf/prog_tests/fd_array.c       |  4 +-
- .../selftests/bpf/prog_tests/flow_dissector.c |  4 +-
- .../selftests/bpf/prog_tests/htab_update.c    |  1 +
- .../bpf/prog_tests/kmem_cache_iter.c          |  7 +-
- .../bpf/prog_tests/kprobe_multi_test.c        | 12 ++-
- .../selftests/bpf/prog_tests/lwt_seg6local.c  |  2 +-
- .../bpf/prog_tests/queue_stack_map.c          |  4 +-
- .../selftests/bpf/prog_tests/setget_sockopt.c |  2 +-
- .../bpf/prog_tests/skc_to_unix_sock.c         |  2 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c  | 28 +++----
- .../selftests/bpf/prog_tests/sockmap_listen.c |  2 +-
- .../selftests/bpf/prog_tests/sockopt_sk.c     |  2 +-
- .../bpf/prog_tests/struct_ops_private_stack.c |  4 +-
- .../bpf/prog_tests/task_local_data.h          |  2 +-
- .../selftests/bpf/prog_tests/tc_opts.c        |  6 +-
- .../selftests/bpf/prog_tests/tc_redirect.c    |  2 +-
- .../selftests/bpf/prog_tests/test_sysctl.c    |  3 +
- .../selftests/bpf/prog_tests/test_tc_tunnel.c |  5 +-
- .../selftests/bpf/prog_tests/test_veristat.c  |  4 +-
- .../selftests/bpf/prog_tests/test_xsk.c       | 24 +++++-
- .../bpf/prog_tests/uprobe_multi_test.c        |  6 +-
- .../selftests/bpf/prog_tests/verifier_log.c   |  2 +-
- .../selftests/bpf/prog_tests/xdp_metadata.c   |  4 +-
- tools/testing/selftests/bpf/test_progs.c      | 38 ++++++---
- tools/testing/selftests/bpf/test_verifier.c   |  2 +-
- tools/testing/selftests/bpf/testing_helpers.c |  1 +
- tools/testing/selftests/bpf/trace_helpers.c   | 23 +++---
- tools/testing/selftests/bpf/trace_helpers.h   | 11 ++-
- tools/testing/selftests/bpf/veristat.c        |  2 +
- tools/testing/selftests/bpf/xdp_features.c    |  3 +-
- tools/testing/selftests/bpf/xdp_hw_metadata.c |  4 +-
- 48 files changed, 291 insertions(+), 164 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/DENYLIST.asan
-
+diff --git a/tools/include/linux/args.h b/tools/include/linux/args.h
+index 2e8e65d975c7..14b268f2389a 100644
+--- a/tools/include/linux/args.h
++++ b/tools/include/linux/args.h
+@@ -22,7 +22,11 @@
+ #define COUNT_ARGS(X...) __COUNT_ARGS(, ##X, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0)
+ 
+ /* Concatenate two parameters, but allow them to be expanded beforehand. */
++#ifndef __CONCAT
+ #define __CONCAT(a, b) a ## b
++#endif
++#ifndef CONCATENATE
+ #define CONCATENATE(a, b) __CONCAT(a, b)
++#endif
+ 
+ #endif	/* _LINUX_ARGS_H */
+diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+index 4bc2d25f33e1..6cb56501a505 100644
+--- a/tools/testing/selftests/bpf/bpf_util.h
++++ b/tools/testing/selftests/bpf/bpf_util.h
+@@ -8,6 +8,7 @@
+ #include <errno.h>
+ #include <syscall.h>
+ #include <bpf/libbpf.h> /* libbpf_num_possible_cpus */
++#include <linux/args.h>
+ 
+ static inline unsigned int bpf_num_possible_cpus(void)
+ {
+@@ -21,25 +22,43 @@ static inline unsigned int bpf_num_possible_cpus(void)
+ 	return possible_cpus;
+ }
+ 
+-/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
+- * is zero-terminated string no matter what (unless sz == 0, in which case
+- * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
+- * in what is returned. Given this is internal helper, it's trivial to extend
+- * this, when necessary. Use this instead of strncpy inside libbpf source code.
++/*
++ * Simplified strscpy() implementation. The kernel one is in lib/string.c
+  */
+-static inline void bpf_strlcpy(char *dst, const char *src, size_t sz)
++static inline ssize_t sized_strscpy(char *dest, const char *src, size_t count)
+ {
+-	size_t i;
++	long res = 0;
+ 
+-	if (sz == 0)
+-		return;
++	if (count == 0)
++		return -E2BIG;
+ 
+-	sz--;
+-	for (i = 0; i < sz && src[i]; i++)
+-		dst[i] = src[i];
+-	dst[i] = '\0';
++	while (count > 1) {
++		char c;
++
++		c = src[res];
++		dest[res] = c;
++		if (!c)
++			return res;
++		res++;
++		count--;
++	}
++
++	/* Force NUL-termination. */
++	dest[res] = '\0';
++
++	/* Return E2BIG if the source didn't stop */
++	return src[res] ? -E2BIG : res;
+ }
+ 
++#define __strscpy0(dst, src, ...)	\
++	sized_strscpy(dst, src, sizeof(dst))
++#define __strscpy1(dst, src, size)	\
++	sized_strscpy(dst, src, size)
++
++#undef strscpy /* Redefine the placeholder from tools/include/linux/string.h */
++#define strscpy(dst, src, ...)	\
++	CONCATENATE(__strscpy, COUNT_ARGS(__VA_ARGS__))(dst, src, __VA_ARGS__)
++
+ #define __bpf_percpu_val_align	__attribute__((__aligned__(8)))
+ 
+ #define BPF_DECLARE_PERCPU(type, name)				\
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index 20cede4db3ce..45cd0b479fe3 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -86,7 +86,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
+ 		enable[len] = 0;
+ 		close(fd);
+ 	} else {
+-		bpf_strlcpy(enable, controllers, sizeof(enable));
++		strscpy(enable, controllers);
+ 	}
+ 
+ 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
 -- 
 2.53.0
 
