@@ -1,425 +1,138 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FD8833EB13
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E602571DA
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:26:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771874684; cv=none; b=FtZBlDe+pUCedXzZRU/9eMISuq1YlXgwAymfEQpxgWV6z6vdsNjFThq5+Y2DaF1ZKGVSX98cx0NPT4SmUnF/pKa3bIU5m48CXtAo4VNmOtLT8svgR9orapsSK7tneFObNnZtSUbUguTjBEbdKti8uBzYPAvAbtfoDvCu9iNzSiU=
+	t=1771874813; cv=none; b=TS/fc11qwm821XQpXdpC49XKPj5UKEElqPra1bpI3t6F6irPnUmSIspCLisHfDf9+Z5nwxtDN6JuFRYQu9dG6jE0QAIn14JdwlcPrMWE8RTol0GiqTaCJpyr6itx29OqVv60SG600hs/Fk+QOPdyWfxi6q7weyFqSmk4axr5K44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771874684; c=relaxed/simple;
-	bh=20tixkRM/WHoX3IdoSSJdAV4D3Vy4iw2gsznDP73cCc=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=tEglpWINmk/StX30xalby2N3Xv5kAn4I/9cKQX9OYvr5CkZuYkVSRubo/5l/NT1OuAKwFxEgrS7zhrU0fg+zg8dw9mlpY/tUP9dUiNa5r2Diyqg5tTMDcVgWf3hgMV2l+33+V/xS9THA55y0tc2q0M/M7JYLGNcyJTQVDlcPJNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rT5irvzT; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1771874813; c=relaxed/simple;
+	bh=iyUHJHHbHiMnzC56ZuEuiuqfucnJnkY+drjiYAnTIgg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aL5ruVxMN/YyDHTwcXr7gHiov+DPIHg6lc9ZR8tHj5EL3SUQHqrWb1J8zevV8kwJE44LtQJ1hPo/oqksQnZ3mc578trHWMiynFSvbJtMRn+9RVGF0zzhAhFUUA425tGfagrrbHOnmorXGerv/lhZOxBrTz7SNmbL7/RNEbRoVfg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GqyEYsOS; arc=none smtp.client-ip=95.215.58.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rT5irvzT"
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61NI25LL2838435;
-	Mon, 23 Feb 2026 19:24:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=UGunXb
-	k4R2K+cnSPKJTGq4bAxVdrCBHxPC1BtWXwRHw=; b=rT5irvzTY79K2pPGHiaCpW
-	LqTlQWKldVKRZ5fxzBLaUcF2VwxhraaZxiv5wdrVe6P90xF706G7Rwmp+Ygixg9g
-	cc+uNQINl6M92BYwqpbwXDay6RWm39GElURXxTpcaUTbyeurEu5icFnCW6p8CaEP
-	QpJpOMxykq1hALIxXmV9qWlGe9EazrqpDQUWT+tT7oeLsjD2L5IfYbMhHrHmVxpf
-	+Z7/3eS7RE5hVbKBQEgnGVti8IziHvmJ3TgZ8HZ6C7/8Imn26OaM8QrgMxuT89k8
-	CgGgONhIsZJX4SBqa5Sq62Ezx3HdK8jhfc1fopattJ7WtEp3KhBLQqMWYd7Sjw9Q
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4e38h2n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 19:24:04 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61NF0Phl015758;
-	Mon, 23 Feb 2026 19:24:04 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfq1se3ty-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 19:24:03 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com (smtpav03.wdc07v.mail.ibm.com [10.39.53.230])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61NJO3Zw53346624
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Feb 2026 19:24:03 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 378D358054;
-	Mon, 23 Feb 2026 19:24:03 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 425525805A;
-	Mon, 23 Feb 2026 19:24:02 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-	by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 23 Feb 2026 19:24:02 +0000 (GMT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GqyEYsOS"
+Message-ID: <e0f16c6c-cd9f-4881-b638-c52c8a83104e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771874809;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=V9BhDXbDb+yH2yMv7tSmQcdqgxwb0xNI6HvhXw+0pJk=;
+	b=GqyEYsOSVJ+fZLS0D5M9huUiqM4Y0iGXDBZtVWi77s/fw1BmvRPJGL9OfzOGY0K6124x2p
+	eLi8cVXXOz92G54rvU6KCI8LiCKigEfRCKDXiaWnXcHeiupxtdISiXP45l3dsEPa2IzCVR
+	iec3DqYk57Y2BLyPZW+Z60y701oYYJo=
+Date: Mon, 23 Feb 2026 11:26:13 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 24 Feb 2026 00:54:01 +0530
-From: adubey <adubey@linux.ibm.com>
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: bpf@vger.kernel.org, hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
-        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
-        clm@meta.com, ihor.solodrai@linux.dev
-Subject: Re: [PATCH 1/2] powerpc64/bpf: Implement JIT support for private
- stack
-In-Reply-To: <665838c8-d921-403e-a45c-eefad4902209@kernel.org>
-References: <20260216152234.36632-1-adubey@linux.ibm.com>
- <665838c8-d921-403e-a45c-eefad4902209@kernel.org>
-Message-ID: <406c7737dea5ee4d7544ad0ba6a62c48@linux.ibm.com>
-X-Sender: adubey@linux.ibm.com
-Organization: IBM
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
+Subject: Re: [LSF/MM/BPF TOPIC] BPF local storage for every packet
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com,
+ lsf-pc@lists.linux-foundation.org
+References: <87ecmffopy.fsf@cloudflare.com>
+ <5fdee5fd-aff1-4764-820e-3b1f3ad00941@linux.dev>
+ <877bs6fc25.fsf@cloudflare.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <877bs6fc25.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Authority-Analysis: v=2.4 cv=XMs9iAhE c=1 sm=1 tr=0 ts=699ca955 cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=DODryGAArwQ_SPwVTs4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: x7CFHJqXU85y4PV0TjoR_Ut91l1I7lBX
-X-Proofpoint-ORIG-GUID: CnIWFGmczT-BaXz7ayJhZVPsB_TU_Aft
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDE2NiBTYWx0ZWRfX+xXf+U6inB8R
- O6IeeIllxd/8cYXZSLLDeLi9vRsL3KEGLNvxjBE4CKws7vMNExb2CkKinSYaQteQPmEMyCfHqt0
- iXe8hSqIIHj9nXBvshOBgYwnSlH28S6MnwD+OGK3i1beWuweDky5bL9M3LUxfrzAU+gKHmb6SXU
- Clon7sdDpbKQpA25jSSYsN67CO94lf6bD0cv5iT4yEh9B0wJjfdAH2TmSbLTS+s7UPV33GC61jM
- NszRB4wkRQiKIJudhVcODG2gr0dTYsDWNYAEuA5TPKbukbxFgBYoSewqVrKljdUI0oE5gAIsdzN
- Rvn4Nt7DCkHVz/vtZbEuG7hcAfAbP6rgKIxC8IW/4pN7Ohns8FlW+cqdu4aLy365E8tfMM4wqoW
- 3mE182VEYo1bhpC6dBTW+IQAB7OC1q9rS5U1i1w9fAVfc+utqXWVFE0woQ8X1koouaAVtbIK2Tm
- PGaI8DYYFRvIIcwzFSQ==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-23_04,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- impostorscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
- clxscore=1015 adultscore=0 spamscore=0 priorityscore=1501 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602230166
+X-Migadu-Flow: FLOW_OUT
 
-On 2026-02-23 16:40, Christophe Leroy (CS GROUP) wrote:
-> Le 16/02/2026 à 16:22, adubey@linux.ibm.com a écrit :
->> From: Abhishek Dubey <adubey@linux.ibm.com>
->> 
->> Provision the private stack as a per-CPU allocation during
->> bpf_int_jit_compile(). Align the stack to 16 bytes and place guard
->> regions at both ends to detect runtime stack overflow and underflow.
->> 
->> Round the private stack size up to the nearest 16-byte boundary.
->> Make each guard region 16 bytes to preserve the required overall
->> 16-byte alignment. When private stack is set, skip bpf stack size
->> accounting in kernel stack.
->> 
->> There is no stack pointer in powerpc. Stack referencing during JIT
->> is done using frame pointer. Frame pointer calculation goes like:
->> 
->> BPF frame pointer = Priv stack allocation start address +
->>                      Overflow guard +
->>                      Actual stack size defined by verifier
->> 
->> Memory layout:
->> 
->> High Addr          
->> +--------------------------------------------------+
->>                     |                                                  
->> |
->>                     | 16 bytes Underflow guard (0xEB9F12345678eb9fULL) 
->> |
->>                     |                                                  
->> |
->>           BPF FP -> 
->> +--------------------------------------------------+
->>                     |                                                  
->> |
->>                     | Private stack - determined by verifier           
->> |
->>                     | 16-bytes aligned                                 
->> |
->>                     |                                                  
->> |
->>                     
->> +--------------------------------------------------+
->>                     |                                                  
->> |
->> Lower Addr         | 16 byte Overflow guard (0xEB9F12345678eb9fULL)   
->> |
->>                     |                                                  
->> |
->> Priv stack alloc 
->> ->+--------------------------------------------------+
->> start
->> 
->> Update BPF_REG_FP to point to the calculated offset within the
->> allocated private stack buffer. Now, BPF stack usage reference
->> in the allocated private stack.
->> 
->> The patch is rebase over fixes by Hari:
->> https://lore.kernel.org/bpf/20260216065639.1750181-1-hbathini@linux.ibm.com/T/#mf02cad9096fa4ad1f05610b1f464da1cddf7445a
->> 
->> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
->> ---
->>   arch/powerpc/net/bpf_jit.h        |  5 +++
->>   arch/powerpc/net/bpf_jit_comp.c   | 74 
->> +++++++++++++++++++++++++++++++
->>   arch/powerpc/net/bpf_jit_comp64.c | 38 +++++++++++++---
->>   3 files changed, 112 insertions(+), 5 deletions(-)
->> 
->> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
->> index 7354e1d72f79..5a115c54e43a 100644
->> --- a/arch/powerpc/net/bpf_jit.h
->> +++ b/arch/powerpc/net/bpf_jit.h
->> @@ -178,8 +178,13 @@ struct codegen_context {
->>   	bool is_subprog;
->>   	bool exception_boundary;
->>   	bool exception_cb;
->> +	u64 priv_sp;
+On 2/21/26 5:42 AM, Jakub Sitnicki wrote:
+> On Fri, Feb 20, 2026 at 10:34 AM -08, Martin KaFai Lau wrote:
+>> On 2/20/26 6:56 AM, Jakub Sitnicki wrote:
+>>> In the upcoming days we are going to post an RFC which proposes to
+>>> extend the concept of BPF local storage to socket buffers (sk_buff, skb)
+>>> as means to attach arbitrary metadata to packets from BPF programs [1]
+>>> (slides 41-55).
+>>> Design wise, BPF local storage is a great fit for a packet metadata
+>>> container, as it that avoids some of the shortcoming of the the XDP
+>>> metadata interface:
+>>> 1. Users interact with storage through BPF maps and can take advantage
+>>>      of existing built-in BPF map types, while still being able to
+>>>      implement a custom data format,
+>>> 2. Maps within local storage can have different properties controlled by
+>>>      map flags. For example, maps with BPF_F_CLONE set can survive packet
+>>>      cloning. Other flags could allow map contents to survive sk_buff
+>>>      scrubbing during encapsulation/decapsulation or pass across network
+>>>      namespace boundaries.
+>>> 3. Local storage supports multiple users out of the box - each user
+>>>      creates their own map, eliminating the need to coordinate data
+>>>      layout,
+>>> 4. Local storage has its own backing memory, so persisting it across
+>>>      network stack layers requires no changes to the network stack.
+>>> However, this flexibility comes at a cost. While XDP metadata requires
+>>> no allocations [2], an initial write to BPF local storage requires two:
+>>> one for bpf_local_storage_elem, and one for bpf_local_storage itself.
+>>> We would like to align this work with the needs of other BPF local
+>>> storage users (socks, cgroups, tasks, inodes), where allocation overhead
+>>> has been a concern as well [2].
+>>> Optimization ideas we would like to put up for discussion:
+>>> - slimming down bpf_local_storage so it can be embedded as an skb
+>>>     extension chunk,
+>>> - making the bpf_local_storage cache size configurable,
+>>> - allowing bpf_local_storage to be pre-allocated,
+>>> - co-allocating bpf_local_storage and bpf_local_storage_elem for the
+>>>     single-map case.
+>>
+>> The sk/cgroup/task storage has a much longer lifetime. Meaning once allocation
+>> is done, the storage stays in the sk until the sk is closed. The length of
+>> lifetime is quite different from the skb. I am afraid we are re-purposing
+>> bpf_local_storage for a very different use case where skb lifecycle is much
+>> shorter.
+>>
+>> We are planning to increase the 'sizeof(struct sock)' for perf reason. Saving an
+>> allocation is an upside but not the major one we are looking (or care) for
+>> sk. We are more looking for cacheline efficiency and probably remove the need
+>> for bpf_local_storage[_elem] if the user chooses to use the in-place spaces of a
+>> sk.
+>>
+>> If 'sizeof(struct sk_buff)' can be increased, this should align on where sk
+>> local storage is going. If skb will solely depend on the existing
+>> bpf_local_storage and has no plan to raise sizeof(struct sk_buff) for perf
+>> purpose, the existing bpf_local_storage may be the wrong place to
+>> repurpose/optimize because the lifecycle of skb is very different.
 > 
-> Are you sure you want a u64, not a long ?
-After bot's warning, I was considering void __percpu *priv_sp in 
-codegen_context, to keep compiler happy throughout.
-If not above, I would prefer long(~= pointer). Thoughts? @Christophe
+> The lifetime difference is undeniable, but I still see common ground.
+> To make it more concrete:
 > 
->>   };
->>   +/* Memory size & magic-value to detect private stack 
->> overflow/underflow */
->> +#define PRIV_STACK_GUARD_SZ    16
->> +#define PRIV_STACK_GUARD_VAL   0xEB9F12345678eb9fULL
->> +
->>   #define bpf_to_ppc(r)	(ctx->b2p[r])
->>     #ifdef CONFIG_PPC32
->> diff --git a/arch/powerpc/net/bpf_jit_comp.c 
->> b/arch/powerpc/net/bpf_jit_comp.c
->> index 278e09b57560..7a78e03d482f 100644
->> --- a/arch/powerpc/net/bpf_jit_comp.c
->> +++ b/arch/powerpc/net/bpf_jit_comp.c
->> @@ -129,6 +129,39 @@ bool bpf_jit_needs_zext(void)
->>   	return true;
->>   }
->>   +static void priv_stack_init_guard(void __percpu *priv_stack_ptr, 
->> int alloc_size)
->> +{
->> +	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
->> +	u64 *stack_ptr;
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
->> +		stack_ptr[0] = PRIV_STACK_GUARD_VAL;
->> +		stack_ptr[1] = PRIV_STACK_GUARD_VAL;
->> +		stack_ptr[underflow_idx] = PRIV_STACK_GUARD_VAL;
->> +		stack_ptr[underflow_idx + 1] = PRIV_STACK_GUARD_VAL;
->> +	}
->> +}
->> +
->> +static void priv_stack_check_guard(void __percpu *priv_stack_ptr, int 
->> alloc_size,
->> +								struct bpf_prog *fp)
->> +{
->> +	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
->> +	u64 *stack_ptr;
->> +
->> +	for_each_possible_cpu(cpu) {
->> +		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
->> +		if (stack_ptr[0] != PRIV_STACK_GUARD_VAL ||
->> +			stack_ptr[1] != PRIV_STACK_GUARD_VAL ||
->> +			stack_ptr[underflow_idx] != PRIV_STACK_GUARD_VAL ||
->> +			stack_ptr[underflow_idx + 1] != PRIV_STACK_GUARD_VAL) {
->> +			pr_err("BPF private stack overflow/underflow detected for prog 
->> %sx\n",
->> +			bpf_jit_get_prog_name(fp));
->> +			break;
->> +		}
->> +	}
->> +}
->> +
->>   struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
->>   {
->>   	u32 proglen;
->> @@ -140,6 +173,8 @@ struct bpf_prog *bpf_int_jit_compile(struct 
->> bpf_prog *fp)
->>   	struct codegen_context cgctx;
->>   	int pass;
->>   	int flen;
->> +	int priv_stack_alloc_size;
->> +	void __percpu *priv_stack_ptr = NULL;
->>   	struct bpf_binary_header *fhdr = NULL;
->>   	struct bpf_binary_header *hdr = NULL;
->>   	struct bpf_prog *org_fp = fp;
->> @@ -173,6 +208,25 @@ struct bpf_prog *bpf_int_jit_compile(struct 
->> bpf_prog *fp)
->>   		fp->aux->jit_data = jit_data;
->>   	}
->>   +	if (!priv_stack_ptr && fp->aux->jits_use_priv_stack) {
->> +		/*
->> +		 * Allocate private stack of size equivalent to
->> +		 * verifier-calculated stack size plus two memory
->> +		 * guard regions to detect private stack overflow
->> +		 * and underflow.
->> +		 */
->> +		priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
->> +							2 * PRIV_STACK_GUARD_SZ;
->> +		priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_size, 16, 
->> GFP_KERNEL);
->> +		if (!priv_stack_ptr) {
->> +			fp = org_fp;
->> +			goto out_priv_stack;
->> +		}
->> +
->> +		priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_size);
->> +		fp->aux->priv_stack_ptr = priv_stack_ptr;
->> +	}
->> +
->>   	flen = fp->len;
->>   	addrs = jit_data->addrs;
->>   	if (addrs) {
->> @@ -209,6 +263,7 @@ struct bpf_prog *bpf_int_jit_compile(struct 
->> bpf_prog *fp)
->>   	cgctx.is_subprog = bpf_is_subprog(fp);
->>   	cgctx.exception_boundary = fp->aux->exception_boundary;
->>   	cgctx.exception_cb = fp->aux->exception_cb;
->> +	cgctx.priv_sp = priv_stack_ptr ? (u64)priv_stack_ptr : 0;
+> 1. IIRC you've mentioned wanting more bpf_local_storage->cache entries
+>     for socks in some scenarios, while for skbs I'd expect we need
+>     fewer. We could make the cache size configurable via a flexible
+>     array.
 > 
-> priv_stack_ptr is a pointer, ie a long.
-> priv_sp is a u64, ie a long long.
-Ack!
+> 2. Embedding bpf_local_storage is another overlap I had in mind. For
+>     socks that in within the same memory blob as struct sock, while for
+>     skbs we'd want to embed it in skb_ext (once it's small enough). This
+>     depends on whether you end up dropping bpf_local_storage for
+>     sk_local_storage entirely, which I didn't know about until now.
+
+For the in-place sk storage, it should not need the bpf_local_storage 
+and the bpf_local_storage_elem. A stable map_xyz->sk_offset should be 
+enough. If a storage is needed for all sk, the bpf prog should use the 
+in-place sk storage instead of going through the bpf_local_storage[_elem].
+
+imo, if we manage to pull out a new solution (whatever that is) for skb 
+but does not perform close to the skb->data_meta, it is probably hard to 
+use in production. I could be wrong but I don't see how embedding 
+local_storage and/or shrink the cache can get there. I think we need 
+another solution/design.
+
 > 
-> This will mismatch on powerpc/32
-long/void* should work fine everywhere.
-> 
->>     	/* Scouting faux-generate pass 0 */
->>   	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
->> @@ -306,7 +361,12 @@ struct bpf_prog *bpf_int_jit_compile(struct 
->> bpf_prog *fp)
->>   		}
->>   		bpf_prog_fill_jited_linfo(fp, addrs);
->>   out_addrs:
->> +		if (!image && priv_stack_ptr) {
->> +			free_percpu(priv_stack_ptr);
->> +			fp->aux->priv_stack_ptr = NULL;
-> 
-> Shouldn't those two lines be swapped ?
-Good catch! This can lead to use-after-free situation.
-> 
->> +		}
->>   		kfree(addrs);
->> +out_priv_stack:
->>   		kfree(jit_data);
->>   		fp->aux->jit_data = NULL;
->>   	} else {
->> @@ -419,6 +479,8 @@ void bpf_jit_free(struct bpf_prog *fp)
->>   	if (fp->jited) {
->>   		struct powerpc_jit_data *jit_data = fp->aux->jit_data;
->>   		struct bpf_binary_header *hdr;
->> +		void __percpu *priv_stack_ptr;
->> +		int priv_stack_alloc_size;
->>     		/*
->>   		 * If we fail the final pass of JIT (from jit_subprogs),
->> @@ -432,6 +494,13 @@ void bpf_jit_free(struct bpf_prog *fp)
->>   		}
->>   		hdr = bpf_jit_binary_pack_hdr(fp);
->>   		bpf_jit_binary_pack_free(hdr, NULL);
->> +		priv_stack_ptr = fp->aux->priv_stack_ptr;
->> +		if (priv_stack_ptr) {
->> +			priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
->> +							2 * PRIV_STACK_GUARD_SZ;
->> +			priv_stack_check_guard(priv_stack_ptr, priv_stack_alloc_size, fp);
->> +			free_percpu(priv_stack_ptr);
->> +		}
->>   		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
->>   	}
->>   @@ -453,6 +522,11 @@ bool bpf_jit_supports_kfunc_call(void)
->>   	return true;
->>   }
->>   +bool bpf_jit_supports_private_stack(void)
->> +{
->> +	return IS_ENABLED(CONFIG_PPC64);
->> +}
->> +
->>   bool bpf_jit_supports_arena(void)
->>   {
->>   	return IS_ENABLED(CONFIG_PPC64);
->> diff --git a/arch/powerpc/net/bpf_jit_comp64.c 
->> b/arch/powerpc/net/bpf_jit_comp64.c
->> index 640b84409687..206ef43b4090 100644
->> --- a/arch/powerpc/net/bpf_jit_comp64.c
->> +++ b/arch/powerpc/net/bpf_jit_comp64.c
->> @@ -183,6 +183,20 @@ void bpf_jit_realloc_regs(struct codegen_context 
->> *ctx)
->>   {
->>   }
->>   +static void emit_fp_priv_stack(u32 *image, struct codegen_context 
->> *ctx, void __percpu *ptr)
->> +{
->> +	/* Load percpu data offset */
->> +	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R13,
->> +			offsetof(struct paca_struct, data_offset)));
->> +	PPC_LI64(bpf_to_ppc(BPF_REG_FP), (u64)ptr);
->> +	/*
->> +	 * Set frame pointer with percpu allocated
->> +	 * buffer for private stack.
->> +	 */
->> +	EMIT(PPC_RAW_ADD(bpf_to_ppc(BPF_REG_FP),
->> +			bpf_to_ppc(TMP_REG_1), bpf_to_ppc(BPF_REG_FP)));
->> +}
->> +
->>   /*
->>    * For exception boundary & exception_cb progs:
->>    *     return increased size to accommodate additional NVRs.
->> @@ -197,6 +211,12 @@ static int bpf_jit_stack_size(struct 
->> codegen_context *ctx)
->>   void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
->>   {
->>   	int i;
->> +	void __percpu *priv_frame_ptr = NULL;
->> +
->> +	if (ctx->priv_sp) {
->> +		priv_frame_ptr = (void*) ctx->priv_sp + PRIV_STACK_GUARD_SZ +
->> +					round_up(ctx->stack_size, 16);
->> +	}
->>     	/* Instruction for trampoline attach */
->>   	EMIT(PPC_RAW_NOP());
->> @@ -251,7 +271,7 @@ void bpf_jit_build_prologue(u32 *image, struct 
->> codegen_context *ctx)
->>   		}
->>     		EMIT(PPC_RAW_STDU(_R1, _R1,
->> -				-(bpf_jit_stack_size(ctx) + ctx->stack_size)));
->> +			-(bpf_jit_stack_size(ctx) + (ctx->priv_sp ? 0 : 
->> ctx->stack_size))));
->>   	}
->>     	/*
->> @@ -307,9 +327,16 @@ void bpf_jit_build_prologue(u32 *image, struct 
->> codegen_context *ctx)
->>   	 * Exception_cb not restricted from using stack area or arena.
->>   	 * Setup frame pointer to point to the bpf stack area
->>   	 */
->> -	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
->> -		EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
->> -			STACK_FRAME_MIN_SIZE + ctx->stack_size));
->> +	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP))) {
->> +		if (ctx->priv_sp && priv_frame_ptr) {
->> +			/* Set up private stack pointer */
->> +			emit_fp_priv_stack(image, ctx, priv_frame_ptr);
->> +		} else {
->> +			/* Setup frame pointer to point to the bpf stack area */
->> +			EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
->> +				STACK_FRAME_MIN_SIZE + ctx->stack_size));
->> +		}
->> +	}
->>     	if (ctx->arena_vm_start)
->>   		PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
->> @@ -339,7 +366,8 @@ static void bpf_jit_emit_common_epilogue(u32 
->> *image, struct codegen_context *ctx
->>     	/* Tear down our stack frame */
->>   	if (bpf_has_stack_frame(ctx)) {
->> -		EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_jit_stack_size(ctx) + 
->> ctx->stack_size));
->> +		EMIT(PPC_RAW_ADDI(_R1, _R1,
->> +			bpf_jit_stack_size(ctx) + (ctx->priv_sp ? 0 : ctx->stack_size)));
->>     		if (ctx->seen & SEEN_FUNC || ctx->exception_cb) {
->>   			EMIT(PPC_RAW_LD(_R0, _R1, PPC_LR_STKOFF));
--Abhishek
+> 3. I've heard the idea of allocating skb_ext memory together with
+>     sk_buff was floated in the past. While trimming skb_ext at build-time
+>     is hard today — say I need XFRM but don't care about crypto offloads
+>     keeping state in skb_ext — the idea is similar to what you're
+>     proposing for struct sock.
+
