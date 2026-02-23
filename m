@@ -1,60 +1,83 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2599D35B643;
-	Mon, 23 Feb 2026 11:45:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4E5734FF4D
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 11:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771847121; cv=none; b=G21kaSzFUHGrT85nFEs3VZHUsYda6fJTTAf0dNPEcYHimaWmGnI77lamIPRqW680fUaOOqIjO8OBJyPofjPkafVo/Ck2qb+wsvROdNMeNjRInWWdoxZ4peSA1U9oQBA7aP/9qD/DpA9xkTL6AtiW2STwo4hqsIMs2B2X2z/R30s=
+	t=1771847561; cv=none; b=hfdAebYxCg6ooFZnTdZ1o6sPp62MFNY231qYh69odo11yHJ0Ud3UGINWbz8/hjzKkCYtGIkG10IUqAaamGEMGZsHij8MIsJRP+3hYns6bKYLuMgnjyYUyz/QfXmiAaBW7wHLsQXsIeim7qeOgoKj1O6ii6YvVppeWVWOfDgX5RE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771847121; c=relaxed/simple;
-	bh=sz2X2ovkOkNyNxTVSqZ9D5RuN4/x6nw7CTW8k28O2Go=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bFnSjuOjVIOVtdOraGZhYQWolUTq/bXCLAt804c4HtUemi/dfrV3uVrOBTGHTccqZA69UtPWt+JUhXGipUkeoF/8Xo7xWLeI1nuJuIY6EUNQ3pjPUo861Umi837+3kCp60VH8qyI1/X8b+MOg/Elk8VuiuRyIe/3fwqd6xjiPX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kIWYAjTu; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1771847561; c=relaxed/simple;
+	bh=yoFHgM9+Mlrw4RBzyJBsdbZ1JR1zow2fnujol+orqEU=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Wc8NG7Wg5oxVQ6buWe6rwCHoFsicAE4fTM4yJcUYH/PhUcQFHGu+0/2xaBOMow3bEVfqber1Fkw4QwjFuiO9hY7CXNpCIjNbhjyX9JOdx5LUza4WfEXoQppA8vZ2fj/kBXEraIl4C62mTzZx5zD458BHE1Szj1D1fKMV4KoDLhw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VWCTRahe; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=PL77kHxm; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kIWYAjTu"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61MNOTrq2839902;
-	Mon, 23 Feb 2026 11:45:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ogDCAk
-	iKXSzUTq+jSctmvqmgehpHdHEidi3Jrqe5V3c=; b=kIWYAjTuWXa1MRhlFVxaDf
-	heTLq9ynWO46XUK/uR1tibEqhk0CzOq+0HHmkAteiJMoeijx16xZDXxK1VRl6gXs
-	2YLi+8olj4pzthZG6+DdlqKX9xt2/nr4SLG3qvThWlqt9KK6YKPe8Or3YEMDtDkA
-	m1B+eWIf7FRdQz4pvLf9MrwAlvtbjEF2Z4o9ZtrimNEBj6EakCab9bTIbhns46WQ
-	lzfCcTHOdNLfCcS8FRHwNQIMw+Obcuo4V1Kfg82I65h2+hY/grgGLpcyX4+DLoBb
-	8GjZLIqU5g1MFY0R6CHPWEQCRY36xpakIhYwKqOf5Eg88uYo1NR3J1DQASlgL45w
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4brpdnp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 11:44:59 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61N9w6gF015764;
-	Mon, 23 Feb 2026 11:44:58 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfq1scp59-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 11:44:58 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61NBit9A55574850
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 23 Feb 2026 11:44:55 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1A96D2004B;
-	Mon, 23 Feb 2026 11:44:55 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E047C20043;
-	Mon, 23 Feb 2026 11:44:53 +0000 (GMT)
-Received: from [0.0.0.0] (unknown [9.87.140.60])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 23 Feb 2026 11:44:53 +0000 (GMT)
-Message-ID: <9a939e13-d462-48e8-bc4e-19157b353b4c@linux.ibm.com>
-Date: Mon, 23 Feb 2026 12:44:53 +0100
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VWCTRahe";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="PL77kHxm"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771847558;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=e+UCu4+UtCPWElkxi2K6F4aNzlRX2JMqSRFEG9Ahsyg=;
+	b=VWCTRaheZjZKtDN2f5fIFpbN6VNq/ouzn3/f0k2iz254sZQv34zy7UwBwxsif+w+cDi2/L
+	Nf0ba6p/TIqc6q4h3blhIobMK/dcqHw0+cEPNKKSem4m792/TAdRlMIJr4Pn+FTZfN3ECd
+	EEU4LBwcArWuPG1amYs+LiE8z1tj+ms=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-635-AtdkgMbiNval3AK5HDlAqw-1; Mon, 23 Feb 2026 06:52:37 -0500
+X-MC-Unique: AtdkgMbiNval3AK5HDlAqw-1
+X-Mimecast-MFC-AGG-ID: AtdkgMbiNval3AK5HDlAqw_1771847556
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4836b7c302fso37056205e9.1
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 03:52:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1771847556; x=1772452356; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=e+UCu4+UtCPWElkxi2K6F4aNzlRX2JMqSRFEG9Ahsyg=;
+        b=PL77kHxmapSMsg8MZIyEIhiD0V66NWOwFuzM4BZ6yrH+SOrEqd2zI9k8pj91LLaLiI
+         nLJVU0l1GfCNTLlc4VYVO7qq5wTd+W87L4l/7FEl1X0PEAxiTIIkchoReipmdwlWhhNb
+         vqjDhNP+q+9ushF56OKnjt43nKTzj+ajqu3BEGtjJTtQwXBeEUfSl78jzt+XXFhm2jZj
+         9N0dspjEGZREYzhD0VR61FQXauZUDWO/8noLiiw3XgtFnm538qoJHS4g2SNovd8ROMH/
+         Nj2kJud0vEPZtT4tkLR5FvYHUHbt2eJ87zYzgzQkSYFccYSKndugBUhn7V8X67JCYJnX
+         b7uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771847556; x=1772452356;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e+UCu4+UtCPWElkxi2K6F4aNzlRX2JMqSRFEG9Ahsyg=;
+        b=wmICdDj6/246ing0hP1Txm9fOPL/rLX9BpdQ90PmAZaoElsPMqZH6x9Q0m9ww72kc+
+         HSMlLLDtScPe7xudeWeB6JP10dgM2ibjXCOTjQHufphQ4FjScNlRtIB1JFFJeQ+EzPa3
+         XR5c0uN7HfD+kiKGk9Aj8+6LBR94qOW0YHSdpDslwbBEOxmyqJ5JMGtAFnmur60OuCs9
+         c8OeOQEOyit+y5aFMNIq9n9QrtzwukMqMCJBvW4aBFhW3Tts3rA6DRBmmpBKbrDkp3dI
+         JJ17DMnef1g/8hCCzj5P+hF7EZmssFw5a9O4HglFESl2G3ulPgyB2+4Y3fxTSe487752
+         AbKw==
+X-Gm-Message-State: AOJu0YxoCzpl0F5K72+kKUobOmy0ZRLa9BJZulP5Ie+uRDhqV6pY3o8w
+	84luQrQ/6rAsrNGpkpaergxDUoARs74eur4Ulo0NFMDBTHkgz74oqw8VbmhHNZofkyz4ZyeVcex
+	170sfaLLnNOfjLMPQwBDZhM4OHSa81ASnmpdUejn7FbuiVvBw5AdN
+X-Gm-Gg: AZuq6aInMutLz1I1aCuIvz7tIo9+Ttsjm6HNi7G4g1ZaLz24WAJ5DC2E6FKWN0oymRT
+	969Nzdy3KQHMSwkqvtuDWrzdau4qD/pirWky/osRQg6UkvkVucgV+qqnQ4n7/fDB/K8s6UQNhQY
+	ti7NnaYyFtGUw3bGK/xW2von6sSfMHLKuqrNoEJyO0J39m7l7dEVvAGBfM4tqPrxk3pE25qXJTO
+	pJjEdHoA6qyWh9y8DMncjgPd4+jkpo2eBQLsmWRoC2f8mR5f2PTQ5g6Os1mDDKAqnT4McmVFDTA
+	8V7KbMlj5svjftWS5quXUaHJ7fztzlOG9FUjQcTpz/b5dz9VlqHn+i6m61nWw3owlxW6c5yTY9t
+	QkzNI1GQ21GZAC6inHO7caZ1zLfYSN74aAA+v5eMvnpSQT3SnYMYgBsSQ
+X-Received: by 2002:a05:600c:154b:b0:477:afc5:fb02 with SMTP id 5b1f17b1804b1-483a962e38bmr125052955e9.21.1771847556053;
+        Mon, 23 Feb 2026 03:52:36 -0800 (PST)
+X-Received: by 2002:a05:600c:154b:b0:477:afc5:fb02 with SMTP id 5b1f17b1804b1-483a962e38bmr125052355e9.21.1771847555453;
+        Mon, 23 Feb 2026 03:52:35 -0800 (PST)
+Received: from [192.168.0.135] (185-219-167-205-static.vivo.cz. [185.219.167.205])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970bfa015sm18488022f8f.8.2026.02.23.03.52.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 23 Feb 2026 03:52:34 -0800 (PST)
+Message-ID: <0675cf92-1833-4f1a-bd8e-53de5cc1ed7e@redhat.com>
+Date: Mon, 23 Feb 2026 12:52:32 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -62,78 +85,229 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/3] bpf,s390: introduce emit_store_stack_imm64()
- for trampoline
-To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org
-Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
-        eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
-        haoluo@google.com, jolsa@kernel.org, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, bpf@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20260223084022.653186-1-dongml2@chinatelecom.cn>
- <20260223084022.653186-2-dongml2@chinatelecom.cn>
+Subject: Re: [PATCH bpf-next v3 0/3] Separate tests that need error injection
+From: Viktor Malik <vmalik@redhat.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Jordan Rome <linux@jordanrome.com>, Qais Yousef <qyousef@layalina.io>,
+ Hou Tao <houtao1@huawei.com>
+References: <cover.1770736390.git.vmalik@redhat.com>
+ <CAADnVQLfV3PPYA8=EXDKwoQ925_W9HANf7gSn2=_fd42HD_FiA@mail.gmail.com>
+ <d92e60ea-d590-4ce4-961f-4e8ce1cb0c42@redhat.com>
+ <CAADnVQK6qP8izg+k9yV0vdcT-+=axtFQ2fKw7D-2Ei-V6WS5Dw@mail.gmail.com>
+ <582944ed-ddd6-4843-ba36-b4aed03c5b2f@redhat.com>
+ <CAADnVQJ4PU7bCb5XO9+zMZhLRSdbCKwxG6Rtojh2Rc3UZ8H43Q@mail.gmail.com>
+ <d2706604-1674-49fd-a150-7ace8839657f@redhat.com>
+ <CAADnVQLT7cGgExtaqusyk+XwrD=-x15kL0veJB5YPewjPo=PUg@mail.gmail.com>
+ <fa67d3db-273f-4e4e-90a2-ba805f484bd1@redhat.com>
 Content-Language: en-US
-From: Ilya Leoshkevich <iii@linux.ibm.com>
-In-Reply-To: <20260223084022.653186-2-dongml2@chinatelecom.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-ORIG-GUID: Py6Zu0sNF6bQULOx9WAjiYDMa1y0Lffj
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDA5OSBTYWx0ZWRfX0fi5FM+jXi/f
- TKmTH3dxWlWqeTN62tCiyNGJLrASS+pxoEmrop1xZSRsEiZ82OJ84hMciB4pg4gO+TnxIRy9hgc
- ObaU/8PvvXxfXERSrEO2zttf++vZeismNiHs80Yr9CHK82FZ+36xT21qsZvQcThyswkSgScahmN
- TDNANpbUcyTVwp+EUpHxLQ+OwY2en7y5pzrzHlFiz5y+VbLKLLcFRnJFLG5MAOeEGBmcAdK031n
- NNE+FnmOA/ba2pZ+zIl6IMVexcOfG9TlkvGmsY0s8Io+chnbotxpqsssNNa6TVpP3JTWkJ0Q17c
- AjDs29E6HaND7WbDP5Cvb5jFSJ/oBEb9K0UXA0nHlCtI7OHH1eirNe7/Aa2FeNc6Vw2XBz7tvKZ
- WEXvBny0jtvVhnw5UjNwQa7Ldj89daNuJGqkferh1fPJUw3w245wxOmnZTZZ0E9UWrbPctqu9Qf
- ihONCU9jK5Wj66cnSCw==
-X-Authority-Analysis: v=2.4 cv=eNceTXp1 c=1 sm=1 tr=0 ts=699c3dbc cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
- a=COVfD8POcFL2HCZS6VIA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: ffivgXBCrRasPRQq13UCAN7EmSI1-tlT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-23_02,2026-02-20_04,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 phishscore=0 suspectscore=0 adultscore=0
- bulkscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602230099
+In-Reply-To: <fa67d3db-273f-4e4e-90a2-ba805f484bd1@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 2/16/26 08:46, Viktor Malik wrote:
+> On 2/14/26 00:13, Alexei Starovoitov wrote:
+>> On Fri, Feb 13, 2026 at 1:22 AM Viktor Malik <vmalik@redhat.com> wrote:
+>>>
+>>> On 2/12/26 17:35, Alexei Starovoitov wrote:
+>>>> On Wed, Feb 11, 2026 at 11:22 PM Viktor Malik <vmalik@redhat.com> wrote:
+>>>>>
+>>>>> On 2/12/26 02:42, Alexei Starovoitov wrote:
+>>>>>> On Wed, Feb 11, 2026 at 5:55 AM Viktor Malik <vmalik@redhat.com> wrote:
+>>>>>>>
+>>>>>>> On 2/11/26 03:42, Alexei Starovoitov wrote:
+>>>>>>>> On Tue, Feb 10, 2026 at 7:14 AM Viktor Malik <vmalik@redhat.com> wrote:
+>>>>>>>>>
+>>>>>>>>> Some enterprise kernels (such as RHEL) do not enable error injection via
+>>>>>>>>> BPF (CONFIG_FUNCTION_ERROR_INJECTION and CONFIG_BPF_KPROBE_OVERRIDE).
+>>>>>>>>> When running test_progs on such kernels, a lot of test cases fail since
+>>>>>>>>> they use sleepable fentry or fmod_ret program types which require error
+>>>>>>>>> injection to be enabled. While it is possible to skip these via custom
+>>>>>>>>> DENYLIST, some test_progs are not properly split into subtests and
+>>>>>>>>> therefore must be entirely skipped.
+>>>>>>>>
+>>>>>>>> Something is wrong.
+>>>>>>>> -SEC("fentry/" SYS_PREFIX "sys_nanosleep")
+>>>>>>>> -int do_probe_read(void *ctx)
+>>>>>>>> +SEC("?fentry/" SYS_PREFIX "sys_nanosleep")
+>>>>>>>> +int probe_read(void *ctx)
+>>>>>>>>  {
+>>>>>>>>         char buf[8];
+>>>>>>>>
+>>>>>>>> @@ -37,19 +37,19 @@ int do_probe_read(void *ctx)
+>>>>>>>>         return 0;
+>>>>>>>>  }
+>>>>>>>>
+>>>>>>>> -SEC("fentry.s/" SYS_PREFIX "sys_nanosleep")
+>>>>>>>> -int do_copy_from_user(void *ctx)
+>>>>>>>> +SEC("?fentry.s/" SYS_PREFIX "sys_nanosleep")
+>>>>>>>>
+>>>>>>>> sleepable should have nothing to do with CONFIG_FUNCTION_ERROR_INJECTION.
+>>>>>>>
+>>>>>>> I may be missing something but I think it is directly dependent, at
+>>>>>>> least for fentry.
+>>>>>>>
+>>>>>>> In bpf_check_attach_target (kernel/bpf/verifier.c), we have:
+>>>>>>>
+>>>>>>>     if (prog->sleepable) {
+>>>>>>>             ret = -EINVAL;
+>>>>>>>             switch (prog->type) {
+>>>>>>>             case BPF_PROG_TYPE_TRACING:
+>>>>>>>
+>>>>>>>                 /* fentry/fexit/fmod_ret progs can be sleepable if they are
+>>>>>>>                  * attached to ALLOW_ERROR_INJECTION and are not in denylist.
+>>>>>>>                  */
+>>>>>>>                 if (!check_non_sleepable_error_inject(btf_id) &&
+>>>>>>>                     within_error_injection_list(addr))
+>>>>>>
+>>>>>> Oh. That's an annoying side effect of disabling error inject.
+>>>>>> fentry progs are not injecting any errors. They just use that
+>>>>>> list as allowlist of good attach points.
+>>>>>> Let's explicitly allow all syscalls here.
+>>>>>
+>>>>> Ok, I'll post a patch.
+>>>>>
+>>>>>>
+>>>>>>>                     ret = 0;
+>>>>>>>                 /* fentry/fexit/fmod_ret progs can also be sleepable if they are
+>>>>>>>                  * in the fmodret id set with the KF_SLEEPABLE flag.
+>>>>>>>                  */
+>>>>>>>                 else {
+>>>>>>>                     u32 *flags = btf_kfunc_is_modify_return(btf, btf_id,
+>>>>>>>                                         prog);
+>>>>>>>
+>>>>>>>                     if (flags && (*flags & KF_SLEEPABLE))
+>>>>>>>                         ret = 0;
+>>>>>>>                 }
+>>>>>>>                 break;
+>>>>>>>             [...]
+>>>>>>>             }
+>>>>>>>             if (ret) {
+>>>>>>>                 module_put(mod);
+>>>>>>>                 bpf_log(log, "%s is not sleepable\n", tname);
+>>>>>>>                 return ret;
+>>>>>>>             }
+>>>>>>>     }
+>>>>>>>
+>>>>>>> If I read that correctly, fentry must be on the error injection list
+>>>>>>> (which is populated by functions marked with ALLOW_ERROR_INJECTION when
+>>>>>>> CONFIG_FUNCTION_ERROR_INJECTION=y) to be allowed as sleepable.
+>>>>>>>
+>>>>>>> The other branch for fmodret id set seems to be only relevant for
+>>>>>>> kernel modules which explicily register their functions into
+>>>>>>> BTF_KFUNC_HOOK_FMODRET set.
+>>>>>>>
+>>>>>>>> While CONFIG_BPF_KPROBE_OVERRIDE affects a single helper.
+>>>>>>>>
+>>>>>>>> Both fentry and fentry.s should work fine on sys_nanosleep.
+>>>>>>>> fmod_ret is also completely independent of these two flags.
+>>>>>>>
+>>>>>>> For fmod_ret, we have a very similar code:
+>>>>>>>
+>>>>>>>     } else if (prog->expected_attach_type == BPF_MODIFY_RETURN) {
+>>>>>>>             [...]
+>>>>>>>             ret = -EINVAL;
+>>>>>>>             if (btf_kfunc_is_modify_return(btf, btf_id, prog) ||
+>>>>>>>                 !check_attach_modify_return(addr, tname))
+>>>>>>>                 ret = 0;
+>>>>>>>             if (ret) {
+>>>>>>>                 module_put(mod);
+>>>>>>>                 bpf_log(log, "%s() is not modifiable\n", tname);
+>>>>>>>                 return ret;
+>>>>>>>             }
+>>>>>>>     }
+>>>>>>>
+>>>>>>> with
+>>>>>>>
+>>>>>>>     static int check_attach_modify_return(unsigned long addr, const char *func_name)
+>>>>>>>     {
+>>>>>>>         if (within_error_injection_list(addr) ||
+>>>>>>>             !strncmp(SECURITY_PREFIX, func_name, sizeof(SECURITY_PREFIX) - 1))
+>>>>>>
+>>>>>> Same thing here.
+>>>>>> Let's wrap within_error_injection_list() with bpf specific helper
+>>>>>> that in case of !CONFIG_FUNCTION_ERROR_INJECTION
+>>>>>> will allow syscalls anyway.
+>>>>>
+>>>>> I would argue that fmod_ret should remain gated behind
+>>>>> CONFIG_ERROR_INJECTION. It's a similar concept to kprobe override - it
+>>>>> allows to override the execution of the original syscall and return a
+>>>>> custom error code.
+>>>>
+>>>> Definitely not. fmod_ret and error injection are two orthogonal concepts.
+>>>> fmod_ret was introduced to be independent of error injection in the
+>>>> first place. fmod_ret is a deliberate spot to allow bpf to change
+>>>> return code
+>>>> in production.
+>>>
+>>> I'm not sure that was the original intention of fmod_ret. Even the
+>>> original patch set mentions that error injection needs to be explicitly
+>>> enabled [1,2]. Changing that is IMHO a significant shift which needs
+>>> discussion.
+>>
+>> That discussion already happened when error_injection was forked
+>> as a config flag and went to default N.
+> 
+> Then I'm a bit confused about the purpose of error_injection. The
+> description of the config option says:
+> 
+>     Add fault injections into various functions that are annotated with
+>     ALLOW_ERROR_INJECTION() in the kernel. BPF may also modify the return
+>     value of these functions. This is useful to test error paths of code.
+> 
+>     If unsure, say N
+> 
+> But if you say that fmod_ret and error_injection are orthogonal
+> concepts, then what is error_injection good for without fmod_ret?
+> 
+>>>
+>>>> While error injection is a debug feature to stress test the kernel.
+>>>> syscalls are in fmod_ret territory, since this is not debugging
+>>>> and not stressing the kernel. ptrace can change syscall returns without
+>>>> bpf, without fmod_ret, and without error injection.
+>>>
+>>> The thing I'm worried about here is that allowing BPF programs override
+>>> syscalls will esentially allow to implement a BPF-based rootkit. I'm
+>>> well aware that BPF is root-only (although there are ways to allow
+>>> unprivileged users run BPF, such as tokens) but if a potential attacker
+>>> gains root access even for a short time, they can install the rootkit
+>>> which may live unnoticed from that moment. Which is not something we
+>>> really want to enable in production. For ptrace, my understanding is
+>>> that it is significantly easier to detect if it is used.
+>>>
+>>> If you don't mind, I'd start with only allowing sleepable syscalls (when
+>>> error injection is disabled) for now.
+>>
+>> I mind and I hate the reasoning that in kernels with error_injection=y
+>> bpf is prone to be a rootkit. This is just a security circus
+>> detached from reality.
+> 
+> Could you share a bit more details why? I'm not a security expert myself
+> but it seems to me that intercepting syscalls could be used to implement
+> a rootkit. For instance [1] does something similar, although they use
+> bpf_override_return in syscall kprobes. So, I'd love to understand why
+> this is detached from reality.
 
-On 2/23/26 09:40, Menglong Dong wrote:
-> Introduce a helper to store 64-bit immediate on the trampoline stack with
-> a help of a register.
->
-> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> ---
->   arch/s390/net/bpf_jit_comp.c | 27 +++++++++++----------------
->   1 file changed, 11 insertions(+), 16 deletions(-)
+Looking into this more, I assume that the premise here is that injecting
+errors into syscalls is not sufficient to implement a rootkit, more
+mechanisms are necessary for that (even [1] uses bpf_probe_write_user
+which is by default enabled on any kernel). On top of that, there are
+tons of other ways to compromise a system using eBPF so enabling error
+injection doesn't change much in that direction.
 
-[...]
+With that, I'm ok with enabling fmod_ret for syscalls even with
+CONFIG_ERROR_INJECTION=n, I'll send a patch.
 
-> @@ -2743,18 +2747,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
->   	 * arg_cnt = m->nr_args;
->   	 */
->   
-> -	if (flags & BPF_TRAMP_F_IP_ARG) {
-> -		/* %r0 = func_addr */
-> -		load_imm64(jit, REG_0, (u64)func_addr);
-> -		/* stg %r0,ip_off(%r15) */
-> -		EMIT6_DISP_LH(0xe3000000, 0x0024, REG_0, REG_0, REG_15,
-> -			      tjit->ip_off);
-> -	}
-> -	/* lghi %r0,nr_bpf_args */
-> -	EMIT4_IMM(0xa7090000, REG_0, nr_bpf_args);
-
-LGHI is more space-efficient than load_imm64(), can we keep it open-coded?
-
-With this changed:
-
-Reviewed-by: Ilya Leoshkevich <iii@linux.ibm.com>
+> 
+> Thanks!
+> Viktor
+> 
+> [1] https://github.com/Gui774ume/ebpfkit
 
