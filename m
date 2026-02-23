@@ -1,358 +1,223 @@
-Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55BAC34D4DF
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 08:40:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9888135949
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 09:04:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771836060; cv=none; b=CmgUwKivfwU/nu4xo5FCsSUQZGgAtfw5ClK7ohhu5jvp4W9F4qRJqGGbg2u2Uf23pggtuJqVryVlxQhi2MzO6ElX5MN1+vUGNKgOPBXaPsMfUzy2ailpvb/W2tIBjD9gjF3qRrQv4yssu64jcl24zFM+FlED5034RiD5cCjRD98=
+	t=1771837460; cv=none; b=odjKyyxM8ECrTsO8ONJD/CYfxYCIYfHSORR+rbUiWV9YUXEpNc1amXyKKc8rBjLOv57FsS59SntS7P8K1C7TPIVWfHvTSh/T/wLpGEhqw0LJiRJARDpiA9/+8zMh/l7oRppN5hpRUbf6Vf+z6hE23JMVZg9zUFSFSqpd3GxxuEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771836060; c=relaxed/simple;
-	bh=szp2iGNF4Kv6bLZiyYuIUdsXdQpB2wVIlacXByNuPIk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=exINOONRHxPWDJ25Z//jc/Bp3PQOqfbVaKVEq9SalFm85iinzAUj41xE+fn/As8PaPk+sJvq+r+IVVglkJ+QrFaAujbBTaGytiEcky/rTdPW7Pnf3G+09a/YPe5fF1TY40XoASdG/kKXw3iBBixM4VwpIW19yZNU9L91KwT1IvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f3WQoh/l; arc=none smtp.client-ip=209.85.214.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771837460; c=relaxed/simple;
+	bh=x1Y3n8wDc1ZZYv0uS1HsBgZCe3d1Qgb/KvME3/M0mxk=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=MQxtUnGhNd4anG249+MRB2asLKxmEnbvi6Wno9wfoBCsFBg8fR8AFJzAhxw1odYEkOehzhGjFf3SqgoDq9C0v/GytY9hMQCZh2yYdiB6F+TusyRoTFMMruedZ+pxkSLjx7oExvCEkn6reTSNZkQgF9HDhXpk6LG+3bnbVs6w0B8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DuRwU3RI; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f3WQoh/l"
-Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2a962230847so40490805ad.3
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 00:40:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771836059; x=1772440859; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jmlGR9kLwjUsf9wLTH82AWyfcud9qPjjE5O/Ouurqko=;
-        b=f3WQoh/li10ZBhMiKHTblgR84G3LSO4geEcfysg7VpqYoaRwGON4Wpij6UMAD07Zh+
-         bMmATpBgjKNJgTxXg1bba1xNt9AX+6OwtFy7ESBiHJ9tUeBsZ8CCa7bk6miJqRlsZwSI
-         bqM2FrKsd9pBLyjUAkigzXA59IZTZJryMB+k2dkmXappTm+Vgo79/JwCDnJQ5CxohfaZ
-         zRmF2QtfDOPlBcJ5uIfxK8/AMDRj4gOp2B7MtYVOtvChAEazpuep5I7qlapoAUWvkk68
-         ayxHyzCu4vBMCEyd3shXQLVYfaSIKLcSVcEM3g4y+mvX5ppV/HWmrg3FwpJK7ESl2H67
-         75VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771836059; x=1772440859;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=jmlGR9kLwjUsf9wLTH82AWyfcud9qPjjE5O/Ouurqko=;
-        b=FDGj9igfItCGvsO4jRrIDLTj38f7nhmAlLdJumfn73MUNpBvS42vakq/Fq/jgJUDko
-         Tc93xcfJve3+G/3/qOm3F0rp4JgfMmQjudq4/hLhwAx3VPVVLiTCO+/HMQ5Upmvg/TIs
-         z0l1njiLKeorDtlpHKP5WLmErT8Rcxu4hfPoy2pJWYfSH1cddDmkD/V0BMN3zAwEacUu
-         JaxfOPEHcZgHfJkJwjOW4VnEaNfcr8P8DpKrILvYCdPYlzgOfmQPI+N8uMwbM+AhYTiJ
-         f4SGj3PJ7t7ymzo5cti+A7yyW2NpbIO/AIJKgx3Y5bb6fhncsqWeys+K1aLGsX+Cstox
-         MPtA==
-X-Forwarded-Encrypted: i=1; AJvYcCWUkeNiITcd1Bsu1LYCsQxasCzvawg2FwCHL+eAoHh0QH9zlxFb5CM3jzNKobhuDoiYDTc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5ZaKG6EsU9ztg382nQRVsgdocJfPzJsxwA14olzZuePxTQe4B
-	tI/4VuHWNKQJh8KXkF4VV+6KDkTTcIddb0Kn0xZ3+1yAXT2xc3p1eFLN
-X-Gm-Gg: ATEYQzycho9uGQ+c2LudDrw4CVvnGbq+IlcC11MV/Hm+O8Yl3x6y09tVSdyS2bsT1lK
-	WUWGqbzxpmvvykCYPiaTHPJZ04BOpR3iAf0MXSxvW4Ro3RUwX2NCeK0swFsmoCZpOYA7/7UbPFM
-	oZDwkjMixRJQwMjOaU6Vsnv7LRzTfmaSopIwbos9TNlew898tZSr8dCjkWAvhOXC1XBSGNO6MHK
-	Ql/ZA6R7znV+l2GKDMYjlcXMh/nfvBn2/lvqgdNR7JDDQ3OmO8dwS+j4wrCGcSU8+xWXhGGoK01
-	sz8mh5+W/nDpWYIfLHNu6xWnG4u9apDWO5fMprWzNLadgx24OBAX1Yex2UApNnwljFLIMS8zgxV
-	08x3livE2xLcwoBwiEBPBhZxFFjoYE3rvOCnwIzoPH3AABHMwCoMwFR/64j09xjl+n+rWIxSyYs
-	Thsbk4EuFX5z4yqwPKzKmA
-X-Received: by 2002:a17:903:18d:b0:2a1:3cd9:a737 with SMTP id d9443c01a7336-2ad744eca61mr84182535ad.36.1771836058656;
-        Mon, 23 Feb 2026 00:40:58 -0800 (PST)
-Received: from 7950hx ([103.173.155.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ad750591e2sm65725405ad.91.2026.02.23.00.40.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 00:40:58 -0800 (PST)
-From: Menglong Dong <menglong8.dong@gmail.com>
-X-Google-Original-From: Menglong Dong <dongml2@chinatelecom.cn>
-To: ast@kernel.org,
-	iii@linux.ibm.com
-Cc: daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	hca@linux.ibm.com,
-	gor@linux.ibm.com,
-	agordeev@linux.ibm.com,
-	borntraeger@linux.ibm.com,
-	svens@linux.ibm.com,
-	bpf@vger.kernel.org,
-	linux-s390@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 3/3] selftests/bpf: factor out get_func_* tests for fsession
-Date: Mon, 23 Feb 2026 16:40:22 +0800
-Message-ID: <20260223084022.653186-4-dongml2@chinatelecom.cn>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260223084022.653186-1-dongml2@chinatelecom.cn>
-References: <20260223084022.653186-1-dongml2@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DuRwU3RI"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61N2F4xg3039399;
+	Mon, 23 Feb 2026 09:04:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=JTzeo5
+	6ofnO4Sb1kOjQ4dmeNRcTLOOQ9A1ufQTFU4vg=; b=DuRwU3RIdrfjqTFzV2tGNm
+	1Qye3LionD+dISppZJo7EjQQJqiuQ4ltBezN4gXQhkqw/t+cJhMDQg3xHrk6PEDX
+	ZopMolBlr9Ehy8kRQydOKCcxKpnOXNsMAhSfXrQpbJiF4H1Nmh2G3thYr+M5VdK4
+	4JYinsAdYSuOF65EPiYC55xCWU+wqQAk/gk2Pzg85FscJMRLZSpjHC2M6fFv9AD2
+	c/yBbT5XBUsKJUMR/REnzdPsocygMPhEjKGpY8H6+fZyHAFFypmIaKLdCLBU7Q0P
+	NlpEFEouZ8kGL69dvl309DrfKwPPuxmFM1X8wvNgxkgXCKPFbzTC4gohxk+oCupg
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4cqpds2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Feb 2026 09:04:03 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61N4kjxi013431;
+	Mon, 23 Feb 2026 09:04:02 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([172.16.1.68])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfqdxv6eu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Feb 2026 09:04:02 +0000
+Received: from smtpav03.dal12v.mail.ibm.com (smtpav03.dal12v.mail.ibm.com [10.241.53.102])
+	by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61N940Rp59965784
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 23 Feb 2026 09:04:00 GMT
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 72AE258056;
+	Mon, 23 Feb 2026 09:04:00 +0000 (GMT)
+Received: from smtpav03.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D95BE5803F;
+	Mon, 23 Feb 2026 09:03:59 +0000 (GMT)
+Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
+	by smtpav03.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 23 Feb 2026 09:03:59 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Mon, 23 Feb 2026 14:33:59 +0530
+From: adubey <adubey@linux.ibm.com>
+To: Hari Bathini <hbathini@linux.ibm.com>
+Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Alexei Starovoitov
+ <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko
+ <andrii@kernel.org>,
+        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+        Venkat Rao
+ Bagalkote <venkat88@linux.ibm.com>, bot+bpf-ci@kernel.org
+Subject: Re: [PATCH v2 5/5] powerpc64/bpf: fix handling of BPF stack in
+ exception callback
+In-Reply-To: <20260220063933.196141-6-hbathini@linux.ibm.com>
+References: <20260220063933.196141-1-hbathini@linux.ibm.com>
+ <20260220063933.196141-6-hbathini@linux.ibm.com>
+Message-ID: <7be71e61b6e9c522b03f96b1c4158b53@linux.ibm.com>
+X-Sender: adubey@linux.ibm.com
+Organization: IBM
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: J6pr6XHSEEjow3S1ar9JVaGzmPK67XBI
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDA3NiBTYWx0ZWRfX/hVaKrtSBBs2
+ oYHPok+3uxtYFmWZ7XvL4G9zJTcnQ0KGYa7NPVInOp/wd2Ets1Z6npqgMeBM7oyzLXuCzlKpaOl
+ zxLzp0HdV+5vc6MDaV7Rdh12ms2Qd9/LKtKKjK5Kt2JkIJuRPoBRQ4Cw8NR4CVaXbmnw9v5Zdca
+ XtVf91VBRZdKsRY9nJjRGgMxc9cNgcceqg3XDnTRutJdhCVq0ydcIf+1NHcCMxdfc/bXsp1+ed7
+ B0X4dZExdYJrNDAqlLyzvP6gmStV3vp+tpnPNQ/mGo1JZT6pjxjQTPJbBORSDrq32VMsXiHf7lw
+ vq7eY93A9l5MZ6nGku2YxwR9mRsEhwocwqnPXgncgCXSGhRlz/LQ2A5juB+pPJAA/IGZwdlWlvN
+ 5A6QVQtqZ7gC2n38Jt4j4axQtJ2vkzJEwwlztXSVYGItKua+g2eUZK0LrKJ49zc/2FiZ+OTR9T2
+ tQrslq5hRs8kvJd+GJg==
+X-Proofpoint-GUID: J6pr6XHSEEjow3S1ar9JVaGzmPK67XBI
+X-Authority-Analysis: v=2.4 cv=bbBmkePB c=1 sm=1 tr=0 ts=699c1803 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=fyT9QdyRjCnhUi2qYUoA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-23_01,2026-02-20_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 clxscore=1011 phishscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602230076
 
-The fsession is already supported by x86_64, arm64, riscv and s390, so we
-don't need to disable it in the compile time according to the
-architecture. Factor out the testings for it. Therefore, the testing can
-be disabled for the architecture that doesn't support it manually.
-
-Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
----
- .../bpf/prog_tests/get_func_args_test.c       | 25 +++++++++++-
- .../bpf/prog_tests/get_func_ip_test.c         | 28 +++++++++++++-
- .../bpf/progs/get_func_args_fsession_test.c   | 37 ++++++++++++++++++
- .../selftests/bpf/progs/get_func_args_test.c  | 38 -------------------
- .../bpf/progs/get_func_ip_fsession_test.c     | 21 ++++++++++
- .../selftests/bpf/progs/get_func_ip_test.c    | 23 -----------
- 6 files changed, 108 insertions(+), 64 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/get_func_args_fsession_test.c
- create mode 100644 tools/testing/selftests/bpf/progs/get_func_ip_fsession_test.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_func_args_test.c b/tools/testing/selftests/bpf/prog_tests/get_func_args_test.c
-index 96b27de05524..7bf8adc41e99 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_func_args_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_func_args_test.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- #include "get_func_args_test.skel.h"
-+#include "get_func_args_fsession_test.skel.h"
- 
- void test_get_func_args_test(void)
- {
-@@ -41,8 +42,30 @@ void test_get_func_args_test(void)
- 	ASSERT_EQ(skel->bss->test4_result, 1, "test4_result");
- 	ASSERT_EQ(skel->bss->test5_result, 1, "test5_result");
- 	ASSERT_EQ(skel->bss->test6_result, 1, "test6_result");
--	ASSERT_EQ(skel->bss->test7_result, 1, "test7_result");
- 
- cleanup:
- 	get_func_args_test__destroy(skel);
- }
-+
-+void test_get_func_args_fsession_test(void)
-+{
-+	struct get_func_args_fsession_test *skel = NULL;
-+	int err;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel = get_func_args_fsession_test__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "get_func_args_fsession_test__open_and_load"))
-+		return;
-+
-+	err = get_func_args_fsession_test__attach(skel);
-+	if (!ASSERT_OK(err, "get_func_args_fsession_test__attach"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test1), &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 0, "test_run");
-+
-+	ASSERT_EQ(skel->bss->test1_result, 1, "test1_result");
-+cleanup:
-+	get_func_args_fsession_test__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-index 7772a0f288d3..357fdedfea93 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-@@ -2,6 +2,7 @@
- #include <test_progs.h>
- #include "get_func_ip_test.skel.h"
- #include "get_func_ip_uprobe_test.skel.h"
-+#include "get_func_ip_fsession_test.skel.h"
- 
- static noinline void uprobe_trigger(void)
- {
-@@ -46,8 +47,6 @@ static void test_function_entry(void)
- 	ASSERT_EQ(skel->bss->test5_result, 1, "test5_result");
- 	ASSERT_EQ(skel->bss->test7_result, 1, "test7_result");
- 	ASSERT_EQ(skel->bss->test8_result, 1, "test8_result");
--	ASSERT_EQ(skel->bss->test9_entry_result, 1, "test9_entry_result");
--	ASSERT_EQ(skel->bss->test9_exit_result, 1, "test9_exit_result");
- 
- cleanup:
- 	get_func_ip_test__destroy(skel);
-@@ -139,3 +138,28 @@ void test_get_func_ip_test(void)
- 	test_function_entry();
- 	test_function_body();
- }
-+
-+void test_get_func_ip_fsession_test(void)
-+{
-+	struct get_func_ip_fsession_test *skel = NULL;
-+	int err;
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+
-+	skel = get_func_ip_fsession_test__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "get_func_ip_fsession_test__open_and_load"))
-+		return;
-+
-+	err = get_func_ip_fsession_test__attach(skel);
-+	if (!ASSERT_OK(err, "get_func_ip_fsession_test__attach"))
-+		goto cleanup;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test1), &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(topts.retval, 0, "test_run");
-+
-+	ASSERT_EQ(skel->bss->test1_entry_result, 1, "test1_entry_result");
-+	ASSERT_EQ(skel->bss->test1_exit_result, 1, "test1_exit_result");
-+
-+cleanup:
-+	get_func_ip_fsession_test__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/get_func_args_fsession_test.c b/tools/testing/selftests/bpf/progs/get_func_args_fsession_test.c
-new file mode 100644
-index 000000000000..bb597f24b659
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/get_func_args_fsession_test.c
-@@ -0,0 +1,37 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include <errno.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u64 test1_result = 0;
-+
-+SEC("fsession/bpf_fentry_test1")
-+int BPF_PROG(test1)
-+{
-+	__u64 cnt = bpf_get_func_arg_cnt(ctx);
-+	__u64 a = 0, z = 0, ret = 0;
-+	__s64 err;
-+
-+	test1_result = cnt == 1;
-+
-+	/* valid arguments */
-+	err = bpf_get_func_arg(ctx, 0, &a);
-+	test1_result &= err == 0 && ((int) a == 1);
-+
-+	/* not valid argument */
-+	err = bpf_get_func_arg(ctx, 1, &z);
-+	test1_result &= err == -EINVAL;
-+
-+	if (bpf_session_is_return(ctx)) {
-+		err = bpf_get_func_ret(ctx, &ret);
-+		test1_result &= err == 0 && ret == 2;
-+	} else {
-+		err = bpf_get_func_ret(ctx, &ret);
-+		test1_result &= err == 0 && ret == 0;
-+	}
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/get_func_args_test.c b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-index 075a1180ec26..1bf47f64d096 100644
---- a/tools/testing/selftests/bpf/progs/get_func_args_test.c
-+++ b/tools/testing/selftests/bpf/progs/get_func_args_test.c
-@@ -165,41 +165,3 @@ int BPF_PROG(tp_test2)
- 
- 	return 0;
- }
--
--__u64 test7_result = 0;
--#if defined(bpf_target_x86) || defined(bpf_target_arm64) || defined(bpf_target_riscv)
--SEC("fsession/bpf_fentry_test1")
--int BPF_PROG(test7)
--{
--	__u64 cnt = bpf_get_func_arg_cnt(ctx);
--	__u64 a = 0, z = 0, ret = 0;
--	__s64 err;
--
--	test7_result = cnt == 1;
--
--	/* valid arguments */
--	err = bpf_get_func_arg(ctx, 0, &a);
--	test7_result &= err == 0 && ((int) a == 1);
--
--	/* not valid argument */
--	err = bpf_get_func_arg(ctx, 1, &z);
--	test7_result &= err == -EINVAL;
--
--	if (bpf_session_is_return(ctx)) {
--		err = bpf_get_func_ret(ctx, &ret);
--		test7_result &= err == 0 && ret == 2;
--	} else {
--		err = bpf_get_func_ret(ctx, &ret);
--		test7_result &= err == 0 && ret == 0;
--	}
--
--	return 0;
--}
--#else
--SEC("fentry/bpf_fentry_test1")
--int BPF_PROG(test7)
--{
--	test7_result = 1;
--	return 0;
--}
--#endif
-diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_fsession_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_fsession_test.c
-new file mode 100644
-index 000000000000..bbeea0d512e3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/get_func_ip_fsession_test.c
-@@ -0,0 +1,21 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char _license[] SEC("license") = "GPL";
-+
-+__u64 test1_entry_result = 0;
-+__u64 test1_exit_result = 0;
-+
-+SEC("fsession/bpf_fentry_test1")
-+int BPF_PROG(test1, int a)
-+{
-+	__u64 addr = bpf_get_func_ip(ctx);
-+
-+	if (bpf_session_is_return(ctx))
-+		test1_exit_result = (const void *) addr == &bpf_fentry_test1;
-+	else
-+		test1_entry_result = (const void *) addr == &bpf_fentry_test1;
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-index 45eaa54d1ac7..2011cacdeb18 100644
---- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-@@ -103,26 +103,3 @@ int BPF_URETPROBE(test8, int ret)
- 	test8_result = (const void *) addr == (const void *) uprobe_trigger;
- 	return 0;
- }
--
--__u64 test9_entry_result = 0;
--__u64 test9_exit_result = 0;
--#if defined(bpf_target_x86) || defined(bpf_target_arm64) || defined(bpf_target_riscv)
--SEC("fsession/bpf_fentry_test1")
--int BPF_PROG(test9, int a)
--{
--	__u64 addr = bpf_get_func_ip(ctx);
--
--	if (bpf_session_is_return(ctx))
--		test9_exit_result = (const void *) addr == &bpf_fentry_test1;
--	else
--		test9_entry_result = (const void *) addr == &bpf_fentry_test1;
--	return 0;
--}
--#else
--SEC("fentry/bpf_fentry_test1")
--int BPF_PROG(test9, int a)
--{
--	test9_entry_result = test9_exit_result = 1;
--	return 0;
--}
--#endif
--- 
-2.53.0
-
+On 2026-02-20 12:09, Hari Bathini wrote:
+> Exception callback reuses the stack frame of exception boundary. When
+> exception boundary and exception callback programs have different BPF
+> stack depth, the current stack unwind in exception callback will fail.
+> Adjust the stack frame size of exception callback, in its prologue,
+> if its BPF stack depth is different from that of exception boundary.
+> 
+> Reported-by: bot+bpf-ci@kernel.org
+> Closes:
+> https://lore.kernel.org/bpf/2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org/
+> Fixes: 11d45eee9f42 ("powerpc64/bpf: Additional NVR handling for 
+> bpf_throw")
+> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+> ---
+> 
+> Changes since v1:
+> * Fixed incorrect use of PPC_RAW_SUB() as pointed out by
+>   bot+bpf-ci@kernel.org.
+> 
+> 
+>  arch/powerpc/net/bpf_jit_comp64.c | 30 ++++++++++++++++++++++--------
+>  1 file changed, 22 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c
+> b/arch/powerpc/net/bpf_jit_comp64.c
+> index 5d4d2bb23cef..33b2a7fd9067 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -32,14 +32,15 @@
+>   *
+>   *		[	prev sp		] <-------------
+>   *		[    tail_call_info	] 8		|
+> - *		[   nv gpr save area	] 6*8 + (12*8)	|
+> + *		[   nv gpr save area	] 6*8		|
+> + *		[ addl. nv gpr save area] (12*8)	| <--- exception 
+> boundary/callback program
+>   *		[    local_tmp_var	] 24		|
+>   * fp (r31) -->	[   ebpf stack space	] upto 512	|
+>   *		[     frame header	] 32/112	|
+>   * sp (r1) --->	[    stack pointer	] --------------
+>   *
+>   * Additional (12*8) in 'nv gpr save area' only in case of
+> - * exception boundary.
+> + * exception boundary/callback.
+>   */
+> 
+>  /* BPF non-volatile registers save area size */
+> @@ -128,12 +129,13 @@ static inline bool bpf_has_stack_frame(struct
+> codegen_context *ctx)
+>   *		[	  ...       	] 		|
+>   * sp (r1) --->	[    stack pointer	] --------------
+>   *		[    tail_call_info	] 8
+> - *		[   nv gpr save area	] 6*8 + (12*8)
+> + *		[   nv gpr save area	] 6*8
+> + *		[ addl. nv gpr save area] (12*8) <--- exception boundary/callback 
+> program
+>   *		[    local_tmp_var	] 24
+>   *		[   unused red zone	] 224
+>   *
+>   * Additional (12*8) in 'nv gpr save area' only in case of
+> - * exception boundary.
+> + * exception boundary/callback.
+>   */
+>  static int bpf_jit_stack_local(struct codegen_context *ctx)
+>  {
+> @@ -240,10 +242,6 @@ void bpf_jit_build_prologue(u32 *image, struct
+> codegen_context *ctx)
+> 
+>  	if (bpf_has_stack_frame(ctx) && !ctx->exception_cb) {
+>  		/*
+> -		 * exception_cb uses boundary frame after stack walk.
+> -		 * It can simply use redzone, this optimization reduces
+> -		 * stack walk loop by one level.
+> -		 *
+>  		 * We need a stack frame, but we don't necessarily need to
+>  		 * save/restore LR unless we call other functions
+>  		 */
+> @@ -287,6 +285,22 @@ void bpf_jit_build_prologue(u32 *image, struct
+> codegen_context *ctx)
+>  		 * program(main prog) as third arg
+>  		 */
+>  		EMIT(PPC_RAW_MR(_R1, _R5));
+> +		/*
+> +		 * Exception callback reuses the stack frame of exception boundary.
+> +		 * But BPF stack depth of exception callback and exception boundary
+> +		 * don't have to be same. If BPF stack depth is different, adjust 
+> the
+> +		 * stack frame size considering BPF stack depth of exception 
+> callback.
+> +		 * The non-volatile register save area remains unchanged. These non-
+> +		 * volatile registers are restored in exception callback's epilogue.
+> +		 */
+> +		EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R5, 0));
+> +		EMIT(PPC_RAW_SUB(bpf_to_ppc(TMP_REG_2), bpf_to_ppc(TMP_REG_1), 
+> _R1));
+> +		EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_2), bpf_to_ppc(TMP_REG_2),
+> +			-BPF_PPC_EXC_STACKFRAME));
+> +		EMIT(PPC_RAW_CMPLDI(bpf_to_ppc(TMP_REG_2), ctx->stack_size));
+> +		PPC_BCC_CONST_SHORT(COND_EQ, 12);
+Can we avoid resizing when boundary_stack is greater? I think it's safe, 
+NVR will be intact anyway and any reference within bounds of larger 
+size.
+Any corner case possible?
+> +		EMIT(PPC_RAW_MR(_R1, bpf_to_ppc(TMP_REG_1)));
+> +		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_EXC_STACKFRAME + 
+> ctx->stack_size)));
+Do we need to setup FP again? If I get it right, still the FP is 
+pointing to older frame, any reference in
+callback will resolve to old frame.
+>  	}
+> 
+>  	/*
+-Abhishek
