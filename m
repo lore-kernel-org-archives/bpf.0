@@ -1,168 +1,246 @@
-Received: from mail-dl1-f53.google.com (mail-dl1-f53.google.com [74.125.82.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011034.outbound.protection.outlook.com [40.107.208.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191773783CE
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 20:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771879267; cv=none; b=iIiXSPS466Lmk/GNJjJz9hLcg7132E/CvnEk/HQXwDcZVX16UsQkcdHPFNSTPZQ+q3ILMhcug8j953Kfw60eJNFiISXZqlazhWhYqXzeJLGSBU1T6iREyh5KNfK8ypHqp3MSDK64gSH3f2PQEHfTnZUdz/tA5z55DL4GN8+gEwI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771879267; c=relaxed/simple;
-	bh=VLbrYIJwMWGuzQz1SNZcSgtdCmIn6DdrhGtP0Qde+rM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YKnOFo6aw+5WVObXHXu93pJq4pPfdESTLkYe0q5Nnui+ELHuNiCmKV9NNlqasqwveQjM71EdqZt1+JWwsQUsXA9MNKDoLc72ZGWGBE62GuUbGfRF5KguA+tSrfqExVvacyAUqG8Kk/G/QUT5rHUN7PoNlbetNF31Hhtzkc5qDCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZgKXYKYj; arc=none smtp.client-ip=74.125.82.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5066136998B;
+	Mon, 23 Feb 2026 20:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.34
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771879382; cv=fail; b=Bafaf5aBksGhNU9l/IuoFLVLbXGz2/145dDQHacmzmI/0VFl1OI4U/b9q/rXKbrjDUSKnhUQKEavr4i/S8EzM5oW0lXQcFUx+OF7kkzGE5rcRz8EBPammx33Dn9tCWlN8mgPNuEKC/PaZWqjoor7pGKYL2TcISQVjWTKwVivZ2I=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771879382; c=relaxed/simple;
+	bh=Y59Jvh4RmL8d0KJxoWp3jxqlVK2ejHudNymcyeMqkZ4=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RVmtru3PIECwov002t6uqtk8hyKKiojyK9WKorRElJB7XC1oALLnntPheSyhYVLnqWV/BH3fxZx+GGbmeLbOtVQbKO3JDIjU27jh0MXqaT6aHH9KXGWoULmtlt5IjWC0vdZ3xkF09ykZNJ30TUu000EJduLT1oFDLeqPeebaM8E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aOvkxEq8; arc=fail smtp.client-ip=40.107.208.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZgKXYKYj"
-Received: by mail-dl1-f53.google.com with SMTP id a92af1059eb24-1271257ae53so4452073c88.1
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 12:41:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771879265; x=1772484065; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wlZBzDcNxEKJGA6OLz+Nok2r1Hy+QsGpkL7Mx9T7Vwo=;
-        b=ZgKXYKYjrxgpPAxhie31nUydtHUM+FuJLFFvMQ4vXnb3yjYzpctduVshTfa7B7TaM3
-         f8R/cV6M7UYoekTItFMrfxIbUprrobEx3bH7BqWYZA5DXIOoaM4cw9o5ynsx2KAKirVA
-         7BI5IrIPCOHvHnlrqfBbfjvXBvNh/3MtdpwcimQprDlBg+UDqlIhUf+lI4Qa1swHiIGx
-         prLJdhIBbT8HGfhA/fYelmveP2k4FdXiRY8t3FHVgr7JKsh1MmEfjQSfgZM5g5SN4cgz
-         KMQNCCfsdHdTlcsHbftOFrnVY3Kh+9GkCiVPlHAlwmRxlY5k0z85NU7WUOveyBeCnnoV
-         605A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771879265; x=1772484065;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wlZBzDcNxEKJGA6OLz+Nok2r1Hy+QsGpkL7Mx9T7Vwo=;
-        b=lOhw60qs4AEE9McUzz7s3OAVhvv9vJwng6NRwj+ZK6FCuo/zjATvC/6mgcIfWeM1kN
-         YptFiG2ycgH/vspbVI5JV/QTMyep7+V1gWrOlrpPy6EHlMkJy9BYZVAlCsapvJZtDlVA
-         U9BeGABtNyKRIO0dtM5VLgCu2mjhfjBkGt4Yx5oG7k92MEgTuioQil0ZovxgpB0j9P1/
-         yO5vpUfLyk7Un6NyeNTLGM06nKIvaK7OCKel7sCtQT1NResnC+3UdkapweWPPKlyxMII
-         a06pBHeMzRudxzJNaZwyx0rGD+fz3/8b1HMt5jLdzCgfuHlP3jIwM+s2++yXe/PdkcRZ
-         XtFA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzvWAtVplBYFl9O93F+vxZ8gMpgAZssbZnsQwMG2pUe1rp9SBhw5PncIClVzjAJr8vstk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzmf2HCdwSaz0UJ47tG4PJbzL3QA0a2AoOTh4gEh/MoZDfgcQ8l
-	wbofaXIH/NmMIfykULzaFLK5TONU3V97nEdDpTm7+kXL1573n0HQAUYPefkz+9dz
-X-Gm-Gg: AZuq6aLQzJ7mRYiHTCMEltisXBIv2rCR3HLCdYuSWI+PmuPRo+6BGfEDx3jty4uCqFs
-	dffS172DCqYOPJHRDRo37o1+EpRopyqjWRmenD6KXksf0eWgvYzxKCvSnj6Cy+7hTFnFKiqZ3ah
-	ewqqMfQ4xtleDGaRCdaqp0oynP/Mi+j1hpSfr0n3Ka20DPR7jOcSoBVo3VnaXAFuoyqr1aLb4PY
-	2U1cuMok79b+8iJJhY1VNqsMDP0kFKfUgnaQRZYL0EU1eEl85KFDMffauHnQ3KiHEeOBjAUaQaU
-	omq+uf8fH3FikL2KVre5uX9jUISFFAhXPYJXjadokUAl7WHPDLrqpG5mEsqZax796EOYWTAmQIQ
-	6xUcShryNjipD/Z8z5OhFF9ak6SXMaZRXNZ2aQQ+1rdK/Ca1AeTZhLYDQFRGY7huBfYHeHE1ahF
-	HoVrxd9p30aJP+JtbTZ5d7RUU5sj1i+mU0nhuiE5hPjSFUmJsRwpQdhPblrGXbkUy6tv2v4O/iN
-	QyIcd8F
-X-Received: by 2002:a05:7022:6993:b0:11b:ade6:45a7 with SMTP id a92af1059eb24-1276acb2090mr3375400c88.1.1771879264833;
-        Mon, 23 Feb 2026 12:41:04 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:7bec:d612:85a2:37de? ([2620:10d:c090:500::1:3a66])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1276af8c936sm9079044c88.14.2026.02.23.12.41.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 12:41:04 -0800 (PST)
-Message-ID: <9ae642bd94696a019f62aca5f49da3b3d941a927.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/6] bpf: Add KF_ACQUIRE and KF_RELEASE
- support for iterators
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko
- <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
-Date: Mon, 23 Feb 2026 12:41:03 -0800
-In-Reply-To: <20260223174659.2749964-2-puranjay@kernel.org>
-References: <20260223174659.2749964-1-puranjay@kernel.org>
-	 <20260223174659.2749964-2-puranjay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aOvkxEq8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cnYNB3FMcQlc85Bpnc4qE13yMc/wNeW6RiQYja4MRVUCpyUo/u7DR64YR3IwQsKjd+bOSAnAE0UTzEfpq8k7G6v36acmTZe+1AriVnEVbVNGkwPoo75tC9IxXFyhAsY/dzPYbXbWvwzsISoAudKz+GSa07HapXz1fUgjYvNnhsfE6hdLZt9SSmwn3YBoxvhKgWRMaS69/ZayT8xycviJ+N3acYi0m+n9HI/PRtwFnPPBIdZVejroL9iOiGr6oorj8FiQLFzv4q8C2JusFDjfvReeLRCPMo46JNb/4EKpVd/z+jy7D8wdwBxognsXdnx/yaa9VQSSdubiailTKc2DZg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=W/tLU3TCduRiR10Exlb+N28fwEvA2XERdSsXWSFezJE=;
+ b=W9CSjfFXaUHuzCx5sx8uFXgRRRGihP2MAHh2jz8174IaND2rH4stEWG6Oakc/M8zgwJfD5AQETlPFAprDf2VXw5TM+IFXqOG2x20SPgf/D0OGPO4G/Sj2TFmxoiGPN9kNIEgBeeIGVsrXyRUZGbvaMs53XZEQYP1t8XS3Ov7ELgShbHHAuIt3Xv6xapJ+zaR7RKauFx3POwXhnP0lGtfbP+Rjd+E8U+QTxARm9qf0jNtBK8N+xgp033sq/WPVjh7CeorizD8mJHsKbP75yx71Qy5A/HX4hmHGYhMoCdwgyegIpezKBkS6KJ/lQWkOvRHNhLRBdLu4QEDqR8srKsYew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=google.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=W/tLU3TCduRiR10Exlb+N28fwEvA2XERdSsXWSFezJE=;
+ b=aOvkxEq8k1djwaIvnzfEUNS9Oe+c9uoZj1pzS9Uu7KZEEQ5bb0uem0kbZHv+aVJom/zxkquxA6HWGHj5j/PnIgi7Ak+/Q4+5tkFnMPA3QH636qhbA5CIL61wM3CYtnAdbWTdHFZTArwMymoF2gZ4ldEtn6VtlgAYcy26w7PLQner44aJjAP54tGfHEcotSjVxWryFsNwJsbStf8PIhC2O2ZuGDPWB/268g+/x3kc0i7lyvbuOtNWGbx7JmmDSuS5cYcP1OLR0NjYU1aLIvjBzpP+i+LMehVmJAX7lg8N8+lrO8PxdvfG/1XNOOBM3g3Mi+Z8wfkjFiHGcW2X+iHnUw==
+Received: from DM6PR07CA0082.namprd07.prod.outlook.com (2603:10b6:5:337::15)
+ by PH7PR12MB8828.namprd12.prod.outlook.com (2603:10b6:510:26b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.21; Mon, 23 Feb
+ 2026 20:42:52 +0000
+Received: from DM2PEPF00003FC5.namprd04.prod.outlook.com
+ (2603:10b6:5:337:cafe::67) by DM6PR07CA0082.outlook.office365.com
+ (2603:10b6:5:337::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9632.21 via Frontend Transport; Mon,
+ 23 Feb 2026 20:42:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DM2PEPF00003FC5.mail.protection.outlook.com (10.167.23.23) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9632.12 via Frontend Transport; Mon, 23 Feb 2026 20:42:52 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 23 Feb
+ 2026 12:42:38 -0800
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.20; Mon, 23 Feb
+ 2026 12:42:38 -0800
+Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server id 15.2.2562.20 via Frontend Transport; Mon, 23
+ Feb 2026 12:42:32 -0800
+From: Tariq Toukan <tariqt@nvidia.com>
+To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>
+CC: Saeed Mahameed <saeedm@nvidia.com>, Leon Romanovsky <leon@kernel.org>,
+	Tariq Toukan <tariqt@nvidia.com>, Mark Bloch <mbloch@nvidia.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Jesper Dangaard Brouer" <hawk@kernel.org>, John Fastabend
+	<john.fastabend@gmail.com>, Richard Cochran <richardcochran@gmail.com>,
+	<netdev@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>, Gal Pressman
+	<gal@nvidia.com>, Dragos Tatulea <dtatulea@nvidia.com>, Cosmin Ratiu
+	<cratiu@nvidia.com>, Pavel Begunkov <asml.silence@gmail.com>, David Wei
+	<dw@davidwei.uk>
+Subject: [PATCH net-next 00/15] net/mlx5e: SHAMPO, Allow high order pages in zerocopy mode
+Date: Mon, 23 Feb 2026 22:41:40 +0200
+Message-ID: <20260223204155.1783580-1-tariqt@nvidia.com>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM2PEPF00003FC5:EE_|PH7PR12MB8828:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7e4d8a4c-c60c-4961-c4e0-08de731c1d6a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|36860700013|1800799024|82310400026|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?NfH8Hm+MSGKXOenKHdg/kAoRofVNEtzMnzfeDXjnxvvVscPs1WIxpwcNnkQL?=
+ =?us-ascii?Q?v+qFTcuhoDvLFtekrrivQ72c1olPQW/EQTQKqdaPNIfbvo8jaqEAWE0/BM+E?=
+ =?us-ascii?Q?ihy+4w4gejkohcf3IbXP4KliKYfkhRVXxX7l0NM64hrhswIb2A85grdisyom?=
+ =?us-ascii?Q?43SP5GiGhubG7m40uqBbbwZe4a6Bgdq7sdgljoEHfEAU/ktMsN0S+zOaZu/O?=
+ =?us-ascii?Q?smNQEjw7KoCk1sfI/ttoR/eDHaCJcmei2z2hud5YlRlGlBGxZKQ/dCznrWso?=
+ =?us-ascii?Q?TfM+AEV4b0bNt10Wxnb3WSbKdutLRod6EH/VX1qWg/Vaf/XVbXRAInfp8sJH?=
+ =?us-ascii?Q?BqKkaVMq5/1D07fXgzURQu2aKlzj6NaRuKGD5azNFEMnbMlMRMI5JGF0tejT?=
+ =?us-ascii?Q?1ids9DhP0lIbnPNEnHTXJl/vC2fkv/Knypt3g47K94AIipVGAuxK6yBIhaDr?=
+ =?us-ascii?Q?IVg1d4ma4wJreDugbuOvye3flecvWa86GK+AnjJJgU0B8xJgNFyYvEMgK+Kr?=
+ =?us-ascii?Q?dInstLOmPT6VF0i2iZQxDOOqvGqEMzEBs12ETLKcUT7kjcxywXrIqCs90dS0?=
+ =?us-ascii?Q?EO5WuDmpGvDKLSKyR8OytlLPKlwTglIHG/QgATv0miLfqgzzj18N1P32fvm+?=
+ =?us-ascii?Q?3F3K8uxduoWaLf06lL8u6arUjN2pWIciJlVi1MsXoIn5OUEoGk0I2JbxpDXo?=
+ =?us-ascii?Q?6bmoxea72Bkk+bbZkJiQRBiBzdLiVrnVNXBg6wt+ervflL1XATlOJTRXYSNF?=
+ =?us-ascii?Q?Jk1yXbk1S8VXxSiq2WXc6d4EAdg3e0EXi5KaiswusJi4ffI37gN1N+3EqVxm?=
+ =?us-ascii?Q?qVGtrPe7AOsRSkKtm75DJYcB842F/2dNvb52f7Hc7PkAixAlYzMdSeJ6JtaO?=
+ =?us-ascii?Q?VASPKJq4D4q317xWGmzy5tFDgv+FviTxDnEq/WcgwxzhXrL7X9b2cykNhCGA?=
+ =?us-ascii?Q?fkWEn9/CdXF9Cv58wTRCOJfLfOFtbXWw3T581ytVwyLkuZytEIa+5UeH9q0+?=
+ =?us-ascii?Q?eQsL0IFYXGIBLWhWDvwQF2/rv44bBC6sYSA1rctcDV+2mBQuGsR0JyaTMvR9?=
+ =?us-ascii?Q?XR2mz2RcO3exsNlCT9jLFVVDGvCuatAfMZ3HWjGYMB6m9T7gJN803zrLMGys?=
+ =?us-ascii?Q?gx3BXlKSezMOIYXY29ZJTQpbT1SKKg6hoE7MIZ3dwtepuDbOPk/9fSBtPfyO?=
+ =?us-ascii?Q?AXYSE2tT15spNHiu2XknogWFY41Nrnr8NIBjxHMdcQfZfznqw6MFAUZl/M5R?=
+ =?us-ascii?Q?3bYitEel8RBIrqSLe4BqqZmnC34C1Vq+Xr2DWQ4nnkOQvmAIqzQ1UUD5sWLE?=
+ =?us-ascii?Q?PS886yzJ/grnm0rCZ0Cc/CustBa9Hlj/r45Y7Ol/fwoOEgiK++8Gmrk2Mhfl?=
+ =?us-ascii?Q?zZc2++yRXt/obHUFHCK483v0NbmFWA26YpwF8hnfjLCuaR8oe7IpMvp27coA?=
+ =?us-ascii?Q?rKFuZpTuFVcyzfyYm1OxTqFTZ6Vh4WZmyM4/8MLE9u+GjkVKh0lObrr4DKli?=
+ =?us-ascii?Q?7GZwPiYHGm0bnOXmPMxwBe1qODKj4SbCLDZGJ5zLVczRoQ4MOv2VUCL6oB48?=
+ =?us-ascii?Q?b1UtnTKvm7KpzdbuWhNcalTREEj9VpTvKDAb15zrZeFrYN9/koJMy82UcAlh?=
+ =?us-ascii?Q?8jRBkf3VIUNrK0Wdg0n1wodyX2WoJ9Zj48Lt0OZBDlBTxX3dFxfXx2WxP9+u?=
+ =?us-ascii?Q?2j/E+g=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(1800799024)(82310400026)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	lWLWV/UOHCrE4J6YHrtfDN9U8ZrefRy1R/0mWMFoykBl72g/ZtqJS/c/ewFOucCVi2dzpT6x2pUlBg7cs1fVCfq3YuY5pICT+LOa5TtRzKjwhhTX648S006+xcbrx4zaEa3Kp4+nBxx20dheZKKv6/JjtuydVh2ounch2JGE8ShcuzI3CusBf8HaLyjummHNQpw9ufvpnOJC4t14Fv73G3m2OrzJnz08EutoE8MAkgqfoe7YEEvn/DqSB1MHzgfOYGBXi4MUpSOMm+qnj5IYnhJeOlxt7kSwZR1EeO32a2bi02GwEnujQ4jnOs0D8O07LB9gzFBIB0k2fVX6TGMIS03ViSZJ0QleoF3rKLbcQCy+DNXKCOv7IJ11EtlqBTf69gs0yBM3V8LDzklI/T50KpgpFiIlpMoHfy/jVbPhwpaXDFklPVr/SBagbaDwLkJZ
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Feb 2026 20:42:52.1508
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e4d8a4c-c60c-4961-c4e0-08de731c1d6a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DM2PEPF00003FC5.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8828
 
-On Mon, 2026-02-23 at 09:46 -0800, Puranjay Mohan wrote:
+Hi,
 
-[...]
+This series adds support for high order pages when io_uring/devmem
+zero copy is used.
 
-> @@ -1083,6 +1084,23 @@ static int mark_stack_slots_iter(struct bpf_verifi=
-er_env *env,
->  	return 0;
->  }
-> =20
-> +/*
-> + * Release the acquired reference tracked by iter_st->id, if any.
-> + * Used during auto-release in _next, DRAINED handling, and _destroy.
-> + */
-> +static int iter_release_acquired_ref(struct bpf_verifier_env *env,
-> +				     struct bpf_reg_state *iter_st)
-> +{
-> +	int err;
-> +
-> +	if (!iter_st->id)
-> +		return 0;
-> +	err =3D release_reference(env, iter_st->id);
-> +	if (!err)
-> +		iter_st->id =3D 0;
+See detailed description by Dragos below.
 
-Nit: maybe drop the `!err` check?
-     It requires a few moments to process mentally and the verifier
-     should stop on this error anyway.
+Regards,
+Tariq
 
-> +	return err;
-> +}
-> +
->  static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
->  				   struct bpf_reg_state *reg, int nr_slots)
->  {
 
-[...]
+The first patches are moving code around to allow using queue specific
+parameters that are not just for XSK. They are a bit large as they touch
+a lot of functions.
 
-> @@ -9178,8 +9204,11 @@ static int process_iter_next_call(struct bpf_verif=
-ier_env *env, int insn_idx,
->  	/* mark current iter state as drained and assume returned NULL */
->  	cur_iter->iter.state =3D BPF_ITER_STATE_DRAINED;
->  	__mark_reg_const_zero(env, &cur_fr->regs[BPF_REG_0]);
-> -
-> -	return 0;
-> +	/*
-> +	 * If _next acquired a ref (KF_ACQUIRE), release it in the DRAINED bran=
-ch since NULL
-> +	 * was returned.
-> +	 */
-> +	return iter_release_acquired_ref(env, cur_iter);
+The middle part of the series is updating various formulas to remove
+remaining hardcoded use of PAGE_SIZE/PAGE_SHIFT.
 
-Nit: Check that `_next` is KF_ACQUIRE here?
-     Not strictly needed for this patch but is a bit more consistent.
-     E.g. consider some future iterator that acquires reference on creation
-     and not on `_next`.
+The last part adds support for high order pages by implementing the
+queue configuration functions and allowing larger rx_page_size
+configurations when in zero-copy mode.
 
->  }
-> =20
->  static bool arg_type_is_mem_size(enum bpf_arg_type type)
-> @@ -14197,6 +14226,17 @@ static int check_kfunc_call(struct bpf_verifier_=
-env *env, struct bpf_insn *insn,
-> =20
->  		if (meta.initialized_dynptr.ref_obj_id) {
->  			err =3D unmark_stack_slots_dynptr(env, reg);
-> +		} else if (base_type(reg->type) =3D=3D PTR_TO_STACK) {
-> +			struct bpf_reg_state *iter_st;
-> +
-> +			iter_st =3D get_iter_from_state(env->cur_state, &meta);
-> +			if (!iter_st->id) {
-> +				verbose(env, "no acquired reference to release\n");
-> +				return -EINVAL;
-> +			}
-> +			err =3D release_reference(env, iter_st->id);
-> +			if (!err)
-> +				iter_st->id =3D 0;
+Results show an increase in BW and a decrease in CPU usage.
+The benchmark was done with the zcrx samples from liburing [0].
 
-Nit: iter_release_acquired_ref()?
+rx_buf_len=4K, oncpu [1]:
+packets=3358832 (MB=820027), rps=55794 (MB/s=13621)
+Average:     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+Average:       9    1.56    0.00   18.09   13.42    0.00   66.80    0.00    0.00    0.00    0.12
 
->  		} else {
->  			err =3D release_reference(env, reg->ref_obj_id);
->  			if (err)
+rx_buf_len=128K, oncpu [2]:
+packets=3781376 (MB=923187), rps=62813 (MB/s=15335)
+Average:     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+Average:       9    0.33    0.00    7.61   18.86    0.00   73.08    0.00    0.00    0.00    0.12
 
-[...]
+rx_buf_len=4K, offcpu [3]:
+packets=3460368 (MB=844816), rps=57481 (MB/s=14033)
+Average:     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+Average:       9    0.00    0.00    0.26    0.00    0.00   92.63    0.00    0.00    0.00    7.11
+Average:      11    3.04    0.00   68.09   28.87    0.00    0.00    0.00    0.00    0.00    0.00
+
+rx_buf_len=128K, offcpu [4]:
+packets=4119840 (MB=1005820), rps=68435 (MB/s=16707)
+Average:     CPU    %usr   %nice    %sys %iowait    %irq   %soft  %steal  %guest  %gnice   %idle
+Average:       9    0.00    0.00    0.87    0.00    0.00   63.77    0.00    0.00    0.00   35.36
+Average:      11    1.96    0.00   43.68   54.37    0.00    0.00    0.00    0.00    0.00    0.00
+
+[0] https://github.com/isilence/liburing/tree/zcrx/rx-buf-len
+
+[1] commands:
+  $> taskset -c 9 ./zcrx 6 -i eth2 -q 9 -A 1 -B 4096 -S 33554432
+  $> ./send-zerocopy tcp -6 -D 2001:db8::1 -t 60 -C 0 -l 1 -b 1 -n 1 -z 1 -d -s 256000
+
+[2] commands:
+  $> taskset -c 9 ./zcrx 6 -i eth2 -q 9 -A 1 -B 131072 -S 33554432
+  $> ./send-zerocopy tcp -6 -D 2001:db8::1 -t 60 -C 0 -l 1 -b 1 -n 1 -z 1 -d -s 256000
+
+[3] commands:
+  $> taskset -c 11 ./zcrx 6 -i eth2 -q 9 -A 1 -B 4096 -S 33554432
+  $> ./send-zerocopy tcp -6 -D 2001:db8::1 -t 60 -C 0 -l 1 -b 1 -n 1 -z 1 -d -s 256000
+
+[4] commands:
+  $> taskset -c 11 ./zcrx 6 -i eth2 -q 9 -A 1 -B 131072 -S 33554432
+  $> ./send-zerocopy tcp -6 -D 2001:db8::1 -t 60 -C 0 -l 1 -b 1 -n 1 -z 1 -d -s 256000
+
+Dragos Tatulea (15):
+  net/mlx5e: Make mlx5e_rq_param naming consistent
+  net/mlx5e: Extract striding rq param calculation in function
+  net/mlx5e: Extract max_xsk_wqebbs into its own function
+  net/mlx5e: Expose and rename xsk channel parameter function
+  net/mlx5e: Alloc xsk channel param out of mlx5e_open_xsk()
+  net/mlx5e: Move xsk param into new option container struct
+  net/mlx5e: Drop unused channel parameters
+  net/mlx5e: SHAMPO, Always calculate page size
+  net/mlx5e: Set page_pool order based on calculated page_shift
+  net/mlx5e: Alloc rq drop page based on calculated page_shift
+  net/mlx5e: RX, Make page frag bias more robust
+  net/mlx5e: Add queue config ops for page size
+  net/mlx5e: Pass netdev queue config to param calculations
+  net/mlx5e: Add param helper to calculate max page size
+  net/mlx5e: SHAMPO, Allow high order pages in zerocopy mode
+
+ drivers/net/ethernet/mellanox/mlx5/core/en.h  |   9 +-
+ .../ethernet/mellanox/mlx5/core/en/params.c   | 415 +++++++++++-------
+ .../ethernet/mellanox/mlx5/core/en/params.h   |  45 +-
+ .../net/ethernet/mellanox/mlx5/core/en/ptp.c  |   4 +-
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.c  |   5 +-
+ .../net/ethernet/mellanox/mlx5/core/en/xdp.h  |   3 +-
+ .../ethernet/mellanox/mlx5/core/en/xsk/pool.c |  23 +-
+ .../mellanox/mlx5/core/en/xsk/setup.c         |  59 +--
+ .../mellanox/mlx5/core/en/xsk/setup.h         |   6 +-
+ .../net/ethernet/mellanox/mlx5/core/en_main.c | 194 +++++---
+ .../net/ethernet/mellanox/mlx5/core/en_rx.c   |  36 +-
+ 11 files changed, 502 insertions(+), 297 deletions(-)
+
+
+base-commit: 8bf22c33e7a172fbc72464f4cc484d23a6b412ba
+-- 
+2.44.0
+
