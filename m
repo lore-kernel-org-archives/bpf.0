@@ -1,138 +1,141 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47599313E36
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 15:06:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771859185; cv=none; b=gKhebW7Y10QBZlWzCq4Uv3zZrSrzbRjZerhLlci/oAHZg/qhgIrjgoe+UDrm5/pefuQoU1Oz5LCEm+GQJrsxa2ws/IVbOvz3CoZTc54n3Chdwel6Fox8LgyjI6Zw6wAN1lAZIRK0Bc4zuFyITM/D4GC6xjnUua7OcSzaP1E87XI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771859185; c=relaxed/simple;
-	bh=IHV7aqPp+bGHxNZCJm3n893oxNKmSFA6/AU1Qstp97c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dFfa5szZRPB8tkIwSQmWW0EqvgGpP3N6e1+qX7pIZ4g+e2onZxoQIH/SwpWJjCHZRr0vSLE3T8D7JgePiF3gWIAj4XInm0TgseUn2skg5eo/YhGfzjj4rS1IYOJRQV1OIPL80PXuTnvNYJ4xxlRJgCOxVPODZBuSw9VYXE9xtHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i522L5Tc; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DA4628CF5D
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 15:23:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771860242; cv=pass; b=ZjFApRkJT4Uuo4W49P02FKYCKc3Cd7qhSqKQAOfI47bwws9lBETem0xBECb9zoL4KzLdvG1YDuVLQtJ8iSlsUOj2FtA1YQLN4G7xYfNgPD1SEHqT9CttNZ/Xewd2w5jag6C5N+AqLfwPp/b6Er8KCTRibYh/JoxVjYGs+VSvGMs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771860242; c=relaxed/simple;
+	bh=raBCTCTSUvLUeIlNEor6xXIRdPMmDF/sZcB/wk9N3R8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EsNNDky4ypVu7/w9SFhxoz2ySlUnypVATaABEivtwuLbg+Ik3MOVBoyTUq3WiSzTL5zQiAdaWOI3XrTMkejdnnrSdW25e1BL3CHimOF7Dx0CD94Ik796imoPUN5erUC5s9Bq4l1ufmur16Sx5ZkOBIWQ6Xd7yYAUdSIBvw5MxK4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DoMj/FZe; arc=pass smtp.client-ip=209.85.160.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i522L5Tc"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48371119eacso51586335e9.2
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 07:06:24 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DoMj/FZe"
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-40ea611d1a4so1365418fac.2
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 07:23:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771860239; cv=none;
+        d=google.com; s=arc-20240605;
+        b=V+IaMBvHhmQGm2edFTvU8rdIe2R0VSF6hcOTFxkdxsdi6FqVTVcse3vGn0lNGWyIju
+         uYkaP/HgdveNfVnsbc9QrF/07mUM4le2qXuR9hBjF9LGNuhZGDrZWUTpXzZhNokEkoPl
+         Iam2fxJcJ/5vc5NUm3uHxKWKR3Ez9Rf503Cq7n8L7wIizMypyO5wNkHP1zcWd9Sm9Hqq
+         Xcvzelhli+qvhDtXss5OFqIs5ItHkVI2/J7CLAFI+c44agMJrmEfhO4oB8HuRPcncjvr
+         m8wZpYCmiPewA2NkTYAH5s5L2Uf85mH8OfxxuosjDN5zIFRAIe+X0+eihC3ZAIKevl8g
+         E91g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=iylOjxhh1Hwuz0sxmdpj0jfJrR+KFpeX3OYRYpW8HoI=;
+        fh=A2yubMDYGgn7Ex6piUHQgbd11ct743wV2H5q+FOQIws=;
+        b=RFj8xjDDEmprjEDu/FgIHl4tmD246bhLZpuU2ADIe+pHtOZiLmAJZ6IDmo7Az5l/Fx
+         7Mgf9gZfI48dtNCffDLlSmS7zTg/OskwktbbuQNdkEk9gYqXu1c7G0AFromyPWCksFs9
+         gTaPy5CRWdsQ9DcUIJc4STSz8nrPKm/mwHWcB22CNH+xRrHfSJiGUjGklIsJ3J7uIkA2
+         M8JHPufFcHjTN4wvbO63+RHJoS7bvW/xPdGR1mu6OPOafHHQKLmn59GtdfgJxKXuXjpp
+         ab3vBBTzs43x67KPixteB1K019fpbLtebgb6VCw5irKMIBVTYi3W2me32lub5x01c8p6
+         G1pw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771859183; x=1772463983; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DEkms4j98deJ+XfmVJdJr2vX/lC1EVAkdFYjsx1rvdU=;
-        b=i522L5Tc7mhKMN9JxKVr1ZG7Ak+qXF34I9m34qefivKv7ApccK76nCoHsVmiDpFDF6
-         QrjJZnPKdn8guVFbSQmf/sxztrzBYIB7kEODFW78DoBS5GX2p91CAg9gtTDZYVJu5THe
-         SKoBhuW2HhjbJCNbBRDXGkpN03C4f5UP15fLddAYqCiW0cmxib5Bq40W7CKHiUMnowdP
-         8UwrPi4SfLwjMhv/h8o9lTWZxoLxIRjlj+7jN9Xwa74DDkBJDJaPMqg+TZ8sM1MYtaGP
-         Xvx+xLLNnrLe6WpxcqprMMnyGN6Yp7GrzwwZswPbDHtok/3ipDHuQLeDdWVR3X0qMcRl
-         tOkg==
+        d=gmail.com; s=20230601; t=1771860239; x=1772465039; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iylOjxhh1Hwuz0sxmdpj0jfJrR+KFpeX3OYRYpW8HoI=;
+        b=DoMj/FZe/5Sc4GpED5qJnCWTtjdn9TRio4Jk7F7DXWSoLquKLzREnyNJqIafQtC4kx
+         yBV8eRmY+bQSC5aNqxAFOrX6EZA4KKSCgnnMCFRRuSg8uXPhLU6WR/GZpkYI48jb/MZA
+         LouJ4RDDKcS3sSKpJUxgCbHDRI3gV/aWkBdZx3RUE+f7OWtIulu1McB0W3eCOifmS1FL
+         fWF7MLhQ2eDPrgH0Oh8+iUaJLsa9cZbdE33NrdR383PJ/3wJS3/tiDeX8/twqJwYUPrD
+         cJfoi6scMVTDTrrj8AVEkpRBgbNolgsWQCNArRdfFiQWI2yB5skBus56ICywQcUh98nC
+         5zdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771859183; x=1772463983;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DEkms4j98deJ+XfmVJdJr2vX/lC1EVAkdFYjsx1rvdU=;
-        b=vdpHq/S2h38yioTFjsszgJXfhdmE9IShYkBB+jL0hpqgeMY1MId969spMoYbkejH3l
-         nmrofRqbp82/SNNjzkotud44TG5VjisDyt2sr1rPf7ojP08i5gScWy2vNg5NyHnroMUv
-         ucg27/AguPAwDvoBQnVZ5Nm2wAWtcPxunvnZoTuTyPOipEUSlg82UEBtNyr1Frp418iE
-         Awab5GOU5y4veADBhT9ny+N+nG4V0UlWyzeyTfXRDEDGD4Z2w4GkJOUdFYWPVwIFeflr
-         NuQENa25KgrEWDMxWghMJBvFJIiu/XhzOWb0I0wTcdIKwOfTx9QABg84UYFnuk3CcUDY
-         oInw==
-X-Gm-Message-State: AOJu0YwBQ4RRxL8LwsuU7/C0T5s5EjMmkEcxZ4Dkp/uPOUvX/sSIb9Sj
-	u8krDRAQYJbWr3NNuVBzmcqtqLRf1a7pacxGJx5fkKwzYPz5p0mKh5FXp3QktA==
-X-Gm-Gg: AZuq6aLNJKL/6fu0cHmQ50Tc+3I8XnDS9nuYFQJoKFO6AsmomZXQJ1CPdyTudjs1t/H
-	1cpfsdc3mHdhBIaA41qMLy7GLYMszrh38rOXQLtUV2I7LviKV+tyCXaXRt54/YshcnTZtZcB478
-	11qUhupY1KqWkk8ccj/20C/IYdyGA/a8EG3LHfAZG0te/Q+gKUbjOnv/XzbtgCiwPqhGvFeiSR7
-	olrzfMsNcG7P4acgPO66X/gtqJBQ6zcYCbCQI2uj4X6RTvmsiLb+Ty/RuNXF2uopBkS/oTDjTYs
-	fiT4XL3XchufPsfLI180cKred327thoK4fX0VeNDU45bPX8tYn2kF3k/ZvVF61T7cSGqwcewN+Y
-	SMxIA1gn9SG7HDt8AUA4Z1RTEFPWps7wgKscUxQS/7kfBfL6/HMGnz4B7UxxLGTYKXPYRwpQffD
-	xiW4y4L5DL5JO8we9fyLRVo8BydSqHuCQRgeUOAdWZrH4S5tAYskKzGvPSqg7KgIpME8tZpsH2c
-	Iz09YPLV1jq/dvMpb9XUffdBti+aGJYrqjyWsY=
-X-Received: by 2002:a05:600c:450c:b0:47d:73a4:45a7 with SMTP id 5b1f17b1804b1-483a96377b1mr144550165e9.24.1771859182508;
-        Mon, 23 Feb 2026 07:06:22 -0800 (PST)
-Received: from ?IPV6:2620:10d:c096:325::38a? ([2620:10d:c092:600::1:36ea])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a9cb4bb3sm194526255e9.14.2026.02.23.07.06.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Feb 2026 07:06:21 -0800 (PST)
-Message-ID: <b22117fa-84ba-4f9d-982a-bbaaae35eebd@gmail.com>
-Date: Mon, 23 Feb 2026 15:06:18 +0000
+        d=1e100.net; s=20230601; t=1771860239; x=1772465039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=iylOjxhh1Hwuz0sxmdpj0jfJrR+KFpeX3OYRYpW8HoI=;
+        b=uXI7S714JB+pdAYe30xmTjgovi98Q5kqGQZttOn6l9CGg5AyTDacM9JzmZNIf0s431
+         5NghBsDkmLt+TtPJHhyatyHI8e1Dn3aM6+dNJldS+QXKPp1QqPhSqAVbWPSXl0Z1xeRA
+         9fPiENFeCKwrFqfzI7ZZh3Pg0N2RqG2luPq4JCnSy1Deq7/1cL/VsfUB3P3PNK+hNmrV
+         Vy/tr0slD6r0a4O72OcGhPUmC8l1g9BoHsnNY1zsxZMlMHLxw4FuxwV7A0jYJkFsz5Tr
+         x1LidLyRujeboygfPIs/VLkrzAJG0Vus0f0e4T9d0nPc1jFKgUJTYY57/9DIgpDWVyhs
+         wq/g==
+X-Forwarded-Encrypted: i=1; AJvYcCW31HPzNtb5OPFdVnffiJtgI/g8AhIpOrNBLLoGTLomLL0WLYEny1oF9qyBhbt+GvgOu/g=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0eTNJ1Ei/uCa5D/J7zOblsb88KOjL2jR4C0oA2EODcXxj9T34
+	IyhVxaqLIuXTr47FVnx7ZMeDXD0V5gXFJ1tAyHZ9RI+6GhtFabXratd+FTsEAlbu8ltHy61CO7T
+	CH22eJxDivpHTn1Keo3yBI56bXMk3fvc=
+X-Gm-Gg: ATEYQzw52cNbfuY0oQ6eJkA2pYsLkpOtyXiEHqfrhZvdEcCzxOC+vQq828v9rtOvJbX
+	ieH5ajT16sPLUWbVuGzXDanlxeu9g2EIH8SBgd5UYIslDVAvYYwBR1bVXlBPCFQQDbxjyhq+VSN
+	mswC/3PQA03YiBiP9xDkZq9C8cAwtcsYFAzyxerB21C3qQT6wm/IpHENoCibUmEn2BUpcEWenje
+	bpskrKwI5jcnRSi9Gbpud2BAQ7+RwWlB2LMePa4YbJbiTztptBiFAiSLz4IF3G5vy/WW0f/0XJk
+	hIirDj/4hyZ5oBQzzOgysoqNbneAr47p26CiJRqr
+X-Received: by 2002:a05:6870:a0b3:b0:409:a408:ba30 with SMTP id
+ 586e51a60fabf-4157abdb0a6mr3985399fac.7.1771860238780; Mon, 23 Feb 2026
+ 07:23:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] extra io_uring BPF examples
-To: Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <alexei.starovoitov@gmail.com>
-References: <cover.1771850496.git.asml.silence@gmail.com>
- <9c8d6af7-8546-4409-91fe-85f92a08f503@kernel.dk>
- <d808f483-3c0f-4323-8faa-0b7d49c539e3@gmail.com>
- <a7e1f667-04ba-4fe5-b21e-8c47e68213d3@kernel.dk>
-Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <a7e1f667-04ba-4fe5-b21e-8c47e68213d3@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1771327059.git.asml.silence@gmail.com> <7cc147a959ac068c55dae4f540e38e9e4ab121e0.1771327059.git.asml.silence@gmail.com>
+ <CAADnVQK0RaOA9ZYZdYyQxOzLde9MR8HpMM0SexcW59A9u7X2Jw@mail.gmail.com>
+ <84e2f3ad-28f0-4e9a-804f-2647cba9b30f@gmail.com> <CAADnVQLSEoZ0V1m5j3ggX0o0gzVKyiDHL=J6F0wRXB8qk-MCGA@mail.gmail.com>
+ <591a7f0e-7b78-42f1-9486-163249f5e306@gmail.com>
+In-Reply-To: <591a7f0e-7b78-42f1-9486-163249f5e306@gmail.com>
+From: Ming Lei <tom.leiming@gmail.com>
+Date: Mon, 23 Feb 2026 23:23:47 +0800
+X-Gm-Features: AaiRm50mSl1h_4NN3vEpL1z8e_BPvhdUzWbq4PkZ6YA8PpW16DDFp2UnmKcYZ60
+Message-ID: <CACVXFVPx5AcC9y9xVPCaahDeumNGm4TSkkfhsJ8w+wmW52JQ4w@mail.gmail.com>
+Subject: Re: [PATCH v8 5/5] selftests/io_uring: add a bpf io_uring selftest
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, io-uring <io-uring@vger.kernel.org>, 
+	bpf <bpf@vger.kernel.org>, Jens Axboe <axboe@kernel.dk>, Ming Lei <tom.leiming@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/23/26 14:39, Jens Axboe wrote:
-> On 2/23/26 7:32 AM, Pavel Begunkov wrote:
->> On 2/23/26 14:14, Jens Axboe wrote:
->>> On 2/23/26 7:11 AM, Pavel Begunkov wrote:
->>>> NOT FOR INCLUSION
->>>>
->>>> Alexei asked for extra more realistic examples. This this series is
->>>> based on top of v9 of the io_uring BPF series and implemented as
->>>> selftests. There could be more, but I stopped with 3 that should
->>>> give an idea how it'll be used:
->>>>
->>>> 1. A QD=1 file copy program that show cases state machine handling.
->>>>
->>>> 2. A BPF program rate-limiting the number of inflight io_uring request.
->>>>      That's a good example of what users asked for before but seemed to
->>>>      be too niche to be plumbed into the main io_uring path.
->>>>
->>>> 3. A toy example of how BPF can interact with registered buffers.
->>>
->>> Let's please keep examples in the liburing side, where they can be
->>> with the documentation too.
->>
->> I got you a liburing example
->>
->> https://github.com/isilence/liburing/tree/bpf-ops-example
-> 
-> Right, but that's just the nop thing, which isn't really interesting
-> outside of doing basic verification of yes indeed the kernel side works.
-> 
->> but need to sync with the selftest. I think I'll rather keep the rest
->> into a separate repository instead of adding all helpers to liburing,
->> which will inevitably do similar things but deviating in API and
->> internal details. And it's simpler on dependency management instead
->> of requiring libbpf / etc. for liburing. I wanted a space for
->> misc io_uring bits that doesn't make sense to keep as core liburing
->> anyway.
-> 
-> liburing should have support and documentation. It's not that hard to
-> check for libbpf in configure and either build the support or not. Once
-> various feature support ends up being fragmented in the ecosystem THAT
-> is a mess for users, I'd much rather have it consolidated and deal with
-> it on the liburing side.
+On Sat, Feb 21, 2026 at 6:35=E2=80=AFAM Pavel Begunkov <asml.silence@gmail.=
+com> wrote:
+>
+> On 2/20/26 17:45, Alexei Starovoitov wrote:
+> > On Fri, Feb 20, 2026 at 3:41=E2=80=AFAM Pavel Begunkov <asml.silence@gm=
+ail.com> wrote:
+> >>
+> >> I had such examples, but selftests is not the best place for that.
+> >> It can use abstractions, and I want to make them reusable instead
+> >> of people copy-pasting from selftests.
+> >
+> > Sure, but please still post them as extra patches so it's easier
+> > to see what's the end result.
+> >
+> > Also please reply to that thread:
+> > https://lore.kernel.org/bpf/CALTww28QMg=3DYXqKWpWLZrLO+xiqOe3LGyput8dx6=
+8-dnQsxg=3Dg@mail.gmail.com/
+> >
+> > It's not clear to me whether your io_uring+bpf setup will work
+> > for Xiao's use case.
+> > I don't think we need 2 ways of doing it.
+>
+> We discussed this with Ming on the list before, that's one of the use
+> cases I target as well, there is no reason why it shouldn't work. The
+> difference is that this approach gives a flexible framework for
+> extensibility and covers a good bunch of other needs, which is exactly
+> the reason I moved from a BPF opcode approach, while Ming's proposal is
+> more specific but argued to be a way easier to plug into ublk servers.
+> If you ask me, we need a solution that covers a broader spectrum of
+> use cases, but I guess it all can be argued in either way.
 
-What kind of support do you mean? Installation, removal, other BPF
-management is all on the libbpf side, e.g. skeleton open/load/etc.,
-and with it generating new structures for each of them, I'm not sure
-how to make it into some generic API whether it's liburing or not
-instead of making users to fill in the gaps, nor I think we should.
-As for figuring out right helpers and abstractions for BPF program
-writing, it'll be a gradual process, and I'd rather have it
-separately, it's not like I can reuse liburing for that.
+One big drawback of  Pavel's approach is that it needs a totally
+different userspace
+implementation for using BPF, which is just hard to use in existing
+io_uring applications.
 
--- 
-Pavel Begunkov
+But BPF opcode approach is seamless with existing io_uring applications, be=
+cause
+it simply uses existing io_uring interface.
 
+Thanks,
+Ming Lei
