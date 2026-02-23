@@ -1,32 +1,32 @@
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+Received: from out-186.mta1.migadu.com (out-186.mta1.migadu.com [95.215.58.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A78376BF8
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6497236C0CE
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771873904; cv=none; b=gaERgquRxplcnE1J0zlTd2uqfgyZAtmXz+00mI0/qml17ng/rwRdixPZeL41PDUQIS9QGPz3e1PDbXRApqaS3UqZ/+tnGsUm81DT/qdbZxjKtpibcpf2TYlKwsOeS1xoWHX0JO09tssptByohA0oydZX2Bh5TlzM+TnWi2Db2Ik=
+	t=1771873906; cv=none; b=CdsGMNQvXinXgXWdRk4j+PwsQnMnMDfM01g5dS63SVaKiqTaD1whXoS7pvmIiCUFkWZ07lxbKj6UPm+8AAY06xTpaTrUkdPlili/G0GLgTK29lmuDdIBVa9pOXWQZ1Z5FEhu4XAI8XJxwk3nrqQhBdjCdRHENpWUQPKg1wC2dMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771873904; c=relaxed/simple;
-	bh=hc/E7kagcHNUw8RSngTBUY+g9wwjMUBbC6BQ3A5MxSM=;
+	s=arc-20240116; t=1771873906; c=relaxed/simple;
+	bh=OhwXEJpa4nTUiXqwkxQqB+DAIjkR6dlqqn333NLbtts=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hjgTBtHxe6gvjRIfeKjqgV9j0nz+WxXfLh9M2y099IiSrr4nsqTX3MzoOW9D+p6ncPzn3yUzl8A1ywhCIT6SUHx/LCu71z/L71iRnlnbrZ0XDpGQEe/veF7rdj+0IVKzezMfrBsIq0Bfl7x0olaT9I1a6Ph/y3YHCzODTAWcWHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B04OIfak; arc=none smtp.client-ip=95.215.58.183
+	 MIME-Version; b=iOvOfCvAhCCo7LTmRJDbRzPDvPD8+aiQvUVMVy2HIYknaS0FPglXceH69pGlEvRaYFvJQYLgetQiLrnX7Sm/UGbwxRPuIn11ofD/KKIouFR+oh43iiFQkWdlUrMO2vi9dnTFJh3CLnXhIiCOa+f0EPeSHPdvPLzcBlXCrya/JZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=K+sgaV8/; arc=none smtp.client-ip=95.215.58.186
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B04OIfak"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="K+sgaV8/"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771873900;
+	t=1771873893;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=L5oYDJzQrEcliwwUyjc1S8sIbaaCTZLdOuGhm0bSThw=;
-	b=B04OIfak6eNnu8PFXzHnseq2QLOrd9lZdGvDjkDGKMwK2rVJPufXD65zgl67+h8voAJ55S
-	QKycLv11FtW3+/rT6ghT1BylaqKKUrbMZMuKLZ2BWNz3eOSaEtxNlnBUGry9dUsCUhl1bG
-	1Hhe0xfNr89gmy6wzru1/GMJPUW+ePY=
+	bh=TB4ypzf99oYRqj7vX8THS7uO7MYjSRJ+wJRwvR9VB+Y=;
+	b=K+sgaV8/fqQewMJil/xshDxgMEIZvg6LZ1iSYo3mumXVqZypHDu1/i2p5hC0kLFW3I0ELI
+	SOT6o8cEtK0NF1zL00iWjc/br9cyUfgNgaKfu+AVAprAGG/gL7AUQmDM1LoSJNt/qhBwlE
+	oW58uUPqcQOrfJdZP73AxDRydaW9CH8=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -39,12 +39,11 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v4 20/20] selftests/bpf: Don't override SIGSEGV handler with ASAN
-Date: Mon, 23 Feb 2026 11:11:18 -0800
-Message-ID: <20260223191118.655185-3-ihor.solodrai@linux.dev>
-In-Reply-To: <20260223191118.655185-1-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v4 18/20] selftests/bpf: Fix out-of-bounds array access bugs reported by ASAN
+Date: Mon, 23 Feb 2026 11:11:16 -0800
+Message-ID: <20260223191118.655185-1-ihor.solodrai@linux.dev>
+In-Reply-To: <20260223190736.649171-1-ihor.solodrai@linux.dev>
 References: <20260223190736.649171-1-ihor.solodrai@linux.dev>
- <20260223191118.655185-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -54,93 +53,66 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-test_progs has custom SIGSEGV handler, which interferes with the
-address sanitizer [1]. Add an #ifndef to avoid this.
+- kmem_cache_iter: remove unnecessary debug output
+- lwt_seg6local: change the type of foobar to char[]
+  - the sizeof(foobar) returned the pointer size and not a string
+    length as intended
+- verifier_log: increase prog_name buffer size in verif_log_subtest()
+  - compiler has a conservative estimate of fixed_log_sz value, making
+    ASAN complain on snprint() call
 
-Additionally, declare an __asan_on_error() to dump the test logs in
-the same way it happens in the custom SIGSEGV handler.
-
-[1] https://lore.kernel.org/bpf/73d832948b01dbc0ebc60d85574bdf8537f3a810.camel@gmail.com/
-
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/test_progs.c | 36 +++++++++++++++++-------
- 1 file changed, 26 insertions(+), 10 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c | 7 ++-----
+ tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c   | 2 +-
+ tools/testing/selftests/bpf/prog_tests/verifier_log.c    | 2 +-
+ 3 files changed, 4 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
-index d1418ec1f351..0929f4a7bda4 100644
---- a/tools/testing/selftests/bpf/test_progs.c
-+++ b/tools/testing/selftests/bpf/test_progs.c
-@@ -1261,14 +1261,8 @@ int get_bpf_max_tramp_links(void)
- 	return ret;
- }
+diff --git a/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c b/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
+index 6e35e13c2022..399fe9103f83 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/kmem_cache_iter.c
+@@ -104,11 +104,8 @@ void test_kmem_cache_iter(void)
+ 	if (!ASSERT_GE(iter_fd, 0, "iter_create"))
+ 		goto destroy;
  
--#define MAX_BACKTRACE_SZ 128
--void crash_handler(int signum)
-+static void dump_crash_log(void)
+-	memset(buf, 0, sizeof(buf));
+-	while (read(iter_fd, buf, sizeof(buf)) > 0) {
+-		/* Read out all contents */
+-		printf("%s", buf);
+-	}
++	while (read(iter_fd, buf, sizeof(buf)) > 0)
++		; /* Read out all contents */
+ 
+ 	/* Next reads should return 0 */
+ 	ASSERT_EQ(read(iter_fd, buf, sizeof(buf)), 0, "read");
+diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c b/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c
+index 3bc730b7c7fa..1b25d5c5f8fb 100644
+--- a/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c
++++ b/tools/testing/selftests/bpf/prog_tests/lwt_seg6local.c
+@@ -117,7 +117,7 @@ void test_lwt_seg6local(void)
+ 	const char *ns1 = NETNS_BASE "1";
+ 	const char *ns6 = NETNS_BASE "6";
+ 	struct nstoken *nstoken = NULL;
+-	const char *foobar = "foobar";
++	const char foobar[] = "foobar";
+ 	ssize_t bytes;
+ 	int sfd, cfd;
+ 	char buf[7];
+diff --git a/tools/testing/selftests/bpf/prog_tests/verifier_log.c b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+index 8337c6bc5b95..aaa2854974c0 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verifier_log.c
++++ b/tools/testing/selftests/bpf/prog_tests/verifier_log.c
+@@ -47,7 +47,7 @@ static int load_prog(struct bpf_prog_load_opts *opts, bool expect_load_error)
+ static void verif_log_subtest(const char *name, bool expect_load_error, int log_level)
  {
--	void *bt[MAX_BACKTRACE_SZ];
--	size_t sz;
--
--	sz = backtrace(bt, ARRAY_SIZE(bt));
--
- 	fflush(stdout);
- 	stdout = env.stdout_saved;
- 	stderr = env.stderr_saved;
-@@ -1277,12 +1271,32 @@ void crash_handler(int signum)
- 		env.test_state->error_cnt++;
- 		dump_test_log(env.test, env.test_state, true, false, NULL);
- 	}
-+}
-+
-+#define MAX_BACKTRACE_SZ 128
-+
-+void crash_handler(int signum)
-+{
-+	void *bt[MAX_BACKTRACE_SZ];
-+	size_t sz;
-+
-+	sz = backtrace(bt, ARRAY_SIZE(bt));
-+
-+	dump_crash_log();
-+
- 	if (env.worker_id != -1)
- 		fprintf(stderr, "[%d]: ", env.worker_id);
- 	fprintf(stderr, "Caught signal #%d!\nStack trace:\n", signum);
- 	backtrace_symbols_fd(bt, sz, STDERR_FILENO);
- }
- 
-+#ifdef __SANITIZE_ADDRESS__
-+void __asan_on_error(void)
-+{
-+	dump_crash_log();
-+}
-+#endif
-+
- void hexdump(const char *prefix, const void *buf, size_t len)
- {
- 	for (int i = 0; i < len; i++) {
-@@ -1944,13 +1958,15 @@ int main(int argc, char **argv)
- 		.parser = parse_arg,
- 		.doc = argp_program_doc,
- 	};
-+	int err, i;
-+
-+#ifndef __SANITIZE_ADDRESS__
- 	struct sigaction sigact = {
- 		.sa_handler = crash_handler,
- 		.sa_flags = SA_RESETHAND,
--		};
--	int err, i;
--
-+	};
- 	sigaction(SIGSEGV, &sigact, NULL);
-+#endif
- 
- 	env.stdout_saved = stdout;
- 	env.stderr_saved = stderr;
+ 	LIBBPF_OPTS(bpf_prog_load_opts, opts);
+-	char *exp_log, prog_name[16], op_name[32];
++	char *exp_log, prog_name[24], op_name[32];
+ 	struct test_log_buf *skel;
+ 	struct bpf_program *prog;
+ 	size_t fixed_log_sz;
 -- 
 2.53.0
 
