@@ -1,268 +1,248 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72653339B32
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 17:56:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771869402; cv=pass; b=r986TRHMZ+zREpfey67bmmJbFM4dG/vOcCJSEYbEdO0YfJ+QLh64qxfmQ5i1BYql8DpRQlcLmVimEHnPpbwblc4GKvUcTiXmHnsTql3MRBX1Mfb9IWiA4OQYc/sdhI9s1XFqeRNQKRVmy6uFs49in81UabSXBJmgwemFXrWVJ30=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771869402; c=relaxed/simple;
-	bh=ENA80e9r6CpQnbmQ6frhmvh5gnbE0k7YAwHUVhp8KCs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o0HlU/WN/QXcU5cjTL9uQHIX7zsgsQeTUQ9TTslCSAytYI1Svmnp6arHJ8BielbaWZ+u6sjKQB0d7+l92On3Gk2WXgPbO6fXurDzUkMFw6Ijp7mxx8Uj5MuYspe4JXxJh2T9CqmhMJzUflBkuHpVz7mqaM3jhtX4qDFaKN/JinU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FuJYFcYp; arc=pass smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE7533986D
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 17:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771869548; cv=none; b=AmMMGQv1foV9L0ehkxAnPmJdEVY+PEQ62HRTLftafuh+5MLSQD2p52WcED8gDZtnJh7Vb8HWyKX+fUL04XG6wF78gW4QAfelHaOM/L8NRG6RCileeG1uGUh6oppM/uJEbRzYSOO3y5N3KfPgzfTc61PaR1Qeff7xy/M9qhV3bKY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771869548; c=relaxed/simple;
+	bh=Ytr5JbLh0vlwWhuTr+MZ+p6RrnYDndVaGbBTX2pbsu0=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=NOVC6nRPTvpWp41yNlBxh7hJnEQnTqAcMVRLhk7HjyjYREDNwVGBb7UBO91Eoj3d4SGxgAvs7yZ5vhiBi8xl267BveE9CCylmCzMSyU+6fAmySJfSb8TU2+ho7uMoAsRG7mL2LMEonSyvzYonVedhwCVN6lf8N58xYZGCWc3RQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dRrdt9bj; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FuJYFcYp"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2a79ded11a2so31132125ad.3
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 09:56:41 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771869401; cv=none;
-        d=google.com; s=arc-20240605;
-        b=XjcNYzqNfYoGlLUFKwAetu8jZQ2xNDy+C5G7kUFPYA7CMN7YgtBV0JgdmC4DtuGGBf
-         e2maGmHn7ia+XUlHBvCFJ3CWJ3kVXN5iiX2GiSJZtyc3T+87pDVhHiCaMd+Zpxcw0TyQ
-         j6SsZTCcyU80ClVsCBzmQpRvREEMKD6KWYV1YABffaMSdSiRP4aL9oHpBtmY6cf48W7S
-         8NxrcMB3tTaaX8bTWS6plZ+Elq2MfgzzXhEhWdmQZCb64vhPK7rM2nD313Thtc9JXNP4
-         YiAUWuTgYLfa0ArV5d9uoueYjSrFnGpvRVodpx+E/Qb86jbbAhT5ecpQtG3bCZjwq4tj
-         s6iA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=3ogFf5HfvvIUhdm3leLHNLvU0UQQ4biePEsEMND3YA8=;
-        fh=ruRytyp1U3/Twvapv5y1mA5yA1sI6j9rkfCvopNa1BY=;
-        b=e2fqftGM+LURlDoznrDtP9d+S1zQ0MAGazb+R6Ii3TJY/CbSI+aDt0AwFy/9GLxUk2
-         3Ap94RjrfYRZXN8hxcxii6BKcOuUEfiuN0zwoXqYekbQx/NOEJSjzxhtyp2vDbFvG7IJ
-         J2h749sBfLH5Mmlvz+05spHDIRIaCQjdcDG2vrmW7h5LBFiBnNedll3qj+aepSxv09oh
-         DDlnPr0F2sFeUzwVXldLypczYkgIgxSdt7bfgZChVdTh127S2/w+gEfT2X9Z7ig28IYJ
-         /LYJX0RbDhW7MVk1VpLRsFqVXGyIkj/xFtmp8GeZ5UFmXShczqAXc6+sowEq2Yutqvbt
-         GQiw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dRrdt9bj"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-4376acce52eso2893121f8f.1
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 09:59:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771869401; x=1772474201; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3ogFf5HfvvIUhdm3leLHNLvU0UQQ4biePEsEMND3YA8=;
-        b=FuJYFcYpv6uPyaur4QgtTuMdYW0Kqwm8AlByLHw/FTeYJ4xxBZpEeX76eoJnnVkslD
-         riP0FUiFhbyv0n1onmwsvHinczfeX8DecewqBfvqDG8UmHMMV3mHR2/8de2AJsG8DLzr
-         SGJj5G3246MO1ddql6H24ZhcIYyKpbI684G/IFnY2UYmy5WgbnYEWcXuFxZpjUsIemL1
-         +b7u+hIgTqVJ9cBovuw9iYgKwtKJwkYhvwGat/LERAKpEZM/1lY+PQN1SiUPUDGFbEjX
-         rP83wyRDycVzN0p/NmZn8L2y7uW24aL0LSRzHlxtcYzZue3VQ/DFzziuZgBhXZNZxJoI
-         6x7A==
+        d=gmail.com; s=20230601; t=1771869545; x=1772474345; darn=vger.kernel.org;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+fq60hVWJ0M4t3xbnR9qhGWSI++dn5Iz5WOr+/RkQS8=;
+        b=dRrdt9bjWcwlXn085FdeHLNJE+EBeGAUlL+4UWjm6t7k8Ot256OMzkL98a2s4T5xZD
+         pwUFS0gSIioL+vyTXqH4DUeuo3d/89yQzZot/4WtgKQ3fg3aFTkAdGqdH4VWe6EFXWXm
+         l9ZSZZVsIrRrTbsNHPh/aorwfyUzINFOtWxZYbMgj2rVdrmeCskOQLnzuR9x+LJTsE4e
+         Lx0cQMiRU+rpmnW6XJDCpwhcLVX+AeSqrr9WRf0Fl8GmR37nIqvA8kJDxY/g2Nahi0vW
+         eqk457Zr9/egxjWIDr5Arb9r34FQGjxlwa3fiVVPlGUHdVvtF5ON5WaWmzmsxkrWNJ7d
+         Lotw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771869401; x=1772474201;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=3ogFf5HfvvIUhdm3leLHNLvU0UQQ4biePEsEMND3YA8=;
-        b=q88FXVs/36aGlyxMCX40tm/xyC0U6TV0FY7KRrn1RuIJNy41vblZWgHwyLLYcjO6/k
-         KkWn5m/T4FrsLimcFovtILmzQwqipDzzddmbjD1g6CvSxs+EKW5XkBiATZDCVDHba6A/
-         YSgD9/mvuQjSq/BdjZ3fjUuMjnUGUrSfpVyERGO54teOv2zQnOnpsYilN+Go6DTWRI7U
-         CaRDyvI4hSNcYUP9CX4pJo5NfXjOBAH3pGQtzOlBkn8M8Tz2lgha7mVQBK36VkfNDn8s
-         iu3XAAa+KPAS3JZV6XmumjNW30cuRs3FtAcrhfuToXShU4q0VsgG+oEXSQbLAFHfd1H/
-         42fQ==
-X-Gm-Message-State: AOJu0Yz81IFDrx7Dz3iF8uiELQtdDttREk61t3TG5O8BQn6CvPQCaBhl
-	WZuu6p67X34DrnX1MphxQA9WqUVAcLbd8BWPhJWtHTKfHXbTak1SII+bh0Ror//kdYq7wCw15PZ
-	O5Z14+fgdZvJpWIOmQlgEwFVtcjffVlI=
-X-Gm-Gg: ATEYQzxKlpUymSCiHS0NWrDLd7XAqlVke8QCaEq0YgNoYqA+/R5Y9X9YT/QxeFv2412
-	FmBApM+/veGc+RWloZpNrHwdbsJVgumCR+IHpWgczHa2xDClOdeQgnZEA+8h3lmTK4glrh59fR3
-	gtoEW9JmCVVnFUt9qMJJbaLupm6vuknPuEGTcCL8jtfhViQ7hu4N7iiJxxBbkbtxrESDPPee3/I
-	t3PODr2z2e1cLKnoU5C7RNv2TS0FYw2w5zjhRPF4rkXnxTnaCT0+UKOwsf9Lqf+5ksjKYb8go+G
-	IgqK++zp+4kNprupEd+Y2QQ=
-X-Received: by 2002:a17:903:4b30:b0:2aa:e415:589c with SMTP id
- d9443c01a7336-2ad745675admr71834955ad.55.1771869400591; Mon, 23 Feb 2026
- 09:56:40 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771869545; x=1772474345;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+fq60hVWJ0M4t3xbnR9qhGWSI++dn5Iz5WOr+/RkQS8=;
+        b=sztn9cNV1jxgL9XfYOQjCOmnUMBb7znI6ccs6paqzeDp+nbA3hfrMVRHBlcICpVo44
+         Nwq1bj0MAl/TpFHKogZ2t9khc7JdG3dkj4GY8BTiViByHI6JmLNjUlzLmlsqU1g19tAW
+         gebDnQWYUdExcJuo97XnTUfRr1Ji81WpgP9+tzt3Oiu7v5Oxd8NxN9OCXreagK2mzpev
+         8BJM7sEgNwjHK+rjhbwuExDTXcNn1xeal082nm6tjAt5NeQD8LWivue2dFsDQlNuQQvU
+         DEfqv+PrgGqguqDF/gcNM0JVW2O3bwj7KwwGznMjx7iMrFugYKUxzqDoQnTb+gn+Zx5T
+         emHA==
+X-Forwarded-Encrypted: i=1; AJvYcCXnukCsaPIc/zUYKnQFoM8doOUyig8dJX1+SLZN5/SYa4y6VGoDe+DamUNutuuiORd82Iw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtecmB5r9iTxlBOyF8DRRZ8HGFbkXWolv9bO6Gm054bGD6CcDB
+	YsiOcyzfyb8Vs5qf1AiNeOIyI803p4BEFgeaFuDGMkSMk2B0XOwF14aS
+X-Gm-Gg: ATEYQzzrn394xuAqzdKBRibENbKpTsYZ4ZGWeG9pf+rOETs5UdG0bOMjGkx1PH7t/L+
+	NB/DRClywOAwwmbMdc5B+3Ggor/7X3XwwcD0R4dp07ZBfZM+84ki8L/s2kz4aofBotLA9LHJx/+
+	hQS5XHEgvjZosDIr1ZYHAiM0CzmrrtcR0Ot/ujNoiNm+jdLSEaDpZ++8LXTaV/5DDnFJhjYcDDd
+	bqzUnYe+E4sGl6kXKinSlOCL8YFZzA4fcdyJS2KiRPBY9Pgm4kdBHSyDfMGHBZv8laezMNQanki
+	vN37Z7afF9SXbVKri2WjyFILfuvXDMcAe2z62IxfMiEXVEdtXvR1I2Wnxcrj/GDffiiQiKtPSGJ
+	K81lAgsrd0kGEMxL6gfFq6Kcx/4KMMgoSD1eQQFWjdTECy0NvnZbXy3uO7qrcKOk7BGIZRTpMtv
+	5ksWzajEb9CMbNkqOl2VY=
+X-Received: by 2002:a05:6000:288e:b0:437:a49:137c with SMTP id ffacd0b85a97d-4396f153b4amr18790012f8f.3.1771869544799;
+        Mon, 23 Feb 2026 09:59:04 -0800 (PST)
+Received: from localhost ([2620:10d:c092:600::1:3fd5])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970d4c95dsm22346865f8f.33.2026.02.23.09.59.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Feb 2026 09:59:04 -0800 (PST)
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org,
+ ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
+ kernel-team@meta.com, eddyz87@gmail.com
+Cc: Mykyta Yatsenko <yatsenko@meta.com>
+Subject: Re: [PATCH bpf-next v2 1/2] libbpf: Introduce bpf_program__clone()
+In-Reply-To: <DGMIM8SH2Q43.1I9LNNV1X34KB@etsalapatis.com>
+References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
+ <20260220-veristat_prepare-v2-1-15bff49022a7@meta.com>
+ <DGMIM8SH2Q43.1I9LNNV1X34KB@etsalapatis.com>
+Date: Mon, 23 Feb 2026 17:59:03 +0000
+Message-ID: <877bs3cpeg.fsf@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1771625484.git.josef@toxicpanda.com> <c0c2c805042fe889daca6dd43b86ba5e18725021.1771625484.git.josef@toxicpanda.com>
- <CAEf4BzYbyyAMnRo0Kb8K7D19+CUSANkOWnByX3BZdEase46ZDw@mail.gmail.com> <CAEf4BzZ7tNJG4ex-2oh3zH2fGy9iVtTEimV_pJxj4ZiEBfv1KA@mail.gmail.com>
-In-Reply-To: <CAEf4BzZ7tNJG4ex-2oh3zH2fGy9iVtTEimV_pJxj4ZiEBfv1KA@mail.gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 23 Feb 2026 09:56:27 -0800
-X-Gm-Features: AaiRm51BzZj-jvNK4ni_7TFUjutZxiVAazE2172FA0v1KtC8xr-sQuRjhfIN8m4
-Message-ID: <CAEf4BzZonog2HTTCQ58D9JzP0+ecSLRfrQUXbCOQ_OLabhWzxw@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] libbpf: support appending split BTF in btf__add_btf()
-To: Josef Bacik <josef@toxicpanda.com>
-Cc: bpf@vger.kernel.org, "Claude Opus 4.6" <noreply@anthropic.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Mon, Feb 23, 2026 at 9:55=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Feb 23, 2026 at 9:52=E2=80=AFAM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Fri, Feb 20, 2026 at 2:44=E2=80=AFPM Josef Bacik <josef@toxicpanda.c=
-om> wrote:
-> > >
-> > > btf__add_btf() currently rejects split BTF sources with -ENOTSUP.
-> > > This prevents merging types from multiple kernel module BTFs that
-> > > are all split against the same vmlinux base.
-> > >
-> > > Extend btf__add_btf() to handle split BTF sources by:
-> > >
-> > > - Replacing the blanket -ENOTSUP with a validation that src and dst
-> > >   share the same base BTF pointer when both are split.
-> > >
-> > > - Computing src_start_id from the source's base to distinguish base
-> > >   type ID references (which must remain unchanged) from split type
-> > >   IDs (which must be remapped to new positions in the destination).
-> > >
-> > > - Using src_btf->nr_types instead of btf__type_cnt()-1 for the type
-> > >   count, which is correct for both split and non-split sources.
-> > >
-> > > - Pre-emptively calling btf_ensure_modifiable() on the destination's
-> > >   base BTF to prevent a use-after-free: btf_rewrite_str() resolves
-> > >   strings via btf__str_by_offset(src) which may return pointers into
-> > >   the shared base's string data; btf__add_str(dst) then calls
-> > >   btf__find_str(base) which can trigger btf_ensure_modifiable(base),
-> > >   reallocating that string data and invalidating the pointer.
-> > >
-> > > For non-split sources the behavior is identical: src_start_id is 1,
-> > > the type_id < 1 guard is never true (VOID is already skipped), and
-> > > the remapping formula reduces to the original.
-> > >
-> > > Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-> > > Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-> > > ---
-> > >  tools/lib/bpf/btf.c | 44 ++++++++++++++++++++++++++++++++++++-------=
--
-> > >  1 file changed, 36 insertions(+), 8 deletions(-)
-> > >
-> > > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > > index 83fe79ffcb8f..654fb9ffa01f 100644
-> > > --- a/tools/lib/bpf/btf.c
-> > > +++ b/tools/lib/bpf/btf.c
-> > > @@ -2004,24 +2004,47 @@ int btf__add_btf(struct btf *btf, const struc=
-t btf *src_btf)
-> > >  {
-> > >         struct btf_pipe p =3D { .src =3D src_btf, .dst =3D btf };
-> > >         int data_sz, sz, cnt, i, err, old_strs_len;
-> > > +       __u32 src_start_id;
-> > >         __u32 *off;
-> > >         void *t;
-> > >
-> > > -       /* appending split BTF isn't supported yet */
-> > > -       if (src_btf->base_btf)
-> > > -               return libbpf_err(-ENOTSUP);
-> > > +       /* When appending split BTF, the destination must share the s=
-ame base
-> > > +        * BTF so that base type ID references remain valid.
-> > > +        */
-> > > +       if (src_btf->base_btf &&
-> > > +           src_btf->base_btf !=3D btf->base_btf)
-> > > +               return libbpf_err(-EINVAL);
-> >
-> > let's make it -EOPNOTSUPP (ENOTSUP is not a public error, so let's use
-> > the proper one), it can still be meaningfully supported if bases are
-> > different, we'd just need to add types from base and split parts, and
-> > shift all type IDs (but no use case right now)
-> >
-> > > +
-> > > +       src_start_id =3D src_btf->base_btf ? btf__type_cnt(src_btf->b=
-ase_btf) : 1;
-> > >
-> > >         /* deconstruct BTF, if necessary, and invalidate raw_data */
-> > >         if (btf_ensure_modifiable(btf))
-> > >                 return libbpf_err(-ENOMEM);
-> > >
-> > > +       /* If dst has a base BTF, ensure it is modifiable now so that
-> > > +        * btf__str_by_offset() on the base returns pointers from the
-> > > +        * strset copy rather than from raw_data.
-> > > +        *
-> > > +        * Without this, the first btf_rewrite_str() call that encoun=
-ters
-> > > +        * a base string offset resolves it via btf__str_by_offset(sr=
-c),
-> > > +        * which for split src returns a pointer into base->raw_data.
-> > > +        * That pointer is then passed to btf__add_str(dst), which ca=
-lls
-> > > +        * btf__find_str(base) -> btf_ensure_modifiable(base).  The
-> > > +        * first btf_ensure_modifiable() call copies strings into a
-> > > +        * strset but then frees raw_data via btf_invalidate_raw_data=
-(),
-> > > +        * leaving the pointer dangling before strset__find_str() use=
-s
-> > > +        * it.
-> > > +        */
-> >
-> > This is very surprising behavior, tbh... Base BTF should stay
-> > immutable, we never modify it. It seems like we switch to modifiable
-> > mode for base (implicitly) just to be able to find string by contents
-> > efficiently, which is just a side-effect.
-> >
-> > Anyways, instead of this, can't we just detect that str_off we are
-> > trying to remap is coming from an immutable base BTF, and pass it
-> > through? That would be also more efficient, IMO.
-> >
-> > > +       if (btf->base_btf && btf_ensure_modifiable(btf->base_btf))
-> > > +               return libbpf_err(-ENOMEM);
-> > > +
-> > >         /* remember original strings section size if we have to roll =
-back
-> > >          * partial strings section changes
-> > >          */
-> > >         old_strs_len =3D btf->hdr->str_len;
-> > >
-> > >         data_sz =3D src_btf->hdr->type_len;
-> > > -       cnt =3D btf__type_cnt(src_btf) - 1;
-> > > +       cnt =3D src_btf->nr_types;
-> > >
-> > >         /* pre-allocate enough memory for new types */
-> > >         t =3D btf_add_type_mem(btf, data_sz);
-> > > @@ -2074,11 +2097,16 @@ int btf__add_btf(struct btf *btf, const struc=
-t btf *src_btf)
-> > >                         if (!*type_id) /* nothing to do for VOID refe=
-rences */
-> > >                                 continue;
-> > >
-> > > -                       /* we haven't updated btf's type count yet, s=
-o
-> > > -                        * btf->start_id + btf->nr_types - 1 is the t=
-ype ID offset we should
-> > > -                        * add to all newly added BTF types
-> > > +                       /* For split BTF sources, type IDs referencin=
-g the
-> > > +                        * base BTF (< src_start_id) remain unchanged=
- since
-> > > +                        * dst shares the same base.  Only remap IDs =
-in the
-> > > +                        * split portion.  For non-split sources src_=
-start_id
-> > > +                        * is 1 so all IDs are remapped as before.
-> > >                          */
-> > > -                       *type_id +=3D btf->start_id + btf->nr_types -=
- 1;
-> > > +                       if (*type_id < src_start_id)
-> > > +                               continue;
-> >
-> > see, just like here: you know type is from immutable base, and doesn't
-> > need remapping, we can do the same with string offsets
-> >
-> > pw-bot: cr
->
-> oh, and let's please have a test for this case of adding split BTF
-> with the same base?
->
+"Emil Tsalapatis" <emil@etsalapatis.com> writes:
 
-doh, brain farted, there is a self test in patch #3, ignore me
+> On Fri Feb 20, 2026 at 2:18 PM EST, Mykyta Yatsenko wrote:
+>> From: Mykyta Yatsenko <yatsenko@meta.com>
+>>
+>> Add bpf_program__clone() API that loads a single BPF program from a
+>> prepared BPF object into the kernel, returning a file descriptor owned
+>> by the caller.
+>>
+>> After bpf_object__prepare(), callers can use bpf_program__clone() to
+>> load individual programs with custom bpf_prog_load_opts, instead of
+>> loading all programs at once via bpf_object__load(). Non-zero fields in
+>> opts override the defaults derived from the program and object
+>> internals; passing NULL opts populates everything automatically.
+>>
+>> Internally, bpf_program__clone() resolves BTF-based attach targets
+>> (attach_btf_id, attach_btf_obj_fd) and the sleepable flag, fills
+>> func/line info, fd_array, license, and kern_version from the
+>> prepared object before calling bpf_prog_load().
+>>
+>> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+>> ---
+>>  tools/lib/bpf/libbpf.c   | 64 ++++++++++++++++++++++++++++++++++++++++++++++++
+>>  tools/lib/bpf/libbpf.h   | 17 +++++++++++++
+>>  tools/lib/bpf/libbpf.map |  1 +
+>>  3 files changed, 82 insertions(+)
+>>
+>
+> The code looks in order, one issue below.
+>
+>> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+>> index 0c8bf0b5cce4..4b084bda3f47 100644
+>> --- a/tools/lib/bpf/libbpf.c
+>> +++ b/tools/lib/bpf/libbpf.c
+>> @@ -9793,6 +9793,70 @@ __u32 bpf_program__line_info_cnt(const struct bpf_program *prog)
+>>  	return prog->line_info_cnt;
+>>  }
+>>  
+>> +int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts *opts)
+>> +{
+>> +	LIBBPF_OPTS(bpf_prog_load_opts, attr);
+>> +	struct bpf_prog_load_opts *pattr = &attr;
+>> +	struct bpf_object *obj;
+>> +	int err, fd;
+>> +
+>> +	if (!prog)
+>> +		return libbpf_err(-EINVAL);
+>> +
+>> +	if (!OPTS_VALID(opts, bpf_prog_load_opts))
+>> +		return libbpf_err(-EINVAL);
+>> +
+>> +	obj = prog->obj;
+>> +	if (obj->state < OBJ_PREPARED)
+>> +		return libbpf_err(-EINVAL);
+>> +
+>> +	/* Copy caller opts, fall back to prog/object defaults */
+>> +	OPTS_SET(pattr, expected_attach_type,
+>> +		 OPTS_GET(opts, expected_attach_type, 0) ?: prog->expected_attach_type);
+>> +	OPTS_SET(pattr, attach_btf_id, OPTS_GET(opts, attach_btf_id, 0) ?: prog->attach_btf_id);
+>> +	OPTS_SET(pattr, attach_btf_obj_fd,
+>> +		 OPTS_GET(opts, attach_btf_obj_fd, 0) ?: prog->attach_btf_obj_fd);
+>> +	OPTS_SET(pattr, attach_prog_fd, OPTS_GET(opts, attach_prog_fd, 0) ?: prog->attach_prog_fd);
+>> +	OPTS_SET(pattr, prog_flags, OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags);
+>> +	OPTS_SET(pattr, prog_ifindex, OPTS_GET(opts, prog_ifindex, 0) ?: prog->prog_ifindex);
+>> +	OPTS_SET(pattr, kern_version, OPTS_GET(opts, kern_version, 0) ?: obj->kern_version);
+>> +	OPTS_SET(pattr, fd_array, OPTS_GET(opts, fd_array, NULL) ?: obj->fd_array);
+>> +	OPTS_SET(pattr, token_fd, OPTS_GET(opts, token_fd, 0) ?: obj->token_fd);
+>> +	if (attr.token_fd)
+>> +		attr.prog_flags |= BPF_F_TOKEN_FD;
+>> +
+>> +	/* BTF func/line info */
+>> +	if (obj->btf && btf__fd(obj->btf) >= 0) {
+>> +		OPTS_SET(pattr, prog_btf_fd, OPTS_GET(opts, prog_btf_fd, 0) ?: btf__fd(obj->btf));
+>> +		OPTS_SET(pattr, func_info, OPTS_GET(opts, func_info, NULL) ?: prog->func_info);
+>> +		OPTS_SET(pattr, func_info_cnt,
+>> +			 OPTS_GET(opts, func_info_cnt, 0) ?: prog->func_info_cnt);
+>> +		OPTS_SET(pattr, func_info_rec_size,
+>> +			 OPTS_GET(opts, func_info_rec_size, 0) ?: prog->func_info_rec_size);
+>> +		OPTS_SET(pattr, line_info, OPTS_GET(opts, line_info, NULL) ?: prog->line_info);
+>> +		OPTS_SET(pattr, line_info_cnt,
+>> +			 OPTS_GET(opts, line_info_cnt, 0) ?: prog->line_info_cnt);
+>> +		OPTS_SET(pattr, line_info_rec_size,
+>> +			 OPTS_GET(opts, line_info_rec_size, 0) ?: prog->line_info_rec_size);
+>> +	}
+>> +
+>> +	OPTS_SET(pattr, log_buf, OPTS_GET(opts, log_buf, NULL));
+>> +	OPTS_SET(pattr, log_size, OPTS_GET(opts, log_size, 0));
+>> +	OPTS_SET(pattr, log_level, OPTS_GET(opts, log_level, 0));
+>> +
+>
+> Can we make it so that cloning  prepared but not loaded programs does
+> not load them? The name of the method itself implies the new instance is
+> identical to the old one, which is not the case - we're currently
+> loading the cloned program even if the original is not loaded. I don't 
+> see why for OBJ_PREPARED progrmas this shouldn't be explicitly done by the 
+> caller with bpf_prog_load() instead.
+Mekes sense, but there are few problems:
+we won't be cloning a program, but rather it's
+attributes (struct bpf_prog_load_opts); I don't think we can do true
+cloning with returning a new struct bpf_program.
 
-> >
-> > > +
-> > > +                       *type_id +=3D btf->start_id + btf->nr_types -=
- src_start_id;
-> > >                 }
-> > >
-> > >                 /* go to next type data and type offset index entry *=
-/
-> > > --
-> > > 2.53.0
-> > >
-> > >
+So the best we can do is to change to something like
+bpf_program__clone_attrs() (or bpf_program__load_attrs()) then in
+veristat do:
+
+attrs = bpf_program__clone_attrs(prog)
+bpf_prog_load(bpf_program__insn(prog), attrs)
+
+Let's see what option maintainers prefer.
+>
+> If we do make it so that the cloned program's obj->state is identical to the
+> original's let's also add a test that checks that.
+>
+>> +	/* Resolve BTF attach targets, set sleepable/XDP flags, etc. */
+>> +	if (prog->sec_def && prog->sec_def->prog_prepare_load_fn) {
+>> +		err = prog->sec_def->prog_prepare_load_fn(prog, pattr, prog->sec_def->cookie);
+>> +		if (err)
+>> +			return libbpf_err(err);
+>> +	}
+>> +
+>> +	fd = bpf_prog_load(prog->type, prog->name, obj->license, prog->insns, prog->insns_cnt,
+>> +			   pattr);
+>> +
+>> +	return libbpf_err(fd);
+>> +}
+>> +
+>>  #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
+>>  	.sec = (char *)sec_pfx,						    \
+>>  	.prog_type = BPF_PROG_TYPE_##ptype,				    \
+>> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
+>> index dfc37a615578..0be34852350f 100644
+>> --- a/tools/lib/bpf/libbpf.h
+>> +++ b/tools/lib/bpf/libbpf.h
+>> @@ -2021,6 +2021,23 @@ LIBBPF_API int libbpf_register_prog_handler(const char *sec,
+>>   */
+>>  LIBBPF_API int libbpf_unregister_prog_handler(int handler_id);
+>>  
+>> +/**
+>> + * @brief **bpf_program__clone()** loads a single BPF program from a prepared
+>> + * BPF object into the kernel, returning its file descriptor.
+>> + *
+>> + * The BPF object must have been previously prepared with
+>> + * **bpf_object__prepare()**. If @opts is provided, any non-zero field
+>> + * overrides the defaults derived from the program/object internals.
+>> + * If @opts is NULL, all fields are populated automatically.
+>> + *
+>> + * The returned FD is owned by the caller and must be closed with close().
+>> + *
+>> + * @param prog BPF program from a prepared object
+>> + * @param opts Optional load options; non-zero fields override defaults
+>> + * @return program FD (>= 0) on success; negative error code on failure
+>> + */
+>> +LIBBPF_API int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts *opts);
+>> +
+>>  #ifdef __cplusplus
+>>  } /* extern "C" */
+>>  #endif
+>> diff --git a/tools/lib/bpf/libbpf.map b/tools/lib/bpf/libbpf.map
+>> index d18fbcea7578..e727a54e373a 100644
+>> --- a/tools/lib/bpf/libbpf.map
+>> +++ b/tools/lib/bpf/libbpf.map
+>> @@ -452,6 +452,7 @@ LIBBPF_1.7.0 {
+>>  		bpf_map__set_exclusive_program;
+>>  		bpf_map__exclusive_program;
+>>  		bpf_prog_assoc_struct_ops;
+>> +		bpf_program__clone;
+>>  		bpf_program__assoc_struct_ops;
+>>  		btf__permute;
+>>  } LIBBPF_1.6.0;
