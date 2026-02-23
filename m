@@ -1,73 +1,73 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2AD7283FC3
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 14:12:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1260D286419
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 14:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771855934; cv=none; b=MyJ1qpRtSmVurdOTqZ3m0pnTeXSGn+OagFTjI71PH2afPC4tpALC6XlerG5tbFCnJqooHaVzskI6XUy+mEmA9t0qTqYMD77qZaGdfqcnYN2b4tOxDcdQtjZfkiyPyP/rMwOe4CEi/ZNhPn7t8maNViFa5xMFWuGPO8VkHNph6pI=
+	t=1771855935; cv=none; b=GNmg3+7K3QhmRsFco+hhpwfPcTQNozdzBnblTUp40QpWLoh5bJ8tpVS1iXCun/xy5KNSVEdINkPyqVkLJwAA4pg07f3iV6GFcrQ6PZXKidFOUT2iCALkc65O0jsiloXlSdiE3i8x/ZTJKsaRDvGJT4iVrdgjDWQ4bYFKt/8SALU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771855934; c=relaxed/simple;
-	bh=aTDQVecntenam5S7kU1weulGUTKGlTTsfnzGapduOIs=;
+	s=arc-20240116; t=1771855935; c=relaxed/simple;
+	bh=JcAht/qa/33o5T4UusYBavU6NZLX2xadKpFRFYm9xW0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JKwwDGxKoD1K9vYA2uUdZTFCCC1n+di9kwYID9vMGWRedAVENKWW8yGpYNP+THN66p1DKtWlotvlZ/0Wa99HyknlIHUkS8uYcjWCixa4w6pnRkoLMY+ckEPqFX9wyDVktKezCncVfKMsfkHYYcV0ZBIKC06jiMEKciCCgmXMAsY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C0UxnODx; arc=none smtp.client-ip=209.85.128.50
+	 MIME-Version; b=WzPHfTnxosXvOHw0lv+QBuomto0u4erfNq9pTEPN5y7AVLii1QjDmTR4i0imoYETWp+EgUVavhs7s2hbImUJIti50+iYKE4vQ+GoS8N86dUEEHjwaCGeNP2T7rvc5VKi4BnwopAfS+MKAqy/+yr4FWIrPJGznUs+7hbHTVATy74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ddFZqdI3; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C0UxnODx"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4836d4c26d3so38467105e9.2
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 06:12:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ddFZqdI3"
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso32142395e9.1
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 06:12:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771855931; x=1772460731; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771855932; x=1772460732; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SBP6e52KEPK+2NDEKlDHrJpbPjaEvsvQBokttYVMRUI=;
-        b=C0UxnODxgRA8s6PraPAukB1V1u5mZmgCODhUhrgEbIK87OJhqIN7R9QSAdV8G279h/
-         Lj/3KKkWiFoUAQguU1tyg7Ut0Mz0JhcvmqCmQikiM0LaOanhjf8Ahf9tlUrsXxHX1NJK
-         JoEwaESOirZ3+yFR5pyOvFIk5LsX2PxEuEA+W1F38t/JkZ/GZyX0LL26iTPvCjzM/9+A
-         AAXo5CsuMepP5RbSudx5TH444vCL/cUi7yimhSsxp5GClygAUwH41N4i1eALxsrI+K08
-         9ZY2I9W/iyLa9RkuL6OiVMZqBZDuyw8yYfbN1s4wUEyMu1j3QUP2/krNjQGwyvyUnbuz
-         5yRQ==
+        bh=XX4kuF2xTkbALeEIGcpADsbj7jTldz4sBZ4UTLDJrhg=;
+        b=ddFZqdI3so5g71j3bokeRCZa1HSU6lQGo9rwqcjc+gH0a3vzVpPN6JN+EAC7imXj7K
+         FDu+4T6SUaSRzVZKURZeRMhn7jra6gl8lX2ZgObdOdCgAYFTwpM2i/UZR2cSEUJKKRfq
+         sHQA9WExNScboYsMdddnfXSC6BuXUjbqfxK/+YLDsh/owt1XuRP6u4E4hsbmlH1vhS5i
+         Iin/3DzjyleOJZPMBU3ufSdGJOMGkNL/9edvNQtyImXvu3wz4ArG39whaumFobKsH38a
+         GH77E/Xl8o3VixS26aJr0VASomM9PvIIpIX4ru9AWpkxGxk7Wr9IKOpKnk0iX89NILIv
+         4ndg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771855931; x=1772460731;
+        d=1e100.net; s=20230601; t=1771855932; x=1772460732;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=SBP6e52KEPK+2NDEKlDHrJpbPjaEvsvQBokttYVMRUI=;
-        b=r74+cEuibogLrHh+qWosGpjD+aNyakfxc1UkjqUjVYLPkIcZ6DeNIt09INmM3O3N6d
-         aKxrTo7rTKlUwzjL4CLeT1qrygI0Ath/WoIBrvdXMsXQkVgFNLQZbdcldtDtp0rjryLA
-         rj2CvcdHQ1CeBzF3RMv5T795K29g7JgKgeUkhVVcbAyVzzcnAtH214/ucZohWsjr2s/q
-         tF3S3/fIuwYm9NPh/Q7y6LcrRhmVU+voyVYslAyW7m8aPlUVGtCAgwCr670NVrcx2vha
-         f9yVeLdZ1cGGJGHOcTMny/IFxNZ97SqyqX4UXiHbTfe6UCUVfNSo2J/hz2+w4IZ9UwWy
-         et9A==
-X-Forwarded-Encrypted: i=1; AJvYcCVDchORzyMgIiSEhUiQoz5JCnQlqiPlKpe/QYpVoB/0vvKnVtrkt8xiV4UXlcUC7C4BMsQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYsPpsaGoJGyh6RoY0XlbOFQ5yu+RNfLIvuC5ZpUUiFUXxbqs5
-	iKMjs84nFrJOETMB7z75e8qOxDvkUyDMmb1oxoAgA9QjnPg2KYzIAj72
-X-Gm-Gg: AZuq6aJPLNMRMladBNvlaZG8zI4lZARFVQ8W/X+ZDVzKXcHTrLGArfkuMBNLmnXxUyH
-	EOkSvWAzBYyVgydHkiZTcpnKp9lnYMec0RBN+9ZG+X/dF0U2L9aPnjKQzU3KQlBHVNtL8BzRdzi
-	BPd8xjkGwPPQTNob8ckOyKCDhWYSso/7POZzHMckoA/zrZKXGodpBcOLmIbRs3sKQrgPJwmiKWW
-	PhGUo7Yubh3aZ5GTLl0JAc/WQYK1ZGA6pXwiD584RSyyEZnSGGzktoVWfiCLT6SURVXnJFBmPbc
-	FU3HXZbq6zUQLiHXDF3dxEztPOBJSsIhUV31B4O8As/1yxKuYTMt13W7OVF6tAWikEqXNhAGMiJ
-	fhcfRg8DYPFoFooFGxY/rgDxjjNUN0emwxJJbIlLQNvcXw54mJkPacKpu+ZvLjJN5CBRBjWMFYL
-	VC6zcmfBl3n2SkW6ZYXL05if4/xOa0dd3Mcma/u2j7FIzMIgUlOggilofPhDCdElcv/H8arbfws
-	PvM1gIdgntik61k6Kax
-X-Received: by 2002:a05:600c:470f:b0:46f:c55a:5a8d with SMTP id 5b1f17b1804b1-483a95a852cmr152754095e9.4.1771855930781;
-        Mon, 23 Feb 2026 06:12:10 -0800 (PST)
+        bh=XX4kuF2xTkbALeEIGcpADsbj7jTldz4sBZ4UTLDJrhg=;
+        b=ncWJPIDtmHI7L2YXtIMnFQlBTF8f2NKDpDcVx7Q0+T7h7r89m1xgdcxlhph9gpaTOA
+         uZ8V2AVj3f2iEOkxPHiZj7gNFP80cbIYB/RFdf01/ncIhn9/Vxc5l16iHO7gE4W5Bjzg
+         29+8LmUNCa8kgJ19sMdeMFz84TKLpuraydISfxkUVXT3kpwO2TMfCroOJacGb7scEKqC
+         FA6tGLmoZXHrIiE1KSZGypgIWCHptSn3p14IrRBaaUY3S0/Ldm9wBvsf1/zKEEof5BqZ
+         cggkoSjyRw3RS5gpwqvctWfPk3XFXHsPkrKDjNcfC8JJ/YI6g5FbluSGIHm2sKfLpl+w
+         woEg==
+X-Forwarded-Encrypted: i=1; AJvYcCXnq4aUe1jpu+EYsqF2/7WdU4BWTCHa5CDnSunBzg47tcuosLjgCEFUHrCg8DBYosT0OtM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6mZYh4dgO8wM8bgU6GHh3WIR8YSbOQCFA39ufqbme0BgumnCi
+	RGFkb2DInXWlOPtjPihxKeTQ6Gae11XW2MK+AX4GtAOwtMdksgJDrGUq
+X-Gm-Gg: AZuq6aJHo00MwN4Q9jlCVrF25FmEQyJrVpZgKo1RJmJb40GigkJKMIBtr0Jgj9/dMcw
+	2Zj7w5MUZri4sx7IB9yWjfexng9p99XSwtHLT347jqVKMlxhcSg28r7D0trKmrlqoVC8HgkkgCc
+	n1hIWZILlKLiA+lARhTgKzdAqZj3wydx7RqCgk3+KOHdnTOOEK/7Bpo1kGSybPxVpisCIZDBiWX
+	2US9+aC0FDNKarH1hBYWcnuazArgZGHhDPQ0iqmA0UAVYp75m7wWmUTXqcXJjEbLZUvLoL6f01I
+	KJUK8O4S2/2GvJw4KNEPence+xAE5orAPQLm/vqAhGChDRMCbXx6qOaOq2nqPxtDo8Ppap9CW9A
+	fTgqn6G+Y6DdD6I8uAjhhhcpdbdbxfDiHiyUQ/arQ8RIkdWvrylNDEy7xGKTHeGEFfeesoJdq+a
+	p0+Lm8LlSUFKYVNSx+N5sz6BX8nyV0+Teg13HneIZhKcF3NP7fyeCarQYC95jn7PLUvgDASwJSt
+	hidDM7AdA==
+X-Received: by 2002:a05:600c:5394:b0:480:6ab1:ed0d with SMTP id 5b1f17b1804b1-483a95b7180mr149325395e9.9.1771855932219;
+        Mon, 23 Feb 2026 06:12:12 -0800 (PST)
 Received: from 127.com ([2620:10d:c092:600::1:36ea])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31bc0e3sm247077275e9.5.2026.02.23.06.12.09
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31bc0e3sm247077275e9.5.2026.02.23.06.12.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 06:12:09 -0800 (PST)
+        Mon, 23 Feb 2026 06:12:11 -0800 (PST)
 From: Pavel Begunkov <asml.silence@gmail.com>
 To: io-uring@vger.kernel.org
 Cc: asml.silence@gmail.com,
 	bpf@vger.kernel.org,
 	axboe@kernel.dk,
 	Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Subject: [PATCH 2/3] io_uring/selftests: add rate limiter BPF program
-Date: Mon, 23 Feb 2026 14:12:01 +0000
-Message-ID: <0a7b1658b4ac231320086a1c295bfcae34888c90.1771850496.git.asml.silence@gmail.com>
+Subject: [PATCH 3/3] io_uring/selftests: add regbuf xor example
+Date: Mon, 23 Feb 2026 14:12:02 +0000
+Message-ID: <09ea9cdafd870002278c2c8a62023c81aa742e2c.1771850496.git.asml.silence@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <cover.1771850496.git.asml.silence@gmail.com>
 References: <cover.1771850496.git.asml.silence@gmail.com>
@@ -79,118 +79,115 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Show how io_uring can be extended with features using BPF, which
-would've otherwise required extra complexity and overhead in the common
-io_uring for somewhat niche users. The rate limiter program caps how
-many requests can be in flight at the same time. If the user queues up
-more SQEs than the cap, their execution will be delayed until previous
-requests has completed. It'll automatically handle submitting deferred
-SQEs, as well will correct the waiting parameters based. E.g. if the
-user submits 8 SQEs and wants to wait for CQEs but limits it at 2
-requests at a time, the program will wait for 2 CQEs multiple times
-until there are all 8 CQEs.
+Add a kfunc and an example of calculating xor for a registered buffer.
+That's useful for cases where the registered buffer is not visible by
+user space and exists in-kernel only. The rest depends on the BPF
+writer, and one way to use it could be to execute all jobs like xor'ing
+at the beginning and the do normal request processing (the example
+program just stops). Another approach would be to implement it as a part
+of BPF CQE processing.
 
-The test executes timeout requests and measures the total time to make
-sure they're not executed in parallel.
+We'll need to think through the registered buffer kfunc API before
+merging anything similar (not to mention implementing it properly).
 
 Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
 ---
- tools/testing/selftests/io_uring/Makefile     |   2 +-
- .../testing/selftests/io_uring/common-defs.h  |  11 ++
- tools/testing/selftests/io_uring/helpers.h    |  15 +-
- .../selftests/io_uring/rate_limiter.bpf.c     |  84 +++++++++
- .../testing/selftests/io_uring/rate_limiter.c | 172 ++++++++++++++++++
- 5 files changed, 279 insertions(+), 5 deletions(-)
- create mode 100644 tools/testing/selftests/io_uring/rate_limiter.bpf.c
- create mode 100644 tools/testing/selftests/io_uring/rate_limiter.c
+ io_uring/bpf-ops.c                            | 29 +++++++
+ tools/testing/selftests/io_uring/Makefile     |  2 +-
+ .../testing/selftests/io_uring/common-defs.h  |  6 ++
+ tools/testing/selftests/io_uring/xor.bpf.c    | 31 +++++++
+ tools/testing/selftests/io_uring/xor.c        | 83 +++++++++++++++++++
+ 5 files changed, 150 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/io_uring/xor.bpf.c
+ create mode 100644 tools/testing/selftests/io_uring/xor.c
 
+diff --git a/io_uring/bpf-ops.c b/io_uring/bpf-ops.c
+index 1ffe7ba73b89..51c239c7cb34 100644
+--- a/io_uring/bpf-ops.c
++++ b/io_uring/bpf-ops.c
+@@ -9,6 +9,7 @@
+ #include "memmap.h"
+ #include "bpf-ops.h"
+ #include "loop.h"
++#include "rsrc.h"
+ 
+ static DEFINE_MUTEX(io_bpf_ctrl_mutex);
+ static const struct btf_type *loop_params_type;
+@@ -47,11 +48,39 @@ __u8 *bpf_io_uring_get_region(struct io_ring_ctx *ctx, __u32 region_id,
+ 	return io_region_get_ptr(r);
+ }
+ 
++__bpf_kfunc
++__u8 bpf_io_uring_xor_regbuf(struct io_ring_ctx *ctx, unsigned idx,
++				size_t size)
++{
++	const struct io_mapped_ubuf *imu;
++	struct io_rsrc_node *node;
++	struct iov_iter iter;
++	__u8 xor_res = 0;
++	__u8 buffer[512];
++	int i, ret;
++
++	node = io_rsrc_node_lookup(&ctx->buf_table, idx);
++	if (!node)
++		return 0;
++	imu = node->buf;
++	if (size > imu->len || size > sizeof(buffer))
++		return 0;
++
++	iov_iter_bvec(&iter, ITER_SOURCE, imu->bvec, imu->nr_bvecs, size);
++	ret = copy_from_iter(buffer, size, &iter);
++	if (ret != size)
++		return 0;
++	for (i = 0; i < size; i++)
++		xor_res ^= buffer[i];
++	return xor_res;
++}
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(io_uring_kfunc_set)
+ BTF_ID_FLAGS(func, bpf_io_uring_submit_sqes, KF_SLEEPABLE);
+ BTF_ID_FLAGS(func, bpf_io_uring_get_region, KF_RET_NULL);
++BTF_ID_FLAGS(func, bpf_io_uring_xor_regbuf, KF_SLEEPABLE);
+ BTF_KFUNCS_END(io_uring_kfunc_set)
+ 
+ static const struct btf_kfunc_id_set bpf_io_uring_kfunc_set = {
 diff --git a/tools/testing/selftests/io_uring/Makefile b/tools/testing/selftests/io_uring/Makefile
-index 26e4cf721b86..e0581f96d98a 100644
+index e0581f96d98a..3b139964f537 100644
 --- a/tools/testing/selftests/io_uring/Makefile
 +++ b/tools/testing/selftests/io_uring/Makefile
 @@ -3,7 +3,7 @@ include ../../../build/Build.include
  include ../../../scripts/Makefile.arch
  include ../../../scripts/Makefile.include
  
--TEST_GEN_PROGS := nops_loop overflow unreg cp
-+TEST_GEN_PROGS := nops_loop overflow unreg cp rate_limiter
+-TEST_GEN_PROGS := nops_loop overflow unreg cp rate_limiter
++TEST_GEN_PROGS := nops_loop overflow unreg cp rate_limiter xor
  
  # override lib.mk's default rules
  OVERRIDE_TARGETS := 1
 diff --git a/tools/testing/selftests/io_uring/common-defs.h b/tools/testing/selftests/io_uring/common-defs.h
-index 20b59adbe703..dae3b0fe8588 100644
+index dae3b0fe8588..ee6c36eae426 100644
 --- a/tools/testing/selftests/io_uring/common-defs.h
 +++ b/tools/testing/selftests/io_uring/common-defs.h
-@@ -38,4 +38,15 @@ struct cp_state {
+@@ -49,4 +49,10 @@ struct rate_limiter_state {
  	int res;
  };
  
-+struct rate_limiter_state {
-+	unsigned inflight;
-+	unsigned max_inflight;
-+	unsigned cached_cq_tail;
-+	unsigned target_cq_tail;
-+	bool waitiing;
-+
-+	unsigned to_wait;
-+	int res;
++struct xor_state {
++	unsigned regbuf_idx;
++	unsigned xor_size;
++	__u8 xor_res;
 +};
 +
  #endif /* IOU_TOOLS_COMMON_DEFS_H */
-diff --git a/tools/testing/selftests/io_uring/helpers.h b/tools/testing/selftests/io_uring/helpers.h
-index b6d1b8ca64b8..6894e081e3c0 100644
---- a/tools/testing/selftests/io_uring/helpers.h
-+++ b/tools/testing/selftests/io_uring/helpers.h
-@@ -31,7 +31,9 @@ static inline void ring_ctx_destroy(struct ring_ctx *ctx)
- 	free(ctx->region);
- }
- 
--static inline void ring_ctx_create(struct ring_ctx *ctx, size_t region_size)
-+static inline void ring_ctx_create_flags(struct ring_ctx *ctx,
-+					 size_t region_size,
-+					 unsigned ring_flags)
- {
- 	struct io_uring_mem_region_reg mr;
- 	struct io_uring_region_desc rd;
-@@ -47,11 +49,11 @@ static inline void ring_ctx_create(struct ring_ctx *ctx, size_t region_size)
- 
- 	memset(&params, 0, sizeof(params));
- 	params.cq_entries = cq_entries;
--	params.flags = IORING_SETUP_SINGLE_ISSUER |
-+	params.flags = ring_flags |
-+			IORING_SETUP_SINGLE_ISSUER |
- 			IORING_SETUP_DEFER_TASKRUN |
- 			IORING_SETUP_NO_SQARRAY |
--			IORING_SETUP_CQSIZE |
--			IORING_SETUP_SQ_REWIND;
-+			IORING_SETUP_CQSIZE;
- 
- 	ret = io_uring_queue_init_params(sq_entries, &ctx->ring, &params);
- 	if (ret) {
-@@ -92,4 +94,9 @@ static inline void ring_ctx_create(struct ring_ctx *ctx, size_t region_size)
- 	ri->cq_entries = cq_entries;
- }
- 
-+static inline void ring_ctx_create(struct ring_ctx *ctx, size_t region_size)
-+{
-+	ring_ctx_create_flags(ctx, region_size, IORING_SETUP_SQ_REWIND);
-+}
-+
- #endif /* IOU_TOOLS_HELPERS_H */
-diff --git a/tools/testing/selftests/io_uring/rate_limiter.bpf.c b/tools/testing/selftests/io_uring/rate_limiter.bpf.c
+diff --git a/tools/testing/selftests/io_uring/xor.bpf.c b/tools/testing/selftests/io_uring/xor.bpf.c
 new file mode 100644
-index 000000000000..c4fb74ee6a62
+index 000000000000..c7c3b46ca1bf
 --- /dev/null
-+++ b/tools/testing/selftests/io_uring/rate_limiter.bpf.c
-@@ -0,0 +1,84 @@
++++ b/tools/testing/selftests/io_uring/xor.bpf.c
+@@ -0,0 +1,31 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Limit the number of inflight requests, and automatically submits more
-+ * when previous requests complete. The user can wait for more CQEs than
-+ * the maximum inflight number, in which case it will loop submitting
-+ * and waiting until the specified to_wait is satisfied. It's a simple
-+ * example and doesn't handle lots of edge cases.
-+ */
 +#include <linux/types.h>
 +#include <linux/errno.h>
 +#include <bpf/bpf_helpers.h>
@@ -202,246 +199,111 @@ index 000000000000..c4fb74ee6a62
 +
 +const volatile struct ring_info ri;
 +
-+#define t_min(a, b) ((a) < (b) ? (a) : (b))
-+
-+SEC("struct_ops.s/rate_limiter_loop_step")
-+int BPF_PROG(rate_limiter_loop_step, struct io_ring_ctx *ring, struct iou_loop_params *ls)
++SEC("struct_ops.s/xor_step")
++int BPF_PROG(xor_step, struct io_ring_ctx *ring, struct iou_loop_params *ls)
 +{
-+	struct io_uring *cq_hdr, *sq_hdr;
-+	unsigned nr_new_cqes, extra_wait;
-+	struct rate_limiter_state *rls;
-+	unsigned to_submit;
-+	unsigned cq_tail;
-+	int ret, to_wait;
-+	void *rings;
++	struct xor_state *xs;
 +
-+	rings = (void *)bpf_io_uring_get_region(ring, IOU_REGION_CQ,
-+				ri.cqes_offset + ri.cq_entries * sizeof(struct io_uring_cqe));
-+	rls = (void *)bpf_io_uring_get_region(ring, IOU_REGION_MEM, sizeof(*rls));
-+	if (!rings || !rls)
-+		return IOU_LOOP_STOP;
-+	cq_hdr = rings + ri.cq_hdr_offset;
-+	sq_hdr = rings + ri.sq_hdr_offset;
-+
-+	/* Recalculate the inflight count, we only consider new CQEs */
-+	cq_tail = cq_hdr->tail;
-+	nr_new_cqes = cq_tail - rls->cached_cq_tail;
-+	if (nr_new_cqes > ri.cq_entries) {
-+		rls->res = -ERANGE;
-+		return IOU_LOOP_STOP;
-+	}
-+	rls->cached_cq_tail = cq_tail;
-+	rls->inflight -= nr_new_cqes;
-+
-+	/* Submit SQEs if we're under the QD limit */
-+	to_submit = t_min(sq_hdr->tail - sq_hdr->head, ri.sq_entries);
-+	to_submit = t_min(to_submit, rls->max_inflight - rls->inflight);
-+	if (to_submit) {
-+		ret = bpf_io_uring_submit_sqes(ring, to_submit);
-+		if (ret != to_submit) {
-+			rls->res = ret;
-+			return IOU_LOOP_STOP;
-+		}
-+		rls->inflight += to_submit;
-+	}
-+
-+	to_wait = rls->to_wait;
-+	if (to_wait) {
-+		rls->to_wait = 0;
-+		rls->target_cq_tail = cq_hdr->head + to_wait;
-+		rls->waitiing = true;
-+	}
-+	if (!rls->waitiing)
++	xs = (void *)bpf_io_uring_get_region(ring, IOU_REGION_MEM,
++				sizeof(*xs));
++	if (!xs)
 +		return IOU_LOOP_STOP;
 +
-+	if ((int)(cq_hdr->tail - rls->target_cq_tail) >= 0)
-+		return IOU_LOOP_STOP;
-+
-+	extra_wait = rls->target_cq_tail - cq_hdr->tail;
-+	extra_wait = t_min(extra_wait, rls->inflight);
-+	ls->cq_wait_idx = cq_hdr->tail + extra_wait;
-+	return IOU_LOOP_CONTINUE;
++	xs->xor_res = bpf_io_uring_xor_regbuf(ring, xs->regbuf_idx,
++						xs->xor_size);
++	return IOU_LOOP_STOP;
 +}
 +
 +SEC(".struct_ops.link")
-+struct io_uring_bpf_ops rate_limiter_ops = {
-+	.loop_step = (void *)rate_limiter_loop_step,
++struct io_uring_bpf_ops xor_ops = {
++	.loop_step = (void *)xor_step,
 +};
-diff --git a/tools/testing/selftests/io_uring/rate_limiter.c b/tools/testing/selftests/io_uring/rate_limiter.c
+diff --git a/tools/testing/selftests/io_uring/xor.c b/tools/testing/selftests/io_uring/xor.c
 new file mode 100644
-index 000000000000..4b9bdd4d6b44
+index 000000000000..c2e7d6af2c92
 --- /dev/null
-+++ b/tools/testing/selftests/io_uring/rate_limiter.c
-@@ -0,0 +1,172 @@
++++ b/tools/testing/selftests/io_uring/xor.c
+@@ -0,0 +1,83 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +#include <linux/stddef.h>
 +#include <errno.h>
 +#include <signal.h>
 +#include <stdlib.h>
-+#include <sys/time.h>
++#include <stdio.h>
++#include <time.h>
 +
 +#include <bpf/libbpf.h>
 +#include <io_uring/mini_liburing.h>
 +
-+#include "common-defs.h"
 +#include "helpers.h"
-+#include "rate_limiter.bpf.skel.h"
++#include "xor.bpf.skel.h"
 +
-+static struct rate_limiter *skel;
-+static struct bpf_link *rate_limiter_link;
-+
-+static void setup_bpf_prog(struct ring_ctx *ctx)
++int main()
 +{
-+	int ret;
++	struct xor_state *xs;
++	struct bpf_link *link;
++	struct xor *skel;
++	struct ring_ctx ctx;
++	__u8 *buffer;
++	size_t buf_size = 512;
++	struct iovec iov;
++	__u8 xorv = 0;
++	int ret, i;
 +
-+	skel = rate_limiter__open();
++	ring_ctx_create(&ctx, sizeof(*xs));
++
++	skel = xor__open();
 +	if (!skel) {
 +		fprintf(stderr, "can't generate skeleton\n");
 +		exit(1);
 +	}
++	skel->struct_ops.xor_ops->ring_fd = ctx.ring.ring_fd;
++	skel->rodata->ri = ctx.ri;
 +
-+	skel->struct_ops.rate_limiter_ops->ring_fd = ctx->ring.ring_fd;
-+	skel->rodata->ri = ctx->ri;
-+
-+	ret = rate_limiter__load(skel);
++	ret = xor__load(skel);
 +	if (ret) {
 +		fprintf(stderr, "failed to load skeleton\n");
 +		exit(1);
 +	}
-+
-+	rate_limiter_link = bpf_map__attach_struct_ops(skel->maps.rate_limiter_ops);
-+	if (!rate_limiter_link) {
++	link = bpf_map__attach_struct_ops(skel->maps.xor_ops);
++	if (!link) {
 +		fprintf(stderr, "failed to attach ops\n");
-+		exit(1);
-+	}
-+}
-+
-+static void t_io_uring_prep_timeout(struct io_uring_sqe *sqe,
-+				    struct __kernel_timespec *ts)
-+{
-+	memset(sqe, 0, sizeof(*sqe));
-+	sqe->opcode = (__u8)IORING_OP_TIMEOUT;
-+	sqe->fd = -1;
-+	sqe->addr = (unsigned long)ts;
-+	sqe->len = 1;
-+}
-+
-+static unsigned long long mtime_since(const struct timeval *s,
-+				      const struct timeval *e)
-+{
-+	long long sec, usec;
-+
-+	sec = e->tv_sec - s->tv_sec;
-+	usec = (e->tv_usec - s->tv_usec);
-+	if (sec > 0 && usec < 0) {
-+		sec--;
-+		usec += 1000000;
++		return 1;
 +	}
 +
-+	sec *= 1000;
-+	usec /= 1000;
-+	return sec + usec;
-+}
 +
-+static inline struct io_uring_cqe *io_uring_peek_cqe(struct io_uring *ring)
-+{
-+	struct io_uring_cq *cq = &ring->cq;
-+	const unsigned int mask = *cq->kring_mask;
-+	unsigned int head = *cq->khead;
-+
-+	read_barrier();
-+	if (head != *cq->ktail)
-+		return &cq->cqes[head & mask];
-+
-+	return NULL;
-+}
-+
-+static void run_ring(struct ring_ctx *ctx)
-+{
-+	struct rate_limiter_state *rls = ctx->region;
-+	const unsigned long ms_per_req = 500;
-+	const unsigned max_inflight = 2;
-+	const unsigned nr_reqs = 8;
-+	struct io_uring *ring = &ctx->ring;
-+	struct timeval tv_start, tv_end;
-+	struct __kernel_timespec ts;
-+	struct io_uring_cqe *cqe;
-+	struct io_uring_sqe *sqe;
-+	unsigned nr_cqes = 0;
-+	unsigned long dt;
-+	int i, ret;
-+
-+	rls->max_inflight = max_inflight;
-+	ts.tv_sec = 0;
-+	ts.tv_nsec = ms_per_req * 1000000;
-+
-+	for (i = 0; i < nr_reqs; i++) {
-+		sqe = io_uring_get_sqe(ring);
-+		if (!sqe) {
-+			fprintf(stderr, "get sqe failed\n");
-+			exit(1);
-+		}
-+
-+		t_io_uring_prep_timeout(sqe, &ts);
++	buffer = aligned_alloc(4096, buf_size);
++	if (!buffer) {
++		fprintf(stderr, "allocation failed\n");
++		return 1;
 +	}
 +
-+	gettimeofday(&tv_start, NULL);
-+
-+	ret = io_uring_submit(ring);
-+	if (ret || rls->res) {
-+		fprintf(stderr, "sqe submit failed: %d %d\n", ret, rls->res);
-+		exit(1);
++	srand((unsigned)time(NULL));
++	for (i = 0; i < buf_size; i++) {
++		buffer[i] = rand() % 256;
++		xorv ^= buffer[i];
 +	}
 +
-+	rls->to_wait = nr_reqs;
-+	ret = io_uring_enter(ring->ring_fd, 0, 0, 0, NULL);
++	iov.iov_len = buf_size;
++	iov.iov_base = buffer;
++	ret = io_uring_register_buffers(&ctx.ring, &iov, 1);
 +	if (ret < 0) {
-+		ret = -errno;
-+		fprintf(stderr, "wait failed %i\n", ret);
-+		exit(1);
-+	}
-+	if (rls->res) {
-+		fprintf(stderr, "bpf wait failed %i\n", rls->res);
-+		exit(1);
++		fprintf(stderr, "can't register buffer\n");
++		return 1;
 +	}
 +
-+	while (1) {
-+		cqe = io_uring_peek_cqe(ring);
-+		if (!cqe)
-+			break;
-+		if (cqe->res != -ETIME) {
-+			fprintf(stderr, "invalid cqe %d\n", ret);
-+			exit(1);
-+		}
-+		io_uring_cqe_seen(ring);
-+		nr_cqes++;
++	xs = ctx.region;
++	xs->regbuf_idx = 0;
++	xs->xor_size = buf_size;
++	ring_ctx_run(&ctx);
++
++	if (xs->xor_res != xorv) {
++		fprintf(stderr, "invalid result, %i %i\n", xorv, xs->xor_res);
++		return 1;
 +	}
 +
-+	if (nr_cqes != nr_reqs) {
-+		fprintf(stderr, "CQEs missing\n");
-+		exit(1);
-+	}
-+
-+	gettimeofday(&tv_end, NULL);
-+	dt = mtime_since(&tv_start, &tv_end);
-+
-+	if (dt < nr_reqs / max_inflight * ms_per_req) {
-+		fprintf(stderr, "timeout fired too fast %lu\n", dt);
-+		exit(1);
-+	}
-+}
-+
-+int main()
-+{
-+	struct ring_ctx ctx;
-+
-+	ring_ctx_create_flags(&ctx, sizeof(struct nops_state), 0);
-+	setup_bpf_prog(&ctx);
-+
-+	run_ring(&ctx);
-+
-+	bpf_link__destroy(rate_limiter_link);
-+	rate_limiter__destroy(skel);
++	bpf_link__destroy(link);
++	xor__destroy(skel);
 +	ring_ctx_destroy(&ctx);
 +	return 0;
 +}
