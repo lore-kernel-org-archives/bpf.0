@@ -1,283 +1,136 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from www2881.sakura.ne.jp (www2881.sakura.ne.jp [49.212.198.91])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 064233659FA
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 12:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63B119D081
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 13:32:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.198.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771850689; cv=none; b=u1My3R5btnGH0crO1rvQl7S7oI6PNlGGJOdOGVyCD8i5RlgZAY+osK/BgEpz3g1iuCabrt7l5GeGu+ooEqUjcQbA24j/Pe23TmQx+x8Ce2jrB9h09cCwho6mPZOGIiqllBniwXt74UzauA/vcqGGs7LGR5t4tABkHeSj6BuZTQ8=
+	t=1771853572; cv=none; b=Hp6qcdqoupEXUMCtNhKP9mFEVAXb/oAurXLvxrP8+9ZiQzeOiTNqr+aZADJ2cIo9YUK1WTGpzip00+6xf+PC1hnIqPYr7nVE31euOOJ3GT1D9TQRdZIp1jQVhgki/pJw4hX6v3frk+piqTkf3D4ihTyuaCoztY0mIUxuv247mvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771850689; c=relaxed/simple;
-	bh=M68f3APN5bd7LHloA6NrKBqIULn49u+ujIMSnSth66g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I6rgzjwX0ziqqPgeP+SO9huv6WUCIirE04m2AqikSUgCFy7lXt0pD8OB1nnQE01WIa1o6+nWWjgVlG4adrwa+kEOnxuGxcFQkj+6R2cWqOGNOLzwK9s3zUxTJBOXIqGiiFs8L27vanVPEIFDMe8kD1iw2y4IQt6zlrw+Wb3IuiE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZkgpyZJ; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771853572; c=relaxed/simple;
+	bh=vwDHGZkNKcZgrDUmXykErc1y/rSOex9+J/bjnc8RUYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nUZADHSTMETAkQ2ZTV7Rp82Ei9+08A7aQU5X0xeGtn9LOAvgUgspYz5/ekOqoMSbiYsiSiI5xZEJFkheq/D0cqgYLAD5O1bV3od6rIXyojQqYCj3VtmbzczBHyNXbLfkfc8SUYJDFC31byoL1vOvKafwuoBp2cvzSH0DmrF3X5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp; spf=pass smtp.mailfrom=enjuk.jp; dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b=meD5mbcz; arc=none smtp.client-ip=49.212.198.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enjuk.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZkgpyZJ"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-483487335c2so39500235e9.2
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 04:44:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771850686; x=1772455486; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xnW1Wqd58lECj55tVKLq7KbjiXWb8oIkcZq5dzctHUw=;
-        b=lZkgpyZJMyM09+sAtaO3V0UzXHQP7CQNT2IjG9sVc0wdU3F2kGV3pfKFY9HSkqdsgi
-         C+MemvkbIzd2+99eyd3Bv8rvgpHGilq6mrKLLATwQ960y/BvCvErppPryVvqOHXKgyJR
-         sj0G+g/4vyM/EmCNhlqe4W/3KY3QnlxsH4omkH2nxdrrXZbDMa60It4wZC2j0tyHRLaU
-         s70Yve3MKnM5umkzfIlPaxV5utVf7L+e8Kw7/iQF9XwgXyQW8+KCgb/HZwkHXnrjV7sq
-         hT8APpHXZW49WjW1a4ZEWTMRHfoThs//HarOUfgFeSQE1KrVVuqtFXCTb1s0geIovADD
-         oJNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771850686; x=1772455486;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xnW1Wqd58lECj55tVKLq7KbjiXWb8oIkcZq5dzctHUw=;
-        b=DgILRpkRmM99UpD3F1tutEuDjTklJ0kQYDUqhlTsn7uXsd2j67NfopsTkioGtJYF4e
-         u1UqhbebljDAWZayYgBxv26XqmdsaQoBps41zZdSZSK9uHaNJvfrUH0SRF+7YNMqXmza
-         +ofpfbieJJjNoWNlpaNT3b+a9AYu5e8yN9ZscW7LgGTBxDac3WSfuQvQ94cPlfQYOLmB
-         VoFsBuc4iod9BY6jOaoiqKYAjoMv+AYMzS2LkmPIe74xVXGx3iPUeqJ0ProOIEZByNiG
-         jvRzV9dxd0lbscYFaDkwm2ALqVhx0J2ucNKV+5LTx+no/K0QnPcK+QWdGVBq0Ceb2wvt
-         m9RQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW6Nj6pOLSm1ENajmyq3v4Tvt45UAvvwwu/ss2IXv+jf6T6myL2T48I2FQ8wYMXiaUnNb4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxtMWKBFgxYLLiC0TehVa0ZsWiKrYAeKUAf3fHoOGhZcshLRgGD
-	PT6uXt2Fz7Y5rGJJHpOzTGuDmhqmqaeRio9wtPnWEGzEtQ5E+WhLzSB8
-X-Gm-Gg: AZuq6aIvn1v9t4WjpydN+t1viXT6JRK51mHUi1jqdnI40DbJ7fR5iassem/Qg3abWzO
-	u5wsi3hIdVYXZhzx94a2c5J62UYt8+gxI2pDkv5qyxUb3mhRqPOW5ocrFfqednEnq7CQzlUbO1Y
-	HR4t89eIlRpXCSR5B90JeGTyUCBtB8xxO3yLJocqrYerejLfzV1gtvQ1Z3cBe1i+fkn4jG5bQS7
-	LJiZdlZDqhEUTu5qBVfsJJ3YAf7oesc33s66BR80kSt1937XGwLk4elH4Kl1C3XNRCuo6PdqbRJ
-	VpP1AZsk7Hu8KSzAV9YbfxHkUeboseHYQNr1l+1dX80h3updkJolrXyojdUnQcdhkDnoJDetcof
-	mPQm0T3dJmuQLkoQqd9yg6vhpaiwfUWMZVgVpdK3cItGzBRODRaF8oR8j3AnP2FCDOqLFno9wNz
-	e5Onq+xuWX3Xy1RkPgLqUZHhm+LcFpBWY2ELlPrMSnd6AxgA==
-X-Received: by 2002:a05:600c:638d:b0:480:1e40:3d2 with SMTP id 5b1f17b1804b1-483a95f5a62mr129387105e9.29.1771850685905;
-        Mon, 23 Feb 2026 04:44:45 -0800 (PST)
-Received: from [10.2.0.2] ([146.70.48.20])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a3deb73bsm83621845e9.3.2026.02.23.04.44.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Feb 2026 04:44:45 -0800 (PST)
-Message-ID: <6f4af118-ecb1-422e-a8db-8e6f50d6d988@gmail.com>
-Date: Mon, 23 Feb 2026 13:44:23 +0100
+	dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b="meD5mbcz"
+Received: from x1 (99.223.13.160.dy.iij4u.or.jp [160.13.223.99])
+	(authenticated bits=0)
+	by www2881.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 61NDWcbh055624
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Mon, 23 Feb 2026 22:32:40 +0900 (JST)
+	(envelope-from kohei@enjuk.jp)
+DKIM-Signature: a=rsa-sha256; bh=MU4uqkPCUo1YSM7ORV3XeMLzQiNwxn5T39Jw0803mss=;
+        c=relaxed/relaxed; d=enjuk.jp;
+        h=Date:From:To:Subject:Message-ID;
+        s=rs20251215; t=1771853562; v=1;
+        b=meD5mbczMUBA9iqvN7VIexPFQB9dAqCNgFbF9AbUC6KD43CJqE8IzSY/162US5k6
+         d+qoClRbskcdvG6MrTes0dk0VDvIzlVxtbWG8lTdX3+gUU76GWmW28IVReC2e+v8
+         T+PPrD1WWE3EMslcCi/mRoQcYqB+CIgvGDCnaDZqn7c1EHz5nT3Rg6RKlzJZpOUq
+         /EFMNM97NxBzVdqwraFhm+BxLR35C0FWi4Z5jfLnMmyFBqGaxuCfyDogGKWp+H7K
+         NY5u+/xbmLSGwidcXAhjL0VVJ6hRqydACi5ryCbSxMOe/GiEMGuJ5PV9IHvVt2cB
+         pNpR4f+q2PsKoxLnSTz+yA==
+Date: Mon, 23 Feb 2026 22:32:38 +0900
+From: Kohei Enju <kohei@enjuk.jp>
+To: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jussi Maki <joamaki@gmail.com>, kohei.enju@gmail.com,
+        syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
+Subject: Re: [PATCH v2 bpf] bpf: devmap: fix stack-out-of-bounds write in
+ get_upper_ifindexes()
+Message-ID: <aZxVELsXHvrpkicA@x1>
+References: <20260220193039.7129-1-kohei@enjuk.jp>
+ <87ikbnofug.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/4] ns: add bpf hooks
-To: Christian Brauner <brauner@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>
-Cc: KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- Lennart Poettering <lennart@poettering.net>
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
- <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
-Content-Language: en-US
-From: Djalal Harouni <tixxdz@gmail.com>
-In-Reply-To: <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <87ikbnofug.fsf@toke.dk>
 
-On 2/20/26 01:38, Christian Brauner wrote:
-> Add the three namespace lifecycle hooks and make them available to bpf
-> lsm program types. This allows bpf to supervise namespace creation. I'm
-> in the process of adding various "universal truth" bpf programs to
-> systemd that will make use of this. This e.g., allows to lock in a
-> program into a given set of namespaces.
-
-Thank you Christian, so if this feature is added we will also
-use it.
-
-The commit log says lock in a given set of namespaces where I see
-only setns path am I right? would it make sense to also have the
-check around some callers of create_new_namespaces() where
-appropriate befor nsproxy switch if we don't want to go deep, but
-allow a bit of control or easy checks around
-CLONE_NEWNS/mount/pivot_root fs combinations?
-
-Or defering the combination checks to userspace makes more sense?
-
-The other clone flags are presumably nested so safe, for userns
-there is already a check, and cgroup+sb you added in the other
-patch is great!
-
-Thank you!
-
-
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-> ---
->   include/linux/bpf_lsm.h | 21 +++++++++++++++++++++
->   kernel/bpf/bpf_lsm.c    | 25 +++++++++++++++++++++++++
->   kernel/nscommon.c       |  9 ++++++++-
->   kernel/nsproxy.c        |  7 +++++++
->   4 files changed, 61 insertions(+), 1 deletion(-)
+On 02/23 12:32, Toke Høiland-Jørgensen wrote:
+> Kohei Enju <kohei@enjuk.jp> writes:
 > 
-> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-> index 643809cc78c3..5ae438fdf567 100644
-> --- a/include/linux/bpf_lsm.h
-> +++ b/include/linux/bpf_lsm.h
-> @@ -12,6 +12,9 @@
->   #include <linux/bpf_verifier.h>
->   #include <linux/lsm_hooks.h>
->   
-> +struct ns_common;
-> +struct nsset;
-> +
->   #ifdef CONFIG_BPF_LSM
->   
->   #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-> @@ -48,6 +51,11 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func)
->   
->   int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
->   			     struct bpf_retval_range *range);
-> +
-> +int bpf_lsm_namespace_alloc(struct ns_common *ns);
-> +void bpf_lsm_namespace_free(struct ns_common *ns);
-> +int bpf_lsm_namespace_install(struct nsset *nsset, struct ns_common *ns);
-> +
->   int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
->   				const struct bpf_dynptr *value_p, int flags);
->   int bpf_remove_dentry_xattr_locked(struct dentry *dentry, const char *name__str);
-> @@ -104,6 +112,19 @@ static inline bool bpf_lsm_has_d_inode_locked(const struct bpf_prog *prog)
->   {
->   	return false;
->   }
-> +
-> +static inline int bpf_lsm_namespace_alloc(struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
-> +static inline void bpf_lsm_namespace_free(struct ns_common *ns)
-> +{
-> +}
-> +static inline int bpf_lsm_namespace_install(struct nsset *nsset,
-> +					    struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
->   #endif /* CONFIG_BPF_LSM */
->   
->   #endif /* _LINUX_BPF_LSM_H */
-> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> index 0c4a0c8e6f70..f6378db46220 100644
-> --- a/kernel/bpf/bpf_lsm.c
-> +++ b/kernel/bpf/bpf_lsm.c
-> @@ -30,10 +30,32 @@ __weak noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
->   #include <linux/lsm_hook_defs.h>
->   #undef LSM_HOOK
->   
-> +__bpf_hook_start();
-> +
-> +__weak noinline int bpf_lsm_namespace_alloc(struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
-> +
-> +__weak noinline void bpf_lsm_namespace_free(struct ns_common *ns)
-> +{
-> +}
-> +
-> +__weak noinline int bpf_lsm_namespace_install(struct nsset *nsset,
-> +					  struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
-> +
-> +__bpf_hook_end();
-> +
->   #define LSM_HOOK(RET, DEFAULT, NAME, ...) BTF_ID(func, bpf_lsm_##NAME)
->   BTF_SET_START(bpf_lsm_hooks)
->   #include <linux/lsm_hook_defs.h>
->   #undef LSM_HOOK
-> +BTF_ID(func, bpf_lsm_namespace_alloc)
-> +BTF_ID(func, bpf_lsm_namespace_free)
-> +BTF_ID(func, bpf_lsm_namespace_install)
->   BTF_SET_END(bpf_lsm_hooks)
->   
->   BTF_SET_START(bpf_lsm_disabled_hooks)
-> @@ -383,6 +405,8 @@ BTF_ID(func, bpf_lsm_task_prctl)
->   BTF_ID(func, bpf_lsm_task_setscheduler)
->   BTF_ID(func, bpf_lsm_task_to_inode)
->   BTF_ID(func, bpf_lsm_userns_create)
-> +BTF_ID(func, bpf_lsm_namespace_alloc)
-> +BTF_ID(func, bpf_lsm_namespace_install)
->   BTF_SET_END(sleepable_lsm_hooks)
->   
->   BTF_SET_START(untrusted_lsm_hooks)
-> @@ -395,6 +419,7 @@ BTF_ID(func, bpf_lsm_sk_alloc_security)
->   BTF_ID(func, bpf_lsm_sk_free_security)
->   #endif /* CONFIG_SECURITY_NETWORK */
->   BTF_ID(func, bpf_lsm_task_free)
-> +BTF_ID(func, bpf_lsm_namespace_free)
->   BTF_SET_END(untrusted_lsm_hooks)
->   
->   bool bpf_lsm_is_sleepable_hook(u32 btf_id)
-> diff --git a/kernel/nscommon.c b/kernel/nscommon.c
-> index bdc3c86231d3..c3613cab3d41 100644
-> --- a/kernel/nscommon.c
-> +++ b/kernel/nscommon.c
-> @@ -1,6 +1,7 @@
->   // SPDX-License-Identifier: GPL-2.0-only
->   /* Copyright (c) 2025 Christian Brauner <brauner@kernel.org> */
->   
-> +#include <linux/bpf_lsm.h>
->   #include <linux/ns_common.h>
->   #include <linux/nstree.h>
->   #include <linux/proc_ns.h>
-> @@ -77,6 +78,7 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
->   		ret = proc_alloc_inum(&ns->inum);
->   	if (ret)
->   		return ret;
-> +
->   	/*
->   	 * Tree ref starts at 0. It's incremented when namespace enters
->   	 * active use (installed in nsproxy) and decremented when all
-> @@ -86,11 +88,16 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
->   		atomic_set(&ns->__ns_ref_active, 1);
->   	else
->   		atomic_set(&ns->__ns_ref_active, 0);
-> -	return 0;
-> +
-> +	ret = bpf_lsm_namespace_alloc(ns);
-> +	if (ret && !inum)
-> +		proc_free_inum(ns->inum);
-> +	return ret;
->   }
->   
->   void __ns_common_free(struct ns_common *ns)
->   {
-> +	bpf_lsm_namespace_free(ns);
->   	proc_free_inum(ns->inum);
->   }
->   
-> diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
-> index 259c4b4f1eeb..5742f9664dbb 100644
-> --- a/kernel/nsproxy.c
-> +++ b/kernel/nsproxy.c
-> @@ -9,6 +9,7 @@
->    *             Pavel Emelianov <xemul@openvz.org>
->    */
->   
-> +#include <linux/bpf_lsm.h>
->   #include <linux/slab.h>
->   #include <linux/export.h>
->   #include <linux/nsproxy.h>
-> @@ -379,6 +380,12 @@ static int prepare_nsset(unsigned flags, struct nsset *nsset)
->   
->   static inline int validate_ns(struct nsset *nsset, struct ns_common *ns)
->   {
-> +	int ret;
-> +
-> +	ret = bpf_lsm_namespace_install(nsset, ns);
-> +	if (ret)
-> +		return ret;
-> +
->   	return ns->ops->install(nsset, ns);
->   }
->   
-> 
+> > get_upper_ifindexes() iterates over all upper devices and writes their
+> > indices into an array without checking bounds.
+> >
+> > Also the callers assume that the max number of upper devices is
+> > MAX_NEST_DEV and allocate excluded_devices[1+MAX_NEST_DEV] on the stack,
+> > but that assumption is not correct and the number of upper devices could
+> > be larger than MAX_NEST_DEV (e.g., many macvlans), causing a
+> > stack-out-of-bounds write.
+> >
+> > Add a max parameter to get_upper_ifindexes() to avoid the issue.
+> >
+> > To reproduce, create more than MAX_NEST_DEV(8) macvlans on a device with
+> > an XDP program attached using BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS.
+> > Then send a packet to the device to trigger the XDP redirect path.
+> >
+> > Reported-by: syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
+> > Closes: https://lore.kernel.org/all/698c4ce3.050a0220.340abe.000b.GAE@google.com/T/
+> > Fixes: aeea1b86f936 ("bpf, devmap: Exclude XDP broadcast to master device")
+> > Signed-off-by: Kohei Enju <kohei@enjuk.jp>
+> > ---
+> > Changes:
+> >   v2:
+> >     - fix formatting, accounting that max-line-length is 100
+> >   v1: https://lore.kernel.org/bpf/20260216201428.65641-1-kohei@enjuk.jp/
+> > ---
+> >  kernel/bpf/devmap.c | 12 ++++++++----
+> >  1 file changed, 8 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+> > index 2625601de76e..c8c49d86a403 100644
+> > --- a/kernel/bpf/devmap.c
+> > +++ b/kernel/bpf/devmap.c
+> > @@ -588,16 +588,18 @@ static inline bool is_ifindex_excluded(int *excluded, int num_excluded, int ifin
+> >  }
+> >  
+> >  /* Get ifindex of each upper device. 'indexes' must be able to hold at
+> > - * least MAX_NEST_DEV elements.
+> > + * least 'max' elements.
+> >   * Returns the number of ifindexes added.
+> >   */
+> > -static int get_upper_ifindexes(struct net_device *dev, int *indexes)
 
+> > +static int get_upper_ifindexes(struct net_device *dev, int *indexes, int max)
+> >  {
+> >  	struct net_device *upper;
+> >  	struct list_head *iter;
+> >  	int n = 0;
+> >  
+> >  	netdev_for_each_upper_dev_rcu(dev, upper, iter) {
+> > +		if (n >= max)
+> > +			break;
+> 
+> Hmm, how about returning an error here, and aborting the redirect
+> entirely? This silent truncation to an arbitrary number seems a bit
+> surprising, and very hard to debug. With an error, there will at least
+> be an error tracepoint to catch the failure.
+> 
+> -Toke
+
+Hi, Toke. 
+
+Thanks for the review.
+Indeed I agree that silent truncation is surprising and hard to debug.
+I'll send a v3 that returns -EOVERFLOW and aborts the redirect when
+there are too many upper devices.
