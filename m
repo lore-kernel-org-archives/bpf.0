@@ -1,66 +1,65 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6354245008
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 13:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D6E21CFEF
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 13:57:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771854378; cv=none; b=Hc8NktiGQS+6KjUvx3+Rx7BH0WNw3L/gOP5e8qNMKFpoOZQ1EXLG6YsJdD1AoZAZNtk4Cqzm0C7AaUTdZHvx44ioGBZxvjBP/oZXTS6O4Ba5p7urxJTGih2Tx8OASTo7/Vk961uTo1pdA+E7WQ7/+Aj9H/misYVOz6oRR3mqHqw=
+	t=1771855055; cv=none; b=WUUyNe/8SSFZFg2G4wfKS5Xkd1OWIfzw/+MdKTUAv+bKvdUDjMRcr9YBviATvfjgE6gj1tJW/c7yYykEDo7RxkQK7kUaYh77wcC6S18xmlzmoN2pCdoZsTpDUEiLZbvXsFlvFJeZO3vtaWf2RFBdfOvvvvk68btPRqGaxY7acFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771854378; c=relaxed/simple;
-	bh=moj3QcCqGLm4CLDFDzhqpwOR0+qc8ZVyonKyqdrXhMs=;
+	s=arc-20240116; t=1771855055; c=relaxed/simple;
+	bh=hpD4A2LbjbCNjsrw5tSp/djcEzocZv9CkhaFRtwPCt4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sDnyrxuVim9XmfioBK2+zCpe2C6c/1JyuWNPoeK/67/+KHu1OWFRZtwjJ0CU7P4S4aP7ZO2dBX4lawLp59j1Fw9IMHGGBfa/8al4Bnv32zpV0KAhcGoqJd8aJ8u6677vhz511/ur1oTdUsIw0UcrL6MY/XHqBRq4hD3G+BwoUXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PhezQN2L; arc=none smtp.client-ip=209.85.221.67
+	 In-Reply-To:Content-Type; b=G/rGzvRY0ZGmTSvrnk3T/3SuGjf63LAOlGMBxES67hYGHkLWQ6F6t7NyDfSxjHNuRTHRDeDrSNp0erQHTKbUKnMcOWWcl8jle8fJzuVLQmqV5/lUWyJn9mkOtXwqWw18YKJprwfmeUaUs8cZt4YmvRSPAPs8Shi5MgEgXAKq16Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WuvwByZs; arc=none smtp.client-ip=209.85.221.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PhezQN2L"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-4359249bbacso3199711f8f.0
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 05:46:16 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WuvwByZs"
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-43622089851so4393296f8f.3
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 05:57:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771854375; x=1772459175; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771855053; x=1772459853; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nQQ7lnppDq+V0zgDgWba+T0g0+pMzVEGyZ983+O+pHg=;
-        b=PhezQN2LypfTN99J0BsO/WMhkHLSXCBM9MIncUdh37qhlM1/hN7eLdd9/4BEevLliJ
-         f+k3NBQBxSYlIii0PxfJk6NTYXJNxGcs2aZMS5EGVuTeV2hef3LW84CioV2iYGxrOLlw
-         nLVHeM/dkzQdtqMMbgSz+TOHnJJidbgr/9UMRHS5lEMSCO2/12I9g+TYCZcKvRI6jSw1
-         Q0/zQUxjNjtP8MBl8UQigKuowZBibCxsGCPIfnXexTtCPlAtLet7yvhgH1NYwjusj1Bb
-         vOv1ln8UtEbK6w7EJp/Gq1TWGjSPvAqq+I4NF7Hpv7q9mS2BQPMxx39DxDLTUCXlVCKd
-         UE+Q==
+        bh=WJsnTs9wOOva+W/dlyKuzUXHIrF1f8WEp0sW62KqpBk=;
+        b=WuvwByZsY8hBRI6F1GcVQSZGWV5xGylfgjm0Xso/pKVV6ot/m99eOBJXgUQr4hWGjA
+         NO7OfYiSD/j/UrGtSUtCoP1IOOzm8gIM+dwi2JFmOUl0iWcLlVvdK0S1SOcsVtknQZ6D
+         C2JD5tG9umYnbNnc0jdQ3UqhV1W8Wewj4X2yUSKmD0pmRQ8iUJDYSdkf/uoAgeS1REPj
+         VTWYFeVMV9ocac7s1YsMGrnzpnBwMGSNTv0P2koULf+iZMYGHVdi4N0mDl6xLdEe9Prb
+         tXiaQX+dwHvE9jnOBQlfTMAYzcpv8w+nAorcHeVxe2++qTiH4dadzkz4cAJzRbgcbEiv
+         jWaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771854375; x=1772459175;
+        d=1e100.net; s=20230601; t=1771855053; x=1772459853;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nQQ7lnppDq+V0zgDgWba+T0g0+pMzVEGyZ983+O+pHg=;
-        b=Mj1tkJkB0U81fPa9xcEKRwLPa1jzqMV0v6ZfHdyyIgXfykroYU98yXydWTJudiQ9QE
-         6voSci2JPU+buD8wayCC7AzL//NYmScOUHS8veSyt9TIZXXEwBGdB5Xe+/mhTwkPZbVo
-         8h5x4z/1ONO9HbDt2k71qTVX6+Xn19XIP2W9vEkM0Met1BIghDrdQ24o3PbtzdvfkXMU
-         qGUdpclk8ck6sHMN76M6nUaRcd2sj54doNliEDkwAHDloiAFzyqxpve3jCWZQKeFe5hu
-         n+nbSmO9JldwQ1KDhzyG1sCqeGnuTmv8yhZ5VeY/hhLYxIjL6v/+WI0YbNXFeihFquPb
-         PPyg==
-X-Forwarded-Encrypted: i=1; AJvYcCVZ/YUpojk1mLgzBuVFGEtMY4B4Lq9RpYrK7xFO2EgimYkJCxRAwit1Klxd8u3XSWrdQIg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSCarrPbwbCKk6h52ajIDCoSPdpzY335IUdxv43AVonHqoBRmN
-	XNsuyMO3VJvA+Gw61Zcgatrl2aXZT4biHqFSmea7S4u2L4K4hT+wqYWd
-X-Gm-Gg: ATEYQzx3OMl1Itcyw5rGRP86fJXcVHCJqp3LCXuzhFKRl9I6ZYP3s4aY38Z89AG3XTF
-	AZdpRaJ2mNretUKo4uv8z8d0P81GAI9sgmtGOMiYCkfur/0qomReTApuFxjVHdbyY2/M03y8bjq
-	Ictn3alSZ5waUZ97hb8jgDvM1fjmRFUUwFvz5Z8SlrKmDEsKIEzy05vKe5Ziyp9cLguy1OuxCnW
-	6WKofhP4A5o+B/MSmDaWtWO/pv3dF/pIMLfHD8GAcFGgoE+GqVz1eQvjq7E22AKiIhiDBEzJp+s
-	d8o23u/e0yUMPhwTv58/aWgCZeW78z4+PJpcq2t8bTxro/xB/qdpuh9wiUxPEG8UoMdqWbDy1XC
-	sudHoNuocEgjTaYTddiXnxVT93zXOrslZdK3yTMf6R85GE3crlsiw93Wag8kLq8a0CdJRa5H3qd
-	mKB7fB3qxwOKZpx3+OtPiprZV8BDsjSgEE5SpxSFUMV9Y=
-X-Received: by 2002:a05:6000:2282:b0:435:932e:f924 with SMTP id ffacd0b85a97d-4396fd9b8f6mr15083047f8f.2.1771854374934;
-        Mon, 23 Feb 2026 05:46:14 -0800 (PST)
-Received: from [10.158.36.109] ([72.25.96.17])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970d3fc12sm17069302f8f.24.2026.02.23.05.46.12
+        bh=WJsnTs9wOOva+W/dlyKuzUXHIrF1f8WEp0sW62KqpBk=;
+        b=WD028iiHmwLi5SjyueFqFWacxJHFbyv0wvkKScNDiJ19fmSjNebZU/Q5A0PbhgjJpu
+         5VimzaBFXcrNxKAJe91DJWhtO1Ju5QzVS/lRbaV9/rEjMZJjABrwmVV9Nkec2twID7EW
+         OKPAVal6mCRe5j1geB59QXHetfUsvCGLdxRgkApKTaAi+RZWR3XlZwH45+ocltQP3zSq
+         QhyNaLITqZ3RNNcOEAdd6euI9eeoPYS2/ZvdGpyFfbegRSCn+K7SAIpkC/pqLoNIZaur
+         +eWIrs1TI3HkIZBJnEbej5iFCwQ+alCM/oTz2+A3m4jK4ajVrIOmWR5QCGcpBL1uv8wL
+         eLtw==
+X-Gm-Message-State: AOJu0Yz10rA0Fa2ovNJx4leZgv3RKsE93w4NW13tUkZ9tCYOHyo4YgeQ
+	vGR3Gdyu+s4qzo+X/ZarO3hmFxkNL4llK0u91Nv5hJ6zG8ouWgRj8V3b
+X-Gm-Gg: ATEYQzxOm2kTO/Cnbe6Z2BVhqEHVMkUULEVfZfRttp7qDErfmecCWtmGfhTk3fyNQ8q
+	xVXyH8Y/TZbR/vcOtQ39+xF5K0GHT49pRtkXgj2hRqKkEkyk/qGpYr/CR7MZAbYGJBXNenK13/l
+	KWjumE9sA2svE7kq3xeMvggwBdVsQgKArTaPxeUapv4+yPp9LOMY3YQLkW8pBF0Ar2EQSju9woa
+	ab83hq8/Cemv+W7zZ39PFz6Q04CsKgEs534YXynVPaTgBqiK7/OYcAckJBDh0T0wA9uPitdQrJR
+	AEqarnH3YTXHXd5Tzr2Cu6O0jG84TrjMg2kn7SdHOqtids9aFJ66kxRy9e+rngb5Mlh4L6zBmzV
+	DIWEg1R5p47m7PEgpHEJqDLCrlsrDvwHaNLhvsv6lgfVtekbaWBTJJJNyhRMX98EfsyWmHCUkp8
+	TM6BbajSQulgwAyijgVWvJ8z7A5IBwKB+izcijeapD4wxyIISReTS6f1osVyrW
+X-Received: by 2002:a05:6000:2407:b0:435:bd00:cb4 with SMTP id ffacd0b85a97d-4396f15b2a4mr14095895f8f.23.1771855052654;
+        Mon, 23 Feb 2026 05:57:32 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1126:4:e583:8b63:e8f2:1472? ([2620:10d:c092:500::4:5d16])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970bf9f6csm21443781f8f.7.2026.02.23.05.57.31
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Feb 2026 05:46:14 -0800 (PST)
-Message-ID: <e24b4a4f-b7e7-4e9e-ade0-cdda06f5765a@gmail.com>
-Date: Mon, 23 Feb 2026 15:46:14 +0200
+        Mon, 23 Feb 2026 05:57:32 -0800 (PST)
+Message-ID: <260229af-3ea8-43c3-bfd7-fe6b3471e75d@gmail.com>
+Date: Mon, 23 Feb 2026 13:57:31 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,203 +67,73 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net] net/mlx5e: Precompute xdpsq assignments for
- mlx5e_xdp_xmit()
-To: Finn Dayton <Finnius.Dayton@spacex.com>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Cc: "Alexei Starovoitov ," <ast@kernel.org>,
- "Daniel Borkmann ," <daniel@iogearbox.net>,
- "David S. Miller ," <davem@davemloft.net>, "Jakub Kicinski ,"
- <kuba@kernel.org>, "Jesper Dangaard Brouer ," <hawk@kernel.org>,
- "John Fastabend ," <john.fastabend@gmail.com>,
- "Stanislav Fomichev ," <sdf@fomichev.me>,
- "Saeed Mahameed ," <saeedm@nvidia.com>, "Leon Romanovsky ,"
- <leon@kernel.org>, "Tariq Toukan ," <tariqt@nvidia.com>,
- "Mark Bloch ," <mbloch@nvidia.com>, "Andrew Lunn ," <andrew+netdev@lunn.ch>,
- "Eric Dumazet ," <edumazet@google.com>, "Paolo Abeni ," <pabeni@redhat.com>,
- "stable@vger.kernel.org" <stable@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <610D8F9E-0038-46D9-AD8A-1D596236B1EF@spacex.com>
+Subject: Re: [PATCH bpf-next v2 0/2] libbpf: Add bpf_program__clone() for
+ individual program loading
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin Lau <kafai@meta.com>, Kernel Team <kernel-team@meta.com>,
+ Eduard <eddyz87@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>
+References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
+ <CAADnVQJFHzGQX0xh5pSVm1AKH=ONM4NYRnv=+qdWOAW4PmrVQg@mail.gmail.com>
 Content-Language: en-US
-From: Tariq Toukan <ttoukan.linux@gmail.com>
-In-Reply-To: <610D8F9E-0038-46D9-AD8A-1D596236B1EF@spacex.com>
+From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
+In-Reply-To: <CAADnVQJFHzGQX0xh5pSVm1AKH=ONM4NYRnv=+qdWOAW4PmrVQg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+On 2/20/26 22:48, Alexei Starovoitov wrote:
+> On Fri, Feb 20, 2026 at 11:18 AM Mykyta Yatsenko
+> <mykyta.yatsenko5@gmail.com> wrote:
+>> This series adds bpf_program__clone() to libbpf and converts veristat to
+>> use it, replacing the costly per-program object re-opening pattern.
+>>
+>> veristat needs to load each BPF program in isolation to collect
+>> per-program verification statistics. Previously it achieved this by
+>> opening a fresh bpf_object for every program, disabling autoload on all
+>> but the target, and loading the whole object. For object files with many
+>> programs this meant repeating ELF parsing and BTF processing N times.
+>>
+>> Patch 1 introduces bpf_program__clone(), which loads a single program
+>> from a prepared object into the kernel and returns an fd owned by the
+>> caller. It resolves BTF attach targets, fills in func/line info,
+>> fd_array, and other load parameters from the prepared object
+>> automatically, while letting callers override any field via
+>> bpf_prog_load_opts.
+>>
+>> Patch 2 converts veristat to prepare the object once and clone each
+>> program individually, eliminating redundant work.
+>>
+>> Performance
+>> Tested on selftests: 918 objects, ~4270 programs:
+>>   - Wall time:   36.88s -> 23.18s (37% faster)
+>>   - User time:   20.80s -> 16.07s (23% faster)
+>>   - Kernel time: 12.07s ->  6.06s (50% faster)
+>>
+>> Per-program loading also improves coverage: 83 programs that previously
+>> failed now succeed.
+> Wait what? How is that possible?
+Thanks for asking. Take for example verifier_unpriv.bpf.o object,
+all progs fail to load on the system veristat, the errors are:
+```
+libbpf: map 'map_prog1_socket': failed to initialize slot [1]
+to prog 'dummy_prog_loop1_socket' fd=-2: -EBADF
+...
+libbpf: map 'map_prog1_socket': failed to initialize slot
+[0] to prog 'dummy_prog_42_socket' fd=-2: -EBADF
+...
+etc
+```
+I understand this is due to the libbpf trying to initialize
+all PROG_ARRAY maps during object load, regardless if the corresponding
+program is loading or not (currently only 1 program is
+enabled at a time, so object that has those PROG_ARRAY has no
+chance to succeed)
+This root cause is the only reason for all 83
+improvements.
 
+This is not intentional, but it sounds like a nice side-effect,
+so I mention it.
 
-On 23/02/2026 2:05, Finn Dayton wrote:
-> mlx5e_xdp_xmit() selects an XDP SQ (Send Queue) using smp_processor_id()
-> (CPU ID). When doing XDP_REDIRECT from a CPU whose ID is
->> = priv->channels.num, mlx5e_xdp_xmit() returns -ENXIO and the
-> redirect fails.
-> 
-> Previous discussion proposed using modulo in mlx5e_xdp_xmit() to map
-> CPU IDs into the channel range, but modulo/division is too costly in
-> the hot path.
-> 
-
-That discussion reached to an agreement of using a while loop with 
-subtraction. It's expected to be fast, and optimizes the common case.
-
-> Instead, this solution precomputes per-cpu priv->xdpsq assignments when
-> channels are (re)configured and does a single lookup in  mlx5e_xdp_xmit().
-> 
-> Because multiple CPUs map to the same xdpsq when CPU count exceeds
-> channel count, serialize xdp_xmit on the ring with xdp_tx_lock.
-> 
-
-What's the advantage of this solution over the one we already agreed to?
-
-> Fixes: 58b99ee3e3eb ("net/mlx5e: Add support for XDP_REDIRECT in device-out side")
-> Link: https://lore.kernel.org/netdev/20251031231038.1092673-1-zijianzhang@bytedance.com/
-> Link: https://lore.kernel.org/netdev/44f69955-b566-4fb1-904d-f551046ff2d4@gmail.com
-> Cc: stable@vger.kernel.org # 6.12+
-> Signed-off-by: Finn Dayton <finnius.dayton@spacex.com>
-> ---
-> Testing:
->   - XDP forwarding / XDP_REDIRECT verified with both low CPU ids and
->     CPU ids > than number of send queues.
->   - No -ENXIO observed, successful forwarding.
-> 
->   drivers/net/ethernet/mellanox/mlx5/core/en.h  |  4 +++
->   .../net/ethernet/mellanox/mlx5/core/en/xdp.c  | 16 +++++++----
->   .../net/ethernet/mellanox/mlx5/core/en_main.c | 28 +++++++++++++++++++
->   3 files changed, 43 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en.h b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-> index ea2cd1f5d1d0..387954201640 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en.h
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en.h
-> @@ -519,6 +519,8 @@ struct mlx5e_xdpsq {
->   	/* control path */
->   	struct mlx5_wq_ctrl        wq_ctrl;
->   	struct mlx5e_channel      *channel;
-> +	/* serialize writes by multiple CPUs to this send queue */
-> +	spinlock_t xdp_tx_lock;
->   } ____cacheline_aligned_in_smp;
->   
->   struct mlx5e_xdp_buff {
-> @@ -909,6 +911,8 @@ struct mlx5e_priv {
->   	struct mlx5e_rq            drop_rq;
->   
->   	struct mlx5e_channels      channels;
-> +	/* selects the xdpsq during mlx5e_xdp_xmit() */
-> +	int __percpu              *send_queue_idx_ptr;
->   	struct mlx5e_rx_res       *rx_res;
->   	u32                       *tx_rates;
->   
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-> index 80f9fc10877a..2dd44ad873a1 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en/xdp.c
-> @@ -845,7 +845,7 @@ int mlx5e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
->   	struct mlx5e_priv *priv = netdev_priv(dev);
->   	struct mlx5e_xdpsq *sq;
->   	int nxmit = 0;
-> -	int sq_num;
-> +	int send_queue_idx = 0;
->   	int i;
->   
->   	/* this flag is sufficient, no need to test internal sq state */
-> @@ -855,13 +855,19 @@ int mlx5e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
->   	if (unlikely(flags & ~XDP_XMIT_FLAGS_MASK))
->   		return -EINVAL;
->   
-> -	sq_num = smp_processor_id();
->   
-> -	if (unlikely(sq_num >= priv->channels.num))
-> +	if (unlikely(!priv->send_queue_idx_ptr))
->   		return -ENXIO;
->   
-> -	sq = priv->channels.c[sq_num]->xdpsq;
-> +	send_queue_idx = *this_cpu_ptr(priv->send_queue_idx_ptr);
-> +	if (unlikely(send_queue_idx >= priv->channels.num || send_queue_idx < 0))
-> +		return -ENXIO;
->   
-> +	sq = priv->channels.c[send_queue_idx]->xdpsq;
-> +	/* The number of queues configured on a netdev may be smaller than the
-> +	 * CPU pool, so two CPUs might map to this queue. We must serialize writes.
-> +	 */
-> +	spin_lock(&sq->xdp_tx_lock);
->   	for (i = 0; i < n; i++) {
->   		struct mlx5e_xmit_data_frags xdptxdf = {};
->   		struct xdp_frame *xdpf = frames[i];
-> @@ -941,7 +947,7 @@ int mlx5e_xdp_xmit(struct net_device *dev, int n, struct xdp_frame **frames,
->   
->   	if (flags & XDP_XMIT_FLUSH)
->   		mlx5e_xmit_xdp_doorbell(sq);
-> -
-> +	spin_unlock(&sq->xdp_tx_lock);
->   	return nxmit;
->   }
->   
-> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> index 7eb691c2a1bd..adef35d06b89 100644
-> --- a/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> +++ b/drivers/net/ethernet/mellanox/mlx5/core/en_main.c
-> @@ -1492,6 +1492,7 @@ static int mlx5e_alloc_xdpsq(struct mlx5e_channel *c,
->   	sq->pdev      = c->pdev;
->   	sq->mkey_be   = c->mkey_be;
->   	sq->channel   = c;
-> +	spin_lock_init(&sq->xdp_tx_lock);
->   	sq->uar_map   = c->bfreg->map;
->   	sq->min_inline_mode = params->tx_min_inline_mode;
->   	sq->hw_mtu    = MLX5E_SW2HW_MTU(params, params->sw_mtu) - ETH_FCS_LEN;
-> @@ -3283,10 +3284,30 @@ static void mlx5e_build_txq_maps(struct mlx5e_priv *priv)
->   	smp_wmb();
->   }
->   
-> +static void build_priv_to_xdpsq_associations(struct mlx5e_priv *priv)
-> +{
-> +	/*
-> +	 * Build the mapping from CPU to XDP send queue index for priv.
-> +	 * This is used by mlx5e_xdp_xmit() to determine which xdpsq (send queue)
-> +	 * should handle the xdptx data, based on the CPU running mlx5e_xdp_xmit()
-> +	 * and the target priv (netdev).
-> +	 */
-> +	int send_queue_idx, cpu;
-> +
-> +	if (unlikely(priv->channels.num == 0))
-> +		return;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		send_queue_idx = cpu % priv->channels.num;
-> +		*per_cpu_ptr(priv->send_queue_idx_ptr, cpu) = send_queue_idx;
-> +	}
-> +}
-> +
->   void mlx5e_activate_priv_channels(struct mlx5e_priv *priv)
->   {
->   	mlx5e_build_txq_maps(priv);
->   	mlx5e_activate_channels(priv, &priv->channels);
-> +	build_priv_to_xdpsq_associations(priv);
->   	mlx5e_xdp_tx_enable(priv);
->   
->   	/* dev_watchdog() wants all TX queues to be started when the carrier is
-> @@ -6263,8 +6284,14 @@ int mlx5e_priv_init(struct mlx5e_priv *priv,
->   	if (!priv->fec_ranges)
->   		goto err_free_channel_stats;
->   
-> +	priv->send_queue_idx_ptr = alloc_percpu(int);
-> +	if (!priv->send_queue_idx_ptr)
-> +		goto err_free_fec_ranges;
-> +
->   	return 0;
->   
-> +err_free_fec_ranges:
-> +	kfree(priv->fec_ranges);
->   err_free_channel_stats:
->   	kfree(priv->channel_stats);
->   err_free_tx_rates:
-> @@ -6295,6 +6322,7 @@ void mlx5e_priv_cleanup(struct mlx5e_priv *priv)
->   	for (i = 0; i < priv->stats_nch; i++)
->   		kvfree(priv->channel_stats[i]);
->   	kfree(priv->channel_stats);
-> +	free_percpu(priv->send_queue_idx_ptr);
->   	kfree(priv->tx_rates);
->   	kfree(priv->txq2sq_stats);
->   	kfree(priv->txq2sq);
+Is this something we would like to address in libbpf?
 
