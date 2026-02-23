@@ -1,119 +1,347 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8444A35CB60;
-	Mon, 23 Feb 2026 10:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD091CEAA3
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 11:10:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771843711; cv=none; b=YQGZPuum7Dfvr2KxmPHFqCIdkPgTuzBNIwA5UZJP3PuAFGEYPlqrL3EqF4Tmlktl1ywezwQoxpW47OfzJNiHiVE3n3qHYP6hxhw8hqbhuRvglJN1dsytSMPhC9Mlxl885clad0HoH9+sczGZRQoUGzg68mf9/7ksc4fgMTqRBDU=
+	t=1771845048; cv=none; b=t3gsEwL9ty5GQAgYCYMIjPhu5sCPXJcLPMgmpr8ID23GfvmwJFXUNKLOQqwVV4O5FFPoqws95b/iCDFWaN+Ev9QEf76aDRNiJFFbA9KesrfDLFuZa+J3rV9U32zuCXD8/ZDdbydWNfCPWHJNEKteLrDGaDVurOVnGu4lQWvys+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771843711; c=relaxed/simple;
-	bh=B4k9gRkg71PnsXufZ2xYa5mMfTFkRd2QdwpI5OBgPQk=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rpD7bPA3C8ednsvs2GvG9PmuUDc9IFH93wwHKh77qXyhK5TtkKBTMKYWhRjtFPeNFwIJtRjaYMpWe/r2zg1Hwl++2JEIhaJQ5ky+Kxf4Tm+O47QEyQFSJ86FZ3ngVepNZgCUoYISAsPx1qRbFZbnVcK1hRFFOIJNpmXumkJK3EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=r7i4Wj3i; arc=none smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1771845048; c=relaxed/simple;
+	bh=FsKgtEnl0LkI8xPm0wa55X6azGAgdkP8hsP2D/3AvFQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AVlkN1tZGdwiQrxnsW+im729cc32qcMLmJYTg0QQ+MjbGiaZ1/pPNruyIkPrEb39VgaLXmk4M1ad/plScoL4nCl72SbSoQUKyZBneTMpiyMSnHh6EZg0GEs46Uw5TD9SWXu5d+tSLS1ZlpfBPIiCxcSUB0Hdnz3zbx1Gh/Sur0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EE6WHHt+; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="r7i4Wj3i"
-Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61N9Ogk0853227;
-	Mon, 23 Feb 2026 10:47:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=UVyLOI3z8vWqmLKu0cEzyVJ9p5zsfe+0kMQ3yPY7dlo=; b=r7i4
-	Wj3iJztaMll+kb1E3oDWnRm6MlurDnIZeuQ9qX84fMc598gS6ZEU1w7dMGZoZqVJ
-	sOsG3kNY4m2O6Lh5n88gURdRUr3qiEV5wnTZuDU/JQVln8DpB1IXRRoYlrdjTwQC
-	FCnkV4XNtzA/KBdx4C6IRhLKA9eoKC+aNc0yT5dUDOcaBrEEFK150AgfTjARttgk
-	GiLRWH0lbZQ/4ceeS5EoXp3FmPfLIA/bOowbxevpRI8/RK2Sxd4S5xMzr/0RIo/I
-	DvaSxCmKv4YL+PdN8uI2awQDpROYhWnYpiPJ3fG/tip/6bFoXvxFQSEp+GVbvssL
-	kV2AvfBM9LD1bTVayg==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cfqxwcake-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Feb 2026 10:47:52 +0000 (GMT)
-Received: from ML-CTVHTF21DX.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 23 Feb 2026 10:47:45 +0000
-From: Slava Imameev <slava.imameev@crowdstrike.com>
-To: <bot+bpf-ci@kernel.org>
-CC: <andrii@kernel.org>, <ast@kernel.org>, <bpf@vger.kernel.org>,
-        <clm@meta.com>, <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <eddyz87@gmail.com>, <edumazet@google.com>, <haoluo@google.com>,
-        <horms@kernel.org>, <ihor.solodrai@linux.dev>,
-        <john.fastabend@gmail.com>, <jolsa@kernel.org>, <kpsingh@kernel.org>,
-        <kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-open-source@crowdstrike.com>,
-        <martin.lau@kernel.org>, <martin.lau@linux.dev>,
-        <netdev@vger.kernel.org>, <pabeni@redhat.com>, <sdf@fomichev.me>,
-        <shuah@kernel.org>, <slava.imameev@crowdstrike.com>, <song@kernel.org>,
-        <yonghong.song@linux.dev>
-Subject: Re: Re: [PATCH bpf-next v3 1/2] bpf: Support multi-level pointer params via SCALAR_VALUE for trampolines
-Date: Mon, 23 Feb 2026 21:47:43 +1100
-Message-ID: <20260223104743.37713-1-slava.imameev@crowdstrike.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <692c1f3c4b95e9b8a2bbaf333f4618f1ca1c3cc36fc8b0246b094cd67ed62dbd@mail.kernel.org>
-References: <692c1f3c4b95e9b8a2bbaf333f4618f1ca1c3cc36fc8b0246b094cd67ed62dbd@mail.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EE6WHHt+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38F6CC116C6;
+	Mon, 23 Feb 2026 11:10:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771845048;
+	bh=FsKgtEnl0LkI8xPm0wa55X6azGAgdkP8hsP2D/3AvFQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=EE6WHHt+ogtBrVn95v2zV3TzxfQpsmQHkop4SsALngr+/5KRYF4NNtLGMd2mHkjJZ
+	 9gkur3A8Oyx24UpqCkoeDBI5iW9ZF79NkGkDbbYP2kvf1B0d6l+/ShAsS+3aGJv1wU
+	 NaD2DR2uRoisgf1ji/xs+Zz+shNRZjl7kMzQU4C1WS4YrbWM2nZvNyElACy8pF1Re6
+	 8fqRukj3jb4/Oht+F+SmhCv9BQieiMvYnCyfEgcpXAQPA936fE4ha6wi2W/k0EzlN+
+	 d461BA3RMh3hD7VAguy1VT3Pa+sxNkYapEWx1crcdPLGJJwW/N3hbt9sLHik3anrWw
+	 BCH8pR0W2URDw==
+Message-ID: <665838c8-d921-403e-a45c-eefad4902209@kernel.org>
+Date: Mon, 23 Feb 2026 12:10:44 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] powerpc64/bpf: Implement JIT support for private
+ stack
+To: adubey@linux.ibm.com, bpf@vger.kernel.org
+Cc: hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@kernel.org,
+ eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260216152234.36632-1-adubey@linux.ibm.com>
+Content-Language: fr-FR
+From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+In-Reply-To: <20260216152234.36632-1-adubey@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH008.crowdstrike.sys (10.100.11.75) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-ORIG-GUID: u83RgyQRo6YQuztzaIMjK3jEhrRMTO4m
-X-Authority-Analysis: v=2.4 cv=TJhIilla c=1 sm=1 tr=0 ts=699c3058 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22 a=6Gbh3OEyIFFArXis12EA:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDA5MyBTYWx0ZWRfXwY+XXO95NKDb
- 5upXSOhNQb8bSY8jYzonOWR8axJ09OYOOGLPBYJJWbP4Wf9PdosW0k2nUnKi2sRY7ihnjVASwdI
- PgGjkbQ9yMXdfyZi8VXugsB3AfoMG4pgt015ly7ZTFF8ccmlSa4NJeu1PrU9qng03H6zNGlnyZm
- sTGVbTVig2NpzmDxH4DwSDit0Ty7Jk/whDFshWZIjpfR4U71if0C3i9mXZAlzF1UMRpGx1NJnyf
- 2PXzSR0CeYq3SVDKO7+K14boa5QLzAHvcRIYuAwvPZT+Uwvn9gg3eL3brHk1ZZI0MZGS1wfq/O+
- CRsnLVnSbCgBIbNe5YRQ0E87k2f2pqEaWKbiRfZpkkgVzDw5VSfUT3fwkNyKVU4y7s6QK97gU95
- UOl3FQZiQ6SuahY/shSOHoPFK/vvkeHM33Qxb5ArcsmhpYTfgpHCv8Zp+lfxyD8D/LB+LCGzSat
- GXMAuYCQzQ9OYvOIfhA==
-X-Proofpoint-GUID: u83RgyQRo6YQuztzaIMjK3jEhrRMTO4m
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11709
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 malwarescore=0 suspectscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 adultscore=0 clxscore=1011 bulkscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602230093
 
-I think support for broader types can be provided in a compatible way
-with future annotated support, as I explained in my reply to the v2
-review:
 
-"
-  > so I suggest treating 'void **' as a scalar as Eduard suggested.
-  > This particular sb_eat_lsm_opts() hook
-  > doesn't have a useful type behind it anyway.
-  > I'm less certain about 'char **'. If we make it scalar too
-  > it will be harder to make it a pointer to nul terminated string later.
 
-  > So I would do 'void **' -> scalar for now only.
+Le 16/02/2026 à 16:22, adubey@linux.ibm.com a écrit :
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
+> Provision the private stack as a per-CPU allocation during
+> bpf_int_jit_compile(). Align the stack to 16 bytes and place guard
+> regions at both ends to detect runtime stack overflow and underflow.
+> 
+> Round the private stack size up to the nearest 16-byte boundary.
+> Make each guard region 16 bytes to preserve the required overall
+> 16-byte alignment. When private stack is set, skip bpf stack size
+> accounting in kernel stack.
+> 
+> There is no stack pointer in powerpc. Stack referencing during JIT
+> is done using frame pointer. Frame pointer calculation goes like:
+> 
+> BPF frame pointer = Priv stack allocation start address +
+>                      Overflow guard +
+>                      Actual stack size defined by verifier
+> 
+> Memory layout:
+> 
+> High Addr          +--------------------------------------------------+
+>                     |                                                  |
+>                     | 16 bytes Underflow guard (0xEB9F12345678eb9fULL) |
+>                     |                                                  |
+>           BPF FP -> +--------------------------------------------------+
+>                     |                                                  |
+>                     | Private stack - determined by verifier           |
+>                     | 16-bytes aligned                                 |
+>                     |                                                  |
+>                     +--------------------------------------------------+
+>                     |                                                  |
+> Lower Addr         | 16 byte Overflow guard (0xEB9F12345678eb9fULL)   |
+>                     |                                                  |
+> Priv stack alloc ->+--------------------------------------------------+
+> start
+> 
+> Update BPF_REG_FP to point to the calculated offset within the
+> allocated private stack buffer. Now, BPF stack usage reference
+> in the allocated private stack.
+> 
+> The patch is rebase over fixes by Hari:
+> https://lore.kernel.org/bpf/20260216065639.1750181-1-hbathini@linux.ibm.com/T/#mf02cad9096fa4ad1f05610b1f464da1cddf7445a
+> 
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit.h        |  5 +++
+>   arch/powerpc/net/bpf_jit_comp.c   | 74 +++++++++++++++++++++++++++++++
+>   arch/powerpc/net/bpf_jit_comp64.c | 38 +++++++++++++---
+>   3 files changed, 112 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index 7354e1d72f79..5a115c54e43a 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -178,8 +178,13 @@ struct codegen_context {
+>   	bool is_subprog;
+>   	bool exception_boundary;
+>   	bool exception_cb;
+> +	u64 priv_sp;
 
-  I changed to scalar in v3, keeping broader scope for pointer types.
+Are you sure you want a u64, not a long ?
 
-  We encountered double pointers of various types that required
-  workarounds, such as:
+>   };
+>   
+> +/* Memory size & magic-value to detect private stack overflow/underflow */
+> +#define PRIV_STACK_GUARD_SZ    16
+> +#define PRIV_STACK_GUARD_VAL   0xEB9F12345678eb9fULL
+> +
+>   #define bpf_to_ppc(r)	(ctx->b2p[r])
+>   
+>   #ifdef CONFIG_PPC32
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 278e09b57560..7a78e03d482f 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -129,6 +129,39 @@ bool bpf_jit_needs_zext(void)
+>   	return true;
+>   }
+>   
+> +static void priv_stack_init_guard(void __percpu *priv_stack_ptr, int alloc_size)
+> +{
+> +	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
+> +	u64 *stack_ptr;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
+> +		stack_ptr[0] = PRIV_STACK_GUARD_VAL;
+> +		stack_ptr[1] = PRIV_STACK_GUARD_VAL;
+> +		stack_ptr[underflow_idx] = PRIV_STACK_GUARD_VAL;
+> +		stack_ptr[underflow_idx + 1] = PRIV_STACK_GUARD_VAL;
+> +	}
+> +}
+> +
+> +static void priv_stack_check_guard(void __percpu *priv_stack_ptr, int alloc_size,
+> +								struct bpf_prog *fp)
+> +{
+> +	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
+> +	u64 *stack_ptr;
+> +
+> +	for_each_possible_cpu(cpu) {
+> +		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
+> +		if (stack_ptr[0] != PRIV_STACK_GUARD_VAL ||
+> +			stack_ptr[1] != PRIV_STACK_GUARD_VAL ||
+> +			stack_ptr[underflow_idx] != PRIV_STACK_GUARD_VAL ||
+> +			stack_ptr[underflow_idx + 1] != PRIV_STACK_GUARD_VAL) {
+> +			pr_err("BPF private stack overflow/underflow detected for prog %sx\n",
+> +			bpf_jit_get_prog_name(fp));
+> +			break;
+> +		}
+> +	}
+> +}
+> +
+>   struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>   {
+>   	u32 proglen;
+> @@ -140,6 +173,8 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>   	struct codegen_context cgctx;
+>   	int pass;
+>   	int flen;
+> +	int priv_stack_alloc_size;
+> +	void __percpu *priv_stack_ptr = NULL;
+>   	struct bpf_binary_header *fhdr = NULL;
+>   	struct bpf_binary_header *hdr = NULL;
+>   	struct bpf_prog *org_fp = fp;
+> @@ -173,6 +208,25 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>   		fp->aux->jit_data = jit_data;
+>   	}
+>   
+> +	if (!priv_stack_ptr && fp->aux->jits_use_priv_stack) {
+> +		/*
+> +		 * Allocate private stack of size equivalent to
+> +		 * verifier-calculated stack size plus two memory
+> +		 * guard regions to detect private stack overflow
+> +		 * and underflow.
+> +		 */
+> +		priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
+> +							2 * PRIV_STACK_GUARD_SZ;
+> +		priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_size, 16, GFP_KERNEL);
+> +		if (!priv_stack_ptr) {
+> +			fp = org_fp;
+> +			goto out_priv_stack;
+> +		}
+> +
+> +		priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_size);
+> +		fp->aux->priv_stack_ptr = priv_stack_ptr;
+> +	}
+> +
+>   	flen = fp->len;
+>   	addrs = jit_data->addrs;
+>   	if (addrs) {
+> @@ -209,6 +263,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>   	cgctx.is_subprog = bpf_is_subprog(fp);
+>   	cgctx.exception_boundary = fp->aux->exception_boundary;
+>   	cgctx.exception_cb = fp->aux->exception_cb;
+> +	cgctx.priv_sp = priv_stack_ptr ? (u64)priv_stack_ptr : 0;
 
-  int __posix_acl_chmod(struct posix_acl **acl, gfp_t gfp, umode_t mode)
+priv_stack_ptr is a pointer, ie a long.
+priv_sp is a u64, ie a long long.
 
-  Adding support for void** alone doesn't address the broader issue
-  with other double pointer types.
+This will mismatch on powerpc/32
 
-  When annotated array support (including char**) is added in the
-  future, it should remain compatible with the scalar approach for
-  legacy (unannotated) parameters. Unannotated parameters will
-  continue using scalar handling.
-"
+>   
+>   	/* Scouting faux-generate pass 0 */
+>   	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+> @@ -306,7 +361,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>   		}
+>   		bpf_prog_fill_jited_linfo(fp, addrs);
+>   out_addrs:
+> +		if (!image && priv_stack_ptr) {
+> +			free_percpu(priv_stack_ptr);
+> +			fp->aux->priv_stack_ptr = NULL;
+
+Shouldn't those two lines be swapped ?
+
+> +		}
+>   		kfree(addrs);
+> +out_priv_stack:
+>   		kfree(jit_data);
+>   		fp->aux->jit_data = NULL;
+>   	} else {
+> @@ -419,6 +479,8 @@ void bpf_jit_free(struct bpf_prog *fp)
+>   	if (fp->jited) {
+>   		struct powerpc_jit_data *jit_data = fp->aux->jit_data;
+>   		struct bpf_binary_header *hdr;
+> +		void __percpu *priv_stack_ptr;
+> +		int priv_stack_alloc_size;
+>   
+>   		/*
+>   		 * If we fail the final pass of JIT (from jit_subprogs),
+> @@ -432,6 +494,13 @@ void bpf_jit_free(struct bpf_prog *fp)
+>   		}
+>   		hdr = bpf_jit_binary_pack_hdr(fp);
+>   		bpf_jit_binary_pack_free(hdr, NULL);
+> +		priv_stack_ptr = fp->aux->priv_stack_ptr;
+> +		if (priv_stack_ptr) {
+> +			priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
+> +							2 * PRIV_STACK_GUARD_SZ;
+> +			priv_stack_check_guard(priv_stack_ptr, priv_stack_alloc_size, fp);
+> +			free_percpu(priv_stack_ptr);
+> +		}
+>   		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
+>   	}
+>   
+> @@ -453,6 +522,11 @@ bool bpf_jit_supports_kfunc_call(void)
+>   	return true;
+>   }
+>   
+> +bool bpf_jit_supports_private_stack(void)
+> +{
+> +	return IS_ENABLED(CONFIG_PPC64);
+> +}
+> +
+>   bool bpf_jit_supports_arena(void)
+>   {
+>   	return IS_ENABLED(CONFIG_PPC64);
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+> index 640b84409687..206ef43b4090 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -183,6 +183,20 @@ void bpf_jit_realloc_regs(struct codegen_context *ctx)
+>   {
+>   }
+>   
+> +static void emit_fp_priv_stack(u32 *image, struct codegen_context *ctx, void __percpu *ptr)
+> +{
+> +	/* Load percpu data offset */
+> +	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R13,
+> +			offsetof(struct paca_struct, data_offset)));
+> +	PPC_LI64(bpf_to_ppc(BPF_REG_FP), (u64)ptr);
+> +	/*
+> +	 * Set frame pointer with percpu allocated
+> +	 * buffer for private stack.
+> +	 */
+> +	EMIT(PPC_RAW_ADD(bpf_to_ppc(BPF_REG_FP),
+> +			bpf_to_ppc(TMP_REG_1), bpf_to_ppc(BPF_REG_FP)));
+> +}
+> +
+>   /*
+>    * For exception boundary & exception_cb progs:
+>    *     return increased size to accommodate additional NVRs.
+> @@ -197,6 +211,12 @@ static int bpf_jit_stack_size(struct codegen_context *ctx)
+>   void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+>   {
+>   	int i;
+> +	void __percpu *priv_frame_ptr = NULL;
+> +
+> +	if (ctx->priv_sp) {
+> +		priv_frame_ptr = (void*) ctx->priv_sp + PRIV_STACK_GUARD_SZ +
+> +					round_up(ctx->stack_size, 16);
+> +	}
+>   
+>   	/* Instruction for trampoline attach */
+>   	EMIT(PPC_RAW_NOP());
+> @@ -251,7 +271,7 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+>   		}
+>   
+>   		EMIT(PPC_RAW_STDU(_R1, _R1,
+> -				-(bpf_jit_stack_size(ctx) + ctx->stack_size)));
+> +			-(bpf_jit_stack_size(ctx) + (ctx->priv_sp ? 0 : ctx->stack_size))));
+>   	}
+>   
+>   	/*
+> @@ -307,9 +327,16 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+>   	 * Exception_cb not restricted from using stack area or arena.
+>   	 * Setup frame pointer to point to the bpf stack area
+>   	 */
+> -	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+> -		EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+> -			STACK_FRAME_MIN_SIZE + ctx->stack_size));
+> +	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP))) {
+> +		if (ctx->priv_sp && priv_frame_ptr) {
+> +			/* Set up private stack pointer */
+> +			emit_fp_priv_stack(image, ctx, priv_frame_ptr);
+> +		} else {
+> +			/* Setup frame pointer to point to the bpf stack area */
+> +			EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+> +				STACK_FRAME_MIN_SIZE + ctx->stack_size));
+> +		}
+> +	}
+>   
+>   	if (ctx->arena_vm_start)
+>   		PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
+> @@ -339,7 +366,8 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+>   
+>   	/* Tear down our stack frame */
+>   	if (bpf_has_stack_frame(ctx)) {
+> -		EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_jit_stack_size(ctx) + ctx->stack_size));
+> +		EMIT(PPC_RAW_ADDI(_R1, _R1,
+> +			bpf_jit_stack_size(ctx) + (ctx->priv_sp ? 0 : ctx->stack_size)));
+>   
+>   		if (ctx->seen & SEEN_FUNC || ctx->exception_cb) {
+>   			EMIT(PPC_RAW_LD(_R0, _R1, PPC_LR_STKOFF));
+
