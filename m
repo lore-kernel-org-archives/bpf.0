@@ -1,138 +1,185 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E602571DA
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DF823EA8B
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771874813; cv=none; b=TS/fc11qwm821XQpXdpC49XKPj5UKEElqPra1bpI3t6F6irPnUmSIspCLisHfDf9+Z5nwxtDN6JuFRYQu9dG6jE0QAIn14JdwlcPrMWE8RTol0GiqTaCJpyr6itx29OqVv60SG600hs/Fk+QOPdyWfxi6q7weyFqSmk4axr5K44=
+	t=1771875192; cv=none; b=cWdt4AmiUD4118v0g+bzh8O3P4B4gEDF45RX1oXGzzAOjuGi4q8/vvNibUdV33db77Mlnu77y37KzKcFiUUa/8VoSzAQ7cOuoA3YOQHqYOStx1/YWRMxy8CQn1EywH4Gp1ln/el4foYnNE5v6t3D0VhM2EGn6uTAtbW75gdn0a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771874813; c=relaxed/simple;
-	bh=iyUHJHHbHiMnzC56ZuEuiuqfucnJnkY+drjiYAnTIgg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aL5ruVxMN/YyDHTwcXr7gHiov+DPIHg6lc9ZR8tHj5EL3SUQHqrWb1J8zevV8kwJE44LtQJ1hPo/oqksQnZ3mc578trHWMiynFSvbJtMRn+9RVGF0zzhAhFUUA425tGfagrrbHOnmorXGerv/lhZOxBrTz7SNmbL7/RNEbRoVfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GqyEYsOS; arc=none smtp.client-ip=95.215.58.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771875192; c=relaxed/simple;
+	bh=H92Fngy2jMaCQ9z6mHQcAPKLql/LE6cWbhzQviHkSeM=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=Gk5Zn/352Z/at0TR3tbdsnduOkaU2mU41Mq9EzQge8UvAFbqOQlMf+lEA/4NI+OjpliJHwlsnBd9Y5b4XJCPnI4tXlGwNG8fIbe5ZsqfsEWUPJlzG4LcvW2CBBycedDesQok1yEfjpSVxwXYa8k5BSXOGsGy0C4cvWCP53ngTMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=KL5ZFkgq; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GqyEYsOS"
-Message-ID: <e0f16c6c-cd9f-4881-b638-c52c8a83104e@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771874809;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V9BhDXbDb+yH2yMv7tSmQcdqgxwb0xNI6HvhXw+0pJk=;
-	b=GqyEYsOSVJ+fZLS0D5M9huUiqM4Y0iGXDBZtVWi77s/fw1BmvRPJGL9OfzOGY0K6124x2p
-	eLi8cVXXOz92G54rvU6KCI8LiCKigEfRCKDXiaWnXcHeiupxtdISiXP45l3dsEPa2IzCVR
-	iec3DqYk57Y2BLyPZW+Z60y701oYYJo=
-Date: Mon, 23 Feb 2026 11:26:13 -0800
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="KL5ZFkgq"
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61NITKG23172107;
+	Mon, 23 Feb 2026 19:32:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=+HAthE
+	MD6C8u01c3UOpX9clz4coYeUnj/3U5RORe4cs=; b=KL5ZFkgqbKK8ko+Ncz0rsk
+	OPQtmpgf3kPFesiDhR/mxfHNGaEG+eGum+khcj68nFWXs/4WHDXQlJ3EpZUhbPrw
+	JkvKzfC4H9xNcWZCcLtj4YcmsW3kgu2BAaizYaho1a1hIMAOkT+VBiqAnumaAUQS
+	8QSqNFcxui/QchcbmUKA0oCggUEHfqumMxzlidkAMj02bzufd0RQ/4oFANqhDFLU
+	9HafE6IfPOcQ++fs0D7m9Rz7U2QPanqgn8EtlAyjZCDOb8lYcz/dUgzowNGx0VQY
+	SgoBgo173eFueWUxPgWl9lMiVhmUOxvtv/re6sPZGFHqJ84CTRXIA1gyL5Ta/fbg
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4cqrhhk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Feb 2026 19:32:41 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61NG6JRs030298;
+	Mon, 23 Feb 2026 19:32:40 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfrhk5xhu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Feb 2026 19:32:40 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61NJWdQW20120074
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 23 Feb 2026 19:32:40 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A2FE35805F;
+	Mon, 23 Feb 2026 19:32:39 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A15BA58043;
+	Mon, 23 Feb 2026 19:32:38 +0000 (GMT)
+Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
+	by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 23 Feb 2026 19:32:38 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [LSF/MM/BPF TOPIC] BPF local storage for every packet
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, kernel-team@cloudflare.com,
- lsf-pc@lists.linux-foundation.org
-References: <87ecmffopy.fsf@cloudflare.com>
- <5fdee5fd-aff1-4764-820e-3b1f3ad00941@linux.dev>
- <877bs6fc25.fsf@cloudflare.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <877bs6fc25.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Date: Tue, 24 Feb 2026 01:02:38 +0530
+From: adubey <adubey@linux.ibm.com>
+To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
+Cc: bpf@vger.kernel.org, hbathini@linux.ibm.com, linuxppc-dev@lists.ozlabs.org,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
+        clm@meta.com, ihor.solodrai@linux.dev
+Subject: Re: [PATCH 2/2] selftests/bpf: Enable private stack tests for
+ powerpc64
+In-Reply-To: <1956c912-c880-4214-9bc3-e205902459b5@kernel.org>
+References: <20260216152234.36632-1-adubey@linux.ibm.com>
+ <20260216152234.36632-2-adubey@linux.ibm.com>
+ <1956c912-c880-4214-9bc3-e205902459b5@kernel.org>
+Message-ID: <4cfdd14fac3c4091c6616decfc5d6ab9@linux.ibm.com>
+X-Sender: adubey@linux.ibm.com
+Organization: IBM
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Proofpoint-ORIG-GUID: EXtVg3WTOAebkMJ6Cyw6AXFkRhwBRc3L
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDE2NiBTYWx0ZWRfX2rC4xsxuUKjX
+ xb2ITekNjn3DAZocQdBP7qq8+tfePxbCdSi2X5fZetY7yGEiI8cB4pzyrLY54YKyHfw6ymnynJR
+ d6u8jzIkMW4vlA/PmtDdzzJWsCEQuxrHXuQzHD1kshmwWvH64UxOQxvkDv0pJjHx5ODgCprSOXm
+ 9cVqyDzTvm8FFOcXzJBdPAvro5ntVD/OT8FYX2dWlM8gZxCgtMuswTxxKhHQE446h5ovAVUDemj
+ 4CHHDx2mx1rvg7+n0DYOdCNMuQynycG1rvzkYENVROTfoXytmqvSo9EKVObq7zwW9vUNZiSFg0T
+ ERogrBcunTlJlrDii/6bRVIWUxzNhQ7nQYatvR13jKvYlmArCw+OYQYqZs0fzwwPrLpAtDtVE2v
+ c9JDltkZAsbj1X6o5pi9tR0ACLhB+HQg3tGKWWDjl/2LIa59Ehss77ERWhtedWcAk5jFjRm+Drz
+ vjaWWUPcf7vg5u2Xn+w==
+X-Proofpoint-GUID: gUw0PTrM_Pjy2ZOqm6Xa5dgujYzcmh57
+X-Authority-Analysis: v=2.4 cv=bbBmkePB c=1 sm=1 tr=0 ts=699cab5a cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
+ a=qmUj5T3_vRBoYhgTJiUA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-23_04,2026-02-23_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 phishscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602230166
 
-On 2/21/26 5:42 AM, Jakub Sitnicki wrote:
-> On Fri, Feb 20, 2026 at 10:34 AM -08, Martin KaFai Lau wrote:
->> On 2/20/26 6:56 AM, Jakub Sitnicki wrote:
->>> In the upcoming days we are going to post an RFC which proposes to
->>> extend the concept of BPF local storage to socket buffers (sk_buff, skb)
->>> as means to attach arbitrary metadata to packets from BPF programs [1]
->>> (slides 41-55).
->>> Design wise, BPF local storage is a great fit for a packet metadata
->>> container, as it that avoids some of the shortcoming of the the XDP
->>> metadata interface:
->>> 1. Users interact with storage through BPF maps and can take advantage
->>>      of existing built-in BPF map types, while still being able to
->>>      implement a custom data format,
->>> 2. Maps within local storage can have different properties controlled by
->>>      map flags. For example, maps with BPF_F_CLONE set can survive packet
->>>      cloning. Other flags could allow map contents to survive sk_buff
->>>      scrubbing during encapsulation/decapsulation or pass across network
->>>      namespace boundaries.
->>> 3. Local storage supports multiple users out of the box - each user
->>>      creates their own map, eliminating the need to coordinate data
->>>      layout,
->>> 4. Local storage has its own backing memory, so persisting it across
->>>      network stack layers requires no changes to the network stack.
->>> However, this flexibility comes at a cost. While XDP metadata requires
->>> no allocations [2], an initial write to BPF local storage requires two:
->>> one for bpf_local_storage_elem, and one for bpf_local_storage itself.
->>> We would like to align this work with the needs of other BPF local
->>> storage users (socks, cgroups, tasks, inodes), where allocation overhead
->>> has been a concern as well [2].
->>> Optimization ideas we would like to put up for discussion:
->>> - slimming down bpf_local_storage so it can be embedded as an skb
->>>     extension chunk,
->>> - making the bpf_local_storage cache size configurable,
->>> - allowing bpf_local_storage to be pre-allocated,
->>> - co-allocating bpf_local_storage and bpf_local_storage_elem for the
->>>     single-map case.
->>
->> The sk/cgroup/task storage has a much longer lifetime. Meaning once allocation
->> is done, the storage stays in the sk until the sk is closed. The length of
->> lifetime is quite different from the skb. I am afraid we are re-purposing
->> bpf_local_storage for a very different use case where skb lifecycle is much
->> shorter.
->>
->> We are planning to increase the 'sizeof(struct sock)' for perf reason. Saving an
->> allocation is an upside but not the major one we are looking (or care) for
->> sk. We are more looking for cacheline efficiency and probably remove the need
->> for bpf_local_storage[_elem] if the user chooses to use the in-place spaces of a
->> sk.
->>
->> If 'sizeof(struct sk_buff)' can be increased, this should align on where sk
->> local storage is going. If skb will solely depend on the existing
->> bpf_local_storage and has no plan to raise sizeof(struct sk_buff) for perf
->> purpose, the existing bpf_local_storage may be the wrong place to
->> repurpose/optimize because the lifecycle of skb is very different.
+On 2026-02-23 16:41, Christophe Leroy (CS GROUP) wrote:
+> Le 16/02/2026 à 16:22, adubey@linux.ibm.com a écrit :
+>> From: Abhishek Dubey <adubey@linux.ibm.com>
+>> 
+>> With support of private stack, relevant tests must pass
+>> on powerpc64.
+>> 
+>> #./test_progs -t struct_ops_private_stack
+>> #434/1   struct_ops_private_stack/private_stack:OK
+>> #434/2   struct_ops_private_stack/private_stack_fail:OK
+>> #434/3   struct_ops_private_stack/private_stack_recur:OK
+>> #434     struct_ops_private_stack:OK
+>> Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+>> 
+>> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+>> ---
+>>   tools/testing/selftests/bpf/progs/struct_ops_private_stack.c   | 3 
+>> ++-
+>>   .../selftests/bpf/progs/struct_ops_private_stack_fail.c        | 3 
+>> ++-
+>>   .../selftests/bpf/progs/struct_ops_private_stack_recur.c       | 3 
+>> ++-
+>>   3 files changed, 6 insertions(+), 3 deletions(-)
+>> 
+>> diff --git 
+>> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c 
+>> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
+>> index dbe646013811..1df1111cd029 100644
+>> --- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
+>> +++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
+>> @@ -7,7 +7,8 @@
+>>     char _license[] SEC("license") = "GPL";
+>>   -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
+>> +#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
+>> +				|| defined(__TARGET_ARCH_powerpc)
 > 
-> The lifetime difference is undeniable, but I still see common ground.
-> To make it more concrete:
+> Won't this also trigger the test on powerpc/32 ?
+We have patch ready marking test separation b/w 32/64-bit ppc.
+Planning to post it immediately after few concurrent patches are frozen.
+With current tag, yes it does invoke on 32 bit. Our intent is to
+support private stack for ppc64 only in this series.
 > 
-> 1. IIRC you've mentioned wanting more bpf_local_storage->cache entries
->     for socks in some scenarios, while for skbs I'd expect we need
->     fewer. We could make the cache size configurable via a flexible
->     array.
 > 
-> 2. Embedding bpf_local_storage is another overlap I had in mind. For
->     socks that in within the same memory blob as struct sock, while for
->     skbs we'd want to embed it in skb_ext (once it's small enough). This
->     depends on whether you end up dropping bpf_local_storage for
->     sk_local_storage entirely, which I didn't know about until now.
-
-For the in-place sk storage, it should not need the bpf_local_storage 
-and the bpf_local_storage_elem. A stable map_xyz->sk_offset should be 
-enough. If a storage is needed for all sk, the bpf prog should use the 
-in-place sk storage instead of going through the bpf_local_storage[_elem].
-
-imo, if we manage to pull out a new solution (whatever that is) for skb 
-but does not perform close to the skb->data_meta, it is probably hard to 
-use in production. I could be wrong but I don't see how embedding 
-local_storage and/or shrink the cache can get there. I think we need 
-another solution/design.
-
-> 
-> 3. I've heard the idea of allocating skb_ext memory together with
->     sk_buff was floated in the past. While trimming skb_ext at build-time
->     is hard today — say I need XFRM but don't care about crypto offloads
->     keeping state in skb_ext — the idea is similar to what you're
->     proposing for struct sock.
-
+>>   bool skip __attribute((__section__(".data"))) = false;
+>>   #else
+>>   bool skip = true;
+>> diff --git 
+>> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c 
+>> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
+>> index 3d89ad7cbe2a..e09c1a8782b4 100644
+>> --- 
+>> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
+>> +++ 
+>> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
+>> @@ -7,7 +7,8 @@
+>>     char _license[] SEC("license") = "GPL";
+>>   -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
+>> +#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
+>> +				|| defined(__TARGET_ARCH_powerpc)
+>>   bool skip __attribute((__section__(".data"))) = false;
+>>   #else
+>>   bool skip = true;
+>> diff --git 
+>> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c 
+>> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
+>> index b1f6d7e5a8e5..791800835673 100644
+>> --- 
+>> a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
+>> +++ 
+>> b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
+>> @@ -7,7 +7,8 @@
+>>     char _license[] SEC("license") = "GPL";
+>>   -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
+>> +#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
+>> +				|| defined(__TARGET_ARCH_powerpc)
+>>   bool skip __attribute((__section__(".data"))) = false;
+>>   #else
+>>   bool skip = true;
+-Abhishek
