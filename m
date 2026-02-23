@@ -1,60 +1,43 @@
-Received: from www2881.sakura.ne.jp (www2881.sakura.ne.jp [49.212.198.91])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63B119D081
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 13:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.198.91
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0C022F177;
+	Mon, 23 Feb 2026 13:42:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771853572; cv=none; b=Hp6qcdqoupEXUMCtNhKP9mFEVAXb/oAurXLvxrP8+9ZiQzeOiTNqr+aZADJ2cIo9YUK1WTGpzip00+6xf+PC1hnIqPYr7nVE31euOOJ3GT1D9TQRdZIp1jQVhgki/pJw4hX6v3frk+piqTkf3D4ihTyuaCoztY0mIUxuv247mvY=
+	t=1771854152; cv=none; b=ewNe+kHy/tHmscoSOQOCEkcEalbXwmLuzR2F/5wuh/pKP8VWQ6Ie7guV1v9BhKj+HakKl5PC7wNNhgQfhGNnTgMLGBoRbXds7DqsMFch/XK+R+N6+1YqqQBEvCuNS77F9qGjdLpnukP2fNakd6k3kXb0d0UWH/1wtynXxQdoTQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771853572; c=relaxed/simple;
-	bh=vwDHGZkNKcZgrDUmXykErc1y/rSOex9+J/bjnc8RUYs=;
+	s=arc-20240116; t=1771854152; c=relaxed/simple;
+	bh=FeGFrz+P3/u/+kz2HdUD5oz1nyGnKJRt0Glwhe+BCUw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nUZADHSTMETAkQ2ZTV7Rp82Ei9+08A7aQU5X0xeGtn9LOAvgUgspYz5/ekOqoMSbiYsiSiI5xZEJFkheq/D0cqgYLAD5O1bV3od6rIXyojQqYCj3VtmbzczBHyNXbLfkfc8SUYJDFC31byoL1vOvKafwuoBp2cvzSH0DmrF3X5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp; spf=pass smtp.mailfrom=enjuk.jp; dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b=meD5mbcz; arc=none smtp.client-ip=49.212.198.91
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enjuk.jp
+	 Content-Type:Content-Disposition:In-Reply-To; b=WXF1/XjNieUAXKRM0E3Vy9vnsJQEN9vyoNNr6UGcG778fizw5MMiQGoyvDwcp41Q5jXQkb2kBBzIjlhzQeKQf7ogS86AavhKZmGHeF0JEk8RsNo3+yKVd47hDqivUfMXZVcnApas2rwqSilDcGF4WHTNezhR8xte3YaQNLDnLsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hqnYphIE; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b="meD5mbcz"
-Received: from x1 (99.223.13.160.dy.iij4u.or.jp [160.13.223.99])
-	(authenticated bits=0)
-	by www2881.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 61NDWcbh055624
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 23 Feb 2026 22:32:40 +0900 (JST)
-	(envelope-from kohei@enjuk.jp)
-DKIM-Signature: a=rsa-sha256; bh=MU4uqkPCUo1YSM7ORV3XeMLzQiNwxn5T39Jw0803mss=;
-        c=relaxed/relaxed; d=enjuk.jp;
-        h=Date:From:To:Subject:Message-ID;
-        s=rs20251215; t=1771853562; v=1;
-        b=meD5mbczMUBA9iqvN7VIexPFQB9dAqCNgFbF9AbUC6KD43CJqE8IzSY/162US5k6
-         d+qoClRbskcdvG6MrTes0dk0VDvIzlVxtbWG8lTdX3+gUU76GWmW28IVReC2e+v8
-         T+PPrD1WWE3EMslcCi/mRoQcYqB+CIgvGDCnaDZqn7c1EHz5nT3Rg6RKlzJZpOUq
-         /EFMNM97NxBzVdqwraFhm+BxLR35C0FWi4Z5jfLnMmyFBqGaxuCfyDogGKWp+H7K
-         NY5u+/xbmLSGwidcXAhjL0VVJ6hRqydACi5ryCbSxMOe/GiEMGuJ5PV9IHvVt2cB
-         pNpR4f+q2PsKoxLnSTz+yA==
-Date: Mon, 23 Feb 2026 22:32:38 +0900
-From: Kohei Enju <kohei@enjuk.jp>
-To: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@fomichev.me>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jussi Maki <joamaki@gmail.com>, kohei.enju@gmail.com,
-        syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
-Subject: Re: [PATCH v2 bpf] bpf: devmap: fix stack-out-of-bounds write in
- get_upper_ifindexes()
-Message-ID: <aZxVELsXHvrpkicA@x1>
-References: <20260220193039.7129-1-kohei@enjuk.jp>
- <87ikbnofug.fsf@toke.dk>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hqnYphIE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35034C116C6;
+	Mon, 23 Feb 2026 13:42:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771854152;
+	bh=FeGFrz+P3/u/+kz2HdUD5oz1nyGnKJRt0Glwhe+BCUw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hqnYphIEO870dd81/fzqMrs9j+imMlc/g/egsk7hBfyBaQjY49ERtDIfkHL6HzwsE
+	 rSE6VZ0HPOoaH+In4j75lh4Z5OgrNMLcuO7szw0NammutqPcEEt36yJ8Df3RGM3XeQ
+	 m5iYaO1TJatmiyGBwWsW6HkBaI6BQKH0GYZECcnwkjBF4iteViveAWXlLPpqG7P523
+	 R4rotGt1o2IjiAWex0lORmFurCgC4d5fB1Bv2lhp3XknWcdnlUqRQxVVfu5LhykHKY
+	 NQgGJa08nDdIGNx43EvupOTvCJCS29VlmB1fJyD+fANVuQ0UdgqhFhO9HohGxmUdz1
+	 eeXtksI+E965w==
+Date: Mon, 23 Feb 2026 14:42:27 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Christoph Hellwig <hch@infradead.org>
+Cc: Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org, KP Singh <kpsingh@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] bpf: classify block device hooks appropriately
+Message-ID: <20260223-verlegen-reagieren-ab46dc9460ba@brauner>
+References: <20260220-work-bpf-bdev-v1-0-c53e852c4702@kernel.org>
+ <20260220-work-bpf-bdev-v1-1-c53e852c4702@kernel.org>
+ <aZinyCqhKYSFLj43@infradead.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -63,74 +46,42 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87ikbnofug.fsf@toke.dk>
+In-Reply-To: <aZinyCqhKYSFLj43@infradead.org>
 
-On 02/23 12:32, Toke Høiland-Jørgensen wrote:
-> Kohei Enju <kohei@enjuk.jp> writes:
+On Fri, Feb 20, 2026 at 10:28:24AM -0800, Christoph Hellwig wrote:
+> On Fri, Feb 20, 2026 at 06:48:48PM +0100, Christian Brauner wrote:
+> > A bunch of new hooks for managing block devices were added a while ago
+> > but they weren't actually appropriately classified.
 > 
-> > get_upper_ifindexes() iterates over all upper devices and writes their
-> > indices into an array without checking bounds.
-> >
-> > Also the callers assume that the max number of upper devices is
-> > MAX_NEST_DEV and allocate excluded_devices[1+MAX_NEST_DEV] on the stack,
-> > but that assumption is not correct and the number of upper devices could
-> > be larger than MAX_NEST_DEV (e.g., many macvlans), causing a
-> > stack-out-of-bounds write.
-> >
-> > Add a max parameter to get_upper_ifindexes() to avoid the issue.
-> >
-> > To reproduce, create more than MAX_NEST_DEV(8) macvlans on a device with
-> > an XDP program attached using BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS.
-> > Then send a packet to the device to trigger the XDP redirect path.
-> >
-> > Reported-by: syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
-> > Closes: https://lore.kernel.org/all/698c4ce3.050a0220.340abe.000b.GAE@google.com/T/
-> > Fixes: aeea1b86f936 ("bpf, devmap: Exclude XDP broadcast to master device")
-> > Signed-off-by: Kohei Enju <kohei@enjuk.jp>
-> > ---
-> > Changes:
-> >   v2:
-> >     - fix formatting, accounting that max-line-length is 100
-> >   v1: https://lore.kernel.org/bpf/20260216201428.65641-1-kohei@enjuk.jp/
-> > ---
-> >  kernel/bpf/devmap.c | 12 ++++++++----
-> >  1 file changed, 8 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-> > index 2625601de76e..c8c49d86a403 100644
-> > --- a/kernel/bpf/devmap.c
-> > +++ b/kernel/bpf/devmap.c
-> > @@ -588,16 +588,18 @@ static inline bool is_ifindex_excluded(int *excluded, int num_excluded, int ifin
-> >  }
-> >  
-> >  /* Get ifindex of each upper device. 'indexes' must be able to hold at
-> > - * least MAX_NEST_DEV elements.
-> > + * least 'max' elements.
-> >   * Returns the number of ifindexes added.
-> >   */
-> > -static int get_upper_ifindexes(struct net_device *dev, int *indexes)
-
-> > +static int get_upper_ifindexes(struct net_device *dev, int *indexes, int max)
-> >  {
-> >  	struct net_device *upper;
-> >  	struct list_head *iter;
-> >  	int n = 0;
-> >  
-> >  	netdev_for_each_upper_dev_rcu(dev, upper, iter) {
-> > +		if (n >= max)
-> > +			break;
+> > 
+> > * bpf_lsm_bdev_alloc() is called when the inode for the block
+> >   device is allocated. This happens from a sleepable context so mark the
+> >   function as sleepable. When this function is called the memory for the
+> >   block device storage embedded into the inode is zeroed. That block
+> >   device cannot be meaningfully reference or interacted with at this
+> >   point. So mark it as untrusted for now.
+> > 
+> > * bpf_lsm_bdev_free() is called when the inode for the block
+> >   device is freed. A bunch of memory associated with the block device
+> >   has already been freed and there's dangling pointers in there. So mark
+> >   it as untrusted. It cannot be meaningfully referenced or interacted
+> >   with anymore. It is also called from sb->s_op->free_inode:: which
+> >   means it runs in rcu context (most of the times). So leave it as
+> >   non-sleepable.
 > 
-> Hmm, how about returning an error here, and aborting the redirect
-> entirely? This silent truncation to an arbitrary number seems a bit
-> surprising, and very hard to debug. With an error, there will at least
-> be an error tracepoint to catch the failure.
-> 
-> -Toke
+> How did this even get added?  None of this should be of any business
+> to LSM hooks :(
 
-Hi, Toke. 
+Fyi, it had nothing to do with bpf. That came as part of IPE about 2
+years ago and gives that particular LSM the ability to track the
+dm-verity status via the underlying block device so binary execution is
+restricted to binaries from non-writable and dm-verity protected
+filesystems (ignoring scripts for a second...).
 
-Thanks for the review.
-Indeed I agree that silent truncation is surprising and hard to debug.
-I'll send a v3 that returns -EOVERFLOW and aborts the redirect when
-there are too many upper devices.
+This just appropriately classifies the hook for the verifier. It's the
+same mechanism as security_alloc_*(). The fun part is though that while
+the traditional LSM needs a pointer in struct block_device to allocate
+storage for it a bpf lsm doesn't need that at all. It only needs the
+hook itself and a hashmap. Or to say it more directly: this could've
+always been a bpf lsm only without any additional in-kernel code for
+this. But anyway, I'm using it.
