@@ -1,159 +1,151 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DD5332692D
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 16:40:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771864826; cv=none; b=Ox2umszQmwEssW72Ayu04ow3uyd38/Rcq0eSrzJK+MVSMXR9ZkcUn1hhuV9/Qpx7128isl4nI+HVMj/il2yI2YBLtrAReAG6Ljrd8PARClkNsBm1wQiKgPuY1KjvFGfzJecH0pOXixj571q0g5TP+i1ny6qDM36B2xU6nVyBeqo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771864826; c=relaxed/simple;
-	bh=I7lUptFxVarzef9jC3UnmMrsKEqQ87c/rhGjl8OYvuM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F1yBYn6lqQnczeQ6um+xdULL+lLdpKt5zuzNgHzvrQx/F2PvhdufUFWdQWhqtZEO6Q2zoo0kYLSLleCeXY9WhlJZE/NK12dqWTLXG1tM3wuGYRAIe8ehw/eIcN3OMmus3ykIs1J0fzdHfOZKpRwhUEzlMNUF4QSwe8gn3xJtAp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jJNau3c3; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=YAieF/w4; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=jJNau3c3; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=YAieF/w4; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758463176E0
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 16:58:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771865909; cv=pass; b=OCP2a1DaSIAKZZAbWSqlu+MuL/6VjJ+eqzSs+Vv/HTEc4KjXTgP9+1I4146k2CxIlV8+bkWblKjyP/fgaWnTi6JutjViYVKnW6AiGSGjqfDEddWcG86HlriMWU1EIh12kAv7X+fdSY5VMh/y3+5Uh4gvQIWsIYk4n/nfPDgQ//c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771865909; c=relaxed/simple;
+	bh=8O35ywf3frONs/mR3sh+Q3y4PGU/DxQ4aRR+Ww+VwB8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R8NcL3VTVC/NYgOgfBvXnevon5D+O4P6bvRmLMGnwvvZm7RNGn1hgpw6juaBS3TsNiDOxfchL4SjsxgHn+oD2HgGkw5eHInD+VK0KhNqKTiJWYJjbX1nA1v2ZWQfiQDNok4428M6L4waXhGTwRm3wu9zeUwJ9Dc3RgQqNXlcB9U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ReOT2Foh; arc=pass smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jJNau3c3";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="YAieF/w4";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="jJNau3c3";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="YAieF/w4"
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id AC13E5BE67;
-	Mon, 23 Feb 2026 16:40:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1771864823; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cgb3ZEft8H8vg1RtznkOIulf8Ony0/O/bgWiqx7t8as=;
-	b=jJNau3c3QbBeEjRBRcwAI9fCcEF1t50YJsiqUKSmWEcWjw0yp+Z1pREyeebONaKdRk+nva
-	+BiZdFXRsgDcGAz5dqE9QDTq4DC4nfRpPaeQ+3mHs66T7LX4lJrQBaTLCD16CJ47tY5f4Q
-	WhmXWfNH5HrBJbBmiDZPN6jnhT/NVr8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1771864823;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cgb3ZEft8H8vg1RtznkOIulf8Ony0/O/bgWiqx7t8as=;
-	b=YAieF/w45cdAl7C34WmMAd+L6Iodz2kTKV5NQUmDBvlgLy4i8sm0cksQ5k2RF0xMgFS7vD
-	kxgdbsBHeMDX/qDg==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1771864823; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cgb3ZEft8H8vg1RtznkOIulf8Ony0/O/bgWiqx7t8as=;
-	b=jJNau3c3QbBeEjRBRcwAI9fCcEF1t50YJsiqUKSmWEcWjw0yp+Z1pREyeebONaKdRk+nva
-	+BiZdFXRsgDcGAz5dqE9QDTq4DC4nfRpPaeQ+3mHs66T7LX4lJrQBaTLCD16CJ47tY5f4Q
-	WhmXWfNH5HrBJbBmiDZPN6jnhT/NVr8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1771864823;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=cgb3ZEft8H8vg1RtznkOIulf8Ony0/O/bgWiqx7t8as=;
-	b=YAieF/w45cdAl7C34WmMAd+L6Iodz2kTKV5NQUmDBvlgLy4i8sm0cksQ5k2RF0xMgFS7vD
-	kxgdbsBHeMDX/qDg==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 438413EA68;
-	Mon, 23 Feb 2026 16:40:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id FEvaDveCnGl4fwAAD6G6ig
-	(envelope-from <hare@suse.de>); Mon, 23 Feb 2026 16:40:23 +0000
-Message-ID: <eb5c2bd8-9e59-496d-8480-29ae7c7b959b@suse.de>
-Date: Mon, 23 Feb 2026 17:40:22 +0100
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ReOT2Foh"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4837907f535so41112825e9.3
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 08:58:28 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771865907; cv=none;
+        d=google.com; s=arc-20240605;
+        b=MVTqZC+2poxDQLYybPPuww5KYpwRpikQdJ4Y3IyFAMM0bBDz/5oSCsCHm826yI0PA8
+         yl4bK2oDwl4cMYR9kTgBhV+tGhcOG6GvHqp9E1gKONpSFuo88DH2YU2YQb2nYj9NAocU
+         KfkVtFxaO1JL9NVCyy0BarNKwgYo3/jDMtu4WEdH2sW4ozm4iUpe/GkKP6cYDE03tVPf
+         YPzRgFzi+NUC0ri8LHkHt0Hd7vMO9RxgFhwXnB4PZRJTd9rXd0+VcxPOdtvnnGuE+wcN
+         me9Q3YfMap2GiPkLaExqihr9zmmbtGLALmTpsFrPJ1/P2AADgsLCsZEKvmTTWPMB1j1A
+         9BKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2/TWRW3byuvHDEl1Ok9W0sAe5kheK+6oFHQAV5r5ghw=;
+        fh=avahKAf924smMndtTEqfpnY6Hc7TmC/pPDjF5khxAZg=;
+        b=afBK8r23CSIypfqLVxlGAlgJ+/ZmGfJrzV8zN7Il88l8435b/1Dxp0UJcmKb5oRX0T
+         6C+12OFDsyLfmU0wUXwlkopT+xRV3FT/UT4qociMy0YKENj72usqWTBRubf2izlfgrae
+         k4uSggeJidWNzC+NS/aBF5JVTPF5xA3fqt7KiQF9BWAKnDMVzsz06mThlnnGcujxzxyH
+         IyHtrqzTvoqLQMc+B0MkTpzgansbSQX/WsaZdphajxiBn/FMrxhSp0UTQTBj03OnGB6P
+         K21rzrd/l1IKito1h4+lOdTmA/kKKXbNB+3/eRcB+dLb2sDf8rPs02DWRb+hR1auwR2t
+         JE4w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771865907; x=1772470707; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2/TWRW3byuvHDEl1Ok9W0sAe5kheK+6oFHQAV5r5ghw=;
+        b=ReOT2Fohn+NNBBbUJpNuYk384nuMXyiNFHVPkouNela1ImQm4WI0vsXiu/VNIdP6kD
+         J7zbFeV4UpXHLousND1iqZaEXqe2OhDCBiKP2hwdHCwglau583RVveXojmoNacSCTSgg
+         ZO94CAlMcp5+NTKBV46d1C7X0HXfTisdBfXxhXbmsz2f6J56rMF41e0IBOw3uio2OqDs
+         Y7lh77oFr7d9wjKEiiren2rJNRHlWDpzGIxplX76MbVhCIwSxuXXXVI62qJg103EPqDG
+         aEboVMp0zMDHAPCj4Zefd6zEJ6AWFRPjMVdc8LREdbMEmcphSQEHPfJvAkQk1LmVgffc
+         LrUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771865907; x=1772470707;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=2/TWRW3byuvHDEl1Ok9W0sAe5kheK+6oFHQAV5r5ghw=;
+        b=gtOs8/DyCJSJRdp1i3IvuEghGopwSJ5hCqgd6BWN9ZkWwxhfusNxu4PXwplzzOzY76
+         yhSTjg6I8a6Ii3zvZLYBHHnsDWwIzSC+Dv7CB/YQ1m+nv5gQ7iJfeyVWDMFUEOam1/0E
+         2wWML8dfTen/gny9MN2t25utKd9HVnxd6GQPZalUXIJQOI+jM/7Xu5RS9b9ROxgbwjqH
+         Wa1FP2epUwvMzSA+aslZ/r/1k5UW3XAD1thn6hgU/MoKp3X4zZI9gT5djSx14eRWn7Xj
+         Cxr0OQYvrCzmWs6cNqOsxQmxnVtOriOe6nU9AuqIw8gAYGbJZX7jvjg2mlomp/IZoh2v
+         uI3w==
+X-Forwarded-Encrypted: i=1; AJvYcCXGlUwJ1SZy1iOhYVDf6TrvLpUmnzqj0RcyIOZqUkPG2jAq5FnSDyBgC97/JGZY1sa3LCQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEyOkMf4l1wYhdQQbHGFFAjwgv5ZKiwxHxMa2NUocUnqM52vQE
+	2CudIG7fpa60q9V0FIcy8WX2hJBAqE0N1qNkUT4waJp4slaFgeuIp4HWe9toLfkPJzeNXAoMOfQ
+	iffZgODPLRqburj+ySPr1fpidC1+HdBc=
+X-Gm-Gg: AZuq6aKJSOfHgv8mVH7hKUTGnGHptad52f1Wv8+G4BRaNVInNKJfRkPR6xgYFv3co1s
+	hoAD7bJ5K1voXhW2Tkhp/gQcCkMdlxJm40rolzYC7tJrlEejpMn7lqkLdTuO+0BJchlFcvCKm39
+	oiKgIa2SUv+gvVU7MzllKMD4rz9Exg0ajQfKRH/3SThuRGxmdx3M6W61lznGQLNU4p47ZFLF3eh
+	xIyTjnWz+uxd/oxhVtDLo+rVeEmP/03Arl8X39AHI6yy7RncU4Og0QExcqYZr7xVp5vDx//eK/x
+	b7pSwKcrEzmLRraltYZQBKAGpT7bS7vwau9Teqg3D+LRyimdyoZ5YIg6hOM4kqZzNgpP+Vr44nt
+	g0Qpyz5KWr793HTBQMRE=
+X-Received: by 2002:a05:600c:3484:b0:483:7f4e:fef6 with SMTP id
+ 5b1f17b1804b1-483a95fa4e7mr119430205e9.26.1771865906614; Mon, 23 Feb 2026
+ 08:58:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [LSF/MM/BPF TOPIC] User space RAID5 with ublk and io_uring BPF
-To: Pavel Begunkov <asml.silence@gmail.com>, Xiao Ni <xni@redhat.com>,
- lsf-pc@lists.linux-foundation.org, linux-block
- <linux-block@vger.kernel.org>, bpf@vger.kernel.org
-Cc: Ming Lei <ming.lei@redhat.com>
-References: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
- <7e772d91-a546-40ed-90c0-29e2a9721c53@gmail.com>
-Content-Language: en-US
-From: Hannes Reinecke <hare@suse.de>
-In-Reply-To: <7e772d91-a546-40ed-90c0-29e2a9721c53@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -4.30
-X-Spam-Level: 
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[gmail.com,redhat.com,lists.linux-foundation.org,vger.kernel.org];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_TLS_ALL(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:helo]
-X-Spam-Flag: NO
+References: <692c1f3c4b95e9b8a2bbaf333f4618f1ca1c3cc36fc8b0246b094cd67ed62dbd@mail.kernel.org>
+ <20260223104743.37713-1-slava.imameev@crowdstrike.com>
+In-Reply-To: <20260223104743.37713-1-slava.imameev@crowdstrike.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 23 Feb 2026 08:58:14 -0800
+X-Gm-Features: AaiRm53gF6QRXkPAEJJjxdjdGlfFi_H0IJde1Ne6TGCB64Ct4fuwj2XfM2Yoyyg
+Message-ID: <CAADnVQ+okfKHvKzCy9vLQkpevhvHMFXhincqmFOQX9zN_vtQyA@mail.gmail.com>
+Subject: Re: Re: [PATCH bpf-next v3 1/2] bpf: Support multi-level pointer
+ params via SCALAR_VALUE for trampolines
+To: Slava Imameev <slava.imameev@crowdstrike.com>
+Cc: bot+bpf-ci@kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, Chris Mason <clm@meta.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, Eduard <eddyz87@gmail.com>, 
+	Eric Dumazet <edumazet@google.com>, Hao Luo <haoluo@google.com>, Simon Horman <horms@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	DL Linux Open Source Team <linux-open-source@crowdstrike.com>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Network Development <netdev@vger.kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/23/26 16:54, Pavel Begunkov wrote:
-> On 2/19/26 05:38, Xiao Ni wrote:
->> Hi all
->>
->> I'm doing some work on user-space RAID recently. I'd like to propose a
->> topic for LSF/MM 2026 regarding the implementation of RAID5 in user
->> space using ublk and io_uring bpf[1], particularly focusing on the
->> challenges encountered and potential kernel improvements needed.
->>
->> Ublk raid5 uses the ublk framework (tools/testing/selftests/ublk/),
->> with the goal of leveraging io_uring's zero-copy capabilities and
->> BPF[1] for performance optimization. The implementation includes:
->> * RAID5 stripe handling with configurable chunk sizes
->> * Multi-queue support via io_uring
->> * Degraded mode for single disk failure tolerance
->> * Integration with io_uring BPF struct_ops framework
->>
->> During the implementation, I encountered several technical challenges.
->> The primary challenge is performing XOR parity calculations in a true
->> zero-copy manner:
-> 
-> I aim at similar use cases, i.e. interacting with registered buffers
-> from BPF, but based on a different BPF-io_uring implementation. I'd be
-> interesting to discuss how the kfunc API should look like.
-> 
-I'd be interested in that, too.
-I'm working on BPF support for nvme / nvmet, so some ideas how others
-handle it won't go amiss.
+On Mon, Feb 23, 2026 at 2:48=E2=80=AFAM Slava Imameev
+<slava.imameev@crowdstrike.com> wrote:
+>
+> I think support for broader types can be provided in a compatible way
+> with future annotated support, as I explained in my reply to the v2
+> review:
+>
+> "
+>   > so I suggest treating 'void **' as a scalar as Eduard suggested.
+>   > This particular sb_eat_lsm_opts() hook
+>   > doesn't have a useful type behind it anyway.
+>   > I'm less certain about 'char **'. If we make it scalar too
+>   > it will be harder to make it a pointer to nul terminated string later=
+.
+>
+>   > So I would do 'void **' -> scalar for now only.
+>
+>   I changed to scalar in v3, keeping broader scope for pointer types.
+>
+>   We encountered double pointers of various types that required
+>   workarounds, such as:
+>
+>   int __posix_acl_chmod(struct posix_acl **acl, gfp_t gfp, umode_t mode)
+>
+>   Adding support for void** alone doesn't address the broader issue
+>   with other double pointer types.
+>
+>   When annotated array support (including char**) is added in the
+>   future, it should remain compatible with the scalar approach for
+>   legacy (unannotated) parameters. Unannotated parameters will
+>   continue using scalar handling.
+> "
 
-Cheers,
+but then there is no need to relax it for double pointers only.
 
-Hannes
--- 
-Dr. Hannes Reinecke                  Kernel Storage Architect
-hare@suse.de                                +49 911 74053 688
-SUSE Software Solutions GmbH, Frankenstr. 146, 90461 Nürnberg
-HRB 36809 (AG Nürnberg), GF: I. Totev, A. McDonald, W. Knoblich
+-       if (is_void_or_int_ptr(btf, t))
++       if (is_void_or_int_ptr(btf, t) || !btf_type_is_struct_ptr(btf, t))
+
+would make 'scalar' a fallback for anything unrecognized,
+and we can argue that making it smarter in the future
+maybe hopefully won't break progs.
