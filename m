@@ -1,32 +1,32 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F8D376483
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:11:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23A78376BF8
+	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 19:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771873900; cv=none; b=QZDLOl8GplS4FQS4Hyk6Nj5vp2auIlQFxFKFbLzB66p88W9kpsSUpvVtqineopnk8azqJ462QRoWm5LSGYXYt7fkYOYmb8CmWJ3TNmd8MKIeehdWMQAqRntvP6/u0XlG6hLsfxmwYI6qLV/pcYKA4DGwrOrEZIRV5H4MxgU6lE8=
+	t=1771873904; cv=none; b=gaERgquRxplcnE1J0zlTd2uqfgyZAtmXz+00mI0/qml17ng/rwRdixPZeL41PDUQIS9QGPz3e1PDbXRApqaS3UqZ/+tnGsUm81DT/qdbZxjKtpibcpf2TYlKwsOeS1xoWHX0JO09tssptByohA0oydZX2Bh5TlzM+TnWi2Db2Ik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771873900; c=relaxed/simple;
-	bh=mkdXOMtAiZEE/kIjEnKL+A+FZpU22LHBLHxeu9Pl4a0=;
+	s=arc-20240116; t=1771873904; c=relaxed/simple;
+	bh=hc/E7kagcHNUw8RSngTBUY+g9wwjMUBbC6BQ3A5MxSM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=djU/sjYfCrSf14o3Kvp7xMdvdhS8fyQVU17mEy/xhBvQhTV/lXN7ZMup3/XMM41WtWNBSFZq3/GAa4giWAFI/Imn/TkghNb0NGLnNL3P3axQC+D+q5PjC0rMwk/C5SDSaXvne1Mi/JEC2jdTQcSaP/LlFqYJOhrYLtPo1H4LXm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iKDJGFNs; arc=none smtp.client-ip=95.215.58.174
+	 MIME-Version; b=hjgTBtHxe6gvjRIfeKjqgV9j0nz+WxXfLh9M2y099IiSrr4nsqTX3MzoOW9D+p6ncPzn3yUzl8A1ywhCIT6SUHx/LCu71z/L71iRnlnbrZ0XDpGQEe/veF7rdj+0IVKzezMfrBsIq0Bfl7x0olaT9I1a6Ph/y3YHCzODTAWcWHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B04OIfak; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iKDJGFNs"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B04OIfak"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771873897;
+	t=1771873900;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aI++4j9Xuw5+ouqhgv9iItaYJYo/emEExNe9kGFLeT0=;
-	b=iKDJGFNskx8mHxqengOw62UYLArotI/SBVLFolIBSXCENqKmX4sF9Cc6h++BV65/qtuTn7
-	3fr+M/h89t0gHBwryERFTkmsza67VLliJDyYTJNqmhNBi+LoHRUBVve6FtS++0Fuq97Z/W
-	R6PN8GekuIwtvq7JzLdCq5PqoO7Wd6Q=
+	bh=L5oYDJzQrEcliwwUyjc1S8sIbaaCTZLdOuGhm0bSThw=;
+	b=B04OIfak6eNnu8PFXzHnseq2QLOrd9lZdGvDjkDGKMwK2rVJPufXD65zgl67+h8voAJ55S
+	QKycLv11FtW3+/rT6ghT1BylaqKKUrbMZMuKLZ2BWNz3eOSaEtxNlnBUGry9dUsCUhl1bG
+	1Hhe0xfNr89gmy6wzru1/GMJPUW+ePY=
 From: Ihor Solodrai <ihor.solodrai@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -39,9 +39,9 @@ Cc: Amery Hung <ameryhung@gmail.com>,
 	bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf v4 19/20] selftests/bpf: Check BPFTOOL env var in detect_bpftool_path()
-Date: Mon, 23 Feb 2026 11:11:17 -0800
-Message-ID: <20260223191118.655185-2-ihor.solodrai@linux.dev>
+Subject: [PATCH bpf v4 20/20] selftests/bpf: Don't override SIGSEGV handler with ASAN
+Date: Mon, 23 Feb 2026 11:11:18 -0800
+Message-ID: <20260223191118.655185-3-ihor.solodrai@linux.dev>
 In-Reply-To: <20260223191118.655185-1-ihor.solodrai@linux.dev>
 References: <20260223190736.649171-1-ihor.solodrai@linux.dev>
  <20260223191118.655185-1-ihor.solodrai@linux.dev>
@@ -54,53 +54,93 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The bpftool_maps_access and bpftool_metadata tests may fail on BPF CI
-with "command not found", depending on a workflow.
-This happens because detect_bpftool_path() only checks two hardcoded
-relative paths:
-  - ./tools/sbin/bpftool
-  - ../tools/sbin/bpftool
+test_progs has custom SIGSEGV handler, which interferes with the
+address sanitizer [1]. Add an #ifndef to avoid this.
 
-Add support for a BPFTOOL environment variable that allows specifying
-the exact path to the bpftool binary.
+Additionally, declare an __asan_on_error() to dump the test logs in
+the same way it happens in the custom SIGSEGV handler.
+
+[1] https://lore.kernel.org/bpf/73d832948b01dbc0ebc60d85574bdf8537f3a810.camel@gmail.com/
 
 Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 ---
- tools/testing/selftests/bpf/bpftool_helpers.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_progs.c | 36 +++++++++++++++++-------
+ 1 file changed, 26 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/bpftool_helpers.c b/tools/testing/selftests/bpf/bpftool_helpers.c
-index 595a636fa13b..929fc257f431 100644
---- a/tools/testing/selftests/bpf/bpftool_helpers.c
-+++ b/tools/testing/selftests/bpf/bpftool_helpers.c
-@@ -14,6 +14,17 @@
- static int detect_bpftool_path(char *buffer, size_t size)
- {
- 	char tmp[BPFTOOL_PATH_MAX_LEN];
-+	const char *env_path;
-+
-+	/* First, check if BPFTOOL environment variable is set */
-+	env_path = getenv("BPFTOOL");
-+	if (env_path && access(env_path, X_OK) == 0) {
-+		strscpy(buffer, env_path, size);
-+		return 0;
-+	} else if (env_path) {
-+		fprintf(stderr, "bpftool '%s' doesn't exist or is not executable\n", env_path);
-+		return 1;
-+	}
- 
- 	/* Check default bpftool location (will work if we are running the
- 	 * default flavor of test_progs)
-@@ -33,7 +44,7 @@ static int detect_bpftool_path(char *buffer, size_t size)
- 		return 0;
- 	}
- 
--	/* Failed to find bpftool binary */
-+	fprintf(stderr, "Failed to detect bpftool path, use BPFTOOL env var to override\n");
- 	return 1;
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index d1418ec1f351..0929f4a7bda4 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -1261,14 +1261,8 @@ int get_bpf_max_tramp_links(void)
+ 	return ret;
  }
  
+-#define MAX_BACKTRACE_SZ 128
+-void crash_handler(int signum)
++static void dump_crash_log(void)
+ {
+-	void *bt[MAX_BACKTRACE_SZ];
+-	size_t sz;
+-
+-	sz = backtrace(bt, ARRAY_SIZE(bt));
+-
+ 	fflush(stdout);
+ 	stdout = env.stdout_saved;
+ 	stderr = env.stderr_saved;
+@@ -1277,12 +1271,32 @@ void crash_handler(int signum)
+ 		env.test_state->error_cnt++;
+ 		dump_test_log(env.test, env.test_state, true, false, NULL);
+ 	}
++}
++
++#define MAX_BACKTRACE_SZ 128
++
++void crash_handler(int signum)
++{
++	void *bt[MAX_BACKTRACE_SZ];
++	size_t sz;
++
++	sz = backtrace(bt, ARRAY_SIZE(bt));
++
++	dump_crash_log();
++
+ 	if (env.worker_id != -1)
+ 		fprintf(stderr, "[%d]: ", env.worker_id);
+ 	fprintf(stderr, "Caught signal #%d!\nStack trace:\n", signum);
+ 	backtrace_symbols_fd(bt, sz, STDERR_FILENO);
+ }
+ 
++#ifdef __SANITIZE_ADDRESS__
++void __asan_on_error(void)
++{
++	dump_crash_log();
++}
++#endif
++
+ void hexdump(const char *prefix, const void *buf, size_t len)
+ {
+ 	for (int i = 0; i < len; i++) {
+@@ -1944,13 +1958,15 @@ int main(int argc, char **argv)
+ 		.parser = parse_arg,
+ 		.doc = argp_program_doc,
+ 	};
++	int err, i;
++
++#ifndef __SANITIZE_ADDRESS__
+ 	struct sigaction sigact = {
+ 		.sa_handler = crash_handler,
+ 		.sa_flags = SA_RESETHAND,
+-		};
+-	int err, i;
+-
++	};
+ 	sigaction(SIGSEGV, &sigact, NULL);
++#endif
+ 
+ 	env.stdout_saved = stdout;
+ 	env.stderr_saved = stderr;
 -- 
 2.53.0
 
