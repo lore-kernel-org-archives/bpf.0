@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94DFD35B656;
-	Mon, 23 Feb 2026 10:22:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1099135BDBC;
+	Mon, 23 Feb 2026 10:23:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771842182; cv=none; b=BDDq/K4DQGkMJ+ciRb+2TXocVqhTv7suWmAqZ3N+6mRuTMoz+swtUdADOOs8UBBYJ8wCXV91SGbGOZ9aoKzS5w997u8ZUNYiK6LDCZgylxxNvoH8Y6JNWFdtAizfZFBPaZbdoVK/l7S2kPyIij2mk3Nm1BukWFUc5K6vEPFQDIU=
+	t=1771842184; cv=none; b=HKAARgt8bIq/LtUqGVVllU4TQIJWuLLJJZJcrFnhbCk8Hi1D3wGdbDEgJoIbiLbpvFKFNUlrXuCLzyzgzXdjaskkLVPADsN0fi7bDyuU5h9r0yeak2fijs0FHuUMGJ/hkzmVxF8G3PT8oO7zBenN+1TyDyiED34gfFwZaIdf8G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771842182; c=relaxed/simple;
-	bh=PhZmw2HezwgE5pFRtdOSxaDFfThUcjyd1oY4SxpvDQk=;
+	s=arc-20240116; t=1771842184; c=relaxed/simple;
+	bh=SukpHFHiSHu/twx0r6xVxUPGGOUN6BgGoamcfzCozeA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dNkHwcVC/cxuRC6UX08KEQ2FJfFT1hWOguGimiqzkoZoxYObJTvrB0h2T/3AsfItyH7nwZwj55mKRwynx8elp092NnIiataiWVBglbqa6WplwhHPCBloNUmG00ZRr0+Xl0lZPwfso0GpwcyokdT9cX9I3O6vS5zh4nfCBeOvnxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GaZNKIx1; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=P6rjF4EXmTdZkTcx9Kzyh7C0PMavjjmDbSGb0HuwKhIEQPsBtzb/PTP7CT2ntqzHQBWKcBRRK2OxsARoM7QtFGXdOiuHxEtvZBtH2I+S2cDqFmICaqYPD72rne6MX2v7t9WWfdOeqR5JzFXkWKZUIQVBCDLfyFl4k6UZM+jnbNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kO7zDJNE; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GaZNKIx1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kO7zDJNE"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771842176; x=1803378176;
+  t=1771842183; x=1803378183;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=PhZmw2HezwgE5pFRtdOSxaDFfThUcjyd1oY4SxpvDQk=;
-  b=GaZNKIx1iI5+TqE1XlrxN6sou0Cz/OKXUwFtaMh4Hwh0o4rlvKvMP/tz
-   kkrNSiOD5kWK+t1o0Mm4pdJcw9sy9nQem6Z2cubqF/LMt8NethEmZOdxy
-   eVAJVPdnO5uUEbPpNpQsomt3y+GdJez6SE+cnW4Y/ny8gNpxtUsu29/RW
-   bqjab+Hl9eD6HGf41fiw8wgsuVOhYDC8jhtZS0wnAUEB7/nbDhJp4HHpb
-   98P0nj+bi1q5+L5+L1EQjR1fRIdxBnm55CorO8tOoLb2EYCxlVFX/2OOX
-   38U/iZRX09FzvHX+BF0jxeRFebXH92VvRW4U5nxMz/o45Q399T2rW07tV
-   Q==;
-X-CSE-ConnectionGUID: HqkzESLTT8i3lAQ0/mB7Rw==
-X-CSE-MsgGUID: 8KNkEhOtSNiIyfxjw1wcQg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11709"; a="76444720"
+  bh=SukpHFHiSHu/twx0r6xVxUPGGOUN6BgGoamcfzCozeA=;
+  b=kO7zDJNEvA5acq32rpkdWezYj3DLQtHUrQ1OT3Qi83LuaAHH8y8VV3bz
+   QH1pZM6EzyTxXUcGXaXsFMVNI3sPaU3T20AgqGGNOSfMarVruW9dGJbGB
+   MeODylsSHJ6ulC/Oafa9Xpo9Gkj3BRUfilOgxaKBezRWJAd8l896DliPV
+   QcH+OHQKyM2cQav4k8XJdUKZD9HGw0rwyZBxK9GC9+/f/A0qxh+7r7vhl
+   0VDnKs0+m7Vz2qWvyLvmQp3QvLOqh33BNQkvpH3Eoq6zMKkPp3WOduv5f
+   r31Tz9xiC0hicVXOObdWVVKSyYCcUPrKoQXIeM0/cRrhGflif6RLARmSQ
+   A==;
+X-CSE-ConnectionGUID: bqlSvHyEQZSpSB3/2qx2Qg==
+X-CSE-MsgGUID: APz1HztiTLCmdmWeP5tx/A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11709"; a="76444757"
 X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="76444720"
+   d="scan'208";a="76444757"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 02:22:55 -0800
-X-CSE-ConnectionGUID: 8u7F0LlCR3qRjeI9gQ1A4g==
-X-CSE-MsgGUID: p2KXPAsoSUCEVswHJN9s+Q==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 02:23:03 -0800
+X-CSE-ConnectionGUID: 2kG+HZnaQLKkYkJE7n4qHw==
+X-CSE-MsgGUID: PwT+AwM4QMS0MifL5vJCCg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="246121746"
+   d="scan'208";a="246121809"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orviesa002.jf.intel.com with ESMTP; 23 Feb 2026 02:22:51 -0800
+  by orviesa002.jf.intel.com with ESMTP; 23 Feb 2026 02:22:58 -0800
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id EACD328169;
-	Mon, 23 Feb 2026 10:22:48 +0000 (GMT)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 7D28D28160;
+	Mon, 23 Feb 2026 10:22:55 +0000 (GMT)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: Tony Nguyen <anthony.l.nguyen@intel.com>,
 	intel-wired-lan@lists.osuosl.org
@@ -68,9 +68,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH iwl-next 04/10] ixgbevf: branch prediction and cleanup
-Date: Mon, 23 Feb 2026 10:52:11 +0100
-Message-ID: <20260223095222.3205363-5-larysa.zaremba@intel.com>
+Subject: [PATCH iwl-next 07/10] ixgbevf: support XDP_REDIRECT and .ndo_xdp_xmit
+Date: Mon, 23 Feb 2026 10:52:14 +0100
+Message-ID: <20260223095222.3205363-8-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260223095222.3205363-1-larysa.zaremba@intel.com>
 References: <20260223095222.3205363-1-larysa.zaremba@intel.com>
@@ -82,104 +82,328 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add likely/unlikely markers for better branch prediction. While touching
-some functions, cleanup the code a little bit.
+To fully support XDP_REDIRECT, utilize more libeth helpers in XDP Rx path,
+hence save cached_ntu in the ring structure instead of stack.
 
-This patch is not supposed to make any logic changes.
+ixgbevf-supported VFs usually have few queues, so use libeth_xdpsq_lock
+functionality for XDP queue sharing. Adjust filling-in of XDP Tx
+descriptors to use data from xdp frame. Otherwise, simply use libeth
+helpers to implement .ndo_xdp_xmit().
+
+While at it, fix a typo in libeth docs.
 
 Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
-Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- .../net/ethernet/intel/ixgbevf/ixgbevf_main.c | 29 +++++++++----------
- 1 file changed, 14 insertions(+), 15 deletions(-)
+ drivers/net/ethernet/intel/ixgbevf/ixgbevf.h  |   2 +
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c | 142 ++++++++----------
+ include/net/libeth/xdp.h                      |   2 +-
+ 3 files changed, 64 insertions(+), 82 deletions(-)
 
+diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf.h b/drivers/net/ethernet/intel/ixgbevf/ixgbevf.h
+index 67d10e6e9910..61883b1e1f78 100644
+--- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf.h
++++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf.h
+@@ -99,6 +99,8 @@ struct ixgbevf_ring {
+ 		struct ixgbevf_tx_buffer *tx_buffer_info;
+ 		struct libeth_sqe *xdp_sqes;
+ 	};
++	struct libeth_xdpsq_lock xdpq_lock;
++	u32 cached_ntu;
+ 	unsigned long state;
+ 	struct ixgbevf_stats stats;
+ 	struct u64_stats_sync syncp;
 diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-index 24b8f4bb415b..39124c430537 100644
+index 6be2390daeba..b0f34f097bf6 100644
 --- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
 +++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-@@ -570,7 +570,7 @@ static void ixgbevf_alloc_rx_buffers(struct ixgbevf_ring *rx_ring,
- 	u16 ntu = rx_ring->next_to_use;
+@@ -649,10 +649,6 @@ static inline void ixgbevf_irq_enable_queues(struct ixgbevf_adapter *adapter,
+ 	IXGBE_WRITE_REG(hw, IXGBE_VTEIMS, qmask);
+ }
  
- 	/* nothing to do or no valid netdev defined */
--	if (!cleaned_count || !rx_ring->netdev)
-+	if (unlikely(!cleaned_count || !rx_ring->netdev))
- 		return;
- 
- 	rx_desc = IXGBEVF_RX_DESC(rx_ring, ntu);
-@@ -586,7 +586,7 @@ static void ixgbevf_alloc_rx_buffers(struct ixgbevf_ring *rx_ring,
- 
- 		rx_desc++;
- 		ntu++;
--		if (unlikely(ntu == rx_ring->count)) {
-+		if (unlikely(ntu == fq.count)) {
- 			rx_desc = IXGBEVF_RX_DESC(rx_ring, 0);
- 			ntu = 0;
- 		}
-@@ -823,7 +823,7 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
- 
- 		rx_desc = IXGBEVF_RX_DESC(rx_ring, rx_ring->next_to_clean);
- 		size = le16_to_cpu(rx_desc->wb.upper.length);
--		if (!size)
-+		if (unlikely(!size))
- 			break;
- 
- 		/* This memory barrier is needed to keep us from reading
-@@ -855,7 +855,7 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
- 		}
- 
- 		/* exit if we failed to retrieve a buffer */
--		if (!xdp_res && !skb) {
-+		if (unlikely(!xdp_res && !skb)) {
- 			rx_ring->rx_stats.alloc_rx_buff_failed++;
- 			break;
- 		}
-@@ -867,21 +867,19 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
- 			continue;
- 
- 		/* verify the packet layout is correct */
--		if (xdp_res || ixgbevf_cleanup_headers(rx_ring, rx_desc, skb)) {
-+		if (xdp_res ||
-+		    unlikely(ixgbevf_cleanup_headers(rx_ring, rx_desc, skb))) {
- 			skb = NULL;
- 			continue;
- 		}
- 
--		/* probably a little skewed due to removing CRC */
--		total_rx_bytes += skb->len;
+-#define IXGBEVF_XDP_PASS 0
+-#define IXGBEVF_XDP_CONSUMED 1
+-#define IXGBEVF_XDP_TX 2
 -
- 		/* Workaround hardware that can't do proper VEPA multicast
- 		 * source pruning.
- 		 */
--		if ((skb->pkt_type == PACKET_BROADCAST ||
--		     skb->pkt_type == PACKET_MULTICAST) &&
--		    ether_addr_equal(rx_ring->netdev->dev_addr,
--				     eth_hdr(skb)->h_source)) {
-+		if (unlikely((skb->pkt_type == PACKET_BROADCAST ||
-+			      skb->pkt_type == PACKET_MULTICAST) &&
-+			     ether_addr_equal(rx_ring->netdev->dev_addr,
-+					      eth_hdr(skb)->h_source))) {
- 			dev_kfree_skb_irq(skb);
- 			continue;
- 		}
-@@ -889,13 +887,14 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
- 		/* populate checksum, VLAN, and protocol */
- 		ixgbevf_process_skb_fields(rx_ring, rx_desc, skb);
+ static void ixgbevf_clean_xdp_num(struct ixgbevf_ring *xdp_ring, bool in_napi,
+ 				  u16 to_clean)
+ {
+@@ -710,12 +706,14 @@ static u16 ixgbevf_tx_get_num_sent(struct ixgbevf_ring *xdp_ring)
+ static void ixgbevf_clean_xdp_ring(struct ixgbevf_ring *xdp_ring)
+ {
+ 	ixgbevf_clean_xdp_num(xdp_ring, false, xdp_ring->pending);
++	libeth_xdpsq_put(&xdp_ring->xdpq_lock, xdp_ring->netdev);
+ }
  
-+		/* probably a little skewed due to removing CRC */
-+		total_rx_bytes += skb->len;
-+		total_rx_packets++;
+ static u32 ixgbevf_prep_xdp_sq(void *xdpsq, struct libeth_xdpsq *sq)
+ {
+ 	struct ixgbevf_ring *xdp_ring = xdpsq;
+ 
++	libeth_xdpsq_lock(&xdp_ring->xdpq_lock);
+ 	if (unlikely(ixgbevf_desc_unused(xdp_ring) < LIBETH_XDP_TX_BULK)) {
+ 		u16 to_clean = ixgbevf_tx_get_num_sent(xdp_ring);
+ 
+@@ -749,7 +747,7 @@ static u32 ixgbevf_prep_xdp_sq(void *xdpsq, struct libeth_xdpsq *sq)
+ 	*sq = (struct libeth_xdpsq) {
+ 		.count = xdp_ring->count,
+ 		.descs = xdp_ring->desc,
+-		.lock = NULL,
++		.lock = &xdp_ring->xdpq_lock,
+ 		.ntu = &xdp_ring->next_to_use,
+ 		.pending = &xdp_ring->pending,
+ 		.pool = NULL,
+@@ -775,9 +773,13 @@ static void ixgbevf_xdp_xmit_desc(struct libeth_xdp_tx_desc desc, u32 i,
+ 		cmd_type |= IXGBE_TXD_CMD_EOP;
+ 
+ 	if (desc.flags & LIBETH_XDP_TX_FIRST) {
+-		struct skb_shared_info *sinfo = sq->sqes[i].sinfo;
+-		u16 full_len = desc.len + sinfo->xdp_frags_size;
++		struct libeth_sqe *sqe = &sq->sqes[i];
++		struct skb_shared_info *sinfo;
++		u16 full_len;
+ 
++		sinfo = sqe->type == LIBETH_SQE_XDP_TX ? sqe->sinfo :
++				     xdp_get_shared_info_from_frame(sqe->xdpf);
++		full_len = desc.len + sinfo->xdp_frags_size;
+ 		tx_desc->read.olinfo_status =
+ 			cpu_to_le32((full_len << IXGBE_ADVTXD_PAYLEN_SHIFT) |
+ 				    IXGBE_ADVTXD_CC);
+@@ -787,76 +789,36 @@ static void ixgbevf_xdp_xmit_desc(struct libeth_xdp_tx_desc desc, u32 i,
+ 	tx_desc->read.cmd_type_len = cpu_to_le32(cmd_type);
+ }
+ 
+-LIBETH_XDP_DEFINE_START();
+-LIBETH_XDP_DEFINE_FLUSH_TX(static ixgbevf_xdp_flush_tx, ixgbevf_prep_xdp_sq,
+-			   ixgbevf_xdp_xmit_desc);
+-LIBETH_XDP_DEFINE_END();
+-
+-static void ixgbevf_xdp_set_rs(struct ixgbevf_ring *xdp_ring, u32 cached_ntu)
++static void ixgbevf_xdp_rs_and_bump(void *xdpsq, bool sent, bool flush)
+ {
+-	u32 ltu = (xdp_ring->next_to_use ? : xdp_ring->count) - 1;
++	struct ixgbevf_ring *xdp_ring = xdpsq;
+ 	union ixgbe_adv_tx_desc *desc;
++	u32 ltu;
 +
- 		ixgbevf_rx_skb(q_vector, skb);
++	if ((!flush && xdp_ring->pending < xdp_ring->count - 1) ||
++	    xdp_ring->cached_ntu == xdp_ring->next_to_use)
++		return;
  
- 		/* reset skb pointer */
- 		skb = NULL;
++	ltu = (xdp_ring->next_to_use ? : xdp_ring->count) - 1;
+ 	desc = IXGBEVF_TX_DESC(xdp_ring, ltu);
+-	xdp_ring->xdp_sqes[cached_ntu].rs_idx = ltu + 1;
++	xdp_ring->xdp_sqes[xdp_ring->cached_ntu].rs_idx = ltu + 1;
+ 	desc->read.cmd_type_len |= cpu_to_le32(IXGBE_TXD_CMD);
+-}
 -
--		/* update budget accounting */
--		total_rx_packets++;
+-static void ixgbevf_rx_finalize_xdp(struct libeth_xdp_tx_bulk *tx_bulk,
+-				    bool xdp_xmit, u32 cached_ntu)
+-{
+-	struct ixgbevf_ring *xdp_ring = tx_bulk->xdpsq;
+-
+-	if (!xdp_xmit)
+-		goto unlock;
+-
+-	if (tx_bulk->count)
+-		ixgbevf_xdp_flush_tx(tx_bulk, LIBETH_XDP_TX_DROP);
+-
+-	ixgbevf_xdp_set_rs(xdp_ring, cached_ntu);
++	xdp_ring->cached_ntu = xdp_ring->next_to_use;
+ 
+ 	/* Finish descriptor writes before bumping tail */
+ 	wmb();
+ 	ixgbevf_write_tail(xdp_ring, xdp_ring->next_to_use);
+-unlock:
+-	rcu_read_unlock();
+ }
+ 
+-static int ixgbevf_run_xdp(struct libeth_xdp_tx_bulk *tx_bulk,
+-			   struct libeth_xdp_buff *xdp)
+-{
+-	int result = IXGBEVF_XDP_PASS;
+-	const struct bpf_prog *xdp_prog;
+-	u32 act;
+-
+-	xdp_prog = tx_bulk->prog;
+-	if (!xdp_prog)
+-		goto xdp_out;
+-
+-	act = bpf_prog_run_xdp(xdp_prog, &xdp->base);
+-	switch (act) {
+-	case XDP_PASS:
+-		break;
+-	case XDP_TX:
+-		result = IXGBEVF_XDP_TX;
+-		if (!libeth_xdp_tx_queue_bulk(tx_bulk, xdp,
+-					      ixgbevf_xdp_flush_tx))
+-			result = IXGBEVF_XDP_CONSUMED;
+-		break;
+-	default:
+-		bpf_warn_invalid_xdp_action(tx_bulk->dev, xdp_prog, act);
+-		fallthrough;
+-	case XDP_ABORTED:
+-		trace_xdp_exception(tx_bulk->dev, xdp_prog, act);
+-		fallthrough; /* handle aborts by dropping packet */
+-	case XDP_DROP:
+-		result = IXGBEVF_XDP_CONSUMED;
+-		libeth_xdp_return_buff(xdp);
+-		break;
+-	}
+-xdp_out:
+-	return result;
+-}
++LIBETH_XDP_DEFINE_START();
++LIBETH_XDP_DEFINE_FLUSH_TX(static ixgbevf_xdp_flush_tx, ixgbevf_prep_xdp_sq,
++			   ixgbevf_xdp_xmit_desc);
++LIBETH_XDP_DEFINE_FLUSH_XMIT(static ixgbevf_xdp_flush_xmit, ixgbevf_prep_xdp_sq,
++			     ixgbevf_xdp_xmit_desc);
++LIBETH_XDP_DEFINE_RUN_PROG(static ixgbevf_xdp_run_prog, ixgbevf_xdp_flush_tx);
++LIBETH_XDP_DEFINE_FINALIZE(static ixgbevf_xdp_finalize_xdp_napi,
++			   ixgbevf_xdp_flush_tx, ixgbevf_xdp_rs_and_bump);
++LIBETH_XDP_DEFINE_END();
+ 
+ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
+ 				struct ixgbevf_ring *rx_ring,
+@@ -867,17 +829,11 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
+ 	u16 cleaned_count = ixgbevf_desc_unused(rx_ring);
+ 	LIBETH_XDP_ONSTACK_BULK(xdp_tx_bulk);
+ 	LIBETH_XDP_ONSTACK_BUFF(xdp);
+-	u32 cached_ntu;
+-	bool xdp_xmit = false;
+-	int xdp_res = 0;
+ 
+ 	libeth_xdp_init_buff(xdp, &rx_ring->xdp_stash, &rx_ring->xdp_rxq);
+ 	libeth_xdp_tx_init_bulk(&xdp_tx_bulk, rx_ring->xdp_prog,
+ 				adapter->netdev, adapter->xdp_ring,
+ 				adapter->num_xdp_queues);
+-	if (xdp_tx_bulk.prog)
+-		cached_ntu =
+-			((struct ixgbevf_ring *)xdp_tx_bulk.xdpsq)->next_to_use;
+ 
+ 	while (likely(total_rx_packets < budget)) {
+ 		union ixgbe_adv_rx_desc *rx_desc;
+@@ -910,11 +866,8 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
+ 		if (ixgbevf_is_non_eop(rx_ring, rx_desc))
+ 			continue;
+ 
+-		xdp_res = ixgbevf_run_xdp(&xdp_tx_bulk, xdp);
+-		if (xdp_res) {
+-			if (xdp_res == IXGBEVF_XDP_TX)
+-				xdp_xmit = true;
+-
++		if (xdp_tx_bulk.prog &&
++		    !ixgbevf_xdp_run_prog(xdp, &xdp_tx_bulk)) {
+ 			xdp->data = NULL;
+ 			total_rx_packets++;
+ 			total_rx_bytes += size;
+@@ -960,7 +913,7 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
+ 	/* place incomplete frames back on ring for completion */
+ 	libeth_xdp_save_buff(&rx_ring->xdp_stash, xdp);
+ 
+-	ixgbevf_rx_finalize_xdp(&xdp_tx_bulk, xdp_xmit, cached_ntu);
++	ixgbevf_xdp_finalize_xdp_napi(&xdp_tx_bulk);
+ 
+ 	u64_stats_update_begin(&rx_ring->syncp);
+ 	rx_ring->stats.packets += total_rx_packets;
+@@ -972,6 +925,23 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
+ 	return total_rx_packets;
+ }
+ 
++static int ixgbevf_xdp_xmit(struct net_device *dev, int n,
++			    struct xdp_frame **frames, u32 flags)
++{
++	struct ixgbevf_adapter *adapter = netdev_priv(dev);
++
++	if (unlikely(test_bit(__IXGBEVF_DOWN, &adapter->state)))
++		return -ENETDOWN;
++
++	if (unlikely(!adapter->num_xdp_queues))
++		return -ENXIO;
++
++	return libeth_xdp_xmit_do_bulk(dev, n, frames, flags, adapter->xdp_ring,
++				       adapter->num_xdp_queues,
++				       ixgbevf_xdp_flush_xmit,
++				       ixgbevf_xdp_rs_and_bump);
++}
++
+ /**
+  * ixgbevf_poll - NAPI polling calback
+  * @napi: napi struct with our devices info in it
+@@ -1432,6 +1402,7 @@ static void ixgbevf_configure_tx_ring(struct ixgbevf_adapter *adapter,
+ 	ring->next_to_clean = 0;
+ 	ring->next_to_use = 0;
+ 	ring->pending = 0;
++	ring->cached_ntu = 0;
+ 
+ 	/* In order to avoid issues WTHRESH + PTHRESH should always be equal
+ 	 * to or less than the number of on chip descriptors, which is
+@@ -1444,12 +1415,15 @@ static void ixgbevf_configure_tx_ring(struct ixgbevf_adapter *adapter,
+ 		   32;           /* PTHRESH = 32 */
+ 
+ 	/* reinitialize tx_buffer_info */
+-	if (!ring_is_xdp(ring))
++	if (!ring_is_xdp(ring)) {
+ 		memset(ring->tx_buffer_info, 0,
+ 		       sizeof(struct ixgbevf_tx_buffer) * ring->count);
+-	else
++	} else {
+ 		memset(ring->xdp_sqes, 0,
+ 		       sizeof(struct libeth_sqe) * ring->count);
++		libeth_xdpsq_get(&ring->xdpq_lock, ring->netdev,
++				 num_possible_cpus() > adapter->num_xdp_queues);
++	}
+ 
+ 	clear_bit(__IXGBEVF_HANG_CHECK_ARMED, &ring->state);
+ 	clear_bit(__IXGBEVF_TX_XDP_RING_PRIMED, &ring->state);
+@@ -4175,6 +4149,8 @@ static int ixgbevf_xdp_setup(struct net_device *dev, struct bpf_prog *prog,
+ 
+ 	/* If transitioning XDP modes reconfigure rings */
+ 	if (!!prog != !!old_prog) {
++		xdp_features_clear_redirect_target(dev);
++
+ 		/* Hardware has to reinitialize queues and interrupts to
+ 		 * match packet buffer alignment. Unfortunately, the
+ 		 * hardware is not flexible enough to do this dynamically.
+@@ -4192,6 +4168,9 @@ static int ixgbevf_xdp_setup(struct net_device *dev, struct bpf_prog *prog,
+ 			xchg(&adapter->rx_ring[i]->xdp_prog, adapter->xdp_prog);
  	}
  
- 	/* place incomplete frames back on ring for completion */
++	if (prog)
++		xdp_features_set_redirect_target(dev, true);
++
+ 	if (old_prog)
+ 		bpf_prog_put(old_prog);
+ 
+@@ -4222,6 +4201,7 @@ static const struct net_device_ops ixgbevf_netdev_ops = {
+ 	.ndo_vlan_rx_kill_vid	= ixgbevf_vlan_rx_kill_vid,
+ 	.ndo_features_check	= ixgbevf_features_check,
+ 	.ndo_bpf		= ixgbevf_xdp,
++	.ndo_xdp_xmit		= ixgbevf_xdp_xmit,
+ };
+ 
+ static void ixgbevf_assign_netdev_ops(struct net_device *dev)
+@@ -4354,7 +4334,7 @@ static int ixgbevf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 			    NETIF_F_HW_VLAN_CTAG_TX;
+ 
+ 	netdev->priv_flags |= IFF_UNICAST_FLT;
+-	netdev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_RX_SG;
++	libeth_xdp_set_features_noredir(netdev, NULL, 0, NULL);
+ 
+ 	/* MTU range: 68 - 1504 or 9710 */
+ 	netdev->min_mtu = ETH_MIN_MTU;
+diff --git a/include/net/libeth/xdp.h b/include/net/libeth/xdp.h
+index 898723ab62e8..2e2154ccecae 100644
+--- a/include/net/libeth/xdp.h
++++ b/include/net/libeth/xdp.h
+@@ -1094,7 +1094,7 @@ __libeth_xdp_xmit_do_bulk(struct libeth_xdp_tx_bulk *bq,
+  * @xqs: array of XDPSQs driver structs
+  * @nqs: number of active XDPSQs, the above array length
+  * @fl: driver callback to flush an XDP xmit bulk
+- * @fin: driver cabback to finalize the queue
++ * @fin: driver callback to finalize the queue
+  *
+  * If the driver has active XDPSQs, perform common checks and send the frames.
+  * Finalize the queue, if requested.
 -- 
 2.52.0
 
