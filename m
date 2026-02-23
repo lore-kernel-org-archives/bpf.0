@@ -1,314 +1,290 @@
-Received: from outbound.soverin.net (outbound.soverin.net [185.233.34.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D32D361DB1
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 11:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.34.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94523659F4;
+	Mon, 23 Feb 2026 12:15:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771847831; cv=none; b=pHxOJ6mRHRjRDnNqP5sxIMRB5cFu39ZJFLJKBnQ7Ll3wUjTxr9ufa50oeMwvUuiYCBmnHS6NH1UKQzbxF7TCG4JNfmxRD0benMPrdbcwqmlwXiufprCuml4OciiBotZnT1Ku4wLSmwYpLzX4TlG8Lp53aJ7smUYOcN/i4yNHtns=
+	t=1771848903; cv=none; b=DTVOvrMrFBHd7/PDS6Go++hjUTsWDWhIQvP4XKB9HpEAOWeaHFrEwxZR17rPuVLkKSdm99C+O+G5T6XdMV8LprXISe1rVX3S0GNhJ44spSoM4oE56hQWqFf9xxJ8D24SemB94/xFLQbDq93ab1tJKclRfDvK+zequ/Kq449oJv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771847831; c=relaxed/simple;
-	bh=fj5rlXzvXA/I1FVL19r/W0m9si/oEMfPmcHb7Z9p/70=;
+	s=arc-20240116; t=1771848903; c=relaxed/simple;
+	bh=36cWsecT1qUgOLTpdU6JzUMxBxZWBjM/D7IujN/u1qY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HeXGaH9nkIXQi2mNAYnKhZe9AsuF0k5ZatZTdC3eKQ6gzyxUdQzuyPg+AzoxIZR1r97xo3i9aUs03zYNFQ15ez2CPnFbS/Vc/DkRC4ZtMEPBs55VEyTTP22Hqu9Q17RhZ98UACJDMNl1XFPlyli8FvGgmu/+8yi2F+NutsLCxBQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net; spf=pass smtp.mailfrom=qmon.net; dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b=MIvQEalq; arc=none smtp.client-ip=185.233.34.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qmon.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qmon.net
+	 In-Reply-To:Content-Type; b=PoWUKCTtshHVvjETRbgCGVqote1sV+O1cHGNqiCCD/GUPhXCzDwhQusGvvJJF/dspPPEe71nQ6+cFGAe76r5BmUnnSRIQleb+GKTFDhYJ3wYizDBBobXLmtcDY/v5lsA7c3gH2dh34259GV7dE6LjWgBXqYUHtsSjMuMTzR7elY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=jmSHJpDz; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qmon.net header.i=@qmon.net header.b="MIvQEalq"
-Received: from smtp.soverin.net (unknown [10.10.4.99])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by outbound.soverin.net (Postfix) with ESMTPS id 4fKK1H3xqJz74;
-	Mon, 23 Feb 2026 11:50:43 +0000 (UTC)
-Received: from smtp.soverin.net (smtp.soverin.net [10.10.4.99]) by soverin.net (Postfix) with ESMTPSA id 4fKK1H0m0Zz6Z;
-	Mon, 23 Feb 2026 11:50:43 +0000 (UTC)
-Authentication-Results: smtp.soverin.net;
-	dkim=pass (2048-bit key; unprotected) header.d=qmon.net header.i=@qmon.net header.a=rsa-sha256 header.s=soverin1 header.b=MIvQEalq;
-	dkim-atps=neutral
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qmon.net; s=soverin1;
-	t=1771847443;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=T4/NovDbZ2I9QifLn7WexZcRbDHVjCtbNjJS4GwkFe4=;
-	b=MIvQEalq/TD+AgwMDY4QKaeIFOmrUA6WsXULr3udraLpdh1i0KJV5zVnYHcS1JuFaYM5dL
-	q+C0P5Y4vm0JbUBrBMbq8mHlzdTiFIVt8OXhWwt6WSUz1JFeH6eval10eJDs/LgfnfEQVD
-	jNfVXM9a1xypboNMRfHekFxKN6jSWZXyOHaHJMak+Mvaumtq6IJ/1TcZwzYyb9hqO2a++l
-	3RgV103Mac7p0j/EqZfrrpIoGgEDRGmDztpJ+qrYzCgcgjKsODENrQ/m0GzQll7eA7EYl1
-	e9SOCvgKGza4M3BMlwZHCPxiCgBu+3e+ZG85QaByPuNRNZCxTX1htTuw+pphfw==
-X-CMAE-Score: 0
-X-CM-Analysis: v=2.4 cv=UsCZN/wB c=1 sm=1 tr=0 ts=699c3f13 a=vzOQIoBu8N4nb49veeH0EQ==:617 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10 a=maIFttP_AAAA:8 a=6gl_cCoBAAAA:8 a=Cj_RZmtuHQ-gFTPhAEIA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=qR24C9TJY6iBuJVj_x8Y:22 a=Bor9z-CvbNo2M6AZn8_k:22
-X-CM-Envelope: MS4xfJZreZIgfFxW893SbxiHgPc/ht2RA++5efAq7NJZmsPFyuuc4YqLmK71jSrRtPp3HN5rUaL6/AHfWnZfIbYRQOjGIb5Nm0UMrIdEYYd95Wphy2YLUnor 5NVLi1c4gLRaldA8iD9W69j+hOT/O2bwCJOUFrgusjno5zhvhc7lHXdYDZwaGwzCBsMoRuDV6TvbMqwd3QUTnw6tFRkeGW66l9SFZe18ukdcINLluWVm5c/N wUOXuxT9SSeimsJmH4/mZphoPNlt31CzicCcM5UpX+lFtPAczaDiDeMdDNhNEdFqAyzrP6LmqSiyF7TJWe41jAKu9WI8veU6TbdpjSxVMzu8+fglhCJKGlwv mBl7aHlS
-X-Soverin-Id: 019c8a56-6238-7530-8219-f0377e53833e
-Message-ID: <4ccb0ad0-3e50-4548-b8d6-e2d7e93b3dad@qmon.net>
-Date: Mon, 23 Feb 2026 11:50:42 +0000
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jmSHJpDz"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61N3Fab53184352;
+	Mon, 23 Feb 2026 12:14:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=B7n7tb
+	tuq8gVlMaNwM7zMnYoFVVP0uXAjpdAB3YYewM=; b=jmSHJpDzpORS3K/nw8UPRH
+	yNTnSMpwww6HkGx+RGbjaecwb+vi11LqxC2Q33mNPQ19ROggJ49Ag6xL+SWYnR1b
+	UWya60UvkUdyDUsng0B1H9UXdtEgUx3nIRaJUmEM82UUk5eU+gX6PTYiw6avjEGs
+	zuxNvvepaZqL/x0+dvbSh6MFx0PcIR8+8ZRkqOkRJtVyJ+aToplMDtxGQcLCD7fx
+	9ANLli6BTQH+nHHstQkHDAmOGlm3DR+PL+S7cPu0d9H1ALAXu+i70uuQuSo8Rsp0
+	zEeFuS2+VmioHfO0wE+0gcruNIL0VF43Ioc9VXIPFWzWmBEZkvXmhyGa5QOwj8Sw
+	==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf24g6sv5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Feb 2026 12:14:34 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61NCALHb027800;
+	Mon, 23 Feb 2026 12:14:33 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfsr1mcnh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 23 Feb 2026 12:14:33 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61NCET9w49545494
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 23 Feb 2026 12:14:29 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C2B482004D;
+	Mon, 23 Feb 2026 12:14:29 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9858B2004B;
+	Mon, 23 Feb 2026 12:14:28 +0000 (GMT)
+Received: from [0.0.0.0] (unknown [9.87.140.60])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 23 Feb 2026 12:14:28 +0000 (GMT)
+Message-ID: <10367bd9-4b9f-48d1-9ee7-8e8b1ec57909@linux.ibm.com>
+Date: Mon, 23 Feb 2026 13:14:28 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v4 2/3] bpftool: support merging multiple module BTFs in
- btf dump
-To: Josef Bacik <josef@toxicpanda.com>, bpf@vger.kernel.org
-Cc: Alan Maguire <alan.maguire@oracle.com>
-References: <cover.1771625484.git.josef@toxicpanda.com>
- <d04e23314b04024a61fe295dfd28a0f215a6449b.1771625484.git.josef@toxicpanda.com>
-From: Quentin Monnet <qmo@qmon.net>
-Content-Language: en-GB
-In-Reply-To: <d04e23314b04024a61fe295dfd28a0f215a6449b.1771625484.git.josef@toxicpanda.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spampanel-Class: ham
-
-2026-02-20 17:43 UTC-0500 ~ Josef Bacik <josef@toxicpanda.com>
-> Add support for specifying multiple file sources in 'bpftool btf dump'
-> to generate a single C header containing types from vmlinux plus
-> multiple kernel modules:
-> 
->   bpftool btf dump file /sys/kernel/btf/mod1 file /sys/kernel/btf/mod2 format c
-> 
-> This is useful for BPF programs that need to access types defined in
-> kernel modules. Previously this required a separate bpftool invocation
-> for each module, producing separate headers that could not be combined
-> due to overlapping vmlinux type definitions.
-> 
-> The implementation collects all file paths, then for the multi-file
-> case creates an empty split BTF on the vmlinux base and iteratively
-> merges each module's types into it via btf__add_btf(). The single-file
-> code path is preserved exactly to avoid any regression risk.
-> 
-> Auto-detection of vmlinux as the base BTF from sysfs paths works as
-> before. If vmlinux itself appears in the file list it is skipped with
-> a warning since its types are already provided by the base.
-> 
-> Signed-off-by: Josef Bacik <josef@toxicpanda.com>
-
-
-Thanks for this patch!
-
-
-> Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
-
-
-Looking at Documentation/process/coding-assistants.rst and git logs, I
-believe this tag should be like "Assisted-by: Claude:claude-opus-4-6".
-(Same for other patches in the series.)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 2/3] bpf,s390: add fsession support for
+ trampolines
+To: Menglong Dong <menglong8.dong@gmail.com>, ast@kernel.org
+Cc: daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+        eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+        haoluo@google.com, jolsa@kernel.org, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, bpf@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20260223084022.653186-1-dongml2@chinatelecom.cn>
+ <20260223084022.653186-3-dongml2@chinatelecom.cn>
+Content-Language: en-US
+From: Ilya Leoshkevich <iii@linux.ibm.com>
+In-Reply-To: <20260223084022.653186-3-dongml2@chinatelecom.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=TNRIilla c=1 sm=1 tr=0 ts=699c44ab cx=c_pps
+ a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=JiIl2gRODhJS3gKvde8A:9
+ a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: oR92738kPA7ueINngB0n8_-9BFV3Xzqw
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjIzMDEwNCBTYWx0ZWRfXzy/OWVwK8kMg
+ D3NyYkBVRB8bsXjJIUnfOIGefi2fV4f/AJm3zdNCE5X+RkgA59epuGAHJ3Uplqq6FdS4IiRDmgQ
+ FPF/Ng0S6V02p+Gm1JWiH5wWhCVH2Efl8nNfr0njfJHWHRA6n/xmNC2kso0XfNOaSnDmQ5ZFfbU
+ z9MWQoxQ5ChjETbl1VlGc2Ns5glKOgFJxD5k8PJyzCsWMiQtx23yz/e5gxCHvUlbDB+IjMwnaFB
+ 3o9gNQsfRdxCrK0u7TleOEFKmu/+UGnugBIdWROq3VVYXMaO0IL1ebQDny1WZROwvF/2qpNTDrV
+ GS4y0zzoHbcPon5ndarTFWs7H2s0KI4I5468ALrbQHgUlCLC4lQFGO9Vun/avDDo8ay+cSvXCuO
+ tm7hnuwSsiAtWooADRcCpLp7WBulwP16gjBSV4qksB6ymw/uVYrSdxnjWAqc9E6mYnB9P0MkWbK
+ 9qVDRYUAlzZDRsXvwIA==
+X-Proofpoint-ORIG-GUID: cmrsWhzXOMdcSLVsLbMslXilLpA109xW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-23_02,2026-02-20_04,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ spamscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602230104
 
 
+On 2/23/26 09:40, Menglong Dong wrote:
+> Implement BPF_TRACE_FSESSION support for s390. The logic here is similar
+> to what we did in x86_64.
+>
+> In order to simply the logic, we factor out the function invoke_bpf() for
+> fentry and fexit.
+>
+> Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
 > ---
->  tools/bpf/bpftool/btf.c | 135 ++++++++++++++++++++++++++++++++++++----
->  1 file changed, 122 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
-> index 946612029dee..16bc1332639f 100644
-> --- a/tools/bpf/bpftool/btf.c
-> +++ b/tools/bpf/bpftool/btf.c
-> @@ -28,6 +28,7 @@
->  #define FASTCALL_DECL_TAG	"bpf_fastcall"
->  
->  #define MAX_ROOT_IDS		16
-> +#define MAX_BTF_FILES		64
->  
->  static const char * const btf_kind_str[NR_BTF_KINDS] = {
->  	[BTF_KIND_UNKN]		= "UNKNOWN",
-> @@ -958,20 +959,127 @@ static int do_dump(int argc, char **argv)
->  		NEXT_ARG();
->  	} else if (is_prefix(src, "file")) {
->  		const char sysfs_prefix[] = "/sys/kernel/btf/";
-> +		const char *files[MAX_BTF_FILES];
-> +		int nr_files = 0;
->  
-> -		if (!base_btf &&
-> -		    strncmp(*argv, sysfs_prefix, sizeof(sysfs_prefix) - 1) == 0 &&
-> -		    strcmp(*argv, sysfs_vmlinux) != 0)
-> -			base = get_vmlinux_btf_from_sysfs();
-> -
-> -		btf = btf__parse_split(*argv, base ?: base_btf);
-> -		if (!btf) {
-> -			err = -errno;
-> -			p_err("failed to load BTF from %s: %s",
-> -			      *argv, strerror(errno));
-> -			goto done;
-> -		}
-> +		files[nr_files++] = *argv;
->  		NEXT_ARG();
+>   arch/s390/net/bpf_jit_comp.c | 68 +++++++++++++++++++++++++++++++-----
+>   1 file changed, 59 insertions(+), 9 deletions(-)
+
+
+Thank you for contributing this series!
+
+
+In general this all looks very reasonable; I believe I found a few nits, 
+please take a look at my comments below.
+
+
+>
+> diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
+> index 763d2491dfa3..ea0c81f18ece 100644
+> --- a/arch/s390/net/bpf_jit_comp.c
+> +++ b/arch/s390/net/bpf_jit_comp.c
+> @@ -2480,8 +2480,8 @@ struct bpf_tramp_jit {
+>   	int ip_off;		/* For bpf_get_func_ip(), has to be at
+>   				 * (ctx - 16)
+>   				 */
+> -	int arg_cnt_off;	/* For bpf_get_func_arg_cnt(), has to be at
+> -				 * (ctx - 8)
+> +	int func_meta_off;	/* For bpf_get_func_arg_cnt()/fsession, has
+> +				 * to be at (ctx - 8)
+>   				 */
+>   	int bpf_args_off;	/* Offset of BPF_PROG context, which consists
+>   				 * of BPF arguments followed by return value
+> @@ -2585,6 +2585,28 @@ static int invoke_bpf_prog(struct bpf_tramp_jit *tjit,
+>   	return 0;
+>   }
+>   
+> +static int invoke_bpf(struct bpf_tramp_jit *tjit,
+> +		      const struct btf_func_model *m,
+> +		      struct bpf_tramp_links *tl, bool save_ret,
+> +		      u64 func_meta, int cookie_off)
+> +{
+> +	int i, cur_cookie = (tjit->bpf_args_off - cookie_off) / sizeof(u64);
+> +	struct bpf_jit *jit = &tjit->common;
 > +
-> +		/* Collect additional file arguments. Use strcmp (exact match)
-> +		 * to avoid ambiguity with file paths that are prefixes of
-> +		 * "file" (e.g., "./f").
-> +		 */
-
-
-I don't understand why we'd remove subcommand prefixing here, each file
-name should be preceded with the "file" keyword so from command parsing,
-there's no ambiguity?
-
-
-> +		while (argc && strcmp(*argv, "file") == 0) {
-> +			NEXT_ARG();
-> +			if (!REQ_ARGS(1)) {
-> +				err = -EINVAL;
-> +				goto done;
-> +			}
-> +			if (nr_files >= MAX_BTF_FILES) {
-> +				p_err("too many BTF files (max %d)",
-> +				      MAX_BTF_FILES);
-> +				err = -E2BIG;
-> +				goto done;
-> +			}
-> +			files[nr_files++] = *argv;
-> +			NEXT_ARG();
+> +	for (i = 0; i < tl->nr_links; i++) {
+> +		if (bpf_prog_calls_session_cookie(tl->links[i])) {
+> +			u64 meta = func_meta | ((u64)cur_cookie << BPF_TRAMP_COOKIE_INDEX_SHIFT);
+> +
+> +			emit_store_stack_imm64(jit, REG_0, tjit->func_meta_off, meta);
+> +			cur_cookie--;
 > +		}
+> +		if (invoke_bpf_prog(tjit, m, tl->links[i], save_ret))
+> +			return -EINVAL;
+> +	}
 > +
-> +		if (nr_files == 1) {
-> +			/* Single file — preserve existing behavior exactly */
-
-
-I guess Claude inserted this comment. Please use a regular dash, there's
-no need to turn the file into UTF-8 for this (or remove the comment).
-
-
-> +			if (!base_btf &&
-> +			    strncmp(files[0], sysfs_prefix,
-> +				    sizeof(sysfs_prefix) - 1) == 0 &&
-> +			    strcmp(files[0], sysfs_vmlinux) != 0)
-> +				base = get_vmlinux_btf_from_sysfs();
+> +	return 0;
+> +}
 > +
-> +			btf = btf__parse_split(files[0], base ?: base_btf);
-> +			if (!btf) {
-> +				err = -errno;
-> +				p_err("failed to load BTF from %s: %s",
-> +				      files[0], strerror(errno));
-> +				goto done;
-> +			}
-> +		} else {
-
-
-That's quite a lot of processing in the middle of the argument parsing
-code, I wouldn't mind having this as a separate function.
-
-
-> +			struct btf *vmlinux_base = base_btf;
-> +			struct btf *combined, *mod;
-> +			int j, ret;
+>   static int alloc_stack(struct bpf_tramp_jit *tjit, size_t size)
+>   {
+>   	int stack_offset = tjit->stack_size;
+> @@ -2614,8 +2636,10 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+>   	struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+>   	int nr_bpf_args, nr_reg_args, nr_stack_args;
+> +	int cookie_cnt, cookie_off, fsession_cnt;
+>   	struct bpf_jit *jit = &tjit->common;
+>   	int arg, bpf_arg_off;
+> +	u64 func_meta;
+>   	int i, j;
+>   
+>   	/* Support as many stack arguments as "mvc" instruction can handle. */
+> @@ -2647,6 +2671,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   			return -ENOTSUPP;
+>   	}
+>   
+> +	cookie_cnt = bpf_fsession_cookie_cnt(tlinks);
+> +	fsession_cnt = bpf_fsession_cnt(tlinks);
 > +
-> +			/* Auto-detect vmlinux base from sysfs if needed */
-> +			if (!vmlinux_base) {
-> +				for (j = 0; j < nr_files; j++) {
-> +					if (strncmp(files[j], sysfs_prefix,
-> +						    sizeof(sysfs_prefix) - 1) == 0 &&
-> +					    strcmp(files[j], sysfs_vmlinux) != 0) {
-> +						base = get_vmlinux_btf_from_sysfs();
-> +						vmlinux_base = base;
-> +						break;
-> +					}
-> +				}
-> +			}
-> +			if (!vmlinux_base) {
-> +				p_err("base BTF is required when merging multiple BTF files; use -B/--base-btf or use sysfs paths");
-> +				err = -EINVAL;
-> +				goto done;
-> +			}
-> +
-> +			/* Filter out vmlinux from the file list */
-> +			for (j = 0; j < nr_files; j++) {
-> +				if (strcmp(files[j], sysfs_vmlinux) == 0) {
-> +					p_info("skipping %s (already loaded as base)",
-> +					       sysfs_vmlinux);
-> +					memmove(&files[j], &files[j + 1],
-> +						(nr_files - j - 1) * sizeof(files[0]));
-> +					nr_files--;
-> +					j--;
-> +				}
-> +			}
-> +			if (nr_files == 0) {
-> +				p_err("no module BTF files to merge (all paths were vmlinux)");
-> +				err = -EINVAL;
-> +				goto done;
-> +			}
-> +
-> +			combined = btf__new_empty_split(vmlinux_base);
-> +			if (!combined) {
-> +				err = -errno;
-> +				p_err("failed to create combined BTF: %s",
-> +				      strerror(-err));
-> +				goto done;
-> +			}
-> +
-> +			for (j = 0; j < nr_files; j++) {
-> +				mod = btf__parse_split(files[j], vmlinux_base);
-> +				if (!mod) {
-> +					err = -errno;
-> +					p_err("failed to load BTF from %s: %s",
-> +					      files[j], strerror(-err));
-> +					btf__free(combined);
-> +					goto done;
-> +				}
-> +
-> +				ret = btf__add_btf(combined, mod);
-> +				btf__free(mod);
-> +				if (ret < 0) {
-> +					p_err("failed to merge BTF from %s: %s",
-> +					      files[j], strerror(-ret));
-> +					btf__free(combined);
-> +					err = ret;
-> +					goto done;
-> +				}
-> +			}
-> +
-> +			ret = btf__dedup(combined, NULL);
-> +			if (ret) {
-> +				p_err("failed to dedup combined BTF: %s",
-> +				      strerror(-ret));
-> +				btf__free(combined);
-> +				err = ret;
-> +				goto done;
-> +			}
-> +
-> +			btf = combined;
-> +		}
->  	} else {
->  		err = -1;
->  		p_err("unrecognized BTF source specifier: '%s'", src);
-> @@ -1445,7 +1553,8 @@ static int do_help(int argc, char **argv)
->  		"       %1$s %2$s dump BTF_SRC [format FORMAT] [root_id ROOT_ID]\n"
->  		"       %1$s %2$s help\n"
->  		"\n"
-> -		"       BTF_SRC := { id BTF_ID | prog PROG | map MAP [{key | value | kv | all}] | file FILE }\n"
-> +		"       BTF_SRC := { id BTF_ID | prog PROG | map MAP [{key | value | kv | all}] |\n"
-> +		"                    file FILE [file FILE]... }\n"
+>   	/*
+>   	 * Calculate the stack layout.
+>   	 */
+> @@ -2659,8 +2686,9 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   	tjit->backchain_off = tjit->stack_size - sizeof(u64);
+>   	tjit->stack_args_off = alloc_stack(tjit, nr_stack_args * sizeof(u64));
+>   	tjit->reg_args_off = alloc_stack(tjit, nr_reg_args * sizeof(u64));
+> +	cookie_off = alloc_stack(tjit, cookie_cnt * sizeof(u64));
+>   	tjit->ip_off = alloc_stack(tjit, sizeof(u64));
+> -	tjit->arg_cnt_off = alloc_stack(tjit, sizeof(u64));
+> +	tjit->func_meta_off = alloc_stack(tjit, sizeof(u64));
+>   	tjit->bpf_args_off = alloc_stack(tjit, nr_bpf_args * sizeof(u64));
+>   	tjit->retval_off = alloc_stack(tjit, sizeof(u64));
+>   	tjit->r7_r8_off = alloc_stack(tjit, 2 * sizeof(u64));
+> @@ -2749,7 +2777,8 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   
+>   	if (flags & BPF_TRAMP_F_IP_ARG)
+>   		emit_store_stack_imm64(jit, REG_0, tjit->ip_off, (u64)func_addr);
+> -	emit_store_stack_imm64(jit, REG_0, tjit->arg_cnt_off, nr_bpf_args);
+> +	func_meta = nr_bpf_args;
+> +	emit_store_stack_imm64(jit, REG_0, tjit->func_meta_off, func_meta);
+>   
+>   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>   		/*
+> @@ -2762,10 +2791,19 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   		EMIT6_PCREL_RILB_PTR(0xc0050000, REG_14, __bpf_tramp_enter);
+>   	}
+>   
+> -	for (i = 0; i < fentry->nr_links; i++)
+> -		if (invoke_bpf_prog(tjit, m, fentry->links[i],
+> -				    flags & BPF_TRAMP_F_RET_FENTRY_RET))
+> +	if (fsession_cnt) {
+> +		/* clear all the session cookies' value */
 
+Here and below: please use the existing style for single-line comments: 
+full sentence starting with a capital letter and ending with a dot. 
+Unfortunately the JIT is somewhat inconsistent in this area, but let's 
+at least not introduce a new comment style here.
 
-As Alan said, can you please update the related man page? There's the
-command summary at the top, and then the command description to update.
+> +		for (i = 0; i < cookie_cnt; i++)
+> +			emit_store_stack_imm64(jit, REG_0, cookie_off + 8 * i, 0);
+> +		/* clear the return value to make sure fentry always gets 0 */
+> +		emit_store_stack_imm64(jit, REG_0, tjit->retval_off, 0);
+> +	}
 
-Can you please also update bash-completion/bpftool? You could use:
+Would it make sense to clear cookies right after invoke_bpf_prog() and 
+only if bpf_prog_calls_session_cookie() is true?
 
-    diff --git i/tools/bpf/bpftool/bash-completion/bpftool w/tools/bpf/bpftool/bash-completion/bpftool
-    index a28f0cc522e4..babb0d4e9753 100644
-    --- i/tools/bpf/bpftool/bash-completion/bpftool
-    +++ w/tools/bpf/bpftool/bash-completion/bpftool
-    @@ -961,10 +961,14 @@ _bpftool()
-                             *)
-                                 # emit extra options
-                                 case ${words[3]} in
-    -                                id|file)
-    +                                id)
-                                         COMPREPLY=( $( compgen -W "root_id" -- "$cur" ) )
-                                         _bpftool_once_attr 'format'
-                                         ;;
-    +                                file)
-    +                                    COMPREPLY=( $( compgen -W "root_id file" -- "$cur" ) )
-    +                                    _bpftool_once_attr 'format'
-    +                                    ;;
-                                     map|prog)
-                                         if [[ ${words[3]} == "map" ]] && [[ $cword == 6 ]]; then
-                                             COMPREPLY+=( $( compgen -W "key value kv all" -- "$cur" ) )
+Going one step further and reducing the size of cookies array would 
+probably be ideal, but I guess this will complicate things 
+significantly, so I'm not suggesting to do this.
 
+> +
+> +	if (fentry->nr_links) {
 
-Thanks,
-Quentin
+I think it's okay to drop this condition, invoke_bpf() is most likely 
+inlined and the loop will automatically have 0 iterations in this case.
+
+> +		if (invoke_bpf(tjit, m, fentry, flags & BPF_TRAMP_F_RET_FENTRY_RET,
+> +			       func_meta, cookie_off))
+>   			return -EINVAL;
+> +	}
+>   
+>   	if (fmod_ret->nr_links) {
+>   		/*
+> @@ -2842,11 +2880,18 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
+>   		EMIT6_PCREL_RILC(0xc0040000, 0, (u64)im->ip_epilogue);
+>   	}
+>   
+> +	/* set the "is_return" flag for fsession */
+> +	func_meta |= (1ULL << BPF_TRAMP_IS_RETURN_SHIFT);
+> +	if (fsession_cnt)
+> +		emit_store_stack_imm64(jit, REG_W0, tjit->func_meta_off,
+> +				       func_meta);
+> +
+>   	/* do_fexit: */
+>   	tjit->do_fexit = jit->prg;
+> -	for (i = 0; i < fexit->nr_links; i++)
+> -		if (invoke_bpf_prog(tjit, m, fexit->links[i], false))
+> +	if (fexit->nr_links) {
+Same as for fentry.
+> +		if (invoke_bpf(tjit, m, fexit, false, func_meta, cookie_off))
+>   			return -EINVAL;
+> +	}
+>   
+>   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
+>   		im->ip_epilogue = jit->prg_buf + jit->prg;
+> @@ -2951,6 +2996,11 @@ bool bpf_jit_supports_arena(void)
+>   	return true;
+>   }
+>   
+> +bool bpf_jit_supports_fsession(void)
+> +{
+> +	return true;
+> +}
+> +
+>   bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
+>   {
+>   	if (!in_arena)
