@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E057335B654;
-	Mon, 23 Feb 2026 10:22:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A302A35C1B8;
+	Mon, 23 Feb 2026 10:23:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771842185; cv=none; b=oH8MiSeafeeozaZTpZwARrejU3zsldndqsUMAyU6C4AAw5LnGeoVTzOsdoAFi5Avwjf/+PDGJXDA8FG3sGMkKsw8I9H7ctxS3znDSEKEIuphtNxAgVA9d3hhEn/cpkxVMjj1mzc/9CtLicQjt9P+eMekaqO8ORtjzTBFZkoVhR4=
+	t=1771842189; cv=none; b=KXbd5wn2DFt3K5KtLhRlRUNIxp40jFAMZ5YLO6wSB4ivnRv8tL2gdYct/NrzdDfxfbOayfIywbptTq4CaFtJkvJbGf+cCJWhATfEgDlmVahuKYB2dw7ltUQNGhy7XVO7BxUXt6nCY4yzPqT39AdlndPCzQEzZMiaZzxjW8SjEEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771842185; c=relaxed/simple;
-	bh=zYvKRYU44cLTr0xZ74FqQOoA6ff7ebXqgTePuAJ4LiA=;
+	s=arc-20240116; t=1771842189; c=relaxed/simple;
+	bh=xHK7gGAYeq7rlJbOwKq4LBEKAz7MjueTP+xH9HaTUkM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ilWHSGJvZ5zrHXhKdnKqHD9X7gqxvHnbtbeCfkZK/oZVUWAHARUs3YvvQj3Rnjhde288mH/8ptiofSKg5DukKuCVNDsr1VO/Ka5PnEeMI3WAxMSzhavFRQX5IAOOxsn1G7046fAnHN4HTTzk7CJPgJ5oDsMtYQJ5IAVIIqHvkac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kcI5mcM7; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=P2FkFqKT87jk210dHqxSb4iTXr++i77Z+vT7pvpPMrkZ6smyl4joPbp6AVQI9H0WJt8yoQ5Hy97nXgAoguyMhOBv9RvCdlVYAjOSowRIC0j1zxNxHMojqk79FxwU/VuDKBy2HtGuXfjs6Uh4R0fNxCVHWJIpuosBcinB9gjLjys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NqFHYVpb; arc=none smtp.client-ip=198.175.65.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kcI5mcM7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NqFHYVpb"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771842180; x=1803378180;
+  t=1771842187; x=1803378187;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=zYvKRYU44cLTr0xZ74FqQOoA6ff7ebXqgTePuAJ4LiA=;
-  b=kcI5mcM7CsUjeJbvuywjlMfcflzZrOEAFwzIHIzqwl/bBh/pFh1tHOhp
-   XIIkJVOvrxOQaV/KkeFlsKm0DTV6enA9lJwWtGo3UfWAmFjc3y5Co41c/
-   gmI+5/FEp2hbaOsIU4cDgdNLmhiEMkXKo//npSPye8w17FguOk9MPZlW4
-   bAfkhab2SeEmTQ5Gf3GWgArjwNGtKF4xCr/3JB479fNYY5q4UDyNObi1D
-   mUUkzPla0DRCUOkKDaad7dtRaxeT243LzmfHHla0+4WTvc4OXS2SXubJt
-   VDOFs9f7TRqqoJBBNsM+330UY2DvuZ2WDvy/xxmVuZRIaJCVDw5iskszl
-   g==;
-X-CSE-ConnectionGUID: 5zYQZRmzQPqNzJO8uCIp0w==
-X-CSE-MsgGUID: qZ9rFdndSUmTiyOa4qaMJg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11709"; a="76444731"
+  bh=xHK7gGAYeq7rlJbOwKq4LBEKAz7MjueTP+xH9HaTUkM=;
+  b=NqFHYVpb7YR7jN1BM89Nj0x+tqpDbxQAdXBAcGwKKrfcDTLbUa9bQQZb
+   2SYMP4qQTQZ+ydFhKCOoJCBlisqPxE20o5kE4FSGFXAEKayWkg54L80Vm
+   fQMVSjtR1gnAgD6BKziRq9RrogPon/RKHk+jpnzbjxCTXVVqwXcgy6BB1
+   eBsSsHAgOQFYiSSPMbTWSJ3bWMjHo3TqMpQpeI+e/5/zfnFe4bzcXCEZ2
+   UprOjUCCXYdqiG9L8u7M0qVB0KZlh0d+A7/mNOy3m1DkAcJ+O3tV3+xZF
+   AWUXCPS+ZWshPeUAfm6tmpxtMEut1AEwUwG09fUspHLdZkIUn32B4AAgL
+   A==;
+X-CSE-ConnectionGUID: NI3DgFCyQHmhf/rdJolnBQ==
+X-CSE-MsgGUID: Rsz01JS/SCSboi6KAs874w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11709"; a="76444783"
 X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="76444731"
+   d="scan'208";a="76444783"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 02:22:58 -0800
-X-CSE-ConnectionGUID: 1BvZhXR8QiyBq2qSWiVSSQ==
-X-CSE-MsgGUID: 1md0WBZzTJGtkfC9tXXX4A==
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2026 02:23:06 -0800
+X-CSE-ConnectionGUID: h55ZlWndR0CzyqnrO28iRA==
+X-CSE-MsgGUID: ALdrkKSoSUag68C8BkGV8A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,306,1763452800"; 
-   d="scan'208";a="246121761"
+   d="scan'208";a="246121851"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orviesa002.jf.intel.com with ESMTP; 23 Feb 2026 02:22:53 -0800
+  by orviesa002.jf.intel.com with ESMTP; 23 Feb 2026 02:23:02 -0800
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 08D632816F;
-	Mon, 23 Feb 2026 10:22:50 +0000 (GMT)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 3551228167;
+	Mon, 23 Feb 2026 10:23:00 +0000 (GMT)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: Tony Nguyen <anthony.l.nguyen@intel.com>,
 	intel-wired-lan@lists.osuosl.org
@@ -68,9 +68,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH iwl-next 05/10] ixgbevf: support XDP multi-buffer on Rx path
-Date: Mon, 23 Feb 2026 10:52:12 +0100
-Message-ID: <20260223095222.3205363-6-larysa.zaremba@intel.com>
+Subject: [PATCH iwl-next 09/10] ixgbevf: reconfigure page pool when reallocating buffers
+Date: Mon, 23 Feb 2026 10:52:16 +0100
+Message-ID: <20260223095222.3205363-10-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260223095222.3205363-1-larysa.zaremba@intel.com>
 References: <20260223095222.3205363-1-larysa.zaremba@intel.com>
@@ -82,237 +82,159 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement XDP support for received fragmented packets, this requires using
-some helpers from libeth_xdp.
+Currently, when MTU is changed, page pool is not reconfigured, which leads
+to usage of suboptimal buffer sizes.
+
+Always destroy page pool when cleaning the ring up and create it anew when
+we first allocate Rx buffers.
 
 Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- drivers/net/ethernet/intel/ixgbevf/ixgbevf.h  |  3 +-
- .../net/ethernet/intel/ixgbevf/ixgbevf_main.c | 88 ++++++-------------
- 2 files changed, 31 insertions(+), 60 deletions(-)
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c | 69 +++++++++----------
+ 1 file changed, 33 insertions(+), 36 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf.h b/drivers/net/ethernet/intel/ixgbevf/ixgbevf.h
-index 698091d42dbd..eada53c57fcf 100644
---- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf.h
-+++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf.h
-@@ -11,6 +11,7 @@
- #include <linux/netdevice.h>
- #include <linux/if_vlan.h>
- #include <linux/u64_stats_sync.h>
-+#include <net/libeth/types.h>
- #include <net/xdp.h>
- 
- #include "vf.h"
-@@ -106,7 +107,6 @@ struct ixgbevf_ring {
- 	struct xdp_rxq_info xdp_rxq;
- 	u64 hw_csum_rx_error;
- 	u8 __iomem *tail;
--	struct sk_buff *skb;
- 
- 	/* holds the special value that gets the hardware register offset
- 	 * associated with this ring, which is different for DCB and RSS modes
-@@ -114,6 +114,7 @@ struct ixgbevf_ring {
- 	u16 reg_idx;
- 	int queue_index; /* needed for multiqueue queue management */
- 	u32 rx_buf_len;
-+	struct libeth_xdp_buff_stash xdp_stash;
- } ____cacheline_internodealigned_in_smp;
- 
- /* How many Rx Buffers do we bundle into one write to the hardware ? */
 diff --git a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-index 39124c430537..558a4fad543a 100644
+index 790e86135fbd..606c6123d7eb 100644
 --- a/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
 +++ b/drivers/net/ethernet/intel/ixgbevf/ixgbevf_main.c
-@@ -84,6 +84,7 @@ MODULE_DEVICE_TABLE(pci, ixgbevf_pci_tbl);
+@@ -1660,6 +1660,12 @@ static void ixgbevf_rx_destroy_pp(struct ixgbevf_ring *rx_ring)
+ 		.fqes	= rx_ring->rx_fqes,
+ 	};
  
- MODULE_DESCRIPTION("Intel(R) 10 Gigabit Virtual Function Network Driver");
- MODULE_IMPORT_NS("LIBETH");
-+MODULE_IMPORT_NS("LIBETH_XDP");
- MODULE_LICENSE("GPL v2");
- 
- #define DEFAULT_MSG_ENABLE (NETIF_MSG_DRV|NETIF_MSG_PROBE|NETIF_MSG_LINK)
-@@ -647,26 +648,6 @@ static bool ixgbevf_cleanup_headers(struct ixgbevf_ring *rx_ring,
- 	return false;
- }
- 
--/**
-- * ixgbevf_add_rx_frag - Add contents of Rx buffer to sk_buff
-- * @rx_ring: rx descriptor ring to transact packets on
-- * @rx_buffer: buffer containing page to add
-- * @skb: sk_buff to place the data into
-- * @size: size of buffer to be added
-- *
-- * This function will add the data contained in rx_buffer->page to the skb.
-- **/
--static void ixgbevf_add_rx_frag(const struct libeth_fqe *rx_buffer,
--				struct sk_buff *skb,
--				unsigned int size)
--{
--	u32 hr = netmem_get_pp(rx_buffer->netmem)->p.offset;
--
--	skb_add_rx_frag_netmem(skb, skb_shinfo(skb)->nr_frags,
--			       rx_buffer->netmem, rx_buffer->offset + hr,
--			       size, rx_buffer->truesize);
--}
--
- static inline void ixgbevf_irq_enable_queues(struct ixgbevf_adapter *adapter,
- 					     u32 qmask)
- {
-@@ -803,16 +784,16 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
- 	unsigned int total_rx_bytes = 0, total_rx_packets = 0;
- 	struct ixgbevf_adapter *adapter = q_vector->adapter;
- 	u16 cleaned_count = ixgbevf_desc_unused(rx_ring);
--	struct sk_buff *skb = rx_ring->skb;
- 	LIBETH_XDP_ONSTACK_BUFF(xdp);
- 	bool xdp_xmit = false;
- 	int xdp_res = 0;
- 
--	xdp->base.rxq = &rx_ring->xdp_rxq;
-+	libeth_xdp_init_buff(xdp, &rx_ring->xdp_stash, &rx_ring->xdp_rxq);
- 
- 	while (likely(total_rx_packets < budget)) {
- 		union ixgbe_adv_rx_desc *rx_desc;
- 		struct libeth_fqe *rx_buffer;
-+		struct sk_buff *skb;
- 		unsigned int size;
- 
- 		/* return some buffers to hardware, one at a time is too slow */
-@@ -833,42 +814,34 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
- 		rmb();
- 
- 		rx_buffer = &rx_ring->rx_fqes[rx_ring->next_to_clean];
--		libeth_rx_sync_for_cpu(rx_buffer, size);
-+		libeth_xdp_process_buff(xdp, rx_buffer, size);
- 
--		/* retrieve a buffer from the ring */
--		if (!skb) {
--			libeth_xdp_prepare_buff(xdp, rx_buffer, size);
--			prefetch(xdp->data);
--			xdp_res = ixgbevf_run_xdp(adapter, rx_ring, xdp);
--		}
-+		cleaned_count++;
-+		/* fetch next buffer in frame if non-eop */
-+		if (ixgbevf_is_non_eop(rx_ring, rx_desc))
-+			continue;
- 
-+		xdp_res = ixgbevf_run_xdp(adapter, rx_ring, xdp);
- 		if (xdp_res) {
- 			if (xdp_res == IXGBEVF_XDP_TX)
- 				xdp_xmit = true;
- 
- 			total_rx_packets++;
- 			total_rx_bytes += size;
--		} else if (skb) {
--			ixgbevf_add_rx_frag(rx_buffer, skb, size);
--		} else {
--			skb = xdp_build_skb_from_buff(&xdp->base);
-+			continue;
- 		}
- 
-+		skb = xdp_build_skb_from_buff(&xdp->base);
-+		xdp->data = NULL;
++	if (!fq.pp)
++		return;
 +
- 		/* exit if we failed to retrieve a buffer */
--		if (unlikely(!xdp_res && !skb)) {
-+		if (unlikely(!skb)) {
- 			rx_ring->rx_stats.alloc_rx_buff_failed++;
- 			break;
- 		}
++	xdp_rxq_info_detach_mem_model(&rx_ring->xdp_rxq);
++	xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
++
+ 	libeth_rx_fq_destroy(&fq);
+ 	rx_ring->rx_fqes = NULL;
+ 	rx_ring->pp = NULL;
+@@ -1710,6 +1716,14 @@ static int ixgbevf_rx_create_pp(struct ixgbevf_ring *rx_ring)
+ 	rx_ring->truesize = fq.truesize;
+ 	rx_ring->rx_buf_len = fq.buf_len;
  
--		cleaned_count++;
--
--		/* fetch next buffer in frame if non-eop */
--		if (ixgbevf_is_non_eop(rx_ring, rx_desc))
--			continue;
--
- 		/* verify the packet layout is correct */
--		if (xdp_res ||
--		    unlikely(ixgbevf_cleanup_headers(rx_ring, rx_desc, skb))) {
-+		if (unlikely(ixgbevf_cleanup_headers(rx_ring, rx_desc, skb))) {
- 			skb = NULL;
- 			continue;
- 		}
-@@ -892,13 +865,10 @@ static int ixgbevf_clean_rx_irq(struct ixgbevf_q_vector *q_vector,
- 		total_rx_packets++;
++	/* XDP RX-queue info */
++	ret = __xdp_rxq_info_reg(&rx_ring->xdp_rxq, rx_ring->netdev,
++				 rx_ring->queue_index, 0, rx_ring->truesize);
++	if (ret)
++		goto err;
++
++	xdp_rxq_info_attach_page_pool(&rx_ring->xdp_rxq, rx_ring->pp);
++
+ 	if (!fq.hsplit)
+ 		return 0;
  
- 		ixgbevf_rx_skb(q_vector, skb);
--
--		/* reset skb pointer */
--		skb = NULL;
- 	}
+@@ -1779,6 +1793,8 @@ static void ixgbevf_configure_rx_ring(struct ixgbevf_adapter *adapter,
+ 	ring->next_to_clean = 0;
+ 	ring->next_to_use = 0;
  
- 	/* place incomplete frames back on ring for completion */
--	rx_ring->skb = skb;
-+	libeth_xdp_save_buff(&rx_ring->xdp_stash, xdp);
- 
- 	if (xdp_xmit) {
- 		struct ixgbevf_ring *xdp_ring =
-@@ -2018,10 +1988,7 @@ void ixgbevf_up(struct ixgbevf_adapter *adapter)
- static void ixgbevf_clean_rx_ring(struct ixgbevf_ring *rx_ring)
++	ixgbevf_rx_create_pp(ring);
++
+ 	/* RXDCTL.RLPML does not work on 82599 */
+ 	if (adapter->hw.mac.type != ixgbe_mac_82599_vf) {
+ 		u32 pkt_len =
+@@ -2271,8 +2287,10 @@ static void ixgbevf_clean_all_rx_rings(struct ixgbevf_adapter *adapter)
  {
- 	/* Free Rx ring sk_buff */
--	if (rx_ring->skb) {
--		dev_kfree_skb(rx_ring->skb);
--		rx_ring->skb = NULL;
--	}
-+	libeth_xdp_return_stash(&rx_ring->xdp_stash);
+ 	int i;
  
- 	/* Free all the Rx ring pages */
- 	for (u32 i = rx_ring->next_to_clean; i != rx_ring->next_to_use; ) {
-@@ -4101,16 +4068,19 @@ ixgbevf_features_check(struct sk_buff *skb, struct net_device *dev,
- 	return features;
+-	for (i = 0; i < adapter->num_rx_queues; i++)
++	for (i = 0; i < adapter->num_rx_queues; i++) {
+ 		ixgbevf_clean_rx_ring(adapter->rx_ring[i]);
++		ixgbevf_rx_destroy_pp(adapter->rx_ring[i]);
++	}
  }
  
--static int ixgbevf_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
-+static int ixgbevf_xdp_setup(struct net_device *dev, struct bpf_prog *prog,
-+			     struct netlink_ext_ack *extack)
+ /**
+@@ -3293,6 +3311,11 @@ static int ixgbevf_setup_all_tx_resources(struct ixgbevf_adapter *adapter)
+ 	return err;
+ }
+ 
++static struct device *ixgbevf_dma_dev_from_ring(struct ixgbevf_ring *ring)
++{
++	return &ring->q_vector->adapter->pdev->dev;
++}
++
+ /**
+  * ixgbevf_setup_rx_resources - allocate Rx resources
+  * @adapter: board private structure
+@@ -3303,41 +3326,25 @@ static int ixgbevf_setup_all_tx_resources(struct ixgbevf_adapter *adapter)
+ int ixgbevf_setup_rx_resources(struct ixgbevf_adapter *adapter,
+ 			       struct ixgbevf_ring *rx_ring)
  {
--	int i, frame_size = dev->mtu + ETH_HLEN + ETH_FCS_LEN + VLAN_HLEN;
-+	u32 frame_size = READ_ONCE(dev->mtu) + LIBETH_RX_LL_LEN;
- 	struct ixgbevf_adapter *adapter = netdev_priv(dev);
- 	struct bpf_prog *old_prog;
-+	bool requires_mbuf;
+-	int ret;
+-
+-	ret = ixgbevf_rx_create_pp(rx_ring);
+-	if (ret)
+-		return ret;
+-
+ 	u64_stats_init(&rx_ring->syncp);
  
--	/* verify ixgbevf ring attributes are sufficient for XDP */
--	for (i = 0; i < adapter->num_rx_queues; i++) {
--		if (frame_size > IXGBEVF_RXBUFFER_3072)
--			return -EINVAL;
-+	requires_mbuf = frame_size > IXGBEVF_RX_PAGE_LEN(LIBETH_XDP_HEADROOM);
-+	if (prog && !prog->aux->xdp_has_frags && requires_mbuf) {
-+		NL_SET_ERR_MSG_MOD(extack,
-+				   "Configured MTU requires non-linear frames and XDP prog does not support frags");
-+		return -EOPNOTSUPP;
- 	}
+ 	/* Round up to nearest 4K */
+ 	rx_ring->dma_size = rx_ring->count * sizeof(union ixgbe_adv_rx_desc);
+ 	rx_ring->dma_size = ALIGN(rx_ring->dma_size, 4096);
  
- 	old_prog = xchg(&adapter->xdp_prog, prog);
-@@ -4130,7 +4100,7 @@ static int ixgbevf_xdp_setup(struct net_device *dev, struct bpf_prog *prog)
- 		if (netif_running(dev))
- 			ixgbevf_open(dev);
- 	} else {
--		for (i = 0; i < adapter->num_rx_queues; i++)
-+		for (int i = 0; i < adapter->num_rx_queues; i++)
- 			xchg(&adapter->rx_ring[i]->xdp_prog, adapter->xdp_prog);
- 	}
+-	rx_ring->desc = dma_alloc_coherent(rx_ring->pp->p.dev,
++	rx_ring->desc = dma_alloc_coherent(ixgbevf_dma_dev_from_ring(rx_ring),
+ 					   rx_ring->dma_size,
+ 					   &rx_ring->dma, GFP_KERNEL);
  
-@@ -4144,7 +4114,7 @@ static int ixgbevf_xdp(struct net_device *dev, struct netdev_bpf *xdp)
+-	if (!rx_ring->desc)
+-		goto err;
+-
+-	/* XDP RX-queue info */
+-	ret = __xdp_rxq_info_reg(&rx_ring->xdp_rxq, adapter->netdev,
+-				 rx_ring->queue_index, 0, rx_ring->truesize);
+-	if (ret)
+-		goto err;
+-
+-	xdp_rxq_info_attach_page_pool(&rx_ring->xdp_rxq, rx_ring->pp);
++	if (!rx_ring->desc) {
++		dev_err(rx_ring->dev,
++			"Unable to allocate memory for the Rx descriptor ring\n");
++		return -ENOMEM;
++	}
+ 
+ 	rx_ring->xdp_prog = adapter->xdp_prog;
+ 
+ 	return 0;
+-err:
+-	ixgbevf_rx_destroy_pp(rx_ring);
+-	dev_err(rx_ring->dev, "Unable to allocate memory for the Rx descriptor ring\n");
+-
+-	return ret;
+ }
+ 
+ /**
+@@ -3378,24 +3385,14 @@ static int ixgbevf_setup_all_rx_resources(struct ixgbevf_adapter *adapter)
+  **/
+ void ixgbevf_free_rx_resources(struct ixgbevf_ring *rx_ring)
  {
- 	switch (xdp->command) {
- 	case XDP_SETUP_PROG:
--		return ixgbevf_xdp_setup(dev, xdp->prog);
-+		return ixgbevf_xdp_setup(dev, xdp->prog, xdp->extack);
- 	default:
- 		return -EINVAL;
- 	}
-@@ -4296,7 +4266,7 @@ static int ixgbevf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 			    NETIF_F_HW_VLAN_CTAG_TX;
+-	struct libeth_fq fq = {
+-		.fqes	= rx_ring->rx_fqes,
+-		.pp	= rx_ring->pp,
+-	};
+-
+ 	ixgbevf_clean_rx_ring(rx_ring);
+-
++	ixgbevf_rx_destroy_pp(rx_ring);
+ 	rx_ring->xdp_prog = NULL;
+-	xdp_rxq_info_detach_mem_model(&rx_ring->xdp_rxq);
+-	xdp_rxq_info_unreg(&rx_ring->xdp_rxq);
  
- 	netdev->priv_flags |= IFF_UNICAST_FLT;
--	netdev->xdp_features = NETDEV_XDP_ACT_BASIC;
-+	netdev->xdp_features = NETDEV_XDP_ACT_BASIC | NETDEV_XDP_ACT_RX_SG;
+-	dma_free_coherent(fq.pp->p.dev, rx_ring->dma_size, rx_ring->desc,
++	dma_free_coherent(ixgbevf_dma_dev_from_ring(rx_ring),
++			  rx_ring->dma_size, rx_ring->desc,
+ 			  rx_ring->dma);
+ 	rx_ring->desc = NULL;
+-
+-	libeth_rx_fq_destroy(&fq);
+-	rx_ring->rx_fqes = NULL;
+-	rx_ring->pp = NULL;
+ }
  
- 	/* MTU range: 68 - 1504 or 9710 */
- 	netdev->min_mtu = ETH_MIN_MTU;
+ /**
 -- 
 2.52.0
 
