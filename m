@@ -1,142 +1,177 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A329334C35
-	for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 22:32:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7904E83A14;
+	Mon, 23 Feb 2026 22:46:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771885961; cv=none; b=mXBMEcb2JaBpYShYOBermw20QapQJ4ja3IcLsslNkJrxp+ILWVobXhCoZeprg6CPYz/01jxi30cpflOT7kLZNuKhNNT2qWpZAKfS3mhAtpvYjUGg8j9XM+a+jSvtWIUr73nZMHsFWPBLUQihNnY2SAPKWqi1kfTBT92H3DiBOu8=
+	t=1771886778; cv=none; b=Gv+a1fofLm1jlbR2OJIdgqbZOx4kzNBNY4Ld2BejV7PU148jBZxTLkfBu8rl9R70N2GXy0p07cJWTT1Z6kEXoPdBKE18o5A6jlgWp5VuFK5lc5k+61PdJKiGwrY5IA9Jq//xbYjwqBkCtsNViFEFMlPWWHxEfsCxM9bE4NBm704=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771885961; c=relaxed/simple;
-	bh=GKoZGl4SvMjI7mJZYLtzEvN9UEHm0W01NVVG0EYK/cw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=akE4zzTcaLileuZCvmCbulX+KomiCIOtALh5qbXLf9DewByM/w5oDi3AYflEJWHW0GNRAIVGJ8wxFIWtW//0FouVkl5tZm2rc0e8dWQy3j6U4aWi0fVpyN0/+pSLFpReXtxvixwP4sLRsGG7BhppdT61TCIQ+pf8X2Emw6AkykA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=fSy11OST; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771886778; c=relaxed/simple;
+	bh=dDqm3M/UUJINYrVqHDCxExjWkuLu8A/UfuHCHHnJhwM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=GmKfpI8BaJ3rOESHb/xkL/ULD//05xDbgDaiXMYNX+Zjl7rXI/pcywzRmjVRsI1vHbfzxCZ5Y4iH6w4jvfr7xbOKde+61LUOjP/XBsClgK4vmql2UBRGXTEskJUdJLDtvxnyAYHlD036s6kMXFMij24/3I39U1aVWm2o8ZLREs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJKRUAnt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="fSy11OST"
-Message-ID: <b76aa450-e3fc-4002-ba3f-c73c11c1ec84@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771885956;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gOUzGH24v1tE/NOsj00qGvJRG/uLDcmIAwX4fz02AzI=;
-	b=fSy11OSTKGL7KRrCqS2vvDAjK7ww5QPCPClZ1Bbt58YE5Szw9jruRwwt/Uzp+6cmJ6ijRE
-	QDD9VXlip8Ws2DSnx62JtZTDZgD7DnubbYj8LQG56vWKe7Vo9Xh508x8TnfIRUaQgJflum
-	PNCUnzIsQBcnH78+QbFBWh6ApCDMZUc=
-Date: Mon, 23 Feb 2026 14:32:28 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJKRUAnt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18973C116C6;
+	Mon, 23 Feb 2026 22:46:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771886778;
+	bh=dDqm3M/UUJINYrVqHDCxExjWkuLu8A/UfuHCHHnJhwM=;
+	h=Date:From:To:Cc:Subject:From;
+	b=WJKRUAntho7cZHN8rTDNJI7ieKd9HiRFwIpfqFdu7OL6UBDSljJLVGK1w9ko4VF9G
+	 xuZEjuIasH4luO4t6J/9ZpI/1aZsfy9zd5NOgPcKLNar6FlxhOdevt5J/c+5ZaL+l7
+	 r+uBGZSaUi1SWSKLTzlhiEEM+dQSirqmoob7CQ2msNO7dMa0LN2v+XGZEzMwqz8kEJ
+	 u9pYaONC+HHe/BnIckWQQ4FpPsezotrC3jjiFzGcqgsz2K2Unoqenal8v/Yc+snNm3
+	 /aus4wpH41ca4UJS84jkJ2mjogXHaiASpVM0h1+a0rUMI/3/Ky3nC8IG/nVrQw9PJ8
+	 q6NyI4QvsszdA==
+Date: Mon, 23 Feb 2026 14:46:17 -0800
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: linux-fsdevel <linux-fsdevel@vger.kernel.org>, bpf@vger.kernel.org,
+	linux-ext4 <linux-ext4@vger.kernel.org>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, Bernd Schubert <bernd@bsbernd.com>,
+	Joanne Koong <joannelkoong@gmail.com>,
+	Theodore Ts'o <tytso@mit.edu>, Neal Gompa <neal@gompa.dev>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>, John@groves.net,
+	demiobenour@gmail.com
+Subject: [PATCHBLIZZARD v7] fuse/libfuse/e2fsprogs: containerize ext4 for
+ safer operation
+Message-ID: <20260223224617.GA2390314@frogsfrogsfrogs>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v4 03/20] selftests/bpf: Replace strncpy() with
- strscpy()
-To: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Jiri Olsa <olsajiri@gmail.com>,
- Mykyta Yatsenko <yatsenko@meta.com>,
- =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: Amery Hung <ameryhung@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com
-References: <20260223190736.649171-1-ihor.solodrai@linux.dev>
- <20260223190736.649171-4-ihor.solodrai@linux.dev>
- <8249f1439fa9ee4a1227da3f0707a9d0cfbad825.camel@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <8249f1439fa9ee4a1227da3f0707a9d0cfbad825.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2/23/26 2:28 PM, Eduard Zingerman wrote:
-> On Mon, 2026-02-23 at 11:07 -0800, Ihor Solodrai wrote:
-> 
-> [...]
-> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/align.c b/tools/testing/selftests/bpf/prog_tests/align.c
->> index 24c509ce4e5b..841a166b8081 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/align.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/align.c
->> @@ -633,7 +633,7 @@ static int do_test_single(struct bpf_align_test *test)
->>  	} else {
->>  		ret = 0;
->>  		/* We make a local copy so that we can strtok() it */
->> -		strncpy(bpf_vlog_copy, bpf_vlog, sizeof(bpf_vlog_copy));
->> +		strscpy(bpf_vlog_copy, bpf_vlog);
->>  		start = strstr(bpf_vlog_copy, main_pass_start);
->>  		if (!start) {
->>  			ret = 1;
-> 
-> This hunk no longer applies.
+This is the seventh public draft of a prototype to connect the Linux
+fuse driver to fs-iomap for regular file IO operations to and from files
+whose contents persist to locally attached storage devices.  With this
+release, I show that it's possible to build a fuse server for a real
+filesystem (ext4) that runs entirely in userspace yet maintains most of
+its performance.  Furthermore, I also show that the userspace program
+runs with minimal privilege, which means that we no longer need to have
+filesystem metadata parsing be a privileged (== risky) operation.
 
+Why would you want to do that?  Most filesystem drivers are seriously
+vulnerable to metadata parsing attacks, as syzbot has shown repeatedly
+over almost a decade of its existence.  Faulty code can lead to total
+kernel compromise, and I think there's a very strong incentive to move
+all that parsing out to userspace where we can containerize the fuse
+server process.
 
-Hmm... Applies for me. What revision did you try?
+Demi Marie Obenour pointed out that libguestfs exists.  That project
+creates a minimum rootfs, spins up a libvirt VM with a disk image
+attached, and has a fuse server that can talk to the VM to provide file
+access.  This provides the safety and isolation that I discussed above,
+though the performance is not great, the memory and disk space
+consumption are rather amazing (500MB and 350MB, respectively!), and
+startup times are very slow.  This project avoids those overheads,
+though I concede that libguestfs already exists and probably works in
+more places than, say, lklfuse.
 
-$ git log -1 --oneline 
-6de23f81a5e0 (HEAD, tag: v7.0-rc1, origin/bpf) Linux 7.0-rc1
+willy's folios conversion project (and to a certain degree RH's new
+mount API) have also demonstrated that treewide changes to the core
+mm/pagecache/fs code are very very difficult to pull off and take years
+because you have to understand every filesystem's bespoke use of that
+core code.  Eeeugh.
 
-$ b4 shazam 20260223190736.649171-1-ihor.solodrai@linux.dev
-Grabbing thread from lore.kernel.org/all/20260223190736.649171-1-ihor.solodrai@linux.dev/t.mbox.gz
-Checking for newer revisions
-Grabbing search results from lore.kernel.org
-Analyzing 22 messages in the thread
-Looking for additional code-review trailers on lore.kernel.org
-Analyzing 103 code-review messages
-Checking attestation on all messages, may take a moment...
----
-  ✓ [PATCH v4 1/20] selftests/bpf: Add simple strscpy() implementation
-  ✓ [PATCH v4 2/20] selftests/bpf: Replace strcpy() calls with strscpy()
-  ✓ [PATCH v4 3/20] selftests/bpf: Replace strncpy() with strscpy()
-  ✓ [PATCH v4 4/20] selftests/bpf: Use strscpy in bpftool_helpers.c
-  ✓ [PATCH v4 5/20] selftests/bpf: Use memcpy() for bounded non-NULL-terminated copies
-  ✓ [PATCH v4 6/20] selftests/bpf: Pass through build flags to bpftool and resolve_btfids
-  ✓ [PATCH v4 7/20] resolve_btfids: Fix memory leaks reported by ASAN
-  ✓ [PATCH v4 8/20] selftests/bpf: Add DENYLIST.asan
-  ✓ [PATCH v4 9/20] selftests/bpf: Refactor bpf_get_ksyms() trace helper
-  ✓ [PATCH v4 10/20] selftests/bpf: Fix memory leaks in tests
-  ✓ [PATCH v4 11/20] selftests/bpf: Fix cleanup in check_fd_array_cnt__fd_array_too_big()
-  ✓ [PATCH v4 12/20] veristat: Fix a memory leak for preset ENUMERATOR
-  ✓ [PATCH v4 13/20] selftests/bpf: Fix use-after-free in xdp_metadata test
-  ✓ [PATCH v4 14/20] selftests/bpf: Fix double thread join in uprobe_multi_test
-  ✓ [PATCH v4 15/20] selftests/bpf: Fix resource leaks caused by missing cleanups
-  ✓ [PATCH v4 16/20] selftests/bpf: Free bpf_object in test_sysctl
-  ✓ [PATCH v4 17/20] selftests/bpf: Fix array bounds warning in jit_disasm_helpers
-  ✓ [PATCH v4 18/20] selftests/bpf: Fix out-of-bounds array access bugs reported by ASAN
-  ✓ [PATCH v4 19/20] selftests/bpf: Check BPFTOOL env var in detect_bpftool_path()
-  ✓ [PATCH v4 20/20] selftests/bpf: Don't override SIGSEGV handler with ASAN
-  ---
-  ✓ Signed: DKIM/linux.dev
----
-Total patches: 20
----
-Applying: selftests/bpf: Add simple strscpy() implementation
-Applying: selftests/bpf: Replace strcpy() calls with strscpy()
-Applying: selftests/bpf: Replace strncpy() with strscpy()
-Applying: selftests/bpf: Use strscpy in bpftool_helpers.c
-Applying: selftests/bpf: Use memcpy() for bounded non-NULL-terminated copies
-Applying: selftests/bpf: Pass through build flags to bpftool and resolve_btfids
-Applying: resolve_btfids: Fix memory leaks reported by ASAN
-Applying: selftests/bpf: Add DENYLIST.asan
-Applying: selftests/bpf: Refactor bpf_get_ksyms() trace helper
-Applying: selftests/bpf: Fix memory leaks in tests
-Applying: selftests/bpf: Fix cleanup in check_fd_array_cnt__fd_array_too_big()
-Applying: veristat: Fix a memory leak for preset ENUMERATOR
-Applying: selftests/bpf: Fix use-after-free in xdp_metadata test
-Applying: selftests/bpf: Fix double thread join in uprobe_multi_test
-Applying: selftests/bpf: Fix resource leaks caused by missing cleanups
-Applying: selftests/bpf: Free bpf_object in test_sysctl
-Applying: selftests/bpf: Fix array bounds warning in jit_disasm_helpers
-Applying: selftests/bpf: Fix out-of-bounds array access bugs reported by ASAN
-Applying: selftests/bpf: Check BPFTOOL env var in detect_bpftool_path()
-Applying: selftests/bpf: Don't override SIGSEGV handler with ASAN
+The fuse command plumbing is very simple -- the ->iomap_begin,
+->iomap_end, and iomap ->ioend calls within iomap are turned into
+upcalls to the fuse server via a trio of new fuse commands.  Pagecache
+writeback is now a directio write.  The fuse server can upsert mappings
+into the kernel for cached access (== zero upcalls for rereads and pure
+overwrites!) and the iomap cache revalidation code works.
 
+At this stage I still get about 95% of the kernel ext4 driver's
+streaming directio performance on streaming IO, and 110% of its
+streaming buffered IO performance.  Random buffered IO is about 85% as
+fast as the kernel.  Random direct IO is about 80% as fast as the
+kernel; see the cover letter for the fuse2fs iomap changes for more
+details.  Unwritten extent conversions on random direct writes are
+especially painful for fuse+iomap (~90% more overhead) due to upcall
+overhead.  And that's with (now dynamic) debugging turned on!
 
-> 
-> [...]
+These items have been addressed since the sixth RFC:
 
+1. Setting current->flags didn't work for fuse servers running inside
+   a systemd service, so that's now fixed.
+
+2. Joanne and I worked together to build a prototype of allowing the
+   fuse server to override the iomap ops via the BPF struct_ops device.
+   This might take care of the interleaved mapping code in John Groves'
+   famfs patchset.  This worked great back when my dev branch was
+   based off of 6.19.
+
+   Unfortunately it's broken in 7.0-rc1 because ... something changed
+   in how BTF gets generated and now I get weird compiler warnings and
+   the kernel build fails.  I don't currently know what in gcc 14.2 is
+   allergic let alone how to fix this. :(
+
+   The BPF parts of this submission are RFC because at this point I
+   still have a lot of unresolved questions, such as:
+
+   a> If you're building a file server for a distro package, there seems
+      to be very little consistency as to where vmlinux.h might be
+      found.
+
+   b> Can we just compile the bpf at runtime?  That would introduce a
+      lot of runtime dependencies (bpftool, clang, etc.) and precludes
+      the possibility of vendor-signed bpf binaries.
+
+   c> Are the memory protections implemented by the RFC series adequate
+      to prevent data theft and/or kernel memory corruption?  struct ops
+      seem to have a lot of capabilities.
+
+   d> Does anyone else in filesystem-land think this is a good idea?
+
+3. The mapping cache isn't invalidated at file close anymore.
+
+4. Cleaned up the header files so that we're not just dumping tons of
+   symbols in fuse_i.h.
+
+5. Various review complaints from Chris Mason's AI reviewer.
+
+There are some warts remaining:
+
+a. I would like to continue the discussion about how the design review
+   of this code should be structured, and how might I go about creating
+   new userspace filesystem servers -- lightweight new ones based off
+   the existing userspace tools?  Or by merging lklfuse?
+
+b. ext4 doesn't support out of place writes so I don't know if that
+   actually works correctly.
+
+c. fuse2fs doesn't support the ext4 journal.  Urk.
+
+d. There's a VERY large quantity of fuse2fs improvements that need to be
+   applied before we get to the fuse-iomap parts.  I'm not sending these
+   (or the fstests changes) to keep the size of the patchbomb at
+   "unreasonably large". :P  As a result, the fstests and e2fsprogs
+   postings are very targeted.
+
+e. I've dropped the fstests part of the patchbomb because v6 was just
+   way too long.
+
+I would like to get the main parts of this submission reviewed for 7.1
+now that this has been collecting comments and tweaks in non-rfc status
+for 3.5 months.
+
+Kernel:
+https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfs-linux.git/log/?h=fuse-iomap-bpf
+
+libfuse:
+https://git.kernel.org/pub/scm/linux/kernel/git/djwong/libfuse.git/log/?h=fuse-iomap-bpf
+
+e2fsprogs:
+https://git.kernel.org/pub/scm/linux/kernel/git/djwong/e2fsprogs.git/log/?h=fuse-iomap-bpf
+
+fstests:
+https://git.kernel.org/pub/scm/linux/kernel/git/djwong/xfstests-dev.git/log/?h=fuse2fs
+
+--Darrick
