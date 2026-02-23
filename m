@@ -1,94 +1,118 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE3637F727;
-	Mon, 23 Feb 2026 23:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7323934D4D8;
+	Mon, 23 Feb 2026 23:18:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771888716; cv=none; b=g0Vj2Y7H5JG6yklkEkl4v+wT3CD+0Kdx37ben9sMPndA3/ELxRhXM6cMXjwqHGkmhvrcq9JQiqBNouOYzyYLcsXrcUUGG23f7HdNgKN8X+zSQzWDfLtLNrNFpTLyZJsDgabgkZM9/zK4sGsZxLlPB5AqIhpgLsg1eCACqcSP4Ao=
+	t=1771888728; cv=none; b=I6QTFIwSzbgE0C8hoSSY+/oW2+1Cx077EQOC9lQLMTDztjnGJNqh3VAzJ8Q7qPnLBFET3+xtLI/tHcnKYKR+Gb39moaQc5vCEsChJlmxyA62sU2Sr7tkgrsHx2ytn6GHiK1CVS9csd4gTCmLQSFQMWVvOMnGvjwezQjYwBQy0Bk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771888716; c=relaxed/simple;
-	bh=hZZ0Nqf3pc2crIGZaHibR4tu96NpNUTg1wVtR82zV8o=;
-	h=Date:Subject:From:To:Cc:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YII16AjHQLv3U9rd/k84q3YBQTUUNMxv3g0PigKwfdpSpz51u0G/y+tK3RCikPO0FD2rupnXNzMNaV2fJV1VnWS0bVJsTrkeB5LnUo4JcSGF+gHHZUkrUtGSfUspxXJoYbPhgZ68s9tb0evoyK+H4S9RgbjR+GYHIxEc9Ws8g2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uRA2kjHk; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771888728; c=relaxed/simple;
+	bh=CYLrkQbplhVLWpLwYQI2kVgix50aUPHsmv7SwhslwTg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZxrXQRdZZ/Dkz2PYtlz0/7z/SAJHXIC7TdbA9ijhYsxfjKQzWFmOwlSC2Q/DiQ3zkfoFIQO11RlzTXyPzOO1R4g9xkCrADxTk/D+B+axkvef1skBjk3OQ3zKx1VrEhSNfVBwYNfo4lkBCr7r31g4JDAqWiYEHhEIA/qlcPQuLw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TlZbVIG0; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uRA2kjHk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D42C116C6;
-	Mon, 23 Feb 2026 23:18:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TlZbVIG0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC4EC116C6;
+	Mon, 23 Feb 2026 23:18:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771888716;
-	bh=hZZ0Nqf3pc2crIGZaHibR4tu96NpNUTg1wVtR82zV8o=;
-	h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
-	b=uRA2kjHk8AlV+J6L1uXgdGsiVDcO8SLlmegVI8PB9+O0HR8TEcEdr6zCL1DbcPlNL
-	 zXK4md+a0ILw/7KHPuo986r0Cv6perSzPRFeaH5SkNodaZl+89UrGhUwsfEFGr8dQV
-	 Wx+JcAgZDWgBFvMWvpGwTdd+smlBLOeADgJbfdjV0Dks3EtaJj8X26vAuZp9Clfk79
-	 YPqdBcQJnNSjOVyWWztY5rZtOG9/T8a4CG333Zg5ST4WTZ3kLIn9SlgFJqFhdyujqr
-	 vmPQub57o8lxznUkdhu9Mha8NwFI3vM6cs9L/e8Dc3P1otk6BmcfVFXWrYMt6wwTBo
-	 rSiisI4ZVEPow==
-Date: Mon, 23 Feb 2026 15:18:35 -0800
-Subject: [PATCH 2/9] fuse: force a ctime update after a fileattr_set call when
- in iomap mode
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: miklos@szeredi.hu, djwong@kernel.org
-Cc: joannelkoong@gmail.com, bpf@vger.kernel.org, bernd@bsbernd.com,
- neal@gompa.dev, linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org
-Message-ID: <177188735569.3937167.11649393171015153108.stgit@frogsfrogsfrogs>
-In-Reply-To: <177188735474.3937167.17022266174919777880.stgit@frogsfrogsfrogs>
-References: <177188735474.3937167.17022266174919777880.stgit@frogsfrogsfrogs>
+	s=k20201202; t=1771888727;
+	bh=CYLrkQbplhVLWpLwYQI2kVgix50aUPHsmv7SwhslwTg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TlZbVIG0zfxSp01GgD2+JrWlDWhpRYIi9iTBhCrYsyrhBEvafKGrz2Sy10Zr/MQkO
+	 X1SL7F61crQZeQWRjiwxV8hbfegSYseFSQVFEm3T0eSv7L1gLYAWcFx88Chz+qnBzR
+	 qxzUVv9nXlsD5qoFeVw2MpDIz2ZJBws9y/8zBWThrTv1CUFXmms+yQKrqAfBJe58Rj
+	 wzoFidKhPfAGKJtuWuzd3CSqX6uLhqXhwQPvDkLXHlNpf/7Xie1DnA9YPLi/1rPJUG
+	 2Uvl9A1L5WmKRP7FY64FUyfKI4LTjN9DyLsOPBIVeTR5NmcYTzMkfxsK50Z4nHKidf
+	 m7ZoZ1PlpHIWg==
+Date: Mon, 23 Feb 2026 15:18:45 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Donald Hunter <donald.hunter@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard
+ Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Tony Nguyen <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Alexander Lobakin
+ <aleksander.lobakin@intel.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
+ Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Maciej Fijalkowski
+ <maciej.fijalkowski@intel.com>, Jakub Sitnicki <jakub@cloudflare.com>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org,
+ intel-wired-lan@lists.osuosl.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
+ capability to XDP metadata specs
+Message-ID: <20260223151845.06db43b0@kernel.org>
+In-Reply-To: <aZyKWoxnywXKWth9@lore-desk>
+References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
+	<20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
+	<20260218174742.62a4074f@kernel.org>
+	<aZbuWBnmh_SQJyVf@lore-desk>
+	<20260219091344.1d8517f3@kernel.org>
+	<aZyKWoxnywXKWth9@lore-desk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-From: Darrick J. Wong <djwong@kernel.org>
+On Mon, 23 Feb 2026 18:11:54 +0100 Lorenzo Bianconi wrote:
+> > Off the top of my head drivers prefer reporting UNNECESSARY when they
+> > have both, and reserve COMPLETE for cases where L4 could not be found
+> > or is incorrect. Why don't we report both? We're using 3 args, we still
+> > have 3 to go. We could turn ip_summed into a bitmap and have explicit
+> > output args for both level and csum complete value?  
+> 
+> Ack, thx for the explanation. Just for sake of understanding, is there
+> any NIC capable of reporting both csum_value and csum for the same packet
+> in the DMA descriptor? Or is this change needed to be future-proof?
 
-In iomap mode, the kernel is in charge of driving ctime updates to
-the fuse server and ignores updates coming from the fuse server.
-Therefore, when someone calls fileattr_set to change file attributes, we
-must force a ctime update.
+Both nfp and fbnic definitely can. Off the top of my head - mlx5 also
+can, but I haven't double checked.
 
-Found by generic/277.
+> > One more thing I'd like us to at least have a plan for at this stage
+> > is how to deal with COMPLETE + modified packet + XDP_PASS.
+> > Right now some drivers discard COMPLETE when XDP is attached since
+> > they can't be sure if XDP modifies the packet. Other drivers don't
+> > and we end up with bad csum splat. Do we have a recommendation on
+> > the correct behavior? If not - should we have a kfunc to adjust /
+> > discard csum complete explicitly?  
+> 
+> At the moment there is no way to store the csum value we got running
+> bpf_xdp_metadata_rx_checksum() in order to be consumed during
+> xdp_buff/xdp_frame to skb conversion (this info can just be consumed in the
+> ebpf program bound to the NIC) but
 
-Signed-off-by: "Darrick J. Wong" <djwong@kernel.org>
----
- fs/fuse/ioctl.c |   11 +++++++++++
- 1 file changed, 11 insertions(+)
+I think the scope here is much narrower than the xdp_buf to xdp_frame
+to skb conversion. We are just pass information between the program and
+driver which owns xdp_buff. Very similar to your new xmo.
 
+We could either tell the driver to discard the csum complete or even
+add a helper to "adjust" the the csum value. Similar to the helper
+we have to adjust the csum in TC / skb context.
 
-diff --git a/fs/fuse/ioctl.c b/fs/fuse/ioctl.c
-index fdc175e93f7474..07529db21fb781 100644
---- a/fs/fuse/ioctl.c
-+++ b/fs/fuse/ioctl.c
-@@ -546,8 +546,13 @@ int fuse_fileattr_set(struct mnt_idmap *idmap,
- 	struct fuse_file *ff;
- 	unsigned int flags = fa->flags;
- 	struct fsxattr xfa;
-+	struct file_kattr old_ma = { };
-+	bool is_wb = (fuse_get_cache_mask(inode) & STATX_CTIME);
- 	int err;
- 
-+	if (is_wb)
-+		vfs_fileattr_get(dentry, &old_ma);
-+
- 	ff = fuse_priv_ioctl_prepare(inode);
- 	if (IS_ERR(ff))
- 		return PTR_ERR(ff);
-@@ -571,6 +576,12 @@ int fuse_fileattr_set(struct mnt_idmap *idmap,
- 
- cleanup:
- 	fuse_priv_ioctl_cleanup(inode, ff);
-+	/*
-+	 * If we cache ctime updates and the fileattr changed, then force a
-+	 * ctime update.
-+	 */
-+	if (is_wb && memcmp(&old_ma, fa, sizeof(old_ma)))
-+		fuse_update_ctime(inode);
- 
- 	return err;
- }
+> I guess the issue you pointed out can be solved in the verifier
+> during program load time. What do you think?
 
+It could, but at the verifier level we'd probably have to be fairly
+coarse-grained. Any write to the packet data would mean csum complete
+cannot be trusted, that's not too hard. But also any tail call / fentry?
+I'm not really up to date on the latest in program chaining in BPF but
+I think a lot of real-life deployments would use either chaining or
+fentry. So in practice it may be a lot of complexity for having csum
+complete always disabled w/ XDP, in practice.
+
+Up to you. I'm totally okay to just say** that drivers should never
+report csum complete with XDP (until appropriate API is built).
+Perhaps this will force those who care about XDP+csum_complete to
+tell us what their requirements are?
+
+[**] "just say" == document and add driver kselftest that validates it
