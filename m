@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB09A3EBF1F
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 21:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7089C33ADA9
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 21:26:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771968358; cv=none; b=LH81le1Vft4XqBbsaZBiuuA4Su4mkEl3SzMGWJC9t0VYViY9v3zjcuKuRw5qbE4Ertm434zq97fwxeGjCS9OPx5SMcaiPai4itlSVNQOgBvftSeybzc2ndnfaWPh1TG/789CDpAQnjjeSXcjt2UFpePO18RvzFazwrEZaKYaNac=
+	t=1771968363; cv=none; b=rEDGZsLVZmmCz2QZF37wiWId7enIqyD8YKy+EQELn2s5DLGj1LK8+B2F+oR9BDOLpDjBEujelxx2p59V9rU+9BXkdl5oSa/qN6dibK6B+S5XlbNnav2PcKOBMYZe+zUiYZaTYSHFnl/C4EMePwyLUaBMuh+43Y/P4oVoEQMBfsw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771968358; c=relaxed/simple;
-	bh=jj2BgQZnyHCmnihGKKjmzKN+VqY9DaTcGkdaqglPwJk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=F6rup0wWBKspnmAwf6b8EbyxwsG8kL08AYp3j6SdEMLGZ3E8ACs/N86kWOY1JieKZhMxwpxLgyQ2ygRQ+TYxUGLXTG5twjtl8U4mMnt69hD4iFNeNLcQ1Dd3IgrajBhYYULATLMS/EJOdeKTB2rpx97K8mIMHpjIuSpdQsgwtNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GQ2RXvGP; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771968363; c=relaxed/simple;
+	bh=/3baXZfKl7ZKR5eQjaNfIb4EHW7GOPZVfVj/duCe7Iw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Upo3cy5/DwYadBikStR4qxsXtwfO29JZxvPLjIPnTDrjMIy+Ia30a61xYj8rqBqh+ZDzd5Mdi3l1JLClRxhPD+pMraESuMypDfhLDhOfnRrNecn1kSvCMqSDOQq1JFrFEDWSu2aer5kWYEEt78jbWx4GnmC3Vm5JqmOZYWI3UZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b79JGQ/v; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQ2RXvGP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 328BDC116D0;
-	Tue, 24 Feb 2026 21:25:58 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b79JGQ/v"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18D2C116D0;
+	Tue, 24 Feb 2026 21:26:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771968358;
-	bh=jj2BgQZnyHCmnihGKKjmzKN+VqY9DaTcGkdaqglPwJk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GQ2RXvGPZZo6b8/7cWlmTjK1+pL6nQ7Z+2BL0QvwIUNafch1NtYLgDky8Zn+YGJ18
-	 9FrQKS7UCVTit5KhUwdRGx16a1S/SiI4+UUWyapd0pDiK6Qo1fq0xA85Qcc9WPlAij
-	 /UvzNm9s6/TeAqZWCkrJVwHBOM9L+O1CZQ10cHP7edr05nOkR5GvjWXeCHVKsMD5MU
-	 9cwFtvB5+GEf9SPM9cyqXYIUPmnZtchaVAntWYCs5jzQs9Uq9Ciy3ruFlOn5xGZYtv
-	 W+VnlZxGik0rpnqu9xbiWi/UzS16WAXB/ym47fiSYhhimys2otlNVmvmyPPtLOMurD
-	 ei8Rh0xkH2MrA==
+	s=k20201202; t=1771968363;
+	bh=/3baXZfKl7ZKR5eQjaNfIb4EHW7GOPZVfVj/duCe7Iw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=b79JGQ/vRwKhGaPKOZyRABIEA+7SQAn/eZvs7x6p9ItIAVmE8hjvAB/1Jf/hsvGon
+	 DV/Ty/5jdTtXlzoClYZBCyRDSEL2YLI+CQ2E82LZpMna96rBto7Rpv8MjjALsntmZw
+	 lwSZJFa0qWZn2YU9oP6uGfzHXTEMcYRifh3+0cMJiC8fVg+LTCbpPNs5Iewk/RNWUZ
+	 5+pv27Li1WTxcmFg/Ydon8QATdcSWf5SEnwXRIPTzrMf8nfnlsaTeH8ErH8zFr6pxx
+	 GdVj4yaTNvcqAcav7w3PKZgIlLzFlrNRscB56UNHQywFFk/lBa6BiS30gx8fLk5oSG
+	 JvxQMDLjSMZmw==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -37,162 +38,189 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v4 0/7] Introduce KF_FORBID_SLEEP modifier for acquire/release kfuncs
-Date: Tue, 24 Feb 2026 13:25:22 -0800
-Message-ID: <20260224212535.1165151-1-puranjay@kernel.org>
+Subject: [PATCH bpf-next v4 1/7] bpf: Add KF_ACQUIRE and KF_RELEASE support for iterators
+Date: Tue, 24 Feb 2026 13:25:23 -0800
+Message-ID: <20260224212535.1165151-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260224212535.1165151-1-puranjay@kernel.org>
+References: <20260224212535.1165151-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Changelog:
+Some iterators hold resources (like mmap_lock in task_vma) that prevent
+sleeping. To allow BPF programs to release such resources mid-iteration
+and call sleepable helpers, the verifier needs to track acquire/release
+semantics on iterator _next pointers.
 
-v3: https://lore.kernel.org/all/20260223174659.2749964-1-puranjay@kernel.org/
-Changes in v3 -> v4:
-- In iter_release_acquired_ref(), drop the if (!err) guard before
-  zeroing iter_st->id, the verifier stops on error anyway (Eduard)
-- In process_iter_next_call() DRAINED branch, guard iter_release_acquired_ref()
-  with is_kfunc_acquire() check for future-proofing (Eduard)
-- In check_kfunc_call() KF_RELEASE path, validate that the stack slot is
-  actually STACK_ITER before operating on it (Mykyta)
-- In check_kfunc_call() KF_RELEASE path, use iter_release_acquired_ref()
-  helper instead of open-coding release_reference() + id zeroing (Eduard)
-- In check_kfunc_call() KF_ACQUIRE path, move is_iter_next_kfunc() check
-  inside the is_kfunc_acquire() block so there is only one place checking
-  is_kfunc_acquire() (Mykyta)
-- Add new patch to consolidate scattered sleepable checks in
-  check_kfunc_call() into a single in_sleepable_context() check (Eduard)
-- Drop separate forbid_sleep_count check in check_kfunc_call(), now
-  covered by the consolidated in_sleepable_context() check (Eduard)
-- Use in_sleepable_context() for global subprog sleep check in
-  check_func_call() instead of open-coding (Eduard)
-- Add runtime test for nested task_vma iterators on the same task to
-  verify mmap_read_trylock() handles concurrent readers (Alexei)
+Repurpose the st->id field on STACK_ITER slots to track the ref_obj_id
+of the pointer returned by _next when the kfunc is annotated with
+KF_ACQUIRE. This is safe because st->id is initialized to 0 by
+__mark_reg_known_zero() in mark_stack_slots_iter() and is not compared
+in stacksafe() for STACK_ITER slots.
 
-v2: https://lore.kernel.org/all/20260223160300.2109907-1-puranjay@kernel.org/
-Changes in v2 -> v3:
-- Rebased on bpf-next/master
+The lifecycle is:
 
-v1: https://lore.kernel.org/all/20260218182555.1501495-1-puranjay@kernel.org/
-Changes in v1 -> v2:
-- Add a patch to consolidate sleepable context error message printing in
-  check_helper_call(), has no functional changes (Eduard)
-- In check_kfunc_call() for KF_RELEASE and __iter arg, use release_regno
-  like dynptr rather than custom handling (Mykyta)
-- Fix some comments to follow correct style (Mykyta)
-- Move state->forbid_sleep_count-- to release_reference_state() (Eduard)
-- Remove error message in check_resource_leak() for forbid_sleep_count
-  because it is redundant and will never trigger (Eduard)
-- Consolidated some checks and prints (Eduard)
+  _next (KF_ACQUIRE):
+    - auto-release old ref if st->id != 0
+    - acquire new ref, store ref_obj_id in st->id
+    - DRAINED branch: release via st->id, set st->id = 0
+    - ACTIVE branch: keeps ref, st->id tracks it
 
+  _release (KF_RELEASE + __iter arg):
+    - read st->id, release_reference(), set st->id = 0
 
-Some BPF kfuncs acquire resources that prevent sleeping - a lock, a
-reference to an object under a lock, a preempt-disable section. Today there
-is no way for the verifier to know that holding a particular acquired
-reference means sleeping is forbidden. Programs either run entirely in
-sleepable or non-sleepable context, with no way to express "sleeping is
-forbidden right now, but will be allowed once I release this reference."
+  _destroy:
+    - release st->id if non-zero before releasing iterator's own ref
 
-This series adds KF_FORBID_SLEEP, a new kfunc flag that can be combined
-with KF_ACQUIRE. When a kfunc annotated with KF_ACQUIRE | KF_FORBID_SLEEP
-is called, the verifier tags the acquired reference with forbid_sleep and
-increments a per-state forbid_sleep_count counter. When the reference is
-released (through corresponding KF_RELEASE kfunc), the counter is
-decremented.  The verifier checks this counter everywhere it decides
-whether sleeping is allowed — sleepable helpers, sleepable kfuncs, global
-function calls, and resource leak checks.
+Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+---
+ kernel/bpf/verifier.c | 71 +++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 69 insertions(+), 2 deletions(-)
 
-This is fully generic. Any pair of KF_ACQUIRE/KF_RELEASE kfuncs can opt
-into sleep prohibition by adding KF_FORBID_SLEEP to the acquire side.
-
-To make this useful for iterators specifically, the series first extends
-the verifier's iterator support to allow KF_ACQUIRE on _next and KF_RELEASE
-on a separate kfunc taking an __iter argument. The verifier tracks the
-acquired reference on the iterator's stack slot (st->id) and auto-releases
-it on the next _next call and on the DRAINED (NULL) path, so the
-acquire/release is transparent to programs that don't need mid-loop
-release.
-
-Iterator KF_ACQUIRE support is not useful on its own right now, but it
-becomes the foundation for KF_FORBID_SLEEP: an iterator whose _next is
-annotated with KF_ACQUIRE | KF_FORBID_SLEEP can now express "holding this
-pointer forbids sleeping; calling _release invalidates the pointer and
-re-enables sleeping."
-
-The task_vma iterator is the first user. It holds mmap_lock during
-iteration, preventing sleepable helpers like bpf_copy_from_user().
-Currently, this can lead to a deadlock as the fault path also takes
-mmap_lock.
-
-With this series, a BPF program can release the lock mid-iteration:
-
-    bpf_for_each(task_vma, vma, task, 0) {
-        u64 start = vma->vm_start;
-
-        /* sleeping forbidden, but vma pointer access allowed */
-        bpf_iter_task_vma_release(&___it);
-        /* mmap_lock released, vma pointer invalidated */
-        /* sleeping is fine here */
-
-        bpf_copy_from_user(&buf, sizeof(buf), (void *)start);
-    }
-
-The series is organized as:
-
-  Patch 1: KF_ACQUIRE/KF_RELEASE plumbing for iterators in the
-           verifier. Pure infrastructure, no behavioral change to
-           existing iterators.
-
-  Patch 2: Consolidate sleepable context error message printing
-           in check_helper_call(), no functional changes.
-
-  Patch 3: Consolidate scattered sleepable checks in check_kfunc_call()
-           into a single in_sleepable_context() check.
-
-  Patch 4: KF_FORBID_SLEEP flag and forbid_sleep_count machinery.
-           Generic, works for any KF_ACQUIRE kfunc - iterator or not.
-
-  Patch 5: Move mmap_lock acquisition from _new to _next in the
-           task_vma iterator, preparing for re-acquisition after
-           release.
-
-  Patch 6: Wire up task_vma as the first user: annotate _next with
-           KF_ACQUIRE | KF_FORBID_SLEEP, add bpf_iter_task_vma_release().
-
-  Patch 7: Selftests covering the runtime path (release + copy_from_user,
-           nested iterators on same mm) and verifier rejection of
-           invalid patterns (sleeping without release, VMA access after
-           release, double release, release without acquire, nested
-           iterator interaction).
-
-Puranjay Mohan (7):
-  bpf: Add KF_ACQUIRE and KF_RELEASE support for iterators
-  bpf: consolidate sleepable checks in check_helper_call()
-  bpf: consolidate sleepable checks in check_kfunc_call()
-  bpf: Add KF_FORBID_SLEEP modifier for KF_ACQUIRE kfuncs
-  bpf: Move locking to bpf_iter_task_vma_next()
-  bpf: Add split iteration support to task_vma iterator
-  selftests/bpf: Add tests for split task_vma iterator
-
- include/linux/bpf_verifier.h                  |   2 +
- include/linux/btf.h                           |   1 +
- kernel/bpf/helpers.c                          |   3 +-
- kernel/bpf/task_iter.c                        |  44 +++--
- kernel/bpf/verifier.c                         | 184 ++++++++++++------
- .../testing/selftests/bpf/bpf_experimental.h  |   1 +
- .../testing/selftests/bpf/prog_tests/iters.c  |  24 +++
- .../selftests/bpf/progs/iters_task_vma.c      |  71 +++++++
- .../bpf/progs/iters_task_vma_nosleep.c        | 125 ++++++++++++
- 9 files changed, 387 insertions(+), 68 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/iters_task_vma_nosleep.c
-
-
-base-commit: e4094d56c5592dd90aa619f9480265b0689ed3d9
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1153a828ce8d..af18cda06dc1 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -1038,6 +1038,8 @@ static void __mark_reg_known_zero(struct bpf_reg_state *reg);
+ static bool in_rcu_cs(struct bpf_verifier_env *env);
+ 
+ static bool is_kfunc_rcu_protected(struct bpf_kfunc_call_arg_meta *meta);
++static bool is_kfunc_acquire(struct bpf_kfunc_call_arg_meta *meta);
++static bool is_kfunc_release(struct bpf_kfunc_call_arg_meta *meta);
+ 
+ static int mark_stack_slots_iter(struct bpf_verifier_env *env,
+ 				 struct bpf_kfunc_call_arg_meta *meta,
+@@ -1083,6 +1085,22 @@ static int mark_stack_slots_iter(struct bpf_verifier_env *env,
+ 	return 0;
+ }
+ 
++/*
++ * Release the acquired reference tracked by iter_st->id, if any.
++ * Used during auto-release in _next, DRAINED handling, and _destroy.
++ */
++static int iter_release_acquired_ref(struct bpf_verifier_env *env,
++				     struct bpf_reg_state *iter_st)
++{
++	int err;
++
++	if (!iter_st->id)
++		return 0;
++	err = release_reference(env, iter_st->id);
++	iter_st->id = 0;
++	return err;
++}
++
+ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
+ 				   struct bpf_reg_state *reg, int nr_slots)
+ {
+@@ -1097,8 +1115,14 @@ static int unmark_stack_slots_iter(struct bpf_verifier_env *env,
+ 		struct bpf_stack_state *slot = &state->stack[spi - i];
+ 		struct bpf_reg_state *st = &slot->spilled_ptr;
+ 
+-		if (i == 0)
++		if (i == 0) {
++			/*
++			 * Release any outstanding acquired ref tracked by st->id
++			 * before releasing the iterator's own ref.
++			 */
++			WARN_ON_ONCE(iter_release_acquired_ref(env, st));
+ 			WARN_ON_ONCE(release_reference(env, st->ref_obj_id));
++		}
+ 
+ 		__mark_reg_not_init(env, st);
+ 
+@@ -8943,6 +8967,8 @@ static int process_iter_arg(struct bpf_verifier_env *env, int regno, int insn_id
+ 		/* remember meta->iter info for process_iter_next_call() */
+ 		meta->iter.spi = spi;
+ 		meta->iter.frameno = reg->frameno;
++		if (is_kfunc_release(meta))
++			meta->release_regno = regno;
+ 		meta->ref_obj_id = iter_ref_obj_id(env, reg, spi);
+ 
+ 		if (is_iter_destroy_kfunc(meta)) {
+@@ -9178,6 +9204,12 @@ static int process_iter_next_call(struct bpf_verifier_env *env, int insn_idx,
+ 	/* mark current iter state as drained and assume returned NULL */
+ 	cur_iter->iter.state = BPF_ITER_STATE_DRAINED;
+ 	__mark_reg_const_zero(env, &cur_fr->regs[BPF_REG_0]);
++	/*
++	 * If _next acquired a ref (KF_ACQUIRE), release it in the DRAINED branch since NULL
++	 * was returned.
++	 */
++	if (is_kfunc_acquire(meta))
++		return iter_release_acquired_ref(env, cur_iter);
+ 
+ 	return 0;
+ }
+@@ -14201,6 +14233,22 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 
+ 		if (meta.initialized_dynptr.ref_obj_id) {
+ 			err = unmark_stack_slots_dynptr(env, reg);
++		} else if (base_type(reg->type) == PTR_TO_STACK) {
++			struct bpf_func_state *fstate;
++			struct bpf_reg_state *iter_st;
++
++			fstate = env->cur_state->frame[meta.iter.frameno];
++			if (fstate->stack[meta.iter.spi].slot_type[0] != STACK_ITER) {
++				verbose(env, "expected iterator on stack for release\n");
++				return -EINVAL;
++			}
++
++			iter_st = get_iter_from_state(env->cur_state, &meta);
++			if (!iter_st->id) {
++				verbose(env, "no acquired reference to release\n");
++				return -EINVAL;
++			}
++			err = iter_release_acquired_ref(env, iter_st);
+ 		} else {
+ 			err = release_reference(env, reg->ref_obj_id);
+ 			if (err)
+@@ -14278,6 +14326,8 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			__mark_reg_const_zero(env, &regs[BPF_REG_0]);
+ 		mark_btf_func_reg_size(env, BPF_REG_0, t->size);
+ 	} else if (btf_type_is_ptr(t)) {
++		struct bpf_reg_state *iter_acquire_st = NULL;
++
+ 		ptr_type = btf_type_skip_modifiers(desc_btf, t->type, &ptr_type_id);
+ 		err = check_special_kfunc(env, &meta, regs, insn_aux, ptr_type, desc_btf);
+ 		if (err) {
+@@ -14361,7 +14411,21 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		}
+ 		mark_btf_func_reg_size(env, BPF_REG_0, sizeof(void *));
+ 		if (is_kfunc_acquire(&meta)) {
+-			int id = acquire_reference(env, insn_idx);
++			int id;
++
++			/*
++			 * For iterators with KF_ACQUIRE, auto-release the previous
++			 * iteration's ref before acquiring a new one, and after
++			 * acquisition track the new ref on the iter slot.
++			 */
++			if (is_iter_next_kfunc(&meta)) {
++				iter_acquire_st = get_iter_from_state(env->cur_state, &meta);
++				err = iter_release_acquired_ref(env, iter_acquire_st);
++				if (err)
++					return err;
++			}
++
++			id = acquire_reference(env, insn_idx);
+ 
+ 			if (id < 0)
+ 				return id;
+@@ -14372,6 +14436,9 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			ref_set_non_owning(env, &regs[BPF_REG_0]);
+ 		}
+ 
++		if (iter_acquire_st)
++			iter_acquire_st->id = regs[BPF_REG_0].ref_obj_id;
++
+ 		if (reg_may_point_to_spin_lock(&regs[BPF_REG_0]) && !regs[BPF_REG_0].id)
+ 			regs[BPF_REG_0].id = ++env->id_gen;
+ 	} else if (btf_type_is_void(t)) {
 -- 
 2.47.3
 
