@@ -1,158 +1,130 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954AD37BE8F
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 11:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771932294; cv=pass; b=dJUUK6RKZYAaqTBKV4XewZfJWFD4cMyng6rIzvK7w8SUO6esTChvSsTZ4K6quQKXEryp3oaaWtCcLd6w37bC03oJsrtiZ+atRAqYxVgT/pQLSMpQVm9u1iYaUBOJEiPw+nAZAdjKicj+0WtQ5aQwNOQ9V5ft0Pn5MGTUYlEyiSw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771932294; c=relaxed/simple;
-	bh=0h8wHrtI/qyGbw1ifbnANE2Bi6Zp/mvWLzKpHtQm/Uo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BuHGOyo+1CZmnVKrfDH3BR6sfewaUBJ+iF91z9x2abKvWRO1yDl7TkuDoQBakdC12Pf+8F1Dy+4lYnKv44PzHW+OrNNbXs1KDbucMqpZdZQOQg6nVVD9wZcaek3vGY6ht/3Mjk1hr7cE3ucfKde7KEBJTXzTua8J2lO774n9bLQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Co3SKq0D; arc=pass smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2D6E37C0ED;
+	Tue, 24 Feb 2026 11:26:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771932385; cv=none; b=hND8bDNhx581fLokq0aFs3J2fvS7UXxZ/sPzL+igTa0ynuBkDH6WsM/Tu9lxMbphz+ikogldp0ZI6kJMiGPxRJmF6GJdY53S4pSmHZaM8gyV3FnlA/YH21eJQygVoYEtET0o4zZAvm5xwrzWLsjaBACiQqz5BFDREx9b3ZxAfOk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771932385; c=relaxed/simple;
+	bh=jKGpRtkQmoW/eINjEEeqokeSEboufukG5iJM7QvxWh0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tvcjVKoOY2pOzR5qvwpwgmdRggse3hwa+rKzN5US9Jd2BtINAssKy4T2axbysB+pXVKmIwswKZKHqIR6GMOLkUx01IAEgT8iD7DIHDmzEYZYuRYbWGMQyakVGuGqCFY3k1Sy9VBMGbhpviXGdRXVCglBq/T/74vNb3+F58n98Ng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KdMRzram; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Co3SKq0D"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b8fa449e618so869956266b.0
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 03:24:53 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771932292; cv=none;
-        d=google.com; s=arc-20240605;
-        b=cPpTSTVHQU3+8fq752eQuupwp6qh4RNyzD+JdIvsJkNJhf+3Vduw7VBlfV06PdaDQM
-         lxVwmX1iIvQ7BNq8GFu7m8kuldqqEoJ+PEcUPYF0V9bGorgL2uzmMV9K2BvJj4j9WlmI
-         /x1MTUv9V/i1mKrj4pkjmPKq6eKEigDtLUgFTyCXhNAXoUPv2T2nhw4TCfKc6CMUKT/P
-         x7lBLIpKPz03c/Sbkap/yDEKqXg0PwOnEbQa7nciYQwPi6Y5z/UGAyjkuar4P61j1QHz
-         fwUJDRMhiK0179zLt13g3rvqac2IadJUhrSQf9v2pF292uHQKlxaMpO6JQZm1n9abpAb
-         4Pmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0h8wHrtI/qyGbw1ifbnANE2Bi6Zp/mvWLzKpHtQm/Uo=;
-        fh=8DoVh3Iyt0R+s2t7XOny+wXcz6YPk7eroGHcz2JdAg4=;
-        b=PCwurljvbUicPJFLquPi+HTcJz/qB3t0ez6N7BzD9DzDvwnj2rXcpmroLAtxGECjBP
-         d1HADiI9koMyl5Gh8FOQDlNNxzqE9cVHjdTpZgWN/hEZ9JICvvos/9A2aJGMZY4AgRKt
-         +YwIuN5DaoPbMinBWudOYtXa+vI4EPANLiaJl3OzH3Xpf5n4fuQMwmMRcpb6SfihAEmZ
-         kF4qWhODCaFF4nVrGJsZy01PdWqKcGobMRTBLba3zEEa/p5JtFotOAiTJAwM+92ZqwPH
-         MQyp906gz0tZyvEQsGmIfKM9GIun8F7UqqUIqELB7GECtV6V9MnkkIphcfEMvx/jkHrj
-         Zx+Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771932292; x=1772537092; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0h8wHrtI/qyGbw1ifbnANE2Bi6Zp/mvWLzKpHtQm/Uo=;
-        b=Co3SKq0DcmZ92vYvkq57tAuPD1PWICMWg72Y/vvYk3r852wYv8SfJImBvUpWBnwH0D
-         Azz/lRwoPi1T1tScit0/EVWL++tIxFYe1B0dOYeDGBCaiD5XpXJaHc73JM7whrB00aXc
-         KMjLnpP7NuzQ3hho/B+0e5PHwus8zgr8Ow+xE1U3jhOJ3uQBb+DVaXHG6CHl+DddxR6o
-         5kg18YPXWBOzxXNgsWg5QPdIcBJHaUvtPoSFU2LvQYOz8GrDZh/nYQk7MjUbCUdSUNf4
-         72Ye2lDO6niZQaW1Z8vROEOEmJ0RdfB6kpdFiIojdsMlS9hT9eaY0KiOWQ3kbDi+Ur5x
-         n9zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771932292; x=1772537092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0h8wHrtI/qyGbw1ifbnANE2Bi6Zp/mvWLzKpHtQm/Uo=;
-        b=Djdsfa7rSZpBWsA0rMaXn/8E9s3D+KVAlgtkao2XQuRvxo0GWjik1v9IXrGMDSeYBV
-         2zEczCiUgUKiwsXhCMmXyeY9PxJAW1h5G4B5yexVwQxNAW4sciIIjAt85vhCngL53qeD
-         ub5gWUEh5NTz1DMOPHes3zTnRM+12DcBfiWi1J8hs8In42ucbegfPf0S5IYiJS86NcMG
-         bds8k5/pGK0cfMsKzWNwPYa7hsNuTJuDJP08SohyoocvLECLbrzSrBGMecG7TFMFVl/F
-         SyTaIJdW441r6qPBr9pl9CSLetwJk0yChBUHzMWnsNiERgLLlTPGlxfsMhuPhJwJnTJy
-         lZSQ==
-X-Gm-Message-State: AOJu0Yy0gP3f9j0e7rnfmhmqfwqUP7jSEa7hd8U+jove+rDdA0xtofsN
-	zSOfWhNyS1VrF8HFOgbOe/o9g954W2KOgzUldoJEGemM7UtGCYR/y8ai2xTnasb8Ly5cDrsMUlG
-	2crnFh/qbw4usIPvNKr3GkzqtMwa6xRM=
-X-Gm-Gg: ATEYQzy+/Il1sGRQmiAiaFFlYGIO+D4UBXOTBMrMEhjft0cqYJouqm1VHs7MtqBiZ9M
-	HWYK967B5IHGDon51G8iEFKdW0Jx6ENZlRdhyeBPQIXsmtpThLGF0pYR9nrGPc1QRWETiLu9AUK
-	rS9MeiwJTnTosqyaczseoZ0qYjl7qOMu222uZ7wohxjajjoptThJLL4oUkIPNzyiJxs9R3N75U4
-	pwm8qGJT6VTFI9wVuyZ2y65KQ2HCJmewHr2LYqvaBkatpMso/nU1pyEVVEnTAhfL+o2VseUiaCS
-	+aWtXPqDRcSAMjAgJr148Q==
-X-Received: by 2002:a17:906:ee8e:b0:b90:3593:654c with SMTP id
- a640c23a62f3a-b9081a2aa1fmr713013466b.21.1771932291638; Tue, 24 Feb 2026
- 03:24:51 -0800 (PST)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KdMRzram"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771932381;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=C9tpplCFFUxBSafBcz5oJn5FmlATJrojlSyiIAZIo2Y=;
+	b=KdMRzramMNNyoFSDwyRphg5gnvY3iXBbKZPBKhM7p/qNhi5CVmpDAad73Xf2qBPXAlI1NR
+	tst3CG+ZlPeWnvuCODmSQA74++8DkYTlRIDCG8lAfwpKrdYakZBLhOt0IOAf6zg9gdaV+z
+	Vxi9nP3KXi7qT5bEh02Fw5CvK4ZjLjg=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,
+	jiayuan.chen@shopee.com,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jussi Maki <joamaki@gmail.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH bpf v1 1/2] net/bpf: fix null-ptr-deref in xdp_master_redirect() for bonding
+Date: Tue, 24 Feb 2026 19:25:41 +0800
+Message-ID: <20260224112545.37888-2-jiayuan.chen@linux.dev>
+In-Reply-To: <20260224112545.37888-1-jiayuan.chen@linux.dev>
+References: <20260224112545.37888-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260223174659.2749964-1-puranjay@kernel.org> <CAADnVQ+aobVwR1m-v2w_RWFxG_9TwkYQ-K8KtC6D18HrYe8Dig@mail.gmail.com>
-In-Reply-To: <CAADnVQ+aobVwR1m-v2w_RWFxG_9TwkYQ-K8KtC6D18HrYe8Dig@mail.gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Tue, 24 Feb 2026 11:24:40 +0000
-X-Gm-Features: AaiRm51cBgLfGqcQo86Xqh9SXFMHeFSIcvF2I5QqDnwj28uSlCV6i3eed26S64s
-Message-ID: <CANk7y0hLknrHo+UB2HDPeen6nLxRaBdLNKiMBiMBv7Hh-QzPEw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/6] Introduce KF_FORBID_SLEEP modifier for
- acquire/release kfuncs
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Feb 24, 2026 at 1:49=E2=80=AFAM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Mon, Feb 23, 2026 at 9:48=E2=80=AFAM Puranjay Mohan <puranjay@kernel.o=
-rg> wrote:
-> >
-> >
-> > Iterator KF_ACQUIRE support is not useful on its own right now, but it
-> > becomes the foundation for KF_FORBID_SLEEP: an iterator whose _next is
-> > annotated with KF_ACQUIRE | KF_FORBID_SLEEP can now express "holding th=
-is
-> > pointer forbids sleeping; calling _release invalidates the pointer and
-> > re-enables sleeping."
-> >
->
-> The name of the flag and semantics bothers me a bit.
-> How about we call it KF_ACQUIRE_LOCK and make it exclusive vs KF_ACQUIRE.
-> And document it like:
-> KF_ACQUIRE -> acquires a resource via reference counting
-> KF_ACQUIRE_LOCK -> acquires a resource by locking it
->
-> and to match it I would do:
-> KF_RELEASE -> releases a resource by decrementing refcount
-> KF_RELEASE_LOCK -> releases a resource by unlocking it.
->
-> When lock is taken it's typically prohibited to sleep and do
-> other things. So I feel such flags would describe what's
-> going on underneath more accurately.
->
-> Thoughts?
+From: Jiayuan Chen <jiayuan.chen@shopee.com>
 
-I am fine with this except, I think we should still keep the
-KF_RELEASE a single release mechanism that releases according to how
-the reference was taken (refcount/lock). There is nothing wrong with
-separate KF_RELEASE and KF_RELEASE_LOCK, except we would have to
-reject all wrong usages like KF_ACQUIRE -> KF_RELEASE_LOCK,
-KF_ACQUIRE_LOCK -> KF_RELEASE. I am fine with both but prefer the
-common KF_RELEASE. Let me know which one you like and I will go ahead
-with it.
+xdp_master_redirect() dereferences the master device pointer and calls
+ndo_xdp_get_xmit_slave() without checking whether the master is valid
+or running. When a bond device in round-robin mode has never been brought
+up, bond->rr_tx_counter is not allocated (only allocated in bond_open()).
+The XDP redirect path can still reach bond_rr_gen_slave_id() via
+xdp_master_redirect() → bond_xdp_get_xmit_slave() →
+bond_xdp_xmit_roundrobin_slave_get(), causing a null-ptr-deref on
+rr_tx_counter.
 
-> btw do we need a selftest that 2nd task_iter cannot call iter_next()?
-> Like:
-> iter_new(it1);
-> iter_new(it2);
-> iter_next(it1);
-> iter_next(it2); // this one has nothing to do with sleeping
-> but once we think of iter_next as KF_ACQUIRE_LOCK
-> it becomes obvious that it's not ok to re-acquire the same lock.
+bpf_master_redirect_enabled_key is a global static key. When any bond
+device has native XDP attached, this key is enabled system-wide, causing
+the XDP_TX → xdp_master_redirect interception to fire for all bond
+slaves, even slaves of other bond devices that have never been opened.
 
-But we still need to allow this if the locks are different, because
-that will support the nested iterator use case. For example, nested
-task_vma iterators that iterate vmas for different task structs
-(different mm->mmap_lock). And I think the check for re-acquiring the
-lock for the same iterator should be done at runtime as it is done
-currently in task vma iterator. I think what you are saying is that we
-could have a certain class of iterators that take a global lock ->
-only one iterator of that type can be used at a time (nesting not
-supported by design), even that should be taken care at runtime rather
-than the verifier tracking it.
+To trigger, the following conditions must be met:
+1. A bond (bond0) with native XDP attached, enabling the global key
+2. Another bond (bond1) in round-robin mode, never brought up
+3. A slave (veth1) of bond1 with generic XDP returning XDP_TX
+4. Packets hitting the generic XDP path on veth1
+
+Add a check in xdp_master_redirect() to verify the master device is
+valid and running before proceeding with the redirect. This is
+semantically correct because redirecting to a non-running master is
+meaningless, and safe from a concurrency perspective because
+xdp_master_redirect() runs under RCU protection and the master's
+resources are not freed until after an RCU grace period.
+
+Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to slave device")
+Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE@google.com/T/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+---
+ net/core/filter.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/net/core/filter.c b/net/core/filter.c
+index ba019ded773d..9a45dabd0044 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -4387,6 +4387,9 @@ u32 xdp_master_redirect(struct xdp_buff *xdp)
+ 	struct net_device *master, *slave;
+ 
+ 	master = netdev_master_upper_dev_get_rcu(xdp->rxq->dev);
++	if (unlikely(!master || !netif_running(master)))
++		return XDP_TX;
++
+ 	slave = master->netdev_ops->ndo_xdp_get_xmit_slave(master, xdp);
+ 	if (slave && slave != xdp->rxq->dev) {
+ 		/* The target device is different from the receiving device, so
+-- 
+2.43.0
+
