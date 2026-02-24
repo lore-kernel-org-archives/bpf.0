@@ -1,73 +1,76 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389E439A7F2
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 13:12:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4C83A0EB1
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 13:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771938755; cv=none; b=tqCZoxATNOlGrAgN9HZ74DDXlUmfZ1S5jF56tc14GscVwnu8lmfnFOBDfAUQPpkmeUxpa7Uggtyyqc7hGRk8j5mF/bP5pLaE6xBHhcSIckQAFko+xJNwG8i96E2b+tzL7MhqkOxSn6tyJqAFiCPMCzzyNyJ/2KCfJ/2WxLcjuH8=
+	t=1771940120; cv=none; b=WUgDG3Ehc42nAGtzFTzB4E3DDjJ/A9KOxNDZJUp/wCAf00NZ9unFfJbtgPri4qs2BMtHXr0N/K6Y6OcWcPGl8qhNwwBlke5exzzk2UCEOyO4RzBxzRlKVFYuUZx6Mks5YhcTJuHyHtUKCV9XZvwsg83FJMKYBqpitmQWqhSD1Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771938755; c=relaxed/simple;
-	bh=wbOBk0Fd0SKtT/JaetizwZKdyxIePRjiQd2+sCd5Rls=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ViQw4HKIXjtZTZfK3QWwTpOTkE4oml2aQRy36ZdiZFNhUMg3ghIediEWqychVdcWj4KIWBh+E0iPtKy/iTok9DyKP9qTRQ09OTedaNSV8TaRkco72HnyN2oQtgadI44+MWUuTxtzSnDGy4fuaI48jWGEpNLQORb3TburSb9EMnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iW5eEvfM; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771940120; c=relaxed/simple;
+	bh=qhbJpmZITKjbEAcPdtlGm6W8/Qffyxn/CjLw4UREa1I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TlZMM67aDf9vVkF212ejfqyPbGu+42Yuiq5lKly/sir2oDmFQIe8+tCf2FtdjoRZuogR6ztokZLVCgK0paKc8QpPTC60XzgJT+Ib6OoylNm7v74kc9gEvpcKBa8GvjeIzwOiI0aVfQplwz8KW4YeEo1CAkeunRrcX0yjVn8r6Xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TTmOl1Wg; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iW5eEvfM"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-483a233819aso53553775e9.3
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 05:12:34 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TTmOl1Wg"
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-65f73225f45so539644a12.1
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 05:35:17 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771938753; x=1772543553; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771940116; x=1772544916; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=nMsQLpJRHzcAo8oV79WX+29rruSKqqv3UZmJUPZ2+IY=;
-        b=iW5eEvfMuUvnJX5p/0ocBBgPoTGpLQyWCar7cWqCMY5JnMuhnLbz4D+MYIW+cw8NHk
-         GzZmNYBg6gS3UuLrLUbRk44SE823R1rwUytYHoc4l9b6Wl8PUemWHZlDxvvmkuY7OCPy
-         mucO97w8UVYl1c68Cx3XypnUbmu0Bb3cIRgOljmS8t0RPY3b3mmAfWHhRTS59yP2BI8c
-         HIKJb5cTEYc2YXiKv/N1IezBL1Hs1sRArB7R+XP/lpxCtacIbYyyRVNJ37if6+ySChXY
-         guphTZIrsAa8qmNl98GaLelvCQ7ys8+TAhV0oe+KxU+CwYY7OoSmycak13SWaOwFTiAD
-         b9sw==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=017Au0WagCuxotQHTbuPbnn7OOhD26VlW9T9YwI+bmw=;
+        b=TTmOl1WgO9ipDMNDDj3wD89bpFoluL+wCTIJLb4MqoavlpDQ7xDtodnvIGGDqUtyoV
+         4RuHCPw2s1t1N3q7xh+MDGSRsMf2rHME6KoikPe0TAyvLoQ2PpIpze0jjE2xrJ1zLSxg
+         lSiEZ0xAr3QCnDNChTXHZBsW60fDZ+7HIvIN19yVqKesbgtur9ChCDTEh/FEi/Wunz1D
+         eSRz7a9cqDMe9Z2lGY1nPkhl0rL0NUbLZXbw3DCCismTWLKcz4H0yL6aFBSVNFViPnFZ
+         dU5OygsDP70fjKg+dUuf9sLk/Cfc7KSLLOTxK/nT29jkbd8Yg0GgNshE+3zb3RZMh5Vs
+         2RUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771938753; x=1772543553;
+        d=1e100.net; s=20230601; t=1771940116; x=1772544916;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nMsQLpJRHzcAo8oV79WX+29rruSKqqv3UZmJUPZ2+IY=;
-        b=w48tbHqUNPvg76/ifk2vOed+g9JM99dFCMu3115mrFH9piyt871XZh9rP0AveczS24
-         rDJVowgDDmdf1E2uZ/ARtlYN4PcCliZ8Kg8Jw3pPCzzBX4a6OjJmJTaSyxvMCFY4N+B7
-         qm6ZQ9SkwLmZOL8azc4jlOzeK7PajgyN1T6A+8AEe1mzJR54I1Hk7DmMxich1vZzUr3O
-         2EkJOrSQwpSCp9F0+s56u0yz0JZqSH62sAUSEAR/MuFcr9tCIjxFdwJOSPP5Nnqti3Hi
-         vKNNpex8/DzzeOdie9vHCam4x9OsVWvrD+gS+TkFRpASzy3G2JhtHJOV4kXPQlsGtVxG
-         rbhw==
-X-Gm-Message-State: AOJu0YyScjJSXO64J2lDDM3hjf/SVOBAJyX8OAUiszuaTB28njyEKOZn
-	2zZIy6ahMIRLMDsw/8i0D/cbRXAy1W99cMgKZ0u7FYZc4pxKS1OCVeki
-X-Gm-Gg: AZuq6aIPA7WzTcWTKKXTiNfmpWzDDMkU/YyOhzs9loemmVZaXy3pFSPlfN3IUvgioUt
-	ImcKCgnUoghcAv8J21FJTnNsiezyWF8ESknx+bNaJVXTsYzwWh3r5pBDb+7g8PHquZDbZYExBGk
-	jVIcyfNdxrqD+LSFpNfEVDfIxyTMyiDzoxS7zizs5BT7dQkBCJwO9JHa/L72+lGlTqy7WY8HbM/
-	/bApeqBfXugp6TldZf46gVgIhM9Nt3VZGoVHBfVo9M1NbR/ZrcPr7GvGxfSoJYrCHERPhETdU/Z
-	PBjPcUKa5v5s02ddLkaQADcU6nZA+wmW6nhAl54WRlyFcd+hqpxbrLg2rlTNzmgqTka+MiJMKDI
-	sklYYz2UDve6Y8Kq4odGmFMHQKTpfa/vESQ1zKpVoofmlCGHoUxP6rb9v8ZBhzMPm8wyyIBqj
-X-Received: by 2002:a05:600c:4fd5:b0:483:498f:7963 with SMTP id 5b1f17b1804b1-483a9637a61mr168023725e9.26.1771938752378;
-        Tue, 24 Feb 2026 05:12:32 -0800 (PST)
-Received: from krava ([2a02:8308:a00c:e200::b44f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31b3d88sm369903185e9.3.2026.02.24.05.12.31
+        bh=017Au0WagCuxotQHTbuPbnn7OOhD26VlW9T9YwI+bmw=;
+        b=u1ocOq3HPnGDM92YWfLc1NIZM26tDnodd6HcOnMKuspbITkkcOSDbbEnpZzo2Y+Ivh
+         T6XKKfgoIeLI2Wz4xYsflGLJ10Pj3Y8pbiz7sgzhhAPNRHjryvc4VF4DjYYy6wMZ/7o0
+         SDvqt4rI56Fgi2cpDgk+zXRaYTLIfxSvgCipl57sdsieau1TEJzRt/+BklKbxmUj1o+/
+         1TvuRu0EGvj+HIkQEoOmidwdDofwkucmf6b5hlHHK4H+40YAksAVogsqEDjCNtYGjjBp
+         nXxy9d+c5bXzomdz3IXNDQUUfKTJJXFyyMiO4qMCUR2eIB213moCvblfXGjJmc14wOpj
+         dDtA==
+X-Forwarded-Encrypted: i=1; AJvYcCVuKQFE4ft+V1Onddto1SmHwHesE50HXOODk6EgCkfU2TLaaqO7XIeV8rFWaXBksKZdUpY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuozmGnl79E9gLbt/cimf2xhLV7e/fGatdyYlPNfKOeus1VRMC
+	bPWakXkuZxXDNmSGdGpsl5hzvGRpvGIUOgio2xEwxMe4LvQm3b51jS08VgXZ/cpnzg==
+X-Gm-Gg: AZuq6aJjtNR5c4hiPhwjx1Pv7MRh42z7ADtEMtXNuQrWrVOU4AMCHqei3exECCsoFGy
+	wT/mcA9XxgsJDZPvZMGA/l4qJYTUo24e1FUyTmpUNGdAaHLveHbjxWE69+ORfw2EoYJOXTtYyyV
+	UlrxW4r8np1rGWDSc5g9w6bVg1RlA/CbxXNQBn6F5v3/RqyDvZ9hLNNT98A+ALzllGSiXhEq/aT
+	3vXeghOxGqi7D7DjWaSIenMxkLuc4YkggxT77GldyraMIxapI7sripFMLzuefxGuSnGGgxTOF1K
+	xdJbcDxrdH7aIqhvBBQ5OarLEiw8su+8EdPwIChJhb0ILApbIBCSn7S23nPJ1H71sERD8DZc7uE
+	DQSGr7n6qbqogamFIXhlLJvcULd9J44rRNeNjAqPu9tflOyh/Ki6syN2yW14KUOpHevo0Es1eFm
+	/vPYSN6R6+jDIj9f6CMJIRe+Q4mYy3IaNwog6GYnI257Kon7Z0dSgFC8kcxWjuTEM=
+X-Received: by 2002:a17:906:eec7:b0:b87:117f:b6f0 with SMTP id a640c23a62f3a-b9081b23d01mr691501366b.30.1771940115631;
+        Tue, 24 Feb 2026 05:35:15 -0800 (PST)
+Received: from google.com (93.50.90.34.bc.googleusercontent.com. [34.90.50.93])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084a4d6e1sm426835366b.0.2026.02.24.05.35.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 05:12:32 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 24 Feb 2026 14:12:30 +0100
-To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, rostedt@goodmis.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-open-source@crowdstrike.com
-Subject: Re: [RFC PATCH bpf-next 3/3] selftests/bpf: add tests for
- kprobe.session optimization
-Message-ID: <aZ2jviVuAYEENerC@krava>
-References: <20260223215113.924599-1-andrey.grodzovsky@crowdstrike.com>
- <20260223215113.924599-4-andrey.grodzovsky@crowdstrike.com>
+        Tue, 24 Feb 2026 05:35:15 -0800 (PST)
+Date: Tue, 24 Feb 2026 13:35:11 +0000
+From: Matt Bobrowski <mattbobrowski@google.com>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>,
+	KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+	Lennart Poettering <lennart@poettering.net>
+Subject: Re: [PATCH 1/4] ns: add bpf hooks
+Message-ID: <aZ2pDzhDFpFMjgb1@google.com>
+References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
+ <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -76,119 +79,202 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260223215113.924599-4-andrey.grodzovsky@crowdstrike.com>
+In-Reply-To: <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
 
-On Mon, Feb 23, 2026 at 04:51:13PM -0500, Andrey Grodzovsky wrote:
-> Add two new subtests to kprobe_multi_test to validate the
-> kprobe.session exact function name optimization:
-
-SNIP
-
-> +static void test_session_errors(void)
+On Fri, Feb 20, 2026 at 01:38:29AM +0100, Christian Brauner wrote:
+> Add the three namespace lifecycle hooks and make them available to bpf
+> lsm program types. This allows bpf to supervise namespace creation. I'm
+> in the process of adding various "universal truth" bpf programs to
+> systemd that will make use of this. This e.g., allows to lock in a
+> program into a given set of namespaces.
+> 
+> Signed-off-by: Christian Brauner <brauner@kernel.org>
+> ---
+>  include/linux/bpf_lsm.h | 21 +++++++++++++++++++++
+>  kernel/bpf/bpf_lsm.c    | 25 +++++++++++++++++++++++++
+>  kernel/nscommon.c       |  9 ++++++++-
+>  kernel/nsproxy.c        |  7 +++++++
+>  4 files changed, 61 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
+> index 643809cc78c3..5ae438fdf567 100644
+> --- a/include/linux/bpf_lsm.h
+> +++ b/include/linux/bpf_lsm.h
+> @@ -12,6 +12,9 @@
+>  #include <linux/bpf_verifier.h>
+>  #include <linux/lsm_hooks.h>
+>  
+> +struct ns_common;
+> +struct nsset;
+> +
+>  #ifdef CONFIG_BPF_LSM
+>  
+>  #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
+> @@ -48,6 +51,11 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func)
+>  
+>  int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
+>  			     struct bpf_retval_range *range);
+> +
+> +int bpf_lsm_namespace_alloc(struct ns_common *ns);
+> +void bpf_lsm_namespace_free(struct ns_common *ns);
+> +int bpf_lsm_namespace_install(struct nsset *nsset, struct ns_common *ns);
+> +
+>  int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
+>  				const struct bpf_dynptr *value_p, int flags);
+>  int bpf_remove_dentry_xattr_locked(struct dentry *dentry, const char *name__str);
+> @@ -104,6 +112,19 @@ static inline bool bpf_lsm_has_d_inode_locked(const struct bpf_prog *prog)
+>  {
+>  	return false;
+>  }
+> +
+> +static inline int bpf_lsm_namespace_alloc(struct ns_common *ns)
 > +{
-> +	struct kprobe_multi_session_errors *skel = NULL;
-> +	struct bpf_link *link_wildcard = NULL;
-> +	struct bpf_link *link_exact = NULL;
-> +	int err_wildcard, err_exact;
+> +	return 0;
+> +}
+> +static inline void bpf_lsm_namespace_free(struct ns_common *ns)
+> +{
+> +}
+> +static inline int bpf_lsm_namespace_install(struct nsset *nsset,
+> +					    struct ns_common *ns)
+> +{
+> +	return 0;
+> +}
+>  #endif /* CONFIG_BPF_LSM */
+>  
+>  #endif /* _LINUX_BPF_LSM_H */
+> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
+> index 0c4a0c8e6f70..f6378db46220 100644
+> --- a/kernel/bpf/bpf_lsm.c
+> +++ b/kernel/bpf/bpf_lsm.c
+> @@ -30,10 +30,32 @@ __weak noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
+>  #include <linux/lsm_hook_defs.h>
+>  #undef LSM_HOOK
+>  
+> +__bpf_hook_start();
 > +
-> +	skel = kprobe_multi_session_errors__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "kprobe_multi_session_errors__open_and_load"))
-> +		return;
-> +
-> +	/*
-> +	 * Test error code consistency: both wildcard (slow path) and exact name
-> +	 * (fast path) should return the same error code (ENOENT) for non-existent
-> +	 * functions. This protects against future kernel changes that might alter
-> +	 * error return values.
-> +	 */
-> +
-> +	/* Try to attach with non-existent wildcard pattern (slow path) */
-> +	link_wildcard = bpf_program__attach(skel->progs.test_nonexistent_wildcard);
-> +	err_wildcard = -errno;
-> +	ASSERT_ERR_PTR(link_wildcard, "attach_nonexistent_wildcard");
-> +	ASSERT_EQ(err_wildcard, -ENOENT, "wildcard_error_enoent");
-> +
-> +	/* Try to attach with non-existent exact name (fast path) */
-> +	link_exact = bpf_program__attach(skel->progs.test_nonexistent_exact);
-> +	err_exact = -errno;
-> +	ASSERT_ERR_PTR(link_exact, "attach_nonexistent_exact");
-> +	ASSERT_EQ(err_exact, -ENOENT, "exact_error_enoent");
-> +
-> +	/*
-> +	 * Verify both paths return identical error codes - this is critical for
-> +	 * API consistency and prevents user code from breaking when switching
-> +	 * between wildcard patterns and exact function names.
-> +	 */
-> +	ASSERT_EQ(err_wildcard, err_exact, "error_consistency");
-> +
-> +	kprobe_multi_session_errors__destroy(skel);
-
-there's already subtest for attach failures (test_attach_api_fails),
-so maybe let's put this over there?
-
-SNIP
-
-> diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_session_syms.c b/tools/testing/selftests/bpf/progs/kprobe_multi_session_syms.c
-> new file mode 100644
-> index 000000000000..6a4bd57af1fc
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/kprobe_multi_session_syms.c
-> @@ -0,0 +1,45 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/* Test kprobe.session with exact function names to verify syms[] optimization */
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +#include <stdbool.h>
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +int pid = 0;
-> +
-> +/* Results for each function: incremented on entry and return */
-> +__u64 test1_count = 0;
-> +
-> +/* Track entry vs return */
-> +bool test1_return = false;
-> +
-> +/*
-> + * No tests in here, just to trigger 'bpf_fentry_test*'
-> + * through tracing test_run
-> + */
-> +SEC("fentry/bpf_modify_return_test")
-> +int BPF_PROG(trigger)
+> +__weak noinline int bpf_lsm_namespace_alloc(struct ns_common *ns)
 > +{
 > +	return 0;
 > +}
 > +
-> +/*
-> + * Test 1: Exact function name (no wildcards) - uses fast syms[] path
-> + * This should attach via opts.syms array, bypassing kallsyms parsing
-> + */
-> +SEC("kprobe.session/bpf_fentry_test1")
-> +int test_kprobe_syms_1(struct pt_regs *ctx)
-
-perhaps we could execute this as part of test_session_skel_api test?
-
-seems like we could put this directly to progs/kprobe_multi_session.c and
-call session_check(ctx) and change test_results validation accordingly
-
-thanks,
-jirka
-
-
+> +__weak noinline void bpf_lsm_namespace_free(struct ns_common *ns)
 > +{
-> +	if (bpf_get_current_pid_tgid() >> 32 != pid)
-> +		return 0;
-> +
-> +	test1_count++;
-> +
-> +	/* Check if this is return probe */
-> +	if (bpf_session_is_return(ctx))
-> +		test1_return = true;
-> +
-> +	return 0;  /* Always execute return probe */
 > +}
+
+I'm wondering how you foresee this hook functioning in a scenario
+where the BPF LSM program is attached to this new hook point, although
+with its attachment type being set to BPF_LSM_CGROUP instead of
+BPF_LSM_MAC? You probably wouldn't want to utilize something like
+BPF_LSM_CGROUP for your specific use case, but as things stand
+currently I don't believe there's anyhthing preventing you from using
+BPF_LSM_CGROUP with a hook like bpf_lsm_namespace_free().
+
+Notably, the BPF_LSM_CGROUP infrastructure is designed to execute BPF
+programs based on the cgroup of the currently executing task. There
+could be some surprises if the bpf_lsm_namespace_free() hook were to
+ever be called from a context (e.g, kworker) other than the one
+specified whilst attaching the BPF LSM program with type
+BPF_LSM_CGROUP.
+
+> +__weak noinline int bpf_lsm_namespace_install(struct nsset *nsset,
+> +					  struct ns_common *ns)
+> +{
+> +	return 0;
+> +}
+> +
+> +__bpf_hook_end();
+> +
+>  #define LSM_HOOK(RET, DEFAULT, NAME, ...) BTF_ID(func, bpf_lsm_##NAME)
+>  BTF_SET_START(bpf_lsm_hooks)
+>  #include <linux/lsm_hook_defs.h>
+>  #undef LSM_HOOK
+> +BTF_ID(func, bpf_lsm_namespace_alloc)
+> +BTF_ID(func, bpf_lsm_namespace_free)
+> +BTF_ID(func, bpf_lsm_namespace_install)
+>  BTF_SET_END(bpf_lsm_hooks)
+>  
+>  BTF_SET_START(bpf_lsm_disabled_hooks)
+> @@ -383,6 +405,8 @@ BTF_ID(func, bpf_lsm_task_prctl)
+>  BTF_ID(func, bpf_lsm_task_setscheduler)
+>  BTF_ID(func, bpf_lsm_task_to_inode)
+>  BTF_ID(func, bpf_lsm_userns_create)
+> +BTF_ID(func, bpf_lsm_namespace_alloc)
+> +BTF_ID(func, bpf_lsm_namespace_install)
+>  BTF_SET_END(sleepable_lsm_hooks)
+>  
+>  BTF_SET_START(untrusted_lsm_hooks)
+> @@ -395,6 +419,7 @@ BTF_ID(func, bpf_lsm_sk_alloc_security)
+>  BTF_ID(func, bpf_lsm_sk_free_security)
+>  #endif /* CONFIG_SECURITY_NETWORK */
+>  BTF_ID(func, bpf_lsm_task_free)
+> +BTF_ID(func, bpf_lsm_namespace_free)
+>  BTF_SET_END(untrusted_lsm_hooks)
+>  
+>  bool bpf_lsm_is_sleepable_hook(u32 btf_id)
+> diff --git a/kernel/nscommon.c b/kernel/nscommon.c
+> index bdc3c86231d3..c3613cab3d41 100644
+> --- a/kernel/nscommon.c
+> +++ b/kernel/nscommon.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /* Copyright (c) 2025 Christian Brauner <brauner@kernel.org> */
+>  
+> +#include <linux/bpf_lsm.h>
+>  #include <linux/ns_common.h>
+>  #include <linux/nstree.h>
+>  #include <linux/proc_ns.h>
+> @@ -77,6 +78,7 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
+>  		ret = proc_alloc_inum(&ns->inum);
+>  	if (ret)
+>  		return ret;
+> +
+>  	/*
+>  	 * Tree ref starts at 0. It's incremented when namespace enters
+>  	 * active use (installed in nsproxy) and decremented when all
+> @@ -86,11 +88,16 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
+>  		atomic_set(&ns->__ns_ref_active, 1);
+>  	else
+>  		atomic_set(&ns->__ns_ref_active, 0);
+> -	return 0;
+> +
+> +	ret = bpf_lsm_namespace_alloc(ns);
+> +	if (ret && !inum)
+> +		proc_free_inum(ns->inum);
+> +	return ret;
+>  }
+>  
+>  void __ns_common_free(struct ns_common *ns)
+>  {
+> +	bpf_lsm_namespace_free(ns);
+>  	proc_free_inum(ns->inum);
+>  }
+>  
+> diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
+> index 259c4b4f1eeb..5742f9664dbb 100644
+> --- a/kernel/nsproxy.c
+> +++ b/kernel/nsproxy.c
+> @@ -9,6 +9,7 @@
+>   *             Pavel Emelianov <xemul@openvz.org>
+>   */
+>  
+> +#include <linux/bpf_lsm.h>
+>  #include <linux/slab.h>
+>  #include <linux/export.h>
+>  #include <linux/nsproxy.h>
+> @@ -379,6 +380,12 @@ static int prepare_nsset(unsigned flags, struct nsset *nsset)
+>  
+>  static inline int validate_ns(struct nsset *nsset, struct ns_common *ns)
+>  {
+> +	int ret;
+> +
+> +	ret = bpf_lsm_namespace_install(nsset, ns);
+> +	if (ret)
+> +		return ret;
+> +
+>  	return ns->ops->install(nsset, ns);
+>  }
+>  
+> 
 > -- 
-> 2.34.1
+> 2.47.3
 > 
