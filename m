@@ -1,190 +1,182 @@
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B003ACA52
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 18:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45ED54758
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 18:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=74.125.224.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771956051; cv=pass; b=h3opjFXm6mYSuDbmCf9QHRCBFMD431Ha+ttyRY5dGjj/Zn3bUwj+ipnnBGJUsEQW/CrcygjTH1w+LQBa78NmsCPp8nUbLrzySveW8lbkNGwnw090UaZzaOE7poc5XKrJuwBZSUKcw2Pp4RybWvX42NhmrtISjPZFmzDuki1U2r4=
+	t=1771956598; cv=pass; b=VNMX3zeelVc5zAT3CSUTD2dUwVrBWySCGrzzkNo3VIfVQg+NMH9+ppJPHQKOGRLoXcwr2fHrmpq2O0vxXiSks811Zrw26NBhJI3N9dT3avdpk5/duOrWenSc4IeHACHGOqa9yM+aEQM5Hyk5kDNECY1dB8SNbpaGZG9b5im8zIc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771956051; c=relaxed/simple;
-	bh=op2WAl+A8WCV2+n13UwckpDZcDhru/asS1xBQHlPgsQ=;
+	s=arc-20240116; t=1771956598; c=relaxed/simple;
+	bh=yOUAlQdecOXwqwuQLKYarY4cF8GxvyJ5zAvCeXDrct4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cxhwwo52SmdEfD8USRypwkFTh5VRZcP+N9dY0e3ASRnedGzHdAmgFgkeE8ZoaJgK+nDn/FM5FWC28WBcis8RygOGbN26XGs41gaDVutlEs9o9DESYUyJWEM+3boYWMV0ua9r4qAL44/qPSYdfYSwGSFFNieqqOL6qodNreRdOBo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fhnUFbqN; arc=pass smtp.client-ip=209.85.221.53
+	 To:Cc:Content-Type; b=XUAPNvRh6RUrnwNK07wis4AFYXWj+sJtR6WoJD8+PQ/ND2q6hKHX1WXKWWyaoFrsBuNlx5smt2JMwBv4BccICHtaX/6ZZRiIoFQMA+ChsrVdIEOhzzocCvNnZL+jwBL/q3ZSTniPUsp8lVM+f3f5h+C4wnmmS+qyeN+nrBBSjDI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=isnQPH8Y; arc=pass smtp.client-ip=74.125.224.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fhnUFbqN"
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-4362507f0bcso52008f8f.0
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 10:00:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771956049; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="isnQPH8Y"
+Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-64c31ca77b4so5265748d50.2
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 10:09:56 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771956596; cv=none;
         d=google.com; s=arc-20240605;
-        b=QoRgd5n58PE7wH/Q5t4cT3a/l3N6/dbARlvn7cbHDFaSuTPVfoGYFffsZnsN1NCins
-         Uzvjq3GKKpnH3hBjOZR86qmxSjFjWc1Rt/JAAf2reUCF6rvXYXls8+iT0Bxv4MlEJO1S
-         XGxa4lcUChvMI9Mw1uV6pqB+zTSuwfHK0AHVbI7NWcYp6nN4fgo5v/HZxLAyM4kiE7+r
-         WunxzaQckpCzey6zeVzLkv6qP3HPV6cfCBBmpTTa3Wpbl31sjpLXpbs3TxUZtIwWDSCD
-         WEEHKJzygHDwDVSo2fUQrYOeOEkKkEqDCuexqKXq3AbXFHZPm4c5GXq1YBTEawc5/ds4
-         PDQg==
+        b=FmTgWAegKlalMa3U3fHi0UMfiftuYKBDdpHNO5KtCK5Pumj3pqPYaYto9qJmulvwSh
+         ALlqXUXTuu5Etz/Fwg0/4qbVuKNX54+Jypqhz2nwYdX8/0WRmKDVL91ykWRDIZmCGO37
+         8grO84oi8l6MgrBZN4NhO2x/OOu/LkSnvQ8XOiH3z0upLHTpdH6L8EVRJqpTYLtYsp88
+         RkkawLQS1k4YAQ2UGPilq99AC9/NkQntxd6v29nBtL8a3WOahBdeHx+OgaBtv5rLyFms
+         OxpMwPhcO9a5ipvXYrZBg+KdgWO/eeexFYMZsDoz8u84MxsQ0Qz7kAPWp8ND6NAUaFW0
+         HiFg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=op2WAl+A8WCV2+n13UwckpDZcDhru/asS1xBQHlPgsQ=;
-        fh=V+pBgdWCGc3eEx30o3EZqXHeWkGtRTtxD2uIo15vuaQ=;
-        b=iupZAIR0rACQice010lp2sjDQ0evV+YJ2slmDfTBozUh8CkST9mlHDr+piRE7hn30B
-         /QbMTQNAClYAZAwJuAKVP6KIjqYUwJSgaxbgCa3lXOEIovQUSu5y2rLN0BxxNSiuxjcC
-         5jh7x/dl6Jrgvnb+qkCmnBNczJ5YWLq0MznDf6zLthc5WWmQOTEoXHeMIPr10iRpvPUL
-         1SB9kvoxYTWn60Z8i2LIQ6xa14Bp7FkMx4mz3W3LAbBcgLxAbb+h8JOC2QHNek/rC/rA
-         sVKl7XQE5s6KLAoXQnLjTqrDeyAnLTMCNNodIFYirDOiCkXtvkaIolmpR8pfdptzhkK6
-         SDkw==;
+        bh=UlE7fs0GltsN511MjiIWQOzjiD2GXI1YY/nWZb9NCu0=;
+        fh=SX+B7nJgDQkNE7HRslrjgofYVgsAGRVl4p1vRCTRjjg=;
+        b=Jgme53GjlClD9XMIjmakQ+lJB8FpzJCAcbQqdeupuAOhHPKiw6hLKOO7O6eZtlo7Gf
+         VVd3xjwT3Dw/hHmj0zgNL3K9IJRKtdrvfLRyrbSBqCFEfPPMwmXiOQp2Mk+IBwm+og7w
+         V8gv2fB+VneTmb61cQITD9rgC3w69OyCnxlmfpigeAJPY8fqPTIbuVf/JEjkDTzFrcSU
+         W59q2BAUqQSZ7TKSl7gk86sG6jDy0qO8seg2MFNjyYQUzv0vPbWYdIRnFtyIZL1FOHOh
+         mHMIzLBIFqAxvQNas/zHEdJ6mWceGnhOvfdIXtX0252FYc0jsq0089mvfS7ZoxEztl/r
+         RBBg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771956049; x=1772560849; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1771956596; x=1772561396; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=op2WAl+A8WCV2+n13UwckpDZcDhru/asS1xBQHlPgsQ=;
-        b=fhnUFbqNydaeQ5KtemMPevvfOp+4/fr3cZXVFbR0Prqb5ipV7mCDv03Zjbhz1LvOtB
-         yOd2NLohjRP/nm+EMYdwyq5Hl0tqJrMoLXN31fii2YdmwwP2U9HudgOb1bWxVgLI6V36
-         AEKCq8QuP6TkyAutkqW0rrvSXECDe9uzY169rhtPOlghsRT/FCENO76e8tMOCkezrDbp
-         HKO+o40bc4/cJmYPw5UQstSXWbyx95/jBpTZj/EPTfe9gCsIILiBlo2OlfuLIHk7Enys
-         rb/HCOPCXLh3N80YMhod98YdddiFaO5DCSurj+34nga8T/889j2FUxuk6pRzkqnfn3fI
-         kpuw==
+        bh=UlE7fs0GltsN511MjiIWQOzjiD2GXI1YY/nWZb9NCu0=;
+        b=isnQPH8YIpNYR5tCqGIsKqKSAqwZIRL6UpVDGXy/zKVvKhv6Jubi+Ym5nLIe1Uetdv
+         vJStCxKpieDEKbDv4QuWHNh81T5eraqU3a+bjDBzi+YsR+pC9j5Zxv/0SDk8fqNJtS9G
+         V0YdfzV8eOlwk9OGlHhnvjP1tktnOtmF2ELXOPcDtV3bv0Mi0FpJDNmGhphKr+b1Bdkp
+         tQAbpxLJQBb7GLhse4k/doca2LXoUo4RzjQxJj1iLB9atleu+VZJs/ugC4un3iqJ+NxC
+         53/z3FVlOvlR34E56uw2WmlsbWwsQXsJzLHuurrOh6qWTRsMEUXjDMZ1aRSmlg9pB6Hm
+         3l5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771956049; x=1772560849;
+        d=1e100.net; s=20230601; t=1771956596; x=1772561396;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=op2WAl+A8WCV2+n13UwckpDZcDhru/asS1xBQHlPgsQ=;
-        b=PjZlo2WirpC7ONkK1FNElG1NpJypAWxTz9+lRmkPMdCKpnP3pNP6mziIqp4hKKn8eV
-         gKZ/lWmI2F8PLO30RoIT/paM/EEN4YYmRizjyPiYq53vXYz+hyhT6QEyMEBpkWRM3zC4
-         sLlMz4cqiN3qbzRx41UUI02qZ+CeFSeTfbfLY0YPqk66Hwy28GNYViLbCTS5a03sHT02
-         X2TBdoqI6Z4U6xL21CDq4r3wau3/iJvQHIyR0O/b3EjIeqG4f0qWXrDUlPXNCJh9HZod
-         hPWtMhhZTK7nVyQ/OdACjTwSKwlPI3fjdkIYDchTAvJJxX5YDVzcW10n/YkTB124Twxy
-         j3pQ==
-X-Gm-Message-State: AOJu0YxEpWfgyD0IEs8rNycBo45rEam/kF8Q66PGrthPbBQnCszxi/i+
-	b6lIw4iJP8mNprIqVSphEq4GgWRcQ21+M7omgWbLcM9HAxQYVfdcIgRSUGLDloic7sZslh9cVCi
-	0kr+OSalHHwXY6cyt11mhNn3ygCjcdK1QkSwq
-X-Gm-Gg: ATEYQzyaZI8PQ/LKCsw4JJ779r3rOMZJGWYI+BVkNN+BqroMsBnceu+cqr9JDP3P0Jt
-	SMHaOJ9hXE/ymiDD4ilQkUNrXI+Ordn4/iMuZpFeB7YHOfXoOgLTzeVxd+z9fMy/ZjZPPg2UGHI
-	+7WL0KSn6wd8G4hc1HPwqp6snlDV/Fuxq4q10OGVaqU4hvsnleODo+JEXoGYK90y5gAXgeLk9nC
-	NMWrc9GumbnpyIMW94E4gbYC9SreEMO5IA8rh8zn6fIfbQI0Ov8/+VQiOJuAcJht728Y8BcQn+l
-	X8BJ1Jj2KfUOvEOr79PSltP4ko2OawK+qjtI8AR2ZdVJwfw1559oBPNkO0OmCZi2yBkLJaYiUr1
-	dHmt5Py+y
-X-Received: by 2002:a05:6000:607:b0:430:fd0e:a502 with SMTP id
- ffacd0b85a97d-4398d95aa4amr1351186f8f.22.1771956048684; Tue, 24 Feb 2026
- 10:00:48 -0800 (PST)
+        bh=UlE7fs0GltsN511MjiIWQOzjiD2GXI1YY/nWZb9NCu0=;
+        b=nMbr/ry04B5j3f65kLWa/eaNmLY3ePUa0E3J/K/J6sI3TLd+QNUndwzcwAGV85Y81/
+         pnRa/H6cy1lScMPVJhoWsfaixsJu43NCl7eIg3QhIMF7O8gCxQOHPtGYXkMdt7nVqDzk
+         vOe0cJtQgR9Wzi93qizvz+Ey4FyWcnInTPSs8grRB0fuTjMA3QSm92/qayCFb+PKWEBt
+         HcIqCZ9xVtorYm0UW6b49p6MJyyIzu7b+vtwIdYb74UcLdfPY1j+oDaZErVK0PcW9qYs
+         5/Hd+imePUnCWi4R32J+UWUEm8mceRKBAQd9d5rEF25TyWpTq+TRumv+g3EFC/zfCqmI
+         klZA==
+X-Forwarded-Encrypted: i=1; AJvYcCWg2bW8I55+3wsKV4x4jdKs7vZXlUn7rduUQOvZRV9yzw0bb2wgpDzDuvZfLHMnD6sgesc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyH2soaeDNBEupK5/NYAnXXR52Pm6wLRxQeUJ8sYyZjWbKFdU/6
+	0cUPiDPQc9+dN+WozOH1fuLf4qOfmeyWnNS5GmFrpTsHlKefAhjs0t0MZ2DJnIEIGGwgl8gqvzw
+	dxC8iN4IxwINoesamaT+W+bNE/ElyJCo=
+X-Gm-Gg: ATEYQzwqd+TJ4YD8A2o93l8YuJnaT73Mub4CfxNSm86Arv7lMs5Ly5dZZCWcawykWph
+	E9B2FblwMx1HQAE6w2o4975aBDVUKHxRokuyaLfjez6podg48YDmCYoAb89zJg03Zpo5i+D/4Aq
+	J5Z8jg7fT9/G3YXcEcJaKfHalZ8S0jNhejb5g1nLZo+gkwC1XTF5KQepDgzJYpQ8JPv7xxh848v
+	O70Dvm+sCW8VApsrfqKQgqmIavDDop0OQvFnxQECx1x1Wj3X+oiBA9xVwec+Tb1j+93T3aA8/nA
+	YtnvKMw=
+X-Received: by 2002:a53:ac8a:0:b0:64c:99d7:8d1e with SMTP id
+ 956f58d0204a3-64c99d7b4c2mr3800678d50.3.1771956595826; Tue, 24 Feb 2026
+ 10:09:55 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260223174659.2749964-1-puranjay@kernel.org> <CAADnVQ+aobVwR1m-v2w_RWFxG_9TwkYQ-K8KtC6D18HrYe8Dig@mail.gmail.com>
- <CANk7y0hLknrHo+UB2HDPeen6nLxRaBdLNKiMBiMBv7Hh-QzPEw@mail.gmail.com>
-In-Reply-To: <CANk7y0hLknrHo+UB2HDPeen6nLxRaBdLNKiMBiMBv7Hh-QzPEw@mail.gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Feb 2026 10:00:37 -0800
-X-Gm-Features: AaiRm50fMpIAmc5j4p_2ehJMOiNLcepI8Sr74Yrw0hHoaaQeYVvJ8kTx7V3gyDo
-Message-ID: <CAADnVQJ_xG+QAUzPHm1FZGpcz45X3k_cG3ThQ0da3kFa0ppLmA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/6] Introduce KF_FORBID_SLEEP modifier for
- acquire/release kfuncs
-To: Puranjay Mohan <puranjay12@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
-	Kernel Team <kernel-team@meta.com>
+References: <20260224015855.1481707-1-ihor.solodrai@linux.dev>
+In-Reply-To: <20260224015855.1481707-1-ihor.solodrai@linux.dev>
+From: Amery Hung <ameryhung@gmail.com>
+Date: Tue, 24 Feb 2026 10:09:43 -0800
+X-Gm-Features: AaiRm50LRoerYwjYiCL0nDNYwJlYMVx42WomfHN20FpttQ1PoqZleEWazCaW7-U
+Message-ID: <CAMB2axP9pZMtUcQH_bV9HWE145BseUpk9K5VfYhjYRa9gkTwsg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Fix flakiness of task_local_storage/sys_enter_exit
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org, 
+	kernel-team@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 24, 2026 at 3:24=E2=80=AFAM Puranjay Mohan <puranjay12@gmail.co=
-m> wrote:
+On Mon, Feb 23, 2026 at 5:59=E2=80=AFPM Ihor Solodrai <ihor.solodrai@linux.=
+dev> wrote:
 >
-> On Tue, Feb 24, 2026 at 1:49=E2=80=AFAM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Feb 23, 2026 at 9:48=E2=80=AFAM Puranjay Mohan <puranjay@kernel=
-.org> wrote:
-> > >
-> > >
-> > > Iterator KF_ACQUIRE support is not useful on its own right now, but i=
-t
-> > > becomes the foundation for KF_FORBID_SLEEP: an iterator whose _next i=
-s
-> > > annotated with KF_ACQUIRE | KF_FORBID_SLEEP can now express "holding =
-this
-> > > pointer forbids sleeping; calling _release invalidates the pointer an=
-d
-> > > re-enables sleeping."
-> > >
-> >
-> > The name of the flag and semantics bothers me a bit.
-> > How about we call it KF_ACQUIRE_LOCK and make it exclusive vs KF_ACQUIR=
-E.
-> > And document it like:
-> > KF_ACQUIRE -> acquires a resource via reference counting
-> > KF_ACQUIRE_LOCK -> acquires a resource by locking it
-> >
-> > and to match it I would do:
-> > KF_RELEASE -> releases a resource by decrementing refcount
-> > KF_RELEASE_LOCK -> releases a resource by unlocking it.
-> >
-> > When lock is taken it's typically prohibited to sleep and do
-> > other things. So I feel such flags would describe what's
-> > going on underneath more accurately.
-> >
-> > Thoughts?
+> The test_sys_enter_exit test was setting target_pid before attaching
+> the BPF programs, which causes syscalls made during the attach phase
+> to be counted. This is flaky because, apparently, there is no
+> guarantee that both on_enter and on_exit will trigger during the
+> attachment.
 >
-> I am fine with this except, I think we should still keep the
-> KF_RELEASE a single release mechanism that releases according to how
-> the reference was taken (refcount/lock). There is nothing wrong with
-> separate KF_RELEASE and KF_RELEASE_LOCK, except we would have to
-> reject all wrong usages like KF_ACQUIRE -> KF_RELEASE_LOCK,
-> KF_ACQUIRE_LOCK -> KF_RELEASE.
-
-yes. Is this too complex or what's the concern?
-
-> I am fine with both but prefer the
-> common KF_RELEASE. Let me know which one you like and I will go ahead
-> with it.
-
-Magic KF_RELEASE simplifies things a bit. I don't mind, I guess,
-but would like to hear a 3rd opinion.
-
-> > btw do we need a selftest that 2nd task_iter cannot call iter_next()?
-> > Like:
-> > iter_new(it1);
-> > iter_new(it2);
-> > iter_next(it1);
-> > iter_next(it2); // this one has nothing to do with sleeping
-> > but once we think of iter_next as KF_ACQUIRE_LOCK
-> > it becomes obvious that it's not ok to re-acquire the same lock.
+> Move the target_pid assignment to after task_local_storage__attach()
+> so that only explicit sys_gettid() calls are counted.
 >
-> But we still need to allow this if the locks are different, because
-> that will support the nested iterator use case. For example, nested
-> task_vma iterators that iterate vmas for different task structs
-> (different mm->mmap_lock).
+> Reported-by: BPF CI Bot (Claude Opus 4.6) <bot+bpf-ci@kernel.org>
+> Closes: https://github.com/kernel-patches/vmtest/issues/448
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>
+> ---
+>
+> I've been experimenting with running AI on BPF CI to investigate test
+> failures. This is an example of a thing it may come up with.
+>
+> I don't want to spam the list with these, so for starters I'll be
+> relaying only patches that I evaluated and/or tested.
+>
+> The AI generated reports will be posted with "[bpf-ci-bot]" prefix
+> here: https://github.com/kernel-patches/vmtest/issues
+>
+> The goal of this particular application of AI is to make BPF CI more
+> stable, less noisy/flaky, and potentially find and fix more kernel
+> bugs. We'll see how it goes.
+>
+> ---
+>  .../selftests/bpf/prog_tests/task_local_storage.c  | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c =
+b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+> index 7bee33797c71..2820a604aaa6 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+> @@ -25,24 +25,28 @@
+>  static void test_sys_enter_exit(void)
+>  {
+>         struct task_local_storage *skel;
+> +       pid_t pid =3D sys_gettid();
+>         int err;
+>
+>         skel =3D task_local_storage__open_and_load();
+>         if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+>                 return;
+>
+> -       skel->bss->target_pid =3D sys_gettid();
+> -
+>         err =3D task_local_storage__attach(skel);
+>         if (!ASSERT_OK(err, "skel_attach"))
+>                 goto out;
+>
+> +       /* Set target_pid after attach so that syscalls made during
+> +        * attach are not counted.
+> +        */
+> +       skel->bss->target_pid =3D pid;
+> +
+>         sys_gettid();
+>         sys_gettid();
+>
 
-Well, different tasks can have the same mm->mmap_lock.
-For example: two threads of the same process.
+The test is done at this point and perhaps we should also add
+skel->bss->target_pid =3D 0 to avoid some global variables from being
+changed by bpf programs again. This is already done in
+prog_tests/cgrp_local_storage.c. Not solving interference from
+parallel subtests, but at least it will be easier to reason about the
+test result.
 
-> And I think the check for re-acquiring the
-> lock for the same iterator should be done at runtime as it is done
-> currently in task vma iterator. I think what you are saying is that we
-> could have a certain class of iterators that take a global lock ->
-> only one iterator of that type can be used at a time (nesting not
-> supported by design), even that should be taken care at runtime rather
-> than the verifier tracking it.
-
-I mean that as long as iter_new() before and iter_next() after
-implementation is using mmap_read_trylock() then it will be fine.
-Runtime detection of deadlock works, but we need a selftest.
-
-When iter_new() did trylock() it was borderline acceptable,
-but doing it in iter_next() feels suboptimal.
-Especially if bpf progs are going to adopt the pattern of
-bpf_iter_task_vma_release() that does mmap_unlock
-in the loop body, so next iter_next() will rely on luck.
-Many vma-s to iterate -> high chance that one of trylocks will fail.
+> -       /* 3x syscalls: 1x attach and 2x gettid */
+> -       ASSERT_EQ(skel->bss->enter_cnt, 3, "enter_cnt");
+> -       ASSERT_EQ(skel->bss->exit_cnt, 3, "exit_cnt");
+> +       /* 2x gettid syscalls */
+> +       ASSERT_EQ(skel->bss->enter_cnt, 2, "enter_cnt");
+> +       ASSERT_EQ(skel->bss->exit_cnt, 2, "exit_cnt");
+>         ASSERT_EQ(skel->bss->mismatch_cnt, 0, "mismatch_cnt");
+>  out:
+>         task_local_storage__destroy(skel);
+> --
+> 2.53.0
+>
