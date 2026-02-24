@@ -1,138 +1,158 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E2537882A
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 10:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771930700; cv=none; b=msuCWr/+Lquvy9LkrQWMZEvnsAMqdNsXZtfQKe7Hfb89zN+tt9DTNwIr+/bPpUlUobBTE5Nre/p1oaw0oPHjT+I95bFX8MtVWBLavy67jORJrvPdy5ZV8QVPxMbqsi8JElMuL+Dzvf5A+/iB30lSFlL9xx9uAvxs9ZtsQS+fiig=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771930700; c=relaxed/simple;
-	bh=4oKOtmEtfvLwnqMA7pFkspC1lNzXym9piPx1zp9Q3rw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=lKtTvXXfBPmzAivNbEM33frUncStQmn9vW0cQM2bMHxuYkleJDwHh1GoWG017sjzyNd01zTAd57aygQ4zS2+ECcObR5KiOER0eEXd1r+0nbJINw+GiuBZVNtiV+Ebb7EXdNaB+aBxX5NqI/p9vKZ04aqKusv8xxES6fPR+qyexQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=SgohH7BT; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=e+/mhzpO; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 954AD37BE8F
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 11:24:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771932294; cv=pass; b=dJUUK6RKZYAaqTBKV4XewZfJWFD4cMyng6rIzvK7w8SUO6esTChvSsTZ4K6quQKXEryp3oaaWtCcLd6w37bC03oJsrtiZ+atRAqYxVgT/pQLSMpQVm9u1iYaUBOJEiPw+nAZAdjKicj+0WtQ5aQwNOQ9V5ft0Pn5MGTUYlEyiSw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771932294; c=relaxed/simple;
+	bh=0h8wHrtI/qyGbw1ifbnANE2Bi6Zp/mvWLzKpHtQm/Uo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BuHGOyo+1CZmnVKrfDH3BR6sfewaUBJ+iF91z9x2abKvWRO1yDl7TkuDoQBakdC12Pf+8F1Dy+4lYnKv44PzHW+OrNNbXs1KDbucMqpZdZQOQg6nVVD9wZcaek3vGY6ht/3Mjk1hr7cE3ucfKde7KEBJTXzTua8J2lO774n9bLQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Co3SKq0D; arc=pass smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="SgohH7BT";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="e+/mhzpO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1771930698;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4oKOtmEtfvLwnqMA7pFkspC1lNzXym9piPx1zp9Q3rw=;
-	b=SgohH7BT04LH6XWpuMtTQuQK9kbTmu2S8sZ0anfGrz9SWKgCGvrvHq6yw12oHzXAn9bim6
-	6V70uxd8NXaOaHCE6SBU7owygfEI3EEAqDaAl84EJYgF9NMZnYzjZgVdwf/Z8Xpom9z+3j
-	JJa/nXgKyAC968Ra4cs74yY4v2ZgD1U=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-629-4w7BVelfP9-0A51OnlP_Rw-1; Tue, 24 Feb 2026 05:58:15 -0500
-X-MC-Unique: 4w7BVelfP9-0A51OnlP_Rw-1
-X-Mimecast-MFC-AGG-ID: 4w7BVelfP9-0A51OnlP_Rw_1771930694
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-483101623e9so46962685e9.3
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 02:58:15 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Co3SKq0D"
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b8fa449e618so869956266b.0
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 03:24:53 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771932292; cv=none;
+        d=google.com; s=arc-20240605;
+        b=cPpTSTVHQU3+8fq752eQuupwp6qh4RNyzD+JdIvsJkNJhf+3Vduw7VBlfV06PdaDQM
+         lxVwmX1iIvQ7BNq8GFu7m8kuldqqEoJ+PEcUPYF0V9bGorgL2uzmMV9K2BvJj4j9WlmI
+         /x1MTUv9V/i1mKrj4pkjmPKq6eKEigDtLUgFTyCXhNAXoUPv2T2nhw4TCfKc6CMUKT/P
+         x7lBLIpKPz03c/Sbkap/yDEKqXg0PwOnEbQa7nciYQwPi6Y5z/UGAyjkuar4P61j1QHz
+         fwUJDRMhiK0179zLt13g3rvqac2IadJUhrSQf9v2pF292uHQKlxaMpO6JQZm1n9abpAb
+         4Pmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=0h8wHrtI/qyGbw1ifbnANE2Bi6Zp/mvWLzKpHtQm/Uo=;
+        fh=8DoVh3Iyt0R+s2t7XOny+wXcz6YPk7eroGHcz2JdAg4=;
+        b=PCwurljvbUicPJFLquPi+HTcJz/qB3t0ez6N7BzD9DzDvwnj2rXcpmroLAtxGECjBP
+         d1HADiI9koMyl5Gh8FOQDlNNxzqE9cVHjdTpZgWN/hEZ9JICvvos/9A2aJGMZY4AgRKt
+         +YwIuN5DaoPbMinBWudOYtXa+vI4EPANLiaJl3OzH3Xpf5n4fuQMwmMRcpb6SfihAEmZ
+         kF4qWhODCaFF4nVrGJsZy01PdWqKcGobMRTBLba3zEEa/p5JtFotOAiTJAwM+92ZqwPH
+         MQyp906gz0tZyvEQsGmIfKM9GIun8F7UqqUIqELB7GECtV6V9MnkkIphcfEMvx/jkHrj
+         Zx+Q==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1771930694; x=1772535494; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4oKOtmEtfvLwnqMA7pFkspC1lNzXym9piPx1zp9Q3rw=;
-        b=e+/mhzpOlzqxGLfmyOCJqFuGGlpTCu9SGsxQc04DDitfZhiEsjziHElnhLftZ4Xzx/
-         b0QjB5DVxXS7GKJSSdljBVUc81pj3GGszpBYC1UY55hPQJxd2KTabheerFf9gA0aschS
-         gRUWfQJaf4gyX9rSVQfI+3gidaJ4ZjPg+dB7IZ0EVnHNT8hI9bqoZomxf2zJCJ94Wh+K
-         5ciGuuNx2a2v1OteTtDd+S1cvvBFNl7Fs3cm3JyLWxb2OdUlz+/Fv/iQmQNdoHZy+u+c
-         5UmgovxLGJ8UVZsffdhuanLhL32eikzfcL4/dwngmobPz4xLd3tK/fKJ0wRX6+Yq+qNR
-         X2Ww==
+        d=gmail.com; s=20230601; t=1771932292; x=1772537092; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0h8wHrtI/qyGbw1ifbnANE2Bi6Zp/mvWLzKpHtQm/Uo=;
+        b=Co3SKq0DcmZ92vYvkq57tAuPD1PWICMWg72Y/vvYk3r852wYv8SfJImBvUpWBnwH0D
+         Azz/lRwoPi1T1tScit0/EVWL++tIxFYe1B0dOYeDGBCaiD5XpXJaHc73JM7whrB00aXc
+         KMjLnpP7NuzQ3hho/B+0e5PHwus8zgr8Ow+xE1U3jhOJ3uQBb+DVaXHG6CHl+DddxR6o
+         5kg18YPXWBOzxXNgsWg5QPdIcBJHaUvtPoSFU2LvQYOz8GrDZh/nYQk7MjUbCUdSUNf4
+         72Ye2lDO6niZQaW1Z8vROEOEmJ0RdfB6kpdFiIojdsMlS9hT9eaY0KiOWQ3kbDi+Ur5x
+         n9zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771930694; x=1772535494;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4oKOtmEtfvLwnqMA7pFkspC1lNzXym9piPx1zp9Q3rw=;
-        b=Bd+73McsEvdytKRo/doF5E7ltQOaKXxj7NwRoiKlX6JqYxCqz+mUiIN6hsYPr9VVkr
-         CQgWeNOa7CNQWOcLJa8FDxf/13NgN1pacNmsMFWHRcvOXM7D39unsh4FHNx1XxOHd4gm
-         z0I89LzgHsw91M09sn1MHdLRU8I/wTtKEUwtcNvdvIB3vRQ2RnkkmidGFXJbHvPXY8ts
-         kh/zInVuNqgMFjL2/0TtXn+neUzPuAFtdemO8hrzyROurPVO8xDI6EKgb+ZEylF6pbhs
-         q0oNpi9qHVG+xvQ6tFjrfSXuZYsfeYePdJx79y8OX7yBgFvjvYHl06V/oELOc8W/6wjy
-         7/jA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdLoKNHt4VTm7fu5Aa+eGqUB3x6xcJ0CEjc3njf4zwKpoYlreC5AkMqvif/JErN1D86Xs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsQRVAz2Ub7KAxeTEM/tm7Xs2mbGLE5hBmQ+bsrpWr7ZjpWc0v
-	XKixBmOJlT+sCbaPwOAWOYUalhE/GZJZK+SfmCAoGc4N5qrNMbuorbjYYeJcr7sLDg1rUQ/cvXt
-	ApBWgNRPQZX80M3XMZWUIMSvAyIwG/G/3lQaBBThT8wtidLIdr8xNqg==
-X-Gm-Gg: AZuq6aL647rgaKeJhMXouqptDnSsQiEd9CkSxESKv4kabp8eDtBqKoiQQG/sFx/iTl/
-	UYX/wHrPq5R7O+/8SHI5jCWjquGbxAEojwfpW485kF9j+uzIgmD7PeOOUqFmogh/0t3hBdXYeyZ
-	brSlZ8cvXAJfbuQXxirz0cSAI1KKKIflJCMtA8JruMFnQ3Zfc/1toJ8TObrl+rnIy6QIQH8ueVE
-	PNwrXmkWAsKPhc7ieXlYZf3L39r7IN9LYV01ykL3AgvSxjBG2X9cqnznExdiu7s87ZPd00AfYEU
-	uRGn+iBnwyZDbKb5BtKFS5bce21KYTFP1E1fRQdHvglf6jSXoV3/k34MDBrQx0J9VhAQF8SD950
-	eUttKaeMOkivdT9n/VQpcC3izAVr/ptE6mWNrr6v5gIaLQw==
-X-Received: by 2002:a05:600c:c4a5:b0:483:a2ce:f461 with SMTP id 5b1f17b1804b1-483a95eb453mr192990225e9.4.1771930694324;
-        Tue, 24 Feb 2026 02:58:14 -0800 (PST)
-X-Received: by 2002:a05:600c:c4a5:b0:483:a2ce:f461 with SMTP id 5b1f17b1804b1-483a95eb453mr192989615e9.4.1771930693778;
-        Tue, 24 Feb 2026 02:58:13 -0800 (PST)
-Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a31c56d8sm493903085e9.8.2026.02.24.02.58.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 02:58:13 -0800 (PST)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 478EF5168ED; Tue, 24 Feb 2026 11:58:15 +0100 (CET)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Kohei Enju <kohei@enjuk.jp>, netdev@vger.kernel.org, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, Jakub
- Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh
- <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Jussi Maki <joamaki@gmail.com>, kohei.enju@gmail.com,
- Kohei Enju <kohei@enjuk.jp>,
- syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
-Subject: Re: [PATCH v3 bpf] bpf: devmap: fix stack-out-of-bounds write in
- get_upper_ifindexes()
-In-Reply-To: <20260224031556.38398-1-kohei@enjuk.jp>
-References: <20260224031556.38398-1-kohei@enjuk.jp>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 24 Feb 2026 11:58:15 +0100
-Message-ID: <87ldgimmrc.fsf@toke.dk>
+        d=1e100.net; s=20230601; t=1771932292; x=1772537092;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=0h8wHrtI/qyGbw1ifbnANE2Bi6Zp/mvWLzKpHtQm/Uo=;
+        b=Djdsfa7rSZpBWsA0rMaXn/8E9s3D+KVAlgtkao2XQuRvxo0GWjik1v9IXrGMDSeYBV
+         2zEczCiUgUKiwsXhCMmXyeY9PxJAW1h5G4B5yexVwQxNAW4sciIIjAt85vhCngL53qeD
+         ub5gWUEh5NTz1DMOPHes3zTnRM+12DcBfiWi1J8hs8In42ucbegfPf0S5IYiJS86NcMG
+         bds8k5/pGK0cfMsKzWNwPYa7hsNuTJuDJP08SohyoocvLECLbrzSrBGMecG7TFMFVl/F
+         SyTaIJdW441r6qPBr9pl9CSLetwJk0yChBUHzMWnsNiERgLLlTPGlxfsMhuPhJwJnTJy
+         lZSQ==
+X-Gm-Message-State: AOJu0Yy0gP3f9j0e7rnfmhmqfwqUP7jSEa7hd8U+jove+rDdA0xtofsN
+	zSOfWhNyS1VrF8HFOgbOe/o9g954W2KOgzUldoJEGemM7UtGCYR/y8ai2xTnasb8Ly5cDrsMUlG
+	2crnFh/qbw4usIPvNKr3GkzqtMwa6xRM=
+X-Gm-Gg: ATEYQzy+/Il1sGRQmiAiaFFlYGIO+D4UBXOTBMrMEhjft0cqYJouqm1VHs7MtqBiZ9M
+	HWYK967B5IHGDon51G8iEFKdW0Jx6ENZlRdhyeBPQIXsmtpThLGF0pYR9nrGPc1QRWETiLu9AUK
+	rS9MeiwJTnTosqyaczseoZ0qYjl7qOMu222uZ7wohxjajjoptThJLL4oUkIPNzyiJxs9R3N75U4
+	pwm8qGJT6VTFI9wVuyZ2y65KQ2HCJmewHr2LYqvaBkatpMso/nU1pyEVVEnTAhfL+o2VseUiaCS
+	+aWtXPqDRcSAMjAgJr148Q==
+X-Received: by 2002:a17:906:ee8e:b0:b90:3593:654c with SMTP id
+ a640c23a62f3a-b9081a2aa1fmr713013466b.21.1771932291638; Tue, 24 Feb 2026
+ 03:24:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+References: <20260223174659.2749964-1-puranjay@kernel.org> <CAADnVQ+aobVwR1m-v2w_RWFxG_9TwkYQ-K8KtC6D18HrYe8Dig@mail.gmail.com>
+In-Reply-To: <CAADnVQ+aobVwR1m-v2w_RWFxG_9TwkYQ-K8KtC6D18HrYe8Dig@mail.gmail.com>
+From: Puranjay Mohan <puranjay12@gmail.com>
+Date: Tue, 24 Feb 2026 11:24:40 +0000
+X-Gm-Features: AaiRm51cBgLfGqcQo86Xqh9SXFMHeFSIcvF2I5QqDnwj28uSlCV6i3eed26S64s
+Message-ID: <CANk7y0hLknrHo+UB2HDPeen6nLxRaBdLNKiMBiMBv7Hh-QzPEw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/6] Introduce KF_FORBID_SLEEP modifier for
+ acquire/release kfuncs
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
+	Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Kohei Enju <kohei@enjuk.jp> writes:
+On Tue, Feb 24, 2026 at 1:49=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Mon, Feb 23, 2026 at 9:48=E2=80=AFAM Puranjay Mohan <puranjay@kernel.o=
+rg> wrote:
+> >
+> >
+> > Iterator KF_ACQUIRE support is not useful on its own right now, but it
+> > becomes the foundation for KF_FORBID_SLEEP: an iterator whose _next is
+> > annotated with KF_ACQUIRE | KF_FORBID_SLEEP can now express "holding th=
+is
+> > pointer forbids sleeping; calling _release invalidates the pointer and
+> > re-enables sleeping."
+> >
+>
+> The name of the flag and semantics bothers me a bit.
+> How about we call it KF_ACQUIRE_LOCK and make it exclusive vs KF_ACQUIRE.
+> And document it like:
+> KF_ACQUIRE -> acquires a resource via reference counting
+> KF_ACQUIRE_LOCK -> acquires a resource by locking it
+>
+> and to match it I would do:
+> KF_RELEASE -> releases a resource by decrementing refcount
+> KF_RELEASE_LOCK -> releases a resource by unlocking it.
+>
+> When lock is taken it's typically prohibited to sleep and do
+> other things. So I feel such flags would describe what's
+> going on underneath more accurately.
+>
+> Thoughts?
 
-> get_upper_ifindexes() iterates over all upper devices and writes their
-> indices into an array without checking bounds.
->
-> Also the callers assume that the max number of upper devices is
-> MAX_NEST_DEV and allocate excluded_devices[1+MAX_NEST_DEV] on the stack,
-> but that assumption is not correct and the number of upper devices could
-> be larger than MAX_NEST_DEV (e.g., many macvlans), causing a
-> stack-out-of-bounds write.
->
-> Add a max parameter to get_upper_ifindexes() to avoid the issue.
-> When there are too many upper devices, return -EOVERFLOW and abort the
-> redirect.
->
-> To reproduce, create more than MAX_NEST_DEV(8) macvlans on a device with
-> an XDP program attached using BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS.
-> Then send a packet to the device to trigger the XDP redirect path.
->
-> Reported-by: syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/698c4ce3.050a0220.340abe.000b.GAE@goo=
-gle.com/T/
-> Fixes: aeea1b86f936 ("bpf, devmap: Exclude XDP broadcast to master device=
-")
-> Signed-off-by: Kohei Enju <kohei@enjuk.jp>
+I am fine with this except, I think we should still keep the
+KF_RELEASE a single release mechanism that releases according to how
+the reference was taken (refcount/lock). There is nothing wrong with
+separate KF_RELEASE and KF_RELEASE_LOCK, except we would have to
+reject all wrong usages like KF_ACQUIRE -> KF_RELEASE_LOCK,
+KF_ACQUIRE_LOCK -> KF_RELEASE. I am fine with both but prefer the
+common KF_RELEASE. Let me know which one you like and I will go ahead
+with it.
 
-Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
+> btw do we need a selftest that 2nd task_iter cannot call iter_next()?
+> Like:
+> iter_new(it1);
+> iter_new(it2);
+> iter_next(it1);
+> iter_next(it2); // this one has nothing to do with sleeping
+> but once we think of iter_next as KF_ACQUIRE_LOCK
+> it becomes obvious that it's not ok to re-acquire the same lock.
 
+But we still need to allow this if the locks are different, because
+that will support the nested iterator use case. For example, nested
+task_vma iterators that iterate vmas for different task structs
+(different mm->mmap_lock). And I think the check for re-acquiring the
+lock for the same iterator should be done at runtime as it is done
+currently in task vma iterator. I think what you are saying is that we
+could have a certain class of iterators that take a global lock ->
+only one iterator of that type can be used at a time (nesting not
+supported by design), even that should be taken care at runtime rather
+than the verifier tracking it.
