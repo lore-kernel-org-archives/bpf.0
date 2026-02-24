@@ -1,120 +1,115 @@
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F027E0E4
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 02:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771901930; cv=pass; b=JTHvea3pbXyHIK9pEHqXgPyD0iixlU4EwPxQXEaM6B3A96q2+KtWHn6w8oPSt+1cXtMCrL75wAr0nkFOqXoS+/KHoaNtDzpzZcwYlcHds/DLT2PodP7yJgJWVzuiMStpjcTFrJyxeEh3AWhYPlSEz98KNOvUCe8Qpzf3T2xEW3k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771901930; c=relaxed/simple;
-	bh=tOd+OOw38MI45+QlWtqhkOuDIRdBXvPQzcU7osEsBRc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lIpqIge5Z+HZQOB4qCEjl2EZS9Et9HQZX7E5UU3P1K53WMvCzqXhvlp1am/FQ9isU7MwTchOKRiFT2CyWvtMdRF0zTRiucH0UoHo8Iomj36wmJQYWRFQjxzczphRV8fseNJf6SPMoUSUnA+aug0k5TozS07cUxjOPOVXPVFUW3Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ai3aRsom; arc=pass smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE8121A459;
+	Tue, 24 Feb 2026 03:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771902026; cv=none; b=TF4PnPX9OfVLVA9MgYI6AJ1WpSb2PsgBjBqqVP6BUgK9wBk9+/huzTBHEeHzRBlIin+WubMhJ32ih64TRkZoIsfdRY5YqH1YBVOAyk62b9Nrw94PBYxl+NfA3B+nszN9sfbcnYoIKJhyfT4RCUK9d7d9tabWvmN8eeLSiWadBy4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771902026; c=relaxed/simple;
+	bh=tSi8HdRwhZ4zapySywIOmzb9ESqD4kwO99QktYIcGvc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=qkube+apPXSTVHbJDa3nfsyKUHG58/syX4Yk8I1ovUv0U7mwVECFSuc+OSkBJKgovfbF7cjT+EQWOLiGGidapmn/eSaGW/JGrLvdQxeIRWfYZ/qu8fNfi329VnNW2Cbom7z3VWBxoU/UKlMmi0Nc/gLOJ3YI2zNIQ8rJ8Fdhs8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=taMbzKBu; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ai3aRsom"
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4362507f0bcso3516175f8f.0
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 18:58:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771901927; cv=none;
-        d=google.com; s=arc-20240605;
-        b=aGBgY6QruV85rX8RyQfSLYsy6c3qeRoqaQuMRBbMybvdcsNjYU2oAeG73RAi6sZAE9
-         T9+U9Q6XzNfxBB+NKLNfiEjEpw4vrCJ8ZR2RUMl01YxcR/l7IUR0tS2a8gNNPu3ejzGk
-         wb4y05eipV0v+lpTXH17gz/vJK+y8MXESgewsxatEhPr85HaGY73qN6MAEfoPiGcGZf+
-         FgpVlk2uFvHFBCl5rrY/tdL0DbbadLFwUPlbFmtFFF/sykxD+mN5NAiY2WNkXwxbncnj
-         c9hJpKNn5uM3BBwKmyq2u/Lil0SA3rx8U9XWMzp8HZoQuLhEBm5UHy4jzbdp5rHZuoBw
-         BVNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=tOd+OOw38MI45+QlWtqhkOuDIRdBXvPQzcU7osEsBRc=;
-        fh=cYWxAO4hEA81svD5X/DiiNB7a/xE2yZ32mprOvFjECI=;
-        b=E4k9VG4ztKdmamYfoX6YvEKq3/QSNgue+wnRDz/ud+h8k0p8NmkNAQZEnxVwo+LsoY
-         BlNVFtTH0AH6r58MKYZrrcZEaat2wHfdAH2k72leExpe2D04+u62OWLBQhE0I9lFWvMP
-         7Zi8lIYJwLj0DZ2Bwj+zTtgLQTNKLH7BaL0al+JINd+41BrgAr+ksxtIamX7/KHACG+R
-         +7Vkef/EC+npKyUETv+I7R+XLH0LN3Cy0vCHnaZ9KjgK3NkjwDNQcqeCvHgkCk2LFM4P
-         R5FU6isZKRGrW281t9bppJNG2c7O+2G6Aw9do6aRpoIFobxHFHlL87oV1nwJ9TSBs46i
-         ywTw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771901927; x=1772506727; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tOd+OOw38MI45+QlWtqhkOuDIRdBXvPQzcU7osEsBRc=;
-        b=ai3aRsomVi/83OIy7zOebEaC2zsQhgeUk6evt7ioGC14rGt3yKYoTzS6kmTU5v0GiI
-         36zQ3VxPX2VpIU+0B4fISS9IiMOasjORzL7jvlK+G6Q/Fj+1BlMmSHi5KAPVnwU6gD0j
-         ovk6oGUXA4aTsbLDQzY4FkHlmYIc07dggpcNim9anAUluQPeRdP5xfpewb8jGfx618nY
-         VRFNBgzJVBmiuBXntQvZm+iv6jWdbxXjDhygLbci7DDCmf81MNs+o2ErT/KJxz66t6lF
-         YF9ZooDmNOkgpjuMZpAvAPN0q9KhCZBWmxTRkGP0MNc1WhOI1PuQDqQu5IVSQtq8/Lj4
-         0E9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771901927; x=1772506727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=tOd+OOw38MI45+QlWtqhkOuDIRdBXvPQzcU7osEsBRc=;
-        b=eZj14D8UPJHTH0iLoZEBF1IPbUeP3vZnIAo5K09fI0W/UrZN74vpn7iDeBcIBR294a
-         MAmLxELqUKEK+D3yGYbF6VYEP6wocVL/qnSL/GY+LFGlnxJKd/5p9xAd/EP9K+bME9VT
-         JpPE0TYp55VcNHFiW9JBkTkTOhcEalh4k4xqbV4k2N+vfqCfpWb35V6BYSU5yzKXwkWt
-         bLSz2QnJhbLm0YgL6an6QLXSRuPpSxxukITig9gBRyRQ5m6f1VZ8IbxBAGHVBRvQrYLp
-         3Ue1lF8DglWan72Sxsi0hr49bnSpOnYBlrf3+pmevMHUyY0XVxDNy14HMyAT2RxqsrwG
-         xbNw==
-X-Gm-Message-State: AOJu0YyumH4tLZnueO76ItIdPrEZ7IB+q2r8MwMXTSXc3yMLofH9H2D3
-	dVi2P3zQBKDZ6o07d905h9WMN+Fc2uSKGYSczwH6H4nJo3imMQ2qOCXUmzRhiN1zOQhvfyXFj2N
-	TlIzBRmum0z+5NNr41wpoCCP51qLYbJM=
-X-Gm-Gg: ATEYQzxVjo3+7LVpO4el1VpvdsHhf83IA86wU+wWMA+2YGTrXEQ8ReA+uKCAdf8BIwg
-	FCCnc58Hb3wFTWlRQB6eme500atvVJXA+mwyrp3rls3ZKQvGutFl88SkLe75vg+o/GEqRYxPg9R
-	hFynb0yN52zWt4vHpkOYnv5QDQYNY9FrOTGA18w9sGn8gdeSwF+yqSuRhs3tQmZdOD8xwSksb26
-	QslK+SenJOYueHcd/rXLZdyrwEVIwD2mYZDaohfXO1Gz8rsw102qjVcLYJjpzgPbTysBTjqu67x
-	MBD3Pp3UcGayvR43S7CC9PDiuCq6XfAOx0c0f6p1yQ4XX4mlufhOKtQx9ojn/rcwpKIQOpx49CD
-	iFcXjcc/aQQMLgplLYMhIYv0x0w==
-X-Received: by 2002:a05:6000:4211:b0:437:6b6e:d108 with SMTP id
- ffacd0b85a97d-439626c7da4mr26621628f8f.8.1771901927057; Mon, 23 Feb 2026
- 18:58:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="taMbzKBu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E9FC116C6;
+	Tue, 24 Feb 2026 03:00:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771902025;
+	bh=tSi8HdRwhZ4zapySywIOmzb9ESqD4kwO99QktYIcGvc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=taMbzKBu2Bq9j0Z40WNqVrlTkK/WZbNkdLVQd3OMcP8H+0apETZaxNBzLmkTS0vlu
+	 SVfFe//+G4MREZPpHUncvGOZjW1BUv4SecuzoTK5rehRpNrPzeu2UuZkSGlGxRC0JV
+	 mJ3XVVdoYaupeeSyFyV9KIomXZeFbfEBCdna0/f2iD0weoSM2vIdKEYQqnN9MpSJGm
+	 xq9mQKx+h9FOWERA2128trDBsKn+kMHzI/N1+/yoD6wqYtwtuze1cIVHcnL/17IzE6
+	 VjNt2oktcE9Vsl4m8qXUSfnPqOVpL0AvFRURREHU2AqwtXrSIE5sYTMS0e0R+sKwT9
+	 aXfL2CuLPu/Fw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D643808200;
+	Tue, 24 Feb 2026 03:00:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1770736390.git.vmalik@redhat.com> <CAADnVQLfV3PPYA8=EXDKwoQ925_W9HANf7gSn2=_fd42HD_FiA@mail.gmail.com>
- <d92e60ea-d590-4ce4-961f-4e8ce1cb0c42@redhat.com> <CAADnVQK6qP8izg+k9yV0vdcT-+=axtFQ2fKw7D-2Ei-V6WS5Dw@mail.gmail.com>
- <582944ed-ddd6-4843-ba36-b4aed03c5b2f@redhat.com> <CAADnVQJ4PU7bCb5XO9+zMZhLRSdbCKwxG6Rtojh2Rc3UZ8H43Q@mail.gmail.com>
- <d2706604-1674-49fd-a150-7ace8839657f@redhat.com> <CAADnVQLT7cGgExtaqusyk+XwrD=-x15kL0veJB5YPewjPo=PUg@mail.gmail.com>
- <fa67d3db-273f-4e4e-90a2-ba805f484bd1@redhat.com> <0675cf92-1833-4f1a-bd8e-53de5cc1ed7e@redhat.com>
-In-Reply-To: <0675cf92-1833-4f1a-bd8e-53de5cc1ed7e@redhat.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 23 Feb 2026 18:58:36 -0800
-X-Gm-Features: AaiRm520WPQ-BGS-IIRDhggH3rpFmXh7moQAsy6sy7i3u1bmLkVhWUd7b6ey8S0
-Message-ID: <CAADnVQ+BQZd4C8Mc4U1AnpQNPhouwjO=w89ORgF05AsoAH0RHg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/3] Separate tests that need error injection
-To: Viktor Malik <vmalik@redhat.com>
-Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Jordan Rome <linux@jordanrome.com>, 
-	Qais Yousef <qyousef@layalina.io>, Hou Tao <houtao1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v4 00/20] selftests/bpf: Fixes for userspace ASAN
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177190203179.3291650.5550860539555741440.git-patchwork-notify@kernel.org>
+Date: Tue, 24 Feb 2026 03:00:31 +0000
+References: <20260223190736.649171-1-ihor.solodrai@linux.dev>
+In-Reply-To: <20260223190736.649171-1-ihor.solodrai@linux.dev>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
+ eddyz87@gmail.com, olsajiri@gmail.com, yatsenko@meta.com,
+ alexis.lothore@bootlin.com, ameryhung@gmail.com, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
 
-On Mon, Feb 23, 2026 at 3:52=E2=80=AFAM Viktor Malik <vmalik@redhat.com> wr=
-ote:
->
->
-> Looking into this more, I assume that the premise here is that injecting
-> errors into syscalls is not sufficient to implement a rootkit, more
-> mechanisms are necessary for that (even [1] uses bpf_probe_write_user
-> which is by default enabled on any kernel). On top of that, there are
-> tons of other ways to compromise a system using eBPF so enabling error
-> injection doesn't change much in that direction.
->
-> With that, I'm ok with enabling fmod_ret for syscalls even with
-> CONFIG_ERROR_INJECTION=3Dn, I'll send a patch.
+Hello:
 
-Now we're on the same page. Thanks
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
+
+On Mon, 23 Feb 2026 11:07:16 -0800 you wrote:
+> This series includes various fixes aiming to enable test_progs run
+> with userspace address sanitizer on BPF CI.
+> 
+> The first five patches add a simplified implementation of strscpy() to
+> selftests/bpf and then replace strcpy/strncpy usages across the tests
+> with it. See relevant discussions [1][2].
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v4,01/20] selftests/bpf: Add simple strscpy() implementation
+    https://git.kernel.org/bpf/bpf/c/63c49efc987a
+  - [bpf,v4,02/20] selftests/bpf: Replace strcpy() calls with strscpy()
+    https://git.kernel.org/bpf/bpf/c/6a087ac23f5b
+  - [bpf,v4,03/20] selftests/bpf: Replace strncpy() with strscpy()
+    https://git.kernel.org/bpf/bpf/c/05849ec34f3d
+  - [bpf,v4,04/20] selftests/bpf: Use strscpy in bpftool_helpers.c
+    https://git.kernel.org/bpf/bpf/c/f074d8941c29
+  - [bpf,v4,05/20] selftests/bpf: Use memcpy() for bounded non-NULL-terminated copies
+    https://git.kernel.org/bpf/bpf/c/6fcf7925e334
+  - [bpf,v4,06/20] selftests/bpf: Pass through build flags to bpftool and resolve_btfids
+    https://git.kernel.org/bpf/bpf/c/b1dc4f39b541
+  - [bpf,v4,07/20] resolve_btfids: Fix memory leaks reported by ASAN
+    https://git.kernel.org/bpf/bpf/c/08a4ab51771f
+  - [bpf,v4,08/20] selftests/bpf: Add DENYLIST.asan
+    https://git.kernel.org/bpf/bpf/c/7661538bb7d2
+  - [bpf,v4,09/20] selftests/bpf: Refactor bpf_get_ksyms() trace helper
+    https://git.kernel.org/bpf/bpf/c/536abce60307
+  - [bpf,v4,10/20] selftests/bpf: Fix memory leaks in tests
+    https://git.kernel.org/bpf/bpf/c/f8e7eccf33d3
+  - [bpf,v4,11/20] selftests/bpf: Fix cleanup in check_fd_array_cnt__fd_array_too_big()
+    https://git.kernel.org/bpf/bpf/c/e4093ebf3db1
+  - [bpf,v4,12/20] veristat: Fix a memory leak for preset ENUMERATOR
+    https://git.kernel.org/bpf/bpf/c/10d19e708d3b
+  - [bpf,v4,13/20] selftests/bpf: Fix use-after-free in xdp_metadata test
+    https://git.kernel.org/bpf/bpf/c/4650dd3ea4ac
+  - [bpf,v4,14/20] selftests/bpf: Fix double thread join in uprobe_multi_test
+    https://git.kernel.org/bpf/bpf/c/a9b15811ef10
+  - [bpf,v4,15/20] selftests/bpf: Fix resource leaks caused by missing cleanups
+    https://git.kernel.org/bpf/bpf/c/547a83e93a48
+  - [bpf,v4,16/20] selftests/bpf: Free bpf_object in test_sysctl
+    https://git.kernel.org/bpf/bpf/c/1907d7a6ca0f
+  - [bpf,v4,17/20] selftests/bpf: Fix array bounds warning in jit_disasm_helpers
+    https://git.kernel.org/bpf/bpf/c/68da3afd0bf0
+  - [bpf,v4,18/20] selftests/bpf: Fix out-of-bounds array access bugs reported by ASAN
+    https://git.kernel.org/bpf/bpf/c/a3f40c2890e9
+  - [bpf,v4,19/20] selftests/bpf: Check BPFTOOL env var in detect_bpftool_path()
+    https://git.kernel.org/bpf/bpf/c/fe9f7aa74767
+  - [bpf,v4,20/20] selftests/bpf: Don't override SIGSEGV handler with ASAN
+    https://git.kernel.org/bpf/bpf/c/db7337948c7b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
