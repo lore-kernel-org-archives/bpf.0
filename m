@@ -1,270 +1,218 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B791C860C
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 01:16:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13827231827
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 01:44:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771895769; cv=none; b=a5BzYOHKyZUVyoJYnM0Fl1QqZ6ghlQbAUUoOHqWPhr0Poo29gdhbTgtujuiRnG0StpkEjZL6ygx6RsfMMhPPO7aBmSfphZU1/299qK719msNy7HprbAlg4p1UKyH+B9qFjh8Cjj+63qgU37ll0OeBt+af4tCSB0HwOVMaP56iO0=
+	t=1771897469; cv=none; b=uLSGgywesETAtbBaI15dmZk6y9/AtCapXBOIZtHNKLnZ6Ewu+Kr4EwqkeOfT9vXPKyHozmbpdRNBM1W6W67mII5qD3eg1E9rpN2akBNXPI8RvYTzp1RynU9GFXfvcrgdh92rj0Au5vWzha4BDxDAO/sedaBdWMKZTV3fsJZKzA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771895769; c=relaxed/simple;
-	bh=/WEwMXI9+NBYnYEUwRmLcJPLue1w5B8049oasKnv6uc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dml5JZurWEc/FoZNh62FGnpekvQtfafXUEe7YWLlD9GTpwZBXYWFPh1tuo8ePogtmXr7DZvoz956ySnMzqKYfvg37IQXfdKzkUwAllMLKtIyf9LKO+WhkcOE2Od9Qi97C1hFpFvNOCwx5X0FZHFYk2XwbVxhzQJmlbrFBt+1CSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MidSfS62; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1771897469; c=relaxed/simple;
+	bh=1+d6fXVelUu6FG/oQk0FpqnqGof1kKOdmjl0GqbcVNg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GAXfDGLWXgQLLarLCDjg62ih8fZeUWrRtcx+LD204pB5Hfar3z/VH0kXJ7/gQiBsJqLtXZmvd6ceR69kcgUjsDyJvqjEDI+KDaZR0LuuK/saQZC7Jw5WqZR2MovOqMH9BbXm/gaFl8zG/MGWCDJqiY5d7wf5rx2EdLGRkLejsaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Zr2tuinD; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MidSfS62"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b884ad1026cso776251766b.2
-        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 17:16:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771895766; x=1772500566; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oyTNmHcTbqte4mfYZdJqgeiDYGxy4Pb6et+1aAN/vEo=;
-        b=MidSfS62yG/6BrxdljqXq7zA2g7ak6LuqOkeDboDKzl/I1z14/EDZRKX2xEVJ7+t6e
-         IwynIFXb0UyScYZEO72fq4jtO29jF8ItF2Bv19y7vTd8IQs+x5V9jS8wNhItLdkgS7On
-         COT9cYxI3z0YgTX0xTeZ1ZyzBNEfDgqqUgQAEcIhdWy+gOrhE4uCIqjXc7o8m6evZ7zS
-         qRs+xxtZy4LE9rlubZb3QJxB0J79jvt6Z+fwoNnHKz+DJ5qeZJuEvJobXWuNvcNYosOZ
-         QKUN6EjJIn6sv98RiAa+EV7Jauh2H2+1NsClQvCCwNttX0nqmyGIQ4pnLIXDk/gwkPo4
-         KBCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771895766; x=1772500566;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oyTNmHcTbqte4mfYZdJqgeiDYGxy4Pb6et+1aAN/vEo=;
-        b=EGldFlIvDG0sszR888Q3Nwer0QlJcuctDCoXQQy+hMiEn9TksTDi+6+Gf4PQINzart
-         LtTI72qPKb+iobj8z9hbab1X5YS/fU1JKp/xQjFq/EFDP+A6xpwg4eOp1Tq8rBCaWcr9
-         YoyPLpvKEnOaPtEXBWzhDNK5jijYKBIbYB1cYvP7CpBd6UvjwUMbU2W5Q6cS2M+Zhztk
-         pkFDU3utnOonf8UA6pfn6d73XOH8BEhAR2qeAntM9gsG7/fBrbQ+vLUZ75GuV/th4TNS
-         LcpIac7kqkvIGbij2tz+5SEDp6sNa+IezIz0EYPkxvmEE/zVcr70sM9QNrRp77/vJbUl
-         b4AQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXQe8dHiKy1sHQYh87sOicaWBUOlX97/Hl27BZItH5ZkMRqsirmb9OGnXhRBI0639igkyw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLi0ZmlO8gKkZYqcjKIEKPCY9Ue6TnJsNM4VFmXNt2RFAdpBnR
-	tl2yDmQXDUBBrU+tRFsoNycYRZ+IwCwLyyX1qq8uCu6NWAjIjAxO3bLs+Nvb+rCojw==
-X-Gm-Gg: AZuq6aJLjzk1TS7ac/lJHsxYhUgEjLN/yli0a6NmhcWNA9O1Tvh1LkfLuCc3YnlNt4d
-	Vhg2cp8c3QL2mLczOJDXlh8siF/bnle3rQAo3UNQolzhciVXSAZ8GPfd79y09kid1WjZDd9Nksc
-	ZMY2BmiR65fBLKWQJPpdRZTopwLOrXZapHqYn24s3hnNUJP6eiRct3mfh7xOSaU/nXrmjORGc1K
-	yTrK0Oaz88ODjDCFK4jSzQ6I4D8d6ta0bSsGCDsia+PLju/Me0dPb8gcYhroqABJmxiKJKbSVBW
-	ko+eWOJBFpySXrqYRhuLW3DFOz6cf0KS2Qc8XFgUJNFiPp5Xh41upt6LO0SMOIm/D2lw5NgooEG
-	5aCdN2KeEGMJrBRIkv9DhmdZzyUyTKTVQ7AVb/0yFQ1I8odpzodIwacQMQCKB55khYO3CfsIUPm
-	ZF71B/Y9pBK3wqz8lDjkryLvFsYU5RiZSjLcAEspKf5GRY03z6azgVYWcjMoGlpjU=
-X-Received: by 2002:a17:907:d8b:b0:b87:1c20:7c63 with SMTP id a640c23a62f3a-b90819bfa47mr720467266b.20.1771895765741;
-        Mon, 23 Feb 2026 17:16:05 -0800 (PST)
-Received: from google.com (93.50.90.34.bc.googleusercontent.com. [34.90.50.93])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084e4bf5dsm379639166b.32.2026.02.23.17.16.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Feb 2026 17:16:04 -0800 (PST)
-Date: Tue, 24 Feb 2026 01:16:01 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>,
-	KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	Lennart Poettering <lennart@poettering.net>
-Subject: Re: [PATCH 1/4] ns: add bpf hooks
-Message-ID: <aZz70R4zeFajNUls@google.com>
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
- <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Zr2tuinD"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771897456;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KDH5UCfSXMtCyw0n1KltQLsnu2EYcYJTR+B1IFVFXIU=;
+	b=Zr2tuinDz/y5CiYudbmHG+PNBkfx86T+C/KxIQt8qNsUThOQiG+bg+m0RRXnbsbAWff7XO
+	BewZzQs+uT3nTIawmEnfnWiA1Ve62zGSwXsHhwzLvNDrPvOz+JwtGzduH/oenMRlsSv06s
+	fB9NRoEUtv2ceZee07DdRJWv6LwbS78=
+From: Menglong Dong <menglong.dong@linux.dev>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Menglong Dong <menglong8.dong@gmail.com>, andrii@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+ eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next] libbpf: skip compat check for session kfuncs
+Date: Tue, 24 Feb 2026 09:43:57 +0800
+Message-ID: <5968298.DvuYhMxLoT@7940hx>
+In-Reply-To:
+ <CAEf4BzYJPue8VN59buLAaxL_SfbnHQQXs7nQn6_2t6=E_CppvQ@mail.gmail.com>
+References:
+ <20260211125737.1315848-1-dongml2@chinatelecom.cn>
+ <5968554.DvuYhMxLoT@7950hx>
+ <CAEf4BzYJPue8VN59buLAaxL_SfbnHQQXs7nQn6_2t6=E_CppvQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Migadu-Flow: FLOW_OUT
 
-On Fri, Feb 20, 2026 at 01:38:29AM +0100, Christian Brauner wrote:
-> Add the three namespace lifecycle hooks and make them available to bpf
-> lsm program types. This allows bpf to supervise namespace creation. I'm
-> in the process of adding various "universal truth" bpf programs to
-> systemd that will make use of this. This e.g., allows to lock in a
-> program into a given set of namespaces.
-> 
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-> ---
->  include/linux/bpf_lsm.h | 21 +++++++++++++++++++++
->  kernel/bpf/bpf_lsm.c    | 25 +++++++++++++++++++++++++
->  kernel/nscommon.c       |  9 ++++++++-
->  kernel/nsproxy.c        |  7 +++++++
->  4 files changed, 61 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-> index 643809cc78c3..5ae438fdf567 100644
-> --- a/include/linux/bpf_lsm.h
-> +++ b/include/linux/bpf_lsm.h
-> @@ -12,6 +12,9 @@
->  #include <linux/bpf_verifier.h>
->  #include <linux/lsm_hooks.h>
->  
-> +struct ns_common;
-> +struct nsset;
-> +
->  #ifdef CONFIG_BPF_LSM
->  
->  #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-> @@ -48,6 +51,11 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func)
->  
->  int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
->  			     struct bpf_retval_range *range);
-> +
-> +int bpf_lsm_namespace_alloc(struct ns_common *ns);
-> +void bpf_lsm_namespace_free(struct ns_common *ns);
-> +int bpf_lsm_namespace_install(struct nsset *nsset, struct ns_common *ns);
-> +
->  int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
->  				const struct bpf_dynptr *value_p, int flags);
->  int bpf_remove_dentry_xattr_locked(struct dentry *dentry, const char *name__str);
-> @@ -104,6 +112,19 @@ static inline bool bpf_lsm_has_d_inode_locked(const struct bpf_prog *prog)
->  {
->  	return false;
->  }
-> +
-> +static inline int bpf_lsm_namespace_alloc(struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
-> +static inline void bpf_lsm_namespace_free(struct ns_common *ns)
-> +{
-> +}
-> +static inline int bpf_lsm_namespace_install(struct nsset *nsset,
-> +					    struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
->  #endif /* CONFIG_BPF_LSM */
->  
->  #endif /* _LINUX_BPF_LSM_H */
-> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> index 0c4a0c8e6f70..f6378db46220 100644
-> --- a/kernel/bpf/bpf_lsm.c
-> +++ b/kernel/bpf/bpf_lsm.c
-> @@ -30,10 +30,32 @@ __weak noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
->  #include <linux/lsm_hook_defs.h>
->  #undef LSM_HOOK
->  
-> +__bpf_hook_start();
-> +
-> +__weak noinline int bpf_lsm_namespace_alloc(struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
-> +
-> +__weak noinline void bpf_lsm_namespace_free(struct ns_common *ns)
-> +{
-> +}
-> +
-> +__weak noinline int bpf_lsm_namespace_install(struct nsset *nsset,
-> +					  struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
-> +
-> +__bpf_hook_end();
+On 2026/2/24 03:09 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
+> On Sun, Feb 22, 2026 at 6:16=E2=80=AFAM Menglong Dong <menglong.dong@linu=
+x.dev> wrote:
+> >
+> > On 2026/2/12 01:20, Andrii Nakryiko wrote:
+> > > On Wed, Feb 11, 2026 at 4:57=E2=80=AFAM Menglong Dong <menglong8.dong=
+@gmail.com> wrote:
+> > > >
+> > > > The function prototype of bpf_session_{cookie,is_return} is changed=
+ in
+> > > > the commit 8fe4dc4f6456 ("bpf: change prototype of
+> > > > bpf_session_{cookie,is_return}"), which is not friendly to the old =
+kernel,
+> > > > as the libbpf will fail on the compatible checking.
+> > > >
+> > > > Therefore, let's skip the checking of bpf_session_{cookie,is_return=
+} in
+> > > > libbpf, and just let the kernel do the checking.
+> > > >
+> > > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
+> > > > ---
+> > > >  tools/lib/bpf/libbpf.c | 31 ++++++++++++++++++++-----------
+> > > >  1 file changed, 20 insertions(+), 11 deletions(-)
+> > > >
+> > >
+> > > This is not the way. Use bpf_ksym_exists() check and have custom
+> > > legacy bpf_session_cookie___legacy() definition with old prototype.
+> > > You can then detect whether
+> > > bpf_ksym_exists(bpf_session_cookie___legacy) is true and use the
+> > > legacy version, otherwise use the current version.
+> >
+> > Great! I found that there are already similar usages in kernel.
+> > I did some tests, and it works well. Thanks!
+> >
+> > BTW, do you think that if we need do some wrapper for bpf_session_{cook=
+ie,is_return}
+> > like this in case that someone else don't know the compatible problem?
+> >
+> > extern bool bpf_session_is_return___legacy(void) __weak __ksym;
+> > extern __u64 *bpf_session_cookie___legacy(void) __weak __ksym;
+> >
+> >
+> > #define bpf_session_is_return(ctx)                                     =
+                         \
+> >         (bpf_ksym_exists(bpf_session_is_return___legacy) ? bpf_session_=
+is_return___legacy() :   \
+> >                                                            bpf_session_=
+is_return(ctx))
+> > #define bpf_session_cookie(ctx)                                        =
+                 \
+> >         (bpf_ksym_exists(bpf_session_cookie___legacy) ? bpf_session_coo=
+kie___legacy() : \
+> >                                                         bpf_session_coo=
+kie(ctx))
+> >
+>=20
+> I'd like to avoid carrying this in libbpf forever, tbh. One reason we
+> decided to break bpf_session_xxx() helpers is because almost no one is
+> using them in any serious capacity, so I'm thinking it's fine to just
+> have this workaround live in your code base as an early session
+> adopter.
 
-Is the usage of __bpf_hook_start()/__bpf_hook_end() strictly necessary
-here? If so, why is that? My understanding was that they're only
-needed in situations where public function prototypes don't exist
-(e.g., BPF kfuncs).
+OK!
 
->  #define LSM_HOOK(RET, DEFAULT, NAME, ...) BTF_ID(func, bpf_lsm_##NAME)
->  BTF_SET_START(bpf_lsm_hooks)
->  #include <linux/lsm_hook_defs.h>
->  #undef LSM_HOOK
-> +BTF_ID(func, bpf_lsm_namespace_alloc)
-> +BTF_ID(func, bpf_lsm_namespace_free)
-> +BTF_ID(func, bpf_lsm_namespace_install)
->  BTF_SET_END(bpf_lsm_hooks)
->  
->  BTF_SET_START(bpf_lsm_disabled_hooks)
-> @@ -383,6 +405,8 @@ BTF_ID(func, bpf_lsm_task_prctl)
->  BTF_ID(func, bpf_lsm_task_setscheduler)
->  BTF_ID(func, bpf_lsm_task_to_inode)
->  BTF_ID(func, bpf_lsm_userns_create)
-> +BTF_ID(func, bpf_lsm_namespace_alloc)
-> +BTF_ID(func, bpf_lsm_namespace_install)
->  BTF_SET_END(sleepable_lsm_hooks)
->  
->  BTF_SET_START(untrusted_lsm_hooks)
-> @@ -395,6 +419,7 @@ BTF_ID(func, bpf_lsm_sk_alloc_security)
->  BTF_ID(func, bpf_lsm_sk_free_security)
->  #endif /* CONFIG_SECURITY_NETWORK */
->  BTF_ID(func, bpf_lsm_task_free)
-> +BTF_ID(func, bpf_lsm_namespace_free)
->  BTF_SET_END(untrusted_lsm_hooks)
->  
->  bool bpf_lsm_is_sleepable_hook(u32 btf_id)
-> diff --git a/kernel/nscommon.c b/kernel/nscommon.c
-> index bdc3c86231d3..c3613cab3d41 100644
-> --- a/kernel/nscommon.c
-> +++ b/kernel/nscommon.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /* Copyright (c) 2025 Christian Brauner <brauner@kernel.org> */
->  
-> +#include <linux/bpf_lsm.h>
->  #include <linux/ns_common.h>
->  #include <linux/nstree.h>
->  #include <linux/proc_ns.h>
-> @@ -77,6 +78,7 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
->  		ret = proc_alloc_inum(&ns->inum);
->  	if (ret)
->  		return ret;
-> +
->  	/*
->  	 * Tree ref starts at 0. It's incremented when namespace enters
->  	 * active use (installed in nsproxy) and decremented when all
-> @@ -86,11 +88,16 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
->  		atomic_set(&ns->__ns_ref_active, 1);
->  	else
->  		atomic_set(&ns->__ns_ref_active, 0);
-> -	return 0;
-> +
-> +	ret = bpf_lsm_namespace_alloc(ns);
-> +	if (ret && !inum)
-> +		proc_free_inum(ns->inum);
-> +	return ret;
->  }
->  
->  void __ns_common_free(struct ns_common *ns)
->  {
-> +	bpf_lsm_namespace_free(ns);
->  	proc_free_inum(ns->inum);
->  }
->  
-> diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
-> index 259c4b4f1eeb..5742f9664dbb 100644
-> --- a/kernel/nsproxy.c
-> +++ b/kernel/nsproxy.c
-> @@ -9,6 +9,7 @@
->   *             Pavel Emelianov <xemul@openvz.org>
->   */
->  
-> +#include <linux/bpf_lsm.h>
->  #include <linux/slab.h>
->  #include <linux/export.h>
->  #include <linux/nsproxy.h>
-> @@ -379,6 +380,12 @@ static int prepare_nsset(unsigned flags, struct nsset *nsset)
->  
->  static inline int validate_ns(struct nsset *nsset, struct ns_common *ns)
->  {
-> +	int ret;
-> +
-> +	ret = bpf_lsm_namespace_install(nsset, ns);
-> +	if (ret)
-> +		return ret;
-> +
->  	return ns->ops->install(nsset, ns);
->  }
->  
-> 
-> -- 
-> 2.47.3
-> 
+>=20
+> > Thanks!
+> > Menglong Dong
+> >
+> > >
+> > > pw-bot: cr
+> > >
+> > >
+> > > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > > > index 0c8bf0b5cce4..71bdd1c1ac39 100644
+> > > > --- a/tools/lib/bpf/libbpf.c
+> > > > +++ b/tools/lib/bpf/libbpf.c
+> > > > @@ -8557,6 +8557,12 @@ static int find_ksym_btf_id(struct bpf_objec=
+t *obj, const char *ksym_name,
+> > > >         return id;
+> > > >  }
+> > > >
+> > > > +static bool kfunc_skip_compat_check(const char *name)
+> > > > +{
+> > > > +       return name && (strcmp(name, "bpf_session_cookie") =3D=3D 0=
+ ||
+> > > > +                       strcmp(name, "bpf_session_is_return") =3D=
+=3D 0);
+> > > > +}
+> > > > +
+> > > >  static int bpf_object__resolve_ksym_var_btf_id(struct bpf_object *=
+obj,
+> > > >                                                struct extern_desc *=
+ext)
+> > > >  {
+> > > > @@ -8617,12 +8623,13 @@ static int bpf_object__resolve_ksym_func_bt=
+f_id(struct bpf_object *obj,
+> > > >         struct module_btf *mod_btf =3D NULL;
+> > > >         const struct btf_type *kern_func;
+> > > >         struct btf *kern_btf =3D NULL;
+> > > > +       const char *kfunc_name;
+> > > >         int ret;
+> > > >
+> > > >         local_func_proto_id =3D ext->ksym.type_id;
+> > > >
+> > > > -       kfunc_id =3D find_ksym_btf_id(obj, ext->essent_name ?: ext-=
+>name, BTF_KIND_FUNC, &kern_btf,
+> > > > -                                   &mod_btf);
+> > > > +       kfunc_name =3D ext->essent_name ?: ext->name;
+> > > > +       kfunc_id =3D find_ksym_btf_id(obj, kfunc_name, BTF_KIND_FUN=
+C, &kern_btf, &mod_btf);
+> > > >         if (kfunc_id < 0) {
+> > > >                 if (kfunc_id =3D=3D -ESRCH && ext->is_weak)
+> > > >                         return 0;
+> > > > @@ -8634,16 +8641,18 @@ static int bpf_object__resolve_ksym_func_bt=
+f_id(struct bpf_object *obj,
+> > > >         kern_func =3D btf__type_by_id(kern_btf, kfunc_id);
+> > > >         kfunc_proto_id =3D kern_func->type;
+> > > >
+> > > > -       ret =3D bpf_core_types_are_compat(obj->btf, local_func_prot=
+o_id,
+> > > > -                                       kern_btf, kfunc_proto_id);
+> > > > -       if (ret <=3D 0) {
+> > > > -               if (ext->is_weak)
+> > > > -                       return 0;
+> > > > +       if (!kfunc_skip_compat_check(kfunc_name)) {
+> > > > +               ret =3D bpf_core_types_are_compat(obj->btf, local_f=
+unc_proto_id,
+> > > > +                                               kern_btf, kfunc_pro=
+to_id);
+> > > > +               if (ret <=3D 0) {
+> > > > +                       if (ext->is_weak)
+> > > > +                               return 0;
+> > > >
+> > > > -               pr_warn("extern (func ksym) '%s': func_proto [%d] i=
+ncompatible with %s [%d]\n",
+> > > > -                       ext->name, local_func_proto_id,
+> > > > -                       mod_btf ? mod_btf->name : "vmlinux", kfunc_=
+proto_id);
+> > > > -               return -EINVAL;
+> > > > +                       pr_warn("extern (func ksym) '%s': func_prot=
+o [%d] incompatible with %s [%d]\n",
+> > > > +                               ext->name, local_func_proto_id,
+> > > > +                               mod_btf ? mod_btf->name : "vmlinux"=
+, kfunc_proto_id);
+> > > > +                       return -EINVAL;
+> > > > +               }
+> > > >         }
+> > > >
+> > > >         /* set index for module BTF fd in fd_array, if unset */
+> > > > --
+> > > > 2.53.0
+> > > >
+> > >
+> > >
+> >
+> >
+> >
+> >
+
+
+
+
