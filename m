@@ -1,32 +1,32 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49EAA3A63E1
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 15:42:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5843A6409;
+	Tue, 24 Feb 2026 15:42:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771947775; cv=none; b=LW/loojKkzErEsBx7NDe83RoXuZB71iGKEF4Tj9RhC5a2h/NZQH7zH8UJOKT3b8OEo+Unkn1Zr8mu8eFRdsfIA8BtyjUymUfLHxtLRR+lagBNqfxF3g2aFq9ICjdJZF1EFosFWhOWe/m3TYh4wXvEFvHaysMh36dQUdpSge1rNU=
+	t=1771947779; cv=none; b=t5glbqpG/U2bs/6rRvkrC0PpO6wJl2aTM6FzL+vxnfbqnI7iJA8ebC6ZlrQUOdtj4PEs/9BDK8q5s2EJWGIHiavHUZkwoGYqsENwIITKcP4LZDGEho9h2Sb50N0zdSW2TgMEOnUUfKbYQv/+pcUNChx9QPzX5R4hu5zyKVTRAiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771947775; c=relaxed/simple;
-	bh=NHdxzPJAtBr7xEqxXkZkD/fNi+zTIHjksONscrsRtW8=;
+	s=arc-20240116; t=1771947779; c=relaxed/simple;
+	bh=f849xKyoZAajEGHjpBZZX77DXEVvDQzC30RhKa7IJuQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sWagyekuN8rj2IYKSfXJWwFzhssWrFIf2HtuqRb4BqGFlDco28w4bpPZTLXWMNlOBYdlY0lY21G7p0thNrsa9sfP1RZQNv0566pM1Dw5119QFDO2b+8bwQYx+02ZWMHKpJEUEpO9MPBUPw4RMvhrWgVr8JpS/QvjGh20VyOETd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vTMgeP0c; arc=none smtp.client-ip=91.218.175.185
+	 MIME-Version; b=gpIZyd+VEwmnXgJab0Y/cK0RZxLpChQQfCqOE0IlreO/J7cLJuTU2IyegM1yVWKtPFjyLMGsrNAzeNJI/B/fqyvQekA7fWJRRB1wYoLEbxrtfV84fDoZFswG7q/w7gGJuBBmzMtGdCMsa8otQ8XnJDqIjh4lqx8DyPxv/k3NN8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GVMrA6rW; arc=none smtp.client-ip=91.218.175.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vTMgeP0c"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GVMrA6rW"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771947772;
+	t=1771947765;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2BOzvXBrvd4MIf2KjLhTZ2sIZQ/Qdk4vFnBFVzdfMQ4=;
-	b=vTMgeP0c81KkszjqgGD3qGWLo9OUqlvVh5hqfG5GnjurGp7dmWbzvJ/c8gpg91aDTRL4Fy
-	jeJwIeQhFjqSgDGz6bI7sLXaDO0E3AQyQ7kR/2Ba14ip54n/OSjfcBJAh0bcF2xQoEIB7H
-	nehxhSl5Kih1JtL4lCXATJnSz+7upuY=
+	bh=BJFu39HW6jkSyHpZDpx94eEtrHBuJjXZaAVXvr0cMw0=;
+	b=GVMrA6rW0c99pjcn5e96vFYBY1ETaJKSNpNlkk7cNHwOOR90o6NpkBH+s0SzgoEYbqkZMZ
+	Ts+NmrtYx/bRwSVCM3kikcfF7SE/wHQ9rppddZkUt0gmLow9yXpdIjf+5+rHGfHnpl41jo
+	6MaU+ltZq5yHbC9eVqYhE62PQc2yoyU=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -52,9 +52,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next 7/8] selftests/bpf: Add a test to verify call_get_func_ip compatibility enforcement
-Date: Tue, 24 Feb 2026 23:40:23 +0800
-Message-ID: <20260224154024.12504-8-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 6/8] selftests/bpf: Add a test to verify kprobe_write_ctx compatibility enforcement
+Date: Tue, 24 Feb 2026 23:40:22 +0800
+Message-ID: <20260224154024.12504-7-leon.hwang@linux.dev>
 In-Reply-To: <20260224154024.12504-1-leon.hwang@linux.dev>
 References: <20260224154024.12504-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -66,59 +66,55 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Add prog_array coverage for tracing programs that differ in
-bpf_get_func_ip() dependency.
+Add prog_array coverage for kprobe programs with and without
+kprobe_write_ctx requirements.
 
-The test verifies one-way enforcement: !call_get_func_ip programs
-cannot tail-call call_get_func_ip programs.
+The test verifies one-way enforcement: !kprobe_write_ctx programs
+cannot tail-call kprobe_write_ctx programs.
 
 Assisted-by: Codex:gpt-5.3-codex
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- .../bpf/prog_tests/get_func_ip_test.c         | 46 +++++++++++++++++++
- .../selftests/bpf/progs/get_func_ip_test.c    |  6 +++
- 2 files changed, 52 insertions(+)
+ .../selftests/bpf/prog_tests/attach_probe.c   | 44 +++++++++++++++++++
+ .../selftests/bpf/progs/kprobe_write_ctx.c    |  6 +++
+ 2 files changed, 50 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-index 7772a0f288d3..670457d4e159 100644
---- a/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/prog_tests/get_func_ip_test.c
-@@ -139,3 +139,49 @@ void test_get_func_ip_test(void)
- 	test_function_entry();
- 	test_function_body();
+diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+index 9e77e5da7097..a9444db92246 100644
+--- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
++++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
+@@ -220,11 +220,53 @@ static void test_attach_kprobe_write_ctx(void)
+ 
+ 	kprobe_write_ctx__destroy(skel);
  }
 +
-+static void test_prog_array_call_get_func_ip_compat(void)
++static void test_kprobe_write_ctx_prog_array_compat(void)
 +{
-+	__u32 key = 0, with_get_func_ip_fd, without_get_func_ip_fd;
-+	struct get_func_ip_test *skel = NULL;
++	__u32 key = 0, read_prog_fd, write_prog_fd;
++	struct kprobe_write_ctx *skel = NULL;
 +	int map_fd = -1, err;
 +
-+	skel = get_func_ip_test__open();
-+	if (!ASSERT_OK_PTR(skel, "get_func_ip_test__open"))
++	skel = kprobe_write_ctx__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "kprobe_write_ctx__open_and_load"))
 +		return;
-+
-+	err = get_func_ip_test__load(skel);
-+	if (!ASSERT_OK(err, "get_func_ip_test__load"))
-+		goto cleanup;
-+
-+	with_get_func_ip_fd = bpf_program__fd(skel->progs.test1);
-+	without_get_func_ip_fd = bpf_program__fd(skel->progs.test1_dummy);
-+	if (!ASSERT_GE(with_get_func_ip_fd, 0, "with_get_func_ip_fd"))
-+		goto cleanup;
-+	if (!ASSERT_GE(without_get_func_ip_fd, 0, "without_get_func_ip_fd"))
-+		goto cleanup;
 +
 +	map_fd = bpf_map_create(BPF_MAP_TYPE_PROG_ARRAY, NULL, sizeof(key),
 +				sizeof(__u32), 1, NULL);
 +	if (!ASSERT_GE(map_fd, 0, "bpf_map_create"))
 +		goto cleanup;
 +
-+	err = bpf_map_update_elem(map_fd, &key, &without_get_func_ip_fd, BPF_ANY);
++	read_prog_fd = bpf_program__fd(skel->progs.kprobe_read_ctx);
++	write_prog_fd = bpf_program__fd(skel->progs.kprobe_write_ctx);
++	if (!ASSERT_GE(read_prog_fd, 0, "read_prog_fd"))
++		goto cleanup;
++	if (!ASSERT_GE(write_prog_fd, 0, "write_prog_fd"))
++		goto cleanup;
++
++	err = bpf_map_update_elem(map_fd, &key, &read_prog_fd, BPF_ANY);
 +	if (!ASSERT_OK(err, "bpf_map_update_elem success"))
 +		goto cleanup;
 +
-+	err = bpf_map_update_elem(map_fd, &key, &with_get_func_ip_fd, BPF_ANY);
++	err = bpf_map_update_elem(map_fd, &key, &write_prog_fd, BPF_ANY);
 +	if (!ASSERT_ERR(err, "bpf_map_update_elem failure"))
 +		goto cleanup;
 +	ASSERT_EQ(errno, EINVAL, "bpf_map_update_elem errno");
@@ -126,30 +122,47 @@ index 7772a0f288d3..670457d4e159 100644
 +cleanup:
 +	if (map_fd >= 0)
 +		close(map_fd);
-+	get_func_ip_test__destroy(skel);
++	kprobe_write_ctx__destroy(skel);
 +}
+ #else
+ static void test_attach_kprobe_write_ctx(void)
+ {
+ 	test__skip();
+ }
 +
-+void test_get_func_ip_test_prog_map_compatible(void)
++static void test_kprobe_write_ctx_prog_array_compat(void)
 +{
-+	test_prog_array_call_get_func_ip_compat();
++	test__skip();
 +}
-diff --git a/tools/testing/selftests/bpf/progs/get_func_ip_test.c b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-index 45eaa54d1ac7..6a7d306af96e 100644
---- a/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-+++ b/tools/testing/selftests/bpf/progs/get_func_ip_test.c
-@@ -32,6 +32,12 @@ int BPF_PROG(test1, int a)
+ #endif
+ 
+ static void test_attach_probe_auto(struct test_attach_probe *skel)
+@@ -434,6 +476,8 @@ void test_attach_probe(void)
+ 		test_attach_kprobe_long_event_name();
+ 	if (test__start_subtest("kprobe-write-ctx"))
+ 		test_attach_kprobe_write_ctx();
++	if (test__start_subtest("kprobe-write-ctx-prog-array-compat"))
++		test_kprobe_write_ctx_prog_array_compat();
+ 
+ cleanup:
+ 	test_attach_probe__destroy(skel);
+diff --git a/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c b/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
+index f77aef0474d3..09e0c487bde5 100644
+--- a/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
++++ b/tools/testing/selftests/bpf/progs/kprobe_write_ctx.c
+@@ -13,6 +13,12 @@ int kprobe_write_ctx(struct pt_regs *ctx)
  	return 0;
  }
  
-+SEC("fentry/bpf_fentry_test1")
-+int BPF_PROG(test1_dummy, int a)
++SEC("kprobe")
++int kprobe_read_ctx(struct pt_regs *ctx)
 +{
 +	return 0;
 +}
 +
- __u64 test2_result = 0;
- SEC("fexit/bpf_fentry_test2")
- int BPF_PROG(test2, int a)
+ SEC("kprobe.multi")
+ int kprobe_multi_write_ctx(struct pt_regs *ctx)
+ {
 -- 
 2.52.0
 
