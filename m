@@ -1,237 +1,242 @@
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A064732C94B
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 19:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A300D1EB5E1;
+	Tue, 24 Feb 2026 19:57:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771962835; cv=none; b=CbIGvBelUEBgBzX+OMt4H/AvkGlg+ffJdrewf3xJmQuv1xUog83TRew9brYdYQR4N2QB2qbCJ7bNXdFCtWGsfhHXZwm1FXJ6sFyjF9Xvc3J3oORQWVZidLhesZ0GNkvOgE3bQPC8ZU1jdPiShRizar0r58+7STzbNpNDYHE/PDI=
+	t=1771963049; cv=none; b=DsEQG2MMg4XZTOoWpL7qLBJPcPbzVu8r9JcBbpUV7nYG6RJ7uwrVg3IO9SEGhF1V72K/tdVky7j80nspAV9K7hmLHp5QYEh6EDVn6+wMejXMka1xmdqa1Tqjep5frvRh1zNLLf2M8rQ4oeb99P6tcPGs1ZqEySdnK0mahyL78/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771962835; c=relaxed/simple;
-	bh=CCjU8S6lsjGuCMaAsjN16QS01K4Xlt/A0FShrZNssWE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=nXktkssGPH1PPue90OBeLS1+oxgYQqvBj3vHezQJ7pry+KmGGBeBWzOe/LaHo53jBnKPiYk2zxGcx0P8vcD7BDxX/61F1yl1BOOgFWnynE7mBzXoTofpf8e1SQ2wdtyOETxFFF35v03fvFHFzUFdpr8ovY3imkyi5KIqTiCDGrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=b2M3OGXV; arc=none smtp.client-ip=209.85.222.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1771963049; c=relaxed/simple;
+	bh=vHN4WiwsviYKGU7NPR3b69HaTRTDvpBQ07QmvThnpAo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bfHMNiz5/gCVP9d9InY2qsEGRjjMnlLO2e71XDLcgd2oPw5n/z3CEQlUH6jL/93sf1miILxv5fctotQwiTQ9RIM7sgxC8tN3ND7lqBp16/One0sTXfFBGCQUpx7OU69VHRabLFT95VASUn6sMh7V2QhGRmICAFgnCKf0RE2MVJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X+7ajcfK; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="b2M3OGXV"
-Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8cb3e0093e3so581308985a.0
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 11:53:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1771962832; x=1772567632; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=drEVikMNesExIHat5CzTXNECw/7u3CktgSHrx0htbCk=;
-        b=b2M3OGXV0mmUveZtZpSH2nyQgqsAYUnKKZgzgfi7elbA8Ej83KCh9R9/j4F5WiFkoY
-         VUG/R5DLkF2gs03dsGGHvbKMULhPBUPSipRUMGdaxXiuLUFXuQx1nsMBbpMNS0io3OKE
-         YcUpUJcztQ7LtFmuSY44HU3cHR/pwH+h4Srnvn+j+wwr4hBAIsKofJ1d19djfCDni9r1
-         19tVXQJke2umo1DH+ABaXf6xKi5cDa7tCEHhORgRC+wcQ0BVyum9jwM6iOpFmo1mdMeb
-         lN+AOx2gSvsb5FOb+83gDNNYEqBmQiy3QeWFiz1gfTLWBmuC7SFMDWin3StK7/Z/bRjD
-         tPJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771962832; x=1772567632;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=drEVikMNesExIHat5CzTXNECw/7u3CktgSHrx0htbCk=;
-        b=c1LA4RrHtTkaGfLis2GY/ZEHePwamu65iBX42kw+V4rNkrSNU5oiRYIpcX9P+pmQ9X
-         ETFNjsMW5klfgS75VDVBNpTTtCshMNOoaKH71fDum5BQ46rNf6oRVkgbYE8Sf8HgjfUc
-         qMHSEHd4xABWz0WJNvGhaUUSM3P3UrH0W97L1AVK9g3G6O1mEP8W4PG8qWrBbXnVcy5l
-         52QHdM0vQuim/OPZdSjI04YRqjoT2H/YJ4vLz1v1Qka7pSW6bFGcUw300GmY40wMaGbI
-         Eb3kG5XNgodfju2fMp78q3xRURvttKvyY1tuDpStvIWoKMVTHA+rH40IH+GxC06UniKu
-         ikTw==
-X-Forwarded-Encrypted: i=1; AJvYcCVCg92DaDKQ3koBIxRRqrcXGnjSXs9+pt8yg1ESLcnsdY6sQsh/LorPoOvtFl4PJg/hL8A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXXlqlQM6DLyrzN2g+ocRHp7RBh4ZMWUG3AxTNHED9cTG7C0gG
-	T0FoKkWI4DhKKl2oogaBAlyFE49jvHCrc29WEN+cHgAyd4oz3HfpmzLvpI2Rezd1xBk=
-X-Gm-Gg: AZuq6aJ7O8LWrnOd8LTQ/okQEEGwGp0C7UrntM+lRgnIPEmkxJTQbK7QN/I+YF+eKNx
-	CsU7jB3VXBXwFmVGQa7k5nQTf1KnAIhv1i5PAfVvDX5eb1legIm3MhWhjXzcEN4xVb0VzzPa+Jn
-	4kkfaKisE2kofGT5B6fyuh+DMWNGdhQHHQQPuM/g4MCb7qKHY0YFfI63F3TS/1Ss5R+zEWKV61m
-	MYN+TwuL8jSALLF5CAkxNcv2pqyQMS9PYksJWx04UBBXevfQ4aHvKzW0O75boV7KvKlhru7xr8H
-	1xbYNOB3WX4fh9vOc1EqQaLCI8x/azsByYwPhSr65pBbPX/0cWY9FAWjVU54c2o4XCQHXmJco58
-	brd5RKDL7/d+YTgJK0JINtJGCzKBbV4czA56iFMVJrt3rQP0R8gqzgns2iOCFoRXKE9xJEChdA+
-	SH2Vuq5iejhaR64Hm6MTXlLJU=
-X-Received: by 2002:a05:620a:28d1:b0:8c6:a213:8fe0 with SMTP id af79cd13be357-8cb8c9fa4abmr1667348885a.23.1771962832091;
-        Tue, 24 Feb 2026 11:53:52 -0800 (PST)
-Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899b26ccd43sm8973776d6.50.2026.02.24.11.53.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Feb 2026 11:53:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X+7ajcfK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38AC0C116D0;
+	Tue, 24 Feb 2026 19:57:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771963049;
+	bh=vHN4WiwsviYKGU7NPR3b69HaTRTDvpBQ07QmvThnpAo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X+7ajcfKPeAdtZqjljWMKQRIcZtVodygtnxrFsXO9w7mERyeSNn50Mk62H6xfe8zb
+	 nYWZpTZVXcMhbhwEGX5Bu817mDX4qGUxkMKGkr6839G79GwCAokIh3QchN/pX8lwuC
+	 xNVajxKqAs78UJvQGIBYZiAlddWrjS5lvgmJ+x8fyKwQHnc374dsPfYVbQfSN70omT
+	 xohBzeUx0n7ltxEqrYtPzMMCWeQQV7O2Xx5wvmE5Jdr7g/mWF/psfeMxUPgKRs6V/t
+	 jeJfvViXWXCButyktOXuXHjFEveoOvCCVzsbKShD3H2WoXzYC5CR3bgGj+RqIF6NrY
+	 uaRu5x7sWu7wA==
+Date: Tue, 24 Feb 2026 11:57:28 -0800
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Joanne Koong <joannelkoong@gmail.com>
+Cc: miklos@szeredi.hu, bpf@vger.kernel.org, bernd@bsbernd.com,
+	neal@gompa.dev, linux-fsdevel@vger.kernel.org,
+	linux-ext4@vger.kernel.org
+Subject: Re: [PATCH 1/5] fuse: flush pending FUSE_RELEASE requests before
+ sending FUSE_DESTROY
+Message-ID: <20260224195728.GE13829@frogsfrogsfrogs>
+References: <177188733084.3935219.10400570136529869673.stgit@frogsfrogsfrogs>
+ <177188733133.3935219.4620873208351971726.stgit@frogsfrogsfrogs>
+ <CAJnrk1ZZ=1jF4DUF-NyedLP-BJM_5d3s0zfD4oHGyR51PM9E7Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 24 Feb 2026 14:53:50 -0500
-Message-Id: <DGNGEEL4AYE5.3EF1GJDZ1JG9D@etsalapatis.com>
-Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <martin.lau@kernel.org>, <memxor@gmail.com>, <song@kernel.org>,
- <yonghong.song@linux.dev>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Allow void global functions in the
- verifier
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.20.1
-References: <20260223215046.1706110-1-emil@etsalapatis.com>
- <20260223215046.1706110-2-emil@etsalapatis.com>
- <7fcfdf81aa76d816f7b5032d5b8a85302621fe64.camel@gmail.com>
- <DGNEYQZUKR83.25MVGRAQ05NSU@etsalapatis.com>
- <446bbdd8c843340e496c6059d6e1432f1708af59.camel@gmail.com>
-In-Reply-To: <446bbdd8c843340e496c6059d6e1432f1708af59.camel@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJnrk1ZZ=1jF4DUF-NyedLP-BJM_5d3s0zfD4oHGyR51PM9E7Q@mail.gmail.com>
 
-On Tue Feb 24, 2026 at 2:02 PM EST, Eduard Zingerman wrote:
-> On Tue, 2026-02-24 at 13:46 -0500, Emil Tsalapatis wrote:
->> On Mon Feb 23, 2026 at 7:09 PM EST, Eduard Zingerman wrote:
->> > On Mon, 2026-02-23 at 16:50 -0500, Emil Tsalapatis wrote:
->>=20
->> Ack on the comments for 2/2. For here:
->> >=20
->> > [...]
->> >=20
->> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> > > index 0162f946032f..e997c3776fa7 100644
->> > > --- a/kernel/bpf/verifier.c
->> > > +++ b/kernel/bpf/verifier.c
->> > > @@ -444,6 +444,29 @@ static bool subprog_is_global(const struct bpf_=
-verifier_env *env, int subprog)
->> > >  	return aux && aux[subprog].linkage =3D=3D BTF_FUNC_GLOBAL;
->> > >  }
->> > > =20
->> > > +static bool subprog_returns_void(struct bpf_verifier_env *env, int =
-subprog)
->> > > +{
->> > > +	const struct btf_type *type, *func, *func_proto;
->> > > +	const struct btf *btf =3D env->prog->aux->btf;
->> > > +	u32 btf_id;
->> > > +
->> > > +	btf_id =3D env->prog->aux->func_info[subprog].type_id;
->> > > +
->> > > +	func =3D btf_type_by_id(btf, btf_id);
->> > > +	if (verifier_bug_if(!func, env, "btf_id %u not found", btf_id))
->> > > +		return false;
->> > > +
->> > > +	func_proto =3D btf_type_by_id(btf, func->type);
->> > > +	if (verifier_bug_if(!func_proto, env, "btf_id %u not found", func-=
->type))
->> > > +		return false;
->> > > +
->> > > +	type =3D btf_type_skip_modifiers(btf, func_proto->type, NULL);
->> > > +	if (verifier_bug_if(!type, env, "btf_id %u not found", func_proto-=
->type))
->> > > +		return false;
->> > > +
->> >=20
->> > Nit: I there there are a few unnecessary 'verifier_bug_if()' checks he=
-re,
->> >      e.g. btf.c:btf_check_all_types() guarantees that func->type and f=
-unc_proto->type
->> >      would be valid.
->> >=20
->>=20
->> Ack, just to make sure I got it right at all the verifier_bug_if() are
->> unnecessary. unnecessary because the BTF is already checked. There's no =
-way we
->> have an existing type with invalid fields. We also know the subprog btf
->> ID is valid from check_btf_func_early that happens way before
->> do_check_subprogs where subprog_returns_void is used.
->
-> Certainly not needed for 'func->type' and 'func_proto->type' access.
-> For 'func_info[subprog].type_id', idk -- depends on how defensive you
-> want to be, I'd skip it as well.
->
->>=20
->> > > +	return btf_type_is_void(type);
->> > > +}
->> > > +
->> > >  static const char *subprog_name(const struct bpf_verifier_env *env,=
- int subprog)
->> > >  {
->> > >  	struct bpf_func_info *info;
->> >=20
->> > [...]
->> >=20
->> > > @@ -17812,6 +17837,16 @@ static int check_return_code(struct bpf_ver=
-ifier_env *env, int regno, const char
->> > > =20
->> > >  	/* LSM and struct_ops func-ptr's return type could be "void" */
->> > >  	if (!is_subprog || frame->in_exception_callback_fn) {
->> > > +
->> > > +		/*
->> > > +		 * If the actual program is an extension, let it
->> > > +		 * return void - attaching will succeed only if the
->> > > +		 * program being replaced also returns void, and since
->> > > +		 * it has passed verification its actual type doesn't matter.
->> > > +		 */
->> > > +		if (env->prog->type =3D=3D BPF_PROG_TYPE_EXT && subprog_returns_v=
-oid(env, frame->subprogno))
->> > > +			return 0;
->> > > +
->> > >  		switch (prog_type) {
->> > >  		case BPF_PROG_TYPE_LSM:
->> > >  			if (prog->expected_attach_type =3D=3D BPF_LSM_CGROUP)
->> > > @@ -17841,6 +17876,10 @@ static int check_return_code(struct bpf_ver=
-ifier_env *env, int regno, const char
->> > >  		default:
->> > >  			break;
->> > >  		}
->> > > +	} else {
->> > > +		/* If this is a void global subprog, there is no return value. */
->> > > +		if (subprog_is_global(env, frame->subprogno) && subprog_returns_v=
-oid(env, frame->subprogno))
->> > > +			return 0;
->> >=20
->> > Suppose a global subprogram is verified and it calls bpf_throw().
->> > check_return_code() is called from check_kfunc_call() in such case
->> > with R1 as a parameter.  This check acts on the return type of the
->> > program, will it miss proper return value check for the program?
->> >=20
->>=20
->> Due to the short-circuiting herea a void global program can bpf_throw()=
-=20
->> with no issue. This is what we want, correct? The return type we check=
-=20
->> in that case would always be that of the u64 cookie AFAICT.
->
-> I mean the following situation:
->
->   SEC(<I want some special return code>)
->   int foo(...) {
->     ... bar(...) ...;
->     return ...;
->   }
->
->   // global func
->   void bar(...) {=20
->     ... bpf_throw(<bad return code>) ...
->   }
->
-> In this case 'bar' would correspond to 'frame' in the check above and
-> <bad return code> won't be checked.
->
+On Tue, Feb 24, 2026 at 11:33:12AM -0800, Joanne Koong wrote:
+> On Mon, Feb 23, 2026 at 3:06 PM Darrick J. Wong <djwong@kernel.org> wrote:
+> >
+> > From: Darrick J. Wong <djwong@kernel.org>
+> >
+> > generic/488 fails with fuse2fs in the following fashion:
+> >
+> > generic/488       _check_generic_filesystem: filesystem on /dev/sdf is inconsistent
+> > (see /var/tmp/fstests/generic/488.full for details)
+> >
+> > This test opens a large number of files, unlinks them (which really just
+> > renames them to fuse hidden files), closes the program, unmounts the
+> > filesystem, and runs fsck to check that there aren't any inconsistencies
+> > in the filesystem.
+> >
+> > Unfortunately, the 488.full file shows that there are a lot of hidden
+> > files left over in the filesystem, with incorrect link counts.  Tracing
+> > fuse_request_* shows that there are a large number of FUSE_RELEASE
+> > commands that are queued up on behalf of the unlinked files at the time
+> > that fuse_conn_destroy calls fuse_abort_conn.  Had the connection not
+> > aborted, the fuse server would have responded to the RELEASE commands by
+> > removing the hidden files; instead they stick around.
+> >
+> > For upper-level fuse servers that don't use fuseblk mode this isn't a
+> > problem because libfuse responds to the connection going down by pruning
+> > its inode cache and calling the fuse server's ->release for any open
+> > files before calling the server's ->destroy function.
+> >
+> > For fuseblk servers this is a problem, however, because the kernel sends
+> > FUSE_DESTROY to the fuse server, and the fuse server has to write all of
+> > its pending changes to the block device before replying to the DESTROY
+> > request because the kernel releases its O_EXCL hold on the block device.
+> > This means that the kernel must flush all pending FUSE_RELEASE requests
+> > before issuing FUSE_DESTROY.
+> >
+> > For fuse-iomap servers this will also be a problem because iomap servers
+> > are expected to release all exclusively-held resources before unmount
+> > returns from the kernel.
+> >
+> > Create a function to push all the background requests to the queue
+> > before sending FUSE_DESTROY.  That way, all the pending file release
+> > events are processed by the fuse server before it tears itself down, and
+> > we don't end up with a corrupt filesystem.
+> >
+> > Note that multithreaded fuse servers will need to track the number of
+> > open files and defer a FUSE_DESTROY request until that number reaches
+> > zero.  An earlier version of this patch made the kernel wait for the
+> > RELEASE acknowledgements before sending DESTROY, but the kernel people
+> > weren't comfortable with adding blocking waits to unmount.
+> >
+> > Signed-off-by: "Darrick J. Wong" <djwong@kernel.org>
+> 
+> Overall LGTM, left a few comments below
+> 
+> Reviewed-by: Joanne Koong <joannelkoong@gmail.com>
 
-I see, yes this spuriously passes. Since the check_error_code only runs
-for BPF_EXIT and bpf_throw, can we just check if we're inspecting
-bpf_throw()'s return value like so?
+Thanks!
 
-bool is_bpf_throw =3D regno =3D=3D BPF_REG_1;
-...
-if (subprog_is_global(env, frame->subprogno) && subprog_returns_void(env, f=
-rame->subprogno)
-	&& !is_bpf_throw)
-...
+> > ---
+> >  fs/fuse/fuse_i.h |    5 +++++
+> >  fs/fuse/dev.c    |   19 +++++++++++++++++++
+> >  fs/fuse/inode.c  |   12 +++++++++++-
+> >  3 files changed, 35 insertions(+), 1 deletion(-)
+> >
+> >
+> > diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
+> > index 7f16049387d15e..1d4beca5c7018d 100644
+> > --- a/fs/fuse/fuse_i.h
+> > +++ b/fs/fuse/fuse_i.h
+> > @@ -1287,6 +1287,11 @@ void fuse_request_end(struct fuse_req *req);
+> >  void fuse_abort_conn(struct fuse_conn *fc);
+> >  void fuse_wait_aborted(struct fuse_conn *fc);
+> >
+> > +/**
+> > + * Flush all pending requests but do not wait for them.
+> > + */
+> 
+> nit: /*  */ comment style
 
-We only need to use this check in two places in check_error_code
-to solve the problem. With the fix we can also still throw from
-void global() functions.
+I'm very confused by the comment style in this header file.  Some of
+them look like kerneldoc comments (albeit not documenting the sole
+parameter), but others are just regular C comments.
 
->>=20
->> > >  	}
->> > > =20
->> > >  	/* eBPF calling convention is such that R0 is used
->> >=20
->> > [...]
+<shrug> I sorta dislike kerneldoc's fussiness so I'll change it to a C
+comment so that I don't have to propagate this "@param fc fuse
+connection" verbosity.
 
+> > +void fuse_flush_requests(struct fuse_conn *fc);
+> > +
+> >  /* Check if any requests timed out */
+> >  void fuse_check_timeout(struct work_struct *work);
+> >
+> > diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+> > index 0b0241f47170d4..ac9d7a7b3f5e68 100644
+> > --- a/fs/fuse/dev.c
+> > +++ b/fs/fuse/dev.c
+> > @@ -24,6 +24,7 @@
+> >  #include <linux/splice.h>
+> >  #include <linux/sched.h>
+> >  #include <linux/seq_file.h>
+> > +#include <linux/nmi.h>
+> 
+> I don't think you meant to add this?
+
+Yep, that was added for a previous iteration and can go away now.
+
+> >
+> >  #include "fuse_trace.h"
+> >
+> > @@ -2430,6 +2431,24 @@ static void end_polls(struct fuse_conn *fc)
+> >         }
+> >  }
+> >
+> > +/*
+> > + * Flush all pending requests and wait for them.  Only call this function when
+> 
+> I think you meant "don't wait" for them?
+
+Right.  Fixed.
+
+> > + * it is no longer possible for other threads to add requests.
+> > + */
+> > +void fuse_flush_requests(struct fuse_conn *fc)
+> > +{
+> > +       spin_lock(&fc->lock);
+> > +       spin_lock(&fc->bg_lock);
+> > +       if (fc->connected) {
+> > +               /* Push all the background requests to the queue. */
+> > +               fc->blocked = 0;
+> > +               fc->max_background = UINT_MAX;
+> > +               flush_bg_queue(fc);
+> > +       }
+> > +       spin_unlock(&fc->bg_lock);
+> > +       spin_unlock(&fc->lock);
+> > +}
+> > +
+> >  /*
+> >   * Abort all requests.
+> >   *
+> > diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
+> > index e57b8af06be93e..58c3351b467221 100644
+> > --- a/fs/fuse/inode.c
+> > +++ b/fs/fuse/inode.c
+> > @@ -2086,8 +2086,18 @@ void fuse_conn_destroy(struct fuse_mount *fm)
+> >  {
+> >         struct fuse_conn *fc = fm->fc;
+> >
+> > -       if (fc->destroy)
+> > +       if (fc->destroy) {
+> > +               /*
+> > +                * Flush all pending requests (most of which will be
+> > +                * FUSE_RELEASE) before sending FUSE_DESTROY, because the fuse
+> > +                * server must close the filesystem before replying to the
+> > +                * destroy message, because unmount is about to release its
+> > +                * O_EXCL hold on the block device.  We don't wait, so libfuse
+> > +                * has to do that for us.
+> 
+> nit: imo the "because the fuse server must close the filesystem before
+> replying to the destroy message, because..." part is confusing. Even
+> if that weren't true, the pending requests would still have to be sent
+> before the destroy, no? i think it would be less confusing if that
+> part of the paragraph was removed. I think it might be better to
+> remove the "we don't wait, so libfuse has to do that for us" part too
+> or rewording it to something like "flushed requests are sent before
+> the FUSE_DESTROY. Userspace is responsible for ensuring flushed
+> requests are handled before replying to the FUSE_DESTROY".
+
+How about I simplify it to:
+
+	/*
+	 * Flush all pending requests before sending FUSE_DESTROY.  The
+	 * fuse server must reply to the flushed requests before
+	 * handling FUSE_DESTROY because unmount is about to release
+	 * its O_EXCL hold on the block device.
+	 */
+
+--D
+
+> 
+> Thanks,
+> Joanne
+> 
+> > +                */
+> > +               fuse_flush_requests(fc);
+> >                 fuse_send_destroy(fm);
+> > +       }
+> >
+> >         fuse_abort_conn(fc);
+> >         fuse_wait_aborted(fc);
+> >
+> 
