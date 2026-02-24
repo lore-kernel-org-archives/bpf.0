@@ -1,196 +1,206 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71ED62DCF74
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771965405; cv=none; b=Kz9+MXtAdk7N66ivtgQoKeirGp8uKRyQxKQKemYhkXNNAMmder8w4c6MBboyiYYhLjDX74xRdyseTM6TYnMqIBsjhDu74VA8plpDFJGUCVs/puNHVmaAqOi8iss1gHCxLFxSvb7AFjx3TJVYrQb7GWbW0TJLLFWcbGfPI6hcxD4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771965405; c=relaxed/simple;
-	bh=WnkX3o/UUVXeqvXLVVHx+EDgLzI1tBcK2/ihc1fOEuM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aZD7hP2g0c4DSM/u1iaPbG+LJhK3/oxMYDScnIbDd0hyvXsqaetzd8lvHXJQxmqx8NwtYWp9UJ6YTqSNrwrHBXbI+lMjPPKbTQqYbQWfMzKA1t40Cw7LzxhYBOw5dppOQGjyUdmPpLJZbFtOjCCCsrS8JKSHRSx0enytZ1tFZ58=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=fZc1G0dn; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C543125B1C7
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:42:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.152.16
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771965738; cv=pass; b=ZL59a9eN42/V28gtIXvAKd6fy0wyY2qMDxPBFmzc05A4CZlVSMicLlpKc4eEbjJDFAA4SXkvJg+qMbI3qhXXY2fpOTjTC/yjApGcLdZBptFiUShe43XcPO6X0yvsnRQ0aqYd1cbAJrJbFXJrQdkCq0y6pD9Pe20Id4yQeoqYDEk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771965738; c=relaxed/simple;
+	bh=mnISPsJImprH168AWpbgdFRVqAmxfR7AIlg8dt16f00=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rNaJ68lKQ9GFbDWRQG32gHo4hgVlYdqfYL/Ig8M1Gg6NaCJi8WhhUzy+BKSxBxVUYeetE9AGTIehb4r2mbYQTc8lKRm7WUh1m74IsRmYasyrZNpxnbSdb+TiJf1gIX6u2uz2S6kh4pJqwnjP3TjH2yi6SqdAeOdZN1v+/hh3x0Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=bLwUVwVO; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=N+g8xVZs; arc=pass smtp.client-ip=148.163.152.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fZc1G0dn"
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OKNk9H2582842;
-	Tue, 24 Feb 2026 20:36:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=LDKruURJptjtqC3/O
-	5C7mqtiXapJ5l0fal5Ut14TaTI=; b=fZc1G0dnQiSqKOIPD3z28q+TpmgaMAgHi
-	90lqOZrwqzRt1dtTAulTb0/B5toZbWo0G9nJ9OnACrasD0jYA5kgSk3KMBxgQsoW
-	sAl2CZSqld4nThFIbUEp4WH6AAwSn5fXa40POAbbC9RslyB+PREw3eaj5y8VZkit
-	46rXrrTtwAHszKjE5/IF15FljKEogbWcUf7xaWY/bd9CIJFprfojEu30hev2komB
-	Wvt/zELhU2rjJNFUCe3dn/R/GOR6gmUrTouSSuHYZbNFdwtO+KlfuCosvgyd9Ckj
-	G6i0ebNsgH2flxWsnG4/ohg2Km/F75BdFnLlDumLYd3o1kXsQm+7g==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf24gd2bq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Feb 2026 20:36:28 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61OGf8IE015789;
-	Tue, 24 Feb 2026 20:36:27 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfq1sjnb1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Feb 2026 20:36:27 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61OKaO0252429172
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Feb 2026 20:36:24 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1DA7D2004B;
-	Tue, 24 Feb 2026 20:36:24 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9330820040;
-	Tue, 24 Feb 2026 20:36:22 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 24 Feb 2026 20:36:22 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: linuxppc-dev@lists.ozlabs.org
-Cc: bpf@vger.kernel.org, hbathini@linux.ibm.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, maddy@linux.ibm.com,
-        Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH 4/4] selftest/bpf: Add tailcall verifier selftest for powerpc64
-Date: Tue, 24 Feb 2026 20:36:27 -0500
-Message-ID: <20260225013627.22098-5-adubey@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260225013627.22098-1-adubey@linux.ibm.com>
-References: <20260225013627.22098-1-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="bLwUVwVO";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="N+g8xVZs"
+Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OKalB01595629
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:42:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=default; bh=WlZGPMdZypZmN+ZFMakIn+2UUV
+	GCEw9NXdFUQ2o1k8M=; b=bLwUVwVO9h8WftaNjcSYOxMZWjl0jV8aHsFRJ5E8mr
+	azjqzd4vIwz8oEfGeMjw6TeCtU7YVF+5s2xVRWWVurca4S+bclbABBc5d1LUcb2P
+	Mo8oSkXtGRLkWNgLTe4eMSVZE+g5J2L7V9gJa/0kBElleKnEibbHXr5q+X+wWRb4
+	YtzF6XAsjfC0d6fuwoPjy9JpWCO3RBO3CeZ6FAsVT+AVuMyu71Qs6Gq0y0B5w/zh
+	2khiJNSt2V2wguEMuOjSpeqoY/Xhp+CLHi7/b1ISgO2cPazhJiOiG3FdcaB+wrYZ
+	+dgNuet+8BtOLFDuGpH61Vh3BPeHbWFRFhRlRJFVs0VA==
+Received: from mail-yw1-f199.google.com (mail-yw1-f199.google.com [209.85.128.199])
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4chk66r0kw-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:42:15 +0000 (GMT)
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-797a92852d3so94981307b3.2
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:42:15 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771965735; cv=none;
+        d=google.com; s=arc-20240605;
+        b=XG9oGZL5jl9wMRHfvnuJoQlTfwKz7zl5LuQIW9hR8ljjQ4P0ItEgxQMcVB6PxmGrDk
+         jGQdEIAMLxku3PDVBrWlBRwmIqfq9bGyTdSyVU6Y6k6LMOzY32uzCBMjh4kkKYAIBb7e
+         eFC6yyoWCc2o9flVWjxbHb/tLc02WK2Xc//YbCqM+VVhddauakH4BAZuR2OY/vCDZBhO
+         ZCnuetepI5O6UWLc9Xo4CSFa0ifc3SOIjT4IhbzHlm2hEjkKurx6K3i5FikE0TFnB3v/
+         hvOUTX1lZCK2Xdhf0b9Sure8zFDwSe8xbEEwyfkS8RaA1a9eBpRgSccDR+GJqMcEh4AA
+         M96A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=WlZGPMdZypZmN+ZFMakIn+2UUVGCEw9NXdFUQ2o1k8M=;
+        fh=AViG/WVHQV3VSN1+/7gGN99xGFfqgKWnmAronJ/Jcf8=;
+        b=CAcwDhse1BQLRJLrJVgiOtOWN9NQ9Fo+ZWzwsez4pvt3ypcFUQ4jUAILKpNQ+VMJH5
+         d3aOZ2F2wS2UqWBz8orauWTMz3w3Xj/gA1XODyI2Db5ttoQFT25uxtE7Po3O6oTjvP5C
+         r4rLBYINdGc/9Frl7amrb1hHBhm56ky6jwv5GeVhtnYQNAgwxP52QmZgn74TXtZ0nZdN
+         A/k2u2ffbo2NV+foV8AIlsTtGx6iDeUcLBb8roJ47ZSyBhlxKlTY8VqeXdeF8q5azCG7
+         a/bLu/caibGaWeGOM0hYFNhCCAYIpGG3yBz7gWtJ6UXJabG+JEsqhKSsr6X1tsWY+FFb
+         YaBg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crowdstrike.com; s=google; t=1771965735; x=1772570535; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=WlZGPMdZypZmN+ZFMakIn+2UUVGCEw9NXdFUQ2o1k8M=;
+        b=N+g8xVZssz0d/2BmphQ8+B4fndXSvHt83Vi+jXDl8EF36dbEFKzNlLG5FCbCdwsP55
+         8qVuKw9BUKIjrT61+K2l+U/f28GCJYZhZQMtwFftjTRl+yAinIh5E0Wi6/NCweco27SY
+         zNxaaizqr13Gxywzf9ncyXCUmlvca0JgeRUw0cEVEORa/sHJ0by+fT0vRYW1uI7GgSH3
+         QfgdmucnowHFleEq8DjqxdFFMjWk+QCvL8+t4i1XLTgnBXSZWNCtbaUgXSx5mbgCXskJ
+         tCkAaZCGfdSkTQh0OT29mOKR5Gt+oTuujfAw3myO+gfkN2HC5ikoARaPs7eKQ5VNVVss
+         0TyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771965735; x=1772570535;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WlZGPMdZypZmN+ZFMakIn+2UUVGCEw9NXdFUQ2o1k8M=;
+        b=wxikOHFxmY2RJMmMKc9QU4sz+I2DXRhW/VH8adUiWtvbQJIm9q3BF83ZPhisJM6IpG
+         MwN+berKnkY4feo4RYpHNHjoo/ce2Q86l6I1x7cCuBUyXioCgn7254XomzjlwZPCqCfl
+         Qv7DG8DWghygjv9gRusjIhJUW4yd+O99NCWIRyFRhudGFmC6UCClIlOA+/k3ArVgcUPh
+         KI9MX0+noA94bFZ8VC5WxMyXgVI4JsQscK2cLsWzbq9ClNwWlWsK905L+3qB9L+qSk0D
+         84eM3WS9wffAZIIxcFnSeJV9ULm42MSHJgFagyZWiSudtv4RV2lxXJJ7ATDT3euUkPfF
+         OACg==
+X-Gm-Message-State: AOJu0Yx1UdDx5dfc3Qg6YTGOymTnZ0IPJqQNttA/BZcZ5Oj6l4GHL4Vb
+	1oWqakLgvJ4rHaivNM6YpNlC9oLj4dfERJzUBJCSF+riEWFCfHCKAJOJavqD87v+zR2m2oj2mkj
+	yTzOSAe2f8JeBUSjvt+pYsTeoiH1LhzevXG/VdXAYYny5lK/d+TTXe7kcWRtVTPf7SSFi1S1Yf1
+	6oYO0sfmqjPRQwUJL6jFj6NSuH5Lfc4WhsFcKyK6o=
+X-Gm-Gg: ATEYQzxvBzX1TXxCKtEA7yAi0LYOaBFEPFSHoB0AVbajNjnZaZhlGkGiF+sTBvFPw2F
+	qyosMBIHz/gIRcWPBkqX6Mrrtj1KoOn2NJd0IjJkYCnIDsZdBA0ccU3Ca+Eht1g4kuMCRGl20zz
+	IzscVjKzqA5N0jYb51lCElNz6o1T4C1IHWHUoTpn1vPixDV0nkZgtGO7xjI383PHVrszM75+LJd
+	+Zt
+X-Received: by 2002:a05:690c:c511:b0:798:6619:f1d4 with SMTP id 00721157ae682-7986619f50fmr8137497b3.6.1771965734961;
+        Tue, 24 Feb 2026 12:42:14 -0800 (PST)
+X-Received: by 2002:a05:690c:c511:b0:798:6619:f1d4 with SMTP id
+ 00721157ae682-7986619f50fmr8137167b3.6.1771965734427; Tue, 24 Feb 2026
+ 12:42:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=TNRIilla c=1 sm=1 tr=0 ts=699e0bcc cx=c_pps
- a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=TZJ4Wy1_Ugu8wcDdlOUA:9
-X-Proofpoint-GUID: 9k6bWDutqn9pjuip8fHcLD8GF_HkkTFo
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDE3MyBTYWx0ZWRfXyxpEuYp9QAjw
- zjxDU+LwYzuNj5Il9u+WSdzMXIH5V5BgLtwy5YTOBS6jkZgu9OT+slcaUe54ZgjEp1wGeTolOUD
- WpPUTyJmFFX9jLQBh/GR+R7+qMbuEsg89yweP7a/Cje2FXkujyV/pf+ZnZQfqc3wR/JRH0THJq4
- vtC3xQWZQFKZUoDMuD0SkQHbHbTghiWhDv58iWZYl9ylFLyXvboFSg6e9/iGi/uuwGIj0w2acvc
- d+n1XOW9TQQ1Tz5HQkNwsKjj1UxyxudjoeRaHulZskkCQpA1J1RQP47iYAh/MygYQ/nYk9eaeme
- K1IgwRlRPna0EERre6hOVGbDZX6BzNtPOLg+GGg87sv3szR8Tn75Ov1NPq8meIa/FPz/KMHR3IR
- 8NliRyyrqBIG0qmhl0/npUf5LpLL9HbzyZsxQyBGoQrm2O5s5enuWv1dQRQl7+JtDobH/S6NcyL
- hrFz9b9DDASl0dWl2IQ==
-X-Proofpoint-ORIG-GUID: 9k6bWDutqn9pjuip8fHcLD8GF_HkkTFo
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-24_02,2026-02-23_03,2025-10-01_01
+References: <20260224172340.1704618-1-andrey.grodzovsky@crowdstrike.com>
+ <20260224172340.1704618-2-andrey.grodzovsky@crowdstrike.com> <DGNDVI5OW8LF.38M1D6KV6YVHS@etsalapatis.com>
+In-Reply-To: <DGNDVI5OW8LF.38M1D6KV6YVHS@etsalapatis.com>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Tue, 24 Feb 2026 15:42:03 -0500
+X-Gm-Features: AaiRm52JH3ICQQqkv74_OmBx1HFKbtP_-y6zlLJNIVzHyWnlljZuZrZroFZ8r-M
+Message-ID: <CAOu3gNipY0dHCjoYoit4XH2PYG2J0Fpk7F=0eWnyGd98_6JwWw@mail.gmail.com>
+Subject: Re: [External] Re: [RFC PATCH bpf-next v2 1/2] libbpf: Handle
+ duplicate kprobe symbols in attach_kprobe_opts
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Authority-Analysis: v=2.4 cv=R5MO2NRX c=1 sm=1 tr=0 ts=699e0d27 cx=c_pps
+ a=72HoHk1woDtn7btP4rdmlg==:117 a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10
+ a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
+ a=R_n4Uisa8axJ7jemP0ek:22 a=VwQbUJbxAAAA:8 a=pl6vuDidAAAA:8
+ a=CbNFBKWpDDtCZVcQraAA:9 a=QEXdDO2ut3YA:10 a=kA6IBgd4cpdPkAWqgNAz:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDE3OCBTYWx0ZWRfXyfFrsGpnQF+w
+ In41VRmecZhvkR7iHJ/t/gWSGHllx5oA5Cz1/N22xufROkedFb02e6tyOwmxqG9s0cJgJjTUqMF
+ 5fOp16h2tgKP29/HPjaXdTin8pe5GspHjp2l9ZoGL6Kcsj4mz0XSzFLzugS7ZWMVLGF92BadQdG
+ gQVj12DbRBNdMYY/OLY4fmkdyY0i8pqIQQP3ULEKsyjI0o/hkGJxOvq77wW6MIohXeL7aMEecTj
+ g03D6wB6A0sILdbqSa7VyJ3LX/5tlXPpfp+XSspSLRXeP0NFZxUqt/+OabvtjckgbD1fK0Uq5BI
+ xNBXlQQzMQUq/tmKI0J2MwmvS98TKdpekqDtwAXFr/OrbT+ogTHPVNVn92QvXfuZaKsGbALsjEe
+ D3uWHf6Ryp63qiCAbqqZy5l7Qr3n4IMshPR6jp0OH50qkV1rbbrWh4EwQt952ehBMSa4COmFHZr
+ QK1UChZIm+9cyeexdkA==
+X-Proofpoint-GUID: n-3OMahvSQjGbJOc4aYvhuzYh_w8rmu-
+X-Proofpoint-ORIG-GUID: n-3OMahvSQjGbJOc4aYvhuzYh_w8rmu-
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11711
+ signatures=596818
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 suspectscore=0 adultscore=0 priorityscore=1501 impostorscore=0
- spamscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 phishscore=0
+ malwarescore=0 phishscore=0 impostorscore=0 priorityscore=1501 adultscore=0
+ spamscore=0 bulkscore=0 clxscore=1015 lowpriorityscore=0 suspectscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602240173
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602240178
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+Hey Emil, sorry for sending this twice. My reply was dropped
+from bpf@vger.kernel.org due to formatting issues.
 
-Verifier testcase result for tailcalls:
+>
+> On Tue Feb 24, 2026 at 12:23 PM EST, Andrey Grodzovsky wrote:
+> > When attaching a kprobe to a function that has duplicate symbols in
+> > kallsyms (e.g. same name in vmlinux and a module), the kernel returns
+> > EADDRNOTAVAIL (or EINVAL via the legacy path). Detect this and retry
+> > by resolving the vmlinux address through kallsyms, skipping module
+> > symbols, and using the absolute address for probe creation.
+> >
+> > Extend libbpf_kallsyms_parse() to support module name extraction and
+> > add a skip_if_module flag so callers can filter module symbols at the
+> > parse level without changing callback signatures.
+> >
+> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> > ---
+> >  tools/lib/bpf/libbpf.c | 153 ++++++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 135 insertions(+), 18 deletions(-)
+> >
+>
+>
+> Nit: Missing newline between comment open and the text.
+>
+> > +              * duplicate symbol name. Reject such symbols to avoid
+> > +              * ambiguous resolution.
+> > +              */
+> > +             if (data->kaddr && data->kaddr != sym_addr) {
+>
+> Q: Is it possible that data->kaddr == sym_addr in the first place - that
+> is, can we get the same symbol resolution twice? If not, can we simplify
+> this to if (data->kaddr) { ... } ?
 
-# ./test_progs -t verifier_tailcall
-#617/1   verifier_tailcall/invalid map type for tail call:OK
-#617/2   verifier_tailcall/invalid map type for tail call @unpriv:OK
-#617     verifier_tailcall:OK
-#618/1   verifier_tailcall_jit/main:OK
-#618     verifier_tailcall_jit:OK
-Summary: 2/3 PASSED, 0 SKIPPED, 0 FAILED
+I looked into this.
 
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
----
- .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++++++++
- 1 file changed, 69 insertions(+)
+I confirmed it happens for data symbols - zero-sized lock_class_key
+objects produce many duplicate name+address entries in
+kallsyms:
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-index 8d60c634a114..17475ecb3207 100644
---- a/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_tailcall_jit.c
-@@ -90,6 +90,75 @@ __jited("	popq	%rax")
- __jited("	jmp	{{.*}}")		/* jump to tail call tgt   */
- __jited("L0:	leave")
- __jited("	{{(retq|jmp	0x)}}")		/* return or jump to rethunk */
-+__arch_powerpc64
-+/* program entry for main(), regular function prologue */
-+__jited("	nop")
-+__jited("	ld 2, 16(13)")
-+__jited("	li 9, 0")
-+__jited("	std 9, -8(1)")
-+__jited("	mflr 0")
-+__jited("	std 0, 16(1)")
-+__jited("	stdu 1, {{.*}}(1)")
-+/* load address and call sub() via count register */
-+__jited("	lis 12, {{.*}}")
-+__jited("	sldi 12, 12, 32")
-+__jited("	oris 12, 12, {{.*}}")
-+__jited("	ori 12, 12, {{.*}}")
-+__jited("	mtctr 12")
-+__jited("	bctrl")
-+__jited("	mr	8, 3")
-+__jited("	li 8, 0")
-+__jited("	addi 1, 1, {{.*}}")
-+__jited("	ld 0, 16(1)")
-+__jited("	mtlr 0")
-+__jited("	mr	3, 8")
-+__jited("	blr")
-+__jited("...")
-+__jited("func #1")
-+/* subprogram entry for sub() */
-+__jited("	nop")
-+__jited("	ld 2, 16(13)")
-+/* tail call prologue for subprogram */
-+__jited("	ld 10, 0(1)")
-+__jited("	ld 9, -8(10)")
-+__jited("	cmplwi	9, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 9, 10, -8")
-+__jited("	std 9, -8(1)")
-+__jited("	lis {{.*}}, {{.*}}")
-+__jited("	sldi {{.*}}, {{.*}}, 32")
-+__jited("	oris {{.*}}, {{.*}}, {{.*}}")
-+__jited("	ori {{.*}}, {{.*}}, {{.*}}")
-+__jited("	li {{.*}}, 0")
-+__jited("	lwz 9, {{.*}}({{.*}})")
-+__jited("	slwi {{.*}}, {{.*}}, 0")
-+__jited("	cmplw	{{.*}}, 9")
-+__jited("	bf	0, {{.*}}")
-+/* bpf_tail_call implementation */
-+__jited("	ld 9, -8(1)")
-+__jited("	cmplwi	9, 33")
-+__jited("	bf	{{.*}}, {{.*}}")
-+__jited("	ld 9, 0(9)")
-+__jited("	cmplwi	9, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 9, 9, 1")
-+__jited("	mulli 10, {{.*}}, 8")
-+__jited("	add 10, 10, {{.*}}")
-+__jited("	ld 10, {{.*}}(10)")
-+__jited("	cmpldi	10, 0")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	ld 10, {{.*}}(10)")
-+__jited("	addi 10, 10, 16")
-+__jited("	mtctr 10")
-+__jited("	ld 10, -8(1)")
-+__jited("	cmplwi	10, 33")
-+__jited("	bt	{{.*}}, {{.*}}")
-+__jited("	addi 10, 1, -8")
-+__jited("	std 9, 0(10)")
-+__jited("	bctr")
-+__jited("	mr	3, 8")
-+__jited("	blr")
-+
- SEC("tc")
- __naked int main(void)
- {
--- 
-2.52.0
+ffffffff96307908 __key.0
+ffffffff96307908 __key.1
+ffffffff96307908 __key.2
 
+For text symbols, I didn't find but, I belive, this could still occur
+with weak functions - if the kernel defines a __weak function in a
+header or common file and multiple subsystems include it
+without overriding it with a strong version, the linker
+may retain multiple entries pointing to the same fallback
+implementation. In that case the resolution is not ambiguous - both entries
+point to the same code, so we should not reject it. So my prefernce is
+To keep this extra check just because of this theoretical possibility.
+happen. But yea, I don't have proof this actually can happen.
+Let me know what you think.
+
+Andrey
+
+>
+> > +                     pr_warn("kernel symbol '%s': resolution is ambiguous: 0x%llx or 0x%llx\n",
+> > +                     sym_name, data->kaddr, sym_addr);
+> > +                     return -EINVAL;
+> > +             }
+> > +
+> > +             data->kaddr = sym_addr;
+> > +             pr_debug("found kernel symbol %s at address 0x%llx\n",
+> > +                      sym_name, data->kaddr);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+>
