@@ -1,176 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77D642E2DFB
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 21:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771968586; cv=none; b=J40+c+0VHVQOVFwmGxTbLngpTQIGhUyixMvFFOUXMVKJd6zEZZNsxXZlcBwjjJ6eRHPMWAQEEMTTIeEzeNieBm2oV4bSUKkpCXmPXj6RS67tzePU5p5xj2Y6fB+yhq6og91QT283kn8mPv0F6/Ykwis6dEzw4V3JK5lvf44IZPc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771968586; c=relaxed/simple;
-	bh=75wFjdLGpHCy36wy8xROygNeEyyiavbM5IBG1ytvkKs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=MR0ky2T+/PgbIjWT2cPD+Jl6AkBsmKh+CU3Yhh+CqYbVZQJRGNf8r9tLTLRn11iQYg+OkVQvSWsHYCbD22XNdhzlURbBBx117jnb8fcMfToDbgP7s20rrRcq+h46kBZIs0G21ZzIANt2Pc41XcOba3wSep33n9OczjaQXLihAzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jc6BIQKZ; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D30271464
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 21:46:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771969585; cv=pass; b=s+8xkxPNLnPqJBDuQB6uo5hft68uV312CyLhlxGvHhbtAF2YNqPU8+l5YE/9MyQxPAQEfENKxxDZ5fYKdXa6ci14uHRdIO37aUWH2BQGX6kubbWtQecCcQ0OW+8F8p5k7gh48I0NHda1rJWEbbMnhi2/ad1U2/G2iBtm1Qtzu0E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771969585; c=relaxed/simple;
+	bh=PVOj3o8hTSd9krm191kSZ4lxTW8YNJ4NqIl8XqoBMeY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QwmVB3pv4oOBrQa66IMRsjiBakTGHfvW+9ArVrLhp+ugeE9h6GdJ6xI4MnYgRbj3XoUX0YCldG1rIzFz7cWTaWlEk3EHYka0nxr+wzwLTHEvzNNAlk3dccEy4JXx2MBJR0gAkGCUw/Pz8QRTK86dT9XUTGJb3tfe5BVPuuhdFS8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lwC3g26R; arc=pass smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jc6BIQKZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDD53C116D0;
-	Tue, 24 Feb 2026 21:29:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771968586;
-	bh=75wFjdLGpHCy36wy8xROygNeEyyiavbM5IBG1ytvkKs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=jc6BIQKZhDP0Fw8ryEyJuwTU9nb3PVbbMInrmC86lfEXFQgDCmRHLxTlcrfqleLGK
-	 bW7AW+h+lH394daVpxBnzCdO5vliuMNTKUIzMa206/I2pZQSfq5VNaMBfq9gM2erse
-	 oMWanjnulqaGMccx74WsG87tuqnOSYs0umeizAMeCVOSP/9J+MdDLK1h29IJWDnUrd
-	 pdEooMBOtNPk8JcZtDlpjn2suLhT/gk2TiDOc7sp+L/UmSbSDovYAgkYLByy3FMfxf
-	 ZNJxwsq8VnionIo7TZkDrRncKA7LdEfmsr0w2hrDHdZb+/lnr+1GpSgM1eFT/2eQs7
-	 /S5ORyr0PR6kw==
-Content-Type: multipart/mixed; boundary="===============4812018571603848610=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lwC3g26R"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-43945763558so3801868f8f.3
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 13:46:24 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771969583; cv=none;
+        d=google.com; s=arc-20240605;
+        b=NNhK6U3WwQhZH2zy/de41sH9iHCiuktkj2yUwuainu9ecKgL1HCKHs/aDLcNnH/Mo+
+         S8JwkkVoHBKS6zEeTZ09bayE+Az3fNw23ePF8WjLQwLSjexcesVSnoTryKVENlf0pLL1
+         sV2LUMm77hEXqwH2ArcU8xNBwqXq38Ct+WI8cgYcOEa2eGpw5ZSVwGKkJ5cbaGcWmJI1
+         0LvTlAEEI9EYR9iDO6eimDMNkCzroO12zs/4bacdDNathb3+uPnoqEHOD8uwlw/gVaaK
+         /8Op6jaj6hbvwYmEK+YhJCMHcU2pDBrr7Pz0ju+ON0IfyKxlISGf+tbXSBqcMIlb/7iJ
+         24lg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=PVOj3o8hTSd9krm191kSZ4lxTW8YNJ4NqIl8XqoBMeY=;
+        fh=QWPamShyA1J/8s5doFWE3PWqLapUJDuSRevdrJZqM+c=;
+        b=VJ0X914SaH88SXMgIXJo4iNQNze5YzrYDXJYGyWIr2rk+MIYwhkh5HaUn3mjX7LOHw
+         4cNB5g5psWEFIBrp+VXhEotSuWW1wioFtDdKHzd4cPGlZ+OHSUtLCt/y+BpPS6y/esYI
+         lkbcfy5dHo0QvCmkvMOimXoXwro2HsCV6MSh5YpKeWOYPukhT2y3ZwDHSbH172hSFPZb
+         P7C8jH+TUAZyzw+Jv7cD5/B0mocMGDn1gLEJobWFhGqIzP/J4PWECVugnxls3p1MZKkH
+         N/rLcWsLWF0FziQpxor21aJUJx1IErrGCXrCxLSSTKI5dj0x9Um9ViMra5kQCHuxtdRr
+         Zjzg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771969583; x=1772574383; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PVOj3o8hTSd9krm191kSZ4lxTW8YNJ4NqIl8XqoBMeY=;
+        b=lwC3g26ROdYAmwnsmSGQWZVVc8p4e9b6P9iw0LyPP73KpdPwwDbezgoILy9iszjk2U
+         u26Om8ZqLgPriCLNzeZB9Xq+SLpFwjY995mB0nnK6KJFFkzcNpJupi601nqIVpewF9Sz
+         47KIn1RFtehHTn8VoDu1wgbAbXsXmPdzig/hcGL6U2HROqLoA6YnE9W1BSO1oH5MhL1j
+         5FvyAGfs5BNJQdlORlR6cF+D7xegQ4TmBH9Kk5Tx+0OsnAcvUZ8Ik+CCro64gRTeMm83
+         MCzJKlZCeY7OBL2lsayN679B0CitkeEWlFoEOJsifDisEp7l7QAq7lCrxC88fY7DrB+f
+         3euQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771969583; x=1772574383;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=PVOj3o8hTSd9krm191kSZ4lxTW8YNJ4NqIl8XqoBMeY=;
+        b=eymi4MTDLfnO1XV0jKBJU8y+033/WzS7BTMJPMD3Khib6hbeM6xhaXvr+0Lw1sW1qf
+         PV74HW+dPmWX1ZymCGi3OYa4sIwIRGXS/BJOMLt17BpFBnGvF0AtEZEekVlV0wumDvkI
+         jq1IsWnMGwKOmed7xInwMDs2JGvUALJnumXXGPWmHJBqwei4sal/+RlGHhRCj8UEnHt4
+         4t5V0rHNkofpLGqNjabsCMr/eYqhU4EoK4iLoz+DRNnuLXCmlkYCRh9oQWyC5b5g9dJD
+         bzXJgKvv5HiOySvi1SVlgiL8646Tj2URCRclyi3uz8f7VSfnFKQZAY2dw/sm9TIfjti4
+         xBMw==
+X-Gm-Message-State: AOJu0Yz+V6LKAprFIRjSu6BX3ZJB3oeNuUERJlIqY+sd06PXVSZQvrXA
+	vycD1sbxIAaYFNtnKubpMeGmy9U+gnb8yWApnl6p+FCUKzh7Qf2TsIwF58XVm9hoH4NX+YgisB9
+	IB/nQ8Js8mpaMfkRkGsrocvyy8hI6Vp0=
+X-Gm-Gg: ATEYQzw9ny2wYEF95559TQwfR9GrBErXrU/NI7/sh3wCXpszFRjJZrrlZoZx2BdVmON
+	NgKbVMUxjrnW19cPfLkOADZtFA84+EzxUcOYhpp1N6JSD2NLC71buvtoUFD7V35NXQBn4C+EeFO
+	5b4ef+Q4lBx67aqvgsaJ+e0Y3H9KvLqb8TEf/ton3xBnQEIETtoY9OSFL+Xb7QZO0r0HlEjmWoc
+	gPbLaJ4SQ2juHDeF6x7mgyFEtQ5er/oJgJPfIVLdiBcrEwr1lt0dj0sADIoGBpfNnEAT0o7vAUc
+	LjRSh66MxsZWoq74n7VkWqPswIdHb7tuz5jRey7PV+bMXdLuix3raKWCMmQ5+ZOBajlpjjx2pT7
+	7/7/DB+E6
+X-Received: by 2002:a05:6000:2901:b0:435:b068:d3da with SMTP id
+ ffacd0b85a97d-4396f16e32fmr24640989f8f.4.1771969582627; Tue, 24 Feb 2026
+ 13:46:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <29abe0604fd96a4e172f6ff49dacddb3f207c2e84959e0d93223ca30ba90d77f@mail.kernel.org>
-In-Reply-To: <20260225013627.22098-2-adubey@linux.ibm.com>
-References: <20260225013627.22098-2-adubey@linux.ibm.com>
-Subject: Re: [PATCH 1/4] powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,linuxppc-dev@lists.ozlabs.org
-Cc: bpf@vger.kernel.org,hbathini@linux.ibm.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,maddy@linux.ibm.com,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 24 Feb 2026 21:29:44 +0000 (UTC)
+References: <20260224212535.1165151-1-puranjay@kernel.org>
+In-Reply-To: <20260224212535.1165151-1-puranjay@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 24 Feb 2026 13:46:11 -0800
+X-Gm-Features: AaiRm50gTAmzemHp9Jp45rNbK27fg6IJC6X6VZyi-yYOD9AxE02RcnnCQPefbSQ
+Message-ID: <CAADnVQKO01A+PjwYCu9+HB8PK0Kb4+HGM0ZseUzY3eDMvSPqDw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 0/7] Introduce KF_FORBID_SLEEP modifier for
+ acquire/release kfuncs
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, Puranjay Mohan <puranjay12@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============4812018571603848610==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Feb 24, 2026 at 1:25=E2=80=AFPM Puranjay Mohan <puranjay@kernel.org=
+> wrote:
+>
+>
+> This series adds KF_FORBID_SLEEP, a new kfunc flag that can be combined
+> with KF_ACQUIRE. When a kfunc annotated with KF_ACQUIRE | KF_FORBID_SLEEP
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
+I don't want to introduce this new flag now only to be
+replaced with KF_ACQUIRE_LOCK.
 
-[ ... ]
+the follow up we discussed in the other email is different.
 
-> +	/* Relative offset of dummy_tramp_addr wrt start of long branch stub */
-> +	tramp_idx = long_branch_stub_idx + 7;
-> +	/*
-> +	 * Image layout need not be considered 8-byte aligned.
-> +	 * Lower 3 bits must be clear for 8-bytes alignment.
-> +	 * Adjust offset for padding NOP before dummy_tramp_addr
-> +	 */
-> +	tramp_needs_align = (((unsigned long)&image[tramp_idx]) & 7) != 0;
-> +	tramp_load_offset = tramp_needs_align ? 24 : 20;
-
-Can the alignment check produce different results between the sizing
-pass and the code generation pass?
-
-During the sizing pass, bpf_int_jit_compile() calls
-bpf_jit_build_epilogue(NULL, &cgctx), so image is NULL here.
-&image[tramp_idx] evaluates to (tramp_idx * 4), and the alignment
-decision depends only on the parity of tramp_idx.
-
-During code generation, image is code_base, which may or may not be
-8-byte aligned. bpf_jit_binary_pack_alloc() uses alignment=4 with a
-random start offset, so roughly half the time code_base will have
-bit 2 set. When it does, the alignment check flips:
-
-    sizing pass (image=NULL, tramp_idx odd):
-        ((tramp_idx * 4) & 7) = 4, tramp_needs_align = true
-
-    code gen pass (code_base bit 2 set, tramp_idx odd):
-        (((unsigned long)code_base + tramp_idx * 4) & 7) = 0,
-        tramp_needs_align = false
-
-This means the sizing pass may emit a NOP that the code generation
-pass omits (or vice versa), causing the stub to be a different size
-than what was computed during sizing.
-
-> +	EMIT(PPC_RAW_LL(_R12, _R12, tramp_load_offset));
-> +	EMIT(PPC_RAW_MTCTR(_R12));
-> +	EMIT(PPC_RAW_MTLR(_R11));
-> +	EMIT(PPC_RAW_BCTR());
-> +
-> +	/* align dummy_tramp_addr to 8 bytes */
-> +	if (tramp_needs_align)
-> +		EMIT(PPC_RAW_NOP());
-> +
-> +	if (image)
-> +		*((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
-> +
-> +	ctx->idx += SZL / 4;
-> +
->  	if (!bpf_jit_ool_stub) {
->  		bpf_jit_ool_stub = (ctx->idx - ool_stub_idx) * 4;
->  		bpf_jit_long_branch_stub = (ctx->idx - long_branch_stub_idx) * 4;
->  	}
-
-Because the conditional NOP makes the stub size variable,
-bpf_jit_long_branch_stub now depends on whether tramp_needs_align
-was true when it was first set. This global is set once during the
-first program's sizing pass and reused for all subsequent programs.
-
-Since each BPF program has a different body size (different N for
-long_branch_stub_idx), and each allocation may have different
-code_base alignment, the stub size can vary per-program. But
-bpf_arch_text_poke() uses the fixed global to compute the branch
-target:
-
-    create_branch(&old_inst, ip,
-                  bpf_func_end - bpf_jit_long_branch_stub,
-                  branch_flags);
-
-If this program's actual stub size differs from the global by 4
-bytes, the branch lands one instruction before or after the intended
-mflr r11 at the stub entry.
-
-In the old code, the stub had a fixed layout with no conditional
-instructions, so bpf_jit_long_branch_stub was the same for all
-programs.
-
-[ ... ]
-
-> @@ -1161,6 +1180,8 @@ static void do_isync(void *info __maybe_unused)
->  *	mtctr	r12
->  *	mtlr	r11 // needed to retain ftrace ABI
->  *	bctr
-> + *	nop         // optinonal, mem align dummy_tramp field
-> + *	.long	<branch_addr>/<dummy_tramp>
-
-Typo: "optinonal" should be "optional".
-
-Also, the comment block above this still shows the old load offset:
-
- *	ld	r12, -16(r12)
-
-This should reflect the new forward offset (20 or 24).
-
-[ ... ]
-
->  	/*
->  	 * Long branch stub:
->  	 *	mflr	r11
->  	 *	bcl	20,31,$+4
-> -	 *	mflr	r12
-> -	 *	ld	r12, -8-SZL(r12)
-> +	 *	mflr	r12		// lr/r12 stores current pc
-> +	 *	ld	r12, 20(r12)	// offset(dummy_tramp_addr) from prev inst. is 20
-
-The hardcoded 20 in this comment is only correct when no alignment
-NOP is needed. When tramp_needs_align is true, the offset is 24.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22369534987
-
-AI-authorship-score: low
-AI-authorship-explanation: Domain-specific code with detailed hardware debugging output in the cover letter suggests manual engineering work.
-issues-found: 3
-issue-severity-score: high
-issue-severity-explanation: Alignment check uses NULL image pointer during sizing pass, causing variable stub sizes that break the bpf_jit_long_branch_stub global used by bpf_arch_text_poke to compute branch targets, potentially causing incorrect JIT code execution.
-
---===============4812018571603848610==--
+pw-bot: cr
