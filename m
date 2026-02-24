@@ -1,185 +1,98 @@
-Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA25225416
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:38:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D2425A2C9;
+	Tue, 24 Feb 2026 12:39:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771936714; cv=none; b=s9DibmbgtxkqVp4T5Ko9Q0r6sqExzdOnTljGzMnA/qWCaxgUllFRvJD3rFO0qBreuYknz5GZvsTPEyxU/Fs+J5SVouOFDneoQK3XmojAxDtYQ7xoG/lPFmjIx2pGjdCPWVzaLhu4YR+XcxNzGYOgQ4sg+hb1gPiNGjhLGgcb2/0=
+	t=1771936778; cv=none; b=jpTSemmc1KUbpYHB6BSVnw3kvwtzAL8/KeZdHoMKtGOKiCHRq0GLO2Ep7jj049EOKLZo/rC73jjuo6VMcpENJ/OuqspLZs3k1pg//u6FiJkHZcfF8Mxj6tpbWsJL2rvoXGyAua+LacZSAzxx2w29q3MwGZ9OqtkbXzT+6PXd3mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771936714; c=relaxed/simple;
-	bh=oXDKd50PcR3o8XNqPf8uMrmunzOoieZCrT9mA1rTgsY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IEYf9AlRCF7Lln81riL4xACWz6dWwHrScTgI0Ntc3W/axZ8mRDfuOKHhXmCkBHMZqvAsgqd6uDtUfH4biKUmnaHYpWcMR8Kwj9mbwkFxHL90X/lGhkCmEkIPMGdwLO+HWN4MfBBozJp1bUtN0c5SpJjyCW9DekyI7cdOHYSR+HQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=zdenek.bouska@siemens.com header.b=c0FUpjxz; arc=none smtp.client-ip=185.136.64.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+	s=arc-20240116; t=1771936778; c=relaxed/simple;
+	bh=YKI1upsRFHpQ70GhUF+nMVLZfbcZ0yrmnGFgevv0qF4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mRaSnPbnXVZgQjDq1i4M7EtrUpu7mX5dA9EHwZd2Hz5JtGcTJj2QH2eE4x3WmS+DVBSPv0VPVWRleVTNfLJrnoVt8WP2MaBnCnBRjDJKLqQlkMCA9JipC32sPQnKzBxvg8Solasf+Tk6CIAg/rtgFVYFkd5Yv7Oe5s45A+8bO2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UmeYc8Xm; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=zdenek.bouska@siemens.com header.b="c0FUpjxz"
-Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 20260224123821fc15a672fe000207e5
-        for <bpf@vger.kernel.org>;
-        Tue, 24 Feb 2026 13:38:21 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm2;
- d=siemens.com; i=zdenek.bouska@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
- bh=ZK6pwPA0ICZ+Gacpu5r5lttbWewOZgHz7aEYNA6FSLk=;
- b=c0FUpjxzDpLswDhMBIkvrYF6Y53m3VIxMptKCF63PXx8L2xGtB8D89PuQZ1PBVS7/JHbFk
- jMHtrok/h42ZkISlsW7LK9Nm2oJ/FiGSyTDSpjzQsrKPVnHJYKROhIgZQwdaK4Jvh1RBDVzt
- NaGr+0gxAhDfogMllwYXC4GfVJfvAoyBzpU97ieCzdRUkZYEocvWgVKgg4xlJ3VL0qKAiUOl
- BfYMy091s4OOt+p60UZ/ad9DYkrvF+pxa0+qusrFj6tpBG1+VY5UTRGLNEkF7Nir3B3l7hVN
- nC7PPh2lYP74MCf17Pj42LPdeQjZjz7OlkLb+Nqxir5D85kR90Ayl16g==;
-From: Zdenek Bouska <zdenek.bouska@siemens.com>
-Date: Tue, 24 Feb 2026 13:38:13 +0100
-Subject: [PATCH] igc: fix page fault in XDP TX timestamps handling
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UmeYc8Xm"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A0A8C116D0;
+	Tue, 24 Feb 2026 12:39:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771936777;
+	bh=YKI1upsRFHpQ70GhUF+nMVLZfbcZ0yrmnGFgevv0qF4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=UmeYc8Xmc8q6Ktw+pmpjpo4rcg2rpxPqLSrwhmop88ELBL6oqGNEFUfyO8nY4jYQV
+	 njgml2tRuM0x+L5NVrghIbPf5VhJmV8K/sj9s1GcfqaPxOpyksU7kKSkq6wxd/sQZu
+	 HGvo4R002MKuxjywktj/HwrpgJJ0CUqQSFQUQnxVB2v6XJF3iePXxJJ/vifAPer+sw
+	 5cHFlAEzvJLq48o7hyaaQFesLtuWs9H6N91DjY9w4oa6QfLpvlhqELvaIS/+gsbdn6
+	 v6heGMiR7IF8V8vbEkGWopsSbzFnDLNpaCWw/4OA90O6NjwQACnp8PhU9B2n05Bsqb
+	 2iANhGgZ4e5nQ==
+Date: Tue, 24 Feb 2026 12:39:33 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+	Networking <netdev@vger.kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
+Message-ID: <aZ2cBWyiG_fKSjIq@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260224-igc-fix-xdp-tx-tstamp-pagefault-v1-1-7c729ef61ee5@siemens.com>
-X-B4-Tracking: v=1; b=H4sIALSbnWkC/x2NQQqDMBAAvyJ7dkG3VopfKR62yZouVBuSKAHJ3
- w0eB4aZE6IElQhTc0KQQ6P+twp924D58uYE1VYG6mjsqCdUZ3DRjNl6TBlTTLx69Oxk4f2X0Az
- 8sTI8H6+RoFZ8kKrfh/dcygXMciYIcQAAAA==
-X-Change-ID: 20260212-igc-fix-xdp-tx-tstamp-pagefault-c4abde453862
-To: Tony Nguyen <anthony.l.nguyen@intel.com>, 
- Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
- Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, 
- Richard Cochran <richardcochran@gmail.com>, 
- Song Yoong Siang <yoong.siang.song@intel.com>, 
- Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Cc: Vinicius Costa Gomes <vinicius.gomes@intel.com>, 
- intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Florian Bezdeka <florian.bezdeka@siemens.com>, 
- Zdenek Bouska <zdenek.bouska@siemens.com>
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-1328595:519-21489:flowmailer
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="MRWQfcW/ZMqR3ZoK"
+Content-Disposition: inline
 
-If an XDP application that requested TX timestamping is shutting down
-while the link of the interface in use is still up the following kernel
-splat is reported:
 
-[  883.803618] [   T1554] BUG: unable to handle page fault for address: ffffcfb6200fd008
-...
-[  883.803650] [   T1554] Call Trace:
-[  883.803652] [   T1554]  <TASK>
-[  883.803654] [   T1554]  igc_ptp_tx_tstamp_event+0xdf/0x160 [igc]
-[  883.803660] [   T1554]  igc_tsync_interrupt+0x2d5/0x300 [igc]
-...
+--MRWQfcW/ZMqR3ZoK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-During shutdown of the TX ring the xsk_meta pointers are left behind, so
-that the IRQ handler is trying to touch them.
+Hi all,
 
-This issue is now being fixed by cleaning up the stale xsk meta data on
-TX shutdown. TX timestamps on other queues remain unaffected.
+Today's linux-next merge of the bpf-next tree got a conflict in:
 
-Fixes: 15fd021bc427 ("igc: Add Tx hardware timestamp request for AF_XDP zero-copy packet")
-Signed-off-by: Zdenek Bouska <zdenek.bouska@siemens.com>
----
- drivers/net/ethernet/intel/igc/igc.h      |  2 ++
- drivers/net/ethernet/intel/igc/igc_main.c |  7 +++++++
- drivers/net/ethernet/intel/igc/igc_ptp.c  | 33 +++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+)
+  tools/testing/selftests/bpf/prog_tests/align.c
 
-diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-index a427f05814c1ae7330c6f7034cd0f2b40b74dab6..17236813965d334f14eba928affbd4f91b96ecd4 100644
---- a/drivers/net/ethernet/intel/igc/igc.h
-+++ b/drivers/net/ethernet/intel/igc/igc.h
-@@ -781,6 +781,8 @@ int igc_ptp_hwtstamp_set(struct net_device *netdev,
- 			 struct kernel_hwtstamp_config *config,
- 			 struct netlink_ext_ack *extack);
- void igc_ptp_tx_hang(struct igc_adapter *adapter);
-+void igc_ptp_clear_xsk_tx_tstamp_queue(struct igc_adapter *adapter,
-+				       u16 queue_id);
- void igc_ptp_read(struct igc_adapter *adapter, struct timespec64 *ts);
- void igc_ptp_tx_tstamp_event(struct igc_adapter *adapter);
- 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 89a321a344d263ace5c66f7ade782b40cc482566..570e90fab67d653bbbb242d242d0b64a49fba602 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -193,6 +193,7 @@ static void igc_unmap_tx_buffer(struct device *dev, struct igc_tx_buffer *buf)
-  */
- static void igc_clean_tx_ring(struct igc_ring *tx_ring)
- {
-+	struct igc_adapter *adapter;
- 	u16 i = tx_ring->next_to_clean;
- 	struct igc_tx_buffer *tx_buffer = &tx_ring->tx_buffer_info[i];
- 	u32 xsk_frames = 0;
-@@ -264,6 +265,12 @@ static void igc_clean_tx_ring(struct igc_ring *tx_ring)
- 	/* reset next_to_use and next_to_clean */
- 	tx_ring->next_to_use = 0;
- 	tx_ring->next_to_clean = 0;
-+
-+	/* Clear any lingering XSK TX timestamp requests */
-+	if (test_bit(IGC_RING_FLAG_TX_HWTSTAMP, &tx_ring->flags)) {
-+		adapter = netdev_priv(tx_ring->netdev);
-+		igc_ptp_clear_xsk_tx_tstamp_queue(adapter, tx_ring->queue_index);
-+	}
- }
- 
- /**
-diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
-index 7aae83c108fd7611b00bf075592f93a902b83422..98491346d21b80925ce42ba276d851d4318e66b7 100644
---- a/drivers/net/ethernet/intel/igc/igc_ptp.c
-+++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
-@@ -576,6 +576,39 @@ static void igc_ptp_clear_tx_tstamp(struct igc_adapter *adapter)
- 	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
- }
- 
-+/**
-+ * igc_ptp_clear_xsk_tx_tstamp_queue - Clear pending XSK TX timestamps for a queue
-+ * @adapter: Board private structure
-+ * @queue_id: TX queue index to clear timestamps for
-+ *
-+ * Iterates over all TX timestamp registers and releases any pending
-+ * timestamp requests associated with the given TX queue. This is
-+ * called when an XDP pool is being disabled to ensure no stale
-+ * timestamp references remain.
-+ */
-+void igc_ptp_clear_xsk_tx_tstamp_queue(struct igc_adapter *adapter, u16 queue_id)
-+{
-+	unsigned long flags;
-+	int i;
-+
-+	spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
-+
-+	for (i = 0; i < IGC_MAX_TX_TSTAMP_REGS; i++) {
-+		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
-+
-+		if (tstamp->buffer_type != IGC_TX_BUFFER_TYPE_XSK)
-+			continue;
-+		if (tstamp->xsk_queue_index != queue_id)
-+			continue;
-+		if (!tstamp->xsk_tx_buffer)
-+			continue;
-+
-+		igc_ptp_free_tx_buffer(adapter, tstamp);
-+	}
-+
-+	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
-+}
-+
- static void igc_ptp_disable_tx_timestamp(struct igc_adapter *adapter)
- {
- 	struct igc_hw *hw = &adapter->hw;
+between commit:
 
----
-base-commit: 05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
-change-id: 20260212-igc-fix-xdp-tx-tstamp-pagefault-c4abde453862
+  05849ec34f3d7 ("selftests/bpf: Replace strncpy() with strscpy()")
 
-Best regards,
--- 
-Zdenek Bouska
+=66rom the bpf tree and commit:
 
-Siemens, s.r.o.
-Foundational Technologies
+  f632de6e19553 ("selftests/bpf: Migrate align.c tests to test_loader frame=
+work")
 
+=66rom the bpf-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+(deleted the file)
+
+--MRWQfcW/ZMqR3ZoK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmdnAQACgkQJNaLcl1U
+h9CPLwf/WVi/v65yvxIWLU0e2i7lyr7/Gx18hXCvU8X+jNYcVqEmOjTGksRrkwEH
+FhZBM8r6iOWq7LXevWqXgtlNfs8u+M7zwWw/GgH6aubqBGo84PMiNei66qhlLLWl
+WTtkhpcazy5qizI/h3SXNJw0ywMUX8OefTRfpyJ0ywhEe/gi65QMeFMdwzv9rF4V
+/V981ojtcQ46skIMA/YfDoEGTRnoOJOzEIoRg94HBKYMLOsjvqz87CF5hq1mcpKJ
+Ol8MYGIhVF8GSOWM8/u613hTCrL9SZ+H+RJDBcjPo/GKlOb4BIh9hA+QZ64DiGgD
++tPDXy5IebLIo8HQX1qPApehFenxEA==
+=fAsj
+-----END PGP SIGNATURE-----
+
+--MRWQfcW/ZMqR3ZoK--
