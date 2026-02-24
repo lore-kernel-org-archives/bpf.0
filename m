@@ -1,35 +1,58 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from www2881.sakura.ne.jp (www2881.sakura.ne.jp [49.212.198.91])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE8121A459;
-	Tue, 24 Feb 2026 03:00:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3DD189B84
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 03:16:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=49.212.198.91
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771902026; cv=none; b=TF4PnPX9OfVLVA9MgYI6AJ1WpSb2PsgBjBqqVP6BUgK9wBk9+/huzTBHEeHzRBlIin+WubMhJ32ih64TRkZoIsfdRY5YqH1YBVOAyk62b9Nrw94PBYxl+NfA3B+nszN9sfbcnYoIKJhyfT4RCUK9d7d9tabWvmN8eeLSiWadBy4=
+	t=1771902964; cv=none; b=FjxbdTOYBtdAaHrePqJElo4/4rD0Hrw56bKpg97/mnt0Ei4it390VXUKt9UpWnx5CSj0lnXSbuWcInbF9VeAZL7pazlgGOLMnK9sWMg1BK63q8KMLQrcBbus/YcdWX0YG7/jvnaEQiFxJvupD5pHpmWTmy8zde6K9UMeh5p85dM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771902026; c=relaxed/simple;
-	bh=tSi8HdRwhZ4zapySywIOmzb9ESqD4kwO99QktYIcGvc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=qkube+apPXSTVHbJDa3nfsyKUHG58/syX4Yk8I1ovUv0U7mwVECFSuc+OSkBJKgovfbF7cjT+EQWOLiGGidapmn/eSaGW/JGrLvdQxeIRWfYZ/qu8fNfi329VnNW2Cbom7z3VWBxoU/UKlMmi0Nc/gLOJ3YI2zNIQ8rJ8Fdhs8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=taMbzKBu; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771902964; c=relaxed/simple;
+	bh=aVxx/dAl9N6K1fGMuhwduxugmraw8DCjFlLI39ECSQI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pFKnXZlaySoDOZzD5U3B2QFFXhLcFE/DW8LyGqUNro6Au0IwIZsprVTb2tHkf/suE0B4hU/ERR9c2vCDjhLO8XNIRF5R5+7NsMvoXxcZQz6YEkAPY3tI/3ZFNESZRcJo7OE0N2aFxV0apigQCpkqHAPvDdkqURgA/PHiI5K2+Gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp; spf=pass smtp.mailfrom=enjuk.jp; dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b=utA36q1E; arc=none smtp.client-ip=49.212.198.91
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=enjuk.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=enjuk.jp
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="taMbzKBu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6E9FC116C6;
-	Tue, 24 Feb 2026 03:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771902025;
-	bh=tSi8HdRwhZ4zapySywIOmzb9ESqD4kwO99QktYIcGvc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=taMbzKBu2Bq9j0Z40WNqVrlTkK/WZbNkdLVQd3OMcP8H+0apETZaxNBzLmkTS0vlu
-	 SVfFe//+G4MREZPpHUncvGOZjW1BUv4SecuzoTK5rehRpNrPzeu2UuZkSGlGxRC0JV
-	 mJ3XVVdoYaupeeSyFyV9KIomXZeFbfEBCdna0/f2iD0weoSM2vIdKEYQqnN9MpSJGm
-	 xq9mQKx+h9FOWERA2128trDBsKn+kMHzI/N1+/yoD6wqYtwtuze1cIVHcnL/17IzE6
-	 VjNt2oktcE9Vsl4m8qXUSfnPqOVpL0AvFRURREHU2AqwtXrSIE5sYTMS0e0R+sKwT9
-	 aXfL2CuLPu/Fw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02D643808200;
-	Tue, 24 Feb 2026 03:00:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=enjuk.jp header.i=@enjuk.jp header.b="utA36q1E"
+Received: from ms-a2 (99.223.13.160.dy.iij4u.or.jp [160.13.223.99])
+	(authenticated bits=0)
+	by www2881.sakura.ne.jp (8.16.1/8.16.1) with ESMTPSA id 61O3Fxws082566
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Tue, 24 Feb 2026 12:16:00 +0900 (JST)
+	(envelope-from kohei@enjuk.jp)
+DKIM-Signature: a=rsa-sha256; bh=o9TCtDnPs0UhX9rEgkhCpMtnSuAWHpA6U1kvGCV5OAA=;
+        c=relaxed/relaxed; d=enjuk.jp;
+        h=From:To:Subject:Date:Message-ID;
+        s=rs20251215; t=1771902960; v=1;
+        b=utA36q1EgWn648+1eGjNMxbzfCmx3YwvlO8xSVbqiY8pZiBFd5CY5cLiFuyF7tcn
+         t9csJn6J4KcXni3loTI6LB/C0uqmKgc/K36Oks/MR8vjSPkQDoFWioUhcufxgVSQ
+         YhPc71LGeJQBbCHkUFm7860nXDQT2MF1FsEYHq+z5BGr6JCvscZAXD1qLaOqZX6P
+         rE3LA+RZcSjI739GFw9kBhe7HUDmUXiW9gwu8z1JO6jWjwjEkoyHXDsbBhQ+9A9a
+         f1MTlqYgiarEIQIvAee2PohOjCy69ALZ9qi6ny5YpSLjqf6ZaXkJs4jtzGO1Zg/r
+         mjKWdEds1X38n57HdZkePg==
+From: Kohei Enju <kohei@enjuk.jp>
+To: netdev@vger.kernel.org, bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Stanislav Fomichev <sdf@fomichev.me>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jussi Maki <joamaki@gmail.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        kohei.enju@gmail.com, Kohei Enju <kohei@enjuk.jp>,
+        syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
+Subject: [PATCH v3 bpf] bpf: devmap: fix stack-out-of-bounds write in get_upper_ifindexes()
+Date: Tue, 24 Feb 2026 03:15:37 +0000
+Message-ID: <20260224031556.38398-1-kohei@enjuk.jp>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,79 +60,95 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v4 00/20] selftests/bpf: Fixes for userspace ASAN
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177190203179.3291650.5550860539555741440.git-patchwork-notify@kernel.org>
-Date: Tue, 24 Feb 2026 03:00:31 +0000
-References: <20260223190736.649171-1-ihor.solodrai@linux.dev>
-In-Reply-To: <20260223190736.649171-1-ihor.solodrai@linux.dev>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, olsajiri@gmail.com, yatsenko@meta.com,
- alexis.lothore@bootlin.com, ameryhung@gmail.com, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-team@meta.com
 
-Hello:
+get_upper_ifindexes() iterates over all upper devices and writes their
+indices into an array without checking bounds.
 
-This series was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Also the callers assume that the max number of upper devices is
+MAX_NEST_DEV and allocate excluded_devices[1+MAX_NEST_DEV] on the stack,
+but that assumption is not correct and the number of upper devices could
+be larger than MAX_NEST_DEV (e.g., many macvlans), causing a
+stack-out-of-bounds write.
 
-On Mon, 23 Feb 2026 11:07:16 -0800 you wrote:
-> This series includes various fixes aiming to enable test_progs run
-> with userspace address sanitizer on BPF CI.
-> 
-> The first five patches add a simplified implementation of strscpy() to
-> selftests/bpf and then replace strcpy/strncpy usages across the tests
-> with it. See relevant discussions [1][2].
-> 
-> [...]
+Add a max parameter to get_upper_ifindexes() to avoid the issue.
+When there are too many upper devices, return -EOVERFLOW and abort the
+redirect.
 
-Here is the summary with links:
-  - [bpf,v4,01/20] selftests/bpf: Add simple strscpy() implementation
-    https://git.kernel.org/bpf/bpf/c/63c49efc987a
-  - [bpf,v4,02/20] selftests/bpf: Replace strcpy() calls with strscpy()
-    https://git.kernel.org/bpf/bpf/c/6a087ac23f5b
-  - [bpf,v4,03/20] selftests/bpf: Replace strncpy() with strscpy()
-    https://git.kernel.org/bpf/bpf/c/05849ec34f3d
-  - [bpf,v4,04/20] selftests/bpf: Use strscpy in bpftool_helpers.c
-    https://git.kernel.org/bpf/bpf/c/f074d8941c29
-  - [bpf,v4,05/20] selftests/bpf: Use memcpy() for bounded non-NULL-terminated copies
-    https://git.kernel.org/bpf/bpf/c/6fcf7925e334
-  - [bpf,v4,06/20] selftests/bpf: Pass through build flags to bpftool and resolve_btfids
-    https://git.kernel.org/bpf/bpf/c/b1dc4f39b541
-  - [bpf,v4,07/20] resolve_btfids: Fix memory leaks reported by ASAN
-    https://git.kernel.org/bpf/bpf/c/08a4ab51771f
-  - [bpf,v4,08/20] selftests/bpf: Add DENYLIST.asan
-    https://git.kernel.org/bpf/bpf/c/7661538bb7d2
-  - [bpf,v4,09/20] selftests/bpf: Refactor bpf_get_ksyms() trace helper
-    https://git.kernel.org/bpf/bpf/c/536abce60307
-  - [bpf,v4,10/20] selftests/bpf: Fix memory leaks in tests
-    https://git.kernel.org/bpf/bpf/c/f8e7eccf33d3
-  - [bpf,v4,11/20] selftests/bpf: Fix cleanup in check_fd_array_cnt__fd_array_too_big()
-    https://git.kernel.org/bpf/bpf/c/e4093ebf3db1
-  - [bpf,v4,12/20] veristat: Fix a memory leak for preset ENUMERATOR
-    https://git.kernel.org/bpf/bpf/c/10d19e708d3b
-  - [bpf,v4,13/20] selftests/bpf: Fix use-after-free in xdp_metadata test
-    https://git.kernel.org/bpf/bpf/c/4650dd3ea4ac
-  - [bpf,v4,14/20] selftests/bpf: Fix double thread join in uprobe_multi_test
-    https://git.kernel.org/bpf/bpf/c/a9b15811ef10
-  - [bpf,v4,15/20] selftests/bpf: Fix resource leaks caused by missing cleanups
-    https://git.kernel.org/bpf/bpf/c/547a83e93a48
-  - [bpf,v4,16/20] selftests/bpf: Free bpf_object in test_sysctl
-    https://git.kernel.org/bpf/bpf/c/1907d7a6ca0f
-  - [bpf,v4,17/20] selftests/bpf: Fix array bounds warning in jit_disasm_helpers
-    https://git.kernel.org/bpf/bpf/c/68da3afd0bf0
-  - [bpf,v4,18/20] selftests/bpf: Fix out-of-bounds array access bugs reported by ASAN
-    https://git.kernel.org/bpf/bpf/c/a3f40c2890e9
-  - [bpf,v4,19/20] selftests/bpf: Check BPFTOOL env var in detect_bpftool_path()
-    https://git.kernel.org/bpf/bpf/c/fe9f7aa74767
-  - [bpf,v4,20/20] selftests/bpf: Don't override SIGSEGV handler with ASAN
-    https://git.kernel.org/bpf/bpf/c/db7337948c7b
+To reproduce, create more than MAX_NEST_DEV(8) macvlans on a device with
+an XDP program attached using BPF_F_BROADCAST | BPF_F_EXCLUDE_INGRESS.
+Then send a packet to the device to trigger the XDP redirect path.
 
-You are awesome, thank you!
+Reported-by: syzbot+10cc7f13760b31bd2e61@syzkaller.appspotmail.com
+Closes: https://lore.kernel.org/all/698c4ce3.050a0220.340abe.000b.GAE@google.com/T/
+Fixes: aeea1b86f936 ("bpf, devmap: Exclude XDP broadcast to master device")
+Signed-off-by: Kohei Enju <kohei@enjuk.jp>
+---
+Changes:
+  v3:
+    - return -EOVERFLOW when there are too many upper devices
+  v2: https://lore.kernel.org/bpf/20260220193039.7129-1-kohei@enjuk.jp/
+    - fix formatting, accounting that max-line-length is 100
+  v1: https://lore.kernel.org/bpf/20260216201428.65641-1-kohei@enjuk.jp/
+---
+ kernel/bpf/devmap.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
+index 2625601de76e..d8e926a2d0da 100644
+--- a/kernel/bpf/devmap.c
++++ b/kernel/bpf/devmap.c
+@@ -588,18 +588,22 @@ static inline bool is_ifindex_excluded(int *excluded, int num_excluded, int ifin
+ }
+ 
+ /* Get ifindex of each upper device. 'indexes' must be able to hold at
+- * least MAX_NEST_DEV elements.
+- * Returns the number of ifindexes added.
++ * least 'max' elements.
++ * Returns the number of ifindexes added, or -EOVERFLOW if there are too 
++ * many upper devices.
+  */
+-static int get_upper_ifindexes(struct net_device *dev, int *indexes)
++static int get_upper_ifindexes(struct net_device *dev, int *indexes, int max)
+ {
+ 	struct net_device *upper;
+ 	struct list_head *iter;
+ 	int n = 0;
+ 
+ 	netdev_for_each_upper_dev_rcu(dev, upper, iter) {
++		if (n >= max)
++			return -EOVERFLOW;
+ 		indexes[n++] = upper->ifindex;
+ 	}
++
+ 	return n;
+ }
+ 
+@@ -615,7 +619,11 @@ int dev_map_enqueue_multi(struct xdp_frame *xdpf, struct net_device *dev_rx,
+ 	int err;
+ 
+ 	if (exclude_ingress) {
+-		num_excluded = get_upper_ifindexes(dev_rx, excluded_devices);
++		num_excluded = get_upper_ifindexes(dev_rx, excluded_devices,
++						   ARRAY_SIZE(excluded_devices) - 1);
++		if (num_excluded < 0)
++			return num_excluded;
++
+ 		excluded_devices[num_excluded++] = dev_rx->ifindex;
+ 	}
+ 
+@@ -733,7 +741,11 @@ int dev_map_redirect_multi(struct net_device *dev, struct sk_buff *skb,
+ 	int err;
+ 
+ 	if (exclude_ingress) {
+-		num_excluded = get_upper_ifindexes(dev, excluded_devices);
++		num_excluded = get_upper_ifindexes(dev, excluded_devices,
++						   ARRAY_SIZE(excluded_devices) - 1);
++		if (num_excluded < 0)
++			return num_excluded;
++
+ 		excluded_devices[num_excluded++] = dev->ifindex;
+ 	}
+ 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.51.0
 
