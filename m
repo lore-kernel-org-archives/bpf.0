@@ -1,98 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D2425A2C9;
-	Tue, 24 Feb 2026 12:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B4B437FF43
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771936778; cv=none; b=jpTSemmc1KUbpYHB6BSVnw3kvwtzAL8/KeZdHoMKtGOKiCHRq0GLO2Ep7jj049EOKLZo/rC73jjuo6VMcpENJ/OuqspLZs3k1pg//u6FiJkHZcfF8Mxj6tpbWsJL2rvoXGyAua+LacZSAzxx2w29q3MwGZ9OqtkbXzT+6PXd3mc=
+	t=1771937936; cv=none; b=Bu2gvMxJJ2CW4Nd7ttAyo3GcolhtgShaFk6kt9Rk8uateEKKocJrWJuaWUG9pQarIKouGEY7mYz3pi94JcmkzcFEcD+RdWDce/OIE1D2h5UG8De1EnBurIGXJIl0/2p35BiHHqNDStkTLqD+y9xhH7Gos4FmOO6XY/ccDHqTfhg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771936778; c=relaxed/simple;
-	bh=YKI1upsRFHpQ70GhUF+nMVLZfbcZ0yrmnGFgevv0qF4=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mRaSnPbnXVZgQjDq1i4M7EtrUpu7mX5dA9EHwZd2Hz5JtGcTJj2QH2eE4x3WmS+DVBSPv0VPVWRleVTNfLJrnoVt8WP2MaBnCnBRjDJKLqQlkMCA9JipC32sPQnKzBxvg8Solasf+Tk6CIAg/rtgFVYFkd5Yv7Oe5s45A+8bO2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UmeYc8Xm; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771937936; c=relaxed/simple;
+	bh=DDw96xmoZbUt+zs0MoI3/CFecRPmq/Pl4/MVFM0h0dA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kZzmtxdr0R6XNX9CeeVO9DnmxTzB02DzOKcClUwcB8BzRPF4uyvwFmQZ05l2SIkZVskE71s6MqPV5p7fg4XP1zN1tR7DWCVQToRrEY4A8yEk8Nkn9ncme7hjwjWEN8vzTM6i7lzAHucSfl50Tq2Qh4KO0Ye60XyC+ZnNC0M0fC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ttQedrwE; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UmeYc8Xm"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A0A8C116D0;
-	Tue, 24 Feb 2026 12:39:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771936777;
-	bh=YKI1upsRFHpQ70GhUF+nMVLZfbcZ0yrmnGFgevv0qF4=;
-	h=Date:From:To:Cc:Subject:From;
-	b=UmeYc8Xmc8q6Ktw+pmpjpo4rcg2rpxPqLSrwhmop88ELBL6oqGNEFUfyO8nY4jYQV
-	 njgml2tRuM0x+L5NVrghIbPf5VhJmV8K/sj9s1GcfqaPxOpyksU7kKSkq6wxd/sQZu
-	 HGvo4R002MKuxjywktj/HwrpgJJ0CUqQSFQUQnxVB2v6XJF3iePXxJJ/vifAPer+sw
-	 5cHFlAEzvJLq48o7hyaaQFesLtuWs9H6N91DjY9w4oa6QfLpvlhqELvaIS/+gsbdn6
-	 v6heGMiR7IF8V8vbEkGWopsSbzFnDLNpaCWw/4OA90O6NjwQACnp8PhU9B2n05Bsqb
-	 2iANhGgZ4e5nQ==
-Date: Tue, 24 Feb 2026 12:39:33 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	Networking <netdev@vger.kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the bpf-next tree with the bpf tree
-Message-ID: <aZ2cBWyiG_fKSjIq@sirena.org.uk>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ttQedrwE"
+Date: Tue, 24 Feb 2026 12:58:31 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771937923;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=u+wivhIr528+W6wLESqvbuF0C1RtOB8ByC0jlMyM6cc=;
+	b=ttQedrwEbhqs8TPNzb9B3Y861TAKH54StDmEW8UqoxOWKwPfTGhRbkouy/LuWORW1iTAq6
+	3iX6s7XAptUtrsVJdnqPjv+U6/FPE/E3+kZLl+JhKrSQgHWm2mr9VDj5jIgTonPhNqUJ6H
+	dhUIkRCp0FElxpQjDjSRyKjLXG75it4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Pankaj Raghav (Samsung)" <pankaj.raghav@linux.dev>
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: miklos@szeredi.hu, joannelkoong@gmail.com, bpf@vger.kernel.org, 
+	bernd@bsbernd.com, neal@gompa.dev, linux-fsdevel@vger.kernel.org, 
+	linux-ext4@vger.kernel.org
+Subject: Re: [PATCH 29/33] fuse: support atomic writes with iomap
+Message-ID: <ej24ajmh6ltfe37yiy6qzqko5p6y5eecixzybexgxs5oo45iuu@ufvfjxvppc3o>
+References: <177188734044.3935739.1368557343243072212.stgit@frogsfrogsfrogs>
+ <177188734865.3935739.5549380606123677673.stgit@frogsfrogsfrogs>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="MRWQfcW/ZMqR3ZoK"
-Content-Disposition: inline
-
-
---MRWQfcW/ZMqR3ZoK
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <177188734865.3935739.5549380606123677673.stgit@frogsfrogsfrogs>
+X-Migadu-Flow: FLOW_OUT
 
-Hi all,
+> +	}
+> +
+>  	/*
+>  	 * Unaligned direct writes require zeroing of unwritten head and tail
+>  	 * blocks.  Extending writes require zeroing of post-EOF tail blocks.
+> @@ -1873,6 +1909,12 @@ static ssize_t fuse_iomap_buffered_write(struct kiocb *iocb,
+>  	if (!iov_iter_count(from))
+>  		return 0;
+>  
+> +	if (iocb->ki_flags & IOCB_ATOMIC) {
+> +		ret = fuse_iomap_atomic_write_valid(iocb, from);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
 
-Today's linux-next merge of the bpf-next tree got a conflict in:
+I still haven't gone through the whole patch blizzard but I had a
+general question here: we don't give ATOMIC guarantees to buffered IO,
+so I am wondering how we give that here. For example, we might mix
+atomic and non atomic buffered IO during writeback. Am I missing some
+implementation detail that makes it possible here? I don't think we
+should enable this for buffered IO.
 
-  tools/testing/selftests/bpf/prog_tests/align.c
-
-between commit:
-
-  05849ec34f3d7 ("selftests/bpf: Replace strncpy() with strscpy()")
-
-=66rom the bpf tree and commit:
-
-  f632de6e19553 ("selftests/bpf: Migrate align.c tests to test_loader frame=
-work")
-
-=66rom the bpf-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-(deleted the file)
-
---MRWQfcW/ZMqR3ZoK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmmdnAQACgkQJNaLcl1U
-h9CPLwf/WVi/v65yvxIWLU0e2i7lyr7/Gx18hXCvU8X+jNYcVqEmOjTGksRrkwEH
-FhZBM8r6iOWq7LXevWqXgtlNfs8u+M7zwWw/GgH6aubqBGo84PMiNei66qhlLLWl
-WTtkhpcazy5qizI/h3SXNJw0ywMUX8OefTRfpyJ0ywhEe/gi65QMeFMdwzv9rF4V
-/V981ojtcQ46skIMA/YfDoEGTRnoOJOzEIoRg94HBKYMLOsjvqz87CF5hq1mcpKJ
-Ol8MYGIhVF8GSOWM8/u613hTCrL9SZ+H+RJDBcjPo/GKlOb4BIh9hA+QZ64DiGgD
-+tPDXy5IebLIo8HQX1qPApehFenxEA==
-=fAsj
------END PGP SIGNATURE-----
-
---MRWQfcW/ZMqR3ZoK--
+-- 
+Pankaj
