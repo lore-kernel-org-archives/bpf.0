@@ -1,184 +1,237 @@
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7EB1330328
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 19:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771962731; cv=pass; b=AllfPGtYFeFd4aPqOeg+7UpBeLi9IauZgbVilqBCTW/a92z0mdrCYucLYbRn7tQ5SZYDchIHMRWUOlQNo3OkVhkltp1wtYOJ6EQ43rrzX3J4dgZ4EKdJlzKgKmJvfdNtP7/PVL4w01A3gkTJ289MyRPRd3z6Z9mgiwLc02XjYvs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771962731; c=relaxed/simple;
-	bh=SoixlidDiibOOpy1bBAn3Bjb0iw9WOkz1GIcGBKF5s8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hHliCYBrEXmCAWLAWmtQBZNFnr5LEEtTuFtZoyrdaHCyosFSGNFM2L82PKqAb54v/NOawYmrHebz6vmoOBtfqKpws2OKScr0RHnBrCPEOIy3d6zo+jKlMwQAEQIimCtdmrKn9rMw83jjK0+sCLEmrpRCaHGnwHdxGmZ2dhSNuek=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=if17CGpK; arc=pass smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A064732C94B
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 19:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771962835; cv=none; b=CbIGvBelUEBgBzX+OMt4H/AvkGlg+ffJdrewf3xJmQuv1xUog83TRew9brYdYQR4N2QB2qbCJ7bNXdFCtWGsfhHXZwm1FXJ6sFyjF9Xvc3J3oORQWVZidLhesZ0GNkvOgE3bQPC8ZU1jdPiShRizar0r58+7STzbNpNDYHE/PDI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771962835; c=relaxed/simple;
+	bh=CCjU8S6lsjGuCMaAsjN16QS01K4Xlt/A0FShrZNssWE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=nXktkssGPH1PPue90OBeLS1+oxgYQqvBj3vHezQJ7pry+KmGGBeBWzOe/LaHo53jBnKPiYk2zxGcx0P8vcD7BDxX/61F1yl1BOOgFWnynE7mBzXoTofpf8e1SQ2wdtyOETxFFF35v03fvFHFzUFdpr8ovY3imkyi5KIqTiCDGrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=b2M3OGXV; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="if17CGpK"
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b8fd976e90cso802754066b.0
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 11:52:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771962728; cv=none;
-        d=google.com; s=arc-20240605;
-        b=XvYSJKBeCZh//rtS7HpmGX9K0USmiB+T8FeZ78ePjVVoePc2a8mQtTxpDW+9kRNL4T
-         gV0FHll4gfvC9ig5f2lHVdt50+NkMRwutzrO35/IR/RgROCNbwqxA6O88Rt/9iCfJ7Oi
-         K+GO4DJmAGVKFz0tj+gxcwMrRLdem9Z88cTknOYDxWnVOGHVe9aml5wKOzKRlBVs2tUv
-         AT0wu1lYbn4vPL/zdzzh7zV/uHh5mFyFadOVJ4lrZtFR0SuB0Gfpggc1iWIgaHH+vKgL
-         9/OTixB7WHZUZH/RaeGv2zPWu4RyA7wnf4j7Fyi/ZVIED3EF9KZDgHU4P1CSx+UkCdGA
-         ZeiA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=CW77RPxHP9c5AiefiMyl8UTV+Eib5tdUtzprV6NOeOo=;
-        fh=ssiRGpjMl+b9sAWw2mtuNTXZnnnjl1IklYqlt7iCziA=;
-        b=Ooa0i1FBpEt4kJgRibCspjddU3EWirr72Nuqs7Pq+OhHzRblkbZ6Nf1xZ6aUjdMevb
-         p4wQ4J8TLvsOZJZYSWewW6TnTqY9om0pSa5YRTUymlw3f3cp1MLYn7l59TF/OUOiy1aA
-         /Gj+hyQJMmzBRDDfdSOc1BjgC7xjR0DIcSl7UHGMhM2hWb0UXvjiGlsanYpxTy7MxHI5
-         3vI5fvjS1cNh7NF98ZlynNCSTZ13I0W9wCqDIOc9wjfFUz/ECmsw1dyO5IiNZRW2BzZg
-         ukZHS3V0zLPUrZ+3mFAgnCzE067UZEefAA3bV1QbsCj+5IbtbdvqbvjNJBvy5akOgYHf
-         J55Q==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="b2M3OGXV"
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-8cb3e0093e3so581308985a.0
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 11:53:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771962728; x=1772567528; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1771962832; x=1772567632; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CW77RPxHP9c5AiefiMyl8UTV+Eib5tdUtzprV6NOeOo=;
-        b=if17CGpKUNNf75v6igeiTDH2KSzVR62nZjaYbxfzyiIb1FDH7e68c5WTO+ICAAzoLj
-         PTEuGQYAYrh+QPCzMQa6hueYB8Fm8gLNnqrVpeyzq5u8LFnNnVxhkijjAZLhuIpl6jg7
-         +5c1Z2aBL1xENBa9lZIMY9Tg+MzpnFsPRcc88p7WObe2FzcoSIiK6bf6ehNv+l4guyr9
-         a1XR+J2blwz9K6VsXEhNPr/UxsjhneT7EgMTFmhPBpDbMhabhdByOr67G8fd93D4MlYU
-         1sxXETZQQ0hsetRp1y8a3otMKZlnfKjlId3EcQOy6nGiS0/5ISG/6bPdzIdignp6O6ku
-         4fHw==
+        bh=drEVikMNesExIHat5CzTXNECw/7u3CktgSHrx0htbCk=;
+        b=b2M3OGXV0mmUveZtZpSH2nyQgqsAYUnKKZgzgfi7elbA8Ej83KCh9R9/j4F5WiFkoY
+         VUG/R5DLkF2gs03dsGGHvbKMULhPBUPSipRUMGdaxXiuLUFXuQx1nsMBbpMNS0io3OKE
+         YcUpUJcztQ7LtFmuSY44HU3cHR/pwH+h4Srnvn+j+wwr4hBAIsKofJ1d19djfCDni9r1
+         19tVXQJke2umo1DH+ABaXf6xKi5cDa7tCEHhORgRC+wcQ0BVyum9jwM6iOpFmo1mdMeb
+         lN+AOx2gSvsb5FOb+83gDNNYEqBmQiy3QeWFiz1gfTLWBmuC7SFMDWin3StK7/Z/bRjD
+         tPJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771962728; x=1772567528;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CW77RPxHP9c5AiefiMyl8UTV+Eib5tdUtzprV6NOeOo=;
-        b=BzweQlRg3wbp1A4rFVFSt/49B9a1xj7MWEhZ2rB+SEZBD/e3bFCAjO+7rZ687RhYkN
-         SXC5nYSRdWmmtSduuoCl3/eYChicXg3Lhi37Pqdm3T+5Sb8IwqmC8BUzk4nzk8w4Z3QV
-         f3y3xzXX9uuim5Mgbsz9ZWQl5dN58P6tYVYxh5sjb8Ecue8fueuS3SdalpQS9V6f0r+/
-         Rq8k0xf08wblt9c46OEkqq3LhVwkKFdCXUGIZ+N5oICfZeYkDhPZEs22StLugVXHz0JI
-         UhkzdM66yaHRU5QQakvNv7suZ4hPZtk5T5A8f31D8Xt9Xu+Ew35c2gSbDT6UPiaUqG6z
-         l/qg==
-X-Forwarded-Encrypted: i=1; AJvYcCWV/Lcp2rIK6HJIU2/bVgOPngOs6cKPYL6EMGDfadmI2gFW6AKbtvvMvFLl4XHJvsl5rGU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuhnKJH5WWKB1aWo4PRA3LSgQTo9qskpUC30omz3BznJm0YbDp
-	5KH4O57638zkTN/g8upAbEEumM/EBqCCvRr3sj7IHG52jLGBp3xZZfNsuoIw8UcSWOwItKz6Ccl
-	7ujxOzTSC9rXIYNiQ2V/q78ts5wsh7vU=
-X-Gm-Gg: ATEYQzxBl34DSt+JTuvlRnEa7MDl9qc436jP7/loHbpMAPnkrs6Y1F8Js0WRXrQZwJo
-	dL8X7SsBPBqW6DXDXTLHcW7Qx1bcHEuQahsAYtm5mvF0B351JZFiBvJW09CWrGFldV7+kd4//Ik
-	uesB1q39OQYStrFK232nHCZY2sUCLRQWudQdEF6kv8HB0celZnnLdJ8D0dXC5VwAeQmEouHGAT4
-	IlC4DlFQuyZ3xv97JDQK4Ye1z6gZztD7ehVsoL0EDCaSnfyNdXd6X3cAAowPEvu+gGfV4+bkVDi
-	HwQIf8vq
-X-Received: by 2002:a17:907:fdcb:b0:b8f:a03c:ac22 with SMTP id
- a640c23a62f3a-b9081b77ae4mr907145966b.42.1771962727752; Tue, 24 Feb 2026
- 11:52:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1771962832; x=1772567632;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=drEVikMNesExIHat5CzTXNECw/7u3CktgSHrx0htbCk=;
+        b=c1LA4RrHtTkaGfLis2GY/ZEHePwamu65iBX42kw+V4rNkrSNU5oiRYIpcX9P+pmQ9X
+         ETFNjsMW5klfgS75VDVBNpTTtCshMNOoaKH71fDum5BQ46rNf6oRVkgbYE8Sf8HgjfUc
+         qMHSEHd4xABWz0WJNvGhaUUSM3P3UrH0W97L1AVK9g3G6O1mEP8W4PG8qWrBbXnVcy5l
+         52QHdM0vQuim/OPZdSjI04YRqjoT2H/YJ4vLz1v1Qka7pSW6bFGcUw300GmY40wMaGbI
+         Eb3kG5XNgodfju2fMp78q3xRURvttKvyY1tuDpStvIWoKMVTHA+rH40IH+GxC06UniKu
+         ikTw==
+X-Forwarded-Encrypted: i=1; AJvYcCVCg92DaDKQ3koBIxRRqrcXGnjSXs9+pt8yg1ESLcnsdY6sQsh/LorPoOvtFl4PJg/hL8A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXXlqlQM6DLyrzN2g+ocRHp7RBh4ZMWUG3AxTNHED9cTG7C0gG
+	T0FoKkWI4DhKKl2oogaBAlyFE49jvHCrc29WEN+cHgAyd4oz3HfpmzLvpI2Rezd1xBk=
+X-Gm-Gg: AZuq6aJ7O8LWrnOd8LTQ/okQEEGwGp0C7UrntM+lRgnIPEmkxJTQbK7QN/I+YF+eKNx
+	CsU7jB3VXBXwFmVGQa7k5nQTf1KnAIhv1i5PAfVvDX5eb1legIm3MhWhjXzcEN4xVb0VzzPa+Jn
+	4kkfaKisE2kofGT5B6fyuh+DMWNGdhQHHQQPuM/g4MCb7qKHY0YFfI63F3TS/1Ss5R+zEWKV61m
+	MYN+TwuL8jSALLF5CAkxNcv2pqyQMS9PYksJWx04UBBXevfQ4aHvKzW0O75boV7KvKlhru7xr8H
+	1xbYNOB3WX4fh9vOc1EqQaLCI8x/azsByYwPhSr65pBbPX/0cWY9FAWjVU54c2o4XCQHXmJco58
+	brd5RKDL7/d+YTgJK0JINtJGCzKBbV4czA56iFMVJrt3rQP0R8gqzgns2iOCFoRXKE9xJEChdA+
+	SH2Vuq5iejhaR64Hm6MTXlLJU=
+X-Received: by 2002:a05:620a:28d1:b0:8c6:a213:8fe0 with SMTP id af79cd13be357-8cb8c9fa4abmr1667348885a.23.1771962832091;
+        Tue, 24 Feb 2026 11:53:52 -0800 (PST)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899b26ccd43sm8973776d6.50.2026.02.24.11.53.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Feb 2026 11:53:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260223174659.2749964-1-puranjay@kernel.org> <CAADnVQ+aobVwR1m-v2w_RWFxG_9TwkYQ-K8KtC6D18HrYe8Dig@mail.gmail.com>
- <CANk7y0hLknrHo+UB2HDPeen6nLxRaBdLNKiMBiMBv7Hh-QzPEw@mail.gmail.com>
- <CAADnVQJ_xG+QAUzPHm1FZGpcz45X3k_cG3ThQ0da3kFa0ppLmA@mail.gmail.com> <a8fbc7a3669ad1014b2623c42219d3d074dfbc8f.camel@gmail.com>
-In-Reply-To: <a8fbc7a3669ad1014b2623c42219d3d074dfbc8f.camel@gmail.com>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Tue, 24 Feb 2026 19:51:56 +0000
-X-Gm-Features: AaiRm50nqWHH-30qUmv_6zCffcGuXUgLj-EWc-RF4A2gnUDmjipv0GZNgw0DU8c
-Message-ID: <CANk7y0hv7TsJD5Ne_LaHpLiHNfMDJV+SUyXqnNftmC03fMTUBg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 0/6] Introduce KF_FORBID_SLEEP modifier for
- acquire/release kfuncs
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf <bpf@vger.kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, 
-	Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 24 Feb 2026 14:53:50 -0500
+Message-Id: <DGNGEEL4AYE5.3EF1GJDZ1JG9D@etsalapatis.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <martin.lau@kernel.org>, <memxor@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf: Allow void global functions in the
+ verifier
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260223215046.1706110-1-emil@etsalapatis.com>
+ <20260223215046.1706110-2-emil@etsalapatis.com>
+ <7fcfdf81aa76d816f7b5032d5b8a85302621fe64.camel@gmail.com>
+ <DGNEYQZUKR83.25MVGRAQ05NSU@etsalapatis.com>
+ <446bbdd8c843340e496c6059d6e1432f1708af59.camel@gmail.com>
+In-Reply-To: <446bbdd8c843340e496c6059d6e1432f1708af59.camel@gmail.com>
 
-On Tue, Feb 24, 2026 at 6:55=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
+On Tue Feb 24, 2026 at 2:02 PM EST, Eduard Zingerman wrote:
+> On Tue, 2026-02-24 at 13:46 -0500, Emil Tsalapatis wrote:
+>> On Mon Feb 23, 2026 at 7:09 PM EST, Eduard Zingerman wrote:
+>> > On Mon, 2026-02-23 at 16:50 -0500, Emil Tsalapatis wrote:
+>>=20
+>> Ack on the comments for 2/2. For here:
+>> >=20
+>> > [...]
+>> >=20
+>> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> > > index 0162f946032f..e997c3776fa7 100644
+>> > > --- a/kernel/bpf/verifier.c
+>> > > +++ b/kernel/bpf/verifier.c
+>> > > @@ -444,6 +444,29 @@ static bool subprog_is_global(const struct bpf_=
+verifier_env *env, int subprog)
+>> > >  	return aux && aux[subprog].linkage =3D=3D BTF_FUNC_GLOBAL;
+>> > >  }
+>> > > =20
+>> > > +static bool subprog_returns_void(struct bpf_verifier_env *env, int =
+subprog)
+>> > > +{
+>> > > +	const struct btf_type *type, *func, *func_proto;
+>> > > +	const struct btf *btf =3D env->prog->aux->btf;
+>> > > +	u32 btf_id;
+>> > > +
+>> > > +	btf_id =3D env->prog->aux->func_info[subprog].type_id;
+>> > > +
+>> > > +	func =3D btf_type_by_id(btf, btf_id);
+>> > > +	if (verifier_bug_if(!func, env, "btf_id %u not found", btf_id))
+>> > > +		return false;
+>> > > +
+>> > > +	func_proto =3D btf_type_by_id(btf, func->type);
+>> > > +	if (verifier_bug_if(!func_proto, env, "btf_id %u not found", func-=
+>type))
+>> > > +		return false;
+>> > > +
+>> > > +	type =3D btf_type_skip_modifiers(btf, func_proto->type, NULL);
+>> > > +	if (verifier_bug_if(!type, env, "btf_id %u not found", func_proto-=
+>type))
+>> > > +		return false;
+>> > > +
+>> >=20
+>> > Nit: I there there are a few unnecessary 'verifier_bug_if()' checks he=
+re,
+>> >      e.g. btf.c:btf_check_all_types() guarantees that func->type and f=
+unc_proto->type
+>> >      would be valid.
+>> >=20
+>>=20
+>> Ack, just to make sure I got it right at all the verifier_bug_if() are
+>> unnecessary. unnecessary because the BTF is already checked. There's no =
+way we
+>> have an existing type with invalid fields. We also know the subprog btf
+>> ID is valid from check_btf_func_early that happens way before
+>> do_check_subprogs where subprog_returns_void is used.
 >
-> On Tue, 2026-02-24 at 10:00 -0800, Alexei Starovoitov wrote:
-> > On Tue, Feb 24, 2026 at 3:24=E2=80=AFAM Puranjay Mohan <puranjay12@gmai=
-l.com> wrote:
-> > >
-> > > On Tue, Feb 24, 2026 at 1:49=E2=80=AFAM Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Mon, Feb 23, 2026 at 9:48=E2=80=AFAM Puranjay Mohan <puranjay@ke=
-rnel.org> wrote:
-> > > > >
-> > > > >
-> > > > > Iterator KF_ACQUIRE support is not useful on its own right now, b=
-ut it
-> > > > > becomes the foundation for KF_FORBID_SLEEP: an iterator whose _ne=
-xt is
-> > > > > annotated with KF_ACQUIRE | KF_FORBID_SLEEP can now express "hold=
-ing this
-> > > > > pointer forbids sleeping; calling _release invalidates the pointe=
-r and
-> > > > > re-enables sleeping."
-> > > > >
-> > > >
-> > > > The name of the flag and semantics bothers me a bit.
-> > > > How about we call it KF_ACQUIRE_LOCK and make it exclusive vs KF_AC=
-QUIRE.
-> > > > And document it like:
-> > > > KF_ACQUIRE -> acquires a resource via reference counting
-> > > > KF_ACQUIRE_LOCK -> acquires a resource by locking it
-> > > >
-> > > > and to match it I would do:
-> > > > KF_RELEASE -> releases a resource by decrementing refcount
-> > > > KF_RELEASE_LOCK -> releases a resource by unlocking it.
-> > > >
-> > > > When lock is taken it's typically prohibited to sleep and do
-> > > > other things. So I feel such flags would describe what's
-> > > > going on underneath more accurately.
-> > > >
-> > > > Thoughts?
-> > >
-> > > I am fine with this except, I think we should still keep the
-> > > KF_RELEASE a single release mechanism that releases according to how
-> > > the reference was taken (refcount/lock). There is nothing wrong with
-> > > separate KF_RELEASE and KF_RELEASE_LOCK, except we would have to
-> > > reject all wrong usages like KF_ACQUIRE -> KF_RELEASE_LOCK,
-> > > KF_ACQUIRE_LOCK -> KF_RELEASE.
-> >
-> > yes. Is this too complex or what's the concern?
-> >
-> > > I am fine with both but prefer the
-> > > common KF_RELEASE. Let me know which one you like and I will go ahead
-> > > with it.
-> >
-> > Magic KF_RELEASE simplifies things a bit. I don't mind, I guess,
-> > but would like to hear a 3rd opinion.
+> Certainly not needed for 'func->type' and 'func_proto->type' access.
+> For 'func_info[subprog].type_id', idk -- depends on how defensive you
+> want to be, I'd skip it as well.
 >
-> At the moment verifier tracks the following locking/non-sleepable
-> resources:
-> - active_irq_id        - nesting allowed, forbids sleep, special stack sl=
-ot acquire/release logic.
-> - active_rcu_locks     - nesting allowed, forbids sleep, used by in in_rc=
-u_cs(),
->                          no special acquire/release logic.
-> - active_preempt_locks - nesting allowed, forbids sleep, no special acqui=
-re/release logic.
-> - active_locks         - nesting disallowed, forbids sleep, no special ac=
-quire/release logic.
+>>=20
+>> > > +	return btf_type_is_void(type);
+>> > > +}
+>> > > +
+>> > >  static const char *subprog_name(const struct bpf_verifier_env *env,=
+ int subprog)
+>> > >  {
+>> > >  	struct bpf_func_info *info;
+>> >=20
+>> > [...]
+>> >=20
+>> > > @@ -17812,6 +17837,16 @@ static int check_return_code(struct bpf_ver=
+ifier_env *env, int regno, const char
+>> > > =20
+>> > >  	/* LSM and struct_ops func-ptr's return type could be "void" */
+>> > >  	if (!is_subprog || frame->in_exception_callback_fn) {
+>> > > +
+>> > > +		/*
+>> > > +		 * If the actual program is an extension, let it
+>> > > +		 * return void - attaching will succeed only if the
+>> > > +		 * program being replaced also returns void, and since
+>> > > +		 * it has passed verification its actual type doesn't matter.
+>> > > +		 */
+>> > > +		if (env->prog->type =3D=3D BPF_PROG_TYPE_EXT && subprog_returns_v=
+oid(env, frame->subprogno))
+>> > > +			return 0;
+>> > > +
+>> > >  		switch (prog_type) {
+>> > >  		case BPF_PROG_TYPE_LSM:
+>> > >  			if (prog->expected_attach_type =3D=3D BPF_LSM_CGROUP)
+>> > > @@ -17841,6 +17876,10 @@ static int check_return_code(struct bpf_ver=
+ifier_env *env, int regno, const char
+>> > >  		default:
+>> > >  			break;
+>> > >  		}
+>> > > +	} else {
+>> > > +		/* If this is a void global subprog, there is no return value. */
+>> > > +		if (subprog_is_global(env, frame->subprogno) && subprog_returns_v=
+oid(env, frame->subprogno))
+>> > > +			return 0;
+>> >=20
+>> > Suppose a global subprogram is verified and it calls bpf_throw().
+>> > check_return_code() is called from check_kfunc_call() in such case
+>> > with R1 as a parameter.  This check acts on the return type of the
+>> > program, will it miss proper return value check for the program?
+>> >=20
+>>=20
+>> Due to the short-circuiting herea a void global program can bpf_throw()=
+=20
+>> with no issue. This is what we want, correct? The return type we check=
+=20
+>> in that case would always be that of the u64 cookie AFAICT.
 >
-> Currently verifier checks what kfunc/helper is called and changes
-> internal state accordingly. It might be possible to slice the above
-> into a set of "generic" flags / feats, but it requires some thought.
+> I mean the following situation:
 >
-> Maybe explore this as a separate series?
+>   SEC(<I want some special return code>)
+>   int foo(...) {
+>     ... bar(...) ...;
+>     return ...;
+>   }
+>
+>   // global func
+>   void bar(...) {=20
+>     ... bpf_throw(<bad return code>) ...
+>   }
+>
+> In this case 'bar' would correspond to 'frame' in the check above and
+> <bad return code> won't be checked.
+>
 
-Eduard,
+I see, yes this spuriously passes. Since the check_error_code only runs
+for BPF_EXIT and bpf_throw, can we just check if we're inspecting
+bpf_throw()'s return value like so?
 
-Are you fine with making KF_ACQUIRE | KF_FORBIDS_SLEEP as a new flag
-called KF_ACQUIRE_LOCK
-and then keeping the common KF_RELEASE that will release according to
-how it was acquired?
+bool is_bpf_throw =3D regno =3D=3D BPF_REG_1;
+...
+if (subprog_is_global(env, frame->subprogno) && subprog_returns_void(env, f=
+rame->subprogno)
+	&& !is_bpf_throw)
+...
+
+We only need to use this check in two places in check_error_code
+to solve the problem. With the fix we can also still throw from
+void global() functions.
+
+>>=20
+>> > >  	}
+>> > > =20
+>> > >  	/* eBPF calling convention is such that R0 is used
+>> >=20
+>> > [...]
+
