@@ -1,115 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93793A8FE1;
-	Tue, 24 Feb 2026 16:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744463A9017
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 16:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771950957; cv=none; b=P5ZKS4yqzf6jUYSM6IuGZZr5YmJHEJVvGIuobE1A4ojTld6l8D8Ljx73niyqx9e/4AmCJ0XmglXf8dh5V5QkPBr9wm809PKsZnYHPH07GlyfjZM5ALZBQpKvkaAlMBZGwDHfc+QpsbtwDu102VIn4CM9u6mWUM6wZZldrZZGdJs=
+	t=1771951265; cv=none; b=GKd+/+F7aLjswv8VHlDEODAn9pkB8INdOh5+JPD58N+tSy0wVMGNT2KJ+A8uHD8laGU12vHb90yIrRpROAPXg842Hgt3Lke8zY8/KA2hOsPCJZ2UIihRvNpN6n5ASnXQExr3hiSIHa7lbfW2hJ/5xT/CXhM6AEkSzwRxCb67XCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771950957; c=relaxed/simple;
-	bh=kSBTLlMV6zLNU1mablt3JM4TXckztaxwmFihI53ir5c=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=LqIMNtMryN+6Z65gMIWhBI7O6ZQEhMyC+iqxLewJ9+tXAdaXZIOyuYvCFl+NizJR5i8UYfROC8FaRiVsNZ3m1r6Ldt2I6gBWqsOQhnQUNAoesgPzxDMLhivfC+Tmt4vBP3AZLPNbW9TYCpX9alIY+LLylnKwJdHmQ/ZsZwSJCjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i4rLs0cs; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771951265; c=relaxed/simple;
+	bh=BZ9lfO6U4ma9U2uVlRs0Zw6UyLWQ1toiQA7yQFJuSxU=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=kGxoSa+dZpWXk5dbNzPbH9ME4fpbgLf/oEFHBv6+yzSB7acYam9Sj+jkT5NBbz3NsuGuzvwHCE6ts2p9NmjbieAqg75bFZTjCyCro1iYQtLwzJpfDc1C+UIM17YkgzL1+zLuIUGQnKfqAiXra8YKhZOiFw01UUPi+Ju93GGN/+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com; spf=pass smtp.mailfrom=toxicpanda.com; dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b=XnyrpHM4; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=toxicpanda.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toxicpanda.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i4rLs0cs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78998C116D0;
-	Tue, 24 Feb 2026 16:35:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771950957;
-	bh=kSBTLlMV6zLNU1mablt3JM4TXckztaxwmFihI53ir5c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=i4rLs0csiXnuR3pQFC5fXouZ1CReKzLw6IUjP808CNpyIwZrwZXI5OqP88MimOpEd
-	 Q9a2zmzCsapZ81C9RdbcHl7iyDs+brduReKHn8O66+VoRTH124+ssuxz9x2bKFPHjg
-	 c+HcMbS9wnRS3FvW0QdPCwi6M7vXJw9BPjDc25RukpZmZZdBsdON2JeEP8IcGmSBl0
-	 MKyYGoP3m+EdHpEppMi8aB/3aWdhZnahQjYGTOjkRvyGnE62HpjZEg39QijS3K/Jm+
-	 V0sSHKSeCt9z+ovrJaB7MibHy0CIHOrAOeKmaS0Wq3K45QtHkFTr12tlQ+jmYMXj0f
-	 aqDeNjEVH7ZsQ==
-Content-Type: multipart/mixed; boundary="===============1231585818442456678=="
+	dkim=pass (2048-bit key) header.d=toxicpanda.com header.i=@toxicpanda.com header.b="XnyrpHM4"
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-506a67282a0so51783081cf.0
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 08:41:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda.com; s=google; t=1771951262; x=1772556062; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DGNzLuVf9K7qCwo4M0rcgEP0M+Rz7a7R1W2RX06SmpE=;
+        b=XnyrpHM4FrXSYFpyY4jzljm0/dQepiSPln0VowQhYtKLZhocV9ykK6o3aXcA+wbJJf
+         H7FjQ4oIVrj7gOY/gsaH/RoytRFXFsH7KpOm8DG8k0hgGA3JvsrbQF4PkPW3dIJFEdlA
+         UKuHnKEV+W9A06+PYfP+bTv4P3kh5UHdguOtukHCtPaKPILWrfJF8OICkc13LXnH9rV2
+         1+zrUpnV8GGYaEkryDF1x3aqPoC9D7sIgImRFdE8fJYyqa/bwOwzwp3u/Zd1SXowT9iS
+         WwMXiZiEAdG9H/zmFSRbPB9QqgoB4wkW5YtQgsRsfuR1hARBlnNUslIcDBfoHOi17+DE
+         ct8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771951262; x=1772556062;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DGNzLuVf9K7qCwo4M0rcgEP0M+Rz7a7R1W2RX06SmpE=;
+        b=CHLBBdKQPzdg1ALZX2YBolwjcNkIdYWbrA0geKPnWWxwcIZ9JNPSW7zLkGccHi1y5Q
+         pjtwSnadIszTARKh8tbBv3h5BKxuBKpKQSOFhLQnxdFrUEZnXKa8ZsCxJeyiEg25/5oV
+         buxZPS80CKnXD2vtBQGqX4S+WNENH7/zKBvE5NK+0nN7sD0EFAXuF3kEQ8dkfQIYmmZE
+         3LG14kENYJ+4oZSMpkFyQ3XvCyhXVmWKgGpTsQiSFKtDV0Lw+5TBsoxhfvVwz55dCB0u
+         vVSW2Q7/lZyrARTzjleoedIR4Obw9o+FwUHLpK5ZYi5I8ZxRSSWKHyCmfRalVOOA9iBR
+         hHdA==
+X-Gm-Message-State: AOJu0YzHBAP1owSJN69MIQR2Kd9seCoAqahnzykasgni+MwLeNvKmMEZ
+	PSmxyV4wLzXvhV99Zg7v36dqUHql7xnB8G+QzUDAUGr0hIOBOd3xhlspcZFbONuS6ZB9a2cSHcY
+	GmAi6+9BFkDmA
+X-Gm-Gg: AZuq6aISa5uISSRhXK18u85KnHJMt1bSW/J0SOdibd++u6NxG+IGb5S/emk9sY3sGuz
+	bm3dkjZ1Z43SrPlDVM45+4adokT/43orrImYY2NBs5Z782FMKDMzHBdflIUcsPXVdtT1ZSExRQ5
+	wXnWJy37YARtZZr/MatA8usnjHzwq0Q7CNqJEOg0q/IcNep5qOUBcSDwSMxs/3UZl/YvZj5KpOS
+	0Y1T4pPUHUyLw4waCfHtBYLiFP6IAx/klqAfJ18SwjdshrhhMolRiTSlm0Uaf+EHV6dMZBdfFTJ
+	xkXu6NMdEdZZ2kWeAaFGm3vUCFd/WNjAp0puSaHdml2Y9Fnl6H0xYPuFKB7FA39gbMopfDszM56
+	N6hGMyBDoiZmOw+dLlMH0bD0Q5biZ3txcgobqwtJPFebyQIaeSK//0AEDLR4cHdKu7Stfzyccbt
+	uNIKCGF4ZrP5iMiPL6bf5BdQN+Vsf7U6sSp7tQ
+X-Received: by 2002:a05:622a:241:b0:506:9944:8cfa with SMTP id d75a77b69052e-5070bbe0e70mr168875911cf.17.1771951261721;
+        Tue, 24 Feb 2026 08:41:01 -0800 (PST)
+Received: from localhost ([2603:6080:7702:ce00:96ef:dc7e:bb84:bc5a])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cb8d0eb32dsm1169874985a.31.2026.02.24.08.41.00
+        for <bpf@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 08:41:00 -0800 (PST)
+From: Josef Bacik <josef@toxicpanda.com>
+To: bpf@vger.kernel.org
+Subject: [PATCH v5 0/3] libbpf/bpftool: support merging split BTFs
+Date: Tue, 24 Feb 2026 11:40:51 -0500
+Message-ID: <cover.1771950922.git.josef@toxicpanda.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <eee0df40aa8e7d4bba027682244ea59e86105b677510525f2ddd8b87b88f194e@mail.kernel.org>
-In-Reply-To: <20260224154024.12504-4-leon.hwang@linux.dev>
-References: <20260224154024.12504-4-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next 3/8] bpf: Disallow !call_get_func_ip progs tail-calling call_get_func_ip progs
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,leon.hwang@linux.dev,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,pulehui@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 24 Feb 2026 16:35:55 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============1231585818442456678==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+v1: https://lore.kernel.org/bpf/cover.1771605821.git.josef@toxicpanda.com/
+v2: https://lore.kernel.org/bpf/cover.1771616227.git.josef@toxicpanda.com/
+v3: https://lore.kernel.org/bpf/cover.1771622266.git.josef@toxicpanda.com/
+v4: https://lore.kernel.org/bpf/cover.1771625484.git.josef@toxicpanda.com/
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
+v1->v2:
+- Added a btf__dedup() call to btf__add_btf() to ensure that we don't have
+  duplicate types in the merged BTF.
+v2->v3:
+- AI review got confused about the UAF comment, so the comment was expanded to
+  clarify the UAF potential.
+- Fixed potential clobbering of errno in the error path.
+v3->v4:
+- Fixed a potential silent corruption pointed out by the AI review bot.
+v4->v5:
+- Addressed Andrii's comments for 1/3.
+- Addressed Alan and Quentin's comments for 2/3.
+- Addressed Alan's comments for 3/3.
+- Added my Signed-off-by for the third patch.
+- Made sure to validate everything still worked.
 
-[ ... ]
+--- Original email ---
 
-> @@ -2418,6 +2419,9 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
->  		      map->owner->sleepable == fp->sleepable;
->  		if (ret && (!map->owner->kprobe_write_ctx && aux->kprobe_write_ctx))
->  			ret = false;
-> +		if (ret && (!map->owner->call_get_func_ip && fp->call_get_func_ip &&
-> +			    prog_type == BPF_PROG_TYPE_TRACING))
-> +			ret = false;
+Hello,
 
-This check catches the case where owner->call_get_func_ip is 0 and
-the new program has call_get_func_ip set. However, does the reverse
-ordering also need to be handled?
+I'm extending systing to do introspection on vfio devices, which requires having
+the structs I need from the kernel available in userspace. Normally these are
+loadable modules, but in the case of vfio there's multiple structs across
+multiple modules. Normally you'd do the following to generate your vmlinux.h
+with a module
 
-Consider:
+bpftool btf dump file /sys/kernel/btf/<module> format c \
+	--base /sys/kernel/btf/vmlinux > vmlinux.h
 
-  1. Program H (call_get_func_ip=1) is added to the prog_array first
-     and becomes the owner with owner->call_get_func_ip=1.
+but if you need multiple modules you have to hack together multiple dumps and
+merge them together. This patch series adds support for merging multiple BTF
+sources together, so you can do
 
-  2. Program M (call_get_func_ip=0) is loaded and references this
-     prog_array for tail calls. bpf_check_tail_call() calls
-     __bpf_prog_map_compatible(PA, M), and the check evaluates:
+bpftool btf dump file /sys/kernel/btf/<module1> \
+	file /sys/kernel/btf/<module2> format c \
+	--base /sys/kernel/btf/vmlinux > vmlinux.h
 
-       (!owner->call_get_func_ip && fp->call_get_func_ip)
-       (!1 && 0) = false
+I tested this with my usecase and it works. Thanks,
 
-     so M passes the compatibility check.
+Josef
 
-  3. M is attached to a trampoline where no program needs func_ip,
-     so ip_arg is false and func_ip is not pushed on the stack.
+Josef Bacik (3):
+  libbpf: support appending split BTF in btf__add_btf()
+  bpftool: support merging multiple module BTFs in btf dump
+  selftests/bpf: add test for btf__add_btf() with split BTF sources
 
-  4. M tail-calls H. H calls bpf_get_func_ip(), which reads from
-     the expected stack offset, but that slot was never written by
-     the trampoline, so it returns stale stack data.
+ .../bpf/bpftool/Documentation/bpftool-btf.rst |  11 +-
+ tools/bpf/bpftool/bash-completion/bpftool     |   6 +-
+ tools/bpf/bpftool/btf.c                       | 128 ++++++++++++++++--
+ tools/lib/bpf/btf.c                           |  37 +++--
+ .../selftests/bpf/prog_tests/btf_write.c      | 111 +++++++++++++++
+ 5 files changed, 267 insertions(+), 26 deletions(-)
 
-Would it be safer to reject any mismatch on call_get_func_ip for
-tracing programs, regardless of which program was added first?
-Something like:
+-- 
+2.53.0
 
-  if (ret && (map->owner->call_get_func_ip != fp->call_get_func_ip) &&
-      prog_type == BPF_PROG_TYPE_TRACING)
-          ret = false;
-
->  		if (ret &&
->  		    map->map_type == BPF_MAP_TYPE_PROG_ARRAY &&
->  		    map->owner->expected_attach_type != fp->expected_attach_type)
->  			ret = false;
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22358832658
-
-AI-authorship-score: medium
-AI-authorship-explanation: Selftests in the series carry Assisted-by Codex tags, and the kernel code change is formulaic pattern replication across all commits, consistent with AI-assisted development.
-issues-found: 1
-issue-severity-score: medium
-issue-severity-explanation: One-directional compatibility check allows a non-call_get_func_ip tail-caller to bypass the check when the call_get_func_ip program is added to the prog_array first, potentially causing bpf_get_func_ip to return stale stack data.
-
---===============1231585818442456678==--
