@@ -1,35 +1,41 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0005D23C8AE;
-	Tue, 24 Feb 2026 01:50:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1BFF1DFF0
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 01:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771897807; cv=none; b=UJQo9Oqo1aptRpCBhFwmW7OGWRNygmqvDbesxs/CMlkcxJtZTbj5GrIL0DlgJ0UIBv5LB2h3mRZa6Q3SP/K4Xpk7pQ136biNZMO/vg9IwKL2y6YgYOgOWlVgqfv7F1jPy2nJyec0j6FmcOOUE48FZ3sEpjWys/TyTWExLngI2DU=
+	t=1771898361; cv=none; b=WtkKLjQAB/OtVtsZtBuOYwAaw4aORh3+8of7Z93p/Nf2+YwF/XA6zCU8N51SNiOXUQq5GrRz8EvVqUBigWOdRrG1jWjMFR7gfVBb/kAdu5VyyPfcmJeynbVw7ph0JPNUJMr3GKcA/DUwTosnHcVVigoqcidsVrjRyy9ji+HRObI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771897807; c=relaxed/simple;
-	bh=mCXv0ot5+07qrC12j9YNdK7j5ywNAVyr2ZBKGkvLhbs=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Rs6B7TJ5Gxw6FIGQogpQPiL2cmqjDfDa51etB+snbBd9ZXge8iFUD06uBgkgxn55vjgN4NJ3GOtd8M9n8onvVfeIrPS30Dlm4v51JHEpSX/4eKhJkl+JsD/bkvjIPp3x/VSTdk4brQcu2ocnxca6ysxdfRmb6TwehzliaRTf0uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VHAzelQR; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771898361; c=relaxed/simple;
+	bh=sMEnpYSH73DUDJ2uSib3a6OeS/+zeA1qo3IeycK28Vc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lGSPKwMzYfldvbNQQpFqWApjzYG7ipujRfvAvLD7C09B0CJr4P2q6R2xlXKVyhiiYrRdo3jbDWEMMiSSVYWbfqoKYTF8fJ/rCVhhQIluJte756JAhAxyTSCkBrX5KmqchYjfPZ+U/MbMuvLC/CTWRUqmbfkmQLPjnWBKYQ2r9Ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZzyTd2Xf; arc=none smtp.client-ip=91.218.175.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VHAzelQR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801ECC116C6;
-	Tue, 24 Feb 2026 01:50:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771897806;
-	bh=mCXv0ot5+07qrC12j9YNdK7j5ywNAVyr2ZBKGkvLhbs=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=VHAzelQR7+spe5xvRTZj5tnlH5AkfyN5FT178EHenB/hKl53aQsntlgrl9UHLPF7S
-	 o4QLgYswqUU1SUpUdCAyt6lLpJv7oWMBsWfse4oqaHyiy2zLRTTRkDAIZghkg9zvKP
-	 xHAa6zcFzccKMLOGFr2dJF7kEFVGeszeKfoTKUdhkjrrXR3N1nt/L+TMVkGVLmEp+O
-	 VFkEZ0SG4Gnv4firREiciHPVcVy5SFiEcbB2I301AUGg0/GVtJPrdQJK0cTWs9DPTw
-	 ziKSbKg0EQcTngy6I0cEKuZrhD5+NWmG+34afz2OzGeQQvKAp+kxzhIpMusBX/uEIx
-	 kXoLR9KGKRZwA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id BA0333808200;
-	Tue, 24 Feb 2026 01:50:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZzyTd2Xf"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771898357;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=tLAhwByUlDvI1nu/Ra0kl0Z8oxgrgBwoc8RwzjrPVbM=;
+	b=ZzyTd2Xfg4Lao2eyQuPCVUHtP+zM+UPuysYSGVQY10CxuiopvOJAxxaGfVWQ6KskeLk77w
+	sRC/h10DjqdnMHqMzuSzoFmMTMkhijE4NXz8ijWPRo41xV3Ci+MdwxGsU/o2lEE8BeC9Zk
+	cw7OmW9Lc0B0mpAPBVWmp972AVItZLM=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1] selftests/bpf: Fix flakiness of task_local_storage/sys_enter_exit
+Date: Mon, 23 Feb 2026 17:58:55 -0800
+Message-ID: <20260224015855.1481707-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -37,53 +43,78 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH RESEND v7 0/5] bpf: Expand the usage scenarios of
- bpf_kptr_xchg
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177189781254.3271663.4849399653338044310.git-patchwork-notify@kernel.org>
-Date: Tue, 24 Feb 2026 01:50:12 +0000
-References: <20260214124042.62229-1-pilgrimtao@gmail.com>
-In-Reply-To: <20260214124042.62229-1-pilgrimtao@gmail.com>
-To: Chengkaitao <pilgrimtao@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, yangfeng@kylinos.cn,
- alexei.starovoitov@gmail.com, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, chengkaitao@kylinos.cn
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
+The test_sys_enter_exit test was setting target_pid before attaching
+the BPF programs, which causes syscalls made during the attach phase
+to be counted. This is flaky because, apparently, there is no
+guarantee that both on_enter and on_exit will trigger during the
+attachment.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Move the target_pid assignment to after task_local_storage__attach()
+so that only explicit sys_gettid() calls are counted.
 
-On Sat, 14 Feb 2026 20:40:37 +0800 you wrote:
-> From: Kaitao Cheng <chengkaitao@kylinos.cn>
-> 
-> When using bpf_kptr_xchg, we triggered the following error:
->     31: (85) call bpf_kptr_xchg#194
->     function calls are not allowed while holding a lock
-> bpf_kptr_xchg can now be used in lock-held contexts, so we extended
-> its usage scope in [patch 1/5].
-> 
-> [...]
+Reported-by: BPF CI Bot (Claude Opus 4.6) <bot+bpf-ci@kernel.org>
+Closes: https://github.com/kernel-patches/vmtest/issues/448
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-Here is the summary with links:
-  - [RESEND,v7,1/5] bpf: allow calling bpf_kptr_xchg while holding a lock
-    https://git.kernel.org/bpf/bpf-next/c/964c0747686a
-  - [RESEND,v7,2/5] bpf: allow using bpf_kptr_xchg even if the NON_OWN_REF flag is set
-    https://git.kernel.org/bpf/bpf-next/c/ee9886c40aae
-  - [RESEND,v7,3/5] selftests/bpf: Add supplementary tests for bpf_kptr_xchg
-    https://git.kernel.org/bpf/bpf-next/c/580fa3430b5d
-  - [RESEND,v7,4/5] bpf: allow using bpf_kptr_xchg even if the MEM_RCU flag is set
-    https://git.kernel.org/bpf/bpf-next/c/fb1590448ff7
-  - [RESEND,v7,5/5] selftests/bpf: Add test case for rbtree nodes that contain both bpf_refcount and kptr fields.
-    https://git.kernel.org/bpf/bpf-next/c/ed8fa4b8894f
+---
 
-You are awesome, thank you!
+I've been experimenting with running AI on BPF CI to investigate test
+failures. This is an example of a thing it may come up with.
+
+I don't want to spam the list with these, so for starters I'll be
+relaying only patches that I evaluated and/or tested.
+
+The AI generated reports will be posted with "[bpf-ci-bot]" prefix
+here: https://github.com/kernel-patches/vmtest/issues
+
+The goal of this particular application of AI is to make BPF CI more
+stable, less noisy/flaky, and potentially find and fix more kernel
+bugs. We'll see how it goes.
+
+---
+ .../selftests/bpf/prog_tests/task_local_storage.c  | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+index 7bee33797c71..2820a604aaa6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+@@ -25,24 +25,28 @@
+ static void test_sys_enter_exit(void)
+ {
+ 	struct task_local_storage *skel;
++	pid_t pid = sys_gettid();
+ 	int err;
+ 
+ 	skel = task_local_storage__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+ 		return;
+ 
+-	skel->bss->target_pid = sys_gettid();
+-
+ 	err = task_local_storage__attach(skel);
+ 	if (!ASSERT_OK(err, "skel_attach"))
+ 		goto out;
+ 
++	/* Set target_pid after attach so that syscalls made during
++	 * attach are not counted.
++	 */
++	skel->bss->target_pid = pid;
++
+ 	sys_gettid();
+ 	sys_gettid();
+ 
+-	/* 3x syscalls: 1x attach and 2x gettid */
+-	ASSERT_EQ(skel->bss->enter_cnt, 3, "enter_cnt");
+-	ASSERT_EQ(skel->bss->exit_cnt, 3, "exit_cnt");
++	/* 2x gettid syscalls */
++	ASSERT_EQ(skel->bss->enter_cnt, 2, "enter_cnt");
++	ASSERT_EQ(skel->bss->exit_cnt, 2, "exit_cnt");
+ 	ASSERT_EQ(skel->bss->mismatch_cnt, 0, "mismatch_cnt");
+ out:
+ 	task_local_storage__destroy(skel);
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.53.0
 
