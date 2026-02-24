@@ -1,219 +1,139 @@
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D2DF3644BE;
-	Tue, 24 Feb 2026 07:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A9E33ADA8
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 08:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771918599; cv=none; b=KHjfTaI6g+uhsedmo6aDFaqRzKTYer7+KKa5zfbGM4mI0pC50awXqa9PCPOUIqoM1EIv7LGOzZki5G9Im+e++xfPXoNbJMeXQIav31GP1lq1RVyvQJ/4iejjjlLOdWnyITbLXfz+xKoZi3gJmxEPXFL33SZQtamkfEyWil8fE5Q=
+	t=1771920227; cv=none; b=e+pmUyR5xyuX4kCDitq1KqI8Jpv4NFTdmoL+wflb4eZvV5GHCEpris/a8g6OCMyTisNvbDLbw7+Z63xUkNu3zpfxfUPJjTraB3WY5IGPgPdvsTTIt78UcrLIyfvS7CEnQFYfrAZOrgIIyLRzsP4m/duGw1RugnNvR707QEjpTRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771918599; c=relaxed/simple;
-	bh=iaacxNVDtXkpCqOoUsyH77L0rhFw34H652SiOL1g9FA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NrWAJqDFr2Q74Ltu/mEN/1WDtNwPvdvad8MboWRbsLcRqioxjBaMxMdslb+lAH/YRPFaWr7xYHgvdjrhy0HLy5dbFlapGdc+Pb4CHJWAFMDdjZFzlwRcPQAcgqaANqIz1B6Q/K4PaEh2zTb9PTVOyS6+0YastVz5NFjHKNbUzwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxAfG3VJ1p2acUAA--.63601S3;
-	Tue, 24 Feb 2026 15:35:19 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by front1 (Coremail) with SMTP id qMiowJDxD8O0VJ1p9kxKAA--.9173S4;
-	Tue, 24 Feb 2026 15:35:18 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: loongarch@lists.linux.dev,
-	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/3] LoongArch: BPF: Support small struct arguments for trampoline
-Date: Tue, 24 Feb 2026 15:35:14 +0800
-Message-ID: <20260224073515.1273-3-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20260224073515.1273-1-yangtiezhu@loongson.cn>
-References: <20260224073515.1273-1-yangtiezhu@loongson.cn>
+	s=arc-20240116; t=1771920227; c=relaxed/simple;
+	bh=jP17Izar/lpJs7DpWjWC5ncCG35iIU3cY1TL8RTIa7w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fuh2+GxEhglJgHhyfsnvo9wHQX9Zm4h1e+vynNgn543ngrJ+5JHCgD2IinivUXBB3L/BOrL2MKZQqtXg2BusKsLiw1jY8sBSMwffKBG6pE2J0vSMxcZSpAOzidVcsA+mdGDoucHGIkuxSI7Hn+vXpNex5spyNVxcs+kI15uNj4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CX8z24ZR; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=UK8NG1d6; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CX8z24ZR";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="UK8NG1d6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1771920224;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9jKtLNf1wVvEnb8oGSMJXNrg9RCqp08LA00uDJtDQt4=;
+	b=CX8z24ZRS7SzNcH1Kw2fK7/NwvOXxyakKoLGAC+YFPVJvH1LO2NHbEdyDMDnSV9g1Wzbp7
+	qqzOdcheU++m5CpToGEvkl46+eVxWMVPFoNDZpBiGVVDXV/MN2nNSxsHQ5aNhCL89kchmy
+	MUBw2IfMA7zplqNijEj7Qm2HpYV9lN8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-297-P3crErTXOZSROWi54QqHNQ-1; Tue, 24 Feb 2026 03:03:43 -0500
+X-MC-Unique: P3crErTXOZSROWi54QqHNQ-1
+X-Mimecast-MFC-AGG-ID: P3crErTXOZSROWi54QqHNQ_1771920222
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4837b9913c9so50989745e9.0
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 00:03:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1771920221; x=1772525021; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9jKtLNf1wVvEnb8oGSMJXNrg9RCqp08LA00uDJtDQt4=;
+        b=UK8NG1d6FmINmqmPExRv44i2PzVqNbfAkC8ome09wZc47lMF3407RgxysfKDj86cSO
+         t0ZgooLKVKkrxqOCQEsLgZx5F90x3CVR/LXo2jnWMPp8OIS72iRBSG8chY2vziD4S0jj
+         JtkTzjbZ3uAVL06ambZSs6rWQO61Ua6/3g0QuI7Gty+thy05dugH7fd6jLYxtXeGN8mT
+         HmaCiZjL+fdM4QyTS1k6m4leTOEeHJbC4Lbx6JlddMJU7udTUjjJ9L8mWEywsOlYQ+W6
+         J+Q6dM7BwsJqE52UxfRwNm+2WGN8gwQhEgfF3HB79ZqHxGIWFDLA4XxaEMY/TBxLBSDa
+         YR+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771920221; x=1772525021;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9jKtLNf1wVvEnb8oGSMJXNrg9RCqp08LA00uDJtDQt4=;
+        b=LZixcS7kAQY8j8w1Cz7sMjNtZ4P22C/71JcSUUER5/4gP3MDyIlnx7+glOkOxNPnP5
+         PG1FiI84njYUYiS8W5beFICbAgf4T1LLrl6fxpkGaFw6R4J7nwYC4gP/NACr/gd2POTI
+         NkYQZnB1O4rSNbo6ieTiRqqd1MEtnAXZSbSjdFPM4/AyUOo82gwscMIkHn5fSPVIStwk
+         9/yC+EdtOSlgI8brNBwq9lgHZ9GeiSXeObUmp5Tqr1nc8RwXmDx5rLRPgc9RBZ0b+9IF
+         SBSfXBqVS6cL8G6oK5pAsLg3A4ZD40E4N/C8cF8jiGkaWo6h4HfqScgAaN/sWHTuIp45
+         McdQ==
+X-Gm-Message-State: AOJu0YxXXZZSklQaocfOi9ixHefrxjJnAUl9ojI6oWHbOAbR9LWSQIpt
+	TB7Vv7g5BlwP4MG4umeXr20Aulr9jDkcWQ9kRdVAK08hiOQ4l0SK1HlxRA6VneadPKReCS3UPAj
+	zkO+48hXaNrKXvWNQrMFMpZ+6bW32Ex7+pNQSOcE1A2/qiiwpx+ZIoEfZG5M4
+X-Gm-Gg: AZuq6aIz607wSZdQjOBNcgHq89UrhWX6jnWISuB1LVjj/aZOENk7aY02RkckLRkNMfi
+	muBonZomVGU7jmwI16EpRxABsYgskNCNgvqH/jUNTqBhhzgrxixsQLdYv5eEgGPG05M3ndB8HcS
+	v3AZ70giHSjQO6RP6bizikvYU+xlBYd5+5NO3aHPNL/akuRWDNKkvCtEh7UaHjWM4EjdRj2jvV1
+	4SzrnDDfSZOFupoJzp2FOLOSo2O21a5YmYI8qEItEVUJYx3FgoUFLsMfiW//zBR2L7tQgn4+CJV
+	KPJ75luxX1aRGWRbt/UAH2DqukXsY663NK+sP4S+tAz1v+7I5RF7M7o6XVfKWt5I7joh4CrvOBv
+	qGhbOPPab
+X-Received: by 2002:a05:600c:8b2c:b0:480:1b1a:5526 with SMTP id 5b1f17b1804b1-483a95e24ebmr222805495e9.16.1771920221518;
+        Tue, 24 Feb 2026 00:03:41 -0800 (PST)
+X-Received: by 2002:a05:600c:8b2c:b0:480:1b1a:5526 with SMTP id 5b1f17b1804b1-483a95e24ebmr222804945e9.16.1771920221064;
+        Tue, 24 Feb 2026 00:03:41 -0800 (PST)
+Received: from [10.43.17.26] ([213.175.46.86])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483a9b75e63sm418214195e9.6.2026.02.24.00.03.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Feb 2026 00:03:40 -0800 (PST)
+Message-ID: <ca5c38ad-5203-4b77-a8cc-552690ab70c5@redhat.com>
+Date: Tue, 24 Feb 2026 09:03:38 +0100
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 0/3] Separate tests that need error injection
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Jordan Rome <linux@jordanrome.com>, Qais Yousef <qyousef@layalina.io>,
+ Hou Tao <houtao1@huawei.com>
+References: <cover.1770736390.git.vmalik@redhat.com>
+ <CAADnVQLfV3PPYA8=EXDKwoQ925_W9HANf7gSn2=_fd42HD_FiA@mail.gmail.com>
+ <d92e60ea-d590-4ce4-961f-4e8ce1cb0c42@redhat.com>
+ <CAADnVQK6qP8izg+k9yV0vdcT-+=axtFQ2fKw7D-2Ei-V6WS5Dw@mail.gmail.com>
+ <582944ed-ddd6-4843-ba36-b4aed03c5b2f@redhat.com>
+ <CAADnVQJ4PU7bCb5XO9+zMZhLRSdbCKwxG6Rtojh2Rc3UZ8H43Q@mail.gmail.com>
+ <d2706604-1674-49fd-a150-7ace8839657f@redhat.com>
+ <CAADnVQLT7cGgExtaqusyk+XwrD=-x15kL0veJB5YPewjPo=PUg@mail.gmail.com>
+ <fa67d3db-273f-4e4e-90a2-ba805f484bd1@redhat.com>
+ <0675cf92-1833-4f1a-bd8e-53de5cc1ed7e@redhat.com>
+ <CAADnVQ+BQZd4C8Mc4U1AnpQNPhouwjO=w89ORgF05AsoAH0RHg@mail.gmail.com>
+From: Viktor Malik <vmalik@redhat.com>
+Content-Language: en-US
+In-Reply-To: <CAADnVQ+BQZd4C8Mc4U1AnpQNPhouwjO=w89ORgF05AsoAH0RHg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJDxD8O0VJ1p9kxKAA--.9173S4
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW3WF45Xr4UCr15CFy7trykXrc_yoW7ZFyrpF
-	1qkwsxCF48JFW7WaykXr4UWFyYkFs3A3y3urWUG39aya15Xry5JF4rKFn0yFy5GrykAF1f
-	ursYvryqkF1xJwcCm3ZEXasCq-sJn29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkFb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-	6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-	Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE
-	14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x
-	0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E
-	7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcV
-	C0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF
-	04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
-	CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j8CztUUUUU=
 
-In the current BPF code, the struct argument size is at most 16 bytes,
-enforced by the verifier. According to the Procedure Call Standard for
-LoongArch [1], the struct argument size below 16 bytes are provided as
-part of the 8 argument registers, that is to say, the struct argument
-may be passed in a pair of registers if its size is more than 8 bytes
-and no more than 16 bytes.
+On 2/24/26 03:58, Alexei Starovoitov wrote:
+> On Mon, Feb 23, 2026 at 3:52 AM Viktor Malik <vmalik@redhat.com> wrote:
+>>
+>>
+>> Looking into this more, I assume that the premise here is that injecting
+>> errors into syscalls is not sufficient to implement a rootkit, more
+>> mechanisms are necessary for that (even [1] uses bpf_probe_write_user
+>> which is by default enabled on any kernel). On top of that, there are
+>> tons of other ways to compromise a system using eBPF so enabling error
+>> injection doesn't change much in that direction.
+>>
+>> With that, I'm ok with enabling fmod_ret for syscalls even with
+>> CONFIG_ERROR_INJECTION=n, I'll send a patch.
+> 
+> Now we're on the same page. Thanks
 
-Extend the BPF trampoline JIT to support attachment to functions that
-take small structures (up to 16 bytes) as argument, save and restore
-a number of "argument registers" rather than a number of arguments.
+Thanks for the confirmation.
 
-With this patch, the following related testcases passed:
-
-  sudo ./test_progs -a tracing_struct/struct_args
-  sudo ./test_progs -a tracing_struct/union_args
-
-Link: https://github.com/loongson/la-abi-specs/blob/release/lapcs.adoc#structures [1]
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- arch/loongarch/net/bpf_jit.c | 55 ++++++++++++++++++++----------------
- 1 file changed, 31 insertions(+), 24 deletions(-)
-
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 98c04d6056f4..fef002bd3ffb 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1460,21 +1460,21 @@ int bpf_arch_text_invalidate(void *dst, size_t len)
- 	return ret;
- }
- 
--static void store_args(struct jit_ctx *ctx, int nargs, int args_off)
-+static void store_args(struct jit_ctx *ctx, int nregs, int args_off)
- {
- 	int i;
- 
--	for (i = 0; i < nargs; i++) {
-+	for (i = 0; i < nregs; i++) {
- 		emit_insn(ctx, std, LOONGARCH_GPR_A0 + i, LOONGARCH_GPR_FP, -args_off);
- 		args_off -= 8;
- 	}
- }
- 
--static void restore_args(struct jit_ctx *ctx, int nargs, int args_off)
-+static void restore_args(struct jit_ctx *ctx, int nregs, int args_off)
- {
- 	int i;
- 
--	for (i = 0; i < nargs; i++) {
-+	for (i = 0; i < nregs; i++) {
- 		emit_insn(ctx, ldd, LOONGARCH_GPR_A0 + i, LOONGARCH_GPR_FP, -args_off);
- 		args_off -= 8;
- 	}
-@@ -1590,8 +1590,8 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 					 void *func_addr, u32 flags)
- {
- 	int i, ret, save_ret;
--	int stack_size, nargs;
--	int retval_off, args_off, nargs_off, ip_off, run_ctx_off, sreg_off, tcc_ptr_off;
-+	int stack_size, nregs = m->nr_args;
-+	int retval_off, args_off, nregs_off, ip_off, run_ctx_off, sreg_off, tcc_ptr_off;
- 	bool is_struct_ops = flags & BPF_TRAMP_F_INDIRECT;
- 	void *orig_call = func_addr;
- 	struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-@@ -1611,11 +1611,11 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	 *
- 	 * FP - retval_off  [ return value      ] BPF_TRAMP_F_CALL_ORIG or
- 	 *                    BPF_TRAMP_F_RET_FENTRY_RET
--	 *                  [ argN              ]
-+	 *                  [ arg regN          ]
- 	 *                  [ ...               ]
--	 * FP - args_off    [ arg1              ]
-+	 * FP - args_off    [ arg reg1          ]
- 	 *
--	 * FP - nargs_off   [ regs count        ]
-+	 * FP - nregs_off   [ arg regs count    ]
- 	 *
- 	 * FP - ip_off      [ traced func   ] BPF_TRAMP_F_IP_ARG
- 	 *
-@@ -1626,15 +1626,23 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	 * FP - tcc_ptr_off [ tail_call_cnt_ptr ]
- 	 */
- 
--	if (m->nr_args > LOONGARCH_MAX_REG_ARGS)
--		return -ENOTSUPP;
--
--	/* FIXME: No support of struct argument */
-+	/* Extra registers for struct arguments */
- 	for (i = 0; i < m->nr_args; i++) {
--		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG)
--			return -ENOTSUPP;
-+		if (m->arg_flags[i] & BTF_FMODEL_STRUCT_ARG) {
-+			/*
-+			 * The struct argument size is at most 16 bytes,
-+			 * enforced by the verifier. The struct argument
-+			 * may be passed in a pair of registers if its
-+			 * size is more than 8 bytes and no more than 16
-+			 * bytes.
-+			 */
-+			nregs += round_up(m->arg_size[i], 8) / 8 - 1;
-+		}
- 	}
- 
-+	if (nregs > LOONGARCH_MAX_REG_ARGS)
-+		return -ENOTSUPP;
-+
- 	if (flags & (BPF_TRAMP_F_ORIG_STACK | BPF_TRAMP_F_SHARE_IPMODIFY))
- 		return -ENOTSUPP;
- 
-@@ -1648,13 +1656,12 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	retval_off = stack_size;
- 
- 	/* Room of trampoline frame to store args */
--	nargs = m->nr_args;
--	stack_size += nargs * 8;
-+	stack_size += nregs * 8;
- 	args_off = stack_size;
- 
- 	/* Room of trampoline frame to store args number */
- 	stack_size += 8;
--	nargs_off = stack_size;
-+	nregs_off = stack_size;
- 
- 	/* Room of trampoline frame to store ip address */
- 	if (flags & BPF_TRAMP_F_IP_ARG) {
-@@ -1717,11 +1724,11 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 		emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -ip_off);
- 	}
- 
--	/* store nargs number */
--	move_imm(ctx, LOONGARCH_GPR_T1, nargs, false);
--	emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -nargs_off);
-+	/* store arg regs count */
-+	move_imm(ctx, LOONGARCH_GPR_T1, nregs, false);
-+	emit_insn(ctx, std, LOONGARCH_GPR_T1, LOONGARCH_GPR_FP, -nregs_off);
- 
--	store_args(ctx, nargs, args_off);
-+	store_args(ctx, nregs, args_off);
- 
- 	/* To traced function */
- 	/* Ftrace jump skips 2 NOP instructions */
-@@ -1763,7 +1770,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	}
- 
- 	if (flags & BPF_TRAMP_F_CALL_ORIG) {
--		restore_args(ctx, m->nr_args, args_off);
-+		restore_args(ctx, nregs, args_off);
- 
- 		if (flags & BPF_TRAMP_F_TAIL_CALL_CTX)
- 			emit_insn(ctx, ldd, REG_TCC, LOONGARCH_GPR_FP, -tcc_ptr_off);
-@@ -1799,7 +1806,7 @@ static int __arch_prepare_bpf_trampoline(struct jit_ctx *ctx, struct bpf_tramp_i
- 	}
- 
- 	if (flags & BPF_TRAMP_F_RESTORE_REGS)
--		restore_args(ctx, m->nr_args, args_off);
-+		restore_args(ctx, nregs, args_off);
- 
- 	if (save_ret) {
- 		emit_insn(ctx, ldd, regmap[BPF_REG_0], LOONGARCH_GPR_FP, -(retval_off - 8));
--- 
-2.42.0
+The first patch of this series still looks reasonable to me since the
+module_attach test flattens different test cases together. I'll send a
+new version with just that first patch.
 
