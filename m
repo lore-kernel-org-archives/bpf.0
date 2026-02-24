@@ -1,135 +1,73 @@
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693103A7F50
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 16:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771950171; cv=pass; b=UGU7AkqXBFmFKoRz+88zOgXlaPpwL4Oj+Jyb5nzqI2YwblSUFeInOteBKyYjSyP43cnhP/5+kRES7z+9MkmchzvAcSUgVnxiEtAvzf5ms92cDGgj6tjhObxMHa2wqKwhiRM5N6wI3kbt7YmjU68bYN5nsCJX3Hhb+IP1DPn51WI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771950171; c=relaxed/simple;
-	bh=zElRkeIVBB4cVrg9UxuI6BIZLT/u0RFeegdXTtGlAq8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TUuvCi4tmcl5r+WIxUGkZq9WEl01O/QzTrYXSSCeX5Yebob2Hkc2Kjx8M4iHy/TSswlaY9xZun2i0FzPNVGTliHBF0FxljU4iDKpDZdXGFEe3RfgaDXHci+yuoUrunZ6DTgYj8aD6vw60GC66L25KHJ9Cjle6YKrjoJtCcTLYKA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nv0SnCEv; arc=pass smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D6338BF60;
+	Tue, 24 Feb 2026 16:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771950253; cv=none; b=UaCUsH06FRPXRiVojJJ4XQPoXj2Vsjil08oo1ELGhDHntGE29onIK4pEQA9nvnvf+KodK7amnytZeG3qCsvAqFXtNXFcTE5ZC5yHD/mAGfG6bD5YmGZjaFJrdg1VYUTkdZFI18X3wNa0CWS2GZTDfymG0+PJ66pyiqSthOEUpts=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771950253; c=relaxed/simple;
+	bh=E+YpZPlAvHFc2y94af8AqiwEjdfj3200a4PVDZwLA0s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bgLYZnicUh2C5fLBe8w+J6Vx1xMbHR2Wuv0iG+dBjPOJoQ7AlFm38CiRdx5Sul3Uow9xT+BTVn04uQGpsN43TR/whIMb85Gshu8XsV7m6jLK2ApBkLqx9M8ewyPmCRGsmfybVUpURbfLlVZcJns/l/KdQOOcIccxkSAEhr9hGns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kjhhEuX2; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nv0SnCEv"
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4836d4c26d3so49923905e9.2
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 08:22:50 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771950169; cv=none;
-        d=google.com; s=arc-20240605;
-        b=hWxl7bu2ySTuIENLymkXdVgEeQUUJwC7v0/kHOh4eCt97NCN7AA0BS6wceNKhm3l8a
-         kPBNs2zTqunrwQdsF/X73eXPdQR9G0jvxWjnoMsAPsH0kVVmtwR7tTRiblXucC+TFmXI
-         PgsWf4+s1iSA8aoFHPbVd82vM7xEmouOLF0g0zlG5uIhGyhc3DDbjx3PxG6O210MWXyI
-         pSpngPcjQOkrx0eZCGiQsF9/+mcaQNoYJfOqFT8cxCYeFfJUy9naqpCNWnA1NV3GWnLL
-         apjcQuGt0pyXHTLZeZqHqjvoCfx2cVezAuVHBrxeRMEZmWjO9KIvo4iFGEAKpVoB0dlt
-         8ZhQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=JGercx3vkdEAz0Gc46HRTj3KBzubttjIgevwNppmhDA=;
-        fh=yaM70o67/bR8/JZS9PK4WeVYSoAlAqXvDzzwtF1uAp4=;
-        b=EQg+OhLQOYgTbqOD9ExIuEUO7nSclr/3+Ga7wHKGbWWE4saH9AUDxDqNCLc5FeSX+O
-         0pm3EeGqTTHyzeaNEFzISFx9sf/O/+0pYtCt3zQWau/cBECROXyHZPyXsmuYGUXiS0B+
-         +lPycctSALA/m07uYBrenjxU9vruVYShud07GFVdN/5dyapN5p4+NmcWaVBonTn6YBJV
-         kxrL/eoSum5FBK07n/ccehuYgJVtS1aLTY4JEMaat/OQPrrF0T9jSKkMR/cZs3yEaKh/
-         wFc1T2THbbpXPI+0RPOhHBY4o7Kmbe1LLgK8hfjc93MDbT/KEiNYOl3+SpDBLO6gA7PU
-         OsYw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771950169; x=1772554969; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JGercx3vkdEAz0Gc46HRTj3KBzubttjIgevwNppmhDA=;
-        b=Nv0SnCEvj1E03ViLsMVPWP2wy9007Zy3z0M2SnacQXYCJdciFiNBQjYG8+SZ5rHWMQ
-         horLoTFoFgwwy/73BDzujVnYhfVgxCjj0XlGTVLeZE2WrMG02fJ4BEKclUEcmosZKDcZ
-         TBikCiqnYHr14L72t3rToEdYQy42yp+QAH8cGdSC6Cz++9H5cRV/d3CQe09he1sEzuEX
-         2uG8rLXuNUt8pHYaIAqxM1ChPl87ZqG+WeRPBT5iy8NzlHLx8pLN94HXdD/DJlCqGzGQ
-         l6D3bmI8jVlM4YDR7TmYof13Hxa4baLpZfJEwlGaWsEAQ5itbew1PT191Ou4LkEoayFf
-         RI0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771950169; x=1772554969;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JGercx3vkdEAz0Gc46HRTj3KBzubttjIgevwNppmhDA=;
-        b=iEHJY2APglPvA2QtsAQXta1eMJWEsl/uIVTaOX8IuxhZCNh5YBF+yZSZnChRnkDEdS
-         0BGHj27bXDNhl+0AhV0MmNxyJHIOjPt8jom5ISDjP26cINQplt9J9kCOW5Y/HhAq4Mlo
-         UJQS/phqLnhxOqtbAB6VGo9z0J9BsWoxGCWCpxN/fl5Fn7JmQi0gMKm3pHDcAXra6JZq
-         uvUnB7AjCg+IpEsbX7L65gndAfIAfbHjm2SwEeHRDUCsTaTZIZbkrr8IQVtx0ICzqsOI
-         rL/JeHhxcqJPUKNd6+Zf64xJ2w20aMLPXxN/mbwqLmN3wAHkJQSfuG/ARpwSeugKReOV
-         271Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX9LpeU9YZK1Y4BdWiASlFIuE1zKkIu8qbvtNn3z2kZqc7kp98qOP7hBs9k/2RDVbkOSiI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzadKGD7rct2WFlngczZcVdCeuGVzaIpLVBll37I/kRa8GEoUCA
-	c3+d8uRFcHcU2FsaRWy+zUtP+DVv4XafyOMrkkzwPb6cB1IRJTwkM8o82F0uLTCyn9Qd/WoLAjT
-	HmNuCN+DAt6s3C23DG2UzPOFuEv34YK8=
-X-Gm-Gg: AZuq6aJ09NB6QCWRgsLhlk+W6qymnSR+UmZhmOsFYJAcTOuI2NtXwp/NvcuXJqKuTfQ
-	L6bbl7GgrFpp1FebddUXwCLZeuS6WmODRAMCUGvzMQtjQagi5JHZYAteXQ8gfEgnxjbThh6x7uB
-	X57cTxRu5RqWu2WXWJw5zmJmBC1l4jbrLYQwf18Ls6zaOFqmhWpZleabPLTH899mowtEMZ9SH1K
-	ULszB/KnyMyXxrh67nvKNKSNptK/pzl2tehdayj4eT0skTCAcLto+zM4oXsPvGmcq342fvji4+P
-	Gl+WYRwGJeMK7S4lvmw2tNlEIn+h/DxaS4MqqNlNs+zzrIKFQSPxo4PkhC7W2mv5/ZjW1oh2EpT
-	HI4+8UOZV
-X-Received: by 2002:a05:600c:45ce:b0:477:93f7:bbc5 with SMTP id
- 5b1f17b1804b1-483a95b5835mr212494515e9.10.1771950168684; Tue, 24 Feb 2026
- 08:22:48 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kjhhEuX2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17CE3C116D0;
+	Tue, 24 Feb 2026 16:24:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771950253;
+	bh=E+YpZPlAvHFc2y94af8AqiwEjdfj3200a4PVDZwLA0s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kjhhEuX28k3bGq62b9kkXXk8bpIcr7Vy+/MxBjO1oSERsQdh8MYrR4/OPe0P3MJio
+	 PRbKtsuVL0iLLdG6Kl9YsNZvEqbCJMNeaDrP1O1MFV9IanQZSCSYig8ZIT/DYl326R
+	 H+WhCvEzH2J9RYUElghrjApV2bLLs3t8wDa105ZB/2IUk+PDTkNYCX/gSg+8bKjbvg
+	 pN39spI5iqCXlIntTL1hLkOyGQtDCAn7Db3FqoukYyf7uBaaHOi/UYI287ym6nIJI1
+	 9Qu8/3c5XMNBvbSI5FHgpEIxLxB/Wl6cc9a+3F0rTACx4vkTq4/A0LGvHS/nWRRBCt
+	 wbVVQKg8wNgxQ==
+Date: Tue, 24 Feb 2026 09:24:11 -0700
+From: Keith Busch <kbusch@kernel.org>
+To: Xiao Ni <xni@redhat.com>
+Cc: lsf-pc@lists.linux-foundation.org,
+	linux-block <linux-block@vger.kernel.org>, bpf@vger.kernel.org,
+	Ming Lei <ming.lei@redhat.com>
+Subject: Re: [LSF/MM/BPF TOPIC] User space RAID5 with ublk and io_uring BPF
+Message-ID: <aZ3Qq7kTBKGZjKp3@kbusch-mbp>
+References: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aZ2cBWyiG_fKSjIq@sirena.org.uk>
-In-Reply-To: <aZ2cBWyiG_fKSjIq@sirena.org.uk>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 24 Feb 2026 08:22:36 -0800
-X-Gm-Features: AaiRm51o_zqO5Ia2dOB6XYBIYz_d7zJjJJTNTIBgDEBW7i99NJvSUvxyxg52aCg
-Message-ID: <CAADnVQKoX=Tg63QiyuUZ9aWVYUPi3-gQFCs47s5AiWKjqT=oZw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the bpf-next tree with the bpf tree
-To: Mark Brown <broonie@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	Networking <netdev@vger.kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Next Mailing List <linux-next@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
 
-On Tue, Feb 24, 2026 at 4:39=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> Hi all,
->
-> Today's linux-next merge of the bpf-next tree got a conflict in:
->
->   tools/testing/selftests/bpf/prog_tests/align.c
->
-> between commit:
->
->   05849ec34f3d7 ("selftests/bpf: Replace strncpy() with strscpy()")
->
-> from the bpf tree and commit:
->
->   f632de6e19553 ("selftests/bpf: Migrate align.c tests to test_loader fra=
-mework")
->
-> from the bpf-next tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> (deleted the file)
+On Thu, Feb 19, 2026 at 01:38:46PM +0800, Xiao Ni wrote:
+> Hi all
+> 
+> I'm doing some work on user-space RAID recently. I'd like to propose a
+> topic for LSF/MM 2026 regarding the implementation of RAID5 in user
+> space using ublk and io_uring bpf[1], particularly focusing on the
+> challenges encountered and potential kernel improvements needed.
+> 
+> Ublk raid5 uses the ublk framework (tools/testing/selftests/ublk/),
+> with the goal of leveraging io_uring's zero-copy capabilities and
+> BPF[1] for performance optimization. The implementation includes:
+> * RAID5 stripe handling with configurable chunk sizes
+> * Multi-queue support via io_uring
+> * Degraded mode for single disk failure tolerance
+> * Integration with io_uring BPF struct_ops framework
+> 
+> During the implementation, I encountered several technical challenges.
+> The primary challenge is performing XOR parity calculations in a true
+> zero-copy manner:
 
-Thanks for heads up.
-Since the file is deleted in bpf-next anyway I dropped this hunk
-of patch 05849ec34f3d7 and force pushed bpf tree.
-There should be no conflict anymore. Saves the headache for us
-to resolve it when bpf goes to Linus and then back to bpf-next.
+Great use case. The indirect reference to memory from user space is a
+bit of a blocker for various zero-copy plans, so being able to leverage
+the kernel to perform parity and crypto transforms would be awesome. I
+think there's potential for fuse as well as ublk.
+
+Anyway, I'm interested in the topic.
