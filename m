@@ -1,218 +1,135 @@
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13827231827
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 01:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771897469; cv=none; b=uLSGgywesETAtbBaI15dmZk6y9/AtCapXBOIZtHNKLnZ6Ewu+Kr4EwqkeOfT9vXPKyHozmbpdRNBM1W6W67mII5qD3eg1E9rpN2akBNXPI8RvYTzp1RynU9GFXfvcrgdh92rj0Au5vWzha4BDxDAO/sedaBdWMKZTV3fsJZKzA4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771897469; c=relaxed/simple;
-	bh=1+d6fXVelUu6FG/oQk0FpqnqGof1kKOdmjl0GqbcVNg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GAXfDGLWXgQLLarLCDjg62ih8fZeUWrRtcx+LD204pB5Hfar3z/VH0kXJ7/gQiBsJqLtXZmvd6ceR69kcgUjsDyJvqjEDI+KDaZR0LuuK/saQZC7Jw5WqZR2MovOqMH9BbXm/gaFl8zG/MGWCDJqiY5d7wf5rx2EdLGRkLejsaA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Zr2tuinD; arc=none smtp.client-ip=91.218.175.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFD4F23EAAF
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 01:50:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771897802; cv=pass; b=tcd4+lFrEP4tRxvIU01goaHrdaTUqCT37EGMCg+F+Ht9JegG2zikfIs7lGdgPV1B4fj5s1DA4RpQIfSdqIfsct/mo1+yQMtJLyHZDpEQZvuV4+V516/0vWH+NUzlOZe8TkJMUuuJ4cSUF77PN8lPIlYoBvzyRFWvmkeQkm3Kt1k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771897802; c=relaxed/simple;
+	bh=8zn8LaipGM9efhpYJ3qQN1XJ4O9q3w47hUmwPQaY5KM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iigjZTzsjHLCKwnOCH4RiFcYf6rDfqMjbS/+VYuAGx1hzOHH8Tspw2ryXhxRDnDXUDXQCsRItQbLvzDjq2XGnRX6aS+TmLm1tFnHR/kpT+tdVuu/C8kcCge2UQOfWV9lNr7k4dTTQiAxaOA/sA5aGZArVk4+SsE6dXATM4wFtX4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S1l9x5vr; arc=pass smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Zr2tuinD"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771897456;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=KDH5UCfSXMtCyw0n1KltQLsnu2EYcYJTR+B1IFVFXIU=;
-	b=Zr2tuinDz/y5CiYudbmHG+PNBkfx86T+C/KxIQt8qNsUThOQiG+bg+m0RRXnbsbAWff7XO
-	BewZzQs+uT3nTIawmEnfnWiA1Ve62zGSwXsHhwzLvNDrPvOz+JwtGzduH/oenMRlsSv06s
-	fB9NRoEUtv2ceZee07DdRJWv6LwbS78=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Menglong Dong <menglong8.dong@gmail.com>, andrii@kernel.org,
- ast@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
- eddyz87@gmail.com, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next] libbpf: skip compat check for session kfuncs
-Date: Tue, 24 Feb 2026 09:43:57 +0800
-Message-ID: <5968298.DvuYhMxLoT@7940hx>
-In-Reply-To:
- <CAEf4BzYJPue8VN59buLAaxL_SfbnHQQXs7nQn6_2t6=E_CppvQ@mail.gmail.com>
-References:
- <20260211125737.1315848-1-dongml2@chinatelecom.cn>
- <5968554.DvuYhMxLoT@7950hx>
- <CAEf4BzYJPue8VN59buLAaxL_SfbnHQQXs7nQn6_2t6=E_CppvQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S1l9x5vr"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-483abed83b6so16596685e9.0
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 17:50:00 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771897799; cv=none;
+        d=google.com; s=arc-20240605;
+        b=k+5a/MAQLy749O62fEkRRmEaeRWehUtIO1cpTt/w3yiQvErK3JIvSTikIcCxS4pfYf
+         quVVy8yOdJss9ls5D+1fExIAl+mWz3gLc45hrznR0UOsq1yv5b1JCQiiKEP28/mX9C2T
+         FD7YWsS1pjQ5NgV8cmkX2C7yhljiZqDrtNia66uEqbU4A9AG9PZluFnnfngUeBDd7co+
+         HaDyePuICaXU2S6m0euatWR65Yl3EU04qAOODD4IMbQ5qOvCYPCjojVj2F5E86/SMspH
+         +2KDH2JoK3NArawHrBsMgxNP5ijnG1O/qbHoEC0aNuahq74S+rRTC/2e6C9KEzpdwdi3
+         X/dw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8zn8LaipGM9efhpYJ3qQN1XJ4O9q3w47hUmwPQaY5KM=;
+        fh=QWPamShyA1J/8s5doFWE3PWqLapUJDuSRevdrJZqM+c=;
+        b=JLXa8cPzfjIpHdkrqXXWeavuTgThAJNd/8Lm2KHla5HH+3lljzYxkDn2kwYRbaSG2a
+         wJ+0oxt4IuLL4vGEbAGtGED2egjrpTrx3G2VGhx0Cu1kE3PNZWwCxr5CAYuHtSfW6Lqb
+         R32T4oA0tEhoGTS6d/56dYkdDASZi+1WzMnqn8O7J/j2r3lsFMNervUyUP2bWTcdlSwc
+         7BS1mJQjuc5u+2c9uZQyHgjsauoG4O1nv6ezdVOomKkfm9V4cHEEUDtolnRSGEVmjLNx
+         ib4cHazTVwk32nzWtG3/tr1hZiH2uZ9hbFCIOndxbEXNo6ikePIXTElA+65v3Tos6zKv
+         c6gA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771897799; x=1772502599; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8zn8LaipGM9efhpYJ3qQN1XJ4O9q3w47hUmwPQaY5KM=;
+        b=S1l9x5vrGyFUM+aQXKUA/GwBMldhwoITtNxuhOLLOBteq+BufcTNQRUVOd61IuqzKA
+         /g/b9lm837QEZWzlDJBcLrJlEf1iNFo9Rb7sf2swGSft3867SU6EpL5AchKDRuHarEJR
+         jyKmEmbJC2yY2vIxC3udRWLuvvNS07nbEQWsBnQTuhPxfGnWDptPEbFjV5xQS6LxYdca
+         5AD+G+WW4WYvFfYxJOk688Hy4AxxNMEo3eu4JNdc/WAjppi2yOS9/CdswcnWjPKKgMuz
+         ZpAPPbUCgwtIVLvJonjzVrUm7V8mdVs5tzR/BeQOgY1aSGXuxGXJRdDX3evqCtRTdvSo
+         QWpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771897799; x=1772502599;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8zn8LaipGM9efhpYJ3qQN1XJ4O9q3w47hUmwPQaY5KM=;
+        b=GSJ2FTnMMu9tVuLBC4FblQWCc5hzdFRVamSTQ/DVMcT+OfN5y4dEaxvNoTtZXzzvu6
+         Kx6TXHAgMX++k5+VmE1ofyHWNtEbXWnHeo9jasTcWtUrrzjUbClpKymLljmfydEgKKY8
+         u/2t637Pl5w6ztoRbvKC8By0qaEqdCXWfNgofKInTqq+htif2gHt5vMm+GpVxxA+7j0w
+         CEYGGABiUEwGAWSYWYYyBPtUvYMD5kypwangIEtJ/iocn2QooUUViVJgBRvOLlppQ8MH
+         mBSwN5MFAsf5lK8xUjEs3sZKhm05bpIZRTMtCx9sPpHhjDZHh2Yq9McwRx5LWbtqQtRj
+         tg+w==
+X-Gm-Message-State: AOJu0Yzq4TkZ9kYWPl7NgiFFH3tkZOTJAgA5UkCruHi8TBJvyAs3PL89
+	btDqj0GERZgcIJJpGZH9fh8c+BdR+S2CpqBdW9clas9H0uUFY1ohRCXfN4EjPK7luumXrGJPccq
+	SZ1g5E8VB7Va5Gu03e2bPgKszcmtHBbkanWIM
+X-Gm-Gg: AZuq6aJOXP4+UCairfhE60ntQCw0t9h1u08KUpSIYx6USeqSchhJ7DlytkUzlrA3dcc
+	kJy4qnaxMG54OCPDSOrFAMxMaVQpUUgzJVCbCj6hLxQ+LzBvn7iPEiDCwxYUV/72qP58XtY2XBU
+	IStjfYFqfZpe76D2GtAMnn8UqxmdnYE6nVTtOz7G1m5AnvGQ8zcWjHbzEiYnDxtyNtZiiqHODt6
+	xtHDtdHxL8fE8t+cLSACYiT0GbWwtX29ZnZo/waFlQvLYw5tvZ+O9W6jXYHPylaT2mgaH9LaeQa
+	KqofctQARWgJZ2h/sucxrF2O/8KuxUKY1+/Hx6dFfrNyN6QcCoW3MKJJuj8V9y2VfBNl0o/Osxr
+	GNsXi43bVyc9PwHnY4Bcw8DkliQ==
+X-Received: by 2002:a05:600c:3111:b0:483:612d:7a9a with SMTP id
+ 5b1f17b1804b1-483a95622f5mr180896455e9.0.1771897798960; Mon, 23 Feb 2026
+ 17:49:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260223174659.2749964-1-puranjay@kernel.org>
+In-Reply-To: <20260223174659.2749964-1-puranjay@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 23 Feb 2026 17:49:47 -0800
+X-Gm-Features: AaiRm50rwUFNhyO8Q6nr2AyuK9eINVaezdWRhh_fFphGXOTgHjdL9E8TFD4kJrE
+Message-ID: <CAADnVQ+aobVwR1m-v2w_RWFxG_9TwkYQ-K8KtC6D18HrYe8Dig@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/6] Introduce KF_FORBID_SLEEP modifier for
+ acquire/release kfuncs
+To: Puranjay Mohan <puranjay@kernel.org>
+Cc: bpf <bpf@vger.kernel.org>, Puranjay Mohan <puranjay12@gmail.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
 
-On 2026/2/24 03:09 Andrii Nakryiko <andrii.nakryiko@gmail.com> write:
-> On Sun, Feb 22, 2026 at 6:16=E2=80=AFAM Menglong Dong <menglong.dong@linu=
-x.dev> wrote:
-> >
-> > On 2026/2/12 01:20, Andrii Nakryiko wrote:
-> > > On Wed, Feb 11, 2026 at 4:57=E2=80=AFAM Menglong Dong <menglong8.dong=
-@gmail.com> wrote:
-> > > >
-> > > > The function prototype of bpf_session_{cookie,is_return} is changed=
- in
-> > > > the commit 8fe4dc4f6456 ("bpf: change prototype of
-> > > > bpf_session_{cookie,is_return}"), which is not friendly to the old =
-kernel,
-> > > > as the libbpf will fail on the compatible checking.
-> > > >
-> > > > Therefore, let's skip the checking of bpf_session_{cookie,is_return=
-} in
-> > > > libbpf, and just let the kernel do the checking.
-> > > >
-> > > > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > > > ---
-> > > >  tools/lib/bpf/libbpf.c | 31 ++++++++++++++++++++-----------
-> > > >  1 file changed, 20 insertions(+), 11 deletions(-)
-> > > >
-> > >
-> > > This is not the way. Use bpf_ksym_exists() check and have custom
-> > > legacy bpf_session_cookie___legacy() definition with old prototype.
-> > > You can then detect whether
-> > > bpf_ksym_exists(bpf_session_cookie___legacy) is true and use the
-> > > legacy version, otherwise use the current version.
-> >
-> > Great! I found that there are already similar usages in kernel.
-> > I did some tests, and it works well. Thanks!
-> >
-> > BTW, do you think that if we need do some wrapper for bpf_session_{cook=
-ie,is_return}
-> > like this in case that someone else don't know the compatible problem?
-> >
-> > extern bool bpf_session_is_return___legacy(void) __weak __ksym;
-> > extern __u64 *bpf_session_cookie___legacy(void) __weak __ksym;
-> >
-> >
-> > #define bpf_session_is_return(ctx)                                     =
-                         \
-> >         (bpf_ksym_exists(bpf_session_is_return___legacy) ? bpf_session_=
-is_return___legacy() :   \
-> >                                                            bpf_session_=
-is_return(ctx))
-> > #define bpf_session_cookie(ctx)                                        =
-                 \
-> >         (bpf_ksym_exists(bpf_session_cookie___legacy) ? bpf_session_coo=
-kie___legacy() : \
-> >                                                         bpf_session_coo=
-kie(ctx))
-> >
->=20
-> I'd like to avoid carrying this in libbpf forever, tbh. One reason we
-> decided to break bpf_session_xxx() helpers is because almost no one is
-> using them in any serious capacity, so I'm thinking it's fine to just
-> have this workaround live in your code base as an early session
-> adopter.
+On Mon, Feb 23, 2026 at 9:48=E2=80=AFAM Puranjay Mohan <puranjay@kernel.org=
+> wrote:
+>
+>
+> Iterator KF_ACQUIRE support is not useful on its own right now, but it
+> becomes the foundation for KF_FORBID_SLEEP: an iterator whose _next is
+> annotated with KF_ACQUIRE | KF_FORBID_SLEEP can now express "holding this
+> pointer forbids sleeping; calling _release invalidates the pointer and
+> re-enables sleeping."
+>
 
-OK!
+The name of the flag and semantics bothers me a bit.
+How about we call it KF_ACQUIRE_LOCK and make it exclusive vs KF_ACQUIRE.
+And document it like:
+KF_ACQUIRE -> acquires a resource via reference counting
+KF_ACQUIRE_LOCK -> acquires a resource by locking it
 
->=20
-> > Thanks!
-> > Menglong Dong
-> >
-> > >
-> > > pw-bot: cr
-> > >
-> > >
-> > > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> > > > index 0c8bf0b5cce4..71bdd1c1ac39 100644
-> > > > --- a/tools/lib/bpf/libbpf.c
-> > > > +++ b/tools/lib/bpf/libbpf.c
-> > > > @@ -8557,6 +8557,12 @@ static int find_ksym_btf_id(struct bpf_objec=
-t *obj, const char *ksym_name,
-> > > >         return id;
-> > > >  }
-> > > >
-> > > > +static bool kfunc_skip_compat_check(const char *name)
-> > > > +{
-> > > > +       return name && (strcmp(name, "bpf_session_cookie") =3D=3D 0=
- ||
-> > > > +                       strcmp(name, "bpf_session_is_return") =3D=
-=3D 0);
-> > > > +}
-> > > > +
-> > > >  static int bpf_object__resolve_ksym_var_btf_id(struct bpf_object *=
-obj,
-> > > >                                                struct extern_desc *=
-ext)
-> > > >  {
-> > > > @@ -8617,12 +8623,13 @@ static int bpf_object__resolve_ksym_func_bt=
-f_id(struct bpf_object *obj,
-> > > >         struct module_btf *mod_btf =3D NULL;
-> > > >         const struct btf_type *kern_func;
-> > > >         struct btf *kern_btf =3D NULL;
-> > > > +       const char *kfunc_name;
-> > > >         int ret;
-> > > >
-> > > >         local_func_proto_id =3D ext->ksym.type_id;
-> > > >
-> > > > -       kfunc_id =3D find_ksym_btf_id(obj, ext->essent_name ?: ext-=
->name, BTF_KIND_FUNC, &kern_btf,
-> > > > -                                   &mod_btf);
-> > > > +       kfunc_name =3D ext->essent_name ?: ext->name;
-> > > > +       kfunc_id =3D find_ksym_btf_id(obj, kfunc_name, BTF_KIND_FUN=
-C, &kern_btf, &mod_btf);
-> > > >         if (kfunc_id < 0) {
-> > > >                 if (kfunc_id =3D=3D -ESRCH && ext->is_weak)
-> > > >                         return 0;
-> > > > @@ -8634,16 +8641,18 @@ static int bpf_object__resolve_ksym_func_bt=
-f_id(struct bpf_object *obj,
-> > > >         kern_func =3D btf__type_by_id(kern_btf, kfunc_id);
-> > > >         kfunc_proto_id =3D kern_func->type;
-> > > >
-> > > > -       ret =3D bpf_core_types_are_compat(obj->btf, local_func_prot=
-o_id,
-> > > > -                                       kern_btf, kfunc_proto_id);
-> > > > -       if (ret <=3D 0) {
-> > > > -               if (ext->is_weak)
-> > > > -                       return 0;
-> > > > +       if (!kfunc_skip_compat_check(kfunc_name)) {
-> > > > +               ret =3D bpf_core_types_are_compat(obj->btf, local_f=
-unc_proto_id,
-> > > > +                                               kern_btf, kfunc_pro=
-to_id);
-> > > > +               if (ret <=3D 0) {
-> > > > +                       if (ext->is_weak)
-> > > > +                               return 0;
-> > > >
-> > > > -               pr_warn("extern (func ksym) '%s': func_proto [%d] i=
-ncompatible with %s [%d]\n",
-> > > > -                       ext->name, local_func_proto_id,
-> > > > -                       mod_btf ? mod_btf->name : "vmlinux", kfunc_=
-proto_id);
-> > > > -               return -EINVAL;
-> > > > +                       pr_warn("extern (func ksym) '%s': func_prot=
-o [%d] incompatible with %s [%d]\n",
-> > > > +                               ext->name, local_func_proto_id,
-> > > > +                               mod_btf ? mod_btf->name : "vmlinux"=
-, kfunc_proto_id);
-> > > > +                       return -EINVAL;
-> > > > +               }
-> > > >         }
-> > > >
-> > > >         /* set index for module BTF fd in fd_array, if unset */
-> > > > --
-> > > > 2.53.0
-> > > >
-> > >
-> > >
-> >
-> >
-> >
-> >
+and to match it I would do:
+KF_RELEASE -> releases a resource by decrementing refcount
+KF_RELEASE_LOCK -> releases a resource by unlocking it.
 
+When lock is taken it's typically prohibited to sleep and do
+other things. So I feel such flags would describe what's
+going on underneath more accurately.
 
+Thoughts?
 
-
+btw do we need a selftest that 2nd task_iter cannot call iter_next()?
+Like:
+iter_new(it1);
+iter_new(it2);
+iter_next(it1);
+iter_next(it2); // this one has nothing to do with sleeping
+but once we think of iter_next as KF_ACQUIRE_LOCK
+it becomes obvious that it's not ok to re-acquire the same lock.
