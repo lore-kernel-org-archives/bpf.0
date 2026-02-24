@@ -1,144 +1,132 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904D433B960;
-	Tue, 24 Feb 2026 20:59:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7DB1A0BD0
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 21:01:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771966750; cv=none; b=s36RUDZCyg/K4F6JShog5eVoTCJD2RS5/i/vk7H46zvv97k3zvIwEHw7Fhs5vsVm7hahOrcKSYLFEt9uZe+zZ3vUEWVsXBkVWA/PAv/plWy6nu3WXwi86hYW1AoBqLAh5TxDdwcsJqX57fHYcnR4PYGKVb4hqdSfXw4fO8YDX0Y=
+	t=1771966915; cv=none; b=GOjSbanOLLtCOdj5UoGsDF/s67fBQrj/2M7Hp0KHtBM4WKz9dVCU2VuZCP5PWXMuDhpQmHHGYsCLSLeCqliz+gQcMpEZ6T1jCXPi4C95KnXD3ljHGkt/wUIRIPgoRlolADdTcNKcMmNekC8LXvo/fx0BD24z6n3etk5W7gL9gEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771966750; c=relaxed/simple;
-	bh=nkrvCgJax+Hu9YAH/GgCRO+8YstLU1L1lCG4uaQ3Qb4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rDv7CC6GxGa1brPyUjvgpTI+TCF+2S8AS6d5/Sig8ziZmjpC265G1IZlHP1JloXxRt76Ed3U5iETgI0M/B9VlNdeaqkpMynTadYo3LKOXC+U845B7Ob7FyqXtGkrBFOekKuo6O7uVcFxd+dS1Yi3aOTXbJrpsuxdo3Wfyqr5aps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IxTSgKyJ; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1771966915; c=relaxed/simple;
+	bh=RsPVPaopC3BXTr46mcSYS7S0dKw/uRjutei23T7qobo=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=VhCW5oozd+xs88/96lCwZ5RGlQyMF/7ZmQLNWyD9usj/dmF9tBR+dSns6y3JuAKcnCxPkAGP85EzN+qHCow1vejWXJI/NngNNSiGKmn+9PziPlV18MUbwaQcteklDszd6/FPbEBhnnaU4hMShJD7giTtHXisB3/DByb5hYBJE3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNJrq7MS; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IxTSgKyJ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1771966749; x=1803502749;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=nkrvCgJax+Hu9YAH/GgCRO+8YstLU1L1lCG4uaQ3Qb4=;
-  b=IxTSgKyJiI4YqwV4n1X8NkMXd3m7jUV6yJEgoBO2I5UQEPn+EUsRWHgB
-   3KAgF72DyEEBnvoaNkMcqLRpRoTgcw1xozmlupQRTlzb4nuR2xiA+Xg/7
-   col1gZXrZuz7TJkaUGICWx3eh9s7jIY15lW+X9QF4nBi96CoJaAc6S6xi
-   TXKoKXt77XBYnP6AVC3PHHdgzwYUDFy3qnZVTRcqk/2eS0o83aNBt11YW
-   BWMYhaib0WwwIAA/yh8wm4aOw79XQ4u+ZTt9QgPFPr/RyRRiB86bs7AEC
-   a7i3ucm/7/8ROFAn3msdyANTJbi6DTuUe1GAB+RrqyXHREm9HCmerb2qh
-   g==;
-X-CSE-ConnectionGUID: CX5zkbYrQmyH65VlzcHS/w==
-X-CSE-MsgGUID: e8lLbUleQiiKhg23HUDtwA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11711"; a="95610537"
-X-IronPort-AV: E=Sophos;i="6.21,309,1763452800"; 
-   d="scan'208";a="95610537"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2026 12:59:09 -0800
-X-CSE-ConnectionGUID: RxA1F9doQDK27BfiySCZiQ==
-X-CSE-MsgGUID: UFKoOcZFQv2IrUofsLfFzQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,309,1763452800"; 
-   d="scan'208";a="215252303"
-Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.88.27.144])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2026 12:59:09 -0800
-From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To: Zdenek Bouska <zdenek.bouska@siemens.com>, Tony Nguyen
- <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
- <sdf@fomichev.me>, Richard Cochran <richardcochran@gmail.com>, Song Yoong
- Siang <yoong.siang.song@intel.com>, Lai Peter Jun Ann
- <jun.ann.lai@intel.com>
-Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Florian Bezdeka
- <florian.bezdeka@siemens.com>, Zdenek Bouska <zdenek.bouska@siemens.com>
-Subject: Re: [PATCH] igc: fix page fault in XDP TX timestamps handling
-In-Reply-To: <20260224-igc-fix-xdp-tx-tstamp-pagefault-v1-1-7c729ef61ee5@siemens.com>
-References: <20260224-igc-fix-xdp-tx-tstamp-pagefault-v1-1-7c729ef61ee5@siemens.com>
-Date: Tue, 24 Feb 2026 12:59:08 -0800
-Message-ID: <87342p97tv.fsf@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNJrq7MS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70ABCC116D0;
+	Tue, 24 Feb 2026 21:01:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771966914;
+	bh=RsPVPaopC3BXTr46mcSYS7S0dKw/uRjutei23T7qobo=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=cNJrq7MSne/g/e1PNiCNGRpmnDJokkDLcgx5wBC9XvtlP0Hzbzt5bwO1SiZb6lP2f
+	 HNqlj7tkMyGgA3qNI3iiKUHNxAZeXaA38o+/ffqVxKYmWXWVbxyv7OR9YRDuBpKPr3
+	 vKyTF47Fj4CjzUYYw4fLJtXCmdZftRICoGqW//98YXFGwArwFREWYliCeCQfIBTCHp
+	 PkGXv3ydXjc05SeUdf1r2bkwgguR5SNEZMg/roV4FSGfuA7+daia/ykBWPwvGBmxgy
+	 Ti72dkJ/Ar6dnJS8rxkABhp9sm65r46ePRDyz1ATdTbvvdId/RAb2TNiE/GDh7wy7N
+	 IYq/OWmP1/WeQ==
+Content-Type: multipart/mixed; boundary="===============1101494537671284616=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Message-Id: <90202a7fb1a4fd05e2b5dae0d662fcbfeeef483fbe555305eaf15b75aad15a24@mail.kernel.org>
+In-Reply-To: <20260225010950.20218-2-adubey@linux.ibm.com>
+References: <20260225010950.20218-2-adubey@linux.ibm.com>
+Subject: Re: [PATCH 1/4] powerpc64/bpf: Add support for instruction array
+From: bot+bpf-ci@kernel.org
+To: adubey@linux.ibm.com,linuxppc-dev@lists.ozlabs.org
+Cc: bpf@vger.kernel.org,hbathini@linux.ibm.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,maddy@linux.ibm.com,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 24 Feb 2026 21:01:53 +0000 (UTC)
 
-Zdenek Bouska <zdenek.bouska@siemens.com> writes:
+--===============1101494537671284616==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> If an XDP application that requested TX timestamping is shutting down
-> while the link of the interface in use is still up the following kernel
-> splat is reported:
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 52162e4a7f84..9c27740650b5 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -318,6 +318,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+>  		jit_data->hdr = hdr;
+>  	}
 >
-> [  883.803618] [   T1554] BUG: unable to handle page fault for address: ffffcfb6200fd008
-> ...
-> [  883.803650] [   T1554] Call Trace:
-> [  883.803652] [   T1554]  <TASK>
-> [  883.803654] [   T1554]  igc_ptp_tx_tstamp_event+0xdf/0x160 [igc]
-> [  883.803660] [   T1554]  igc_tsync_interrupt+0x2d5/0x300 [igc]
-> ...
->
-> During shutdown of the TX ring the xsk_meta pointers are left behind, so
-> that the IRQ handler is trying to touch them.
->
-> This issue is now being fixed by cleaning up the stale xsk meta data on
-> TX shutdown. TX timestamps on other queues remain unaffected.
->
-> Fixes: 15fd021bc427 ("igc: Add Tx hardware timestamp request for AF_XDP zero-copy packet")
-> Signed-off-by: Zdenek Bouska <zdenek.bouska@siemens.com>
-> ---
->  drivers/net/ethernet/intel/igc/igc.h      |  2 ++
->  drivers/net/ethernet/intel/igc/igc_main.c |  7 +++++++
->  drivers/net/ethernet/intel/igc/igc_ptp.c  | 33 +++++++++++++++++++++++++++++++
->  3 files changed, 42 insertions(+)
->
-> diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
-> index a427f05814c1ae7330c6f7034cd0f2b40b74dab6..17236813965d334f14eba928affbd4f91b96ecd4 100644
-> --- a/drivers/net/ethernet/intel/igc/igc.h
-> +++ b/drivers/net/ethernet/intel/igc/igc.h
-> @@ -781,6 +781,8 @@ int igc_ptp_hwtstamp_set(struct net_device *netdev,
->  			 struct kernel_hwtstamp_config *config,
->  			 struct netlink_ext_ack *extack);
->  void igc_ptp_tx_hang(struct igc_adapter *adapter);
-> +void igc_ptp_clear_xsk_tx_tstamp_queue(struct igc_adapter *adapter,
-> +				       u16 queue_id);
->  void igc_ptp_read(struct igc_adapter *adapter, struct timespec64 *ts);
->  void igc_ptp_tx_tstamp_event(struct igc_adapter *adapter);
->  
-> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-> index 89a321a344d263ace5c66f7ade782b40cc482566..570e90fab67d653bbbb242d242d0b64a49fba602 100644
-> --- a/drivers/net/ethernet/intel/igc/igc_main.c
-> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
-> @@ -193,6 +193,7 @@ static void igc_unmap_tx_buffer(struct device *dev, struct igc_tx_buffer *buf)
->   */
->  static void igc_clean_tx_ring(struct igc_ring *tx_ring)
->  {
-> +	struct igc_adapter *adapter;
->  	u16 i = tx_ring->next_to_clean;
->  	struct igc_tx_buffer *tx_buffer = &tx_ring->tx_buffer_info[i];
->  	u32 xsk_frames = 0;
-> @@ -264,6 +265,12 @@ static void igc_clean_tx_ring(struct igc_ring *tx_ring)
->  	/* reset next_to_use and next_to_clean */
->  	tx_ring->next_to_use = 0;
->  	tx_ring->next_to_clean = 0;
-> +
-> +	/* Clear any lingering XSK TX timestamp requests */
-> +	if (test_bit(IGC_RING_FLAG_TX_HWTSTAMP, &tx_ring->flags)) {
+> +	/*
+> +	 * The bpf_prog_update_insn_ptrs function expects addrs to
+> +	 * point to the first byte of the jitted instruction.
+> +	 */
+> +	bpf_prog_update_insn_ptrs(fp, addrs, fimage);
 
-minor: move the 'adapter' declaration here.
+Is addrs still valid at this point?  Looking at the code above, in the
+final-pass path where (!fp->is_func || extra_pass) is true, addrs has
+already been freed:
 
-But I will leave that to up to you,
+bpf_int_jit_compile() {
+    ...
+    if (!fp->is_func || extra_pass) {
+        ...
+        bpf_prog_fill_jited_linfo(fp, addrs);
+out_addrs:
+        kfree(addrs);
+        kfree(jit_data);
+        fp->aux->jit_data = NULL;
+    } else {
+        jit_data->addrs = addrs;
+        ...
+        jit_data->hdr = hdr;
+    }
 
-Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+    bpf_prog_update_insn_ptrs(fp, addrs, fimage);  /* <-- here */
+    ...
+}
 
+The kfree(addrs) happens before this call.  The NULL check inside
+bpf_prog_update_insn_ptrs() does not catch this because kfree()
+does not set the pointer to NULL, so offsets[xlated_off] would read
+from freed memory.
 
-Cheers,
--- 
-Vinicius
+The x86 JIT avoids this by placing bpf_prog_update_insn_ptrs() inside
+the if (image) block before the addrs are freed:
+
+arch/x86/net/bpf_jit_comp.c:bpf_int_jit_compile() {
+    ...
+    bpf_prog_update_insn_ptrs(prog, addrs, image);
+    ...
+    /* addrs freed later */
+    kvfree(addrs);
+}
+
+Should this call be moved before the out_addrs label, similar to
+how x86 does it?
+
+Additionally, for CONFIG_PPC64_ELF_ABI_V1 where FUNCTION_DESCR_SIZE
+is 24, the addrs offsets are relative to code_base, not fimage:
+
+    code_base = (u32 *)(image + FUNCTION_DESCR_SIZE);
+    fcode_base = (u32 *)(fimage + FUNCTION_DESCR_SIZE);
+
+Would the image argument need to be (fimage + FUNCTION_DESCR_SIZE)
+rather than fimage to produce the correct absolute addresses in
+insn_array->ips[]?
+
+>  out:
+>  	if (bpf_blinded)
+>  		bpf_jit_prog_release_other(fp, fp == org_fp ? tmp_fp : org_fp);
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22368663191
+
+AI-authorship-score: low
+AI-authorship-explanation: Standard kernel patch conventions with specific upstream references; no AI-generation indicators.
+issues-found: 2
+issue-severity-score: high
+issue-severity-explanation: Use-after-free on addrs array in normal JIT success path can corrupt insn_array jump targets, leading to crashes or undefined behavior.
+
+--===============1101494537671284616==--
