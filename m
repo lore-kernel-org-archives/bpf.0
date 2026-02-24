@@ -1,132 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A7DB1A0BD0
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 21:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41E9B33A70F
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 21:12:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771966915; cv=none; b=GOjSbanOLLtCOdj5UoGsDF/s67fBQrj/2M7Hp0KHtBM4WKz9dVCU2VuZCP5PWXMuDhpQmHHGYsCLSLeCqliz+gQcMpEZ6T1jCXPi4C95KnXD3ljHGkt/wUIRIPgoRlolADdTcNKcMmNekC8LXvo/fx0BD24z6n3etk5W7gL9gEE=
+	t=1771967538; cv=none; b=N1Bsej3zfmrsSHXBbSCctl57fgEa+rNQ4ZbaOuBQK0MA1czmw0RrcnRlpxOkNLOcwcdlcaMgqzFOreIVLpmBHNxwtQ9NieGSmsFgW8I3Jo/4Oy30IXVy6NgGTLT7TQ29EK9bGsnecslCQK8UkThWbPpISQCAsbeMCGDNCi6pAtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771966915; c=relaxed/simple;
-	bh=RsPVPaopC3BXTr46mcSYS7S0dKw/uRjutei23T7qobo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=VhCW5oozd+xs88/96lCwZ5RGlQyMF/7ZmQLNWyD9usj/dmF9tBR+dSns6y3JuAKcnCxPkAGP85EzN+qHCow1vejWXJI/NngNNSiGKmn+9PziPlV18MUbwaQcteklDszd6/FPbEBhnnaU4hMShJD7giTtHXisB3/DByb5hYBJE3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNJrq7MS; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771967538; c=relaxed/simple;
+	bh=sx6nzEgsTL+dLPWUBvSithGjFGALJFXoQAdX5TxrXks=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JZzLTxAajQk7svKXUaksjv9AwOpcmB6aA9B1oHWXTwFvkRs1y1ROjl7JNhBFAlwXLg0yIHss0ztmEHRdd2jv2vGZObOK2mrwjh8kGJYO6shmUHWhy/P1HYzoOZ8FlwkRsJRgNd7VG4H1JdzWmbz4xNq16o+WENibZGswUJB6H7o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=J4aA80Ml; arc=none smtp.client-ip=91.218.175.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNJrq7MS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70ABCC116D0;
-	Tue, 24 Feb 2026 21:01:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771966914;
-	bh=RsPVPaopC3BXTr46mcSYS7S0dKw/uRjutei23T7qobo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=cNJrq7MSne/g/e1PNiCNGRpmnDJokkDLcgx5wBC9XvtlP0Hzbzt5bwO1SiZb6lP2f
-	 HNqlj7tkMyGgA3qNI3iiKUHNxAZeXaA38o+/ffqVxKYmWXWVbxyv7OR9YRDuBpKPr3
-	 vKyTF47Fj4CjzUYYw4fLJtXCmdZftRICoGqW//98YXFGwArwFREWYliCeCQfIBTCHp
-	 PkGXv3ydXjc05SeUdf1r2bkwgguR5SNEZMg/roV4FSGfuA7+daia/ykBWPwvGBmxgy
-	 Ti72dkJ/Ar6dnJS8rxkABhp9sm65r46ePRDyz1ATdTbvvdId/RAb2TNiE/GDh7wy7N
-	 IYq/OWmP1/WeQ==
-Content-Type: multipart/mixed; boundary="===============1101494537671284616=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="J4aA80Ml"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771967534;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ZVdjpkS6hpQa7/nbEiuJR5gXeuovddUa0HnphowMz3I=;
+	b=J4aA80Ml7DEJyPbboIBKRMe851Plc6WXXrjh4pKPUZCkO8b0Qwr1L70vImVRWbVuRqZB+M
+	mJEBUbqMeZe9ssgZKDnjYKC/R7PvaO9/x/ZmqhDBmYv+ZsvSJlPWSfJ7Ptz8bO62/zw6Fx
+	nn6jjXXx7Y2NQgGcQvgnhjmCu6pqV0Q=
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>
+Cc: Mykyta Yatsenko <yatsenko@meta.com>,
+	bpf@vger.kernel.org,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v2] selftests/bpf: Fix flakiness of task_local_storage/sys_enter_exit
+Date: Tue, 24 Feb 2026 13:12:02 -0800
+Message-ID: <20260224211202.214325-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <90202a7fb1a4fd05e2b5dae0d662fcbfeeef483fbe555305eaf15b75aad15a24@mail.kernel.org>
-In-Reply-To: <20260225010950.20218-2-adubey@linux.ibm.com>
-References: <20260225010950.20218-2-adubey@linux.ibm.com>
-Subject: Re: [PATCH 1/4] powerpc64/bpf: Add support for instruction array
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,linuxppc-dev@lists.ozlabs.org
-Cc: bpf@vger.kernel.org,hbathini@linux.ibm.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,maddy@linux.ibm.com,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 24 Feb 2026 21:01:53 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
---===============1101494537671284616==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+The test_sys_enter_exit test was setting target_pid before attaching
+the BPF programs, which causes syscalls made during the attach phase
+to be counted. This is flaky because, apparently, there is no
+guarantee that both on_enter and on_exit will trigger during the
+attachment.
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index 52162e4a7f84..9c27740650b5 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
-> @@ -318,6 +318,12 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
->  		jit_data->hdr = hdr;
->  	}
->
-> +	/*
-> +	 * The bpf_prog_update_insn_ptrs function expects addrs to
-> +	 * point to the first byte of the jitted instruction.
-> +	 */
-> +	bpf_prog_update_insn_ptrs(fp, addrs, fimage);
+Move the target_pid assignment to after task_local_storage__attach()
+so that only explicit sys_gettid() calls are counted.
 
-Is addrs still valid at this point?  Looking at the code above, in the
-final-pass path where (!fp->is_func || extra_pass) is true, addrs has
-already been freed:
-
-bpf_int_jit_compile() {
-    ...
-    if (!fp->is_func || extra_pass) {
-        ...
-        bpf_prog_fill_jited_linfo(fp, addrs);
-out_addrs:
-        kfree(addrs);
-        kfree(jit_data);
-        fp->aux->jit_data = NULL;
-    } else {
-        jit_data->addrs = addrs;
-        ...
-        jit_data->hdr = hdr;
-    }
-
-    bpf_prog_update_insn_ptrs(fp, addrs, fimage);  /* <-- here */
-    ...
-}
-
-The kfree(addrs) happens before this call.  The NULL check inside
-bpf_prog_update_insn_ptrs() does not catch this because kfree()
-does not set the pointer to NULL, so offsets[xlated_off] would read
-from freed memory.
-
-The x86 JIT avoids this by placing bpf_prog_update_insn_ptrs() inside
-the if (image) block before the addrs are freed:
-
-arch/x86/net/bpf_jit_comp.c:bpf_int_jit_compile() {
-    ...
-    bpf_prog_update_insn_ptrs(prog, addrs, image);
-    ...
-    /* addrs freed later */
-    kvfree(addrs);
-}
-
-Should this call be moved before the out_addrs label, similar to
-how x86 does it?
-
-Additionally, for CONFIG_PPC64_ELF_ABI_V1 where FUNCTION_DESCR_SIZE
-is 24, the addrs offsets are relative to code_base, not fimage:
-
-    code_base = (u32 *)(image + FUNCTION_DESCR_SIZE);
-    fcode_base = (u32 *)(fimage + FUNCTION_DESCR_SIZE);
-
-Would the image argument need to be (fimage + FUNCTION_DESCR_SIZE)
-rather than fimage to produce the correct absolute addresses in
-insn_array->ips[]?
-
->  out:
->  	if (bpf_blinded)
->  		bpf_jit_prog_release_other(fp, fp == org_fp ? tmp_fp : org_fp);
+Reported-by: BPF CI Bot (Claude Opus 4.6) <bot+bpf-ci@kernel.org>
+Closes: https://github.com/kernel-patches/vmtest/issues/448
+Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22368663191
+v1->v2: reset skel->bss->target_pid to 0 before asserts (Amery)
+v1: https://lore.kernel.org/bpf/20260224015855.1481707-1-ihor.solodrai@linux.dev/
 
-AI-authorship-score: low
-AI-authorship-explanation: Standard kernel patch conventions with specific upstream references; no AI-generation indicators.
-issues-found: 2
-issue-severity-score: high
-issue-severity-explanation: Use-after-free on addrs array in normal JIT success path can corrupt insn_array jump targets, leading to crashes or undefined behavior.
+---
+ .../bpf/prog_tests/task_local_storage.c          | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
---===============1101494537671284616==--
+diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+index 7bee33797c71..1b26c12f255a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
++++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+@@ -25,24 +25,30 @@
+ static void test_sys_enter_exit(void)
+ {
+ 	struct task_local_storage *skel;
++	pid_t pid = sys_gettid();
+ 	int err;
+ 
+ 	skel = task_local_storage__open_and_load();
+ 	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+ 		return;
+ 
+-	skel->bss->target_pid = sys_gettid();
+-
+ 	err = task_local_storage__attach(skel);
+ 	if (!ASSERT_OK(err, "skel_attach"))
+ 		goto out;
+ 
++	/* Set target_pid after attach so that syscalls made during
++	 * attach are not counted.
++	 */
++	skel->bss->target_pid = pid;
++
+ 	sys_gettid();
+ 	sys_gettid();
+ 
+-	/* 3x syscalls: 1x attach and 2x gettid */
+-	ASSERT_EQ(skel->bss->enter_cnt, 3, "enter_cnt");
+-	ASSERT_EQ(skel->bss->exit_cnt, 3, "exit_cnt");
++	skel->bss->target_pid = 0;
++
++	/* 2x gettid syscalls */
++	ASSERT_EQ(skel->bss->enter_cnt, 2, "enter_cnt");
++	ASSERT_EQ(skel->bss->exit_cnt, 2, "exit_cnt");
+ 	ASSERT_EQ(skel->bss->mismatch_cnt, 0, "mismatch_cnt");
+ out:
+ 	task_local_storage__destroy(skel);
+-- 
+2.53.0
+
