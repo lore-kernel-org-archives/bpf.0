@@ -1,179 +1,120 @@
-Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEC02749D6
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 02:53:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771901622; cv=none; b=irb/drBBhVckooKmAO7/zcQ3YNa/tOt80vNB24W+3vlOBrItpFkisGw36RSmgR966+wbvb7mf3m8Ew4tMRsbL7zD66amPHw/LBOcJPagw3X44V92+fb8kO3tcMmMB7RX1TxSPwa5kuMfEGGJsmuUBlGpmUMhXIWZCZgkRWNbxFU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771901622; c=relaxed/simple;
-	bh=HsxQLplX9ZupAdG6x61z6GQ0vJcOUthh3GHiJgQdS3A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sqJb1PrFEXGjPXnhO4vL+kow9Lh++fRhW/Ni1k7ar/pwAKyWrPHJ1LSmBfWvGTLuGRY1NRFsqoxsDE5kYS97szdYtgrbIvqRjiKtMMP1J62Jpa2Zz6V69wMh/QQQNynb3xmkaKqjOa2nm/NUXVjBrubHJ6SvnVYrU/kDYBzZwtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IjhmKYeu; arc=none smtp.client-ip=91.218.175.189
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F027E0E4
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 02:58:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771901930; cv=pass; b=JTHvea3pbXyHIK9pEHqXgPyD0iixlU4EwPxQXEaM6B3A96q2+KtWHn6w8oPSt+1cXtMCrL75wAr0nkFOqXoS+/KHoaNtDzpzZcwYlcHds/DLT2PodP7yJgJWVzuiMStpjcTFrJyxeEh3AWhYPlSEz98KNOvUCe8Qpzf3T2xEW3k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771901930; c=relaxed/simple;
+	bh=tOd+OOw38MI45+QlWtqhkOuDIRdBXvPQzcU7osEsBRc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lIpqIge5Z+HZQOB4qCEjl2EZS9Et9HQZX7E5UU3P1K53WMvCzqXhvlp1am/FQ9isU7MwTchOKRiFT2CyWvtMdRF0zTRiucH0UoHo8Iomj36wmJQYWRFQjxzczphRV8fseNJf6SPMoUSUnA+aug0k5TozS07cUxjOPOVXPVFUW3Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ai3aRsom; arc=pass smtp.client-ip=209.85.221.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IjhmKYeu"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771901618;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PzkqY8CkKpY6s/bTgMtaexs4DIId6SrfZ+UYAFGY1k8=;
-	b=IjhmKYeuygewBF1EdnI2AQH0YEroTMroCP6VI18Sy/yATK1DJCgGbS8r9F1EL0b+8W6bAx
-	v+FiyKkjjtXacK9LYXf8UVp2xgrh5EhEYY0y3Ws5MZF2T8JDoVtOjZv1EQpiKDmtzEvdD5
-	LmbZ20/pS/9KhVyexI0t4rHbbwVCTCE=
-From: Menglong Dong <menglong.dong@linux.dev>
-To: Menglong Dong <menglong8.dong@gmail.com>,
- Ilya Leoshkevich <iii@linux.ibm.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, hca@linux.ibm.com,
- gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
- svens@linux.ibm.com, bpf@vger.kernel.org, linux-s390@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject:
- Re: [PATCH bpf-next 2/3] bpf,s390: add fsession support for trampolines
-Date: Tue, 24 Feb 2026 10:53:18 +0800
-Message-ID: <9580160.CDJkKcVGEf@7940hx>
-In-Reply-To: <10367bd9-4b9f-48d1-9ee7-8e8b1ec57909@linux.ibm.com>
-References:
- <20260223084022.653186-1-dongml2@chinatelecom.cn>
- <20260223084022.653186-3-dongml2@chinatelecom.cn>
- <10367bd9-4b9f-48d1-9ee7-8e8b1ec57909@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ai3aRsom"
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-4362507f0bcso3516175f8f.0
+        for <bpf@vger.kernel.org>; Mon, 23 Feb 2026 18:58:48 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771901927; cv=none;
+        d=google.com; s=arc-20240605;
+        b=aGBgY6QruV85rX8RyQfSLYsy6c3qeRoqaQuMRBbMybvdcsNjYU2oAeG73RAi6sZAE9
+         T9+U9Q6XzNfxBB+NKLNfiEjEpw4vrCJ8ZR2RUMl01YxcR/l7IUR0tS2a8gNNPu3ejzGk
+         wb4y05eipV0v+lpTXH17gz/vJK+y8MXESgewsxatEhPr85HaGY73qN6MAEfoPiGcGZf+
+         FgpVlk2uFvHFBCl5rrY/tdL0DbbadLFwUPlbFmtFFF/sykxD+mN5NAiY2WNkXwxbncnj
+         c9hJpKNn5uM3BBwKmyq2u/Lil0SA3rx8U9XWMzp8HZoQuLhEBm5UHy4jzbdp5rHZuoBw
+         BVNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=tOd+OOw38MI45+QlWtqhkOuDIRdBXvPQzcU7osEsBRc=;
+        fh=cYWxAO4hEA81svD5X/DiiNB7a/xE2yZ32mprOvFjECI=;
+        b=E4k9VG4ztKdmamYfoX6YvEKq3/QSNgue+wnRDz/ud+h8k0p8NmkNAQZEnxVwo+LsoY
+         BlNVFtTH0AH6r58MKYZrrcZEaat2wHfdAH2k72leExpe2D04+u62OWLBQhE0I9lFWvMP
+         7Zi8lIYJwLj0DZ2Bwj+zTtgLQTNKLH7BaL0al+JINd+41BrgAr+ksxtIamX7/KHACG+R
+         +7Vkef/EC+npKyUETv+I7R+XLH0LN3Cy0vCHnaZ9KjgK3NkjwDNQcqeCvHgkCk2LFM4P
+         R5FU6isZKRGrW281t9bppJNG2c7O+2G6Aw9do6aRpoIFobxHFHlL87oV1nwJ9TSBs46i
+         ywTw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771901927; x=1772506727; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tOd+OOw38MI45+QlWtqhkOuDIRdBXvPQzcU7osEsBRc=;
+        b=ai3aRsomVi/83OIy7zOebEaC2zsQhgeUk6evt7ioGC14rGt3yKYoTzS6kmTU5v0GiI
+         36zQ3VxPX2VpIU+0B4fISS9IiMOasjORzL7jvlK+G6Q/Fj+1BlMmSHi5KAPVnwU6gD0j
+         ovk6oGUXA4aTsbLDQzY4FkHlmYIc07dggpcNim9anAUluQPeRdP5xfpewb8jGfx618nY
+         VRFNBgzJVBmiuBXntQvZm+iv6jWdbxXjDhygLbci7DDCmf81MNs+o2ErT/KJxz66t6lF
+         YF9ZooDmNOkgpjuMZpAvAPN0q9KhCZBWmxTRkGP0MNc1WhOI1PuQDqQu5IVSQtq8/Lj4
+         0E9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771901927; x=1772506727;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=tOd+OOw38MI45+QlWtqhkOuDIRdBXvPQzcU7osEsBRc=;
+        b=eZj14D8UPJHTH0iLoZEBF1IPbUeP3vZnIAo5K09fI0W/UrZN74vpn7iDeBcIBR294a
+         MAmLxELqUKEK+D3yGYbF6VYEP6wocVL/qnSL/GY+LFGlnxJKd/5p9xAd/EP9K+bME9VT
+         JpPE0TYp55VcNHFiW9JBkTkTOhcEalh4k4xqbV4k2N+vfqCfpWb35V6BYSU5yzKXwkWt
+         bLSz2QnJhbLm0YgL6an6QLXSRuPpSxxukITig9gBRyRQ5m6f1VZ8IbxBAGHVBRvQrYLp
+         3Ue1lF8DglWan72Sxsi0hr49bnSpOnYBlrf3+pmevMHUyY0XVxDNy14HMyAT2RxqsrwG
+         xbNw==
+X-Gm-Message-State: AOJu0YyumH4tLZnueO76ItIdPrEZ7IB+q2r8MwMXTSXc3yMLofH9H2D3
+	dVi2P3zQBKDZ6o07d905h9WMN+Fc2uSKGYSczwH6H4nJo3imMQ2qOCXUmzRhiN1zOQhvfyXFj2N
+	TlIzBRmum0z+5NNr41wpoCCP51qLYbJM=
+X-Gm-Gg: ATEYQzxVjo3+7LVpO4el1VpvdsHhf83IA86wU+wWMA+2YGTrXEQ8ReA+uKCAdf8BIwg
+	FCCnc58Hb3wFTWlRQB6eme500atvVJXA+mwyrp3rls3ZKQvGutFl88SkLe75vg+o/GEqRYxPg9R
+	hFynb0yN52zWt4vHpkOYnv5QDQYNY9FrOTGA18w9sGn8gdeSwF+yqSuRhs3tQmZdOD8xwSksb26
+	QslK+SenJOYueHcd/rXLZdyrwEVIwD2mYZDaohfXO1Gz8rsw102qjVcLYJjpzgPbTysBTjqu67x
+	MBD3Pp3UcGayvR43S7CC9PDiuCq6XfAOx0c0f6p1yQ4XX4mlufhOKtQx9ojn/rcwpKIQOpx49CD
+	iFcXjcc/aQQMLgplLYMhIYv0x0w==
+X-Received: by 2002:a05:6000:4211:b0:437:6b6e:d108 with SMTP id
+ ffacd0b85a97d-439626c7da4mr26621628f8f.8.1771901927057; Mon, 23 Feb 2026
+ 18:58:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
-X-Migadu-Flow: FLOW_OUT
+References: <cover.1770736390.git.vmalik@redhat.com> <CAADnVQLfV3PPYA8=EXDKwoQ925_W9HANf7gSn2=_fd42HD_FiA@mail.gmail.com>
+ <d92e60ea-d590-4ce4-961f-4e8ce1cb0c42@redhat.com> <CAADnVQK6qP8izg+k9yV0vdcT-+=axtFQ2fKw7D-2Ei-V6WS5Dw@mail.gmail.com>
+ <582944ed-ddd6-4843-ba36-b4aed03c5b2f@redhat.com> <CAADnVQJ4PU7bCb5XO9+zMZhLRSdbCKwxG6Rtojh2Rc3UZ8H43Q@mail.gmail.com>
+ <d2706604-1674-49fd-a150-7ace8839657f@redhat.com> <CAADnVQLT7cGgExtaqusyk+XwrD=-x15kL0veJB5YPewjPo=PUg@mail.gmail.com>
+ <fa67d3db-273f-4e4e-90a2-ba805f484bd1@redhat.com> <0675cf92-1833-4f1a-bd8e-53de5cc1ed7e@redhat.com>
+In-Reply-To: <0675cf92-1833-4f1a-bd8e-53de5cc1ed7e@redhat.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 23 Feb 2026 18:58:36 -0800
+X-Gm-Features: AaiRm520WPQ-BGS-IIRDhggH3rpFmXh7moQAsy6sy7i3u1bmLkVhWUd7b6ey8S0
+Message-ID: <CAADnVQ+BQZd4C8Mc4U1AnpQNPhouwjO=w89ORgF05AsoAH0RHg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/3] Separate tests that need error injection
+To: Viktor Malik <vmalik@redhat.com>
+Cc: bpf <bpf@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, Jordan Rome <linux@jordanrome.com>, 
+	Qais Yousef <qyousef@layalina.io>, Hou Tao <houtao1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026/2/23 20:14 Ilya Leoshkevich <iii@linux.ibm.com> write:
-> 
-> On 2/23/26 09:40, Menglong Dong wrote:
-> > Implement BPF_TRACE_FSESSION support for s390. The logic here is similar
-> > to what we did in x86_64.
-> >
-> > In order to simply the logic, we factor out the function invoke_bpf() for
-> > fentry and fexit.
-> >
-> > Signed-off-by: Menglong Dong <dongml2@chinatelecom.cn>
-> > ---
-> >   arch/s390/net/bpf_jit_comp.c | 68 +++++++++++++++++++++++++++++++-----
-> >   1 file changed, 59 insertions(+), 9 deletions(-)
-> 
-> 
-> Thank you for contributing this series!
-> 
-> 
-> In general this all looks very reasonable; I believe I found a few nits, 
-> please take a look at my comments below.
-> 
-> 
-> >
-> > diff --git a/arch/s390/net/bpf_jit_comp.c b/arch/s390/net/bpf_jit_comp.c
-> > index 763d2491dfa3..ea0c81f18ece 100644
-[...]
-> >   
-> > -	for (i = 0; i < fentry->nr_links; i++)
-> > -		if (invoke_bpf_prog(tjit, m, fentry->links[i],
-> > -				    flags & BPF_TRAMP_F_RET_FENTRY_RET))
-> > +	if (fsession_cnt) {
-> > +		/* clear all the session cookies' value */
-> 
-> Here and below: please use the existing style for single-line comments: 
-> full sentence starting with a capital letter and ending with a dot. 
-> Unfortunately the JIT is somewhat inconsistent in this area, but let's 
-> at least not introduce a new comment style here.
+On Mon, Feb 23, 2026 at 3:52=E2=80=AFAM Viktor Malik <vmalik@redhat.com> wr=
+ote:
+>
+>
+> Looking into this more, I assume that the premise here is that injecting
+> errors into syscalls is not sufficient to implement a rootkit, more
+> mechanisms are necessary for that (even [1] uses bpf_probe_write_user
+> which is by default enabled on any kernel). On top of that, there are
+> tons of other ways to compromise a system using eBPF so enabling error
+> injection doesn't change much in that direction.
+>
+> With that, I'm ok with enabling fmod_ret for syscalls even with
+> CONFIG_ERROR_INJECTION=3Dn, I'll send a patch.
 
-OK, I'll fix up the comments style in the next version.
-
-> 
-> > +		for (i = 0; i < cookie_cnt; i++)
-> > +			emit_store_stack_imm64(jit, REG_0, cookie_off + 8 * i, 0);
-> > +		/* clear the return value to make sure fentry always gets 0 */
-> > +		emit_store_stack_imm64(jit, REG_0, tjit->retval_off, 0);
-> > +	}
-> 
-> Would it make sense to clear cookies right after invoke_bpf_prog() and 
-> only if bpf_prog_calls_session_cookie() is true?
-
-I think it doesn't make much sense. We only reserve session cookies for
-the fsession progs that called bpf_session_cookie(), which means that
-all the cookies that we reserved here will be used. Right?
-
-> 
-> Going one step further and reducing the size of cookies array would 
-> probably be ideal, but I guess this will complicate things 
-> significantly, so I'm not suggesting to do this.
-> 
-> > +
-> > +	if (fentry->nr_links) {
-> 
-> I think it's okay to drop this condition, invoke_bpf() is most likely 
-> inlined and the loop will automatically have 0 iterations in this case.
-
-OK, I'll drop this checking.
-
-> 
-> > +		if (invoke_bpf(tjit, m, fentry, flags & BPF_TRAMP_F_RET_FENTRY_RET,
-> > +			       func_meta, cookie_off))
-> >   			return -EINVAL;
-> > +	}
-> >   
-> >   	if (fmod_ret->nr_links) {
-> >   		/*
-> > @@ -2842,11 +2880,18 @@ static int __arch_prepare_bpf_trampoline(struct bpf_tramp_image *im,
-> >   		EMIT6_PCREL_RILC(0xc0040000, 0, (u64)im->ip_epilogue);
-> >   	}
-> >   
-> > +	/* set the "is_return" flag for fsession */
-> > +	func_meta |= (1ULL << BPF_TRAMP_IS_RETURN_SHIFT);
-> > +	if (fsession_cnt)
-> > +		emit_store_stack_imm64(jit, REG_W0, tjit->func_meta_off,
-> > +				       func_meta);
-> > +
-> >   	/* do_fexit: */
-> >   	tjit->do_fexit = jit->prg;
-> > -	for (i = 0; i < fexit->nr_links; i++)
-> > -		if (invoke_bpf_prog(tjit, m, fexit->links[i], false))
-> > +	if (fexit->nr_links) {
-> Same as for fentry.
-
-ACK.
-
-Thanks!
-Menglong Dong
-
-> > +		if (invoke_bpf(tjit, m, fexit, false, func_meta, cookie_off))
-> >   			return -EINVAL;
-> > +	}
-> >   
-> >   	if (flags & BPF_TRAMP_F_CALL_ORIG) {
-> >   		im->ip_epilogue = jit->prg_buf + jit->prg;
-> > @@ -2951,6 +2996,11 @@ bool bpf_jit_supports_arena(void)
-> >   	return true;
-> >   }
-> >   
-> > +bool bpf_jit_supports_fsession(void)
-> > +{
-> > +	return true;
-> > +}
-> > +
-> >   bool bpf_jit_supports_insn(struct bpf_insn *insn, bool in_arena)
-> >   {
-> >   	if (!in_arena)
-> 
-> 
-
-
-
-
+Now we're on the same page. Thanks
