@@ -1,73 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82D6338BF60;
-	Tue, 24 Feb 2026 16:24:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD6B3A1CFF
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 16:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771950253; cv=none; b=UaCUsH06FRPXRiVojJJ4XQPoXj2Vsjil08oo1ELGhDHntGE29onIK4pEQA9nvnvf+KodK7amnytZeG3qCsvAqFXtNXFcTE5ZC5yHD/mAGfG6bD5YmGZjaFJrdg1VYUTkdZFI18X3wNa0CWS2GZTDfymG0+PJ66pyiqSthOEUpts=
+	t=1771950890; cv=none; b=S0DQOVXsoGry+bW5iTtF8Vk7HKAmElv3zsILoztDBZI2fdRzrBkLnl9c7fQFMudgwgFxh2rykfgnPDeT0Ihzj3A1EoZbPqQbvu64P514iB0FH7l1dYmqodOrOzeJMUzEmjWjA2v8Z0XQL7RUCBK2NWY7KujqC7z0fzn9vmjityc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771950253; c=relaxed/simple;
-	bh=E+YpZPlAvHFc2y94af8AqiwEjdfj3200a4PVDZwLA0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bgLYZnicUh2C5fLBe8w+J6Vx1xMbHR2Wuv0iG+dBjPOJoQ7AlFm38CiRdx5Sul3Uow9xT+BTVn04uQGpsN43TR/whIMb85Gshu8XsV7m6jLK2ApBkLqx9M8ewyPmCRGsmfybVUpURbfLlVZcJns/l/KdQOOcIccxkSAEhr9hGns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kjhhEuX2; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771950890; c=relaxed/simple;
+	bh=PFSk6JdYVDiqaPGw7FvCINBOaCx/Nla6aJ43Ex/LVf4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=moD/KmWTSgZu4TKwVcV3jbV1HVeHGby5AQYPQrBJwN2l6TW6YM2cr67e3Mo9QS/sq9EN7dwpnbd7mIujRDJSQ7IOJzK16MQyJu/J4xpCq2D2S1dV9wklmzhvLkC5Lkw0QM4lMh+rL34TJkM0et4v4xxv+aUMRelUShdiZ3iooh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EORBKMWG; arc=none smtp.client-ip=95.215.58.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kjhhEuX2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17CE3C116D0;
-	Tue, 24 Feb 2026 16:24:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771950253;
-	bh=E+YpZPlAvHFc2y94af8AqiwEjdfj3200a4PVDZwLA0s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kjhhEuX28k3bGq62b9kkXXk8bpIcr7Vy+/MxBjO1oSERsQdh8MYrR4/OPe0P3MJio
-	 PRbKtsuVL0iLLdG6Kl9YsNZvEqbCJMNeaDrP1O1MFV9IanQZSCSYig8ZIT/DYl326R
-	 H+WhCvEzH2J9RYUElghrjApV2bLLs3t8wDa105ZB/2IUk+PDTkNYCX/gSg+8bKjbvg
-	 pN39spI5iqCXlIntTL1hLkOyGQtDCAn7Db3FqoukYyf7uBaaHOi/UYI287ym6nIJI1
-	 9Qu8/3c5XMNBvbSI5FHgpEIxLxB/Wl6cc9a+3F0rTACx4vkTq4/A0LGvHS/nWRRBCt
-	 wbVVQKg8wNgxQ==
-Date: Tue, 24 Feb 2026 09:24:11 -0700
-From: Keith Busch <kbusch@kernel.org>
-To: Xiao Ni <xni@redhat.com>
-Cc: lsf-pc@lists.linux-foundation.org,
-	linux-block <linux-block@vger.kernel.org>, bpf@vger.kernel.org,
-	Ming Lei <ming.lei@redhat.com>
-Subject: Re: [LSF/MM/BPF TOPIC] User space RAID5 with ublk and io_uring BPF
-Message-ID: <aZ3Qq7kTBKGZjKp3@kbusch-mbp>
-References: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EORBKMWG"
+Message-ID: <801bd6f8-f1c3-4655-8cad-7f211979f330@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1771950886;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=swrYw/40VhGh3BYVfDHQ3Zwen0XOVGXh01U8xdFTtnw=;
+	b=EORBKMWGnWI4HAU2KTlFlVoqyb5dWw4oKl3+dCRAeaek5niwCGNvDftEZddOMpT7OQqoVq
+	jGWz8SKVF3hhl2kgzGIylAf/iKcSbcZwcdQC2ZL0hpOfbiEuaivB5jqc3GsN0lMlcPW8aA
+	7+F+QRjHmmA9gdr01uWHJ9x7NOztxzU=
+Date: Tue, 24 Feb 2026 08:34:30 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1] selftests/bpf: Fix flakiness of
+ task_local_storage/sys_enter_exit
+To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
+ <eddyz87@gmail.com>, Amery Hung <ameryhung@gmail.com>
+Cc: bpf@vger.kernel.org, kernel-team@meta.com
+References: <20260224015855.1481707-1-ihor.solodrai@linux.dev>
+ <87v7fmb1wy.fsf@gmail.com>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <87v7fmb1wy.fsf@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Feb 19, 2026 at 01:38:46PM +0800, Xiao Ni wrote:
-> Hi all
+On 2/24/26 7:23 AM, Mykyta Yatsenko wrote:
+> Ihor Solodrai <ihor.solodrai@linux.dev> writes:
 > 
-> I'm doing some work on user-space RAID recently. I'd like to propose a
-> topic for LSF/MM 2026 regarding the implementation of RAID5 in user
-> space using ublk and io_uring bpf[1], particularly focusing on the
-> challenges encountered and potential kernel improvements needed.
-> 
-> Ublk raid5 uses the ublk framework (tools/testing/selftests/ublk/),
-> with the goal of leveraging io_uring's zero-copy capabilities and
-> BPF[1] for performance optimization. The implementation includes:
-> * RAID5 stripe handling with configurable chunk sizes
-> * Multi-queue support via io_uring
-> * Degraded mode for single disk failure tolerance
-> * Integration with io_uring BPF struct_ops framework
-> 
-> During the implementation, I encountered several technical challenges.
-> The primary challenge is performing XOR parity calculations in a true
-> zero-copy manner:
+>> The test_sys_enter_exit test was setting target_pid before attaching
+>> the BPF programs, which causes syscalls made during the attach phase
+>> to be counted. This is flaky because, apparently, there is no
+>> guarantee that both on_enter and on_exit will trigger during the
+>> attachment.
+>>
+>> Move the target_pid assignment to after task_local_storage__attach()
+>> so that only explicit sys_gettid() calls are counted.
+>>
+>> Reported-by: BPF CI Bot (Claude Opus 4.6) <bot+bpf-ci@kernel.org>
+>> Closes: https://github.com/kernel-patches/vmtest/issues/448
+>> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+>>
+>> ---
+>>
+>> I've been experimenting with running AI on BPF CI to investigate test
+>> failures. This is an example of a thing it may come up with.
+>>
+>> I don't want to spam the list with these, so for starters I'll be
+>> relaying only patches that I evaluated and/or tested.
+>>
+>> The AI generated reports will be posted with "[bpf-ci-bot]" prefix
+>> here: https://github.com/kernel-patches/vmtest/issues
+>>
+>> The goal of this particular application of AI is to make BPF CI more
+>> stable, less noisy/flaky, and potentially find and fix more kernel
+>> bugs. We'll see how it goes.
+>>
+>> ---
+>>  .../selftests/bpf/prog_tests/task_local_storage.c  | 14 +++++++++-----
+>>  1 file changed, 9 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+>> index 7bee33797c71..2820a604aaa6 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
+>> @@ -25,24 +25,28 @@
+>>  static void test_sys_enter_exit(void)
+>>  {
+>>  	struct task_local_storage *skel;
+>> +	pid_t pid = sys_gettid();
+>>  	int err;
+>>  
+>>  	skel = task_local_storage__open_and_load();
+>>  	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
+>>  		return;
+>>  
+>> -	skel->bss->target_pid = sys_gettid();
+>> -
+>>  	err = task_local_storage__attach(skel);
+>>  	if (!ASSERT_OK(err, "skel_attach"))
+>>  		goto out;
+>>  
+>> +	/* Set target_pid after attach so that syscalls made during
+>> +	 * attach are not counted.
+>> +	 */
+>> +	skel->bss->target_pid = pid;
+>> +
+>>  	sys_gettid();
+>>  	sys_gettid();
 
-Great use case. The indirect reference to memory from user space is a
-bit of a blocker for various zero-copy plans, so being able to leverage
-the kernel to perform parity and crypto transforms would be awesome. I
-think there's potential for fuse as well as ublk.
+> Maybe a simpler and less fragile fix would be to add syscall number
+> filter in the BPF program, so that we don't count those unexpected
+> syscalls.
 
-Anyway, I'm interested in the topic.
+Why do you think this is fragile?  We are not counting the syscalls
+made during attachment at all this way.
+
+You may be right, just trying to understand.
+
+>>  
+>> -	/* 3x syscalls: 1x attach and 2x gettid */
+
+The way the test was written, those syscalls during attachment were
+expected. But the flakiness wasn't obvious.
+
+>> -	ASSERT_EQ(skel->bss->enter_cnt, 3, "enter_cnt");
+>> -	ASSERT_EQ(skel->bss->exit_cnt, 3, "exit_cnt");
+>> +	/* 2x gettid syscalls */
+>> +	ASSERT_EQ(skel->bss->enter_cnt, 2, "enter_cnt");
+>> +	ASSERT_EQ(skel->bss->exit_cnt, 2, "exit_cnt");
+>>  	ASSERT_EQ(skel->bss->mismatch_cnt, 0, "mismatch_cnt");
+>>  out:
+>>  	task_local_storage__destroy(skel);
+>> -- 
+>> 2.53.0
+
