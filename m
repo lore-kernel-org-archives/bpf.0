@@ -1,198 +1,144 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5042D86329
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 904D433B960;
+	Tue, 24 Feb 2026 20:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771966028; cv=none; b=eNwQmbcs0b3J5Fr2ekPWcaoRCRMPo+oDdiTy4AKguAWLvgpPNns9rffo2GARU76L3j4vU4+E3nPhXymXAwyBnlZAKlkSuczHQKBnH/2Dh0Vg7ytxWU/qq2vyhHXDYzfsuvlJESgs4CqX6EQvlMVBQRDOJO8U4H8b1rZWeNc3Y1A=
+	t=1771966750; cv=none; b=s36RUDZCyg/K4F6JShog5eVoTCJD2RS5/i/vk7H46zvv97k3zvIwEHw7Fhs5vsVm7hahOrcKSYLFEt9uZe+zZ3vUEWVsXBkVWA/PAv/plWy6nu3WXwi86hYW1AoBqLAh5TxDdwcsJqX57fHYcnR4PYGKVb4hqdSfXw4fO8YDX0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771966028; c=relaxed/simple;
-	bh=bali7a8Hh+sN8T1hv1aQW38KsoJrfKcnpFUBjx/IXhs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iiODgfo5HukC/xsBs5ynXYz6AqTAGSDseYYGl09LZ6DwC2D6iFiuOBEoH3ue0W10FJjWqNhyBgqmmD1Ub6QzLENZX5JODkhuYUo2w5NBrYh7XlobEhqdOOnlMhIeS0JrQoLfZ8ZERc9JzjOHxwAN4lbg/8u1jBW2nzWfmkKL+qA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lIiYnGRH; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771966750; c=relaxed/simple;
+	bh=nkrvCgJax+Hu9YAH/GgCRO+8YstLU1L1lCG4uaQ3Qb4=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=rDv7CC6GxGa1brPyUjvgpTI+TCF+2S8AS6d5/Sig8ziZmjpC265G1IZlHP1JloXxRt76Ed3U5iETgI0M/B9VlNdeaqkpMynTadYo3LKOXC+U845B7Ob7FyqXtGkrBFOekKuo6O7uVcFxd+dS1Yi3aOTXbJrpsuxdo3Wfyqr5aps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IxTSgKyJ; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lIiYnGRH"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4836e3288cdso1246565e9.0
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:47:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771966026; x=1772570826; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/2RY/jAMzJnGRiPq5Y2oi/XXXyC/s1g5i3jX8zBq+lg=;
-        b=lIiYnGRHztvScsPxoDMwOrQ5JakAmXTD3+8l/4bVe90WhTyIpn8709It8jr4uw4h4V
-         dzJVwKeMhEle0EWz8p/iUMLUYObTaznIkIkZ1Xbb7cPZBf33YwRHWvhXSApKS6yo9Ade
-         ziIFNlRN51ooL3ArQYFZ2Q4pyd7VncvEI97OmhBnsOcnokGqHoJMC9l6NOUgxCMRxGVt
-         Xz/8YCVH36UgmC7OtTP7VaGT3pkrIkDddzbJyMS7/p3HJrw4pkzCrljgM/9hxUW5HZgJ
-         tOZVH/a9jC9IomLwmsoRoEirQ4lgFYVhAQhlE8jcVPdXM4YTQoqV8A/l4CTh9JQDcjxv
-         ziBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771966026; x=1772570826;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/2RY/jAMzJnGRiPq5Y2oi/XXXyC/s1g5i3jX8zBq+lg=;
-        b=he3Zg/PhtM2kVwI4E55kdqcsppMdrLk1xK5PeaE3iUWwnYaYv3WoZ2n7y0Eh3HWQ9p
-         sLKXdZlyqlgDY6txp8fDdf8OQ19wJdctpT7tcH/FwdnpiY3CO1hbA7z71bzSi0kkRdjw
-         ptPYjOLg4jImSFFz0sFztm8DhBKKGjCynkh3T4tWK6Ct0nljWlqF8lLPolPo5vtcl0ry
-         wA99c5wn1HZSgAIYXaDl8QJCkN+cgpKsDa1KwU+ztBmi/PkJ1x32W17Sfk3FVeTXQ9FE
-         /VPg2Cwgg+xCmxoAPFKAGrEAZDVQWEXE3+VqtFwctOJYYtoRZ2tuaThxITX5FgnVIArm
-         nSXA==
-X-Forwarded-Encrypted: i=1; AJvYcCW4bVJrZSZXYBI7Do1ORXJOfHQlPdf9OeiFdAgvaagMJtsJBkLzqICPt7wNHvCYMTmyhk4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgB0K9H3BFXqwvH3p7uc7Gs4Jnt5pMpUz1tEvz6zarcRl+0Gbn
-	Dw/em7Kna6KiOmzOIxnNIat3UxEZpMlfvaTlp8Bw5UWpF4Bnu7SzN4gB
-X-Gm-Gg: AZuq6aIAmm/OEowGO8fLL0309p6d1hSSwl2BJRDDju7hW0Q/d6OCHjxP5FO8PP9N3jD
-	PIZmL8l0e6YhbTHo1vqKyuSpCIPWVbKnteWnURn1NuZv7SSdU/jqudJyw0oY12cN6T8QNBm3+Zh
-	s87xrHPNNfUTaktw0pY9TgWs5OFb+A9BG3Ns34iNutC32+lOeEazjA+aAuZQLbaLu+lcg97TyUa
-	hvHej4ImZEkCcLjPSd4mnFj5LXOGBIzqqqkyaqNr7GvcLmgELdAO8/2rQW2ydKRebM2IMaJ/Xix
-	Uh92Mx5LlEUG7uGuVIlN318yxknGHkyaCC6cz/isYVeilCsmPsUjGHSGephPjjaCfrOACEq8g0t
-	EUSmzg8LTIy484WLT81iRejZ3feMej2skWc6Px8nloDJSlKsWXKfYRypop4WwbeA72HWARDrS5I
-	n2Ggn1dXOte/jSwjPN7E/u8zIeQILpPCcMGuwHD2+k/7s+UWsvsJOoKnwnLv+TUHM=
-X-Received: by 2002:a05:600c:3e10:b0:46e:59bd:f7e2 with SMTP id 5b1f17b1804b1-483bd7429a1mr20460815e9.11.1771966025387;
-        Tue, 24 Feb 2026 12:47:05 -0800 (PST)
-Received: from ?IPV6:2a03:83e0:1126:4:14a2:8a3a:807e:d6d? ([2620:10d:c092:500::6:ed07])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970c00d95sm28373558f8f.13.2026.02.24.12.47.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 24 Feb 2026 12:47:05 -0800 (PST)
-Message-ID: <f9ed274c-30bd-4967-b57c-ed0b2873407e@gmail.com>
-Date: Tue, 24 Feb 2026 20:47:03 +0000
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IxTSgKyJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1771966749; x=1803502749;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=nkrvCgJax+Hu9YAH/GgCRO+8YstLU1L1lCG4uaQ3Qb4=;
+  b=IxTSgKyJiI4YqwV4n1X8NkMXd3m7jUV6yJEgoBO2I5UQEPn+EUsRWHgB
+   3KAgF72DyEEBnvoaNkMcqLRpRoTgcw1xozmlupQRTlzb4nuR2xiA+Xg/7
+   col1gZXrZuz7TJkaUGICWx3eh9s7jIY15lW+X9QF4nBi96CoJaAc6S6xi
+   TXKoKXt77XBYnP6AVC3PHHdgzwYUDFy3qnZVTRcqk/2eS0o83aNBt11YW
+   BWMYhaib0WwwIAA/yh8wm4aOw79XQ4u+ZTt9QgPFPr/RyRRiB86bs7AEC
+   a7i3ucm/7/8ROFAn3msdyANTJbi6DTuUe1GAB+RrqyXHREm9HCmerb2qh
+   g==;
+X-CSE-ConnectionGUID: CX5zkbYrQmyH65VlzcHS/w==
+X-CSE-MsgGUID: e8lLbUleQiiKhg23HUDtwA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11711"; a="95610537"
+X-IronPort-AV: E=Sophos;i="6.21,309,1763452800"; 
+   d="scan'208";a="95610537"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2026 12:59:09 -0800
+X-CSE-ConnectionGUID: RxA1F9doQDK27BfiySCZiQ==
+X-CSE-MsgGUID: UFKoOcZFQv2IrUofsLfFzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,309,1763452800"; 
+   d="scan'208";a="215252303"
+Received: from vcostago-desk1.jf.intel.com (HELO vcostago-desk1) ([10.88.27.144])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2026 12:59:09 -0800
+From: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+To: Zdenek Bouska <zdenek.bouska@siemens.com>, Tony Nguyen
+ <anthony.l.nguyen@intel.com>, Przemek Kitszel
+ <przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
+ Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev
+ <sdf@fomichev.me>, Richard Cochran <richardcochran@gmail.com>, Song Yoong
+ Siang <yoong.siang.song@intel.com>, Lai Peter Jun Ann
+ <jun.ann.lai@intel.com>
+Cc: intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, Florian Bezdeka
+ <florian.bezdeka@siemens.com>, Zdenek Bouska <zdenek.bouska@siemens.com>
+Subject: Re: [PATCH] igc: fix page fault in XDP TX timestamps handling
+In-Reply-To: <20260224-igc-fix-xdp-tx-tstamp-pagefault-v1-1-7c729ef61ee5@siemens.com>
+References: <20260224-igc-fix-xdp-tx-tstamp-pagefault-v1-1-7c729ef61ee5@siemens.com>
+Date: Tue, 24 Feb 2026 12:59:08 -0800
+Message-ID: <87342p97tv.fsf@intel.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/2] libbpf: Introduce bpf_program__clone()
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
- ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net, kafai@meta.com,
- kernel-team@meta.com
-Cc: Mykyta Yatsenko <yatsenko@meta.com>
-References: <20260220-veristat_prepare-v2-0-15bff49022a7@meta.com>
- <20260220-veristat_prepare-v2-1-15bff49022a7@meta.com>
- <83cf0430bf164c46abe56d2ec6565ca57ead1663.camel@gmail.com>
-Content-Language: en-US
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-In-Reply-To: <83cf0430bf164c46abe56d2ec6565ca57ead1663.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 2/24/26 19:28, Eduard Zingerman wrote:
-> On Fri, 2026-02-20 at 11:18 -0800, Mykyta Yatsenko wrote:
->> From: Mykyta Yatsenko <yatsenko@meta.com>
->>
->> Add bpf_program__clone() API that loads a single BPF program from a
->> prepared BPF object into the kernel, returning a file descriptor owned
->> by the caller.
->>
->> After bpf_object__prepare(), callers can use bpf_program__clone() to
->> load individual programs with custom bpf_prog_load_opts, instead of
->> loading all programs at once via bpf_object__load(). Non-zero fields in
->> opts override the defaults derived from the program and object
->> internals; passing NULL opts populates everything automatically.
->>
->> Internally, bpf_program__clone() resolves BTF-based attach targets
->> (attach_btf_id, attach_btf_obj_fd) and the sleepable flag, fills
->> func/line info, fd_array, license, and kern_version from the
->> prepared object before calling bpf_prog_load().
->>
->> Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
->> ---
->>   tools/lib/bpf/libbpf.c   | 64 ++++++++++++++++++++++++++++++++++++++++++++++++
->>   tools/lib/bpf/libbpf.h   | 17 +++++++++++++
->>   tools/lib/bpf/libbpf.map |  1 +
->>   3 files changed, 82 insertions(+)
->>
->> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
->> index 0c8bf0b5cce4..4b084bda3f47 100644
->> --- a/tools/lib/bpf/libbpf.c
->> +++ b/tools/lib/bpf/libbpf.c
->> @@ -9793,6 +9793,70 @@ __u32 bpf_program__line_info_cnt(const struct bpf_program *prog)
->>   	return prog->line_info_cnt;
->>   }
->>   
->> +int bpf_program__clone(struct bpf_program *prog, const struct bpf_prog_load_opts *opts)
->> +{
->> +	LIBBPF_OPTS(bpf_prog_load_opts, attr);
->> +	struct bpf_prog_load_opts *pattr = &attr;
->> +	struct bpf_object *obj;
->> +	int err, fd;
->> +
->> +	if (!prog)
->> +		return libbpf_err(-EINVAL);
->> +
->> +	if (!OPTS_VALID(opts, bpf_prog_load_opts))
->> +		return libbpf_err(-EINVAL);
->> +
->> +	obj = prog->obj;
->> +	if (obj->state < OBJ_PREPARED)
->> +		return libbpf_err(-EINVAL);
->> +
->> +	/* Copy caller opts, fall back to prog/object defaults */
->> +	OPTS_SET(pattr, expected_attach_type,
->> +		 OPTS_GET(opts, expected_attach_type, 0) ?: prog->expected_attach_type);
->> +	OPTS_SET(pattr, attach_btf_id, OPTS_GET(opts, attach_btf_id, 0) ?: prog->attach_btf_id);
->> +	OPTS_SET(pattr, attach_btf_obj_fd,
->> +		 OPTS_GET(opts, attach_btf_obj_fd, 0) ?: prog->attach_btf_obj_fd);
->> +	OPTS_SET(pattr, attach_prog_fd, OPTS_GET(opts, attach_prog_fd, 0) ?: prog->attach_prog_fd);
->> +	OPTS_SET(pattr, prog_flags, OPTS_GET(opts, prog_flags, 0) ?: prog->prog_flags);
->> +	OPTS_SET(pattr, prog_ifindex, OPTS_GET(opts, prog_ifindex, 0) ?: prog->prog_ifindex);
->> +	OPTS_SET(pattr, kern_version, OPTS_GET(opts, kern_version, 0) ?: obj->kern_version);
->> +	OPTS_SET(pattr, fd_array, OPTS_GET(opts, fd_array, NULL) ?: obj->fd_array);
-> It seems 'fd_array_cnt' is not copied, should it be?
->
->> +	OPTS_SET(pattr, token_fd, OPTS_GET(opts, token_fd, 0) ?: obj->token_fd);
->> +	if (attr.token_fd)
->> +		attr.prog_flags |= BPF_F_TOKEN_FD;
-> Nit: should this be 'if (OPTS_GET(opts, token_fd, 0) && attr.token_fd)' ?
->
->> +
->> +	/* BTF func/line info */
->> +	if (obj->btf && btf__fd(obj->btf) >= 0) {
->> +		OPTS_SET(pattr, prog_btf_fd, OPTS_GET(opts, prog_btf_fd, 0) ?: btf__fd(obj->btf));
->> +		OPTS_SET(pattr, func_info, OPTS_GET(opts, func_info, NULL) ?: prog->func_info);
->> +		OPTS_SET(pattr, func_info_cnt,
->> +			 OPTS_GET(opts, func_info_cnt, 0) ?: prog->func_info_cnt);
->> +		OPTS_SET(pattr, func_info_rec_size,
->> +			 OPTS_GET(opts, func_info_rec_size, 0) ?: prog->func_info_rec_size);
->> +		OPTS_SET(pattr, line_info, OPTS_GET(opts, line_info, NULL) ?: prog->line_info);
->> +		OPTS_SET(pattr, line_info_cnt,
->> +			 OPTS_GET(opts, line_info_cnt, 0) ?: prog->line_info_cnt);
->> +		OPTS_SET(pattr, line_info_rec_size,
->> +			 OPTS_GET(opts, line_info_rec_size, 0) ?: prog->line_info_rec_size);
->> +	}
->> +
->> +	OPTS_SET(pattr, log_buf, OPTS_GET(opts, log_buf, NULL));
->> +	OPTS_SET(pattr, log_size, OPTS_GET(opts, log_size, 0));
->> +	OPTS_SET(pattr, log_level, OPTS_GET(opts, log_level, 0));
-> Just curious why did you decide not to inherit logging properties from
-> the original program?
-> Unless overridden, the original program would point to the buffer
-> specified for the object in bpf_object_open_opts->kernel_log_buf, right?
-Inheriting the object's log_buf here would mean writing
-into a shared mutable buffer, which sounds not very good,
-I don't see where this scenario is useful.
->
->> +
->> +	/* Resolve BTF attach targets, set sleepable/XDP flags, etc. */
->> +	if (prog->sec_def && prog->sec_def->prog_prepare_load_fn) {
->> +		err = prog->sec_def->prog_prepare_load_fn(prog, pattr, prog->sec_def->cookie);
->> +		if (err)
->> +			return libbpf_err(err);
->> +	}
->> +
->> +	fd = bpf_prog_load(prog->type, prog->name, obj->license, prog->insns, prog->insns_cnt,
->> +			   pattr);
->> +
->> +	return libbpf_err(fd);
->> +}
->> +
->>   #define SEC_DEF(sec_pfx, ptype, atype, flags, ...) {			    \
->>   	.sec = (char *)sec_pfx,						    \
->>   	.prog_type = BPF_PROG_TYPE_##ptype,				    \
+Zdenek Bouska <zdenek.bouska@siemens.com> writes:
 
+> If an XDP application that requested TX timestamping is shutting down
+> while the link of the interface in use is still up the following kernel
+> splat is reported:
+>
+> [  883.803618] [   T1554] BUG: unable to handle page fault for address: ffffcfb6200fd008
+> ...
+> [  883.803650] [   T1554] Call Trace:
+> [  883.803652] [   T1554]  <TASK>
+> [  883.803654] [   T1554]  igc_ptp_tx_tstamp_event+0xdf/0x160 [igc]
+> [  883.803660] [   T1554]  igc_tsync_interrupt+0x2d5/0x300 [igc]
+> ...
+>
+> During shutdown of the TX ring the xsk_meta pointers are left behind, so
+> that the IRQ handler is trying to touch them.
+>
+> This issue is now being fixed by cleaning up the stale xsk meta data on
+> TX shutdown. TX timestamps on other queues remain unaffected.
+>
+> Fixes: 15fd021bc427 ("igc: Add Tx hardware timestamp request for AF_XDP zero-copy packet")
+> Signed-off-by: Zdenek Bouska <zdenek.bouska@siemens.com>
+> ---
+>  drivers/net/ethernet/intel/igc/igc.h      |  2 ++
+>  drivers/net/ethernet/intel/igc/igc_main.c |  7 +++++++
+>  drivers/net/ethernet/intel/igc/igc_ptp.c  | 33 +++++++++++++++++++++++++++++++
+>  3 files changed, 42 insertions(+)
+>
+> diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
+> index a427f05814c1ae7330c6f7034cd0f2b40b74dab6..17236813965d334f14eba928affbd4f91b96ecd4 100644
+> --- a/drivers/net/ethernet/intel/igc/igc.h
+> +++ b/drivers/net/ethernet/intel/igc/igc.h
+> @@ -781,6 +781,8 @@ int igc_ptp_hwtstamp_set(struct net_device *netdev,
+>  			 struct kernel_hwtstamp_config *config,
+>  			 struct netlink_ext_ack *extack);
+>  void igc_ptp_tx_hang(struct igc_adapter *adapter);
+> +void igc_ptp_clear_xsk_tx_tstamp_queue(struct igc_adapter *adapter,
+> +				       u16 queue_id);
+>  void igc_ptp_read(struct igc_adapter *adapter, struct timespec64 *ts);
+>  void igc_ptp_tx_tstamp_event(struct igc_adapter *adapter);
+>  
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> index 89a321a344d263ace5c66f7ade782b40cc482566..570e90fab67d653bbbb242d242d0b64a49fba602 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> @@ -193,6 +193,7 @@ static void igc_unmap_tx_buffer(struct device *dev, struct igc_tx_buffer *buf)
+>   */
+>  static void igc_clean_tx_ring(struct igc_ring *tx_ring)
+>  {
+> +	struct igc_adapter *adapter;
+>  	u16 i = tx_ring->next_to_clean;
+>  	struct igc_tx_buffer *tx_buffer = &tx_ring->tx_buffer_info[i];
+>  	u32 xsk_frames = 0;
+> @@ -264,6 +265,12 @@ static void igc_clean_tx_ring(struct igc_ring *tx_ring)
+>  	/* reset next_to_use and next_to_clean */
+>  	tx_ring->next_to_use = 0;
+>  	tx_ring->next_to_clean = 0;
+> +
+> +	/* Clear any lingering XSK TX timestamp requests */
+> +	if (test_bit(IGC_RING_FLAG_TX_HWTSTAMP, &tx_ring->flags)) {
+
+minor: move the 'adapter' declaration here.
+
+But I will leave that to up to you,
+
+Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+
+
+Cheers,
+-- 
+Vinicius
