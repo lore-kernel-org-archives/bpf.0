@@ -1,122 +1,179 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f179.google.com (mail-dy1-f179.google.com [74.125.82.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD2C335064
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B23826AC3
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:15:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771963824; cv=none; b=Imfb1x4DbQMUjPda+eLD6I2oCa2ZtMuZnQbOBwHzdKawEJFGCw6FTgSfhpXf7jZElY3dhdQ3mNd3/Rl6RHr3WogpjCC5KGEjtZZS8C3d+FCPrw129ymtLgADA2IGTUHRMcJ3hnPOepacEU/wh5j4jVnGhhIZZRbPbfANwUdntVo=
+	t=1771964123; cv=none; b=JQQLbQ8MlIg3WvATY186ajPrwkjnjHTaG6GI4+CL9GjMpLlsub7vsQPi/QkG+XZk2NqdX+yzTv/UvG3b5dhqiiOSpOEf5I5454b0nJ8HjOKmbJTK43GxLie+8IxEBhGsCPcOCauyHnJkNb3gaYf+51T1+SUfPg3yGFtZeQze+d8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771963824; c=relaxed/simple;
-	bh=LG9E8ltTUY3cRqTay4zkC6849CFuTTPbsAK1X8K9bFk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bJkNQZFSuUVplh73aeTaGn0HjKTHLM4CO9G9WHHwbNliMNpcDtNwJHV9IcUMQlprRqRvPIZes3mUq83NS41BL5UU0bOPUMZO0GdnjapHMESeMfD/uKccNORMLI7bNaEFM5jzI7swuYFW0W9kdcLsHORR3FvVIGyRDLXlbDJGTfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Rif28DY+; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1771964123; c=relaxed/simple;
+	bh=KgXxzTNjX+1E/ShvD5eaxLLGppS8wyxaEFh2E4+FryQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=FbXS43wAu94oAEo5Z+EXLN6BIOiu7I+0Qw8S5ke1bRZvHx+ReRDEnfSEUQY6A8ypXlMF4Qcd2UYjRPcOHB3+6cvgpo4v+ftXV7mIeYK5fGIUhCUDiLsDzl/9hSD7KgXH0rXtKmtxa9iBCCG0ZV3c1j5jvWJmekRJKPSKfzIKZLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BqpcxjcT; arc=none smtp.client-ip=74.125.82.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Rif28DY+"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OAsAp32654887;
-	Tue, 24 Feb 2026 20:10:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=tcsQQAWxA3aNGBdZq
-	I58IE+fXC4naEzp2MFfxjUJ08s=; b=Rif28DY+Wtl4T8rihgrK7cUnzA0eOxR83
-	vCwZ0XnSwPN9sfUIPoxUwXDgqucnB7rxQJEbnKHpiNmUUl11n9ZDM6+PcDxXaEps
-	iDnawRIPIac3D9Iyz1KOYun0kkjeuW3ad8IzFCkTXy9sGTaMzDz6cafxrOhDwQfr
-	gv3I8Obrn6nlKX4fOqSt/Z1BLgztsE44JRq+2majozE961XS0wn6MLwecC2t7+jp
-	cLkuzXpSPuqxZga3Uj/iDvenwVn75eGfb9MqNF1iOf5joMXdSdIz4aRym/n8BLZk
-	GKMD8KUQ8KyJ5+uhaN0UVjgE2NvnfXBI8uc/SQ64ZycPSbP+AMyDw==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4cqwbq1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Feb 2026 20:10:06 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61OGUrDc013478;
-	Tue, 24 Feb 2026 20:10:05 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfqdy2je5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Feb 2026 20:10:05 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61OKA1je33947904
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Feb 2026 20:10:01 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 62CB620043;
-	Tue, 24 Feb 2026 20:10:01 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CE83B20040;
-	Tue, 24 Feb 2026 20:09:59 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 24 Feb 2026 20:09:59 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: linuxppc-dev@lists.ozlabs.org
-Cc: bpf@vger.kernel.org, hbathini@linux.ibm.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, maddy@linux.ibm.com,
-        Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH 4/4] selftest/bpf: Enable gotox tests for powerpc64
-Date: Tue, 24 Feb 2026 20:09:32 -0500
-Message-ID: <20260225010950.20218-5-adubey@linux.ibm.com>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260225010950.20218-1-adubey@linux.ibm.com>
-References: <20260225010950.20218-1-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BqpcxjcT"
+Received: by mail-dy1-f179.google.com with SMTP id 5a478bee46e88-2bdac83a6a1so1292338eec.1
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:15:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771964121; x=1772568921; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rayyOxYfGICJXwQGuxUowbiTaZIYRJ/FNfis7O+dXpA=;
+        b=BqpcxjcTWbQMg8w38gBNNFWiwixLeRhH3iwOtAUaRSfHRcNt9BtlmZADqGXsRwusfT
+         dJ+F540f7xutS+pjBKlm9CIJU9uypiiTngwFwZRCCkI5JgUk8CsT+ZP849BADIb5qTly
+         vV9JbVnv9CUEPMZDJ/aczndjbDHWTLg5v+iZau4Y7Bxk84kc5TP+ZFhT9CR0H8bc/ofu
+         ThXjq5+iZUuNrjfQhUNzb/sHMDtTsCA6moJovbElW1vRfh8u3Og+qfOgMvi+sa7P9jm/
+         H5+xDwdkU1QUqDZ2j+dTHG+4ui/1Vy9nbGFcmZX2wIcp1Ft1etOgqwAO2yEupX02DQzF
+         9JcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771964121; x=1772568921;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rayyOxYfGICJXwQGuxUowbiTaZIYRJ/FNfis7O+dXpA=;
+        b=EIY3dmvLE+n5g8Xg8MwU4+bH+LY6FOx1e4/YZvvXVq/xdgfbuWKqTTXaf3FDNYdLmW
+         CoDYS0iDpR4fU9cvjHr0svxAbYcflmOpTflY+DG99sTj7tN0ijh4MC8SFAkUpCjwFDtm
+         WknEPd0bp/jNLNjMBO37m0SP8Dw/so3NgYfDSsuG/EJW065zsrUnB6ZzXHP3jkm04KSF
+         8Gq3Ov6RXJPQ3PcHhEdNb1KEsgfmvfUxFe9BXDn82OBu4f4mCeZ7pUn/T7DwA1A9pzz6
+         guWJ6CzY0Zev7Hgo/9/nhpkEk7v32MaMyw9EzSCfBUxEOp2wYQs6Dlffep54TD4LFkah
+         kvVA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSAbjiPRD5WegGKrh9Fo46d/2fGL2myRkqeyfRwMCEHN0XXSotEuL5VIQqDjUih+7VNqc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJgGu2vf3AUx3iMlL9EuWvaqzMcxQ5yVSZzcBAiUkXs4ysxppA
+	GrPYi+4HHx0m8ijhWfikwyzArduzdA/Irlpb/Em1MLCLVvo0YI2Kflbx
+X-Gm-Gg: ATEYQzzS9g8xyccyQhF4aNfOrAyJctXJdEVPNE8HVIZr4/tMFrnc0pIquaEJLlafGUO
+	XKHyyqczomVLw8pZvGk4sj4sMGN33c5PPwFTVGJyyTRPhS5X+4AyOu3nhHJ2rofDbHx1FUk2d8d
+	Wl8BBGD2FaNq2x4D6dA8HAMvF4jHmMyRAcXajHbrVFJB+1CMnwFFWCz9EZNwP6xbuciGkIsxiT8
+	hmrXnl1IWBw259XBAOl5a/q8RhQxM01tiKlRMg+mQo1VC5aHmH1L8QPJ40QpakrvOQE8E7rlX1n
+	ymVWxh5g9MSmyifpbPwaAHP9W1UlV8YS5p/eRBcuKGGeP+VBmY8ZSpmUrMYMJIe1tOTrT+FOhfY
+	9OP9n9wzEe47Mrx65NY0TMAKGaiaPW5bEVN8tmu4/fz8EivWS4bKAIjZEEgBLeyKS4b4jro+wEy
+	ULSq9Xhq6dFYMWclFHxAyygyFycGZCGOXAgJDDxTACLHNgcKDUFKRvyNzir8oIP+wb/lCOkU66s
+	Nxtog==
+X-Received: by 2002:a05:7301:9e44:b0:2ba:a623:c323 with SMTP id 5a478bee46e88-2bd7b9e7084mr4509511eec.10.1771964120336;
+        Tue, 24 Feb 2026 12:15:20 -0800 (PST)
+Received: from ?IPv6:2a03:83e0:115c:1:79f3:c942:f01f:96aa? ([2620:10d:c090:500::1f1f])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bd7dc37858sm7578708eec.31.2026.02.24.12.15.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Feb 2026 12:15:19 -0800 (PST)
+Message-ID: <f3dec7da331d618df266383fd3f67832397464ac.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/6] Introduce KF_FORBID_SLEEP modifier for
+ acquire/release kfuncs
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf
+ <bpf@vger.kernel.org>,  Alexei Starovoitov	 <ast@kernel.org>, Andrii
+ Nakryiko <andrii@kernel.org>, Daniel Borkmann	 <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi	
+ <memxor@gmail.com>, Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Kernel
+ Team	 <kernel-team@meta.com>
+Date: Tue, 24 Feb 2026 12:15:18 -0800
+In-Reply-To: <CANk7y0hv7TsJD5Ne_LaHpLiHNfMDJV+SUyXqnNftmC03fMTUBg@mail.gmail.com>
+References: <20260223174659.2749964-1-puranjay@kernel.org>
+	 <CAADnVQ+aobVwR1m-v2w_RWFxG_9TwkYQ-K8KtC6D18HrYe8Dig@mail.gmail.com>
+	 <CANk7y0hLknrHo+UB2HDPeen6nLxRaBdLNKiMBiMBv7Hh-QzPEw@mail.gmail.com>
+	 <CAADnVQJ_xG+QAUzPHm1FZGpcz45X3k_cG3ThQ0da3kFa0ppLmA@mail.gmail.com>
+	 <a8fbc7a3669ad1014b2623c42219d3d074dfbc8f.camel@gmail.com>
+	 <CANk7y0hv7TsJD5Ne_LaHpLiHNfMDJV+SUyXqnNftmC03fMTUBg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 96_P54RKxdpNo7PPm1Cfdo1pp4Neh5xi
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDE3MyBTYWx0ZWRfX38YKUJMml4HA
- ZlnbBK4U2mZPhBel4vRI5a6tjbOKRJUBanPAbTNvx7iJftU/aryZOTDGxY94UXeMTlUtSSDms9e
- cf/GnLuE9XAZ9ob4QIuLa488mo1a8orQyQSGxYzYrOE/KS8kspa2gfOie2WgvSx4Uj1J9FzM+VR
- V2jjJizaNus61jZlB6quQ0hrYt52tvpRCeTRTZT4NXAMLluSSX2zsANteB1k8arJM6DJnJixIpe
- u9CnKC7W5QQmNZnwA6CT1RbhGgsGZmFZbvdGmo4dJ72XtHjiVS3GsUkMB/qf+LLxD3tYP8voiug
- PNPt6g2MzR2OCKY+pZs2OWgR0ZStIvHbRtJMBcLzA6cQhB5sjZU9vdnnCA3iRQ8IUx6QUfdRpdz
- N9RVUhDww9bNlHZbXKzXQ7grIB/cUSuPnCGbW7qfhaPeGkcWhBP02nYsZhJ0c0aToIBq81EOCWX
- rCV3fko5T1WCaAwmA4A==
-X-Proofpoint-GUID: 96_P54RKxdpNo7PPm1Cfdo1pp4Neh5xi
-X-Authority-Analysis: v=2.4 cv=bbBmkePB c=1 sm=1 tr=0 ts=699e059e cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8 a=XIkr_taID0MGvadLvJ0A:9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-24_02,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 bulkscore=0 adultscore=0 impostorscore=0 lowpriorityscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 phishscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602240173
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+On Tue, 2026-02-24 at 19:51 +0000, Puranjay Mohan wrote:
+> On Tue, Feb 24, 2026 at 6:55=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.c=
+om> wrote:
+> >=20
+> > On Tue, 2026-02-24 at 10:00 -0800, Alexei Starovoitov wrote:
+> > > On Tue, Feb 24, 2026 at 3:24=E2=80=AFAM Puranjay Mohan <puranjay12@gm=
+ail.com> wrote:
+> > > >=20
+> > > > On Tue, Feb 24, 2026 at 1:49=E2=80=AFAM Alexei Starovoitov
+> > > > <alexei.starovoitov@gmail.com> wrote:
+> > > > >=20
+> > > > > On Mon, Feb 23, 2026 at 9:48=E2=80=AFAM Puranjay Mohan <puranjay@=
+kernel.org> wrote:
+> > > > > >=20
+> > > > > >=20
+> > > > > > Iterator KF_ACQUIRE support is not useful on its own right now,=
+ but it
+> > > > > > becomes the foundation for KF_FORBID_SLEEP: an iterator whose _=
+next is
+> > > > > > annotated with KF_ACQUIRE | KF_FORBID_SLEEP can now express "ho=
+lding this
+> > > > > > pointer forbids sleeping; calling _release invalidates the poin=
+ter and
+> > > > > > re-enables sleeping."
+> > > > > >=20
+> > > > >=20
+> > > > > The name of the flag and semantics bothers me a bit.
+> > > > > How about we call it KF_ACQUIRE_LOCK and make it exclusive vs KF_=
+ACQUIRE.
+> > > > > And document it like:
+> > > > > KF_ACQUIRE -> acquires a resource via reference counting
+> > > > > KF_ACQUIRE_LOCK -> acquires a resource by locking it
+> > > > >=20
+> > > > > and to match it I would do:
+> > > > > KF_RELEASE -> releases a resource by decrementing refcount
+> > > > > KF_RELEASE_LOCK -> releases a resource by unlocking it.
+> > > > >=20
+> > > > > When lock is taken it's typically prohibited to sleep and do
+> > > > > other things. So I feel such flags would describe what's
+> > > > > going on underneath more accurately.
+> > > > >=20
+> > > > > Thoughts?
+> > > >=20
+> > > > I am fine with this except, I think we should still keep the
+> > > > KF_RELEASE a single release mechanism that releases according to ho=
+w
+> > > > the reference was taken (refcount/lock). There is nothing wrong wit=
+h
+> > > > separate KF_RELEASE and KF_RELEASE_LOCK, except we would have to
+> > > > reject all wrong usages like KF_ACQUIRE -> KF_RELEASE_LOCK,
+> > > > KF_ACQUIRE_LOCK -> KF_RELEASE.
+> > >=20
+> > > yes. Is this too complex or what's the concern?
+> > >=20
+> > > > I am fine with both but prefer the
+> > > > common KF_RELEASE. Let me know which one you like and I will go ahe=
+ad
+> > > > with it.
+> > >=20
+> > > Magic KF_RELEASE simplifies things a bit. I don't mind, I guess,
+> > > but would like to hear a 3rd opinion.
+> >=20
+> > At the moment verifier tracks the following locking/non-sleepable
+> > resources:
+> > - active_irq_id        - nesting allowed, forbids sleep, special stack =
+slot acquire/release logic.
+> > - active_rcu_locks     - nesting allowed, forbids sleep, used by in in_=
+rcu_cs(),
+> >                          no special acquire/release logic.
+> > - active_preempt_locks - nesting allowed, forbids sleep, no special acq=
+uire/release logic.
+> > - active_locks         - nesting disallowed, forbids sleep, no special =
+acquire/release logic.
+> >=20
+> > Currently verifier checks what kfunc/helper is called and changes
+> > internal state accordingly. It might be possible to slice the above
+> > into a set of "generic" flags / feats, but it requires some thought.
+> >=20
+> > Maybe explore this as a separate series?
+>=20
+> Eduard,
+>=20
+> Are you fine with making KF_ACQUIRE | KF_FORBIDS_SLEEP as a new flag
+> called KF_ACQUIRE_LOCK
+> and then keeping the common KF_RELEASE that will release according to
+> how it was acquired?
 
-With gotox instruction and jumptable now supported,
-enable corresponding bpf selftest on powerpc.
-
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
----
- tools/testing/selftests/bpf/progs/verifier_gotox.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_gotox.c b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-index 607dad058ca1..c1e5b8529add 100644
---- a/tools/testing/selftests/bpf/progs/verifier_gotox.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_gotox.c
-@@ -6,7 +6,7 @@
- #include "bpf_misc.h"
- #include "../../../include/linux/filter.h"
- 
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
-+#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || defined(__TARGET_ARCH_powerpc)
- 
- #define DEFINE_SIMPLE_JUMP_TABLE_PROG(NAME, SRC_REG, OFF, IMM, OUTCOME)	\
- 									\
--- 
-2.52.0
-
+Idk, I'd keep it KF_FORBIDS_SLEEP for now and rename later.
+W/o the discussed refactoring ACQUIRE_LOCK is a bit confusing, imo.
