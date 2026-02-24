@@ -1,280 +1,110 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4C83A0EB1
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 13:35:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A75839C625;
+	Tue, 24 Feb 2026 13:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771940120; cv=none; b=WUgDG3Ehc42nAGtzFTzB4E3DDjJ/A9KOxNDZJUp/wCAf00NZ9unFfJbtgPri4qs2BMtHXr0N/K6Y6OcWcPGl8qhNwwBlke5exzzk2UCEOyO4RzBxzRlKVFYuUZx6Mks5YhcTJuHyHtUKCV9XZvwsg83FJMKYBqpitmQWqhSD1Jg=
+	t=1771940256; cv=none; b=UxDxzIdItQaPokqyDCIq+yXcmbAq+yuhgfywz5Xx4CYib3w9VfZCuBbE5Muk9JFN+2xLU/kiNECcKQd7qBlP3YVdZs1h33vHuE1q05y9VgbsVfEU9ww5C1wCv8JCkcRQ7+EGalqKj75ECzGZ272NhIspXJBbMUWO6BMjmyMussU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771940120; c=relaxed/simple;
-	bh=qhbJpmZITKjbEAcPdtlGm6W8/Qffyxn/CjLw4UREa1I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TlZMM67aDf9vVkF212ejfqyPbGu+42Yuiq5lKly/sir2oDmFQIe8+tCf2FtdjoRZuogR6ztokZLVCgK0paKc8QpPTC60XzgJT+Ib6OoylNm7v74kc9gEvpcKBa8GvjeIzwOiI0aVfQplwz8KW4YeEo1CAkeunRrcX0yjVn8r6Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TTmOl1Wg; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1771940256; c=relaxed/simple;
+	bh=N+y9fema4fxMIXCGy9yuAezozfWEywSX0IbLhPWbQXk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RaW2SjJiLYJlmEbnrskF1Ml0wacLf0prF/WOOsXhIx7uhSbCdDn0tVq6ekCGiFMWNFBMMp7Qnh2DvtmybTTXtj5UH5bwzWektkxPD7MI6Hg0+5/u9ECxCYlSpKewWUBA6ZBrB2LMInMbUVFifibhZTtxHiLYkgksjDTOvL9ctEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=NGlk9KXQ; arc=none smtp.client-ip=198.37.111.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TTmOl1Wg"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-65f73225f45so539644a12.1
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 05:35:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771940116; x=1772544916; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=017Au0WagCuxotQHTbuPbnn7OOhD26VlW9T9YwI+bmw=;
-        b=TTmOl1WgO9ipDMNDDj3wD89bpFoluL+wCTIJLb4MqoavlpDQ7xDtodnvIGGDqUtyoV
-         4RuHCPw2s1t1N3q7xh+MDGSRsMf2rHME6KoikPe0TAyvLoQ2PpIpze0jjE2xrJ1zLSxg
-         lSiEZ0xAr3QCnDNChTXHZBsW60fDZ+7HIvIN19yVqKesbgtur9ChCDTEh/FEi/Wunz1D
-         eSRz7a9cqDMe9Z2lGY1nPkhl0rL0NUbLZXbw3DCCismTWLKcz4H0yL6aFBSVNFViPnFZ
-         dU5OygsDP70fjKg+dUuf9sLk/Cfc7KSLLOTxK/nT29jkbd8Yg0GgNshE+3zb3RZMh5Vs
-         2RUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771940116; x=1772544916;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=017Au0WagCuxotQHTbuPbnn7OOhD26VlW9T9YwI+bmw=;
-        b=u1ocOq3HPnGDM92YWfLc1NIZM26tDnodd6HcOnMKuspbITkkcOSDbbEnpZzo2Y+Ivh
-         T6XKKfgoIeLI2Wz4xYsflGLJ10Pj3Y8pbiz7sgzhhAPNRHjryvc4VF4DjYYy6wMZ/7o0
-         SDvqt4rI56Fgi2cpDgk+zXRaYTLIfxSvgCipl57sdsieau1TEJzRt/+BklKbxmUj1o+/
-         1TvuRu0EGvj+HIkQEoOmidwdDofwkucmf6b5hlHHK4H+40YAksAVogsqEDjCNtYGjjBp
-         nXxy9d+c5bXzomdz3IXNDQUUfKTJJXFyyMiO4qMCUR2eIB213moCvblfXGjJmc14wOpj
-         dDtA==
-X-Forwarded-Encrypted: i=1; AJvYcCVuKQFE4ft+V1Onddto1SmHwHesE50HXOODk6EgCkfU2TLaaqO7XIeV8rFWaXBksKZdUpY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuozmGnl79E9gLbt/cimf2xhLV7e/fGatdyYlPNfKOeus1VRMC
-	bPWakXkuZxXDNmSGdGpsl5hzvGRpvGIUOgio2xEwxMe4LvQm3b51jS08VgXZ/cpnzg==
-X-Gm-Gg: AZuq6aJjtNR5c4hiPhwjx1Pv7MRh42z7ADtEMtXNuQrWrVOU4AMCHqei3exECCsoFGy
-	wT/mcA9XxgsJDZPvZMGA/l4qJYTUo24e1FUyTmpUNGdAaHLveHbjxWE69+ORfw2EoYJOXTtYyyV
-	UlrxW4r8np1rGWDSc5g9w6bVg1RlA/CbxXNQBn6F5v3/RqyDvZ9hLNNT98A+ALzllGSiXhEq/aT
-	3vXeghOxGqi7D7DjWaSIenMxkLuc4YkggxT77GldyraMIxapI7sripFMLzuefxGuSnGGgxTOF1K
-	xdJbcDxrdH7aIqhvBBQ5OarLEiw8su+8EdPwIChJhb0ILApbIBCSn7S23nPJ1H71sERD8DZc7uE
-	DQSGr7n6qbqogamFIXhlLJvcULd9J44rRNeNjAqPu9tflOyh/Ki6syN2yW14KUOpHevo0Es1eFm
-	/vPYSN6R6+jDIj9f6CMJIRe+Q4mYy3IaNwog6GYnI257Kon7Z0dSgFC8kcxWjuTEM=
-X-Received: by 2002:a17:906:eec7:b0:b87:117f:b6f0 with SMTP id a640c23a62f3a-b9081b23d01mr691501366b.30.1771940115631;
-        Tue, 24 Feb 2026 05:35:15 -0800 (PST)
-Received: from google.com (93.50.90.34.bc.googleusercontent.com. [34.90.50.93])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084a4d6e1sm426835366b.0.2026.02.24.05.35.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 05:35:15 -0800 (PST)
-Date: Tue, 24 Feb 2026 13:35:11 +0000
-From: Matt Bobrowski <mattbobrowski@google.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>,
-	KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-	Lennart Poettering <lennart@poettering.net>
-Subject: Re: [PATCH 1/4] ns: add bpf hooks
-Message-ID: <aZ2pDzhDFpFMjgb1@google.com>
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
- <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="NGlk9KXQ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1771940252;
+	bh=N+y9fema4fxMIXCGy9yuAezozfWEywSX0IbLhPWbQXk=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=NGlk9KXQNPaoBvbjaF6D5At679PxdxNFUxH7x9mNGOShwMMH8lmGNd1cOx20OC7Ob
+	 08ABzVn8Fb4pPl+yaBi6SgsLuCcJgcK0O6QQz9O7BTly4IE47dMUasgXnBXxa1jIUJ
+	 IjUSIe2pGLbSTOuEkRPpsvBUMgk2icZB57FiKIrk=
+Received: from [IPv6:2601:5c4:4300:d341::a774] (unknown [IPv6:2601:5c4:4300:d341::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 8BB401C033A;
+	Tue, 24 Feb 2026 08:37:32 -0500 (EST)
+Message-ID: <72f731b8153106fd32ee991da10f847a3a8d768a.camel@HansenPartnership.com>
+Subject: Re: LSF/MM/BPF: 2026: Call for Proposals
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+  linux-scsi@vger.kernel.org, linux-nvme@lists.infradead.org,
+ bpf@vger.kernel.org,  lwn@lwn.net
+Cc: lsf-pc@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Date: Tue, 24 Feb 2026 08:37:31 -0500
+In-Reply-To: <20260224-sangen-aufatmen-06ba16719f33@brauner>
+References: <20260110-lsfmm-2026-cfp-ae970765d60e@brauner>
+	 <20260119-bagger-desaster-e11c27458c49@brauner>
+	 <20260129-beidseitig-unwohl-9ae543e9f9f5@brauner>
+	 <20260216-ruhelosigkeit-umlegen-548e2a107686@brauner>
+	 <20260224-sangen-aufatmen-06ba16719f33@brauner>
+Autocrypt: addr=James.Bottomley@HansenPartnership.com;
+ prefer-encrypt=mutual;
+ keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.3 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
 
-On Fri, Feb 20, 2026 at 01:38:29AM +0100, Christian Brauner wrote:
-> Add the three namespace lifecycle hooks and make them available to bpf
-> lsm program types. This allows bpf to supervise namespace creation. I'm
-> in the process of adding various "universal truth" bpf programs to
-> systemd that will make use of this. This e.g., allows to lock in a
-> program into a given set of namespaces.
-> 
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
-> ---
->  include/linux/bpf_lsm.h | 21 +++++++++++++++++++++
->  kernel/bpf/bpf_lsm.c    | 25 +++++++++++++++++++++++++
->  kernel/nscommon.c       |  9 ++++++++-
->  kernel/nsproxy.c        |  7 +++++++
->  4 files changed, 61 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/bpf_lsm.h b/include/linux/bpf_lsm.h
-> index 643809cc78c3..5ae438fdf567 100644
-> --- a/include/linux/bpf_lsm.h
-> +++ b/include/linux/bpf_lsm.h
-> @@ -12,6 +12,9 @@
->  #include <linux/bpf_verifier.h>
->  #include <linux/lsm_hooks.h>
->  
-> +struct ns_common;
-> +struct nsset;
-> +
->  #ifdef CONFIG_BPF_LSM
->  
->  #define LSM_HOOK(RET, DEFAULT, NAME, ...) \
-> @@ -48,6 +51,11 @@ void bpf_lsm_find_cgroup_shim(const struct bpf_prog *prog, bpf_func_t *bpf_func)
->  
->  int bpf_lsm_get_retval_range(const struct bpf_prog *prog,
->  			     struct bpf_retval_range *range);
-> +
-> +int bpf_lsm_namespace_alloc(struct ns_common *ns);
-> +void bpf_lsm_namespace_free(struct ns_common *ns);
-> +int bpf_lsm_namespace_install(struct nsset *nsset, struct ns_common *ns);
-> +
->  int bpf_set_dentry_xattr_locked(struct dentry *dentry, const char *name__str,
->  				const struct bpf_dynptr *value_p, int flags);
->  int bpf_remove_dentry_xattr_locked(struct dentry *dentry, const char *name__str);
-> @@ -104,6 +112,19 @@ static inline bool bpf_lsm_has_d_inode_locked(const struct bpf_prog *prog)
->  {
->  	return false;
->  }
-> +
-> +static inline int bpf_lsm_namespace_alloc(struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
-> +static inline void bpf_lsm_namespace_free(struct ns_common *ns)
-> +{
-> +}
-> +static inline int bpf_lsm_namespace_install(struct nsset *nsset,
-> +					    struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
->  #endif /* CONFIG_BPF_LSM */
->  
->  #endif /* _LINUX_BPF_LSM_H */
-> diff --git a/kernel/bpf/bpf_lsm.c b/kernel/bpf/bpf_lsm.c
-> index 0c4a0c8e6f70..f6378db46220 100644
-> --- a/kernel/bpf/bpf_lsm.c
-> +++ b/kernel/bpf/bpf_lsm.c
-> @@ -30,10 +30,32 @@ __weak noinline RET bpf_lsm_##NAME(__VA_ARGS__)	\
->  #include <linux/lsm_hook_defs.h>
->  #undef LSM_HOOK
->  
-> +__bpf_hook_start();
-> +
-> +__weak noinline int bpf_lsm_namespace_alloc(struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
-> +
-> +__weak noinline void bpf_lsm_namespace_free(struct ns_common *ns)
-> +{
-> +}
+On Tue, 2026-02-24 at 10:53 +0100, Christian Brauner wrote:
+> > Don't forget to pester^wask^wremind your respective organizations
+> > to sponsor LSF/MM/BPF 2026! If it helps, you can tell them that
+> > we're considering renaming it LSF/MM/BPF/AI.
+>=20
+> I have just looked at the sponsorship site for LSF/MM/BPF/AI again
+> and we all really need to go out and go steal some of that AI funding
+> money and funnel it into one of the conferences that really drives
+> development of the operating system that drives the compute for all
+> of this.
+>=20
+> Please go and remind your organizations to sponsor. They should know
+> how to get in touch with the Linux Foundation. Just going by the
+> sponsorship page we're missing a bunch of large organizations that we
+> would appreciate if they decided to pitch in. :)
 
-I'm wondering how you foresee this hook functioning in a scenario
-where the BPF LSM program is attached to this new hook point, although
-with its attachment type being set to BPF_LSM_CGROUP instead of
-BPF_LSM_MAC? You probably wouldn't want to utilize something like
-BPF_LSM_CGROUP for your specific use case, but as things stand
-currently I don't believe there's anyhthing preventing you from using
-BPF_LSM_CGROUP with a hook like bpf_lsm_namespace_free().
+Just on this point, at least for Linux Plumbers Conference, we've found
+that increasingly OSPOs (which usually hold the LF contacts) are
+aligned with Marketing organizations and don't see as much value in
+sponsoring pure engineering events (like LSF and LPC).  We've thus
+started getting our money from the Engineering organizations themselves
+(where you are all better placed to wield influence).  To convince your
+engineering management chain (who may never have done this before) you
+need to articulate the value (it's the place where Linux features
+you're working on get presented, discussed and decided so a good
+showing by your engineers can drastically shorten the time to
+acceptance of something, or actually set direction better than a
+mailing list discussion, which provides more roadmap certainty for VPs)
+and provide the details, so the sponsor prospectus is here:
 
-Notably, the BPF_LSM_CGROUP infrastructure is designed to execute BPF
-programs based on the cgroup of the currently executing task. There
-could be some surprises if the bpf_lsm_namespace_free() hook were to
-ever be called from a context (e.g, kworker) other than the one
-specified whilst attaching the BPF LSM program with type
-BPF_LSM_CGROUP.
+http://events.linuxfoundation.org/sponsor-lsfmm-bp-f26
 
-> +__weak noinline int bpf_lsm_namespace_install(struct nsset *nsset,
-> +					  struct ns_common *ns)
-> +{
-> +	return 0;
-> +}
-> +
-> +__bpf_hook_end();
-> +
->  #define LSM_HOOK(RET, DEFAULT, NAME, ...) BTF_ID(func, bpf_lsm_##NAME)
->  BTF_SET_START(bpf_lsm_hooks)
->  #include <linux/lsm_hook_defs.h>
->  #undef LSM_HOOK
-> +BTF_ID(func, bpf_lsm_namespace_alloc)
-> +BTF_ID(func, bpf_lsm_namespace_free)
-> +BTF_ID(func, bpf_lsm_namespace_install)
->  BTF_SET_END(bpf_lsm_hooks)
->  
->  BTF_SET_START(bpf_lsm_disabled_hooks)
-> @@ -383,6 +405,8 @@ BTF_ID(func, bpf_lsm_task_prctl)
->  BTF_ID(func, bpf_lsm_task_setscheduler)
->  BTF_ID(func, bpf_lsm_task_to_inode)
->  BTF_ID(func, bpf_lsm_userns_create)
-> +BTF_ID(func, bpf_lsm_namespace_alloc)
-> +BTF_ID(func, bpf_lsm_namespace_install)
->  BTF_SET_END(sleepable_lsm_hooks)
->  
->  BTF_SET_START(untrusted_lsm_hooks)
-> @@ -395,6 +419,7 @@ BTF_ID(func, bpf_lsm_sk_alloc_security)
->  BTF_ID(func, bpf_lsm_sk_free_security)
->  #endif /* CONFIG_SECURITY_NETWORK */
->  BTF_ID(func, bpf_lsm_task_free)
-> +BTF_ID(func, bpf_lsm_namespace_free)
->  BTF_SET_END(untrusted_lsm_hooks)
->  
->  bool bpf_lsm_is_sleepable_hook(u32 btf_id)
-> diff --git a/kernel/nscommon.c b/kernel/nscommon.c
-> index bdc3c86231d3..c3613cab3d41 100644
-> --- a/kernel/nscommon.c
-> +++ b/kernel/nscommon.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /* Copyright (c) 2025 Christian Brauner <brauner@kernel.org> */
->  
-> +#include <linux/bpf_lsm.h>
->  #include <linux/ns_common.h>
->  #include <linux/nstree.h>
->  #include <linux/proc_ns.h>
-> @@ -77,6 +78,7 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
->  		ret = proc_alloc_inum(&ns->inum);
->  	if (ret)
->  		return ret;
-> +
->  	/*
->  	 * Tree ref starts at 0. It's incremented when namespace enters
->  	 * active use (installed in nsproxy) and decremented when all
-> @@ -86,11 +88,16 @@ int __ns_common_init(struct ns_common *ns, u32 ns_type, const struct proc_ns_ope
->  		atomic_set(&ns->__ns_ref_active, 1);
->  	else
->  		atomic_set(&ns->__ns_ref_active, 0);
-> -	return 0;
-> +
-> +	ret = bpf_lsm_namespace_alloc(ns);
-> +	if (ret && !inum)
-> +		proc_free_inum(ns->inum);
-> +	return ret;
->  }
->  
->  void __ns_common_free(struct ns_common *ns)
->  {
-> +	bpf_lsm_namespace_free(ns);
->  	proc_free_inum(ns->inum);
->  }
->  
-> diff --git a/kernel/nsproxy.c b/kernel/nsproxy.c
-> index 259c4b4f1eeb..5742f9664dbb 100644
-> --- a/kernel/nsproxy.c
-> +++ b/kernel/nsproxy.c
-> @@ -9,6 +9,7 @@
->   *             Pavel Emelianov <xemul@openvz.org>
->   */
->  
-> +#include <linux/bpf_lsm.h>
->  #include <linux/slab.h>
->  #include <linux/export.h>
->  #include <linux/nsproxy.h>
-> @@ -379,6 +380,12 @@ static int prepare_nsset(unsigned flags, struct nsset *nsset)
->  
->  static inline int validate_ns(struct nsset *nsset, struct ns_common *ns)
->  {
-> +	int ret;
-> +
-> +	ret = bpf_lsm_namespace_install(nsset, ns);
-> +	if (ret)
-> +		return ret;
-> +
->  	return ns->ops->install(nsset, ns);
->  }
->  
-> 
-> -- 
-> 2.47.3
-> 
+You have to go high enough in your organization to find someone with an
+actual budget, which can be a bit daunting, so if you need outside
+help, the PC (lsf-pc@lists.linuxfoundation.org) will be able to help
+articulate the value once you've found the person to convince.
+
+If you manage to convince them to sponsor, the address to request a
+contract and a PO is
+
+sponsorships@linuxfoundation.org
+
+Regards,
+
+James
+
