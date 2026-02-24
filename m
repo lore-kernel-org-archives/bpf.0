@@ -1,53 +1,53 @@
-Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE8836BCF3
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 09:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0385636A025
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 09:31:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771925360; cv=none; b=TxXptf1zcVFkLs2Yp0Z4AcFEsLzObW7hcZS7yEg/7WT79DcRM5P8moU8+tzeo8cfmyQUWEkIMujPfmTLirEwyki+ME3KmSbGjfObfZqNwhwuzBtEJbMy74KGY6V+AzM8WNDigei0wuvEHQlR3Y60Ru+e46rUfeFVv2PRB65nMrY=
+	t=1771925492; cv=none; b=Vq/01H7a+sFRmbdrsuN+GHuHxS9JWB3VguIdURI36ERelUCk/u07DMoAI5hJ1Dg0xdqvqBw7qass3VpaZGgZgezhdidqlNHJv7RS9L2WDOlNKDO3jYRHnu+frMcr+X0sP2dYgOstEqSRpNfnK1fhyD0xdqxeSRhU2sIvZzBK178=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771925360; c=relaxed/simple;
+	s=arc-20240116; t=1771925492; c=relaxed/simple;
 	bh=hrd0NlY9pBKuduf76fdmrPBnyckvVI6lRHdi9c3/5Sg=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=IP4YtdWXKn2xf5cSoJ+F3fZgdSufrtxOcSUtdBc/n7Rt7HU64+SO53dTtaHo3g185q92knHzSqXDZdJ+OTI03IOjciSPp5xGqKafrE/LKYt6TvHQ/diw60pT44Fuhgwh9S+Fg6zP8rPwQOfeF7hNm0IOVkcMm/cQMAe5nztyHr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tabba.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ToZNpNBU; arc=none smtp.client-ip=209.85.128.73
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=VESsEyqC/aCCtTHjt1n6ugfRxsHALoY8cf9e+y96I0yel8kcKqWRbpgQccC2+e0K6YQJXr8Qldruad7oMJG1zo6aSH6VWLOVfFJ3SGU74bwagudo7f0jhpeF15sgUfMB+6RxWLzMnUM8c51UnqGVCEjD8y762Y4ClbexSjWM2OY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tabba.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vAJ9whtp; arc=none smtp.client-ip=209.85.128.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tabba.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ToZNpNBU"
-Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4837b7903f3so64474595e9.2
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 01:29:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vAJ9whtp"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4836ff58111so64116945e9.1
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 01:31:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1771925357; x=1772530157; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1771925489; x=1772530289; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
         bh=srSVsiV2b/ln5UzP/d6flconP4PG3Pc7vryxNaoWscY=;
-        b=ToZNpNBUa7ULlHFexOnmI/c0h6jdjDxvckF46bfE0/ypJ4VIPVNVhQw/GfRsUsuhxS
-         05FGbcZtUWFMT/2mSEFBSCbOFbK2ga15yN9b1nFt08L/NhZBEHXndLDXNoiLy+DiCQND
-         UBR9a4wfDOyjDNRJzP5SJxuH4//WnDDt05M858ZDGQLXlEdZD30SNlm8DmwWotlI1uWI
-         I8K99SORg6nNIxGUqpKEPCfOpWBaflwVsiS2LstkNgeQDpzNBZufNDedbz5Lq4aElHS3
-         J8ZKiX+igIRhKUJaHCGZZpKmVna+F6bURE7S7qjU72f5SFcb/1u2AzQ8lX2wZQhYAz1S
-         hhiA==
+        b=vAJ9whtptRWJB+waUZnd2mi57nrf/xMqy7huGNLpB6bd59SbC86qxMsnHZiizGEgyw
+         9cOcvDFA5Uxkxmtgl3M2wfS1PV+gZQeX2/8955gyu9IBKtr07OUtGxHIEPADING+Snid
+         yI862+L7evmpx5Sl08MeLlclssgiITuy1zlEASRSJQgd5RH61B3HkmlO9qZEYw6DjIyB
+         E/tD/ZukxlaYUK/vqfI0p0rs0l3ZatTgG93gW4BNAWh2BIMl1GxqP26gwB0JJE49u5qQ
+         fmE+xs1UE3BavYR2dQz1vBzqy03SWPDvnQyytjcwichz+3V+ft0QAttvzBoXP6AVlmYg
+         O1qA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771925357; x=1772530157;
+        d=1e100.net; s=20230601; t=1771925489; x=1772530289;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
         bh=srSVsiV2b/ln5UzP/d6flconP4PG3Pc7vryxNaoWscY=;
-        b=r3zS+7hLZR+93zUDSMfqJL9GGevdxRiFYpDRVqedjuonNqZC+oJJPGHdZuiNk8CTP+
-         /eFYntKTgtrlPhkoggk1JKcMzrDqcazNGCpKniyfMUI0oWm3TYhOF1MKTZHmCzrCJvkB
-         tSg18YoMsEJ0BTM4WHfKVuNboYzfGTrBOtzGGiHTWKX/3xbUVaPYXbbyP0Usj9VkO+CO
-         ksn1ZBnwUa90ZRAj8JI3N/hfzqBh/2F0wt4rQzI4fdoL+BcIaFY2AcRub/tIk67aGZt5
-         YtvjgFQ+7kGdMMRNOM2PmATClU+11WDyGtfqAExuzDKqdV0EHdIQJX61dmxZf95o4Hb1
-         jKCg==
-X-Gm-Message-State: AOJu0YzR3C8rSbn/h+chWODTXqrbDKzYsxvEtlmJ63TnVzGf8nZtasIH
-	FpRpiOf6HHO7+KdP7r6dS7WuHEkSKLfiy2rh7xiZ9IH2+nmbOP/FLiv+UYYL+MBzhTe7btGDFHM
-	g0iF3lEq4CChHYUsnwuokIYcYYCPWy5qLiulGlfuiciqHuk/QhDDrRpCjw1mS7UrgGY5gwP+W9W
-	MuRfvAHXEIb8dShTtEUi2RxCxMFks=
-X-Received: from wmbju22.prod.google.com ([2002:a05:600c:56d6:b0:47e:e4a5:c5f2])
- (user=tabba job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:6298:b0:477:5c58:3d42
- with SMTP id 5b1f17b1804b1-483a95fb23amr187555705e9.10.1771925356794; Tue, 24
- Feb 2026 01:29:16 -0800 (PST)
-Date: Tue, 24 Feb 2026 09:29:15 +0000
+        b=cjuSEeeqov0N8ptKNwS9nm+40P6LU6ccdqpE4RiUlTzrdY/ztaCQ0PnUij3F6Z0jbp
+         vCIRL91av4SuewVkCLh8/j9xhZoajssAJceCvf7ysyWzQuITGFW1qeI+aLqbfLefOuaH
+         cZNIi0tgt3+TQ70pX1/uKi336YWKpSnkdJWbgpOdbIfS+bL5DC4SIj4OD4Df7fDBgEZQ
+         zPUE06lsWDNtHa+ReDF4WlnyatcZ0ioc1NCWFZ5QfSUFVM3LDlXyd2lavLwyxk3ZpXHq
+         FvBViA6Sk7aLz7sOEAmbnlcfPvUSxV+Q0r+mXrPhGnrd7n4FOW8hoJG5vkZPMUuXHFQI
+         8NkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCULG2kjbKoamtsZjz77WYo5Nb5cMlPs0HUzhmHHfStxj+1xTp6crIBFma4Y6zkeakOR+1E=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzf8Ki3xludktA0j1KC2uQq20UNdnIaKDCffHaDUFZmVwuW7XFX
+	uNzqyoBlJJSQbDLBTHH/gLBJxeHsAFPRg+1EpWoyNtLZyWJUqaoMMWTkL8fldAgk1cuZqeExIf5
+	4FQ==
+X-Received: from wmdq4.prod.google.com ([2002:a05:600c:304:b0:483:2ac4:5da6])
+ (user=tabba job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:1e1d:b0:483:456a:514b
+ with SMTP id 5b1f17b1804b1-483a95befe5mr191351835e9.12.1771925489179; Tue, 24
+ Feb 2026 01:31:29 -0800 (PST)
+Date: Tue, 24 Feb 2026 09:31:28 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -55,12 +55,18 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.53.0.371.g1d285c8824-goog
-Message-ID: <20260224092915.1925488-1-tabba@google.com>
+Message-ID: <20260224093128.1926610-1-tabba@google.com>
 Subject: [PATCH] arm64: bpf: Fix UBSAN misaligned access in BPF JIT
 From: Fuad Tabba <tabba@google.com>
-To: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Cc: tabba@google.com
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Xu Kuohai <xukuohai@huaweicloud.com>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, Jean-Philippe Brucker <jpb@kernel.org>, tabba@google.com
 Content-Type: text/plain; charset="UTF-8"
 
 struct bpf_plt contains a u64 'target' field. The BPF JIT allocator
