@@ -1,251 +1,227 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08902396D21
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:27:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C0237F72A
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771936073; cv=none; b=bfVlI+aSigwOF/6craaZekhml3RQgxxfmziYi2DH0t+hhdJ25tiZggotNsmiksd4QIMVgbNggNhdhYSI2fewFPoXlCvU6pGKmnmZR/N3eg+RcPNJWUDvle8cXROJaYFLivvOtK8Z08J97A7d1akUqgJmgfUuUI7ChSXpqJAsJbI=
+	t=1771936133; cv=none; b=N6FZ/0eHqOCg7hFV6wNR/FAOQPtwP0vk2rew2szb6nIGLtR5zXmhu4urMcCFAPTlkRzR4Qk/YcMk9TEuoJO4jPCXw8/oQv9J9wsz1yAPAeVNPF8TRh5WJ49w+s6PN2J81jiayUWHIAKwdORqWX665lMcwm/qY0zdxdln875gFAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771936073; c=relaxed/simple;
-	bh=jnGgGDtJaiHTpWedHcitax5pKAZs4Ve8ImdmxNgaMww=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fIt0yK6SAgfuq94MamHgJahStv20sLgVVlSQiXaVHJ9Z9VESJJaUmmSoSJe3aj0WCEZW9H6ovey+mg5Eg8GdoVrFWyI6cciNzTd+C8+IoDiTUkz4iEyyGD7OhqDtOXz99J9fOpYgm2ojOw9VzHHqaq/TVZYOP4zM2t+3VgYC0rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Cjcp12jw; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771936133; c=relaxed/simple;
+	bh=6W5O/PUZpQhV7b4cwMNnMomT/hFrjm6a+YddVT+JVxQ=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=jziDlTqA8VPynvAwMl++6ZADMZu+Z4XKI5BMxItmSSiKR/U1dxCFuU1s7Dqe2OjdUZ6Al8nWvqad82E2vUuSPbG76wjEv0xxQlv597gyqyEvV+eVzNtMLgo/HtxvWqcPqfmsIK2frq2pAuXpFQnau5ngV9ex27FzTET2MmkpgfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=glT59HEB; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cjcp12jw"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-4362507f396so5177927f8f.0
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 04:27:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771936069; x=1772540869; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=NdA67fxGAODEvD0mlOn/T3/ZTarPD6vhJPnIAbEKHSY=;
-        b=Cjcp12jwMQsTNfxT62TKJsDi001zrwZmIamFsJ5VvFl6kTlxJ8cAHwbYdmC73+LcPj
-         tZS+S73lbSC4uMZh+WrrhH4s8yriDKB3WC2B0gKIkiOVhxc9pUESSfO8NkgRRZuRJ4Ca
-         mBIiAnH46L0xlPa0DLamqapdFYbflckdYpPTQnH/NniZJAtiOfsUEZ0yiUpoPnR0W15E
-         tfUrrNZagFj5BTjBMmL2lSgcv90fx7qDwCn7PCua0G2tjqdHQbVrXmP6VBmLYhBpl9ha
-         /3pSUSWTy4gqfFCdmH8gEKh4HiNGgHAi4E5s4ktDp2YoX+qFVV/1RCdsKadwWB02CqSd
-         SnAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771936069; x=1772540869;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NdA67fxGAODEvD0mlOn/T3/ZTarPD6vhJPnIAbEKHSY=;
-        b=Qp48b/tvKlXG42aGEu+05hwv9C93+C8BWUQKW++fiaIJKopf9W/YFmi5OMsCKw+TIw
-         XSpHJZ3k7OoA1120EXkEjIURJDjrs5Vj5AojL1sSjcYzp/O5MUUhTHHx3UNT9KiXvzhM
-         ZCsWiNtVa04I1eZ7uXAv7Mq7hFoUlLDIPn9cCVvQMuTNDPEF1dBKyGVHeWKhJld54Nu3
-         GkClfCJOxZ8VJXiKZQHhFotypXmfPNFLtr9DWyYsCWpc3kIvMgl16w41o+bIfx2FQqDJ
-         WKrp4bNX4dM3SdxORT+X0d3AGIpxvkmiolUda+57kPn1pJu251a8fXSdeT4H2H1c4WGi
-         ng/A==
-X-Forwarded-Encrypted: i=1; AJvYcCWRD/9mhowimPQPtGBVfedB2Hj59u4VuLzZUw2Cu3F555yYdywtr9FWXVomAgFVX9uGUdE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbQJp0ley14THVFhwfpcsHdntfjMNWgfF04BebIPV01IAJKZOW
-	eXgEJzlhkmC/QjAmeA3M92swFohGcSjKI1wQFZ25UujOA0OMEBtbKCpN
-X-Gm-Gg: ATEYQzwgLT/R+b/Jiwet+LqDiN3fgkohPdD0+t0a23mcYXF+lWM1pYqm0ug3CXZig54
-	Se2TpIqwg32XYN0/lEbOj6kjol885HX19GJP774bpR9L6/iiWIW9G+Cx72qH+4Uwtj3QwL5PRQR
-	9aoKFG1kpuTHMqjbl/SitjRsJ6aY1VnMWdGfA+vQK4e+eAEN8dbKrH/Y0yphg1o88oQrUE6hILh
-	+M9qFmPGHE1sFJL2iDfAVnZLPpSuhEJPe3QKMD3uMb5O2Od6wMxeE/ry/ICBVJ5yUIJQTDpJ4XY
-	vxhn9Ue2d/VHmd8UXdRZXHiiP8r6k1hbB1QIE8iXXMZo2exRtV45rXJuUZTN8j03M+OYSQlfTgJ
-	NQqD+vo5xvBFaxiLWJfMUvCvtFFr2TrlHzLT/cabxQoT7SCh9JY4oUtPOvPJSph/mBL9OY0st
-X-Received: by 2002:a5d:5f43:0:b0:439:879f:f8f3 with SMTP id ffacd0b85a97d-439879ffaf9mr3265620f8f.16.1771936069016;
-        Tue, 24 Feb 2026 04:27:49 -0800 (PST)
-Received: from krava ([2a02:8308:a00c:e200::b44f])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-43970d4c96csm28661352f8f.30.2026.02.24.04.27.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 04:27:48 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 24 Feb 2026 13:27:46 +0100
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>,
-	Martin KaFai Lau <kafai@fb.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Steven Rostedt <rostedt@kernel.org>
-Subject: Re: [PATCH bpf-next 02/17] bpf: Use mutex lock pool for bpf
- trampolines
-Message-ID: <aZ2ZQnBHPz3UO1wr@krava>
-References: <20260220100649.628307-1-jolsa@kernel.org>
- <20260220100649.628307-3-jolsa@kernel.org>
- <CAADnVQ+2-DtgWqeKmrbsP0O7Rz2ZkDjkh1kfHDSxF0K8Xs+1ww@mail.gmail.com>
- <aZsT6_3tkli3SPsI@krava>
- <CAADnVQL_Jpe_7a55HTn5CyYoxWcHahiK3+CDeOeURqZAuf+teA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="glT59HEB"
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61O3aLbv1936303;
+	Tue, 24 Feb 2026 12:28:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=nQyK09
+	DJOCnhZTtQgUBQY82VhZ9H6BsS5oN230S1xwk=; b=glT59HEB8llTPQ8Zq3glnD
+	P2p9KuUqkYh+ir0p1HeBbMMpjaXNuHSDQBNvRKGfZDmOUAublAsUUOS4Phsz7kLo
+	YrxAhQ14dob/GVMv1EAs/ga3lqfn1tltwgVsaL2SrBduDEZm2vr+M8pCgEP6B/3J
+	l4AAxyZQwP3zPlMuOVuSfRZOJ+UMxYlrc7yxgRDDwQ7So9Qq38i3QJBXPZRmqOEO
+	M57RY2oAtYUfjqevCWxIKohK2E3FuUW5UXBlTegRahJRyMgEHiSoy2XmYgt/PqUI
+	jkddCczwaQ68IbWjM4vz6u1Rk7fGsnuJ0kU1Fl4bUwdPTzx+YUEr6gQ9q3nCX0MQ
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4brtum8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Feb 2026 12:28:32 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61O7qAiU030267;
+	Tue, 24 Feb 2026 12:28:32 GMT
+Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfrhk8qnj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Feb 2026 12:28:32 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61OCSUQx33686196
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Feb 2026 12:28:31 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E1F715805B;
+	Tue, 24 Feb 2026 12:28:30 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1138558058;
+	Tue, 24 Feb 2026 12:28:30 +0000 (GMT)
+Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
+	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 24 Feb 2026 12:28:29 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQL_Jpe_7a55HTn5CyYoxWcHahiK3+CDeOeURqZAuf+teA@mail.gmail.com>
+Date: Tue, 24 Feb 2026 17:58:29 +0530
+From: adubey <adubey@linux.ibm.com>
+To: Hari Bathini <hbathini@linux.ibm.com>
+Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Alexei Starovoitov
+ <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko
+ <andrii@kernel.org>,
+        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
+        Venkat Rao
+ Bagalkote <venkat88@linux.ibm.com>, bot+bpf-ci@kernel.org
+Subject: Re: [PATCH v2 5/5] powerpc64/bpf: fix handling of BPF stack in
+ exception callback
+In-Reply-To: <20260220063933.196141-6-hbathini@linux.ibm.com>
+References: <20260220063933.196141-1-hbathini@linux.ibm.com>
+ <20260220063933.196141-6-hbathini@linux.ibm.com>
+Message-ID: <63a682779fd92c0a027de1b83581abc3@linux.ibm.com>
+X-Sender: adubey@linux.ibm.com
+Organization: IBM
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: cua_idSYFhTzXxw9KoKQGwmTND_fxYkj
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDA5OCBTYWx0ZWRfX+ZUqhgsg+U+P
+ BLujSWaYAVTuednBo15+/C6fJxG6hO3eUFSn9AFrZ5Sm2ZZu1aNs8FnQtUp06wH1Y0qy5kWTLeG
+ D5XJVRVCVNsbZigDu6RZHDjRzPjzEn7MIwxBJlFqfKkJwR+pbQUo0sW5zvfx7Algq0FmJSdPIhI
+ IZN6ZGQro0n5VNSspybKlrJZt/HbgL5qaVwpMcRrLGeTVkhIjph3fmeBe7/DGRJRLyZvKUb88uw
+ wQ7AnirPt7RYVjgS2A2rnX3+nP6k4CKa84z0SrFVi4iW8NmAmQScF8nZ9b4KBpEPZnuiKf/SBUO
+ 0A1Ts8snUeCZcg/IZ5h5KCSRGhMiPG1fDOGsplRj3JyhcFc3IrwsaE7JLtywPghoqgjuCR7bFFw
+ i8bzEc8xYr8CLAgthl8iyREHvictQZ51ZVOPMUa3yt/W8YCbyGrSVXa/T53pXIME0a/V+uN0cW6
+ iRRuMBqzc4htaQM8Hrg==
+X-Authority-Analysis: v=2.4 cv=eNceTXp1 c=1 sm=1 tr=0 ts=699d9970 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=DoYHL1yo63ZzXAc8OwYA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-GUID: cua_idSYFhTzXxw9KoKQGwmTND_fxYkj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-24_01,2026-02-23_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 priorityscore=1501 phishscore=0 suspectscore=0 adultscore=0
+ bulkscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0 spamscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602240098
 
-On Mon, Feb 23, 2026 at 11:35:29AM -0800, Alexei Starovoitov wrote:
-> On Sun, Feb 22, 2026 at 6:34 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> >
-> > On Fri, Feb 20, 2026 at 11:58:13AM -0800, Alexei Starovoitov wrote:
-> > > On Fri, Feb 20, 2026 at 2:07 AM Jiri Olsa <jolsa@kernel.org> wrote:
-> > > >
-> > > > Adding mutex lock pool that replaces bpf trampolines mutex.
-> > > >
-> > > > For tracing_multi link coming in following changes we need to lock all
-> > > > the involved trampolines during the attachment. This could mean thousands
-> > > > of mutex locks, which is not convenient.
-> > > >
-> > > > As suggested by Andrii we can replace bpf trampolines mutex with mutex
-> > > > pool, where each trampoline is hash-ed to one of the locks from the pool.
-> > > >
-> > > > It's better to lock all the pool mutexes (64 at the moment) than
-> > > > thousands of them.
-> > > >
-> > > > Removing the mutex_is_locked in bpf_trampoline_put, because we removed
-> > > > the mutex from bpf_trampoline.
-> > > >
-> > > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > > ---
-> > > >  include/linux/bpf.h     |  2 --
-> > > >  kernel/bpf/trampoline.c | 74 +++++++++++++++++++++++++++++++----------
-> > > >  2 files changed, 56 insertions(+), 20 deletions(-)
-> > > >
-> > > > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > > > index cd9b96434904..46bf3d86bdb2 100644
-> > > > --- a/include/linux/bpf.h
-> > > > +++ b/include/linux/bpf.h
-> > > > @@ -1335,8 +1335,6 @@ struct bpf_trampoline {
-> > > >         /* hlist for trampoline_ip_table */
-> > > >         struct hlist_node hlist_ip;
-> > > >         struct ftrace_ops *fops;
-> > > > -       /* serializes access to fields of this trampoline */
-> > > > -       struct mutex mutex;
-> > > >         refcount_t refcnt;
-> > > >         u32 flags;
-> > > >         u64 key;
-> > > > diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> > > > index 952cd7932461..05dc0358654d 100644
-> > > > --- a/kernel/bpf/trampoline.c
-> > > > +++ b/kernel/bpf/trampoline.c
-> > > > @@ -30,6 +30,45 @@ static struct hlist_head trampoline_ip_table[TRAMPOLINE_TABLE_SIZE];
-> > > >  /* serializes access to trampoline tables */
-> > > >  static DEFINE_MUTEX(trampoline_mutex);
-> > > >
-> > > > +#define TRAMPOLINE_LOCKS_BITS 6
-> > > > +#define TRAMPOLINE_LOCKS_TABLE_SIZE (1 << TRAMPOLINE_LOCKS_BITS)
-> > > > +
-> > > > +static struct {
-> > > > +       struct mutex mutex;
-> > > > +       struct lock_class_key key;
-> > > > +} *trampoline_locks;
-> > > > +
-> > > > +static struct mutex *trampoline_locks_lookup(struct bpf_trampoline *tr)
-> > >
-> > > select_trampoline_lock() ?
-> >
-> > ok
-> >
-> > >
-> > > > +{
-> > > > +       return &trampoline_locks[hash_64((u64) tr, TRAMPOLINE_LOCKS_BITS)].mutex;
-> > > > +}
-> > > > +
-> > > > +static void trampoline_lock(struct bpf_trampoline *tr)
-> > > > +{
-> > > > +       mutex_lock(trampoline_locks_lookup(tr));
-> > > > +}
-> > > > +
-> > > > +static void trampoline_unlock(struct bpf_trampoline *tr)
-> > > > +{
-> > > > +       mutex_unlock(trampoline_locks_lookup(tr));
-> > > > +}
-> > > > +
-> > > > +static int __init trampoline_locks_init(void)
-> > > > +{
-> > > > +       int i;
-> > > > +
-> > > > +       trampoline_locks = kmalloc_array(TRAMPOLINE_LOCKS_TABLE_SIZE,
-> > > > +                                        sizeof(trampoline_locks[0]), GFP_KERNEL);
-> > >
-> > > why bother with memory allocation? This is just 64 mutexes.
-> >
-> > ok, I could probably use __mutex_init directly for static key
-> >
-> > about 64.. not sure how I missed that but there's lockdep limit for
-> > maximum locks depth and it's 48.. so we'll need to use 32 locks,
-> > which is probably still ok
-> >
-> > >
-> > > > +       if (!trampoline_locks)
-> > > > +               return -ENOMEM;
-> > > > +
-> > > > +       for (i = 0; i < TRAMPOLINE_LOCKS_TABLE_SIZE; i++) {
-> > > > +               lockdep_register_key(&trampoline_locks[i].key);
-> > >
-> > > why special key?
-> >
-> > if we keep single key we will get lockdep 'recursive locking' warning
-> > during bpf_trampoline_multi_attach, because lockdep will think we lock
-> > the same mutex
-> >
-> > there's support to annotate nested locking with mutex_lock_nested but
-> > it allows maximum of 8 nested instances
+On 2026-02-20 12:09, Hari Bathini wrote:
+> Exception callback reuses the stack frame of exception boundary. When
+> exception boundary and exception callback programs have different BPF
+> stack depth, the current stack unwind in exception callback will fail.
+> Adjust the stack frame size of exception callback, in its prologue,
+> if its BPF stack depth is different from that of exception boundary.
 > 
-> yeah. subclass limit of 8 is there for a different use case.
+> Reported-by: bot+bpf-ci@kernel.org
+> Closes:
+> https://lore.kernel.org/bpf/2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org/
+> Fixes: 11d45eee9f42 ("powerpc64/bpf: Additional NVR handling for 
+> bpf_throw")
+> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
+> ---
+> 
+> Changes since v1:
+> * Fixed incorrect use of PPC_RAW_SUB() as pointed out by
+>   bot+bpf-ci@kernel.org.
 > 
 > 
-> I guess you never validated your earlier approach of "let's take
-> all trampoline mutexes" with lockdep ? ;)
-
-nope, the rfc had workaround for lockdep ;-)
-
-+#ifdef CONFIG_LOCKDEP
-+	mutex_init_with_key(&tr->mutex, &__lockdep_no_track__);
-+#else
-
-but I overlooked lockdep config for this version
-
-> MAX_LOCK_DEPTH is indeed 48.
+>  arch/powerpc/net/bpf_jit_comp64.c | 30 ++++++++++++++++++++++--------
+>  1 file changed, 22 insertions(+), 8 deletions(-)
 > 
-> See fs/configfs/inode.c and default_group_class.
-> It does:
->                         lockdep_set_class(&inode->i_rwsem,
->                                           &default_group_class[depth - 1]);
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c
+> b/arch/powerpc/net/bpf_jit_comp64.c
+> index 5d4d2bb23cef..33b2a7fd9067 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -32,14 +32,15 @@
+>   *
+>   *		[	prev sp		] <-------------
+>   *		[    tail_call_info	] 8		|
+> - *		[   nv gpr save area	] 6*8 + (12*8)	|
+> + *		[   nv gpr save area	] 6*8		|
+> + *		[ addl. nv gpr save area] (12*8)	| <--- exception 
+> boundary/callback program
+>   *		[    local_tmp_var	] 24		|
+>   * fp (r31) -->	[   ebpf stack space	] upto 512	|
+>   *		[     frame header	] 32/112	|
+>   * sp (r1) --->	[    stack pointer	] --------------
+>   *
+>   * Additional (12*8) in 'nv gpr save area' only in case of
+> - * exception boundary.
+> + * exception boundary/callback.
+>   */
 > 
-> the idea here is that the number of lockdep keys doesn't have
-> to be equal to the actual number of mutexes.
-
-I see, thanks for the pointer
-
+>  /* BPF non-volatile registers save area size */
+> @@ -128,12 +129,13 @@ static inline bool bpf_has_stack_frame(struct
+> codegen_context *ctx)
+>   *		[	  ...       	] 		|
+>   * sp (r1) --->	[    stack pointer	] --------------
+>   *		[    tail_call_info	] 8
+> - *		[   nv gpr save area	] 6*8 + (12*8)
+> + *		[   nv gpr save area	] 6*8
+> + *		[ addl. nv gpr save area] (12*8) <--- exception boundary/callback 
+> program
+>   *		[    local_tmp_var	] 24
+>   *		[   unused red zone	] 224
+>   *
+>   * Additional (12*8) in 'nv gpr save area' only in case of
+> - * exception boundary.
+> + * exception boundary/callback.
+>   */
+>  static int bpf_jit_stack_local(struct codegen_context *ctx)
+>  {
+> @@ -240,10 +242,6 @@ void bpf_jit_build_prologue(u32 *image, struct
+> codegen_context *ctx)
 > 
-> I guess we can keep a total of 32 mutexes to avoid making it too fancy.
-> Please add a comment explaining 32 and why it needs lockdep_key.
+>  	if (bpf_has_stack_frame(ctx) && !ctx->exception_cb) {
+>  		/*
+> -		 * exception_cb uses boundary frame after stack walk.
+> -		 * It can simply use redzone, this optimization reduces
+> -		 * stack walk loop by one level.
+> -		 *
+>  		 * We need a stack frame, but we don't necessarily need to
+>  		 * save/restore LR unless we call other functions
+>  		 */
+> @@ -287,6 +285,22 @@ void bpf_jit_build_prologue(u32 *image, struct
+> codegen_context *ctx)
+>  		 * program(main prog) as third arg
+>  		 */
+>  		EMIT(PPC_RAW_MR(_R1, _R5));
+> +		/*
+> +		 * Exception callback reuses the stack frame of exception boundary.
+> +		 * But BPF stack depth of exception callback and exception boundary
+> +		 * don't have to be same. If BPF stack depth is different, adjust 
+> the
+> +		 * stack frame size considering BPF stack depth of exception 
+> callback.
+> +		 * The non-volatile register save area remains unchanged. These non-
+> +		 * volatile registers are restored in exception callback's epilogue.
+> +		 */
+> +		EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R5, 0));
+> +		EMIT(PPC_RAW_SUB(bpf_to_ppc(TMP_REG_2), bpf_to_ppc(TMP_REG_1), 
+> _R1));
+> +		EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_2), bpf_to_ppc(TMP_REG_2),
+> +			-BPF_PPC_EXC_STACKFRAME));
+> +		EMIT(PPC_RAW_CMPLDI(bpf_to_ppc(TMP_REG_2), ctx->stack_size));
+> +		PPC_BCC_CONST_SHORT(COND_EQ, 12);
+> +		EMIT(PPC_RAW_MR(_R1, bpf_to_ppc(TMP_REG_1)));
+> +		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_EXC_STACKFRAME + 
+> ctx->stack_size)));
+For the last comment here:
+"Do we need to setup FP again? If I get it right, still the FP is 
+pointing to older frame, any reference in
+callback will resolve to old frame."
 
-ok
+Following inst takes care of above; it was missing for me in rebasing, 
+my bad.
+EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+                                 STACK_FRAME_MIN_SIZE + 
+ctx->stack_size));
 
+>  	}
 > 
-> I thought declaring all mutexes as static will avoid the need for the key,
-> but DEFINE_MUTEX doesn't support an array.
-> So since we need a loop anyway to init mutex and the key,
-> let's keep kmalloc_array() above. Which is now renamed to kmalloc_objs()
-> after 7.0-rc1.
-
-I don't mind either way, meanwhile I used this version:
-
-static struct {
-       struct mutex mutex;
-       struct lock_class_key key;
-} trampoline_locks[TRAMPOLINE_LOCKS_TABLE_SIZE];
-
-       for (i = 0; i < TRAMPOLINE_LOCKS_TABLE_SIZE; i++)
-               __mutex_init(&trampoline_locks[i].mutex, "trampoline_lock", &trampoline_locks[i].key);
-
-thanks,
-jirka
+>  	/*
+-Abhishek
