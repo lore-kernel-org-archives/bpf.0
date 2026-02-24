@@ -1,87 +1,198 @@
-Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C85BB33D4F3
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 21:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.225
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB09A3EBF1F
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 21:25:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771968328; cv=none; b=vD/o3WhkuYPDhQatdXgrMDk9vuTAnice91+yE7buPgSvTielq/lQpdAXH/MKzWpXkmEjfMNjF3vbwAnZDg+qqGTZbkq6+rschA9EDj4cBIlRMEvpLUefFer4D3wju+ak2qRLrIpljmAeulG6j0K8ig28yV7QTy+denkwHXyt10k=
+	t=1771968358; cv=none; b=LH81le1Vft4XqBbsaZBiuuA4Su4mkEl3SzMGWJC9t0VYViY9v3zjcuKuRw5qbE4Ertm434zq97fwxeGjCS9OPx5SMcaiPai4itlSVNQOgBvftSeybzc2ndnfaWPh1TG/789CDpAQnjjeSXcjt2UFpePO18RvzFazwrEZaKYaNac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771968328; c=relaxed/simple;
-	bh=p9N0tg9ro3UyBcP2Fzp3R/vRzcui4PdL161SdN6uY2E=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=T3WGNM+16SuurOcWnYEW+02vLWQLtC4AxhQbNxdxproDlbUu+AXxZnLVfQJy7UxP3iE7lFLzzyFjjTrdg/c1Qfxp1BdX3iVEOJmc8MynpqZXiKsBbxadqiPA2PbV4Naz/YPywBsy1IBdzhIm4RxB1mlZPVhnqZwAzwUhmsyiYJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b=KcW5ewYG; arc=none smtp.client-ip=185.136.65.225
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+	s=arc-20240116; t=1771968358; c=relaxed/simple;
+	bh=jj2BgQZnyHCmnihGKKjmzKN+VqY9DaTcGkdaqglPwJk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=F6rup0wWBKspnmAwf6b8EbyxwsG8kL08AYp3j6SdEMLGZ3E8ACs/N86kWOY1JieKZhMxwpxLgyQ2ygRQ+TYxUGLXTG5twjtl8U4mMnt69hD4iFNeNLcQ1Dd3IgrajBhYYULATLMS/EJOdeKTB2rpx97K8mIMHpjIuSpdQsgwtNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GQ2RXvGP; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b="KcW5ewYG"
-Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 20260224212514e6a90b078100020795
-        for <bpf@vger.kernel.org>;
-        Tue, 24 Feb 2026 22:25:14 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm2;
- d=siemens.com; i=florian.bezdeka@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=vbehI5k0rB54bjh1f0a2umagLZ4OYrZF4eNdQQugxLw=;
- b=KcW5ewYGX3l5vf4Wblfb+Vgb1Jpva+THV2gf/O4U5sXYcTiaDI7LLIzlAwZMx9XA8avU3B
- MQLeoJMHcWwQCTYV+Lbgn3qf3lawLd9EMojyc47icVDouNXsJJbkRi9MuydVi1Y2oRAEgY9U
- W96vDkI/s4GJtRjD1v8EERcDzrnoFuR4N2bBcqEagUxqt4QDYPEVaFLMXWkTTmUInyqXA/67
- dSjuG5ywwV4GpDznI04Ak2CUpfcKMKF76RVh6CM5zU0SWApiNooKLivJ5BkfGYoQBNqrOYq9
- GSfAnJqKWOzldv8IzuXYnOj/5a/eqfGWLWyn4qc+ed3rWdHWodlyNeww==;
-Message-ID: <f269adc1e366685a15622fb51740eca7168c9339.camel@siemens.com>
-Subject: Re: [PATCH] igc: fix page fault in XDP TX timestamps handling
-From: Florian Bezdeka <florian.bezdeka@siemens.com>
-To: Zdenek Bouska <zdenek.bouska@siemens.com>, Tony Nguyen	
- <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>,  Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet	
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni	
- <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann	
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Richard Cochran	 <richardcochran@gmail.com>, Song Yoong Siang
- <yoong.siang.song@intel.com>,  Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Cc: Vinicius Costa Gomes <vinicius.gomes@intel.com>, 
-	intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Tue, 24 Feb 2026 22:25:10 +0100
-In-Reply-To: <20260224-igc-fix-xdp-tx-tstamp-pagefault-v1-1-7c729ef61ee5@siemens.com>
-References: 
-	<20260224-igc-fix-xdp-tx-tstamp-pagefault-v1-1-7c729ef61ee5@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GQ2RXvGP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 328BDC116D0;
+	Tue, 24 Feb 2026 21:25:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771968358;
+	bh=jj2BgQZnyHCmnihGKKjmzKN+VqY9DaTcGkdaqglPwJk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=GQ2RXvGPZZo6b8/7cWlmTjK1+pL6nQ7Z+2BL0QvwIUNafch1NtYLgDky8Zn+YGJ18
+	 9FrQKS7UCVTit5KhUwdRGx16a1S/SiI4+UUWyapd0pDiK6Qo1fq0xA85Qcc9WPlAij
+	 /UvzNm9s6/TeAqZWCkrJVwHBOM9L+O1CZQ10cHP7edr05nOkR5GvjWXeCHVKsMD5MU
+	 9cwFtvB5+GEf9SPM9cyqXYIUPmnZtchaVAntWYCs5jzQs9Uq9Ciy3ruFlOn5xGZYtv
+	 W+VnlZxGik0rpnqu9xbiWi/UzS16WAXB/ym47fiSYhhimys2otlNVmvmyPPtLOMurD
+	 ei8Rh0xkH2MrA==
+From: Puranjay Mohan <puranjay@kernel.org>
+To: bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay@kernel.org>,
+	Puranjay Mohan <puranjay12@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v4 0/7] Introduce KF_FORBID_SLEEP modifier for acquire/release kfuncs
+Date: Tue, 24 Feb 2026 13:25:22 -0800
+Message-ID: <20260224212535.1165151-1-puranjay@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-68982:519-21489:flowmailer
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2026-02-24 at 13:38 +0100, Zdenek Bouska wrote:
-> If an XDP application that requested TX timestamping is shutting down
-> while the link of the interface in use is still up the following kernel
-> splat is reported:
->=20
-> [  883.803618] [   T1554] BUG: unable to handle page fault for address: f=
-fffcfb6200fd008
-> ...
-> [  883.803650] [   T1554] Call Trace:
-> [  883.803652] [   T1554]  <TASK>
-> [  883.803654] [   T1554]  igc_ptp_tx_tstamp_event+0xdf/0x160 [igc]
-> [  883.803660] [   T1554]  igc_tsync_interrupt+0x2d5/0x300 [igc]
-> ...
->=20
-> During shutdown of the TX ring the xsk_meta pointers are left behind, so
-> that the IRQ handler is trying to touch them.
->=20
-> This issue is now being fixed by cleaning up the stale xsk meta data on
-> TX shutdown. TX timestamps on other queues remain unaffected.
->=20
-> Fixes: 15fd021bc427 ("igc: Add Tx hardware timestamp request for AF_XDP z=
-ero-copy packet")
-> Signed-off-by: Zdenek Bouska <zdenek.bouska@siemens.com>
+Changelog:
 
-Reviewed-by: Florian Bezdeka <florian.bezdeka@siemens.com>
+v3: https://lore.kernel.org/all/20260223174659.2749964-1-puranjay@kernel.org/
+Changes in v3 -> v4:
+- In iter_release_acquired_ref(), drop the if (!err) guard before
+  zeroing iter_st->id, the verifier stops on error anyway (Eduard)
+- In process_iter_next_call() DRAINED branch, guard iter_release_acquired_ref()
+  with is_kfunc_acquire() check for future-proofing (Eduard)
+- In check_kfunc_call() KF_RELEASE path, validate that the stack slot is
+  actually STACK_ITER before operating on it (Mykyta)
+- In check_kfunc_call() KF_RELEASE path, use iter_release_acquired_ref()
+  helper instead of open-coding release_reference() + id zeroing (Eduard)
+- In check_kfunc_call() KF_ACQUIRE path, move is_iter_next_kfunc() check
+  inside the is_kfunc_acquire() block so there is only one place checking
+  is_kfunc_acquire() (Mykyta)
+- Add new patch to consolidate scattered sleepable checks in
+  check_kfunc_call() into a single in_sleepable_context() check (Eduard)
+- Drop separate forbid_sleep_count check in check_kfunc_call(), now
+  covered by the consolidated in_sleepable_context() check (Eduard)
+- Use in_sleepable_context() for global subprog sleep check in
+  check_func_call() instead of open-coding (Eduard)
+- Add runtime test for nested task_vma iterators on the same task to
+  verify mmap_read_trylock() handles concurrent readers (Alexei)
+
+v2: https://lore.kernel.org/all/20260223160300.2109907-1-puranjay@kernel.org/
+Changes in v2 -> v3:
+- Rebased on bpf-next/master
+
+v1: https://lore.kernel.org/all/20260218182555.1501495-1-puranjay@kernel.org/
+Changes in v1 -> v2:
+- Add a patch to consolidate sleepable context error message printing in
+  check_helper_call(), has no functional changes (Eduard)
+- In check_kfunc_call() for KF_RELEASE and __iter arg, use release_regno
+  like dynptr rather than custom handling (Mykyta)
+- Fix some comments to follow correct style (Mykyta)
+- Move state->forbid_sleep_count-- to release_reference_state() (Eduard)
+- Remove error message in check_resource_leak() for forbid_sleep_count
+  because it is redundant and will never trigger (Eduard)
+- Consolidated some checks and prints (Eduard)
+
+
+Some BPF kfuncs acquire resources that prevent sleeping - a lock, a
+reference to an object under a lock, a preempt-disable section. Today there
+is no way for the verifier to know that holding a particular acquired
+reference means sleeping is forbidden. Programs either run entirely in
+sleepable or non-sleepable context, with no way to express "sleeping is
+forbidden right now, but will be allowed once I release this reference."
+
+This series adds KF_FORBID_SLEEP, a new kfunc flag that can be combined
+with KF_ACQUIRE. When a kfunc annotated with KF_ACQUIRE | KF_FORBID_SLEEP
+is called, the verifier tags the acquired reference with forbid_sleep and
+increments a per-state forbid_sleep_count counter. When the reference is
+released (through corresponding KF_RELEASE kfunc), the counter is
+decremented.  The verifier checks this counter everywhere it decides
+whether sleeping is allowed — sleepable helpers, sleepable kfuncs, global
+function calls, and resource leak checks.
+
+This is fully generic. Any pair of KF_ACQUIRE/KF_RELEASE kfuncs can opt
+into sleep prohibition by adding KF_FORBID_SLEEP to the acquire side.
+
+To make this useful for iterators specifically, the series first extends
+the verifier's iterator support to allow KF_ACQUIRE on _next and KF_RELEASE
+on a separate kfunc taking an __iter argument. The verifier tracks the
+acquired reference on the iterator's stack slot (st->id) and auto-releases
+it on the next _next call and on the DRAINED (NULL) path, so the
+acquire/release is transparent to programs that don't need mid-loop
+release.
+
+Iterator KF_ACQUIRE support is not useful on its own right now, but it
+becomes the foundation for KF_FORBID_SLEEP: an iterator whose _next is
+annotated with KF_ACQUIRE | KF_FORBID_SLEEP can now express "holding this
+pointer forbids sleeping; calling _release invalidates the pointer and
+re-enables sleeping."
+
+The task_vma iterator is the first user. It holds mmap_lock during
+iteration, preventing sleepable helpers like bpf_copy_from_user().
+Currently, this can lead to a deadlock as the fault path also takes
+mmap_lock.
+
+With this series, a BPF program can release the lock mid-iteration:
+
+    bpf_for_each(task_vma, vma, task, 0) {
+        u64 start = vma->vm_start;
+
+        /* sleeping forbidden, but vma pointer access allowed */
+        bpf_iter_task_vma_release(&___it);
+        /* mmap_lock released, vma pointer invalidated */
+        /* sleeping is fine here */
+
+        bpf_copy_from_user(&buf, sizeof(buf), (void *)start);
+    }
+
+The series is organized as:
+
+  Patch 1: KF_ACQUIRE/KF_RELEASE plumbing for iterators in the
+           verifier. Pure infrastructure, no behavioral change to
+           existing iterators.
+
+  Patch 2: Consolidate sleepable context error message printing
+           in check_helper_call(), no functional changes.
+
+  Patch 3: Consolidate scattered sleepable checks in check_kfunc_call()
+           into a single in_sleepable_context() check.
+
+  Patch 4: KF_FORBID_SLEEP flag and forbid_sleep_count machinery.
+           Generic, works for any KF_ACQUIRE kfunc - iterator or not.
+
+  Patch 5: Move mmap_lock acquisition from _new to _next in the
+           task_vma iterator, preparing for re-acquisition after
+           release.
+
+  Patch 6: Wire up task_vma as the first user: annotate _next with
+           KF_ACQUIRE | KF_FORBID_SLEEP, add bpf_iter_task_vma_release().
+
+  Patch 7: Selftests covering the runtime path (release + copy_from_user,
+           nested iterators on same mm) and verifier rejection of
+           invalid patterns (sleeping without release, VMA access after
+           release, double release, release without acquire, nested
+           iterator interaction).
+
+Puranjay Mohan (7):
+  bpf: Add KF_ACQUIRE and KF_RELEASE support for iterators
+  bpf: consolidate sleepable checks in check_helper_call()
+  bpf: consolidate sleepable checks in check_kfunc_call()
+  bpf: Add KF_FORBID_SLEEP modifier for KF_ACQUIRE kfuncs
+  bpf: Move locking to bpf_iter_task_vma_next()
+  bpf: Add split iteration support to task_vma iterator
+  selftests/bpf: Add tests for split task_vma iterator
+
+ include/linux/bpf_verifier.h                  |   2 +
+ include/linux/btf.h                           |   1 +
+ kernel/bpf/helpers.c                          |   3 +-
+ kernel/bpf/task_iter.c                        |  44 +++--
+ kernel/bpf/verifier.c                         | 184 ++++++++++++------
+ .../testing/selftests/bpf/bpf_experimental.h  |   1 +
+ .../testing/selftests/bpf/prog_tests/iters.c  |  24 +++
+ .../selftests/bpf/progs/iters_task_vma.c      |  71 +++++++
+ .../bpf/progs/iters_task_vma_nosleep.c        | 125 ++++++++++++
+ 9 files changed, 387 insertions(+), 68 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/iters_task_vma_nosleep.c
+
+
+base-commit: e4094d56c5592dd90aa619f9480265b0689ed3d9
+-- 
+2.47.3
 
