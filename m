@@ -1,227 +1,185 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mta-64-226.siemens.flowmailer.net (mta-64-226.siemens.flowmailer.net [185.136.64.226])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C0237F72A
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:28:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAA25225416
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771936133; cv=none; b=N6FZ/0eHqOCg7hFV6wNR/FAOQPtwP0vk2rew2szb6nIGLtR5zXmhu4urMcCFAPTlkRzR4Qk/YcMk9TEuoJO4jPCXw8/oQv9J9wsz1yAPAeVNPF8TRh5WJ49w+s6PN2J81jiayUWHIAKwdORqWX665lMcwm/qY0zdxdln875gFAQ=
+	t=1771936714; cv=none; b=s9DibmbgtxkqVp4T5Ko9Q0r6sqExzdOnTljGzMnA/qWCaxgUllFRvJD3rFO0qBreuYknz5GZvsTPEyxU/Fs+J5SVouOFDneoQK3XmojAxDtYQ7xoG/lPFmjIx2pGjdCPWVzaLhu4YR+XcxNzGYOgQ4sg+hb1gPiNGjhLGgcb2/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771936133; c=relaxed/simple;
-	bh=6W5O/PUZpQhV7b4cwMNnMomT/hFrjm6a+YddVT+JVxQ=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=jziDlTqA8VPynvAwMl++6ZADMZu+Z4XKI5BMxItmSSiKR/U1dxCFuU1s7Dqe2OjdUZ6Al8nWvqad82E2vUuSPbG76wjEv0xxQlv597gyqyEvV+eVzNtMLgo/HtxvWqcPqfmsIK2frq2pAuXpFQnau5ngV9ex27FzTET2MmkpgfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=glT59HEB; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1771936714; c=relaxed/simple;
+	bh=oXDKd50PcR3o8XNqPf8uMrmunzOoieZCrT9mA1rTgsY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IEYf9AlRCF7Lln81riL4xACWz6dWwHrScTgI0Ntc3W/axZ8mRDfuOKHhXmCkBHMZqvAsgqd6uDtUfH4biKUmnaHYpWcMR8Kwj9mbwkFxHL90X/lGhkCmEkIPMGdwLO+HWN4MfBBozJp1bUtN0c5SpJjyCW9DekyI7cdOHYSR+HQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=zdenek.bouska@siemens.com header.b=c0FUpjxz; arc=none smtp.client-ip=185.136.64.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="glT59HEB"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61O3aLbv1936303;
-	Tue, 24 Feb 2026 12:28:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=nQyK09
-	DJOCnhZTtQgUBQY82VhZ9H6BsS5oN230S1xwk=; b=glT59HEB8llTPQ8Zq3glnD
-	P2p9KuUqkYh+ir0p1HeBbMMpjaXNuHSDQBNvRKGfZDmOUAublAsUUOS4Phsz7kLo
-	YrxAhQ14dob/GVMv1EAs/ga3lqfn1tltwgVsaL2SrBduDEZm2vr+M8pCgEP6B/3J
-	l4AAxyZQwP3zPlMuOVuSfRZOJ+UMxYlrc7yxgRDDwQ7So9Qq38i3QJBXPZRmqOEO
-	M57RY2oAtYUfjqevCWxIKohK2E3FuUW5UXBlTegRahJRyMgEHiSoy2XmYgt/PqUI
-	jkddCczwaQ68IbWjM4vz6u1Rk7fGsnuJ0kU1Fl4bUwdPTzx+YUEr6gQ9q3nCX0MQ
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4brtum8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Feb 2026 12:28:32 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61O7qAiU030267;
-	Tue, 24 Feb 2026 12:28:32 GMT
-Received: from smtprelay04.wdc07v.mail.ibm.com ([172.16.1.71])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfrhk8qnj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 24 Feb 2026 12:28:32 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-	by smtprelay04.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61OCSUQx33686196
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 24 Feb 2026 12:28:31 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E1F715805B;
-	Tue, 24 Feb 2026 12:28:30 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1138558058;
-	Tue, 24 Feb 2026 12:28:30 +0000 (GMT)
-Received: from ltc.linux.ibm.com (unknown [9.5.196.140])
-	by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 24 Feb 2026 12:28:29 +0000 (GMT)
+	dkim=pass (2048-bit key) header.d=siemens.com header.i=zdenek.bouska@siemens.com header.b="c0FUpjxz"
+Received: by mta-64-226.siemens.flowmailer.net with ESMTPSA id 20260224123821fc15a672fe000207e5
+        for <bpf@vger.kernel.org>;
+        Tue, 24 Feb 2026 13:38:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm2;
+ d=siemens.com; i=zdenek.bouska@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=ZK6pwPA0ICZ+Gacpu5r5lttbWewOZgHz7aEYNA6FSLk=;
+ b=c0FUpjxzDpLswDhMBIkvrYF6Y53m3VIxMptKCF63PXx8L2xGtB8D89PuQZ1PBVS7/JHbFk
+ jMHtrok/h42ZkISlsW7LK9Nm2oJ/FiGSyTDSpjzQsrKPVnHJYKROhIgZQwdaK4Jvh1RBDVzt
+ NaGr+0gxAhDfogMllwYXC4GfVJfvAoyBzpU97ieCzdRUkZYEocvWgVKgg4xlJ3VL0qKAiUOl
+ BfYMy091s4OOt+p60UZ/ad9DYkrvF+pxa0+qusrFj6tpBG1+VY5UTRGLNEkF7Nir3B3l7hVN
+ nC7PPh2lYP74MCf17Pj42LPdeQjZjz7OlkLb+Nqxir5D85kR90Ayl16g==;
+From: Zdenek Bouska <zdenek.bouska@siemens.com>
+Date: Tue, 24 Feb 2026 13:38:13 +0100
+Subject: [PATCH] igc: fix page fault in XDP TX timestamps handling
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 24 Feb 2026 17:58:29 +0530
-From: adubey <adubey@linux.ibm.com>
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Alexei Starovoitov
- <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko
- <andrii@kernel.org>,
-        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-        Venkat Rao
- Bagalkote <venkat88@linux.ibm.com>, bot+bpf-ci@kernel.org
-Subject: Re: [PATCH v2 5/5] powerpc64/bpf: fix handling of BPF stack in
- exception callback
-In-Reply-To: <20260220063933.196141-6-hbathini@linux.ibm.com>
-References: <20260220063933.196141-1-hbathini@linux.ibm.com>
- <20260220063933.196141-6-hbathini@linux.ibm.com>
-Message-ID: <63a682779fd92c0a027de1b83581abc3@linux.ibm.com>
-X-Sender: adubey@linux.ibm.com
-Organization: IBM
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: cua_idSYFhTzXxw9KoKQGwmTND_fxYkj
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDA5OCBTYWx0ZWRfX+ZUqhgsg+U+P
- BLujSWaYAVTuednBo15+/C6fJxG6hO3eUFSn9AFrZ5Sm2ZZu1aNs8FnQtUp06wH1Y0qy5kWTLeG
- D5XJVRVCVNsbZigDu6RZHDjRzPjzEn7MIwxBJlFqfKkJwR+pbQUo0sW5zvfx7Algq0FmJSdPIhI
- IZN6ZGQro0n5VNSspybKlrJZt/HbgL5qaVwpMcRrLGeTVkhIjph3fmeBe7/DGRJRLyZvKUb88uw
- wQ7AnirPt7RYVjgS2A2rnX3+nP6k4CKa84z0SrFVi4iW8NmAmQScF8nZ9b4KBpEPZnuiKf/SBUO
- 0A1Ts8snUeCZcg/IZ5h5KCSRGhMiPG1fDOGsplRj3JyhcFc3IrwsaE7JLtywPghoqgjuCR7bFFw
- i8bzEc8xYr8CLAgthl8iyREHvictQZ51ZVOPMUa3yt/W8YCbyGrSVXa/T53pXIME0a/V+uN0cW6
- iRRuMBqzc4htaQM8Hrg==
-X-Authority-Analysis: v=2.4 cv=eNceTXp1 c=1 sm=1 tr=0 ts=699d9970 cx=c_pps
- a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
- a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
- a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=DoYHL1yo63ZzXAc8OwYA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-GUID: cua_idSYFhTzXxw9KoKQGwmTND_fxYkj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-24_01,2026-02-23_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 phishscore=0 suspectscore=0 adultscore=0
- bulkscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0 spamscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602240098
+Message-Id: <20260224-igc-fix-xdp-tx-tstamp-pagefault-v1-1-7c729ef61ee5@siemens.com>
+X-B4-Tracking: v=1; b=H4sIALSbnWkC/x2NQQqDMBAAvyJ7dkG3VopfKR62yZouVBuSKAHJ3
+ w0eB4aZE6IElQhTc0KQQ6P+twp924D58uYE1VYG6mjsqCdUZ3DRjNl6TBlTTLx69Oxk4f2X0Az
+ 8sTI8H6+RoFZ8kKrfh/dcygXMciYIcQAAAA==
+X-Change-ID: 20260212-igc-fix-xdp-tx-tstamp-pagefault-c4abde453862
+To: Tony Nguyen <anthony.l.nguyen@intel.com>, 
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, 
+ Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, 
+ Richard Cochran <richardcochran@gmail.com>, 
+ Song Yoong Siang <yoong.siang.song@intel.com>, 
+ Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Cc: Vinicius Costa Gomes <vinicius.gomes@intel.com>, 
+ intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Florian Bezdeka <florian.bezdeka@siemens.com>, 
+ Zdenek Bouska <zdenek.bouska@siemens.com>
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-1328595:519-21489:flowmailer
 
-On 2026-02-20 12:09, Hari Bathini wrote:
-> Exception callback reuses the stack frame of exception boundary. When
-> exception boundary and exception callback programs have different BPF
-> stack depth, the current stack unwind in exception callback will fail.
-> Adjust the stack frame size of exception callback, in its prologue,
-> if its BPF stack depth is different from that of exception boundary.
-> 
-> Reported-by: bot+bpf-ci@kernel.org
-> Closes:
-> https://lore.kernel.org/bpf/2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org/
-> Fixes: 11d45eee9f42 ("powerpc64/bpf: Additional NVR handling for 
-> bpf_throw")
-> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
-> ---
-> 
-> Changes since v1:
-> * Fixed incorrect use of PPC_RAW_SUB() as pointed out by
->   bot+bpf-ci@kernel.org.
-> 
-> 
->  arch/powerpc/net/bpf_jit_comp64.c | 30 ++++++++++++++++++++++--------
->  1 file changed, 22 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c
-> b/arch/powerpc/net/bpf_jit_comp64.c
-> index 5d4d2bb23cef..33b2a7fd9067 100644
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-> @@ -32,14 +32,15 @@
->   *
->   *		[	prev sp		] <-------------
->   *		[    tail_call_info	] 8		|
-> - *		[   nv gpr save area	] 6*8 + (12*8)	|
-> + *		[   nv gpr save area	] 6*8		|
-> + *		[ addl. nv gpr save area] (12*8)	| <--- exception 
-> boundary/callback program
->   *		[    local_tmp_var	] 24		|
->   * fp (r31) -->	[   ebpf stack space	] upto 512	|
->   *		[     frame header	] 32/112	|
->   * sp (r1) --->	[    stack pointer	] --------------
->   *
->   * Additional (12*8) in 'nv gpr save area' only in case of
-> - * exception boundary.
-> + * exception boundary/callback.
->   */
-> 
->  /* BPF non-volatile registers save area size */
-> @@ -128,12 +129,13 @@ static inline bool bpf_has_stack_frame(struct
-> codegen_context *ctx)
->   *		[	  ...       	] 		|
->   * sp (r1) --->	[    stack pointer	] --------------
->   *		[    tail_call_info	] 8
-> - *		[   nv gpr save area	] 6*8 + (12*8)
-> + *		[   nv gpr save area	] 6*8
-> + *		[ addl. nv gpr save area] (12*8) <--- exception boundary/callback 
-> program
->   *		[    local_tmp_var	] 24
->   *		[   unused red zone	] 224
->   *
->   * Additional (12*8) in 'nv gpr save area' only in case of
-> - * exception boundary.
-> + * exception boundary/callback.
->   */
->  static int bpf_jit_stack_local(struct codegen_context *ctx)
->  {
-> @@ -240,10 +242,6 @@ void bpf_jit_build_prologue(u32 *image, struct
-> codegen_context *ctx)
-> 
->  	if (bpf_has_stack_frame(ctx) && !ctx->exception_cb) {
->  		/*
-> -		 * exception_cb uses boundary frame after stack walk.
-> -		 * It can simply use redzone, this optimization reduces
-> -		 * stack walk loop by one level.
-> -		 *
->  		 * We need a stack frame, but we don't necessarily need to
->  		 * save/restore LR unless we call other functions
->  		 */
-> @@ -287,6 +285,22 @@ void bpf_jit_build_prologue(u32 *image, struct
-> codegen_context *ctx)
->  		 * program(main prog) as third arg
->  		 */
->  		EMIT(PPC_RAW_MR(_R1, _R5));
-> +		/*
-> +		 * Exception callback reuses the stack frame of exception boundary.
-> +		 * But BPF stack depth of exception callback and exception boundary
-> +		 * don't have to be same. If BPF stack depth is different, adjust 
-> the
-> +		 * stack frame size considering BPF stack depth of exception 
-> callback.
-> +		 * The non-volatile register save area remains unchanged. These non-
-> +		 * volatile registers are restored in exception callback's epilogue.
-> +		 */
-> +		EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R5, 0));
-> +		EMIT(PPC_RAW_SUB(bpf_to_ppc(TMP_REG_2), bpf_to_ppc(TMP_REG_1), 
-> _R1));
-> +		EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_2), bpf_to_ppc(TMP_REG_2),
-> +			-BPF_PPC_EXC_STACKFRAME));
-> +		EMIT(PPC_RAW_CMPLDI(bpf_to_ppc(TMP_REG_2), ctx->stack_size));
-> +		PPC_BCC_CONST_SHORT(COND_EQ, 12);
-> +		EMIT(PPC_RAW_MR(_R1, bpf_to_ppc(TMP_REG_1)));
-> +		EMIT(PPC_RAW_STDU(_R1, _R1, -(BPF_PPC_EXC_STACKFRAME + 
-> ctx->stack_size)));
-For the last comment here:
-"Do we need to setup FP again? If I get it right, still the FP is 
-pointing to older frame, any reference in
-callback will resolve to old frame."
+If an XDP application that requested TX timestamping is shutting down
+while the link of the interface in use is still up the following kernel
+splat is reported:
 
-Following inst takes care of above; it was missing for me in rebasing, 
-my bad.
-EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
-                                 STACK_FRAME_MIN_SIZE + 
-ctx->stack_size));
+[  883.803618] [   T1554] BUG: unable to handle page fault for address: ffffcfb6200fd008
+...
+[  883.803650] [   T1554] Call Trace:
+[  883.803652] [   T1554]  <TASK>
+[  883.803654] [   T1554]  igc_ptp_tx_tstamp_event+0xdf/0x160 [igc]
+[  883.803660] [   T1554]  igc_tsync_interrupt+0x2d5/0x300 [igc]
+...
 
->  	}
-> 
->  	/*
--Abhishek
+During shutdown of the TX ring the xsk_meta pointers are left behind, so
+that the IRQ handler is trying to touch them.
+
+This issue is now being fixed by cleaning up the stale xsk meta data on
+TX shutdown. TX timestamps on other queues remain unaffected.
+
+Fixes: 15fd021bc427 ("igc: Add Tx hardware timestamp request for AF_XDP zero-copy packet")
+Signed-off-by: Zdenek Bouska <zdenek.bouska@siemens.com>
+---
+ drivers/net/ethernet/intel/igc/igc.h      |  2 ++
+ drivers/net/ethernet/intel/igc/igc_main.c |  7 +++++++
+ drivers/net/ethernet/intel/igc/igc_ptp.c  | 33 +++++++++++++++++++++++++++++++
+ 3 files changed, 42 insertions(+)
+
+diff --git a/drivers/net/ethernet/intel/igc/igc.h b/drivers/net/ethernet/intel/igc/igc.h
+index a427f05814c1ae7330c6f7034cd0f2b40b74dab6..17236813965d334f14eba928affbd4f91b96ecd4 100644
+--- a/drivers/net/ethernet/intel/igc/igc.h
++++ b/drivers/net/ethernet/intel/igc/igc.h
+@@ -781,6 +781,8 @@ int igc_ptp_hwtstamp_set(struct net_device *netdev,
+ 			 struct kernel_hwtstamp_config *config,
+ 			 struct netlink_ext_ack *extack);
+ void igc_ptp_tx_hang(struct igc_adapter *adapter);
++void igc_ptp_clear_xsk_tx_tstamp_queue(struct igc_adapter *adapter,
++				       u16 queue_id);
+ void igc_ptp_read(struct igc_adapter *adapter, struct timespec64 *ts);
+ void igc_ptp_tx_tstamp_event(struct igc_adapter *adapter);
+ 
+diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+index 89a321a344d263ace5c66f7ade782b40cc482566..570e90fab67d653bbbb242d242d0b64a49fba602 100644
+--- a/drivers/net/ethernet/intel/igc/igc_main.c
++++ b/drivers/net/ethernet/intel/igc/igc_main.c
+@@ -193,6 +193,7 @@ static void igc_unmap_tx_buffer(struct device *dev, struct igc_tx_buffer *buf)
+  */
+ static void igc_clean_tx_ring(struct igc_ring *tx_ring)
+ {
++	struct igc_adapter *adapter;
+ 	u16 i = tx_ring->next_to_clean;
+ 	struct igc_tx_buffer *tx_buffer = &tx_ring->tx_buffer_info[i];
+ 	u32 xsk_frames = 0;
+@@ -264,6 +265,12 @@ static void igc_clean_tx_ring(struct igc_ring *tx_ring)
+ 	/* reset next_to_use and next_to_clean */
+ 	tx_ring->next_to_use = 0;
+ 	tx_ring->next_to_clean = 0;
++
++	/* Clear any lingering XSK TX timestamp requests */
++	if (test_bit(IGC_RING_FLAG_TX_HWTSTAMP, &tx_ring->flags)) {
++		adapter = netdev_priv(tx_ring->netdev);
++		igc_ptp_clear_xsk_tx_tstamp_queue(adapter, tx_ring->queue_index);
++	}
+ }
+ 
+ /**
+diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
+index 7aae83c108fd7611b00bf075592f93a902b83422..98491346d21b80925ce42ba276d851d4318e66b7 100644
+--- a/drivers/net/ethernet/intel/igc/igc_ptp.c
++++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
+@@ -576,6 +576,39 @@ static void igc_ptp_clear_tx_tstamp(struct igc_adapter *adapter)
+ 	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
+ }
+ 
++/**
++ * igc_ptp_clear_xsk_tx_tstamp_queue - Clear pending XSK TX timestamps for a queue
++ * @adapter: Board private structure
++ * @queue_id: TX queue index to clear timestamps for
++ *
++ * Iterates over all TX timestamp registers and releases any pending
++ * timestamp requests associated with the given TX queue. This is
++ * called when an XDP pool is being disabled to ensure no stale
++ * timestamp references remain.
++ */
++void igc_ptp_clear_xsk_tx_tstamp_queue(struct igc_adapter *adapter, u16 queue_id)
++{
++	unsigned long flags;
++	int i;
++
++	spin_lock_irqsave(&adapter->ptp_tx_lock, flags);
++
++	for (i = 0; i < IGC_MAX_TX_TSTAMP_REGS; i++) {
++		struct igc_tx_timestamp_request *tstamp = &adapter->tx_tstamp[i];
++
++		if (tstamp->buffer_type != IGC_TX_BUFFER_TYPE_XSK)
++			continue;
++		if (tstamp->xsk_queue_index != queue_id)
++			continue;
++		if (!tstamp->xsk_tx_buffer)
++			continue;
++
++		igc_ptp_free_tx_buffer(adapter, tstamp);
++	}
++
++	spin_unlock_irqrestore(&adapter->ptp_tx_lock, flags);
++}
++
+ static void igc_ptp_disable_tx_timestamp(struct igc_adapter *adapter)
+ {
+ 	struct igc_hw *hw = &adapter->hw;
+
+---
+base-commit: 05f7e89ab9731565d8a62e3b5d1ec206485eeb0b
+change-id: 20260212-igc-fix-xdp-tx-tstamp-pagefault-c4abde453862
+
+Best regards,
+-- 
+Zdenek Bouska
+
+Siemens, s.r.o.
+Foundational Technologies
+
