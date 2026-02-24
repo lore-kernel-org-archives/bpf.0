@@ -1,145 +1,144 @@
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AAA134CFCC
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 22:49:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771973354; cv=none; b=oyPKMatCKV4y/fMGapl6wrG8PG1Hd7HwotTFO/zFinKn2YhNbbJwVDM1sitcJ1Tw6gcd9U01dC3hkoiBZXp02tkloYEiXVpQyd+SvcpL/oerhMUJu+NTQ7MKELz6Xr0OxfWnuNt5oPvJzx7i4jkT/yuYUg2szoSr9xARhH9uodo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771973354; c=relaxed/simple;
-	bh=C3CcHTwIUdxmNWp2xQNbWACfFXPbfK/vbugzNWBytTY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eY2LJPeMjAz49M8OfePTeKtsSC3QyyS7ud5I6LRPgxxh2hfyWDaItWJVWQXx3NQblu0+xpLGsINXGt8jU3amgnu64We988McXsj+J53tkqaI2GuJuuHPKcAJUMl5OqwTJZj42xcvXEwq0PgODYKtM6NPEaihi1wejnZU35Dky8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X2VVjzd9; arc=none smtp.client-ip=91.218.175.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC9273446C2
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 22:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771973422; cv=pass; b=MLbuk/9aHtPVeuEBwuzIfvHH7L6L0D0wsu7g7uUhQlIBGj/rdTxqz0pjCA65Us5tpq2DQAVqd52RouzviX5LRtltTWNNWuEmp69q21fLPwPQlfU0tO8mEwICS/NbXd1YG9e4j9mqltjUgO6XWuUOQ2WFr9BCv9p1Q5vPk2o2zxw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771973422; c=relaxed/simple;
+	bh=fQZ52x1X/lJ8Fj1fedjOeJcb20NkVPIEXg2MWzdaV0c=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ozzmaKsvGXPAtxhmlyecCA4dCRk+6dMtqE5iE8GvEU/MaKo4yJ5R76r38dTWzEwvX9p7pANEzuxeaDKQGA3SzOYw1wNmPFJAOlvCY6AOqtQvaF8kUDNl+uA4MeMtTD5U5D+BCQCV7vvazqOyQwYm/AlgHy2wvICanXtvOf6/r7E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CDiCwy9O; arc=pass smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X2VVjzd9"
-Message-ID: <1fcd6f57-8c09-4f66-a5fb-30615c40bf41@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771973349;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=15vqhhJlB2nyjvlehQUoNAclVqI7YCRBU/x3BHmxoNk=;
-	b=X2VVjzd94dmmtgu5yKNxrPEnY82z2uWwUFGZEd3BoeIJ5zNJUTZ9iMko6F2DMeQnFkK6WF
-	CDGqQOcmQ3NwNA+V7A6ca3Bu+h6INpBTSKODGOvP+lTR7wix+N6/F4jlSYBEHaY2yHkFAr
-	vwq26OsCwUZzqhmbebXdEPSLtjdvywc=
-Date: Tue, 24 Feb 2026 14:49:02 -0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CDiCwy9O"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-48329eb96a7so35421595e9.3
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 14:50:20 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1771973419; cv=none;
+        d=google.com; s=arc-20240605;
+        b=e4GsU5kfxECT+77Ou9N6Sx1V9B9/S0xx0Q4KQ4ct1M26PYMHPuylCaBcRwERQRom2j
+         VV+COSD59xSQn8bJC+6Ae1pKg/UZ0jCb1VNcL0DOZi4ySSaCQkedOGcMe6YuS3y1vFQB
+         QuUu5RgZb1SIRbFFqNj+7zMy4whoPuPilUUvi0w/IiMlxAgtGfOEimcDJeOfUyjmqdAv
+         6ijnqlo6hX/nt8AxKXNUftfj71eGA39hm13dHBTvFoXPuwrVHHJdF409x3Mvac0d6nWM
+         EwdXBr8+IVc1pulBXmRyiMK3YbQzmMaigEJ/XHYElVGC3sS+HvujU6M2S3OZ3L+Mz0rd
+         bB/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=KrCq5+KBoM2cWeCyN3CRmB9j5dBRZx6i5CAD9No0B+8=;
+        fh=BcTv/aiNgrpgr84GI6wt2NnKnsyD6IvBm5QXVyLMv6A=;
+        b=iX5HNyJyKHKckArqXdquenZyifXGaZ4EIcQM/hVBEk8CB+kh2BBG8aWyAl+PrL75vr
+         EMnnQNOjwpn4jWmbHGTGrbFSRfdfDbrMRJjzKQCf1zj5glOzsZ3RSUPs8y7RTurcJPCZ
+         TlcAJ3PKOZavG73Q5oqO2cjmY3jd7igG+jya2wMm7E0H5rx+3B5oncs816q0wVI4UqIK
+         w5A4EI2Ow5pkuPJQJGFoVqCK7imNWN61lqN2YwLAXeJqV/HJqRkVnueiOV8rSq5wTeen
+         F776yI0WYlNu1Cal2vLK+kf/NtN8ivi6wGnjPiJGmdBg6VxUHAHFsHpDeQpbU+jpd7dR
+         nlKA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1771973419; x=1772578219; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KrCq5+KBoM2cWeCyN3CRmB9j5dBRZx6i5CAD9No0B+8=;
+        b=CDiCwy9OAhXilC//tDXqgjFM6YVI5X1j3jZ0akxWZgOSRThWhu2gh2wHomFP9odO1c
+         9ymhXzecmqSyWELFNxWDlvJfiQqSpU2oa9e9gh8gNlkirZZoVSJZIzUWJVDWVGYhYH5P
+         /OqQzlquhBevC9VVtF6EQHQZsa59ZqZ+mSfPlOfpTj6eKUALitaUHZ1UX5aor3l+zhJ7
+         yT2ESKyj2YXSXv8yrtK7mRC4phJu2d7jjhlcF5ZwuVt+pYC9Uio8UunuoDcJtWWyy6RZ
+         C9FaVNm+oT/+hydwSRsLOSZlu5kCxTR4xeCGc1/JwfJpJyxU1cvr1PZo+JNmi3WlNbuZ
+         z5nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771973419; x=1772578219;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=KrCq5+KBoM2cWeCyN3CRmB9j5dBRZx6i5CAD9No0B+8=;
+        b=m8jLBVvGZXcfZwsBIbJhcQAT4AAupuyXcy7TwyP7Rau9x/A0D7HSeYoHaYU4PBNY2s
+         wLBmVWs+Ubw5NR2XAwwhJx0MwOqdsneyMlXtVYN1qfzM/686dEb3gz1BAG7yaBl7S43Q
+         TNcbKBXq5JfmCIV7/SQyyK0yVFOssBU6+HHxw7a1er/NUllMwp/pRh00JSW9pokMtcTl
+         QsC6DK486QrNdjH9C/FjVwleN20nErqcEYYI+q62bMd0Frbd2gjwKT0vrkfGvz5yos9v
+         uwau7NY7H2Di3HjE4H/7/T9fLG0ZCjWRB6Ou4c1L78DLYLXRqhloVcxWt0C1Oc5ngs91
+         a7bg==
+X-Forwarded-Encrypted: i=1; AJvYcCXqC5ER929jugwm53w1xR+9bf20SaIqtCrnJfN/bDw/BUHoofkW/bvRKYPllFWsSZyE1v8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+iYk0HKyipFsz50dx9HaDvng5msxRjuk2dnMd0ZRJ9DXpsSsi
+	2n2+My/+2+C9pnr6jaB+gEGh9JJT1Mu6czGStD3tAUhfg27PVi3tDHwGHv1pmhBp0JCAIrzWUu+
+	kyZ6XEh4sB2M4/5tyU340yDg0XvL4R4Q=
+X-Gm-Gg: ATEYQzwWA+ejtc8cTMfKtkMdduAE/p0KrEsbux1qwvkIEZUU9roNOp8aYZdwO8fyuPS
+	DSGgfs5mcvpqaNog1aSXcZWYpOL7eaVbFqg76LBEQBOidTB189IP2op8zUdksVMDKptrsxRuuzp
+	qlawgqhcxfQf8/rTKRiwlBGPFA3P4JjWycJ9VjlQynGFQY1AJAZHvHMVRLgkZqZZ0DfVFILHhhH
+	qTuXYFBzDPVR10HSKBs7UxlkhXH0sz4VwZK0lsUlulc2JkLMd16HE6027KKtjZbmptSqtwGplJs
+	uzRh5KQhB05H9p9iyMt/xuUM/O9EXfkzRhes1EKURUquqrnOo75921/la3sUm7/7gfVZ15LKDwW
+	/+MHfE939dilrT1lqjUmpsBfPzjuT2uSI+MJ0
+X-Received: by 2002:a05:600c:3111:b0:483:612d:7a9a with SMTP id
+ 5b1f17b1804b1-483a95622f5mr239154765e9.0.1771973418610; Tue, 24 Feb 2026
+ 14:50:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Fix flakiness of
- task_local_storage/sys_enter_exit
-To: Amery Hung <ameryhung@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykyta Yatsenko <yatsenko@meta.com>,
- bpf@vger.kernel.org, kernel-team@meta.com
-References: <20260224211202.214325-1-ihor.solodrai@linux.dev>
- <CAMB2axNHh0ihZHS6yoU9hFXsoBnARgnHBMh6+sEZnLmL3KbpbQ@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <CAMB2axNHh0ihZHS6yoU9hFXsoBnARgnHBMh6+sEZnLmL3KbpbQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <20260224212535.1165151-1-puranjay@kernel.org> <CAADnVQKO01A+PjwYCu9+HB8PK0Kb4+HGM0ZseUzY3eDMvSPqDw@mail.gmail.com>
+ <179f2b813fd096a3975dd4a66b5da063fb593a64.camel@gmail.com>
+In-Reply-To: <179f2b813fd096a3975dd4a66b5da063fb593a64.camel@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Tue, 24 Feb 2026 14:50:07 -0800
+X-Gm-Features: AaiRm50LjBb16ALFEpO0fVEhhCxYkCLd6WyUW3AJdABFOqy4JAyOIRpiHFsvals
+Message-ID: <CAADnVQ+vjJf9xy6Oy5dCy_F2hvKt6TwZ1jA3Xv2PxMDpkPksXQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 0/7] Introduce KF_FORBID_SLEEP modifier for
+ acquire/release kfuncs
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Puranjay Mohan <puranjay@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@kernel.org>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>, Kernel Team <kernel-team@meta.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/24/26 2:04 PM, Amery Hung wrote:
-> On Tue, Feb 24, 2026 at 1:12 PM Ihor Solodrai <ihor.solodrai@linux.dev> wrote:
->>
->> The test_sys_enter_exit test was setting target_pid before attaching
->> the BPF programs, which causes syscalls made during the attach phase
->> to be counted. This is flaky because, apparently, there is no
->> guarantee that both on_enter and on_exit will trigger during the
->> attachment.
->>
->> Move the target_pid assignment to after task_local_storage__attach()
->> so that only explicit sys_gettid() calls are counted.
->>
->> Reported-by: BPF CI Bot (Claude Opus 4.6) <bot+bpf-ci@kernel.org>
->> Closes: https://github.com/kernel-patches/vmtest/issues/448
->> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->>
->> ---
->>
->> v1->v2: reset skel->bss->target_pid to 0 before asserts (Amery)
->> v1: https://lore.kernel.org/bpf/20260224015855.1481707-1-ihor.solodrai@linux.dev/
->>
->> ---
->>  .../bpf/prog_tests/task_local_storage.c          | 16 +++++++++++-----
->>  1 file changed, 11 insertions(+), 5 deletions(-)
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
->> index 7bee33797c71..1b26c12f255a 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
->> @@ -25,24 +25,30 @@
->>  static void test_sys_enter_exit(void)
->>  {
->>         struct task_local_storage *skel;
->> +       pid_t pid = sys_gettid();
->>         int err;
->>
->>         skel = task_local_storage__open_and_load();
->>         if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
->>                 return;
->>
->> -       skel->bss->target_pid = sys_gettid();
->> -
->>         err = task_local_storage__attach(skel);
->>         if (!ASSERT_OK(err, "skel_attach"))
->>                 goto out;
->>
->> +       /* Set target_pid after attach so that syscalls made during
->> +        * attach are not counted.
->> +        */
->> +       skel->bss->target_pid = pid;
->> +
->>         sys_gettid();
->>         sys_gettid();
->>
->> -       /* 3x syscalls: 1x attach and 2x gettid */
->> -       ASSERT_EQ(skel->bss->enter_cnt, 3, "enter_cnt");
->> -       ASSERT_EQ(skel->bss->exit_cnt, 3, "exit_cnt");
->> +       skel->bss->target_pid = 0;
->> +
->> +       /* 2x gettid syscalls */
->> +       ASSERT_EQ(skel->bss->enter_cnt, 2, "enter_cnt");
->> +       ASSERT_EQ(skel->bss->exit_cnt, 2, "exit_cnt");
-> 
-> Does tools/testing/selftests/bpf/prog_tests/cgrp_local_storage.c also
-> have the same flakiness issue and should also be updated in the same
-> way?
+On Tue, Feb 24, 2026 at 1:53=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
+>
+> On Tue, 2026-02-24 at 13:46 -0800, Alexei Starovoitov wrote:
+> > On Tue, Feb 24, 2026 at 1:25=E2=80=AFPM Puranjay Mohan <puranjay@kernel=
+.org> wrote:
+> > >
+> > >
+> > > This series adds KF_FORBID_SLEEP, a new kfunc flag that can be combin=
+ed
+> > > with KF_ACQUIRE. When a kfunc annotated with KF_ACQUIRE | KF_FORBID_S=
+LEEP
+> >
+> > I don't want to introduce this new flag now only to be
+> > replaced with KF_ACQUIRE_LOCK.
+> >
+> > the follow up we discussed in the other email is different.
+> >
+> > pw-bot: cr
+>
+> Then the refactoring should be bundled together with this series,
+> otherwise it is very confusing to have a flag named KF_ACQUIRE_LOCK
+> and bpf_verifier_state->forbid_sleep_count, bpf_reference_state->forbid_s=
+leep.
 
-I haven't seen similar failures on CI, but that may just mean we were
-lucky.
+The name shouldn't be forbid_sleep_count, obviously.
+I argue that the counter is also incorrect.
+As soon as we have two iterators that take locks in acquire.
 
-Do you know of other tests that may have the same issue?
+if (..)
+  iter_next(it1);
+else
+  iter_next(it2);
 
-I checked these, but only task_local_storage and cgrp_local_storage
-assert counts:
+will pass the counter compare in refsafe().
+Both states will have forbid_sleep_count =3D=3D 1, but they took
+different locks.
+So we need to compare refs in for (i =3D 0; i < old->acquired_refs)
+anyway, but then why have a counter?
 
-$ grep -r 'skel->bss->target_pid = .*gettid' tools/testing/selftests/bpf/
-tools/testing/selftests/bpf/prog_tests/cgroup_xattr.c:  skel->bss->target_pid = sys_gettid();
-tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c: skel->bss->target_pid = sys_gettid();
-tools/testing/selftests/bpf/prog_tests/rcu_read_lock.c: skel->bss->target_pid = sys_gettid();
-tools/testing/selftests/bpf/prog_tests/task_local_storage.c:    skel->bss->target_pid = sys_gettid();
-tools/testing/selftests/bpf/prog_tests/cgrp_local_storage.c:    skel->bss->target_pid = sys_gettid();
-tools/testing/selftests/bpf/prog_tests/cgrp_local_storage.c:    skel->bss->target_pid = sys_gettid();
-
-
-> 
->>         ASSERT_EQ(skel->bss->mismatch_cnt, 0, "mismatch_cnt");
->>  out:
->>         task_local_storage__destroy(skel);
->> --
->> 2.53.0
->>
-
+The bigger refactoring is to generalize all active_* counters.
+That part can wait.
