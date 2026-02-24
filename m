@@ -1,123 +1,81 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A959B33BBB1
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 22:06:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A75233BBD9;
+	Tue, 24 Feb 2026 22:11:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771970809; cv=none; b=EJp03hLErnFLwUhQUtHZ/u3wycNNb/189GZCcrapQC1UtT8YF0wolrP/7QP4ajTASrQ+/Tdi7MqwqWpgroN1q4U4TkrVE4hUIlXhltO38xSgytdJHEFhCk1PXZna6hFxi+Z1psncXhvlQoWPDKHMtPWk8fPjvtZfBiRyfts/848=
+	t=1771971083; cv=none; b=AgbHtFAb0jEynW7Df/RirQUURFpk274HOQqnyxqeWr9v5BlE+RawP3N2b3HKWB5CM27HBSv/YCd/3ai8SfLNEpi2rKXA9M4p/DRBXbQfTYQcNTSjvRNgBtLRSxj7E4s+3cQAisBEvCo0UOnZ83MHVckVDZAXtguLeuq/LnrKwpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771970809; c=relaxed/simple;
-	bh=wqbWE0rwSUZBslS+uzFuRAKeQEu2q8xkj/2gGLpqr8U=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=KAzNI5ZkLZTGhjPD3Hr2mn21SVaMt36OiBuKfdmPDNpsinShyHoawwYcxMGUdF6nx56D5YU3v+ZaLfVtGcbisyLt1zFcncBgA69I2qS3/nO+gz/V7oxktYQ8YSBUnJ+wpHc6DvW11qOvOt79VyILQKEAmOrdS3CTCXY1sHUco1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqVwN9Of; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1771971083; c=relaxed/simple;
+	bh=6ZqYqq4IRN85KW12SiEIDbmT9hRIl6C7svor3k6zd5k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eYQeA1EbdYQZ50J4+Q4/LwQDy0pps20lU/wt3mKUKn96t51pFgvuY/idm0x/VYqVgwQiL03YBwJ0wmh4CGOvGrI/Cx8gU122CDPfSm3oBCLvRlA/8gMbPJdVug0lKKtPIpHLfrS3+epmzeHMNaUt9IEOUHZ3hGYd8qe4KlHzp3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NxM7NCjh; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqVwN9Of"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9895C116D0;
-	Tue, 24 Feb 2026 22:06:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NxM7NCjh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7D50C19425;
+	Tue, 24 Feb 2026 22:11:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1771970809;
-	bh=wqbWE0rwSUZBslS+uzFuRAKeQEu2q8xkj/2gGLpqr8U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=nqVwN9OfVHSUvDecQLSkK7ZZCWfJgeadRQ1ecC+vdOrfyq7tZWUMS2O99MF2F+67P
-	 PuqXKzwzfTDoRuUDhKKcC724UW5lHIfquoIIyVw//pKUUtSfYoj4YQ0iazt0cIB50k
-	 oxEghx3H+qtrolsQ2Kzq1pN+ArpYR7i1ABBi7Az6uKcUi/cjOE71QV9CvbHPLWKqPC
-	 YF4n9JbtEAVm72Rqp8CXJxKbG8EWlgIzqQI7VMIpBdAXuSZVTVmcVVTGr33oo0rIMf
-	 NBBFBkjC0Kf0vujbCrJX1cMkLr50aFotjqdEdaNTq8YlYDfUIxEttoi7MV+Z7pV4n8
-	 9QU6NrsJe0AYw==
-Content-Type: multipart/mixed; boundary="===============8186444009712332254=="
+	s=k20201202; t=1771971083;
+	bh=6ZqYqq4IRN85KW12SiEIDbmT9hRIl6C7svor3k6zd5k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NxM7NCjhcWEDiqpj9bDwCgF7TJxK+cKbBrZfC9Myv2ik90QROYMa47BYsrUudAtH2
+	 hUBKPBdJwYD47iETy9y3oJts3e0+LXquOb4zOT86xxalFU/jxXhJCGoE6sp6mXyAgP
+	 5i4v3MqQzN6zOH2BzHOMpjoCcHEwfCRfFya25wgbuulo8P6UJGIuVy6XURO1ur1i7H
+	 d2g4HU6isRIIlsNG+MyWxWiTkzqJles1AJp6J79/v+6V9CEnNaSBXJOXaBMMOD/BnU
+	 8eX5CBGXFckqZgCAfK9x8KmKvOAD+CepXe3DTMoQ0gJkPHsW4ihoI3bIsV+6x4T1so
+	 XHd1D4/RYriPQ==
+Date: Tue, 24 Feb 2026 22:11:18 +0000
+From: Will Deacon <will@kernel.org>
+To: Fuad Tabba <tabba@google.com>
+Cc: bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: bpf: Fix UBSAN misaligned access in BPF JIT
+Message-ID: <aZ4iBlzQ7kyxByg2@willie-the-truck>
+References: <20260224092915.1925488-1-tabba@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <80375dd0a944f4c089b9fe20872b85be6060d91fede8ca36ee314d3b317e64b5@mail.kernel.org>
-In-Reply-To: <20260224212535.1165151-5-puranjay@kernel.org>
-References: <20260224212535.1165151-5-puranjay@kernel.org>
-Subject: Re: [PATCH bpf-next v4 4/7] bpf: Add KF_FORBID_SLEEP modifier for KF_ACQUIRE kfuncs
-From: bot+bpf-ci@kernel.org
-To: puranjay@kernel.org,bpf@vger.kernel.org
-Cc: puranjay@kernel.org,puranjay12@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,memxor@gmail.com,mykyta.yatsenko5@gmail.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 24 Feb 2026 22:06:47 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260224092915.1925488-1-tabba@google.com>
 
---===============8186444009712332254==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Tue, Feb 24, 2026 at 09:29:15AM +0000, Fuad Tabba wrote:
+> struct bpf_plt contains a u64 'target' field. The BPF JIT allocator
+> was using an alignment of 4 bytes (sizeof(u32)), which could lead
+> to the 'target' field being misaligned in the JIT buffer.
+> 
+> Increase the alignment requirement to 8 bytes (sizeof(u64)) in
+> bpf_jit_binary_pack_alloc() to guarantee proper alignment for
+> struct bpf_plt.
+> 
+> Fixes: b2ad54e1533e9 ("bpf, arm64: Implement bpf_arch_text_poke() for arm64")
+> Signed-off-by: Fuad Tabba <tabba@google.com>
+> ---
+>  arch/arm64/net/bpf_jit_comp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+> index 356d33c7a4ae..adf84962d579 100644
+> --- a/arch/arm64/net/bpf_jit_comp.c
+> +++ b/arch/arm64/net/bpf_jit_comp.c
+> @@ -2119,7 +2119,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>  	extable_offset = round_up(prog_size + PLT_TARGET_SIZE, extable_align);
+>  	image_size = extable_offset + extable_size;
+>  	ro_header = bpf_jit_binary_pack_alloc(image_size, &ro_image_ptr,
+> -					      sizeof(u32), &header, &image_ptr,
+> +					      sizeof(u64), &header, &image_ptr,
+>  					      jit_fill_hole);
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+Did you see a functional issue with this or are you just trying to squash
+a UBSAN splat? I can't see an issue with the code and it seems a bit
+over-the-top to over-align the whole JIT buffer just because of structure
+alignment rules that don't really make sense for the actual PLT.
 
-[ ... ]
+Does marking 'struct bpf_plt' as __packed help?
 
-> @@ -10852,9 +10860,7 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  			return -EINVAL;
->  		}
->
-> -		if (env->subprog_info[subprog].might_sleep &&
-> -		    (env->cur_state->active_rcu_locks || env->cur_state->active_preempt_locks ||
-> -		     env->cur_state->active_irq_id || !in_sleepable(env))) {
-> +		if (env->subprog_info[subprog].might_sleep && !in_sleepable_context(env)) {
->  			verbose(env, "global functions that may sleep are not allowed in non-sleepable context,\n"
->  				     "i.e., in a RCU/IRQ/preempt-disabled section, or in\n"
->  				     "a non-sleepable BPF program context\n");
-
-The condition here now uses in_sleepable_context(), which also
-checks forbid_sleep_count. If the rejection is due to
-forbid_sleep_count being non-zero, the error message will tell the
-user it is a "RCU/IRQ/preempt-disabled section" rather than a
-nosleep region.
-
-Both check_helper_call() and check_kfunc_call() use
-non_sleepable_context_description() for this purpose:
-
-check_helper_call():
-    verbose(env, "sleepable helper %s#%d in %s\n",
-            func_id_name(func_id), func_id,
-            non_sleepable_context_description(env));
-
-check_kfunc_call():
-    verbose(env, "kernel func %s is sleepable within %s\n",
-            func_name, non_sleepable_context_description(env));
-
-Should check_func_call() also use non_sleepable_context_description()
-to keep the error messages consistent?
-
-[ ... ]
-
-> @@ -11578,6 +11584,7 @@ static inline bool in_sleepable_context(struct bpf_verifier_env *env)
->  	       !env->cur_state->active_preempt_locks &&
->  	       !env->cur_state->active_locks &&
->  	       !env->cur_state->active_irq_id &&
-> +	       !env->cur_state->forbid_sleep_count &&
->  	       in_sleepable(env);
->  }
-
-[ ... ]
-
-> @@ -11591,6 +11598,8 @@ static const char *non_sleepable_context_description(struct bpf_verifier_env *env)
->  		return "IRQ-disabled region";
->  	if (env->cur_state->active_locks)
->  		return "lock region";
-> +	if (env->cur_state->forbid_sleep_count)
-> +		return "nosleep region";
->  	return "non-sleepable context";
->  }
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22371254221
-
-AI-authorship-score: low
-AI-authorship-explanation: The commit shows deep understanding of BPF verifier internals, iterates on maintainer feedback across multiple versions, and follows established kernel patterns consistently with the author's history as a BPF maintainer.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: The error message in check_func_call() does not use non_sleepable_context_description() and will misleadingly report 'RCU/IRQ/preempt-disabled section' when the actual cause is a nosleep region from KF_FORBID_SLEEP, unlike the consistent pattern in check_helper_call() and check_kfunc_call().
-
---===============8186444009712332254==--
+Will
