@@ -1,143 +1,115 @@
-Received: from out-172.mta1.migadu.com (out-172.mta1.migadu.com [95.215.58.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD6B3A1CFF
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 16:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93793A8FE1;
+	Tue, 24 Feb 2026 16:35:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771950890; cv=none; b=S0DQOVXsoGry+bW5iTtF8Vk7HKAmElv3zsILoztDBZI2fdRzrBkLnl9c7fQFMudgwgFxh2rykfgnPDeT0Ihzj3A1EoZbPqQbvu64P514iB0FH7l1dYmqodOrOzeJMUzEmjWjA2v8Z0XQL7RUCBK2NWY7KujqC7z0fzn9vmjityc=
+	t=1771950957; cv=none; b=P5ZKS4yqzf6jUYSM6IuGZZr5YmJHEJVvGIuobE1A4ojTld6l8D8Ljx73niyqx9e/4AmCJ0XmglXf8dh5V5QkPBr9wm809PKsZnYHPH07GlyfjZM5ALZBQpKvkaAlMBZGwDHfc+QpsbtwDu102VIn4CM9u6mWUM6wZZldrZZGdJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771950890; c=relaxed/simple;
-	bh=PFSk6JdYVDiqaPGw7FvCINBOaCx/Nla6aJ43Ex/LVf4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=moD/KmWTSgZu4TKwVcV3jbV1HVeHGby5AQYPQrBJwN2l6TW6YM2cr67e3Mo9QS/sq9EN7dwpnbd7mIujRDJSQ7IOJzK16MQyJu/J4xpCq2D2S1dV9wklmzhvLkC5Lkw0QM4lMh+rL34TJkM0et4v4xxv+aUMRelUShdiZ3iooh0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EORBKMWG; arc=none smtp.client-ip=95.215.58.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771950957; c=relaxed/simple;
+	bh=kSBTLlMV6zLNU1mablt3JM4TXckztaxwmFihI53ir5c=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=LqIMNtMryN+6Z65gMIWhBI7O6ZQEhMyC+iqxLewJ9+tXAdaXZIOyuYvCFl+NizJR5i8UYfROC8FaRiVsNZ3m1r6Ldt2I6gBWqsOQhnQUNAoesgPzxDMLhivfC+Tmt4vBP3AZLPNbW9TYCpX9alIY+LLylnKwJdHmQ/ZsZwSJCjI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i4rLs0cs; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EORBKMWG"
-Message-ID: <801bd6f8-f1c3-4655-8cad-7f211979f330@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771950886;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=swrYw/40VhGh3BYVfDHQ3Zwen0XOVGXh01U8xdFTtnw=;
-	b=EORBKMWGnWI4HAU2KTlFlVoqyb5dWw4oKl3+dCRAeaek5niwCGNvDftEZddOMpT7OQqoVq
-	jGWz8SKVF3hhl2kgzGIylAf/iKcSbcZwcdQC2ZL0hpOfbiEuaivB5jqc3GsN0lMlcPW8aA
-	7+F+QRjHmmA9gdr01uWHJ9x7NOztxzU=
-Date: Tue, 24 Feb 2026 08:34:30 -0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i4rLs0cs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78998C116D0;
+	Tue, 24 Feb 2026 16:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1771950957;
+	bh=kSBTLlMV6zLNU1mablt3JM4TXckztaxwmFihI53ir5c=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=i4rLs0csiXnuR3pQFC5fXouZ1CReKzLw6IUjP808CNpyIwZrwZXI5OqP88MimOpEd
+	 Q9a2zmzCsapZ81C9RdbcHl7iyDs+brduReKHn8O66+VoRTH124+ssuxz9x2bKFPHjg
+	 c+HcMbS9wnRS3FvW0QdPCwi6M7vXJw9BPjDc25RukpZmZZdBsdON2JeEP8IcGmSBl0
+	 MKyYGoP3m+EdHpEppMi8aB/3aWdhZnahQjYGTOjkRvyGnE62HpjZEg39QijS3K/Jm+
+	 V0sSHKSeCt9z+ovrJaB7MibHy0CIHOrAOeKmaS0Wq3K45QtHkFTr12tlQ+jmYMXj0f
+	 aqDeNjEVH7ZsQ==
+Content-Type: multipart/mixed; boundary="===============1231585818442456678=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1] selftests/bpf: Fix flakiness of
- task_local_storage/sys_enter_exit
-To: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Eduard Zingerman
- <eddyz87@gmail.com>, Amery Hung <ameryhung@gmail.com>
-Cc: bpf@vger.kernel.org, kernel-team@meta.com
-References: <20260224015855.1481707-1-ihor.solodrai@linux.dev>
- <87v7fmb1wy.fsf@gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <87v7fmb1wy.fsf@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <eee0df40aa8e7d4bba027682244ea59e86105b677510525f2ddd8b87b88f194e@mail.kernel.org>
+In-Reply-To: <20260224154024.12504-4-leon.hwang@linux.dev>
+References: <20260224154024.12504-4-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next 3/8] bpf: Disallow !call_get_func_ip progs tail-calling call_get_func_ip progs
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,leon.hwang@linux.dev,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,pulehui@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 24 Feb 2026 16:35:55 +0000 (UTC)
+
+--===============1231585818442456678==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2/24/26 7:23 AM, Mykyta Yatsenko wrote:
-> Ihor Solodrai <ihor.solodrai@linux.dev> writes:
-> 
->> The test_sys_enter_exit test was setting target_pid before attaching
->> the BPF programs, which causes syscalls made during the attach phase
->> to be counted. This is flaky because, apparently, there is no
->> guarantee that both on_enter and on_exit will trigger during the
->> attachment.
->>
->> Move the target_pid assignment to after task_local_storage__attach()
->> so that only explicit sys_gettid() calls are counted.
->>
->> Reported-by: BPF CI Bot (Claude Opus 4.6) <bot+bpf-ci@kernel.org>
->> Closes: https://github.com/kernel-patches/vmtest/issues/448
->> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
->>
->> ---
->>
->> I've been experimenting with running AI on BPF CI to investigate test
->> failures. This is an example of a thing it may come up with.
->>
->> I don't want to spam the list with these, so for starters I'll be
->> relaying only patches that I evaluated and/or tested.
->>
->> The AI generated reports will be posted with "[bpf-ci-bot]" prefix
->> here: https://github.com/kernel-patches/vmtest/issues
->>
->> The goal of this particular application of AI is to make BPF CI more
->> stable, less noisy/flaky, and potentially find and fix more kernel
->> bugs. We'll see how it goes.
->>
->> ---
->>  .../selftests/bpf/prog_tests/task_local_storage.c  | 14 +++++++++-----
->>  1 file changed, 9 insertions(+), 5 deletions(-)
->>
->> diff --git a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
->> index 7bee33797c71..2820a604aaa6 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/task_local_storage.c
->> @@ -25,24 +25,28 @@
->>  static void test_sys_enter_exit(void)
->>  {
->>  	struct task_local_storage *skel;
->> +	pid_t pid = sys_gettid();
->>  	int err;
->>  
->>  	skel = task_local_storage__open_and_load();
->>  	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
->>  		return;
->>  
->> -	skel->bss->target_pid = sys_gettid();
->> -
->>  	err = task_local_storage__attach(skel);
->>  	if (!ASSERT_OK(err, "skel_attach"))
->>  		goto out;
->>  
->> +	/* Set target_pid after attach so that syscalls made during
->> +	 * attach are not counted.
->> +	 */
->> +	skel->bss->target_pid = pid;
->> +
->>  	sys_gettid();
->>  	sys_gettid();
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 
-> Maybe a simpler and less fragile fix would be to add syscall number
-> filter in the BPF program, so that we don't count those unexpected
-> syscalls.
+[ ... ]
 
-Why do you think this is fragile?  We are not counting the syscalls
-made during attachment at all this way.
+> @@ -2418,6 +2419,9 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+>  		      map->owner->sleepable == fp->sleepable;
+>  		if (ret && (!map->owner->kprobe_write_ctx && aux->kprobe_write_ctx))
+>  			ret = false;
+> +		if (ret && (!map->owner->call_get_func_ip && fp->call_get_func_ip &&
+> +			    prog_type == BPF_PROG_TYPE_TRACING))
+> +			ret = false;
 
-You may be right, just trying to understand.
+This check catches the case where owner->call_get_func_ip is 0 and
+the new program has call_get_func_ip set. However, does the reverse
+ordering also need to be handled?
 
->>  
->> -	/* 3x syscalls: 1x attach and 2x gettid */
+Consider:
 
-The way the test was written, those syscalls during attachment were
-expected. But the flakiness wasn't obvious.
+  1. Program H (call_get_func_ip=1) is added to the prog_array first
+     and becomes the owner with owner->call_get_func_ip=1.
 
->> -	ASSERT_EQ(skel->bss->enter_cnt, 3, "enter_cnt");
->> -	ASSERT_EQ(skel->bss->exit_cnt, 3, "exit_cnt");
->> +	/* 2x gettid syscalls */
->> +	ASSERT_EQ(skel->bss->enter_cnt, 2, "enter_cnt");
->> +	ASSERT_EQ(skel->bss->exit_cnt, 2, "exit_cnt");
->>  	ASSERT_EQ(skel->bss->mismatch_cnt, 0, "mismatch_cnt");
->>  out:
->>  	task_local_storage__destroy(skel);
->> -- 
->> 2.53.0
+  2. Program M (call_get_func_ip=0) is loaded and references this
+     prog_array for tail calls. bpf_check_tail_call() calls
+     __bpf_prog_map_compatible(PA, M), and the check evaluates:
 
+       (!owner->call_get_func_ip && fp->call_get_func_ip)
+       (!1 && 0) = false
+
+     so M passes the compatibility check.
+
+  3. M is attached to a trampoline where no program needs func_ip,
+     so ip_arg is false and func_ip is not pushed on the stack.
+
+  4. M tail-calls H. H calls bpf_get_func_ip(), which reads from
+     the expected stack offset, but that slot was never written by
+     the trampoline, so it returns stale stack data.
+
+Would it be safer to reject any mismatch on call_get_func_ip for
+tracing programs, regardless of which program was added first?
+Something like:
+
+  if (ret && (map->owner->call_get_func_ip != fp->call_get_func_ip) &&
+      prog_type == BPF_PROG_TYPE_TRACING)
+          ret = false;
+
+>  		if (ret &&
+>  		    map->map_type == BPF_MAP_TYPE_PROG_ARRAY &&
+>  		    map->owner->expected_attach_type != fp->expected_attach_type)
+>  			ret = false;
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22358832658
+
+AI-authorship-score: medium
+AI-authorship-explanation: Selftests in the series carry Assisted-by Codex tags, and the kernel code change is formulaic pattern replication across all commits, consistent with AI-assisted development.
+issues-found: 1
+issue-severity-score: medium
+issue-severity-explanation: One-directional compatibility check allows a non-call_get_func_ip tail-caller to bypass the check when the call_get_func_ip program is added to the prog_array first, potentially causing bpf_get_func_ip to return stale stack data.
+
+--===============1231585818442456678==--
