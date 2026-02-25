@@ -1,196 +1,141 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1307D38E104
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 09:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68475299950;
+	Wed, 25 Feb 2026 09:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772011728; cv=none; b=h8t64e1Z4mI7ArtSjKLhAy11lT3KyEEG8uvy7kkE4lL/akbcqONwY0VEKbzE8IUrqHNnzfPJGZZFpKPj9rpz8ULkgoGtWyBWdCe4KIcmRUGJKzro1ZWGGeiW7Pp0l1LDkPed2A55VphwUR1kHTUwW7Dm6Q6pu9iqFJ2VL+jHhMY=
+	t=1772012825; cv=none; b=ZDwMrF1xXAw8Ithj/2uv8oAXjfV6TZw0w2sSfRfuCt/SfqX9pWhhi5rRBte+XxjJZ9V0q9nFs7Wo+cr1/0HW7xgtC2lzTROmqn/Ss7UKv24rWGuwSdvZFf7XxjKoRydO6uSaoZrPv227bEqFx2HJ/GdceMhncPAHByW1J5YjEeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772011728; c=relaxed/simple;
-	bh=I8o4y5mNT6NBUdK1Hz51XMHixYT0zeMuuzrQvMT/nDI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V8aOj4hK6tHocvLIilgzKRjrGqYyjzQ+HCacmnDaLfDnhD67CEyhMi0YHqfmtE+6VKE9KL91Y2w2clF7rUrYNA/CrS8e3PwMLk183ZffTHCNcSHN/fkBGQ/GpefNnz1zqqmqUxmbWZzEnA25WhdFW4k9Lt4j8ZN9P6Rovz8Wj0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PPPhBcFd; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PPPhBcFd"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-358eac0571aso1029887a91.2
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 01:28:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772011726; x=1772616526; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UV/LTk2gfEB8ll8anEm9MRkQrafSl1LusFUtX+b2yMA=;
-        b=PPPhBcFdonPI+yS9Aklf/86qn5UGvTzo7dQBIxaJq3i8l7bsC98kmDkYW3dsUzVJB+
-         hT8jCjGEzlnjd0Sfka6RFH+DZZDmvF4CJbqM9PrMMHD3QEWi/6RoqWIMz0hZEaUtTjM+
-         N4BwjnVUK19bmi/F5/BRILCdszkgbyNwQP4XZMiDctIfxfGY3+0Pj9+krQU1W9lrKbRJ
-         tO4skn+CBxbt5ojt4LViEQDTBMfrAm8E7ZCNZZoD8r6EAjx9QKOW43eDyhmegI90dHGI
-         EenWzgXm1la6qhqa+6LznLEv2XTybllxlW/JgGztmdi9/zT0FfWVWQ3yHlNd5IXxPjWi
-         UJ0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772011726; x=1772616526;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UV/LTk2gfEB8ll8anEm9MRkQrafSl1LusFUtX+b2yMA=;
-        b=hn/bOv0JHnlKKCm/cBtOJEApmLpma2uNImHfC/DMgy7rdvw67ysovHu2j8VxNtXnzR
-         Fdsy1E+xlIQ9CN2VDRQll53uF7T4SyW5Hk2ms+1hNHbYqZcRhHNTxrG0PW/3mrpWo7PL
-         ynz8ojGEx4BDdyTVdspN/WBVQ/ef8zXWp/st+1L8CH5nZy5IhGjmbfCgWgWKf9NTO18H
-         AGLJL50a6zdAwqJ95+b0cBvQxRbYoBxOuWKnXbexisLzompYXHbUstJOIAzXJtilPzPy
-         8G9WRtlz4gP4DwFg3kxPrTswObgxJUHh555SXevIyknrbwZjYS4nVnhCxpFer8OxaBAC
-         V+3Q==
-X-Gm-Message-State: AOJu0Yzvpy/sWzMKcru4fNV/A+wO4tr+Ii+9jv0f/g+pAUlOoZHL4ROP
-	uAwvCDj6KynYjOPY8/BwD8bOS2yI7EblE/qb07k6qkrkYLiP3c4S+I43
-X-Gm-Gg: ATEYQzxAQvmJzHFzSXajQFclFhDZLjIyOs/YAX+GnTWFUCjNsSyQxvs/Qs48CFA8Jg1
-	b2A4chArkRiP5aMR3MxtZOUvWZTcas0d2AkqYdfVivJiTYMIGlWFgHolQHOvAD1kL0Vi4oHEzl8
-	ny3HLujmgY1e6issfCOioI+Z6ciePRP+GB2rbDRD4rOSy5NAlyi11Vtgeo2ntNyDfEzZWePYc82
-	WT/IAyd8HKFIcghIvByB/EyTt5Mpc3zU7P+/eEWzXVjd5LR4ZntwZWoMfnDAYgz2GR7FYoDIdoJ
-	y2ToAmeGOUi2V+MjI3FaeQMgnA2q8XQOxaxIBJuiZ+G++2au7fwnS19OlL3qBIJ79PGHpFGvUz6
-	kwF9ee/Fw61GZ4zP8AEU2+32ATauK1BqwH7isOaqB3VC1a+gO7mfxJlz7YOFCNHYj+yMQG2xSKd
-	kpz2Rb6PTpSavdSIuZGaPyjGABfoezQiVvfXJdkVStIO7qBAQfucMCMQaTMDrqKew2
-X-Received: by 2002:a17:90b:2681:b0:356:72f3:acaf with SMTP id 98e67ed59e1d1-3590f2552b5mr1428352a91.32.1772011726439;
-        Wed, 25 Feb 2026 01:28:46 -0800 (PST)
-Received: from localhost.localdomain ([113.218.252.140])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-35912f5f29fsm837901a91.1.2026.02.25.01.28.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 25 Feb 2026 01:28:46 -0800 (PST)
-From: Chengkaitao <pilgrimtao@gmail.com>
-To: martin.lau@linux.dev,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	chengkaitao@kylinos.cn,
-	leon.hwang@linux.dev,
-	linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 6/6] selftests/bpf: Add test cases for bpf_list_is_first/is_last/empty
-Date: Wed, 25 Feb 2026 17:26:51 +0800
-Message-ID: <20260225092651.94689-7-pilgrimtao@gmail.com>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20260225092651.94689-1-pilgrimtao@gmail.com>
-References: <20260225092651.94689-1-pilgrimtao@gmail.com>
+	s=arc-20240116; t=1772012825; c=relaxed/simple;
+	bh=1LvHH9zLzk7uD7y9mkByzT8NzxVleRt8XMwesVdLwPI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m+BJWjhbp3sPxUpzdZcglzQsXbhjdR2jtkoRJ/n/PsRVYlKrII1UzLOm9TJD0nGktV1QQItJ05RnLHJdcgYDCNCFRf+9Sv5NO5W00BovFtq5VPl61RQiDDpO7XGV3f/SjuoNW3MnqxQ0M7Pl2IZr7g0gqoKH3tcaUB76ReDFuRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
+Received: from mail.maildlp.com (unknown [172.19.163.177])
+	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fLV8Q1QFDzKHMfD;
+	Wed, 25 Feb 2026 17:45:58 +0800 (CST)
+Received: from mail02.huawei.com (unknown [10.116.40.75])
+	by mail.maildlp.com (Postfix) with ESMTP id BF5DC4058C;
+	Wed, 25 Feb 2026 17:46:53 +0800 (CST)
+Received: from [10.67.111.192] (unknown [10.67.111.192])
+	by APP2 (Coremail) with SMTP id Syh0CgAXfn0MxZ5pptNWIg--.15064S2;
+	Wed, 25 Feb 2026 17:46:53 +0800 (CST)
+Message-ID: <2d0c6893-d4a5-42bc-a480-55bc669da130@huaweicloud.com>
+Date: Wed, 25 Feb 2026 17:46:52 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] arm64: bpf: Fix UBSAN misaligned access in BPF JIT
+Content-Language: en-US
+To: Fuad Tabba <tabba@google.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Puranjay Mohan <puranjay@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ bpf@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Martin KaFai Lau <martin.lau@linux.dev>,
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>,
+ Jean-Philippe Brucker <jpb@kernel.org>
+References: <20260224093128.1926610-1-tabba@google.com>
+ <c402e95a-26d3-47eb-8249-52ece97989d3@huaweicloud.com>
+ <CA+EHjTyXWqnr4Cu_cZyxDCVNCxto9pJN0WS18S_ri824oQhwug@mail.gmail.com>
+From: Xu Kuohai <xukuohai@huaweicloud.com>
+In-Reply-To: <CA+EHjTyXWqnr4Cu_cZyxDCVNCxto9pJN0WS18S_ri824oQhwug@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:Syh0CgAXfn0MxZ5pptNWIg--.15064S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxuryrWry5Jw47tr4rAw4ruFg_yoW5Xw47pa
+	4kK3ZIkFWqq3yjk3W2qa1rAr4agw4kWr43GrWUK34Fyrn0gr97WFy3K3ya9FZ8Crs8Gw45
+	ZFWjg3y7uF18ArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+	xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+	0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
+	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
+	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWr
+	XwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x
+	0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_
+	Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0
+	s2-5UUUUU==
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
 
-From: Kaitao Cheng <chengkaitao@kylinos.cn>
+On 2/25/2026 5:08 PM, Fuad Tabba wrote:
+> Hi Xu,
+> 
+> On Wed, 25 Feb 2026 at 01:43, Xu Kuohai <xukuohai@huaweicloud.com> wrote:
+>>
+>> On 2/24/2026 5:31 PM, Fuad Tabba wrote:
+>>> struct bpf_plt contains a u64 'target' field. The BPF JIT allocator
+>>> was using an alignment of 4 bytes (sizeof(u32)), which could lead
+>>> to the 'target' field being misaligned in the JIT buffer.
+>>>
+>>> Increase the alignment requirement to 8 bytes (sizeof(u64)) in
+>>> bpf_jit_binary_pack_alloc() to guarantee proper alignment for
+>>> struct bpf_plt.
+>>>
+>>> Fixes: b2ad54e1533e9 ("bpf, arm64: Implement bpf_arch_text_poke() for arm64")
+>>> Signed-off-by: Fuad Tabba <tabba@google.com>
+>>> ---
+>>>    arch/arm64/net/bpf_jit_comp.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>>> index 356d33c7a4ae..adf84962d579 100644
+>>> --- a/arch/arm64/net/bpf_jit_comp.c
+>>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>>> @@ -2119,7 +2119,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
+>>>        extable_offset = round_up(prog_size + PLT_TARGET_SIZE, extable_align);
+>>>        image_size = extable_offset + extable_size;
+>>>        ro_header = bpf_jit_binary_pack_alloc(image_size, &ro_image_ptr,
+>>> -                                           sizeof(u32), &header, &image_ptr,
+>>> +                                           sizeof(u64), &header, &image_ptr,
+>>>                                              jit_fill_hole);
+>>>        if (!ro_header) {
+>>>                prog = orig_prog;
+>>
+>> Good catch. build_plt pads NOP instructions to ensure a 64-bit relative offset for
+>> plt target, but it misses the alignment check for image base itself.
+>>
+>> Acked-by: Xu Kuohai <xukuohai@huaweicloud.com>
+>>
+>> nit: Add check for base alignment in build_plt, or a comment to clarify?
+> 
+> Thanks for the having a look and for the Ack.
+> 
+> You're right that build_plt() assumes 64-bit alignment when
+> calculating the NOP padding. However, Will pointed out, over-aligning
+> the entire JIT buffer just to satisfy the C standard is somewhat
+> heavy-handed. I didn't actually run into a functional bug. The issue
+> is that UBSAN complains because we violate the standard's alignment
+> rules.
+> I'll dropping the allocator change in favor of marking struct bpf_plt
+> as __packed.
+>
 
-Rename test_list_add_del to list_add_del_and_check and extend it to
-cover the new kfuncs: assert list non-empty after insert, assert
-is_first(n) and is_last(m_1) after bpf_list_add, and assert list
-empty after removing both nodes.
+Interesting, I think the plt target should be 64-bit aligned to ensure
+atomic reading on arm64. It can be updated concurrently by WRITE_ONCE
+in the bpf_arch_text_poke function while the ldr instruction in the plt is
+executed. If it is not aligned correctly, the ldr may read a half-old
+half-new value, causing the plt to jump to an invalid destination.
 
-Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
----
- .../testing/selftests/bpf/bpf_experimental.h  | 15 +++++++++++
- .../selftests/bpf/progs/refcounted_kptr.c     | 27 +++++++++++++++----
- 2 files changed, 37 insertions(+), 5 deletions(-)
+To avoid over-aligning the entire buffer, how about fixing the padding
+method in build_plt to just make the plt target aligned correctly?
 
-diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
-index dc3919deab89..fc73a276c268 100644
---- a/tools/testing/selftests/bpf/bpf_experimental.h
-+++ b/tools/testing/selftests/bpf/bpf_experimental.h
-@@ -122,6 +122,21 @@ extern int bpf_list_add_impl(struct bpf_list_node *prev, struct bpf_list_node *n
- /* Convenience macro to wrap over bpf_list_add_impl */
- #define bpf_list_add(prev, node) bpf_list_add_impl(prev, node, NULL, 0)
- 
-+/* Description
-+ *	Return true if 'node' is the first node in the list with head 'head'.
-+ */
-+extern bool bpf_list_is_first(struct bpf_list_head *head, struct bpf_list_node *node) __ksym;
-+
-+/* Description
-+ *	Return true if 'node' is the last node in the list with head 'head'.
-+ */
-+extern bool bpf_list_is_last(struct bpf_list_head *head, struct bpf_list_node *node) __ksym;
-+
-+/* Description
-+ *	Return true if the list with head 'head' has no entries.
-+ */
-+extern bool bpf_list_empty(struct bpf_list_head *head) __ksym;
-+
- /* Description
-  *	Remove 'node' from rbtree with root 'root'
-  * Returns
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-index a3d5995d4302..aa4ee68c8baf 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-@@ -367,14 +367,14 @@ long insert_rbtree_and_stash__del_tree_##rem_tree(void *ctx)		\
- INSERT_STASH_READ(true, "insert_stash_read: remove from tree");
- INSERT_STASH_READ(false, "insert_stash_read: don't remove from tree");
- 
--/* Insert one node in tree and list, remove it from tree, add a second
-- * node after it in list with bpf_list_add, then remove both nodes from
-- * list via bpf_list_del.
-+/* Insert one node in tree and list, remove it from tree, add a second node
-+ * after it with bpf_list_add, check bpf_list_is_first/is_last/empty, then
-+ * remove both nodes from list via bpf_list_del.
-  */
- SEC("tc")
--__description("test_list_add_del: test bpf_list_add/del")
-+__description("list_add_del_and_check: test bpf_list_add/del/is_first/is_last/empty")
- __success __retval(0)
--long test_list_add_del(void *ctx)
-+long list_add_del_and_check(void *ctx)
- {
- 	long err = 0;
- 	struct bpf_rb_node *rb;
-@@ -386,6 +386,11 @@ long test_list_add_del(void *ctx)
- 		return err;
- 
- 	bpf_spin_lock(&lock);
-+	if (bpf_list_empty(&head)) {
-+		bpf_spin_unlock(&lock);
-+		return -7;
-+	}
-+
- 	rb = bpf_rbtree_first(&root);
- 	if (!rb) {
- 		bpf_spin_unlock(&lock);
-@@ -418,6 +423,14 @@ long test_list_add_del(void *ctx)
- 		return -8;
- 	}
- 
-+	if (!bpf_list_is_first(&head, &n->l) ||
-+	    !bpf_list_is_last(&head, &m_1->l)) {
-+		bpf_spin_unlock(&lock);
-+		bpf_obj_drop(n);
-+		bpf_obj_drop(m_1);
-+		return -9;
-+	}
-+
- 	l = bpf_list_del(&n->l);
- 	l_1 = bpf_list_del(&m_1->l);
- 	bpf_spin_unlock(&lock);
-@@ -434,6 +447,10 @@ long test_list_add_del(void *ctx)
- 	else
- 		err = -6;
- 
-+	bpf_spin_lock(&lock);
-+	if (!bpf_list_empty(&head))
-+		err = -7;
-+	bpf_spin_unlock(&lock);
- 	return err;
- }
- 
--- 
-2.50.1 (Apple Git-155)
+
+> Thanks again,
+> /fiad
 
