@@ -1,99 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA71E22F177;
-	Wed, 25 Feb 2026 07:19:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379A675801
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 07:38:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772003978; cv=none; b=d76LxzerUZAd+1Up6N1U2JSmClFC3zTmOWdoA27HHkKT5GpzRmaGlzRriLK8ymGeUN40iqzbs9zVW/sYA2XmuZV3sSCAOL9p/3+KjNeEZbmwgIU8kWewwUtRKvWSraXWC7DD85RIiqev51NP0KXlgmx3Hmirwslksc1OkIkEKwE=
+	t=1772005092; cv=none; b=avH5YNIy9bHjlcrFAmxLYIYeUD5qP+8KpTIT5lkuyxphe86YgMrsUYcqqe9HfgQuK0+gtXKsPua6wfwbwB50GqPM2jHd1bzDZ/AXECEsBTMXsLTHvRWtNNe/A6DxAy02bbFtmB5jmAJXLhlpHCx20fcGq55wsKnBkfcxEq5LIP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772003978; c=relaxed/simple;
-	bh=A7lRttC43wF7lpKdY61+Fq1GW0SYqkp06OO3jF4y3oM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ls2GjI2ugw0OAx2gHcfgHMNpmWHhNqLHlply6CoxQPs8PJJFYXQcy3pkxw0bLRkZPZnDDMa0ImaO4SB/aT+1smFZwBgnA7t58DGoNFi0IHKfmp1IB3G6fFlNN8D1KucYNvPdA+1dRPS3OKxC6AbCJulZtKkQTPOI7IJUHrIObbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z24wLhm5; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772005092; c=relaxed/simple;
+	bh=2pogDiTrJQEpyA+MouE4243GYa3otjlGllU06zSZ0zQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Py1fuT16K0+BJKssj2LNl0GQXuintBMg7j5M1SHTjY+SpbfjQEV8YB5Ps+v/8X0DI6XlEqP3s0Cj/0OuAHsXaFxPhkbxW5NCqd2p7l4yiRgOG2hWob6mGG26tjvXj4tPZjk6vB/EEosph2JmrniKOPkMIGqPiljdf0BcdRGRtyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CORSCb9W; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z24wLhm5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58C22C19425;
-	Wed, 25 Feb 2026 07:19:25 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CORSCb9W"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C51CC116D0;
+	Wed, 25 Feb 2026 07:38:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772003978;
-	bh=A7lRttC43wF7lpKdY61+Fq1GW0SYqkp06OO3jF4y3oM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Z24wLhm5/hlhU0gkoIm6x9z2KjkAIaHXIYJV4uUyDIR+3hmm2Bl1Ycmw6+TIfLpcL
-	 bdzlprkx0zhWuNM6KdsT2ER383xrUWorB+MYjjkLrUhH8WPSfmMZv5ai9+Dr62Nuqk
-	 yEvyIlsaervGrjeETEBQg8ogKCxZ+bH7A+mCTe+Wwu4h4wbMH4u23XDfo/Mfhun2jA
-	 hdJleBHr2kYeLtdzt7VMWUxAjImTT4y134nJTkge4cKYuTcAYRY93H5gmbl5yzfICn
-	 IlOcLpRZB71TR98tr5eHZ+mjbXIc8ocAa6yULW9aAt+hOsjlchEgDrR+oCf4sdLm6A
-	 6n2iLJ74d0RJw==
-Date: Wed, 25 Feb 2026 09:19:21 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Byungchul Park <byungchul@sk.com>
-Cc: linux-mm@kvack.org, akpm@linux-foundation.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
-	harry.yoo@oracle.com, ast@kernel.org, daniel@iogearbox.net,
-	davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
-	leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
-	andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
-	david@redhat.com, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, surenb@google.com,
-	mhocko@suse.com, horms@kernel.org, jackmanb@google.com,
-	hannes@cmpxchg.org, ziy@nvidia.com, ilias.apalodimas@linaro.org,
-	willy@infradead.org, brauner@kernel.org, kas@kernel.org,
-	yuzhao@google.com, usamaarif642@gmail.com,
-	baolin.wang@linux.alibaba.com, almasrymina@google.com,
-	toke@redhat.com, asml.silence@gmail.com, bpf@vger.kernel.org,
-	linux-rdma@vger.kernel.org, sfr@canb.auug.org.au, dw@davidwei.uk,
-	ap420073@gmail.com, dtatulea@nvidia.com
-Subject: Re: [PATCH v4] mm: introduce a new page type for page pool in page
- type
-Message-ID: <aZ6ieTRCPs3IKWpp@kernel.org>
-References: <20260224051347.19621-1-byungchul@sk.com>
+	s=k20201202; t=1772005091;
+	bh=2pogDiTrJQEpyA+MouE4243GYa3otjlGllU06zSZ0zQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=CORSCb9WaZl195GmCgYrCO1aA6xUrlgdlO0HMBctXfOZJbG07+ilUxq75FHUum66F
+	 +JDYhRQ6n5m7wzxygsfAshBxXs0oEIx61Rgh28YPtaLOJteYHJvKlzy4t6xYbBY0Wy
+	 e/mTOdMeE0lbCquuF5r7syZ49wbffcgMJr8pl3o3YIEtRo/8bgwEyevNfFZ1BRsy3o
+	 YwQImiUQP7lqMUQq8cPrb36cslCjU88i95KZmgoYk1EHsEHlLN5lGIo9/K+tC+1gj1
+	 ut2TyIG7Ex2SQVQjFSsqdW2W98F3hh/INfAve4eW7a/Ljvjq/ZRC/jnFyPV3VdPf/z
+	 KIItNlh57PuPg==
+Content-Type: multipart/mixed; boundary="===============7947378391257214783=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260224051347.19621-1-byungchul@sk.com>
+Message-Id: <37aef2457aa50ca719b97ed4f945c6b22c219398d87296c72bcd69a678986ece@mail.kernel.org>
+In-Reply-To: <B97C43D716882A74+20260225065459.2609916-1-xulang@uniontech.com>
+References: <B97C43D716882A74+20260225065459.2609916-1-xulang@uniontech.com>
+Subject: Re: [PATCH v2] bpf: fix: Race condition in bpf_trampoline_unlink_cgroup_shim
+From: bot+bpf-ci@kernel.org
+To: xulang@uniontech.com,martin.lau@linux.dev
+Cc: ast@kernel.org,bpf@vger.kernel.org,daniel@iogearbox.net,dddddd@hust.edu.cn,dzm91@hust.edu.cn,hust-os-kernel-patches@googlegroups.com,kaiyanm@hust.edu.cn,sdf@fomichev.me,xulang@uniontech.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 25 Feb 2026 07:38:10 +0000 (UTC)
 
-On Tue, Feb 24, 2026 at 02:13:47PM +0900, Byungchul Park wrote:
-> Currently, the condition 'page->pp_magic == PP_SIGNATURE' is used to
-> determine if a page belongs to a page pool.  However, with the planned
-> removal of @pp_magic, we should instead leverage the page_type in struct
-> page, such as PGTY_netpp, for this purpose.
-> 
-> Introduce and use the page type APIs e.g. PageNetpp(), __SetPageNetpp(),
-> and __ClearPageNetpp() instead, and remove the existing APIs accessing
-> @pp_magic e.g. page_pool_page_is_pp(), netmem_or_pp_magic(), and
-> netmem_clear_pp_magic().
-> 
-> Plus, add @page_type to struct net_iov at the same offset as struct page
-> so as to use the page_type APIs for struct net_iov as well.  While at it,
-> reorder @type and @owner in struct net_iov to avoid a hole and
-> increasing the struct size.
-> 
-> This work was inspired by the following link:
-> 
->   https://lore.kernel.org/all/582f41c0-2742-4400-9c81-0d46bf4e8314@gmail.com/
-> 
-> While at it, move the sanity check for page pool to on the free path.
-> 
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Co-developed-by: Pavel Begunkov <asml.silence@gmail.com>
-> Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-> Signed-off-by: Byungchul Park <byungchul@sk.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Acked-by: Zi Yan <ziy@nvidia.com>
-> Acked-by: Vlastimil Babka <vbabka@suse.cz>
-> Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
+--===============7947378391257214783==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
 
--- 
-Sincerely yours,
-Mike.
+[ ... ]
+
+> @@ -1003,12 +1004,13 @@ struct bpf_attach_target_info tgt_info = {};
+>
+>  	shim_link = cgroup_shim_find(tr, bpf_func);
+>  	if (shim_link) {
+> +		link = &shim_link->link.link;
+> +		if (link == bpf_link_inc_not_zero(link)) {
+
+The other callers of bpf_link_inc_not_zero() in the tree check the
+return value with IS_ERR(), for example in
+bpf_link_get_curr_or_next():
+
+    link = bpf_link_inc_not_zero(link);
+    if (IS_ERR(link)) {
+        (*id)++;
+        goto again;
+    }
+
+Would it be more consistent to use IS_ERR() here as well?  Something
+like:
+
+    if (!IS_ERR(bpf_link_inc_not_zero(link))) {
+
+> +			/* Reusing existing shim attached by the other program. */
+> +			mutex_unlock(&tr->mutex);
+> +			bpf_trampoline_put(tr); /* bpf_trampoline_get above */
+> +			return 0;
+> +		}
+>  	}
+
+This commit fixes a use-after-free introduced by commit 69fd337a975c
+("bpf: per-cgroup lsm flavor"), which added the bpf_link_inc() call
+that could resurrect a zero-refcount link.
+
+Should this include a Fixes: tag?
+
+Suggested:
+Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22386382516
+
+AI-authorship-score: medium
+AI-authorship-explanation: Commit message uses markdown-style backtick formatting and verbose explanatory style atypical of kernel patches, but the v1-to-v2 iteration addressing specific reviewer feedback and manual reproduction testing suggest human authorship.
+issues-found: 2
+issue-severity-score: low
+issue-severity-explanation: Missing Fixes tag for a use-after-free bug fix and non-idiomatic bpf_link_inc_not_zero() return value comparison; the fix itself is technically correct.
+
+--===============7947378391257214783==--
