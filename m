@@ -1,209 +1,144 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04D33393DD9
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 11:01:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772017271; cv=pass; b=BQs5z8tN7phtYOcXD0//CQGttweZ/kWzRnpmIVHovjAZ+JZrHztY2NpuC9E7eoel8BI+XVptFaej2pOUkY5OwT4H7p3e2gzTI907aMesOG/HahY+7n+XpBS/tlFeIsOAlK5UApxev8vG05oX6UPejD5hXERNv6s59XMXMPVjEtk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772017271; c=relaxed/simple;
-	bh=P2a5OMgtYUwIpmftFM3FyKxKU1phRRUzi6P0wXa6QvU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MqUoqnDW+qrR5k+QU2Y3gOk7uMjHm8zIpxLq0cafpgSh7oqR8EQQxPW4UrOUgoiyk797qsz5TBxa0QEqwWZ9eRqzZtdOD61IAkXfEbWEx/pZIZBjn8wdu8UuqUQj2luHvfbimBi4qirFcTOhqfu3HJAyzZhy67ZwtE+vfyU3JPY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vmPrwo7Z; arc=pass smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9217E393DD4
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 11:04:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.148.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772017460; cv=none; b=le6pmCcdM5sRdr/kKDgCdtPDoel5wX1J2QhHdpDqnNzeqYOP54tg5vDtjYHYLz+Z8GWyGGhtuD7VUt4U6JqBjkvosnLf0rsY37SvNRrFVgirOoQ+yANilaE4N3xzR3hJvBD9LFDnSBGQ8VULsEmOjaby6vaiUk3DtJr1dVGtx1o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772017460; c=relaxed/simple;
+	bh=3v6jEXXDFmjA2SzKI3hqvjBUHWcTHQyN4QeAqW2m8G4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o/P7GpUUPe2j8NyR21oX6wFjbGis7u2R9F5wGeIvZnep64n2VoQf/nFwjkLpEHQoYlYsisQzLS73VpZh8w9Gps/QRNZnRIyAwEA+b1yzAaJOi4NKPCNhRDkmh9cOvPZAWQ5qmVJ85CNypzJiQIgIhX4eDftoGlepFBWaZrY98QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b=Wf/ZeImY; arc=none smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vmPrwo7Z"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-506a355aedfso412531cf.0
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 03:01:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772017269; cv=none;
-        d=google.com; s=arc-20240605;
-        b=K9h7UJDMHzZmxYiWkXyPNkdUk1BueAJbjqogEKaF6OXrJJtyfHcJw68URg2NFdKoNj
-         EFwn+O5VMbnl5QDuKjswNmERVx2Ces8f+YX8T9daetxagasKaRHn7u7wTy7HHWJA1py5
-         sNg5H/0OYMMjgfhjnuXRzT6fJPm9+IyDDgv1J/LtMXlrE4/Tu4MA+wdjyi5UrHKZpd+o
-         2oVKgRWK/PG36zpnUTahpQ+FLaK8Pkfkn9EvKpI2E1PnUbCBog3NdOfU1BqYJJAdAZb0
-         RSlnge6IM39ckHNp7o109wPwp5cbfppr+UrrYRnpSbh/j2A7eOeAx9EFo77yyZMD7TIn
-         XT9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=h6JvQdVhQWfInPA/Myzv9RmVQ9qHhQNHo4KQIihmpPM=;
-        fh=7RMAbqhRi6PejUh1ds7yQrk1LmBalcx0x3+adTMXIsU=;
-        b=Lzlo8Knk03QhS+/BcLftnKAP6sdt/hu8fsrTQOysdj+hmqZ/lY0o13qeYPRBeZdVXk
-         k7JPW/zLc4hOY7xlWYDIb4W1Tu3bv9m9XoSpQi+JviA915GSG4GYy3yJEzz61xaJk28a
-         MwMFDu6hqnzW1Isi/F0m6OSJQzHTYBQyBx7fiIULaX93f87ANfWW0o7/TRwHdxB11U21
-         r90DzzAYvnMrPfhKT+C28qgVWHPnmuoEZ113yRg0LoBocKh4zFZlBfCukNDBq+16L0YL
-         fxdox/qg3C5vKu+uFfP8j6LrFH3v2l8U+GGVLa4RVoZw3e/Twcm9mgctegmffmBpfQXA
-         h9eQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772017269; x=1772622069; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=h6JvQdVhQWfInPA/Myzv9RmVQ9qHhQNHo4KQIihmpPM=;
-        b=vmPrwo7ZdFm4w413fGwKTI/06XqQeXEtK7+3voLf0EiHccJe6di0B1vUZcYpsV6S0L
-         rnfiK0nUzJuqm4o7MA+McIO7tXCbOPG+Y3f2V8GxusbEkhmH16CrhEkJtbpI6+j1bd9i
-         q91AbaaSbmUAL9sJgJC47F2SMX943cHF1+L9AuWjCMXKukt5JDX1TiFjeXCidjev6jDe
-         hxEGUpY8fhXoJ8A1LKL8yfd8t+fNsy2lx0TDH4xCndYhTLuOyMY4y2usXFsA3ohDWkra
-         4CVw5OVFfvnM7om3Y7IgNU1fZ7S/B+TupWYYItS/VEWpjlfq8dJmGahRaFhb8ozURkEY
-         QsJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772017269; x=1772622069;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h6JvQdVhQWfInPA/Myzv9RmVQ9qHhQNHo4KQIihmpPM=;
-        b=FdYOPHLwq8ZvXLsgShAqGquB7pXr3x7houbk/euajrHtbEGUXirF3KXHbDdSUSaEeF
-         ToQMk3ND2E/XkTp4qCbf2qIgOkPmeMgG0sQcS+K1q7Nlzp5KNOyhVHYxJ6swso0IT7ZL
-         BXjXqBSk6ECC821GNZWDk0FHV2Eom1sxP6ynvIG2dJSl87hBambDNvf5EhiVTYm/hogy
-         7g6iV8rhVv62NBEavd2WZ5HgmqzN4guoYhFLSzFa1icqxsHWFoDSW9l4tx+lfevYpNGe
-         Zx+uZrf5bhz3YBE1YuTUWhkru8uGq5UYdreXPI+ndpDlGmZfqWe86AvmlPfEazFQgj/s
-         oJ8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUNVugfMakfOOzuWAb+cAhEkGRtcryrOIjL+5mJkOMT+ea0qbH5EVYt+++yNqX8m8GXoZc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxv2wEFR4iKnL19SNkPswilkGKXcYytwva8R7vboRPBWa0LYKue
-	gj8c6lwZegz3QpvkN//fLkEgReWG1iyKeGQ73iXqvCmjyqdmn1sKyxIWgFAUM1Z5IW6LfuonB4C
-	/OsJb9aUBsAv/+KSHIIA11y+QkP/fzqfxoZJ980oo
-X-Gm-Gg: ATEYQzymDp1Km6I+WbhjOLieHQUfHAQxwi8LZR//lhOV0o6XrCNt7pWUBpiLBKnC52H
-	7Yx+6dZ99/B2RCallbhobxPY9vYaa3qz40qIM+mALAEQMG5lkd301l49GPhlkLCetffirNhcBek
-	aTkFnH66JzjMJBpWVPj5sWKJhJqHnL10/9GcDUzU/CAyXM3lbOcDKBE2MmnqjVLyZTymRYFSY4X
-	mUf3jkHYMO2Tmo5Yv6KRTyLBf+8k4QkaSSW02goD5kn6QrPMKg4T+iyJf1hDeByi9XfhNrnSLzl
-	IC+iZRr5
-X-Received: by 2002:a05:622a:4d48:b0:501:3b94:bcae with SMTP id
- d75a77b69052e-5073c33f79fmr6685251cf.8.1772017268469; Wed, 25 Feb 2026
- 03:01:08 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=marvell.com header.i=@marvell.com header.b="Wf/ZeImY"
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61ONRkZ31176343;
+	Wed, 25 Feb 2026 03:03:43 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=
+	cc:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pfpt0220; bh=jNxMIlaH3k8mgVhpcmN3R8lUU
+	EjX7d+FafvsPM8bdZE=; b=Wf/ZeImYCuVnQAhd7ieczRBnw0bs7VMTtT6Dkgsu5
+	RlFI2V8EC3VbP2LX7l7bpiyUzOkDqswiU9lfceOv1ka+JLJVpr1ws5QjavK+MAd8
+	5fTFL9+B6wZrJfAv0Dvy4nKjGdfxXK9SfTuUSrzySkD9HwYmXRtn6QYuy/HU2GIo
+	757mejG7blswklsvGm415BldJ9+bTW6s7A1KcK0TumKam5xoIm+bZljbeCwn9YDn
+	eSYQ3cw2xihAPxVh3dXG7M5g2eIX3blvJFS5yxO87eTs++7FLEL/PVXDiP3ta8X0
+	YTFQws5znPlNBbuLT2SKWfQzWLEKoRaM8wy4c1YmYM7rA==
+Received: from dc6wp-exch02.marvell.com ([4.21.29.225])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 4chnp8s907-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Feb 2026 03:03:43 -0800 (PST)
+Received: from DC6WP-EXCH02.marvell.com (10.76.176.209) by
+ DC6WP-EXCH02.marvell.com (10.76.176.209) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.25; Wed, 25 Feb 2026 03:03:42 -0800
+Received: from maili.marvell.com (10.69.176.80) by DC6WP-EXCH02.marvell.com
+ (10.76.176.209) with Microsoft SMTP Server id 15.2.1544.25 via Frontend
+ Transport; Wed, 25 Feb 2026 03:03:42 -0800
+Received: from kernel-ep2 (unknown [10.29.36.53])
+	by maili.marvell.com (Postfix) with SMTP id CAF213F704E;
+	Wed, 25 Feb 2026 03:03:39 -0800 (PST)
+Date: Wed, 25 Feb 2026 16:33:38 +0530
+From: Subbaraya Sundeep <sbhatta@marvell.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+CC: Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Eduard Zingerman <eddyz87@gmail.com>, <bpf@vger.kernel.org>,
+        <kernel-team@meta.com>
+Subject: Re: [PATCH bpf v1] selftests/bpf: Fix a memory leak in xdp_flowtable
+ test
+Message-ID: <20260225110338.GA2906962@kernel-ep2>
+References: <20260225003351.465104-1-ihor.solodrai@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260224093128.1926610-1-tabba@google.com> <c402e95a-26d3-47eb-8249-52ece97989d3@huaweicloud.com>
- <CA+EHjTyXWqnr4Cu_cZyxDCVNCxto9pJN0WS18S_ri824oQhwug@mail.gmail.com> <2d0c6893-d4a5-42bc-a480-55bc669da130@huaweicloud.com>
-In-Reply-To: <2d0c6893-d4a5-42bc-a480-55bc669da130@huaweicloud.com>
-From: Fuad Tabba <tabba@google.com>
-Date: Wed, 25 Feb 2026 11:00:31 +0000
-X-Gm-Features: AaiRm53jgmE7BvI5lAIMDYWme2AOTmQ1Io37wCuBgLmE_qBzXHY0ykNGDt8nNF4
-Message-ID: <CA+EHjTwsrmEjG=n1VzucyiCq9ZURj_3QnMLBQZ2Zsj6qwpui5A@mail.gmail.com>
-Subject: Re: [PATCH] arm64: bpf: Fix UBSAN misaligned access in BPF JIT
-To: Xu Kuohai <xukuohai@huaweicloud.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Puranjay Mohan <puranjay@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Jean-Philippe Brucker <jpb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260225003351.465104-1-ihor.solodrai@linux.dev>
+X-Proofpoint-ORIG-GUID: pJ5zmoy_wMMhlGzoeqdPui5cOa6YqLPI
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDEwOCBTYWx0ZWRfX+GAR/p9JvtmN
+ msNQM/XvXViEz2im1jvyVKnl2Iv/XMBE0a9PMXWSi4ClSLTCgARN9wgp9fqMVpBEPblDeZVz3rw
+ mkWJakgsLaQ9SSVUfR/+4c7lYrSvvwN7/ZoyY/MRW5y/K9gEtkuGJgvBwRL12PnNIMXOB9umfr8
+ HRQw8r6xflSJhqFjOI1XciCgmNE+GcwDyUf2pvyXYptoJEcYg0tCt8bM0pZvsT1RMyqioRN4fii
+ vag1yy7u2iZiy7k8ZV/261+3/rf4rEM8VsRoIXiLCVvwSPZLHnBT3kYUV0fiGyWJK2qPVzRE+uB
+ 0zvdSbXvhyDZHmhuayGEvYZDFzTRlyMh4n4PYv+IhgJOG8Hn/kMU2Ve6v/RJAZVxTRipzOW3cf/
+ iOcWMzm8xorMvQ1X1Xv4lu8XSUwfzGb/emogHpfDV2mFEAGpOnUvp4FMcHsnMUUGpCxlH68yQJG
+ j25KbRL5uZq6Du/xEaw==
+X-Authority-Analysis: v=2.4 cv=bNYb4f+Z c=1 sm=1 tr=0 ts=699ed70f cx=c_pps
+ a=gIfcoYsirJbf48DBMSPrZA==:117 a=gIfcoYsirJbf48DBMSPrZA==:17
+ a=kj9zAlcOel0A:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=l0iWHRpgs5sLHlkKQ1IR:22 a=EAYMVhzMl8SCOHhVQcBL:22 a=NEAV23lmAAAA:8
+ a=M5GUcnROAAAA:8 a=rNDjod-Ssv0htqVAcTEA:9 a=CjuIK1q_8ugA:10
+ a=OBjm3rFKGHvpk9ecZwUJ:22
+X-Proofpoint-GUID: pJ5zmoy_wMMhlGzoeqdPui5cOa6YqLPI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-24_03,2026-02-23_03,2025-10-01_01
 
-Hi Xu,
+On 2026-02-25 at 06:03:51, Ihor Solodrai (ihor.solodrai@linux.dev) wrote:
+> test_progs run with ASAN reported [1]:
+> 
+>   ==126==ERROR: LeakSanitizer: detected memory leaks
+> 
+>   Direct leak of 32 byte(s) in 1 object(s) allocated from:
+>       #0 0x7f1ff3cfa340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
+>       #1 0x5610c15bb520 in bpf_program_attach_fd /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/lib/bpf/libbpf.c:13164
+>       #2 0x5610c15bb740 in bpf_program__attach_xdp /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/lib/bpf/libbpf.c:13204
+>       #3 0x5610c14f91d3 in test_xdp_flowtable /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c:138
+>       #4 0x5610c1533566 in run_one_test /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/testing/selftests/bpf/test_progs.c:1406
+>       #5 0x5610c1537fb0 in main /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/testing/selftests/bpf/test_progs.c:2097
+>       #6 0x7f1ff25df1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8e9fd827446c24067541ac5390e6f527fb5947bb)
+>       #7 0x7f1ff25df28a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8e9fd827446c24067541ac5390e6f527fb5947bb)
+>       #8 0x5610c0bd3180 in _start (/tmp/work/vmtest/vmtest/selftests/bpf/test_progs+0x593180) (BuildId: cdf9f103f42307dc0a2cd6cfc8afcbc1366cf8bd)
+> 
+> Fix by properly destroying bpf_link on exit in xdp_flowtable test.
+> 
+> [1] https://github.com/kernel-patches/vmtest/actions/runs/22361085418/job/64716490680
+> 
+> Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
 
-On Wed, 25 Feb 2026 at 09:46, Xu Kuohai <xukuohai@huaweicloud.com> wrote:
->
-> On 2/25/2026 5:08 PM, Fuad Tabba wrote:
-> > Hi Xu,
-> >
-> > On Wed, 25 Feb 2026 at 01:43, Xu Kuohai <xukuohai@huaweicloud.com> wrote:
-> >>
-> >> On 2/24/2026 5:31 PM, Fuad Tabba wrote:
-> >>> struct bpf_plt contains a u64 'target' field. The BPF JIT allocator
-> >>> was using an alignment of 4 bytes (sizeof(u32)), which could lead
-> >>> to the 'target' field being misaligned in the JIT buffer.
-> >>>
-> >>> Increase the alignment requirement to 8 bytes (sizeof(u64)) in
-> >>> bpf_jit_binary_pack_alloc() to guarantee proper alignment for
-> >>> struct bpf_plt.
-> >>>
-> >>> Fixes: b2ad54e1533e9 ("bpf, arm64: Implement bpf_arch_text_poke() for arm64")
-> >>> Signed-off-by: Fuad Tabba <tabba@google.com>
-> >>> ---
-> >>>    arch/arm64/net/bpf_jit_comp.c | 2 +-
-> >>>    1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>
-> >>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-> >>> index 356d33c7a4ae..adf84962d579 100644
-> >>> --- a/arch/arm64/net/bpf_jit_comp.c
-> >>> +++ b/arch/arm64/net/bpf_jit_comp.c
-> >>> @@ -2119,7 +2119,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *prog)
-> >>>        extable_offset = round_up(prog_size + PLT_TARGET_SIZE, extable_align);
-> >>>        image_size = extable_offset + extable_size;
-> >>>        ro_header = bpf_jit_binary_pack_alloc(image_size, &ro_image_ptr,
-> >>> -                                           sizeof(u32), &header, &image_ptr,
-> >>> +                                           sizeof(u64), &header, &image_ptr,
-> >>>                                              jit_fill_hole);
-> >>>        if (!ro_header) {
-> >>>                prog = orig_prog;
-> >>
-> >> Good catch. build_plt pads NOP instructions to ensure a 64-bit relative offset for
-> >> plt target, but it misses the alignment check for image base itself.
-> >>
-> >> Acked-by: Xu Kuohai <xukuohai@huaweicloud.com>
-> >>
-> >> nit: Add check for base alignment in build_plt, or a comment to clarify?
-> >
-> > Thanks for the having a look and for the Ack.
-> >
-> > You're right that build_plt() assumes 64-bit alignment when
-> > calculating the NOP padding. However, Will pointed out, over-aligning
-> > the entire JIT buffer just to satisfy the C standard is somewhat
-> > heavy-handed. I didn't actually run into a functional bug. The issue
-> > is that UBSAN complains because we violate the standard's alignment
-> > rules.
-> > I'll dropping the allocator change in favor of marking struct bpf_plt
-> > as __packed.
-> >
->
-> Interesting, I think the plt target should be 64-bit aligned to ensure
-> atomic reading on arm64. It can be updated concurrently by WRITE_ONCE
-> in the bpf_arch_text_poke function while the ldr instruction in the plt is
-> executed. If it is not aligned correctly, the ldr may read a half-old
-> half-new value, causing the plt to jump to an invalid destination.
-
-You're right. I missed that target is concurrently updated via
-bpf_arch_text_poke() and read by ldr. If target crosses an 8-byte
-boundary, we lose the single-copy atomicity guarantee, risking a torn
-read. So I guess that this isn't just UBSAN, it could cause real
-issues...
-
-> To avoid over-aligning the entire buffer, how about fixing the padding
-> method in build_plt to just make the plt target aligned correctly?
-
-I'm not sure about this. If my reading of the code is correct, during
-the first JIT pass, ctx->image is NULL. The current padding logic in
-build_plt() looks like this:
-
-        /* make sure target is 64-bit aligned */
-        if ((ctx->idx + PLT_TARGET_OFFSET / AARCH64_INSN_SIZE) % 2)
-            emit(A64_NOP, ctx);
-
-This forces the relative offset of the PLT to be a multiple of 8
-bytes. Therefore, it assumes that the base pointer (ctx->image) is
-also 8-byte aligned. If the allocator gives us a base pointer that is
-only 4-byte aligned, target will end up misaligned.
-
-If we try to make the padding dynamic based on the actual address of
-ctx->image, pass 1 (where ctx->image is NULL) and pass 2 (where
-ctx->image is allocated) might disagree on the number of NOPs
-required. This would cause ctx->idx to diverge between passes,
-breaking the size calculations and offset tables.
-
-Given that enforcing 8-byte alignment in bpf_jit_binary_pack_alloc
-wastes a maximum of 4 bytes per BPF program, I think my original v1
-patch was actually the safest and cleanest way to fix both the UBSAN
-warning and the tearing risk.
-
-What do you think? If you agree, I will abandon v2, and resubmit the
-original one as v3 with an updated commit message detailing your
-observation regarding the atomic read/write requirement.
+Reviewed-by: Subbaraya Sundeep <sbhatta@marvell.com>
 
 Thanks,
-/fuad
-
->
-> > Thanks again,
-> > /fiad
->
+Sundeep
+> 
+> ---
+> 
+> This should've been part of the recent series. I missed this locally
+> because the test is skipped if nftables is not installed.
+> 
+> ---
+>  tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c b/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c
+> index 3f9146d83d79..325e0b64dc35 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c
+> @@ -67,7 +67,7 @@ void test_xdp_flowtable(void)
+>  	struct nstoken *tok = NULL;
+>  	int iifindex, stats_fd;
+>  	__u32 value, key = 0;
+> -	struct bpf_link *link;
+> +	struct bpf_link *link = NULL;
+>  
+>  	if (SYS_NOFAIL("nft -v")) {
+>  		fprintf(stdout, "Missing required nft tool\n");
+> @@ -160,6 +160,7 @@ void test_xdp_flowtable(void)
+>  
+>  	ASSERT_GE(value, N_PACKETS - 2, "bpf_xdp_flow_lookup failed");
+>  out:
+> +	bpf_link__destroy(link);
+>  	xdp_flowtable__destroy(skel);
+>  	if (tok)
+>  		close_netns(tok);
+> -- 
+> 2.53.0
+> 
