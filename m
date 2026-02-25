@@ -1,247 +1,228 @@
-Received: from mail-dl1-f48.google.com (mail-dl1-f48.google.com [74.125.82.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1C3933A704
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:33:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09E726A0C7
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:36:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771965209; cv=none; b=ty4sl3hZM3dCtxHFYXOCjPlSAa7cGRUidaootGgTah80FhS4dAw5N15wROspoHv4df7Laj1LsWH8Y+fSS5+M+evn7OXIxO/Qk+7mz2dRODjs5bGQWxZjdpD7ICyDR/l1Hl1bYE7qPZsSGVS/u3wONmsxQ8utlsxtH3F2ga6eVsQ=
+	t=1771965393; cv=none; b=Mo5S5QoVzjtmBnrJf8W8LOsXPiaI/fAt3XWR4Pv0C8J+wQ/cg6Ai3+RTL927jKV69/cFtk6z/6EPzh6kbHNYHXzu/bCJeSTxeYxi8T5Ostats6cYRA0bPKSdWRvOCg/3ofyhClHAigENPIAIQA/O9cq58c9K5W7eB27JQJnfZb8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771965209; c=relaxed/simple;
-	bh=nSei2sTBi72yRXtQd1qn70bO+pUaTGJiQ2eERPPjD3g=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JS/+1LsCbBAuGgqfn8E5Z6CEBczP37W+jWXG22yWyvUlEBEj3+JgNVWsrnuhUBCpRCJ2k4My8UuXwlgP4vij7wVSt0K9IkuurjUPe8Gba6ETuPFrHBv7r+wmMo+B9BrMAK6l5cpBXCGmOR8CPx/nXDqy0DwDg+1keUD9GxhW9/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TeM5ouqK; arc=none smtp.client-ip=74.125.82.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1771965393; c=relaxed/simple;
+	bh=M15ONHXMX/Ts3pmsPbjYAPnPr3ShM/C8+TvgwM8wu9E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k1B9hOQ3RdZcZvt5+JnxoOPgQwmdAMGLq2vwj7/LxVgXMcw3Xi+EN8geclDyr/Y6HwH1FepyRtiLKLwll9zPjbb523JesSn8HEu41/6U7pZLs9amU1zeWEQGsAb2KD0ClvyxwzYokdYNZCdHrApWjMVL2iLyfTiVvGUO3D6aYWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WG5uczza; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TeM5ouqK"
-Received: by mail-dl1-f48.google.com with SMTP id a92af1059eb24-1271195d2a7so3396494c88.0
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:33:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771965207; x=1772570007; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=YLO0Xn5/H66XoaA+8sDLbSztkPH8MCQ26uzeiZ8KbpI=;
-        b=TeM5ouqKWvvkHogPXEiWrUwtD3ltaWJxqO9qmEDf3IPbWthoCQbs1hkjemD9qA07gp
-         Il8ghEMrjknDPbsh1TGJnBVtvH+AHPkejfIC+RZVVfNEXdq+FlpQKm/Y5gQY3P02J5lE
-         o2zxD0pxrSHo2wYdlLzUA0TQ/bJzitKZyyqU6FwmTln50F/NP5EVzhr6BHOgsN/Nghgt
-         Di42l3Gf4Mg2tvbCHEAV41JtvJCV+wDuzj9Eb7wWYQCD1uNIXTZ3UraJjpsP+UIFsR85
-         S3Zv/eLwtGfkaDb5j7OrERTgcQU8E+5suZzeVbHGfCNGDkDGpwey9ppYMPuUAxF4LsgZ
-         0iOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771965207; x=1772570007;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YLO0Xn5/H66XoaA+8sDLbSztkPH8MCQ26uzeiZ8KbpI=;
-        b=O8S/oDnpxCyTrjm1kJntZYSL/d1lRUXlVp61VFofttqlOwl8ILOtjoGc8JCb904tEg
-         sxM7TatY9o509kE9HaxmszKW4hf9BSpqgy0tWamaMUO8iSjii8IgQQs7gC24HWB21dN6
-         KiI/WOYRxkY+4vxQNB5rLbvgrjBEaylAr67CHbGfEEP4byj7BoO+sNl7DyZErkLA4P/H
-         f3YrvxHsNMOPOleIhpGb5j3b008kitnSvAOjQhibB+g1/iGGFWPI7dZHP25aoL5r4NYs
-         gytUJL/mNh4V3lY1GoaTs5kStbK1BGY0YuSK0mYXdJ14LP5nkJxVGNiP9TXnZ1tRKJmf
-         MeaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUibOIetW/YCe5lSvcVsHAk/NtN8sqCKZNjbFFy6ky8cThA25cA+/gmi4gpyu+xsnbOF0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEP6I+BnY95T2akw79ahEkiOy8/5jnduyB+kZ/zdatbU6Qi77X
-	YdsG2AHJVq3kJCCe0BJVWf7hVq339IrppEJ3J4SROz5Imc3Tv4gXfqMT
-X-Gm-Gg: AZuq6aLTvXroKbI5D63ia5WkUreAxs1DZN58djaO1xV8k6f/ZFrRbSZ62c/zKbefIYF
-	6PCU1g/h8AqWjtcLLtqWi6w9R8PLWEjGzeZPyASJ2rRcjzPSqXVn/c1K8EhMDpatluOKQ/hJqEY
-	Fdtt1sSaAKRyc4wlFfTaVolAI08eYwF9oQvC8qMdAkMqeuhjh4KsBY7Tm7EhndgjKUTUvKEnTOb
-	z82LmIwI9mR3r3Z0lagLJ1W8Zzlrx8RvW8r9gNIDExXm+KvwHsgjYsKIvuVebcRjuFHnLvTpVMe
-	M4bViITbRnAUn+5BbC6JXK2zx6OyyinmQG44By1BxAb85cyacSbkCLL59Qi5fSWlynfJCdRqLNU
-	J69pfA5C4qvI8HCElAhhSrhSyNc4c7pQmCbHgx7cc1h1NwR93IR7anuJyx5eLgsPkMN8rfGZsII
-	2LsUmqM7vrMhU91iUoYThoOa+V6DgGJS8DjQmDFnpdtaQQQboPQqswFZ0qQRoNJm3Cc3Q6m5/GD
-	qrO5EZytl0BEgDo
-X-Received: by 2002:a05:7022:e0d:b0:127:5cfd:785 with SMTP id a92af1059eb24-1276acb3200mr4879358c88.4.1771965206750;
-        Tue, 24 Feb 2026 12:33:26 -0800 (PST)
-Received: from ?IPv6:2a03:83e0:115c:1:79f3:c942:f01f:96aa? ([2620:10d:c090:500::1f1f])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1276afa0bedsm11563053c88.16.2026.02.24.12.33.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Feb 2026 12:33:26 -0800 (PST)
-Message-ID: <e3449e28b1c8d37eb54431668aea7f237c137437.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Allow void global functions in the
- verifier
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@kernel.org, memxor@gmail.com, song@kernel.org,
- yonghong.song@linux.dev
-Date: Tue, 24 Feb 2026 12:33:24 -0800
-In-Reply-To: <DGNGEEL4AYE5.3EF1GJDZ1JG9D@etsalapatis.com>
-References: <20260223215046.1706110-1-emil@etsalapatis.com>
-	 <20260223215046.1706110-2-emil@etsalapatis.com>
-	 <7fcfdf81aa76d816f7b5032d5b8a85302621fe64.camel@gmail.com>
-	 <DGNEYQZUKR83.25MVGRAQ05NSU@etsalapatis.com>
-	 <446bbdd8c843340e496c6059d6e1432f1708af59.camel@gmail.com>
-	 <DGNGEEL4AYE5.3EF1GJDZ1JG9D@etsalapatis.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WG5uczza"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OFQjo81361599;
+	Tue, 24 Feb 2026 20:36:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=APRPdC8/iEC+tzPbwo+CmGdnsgxx4HawlZ2XzTbQX
+	jI=; b=WG5uczzacVtzJjpWZ6PWDOKTynZSNCZnyHoe1FLAlBXrcfJqHkFRV/oEe
+	3kFuHIJ3x3Dlq/nWaMmgRUPCSEUXXFgBAuvwwGmQ9n2PqjNtZd+z99U5EiYym9kL
+	UhmxAKctuE/pXVMmyaqe3IwIwnkQg7JfKlXtyhk/ZeDx8o6pkzXOF9K7dz1pvIOj
+	yzYs4qxWUf/OtqSlDJhhaGgLE6VOsRoF1wqSuvPMh4gWWhqam433ZQmFd/UL6qu4
+	FAPLaBvXZPwaPde5QX12VjzmU371cBxLfDJdGxUMOZLyrAuKkiUdGiAV6h6eIerF
+	7muSOXC6pl+Wb/gw3o1TN5cDJKnKw==
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf34c4vq3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Feb 2026 20:36:13 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61OKVINH015764;
+	Tue, 24 Feb 2026 20:36:12 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cfq1sjnac-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Feb 2026 20:36:12 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61OKa8TL56820036
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Feb 2026 20:36:08 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 939FF20040;
+	Tue, 24 Feb 2026 20:36:08 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1312320043;
+	Tue, 24 Feb 2026 20:36:07 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 24 Feb 2026 20:36:06 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: linuxppc-dev@lists.ozlabs.org
+Cc: bpf@vger.kernel.org, hbathini@linux.ibm.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, maddy@linux.ibm.com,
+        Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH 0/4] powerpc/bpf: Add support for verifier selftest
+Date: Tue, 24 Feb 2026 20:36:23 -0500
+Message-ID: <20260225013627.22098-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDE3MyBTYWx0ZWRfX7bnkhTDL+K7X
+ yPRVoEX00p98hRNjdLQhGdPGv0YCTYZykQJTg8Unc+u6m7DJH9aYViBCu0jDm54S3dNImHym0d+
+ vNQYpKfU5//Z9zQbra0qxulsBFmkqLkQbjWu21I9CSedgpcd5OvVhPOtpPAc8D12MA3yzIJDxlk
+ q5A/fxk9kp+VqTXOldvy2ZAQOmesdP8A0UavpAesqzXqYsnZdllaFm/QrWKV+Wm5JX++PKmJ2qK
+ 4RwgGjVkAX/4lBZYECozb8iAokbn+wSztWLiHYnjOYf+7TE9SBZHg/YLgERo7EfWytUp2tSxNaJ
+ CBPRhy49OMDP6/rO0suho18308KIkVLouE+5t8uZ6EgujIKFpg/UUa1Y6C0pd4rnhAamNiWr/wa
+ EJ04Dy+6vON4g2PaRFyjgTO9AITgVfpwEnpDlRGmBlZhkRL/tNWbo5mg7XQadbqEMoVgaZCnuPs
+ R3TtaOMtW8gcSLmYbjQ==
+X-Proofpoint-ORIG-GUID: JQF8vhkCSA9f1Z8xvz0zGz7c5V2JE5gD
+X-Authority-Analysis: v=2.4 cv=F9lat6hN c=1 sm=1 tr=0 ts=699e0bbd cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=HhURED8lYQe9u563lhwA:9
+X-Proofpoint-GUID: JQF8vhkCSA9f1Z8xvz0zGz7c5V2JE5gD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-24_02,2026-02-23_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 bulkscore=0 adultscore=0 spamscore=0
+ clxscore=1015 suspectscore=0 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602240173
 
-On Tue, 2026-02-24 at 14:53 -0500, Emil Tsalapatis wrote:
-> On Tue Feb 24, 2026 at 2:02 PM EST, Eduard Zingerman wrote:
-> > On Tue, 2026-02-24 at 13:46 -0500, Emil Tsalapatis wrote:
-> > > On Mon Feb 23, 2026 at 7:09 PM EST, Eduard Zingerman wrote:
-> > > > On Mon, 2026-02-23 at 16:50 -0500, Emil Tsalapatis wrote:
-> > >=20
-> > > Ack on the comments for 2/2. For here:
-> > > >=20
-> > > > [...]
-> > > >=20
-> > > > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > > > index 0162f946032f..e997c3776fa7 100644
-> > > > > --- a/kernel/bpf/verifier.c
-> > > > > +++ b/kernel/bpf/verifier.c
-> > > > > @@ -444,6 +444,29 @@ static bool subprog_is_global(const struct b=
-pf_verifier_env *env, int subprog)
-> > > > >  	return aux && aux[subprog].linkage =3D=3D BTF_FUNC_GLOBAL;
-> > > > >  }
-> > > > > =20
-> > > > > +static bool subprog_returns_void(struct bpf_verifier_env *env, i=
-nt subprog)
-> > > > > +{
-> > > > > +	const struct btf_type *type, *func, *func_proto;
-> > > > > +	const struct btf *btf =3D env->prog->aux->btf;
-> > > > > +	u32 btf_id;
-> > > > > +
-> > > > > +	btf_id =3D env->prog->aux->func_info[subprog].type_id;
-> > > > > +
-> > > > > +	func =3D btf_type_by_id(btf, btf_id);
-> > > > > +	if (verifier_bug_if(!func, env, "btf_id %u not found", btf_id))
-> > > > > +		return false;
-> > > > > +
-> > > > > +	func_proto =3D btf_type_by_id(btf, func->type);
-> > > > > +	if (verifier_bug_if(!func_proto, env, "btf_id %u not found", fu=
-nc->type))
-> > > > > +		return false;
-> > > > > +
-> > > > > +	type =3D btf_type_skip_modifiers(btf, func_proto->type, NULL);
-> > > > > +	if (verifier_bug_if(!type, env, "btf_id %u not found", func_pro=
-to->type))
-> > > > > +		return false;
-> > > > > +
-> > > >=20
-> > > > Nit: I there there are a few unnecessary 'verifier_bug_if()' checks=
- here,
-> > > >      e.g. btf.c:btf_check_all_types() guarantees that func->type an=
-d func_proto->type
-> > > >      would be valid.
-> > > >=20
-> > >=20
-> > > Ack, just to make sure I got it right at all the verifier_bug_if() ar=
-e
-> > > unnecessary. unnecessary because the BTF is already checked. There's =
-no way we
-> > > have an existing type with invalid fields. We also know the subprog b=
-tf
-> > > ID is valid from check_btf_func_early that happens way before
-> > > do_check_subprogs where subprog_returns_void is used.
-> >=20
-> > Certainly not needed for 'func->type' and 'func_proto->type' access.
-> > For 'func_info[subprog].type_id', idk -- depends on how defensive you
-> > want to be, I'd skip it as well.
-> >=20
-> > >=20
-> > > > > +	return btf_type_is_void(type);
-> > > > > +}
-> > > > > +
-> > > > >  static const char *subprog_name(const struct bpf_verifier_env *e=
-nv, int subprog)
-> > > > >  {
-> > > > >  	struct bpf_func_info *info;
-> > > >=20
-> > > > [...]
-> > > >=20
-> > > > > @@ -17812,6 +17837,16 @@ static int check_return_code(struct bpf_=
-verifier_env *env, int regno, const char
-> > > > > =20
-> > > > >  	/* LSM and struct_ops func-ptr's return type could be "void" */
-> > > > >  	if (!is_subprog || frame->in_exception_callback_fn) {
-> > > > > +
-> > > > > +		/*
-> > > > > +		 * If the actual program is an extension, let it
-> > > > > +		 * return void - attaching will succeed only if the
-> > > > > +		 * program being replaced also returns void, and since
-> > > > > +		 * it has passed verification its actual type doesn't matter.
-> > > > > +		 */
-> > > > > +		if (env->prog->type =3D=3D BPF_PROG_TYPE_EXT && subprog_return=
-s_void(env, frame->subprogno))
-> > > > > +			return 0;
-> > > > > +
-> > > > >  		switch (prog_type) {
-> > > > >  		case BPF_PROG_TYPE_LSM:
-> > > > >  			if (prog->expected_attach_type =3D=3D BPF_LSM_CGROUP)
-> > > > > @@ -17841,6 +17876,10 @@ static int check_return_code(struct bpf_=
-verifier_env *env, int regno, const char
-> > > > >  		default:
-> > > > >  			break;
-> > > > >  		}
-> > > > > +	} else {
-> > > > > +		/* If this is a void global subprog, there is no return value.=
- */
-> > > > > +		if (subprog_is_global(env, frame->subprogno) && subprog_return=
-s_void(env, frame->subprogno))
-> > > > > +			return 0;
-> > > >=20
-> > > > Suppose a global subprogram is verified and it calls bpf_throw().
-> > > > check_return_code() is called from check_kfunc_call() in such case
-> > > > with R1 as a parameter.  This check acts on the return type of the
-> > > > program, will it miss proper return value check for the program?
-> > > >=20
-> > >=20
-> > > Due to the short-circuiting herea a void global program can bpf_throw=
-()=20
-> > > with no issue. This is what we want, correct? The return type we chec=
-k=20
-> > > in that case would always be that of the u64 cookie AFAICT.
-> >=20
-> > I mean the following situation:
-> >=20
-> >   SEC(<I want some special return code>)
-> >   int foo(...) {
-> >     ... bar(...) ...;
-> >     return ...;
-> >   }
-> >=20
-> >   // global func
-> >   void bar(...) {=20
-> >     ... bpf_throw(<bad return code>) ...
-> >   }
-> >=20
-> > In this case 'bar' would correspond to 'frame' in the check above and
-> > <bad return code> won't be checked.
-> >=20
->=20
-> I see, yes this spuriously passes. Since the check_error_code only runs
-> for BPF_EXIT and bpf_throw, can we just check if we're inspecting
-> bpf_throw()'s return value like so?
->=20
-> bool is_bpf_throw =3D regno =3D=3D BPF_REG_1;
-> ...
-> if (subprog_is_global(env, frame->subprogno) && subprog_returns_void(env,=
- frame->subprogno)
-> 	&& !is_bpf_throw)
-> ...
->=20
-> We only need to use this check in two places in check_error_code
-> to solve the problem. With the fix we can also still throw from
-> void global() functions.
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-Would it be possible to split check_return_code() in two:
-- check_return_code() that checks program return code
-- check_throw_return_code() with throw specific logic,
-  referring back to check_return_code() if necessary?
+The verifier selftest validates JITed instructions by matching expected
+disassembly output. The first two patches fix issues in powerpc instruction
+disassembly that were causing test flow failures. The fix is common for 
+64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
+architecture tag in the third patch, enabling proper test filtering in
+verifier test files. Introduce verifier testcases for tailcalls on powerpc64
+in the final patch.
 
-> > >=20
-> > > > >  	}
-> > > > > =20
-> > > > >  	/* eBPF calling convention is such that R0 is used
-> > > >=20
-> > > > [...]
+Bug Details:
+------------
+
+    The Long branch stub in the trampoline implementation[1] provides
+    flexibility to handles short as well as long branch distance to
+    actual trampoline. Whereas, the 8 bytes long dummy_tramp_addr field
+    sitting before long branch stub leads to failure when enabling
+    verifier based seltest for ppc64.
+    
+    The verifier selftests require disassembing the final jited image
+    to get native instructions. Later the disassembled instruction
+    sequence is matched against sequence of instructions provided in
+    test-file under __jited() wrapper. The final jited image contains
+    Out-of-line stub and Long branch stub as part of epilogue jitting
+    for a bpf program. The 8 bytes space for dummy_tramp is sandwiched
+    between both above mentioned stubs. These 8 bytes contain memory
+    address of dummy trampoline during trampoline invocation which don't
+    correspond to any powerpc instructions. So, disassembly fails
+    resulting in failure of verifier selftests.
+    
+    The following code snippet shows the problem with current arrangement
+    made for dummy_tramp_addr.
+    
+    /* Out-of-line stub */
+    mflr    r0  
+    [b|bl]  tramp
+    mtlr    r0 //only with OOL 
+    b       bpf_func + 4 
+    /* Long branch stub */
+    .long   <dummy_tramp_addr>  <---Invalid bytes sequence, disassembly fails
+    mflr    r11 
+    bcl     20,31,$+4
+    mflr    r12 
+    ld      r12, -8-SZL(r12)
+    mtctr   r12 
+    mtlr    r11 //retain ftrace ABI 
+    bctr
+
+    Consider test program binary of size 112 bytes:
+    0:  00000060 10004de8 00002039 f8ff21f9 81ff21f8 7000e1fb 3000e13b
+    28: 3000e13b 2a006038 f8ff7ff8 00000039 7000e1eb 80002138 7843037d
+    56: 2000804e a602087c 00000060 a603087c bcffff4b c0341d00 000000c0
+    84: a602687d 05009f42 a602887d f0ff8ce9 a603897d a603687d 2004804e
+
+    Disassembly output of above binary for ppc64le:
+    pc:0     left:112    00 00 00 60  :  nop 
+    pc:4     left:108    10 00 4d e8  :  ld 2, 16(13)
+    pc:8     left:104    00 00 20 39  :  li 9, 0
+    pc:12    left:100    f8 ff 21 f9  :  std 9, -8(1)
+    pc:16    left:96     81 ff 21 f8  :  stdu 1, -128(1)
+    pc:20    left:92     70 00 e1 fb  :  std 31, 112(1)
+    pc:24    left:88     30 00 e1 3b  :  addi 31, 1, 48
+    pc:28    left:84     30 00 e1 3b  :  addi 31, 1, 48
+    pc:32    left:80     2a 00 60 38  :  li 3, 42
+    pc:36    left:76     f8 ff 7f f8  :  std 3, -8(31)
+    pc:40    left:72     00 00 00 39  :  li 8, 0
+    pc:44    left:68     70 00 e1 eb  :  ld 31, 112(1)
+    pc:48    left:64     80 00 21 38  :  addi 1, 1, 128 
+    pc:52    left:60     78 43 03 7d  :  mr    3, 8
+    pc:56    left:56     20 00 80 4e  :  blr 
+    pc:60    left:52     a6 02 08 7c  :  mflr 0
+    pc:64    left:48     00 00 00 60  :  nop 
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     c0 34 1d 00  :
+    ... 
+    
+    Failure log:
+    Can't disasm instruction at offset 76: c0 34 1d 00 00 00 00 c0 a6 02 68 7d 05 00 9f 42
+    --------------------------------------
+    
+    Observation:
+    Can't disasm instruction at offset 76 as this address has 
+    ".long <dummy_tramp_addr>" (0xc0341d00000000c0)
+    But valid instructions follow at offset 84 onwards.
+
+    Move the long branch address space to the bottom of the long
+    branch stub. This allows uninterrupted disassembly until the 
+    last 8 bytes. Exclude these last bytes from the overall
+    program length to prevent failure in assembly generation.
+
+    Following is disassembler output for same test program with moved down
+    dummy_tramp_addr field:
+    .....
+    .....
+    pc:68    left:44     a6 03 08 7c  :  mtlr 0
+    pc:72    left:40     bc ff ff 4b  :  b .-68
+    pc:76    left:36     a6 02 68 7d  :  mflr 11
+    pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4 
+    pc:84    left:28     a6 02 88 7d  :  mflr 12
+    pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
+    pc:92    left:20     a6 03 89 7d  :  mtctr 12
+    pc:96    left:16     a6 03 68 7d  :  mtlr 11
+    pc:100   left:12     20 04 80 4e  :  bctr
+    pc:104   left:8      c0 34 1d 00  :
+    
+    Failure log:
+    Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
+    ---------------------------------------
+    Disassembly logic can truncate at 104, ignoring last 8 bytes.
+    
+    Update the dummy_tramp_addr field offset calculation from the end 
+    of the program to reflect its new location, for bpf_arch_text_poke()
+    to update the actual trampoline's address in this field.
+    
+    [1] https://lore.kernel.org/all/20241030070850.1361304-18-hbathini@linux.ibm.com/
+
+Abhishek Dubey (4):
+  powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
+  selftest/bpf: Fixing powerpc JIT disassembly failure
+  selftest/bpf: Enable verifier selftest for powerpc64
+  selftest/bpf: Add tailcall verifier selftest for powerpc64
+
+ arch/powerpc/net/bpf_jit_comp.c               | 45 +++++++++---
+ .../selftests/bpf/jit_disasm_helpers.c        | 13 +++-
+ tools/testing/selftests/bpf/progs/bpf_misc.h  |  1 +
+ .../bpf/progs/verifier_tailcall_jit.c         | 69 +++++++++++++++++++
+ tools/testing/selftests/bpf/test_loader.c     |  5 ++
+ 5 files changed, 121 insertions(+), 12 deletions(-)
+
+-- 
+2.52.0
+
