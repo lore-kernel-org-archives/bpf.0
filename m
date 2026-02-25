@@ -1,30 +1,30 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E433B8D6A
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 13:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE6A33890B
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 13:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772027026; cv=none; b=iciK9JGvn4TWMMKA5drDq+UUU+SFC0WOm8itYkR+bS+K3psL0QdJdeInou+NeAOJw7E82orLHRkT9JqmzIbz/ISZxuhv7j/HKYTjVA/Kq5NIs6NvZYueWAYxfs7TbSqvlxGmKK0NLBDXw5fLBzFNvLb5yTKYM+105gpDo1ftW8w=
+	t=1772027412; cv=none; b=QWVKSlL6cW5WXj+wxf0rjMSzSqvO1qZtJR4oIWTwIpiPTXswJ6g8WA+fPb9X9OKMV1y5cZBU/Xhqj0LkvojCr/ybgDot/YwYuhzCa6huYxPppJ6iVDNm6n1mdK749WrUPGDbu1CGQ5vjYjkKI8rwTQTOGGIf5dfflBbYnbBKZy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772027026; c=relaxed/simple;
-	bh=wBKev94WNU/mMgqABeTD68xaDxF4LQZShspMIUNbknw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eQC861mvnSVRRtuJ4VjRyq0HFvryTk7RoV8kMAAbvQQrEqrqXpIrvYU3e0Hjomzu3RonSOKxWCT0YA62f4gwMStEMrihqwWeBgqFWWxCmvqLEHI+ROo4r0bZ+thoVA64OZqZEbDhmRL91XoUz+Dx8Et0bftPWfyHrco+QqGLS9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WpYodwNH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772027412; c=relaxed/simple;
+	bh=k7OL4Ho3Zh+g/dPKV4RhS2+mSUBpIC3EAhma7eGVWSQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lc58VX2qWRVt0LMavzNkCTC0nM3HCMih9Ar4J0zbZ3jSz6XSHFaVJeTbwBjM1iuXDeBbCOb9qWexxAx00JLEXMCl9nA4PTLUVP2X20vFMRyE/CYtx2KeQVYYMgVhmmmhgMl2M2A4ZXl9ux8W/9scNFMD7AaYkuJHY1a/fX/wEWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=muDU7TFb; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WpYodwNH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58CF7C116D0;
-	Wed, 25 Feb 2026 13:43:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="muDU7TFb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4ED7C116D0;
+	Wed, 25 Feb 2026 13:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772027026;
-	bh=wBKev94WNU/mMgqABeTD68xaDxF4LQZShspMIUNbknw=;
+	s=k20201202; t=1772027411;
+	bh=k7OL4Ho3Zh+g/dPKV4RhS2+mSUBpIC3EAhma7eGVWSQ=;
 	h=From:To:Cc:Subject:Date:From;
-	b=WpYodwNHAqM3agoLtd3Bd5HxFsLCuOe60IYzmZV5AcqI+f/PCjOnGKkcsbOOmJIk9
-	 a6brE3QJPQvBWaU+sxvRx+r+lLRv5G6BPnogLypuQ2mDEIOWnWvEmokjZp2B2LgFba
-	 SQ5jzJK/LfuwxNaMYvy9UZt42AuRNsfp/hinX2kBf4SKxfE5vv7w7UM2Jnqeq3zmD+
-	 C98A+3Nv8Q11oYrqkg+75D0TfZTy3cn+BHaDeFy4j+PiQOwCIlXM3OgQWc4aWiyogt
-	 4t2gae3V09zuCX2jn0yRi3q0QdS2dM5WwtgkpNgWlMQE5JKm75NO1EqfeUeDlL1grT
-	 BM6v/L43FaJ6A==
+	b=muDU7TFbmQoyH99KTFeqYZsTYOF4FJYryruCP0YLT+AYCWlDDtrdzc4so2EJZ53tP
+	 MKn0JfdTyTLNZLSPL6dX4uG7YXwbcGRusWwwEeP+2rd4z6azaiqmffTmmLCxyo5pjj
+	 L3EDWa1Mb9baG98nu2Mkx/+7ZhT5hKhZUmF9PCI8lpTYBBgkU51IywOYjr+TtYHsmm
+	 skpPhvR3s1sRNXzEVnUPhciQG2IcYd2ryiI3qBr6GLWXVp439VIgKxd1eRdaKBBICV
+	 DiaKo+zY2m4FZhf6QuPnSsC8L9xbLzeP9AAczxWM04pW4/UwUz/wEeo6HSrNgIDzCC
+	 b/sLwLumOWPjw==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -36,11 +36,10 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	Xu Kuohai <xukuohai@huaweicloud.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next] bpf, arm64: Use ORR-based MOV for general-purpose registers
-Date: Wed, 25 Feb 2026 05:43:38 -0800
-Message-ID: <20260225134339.2723288-1-puranjay@kernel.org>
+Subject: [PATCH bpf-next 1/2] bpf: Consolidate sleepable checks in check_helper_call()
+Date: Wed, 25 Feb 2026 05:49:48 -0800
+Message-ID: <20260225134950.2781351-1-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -48,109 +47,80 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The A64_MOV macro unconditionally uses ADD Rd, Rn, #0 to implement
-register moves. While functionally correct, this is not the canonical
-encoding when both operands are general-purpose registers.
+check_helper_call() prints the error message for every
+env->cur_state->active* element when calling a sleepable helper.
+Consolidate all of them into a single print statement.
 
-On AArch64, MOV has two aliases depending on the operand registers:
-  - MOV <Xd|SP>, <Xn|SP>  →  ADD <Xd|SP>, <Xn|SP>, #0
-  - MOV <Xd>, <Xn>        →  ORR <Xd>, XZR, <Xn>
-
-The ADD form is required when the stack pointer is involved (as ORR
-does not accept SP), while the ORR form is the preferred encoding for
-general-purpose registers.
-
-The ORR encoding is also measurably faster on modern microarchitectures.
-A microbenchmark [1] comparing dependent chains of MOV (ORR) vs ADD #0
-on an ARM Neoverse-V2 (72-core, 3.4 GHz) shows:
-
-  === mov (ORR Xd, XZR, Xn) ===
-  run1 cycles/op=0.749859456
-  run2 cycles/op=0.749991250
-  run3 cycles/op=0.749601847
-  avg cycles/op=0.749817518
-
-  === add0 (ADD Xd, Xn, #0) ===
-  run1 cycles/op=1.004777689
-  run2 cycles/op=1.004558266
-  run3 cycles/op=1.004806559
-  avg cycles/op=1.004714171
-
-The ORR form completes in ~0.75 cycles/op vs ~1.00 cycles/op for ADD #0,
-a ~25% improvement. This is likely because the CPU's register renaming
-hardware can eliminate ORR-based moves, while ADD #0 must go through the
-ALU pipeline.
-
-Update A64_MOV to select the appropriate encoding at JIT time:
-use ADD when either register is A64_SP, and ORR (via
-aarch64_insn_gen_move_reg()) otherwise.
-
-Update verifier_private_stack selftests to expect "mov x7, x0" instead
-of "add x7, x0, #0x0" in the JITed instruction checks, matching the
-new ORR-based encoding.
-
-[1] https://github.com/puranjaymohan/scripts/blob/main/arm64/bench/run_mov_vs_add0.sh
+The check for env->cur_state->active_locks was not part of the removed
+print statements and will not be triggered with the consolidated print
+as well because it is checked in do_check() before check_helper_call()
+is even reached.
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- arch/arm64/net/bpf_jit.h                                  | 4 +++-
- .../testing/selftests/bpf/progs/verifier_private_stack.c  | 8 ++++----
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ kernel/bpf/verifier.c | 40 ++++++++++++++++++----------------------
+ 1 file changed, 18 insertions(+), 22 deletions(-)
 
-diff --git a/arch/arm64/net/bpf_jit.h b/arch/arm64/net/bpf_jit.h
-index bbea4f36f9f2..d13de4222cfb 100644
---- a/arch/arm64/net/bpf_jit.h
-+++ b/arch/arm64/net/bpf_jit.h
-@@ -187,7 +187,9 @@
- /* Rn - imm12; set condition flags */
- #define A64_CMP_I(sf, Rn, imm12) A64_SUBS_I(sf, A64_ZR, Rn, imm12)
- /* Rd = Rn */
--#define A64_MOV(sf, Rd, Rn) A64_ADD_I(sf, Rd, Rn, 0)
-+#define A64_MOV(sf, Rd, Rn) \
-+	(((Rd) == A64_SP || (Rn) == A64_SP) ? A64_ADD_I(sf, Rd, Rn, 0) : \
-+	 aarch64_insn_gen_move_reg(Rd, Rn, A64_VARIANT(sf)))
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1153a828ce8d..e8c4a5f8520d 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11549,6 +11549,19 @@ static inline bool in_sleepable_context(struct bpf_verifier_env *env)
+ 	       in_sleepable(env);
+ }
  
- /* Bitfield move */
- #define A64_BITFIELD(sf, Rd, Rn, immr, imms, type) \
-diff --git a/tools/testing/selftests/bpf/progs/verifier_private_stack.c b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-index 1ecd34ebde19..646e8ef82051 100644
---- a/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_private_stack.c
-@@ -170,11 +170,11 @@ __jited("	mrs	x10, TPIDR_EL{{[0-1]}}")
- __jited("	add	x27, x27, x10")
- __jited("	add	x25, x27, {{.*}}")
- __jited("	bl	0x{{.*}}")
--__jited("	add	x7, x0, #0x0")
-+__jited("	mov	x7, x0")
- __jited("	mov	x0, #0x2a")
- __jited("	str	x0, [x27]")
- __jited("	bl	0x{{.*}}")
--__jited("	add	x7, x0, #0x0")
-+__jited("	mov	x7, x0")
- __jited("	mov	x7, #0x0")
- __jited("	ldp	x25, x27, [sp], {{.*}}")
- __naked void private_stack_callback(void)
-@@ -220,7 +220,7 @@ __jited("	mov	x0, #0x2a")
- __jited("	str	x0, [x27]")
- __jited("	mov	x0, #0x0")
- __jited("	bl	0x{{.*}}")
--__jited("	add	x7, x0, #0x0")
-+__jited("	mov	x7, x0")
- __jited("	ldp	x27, x28, [sp], #0x10")
- int private_stack_exception_main_prog(void)
++static const char *non_sleepable_context_description(struct bpf_verifier_env *env)
++{
++	if (env->cur_state->active_rcu_locks)
++		return "rcu_read_lock region";
++	if (env->cur_state->active_preempt_locks)
++		return "non-preemptible region";
++	if (env->cur_state->active_irq_id)
++		return "IRQ-disabled region";
++	if (env->cur_state->active_locks)
++		return "lock region";
++	return "non-sleepable context";
++}
++
+ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 			     int *insn_idx_p)
  {
-@@ -258,7 +258,7 @@ __jited("	add	x25, x27, {{.*}}")
- __jited("	mov	x0, #0x2a")
- __jited("	str	x0, [x27]")
- __jited("	bl	0x{{.*}}")
--__jited("	add	x7, x0, #0x0")
-+__jited("	mov	x7, x0")
- __jited("	ldp	x27, x28, [sp], #0x10")
- int private_stack_exception_sub_prog(void)
- {
+@@ -11609,28 +11622,11 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
+ 		return err;
+ 	}
+ 
+-	if (env->cur_state->active_rcu_locks) {
+-		if (fn->might_sleep) {
+-			verbose(env, "sleepable helper %s#%d in rcu_read_lock region\n",
+-				func_id_name(func_id), func_id);
+-			return -EINVAL;
+-		}
+-	}
+-
+-	if (env->cur_state->active_preempt_locks) {
+-		if (fn->might_sleep) {
+-			verbose(env, "sleepable helper %s#%d in non-preemptible region\n",
+-				func_id_name(func_id), func_id);
+-			return -EINVAL;
+-		}
+-	}
+-
+-	if (env->cur_state->active_irq_id) {
+-		if (fn->might_sleep) {
+-			verbose(env, "sleepable helper %s#%d in IRQ-disabled region\n",
+-				func_id_name(func_id), func_id);
+-			return -EINVAL;
+-		}
++	if (fn->might_sleep && !in_sleepable_context(env)) {
++		verbose(env, "sleepable helper %s#%d in %s\n",
++			func_id_name(func_id), func_id,
++			non_sleepable_context_description(env));
++		return -EINVAL;
+ 	}
+ 
+ 	/* Track non-sleepable context for helpers. */
 
 base-commit: f620af11c27b8ec9994a39fe968aa778112d1566
 -- 
