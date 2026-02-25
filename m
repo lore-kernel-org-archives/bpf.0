@@ -1,160 +1,114 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-oi1-f194.google.com (mail-oi1-f194.google.com [209.85.167.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484CF3D903F
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 18:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A232FE04E
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 18:51:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772044219; cv=none; b=sxuDpYKtrybo62BCskqYZISd4Eh0Fw8i+xca6Vtp+QxrBj6i+ebIOYtUeLF/fdEI9pV/QAJWQA2kwyLQosoLyRYj/cOOmMGWPHUOs5m96QXVCcUkRANkxlq5mXbcA4VP6SnbvZNdflHGpG0VF7+Mhu4a6RhtQTzYxa6C7QNLaJs=
+	t=1772045489; cv=none; b=WSZZ68NIeKXHjVbpG/qIw2dGPEPjjCR0AmzYl9iFEO6QYwApRBszWQ7sf6D7M9ktEU2akF9s7AQl6jMeC+2xrknmC2q6cHZkL+U06ox2oBEzrECO3Y4Za0RjLI1ejbh4+HwlXqpu+cfrjjzqJ4iJmwGTqeYtUoppBmEeiNgo3AI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772044219; c=relaxed/simple;
-	bh=HvjR3kpQYiCAqTjSMeLdm6d4cm70cKz4mWAlOhRmcEc=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=LMiAgAvtZgm4nZgFVxlFmTDthrOMWsJOyAKhNTCXGBeH4Jj6bhRBE4BWF1hgO+pkdLmOABSnnMV8cpRd9FiQHOONXiRH/8DacbNpqR+kKfTHboOi4uvyHBpSzOVPYCsjFqa0a9uLuaOIeMbEmou/nMpJBrelrhJcQfW6G666+Q4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GNFkvvFx; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1772045489; c=relaxed/simple;
+	bh=McsKewBnACnO0MD86xFLGwrmlKrGRkJ2pWHwqFUnxBE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kmgC/sDZtQ0rnua4OkaXyLkPI4gWoAbYP7kjiSEC82Gk6zxRueirIYq9amI0XMTPwMbJTm6J4evWOf3u1TrBuz7q/TovpD42aBmVhO3ZM512qG402SHjjmeP727n0EIR+zRMFGDVcIzVyiZDmqx+zB+pfLbogY0MjwzOzh1mkes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fo24WFdO; arc=none smtp.client-ip=209.85.167.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GNFkvvFx"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-48329eb96a7so440105e9.3
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 10:30:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fo24WFdO"
+Received: by mail-oi1-f194.google.com with SMTP id 5614622812f47-463208653d6so3194b6e.3
+        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 10:51:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772044217; x=1772649017; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=FnbM5EnO2GxrIGc1dBOoZyqSpexXn48KFfCSUQj0RSk=;
-        b=GNFkvvFxgEudX/7LNwpxu8kTJW/XEJLwIvhgHj0AvQ2gLkdkh31ThSX+fVD4pXISM/
-         r0JLUF9DzinQ7tbPcUTLBzUk5R7og2Fz94QcNtWI7yyQCqYcyhqe4GO/lXoPzLsDp+4U
-         sAKYL/HsQpskVq/C5c4rFpNvmpQ0U2BkBwAmLQ4n3tX9c7F1yk+psdFQQfyO4iEgDuSS
-         b5siRZIsW1zX6HEzsE/ab15AHAUszP5++aHqEyB9UEZHAqlrF/n8CQ1+ODCJ7IYQUleg
-         EUJ8keESHrmqIB/tBz+rSN+uggSRtG1bsGWZsOd3XjLozB8HupFNNua1/h9KpB+YDSGd
-         XwBg==
+        d=gmail.com; s=20230601; t=1772045483; x=1772650283; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VzwK0Z8rjJM0P9pmY69UOy8HnPcPWzbCoNiQ5fea7ns=;
+        b=fo24WFdOwzPCsGdssLJGrzWoJo+TSTYNNU8zM99d9mVBsOODUjes5HJ2uH0WwKs+nh
+         XUpwRfpoCNOxAPZLMEFZia+Ma7xSXX0VPse0rQsoH0nMEO+Iq+9MzD4UkLEQvrQpsYu5
+         BXQZT0p/2d71y9Hn6zZnsOqXrKY0NtZQ/ay2iIxowZo5uXUx7XrU+RfYZEhDpaDnwrG2
+         F8NeLasvcacdMERT16JGbQJnqYxugvMC1TIpRaLH3p2FT3xzbvSXtm4XWpHi/c8HYTiN
+         /UjfnomzFga7DFC5t/xQiouoENMteef+ra4WMHNDybUieeJRxvYY/c2Fna5nNuJ0L9F5
+         e2pA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772044217; x=1772649017;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FnbM5EnO2GxrIGc1dBOoZyqSpexXn48KFfCSUQj0RSk=;
-        b=w+0Lz3XK3j6xbzcDJi8qQqNgXaaQS5Ul+Wza936xc4VcmC5zySVio22l9Ju+iiQ68H
-         iNcXSuA3f+vzM7Gimmrjuigr9DtD2I9tYts6DfjtAKX1m81QISOwHEwYIdUvvS31+Nlx
-         gttJWCUX2D2yM1CDuZRQ3T/YDRXBL9cLDEVW3PR60+K7fBSwSJxxbvgK1BxoLfATGCDG
-         Uf3FBrkIMhmhMosK+Wah7ELmVOxg2kRD/797Uz/D8BajbRJr31+wuQSIhN5kguiHG5sH
-         LfSqyTQwTCopVkE+uiY4pHnS2nicG4Wjp3IP0HEsG/NXrM0ypwLvzVwv40+IKtrdLYni
-         GJFA==
-X-Forwarded-Encrypted: i=1; AJvYcCWCbnykMyk0kzFJxH39p0ZFoBRcdDOHkPY4qw8DRlcCVZNJMFDzpGlIS1fDHVPGYl++l5A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWwNlISMQAC0+Oj/UGUqrekjymfZcGTY30L0PM61Q4gtKMGZy9
-	UCHt6naJl2iN2qZGF51mU1iCLyiTViF+PTSCuy9kE4VpB03rXyTQJrmU
-X-Gm-Gg: ATEYQzyx31VppNiOVHCxGxYtzwU1QvxzlT95NK/nB0AXoQqekvbiygP9AF1lGfF4zTc
-	UY62SzehQhCFU7rQT0D1on9zHV2MLhhFskCg/aES9ulSah8R+w9V1QIgT8eO73oGlaSLyBHn7kp
-	yY3/CcxTRggIsGHVe/YVIO1LdTQuh8Zf/TEh0v1oWb9T7znyUtFO79LmyfBMznHAuiplg1zSiuY
-	hb1sIn2l2RQmn5j9/kvGGKJzqUvEDkNqNcIs072eHPtpy+F0LEZ115SJ1TlUrzwHidncZXHHrqf
-	kd0LxsRORo5WNAiIvrd6H0bNZzfCmRB45ONtFBy6omtneGF5ycajCVx4rmFGbYlPLDz14PygLfW
-	dVn3BK7Eot6g8E0pN+QgVgRAh9nk2nuNZmpFa633ctXUCl4JdcPs5nivwPt1L6SFrIOgyV39DDM
-	xFuLbq8wpMIjMkaxU=
-X-Received: by 2002:a05:600c:8107:b0:479:2f95:5179 with SMTP id 5b1f17b1804b1-483a95c5313mr306173925e9.15.1772044216438;
-        Wed, 25 Feb 2026 10:30:16 -0800 (PST)
-Received: from localhost ([2620:10d:c092:500::5:413a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd70e6c9sm67252695e9.8.2026.02.25.10.30.15
+        d=1e100.net; s=20230601; t=1772045483; x=1772650283;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VzwK0Z8rjJM0P9pmY69UOy8HnPcPWzbCoNiQ5fea7ns=;
+        b=MaSFsj72jNXDW4XXsTLecqIv+QG5RlGdLS1vsBhFhSdUhUEH1g+NpYjAWc/0E/ikW6
+         Jzbi4O+zv9VKYzy8vop24HX0xikWzU23p4omrhh8mEJ3CEzzWv2WbK7oxtDop4ciG2RY
+         2GVby+1dTj19OF+R35Hz7TdaiZv2+/W08KVN/BgzJuFDeMSdWrO+krdiZLhBBVMcipIj
+         23ZyLlGjJJZCHygtXMxdjUyzJPicH4KsM7BUcsrwtocXrix4cRjznuovTBVbUzIH6TUB
+         qBK1cF7Eof/2tAjR3No7f4M9oOFOoP5PnGoHm27e0liLRXqYcEn9DkyWVARCbQ+0THrr
+         zF9g==
+X-Gm-Message-State: AOJu0YxvK3f14ksQcaQNecj5aXYXKuEW2Og64gO1AILNqzfFmg5ZPwBZ
+	0ECxNX+/6e3bOh1qviKb7hwow/x/m5ILOCuup4QZ4oPKIv/HZkrN9Vv+0jvKRy6E
+X-Gm-Gg: ATEYQzzLAtF9Fd68IFXeL/78Nut6fS2RsQSY5TXLKp4+2mzEtGfBnKtn/Dxbvgqqle4
+	Kk3LLhrd62ngfEnwW8bLf9x6C7MpdrcdEZ/S9Fz5R4DD62f0MDaIhib3KLwv8bymnqE7S5cfr3C
+	yy+DIpk0i2L8ad5a51c+yMvR0ag8Rs1CKuRskQarWm+nB4M0/wL3bPaNNjETuSKm3eFxe1SkGq1
+	nJ+NKYPPW6YgziJZciHCX9tMgjY1U35ctV2SIHo+kwYpa3DkfEsPPMk5O0fwGlXZ8y4mtyTQ7OM
+	wC57tgWmJwpFf24am7TYtwwQp0HAfmyxbr5t9ntFoVT8G5y8PSx+FCTPuWq5/Pu/+52U3TjI5i1
+	sFUsd5dgykN2+NlvCXjq7FH2MKhrwy/QoBwCJBre+tMDgiW3ui8wH3c125Dr/mPvfCP8WpTMz0K
+	7zt9KoOXgxqjXMiqNdPtZT6eaZOwVLt2Yiys14V/CqwjA=
+X-Received: by 2002:a05:6808:309f:b0:45e:bfd1:c332 with SMTP id 5614622812f47-46446301ademr9887599b6e.32.1772045483104;
+        Wed, 25 Feb 2026 10:51:23 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:3::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4644a05040asm9127127b6e.9.2026.02.25.10.51.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 10:30:15 -0800 (PST)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>, Puranjay Mohan
- <puranjay12@gmail.com>, Alexei Starovoitov <ast@kernel.org>, Andrii
- Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- kernel-team@meta.com
-Subject: Re: [PATCH bpf-next 1/2] bpf: Consolidate sleepable checks in
- check_helper_call()
-In-Reply-To: <20260225134950.2781351-1-puranjay@kernel.org>
-References: <20260225134950.2781351-1-puranjay@kernel.org>
-Date: Wed, 25 Feb 2026 18:30:15 +0000
-Message-ID: <877bs0llqg.fsf@gmail.com>
+        Wed, 25 Feb 2026 10:51:22 -0800 (PST)
+From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	kkd@meta.com,
+	kernel-team@meta.com
+Subject: [PATCH bpf-next v1 0/4] Close race in freeing special fields and map value
+Date: Wed, 25 Feb 2026 10:51:17 -0800
+Message-ID: <20260225185121.2057388-1-memxor@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1506; h=from:subject; bh=McsKewBnACnO0MD86xFLGwrmlKrGRkJ2pWHwqFUnxBE=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpn0QMBT1TugeIY+URCqif4JCRlWXinz7NVWkAVesx UefdSYaJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaZ9EDAAKCRBM4MiGSL8RyqlZEA C2x2r4aA0FAOODVHNqYTftN1AcCxdmzKJv+RZVaQewKZAVkqZ8iAyXAfXnYQrLLMFUWisoUp5o+LgS rHd83ifY6UQMc5WL62NQZyyjgEtIZD9lRE2HMjnit4ETJvycbfnp/5v69l3kg4TIj8npWf3PbquyQ3 jGRhmDgWCslXfcxPwvqXW7F55WYEbEkJtLQdk/s7/JoZMXcg79yiJHL1mDreO/XC2K7tIft8M2/wET 6z3XfTbIUJpKrbDx6JlLKMzr+T+7qqHFMa2Yqb1sTighF26G5qkcu4J2DjSrV8BVM7m1aYNF70T/lr jBu/KifOOBlNaQevraWSWGK/7M/xz9qo2XVlWReWaFPZSKDabBH8LT6+nOoIUoL0JbMufQpj3l5q7E mkAEzjAmS/GSe/dU5xAmdswd7ccKkc9S7cRMOYvh3AG17RhHx0xp5NsQ3+NVYnMK9+GH/TrCXh8PVn 6hLBws+pDbqMxK8Tkmk3tyOslSuKd03Z0/sr746PoKah0qzxMS6bIj8Rv58x6JupFjcoWa24jj2ZdP zqQYGSG0KIPdq5BkdmeYTatkmajPls2LoCti4/uDs5IVrZerstVVgESaYaf0HlWuXFlLZB3h40k8GZ Zj0RJK0WR9/IdgGrZNMS3/TtIZM70taSGdvGAvxmUtYyy7iuGxBiH6FT1HyA==
+X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
+Content-Transfer-Encoding: 8bit
 
-Puranjay Mohan <puranjay@kernel.org> writes:
+There exists a race across various map types where the freeing of
+special fields (tw, timer, wq, kptr, etc.) can be done eagerly when a
+logical delete operation is done on a map value, such that the program
+which continues to have access to such a map value can recreate the
+fields and cause them to leak.
 
-> check_helper_call() prints the error message for every
-> env->cur_state->active* element when calling a sleepable helper.
-> Consolidate all of them into a single print statement.
->
-> The check for env->cur_state->active_locks was not part of the removed
-> print statements and will not be triggered with the consolidated print
-> as well because it is checked in do_check() before check_helper_call()
-> is even reached.
->
-> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> ---
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
->  kernel/bpf/verifier.c | 40 ++++++++++++++++++----------------------
->  1 file changed, 18 insertions(+), 22 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1153a828ce8d..e8c4a5f8520d 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -11549,6 +11549,19 @@ static inline bool in_sleepable_context(struct bpf_verifier_env *env)
->  	       in_sleepable(env);
->  }
->  
-> +static const char *non_sleepable_context_description(struct bpf_verifier_env *env)
-> +{
-> +	if (env->cur_state->active_rcu_locks)
-> +		return "rcu_read_lock region";
-> +	if (env->cur_state->active_preempt_locks)
-> +		return "non-preemptible region";
-> +	if (env->cur_state->active_irq_id)
-> +		return "IRQ-disabled region";
-> +	if (env->cur_state->active_locks)
-> +		return "lock region";
-> +	return "non-sleepable context";
-> +}
-> +
->  static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
->  			     int *insn_idx_p)
->  {
-> @@ -11609,28 +11622,11 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
->  		return err;
->  	}
->  
-> -	if (env->cur_state->active_rcu_locks) {
-> -		if (fn->might_sleep) {
-> -			verbose(env, "sleepable helper %s#%d in rcu_read_lock region\n",
-> -				func_id_name(func_id), func_id);
-> -			return -EINVAL;
-> -		}
-> -	}
-> -
-> -	if (env->cur_state->active_preempt_locks) {
-> -		if (fn->might_sleep) {
-> -			verbose(env, "sleepable helper %s#%d in non-preemptible region\n",
-> -				func_id_name(func_id), func_id);
-> -			return -EINVAL;
-> -		}
-> -	}
-> -
-> -	if (env->cur_state->active_irq_id) {
-> -		if (fn->might_sleep) {
-> -			verbose(env, "sleepable helper %s#%d in IRQ-disabled region\n",
-> -				func_id_name(func_id), func_id);
-> -			return -EINVAL;
-> -		}
-> +	if (fn->might_sleep && !in_sleepable_context(env)) {
-> +		verbose(env, "sleepable helper %s#%d in %s\n",
-> +			func_id_name(func_id), func_id,
-> +			non_sleepable_context_description(env));
-> +		return -EINVAL;
->  	}
->  
->  	/* Track non-sleepable context for helpers. */
->
-> base-commit: f620af11c27b8ec9994a39fe968aa778112d1566
-> -- 
-> 2.47.3
+The set contains fixes for this case. It is a continuation of Mykyta's
+previous attempt in [0], but applies to all fields. A test is included
+which reproduces the bug reliably in absence of the fixes.
+
+  [0]: https://lore.kernel.org/bpf/20260216131341.1285427-1-mykyta.yatsenko5@gmail.com
+
+Kumar Kartikeya Dwivedi (4):
+  bpf: Register dtor for freeing special fields
+  bpf: Delay freeing fields in local storage
+  bpf: Retire rcu_trace_implies_rcu_gp() from local storage
+  selftests/bpf: Add tests for special fields races
+
+ include/linux/bpf_mem_alloc.h                 |   4 +
+ kernel/bpf/bpf_local_storage.c                |  65 ++++----
+ kernel/bpf/hashtab.c                          |  37 +++++
+ kernel/bpf/memalloc.c                         |  42 +++--
+ .../selftests/bpf/prog_tests/map_kptr_race.c  | 155 ++++++++++++++++++
+ .../selftests/bpf/progs/map_kptr_race.c       | 145 ++++++++++++++++
+ 6 files changed, 403 insertions(+), 45 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+ create mode 100644 tools/testing/selftests/bpf/progs/map_kptr_race.c
+
+
+base-commit: f620af11c27b8ec9994a39fe968aa778112d1566
+-- 
+2.47.3
+
