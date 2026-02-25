@@ -1,92 +1,93 @@
-Received: from mta-65-226.siemens.flowmailer.net (mta-65-226.siemens.flowmailer.net [185.136.65.226])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FF8364020
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 11:11:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.65.226
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8595A213254
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 11:12:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772017867; cv=none; b=MnKB01cOVsIgM3KqLTDi7bhVGLDjxo/5i0vECiezLc1GXHmatVRCwXVHD6YLTamt78OhfIqkVy27FA7P15pHPSXmW2qaTr2Bo/O2w7LCtG/v60sNjUg1DSSM1IKmge0y35TjzCyfW11vdJa5VZET9woJXd7pN3PxxqsW+Zuu/eA=
+	t=1772017931; cv=none; b=DLUwjlJFEsArdJ87ocT18V7KQt1uMKRl5/kRENBr+XEBvuM8tDiKeWmJ4NqE0N3L9/jp+Ilkn+ISW3ktHfQBJLgKKJaQPRL6Vm9kPlFhpKvg2yR1TOAIYTjNW28Gm6ds95CcG89pagVCVGC3nFOko5AR0Z/Wbr5wdSpIOmpLKHE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772017867; c=relaxed/simple;
-	bh=EbYZckyTUpRdw1Kb/+WXutbwzQab58VCt2lVfCH9L94=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FaeWeTBfslph7tWhDsaQUvyaMco8IK/MwyhKLCVEv2DukGJ8IUJNd3fy2A4pyemmxiDctZ9MqgqxIlNGF0Lat9xMuCcFcMKzWIsnlSvyjXHTZM0JpVTW2me7j2jtIDl8YJ4m4W7KWI/S1WWypaWtvE+b0L1etUrFMjZUQAJR93E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b=IBktAHMd; arc=none smtp.client-ip=185.136.65.226
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+	s=arc-20240116; t=1772017931; c=relaxed/simple;
+	bh=euv0b1jOYXmox0xMfxa8d34uU4tYwxcEjUzRv5RY1lM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=d0tkxoPbzUWwtkmYbxudmmXQcD9PakFmccOqdXYiznBOIJTEW3K0/m2QNpENc0NUz1pILb0ZOdtS7Iqt5i8xCxMMzOnn7ODBAO5SKyIF8ViZ3S1Srn8lteSkN/N8lie0m8tzZ8CMEe8sru8G7+1kQ9y0u2Fpz+Z4BpLON7EVpOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RK6SAmZX; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=florian.bezdeka@siemens.com header.b="IBktAHMd"
-Received: by mta-65-226.siemens.flowmailer.net with ESMTPSA id 20260225111059e0084ffeea00020781
-        for <bpf@vger.kernel.org>;
-        Wed, 25 Feb 2026 12:10:59 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm2;
- d=siemens.com; i=florian.bezdeka@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=Asc7os5XgEttj+QqFfI9VdSfR3d7ytYJwpk2iQbc3GQ=;
- b=IBktAHMdRTU6V+8xrzNUCbSLyz2pcjARd1g51+nrvqYOdAqTA5KuLrcC6RTKX814EhQ6pD
- 98zkHaHWDzqmtcyXuEszOgWJwZdaq/f4WH95f2I+pem0PFeOFRWBH63YazXLYrijQBBkQL/E
- I8RTxLQUTSl6qUV3LxLCci+1NJ5vjjufACcZtO9/87kbP68/W4v687xlC/PrtWk0VkEmjFkR
- CDX8RaFHnNo8P3jvEbhIej0nKleAyrQrsAykTPwfmIe7Gj/p9YMO581U0gBwwnqB9Ex3jUyw
- fkIzJIEpP9kbDMla0Xu05DrrRjJk6DGWhE9OXG2qmzU0kLCyXssSJT2g==;
-Message-ID: <f4232af291e742d0d0a110bbf6934ebdf490e153.camel@siemens.com>
-Subject: Re: [PATCH v2] igc: fix page fault in XDP TX timestamps handling
-From: Florian Bezdeka <florian.bezdeka@siemens.com>
-To: Zdenek Bouska <zdenek.bouska@siemens.com>, Tony Nguyen	
- <anthony.l.nguyen@intel.com>, Przemek Kitszel
- <przemyslaw.kitszel@intel.com>,  Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet	
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni	
- <pabeni@redhat.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann	
- <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, John
- Fastabend <john.fastabend@gmail.com>, Stanislav Fomichev <sdf@fomichev.me>,
- Richard Cochran	 <richardcochran@gmail.com>, Song Yoong Siang
- <yoong.siang.song@intel.com>,  Lai Peter Jun Ann <jun.ann.lai@intel.com>
-Cc: Vinicius Costa Gomes <vinicius.gomes@intel.com>, 
-	intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Date: Wed, 25 Feb 2026 12:10:58 +0100
-In-Reply-To: <20260225-igc-fix-xdp-tx-tstamp-pagefault-v2-1-bf797ec20f3b@siemens.com>
-References: 
-	<20260225-igc-fix-xdp-tx-tstamp-pagefault-v2-1-bf797ec20f3b@siemens.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RK6SAmZX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 016EBC116D0;
+	Wed, 25 Feb 2026 11:12:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772017931;
+	bh=euv0b1jOYXmox0xMfxa8d34uU4tYwxcEjUzRv5RY1lM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=RK6SAmZXI79+Yt1NFJ3rv3BhrnDrpdbVVJ4edONcjJ1B+KIrPbbXRFzbVTNCBOElN
+	 us5NL4WrigLTzuc8zOMv/ejciOlR2uGxv0AXzX0BGQne3wtRIoSEB2S6d+pnr6vMDq
+	 G+B+CCejF7vN7dbLGQFgDL7wJh45HEoQWMQ8stdDaarOenW8BtGJffyv9hxJZ2hBZC
+	 zYc1xgtNvRldltjvkaSp1UaICv2dEBLMw2XperskQE17RuxsP0fPgOsZwI84MZxXTX
+	 yueNVe9hTOq9lf9BUPwTJfICRkk3vGec9/Tghuee8A0aoH7LlCbcB7y3mmwCt5XPNA
+	 gOMpLxglQ2uOg==
+Content-Type: multipart/mixed; boundary="===============6469514507980447881=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-68982:519-21489:flowmailer
+Message-Id: <05836ab33e1d18dd049c73ae561f9348a3ec5a24dd9de56c72ebab6db14dcc60@mail.kernel.org>
+In-Reply-To: <20260225153950.15331-2-adubey@linux.ibm.com>
+References: <20260225153950.15331-2-adubey@linux.ibm.com>
+Subject: Re: [PATCH v2 2/2] selftests/bpf: Enable private stack tests for powerpc64
+From: bot+bpf-ci@kernel.org
+To: adubey@linux.ibm.com,linuxppc-dev@lists.ozlabs.org
+Cc: bpf@vger.kernel.org,hbathini@linux.ibm.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,maddy@linux.ibm.com,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 25 Feb 2026 11:12:09 +0000 (UTC)
 
-On Wed, 2026-02-25 at 10:58 +0100, Zdenek Bouska wrote:
-> If an XDP application that requested TX timestamping is shutting down
-> while the link of the interface in use is still up the following kernel
-> splat is reported:
->=20
-> [  883.803618] [   T1554] BUG: unable to handle page fault for address: f=
-fffcfb6200fd008
-> ...
-> [  883.803650] [   T1554] Call Trace:
-> [  883.803652] [   T1554]  <TASK>
-> [  883.803654] [   T1554]  igc_ptp_tx_tstamp_event+0xdf/0x160 [igc]
-> [  883.803660] [   T1554]  igc_tsync_interrupt+0x2d5/0x300 [igc]
-> ...
->=20
-> During shutdown of the TX ring the xsk_meta pointers are left behind, so
-> that the IRQ handler is trying to touch them.
->=20
-> This issue is now being fixed by cleaning up the stale xsk meta data on
-> TX shutdown. TX timestamps on other queues remain unaffected.
->=20
-> Fixes: 15fd021bc427 ("igc: Add Tx hardware timestamp request for AF_XDP z=
-ero-copy packet")
-> Signed-off-by: Zdenek Bouska <zdenek.bouska@siemens.com>
-> ---
-> Changes in v2:
-> - Moved 'adapter' variable declaration into the if block (Vinicius)
-> - Link to v1: https://lore.kernel.org/r/20260224-igc-fix-xdp-tx-tstamp-pa=
-gefault-v1-1-7c729ef61ee5@siemens.com
-> ---
+--===============6469514507980447881==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Florian Bezdeka <florian.bezdeka@siemens.com>
+> diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
+> --- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
+> +++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
+> @@ -7,7 +7,8 @@
+>
+>  char _license[] SEC("license") = "GPL";
+>
+> -#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
+> +#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) \
+> +				|| defined(__TARGET_ARCH_powerpc)
+
+As Christophe Leroy noted in the v1 review, __TARGET_ARCH_powerpc
+matches both powerpc32 and powerpc64.
+
+bpf_jit_supports_private_stack() in bpf_jit_comp.c returns
+IS_ENABLED(CONFIG_PPC64), so private stack is only available on
+powerpc64. On powerpc32 skip would be false, the tests would
+attempt to load programs with combined stack depths exceeding
+512 bytes, and the verifier would reject them.
+
+Was this intended to be addressed in a follow-up, or should the
+guard be narrowed to powerpc64 only?
+
+https://lore.kernel.org/bpf/1956c912-c880-4214-9bc3-e205902459b5@kernel.org/
+
+> [ ... ]
+
+The same change appears in struct_ops_private_stack_fail.c and
+struct_ops_private_stack_recur.c with the same concern.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22393518231
+
+AI-authorship-score: low
+AI-authorship-explanation: Straightforward mechanical change with copy-pasted test output, typical of a human developer enabling tests for a newly supported architecture.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Unaddressed review comment from the PowerPC BPF JIT co-maintainer about __TARGET_ARCH_powerpc matching both PPC32 and PPC64, causing test failures on powerpc32 where private stack is not supported.
+
+--===============6469514507980447881==--
