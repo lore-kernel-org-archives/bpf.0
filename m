@@ -1,68 +1,61 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from devnull.danielhodges.dev (vps-2f6e086e.vps.ovh.us [135.148.138.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE17B395D94
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 19:54:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744B1182B7;
+	Wed, 25 Feb 2026 20:29:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=135.148.138.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772049297; cv=none; b=q4E2HwuqwgWneBYP/MXZ3AFl4K5sZPs3PFl0zMTOW6GlXFWpHBaAC1RaNK7tzD0k/yxvKIkQ5IZgJ/LZp07YXt2D1AhoZhQOIUquAyxpVFRZVLaqHhCOzHXZ6KGyAmfKC6F3D+ZXATFw/EYx+aFUuWZ5PAeZ9PdC2mDv7ASBYcM=
+	t=1772051386; cv=none; b=CLud2P5uMCqFntb9vmdzNiznRcR6CKoGX1ar7HdCBQuw/8AAewRQkXJNT4fJYfdrMwIIzLj2+cW/W0r4fvjBZNcL51LhOAufoi8FmmDR61qttfi9npGO1ZiksqrngzwhH2Aquxs4kLrXV0DuCcEs+OQnyJyqzm/qwJJG/TaAp70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772049297; c=relaxed/simple;
-	bh=uWy7JOeZmBN/++A9/JkYdMLdmz+u5iHdPCOz7rwh1x8=;
+	s=arc-20240116; t=1772051386; c=relaxed/simple;
+	bh=MsjBP+XADbnF2pGp+2ZYR3FW34IqUtLzh0Krsr1pUWg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gYNmcbqyqPp/LRYofZ+uAylARloltZidRqTko+ZZXqkAsaCjv7k/QZBIrsBRLRZbwm3L/ZnAVn8YUzwuYT6CH5f+0OFwCIfj15W2tGqYnpyya/NSMxLwkny47mO4oKZRkP99EvR3biJea8sSmnPoVA6Gp6gy4giMIawJ2y6KMmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hRTWjANT; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	 MIME-Version; b=snCP98xTzyzhDLpky4pFllbnGUrnZdf0fPDKKqkudthZIM7G9q+kb7QaujraTWpz5Lcy9prQmBwoWHSZtEbeRSi9yLvZoI2wGt6ODhjjMHtdB7x+nK8qtS6ZvBAZap1Efi9CYObrfkq6mW+whKmR0jkkxarXFscoOWQFhHV4IR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev; spf=pass smtp.mailfrom=danielhodges.dev; dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=Q8CjVEgM; dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b=eC+t3KsH; arc=none smtp.client-ip=135.148.138.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=danielhodges.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=danielhodges.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hRTWjANT"
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61PJ0TYw1913564;
-	Wed, 25 Feb 2026 19:54:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=CKksP/7kRZbD8X/Qs
-	1392h9zaNldfBZ6sBaDcofTYeI=; b=hRTWjANTVJmFM4M6X8WB79LGEoGBTi8yb
-	+p1wGYGAMYMLiyoNLph29hDWXVoaQc+/oizyhisRC9YsqU+b+XlxpP3aCk6cByoH
-	rY0ym08R9bM1Jv9d3kXtbbfoZlSGw58fJVufPGl9NAkk7FarL9xVc7GkDrc1U3H/
-	PYEDUvoF3FUwkBO/6hP82XQWj66UpXdftelY6zuRHPr87kp9V8ecWnQ4Rbmi6vH2
-	ONFUIj7V+0ye70kbNexFfxTDMuIGlnh2UNfIZFTDMRxhLNA3r5yylFGVSP+uJ7Gg
-	MqUkAwOGzbrJp9vZ/CHBMtvs/+ff8LiIfTzqRGe+BLF/+WKCFBwdg==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf4722awx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Feb 2026 19:54:38 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61PJWMQN001646;
-	Wed, 25 Feb 2026 19:54:37 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfr1n74tj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 25 Feb 2026 19:54:37 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61PJsXZk15925594
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 25 Feb 2026 19:54:33 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8211520040;
-	Wed, 25 Feb 2026 19:54:33 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0435D20043;
-	Wed, 25 Feb 2026 19:54:32 +0000 (GMT)
-Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 25 Feb 2026 19:54:31 +0000 (GMT)
-From: adubey@linux.ibm.com
-To: linuxppc-dev@lists.ozlabs.org
-Cc: bpf@vger.kernel.org, hbathini@linux.ibm.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, maddy@linux.ibm.com,
-        Abhishek Dubey <adubey@linux.ibm.com>
-Subject: [PATCH v3 2/2] selftests/bpf: Enable private stack tests for powerpc64
-Date: Wed, 25 Feb 2026 19:54:40 -0500
-Message-ID: <20260226005440.9570-2-adubey@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="Q8CjVEgM";
+	dkim=permerror (0-bit key) header.d=danielhodges.dev header.i=@danielhodges.dev header.b="eC+t3KsH"
+DKIM-Signature: v=1; a=rsa-sha256; s=202510r; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1772051376; bh=PCmcFIzhjnC9egGss+/wXYW
+	qg/CtCSq4+JEDJ67Gi8g=; b=Q8CjVEgMx+wbWePMjVJemh4cmhVePvhQX2m3209eMrULgJj6dD
+	1+Y1NWW/GD5I1LWxeYVOKzp0QPdKC0s8vJTI98p6hFhZoz5IwpPfETJL+ndBjJcObDVLQoI/xYv
+	inBcfj2hSVXf3RVkSjwK2OtWM5roqQI8K5ZW9M4U0y1+D9o/Rd2ysMbw0tallRQ9CXL8c/3lhpD
+	OdLBhKdnVU1zZj2j3VawrrzNQ7wzxdTsQU4f+BVDo009PQwUiNDsfReUm782OCnAoy1C6OQSs7t
+	K5vyImEDXFOCi0/DFdtnxawad6JV0MQW7/+dJ1NjD9wTEKtVPD8YWpxVZIcQBBtzWYQ==;
+DKIM-Signature: v=1; a=ed25519-sha256; s=202510e; d=danielhodges.dev; c=relaxed/relaxed;
+	h=Message-ID:Date:Subject:To:From; t=1772051376; bh=PCmcFIzhjnC9egGss+/wXYW
+	qg/CtCSq4+JEDJ67Gi8g=; b=eC+t3KsHksvQ6o9Wdn2RFDOkol/mMsfRgL/zGSWhuV/3AOe+L8
+	B9z5mu1AYkoKsrAeud1D61jymSS/+slEcnCw==;
+From: Daniel Hodges <git@danielhodges.dev>
+To: bpf@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: ast@kernel.org,
+	andrii@kernel.org,
+	daniel@iogearbox.net,
+	vadim.fedorenko@linux.dev,
+	song@kernel.org,
+	yatsenko@meta.com,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	yonghong.song@linux.dev,
+	herbert@gondor.apana.org.au,
+	davem@davemloft.net,
+	Daniel Hodges <git@danielhodges.dev>
+Subject: [PATCH bpf-next v8 1/4] bpf: Add hash kfunc for cryptographic hashing
+Date: Wed, 25 Feb 2026 15:29:32 -0500
+Message-ID: <20260225202935.31986-2-git@danielhodges.dev>
 X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260226005440.9570-1-adubey@linux.ibm.com>
-References: <20260226005440.9570-1-adubey@linux.ibm.com>
+In-Reply-To: <20260225202935.31986-1-git@danielhodges.dev>
+References: <20260225202935.31986-1-git@danielhodges.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -70,180 +63,364 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 9CR3_HGp1kEVcI8n8CIfte2xBNlA0tcv
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDE4OCBTYWx0ZWRfXyniTK7qvobzM
- Xy9D3gY4W3Zdu1nXflv1MbSdV2fx5y4vVMbxRtRNlfv0RhxukceU76KgWOMCptN3ya3mqO1xy5Q
- 0SK/wAQCsRZGoc15umHBW4/ElUAJgg62/l6EBLkvukF0Pf8vW3BiADaRUDMfiOWTOrzQA6wKv43
- MJVx4Bn0vqxPsMYPAmyFNpFYegmGchenZQkmixW3xZHRlnujcqETch1fNUJvB2yCExKZzkGFQW3
- yXAHCTm/MnqyBukDkaprslrVGzk+BLHOSxtuOPNEbLVb/wIdPmKhpHeFgqAqnA/PayDkUUXsSvk
- UTzaRDAiZOwlIkW/E+YE2cF+6S7oGxbskb5KDLpmjPi3RhW5G0+oFEVD6Thli5xKvUgk5RZ3bIt
- gKtXCE36OyoNoCnNLy3TFmvNDcatRUtfd5s2I20sJXwj/qBH+cbfyRRnOrMdqY/2l2ZVd4YlSf2
- /IEDRCmB/F9DdFkUgzw==
-X-Authority-Analysis: v=2.4 cv=R7wO2NRX c=1 sm=1 tr=0 ts=699f537e cx=c_pps
- a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=WRW5XrRV495NP23rXD4A:9
-X-Proofpoint-GUID: 9CR3_HGp1kEVcI8n8CIfte2xBNlA0tcv
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-25_03,2026-02-25_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 clxscore=1015 impostorscore=0 phishscore=0 spamscore=0
- suspectscore=0 malwarescore=0 bulkscore=0 adultscore=0 lowpriorityscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602250188
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+Add bpf_crypto_shash module that registers a hash type with the BPF
+crypto infrastructure, enabling BPF programs to access kernel hash
+algorithms through a unified interface.
 
-With support of private stack, relevant tests must pass
-on powerpc64.
+The bpf_crypto_type interface is extended with hash-specific callbacks:
+   - alloc_tfm: Allocates crypto_shash context with proper descriptor size
+   - free_tfm: Releases hash transform and context memory
+   - has_algo: Checks algorithm availability via crypto_has_shash()
+   - hash: Performs single-shot hashing via crypto_shash_digest()
+   - digestsize: Returns the output size for the hash algorithm
+   - get_flags: Exposes transform flags to BPF programs
 
-#./test_progs -t struct_ops_private_stack
-#434/1   struct_ops_private_stack/private_stack:OK
-#434/2   struct_ops_private_stack/private_stack_fail:OK
-#434/3   struct_ops_private_stack/private_stack_recur:OK
-#434     struct_ops_private_stack:OK
-Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
+Add bpf_crypto_hash() kfunc that works with any hash algorithm
+registered in the kernel's crypto API through the BPF crypto type
+system. This enables BPF programs to compute cryptographic hashes for
+use cases such as content verification, integrity checking, and data
+authentication.
 
-v2->v3:
-  Enable testcase using __powerpc64__ instead of __TARGET_ARCH_powerpc,
-  to prevent it getting invoked on powerpc32
+Update bpf_crypto_ctx_create() to support keyless operations:
+   - Hash algorithms don't require keys, unlike ciphers
+   - Only validates key presence if type->setkey is defined
+   - Conditionally sets IV/state length for cipher operations only
 
-[v2]: https://lore.kernel.org/bpf/20260225153950.15331-1-adubey@linux.ibm.com
-
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+Signed-off-by: Daniel Hodges <git@danielhodges.dev>
 ---
- .../bpf/prog_tests/struct_ops_private_stack.c | 29 +++++++++----------
- .../bpf/progs/struct_ops_private_stack.c      |  6 ----
- .../bpf/progs/struct_ops_private_stack_fail.c |  6 ----
- .../progs/struct_ops_private_stack_recur.c    |  6 ----
- 4 files changed, 13 insertions(+), 34 deletions(-)
+ MAINTAINERS                  |  1 +
+ crypto/Makefile              |  3 ++
+ crypto/bpf_crypto_shash.c    | 96 ++++++++++++++++++++++++++++++++++++
+ crypto/bpf_crypto_skcipher.c |  1 +
+ include/linux/bpf_crypto.h   |  9 ++++
+ kernel/bpf/crypto.c          | 93 ++++++++++++++++++++++++++++++----
+ 6 files changed, 194 insertions(+), 9 deletions(-)
+ create mode 100644 crypto/bpf_crypto_shash.c
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-index 4006879ca3fe..afad3522b772 100644
---- a/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/prog_tests/struct_ops_private_stack.c
-@@ -5,6 +5,7 @@
- #include "struct_ops_private_stack_fail.skel.h"
- #include "struct_ops_private_stack_recur.skel.h"
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 55af015174a5..6c78aae1bc6c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -4801,6 +4801,7 @@ BPF [CRYPTO]
+ M:	Vadim Fedorenko <vadim.fedorenko@linux.dev>
+ L:	bpf@vger.kernel.org
+ S:	Maintained
++F:	crypto/bpf_crypto_shash.c
+ F:	crypto/bpf_crypto_skcipher.c
+ F:	include/linux/bpf_crypto.h
+ F:	kernel/bpf/crypto.c
+diff --git a/crypto/Makefile b/crypto/Makefile
+index 04e269117589..4db6a76d4c3e 100644
+--- a/crypto/Makefile
++++ b/crypto/Makefile
+@@ -32,6 +32,9 @@ obj-$(CONFIG_CRYPTO_ECHAINIV) += echainiv.o
+ crypto_hash-y += ahash.o
+ crypto_hash-y += shash.o
+ obj-$(CONFIG_CRYPTO_HASH2) += crypto_hash.o
++ifeq ($(CONFIG_BPF_SYSCALL),y)
++obj-$(CONFIG_CRYPTO_HASH2) += bpf_crypto_shash.o
++endif
  
-+#if defined(__x86_64__) || defined(__aarch64__) || defined(__powerpc64__)
- static void test_private_stack(void)
- {
- 	struct struct_ops_private_stack *skel;
-@@ -15,11 +16,6 @@ static void test_private_stack(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack__open"))
- 		return;
- 
--	if (skel->data->skip) {
--		test__skip();
--		goto cleanup;
--	}
--
- 	err = struct_ops_private_stack__load(skel);
- 	if (!ASSERT_OK(err, "struct_ops_private_stack__load"))
- 		goto cleanup;
-@@ -48,11 +44,6 @@ static void test_private_stack_fail(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack_fail__open"))
- 		return;
- 
--	if (skel->data->skip) {
--		test__skip();
--		goto cleanup;
--	}
--
- 	err = struct_ops_private_stack_fail__load(skel);
- 	if (!ASSERT_ERR(err, "struct_ops_private_stack_fail__load"))
- 		goto cleanup;
-@@ -72,11 +63,6 @@ static void test_private_stack_recur(void)
- 	if (!ASSERT_OK_PTR(skel, "struct_ops_private_stack_recur__open"))
- 		return;
- 
--	if (skel->data->skip) {
--		test__skip();
--		goto cleanup;
--	}
--
- 	err = struct_ops_private_stack_recur__load(skel);
- 	if (!ASSERT_OK(err, "struct_ops_private_stack_recur__load"))
- 		goto cleanup;
-@@ -95,7 +81,7 @@ static void test_private_stack_recur(void)
- 	struct_ops_private_stack_recur__destroy(skel);
- }
- 
--void test_struct_ops_private_stack(void)
-+static void __test_struct_ops_private_stack(void)
- {
- 	if (test__start_subtest("private_stack"))
- 		test_private_stack();
-@@ -104,3 +90,14 @@ void test_struct_ops_private_stack(void)
- 	if (test__start_subtest("private_stack_recur"))
- 		test_private_stack_recur();
- }
-+#else
-+static void __test_struct_ops_private_stack(void)
-+{
-+	test__skip();
-+}
-+#endif
+ obj-$(CONFIG_CRYPTO_AKCIPHER2) += akcipher.o
+ obj-$(CONFIG_CRYPTO_SIG2) += sig.o
+diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
+new file mode 100644
+index 000000000000..6e9b0d757ec9
+--- /dev/null
++++ b/crypto/bpf_crypto_shash.c
+@@ -0,0 +1,96 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++#include <linux/types.h>
++#include <linux/module.h>
++#include <linux/bpf_crypto.h>
++#include <crypto/hash.h>
 +
-+void test_struct_ops_private_stack(void)
++struct bpf_shash_ctx {
++	struct crypto_shash *tfm;
++	struct shash_desc desc;
++};
++
++static void *bpf_crypto_shash_alloc_tfm(const char *algo)
 +{
-+	__test_struct_ops_private_stack();
++	struct bpf_shash_ctx *ctx;
++	struct crypto_shash *tfm;
++
++	tfm = crypto_alloc_shash(algo, 0, 0);
++	if (IS_ERR(tfm))
++		return tfm;
++
++	ctx = kzalloc(sizeof(*ctx) + crypto_shash_descsize(tfm), GFP_KERNEL);
++	if (!ctx) {
++		crypto_free_shash(tfm);
++		return ERR_PTR(-ENOMEM);
++	}
++
++	ctx->tfm = tfm;
++	ctx->desc.tfm = tfm;
++
++	return ctx;
 +}
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-index dbe646013811..3cd0c1a55cbd 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack.c
-@@ -7,12 +7,6 @@
++
++static void bpf_crypto_shash_free_tfm(void *tfm)
++{
++	struct bpf_shash_ctx *ctx = tfm;
++
++	crypto_free_shash(ctx->tfm);
++	kfree(ctx);
++}
++
++static int bpf_crypto_shash_has_algo(const char *algo)
++{
++	return crypto_has_shash(algo, 0, 0);
++}
++
++static int bpf_crypto_shash_hash(void *tfm, const u8 *data, u8 *out,
++				 unsigned int len)
++{
++	struct bpf_shash_ctx *ctx = tfm;
++
++	return crypto_shash_digest(&ctx->desc, data, len, out);
++}
++
++static unsigned int bpf_crypto_shash_digestsize(void *tfm)
++{
++	struct bpf_shash_ctx *ctx = tfm;
++
++	return crypto_shash_digestsize(ctx->tfm);
++}
++
++static u32 bpf_crypto_shash_get_flags(void *tfm)
++{
++	struct bpf_shash_ctx *ctx = tfm;
++
++	return crypto_shash_get_flags(ctx->tfm);
++}
++
++static const struct bpf_crypto_type bpf_crypto_shash_type = {
++	.alloc_tfm	= bpf_crypto_shash_alloc_tfm,
++	.free_tfm	= bpf_crypto_shash_free_tfm,
++	.has_algo	= bpf_crypto_shash_has_algo,
++	.hash		= bpf_crypto_shash_hash,
++	.digestsize	= bpf_crypto_shash_digestsize,
++	.get_flags	= bpf_crypto_shash_get_flags,
++	.owner		= THIS_MODULE,
++	.type_id	= BPF_CRYPTO_TYPE_HASH,
++	.name		= "hash",
++};
++
++static int __init bpf_crypto_shash_init(void)
++{
++	return bpf_crypto_register_type(&bpf_crypto_shash_type);
++}
++
++static void __exit bpf_crypto_shash_exit(void)
++{
++	int err = bpf_crypto_unregister_type(&bpf_crypto_shash_type);
++
++	WARN_ON_ONCE(err);
++}
++
++module_init(bpf_crypto_shash_init);
++module_exit(bpf_crypto_shash_exit);
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Hash algorithm support for BPF");
+diff --git a/crypto/bpf_crypto_skcipher.c b/crypto/bpf_crypto_skcipher.c
+index a88798d3e8c8..79d310fbcc48 100644
+--- a/crypto/bpf_crypto_skcipher.c
++++ b/crypto/bpf_crypto_skcipher.c
+@@ -63,6 +63,7 @@ static const struct bpf_crypto_type bpf_crypto_lskcipher_type = {
+ 	.statesize	= bpf_crypto_lskcipher_statesize,
+ 	.get_flags	= bpf_crypto_lskcipher_get_flags,
+ 	.owner		= THIS_MODULE,
++	.type_id	= BPF_CRYPTO_TYPE_SKCIPHER,
+ 	.name		= "skcipher",
+ };
  
- char _license[] SEC("license") = "GPL";
+diff --git a/include/linux/bpf_crypto.h b/include/linux/bpf_crypto.h
+index a41e71d4e2d9..cf2c66f9782b 100644
+--- a/include/linux/bpf_crypto.h
++++ b/include/linux/bpf_crypto.h
+@@ -3,6 +3,12 @@
+ #ifndef _BPF_CRYPTO_H
+ #define _BPF_CRYPTO_H
  
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
--bool skip __attribute((__section__(".data"))) = false;
--#else
--bool skip = true;
--#endif
--
- void bpf_testmod_ops3_call_test_2(void) __ksym;
++enum bpf_crypto_type_id {
++	BPF_CRYPTO_TYPE_SKCIPHER = 1,
++	BPF_CRYPTO_TYPE_HASH,
++	BPF_CRYPTO_TYPE_SIG,
++};
++
+ struct bpf_crypto_type {
+ 	void *(*alloc_tfm)(const char *algo);
+ 	void (*free_tfm)(void *tfm);
+@@ -11,10 +17,13 @@ struct bpf_crypto_type {
+ 	int (*setauthsize)(void *tfm, unsigned int authsize);
+ 	int (*encrypt)(void *tfm, const u8 *src, u8 *dst, unsigned int len, u8 *iv);
+ 	int (*decrypt)(void *tfm, const u8 *src, u8 *dst, unsigned int len, u8 *iv);
++	int (*hash)(void *tfm, const u8 *data, u8 *out, unsigned int len);
+ 	unsigned int (*ivsize)(void *tfm);
+ 	unsigned int (*statesize)(void *tfm);
++	unsigned int (*digestsize)(void *tfm);
+ 	u32 (*get_flags)(void *tfm);
+ 	struct module *owner;
++	enum bpf_crypto_type_id type_id;
+ 	char name[14];
+ };
  
- int val_i, val_j;
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-index 3d89ad7cbe2a..1442728f5604 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_fail.c
-@@ -7,12 +7,6 @@
+diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
+index 51f89cecefb4..3b2b0d06f1b2 100644
+--- a/kernel/bpf/crypto.c
++++ b/kernel/bpf/crypto.c
+@@ -139,7 +139,7 @@ __bpf_kfunc_start_defs();
+  * It may return NULL if no memory is available.
+  * @params:	pointer to struct bpf_crypto_params which contains all the
+  *		details needed to initialise crypto context.
+- * @params__sz:	size of steuct bpf_crypto_params usef by bpf program
++ * @params__sz:	size of struct bpf_crypto_params used by bpf program
+  * @err:	integer to store error code when NULL is returned.
+  */
+ __bpf_kfunc struct bpf_crypto_ctx *
+@@ -171,7 +171,12 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 		goto err_module_put;
+ 	}
  
- char _license[] SEC("license") = "GPL";
+-	if (!params->key_len || params->key_len > sizeof(params->key)) {
++	/* Hash operations don't require a key, but cipher operations do */
++	if (params->key_len > sizeof(params->key)) {
++		*err = -EINVAL;
++		goto err_module_put;
++	}
++	if (!params->key_len && type->setkey) {
+ 		*err = -EINVAL;
+ 		goto err_module_put;
+ 	}
+@@ -195,16 +200,23 @@ bpf_crypto_ctx_create(const struct bpf_crypto_params *params, u32 params__sz,
+ 			goto err_free_tfm;
+ 	}
  
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
--bool skip __attribute((__section__(".data"))) = false;
--#else
--bool skip = true;
--#endif
--
- void bpf_testmod_ops3_call_test_2(void) __ksym;
+-	*err = type->setkey(ctx->tfm, params->key, params->key_len);
+-	if (*err)
+-		goto err_free_tfm;
++	if (params->key_len) {
++		if (!type->setkey) {
++			*err = -EINVAL;
++			goto err_free_tfm;
++		}
++		*err = type->setkey(ctx->tfm, params->key, params->key_len);
++		if (*err)
++			goto err_free_tfm;
  
- int val_i, val_j;
-diff --git a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-index b1f6d7e5a8e5..faaa0f8d65a4 100644
---- a/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-+++ b/tools/testing/selftests/bpf/progs/struct_ops_private_stack_recur.c
-@@ -7,12 +7,6 @@
+-	if (type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY) {
+-		*err = -EINVAL;
+-		goto err_free_tfm;
++		if (type->get_flags(ctx->tfm) & CRYPTO_TFM_NEED_KEY) {
++			*err = -EINVAL;
++			goto err_free_tfm;
++		}
+ 	}
  
- char _license[] SEC("license") = "GPL";
+-	ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
++	if (type->ivsize && type->statesize)
++		ctx->siv_len = type->ivsize(ctx->tfm) + type->statesize(ctx->tfm);
  
--#if defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)
--bool skip __attribute((__section__(".data"))) = false;
--#else
--bool skip = true;
--#endif
--
- void bpf_testmod_ops3_call_test_1(void) __ksym;
+ 	refcount_set(&ctx->usage, 1);
  
- int val_i, val_j;
+@@ -325,6 +337,9 @@ __bpf_kfunc int bpf_crypto_decrypt(struct bpf_crypto_ctx *ctx,
+ 	const struct bpf_dynptr_kern *dst_kern = (struct bpf_dynptr_kern *)dst;
+ 	const struct bpf_dynptr_kern *siv_kern = (struct bpf_dynptr_kern *)siv__nullable;
+ 
++	if (ctx->type->type_id != BPF_CRYPTO_TYPE_SKCIPHER)
++		return -EINVAL;
++
+ 	return bpf_crypto_crypt(ctx, src_kern, dst_kern, siv_kern, true);
+ }
+ 
+@@ -346,9 +361,64 @@ __bpf_kfunc int bpf_crypto_encrypt(struct bpf_crypto_ctx *ctx,
+ 	const struct bpf_dynptr_kern *dst_kern = (struct bpf_dynptr_kern *)dst;
+ 	const struct bpf_dynptr_kern *siv_kern = (struct bpf_dynptr_kern *)siv__nullable;
+ 
++	if (ctx->type->type_id != BPF_CRYPTO_TYPE_SKCIPHER)
++		return -EINVAL;
++
+ 	return bpf_crypto_crypt(ctx, src_kern, dst_kern, siv_kern, false);
+ }
+ 
++#if IS_ENABLED(CONFIG_CRYPTO_HASH2)
++/**
++ * bpf_crypto_hash() - Compute hash using configured context
++ * @ctx:	The crypto context being used. The ctx must be a trusted pointer.
++ * @data:	bpf_dynptr to the input data to hash. Must be a trusted pointer.
++ * @out:	bpf_dynptr to the output buffer. Must be a trusted pointer.
++ *
++ * Computes hash of the input data using the crypto context. The output buffer
++ * must be at least as large as the digest size of the hash algorithm.
++ */
++__bpf_kfunc int bpf_crypto_hash(struct bpf_crypto_ctx *ctx,
++				const struct bpf_dynptr *data,
++				const struct bpf_dynptr *out)
++{
++	const struct bpf_dynptr_kern *data_kern = (struct bpf_dynptr_kern *)data;
++	const struct bpf_dynptr_kern *out_kern = (struct bpf_dynptr_kern *)out;
++	unsigned int digestsize;
++	u64 data_len, out_len;
++	const u8 *data_ptr;
++	u8 *out_ptr;
++
++	if (ctx->type->type_id != BPF_CRYPTO_TYPE_HASH)
++		return -EINVAL;
++
++	if (!ctx->type->hash)
++		return -EOPNOTSUPP;
++
++	data_len = __bpf_dynptr_size(data_kern);
++	out_len = __bpf_dynptr_size(out_kern);
++
++	if (data_len == 0 || data_len > UINT_MAX)
++		return -EINVAL;
++
++	if (!ctx->type->digestsize)
++		return -EOPNOTSUPP;
++
++	digestsize = ctx->type->digestsize(ctx->tfm);
++	if (out_len < digestsize)
++		return -EINVAL;
++
++	data_ptr = __bpf_dynptr_data(data_kern, data_len);
++	if (!data_ptr)
++		return -EINVAL;
++
++	out_ptr = __bpf_dynptr_data_rw(out_kern, out_len);
++	if (!out_ptr)
++		return -EINVAL;
++
++	return ctx->type->hash(ctx->tfm, data_ptr, out_ptr, data_len);
++}
++#endif /* CONFIG_CRYPTO_HASH2 */
++
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(crypt_init_kfunc_btf_ids)
+@@ -365,6 +435,9 @@ static const struct btf_kfunc_id_set crypt_init_kfunc_set = {
+ BTF_KFUNCS_START(crypt_kfunc_btf_ids)
+ BTF_ID_FLAGS(func, bpf_crypto_decrypt, KF_RCU)
+ BTF_ID_FLAGS(func, bpf_crypto_encrypt, KF_RCU)
++#if IS_ENABLED(CONFIG_CRYPTO_HASH2)
++BTF_ID_FLAGS(func, bpf_crypto_hash, KF_RCU)
++#endif
+ BTF_KFUNCS_END(crypt_kfunc_btf_ids)
+ 
+ static const struct btf_kfunc_id_set crypt_kfunc_set = {
+@@ -389,6 +462,8 @@ static int __init crypto_kfunc_init(void)
+ 	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_CLS, &crypt_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SCHED_ACT, &crypt_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_XDP, &crypt_kfunc_set);
++	/* Register for SYSCALL programs to enable testing and debugging */
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL, &crypt_kfunc_set);
+ 	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
+ 					       &crypt_init_kfunc_set);
+ 	return  ret ?: register_btf_id_dtor_kfuncs(bpf_crypto_dtors,
 -- 
 2.52.0
 
