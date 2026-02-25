@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE6A33890B
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 13:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC963D1CAA
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 13:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772027412; cv=none; b=QWVKSlL6cW5WXj+wxf0rjMSzSqvO1qZtJR4oIWTwIpiPTXswJ6g8WA+fPb9X9OKMV1y5cZBU/Xhqj0LkvojCr/ybgDot/YwYuhzCa6huYxPppJ6iVDNm6n1mdK749WrUPGDbu1CGQ5vjYjkKI8rwTQTOGGIf5dfflBbYnbBKZy4=
+	t=1772027416; cv=none; b=eghelSyu4jDZX9iGplDplrwnpiJoSg+zp+NAuphY2W+iYLgiPSlzcz7Q6JJmh2OL1MIE7Ji1tQryfU4edpDf+7dNITwnEHRQ1+7+Xjtm1N0+pJEwEAnaA/zAxAopfjjdNDO1CDiwpldYVebgClfRf7cTLYz6OPf9GagaWPNiwQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772027412; c=relaxed/simple;
-	bh=k7OL4Ho3Zh+g/dPKV4RhS2+mSUBpIC3EAhma7eGVWSQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lc58VX2qWRVt0LMavzNkCTC0nM3HCMih9Ar4J0zbZ3jSz6XSHFaVJeTbwBjM1iuXDeBbCOb9qWexxAx00JLEXMCl9nA4PTLUVP2X20vFMRyE/CYtx2KeQVYYMgVhmmmhgMl2M2A4ZXl9ux8W/9scNFMD7AaYkuJHY1a/fX/wEWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=muDU7TFb; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772027416; c=relaxed/simple;
+	bh=XdkFv8THPOie/296pE+CVB1asKJ1JaEzkhxX+iyyQYg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oGJkJ4nMuGiQTMA4+75WnbvxTkcpJZt2GCImtrPl11QyyvRiwZDI2DDu9rFSiqEXYbHrvPC/T6G5wdRpJjBpkHEUB24tQ9+N1n/GkCIEeOmfMYGnrDX1ymvRvnETXAwVPjg2ZW/sIH0eqjfWO+3/UsD9kC20F0LHhtO0nk77prs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WhrQR8ec; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="muDU7TFb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4ED7C116D0;
-	Wed, 25 Feb 2026 13:50:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WhrQR8ec"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F683C116D0;
+	Wed, 25 Feb 2026 13:50:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772027411;
-	bh=k7OL4Ho3Zh+g/dPKV4RhS2+mSUBpIC3EAhma7eGVWSQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=muDU7TFbmQoyH99KTFeqYZsTYOF4FJYryruCP0YLT+AYCWlDDtrdzc4so2EJZ53tP
-	 MKn0JfdTyTLNZLSPL6dX4uG7YXwbcGRusWwwEeP+2rd4z6azaiqmffTmmLCxyo5pjj
-	 L3EDWa1Mb9baG98nu2Mkx/+7ZhT5hKhZUmF9PCI8lpTYBBgkU51IywOYjr+TtYHsmm
-	 skpPhvR3s1sRNXzEVnUPhciQG2IcYd2ryiI3qBr6GLWXVp439VIgKxd1eRdaKBBICV
-	 DiaKo+zY2m4FZhf6QuPnSsC8L9xbLzeP9AAczxWM04pW4/UwUz/wEeo6HSrNgIDzCC
-	 b/sLwLumOWPjw==
+	s=k20201202; t=1772027415;
+	bh=XdkFv8THPOie/296pE+CVB1asKJ1JaEzkhxX+iyyQYg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WhrQR8ecY+P8G6iNRYVZ7d83tdAYAz4XhWIhKbJB4k7hmyYSRYC8MubSWzttHdbMr
+	 CQy6fqO3FtxlPN768aq/ij5175/DYE1C7kCypNIv0p6V7CNVwJOES/ZVfU7ayZjyxT
+	 TimpZvKcfgz6r83TqLsaB0LwSOBjTsXdWK5+ngXvy2bxc1FejMXh3MYXp2wGswQwr5
+	 Lb9tLnmCcfgyV4WndENXqHN0JJkoo2mUgO7AP7TkflPDD4q3z35feqWts2Yg4p7wr4
+	 B4oEAqZieVVkMo+1yESHcaav8AeJr7C79BgMUiYfJDrvLZ+uLXNvZ3IBtslVh+TTqd
+	 tGvXtTns+qZxg==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -37,10 +38,12 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next 1/2] bpf: Consolidate sleepable checks in check_helper_call()
-Date: Wed, 25 Feb 2026 05:49:48 -0800
-Message-ID: <20260225134950.2781351-1-puranjay@kernel.org>
+Subject: [PATCH bpf-next 2/2] bpf: Consolidate sleepable checks in check_kfunc_call()
+Date: Wed, 25 Feb 2026 05:49:49 -0800
+Message-ID: <20260225134950.2781351-2-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260225134950.2781351-1-puranjay@kernel.org>
+References: <20260225134950.2781351-1-puranjay@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -49,80 +52,78 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_helper_call() prints the error message for every
-env->cur_state->active* element when calling a sleepable helper.
-Consolidate all of them into a single print statement.
+check_kfunc_call() has multiple scattered checks that reject sleepable
+kfuncs in various non-sleepable contexts (RCU, preempt-disabled, IRQ-
+disabled). These are the same conditions already checked by
+in_sleepable_context(), so replace them with a single consolidated
+check.
 
-The check for env->cur_state->active_locks was not part of the removed
-print statements and will not be triggered with the consolidated print
-as well because it is checked in do_check() before check_helper_call()
-is even reached.
+This also simplifies the preempt lock tracking by flattening the nested
+if/else structure into a linear chain: preempt_disable increments,
+preempt_enable checks for underflow and decrements, and the sleepable
+check uses in_sleepable_context() which covers all non-sleepable
+contexts uniformly.
+
+No functional change since in_sleepable_context() checks all the same
+state (active_rcu_locks, active_preempt_locks, active_locks,
+active_irq_id, in_sleepable).
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- kernel/bpf/verifier.c | 40 ++++++++++++++++++----------------------
- 1 file changed, 18 insertions(+), 22 deletions(-)
+ kernel/bpf/verifier.c | 35 ++++++++++++-----------------------
+ 1 file changed, 12 insertions(+), 23 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 1153a828ce8d..e8c4a5f8520d 100644
+index e8c4a5f8520d..c26139b96c6a 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -11549,6 +11549,19 @@ static inline bool in_sleepable_context(struct bpf_verifier_env *env)
- 	       in_sleepable(env);
- }
- 
-+static const char *non_sleepable_context_description(struct bpf_verifier_env *env)
-+{
-+	if (env->cur_state->active_rcu_locks)
-+		return "rcu_read_lock region";
-+	if (env->cur_state->active_preempt_locks)
-+		return "non-preemptible region";
-+	if (env->cur_state->active_irq_id)
-+		return "IRQ-disabled region";
-+	if (env->cur_state->active_locks)
-+		return "lock region";
-+	return "non-sleepable context";
-+}
-+
- static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 			     int *insn_idx_p)
- {
-@@ -11609,28 +11622,11 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 		return err;
- 	}
- 
--	if (env->cur_state->active_rcu_locks) {
--		if (fn->might_sleep) {
--			verbose(env, "sleepable helper %s#%d in rcu_read_lock region\n",
--				func_id_name(func_id), func_id);
--			return -EINVAL;
--		}
+@@ -14153,34 +14153,23 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 				}
+ 			}));
+ 		}
+-	} else if (sleepable && env->cur_state->active_rcu_locks) {
+-		verbose(env, "kernel func %s is sleepable within rcu_read_lock region\n", func_name);
+-		return -EACCES;
+-	}
+-
+-	if (in_rbtree_lock_required_cb(env) && (rcu_lock || rcu_unlock)) {
+-		verbose(env, "Calling bpf_rcu_read_{lock,unlock} in unnecessary rbtree callback\n");
+-		return -EACCES;
 -	}
 -
 -	if (env->cur_state->active_preempt_locks) {
--		if (fn->might_sleep) {
--			verbose(env, "sleepable helper %s#%d in non-preemptible region\n",
--				func_id_name(func_id), func_id);
--			return -EINVAL;
+-		if (preempt_disable) {
+-			env->cur_state->active_preempt_locks++;
+-		} else if (preempt_enable) {
+-			env->cur_state->active_preempt_locks--;
+-		} else if (sleepable) {
+-			verbose(env, "kernel func %s is sleepable within non-preemptible region\n", func_name);
+-			return -EACCES;
 -		}
--	}
--
--	if (env->cur_state->active_irq_id) {
--		if (fn->might_sleep) {
--			verbose(env, "sleepable helper %s#%d in IRQ-disabled region\n",
--				func_id_name(func_id), func_id);
--			return -EINVAL;
--		}
-+	if (fn->might_sleep && !in_sleepable_context(env)) {
-+		verbose(env, "sleepable helper %s#%d in %s\n",
-+			func_id_name(func_id), func_id,
-+			non_sleepable_context_description(env));
-+		return -EINVAL;
+ 	} else if (preempt_disable) {
+ 		env->cur_state->active_preempt_locks++;
+ 	} else if (preempt_enable) {
+-		verbose(env, "unmatched attempt to enable preemption (kernel function %s)\n", func_name);
+-		return -EINVAL;
++		if (env->cur_state->active_preempt_locks == 0) {
++			verbose(env, "unmatched attempt to enable preemption (kernel function %s)\n",
++				func_name);
++			return -EINVAL;
++		}
++		env->cur_state->active_preempt_locks--;
++	} else if (sleepable && !in_sleepable_context(env)) {
++		verbose(env, "kernel func %s is sleepable within %s\n",
++			func_name, non_sleepable_context_description(env));
++		return -EACCES;
  	}
  
- 	/* Track non-sleepable context for helpers. */
-
-base-commit: f620af11c27b8ec9994a39fe968aa778112d1566
+-	if (env->cur_state->active_irq_id && sleepable) {
+-		verbose(env, "kernel func %s is sleepable within IRQ-disabled region\n", func_name);
++	if (in_rbtree_lock_required_cb(env) && (rcu_lock || rcu_unlock)) {
++		verbose(env, "Calling bpf_rcu_read_{lock,unlock} in unnecessary rbtree callback\n");
+ 		return -EACCES;
+ 	}
+ 
 -- 
 2.47.3
 
