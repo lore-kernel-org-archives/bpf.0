@@ -1,65 +1,66 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B312798E5
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 16:23:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06FE28469A
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 16:23:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772036637; cv=none; b=hRBm6G6Q6VSzUh4uOQd3iEC5ZP4JSZX36SL5S3TbbNJGd+sNeLUeBkWYkIx2pyLoJ5rq2VrcUitNLhxsvF9y1gi01E6RxMQ+5fwr7nS+IUdKfMHXM1pRRGLvR+niorCr4+t443iVwzCfLECMOkYmzrUJei++Sbu3svUSMmLZ2ps=
+	t=1772036638; cv=none; b=OLo38CQYaDyfjeG08cHAFgi03kveqLKWMPTZjAYUF+d9Q3F+LtGbtwCLuuClF9qRkZxqOQdYBmcfEGxQHx7os7bOF6sC0vJtTzXtio8Li0c9w6QjALyAlFIDXdgdQ2LXrn7e1U16AbHojwwpE18Z1vEh7XtXGzY+UoMP+P9maCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772036637; c=relaxed/simple;
-	bh=gsvUc/wnNO0M/csOUZ1gRAf96GWjGH5xm/B7l+BzW6w=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AvbbjuayjCnYJ2lMO0cKnMofw4tdaiJz1vPLczB7FgjVISWTWM4yzh1rClDZ7mNTkRUOuuXumNcBYKCa6aRbBklVSxybKEC+BfDkuYiSQFpb/RF+3JmzipTb1KIUtn08m4WjW+Mm6pqLBZOBvZ7WNNdmVBVIhkwqPSeU6q+e3wc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f9yAN1vt; arc=none smtp.client-ip=209.85.128.52
+	s=arc-20240116; t=1772036638; c=relaxed/simple;
+	bh=AeiVKLsCJRmiRaNRMIWhZPM41Svv0XRYbbydxIy8/6U=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=fRgcZ621bQWf3kLajc5Zc1KvescXYxfqdlxIK27M8ec1PvP38XbhaxG8RRHrClXNNXBfgMYGqrBEYJZ+ftqcGOBW6C4OpfC0ZYY0oToidrpZN9iuCJM32WKE2vqDSEk2EuzQkVYX8IjtSFT5gSUEBiflIxo3tz0De5pISyYhZus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GnGbSx3F; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f9yAN1vt"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-48336a6e932so42213315e9.3
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 08:23:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GnGbSx3F"
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-483703e4b08so10001855e9.1
+        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 08:23:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772036634; x=1772641434; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pUfzA6e/ymOWN+UIP0/6NI8B4wcYKwtSJz5+KSlm07g=;
-        b=f9yAN1vt75VylLywuOTnLMNkfkrkiZ1fneaAbLxbpfIJLf3g7lA8wa+SxsHOPWH3l7
-         KKWw9NGXFMX3vBF//oYvYspFCtr2iwdyXfW5FO+gfGpKsrLimaJZHVcBf5Tr1Ts5cZo2
-         vbYb2uk5U1y+5Sy0FUr86svEjoCjpS2xg5qVd+8GfZLgqvnuC+LGc+jsp9Fcqm1g0+yL
-         jWD7Sn8t0pkrguwYaWtCY3197kWRX6VJJLT89wRdTNGJ+7wMvangKGm9Ux4U1PJhsFg5
-         QZ67gJLuvuKlkhgwK7StBvgDka52BCejnjiZgGewP6b8qyYMeGE+3eLub12JGRcWn+W5
-         39tg==
+        d=gmail.com; s=20230601; t=1772036635; x=1772641435; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nYyuuM1gwHz7Pa17EejJA2IJzX2XF5uixq6EEh0OQsM=;
+        b=GnGbSx3Fp9/3PVDmVm5Y7x3ipHkQy/myILbLZGgezrGf2QuCOirUgt/s07dX8hrnBq
+         DX6jgVitpM8+gFe/ZcCgX23wlqDHBEF8Rn/V+/Vs0BN3kFiadn72tCHhr9aJ84N21xnV
+         NAnV65KPaYTzjdV7V7UBhXixUythdL3MnU6zmuDZMBhrJndXql3Mz/EbGAtPMpIJUNKs
+         UZQ0IlhORx7kP+LgGY6c72xJq7Oms7yweFFFHKa16C7K6xkOQkIgksQ1vrgnZY5NWC1O
+         DWTv/QPpKDomQG+iNdgiRRGND/Q9nIUoei2A8RZeVOqCHh/xEb/+7tdo8HxRd9aLKqrf
+         ZeYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772036634; x=1772641434;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pUfzA6e/ymOWN+UIP0/6NI8B4wcYKwtSJz5+KSlm07g=;
-        b=bNnrob6wXLe+eW7ySZHprq32MwKUYFynxApw/wgu/uJxOlCC6V9TMfzhjOxi1z23lU
-         sVOYPvHHwI38wGBovzLmIMGaczK6s8iCBTvH/mzqG5ZvdC7/S2oIP4wwPmtMY+tutC51
-         WX/bFqHeabIhuNzRiMr0oWQhiXTZezsVfFDYpHf4tIdVHV9fX/1ndir4pSPo4WhwXg1U
-         BjWo9Oe02AJrvbCVxa23wpDWlHBEoLouKCF/CnT08XT1H2Cxm8HK5IfEQ6uzG6W/4rGk
-         b5FYZifkckIVd9Rl9gB7I7hPIPSbvmaG0t+sL++iRkeMG4IwPwc1J4r7HWJTWbaLlSMD
-         5hIw==
-X-Gm-Message-State: AOJu0YwPwCtSZnIY5fTzdV5YfCQ5aVzgCU5eh6Z++YbkHYo5rBbPCUf6
-	eoYyVLia2Fi25gC+hsYJfTNcuLQNeka0F5yeclXHKiaq8VJTYm28mX3t
-X-Gm-Gg: ATEYQzyCJ0IG9y+CayUOF/sZSKtb7cBHqx7nkG8Gu6jcgSYvyiZA4Nxl1nUF4iLTbK3
-	WXy1SHfUOO3FPutpbdIRZbrhPh6qZMZxMsJYI7lALWcNABvqsTPi6ZBatqcrGFs75MwZgbIFmu/
-	sbeCr248VwaL1HoM6AE1TjldFJzFaTT0wLPQlCaxjZJqc+wcuXaFTwMsbht0zzpl4M1GE6pvsVH
-	DJqMVhrFpDR0M9MZ5cJq6Kb3Q887qlqiOPZFfY3uvT91D698b0xglBixqvc5js2qCkqp9O2Hv9A
-	n4N5I/9om9tf8SqjDeV5qfc21j80CCfjLehO874VTc04O/K/ykwfiH7KO9FAAvJd+fGGfWXTDsl
-	YHL8Ij/UXShbHG5+vi6qmtPhBOXydPd3fz8nfoXP5Qi23fdon8yMwDXSbTXWCANF5qIKuDj/9AV
-	mzFD6cIwocokcW+PiwPg==
-X-Received: by 2002:a05:600c:6815:b0:483:a21:7744 with SMTP id 5b1f17b1804b1-483c21a1195mr17797055e9.26.1772036633889;
-        Wed, 25 Feb 2026 08:23:53 -0800 (PST)
-Received: from localhost ([2a03:2880:30ff:54::])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bfbb465bsm37411215e9.3.2026.02.25.08.23.53
+        d=1e100.net; s=20230601; t=1772036635; x=1772641435;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=nYyuuM1gwHz7Pa17EejJA2IJzX2XF5uixq6EEh0OQsM=;
+        b=Z/SHhkuZofco05VDu4EavyWBoSLaSt1ML/hCV3O3GF+zn2XHvpPbdBMQ3ltt5v6Msp
+         GhOrDWQ4l5i6G/W6mYmUrGLJ+rmJBsitvz00+l9CJQo76ktqiOb3gEce0/2WTh2vO2Rx
+         FM0kP4sdMC7FcoVIrkQJ7z+OSfzp8uS1kCC3eAQFR+gvV4aRcxB62CJqQXPheD6z0ZV3
+         1Et8XTmSTrQzlNbcwakIbvAORvTQoioFWY7c1jOrQd01AAj4oJ1f1DxRnTVr8rlhqzMO
+         GuwnK5tTuSWhLDry3juhwqti4aDD5u2e/QW5sg0AD8IlONgDB1jIhzZcXI5u70rDJTCh
+         5oNw==
+X-Gm-Message-State: AOJu0YyzaNKtFDDH1KpqHpvCPosCumTg97hSMYNOKfTnqWoyZfy+kniV
+	ZOyckiTDQdwR3yZkSm5PisG3kKlAd4vNdohCOKDIbmlfKZP/zrrRdTDq
+X-Gm-Gg: ATEYQzy5QlIcyvEQqK+1dBPYlI/nruQhZDgTary+y1kmBGj+qpZmWitLoplcRSNkQJ8
+	TOG/EZqVm4QenucXwYShDzcmwu93mhloauYRCaQT4D2mrjGuHbEsWFdTuM8O98mG2FzwbRl4WHV
+	OSQjiIavanBjspykpN81Bg1rzOsE1XFMQQPWhuyub/yzSHEysOrTI0LLG4lArnJcTFK20nqt2HZ
+	dFIVTEjNxWjgC5HEbAF6RWDDihJ5CLYfuJeubCN/0xyh6HZuVmTTk9oGKlbXpTI2KWQyAkC84id
+	zbkpYVBYxfYTlwPdSiID5wPaMLQI9WnxnMlB9RskMFaLyuZsvK5wruCEIuJmFoHDYf1LM/5sa8R
+	a1gRBXr3SUGX3zNk4ZkAIw5mVfBFrp1kQK0/p8DTp4/5vVZ0xl+2FZehqQUe2EG69QWg3e4mfDk
+	7TJF1kIEfHNsznd5/g
+X-Received: by 2002:a05:600c:8b56:b0:483:7b99:131d with SMTP id 5b1f17b1804b1-483bd75e26emr79096335e9.16.1772036635184;
+        Wed, 25 Feb 2026 08:23:55 -0800 (PST)
+Received: from localhost ([2a03:2880:30ff:3::])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd750701sm87267625e9.11.2026.02.25.08.23.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 08:23:53 -0800 (PST)
+        Wed, 25 Feb 2026 08:23:54 -0800 (PST)
 From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-Subject: [PATCH bpf-next v2 0/6] bpf: Add support for sleepable raw
- tracepoint programs
-Date: Wed, 25 Feb 2026 08:23:48 -0800
-Message-Id: <20260225-sleepable_tracepoints-v2-0-0330dafd650f@meta.com>
+Date: Wed, 25 Feb 2026 08:23:49 -0800
+Subject: [PATCH bpf-next v2 1/6] bpf: Reject sleepable raw_tp programs on
+ non-faultable tracepoints
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -68,92 +69,56 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIABQin2kC/x3MSwqEMBBF0a1IjTuQxA/SW2kaifrUAokhFUQI7
- t3g8AzuzSSIDKFvlSniZOHDF9hPRdPm/ArFczFZbTttTadkB4IbdwwpugnhYJ9E1b1xMI3Rbau
- ptCFi4ev9/mgMi/K4Ev3v+wG8SdDvcQAAAA==
+Message-Id: <20260225-sleepable_tracepoints-v2-1-0330dafd650f@meta.com>
+References: <20260225-sleepable_tracepoints-v2-0-0330dafd650f@meta.com>
+In-Reply-To: <20260225-sleepable_tracepoints-v2-0-0330dafd650f@meta.com>
 To: bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org, 
  daniel@iogearbox.net, kafai@meta.com, kernel-team@meta.com, 
  eddyz87@gmail.com
 Cc: Mykyta Yatsenko <yatsenko@meta.com>
 X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772036632; l=3366;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772036632; l=1073;
  i=yatsenko@meta.com; s=20260220; h=from:subject:message-id;
- bh=gsvUc/wnNO0M/csOUZ1gRAf96GWjGH5xm/B7l+BzW6w=;
- b=FrIOY8bDuGvbWQjFVUROqoHAUMhkexGxrLnSIfMaeZU0PPX7HfwAnZKryBCUmRWLV0ux8aG5/
- 1M7h1YfP6lFDagEGEmPYAAFHJJSmRUyLUh6KpmyUscvsKRTXq8tPx7k
+ bh=3ug39tIJWf7aUfLIJsKQQtvtZdmXLhfMIGplgErV9SE=;
+ b=1zBaEOo9xysnTGwGOr6SwF8rcrDdLIqgPAKdeshtIw03mqvpmoUmZAZzIoukRSYWiK7ccg9Dw
+ 2XpEJS2FgW1CA7UwKQUFHScsUCqR2wYyV+V6USl7JZ8OGfvP8AXkq+t
 X-Developer-Key: i=yatsenko@meta.com; a=ed25519;
  pk=QUfct6THKRRhwIGGKcldE2w7zXPci1gMPcF7qij1gwA=
 
-This series adds support for sleepable BPF programs attached to raw
-tracepoints (tp_btf). The motivation is to allow BPF programs on
-syscall tracepoints to use sleepable helpers such as
-bpf_copy_from_user(), enabling reliable user memory reads that can
-page-fault.
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-Currently, raw tracepoint BPF programs always run with RCU read lock
-held and preemption disabled, which prevents calling any helper that
-might sleep. Faultable tracepoints (__DECLARE_TRACE_SYSCALL) already
-run under rcu_tasks_trace protection in process context where sleeping
-is safe.
+Add an attach-time check in bpf_raw_tp_link_attach() to ensure that
+sleepable BPF programs can only attach to faultable tracepoints.
+Faultable tracepoints (e.g., sys_enter, sys_exit) are guaranteed to
+run in a context where sleeping is safe, using rcu_tasks_trace for
+protection. Non-faultable tracepoints may run in NMI or other
+non-sleepable contexts.
 
-This series removes that restriction for faultable tracepoints:
-
-Patch 1 adds an attach-time check to reject sleepable programs on
-non-faultable tracepoints (e.g., sched_switch) that may run in NMI
-or other non-sleepable contexts. This is a no-op until the verifier
-allows sleepable raw_tp programs.
-
-Patch 2 modifies __bpf_trace_run() to support sleepable programs:
-use migrate_disable() instead of rcu_read_lock() for sleepable
-programs, call might_fault() to annotate faultable context, and rely
-on the outer rcu_tasks_trace lock from the faultable tracepoint
-callback for program lifetime protection.
-
-Patch 3 removes preempt_disable from the faultable tracepoint BPF
-callback wrapper, since preemption management is now handled
-per-program inside __bpf_trace_run().
-
-Patch 4 allows BPF_TRACE_RAW_TP programs to be loaded as sleepable.
-All runtime infrastructure is in place at this point, ensuring no
-bisectability issues.
-
-Patch 5 adds the tp_btf.s section handler in libbpf, following the
-existing pattern of fentry.s/fexit.s/lsm.s.
-
-Patch 6 adds selftests covering both the positive case (sleepable
-program on sys_enter using bpf_copy_from_user() to read user memory)
-and the negative case (sleepable program rejected on sched_switch).
+This complements the verifier-side change that allows BPF_TRACE_RAW_TP
+programs to be loaded as sleepable.
 
 Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
 ---
-Changes in v2:
-  - Address AI review points - modified the order of the patches
-  - Link to v1: https://lore.kernel.org/bpf/20260218-sleepable_tracepoints-v1-0-ec2705497208@meta.com/
+ kernel/bpf/syscall.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
----
-Mykyta Yatsenko (6):
-      bpf: Reject sleepable raw_tp programs on non-faultable tracepoints
-      bpf: Add sleepable execution path for raw tracepoint programs
-      bpf: Remove preempt_disable from faultable tracepoint BPF callbacks
-      bpf: Allow sleepable programs for BPF_TRACE_RAW_TP attach type
-      libbpf: Add tp_btf.s section handler for sleepable raw tracepoints
-      selftests/bpf: Add tests for sleepable raw tracepoint programs
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 0378e83b4099..6ddafb1b03fd 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -4261,6 +4261,11 @@ static int bpf_raw_tp_link_attach(struct bpf_prog *prog,
+ 	if (!btp)
+ 		return -ENOENT;
+ 
++	if (prog->sleepable && !tracepoint_is_faultable(btp->tp)) {
++		err = -EINVAL;
++		goto out_put_btp;
++	}
++
+ 	link = kzalloc_obj(*link, GFP_USER);
+ 	if (!link) {
+ 		err = -ENOMEM;
 
- include/trace/bpf_probe.h                          |  2 -
- kernel/bpf/syscall.c                               |  5 ++
- kernel/bpf/verifier.c                              |  3 +-
- kernel/trace/bpf_trace.c                           | 20 ++++++--
- tools/lib/bpf/libbpf.c                             |  1 +
- .../selftests/bpf/prog_tests/sleepable_raw_tp.c    | 56 ++++++++++++++++++++++
- .../selftests/bpf/progs/test_sleepable_raw_tp.c    | 43 +++++++++++++++++
- .../bpf/progs/test_sleepable_raw_tp_fail.c         | 16 +++++++
- tools/testing/selftests/bpf/verifier/sleepable.c   |  5 +-
- 9 files changed, 142 insertions(+), 9 deletions(-)
----
-base-commit: f620af11c27b8ec9994a39fe968aa778112d1566
-change-id: 20260216-sleepable_tracepoints-381ae1410550
-
-Best regards,
 -- 
-Mykyta Yatsenko <yatsenko@meta.com>
+2.47.3
 
