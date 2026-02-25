@@ -1,66 +1,65 @@
-Received: from mail-ot1-f66.google.com (mail-ot1-f66.google.com [209.85.210.66])
+Received: from mail-ot1-f65.google.com (mail-ot1-f65.google.com [209.85.210.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F57315D37
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 18:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEC62313537
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 18:51:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772045494; cv=none; b=DaLeHZmulmLHoyc1zYHkn1ldwga2g3k3wI0kttZgDmjDWaHkNKX2yt6WcnTCW36CqnE5H6SEmqyx2aizN1uu9Xl1BKwf557RzUypq4C7/2DTau9W1R3sykgtn64EgtAvmeWKlft01xflBzXXqs0qigYoIPzpCAtaNqQ9CJvlp5U=
+	t=1772045497; cv=none; b=bLYY9Uv6f0cSkrEiXzanVKAFKqtdHlttMGIlHj7smHgz7xrcP+4Ocbx3l2i+rnmwEGe9ehGzQtZqlb/8jVN2HkIOgm3WSWefs6ZNDBVfH/WoqZTDM6bB9NgthQPPNPVHkitm7Qy08ZvLQFdLYMjTufRBGws94kyU4+ClmsFe118=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772045494; c=relaxed/simple;
-	bh=ktSsHnIeb85+GLCRE/QVJBd+HUq/x/Mddonuzk6pSUI=;
+	s=arc-20240116; t=1772045497; c=relaxed/simple;
+	bh=EKYDu/wX3O1wBmI+zy5TeFFDDIKvsN8WJ2WI6YEIJDU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Hfxgg8mEvwfSLbKJ55jEo2IMHuTsxOfvKuDO6mLVrkvXAJolrHZRa6eUmT3UP+7PzyAYhFGxbcYSY9banYeWiQ3W/ioScVqDo3/k2Z6heIB7DbWsqpaqy3hsz14+XKaKRGujAN0WWNNqci57Zrs1k/hIHrk0fW4AlogUt+/c2QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jcGhrJ3T; arc=none smtp.client-ip=209.85.210.66
+	 MIME-Version; b=ePrSk1kI/QRtin7jW4+4GPOss4RkGnVm46DAbvdZao6hRdDODkU13wkXB1rzVVXfitXaKxSxeBjHSDHNN3LVSKPt8BbVZsNxiSk7KbZLHpspEIWTE2l4LtnF1zC4PezbpFkEW13g918d6/spP1GE8WIllACANy3uASx12Q68y/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kvhDHVmL; arc=none smtp.client-ip=209.85.210.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jcGhrJ3T"
-Received: by mail-ot1-f66.google.com with SMTP id 46e09a7af769-7d18c654458so3007854a34.3
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 10:51:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kvhDHVmL"
+Received: by mail-ot1-f65.google.com with SMTP id 46e09a7af769-7d1872504cbso1385261a34.0
+        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 10:51:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772045488; x=1772650288; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772045490; x=1772650290; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rvh2fMffXWUqz30wsgMK149EQv8Rx7SI2K+poEAhNIo=;
-        b=jcGhrJ3TzgucXdOLudnzr88nELSiCUTBlWakkmRCsrHNrWJ1s1e2n3EesuCQEgZKu1
-         m6z0tNAYR58riE1BFZ/Tl27+C11yG8PYAYy3tfWfOLdN56L5JIFTb4fq1AS26FMdbux/
-         kaTL6JgpbaUQGGOQpWLUqasGOUoCA+psMS1XBfQu59u+nFxaQhuPX+iXxTLJB428OMeE
-         LpFVrAHbL2xEazi7WlTyixYRL62OLBEMxHPAplZ/Z9yU1KHm9h+WmZjxXw0oeWyJu6dA
-         DdvtEc3kwoVvDkmoqgyv4JvnZG/Q52Ypd+y0sn2V6nAmFFfVb6RFoo2sCF3RMxNisN4e
-         lOZw==
+        bh=VGwr7JSsBS8q8t6kvg58ms9zCvnMXGezZMd6ktlCK44=;
+        b=kvhDHVmLmI+B80cWz6P1V3WH1+dxBKJFK3UF++CmQYlGnailZ3IQl+LpgdDzpCvOYs
+         oRI39/LZmSJP9z3bJzNiJqDy6KOc0n2N31lP39t70XrabqqFkej8RcLEBYWz8h6VhinB
+         C0sBAEVcvICcrpgm0e6RGD2vN+DJ7pxYpSOQf2eJrtQQdfoAJ4RjkwZYwbniAuEEcBQj
+         mwjJPYrOuSIpaPuTOxVG9BonlqdF6AhRuIo+fk3HF8uT7Uy5I3PwN4mn6Pd0UvH7OuRD
+         V8qBr6wrmh3QS7qIO3M336DUnERhDMMRvHT1aHdRrceocuQ1Nt2IdpkHfDwVvX/4uF1i
+         A5jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772045488; x=1772650288;
+        d=1e100.net; s=20230601; t=1772045490; x=1772650290;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rvh2fMffXWUqz30wsgMK149EQv8Rx7SI2K+poEAhNIo=;
-        b=NZt95b7BsUAL+zmKaakoX9PDeYT9R/EC4ccesk5XRKMdrytFCrgqPpWp3le0tps/zZ
-         IPsHxXfwHUEPuRdAjWKyr5VJgP2jE6uzuBvlWtNxsIK8p8Mbrgv506oAGbiE+WTtaEWf
-         s31Sws9nuR+vTM8v45Wj3o5CxJsp7ikgnmo5KnBFIfV/i5ysNrF41lHtz6eqXLD5ELxi
-         1Wlh9R5GtXZgDW5BTwCZNYBvk0mj7ZSqSn+7AUfjEwePV6hsbmjt0hSov2aTeiLRVC2y
-         JvbYnXXIK46WcF/CQVo92mvXPQxuVmVsl1iExOG4llj2AMXHJP7tV6Ytniop0ooUoKZI
-         tF9A==
-X-Gm-Message-State: AOJu0YwiIxtfKB9fGfwQNAFkKdYlnhqZFjERCtc+rJs1qKbTsIXcyQ9w
-	FKyqX4L4BATSHY8XEgSexRMGEq/5lwoffXsxVxwYfHPQBFAkaFQif0VeojQqFSSd
-X-Gm-Gg: ATEYQzzlUL3H5dVCt0apnb+oT6q6TQ9IN/PN32f3X4+KX3bQanauG+J8Q7bm6JRdlyg
-	OVqp5qbCZDHELS8J5Nv+gO6/9Aheux3rzskAyb0KkzIND9/p2gDwfu4tNXmFt3j9hVQRPrJjlMk
-	9YH2hxv+QKn5JyuDOe8c1a2A+NzUGR7VRbzx6hUl3wYdELcVijauk1Qjd6B8MRqpSiVjZnMpDeG
-	JBXPHV3BvcL6m2QRUGU6Jdn8UCfYKAUqxWsD9T8laUDfkyKlm2O9rtDXP2panT5rEoPSpoKIsMG
-	k/pavTWX2TzOv5WuuJwcKWRhXsag8O6fNdUqFdtsBQR1Loq8lUZ0Wi69VGgflQcMzQ2lP5LlQk7
-	cq6Hx+JQyd7+m8zZBHtIi07ac6FrYkhVrj/TbF0zh44HAGx7C0JDI02w+RC57WscWKkmt4HiQoH
-	lUQmKhiXPU0bgNgTxtuVnOG8cNJDmuW/IGum72B/f1pJE=
-X-Received: by 2002:a05:6870:2011:b0:409:7d3a:bfe1 with SMTP id 586e51a60fabf-4157ac4d509mr8420096fac.13.1772045488161;
-        Wed, 25 Feb 2026 10:51:28 -0800 (PST)
-Received: from localhost ([2a03:2880:10ff:9::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4157cfa6624sm15856727fac.8.2026.02.25.10.51.27
+        bh=VGwr7JSsBS8q8t6kvg58ms9zCvnMXGezZMd6ktlCK44=;
+        b=wEjgREdFEnX0/x4OPmSheQBgfhIKM3wVnVF/+LFU2IuR9M8XdA/Tm+pw8f9LCpNNqH
+         sGGBAE5oNRU/0miC3wtHYExbxs5AIB4wfYcG/Dd5PaYJQ4V3Ag7eaj7aB8drPeh/Djuf
+         f1xwvZFadyM3iPR6HTcczH/kKpKyj/nz3V4byVQALhbyuNXP4mkAwt+1o4de0WzbX1NV
+         MyUXOmd4LUMKVrTbL4fm/GhbZVe0AUaefv4K+ZLAryEvn/m0JH+a/zbMtcSGtKqNvXRd
+         nGiOuNIrr8y8/CqyoZskZ07VReOFDMp+vExdyn2Au083jSmlQ9UMLMh6pmvPOTEGMknL
+         bgAg==
+X-Gm-Message-State: AOJu0Ywt452FG/YGKC/mYtR49bgKt7RyPXgPK0MYoMQLSAQT2wuZErUO
+	IcgP9+8vIwA2nipmw5HSrWYAsDOGFRrDmThHGjgIYQn1KuuxG1VIzaUuWTo/6MIkc5A=
+X-Gm-Gg: ATEYQzxmVy7iup0UkOtrH85z/phP8LUyl2XjtZ/sxg0cXeHDk33lCQIHiU9o54X7cyx
+	Pn8n0XSq3sdlyc1cRYFgKcUGo/sqLrK48Ft8Sn7hXDXnT8ekxVHa+RtcHMK+T97gW9IJVUSDtcA
+	O+466lNHRl+xNuixX/yW2rUaWdtDNNUt67hB5BP8Ittmd/ikBqgWxdWugjVs03qkVYpVhloxFiv
+	wl/sGFhz6NCUgipax3bK0VsuWnmbqoNRvLxPEALgSoyRcLclg1JU92JgU1PySu0ZZZthE9keXz8
+	X0EaxQ89sX0Pv+GwZeKBbEIduUOHFi/1/60iC+sn0vbZEQEbW1NrSC/lXQ7UkdoVd3Tt23fud93
+	imW9IkTl1tHju07sDOJk1mMfS4Ti3uK4nuXJdDe0rPFJXK8SC/HUP/o9n8T9LNu9ilIO/dJZw51
+	wvjv1CiNdnMQGbYBm6CBNzXosXZILQE9NQSUXiTlYfPm4=
+X-Received: by 2002:a9d:6515:0:b0:7d1:9183:c683 with SMTP id 46e09a7af769-7d585784820mr37917a34.16.1772045490017;
+        Wed, 25 Feb 2026 10:51:30 -0800 (PST)
+Received: from localhost ([2a03:2880:10ff:7::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7d55b9a8498sm6464153a34.28.2026.02.25.10.51.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 10:51:27 -0800 (PST)
+        Wed, 25 Feb 2026 10:51:29 -0800 (PST)
 From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 To: bpf@vger.kernel.org
-Cc: "Paul E. McKenney" <paulmck@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+Cc: Alexei Starovoitov <ast@kernel.org>,
 	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@kernel.org>,
@@ -68,9 +67,9 @@ Cc: "Paul E. McKenney" <paulmck@kernel.org>,
 	Mykyta Yatsenko <yatsenko@meta.com>,
 	kkd@meta.com,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v1 3/4] bpf: Retire rcu_trace_implies_rcu_gp() from local storage
-Date: Wed, 25 Feb 2026 10:51:20 -0800
-Message-ID: <20260225185121.2057388-4-memxor@gmail.com>
+Subject: [PATCH bpf-next v1 4/4] selftests/bpf: Add tests for special fields races
+Date: Wed, 25 Feb 2026 10:51:21 -0800
+Message-ID: <20260225185121.2057388-5-memxor@gmail.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260225185121.2057388-1-memxor@gmail.com>
 References: <20260225185121.2057388-1-memxor@gmail.com>
@@ -80,91 +79,339 @@ List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2657; h=from:subject; bh=ktSsHnIeb85+GLCRE/QVJBd+HUq/x/Mddonuzk6pSUI=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpn0QMAKBz0t+sEK6gco7neCtjwOxPlFGfF1fx2zB3 SAQetkGJAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaZ9EDAAKCRBM4MiGSL8RytcyD/ 9NTVnClHQIdYrnTWi3vg3GfSAe2Kpcz0u6baScvgQljN8LKnUsZxKlAyM8uWSFAt+AwyiuchAV0P6K QdFEJHX0I8NYrO/Q4iMrQ4TV6ou5EIhPJY2GdJM1ETFgG4oq7PNZod2cdvJyhaS4w5HETjj8quBMN+ F7r1o9XboEhbOP18gr41nJzOqaWB8McuvZ132LGjdAoJsSr7pUiKSuT0KcIga5af66N5H2modS7HYP FWqru3KGD+FCu6pzuS2iRw2iwl2JfA0QBqKtBdsjsTPxuhzY+QuQ7L2BJA1xFBWAMWewLyUAn9pwUE VjTKXT1Vka9LvqgriqTIoBYv/nmcbZg2ijIp8UY9mnkBgZd0fouzp0Pkguq12HdSHbPgTcFp1YNFZn PeIE4+dmKBXT1dV2PQKAYMOcfMN6ImZtAXMktKFSkGq+S/CAvDyOZoIv0mXAMBwXhJAwFkTfLmOKHB zm3x+/nSrAycmcV4Sp+5JIFqVqivNmgsn6pUY+DIe7rd0Nl1yVVPKkGp1haf4EK48YwHzx+tmTIelk ZU9rbjkX1PbktZ+s9Xxsht7w9nOPgoIR9FyPMYAZcMlu8SZbtjQcRjdJ0aRyvNQHH5LjPcOqGedmMe I/7WeBpPh48tbfQAbJNyRadDCj5TLdFQVS/1ijEMn25KTqjIhaO9Ig1bUerA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=9090; h=from:subject; bh=EKYDu/wX3O1wBmI+zy5TeFFDDIKvsN8WJ2WI6YEIJDU=; b=owEBbQKS/ZANAwAIAUzgyIZIvxHKAcsmYgBpn0QNFcFdtwdGdsmhwHtAmQrERM1zVm+zZlodUno3 IXd7Hd+JAjMEAAEIAB0WIQRLvip+Buz51YI8YRFM4MiGSL8RygUCaZ9EDQAKCRBM4MiGSL8RyohVD/ 9JzHnW8Da31EfCXiTnG6k2UiTvM+yING2ZJHMpgIrcCIZdvNQaKaJKNJPhvq173Yvaf9b7jTem617S axQy6BG6obYyQX4zZivM7upHeZrc9/S7B9PdzZDwvVK8ejwMyyzp28TzfHvbOcWM9UJjWijeW9HvVP /51BHZASBf2aUbHw3T0iVSGM8aKoF3i//ndQ0BPgM1uFEGo482y45ah8OoXS2HQCA0e90Q8P9X+534 /YKq43BEo4w7X+8936sMpthie45cWyU5kE1gtwAd77mlG5HEmCNjIBUcxKFTFlWZP1Q8jX1BDnTa0t mmGIDvfkiFCo/PawQZeal8Dm6ioHv5+fXbe0GJOdvuAVE6cFlQTY/8UmhIDKq6Rrp6qk8PGxWbDJmn n52gRyaxrMp+021o2B6Y8HvoQ1Uyd7PgrVbKB9jrv7S+nYhBOTFi0pGEmUF4EMHE7BPeV03ydUJXGU +GoqJcqTNF98/UYrQw/Nhmj7G2VrekSAD2bEqqu6KaZK8GiFXSOhVh/w67s0FK0PEeZbyBXgSqHt57 XwObc61QULP9HeaD8tbDI9dWAe4DPnSgMKol5CbVbSf+wZFyJJlUW8Uivf5Hc2pSN5PEhUxPtQl5WT AMUcTQBMG0AkBeod6asb7CoGBSo7c1jWLfJpeCirpfY5yMy0N1hSctxkqsMg==
 X-Developer-Key: i=memxor@gmail.com; a=openpgp; fpr=4BBE2A7E06ECF9D5823C61114CE0C88648BF11CA
 Content-Transfer-Encoding: 8bit
 
-This assumption will always hold going forward, hence just remove the
-various checks and assume it is true with a comment for the uninformed
-reader.
+Add a couple of tests to ensure that the refcount drops to zero when we
+exercise the race where creation of a special field succeeds the logical
+bpf_obj_free_fields done when deleting an element. Prior to previous
+changes, the fields would be freed eagerly and repopulate and end up
+leaking, causing the reference to not drop down correctly. Running this
+test on a kernel without fixes will cause a hang in delete_module, since
+the module reference stays active due to the leaked kptr not dropping
+it. After the fixes tests succeed as expected.
 
-Cc: Paul E. McKenney <paulmck@kernel.org>
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 ---
- kernel/bpf/bpf_local_storage.c | 37 +++++++++++++++++-----------------
- 1 file changed, 19 insertions(+), 18 deletions(-)
+ .../selftests/bpf/prog_tests/map_kptr_race.c  | 155 ++++++++++++++++++
+ .../selftests/bpf/progs/map_kptr_race.c       | 145 ++++++++++++++++
+ 2 files changed, 300 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+ create mode 100644 tools/testing/selftests/bpf/progs/map_kptr_race.c
 
-diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-index 0825a92dcd6d..84fe6364c75d 100644
---- a/kernel/bpf/bpf_local_storage.c
-+++ b/kernel/bpf/bpf_local_storage.c
-@@ -107,14 +107,12 @@ static void __bpf_local_storage_free_trace_rcu(struct rcu_head *rcu)
- {
- 	struct bpf_local_storage *local_storage;
- 
--	/* If RCU Tasks Trace grace period implies RCU grace period, do
--	 * kfree(), else do kfree_rcu().
-+	/*
-+	 * RCU Tasks Trace grace period implies RCU grace period, do
-+	 * kfree() directly.
- 	 */
- 	local_storage = container_of(rcu, struct bpf_local_storage, rcu);
--	if (rcu_trace_implies_rcu_gp())
--		kfree(local_storage);
--	else
--		kfree_rcu(local_storage, rcu);
-+	kfree(local_storage);
- }
- 
- /* Handle use_kmalloc_nolock == false */
-@@ -138,10 +136,11 @@ static void bpf_local_storage_free_rcu(struct rcu_head *rcu)
- 
- static void bpf_local_storage_free_trace_rcu(struct rcu_head *rcu)
- {
--	if (rcu_trace_implies_rcu_gp())
--		bpf_local_storage_free_rcu(rcu);
--	else
--		call_rcu(rcu, bpf_local_storage_free_rcu);
-+	/*
-+	 * RCU Tasks Trace grace period implies RCU grace period, do
-+	 * kfree() directly.
-+	 */
-+	bpf_local_storage_free_rcu(rcu);
- }
- 
- static void bpf_local_storage_free(struct bpf_local_storage *local_storage,
-@@ -179,10 +178,11 @@ static void __bpf_selem_free_rcu(struct rcu_head *rcu)
- /* rcu tasks trace callback for use_kmalloc_nolock == false */
- static void __bpf_selem_free_trace_rcu(struct rcu_head *rcu)
- {
--	if (rcu_trace_implies_rcu_gp())
--		__bpf_selem_free_rcu(rcu);
--	else
--		call_rcu(rcu, __bpf_selem_free_rcu);
-+	/*
-+	 * RCU Tasks Trace grace period implies RCU grace period, do
-+	 * kfree() directly.
-+	 */
-+	__bpf_selem_free_rcu(rcu);
- }
- 
- /* Handle use_kmalloc_nolock == false */
-@@ -214,10 +214,11 @@ static void bpf_selem_free_rcu(struct rcu_head *rcu)
- 
- static void bpf_selem_free_trace_rcu(struct rcu_head *rcu)
- {
--	if (rcu_trace_implies_rcu_gp())
--		bpf_selem_free_rcu(rcu);
--	else
--		call_rcu(rcu, bpf_selem_free_rcu);
-+	/*
-+	 * RCU Tasks Trace grace period implies RCU grace period, do
-+	 * kfree() directly.
-+	 */
-+	bpf_selem_free_rcu(rcu);
- }
- 
- void bpf_selem_free(struct bpf_local_storage_elem *selem,
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c b/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+new file mode 100644
+index 000000000000..941e3d9880ed
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
+@@ -0,0 +1,155 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <test_progs.h>
++#include <network_helpers.h>
++
++#include "map_kptr_race.skel.h"
++
++static int get_map_id(int map_fd)
++{
++	struct bpf_map_info info = {};
++	__u32 len = sizeof(info);
++
++	if (!ASSERT_OK(bpf_map_get_info_by_fd(map_fd, &info, &len), "get_map_info"))
++		return -1;
++	return info.id;
++}
++
++static int read_refs(struct map_kptr_race *skel)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts);
++	int ret;
++
++	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.count_ref), &opts);
++	if (!ASSERT_OK(ret, "count_ref run"))
++		return -1;
++	if (!ASSERT_OK(opts.retval, "count_ref retval"))
++		return -1;
++	return skel->bss->num_of_refs;
++}
++
++static void test_htab_leak(void)
++{
++	LIBBPF_OPTS(bpf_test_run_opts, opts,
++		.data_in = &pkt_v4,
++		.data_size_in = sizeof(pkt_v4),
++		.repeat = 1,
++	);
++	struct map_kptr_race *skel, *watcher;
++	int ret, map_id;
++
++	skel = map_kptr_race__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	ret = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.test_htab_leak), &opts);
++	if (!ASSERT_OK(ret, "test_htab_leak run"))
++		goto out_skel;
++	if (!ASSERT_OK(opts.retval, "test_htab_leak retval"))
++		goto out_skel;
++
++	map_id = get_map_id(bpf_map__fd(skel->maps.race_hash_map));
++	if (!ASSERT_GE(map_id, 0, "map_id"))
++		goto out_skel;
++
++	watcher = map_kptr_race__open_and_load();
++	if (!ASSERT_OK_PTR(watcher, "watcher open_and_load"))
++		goto out_skel;
++
++	watcher->bss->target_map_id = map_id;
++	watcher->links.map_put = bpf_program__attach(watcher->progs.map_put);
++	if (!ASSERT_OK_PTR(watcher->links.map_put, "attach fentry"))
++		goto out_watcher;
++	watcher->links.htab_map_free = bpf_program__attach(watcher->progs.htab_map_free);
++	if (!ASSERT_OK_PTR(watcher->links.htab_map_free, "attach fexit"))
++		goto out_watcher;
++
++	map_kptr_race__destroy(skel);
++	skel = NULL;
++
++	kern_sync_rcu();
++
++	while (!READ_ONCE(watcher->bss->map_freed))
++		sched_yield();
++
++	ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
++	ASSERT_EQ(read_refs(watcher), 2, "htab refcount");
++
++out_watcher:
++	map_kptr_race__destroy(watcher);
++out_skel:
++	map_kptr_race__destroy(skel);
++}
++
++static void test_sk_ls_leak(void)
++{
++	struct map_kptr_race *skel, *watcher;
++	int listen_fd = -1, client_fd = -1, map_id;
++
++	skel = map_kptr_race__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	if (!ASSERT_OK(map_kptr_race__attach(skel), "attach"))
++		goto out_skel;
++
++	listen_fd = start_server(AF_INET6, SOCK_STREAM, "::1", 0, 0);
++	if (!ASSERT_GE(listen_fd, 0, "start_server"))
++		goto out_skel;
++
++	client_fd = connect_to_fd(listen_fd, 0);
++	if (!ASSERT_GE(client_fd, 0, "connect_to_fd"))
++		goto out_skel;
++
++	if (!ASSERT_EQ(skel->bss->sk_ls_leak_done, 1, "sk_ls_leak_done"))
++		goto out_skel;
++
++	close(client_fd);
++	client_fd = -1;
++	close(listen_fd);
++	listen_fd = -1;
++
++	map_id = get_map_id(bpf_map__fd(skel->maps.sk_ls_race_map));
++	if (!ASSERT_GE(map_id, 0, "map_id"))
++		goto out_skel;
++
++	watcher = map_kptr_race__open_and_load();
++	if (!ASSERT_OK_PTR(watcher, "watcher open_and_load"))
++		goto out_skel;
++
++	watcher->bss->target_map_id = map_id;
++	watcher->links.map_put = bpf_program__attach(watcher->progs.map_put);
++	if (!ASSERT_OK_PTR(watcher->links.map_put, "attach fentry"))
++		goto out_watcher;
++	watcher->links.sk_map_free = bpf_program__attach(watcher->progs.sk_map_free);
++	if (!ASSERT_OK_PTR(watcher->links.sk_map_free, "attach fexit"))
++		goto out_watcher;
++
++	map_kptr_race__destroy(skel);
++	skel = NULL;
++
++	kern_sync_rcu();
++
++	while (!READ_ONCE(watcher->bss->map_freed))
++		sched_yield();
++
++	ASSERT_EQ(watcher->bss->map_freed, 1, "map_freed");
++	ASSERT_EQ(read_refs(watcher), 2, "sk_ls refcount");
++
++out_watcher:
++	map_kptr_race__destroy(watcher);
++out_skel:
++	if (client_fd >= 0)
++		close(client_fd);
++	if (listen_fd >= 0)
++		close(listen_fd);
++	map_kptr_race__destroy(skel);
++}
++
++void serial_test_map_kptr_race(void)
++{
++	if (test__start_subtest("htab_leak"))
++		test_htab_leak();
++	if (test__start_subtest("sk_ls_leak"))
++		test_sk_ls_leak();
++}
+diff --git a/tools/testing/selftests/bpf/progs/map_kptr_race.c b/tools/testing/selftests/bpf/progs/map_kptr_race.c
+new file mode 100644
+index 000000000000..1731f42bf5bc
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/map_kptr_race.c
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++#include <bpf/bpf_tracing.h>
++#include "../test_kmods/bpf_testmod_kfunc.h"
++
++struct map_value {
++	struct prog_test_ref_kfunc __kptr *ref_ptr;
++};
++
++struct {
++	__uint(type, BPF_MAP_TYPE_HASH);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, struct map_value);
++	__uint(max_entries, 1);
++} race_hash_map SEC(".maps");
++
++struct {
++	__uint(type, BPF_MAP_TYPE_SK_STORAGE);
++	__uint(map_flags, BPF_F_NO_PREALLOC);
++	__type(key, int);
++	__type(value, struct map_value);
++} sk_ls_race_map SEC(".maps");
++
++int num_of_refs;
++int sk_ls_leak_done;
++int target_map_id;
++int map_freed;
++
++SEC("tc")
++int test_htab_leak(struct __sk_buff *skb)
++{
++	struct prog_test_ref_kfunc *p, *old;
++	struct map_value val = {};
++	struct map_value *v;
++	int key = 0;
++
++	if (bpf_map_update_elem(&race_hash_map, &key, &val, BPF_ANY))
++		return 1;
++
++	v = bpf_map_lookup_elem(&race_hash_map, &key);
++	if (!v)
++		return 2;
++
++	p = bpf_kfunc_call_test_acquire(&(unsigned long){0});
++	if (!p)
++		return 3;
++	old = bpf_kptr_xchg(&v->ref_ptr, p);
++	if (old)
++		bpf_kfunc_call_test_release(old);
++
++	bpf_map_delete_elem(&race_hash_map, &key);
++
++	p = bpf_kfunc_call_test_acquire(&(unsigned long){0});
++	if (!p)
++		return 4;
++	old = bpf_kptr_xchg(&v->ref_ptr, p);
++	if (old)
++		bpf_kfunc_call_test_release(old);
++
++	return 0;
++}
++
++SEC("tp_btf/inet_sock_set_state")
++int BPF_PROG(test_sk_ls_leak, struct sock *sk, int oldstate, int newstate)
++{
++	struct prog_test_ref_kfunc *p, *old;
++	struct map_value *v;
++
++	if (newstate != BPF_TCP_SYN_SENT)
++		return 0;
++
++	if (sk_ls_leak_done)
++		return 0;
++
++	v = bpf_sk_storage_get(&sk_ls_race_map, sk, NULL,
++				BPF_SK_STORAGE_GET_F_CREATE);
++	if (!v)
++		return 0;
++
++	p = bpf_kfunc_call_test_acquire(&(unsigned long){0});
++	if (!p)
++		return 0;
++	old = bpf_kptr_xchg(&v->ref_ptr, p);
++	if (old)
++		bpf_kfunc_call_test_release(old);
++
++	bpf_sk_storage_delete(&sk_ls_race_map, sk);
++
++	p = bpf_kfunc_call_test_acquire(&(unsigned long){0});
++	if (!p)
++		return 0;
++	old = bpf_kptr_xchg(&v->ref_ptr, p);
++	if (old)
++		bpf_kfunc_call_test_release(old);
++
++	sk_ls_leak_done = 1;
++	return 0;
++}
++
++long target_map_ptr;
++
++SEC("fentry/bpf_map_put")
++int BPF_PROG(map_put, struct bpf_map *map)
++{
++	if (target_map_id && map->id == (u32)target_map_id)
++		target_map_ptr = (long)map;
++	return 0;
++}
++
++SEC("fexit/htab_map_free")
++int BPF_PROG(htab_map_free, struct bpf_map *map)
++{
++	if (target_map_ptr && (long)map == target_map_ptr)
++		map_freed = 1;
++	return 0;
++}
++
++SEC("fexit/bpf_sk_storage_map_free")
++int BPF_PROG(sk_map_free, struct bpf_map *map)
++{
++	if (target_map_ptr && (long)map == target_map_ptr)
++		map_freed = 1;
++	return 0;
++}
++
++SEC("syscall")
++int count_ref(void *ctx)
++{
++	struct prog_test_ref_kfunc *p;
++	unsigned long arg = 0;
++
++	p = bpf_kfunc_call_test_acquire(&arg);
++	if (!p)
++		return 1;
++
++	num_of_refs = p->cnt.refs.counter;
++
++	bpf_kfunc_call_test_release(p);
++	return 0;
++}
++
++char _license[] SEC("license") = "GPL";
 -- 
 2.47.3
 
