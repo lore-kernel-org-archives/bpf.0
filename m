@@ -1,144 +1,197 @@
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB5543B52F1
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 12:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA2838E5FB
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 12:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772022271; cv=none; b=Tj7nsovG0hFM2WArarZ8m59kowNTav+FEL36bDTsNVjIY5cXwkAroK8i8zTKU9hyFf0tmXHZefeC38fqic8b4L0YWzQJW1VLUHMbmiQ7QxdfGKSHpmk6p18gZdfe+ucdwqNPwHpVYUNCJfGUOdPb81kQKe8LrpmDWrqqaycH3v8=
+	t=1772024371; cv=none; b=mJwKXt4WHdKJ2p58GzLFcSniqkrss47MbtmzgkfrEkvmXsOA7BMq0TRUvc7F5aNJU+89USwVYBoSEQxEKlQ5nxy/dv2fv1mcc4AZdpG/onQ4H/XM6YnXfyfDgvOOgYFQmawO6/weCzxl3DUo5XFWO3ShpHs2yQlOMezIWBql8Bg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772022271; c=relaxed/simple;
-	bh=w0RkkI60n0NfVjeD3GCvWy9379xhuF9l5DYLh+Frc74=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=lcHVojBZEeZbjUbvb8umaKp5HXlNZRwOc/TiqADg78331nusFXYGj20FJZsxWDkZlBitnRV1P/mAft9Gw1U5/qcqELEgUiFemSZHEvxmvbJ8fT8cGWoHmUSQZnvDUQ/MODSSbzPoG0ZuGl0vC6HfWsFqbocnhjowuYFNRraW088=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-663006e4c3cso77692080eaf.2
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 04:24:29 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772022269; x=1772627069;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+	s=arc-20240116; t=1772024371; c=relaxed/simple;
+	bh=TPtQecFLt3bKgAlUJv6uA3jD+8ENnPfJf8K8C1mKZj0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cgAcmnTU+Sd0ruf0arixepExOPKzwqUc6ur4EeaciBeBbbscpHFQz9eACjlqwq5xvYarDEwy/+su0YHhUTXYemG7Rgmry1NTltrxLxpd2tAu+U5LAn12FL0/yaEH+vz2n+x5FAfMM+6vqmlhwJYup8hMhTyN19jJlWQA2/k2Eac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nqYQ6DDi; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nqYQ6DDi"
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-389e4330e32so5499781fa.0
+        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 04:59:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772024369; x=1772629169; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vxgM2+7tBarSdr5Mf2egulRHzkOHvLOxJK/f02SHmAk=;
-        b=eD15YFFOzvsAC4nKBp5bdZUd372XS3+K+TsHuzAlL4cVMnqpM+gIu/p3/+n53NxoSC
-         SYTRiUC3hnX62VQeVotO9gRGlVqUdJ+BR2w3Wy/HX+WLV+4xjC6u5vvkNQH1GNdXq9JY
-         u4/wEVuh6+otdSWB+4RQcuxTgp5HXuaj1TbhZSbXPd48unDX45CzViRcqdGK4TRaVSXw
-         MfoY6WE306VVkz9iQdq89yRz350wAYJk4wgxD+Gk2BYgxmPmxSWCipRbxpj2+HYNJqwB
-         50TL+oPZ7C5HrC/rxo11ArClXjnTWt9v75kGO5qndyXlHyWIl3S2jZw36+zl/53D3e3t
-         fMRA==
-X-Forwarded-Encrypted: i=1; AJvYcCUXhARO5DZKhyV314fu0o4YUnxQqBJoGQe5qgyQQm7w//7Kru+V67ftHQF9CJ1Oc2lgjgQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzI/ojyIa/ZtF4NVgR0rSHJJtmcTfblPe7ReFUv/ymaCZjNz1WS
-	cboldjlbe7iLmgCH70tyA1zYe2npTPt9XB3AY3lPJIvhwW9GDD8mZPGiaG8MZy612OzssGJEfj3
-	MK9tLpzGP7lhXy0j2Jbz+wtZ2pLZMFChqHQcsEm24gJUqZUxjC3bhxwVMf+c=
+        bh=tXh8nJgWerBQSiJBvjtEBHO2Vkt5cQS3cW38XI+++O8=;
+        b=nqYQ6DDiWVc67vqdI61Zj2cHS+dB1g38yS6o1FNobtwqz9VaHtyv10HkSVjum4l+a/
+         546iFR9sQyzU+S/r5NUMQJMCeVTE+VZDhnrtvBurHFs4+UGi9lJeh87oe5oyjd1yZbOA
+         QGl8a0OuccWN2/Tu6RaEcaO4t6qFTq+JBh9UvVg4LX2FJ++qU8uLOaBvitfkkdpxgzyf
+         kGFRhL8glJ3zHIYy4PvdzDBGNQqYfhVTbaUiL7UQ+X1Z5ESLPKdJo/CRokGBuxxctMFa
+         ZqzOdZf3+QAQdTCWira8tIkgJtu8ns0zIpLGwFRMPPMSptee6uFDfmCTQzIlnRLKpfci
+         z4GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772024369; x=1772629169;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tXh8nJgWerBQSiJBvjtEBHO2Vkt5cQS3cW38XI+++O8=;
+        b=NW1u03WCx8lz+FZUm41iG9brgfYjNwa6I8TqCvqbPrEyw2ZC3WaDV9Sab+Qd8jsLrp
+         8ECXpDtealHnHqolslr1RO4d88IcObJCH4aKV15HC4UJwQlVq8GjsjLcqM44E/BZZ5CX
+         BDu9L93MsKgQQyvFPT2DLaNzB6irdw/as1FI4ZcW/+ybM3r/rXM0XZPSwOTHPUECGmYX
+         lAeohiC4evPFhX5wxerNk+exLvaFKPPwKHqo8R7CJvDUM6RDu7n72xbVeC5kgDjkhgPQ
+         mPdyTPKNQP2Z88bnU1/Hlo2WLAmxp5t/+9M+wjJo0nBb/isNFUeTwk/xBTBE1gC2nuf+
+         42kA==
+X-Forwarded-Encrypted: i=1; AJvYcCWGGHYa8uD6wVdK8T6ydtRb4x5oh19Oda7+n9VcKaVqSRapEhHhzNGiexXVlo3kTZl4hhc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywiab1xNQFmSQki2EDq6tGtNLWtkleM2k1Co3tbCRhIVaTEn+3f
+	m9Tqv0BCIgn76huOkeQjQE9QL0Brg9V7KmSjU6k2QTfx8Ojyr6mYhXFaDoh/KA==
+X-Gm-Gg: ATEYQzy2Bp8fAyBG1N9fG1TuuF4L8Ws2mCcUBXmeaoTsy9HZlHQFV5c7xPtIyX9Mb+w
+	IR+oT6jbrK6ctL8z5eSOnPJyufxSyhgkhvL7j1+DY/+hMp0TrHr1pmzhviLfaBDyR8zSsUY4FSQ
+	HMdqoa6nK99MEDxKyHY22gcHb2sCIpTWgB5qf2cGEvPEY+YxLiZEfUdm+hPzRvzgJ62NEsjxPJ6
+	ZjUYEwoF/1qQ/gk4TwN002/THPkHwfMtf/uFM2Vj0c4W6BBonLNhQkeOaqKnirWELlnlmtNbH83
+	CbXd1O/tm3viiCeC+r/hNNz6DBO/uZ3ypLKW8gzHl04XddTluxEVMGnz04hJ00mSuDlt9f+5fgP
+	A0+DfkRawfCmTlSZTo+slS4k1R275cbKhkCO9TQGvy92uN8F/YezMvA4uzMeNVfPWUGe7Utp2mm
+	44HQ/ljwD4leozR69n2AF3Q37IlQI/LcLiP5pRR6D9CsZEe8yrbfQT1OkioralyWLtZpD+JZZbr
+	LrbfrWVU00omTWULcxB8g33WtLT1QnAgfwmgaoUUz1PVSVjPnf2GC1UlQ==
+X-Received: by 2002:a17:906:f59a:b0:b8e:d04e:e4fc with SMTP id a640c23a62f3a-b9081a0cbefmr898192366b.22.1772017948488;
+        Wed, 25 Feb 2026 03:12:28 -0800 (PST)
+Received: from [10.112.148.141] (82-132-214-161.dab.02.net. [82.132.214.161])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b9084ee4d63sm508858366b.62.2026.02.25.03.12.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Feb 2026 03:12:27 -0800 (PST)
+Message-ID: <22073d2a-31ea-46c2-bb4a-b771b2fcf8ee@gmail.com>
+Date: Wed, 25 Feb 2026 11:12:24 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:16a3:b0:679:94ff:6ea7 with SMTP id
- 006d021491bc7-679c4251e3dmr8290560eaf.15.1772022268917; Wed, 25 Feb 2026
- 04:24:28 -0800 (PST)
-Date: Wed, 25 Feb 2026 04:24:28 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <699ee9fc.050a0220.1cd54b.0009.GAE@google.com>
-Subject: [syzbot] [net?] [bpf?] KCSAN: data-race in sk_psock_drop / unix_stream_sendmsg
-From: syzbot <syzbot+87f770387a9e5dc6b79b@syzkaller.appspotmail.com>
-To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
-	daniel@iogearbox.net, davem@davemloft.net, edumazet@google.com, 
-	horms@kernel.org, jakub@cloudflare.com, john.fastabend@gmail.com, 
-	kuba@kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v8 5/5] selftests/io_uring: add a bpf io_uring selftest
+To: Ming Lei <ming.lei@redhat.com>
+Cc: Ming Lei <tom.leiming@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ io-uring <io-uring@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+ Jens Axboe <axboe@kernel.dk>, Xiao Ni <xni@redhat.com>,
+ Caleb Sander Mateos <csander@purestorage.com>
+References: <cover.1771327059.git.asml.silence@gmail.com>
+ <7cc147a959ac068c55dae4f540e38e9e4ab121e0.1771327059.git.asml.silence@gmail.com>
+ <CAADnVQK0RaOA9ZYZdYyQxOzLde9MR8HpMM0SexcW59A9u7X2Jw@mail.gmail.com>
+ <84e2f3ad-28f0-4e9a-804f-2647cba9b30f@gmail.com>
+ <CAADnVQLSEoZ0V1m5j3ggX0o0gzVKyiDHL=J6F0wRXB8qk-MCGA@mail.gmail.com>
+ <591a7f0e-7b78-42f1-9486-163249f5e306@gmail.com>
+ <CACVXFVPx5AcC9y9xVPCaahDeumNGm4TSkkfhsJ8w+wmW52JQ4w@mail.gmail.com>
+ <ed7b85d0-38d0-413c-a28a-f3b0d1a72a13@gmail.com>
+ <CAFj5m9L_WPH_du4GMVYGBdYA_NX1kbGtJpAP0hbfuEjuk5faZw@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAFj5m9L_WPH_du4GMVYGBdYA_NX1kbGtJpAP0hbfuEjuk5faZw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hello,
+On 2/25/26 08:41, Ming Lei wrote:
+> On Tue, Feb 24, 2026 at 12:30 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> On 2/23/26 15:23, Ming Lei wrote:
+>>> On Sat, Feb 21, 2026 at 6:35 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>>>
+>>>> On 2/20/26 17:45, Alexei Starovoitov wrote:
+>>>>> On Fri, Feb 20, 2026 at 3:41 AM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>>>>>
+>>>>>> I had such examples, but selftests is not the best place for that.
+>>>>>> It can use abstractions, and I want to make them reusable instead
+>>>>>> of people copy-pasting from selftests.
+>>>>>
+>>>>> Sure, but please still post them as extra patches so it's easier
+>>>>> to see what's the end result.
+>>>>>
+>>>>> Also please reply to that thread:
+>>>>> https://lore.kernel.org/bpf/CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com/
+>>>>>
+>>>>> It's not clear to me whether your io_uring+bpf setup will work
+>>>>> for Xiao's use case.
+>>>>> I don't think we need 2 ways of doing it.
+>>>>
+>>>> We discussed this with Ming on the list before, that's one of the use
+>>>> cases I target as well, there is no reason why it shouldn't work. The
+>>>> difference is that this approach gives a flexible framework for
+>>>> extensibility and covers a good bunch of other needs, which is exactly
+>>>> the reason I moved from a BPF opcode approach, while Ming's proposal is
+>>>> more specific but argued to be a way easier to plug into ublk servers.
+>>>> If you ask me, we need a solution that covers a broader spectrum of
+>>>> use cases, but I guess it all can be argued in either way.
+>>>
+>>> One big drawback of  Pavel's approach is that it needs a totally
+>>> different userspace
+>>> implementation for using BPF, which is just hard to use in existing
+>>> io_uring applications.
+>>
+>> Not really, it depends on how you write it. If you need to rewrite CQ
+> 
+> I meant SQE has to be allocated & built in bpf prog, then it is inevitable
+> to move application logic into bpf prog.
 
-syzbot found the following issue on:
+But that's what I'm saying, you don't need building sqes in bpf
+to augment it with BPF checksumming / etc. I can elaborate when I
+get some time, but to give a short example:
 
-HEAD commit:    23b0f90ba871 Merge tag 'sysctl-7.00-rc1' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13f3695a580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=70c3ed59b49365c3
-dashboard link: https://syzkaller.appspot.com/bug?extid=87f770387a9e5dc6b79b
-compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+# bpf-prog.c:
 
-Unfortunately, I don't have any reproducer for this issue yet.
+unsigned csum_jobs;
+unsigned regbuf_idx_to_csum;
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ae3bcc875a04/disk-23b0f90b.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/1a4dbd53da8f/vmlinux-23b0f90b.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3c3824777f5c/bzImage-23b0f90b.xz
+loop() {
+	if (csum_jobs) {
+		kfunc_regbuf_do_csum(regbuf_idx_to_csum);
+		csum_jobs = 0;
+		...
+	}
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+87f770387a9e5dc6b79b@syzkaller.appspotmail.com
+	// proceed to the default submit / lopp implementation
+	// you'd expect from normal io_uring_submit_and_wait()
+}
 
-==================================================================
-BUG: KCSAN: data-race in sk_psock_drop / unix_stream_sendmsg
+# user-prog.c
 
-write to 0xffff88810220dc08 of 8 bytes by task 3611 on cpu 1:
- sk_psock_stop_verdict net/core/skmsg.c:1311 [inline]
- sk_psock_drop+0x12f/0x270 net/core/skmsg.c:896
- sk_psock_put include/linux/skmsg.h:506 [inline]
- sock_map_unref+0x2a5/0x300 net/core/sock_map.c:185
- __sock_map_delete net/core/sock_map.c:426 [inline]
- sock_map_delete_from_link net/core/sock_map.c:439 [inline]
- sock_map_unlink net/core/sock_map.c:1608 [inline]
- sock_map_remove_links+0x228/0x340 net/core/sock_map.c:1623
- sock_map_close+0xa1/0x340 net/core/sock_map.c:1684
- unix_release+0x4e/0x80 net/unix/af_unix.c:1183
- __sock_release net/socket.c:662 [inline]
- sock_close+0x6b/0x150 net/socket.c:1455
- __fput+0x29b/0x650 fs/file_table.c:469
- fput_close_sync+0xad/0x190 fs/file_table.c:574
- __do_sys_close fs/open.c:1509 [inline]
- __se_sys_close fs/open.c:1494 [inline]
- __x64_sys_close+0x55/0xf0 fs/open.c:1494
- x64_sys_call+0x275d/0x3020 arch/x86/include/generated/asm/syscalls_64.h:4
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x12c/0x370 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
+ring = create_ring();
+load_my_bpf();
 
-read to 0xffff88810220dc08 of 8 bytes by task 3605 on cpu 0:
- unix_stream_sendmsg+0x7f8/0xbb0 net/unix/af_unix.c:2480
- sock_sendmsg_nosec net/socket.c:727 [inline]
- __sock_sendmsg net/socket.c:742 [inline]
- ____sys_sendmsg+0x5af/0x600 net/socket.c:2592
- ___sys_sendmsg+0x195/0x1e0 net/socket.c:2646
- __sys_sendmsg net/socket.c:2678 [inline]
- __do_sys_sendmsg net/socket.c:2683 [inline]
- __se_sys_sendmsg net/socket.c:2681 [inline]
- __x64_sys_sendmsg+0xd4/0x160 net/socket.c:2681
- x64_sys_call+0x194c/0x3020 arch/x86/include/generated/asm/syscalls_64.h:47
- do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
- do_syscall_64+0x12c/0x370 arch/x86/entry/syscall_64.c:94
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
+sqe = get_and_prep_sqe();
+// normal submit+wait
+io_uring_submit_and_wait();
 
-value changed: 0xffffffff8486dd00 -> 0xffffffff8472c9f0
+cqe = get_cqes();
+if (cqe->type == ...) {
+	skel->bss->csum_jobs++;
+	skel->bss->regbuf_idx_to_csum = idx_from_cqe(cqe);
+	// use bpf arenas, io_uring regions for the real tning
+}
 
-Reported by Kernel Concurrency Sanitizer on:
-CPU: 0 UID: 0 PID: 3605 Comm: syz.4.30 Not tainted syzkaller #0 PREEMPT(full) 
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 02/12/2026
-==================================================================
+// queue more sqes if needed
 
+// this will do csum'ing and followed by submit+wait
+io_uring_submit_and_wait();
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> If the logic is complicated, it is one big thing.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+The implementation above would be simple enough. And on top,
+someone could try to do BPF submissions to cover cases like
+you had with group request ordering (forgot the actual name).
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+> raid5 is a great example with complicated fast io code path, I'd suggest someone
+> or Xiao or Caleb, try it. Compare your approach to the bpf opcode and draw
+> some useful conclusions.  Code should be more convincing.
+> 
+> For bpf opcode approach I believe Xiao has already built an example.
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+It might be entertaining, but I wanted to stress that it's not
+a blocker for my work. It can handle the use case with registered
+buffers, but I aim at a more wider range of applications, which
+wouldn't be covered by the opcode approach. And that's the reason
+why I moved away from opcodes, it wasn't flexible enough.
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+-- 
+Pavel Begunkov
 
-If you want to undo deduplication, reply with:
-#syz undup
