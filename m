@@ -1,126 +1,77 @@
-Received: from mail-wr1-f66.google.com (mail-wr1-f66.google.com [209.85.221.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1373D3D16
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 16:40:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.66
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772037613; cv=pass; b=Hb/N7ZQ3COfQYwQEosdo+BX+w7GDNsmY6R9Mng4AuMtVfssGSP96tiQZAqRwZgpn053JwkY/Lw7h1EwhpXQ3K0YT+PDP2zWZDXHazFkv3sD1Mjx7Cn7u6crQAc/WoQUGhyDn5iUvK7R43NsLacqU1s1ZSpWmXLifOb3+k7BzbKc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772037613; c=relaxed/simple;
-	bh=2PEh1WESF3BGVoUAo0llKVx/EUAdUbTZWsfqV18G9kw=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=RSEgzbuX8YQ9g05i3QxUEM82rPYeOj8X1JeNckT7hWet/D927GFmk5/0eHcNtJoxYvZ7923nskGCiz6QDSZDHKeWV9fSiZhUW7Aip7urrvXgTg+KlnpaVBut3CSD5YdvQMbwohYYYewEbjqnvmh5gG4vozUG5S8sjaNrd/ML45A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lhRXckAs; arc=pass smtp.client-ip=209.85.221.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5167F3DA7EB;
+	Wed, 25 Feb 2026 17:03:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772039005; cv=none; b=hCDyMtpVe/zyposNwQvZjozWzLJlhC6z5gFcJ+gLxu3vQa3Iv18Uq+KMihfGKMzD48Q2mM5qi1FzN2NIYBMGePDm5qUgM4K+YkXTmAsR+X5TUI7LCjiv7AzCk5Eks10jSaSBd7quKLuZ9XjSWLf8VJzl01YxzgNVCWO90Hr1pCY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772039005; c=relaxed/simple;
+	bh=+54Y2ZaIfsOsI9qJ7/J6L0tufQ7xJ8poQmI0lVmcc/k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t4oBaUcn3nE9fRVpvv4x06s9KbpkwIjVv6O/XB6x7pzfiTTUN/uutzwDW+mJiHPXh5mi7JJNvk9lGg270rAzuM8iOX1bLVOhfRh7UsFh4iKrCQE/sLdOE9WKA7/J/d7z9LkimaitBLSYRQWjKfMPIXISMIwspTeJxVwS4H4l+Ok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AwM+YFF/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lhRXckAs"
-Received: by mail-wr1-f66.google.com with SMTP id ffacd0b85a97d-4398ebdf520so686582f8f.0
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 08:40:09 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772037608; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WmapalyFPiBSt8Q9ddGcUq3RrE6xskhQbPrPuLdqq65eSqSGWpKnMG/UVOwyrk3yIh
-         AnJDw9kVC+e3CVeDqVxM8ygQe+aKq5/YkC4i0dok6Hc0Fw3EF/laxkK/fu4VsWp27txC
-         FXeWLnGbRB8N2AEJpnD6J3YF+o2kVlEEm3ade0uMlPkWFmcEnCZeFmRg/AfoY2+pkxmq
-         bhkkfN2bCG0gM/YxHam9wDTON16meRoC5QsQTDJzAqhK7Pvx3pe1wM6JPZr5jEOLlLrC
-         F6E8dJ/u5wvZX2ntC17vDsMsIn7tk6S1ANiCUb5MnhXaQGpPkI0BXpVCZhnpE5+patpV
-         Lhkg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=abOUY+w5GnqeUS+kfj50B/qR62F95KVkgE0+o2VC2kQ=;
-        fh=g4l5bN87s2wQrC1vCCcDcWNOYd8SLe/S3XRXJiOF+SE=;
-        b=L/QPc1UfNJCk98uTrb1ULNmkmJKnhYacZqgswBG0MqinOeEoS3GaGeSUdm7webtPrb
-         WJuc0pebgDFQwU4My2xC/tFU3pCphP629HFJFo6V7bp9RUtP9Zqv51KyjCeIuW4Sf7zZ
-         How0uWhonn9LpiMSMBAQJFSEKJ1Tq5/GTEjYz1O9EY1iR9rbjQYx1GzRQGa9z5TB7VOI
-         3B7Z06P8KjKiKG7QV3wXRfv/KpWqn+DEgOeAVd6rGHceXO1g/D1cpNa8EsUlPcpyo2G2
-         NrHTqJfHWQKottABnuUVkV0vw+Wb9NXJ+L28r6yxR6FRSc8mBju+ZFOD9BckP0ODGYnj
-         BvLA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772037608; x=1772642408; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=abOUY+w5GnqeUS+kfj50B/qR62F95KVkgE0+o2VC2kQ=;
-        b=lhRXckAsJBzIvN4+sRV8r5iN1MnkFoCG+bAXd8wcJbePR7NYuTHBSp2+4IImj118Nw
-         +sUoL/gXWIMmNPh5bVyxPUyQPMe0yr7zsdM5WkxsxnLeV+72hA6EF4pl01EBfiHtMoeB
-         I0SyDmXNHkiZM4A5VJw0vuAN5WUV/Zph62Av26tHMmIpqUZhLCGamABWU+NsBEuYmTGq
-         6ljRqJSAWJ79aHP3W82Q2/OX48jKuEuagSP5+alowLK6wpGYUZYSl68GRvtxuZj8SDL6
-         O49PgW/7r/LqH9ngJPxYRzS7v74wjsnCQ7MOoiaTnSyeDTGRyIbD4FajwOicQM+vjw9Q
-         4t4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772037608; x=1772642408;
-        h=to:subject:message-id:date:from:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=abOUY+w5GnqeUS+kfj50B/qR62F95KVkgE0+o2VC2kQ=;
-        b=He6hib3S3ngWqo5F+QOXxS+BA8yxPSq81TmF2EFkYDqNfroCQ9MeN6gQHlFNXRA3i2
-         lfa4FL589AQ5uyXX4tXk6HFn8vG62SOAA1/gvLiBm1RRUZx09B4Tian7c/H7gLT8x8Bx
-         1N7jdtjU7Qj03dIhIeHK2nKPAHrVPFV9L4wmDg0k6x2nkvAoRVUWHNVK9Qpw+jFSgpYD
-         pJMt3WbL0M+MLG5SfTA2e6dpnVFLnERrZqKsdzkM1ZOYADEDQvauY2JmT7wcl6UMmezw
-         4LE2A1950FID/xPHMGu7z6jmtrYRRen9N3JK6jrl7RHO9qjRt2WvJ74Ayi4ZlQ88H7fh
-         N9Ug==
-X-Gm-Message-State: AOJu0YwUNjWFeVaGuKsUFfhQqKxkwrkPsZYGmKQzzgFcpmeHrIutLifu
-	SUjQ/ZBEbf88JrU4VLt2h0pC7GLZWvy7LUpo/nNkIGesgHreWZYJSD7XcMLVAb8Kl6Plv4BOEl3
-	TevXcaSXQw/5HMXW3dHTomRUPvrrogAC7PIli7jw=
-X-Gm-Gg: ATEYQzxIZMwe173IoZYhj8pVa2CUiyOaQ4Z3+rDdbfmdgzeSV7WKSySbvMWFj3T70q8
-	Rt7+ISzuf2SzAWnBDJlliXXOeax57Kwa1uGBJfZwZaX/sEX1QE7qZ3iBs1qdVjFYDdImZGXH/83
-	c9KrhnTohg4tTcH8ML9LiiMEQtOnsrfsmShpOO/waKbW8Mm14uqPop6YYFzDkUik7cmFbuBGBI9
-	Z9urt4V3KhtGaKzPDmnrhOCJP+aLmVXu84JpK/TmaOX1IsKUcqa5CpeHQpSmkzxjR/X9ZACWDXa
-	jqzbMoq/XDUled4h3n4jxbW/dbhYxmD6qdP7ooWeLvYZsFLTI8Y7HFVTLd3L
-X-Received: by 2002:a05:6000:428a:b0:437:7300:eb1c with SMTP id
- ffacd0b85a97d-4398d965037mr7825079f8f.26.1772037607742; Wed, 25 Feb 2026
- 08:40:07 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AwM+YFF/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8C65C116D0;
+	Wed, 25 Feb 2026 17:03:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772039004;
+	bh=+54Y2ZaIfsOsI9qJ7/J6L0tufQ7xJ8poQmI0lVmcc/k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AwM+YFF/HAeRvq6xs2PE2tgPQqXk7dDtviEV4m24LKlW3zbrv06H8In7g9ug1CEIo
+	 +pL3I6Xl/VMl3/tIyQYQSDcnAv0e1uAG0e9W+j5Eu9yR1ozVpEH+VFbgqr1ol474+f
+	 qRe7Kic8JHEQoNx7Ne/2B/WoOFPx17QDrdnhQ3OWm0pAeBR05pS2IASdB6C+KKqxI7
+	 o8Nc7A0SDmx3lk9MEyUSZbmknwcd9zM8NwpMOwdAjhjt8TIA8cBT+FQyrG+9qTdy4Y
+	 ZV3PZsSXqisUJSNmPg+u5igl+/K9fchj7boSBwbNOZgCothLS2R1i0ZHfwoJzoZjvZ
+	 duufAfesWwgVw==
+Date: Wed, 25 Feb 2026 09:03:22 -0800
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Christoph Hellwig <hch@lst.de>
+Cc: brauner@kernel.org, miklos@szeredi.hu, bpf@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org
+Subject: Re: [PATCH 2/2] iomap: allow NULL swap info bdev when activating
+ swapfile
+Message-ID: <20260225170322.GF13829@frogsfrogsfrogs>
+References: <177188733433.3935463.11119081161286211234.stgit@frogsfrogsfrogs>
+ <177188733484.3935463.443855246947996750.stgit@frogsfrogsfrogs>
+ <20260224140118.GB9516@lst.de>
+ <20260224192653.GC13829@frogsfrogsfrogs>
+ <20260225141639.GB2732@lst.de>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 25 Feb 2026 17:39:31 +0100
-X-Gm-Features: AaiRm52hDvLF9-V65nZqmdINgbXuE6nMYaFwsUHpr9uxHLutG_s7daVXEVgLWe4
-Message-ID: <CAP01T75xqwhGHzw8BTa8GXWJxq4OhJEx-O7CQvTuTUgxhJ70fQ@mail.gmail.com>
-Subject: [LSF/MM/BPF TOPIC] Coroutines in BPF
-To: bpf <bpf@vger.kernel.org>, lsf-pc@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260225141639.GB2732@lst.de>
 
-BPF programs today run to completion synchronously, since they
-fundamentally represent a function that can be invoked by the kernel,
-with a fixed execution context and execution time budget. A class of
-problems we try to solve using kernel extensions involves stitching
-together control flow across various contexts, separated both
-spatially (i.e. in context, e.g. from an NMI to a task) and temporally
-(i.e. in time, e.g. using a timer to delay execution of certain
-logic).
+On Wed, Feb 25, 2026 at 03:16:39PM +0100, Christoph Hellwig wrote:
+> On Tue, Feb 24, 2026 at 11:26:53AM -0800, Darrick J. Wong wrote:
+> > > That sounds pretty sketchy.  How do you make sure that is safe vs
+> > > memory reclaim deadlocks?  Does someone really need this feature?
+> > 
+> > Err, which part is sketchy, specifically?  This patch that adjusts stuff
+> > in fs/iomap/, or the (much later) patch to fuse-iomap?
+> 
+> The concept of swapping to fuse.
+> 
+> > Obviously this means that the fuse server is granting a longterm layout
+> > lease to the kernel swapfile code, so it should reply to
+> > fuse_iomap_begin with a error code if it doesn't want to do that.
+> > 
+> > I don't know that anyone really needs this feature, but pre-iomap
+> > fuse2fs supports swapfiles, as does any other fuse server that
+> > implements bmap.
+> 
+> Eww, I didn't know people were already trying to support swap to fuse.
 
-At the core of these solutions is a consistent pattern of capturing
-state pertaining to a given task or request (e.g. in a map) and the
-function that must be applied on such a state to achieve some end
-(e.g. the task work or timer callback), while composing all of this
-together using lower level primitives to achieve asynchrony.
+It was merged in the kernel via commit b2d2272fae1e1d ("[PATCH] fuse:
+add bmap support"), which was 2.6.20.  So people have been using it for
+~20 years now.  At least it's the mm-managed bio swap path and we're not
+actually upcalling the fuse server to do swapins/swapouts.
 
-I would like to use this session to illustrate how this maps closely
-to the idea of a continuation, and why we could benefit from such an
-abstraction in BPF for writing programs that implement asynchronous
-control flow. Such patterns can be made simpler to express, more
-efficient at runtime through specialization, and easier for the
-verifier to reason about end-to-end.
-
-In particular, we will discuss the implementation of coroutine support
-for the BPF runtime, by leveraging the C++ frontend in clang. This
-will be a more concrete continuation of my presentation last year [0],
-with a focus on the implementation details of the coroutine
-abstraction, its runtime and compiler integration, paired with some
-examples to motivate the need for such a primitive.
-
-The session will be illustrative and open-ended, with some topics we
-could cover listed below:
-- Bootstrapping the C++ frontend for BPF (which might be of interest
-independently).
-- ABI between the BPF runtime and LLVM's coroutine lowering.
-- Verifier changes necessary to make coroutines safe.
-- Example use cases and demos (e.g., scheduling work done in various
-kernel contexts, programs that operate across NMI/task context,
-interaction with timers, etc.).
-
-  [0]: https://bpfconf.ebpf.io/bpfconf2025/bpfconf2025_material/Nous%20-%20LSFMMBPF%202025.pdf
+--D
