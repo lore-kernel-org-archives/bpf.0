@@ -1,160 +1,123 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B987303A04;
-	Wed, 25 Feb 2026 21:06:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C46E30E852
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 21:08:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772053602; cv=none; b=LhN9sd//AlFNAQeQ42iztgDvPrOFh6fJW9Q+kPUkdk0bUkvZp8ps9xMMDF5BpsJhr0u+T5dfpeMb20rwIbZWe7NotOPIXb627AgICFyeOtG46ra0sWCFeUc1B8i1KTytN0fUCB38Y9Cnd+aJH8VqmJ/B8NijIxH9a7JFZBPIhWE=
+	t=1772053724; cv=none; b=LxbuojEbZex2z9pZRQ8UkJ0Ql5gDUGp6w4tOnwXgakm6E8NoAU1vtRg4UT+WwVSrxbN1x6hKBb9rcvCiND0cb0bmeenNwmCXD2LPXZPaVwwpFVFWUwM1Vd9gwTlbVdUcX9g6KGY6LX9ssbI2EEz1bsefpwS8U5HXkKzsqTkI1YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772053602; c=relaxed/simple;
-	bh=dgVUcg5h0F/5rdQgXU6jWV/I3Z8iC65i5+Eqs9p8nXs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=hiHXV3jT5nsqR6cr3Z8xmbVpx0BQjHzT6HTX2/k+tRQ/cW8CLkaMxMOlohxBXgkLTkN9U1h1w63SB9eumIxBqeQ7UJw2cQwIMr1mszue/3hO6SUczCWmv9mCIWQAgND2Cgo3iaDKdOjhhfqxHiyEIm/R2RYkQ01x9fOx3J5DRvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ugwRTs0D; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772053724; c=relaxed/simple;
+	bh=/8Vcz1prEbRK+dIJdMqcAygK+LDRxlZV6UmQxwtSlYQ=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=P+Wg3yUchVOCDeljonTlGijxhE6nnfgX5fJrZUjHHWBlEzBHy+GUiRePWY79fIAiJM1uiIK9Y2ZmFFf2s79PPwu8waziISPz0LtZWceSK28k9/AdqEsE2hYN+6csDgiwGd2IH3aVoHIhe9Ko3718OM7iVo35MZRJiO5GGL1Q8Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jTYvnq2N; arc=none smtp.client-ip=74.125.82.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ugwRTs0D"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B95CCC116D0;
-	Wed, 25 Feb 2026 21:06:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772053601;
-	bh=dgVUcg5h0F/5rdQgXU6jWV/I3Z8iC65i5+Eqs9p8nXs=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=ugwRTs0D8xDEBxAPXPTRj1sk9quW659aQDtIFlQTPc502a/rMoTtrzdufXQik7jLQ
-	 ACCH6cK79I0WHaNyd/eph9KWYr0Qppt/I3IkIg+8qZPYjeecBectcs5GhE9xXmVDt2
-	 /ylHNnae0nT44Q6j5D8LwTEafT4FKNU/FkoEuYrGB//7eVyKnNQj8ztnT3xqxvNL2F
-	 MxGnJINMstRiB8XI6kYYscgg6IcymYCZ4rLcDktQvEinoIufU17JOrSJdauIVDT46U
-	 dn+FEcQhE3okGiJcztJnJu7AXjLfeWJWNYUJ6vzJ2LnzsqAoofgiQDO8sdcClA+iY6
-	 3qvGoP/lktGhw==
-Content-Type: multipart/mixed; boundary="===============2090170065257609829=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jTYvnq2N"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2ba9f033a5bso1484107eec.0
+        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 13:08:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772053723; x=1772658523; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Of03JtVBl6x9wrND6zq4YBe9ooyHXbISaWzBe270tkw=;
+        b=jTYvnq2NOJPbiEVPcuPQtz4ou84naqzmPYPlmrMJh19Z3LruJxrPhceojkvjXAqnty
+         cgxO/uEgYkvRYT2sZuW9H29yluxXZXmDP5NWIiVQ0xqZR0uELgrRB9ca18ByKCZ2itEq
+         o2JGwOruYlpB7RBTHPRgRKUBbR2HmS83DZdxyNWU8m99yzniH6geHlVCpKg5jYQz7sd+
+         Nvp/TzurpDejQ1cvcanYHpRL7DMjDfQqom5VDAO0IA9PX1iXlQUZNkQ78Owhbj85Bl4H
+         Dt8N5I4NdJTttLUK9Gs1dULHnDT/mUdLi07U8TSz0NyPhS+rKaxlwQW93eRfphceOJZn
+         uZHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772053723; x=1772658523;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Of03JtVBl6x9wrND6zq4YBe9ooyHXbISaWzBe270tkw=;
+        b=wDz4GV7CXeZuFRMPupdoAfuj/gn1VaujIT6R04WKOmriBb6TNvI1swZ9rTHQtTLBjR
+         tnUgtt3Gwqb0btbNEUsztmjaGutVZ22lYzqMV4SCHPFjCtNJokLfXnJxe6m0w67LacEC
+         fluvoDQqeCKx+y4P/J+nPYrDIlo3PbNDWrAIS5iKvKhLxfHu0vVzT9rKzIbzseyTQV4s
+         O+TOdWSBQBHKXRkU4vE8UNW4QTnn1I+V873lBKm7r4EmvPaD124YBZ08PJM72PdTkR5u
+         W37NY1OElnxD3b+GMiDpP2VIUNpb0/L4h+YR0+nDQbOPERdyZJPQewDjr/ZBuVU5dqjV
+         0hkg==
+X-Forwarded-Encrypted: i=1; AJvYcCVwAKCjk99lg77/u+OAOh9tcRk0UuXXU7/NK2SJqS/vuNkx7gJps0mNlMj5DpV0aaOOT40=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1VM4vU0KV3GuhJjSwcrIvmeA7Bysy4cUCkesVxA8Pf4rhtDYe
+	eQV8+JQEa48fBL5ufrFPwN8IShLyiKmoKZes6I+yuHAv+dVGCgUkRSxh0WnZLQGj/hm45G9bgf/
+	HKoZ0Jma1MZKG4A==
+X-Received: from dydb17.prod.google.com ([2002:a05:7300:80d1:b0:2ba:acf0:ab76])
+ (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:7300:23cc:b0:2ba:a440:79b0 with SMTP id 5a478bee46e88-2bd7bd711b5mr9002146eec.36.1772053722568;
+ Wed, 25 Feb 2026 13:08:42 -0800 (PST)
+Date: Wed, 25 Feb 2026 13:08:16 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <bf515a9784c17b9b0dcfeff987e9cc7c328fc6d330cdb97b1cfe77448eafcc27@mail.kernel.org>
-In-Reply-To: <20260225202935.31986-2-git@danielhodges.dev>
-References: <20260225202935.31986-2-git@danielhodges.dev>
-Subject: Re: [PATCH bpf-next v8 1/4] bpf: Add hash kfunc for cryptographic hashing
-From: bot+bpf-ci@kernel.org
-To: git@danielhodges.dev,bpf@vger.kernel.org,linux-crypto@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,vadim.fedorenko@linux.dev,song@kernel.org,yatsenko@meta.com,martin.lau@linux.dev,eddyz87@gmail.com,haoluo@google.com,jolsa@kernel.org,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,yonghong.song@linux.dev,herbert@gondor.apana.org.au,davem@davemloft.net,git@danielhodges.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 25 Feb 2026 21:06:39 +0000 (UTC)
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
+Message-ID: <20260225210820.177674-1-wusamuel@google.com>
+Subject: [PATCH bpf-next v5 0/2] Add wakeup_source iterators
+From: Samuel Wu <wusamuel@google.com>
+To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: Samuel Wu <wusamuel@google.com>, kernel-team@android.com, 
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
---===============2090170065257609829==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+This patch series introduces BPF iterators for wakeup_source, enabling
+BPF programs to efficiently traverse a device's wakeup sources.
 
-> diff --git a/crypto/bpf_crypto_shash.c b/crypto/bpf_crypto_shash.c
-> --- /dev/null
-> +++ b/crypto/bpf_crypto_shash.c
-> @@ -0,0 +1,96 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-> +#include <linux/types.h>
-> +#include <linux/module.h>
-> +#include <linux/bpf_crypto.h>
-> +#include <crypto/hash.h>
-> +
-> +struct bpf_shash_ctx {
-> +	struct crypto_shash *tfm;
-> +	struct shash_desc desc;
-> +};
+Currently, inspecting wakeup sources typically involves reading interfaces
+like /sys/class/wakeup/* or debugfs. The repeated syscalls to query the
+sysfs nodes is inefficient, as there can be hundreds of wakeup_sources, and
+each wakeup source have multiple stats, with one sysfs node per stat.
+debugfs is unstable and insecure.
 
-[ ... ]
+The iterators utilize pre-existing wakeup_sources_walk_* functions to
+traverse over the SRCU that backs the list of wakeup_sources.
 
-> +static void *bpf_crypto_shash_alloc_tfm(const char *algo)
-> +{
+Changes in v5:
+ - Add CORE definitions for *__local variables to fix s390 build per bpf-ci
+ - v4 link: https://lore.kernel.org/all/20260211235055.239024-1-wusamuel@google.com/
 
-[ ... ]
+Changes in v4:
+ - Proper init of variables in ws_iter_check_sleep_times() test per bpf-ci
+ - Remove PM patch since it's already part of rebase
+ - v3 link: https://lore.kernel.org/all/20260124012133.2451708-1-wusamuel@google.com/
 
-> +	ctx->tfm = tfm;
-> +	ctx->desc.tfm = tfm;
-> +
-> +	return ctx;
-> +}
+Changes in v3:
+ - Update wakeup_sources_walk_start() to handle an empty list per bpf-ci
+ - Simplify read of a struct's field in BPF program selftest per Andrii
+ - Drop open coded iterators for wakeup_sources
+ - Fix condition from !get_ws_iter_stream to get_ws_iter_stream in selftest
+ - Read event_count instead of wakeup_count in selftest
+ - v2 link: https://lore.kernel.org/all/20260108225523.3268383-1-wusamuel@google.com/
 
-[ ... ]
-
-> +static int bpf_crypto_shash_hash(void *tfm, const u8 *data, u8 *out,
-> +				 unsigned int len)
-> +{
-> +	struct bpf_shash_ctx *ctx = tfm;
-> +
-> +	return crypto_shash_digest(&ctx->desc, data, len, out);
-> +}
-
-bpf_crypto_shash_alloc_tfm() creates one bpf_shash_ctx per
-bpf_crypto_ctx, with a single embedded shash_desc. Multiple BPF
-programs can acquire references to the same bpf_crypto_ctx
-concurrently via bpf_crypto_ctx_acquire() (which just does
-refcount_inc_not_zero), and the hash kfunc is marked KF_RCU which
-provides no mutual exclusion.
-
-When two CPUs call bpf_crypto_hash() with the same context, both
-end up in crypto_shash_digest() using the same desc:
-
-  CPU0                           CPU1
-  bpf_crypto_hash(ctx)           bpf_crypto_hash(ctx)
-    bpf_crypto_shash_hash()        bpf_crypto_shash_hash()
-      crypto_shash_digest(desc)      crypto_shash_digest(desc)
-        alg->digest(desc, ...)         alg->digest(desc, ...)
-        // writes desc->__ctx          // writes desc->__ctx
-        memset(desc->__ctx, 0)         memset(desc->__ctx, 0)
-
-crypto_shash_op_and_zero() in crypto/shash.c writes to
-shash_desc_ctx(desc) via the algorithm callback and then zeroes it
-with memset. Both CPUs race on this buffer, producing silently
-corrupted hash output.
-
-The existing encrypt/decrypt path does not have this problem because
-crypto_lskcipher_encrypt() treats the tfm as read-only (the key
-schedule is pre-computed) and the mutable IV state is passed
-per-call through the siv dynptr.
-
-Would it make sense to allocate a shash_desc per-call on the stack,
-or use a per-cpu descriptor, to avoid this race?
-
-> diff --git a/kernel/bpf/crypto.c b/kernel/bpf/crypto.c
-> --- a/kernel/bpf/crypto.c
-> +++ b/kernel/bpf/crypto.c
-
-[ ... ]
-
-> +#if IS_ENABLED(CONFIG_CRYPTO_HASH2)
-> +/**
-> + * bpf_crypto_hash() - Compute hash using configured context
-> + * @ctx:	The crypto context being used. The ctx must be a trusted pointer.
-> + * @data:	bpf_dynptr to the input data to hash. Must be a trusted pointer.
-> + * @out:	bpf_dynptr to the output buffer. Must be a trusted pointer.
-> + *
-> + * Computes hash of the input data using the crypto context. The output buffer
-> + * must be at least as large as the digest size of the hash algorithm.
-> + */
-> +__bpf_kfunc int bpf_crypto_hash(struct bpf_crypto_ctx *ctx,
-> +				const struct bpf_dynptr *data,
-> +				const struct bpf_dynptr *out)
-> +{
-
-[ ... ]
-
-> +	return ctx->type->hash(ctx->tfm, data_ptr, out_ptr, data_len);
-> +}
-> +#endif /* CONFIG_CRYPTO_HASH2 */
+Changes in v2:
+ - Guard BPF Makefile with CONFIG_PM_SLEEP to fix build errors
+ - Update copyright from 2025 to 2026
+ - v1 link: https://lore.kernel.org/all/20251204025003.3162056-1-wusamuel@google.com/
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Samuel Wu (2):
+  bpf: Add wakeup_source iterator
+  selftests/bpf: Add tests for wakeup_sources
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22414975518
+ kernel/bpf/Makefile                           |   3 +
+ kernel/bpf/wakeup_source_iter.c               | 103 ++++++
+ tools/testing/selftests/bpf/config            |   1 +
+ .../bpf/prog_tests/wakeup_source_iter.c       | 300 ++++++++++++++++++
+ .../selftests/bpf/progs/wakeup_source_iter.c  |  80 +++++
+ 5 files changed, 487 insertions(+)
+ create mode 100644 kernel/bpf/wakeup_source_iter.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/wakeup_source_iter.c
 
-AI-authorship-score: low
-AI-authorship-explanation: Eight revision iterations with active reviewer engagement on lore.kernel.org and incremental changes addressing feedback are consistent with human-driven development.
-issues-found: 1
-issue-severity-score: medium
-issue-severity-explanation: Data race on shared shash_desc in bpf_crypto_hash() produces silently corrupted cryptographic hash output when two CPUs use the same context concurrently, which could affect integrity checking and authentication use cases.
+-- 
+2.53.0.473.g4a7958ca14-goog
 
---===============2090170065257609829==--
