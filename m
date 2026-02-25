@@ -1,308 +1,257 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEB13E958C
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 17:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772039644; cv=none; b=ACJkFG9A0LV8oDR8kUrSl6jLy74GhWBsYP9q/dTwRHtbY2EW6zBd0W1XHgkb0B+HA47w+aHT2bayZxImYNIf/htarkp0WfYbsFq2PfsLvWpqYLpPNNfCqt2rw6JyRnzm3CH6wo5kQq6oVp4hWKSxi+LsaIPMZ46Lb/uwi7yU9i0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772039644; c=relaxed/simple;
-	bh=nUo04ih3SDy0r3suDHQjkZDw8s/+NqXtWaoVNaiVJzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oM04TyIJjmQEeJxse429/5MJFLmE1cn/ub7q9aPQFQA6otcbLkA6M1Is6T4pV3Vru55eq64ubrpWjFyfX2wdAhrUfKbDcc+hMJ+JuZ2lV5DZsJHMLW7eelZmkk09PvlL5j70QGYZTgAcei+SPi/YcQF279m3Q0rGD67/Lmvhsl8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NNIACqKF; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFAAA3E95AB;
+	Wed, 25 Feb 2026 17:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772040006; cv=fail; b=R3nWFWmA2nO+u1PNok4ilfh/umM30Ac2Qoli0pu61sY4hfBu9Z30xdJUAhjhE7N+Y27wqgrbghKttvckB4Hs1afiOym/hg8ruCx/4aa3v+bQGUOn1Heg+ZW/+7N+OfmE61Tln3o/Jwr6t0t3BDqDOxIHW71/fNrkW2/+h8sHAbY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772040006; c=relaxed/simple;
+	bh=oL07NrC0/aSPZI7dFybcfzDgYu6AhUnHp1GYwPmiD6Y=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=hacKlQWwmvHJUjFOglvYeePVEhA4iZuH94/8h2sm3mLqG4sTz+8/pI/qh7pgWjDOSK5O2ggbU+80RNPNIXIroQ+lJ2xsWl/jmIyLgWlKQCr8KbZ3vaoEgOp3W2W5S0OVSrcoGt3R7Ml/lOYYJ2FhzQwrOxHoylywWi8hKAxLSGE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VPW8dajW; arc=fail smtp.client-ip=198.175.65.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NNIACqKF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VPW8dajW"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772039641; x=1803575641;
+  t=1772040003; x=1803576003;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nUo04ih3SDy0r3suDHQjkZDw8s/+NqXtWaoVNaiVJzk=;
-  b=NNIACqKF7wLMNVB1LoLqO8V7CNWicdBriGDWx59umVMovEDyjyovP42/
-   aHWVxyO48B9HeWhRIwXT6GqXYNzCTqI2IcyEOWfnAYUBRLNhHSFbqmGGB
-   TRwlhIOZnQnSKdnx038dFyYSzb2vWirufHvfst0r+F5WLAlEaZq9EziM1
-   jA/fWc0/sWDGCOIQtxxQ3D+y6pGvPP42u3MgG3SfN3ufie7XMB5tJHI65
-   K+Jj8Q6e2BqcN1gij5ZwaOAXWVt0fHQl1yVuHZWcADbYmz1zL+xH4Pk6A
-   l+Rk7UGdkAO4wwvQPZPCNhTOmT0TnD0HKBv+YoUQlJ2D2JXNF3gcdEI/z
+   in-reply-to:mime-version;
+  bh=oL07NrC0/aSPZI7dFybcfzDgYu6AhUnHp1GYwPmiD6Y=;
+  b=VPW8dajWNN+EbZ/T8erbEtDMmBZSm1EU4Y1R72pJ+8Mf8W6zJeqG9KdC
+   9E981dVbGRLEU8VfZ5v3kNsbPIGQcR6vIi/+V4YYEGtgFXi1iPIW3ljGH
+   M1ryEDbrbS7/BfC/491iByIDjz+KDJmzHYyXfYqQkg0Q+pA4epUSwnAOW
+   Ny/W7Dx0AD7XwaYvGW4BJ9C0XLZGs9e59zFM0grXhu3wCm6bub85+8l8i
+   TFIhKmc3wBSFJUF4BtZmN7QDGyLvyJ7hEI8MIkdnXTBgD8n9JS4Y+wrAi
+   Rd5xbjj1A2psy/yNtNInkAtu9wG5SnTZlz7eXDkb4WRBCLCW37j2yBYLv
    Q==;
-X-CSE-ConnectionGUID: //0SpNYeQXSLjAHUYP1+zA==
-X-CSE-MsgGUID: kGcm+HBGTqWObFPMTDyDNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="98555861"
+X-CSE-ConnectionGUID: VkJvZwdqTWSbBOnIb9DrGQ==
+X-CSE-MsgGUID: l4KQxHpyTRqZD0bMiR4ouw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="83418025"
 X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
-   d="scan'208";a="98555861"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 09:14:01 -0800
-X-CSE-ConnectionGUID: Nr6cnKMKQNmf9WXDGJ6XbA==
-X-CSE-MsgGUID: ERRqZfocT9ilA52qPrFI0Q==
+   d="scan'208";a="83418025"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 09:20:02 -0800
+X-CSE-ConnectionGUID: Eh7ynHQORSeELTV0rHtCmQ==
+X-CSE-MsgGUID: ZnrCiSeKSuKHewxB3ZUBew==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,310,1763452800"; 
-   d="scan'208";a="215516689"
-Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
-  by orviesa010.jf.intel.com with ESMTP; 25 Feb 2026 09:13:58 -0800
-Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vvISR-000000006gP-1Lft;
-	Wed, 25 Feb 2026 17:13:55 +0000
-Date: Thu, 26 Feb 2026 01:13:18 +0800
-From: kernel test robot <lkp@intel.com>
-To: adubey@linux.ibm.com, linuxppc-dev@lists.ozlabs.org
-Cc: oe-kbuild-all@lists.linux.dev, bpf@vger.kernel.org,
-	hbathini@linux.ibm.com, ast@kernel.org, daniel@iogearbox.net,
-	andrii@kernel.org, maddy@linux.ibm.com,
-	Abhishek Dubey <adubey@linux.ibm.com>
-Subject: Re: [PATCH v2 1/2] powerpc64/bpf: Implement JIT support for private
- stack
-Message-ID: <202602260116.5ljOxwdH-lkp@intel.com>
-References: <20260225153950.15331-1-adubey@linux.ibm.com>
+   d="scan'208";a="215064444"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 09:20:01 -0800
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 25 Feb 2026 09:20:00 -0800
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Wed, 25 Feb 2026 09:20:00 -0800
+Received: from DM1PR04CU001.outbound.protection.outlook.com (52.101.61.9) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Wed, 25 Feb 2026 09:20:00 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UFlx9+LsxUH0f1NAPiorkSU0t7uhAVm6CqWfk2QbZ/zfAFDzLRdAo5JAv6l9A0n1qZu/PzkfucTRfpEAx6c+pM2OuHQ/pKk8pzCt1VWo28vnSTsx4TknpBU04wXNIHIy3TWgzF7R/NhaXeMspx9CZx3LWiUlg6JN6s2oTQlWzv37JN+EXZlSR+bhmEK5DYXjAhvUxJDBFf5kKVSi5qCN18jZ2kpdvsbu5Qs8VJKnNYdFJxOi1Vdd4WQhGoR811HTDU/QK4yCO4sSXudP97YEPBEOOxgUZbFJuXEQJO05mQ22p6FhJ7GyYuSfPlccpkKFIOqoNuQO8U/3+5NlmPzlRg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=egjavjbdxBH3x0FZt7f1wlVnBb6pFcVzJ7NgXA8A9No=;
+ b=SLA00SBq2Ic6SlSsp7B1+CPh4BlU9S+UQKWiB/WpLSLIxhcSQag/wTLVxCXugJCrNuqMZf3BV4lZrZqsv/X/WaRlhUnPtiRLc/C6tZTYKPIk1WtqAP5YShhmnrfOT9joydQ1Um7CfBp1rrvjpplAEZHg1yPpinY2sCTdFCPIsDOahQkP6vGLLzsrJhzKqH6kBimy++a/lnyZN4H+tWNpWg+hoihN/izqJ9APW7pSN+6WazstcHBsQiexpVhm80xdIy5yKJmEHm3EL6qj5EDdHrns1Eh0aLef4x6uoZGA8xoJlkD52xXldKySFWb6EizEkoHff9uvL0aKtiqpJk0ipA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SN7PR11MB7540.namprd11.prod.outlook.com (2603:10b6:806:340::7)
+ by DM4PR11MB5994.namprd11.prod.outlook.com (2603:10b6:8:5d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.22; Wed, 25 Feb
+ 2026 17:19:57 +0000
+Received: from SN7PR11MB7540.namprd11.prod.outlook.com
+ ([fe80::2edd:5c6d:169c:389b]) by SN7PR11MB7540.namprd11.prod.outlook.com
+ ([fe80::2edd:5c6d:169c:389b%4]) with mapi id 15.20.9632.017; Wed, 25 Feb 2026
+ 17:19:57 +0000
+Date: Wed, 25 Feb 2026 18:19:48 +0100
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: Simon Horman <horms@kernel.org>
+CC: Tony Nguyen <anthony.l.nguyen@intel.com>,
+	<intel-wired-lan@lists.osuosl.org>, Przemek Kitszel
+	<przemyslaw.kitszel@intel.com>, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, "Jakub
+ Kicinski" <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Alexander
+ Lobakin" <aleksander.lobakin@intel.com>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, Aleksandr Loktionov
+	<aleksandr.loktionov@intel.com>, Natalia Wochtman
+	<natalia.wochtman@intel.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: Re: [PATCH iwl-next 03/10] ixgbevf: use libeth in Rx processing
+Message-ID: <aZ8vNEn7V4VVoOHr@soc-5CG4396X81.clients.intel.com>
+References: <20260223095222.3205363-1-larysa.zaremba@intel.com>
+ <20260223095222.3205363-4-larysa.zaremba@intel.com>
+ <aZ3jzpKs7VcVi-mL@horms.kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <aZ3jzpKs7VcVi-mL@horms.kernel.org>
+X-ClientProxiedBy: VI1PR04CA0061.eurprd04.prod.outlook.com
+ (2603:10a6:802:2::32) To SN7PR11MB7540.namprd11.prod.outlook.com
+ (2603:10b6:806:340::7)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260225153950.15331-1-adubey@linux.ibm.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN7PR11MB7540:EE_|DM4PR11MB5994:EE_
+X-MS-Office365-Filtering-Correlation-Id: 33d6ba5f-0412-4f0a-771f-08de74921971
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|10070799003|1800799024|7416014;
+X-Microsoft-Antispam-Message-Info: aj7QpNxMH/TqEmLF+w5OJ5p7Tcdf5K2/r5GHuPJpsGJJZYTdLQ7MO/PJhuwGupOoHXMQD7XqFCS1dSkQznqznhu2mPwFvq2NHBtd+618llWAMbZsNzdMh6mbmz/FBczorySj8PMrVKz+5Gr4SZhOXqYlrwEMHmVSebUTu1Deh20qB1oPA1acGgPMKGMoIlSQyk1c8HvUfqK4AdX9ggXoKI72j7UM9YUF+HOYrenK9jBzzGO7BdK3F4cSmfeIZ4jsEXt3ianiNEF7b2CDoy0udis/Ib9wmN7DZqTMT0Hw/5J++UNbWSlH/ynPvbkzCRNMxfygr44VbkFPQAYSOpD1jErSQk3GUpif+uzZaVch04fK1gQOzpDcj0cCiaj+S5Cc5W9hH6OkRM1LOl0UA9ttpkb7MZAzYVISbOCrhotGPxIZSwrJb6Tf3Q6VVp9yc+f4lr8ZSLo5G6UkYCC5a9ueUMPi2XJkbunuW7rUiZ689d7kGOesaD+KgCP9iezkARjiWeA0/XWXX+DHzvbmqAb+9ZhSNNP18f7Ovrd2dKJ9ZwCbv7s2UtoWANzsooIvTLmRbvo+ZfqNKg+Lwo2rqdjy0MSvNS5UcUeR8lxFl7a6FzmtlkarYcXcvCIbJgrqypYvvtxjmBzp0ESifyejv8pzy3BC2HpfAXw08lzDbBTQ3MURNTv9C+dEAIcn25L9BV3u9BLSggNs5cjGLGyA9xIIW7CrF1h5cvvnPExwAYBqOhM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN7PR11MB7540.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(10070799003)(1800799024)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AKcNYOt1gaAYU1nlVmd62KtWPVVWQNMGvmIVEFRp8PtSAxdnN+x/Z6LbHOnK?=
+ =?us-ascii?Q?W2AGJzKqqrZySETIbh9u/0hFNUQagVt+FdWWA2yRam5HtKXoCLTLuwMHL4Kt?=
+ =?us-ascii?Q?n1QpJwzqrH/DxXma2Ojr4hahEifqymGpUTD+RLgpkk7/wnqHMQoNCZqCdcI9?=
+ =?us-ascii?Q?OoYbX9ES1XIten/xMR44bR6CGbR8/xR6cOO0WyKGNzDRXBwCOUFC53ioGqPi?=
+ =?us-ascii?Q?/7SohZByPogD/bXzmFiCRT9LVz499nuvWAsvAeDXvjxHcuoY7OMshNo70Rz/?=
+ =?us-ascii?Q?xAobXnR5CIc/xkdyWVKxWmOvV33WjO0OsmpkH85n/t+DFjhXL/oBpzdusm4k?=
+ =?us-ascii?Q?k9QuWj0ZfegFHlYWw/gKiHvyaew+ks68zfL77EnStPCKu6OXVZGKjvIZYbEH?=
+ =?us-ascii?Q?wXvcOY7WHoMdwW0qsDiY8W13v3bsXgm7DtTAgXNqrIaXBeBk1U9ZZrmrYQe1?=
+ =?us-ascii?Q?obavPHj6ShGcHpbhy74604NyEOst5y1a0E83SM2hi4N5Lqjc5S5E+lr/a6mh?=
+ =?us-ascii?Q?nKALOZAvZGiHWT8tfEJYRt5X9P/73KY8pDgxU1QA1Stznqow27APpkwwsuoi?=
+ =?us-ascii?Q?vEqeD3t+vwsB2LHuu9MujvX245eln7sESwxGxGFY0MN11drLy62AY7/IY649?=
+ =?us-ascii?Q?rLJ9u8bCEc6Y7hX9hgwG5sKV/9FB4S5KQS6KIXR3qEXLrDnj2EntEem8aDE/?=
+ =?us-ascii?Q?piJKAF0yWeW/aeBrsW7+ifQZ9+9OF1c3sDsLtvWf/Jh1AFY25tgg8vrW7ZBz?=
+ =?us-ascii?Q?iXrsViLiZOR+CO7VEz966FJIjEOVVtlNyzgVk6BkBUDpT1oaJfmPQU1iBiuB?=
+ =?us-ascii?Q?T9hGVrBxHtjgOtZINU/jA8D7LjshTqQUfK+Pm1DKR/MI+J4Q0Lin3jil/j4h?=
+ =?us-ascii?Q?Ff0Me3C606MdgTdz3NH/ARiF9odiH3XNXOEDqqZoB5LdnRpj4ejefUetTktC?=
+ =?us-ascii?Q?KZtVpXSeomaPRAozz0TRuWawkVZvoJdl1zDPfZgjGOrJyyT6nM+1oYfH1aNn?=
+ =?us-ascii?Q?DjRzztIhZ3EEtZC6ZPqsqpIKdt85lOv12d1SyaZIuC0JHm6qQdPu7PGFMvP0?=
+ =?us-ascii?Q?tAdyPNOnCxXLkn0zIPBrbR3HW+rcPWfqljaLW2YGOwLnQ8kHEsGXRTe1UJCJ?=
+ =?us-ascii?Q?QKSjyqi/105aAGcAZcc85rZKEFq8zoLlXnecQI47jaXo1IDVFNk5GYEv6IDa?=
+ =?us-ascii?Q?nk+Y+hXzdU2M5/I5er/SHHCe3pDEgWlxchie83Qy/M7jhaXasjztPtxR6KQI?=
+ =?us-ascii?Q?ARXx1LsQiG+T6NKilN6B/9hO+lbPHXz0Iuq8wD4rVqZYYjY89wqM41H3MMA3?=
+ =?us-ascii?Q?GKkPQCQb98RUW5zCBQ+/w4cfftwWrAsJ/wrHMPdW3GXLEH6cypji2JRgRCwt?=
+ =?us-ascii?Q?cvOy+tOvFE1O8AipDMxQcKoCN4s/HT1QoaiE74kc3/6mE0/nZF87ff2VQZu2?=
+ =?us-ascii?Q?0z4ZKtkUc9j9K8lpg/p+TYFP5lsvQkBGfZH9NH+0lcYFtcELZodfiRR2VIM/?=
+ =?us-ascii?Q?u26wFaSqe4RoQIbKw6N4U04rbQP0YRW1Xoea8fqlXSqgGYPBtU/53IzjUzxZ?=
+ =?us-ascii?Q?7c2QOdxPNLkIvvJGaT7GnDuLm9wr7wsE8G2SY2opzzOueewOrUQnzOz9T4lk?=
+ =?us-ascii?Q?h7iVodlliiaOqy0cVWfrq28LO5otodSJ0qpNdb4gGUS+N5I2unHH/qV8+LVL?=
+ =?us-ascii?Q?OglIqTOzJ2M+YNCxmk7MlBcmtiyUQiym5uU6VMc4mm1AAy0KkV1d3baOEph8?=
+ =?us-ascii?Q?1QAv8De82OLVjZqymBiqmSyfvSRFt3H9GOUxGOTk74DvwJkhMJFzOqK/wBjV?=
+X-MS-Exchange-AntiSpam-MessageData-1: oQSIBFDwZpXUFl/oH2tmiv/jNJM0txSQ/60=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 33d6ba5f-0412-4f0a-771f-08de74921971
+X-MS-Exchange-CrossTenant-AuthSource: SN7PR11MB7540.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2026 17:19:57.6859
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Au8sGGeiHeKEMk6v2xWeypxunWslalu1jsPQZSx5gmWWROHfP6S1mDcJD7EpSsxOuVTdrJsEREUEyy3Kq1av1pJuE7Ca//idMAKO0MvIDIw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5994
+X-OriginatorOrg: intel.com
 
-Hi,
+On Tue, Feb 24, 2026 at 05:45:50PM +0000, Simon Horman wrote:
+> On Mon, Feb 23, 2026 at 10:52:10AM +0100, Larysa Zaremba wrote:
+> > Use page_pool buffers by the means of libeth in the Rx queues, this
+> > significantly reduces code complexity of the driver itself.
+> > 
+> > Suggested-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> > Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> > Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
+> > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+> 
+> ...
+> 
+> > @@ -3257,12 +3133,26 @@ static int ixgbevf_setup_all_tx_resources(struct ixgbevf_adapter *adapter)
+> >  int ixgbevf_setup_rx_resources(struct ixgbevf_adapter *adapter,
+> >  			       struct ixgbevf_ring *rx_ring)
+> >  {
+> > -	int size;
+> > +	struct libeth_fq fq = {
+> > +		.count		= rx_ring->count,
+> > +		.nid		= NUMA_NO_NODE,
+> > +		.type		= LIBETH_FQE_MTU,
+> > +		.xdp		= !!rx_ring->xdp_prog,
+> > +		.idx		= rx_ring->queue_index,
+> > +		.buf_len	= IXGBEVF_RX_PAGE_LEN(rx_ring->xdp_prog ?
+> > +						      LIBETH_XDP_HEADROOM :
+> > +						      LIBETH_SKB_HEADROOM),
+> > +	};
+> > +	int ret;
+> >  
+> > -	size = sizeof(struct ixgbevf_rx_buffer) * rx_ring->count;
+> > -	rx_ring->rx_buffer_info = vmalloc(size);
+> > -	if (!rx_ring->rx_buffer_info)
+> > -		goto err;
+> > +	ret = libeth_rx_fq_create(&fq, &rx_ring->q_vector->napi);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	rx_ring->pp = fq.pp;
+> > +	rx_ring->rx_fqes = fq.fqes;
+> > +	rx_ring->truesize = fq.truesize;
+> > +	rx_ring->rx_buf_len = fq.buf_len;
+> >  
+> >  	u64_stats_init(&rx_ring->syncp);
+> >  
+> > @@ -3270,25 +3160,29 @@ int ixgbevf_setup_rx_resources(struct ixgbevf_adapter *adapter,
+> >  	rx_ring->size = rx_ring->count * sizeof(union ixgbe_adv_rx_desc);
+> >  	rx_ring->size = ALIGN(rx_ring->size, 4096);
+> >  
+> > -	rx_ring->desc = dma_alloc_coherent(rx_ring->dev, rx_ring->size,
+> > +	rx_ring->desc = dma_alloc_coherent(fq.pp->p.dev, rx_ring->size,
+> >  					   &rx_ring->dma, GFP_KERNEL);
+> >  
+> >  	if (!rx_ring->desc)
+> 
+> Hi Larysa,
+> 
+> Prior to this patch, if this error condition was met,
+> then function would return -ENOMEM. But now it will return 0.
+> This does not seem intentional.
+> 
+> Flagged by Smatch.
 
-kernel test robot noticed the following build warnings:
+No, it is not intentional, though the problem is fixed in a later patch. Will 
+correct this one in v2.
 
-[auto build test WARNING on bpf-next/master]
-[also build test WARNING on bpf/master powerpc/next linus/master v7.0-rc1 next-20260224]
-[cannot apply to bpf-next/net powerpc/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/adubey-linux-ibm-com/selftests-bpf-Enable-private-stack-tests-for-powerpc64/20260225-184532
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/20260225153950.15331-1-adubey%40linux.ibm.com
-patch subject: [PATCH v2 1/2] powerpc64/bpf: Implement JIT support for private stack
-config: powerpc-randconfig-r123-20260225 (https://download.01.org/0day-ci/archive/20260226/202602260116.5ljOxwdH-lkp@intel.com/config)
-compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260226/202602260116.5ljOxwdH-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202602260116.5ljOxwdH-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> arch/powerpc/net/bpf_jit_comp.c:222:7: warning: variable 'addrs' is used uninitialized whenever 'if' condition is true [-Wsometimes-uninitialized]
-     222 |                 if (!priv_stack_ptr) {
-         |                     ^~~~~~~~~~~~~~~
-   arch/powerpc/net/bpf_jit_comp.c:370:9: note: uninitialized use occurs here
-     370 |                 kfree(addrs);
-         |                       ^~~~~
-   arch/powerpc/net/bpf_jit_comp.c:222:3: note: remove the 'if' if its condition is always false
-     222 |                 if (!priv_stack_ptr) {
-         |                 ^~~~~~~~~~~~~~~~~~~~~~
-     223 |                         fp = org_fp;
-         |                         ~~~~~~~~~~~~
-     224 |                         goto out_priv_stack;
-         |                         ~~~~~~~~~~~~~~~~~~~~
-     225 |                 }
-         |                 ~
-   arch/powerpc/net/bpf_jit_comp.c:171:12: note: initialize the variable 'addrs' to silence this warning
-     171 |         u32 *addrs;
-         |                   ^
-         |                    = NULL
-   1 warning generated.
-
-
-vim +222 arch/powerpc/net/bpf_jit_comp.c
-
-   164	
-   165	struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
-   166	{
-   167		u32 proglen;
-   168		u32 alloclen;
-   169		u8 *image = NULL;
-   170		u32 *code_base;
-   171		u32 *addrs;
-   172		struct powerpc_jit_data *jit_data;
-   173		struct codegen_context cgctx;
-   174		int pass;
-   175		int flen;
-   176		int priv_stack_alloc_size;
-   177		void __percpu *priv_stack_ptr = NULL;
-   178		struct bpf_binary_header *fhdr = NULL;
-   179		struct bpf_binary_header *hdr = NULL;
-   180		struct bpf_prog *org_fp = fp;
-   181		struct bpf_prog *tmp_fp;
-   182		bool bpf_blinded = false;
-   183		bool extra_pass = false;
-   184		u8 *fimage = NULL;
-   185		u32 *fcode_base;
-   186		u32 extable_len;
-   187		u32 fixup_len;
-   188	
-   189		if (!fp->jit_requested)
-   190			return org_fp;
-   191	
-   192		tmp_fp = bpf_jit_blind_constants(org_fp);
-   193		if (IS_ERR(tmp_fp))
-   194			return org_fp;
-   195	
-   196		if (tmp_fp != org_fp) {
-   197			bpf_blinded = true;
-   198			fp = tmp_fp;
-   199		}
-   200	
-   201		jit_data = fp->aux->jit_data;
-   202		if (!jit_data) {
-   203			jit_data = kzalloc_obj(*jit_data);
-   204			if (!jit_data) {
-   205				fp = org_fp;
-   206				goto out;
-   207			}
-   208			fp->aux->jit_data = jit_data;
-   209		}
-   210	
-   211		priv_stack_ptr = fp->aux->priv_stack_ptr;
-   212		if (!priv_stack_ptr && fp->aux->jits_use_priv_stack) {
-   213			/*
-   214			 * Allocate private stack of size equivalent to
-   215			 * verifier-calculated stack size plus two memory
-   216			 * guard regions to detect private stack overflow
-   217			 * and underflow.
-   218			 */
-   219			priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
-   220								2 * PRIV_STACK_GUARD_SZ;
-   221			priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_size, 16, GFP_KERNEL);
- > 222			if (!priv_stack_ptr) {
-   223				fp = org_fp;
-   224				goto out_priv_stack;
-   225			}
-   226	
-   227			priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_size);
-   228			fp->aux->priv_stack_ptr = priv_stack_ptr;
-   229		}
-   230	
-   231		flen = fp->len;
-   232		addrs = jit_data->addrs;
-   233		if (addrs) {
-   234			cgctx = jit_data->ctx;
-   235			/*
-   236			 * JIT compiled to a writable location (image/code_base) first.
-   237			 * It is then moved to the readonly final location (fimage/fcode_base)
-   238			 * using instruction patching.
-   239			 */
-   240			fimage = jit_data->fimage;
-   241			fhdr = jit_data->fhdr;
-   242			proglen = jit_data->proglen;
-   243			hdr = jit_data->hdr;
-   244			image = (void *)hdr + ((void *)fimage - (void *)fhdr);
-   245			extra_pass = true;
-   246			/* During extra pass, ensure index is reset before repopulating extable entries */
-   247			cgctx.exentry_idx = 0;
-   248			goto skip_init_ctx;
-   249		}
-   250	
-   251		addrs = kcalloc(flen + 1, sizeof(*addrs), GFP_KERNEL);
-   252		if (addrs == NULL) {
-   253			fp = org_fp;
-   254			goto out_addrs;
-   255		}
-   256	
-   257		memset(&cgctx, 0, sizeof(struct codegen_context));
-   258		bpf_jit_init_reg_mapping(&cgctx);
-   259	
-   260		/* Make sure that the stack is quadword aligned. */
-   261		cgctx.stack_size = round_up(fp->aux->stack_depth, 16);
-   262		cgctx.arena_vm_start = bpf_arena_get_kern_vm_start(fp->aux->arena);
-   263		cgctx.user_vm_start = bpf_arena_get_user_vm_start(fp->aux->arena);
-   264		cgctx.is_subprog = bpf_is_subprog(fp);
-   265		cgctx.exception_boundary = fp->aux->exception_boundary;
-   266		cgctx.exception_cb = fp->aux->exception_cb;
-   267		cgctx.priv_sp = priv_stack_ptr;
-   268	
-   269		/* Scouting faux-generate pass 0 */
-   270		if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
-   271			/* We hit something illegal or unsupported. */
-   272			fp = org_fp;
-   273			goto out_addrs;
-   274		}
-   275	
-   276		/*
-   277		 * If we have seen a tail call, we need a second pass.
-   278		 * This is because bpf_jit_emit_common_epilogue() is called
-   279		 * from bpf_jit_emit_tail_call() with a not yet stable ctx->seen.
-   280		 * We also need a second pass if we ended up with too large
-   281		 * a program so as to ensure BPF_EXIT branches are in range.
-   282		 */
-   283		if (cgctx.seen & SEEN_TAILCALL || !is_offset_in_branch_range((long)cgctx.idx * 4)) {
-   284			cgctx.idx = 0;
-   285			if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
-   286				fp = org_fp;
-   287				goto out_addrs;
-   288			}
-   289		}
-   290	
-   291		bpf_jit_realloc_regs(&cgctx);
-   292		/*
-   293		 * Pretend to build prologue, given the features we've seen.  This will
-   294		 * update ctgtx.idx as it pretends to output instructions, then we can
-   295		 * calculate total size from idx.
-   296		 */
-   297		bpf_jit_build_prologue(NULL, &cgctx);
-   298		addrs[fp->len] = cgctx.idx * 4;
-   299		bpf_jit_build_epilogue(NULL, &cgctx);
-   300	
-   301		fixup_len = fp->aux->num_exentries * BPF_FIXUP_LEN * 4;
-   302		extable_len = fp->aux->num_exentries * sizeof(struct exception_table_entry);
-   303	
-   304		proglen = cgctx.idx * 4;
-   305		alloclen = proglen + FUNCTION_DESCR_SIZE + fixup_len + extable_len;
-   306	
-   307		fhdr = bpf_jit_binary_pack_alloc(alloclen, &fimage, 4, &hdr, &image,
-   308						      bpf_jit_fill_ill_insns);
-   309		if (!fhdr) {
-   310			fp = org_fp;
-   311			goto out_addrs;
-   312		}
-   313	
-   314		if (extable_len)
-   315			fp->aux->extable = (void *)fimage + FUNCTION_DESCR_SIZE + proglen + fixup_len;
-   316	
-   317	skip_init_ctx:
-   318		code_base = (u32 *)(image + FUNCTION_DESCR_SIZE);
-   319		fcode_base = (u32 *)(fimage + FUNCTION_DESCR_SIZE);
-   320	
-   321		/* Code generation passes 1-2 */
-   322		for (pass = 1; pass < 3; pass++) {
-   323			/* Now build the prologue, body code & epilogue for real. */
-   324			cgctx.idx = 0;
-   325			cgctx.alt_exit_addr = 0;
-   326			bpf_jit_build_prologue(code_base, &cgctx);
-   327			if (bpf_jit_build_body(fp, code_base, fcode_base, &cgctx, addrs, pass,
-   328					       extra_pass)) {
-   329				bpf_arch_text_copy(&fhdr->size, &hdr->size, sizeof(hdr->size));
-   330				bpf_jit_binary_pack_free(fhdr, hdr);
-   331				fp = org_fp;
-   332				goto out_addrs;
-   333			}
-   334			bpf_jit_build_epilogue(code_base, &cgctx);
-   335	
-   336			if (bpf_jit_enable > 1)
-   337				pr_info("Pass %d: shrink = %d, seen = 0x%x\n", pass,
-   338					proglen - (cgctx.idx * 4), cgctx.seen);
-   339		}
-   340	
-   341		if (bpf_jit_enable > 1)
-   342			/*
-   343			 * Note that we output the base address of the code_base
-   344			 * rather than image, since opcodes are in code_base.
-   345			 */
-   346			bpf_jit_dump(flen, proglen, pass, code_base);
-   347	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> 
+> >  		goto err;
+> >  
+> >  	/* XDP RX-queue info */
+> > -	if (xdp_rxq_info_reg(&rx_ring->xdp_rxq, adapter->netdev,
+> > -			     rx_ring->queue_index, 0) < 0)
+> > +	ret = __xdp_rxq_info_reg(&rx_ring->xdp_rxq, adapter->netdev,
+> > +				 rx_ring->queue_index, 0, rx_ring->truesize);
+> > +	if (ret)
+> >  		goto err;
+> >  
+> > +	xdp_rxq_info_attach_page_pool(&rx_ring->xdp_rxq, fq.pp);
+> > +
+> >  	rx_ring->xdp_prog = adapter->xdp_prog;
+> >  
+> >  	return 0;
+> >  err:
+> > -	vfree(rx_ring->rx_buffer_info);
+> > -	rx_ring->rx_buffer_info = NULL;
+> > +	libeth_rx_fq_destroy(&fq);
+> > +	rx_ring->rx_fqes = NULL;
+> > +	rx_ring->pp = NULL;
+> >  	dev_err(rx_ring->dev, "Unable to allocate memory for the Rx descriptor ring\n");
+> > -	return -ENOMEM;
+> > +	return ret;
+> >  }
+> >  
+> >  /**
+> 
+> ...
