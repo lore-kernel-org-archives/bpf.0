@@ -1,54 +1,54 @@
-Received: from mail-dy1-f202.google.com (mail-dy1-f202.google.com [74.125.82.202])
+Received: from mail-dy1-f201.google.com (mail-dy1-f201.google.com [74.125.82.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B495303A04
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 21:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47FAF311C38
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 21:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772053731; cv=none; b=n/LMveQswpH2f+O6jh2mO4n0IZX6XZJNdMvVHtoPo1WrHyTqPDhiTkI9Mm2TX3+0AEclOPtFJRe/N8MN2fBNMF7JTwvbJ5xSB+U8KDoVbGWrWFCjnXH/8D3EGPHypRdLox/EI/gPxS7vOz3N80Rjgg5U+us5CNVdNJQNsoKm6jw=
+	t=1772053735; cv=none; b=C2AtG77D5uyl/MDKbqp/rUMadhhBg+jHZkHg9uxJMny4ZtVK7EJJLHt7sEWNbaEgBDygI0XNUl71JI10pkQ9oNmlXLDPxkc+iqNDcwVD0hbZPImjCoFTblMyb2qasHPc/KYQWkPMpXDssgZjW43s4YGipsC/3jL4xlT8UUoEIlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772053731; c=relaxed/simple;
-	bh=oECk2GSjLxevTPHxMFT3evHAkKvGrITJcUAznsv3I1c=;
+	s=arc-20240116; t=1772053735; c=relaxed/simple;
+	bh=FYzWglH3Sum+8390Wy0gRg8Q06ZKbw+gn0wI9rmzZg4=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=NlLQTHGARqLy2ha2VmUaZutfTcPu2uQqLHopvn35SIZVOPtePmjKUZ7RQJJ2jCqhIHvtOGaO3Vc4JaSdzf4xVAuLg0Mp77twu+mmSxEHsJCFo98VAjxIaX3XoJj2QBM5kvuDK5ftR7w6av1BG/vqqFrff6B2ehEvPiEbpz8JdPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4lmrYA0X; arc=none smtp.client-ip=74.125.82.202
+	 To:Cc:Content-Type; b=d1VBA4xEiCOqKSvGfr7b0Opk4UEc9IpBl1wbRz/2/2VSuocaD4tp8PlAYt2TNbO7hB6l5V+PLk3DunCJPtKNLgYG6DvxyjMqk2OuVwaV707unWAqkT71hOx24x45uwRMhLQRY/Qh8lALkEtXm4WR1AH/f/nUAqxMzZ/diGKdLRM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LVpA5EQv; arc=none smtp.client-ip=74.125.82.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wusamuel.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4lmrYA0X"
-Received: by mail-dy1-f202.google.com with SMTP id 5a478bee46e88-2ba7e98178fso142986eec.0
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 13:08:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LVpA5EQv"
+Received: by mail-dy1-f201.google.com with SMTP id 5a478bee46e88-2ba9a744f7dso128803eec.0
+        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 13:08:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772053727; x=1772658527; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772053731; x=1772658531; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VnO+r1rZZjM9sBZjGFwen0orvSPCFPS7yOGiimnlGMc=;
-        b=4lmrYA0Xl5lYxRaxDMi/YHl8xtwe4+5UMf3zBeM5ABFVRiyLCt3EYVNpjePec50diZ
-         lwQQFh9rfPWNw7vuKP7A60ZNoOmpUalK2fbea/IIRx3FvMYa4Nrcscxr3ch8JG2yl1Jq
-         +FBOvpMfSSj1osClJxgQdJ43kkDctQiVe+c55nVZXyRADdusrYynWdk0RAZoP2naxz9f
-         VLBXuG20RHMX1XiarKpQAzg76oQHgKrW/mLFemUz2DcaXUOj/XrwDLVnOvwWXf4FxZ/4
-         DtYwsK6U4839T0WiU9QUZ/fL+sHvvk0OeP64YmsT2FgZaIaM/32dqGKuNPLpgo8EMVgi
-         M2sg==
+        bh=dMHmqKHxrwFZmYF6YxbRzL2nzys8T1WazGuJ7IEz3lg=;
+        b=LVpA5EQvynFGG+17oobkMnplj0zSgT8jdHVeK5UAkGmYUu09Ni0a3/F6W5svIFl8Xh
+         I5e4tkgZimHErh7SIH8Y6dhGXrUo2VJWuR4Q6GMitDO/hF8l/0gKnabuDPj27JtxeYI1
+         r5r46DvKbKGG17sO2fZX1HwYmxVqnvtAIMRcLzDS7VbALHhOCxUm2aDbt2SnBJanNCJN
+         pJKaD08Pn4ihm6o/eNktluwKtLyQpshmZYl7gkRbAQaqWv1eoLbbpZ1ZoeGdhgGojhh+
+         p/eoUzozVuWrGblPRlPzu3yX277dEz5FibEm0Ee5pZtKSxVsGVRu5161L64Qtf48T1sR
+         4mrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772053727; x=1772658527;
+        d=1e100.net; s=20230601; t=1772053731; x=1772658531;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VnO+r1rZZjM9sBZjGFwen0orvSPCFPS7yOGiimnlGMc=;
-        b=QteJ/jtOOhswX039xubm87zNw2GfcC2bJFxxNSqmUBstFgXb7UDTPpxPYo6o/cId2u
-         s9K7jg87a3kJDBymdWw2mMeYr4CABW6Bi7ddCUT6m6TQMoOeNsaT7AOZyNJXJVLD+c7k
-         5OnAqyEZRc7IPZLQtx76it45p4D1NKs70Ewo4XFdUrjp7f/k5PFh2APCR8CrBJiQJ4Ne
-         LNr6QmrsIcHHo8x3n/1aMBXD5FERkrxtzt9D32iGaUlsIaZ5BUhdF1Ip7RC2ZWDae8E9
-         zBfOLfSBIcShjFIxsPd6JYsA8fYhRwmWWj16iLCTXxG8tVvDezcEuVcRWtE2yFeQ9/Xr
-         phHA==
-X-Forwarded-Encrypted: i=1; AJvYcCWSXeWj3c7+0a6k2mfdmgpDOL4CooAxydVy7WNWqjjQhN4IOuuvmFQgRwW/+4jC9+fz6QI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3QeXXoUXMbytCAc4vJawG/aj+c0x+eC/MTG9NomSYwOb/RhcK
-	4xrCzelaIBfTVilx67B8dddq5aPlJTAZrLHIn0XswNRL03zzRd0oyLLqHR1CMu6URaLTGKz+WPX
-	iO5jE+CTZwTkIew==
-X-Received: from dycuf4.prod.google.com ([2002:a05:7300:104:b0:2ba:2119:629c])
+        bh=dMHmqKHxrwFZmYF6YxbRzL2nzys8T1WazGuJ7IEz3lg=;
+        b=K0FJfQ+GpARUvN+L2qL2xHUOAYUlcQGm0BE0jeGvH9EPJ9Ub3FH0QUmP27n+Id1mJH
+         cQNMIvNzs4U7tRxGdvjWSBbrHaGApbz64hpsfenzyKKgP+PzOVUVzgdODrecgwVrSIFu
+         eFjVzOu5Xh9pWtDUtuk+tOYfUjMw/xetaF5KIRueLW+wxli4bE/a9n04U+/ggvc9xk/V
+         yyxalTwYih8MzI/mLIZbU5eGfB9qlKEadatxHF0JFhiA/8992zeLZFqS2E80v63hj3ov
+         vyEPFVsB2s286Wt3wiso9g4CVWQJWBpWYfotopiE1fe4oUVZVt+5xBDYWVdry8Ced2Eg
+         jKww==
+X-Forwarded-Encrypted: i=1; AJvYcCVNqDWWWKucBnknaLRRsIBVmYyr5NPgS+DSrSWCFGooRWbtNhK97X7JbeK1VABiVE0Yn9w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywqu20QZiis+H+SEiqkx6TTgAHgXB2BPNZPFMW/3pYp7l5Bee89
+	uDs/+TjRmHGxxGcB3tZ1D4crflhaW8YNbCWxGMPi3zpiFfPLJBEnhBbWq7jkSwfKeAUwj7iiF33
+	qbnNGilA0ocsEsw==
+X-Received: from dyaa9.prod.google.com ([2002:a05:693c:40c9:b0:2ba:9c5e:b1a2])
  (user=wusamuel job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:7300:aca5:b0:2b8:6ad3:804e with SMTP id 5a478bee46e88-2bdcc03b2acmr798987eec.22.1772053726742;
- Wed, 25 Feb 2026 13:08:46 -0800 (PST)
-Date: Wed, 25 Feb 2026 13:08:17 -0800
+ 2002:a05:7301:4586:b0:2b0:5306:1770 with SMTP id 5a478bee46e88-2bd7bd24250mr8264899eec.22.1772053731102;
+ Wed, 25 Feb 2026 13:08:51 -0800 (PST)
+Date: Wed, 25 Feb 2026 13:08:18 -0800
 In-Reply-To: <20260225210820.177674-1-wusamuel@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -58,8 +58,8 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260225210820.177674-1-wusamuel@google.com>
 X-Mailer: git-send-email 2.53.0.473.g4a7958ca14-goog
-Message-ID: <20260225210820.177674-2-wusamuel@google.com>
-Subject: [PATCH bpf-next v5 1/2] bpf: Add wakeup_source iterator
+Message-ID: <20260225210820.177674-3-wusamuel@google.com>
+Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Add tests for wakeup_sources
 From: Samuel Wu <wusamuel@google.com>
 To: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
 	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -72,142 +72,434 @@ Cc: Samuel Wu <wusamuel@google.com>, kernel-team@android.com,
 	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Add a BPF iterator for traversing through wakeup_sources.
+Sets up the framework to test wakeup_sources iterators using BPF, and
+adds a few basic tests.
 
-Setup iterators to traverse through a SRCUs of wakeup_sources. This is a
-more elegant and efficient traversal than going through the options
-today, such as at /sys/class/wakeup, or through debugfs.
+Adds several helper functions that for grabbing and releasing a
+wakelock, abstracting out key functions to setup a framework for testing
+wakeup_sources.
+
+Additionally, adds 3 tests:
+1. check_active_count: Checks that stats related to active_count are
+   properly set after several lock/unlock cycles
+2. check_sleep_times: Checks that time accounting related to sleep are
+   properly calculated
+3. check_no_infinite_reads: Checks that the iterator traversal returns
+   NULL at the end
 
 Signed-off-by: Samuel Wu <wusamuel@google.com>
 ---
- kernel/bpf/Makefile             |   3 +
- kernel/bpf/wakeup_source_iter.c | 103 ++++++++++++++++++++++++++++++++
- 2 files changed, 106 insertions(+)
- create mode 100644 kernel/bpf/wakeup_source_iter.c
+ tools/testing/selftests/bpf/config            |   1 +
+ .../bpf/prog_tests/wakeup_source_iter.c       | 300 ++++++++++++++++++
+ .../selftests/bpf/progs/wakeup_source_iter.c  |  80 +++++
+ 3 files changed, 381 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/wakeup_source_iter.c
 
-diff --git a/kernel/bpf/Makefile b/kernel/bpf/Makefile
-index 79cf22860a99..1259373298e1 100644
---- a/kernel/bpf/Makefile
-+++ b/kernel/bpf/Makefile
-@@ -66,6 +66,9 @@ obj-$(CONFIG_BPF_SYSCALL) += kmem_cache_iter.o
- ifeq ($(CONFIG_DMA_SHARED_BUFFER),y)
- obj-$(CONFIG_BPF_SYSCALL) += dmabuf_iter.o
- endif
-+ifeq ($(CONFIG_PM_SLEEP),y)
-+obj-$(CONFIG_BPF_SYSCALL) += wakeup_source_iter.o
-+endif
- 
- CFLAGS_REMOVE_percpu_freelist.o = $(CC_FLAGS_FTRACE)
- CFLAGS_REMOVE_bpf_lru_list.o = $(CC_FLAGS_FTRACE)
-diff --git a/kernel/bpf/wakeup_source_iter.c b/kernel/bpf/wakeup_source_iter.c
+diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
+index 24855381290d..75e8542ef111 100644
+--- a/tools/testing/selftests/bpf/config
++++ b/tools/testing/selftests/bpf/config
+@@ -111,6 +111,7 @@ CONFIG_IP6_NF_IPTABLES=y
+ CONFIG_IP6_NF_FILTER=y
+ CONFIG_NF_NAT=y
+ CONFIG_PACKET=y
++CONFIG_PM_WAKELOCKS=y
+ CONFIG_RC_CORE=y
+ CONFIG_SAMPLES=y
+ CONFIG_SAMPLE_LIVEPATCH=m
+diff --git a/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c b/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
 new file mode 100644
-index 000000000000..ab83d212a1f9
+index 000000000000..40e47157a6a0
 --- /dev/null
-+++ b/kernel/bpf/wakeup_source_iter.c
-@@ -0,0 +1,103 @@
-+// SPDX-License-Identifier: GPL-2.0-only
++++ b/tools/testing/selftests/bpf/prog_tests/wakeup_source_iter.c
+@@ -0,0 +1,300 @@
++// SPDX-License-Identifier: GPL-2.0
 +/* Copyright (c) 2026 Google LLC */
-+#include <linux/bpf.h>
-+#include <linux/btf_ids.h>
-+#include <linux/kernel.h>
-+#include <linux/pm_wakeup.h>
-+#include <linux/seq_file.h>
 +
-+struct bpf_iter__wakeup_source {
-+	__bpf_md_ptr(struct bpf_iter_meta *, meta);
-+	__bpf_md_ptr(struct wakeup_source *, wakeup_source);
-+};
++#include <test_progs.h>
++#include <bpf/btf.h>
++#include <bpf/libbpf.h>
++#include "wakeup_source_iter.skel.h"
 +
-+static void *wakeup_source_iter_seq_start(struct seq_file *seq, loff_t *pos)
++#include <fcntl.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <unistd.h>
++
++
++/* Sleep for 10ms to ensure active time is > 0 after converting ns to ms*/
++#define TEST_SLEEP_US 10000
++#define TEST_SLEEP_MS (TEST_SLEEP_US / 1000)
++#define WAKEUP_SOURCE_NAME_LEN 32
++
++static const char test_ws_name[] = "bpf_selftest_ws";
++static bool test_ws_created;
++
++/*
++ * Creates a new wakeup source by writing to /sys/power/wake_lock.
++ * This lock persists until explicitly unlocked.
++ */
++static int lock_ws(const char *name)
 +{
-+	int *srcuidx = seq->private;
-+	struct wakeup_source *ws;
-+	loff_t i;
++	int fd;
++	ssize_t bytes;
 +
-+	*srcuidx = wakeup_sources_read_lock();
++	fd = open("/sys/power/wake_lock", O_WRONLY);
++	if (!ASSERT_OK_FD(fd, "open /sys/power/wake_lock"))
++		return -1;
 +
-+	ws = wakeup_sources_walk_start();
-+	for (i = 0; ws && i < *pos; i++)
-+		ws = wakeup_sources_walk_next(ws);
-+
-+	return ws;
-+}
-+
-+static void *wakeup_source_iter_seq_next(struct seq_file *seq, void *v, loff_t *pos)
-+{
-+	struct wakeup_source *ws = v;
-+
-+	++*pos;
-+
-+	return wakeup_sources_walk_next(ws);
-+}
-+
-+static void wakeup_source_iter_seq_stop(struct seq_file *seq, void *v)
-+{
-+	int *srcuidx = seq->private;
-+
-+	if (*srcuidx >= 0)
-+		wakeup_sources_read_unlock(*srcuidx);
-+	*srcuidx = -1;
-+}
-+
-+static int __wakeup_source_seq_show(struct seq_file *seq, void *v, bool in_stop)
-+{
-+	struct bpf_iter_meta meta = {
-+		.seq = seq,
-+	};
-+	struct bpf_iter__wakeup_source ctx = {
-+		.meta = &meta,
-+		.wakeup_source = v,
-+	};
-+	struct bpf_prog *prog = bpf_iter_get_info(&meta, in_stop);
-+
-+	if (prog)
-+		return bpf_iter_run_prog(prog, &ctx);
++	bytes = write(fd, name, strlen(name));
++	close(fd);
++	if (!ASSERT_EQ(bytes, strlen(name), "write to wake_lock"))
++		return -1;
 +
 +	return 0;
 +}
 +
-+static int wakeup_source_iter_seq_show(struct seq_file *seq, void *v)
++/*
++ * Destroys the ws by writing the same name to /sys/power/wake_unlock.
++ */
++static void unlock_ws(const char *name)
 +{
-+	return __wakeup_source_seq_show(seq, v, false);
++	int fd;
++
++	fd = open("/sys/power/wake_unlock", O_WRONLY);
++	if (!ASSERT_OK_FD(fd, "open /sys/power/wake_unlock"))
++		goto cleanup;
++
++	write(fd, name, strlen(name));
++
++cleanup:
++	if (fd)
++		close(fd);
 +}
 +
-+static const struct seq_operations wakeup_source_iter_seq_ops = {
-+	.start	= wakeup_source_iter_seq_start,
-+	.next	= wakeup_source_iter_seq_next,
-+	.stop	= wakeup_source_iter_seq_stop,
-+	.show	= wakeup_source_iter_seq_show,
-+};
-+
-+static const struct bpf_iter_seq_info wakeup_source_iter_seq_info = {
-+	.seq_ops		= &wakeup_source_iter_seq_ops,
-+	.seq_priv_size		= sizeof(int),
-+};
-+
-+static struct bpf_iter_reg bpf_wakeup_source_reg_info = {
-+	.target			= "wakeup_source",
-+	.ctx_arg_info_size	= 1,
-+	.ctx_arg_info		= {
-+		{
-+			offsetof(struct bpf_iter__wakeup_source, wakeup_source),
-+			PTR_TO_BTF_ID_OR_NULL
-+		},
-+	},
-+	.seq_info		= &wakeup_source_iter_seq_info,
-+};
-+
-+DEFINE_BPF_ITER_FUNC(wakeup_source, struct bpf_iter_meta *meta,
-+		     struct wakeup_source *wakeup_source)
-+BTF_ID_LIST_SINGLE(bpf_wakeup_source_btf_id, struct, wakeup_source)
-+
-+static int __init wakeup_source_iter_init(void)
++/*
++ * Setups for testing ws iterators. Will run once prior to suite of tests.
++ */
++static int setup_test_ws(void)
 +{
-+	bpf_wakeup_source_reg_info.ctx_arg_info[0].btf_id = bpf_wakeup_source_btf_id[0];
-+	return bpf_iter_reg_target(&bpf_wakeup_source_reg_info);
++	if (lock_ws(test_ws_name))
++		return -1;
++	test_ws_created = true;
++
++	return 0;
 +}
 +
-+late_initcall(wakeup_source_iter_init);
++/*
++ * Tears down and cleanups testing ws iterators. WIll run once after the suite
++ * of tests.
++ */
++static void teardown_test_ws(void)
++{
++	if (!test_ws_created)
++		return;
++	unlock_ws(test_ws_name);
++	test_ws_created = false;
++}
++
++struct WakeupSourceInfo {
++	char name[WAKEUP_SOURCE_NAME_LEN];
++	unsigned long active_count;
++	long active_time_ms;
++	unsigned long event_count;
++	unsigned long expire_count;
++	long last_change_ms;
++	long max_time_ms;
++	long prevent_sleep_time_ms;
++	long total_time_ms;
++	unsigned long wakeup_count;
++};
++
++/*
++ * Reads and parses one wakeup_source record from the iterator file.
++ * A record is a single space-delimited line.
++ * Returns true on success, false on EOF. Asserts internally on errors.
++ */
++static bool read_ws_info(FILE *iter_file, struct WakeupSourceInfo *ws_info,
++			 char **line)
++{
++	size_t linesize;
++	int items;
++
++	if (getline(line, &linesize, iter_file) == -1)
++		return false;
++
++	(*line)[strcspn(*line, "\n")] = 0;
++
++	items = sscanf(*line, "%s %lu %ld %lu %lu %ld %ld %ld %ld %lu",
++		       ws_info->name, &ws_info->active_count,
++		       &ws_info->active_time_ms, &ws_info->event_count,
++		       &ws_info->expire_count, &ws_info->last_change_ms,
++		       &ws_info->max_time_ms, &ws_info->prevent_sleep_time_ms,
++		       &ws_info->total_time_ms, &ws_info->wakeup_count);
++
++	if (!ASSERT_EQ(items, 10, "read wakeup source info"))
++		return false;
++
++	if (!ASSERT_LT(strlen(ws_info->name), WAKEUP_SOURCE_NAME_LEN,
++		       "name length"))
++		return false;
++
++	return true;
++}
++
++static int get_ws_iter_stream(struct wakeup_source_iter *skel, int *iter_fd,
++			      FILE **iter_file)
++{
++	*iter_fd = bpf_iter_create(
++			bpf_link__fd(skel->links.wakeup_source_collector));
++	if (!ASSERT_OK_FD(*iter_fd, "iter_create"))
++		return -1;
++
++	*iter_file = fdopen(*iter_fd, "r");
++	if (!ASSERT_OK_PTR(*iter_file, "fdopen"))
++		return -1;
++
++	return 0;
++}
++
++static void subtest_ws_iter_check_active_count(struct wakeup_source_iter *skel)
++{
++	static const char subtest_ws_name[] = "bpf_selftest_ws_active_count";
++	const int lock_unlock_cycles = 5;
++	struct WakeupSourceInfo ws_info;
++	char *line = NULL;
++	bool found_ws = false;
++	FILE *iter_file = NULL;
++	int iter_fd = -1;
++	int i;
++
++	for (i = 0; i < lock_unlock_cycles; i++) {
++		if (!ASSERT_OK(lock_ws(subtest_ws_name), "lock_ws"))
++			goto cleanup;
++		unlock_ws(subtest_ws_name);
++	}
++
++	if (get_ws_iter_stream(skel, &iter_fd, &iter_file))
++		goto cleanup;
++
++	while (read_ws_info(iter_file, &ws_info, &line)) {
++		if (strcmp(ws_info.name, subtest_ws_name) == 0) {
++			found_ws = true;
++			ASSERT_EQ(ws_info.active_count, lock_unlock_cycles,
++				  "active_count check");
++			ASSERT_EQ(ws_info.event_count, lock_unlock_cycles,
++				  "event_count check");
++			break;
++		}
++	}
++
++	ASSERT_TRUE(found_ws, "found active_count test ws");
++
++	free(line);
++cleanup:
++	if (iter_file)
++		fclose(iter_file);
++	else if (iter_fd >= 0)
++		close(iter_fd);
++}
++
++static void subtest_ws_iter_check_sleep_times(struct wakeup_source_iter *skel)
++{
++	bool found_test_ws = false;
++	struct WakeupSourceInfo ws_info;
++	char *line = NULL;
++	FILE *iter_file = NULL;
++	int iter_fd = -1;
++
++	if (get_ws_iter_stream(skel, &iter_fd, &iter_file))
++		goto cleanup;
++
++	while (read_ws_info(iter_file, &ws_info, &line)) {
++		if (strcmp(ws_info.name, test_ws_name) == 0) {
++			found_test_ws = true;
++			ASSERT_GT(ws_info.last_change_ms, 0,
++				  "Expected non-zero last change");
++			ASSERT_GE(ws_info.active_time_ms, TEST_SLEEP_MS,
++				  "Expected active time >= TEST_SLEEP_MS");
++			ASSERT_GE(ws_info.max_time_ms, TEST_SLEEP_MS,
++				  "Expected max time >= TEST_SLEEP_MS");
++			ASSERT_GE(ws_info.total_time_ms, TEST_SLEEP_MS,
++				  "Expected total time >= TEST_SLEEP_MS");
++			break;
++		}
++	}
++
++	ASSERT_TRUE(found_test_ws, "found_test_ws");
++
++	free(line);
++cleanup:
++	if (iter_file)
++		fclose(iter_file);
++	else if (iter_fd >= 0)
++		close(iter_fd);
++}
++
++static void subtest_ws_iter_check_no_infinite_reads(
++		struct wakeup_source_iter *skel)
++{
++	int iter_fd;
++	char buf[256];
++
++	iter_fd = bpf_iter_create(bpf_link__fd(skel->links.wakeup_source_collector));
++	if (!ASSERT_OK_FD(iter_fd, "iter_create"))
++		return;
++
++	while (read(iter_fd, buf, sizeof(buf)) > 0)
++		;
++
++	/* Final read should return 0 */
++	ASSERT_EQ(read(iter_fd, buf, sizeof(buf)), 0, "read");
++
++	close(iter_fd);
++}
++
++void test_wakeup_source_iter(void)
++{
++	struct wakeup_source_iter *skel = NULL;
++	struct btf *vmlinux_btf;
++	int btf_id;
++
++	if (geteuid() != 0) {
++		fprintf(stderr,
++			"Skipping wakeup_source_iter test, requires root\n");
++		test__skip();
++		return;
++	}
++
++	skel = wakeup_source_iter__open();
++	if (!ASSERT_OK_PTR(skel, "wakeup_source_iter__open"))
++		return;
++
++	vmlinux_btf = btf__load_vmlinux_btf();
++	if (!vmlinux_btf)
++		return;
++
++	btf_id = btf__find_by_name_kind(vmlinux_btf, "bpf_iter__wakeup_source", BTF_KIND_STRUCT);
++	btf__free(vmlinux_btf);
++
++	if (btf_id <= 0) {
++		test__skip();
++		goto destroy;
++	}
++
++	if (!ASSERT_OK(wakeup_source_iter__load(skel), "iter__load"))
++		goto destroy;
++
++	if (!ASSERT_OK(setup_test_ws(), "setup_test_ws"))
++		goto teardown;
++
++	if (!ASSERT_OK(wakeup_source_iter__attach(skel), "skel_attach"))
++		goto teardown;
++
++	/*
++	 * Sleep on O(ms) to ensure that time stats' resolution isn't lost when
++	 * converting from ns to ms
++	 */
++	usleep(TEST_SLEEP_US);
++
++	if (test__start_subtest("active_count"))
++		subtest_ws_iter_check_active_count(skel);
++	if (test__start_subtest("sleep_times"))
++		subtest_ws_iter_check_sleep_times(skel);
++	if (test__start_subtest("no_infinite_reads"))
++		subtest_ws_iter_check_no_infinite_reads(skel);
++
++teardown:
++	teardown_test_ws();
++destroy:
++	wakeup_source_iter__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/wakeup_source_iter.c b/tools/testing/selftests/bpf/progs/wakeup_source_iter.c
+new file mode 100644
+index 000000000000..d770efc3bd0d
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/wakeup_source_iter.c
+@@ -0,0 +1,80 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Google LLC */
++#include <vmlinux.h>
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_helpers.h>
++
++#define NSEC_PER_MS 1000000UL
++#define WAKEUP_SOURCE_NAME_LEN 32
++
++char _license[] SEC("license") = "GPL";
++
++struct wakeup_source___local {
++	const char *name;
++	unsigned long active_count;
++	unsigned long event_count;
++	unsigned long wakeup_count;
++	unsigned long expire_count;
++	ktime_t last_time;
++	ktime_t max_time;
++	ktime_t total_time;
++	ktime_t start_prevent_time;
++	ktime_t prevent_sleep_time;
++	bool active:1;
++	bool autosleep_enabled:1;
++} __attribute__((preserve_access_index));
++
++struct bpf_iter__wakeup_source___local {
++	struct bpf_iter_meta *meta;
++	struct wakeup_source___local *wakeup_source;
++} __attribute__((preserve_access_index));
++
++SEC("iter/wakeup_source")
++int wakeup_source_collector(struct bpf_iter__wakeup_source___local *ctx)
++{
++	const struct wakeup_source___local *ws = ctx->wakeup_source;
++	struct seq_file *seq = ctx->meta->seq;
++	char name[WAKEUP_SOURCE_NAME_LEN] = {'\0'};
++	const char *pname;
++	bool active, autosleep_enable;
++	s64 active_time, curr_time, max_time, prevent_sleep_time, total_time;
++
++	if (!ws)
++		return 0;
++
++	active = BPF_CORE_READ_BITFIELD_PROBED(ws, active);
++	autosleep_enable = BPF_CORE_READ_BITFIELD_PROBED(ws, autosleep_enabled);
++	if (bpf_core_read(&pname, sizeof(pname), &ws->name) ||
++	    bpf_probe_read_kernel_str(name, sizeof(name), pname) < 0)
++		return 0;
++
++	active_time = 0;
++	curr_time = bpf_ktime_get_ns();
++	max_time = ws->max_time;
++	prevent_sleep_time = ws->prevent_sleep_time;
++	total_time = ws->total_time;
++
++	if (active) {
++		active_time = curr_time - ws->last_time;
++		total_time += active_time;
++		if (active_time > max_time)
++			max_time = active_time;
++		if (autosleep_enable)
++			prevent_sleep_time +=
++				curr_time - ws->start_prevent_time;
++	}
++
++	BPF_SEQ_PRINTF(seq,
++		       "%s %lu %ld %lu %lu %ld %ld %ld %ld %lu\n",
++		       name,
++		       ws->active_count,
++		       active_time / NSEC_PER_MS,
++		       ws->event_count,
++		       ws->expire_count,
++		       ws->last_time / NSEC_PER_MS,
++		       max_time / NSEC_PER_MS,
++		       prevent_sleep_time / NSEC_PER_MS,
++		       total_time / NSEC_PER_MS,
++		       ws->wakeup_count);
++	return 0;
++}
 -- 
 2.53.0.473.g4a7958ca14-goog
 
