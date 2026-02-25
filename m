@@ -1,173 +1,153 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC93E33032B
-	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:09:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771963781; cv=pass; b=IxF/p9iu6pkulfMsegIS6ouv+eKIZo+n+2of7jiHX1vbTwtUtLGMnGm0Na/z8FBnnwqze0dXdPtl/+2x9rUvn8B4GDYo5O6uIDWvXaV21tsMjL47ItOvkBU/W+P3V2TBw/31cspJtIdT7WwSZy0mN8NgGNkpbw3vPIiJm7vXbBQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771963781; c=relaxed/simple;
-	bh=2Cg/DXUaQemdS7si661sB6VqKVJNE0PpNQT4QAW402w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Y3YPXy7sB35cpNXvss1BqOQhilN4/mZlOJRW5x7KQJ/taNlkzu96GiQe/ZQH06+sgEm8Fra1QUGsgcdooagC+mC/j1yQ9S53MjBTqTyvtszbpuYmIfBkCjuo9GxWHGkJSV/5LZ+kncjR6SZi8DhYyDQunT0xwE/xaj08a8wO/Y4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WJcaled3; arc=pass smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B7F33032B
+	for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 20:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771963811; cv=none; b=pl/Njc2DO/DtSYzrNJrTbgE3KJhy7HOvhveboOxqstLjDte3I/khpZQtYdBT4SxSfAFmHZPH3p21HcVCJvRCEThpwGasak4j9RjOmiu0RwBLQLyXeoG50HQ43NhO7KkHyTiBa2KpPaLYYYlzb2nBO3sv3uDASuiYE/01hGtOPrk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771963811; c=relaxed/simple;
+	bh=n4JA1WkEWb295DjXf9YL10EJg1nekHY8fbFlQsNA29I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aMrVRiYSK9Nu32PVXCM21Cff+hsT5BI7DU8bFkZFl7qZVcC/k2+yTTMYwy3GZ8UbwiHg+tXt80zomLPKyf1dbgyAUJpv8uObG0Yz3IX+TlUNGw7oNCRCsyZWmcWziFIJqDKT25xTQziERvzgGp1vp+ctve/cPBRaPaXESk7C1RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=HEworAZq; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WJcaled3"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-50697d6a69cso32859381cf.2
-        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 12:09:39 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771963779; cv=none;
-        d=google.com; s=arc-20240605;
-        b=TteAB6OpxPUWF7445z7bytJ6HP/CikuZkWKBsrOSLKnii5zN2awwuPg8b71/rZziJ8
-         rtVXS7YJiJqzJ1+2NmcD9HYPRO2+jFF+D3aIlI+R+XVPeVaH41oaTplIxJc3yhICDPm3
-         xBJ97/2XweXIy+m8t3lhrbaj596V7J7lXPjFwG0IV54eoBNkRG1H2q/npNld2L6COT/0
-         sALQsXh2GTBRdEOlO6SgC1RTZJb6IiBEgjA1G5XRHB3Fuac3vkSnidOutXvP9eij24jy
-         aX8xMWw9PUMbPMvKOFpUUbXpInhwc39lEpaxynlHDbPnLb+N0C+6kMBjyYPFmlkfrx8f
-         hOCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=1DDHaOfhOlTVmBPRd/vHmXNqCBjvhgIixRlqQfkjm7g=;
-        fh=dVamNQeqQBTkGx4i0rqW4pHruYVaTKAxIWUAm65Dvns=;
-        b=RSKNgPwuWmG40Vqg6c4Lf0kPuhjnoZW4WI4dShEW+y+gh5z7sTeNMiria+aCifkpqW
-         JnjmenRCtGMWedNsfj0toFSy3c1usnItcjQb9Q9oeH68QHn/5ESzOg7MxqVmmYAwZVaH
-         7UPnBsyOEUUjP/ijLUuXpmwO262a3BCQVrESL8+qyC6lBF3gFGGMwfxD/vwAKpjFwYc6
-         03f0iSk6nfxvZy5ys94HPkN1sOlxHjJ2R0G/Yvn1XpMNp/z92YQvRO4cVP0OEWy9u9/2
-         Oq+nkK4zEXGZRKGOXzLMQJ1BtnzeWft4Z62Z+6rfiIclnNhhNJBMYJcQ3rNf27S59/Lp
-         sYPg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1771963779; x=1772568579; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1DDHaOfhOlTVmBPRd/vHmXNqCBjvhgIixRlqQfkjm7g=;
-        b=WJcaled3m4rBPyjQcD4YEGhqpMqXciFvxDGDqawJnXTo3PBfC4cw1nBi4+ors4LGz9
-         aG0KN5kh9om+TTrTXXFwzDQMGjKIKgBItoEpOQ6c+VxTiS1pBfDZl79MTOYsVBuhEqub
-         +Eoz1MvlXYTJFjP7a/rGvujL+ch/6wd/+kZ1YjUPlN7aySKajKYlkZScS28tEZifgG0v
-         3cH1dwFvEYjQyn+jHiXRO6DgsQCjIFKWMvyhlDvY4iuXinDF374LYfwTQHctFEHLJ0jw
-         RK2SmLpLnmRONJ7JyQYfpmPJuKbaLBpLNzphejagMtsuv4pf+Q7j3u3vwFhpHW7E2E0l
-         GkxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771963779; x=1772568579;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=1DDHaOfhOlTVmBPRd/vHmXNqCBjvhgIixRlqQfkjm7g=;
-        b=ibzO3KB2EsiCSaApdLeMXOW/kGYNjwFZJX/lF4R9YY4pOKpyoUHBbF+WygBiddZLVY
-         /tVl1W1a5qiIPKfGzYTAzplixTp4DTOrp+R7R8j4B+07v+2MNV+lF5NMOOQXcLrl71mw
-         cYUjtzXM28Q3JKVMI/oqzCxvUDQejXhX0n+q+yMSVziKlVmsYPj1AqwecnEXZGUuRfrf
-         DY+llTofMtE/jJrL3QTahqfY5RkXvaqefdnVgHsqvarJKkLFtWiLlGxhRENDechGbP9U
-         KR9RQehnLJj/uvmShLsSU69itFCz9azOvAC+1dYOY96myu3ObFv3HzD+KEwHynV1a1G1
-         1gAw==
-X-Forwarded-Encrypted: i=1; AJvYcCWSmKeUYjBEA2n3Hu3SGTopsz715RJoaM+kDfTMJc/Io26NEsUob5kqavd0qnucE7xKgMY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjmZB4dcBMvMmZ1p4C/aypCKjrcyFbT7oy1rVDQ0EnzzhWEHbP
-	IxXXPiLytlwU6kMEL6AnQY6Gj/bZlQ208mlZ57PKFMI846cD80YZNNDQ2oc0CWePLlnIuOf6EGw
-	YcWZG39Heq3y0CSHzcR0TumFgjhz8kro=
-X-Gm-Gg: AZuq6aIt02RoS7x4zDeNl514/74ABCIboo7y/RCvEnm4ruVdcd2QLDKYlodXNPit78d
-	q8gcJeni9XgaO6WBq4wv5mk6aMVTDf9GEq384ehm98i1/LJ7YPveOjlrdXMnQ6EJDBnyI/rfpub
-	rdIMmVLOp+ZwmYzCoYO1sQBM0nnwKupbb78F583pvS/zajH1DQbm0rzbh5gyHj4IkdfyHe5cv1Y
-	NfYUkXdShQ1BWPv5se1hrmNSd3YcMJdsbzlG9aksJiy3B+aDNXHBuyOxPMOvk4CH/Xi6maHZIJG
-	wYCE+A==
-X-Received: by 2002:ac8:5a05:0:b0:503:2d06:8e15 with SMTP id
- d75a77b69052e-5070bbd5fbbmr189408691cf.21.1771963778577; Tue, 24 Feb 2026
- 12:09:38 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="HEworAZq"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61OEMe6K327440;
+	Tue, 24 Feb 2026 20:09:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pp1; bh=62cf8BdE7tqhziY156GWJ+4twaLE
+	iemM+AhXMVEXK7k=; b=HEworAZq/IZpEBwiGGjnqw/WJZQ09OftyX/3AmlUrm9X
+	hub0pdv/Bw5CtQG9IPyGcscuU+fMTXtb/6sDAM46b+HWfYMLy+/XbXp6wXtW/5vu
+	XTcXIP7k/SP2Z9fPsClQgEowQrqlOKwPPcy8lbinnH7fHVDtvBhGza8YaDvStiSq
+	00FbLb0mdSb8BhfEGbeUIPy8NwfAHk3cf7nYnuwxIA0m6eA6d5c7tybvyHcsIZ9u
+	LO2gEwVKgj9MEF+3CYM63F9+2ksWZxZFffiXJDsKSaPOFEpc98xK+keSyAvNhOd6
+	mcWZC19hIUoCGxsm8TvY4nCVJw0Us627eb07nQSOfA==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf34c4t6b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Feb 2026 20:09:51 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61OH5CUm001631;
+	Tue, 24 Feb 2026 20:09:51 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfr1n2fum-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 24 Feb 2026 20:09:50 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61OK9lxS49545560
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 24 Feb 2026 20:09:47 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EC7D22004B;
+	Tue, 24 Feb 2026 20:09:46 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6B30620043;
+	Tue, 24 Feb 2026 20:09:45 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 24 Feb 2026 20:09:45 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: linuxppc-dev@lists.ozlabs.org
+Cc: bpf@vger.kernel.org, hbathini@linux.ibm.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, maddy@linux.ibm.com,
+        Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH 0/4] powerpc64/bpf: Add support for instruction array and indirect jump
+Date: Tue, 24 Feb 2026 20:09:28 -0500
+Message-ID: <20260225010950.20218-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <177188733084.3935219.10400570136529869673.stgit@frogsfrogsfrogs> <177188733154.3935219.17731267668265272256.stgit@frogsfrogsfrogs>
-In-Reply-To: <177188733154.3935219.17731267668265272256.stgit@frogsfrogsfrogs>
-From: Joanne Koong <joannelkoong@gmail.com>
-Date: Tue, 24 Feb 2026 12:09:27 -0800
-X-Gm-Features: AaiRm51mgRlWbkXb6u9q8vdEfIKt7UeLJ2adO4XjFSbDCtDEImXRc2B_2FbsvY4
-Message-ID: <CAJnrk1bEm=pe2M367CsbQNYyUEdXCVzAyboqqHnSCxx7fxZKZA@mail.gmail.com>
-Subject: Re: [PATCH 2/5] fuse: quiet down complaints in fuse_conn_limit_write
-To: "Darrick J. Wong" <djwong@kernel.org>
-Cc: miklos@szeredi.hu, stable@vger.kernel.org, bpf@vger.kernel.org, 
-	bernd@bsbernd.com, neal@gompa.dev, linux-fsdevel@vger.kernel.org, 
-	linux-ext4@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=y
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI0MDE3MyBTYWx0ZWRfX+UFLxuhYOBOy
+ 1rrdHQNAFXpUFDJc6MMS1N1vfeRU0x/Lu9k+qEbD4lBCzu77D+V0MhUW4Pi/CXYa/oBLR4J0VG4
+ 20LuCLABMhLwpaklFMfv+QWmyuRsHqavTvtw/IS8nTBSkjcRCRqXHmCFOJRrdTBdi01H/tf+I8S
+ Z3MyUeS0ap8tORbq3ETus7hiFwvBKJrRE1kIYpcYMYrEqQNLmq25U7ooi+z/KiLrALgYQ646IbR
+ q3NE3gV43fbpOTG4LCURuRoTQF0SZE4GpuC3K5Qa71P+YjpfBepPMRTVnF9wZq2pmV0x5afxZKz
+ l/b0bvZ6ipew8orFrGsW3RZT3e64Yea/f11XBnDALQlm5XlegQ23ZpK8kwSjHd80bmms9Ri923Q
+ EWNzfzQZB1fqCcCOsoCGzgRh3B3tgIuxpENi+7USe1F36cRUeT95OkH4ayD+nPukYSc4/aYroVu
+ mYSP4ECjYvvCTztfG5g==
+X-Proofpoint-ORIG-GUID: cgqE8olK2WkmaJQvaM3tpNxMOfjz9Ozn
+X-Authority-Analysis: v=2.4 cv=F9lat6hN c=1 sm=1 tr=0 ts=699e058f cx=c_pps
+ a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17
+ a=qf4gfuq51q0A:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VnNF1IyMAAAA:8
+ a=L4-lWHaHw3GvA7f3vB0A:9 a=3ZKOabzyN94A:10 a=k40Crp0UdiQA:10
+X-Proofpoint-GUID: cgqE8olK2WkmaJQvaM3tpNxMOfjz9Ozn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-24_02,2026-02-23_03,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 bulkscore=0 adultscore=0 spamscore=0
+ clxscore=1015 suspectscore=0 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602240173
 
-On Mon, Feb 23, 2026 at 3:06=E2=80=AFPM Darrick J. Wong <djwong@kernel.org>=
- wrote:
->
-> From: Darrick J. Wong <djwong@kernel.org>
->
-> gcc 15 complains about an uninitialized variable val that is passed by
-> reference into fuse_conn_limit_write:
->
->  control.c: In function =E2=80=98fuse_conn_congestion_threshold_write=E2=
-=80=99:
->  include/asm-generic/rwonce.h:55:37: warning: =E2=80=98val=E2=80=99 may b=
-e used uninitialized [-Wmaybe-uninitialized]
->     55 |         *(volatile typeof(x) *)&(x) =3D (val);                  =
-          \
->        |         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
->  include/asm-generic/rwonce.h:61:9: note: in expansion of macro =E2=80=98=
-__WRITE_ONCE=E2=80=99
->     61 |         __WRITE_ONCE(x, val);                                   =
-        \
->        |         ^~~~~~~~~~~~
->  control.c:178:9: note: in expansion of macro =E2=80=98WRITE_ONCE=E2=80=
-=99
->    178 |         WRITE_ONCE(fc->congestion_threshold, val);
->        |         ^~~~~~~~~~
->  control.c:166:18: note: =E2=80=98val=E2=80=99 was declared here
->    166 |         unsigned val;
->        |                  ^~~
->
-> Unfortunately there's enough macro spew involved in kstrtoul_from_user
-> that I think gcc gives up on its analysis and sprays the above warning.
-> AFAICT it's not actually a bug, but we could just zero-initialize the
-> variable to enable using -Wmaybe-uninitialized to find real problems.
->
-> Previously we would use some weird uninitialized_var annotation to quiet
-> down the warnings, so clearly this code has been like this for quite
-> some time.
->
-> Cc: <stable@vger.kernel.org> # v5.9
-> Fixes: 3f649ab728cda8 ("treewide: Remove uninitialized_var() usage")
-> Signed-off-by: "Darrick J. Wong" <djwong@kernel.org>
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-Makes sense to me.
+The first 2 patch enable support for instruction array. Now, the 
+instruction offset map maintain the mapping:
+original inst -> xlated inst -> jited inst
 
-Reviewed-by: Joanne Koong <joannelkoong@gmail.com>
-> ---
->  fs/fuse/control.c |    4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
->
-> diff --git a/fs/fuse/control.c b/fs/fuse/control.c
-> index 140bd5730d9984..073c2d8e4dfc7c 100644
-> --- a/fs/fuse/control.c
-> +++ b/fs/fuse/control.c
-> @@ -121,7 +121,7 @@ static ssize_t fuse_conn_max_background_write(struct =
-file *file,
->                                               const char __user *buf,
->                                               size_t count, loff_t *ppos)
->  {
-> -       unsigned val;
-> +       unsigned val =3D 0;
->         ssize_t ret;
->
->         ret =3D fuse_conn_limit_write(file, buf, count, ppos, &val,
-> @@ -163,7 +163,7 @@ static ssize_t fuse_conn_congestion_threshold_write(s=
-truct file *file,
->                                                     const char __user *bu=
-f,
->                                                     size_t count, loff_t =
-*ppos)
->  {
-> -       unsigned val;
-> +       unsigned val =3D 0;
->         struct fuse_conn *fc;
->         ssize_t ret;
->
->
+The last two patch enable support for indirect jump. Any eligile
+register can store jump target address for control flow to jump.
+
+The features will be enabled on ppc32 in a separate series.
+
+All selftest related to instruction array and indirect jump
+are passing.
+
+./test_progs-cpuv4 -n 20
+#21/1    bpf_insn_array/one2one:OK
+#21/2    bpf_insn_array/simple:OK
+#21/3    bpf_insn_array/deletions:OK
+#21/4    bpf_insn_array/deletions-with-functions:OK
+#21/5    bpf_insn_array/blindness:OK
+#21/6    bpf_insn_array/incorrect-index:OK
+#21/7    bpf_insn_array/load-unfrozen-map:OK
+#21/8    bpf_insn_array/no-map-reuse:OK
+#21/9    bpf_insn_array/bpf-side-ops:OK
+#21      bpf_insn_array:OK
+Summary: 1/9 PASSED, 0 SKIPPED, 0 FAILED
+
+./test_progs-cpuv4 -n 21 
+#20/1    bpf_gotox/one-switch:OK
+#20/2    bpf_gotox/one-switch-non-zero-sec-offset:OK
+#20/3    bpf_gotox/two-switches:OK
+#20/4    bpf_gotox/big-jump-table:OK
+#20/5    bpf_gotox/static-global:OK
+#20/6    bpf_gotox/nonstatic-global:OK
+#20/7    bpf_gotox/other-sec:OK
+#20/8    bpf_gotox/static-global-other-sec:OK
+#20/9    bpf_gotox/nonstatic-global-other-sec:OK
+#20/10   bpf_gotox/one-jump-two-maps:OK
+#20/11   bpf_gotox/one-map-two-jumps:OK
+#20      bpf_gotox:OK
+Summary: 1/11 PASSED, 0 SKIPPED, 0 FAILED
+
+Abhishek Dubey (4):
+  powerpc64/bpf: Add support for instruction array
+  selftest/bpf: Enable instruction array test for powerpc64
+  powerpc64/bpf: Add support for indirect jump
+  selftest/bpf: Enable gotox tests for powerpc64
+
+ arch/powerpc/net/bpf_jit_comp.c                         | 6 ++++++
+ arch/powerpc/net/bpf_jit_comp64.c                       | 8 ++++++++
+ tools/testing/selftests/bpf/prog_tests/bpf_insn_array.c | 2 +-
+ tools/testing/selftests/bpf/progs/verifier_gotox.c      | 2 +-
+ 4 files changed, 16 insertions(+), 2 deletions(-)
+
+-- 
+2.52.0
+
