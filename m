@@ -1,179 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE9AE33ADA9
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 11:32:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C723A9DB1;
+	Wed, 25 Feb 2026 11:47:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772019143; cv=none; b=sAE7VMgJs06M7D9x9BjvY5Xa58JcZYYzVc3GMnUR639rVKUF1YR6rPeLf0dklzJreXsWbz/2Mj9q6sXcRIGhACioWd/mwfrxlgly15S5GwSMMq120o9K/fpykiK6XA0Vy1YwOFGZ+S3YIn+8GnfwR0kD/ohKeD9Err6IK93rwQI=
+	t=1772020052; cv=none; b=TIt4h0bJLQVBctNJfHOqQ6XDzyrBxGac9MNgiVWk5qjfDtA9eWzU3fzzEKcX4Ykey6pB5+N1VcUiwUucEUzTAwhUx8oHONpn7zPl1KvtFB0wgQUd8QF0/1cdI9gn6qo/NWi+1qORZkO2IrEu4ossUNcBeFy6bn4Y9hkDaA0gFWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772019143; c=relaxed/simple;
-	bh=dertjUWoCoqTLHjFr802gNUMYAMUBvWXGSbi4fea2os=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Y+G4My+n6Jiyz0Xxa7tyvSbdqaWySDnZL4mj7TvrzOeBlhbpPYjtZCByxWRqDlDkue+/9mZcQYw5Vb+fkMOSA0GvpaUbYXqZi6hPOgkNniU261bHC9Pt+4Nf91YIxoeAu3j4/F1mO4IecSBypP9T+8xxr4JyKjiO3xI1mSqO55w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j/EAetCC; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j/EAetCC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C78BC116D0;
-	Wed, 25 Feb 2026 11:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772019142;
-	bh=dertjUWoCoqTLHjFr802gNUMYAMUBvWXGSbi4fea2os=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=j/EAetCCmDn2Ym4UrJaJRe9tUfMQ7TfxOg9Tl37/0w+EkMpTJUdoOoCM8DsEpRWqf
-	 O+C6jPQeZ0ybtyMhOoNYMSeUYPkG3OsflTVWs85HIrZdRZyycUSQfqEJIH3oO+pWpb
-	 dGxmj0tcd/QrLfhy2/azP2+pLh51PrZi1ebVzFlSCHo/O73ewrKSdbOkBHXeieCBJX
-	 7vPoo1cyWzTKXvq0x9zN3uhY2UXx9QFZqmcuuepP1ogj5bftlsTKaT+TW/SyGc1t50
-	 4/QfKjzcT2b2nXShYjvL5sMmeBP9UwHCi0iYH3iU6kNTozKaWuwhkXeXL6uN34vV1F
-	 nqn4fFtYDkYJw==
-Content-Type: multipart/mixed; boundary="===============3041621592064433641=="
+	s=arc-20240116; t=1772020052; c=relaxed/simple;
+	bh=Y2tURQ/ugst/cYXgMI7R0Xlrghwci9DQtOCQ7z9uWlI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=eUd48ePZ8iWrJ5N2YeFQpZem99nCrR6MhMkjkVP+ZiBieGRiQabYCmK7hYaOPCsomhEFVGEyOWObbsRIcyEVZmeuZgTzOHXJnInaUlxKiEKWEHHL8/2Ywimy1XIlBw2673HLCpqnYTpLWpjUpOyjzguX4HM1ZYSfkWdxAKZy1P8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay04.hostedemail.com (Postfix) with ESMTP id 038AD1A0460;
+	Wed, 25 Feb 2026 11:47:28 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf13.hostedemail.com (Postfix) with ESMTPA id 7698E20010;
+	Wed, 25 Feb 2026 11:47:26 +0000 (UTC)
+Date: Wed, 25 Feb 2026 06:47:23 -0500
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Cc: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <andrii@kernel.org>, <jolsa@kernel.org>,
+ <linux-trace-kernel@vger.kernel.org>, <linux-open-source@crowdstrike.com>
+Subject: Re: [RFC PATCH bpf-next 2/3] ftrace: Use kallsyms binary search for
+ single-symbol lookup
+Message-ID: <20260225064723.53bcce3e@fedora>
+In-Reply-To: <20260223215113.924599-3-andrey.grodzovsky@crowdstrike.com>
+References: <20260223215113.924599-1-andrey.grodzovsky@crowdstrike.com>
+	<20260223215113.924599-3-andrey.grodzovsky@crowdstrike.com>
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d44beebe88d00a554d0bda86f0ceccf403cd0f127e82e4a52b2a2fa2ae0bf22b@mail.kernel.org>
-In-Reply-To: <20260225153950.15331-1-adubey@linux.ibm.com>
-References: <20260225153950.15331-1-adubey@linux.ibm.com>
-Subject: Re: [PATCH v2 1/2] powerpc64/bpf: Implement JIT support for private stack
-From: bot+bpf-ci@kernel.org
-To: adubey@linux.ibm.com,linuxppc-dev@lists.ozlabs.org
-Cc: bpf@vger.kernel.org,hbathini@linux.ibm.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,maddy@linux.ibm.com,adubey@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 25 Feb 2026 11:32:21 +0000 (UTC)
-
---===============3041621592064433641==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-Stat-Signature: xw5asezhocjfh86or7tfxz96m4tqj5aq
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 7698E20010
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1808afTpgJlNX5j9nUH8blSilRFwCNl1X0=
+X-HE-Tag: 1772020046-408120
+X-HE-Meta: U2FsdGVkX19wOTwBSJcdcwarCOu1IQoy4WqJk4Z1o18tuby9DFzatcZz7X0Lvj3jpmEVnJwcS2AbZX37U5KhcTIdpj8MyhqJsdbdzJ0v40mpCVYbOwbyEs+bWy/YNgYHRbGdYttNAuOogpJH7FgnIC3hADbKh2+Oq+kx06wTUtN/peDMwlIAXihxlmyQCfUvBHL063Fj1xmCHuQH2KCZGsr+OJYXhGdvY9XazazwN2ZdY8WLR72NXv1zMEs81XEknaHdRCzOXrV52XQrF//evnqOlXH4D8DRFzlLIztTqUFQ5xH2oJjj7piPkoBZ1fUapbnEHvCAvLDT+Bs7cs6rloKwuV0+fwXk
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
+On Mon, 23 Feb 2026 16:51:12 -0500
+Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com> wrote:
 
-[ ... ]
+> When ftrace_lookup_symbols() is called with a single symbol (cnt == 1),
+> use kallsyms_lookup_name() for O(log N) binary search instead of the
+> full linear scan via kallsyms_on_each_symbol().
 
-> +static void priv_stack_check_guard(void __percpu *priv_stack_ptr, int alloc_size,
-> +								struct bpf_prog *fp)
-> +{
-> +	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
-> +	u64 *stack_ptr;
-> +
-> +	for_each_possible_cpu(cpu) {
-> +		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
-> +		if (stack_ptr[0] != PRIV_STACK_GUARD_VAL ||
-> +			stack_ptr[1] != PRIV_STACK_GUARD_VAL ||
-> +			stack_ptr[underflow_idx] != PRIV_STACK_GUARD_VAL ||
-> +			stack_ptr[underflow_idx + 1] != PRIV_STACK_GUARD_VAL) {
-> +			pr_err("BPF private stack overflow/underflow detected for prog %sx\n",
-> +			bpf_jit_get_prog_name(fp));
+So this patch looks like it should go through the tracing tree, not bpf.
 
-Should "%sx" be "%s"? The trailing 'x' would be appended to the
-program name in the error output.
+> 
+> ftrace_lookup_symbols() was designed for batch resolution of many
+> symbols in a single pass.  For large cnt this is efficient: a single
+> O(N) walk over all symbols with O(log cnt) binary search into the
+> sorted input array.  But for cnt == 1 it still decompresses all ~200K
+> kernel symbols only to match one.
+> 
+> kallsyms_lookup_name() uses the sorted kallsyms index and needs only
+> ~17 decompressions for a single lookup.
+> 
+> This is the common path for kprobe.session with exact function names,
+> where libbpf sends one symbol per BPF_LINK_CREATE syscall.
+> 
+> If binary lookup fails (duplicate symbol names where the first match
+> is not ftrace-instrumented, or module symbols), the function falls
+> through to the existing linear scan path.
+> 
+> Before (cnt=1, 50 kprobe.session programs):
+>   Attach: 858 ms  (kallsyms_expand_symbol 25% of CPU)
+> 
+> After:
+>   Attach:  52 ms  (16x faster)
+> 
+> Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> ---
+>  kernel/trace/ftrace.c | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+> 
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index 827fb9a0bf0d..bfd7670669c2 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -9263,6 +9263,19 @@ static int kallsyms_callback(void *data, const char *name, unsigned long addr)
+>   * @addrs array, which needs to be big enough to store at least @cnt
+>   * addresses.
+>   *
+> + * For a single symbol (cnt == 1), uses kallsyms_lookup_name() which
+> + * performs an O(log N) binary search via the sorted kallsyms index.
+> + * This avoids the full O(N) linear scan over all kernel symbols that
+> + * the multi-symbol path requires.
+> + *
+> + * For multiple symbols, uses a single-pass linear scan via
+> + * kallsyms_on_each_symbol() with binary search into the sorted input
+> + * array.
 
-> +			break;
-> +		}
+The above is fine.
+
+>  While individual lookups are O(log N), doing K lookups
+> + * totals O(K * log N) which loses to a single sequential O(N) pass
+> + * at scale due to cache-friendly memory access patterns of the linear
+> + * walk.  Empirical testing shows the linear scan is faster for batch
+> + * lookups even well below 10K symbols.
+
+The above is unneeded for a comment in the code and just belongs in the
+change log.
+
+-- Steve
+
+> + *
+>   * Returns: 0 if all provided symbols are found, -ESRCH otherwise.
+>   */
+>  int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *addrs)
+> @@ -9270,6 +9283,21 @@ int ftrace_lookup_symbols(const char **sorted_syms, size_t cnt, unsigned long *a
+>  	struct kallsyms_data args;
+>  	int found_all;
+>  
+> +	/* Fast path: single symbol uses O(log N) binary search */
+> +	if (cnt == 1) {
+> +		addrs[0] = kallsyms_lookup_name(sorted_syms[0]);
+> +		if (addrs[0])
+> +			addrs[0] = ftrace_location(addrs[0]);
+> +		if (addrs[0])
+> +			return 0;
+> +		/*
+> +		 * Binary lookup can fail for duplicate symbol names
+> +		 * where the first match is not ftrace-instrumented,
+> +		 * or for module symbols.  Retry with linear scan.
+> +		 */
 > +	}
-> +}
+> +
+> +	/* Batch path: single-pass O(N) linear scan */
+>  	memset(addrs, 0, sizeof(*addrs) * cnt);
+>  	args.addrs = addrs;
+>  	args.syms = sorted_syms;
 
-[ ... ]
-
-> +	priv_stack_ptr = fp->aux->priv_stack_ptr;
-> +	if (!priv_stack_ptr && fp->aux->jits_use_priv_stack) {
-
-[ ... ]
-
-> +		priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_size, 16, GFP_KERNEL);
-> +		if (!priv_stack_ptr) {
-> +			fp = org_fp;
-> +			goto out_priv_stack;
-> +		}
-
-[ ... ]
-
->  out_addrs:
-> +		if (!image && priv_stack_ptr) {
-> +			fp->aux->priv_stack_ptr = NULL;
-> +			free_percpu(priv_stack_ptr);
-> +		}
-> +out_priv_stack:
->  		kfree(addrs);
-
-When __alloc_percpu_gfp() fails above, goto out_priv_stack jumps
-here. At that point, addrs is declared as:
-
-    u32 *addrs;
-
-without initialization and has not yet been assigned (the assignment
-addrs = jit_data->addrs comes after the goto). This passes a garbage
-pointer to kfree().
-
-The x86 JIT has kvfree(addrs) at the out_addrs label (before
-out_priv_stack), so the goto to out_priv_stack skips it. Should the
-label ordering here be adjusted similarly, or should addrs be
-initialized to NULL?
-
-> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
-> --- a/arch/powerpc/net/bpf_jit_comp64.c
-> +++ b/arch/powerpc/net/bpf_jit_comp64.c
-
-[ ... ]
-
->  		EMIT(PPC_RAW_STDU(_R1, _R1,
-> -				-(bpf_jit_stack_size(ctx) + ctx->stack_size)));
-> +			-(bpf_jit_stack_size(ctx) + (ctx->priv_sp ? 0 : ctx->stack_size))));
->  	}
-
-The STDU frame size is now bpf_jit_stack_size(ctx) when priv_sp is
-set, excluding ctx->stack_size. However, bpf_jit_stack_offsetof()
-still computes NVR save offsets including ctx->stack_size:
-
-    bpf_jit_stack_offsetof() {
-        ...
-        return (bpf_has_stack_frame(ctx) ?
-            (frame_nvr_size + ctx->stack_size) : 0)
-                - (8 * (32 - reg)) - BPF_PPC_TAILCALL;
-    }
-
-Similarly, bpf_jit_stack_local() returns
-STACK_FRAME_MIN_SIZE + ctx->stack_size.
-
-Since the STDU frame no longer reserves space for ctx->stack_size
-when using private stack, these offsets point ctx->stack_size bytes
-beyond the allocated frame. This would cause NVR saves in the
-prologue and restores in the epilogue to write past the frame
-boundary into the caller's stack.
-
-The x86 JIT handles this by zeroing stack_depth in do_jit() when
-private stack is active, which keeps all offset calculations
-consistent. Would a similar approach work here, either zeroing
-ctx->stack_size after setting up priv_sp, or updating the offset
-functions to account for it?
-
-[ ... ]
-
->  	/* Tear down our stack frame */
->  	if (bpf_has_stack_frame(ctx)) {
-> -		EMIT(PPC_RAW_ADDI(_R1, _R1, bpf_jit_stack_size(ctx) + ctx->stack_size));
-> +		EMIT(PPC_RAW_ADDI(_R1, _R1,
-> +			bpf_jit_stack_size(ctx) + (ctx->priv_sp ? 0 : ctx->stack_size)));
-
-Same issue here -- the ADDI restore is correct, but the NVR restores
-emitted by bpf_jit_emit_common_epilogue() use
-bpf_jit_stack_offsetof(), which still includes ctx->stack_size in
-the offset and would load from the wrong location.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22393518231
-
-AI-authorship-score: low
-AI-authorship-explanation: The code shows typical human porting errors and organic review iteration across v1/v2, inconsistent with AI-generated code patterns.
-issues-found: 3
-issue-severity-score: high
-issue-severity-explanation: Stack corruption from mismatched NVR save offsets affects every PPC64 BPF program using private stack, and kfree of an uninitialized pointer can crash or corrupt the slab allocator under memory pressure.
-
---===============3041621592064433641==--
