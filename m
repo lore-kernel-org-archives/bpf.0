@@ -1,150 +1,118 @@
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9B52D592F
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 17:53:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772042038; cv=pass; b=rTT9vJ9I/B4PgQrLr6UAaj9RhiytOYlaU2e1PTPZF6kG/JNnX/Vk+J7ZILa9kuyW4RkJf7hr0aKjTUtU0i0haKhcqQWV9bGrJa7c5OKnFCjO1m6ctXNYM2EF/U89GKv91E7QIAafy13ih1+yWWts1G9h6dhWmlSIey/jEzmMeZg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772042038; c=relaxed/simple;
-	bh=ys1EeTaGO4MV4C4zRqUcLdiLfUXHWoz3nDJ9U8hLerY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mmnnDxwPIIorhD2rTmjwTnDyk1Qt2bEtkpM+IO4IFFyHHQmh8F21z3kyff57JllUX7QjLF27Ib1NqW9nh5KmT+R/AzQWt64Cjn5HfjZrfnE+Qz9rACvPMgOfw0ooGnTm19e2nJPPxn+eD5KzsbUsbXEDT+Epququwib+Zk+Y8l4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Dg66wscw; arc=pass smtp.client-ip=209.85.160.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 834FB1CBEB9;
+	Wed, 25 Feb 2026 18:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772043448; cv=none; b=qMfLFreH+EcdQLa90RBE7SW+yiPghWcAbbvITMb6xaYEPHWYzISXBDYr4NwC/DLigKDcXjN3tG/lc+Ax2rZXbZyym4kvWN77/37wQcYVJTmgdWN5nTQ6QR0kxphwXrSDkEZuwVNwmD6J3k/g6G7DAzjZh/shEMSURSNHphSfk8E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772043448; c=relaxed/simple;
+	bh=UucAOz994cV+L7XaqXObhEfee3wJbdE/6/J3TtjyssY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rikEriYB3WX0gGx4y0Ua/NALc6eNy3jtHGTtMOOsDzP0AH5kHfdP7TjXaY7n7KAdVKXYznRnfpI1ffZ1Etu3L9hSaDF8khdZpqG14nfHBhS3U0fkYN5qCaJKo3aSST+djK7+MjqNHL/UVTJH2HdON1/LVW/prY6NxkGU4wODcOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NEXKKiDb; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Dg66wscw"
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-5069a785ed2so10241cf.1
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 09:53:56 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772042036; cv=none;
-        d=google.com; s=arc-20240605;
-        b=FOtgZ7G7dcgIAqQJEnbl981fwSe6Buu1fhhTaCuZo4yFT/Yy6z1gqWzua6LkLrPGMZ
-         5vec5BT+hTwOg+yKXo+OPFxXc8Tu7X1URbNow4Laqu2MCwEcKo9xEHrKV0LpPs2L6bIC
-         /zZE6hA+HE5E+bTxrqlqjKhi2fx5UZqEeEhRwtAEsWOmvjVZssC9gnEBD+e98Y+Xc+4g
-         QeJEc9JGZsLspzBgvlKrcsjD7q3JdCfZqK8NVOSIvmrkchMuJRhY1OCizCAkIv5eImfp
-         xg4My12cw9DYBglyVLvikJRhAIfiZqnrsIr44Pkn+SxYBvO3AiPNoiUlTv/mhV4R5+so
-         UyZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=jEAVieEU+20sbk3t3ofcLww1+yuqfYhJTzzkm2s0tRk=;
-        fh=7CNiWmcCwfShlbab4Ue6Npihl4YPZFzDvn70eUsZ1Eg=;
-        b=iy8axTUhtJI120O16SjFkJwqcWbAMIyWtMDgC297XW6sMTSCeX5VIWX3MP+0+VJZjd
-         c5G/fUiJRhD9ueHqkLsN+BW8JxUEtZZLPhECXCyGGIyO1JnOqgpoZKFRFOFtmuZl2Dh7
-         h7edvoYZORSclJVlvWDeq8WMMH7DUZUjpRw2CapiSaf2akWmKPiXSpYfEW3kd8Q/f79N
-         P+/CxhpVAvHM+OX7xFOqE6WNRD2U9jWvcHeDzu9O8O2fLNFhWFAHrCO6YeUXZeEZPQJT
-         fm71uQKfTEpSYReFrY4J4f5pthSn+G9lmafNtepHmTEBb6MHIdxA5JZejsUavl5884r0
-         w9AA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772042036; x=1772646836; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jEAVieEU+20sbk3t3ofcLww1+yuqfYhJTzzkm2s0tRk=;
-        b=Dg66wscw6N6PMn/Ic/J4yMFXqyIQy0EvHM5RwDUcHLNKp69BbfzzpcmBvGkfa/uBji
-         cmGEAzVxetJSudoAvNIkpepYGTR28qm3Velj4NHXYmIIwRYyMY7Azzsiyd2hPiWukXkU
-         ah0DEXsoWAJSgGbg1WrPUo1K3r4fdKOZ1DtDtI5SScIDxjSbfNYOfw8lmcENqTaBgdNL
-         m9bLbqzrlTtz9xkx4Fr9c0j18v4AEhPudr4WUkp4bNXprRay/tM5/nceRISQPRVRNimh
-         kNCwj5rs+NenKoVC42dnJZiKwirAiJR8yZ4fHu3DoPWXOAaeIMiwYCRlEHghMc97Srv5
-         3CvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772042036; x=1772646836;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jEAVieEU+20sbk3t3ofcLww1+yuqfYhJTzzkm2s0tRk=;
-        b=F6lKzS42SCMDLoIONEdGalU5wmKksPXrWupAMtqlfV/TPv2mTYE1xUVgGiiYTyxRdk
-         aTG4KR+R76JAB5KuGNmzNZz4rabAlJYpskFW/tduangv61DFQdioYjdiW6g7im+uTIZ2
-         GZ1hf/qvfXDT4LQpT1PCVyUVb1mtVaFsCOnFAea1k8EZv+gE8IVZt76Fdyfa3s4qYsT7
-         Ssr2uj2i0CJEsBmoo0V8xXtv0HTCFUAqJA4WRS55lyOToub3IzVMFFwEQSmOpglrlmSr
-         jM7EP/Mi4ja7cueZDwH4xOElSZQKQlebGl358azIdxwzl/l7skhuOU28f6RQyNnK33Vd
-         W5cg==
-X-Forwarded-Encrypted: i=1; AJvYcCWyTRCDYgbAjLMhXhykQ2WLTPy0xTze63LP+83hk6dpmHvQaB+zP51yWoLPb6lvFKEzACU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGM86kRwJlE04D41D1d+wBkBGRyNI8OfYmIutuM/88bbODau6u
-	m1eSiYgOv43vRwUVgTuaK0U6dg5GFXezAEPvo6QY6IHRBHjZRkMLP4RmLpta00VwjmrEp/jeaCI
-	+aexbK6iJv1bwIKJ2mYS/ZHcbTxOecFZubCkHv65p
-X-Gm-Gg: ATEYQzxRih/LBv9MK2EYKZT5q+y9jEkK0vlDdcUCPWVdiz8bW5VyTfMy8nZyngdCIwk
-	OF+nqEpu6FxZlL4PtNAiHluHk9FtA9t2JRdyIDfsfYPqxzvCuwz3lgstbvbPygWOWJT1firNGbR
-	UI7U+MJQ00uNSv87khtctjJtNQflJdJsDZGn/XiD2JBHcbSLJQ27Kr/u9Alarv35YSYDr9lS3j6
-	luYgVnmLx3KOQiWE6FKLV/kMdava4V+mXMXxcwLu8iCns69Fnp7wwGJtraTpvdjBpqilNQ58To/
-	+T3+4pks
-X-Received: by 2002:a05:622a:246:b0:4ff:cb25:998b with SMTP id
- d75a77b69052e-50738e19028mr11538841cf.12.1772042035314; Wed, 25 Feb 2026
- 09:53:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NEXKKiDb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772043446; x=1803579446;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UucAOz994cV+L7XaqXObhEfee3wJbdE/6/J3TtjyssY=;
+  b=NEXKKiDbflbbendMEbSRZC6O25EWp+ciC99tvoCjOmkkMdclzH0DwHF2
+   TlMwGOo2+eOie5tYzlb5cLhiWbO1Xol4EZZoR+S8WcedMh+gOMhrwEKzH
+   fDkenLMmh8KIa4RWqdlLSQhTG1v7JDovSbnJEHTtqD6ox2RVC91mA4UDy
+   uDfoD5sYz9ddmJdxgGHeAFI7upqf1omodqftxyVMeB7zNfprPp/vFpRjY
+   EhIOECW0EOtdyWuCVfIyL/2jr6vQabpvbQh9uSd+5a3Nw4dCxh7LnKpu7
+   cSS5BwRDn8tHooBBoDwDwDgfDiqeP3xr2VXnm2WP5YxfoVr++sI/qOd7P
+   g==;
+X-CSE-ConnectionGUID: gS3CfVdTT6S6LhjE94ZoHw==
+X-CSE-MsgGUID: cqxaZO4tTOSBqyIyh8/syg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11712"; a="72967631"
+X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
+   d="scan'208";a="72967631"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2026 10:17:26 -0800
+X-CSE-ConnectionGUID: EiyiVOgUSxCRGP3NzQaxSA==
+X-CSE-MsgGUID: 0pRomoGlTAWqXMRnqrxLdw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,311,1763452800"; 
+   d="scan'208";a="254070266"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by orviesa001.jf.intel.com with ESMTP; 25 Feb 2026 10:17:22 -0800
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id 36A0232C80;
+	Wed, 25 Feb 2026 18:17:20 +0000 (GMT)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: Tony Nguyen <anthony.l.nguyen@intel.com>,
+	intel-wired-lan@lists.osuosl.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Natalia Wochtman <natalia.wochtman@intel.com>,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH iwl-next v2 00/10] libeth and full XDP for ixgbevf
+Date: Wed, 25 Feb 2026 18:46:34 +0100
+Message-ID: <20260225174646.3514556-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260224093128.1926610-1-tabba@google.com> <c402e95a-26d3-47eb-8249-52ece97989d3@huaweicloud.com>
- <CA+EHjTyXWqnr4Cu_cZyxDCVNCxto9pJN0WS18S_ri824oQhwug@mail.gmail.com>
- <2d0c6893-d4a5-42bc-a480-55bc669da130@huaweicloud.com> <aZ81zpP6ooG_19cI@willie-the-truck>
-In-Reply-To: <aZ81zpP6ooG_19cI@willie-the-truck>
-From: Fuad Tabba <tabba@google.com>
-Date: Wed, 25 Feb 2026 17:53:18 +0000
-X-Gm-Features: AaiRm534zbpWWOEgtIxfzMhryUNrf7luuF1GuBsHMOEjyqDn4wuNqe1tCagnydI
-Message-ID: <CA+EHjTxxqr1fTfDrFwpij+92BEATbYTWmOKqtDeo5jgfqqCsFg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: bpf: Fix UBSAN misaligned access in BPF JIT
-To: Will Deacon <will@kernel.org>
-Cc: Xu Kuohai <xukuohai@huaweicloud.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Puranjay Mohan <puranjay@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, bpf@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Jakub Sitnicki <jakub@cloudflare.com>, 
-	Jean-Philippe Brucker <jpb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Will,
+Update ixgbevf with standard XDP features by utilizing libeth library.
 
-On Wed, 25 Feb 2026 at 17:48, Will Deacon <will@kernel.org> wrote:
->
-> On Wed, Feb 25, 2026 at 05:46:52PM +0800, Xu Kuohai wrote:
-> > Interesting, I think the plt target should be 64-bit aligned to ensure
-> > atomic reading on arm64. It can be updated concurrently by WRITE_ONCE
-> > in the bpf_arch_text_poke function while the ldr instruction in the plt is
-> > executed. If it is not aligned correctly, the ldr may read a half-old
-> > half-new value, causing the plt to jump to an invalid destination.
->
-> Thanks for pointing that out; I hadn't realised that we patched live
-> PLTs!
->
-> > To avoid over-aligning the entire buffer, how about fixing the padding
-> > method in build_plt to just make the plt target aligned correctly?
->
-> Makes sense to me.
+First, in patches 1-4 refactor existing general and XDP Rx code
+to use libeth fill queues. Then in patches 5-7, add support for
+XDP multi-buffer and XDP_REDIRECT (target and source). Patch 8 addresses
+particularities of one HW type by using a software header split.
+Patches 9-10 address page pool not being reconfigured on MTU change.
 
-As I noted in my reply to Xu, and keeping in mind that this is very
-new to me (so take it with a huge pinch of salt), I don't think this
-is correct, but that my original patch is probably the best fix:
+v1->v2:
+* fix wrong return value when allocating descriptor memory fails
+* tag xdp_prog in ring structure as RCU
 
-> I'm not sure about this. If my reading of the code is correct, during
-> the first JIT pass, ctx->image is NULL. The current padding logic in
-> build_plt() looks like this:
->
->         /* make sure target is 64-bit aligned */
->         if ((ctx->idx + PLT_TARGET_OFFSET / AARCH64_INSN_SIZE) % 2)
->             emit(A64_NOP, ctx);
->
-> This forces the relative offset of the PLT to be a multiple of 8
-> bytes. Therefore, it assumes that the base pointer (ctx->image) is
-> also 8-byte aligned. If the allocator gives us a base pointer that is
-> only 4-byte aligned, target will end up misaligned.
->
-> If we try to make the padding dynamic based on the actual address of
-> ctx->image, pass 1 (where ctx->image is NULL) and pass 2 (where
-> ctx->image is allocated) might disagree on the number of NOPs
-> required. This would cause ctx->idx to diverge between passes,
-> breaking the size calculations and offset tables.
+Larysa Zaremba (9):
+  ixgbevf: remove legacy Rx
+  ixgbevf: do not share pages between packets
+  ixgbevf: use libeth in Rx processing
+  ixgbevf: branch prediction and cleanup
+  ixgbevf: support XDP multi-buffer on Rx path
+  ixgbevf: XDP_TX in multi-buffer through libeth
+  ixgbevf: support XDP_REDIRECT and .ndo_xdp_xmit
+  ixgbevf: reconfigure page pool when reallocating buffers
+  ixgbevf: allow changing MTU when XDP program is attached
 
-Cheers,
-/fuad
+Natalia Wochtman (1):
+  ixgbevf: add pseudo header split
 
->
-> Will
+ drivers/net/ethernet/intel/Kconfig            |    1 +
+ drivers/net/ethernet/intel/ixgbevf/defines.h  |    2 +-
+ drivers/net/ethernet/intel/ixgbevf/ethtool.c  |   48 -
+ drivers/net/ethernet/intel/ixgbevf/ixgbevf.h  |   98 +-
+ .../net/ethernet/intel/ixgbevf/ixgbevf_main.c | 1104 +++++++----------
+ include/net/libeth/xdp.h                      |    2 +-
+ 6 files changed, 487 insertions(+), 768 deletions(-)
+
+-- 
+2.52.0
+
