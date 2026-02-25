@@ -1,100 +1,95 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6096C1E5B9A
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 00:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7882248B3
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 00:36:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771979654; cv=none; b=aAr6VnLG+KAcI6effcede7K06D+dUNxalG0YSquyMKFDiEDedRxupAunKw1jsXboVhwIq34yZPBsoCxw/5HkdSBdDXcwsEeMTLrXySOaAyL/Rjn++aAvdzP0H9pRFUdyX2GM2zKNc4v7e6R0vpVCOmC9Cd0fHYLHRM9rqvGVGW8=
+	t=1771979761; cv=none; b=P2pqbL3Z//McCd5eM+IzGb/wLpAbb4jND7Z4+unOJ9kLVpWTkPtC0gboIAnVbtjqs95XryLvU4n4Qp5DZetj3bPP4INzgZspbNhhqGoKtTADFKoO6RSUkP5nd1L2nFS28HLvqhKozS4wHiUAKDNyAcRUymfxPbgIilJ1SgXZk/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771979654; c=relaxed/simple;
-	bh=7S0ZAGEtN+MYa1b6Sg1G3e/c415FMUzoQXGMYFiY6oY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EbOVjc8TsfQ8AanyuMXIyrCMT+CjxMhDrgimQ21TGIl1OJEQIRlH2tFQnNubjiUY7oXQ0D21UMKItzmUJoZb7y9giupV6mlue7bH7hCc5x8Iw/2SzIUj6JmMCi/FVTxCl0bEz0OopjjvUI9PDYreLBsTWuiK6aV7TVCztZuHReY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Huax2na4; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1771979761; c=relaxed/simple;
+	bh=stRsP1O+9FA+35G10yuqDVObn1O6DuV/lsK0Cj70acA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Us6dJogtaTaRHZESoqTOpba+kcg7crlHABmXi2vQ29TZrur4eoaVgY7QUSYosR9+HwcnCr8satBw9r/GuQRGlYwmkEV9xBAMRhxnI63eLvAe/BQN4V/BT1rH+IDng6gIQ+2bs4OA8uelgwj9JMc1z/l7Yj+sn7AS79KtNnY91hQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wY6MM4Vf; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Huax2na4"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1771979649;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=5YcB//ck1gWfDekLLfSSM3SiB/eEYrbR7pG+NGLy91E=;
-	b=Huax2na47Rx6KDj7iuOhY4k0tHjl3hbLY5UKW+l0nGIbDq4QzpGJBV8smNlxZk0cWSDxU/
-	QUYa2hqiPXwHE1A9m4kVCYApcs0QWHoeJ+L3FlOsB1bJO2VgpaEoOj7sn453IUQQ1W5Qbk
-	9FHuwT6bjWFLKR3Qojmm0s2cGSFF5jw=
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf v1] selftests/bpf: Fix a memory leak in xdp_flowtable test
-Date: Tue, 24 Feb 2026 16:33:51 -0800
-Message-ID: <20260225003351.465104-1-ihor.solodrai@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wY6MM4Vf"
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2ad147cdf07so65312535ad.2
+        for <bpf@vger.kernel.org>; Tue, 24 Feb 2026 16:36:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1771979760; x=1772584560; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=lpd6udhqVRoi/VjnEJ31/8jqYQEWSxtwTa2nqxOPIz4=;
+        b=wY6MM4VfHGKhSTROXPQsjCFvvEnWluspb7XarMrn5/vGiX7mWALxDjcO6M/OJNFmLi
+         5CZt0DB2NJ1BIXEBT3slB47cx3ag0OhiUNF8RovWZxC2l7CgyL9HkHnZABgqVYi4eGBx
+         gK9QLap9WoUS1YG1W/6xCEJQ1Yzd19R53vhN62tZbfXkopqrERxeJdO18OcFe718KYxQ
+         GtRKS/NCazQPA0UKhjMCEFn0bW0JoetO51K7tQLxeEqIHWeyY/khINmn3bY3/Y8aD159
+         J4OKg6SfjwhW2YlF8vp2DYgbGBP5ONG8yWHLKgpea4KVEWnyz2w+84jG0PsKCax/C1Z0
+         76lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1771979760; x=1772584560;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lpd6udhqVRoi/VjnEJ31/8jqYQEWSxtwTa2nqxOPIz4=;
+        b=h42L3weFmpps3Q2F33cKl1BKIk8UpuNZ+DJR3mymWu0Shk0vyuzlk9qaXh6NByUwad
+         uIZobY+fVcRiK+g3f9fd966KcV/DDScT99wqef0JiYv80ocTm4unmI16ZyAKVnzqR+dW
+         z+VE4LKIymMxzBsQhQ7/Cj9ZqmdGQePVUdYbdQyRmyIv23CLMgIu0rcWFbL9ku8FbssW
+         SaQFGZ1CPcqIzYBMWI+RVfBJ/hmSdXlLcyMeKDQiEoSaZwYkMlkN0p2fTpg9FAAeHkT3
+         n1bP/hWRDJPzw+0678Qvxye8etQtqaVqP3hH19IdXNMAIBCRxV2/4aVW8PVxOhdqHqQc
+         /M1A==
+X-Forwarded-Encrypted: i=1; AJvYcCXgseR1TwWJFC3P14vOq4wvN6xtXJbmJdeX6dDfntL0Bm7KQiukjph+KDmaA0OzrbEiHlo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy52mCk7AnVDCfbK2RIU++f5WMMKgjndCGhE9Hd5F0XoI6a9OrK
+	bR+hT2oMzTWy/c8tNmNd3u/HU8lEQSsp4XQqircv8dPOnG7ci3rk75HzfLDrklDQVIjkOhnREWF
+	TDLYlTPK45DQhE/JTGQ==
+X-Received: from plwh12.prod.google.com ([2002:a17:902:f7cc:b0:2a1:1059:442a])
+ (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:903:228f:b0:2a9:484c:ff30 with SMTP id d9443c01a7336-2add13834ffmr4836965ad.26.1771979759424;
+ Tue, 24 Feb 2026 16:35:59 -0800 (PST)
+Date: Tue, 24 Feb 2026 16:33:48 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.53.0.414.gf7e9f6c205-goog
+Message-ID: <20260225003349.113746-1-tjmercier@google.com>
+Subject: [PATCH bpf] selftests/bpf: Fix OOB read in dmabuf_collector
+From: "T.J. Mercier" <tjmercier@google.com>
+To: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, 
+	bpf@vger.kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Cc: quic_sukadev@quicinc.com, "T.J. Mercier" <tjmercier@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-test_progs run with ASAN reported [1]:
+Dmabuf name allocations can be less than DMA_BUF_NAME_LEN characters,
+but bpf_probe_read_kernel always tries to read exactly that many bytes.
+If a name is less than DMA_BUF_NAME_LEN characters,
+bpf_probe_read_kernel will read past the end. bpf_probe_read_kernel_str
+stops at the first NUL terminator so use it instead, like
+iter_dmabuf_for_each already does.
 
-  ==126==ERROR: LeakSanitizer: detected memory leaks
-
-  Direct leak of 32 byte(s) in 1 object(s) allocated from:
-      #0 0x7f1ff3cfa340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
-      #1 0x5610c15bb520 in bpf_program_attach_fd /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/lib/bpf/libbpf.c:13164
-      #2 0x5610c15bb740 in bpf_program__attach_xdp /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/lib/bpf/libbpf.c:13204
-      #3 0x5610c14f91d3 in test_xdp_flowtable /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c:138
-      #4 0x5610c1533566 in run_one_test /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/testing/selftests/bpf/test_progs.c:1406
-      #5 0x5610c1537fb0 in main /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/testing/selftests/bpf/test_progs.c:2097
-      #6 0x7f1ff25df1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8e9fd827446c24067541ac5390e6f527fb5947bb)
-      #7 0x7f1ff25df28a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8e9fd827446c24067541ac5390e6f527fb5947bb)
-      #8 0x5610c0bd3180 in _start (/tmp/work/vmtest/vmtest/selftests/bpf/test_progs+0x593180) (BuildId: cdf9f103f42307dc0a2cd6cfc8afcbc1366cf8bd)
-
-Fix by properly destroying bpf_link on exit in xdp_flowtable test.
-
-[1] https://github.com/kernel-patches/vmtest/actions/runs/22361085418/job/64716490680
-
-Signed-off-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-
+Fixes: ae5d2c59ecd7 ("selftests/bpf: Add test for dmabuf_iter")
+Reported-by: Sukadev Bhattiprolu <quic_sukadev@quicinc.com>
+Signed-off-by: T.J. Mercier <tjmercier@google.com>
 ---
+ tools/testing/selftests/bpf/progs/dmabuf_iter.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-This should've been part of the recent series. I missed this locally
-because the test is skipped if nftables is not installed.
-
----
- tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c b/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c
-index 3f9146d83d79..325e0b64dc35 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c
-@@ -67,7 +67,7 @@ void test_xdp_flowtable(void)
- 	struct nstoken *tok = NULL;
- 	int iifindex, stats_fd;
- 	__u32 value, key = 0;
--	struct bpf_link *link;
-+	struct bpf_link *link = NULL;
+diff --git a/tools/testing/selftests/bpf/progs/dmabuf_iter.c b/tools/testing/selftests/bpf/progs/dmabuf_iter.c
+index 13cdb11fdeb2..9cbb7442646e 100644
+--- a/tools/testing/selftests/bpf/progs/dmabuf_iter.c
++++ b/tools/testing/selftests/bpf/progs/dmabuf_iter.c
+@@ -48,7 +48,7 @@ int dmabuf_collector(struct bpf_iter__dmabuf *ctx)
  
- 	if (SYS_NOFAIL("nft -v")) {
- 		fprintf(stdout, "Missing required nft tool\n");
-@@ -160,6 +160,7 @@ void test_xdp_flowtable(void)
+ 	/* Buffers are not required to be named */
+ 	if (pname) {
+-		if (bpf_probe_read_kernel(name, sizeof(name), pname))
++		if (bpf_probe_read_kernel_str(name, sizeof(name), pname) < 0)
+ 			return 1;
  
- 	ASSERT_GE(value, N_PACKETS - 2, "bpf_xdp_flow_lookup failed");
- out:
-+	bpf_link__destroy(link);
- 	xdp_flowtable__destroy(skel);
- 	if (tok)
- 		close_netns(tok);
+ 		/* Name strings can be provided by userspace */
 -- 
-2.53.0
+2.53.0.414.gf7e9f6c205-goog
 
