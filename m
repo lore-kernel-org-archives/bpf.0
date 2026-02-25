@@ -1,49 +1,63 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC963D1CAA
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 13:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A598271471;
+	Wed, 25 Feb 2026 14:15:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772027416; cv=none; b=eghelSyu4jDZX9iGplDplrwnpiJoSg+zp+NAuphY2W+iYLgiPSlzcz7Q6JJmh2OL1MIE7Ji1tQryfU4edpDf+7dNITwnEHRQ1+7+Xjtm1N0+pJEwEAnaA/zAxAopfjjdNDO1CDiwpldYVebgClfRf7cTLYz6OPf9GagaWPNiwQk=
+	t=1772028926; cv=none; b=NKkjR/gi7t5ICwngDrHA/9hlfjNOKOHk87pMMAqc7uGzSHdmIsNWyHA0PDI1G6880bWPIsYTAEnK1AKrsrvVZzAX90BgzETrwcmw5JZ8LQ16iudP98gg/MojaR3M6oJvAb0jvsx1uPEWkhOY8+bWyJB4ZXzU1EpiuFRTya5qMq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772027416; c=relaxed/simple;
-	bh=XdkFv8THPOie/296pE+CVB1asKJ1JaEzkhxX+iyyQYg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oGJkJ4nMuGiQTMA4+75WnbvxTkcpJZt2GCImtrPl11QyyvRiwZDI2DDu9rFSiqEXYbHrvPC/T6G5wdRpJjBpkHEUB24tQ9+N1n/GkCIEeOmfMYGnrDX1ymvRvnETXAwVPjg2ZW/sIH0eqjfWO+3/UsD9kC20F0LHhtO0nk77prs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WhrQR8ec; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772028926; c=relaxed/simple;
+	bh=AVYgVW1Oq7gO4+QnysxWAvg1evILwwV159VO5F9DPlQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aPue4mMScrVf54IqdVcIcMpMlObdjWUL5lZ8yseVb4wcPRSjMp3Lj3SaVUxvQriVgCXSd6vB8wmAYX/0Lfl70AhQP94/37iUsrjdREPZJ3LwGD+Z87wsYWHT+QbZKBr7C41m0qx9i1/LhFaTcIhLwVk5RuRXbsP3SfEyoiMQ4EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=jqzKkcfA; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WhrQR8ec"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F683C116D0;
-	Wed, 25 Feb 2026 13:50:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772027415;
-	bh=XdkFv8THPOie/296pE+CVB1asKJ1JaEzkhxX+iyyQYg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WhrQR8ecY+P8G6iNRYVZ7d83tdAYAz4XhWIhKbJB4k7hmyYSRYC8MubSWzttHdbMr
-	 CQy6fqO3FtxlPN768aq/ij5175/DYE1C7kCypNIv0p6V7CNVwJOES/ZVfU7ayZjyxT
-	 TimpZvKcfgz6r83TqLsaB0LwSOBjTsXdWK5+ngXvy2bxc1FejMXh3MYXp2wGswQwr5
-	 Lb9tLnmCcfgyV4WndENXqHN0JJkoo2mUgO7AP7TkflPDD4q3z35feqWts2Yg4p7wr4
-	 B4oEAqZieVVkMo+1yESHcaav8AeJr7C79BgMUiYfJDrvLZ+uLXNvZ3IBtslVh+TTqd
-	 tGvXtTns+qZxg==
-From: Puranjay Mohan <puranjay@kernel.org>
-To: bpf@vger.kernel.org
-Cc: Puranjay Mohan <puranjay@kernel.org>,
-	Puranjay Mohan <puranjay12@gmail.com>,
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="jqzKkcfA"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
+	s=default; t=1772028920;
+	bh=3pvUGRlmdavixZVPrxVrN1vvUZK1c752LzmogmPwc5Q=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jqzKkcfA3DDlHLUnJa+rsVfgKwRWcWMIR+jNPkgZDGwI9gSirlrQQ/zPXIIXtDN5g
+	 dD4e2EC151/Y1DlDITpF8vA/a57l6i3NNBykcsmjcEYRbL+J0EhF6RBlSTyb5CFJnH
+	 Sm0dftzPng42oJUDVLnnFO8rgTbtXRBmxkBwI4WA=
+Received: from stargazer (unknown [IPv6:2409:8a4c:e11:4510:818c:b334:624:49f8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id E718C1A4370;
+	Wed, 25 Feb 2026 09:15:10 -0500 (EST)
+From: Xi Ruoyao <xry111@xry111.site>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Hengqi Chen <hengqi.chen@gmail.com>
+Cc: Mingcong Bai <jeffbai@aosc.io>,
+	Zixing Liu <liushuyu@aosc.io>,
+	Xi Ruoyao <xry111@xry111.site>,
 	Alexei Starovoitov <ast@kernel.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next 2/2] bpf: Consolidate sleepable checks in check_kfunc_call()
-Date: Wed, 25 Feb 2026 05:49:49 -0800
-Message-ID: <20260225134950.2781351-2-puranjay@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260225134950.2781351-1-puranjay@kernel.org>
-References: <20260225134950.2781351-1-puranjay@kernel.org>
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>,
+	George Guo <guodongtai@kylinos.cn>,
+	Chenghao Duan <duanchenghao@kylinos.cn>,
+	loongarch@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: [PATCH] LoongArch: Fix calling smp_processor_id() in preemptible code
+Date: Wed, 25 Feb 2026 22:14:02 +0800
+Message-ID: <20260225141404.178823-2-xry111@xry111.site>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,78 +66,101 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-check_kfunc_call() has multiple scattered checks that reject sleepable
-kfuncs in various non-sleepable contexts (RCU, preempt-disabled, IRQ-
-disabled). These are the same conditions already checked by
-in_sleepable_context(), so replace them with a single consolidated
-check.
+Fix the warning recently exploited by commit 4ab17e762b34 ("LoongArch:
+BPF: Use BPF prog pack allocator"):
 
-This also simplifies the preempt lock tracking by flattening the nested
-if/else structure into a linear chain: preempt_disable increments,
-preempt_enable checks for underflow and decrements, and the sleepable
-check uses in_sleepable_context() which covers all non-sleepable
-contexts uniformly.
+    BUG: using smp_processor_id() in preemptible [00000000] code: systemd/1
+    caller is larch_insn_text_copy+0x40/0xf0
 
-No functional change since in_sleepable_context() checks all the same
-state (active_rcu_locks, active_preempt_locks, active_locks,
-active_irq_id, in_sleepable).
+Simply changing it to raw_smp_processor_id() is not enough: if preempt
+and CPU hotplug happens after raw_smp_processor_id() but before
+stop_machine(), the CPU where raw_smp_processor_id() has run may be
+offline when stop_machine() and no CPU will run copy_to_kernel_nofault()
+in text_copy_cb().  Thus guard the larch_insn_text_copy() calls with
+cpus_read_lock() and change stop_machine() to stop_machine_cpuslocked()
+to prevent this.
 
-Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+Fixes: 9fbd18cf4c69 ("LoongArch: BPF: Add dynamic code modification support")
+Signed-off-by: Xi Ruoyao <xry111@xry111.site>
 ---
- kernel/bpf/verifier.c | 35 ++++++++++++-----------------------
- 1 file changed, 12 insertions(+), 23 deletions(-)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e8c4a5f8520d..c26139b96c6a 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14153,34 +14153,23 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
- 				}
- 			}));
- 		}
--	} else if (sleepable && env->cur_state->active_rcu_locks) {
--		verbose(env, "kernel func %s is sleepable within rcu_read_lock region\n", func_name);
--		return -EACCES;
--	}
--
--	if (in_rbtree_lock_required_cb(env) && (rcu_lock || rcu_unlock)) {
--		verbose(env, "Calling bpf_rcu_read_{lock,unlock} in unnecessary rbtree callback\n");
--		return -EACCES;
--	}
--
--	if (env->cur_state->active_preempt_locks) {
--		if (preempt_disable) {
--			env->cur_state->active_preempt_locks++;
--		} else if (preempt_enable) {
--			env->cur_state->active_preempt_locks--;
--		} else if (sleepable) {
--			verbose(env, "kernel func %s is sleepable within non-preemptible region\n", func_name);
--			return -EACCES;
--		}
- 	} else if (preempt_disable) {
- 		env->cur_state->active_preempt_locks++;
- 	} else if (preempt_enable) {
--		verbose(env, "unmatched attempt to enable preemption (kernel function %s)\n", func_name);
--		return -EINVAL;
-+		if (env->cur_state->active_preempt_locks == 0) {
-+			verbose(env, "unmatched attempt to enable preemption (kernel function %s)\n",
-+				func_name);
-+			return -EINVAL;
-+		}
-+		env->cur_state->active_preempt_locks--;
-+	} else if (sleepable && !in_sleepable_context(env)) {
-+		verbose(env, "kernel func %s is sleepable within %s\n",
-+			func_name, non_sleepable_context_description(env));
-+		return -EACCES;
- 	}
+P.S. I've considered moving the locks inside larch_insn_text_copy() but
+doing so seems not an easy hack.  In bpf_arch_text_poke() obviously the
+memcpy() call must be guarded by text_mutex, so we have to leave the
+acquire of text_mutex out of larch_insn_text_copy.  But in the entire
+kernel the acquire of mutexes is always after cpus_read_lock(), so we
+cannot put cpus_read_lock() into larch_insn_text_copy() while leaving
+the text_mutex acquire out (or we risk a deadlock due to inconsistent
+lock acquire order).  So I'd just submit this as-is to fix the bug and
+leave the posssible refactor for others.
+
+ arch/loongarch/kernel/inst.c | 4 ++--
+ arch/loongarch/net/bpf_jit.c | 6 ++++++
+ 2 files changed, 8 insertions(+), 2 deletions(-)
+
+diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
+index bf037f0c6b26..db236e2b34a7 100644
+--- a/arch/loongarch/kernel/inst.c
++++ b/arch/loongarch/kernel/inst.c
+@@ -263,14 +263,14 @@ int larch_insn_text_copy(void *dst, void *src, size_t len)
+ 		.dst = dst,
+ 		.src = src,
+ 		.len = len,
+-		.cpu = smp_processor_id(),
++		.cpu = raw_smp_processor_id(),
+ 	};
  
--	if (env->cur_state->active_irq_id && sleepable) {
--		verbose(env, "kernel func %s is sleepable within IRQ-disabled region\n", func_name);
-+	if (in_rbtree_lock_required_cb(env) && (rcu_lock || rcu_unlock)) {
-+		verbose(env, "Calling bpf_rcu_read_{lock,unlock} in unnecessary rbtree callback\n");
- 		return -EACCES;
- 	}
+ 	start = round_down((size_t)dst, PAGE_SIZE);
+ 	end   = round_up((size_t)dst + len, PAGE_SIZE);
+ 
+ 	set_memory_rw(start, (end - start) / PAGE_SIZE);
+-	ret = stop_machine(text_copy_cb, &copy, cpu_online_mask);
++	ret = stop_machine_cpuslocked(text_copy_cb, &copy, cpu_online_mask);
+ 	set_memory_rox(start, (end - start) / PAGE_SIZE);
+ 
+ 	return ret;
+diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
+index 3bd89f55960d..e8e0ad34928c 100644
+--- a/arch/loongarch/net/bpf_jit.c
++++ b/arch/loongarch/net/bpf_jit.c
+@@ -1379,9 +1379,11 @@ void *bpf_arch_text_copy(void *dst, void *src, size_t len)
+ {
+ 	int ret;
+ 
++	cpus_read_lock();
+ 	mutex_lock(&text_mutex);
+ 	ret = larch_insn_text_copy(dst, src, len);
+ 	mutex_unlock(&text_mutex);
++	cpus_read_unlock();
+ 
+ 	return ret ? ERR_PTR(-EINVAL) : dst;
+ }
+@@ -1429,10 +1431,12 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
+ 	if (ret)
+ 		return ret;
+ 
++	cpus_read_lock();
+ 	mutex_lock(&text_mutex);
+ 	if (memcmp(ip, new_insns, LOONGARCH_LONG_JUMP_NBYTES))
+ 		ret = larch_insn_text_copy(ip, new_insns, LOONGARCH_LONG_JUMP_NBYTES);
+ 	mutex_unlock(&text_mutex);
++	cpus_read_unlock();
+ 
+ 	return ret;
+ }
+@@ -1450,10 +1454,12 @@ int bpf_arch_text_invalidate(void *dst, size_t len)
+ 	for (i = 0; i < (len / sizeof(u32)); i++)
+ 		inst[i] = INSN_BREAK;
+ 
++	cpus_read_lock();
+ 	mutex_lock(&text_mutex);
+ 	if (larch_insn_text_copy(dst, inst, len))
+ 		ret = -EINVAL;
+ 	mutex_unlock(&text_mutex);
++	cpus_read_unlock();
+ 
+ 	kvfree(inst);
  
 -- 
-2.47.3
+2.53.0
 
