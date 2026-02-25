@@ -1,185 +1,156 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DEFD26560A
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 10:21:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC09311587;
+	Wed, 25 Feb 2026 10:22:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772014912; cv=none; b=uJP27EKXRoHZkkXJ4hgq7pslZq27sry/k2Job2Flc7igum4UIhwYV68OqbjT6AKgzkNFgk4UDv38flmCu0+3AgS9wB6V1Dskjc6QlJOpFYfZkEIgD38ZWLTjPmB8nnFe+StChRFPKpcu7pcCAsCcCQ6k5NAY5wGl+PL0nVkP1AM=
+	t=1772014971; cv=none; b=KAYq4YhrCdDkwecTn6lwiIvBbZuLbumm5ZN+ZHNdV6NZcADgrSUaGFkhKzCd5h8UeCLMNJHM0ydb68tu3WNVpKdOYQ/O26PZn7kNiCDxQ/kUG83j8dVlKZwCLbJihnJMnlHKnydVqpjRTRkbilhLCFl7LqdeUAw7tKlCmVvy/Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772014912; c=relaxed/simple;
-	bh=2nSRz3xdfQ/+Vp0Ax0DpPsdzoGVdWAcOtHs0/LpFfkU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GP0FiueeliCLRYCJnUEUGFD4HBgVQxIC65Kwx2c5hBsQA2prnUnj4qNoZ7Sa+Qv5oiP9I/vwC/TSTUC3/ytF3bp5jwcTpgCRA3BmfDcls5HPAQGsJFtaYk+aKKvIFTv75g3TYUtYW0AQ+v3FuynUpVZ++E2IPL7Tfu4D5fepmik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S39oeoCb; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772014971; c=relaxed/simple;
+	bh=gdrtsR2FeVso8a4uVhevoFIWVVb/zq+AI6iRvYROt+k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=MBSDBihiPsn63lBTKIiLmG78Y4pZ8mbkDpmR5Yt+Htvra57v5jQkwc1CD47RSJP2m1UYKJAivNevSLheoki8H4wPOqImrdGQiLLAbmDd3VmHenqdpNNoOXj7SxfFPdbXJ/n9xI/Ii4b5Gcpg8+dWS8LTkgYddaBa9iXFk70qvYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i+/JSkBQ; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S39oeoCb"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4836f4cbe0bso50266205e9.3
-        for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 02:21:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772014909; x=1772619709; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=glQw7gI2CNTRlL7fs/Cgz9GR5YxSpe0kIhUBT8I3Sno=;
-        b=S39oeoCbjm34cj1HPF3/uXH9OK7RkThFq6WrRcktEnK7CuY1IgS12X1oPhdR9kCSgc
-         foNRXpsadKZI1QiI0iQ7otsf77jEDcB3K86XnGUOtbXX70yt5Sz+0vx1kVTdJHPEsce1
-         7cXJNa/LPYUTP3lhnFGRkph630AWPZe6jzlXJlGkRQizsmTxo2+Hal7GOaj/gKl7Wu4f
-         qFYRlFYTyrJ9ttuHBitgJiq/lv15KcO/mM+UdbbUItGTKy5IpfuRYPnYptpe8lqXJSQi
-         xh2oh28R/DuGBjYjFUZ+b4rcUbeaLd66eT9AC19cItfbzX3/J4cR+SUuTOCD5ApXxGN/
-         21kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772014909; x=1772619709;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=glQw7gI2CNTRlL7fs/Cgz9GR5YxSpe0kIhUBT8I3Sno=;
-        b=qEv/2MCFLBm3BqPVdXtsigvoJbJHi1U4VdL6VYAQ9hsKM4xKdxAtnaOHlnpmrTh2R5
-         XaYgbiig80cxjdW/QM/SsvXHVNxPCswZtpCVsb2evzTqo08bXicP8Mc2Qdjs3mRCLTf1
-         SCd/oG/p+CL2oIODZFeY4GGDFPa/CbyNOEBuYfxqOfYOr3b5geBGBwcSa35o6dwhT6M1
-         GG0ebgJvFU7iBWC2MtEmzeUdG/xNauWK7KjMwqVFMUniCfru1oqBknnCJGTMiFCiHtS0
-         8TN0Y60Y1ILhMWM4TSjrJzRIY7p+D2NBDYB3+VcRGUePqXWojxNcEqcO2TfQdC/ltAQX
-         OnkA==
-X-Gm-Message-State: AOJu0Yzjb3azr7LsIO2ut40Hi7XUjnAWMslYQsfVdAfvCe33stkbtBur
-	z1v9k1p1K83h9THVO77jqbcA9/+ydmUIUZIj3/ryctdx3X/WGQHVkMEL
-X-Gm-Gg: ATEYQzw0r66Bn3GOKoA2nxuxXCFp9lswhvPjnFwSWqbsvk+qYSy8wEZ+ZMK+DRnTeg6
-	b2IkLU08UYDICejOZ1N6dI6REhQuPdftKBPe/T4770cKSGO12VBAKIYwlOOIc8JpETCgsJZw+8Z
-	kR7ycYX7HXg2M5eHQBi+HXBlSDGVuna3/YXbAxOFkQ0ioZZqKmt78RWI2BVlzq2HmvNw35RczMv
-	RSScUnrNrWwNcmbz0SnNLmqO46iKBkZnnc5KPHr/y7VssNB53YsKoVBU0t7YtH5CD2gEDxeW/zG
-	4tLarsLJi8Mk5SWsFVnJSCuh8cd1Z0zxBjR7Y1eKPbdGQrhlpbzRNX4buxDOooD+EAtQlwdIqqY
-	2xB5ztRocBPw8yTe5/JDvYNqV6VzSd3xMMtTG5cn2xIE6Y1kjGkeR1l9zZMFPDdpU2MXMqbebXp
-	zucIE6D3lk4j1LNgxPoL48XZMMB0dXphFLTZjCrft5FXzm4EjWCMAMJYLjRGH/qRK6Xg3S2q18/
-	8XuAA==
-X-Received: by 2002:a05:600c:529b:b0:483:348a:d3f3 with SMTP id 5b1f17b1804b1-483a95dde23mr282372745e9.18.1772014909124;
-        Wed, 25 Feb 2026 02:21:49 -0800 (PST)
-Received: from Tunnel ([81.6.34.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd733706sm59127215e9.13.2026.02.25.02.21.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Feb 2026 02:21:48 -0800 (PST)
-Date: Wed, 25 Feb 2026 11:21:46 +0100
-From: Paul Chaignon <paul.chaignon@gmail.com>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Harishankar Vishwanathan <harishankar.vishwanathan@gmail.com>,
-	Srinivas Narayana <srinivas.narayana@rutgers.edu>,
-	Santosh Nagarakatte <santosh.nagarakatte@rutgers.edu>
-Subject: Re: [PATCH v2 bpf 3/4] selftests/bpf: Test refinement of
- single-value tnum
-Message-ID: <aZ7NOlhsG5RZIhIl@Tunnel>
-References: <cover.1771594636.git.paul.chaignon@gmail.com>
- <1bd78db44bef27d9d7fb549ed3eb8811ee2a5e5e.1771594636.git.paul.chaignon@gmail.com>
- <c0ed78441523309a84ac93e962d73f202337fbb4.camel@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i+/JSkBQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D2DC116D0;
+	Wed, 25 Feb 2026 10:22:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772014970;
+	bh=gdrtsR2FeVso8a4uVhevoFIWVVb/zq+AI6iRvYROt+k=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=i+/JSkBQbsl7LRQglWfnqh6v0ORD/7UuQX401tJ9A9RvWmyeJzKPUD2t4OQ408Jpi
+	 EtVubx4Qtcs5jlGCMrEleHJtvprw/yelWy9hfBAyK4gpcKuKasIRmbNk66+kq/d+Hz
+	 WbezYtqNQFJhMjJaZoHDVCvnouNnaR/hJHq69day/L1INhBGzXRTLs3H6IqqHnkaQx
+	 lBmciBqVPhHg0G6eG9SuwAl5vvL8MQTiKatxKXHsF1dBzisztPQqf/rW6jT111kayz
+	 nXKgbwPqV9s28RIGT3BiY2jN8Rulnwq9EmytTyjaRfx8/EF9QuTCBI36oopjGG3XyP
+	 2+0m5NyMpsDng==
+Content-Type: multipart/mixed; boundary="===============6960624909808448222=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0ed78441523309a84ac93e962d73f202337fbb4.camel@gmail.com>
+Message-Id: <d09a2c3a207cf3f14215fc078df83b1904f7911a6b3978940a84554afaf965e9@mail.kernel.org>
+In-Reply-To: <20260225092651.94689-2-pilgrimtao@gmail.com>
+References: <20260225092651.94689-2-pilgrimtao@gmail.com>
+Subject: Re: [PATCH v2 1/6] bpf: Introduce the bpf_list_del kfunc.
+From: bot+bpf-ci@kernel.org
+To: pilgrimtao@gmail.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,leon.hwang@linux.dev,linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Wed, 25 Feb 2026 10:22:48 +0000 (UTC)
 
-On Fri, Feb 20, 2026 at 04:20:55PM -0800, Eduard Zingerman wrote:
-> On Fri, 2026-02-20 at 14:57 +0100, Paul Chaignon wrote:
-> > This patch introduces selftests to cover the new bounds refinement
-> > logic introduced in the previous patch. Without the previous patch,
-> > the first two tests fail because of the invariant violation they
-> > trigger. The last test fails because the R10 access is not detected as
-> > dead code. In addition, all tests fail because of R0 having a
-> > non-constant value in the verifier logs.
-> >
-> > Signed-off-by: Paul Chaignon <paul.chaignon@gmail.com>
-> > ---
-> 
-> Hi Paul,
+--===============6960624909808448222==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Hi Eduard,
+> diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> --- a/kernel/bpf/helpers.c
+> +++ b/kernel/bpf/helpers.c
 
-Sorry for the late answer, I've been travelling.
+[ ... ]
 
-> 
-> I have a few nitpicks, sorry for not commenting about it in v1.
+> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_node *node)
+> +{
+> +	struct bpf_list_node_kern *knode = (struct bpf_list_node_kern *)node;
+> +
+> +	if (unlikely(!knode))
+> +		return NULL;
+> +
+> +	if (WARN_ON_ONCE(!READ_ONCE(knode->owner)))
+> +		return NULL;
+> +
+> +	list_del_init(&knode->list_head);
+> +	WRITE_ONCE(knode->owner, NULL);
+> +
+> +	return node;
+> +}
 
-No worries. The AI bot also found a new small thing :')
+Unlike bpf_list_pop_front/bpf_list_pop_back which take a
+bpf_list_head argument, bpf_list_del takes only a bpf_list_node.
+The list_head argument is what triggers the verifier's lock check
+in __process_kf_arg_ptr_to_graph_root() via
+check_reg_allocation_locked().
 
-I noticed you haven't acked the first patch. I think it's a bit thougher
-to follow, so is there anything we could do to ease review?
+Since bpf_list_del has no list_head argument, the verifier path
+goes through __process_kf_arg_ptr_to_graph_node() which has no
+lock check. Can a BPF program call bpf_list_del without holding
+the bpf_spin_lock?
 
-> 
-> >  .../selftests/bpf/progs/verifier_bounds.c     | 91 +++++++++++++++++++
-> >  1 file changed, 91 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> > index 560531404bce..41dd249faadd 100644
-> > --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> > +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> > @@ -1863,4 +1863,95 @@ l1_%=:	r0 = 1;				\
-> >  	: __clobber_all);
-> >  }
-> >
-> > +/* This test covers the bounds deduction when the u64 range and the tnum
-> > + * overlap only at umax. After instruction 3, the ranges look as follows:
-> > + *
-> > + * 0    umin=0xe01     umax=0xf00                              U64_MAX
-> > + * |    [xxxxxxxxxxxxxx]                                       |
-> > + * |----------------------------|------------------------------|
-> > + * |   x               x                                       | tnum values
-> > + *
-> > + * The verifier can therefore deduce that the R0=0xf00=3840.
-> > + */
-> > +SEC("socket")
-> > +__description("bounds refinement with single-value tnum on umax")
-> > +__msg("3: (15) if r0 == 0xe00 {{.*}} R0=3840")
-> > +__success __log_level(2)
-> > +__flag(BPF_F_TEST_REG_INVARIANTS)
-> > +__naked void bounds_refinement_tnum_umax(void *ctx)
-> > +{
-> > +	asm volatile("			\
-> > +	call %[bpf_get_prandom_u32];	\
-> > +	r0 |= 0xe00;			\
-> > +	r0 &= 0xf00;			\
-> > +	if r0 == 0xe00 goto +2;		\
-> > +	if r0 == 0xf00 goto +1;		\
-> > +	r0 = 0;				\
-> 
-> Nit: make this `r10 = 0;`, just like in the last test?
->      (and in the next test).
-> 
-> Also, the test works the same if I replace 0xe00 -> 0xe, 0xf00 -> 0xf.
-> Maybe pick the smaller constants to ease the readability?
+Consider the following sequence:
 
-If we switch to 0xe and 0xf, the test won't validate the changes
-anymore: it will pass regardless of the second patch. That's because
-the range would only contain two values. We can however change it to
-0xe0 and 0xf0.
+    bpf_spin_lock(&obj->lock);
+    ref = bpf_list_front(&obj->head);
+    owned = bpf_refcount_acquire(ref);
+    bpf_spin_unlock(&obj->lock);
+    /* owned is PTR_TO_BTF_ID | MEM_ALLOC, still valid */
+    bpf_list_del(&owned->node);  /* no lock held */
 
-[...]
+bpf_refcount_acquire returns an owning reference that survives
+lock release. The verifier allows passing the node field of this
+owning reference to bpf_list_del without any lock enforcement.
 
-> Also, I think a few more tests are necessary, there are three cases:
-> 
->          if (umin_in_tnum && tnum_next > reg->umax_value) {  // A
-> 	 	...
->          } else if (!umin_in_tnum && tnum_next == tmax) {    // B
-> 	 	...
->          } else if (!umin_in_tnum && tnum_next <= reg->umax_value && // C
-> 	 	...
->          }
-> 
-> If I remove 'umin_in_tnum &&' from A no tests fail.
+If another CPU concurrently operates on the same list under the
+lock, the unprotected list_del_init here would race with those
+operations and could corrupt the list.
 
-That would be expected. As you pointed out in the v1, this part of the
-condition is not strictly necessary because it should be implied by the
-second part. We ended up adding it just for readability.
+For reference, bpf_rbtree_remove avoids this by taking both
+root and node arguments, where the root triggers the lock check:
 
-> If I remove '!umin_in_tnum &&' from B or C test cases
-> 'verifier_bounds/verifier_bounds/bounds check based on reg_off + var_off + insn_off. test{1,2}' fail,
-> but these seem unrelated.
-> Maybe craft a few test cases covering these conditions?
+kernel/bpf/verifier.c:__process_kf_arg_ptr_to_graph_root() {
+    ...
+    if (check_reg_allocation_locked(env, reg)) {
+        verbose(env, "bpf_spin_lock at off=%d must be held ...\n",
+            rec->spin_lock_off, head_type_name);
+        return -EINVAL;
+    }
+    ...
+}
 
-Ack. I'll include the two cases I mentioned when discussing this in the
-v1.
+Would it make sense to add a similar lock check in
+__process_kf_arg_ptr_to_graph_node() for kfuncs that only
+take a node argument?
 
-Thanks for the review!
+[ ... ]
+
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -13089,6 +13093,9 @@ __process_kf_arg_ptr_to_graph_node(struct bpf_verifier_env *env,
+>  		return -EINVAL;
+>  	}
+>
+> +	if (!*node_field)
+> +		*node_field = field;
+> +
+>  	field = *node_field;
+>
+>  	et = btf_type_by_id(field->graph_root.btf, field->graph_root.value_btf_id);
+
+This is where the node_field is set for bpf_list_del. For push
+operations, *node_field was already set by the list_head argument
+processing in __process_kf_arg_ptr_to_graph_root (which includes
+the lock check). For bpf_list_del, *node_field starts as NULL and
+is set here from the node's own field, bypassing the root path
+entirely and with it the lock enforcement.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22391130139
+
+AI-authorship-score: medium
+AI-authorship-explanation: Formulaic commit message style and brute-force linear scan suggest possible AI generation, but coherent cross-file BPF verifier integration shows domain understanding.
+issues-found: 1
+issue-severity-score: high
+issue-severity-explanation: Missing bpf_spin_lock enforcement in the verifier for bpf_list_del allows concurrent unprotected list_del_init, which can corrupt the linked list and crash the kernel.
+
+--===============6960624909808448222==--
