@@ -1,144 +1,115 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC09311587;
-	Wed, 25 Feb 2026 10:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B55A7311587;
+	Wed, 25 Feb 2026 10:22:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772014971; cv=none; b=KAYq4YhrCdDkwecTn6lwiIvBbZuLbumm5ZN+ZHNdV6NZcADgrSUaGFkhKzCd5h8UeCLMNJHM0ydb68tu3WNVpKdOYQ/O26PZn7kNiCDxQ/kUG83j8dVlKZwCLbJihnJMnlHKnydVqpjRTRkbilhLCFl7LqdeUAw7tKlCmVvy/Jg=
+	t=1772014974; cv=none; b=oUichioal0sfFne6QVJwvBLOQ77PMmbADDrao6i3B7tZG8a7BEOoKnJQPhzEXrHdbwaicaID3RnEsTF20XT0389HUI4PM3OrTiIeDEnl62iBeH6sWZGo88fARLGjYvMUIrovEyE9BuE2vTyD84DoIRCdwZdUoPryJ0X5PhkK2Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772014971; c=relaxed/simple;
-	bh=gdrtsR2FeVso8a4uVhevoFIWVVb/zq+AI6iRvYROt+k=;
+	s=arc-20240116; t=1772014974; c=relaxed/simple;
+	bh=jgGKUSz+XveMGfQVqie6OFOhJ89K3azC6BD+pjBLiXg=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=MBSDBihiPsn63lBTKIiLmG78Y4pZ8mbkDpmR5Yt+Htvra57v5jQkwc1CD47RSJP2m1UYKJAivNevSLheoki8H4wPOqImrdGQiLLAbmDd3VmHenqdpNNoOXj7SxfFPdbXJ/n9xI/Ii4b5Gcpg8+dWS8LTkgYddaBa9iXFk70qvYc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i+/JSkBQ; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=qJAF19tPwXZ8x1aA5k3/NqX85p60/4Wgxw5dQ80S55t2N2pLSdQsXQTjrwfa1r+UsyWlkI8jbnQVibBcnkOfjjMPH79+5YkmRXbp7zYSL0zUAh8137Z407y4legqUWE1Th6U76wMjG2R9AY9/j5S/WnEFbi7Jheus0Anqj1SqNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ufz2Bixx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i+/JSkBQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D2DC116D0;
-	Wed, 25 Feb 2026 10:22:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ufz2Bixx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F584C19422;
+	Wed, 25 Feb 2026 10:22:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772014970;
-	bh=gdrtsR2FeVso8a4uVhevoFIWVVb/zq+AI6iRvYROt+k=;
+	s=k20201202; t=1772014974;
+	bh=jgGKUSz+XveMGfQVqie6OFOhJ89K3azC6BD+pjBLiXg=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=i+/JSkBQbsl7LRQglWfnqh6v0ORD/7UuQX401tJ9A9RvWmyeJzKPUD2t4OQ408Jpi
-	 EtVubx4Qtcs5jlGCMrEleHJtvprw/yelWy9hfBAyK4gpcKuKasIRmbNk66+kq/d+Hz
-	 WbezYtqNQFJhMjJaZoHDVCvnouNnaR/hJHq69day/L1INhBGzXRTLs3H6IqqHnkaQx
-	 lBmciBqVPhHg0G6eG9SuwAl5vvL8MQTiKatxKXHsF1dBzisztPQqf/rW6jT111kayz
-	 nXKgbwPqV9s28RIGT3BiY2jN8Rulnwq9EmytTyjaRfx8/EF9QuTCBI36oopjGG3XyP
-	 2+0m5NyMpsDng==
-Content-Type: multipart/mixed; boundary="===============6960624909808448222=="
+	b=Ufz2BixxHQ8oYF5MKEe4EFzACo3vZx0jrjsz6uwqg7SKb2g01g9DO0SRuihod/iE+
+	 H57r3CRMnyRI4gLJoy7UFl1+LqR6brPLlx1EUTU8l7HP+AOYkGVq/L2RAyCNbseFT9
+	 /rnqf+4439UyBVsy1I28c0dURYV/0zgpp8/7Pg1rlrFQMBO8Q31ioOjVgW5FoH36sP
+	 fw0m19cDM8M7CeNLQ4TfJNAydMl8kW3ru9lhevdHWftT/D/erssHs/4JJAo8+CdCU7
+	 kOxQUu7dQfNa9aKBsdNzIsYbIsjbhxKhf8ggVLANus5b4EfLyUS6YqbilG7744Jgfh
+	 RLHAk1KcMGoWg==
+Content-Type: multipart/mixed; boundary="===============7422068697806635002=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d09a2c3a207cf3f14215fc078df83b1904f7911a6b3978940a84554afaf965e9@mail.kernel.org>
-In-Reply-To: <20260225092651.94689-2-pilgrimtao@gmail.com>
-References: <20260225092651.94689-2-pilgrimtao@gmail.com>
-Subject: Re: [PATCH v2 1/6] bpf: Introduce the bpf_list_del kfunc.
+Message-Id: <3168bba91f4e61774032a2227da0d9c9b7042f70f49fdbdd79ad7e2cf62d2c85@mail.kernel.org>
+In-Reply-To: <20260225092651.94689-4-pilgrimtao@gmail.com>
+References: <20260225092651.94689-4-pilgrimtao@gmail.com>
+Subject: Re: [PATCH v2 3/6] bpf: add bpf_list_add_impl to insert node after a given list node
 From: bot+bpf-ci@kernel.org
 To: pilgrimtao@gmail.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,leon.hwang@linux.dev,linux-kselftest@vger.kernel.org
 Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 25 Feb 2026 10:22:48 +0000 (UTC)
+Date: Wed, 25 Feb 2026 10:22:52 +0000 (UTC)
 
---===============6960624909808448222==
+--===============7422068697806635002==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
 > diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+> index 093600363564..0d7581786a14 100644
 > --- a/kernel/bpf/helpers.c
 > +++ b/kernel/bpf/helpers.c
 
 [ ... ]
 
-> +__bpf_kfunc struct bpf_list_node *bpf_list_del(struct bpf_list_node *node)
-> +{
-> +	struct bpf_list_node_kern *knode = (struct bpf_list_node_kern *)node;
-> +
-> +	if (unlikely(!knode))
-> +		return NULL;
-> +
-> +	if (WARN_ON_ONCE(!READ_ONCE(knode->owner)))
-> +		return NULL;
-> +
-> +	list_del_init(&knode->list_head);
-> +	WRITE_ONCE(knode->owner, NULL);
-> +
-> +	return node;
-> +}
+> +__bpf_kfunc int bpf_list_add_impl(struct bpf_list_node *prev,
+> +				  struct bpf_list_node *node,
+> +				  void *meta__ign, u64 off)
 
-Unlike bpf_list_pop_front/bpf_list_pop_back which take a
-bpf_list_head argument, bpf_list_del takes only a bpf_list_node.
-The list_head argument is what triggers the verifier's lock check
-in __process_kf_arg_ptr_to_graph_root() via
-check_reg_allocation_locked().
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 7a54cd749aec..9558b7020b89 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
 
-Since bpf_list_del has no list_head argument, the verifier path
-goes through __process_kf_arg_ptr_to_graph_node() which has no
-lock check. Can a BPF program call bpf_list_del without holding
-the bpf_spin_lock?
+[ ... ]
 
-Consider the following sequence:
+> @@ -14124,6 +14128,7 @@ static int check_kfunc_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+>
+>  	if (meta.func_id == special_kfunc_list[KF_bpf_list_push_front_impl] ||
+>  	    meta.func_id == special_kfunc_list[KF_bpf_list_push_back_impl] ||
+> +	    meta.func_id == special_kfunc_list[KF_bpf_list_add_impl] ||
+>  	    meta.func_id == special_kfunc_list[KF_bpf_rbtree_add_impl]) {
+>  		release_ref_obj_id = regs[BPF_REG_2].ref_obj_id;
+>  		insn_aux->insert_off = regs[BPF_REG_2].off;
 
-    bpf_spin_lock(&obj->lock);
-    ref = bpf_list_front(&obj->head);
-    owned = bpf_refcount_acquire(ref);
-    bpf_spin_unlock(&obj->lock);
-    /* owned is PTR_TO_BTF_ID | MEM_ALLOC, still valid */
-    bpf_list_del(&owned->node);  /* no lock held */
+Is the verifier enforcing that the bpf_spin_lock is held when
+bpf_list_add_impl is called?
 
-bpf_refcount_acquire returns an owning reference that survives
-lock release. The verifier allows passing the node field of this
-owning reference to bpf_list_del without any lock enforcement.
-
-If another CPU concurrently operates on the same list under the
-lock, the unprotected list_del_init here would race with those
-operations and could corrupt the list.
-
-For reference, bpf_rbtree_remove avoids this by taking both
-root and node arguments, where the root triggers the lock check:
+The existing bpf_list_push_front_impl and bpf_list_push_back_impl get
+lock enforcement because they take a bpf_list_head* as their first
+argument. That argument type triggers __process_kf_arg_ptr_to_graph_root
+in the verifier, which calls check_reg_allocation_locked():
 
 kernel/bpf/verifier.c:__process_kf_arg_ptr_to_graph_root() {
     ...
     if (check_reg_allocation_locked(env, reg)) {
-        verbose(env, "bpf_spin_lock at off=%d must be held ...\n",
+        verbose(env, "bpf_spin_lock at off=%d must be held for %s\n",
             rec->spin_lock_off, head_type_name);
         return -EINVAL;
     }
     ...
 }
 
-Would it make sense to add a similar lock check in
-__process_kf_arg_ptr_to_graph_node() for kfuncs that only
-take a node argument?
+bpf_list_add_impl takes two bpf_list_node* arguments and no
+bpf_list_head*. The verifier processes both arguments through
+__process_kf_arg_ptr_to_graph_node, which does not call
+check_reg_allocation_locked. This means a BPF program could call
+bpf_list_add_impl without holding the spin lock.
 
-[ ... ]
+With bpf_refcount, a program can hold an owning reference to an
+in-list node that survives lock release:
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
+    bpf_spin_lock(&lock);
+    bpf_list_push_front(&head, &node->node);
+    extra = bpf_refcount_acquire(node);
+    bpf_spin_unlock(&lock);
+    /* extra is still an owning ref, call without lock */
+    bpf_list_add_impl(&extra->node, &new_node->node, ...);
 
-[ ... ]
-
-> @@ -13089,6 +13093,9 @@ __process_kf_arg_ptr_to_graph_node(struct bpf_verifier_env *env,
->  		return -EINVAL;
->  	}
->
-> +	if (!*node_field)
-> +		*node_field = field;
-> +
->  	field = *node_field;
->
->  	et = btf_type_by_id(field->graph_root.btf, field->graph_root.value_btf_id);
-
-This is where the node_field is set for bpf_list_del. For push
-operations, *node_field was already set by the list_head argument
-processing in __process_kf_arg_ptr_to_graph_root (which includes
-the lock check). For bpf_list_del, *node_field starts as NULL and
-is set here from the node's own field, bypassing the root path
-entirely and with it the lock enforcement.
+This would execute list_add() without synchronization, which could
+corrupt the list.
 
 
 ---
@@ -147,10 +118,10 @@ See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
 CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22391130139
 
-AI-authorship-score: medium
-AI-authorship-explanation: Formulaic commit message style and brute-force linear scan suggest possible AI generation, but coherent cross-file BPF verifier integration shows domain understanding.
+AI-authorship-score: low
+AI-authorship-explanation: Code closely follows existing bpf_list_push_front/back patterns with natural kernel commit style and precise BPF-specific terminology.
 issues-found: 1
 issue-severity-score: high
-issue-severity-explanation: Missing bpf_spin_lock enforcement in the verifier for bpf_list_del allows concurrent unprotected list_del_init, which can corrupt the linked list and crash the kernel.
+issue-severity-explanation: Missing verifier spin lock enforcement for bpf_list_add_impl allows unsynchronized list_add() calls that can corrupt the linked list.
 
---===============6960624909808448222==--
+--===============7422068697806635002==--
