@@ -1,191 +1,108 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFBD340B6ED
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 15:18:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18F763EF0DD
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 15:31:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772119093; cv=none; b=dTAEMYYZUzihpB7paZz78Lik8Jjxcw6YQsvqTjfDy5g5ZkX0GUBFanp4Y78OUXjeqRMcdlwUikSQphrTZh12BpsRz1Kz6nrXM1mfSiO1LoAkr3F6MLXa6oWrqyHrbJVJgbBBpt1srTEQeysYAeC43Cy9zZ+eLYiAukWHIMeo+Qw=
+	t=1772119894; cv=none; b=LELqf5qvKRLRlaDppauou8BBv57dymqpyliu0ls+umLqNlcnWrnyehEo4VPTXomWRAywMaNQijWPyN5RFbwLGaRiC+dy6zHBL/jZgeTXCH1vTkJ+0Jum/DIFXI4OqhyYSFdrET6ee5UcmtXd74M/PBDDYEfT3mH6EdsdE/ulKeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772119093; c=relaxed/simple;
-	bh=UtOhj8tACoqtlw1hMQBUUKvYaf1dX1kM+5j0nTLO5r4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=a3JWHOoqx2wQi+OGN+OQ52AEyDV+VoBy2jKdeiE9Ol6ih135RLeCXzBtMXok1VXz5qVu5W9AqZoXJvo/7Ewfjztri+OT3Y35y265tsGXYTq9owz6Qqb8VWo6BIBawa9x/EV+h9AsuMBHvFW75vOzTJC6k+wDQnXiwAD+Y6zUWhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JuXU6Kbl; arc=none smtp.client-ip=209.85.128.46
+	s=arc-20240116; t=1772119894; c=relaxed/simple;
+	bh=BVB6qOyRBxMNYsiHGWpKXsOom98dxP4uy87qhLCgd08=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xi9crRc3Ys4/7Ld6lBdTa51dCu9WCGnwLzo9iN9thjXjmeK4WFKOdLv9v4KEwzvCKrR1oYk1SspRGTbAC87OdigGjwpw+YpgH715vtS+CU4e10/D5GcIIAOrHQGKRfWrVaHAXw+fxFIJ5GJapbFaAICI4gRrMV6dZWVQ5Z9eqxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ju3bCLU+; arc=none smtp.client-ip=209.85.161.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JuXU6Kbl"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48372efa020so8449495e9.2
-        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 07:18:11 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ju3bCLU+"
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-679f6ee3fb0so221528eaf.2
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 07:31:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772119090; x=1772723890; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hXMv97b9KNqAU0cNnpTqpEvgdSSxZvM5f/4DMEg70Dk=;
-        b=JuXU6Kbl6tU+d/b4+DTt1+J3xPCTEDSaGo5UBHdD+R/fWLWO9+G9Yzxn3q7owIdON/
-         uNKFykF/JfkFiAf/VJsoKH04vdwVQZAO0HlLQ60bQZPI1Wa5wHGQ0Wji7LkOOZIxnW0+
-         YEvKPJt/dZjAKPitMpvkmBxL93y+RJr6MbJv9XFa/K0usHYpphbGm4dCaO//ful6R4sg
-         GsSHHncBsSztba1jRNOUTI9DP9y0pb63uHBRhVrXCcEUuzXziT/jNaGV18wKx/EB9oiY
-         Q65VBPCjJ9G6pv+tyyvcw7QJeZ0tUGI4Nrf+YOTZ0GrKBYLtiOo3R4bftG+bN+PsEnH9
-         v53g==
+        d=gmail.com; s=20230601; t=1772119892; x=1772724692; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7zyMJZ8Es71niz9QrP8bV/oTWJNPw8YbTwYsxXMHZJQ=;
+        b=ju3bCLU+YzVnVYICJp/WV4fI3yJBB39rUW/NKiMHnJeAbaD6jmm5mw7/Pj/UGJFVrE
+         lcua978ix3xc8IclPbdRhOn//H0wib7mHsQcEZZMyGB1Omc4lvCtI8Bu8ycBWTffm+tu
+         R33cYw4fQy65MMVUT+aAd1qUwsDhg3lJaAS1B+wJRmh5qsyAW0A3Rr0GXGFYCSc7Z+Xp
+         Qp0ApXRzDGPpZalfWKB8xdPe2Y/26XlV15uRxuY7DOYucFvVdjn7xW79LxbTh8IpyfzE
+         1aM1+TDFhGFP65h2IANavyn8ku0nqnnt075A8nqhDx1vtZ3Z8DuVKUOiu9Ef8CjpM9Pt
+         qbiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772119090; x=1772723890;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1772119892; x=1772724692;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hXMv97b9KNqAU0cNnpTqpEvgdSSxZvM5f/4DMEg70Dk=;
-        b=oaMMfUFnWV4qlyCq8lPBkQc1WwBNergWStR1duTz4CYZSldfp+T9PlJ6MFCdSs03WN
-         XmYqHN9hiZ75JRsEFwQ8jfLxwuvQCt5vNjPpnxGdpedcaZXzL20V6rOG1GjOJcuVcfEp
-         ZDlUsTCe/dg40Ui/sTttgc8vmTT5s0nmR/7XdBErDlbX+oSoXo0wg7fyPa6yd4l0x9hB
-         sJ5bi38ZCubnIFdLhUbJgKg6yJy2TYvB2J+eXrSePvXW1mj2ZEiJh/tykZQUkBvTLwZ9
-         cReAy5miTD9z9RMRCaYCQetqAYluwwu/W5rG1Ig5tLtxlTOCCItxjEreNaQePqX3xeBF
-         B/rg==
-X-Forwarded-Encrypted: i=1; AJvYcCXIb8UZzWqQQgaIDyhYX9fNjfGq+rMeuPEo3DbMPsNBIwO49SkmmIS41UQ04sG4ZqWnE1A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw95bNvibEGS57/sbjgVZrJfczBAoGKXA/x3nLQm5XK6Z3ZqdC4
-	QW7Tk6LAryg/m4gf9AnMdZ9QIcMXvGVEPp38DVqsRY1s9o6+3+ytZNQK
-X-Gm-Gg: ATEYQzz8acETVZ6PAq8SRFb1b5E5rzPNcjjpqm15ci2GN7l3TZ0hCnPqsUiLWToyUuz
-	XuP184jGsOsEVheT9a79/2s9dfxj0ofn6T6u4CLjdUUZPEA0SIyDAou8ND/b6uz6vaD+YM26vCx
-	tJDe/VCps7fwNUdMeLlbJRYWPvP85bDhrG7+YXWQXMNPs12+2DIEX8MV2gaj8qckHdYgahMdWMz
-	jnzfqu77i9la+m6AzB2Ac63oGcocMoBkWyEPAVTmiLC6/T8+o16LylD3ldjB7Kl4CnrTQj7h6KA
-	GP0cw41e5PJOJZv8w4d45JD1ve3/60JlXDtoB7sAlE4cVgvwcSP4byQHdivuH+q/TXFW4Yer+gN
-	B7L4Gq+SHRbf4jiitQ5QZDSw6jmgPJyP4JBJrMz1sPkyde+cEM1KFir6N9JbTK9LxyXwDm65wH0
-	MXdDzbVYN9O42hQR4IJm8=
-X-Received: by 2002:a05:600c:628d:b0:483:7020:864 with SMTP id 5b1f17b1804b1-483c21a59aemr62238595e9.25.1772119089813;
-        Thu, 26 Feb 2026 07:18:09 -0800 (PST)
-Received: from localhost ([2620:10d:c092:500::5:5405])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd75df9fsm162765655e9.13.2026.02.26.07.18.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 07:18:09 -0800 (PST)
-From: Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>
-To: Sun Jian <sun.jian.kdev@gmail.com>, Andrii Nakryiko <andrii@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Sun Jian <sun.jian.kdev@gmail.com>
-Subject: Re: [PATCH v2 1/2] selftests/bpf: probe_user: filter by pid to
- avoid cross-test interference
-In-Reply-To: <20260226093132.437206-2-sun.jian.kdev@gmail.com>
-References: <20260226093132.437206-1-sun.jian.kdev@gmail.com>
- <20260226093132.437206-2-sun.jian.kdev@gmail.com>
-Date: Thu, 26 Feb 2026 15:18:08 +0000
-Message-ID: <87ikbjpm8f.fsf@gmail.com>
+        bh=7zyMJZ8Es71niz9QrP8bV/oTWJNPw8YbTwYsxXMHZJQ=;
+        b=v9mW8+xWQNcRY9QXRtMzb5xcwlTSu8WutybBk3FjkG4mszb/7yzQzKJMm5uOQT08Ik
+         xKD0QG5lFUVXmVNsBwWoXzStevyDkFeyxBDTICFk++yfvl1WbsWWfnFcDooNRvADZM5M
+         2MnOpJ2vgQyp/Jn/ERmAT7E20h265yO+xbtmDIl8NZRfSPbwdnkzoz1tGZCZNoQPkzWc
+         T8IG3xnWEehBeiBg5tqCsn1K+Mpd8DYBxe1nZo0cECE9TSemSsHC+WNIh/O7chjn2p+k
+         Hcw0XYirc1ZR7R0NSPWs/DiZ7z2dk2IdwLy4hOrZdxcFAId7zJc4txCwYK5SWmumGPZp
+         +vSg==
+X-Forwarded-Encrypted: i=1; AJvYcCVvFcWMVcFD601Sni0Ead8f+mpI/GH24LCRMWRWHPYHwj2eqt9Ql/u7yMt7Bmrz2WacJlI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKvof89dkm/sJgg1pbREsJB1TDXJVTmigbKCeR1leYMKt6s+Xh
+	aKgngTycVywKl332Zfk3v49T5x1hQYioKB13ddr1Fzo+6+MzuUQs+KV+
+X-Gm-Gg: ATEYQzxeCF7Q+PHivDNxZa70kCHSkmmy7otoGp6nq41uACuDYZWQPnHMrQo5EvRl4kg
+	4V/1Sv0KeVts5oVLZLh8Ab6UV3HIvFOjZ1kB2nkxa0yTpnlI/Fgb8vTANaeyuTXswCS/82zFKE7
+	Dk4ZRaRld9CYveuusTirGdvQo6ni6lPdMtaM6ZaoEXQsizdnbjoplRuI/qRIGeaGJ7ffiaYn+kQ
+	ISd1CoKr0SdIY0G7iMtihFCKOOc94GVFVWKmD73fzaEr0KsCcV5AFuxpe42d65eNtw2mADBymmC
+	JgnR+/QaQmfEHfnVM7LMcL4jJPvx0TKzZgnjyrB+3cYkcNEndHLusvK+LK2y9oGgnLJHSDOn//7
+	cGfrfYgILkOi1hMcDErrT4GPJmSpzNehmzqZG68C+OQqH95bqxS4dFArJ8ny9P3ryWqjVDgQknR
+	GuVOLstG4zS9lY9fFnm69cHUE4Ih8hvs2B2ez5NK2+lum2j2xxGhvoq/BO6/vyfZANqnTD0hhFp
+	JuLW6XensH+wEfFBA==
+X-Received: by 2002:a4a:e903:0:b0:679:dd71:db87 with SMTP id 006d021491bc7-679ef7faeb5mr2335897eaf.7.1772119891882;
+        Thu, 26 Feb 2026 07:31:31 -0800 (PST)
+Received: from ?IPV6:2601:282:1e02:1040:481e:870c:b200:7ebe? ([2601:282:1e02:1040:481e:870c:b200:7ebe])
+        by smtp.googlemail.com with ESMTPSA id 006d021491bc7-679f2be9ab7sm1672515eaf.4.2026.02.26.07.31.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Feb 2026 07:31:31 -0800 (PST)
+Message-ID: <b100157c-7486-41f5-83b1-b394b181da27@gmail.com>
+Date: Thu, 26 Feb 2026 08:31:27 -0700
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH bpf-next 6/9] bpf: fib_lookup: Honor oif in IPv6
+ output route lookups
+Content-Language: en-US
+To: bot+bpf-ci@kernel.org, idosch@nvidia.com, netdev@vger.kernel.org,
+ bpf@vger.kernel.org
+Cc: davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+ edumazet@google.com, petrm@nvidia.com, horms@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, martin.lau@linux.dev,
+ john.fastabend@gmail.com, sdf@fomichev.me, martin.lau@kernel.org,
+ eddyz87@gmail.com, yonghong.song@linux.dev, clm@meta.com,
+ ihor.solodrai@linux.dev
+References: <20260226080003.524935-7-idosch@nvidia.com>
+ <9923d7a71f5623f84db40fa20cf3fb4e8625fc5f2661c4584dfa9237c2d98bcb@mail.kernel.org>
+From: David Ahern <dsahern@gmail.com>
+In-Reply-To: <9923d7a71f5623f84db40fa20cf3fb4e8625fc5f2661c4584dfa9237c2d98bcb@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Sun Jian <sun.jian.kdev@gmail.com> writes:
+On 2/26/26 1:41 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index 0d5d5a17acb2..e92552b139b1 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>> @@ -6255,6 +6255,7 @@ static int bpf_ipv6_fib_lookup(struct net *net, struct bpf_fib_lookup *params,
+>>  	if (flags & BPF_FIB_LOOKUP_OUTPUT) {
+>>  		fl6.flowi6_iif = 1;
+>>  		oif = fl6.flowi6_oif = params->ifindex;
+>> +		strict = RT6_LOOKUP_F_IFACE;
+>>  	} else {
+> 
+> The fix itself looks correct. Since this addresses a bug that has been
+> present since the original bpf_fib_lookup helper was introduced, should
+> this carry a Fixes tag?
+> 
+> Fixes: 87f5fc7e48dd ("bpf: Provide helper to do forwarding lookups in kernel FIB table")
 
-> The test installs a kprobe on __sys_connect and checks that
-> bpf_probe_write_user() can modify the syscall argument. However, any
-> concurrent thread in any other test that calls connect() will also
-> trigger the kprobe and have its sockaddr silently overwritten, causing
-> flaky failures in unrelated tests.
->
-> Constrain the hook to the current test process by filtering on a PID
-> stored as a global variable in .bss. Initialize the .bss value from
-> user space before bpf_object__load() using bpf_map__set_initial_value(),
-> and validate the bss map value size to catch layout mismatches.
->
-> No new map is introduced and the test keeps the existing non-skeleton
-> flow.
->
-> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
-Acked-by: Mykyta Yatsenko <yatsenko@meta.com>
-> ---
->  .../selftests/bpf/prog_tests/probe_user.c     | 27 ++++++++++++++++++-
->  .../selftests/bpf/progs/test_probe_user.c     | 13 +++++++--
->  2 files changed, 37 insertions(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/probe_user.c b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-> index 8721671321de..280dcdb5ddef 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/probe_user.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-> @@ -20,6 +20,11 @@ void serial_test_probe_user(void)
->  	struct bpf_program *kprobe_progs[prog_count];
->  	struct bpf_object *obj;
->  	static const int zero = 0;
-> +	struct test_pro_bss {
-> +		struct sockaddr_in old;
-> +		__u32 test_pid;
-> +	};
-> +	struct test_pro_bss results = {};
->  	size_t i;
->  
->  	obj = bpf_object__open_file(obj_file, &opts);
-> @@ -34,6 +39,24 @@ void serial_test_probe_user(void)
->  			goto cleanup;
->  	}
->  
-> +	{
-> +		struct bpf_map *bss_map;
-> +		struct test_pro_bss bss_init = {};
-> +
-> +		bss_init.test_pid = getpid();
-> +		bss_map = bpf_object__find_map_by_name(obj, "test_pro.bss");
-> +		if (CHECK(!bss_map, "find_bss_map", "no bss map\n"))
-> +			goto cleanup;
-> +		if (CHECK(bpf_map__value_size(bss_map) != sizeof(bss_init),
-> +			  "bss_size", "bss value_size %u != %zu\n",
-> +			  bpf_map__value_size(bss_map), sizeof(bss_init)))
-> +			goto cleanup;
-> +		err = bpf_map__set_initial_value(bss_map, &bss_init,
-> +						 sizeof(bss_init));
-> +		if (CHECK(err, "set_bss_init", "err %d\n", err))
-> +			goto cleanup;
-> +	}
-> +
->  	err = bpf_object__load(obj);
->  	if (CHECK(err, "obj_load", "err %d\n", err))
->  		goto cleanup;
-> @@ -62,11 +85,13 @@ void serial_test_probe_user(void)
->  	connect(sock_fd, &curr, sizeof(curr));
->  	close(sock_fd);
->  
-> -	err = bpf_map_lookup_elem(results_map_fd, &zero, &tmp);
-> +	err = bpf_map_lookup_elem(results_map_fd, &zero, &results);
->  	if (CHECK(err, "get_kprobe_res",
->  		  "failed to get kprobe res: %d\n", err))
->  		goto cleanup;
->  
-> +	memcpy(&tmp, &results.old, sizeof(tmp));
-> +
->  	in = (struct sockaddr_in *)&tmp;
->  	if (CHECK(memcmp(&tmp, &orig, sizeof(orig)), "check_kprobe_res",
->  		  "wrong kprobe res from probe read: %s:%u\n",
-> diff --git a/tools/testing/selftests/bpf/progs/test_probe_user.c b/tools/testing/selftests/bpf/progs/test_probe_user.c
-> index a8e501af9604..4bc86c7654b1 100644
-> --- a/tools/testing/selftests/bpf/progs/test_probe_user.c
-> +++ b/tools/testing/selftests/bpf/progs/test_probe_user.c
-> @@ -5,13 +5,22 @@
->  #include <bpf/bpf_core_read.h>
->  #include "bpf_misc.h"
->  
-> -static struct sockaddr_in old;
-> +struct test_pro_bss {
-> +	struct sockaddr_in old;
-> +	__u32 test_pid;
-> +};
-> +
-> +struct test_pro_bss bss;
->  
->  static int handle_sys_connect_common(struct sockaddr_in *uservaddr)
->  {
->  	struct sockaddr_in new;
-> +	__u32 cur = bpf_get_current_pid_tgid() >> 32;
-> +
-> +	if (bss.test_pid && cur != bss.test_pid)
-> +		return 0;
->  
-> -	bpf_probe_read_user(&old, sizeof(old), uservaddr);
-> +	bpf_probe_read_user(&bss.old, sizeof(bss.old), uservaddr);
->  	__builtin_memset(&new, 0xab, sizeof(new));
->  	bpf_probe_write_user(uservaddr, &new, sizeof(new));
->  
-> -- 
-> 2.43.0
++1. I would consider this a bug fix.
