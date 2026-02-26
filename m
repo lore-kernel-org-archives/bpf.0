@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ED3344CAE9
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 16:15:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977C130AD00
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 16:15:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772122548; cv=none; b=a8xM0x25UuoJQ9JvtJq7KxAvpiHr8iRoDvOrK3aFGi3Tf4bCG1/7Z7Fccyz1qobPXQxEgbUjEc0tjs9yfQS4Uyuhoeb/J7aeP1fHFrYuIN/TtqjTlQ/o/Ej8fU8kVkg15w0S4c8euvOOCZAC5DSlAE3WHftI3Gjb0XokR859HaA=
+	t=1772122552; cv=none; b=SAspYW37+DcqDVoRzJN3iYj32iWAg5QKjuXQQO7hGiTK7dc0bZx1b9OZCpviztNxk6ZEfdaMcFF2o23ZAMe6UppzZ6rBnHzKqMtxxgoeIMkcuOZsXf3NZNlUHWrIjf1F4U7dZtshN3h1dewyp9+uhGckJEk5Vx4bTGPix6lkOOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772122548; c=relaxed/simple;
-	bh=opgV5IOMQS++JhFgCfNlfE0WpYn6znZgtya0Dk/E3fU=;
+	s=arc-20240116; t=1772122552; c=relaxed/simple;
+	bh=o62ydrWwnxvqlzM4+zR6Zmqv+yD0fgta4L0URva2D9Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gh2ZLT+Ft/JHJCExEEAgdaKqLkUg68hUgwxY1lmDwLLRTK+zXnXx+kT1Mk23RTn0ueRSqhH0lavEf5W1uv7IjN76N2JPwIuRnJRhXhPV6Np93JYc7iV61+Zpr1zgB4iRDgYllFtRObr9o9srC2BcK1zVaXXgN7HW+4JWWYuZTAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zt+y22BQ; arc=none smtp.client-ip=10.30.226.201
+	 MIME-Version; b=HGjZugZnLzKf8Iu3voIy5eG962Tq4qr0cs41fgzATmsNcd1Oa0X+OUbeqTA5rG4r1amRZC97BU5jRO8Uo/pGkvQigEnBxPiwCb+tWiAqn1AClcGLKy2MGVmXiq42bcQRzxo+mrWHIMpdmlraHOXLwKHbr8rZ/P64+gOLxjqutLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Du3TbVfx; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zt+y22BQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE12C116C6;
-	Thu, 26 Feb 2026 16:15:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Du3TbVfx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F243CC116C6;
+	Thu, 26 Feb 2026 16:15:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772122547;
-	bh=opgV5IOMQS++JhFgCfNlfE0WpYn6znZgtya0Dk/E3fU=;
+	s=k20201202; t=1772122552;
+	bh=o62ydrWwnxvqlzM4+zR6Zmqv+yD0fgta4L0URva2D9Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Zt+y22BQoCKfzbbT7xCDpsjz2RHmQGf8oExn1+pBy1imyKKO11OAa6CTdoOZGddDP
-	 2WyqRVX4zUz3OMXxPosXmvbNXFS8Cq2C3LG1aTubyvOex8BqywLAWwwucFdXILeKfI
-	 leWD/8v7CwKUanereUn1tgV3LT1RYAG/c4rX9E7Tvvl3tChfMcUDjTg5fbF+rijrIb
-	 x6LppvIbz0zTzF+WkTdpdX/0OYNNECJ+0pzJMrC0g5egSgU5LMomqeLl5TGBr/jqrn
-	 xyihTcJUMc/nmt+Vx3wb1NjOcguzgDdndxfjO+zRH46iajikaFDo6VH+EOrbBcGIAu
-	 SHVD8zi0DYHZA==
+	b=Du3TbVfxQYGcSVfAB6Vd3RV6s7NqDVa3YuBsHeuvc3R7hVmyQm0Bqs3B6+YUiCL0X
+	 k5JKDDLv/ddsm4EvSj8N7vN3KEti+Q8T56edmfD2QKWD9uHnsVQ/4VJ4T2pp0D7sWx
+	 4XAhA6766RNJRmOOzZawx5GMFyh0S2crQ9CzAf9pJmurvCDFlSirbqJv1lCs7DiXWD
+	 jvqQtn/wX0AW+U/XaCMq5alHGZsUtNYPyMFWWiEcprIa5pViSNdMDL8EKmvMxvHmXS
+	 rOiYcfghmI/T9a90ApsyAYoVITeo4Z6sJdIMOGfieWRm5tOHJb94KkztSNUJ1JgLsV
+	 NfoTxCGXZbjJw==
 From: Puranjay Mohan <puranjay@kernel.org>
 To: bpf@vger.kernel.org
 Cc: Puranjay Mohan <puranjay@kernel.org>,
@@ -38,9 +38,9 @@ Cc: Puranjay Mohan <puranjay@kernel.org>,
 	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
 	Mykyta Yatsenko <mykyta.yatsenko5@gmail.com>,
 	kernel-team@meta.com
-Subject: [PATCH bpf v5 7/8] bpf: Add split iteration support to task_vma iterator
-Date: Thu, 26 Feb 2026 08:14:56 -0800
-Message-ID: <20260226161500.775715-8-puranjay@kernel.org>
+Subject: [PATCH bpf v5 8/8] selftests/bpf: Add tests for split task_vma iterator
+Date: Thu, 26 Feb 2026 08:14:57 -0800
+Message-ID: <20260226161500.775715-9-puranjay@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260226161500.775715-1-puranjay@kernel.org>
 References: <20260226161500.775715-1-puranjay@kernel.org>
@@ -52,68 +52,307 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Wire up the task_vma iterator to use the KF_ACQUIRE/KF_RELEASE and
-KF_FORBID_FAULT infrastructure from the previous commits.
+Add runtime and verifier tests for the split task_vma iteration model.
 
-Annotate bpf_iter_task_vma_next with KF_ACQUIRE | KF_FORBID_FAULT so
-each returned VMA pointer becomes a tracked reference that prevents
-faulting. Add bpf_iter_task_vma_release(it__iter) with KF_RELEASE that
-releases the mmap read lock, drops the acquired reference, and
-re-enables sleeping. The next call to _next will re-acquire the lock via
-mmap_read_trylock().
+The runtime tests are:
+- iter_task_vma_release_and_copy: iterates VMAs, saves vm_start,
+  releases mmap_lock via bpf_iter_task_vma_release(), then calls
+  bpf_copy_from_user() on the saved address.
+- iter_task_vma_nested: two nested task_vma iterators on the same task
+  verify that mmap_read_trylock() succeeds for the second reader on
+  the same mm.
 
-This enables a split iteration pattern:
-
-  bpf_for_each(task_vma, vma, task, 0) {
-      u64 start = vma->vm_start;
-      /* vma access allowed, sleeping forbidden */
-      bpf_iter_task_vma_release(&___it);
-      /* vma access forbidden, sleeping allowed */
-      bpf_copy_from_user(&buf, sizeof(buf), (void *)start);
-  }
+The verifier tests cover:
+- nosleep_iter_release_then_sleep: release then sleep is accepted
+- nosleep_iter_sleep_without_release: sleep without release is rejected
+  with "in nofault region"
+- nosleep_iter_vma_access_after_release: VMA access after release is
+  rejected with "invalid mem access 'scalar'"
+- nosleep_iter_double_release: double release is rejected
+- nosleep_iter_release_without_acquire: release without prior _next is
+  rejected
+- nosleep_iter_nested_release_inner: releasing inner iterator does not
+  allow sleeping when outer still holds a nofault reference
 
 Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
 ---
- kernel/bpf/helpers.c   |  3 ++-
- kernel/bpf/task_iter.c | 10 ++++++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+ .../testing/selftests/bpf/bpf_experimental.h  |   1 +
+ .../testing/selftests/bpf/prog_tests/iters.c  |  24 ++++
+ .../selftests/bpf/progs/iters_task_vma.c      |  71 ++++++++++
+ .../bpf/progs/iters_task_vma_nosleep.c        | 125 ++++++++++++++++++
+ 4 files changed, 221 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/iters_task_vma_nosleep.c
 
-diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
-index 6eb6c82ed2ee..e4d0a3a62428 100644
---- a/kernel/bpf/helpers.c
-+++ b/kernel/bpf/helpers.c
-@@ -4605,8 +4605,9 @@ BTF_ID_FLAGS(func, bpf_iter_num_new, KF_ITER_NEW)
- BTF_ID_FLAGS(func, bpf_iter_num_next, KF_ITER_NEXT | KF_RET_NULL)
- BTF_ID_FLAGS(func, bpf_iter_num_destroy, KF_ITER_DESTROY)
- BTF_ID_FLAGS(func, bpf_iter_task_vma_new, KF_ITER_NEW | KF_RCU)
--BTF_ID_FLAGS(func, bpf_iter_task_vma_next, KF_ITER_NEXT | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_iter_task_vma_next, KF_ITER_NEXT | KF_RET_NULL | KF_ACQUIRE | KF_FORBID_FAULT)
- BTF_ID_FLAGS(func, bpf_iter_task_vma_destroy, KF_ITER_DESTROY)
-+BTF_ID_FLAGS(func, bpf_iter_task_vma_release, KF_RELEASE)
- #ifdef CONFIG_CGROUPS
- BTF_ID_FLAGS(func, bpf_iter_css_task_new, KF_ITER_NEW)
- BTF_ID_FLAGS(func, bpf_iter_css_task_next, KF_ITER_NEXT | KF_RET_NULL)
-diff --git a/kernel/bpf/task_iter.c b/kernel/bpf/task_iter.c
-index a85115c191e4..55b264d634db 100644
---- a/kernel/bpf/task_iter.c
-+++ b/kernel/bpf/task_iter.c
-@@ -879,6 +879,16 @@ __bpf_kfunc struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_iter_task_v
- 	return vma;
+diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testing/selftests/bpf/bpf_experimental.h
+index 4b7210c318dd..c845553bb932 100644
+--- a/tools/testing/selftests/bpf/bpf_experimental.h
++++ b/tools/testing/selftests/bpf/bpf_experimental.h
+@@ -165,6 +165,7 @@ extern int bpf_iter_task_vma_new(struct bpf_iter_task_vma *it,
+ 				 struct task_struct *task,
+ 				 __u64 addr) __ksym;
+ extern struct vm_area_struct *bpf_iter_task_vma_next(struct bpf_iter_task_vma *it) __ksym;
++extern void bpf_iter_task_vma_release(struct bpf_iter_task_vma *it) __ksym;
+ extern void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it) __ksym;
+ 
+ /* Convenience macro to wrap over bpf_obj_drop_impl */
+diff --git a/tools/testing/selftests/bpf/prog_tests/iters.c b/tools/testing/selftests/bpf/prog_tests/iters.c
+index a539980a2fbe..ab24871762c8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/iters.c
++++ b/tools/testing/selftests/bpf/prog_tests/iters.c
+@@ -21,6 +21,7 @@
+ #include "iters_css_task.skel.h"
+ #include "iters_css.skel.h"
+ #include "iters_task_failure.skel.h"
++#include "iters_task_vma_nosleep.skel.h"
+ 
+ static void subtest_num_iters(void)
+ {
+@@ -152,6 +153,28 @@ static void subtest_task_vma_iters(void)
+ 	if (!ASSERT_EQ(skel->bss->vmas_seen, seen, "vmas_seen_eq"))
+ 		goto cleanup;
+ 
++	/* Test release+sleepable: trigger the release_and_copy program */
++	skel->bss->release_vmas_seen = 0;
++	err = iters_task_vma__attach(skel);
++	if (!ASSERT_OK(err, "skel_reattach"))
++		goto cleanup;
++
++	getpgid(skel->bss->target_pid);
++	iters_task_vma__detach(skel);
++
++	ASSERT_GT(skel->bss->release_vmas_seen, 0, "release_vmas_seen_gt_zero");
++
++	/* Test nested iterators on same task (same mmap_lock) */
++	skel->bss->nested_vmas_seen = 0;
++	err = iters_task_vma__attach(skel);
++	if (!ASSERT_OK(err, "skel_reattach_nested"))
++		goto cleanup;
++
++	getpgid(skel->bss->target_pid);
++	iters_task_vma__detach(skel);
++
++	ASSERT_GT(skel->bss->nested_vmas_seen, 0, "nested_vmas_seen_gt_zero");
++
+ cleanup:
+ 	if (f)
+ 		fclose(f);
+@@ -322,4 +345,5 @@ void test_iters(void)
+ 	if (test__start_subtest("css"))
+ 		subtest_css_iters();
+ 	RUN_TESTS(iters_task_failure);
++	RUN_TESTS(iters_task_vma_nosleep);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/iters_task_vma.c b/tools/testing/selftests/bpf/progs/iters_task_vma.c
+index dc0c3691dcc2..baecd79d2998 100644
+--- a/tools/testing/selftests/bpf/progs/iters_task_vma.c
++++ b/tools/testing/selftests/bpf/progs/iters_task_vma.c
+@@ -40,4 +40,75 @@ int iter_task_vma_for_each(const void *ctx)
+ 	return 0;
  }
  
-+__bpf_kfunc void bpf_iter_task_vma_release(struct bpf_iter_task_vma *it__iter)
-+{
-+	struct bpf_iter_task_vma_kern *kit = (void *)it__iter;
++unsigned int release_vmas_seen = 0;
 +
-+	if (kit->data && kit->data->locked) {
-+		bpf_mmap_unlock_mm(kit->data->work, kit->data->mm);
-+		kit->data->locked = false;
++SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
++int iter_task_vma_release_and_copy(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct vm_area_struct *vma;
++	unsigned int seen = 0;
++
++	if (task->pid != target_pid)
++		return 0;
++
++	if (release_vmas_seen)
++		return 0;
++
++	bpf_for_each(task_vma, vma, task, 0) {
++		__u64 start;
++		char buf[8];
++
++		if (bpf_cmp_unlikely(seen, >=, 1000))
++			break;
++
++		/* Phase 1: mmap_lock held, read VMA data */
++		start = vma->vm_start;
++
++		/* Transition: release mmap_lock */
++		bpf_iter_task_vma_release(&___it);
++		/* VMA pointer is now invalid; sleepable helpers allowed */
++
++		/* Phase 2: mmap_lock released, sleepable call */
++		bpf_copy_from_user(&buf, sizeof(buf), (void *)start);
++
++		seen++;
 +	}
++
++	release_vmas_seen = seen;
++	return 0;
 +}
 +
- __bpf_kfunc void bpf_iter_task_vma_destroy(struct bpf_iter_task_vma *it)
- {
- 	struct bpf_iter_task_vma_kern *kit = (void *)it;
++/*
++ * Test nested task_vma iterators on the same task.  Both iterators take
++ * mmap_read_trylock() on the same mm; the rwsem should allow the second
++ * reader and the inner loop should observe at least one VMA.
++ */
++unsigned int nested_vmas_seen = 0;
++
++SEC("fentry.s/" SYS_PREFIX "sys_getpgid")
++int iter_task_vma_nested(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct vm_area_struct *vma1, *vma2;
++	unsigned int seen = 0;
++
++	if (task->pid != target_pid)
++		return 0;
++
++	if (nested_vmas_seen)
++		return 0;
++
++	bpf_for_each(task_vma, vma1, task, 0) {
++		bpf_for_each(task_vma, vma2, task, 0) {
++			seen++;
++			break;
++		}
++		break;
++	}
++
++	nested_vmas_seen = seen;
++	return 0;
++}
++
+ char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/iters_task_vma_nosleep.c b/tools/testing/selftests/bpf/progs/iters_task_vma_nosleep.c
+new file mode 100644
+index 000000000000..fc02702b233c
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/iters_task_vma_nosleep.c
+@@ -0,0 +1,125 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2026 Meta Platforms, Inc. and affiliates. */
++
++#include "vmlinux.h"
++#include "bpf_experimental.h"
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++/* Negative test: sleepable call without release should be rejected */
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__failure __msg("sleepable helper bpf_copy_from_user#{{[0-9]+}} in nofault region")
++int nosleep_iter_sleep_without_release(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct vm_area_struct *vma;
++
++	bpf_for_each(task_vma, vma, task, 0) {
++		char buf[8];
++
++		/* Attempt to call sleepable helper without releasing mmap_lock.
++		 * Verifier should reject this.
++		 */
++		bpf_copy_from_user(&buf, sizeof(buf), (void *)vma->vm_start);
++		break;
++	}
++	return 0;
++}
++
++/* Negative test: VMA access after release should be rejected */
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__failure __msg("invalid mem access 'scalar'")
++int nosleep_iter_vma_access_after_release(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct vm_area_struct *vma;
++	__u64 val = 0;
++
++	bpf_for_each(task_vma, vma, task, 0) {
++		bpf_iter_task_vma_release(&___it);
++		/* VMA pointer is now invalid. Accessing it should be rejected. */
++		val = vma->vm_start;
++		break;
++	}
++	__sink(val);
++	return 0;
++}
++
++/* Positive test: release then sleepable call should succeed */
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__success
++int nosleep_iter_release_then_sleep(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct vm_area_struct *vma;
++
++	bpf_for_each(task_vma, vma, task, 0) {
++		__u64 start = vma->vm_start;
++		char buf[8];
++
++		bpf_iter_task_vma_release(&___it);
++		bpf_copy_from_user(&buf, sizeof(buf), (void *)start);
++		break;
++	}
++	return 0;
++}
++
++/* Negative test: double release should be rejected */
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__failure __msg("no acquired reference to release")
++int nosleep_iter_double_release(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct vm_area_struct *vma;
++
++	bpf_for_each(task_vma, vma, task, 0) {
++		bpf_iter_task_vma_release(&___it);
++		bpf_iter_task_vma_release(&___it);
++		break;
++	}
++	return 0;
++}
++
++/* Negative test: release without any prior _next acquire */
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__failure __msg("no acquired reference to release")
++int nosleep_iter_release_without_acquire(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct bpf_iter_task_vma it;
++
++	bpf_iter_task_vma_new(&it, task, 0);
++	/* No _next called, so no acquired reference exists */
++	bpf_iter_task_vma_release(&it);
++	bpf_iter_task_vma_destroy(&it);
++	return 0;
++}
++
++/* Negative test: nested iterators, releasing inner should not allow sleeping
++ * because the outer iterator still holds a nofault reference.
++ */
++SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
++__failure __msg("sleepable helper bpf_copy_from_user#{{[0-9]+}} in nofault region")
++int nosleep_iter_nested_release_inner(const void *ctx)
++{
++	struct task_struct *task = bpf_get_current_task_btf();
++	struct vm_area_struct *vma_outer, *vma_inner;
++
++	bpf_for_each(task_vma, vma_outer, task, 0) {
++		bpf_for_each(task_vma, vma_inner, task, 0) {
++			__u64 start = vma_inner->vm_start;
++			char buf[8];
++
++			bpf_iter_task_vma_release(&___it);
++			/* Inner released, but outer still holds nofault ref.
++			 * Sleeping should still be forbidden.
++			 */
++			bpf_copy_from_user(&buf, sizeof(buf), (void *)start);
++			break;
++		}
++		break;
++	}
++	return 0;
++}
 -- 
 2.47.3
 
