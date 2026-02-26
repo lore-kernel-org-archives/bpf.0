@@ -1,141 +1,101 @@
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4692B368971
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 21:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.41
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772142986; cv=pass; b=tVVGC2YJHSNErOjDwHV8DkR8zpjx6WVGtk4llGKEWF9agFRvx/YVU7tGm/gdoWvPZ5gTZW100hgH2BgGzrqgWB/bN2g2b74b8lQzRGAho1PbC/WEVQekx124v6SvotMwrrV6bGstyxN5z43UAHKqmPv+1/OgD3fymIjAiAsQcLs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772142986; c=relaxed/simple;
-	bh=ubzl0nrerXJVdr22o96X3yVBWyBcT6n7SLaRG9gfXGA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c3oURMPCj7VdA1osQ+b9YahDiMMcGEqSMitxq7VuOJVDBs39FXe503RjGQaoQd9KfmVZfMWwXGGfRcPV72QjTOhMBwUz3Mfd6FjunZ0VUcubL4InVBVnJlg2n5nvdx0yyoypV0HTsVMurjpnzXAvv25SSlPfOMqSFGc4W5uw9Ig=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MCeowg1c; arc=pass smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADCC4418E9;
+	Thu, 26 Feb 2026 22:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772146326; cv=none; b=PPcQG7fLwac44V2u/6dGK4Ykk/tFHf0/+qoDr4gG7pXzqlkGR3jw+6Trs87F4JK76zSg1ZLrX5GE5BXD3nJajIVOANBMiIdSSTSZSnnMmJTXx3S25DF61A6wvYSnbXQ0t3ukONlImpQwXQ4i4xCy4siC26zmkx5V6hSAIEui8Bk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772146326; c=relaxed/simple;
+	bh=2+gjNqN353ZDwdvuA5hCVDrTsV9/BiJ5JmUBZ7zBKJc=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=JrXFL5dR88Z3yvtu0H1CEGhWHdF1QLqIuDB6E2nvsbDnr8Pw7ocLWjcMlajYoNS+WEfWytjzzDNyNcQsp64ZT7TK0mFlNTXde30SQrhP3o6Kv29Nh3lbrZm1X//CmsiILVjQqefTxenmWx7mjT90yyNoAS5olWPuz1YVKH2yBkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qlC+zjdG; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MCeowg1c"
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso11130115e9.1
-        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 13:56:25 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772142983; cv=none;
-        d=google.com; s=arc-20240605;
-        b=V73E8AiT0EoUQGFWOJDdNL/35homButTRPbHaEqgjasR2shcMxat1N9YssGgPs9dqY
-         ab69hYUEqY76NsD6V/71cQBa0engvYfqmuTz2gL1AMdfRgkrWr3XoPeFU7oSK1f3UuNJ
-         YEAjUzx9j+jaM79w2hFff59FC2d0VbieSp30IBzPXuNW+uLxVVAxzdC8NZZ98PPJrg3U
-         y2pyIXQkjaM+lzgI64aN7Ff5h90McnM4ixGLy9GtyOMnkiS32tB0SU3W7INYjHA9douR
-         vd9QlzbkCCEVk3gRx93od4P/+Awrg4dcifUOJJl6qoU3nh5CxrZ2vj6IYqvfo02NkKZE
-         pH3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=ubzl0nrerXJVdr22o96X3yVBWyBcT6n7SLaRG9gfXGA=;
-        fh=42mh1QYHA1B2nfoJk5Yj43rUdkiyfqs7zxBYjUTeJVc=;
-        b=QVRKMHrkRqNFY2tsqfxmvX8YH5Uw4eVAM7VNEHtYR2R5+t2tlhhugDaYKX01X6uRNa
-         kANBmWhMn/IChebbDlVlupsbP+DX/RxUd6umfQcjr0fkMsBmsVY7ESzbQgN+RBWPIVoF
-         klyzrk+5YrL094Pv6I4wKk5/LAJ0HZvWuxKIrAuAm1WgKEtRmeq2qkm+9RhBIz4w8rPa
-         chyrhvmXhin3+9U64I6Az7iZTrciFbL/L8B7JGZz47As/1eS3C0CuD/YXqVvfBDfWVYn
-         dEr/2Ig4+vVbnSr9mXn9hjSThoxdkEnOFHu+th2zMTDGztWRQO/GkFIfYPVO1pdyJhgC
-         Gu6w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772142983; x=1772747783; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ubzl0nrerXJVdr22o96X3yVBWyBcT6n7SLaRG9gfXGA=;
-        b=MCeowg1cX8ndLUYIxla17tcyLSPIRd+i1CsmwQtK1o59ili1ihNji3c6suCkkBaA28
-         bkbIYFZtrajLMcihfXKGr32uoiZpraHxCOJjohYW0fSPRqYUdnsr5a5tJID7oVXKlBkF
-         rRJFC1+ejfbMmVTxhs6p6/cbhUNcaUSCe/PVfBTU4esdwakIijruEzAiwJmdPZHt+7tN
-         Pc4G+k+Wt1wpjK/HWPwNgN0Q23W22r1BgnWlIP+bT+awdhNhj/EIMixWBfGBPDC+uBFi
-         Kq3dyrTnNxlvoE9rsAYU70IuPq4s797SnVvN4c5Wi34eW/Puoyq3PIbDESyePaYhqfzL
-         aGTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772142983; x=1772747783;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=ubzl0nrerXJVdr22o96X3yVBWyBcT6n7SLaRG9gfXGA=;
-        b=ZchdU+Y9NYyTxEFXeBee0VS/vEp3JfgM3WKcLosgsZUfH6SKZxEnC1qXoeyiN8s4Sr
-         A4XkoxNKYqg+up1lazisBHtGDArmIwWSRi8D9pZrMAcErBenJ3YXgwOuxbEhth9MbT1E
-         nzugqKic0bCSxr7Hz6hNRnrYMum9CCfnBNUO4F8bPgB0G4rSqWjnmKw7l+UbmVtqxr09
-         fthDbC9ZEk6qJKEr9OzaEIXlgs/AvAdMIxe3pBGwHfIAUHE1Dos6TZK5cHFrQZmeg+pU
-         1JfRxdboJX0+1dFM1Fh5PSY/MvHdUKbPkIO0qsBL9T/hneVC4nWXP3hTxwSpo3diNYrF
-         SQew==
-X-Gm-Message-State: AOJu0YzSCl+hm9q+DFedHfuf8+wu83Alqho7qG9idNCd42KEub22Xb/7
-	AeUETt7yIOby+vJziKw1YXu0DyiDpPrNRcbZ6gm5QWZj48psJoUaizMC8pVjVj8y0S4YryWJh/L
-	9Q+xwr3WQtO/t0oy1Sfj/vaMDwcDpSMA=
-X-Gm-Gg: ATEYQzzdRXTY5iqWUTHD0G/vtIb30uhQeNHTBWwsoDAJiT6zcKFrW2vUAuH9v8PZJFa
-	sUvGmFvQCDmpTC/ynkHxN1UfWEVwECGJsmYD4/xwgWk4cqLrIoXMueLg/uOCrajMqvKs5C8XSTT
-	5XuxDtoy3Gb/l+sO1yVF1XNiJ4vwFieBiaEvrBFLzNNIGkC3T1mj4mFj/0a1rMmi3vEdXiBfR5N
-	svY3a0v5exdS3wf2z+A/BKE9M7q60il37g/tBOKI/fDqYLfDjUj2y0u3OChBee2X1fxSnJQBa7m
-	QGFd9u7Oy3luv9f13VGx0l/t1ma7S4lISlJMvGOeFQneKnZT70lFOSUTF4jlC9RJxK2rlKqwCLb
-	lZkG5+XLhU56xaH+nJj5VKWhgIA==
-X-Received: by 2002:a05:600c:1f06:b0:483:7783:5382 with SMTP id
- 5b1f17b1804b1-483c9bf49afmr5437545e9.27.1772142983320; Thu, 26 Feb 2026
- 13:56:23 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qlC+zjdG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A8AC19423;
+	Thu, 26 Feb 2026 22:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772146326;
+	bh=2+gjNqN353ZDwdvuA5hCVDrTsV9/BiJ5JmUBZ7zBKJc=;
+	h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
+	b=qlC+zjdGw0ga8OZLY2A7odZzzvnUdFryRcVETmxLLmuZ2oPvWpTXWM20+q/059k4f
+	 uRN8ZXazvLFsSGfaxofwAuiyYgSqHO+Hq2L6c9ZeGVAOuz2j6u2h5zQpWpMloK+Wqt
+	 tkksJ+/95IJdmnxBsxspOnlW6A9ulIhOiSOZ5nOjyRtCjJnd5ctS65RUlDlmKu3yu8
+	 ytwnl0XxYbq9C22c9zNCZgwS7ArfcpbIrx2QaV4zx8vnN60c2VdkdSxkDQvvwTwVUn
+	 Z2yaBD5YG3KJdkQ9g9igIv/rVKgt5as6CovmlTu4a3MlH1EAJfvLQTgNSjcgJ8m+Of
+	 13ljTSzRzd2uQ==
+Message-ID: <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
+Date: Thu, 26 Feb 2026 22:52:01 +0000
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260226-skb-local-storage-v1-0-4ca44f0dd9d1@cloudflare.com>
-In-Reply-To: <20260226-skb-local-storage-v1-0-4ca44f0dd9d1@cloudflare.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 26 Feb 2026 13:56:12 -0800
-X-Gm-Features: AaiRm52GQ6X9DvTsRQ_mFSVEgOOXYizMYQZrtMbFf9A1yKUa07ng9nh92m8C2EY
-Message-ID: <CAADnVQKVfyh3_OZshvYf7GJUF-ph2eMfmaQsxNgwBJd1AJgXTQ@mail.gmail.com>
-Subject: Re: [PATCH RFC bpf-next 0/5] skb extension for BPF local storage
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf <bpf@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Network Development <netdev@vger.kernel.org>, 
-	kernel-team <kernel-team@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Quentin Monnet <qmo@kernel.org>
+Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
+To: Namhyung Kim <namhyung@kernel.org>, Leo Yan <leo.yan@arm.com>
+Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
+ Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>, Ian Rogers <irogers@google.com>,
+ James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
+ linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+ llvm@lists.linux.dev, bpf@vger.kernel.org
+References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
+ <aaCTC86U9KjnmZmu@google.com>
+Content-Language: en-GB
+In-Reply-To: <aaCTC86U9KjnmZmu@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 26, 2026 at 1:16=E2=80=AFPM Jakub Sitnicki <jakub@cloudflare.co=
-m> wrote:
->
-> Previously we have attempted to allow BPF users to attach tens of bytes o=
-f
-> arbitrary data to packets by making XDP/skb metadata area persist across
-> netstack layers [1].
->
-> This approach turned out to be unsuccessful. It would require us to
-> restrict the layout of skb headroom and patch call sites which modify the
-> headroom by pushing/pulling the skb->data.
->
-> As per Jakub's feedback [2] we're turning our attention to skb extensions
-> as the new vehicle for passing BPF metadata. skb extensions avoid these
-> problems by being a separate, opt-in side allocation that doesn't interfe=
-re
-> with skb headroom layout.
->
-> With the switch to skb extensions, we are no longer restricted by the
-> features of XDP metadata, and hence we propose to extend the concept of B=
-PF
-> local storage to socket buffers - skb local storage.
->
-> BPF local storage is an established pattern of attaching arbitrary data
-> from BPF context to various common kernel entities (sk, task, cgroup,
-> inode).
+2026-02-26 10:38 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
+> Adding bpftool maintainer.
+> 
+> On Tue, Feb 24, 2026 at 12:16:40PM +0000, Leo Yan wrote:
+>> GCC-15 release claims [1]:
+>>
+>>   {0} initializer in C or C++ for unions no longer guarantees clearing
+>>   of the whole union (except for static storage duration initialization),
+>>   it just initializes the first union member to zero. If initialization
+>>   of the whole union including padding bits is desirable, use {} (valid
+>>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
+>>   restore old GCC behavior.
+>>
+>> As a result, this new behaviour might cause unexpected data when we
+>> initialize a union with using the '{ 0 }' initializer.
+>>
+>> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
+>> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
+>> in unions and structures.  This commit applies the same option for tools
+>> building.
+>>
+>> The option is not supported neither by any version older than GCC 15 and
+>> is also not supported by LLVM, this patch adds the cc-option function to
+>> dynamically detect the compiler option.
+>>
+>> [1] https://gcc.gnu.org/gcc-15/changes.html
+>>
+>> Signed-off-by: Leo Yan <leo.yan@arm.com>
 
-And that list of local storages ends with a solid period.
-We're not going to add new local storages.
-Not for skb and not for anything else.
-We rejected it for cred, bdev and other things.
 
-The path forward for such "local storage" like use cases is
-to optimize hash, trie, rhashtable, whatever map, so
-it's super fast for key =3D=3D sizeof(void *) and use that
-when you need it.
-The life cycle of skb already has a tracepoint in the free path.
-So do map_update(key=3Dskb, ...) when you need to create such "skb local st=
-orage"
-and free it from trace_consume/kfree_skb.
-Potentially we can add a tracepoint in alloc_skb,
-so bpf prog can alloc "skb local storage" there,
-and to clone skb, so you can track the storage through clones
-if you need to.
+Thank you Namhyung for the Cc.
+
+I built bpftool with the patch, with gcc 13 (which didn't get the flag,
+as expected) and gcc 15, and it's fine with both. As far as I can tell,
+bpftool does not initialise any union with "{0}" anyway.
+
+One potential concern (I didn't try) could be for cross-compilation:
+bpftool's Makefile sets HOST_CFLAGS based on $(CFLAGS), but $(HOSTCC)
+and $(CC) could be different versions of gcc, for example. The same
+concern could apply to perf with HOSTCFLAGS, by the way?
+
+Best regards,
+Quentin
+
+
+Note: For fellow bpf@ readers, the original thread is at
+https://lore.kernel.org/linux-kbuild/aaCTC86U9KjnmZmu@google.com/T/#m700907de1a84c007bfda62981af590ad7aed0f11
