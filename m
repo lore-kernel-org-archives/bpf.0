@@ -1,84 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B1D451044
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 19:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB88243E9F3
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 20:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772134218; cv=none; b=rQM1YbV5HufIbmc+DIYwgQ2nAFklbAMlxvbpaVp/FqKcANkGEiCFu/tszIDg4hpVRw0tbhKgHV7kB+udKo5U2azePFhZoGPP0xW+ycB3wvlKp+vlaAmBOZZ25MCv2HrZaQfoFvAODF80Jw/KJwiYodScTt8ADHHcBlWHor/2WDs=
+	t=1772138126; cv=none; b=UmEDxUjQ5y7CZ3R7KuTwK4ktmeHl7Nrz9ylsJUdvl7slfC8d0HlEKRfCq65S6JZ/BxcBBdTozfoGdcNPez+If6/k/l4+Fw2yb/bxCuAmstmB/1FzGl0tsdFGRvSI5CAplThD41OZ0O2/mAHDtZkld7d1YLlw0twcSbEiuv/34LE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772134218; c=relaxed/simple;
-	bh=MQUzNhvE+luWP6M+agczzNcVCMwBKRVm/fMS+/sWACE=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=eKVQcL55UG4mXqWgU6ZosdEP7iSHT+wVmy8fSO1gKA73ves3ID3J2wgeoVnnAEABPxUUyfSVjfPQA96Dg2HcYp87nf7NhXye3LR6hjWFRn+g3jbztMTMaOAWm7y/Mr8wwQD2bf8vQqdXh+SlmuawCoSgTWCEnsYuGezSULLyQ04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F1T7ciyG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772138126; c=relaxed/simple;
+	bh=kfZtNtlAM945/+oby8LlEWy8+TQRYJ0vCGEE8bC3kOY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=bqVUq5PYBitDYfs9cQER9BYfCGaVzRjim1o4EwB+ny6/xG8VWiL9CChPE6birZhQMR7+iL2QbSwRua5rKq8BQpFkJJ5pMqEbC13wLeCaT9VUR4r0kz8pywSoWc1srGaT8VX7f0swAIUGCOWuPXnUJRQNDRINIbKDoUXQTkH1JyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=B41ixDmj; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F1T7ciyG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8AFC116C6;
-	Thu, 26 Feb 2026 19:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772134218;
-	bh=MQUzNhvE+luWP6M+agczzNcVCMwBKRVm/fMS+/sWACE=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=F1T7ciyGWuKE64VRNm+NkOrlAxPy62Q/lS/nbc1OOS6cLpPCV3OAiag1HhC7i6Tui
-	 cW896qebeaW5PoHeiPbNUPW18g1NbkcZIw050qTGrBeVcWeGqGe4o6ngGfUZokNzCl
-	 C0wCUFtIUGD1aioLvr8AilzFrTU1Bchwe7HpCc3ISUkAb87+WJhPPQOIbvKebV7S7V
-	 7WSpTwnCGXILTZQbC91K9+GK988D9tPYEOZus+N8sySF2vaVENvbxBQIPEmYtG8EP2
-	 YVFTXUsPjZvCP3uXqsmA6cC4o5U9DjLEaPdmeYENY2AituaeDYfUUkd07OiVBT5zrb
-	 WAxUdYDDXdu7g==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02DC83931090;
-	Thu, 26 Feb 2026 19:30:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="B41ixDmj"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-506362ac5f7so12213391cf.1
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 12:35:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772138124; x=1772742924; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zHjqKquvIB9BrokH/ibU+Dc9tyTDZIGbnWGkcszwjdY=;
+        b=B41ixDmjnfem8bEvBhhLF8ItQrnN0N7BK974fignXIIHa2l0Lf4ZluU88Vwo+uUFKM
+         CsQ2ktG7uqu13ycm7jWAzluRENQAw5za6mIvuBxWDiQ7LU8ftpoZYrk7oECx5uXjEs9e
+         h4wFOI6nuZK3vUKTbaE5irFApbBdpV4bBZ9rN7HXdReOrhliN2MOd2gLKvnLocbsHRME
+         g/CSr7aOLILDJmf28n5vsp8qMhFtjcUjkXut95JRXb3MVsnpe6Todwx2GyhWUhkK8uN5
+         hzq6dPXekG+yqU9Pha/z2gm8TMiA1J5rjGFsPnrlax1FY3sE065spw0+Y5CkHnAWIpnl
+         z8Ww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772138124; x=1772742924;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zHjqKquvIB9BrokH/ibU+Dc9tyTDZIGbnWGkcszwjdY=;
+        b=JAUOPNRLN8Oa5+U9q0pkfx5ziSYx6LVYiBJsluMt63lqzXxGuQk9O6Te1WqV8Bj8uK
+         0F1pZPA+WfE1w8dsWxpwX52H8wqRU2d7orEl+boPMT3KxFTBkfILTqZ20A5G8wNlIElT
+         l9YoLrVnUCNr6SjyFwr7JsdU49Pc+BVczfub3Ttr6zf/SBGQn3IyGzh2aCurqOLnGNAl
+         w0wy9yYRBYS3dN9P03KjmYOcTS7LootAsO2jtL7S/8oqDVQwSHBSx0k8WO+EGl13a9x5
+         zDMPi3me3/2Bq76FrvU4HnYq7XO9ZOVfAKn55vIAlWOBdfBbnT0jojLLBBzXKN8uooh5
+         7ffg==
+X-Forwarded-Encrypted: i=1; AJvYcCUPjWaEVLQxUBKLJcCeoFnUobfdIyfsV3VRMmnTOwdDfcZ9lhgzSkpNUNvNHVGmTKR2kjc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywgz0GQMqL0gfOni7j/hUrSwCmTVFWW957rXGBb2V7uDy6w44M8
+	Amm6JxuFnY6L0yZqvnPrWWKbdXNCm2U4JpmVCfTccSKOZ9RSnW2zvcF43n/upZYIkvk=
+X-Gm-Gg: ATEYQzyk3lyZTDZp/N+psLDkaoZEyvE6EA7imkTacokntTz1QMICgbv/gl3awI449g4
+	AMschPjzx0wJlO3RtbwpuvGkyQreE+MK410ctZFYWh2w94sI+rjwUdoG37CoMS0MEYqb336ECIO
+	KgPuQrFyaLflx7DW+hDhBtV6WT6uiF8vR+4nl6P305cqKN41uTTvoW+N8cbU3t0ZvnP1YcBZVOf
+	1Lxsl9lpPkYJEXOmT/SKhp+FdTE83So9jcyngHjE998w3W1+u53HOWf2mymDRGv4PqPgJR1LhPG
+	73/3pcMF+5pz2Xj7MvW9qnG0QZUmkAao5Wryg9yKTj6fVezHGu1ClU31uMyplzAcQBeJQ/liO+w
+	+Ec0r+Fq9oeAj/fogri6ATGZUGiKAFD1Chs9qcFI+6xekfCAHi7qkW4N/BZRc+maule8i59GlD1
+	YZaVAktg4PfUoxCQ/Kl4pwzHA=
+X-Received: by 2002:a05:622a:15ca:b0:501:3ccd:cb3e with SMTP id d75a77b69052e-507528c4f1emr3866101cf.66.1772138123576;
+        Thu, 26 Feb 2026 12:35:23 -0800 (PST)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744ad885bsm26943931cf.28.2026.02.26.12.35.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Feb 2026 12:35:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf v1] selftests/bpf: Fix a memory leak in xdp_flowtable
- test
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177213422254.1808439.1401384174214570976.git-patchwork-notify@kernel.org>
-Date: Thu, 26 Feb 2026 19:30:22 +0000
-References: <20260225003351.465104-1-ihor.solodrai@linux.dev>
-In-Reply-To: <20260225003351.465104-1-ihor.solodrai@linux.dev>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
- eddyz87@gmail.com, bpf@vger.kernel.org, kernel-team@meta.com
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 26 Feb 2026 15:35:22 -0500
+Message-Id: <DGP6JAD9617O.1TN5OOID1E4Z@etsalapatis.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <martin.lau@kernel.org>, <memxor@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v4 2/4] bpf: Separate bpf_throw() and
+ bpf_exit() return value validation
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260225033356.518313-1-emil@etsalapatis.com>
+ <20260225033356.518313-3-emil@etsalapatis.com>
+ <9bbeeb42c5504ffa6de8a1a1fa02cf0432667242.camel@gmail.com>
+In-Reply-To: <9bbeeb42c5504ffa6de8a1a1fa02cf0432667242.camel@gmail.com>
 
-Hello:
+On Wed Feb 25, 2026 at 11:56 PM EST, Eduard Zingerman wrote:
+> On Tue, 2026-02-24 at 22:33 -0500, Emil Tsalapatis wrote:
+>> Both bpf_throw() and BPF_EXIT use the same return value validation
+>> function, even though their validation logic is slightly different.
+>> Using the same code path for both complicates the logic and makes
+>> it difficult to follow, so create a new check_throw_return_code()
+>> function just for bpf_throw()-based exits. Also factor code needed
+>> for both functions out of check_return_code().
+>>=20
+>> No functional changes.
+>>=20
+>> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+>> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> ---
+>
+> I think I suggested the wrong split.
+> A better border would be between checking return code for subprograms
+> and for programs. Wdyt about the following branch:
+> https://github.com/eddyz87/bpf/tree/check-subprogram-return-code
+> (fexit_bpf2bpf/freplace_void fails,
+>  but I think it could be fixed after some debugging).
+>
 
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+I see, yeah this split avoids duplication and removes the constant
+is_subprog checks. I'm going through the two patches rn and will=20
+send out the new version with them.
 
-On Tue, 24 Feb 2026 16:33:51 -0800 you wrote:
-> test_progs run with ASAN reported [1]:
-> 
->   ==126==ERROR: LeakSanitizer: detected memory leaks
-> 
->   Direct leak of 32 byte(s) in 1 object(s) allocated from:
->       #0 0x7f1ff3cfa340 in calloc ../../../../src/libsanitizer/asan/asan_malloc_linux.cpp:77
->       #1 0x5610c15bb520 in bpf_program_attach_fd /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/lib/bpf/libbpf.c:13164
->       #2 0x5610c15bb740 in bpf_program__attach_xdp /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/lib/bpf/libbpf.c:13204
->       #3 0x5610c14f91d3 in test_xdp_flowtable /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/testing/selftests/bpf/prog_tests/xdp_flowtable.c:138
->       #4 0x5610c1533566 in run_one_test /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/testing/selftests/bpf/test_progs.c:1406
->       #5 0x5610c1537fb0 in main /codebuild/output/src685977285/src/actions-runner/_work/vmtest/vmtest/src/tools/testing/selftests/bpf/test_progs.c:2097
->       #6 0x7f1ff25df1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8e9fd827446c24067541ac5390e6f527fb5947bb)
->       #7 0x7f1ff25df28a in __libc_start_main (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8e9fd827446c24067541ac5390e6f527fb5947bb)
->       #8 0x5610c0bd3180 in _start (/tmp/work/vmtest/vmtest/selftests/bpf/test_progs+0x593180) (BuildId: cdf9f103f42307dc0a2cd6cfc8afcbc1366cf8bd)
-> 
 > [...]
-
-Here is the summary with links:
-  - [bpf,v1] selftests/bpf: Fix a memory leak in xdp_flowtable test
-    https://git.kernel.org/bpf/bpf/c/60e3cbef3500
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
 
