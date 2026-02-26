@@ -1,193 +1,339 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
+Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com [209.85.161.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C4C430CDBB
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 09:31:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9B6A3128BE
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 09:31:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772098313; cv=none; b=f83/SwFR3/SFwxdmH8t50g2eN0KQ5wJfrKyx+S/ZZ8x89MdvErOWRKrGaKMiUWskmcMA10OZY2RkS6HBcpF0u+6J2K8iLSkijDrMjViSmZjHqsClTU7LLvSnhUhdtlrimnqAkX0rFRCMLKuC3Ebx8drUm1hAfMPsXxmPWnrOgn4=
+	t=1772098316; cv=none; b=IhlHs5DmTeCvsbaWxLtgjoOUGd0lOLvoAOdxGYECCF6EvL3agcWVSAbnijPSoo6Ic33QlnapGnT28ZAYsuyz8axKjIzHm8PZ/md5gBQtTxTgbw6R2d9ADx20SrwQkY92QJ1WBxXD//JMCT2QNcxer25CwzM8rQJf8qrqF3tOys8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772098313; c=relaxed/simple;
-	bh=XMrM4+Hj3SghIxgdaOrFD80PkaSmAH1qWcfG8RAykiE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dYcDene5VJRaediKws1GkfBEmUWiqCpo7EuFFr59MVaav4NCSzrSOZL1iC8fDyngNS6hZI2TprX54fQ+RrQxMvQXz6opdNZ62cAhSU2BMKgO8IxFlb75/mjSJYMZSp+QmooE4rCVeh1gbigMCeKiDvZn12qhGSfR2NgOsp07Zjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GCjcbDBh; arc=none smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GCjcbDBh"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-12732e6a123so165013c88.1
-        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 01:31:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772098311; x=1772703111; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Tec9IvX19mzXZCyeb8uc2mz6TaJdE7CZsee6blSRk3g=;
-        b=GCjcbDBhkNYLlpLHsBCqhIl7sZfJ8iuflzVpx+VT5yx3N0OJL6u7uipNviFbKjAruS
-         5tcmeAqVkyBWbeaEbnTRDQmkL3VwDWYdsnLi/O7484GMEvOnI9qracTspZIkjT6BOyDR
-         yIs4fdBtSqi+2Dn1AaxPGO0aOGe3dDtR/jX7zExIB1jalXmzxbBxSyUp7adZuYe6PK4k
-         zYYapSw65E/Z/5k3gS9vp9BJ8bD4eCzMNR4u1YpZoufmnsRHrVeJfhooqHDwLwqDkvb5
-         A9Gz1029sXvaUDQogW2xFlKT0WWfjCBkxgu2mD2ZNYJyXwv2WUPCOrmEAiTGjln4EsIw
-         9h9w==
+	s=arc-20240116; t=1772098316; c=relaxed/simple;
+	bh=LWwGOkUvPIVQ3+1oaUt/kkoJNlvXF8UpyEu9qb8fYgg=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=gqnGEMQy8HuOVdtSPqLyTZWEzQoSzMOCMSoqZ51XzHh07xMw0FvhTZ2yyx/LHzOm8atcYVRWzDtEBAly/IrjHOACGM8Y7wKWu7ISfRyCkq9DfNGR+jsR7Rsi8+oMBClT4KbgSM9xPdoiHFi71axet/Sgc+XnA+Q/ACV18aN5FnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f69.google.com with SMTP id 006d021491bc7-679a47a1febso14831345eaf.3
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 01:31:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772098311; x=1772703111;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=Tec9IvX19mzXZCyeb8uc2mz6TaJdE7CZsee6blSRk3g=;
-        b=UucU6re8OeaU0bL6XGtSqWPuAVo9Gah3ZKJzQTWPYtKAeUo97HUQLCRS95q5L9m0Y8
-         s4UQUXCJaZSIARUAO42iRntIYe+W9g0kZNe9Zwo1QFjHRwyhckAh48B0GEFn+IP96Zd6
-         fwACJURC36r9HNjVs66iSYsH61OU5mEiDd69fhfBEoQBdSFVoVLB6MEb8W12h+R2Kg8q
-         fm5ES/8k5QLyTiA/AvUBqvTtbnQ7mAGdO4UKyNpVefJfxQxygmTACZjfZVZQ0W+/iwzb
-         1s0RKkoYcuWBimkMQq+/LguZfoIHgvFoKyjYGeSUqzELc7ss36zxIPPazfpxPFv48h2R
-         Xn2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUkg2dA1Ag4Sn8cXH02eTCdaZtJbcO3BGCcc4rKT3Q7IhZIirlXJnGpc4wuOyGkJ5sKd/g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxMj0kIRcJbHg3upLP+8IzrGOwNFiNMCzLYF3aWlvMLmSL4ieuO
-	xAMGb699EpCfY6WOPVThi4JqYJ0wB8suTl6omAMjOcy/+TcIdNB4lR7D
-X-Gm-Gg: ATEYQzzcx9tn/ZkPQAJGCT2veTtbygKgGoJsk66roTa2j7+EVSo6Z7xEZfHEY/o2iaR
-	rs/TX4RYfqrRbZte8G00SEvGjIFYab+HfMh40FmKW8ur9SS1aT1xhBrqy+7LwafJUO2PtUDjRbZ
-	eDG4VU0f7uFcFLHaV/n/vC2lud88hsVBaHx9zon/uHBZed7s15lOPhhPFueYCZALzAFSFlhqZ4T
-	r50EJfC7GxlzFfH5MfwzDuH7OJetGVR+ybPVfFwVK4LkaEKu4Xtu0pUyJG8F/U5EySQsJm53+lN
-	3E+qhGorxffU7h6RrwJHkwj2RnPMcRv4aq+UX8W9IzFKb3UlYj3qoW27tAOG6mDxFB6ikd6N9Sg
-	eK89sHsl/9LVNDRehmMiLzon01Sjg5Tvi6jpCW9SX61woXDdXjKJS3Ltv5dy3videfG8BJJ58dR
-	A6TfcYU6enDD+cH/iakM1A1qt6NE/dS+lvYvwzx8spNSqiKsE7nsaVMJuylV0FZktDTCFCuMG12
-	LCB5y8zgMFs3MYYsEtfW5E=
-X-Received: by 2002:a05:7022:608e:b0:119:e569:fb96 with SMTP id a92af1059eb24-1276acda68bmr9380442c88.5.1772098311330;
-        Thu, 26 Feb 2026 01:31:51 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12789a43c12sm1771904c88.14.2026.02.26.01.31.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 01:31:50 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v2 1/2] selftests/bpf: probe_user: filter by pid to avoid cross-test interference
-Date: Thu, 26 Feb 2026 17:31:31 +0800
-Message-ID: <20260226093132.437206-2-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260226093132.437206-1-sun.jian.kdev@gmail.com>
-References: <20260226093132.437206-1-sun.jian.kdev@gmail.com>
+        d=1e100.net; s=20230601; t=1772098313; x=1772703113;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ryb83rdKR7cP09Vv+tw2tMg5DgRRAMoUCWddc3/c9WU=;
+        b=GwGqD0wcGvaMw+NEm5BD7VR4tGNWMSkR1GzpthA0Xt65oeYsAzPn8fPsgSWU6C5403
+         J52dmEILNpRQeixjLR/Tb3RFaBb2dH8/1puBL2+SWiNTFxh67BvyP3okC1HKMY7YzStG
+         LDQDSbXdXY9RMRlpAaWPXpwJ3NkQWmL6+mwq0Dm+VO+c2mnXbWmZaYX2fKY6eGn2qYBu
+         TJjDxhDri9epTorTxnu7eywEo4/f3RpIM6zQ7f+db7Pw7bvROoSeX8Ri3vLkzr4iEUaN
+         ntYGs+Nxt0boEC44QUxGa6D/S2PxN53x27LrlcEGirg/4CeluNUVMWaKT6gSkMe0p3SZ
+         oLsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUPYliJtsy9aJbw5Nfg7JHsZM9oX2M3xvkP77aWfZ/RZh/CaTIqfSyTFBsyBn3gawCa9iU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzIzlJ39LLXexUa6ixNzwJNJKAH1nl7EnphYSLX3rTy0pbtie+5
+	MOw0Gr/9yn7mwb+uptp4yr3UbPJdwel99idy8s/De7TFjfgqmm/q0sqXpgdYFU9tUrK5oBoY/ig
+	jq9Y4rmRSKsRRgQChO6me1iGMkDst0piSz3PeoOZjf8+YzydnFEsBE9m4yFU=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a4a:e84a:0:b0:679:92c7:2c11 with SMTP id
+ 006d021491bc7-679f3ce0562mr730648eaf.10.1772098313046; Thu, 26 Feb 2026
+ 01:31:53 -0800 (PST)
+Date: Thu, 26 Feb 2026 01:31:53 -0800
+In-Reply-To: <20260225185121.2057388-1-memxor@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69a01309.050a0220.2fcbed.0007.GAE@google.com>
+Subject: [syzbot ci] Re: Close race in freeing special fields and map value
+From: syzbot ci <syzbot+ci3826af8b4f91bf97@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, kernel-team@meta.com, kkd@meta.com, 
+	martin.lau@kernel.org, memxor@gmail.com, paulmck@kernel.org, 
+	yatsenko@meta.com
+Cc: syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The test installs a kprobe on __sys_connect and checks that
-bpf_probe_write_user() can modify the syscall argument. However, any
-concurrent thread in any other test that calls connect() will also
-trigger the kprobe and have its sockaddr silently overwritten, causing
-flaky failures in unrelated tests.
+syzbot ci has tested the following series
 
-Constrain the hook to the current test process by filtering on a PID
-stored as a global variable in .bss. Initialize the .bss value from
-user space before bpf_object__load() using bpf_map__set_initial_value(),
-and validate the bss map value size to catch layout mismatches.
+[v1] Close race in freeing special fields and map value
+https://lore.kernel.org/all/20260225185121.2057388-1-memxor@gmail.com
+* [PATCH bpf-next v1 1/4] bpf: Register dtor for freeing special fields
+* [PATCH bpf-next v1 2/4] bpf: Delay freeing fields in local storage
+* [PATCH bpf-next v1 3/4] bpf: Retire rcu_trace_implies_rcu_gp() from local storage
+* [PATCH bpf-next v1 4/4] selftests/bpf: Add tests for special fields races
 
-No new map is introduced and the test keeps the existing non-skeleton
-flow.
+and found the following issue:
+KASAN: slab-use-after-free Read in free_all
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
+Full report is available here:
+https://ci.syzbot.org/series/ad9c7ce6-d861-4afe-821a-e8fae6120b12
+
+***
+
+KASAN: slab-use-after-free Read in free_all
+
+tree:      bpf-next
+URL:       https://kernel.googlesource.com/pub/scm/linux/kernel/git/bpf/bpf-next.git
+base:      f620af11c27b8ec9994a39fe968aa778112d1566
+arch:      amd64
+compiler:  Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+config:    https://ci.syzbot.org/builds/b2735b0b-963d-41a7-bb33-db10494a24e1/config
+syz repro: https://ci.syzbot.org/findings/3ee61f99-7d80-4986-a0b1-492ffb6b1c46/syz_repro
+
+==================================================================
+BUG: KASAN: slab-use-after-free in free_all+0x84/0x140 kernel/bpf/memalloc.c:271
+Read of size 8 at addr ffff888112ee9260 by task swapper/0/0
+
+CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+Call Trace:
+ <IRQ>
+ dump_stack_lvl+0xe8/0x150 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xba/0x230 mm/kasan/report.c:482
+ kasan_report+0x117/0x150 mm/kasan/report.c:595
+ free_all+0x84/0x140 kernel/bpf/memalloc.c:271
+ do_call_rcu_ttrace+0x385/0x400 kernel/bpf/memalloc.c:315
+ __free_by_rcu+0x23b/0x3f0 kernel/bpf/memalloc.c:381
+ rcu_do_batch kernel/rcu/tree.c:2617 [inline]
+ rcu_core+0x7cd/0x1070 kernel/rcu/tree.c:2869
+ handle_softirqs+0x22a/0x870 kernel/softirq.c:622
+ __do_softirq kernel/softirq.c:656 [inline]
+ invoke_softirq kernel/softirq.c:496 [inline]
+ __irq_exit_rcu+0x5f/0x150 kernel/softirq.c:723
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:739
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1056 [inline]
+ sysvec_apic_timer_interrupt+0xa6/0xc0 arch/x86/kernel/apic/apic.c:1056
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:697
+RIP: 0010:pv_native_safe_halt+0xf/0x20 arch/x86/kernel/paravirt.c:63
+Code: 8e 6d 02 c3 cc cc cc cc cc cc cc 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa eb 07 0f 00 2d 43 3d 1c 00 fb f4 <e9> 7c ea 02 00 cc cc cc cc cc cc cc cc cc cc cc cc 90 90 90 90 90
+RSP: 0018:ffffffff8e407dc0 EFLAGS: 00000202
+RAX: 00000000000d2297 RBX: ffffffff819a80ad RCX: 0000000080000001
+RDX: 0000000000000001 RSI: ffffffff8def22fa RDI: ffffffff8c27a800
+RBP: ffffffff8e407eb0 R08: ffff88812103395b R09: 1ffff1102420672b
+R10: dffffc0000000000 R11: ffffed102420672c R12: ffffffff90117db0
+R13: 1ffffffff1c929d8 R14: 0000000000000000 R15: 0000000000000000
+ arch_safe_halt arch/x86/kernel/process.c:766 [inline]
+ default_idle+0x9/0x20 arch/x86/kernel/process.c:767
+ default_idle_call+0x72/0xb0 kernel/sched/idle.c:122
+ cpuidle_idle_call kernel/sched/idle.c:191 [inline]
+ do_idle+0x1bd/0x500 kernel/sched/idle.c:332
+ cpu_startup_entry+0x43/0x60 kernel/sched/idle.c:430
+ rest_init+0x2de/0x300 init/main.c:760
+ start_kernel+0x385/0x3d0 init/main.c:1210
+ x86_64_start_reservations+0x24/0x30 arch/x86/kernel/head64.c:310
+ x86_64_start_kernel+0x143/0x1c0 arch/x86/kernel/head64.c:291
+ common_startup_64+0x13e/0x147
+ </TASK>
+
+Allocated by task 5961:
+ kasan_save_stack mm/kasan/common.c:57 [inline]
+ kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
+ poison_kmalloc_redzone mm/kasan/common.c:398 [inline]
+ __kasan_kmalloc+0x93/0xb0 mm/kasan/common.c:415
+ kasan_kmalloc include/linux/kasan.h:263 [inline]
+ __do_kmalloc_node mm/slub.c:5219 [inline]
+ __kmalloc_node_noprof+0x4e0/0x7c0 mm/slub.c:5225
+ kmalloc_node_noprof include/linux/slab.h:1093 [inline]
+ __bpf_map_area_alloc kernel/bpf/syscall.c:398 [inline]
+ bpf_map_area_alloc+0x64/0x170 kernel/bpf/syscall.c:411
+ trie_alloc+0x14f/0x340 kernel/bpf/lpm_trie.c:588
+ map_create+0xafd/0x16a0 kernel/bpf/syscall.c:1507
+ __sys_bpf+0x6e1/0x950 kernel/bpf/syscall.c:6210
+ __do_sys_bpf kernel/bpf/syscall.c:6341 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:6339 [inline]
+ __x64_sys_bpf+0x7c/0x90 kernel/bpf/syscall.c:6339
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Freed by task 83:
+ kasan_save_stack mm/kasan/common.c:57 [inline]
+ kasan_save_track+0x3e/0x80 mm/kasan/common.c:78
+ kasan_save_free_info+0x46/0x50 mm/kasan/generic.c:584
+ poison_slab_object mm/kasan/common.c:253 [inline]
+ __kasan_slab_free+0x5c/0x80 mm/kasan/common.c:285
+ kasan_slab_free include/linux/kasan.h:235 [inline]
+ slab_free_hook mm/slub.c:2687 [inline]
+ slab_free mm/slub.c:6124 [inline]
+ kfree+0x1c1/0x630 mm/slub.c:6442
+ bpf_map_free kernel/bpf/syscall.c:892 [inline]
+ bpf_map_free_deferred+0x217/0x460 kernel/bpf/syscall.c:919
+ process_one_work kernel/workqueue.c:3275 [inline]
+ process_scheduled_works+0xb02/0x1830 kernel/workqueue.c:3358
+ worker_thread+0xa50/0xfc0 kernel/workqueue.c:3439
+ kthread+0x388/0x470 kernel/kthread.c:467
+ ret_from_fork+0x51e/0xb90 arch/x86/kernel/process.c:158
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+
+Last potentially related work creation:
+ kasan_save_stack+0x3e/0x60 mm/kasan/common.c:57
+ kasan_record_aux_stack+0xbd/0xd0 mm/kasan/generic.c:556
+ insert_work+0x3d/0x330 kernel/workqueue.c:2199
+ __queue_work+0xd03/0x1020 kernel/workqueue.c:2354
+ queue_work_on+0x106/0x1d0 kernel/workqueue.c:2405
+ bpf_map_put_with_uref kernel/bpf/syscall.c:975 [inline]
+ bpf_map_release+0x127/0x140 kernel/bpf/syscall.c:985
+ __fput+0x44f/0xa70 fs/file_table.c:469
+ task_work_run+0x1d9/0x270 kernel/task_work.c:233
+ resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+ __exit_to_user_mode_loop kernel/entry/common.c:67 [inline]
+ exit_to_user_mode_loop+0xed/0x480 kernel/entry/common.c:98
+ __exit_to_user_mode_prepare include/linux/irq-entry-common.h:226 [inline]
+ syscall_exit_to_user_mode_prepare include/linux/irq-entry-common.h:256 [inline]
+ syscall_exit_to_user_mode include/linux/entry-common.h:325 [inline]
+ do_syscall_64+0x32d/0xf80 arch/x86/entry/syscall_64.c:100
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+The buggy address belongs to the object at ffff888112ee9000
+ which belongs to the cache kmalloc-cg-1k of size 1024
+The buggy address is located 608 bytes inside of
+ freed 1024-byte region [ffff888112ee9000, ffff888112ee9400)
+
+The buggy address belongs to the physical page:
+page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x112ee8
+head: order:3 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+memcg:ffff888106b17c01
+flags: 0x17ff00000000040(head|node=0|zone=2|lastcpupid=0x7ff)
+page_type: f5(slab)
+raw: 017ff00000000040 ffff88810005d280 dead000000000100 dead000000000122
+raw: 0000000000000000 0000000800100010 00000000f5000000 ffff888106b17c01
+head: 017ff00000000040 ffff88810005d280 dead000000000100 dead000000000122
+head: 0000000000000000 0000000800100010 00000000f5000000 ffff888106b17c01
+head: 017ff00000000003 ffffea00044bba01 00000000ffffffff 00000000ffffffff
+head: ffffffffffffffff 0000000000000000 00000000ffffffff 0000000000000008
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5550, tgid 5550 (dhcpcd), ts 37867090520, free_ts 37834172120
+ set_page_owner include/linux/page_owner.h:32 [inline]
+ post_alloc_hook+0x231/0x280 mm/page_alloc.c:1889
+ prep_new_page mm/page_alloc.c:1897 [inline]
+ get_page_from_freelist+0x24dc/0x2580 mm/page_alloc.c:3962
+ __alloc_frozen_pages_noprof+0x18d/0x380 mm/page_alloc.c:5250
+ alloc_slab_page mm/slub.c:3255 [inline]
+ allocate_slab+0x77/0x660 mm/slub.c:3444
+ new_slab mm/slub.c:3502 [inline]
+ refill_objects+0x331/0x3c0 mm/slub.c:7134
+ refill_sheaf mm/slub.c:2804 [inline]
+ __pcs_replace_empty_main+0x2b9/0x620 mm/slub.c:4578
+ alloc_from_pcs mm/slub.c:4681 [inline]
+ slab_alloc_node mm/slub.c:4815 [inline]
+ __do_kmalloc_node mm/slub.c:5218 [inline]
+ __kmalloc_node_track_caller_noprof+0x572/0x7b0 mm/slub.c:5327
+ kmalloc_reserve net/core/skbuff.c:635 [inline]
+ __alloc_skb+0x2c1/0x7d0 net/core/skbuff.c:713
+ alloc_skb include/linux/skbuff.h:1383 [inline]
+ alloc_skb_with_frags+0xca/0x890 net/core/skbuff.c:6750
+ sock_alloc_send_pskb+0x878/0x990 net/core/sock.c:2995
+ unix_dgram_sendmsg+0x460/0x18e0 net/unix/af_unix.c:2125
+ sock_sendmsg_nosec net/socket.c:727 [inline]
+ __sock_sendmsg net/socket.c:742 [inline]
+ sock_write_iter+0x503/0x550 net/socket.c:1195
+ do_iter_readv_writev+0x619/0x8c0 fs/read_write.c:-1
+ vfs_writev+0x33c/0x990 fs/read_write.c:1059
+ do_writev+0x154/0x2e0 fs/read_write.c:1105
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
+page last free pid 5678 tgid 5678 stack trace:
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ __free_pages_prepare mm/page_alloc.c:1433 [inline]
+ __free_frozen_pages+0xc2b/0xdb0 mm/page_alloc.c:2978
+ __slab_free+0x263/0x2b0 mm/slub.c:5532
+ qlink_free mm/kasan/quarantine.c:163 [inline]
+ qlist_free_all+0x97/0x100 mm/kasan/quarantine.c:179
+ kasan_quarantine_reduce+0x148/0x160 mm/kasan/quarantine.c:286
+ __kasan_slab_alloc+0x22/0x80 mm/kasan/common.c:350
+ kasan_slab_alloc include/linux/kasan.h:253 [inline]
+ slab_post_alloc_hook mm/slub.c:4501 [inline]
+ slab_alloc_node mm/slub.c:4830 [inline]
+ __do_kmalloc_node mm/slub.c:5218 [inline]
+ __kmalloc_noprof+0x316/0x760 mm/slub.c:5231
+ kmalloc_noprof include/linux/slab.h:966 [inline]
+ tomoyo_realpath_from_path+0xe3/0x5d0 security/tomoyo/realpath.c:251
+ tomoyo_realpath_nofollow+0xc3/0x110 security/tomoyo/realpath.c:304
+ tomoyo_find_next_domain+0x259/0x1aa0 security/tomoyo/domain.c:731
+ tomoyo_bprm_check_security+0x11b/0x180 security/tomoyo/tomoyo.c:102
+ security_bprm_check+0x85/0x240 security/security.c:794
+ search_binary_handler fs/exec.c:1654 [inline]
+ exec_binprm fs/exec.c:1696 [inline]
+ bprm_execve+0x896/0x1460 fs/exec.c:1748
+ do_execveat_common+0x50d/0x690 fs/exec.c:1846
+ __do_sys_execve fs/exec.c:1930 [inline]
+ __se_sys_execve fs/exec.c:1924 [inline]
+ __x64_sys_execve+0x97/0xc0 fs/exec.c:1924
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0x14d/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+Memory state around the buggy address:
+ ffff888112ee9100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888112ee9180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff888112ee9200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                                       ^
+ ffff888112ee9280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff888112ee9300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+----------------
+Code disassembly (best guess):
+   0:	8e 6d 02             	mov    0x2(%rbp),%gs
+   3:	c3                   	ret
+   4:	cc                   	int3
+   5:	cc                   	int3
+   6:	cc                   	int3
+   7:	cc                   	int3
+   8:	cc                   	int3
+   9:	cc                   	int3
+   a:	cc                   	int3
+   b:	90                   	nop
+   c:	90                   	nop
+   d:	90                   	nop
+   e:	90                   	nop
+   f:	90                   	nop
+  10:	90                   	nop
+  11:	90                   	nop
+  12:	90                   	nop
+  13:	90                   	nop
+  14:	90                   	nop
+  15:	90                   	nop
+  16:	90                   	nop
+  17:	90                   	nop
+  18:	90                   	nop
+  19:	90                   	nop
+  1a:	90                   	nop
+  1b:	f3 0f 1e fa          	endbr64
+  1f:	eb 07                	jmp    0x28
+  21:	0f 00 2d 43 3d 1c 00 	verw   0x1c3d43(%rip)        # 0x1c3d6b
+  28:	fb                   	sti
+  29:	f4                   	hlt
+* 2a:	e9 7c ea 02 00       	jmp    0x2eaab <-- trapping instruction
+  2f:	cc                   	int3
+  30:	cc                   	int3
+  31:	cc                   	int3
+  32:	cc                   	int3
+  33:	cc                   	int3
+  34:	cc                   	int3
+  35:	cc                   	int3
+  36:	cc                   	int3
+  37:	cc                   	int3
+  38:	cc                   	int3
+  39:	cc                   	int3
+  3a:	cc                   	int3
+  3b:	90                   	nop
+  3c:	90                   	nop
+  3d:	90                   	nop
+  3e:	90                   	nop
+  3f:	90                   	nop
+
+
+***
+
+If these findings have caused you to resend the series or submit a
+separate fix, please add the following tag to your commit message:
+  Tested-by: syzbot@syzkaller.appspotmail.com
+
 ---
- .../selftests/bpf/prog_tests/probe_user.c     | 27 ++++++++++++++++++-
- .../selftests/bpf/progs/test_probe_user.c     | 13 +++++++--
- 2 files changed, 37 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/probe_user.c b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-index 8721671321de..280dcdb5ddef 100644
---- a/tools/testing/selftests/bpf/prog_tests/probe_user.c
-+++ b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-@@ -20,6 +20,11 @@ void serial_test_probe_user(void)
- 	struct bpf_program *kprobe_progs[prog_count];
- 	struct bpf_object *obj;
- 	static const int zero = 0;
-+	struct test_pro_bss {
-+		struct sockaddr_in old;
-+		__u32 test_pid;
-+	};
-+	struct test_pro_bss results = {};
- 	size_t i;
- 
- 	obj = bpf_object__open_file(obj_file, &opts);
-@@ -34,6 +39,24 @@ void serial_test_probe_user(void)
- 			goto cleanup;
- 	}
- 
-+	{
-+		struct bpf_map *bss_map;
-+		struct test_pro_bss bss_init = {};
-+
-+		bss_init.test_pid = getpid();
-+		bss_map = bpf_object__find_map_by_name(obj, "test_pro.bss");
-+		if (CHECK(!bss_map, "find_bss_map", "no bss map\n"))
-+			goto cleanup;
-+		if (CHECK(bpf_map__value_size(bss_map) != sizeof(bss_init),
-+			  "bss_size", "bss value_size %u != %zu\n",
-+			  bpf_map__value_size(bss_map), sizeof(bss_init)))
-+			goto cleanup;
-+		err = bpf_map__set_initial_value(bss_map, &bss_init,
-+						 sizeof(bss_init));
-+		if (CHECK(err, "set_bss_init", "err %d\n", err))
-+			goto cleanup;
-+	}
-+
- 	err = bpf_object__load(obj);
- 	if (CHECK(err, "obj_load", "err %d\n", err))
- 		goto cleanup;
-@@ -62,11 +85,13 @@ void serial_test_probe_user(void)
- 	connect(sock_fd, &curr, sizeof(curr));
- 	close(sock_fd);
- 
--	err = bpf_map_lookup_elem(results_map_fd, &zero, &tmp);
-+	err = bpf_map_lookup_elem(results_map_fd, &zero, &results);
- 	if (CHECK(err, "get_kprobe_res",
- 		  "failed to get kprobe res: %d\n", err))
- 		goto cleanup;
- 
-+	memcpy(&tmp, &results.old, sizeof(tmp));
-+
- 	in = (struct sockaddr_in *)&tmp;
- 	if (CHECK(memcmp(&tmp, &orig, sizeof(orig)), "check_kprobe_res",
- 		  "wrong kprobe res from probe read: %s:%u\n",
-diff --git a/tools/testing/selftests/bpf/progs/test_probe_user.c b/tools/testing/selftests/bpf/progs/test_probe_user.c
-index a8e501af9604..4bc86c7654b1 100644
---- a/tools/testing/selftests/bpf/progs/test_probe_user.c
-+++ b/tools/testing/selftests/bpf/progs/test_probe_user.c
-@@ -5,13 +5,22 @@
- #include <bpf/bpf_core_read.h>
- #include "bpf_misc.h"
- 
--static struct sockaddr_in old;
-+struct test_pro_bss {
-+	struct sockaddr_in old;
-+	__u32 test_pid;
-+};
-+
-+struct test_pro_bss bss;
- 
- static int handle_sys_connect_common(struct sockaddr_in *uservaddr)
- {
- 	struct sockaddr_in new;
-+	__u32 cur = bpf_get_current_pid_tgid() >> 32;
-+
-+	if (bss.test_pid && cur != bss.test_pid)
-+		return 0;
- 
--	bpf_probe_read_user(&old, sizeof(old), uservaddr);
-+	bpf_probe_read_user(&bss.old, sizeof(bss.old), uservaddr);
- 	__builtin_memset(&new, 0xab, sizeof(new));
- 	bpf_probe_write_user(uservaddr, &new, sizeof(new));
- 
--- 
-2.43.0
-
+This report is generated by a bot. It may contain errors.
+syzbot ci engineers can be reached at syzkaller@googlegroups.com.
