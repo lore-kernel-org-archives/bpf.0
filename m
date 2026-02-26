@@ -1,208 +1,155 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012046.outbound.protection.outlook.com [52.101.43.46])
+Received: from out-179.mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9664392C27;
-	Thu, 26 Feb 2026 08:02:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772092929; cv=fail; b=BDgOb8da7T/EAil7+657cZIDmrovPirRkgMgymXKGyA4U5jH15S6Pe5Kqqgvh89IjrAAfcOuSGndmJAOJx6ZxXMWXaWb7j/UePnyf8JoryoOQQkOA9JU/spwXKt58VYtFuEL1uo67jJQnLA5P+Jq9xTEsrsy1+9UMb+OB+8impw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772092929; c=relaxed/simple;
-	bh=hhtyOrRgYrK6f+WSECuGQ/U6RnTmUdi9UEWa7HxXzbo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=E1Q61MBuG9gbTrsgoF/SjYQcdf/IUf+3OVXvaGiXZOnhasojivTtQZgt442+NvvE/Z/DD0a2FWp//r8c1jDgpRObtog6pi7dKQBaPmD/xbzkHqcMfUQHJVzw3DfIHdyRAv2ljdYeRxWvFuYhTW6Z0zp3DuNGfcDuNxTUzpngB8A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ACOs5gGd; arc=fail smtp.client-ip=52.101.43.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A05D392C2D
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 08:03:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772093023; cv=none; b=OQOMrf3T3g0jdIgoTTNg7ACdDDWgbSYkTR2eifKiQzgqboUz/CAYxnMr57RVdSx/ANniAlGwSdhfuk+1cfk0PqQjTzIHqdi+SzXtDiUxf8DbyxHKBr1wB9L3jMPVZFtHu/pS02VYwGOeVe3VrmG4+3Du9vy614sb7HW/mwnPWOo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772093023; c=relaxed/simple;
+	bh=pPm1NQz/awEqft25cau5tHZU/n5KX7QXvnMptYjLpO0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JYAhLoWBKkKJ0jJnllkNg5XTUpvzKrgpuf9x0qkmtBH4N4/AFZk4zWZf4c9qggV790iUI9miRRlfsyrTo/0ZIX9dMUCuyrh52if6kMk6bKf74Jbjzo8mB/CFGcSV//ia9J/jL9Cgokgh31ml3D3RZQ2o5dWhsnuYH7kdK9se2us=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iI/lRdQ2; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ACOs5gGd"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=E0LVeWV6n0hY2vavljGw8bST1/qiqIKBsixoB6xu/kEGYXIyVWyRf2/OgSEaf9RNDS/dZKokZDKrnWA2ny0sCvKKgyH9eWuvaPDL7W/BOegtQMUuIkfsVg4F7PAEBsz134Muvf/PTDv99OGxrSG5IG07I1XJRcHOYnI2y+YRvj03ohgJ4OWeCeYoohwJt6OMNbwm2efZUvpLKQTkNSoCTs9S8L/WtxdoyHCYcVJGs44UAB9Q4C75LSVxt7SN2RZReX1T9u/8GJKT3OI+KMeM2JKE386dKgXLz588+ozPMwSJzSD1QyyOU6ajVNZ7ybiwHIkI4xqu1KWleSjLY2WMpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=leApNsE4ZZUN9qdNyT9Irog7tqSCHBLSH+p9MHr5l10=;
- b=f8amkGP87efWqikxHE2kUKVB/K7kr4bqeH+bA+Pi6u8gMHsDoVt2jZBzBOfgf46q8d9rC9U8LfwkI8BqLjT+pQPdccECy+bt3ExGCmtjFOvu+XuomqKUjO81V9qlPB0ekEvtDokKznNFvx5abRm/0OIwvASvhJ/9vYOnc8N0L8s3ipV7oA2bQwIepMiTw29VV9Nlyd6ezu/4d6/6qJJW06XhestGD1n0W3J/xd6XOGC5XgCL/9V5GOjRlXlOH4PEmBas3UQxaTqI7XoBWKYKIUc3CSheeS7V5oQqJ89zPkFhtanLxFt3EqLJkkXHWBIF1JE4B9ZYMCYe/W1ndp3xlw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=leApNsE4ZZUN9qdNyT9Irog7tqSCHBLSH+p9MHr5l10=;
- b=ACOs5gGdH+890peyJJxKkgUF6eUYDSZaXBypdnqj5X/I3SkgzXoc98//2H3bnM5VxaO8m4gFHPotb/lbL+UvDCIvCqTsIR2q386WTk9ucx6GBZyOlXcGQzeQngw/y3GXDsy3wvgurDDDEE4Y5toxUC5URLfes29i0jtEU1gwarj5niCsDsjYHWXxFYWp3107pTebD6upKuEGbWIo8/8vNy1czPpfYxqQwYovCxmTLz4xOTu4X0vX7Ql4F5nJJ/40akRVIj7f2pFDuc5dJpI0QLJ8eJtXu50yZKY9iGhUWSFHHlfVBhlA7OOq+LiiKBUFcoPFX76V7+/afJEHqo6EoA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com (2603:10b6:8:14e::10)
- by SJ1PR12MB6362.namprd12.prod.outlook.com (2603:10b6:a03:454::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9632.22; Thu, 26 Feb
- 2026 08:02:04 +0000
-Received: from DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f]) by DS0PR12MB7900.namprd12.prod.outlook.com
- ([fe80::3033:67fc:3646:c62f%5]) with mapi id 15.20.9632.010; Thu, 26 Feb 2026
- 08:02:04 +0000
-From: Ido Schimmel <idosch@nvidia.com>
-To: netdev@vger.kernel.org,
-	bpf@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	dsahern@gmail.com,
-	petrm@nvidia.com,
-	horms@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	Ido Schimmel <idosch@nvidia.com>
-Subject: [RFC PATCH bpf-next 9/9] selftests/bpf: fib_lookup: Add IPv6 link-local tests
-Date: Thu, 26 Feb 2026 10:00:03 +0200
-Message-ID: <20260226080003.524935-10-idosch@nvidia.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260226080003.524935-1-idosch@nvidia.com>
-References: <20260226080003.524935-1-idosch@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FR4P281CA0093.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:cb::12) To DS0PR12MB7900.namprd12.prod.outlook.com
- (2603:10b6:8:14e::10)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iI/lRdQ2"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772093013;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LFrUacmVzVoIS6rMkKRo1xTKd0v7vZ9gwEve89bhung=;
+	b=iI/lRdQ2SWmjXq2Hr1/U+VqOq9KdMyadXmMHD7m+CFEEQ92yrtzDKXAfPjMpvfWMCJ4OaL
+	LupU75VXMrM6btpHTBCgZ6UOS3pkFZDh3ha6LcaA1pzospddQOLeU4bEOsEx64TzpzdwXD
+	IAeHJdUTHHGhwwPSG8RH5ItE3JYW7hM=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,
+	jiayuan.chen@shopee.com,
+	Jay Vosburgh <jv@jvosburgh.net>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jonathan Toppins <jon.toppins+linux@gmail.com>,
+	Jussi Maki <joamaki@gmail.com>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net v1 0/2] bonding: fix missing XDP compat check on xmit_hash_policy change
+Date: Thu, 26 Feb 2026 16:03:00 +0800
+Message-ID: <20260226080306.98766-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR12MB7900:EE_|SJ1PR12MB6362:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1e0cbbf7-5a76-4898-c928-08de750d5485
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	EGa7pT7ZdJeShMu+JvAzAoqlfhVVKTmbVYCZgPE2q9uFWb6PosIBoz0lkdcRMctxpU6EoHZSgzo5oHontEx0BtT4vJpdaMpwMDFS8QnMhrSGIYzGc0JbmfsvdiXw+bv9p3owkGg1KMKYNOkP8cIQohtnE4NMk4IAs0aqJ99ZqHIGDNjBUxcFBciPoWGLEiK/MOXVCY9Xt4Gq8aoYMi8H8CRbJ+xFRld41w4aOlvCaMARSNcoSh0mx8qTimZN/hzmBtIFTSfwhIqJ9pZM8JsZFkiWKrKBsbe5uArVyCSnUn5mezMdlFXbHxIKC3p39I/YJRRkx3n1R6QiCrPw66XJ7l1D3lxPOwKLpNeE+2raQyp+3Ht8M8JYtlL8ECOtO9Qgk5Ysqqvxna7aGzCrHy8d/9WanijOf6KuWuoHnCFQRH766exoBEHOYKTuGwFyC+whwasQZhPccKSVrYQlmCANV3no4iBkFGJZy/ZoMTu5LwNi0bfhf8EcYrwuwzXdqI813GlqcKqCkl2x7B9vXvDbkfhmTNSNW7RrCHHciZ3Sa/yJfCprsR3zf0buGgaC5eILhH/Boam6XBFxxr2g8OvBl1H8VE+ZRt9dPsIAhJIaazpOv424o8WKR0IrVX0cLkNV7PFqOS0uXGx7df/1lUKQ+ctbJQrq/1I/JjoAwbpjs86Tec1V1/8Q/lmRFSJHsi+WJgHZPZtw0E76NdtZrGaWIoMV7bX1lNeNpMSDxqCsSKk=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR12MB7900.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?5iaQhoepiAh3ayQg7hwCU1NYfq+Yjn8izmthdOvk8DiIvCeQ22P5bBpc3LgW?=
- =?us-ascii?Q?1Qe9czD0u5vz/LM5xB3q8WeXXIM22LpOTZa2zW5u6fXIFyMiZ2gU35q5Sx4y?=
- =?us-ascii?Q?3qLFLUuOhq+usTOO/Boq6qveRzRDM+LqHgpfC3BMrcoPJxfJRIsIDahGMqhA?=
- =?us-ascii?Q?XsN83JKsD64yBMfcyI+czBeM6uz8q661147P5GK0S+oKap91Wq/iGAMnI1QU?=
- =?us-ascii?Q?g/h2tAoFB+aGM+Y/EdmGU9eot0lPbxAcu+qNV1a6RfqfUgATx+8Mz8SsTlL7?=
- =?us-ascii?Q?9MLMYJA8qYlsrRzkSwDigaW9oz48c1BndElcDM1GUficSW3OZhmzBLDCfOTU?=
- =?us-ascii?Q?/C+Yf4EGN+t6VnyekS7XuDxiQDHu/92xW90PaSTSmDW+MPCNqWOE5xPPv9WD?=
- =?us-ascii?Q?B9Emhi+VQC6tU6suL1n4pdngu6NmdpofBmdNUFsBVPzCTv3j5DxoCZdjvKlC?=
- =?us-ascii?Q?Xr7EhO7Lx3hh1WE7qQyd49XGjM+OWpGVAafQt06z5IE1agSnYM2cilstemle?=
- =?us-ascii?Q?ckcYHrPk+X8PB1qRsobdTsRzSw7qMY10nsSlxglqC4s3QZHGFOddH+WSzGfW?=
- =?us-ascii?Q?3h21OmE2ySO6o+BIY7eSmDnAwc1UlGYH6dhzG0voNN9Ej39M/kXpYXdYvm/L?=
- =?us-ascii?Q?THH2aTbE9iBpPeXnuJL6H6Co2reEEfiqGlpWH2XgFDY42mV7BpD4mjBoVvOT?=
- =?us-ascii?Q?d5wTV0a08LuKAHLqJlGZbVPOEPMWo0KW8ZbauqBcHmnpVbSc9KVxbU4NBtat?=
- =?us-ascii?Q?SMjxf+ZrVnQsoK0iQi+j3rDk5K8KXFiiLWZebvdZQH8QjvnjmMpVcm71wGSS?=
- =?us-ascii?Q?0p5+gJ/33O4sqB4aqY5Ye+HujDd+7c0Ayzmg78xtatp0qQ+Jz375FZQsF9ia?=
- =?us-ascii?Q?gd/2HKlEHAr9nzCUDaBGlCGGAeVUKESKQCY6cJjwqm7stimxpDhvR9fxhUMW?=
- =?us-ascii?Q?F1H/zaYwc1dWtfhImJ4ttZpbDMgm3I+HkUjAnO2Eqpg0OjEGHb7xxJoTcgob?=
- =?us-ascii?Q?/WGKa5xpjNTlMMdcjLik0aRSsbC/ZhZzUkG4r/QWEh3pPa3sOCL2O9hzSNA7?=
- =?us-ascii?Q?xLNH0MTxo3or6Wp0nizJa8MHRoLQXr+v2ubPDNXW/N/tMzx9wooufkCiSiye?=
- =?us-ascii?Q?OdIPu5V6DG2lJ9qhVefb4OcOZlHp3l6e8pT/Rd31FbDOMLlLK12OhN6v4PWy?=
- =?us-ascii?Q?aTcZHKbRVPUW+l5/TKi30IOvaQTmHbKowxBDvOof+qtYC04Q+qBgpOWkFaFa?=
- =?us-ascii?Q?TwFFtY2xzbJ6qKQNY+KsFcTgc1gbf1g4XcIe9r3W7a3dPcCD8tzA8T4x8FFD?=
- =?us-ascii?Q?uewYmUWfhj5kFTZ35e+lmxcs7K+F13Q5JBtX8uMU6by2CXAxUjmzOCkvlzJv?=
- =?us-ascii?Q?hAHLmQELYOhSs0Icf/gmy131rv0HEZaNB3ZAF72YNhdKyLBPZ7uswv4hMb1W?=
- =?us-ascii?Q?SqwSYU2PA26bkWKjdlXvLRkkf20Pr1uvL189TgHXH/8LR5u7vNT9IMhvpcYZ?=
- =?us-ascii?Q?LD2NPnKAu1/5lySEoT6+dBkXp8tiekNcBA32MM57JKU4Mnd3pNsvBopaw304?=
- =?us-ascii?Q?PJ0mmOJ90t5TomQiXJtQmhFopegYzvPf74n8kXtCNYb5tnoRePsZzuzpvdaB?=
- =?us-ascii?Q?ApGHFODyeCark6Mj5In4M73Ey/mrklMf2H2C/2L1XvTBifwblg6iHNWzqvYk?=
- =?us-ascii?Q?9XSUkPeiXZg7VEJr4aiP7c7GgjvEDCVTNOU+oJU+rQXuvJrg3rD1GU4evNMD?=
- =?us-ascii?Q?PxLl6NHBdw=3D=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e0cbbf7-5a76-4898-c928-08de750d5485
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR12MB7900.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Feb 2026 08:02:04.7683
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: o7mXppbs4NLe5OYPfP055oWEhIpa6OcVdWfAWIRMMXAUAG+OjHRdQXtC/7WP2ez8Tt4P686kQ7PJzsuL00dlAA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6362
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Add tests that verify that bpf_fib_lookup() is able to resolve the
-destination MAC for an IPv6 link-local address when specifying the
-BPF_FIB_LOOKUP_OUTPUT flag.
+syzkaller reported a bug https://syzkaller.appspot.com/bug?extid=5a287bcdc08104bc3132
 
-Output without "bpf: fib_lookup: Allow output lookups for IPv6
-link-local addresses":
+When a bond device is in 802.3ad or balance-xor mode, XDP is supported
+only when xmit_hash_policy != vlan+srcmac.  This constraint is enforced
+in bond_option_mode_set() via bond_xdp_check(), which prevents switching
+to an XDP-incompatible mode while a program is loaded.  However, the
+symmetric path -- changing xmit_hash_policy while XDP is loaded -- had
+no such guard in bond_option_xmit_hash_policy_set().
 
- # ./test_progs -a fib_lookup
- [...]
- Testing IPv6 output route, link-local, via first device set_lookup_params:PASS:inet_pton(IPV6_IFACE_ADDR) 0 nsec
- test_fib_lookup:PASS:bpf_prog_test_run_opts 0 nsec
- test_fib_lookup:FAIL:fib_lookup_ret unexpected fib_lookup_ret: actual 4 != expected 0
- [...]
- Testing IPv6 output route, link-local, via second device set_lookup_params:PASS:inet_pton(IPV6_IFACE_ADDR) 0 nsec
- test_fib_lookup:PASS:bpf_prog_test_run_opts 0 nsec
- test_fib_lookup:FAIL:fib_lookup_ret unexpected fib_lookup_ret: actual 4 != expected 0
- [...]
- #119     fib_lookup:FAIL
- Summary: 0/0 PASSED, 0 SKIPPED, 1 FAILED
+This means the following sequence silently creates an inconsistent state:
 
-Output with "bpf: fib_lookup: Allow output lookups for IPv6 link-local
-addresses":
+  1. Create a bond in 802.3ad mode with xmit_hash_policy=layer2+3.
+  2. Attach a native XDP program to the bond.
+  3. Change xmit_hash_policy to vlan+srcmac (no error, not checked).
 
- # ./test_progs -a fib_lookup
- #119     fib_lookup:OK
- Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+Now bond->xdp_prog is set but bond_xdp_check() returns false for the
+same device.  When the bond is later torn down (e.g. netns deletion),
+dev_xdp_uninstall() calls bond_xdp_set(dev, NULL) to remove the
+program, which hits the bond_xdp_check() guard and returns -EOPNOTSUPP,
+triggering a kernel WARNING:
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
----
- .../testing/selftests/bpf/prog_tests/fib_lookup.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+  bond1 (unregistering): Error: No native XDP support for the current bonding mode
+  ------------[ cut here ]------------
+  dev_xdp_install(dev, mode, bpf_op, NULL, 0, NULL)
+  WARNING: net/core/dev.c:10361 at dev_xdp_uninstall net/core/dev.c:10361 [inline], CPU#0: kworker/u8:22/11031
+  Modules linked in:
+  CPU: 0 UID: 0 PID: 11031 Comm: kworker/u8:22 Not tainted syzkaller #0 PREEMPT(full)
+  Workqueue: netns cleanup_net
+  RIP: 0010:dev_xdp_uninstall net/core/dev.c:10361 [inline]
+  RIP: 0010:unregister_netdevice_many_notify+0x1efd/0x2370 net/core/dev.c:12393
+  RSP: 0018:ffffc90003b2f7c0 EFLAGS: 00010293
+  RAX: ffffffff8971e99c RBX: ffff888052f84c40 RCX: ffff88807896bc80
+  RDX: 0000000000000000 RSI: 00000000ffffffa1 RDI: 0000000000000000
+  RBP: ffffc90003b2f930 R08: ffffc90003b2f207 R09: 1ffff92000765e40
+  R10: dffffc0000000000 R11: fffff52000765e41 R12: 00000000ffffffa1
+  R13: ffff888052f84c38 R14: 1ffff1100a5f0988 R15: ffffc9000df67000
+  FS:  0000000000000000(0000) GS:ffff8881254ae000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: 00007f60871d5d58 CR3: 000000006c41c000 CR4: 00000000003526f0
+  Call Trace:
+   <TASK>
+   ops_exit_rtnl_list net/core/net_namespace.c:187 [inline]
+   ops_undo_list+0x3d3/0x940 net/core/net_namespace.c:248
+   cleanup_net+0x56b/0x800 net/core/net_namespace.c:704
+   process_one_work kernel/workqueue.c:3275 [inline]
+   process_scheduled_works+0xaec/0x17a0 kernel/workqueue.c:3358
+   worker_thread+0xa50/0xfc0 kernel/workqueue.c:3439
+   kthread+0x388/0x470 kernel/kthread.c:467
+   ret_from_fork+0x51e/0xb90 arch/x86/kernel/process.c:158
+   ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:245
+   </TASK>
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fib_lookup.c b/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-index 9e933daf56d7..3dca6fde249b 100644
---- a/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fib_lookup.c
-@@ -47,6 +47,8 @@
- #define IPV4_OUTPUT_DST		"192.0.2.1"
- #define IPV6_OUTPUT_NET		"2001:db8:1::"
- #define IPV6_OUTPUT_DST		"2001:db8:1::1"
-+#define IPV6_LL_ADDR		"fe80::1"
-+#define IPV6_LL_DST		"fe80::2"
- 
- struct fib_lookup_test {
- 	const char *desc;
-@@ -207,6 +209,14 @@ static const struct fib_lookup_test tests[] = {
- 	  .expected_ret = BPF_FIB_LKUP_RET_NOT_FWDED,
- 	  .lookup_flags = BPF_FIB_LOOKUP_OUTPUT | BPF_FIB_LOOKUP_SKIP_NEIGH,
- 	  .ifindex = IFINDEX_VETH2, },
-+	{ .desc = "IPv6 output route, link-local, via first device",
-+	  .daddr = IPV6_LL_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-+	  .lookup_flags = BPF_FIB_LOOKUP_OUTPUT, .dmac = DMAC_INIT,
-+	  .ifindex = IFINDEX_VETH1, .expected_ifindex = IFINDEX_VETH1, },
-+	{ .desc = "IPv6 output route, link-local, via second device",
-+	  .daddr = IPV6_LL_DST, .expected_ret = BPF_FIB_LKUP_RET_SUCCESS,
-+	  .lookup_flags = BPF_FIB_LOOKUP_OUTPUT, .dmac = DMAC_INIT2,
-+	  .ifindex = IFINDEX_VETH2, .expected_ifindex = IFINDEX_VETH2, },
- };
- 
- static int setup_netns(void)
-@@ -289,6 +299,11 @@ static int setup_netns(void)
- 	SYS(fail, "ip neigh add %s dev veth1 lladdr %s nud perm", IPV6_OUTPUT_DST, DMAC);
- 	SYS(fail, "ip neigh add %s dev veth2 lladdr %s nud perm", IPV6_OUTPUT_DST, DMAC2);
- 
-+	SYS(fail, "ip addr add %s/64 dev veth1 nodad", IPV6_LL_ADDR);
-+	SYS(fail, "ip addr add %s/64 dev veth2 nodad", IPV6_LL_ADDR);
-+	SYS(fail, "ip neigh add %s dev veth1 lladdr %s nud perm", IPV6_LL_DST, DMAC);
-+	SYS(fail, "ip neigh add %s dev veth2 lladdr %s nud perm", IPV6_LL_DST, DMAC2);
-+
- 	return 0;
- fail:
- 	return -1;
+Beyond the WARNING itself, when dev_xdp_install() fails during
+dev_xdp_uninstall(), bond_xdp_set() returns early without calling
+bpf_prog_put() on the old program.  dev_xdp_uninstall() then releases
+only the reference held by dev->xdp_state[], while the reference held
+by bond->xdp_prog is never dropped, leaking the struct bpf_prog.
+
+The fix refactors the core logic of bond_xdp_check() into a new helper
+__bond_xdp_check_mode(mode, xmit_policy) that takes both parameters
+explicitly, avoiding the need to read them from the bond struct.
+bond_xdp_check() becomes a thin wrapper around it.
+bond_option_xmit_hash_policy_set() then uses __bond_xdp_check_mode()
+directly, passing the candidate xmit_policy before it is committed,
+mirroring exactly what bond_option_mode_set() already does for mode
+changes.
+
+Patch 1 adds the kernel fix.
+Patch 2 adds a selftest that reproduces the WARNING by attaching native
+XDP to a bond in 802.3ad mode, then attempting to change xmit_hash_policy
+to vlan+srcmac -- verifying the change is rejected with the fix applied.
+
+Jiayuan Chen (2):
+  bpf/bonding: reject vlan+srcmac xmit_hash_policy change when XDP is
+    loaded
+  selftests/bpf: add test for xdp_bonding xmit_hash_policy compat
+
+ drivers/net/bonding/bond_main.c               |  9 ++-
+ drivers/net/bonding/bond_options.c            |  2 +
+ include/net/bonding.h                         |  1 +
+ .../selftests/bpf/prog_tests/xdp_bonding.c    | 58 +++++++++++++++++++
+ 4 files changed, 68 insertions(+), 2 deletions(-)
+
 -- 
-2.53.0
+2.43.0
 
