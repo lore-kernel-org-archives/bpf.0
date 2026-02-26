@@ -1,100 +1,74 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C1427472;
-	Thu, 26 Feb 2026 10:41:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C837B26B756
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 11:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772102506; cv=none; b=Hujx76jUKkPWEz+M3EQZP194KNgiMCZsAqgcBZ2IBBzWc39hDq5nLURn6xKSQs2FPNBMCCvW6irP3f7khkBAZ6UKKQxkfEgP1fdF82LZgkr5/SP5s5ysi3+oAlkH07ZPj1ZlzFo/6eAGuL21ex6s/bh+mSuTg+yeH6c2/0bpzn0=
+	t=1772105928; cv=none; b=CK8VS4jYMR0LIjFrXlX/ZFRpc0zPxkk4SfhrmMh/5Pio3U0uAVJIa+8QQpI3f2+qxtTTHGPAsTMLA9GUtamnFPr63r2d9T6EG3su8OkA8hnQ6XmGzmmQxpqlBDCJW8UJgQmwhml0rXWGUVZSdhVMtcDHlNRiQF2iXoinm9CRt/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772102506; c=relaxed/simple;
-	bh=NMzeyOxAYXzF4sthIP3D/i7E+x8X8zh6cTJ8kUu7Pu0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=gWvI8GFMqpJLYNYzy3g+ZcrdRE5wYGv3YCTa9WqVJ8l3KULoeX3tJ2HD+xKKD/5dGTahQhzT65wBFQXK1n4h+ccSiX41Sq+vHriLWXSugVL7kEusgwgvd/7rRqoI7cauZi+WvSo1Ns0vbbyvq+BnhIpFcH1I9xr3HscL32t6wq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACEXSJS3; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACEXSJS3"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F6EC116C6;
-	Thu, 26 Feb 2026 10:41:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772102505;
-	bh=NMzeyOxAYXzF4sthIP3D/i7E+x8X8zh6cTJ8kUu7Pu0=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=ACEXSJS3B2fQEadkGEJl1zvYqazqXvxdDOIOjcbjXB34DqReGyuQ8Wp+EbHWE2Ncq
-	 Jc7w5zfeuir54PgUCwibSqog7dUFxMcOvmYp+vaBoBq6FHdcBRJLUyuHWdy4ysp7iY
-	 SYEqIkalGg5GK4C3XqpU023DIzxi9BGwhxw3UqE3WgGYAsnC+uVao+AIXyvQU7b+up
-	 TMG6qECmP/DLCaFHL/VHztCoFzhbqKw2ui47E2MtNKe+Nw/t4tFvYzDGgEd2e84eKi
-	 KP2FDbdNtPxQ7fUNQPTnR0s63oVU0sHX5xhtiMGg5CYg+ztqWhboa5qiSLfxuPScIA
-	 VHqDULfc8kGKQ==
-Content-Type: multipart/mixed; boundary="===============7185096252700937842=="
+	s=arc-20240116; t=1772105928; c=relaxed/simple;
+	bh=lmm0kAkf0h8ZY4eipiBn7r5LB7jDBcy0Mq1HuFsTVJ0=;
+	h=Message-ID:Date:MIME-Version:To:CC:References:Subject:From:
+	 In-Reply-To:Content-Type; b=HVDI8NSu3BmOdScaWq/Bn+r4UlH8pjFqE1SuKIVI7TJXQbRNpPMd0biU4R4GLoMFwvoCaRmwUalnYM+8w8DUDcP50UR1g5nz1fP/4W0aqJzlrFulgyjHU8W19uqIMVW7d5WbFt2pPxQkdEQSUzxa3sg3AcoUlK11jxFGN0Mc6cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.224.150])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTPS id 4fM8bS6gPgzJ46bl;
+	Thu, 26 Feb 2026 19:38:12 +0800 (CST)
+Received: from mscpeml500003.china.huawei.com (unknown [7.188.49.51])
+	by mail.maildlp.com (Postfix) with ESMTPS id B00C74056A;
+	Thu, 26 Feb 2026 19:38:37 +0800 (CST)
+Received: from [10.123.123.226] (10.123.123.226) by
+ mscpeml500003.china.huawei.com (7.188.49.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 26 Feb 2026 14:38:37 +0300
+Message-ID: <738a358c-e695-44f9-8288-a20d917dc26c@huawei.com>
+Date: Thu, 26 Feb 2026 14:38:36 +0300
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <aab481dc12d67bc2e6fa5981adc5ce250251dd41ec966bd86e227777f18adc0c@mail.kernel.org>
-In-Reply-To: <20260226095156.117996-2-yangfeng59949@163.com>
-References: <20260226095156.117996-2-yangfeng59949@163.com>
-Subject: Re: [PATCH v7 bpf-next 1/2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
-From: bot+bpf-ci@kernel.org
-To: yangfeng59949@163.com,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,posk@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com
-Cc: bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,yangfeng59949@163.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 26 Feb 2026 10:41:44 +0000 (UTC)
+User-Agent: Mozilla Thunderbird
+To: <alexei.starovoitov@gmail.com>, <gladyshev.ilya1@h-partners.com>
+CC: <bpf@vger.kernel.org>, <lsf-pc@lists.linux-foundation.org>
+References: <CAADnVQK=j45QiJTRN2Z43tztkjqGcO+ZwEidrWcfv-d7xoJJKw@mail.gmail.com>
+Subject: Re: [LSF/MM/BPF TOPIC] Userspace JIT for eBPF
+Content-Language: en-US
+From: Stepanov Anatoly <stepanov.anatoly@huawei.com>
+In-Reply-To: <CAADnVQK=j45QiJTRN2Z43tztkjqGcO+ZwEidrWcfv-d7xoJJKw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: mscpeml500003.china.huawei.com (7.188.49.51) To
+ mscpeml500003.china.huawei.com (7.188.49.51)
 
---===============7185096252700937842==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hi,
 
-> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> --- a/net/bpf/test_run.c
-> +++ b/net/bpf/test_run.c
-> @@ -1156,6 +1156,18 @@
->  		skb->ip_summed = CHECKSUM_COMPLETE;
->  	}
->
-> +	if (prog->type == BPF_PROG_TYPE_LWT_XMIT && !skb_dst(skb)) {
-> +		if (!ipv6_bpf_stub) {
-> +			pr_warn_once("Please test this program with the IPv6 module enabled\n");
-> +			goto out;
+Looks interesting, in terms of getting latest available machine-code optimizations into eBPF quickly, w/o kernel update.
+We have several production scenarios, that might get benefit from that.
 
-Should this set ret to an error code before goto out?  At this point
-ret is 0 from the earlier convert___skb_to_skb() success path, so the
-function returns 0 to the bpf() syscall without ever running the BPF
-program.
+It’s clear that Linux kernel can eventually get these optimizations in future, but now we have lots of machines with some older LTS kernels
+which are going to be upgraded in 1-2 years.
 
-Every other early exit in bpf_prog_test_run_skb() assigns a negative
-errno before goto out, for example:
+I have several questions here:
+To Ilya:
+1. Do you have any performance results apart from sched-ext?
+2. Is it published in some way, so we can try?
 
-    ret = -EINVAL;
-    goto out;
+To Alexei:
+As far as i see, concurrency is one of the major concerns.
 
-    ret = -ENOMEM;
-    goto out;
+We have 90% of kprobe/uprobe/tracepoint eBPF hooks and 10% other types, 
+so for the majority cases it seems like only issue is
+concurrent accesses to shared eBPF-maps, which could be supported by LLVM via fetch_add/etc., 
+what are your thoughts on this?
 
-    ret = -ENODEV;
-    goto out;
+Another question: can we have some mechanism in BPF-verifier (in theory at least) to detect concurrent-related
+behavior (control-flow dependencies on shared data for example) and if so, just fallback to default approach?
 
-Returning 0 here means userspace sees a successful test run that never
-actually executed.  Something like ret = -EOPNOTSUPP would let the
-caller know the test could not proceed.
+-- 
+Anatoly Stepanov, Huawei
 
-> +		}
-
-> [ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22437468613
-
-AI-authorship-score: low
-AI-authorship-explanation: Patch iterated through 7 versions over 3 weeks with detailed maintainer interaction, consistent with human development.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Missing error return code on early exit path causes bpf() syscall to return success without executing the BPF program when IPv6 is unavailable.
-
---===============7185096252700937842==--
