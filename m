@@ -1,97 +1,376 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 228B638F955
-	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 19:31:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4EB277C81
+	for <bpf@vger.kernel.org>; Wed, 25 Feb 2026 19:54:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772047907; cv=none; b=dIuhl43IrlEvFc8u3Rjv76IvOS5hlpqXIxpinp3Pj8v46yC3QbqxNkzlyUDyVVaYAoTdBkImd/mm36rVrv6j9AdNqPmF3kmXPmu6jcoxYgyieqLh/ead9WG6YstCK7h67Amw12xd3iIvCaZGZogqdbqA0lkutwBHmiWxxwtWzOI=
+	t=1772049296; cv=none; b=g74dq5Q39J4TBx0UGiyvJUnH56uQ8wraG+9NegpphHk/fYYoaMka9SCRjZdHezrhWBkCgp/H3AwO4oQtc86sfrDs2AfyUS7ma3S5LmGk8buWpX35jeNSAmjSqv6DYQ9o228xBwv+zPuV3HDRNmIJ7Lr/kA2QOT9wNQNmR7N2Z/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772047907; c=relaxed/simple;
-	bh=M5vspAADnKD+PryBDq8V3PBIhucdgOKDl8XLKWFlNXY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Us/KzDuVH0cEqGVVBRgMVrHiUiB0eOWSfL5P393NDchplJo2bEVP1k59VXUMd06ZcA/HstcDtMwgNUKnFr0Zwjpelq43Q0uKJ0OJSxXypGwLN/Ytr7gK7tX+YObg/uXrg1q38i13zShqwHiOPpUZ1Lq1ImIm8M0UvNmeKrG4wd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MC8TZwKD; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772049296; c=relaxed/simple;
+	bh=tzc16M8jLafm+a0ib/sx0n7nNUCIg2uDm9dA5PjHHjY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JWqEfUaL4vSFDaoQrH93JqWXQThd/AvdBeY+tHow/i26OextjOPYG8TYRIJLAE4FWe0giAQZJGmSnVB3RM8CPQnqCDTnxOQDi+sEKwta/sGfSOyoUaPc0+RRtqwdX0hlCARbWWXuR2UqTP09NlxDDyZ0woG1OSsQMt98UU2O/SY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=DcNnnPZM; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MC8TZwKD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8656AC116D0;
-	Wed, 25 Feb 2026 19:31:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772047906;
-	bh=M5vspAADnKD+PryBDq8V3PBIhucdgOKDl8XLKWFlNXY=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=MC8TZwKD8yoyRT9CryhFv7Y53To4xg5OKWAeEL/1tAkYXy34dqHQpDY/d5bb4VGlL
-	 vWjTIiBE3O3cTAVB4vUGHbHEqZlUc/+bDUw8+TYfE8OmrhAk81C6UZh/ZR2Pg+tYIe
-	 DNnnXr7vEp4sjWeV8EBdmNgPtCosck+M86XuykSb5a32791o4PyhWSrnYt7Eb35ZOP
-	 1YMSc0ua8sH6Jnm0AcUz/VmC9XXanFbabHfJ2lhEywAZgqJfp+pZMaFUXRLxYeF1Ey
-	 0qjzyCQqHfG7nzJm2fxcvtzXMwnY1nfIbXicToni7/Of7XHMmkDbD4wY4tS6w4N+md
-	 iJqD7P36qFitg==
-Content-Type: multipart/mixed; boundary="===============0610971924005731258=="
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="DcNnnPZM"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61PEe3vE2520093;
+	Wed, 25 Feb 2026 19:54:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=pp1; bh=vQCdEPt9PM0lHc5oLaNfnQq+YNwDetByd5AI67ExU
+	U8=; b=DcNnnPZMRJW4QFMJ3oek/2G31Xw2ZtbXcHE7VwiI4faIJpzqpnOWh/Rs7
+	QxYys6KXD71sgcxxelYb7epGLRFTCjT+Kmmk+7lxS8He8bHj0FLFNga1Vv5cHp53
+	cVuE0lysYIBxLY2kJsZS1qkMu/EkVn+EnmttDhR/T7FrnELJUNG/bPOoNs8cLPAH
+	DGCOqrgYMWqDbicrkIFHrf8PQTNXjkK2cQj1WYH/Pd9YH8jOeRVhZu+NgUAQmjl1
+	8RnXy4Y0L0fwa6i0CAd7/uRCzyEC35k3Amyc9rnswhe0aPjNVXV4qF2w3mChC6sC
+	FL1xxWmNz+WFmPk3W+z0dprTm4fcw==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf34c9gkr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Feb 2026 19:54:34 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61PHAqka030267;
+	Wed, 25 Feb 2026 19:54:33 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfrhkf21j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 25 Feb 2026 19:54:33 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61PJsTjC61931992
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 25 Feb 2026 19:54:29 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C2C7020043;
+	Wed, 25 Feb 2026 19:54:29 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 44A6820040;
+	Wed, 25 Feb 2026 19:54:28 +0000 (GMT)
+Received: from ltcrain4-lp15.ltc.tadn.ibm.com (unknown [9.5.7.39])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 25 Feb 2026 19:54:28 +0000 (GMT)
+From: adubey@linux.ibm.com
+To: linuxppc-dev@lists.ozlabs.org
+Cc: bpf@vger.kernel.org, hbathini@linux.ibm.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, maddy@linux.ibm.com,
+        Abhishek Dubey <adubey@linux.ibm.com>
+Subject: [PATCH v3 1/2] powerpc64/bpf: Implement JIT support for private stack
+Date: Wed, 25 Feb 2026 19:54:39 -0500
+Message-ID: <20260226005440.9570-1-adubey@linux.ibm.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fa7bb05738258324a4278d62e2abc58a603819587903a6a992157f999331732c@mail.kernel.org>
-In-Reply-To: <20260225185121.2057388-3-memxor@gmail.com>
-References: <20260225185121.2057388-3-memxor@gmail.com>
-Subject: Re: [PATCH bpf-next v1 2/4] bpf: Delay freeing fields in local storage
-From: bot+bpf-ci@kernel.org
-To: memxor@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yatsenko@meta.com,kkd@meta.com,kernel-team@meta.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 25 Feb 2026 19:31:45 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI1MDE4OCBTYWx0ZWRfXys9uW3u7GfdB
+ LHFwwheKLGiKdf1Myj//Z24w4+gyH5QO9jUjZzzTRSNfFxt3N0JbdO14QOD347wvDolgRc+YMIS
+ K3exN6BVDIVZcnv8UKTMu6xaokkvTyg1rR2wbv6mcZgYjc3Omdy1VMHKFKpCFdODqXdPcd4abN7
+ 5nSEv3ztvoPCyJnX2lFFIBOvC5MzDzCdCby9eOFMg0s4A4l7vrwFPdEKTQBt2AOwef3p3LL1669
+ C9kAjXJMNs1QCLMy3thPtmVEgAmsvm1VIl8Oda/nYSLFjdLnwk7eAJQFWFtD1IXfsXG8uaCNBJ6
+ 0dZld2nQIln7PJm4cymNXSoboBszuXAaq0pC/SNno1cd5ZBvspQ9fA4sGhuxRJyhY4MOxq9C2Lj
+ KzTP5pWsuxf4YRmREYEdBFrpEja5nTcsKj8J0a/Xn+wVDgC1RhrGKyKvBvJWUq2fEHa6tNh+kMV
+ Pa8q4+x2MooxuKZQwGQ==
+X-Proofpoint-ORIG-GUID: wrO-PkZOBq3jQkdtQV0nO2VmKsOktGkT
+X-Authority-Analysis: v=2.4 cv=F9lat6hN c=1 sm=1 tr=0 ts=699f537a cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
+ a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=F76KSA7jxJ0ultxYvGsA:9
+X-Proofpoint-GUID: wrO-PkZOBq3jQkdtQV0nO2VmKsOktGkT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-25_03,2026-02-25_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 phishscore=0 bulkscore=0 adultscore=0 spamscore=0
+ clxscore=1015 suspectscore=0 malwarescore=0 lowpriorityscore=0
+ priorityscore=1501 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2601150000
+ definitions=main-2602250188
 
---===============0610971924005731258==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-> diff --git a/kernel/bpf/bpf_local_storage.c b/kernel/bpf/bpf_local_storage.c
-> index b28f07d3a0db..0825a92dcd6d 100644
-> --- a/kernel/bpf/bpf_local_storage.c
-> +++ b/kernel/bpf/bpf_local_storage.c
+Provision the private stack as a per-CPU allocation during
+bpf_int_jit_compile(). Align the stack to 16 bytes and place guard
+regions at both ends to detect runtime stack overflow and underflow.
 
-[ ... ]
+Round the private stack size up to the nearest 16-byte boundary.
+Make each guard region 16 bytes to preserve the required overall
+16-byte alignment. When private stack is set, skip bpf stack size
+accounting in kernel stack.
 
-> +/* rcu callback for use_kmalloc_nolock == false */
-> +static void __bpf_selem_free_rcu(struct rcu_head *rcu)
-> +{
-> +	struct bpf_local_storage_elem *selem;
-> +
-> +	selem = container_of(rcu, struct bpf_local_storage_elem, rcu);
-> +	/* bpf_selem_unlink_nofail may have already cleared smap and freed fields. */
-> +	if (SDATA(selem)->smap)
-> +		bpf_obj_free_fields(SDATA(selem)->smap->map.record, SDATA(selem)->data);
-> +	kfree(selem);
-> +}
+There is no stack pointer in powerpc. Stack referencing during JIT
+is done using frame pointer. Frame pointer calculation goes like:
 
-The smap field is declared __rcu in struct bpf_local_storage_data:
+BPF frame pointer = Priv stack allocation start address +
+                    Overflow guard +
+                    Actual stack size defined by verifier
 
-    struct bpf_local_storage_map __rcu *smap;
+Memory layout:
 
-Should this use rcu_dereference_check() to be consistent with the
-existing pattern in bpf_selem_free_rcu()?
+High Addr          +--------------------------------------------------+
+                   |                                                  |
+                   | 16 bytes Underflow guard (0xEB9F12345678eb9fULL) |
+                   |                                                  |
+         BPF FP -> +--------------------------------------------------+
+                   |                                                  |
+                   | Private stack - determined by verifier           |
+                   | 16-bytes aligned                                 |
+                   |                                                  |
+                   +--------------------------------------------------+
+                   |                                                  |
+Lower Addr         | 16 byte Overflow guard (0xEB9F12345678eb9fULL)   |
+                   |                                                  |
+Priv stack alloc ->+--------------------------------------------------+
+start
 
-    smap = rcu_dereference_check(SDATA(selem)->smap, 1);
-    if (smap)
-            bpf_obj_free_fields(smap->map.record, SDATA(selem)->data);
+Update BPF_REG_FP to point to the calculated offset within the
+allocated private stack buffer. Now, BPF stack usage reference
+in the allocated private stack.
 
-As written, the pointer is loaded from memory twice (once for the if
-check and once for the dereference) without READ_ONCE or a local
-variable, and sparse would flag the direct access to an __rcu pointer.
+The patch is rebase over fixes by Hari:
+https://lore.kernel.org/bpf/20260220063933.196141-1-hbathini@linux.ibm.com/
 
+v1->v2:
+  Fix ci-bot warning for percpu pointer casting
+  Minor refactoring
+v2->v3:
+  Fix ci-bot bug targeting clobbered NVRs on stack rollback
 
+[v2]: https://lore.kernel.org/bpf/20260225153950.15331-1-adubey@linux.ibm.com
+[v1]: https://lore.kernel.org/bpf/20260216152234.36632-1-adubey@linux.ibm.com
+
+Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ arch/powerpc/net/bpf_jit.h        |  5 ++
+ arch/powerpc/net/bpf_jit_comp.c   | 87 +++++++++++++++++++++++++++++--
+ arch/powerpc/net/bpf_jit_comp64.c | 29 +++++++++--
+ 3 files changed, 113 insertions(+), 8 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22411606914
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index 7354e1d72f79..eb0a400b5a98 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -178,8 +178,13 @@ struct codegen_context {
+ 	bool is_subprog;
+ 	bool exception_boundary;
+ 	bool exception_cb;
++	void __percpu *priv_sp;
+ };
+ 
++/* Memory size & magic-value to detect private stack overflow/underflow */
++#define PRIV_STACK_GUARD_SZ    16
++#define PRIV_STACK_GUARD_VAL   0xEB9F12345678eb9fULL
++
+ #define bpf_to_ppc(r)	(ctx->b2p[r])
+ 
+ #ifdef CONFIG_PPC32
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index 278e09b57560..adb2838bc653 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -129,25 +129,60 @@ bool bpf_jit_needs_zext(void)
+ 	return true;
+ }
+ 
++static void priv_stack_init_guard(void __percpu *priv_stack_ptr, int alloc_size)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
++
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		stack_ptr[0] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[1] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx] = PRIV_STACK_GUARD_VAL;
++		stack_ptr[underflow_idx + 1] = PRIV_STACK_GUARD_VAL;
++	}
++}
++
++static void priv_stack_check_guard(void __percpu *priv_stack_ptr, int alloc_size,
++								struct bpf_prog *fp)
++{
++	int cpu, underflow_idx = (alloc_size - PRIV_STACK_GUARD_SZ) >> 3;
++	u64 *stack_ptr;
++
++	for_each_possible_cpu(cpu) {
++		stack_ptr = per_cpu_ptr(priv_stack_ptr, cpu);
++		if (stack_ptr[0] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[1] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[underflow_idx] != PRIV_STACK_GUARD_VAL ||
++			stack_ptr[underflow_idx + 1] != PRIV_STACK_GUARD_VAL) {
++			pr_err("BPF private stack overflow/underflow detected for prog %s\n",
++			bpf_jit_get_prog_name(fp));
++			break;
++		}
++	}
++}
++
+ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ {
+ 	u32 proglen;
+ 	u32 alloclen;
+ 	u8 *image = NULL;
+-	u32 *code_base;
+-	u32 *addrs;
+-	struct powerpc_jit_data *jit_data;
++	u32 *code_base = NULL;
++	u32 *addrs = NULL;
++	struct powerpc_jit_data *jit_data = NULL;
+ 	struct codegen_context cgctx;
+ 	int pass;
+ 	int flen;
++	int priv_stack_alloc_size;
++	void __percpu *priv_stack_ptr = NULL;
+ 	struct bpf_binary_header *fhdr = NULL;
+ 	struct bpf_binary_header *hdr = NULL;
+ 	struct bpf_prog *org_fp = fp;
+-	struct bpf_prog *tmp_fp;
++	struct bpf_prog *tmp_fp = NULL;
+ 	bool bpf_blinded = false;
+ 	bool extra_pass = false;
+ 	u8 *fimage = NULL;
+-	u32 *fcode_base;
++	u32 *fcode_base = NULL;
+ 	u32 extable_len;
+ 	u32 fixup_len;
+ 
+@@ -173,6 +208,26 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		fp->aux->jit_data = jit_data;
+ 	}
+ 
++	priv_stack_ptr = fp->aux->priv_stack_ptr;
++	if (!priv_stack_ptr && fp->aux->jits_use_priv_stack) {
++		/*
++		 * Allocate private stack of size equivalent to
++		 * verifier-calculated stack size plus two memory
++		 * guard regions to detect private stack overflow
++		 * and underflow.
++		 */
++		priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
++							2 * PRIV_STACK_GUARD_SZ;
++		priv_stack_ptr = __alloc_percpu_gfp(priv_stack_alloc_size, 16, GFP_KERNEL);
++		if (!priv_stack_ptr) {
++			fp = org_fp;
++			goto out_priv_stack;
++		}
++
++		priv_stack_init_guard(priv_stack_ptr, priv_stack_alloc_size);
++		fp->aux->priv_stack_ptr = priv_stack_ptr;
++	}
++
+ 	flen = fp->len;
+ 	addrs = jit_data->addrs;
+ 	if (addrs) {
+@@ -209,6 +264,9 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 	cgctx.is_subprog = bpf_is_subprog(fp);
+ 	cgctx.exception_boundary = fp->aux->exception_boundary;
+ 	cgctx.exception_cb = fp->aux->exception_cb;
++	cgctx.priv_sp = priv_stack_ptr;
++	if (priv_stack_ptr)
++		cgctx.stack_size = 0;
+ 
+ 	/* Scouting faux-generate pass 0 */
+ 	if (bpf_jit_build_body(fp, NULL, NULL, &cgctx, addrs, 0, false)) {
+@@ -306,6 +364,11 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_prog *fp)
+ 		}
+ 		bpf_prog_fill_jited_linfo(fp, addrs);
+ out_addrs:
++		if (!image && priv_stack_ptr) {
++			fp->aux->priv_stack_ptr = NULL;
++			free_percpu(priv_stack_ptr);
++		}
++out_priv_stack:
+ 		kfree(addrs);
+ 		kfree(jit_data);
+ 		fp->aux->jit_data = NULL;
+@@ -419,6 +482,8 @@ void bpf_jit_free(struct bpf_prog *fp)
+ 	if (fp->jited) {
+ 		struct powerpc_jit_data *jit_data = fp->aux->jit_data;
+ 		struct bpf_binary_header *hdr;
++		void __percpu *priv_stack_ptr;
++		int priv_stack_alloc_size;
+ 
+ 		/*
+ 		 * If we fail the final pass of JIT (from jit_subprogs),
+@@ -432,6 +497,13 @@ void bpf_jit_free(struct bpf_prog *fp)
+ 		}
+ 		hdr = bpf_jit_binary_pack_hdr(fp);
+ 		bpf_jit_binary_pack_free(hdr, NULL);
++		priv_stack_ptr = fp->aux->priv_stack_ptr;
++		if (priv_stack_ptr) {
++			priv_stack_alloc_size = round_up(fp->aux->stack_depth, 16) +
++							2 * PRIV_STACK_GUARD_SZ;
++			priv_stack_check_guard(priv_stack_ptr, priv_stack_alloc_size, fp);
++			free_percpu(priv_stack_ptr);
++		}
+ 		WARN_ON_ONCE(!bpf_prog_kallsyms_verify_off(fp));
+ 	}
+ 
+@@ -453,6 +525,11 @@ bool bpf_jit_supports_kfunc_call(void)
+ 	return true;
+ }
+ 
++bool bpf_jit_supports_private_stack(void)
++{
++	return IS_ENABLED(CONFIG_PPC64);
++}
++
+ bool bpf_jit_supports_arena(void)
+ {
+ 	return IS_ENABLED(CONFIG_PPC64);
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index 640b84409687..65ab8b7a7f82 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -183,6 +183,22 @@ void bpf_jit_realloc_regs(struct codegen_context *ctx)
+ {
+ }
+ 
++static void emit_fp_priv_stack(u32 *image, struct codegen_context *ctx)
++{
++	/* Load percpu data offset */
++	EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R13,
++			offsetof(struct paca_struct, data_offset)));
++	PPC_LI64(bpf_to_ppc(BPF_REG_FP), (__force long)ctx->priv_sp);
++	/*
++	 * Load base percpu pointer of private stack allocation.
++	 * Runtime per-cpu address = (base + data_offset) + (guard + stack_size)
++	 */
++	EMIT(PPC_RAW_ADD(bpf_to_ppc(BPF_REG_FP),
++			bpf_to_ppc(TMP_REG_1), bpf_to_ppc(BPF_REG_FP)));
++	EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), bpf_to_ppc(BPF_REG_FP),
++			PRIV_STACK_GUARD_SZ + round_up(ctx->stack_size, 16)));
++}
++
+ /*
+  * For exception boundary & exception_cb progs:
+  *     return increased size to accommodate additional NVRs.
+@@ -307,9 +323,16 @@ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx)
+ 	 * Exception_cb not restricted from using stack area or arena.
+ 	 * Setup frame pointer to point to the bpf stack area
+ 	 */
+-	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP)))
+-		EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
+-			STACK_FRAME_MIN_SIZE + ctx->stack_size));
++	if (bpf_is_seen_register(ctx, bpf_to_ppc(BPF_REG_FP))) {
++		if (ctx->priv_sp) {
++			/* Set up fp in private stack */
++			emit_fp_priv_stack(image, ctx);
++		} else {
++			/* Setup frame pointer to point to the bpf stack area */
++			EMIT(PPC_RAW_ADDI(bpf_to_ppc(BPF_REG_FP), _R1,
++				STACK_FRAME_MIN_SIZE + ctx->stack_size));
++		}
++	}
+ 
+ 	if (ctx->arena_vm_start)
+ 		PPC_LI64(bpf_to_ppc(ARENA_VM_START), ctx->arena_vm_start);
+-- 
+2.52.0
 
-AI-authorship-score: low
-AI-authorship-explanation: Focused, technically precise RCU bug fix by a well-known BPF maintainer showing deep subsystem expertise.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Missing rcu_dereference_check() for __rcu pointer access causes sparse warnings and double-loads the pointer, but no concurrent writer exists at callback time so functional impact is minimal.
-
---===============0610971924005731258==--
