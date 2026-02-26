@@ -1,181 +1,130 @@
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C58D39282E;
-	Thu, 26 Feb 2026 09:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390C639900E
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 09:12:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772097035; cv=none; b=BHgY1waoq+q2jXTJgJk2TWjCpcXZuyG6I63wTnmaVmBn8ko0Ksv1EEuO42nAuUjqxeqX2vW0fR3+kdLpTrPEGnS623/2qg6NKMLv7osOPo0LN3r3zYkncI3Mu5Ytn3AdQnyPBzxDFnVO0OcehgeaAUA7mHp4Dtdvr7wVWUSEq/Q=
+	t=1772097135; cv=none; b=Dq3vjZQ+qxnB5pe20w9adn0Coox5HrPR3NcMEEyyqc1PjkGxM6Xo1O9U6ZX+03GguBk//I8kQNblsR4T6EovtU62kV0rstSpyD/L5/tar6PC2M6vNGoqZQ8wY20Sh8UwGUJeJIuIGRCiv06NhE6+WRJ7cZfKTZXBpSL67oHOf/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772097035; c=relaxed/simple;
-	bh=7lx5RQgAu8tuCa5/y0LmMXgKvily/v6Qd02zsj0mNNg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dcxMwDIfIk+4M6FdKCgH4+oHjkz+4bCLUrs7kFG6Bs2v0wUkwAlPhrzo6wSGuzGR6xwE0B2Qwz4pWHpT48VF4nODzYNe9ryvYhQ5TXe0YbIPk0nkF3qBMSYX+azHhB8zeRQv8I3Z8vOLfsJGZcNyT/2ZV89m5oHYz344PUQz6t8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=YmbbjDgK; arc=none smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1772097135; c=relaxed/simple;
+	bh=gR8JrkKH77PwEuudsi/sFf4YxNq45Ct5YGL2dA2Gjb0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pk2TdmC3H34BZ7QppkOE1Tngbe34QYR60ZPUo7awec37UZ1fgMH1BJhp9CEaMPmxi2LSMZUQDOdpkR8MSCTvgRkVabHGSPX83XpuC5KU11JzXWoRdvWKyvDspN+oG0eMIZAHKGI9cI3IV+IyAGMMOkIlcOq98C56yT3Smd7DW2g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lrgVHh3l; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="YmbbjDgK"
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61Q62hbr4032387;
-	Thu, 26 Feb 2026 09:10:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=mlJGl
-	TC/TiGAhOdLcvKPcmF12d02ePjIk6H4VEHMkrk=; b=YmbbjDgKL/Y162XJFxcvb
-	86pF8eqAa2rYg4le3ylEqCMBfGD2duh5L5UoSr5O1gVsUMPRlGzHXUZfyPc9qY9F
-	FIpVx2JgL0ZsmGAf73WxfynsKmTP61yuJDjjY0o9yTfXOwqgmZ5vD21Jo2g04uX9
-	W0We6o4v0fdpRm8198TrCFEmHpHMVSYj2t6/+8xQQ9uZVLs9qT9GXoa8y55B47Mt
-	Pg05A6FjTDjcpGJauQX/Js3h68gBealcxYM/DpiOmbwB9GIKQ35t41/mUbWH2VRl
-	fR2SakDurkGkhg/M3MExVBZdgia4jLJ9mNaEDvBfM5cPvfRLrTBswBro0sYGP7bH
-	g==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cjgjfr6pf-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 26 Feb 2026 09:10:11 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 61Q7JjSi028500;
-	Thu, 26 Feb 2026 08:56:38 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4cf35c75ck-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 26 Feb 2026 08:56:38 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 61Q8uYaS038952;
-	Thu, 26 Feb 2026 08:56:37 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-58-146.vpn.oracle.com [10.154.58.146])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4cf35c759a-2;
-	Thu, 26 Feb 2026 08:56:37 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: andrii@kernel.org, ast@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
-        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-        jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
-        mykyta.yatsenko5@gmail.com, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v9 bpf-next 01/10] btf: add BTF kind layout encoding to UAPI
-Date: Thu, 26 Feb 2026 08:56:15 +0000
-Message-ID: <20260226085624.1909682-2-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260226085624.1909682-1-alan.maguire@oracle.com>
-References: <20260226085624.1909682-1-alan.maguire@oracle.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lrgVHh3l"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-c6e1dc5c5edso279995a12.1
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 01:12:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772097132; x=1772701932; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=WfjwDtLvw60OrVaBORutYJIpW9lJUq2Hk3Pocg/05+g=;
+        b=lrgVHh3lUpxh3oc08NCO5gJynQVpx8JtwWqHFnUo+vfP2h7v9uT11P2klu0CGcnNZy
+         kXIkfGYznxUhzBBs3FB270Ge19qCrc9pA30UPKTuPTXSrtIvf6kIpFvCIrQT1rLno3wb
+         XWPf7b6TNKXYkCE096yKoa8muyKPsd8kEuZ36En7R4Fc+j3EgE3V+IdSboBEe2nyFS95
+         IkLrD/KMe9AZ/t6qDh+ptT6veNKNzFyUdJc2tLAOUaHJlnqsTKhQrEEI0HwTYJmRgX+2
+         6dmYgtIsQdPnmomsEKS6bMRUTR6Bie/i4ion1W85BQlwHsBoK7gNsRjFN7lomrEyay9A
+         +cSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772097132; x=1772701932;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WfjwDtLvw60OrVaBORutYJIpW9lJUq2Hk3Pocg/05+g=;
+        b=UC2isyrdPGqZWRSyV32c9zmm/x/4W5PqsLBk4jdTAYi32I30q27qC6TXPUqyavAcLY
+         uDN8uKubitW9Rjyr38ITh8zJCopgMDdAtRrqPuh1He43dUMD7ggry6UtxnJUGuq7zDnv
+         MPax6nBWvqtefNkZWRKk/8khbIMUz9NjPQUQsRK3Gm5rq/532VvrTrK2gMAqe3bZtVGa
+         noWVx3dlsNCP0Sn7j+7msfi7VesQ+kR14aySbEiKfyw2RBlaeXfe/9mmHQdBtBiVEjgd
+         zPnDeww6KXglGFdAXhIzVbIp6t9WzUy0fKFkVj2e0R1luRrLdGyFALMY/ZV+0CGAlW+3
+         m0IA==
+X-Forwarded-Encrypted: i=1; AJvYcCXiKlrNwAivJMoVel3xDxwKnITQUl0GPlo5sJPOLc6NXwfLCecJktSppjtiGk+BD0nZrJo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5+LdHR1rYCOm76d9dI4f4UaZCjlRq0A0mG2jLdNVQigZaxgSU
+	F+UmodwiwpBI3hXpKm50DgY6uCETNlByAWG3hAPvzv4p8t557UL6lTqB
+X-Gm-Gg: ATEYQzz0vzmHx+lqOYfJoYwGgKMT3AEPZ355xXOwrIQmn94xbPMpgdRBC4joIUMNQ5U
+	pFtgAgFYu4cEM96proj/gv1VblUjQ8Qshk3lHFbgoSHInSv7Ix1TjWRgCzBlMADDnsf9I+oxL4T
+	l2sd3WLaKOi7UUpVXv7seciweji1U43w1pEuL2v9Fj47GXb57q3ODvsXpFBSfgBlxYgMCIrBuOR
+	CUP2/1KN9xC0Iv49PAv90+7qVAM/6OWX0e4JMiArk6d95UJ/kpY5Tc58nt9AL+y6/rwj4WOzmcr
+	x4YgT3yBxCE5+l4gm92k/FNeJsMdkwuF2GPgxd4Nzridx4JJLzpCB1VuMKlT8rLezBJpP46RFJs
+	kQ8PfqmTUdUlN8d0nHtudfEOxnLgPcyKDNi6xJeXz5qiZ0d+76yg9pzaA6ZGimZmaou5HqiPtq8
+	7s6Y85rgNG5iS8/z1cn9GkCycFUqZ7lRSkWFieQyLNg4rCVjzHTok=
+X-Received: by 2002:a17:90b:1f92:b0:353:5595:3246 with SMTP id 98e67ed59e1d1-3593db4e1acmr1722094a91.21.1772097132222;
+        Thu, 26 Feb 2026 01:12:12 -0800 (PST)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3593dda5c87sm1461686a91.9.2026.02.26.01.12.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Feb 2026 01:12:11 -0800 (PST)
+Message-ID: <22c68a8ae1e415bb70bd5581f9be890495335ecf.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] bpf: Consolidate sleepable checks in
+ check_helper_call()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko
+ <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Date: Thu, 26 Feb 2026 01:12:09 -0800
+In-Reply-To: <20260225134950.2781351-1-puranjay@kernel.org>
+References: <20260225134950.2781351-1-puranjay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-02-25_04,2026-02-25_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 malwarescore=0
- mlxscore=0 suspectscore=0 bulkscore=0 phishscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
- definitions=main-2602260079
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI2MDA4MiBTYWx0ZWRfX6OhSbogCjh0x
- vMdbpe64tEjctESXnJu7N6nZOvYnfOgZpuwmD7OAl0HkhOW+ZWNKVlkMHo6V1uxPlV7nNJcpMus
- KcKqwQuGEFsjqd3VfguX7hBCF7lrqVTr+kFfuVBK8mfPa+N0XCXWwTCTIWzSI+QA1RnJTqACwN+
- VpX3ZFOpAumMTGK+XlXo4sjL/6QwglkB4OTpq0O6SrjcfSkfenzF2wEN7QYGajUhBMDNSTgL5Ta
- u//3DZZMzh6LuWcRi1pjJPovPVUKI2lApvFhUiuTE0uhvyBL/oxC2uelxHObNgyUl7PLHA0UkG1
- sCd3Z17KHJd4uoFOzX377sXuktFRx9EFpxc28aLxPxJrFHluZEhnx9aQfPJAGxBuCOErPIMC91D
- wnWH/vy81iD0TU+hxelExI7LkeDt9DXVDJ3TDtrV7tlZrSdgtKB4RoXcIM61yuawWOxgUaFckl5
- MQK+uaPlbgxG7+j1XzA==
-X-Proofpoint-ORIG-GUID: Ujol1BYaXT1f5v-WvRRur0I5zqqmMwg8
-X-Proofpoint-GUID: Ujol1BYaXT1f5v-WvRRur0I5zqqmMwg8
-X-Authority-Analysis: v=2.4 cv=L/oQguT8 c=1 sm=1 tr=0 ts=69a00df3 cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22 a=Mpw57Om8IfrbqaoTuvik:22
- a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8 a=pGLkceISAAAA:8 a=yPCof4ZbAAAA:8
- a=juZ357eHEe9gvkRO8XoA:9
 
-BTF kind layouts provide information to parse BTF kinds. By separating
-parsing BTF from using all the information it provides, we allow BTF
-to encode new features even if they cannot be used by readers. This
-will be helpful in particular for cases where older tools are used
-to parse newer BTF with kinds the older tools do not recognize;
-the BTF can still be parsed in such cases using kind layout.
+On Wed, 2026-02-25 at 05:49 -0800, Puranjay Mohan wrote:
 
-The intent is to support encoding of kind layouts optionally so that
-tools like pahole can add this information. For each kind, we record
+[...]
 
-- length of singular element following struct btf_type
-- length of each of the btf_vlen() elements following
-- a (currently unused) flags field
+> @@ -11609,28 +11622,11 @@ static int check_helper_call(struct bpf_verifie=
+r_env *env, struct bpf_insn
+> *insn
+> =C2=A0		return err;
+> =C2=A0	}
+> =C2=A0
+> -	if (env->cur_state->active_rcu_locks) {
+> -		if (fn->might_sleep) {
+> -			verbose(env, "sleepable helper %s#%d in rcu_read_lock region\n",
+> -				func_id_name(func_id), func_id);
+> -			return -EINVAL;
+> -		}
+> -	}
+> -
+> -	if (env->cur_state->active_preempt_locks) {
+> -		if (fn->might_sleep) {
+> -			verbose(env, "sleepable helper %s#%d in non-preemptible region\n",
+> -				func_id_name(func_id), func_id);
+> -			return -EINVAL;
+> -		}
+> -	}
+> -
+> -	if (env->cur_state->active_irq_id) {
+> -		if (fn->might_sleep) {
+> -			verbose(env, "sleepable helper %s#%d in IRQ-disabled region\n",
+> -				func_id_name(func_id), func_id);
+> -			return -EINVAL;
+> -		}
+> +	if (fn->might_sleep && !in_sleepable_context(env)) {
+> +		verbose(env, "sleepable helper %s#%d in %s\n",
+> +			func_id_name(func_id), func_id,
+> +			non_sleepable_context_description(env));
+> +		return -EINVAL;
 
-The ideas here were discussed at [1], [2]; hence
+A few checks above there is:
 
-Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
+	if (!in_sleepable(env) && fn->might_sleep) {
+		verbose(env, "helper call might sleep in a non-sleepable prog\n");
+		return -EINVAL;
+	}
 
-[1] https://lore.kernel.org/bpf/CAEf4BzYjWHRdNNw4B=eOXOs_ONrDwrgX4bn=Nuc1g8JPFC34MA@mail.gmail.com/
-[2] https://lore.kernel.org/bpf/20230531201936.1992188-1-alan.maguire@oracle.com/
----
- include/uapi/linux/btf.h       | 12 ++++++++++++
- tools/include/uapi/linux/btf.h | 12 ++++++++++++
- 2 files changed, 24 insertions(+)
-
-diff --git a/include/uapi/linux/btf.h b/include/uapi/linux/btf.h
-index 266d4ffa6c07..638615ebddc2 100644
---- a/include/uapi/linux/btf.h
-+++ b/include/uapi/linux/btf.h
-@@ -8,6 +8,16 @@
- #define BTF_MAGIC	0xeB9F
- #define BTF_VERSION	1
- 
-+/*
-+ * BTF layout section consists of a struct btf_layout for each known
-+ * kind at BTF encoding time.
-+ */
-+struct btf_layout {
-+	__u8 info_sz;		/* size of singular element after btf_type */
-+	__u8 elem_sz;		/* size of each of btf_vlen(t) elements */
-+	__u16 flags;		/* currently unused */
-+};
-+
- struct btf_header {
- 	__u16	magic;
- 	__u8	version;
-@@ -19,6 +29,8 @@ struct btf_header {
- 	__u32	type_len;	/* length of type section	*/
- 	__u32	str_off;	/* offset of string section	*/
- 	__u32	str_len;	/* length of string section	*/
-+	__u32	layout_off;	/* offset of layout section	*/
-+	__u32	layout_len;	/* length of layout section	*/
- };
- 
- /* Max # of type identifier */
-diff --git a/tools/include/uapi/linux/btf.h b/tools/include/uapi/linux/btf.h
-index 266d4ffa6c07..638615ebddc2 100644
---- a/tools/include/uapi/linux/btf.h
-+++ b/tools/include/uapi/linux/btf.h
-@@ -8,6 +8,16 @@
- #define BTF_MAGIC	0xeB9F
- #define BTF_VERSION	1
- 
-+/*
-+ * BTF layout section consists of a struct btf_layout for each known
-+ * kind at BTF encoding time.
-+ */
-+struct btf_layout {
-+	__u8 info_sz;		/* size of singular element after btf_type */
-+	__u8 elem_sz;		/* size of each of btf_vlen(t) elements */
-+	__u16 flags;		/* currently unused */
-+};
-+
- struct btf_header {
- 	__u16	magic;
- 	__u8	version;
-@@ -19,6 +29,8 @@ struct btf_header {
- 	__u32	type_len;	/* length of type section	*/
- 	__u32	str_off;	/* offset of string section	*/
- 	__u32	str_len;	/* length of string section	*/
-+	__u32	layout_off;	/* offset of layout section	*/
-+	__u32	layout_len;	/* length of layout section	*/
- };
- 
- /* Max # of type identifier */
--- 
-2.39.3
-
+'fn->might_sleep && !in_sleepable_context(env)' covers this case,
+do we want to remove it as well?
