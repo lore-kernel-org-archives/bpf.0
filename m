@@ -1,117 +1,138 @@
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from xry111.site (xry111.site [89.208.246.23])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D995313E21
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 09:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C62863126AF;
+	Thu, 26 Feb 2026 09:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772098317; cv=none; b=WsC8oWIRe3dFrxj/CiN6pIuVKU8X/ycpjngLZco++dLNzt88uwFMQqurMo47oHf9jnu17HwZ49kR/9Bp1FAsLlow67ApbgDOAkR88JPFtqiUH3Rn9AmYQHDbTyEDJCnD2T++pgawKrKTVVR02bq5u+mmPTXr7Lz9tgrLYVZSkNA=
+	t=1772098334; cv=none; b=dgBDK7oRI7OPbMCA3Y77UtJXkwuLVJGaidC+iAuOCQxUoUJyZJEspzJ3HjSRiXHzJu14AItsOPMLI3OeZgEpO9IrXflb8CH0G/Nw2quIfKru8LOQrN02/xiRf4FVAbUOfrLzLrJI1BrKo9tr2X+my0OvlyagmjS8igsgskqP/zc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772098317; c=relaxed/simple;
-	bh=7hlfsR+NxVR84wDC2V+k6SQPH/xZi5y8H+6CYmBY5BQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GlK7FQ3FSEc0ug8eOKI4KP+GJHHRb82GA57RumbQSRUWSN3DrQ+UHfKzCEYMHRtCbUnGwCTiwCatU7FOLv8JvP5NftSzBK3Ahlv6cFmAtcBek689qFyZB9/W/2cLDxlTfUqD9Mskw4JSaGk8j1MNicy6cXEKGSROmPv/lzNQDN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Pp/73ine; arc=none smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772098334; c=relaxed/simple;
+	bh=m5mtnbJ2X65BR6QuQDkTsPW41IRAVxN/CnC2fL/G7yk=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PK4q74Xi+KrLSAsySMCyCO6j8DSPOoQXxfgDmBIGDcd92Htz6b2DMHoHEjLoHgBSDiRVRmsyq7AoDgmvnbl1IrVGjL0ct7EnTD8mtmTDiP3yDnM5AEoIG2qzCTEfnc3n7iX1dQyTTAMmnKprRSQXxkFjuY+G0O7tZNDoIrByjHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=KcC+UUjf; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pp/73ine"
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-12732e6a123so165164c88.1
-        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 01:31:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772098315; x=1772703115; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VTO52UAvVAs4B92EPIjRgjAEaywnmDEV4QBGIv74ZP0=;
-        b=Pp/73inevdIICPttkoXbYjTFkamREKn3uSp7qVa4M0hDGAuOJbJc3OrDfqLz9znFyB
-         vAX4jWbJR6Cjt6K4Qnw294Yh8FqpmPvHlZ1HU5knZlFm1ZkdJSgb7zRmpEQO67tsa5RH
-         41DjmqNdTZkUXzYxAaz3gEgtRv5LHfnZyK677ZeFV+EtLkSSjsDUMYHCQC9I/RhBuMLL
-         oR2xjL62KRP3AEI32FbjkdfqEfI7DZoR+Ry6SVsy4J3grXj+Y9w7u7ozESHTCMU/dJYF
-         JHIpap+EMGuQlWtaQwTjURmlqPdriseRfpSMUHt3svgIueCQfsBeMHRpY4y+lGDEGxvP
-         ijNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772098315; x=1772703115;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=VTO52UAvVAs4B92EPIjRgjAEaywnmDEV4QBGIv74ZP0=;
-        b=w2CiAtcRpEa3tNMm1aKBFjvLu4mHBzXCNsMkHbE9kEj6MfxCj9if5Q2k1YFtNXGDe+
-         Dw+0+SjXGBqHi05Vk10/1D1u8l10Htkh6BgPsj11+/zKUb0j9Oc3YOo3CZKYGROPcb1V
-         aHIb+/UsoEe74CEwkWQnh1BcOwYlC41kqTRStH7nRJjxoIEJgw2jolk1eozn4KfxcHKW
-         oUt7u2lfESyf09bS0mtVXFy0Gqenb0rkoYWMTkADOaWfhi2RIQPFPQko58r1AsDMszCy
-         Cb0wjyEd31tfquUkgzvYzFTgRt/PqMUecEQngR0z1P1agV8XSKnK0VOg+AjaFIOrlJj4
-         4X+g==
-X-Forwarded-Encrypted: i=1; AJvYcCUf5ds2Qho9sQgFigcgAVNy9JXQ+2H1vj/K2M4JKohI6NJ4Vz0vdJY33ZLADX2ExeV/Ei4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyme1mvKjefqrxnyGePccS0v+XUjb0IwWsiMan1trnVtmnuX0Q5
-	So1NfikquOqq1WOq9LjzERtirQWfUp2tLzxZBoDHHDGPHySQIkikJSER
-X-Gm-Gg: ATEYQzyH35w40vY/CevGJgP9e3B/YXOZBeFpxlwPJiCR3N32htSZJvFwy/J+f0NY8vQ
-	dtpr3ECL5qgBKCLU1R58ME7HkjrAN7Ui1s/LIbTWOqUHZldBCMmtA127ON+2OlJUj4eoTgG0dDB
-	Pr57eC6AlTo+1xYHvlP1rl2BCAPIZcOyZH5bynpRyzhmNbneYW/f9XAXgBfNHrgJiEA4DFZlMpN
-	8sO3VDc2a8Qe3ITeVJr2tqe393XbDu6zBv0kdwrCTneelGe8/1aNgha8S4A0NUYyqFPgUUpxqEA
-	NFcffAYtYv2DxEewoWteG/WAan6x7MJk5YeM8TylWixQ/j1XnyXO3OeRgt0LYTldzWLKMpJpmkI
-	r+g0HkgNN0QMaiUNozlkj0Q7R90nk24TW6uytI1FZ7AWJR88MWohV1giNWOH78uhzVifmXQzhfS
-	nMtd4nKSz0nuymySUUoUyWtLCMra9IykLttI+H6qm/tnn0Il2ngrYJWU6x/9amwgwWue32IgPef
-	wSYJLJbBvC/yUKfNGiWJO8=
-X-Received: by 2002:a05:7022:238d:b0:123:331d:bdbb with SMTP id a92af1059eb24-1276ad6277emr8587660c88.22.1772098315212;
-        Thu, 26 Feb 2026 01:31:55 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-12789a43c12sm1771904c88.14.2026.02.26.01.31.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 01:31:54 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH v2 2/2] selftests/bpf: probe_user: drop serial restriction
-Date: Thu, 26 Feb 2026 17:31:32 +0800
-Message-ID: <20260226093132.437206-3-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260226093132.437206-1-sun.jian.kdev@gmail.com>
-References: <20260226093132.437206-1-sun.jian.kdev@gmail.com>
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="KcC+UUjf"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
+	s=default; t=1772098326;
+	bh=m5mtnbJ2X65BR6QuQDkTsPW41IRAVxN/CnC2fL/G7yk=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=KcC+UUjfmnPjkrNyweyw2BIqXep1KooO91X6GA60CVkh2gZpo2SoaOXVip3hDirzg
+	 dWE6fTPqEMwoszcrx9WwRCofQp+uJ6AYydnCTAldZoi2ucfHZn3copcwY9jCAG1tTg
+	 LPkD1N0FbJLZmskqY5/q8obsxYz3OxyrEYtdfp5Q=
+Received: from [127.0.0.1] (2607-8700-5500-e873-0000-0000-0000-1001.16clouds.com [IPv6:2607:8700:5500:e873::1001])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature ECDSA (secp384r1) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 289561A44C2;
+	Thu, 26 Feb 2026 04:32:00 -0500 (EST)
+Message-ID: <7b5200ab6541cbee3b1a6ba0b7185596a78bed2c.camel@xry111.site>
+Subject: Re: [PATCH] LoongArch: Fix calling smp_processor_id() in
+ preemptible code
+From: Xi Ruoyao <xry111@xry111.site>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: WANG Xuerui <kernel@xen0n.name>, Hengqi Chen <hengqi.chen@gmail.com>, 
+ Mingcong Bai <jeffbai@aosc.io>, Zixing Liu <liushuyu@aosc.io>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau	
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu	
+ <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend	
+ <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
+ Fomichev	 <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>,  Tiezhu Yang <yangtiezhu@loongson.cn>, George Guo
+ <guodongtai@kylinos.cn>, Chenghao Duan	 <duanchenghao@kylinos.cn>,
+ loongarch@lists.linux.dev, 	linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org
+Date: Thu, 26 Feb 2026 17:31:58 +0800
+In-Reply-To: <CAAhV-H7rF+XwXmp_wfcHFmAgaybQdtzSUDRinFneLrGJKaNQCw@mail.gmail.com>
+References: <20260225141404.178823-2-xry111@xry111.site>
+	 <CAAhV-H7rF+XwXmp_wfcHFmAgaybQdtzSUDRinFneLrGJKaNQCw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.3 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Patch 1/2 added PID filtering to the probe_user BPF program to avoid
-cross-test interference from the global connect() hooks.
+On Thu, 2026-02-26 at 17:08 +0800, Huacai Chen wrote:
+> Hi, Ruoyao,
+>=20
+> On Wed, Feb 25, 2026 at 10:15=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> w=
+rote:
+> >=20
+> > Fix the warning recently exploited by commit 4ab17e762b34 ("LoongArch:
+> > BPF: Use BPF prog pack allocator"):
+> >=20
+> > =C2=A0=C2=A0=C2=A0 BUG: using smp_processor_id() in preemptible [000000=
+00] code: systemd/1
+> > =C2=A0=C2=A0=C2=A0 caller is larch_insn_text_copy+0x40/0xf0
+> >=20
+> > Simply changing it to raw_smp_processor_id() is not enough: if preempt
+> > and CPU hotplug happens after raw_smp_processor_id() but before
+> > stop_machine(), the CPU where raw_smp_processor_id() has run may be
+> > offline when stop_machine() and no CPU will run copy_to_kernel_nofault(=
+)
+> > in text_copy_cb().=C2=A0 Thus guard the larch_insn_text_copy() calls wi=
+th
+> > cpus_read_lock() and change stop_machine() to stop_machine_cpuslocked()
+> > to prevent this.
+> >=20
+> > Fixes: 9fbd18cf4c69 ("LoongArch: BPF: Add dynamic code modification sup=
+port")
+> > Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> > ---
+> >=20
+> > P.S. I've considered moving the locks inside larch_insn_text_copy() but
+> > doing so seems not an easy hack.=C2=A0 In bpf_arch_text_poke() obviousl=
+y the
+> > memcpy() call must be guarded by text_mutex, so we have to leave the
+> > acquire of text_mutex out of larch_insn_text_copy.=C2=A0 But in the ent=
+ire
+> > kernel the acquire of mutexes is always after cpus_read_lock(), so we
+> > cannot put cpus_read_lock() into larch_insn_text_copy() while leaving
+> > the text_mutex acquire out (or we risk a deadlock due to inconsistent
+> > lock acquire order).=C2=A0 So I'd just submit this as-is to fix the bug=
+ and
+> > leave the posssible refactor for others.
+> >=20
+> > =C2=A0arch/loongarch/kernel/inst.c | 4 ++--
+> > =C2=A0arch/loongarch/net/bpf_jit.c | 6 ++++++
+> > =C2=A02 files changed, 8 insertions(+), 2 deletions(-)
+> >=20
+> > diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.=
+c
+> > index bf037f0c6b26..db236e2b34a7 100644
+> > --- a/arch/loongarch/kernel/inst.c
+> > +++ b/arch/loongarch/kernel/inst.c
+> > @@ -263,14 +263,14 @@ int larch_insn_text_copy(void *dst, void *src, si=
+ze_t len)
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 .dst =3D dst,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 .src =3D src,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 .len =3D len,
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 .cpu =3D smp_processor_id(),
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 .cpu =3D raw_smp_processor_id(),
+> I think we should keep the old function here, because it can help
+> others to catch new bugs if the code is refactored in future.
 
-With the interference removed, drop the serial_ prefix and remove the
-stale TODO comment so the test can run in parallel.
+Hmm, IIUC using smp_processor_id will still trigger the warning as we've
+only acquired the cpu hotplug lock, instead of disabling the preemption
+completely.
 
-Tested:
-  ./test_progs -t probe_user -v
-  ./test_progs -j$(nproc) -t probe_user
+How about adding a lockdep_assert_cpus_held() in this function with an
+explanatory comment?
+>=20
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- tools/testing/selftests/bpf/prog_tests/probe_user.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/probe_user.c b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-index 280dcdb5ddef..930cded1602f 100644
---- a/tools/testing/selftests/bpf/prog_tests/probe_user.c
-+++ b/tools/testing/selftests/bpf/prog_tests/probe_user.c
-@@ -1,8 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
- 
--/* TODO: corrupts other tests uses connect() */
--void serial_test_probe_user(void)
-+void test_probe_user(void)
- {
- 	static const char *const prog_names[] = {
- 		"handle_sys_connect",
--- 
-2.43.0
-
+--=20
+Xi Ruoyao <xry111@xry111.site>
