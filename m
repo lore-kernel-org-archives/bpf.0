@@ -1,849 +1,338 @@
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57BA477E28
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 21:13:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E9A3B8D5C
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 21:17:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772140405; cv=none; b=kSKqpfuKBu+VsiyaHdP4Pw6Qgq+BNm9Kxet44Jr5e/J3BHuyAODLwGajLUAP+v1s728xIKX3TK2fA+5/KgPDqK9BeQBRxUBRGCg8r2lP7fOOB5NLMvGX/ePCix1GdUCZZUNR40EAxpXMLiQ2oGcpAq6ii1ADeXeaxqWB15jgifU=
+	t=1772140632; cv=none; b=jRrnOiR8JRKMTF2lHQyJFhauEIDGNhBj+n3JgukdZKXGtlSGhjbOjOVwp0mcrXC6mDv6f/JdlNB6zg+u6BjYJQP7fx6kZIiZaX6xG4FBKCKroSoxp1EO4mnJPMaq27Y/H9saMlWpWKW7BoWxmWGi1/jPUQU5tiliLRzjGlzXN+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772140405; c=relaxed/simple;
-	bh=DtCH9UytV+RnLVX1F5DSvLpuB/4gI0meNPXyxa/mOgQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cNkUjZrAwRJG5PPEKFPxRJ2gy9o/VJUR65+i4JhtlDqRSunl+HxcsDoZWWlkOH4MzfyMqdC0Rt8sCKfaio9pLC5YC+XFblA5e9lpxj3UKBaH5lyKOXhr659QEYmet8mX2B6VbrLhaDWqVPMTHvThZXNqWCxakXPA7XtYI9hH3RQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=fdtGLQgT; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+	s=arc-20240116; t=1772140632; c=relaxed/simple;
+	bh=1qkkHWrbmB8GbJRa1daENfyN5HDPDg65PAqAyGVES9E=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=ELLvjtkHDsg4Mj6ksGhXRDP4mYoeRsUupKLYZRWq4kpbmjcAVf2LkLE4JN21swYnUrT3W123rB6aDsIBAbT8SeT7dfjdDfIef5V+Mcv7O3k1lxIFdXCLRGTCW/sVbUKUW1R0mW+Zpl47VeoIHgvyYBF6W5YGszZB6X2ILKOEB40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=YJ3hnzbq; arc=none smtp.client-ip=209.85.160.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="fdtGLQgT"
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4836d4c26d3so9041745e9.2
-        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 13:13:18 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="YJ3hnzbq"
+Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-506984b6d83so9532431cf.3
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 13:17:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1772140397; x=1772745197; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BuFl4xqYq6G6RHboEdDI9ZBTYjDGxT8flM5jt2ij3S8=;
-        b=fdtGLQgTBBF0Lj7yZjUqS5j6dNuF38Dy7HOEPOp2E/ejRxbj2yGG2BLQ00ku+DsK9B
-         69Q+a9kr7KeZAQuqCrveeZ3gGhvdn+6dEIv5oBWUb3heAiAw2/NmzsrDIAqPCyRaVNSZ
-         xLepLG5U8ksVMiszLruk1Cr/ARuvgNEKhpVXmvUm+lqJu/YOMWQ5x55sbyfr9QRo3iVT
-         nI4FOkP5ilAsiA6dTccvYdb9aKCh/wSVTC6uyKUnlJtwILWfCCcQ0ustiL+HFIXbydTl
-         AE1xRJw2jw590w0L4pwI7wzilEhH2DdmzjvDXMjV+2ywHAwDtmgJRRtWWQZ+dlaegUPs
-         Gs3w==
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772140623; x=1772745423; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gq5mOF+SJUFiGcPwVZyypyyuyc2ozhC/CT81PmE1Pmw=;
+        b=YJ3hnzbqofFtj+JZpXhEzPz817m5Xx4gH+rUqcGX3Uls7xD9fn9RaNPwKNaursccny
+         vXiUAVFqoVHsOLDmDkqYs4HQ7FJ9QZI5I4ynRSenUnaeSoUqh/l+M2ehoszXtrU40XBr
+         4Qljm7BhkkjEbh3kr6jA5nJg0Jgg1amNzkFd73iF1OfuaFA6F2WF2bHh3wAjaREbFLtA
+         sfK4+ublSmYqVcefDmEcBlU/h3bGDazzVjj1S2n3mup8WMitGX9Z4nSejnmPEXcnkKEj
+         g82baQo0AdS9PyZUi5OSlyQ+VCtWqWKPRSeN2xGLeSrs5DwN4aRIIHvvNrS4+z1B4ZQU
+         qjlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772140397; x=1772745197;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=BuFl4xqYq6G6RHboEdDI9ZBTYjDGxT8flM5jt2ij3S8=;
-        b=sQMYyiF8Q+2YRm8clrNYmIStI8d3lAJlvCdIMHyHR/tNRuJYaY9gPXb0h9gCXFnrTY
-         YApyWKDyuRpkwsLEA3ncKT+oIekh1CilNHlDoVQaD9ztIW6TEI2uNZvsH6idVc6hEkxS
-         aqRY8dZcZuu8tpArrdsdsqS/1xwR3hMOBsc6uEW0cY5Z3A7MDO2JJSRRTRrq4Om93DVO
-         B0PzuczIHwo3r1J1heVnXMBAxjONwb7Sa6LkHvgc06kCvdEvtJXh+qXcC4ZwsLLoJero
-         mvRA/Epw+A/kSyKHHPHYC1XFoEKAQJ2WH286ZKdlhk94tPvM3AlLWbx9MSjROzLTxfrV
-         V9eg==
-X-Gm-Message-State: AOJu0YzdqFy63Lh3rYfPeg59H8RGrS04AeOwQe6Hi/sUOX+847fgR1GX
-	I/yeGsz658zxyTSDuad6dKn/1SQI+R/y2+2DUMNNYENtrlW+hMo6FlTILpI2dIj5f2g=
-X-Gm-Gg: ATEYQzw+gglSqYg3Nvt3/P2bYvJ9no0IQkrJs2kFOAxYbLPNPw0gyulIbplzxpaMk7y
-	JNK+Iak+Pe2ZjQJmSycytXAUmUJGk5HP8i/zHzgcCNlrXD4SBOYmRymI2tFMUgchIUzZMAouFud
-	HXAnfCAI+Odinu6cpWQOJGYQHLrxGLOkyKjEJuoBHJ/rNPfDykQdVQpJN7LBWi/jP5nETsbI9eI
-	kszVHYw2w68LW61jXxMA3rZ+nlTDZ5+w993PlLqe8ofS6o8h+d0na4jfa74vPSKphbJcY+2BezM
-	ksVY1VuzlxfbRswvc7vanziUjRY8rIAWu0Fa08w25fgtTksZcY0kLTNZEaNRd/DO0e46ASllvXb
-	DGuNhYP0eRuvnw6wUdz9/gY71Ap1iAiBE4+9PMfs0TQr+ibIvmKc8qJJSBNMbdh8gYVSlbSJmVs
-	9fotp3BjgTERLtR08YCzyggdZyvWCSE0lU64tjgtfswtYpamJ12EiGQR5hwVGEPhvzLczW
-X-Received: by 2002:a05:600c:a086:b0:483:b3d7:2e80 with SMTP id 5b1f17b1804b1-483c9c1fc82mr3533195e9.33.1772140397078;
-        Thu, 26 Feb 2026 13:13:17 -0800 (PST)
-Received: from cloudflare.com (79.184.124.63.ipv4.supernova.orange.pl. [79.184.124.63])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bfb987b0sm42065325e9.13.2026.02.26.13.13.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 13:13:15 -0800 (PST)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-Date: Thu, 26 Feb 2026 22:12:56 +0100
-Subject: [PATCH RFC bpf-next 5/5] selftests/bpf: Add functional tests for
- skb local storage
+        d=1e100.net; s=20230601; t=1772140623; x=1772745423;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gq5mOF+SJUFiGcPwVZyypyyuyc2ozhC/CT81PmE1Pmw=;
+        b=Qptk5J7lKDFK8Z/Kky2xoVlQQmnvtRaGS2ujchaplb6hszRJcFAu9ed63Xo0IGpG3b
+         wciX2KGWgBGTZenBR8p+EgDESI9YSsuWevnHMkfZpW/jAIvtUI8o03rllY0jOR77+FGt
+         m7ETYJ2UrmHWYUYoIngVqmPVlK/nA7G/7H8Pb+DcWjpixz8NOmUHmXP3tNoTzj5lvSd1
+         PfblmitPE+PY+jw7CW8cEPOtZ27BnURG5MP2ToqFf5NBWcCBfiGHMFRhSAxYYGfm8ucx
+         GsFbOj7zGzlBWf8lyUxRAheJq78bv2PrAVyxS07ltNnMCGePKoXjUgqqaD9BQMMJtNFi
+         /Fww==
+X-Forwarded-Encrypted: i=1; AJvYcCUSqR8vg8zFSn7Iy9LMi+VE90KkEgKWI5Br0fRqHRvOPGB4vwAsrn77PWSJZ5mH/cuRAJs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFAFaojxn1GSHkzcaLvuoJyO0/SBWE3GzXgXA3EZJ1jCYECdl7
+	QeMAHlHhutQcXRWuVpGQKgpJO3goq0zHtx1YFOruHSi5qFV++lzP0/SFqR7IrbzIt2o=
+X-Gm-Gg: ATEYQzxJ12SHxwEH7/IflsTm5OAQPf1VzB1TRHPnLewWbcDmIgyWj0r0JfcNVTp679C
+	Q8z5DotZnfSX/gM7zp3Bwag55j+fIepyUfJO0Dt9kJVseHsSu6um1nltBRdlGhlcyAwVK79asaL
+	iSq3fqy5Gmg59wCOULmRrDeJLsa+Xe2wb29PU22JweFomzVzmtXdPKK+EcwsawPLsp+zM/zCWKD
+	UViYAn0dhUcNiHQWQEEpvTfTo23zsJ/u3JUUwCgqmtwMenI0PNRTl0T65M5HkENpF+Fll4hJT7e
+	ZBox2b3hdV6AFbKqAU/loqatrib5UmFL+aijvuh93lH2JTbR98aE6JPurcW68byWZ6t0kX1laPV
+	IKWdp+d5T6Kf1/7s5HFTastUBCWQjYNAjXRBdu6HnhUORZx/EgWY5U722cq1wv0kvJwpBhNv07n
+	rXSculaIUyJDoK9DVN3Jh7HrE=
+X-Received: by 2002:ac8:7c50:0:b0:506:1c5e:d1c2 with SMTP id d75a77b69052e-507528cea2cmr4960811cf.27.1772140623241;
+        Thu, 26 Feb 2026 13:17:03 -0800 (PST)
+Received: from localhost ([140.174.219.137])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744afbba3sm31709011cf.33.2026.02.26.13.17.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 26 Feb 2026 13:17:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260226-skb-local-storage-v1-5-4ca44f0dd9d1@cloudflare.com>
-References: <20260226-skb-local-storage-v1-0-4ca44f0dd9d1@cloudflare.com>
-In-Reply-To: <20260226-skb-local-storage-v1-0-4ca44f0dd9d1@cloudflare.com>
-To: bpf@vger.kernel.org
-Cc: Jakub Kicinski <kuba@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, netdev@vger.kernel.org, 
- kernel-team@cloudflare.com
-X-Mailer: b4 0.15-dev-07fe9
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 26 Feb 2026 16:17:01 -0500
+Message-Id: <DGP7F6QOXDK0.1LUCS3MPFYJOL@etsalapatis.com>
+Cc: <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+ <martin.lau@kernel.org>, <memxor@gmail.com>, <song@kernel.org>,
+ <yonghong.song@linux.dev>
+Subject: Re: [PATCH bpf-next v4 1/4] bpf: Factor out program return value
+ calculation
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Eduard Zingerman" <eddyz87@gmail.com>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.20.1
+References: <20260225033356.518313-1-emil@etsalapatis.com>
+ <20260225033356.518313-2-emil@etsalapatis.com>
+ <7d080cc5fe67d32fef566a13cee0cd933b13d6f8.camel@gmail.com>
+In-Reply-To: <7d080cc5fe67d32fef566a13cee0cd933b13d6f8.camel@gmail.com>
 
-Exercise skb local storage across program types and hook boundaries.
+On Wed Feb 25, 2026 at 6:31 PM EST, Eduard Zingerman wrote:
+> On Tue, 2026-02-24 at 22:33 -0500, Emil Tsalapatis wrote:
+>> Factor the return value range calculation logic in check_return_code
+>> out of the function in preparation for separating the return value
+>> validation logic for BPF_EXIT and bpf_throw().
+>>=20
+>> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+>> ---
+>
+> I like this refactoring, thank you! The logic seem to be preserved.
+> A few nits below.
+>
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+>
+>> =C2=A0kernel/bpf/verifier.c | 205 +++++++++++++++++++++++---------------=
+----
+>> =C2=A01 file changed, 114 insertions(+), 91 deletions(-)
+>>=20
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index edf5342b982f..96ec27a36b32 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -17837,82 +17837,14 @@ static int check_ld_abs(struct bpf_verifier_en=
+v *env, struct bpf_insn
+>> *insn)
+>> =C2=A0	return 0;
+>> =C2=A0}
+>> =C2=A0
+>> -static int check_return_code(struct bpf_verifier_env *env, int regno, c=
+onst char *reg_name)
+>> +
+>> +static int return_retval_range(struct bpf_verifier_env *env, struct bpf=
+_retval_range *range,
+>> +		bool *return_32bit)
+>
+> Nit: maybe make this function bool?
+>      It does not seem to return any errors.
 
-1. skb_storage_ops: Unit test for the kfunc API - create, read,
-   delete, and re-create with an initial value. Runs as a socket
-   filter via BPF_PROG_TEST_RUN.
 
-2. tc_clone_redirect: Store from TC egress on lo, bpf_clone_redirect
-   to a dummy device, read from TC egress on the dummy - verifies
-   storage is not carried over to the clone (BPF_F_CLONE is not
-   supported).
+Annoyingly, there is a _single_ -EOPNOTSUPP for TRACING programs that do
+not have one of 6 attach types (FENTRY/FEXIT/FSESSION/RAW_TP/MODIFY_RETURN/=
+TRACE_ITER).=20
+IIUC This is actually an exhaustive list of all attach types for a TRACING =
+program, so the
+-EOPNOTSUPP is redundant - we check the attach type is valid at attach/link=
+ creation time=20
+with bpf_prog_attach_check_attach_type. We can have any invalid attach type=
+s for TRACING=20
+progs fall through to the default range and turn the whole function into a =
+bool.
 
-3. tc_ingress_to_cgrp_ingress: Store from TC ingress, read from
-   cgroup/skb ingress - verifies storage survives across hooks on
-   the same skb.
+>
+>> =C2=A0{
+>> -	const char *exit_ctx =3D "At program exit";
+>> -	struct tnum enforce_attach_type_range =3D tnum_unknown;
+>> -	const struct bpf_prog *prog =3D env->prog;
+>> -	struct bpf_reg_state *reg =3D reg_state(env, regno);
+>> -	struct bpf_retval_range range =3D retval_range(0, 1);
+>> =C2=A0	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
+>> -	int err;
+>> -	struct bpf_func_state *frame =3D env->cur_state->frame[0];
+>> -	const bool is_subprog =3D frame->subprogno;
+>> -	bool return_32bit =3D false;
+>> -	const struct btf_type *reg_type, *ret_type =3D NULL;
+>> -
+>> -	/* LSM and struct_ops func-ptr's return type could be "void" */
+>> -	if (!is_subprog || frame->in_exception_callback_fn) {
+>> -		switch (prog_type) {
+>> -		case BPF_PROG_TYPE_LSM:
+>> -			if (prog->expected_attach_type =3D=3D BPF_LSM_CGROUP)
+>> -				/* See below, can be 0 or 0-1 depending on hook. */
+>> -				break;
+>> -			if (!prog->aux->attach_func_proto->type)
+>> -				return 0;
+>> -			break;
+>> -		case BPF_PROG_TYPE_STRUCT_OPS:
+>> -			if (!prog->aux->attach_func_proto->type)
+>> -				return 0;
+>> -
+>> -			if (frame->in_exception_callback_fn)
+>> -				break;
+>> -
+>> -			/* Allow a struct_ops program to return a referenced kptr if it
+>> -			 * matches the operator's return type and is in its unmodified
+>> -			 * form. A scalar zero (i.e., a null pointer) is also allowed.
+>> -			 */
+>> -			reg_type =3D reg->btf ? btf_type_by_id(reg->btf, reg->btf_id) : NULL=
+;
+>> -			ret_type =3D btf_type_resolve_ptr(prog->aux->attach_btf,
+>> -							prog->aux->attach_func_proto->type,
+>> -							NULL);
+>> -			if (ret_type && ret_type =3D=3D reg_type && reg->ref_obj_id)
+>> -				return __check_ptr_off_reg(env, reg, regno, false);
+>> -			break;
+>> -		default:
+>> -			break;
+>> -		}
+>> -	}
+>> =C2=A0
+>> -	/* eBPF calling convention is such that R0 is used
+>> -	 * to return the value from eBPF program.
+>> -	 * Make sure that it's readable at this time
+>> -	 * of bpf_exit, which means that program wrote
+>> -	 * something into it earlier
+>> -	 */
+>> -	err =3D check_reg_arg(env, regno, SRC_OP);
+>> -	if (err)
+>> -		return err;
+>> -
+>> -	if (is_pointer_value(env, regno)) {
+>> -		verbose(env, "R%d leaks addr as return value\n", regno);
+>> -		return -EACCES;
+>> -	}
+>> -
+>> -	if (frame->in_async_callback_fn) {
+>> -		exit_ctx =3D "At async callback return";
+>> -		range =3D frame->callback_ret_range;
+>> -		goto enforce_retval;
+>> -	}
+>> -
+>> -	if (is_subprog && !frame->in_exception_callback_fn) {
+>> -		if (reg->type !=3D SCALAR_VALUE) {
+>> -			verbose(env, "At subprogram exit the register R%d is not a scalar va=
+lue
+>> (%s)\n",
+>> -				regno, reg_type_str(env, reg->type));
+>> -			return -EINVAL;
+>> -		}
+>> -		return 0;
+>> -	}
+>> +	/* Default return value range. */
+>> +	*range =3D retval_range(0, 1);
+>> =C2=A0
+>> =C2=A0	switch (prog_type) {
+>> =C2=A0	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+>> @@ -17925,16 +17857,14 @@ static int check_return_code(struct bpf_verifi=
+er_env *env, int regno, const
+>> char
+>> =C2=A0		=C2=A0=C2=A0=C2=A0 env->prog->expected_attach_type =3D=3D BPF_CG=
+ROUP_INET4_GETSOCKNAME ||
+>> =C2=A0		=C2=A0=C2=A0=C2=A0 env->prog->expected_attach_type =3D=3D BPF_CG=
+ROUP_INET6_GETSOCKNAME ||
+>> =C2=A0		=C2=A0=C2=A0=C2=A0 env->prog->expected_attach_type =3D=3D BPF_CG=
+ROUP_UNIX_GETSOCKNAME)
+>> -			range =3D retval_range(1, 1);
+>> +			*range =3D retval_range(1, 1);
+>> =C2=A0		if (env->prog->expected_attach_type =3D=3D BPF_CGROUP_INET4_BIND=
+ ||
+>> =C2=A0		=C2=A0=C2=A0=C2=A0 env->prog->expected_attach_type =3D=3D BPF_CG=
+ROUP_INET6_BIND)
+>> -			range =3D retval_range(0, 3);
+>> +			*range =3D retval_range(0, 3);
+>> =C2=A0		break;
+>> =C2=A0	case BPF_PROG_TYPE_CGROUP_SKB:
+>> -		if (env->prog->expected_attach_type =3D=3D BPF_CGROUP_INET_EGRESS) {
+>> -			range =3D retval_range(0, 3);
+>> -			enforce_attach_type_range =3D tnum_range(2, 3);
+>> -		}
+>> +		if (env->prog->expected_attach_type =3D=3D BPF_CGROUP_INET_EGRESS)
+>> +			*range =3D retval_range(0, 3);
+>> =C2=A0		break;
+>> =C2=A0	case BPF_PROG_TYPE_CGROUP_SOCK:
+>> =C2=A0	case BPF_PROG_TYPE_SOCK_OPS:
+>> @@ -17945,14 +17875,14 @@ static int check_return_code(struct bpf_verifi=
+er_env *env, int regno, const
+>> char
+>> =C2=A0	case BPF_PROG_TYPE_RAW_TRACEPOINT:
+>> =C2=A0		if (!env->prog->aux->attach_btf_id)
+>> =C2=A0			return 0;
+>> -		range =3D retval_range(0, 0);
+>> +		*range =3D retval_range(0, 0);
+>> =C2=A0		break;
+>> =C2=A0	case BPF_PROG_TYPE_TRACING:
+>> =C2=A0		switch (env->prog->expected_attach_type) {
+>> =C2=A0		case BPF_TRACE_FENTRY:
+>> =C2=A0		case BPF_TRACE_FEXIT:
+>> =C2=A0		case BPF_TRACE_FSESSION:
+>> -			range =3D retval_range(0, 0);
+>> +			*range =3D retval_range(0, 0);
+>> =C2=A0			break;
+>> =C2=A0		case BPF_TRACE_RAW_TP:
+>> =C2=A0		case BPF_MODIFY_RETURN:
+>> @@ -17967,40 +17897,37 @@ static int check_return_code(struct bpf_verifi=
+er_env *env, int regno, const
+>> char
+>> =C2=A0		switch (env->prog->expected_attach_type) {
+>> =C2=A0		case BPF_TRACE_KPROBE_SESSION:
+>> =C2=A0		case BPF_TRACE_UPROBE_SESSION:
+>> -			range =3D retval_range(0, 1);
+>> =C2=A0			break;
+>> =C2=A0		default:
+>> =C2=A0			return 0;
+>> =C2=A0		}
+>> =C2=A0		break;
+>> =C2=A0	case BPF_PROG_TYPE_SK_LOOKUP:
+>> -		range =3D retval_range(SK_DROP, SK_PASS);
+>> +		*range =3D retval_range(SK_DROP, SK_PASS);
+>> =C2=A0		break;
+>> =C2=A0
+>> =C2=A0	case BPF_PROG_TYPE_LSM:
+>> =C2=A0		if (env->prog->expected_attach_type !=3D BPF_LSM_CGROUP) {
+>> =C2=A0			/* no range found, any return value is allowed */
+>> -			if (!get_func_retval_range(env->prog, &range))
+>> +			if (!get_func_retval_range(env->prog, range))
+>> =C2=A0				return 0;
+>> =C2=A0			/* no restricted range, any return value is allowed */
+>> -			if (range.minval =3D=3D S32_MIN && range.maxval =3D=3D S32_MAX)
+>> +			if (range->minval =3D=3D S32_MIN && range->maxval =3D=3D S32_MAX)
+>
+> Tangential to this refactoring. Looking at get_func_retval_range() it
+> seems that S32_{MIN,MAX} special case can never happen.
+> It defers to bpf_lsm_get_retval_range() which either does not set the
+> range or it to [0, 1] or [-MAX_ERRNO, 0].
+> Maybe remove it as a separate patch?
+>
 
-4. tc_ingress_to_sk_filter: Store from TC ingress, read from a
-   socket filter - verifies storage is accessible from SO_ATTACH_BPF.
+Ack, will do.
 
-5. cgrp_egress_to_tp_kfree_skb: Store from cgroup/skb egress, read
-   from tp_btf/kfree_skb after a blackhole qdisc drops the packet -
-   verifies storage survives until skb free.
+>> =C2=A0				return 0;
+>> -			return_32bit =3D true;
+>> +			*return_32bit =3D true;
+>
+> Nit: maybe make this a special case in check_return_code(),
+>      as with enforce_attach_type_range?
+>      Or push 'return_32bit' to be a field in retval_range?
 
-6. tc_ingress_to_lsm_inet_conn_estab: Store from TC ingress, read
-   from LSM inet_conn_established hook - verifies storage is
-   accessible from LSM programs.
+Ack, I think return_32bit as a field is cleaner conceptually. I will
+keep the default value false to avoid churn on all retval_range()=20
+call sites.
 
-7. tc_ingress_to_skops_passive_estab: Store from TC ingress, read
-   from sock_ops BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB via
-   bpf_sock_ops_kern.skb - verifies the sock_ops access path.
-
-Signed-off-by: Jakub Sitnicki <jakub@cloudflare.com>
----
- .../testing/selftests/bpf/prog_tests/skb_storage.c | 405 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/skb_storage.c    | 312 ++++++++++++++++
- 2 files changed, 717 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/skb_storage.c b/tools/testing/selftests/bpf/prog_tests/skb_storage.c
-new file mode 100644
-index 000000000000..32b5669de9f5
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/skb_storage.c
-@@ -0,0 +1,405 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Cloudflare, Inc. */
-+
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include "skb_storage.skel.h"
-+
-+#define CGROUP_PATH "/skb_storage"
-+#define DUMMY_DEV "dum0"
-+#define IFINDEX_LO 1
-+#define MAGIC_VALUE 0xdeadbeef
-+#define TEST_PORT 4242
-+
-+static int send_udp_packet(__be16 port)
-+{
-+	struct sockaddr_in addr = {
-+		.sin_family = AF_INET,
-+		.sin_port = port,
-+		.sin_addr.s_addr = htonl(INADDR_LOOPBACK),
-+	};
-+	int fd, ret = -1;
-+
-+	fd = socket(AF_INET, SOCK_DGRAM, 0);
-+	if (fd < 0)
-+		return -1;
-+
-+	ret = sendto(fd, "x", 1, 0, (struct sockaddr *)&addr, sizeof(addr));
-+	if (ret < 0)
-+		goto out;
-+
-+	ret = 0;
-+out:
-+	close(fd);
-+	return ret;
-+}
-+
-+static int recv_udp_packet(int server_fd)
-+{
-+	char buf[64];
-+	struct sockaddr_in addr;
-+	socklen_t len = sizeof(addr);
-+
-+	return recvfrom(server_fd, buf, sizeof(buf), 0,
-+			(struct sockaddr *)&addr, &len);
-+}
-+
-+static void test_skb_storage_ops(struct skb_storage *skel)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts,
-+		.data_in = &pkt_v4,
-+		.data_size_in = sizeof(pkt_v4),
-+	);
-+	int err;
-+
-+	err = bpf_prog_test_run_opts(bpf_program__fd(skel->progs.skb_storage_ops_test),
-+				     &topts);
-+	ASSERT_OK(err, "test_run");
-+	ASSERT_EQ(skel->bss->test_result, 0, "test_result");
-+}
-+
-+static void test_tc_clone_redirect(struct skb_storage *skel)
-+{
-+	const __be16 test_port = htons(TEST_PORT);
-+	struct bpf_link *dummy_link = NULL;
-+	struct bpf_link *lo_link = NULL;
-+	struct netns_obj *netns;
-+	int dummy_ifindex;
-+
-+	netns = netns_new(__func__, true);
-+	if (!ASSERT_OK_PTR(netns, "netns_new"))
-+		goto cleanup;
-+
-+	SYS(cleanup, "ip link add " DUMMY_DEV " type dummy");
-+	SYS(cleanup, "ip link set " DUMMY_DEV " up");
-+
-+	dummy_ifindex = if_nametoindex(DUMMY_DEV);
-+	if (!ASSERT_GT(dummy_ifindex, 0, "dummy_ifindex"))
-+		goto cleanup;
-+
-+	skel->bss->target_port = test_port;
-+	skel->bss->redirect_ifindex = dummy_ifindex;
-+
-+	lo_link = bpf_program__attach_tcx(skel->progs.tc_clone_redirect_store,
-+					  IFINDEX_LO, NULL);
-+	if (!ASSERT_OK_PTR(lo_link, "attach_ingress"))
-+		goto cleanup;
-+
-+	dummy_link = bpf_program__attach_tcx(skel->progs.tc_clone_redirect_load,
-+					     dummy_ifindex, NULL);
-+	if (!ASSERT_OK_PTR(dummy_link, "attach_egress"))
-+		goto cleanup;
-+
-+	skel->bss->store_seen = 0;
-+	skel->bss->redir_seen = 0;
-+	skel->bss->load_seen = 0;
-+	skel->bss->load_value = 0;
-+
-+	if (!ASSERT_OK(send_udp_packet(test_port), "send_udp"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(skel->bss->store_seen, 1, "store_seen");
-+	ASSERT_EQ(skel->bss->redir_seen, 1, "redir_seen");
-+	ASSERT_EQ(skel->bss->load_seen, 0, "load_seen");
-+	ASSERT_EQ(skel->bss->load_value, 0, "load_value");
-+
-+cleanup:
-+	bpf_link__destroy(dummy_link);
-+	bpf_link__destroy(lo_link);
-+	netns_free(netns);
-+}
-+
-+static void test_tc_ingress_to_cgrp_ingress(struct skb_storage *skel)
-+{
-+	struct bpf_link *tc_link = NULL;
-+	struct bpf_link *cg_link = NULL;
-+	int cgroup_fd = -1;
-+	int server_fd = -1;
-+	__be16 port;
-+
-+	cgroup_fd = test__join_cgroup(CGROUP_PATH);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		return;
-+
-+	server_fd = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
-+		goto cleanup;
-+
-+	port = get_socket_local_port(server_fd);
-+	if (!ASSERT_GE(port, 0, "get_port"))
-+		goto cleanup;
-+
-+	skel->bss->target_port = port;
-+
-+	tc_link = bpf_program__attach_tcx(skel->progs.tc_ingress_store,
-+					  IFINDEX_LO, NULL);
-+	if (!ASSERT_OK_PTR(tc_link, "attach_tc"))
-+		goto cleanup;
-+
-+	cg_link = bpf_program__attach_cgroup(skel->progs.cgrp_ingress_load,
-+					     cgroup_fd);
-+	if (!ASSERT_OK_PTR(cg_link, "attach_cgroup"))
-+		goto cleanup;
-+
-+	skel->bss->store_seen = 0;
-+	skel->bss->load_seen = 0;
-+	skel->bss->load_value = 0;
-+
-+	if (!ASSERT_OK(send_udp_packet(port), "send_udp"))
-+		goto cleanup;
-+
-+	if (!ASSERT_GE(recv_udp_packet(server_fd), 0, "recv_udp"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(skel->bss->store_seen, 1, "store_seen");
-+	ASSERT_EQ(skel->bss->load_seen, 1, "load_seen");
-+	ASSERT_EQ(skel->bss->load_value, MAGIC_VALUE, "load_value");
-+
-+cleanup:
-+	bpf_link__destroy(cg_link);
-+	bpf_link__destroy(tc_link);
-+	if (server_fd >= 0)
-+		close(server_fd);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+}
-+
-+static void test_tc_ingress_to_sk_filter(struct skb_storage *skel)
-+{
-+	struct bpf_link *tc_link = NULL;
-+	int server_fd = -1;
-+	int filter_fd = -1;
-+	__be16 port;
-+	int ret;
-+
-+	server_fd = start_server(AF_INET, SOCK_DGRAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
-+		goto cleanup;
-+
-+	port = get_socket_local_port(server_fd);
-+	if (!ASSERT_GE(port, 0, "get_port"))
-+		goto cleanup;
-+
-+	skel->bss->target_port = port;
-+
-+	tc_link = bpf_program__attach_tcx(skel->progs.tc_ingress_store,
-+					  IFINDEX_LO, NULL);
-+	if (!ASSERT_OK_PTR(tc_link, "attach_tcx"))
-+		goto cleanup;
-+
-+	filter_fd = bpf_program__fd(skel->progs.sk_filter_load);
-+	if (!ASSERT_GE(filter_fd, 0, "get_prog_fd"))
-+		goto cleanup;
-+
-+	ret = setsockopt(server_fd, SOL_SOCKET, SO_ATTACH_BPF,
-+			 &filter_fd, sizeof(filter_fd));
-+	if (!ASSERT_OK(ret, "attach_socket_filter"))
-+		goto cleanup;
-+
-+	skel->bss->store_seen = 0;
-+	skel->bss->load_seen = 0;
-+	skel->bss->load_value = 0;
-+
-+	if (!ASSERT_OK(send_udp_packet(port), "send_udp"))
-+		goto cleanup;
-+
-+	if (!ASSERT_GE(recv_udp_packet(server_fd), 0, "recv_udp"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(skel->bss->store_seen, 1, "store_seen");
-+	ASSERT_EQ(skel->bss->load_seen, 1, "load_seen");
-+	ASSERT_EQ(skel->bss->load_value, MAGIC_VALUE, "load_value");
-+
-+cleanup:
-+	bpf_link__destroy(tc_link);
-+	if (server_fd >= 0)
-+		close(server_fd);
-+}
-+
-+static void test_cgrp_egress_to_tp_kfree_skb(struct skb_storage *skel)
-+{
-+	struct bpf_link *cg_link = NULL;
-+	struct bpf_link *tp_link = NULL;
-+	struct netns_obj *netns = NULL;
-+	int cgroup_fd = -1;
-+	__be16 port;
-+
-+	cgroup_fd = test__join_cgroup(CGROUP_PATH);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		return;
-+
-+	netns = netns_new(__func__, true);
-+	if (!ASSERT_OK_PTR(netns, "netns_new"))
-+		goto cleanup;
-+
-+	port = htons(TEST_PORT);
-+	skel->bss->target_port = port;
-+
-+	cg_link = bpf_program__attach_cgroup(skel->progs.cgrp_egress_store,
-+					     cgroup_fd);
-+	if (!ASSERT_OK_PTR(cg_link, "attach_cgroup"))
-+		goto cleanup;
-+
-+	tp_link = bpf_program__attach_trace(skel->progs.tp_kfree_skb_load);
-+	if (!ASSERT_OK_PTR(tp_link, "attach_tp"))
-+		goto cleanup;
-+
-+	skel->bss->store_seen = 0;
-+	skel->bss->load_seen = 0;
-+	skel->bss->load_value = 0;
-+
-+	SYS(cleanup, "tc qdisc add dev lo root handle 1:0 blackhole");
-+
-+	if (!ASSERT_OK(send_udp_packet(port), "send_udp"))
-+		goto cleanup;
-+
-+	ASSERT_EQ(skel->bss->store_seen, 1, "store_seen");
-+	ASSERT_EQ(skel->bss->load_seen, 1, "load_seen");
-+	ASSERT_EQ(skel->bss->load_value, MAGIC_VALUE, "load_value");
-+
-+cleanup:
-+	bpf_link__destroy(tp_link);
-+	bpf_link__destroy(cg_link);
-+	netns_free(netns);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+}
-+
-+static void test_tc_ingress_to_lsm_inet_conn_estab(struct skb_storage *skel)
-+{
-+	struct bpf_link *lsm_link = NULL;
-+	struct bpf_link *tc_link = NULL;
-+	int server_fd = -1;
-+	int client_fd = -1;
-+	int conn_fd = -1;
-+	__be16 port;
-+
-+	server_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
-+		goto cleanup;
-+
-+	port = get_socket_local_port(server_fd);
-+	if (!ASSERT_GE(port, 0, "get_port"))
-+		goto cleanup;
-+
-+	skel->bss->target_port = port;
-+
-+	tc_link = bpf_program__attach_tcx(skel->progs.tc_ingress_store, IFINDEX_LO, NULL);
-+	if (!ASSERT_OK_PTR(tc_link, "attach_tcx"))
-+		goto cleanup;
-+
-+	lsm_link = bpf_program__attach_lsm(skel->progs.lsm_inet_conn_estab_load);
-+	if (!ASSERT_OK_PTR(lsm_link, "attach_lsm"))
-+		goto cleanup;
-+
-+	skel->bss->store_seen = 0;
-+	skel->bss->load_seen = 0;
-+	skel->bss->load_value = 0;
-+
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (!ASSERT_GE(client_fd, 0, "connect"))
-+		goto cleanup;
-+
-+	conn_fd = accept(server_fd, NULL, NULL);
-+	if (!ASSERT_GE(conn_fd, 0, "accept"))
-+		goto cleanup;
-+	close(conn_fd);
-+
-+	ASSERT_GT(skel->bss->store_seen, 0, "store_seen");
-+	ASSERT_GT(skel->bss->load_seen, 0, "load_seen");
-+	ASSERT_EQ(skel->bss->load_value, MAGIC_VALUE, "load_value");
-+
-+cleanup:
-+	bpf_link__destroy(lsm_link);
-+	bpf_link__destroy(tc_link);
-+	if (client_fd >= 0)
-+		close(client_fd);
-+	if (server_fd >= 0)
-+		close(server_fd);
-+}
-+
-+static void test_tc_ingress_to_skops_passive_estab(struct skb_storage *skel)
-+{
-+	struct bpf_link *cg_link = NULL;
-+	struct bpf_link *tc_link = NULL;
-+	int cgroup_fd = -1;
-+	int server_fd = -1;
-+	int client_fd = -1;
-+	int conn_fd = -1;
-+	__be16 port;
-+
-+	cgroup_fd = test__join_cgroup(CGROUP_PATH);
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup"))
-+		return;
-+
-+	server_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", 0, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_server"))
-+		goto cleanup;
-+
-+	port = get_socket_local_port(server_fd);
-+	if (!ASSERT_GE(port, 0, "get_port"))
-+		goto cleanup;
-+
-+	skel->bss->target_port = port;
-+
-+	tc_link = bpf_program__attach_tcx(skel->progs.tc_ingress_store, IFINDEX_LO, NULL);
-+	if (!ASSERT_OK_PTR(tc_link, "attach_tcx"))
-+		goto cleanup;
-+
-+	cg_link = bpf_program__attach_cgroup(skel->progs.skops_passive_estab_load, cgroup_fd);
-+	if (!ASSERT_OK_PTR(cg_link, "attach_cgroup"))
-+		goto cleanup;
-+
-+	skel->bss->store_seen = 0;
-+	skel->bss->load_seen = 0;
-+	skel->bss->load_value = 0;
-+
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (!ASSERT_GE(client_fd, 0, "connect"))
-+		goto cleanup;
-+
-+	conn_fd = accept(server_fd, NULL, NULL);
-+	if (!ASSERT_GE(conn_fd, 0, "accept"))
-+		goto cleanup;
-+	close(conn_fd);
-+
-+	ASSERT_GT(skel->bss->store_seen, 0, "store_seen");
-+	ASSERT_GT(skel->bss->load_seen, 0, "load_seen");
-+	ASSERT_EQ(skel->bss->load_value, MAGIC_VALUE, "load_value");
-+
-+cleanup:
-+	bpf_link__destroy(cg_link);
-+	bpf_link__destroy(tc_link);
-+	if (client_fd >= 0)
-+		close(client_fd);
-+	if (server_fd >= 0)
-+		close(server_fd);
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+}
-+
-+void test_skb_storage(void)
-+{
-+	struct skb_storage *skel;
-+
-+	skel = skb_storage__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		return;
-+
-+	if (test__start_subtest("skb_storage_ops"))
-+		test_skb_storage_ops(skel);
-+	if (test__start_subtest("tc_clone_redirect"))
-+		test_tc_clone_redirect(skel);
-+	if (test__start_subtest("tc_ingress_to_cgrp_ingress"))
-+		test_tc_ingress_to_cgrp_ingress(skel);
-+	if (test__start_subtest("tc_ingress_to_sk_filter"))
-+		test_tc_ingress_to_sk_filter(skel);
-+	if (test__start_subtest("cgrp_egress_to_tp_kfree_skb"))
-+		test_cgrp_egress_to_tp_kfree_skb(skel);
-+	if (test__start_subtest("tc_ingress_to_lsm_inet_conn_estab"))
-+		test_tc_ingress_to_lsm_inet_conn_estab(skel);
-+	if (test__start_subtest("tc_ingress_to_skops_passive_estab"))
-+		test_tc_ingress_to_skops_passive_estab(skel);
-+
-+	skb_storage__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/skb_storage.c b/tools/testing/selftests/bpf/progs/skb_storage.c
-new file mode 100644
-index 000000000000..57628a6d26ae
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/skb_storage.c
-@@ -0,0 +1,312 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2026 Cloudflare, Inc. */
-+
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_endian.h>
-+#include <bpf/bpf_tracing.h>
-+#include <errno.h>
-+
-+#define fallthrough __attribute__((__fallthrough__))
-+
-+#define ETH_P_IP 0x0800
-+#define ETH_HLEN 14
-+#define MAGIC_VALUE 0xdeadbeef
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_SKB_STORAGE);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__type(key, int);
-+	__type(value, __u32);
-+} skb_storage SEC(".maps");
-+
-+volatile __be16 target_port;
-+volatile __u32 redirect_ifindex;
-+
-+volatile int test_result;
-+volatile int store_seen;
-+volatile int redir_seen;
-+volatile int load_seen;
-+volatile int load_value;
-+
-+enum {
-+	CG_DROP = 0,
-+	CG_PASS,
-+};
-+
-+enum layer { L2, L3, L4 };
-+
-+static bool is_test_packet(struct __sk_buff *skb, enum layer layer)
-+{
-+	__u32 off = 0;
-+	__be16 src;
-+	__be16 dst;
-+	__u8 ihl;
-+
-+	if (skb->protocol != bpf_htons(ETH_P_IP))
-+		return false;
-+
-+	switch (layer) {
-+	case L2:
-+		off += ETH_HLEN;
-+		fallthrough;
-+	case L3:
-+		if (bpf_skb_load_bytes(skb, off, &ihl, 1))
-+			return false;
-+		off += (ihl & 0xf) * 4;
-+		fallthrough;
-+	case L4:
-+		if (bpf_skb_load_bytes(skb, off, &src, 2))
-+			return false;
-+		if (bpf_skb_load_bytes(skb, off + 2, &dst, 2))
-+			return false;
-+	}
-+
-+	return src == target_port || dst == target_port;
-+}
-+
-+SEC("socket")
-+int skb_storage_ops_test(struct __sk_buff *ctx)
-+{
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	struct sk_buff *skb = bpf_cast_to_kern_ctx(ctx);
-+	__u32 init_value = MAGIC_VALUE;
-+	__u32 *value;
-+	int ret;
-+
-+	/* Get non-existent storage */
-+	test_result = 1;
-+	value = bpf_skb_storage_get(map, skb, NULL, 0, 0);
-+	if (value)
-+		goto out;
-+
-+	/* Create storage and write to it */
-+	test_result = 2;
-+	value = bpf_skb_storage_get(map, skb, NULL, 0,
-+				    BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!value)
-+		goto out;
-+	if (*value)
-+		goto out;
-+	*value = MAGIC_VALUE;
-+
-+	/* Get existing storage and read from it  */
-+	test_result = 3;
-+	value = bpf_skb_storage_get(map, skb, NULL, 0, 0);
-+	if (!value)
-+		goto out;
-+	if (*value != MAGIC_VALUE)
-+		goto out;
-+
-+	/* Delete existing storage */
-+	test_result = 4;
-+	ret = bpf_skb_storage_delete(map, skb);
-+	if (ret)
-+		goto out;
-+
-+	/* Delete non-existent storage */
-+	test_result = 5;
-+	ret = bpf_skb_storage_delete(map, skb);
-+	if (ret != -ENOENT)
-+		goto out;
-+
-+	/* Re-create storage with initial value */
-+	test_result = 6;
-+	value = bpf_skb_storage_get(map, skb, &init_value, sizeof(init_value),
-+				    BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!value)
-+		goto out;
-+	if (*value != MAGIC_VALUE)
-+		goto out;
-+
-+	test_result = 0;
-+out:
-+	return ctx->len;
-+}
-+
-+SEC("tcx/egress")
-+int tc_clone_redirect_store(struct __sk_buff *ctx)
-+{
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	struct sk_buff *skb = bpf_cast_to_kern_ctx(ctx);
-+	__u32 *value;
-+
-+	if (!redirect_ifindex)
-+		goto out;
-+	if (!is_test_packet(ctx, L2))
-+		goto out;
-+
-+	value = bpf_skb_storage_get(map, skb, NULL, 0,
-+				    BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!value)
-+		goto out;
-+
-+	*value = MAGIC_VALUE;
-+	store_seen++;
-+
-+	bpf_clone_redirect(ctx, redirect_ifindex, 0);
-+out:
-+	return TCX_DROP;
-+}
-+
-+SEC("tcx/egress")
-+int tc_clone_redirect_load(struct __sk_buff *ctx)
-+{
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	struct sk_buff *skb = bpf_cast_to_kern_ctx(ctx);
-+	__u32 *value;
-+
-+	if (!is_test_packet(ctx, L2))
-+		goto out;
-+
-+	redir_seen++;
-+
-+	value = bpf_skb_storage_get(map, skb, NULL, 0, 0);
-+	if (!value)
-+		goto out;
-+
-+	load_value = *value;
-+	load_seen++;
-+out:
-+	return TCX_DROP;
-+}
-+
-+SEC("tcx/ingress")
-+int tc_ingress_store(struct __sk_buff *ctx)
-+{
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	struct sk_buff *skb = bpf_cast_to_kern_ctx(ctx);
-+	__u32 *value;
-+
-+	if (!is_test_packet(ctx, L2))
-+		goto out;
-+
-+	value = bpf_skb_storage_get(map, skb, NULL, 0,
-+				    BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!value)
-+		goto out;
-+
-+	*value = MAGIC_VALUE;
-+	store_seen++;
-+out:
-+	return TCX_PASS;
-+}
-+
-+SEC("cgroup_skb/ingress")
-+int cgrp_ingress_load(struct __sk_buff *ctx)
-+{
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	struct sk_buff *skb = bpf_cast_to_kern_ctx(ctx);
-+	__u32 *value;
-+
-+	if (!is_test_packet(ctx, L3))
-+		goto out;
-+
-+	value = bpf_skb_storage_get(map, skb, NULL, 0, 0);
-+	if (!value)
-+		goto out;
-+
-+	load_value = *value;
-+	load_seen++;
-+out:
-+	return CG_PASS;
-+}
-+
-+SEC("cgroup_skb/egress")
-+int cgrp_egress_store(struct __sk_buff *ctx)
-+{
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	struct sk_buff *skb = bpf_cast_to_kern_ctx(ctx);
-+	__u32 *value;
-+
-+	if (!is_test_packet(ctx, L3))
-+		goto out;
-+
-+	value = bpf_skb_storage_get(map, skb, NULL, 0,
-+				    BPF_LOCAL_STORAGE_GET_F_CREATE);
-+	if (!value)
-+		goto out;
-+
-+	*value = MAGIC_VALUE;
-+	store_seen++;
-+out:
-+	return CG_PASS;
-+}
-+
-+SEC("socket")
-+int sk_filter_load(struct __sk_buff *ctx)
-+{
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	struct sk_buff *skb = bpf_cast_to_kern_ctx(ctx);
-+	__u32 *value;
-+
-+	if (!is_test_packet(ctx, L4))
-+		goto out;
-+
-+	value = bpf_skb_storage_get(map, skb, NULL, 0, 0);
-+	if (!value)
-+		goto out;
-+
-+	load_value = *value;
-+	load_seen++;
-+out:
-+	return skb->len;
-+}
-+
-+SEC("tp_btf/kfree_skb")
-+int BPF_PROG(tp_kfree_skb_load, struct sk_buff *skb, void *location,
-+	     enum skb_drop_reason reason)
-+{
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	__u32 *value;
-+
-+	value = bpf_skb_storage_get(map, skb, NULL, 0, 0);
-+	if (!value)
-+		goto out;
-+
-+	load_value = *value;
-+	load_seen++;
-+out:
-+	return 0;
-+}
-+
-+SEC("lsm/inet_conn_established")
-+int BPF_PROG(lsm_inet_conn_estab_load, struct sock *sk, struct sk_buff *skb)
-+{
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	__u32 *value;
-+
-+	value = bpf_skb_storage_get(map, skb, NULL, 0, 0);
-+	if (!value)
-+		goto out;
-+
-+	load_value = *value;
-+	load_seen++;
-+out:
-+	return 0;
-+}
-+
-+SEC("sockops")
-+int skops_passive_estab_load(struct bpf_sock_ops *ctx)
-+{
-+	struct bpf_sock_ops_kern *kctx = bpf_cast_to_kern_ctx(ctx);
-+	struct bpf_map *map = (typeof(map))&skb_storage;
-+	struct sk_buff *skb = kctx->skb;
-+	__u32 *value;
-+
-+	if (ctx->op != BPF_SOCK_OPS_PASSIVE_ESTABLISHED_CB)
-+		goto out;
-+	if (!skb)
-+		goto out;
-+
-+	value = bpf_skb_storage_get(map, skb, NULL, 0, 0);
-+	if (!value)
-+		goto out;
-+
-+	load_value = *value;
-+	load_seen++;
-+out:
-+	return CG_PASS;
-+}
-
--- 
-2.43.0
+>
+>> =C2=A0		} else if (!env->prog->aux->attach_func_proto->type) {
+>> =C2=A0			/* Make sure programs that attach to void
+>> =C2=A0			 * hooks don't try to modify return value.
+>> =C2=A0			 */
+>> -			range =3D retval_range(1, 1);
+>> +			*range =3D retval_range(1, 1);
+>> =C2=A0		}
+>> =C2=A0		break;
+>> =C2=A0
+>> =C2=A0	case BPF_PROG_TYPE_NETFILTER:
+>> -		range =3D retval_range(NF_DROP, NF_ACCEPT);
+>> +		*range =3D retval_range(NF_DROP, NF_ACCEPT);
+>> =C2=A0		break;
+>> =C2=A0	case BPF_PROG_TYPE_STRUCT_OPS:
+>> -		if (!ret_type)
+>> -			return 0;
+>> -		range =3D retval_range(0, 0);
+>> +		*range =3D retval_range(0, 0);
+>> =C2=A0		break;
+>> =C2=A0	case BPF_PROG_TYPE_EXT:
+>> =C2=A0		/* freplace program can return anything as its return value
+>
+> [...]
 
