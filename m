@@ -1,130 +1,59 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com [209.85.161.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC352427A18;
-	Thu, 26 Feb 2026 18:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6209235A3AA
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 18:42:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772131085; cv=none; b=mHkHfT9xV4TfJjbqAj7SzDvOvA0Z5O/S7D4wSuv1WqVEa5r5jKDRtdPF+/S2W6wV2o8aPKN0eGYKaWJm9n16Pz0g5AGASGliM9XTLaGrD5IRo51SkfsymASu/dShG5QYz0vIFUMWOktwpquwo7ZWvBAtAcnsD7FU906wmTqlPuk=
+	t=1772131342; cv=none; b=l85NAFiXc3htcdq73XM+Jd9mnKz4dlSLlcYnC16/e9QszDhpqlj3LEJYiD9LBfJbIFeEyq+t4V/MbE3IZOdcSN91IimX2C5A5RVFG0g5iR1alUoAMTcxxHEeCxPzdJYa1LwIe0MrnHKtQbT5P12qlQcwwc3LbQDx8k76czR5AUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772131085; c=relaxed/simple;
-	bh=KDiaZJs2Xk2JTGE/2+p9vMWxm3Q9coBcc/t0Mrz81SQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ANmG8hk78QiSjVJl7qVC3B/Rp3X8xbJasKFmQ7LfioNRhkvRV8jHqDGkPIgghr2+k/JaGn8vSmKqT5tl6KsSbmuwze7a/1zXJmppEg6EAv/aLf4MamEv1+9rTFj4J9rgOsKVPyAGZhfgSqTbYNU/d/AuPBHQdmYKvCHRq8RysfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BER+/t05; arc=none smtp.client-ip=10.30.226.201
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BER+/t05"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88FC5C116C6;
-	Thu, 26 Feb 2026 18:38:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772131085;
-	bh=KDiaZJs2Xk2JTGE/2+p9vMWxm3Q9coBcc/t0Mrz81SQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BER+/t05nE8ccGJ5r3C6rbDaGXuzEzHx62f/9nRU2GHtixL9n3WVcjKvd2GG5zKvz
-	 5HopIEeDASsvQSe+zj5hkKat6c1j9N4v2rtfsg+p3dKrraVuDm6PGnEDFJ4ZgUG0oq
-	 Etd46mMlyGJQHfXq6L88uHsRSsx0GzTFEzPOfdnhrDmeHV/8fOy3tWlsNmA+oou2ys
-	 pRNSyPNudXvJqt0ogf7QhusduFLz4PljXQ3ncv3TOc1jXvcpgWTOSIm7+irZxL4HGg
-	 DpFeQpCLzheyyB+E5dFod3KgagD3xy5D6gXaU6FHJZdg+wYzjr3Eclg1rFMfyOG3iq
-	 x3P9R9FeFEmwg==
-Date: Thu, 26 Feb 2026 10:38:03 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Leo Yan <leo.yan@arm.com>, Quentin Monnet <qmo@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
-Message-ID: <aaCTC86U9KjnmZmu@google.com>
-References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
+	s=arc-20240116; t=1772131342; c=relaxed/simple;
+	bh=DjcBVY8mJqbGJnCRObWENCx0c6xRt7QNzm9li1dg71c=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=bBiDyHY34ZpxCOyziwha7BIBnzeh4DE/zQksohZBVKq6GkSUcaTvvVvnIgTnn4VY2/a7Svw+rckiapPtKTyAuzYeqBYBLJv3b9FE+qkxRB/vG8Apalu1zsf/Li63Wkn7azbk/alOXShDQNcMWA5pk5pPAnQ7kZqxqPIqiSXCTVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-66b612efb4aso16411850eaf.0
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 10:42:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772131340; x=1772736140;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DjcBVY8mJqbGJnCRObWENCx0c6xRt7QNzm9li1dg71c=;
+        b=Aio1zKMu4WwwTy//+bTAM+yz3gDZ0hSOe8K/nKGr1RvLD9ykH8wmCLcuICOxTuol9f
+         ghBJic7Oc6rICbTZhI4KnGaASVyAgXC5KXQWNhKO+ZJP1yu+q7CNMbJ8qX0vGjX7/chy
+         8NhIoQYUDS6Hzk9nSp6o/YVw7cnpQKv+zAFKnN6MInP/jxO8MJiSprHFMLLIiRrH7IhK
+         ZPmucInxqDKiDtqzP3sGpusIezxZ7ls+ht585GcwFL5mBf4OJ6Y8P2pJSc7yTEhPQCNo
+         JMOs6ljFMCN3IMzpiEBB/5Uh9pTE/PDltyMwxeH5wfSTCB233sYvpeHxERvL3R8ybciM
+         PV2A==
+X-Forwarded-Encrypted: i=1; AJvYcCWriOyQ00dL5wgzBqMSOHJtUfOoQcqCQVREtZD3Mj/FL+K4k+tK+AOyNaoYnCbCjT8x8wc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywm2c+Khz3uFYioKy+3pcna7q7sO5ixPzfoQ6OT4qumvA+Mg/Tn
+	ajpFxSNPoJ6vvWZbQ/H+eRDsFcseg9bD2o+37kTWSi4B0GRF2fMe73h18p6Dz0sgud/x5AbPcO2
+	OmwaX5yP+kYOGZwXvZOFSSae+VQEDVN8KaUlHXi2N7cpYB1GJuW8cKNaD3Pw=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
+X-Received: by 2002:a05:6820:2229:b0:679:c346:d8cd with SMTP id
+ 006d021491bc7-679f2331068mr2227907eaf.28.1772131340529; Thu, 26 Feb 2026
+ 10:42:20 -0800 (PST)
+Date: Thu, 26 Feb 2026 10:42:20 -0800
+In-Reply-To: <20260226183653.1812869-1-memxor@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69a0940c.050a0220.3a55be.0008.GAE@google.com>
+Subject: Re: [PATCH] please work syzbot
+From: syzbot ci <syzbot@syzkaller.appspotmail.com>
+To: memxor@gmail.com
+Cc: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, kernel-team@meta.com, kkd@meta.com, 
+	martin.lau@kernel.org, memxor@gmail.com, paulmck@kernel.org, 
+	syzbot@lists.linux.dev, syzkaller-bugs@googlegroups.com, yatsenko@meta.com
+Content-Type: text/plain; charset="UTF-8"
 
-Adding bpftool maintainer.
 
-On Tue, Feb 24, 2026 at 12:16:40PM +0000, Leo Yan wrote:
-> GCC-15 release claims [1]:
-> 
->   {0} initializer in C or C++ for unions no longer guarantees clearing
->   of the whole union (except for static storage duration initialization),
->   it just initializes the first union member to zero. If initialization
->   of the whole union including padding bits is desirable, use {} (valid
->   in C23 or C++) or use -fzero-init-padding-bits=unions option to
->   restore old GCC behavior.
-> 
-> As a result, this new behaviour might cause unexpected data when we
-> initialize a union with using the '{ 0 }' initializer.
-> 
-> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
-> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
-> in unions and structures.  This commit applies the same option for tools
-> building.
-> 
-> The option is not supported neither by any version older than GCC 15 and
-> is also not supported by LLVM, this patch adds the cc-option function to
-> dynamically detect the compiler option.
-> 
-> [1] https://gcc.gnu.org/gcc-15/changes.html
-> 
-> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> ---
-> Resent to linux-kbuild mailing list.
-> ---
->  tools/scripts/Makefile.include | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
-> 
-> diff --git a/tools/scripts/Makefile.include b/tools/scripts/Makefile.include
-> index b5ecf137febcae59f506e107a7f2e2ad72f4bef4..73f6aef4f3fda0cda7ee8f4b9a3b7ff7d956070d 100644
-> --- a/tools/scripts/Makefile.include
-> +++ b/tools/scripts/Makefile.include
-> @@ -40,6 +40,30 @@ EXTRA_WARNINGS += -Wwrite-strings
->  EXTRA_WARNINGS += -Wformat
->  EXTRA_WARNINGS += -Wno-type-limits
->  
-> +# output directory for tests below
-> +TMPOUT = .tmp_$$$$
-> +
-> +# try-run
-> +# Usage: option = $(call try-run, $(CC)...-o "$$TMP",option-ok,otherwise)
-> +# Exit code chooses option. "$$TMP" serves as a temporary file and is
-> +# automatically cleaned up.
-> +try-run = $(shell set -e;		\
-> +	TMP=$(TMPOUT)/tmp;		\
-> +	trap "rm -rf $(TMPOUT)" EXIT;	\
-> +	mkdir -p $(TMPOUT);		\
-> +	if ($(1)) >/dev/null 2>&1;	\
-> +	then echo "$(2)";		\
-> +	else echo "$(3)";		\
-> +	fi)
-> +
-> +# cc-option
-> +# Usage: CFLAGS += $(call cc-option,-march=winchip-c6,-march=i586)
-> +cc-option = $(call try-run, \
-> +	$(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
-> +
-> +# Explicitly clear padding bits with the initializer '{ 0 }'
-> +CFLAGS += $(call cc-option,-fzero-init-padding-bits=all)
-> +
->  # Makefiles suck: This macro sets a default value of $(2) for the
->  # variable named by $(1), unless the variable has been set by
->  # environment or command line. This is necessary for CC and AR
-> 
-> ---
-> base-commit: 7dff99b354601dd01829e1511711846e04340a69
-> change-id: 20260224-tools_build_fix_zero_init-dc5261bd8b8b
-> 
-> Best regards,
-> -- 
-> Leo Yan <leo.yan@arm.com>
-> 
+Unknown command
+
