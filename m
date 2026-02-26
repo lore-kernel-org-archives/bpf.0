@@ -1,109 +1,107 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C7B442B726
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 18:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C72F43CEC4
+	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 19:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772131800; cv=none; b=FXzMl0xCiX7cyI8fJWhTNJZuap0bGSqyaAfrxivp8AzyTQ6rfM7hIVYLC5IvM/WLaNEQ9bYaUYxf1Bgxz6UXy7P3DPP9DO9ogE/8tpy4DWHTlZ5h5TTcgZ8F/6fmmh28Hl0CVqpyQrabpS1/Efv0TZtL1o9uQeDkN+HDWN9nP7k=
+	t=1772132424; cv=none; b=QKHF9gEMasrooDmVRTKIE7UJI3nfWA9YznMS/6TpbZR3vHqcdqsYonEZG20BI/peYA5cAuNt0kbmlYGlTq5hdSPpo8F1xx1sTrbDh9C5FduX4jkkmAasdbtSN/IufEOEACaAmQALbfENr/VbM7AWMmVuo/bh3VNY4LTXvUYp+v8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772131800; c=relaxed/simple;
-	bh=FpN9EERTp2cRgxv8FwIJtAYQnraM8IhyGexQqnlZvxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SorTz0D33ug4XrU05P8wtwGDGAXYEIEgwAwhHP8Q8kdRmrPmb4CVCrjSawA0iR1DN784epn3zXELWuyb0xPncq0r5+wxJbHDYO1C/LEybveBHV2IsorMdleFEHp+0tDg7hqmVWmKpuCLugl+57nFPHkt2h4prbStDZISm5a4Zr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg.org header.i=@cmpxchg.org header.b=A0N1iQsY; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
+	s=arc-20240116; t=1772132424; c=relaxed/simple;
+	bh=FRs+FMhFA6Qm83w4P86kWYPWmbIIPfB6uSu7tErkGiM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Bvi3EolIrlFwDjAsfSsPnC5zpQ/MUYuwrb5vxksFvl1EBlT53NeLIikJY48apcOVluDuCfj733zLND2T/gTbCUtmRlCDW7rrbMscNH9tBfcXLvDWST6X7HjWf85LZIaaoGdmPwpju75KeXbdkqxyDVlIrj/fDnx50N0B/NpXckU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zp1C+gzh; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cmpxchg.org header.i=@cmpxchg.org header.b="A0N1iQsY"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-8cb3bae8d3eso103770685a.1
-        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 10:49:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zp1C+gzh"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-c6f306faaffso454283a12.0
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 11:00:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg.org; s=google; t=1772131794; x=1772736594; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oNGl2PacRgY/7eEMD7XjUPhLqO/KH21uY3Hc8HdE6Yw=;
-        b=A0N1iQsY42dgtKBz2p8VTyl2CrF7Df6aRgM0yWMmfR8QZ/cbjlWqs1zMIvlCxTxtdc
-         zdOCyBcuNhGKejE9Il9ZQoJJg58l1s4H5ZKndsWQ3lujGuQPYRDc/VrpJRCQXPArhD9C
-         iWrdZup1SmlKVbb/MfTh6wtcWWRIRGD8NVKKByA2ToyCRZAQIDGAnJaTAWyIl2vmbztU
-         UMvnSh/Jr+jrIn3sBSlI4owdLBaikWOOSK5offDWHq2Lreb98SP9nL4itZseaOFSshx1
-         8FToskLhvz8ccT0K6xx7HDxOX+gUzxP70T006dckRk0KxnisNTDhDc4mcusGcwXjqZ2a
-         oojw==
+        d=gmail.com; s=20230601; t=1772132421; x=1772737221; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=FRs+FMhFA6Qm83w4P86kWYPWmbIIPfB6uSu7tErkGiM=;
+        b=Zp1C+gzhLKxEKVTub0PFThMoPn5NUkIYqHvHuImNFn0mf4TfTBPqVJ4dqbdGfxR+nL
+         ha1goH+Vk3hglsCwnIaVnYxnWTvCFUVYPw78CwzOYy19FV5hG8X17sJLO222OFTUjLUh
+         StA8zjiTOctj6//HZge6Qqly+3nujLvUSAtvIiTmXJh0UkPU4milbD5O28uZ+wR4Geer
+         aihN/c+gQTPHgzcMt3Fk697MRHdYRX2Xtkk9yl5HS+SKID6SgMU1s464IPTUlFJh/2mO
+         QP6ZTdTWZ7/c0ydSVQD1itpKQRrys9dODfQtGFTEskn8KXS2eoTn5TF5BMJoo95vc2+w
+         F+kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772131794; x=1772736594;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oNGl2PacRgY/7eEMD7XjUPhLqO/KH21uY3Hc8HdE6Yw=;
-        b=tSclg6skPnp2lpvOX8jsOygGhr3aUS0kgidVNnl7cheLRHZoZPILf2TAph910ZGX1S
-         rNWYF1ybyAQY2tn3yQ0Pwf6mPhjBlBPnMI4UBvDdwGEnYVdVhCp3qpa0bdrmk8mzC7D/
-         5soTNudedRhgk8JdHf4fOSM6S2o3R5m4ncx2YnxwxwI1nYOs/x5D9L/2oIpFAFlXWuuK
-         6viWD1JzrvDvJ7B0eOQjeGHF+uPmOypgrRK5W2CciVKAOAkPejxePwtQaQqzm0x9C3Dl
-         W8TKK+kOmLNp1GZDOuH17cKPCvr/HWXkyssR/QUnkKwn2QwYOrzWPTU7Uh0IYqxI9+Dg
-         jG4A==
-X-Forwarded-Encrypted: i=1; AJvYcCUBh2NHpibWZb+VooEk2Mu5tYu8kp9FR52IWf1OHMCC9qJ9d0D5RgksYlGUsWGcdzuymXY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBNxGv32tfsE8o8PKLHSzRDUkCKl4jAAziDAp8e1D1voUZJ3o6
-	uFUziQ8GJgmuUPfMQlQOvFOjzrYcdqGCCwv+wjMj9YOkXk4s+6/KPQCzOI/Ut8aAyRM=
-X-Gm-Gg: ATEYQzz5ewXFq0uTcm9S3nI1O2SeogMdQKhQ2Gt0fZc3U2FGwBKeRlhWi4gOQRjmxu9
-	5UqrlWMOjrapHSE8wyO8u381oNQWRgNV8FCSSg7s81Bk0dyAO/+2dOE9Gsp/k/hVmY55wYMJoyb
-	miMHqq+qdKd+1PWlmT1Ip6Af7OwJaNh3s7UVVPz67P6UHZrSuZWXLeCfMOwSy+xzWNSnra2xEFl
-	kCtzm3I3ucaIfYgdIVujZFQuRCTYTMpbNybdgDXUhar5mhQjVJ0/ndTlDr5B4uHdBaj85tFZDAZ
-	dodVHyCxuYBvsiPZcUlRS8xyxB7GyASiZeHFV2BE3gURi4A47J/l90gSoX620ppZu/EmQhfzAI8
-	9YmdD+IZ3f8Y4P/v54kunQXKQlI0BFC5tkR7YJ+/BIQ9wlw/4n64T5Gb2UknJv6m8gRqXgSUv6n
-	M++OkIXdmsVYOZmTqFaEieI3E7MuMExsh8
-X-Received: by 2002:a05:620a:25cb:b0:8cb:4f63:dac9 with SMTP id af79cd13be357-8cbc8d70e6dmr1400785a.17.1772131793718;
-        Thu, 26 Feb 2026 10:49:53 -0800 (PST)
-Received: from localhost ([2603:7000:c00:3a00:365a:60ff:fe62:ff29])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cbbf746fc5sm268217885a.51.2026.02.26.10.49.52
+        d=1e100.net; s=20230601; t=1772132421; x=1772737221;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FRs+FMhFA6Qm83w4P86kWYPWmbIIPfB6uSu7tErkGiM=;
+        b=uXNs7NYnGoomk57dfmS+Pnsk4DBMDSOvT0he8mRSvj9oaqHbp7PH9maWyC6nrLnSM3
+         R8EH0+EEo82fotxDgjp2e+h+nZCPDWcOpXzeWqfCl+0lJS7arWoUSHkAwoPL/5ucVq0I
+         Jo+EgRNmE5VrOTqwke4lV5iM5oQ/a7/zXSLtP02F68SGKTxG3zTp65ysMLQj+/a7rGnw
+         kr4NAelKS71NtcyRjl7+vLDhhNCNKtFLQ8WMbzRqEry2ODMS5vceQdTxtj9orlAH8fFA
+         hApCdRfbrO+QL+jpEnElJPoXlxyxNbnjzLMI9a++B2ydD57ZfHdwIEeWJ2D4pJywnUMP
+         2JRw==
+X-Forwarded-Encrypted: i=1; AJvYcCWHMSG2sBFK68Gkpm8F4wNrKkx0ixupVfo9g8NrHeFMMnuwDCml8utM3585hxTRnTuNQUU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6wGAppmiEigSK3R5AbXj6g+hLy68mPWQ2G7J0W9Xpu2WBBSMO
+	2wjLYF7wFxom+z3JfJIE1LB+RTtOYN0jOfcWkUFtDig6M3o/K0PVBL4E
+X-Gm-Gg: ATEYQzz2O/gCQWjt+W58HB5Gykxqxrt6HumrcU5iBncjvSO+13uMXduk/2crr3EKBo2
+	U5GEaZ6IR779VOmoN/qG6+ABCc0+Eo9wngvWBUERJt5TDF9R53hhuGWvoUpeqk6avl2LKFgQEvC
+	cmFOza6Yg2DP0aGf0AdJnrWcpMI1otHdwNPF94cdXk5kVROaWg3EqPVudpuAPuEA9cpGjDpJYhy
+	zrvkHZd+nTUXgyrHcO7IXlp2y0HLRdYXBf2T8y+/npl4Z5pBjK5S2Za2tWCrAl8NGkVkgmVF47I
+	4TAvmg5YIust5sn37iNpMfVOljyKJaOTQIRKC/baHHzK4w1731thuurfK2OCn6Vl1eN1HpF1vyb
+	fTgCLq2eAA4FAgTAOQGH43y/M6yuWuUquprV+eOrnz6trAr5ZsmY2WCGqdDhwIUyPWECUAzjfaj
+	didYGi59j3InagX1gDynR+CNDGN/69/hL1AfEDXOpGB4k2gJV3s2I=
+X-Received: by 2002:a17:903:2303:b0:2aa:e570:6e6d with SMTP id d9443c01a7336-2ade9a85338mr50979555ad.40.1772132421279;
+        Thu, 26 Feb 2026 11:00:21 -0800 (PST)
+Received: from [192.168.0.56] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5dde70sm32181945ad.38.2026.02.26.11.00.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 10:49:53 -0800 (PST)
-Date: Thu, 26 Feb 2026 13:49:49 -0500
-From: Johannes Weiner <hannes@cmpxchg.org>
-To: Byungchul Park <byungchul@sk.com>
-Cc: linux-mm@kvack.org, akpm@linux-foundation.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel_team@skhynix.com,
-	harry.yoo@oracle.com, ast@kernel.org, daniel@iogearbox.net,
-	davem@davemloft.net, kuba@kernel.org, hawk@kernel.org,
-	john.fastabend@gmail.com, sdf@fomichev.me, saeedm@nvidia.com,
-	leon@kernel.org, tariqt@nvidia.com, mbloch@nvidia.com,
-	andrew+netdev@lunn.ch, edumazet@google.com, pabeni@redhat.com,
-	david@redhat.com, lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com, vbabka@suse.cz, rppt@kernel.org,
-	surenb@google.com, mhocko@suse.com, horms@kernel.org,
-	jackmanb@google.com, ziy@nvidia.com, ilias.apalodimas@linaro.org,
-	willy@infradead.org, brauner@kernel.org, kas@kernel.org,
-	yuzhao@google.com, usamaarif642@gmail.com,
-	baolin.wang@linux.alibaba.com, almasrymina@google.com,
-	toke@redhat.com, asml.silence@gmail.com, bpf@vger.kernel.org,
-	linux-rdma@vger.kernel.org, sfr@canb.auug.org.au, dw@davidwei.uk,
-	ap420073@gmail.com, dtatulea@nvidia.com
-Subject: Re: [PATCH v4] mm: introduce a new page type for page pool in page
- type
-Message-ID: <aaCVzc2lexW0TiPf@cmpxchg.org>
-References: <20260224051347.19621-1-byungchul@sk.com>
+        Thu, 26 Feb 2026 11:00:20 -0800 (PST)
+Message-ID: <2c7d7b8b58beacfab2557533994664b4344b51ee.camel@gmail.com>
+Subject: Re: [PATCH bpf v5 4/8] bpf: consolidate sleepable checks in
+ check_func_call()
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Puranjay Mohan <puranjay@kernel.org>, bpf@vger.kernel.org
+Cc: Puranjay Mohan <puranjay12@gmail.com>, Alexei Starovoitov
+ <ast@kernel.org>,  Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, Martin KaFai Lau	 <martin.lau@kernel.org>, Kumar
+ Kartikeya Dwivedi <memxor@gmail.com>, Mykyta Yatsenko
+ <mykyta.yatsenko5@gmail.com>, kernel-team@meta.com
+Date: Thu, 26 Feb 2026 11:00:18 -0800
+In-Reply-To: <20260226161500.775715-5-puranjay@kernel.org>
+References: <20260226161500.775715-1-puranjay@kernel.org>
+	 <20260226161500.775715-5-puranjay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 (3.58.1-1.fc43) 
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260224051347.19621-1-byungchul@sk.com>
 
-On Tue, Feb 24, 2026 at 02:13:47PM +0900, Byungchul Park wrote:
-> @@ -1416,9 +1413,15 @@ __always_inline bool __free_pages_prepare(struct page *page,
->  		mod_mthp_stat(order, MTHP_STAT_NR_ANON, -1);
->  		folio->mapping = NULL;
->  	}
-> -	if (unlikely(page_has_type(page)))
-> +	if (unlikely(page_has_type(page))) {
-> +		/* networking expects to clear its page type before releasing */
-> +		if (unlikely(PageNetpp(page))) {
+On Thu, 2026-02-26 at 08:14 -0800, Puranjay Mohan wrote:
+> The sleepable context check for global function calls in
+> check_func_call() open-codes the same checks that in_sleepable_context()
+> already performs. Replace the open-coded check with a call to
+> in_sleepable_context() and use non_sleepable_context_description() for
+> the error message, consistent with check_helper_call() and
+> check_kfunc_call().
+>=20
+> Note that in_sleepable_context() also checks active_locks, which
+> overlaps with the existing active_locks check above it. However, the two
+> checks serve different purposes: the active_locks check rejects all
+> global function calls while holding a lock (not just sleepable ones), so
+> it must remain as a separate guard.
+>=20
+> Update the expected error messages in the irq and preempt_lock selftests
+> to match.
+>=20
+> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+> ---
 
-You can gate that on is_check_pages_enabled(), to avoid a new branch
-in the !debug case.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
-Otherwise, the MM bits look good to me!
-
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+[...]
