@@ -1,113 +1,141 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E1A3290A5
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 17:22:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772126529; cv=pass; b=QQNWK7nkRxC7i+HlOGs0bnruf3Rm9K/wVHFgwNnBnm7bybtjkUZJmsxKnuMvMdBR6nqXqxdUIjZn10+KXkXZk4VZ905j/mizn4xlXkcaUh3ZbpL9cA+cpYHU4GC0R3GqDJiTjYVTz3qfhqivhIgKGlqKkJyztHu8FaLCQQjlobc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772126529; c=relaxed/simple;
-	bh=74qgg5SJJYPKqJmOzG3s1YhVXh8RU3o1jEAY2JTGo2o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eLurbVdt3V1Ye305YyrQQt5utx1A02yj5VlmT2W8DMpd861XbzTOhGuPPVffAyIOuWrTSziWG729JMyHozURmnxn951fC9Vx+kPYusVQgro2akBnx4Hioh0gusAtwJ06cvz8TffSj50OQaCwn7Qruj8IWrUgcbBWWW/NYjnr3L4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=h/ZBFCnF; arc=pass smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90F8C3290D0;
+	Thu, 26 Feb 2026 17:34:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772127241; cv=none; b=EueA3ISYOTYD0xKR8ePZMs+njav+8gUkEbrfRKeT6wmFFB27wvqiuck66RlHpPp1nfYjVP4LimvdtmtPQAHf19l0k3COEKrb/jWJgaQ6+P6xDXFHL6kbr0Wb1lCbtu8FUJANyzEAACOlYsCbEebiRVeeO/RLVkFysI6KaO0gYi4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772127241; c=relaxed/simple;
+	bh=dwcYsrKjVJKGML369lTV9uXUPzQOzZKh6nUitGboBwE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qB80QGp62KTV/35tcOnj0AAHaIcoL3ayZkVMia4zyy/Z1ORWll9RlMzhPCa2TpU9v3uZi/mMa5ZraaegZikT98VyDCLGXjldU3+8LfndJLe2yvYlftAJDtsoZD6N2I9kZLRMlN6k7J8wVRbNd1uGa46giN6xwjH0uaFQ0FlbMtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=Ptp4Bguu; arc=none smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="h/ZBFCnF"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-48334ee0aeaso9401255e9.1
-        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 09:22:07 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772126526; cv=none;
-        d=google.com; s=arc-20240605;
-        b=EVhcnDh62myFvJp2fGqTRZfYS9YlfmBJScJLYTxQAzAtvyxBobVCYDCmlG698CqLu8
-         m9xx8I4RUT/p1etljdy10Y4jq+jIbKyw+Ccc4DRhibwmTdtPVC83roDcC8VKl9xzupPo
-         qrCClfjRlutjpwzpo/H/89uM+3CXWD3ASZ541kKkI4Oz1dNi5XbW+cjtekE+8gg3HE/x
-         I2MzwXT+bdbhHdoHmdi0OEQyS0u2ryRkr3YjWNebZLy3ohzECSnMU4ipfsH4tHczFwbi
-         vkNnX7s6XVx0LRwBsx6rI3QGS2IJ93Kr58hy6TcCECudIiWfZSzlFRUf1JxOYqH70B+x
-         BbSw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=74qgg5SJJYPKqJmOzG3s1YhVXh8RU3o1jEAY2JTGo2o=;
-        fh=0AshWrwtA6EWTqzu+9vOapc88FgTJKyUM4s0U73WJnM=;
-        b=GusmoYIMYKYcGIs7t8kTzKIVjWZomLUmUyQNXO7Yn0/pqb/77mrKeqOKS7nfha2LIi
-         yWK4Lfp8au9RJLNawWVf428HUpUMwYmKSLDOvvSM7A+6vbB+R8gMdL9UQ70NclKbsJFJ
-         PE29iTwQGyf0JbOjSrepYSsKM3u2JScAUz1/wzW9X44MOrhW8GMVyAir4jRvkY+anIpn
-         8Rd9isXta8n9V3usZec1/2xAEKmgzIWubptmSfYHrlD8SVQjHnD/3yf83D8z9a9rKbtZ
-         vcEiHvi1eFx9Lk7mqdUXSSWRkmHIEcsDrshmFTq6jlx5tmVgXb2vZ7OdkjBPJdxVX1QM
-         QEcw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772126526; x=1772731326; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=74qgg5SJJYPKqJmOzG3s1YhVXh8RU3o1jEAY2JTGo2o=;
-        b=h/ZBFCnFM165OdJM/PQQ8TAZJnndWYv9Y77AWglq6ATeGR2LzKnDf7pkBM5B9U68Eo
-         undvdPudxMvopvvE6MlRsOEYLUHJI8MO2hFs9BfCDv9AqISLMSORx9LP1kaLI3wnibDV
-         8vnMI2M8DoyjwcPBZxviVtS3Ho0f2IuArsDLp298ber3Ud9pK132EUhCYDKmvOd5xpdh
-         mNmfXpyd5qn7T+Gt2B1JiKbzk1gFrJvETz3PNd4f5rJFdgAVlVzD0MNYHkxT2yljS7iP
-         MzQu1giRfTGtR8y5VetXgw7SwOSzE6QP5+VaijCQD7qvYxbXLwvmLmfOlSSAwvBPvtBp
-         3z6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772126526; x=1772731326;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=74qgg5SJJYPKqJmOzG3s1YhVXh8RU3o1jEAY2JTGo2o=;
-        b=xH7hcJEAxHjl5uKyAcZsHcUbl8691VACa5lLPoMISoJRH8W/WuGWn73hcjDIAmy/zj
-         DGrYBzZhYWSb9ipKbc7ijxj1btEkjh2HmaijTzDpJmJWanWQoeZIg2U+G9B+HFH+aiWz
-         67GG7UhDwKiZZJ12qK1zX/BWO12zvQFbRKC9g2RUVl6t98bx5xNzwL1gfWPCgY9Hr7Z1
-         kPZoxp2Qaw+IVygBrljrQVl5fyFDBL4DsdxbE0jQhTuYUSj9GlAu0Y+6FQcQijVG9WpY
-         pdmgbPGtnEX+HLbpgLSUMwx2btSbs9pPwqyYRX10Lxn1+iirSwHchAuSo37YykpxNnh+
-         NJNw==
-X-Gm-Message-State: AOJu0YzvlNI0VrXDo8l1wdCJMUXRTbUQs9ugNCeT7YV90XPTga66cRMQ
-	2KFOIeb+TPnjgbAyLB+Zc+gTsIi7GGW5YOoaqZeKGd8QCLYAayKDTe08UTcdvptR0dszx74h68n
-	JOMGwy8zl3AReJK1tzuDoa2CdB6qARf+LVw==
-X-Gm-Gg: ATEYQzyhOMJxV3Z/9HETO0njgBIdY2KOZgxD92qxcfogyLfSziFkEGX/Gy33D140aLb
-	03q5+hx+RV2X+VYY+0Idsp3md4Ec2vXkpZtzahgDn4u74oGNk/L4lW5RtzVAApCr18ktYaAqpmQ
-	NemkqNUqAXLrL3Tc99IIe+s3CygX5W9UG3b8c5t5wimFqYnSR7efWgSyPv2dQ+DEO37VGEiRMXH
-	gD0EzNqNlFK78XA3eJ0qG60svB3vL+WHLPejXJY8IhE0dHO6Ucfv+UamAqmtSTbycD0Ko/vqTL+
-	h6/hAB0tkkhBIV9+zr7x+kgK6Yizq82ejncAsmzqXxtZYqRHLxsyTrwu62Kifsezpe78Vt+EcPP
-	xV2gLDfZ/
-X-Received: by 2002:a05:600c:6812:b0:471:700:f281 with SMTP id
- 5b1f17b1804b1-483c3dee17fmr39194405e9.25.1772126526208; Thu, 26 Feb 2026
- 09:22:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="Ptp4Bguu"
+Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61QH1Xwx1526879;
+	Thu, 26 Feb 2026 17:33:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:message-id:mime-version:subject:to; s=default; bh=By05z4h3FP3sv
+	fuG9M8zZDefK2hesnEvkbkIgm0slCc=; b=Ptp4BguuLlAGm40Msn5WZ6sBpM1Xm
+	Gt91YA4DEkj/ciAwsAd017P1hJsQZC11so7cu4e5T0xZ01oP6paJJnuWajxEFntJ
+	lTY2CIR5H1G6wvOa+Q8KGAIqHrOS44/ecw5aX4PC3A27C3hvzt0S5u3Zi2y5mzY2
+	alUQqDq0BVTBqzlzG3o3TkAsq84U7XiRBjApp7Bh5vKFcGRZoCW4P+lXbdgT86hV
+	I6O59oZw1zDv7SnKEAggo/MZ8IYb6y5Lb/FWQ6MqJUbdQYtEpAjafT8Mfa61b0WQ
+	06Y21c5vdAf1Px49A/AVCEAWbxP3j52I5HrfafTzRH1qq5XEKqqyE+QJw==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4chjkkh1q9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 26 Feb 2026 17:33:44 +0000 (GMT)
+Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Thu, 26 Feb 2026 17:33:43 +0000
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+To: <bpf@vger.kernel.org>, <linux-open-source@crowdstrike.com>
+CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
+        <jolsa@kernel.org>, <rostedt@goodmis.org>,
+        <linux-trace-kernel@vger.kernel.org>
+Subject: [RFC PATCH bpf-next v2 0/3] Optimize kprobe.session attachment for exact function names
+Date: Thu, 26 Feb 2026 12:33:39 -0500
+Message-ID: <20260226173342.3565919-1-andrey.grodzovsky@crowdstrike.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <DGOTPHTTR5ZE.Q7ALRR86ZZ6N@bootlin.com>
-In-Reply-To: <DGOTPHTTR5ZE.Q7ALRR86ZZ6N@bootlin.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 26 Feb 2026 09:21:55 -0800
-X-Gm-Features: AaiRm534F1J34rJ7kh8hSVim5MtGmblXU1UcmGZYNyuBYkm5GWjDPjFqUbdl2iI
-Message-ID: <CAADnVQKM3zCvUv_ja+QCCO20eHZ0qrYpReNguXToZpaf46vEFg@mail.gmail.com>
-Subject: Re: [Question] json parsing and bpf selftests dependencies
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Cc: bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Quentin Monnet <qmo@kernel.org>, 
-	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: 04WPEXCH008.crowdstrike.sys (10.100.11.75) To
+ 04WPEXCH006.crowdstrike.sys (10.100.11.70)
+X-Disclaimer: USA
+X-Authority-Analysis: v=2.4 cv=dYaNHHXe c=1 sm=1 tr=0 ts=69a083f8 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=EjBHVkixTFsA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=t04HzT_fAfAF5W-3wVZy:22 a=VwQbUJbxAAAA:8
+ a=pl6vuDidAAAA:8 a=I6yEX1Q7nsou2vuoaIAA:9
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI2MDE1OCBTYWx0ZWRfX2gBy+XgnhGDy
+ Ya1WdNyRVhfaOeF7AP1C8balxdC9Ubxl4S9IcFsh0vk4mbzONKzh6+6Gi3FqQFInmht7DoymWVT
+ rzuuL01lTRGsL3H9CFTf7N+vy8KnYmO8w6LTeJTKE0xaKNVTlAAe58OXalpvnQx9DbCddRM1aj7
+ UOIghkxKTwmDdxify/y0madUUi6idG0hZR/qxFebLT8fJtRIeFv+Eug8a0jExyTNNL13sbhr8p8
+ O5UNDrR+bN+vJkVusNy3ex0+Jx1w1ASFBj9oUEajLPF3frry7EUlAMZ2TWGqd2EGMf3y8fMOo9H
+ WuTHj6aR0nU4k4SzCExTjCyVm0fdWbcxybNNwRAIjrL0iybCcDQMdf7siTkWYA+CAtX/D3AwkuJ
+ Q68kDf1li3GOS/aPys9LUQrVabDWoVjSN1ACfLLWTX3+t4XL/0sfjsq9mMkvjQ/HMhMJ4I1Sou3
+ kh1P7IqLAGlb91LipRg==
+X-Proofpoint-ORIG-GUID: KrkEvbAkJ27daFhPKMu-ZI8S1u7vKxki
+X-Proofpoint-GUID: KrkEvbAkJ27daFhPKMu-ZI8S1u7vKxki
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11713
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 bulkscore=0 clxscore=1015 malwarescore=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 spamscore=0 priorityscore=1501 suspectscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602260158
 
-On Thu, Feb 26, 2026 at 2:36=E2=80=AFAM Alexis Lothor=C3=A9
-<alexis.lothore@bootlin.com> wrote:
->
-> Hello,
-> I am pursuing my quest to convert standalone bpf tests (from
-> tools/testing/selftests/bpf) into the test_progs framework so they can
-> be executed automatically by the CI tooling.
->
-> I would like to continue on the bpftool tests, especially
-> test_bpftool.py ([1]).
+When libbpf attaches kprobe.session programs with exact function names
+(the common case: SEC("kprobe.session/vfs_read")), the current code path
+has two independent performance bottlenecks:
 
-I think it outlived itself long ago.
-Just delete it.
-Any new bpftool features can be tested through test_progs.
-No need to test json output specifically.
-It's diminishing returns.
+1. Userspace (libbpf): attach_kprobe_session() always parses
+ /proc/kallsyms to resolve function names, even when the name is exact
+ (no wildcards).  This takes ~150ms per function.
+
+2. Kernel (ftrace): ftrace_lookup_symbols() does a full O(N) linear scan
+ over ~200K kernel symbols via kallsyms_on_each_symbol(), decompressing
+ every symbol name, even when resolving a single symbol (cnt == 1).
+
+This series optimizes both layers:
+
+- Patch 1: libbpf detects exact function names (no wildcards) in
+bpf_program__attach_kprobe_multi_opts() and bypasses kallsyms parsing,
+passing the symbol directly to the kernel via syms[] array.
+ESRCH is normalized to ENOENT for API consistency.
+
+- Patch 2: ftrace_lookup_symbols() uses kallsyms_lookup_name() for
+O(log N) binary search when cnt == 1, with fallback to linear scan for
+duplicate symbols or module symbols. Included here for context; this
+patch is destined for the tracing tree via linux-trace-kernel (Steven
+Rostedt).
+
+- Patch 3: Selftests validating exact-name attachment via
+kprobe_multi_session.c and error consistency between wildcard and exact
+paths in test_attach_api_fails.
+
+Changes since v1:
+https://lore.kernel.org/bpf/20260223215113.924599-1-andrey.grodzovsky@crowdstrike.com/
+
+- Moved exact-name detection from attach_kprobe_session() into
+bpf_program__attach_kprobe_multi_opts() so all callers benefit,
+not just session (Jiri Olsa)
+- Changed ftrace_location() to boolean check only, keeping original
+kallsyms address in addrs[] consistent with kallsyms_callback
+behavior (Jiri Olsa)
+- Removed verbose performance rationale from ftrace code comment,
+kept in changelog (Steven Rostedt)
+- Consolidated session syms test into kprobe_multi_session.c using
+session_check(), validating via kprobe_session_result[0] == 4 (Jiri Olsa)
+- Folded error tests into existing test_attach_api_fails() instead of
+separate subtest (Jiri Olsa)
+- Deleted standalone kprobe_multi_session_syms.c and
+kprobe_multi_session_errors.c
+
+Andrey Grodzovsky (3):
+  libbpf: Optimize kprobe.session attachment for exact function names
+  ftrace: Use kallsyms binary search for single-symbol lookup
+  selftests/bpf: add tests for kprobe.session optimization
+
+ kernel/trace/ftrace.c                         | 22 ++++++++++++
+ tools/lib/bpf/libbpf.c                        | 34 +++++++++++++++----
+ .../bpf/prog_tests/kprobe_multi_test.c        | 33 ++++++++++++++++--
+ .../bpf/progs/kprobe_multi_session.c          | 10 ++++++
+ 4 files changed, 91 insertions(+), 8 deletions(-)
+
+-- 
+2.34.1
+
