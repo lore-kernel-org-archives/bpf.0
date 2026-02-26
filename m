@@ -1,292 +1,185 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13B73624B0
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 13:38:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870942D780A;
+	Thu, 26 Feb 2026 13:44:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772113088; cv=none; b=o5gZczcC5wlr9Y01qorHYzw44pHLfi0QKyTf15r93Ep3lQBlvYYgSiuB2GZfi2KrjUA/5dftjoUMcuEp+7bSy/cOkwAZ5Us+72dEM2ZeNvTYtURq5UxPglB8DJ5TD1Nv67rwvaOzkam+WmzYVDJ4YWDz1qnFMcbJ5DuQs8QBksQ=
+	t=1772113451; cv=none; b=P2rMYjnh2O4aJglDIOlFGFDs60zjm+Jg0eJ2+xFonVG7ey14mA1WgHgBBc1C8nXQbdLTmAPt6jVeqlkDJeMdyh5ed0YY9eqdr66gJfGrmRdVgXtnIBMPzt8qLB21CgSccXU3isl/OgG9LvpyxDkRBXpQ//FyI+PxUFty3iuutuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772113088; c=relaxed/simple;
-	bh=FXF/EZisEZkN2tIdE8N9kJA89adAdH+7J80t/xp9+4Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UGFjAPB/XwVssA+KZCNGzesQYVhuE8KoCpXRbK7m1AZrFEtMVH0nq+I+W+692CWFaNQcSs6YR970VWuxNw19SfQ8ZzRQGdACxeFNsDYLcWN+Ii/JqQ5QAdilFFVv9lUH5Mg1S3Wsoi0fU4zI0jcvEb1eG51tI9lYdT3ZCx9Yt38=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UhVOhYDd; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1772113451; c=relaxed/simple;
+	bh=db+xhoQjjx/pt9sUyobNIEy0/Fi7NopNuCoTcDFRXvw=;
+	h=Subject:From:To:Cc:Date:Message-ID:MIME-Version:Content-Type; b=tqO+cYGLTACzeZ8hdLTlaYdcZWMgwMa3VNkXNSQ9eepiV4Dc2fgED7Urxo4OM+VDunes+9ZuhpPVpvk50xQY9HO8vgz9j2IVwKGzHOmjBLnG1tWY9oefW5hRB6wLLq00KdCgjRJyPp/lZtjHVmGZzP98yHN9d8AYQTDgjU1uYcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e6JB2dzM; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UhVOhYDd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772113084;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Xa0ZfxYyv4zHUToxsERixm69ne0BA2dtlNERxeC8jao=;
-	b=UhVOhYDdnURMkAezkP6VXG/yHzOkpj0rW9LhN2p6vqjhwFgfqyPNCNCWmRgbdZeXpLpCNH
-	eViWy/Z34Vk3Q3Egac2aQFmHLBgfX+X9ebHC0+vekRiPZ6sprGxS8bPV3UVBISYUCN0EoE
-	ZSv2Ef1MBpKvPdAOUyKcusQ3aJRNQlI=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-636-oW_UghdSNl6lrqpHzPoquA-1; Thu,
- 26 Feb 2026 08:38:01 -0500
-X-MC-Unique: oW_UghdSNl6lrqpHzPoquA-1
-X-Mimecast-MFC-AGG-ID: oW_UghdSNl6lrqpHzPoquA_1772113077
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8206619560AD;
-	Thu, 26 Feb 2026 13:37:56 +0000 (UTC)
-Received: from rotkaeppchen (unknown [10.44.32.93])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id DB86D3000218;
-	Thu, 26 Feb 2026 13:37:47 +0000 (UTC)
-Date: Thu, 26 Feb 2026 14:37:43 +0100
-From: Philipp Rudo <prudo@redhat.com>
-To: Pingfan Liu <piliu@redhat.com>
-Cc: kexec@lists.infradead.org, "David S. Miller" <davem@davemloft.net>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Andrii
- Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, Yonghong
- Song <yonghong.song@linux.dev>, Jeremy Linton <jeremy.linton@arm.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Ard Biesheuvel <ardb@kernel.org>, Simon Horman <horms@kernel.org>, Gerd
- Hoffmann <kraxel@redhat.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
- Viktor Malik <vmalik@redhat.com>, Jan Hendrik Farr <kernel@jfarr.cc>,
- Baoquan He <bhe@redhat.com>, Dave Young <dyoung@redhat.com>, Andrew Morton
- <akpm@linux-foundation.org>, bpf@vger.kernel.org,
- systemd-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv6 04/13] kexec_file: Use bpf-prog to decompose image
-Message-ID: <20260226143743.7e963ba9@rotkaeppchen>
-In-Reply-To: <20260119032424.10781-5-piliu@redhat.com>
-References: <20260119032424.10781-1-piliu@redhat.com>
-	<20260119032424.10781-5-piliu@redhat.com>
-Organization: Red Hat inc.
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e6JB2dzM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B745C116C6;
+	Thu, 26 Feb 2026 13:44:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772113451;
+	bh=db+xhoQjjx/pt9sUyobNIEy0/Fi7NopNuCoTcDFRXvw=;
+	h=Subject:From:To:Cc:Date:From;
+	b=e6JB2dzM0B7gKb1fk233AvGdk7j1X1Kv+0z3AkokUryKyCD62LSZOAu0zjIq75LhC
+	 mL1gdaGofDvqO30ehS/orMt+oAr1t17sKSUSX7DOhcB3HlJ9WOvAReL666ZzmRvvaQ
+	 QPg05GDu3tsvEvYp6JxDCmeR3g9b6nLaZ43i6BFoCqVwOuvXMtReZKflANIBLH2ai1
+	 TqCfGediXWS3L0CmzGxK32wtkLqWEWsbRdbqcBLhzHp9zW2pitkzeNoieOy/p2Kl2p
+	 KmwAjms0WTJRJdwPr9ozXH6+KOffbP1CX98pR1N8Imfnv1cLH800XjQcgf4wT282n5
+	 QvuvRW8B7Jwzw==
+Subject: [PATCH net-next v5 0/5] net: sched: refactor qdisc drop reasons into
+ dedicated tracepoint
+From: Jesper Dangaard Brouer <hawk@kernel.org>
+To: netdev@vger.kernel.org, Eric Dumazet <eric.dumazet@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>,
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+Cc: Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org,
+ Jakub Kicinski <kuba@kernel.org>, horms@kernel.org, jiri@resnulli.us,
+ edumazet@google.com, xiyou.wangcong@gmail.com, jhs@mojatatu.com,
+ atenart@redhat.com, carges@cloudflare.com, kernel-team@cloudflare.com
+Date: Thu, 26 Feb 2026 14:44:06 +0100
+Message-ID: <177211325634.3011628.9343837509740374154.stgit@firesoul>
+User-Agent: StGit/1.5
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Pingfan,
+This series refactors qdisc drop reason handling by introducing a dedicated
+enum qdisc_drop_reason and trace_qdisc_drop tracepoint, providing qdisc
+layer drop diagnostics with direct qdisc context visibility.
 
-On Mon, 19 Jan 2026 11:24:15 +0800
-Pingfan Liu <piliu@redhat.com> wrote:
+Background:
+-----------
+Identifying which qdisc dropped a packet via skb_drop_reason is difficult.
+Normally, the kfree_skb tracepoint caller "location" hints at the dropping
+code, but qdisc drops happen at a central point (__dev_queue_xmit), making
+this unusable. As a workaround, commits 5765c7f6e317 ("net_sched: sch_fq:
+add three drop_reason") and a42d71e322a8 ("net_sched: sch_cake: Add drop
+reasons") encoded qdisc names directly in the drop reason enums.
 
-[...]
+This series provides a cleaner solution by creating a dedicated qdisc
+tracepoint that naturally includes qdisc context (handle, parent, kind).
 
-> diff --git a/kernel/kexec_bpf_loader.c b/kernel/kexec_bpf_loader.c
-> new file mode 100644
-> index 0000000000000..dc59e1389da94
-> --- /dev/null
-> +++ b/kernel/kexec_bpf_loader.c
-> @@ -0,0 +1,161 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Kexec image bpf section helpers
-> + *
-> + * Copyright (C) 2025, 2026 Red Hat, Inc
-> + */
-> +
-> +#define pr_fmt(fmt)	"kexec_file(Image): " fmt
-> +
-> +#include <linux/err.h>
-> +#include <linux/errno.h>
-> +#include <linux/list.h>
-> +#include <linux/kernel.h>
-> +#include <linux/vmalloc.h>
-> +#include <linux/kexec.h>
-> +#include <linux/elf.h>
-> +#include <linux/string.h>
-> +#include <linux/bpf.h>
-> +#include <linux/filter.h>
-> +#include <asm/byteorder.h>
-> +#include <asm/image.h>
-> +#include <asm/memory.h>
-> +#include "kexec_internal.h"
-> +
-> +/* Load a ELF */
-> +static int arm_bpf_prog(char *bpf_elf, unsigned long sz)
-> +{
-> +	return 0;
-> +}
-> +
-> +static void disarm_bpf_prog(void)
-> +{
-> +}
-> +
-> +struct kexec_context {
-> +	bool kdump;
-> +	char *kernel;
-> +	int kernel_sz;
-> +	char *initrd;
-> +	int initrd_sz;
-> +	char *cmdline;
-> +	int cmdline_sz;
-> +};
-> +
-> +void kexec_image_parser_anchor(struct kexec_context *context,
-> +		unsigned long parser_id);
-> +
-> +/*
-> + * optimize("O0") prevents inline, compiler constant propagation
-> + *
-> + * Let bpf be the program context pointer so that it will not be spilled into
-> + * stack.
-> + */
-> +__attribute__((used, optimize("O0"))) void kexec_image_parser_anchor(
-> +		struct kexec_context *context,
-> +		unsigned long parser_id)
-> +{
-> +	/*
-> +	 * To prevent linker from Identical Code Folding (ICF) with kexec_image_parser_anchor,
-> +	 * making them have different code.
-> +	 */
-> +	volatile int dummy = 0;
-> +
-> +	dummy += 1;
-> +}
-> +
-> +
-> +BTF_KFUNCS_START(kexec_modify_return_ids)
-> +BTF_ID_FLAGS(func, kexec_image_parser_anchor, KF_SLEEPABLE)
-> +BTF_KFUNCS_END(kexec_modify_return_ids)
-> +
-> +static const struct btf_kfunc_id_set kexec_modify_return_set = {
-> +	.owner = THIS_MODULE,
-> +	.set = &kexec_modify_return_ids,
-> +};
-> +
-> +static int __init kexec_bpf_prog_run_init(void)
-> +{
-> +	return register_btf_fmodret_id_set(&kexec_modify_return_set);
-> +}
-> +late_initcall(kexec_bpf_prog_run_init);
-> +
-> +static int kexec_buff_parser(struct bpf_parser_context *parser)
-> +{
-> +	return 0;
-> +}
-> +
-> +/* At present, only PE format file with .bpf section is supported */
-> +#define file_has_bpf_section	pe_has_bpf_section
-> +#define file_get_section	pe_get_section
-> +
-> +int decompose_kexec_image(struct kimage *image, int extended_fd)
-> +{
-> +	struct kexec_context context = { 0 };
-> +	struct bpf_parser_context *bpf;
-> +	unsigned long kernel_sz, bpf_sz;
-> +	char *kernel_start, *bpf_start;
-> +	int ret = 0;
-> +
-> +	if (image->type != KEXEC_TYPE_CRASH)
-> +	        context.kdump = false;
-> +	else
-> +	        context.kdump = true;
-> +
-> +	kernel_start = image->kernel_buf;
-> +	kernel_sz = image->kernel_buf_len;
-> +
-> +	while (file_has_bpf_section(kernel_start, kernel_sz)) {
-> +
-> +		bpf = alloc_bpf_parser_context(kexec_buff_parser, &context);
-> +		if (!bpf)
-> +			return -ENOMEM;
-> +		file_get_section((const char *)kernel_start, ".bpf", &bpf_start, &bpf_sz);
-> +		if (!!bpf_sz) {
-> +			/* load and attach bpf-prog */
-> +			ret = arm_bpf_prog(bpf_start, bpf_sz);
-> +			if (ret) {
-> +				put_bpf_parser_context(bpf);
-> +				pr_err("Fail to load .bpf section\n");
-> +				goto err;
-> +			}
-> +		}
+Solution:
+---------
+Create a new tracepoint trace_qdisc_drop that builds on top of existing
+trace_qdisc_enqueue infrastructure. It includes qdisc handle, parent,
+qdisc kind (name), and device information directly.
 
-I'm not sure this works as intended. In case a .bpf section exists but
-bpf_sz is 0, the function will skip arming the bpf-prog but still
-continue. That doesn't look right to me. IIUC a zero size bpf-prog
-should be an error. Or am I missing something?
+The existing SKB_DROP_REASON_QDISC_DROP is retained for backwards
+compatibility via kfree_skb_reason(). The qdisc-specific drop reasons
+(QDISC_DROP_*) provide fine-grained detail via the new tracepoint.
+The enum uses subsystem encoding (offset by SKB_DROP_REASON_SUBSYS_QDISC)
+to catch type mismatches during debugging.
 
-Thanks
-Philipp
+This implements the alternative approach described in:
+https://lore.kernel.org/all/6be17a08-f8aa-4f91-9bd0-d9e1f0a92d90@kernel.org/
 
-> +		context.kernel = kernel_start;
-> +		context.kernel_sz = kernel_sz;
-> +		/* bpf-prog fentry, which handle above buffers. */
-> +		kexec_image_parser_anchor(&context, (unsigned long)bpf);
-> +
-> +		/*
-> +		 * Container may be nested and should be unfold one by one.
-> +		 * The former bpf-prog should prepare 'kernel', 'initrd',
-> +		 * 'cmdline' for the next phase by calling kexec_buff_parser()
-> +		 */
-> +		kernel_start = context.kernel;
-> +		kernel_sz = context.kernel_sz;
-> +
-> +		/*
-> +		 * detach the current bpf-prog from their attachment points.
-> +		 */
-> +		disarm_bpf_prog();
-> +		put_bpf_parser_context(bpf);
-> +	}
-> +
-> +	/*
-> +	 * image's kernel_buf, initrd_buf, cmdline_buf are set. Now they should
-> +	 * be updated to the new content.
-> +	 */
-> +	image->kernel_buf = context.kernel;
-> +	image->kernel_buf_len = context.kernel_sz;
-> +	image->initrd_buf = context.initrd;
-> +	image->initrd_buf_len = context.initrd_sz;
-> +	image->cmdline_buf = context.cmdline;
-> +	image->cmdline_buf_len = context.cmdline_sz;
-> +
-> +	return 0;
-> +err:
-> +	vfree(context.kernel);
-> +	vfree(context.initrd);
-> +	vfree(context.cmdline);
-> +	return ret;
-> +}
-> +
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 0222d17072d40..f9674bb5bd8db 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -238,7 +238,14 @@ kimage_file_prepare_segments(struct kimage *image, int kernel_fd, int initrd_fd,
->  		goto out;
->  #endif
->  
-> -	/* Call arch image probe handlers */
-> +	if (IS_ENABLED(CONFIG_KEXEC_BPF))
-> +		decompose_kexec_image(image, initrd_fd);
-> +
-> +	/*
-> +	 * From this point, the kexec subsystem handle the kernel boot protocol.
-> +	 *
-> +	 * Call arch image probe handlers
-> +	 */
->  	ret = arch_kexec_kernel_image_probe(image, image->kernel_buf,
->  					    image->kernel_buf_len);
->  	if (ret)
-> diff --git a/kernel/kexec_internal.h b/kernel/kexec_internal.h
-> index 8e5e5c1237732..ee01d0c8bb377 100644
-> --- a/kernel/kexec_internal.h
-> +++ b/kernel/kexec_internal.h
-> @@ -39,6 +39,7 @@ extern size_t kexec_purgatory_size;
->  extern bool pe_has_bpf_section(const char *file_buf, unsigned long pe_sz);
->  extern int pe_get_section(const char *file_buf, const char *sect_name,
->  		char **sect_start, unsigned long *sect_sz);
-> +extern int decompose_kexec_image(struct kimage *image, int extended_fd);
->  #else /* CONFIG_KEXEC_FILE */
->  static inline void kimage_file_post_load_cleanup(struct kimage *image) { }
->  #endif /* CONFIG_KEXEC_FILE */
+Changes since v4:
+-----------------
+v4: https://lore.kernel.org/all/177125575993.2500844.8718737675156179479.stgit@firesoul/
+- Patch 1: Fix clang -Wimplicit-enum-enum-cast warning in sch_dualpi2.c (Jakub)
+  - DualPI2 dequeue path: use SKB_DROP_REASON_QDISC_DROP (correct enum type)
+    instead of QDISC_DROP_CONGESTED for drop_and_retry() which takes
+    enum skb_drop_reason. Patch 5 properly converts this.
+
+Changes since v3:
+-----------------
+v3: https://lore.kernel.org/all/177039500964.2258217.2989656069254156812.stgit@firesoul/
+- Folded patch 3 (CAKE cobalt_should_drop) into patch 1 to avoid
+  temporary enum type confusion between patches (Toke, Paolo)
+- Split tcf_kfree_skb_list() into inline wrapper + __tcf_kfree_skb_list()
+  for fastpath optimization when skb is NULL (Paolo)
+- Series is now 5 patches instead of 6
+- Added Reviewed-by from Toke Høiland-Jørgensen
+
+Changes since v2:
+-----------------
+Link v2: https://lore.kernel.org/all/177032644012.1975497.16411100029657607833.stgit@firesoul/
+- Patch 1: Fix tcf_kfree_skb_list() to handle TC classifier drop reasons
+  - syzbot triggered WARN_ON_ONCE revealing TC classifier's SKB_DROP_REASON_TC_*
+    reasons arrive via shared tc_skb_cb->drop_reason storage
+  - Use SKB_DROP_REASON_SUBSYS_MASK to distinguish qdisc vs TC classifier reasons
+  - Pass TC classifier reasons through to kfree_skb_reason() unchanged
+  - Reported-by: syzbot+ci335f183b8446659a@syzkaller.appspotmail.com
+- Patch 5 (was 6): Fix compile error - add missing QDISC_DROP_L4S_STEP_NON_ECN
+  - Reported-by: kernel test robot <lkp@intel.com>
+  - Closes: https://lore.kernel.org/oe-kbuild-all/202602061240.CRDtcOeX-lkp@intel.com/
+
+Changes since RFC v1:
+---------------------
+Link RFC-v1: https://lore.kernel.org/all/177022452988.1827734.5121740962985640333.stgit@firesoul/
+- Added SKB_DROP_REASON_SUBSYS_QDISC subsystem encoding for enum debugging
+- Added WARN_ON_ONCE to catch wrong enum type (skb vs qdisc drop reason)
+- Renamed QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION (Toke)
+- Renamed QDISC_DROP_FQ_BAND_LIMIT to QDISC_DROP_BAND_LIMIT
+- Renamed QDISC_DROP_FQ_HORIZON_LIMIT to QDISC_DROP_HORIZON_LIMIT
+- Updated SKB_DROP_REASON_QDISC_DROP doc to reference qdisc:qdisc_drop
+- Split rename changes into separate patches for clarity
+
+Series overview:
+----------------
+Patch 1: Introduce the qdisc drop reason infrastructure
+  - New enum qdisc_drop_reason with subsystem encoding
+  - New trace_qdisc_drop tracepoint with qdisc context
+  - tcf_kfree_skb_list() handles both qdisc and TC classifier drop reasons
+  - Split into inline wrapper + __tcf_kfree_skb_list() for fastpath
+  - Convert qdiscs with drop reasons to use the new infrastructure
+  - Fix CAKE cobalt_should_drop() return type for type correctness
+
+Patch 2: Convert SFQ as example for reviewers
+  - Demonstrates how to convert a flow-based qdisc
+  - Adds QDISC_DROP_MAXFLOWS for flow table exhaustion
+  - Rename FQ_FLOW_LIMIT to generic FLOW_LIMIT, now shared by FQ and SFQ
+
+Patch 3: Rename QDISC_DROP_FQ_* to generic names
+  - QDISC_DROP_FQ_BAND_LIMIT -> QDISC_DROP_BAND_LIMIT
+  - QDISC_DROP_FQ_HORIZON_LIMIT -> QDISC_DROP_HORIZON_LIMIT
+  - Remove local FQDR() macro, use full QDISC_DROP_* names
+
+Patch 4: Rename QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION
+  - Generic name without embedding qdisc name
+
+Patch 5: DualPI2 use qdisc_dequeue_drop() for dequeue drops
+  - Demonstrates dequeue-time drop handling with trace_qdisc_drop
+  - Adds QDISC_DROP_L4S_STEP_NON_ECN for L4S step AQM drops
+
+---
+
+Jesper Dangaard Brouer (5):
+      net: sched: introduce qdisc-specific drop reason tracing
+      net: sched: sfq: convert to qdisc drop reasons
+      net: sched: rename QDISC_DROP_FQ_* to generic names
+      net: sched: rename QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION
+      net: sched: sch_dualpi2: use qdisc_dequeue_drop() for dequeue drops
+
+
+ include/net/dropreason-core.h  |  48 ++------------
+ include/net/dropreason-qdisc.h | 114 +++++++++++++++++++++++++++++++++
+ include/net/dropreason.h       |   6 ++
+ include/net/sch_generic.h      |  43 +++++++++----
+ include/trace/events/qdisc.h   |  51 +++++++++++++++
+ net/core/dev.c                 |   8 +--
+ net/sched/sch_cake.c           |  26 ++++----
+ net/sched/sch_codel.c          |   5 +-
+ net/sched/sch_dualpi2.c        |  18 +++---
+ net/sched/sch_fq.c             |  10 +--
+ net/sched/sch_fq_codel.c       |   4 +-
+ net/sched/sch_fq_pie.c         |   4 +-
+ net/sched/sch_generic.c        |  29 ++++++++-
+ net/sched/sch_gred.c           |   4 +-
+ net/sched/sch_pie.c            |   4 +-
+ net/sched/sch_red.c            |   4 +-
+ net/sched/sch_sfb.c            |   4 +-
+ net/sched/sch_sfq.c            |   8 +--
+ 18 files changed, 278 insertions(+), 112 deletions(-)
+ create mode 100644 include/net/dropreason-qdisc.h
+
+--
+Ideology: "If you cannot measure it, you cannot improve it"
+--Jesper
+
 
