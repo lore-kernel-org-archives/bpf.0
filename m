@@ -1,95 +1,100 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35F63A7F75
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 10:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42C1427472;
+	Thu, 26 Feb 2026 10:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772101941; cv=none; b=obp0WFP1U4JF4Ml1LoZQL9NNvpAxlHkJG1u1W+4yiApM6URdtkggdoyI231ygiEESg1ZqwVWEbcynoqqIkuO2u9HWKhL884dzpupPvCuvyfq8FKW7nHIQyn07p6MijZK1Nl7sgC1N6BVVgyXIa0bY3Vg+M0opnIpkA2T+kP470Y=
+	t=1772102506; cv=none; b=Hujx76jUKkPWEz+M3EQZP194KNgiMCZsAqgcBZ2IBBzWc39hDq5nLURn6xKSQs2FPNBMCCvW6irP3f7khkBAZ6UKKQxkfEgP1fdF82LZgkr5/SP5s5ysi3+oAlkH07ZPj1ZlzFo/6eAGuL21ex6s/bh+mSuTg+yeH6c2/0bpzn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772101941; c=relaxed/simple;
-	bh=wkHeT4XUoOFy4GFofBPUPqusWE2E1I31xRkD/rzy22U=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject; b=u3t25VHMLaztGRi562Ge8jjm6hnmiGeF6g8DS9avIejQyZ8MEAmkFknuGeSLnVUj9PevCfXLPBY84cslH+4PNNSy8N9yZqWVqi7tXkfT1RzaLjtVDILL8JYcb0owxYy2PRrmfc+PzYAB5REWD8bJQllqO0icuQT1mrMobx0p/8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=KF3Rg13U; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1772102506; c=relaxed/simple;
+	bh=NMzeyOxAYXzF4sthIP3D/i7E+x8X8zh6cTJ8kUu7Pu0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=gWvI8GFMqpJLYNYzy3g+ZcrdRE5wYGv3YCTa9WqVJ8l3KULoeX3tJ2HD+xKKD/5dGTahQhzT65wBFQXK1n4h+ccSiX41Sq+vHriLWXSugVL7kEusgwgvd/7rRqoI7cauZi+WvSo1Ns0vbbyvq+BnhIpFcH1I9xr3HscL32t6wq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ACEXSJS3; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="KF3Rg13U"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id DE40F1A13A6
-	for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 10:32:15 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id B412B5FDEB;
-	Thu, 26 Feb 2026 10:32:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A8C331036932B;
-	Thu, 26 Feb 2026 11:32:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1772101935; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=zzZoj4BBEM+jIwZkGV9NPQ5xf+aN6E8yHWj58EAW/ug=;
-	b=KF3Rg13UMahOBUwtYdSFfaJIs/AMrvAjFIYBW+huADM3ust7AuQ+BEv1iKaqMy2uH8Hvpl
-	Rk7n5k0oDZx4wM7BvJNKH9cMU5dFQHymDL89whoIMT9HiD9uxRio+5GhbxaxAAW5xHnV2T
-	NDapNkBH62/E4rb95qLcnz/u4yyVcFardq6ShjMcPWUUepj1E0wFzv4oQGT6GCmlYhOgJE
-	7eo4BSaplhq1XCIASdi+eI2j31jipzTPQvBYA0OA77Yp1izm4qbp+HxezaKdzQd+QRybAF
-	Ur2kDhiFjHAgcwk7lgi7lMy5vma0uHJrpDlMfFQrTMJpddtDzO3EkJCYjvR67g==
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ACEXSJS3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40F6EC116C6;
+	Thu, 26 Feb 2026 10:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772102505;
+	bh=NMzeyOxAYXzF4sthIP3D/i7E+x8X8zh6cTJ8kUu7Pu0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=ACEXSJS3B2fQEadkGEJl1zvYqazqXvxdDOIOjcbjXB34DqReGyuQ8Wp+EbHWE2Ncq
+	 Jc7w5zfeuir54PgUCwibSqog7dUFxMcOvmYp+vaBoBq6FHdcBRJLUyuHWdy4ysp7iY
+	 SYEqIkalGg5GK4C3XqpU023DIzxi9BGwhxw3UqE3WgGYAsnC+uVao+AIXyvQU7b+up
+	 TMG6qECmP/DLCaFHL/VHztCoFzhbqKw2ui47E2MtNKe+Nw/t4tFvYzDGgEd2e84eKi
+	 KP2FDbdNtPxQ7fUNQPTnR0s63oVU0sHX5xhtiMGg5CYg+ztqWhboa5qiSLfxuPScIA
+	 VHqDULfc8kGKQ==
+Content-Type: multipart/mixed; boundary="===============7185096252700937842=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 26 Feb 2026 11:32:14 +0100
-Message-Id: <DGOTPHTTR5ZE.Q7ALRR86ZZ6N@bootlin.com>
-Cc: "Quentin Monnet" <qmo@kernel.org>, "Bastien Curutchet (eBPF Foundation)"
- <bastien.curutchet@bootlin.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "bpf" <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [Question] json parsing and bpf selftests dependencies
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Message-Id: <aab481dc12d67bc2e6fa5981adc5ce250251dd41ec966bd86e227777f18adc0c@mail.kernel.org>
+In-Reply-To: <20260226095156.117996-2-yangfeng59949@163.com>
+References: <20260226095156.117996-2-yangfeng59949@163.com>
+Subject: Re: [PATCH v7 bpf-next 1/2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
+From: bot+bpf-ci@kernel.org
+To: yangfeng59949@163.com,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,horms@kernel.org,posk@google.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com
+Cc: bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,yangfeng59949@163.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 26 Feb 2026 10:41:44 +0000 (UTC)
 
-Hello,
-I am pursuing my quest to convert standalone bpf tests (from
-tools/testing/selftests/bpf) into the test_progs framework so they can
-be executed automatically by the CI tooling.
+--===============7185096252700937842==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-I would like to continue on the bpftool tests, especially
-test_bpftool.py ([1]). This one involves quite a lot of json parsing on
-bpftool output (to validate that some entries are present in the
-output, depending on the used command), which does not seem to be a use
-case currently in bpf selftests. The first tests may be handled by some
-manual parsing (eg strstr'ing keys in the output, that's what I've done
-for the recently converted bpftool_metadata test, see [2]), but that's a
-bit fragile, and there are more complex subtests for which this loosy
-strategy will get even more fragile (eg
-test_feature_kernel_full_vs_not_full generates json output with two
-different commands, and tests the diff).
+> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> --- a/net/bpf/test_run.c
+> +++ b/net/bpf/test_run.c
+> @@ -1156,6 +1156,18 @@
+>  		skb->ip_summed = CHECKSUM_COMPLETE;
+>  	}
+>
+> +	if (prog->type == BPF_PROG_TYPE_LWT_XMIT && !skb_dst(skb)) {
+> +		if (!ipv6_bpf_stub) {
+> +			pr_warn_once("Please test this program with the IPv6 module enabled\n");
+> +			goto out;
 
-I then face the need to have some proper json parsing in test_progs. I
-kind of understand that there is a will to keep the dependency list
-small for test_progs, so I'm asking here what could be the best option
-for this:
-- is it ok to make test_progs depend on a new json parsing library (eg:
-  cJSON) ? and so add the library to CI images ?
-- or some implicit dependency on some CLI tooling (eg: jq) ? and so, add
-  the cli tool to CI images ?
-- test_progs is reusing json_writer.c from bpftool ([2]), should we
-  rather write a custom  json_reader.c as well (even if not needed at
-  that point by bpftool itself) ?
+Should this set ret to an error code before goto out?  At this point
+ret is 0 from the earlier convert___skb_to_skb() success path, so the
+function returns 0 to the bpf() syscall without ever running the BPF
+program.
 
-Any opinion on this ?
+Every other early exit in bpf_prog_test_run_skb() assigns a negative
+errno before goto out, for example:
 
-Alexis
+    ret = -EINVAL;
+    goto out;
 
-[1] https://elixir.bootlin.com/linux/v6.19.3/source/tools/testing/selftests=
-/bpf/test_bpftool.py
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git/tree/t=
-ools/testing/selftests/bpf/prog_tests/bpftool_metadata.c#n49
-[3] https://elixir.bootlin.com/linux/v6.19.3/source/tools/bpf/bpftool/json_=
-writer.c
+    ret = -ENOMEM;
+    goto out;
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+    ret = -ENODEV;
+    goto out;
+
+Returning 0 here means userspace sees a successful test run that never
+actually executed.  Something like ret = -EOPNOTSUPP would let the
+caller know the test could not proceed.
+
+> +		}
+
+> [ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22437468613
+
+AI-authorship-score: low
+AI-authorship-explanation: Patch iterated through 7 versions over 3 weeks with detailed maintainer interaction, consistent with human development.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Missing error return code on early exit path causes bpf() syscall to return success without executing the BPF program when IPv6 is unavailable.
+
+--===============7185096252700937842==--
