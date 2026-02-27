@@ -1,76 +1,76 @@
-Received: from mail-dy1-f180.google.com (mail-dy1-f180.google.com [74.125.82.180])
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D499C374755
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 19:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B674611C0
+	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 19:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772220751; cv=none; b=K6P/yXSDyNRrLj860jzxVNeFzZ3kG4vMJGPG43JBRG+x/SqXYv05Yem3/QfktSnHWr8YefZEwhPwLtWZqXsMzOR/8M4OuAVyyzdQiF5T2ZkRtw8IHrNq803x8lNBunN9L7bhc0Qpt+/HqPs0zKg5RILLnp0PmTISmMJSqRlq2ow=
+	t=1772221376; cv=none; b=WG6eafSP1qx1LGZVkOUqTckafGpIu2dleS/InPIfZUudXx3FlGtFm6q5T658on+P0siHD1DcHQcfPq+rTyczsVZ+cI0ZLqkuglEPCewS0MyuIMQSpCc6MrRlRMhskDoky0QO5WwVz2Sk7wn4ueExyQ/eKneohgkzANU/U91EbYU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772220751; c=relaxed/simple;
-	bh=6QzZcczhG4emetLmK5JUdFv2bFQ29h8ZheCtiYEOgeQ=;
+	s=arc-20240116; t=1772221376; c=relaxed/simple;
+	bh=P83yXcG3q75yqwa59IlosbbKR39QHid0c/qqNmCbYog=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=sY76wert0mDiQT5H0pfXS7t4l2JwXv7BGjn2IyA3pUkcG+lhq0oE6BXHakXd/7W7i6H4vYJ6MkbMscpT5cJqtwwEWl8105sutrx9pN5/IEmk0sSdc5x42wDtkInhbIVGuoZTMCqFmkGwi09CYhDlKdGfdx3i4XgrdySPH7B/cOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CgOaiKPW; arc=none smtp.client-ip=74.125.82.180
+	 Content-Type:MIME-Version; b=Su2JdzM8Gl+1kaplZWAv5gFz485MPq2Lgj5NsrPkeOnolsSuMM4/lji+3ct0MyTSfWNDjgzcrB62uQRRT4TBEd3QnbEnlE6haNb5pu7neLYok8+HC7Fp4JKZTmgz+80VEsPJ/O91W8BH8doLjSWNk3dyeqJW6623TYXqWTfdwzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EZSucV+d; arc=none smtp.client-ip=74.125.82.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CgOaiKPW"
-Received: by mail-dy1-f180.google.com with SMTP id 5a478bee46e88-2bdd80beee1so756470eec.1
-        for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 11:32:29 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EZSucV+d"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2bddf5091c0so2463064eec.1
+        for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 11:42:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772220749; x=1772825549; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772221373; x=1772826173; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=TD5rDj0TLP1XUR1dSKjyY9kxGY2+/8HPGd28CtdnkvQ=;
-        b=CgOaiKPWBEfH14TspQaUzmyz9q0Wbsh9NMIrgcJ4S6eYTXfMymd/kW2saumYtpGiSA
-         9NW1mEboPmDky1khNO7c7dbDVRo2eo4CRvU0Idx6mt/fnzOM4TfOacrrzikn70cdYoSv
-         XF8ocpzJcLjEpzlujBNEyaAhlqq1sp2GFWZI4+J3+vaCgizrAb8+NDsHopdsahhm3/eM
-         T6juJZ8sKRQSxRBoBVvxy5aV+q9VfEoWmR/N/SQ5FNW9jZ6Nyx/YkUCCd/0gdrD6suIH
-         uza6sZIRwI4Uj5c+7lQ4mBk34i6eDPyco+u3F+Z0XkrkakwxMy4BXfC05Cf9Q1FxU4hY
-         yBCQ==
+        bh=rwvQ3DO34Efx+M3oSQtNmjZHdlMen3kWA8U3vjL5U+o=;
+        b=EZSucV+du0FU80f4j6ghN8HMaKbIw+ahuJlYhGXm1VuNTsr621LPsrWx/Gq7bst8j8
+         Qc1MhZMjpmF3cZSAV5LTV8mAeN4dqL6//9zNcdq8YHJ9EgKHCTD3PdNKsiPFAI1QN+Iz
+         ZmlKcjctD2CEQhNAGtF2H5qAnXyZSBbOOmexAod+0VVWWV6O0pL6jAwQ5a2QChDHVodv
+         laVoQacO3Ys0LA3wXNKLnMp+xfIL499GV3A1+KFUNeYrxKQ9TjCYrxiWqypx5GCywYAt
+         /kDRFYge8YDzVveU5lAMcwNvCCeT3quZBdxTG+uG+unRwr+E8PlVtmGmWAMIJMtRx3rD
+         wh3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772220749; x=1772825549;
+        d=1e100.net; s=20230601; t=1772221373; x=1772826173;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TD5rDj0TLP1XUR1dSKjyY9kxGY2+/8HPGd28CtdnkvQ=;
-        b=BSfBEHWmKvSchFEAjY7I8hvLgeA6mDUdxqw1hhXVFAL5om+l7bIgSlpglu2JdtclzZ
-         7p0q2lHnGqzUJyn1LkdCjKMMozoCNmGNmPlqO/WlQtDQDNCQUcNro8Y168B22ZwOH6XQ
-         GxVYVg00WYmEiDyj4ufBI+Ieg5cCwkkk1wKHa3cG+ro9Azk5DW4R3w47/M+iRbB/XSFw
-         YFLYMi8TPnVA1U/rkuslntFzcA28g6Q4vE+E8YzcPj++1+gVglfBVuwhM2MEuJt92MQk
-         WErvNLp72FiHHzmayhi3+A2zeZ52La+On8FYaL5vofQWKX02VWinY9eUdKn/fJubI7HC
-         Vvyw==
-X-Forwarded-Encrypted: i=1; AJvYcCX2nqKVJU3mgQ2Tv0rVUEeEWy+XHq7Dao7OUd29i7CM1sLnTus+V/Js3U0s5ZQSix893ic=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5SiktZrPuWNgS55x2pV1goDLCYPpcGqdQ7kW8DjALAyeOa6Cg
-	/cbRbulh3WvF7ANLLDB8Jb+RJy0+a7RLZia6V/fvk/TeJvybVj/5/WLz
-X-Gm-Gg: ATEYQzyDXfH2QFuUo8PPyaGLh2HPQ+QlMxmxYgcZuEyID0NbjTKozW+Uua/DmfIOB96
-	DpQFBs7+oRBTuvzFK6i8q0eVOJu0Y7T4yoOyJ0yVMgDyamt1pqKVLCU+fhhXd83MAyVuxU8GV8o
-	vccsn54cj2XPKtn6QUPXVuuv1OaLJ7nU6v0F5cQSNYHM+XtThca+RZQ5sXxljxqT1/J0ccbw9JZ
-	XSiPNKNpjMn+EVgPzyk7z/pH5qlzzKZi8DP9NM4X2xPo5h6OcfFJB4Lt1Bcz/KHb9jWbAZEakJJ
-	OwNMXWmXB7okwKLy7YYkp7leKxlsRwEKP9sa/n9UnexYhsPYBH1OE2JQVzvkaQrpP/Yemo/x/K6
-	OwA04Y4pIGo+5RXroTbfEr56STq8QvpjA7ScD2xgDTroiQqHGm5dj53hRfAXxDENP3sXf/D3/nN
-	0LseYkQRqjpsZm+RhJxkuVvmfHaHmg6Ayn7WgjHzlwVCY6zj+1NU8roy8n1W3Qz67XtASJMeYAA
-	U3Zn/hk
-X-Received: by 2002:a05:7300:7316:b0:2ba:a58b:b6fd with SMTP id 5a478bee46e88-2bde20f9bf7mr1528089eec.19.1772220748444;
-        Fri, 27 Feb 2026 11:32:28 -0800 (PST)
+        bh=rwvQ3DO34Efx+M3oSQtNmjZHdlMen3kWA8U3vjL5U+o=;
+        b=vYqRMeHsigloWAnAFh6w2w38yxjpN/EhHSD8cw7bCPU6Kuidf9HA4Eifmkkg08guxQ
+         hU2wPSJ0/2GThCWvHhy78IBFqyhoc7h4Juq1fIt8f093vJL1bUiFch7jNniL3ocap23E
+         Ttrk/8WRvODy1e+szz5eKzhs/AZLKlBrzzFRHy36xjplC3KndYaFvKKnZlUvtniA7VFp
+         dkC9QxTxrGsV2sg4XwfAoDGiA3cPMoK3CHQxIounZt3j+5NCO5gQly7SBg2r1Z62x3dP
+         69lsotDCsBLBBKJQfTkvhKwbUjjM3MLnFA773rulCDtTezM7QXcspvEbCpJ22c7x7CYU
+         3aBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUsmZQDlaEufj9IHI4jbSLk+No3uFMftmWcLDVt7CLnfcoQi6Pc8wnXKNYpShNjHBzvtsI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHjB4GcQKkWRQ5m2+KmtpHymjYCRmaBkmcd7ctxvELrM5C7yeR
+	8v/y80iIitqM9SifLMDk3xWcZjaH9QiLvvFg5H3wnG57ozhqA1iCpTT1
+X-Gm-Gg: ATEYQzxQBc7OxOnaeHiTee8kzNb3EujwpYoZW5hU0w7COtKDyK+d20ImBL37tHg1RC0
+	i4pT5RHvHBQB9ih2nOfyUcjq2A7lJeR+5kz8XHSEfMNyNtVE5kQ2p/yt/a7HncF4Lb9g7sr2xIa
+	EeYX9ihVvCQA8Z3h6FmBH3w4mBwkzAUeLdsURpfkgV2ZKi80vUkLVf+B06nJJSMzYYa6qpopFA3
+	muHclbMBvMwymn/xzeuDpVoO/ngitE2hB+j5Oue2/GSwfnYAmHs6yKfF8sZtSL0N2XmcgVDJy6t
+	UOtmCPSiurOaJ1U2CWgoutjioF5IiQMjNqijrHEhQDkJh2Z0jOfTigYDKxwW46gYSzUwqkm9lRw
+	zhyNqyxItwizsOCuG9g1sA474Cts0G2swiX29PPNdpObjB9qzugx2UkSdlB9H5srw8kWPf5+aWr
+	UM3B/UxTTN8j44CL6rX8HFvs8+eGBiEsn2jrVm29tHzrdiLagI844dxT2MZ0h/318qNnjYGlU2+
+	rjzsW7p
+X-Received: by 2002:a05:7300:a890:b0:2ba:96d8:530b with SMTP id 5a478bee46e88-2bde1e84338mr1783861eec.32.1772221373359;
+        Fri, 27 Feb 2026 11:42:53 -0800 (PST)
 Received: from ?IPv6:2a03:83e0:115c:1:dacf:39ea:b35b:a26e? ([2620:10d:c090:500::1:1089])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1f48c77sm5092321eec.26.2026.02.27.11.32.27
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1f46c21sm4309592eec.23.2026.02.27.11.42.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Feb 2026 11:32:28 -0800 (PST)
-Message-ID: <706fc0b28de247fdaf302a5156d5d5cf7f0e6993.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/5] bpf: Allow void global functions in the
- verifier
+        Fri, 27 Feb 2026 11:42:53 -0800 (PST)
+Message-ID: <77261542d4c8c6ba64b14fd6662a4bb2f6ba6829.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v5 3/5] bpf: extract
+ check_subprogram_return_code() for clarity
 From: Eduard Zingerman <eddyz87@gmail.com>
 To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
 Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
 	martin.lau@kernel.org, memxor@gmail.com, song@kernel.org,
  yonghong.song@linux.dev
-Date: Fri, 27 Feb 2026 11:32:26 -0800
-In-Reply-To: <20260227154616.6846-5-emil@etsalapatis.com>
+Date: Fri, 27 Feb 2026 11:42:51 -0800
+In-Reply-To: <20260227154616.6846-4-emil@etsalapatis.com>
 References: <20260227154616.6846-1-emil@etsalapatis.com>
-	 <20260227154616.6846-5-emil@etsalapatis.com>
+	 <20260227154616.6846-4-emil@etsalapatis.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.58.2 (3.58.2-1.fc43) 
@@ -82,79 +82,40 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
 On Fri, 2026-02-27 at 10:46 -0500, Emil Tsalapatis wrote:
-> Global subprogs are currently not allowed to return void. Adjust
-> verifier logic to allow global functions with a void return type.
->=20
-> Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
-> ---
-
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 
 [...]
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fb4d14516043..702b3583cd78 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-
-[...]
-
-> @@ -17952,7 +17977,7 @@ static bool return_retval_range(struct bpf_verifi=
-er_env *env, struct bpf_retval_
->  static bool program_returns_void(struct bpf_verifier_env *env)
->  {
->  	const struct bpf_prog *prog =3D env->prog;
-> -	enum bpf_prog_type prog_type =3D resolve_prog_type(prog);
-> +	enum bpf_prog_type prog_type =3D prog->type;
+> @@ -17979,19 +17979,15 @@ static int check_return_code(struct bpf_verifie=
+r_env *env, int regno, const char
+>  	struct bpf_reg_state *reg =3D reg_state(env, regno);
+>  	struct bpf_retval_range range =3D retval_range(0, 1);
+>  	enum bpf_prog_type prog_type =3D resolve_prog_type(env->prog);
+> -	int ret, err;
+>  	struct bpf_func_state *frame =3D env->cur_state->frame[0];
+> -	const bool is_subprog =3D frame->subprogno;
+> -	bool return_32bit =3D false;
+>  	const struct btf_type *reg_type, *ret_type =3D NULL;
+> +	int ret, err;
 > =20
->  	switch (prog_type) {
->  	case BPF_PROG_TYPE_LSM:
-> @@ -17965,6 +17990,16 @@ static bool program_returns_void(struct bpf_veri=
-fier_env *env)
->  		if (!prog->aux->attach_func_proto->type)
->  			return true;
->  		break;
-> +	case BPF_PROG_TYPE_EXT:
-> +		/*
-> +		 * If the actual program is an extension, let it
-> +		 * return void - attaching will succeed only if the
-> +		 * program being replaced also returns void, and since
-> +		 * it has passed verification its actual type doesn't matter.
-> +		 */
-> +		if (subprog_returns_void(env, 0))
-> +			return true;
-> +		break;
->  	default:
->  		break;
->  	}
+>  	/* LSM and struct_ops func-ptr's return type could be "void" */
+> -	if (!is_subprog || frame->in_exception_callback_fn) {
+> -		if (program_returns_void(env))
+> -			return 0;
+> -	}
+> +	if (!frame->in_async_callback_fn && program_returns_void(env))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Just a note to other reviewers:
+Emil caught that I missed this condition when suggesting the patch.
+It appears that further simplification would be to factor out
+check_async_callback_return_code(), but that is not actually possible.
+This point is reachable both from regular program return and bpf_throw().
+Hence such simplification would push the same check to both points :( .
 
-Agree with above two hunks because of what bpf_check_attach_target() does.
-
-[...]
-
-> @@ -18059,8 +18094,13 @@ static int check_return_code(struct bpf_verifier=
-_env *env, int regno, const char
->  static int check_subprogram_return_code(struct bpf_verifier_env *env)
->  {
->  	struct bpf_reg_state *reg =3D reg_state(env, BPF_REG_0);
-> +	struct bpf_func_state *cur_frame =3D cur_func(env);
->  	int err;
+> +		return 0;
 > =20
-> +	if (subprog_is_global(env, cur_frame->subprogno) &&
-   	    ^^^^^^^^^^^^^^^^^
-Nit:	    This check is now redundant, right?
-	    check_return_code() is called from process_bpf_exit_full()
-	    only when env->cur_state->curframe =3D=3D 0 and cur_frame->subprogno >=
- 0,
-	    meaning that it only applies to global subprogs.
-	    (Maybe even rename the func to check_global_subprog_return_code() to a=
-void confusion?)
-
-> +	    subprog_returns_void(env, cur_frame->subprogno))
-> +			return 0;
-> +
->  	err =3D check_reg_arg(env, BPF_REG_0, SRC_OP);
->  	if (err)
->  		return err;
+> -	if (!is_subprog && prog_type =3D=3D BPF_PROG_TYPE_STRUCT_OPS) {
+> +	if (prog_type =3D=3D BPF_PROG_TYPE_STRUCT_OPS) {
+>  		/* Allow a struct_ops program to return a referenced kptr if it
+>  		 * matches the operator's return type and is in its unmodified
 
 [...]
