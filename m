@@ -1,115 +1,116 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850853A0B33
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 10:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C60A23DA7E7;
+	Fri, 27 Feb 2026 10:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772188693; cv=none; b=I2GlrSM+UVV/G/nFzYTGAWJhdLGx1VafkiCoAWnmL2U4/xuvGEdPW3CQGIOCV43dKic9pslmZ79kEsPaFcL1QL1NFplqe19j0oj5qQ7SQ9vDnSWT77iu7GAl2iAAiaTsYliFvX1TrmeOMupQYNevx3Jw6gB+/Nre/1cTYu2KzxE=
+	t=1772189526; cv=none; b=sfltIPOgX17pIqSyqxIs7PIH2ZAzPM8YpK6rSz7Ic+GxHbC03xgYRsCmVqA8Y2wsxQOI7erVDPdYGDlLD4kertck2WS5kLj1jO+W2tbz9MG74/9l7QkG2WFI7jIwyfE5gNtW0JXVfiG4gmr8sLtmDvASqFz6ilmYgWhIn14mnKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772188693; c=relaxed/simple;
-	bh=D3CdrNY4TsQ8Ul99vMmmtRJORamGT+H7QEgjAxUZKzo=;
-	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
-	 In-Reply-To:References; b=nGEyGnAW37amXL9fh0j5RBvAH41E/sb7UE1YjXFr5ooExYTS4AEJdyrc3hCyVxjMOQ2qeWPb/Y6N00pAtQ9eLU4YwoR+DAs6l/ondIfha0fDYjYXF+N3MZu1SO3N2akf5g0U8mAKtbpG0g0w1NnOj/zUdd/dLc/gAa9aFwqVGYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KFPxY4wr; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1772189526; c=relaxed/simple;
+	bh=+i1Bl/u3LxX7qoFCTpLr2QtQ+gWzwaZAemiMIigdwgk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=WT9ZTCHzfDrAzA6jKjl2LcRTPWm0jWCyHIqCXjwl+DSqjRyMk1qXzdLoqRU8/j51MQ6Dz8zX8XnrZqYsVu5Ptif51jaJh2tZT4GufuOH53hGBADeUfz+Z0SkH1F1bDNSIFjnEyer3PdojD5fbCjJgAcwjqxkXHnrUV6L8SbSn8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EB9+IQjy; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KFPxY4wr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EB9+IQjy"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82799C116C6;
+	Fri, 27 Feb 2026 10:52:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772189526;
+	bh=+i1Bl/u3LxX7qoFCTpLr2QtQ+gWzwaZAemiMIigdwgk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=EB9+IQjyRSIYeyvvBjgpmUoiYAXBzFfHiF3YkSDFKNS5pGDO1I82B7UaAEzOjNP5M
+	 Tdl/GP/G9vmrZa1b+1zEvdJUHT9G0MWVd84NaIOWoKl4HchgIhIagCfPnb1XMoIr4o
+	 2glT2nB/Wg9ltxqcHIU2+jC/7eOTuQ7ateKIz+49+8IEbhJ9lyus12FgcTxNB3JC1R
+	 fJjeDZgOg8XSveJyuJROTKZH53XDdgl6eK+VNXxCtyXih2bi37TB/ksdecYAdrEtI/
+	 NcFT6pTYWcYJUUXeaZYAW4OSLpIVKZn4IZ/ns2k9+XX1o+n6DfV0lhOmBf/fV4VKR7
+	 t2JgurOgEjmWQ==
+Content-Type: multipart/mixed; boundary="===============5334910527371013985=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772188680;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nrLRonMsnCVotmFrNK03+GHGpA++SDG71WGkPi8yPUk=;
-	b=KFPxY4wrVLe1pzTCXQJdmsq7Vw6WG25wRwoCHbbfDRCtwF+6uNzM+L/2zsuudMhw1TQP2P
-	2bJCYw3puk/13mBr/5RjofiPUOlnZSPMPaVu5/6K8cnglINchOpsgLcWTaYpH2ejgMprLl
-	cm0puH6mRPydK84hPGNbyd4NLt6k20k=
-Date: Fri, 27 Feb 2026 10:37:53 +0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
-Message-ID: <faed6bde8e7a96021bc9d55176b764c592f6ce08@linux.dev>
-TLS-Required: No
-Subject: Re: [PATCH net v2 1/2] bonding: fix null-ptr-deref in
- bond_rr_gen_slave_id()
-To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>
-Cc: netdev@vger.kernel.org, jiayuna.chen@linux.dev, jiayuna.chen@shopee.com,
- "Jiayuan Chen" <jiayuan.chen@shopee.com>,
- syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com, "Jay Vosburgh"
- <jv@jvosburgh.net>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S.
- Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
- <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
- "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
- <kpsingh@kernel.org>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
- <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Clark Williams"
- <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Jussi
- Maki" <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-rt-devel@lists.linux.dev
-In-Reply-To: <20260227102149.10ZgLF-t@linutronix.de>
-References: <20260227092254.272603-1-jiayuan.chen@linux.dev>
- <20260227092254.272603-2-jiayuan.chen@linux.dev>
- <20260227094558._Fna2iSe@linutronix.de>
- <4cc373b555ec3d6ff57037c569d12966a8b701db@linux.dev>
- <20260227102149.10ZgLF-t@linutronix.de>
-X-Migadu-Flow: FLOW_OUT
+Message-Id: <ee7305416a59102140d18d5d7f544061d8d82658dda98768c209905d5db222e6@mail.kernel.org>
+In-Reply-To: <20260227100426.2585191-10-alan.maguire@oracle.com>
+References: <20260227100426.2585191-10-alan.maguire@oracle.com>
+Subject: Re: [PATCH v10 bpf-next 09/10] bpftool: Update doc to describe bpftool btf dump .. format metadata
+From: bot+bpf-ci@kernel.org
+To: alan.maguire@oracle.com,andrii@kernel.org,ast@kernel.org
+Cc: daniel@iogearbox.net,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,qmo@kernel.org,ihor.solodrai@linux.dev,mykyta.yatsenko5@gmail.com,dwarves@vger.kernel.org,bpf@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 27 Feb 2026 10:52:04 +0000 (UTC)
 
-February 27, 2026 at 18:21, "Sebastian Andrzej Siewior" <bigeasy@linutron=
-ix.de mailto:bigeasy@linutronix.de?to=3D%22Sebastian%20Andrzej%20Siewior%=
-22%20%3Cbigeasy%40linutronix.de%3E > wrote:
+--===============5334910527371013985==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+
+> diff --git a/tools/bpf/bpftool/Documentation/bpftool-btf.rst b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+> --- a/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+> +++ b/tools/bpf/bpftool/Documentation/bpftool-btf.rst
+
+[ ... ]
+
+> @@ -267,3 +268,26 @@
+>    [104861] FUNC 'smbus_do_alert' type_id=84827 linkage=static
+> +
+> +Display BTF metadata from file vmlinux
+> +
+> +**# bpftool btf dump file vmlinux format meta**
+> +
+> +::
+> +
+> +  size 5161076
+> +  magic 0xeb9f
+> +  version 1
+> +  flags 0x1
+> +  hdr_len 40
+> +  type_len 3036368
+> +  type_off 0
+> +  str_len 2124588
+> +  str_off 3036368
+> +  layout_len 80
+> +  layout_off 5160956
+> +  kind 0    UNKNOWN    info_sz 0    elem_sz 0   flags 0
+> +  kind 1    INT        info_sz 0    elem_sz 0   flags 0
+> +  kind 2    PTR        info_sz 0    elem_sz 0   flags 0
+> +  kind 3    ARRAY      info_sz 0    elem_sz 0   flags 0
+> +  kind 4    STRUCT     info_sz 0    elem_sz 0   flags 0
+
+Does this example reflect actual tool output? A few values appear
+inconsistent with the implementation in dump_btf_meta() and the
+layout encoding in libbpf:
+
+The kind layout values are all zeros, but the layouts[] array in
+tools/lib/bpf/btf.c populates non-zero values for known kinds:
+
+  [BTF_KIND_INT]    = { sizeof(__u32),            0, 0 },  /* info_sz=4  */
+  [BTF_KIND_ARRAY]  = { sizeof(struct btf_array), 0, 0 },  /* info_sz=12 */
+  [BTF_KIND_STRUCT] = { 0, sizeof(struct btf_member), 0 }, /* elem_sz=12 */
+
+The implementation commit (62f2c6445a46) also shows the correct
+non-zero values in its own example:
+
+  kind 1    INT        info_sz 4    elem_sz 0    flags 0
+  kind 3    ARRAY      info_sz 12   elem_sz 0    flags 0
+  kind 4    STRUCT     info_sz 0    elem_sz 12   flags 0
+
+Would it be worth regenerating this example from an actual
+bpftool run to make sure the values match?
 
 
->=20
->=20On 2026-02-27 10:17:29 [+0000], Jiayuan Chen wrote:
->=20
->=20>=20
->=20> bond_mode can be changed after device creation via sysfs or netlink=
-, a bond created
-> >  in active-backup mode can later be switched to round-robin, which me=
-ans the allocation
-> >  must not be conditional on the mode at creation time.
-> >=20
->=20Must the device be in down state or can this be also changed while th=
-e
-> device is up?
->=20
->=20Sebastian
->
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-The mode change requires the device to be DOWN. BOND_OPT_MODE is defined =
-with BOND_OPTFLAG_IFDOWN,
-and bond_opt_check_flags() enforces this:
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22482435858
 
-if ((opt->flags & BOND_OPTFLAG_IFDOWN) && (bond->dev->flags & IFF_UP))
-  return -EBUSY;
+AI-authorship-score: low
+AI-authorship-explanation: Straightforward RST documentation update with iterative human review history spanning 2023-2026, typical of a developer documenting their own feature.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Documentation example output does not match actual tool behavior; kind layout values are all zeros when the implementation produces non-zero values for known kinds.
 
-The same restriction applies to the netlink path as well. Both sysfs and =
-netlink go
-through __bond_opt_set() =E2=86=92 bond_opt_check_deps(), which enforces =
-BOND_OPTFLAG_IFDOWN
-for mode change. Attempting to change the mode while the device is UP ret=
-urns -EBUSY
-regardless of how the change is requested.
-
-So unconditional allocation in bond_init() covers all cases: whether the =
-device is created in
-round-robin mode, or switched to round-robin later
-(which requires being DOWN, meaning bond_open() hasn't been called with t=
-he new mode yet).
-
-Thanks,
+--===============5334910527371013985==--
