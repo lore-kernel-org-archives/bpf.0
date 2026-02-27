@@ -1,49 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A5EA330D2A;
-	Fri, 27 Feb 2026 03:37:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B0826ED2A
+	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 03:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772163422; cv=none; b=L7FFM82QxoAPE61EmpoWVmJh17/aiKj4WqJ69V/NLnPKr32PWLS6ABXRpdj5zb5c87LFIC9Upg7vDJ+efbYXNUoJDsDZ94aaDM1MLH7MgtVVBE/3uYN4L6X+jpMICxR/Iu2XzJOKJCo8lST99J5VMSQuvy28J1d32oojtKWdA14=
+	t=1772164435; cv=none; b=jXqseRC973HAHkU5iXGiYsQbq/R0FFZjhsBUXyKmn9DpkoHZFmZTI1XTIQbeVrYol1nqyULfsv4PyszA7SF+PzZjjEAtznQ4XdUAkHVtplTM1UotLe4lJBgg0eXszrBDsD5RDxfPZwdA3grZba9h/W+Z1o+kgBCjiTxt+cOGBCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772163422; c=relaxed/simple;
-	bh=nWTExEdrQu9yWoo1iOv/yeHjYN3D4MEOFAfN3KqdyjY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pvEG7idIvBLHTcCo/ooDRpQZmm1kGgYbFYKZpUuGoNwOhwb7YGlaJOInxghM2h9PvOCbWaUdKwi0pM3vs/o3xybwmHvxR7ZpjSn0ookPwc2yHRBh6oHHKvpkgqDBjxlmgDirBm6oBN9bJydfVzQNLhDSlguh6Jj15Vp35pV/sso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YfDuwwbG; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772164435; c=relaxed/simple;
+	bh=zTuuLUaWX2nnbSpNamvQH8sri2HhCf5G7tUFH903TXA=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=POIcEcvb/HHz5K8TfXtKUiipaE4cA1Ry/oi4UCyKsP4o7LHOlDP5GW+w7FPzs5wIZW645t3fkwO7eWzCEvfa1QClMPVyc0CifI9D6Jf4KZJtNbqyoPdgnMx9sR9wTj6JItcoy0rs0uMovnFlJcptUF3TlZFJBDloSiM0mHcyqYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b79cBtnh; arc=none smtp.client-ip=209.85.214.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YfDuwwbG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B01F9C116C6;
-	Fri, 27 Feb 2026 03:37:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772163422;
-	bh=nWTExEdrQu9yWoo1iOv/yeHjYN3D4MEOFAfN3KqdyjY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YfDuwwbGCh+k14jfFWEFl0Zowsnbq2xsK/BwWAjV6lX4GpPIG3N94mxNA+vhA4gfJ
-	 tKatDGUYkQfN95+A8FQxoaueQl/zcL3+Bw7LD76uDDDxsM9WJ/m0yXDEB1i+LEB4wB
-	 V/v8bVPKT4N332Aw5l+5ZqUWY0X26aKPLrbtBFPqZlNkWLQZpsaP8mUgE5K7eXw8fN
-	 QK6ySRSdtibV16EBuj9RCy7xn2Q20/XFwVPBCPv0mzwNkKPw+qGknKn//XhzSbMxZx
-	 nYi0tRtXpSStJlJgWO/Pa5GuNbqdI0zsmsqDbvXvGgbJyCqXgn893qGV0Mj0Dfh6rM
-	 Wavbhlj3KHEwg==
-From: Jakub Kicinski <kuba@kernel.org>
-To: jrife@google.com
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	edumazet@google.com,
-	daniel@iogearbox.net,
-	sdf@fomichev.me,
-	netdev@vger.kernel.org,
-	andrii@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b79cBtnh"
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-2ab46931cf1so19450715ad.0
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 19:53:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772164433; x=1772769233; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pwdSgM1NQbWP7Rhe378wlcNmZqA7RqveMVNj2ZfOXJQ=;
+        b=b79cBtnhX5DYVf7TRGR0jTubka9G1aJBvGFK86o0gRpavdkPf5JrbuQGcogKxjU3Wg
+         SwePW7ajFrxDrHH05sEsgAICPtydywgxz3ZUJIUAQo78nJhh32C+6CVrPQxxDRa+TKwd
+         so52/1n3KqT6eg7X0roR+mAO0qAOors3jN4nvnpoEcfiHQe7PjyTANqlkgzMey4g21Qa
+         hK3RSkGtExzUA9TdLCKrwpvKQLnhP0to/BU2ELQfE3RocbqkzG19qJOh7+BWao8Gj1Yr
+         3W1BUJXgviT21caFHpehh17NraI+7WgJqnDJ0ew3AohTGRjbHCgEaQ8cZpoubcIa9ZLy
+         zvjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772164433; x=1772769233;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=pwdSgM1NQbWP7Rhe378wlcNmZqA7RqveMVNj2ZfOXJQ=;
+        b=n2kz1GKOTa6znNxKY2AsFHQSS2f33KcEqiar577vYIwvjbyJirzp1ucUSNx/trxqEw
+         U4Ea1Dz9rKb7f73o//5IM9n29HGGGhDQUil/QdMORc/YeHztsd/muTZzpJh2Dh6MW5Go
+         Pn8p/Sgzl2wkbKbPjvuyHeF3wKWaZeAEMWFl69q2B2c8Cp/yfdSaeOjXFbGtpu/bx7M1
+         sNB6R67qFZLtBNo0M3qNbhLnuexjqmRfZ0oUAaBDwhXFxeh82YcmAAdUUMFhwXT2w5bK
+         fko1nLkI9lLtk2HTZalevXkoK/jsStKx7tTJO2M/rqjiXcQYmVWEngDYTdu4FQnLgCG7
+         UbQA==
+X-Forwarded-Encrypted: i=1; AJvYcCUuvjbPoj6l71lLNIXxCwR9RQBsr1BOJbHA3Jv6REflnTRX5tGMAJy4BM7b5ZxMyMJyCms=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnIn4YJSbYIuu7zyN+2ubl2obkTxQJN4ER6LYO1JM+FbgKr6Xn
+	gR0tH0nDi/fTcltWH8X5zhd8A+dsw6YMrQf1wAG0fq6CtaC65cv16Q3p
+X-Gm-Gg: ATEYQzz2jdJkeZxfO9WOP+Nub//16ZUXLzTKX3FAlTsiVNpUOBo8biXDl0p2iqDkyYn
+	PRg+/Q91U18guxHqRjvdbgXIWR08bg0dzajWILsy0e0Tz7hUZ6WQ5PgSAO8J9zToeuq1QttThOf
+	rX37Mx/5g/SdyEdSpBzONGWaM/SrkonsgrMY+i4oU6xN7o6GGnGxX2SRewtCLlcOaJLOLsd6CSG
+	uoEpZPSFcSdrBtTNJU51Fqjobig6wzK5qFvfAjQ3kFw3YxxVAzjn3eDDFHWjk6K38T16RvusKp2
+	DCcWyZH/leYVc59aHbUynJ+bFQ8My4zlGhGVdrLYXBR0Jgt+tUwgTfLFEsy9y+KxagjwPhNi4KG
+	Kc8od7eh1s62h0evcj9C36NUNf1jWRqCGmh5QFwOVRXee9FvO/hGxvPp0Wez+G8srsWeyi6wSdf
+	4FdYiqHh5EuDORMVvLSDRDH5wXroOsDgTVfFfYgT8+8yTDfjZu1w==
+X-Received: by 2002:a17:902:ea08:b0:2aa:e9f0:146c with SMTP id d9443c01a7336-2adf79cd7d5mr56815645ad.29.1772164432629;
+        Thu, 26 Feb 2026 19:53:52 -0800 (PST)
+Received: from lima-ubuntu.hz.ali.com ([47.246.98.215])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb5c3b01sm41487125ad.31.2026.02.26.19.53.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Feb 2026 19:53:52 -0800 (PST)
+From: Qing Wang <wangqing7171@gmail.com>
+To: syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com
+Cc: andrii@kernel.org,
+	ast@kernel.org,
 	bpf@vger.kernel.org,
-	yusuke.suzuki@isovalent.com,
-	willemdebruijn.kernel@gmail.com,
-	martin.lau@linux.dev
-Subject: Re: [net-next,v1,2/2] selftests/bpf: Ensure dst addr/port are preserved after socket abort
-Date: Thu, 26 Feb 2026 19:36:58 -0800
-Message-ID: <20260227033658.2599813-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260224190516.2102048-3-jrife@google.com>
-References: <20260224190516.2102048-3-jrife@google.com>
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	martin.lau@linux.dev,
+	mathieu.desnoyers@efficios.com,
+	mattbobrowski@google.com,
+	mhiramat@kernel.org,
+	rostedt@goodmis.org,
+	sdf@fomichev.me,
+	song@kernel.org,
+	syzkaller-bugs@googlegroups.com,
+	yonghong.song@linux.dev
+Subject: Re: [syzbot] [bpf?] [trace?] KASAN: slab-use-after-free Read in bpf_trace_run3 (2)
+Date: Fri, 27 Feb 2026 11:53:41 +0800
+Message-Id: <20260227035341.1108372-1-wangqing7171@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <69a0544c.050a0220.3a55be.0004.GAE@google.com>
+References: <69a0544c.050a0220.3a55be.0004.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -52,182 +94,18 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
+#syz test
 
-For local reproduction steps see https://netdev-ai.bots.linux.dev/ai-local.html
----
-selftests/bpf: Ensure dst addr/port are preserved after socket abort
-
-Ensure that sock_release hooks see the original dst_ip4, dst_ip6, and
-dst_port values for connected UDP and TCP sockets following a socket
-abort.
-
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c b/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c
-> new file mode 100644
-> index 000000000000..9bd2be4d45a2
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/sock_destroy_release.c
-> @@ -0,0 +1,135 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <test_progs.h>
-> +#include "network_helpers.h"
-> +#include "sock_destroy_release.skel.h"
-> +
-> +#define TEST_NS "sock_destroy_release_netns"
-> +
-> +static __u64 socket_cookie(int fd)
-> +{
-> +	__u64 cookie;
-> +	socklen_t cookie_len = sizeof(cookie);
-> +
-> +	if (!ASSERT_OK(getsockopt(fd, SOL_SOCKET, SO_COOKIE, &cookie,
-> +				  &cookie_len), "getsockopt(SO_COOKIE)"))
-> +		return 0;
-> +	return cookie;
-> +}
-> +
-> +static void destroy(struct sock_destroy_release *skel, int fd, int sock_type)
-> +{
-> +	__u64 cookie = socket_cookie(fd);
-> +	struct bpf_link *link = NULL;
-> +	int iter_fd = -1;
-> +	int nread;
-> +	__u64 out;
-> +
-> +	skel->bss->abort_cookie = cookie;
-> +
-> +	link = bpf_program__attach_iter(sock_type == SOCK_STREAM ?
-> +					skel->progs.abort_tcp :
-> +					skel->progs.abort_udp, NULL);
-> +	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-> +		goto done;
-> +
-> +	iter_fd = bpf_iter_create(bpf_link__fd(link));
-> +	if (!ASSERT_OK_FD(iter_fd, "bpf_iter_create"))
-> +		goto done;
-> +
-> +	/* Delete matching socket. */
-> +	nread = read(iter_fd, &out, sizeof(out));
-> +	ASSERT_GE(nread, 0, "nread");
-> +	if (nread)
-> +		ASSERT_EQ(out, cookie, "cookie matches");
-> +done:
-> +	if (iter_fd >= 0)
-> +		close(iter_fd);
-> +	bpf_link__destroy(link);
-> +	close(fd);
-> +}
-> +
-> +static void do_test(struct sock_destroy_release *skel, int sock_type,
-> +		    int family)
-> +{
-> +	const char *addr = family == AF_INET ? "127.0.0.1" : "::1";
-> +	int listen_fd = -1, connect_fd = -1;
-> +	static const int port = 10001;
-> +
-> +	listen_fd = start_server(family, sock_type, addr, port, 0);
-> +	if (!ASSERT_OK_FD(listen_fd, "start_server"))
-> +		goto cleanup;
-> +
-> +	connect_fd = connect_to_fd(listen_fd, 0);
-> +	if (!ASSERT_OK_FD(connect_fd, "connect_to_fd"))
-> +		goto cleanup;
-> +
-> +	memset(&skel->bss->sk, 0, sizeof(skel->bss->sk));
-> +	destroy(skel, connect_fd, sock_type);
-
-Does this cause a double close of connect_fd?
-
-The destroy() function closes the fd parameter at line 49:
-
-    close(fd);
-
-But do_test() doesn't update its local connect_fd variable after calling
-destroy().
-
-Later in the cleanup code:
-
-> +cleanup:
-> +	if (connect_fd >= 0)
-> +		close(connect_fd);
-
-connect_fd still holds the closed value and gets closed again.
-
-While this usually results in a benign EBADF error, there's a small window
-where another operation could create a new fd with the same number, and the
-second close would incorrectly close the reused fd.
-
-Should connect_fd be set to -1 after calling destroy() to prevent the double
-close?
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/bpf/progs/sock_destroy_release.c b/tools/testing/selftests/bpf/progs/sock_destroy_release.c
-> new file mode 100644
-> index 000000000000..add322ab1303
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/sock_destroy_release.c
-> @@ -0,0 +1,59 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_core_read.h>
-> +#include <bpf/bpf_endian.h>
-> +#include "bpf_kfuncs.h"
-> +
-> +volatile __u64 abort_cookie;
-> +
-> +void maybe_abort(struct sock_common *sk, struct seq_file *seq)
-> +{
-> +	__u64 sock_cookie;
-> +
-> +	if (!sk)
-> +		return;
-> +
-> +	sock_cookie = bpf_get_socket_cookie(sk);
-> +	if (sock_cookie != abort_cookie)
-> +		return;
-> +
-> +	bpf_sock_destroy(sk);
-> +	bpf_seq_write(seq, &sock_cookie, sizeof(sock_cookie));
-> +}
-> +
-> +SEC("iter/udp")
-> +int abort_udp(struct bpf_iter__udp *ctx)
-> +{
-> +	maybe_abort((struct sock_common *)ctx->udp_sk,
-> +		    ctx->meta->seq);
-> +
-> +	return 0;
-> +}
-> +
-> +SEC("iter/tcp")
-> +int abort_tcp(struct bpf_iter__tcp *ctx)
-> +{
-> +	maybe_abort((struct sock_common *)ctx->sk_common,
-> +		    ctx->meta->seq);
-> +
-> +	return 0;
-> +}
-> +
-> +struct bpf_sock sk = {};
-> +
-> +SEC("cgroup/sock_release")
-> +int sock_release(struct bpf_sock *ctx)
-> +{
-> +	sk.dst_ip4 = ctx->dst_ip4;
-> +	sk.dst_ip6[0] = ctx->dst_ip6[0];
-> +	sk.dst_ip6[1] = ctx->dst_ip6[1];
-> +	sk.dst_ip6[2] = ctx->dst_ip6[2];
-> +	sk.dst_ip6[3] = ctx->dst_ip6[3];
-> +	sk.dst_port = ctx->dst_port;
-> +
-> +	return 1;
-> +}
-> +
-> +char _license[] SEC("license") = "GPL";
--- 
-pw-bot: cr
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index 2d14fb6d0ed0..038bf4436959 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3783,6 +3783,8 @@ static void bpf_raw_tp_link_release(struct bpf_link *link)
+ 
+ 	bpf_probe_unregister(raw_tp->btp, raw_tp);
+ 	bpf_put_raw_tracepoint(raw_tp->btp);
++
++	synchronize_rcu();
+ }
+ 
+ static void bpf_raw_tp_link_dealloc(struct bpf_link *link)
