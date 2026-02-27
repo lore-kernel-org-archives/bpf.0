@@ -1,111 +1,77 @@
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
+Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 583BD332607
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 06:18:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7845B2798E5
+	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 06:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772173097; cv=none; b=YHsQ1bwsgoTnDzSo9MrhQItl6c78M+eBAIWu90xiMfFZUn2P9SFkYsEv+igpEhBcDiolt7dmhPS0roxFcAHtIacEN6hib2eRxiDLLyD1Uk4PX3dMqIRYKFp36QfZ3+kZp725ekiBZD32HEwW+eMerAYa8K5AiiL3lsnQnIX3j0Q=
+	t=1772174104; cv=none; b=P50PdJum6gcJ4BGifTi3jlz4hE4hT4Pv0JsG4z9eNB/zBbzMJckY4pxyqE16zm2OL+6xvIzgbh9qORI13BtJzpOqXQcDaQ0z7dAg4+U0PHUN4E2UhsEeW6aY7WrRQYrKzUfYDYHOE2B1r/AMrFis2M2qT7H6l6qux3g/Khu5SAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772173097; c=relaxed/simple;
-	bh=xtaqGgz0rQ0tjyH/ErNTLu71rauDdX001OKKvtvPx3s=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fuAtVOV+TNfeG4XKpBwajfk2BCzKyG92qNYTXjv4DoR3r3Iwd3TMFZgbA1DUXwrI3AU/+4EWg/uGoLyGjLg1+ZuNWuKerYDnnE3RKJl2V8I+FYyrejYN3XJOcxksQmhS8jnD8ECer3AwndQYFLkaX1g3mT29BTTzCntGRLbZy+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WS8gjwFv; arc=none smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WS8gjwFv"
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-4398e850783so1117680f8f.0
-        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 22:18:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772173094; x=1772777894; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9GVtvXm72TcUE0O6MwBEwQ8fveVVC9XHCdQUSyyFzWA=;
-        b=WS8gjwFv+Vbo7UBTYU4CZzL+togzau8fbR1qu68l4wAGuIycbg28JlZe3DtcsMwfdd
-         8hj8+/9JTrgXPPMF0hkJRYThrE5FkdCPmpSLGflb5mWwQWK6p8X7LTjdCJ9m4vkJypOQ
-         MNd96V5UgFRQ018JTeJ6CxIYboywC0v87Yui84p4Fl6WOHEF1J4643IqNxWzxE97e4nV
-         g/ybFjkUoIDH1Jz+4IS3H9YSry1B5i3XZXJ+IaQbg3SNb9Hz/w3wldMU0o4il3e7RGR1
-         EUCkdYlj0Gz9B45TSfURkbXdTiVo/RcQRF0swSKJpFIYLXB1naRG8bh6mUtoL6G2GLnJ
-         lo4A==
+	s=arc-20240116; t=1772174104; c=relaxed/simple;
+	bh=QbBr3T2VQUA3HHZ2LwPcLmmPuGaEyaZBuNW4ygJx+IM=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=jjC8U41BOHRbBLj03IfTItWDEtEM0j5aF9zaExroQEA50H7veilaYgBjmqhxmcbkg2iew/zYQu6GV2BolwuMlVHvEH3zYw897agTkG+o6wDCPFsSV6j+SIoXc8FbPg13XRvoi/wWkog90VK0ZOg27Vw/s5IAa2WYd81QoLc4R9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-672c40f3873so35372497eaf.2
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 22:35:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772173094; x=1772777894;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=9GVtvXm72TcUE0O6MwBEwQ8fveVVC9XHCdQUSyyFzWA=;
-        b=gL4SPj/aT4spCah+FbSJWHsaWNImSEyQB0IBy7ERYzXhV61LJJQNfL1GMythckwO1W
-         /w3PTkQs0ptyvTL4ZWQDP8LSxp8R1SRlih1Vq7f6LTmah+I89c4pr3crY5EdJddBRxp9
-         byffoaymcqBD2D9/gCiov56kLEogY7SAshKzJ7KHLFu5Es7GMsSU5LNHqxsjch/KazeI
-         VjpBp7m6qr3BWiOMrxy7AChgm1nbvjWiMZMrsDUF4WVRLLWoszxF9xXy4gT1gBywHNrz
-         0DFRis+xH4PglLjnFE6SBj1rJQDKIDWfC7HjuhRSZgcZhajJ44iLIRYKBSFEufL+M1qn
-         cK4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWR2aTUM6TxAyrhIcyktcIUw6FZOleQX4qeNgWpKmhCb9J8gYEULPcE96QUNuCcojFWpsY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUsiU7CcyY39OPDLYX1SjLKiqy/I0uPTRNggZUMPTbmY9D2qgb
-	Em5o5Smh+jsPdJZJtvYAk11T98VJLquVR2iv32FdupBWIy1Xsu/TCDay
-X-Gm-Gg: ATEYQzwkmQ2XTS8VM0GxtFC/didspoE70fLPVv04AXHo3dFNRxSqJTVF2yH5t4GKATq
-	nRkxwqbraHfJw9E/WzKBKXpn2F2W6HOWGgXJOlF3VC6G/jqELF6EIcQZozsfdqvIQ2hrqTyZa15
-	4ped7NTnrys9PoZ8WXHT73XToEo+Wa5iZ6kHIP4z1GZsq9yUSvU6jA55Wl8Cr5N84w69UpMoomJ
-	IWwUWR4c23isnaQ+5eLBf2h5FzD0spMlSMyVKuAWR3cxbXS3kY50h3qMJewO1t4Q4erJUT+c6cz
-	zLdAELFMXTmtG4p1ZKyrt1/XS5czDNxQ/IY2z5x8qvQ+L/JFm0MArZ5SNJHGPXh+6Um4ZTITQj9
-	FIj6gtlaQo1t6zXPFZq2uf3t9HgGfcwPV2Jtln1z03xRVzF2MuKkwdNaDdtFsE5rMfCzDQerp/i
-	XTPsQlSbKMIgyvk+zxDVECn0THKGT8vRoRRed1YPe44knBZnKfJA==
-X-Received: by 2002:a05:6000:601:b0:436:1934:d234 with SMTP id ffacd0b85a97d-4399dde5f46mr2389104f8f.3.1772173093487;
-        Thu, 26 Feb 2026 22:18:13 -0800 (PST)
-Received: from lima-ubuntu.hz.ali.com ([47.246.98.215])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4399c71b498sm4523755f8f.15.2026.02.26.22.18.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 26 Feb 2026 22:18:12 -0800 (PST)
-From: Qing Wang <wangqing7171@gmail.com>
-To: syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	mathieu.desnoyers@efficios.com,
-	mattbobrowski@google.com,
-	mhiramat@kernel.org,
-	rostedt@goodmis.org,
-	sdf@fomichev.me,
-	song@kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	yonghong.song@linux.dev
-Subject: Re: [syzbot] [bpf?] [trace?] KASAN: slab-use-after-free Read in bpf_trace_run3 (2)
-Date: Fri, 27 Feb 2026 14:17:59 +0800
-Message-Id: <20260227061759.1126681-1-wangqing7171@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <69a0544c.050a0220.3a55be.0004.GAE@google.com>
-References: <69a0544c.050a0220.3a55be.0004.GAE@google.com>
+        d=1e100.net; s=20230601; t=1772174102; x=1772778902;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JXTA2zqOAstIeMEAVIOcvwyKQP9PlV3vwMKXGuZAb4w=;
+        b=xO2el4v+hK0gvcsElE3hLy1wzeTIERAG6B5i+12shPF0HBiAGfP7+B+brXc3kaoUx0
+         qS8dLZDXU40f3ZBfJunPnsSKUp952bhnVWvSAcZvxhDDoXoLjQq+fn/R2/EzknwFd8m/
+         9m/dRN9ll5SsSW1X3GGcZPwWqu3Q6yAmqX03F7id5gKKPETRLiTPtAzox4JaFAosCa7T
+         0wBhi2OamD86qT7vSfWQtCVI4pohZNn5Fnj0Oo/QyiNucRJEthmyQGU+RLG4lehempZ6
+         5Ar6lPl7PnLJud/xi67VAGXY++UR0mYi4BiJpFeLjSgxkMHiJcgG0wF958zyyUzYeYBm
+         uqeg==
+X-Forwarded-Encrypted: i=1; AJvYcCWj5X07N2vpeayEug5cnkIRHNp6AGViqCLGtHS90VjJMQCnSgWdSuQtzRJsh2202sLFDrI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDEhDptYCgGxg5YID4Aex1QItp3wlBkDhGKEuCg4VY8ovqW8F2
+	LaE7CnAewDkK8kKedx24L+oCHjsdYwvyTJbnM4qzmbQsZ+iOKlQRzyngtx3rYyYQScu8HjMvpx8
+	+ffPzJC8nQHj9Ob2l1lMJfSsSRuYghJhuO2LjMMmngIIvE3AxnV78zhkUs70=
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6820:2293:b0:679:a9:9447 with SMTP id
+ 006d021491bc7-679fae16f08mr1309686eaf.27.1772174102529; Thu, 26 Feb 2026
+ 22:35:02 -0800 (PST)
+Date: Thu, 26 Feb 2026 22:35:02 -0800
+In-Reply-To: <20260227061759.1126681-1-wangqing7171@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69a13b16.050a0220.305b49.009c.GAE@google.com>
+Subject: Re: [syzbot] [bpf?] [trace?] KASAN: slab-use-after-free Read in
+ bpf_trace_run3 (2)
+From: syzbot <syzbot+9ea7c90be2b24e189592@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	martin.lau@linux.dev, mathieu.desnoyers@efficios.com, 
+	mattbobrowski@google.com, mhiramat@kernel.org, rostedt@goodmis.org, 
+	sdf@fomichev.me, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	wangqing7171@gmail.com, yonghong.song@linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-#syz test
+Hello,
 
-diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
-index 2d14fb6d0ed0..f7a0116c7e46 100644
---- a/kernel/bpf/syscall.c
-+++ b/kernel/bpf/syscall.c
-@@ -3783,6 +3783,8 @@ static void bpf_raw_tp_link_release(struct bpf_link *link)
- 
- 	bpf_probe_unregister(raw_tp->btp, raw_tp);
- 	bpf_put_raw_tracepoint(raw_tp->btp);
-+
-+	tracepoint_synchronize_unregister();
- }
- 
- static void bpf_raw_tp_link_dealloc(struct bpf_link *link)
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+lost connection to test machine
+
+
+
+Tested on:
+
+commit:         a75cb869 Merge tag 'v7.0-rc1-ksmbd-server-fixes' of gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=12e650ba580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=56150637ffd942dd
+dashboard link: https://syzkaller.appspot.com/bug?extid=9ea7c90be2b24e189592
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=1476755a580000
+
