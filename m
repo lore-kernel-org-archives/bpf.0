@@ -1,94 +1,95 @@
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50D4D3D7D83
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 23:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859FF220F38
+	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 23:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.43
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772233929; cv=pass; b=tr1iQHQkn1eM5u1n5M9EDWTB1QqxSD6IsYr4XIW1dnjQsApDDJxL9EoNF/KkUt+wZ6KHKsoz+8ZfpziSSzgn53pilwY9GU/Gd8qjzBuz9yH8l8kEwYhFe4z1/ia06WZ6pfcdFzZ3L1mEn10QEG/o5MDO8+HPQufEav5xTmkvHfo=
+	t=1772234201; cv=pass; b=B3/8x8L8kRCHWQ7bivzRxVNQU1V9uogtsuCCZuJ2/FgwWiK9trFsPfrep048Y5tznJgsFA299TpSFuXpiEfoFcTkcW5vSiktWfrAyWT0EnYAeSuggF5dBimAebZolGcCXFqEhpmkDD2DSQSokTtOolNofak0T0UDdgGf6kY/hK8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772233929; c=relaxed/simple;
-	bh=V5qCzTsaOJWbI8bIApMpk9pkO68rB+P9FzJgy77rz7g=;
+	s=arc-20240116; t=1772234201; c=relaxed/simple;
+	bh=5bEY5UXLzjWPh44w4Cx2basuFz8GnNVWmKBlQs+YDkk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=riDywcYCfgq3HVoqLrYiLjrua91HbN7xymGSmOW9Ms7wVE6MG98spZlhSvtfdG4YGJ9BxEPXArkpp/7Y+TReArWzslyyY6Q5z3EzMDp3LNORM2Fv43WOaxNEpP1A6GWyc8YU8bxh0M9+c1BrwJr0TMs1hbyuOFQ6tL8DYmRNBO8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dkq7OMed; arc=pass smtp.client-ip=209.85.128.48
+	 To:Cc:Content-Type; b=bYR+8+9RplLX0AvuXf+v8/dQ7yuZ6wJg2XK7drkOZtrFOKMqEJZxZCTUu1c1TS3aOJ4jomOOBVZRyJYXYaqQNwNUzlLOBjoFdoz2gCofmDY8CGWRc1idEOcBUWkmBJvZVp4p77G8se+wmxF5Qx5/zPRqVa2K7oPuz7v8oyjN368=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hm1b7ubA; arc=pass smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dkq7OMed"
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-483a2338616so15878335e9.0
-        for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 15:12:08 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772233927; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hm1b7ubA"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-43994aa265eso1501156f8f.3
+        for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 15:16:39 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772234198; cv=none;
         d=google.com; s=arc-20240605;
-        b=b8c4W4pApxZOwpEgycViINuCXnzPb6rxQ89H8t4ZCYPnYBT4ftM2RaOY3KtjKV7l6l
-         kWtHPzwsv9h5nVyS6IrOk/DJm66cnKC1PCYlbmKFhc+vR8AIhkqtdmyyxzNt2dAgdK5p
-         Rhv0yKrHgS/NmHzdgyVSvRbvF1MX0WtRgklQkv0ETumXz6FVpR0ZdpFQEmc6Pi2r9tYe
-         yWmhA0paYfUr5NW2AkoDGbaKVHUXAZ44q5W/Td6nNIqt4Xv+hHEmMi8If5AXTbtAfoa8
-         FYlGCqaFIiTAhKGjXxBy8aiqB1izS5MQVKJ8IlLfuOzKkGlR1YlGjHNy+z3HTO4pVdmx
-         ABPg==
+        b=VzuBTdr9KC5RbkCXbW7EnQQz0Kl6B628zTvifTyDQkqkgNYK48bafuzj+VduPT0vFo
+         FzzaQjP6lOzDLVxc2FD/1hf5gO95AXe133WguD2StOjioJwJl7HflUgvlEGGeNPgp1g/
+         fsJCcL6OIIVCHHSLHYv6xSA167CEw8drttXDDwdHrNVmDgxcwlKlLxqNv/Opccg0LKtA
+         eJ+42GMumBhUG8Cx0U6u64uaP12iPC3YmCfPt3y35liwyvY3C/Z++yfccMMltKOV0mbG
+         6vIlRceUjHZ9YvG/Tn1H+vcx6l+SaMnjpQ+ExqHo7Sp5Bm02oMtEZvr0R5rTYXjahcWF
+         3l3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=cfiGTap6WKsl2m5t2cK3AsLCB7wpzSkIUOVFSYi5LCE=;
-        fh=kuxYuv+1Ou0MeIkbAsqhNiABWTLb607EiKHN1bGUL08=;
-        b=UThR/gWmjlzojNNpTQJza/a8YJicBlJ17CkKVkgFZeALvu1iWMC1GfnW1ukxqwFgMP
-         odkE6VvqQeAvZLVoSvZ6OwuIx6/9KvY7+dUdYHL//00M1qHhUoXazofDKSUYcLqWaFy/
-         D4tEA85ZXfT8g24quYQa+jhr/Zn0Jsql5RyIJ/Ow3FlIYackMkWZ0lxAcrXujKHLuu/A
-         2IhDOcfbShTEU4XgmKaBCJYqcTECWE+0tJi/RgtLRRfcCBgGg65dJo8lM/gqaWf0FFhL
-         opITk735v139K/XbYMQAXw7taYELYKwxlxrnQrJMPd/ATcRK5bYZY1r6Qk/KyXC+MmsH
-         xnXw==;
+        bh=3xNg2kQtCk3Ev8PHb+VBqW9Vt5j3KhL+uqlascRwyC0=;
+        fh=hPJJtkN8Z7ZuQH9Ag3wzav2TvnVACmG/YcUQKiZk8vk=;
+        b=CfKor6RyOunBQAM6/43rbD4SzPlm3l/EorV/BBR3goMFEXUye49y7U38yJvgGUfbGZ
+         Dtl9CLZ5xtLitfCEagMmnjNugjIjW7PLIkowlCvOz1nQmowyJaFBYVxUdPCD+8cm4RVQ
+         1nDmLPaUuni+AjVlBPm/9T4lj5ls/Wocs3fiBYsbj5a9qWtp22Y4FKX60+lK1i3Ft1lt
+         hozV3MeMa7YteNOEPNlOJbyRwBiodLA9AN4962UBvOM0Qigu9/T9CG94jGxa5Mx+4fpE
+         Adt8zdOBJDRuj9BgpgcSHS3fL9cvWLlSvvbWX0+uwn8SgtJlEo8YWvIbQc4xS2kbEOec
+         qjZA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772233927; x=1772838727; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772234198; x=1772838998; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cfiGTap6WKsl2m5t2cK3AsLCB7wpzSkIUOVFSYi5LCE=;
-        b=dkq7OMedQy//LIJK+gYkjWnwFgfZy6eJgW+ok36WuYjM/Ea1VUoYSSDLbIs7qiNbY0
-         UKj1OaBixaUysc+L3MQC/QkeX7LRyO6+wNSlcAI7Z5MgM7NDMSVdW1S7tEbsNbx028I3
-         QCRTac/lWoq1ib5KokF0DWNgRsaA7Obz0y32tKkk9kx2Z6DmBtZen1sRMNlmvLdReDdx
-         qd/8ffDphR9hE7UeV7IqPGiIEshLqMZeCN20Tq+yU5ZEx719d+xRRmGSLQ6CoPsNKIil
-         0Tv+ocFWvkpEnHfNBXbo9M0CQeDTrrusL8QPVYvstCubAMQPCNJiv396oiXoSJWwy26x
-         +MGA==
+        bh=3xNg2kQtCk3Ev8PHb+VBqW9Vt5j3KhL+uqlascRwyC0=;
+        b=Hm1b7ubA/WI3ynYaEofIMSVmOR27iFc93OSXQ1yRjCC+ElwWEyjwIEWEek+83Si9e1
+         HeUwxmdKL6yGR12YfiLxnuq3OmP0z8Jgk0C6iYY1ZXVTrVFE2qKVP6HrpFdQGDTXRs6C
+         S/lURKKVVe75gVH50P+GxmA+mw9mU2DaKcVDz0zyJcvA2WBUXUXN1kAwvvBGtexABPqa
+         qqW8t8yUL2QlkFmrxdnEpe343rM23hlCOJmlLb6LzLqnsZx9awtas7aXvNknWM6Jf4RF
+         pjh/l6HcT9LAxaE1q4b3SpJMLWTFTCkXHQPHgVYn+n/1AVcvLMuoduTsmPwsqSEuUZ+K
+         wk1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772233927; x=1772838727;
+        d=1e100.net; s=20230601; t=1772234198; x=1772838998;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=cfiGTap6WKsl2m5t2cK3AsLCB7wpzSkIUOVFSYi5LCE=;
-        b=inl+I4p9lUa8xG/ga1wlNPdg51i00PXGEvL2Ca0IUSjSh2BnCsegoR6oceBaEf9jG0
-         KS96D65DW1w58u9Xylc/GmT8zdZMWBp9z4xQO5QFvq6qiP/4cOLU860161dGyzw+Cl8E
-         YlndNqP0B6qyHLVhnAI2mRKMD7faX+y9UAF7eI9JOqOZ3c9UkiUVP/kvJ2sHCz2YNBJj
-         eyw+9eVFeBJrD69Ji5o9iSuDxc8LBGlHruigkbNT/sM1SW4dramKgIuzCRK+ihYPHXHN
-         fnt0wvOq29G7T3GprqqjZbVmkO0tGqCuU0BkxEMw5WU1+8Lcsl9Su/R/LoLoBCrTDF11
-         N/dg==
-X-Forwarded-Encrypted: i=1; AJvYcCUN8UXm1AM3HIoQWKxGX9IZnymHxgc6LWnxx8X5A7sMcaYuo+ipJr4rkfDqvfpuYeHbcgU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW+p79z/y31HJZXRoWeoKszeVlpblETPyhDdo6QBf9BVT85AIw
-	/XCZkn3oHS71dBpBxuHi5Pf0P6daLdEpLY+1AaGRrOaj1LiYsRMZ1Nw2yyADqJw6AFMi7l1j94F
-	VtWx49+Vbfa5WVDWgAyq/lqzLHRKowPY=
-X-Gm-Gg: ATEYQzyixrDkkN9YBXNS4JtJ5YbPyo6r+rkcLtGxuk2VPurHD6KdUwJgesoAFq9Smi5
-	OjfMOZIL1jmDRNc0U3E6afyXkKc1RuxPSBeOZKsjyGsPpr4/PYLlWgMJ5B2z6br91oZvPwMz9cv
-	ICTR7qeM7AS7o7s57zlusJvBh8ub8abtS9RREEXM83kMr1GN6i54Ny4xFtxm6TKXIoYS3OX7/4Y
-	kXajp9PK2zMrFWvPUw1Fb4syEkyz6eR+RYnT1/7jUGHW8m89WDJeazEYuqBQIuR9Ph0O997H5KJ
-	/19brmlOjFJWwMYGYkiLR6sgOB0QjRtcPBJcXr0hykM4ofEq0cL5+AACnWhLxznWCV39rW7jnai
-	PTUH5dvfZ1dy9uA5517TqjsbBn8KTIjpwR+I2
-X-Received: by 2002:a05:600c:1f91:b0:477:8985:4036 with SMTP id
- 5b1f17b1804b1-483c9ba7dffmr77716515e9.1.1772233926427; Fri, 27 Feb 2026
- 15:12:06 -0800 (PST)
+        bh=3xNg2kQtCk3Ev8PHb+VBqW9Vt5j3KhL+uqlascRwyC0=;
+        b=oQP00ciRZwnggsfy1NrBE17kOQWpCEg4YNS5RihH3m6Z9VXA1F6Tt+PutUN/O5Z/IP
+         YPObM47dYUqRkHx2VBWdPk1Lgd3KpLOEf4QRf1xonL4/vLZxVa/YAvKEgwQCWISKUvfN
+         Teh3GEtkHHU4hPVK5I6RV5xAWvA6w9qanG7WSsBIyp80KB6eGRRHRAnWkETYa3gptcgI
+         zMOB4xz5ck80nE4sNUcZMGgvYFJnim0W4gt2eSPyGo7ix03Q4Mfrg9ErkeijySPQFjve
+         TVlQ+OWQIUK4M3ioh1kOs27fpuFEBiUxtyD5t7Pwyjw0LsdO94OvQvS7k5QKlckocA1M
+         1rEA==
+X-Forwarded-Encrypted: i=1; AJvYcCU/hqxhpFk8piYWMsxWgdc+zHtFwf6nTDWWqEP+Duuq3rIC7gMkJbKaVdmnTSXpQ1Q4xbo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxujrTQSL+9IW6ejPfgaiPCWaeS/6UuepdpuV6CvhdnQ0HNvp5l
+	+Jpi4Gfb01H/Cj6mL/EoAdqGTKr8eAG6toeZh/mkWkT4ri7F9sje45a35KM113wXMmRGBKNuBI6
+	thgQtYcwxc88Wy8LAU+GP7wDbt5Nq9/c=
+X-Gm-Gg: ATEYQzwT62KLRd6ib8l7ewzJ+wWvrmohRo3VWikTwDsk39uSAlCG/r/Jqgy4EJ3QF6A
+	O9VxZvmBKaaq7vLz0fDdzburwGS/E0tsBHyTyQh+MXW4pRQ6zDhCoHXpj10GzKkOnBe9SKyDz5i
+	MgWkX2TikwWUXM1/cHMtJ4ayW77z60lnzE40zzray2XYNIT+zxYKvgUBiqDnIdMcXV2/g4cdK1N
+	YOm2qAirvq434ntn2I/JSHvC64vmdid/IbfbOUsWkE735z931/5bFBQJ5aq88UtCn4u5cOcQlEp
+	gk8r7ydSNhIw+tNvrJceLE+jYTrdKUpMMgLV+xW8MayjabwYZreEYAV/iyWavM/tB9TSOmXIV2y
+	lTNgpZjMLU6WrBsf2sKi7HA655A==
+X-Received: by 2002:a05:6000:2012:b0:437:678a:5921 with SMTP id
+ ffacd0b85a97d-4399ddd877emr7625802f8f.1.1772234197736; Fri, 27 Feb 2026
+ 15:16:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260227100426.2585191-1-alan.maguire@oracle.com> <20260227100426.2585191-5-alan.maguire@oracle.com>
-In-Reply-To: <20260227100426.2585191-5-alan.maguire@oracle.com>
+References: <20260227100426.2585191-1-alan.maguire@oracle.com> <20260227100426.2585191-9-alan.maguire@oracle.com>
+In-Reply-To: <20260227100426.2585191-9-alan.maguire@oracle.com>
 From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 27 Feb 2026 15:11:54 -0800
-X-Gm-Features: AaiRm51KCOJfLdsYm1FFkILb08m0Ill72NSzmMEkye0mgAEcVQ0oJxnYCifdQqI
-Message-ID: <CAADnVQ+xtkQ1hDpwg+RiUaxdwQHZbtW-PjuqTrob3xEVNEY1vQ@mail.gmail.com>
-Subject: Re: [PATCH v10 bpf-next 04/10] libbpf: Add layout encoding support
+Date: Fri, 27 Feb 2026 15:16:26 -0800
+X-Gm-Features: AaiRm53oYnNJ13pPYwBxjbvQcsIicGI5cpjaxTq7RmFZBNQScvLsj-YfhPsJ9GQ
+Message-ID: <CAADnVQLTwLSWaN8arz5NmCwqJxd3DPhtKn2is5AgrQ0AwYFi7A@mail.gmail.com>
+Subject: Re: [PATCH v10 bpf-next 08/10] bpftool: add BTF dump "format meta" to
+ dump header/metadata
 To: Alan Maguire <alan.maguire@oracle.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Eduard <eddyz87@gmail.com>, 
@@ -104,36 +105,194 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Feb 27, 2026 at 2:05=E2=80=AFAM Alan Maguire <alan.maguire@oracle.c=
 om> wrote:
 >
-> Support encoding of BTF layout data via btf__new_empty_opts().
+> Provide a way to dump BTF metadata info via bpftool; this
+> consists of BTF size, header fields and layout info
+> (if available); for example
 >
-> Current supported opts are base_btf and add_layout.
+> $ bpftool btf dump file vmlinux format meta
+> size 6516862
+> magic 0xeb9f
+> version 1
+> flags 0x0
+> hdr_len 32
+> type_len 3929096
+> type_off 0
+> str_len 2587654
+> str_off 3929176
+> layout_len 80
+> layout_off 3929096
+> kind 0    UNKNOWN    info_sz 0    elem_sz 0    flags 0
+> kind 1    INT        info_sz 4    elem_sz 0    flags 0
+> kind 2    PTR        info_sz 0    elem_sz 0    flags 0
+> kind 3    ARRAY      info_sz 12   elem_sz 0    flags 0
+> kind 4    STRUCT     info_sz 0    elem_sz 12   flags 0
+> kind 5    UNION      info_sz 0    elem_sz 12   flags 0
+> kind 6    ENUM       info_sz 0    elem_sz 8    flags 0
+> kind 7    FWD        info_sz 0    elem_sz 0    flags 0
+> kind 8    TYPEDEF    info_sz 0    elem_sz 0    flags 0
+> kind 9    VOLATILE   info_sz 0    elem_sz 0    flags 0
+> kind 10   CONST      info_sz 0    elem_sz 0    flags 0
+> kind 11   RESTRICT   info_sz 0    elem_sz 0    flags 0
+> kind 12   FUNC       info_sz 0    elem_sz 0    flags 0
+> kind 13   FUNC_PROTO info_sz 0    elem_sz 8    flags 0
+> kind 14   VAR        info_sz 4    elem_sz 0    flags 0
+> kind 15   DATASEC    info_sz 0    elem_sz 12   flags 0
+> kind 16   FLOAT      info_sz 0    elem_sz 0    flags 0
+> kind 17   DECL_TAG   info_sz 4    elem_sz 0    flags 0
+> kind 18   TYPE_TAG   info_sz 0    elem_sz 0    flags 0
+> kind 19   ENUM64     info_sz 0    elem_sz 12   flags 0
 >
-> Layout information is maintained in btf.c in the layouts[] array;
-> when BTF is created with the add_layout option it represents the
-> current view of supported BTF kinds.
+> JSON output is also supported:
+>
+> $ bpftool -p btf dump file /var/tmp/vmlinux.kind_layout format meta
+> {
+>     "size": 6516862,
+>     "header": {
+>         "magic": 60319,
+>         "version": 1,
+>         "flags": 0,
+>         "hdr_len": 32,
+>         "type_len": 3929096,
+>         "type_off": 0,
+>         "str_len": 2587654,
+>         "str_off": 3929176,
+>         "layout_len": 80,
+>         "layout_off": 3929096
+>     },
+>     "layouts": [{
+>             "kind": 0,
+>             "name": "UNKNOWN",
+>             "info_sz": 0,
+>             "elem_sz": 0,
+>             "flags": 0
+>         },{
+>             "kind": 1,
+>             "name": "INT",
+>             "info_sz": 4,
+>             "elem_sz": 0,
+>             "flags": 0
+>         },{
+>             "kind": 2,
+>             "name": "PTR",
+>             "info_sz": 0,
+>             "elem_sz": 0,
+>             "flags": 0
+>         },{
+> ...
 >
 > Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
 > ---
->  tools/lib/bpf/btf.c      | 62 ++++++++++++++++++++++++++++++++++++++--
->  tools/lib/bpf/btf.h      | 20 +++++++++++++
->  tools/lib/bpf/libbpf.map |  1 +
->  3 files changed, 80 insertions(+), 3 deletions(-)
+>  tools/bpf/bpftool/bash-completion/bpftool |  2 +-
+>  tools/bpf/bpftool/btf.c                   | 91 ++++++++++++++++++++++-
+>  2 files changed, 89 insertions(+), 4 deletions(-)
 >
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index db13c15a0049..0c7fc0b49f20 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -29,6 +29,35 @@
+> diff --git a/tools/bpf/bpftool/bash-completion/bpftool b/tools/bpf/bpftoo=
+l/bash-completion/bpftool
+> index a28f0cc522e4..d49d6a70cb74 100644
+> --- a/tools/bpf/bpftool/bash-completion/bpftool
+> +++ b/tools/bpf/bpftool/bash-completion/bpftool
+> @@ -950,7 +950,7 @@ _bpftool()
+>                              return 0
+>                              ;;
+>                          format)
+> -                            COMPREPLY=3D( $( compgen -W "c raw" -- "$cur=
+" ) )
+> +                            COMPREPLY=3D( $( compgen -W "c raw meta" -- =
+"$cur" ) )
+>                              ;;
+>                          root_id)
+>                              return 0;
+> diff --git a/tools/bpf/bpftool/btf.c b/tools/bpf/bpftool/btf.c
+> index 946612029dee..08dc6a86bc85 100644
+> --- a/tools/bpf/bpftool/btf.c
+> +++ b/tools/bpf/bpftool/btf.c
+> @@ -835,6 +835,87 @@ static int dump_btf_c(const struct btf *btf,
+>         return err;
+>  }
 >
->  static struct btf_type btf_void;
->
-> +/* Describe how kinds are laid out; some have a singular element followi=
-ng the "struct btf_type",
-> + * some have BTF_INFO_VLEN(t->info) elements.  Specify sizes for both.  =
-Flags are currently unused.
-> + * Kind layout can be optionally added to the BTF representation in a de=
-dicated section to
-> + * facilitate parsing.  New kinds must be added here.
-> + */
+> +static int dump_btf_meta(const struct btf *btf)
+> +{
+> +       __u32 layout_off =3D 0, layout_len =3D 0;
+> +       __u32 data_sz, i, nr_kinds =3D 0;
+> +       const struct btf_header *hdr;
+> +       const struct btf_layout *l;
+> +       const void *data;
+> +
+> +       data =3D btf__raw_data(btf, &data_sz);
+> +       if (!data)
+> +               return -ENOMEM;
+> +       hdr =3D data;
+> +       if (json_output) {
+> +               jsonw_start_object(json_wtr);           /* metadata objec=
+t */
+> +               jsonw_uint_field(json_wtr, "size", data_sz);
+> +               jsonw_name(json_wtr, "header");
+> +               jsonw_start_object(json_wtr);           /* header object =
+*/
+> +               jsonw_uint_field(json_wtr, "magic", hdr->magic);
+> +               jsonw_uint_field(json_wtr, "version", hdr->version);
+> +               jsonw_uint_field(json_wtr, "flags", hdr->flags);
+> +               jsonw_uint_field(json_wtr, "hdr_len", hdr->hdr_len);
+> +               jsonw_uint_field(json_wtr, "type_len", hdr->type_len);
+> +               jsonw_uint_field(json_wtr, "type_off", hdr->type_off);
+> +               jsonw_uint_field(json_wtr, "str_len", hdr->str_len);
+> +               jsonw_uint_field(json_wtr, "str_off", hdr->str_off);
 
-Pls use proper kernel comment style in any new code.
+I don't think this part is useful.
+People can hex dump it if they really want to.
+
+> +       } else {
+> +               printf("size %-10u\n", data_sz);
+> +               printf("magic 0x%-10x\nversion %-10d\nflags 0x%-10x\nhdr_=
+len %-10u\n",
+> +                      hdr->magic, hdr->version, hdr->flags, hdr->hdr_len=
+);
+> +               printf("type_len %-10u\ntype_off %-10u\n", hdr->type_len,=
+ hdr->type_off);
+> +               printf("str_len %-10u\nstr_off %-10u\n", hdr->str_len, hd=
+r->str_off);
+> +       }
+> +
+> +       if (data_sz >=3D hdr->hdr_len && hdr->hdr_len >=3D sizeof(struct =
+btf_header)) {
+> +               layout_off =3D hdr->layout_off;
+> +               layout_len =3D hdr->layout_len;
+> +               if (layout_len > 0 &&
+> +                   (long long)layout_off + layout_len + hdr->hdr_len <=
+=3D data_sz) {
+> +                       l =3D (void *)hdr + hdr->hdr_len + layout_off;
+> +                       nr_kinds =3D layout_len / sizeof(*l);
+> +               }
+> +       } else {
+> +               if (!json_output)
+> +                       return 0;
+> +       }
+> +
+> +       /* unconditionally display (possibly empty) layout info for json =
+only */
+> +       if (json_output) {
+> +               jsonw_uint_field(json_wtr, "layout_len", layout_len);
+> +               jsonw_uint_field(json_wtr, "layout_off", layout_off);
+> +               jsonw_end_object(json_wtr);             /* end header obj=
+ect */
+> +
+> +               jsonw_name(json_wtr, "layouts");
+> +               jsonw_start_array(json_wtr);
+> +               for (i =3D 0; i < nr_kinds; i++) {
+> +                       jsonw_start_object(json_wtr);
+> +                       jsonw_uint_field(json_wtr, "kind", i);
+> +                       if (i < NR_BTF_KINDS)
+> +                               jsonw_string_field(json_wtr, "name", btf_=
+kind_str[i]);
+> +                       else
+> +                               jsonw_null_field(json_wtr, "name");
+> +                       jsonw_uint_field(json_wtr, "info_sz", l[i].info_s=
+z);
+> +                       jsonw_uint_field(json_wtr, "elem_sz", l[i].elem_s=
+z);
+> +                       jsonw_uint_field(json_wtr, "flags", l[i].flags);
+> +                       jsonw_end_object(json_wtr);
+> +               }
+
+This part, I guess, is ok-ish.
+I wouldn't do it either though. Feels like a debug feature.
