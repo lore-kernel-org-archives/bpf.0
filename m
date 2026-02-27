@@ -1,89 +1,210 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C088142982D
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 15:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6122A413253
+	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 15:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772204979; cv=none; b=P0h2A8ZwnDNUaIanJzJfxSo2bIAQLDy62bQXxXOfDapI7j0fH2Ywj8+UHG7LcOMbR0Ab2636GCSEXb+HwBa0tdh3FnT3fXq0ClHan4q0DrqcCpS6FcGoLSgh13hdeXWJ6SNveBtg1Bb1EEPzWKvlP9fsTg2KXAvOrMXyPyxN7ZU=
+	t=1772206147; cv=none; b=fdpkMip48wHYcQxSQreiMx06t4gPwmI6/iG5EftbJUfi1G/8JkvmV0b0CRAoJkCCRQldFHS1CHe3daLGC0ZjeBief9b55t+TMXJlf23LrHHvTWm8ACVdfAEmC4jduPj471VTu9HJaioiQTFoTOki8wO2xY5nFTYasuMuqtqG/tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772204979; c=relaxed/simple;
-	bh=YfX2g470dRQCs1s3q3T0iw/zUQuuNWiQgKICrIJTCt4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ExcjYqqsT0F+p5f+ojVNzQ7Oxga9/+19xvuvRmH/C/UrW81lIh1rUBXrFE1MmZnZufeYq7ImOj6rrMoBX+3Ok71By8GzSEKTZaR4vAIgXtWHJIpkdlxncmAv0zxZZlRGK3WJgKtrZfjdMlGNFl4TefdsE/+OnKF9TUY1fvSHtJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b6DLQYqB; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1772206147; c=relaxed/simple;
+	bh=yNEcrpqe6dc5IYC004gmDCw5UNR/goRmjvh1nUy2BGU=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=fhUj3svIy/BmLTbyfx9wLHMF9liOtQ+lCjKeKRxE3W1pConMqoL93lNaOM31KCZFaorLG+CLD3QFc5uSllOU3uzhkk2KogiyFdqosq8co5QxWSOeMk9acZsmGB7YV75cvpP76yeWz13ngMklO3TQf1nEwr4UEhongVCb+wz78JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=HMVvWosJ; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b6DLQYqB"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2aad8123335so82185ad.1
-        for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 07:09:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772204978; x=1772809778; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YfX2g470dRQCs1s3q3T0iw/zUQuuNWiQgKICrIJTCt4=;
-        b=b6DLQYqB9MlFY+Is/m/HyI3mx5yN0t+0elB9Mzazp/Y3znVzFRfNf0iBx3J6cpeJFC
-         OJRU/T+q3EAttj97HqRMb+xsON21iIyRXvCB4bJaAt/U83pE2coE90EiPb9AIf/INEyV
-         ZMUYxeqDiJiAA786vci7I0n6ZdC6Mvx+/9tQfW5koz1oO7QLbS4fLBfgBHpOTAvvWIGu
-         1ugBH/jQnI9Y9KdTlWmncrtFVmr+QiKN9vFXcM2YlTk2A30if8eORtSM234AoTlmaWCl
-         uh0vYfYmHNKzL2EYP81D+WPb1kqYGf8RKWes0fK/DlyXQt8zs85vCF6RMz9Ki9x8eM3f
-         nwBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772204978; x=1772809778;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YfX2g470dRQCs1s3q3T0iw/zUQuuNWiQgKICrIJTCt4=;
-        b=om5OXbx8jhHjsxhUypylEyw2rKE0jZOeSdM+GQgdp6ZBayFoQvqugZRoMZvEkanEQL
-         D4UbCdisWg5SwW5Utl3nrlF3myvasTQruWOB4jIZkKLcjyEQvZZ0hdYBTSlNTddqP5T5
-         6T04CkKAB9iiYv51hgamGfXrou9hIRybaEOf2/vCuzX+BurVY6W6J9fjerTEl2COPLB1
-         BKpYuBkuULFWNVNGOcACu3ajhUjttTsXMOCnnKZlS+aF7CABneQQlEdPB5aTQz+XJKJ4
-         EWlG+ADwJEVnZE18IK9wH6y9lM1i6bQF4ohflGHKjiVGP/fsricNoNUlPL80iEy7cqWQ
-         EhhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVnijdiV+Aw3X9b5Gdqz6Xx0USC9R3yZ5iQHptNhTZmPrhPCh0DgmKU0STE8CI1uU39/h0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9hdmpc9O/BKo1CniAIBPuOpuQlAIYCI6LdCHoLSrB3H+Q9POk
-	zoRbTha6l+eSaZ9xBkd/jyjolhaN56p0V3hNHxyGHRnJWXBZwYW5wTmYuLfTukm1EKgP1BRn2Lm
-	9xo0Bjg==
-X-Gm-Gg: ATEYQzyDgZLlQlQj0i6MZU/nmIPTcej2EzdFFBFTln/fxFTIDCFagRvg1roCTRuEpkI
-	fUsduK1xO2jeQ/PInCvI/3FBCcUXnV9UH5fBnMDLO4WEq5hVSCKH3IAJDky50ezcKW+Lguz679R
-	Az/kYNzxrDdACUOklbx8jQvx7gPUTLnlwimTdxO/aNIfnX1lZa8H0bX+kAke9FZKtDAgmwEHHj/
-	8KforuEisCVBLk55r9bp+XMraRgAAO46RxjGbI7KggR8tVR61K3KCg57LcPXyuCPMl+AUDWYSrH
-	zwngdITO7FQGpKlKDEcOMkK4S2XTAhu+DLuG9qsgOVk+ab1oTRaOCZ/FvlxoHClT8jcdw2ayoI+
-	LLjzIr2123mC0W229cKoKfiwwxgiumzf1SqNTfjAwC0truOTCgbuchorB4AlYm6YD9LgsHoTU/g
-	2EzwuKLIr8xKjG+KqVKmKHfI5Qy+alrUFYOrrQyPFWT1pfaMF376bruR9gYQ==
-X-Received: by 2002:a17:902:ec83:b0:299:c368:6b1f with SMTP id d9443c01a7336-2adf77829e3mr5978935ad.18.1772204977547;
-        Fri, 27 Feb 2026 07:09:37 -0800 (PST)
-Received: from google.com (127.200.82.34.bc.googleusercontent.com. [34.82.200.127])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359131aa5afsm5045853a91.0.2026.02.27.07.09.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Feb 2026 07:09:37 -0800 (PST)
-Date: Fri, 27 Feb 2026 15:09:32 +0000
-From: Jordan Rife <jrife@google.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: edumazet@google.com, daniel@iogearbox.net, sdf@fomichev.me, 
-	netdev@vger.kernel.org, andrii@kernel.org, bpf@vger.kernel.org, 
-	yusuke.suzuki@isovalent.com, willemdebruijn.kernel@gmail.com, martin.lau@linux.dev
-Subject: Re: [net-next,v1,2/2] selftests/bpf: Ensure dst addr/port are
- preserved after socket abort
-Message-ID: <mg4c5j3brafehwfbxemda5viihhrtz7x34th5y3mfsme4zpu5q@i74mxbf7iown>
-References: <20260224190516.2102048-3-jrife@google.com>
- <20260227033658.2599813-1-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="HMVvWosJ"
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61R9lpGW733353;
+	Fri, 27 Feb 2026 15:28:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=kIbzSG
+	qhhdlxl+7UUOcZIEyJPullP3O8/Dx7rRjrPi0=; b=HMVvWosJswVeeViN8D/g7j
+	+hJjYP4L9gnW5ylKVdgEWVyGY0H9xSGb8tIZWZF+YWG7Xu1R72oLUo+J/jcR1xrh
+	CJ+7jDBQxVd/ttCpHe1/AM0CXMtTOeqgQU4t0veHGXMCU2S37lnlG+HUdSihMR17
+	IWK+eZesRV1g1grQTnCmORRuo7+XUUdbttAoMNlsvJPZ7ubSH8lng7fNcCw9ODy2
+	aj12k052TwMP09GmkjMmnltHTH/QMGmEjEsiJagWHXVQutEJ9YX4T63YBzcGZvtr
+	eF49YZokBwQNdcuMwH0mutEvoesyjTwNP6XFiJvKJq0Pxt4eAwNQf+hWvUtWEmgw
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cf24gvhbu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Feb 2026 15:28:47 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 61RF4vHY030256;
+	Fri, 27 Feb 2026 15:28:46 GMT
+Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4cfrhktqhs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 27 Feb 2026 15:28:46 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 61RFSjKs28246740
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 27 Feb 2026 15:28:45 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9453A58052;
+	Fri, 27 Feb 2026 15:28:45 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 47DAD5805D;
+	Fri, 27 Feb 2026 15:28:43 +0000 (GMT)
+Received: from smtpclient.apple (unknown [9.61.241.223])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTPS;
+	Fri, 27 Feb 2026 15:28:43 +0000 (GMT)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260227033658.2599813-1-kuba@kernel.org>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3864.300.41.1.7\))
+Subject: Re: [PATCH v2 0/4] powerpc64/bpf: Add support for instruction array
+ and indirect jump
+From: Venkat <venkat88@linux.ibm.com>
+In-Reply-To: <20260227014315.39980-1-adubey@linux.ibm.com>
+Date: Fri, 27 Feb 2026 20:58:29 +0530
+Cc: linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org, hbathini@linux.ibm.com,
+        ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        maddy@linux.ibm.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <72C902E6-BE4E-4C47-9F4A-D8095E7BEDE2@linux.ibm.com>
+References: <20260227014315.39980-1-adubey@linux.ibm.com>
+To: adubey@linux.ibm.com
+X-Mailer: Apple Mail (2.3864.300.41.1.7)
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=TNRIilla c=1 sm=1 tr=0 ts=69a1b82f cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=Mpw57Om8IfrbqaoTuvik:22 a=GgsMoib0sEa3-_RKJdDe:22 a=VwQbUJbxAAAA:8
+ a=VnNF1IyMAAAA:8 a=navZPS6tSOt6txFWZpkA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: lKGDajksKhFp2tvNLGdV4bxmcHYM9AYC
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI3MDEzNSBTYWx0ZWRfXxS4c/lTHaT0k
+ xphzYhlROPKZCAlGAqXPRck8wRPTzJ9aqhZB0+8q3ly4Xk+4fzjJwu6yP7KsAlmc5tVuA49sU5O
+ U2F+s7raLG0OJ3rRiLoz3bBJqdpnZgDsPLp5AU1aVAlxrbek6a3qwhbVFDiCJ8auc+me4PwFrGk
+ q4fTxvDJ500itvPdYgpwlDbymdHQIluI5RcXKxqfyXx+yMnjP+m4BMT2pVNb0aiXJBY0SsERQPg
+ GpXz5qmluQSAJGOum5g2/JXqUk1sJc48Kw178oFvuc2ck6KTfBbWc5yDBT6w3PM2bDsRkmwdefo
+ jpETe0DAFNQ6smJJ1A/9wmW9FnJXS18VEGdxBqy3wBYykEvYB6yIhrJKeXCcjgt1/5WHIJzwzz5
+ LCj4iIOyP2JJr1B6dd1nQB7BvCG8sOx51W+RrlcNwjT/RzRf7nlQUjH9y8S6DebEuWVWj5xESbp
+ VT8r9z2vyQADdY/MgAQ==
+X-Proofpoint-ORIG-GUID: lKGDajksKhFp2tvNLGdV4bxmcHYM9AYC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-02-27_02,2026-02-27_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 suspectscore=0 adultscore=0 priorityscore=1501 impostorscore=0
+ spamscore=0 clxscore=1015 bulkscore=0 lowpriorityscore=0 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2601150000 definitions=main-2602270135
 
-> Should connect_fd be set to -1 after calling destroy() to prevent the double
-> close?
 
-Yep, I'll update this in v2.
 
-Thanks!
+> On 27 Feb 2026, at 7:13=E2=80=AFAM, adubey@linux.ibm.com wrote:
+>=20
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+>=20
+> The first 2 patch enable support for instruction array. Now, the=20
+> instruction offset map maintain the mapping:
+> original inst -> xlated inst -> jited inst
+>=20
+> The last two patch enable support for indirect jump. Any eligile
+> register can store jump target address for control flow to jump.
+>=20
+> The features will be enabled on ppc32 in a separate series.
+>=20
+> The patch series is rebased over:
+> =
+https://lore.kernel.org/bpf/20260226031324.17352-1-adubey@linux.ibm.com
+>=20
+> All selftest related to instruction array and indirect jump
+> are passing.
+>=20
+> ./test_progs-cpuv4 -n 20
+> #21/1=C3=82 =C3=82 =C3=82  bpf_insn_array/one2one:OK
+> #21/2=C3=82 =C3=82 =C3=82  bpf_insn_array/simple:OK
+> #21/3=C3=82 =C3=82 =C3=82  bpf_insn_array/deletions:OK
+> #21/4=C3=82 =C3=82 =C3=82  bpf_insn_array/deletions-with-functions:OK
+> #21/5=C3=82 =C3=82 =C3=82  bpf_insn_array/blindness:OK
+> #21/6=C3=82 =C3=82 =C3=82  bpf_insn_array/incorrect-index:OK
+> #21/7=C3=82 =C3=82 =C3=82  bpf_insn_array/load-unfrozen-map:OK
+> #21/8=C3=82 =C3=82 =C3=82  bpf_insn_array/no-map-reuse:OK
+> #21/9=C3=82 =C3=82 =C3=82  bpf_insn_array/bpf-side-ops:OK
+> #21=C3=82 =C3=82 =C3=82 =C3=82 =C3=82  bpf_insn_array:OK
+> Summary: 1/9 PASSED, 0 SKIPPED, 0 FAILED
+>=20
+> ./test_progs-cpuv4 -n 21 =20
+> #20/1=C3=82 =C3=82 =C3=82  bpf_gotox/one-switch:OK
+> #20/2=C3=82 =C3=82 =C3=82  bpf_gotox/one-switch-non-zero-sec-offset:OK
+> #20/3=C3=82 =C3=82 =C3=82  bpf_gotox/two-switches:OK
+> #20/4=C3=82 =C3=82 =C3=82  bpf_gotox/big-jump-table:OK
+> #20/5=C3=82 =C3=82 =C3=82  bpf_gotox/static-global:OK
+> #20/6=C3=82 =C3=82 =C3=82  bpf_gotox/nonstatic-global:OK
+> #20/7=C3=82 =C3=82 =C3=82  bpf_gotox/other-sec:OK
+> #20/8=C3=82 =C3=82 =C3=82  bpf_gotox/static-global-other-sec:OK
+> #20/9=C3=82 =C3=82 =C3=82  bpf_gotox/nonstatic-global-other-sec:OK
+> #20/10=C3=82 =C3=82  bpf_gotox/one-jump-two-maps:OK
+> #20/11=C3=82 =C3=82  bpf_gotox/one-map-two-jumps:OK
+> #20=C3=82 =C3=82 =C3=82 =C3=82 =C3=82  bpf_gotox:OK
+> Summary: 1/11 PASSED, 0 SKIPPED, 0 FAILED
+>=20
+> v1->v2:
+> Handle image offset for ABIv1
+>=20
+> [v1]: =
+https://lore.kernel.org/bpf/20260225010950.20218-1-adubey@linux.ibm.com
+>=20
+> Abhishek Dubey (4):
+> powerpc64/bpf: Add support for instruction array
+> selftest/bpf: Enable instruction array test for powerpc64
+> powerpc64/bpf: Add support for indirect jump
+> selftest/bpf: Enable gotox tests for powerpc64
+>=20
+> arch/powerpc/net/bpf_jit_comp.c                        | 10 ++++++++++
+> arch/powerpc/net/bpf_jit_comp64.c                      |  8 ++++++++
+> .../testing/selftests/bpf/prog_tests/bpf_insn_array.c  |  2 +-
+> tools/testing/selftests/bpf/progs/verifier_gotox.c     |  4 ++--
+> 4 files changed, 21 insertions(+), 3 deletions(-)
+>=20
+> --=20
+> 2.52.0
 
-Jordan
+Tested-by: Venkat Rao Bagalkote <venkat88@linux.ibm.com>
+
+Tested this series and below are the results.
+
+./test_progs-cpuv4 -n 21=20
+#21/1    bpf_insn_array/one2one:OK
+#21/2    bpf_insn_array/simple:OK
+#21/3    bpf_insn_array/deletions:OK
+#21/4    bpf_insn_array/deletions-with-functions:OK
+#21/5    bpf_insn_array/blindness:OK
+#21/6    bpf_insn_array/incorrect-index:OK
+#21/7    bpf_insn_array/load-unfrozen-map:OK
+#21/8    bpf_insn_array/no-map-reuse:OK
+#21/9    bpf_insn_array/bpf-side-ops:OK
+#21      bpf_insn_array:OK
+Summary: 1/9 PASSED, 0 SKIPPED, 0 FAILED
+
+
+./test_progs-cpuv4 -n 20
+#20/1    bpf_gotox/one-switch:SKIP
+#20/2    bpf_gotox/one-switch-non-zero-sec-offset:SKIP
+#20/3    bpf_gotox/two-switches:SKIP
+#20/4    bpf_gotox/big-jump-table:SKIP
+#20/5    bpf_gotox/static-global:SKIP
+#20/6    bpf_gotox/nonstatic-global:SKIP
+#20/7    bpf_gotox/other-sec:SKIP
+#20/8    bpf_gotox/static-global-other-sec:SKIP
+#20/9    bpf_gotox/nonstatic-global-other-sec:SKIP
+#20/10   bpf_gotox/one-jump-two-maps:SKIP
+#20/11   bpf_gotox/one-map-two-jumps:SKIP
+#20/12   bpf_gotox/check-ldimm64-off:SKIP
+#20/13   bpf_gotox/check-ldimm64-off-gotox:SKIP
+#20      bpf_gotox:SKIP
+Summary: 1/0 PASSED, 13 SKIPPED, 0 FAILED
+
+Regards,
+Venkat.
+
