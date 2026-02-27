@@ -1,122 +1,115 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B0F395DA8;
-	Fri, 27 Feb 2026 10:36:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850853A0B33
+	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 10:38:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772188577; cv=none; b=XaWT9MT4bnBAQe/o2j6rCsr0qB2Lv1KMlm2UiTuPufCQ1zHixdeAnVRrS9x6A1u7M4KS26L+QxuROQ4d0pVv3uhtvWsMlnOjKXaKhYVW/lum0eQJI0qoZWh9HIr7GDvFjqYrrdAYorSbX2C5AnC+ZYRSfXr9R/FnESwp0Wddb6w=
+	t=1772188693; cv=none; b=I2GlrSM+UVV/G/nFzYTGAWJhdLGx1VafkiCoAWnmL2U4/xuvGEdPW3CQGIOCV43dKic9pslmZ79kEsPaFcL1QL1NFplqe19j0oj5qQ7SQ9vDnSWT77iu7GAl2iAAiaTsYliFvX1TrmeOMupQYNevx3Jw6gB+/Nre/1cTYu2KzxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772188577; c=relaxed/simple;
-	bh=y7T7339wqgGkgXm1KaldrOq1fUHHJCkETOZ0kdpLtUU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ASCoYVCf9ns7IGhU1CUgP2Q7TQjIxDIFa1V99KeD9Ucy/6wcisO0+TbSXhQwyGyPHRSIgix7z64XVyex+Nn2m9YLGRcPWjfzZ67wIeIW2GU2ytJoEcDlVcVzrqXf9UhY/vniDWdPZF/0KSbE4Qy18B8VJ9qqp8Nb1WnFyEewlqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C8E814BF;
-	Fri, 27 Feb 2026 02:36:07 -0800 (PST)
-Received: from localhost (e132581.arm.com [10.1.196.87])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 588E43F7BD;
-	Fri, 27 Feb 2026 02:36:13 -0800 (PST)
-Date: Fri, 27 Feb 2026 10:36:11 +0000
-From: Leo Yan <leo.yan@arm.com>
-To: Quentin Monnet <qmo@kernel.org>
-Cc: Namhyung Kim <namhyung@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nsc@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	James Clark <james.clark@linaro.org>, Kees Cook <kees@kernel.org>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, bpf@vger.kernel.org
-Subject: Re: [PATCH RESEND v2] tools build: Use -fzero-init-padding-bits=all
-Message-ID: <20260227103611.GA1098637@e132581.arm.com>
-References: <20260224-tools_build_fix_zero_init-v2-1-b1acc817a01e@arm.com>
- <aaCTC86U9KjnmZmu@google.com>
- <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
+	s=arc-20240116; t=1772188693; c=relaxed/simple;
+	bh=D3CdrNY4TsQ8Ul99vMmmtRJORamGT+H7QEgjAxUZKzo=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=nGEyGnAW37amXL9fh0j5RBvAH41E/sb7UE1YjXFr5ooExYTS4AEJdyrc3hCyVxjMOQ2qeWPb/Y6N00pAtQ9eLU4YwoR+DAs6l/ondIfha0fDYjYXF+N3MZu1SO3N2akf5g0U8mAKtbpG0g0w1NnOj/zUdd/dLc/gAa9aFwqVGYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KFPxY4wr; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KFPxY4wr"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <99e7fe4e-72de-4b55-9a9a-ae51718a0e73@kernel.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772188680;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nrLRonMsnCVotmFrNK03+GHGpA++SDG71WGkPi8yPUk=;
+	b=KFPxY4wrVLe1pzTCXQJdmsq7Vw6WG25wRwoCHbbfDRCtwF+6uNzM+L/2zsuudMhw1TQP2P
+	2bJCYw3puk/13mBr/5RjofiPUOlnZSPMPaVu5/6K8cnglINchOpsgLcWTaYpH2ejgMprLl
+	cm0puH6mRPydK84hPGNbyd4NLt6k20k=
+Date: Fri, 27 Feb 2026 10:37:53 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <faed6bde8e7a96021bc9d55176b764c592f6ce08@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH net v2 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+To: "Sebastian Andrzej Siewior" <bigeasy@linutronix.de>
+Cc: netdev@vger.kernel.org, jiayuna.chen@linux.dev, jiayuna.chen@shopee.com,
+ "Jiayuan Chen" <jiayuan.chen@shopee.com>,
+ syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com, "Jay Vosburgh"
+ <jv@jvosburgh.net>, "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S.
+ Miller" <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Simon Horman" <horms@kernel.org>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
+ <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
+ <kpsingh@kernel.org>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Clark Williams"
+ <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Jussi
+ Maki" <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev
+In-Reply-To: <20260227102149.10ZgLF-t@linutronix.de>
+References: <20260227092254.272603-1-jiayuan.chen@linux.dev>
+ <20260227092254.272603-2-jiayuan.chen@linux.dev>
+ <20260227094558._Fna2iSe@linutronix.de>
+ <4cc373b555ec3d6ff57037c569d12966a8b701db@linux.dev>
+ <20260227102149.10ZgLF-t@linutronix.de>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Feb 26, 2026 at 10:52:01PM +0000, Quentin Monnet wrote:
-> 2026-02-26 10:38 UTC-0800 ~ Namhyung Kim <namhyung@kernel.org>
-> > Adding bpftool maintainer.
-> > 
-> > On Tue, Feb 24, 2026 at 12:16:40PM +0000, Leo Yan wrote:
-> >> GCC-15 release claims [1]:
-> >>
-> >>   {0} initializer in C or C++ for unions no longer guarantees clearing
-> >>   of the whole union (except for static storage duration initialization),
-> >>   it just initializes the first union member to zero. If initialization
-> >>   of the whole union including padding bits is desirable, use {} (valid
-> >>   in C23 or C++) or use -fzero-init-padding-bits=unions option to
-> >>   restore old GCC behavior.
-> >>
-> >> As a result, this new behaviour might cause unexpected data when we
-> >> initialize a union with using the '{ 0 }' initializer.
-> >>
-> >> Since commit dce4aab8441d ("kbuild: Use -fzero-init-padding-bits=all"),
-> >> the kernel has enabled -fzero-init-padding-bits=all to zero padding bits
-> >> in unions and structures.  This commit applies the same option for tools
-> >> building.
-> >>
-> >> The option is not supported neither by any version older than GCC 15 and
-> >> is also not supported by LLVM, this patch adds the cc-option function to
-> >> dynamically detect the compiler option.
-> >>
-> >> [1] https://gcc.gnu.org/gcc-15/changes.html
-> >>
-> >> Signed-off-by: Leo Yan <leo.yan@arm.com>
-> 
-> 
-> Thank you Namhyung for the Cc.
-> 
-> I built bpftool with the patch, with gcc 13 (which didn't get the flag,
-> as expected) and gcc 15, and it's fine with both. As far as I can tell,
-> bpftool does not initialise any union with "{0}" anyway.
+February 27, 2026 at 18:21, "Sebastian Andrzej Siewior" <bigeasy@linutron=
+ix.de mailto:bigeasy@linutronix.de?to=3D%22Sebastian%20Andrzej%20Siewior%=
+22%20%3Cbigeasy%40linutronix.de%3E > wrote:
 
-Thanks a lot for testing!
 
-> One potential concern (I didn't try) could be for cross-compilation:
-> bpftool's Makefile sets HOST_CFLAGS based on $(CFLAGS), but $(HOSTCC)
-> and $(CC) could be different versions of gcc, for example.
+>=20
+>=20On 2026-02-27 10:17:29 [+0000], Jiayuan Chen wrote:
+>=20
+>=20>=20
+>=20> bond_mode can be changed after device creation via sysfs or netlink=
+, a bond created
+> >  in active-backup mode can later be switched to round-robin, which me=
+ans the allocation
+> >  must not be conditional on the mode at creation time.
+> >=20
+>=20Must the device be in down state or can this be also changed while th=
+e
+> device is up?
+>=20
+>=20Sebastian
+>
 
-To avoid confusion, we can use EXTRA_CFLAGS and HOST_EXTRACFLAGS instead
-in Makefile.include:
+The mode change requires the device to be DOWN. BOND_OPT_MODE is defined =
+with BOND_OPTFLAG_IFDOWN,
+and bond_opt_check_flags() enforces this:
 
------
+if ((opt->flags & BOND_OPTFLAG_IFDOWN) && (bond->dev->flags & IFF_UP))
+  return -EBUSY;
 
-# cc-option
-# Usage: CFLAGS += $(call cc-option,-march=winchip-c6,-march=i586)
-cc-option = $(call try-run, \
-       $(CC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
+The same restriction applies to the netlink path as well. Both sysfs and =
+netlink go
+through __bond_opt_set() =E2=86=92 bond_opt_check_deps(), which enforces =
+BOND_OPTFLAG_IFDOWN
+for mode change. Attempting to change the mode while the device is UP ret=
+urns -EBUSY
+regardless of how the change is requested.
 
-host-cc-option = $(call try-run, \
-       $(HOSTCC) -Werror $(1) -c -x c /dev/null -o "$$TMP",$(1),$(2))
-
-# Explicitly clear padding bits with the initializer '{ 0 }'
-EXTRA_CFLAGS += $(call cc-option,-fzero-init-padding-bits=all)
-HOST_EXTRACFLAGS += $(call host-cc-option,-fzero-init-padding-bits=all)
-
------
-
-Then, in a project, its Makefile can append EXTRA_CFLAGS and
-HOST_EXTRACFLAGS to CFLAGS and HOSTCFLAGS respectively.
-
-If this is fine for us, I will repin patches
-
-> The same concern could apply to perf with HOSTCFLAGS, by the way?
-
-I don't see perf's HOSTCFLAGS to reuse CFLAGS.
+So unconditional allocation in bond_init() covers all cases: whether the =
+device is created in
+round-robin mode, or switched to round-robin later
+(which requires being DOWN, meaning bond_open() hasn't been called with t=
+he new mode yet).
 
 Thanks,
-Leo
