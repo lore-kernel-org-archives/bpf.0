@@ -1,169 +1,312 @@
-Received: from xry111.site (xry111.site [89.208.246.23])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B843E32AAA7;
-	Fri, 27 Feb 2026 08:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582EA362123;
+	Fri, 27 Feb 2026 08:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772179467; cv=none; b=HtSa9hDzUakmSZGqZFQWUIoFFRpp6NF6yt+u/oY1lLoGZFGT7G4XXBB8z93tml1gK1x+Lvbr1jI+55A8fP70V2HvXsJj+rujQ1frmqVH30gv/zy24MolKQugizrtyjjjL6bKllD4s/WOWbNzOTcaguMUwVRty06vRUpU6HtT374=
+	t=1772179740; cv=none; b=f5AO61ne3V83mNY002SH+dC55GjkGLVSh7ZiCMqumN1izOW1KadgPt4O5+NVg7XQugsbsgrKcOJ+4wS7Dy99vzvFG+W8ZI6eWfTdOPeYbZLuHIFbj9sK6KRrSp4JhT4tfNY7kew4MsjcESq8wYh6EpNBziyFESaimyAOvHRCMmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772179467; c=relaxed/simple;
-	bh=nXFHV3cR8GxbsgsKMu/kZAx/DtO5IgAoFy/fvYHBuJI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R/0VNmixKuoGSiRwwbj9NJ1t66luM02lsVs8D9WWw75K/r9/YALEePGQ+gWWIO8YTvYBR2Pjh4e9MkY3OX9bGrJOyEjvaH5PIZYpAvsVZh4jXOKx5zazGRuxOLWAd8wzp/7NWrGs0P1BhgmOZWH9Dg+enzcIalivbxKG2Nu/lrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=kCM09yw3; arc=none smtp.client-ip=89.208.246.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+	s=arc-20240116; t=1772179740; c=relaxed/simple;
+	bh=Ra+7uSEKUe/YRs6QG1AyLjWES679g68JqReVroqPfds=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=QcyBUuptVmuDehgAr11Jx4drhZ83zP8SbRhafDozGpSV/Toqqk8CpgD8GqsEuBhWVl6clgOPQxb8PS4hMibRi2jgu8qcmTqfVnrynymXvDhS9N72dA/6Xf6cN/tJt/tXS/nBf/CWarImtPgTX+VJyBE2Yg8cBsetTtgOCaUe1Dk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=giydexke; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="kCM09yw3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=xry111.site;
-	s=default; t=1772179456;
-	bh=nk+cafLP4mV0qNkYoAZlk+EQK8C5KbyOru1aOnmjWE4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=kCM09yw3iEjKLaAOFWoWgTPCq7gOFlzqk6QKgsQQ3tWLHHNHNQQ98TS303rtnWrke
-	 kKWowDBNjLi0kUoxG4VAOU7VqFXN1r7qDCx5za6BEG+TPIA5U309eJhbt8RovPNCyU
-	 Qgu+DDguq1uw2qfTc6MeyhXkmTVl8jKhum3gecls=
-Received: from stargazer (unknown [IPv6:2409:8a4c:e11:4510:818c:b334:624:49f8])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
-	(Client did not present a certificate)
-	(Authenticated sender: xry111@xry111.site)
-	by xry111.site (Postfix) with ESMTPSA id 70E3F1A41C4;
-	Fri, 27 Feb 2026 03:04:09 -0500 (EST)
-From: Xi Ruoyao <xry111@xry111.site>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Hengqi Chen <hengqi.chen@gmail.com>
-Cc: Mingcong Bai <jeffbai@aosc.io>,
-	Zixing Liu <liushuyu@aosc.io>,
-	Xi Ruoyao <xry111@xry111.site>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>,
-	George Guo <guodongtai@kylinos.cn>,
-	Chenghao Duan <duanchenghao@kylinos.cn>,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: [PATCH v2] LoongArch: Fix calling smp_processor_id() in preemptible code
-Date: Fri, 27 Feb 2026 16:03:51 +0800
-Message-ID: <20260227080351.663693-1-xry111@xry111.site>
-X-Mailer: git-send-email 2.53.0
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="giydexke"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id F01674E412D9;
+	Fri, 27 Feb 2026 08:08:57 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id B07B35FE46;
+	Fri, 27 Feb 2026 08:08:57 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 26219103692C2;
+	Fri, 27 Feb 2026 09:08:53 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1772179736; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=e1qepm3/81bAP1at3d4tm6Ugpy5U7kTJ/s1FwYeo+vA=;
+	b=giydexkeHEJhQjDbDIZyFv430jONfagdw6kLXa5IENzr4OhdcNm4S/IkPfe3Rkzjlnbemt
+	/2R4yUsR9hRZUJZVrRruhtXcW9NYyUVCmjIOo30MhAAiS3t4E3GrIbj+08ycLJXvPrwWsW
+	24VOgKGfnbYz9nlrdBreEi8lGg2qDFEW2fFsOHs3IBAWHnIiw+FONAtCq7OupZkL+K0wWu
+	lQuS7zzzLt9h+Un6ePUY23jOKJ0hgZ4t79swInbqJcN3cU3LuHb8EZYvaNICj7MlmCUX9z
+	BYt2ro1ImMnuVJMGJxI37awYJjTTy4F2qTwVUs/FIy+nfeJkle0Ho6SSv/NCMg==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Fri, 27 Feb 2026 09:08:47 +0100
+Subject: [PATCH bpf-next] selftests/bpf: drop test_bpftool.sh
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20260227-bpftool_feature-v1-1-a25860fd52fb@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x2MQQqAIBAAvxJ7TnBFEvpKRJSttRAqahFEf086D
+ szMA5kSU4a+eSDRxZmDr4BtA3af/UaC18qgpOqkQhRLdCWEY3I0lzOR6DSiXqw1RkuoVUzk+P6
+ PA1RZeLoLjO/7AebUbMFrAAAA
+X-Change-ID: 20260211-bpftool_feature-64114bcc7740
+To: Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-Fix the warning:
+The test_bpftool.sh script runs a python unittest script checking
+bpftool json output on different commands. As part of the ongoing effort
+to get rid of any standalone test, this script should either be
+converted to test_progs or removed.
 
-    BUG: using smp_processor_id() in preemptible [00000000] code: sys
-temd/1
-    caller is larch_insn_text_copy+0x40/0xf0
+As validating bpftool json output does not bring much value to the test
+base (and because it would need test_progs to bring in a json parser),
+remove the standalone test script.
 
-Simply changing it to raw_smp_processor_id() is not enough: if preempt
-and CPU hotplug happens after raw_smp_processor_id() but before
-stop_machine(), the CPU where raw_smp_processor_id() has run may be
-offline when stop_machine() and no CPU will run copy_to_kernel_nofault()
-in text_copy_cb().  Thus guard the larch_insn_text_copy() calls with
-cpus_read_lock() and change stop_machine() to stop_machine_cpuslocked()
-to prevent this.
-
-Fixes: 9fbd18cf4c69 ("LoongArch: BPF: Add dynamic code modification support")
-Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
+This removal follows the discussion in [1]
 
-Change since [v1]:
-- Add lockdep_assert_cpus_held() with a comment to prevent people from
-  calling larch_insn_text_copy() w/o acquiring the cpus lock in the
-  future.
+[1] https://lore.kernel.org/bpf/DGOTPHTTR5ZE.Q7ALRR86ZZ6N@bootlin.com/
+---
+ tools/testing/selftests/bpf/Makefile        |   4 +-
+ tools/testing/selftests/bpf/test_bpftool.py | 174 ----------------------------
+ tools/testing/selftests/bpf/test_bpftool.sh |  11 --
+ 3 files changed, 1 insertion(+), 188 deletions(-)
 
-[v1]:https://lore.kernel.org/20260225141404.178823-2-xry111@xry111.site
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index c6bf4dfb1495..c3e1116b146e 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -107,14 +107,12 @@ TEST_PROGS := test_kmod.sh \
+ 	test_lirc_mode2.sh \
+ 	test_xdping.sh \
+ 	test_bpftool_build.sh \
+-	test_bpftool.sh \
+ 	test_doc_build.sh \
+ 	test_xsk.sh \
+ 	test_xdp_features.sh
+ 
+ TEST_PROGS_EXTENDED := \
+-	ima_setup.sh verify_sig_setup.sh \
+-	test_bpftool.py
++	ima_setup.sh verify_sig_setup.sh
+ 
+ TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
+ 	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
+diff --git a/tools/testing/selftests/bpf/test_bpftool.py b/tools/testing/selftests/bpf/test_bpftool.py
+deleted file mode 100644
+index 1c2408ee1f5d..000000000000
+--- a/tools/testing/selftests/bpf/test_bpftool.py
++++ /dev/null
+@@ -1,174 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-# Copyright (c) 2020 SUSE LLC.
+-
+-import collections
+-import functools
+-import json
+-import os
+-import socket
+-import subprocess
+-import unittest
+-
+-
+-# Add the source tree of bpftool and /usr/local/sbin to PATH
+-cur_dir = os.path.dirname(os.path.realpath(__file__))
+-bpftool_dir = os.path.abspath(os.path.join(cur_dir, "..", "..", "..", "..",
+-                                           "tools", "bpf", "bpftool"))
+-os.environ["PATH"] = bpftool_dir + ":/usr/local/sbin:" + os.environ["PATH"]
+-
+-
+-class IfaceNotFoundError(Exception):
+-    pass
+-
+-
+-class UnprivilegedUserError(Exception):
+-    pass
+-
+-
+-def _bpftool(args, json=True):
+-    _args = ["bpftool"]
+-    if json:
+-        _args.append("-j")
+-    _args.extend(args)
+-
+-    return subprocess.check_output(_args)
+-
+-
+-def bpftool(args):
+-    return _bpftool(args, json=False).decode("utf-8")
+-
+-
+-def bpftool_json(args):
+-    res = _bpftool(args)
+-    return json.loads(res)
+-
+-
+-def get_default_iface():
+-    for iface in socket.if_nameindex():
+-        if iface[1] != "lo":
+-            return iface[1]
+-    raise IfaceNotFoundError("Could not find any network interface to probe")
+-
+-
+-def default_iface(f):
+-    @functools.wraps(f)
+-    def wrapper(*args, **kwargs):
+-        iface = get_default_iface()
+-        return f(*args, iface, **kwargs)
+-    return wrapper
+-
+-DMESG_EMITTING_HELPERS = [
+-        "bpf_probe_write_user",
+-        "bpf_trace_printk",
+-        "bpf_trace_vprintk",
+-    ]
+-
+-class TestBpftool(unittest.TestCase):
+-    @classmethod
+-    def setUpClass(cls):
+-        if os.getuid() != 0:
+-            raise UnprivilegedUserError(
+-                "This test suite needs root privileges")
+-
+-    @default_iface
+-    def test_feature_dev_json(self, iface):
+-        unexpected_helpers = DMESG_EMITTING_HELPERS
+-        expected_keys = [
+-            "syscall_config",
+-            "program_types",
+-            "map_types",
+-            "helpers",
+-            "misc",
+-        ]
+-
+-        res = bpftool_json(["feature", "probe", "dev", iface])
+-        # Check if the result has all expected keys.
+-        self.assertCountEqual(res.keys(), expected_keys)
+-        # Check if unexpected helpers are not included in helpers probes
+-        # result.
+-        for helpers in res["helpers"].values():
+-            for unexpected_helper in unexpected_helpers:
+-                self.assertNotIn(unexpected_helper, helpers)
+-
+-    def test_feature_kernel(self):
+-        test_cases = [
+-            bpftool_json(["feature", "probe", "kernel"]),
+-            bpftool_json(["feature", "probe"]),
+-            bpftool_json(["feature"]),
+-        ]
+-        unexpected_helpers = DMESG_EMITTING_HELPERS
+-        expected_keys = [
+-            "syscall_config",
+-            "system_config",
+-            "program_types",
+-            "map_types",
+-            "helpers",
+-            "misc",
+-        ]
+-
+-        for tc in test_cases:
+-            # Check if the result has all expected keys.
+-            self.assertCountEqual(tc.keys(), expected_keys)
+-            # Check if unexpected helpers are not included in helpers probes
+-            # result.
+-            for helpers in tc["helpers"].values():
+-                for unexpected_helper in unexpected_helpers:
+-                    self.assertNotIn(unexpected_helper, helpers)
+-
+-    def test_feature_kernel_full(self):
+-        test_cases = [
+-            bpftool_json(["feature", "probe", "kernel", "full"]),
+-            bpftool_json(["feature", "probe", "full"]),
+-        ]
+-        expected_helpers = DMESG_EMITTING_HELPERS
+-
+-        for tc in test_cases:
+-            # Check if expected helpers are included at least once in any
+-            # helpers list for any program type. Unfortunately we cannot assume
+-            # that they will be included in all program types or a specific
+-            # subset of programs. It depends on the kernel version and
+-            # configuration.
+-            found_helpers = False
+-
+-            for helpers in tc["helpers"].values():
+-                if all(expected_helper in helpers
+-                       for expected_helper in expected_helpers):
+-                    found_helpers = True
+-                    break
+-
+-            self.assertTrue(found_helpers)
+-
+-    def test_feature_kernel_full_vs_not_full(self):
+-        full_res = bpftool_json(["feature", "probe", "full"])
+-        not_full_res = bpftool_json(["feature", "probe"])
+-        not_full_set = set()
+-        full_set = set()
+-
+-        for helpers in full_res["helpers"].values():
+-            for helper in helpers:
+-                full_set.add(helper)
+-
+-        for helpers in not_full_res["helpers"].values():
+-            for helper in helpers:
+-                not_full_set.add(helper)
+-
+-        self.assertCountEqual(full_set - not_full_set,
+-                              set(DMESG_EMITTING_HELPERS))
+-        self.assertCountEqual(not_full_set - full_set, set())
+-
+-    def test_feature_macros(self):
+-        expected_patterns = [
+-            r"/\*\*\* System call availability \*\*\*/",
+-            r"#define HAVE_BPF_SYSCALL",
+-            r"/\*\*\* eBPF program types \*\*\*/",
+-            r"#define HAVE.*PROG_TYPE",
+-            r"/\*\*\* eBPF map types \*\*\*/",
+-            r"#define HAVE.*MAP_TYPE",
+-            r"/\*\*\* eBPF helper functions \*\*\*/",
+-            r"#define HAVE.*HELPER",
+-            r"/\*\*\* eBPF misc features \*\*\*/",
+-        ]
+-
+-        res = bpftool(["feature", "probe", "macros"])
+-        for pattern in expected_patterns:
+-            self.assertRegex(res, pattern)
+diff --git a/tools/testing/selftests/bpf/test_bpftool.sh b/tools/testing/selftests/bpf/test_bpftool.sh
+deleted file mode 100755
+index 718f59692ccb..000000000000
+--- a/tools/testing/selftests/bpf/test_bpftool.sh
++++ /dev/null
+@@ -1,11 +0,0 @@
+-#!/bin/bash
+-# SPDX-License-Identifier: GPL-2.0
+-# Copyright (c) 2020 SUSE LLC.
+-
+-# 'make -C tools/testing/selftests/bpf install' will install to SCRIPT_DIR
+-SCRIPT_DIR=$(dirname $(realpath $0))
+-
+-# 'make -C tools/testing/selftests/bpf' will install to BPFTOOL_INSTALL_PATH
+-BPFTOOL_INSTALL_PATH="$SCRIPT_DIR"/tools/sbin
+-export PATH=$SCRIPT_DIR:$BPFTOOL_INSTALL_PATH:$PATH
+-python3 -m unittest -v test_bpftool.TestBpftool
 
- arch/loongarch/kernel/inst.c | 10 ++++++++--
- arch/loongarch/net/bpf_jit.c |  6 ++++++
- 2 files changed, 14 insertions(+), 2 deletions(-)
+---
+base-commit: 2294d0a45832f16cc20e9c1431165b4e0eb69bcb
+change-id: 20260211-bpftool_feature-64114bcc7740
 
-diff --git a/arch/loongarch/kernel/inst.c b/arch/loongarch/kernel/inst.c
-index bf037f0c6b26..7545ae3c796e 100644
---- a/arch/loongarch/kernel/inst.c
-+++ b/arch/loongarch/kernel/inst.c
-@@ -263,14 +263,20 @@ int larch_insn_text_copy(void *dst, void *src, size_t len)
- 		.dst = dst,
- 		.src = src,
- 		.len = len,
--		.cpu = smp_processor_id(),
-+		.cpu = raw_smp_processor_id(),
- 	};
- 
-+	/*
-+	 * Ensure copy.cpu won't be hot removed before stop_machine.  If
-+	 * it's removed nobody will really update the text.
-+	 */
-+	lockdep_assert_cpus_held();
-+
- 	start = round_down((size_t)dst, PAGE_SIZE);
- 	end   = round_up((size_t)dst + len, PAGE_SIZE);
- 
- 	set_memory_rw(start, (end - start) / PAGE_SIZE);
--	ret = stop_machine(text_copy_cb, &copy, cpu_online_mask);
-+	ret = stop_machine_cpuslocked(text_copy_cb, &copy, cpu_online_mask);
- 	set_memory_rox(start, (end - start) / PAGE_SIZE);
- 
- 	return ret;
-diff --git a/arch/loongarch/net/bpf_jit.c b/arch/loongarch/net/bpf_jit.c
-index 3bd89f55960d..e8e0ad34928c 100644
---- a/arch/loongarch/net/bpf_jit.c
-+++ b/arch/loongarch/net/bpf_jit.c
-@@ -1379,9 +1379,11 @@ void *bpf_arch_text_copy(void *dst, void *src, size_t len)
- {
- 	int ret;
- 
-+	cpus_read_lock();
- 	mutex_lock(&text_mutex);
- 	ret = larch_insn_text_copy(dst, src, len);
- 	mutex_unlock(&text_mutex);
-+	cpus_read_unlock();
- 
- 	return ret ? ERR_PTR(-EINVAL) : dst;
- }
-@@ -1429,10 +1431,12 @@ int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type old_t,
- 	if (ret)
- 		return ret;
- 
-+	cpus_read_lock();
- 	mutex_lock(&text_mutex);
- 	if (memcmp(ip, new_insns, LOONGARCH_LONG_JUMP_NBYTES))
- 		ret = larch_insn_text_copy(ip, new_insns, LOONGARCH_LONG_JUMP_NBYTES);
- 	mutex_unlock(&text_mutex);
-+	cpus_read_unlock();
- 
- 	return ret;
- }
-@@ -1450,10 +1454,12 @@ int bpf_arch_text_invalidate(void *dst, size_t len)
- 	for (i = 0; i < (len / sizeof(u32)); i++)
- 		inst[i] = INSN_BREAK;
- 
-+	cpus_read_lock();
- 	mutex_lock(&text_mutex);
- 	if (larch_insn_text_copy(dst, inst, len))
- 		ret = -EINVAL;
- 	mutex_unlock(&text_mutex);
-+	cpus_read_unlock();
- 
- 	kvfree(inst);
- 
+Best regards,
 -- 
-2.53.0
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
