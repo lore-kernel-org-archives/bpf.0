@@ -1,63 +1,63 @@
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E238F42A80
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 01:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A21F725B1CB
+	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 01:42:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772156309; cv=none; b=cQT0EGvqrWahW3sB29rLqa3i2bdJiywf0PjgkTynW0Rja7eTpShGLqu5ZCbw4iKj9f/WVHEGrTj055GLL8uDSMxfMx7K6ckSAZkr3h0aOeSjl9wa6deiBJqUigNXvUj9GJbiUk1ykN+US+mgjlbqRtx53zELuhyukLhEoZMmf4c=
+	t=1772156557; cv=none; b=K2miMnFJI79P8qwF54nCcVZbkIhTVIIql0yKd+pbHGS0YN2g+EdEECW9k3nbn4VC5fRKZlIrH0ergopVhvlv2HTDp+lyOHUJrf24x53MIfCUHKZIs/05J0kYeBNMvpeo8MdZ6AVW+t/C1ioeS7agL4NiljnNXioTipf35icKj/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772156309; c=relaxed/simple;
-	bh=ucJkiEjX+Usg9Z+h9MsrXwKKwEx/Gl8MkFzHKGvd51g=;
+	s=arc-20240116; t=1772156557; c=relaxed/simple;
+	bh=TLugaVXuQoNSQ+bsTdlCUDm9aJ2X/gYaR3lf3+AwiJ0=;
 	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=euUq8zGPM7T0sm4jZj4kE7cAeiRz78ch+ZFG/OYzOWCL56UP4mMIxLgTDGBkYuCgBZ8IT/hUZAq0+uVQbV+/ePF2Qegx2mK1RvEOoOm6JUm0U3Bgav1dW6GizBCFbxxn4PEx41v+0NAaHAtpjEmqgAum1eHbb/lXtcN7vsNTpJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=Wb3P0p6T; arc=none smtp.client-ip=209.85.222.169
+	 References:In-Reply-To; b=tN+g7bsz4WXd8Y2alRjNdarqnPaT0eeqR9OZLMwlAxPBUWU8c6nRip9ISa2WzT8n91qwLn+DpNDLEuJ72/6T5OCAN7n/qpILc4y6ydlApJBRxPC6jyfP1AqSlgHtcL4UdlKA4QcQEJ0smaljrCiOEyEhzdjYGU8OUnN3f0ycZRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=lAHAXW1F; arc=none smtp.client-ip=209.85.219.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="Wb3P0p6T"
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-8c710439535so90920385a.1
-        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 17:38:27 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="lAHAXW1F"
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-899a9f445cbso20441516d6.0
+        for <bpf@vger.kernel.org>; Thu, 26 Feb 2026 17:42:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772156307; x=1772761107; darn=vger.kernel.org;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772156554; x=1772761354; darn=vger.kernel.org;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oMY8Ubb9SS7Y3XHbQflKJFGU8HjKanmjaFhjCuSBTXs=;
-        b=Wb3P0p6T3pl7BkvZd8XFUdeaOtXX0AwHNyDrTUayapXlSUZwk+npMW/GHlp67+Fg/B
-         rGFa8yTUW2Yz3BtcZ3I6C6TAfQ5Dt8Iye5r7cLCTDB0UNFSrTQHuCKmD7l94JKImmgVT
-         xbMktcjBkoHi8OFZpl3VKfoKYQ9k+0uVSva3H9faCu32Mu5hgHvon9nmTy2/C6uwcDl8
-         Eqw35QBurveOKuj5/0yLXtSiZEDfko4QHjuEdfVnv96ftpWyOqV9w6oHlKUUh/mDVCaN
-         LKYqb5WkudxPLvLU68CQTxSTBgSLt7AFm50dSS0b8WJBTOXvhtIpore+F2XI2QaVVCz6
-         mMQw==
+        bh=6m/9z7kJLPFDqetRFZ4eeSgRtS3KpHzf3VgBKbnJ850=;
+        b=lAHAXW1FXB4iVIENY5pqmXziTK0Ck0xelq5ekwn4x7lY1hvuBnmxLmrXW3EaDtV6HZ
+         3cDznr5gtVHDjknpB+DdmtO975zqfVv0ZYrBhOctHS3lTW9/QWkr+Ek7hlyHO/76lmJk
+         3SCeHiZgbjHXDISH3f3e5CvmQccWmTkbNzhZkD6L9LPJcIy3tM0JIX4ixUKebDfWQZkk
+         tmPgSLkY92P65CH2VHrjNxyVXqQDeGGqnx49C0gEgwK3FBKaPFs/Tr75FWb04GLcvT6j
+         AbAj84lAO/xR5gbDNptRtDMXDd0la3GuYeNNoeXjXnTp9uz1Krb2Qwnj06VXH89+JLCm
+         nFCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772156307; x=1772761107;
+        d=1e100.net; s=20230601; t=1772156554; x=1772761354;
         h=in-reply-to:references:to:from:subject:cc:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=oMY8Ubb9SS7Y3XHbQflKJFGU8HjKanmjaFhjCuSBTXs=;
-        b=NeCjiUDaJQUdTYmgCDAGMKik1O+J16qk++xeeul2sa1EBI6lTlUs+iCilONm0N6KDk
-         ARkMVcfrk+CMzoSMzpYCIjZF7Dhs5OfMjs0g8bxd0D8buSgYgoKZP7ZF7l5fWw63EOf3
-         32J0XEb4/FjKHnDmhiL2Y+wjS5TgNwVE+KsM7PewbHD2R1ni2yjRx/0L5d77meV+we5t
-         JWc3ohOwJe5TbASq1wkqlyRRTQyG633JV7/Gg5MOXrIm+ZZpdW1VJojK0TkYFLJRH4kA
-         sYUrU64jU3oPWv5bPFrAh+DbUw0rKL0Eq3tAI4WlW/CzWw9uYtv3ZhO1IeQnXLyXtsDM
-         ZLBA==
-X-Forwarded-Encrypted: i=1; AJvYcCULc5iJCwZbK2e8hSnAn7jqEJK8K4qVOQbw5ta8lMO1qAJlz/u9lWrxOmffUrnhvTk/1fM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/Aij+F10fmZv0w09qj7+nIpbrt2sqeTmd1ju2RChk1YOUmX3T
-	waGBsA4xb93F+iAopbCrzl/gUCJWx8p4Z6+LHlXcmAcFKK4/PGkIO9VbSEL+3QnC4mM=
-X-Gm-Gg: ATEYQzx9z+ENuHttiCbQyeRPsPvB5Qsm07AfbJ1ljtu0+no4z9sm3ZRpL+4sA0j1cwW
-	IgQOq8tZAVE7gdGoswn9xnhWigKl1L45CtBUo45cLdqD/hKKQQr6JR2gPI4WlOFAVyLUGguYeic
-	Awsd4JT3WyGqzuhDkzl0TJReCeij3yRITbgqy4YKY1GPiyhQljGuMVOG+iyIEOtgoYZdGZE/1nh
-	B6VTZuZhHc9Wm9N2MQ1DPfO+4Yw810EnM8MlvMCrVqxNrTRVtZX28LcFzjBc0X6H1dUOAzRnIyM
-	IL1hKWeQjHSp2dn/Kjo0h+jXUgOHBr635txLd/A/bwDZjcQepg4NiJr4Ny4HvntOSG2TTTDV/CU
-	MZmqy4RTlv3neYbQX4Juf9nrNCZZKxxv62h/USx3pO0hzm+J4BhA4rE3UpbJ5Qu4V+7MHf/4kG2
-	8LzbIDv+VofqCA6PxQS+KagyA=
-X-Received: by 2002:a05:620a:1aa9:b0:8c6:e224:d55b with SMTP id af79cd13be357-8cbc8f15d06mr129282685a.41.1772156306572;
-        Thu, 26 Feb 2026 17:38:26 -0800 (PST)
+        bh=6m/9z7kJLPFDqetRFZ4eeSgRtS3KpHzf3VgBKbnJ850=;
+        b=ehKe1ckFH5nAdCXKgT4fPPXQfbxgfClZ2xSNuKL9w+iOixhHjOaRhS8G1jHqCT/QRn
+         SKXnPP5GN+foeU89XuZMFLFQjrX75CaTzxfbJ4tkFb4zwgps2TCTm7tmY2N1hXxuNl4B
+         Qll+sxLJA5YnxgN12ee6e3PZDtMDWP4f8c0qTmhJPnQ2cHPz4zX12Df0tW/vOqAQNqir
+         SFspzr3BfbrP+vu7INRG0L5GSdhBVJLvQKH1h5Gs/xQNI24tdvzBrpGhfuih/WYAEdac
+         J4viQrRl6m8WnaNeKvfCpYCajY9aJSW8yuV9fWXW/LdIc+yDhKijBaOIaZqHi7/+ujg1
+         xt+g==
+X-Forwarded-Encrypted: i=1; AJvYcCWIm4e9WgEB6LQ/8w2n7liBM7O99RT4V4I15dTtjrcN/HAIMxxWEvpZp36R8rwIHWhbBhk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6XR8KMSnDKtnc2iDPY16l8k18S2oIhstTBQUN3Z3shz0Eluym
+	XmWIx++mBtqJa/xdo6mGlZMCJTD2qsCTJ9mfvjYlEKNckCkK8RhkTT3bAdLZl5nqYoo=
+X-Gm-Gg: ATEYQzz2tQWBudtjoFV6Xe+vfEo1knsa8+L9UtWel0iV1xPmie79CjQRs4lQxJTpmN5
+	Fmlym7996QZqTY0kk2a0s4+kasE4XnuxoZWGJKr1JtAY0pcmzylTXXI6VsXDzEBPL6Qv0qSTcqc
+	vriSZKZMPBDNHSIxtwA6fft+yL3LZQSo4J6Kr0J3H+nhSkv2jDhT9RdvsqoPakJ8wkUUB4QZPrU
+	lqvAyvEh+SOcRDAc/erze8n/PocynUQKhxWFSXt4RaBmTPrVFwj6r/zHBp5WaQjCvNZX0W9gOaZ
+	l/Fy1wcXjyYwo6bjikyxzGGSewkW3fYky7j0TCZzkL1kOGHOnFOdwlsmXlBDsu2WYMxF8D5zs45
+	n5dq6SY2Q8lEUdGYN7ybtuby6mDIgRHITws8voEOQe+ggtLAS1FCnxL1De2FgnCrrexxmqlxVET
+	BS8NmDuqBJB7euVFpAS7n5OgE=
+X-Received: by 2002:a05:6214:4117:b0:899:af01:c2f7 with SMTP id 6a1803df08f44-899d1de4313mr19576376d6.9.1772156554558;
+        Thu, 26 Feb 2026 17:42:34 -0800 (PST)
 Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cbbf6f6950sm357914385a.27.2026.02.26.17.38.25
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8cbbf6fb519sm345530685a.29.2026.02.26.17.42.33
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Feb 2026 17:38:26 -0800 (PST)
+        Thu, 26 Feb 2026 17:42:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,86 +66,126 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Thu, 26 Feb 2026 20:38:24 -0500
-Message-Id: <DGPCZB864GLP.2WMKZWOWZOH2K@etsalapatis.com>
-Cc: "Tejun Heo" <tj@kernel.org>, "Dan Schatzberg" <dschatzberg@meta.com>,
- "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
+Date: Thu, 26 Feb 2026 20:42:33 -0500
+Message-Id: <DGPD2HI0C4S2.KBIKCYURS7P@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Andrii Nakryiko"
  <andrii@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Martin
  KaFai Lau" <martin.lau@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
  <kkd@meta.com>, <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next v1 1/2] bpf: Relax fixed offset check for
- PTR_TO_CTX
+Subject: Re: [PATCH bpf-next v1 2/2] selftests/bpf: Add tests for ctx fixed
+ offset support
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
 To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bpf@vger.kernel.org>
 X-Mailer: aerc 0.20.1
 References: <20260227005725.1247305-1-memxor@gmail.com>
- <20260227005725.1247305-2-memxor@gmail.com>
-In-Reply-To: <20260227005725.1247305-2-memxor@gmail.com>
+ <20260227005725.1247305-3-memxor@gmail.com>
+In-Reply-To: <20260227005725.1247305-3-memxor@gmail.com>
 
 On Thu Feb 26, 2026 at 7:57 PM EST, Kumar Kartikeya Dwivedi wrote:
-> The limitation on fixed offsets stems from the fact that certain program
-> types rewrite the accesses to the context structure and translate them
-> to accesses to the real underlying type. Technically, in the past, we
-> could have stashed the register offset in insn_aux and made rewrites
-> work, but we've never needed it in the past since the offset for such
-> context structures easily fit in the s16 signed instruction offset.
+> Add tests to ensure PTR_TO_CTX supports fixed offsets for program types
+> that don't rewrite accesses to it. Ensure that variable offsets and
+> negative offsets are still rejected. An extra test also checks writing
+> into ctx with modified offset for syscall progs. Other program types do
+> not support writes (notably, writable tracepoints offer a pointer for a
+> writable buffer through ctx, but don't allow writing to the ctx itself).
 >
-> Regardless, the consequence is that for program types where the program
-> type's verifier ops doesn't supply a convert_ctx_access callback, we
-> unnecessarily reject accesses with a modified ctx pointer (i.e., one
-> whose offset has been shifted) in check_ptr_off_reg. Make an exception
-> for such program types (like syscall, tracepoint, raw_tp, etc.).
+> Before the fix made in the previous commit, these tests do not succeed,
+> except the ones testing for failures regardless of the change.
 >
-> Pass in fixed_off_ok as true to __check_ptr_off_reg for such cases, and
-> accumulate the register offset into insn->off passed to check_ctx_access.
-> In particular, the accumulation is critical since we need to correctly
-> track the max_ctx_offset which is used for bounds checking the buffer
-> for syscall programs at runtime.
->
-> Reported-by: Tejun Heo <tj@kernel.org>
-> Reported-by: Dan Schatzberg <dschatzberg@meta.com>
 > Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 > ---
 
 Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
->  kernel/bpf/verifier.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
+>  .../selftests/bpf/progs/verifier_ctx.c        | 76 +++++++++++++++++++
+>  1 file changed, 76 insertions(+)
 >
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 1153a828ce8d..63872b981dcb 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -7722,6 +7722,11 @@ static int check_mem_access(struct bpf_verifier_en=
-v *env, int insn_idx, u32 regn
->  		if (!err && value_regno >=3D 0 && (t =3D=3D BPF_READ || rdonly_mem))
->  			mark_reg_unknown(env, regs, value_regno);
->  	} else if (reg->type =3D=3D PTR_TO_CTX) {
-> +		/*
-> +		 * Program types that don't rewrite ctx accesses can safely
-> +		 * dereference ctx pointers with fixed offsets.
-> +		 */
-> +		bool fixed_off_ok =3D !env->ops->convert_ctx_access;
->  		struct bpf_retval_range range;
->  		struct bpf_insn_access_aux info =3D {
->  			.reg_type =3D SCALAR_VALUE,
-> @@ -7735,10 +7740,16 @@ static int check_mem_access(struct bpf_verifier_e=
-nv *env, int insn_idx, u32 regn
->  			return -EACCES;
->  		}
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_ctx.c b/tools/tes=
+ting/selftests/bpf/progs/verifier_ctx.c
+> index 5ebf7d9bcc55..371780290c0d 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_ctx.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_ctx.c
+> @@ -292,4 +292,80 @@ padding_access("cgroup/post_bind4", bpf_sock, dst_po=
+rt, 2);
+>  __failure __msg("invalid bpf_context access")
+>  padding_access("sk_reuseport", sk_reuseport_md, hash, 4);
 > =20
-> -		err =3D check_ptr_off_reg(env, reg, regno);
-> +		err =3D __check_ptr_off_reg(env, reg, regno, fixed_off_ok);
->  		if (err < 0)
->  			return err;
-> =20
-> +		/*
-> +		 * Fold the register's constant offset into the insn offset so
-> +		 * that is_valid_access() sees the true effective offset.
-> +		 */
-> +		if (fixed_off_ok)
-> +			off +=3D reg->var_off.value;
->  		err =3D check_ctx_access(env, insn_idx, off, size, t, &info);
->  		if (err)
->  			verbose_linfo(env, insn_idx, "; ");
+> +SEC("syscall")
+> +__description("syscall: write to ctx with fixed offset")
+> +__success
+> +__naked void syscall_ctx_fixed_off_write(void)
+> +{
+> +	asm volatile ("					\
+> +	r0 =3D 0;						\
+> +	*(u32*)(r1 + 0) =3D r0;				\
+> +	r1 +=3D 4;					\
+> +	*(u32*)(r1 + 0) =3D r0;				\
+> +	exit;						\
+> +"	::: __clobber_all);
+> +}
+> +
+> +/*
+> + * Test that program types without convert_ctx_access can dereference
+> + * their ctx pointer after adding a fixed offset. Variable and negative
+> + * offsets should still be rejected.
+> + */
+> +#define no_rewrite_ctx_access(type, name, off, ld_op)			\
+> +	SEC(type)							\
+> +	__description(type ": read ctx at fixed offset")		\
+> +	__success							\
+> +	__naked void no_rewrite_##name##_fixed(void)			\
+> +	{								\
+> +		asm volatile ("						\
+> +		r1 +=3D %[__off];						\
+> +		r0 =3D *(" #ld_op " *)(r1 + 0);				\
+> +		r0 =3D 0;							\
+> +		exit;"							\
+> +		:							\
+> +		: __imm_const(__off, off)				\
+> +		: __clobber_all);					\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject variable offset ctx access")	\
+> +	__failure __msg("variable ctx access var_off=3D")			\
+> +	__naked void no_rewrite_##name##_var(void)			\
+> +	{								\
+> +		asm volatile ("						\
+> +		r6 =3D r1;						\
+> +		call %[bpf_get_prandom_u32];				\
+> +		r1 =3D r6;						\
+> +		r0 &=3D 4;						\
+> +		r1 +=3D r0;						\
+> +		r0 =3D *(" #ld_op " *)(r1 + 0);				\
+> +		r0 =3D 0;							\
+> +		exit;"							\
+> +		:							\
+> +		: __imm(bpf_get_prandom_u32)				\
+> +		: __clobber_all);					\
+> +	}								\
+> +	SEC(type)							\
+> +	__description(type ": reject negative offset ctx access")	\
+> +	__failure __msg("negative offset ctx ptr")			\
+> +	__naked void no_rewrite_##name##_neg(void)			\
+> +	{								\
+> +		asm volatile ("						\
+> +		r1 +=3D %[__neg_off];					\
+> +		r0 =3D *(" #ld_op " *)(r1 + 0);				\
+> +		r0 =3D 0;							\
+> +		exit;"							\
+> +		:							\
+> +		: __imm_const(__neg_off, -(off))			\
+> +		: __clobber_all);					\
+> +	}
+> +
+> +no_rewrite_ctx_access("syscall", syscall, 4, u32);
+> +no_rewrite_ctx_access("kprobe", kprobe, 8, u64);
+> +no_rewrite_ctx_access("tracepoint", tp, 8, u64);
+> +no_rewrite_ctx_access("raw_tp", raw_tp, 8, u64);
+> +no_rewrite_ctx_access("raw_tracepoint.w", raw_tp_w, 8, u64);
+> +no_rewrite_ctx_access("fentry/bpf_modify_return_test", fentry, 8, u64);
+> +no_rewrite_ctx_access("cgroup/dev", cgroup_dev, 4, u32);
+> +no_rewrite_ctx_access("netfilter", netfilter, offsetof(struct bpf_nf_ctx=
+, skb), u64);
+> +
+>  char _license[] SEC("license") =3D "GPL";
 
