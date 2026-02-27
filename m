@@ -1,108 +1,99 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f178.google.com (mail-dy1-f178.google.com [74.125.82.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13D827472
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 16:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD56D3469F8
+	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 16:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772210340; cv=none; b=bzp68e/0UbCdyryGwi6zdf+nIqcCIztC6HZl90z9xXOW+fqqQiBdtlbMuEJQzVzBzI6ZnC5671iW8p9pTSWv5y1VUz/a4+3O2YtrEdwLESq8Z1qH9I2U21UZcgkgtsWYjdIeXmcmOX5ishkOXlAGPYijdK+Gnp6IGaRMSUjzxhQ=
+	t=1772210448; cv=none; b=n+SRgdr5R1FibzboLpS+S8vVNa6cH+XnqjhPIUsiy0ICVm5oS3s6K/Hm1J5e7kv+VJLn+oC4qFR4+8QZdJGPjJ2i02Jm8ConsZKVhNeMPUbSbatM7NgomPYd9gbBpaWzAptvRYWUyoOSOGt2pxitbr4FGh9GyNBZ5L+nInOM4uY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772210340; c=relaxed/simple;
-	bh=8LI0IHWaLRjB8r9+a9Ui59W+8wlvcSSs+xwYYse+CrU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=V0eu/4e+8lKrcszW/3JIlCFrLM2zeCthl+++NV6MQNk1sg+bA/Y9LP+xhmMJIog2YKS4G9SwKrGimgz1GPDjn6h1Uk0iqVLsLQXSLQ3ukYPC+llW6gc729lJrmIipyZIKpcOG1EjqqA8zM2nKz9nwKHfq+q20R+32J7xYGuNolg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kk8Xf2rX; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772210448; c=relaxed/simple;
+	bh=4Mty48+/NMm2pM1VrZeYRZPJ4CzqBPTwcCf92RhsF/M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b3+vg+ioQTiHX3oe+YgTYRMR+Ws2Wev6kGEyuXxeKjt0KTFSlacjGiatgjp2pqq9fch9A3Bp7PZsBAcYsmRV0pSEYPpx9YcKDKJ7CDFD7Z/nU/9o3ZFPvQIh1ndDsTRqlW5zAvu88bfKIt1e3nkrCGmmLJol3pvTd43TCtjoPIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y8N4LdfE; arc=none smtp.client-ip=74.125.82.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kk8Xf2rX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AFC8C116C6
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 16:39:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772210340;
-	bh=8LI0IHWaLRjB8r9+a9Ui59W+8wlvcSSs+xwYYse+CrU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kk8Xf2rXlgtDFPWh7Pu08N+o5ooDHD1DRsTbyTnBozhflNcUJTpjltYXYFzOHbQ32
-	 mW1uNuerniEputNLokVShP9qXF2SGiXDvMoixeUzBDmVvy+kSQgDZOTaKvOUAIucFB
-	 KfixiYZSucAmCkrziwNu24WEs0waGb8RvD8j8bdjnntMMnw88Sua5efxHb+Fl+ZSY7
-	 pDXZkmEX3UP9+DqPaWwr+kRyKQVIH6luxB3HuWQT/W0zWVAupgPeqExTXZZkcKO7hm
-	 gAy0BtVFD07/6C8sIisWT+vcoxvy+eSAOiGZ8M9S8rt6d9Jvvty9x3XvXgrcvDuY2O
-	 E3I0DEZROz34Q==
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-8c6f21c2d81so219356485a.2
-        for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 08:39:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW55aB0fwDni2AQ7LC0FuFWvH65velq+qEd595JiqBukKyQIVvpa6T+SRHSFstI4uV+Gf0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3QctV07bR8X8e/im4PUuIDVuhqSvyB30Gmb9PLa1VYxm5jhzs
-	JVjfowKDMfVfjkih956w9NKZvFFyM3SrTACCkLJBFzH7y8+lfMQCNsrWhY7iklc72bKbzQH6ls7
-	zygGbWuRRQVuONC4gagUqKZzQ5zOQnEY=
-X-Received: by 2002:a05:620a:7087:b0:8c6:d343:79a4 with SMTP id
- af79cd13be357-8cbc8ef670amr394649685a.40.1772210339338; Fri, 27 Feb 2026
- 08:38:59 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y8N4LdfE"
+Received: by mail-dy1-f178.google.com with SMTP id 5a478bee46e88-2bdcf5970cdso1372978eec.0
+        for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 08:40:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772210447; x=1772815247; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zOxw5RpgBFDN5Zq6jjIzB5x8gvJLjX55MjawpG9JNE8=;
+        b=Y8N4LdfExCXopfzSa3LihtwCuxv6N585sQkD2oYLryOJTz+Lncw7Ot4eJdbzfmew+I
+         SlX7VP+6B7V0jJfrRNdE+UOrsB4stsUytdI9PaDb/Z/MeqtlKgdcjkgDLa7glyH5s+/5
+         JgYVBslKzTehJ3OAr4Dkvw8UJb9pKXmZmRdgcs7fK5veWRJhzK+A/pGLyPLswh9DzEWK
+         Q1L+yMdSDj1yvSqnAexHgEdjxnPLZwMs6XZ2wL2gUo2vfXd5zuxItr+KFvraoqZbgaGq
+         p1h+QYnoJeH15q/br1IiRKaIQ2s0SvMksbBG2pg0HTck13qa969vIwlFZpH0m2PYtFHS
+         RuDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772210447; x=1772815247;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zOxw5RpgBFDN5Zq6jjIzB5x8gvJLjX55MjawpG9JNE8=;
+        b=BylzYVtx8N3eWDAF81z7Vx+gqaaN4km1ZAPBkEfzxpnZeAn+JTu+YlPaMomhvrWkLD
+         Lb92j7Vh8BJlOThF4R39kqEXjc6V2o57sx3kIWpshs9TA+Q6Ky7qGuUpFQMHQaVlK+xO
+         ZTP5++zgLKQVcwffjoBmx70SVp51iN5yZlNWcdUoSmDg8SLiXCGaQCbSric+tW+ry4YU
+         A3h18I5wWUjTu+dS9zcXyXxWrQtCwEf07nGISlfF2WTxW7o9MBxzDhtfam5Nqwl+iTPd
+         vV/ttmzTUS0L2VmzGHWEDPkkzt54fQMYoSG8LEkwfCi6RG96T9m14dgqb6yHahf2B/jF
+         iDbg==
+X-Forwarded-Encrypted: i=1; AJvYcCW/4ofLItO13jkYKbobns1OhzQN1wyH2hJNYKUrIrmhZFfFDEnhk9OFtHrJQAsZAY4q65k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyN/mg/GMKuZWweKCwl9umCafffXdEQYNtypk6EaXsTfIkH3qVJ
+	IzHgKEHQTONqr79GzhN0tTPqO3QcZRIXM3LJFk7YRJMR7ICqBYNU+llb
+X-Gm-Gg: ATEYQzx5crSR4N21D7j7bmnwLW+e19Xx6Bx52mlXzNyyGRYMGlWAbdjMYr1q1IAhVp1
+	ho8Sn98g65fr2eb1PRHcg1VOsKYpvatHDavvJ16sKqTP1Mklzb9rhWPcDJl9+V8DChpgCLyXTA2
+	HpdXQ9ZQxjqC0Qjm6qMN2/GRPEW5DuInah9UC98WK3Lj1+ijtR55MNR/dDpHmgDuhy31Z1t1HJZ
+	iACdCmtGU7lThTH4fWscXTIbtmzp3OHt01xXN5INRIU7lQz7I8A3cozQaa9PToe5g+OqsL/VU8B
+	UbV8akjk/jrFV5qI1pVUPz3pMQj/gL2aE60D2Pb50h59s8p0sQIryj2VdVrCwfnr41uM8kytnj4
+	IwhkZJ521uCnFbjB9ta5HRqxjDS4IztTEMmmputu36r8BLRgFsgeeUjQ4QPVdbcBm74+CLyyttd
+	KdA9P4Y3Ohdf3+Pd3GGIw+GSNQA4PK7wuLGvv+Irjuo6gpWzM7ElcPuhZ9jkihrCGcWDM5hGLV5
+	VFUYWjXDqHvy4DDkmd95pc7gik=
+X-Received: by 2002:a05:7300:a284:b0:2ba:a387:92f6 with SMTP id 5a478bee46e88-2bdd0fc8189mr2558964eec.13.1772210446551;
+        Fri, 27 Feb 2026 08:40:46 -0800 (PST)
+Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdef9700ffsm220707eec.28.2026.02.27.08.40.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Feb 2026 08:40:46 -0800 (PST)
+From: Sun Jian <sun.jian.kdev@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sun Jian <sun.jian.kdev@gmail.com>
+Subject: [PATCH 0/2] selftests/bpf: fix bpf_cookie failures
+Date: Sat, 28 Feb 2026 00:40:35 +0800
+Message-ID: <20260227164037.84110-1-sun.jian.kdev@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
- <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
- <CAPhsuW63sEvK50ELaxo4LxjCS-2RdfxDzuMYhW59PDUHfF0-iQ@mail.gmail.com> <20260227-nullnummer-eisdiele-08db4c8fe99e@brauner>
-In-Reply-To: <20260227-nullnummer-eisdiele-08db4c8fe99e@brauner>
-From: Song Liu <song@kernel.org>
-Date: Fri, 27 Feb 2026 08:38:48 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5GCK02OXvFeNQVW-QoX9eJ7CyiT=oEDsCYyht-Hve3sQ@mail.gmail.com>
-X-Gm-Features: AaiRm53vvomrYN97zb9oJr-YpBvWojGs_OXdsLpf7lORcARGDVNdLKSnamBhnGI
-Message-ID: <CAPhsuW5GCK02OXvFeNQVW-QoX9eJ7CyiT=oEDsCYyht-Hve3sQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] ns: add bpf hooks
-To: Christian Brauner <brauner@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, Lennart Poettering <lennart@poettering.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 27, 2026 at 2:28=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
-[...]
-> >
-> > If we change the hook as
-> >
-> >    bpf_lsm_namespace_alloc(ns, inum);
-> >
-> > We can move it to the beginning of __ns_common_init().
-> > This change allows blocking __ns_common_init() before
-> > it makes any changes to the ns. Is this a better approach?
->
-> I don't think it matters tbh. We have no control when exactly
-> __ns_common_init() is called. That's up to the containing namespace. We
-> can't rely on the namespace to have been correctly set up at this time.
-> My main goal was to have struct ns_common to be fully initialized
-> already so that direct access to it's field already makes sense.
+Patch 1/2 skips kprobe_multi subtests when bpf_testmod isn't available.
+Patch 2 makes perf_event triggering reliable on slower systems.
 
-Good point on having ns_common initialized. Besides inum, we
-should also pass ns_type and ops into the hook.
+Tested:
+  ./test_progs -t bpf_cookie/perf_event -vv (30 runs): 0 failures
 
-OTOH, shall we have the hook before proc_alloc_inum()? With
-this change, the hook can block the operation before it causes
-any contention on proc_inum_ida. IOW, how about we have:
+Sun Jian (2):
+  selftests/bpf: bpf_cookie: skip kprobe_multi tests without bpf_testmod
+  selftests/bpf: bpf_cookie: make perf_event subtest trigger reliably
 
-@@ -71,6 +71,10 @@ int __ns_common_init(struct ns_common *ns, u32
-ns_type, const struct proc_ns_ope
-        ns_debug(ns, ops);
- #endif
+ .../selftests/bpf/prog_tests/bpf_cookie.c     | 29 ++++++++++++++-----
+ 1 file changed, 21 insertions(+), 8 deletions(-)
 
-+       ret =3D bpf_lsm_namespace_alloc(ns, inum);
-+       if (ret)
-+               return ret;
-+
-        if (inum)
-                ns->inum =3D inum;
-        else
 
-With this change, ns is already initialized, except the inum.
+base-commit: f4d0ec0aa20d49f09dc01d82894ce80d72de0560
+-- 
+2.43.0
 
-WDYT?
-
-Thanks,
-Song
-
-> The containing namespace my already have to rollback a bunch of stuff
-> anyway.
