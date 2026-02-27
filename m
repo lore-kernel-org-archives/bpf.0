@@ -1,166 +1,219 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7126236D4E2
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 20:52:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772225546; cv=pass; b=TJAHzkCItBfXrLOhfBqWhqhqGraC860b/uZOQnRSiZxYmBgAb63pLEpDRpj+Zw5R6wkYZgTNKc1AW9UoiCWNPscDu+4dDa52psoW5cWpvVe+tgZdJGVcihkU6RzpU6tMswfVerWxURinYxvmUNrYEMDStMXj+n5Yn/QagmAt62g=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772225546; c=relaxed/simple;
-	bh=tIygcM6cRtUQKnLeh3AfwHRi5W4L/45ygoA9+ANqpyI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jAJeHbSuILjQhViaezPIanOWZdYNu6/jSS7qLgia3sGurtko/k+KPXpHWxlvGPdhCfFUprinwFDSTiplXsn9zgnPCI942IUdDyg1ax46HKjB9Tfw/wfVONPb7d0eWb8COuI1vOnZZEJ/sq+dZepbZIXcnlR+RDwjiEEiO5Y/6ts=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=HWh7cEqY; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=QZPlrEsc; arc=pass smtp.client-ip=148.163.148.77
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 175603451CC
+	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 20:53:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772225626; cv=none; b=AAn77XLN7fwBfMdTPf3hNBq5BU3y96QbOz2T1ZuRVrgY3WClhcbp6AlPzs3SFYxMBvROJ+zcbuirtU9BN9zpiBlJX38hWnNzBdkZ0XtoxYJcf5VkwHNpmXOvSZ/UHbHrF59Qd8nSuQ1pskp6nJsimio56wX48PJGDG+f5emCX/I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772225626; c=relaxed/simple;
+	bh=sewsWOhrdv0VBl+lVc6DrKsUYvbvkjuiZxBSMLp9LXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=U4BQGomkSHkgrzI8/rYZKHCkNgMPQtd9zjP38xqXwDnXpEjA020uNlwGFVrijv5BoxGJTV5YyFXaMv5StoFWOOdAo8iLF9+ouWVW9aWHBGWCHweMhWoVMppp5MbHbdiFlb92kTBO8UX+VmW3Bbd3EqxYV0C9Tvf+iAu1ESaAbU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AP5adzFU; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="HWh7cEqY";
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="QZPlrEsc"
-Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 61RK4LmG4076739
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 20:52:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=default; bh=T/yQa6BgXqNpw2Qz7tBnZUnFLT
-	WmHSzLy5oxbr8AsWo=; b=HWh7cEqYISvKSNYBrbgXFm+rxnnQpX+T1rmHqlaylz
-	mnNw7s4fTDHgYabBtAuyBrZ6DnqbiuraDMyUf+kR9K00BPxX4PuEzbylVsG8mYmj
-	E2muFoFcvp0U9HAaqG2pQgp/vEgqbMKZ1SydzUfMjKbdV1XgqPpAk4Fqevsmvu9v
-	2r+YlUf/VLXq5BQ+W/LoM7aWGlj7xqelGhhS+B7ThNYW4PHkRtGr/N8oCFAQQJuH
-	zny9f44Ix3u2cEj8y9YIMUW8J/K+oZrjfoYcHRlttZhQyJ5dM+OYPuweoHndPq/k
-	JjdV76WsP1AhOGUvXxVTxhIVDL9q+LE3rKOQukL0dfIw==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4ck5gvavpf-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-	for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 20:52:24 +0000 (GMT)
-Received: from 04WPEXCH008.crowdstrike.sys (10.100.11.75) by
- 04WPEXCH009.crowdstrike.sys (10.100.11.79) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Fri, 27 Feb 2026 20:52:23 +0000
-Received: from mail-yx1-f72.google.com (10.100.11.78) by
- 04WPEXCH008.crowdstrike.sys (10.100.11.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35 via Frontend Transport; Fri, 27 Feb 2026 20:52:23 +0000
-Received: by mail-yx1-f72.google.com with SMTP id 956f58d0204a3-649deef077eso3620626d50.1
-        for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 12:52:23 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772225542; cv=none;
-        d=google.com; s=arc-20240605;
-        b=YYHtjqEA+s7WAP8bMPhhWT7JijWP3YqgN7wYzCSlHoTXl5epjT9ZtsKe95UkGJJ9/P
-         tJ00IDbRsonmuW3XHn6x+TjN8YCzdTzdH8m0c6h9HM4ezQq6GD8DbDThRu9LaJn1FFfL
-         i9y7bRQ5qY1pyAjZr6zag6H8Sq91rrE3TrtXkttW8hM4hOXVhrZnJ9Vfr5lmwQ3QGC9z
-         760TeoKyEHxsztBkxC6yV7K6BSXDrPj1ZIhWAnIPa9uIzbmqdmtYHsQygEADDTLYcFdZ
-         vo6p9ZQ73jz4XLhfU7EKkSrd/Ebsgv37ceM1b+vxKYL7mTZzparphG5m+W0+nA+wXwt2
-         wjOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=T/yQa6BgXqNpw2Qz7tBnZUnFLTWmHSzLy5oxbr8AsWo=;
-        fh=LQFqW2c0gJiNlNFNYvLqnOWK3YkpcNvAFF7ci552+/U=;
-        b=Ku91shfjmIAgORI3nJd4nW/N7v/AzSikbLMkYhzkSL2dVTVoonwT3pKmFG2IuisASM
-         BX4In9Xc6xquEIJ0goWyhgLGQrqoj02PIKyKZW9r/b6r2kvS+shKy6dFqhUxYqIODC4v
-         OsZIZUNNhd1gNhxiygIuAw/6jGyfWO/AUmnnbxu2aNBGZKKoNnsusUSvU6Y9CkQ7MtMZ
-         58A1vg/AaBk8mAGAfUSTx4eHaIVMcPhLI0TL3GUrkhiGxBCJhsYtckiDPbyq7qyMbRq1
-         +4BpD2eHaA441BmGuUP767oyvQHREnRjqVxutRw9hURs1OKDlLe/ke6DNitmTyYYoMCO
-         wSvA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=crowdstrike.com; s=google; t=1772225542; x=1772830342; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T/yQa6BgXqNpw2Qz7tBnZUnFLTWmHSzLy5oxbr8AsWo=;
-        b=QZPlrEscQw/cV+kwA0PFNIUe5rHgcGHbw1BRLGc2HY0n4luKgnjUMElS+q1dLRUmok
-         q5xLK93tr8tpSjrrDQaA4w3AyGZP7QospF5IBKusdvkQKj6qh8vyo2TPuXaz5KLbHefG
-         EbQbYfZvzdjMdmyQ6L8zwWmvzkSldTgGPdzULOVu/q0Q7DJKXY5ATxNNuN99XDlgHSeh
-         qPgLYrrrygAgTcjAxu0UD1E+ivHar/JQUlDWDrC7LKFN1i+p8habI/evNdljPdOfOeF+
-         qnsUXFsmTcYWfB2dI5gJT/ZVNwOSiAaOVsWT2g25yOuhhhgcFo/1YUiWmYcoLIBMhbML
-         k/Gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772225542; x=1772830342;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T/yQa6BgXqNpw2Qz7tBnZUnFLTWmHSzLy5oxbr8AsWo=;
-        b=HvhO4JvzBHYNQRHxkgPgh/hGULUQqit1AxYLxFy6tCjQgmmeMd23vlKCGClD1A3Fwr
-         faMa6yNj/Xc8xZU7ouOKIpEk7C+IGLqyj3U4E7gQN/CIlRIp6h/k0tz/s9CY+8CKM03R
-         ECyxl2z1i4I548ZgCcXHJ++KnLxPC+vf08YuR/QmdLdlbc0+5us7VfdUBRB/UgjZQFYw
-         GBG7KoSSBjS9OZ7UH97mRdzvfNa8gCtlv1tLDginApOTVG0qv4y322uqgq8QR6h4ZgIJ
-         NzuD3ph4C0beCEcP4Bxob9IS4JP2V4MsbwRL36xXjjp1miC4bbEp7s7+k1Ik3htHbKCw
-         E8DQ==
-X-Gm-Message-State: AOJu0Yy+KuiNRw6bMy5biP77tdZ2yrj2SJHeLA4RBTu9XyZHzFuczoaD
-	eejSLV2hYe2cJdDKbHrGT3NqZCIlW/wc3dyKr2Y3ng1RcirGPUG8rF213eVrQ0Q7HRyce3zhWI2
-	PyagzZkxsAdSBVvD+pA2apHac43j0G3JBFKgvhJyWGvUvS5nyQC5CDSDmDMVenPuF3EuywaKBmg
-	fBnVgtIzNa16zq5Lry9a3aUguEA4nSkQ4KlmrGCXIj7Xc=
-X-Gm-Gg: ATEYQzyLV0vlr9RUUmS6pOp2e+yZk2pSRTSO/R6AW2w6H2zKy4+GhjAWk8J2qB70qR4
-	2YIPILFZF2yk9PLi+AKNL9XOgWAxoehawN5TQ3W0ouQDY3y09gZ/t1SlmjrbB74UT38Wa8qKe8t
-	fwD3nb93Q69yqVFsqe2Ri9PU3La1gCUuNQcyxW8EW6Oe59F74ZQsKLi3u7m50qlvBnL2OK2Ldit
-	504
-X-Received: by 2002:a05:690e:687:b0:64a:d6fe:5e18 with SMTP id 956f58d0204a3-64cc22fd002mr2646350d50.64.1772225542638;
-        Fri, 27 Feb 2026 12:52:22 -0800 (PST)
-X-Received: by 2002:a05:690e:687:b0:64a:d6fe:5e18 with SMTP id
- 956f58d0204a3-64cc22fd002mr2646329d50.64.1772225542085; Fri, 27 Feb 2026
- 12:52:22 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AP5adzFU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772225625; x=1803761625;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=sewsWOhrdv0VBl+lVc6DrKsUYvbvkjuiZxBSMLp9LXY=;
+  b=AP5adzFU9qmvp8wixUuf6trHQMnrXto1uyp8oGS4bey6AXQ6O8G8XynD
+   zNLnhl9ZBpnmsjOLe/u1OXmPHJCrYcLmjNQWla2cSGC6qnn8EFanNkVPz
+   KabmP+HNSAzvM1eH1ajGgdLTHacEODzfpC6bpEoApp0zRImcgxeJIsduf
+   bZgyM9nV/P8QQPL6I0bUxDQb84pmy+MiafPtrwER8h6jWQ6rpKi9z6+mJ
+   HHPYuOqeHo+4yMG09vqpiugaiG8VC1iQDmDrv2uZYXwngyMcNfPbuzoum
+   Y6jvODjFOLT01Wy6oqNBj19mII1gVN4MTFlCmRfCztxNQf6ZHRvEmQm/F
+   w==;
+X-CSE-ConnectionGUID: zdEc8emuRB+g245M4EQlgw==
+X-CSE-MsgGUID: 35vG3BPKTGyFp3+Hoxq/4w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11714"; a="77157970"
+X-IronPort-AV: E=Sophos;i="6.21,314,1763452800"; 
+   d="scan'208";a="77157970"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2026 12:53:44 -0800
+X-CSE-ConnectionGUID: YzKUGKEeT6SAcReSVJo2Zg==
+X-CSE-MsgGUID: u7U/NNB9SJScgxP9k1zAuw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,314,1763452800"; 
+   d="scan'208";a="216136986"
+Received: from lkp-server02.sh.intel.com (HELO a3936d6a266d) ([10.239.97.151])
+  by orviesa006.jf.intel.com with ESMTP; 27 Feb 2026 12:53:41 -0800
+Received: from kbuild by a3936d6a266d with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vw4oX-00000000B3L-3jhb;
+	Fri, 27 Feb 2026 20:52:40 +0000
+Date: Sat, 28 Feb 2026 04:49:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev, andrii@kernel.org,
+	ast@kernel.org, daniel@iogearbox.net, eddyz87@gmail.com,
+	martin.lau@kernel.org, memxor@gmail.com, song@kernel.org,
+	yonghong.song@linux.dev, Emil Tsalapatis <emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v5 1/5] bpf: Factor out program return value
+ calculation
+Message-ID: <202602280401.OowzoAl1-lkp@intel.com>
+References: <20260227154616.6846-2-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260226173342.3565919-1-andrey.grodzovsky@crowdstrike.com>
- <20260226173342.3565919-2-andrey.grodzovsky@crowdstrike.com> <aaHPfR_cOwKIm-lU@krava>
-In-Reply-To: <aaHPfR_cOwKIm-lU@krava>
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Date: Fri, 27 Feb 2026 15:52:11 -0500
-X-Gm-Features: AaiRm514vjjY59GDxNTDSyOndmwoCXClwBag-rid5uBCNQXeVTsSFL_NC3gc46Q
-Message-ID: <CAOu3gNj0EWFqJ1wk5Mqowr=wxrgMg=0n-nsSSEzLwPX32SCJHA@mail.gmail.com>
-Subject: Re: [External] Re: [RFC PATCH bpf-next v2 1/3] libbpf: Optimize
- kprobe.session attachment for exact function names
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, linux-open-source@crowdstrike.com, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, rostedt@goodmis.org,
-        linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Disclaimer: USA
-X-Authority-Analysis: v=2.4 cv=Scz6t/Ru c=1 sm=1 tr=0 ts=69a20408 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=IkcTkHD0fZMA:10 a=HzLeVaNsDn8A:10 a=KZhmPCYDdY0A:10
- a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22
- a=5488X_8EJ3_aOaWkbUEA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: W2rfFFUzTFOAqKBi4xtl1ghy2mxYciay
-X-Proofpoint-ORIG-GUID: W2rfFFUzTFOAqKBi4xtl1ghy2mxYciay
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMjI3MDE4MyBTYWx0ZWRfX3LkUjrnlqV/n
- +czzpAmU7tB+ipCT8WTD8/b0EMmOmIQdYDAd8FLU+PvPpKnq5wZAxNhjhM/vZGWYWEX+rsPAcBm
- bbbYdTU7D4q8biFhpSpmlKTr8IZhFnsprSp6R2NyXQX9OhbVdlwNPqJeS79ZB3lIQ6d676lptK5
- aSqd2mx51NmXC0Ekiprz6eOMLLvKB+9g/62vPAHBZ+EFtn33CsZswqQAjdUd5Bhz9LgSDREzCHV
- XVSYcnWr8/fQV0Ogkbbo0rTuLu0fgYvQNMb2C4mfeNbUfjJ9gUl8Wb7vEqYf2FHnbNbN074Davt
- Ask8du/3GYWrUyabMspTXGE7EX1O2vn66umT8G5oXtUUc32U9ab66/VGViSJus1v2lMMqPCrEob
- vj1CtyoumhpDGDt0/9OG9m5T/aV1jCBFkzbNceyGIQ0xuGnVtm+NJPkZRlWw6qCXUBjFOQiBoRv
- NQ5ozFeG6Ir7ivtKa6Q==
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11714
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 priorityscore=1501 spamscore=0 phishscore=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 impostorscore=0 malwarescore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2602270183
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227154616.6846-2-emil@etsalapatis.com>
 
-> -       if (pattern) {
-> +       /*
-> +        * Exact function name (no wildcards): bypass kallsyms parsing
-> +        * and pass the symbol directly to the kernel via syms[] array.
-> +        * The kernel's ftrace_lookup_symbols() resolves it efficiently.
-> +        */
-> +       if (pattern && !strpbrk(pattern, "*?")) {
-> +               syms = &pattern;
-> +               cnt = 1;
-> +       } else if (pattern) {
->                 if (has_available_filter_functions_addrs())
->                         err = libbpf_available_kprobes_parse(&res);
->
->
-> wdyt?
+Hi Emil,
 
-Totally agree, updated in V3.
+kernel test robot noticed the following build warnings:
 
-Thanks,
-Andrey
+[auto build test WARNING on bpf-next/master]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Emil-Tsalapatis/bpf-Factor-out-program-return-value-calculation/20260227-235723
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20260227154616.6846-2-emil%40etsalapatis.com
+patch subject: [PATCH bpf-next v5 1/5] bpf: Factor out program return value calculation
+config: riscv-defconfig (https://download.01.org/0day-ci/archive/20260228/202602280401.OowzoAl1-lkp@intel.com/config)
+compiler: clang version 23.0.0git (https://github.com/llvm/llvm-project 9a109fbb6e184ec9bcce10615949f598f4c974a9)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260228/202602280401.OowzoAl1-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202602280401.OowzoAl1-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/bpf/verifier.c:17864:3: warning: label at end of compound statement is a C23 extension [-Wc23-extensions]
+    17864 |                 }
+          |                 ^
+   kernel/bpf/verifier.c:17923:6: warning: unused variable 'ret' [-Wunused-variable]
+    17923 |         int ret, err;
+          |             ^~~
+   kernel/bpf/verifier.c:17926:7: warning: unused variable 'return_32bit' [-Wunused-variable]
+    17926 |         bool return_32bit = false;
+          |              ^~~~~~~~~~~~
+   3 warnings generated.
+
+
+vim +17864 kernel/bpf/verifier.c
+
+ 17805	
+ 17806	
+ 17807	static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
+ 17808	{
+ 17809		enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+ 17810	
+ 17811		/* Default return value range. */
+ 17812		*range = retval_range(0, 1);
+ 17813	
+ 17814		switch (prog_type) {
+ 17815		case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+ 17816			switch (env->prog->expected_attach_type) {
+ 17817			case BPF_CGROUP_UDP4_RECVMSG:
+ 17818			case BPF_CGROUP_UDP6_RECVMSG:
+ 17819			case BPF_CGROUP_UNIX_RECVMSG:
+ 17820			case BPF_CGROUP_INET4_GETPEERNAME:
+ 17821			case BPF_CGROUP_INET6_GETPEERNAME:
+ 17822			case BPF_CGROUP_UNIX_GETPEERNAME:
+ 17823			case BPF_CGROUP_INET4_GETSOCKNAME:
+ 17824			case BPF_CGROUP_INET6_GETSOCKNAME:
+ 17825			case BPF_CGROUP_UNIX_GETSOCKNAME:
+ 17826				*range = retval_range(1, 1);
+ 17827				break;
+ 17828			case BPF_CGROUP_INET4_BIND:
+ 17829			case BPF_CGROUP_INET6_BIND:
+ 17830				*range = retval_range(0, 3);
+ 17831				break;
+ 17832			default:
+ 17833				break;
+ 17834			}
+ 17835			break;
+ 17836		case BPF_PROG_TYPE_CGROUP_SKB:
+ 17837			if (env->prog->expected_attach_type == BPF_CGROUP_INET_EGRESS)
+ 17838				*range = retval_range(0, 3);
+ 17839			break;
+ 17840		case BPF_PROG_TYPE_CGROUP_SOCK:
+ 17841		case BPF_PROG_TYPE_SOCK_OPS:
+ 17842		case BPF_PROG_TYPE_CGROUP_DEVICE:
+ 17843		case BPF_PROG_TYPE_CGROUP_SYSCTL:
+ 17844		case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+ 17845			break;
+ 17846		case BPF_PROG_TYPE_RAW_TRACEPOINT:
+ 17847			if (!env->prog->aux->attach_btf_id)
+ 17848				return false;
+ 17849			*range = retval_range(0, 0);
+ 17850			break;
+ 17851		case BPF_PROG_TYPE_TRACING:
+ 17852			switch (env->prog->expected_attach_type) {
+ 17853			case BPF_TRACE_FENTRY:
+ 17854			case BPF_TRACE_FEXIT:
+ 17855			case BPF_TRACE_FSESSION:
+ 17856				*range = retval_range(0, 0);
+ 17857				break;
+ 17858			case BPF_TRACE_RAW_TP:
+ 17859			case BPF_MODIFY_RETURN:
+ 17860				return false;
+ 17861			case BPF_TRACE_ITER:
+ 17862				break;
+ 17863			default:
+ 17864			}
+ 17865			break;
+ 17866		case BPF_PROG_TYPE_KPROBE:
+ 17867			switch (env->prog->expected_attach_type) {
+ 17868			case BPF_TRACE_KPROBE_SESSION:
+ 17869			case BPF_TRACE_UPROBE_SESSION:
+ 17870				break;
+ 17871			default:
+ 17872				return false;
+ 17873			}
+ 17874			break;
+ 17875		case BPF_PROG_TYPE_SK_LOOKUP:
+ 17876			*range = retval_range(SK_DROP, SK_PASS);
+ 17877			break;
+ 17878	
+ 17879		case BPF_PROG_TYPE_LSM:
+ 17880			if (env->prog->expected_attach_type != BPF_LSM_CGROUP) {
+ 17881				/* no range found, any return value is allowed */
+ 17882				if (!get_func_retval_range(env->prog, range))
+ 17883					return false;
+ 17884				/* no restricted range, any return value is allowed */
+ 17885				if (range->minval == S32_MIN && range->maxval == S32_MAX)
+ 17886					return false;
+ 17887				range->return_32bit = true;
+ 17888			} else if (!env->prog->aux->attach_func_proto->type) {
+ 17889				/* Make sure programs that attach to void
+ 17890				 * hooks don't try to modify return value.
+ 17891				 */
+ 17892				*range = retval_range(1, 1);
+ 17893			}
+ 17894			break;
+ 17895	
+ 17896		case BPF_PROG_TYPE_NETFILTER:
+ 17897			*range = retval_range(NF_DROP, NF_ACCEPT);
+ 17898			break;
+ 17899		case BPF_PROG_TYPE_STRUCT_OPS:
+ 17900			*range = retval_range(0, 0);
+ 17901			break;
+ 17902		case BPF_PROG_TYPE_EXT:
+ 17903			/* freplace program can return anything as its return value
+ 17904			 * depends on the to-be-replaced kernel func or bpf program.
+ 17905			 */
+ 17906		default:
+ 17907			return false;
+ 17908		}
+ 17909	
+ 17910		/* Continue calculating. */
+ 17911	
+ 17912		return true;
+ 17913	}
+ 17914	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
