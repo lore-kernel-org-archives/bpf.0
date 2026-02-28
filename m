@@ -1,64 +1,64 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9C942847C
-	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 12:38:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BD341C2E6
+	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 12:44:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772282333; cv=none; b=euViuSRvnkaG6Ev8whqwRD9WLlZfgQ0V2q2hucnx0t6utTa7GuqLr7FGTYBWNW/zdhNehi/2esD2QoFaH/h2Oge6xB57vKyvv62J2qFsEiJ9ukpkMNRS6HgGOPhJEs+Ae1Per33wkP/sbzjFLtlrZ+DLm0fvaaUJOOTM9UginXI=
+	t=1772282672; cv=none; b=RrsfxEj2K30ILsM6ckmX2VnO9viVg1o1ie0CZBkuE5xBB9D+opiPJ0ssaFiRjfyNdJfJ1V+5eVSnPIgEYyyzeVLloyCQkB+ucQutq387xrNOwGsa431J7iZAho+8hIdcf+ap4OUDfJlrtGRAJ8io7CqmxJME9e8/f2jxqSPP48E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772282333; c=relaxed/simple;
-	bh=PEA8vWjT5ovfF14s1Tw4RTm8694oQcfI75jIBt+A4lE=;
+	s=arc-20240116; t=1772282672; c=relaxed/simple;
+	bh=tFmr9Byzvb8HJGLej5py8cdOGPaTsp9oa5qHurqtjoY=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uUFAQrMbznzquWfBXmUV4QaTCInnF2qcv0nJ6dnk11jYGFx7astD1BBJczG3kj8y43rK73NS0GwNSn1550Bk0gb/wWD8WPaTHqF2ApI9+KM2Tb5vbDIjC4RMK8pSd8673aUemne1x29g03zOvfcG37lECCWb19JxeVVjSIqcR/A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mx+suYO4; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=tt4dDRRY0xH0K+EGTeK29bj/yVtZLz/MCUaJEU5LkPr0L0Tt2xq/gOWyhkwkB6Tv4SpaXY2kuUDeT7F63mHkB9JR76OUtiqn5mYtd9z8eED9Nt5jPhMuC32jlk8M/izTSZjsE7n+MUiIXSw3JDKDpGjg1C6B+oVLoUZkpbPwI9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eiIPwFYL; arc=none smtp.client-ip=209.85.128.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mx+suYO4"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48372facfedso26100655e9.0
-        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 04:38:51 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eiIPwFYL"
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4837c597cd5so16662405e9.3
+        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 04:44:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772282330; x=1772887130; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1772282669; x=1772887469; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mOaqhQImVlbU+bIaPkzVliN+MSpqLdHsMK4C5p4HbTE=;
-        b=Mx+suYO4WAm6Esi84MZAoAmYsEg+faHqpOo9+bFiEOnlJdfwT+vS7ye5q++/MXA6g4
-         mTIXqomnM6dz7b4tpK1KbP9UZmW5hzlb/wweLxY7zC8AbdZzTDy3F/KaN2VMw1wXsB66
-         IAC4aSt0G9xxuaODA2KLVyEhRLb0dYJmfeWOOZXWzZ3Tj7iGwN4DH5r8OirXx5emK83X
-         hFC6Ge2zWg/fc7qE1q3VrENHESF+g8ifwk+SOkHMggXufiEcnyLhtXrm+uV2F1gK9IJW
-         /vh/E8zN7TllRgrU9JQ7pdZHtwYv695+yKsE8ye6vRoR2MHRk0HW1MoBXpi7GyXxLEJ7
-         t7nw==
+        bh=RH0L9WD4/u9mQiuU+Jc2bLYt2zoxsRLi5sNyM2YzgMo=;
+        b=eiIPwFYLYXBrQHNFhQU4sxt4bdchSZbQ0puZaLAQjjg8A9Odu3TFv1QEgkJEBK/yCk
+         BitlkH+LB4jiAVgOUKCUYU/hCr7WCXGT5fvZI3okDXNtzs17DkiD793+5XSdRTCu2QiZ
+         Xd1BpLe2o/3Fc3Lb1LFNT53cPNBgVkNDDr2VddntcNLiYr+4RJ5kj6GGIOntLiFZIfVM
+         lhlJ/0jeFMh0qmFgv0oWQVJRlexVpR1VV7Rjf2renHY7f7jWAsYvXQMIK2ZzA0iL1XZI
+         flwCa2xK+qbn9PgkWlCnXGh4KzNZq5BPj/c8K9+6Q7zIwAgsQQDJS8mUn+2gWYAmH7CL
+         LzWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772282330; x=1772887130;
+        d=1e100.net; s=20230601; t=1772282669; x=1772887469;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mOaqhQImVlbU+bIaPkzVliN+MSpqLdHsMK4C5p4HbTE=;
-        b=F11D+7tb8NAqZVd3NJHa+Dx8gPSGL4Qzj8e/uwGT7/mu9f8Kf3mq6241Uat3ZCG+gE
-         Pe1jpnDd3wvf1yB1LedzOEb3TF+iUrnQVzNUedgG0QlKAnX06LADCQnR2/n+4PtBtYeJ
-         x8nG8LOmIYJsePehpPwmvKn7EKceHO3E28mybwQBtc/6GTjiStNzZADOhafiO3PRlqUG
-         iq8GCw10YokgwBreoYr6ypWEuMnV4orX1PYgsbg/lNXqg8Yjbj2ptmbjYdGZrUMu8Jxg
-         HS2J0RF2as83uST4s9Nm//ew22a/3JHUEuIb0d3E4BdBjzetsamt8yA+5UNHrCpTId9e
-         Kseg==
-X-Forwarded-Encrypted: i=1; AJvYcCXYU/Jdn3Rt5CCMt+7l50f8fatO3KWH3Z1Lb1FsDrKLlEIy1+wUooVCJFZbBanNBb/3YwE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxraV8vqRtlv/x4rpPwCrvNwCFuLzktBagy61SwQkgseVwSWO2k
-	oQYTpe/7UAzuBwqBJcYj3h014hDMqKG4pgmHoJH0VNHqorK9j/1JnlLatsUo24D//qwPxsgE9XV
-	6ROcq3LdX+59bgOPYIA==
-X-Received: from wmby19.prod.google.com ([2002:a05:600c:c053:b0:480:690c:88de])
+        bh=RH0L9WD4/u9mQiuU+Jc2bLYt2zoxsRLi5sNyM2YzgMo=;
+        b=aYHpjLohomEh3fM8X/v2mTrY+38ol+YJBOknyLUkWLUt2L5IU41A3wTtPxO2/HrnEK
+         z16KXcFlPJrAfSeRrq0o+zCdnpJztX14D+Cx8vX45G+9BqaihWz2/fhNV2UlILAxY/Vk
+         bPjBJnIEvFdlFYMoFf4YCeUG2Eo4kbjo0IQnU6gdqsE6JElSjmLux76mVFCvC7oSAzYA
+         NFAJKv0Pb7Oe4WetEGMTqt1sMERkxrsvazK19PG+wXIHSeUIgA+a+njiCKFxwfRjws2r
+         K8H67uS/BuJo9Be8SmHD1HJsRl45wReD95MzDP7SoRdz+tqUNoIasaFVuTyr49+2M6x0
+         06NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUW7lWMNdW1cx56f9N5WUJeJRBRN2RPQ1jvs6b8bB7PZcnwnSgaB/RGyvgtQ5TmY4WRpfg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDsD5Twz8TwKmtJMjCwrKilYnN1SBMmeh+40XGkKD6HJQIcsGF
+	RTI/dbhLgzU/+aj3BKq2r+LofUa4cCS3/MSElcewSt9LfIqtQOe8NLmXsKvBC+Lc/LE4lLVOLTU
+	fACAMYPnB+T4Do09JeQ==
+X-Received: from wmqi19.prod.google.com ([2002:a05:600c:3553:b0:483:6fe1:c054])
  (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:8b5b:b0:481:a662:b3f3 with SMTP id 5b1f17b1804b1-483c990c263mr116931775e9.7.1772282329804;
- Sat, 28 Feb 2026 04:38:49 -0800 (PST)
-Date: Sat, 28 Feb 2026 12:38:48 +0000
-In-Reply-To: <20260227200848.114019-3-david@kernel.org>
+ 2002:a05:600c:4fc8:b0:47b:e2a9:2bd7 with SMTP id 5b1f17b1804b1-483c9beaca0mr120569145e9.19.1772282668287;
+ Sat, 28 Feb 2026 04:44:28 -0800 (PST)
+Date: Sat, 28 Feb 2026 12:44:27 +0000
+In-Reply-To: <20260227200848.114019-15-david@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260227200848.114019-1-david@kernel.org> <20260227200848.114019-3-david@kernel.org>
-Message-ID: <aaLh2BxSgC9Jl5iS@google.com>
-Subject: Re: [PATCH v1 02/16] mm/memory: remove "zap_details" parameter from zap_page_range_single()
+References: <20260227200848.114019-1-david@kernel.org> <20260227200848.114019-15-david@kernel.org>
+Message-ID: <aaLjK2Q2q5ghE-uE@google.com>
+Subject: Re: [PATCH v1 14/16] mm: rename zap_page_range_single() to zap_vma_range()
 From: Alice Ryhl <aliceryhl@google.com>
 To: "David Hildenbrand (Arm)" <david@kernel.org>
 Cc: linux-kernel@vger.kernel.org, 
@@ -96,31 +96,74 @@ Cc: linux-kernel@vger.kernel.org,
 	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
 Content-Type: text/plain; charset="utf-8"
 
-On Fri, Feb 27, 2026 at 09:08:33PM +0100, David Hildenbrand (Arm) wrote:
-> Nobody except memory.c should really set that parameter to non-NULL. So
-> let's just drop it and make unmap_mapping_range_vma() use
-> zap_page_range_single_batched() instead.
-> 
-> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+On Fri, Feb 27, 2026 at 09:08:45PM +0100, David Hildenbrand (Arm) wrote:
+> diff --git a/drivers/android/binder/page_range.rs b/drivers/android/binder/page_range.rs
+> index fdd97112ef5c..2fddd4ed8d4c 100644
+> --- a/drivers/android/binder/page_range.rs
+> +++ b/drivers/android/binder/page_range.rs
+> @@ -130,7 +130,7 @@ pub(crate) struct ShrinkablePageRange {
+>      pid: Pid,
+>      /// The mm for the relevant process.
+>      mm: ARef<Mm>,
+> -    /// Used to synchronize calls to `vm_insert_page` and `zap_page_range_single`.
+> +    /// Used to synchronize calls to `vm_insert_page` and `zap_vma_range`.
+>      #[pin]
+>      mm_lock: Mutex<()>,
+>      /// Spinlock protecting changes to pages.
+> @@ -719,7 +719,7 @@ fn drop(self: Pin<&mut Self>) {
+>  
+>      if let Some(vma) = mmap_read.vma_lookup(vma_addr) {
+>          let user_page_addr = vma_addr + (page_index << PAGE_SHIFT);
+> -        vma.zap_page_range_single(user_page_addr, PAGE_SIZE);
+> +        vma.zap_vma_range(user_page_addr, PAGE_SIZE);
+>      }
+
+LGTM. Be aware that this will have a merge conflict with patches
+currently in char-misc-linus that are scheduled to land in an -rc.
+
+> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> index dd2046bd5cde..e4488ad86a65 100644
+> --- a/drivers/android/binder_alloc.c
+> +++ b/drivers/android/binder_alloc.c
+> @@ -1185,7 +1185,7 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
+>  	if (vma) {
+>  		trace_binder_unmap_user_start(alloc, index);
+>  
+> -		zap_page_range_single(vma, page_addr, PAGE_SIZE);
+> +		zap_vma_range(vma, page_addr, PAGE_SIZE);
+>  
+>  		trace_binder_unmap_user_end(alloc, index);
+
+LGTM.
 
 > diff --git a/rust/kernel/mm/virt.rs b/rust/kernel/mm/virt.rs
-> index da21d65ccd20..b8e59e4420f3 100644
+> index b8e59e4420f3..04b3cc925d67 100644
 > --- a/rust/kernel/mm/virt.rs
 > +++ b/rust/kernel/mm/virt.rs
+> @@ -113,7 +113,7 @@ pub fn end(&self) -> usize {
+>      /// kernel goes further in freeing unused page tables, but for the purposes of this operation
+>      /// we must only assume that the leaf level is cleared.
+>      #[inline]
+> -    pub fn zap_page_range_single(&self, address: usize, size: usize) {
+> +    pub fn zap_vma_range(&self, address: usize, size: usize) {
+>          let (end, did_overflow) = address.overflowing_add(size);
+>          if did_overflow || address < self.start() || self.end() < end {
+>              // TODO: call WARN_ONCE once Rust version of it is added
 > @@ -124,7 +124,7 @@ pub fn zap_page_range_single(&self, address: usize, size: usize) {
 >          // sufficient for this method call. This method has no requirements on the vma flags. The
 >          // address range is checked to be within the vma.
 >          unsafe {
-> -            bindings::zap_page_range_single(self.as_ptr(), address, size, core::ptr::null_mut())
-> +            bindings::zap_page_range_single(self.as_ptr(), address, size)
+> -            bindings::zap_page_range_single(self.as_ptr(), address, size)
+> +            bindings::zap_vma_range(self.as_ptr(), address, size)
 >          };
+>      }
 
-Please run rustfmt on Rust changes. Here, rustfmt leads to this being
-formatted on a single line:
+Same as previous patch: please run rustfmt. It will format on a single
+line, like this:
 
-unsafe { bindings::zap_page_range_single(self.as_ptr(), address, size) };
+        unsafe { bindings::zap_vma_range(self.as_ptr(), address, size) };
 
-with the above changed:
+with the above change applied:
 
 Acked-by: Alice Ryhl <aliceryhl@google.com> # Rust and Binder
 
