@@ -1,32 +1,32 @@
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [95.215.58.177])
+Received: from out-182.mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1087136074A
-	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 07:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8CA36165B
+	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 07:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772262720; cv=none; b=uZQnf7SQg3W1Skh0yWGINw82k8S0Q3VFJi1xQtvItrypOOqVvYYtnFu534aMuYRA+BL7au2/evsGPxiTBiqXMuRF73rKxjeWvN6kzHS3Y+cPnfn8H2ubOJ/6oPOmns/fXbEazIsMebcYbzFlpxg9S7JN03GyExmrRAW8VTxO5dk=
+	t=1772262724; cv=none; b=BYvuSTDiR1AvSBZJ5LNH2C1YL9furxiAGf7wQbra26k1ybA3Bo+30PLwppryg958x7sTTMWYNe7DmGHChYDtHyX2ZO64bbUKXhTRQeHdYdwnmhyVAM3yfOYUH3Aj5HNWyOE35wBT/CgmEmwMH+/46MaivsPmHpFTFTR7tYaq0+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772262720; c=relaxed/simple;
-	bh=2A5S3wswM8mKH9esHAH6T99t0dCgm8CjNU9Tq7xAU3o=;
+	s=arc-20240116; t=1772262724; c=relaxed/simple;
+	bh=I29KYns+3V8NZNZTTMf6JPThoWhIOTarBn/LbxeDCiE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qdj9icT2llKz6oLXLE/oTHtbS6yVgJ/7ditHDVvdRvoXxtTSi5kaDP6cPyUiIkuKHbdv/RoOKfW1xjMdD5KgAW5Vw+jwNLI9jdFryx0zIPPOvEabq8Ayk6TG8ciNGFcNDKfydt88eRqrYnXJBaSBMWPcBAZii29xdg+Pg4v/9Hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=V4zO90g9; arc=none smtp.client-ip=95.215.58.177
+	 MIME-Version; b=Sz2SmeRBLD8tQj6daY0jcqM9sw6v56fDzIIh9CD3lLLaTGfu6fmquxnWwv12hKo2yP7UJI5mfCFJknYUHgQIFJ5NJ0tjtcViENZK/v+5J3Iut0CgW9WIOLlWDly4GXvZEyGn09264tYZCg1kp40iLme5YYdWnnoC0tmElgNjECU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Arx4Lsfm; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="V4zO90g9"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Arx4Lsfm"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772262717;
+	t=1772262722;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uoC1/SGj9ZyMrYYvjzF+ZFkGqF6/FMZJGvqCL8S4uuA=;
-	b=V4zO90g9wkZEUykIr39YFJ+ssYGocxjwQNkM7L7YyPFsTsBRytq1KA4UUp7hWwI3bcr5Dz
-	KC04j0Mx7G6qJyJCv5ZInXYQiq2cZI1YkRYO+6tdlVgDipSWdaxEb3uuxKxneebC/l8zJH
-	0kDqGwQOnsIbHUup9+bO17oNtOtvkdw=
+	bh=wxewyvr0s1VxeZ03ELEr26G8sNLhbE2InXvijDekoLs=;
+	b=Arx4Lsfm5wZRKrYTmtgBC2688y6OVE19w9gpA5vhVQFGQvaoTDbOkWpX5VW3vz4Sf6eCni
+	aJ7H6HZPl9T1nEHAZ1YSnFUbd22DJpZy5ezu6aC24xp4p03v7DnxeI2Swasibot0JVSYov
+	jmRuFx5b+83KKp4+BkdNV8XEIcZGGCk=
 From: Hui Zhu <hui.zhu@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -47,9 +47,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
 Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next v3 2/3] bpf: Use bpf_core_enum_value for stats in cgroup_iter_memcg
-Date: Sat, 28 Feb 2026 15:11:22 +0800
-Message-ID: <3a788ec239e9f9590897b43d21995e3a3532d916.1772261955.git.zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v3 3/3] selftests/bpf: Check bpf_mem_cgroup_page_state return value
+Date: Sat, 28 Feb 2026 15:11:23 +0800
+Message-ID: <fac266012001b88e2bd6e33578090627b919fd70.1772261955.git.zhuhui@kylinos.cn>
 In-Reply-To: <cover.1772261955.git.zhuhui@kylinos.cn>
 References: <cover.1772261955.git.zhuhui@kylinos.cn>
 Precedence: bulk
@@ -63,52 +63,60 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Hui Zhu <zhuhui@kylinos.cn>
 
-Replace hardcoded enum values with bpf_core_enum_value() calls in
-cgroup_iter_memcg test to improve portability across different
-kernel versions.
+When back-porting test_progs to different kernel versions, I encountered
+an issue where the test_cgroup_iter_memcg test would falsely pass even
+when bpf_mem_cgroup_page_state() failed.
 
-The change adds runtime enum value resolution for:
-- node_stat_item: NR_ANON_MAPPED, NR_SHMEM, NR_FILE_PAGES,
-  NR_FILE_MAPPED
-- memcg_stat_item: MEMCG_KMEM
-- vm_event_item: PGFAULT
-
-This ensures the BPF program can adapt to enum value changes
-between kernel versions.
+This patch adds explicit checks to ensure bpf_mem_cgroup_page_state()
+doesn't return -1 before validating the actual statistics values.
 
 Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 ---
- .../selftests/bpf/progs/cgroup_iter_memcg.c     | 17 ++++++++++++-----
- 1 file changed, 12 insertions(+), 5 deletions(-)
+ .../selftests/bpf/prog_tests/cgroup_iter_memcg.c       | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-index 12f79a44133e..06a385c9d85b 100644
---- a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-+++ b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-@@ -26,11 +26,18 @@ int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+index 88fc3e83d2b7..9eadfbd3fdb9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+@@ -53,6 +53,8 @@ static void test_anon(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
  
- 	bpf_mem_cgroup_flush_stats(memcg);
++	ASSERT_NEQ(memcg_query->nr_anon_mapped, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state NR_ANON_MAPPED");
+ 	ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val");
  
--	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(memcg, NR_ANON_MAPPED);
--	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
--	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(memcg, NR_FILE_PAGES);
--	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(memcg, NR_FILE_MAPPED);
--	memcg_query.pgfault = bpf_mem_cgroup_vm_events(memcg, PGFAULT);
-+	memcg_query.nr_anon_mapped = bpf_mem_cgroup_page_state(
-+		memcg,
-+		bpf_core_enum_value(enum node_stat_item, NR_ANON_MAPPED));
-+	memcg_query.nr_shmem = bpf_mem_cgroup_page_state(
-+		memcg, bpf_core_enum_value(enum node_stat_item, NR_SHMEM));
-+	memcg_query.nr_file_pages = bpf_mem_cgroup_page_state(
-+		memcg, bpf_core_enum_value(enum node_stat_item, NR_FILE_PAGES));
-+	memcg_query.nr_file_mapped = bpf_mem_cgroup_page_state(
-+		memcg,
-+		bpf_core_enum_value(enum node_stat_item, NR_FILE_MAPPED));
-+	memcg_query.pgfault = bpf_mem_cgroup_vm_events(
-+		memcg, bpf_core_enum_value(enum vm_event_item, PGFAULT));
+ cleanup:
+@@ -88,6 +90,10 @@ static void test_file(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup_map;
  
- 	bpf_put_mem_cgroup(memcg);
++	ASSERT_NEQ(memcg_query->nr_file_pages, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state NR_FILE_PAGES");
++	ASSERT_NEQ(memcg_query->nr_file_mapped, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state NR_FILE_MAPPED");
+ 	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
+ 	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
  
+@@ -119,6 +125,8 @@ static void test_shmem(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
+ 
++	ASSERT_NEQ(memcg_query->nr_shmem, (unsigned long)-1,
++		  "bpf_mem_cgroup_page_state NR_SHMEM");
+ 	ASSERT_GT(memcg_query->nr_shmem, 0, "final shmem value");
+ 
+ cleanup:
+@@ -144,6 +152,8 @@ static void test_pgfault(struct bpf_link *link, struct memcg_query *memcg_query)
+ 	if (!ASSERT_OK(read_stats(link), "read stats"))
+ 		goto cleanup;
+ 
++	ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
++		  "bpf_mem_cgroup_vm_events PGFAULT");
+ 	ASSERT_GT(memcg_query->pgfault, 0, "final pgfault val");
+ 
+ cleanup:
 -- 
 2.43.0
 
