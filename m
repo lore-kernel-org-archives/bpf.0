@@ -1,321 +1,122 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7A93CC9E9
-	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 18:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2462FBE1F
+	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 19:45:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772304496; cv=none; b=FSoGR6CN3i0u7cCLrB+1i4S42pk+EWrF2BM/+1/a9PpS/iAhvWHfv9AytWs1meyuILIHbVgC6JO6V1C02WAiNOsS2cCHLGPaOcGM+9iUJv1gRE5aQW+OltPydRya8LGasAqzrJQzSxC761UdY62rDBfJrbusAI3Bc3rzdQ0eYV0=
+	t=1772307950; cv=none; b=h3J1L5CTJZqwUPMT0SXoqvAcZlU3E6BUWHm6e3ttQ+JsXawe9cL8aEV2rjvBKsqdBfFGm5ssFmswr5q/GzFi9IjMmYLnIFSi3XlcvIOHj86/T8TC+oVRB8rd8XrUGwouubuUAS1BhYWSzfhM1ZHU49uM3ibyoILzznEva4Qpcbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772304496; c=relaxed/simple;
-	bh=kcxQBhRnsv/2+rLF1+R6x6q3rrabddgksxGQ/uU7yCE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aYmSi7Nww8axMGntEUuGOJd5RYZ8l/T1oI7cIaWILpsjPdCQpgN+7cJrST1YFgC1OKF4CjGxFHPEHdWpP3Oman7PtHs1jy9J5IXWiNkYs+WaZdT5gw4wZvU1aGGnPI9co4MmhOpWvbMuPqXQVjy2wHU3wZZPb0WfIG31BJgYRa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=hLnu0i12; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	s=arc-20240116; t=1772307950; c=relaxed/simple;
+	bh=HZ/cg1rh+FU6pxOi1Q9rdJCc+qOc66Q8EwKzNGrQEc0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Em9+DT7t61DxQ+GxtMJ9sFScyI5ARzZdpQEikHnWFGbN2ja86+JtTQKqr/0rDNabRftNAK8HRhW99IBYDvLBfPH8dvAu6W4S4DDB4jxmnK7h94D1n3JSwyjOfs/K0y3ANczSKnkq5qkFkEog+YhcYzsex3qphfPtmKy3ikeYTWA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QZJJl24/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="hLnu0i12"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-5069df1de6fso27583091cf.3
-        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 10:48:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772304494; x=1772909294; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TqXDV+BY5Z+ou6mCyh2OlKY8skjH5SofQmVMGER0lYk=;
-        b=hLnu0i12s0VO+ikPez+hcjDlVXti5fl6lhhrrwLma2JWQHR75qQC3gz5SK1wQBZauY
-         DEDildU9FJ3l8tVJfUUczzTo7J4wvCA4XnzxkC3AHblOIlUKmI6iscisVszEMOCrFrGX
-         K49+/Cs+MVi+fs2zH8L6wB9OG0FS6SYcG/1/h/egg6m/Yw6ZRy3BQlP8tYQksdBHCntA
-         wTcAizMCC1/neh4z6PabKEFDI22HQzG7NPh+PCZL3QvtXcWR7/Tn+SgMRPQ6RhQWPt4Y
-         9MvOCDqB7MVo9uIGdJvvW82G3+vEdoUpjObXHgS3bIqNXUAZukESSzGQLoepQr3ExNPO
-         /uJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772304494; x=1772909294;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=TqXDV+BY5Z+ou6mCyh2OlKY8skjH5SofQmVMGER0lYk=;
-        b=Filwsi1Y54D2g7iQY7cPVZHMNJZJzLiw3fH2rPw9dgcNDmaBeNY0IRXxRhu/7Bqmqb
-         AWnP0iDRuRQWIGcTKeCy1syQkeZG3awE4HHRw4a1n4ftaVNND+TRTXWqvUI0sBDnZl9/
-         EzNkfp3kbOVMoWsgtVJeD7fCw5KHahhdGdpYfVzGCyRSGQEY7Avx2/ZimzUcl0CBGc0M
-         jzXT0tl41ey5PoP9kCS9QMD7in8UfNiAwGBrMnioOQnbbEEIGwy6xLaR1jgmpUDfIDWa
-         Zek3R2m0ZpHUo6avGQxVMym9N03MBwYMdGofBYDd46K5Y+kuW1aKU0MDBmTDdS95oVKH
-         BqFw==
-X-Gm-Message-State: AOJu0YxAIoC8Vt59Ztsc3/lZ4JTYyPCYfaSLvmXHXaIFlGtYQLAKU7hq
-	q2zWdQHVpek5K2p1kEKaoIvg2TtFtVSSfBG5WoIgA4I9RzGSmEfcTf10S5w4mlN75PAtl62s5Ay
-	L6pdD6DU=
-X-Gm-Gg: ATEYQzxkX+18F8OIynbXB9960SEJ1YgFek0I/HLHfUe/tX1kGVBPO2yXQFXexWP+D4j
-	IJEYnfqFV3CaUPDkpUasS4tdDiUomcvljqM1LOxDHzKP+YLM9mzkJ1/CZUR9M7B29TBwLIOwwzj
-	r4W2UN5QrkpvlEMS1ieL1DRL3kGijnhDNN7PCJondhfmettvGaM5qb7uRQUmHYWCw3keQCtntlz
-	lXYWI7uMskZkuR0zxbQlo+mB/GQ8MnI1EgQXbb4hVwpuVgBTmX1AGcApv9SE41PRc07BPRwvJVL
-	ewpAKNb0kCWuqd4SpejwVZmUiqLbeeuW/kF9vbLKTdiwv5fI9vYGTaXLaSASXQprtUlzmzB3ftU
-	k4VLaxtEae/SkAjjaIbw2l5zezuac93TTLUTIEum2XJnZhUzY2H5EJcBg7rBE0BJDGew6fyQGjV
-	rqR6AvMBpeP+ee1vRoKOgudQ==
-X-Received: by 2002:ac8:5a8f:0:b0:4f1:b947:aa04 with SMTP id d75a77b69052e-50752740accmr86653171cf.18.1772304493769;
-        Sat, 28 Feb 2026 10:48:13 -0800 (PST)
-Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744ab3d88sm76160561cf.21.2026.02.28.10.48.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Feb 2026 10:48:13 -0800 (PST)
-From: Emil Tsalapatis <emil@etsalapatis.com>
-To: bpf@vger.kernel.org
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	martin.lau@kernel.org,
-	memxor@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v6 5/5] selftests: bpf: Add tests for void global subprogs
-Date: Sat, 28 Feb 2026 13:47:59 -0500
-Message-ID: <20260228184759.108145-6-emil@etsalapatis.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20260228184759.108145-1-emil@etsalapatis.com>
-References: <20260228184759.108145-1-emil@etsalapatis.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QZJJl24/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F4CFC116D0;
+	Sat, 28 Feb 2026 19:45:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772307950;
+	bh=HZ/cg1rh+FU6pxOi1Q9rdJCc+qOc66Q8EwKzNGrQEc0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=QZJJl24/OKbVpRC2EX+pf82JQBZNxqgoxaD85L/9Yg62iZ2Pu9KV3aYgoud8g7ulU
+	 jZTYvL3TA2BX0nqIn2EryG2CjJ0V/+lctmQW6CtoH78jsMJ9+7wjS/k2rBZPTo1mCW
+	 NxtV5uUDCcokIZviMQPzrPD+AJfKy/1dxv/9DbZz2Cyc7cugcPKfubUWUi8arHOU4C
+	 hBEQfdhGRsil2LQKGsAm9T+ila7qqnjp0ApJy0opx+2ILHlgcbHU06tf3zBiQacHB+
+	 EXoIo8Bz0cptEhxDz+CIvfCgyteTydEMCYgYK2WExstmusZUnaD2iWlxS/LkhN2Yf/
+	 jwGQ0EXLt0OYg==
+Content-Type: multipart/mixed; boundary="===============8226162180068454019=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <9014655d9498ca02086847eec5b1f50737bc3de06999b3fecd9aa67345b98cae@mail.kernel.org>
+In-Reply-To: <20260228184759.108145-4-emil@etsalapatis.com>
+References: <20260228184759.108145-4-emil@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v6 3/5] bpf: extract check_global_subprog_return_code() for clarity
+From: bot+bpf-ci@kernel.org
+To: emil@etsalapatis.com,bpf@vger.kernel.org
+Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,martin.lau@kernel.org,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,emil@etsalapatis.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Sat, 28 Feb 2026 19:45:49 +0000 (UTC)
 
-Add additional testing for void global functions. The tests
-ensure that calls to void global functions properly keep
-R0 invalid. Also make sure that exception callbacks still
-require a return value.
+--===============8226162180068454019==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 80b6fb821456..ebcca81ccdaf 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+
+[ ... ]
+
+> @@ -17987,15 +17984,6 @@ static int check_return_code(...)
+>  		goto enforce_retval;
+>  	}
+>
+> -	if (is_subprog && !frame->in_exception_callback_fn) {
+> -		if (reg->type != SCALAR_VALUE) {
+> -			verbose(env, "At subprogram exit the register R%d is not a scalar value (%s)\n",
+> -				regno, reg_type_str(env, reg->type));
+> -			return -EINVAL;
+> -		}
+> -		return 0;
+> -	}
+
+check_return_code() has two callers: process_bpf_exit_full() and
+check_kfunc_call(). The new dispatch in process_bpf_exit_full()
+correctly routes global subprogs to the new function, but
+check_kfunc_call() still calls check_return_code() directly
+when validating bpf_throw() arguments:
+
+    check_kfunc_call() {
+        ...
+        if (meta.func_id == special_kfunc_list[KF_bpf_throw]) {
+            ...
+            if (!env->exception_callback_subprog) {
+                err = check_return_code(env, BPF_REG_1, "R1");
+
+When verifying a global subprog (frame[0]->subprogno != 0), the
+removed block would have accepted any scalar R1 and returned
+early. With it gone, R1 now falls through to full return value
+range validation.
+
+Could this reject previously accepted programs? For instance, in
+a struct_ops program where return_retval_range() returns (0, 0),
+calling bpf_throw(1) from a global subprog would now fail
+verification where it previously succeeded.
+
+The cover letter for this series indicates patches 4-5 may
+complete the bpf_throw refactoring, but they are outside the
+provided range.
+
+[ ... ]
+
+> Both main progs and subprogs use the same function in the verifier,
+> check_return_code, to verify the type and value range of the register
+> being returned. However, subprogs only need a subset of the logic in
+> check_return_code. this also goes the way - check_return_code explicitly
+
+"this also goes the way" -- should this read "this also goes the
+other way"?
+
+> checks whether it is handling a subprogram in multiple places, complicating
+> the logic. Separate the handling of the two into separate functions.
+
 ---
- .../selftests/bpf/prog_tests/exceptions.c     |  1 +
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 24 +++++++++++++
- .../testing/selftests/bpf/progs/exceptions.c  | 14 ++++++++
- .../selftests/bpf/progs/exceptions_fail.c     | 35 +++++++++++++++++--
- .../bpf/progs/freplace_int_with_void.c        | 11 ++++++
- .../selftests/bpf/progs/freplace_void.c       | 10 ++++++
- .../bpf/progs/verifier_global_subprogs.c      | 19 ++++++++++
- 7 files changed, 111 insertions(+), 3 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_int_with_void.c
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_void.c
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/exceptions.c b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-index 516f4a13013c..84ab73e08b0e 100644
---- a/tools/testing/selftests/bpf/prog_tests/exceptions.c
-+++ b/tools/testing/selftests/bpf/prog_tests/exceptions.c
-@@ -83,6 +83,7 @@ static void test_exceptions_success(void)
- 	RUN_SUCCESS(exception_assert_range_with, 1);
- 	RUN_SUCCESS(exception_bad_assert_range, 0);
- 	RUN_SUCCESS(exception_bad_assert_range_with, 10);
-+	RUN_SUCCESS(exception_throw_from_void_global, 11);
- 
- #define RUN_EXT(load_ret, attach_err, expr, msg, after_link)			  \
- 	{									  \
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index f29fc789c14b..23d933f1aec6 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -347,6 +347,17 @@ static void test_func_sockmap_update(void)
- 				  prog_name, false, NULL);
- }
- 
-+static void test_func_replace_void(void)
-+{
-+	const char *prog_name[] = {
-+		"freplace/foo",
-+	};
-+	test_fexit_bpf2bpf_common("./freplace_void.bpf.o",
-+				  "./test_global_func7.bpf.o",
-+				  ARRAY_SIZE(prog_name),
-+				  prog_name, false, NULL);
-+}
-+
- static void test_obj_load_failure_common(const char *obj_file,
- 					 const char *target_obj_file,
- 					 const char *exp_msg)
-@@ -432,6 +443,15 @@ static void test_func_replace_global_func(void)
- 				  prog_name, false, NULL);
- }
- 
-+static void test_func_replace_int_with_void(void)
-+{
-+	/* Make sure we can't freplace with the wrong type */
-+	test_obj_load_failure_common("freplace_int_with_void.bpf.o",
-+				     "./test_global_func2.bpf.o",
-+				     "Return type UNKNOWN of test_freplace_int_with_void()"
-+				     " doesn't match type INT of global_func2()");
-+}
-+
- static int find_prog_btf_id(const char *name, __u32 attach_prog_fd)
- {
- 	struct bpf_prog_info info = {};
-@@ -597,4 +617,8 @@ void serial_test_fexit_bpf2bpf(void)
- 		test_fentry_to_cgroup_bpf();
- 	if (test__start_subtest("func_replace_progmap"))
- 		test_func_replace_progmap();
-+	if (test__start_subtest("freplace_int_with_void"))
-+		test_func_replace_int_with_void();
-+	if (test__start_subtest("freplace_void"))
-+		test_func_replace_void();
- }
-diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
-index f09cd14d8e04..4206f59d7b86 100644
---- a/tools/testing/selftests/bpf/progs/exceptions.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions.c
-@@ -109,6 +109,20 @@ int exception_tail_call(struct __sk_buff *ctx) {
- 	return ret + 8;
- }
- 
-+__weak
-+void throw_11(void)
-+{
-+	bpf_throw(11);
-+}
-+
-+SEC("tc")
-+int exception_throw_from_void_global(struct __sk_buff *ctx)
-+{
-+	throw_11();
-+
-+	return 0;
-+}
-+
- __noinline int exception_ext_global(struct __sk_buff *ctx)
- {
- 	volatile int ret = 0;
-diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/testing/selftests/bpf/progs/exceptions_fail.c
-index d28ecc4ee2d0..275ad6fe4a04 100644
---- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
-+++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
-@@ -29,11 +29,15 @@ struct {
- private(A) struct bpf_spin_lock lock;
- private(A) struct bpf_rb_root rbtree __contains(foo, node);
- 
--__noinline void *exception_cb_bad_ret_type(u64 cookie)
-+__noinline void *exception_cb_bad_ret_type1(u64 cookie)
- {
- 	return NULL;
- }
- 
-+__noinline void exception_cb_bad_ret_type2(u64 cookie)
-+{
-+}
-+
- __noinline int exception_cb_bad_arg_0(void)
- {
- 	return 0;
-@@ -50,8 +54,8 @@ __noinline int exception_cb_ok_arg_small(int a)
- }
- 
- SEC("?tc")
--__exception_cb(exception_cb_bad_ret_type)
--__failure __msg("Global function exception_cb_bad_ret_type() return value not void or scalar.")
-+__exception_cb(exception_cb_bad_ret_type1)
-+__failure __msg("Global function exception_cb_bad_ret_type1() return value not void or scalar.")
- int reject_exception_cb_type_1(struct __sk_buff *ctx)
- {
- 	bpf_throw(0);
-@@ -85,6 +89,15 @@ int reject_exception_cb_type_4(struct __sk_buff *ctx)
- 	return 0;
- }
- 
-+SEC("?tc")
-+__exception_cb(exception_cb_bad_ret_type2)
-+__failure __msg("exception cb cannot return void")
-+int reject_exception_cb_type_5(struct __sk_buff *ctx)
-+{
-+	bpf_throw(0);
-+	return 0;
-+}
-+
- __noinline
- static int timer_cb(void *map, int *key, struct bpf_timer *timer)
- {
-@@ -346,4 +359,20 @@ int reject_exception_throw_cb_diff(struct __sk_buff *ctx)
- 	return 0;
- }
- 
-+__weak
-+void foo(void)
-+{
-+	bpf_throw(1);
-+}
-+
-+SEC("?fentry/bpf_check")
-+__failure __msg("At program exit the register R1 has smin=1 smax=1 should")
-+int reject_out_of_range_global_throw(struct __sk_buff *skb)
-+{
-+	foo();
-+
-+	return 0;
-+}
-+
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/freplace_int_with_void.c b/tools/testing/selftests/bpf/progs/freplace_int_with_void.c
-new file mode 100644
-index 000000000000..cbb8f8ff2581
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/freplace_int_with_void.c
-@@ -0,0 +1,11 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <linux/pkt_cls.h>
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("freplace/global_func2")
-+void test_freplace_int_with_void(struct __sk_buff *skb)
-+{
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/freplace_void.c b/tools/testing/selftests/bpf/progs/freplace_void.c
-new file mode 100644
-index 000000000000..68b114f477fe
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/freplace_void.c
-@@ -0,0 +1,10 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("freplace/foo")
-+void test_freplace_void(struct __sk_buff *skb)
-+{
-+}
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-index 20904cd2baa2..f02012a2fbaa 100644
---- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
-@@ -388,4 +388,23 @@ int arg_tag_dynptr(struct xdp_md *ctx)
- 	return subprog_dynptr(&dptr);
- }
- 
-+__weak
-+void foo(void)
-+{
-+}
-+
-+SEC("?tc")
-+__failure __msg("R0 !read_ok")
-+int return_from_void_global(struct __sk_buff *skb)
-+{
-+	foo();
-+
-+	asm volatile(
-+		"r1 = r0;"
-+		:::
-+	);
-+
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.49.0
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22527094257
 
+AI-authorship-score: low
+AI-authorship-explanation: Grammar error in commit message and iterative human review process across v1-v6 suggest human authorship, though the cover letter notes AI assistance on a different patch in the series.
+issues-found: 2
+issue-severity-score: low
+issue-severity-explanation: Behavioral change in check_kfunc_call bpf_throw path could reject previously accepted programs, but the impact is limited to an unusual code pattern (global subprogs calling bpf_throw without exception callback) and is likely addressed in subsequent patches outside the provided range.
+
+--===============8226162180068454019==--
