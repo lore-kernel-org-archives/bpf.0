@@ -1,61 +1,63 @@
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com [209.85.160.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55DE234D389
-	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 18:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED4D33D506
+	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 18:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772304491; cv=none; b=jTc/4/h1ISduEMiSxnOHyR32H7BPQsDOUdY88CfqUgoZYCOujzJNHKlQSCJmiPpcT2k1siM7dISm9c3Gpq6Z0Fj7sN8vGo2tf/ndejtClgrgwr1ixx+AKMhwsLCcMvVLxdgGvjWKA5gUql8qY1H4tEFYJgZUiCjBTBFBmIapJrA=
+	t=1772304492; cv=none; b=AR9sUbWI0fR2lxU3IqKF+iNXOX5eS6pdoe/hcueC6GRJ6X7iP1eiSOVJk2Nc+sow6tCTIqlMDu5eE2tCXo1Pva8usj7rhvxpQ1FKlUm80GzJbWEc4SxZij91ctcsSzU08NqkW+aGjGJ7tfZvfVF9klQi2oCw2DPswVHy3S+jSHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772304491; c=relaxed/simple;
-	bh=s2g6ibLpkWq/89XU/7atfUVS7Ghj0YTy22RAB3U4dx4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PN3x8ijE5D5reb7YLV6Z7GgW+20op5u6ujZRDV8DfoJJsQlLz3oVc16J/3UL4+9DMx6V40BnhLnKYL1weX2Z9M1P3k84XDDlgHCVDAKyQSQ4MUqFjLTn92pj9xP8Sz4V/iElyUmz3gQ34UF1k6JTB9yHjNzM4rf74Wdfh70SoBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=o521q1qP; arc=none smtp.client-ip=209.85.219.49
+	s=arc-20240116; t=1772304492; c=relaxed/simple;
+	bh=kMlPPo426nLOUgnR76NWL0V4DG8z7Mk/rAoYJWqi7OI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=bJmd/YQARrpaZuhGR4SmqzRusZhr9aLA7An2eBKxje7BOlN/+ZWjZ9ACBRlBonV6F0bKROYXlehNIXNPQ9VDdMWRnHW+nMVYlMbPE4JMHvZHpp7BACxeCtsZ2lWVSAl3qbWWrZ5QMZhu0InwEZfqlbaOboLyz6lE9KQLy+zz3LY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=AJkVpa7u; arc=none smtp.client-ip=209.85.160.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="o521q1qP"
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8954c9daaeaso38563266d6.1
-        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 10:48:09 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="AJkVpa7u"
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-506a7bbe9d0so24999421cf.0
+        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 10:48:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772304488; x=1772909288; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3OMVoFKtb6rEqSt+BaHEeC7/vGupf3OMpDmDnYoGn90=;
-        b=o521q1qPasCwcIvEulIgIFHsZJ5s4i9c+OkH5SSRf4Hm/hl+7ugZDAK0tCx01kC39Q
-         uvwJ75YR45XHzi6H14W81MyOuLEn95lLGX+lAzNb1dB8glJF7/sczRLhVHyHZq468Gft
-         dOY24k5Z/F4/e4omzfU4kTHXemgvoWNIGP9eubdMkX4An0tT/QRG6Jj+0y3ZZ6vQly/L
-         Afe2sguHoEdrcTyl1ScoIlLS+8dSekEbB0567RPyhJCLjc9Vj0o2ChWkwhUG/Fy1uCVE
-         xyR7CVBLw6B9BmkMoNv3VWy7A0zMiQ0ULOK8ojCiVhcHVQGkxpuIlU5fsWGQUwZzYcSe
-         wYtg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772304488; x=1772909288;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772304489; x=1772909289; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3OMVoFKtb6rEqSt+BaHEeC7/vGupf3OMpDmDnYoGn90=;
-        b=D/jJqhZEHLFUAgI9hy5u3GpwsrwkXdTBvKozY9ChnZQ3e05v5K+xeNWz6Z6blBv0Zr
-         zZlP1Mu4LFpv5kqlwxEeai0mjbUPmu1vTea6gSHnlCUa9oeKts+MbfAJla5FV+mJ5pKY
-         dx+P3wYGtgBRLfTTHC/aI+EPAMfXctcZpk3UwlBc8goi+3R9pFEu9v1uCB9jfjLWjfxE
-         FRqm/bU0H89FW4y+zKL2C3vpcs+uYLL25EAqTh4kzCtnQJDHxZuZkOfQSfQzS8xp5pw9
-         WxIjzhXmUxJY3cMoZtGUzrYsDZKnJKVRI7GjXzOPWipSWnKEwkmfgHTTiaUp6YcatvJ3
-         tcRw==
-X-Gm-Message-State: AOJu0YxPDk7b/6XY298cP2TtZTkQ1XtVrJD8SYLmIH38GUTTU8Pvwkb/
-	xam+Hq6XmKspIAf4nQyLXz+Li9gSYVjx8laH18Wqd8Fx7jIpzFB88haCRnPYXaH2LxluGzJ2yHq
-	oF6XFsqw=
-X-Gm-Gg: ATEYQzxSlFz28WXAb7rj0973k+4WBuFAqklYUxNKBN4eFP+z6vTBx+0sAUYuMvXSf6V
-	uea7wrh+RauuIL5K4GVbsjHVeetlsx51akeAZXg7paMQYGBCt6r7YrIBJXpJsbCPdl+//wDst7b
-	JOsKEAHs3AhGD9D5Jpc8wGKGJGJw8Q7qPUbeELJhYVw3BkAaWUMmCnkHJJ5wHWUQy9YcZ2Rt+cu
-	dwr8aq7z+MfBWgZ8XbqQ6PoXwNF0+6EHEmE061+IRqu/G/WVzD78AWNa2yYEk9mW9TEmoFfBTkV
-	EsoZ3fb6+7hU0R2I4wrBLIDFOoQrpgWsA80esLjWNKdSPFQsomWJhoQMVdXwWPaIFInyJpiZFnS
-	jl7t4arS4Di2HXS57n8KgG095iTedTddROFLjROuYdET3q3SOhlFXDZmwVZMVnrsgiYXBWX01QX
-	FyvtuOftx+5RhT0BWyFj0KmA==
-X-Received: by 2002:a05:622a:1811:b0:4ed:66bd:95ea with SMTP id d75a77b69052e-507528d5aacmr95870221cf.29.1772304488037;
-        Sat, 28 Feb 2026 10:48:08 -0800 (PST)
+        bh=3VVuYgrhmhTApRwCWEGLJFI2vuPFxDJZw/gcRpXkHns=;
+        b=AJkVpa7uK0EZ8qZ/E6IcPoIra9VX+9i+PFhmNDmF21X/AV0auGHZahK5+HP9q6j0BL
+         5iBLkCjN4+Y6BpE7j2WikretRjbq2dq83mWR7Vt+xHK7dtaId96I+xURU69YNIPHU6nK
+         p+iWBo9akSpfEnbDbEG9PcvqEDE3kUguuOE/FvpZ9u/Z99gl20RC5SIgNuHyDoMPzpOn
+         GlTxwOksS8NQM1jBBMdCUGrIM3u4+hfJO5GDKWeP/FPG6rUrzWzM3+wax/JfOndTjPvN
+         xXo6srSOISQ7sbMMVrRJYHobjn17mPPHxpx6iYC8Pctx/UuNMmi9qqT/Ow11XvMyIPe7
+         Fx5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772304489; x=1772909289;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=3VVuYgrhmhTApRwCWEGLJFI2vuPFxDJZw/gcRpXkHns=;
+        b=KHmdMo/Dn1hGOeb5HEI6J1lryxvZlU04bntWmfAXBVXeslu9fScsKvAUtcM1bhM2hD
+         yrj5oXsRBcG8RWYR93VSHKUiGAHQtx4+mcrIzuN4xJvgHpKy+HSbS/Gm+c+GSlH2SIPl
+         RMLZmOVBVwUJTZosxLAR8aHnzo/RCkN7f0CfRVWJG2vnspaBPw4pFhk3R/Wlezzwq9nT
+         ODi0DRJ0CjfITSfPv+K3DYESvZml2HNayCS5hn85+mmXgQdhX6yKX+HccbciE4A6WE+5
+         g0M6umGwuBuV030sQ/5Ofg3sJCveyqYlbqzJKiXXZv5d084AKsoNAaRF1Fir/SY1qkRI
+         LQNw==
+X-Gm-Message-State: AOJu0Yy6yxgpxOOGSlcsl5geeR4gWbnvI//bNUgBfSlFENvdx2SKxvpn
+	2ata2Rl/Qa8tTII0y9+9D2cyDS+MH9mQRa2DKWHloWO+LIePjkm755DHMqed/EAgo+Nask7cX21
+	EbcTG7Mg=
+X-Gm-Gg: ATEYQzzc8khEVm8FGLBQHS3cZF/rL3XwWnY+aqG01qKpqsFsNBu48NDmCr6oUJUlWbP
+	shGO1e3MiDMZZoTLph2WCgc3OGbHC5E5ck1xPrdyghgYR5XUz/iu8S1Ndo+qcy2V7wqzXSlLv6Y
+	9/72+RD791aW6LuaMZtpMzBd6hInJFLH9AAm+vuNoIR5UKYJws6xKn27QS2LIpobHHIBBka4a4Q
+	OoaFN6UdzuJGjjfV1W27/RmUwrIOarNkUsIByi/kQD7XwiNsAQcG1xfKzW0GS9jx4Cmq1YCeYep
+	tCYR4NxiUDktpL+1DVXL90KcvAkUHVUj8qd8cN1rLXcsE7sIfO4bbwarcJx4EdrF4BBYq3uBGcM
+	l9E7+N9XWwbiRrzlvhy/ZgyTNYBe2Md2Ikmb+M4DxSkyu44dW7gP4AwxWBL1PRRYB2Aw1X9nhRT
+	qRyNm1hDzIjbWwL7vpewTe0g==
+X-Received: by 2002:a05:622a:355:b0:4f1:ccdd:ffde with SMTP id d75a77b69052e-5075270a13bmr99517301cf.21.1772304489174;
+        Sat, 28 Feb 2026 10:48:09 -0800 (PST)
 Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744ab3d88sm76160561cf.21.2026.02.28.10.48.07
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744ab3d88sm76160561cf.21.2026.02.28.10.48.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Feb 2026 10:48:07 -0800 (PST)
+        Sat, 28 Feb 2026 10:48:08 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
@@ -67,10 +69,12 @@ Cc: andrii@kernel.org,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v6 0/5] bpf: Allow void return type for global subprogs
-Date: Sat, 28 Feb 2026 13:47:54 -0500
-Message-ID: <20260228184759.108145-1-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v6 1/5] bpf: Factor out program return value calculation
+Date: Sat, 28 Feb 2026 13:47:55 -0500
+Message-ID: <20260228184759.108145-2-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20260228184759.108145-1-emil@etsalapatis.com>
+References: <20260228184759.108145-1-emil@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -79,109 +83,325 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Global subprogs are currently not allowed to return void. Adjust
-verifier logic to allow global functions with a void return type.
-Exception callbacks are excluded from this change, and still require
-a scalar return type. 
+Factor the return value range calculation logic in check_return_code
+out of the function in preparation for separating the return value
+validation logic for BPF_EXIT and bpf_throw().
 
-Adding additional logic for void globals significantly complicates
-check_return_code(), mainly because of how the new feature interacts
-with bpf_throw(). To avoid complicating the code, refactor the return
-value range validation logic into two separate functions, one for
-program exits through BPF_EXIT and one for program exits through
-bpf_throw(). The changes are non-functional.
+No functional changes. The change made in return_retval_code's handling
+of PROG_TRACING program types (not error'ing on the default case) is a
+no-op because the match on the program attach type is exhaustive.
 
-Also adjust existing selftests that were ensuring that global subprogs
-with void return types fail to verify. These tests should now load
-successfully.
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
+---
+ include/linux/bpf_verifier.h |   1 +
+ kernel/bpf/verifier.c        | 226 +++++++++++++++++++----------------
+ 2 files changed, 126 insertions(+), 101 deletions(-)
 
-Patches 1-3 refactor check_return_code into two separate functions, one
-for BPF_EXIT and one for bpf_throw(). No functional changes.
-
-Patches 4-5 enable void globals in the verifier and add additional
-selftests.
-
-v5 -> v6
-(https://lore.kernel.org/bpf/20260227154616.6846-1-emil@etsalapatis.com/)
-
-Patch 1:
-
-- Removed unused variables (kernel test robot)
-- Add break; on empty default to suppress warning (kernel test robot)
-- Added explanation on why change in switch statement for
-  BPF_PROG_TYPE_TRACING in check_return_code is a no-op
-
-Patches 2/3:
-
-- Added From: tags to Eduard's patches and changed my Reviewed-by to 
-  Signed-off-by to properly denote patch route (submitting-patches.rst)
-- Renamed check_subprogram_return_code for into check_global_subprog_return_code
-  (Eduard)
-
-Patch 4:
-
-- Remove unnecessary subprog_is_global() check in check_return_code (Eduard)
-- Fix indentation on patch 4 (AI)
-
-Patch 5:
-
-- Fix unused data in selftests (Eduard)
-
-v4 -> v5
-(https://lore.kernel.org/bpf/20260225033356.518313-1-emil@etsalapatis.com/)
-- Split value validation logic from throw/nonthrow to main prog/subprog (Eduard)
-- Turn return_retval_range() to bool and incorporate return_32bit in retval (Eduard)
-- Adjust if-else chain in return_retval_range for cgroup programs into switch
-  statement to bring it in line with the other program types
-
-v3 -> v4
-(https://lore.kernel.org/bpf/20260223215046.1706110-1-emil@etsalapatis.com/)
-- Factor out bpf_throw() return value validation logic into its own
-  function (Eduard)
-- Validate the range of bpf_throw() return values from void globals (Eduard)
-- Move new selftest to verifier_global_subprogs.c (Eduard)
-- Remove unnecessary verifier_bug_if() statements (Eduard)
-- Add new test to ensure void globals can call bpf_throw
-
-v2 -> v3
-(https://lore.kernel.org/bpf/20260210183257.217285-1-emil@etsalapatis.com/)
-- Allow freplace for global programs that return void and add selftests (Kumar)
-
-v1 -> v2
-(https://lore.kernel.org/bpf/20260127231414.359283-1-emil@etsalapatis.com/)
-
-- Only mark R0 as valid for non-void global functions (AI)
-- Rename subprog_is_void to subprog_returns_void (Kumar)
-- Add test that R0 is invalid after calling a void global (Alexei)
-- Add check to ensure exception callbacks do not return void
-and associated selftest
-
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-
-Eduard Zingerman (2):
-  bpf: Extract program_returns_void() for clarity
-  bpf: extract check_global_subprog_return_code() for clarity
-
-Emil Tsalapatis (3):
-  bpf: Factor out program return value calculation
-  bpf: Allow void global functions in the verifier
-  selftests: bpf: Add tests for void global subprogs
-
- include/linux/bpf_verifier.h                  |   1 +
- kernel/bpf/btf.c                              |   7 +-
- kernel/bpf/verifier.c                         | 349 ++++++++++++------
- .../selftests/bpf/prog_tests/exceptions.c     |   1 +
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  |  24 ++
- .../testing/selftests/bpf/progs/exceptions.c  |  14 +
- .../selftests/bpf/progs/exceptions_fail.c     |  35 +-
- .../bpf/progs/freplace_int_with_void.c        |  11 +
- .../selftests/bpf/progs/freplace_void.c       |  10 +
- .../selftests/bpf/progs/test_global_func7.c   |   2 +-
- .../bpf/progs/verifier_global_subprogs.c      |  19 +
- 11 files changed, 344 insertions(+), 129 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_int_with_void.c
- create mode 100644 tools/testing/selftests/bpf/progs/freplace_void.c
-
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index c1e30096ea7b..090aa26d1c98 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -265,6 +265,7 @@ struct bpf_reference_state {
+ struct bpf_retval_range {
+ 	s32 minval;
+ 	s32 maxval;
++	bool return_32bit;
+ };
+ 
+ /* state of the program:
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 1153a828ce8d..0847d2b1fa5e 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -2923,7 +2923,11 @@ static void init_reg_state(struct bpf_verifier_env *env,
+ 
+ static struct bpf_retval_range retval_range(s32 minval, s32 maxval)
+ {
+-	return (struct bpf_retval_range){ minval, maxval };
++	/*
++	 * return_32bit is set to false by default and set explicitly
++	 * by the caller when necessary.
++	 */
++	return (struct bpf_retval_range){ minval, maxval, false };
+ }
+ 
+ #define BPF_MAIN_FUNC (-1)
+@@ -11134,10 +11138,9 @@ static bool in_rbtree_lock_required_cb(struct bpf_verifier_env *env)
+ 	return is_rbtree_lock_required_kfunc(kfunc_btf_id);
+ }
+ 
+-static bool retval_range_within(struct bpf_retval_range range, const struct bpf_reg_state *reg,
+-				bool return_32bit)
++static bool retval_range_within(struct bpf_retval_range range, const struct bpf_reg_state *reg)
+ {
+-	if (return_32bit)
++	if (range.return_32bit)
+ 		return range.minval <= reg->s32_min_value && reg->s32_max_value <= range.maxval;
+ 	else
+ 		return range.minval <= reg->smin_value && reg->smax_value <= range.maxval;
+@@ -11181,7 +11184,7 @@ static int prepare_func_exit(struct bpf_verifier_env *env, int *insn_idx)
+ 			return err;
+ 
+ 		/* enforce R0 return value range, and bpf_callback_t returns 64bit */
+-		if (!retval_range_within(callee->callback_ret_range, r0, false)) {
++		if (!retval_range_within(callee->callback_ret_range, r0)) {
+ 			verbose_invalid_scalar(env, r0, callee->callback_ret_range,
+ 					       "At callback return", "R0");
+ 			return -EINVAL;
+@@ -17800,6 +17803,115 @@ static int check_ld_abs(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 	return 0;
+ }
+ 
++
++static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_range *range)
++{
++	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
++
++	/* Default return value range. */
++	*range = retval_range(0, 1);
++
++	switch (prog_type) {
++	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
++		switch (env->prog->expected_attach_type) {
++		case BPF_CGROUP_UDP4_RECVMSG:
++		case BPF_CGROUP_UDP6_RECVMSG:
++		case BPF_CGROUP_UNIX_RECVMSG:
++		case BPF_CGROUP_INET4_GETPEERNAME:
++		case BPF_CGROUP_INET6_GETPEERNAME:
++		case BPF_CGROUP_UNIX_GETPEERNAME:
++		case BPF_CGROUP_INET4_GETSOCKNAME:
++		case BPF_CGROUP_INET6_GETSOCKNAME:
++		case BPF_CGROUP_UNIX_GETSOCKNAME:
++			*range = retval_range(1, 1);
++			break;
++		case BPF_CGROUP_INET4_BIND:
++		case BPF_CGROUP_INET6_BIND:
++			*range = retval_range(0, 3);
++			break;
++		default:
++			break;
++		}
++		break;
++	case BPF_PROG_TYPE_CGROUP_SKB:
++		if (env->prog->expected_attach_type == BPF_CGROUP_INET_EGRESS)
++			*range = retval_range(0, 3);
++		break;
++	case BPF_PROG_TYPE_CGROUP_SOCK:
++	case BPF_PROG_TYPE_SOCK_OPS:
++	case BPF_PROG_TYPE_CGROUP_DEVICE:
++	case BPF_PROG_TYPE_CGROUP_SYSCTL:
++	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
++		break;
++	case BPF_PROG_TYPE_RAW_TRACEPOINT:
++		if (!env->prog->aux->attach_btf_id)
++			return false;
++		*range = retval_range(0, 0);
++		break;
++	case BPF_PROG_TYPE_TRACING:
++		switch (env->prog->expected_attach_type) {
++		case BPF_TRACE_FENTRY:
++		case BPF_TRACE_FEXIT:
++		case BPF_TRACE_FSESSION:
++			*range = retval_range(0, 0);
++			break;
++		case BPF_TRACE_RAW_TP:
++		case BPF_MODIFY_RETURN:
++			return false;
++		case BPF_TRACE_ITER:
++		default:
++			break;
++		}
++		break;
++	case BPF_PROG_TYPE_KPROBE:
++		switch (env->prog->expected_attach_type) {
++		case BPF_TRACE_KPROBE_SESSION:
++		case BPF_TRACE_UPROBE_SESSION:
++			break;
++		default:
++			return false;
++		}
++		break;
++	case BPF_PROG_TYPE_SK_LOOKUP:
++		*range = retval_range(SK_DROP, SK_PASS);
++		break;
++
++	case BPF_PROG_TYPE_LSM:
++		if (env->prog->expected_attach_type != BPF_LSM_CGROUP) {
++			/* no range found, any return value is allowed */
++			if (!get_func_retval_range(env->prog, range))
++				return false;
++			/* no restricted range, any return value is allowed */
++			if (range->minval == S32_MIN && range->maxval == S32_MAX)
++				return false;
++			range->return_32bit = true;
++		} else if (!env->prog->aux->attach_func_proto->type) {
++			/* Make sure programs that attach to void
++			 * hooks don't try to modify return value.
++			 */
++			*range = retval_range(1, 1);
++		}
++		break;
++
++	case BPF_PROG_TYPE_NETFILTER:
++		*range = retval_range(NF_DROP, NF_ACCEPT);
++		break;
++	case BPF_PROG_TYPE_STRUCT_OPS:
++		*range = retval_range(0, 0);
++		break;
++	case BPF_PROG_TYPE_EXT:
++		/* freplace program can return anything as its return value
++		 * depends on the to-be-replaced kernel func or bpf program.
++		 */
++	default:
++		return false;
++	}
++
++	/* Continue calculating. */
++
++	return true;
++}
++
+ static int check_return_code(struct bpf_verifier_env *env, int regno, const char *reg_name)
+ {
+ 	const char *exit_ctx = "At program exit";
+@@ -17808,18 +17920,17 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
+ 	struct bpf_reg_state *reg = reg_state(env, regno);
+ 	struct bpf_retval_range range = retval_range(0, 1);
+ 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+-	int err;
+ 	struct bpf_func_state *frame = env->cur_state->frame[0];
+ 	const bool is_subprog = frame->subprogno;
+-	bool return_32bit = false;
+ 	const struct btf_type *reg_type, *ret_type = NULL;
++	int err;
+ 
+ 	/* LSM and struct_ops func-ptr's return type could be "void" */
+ 	if (!is_subprog || frame->in_exception_callback_fn) {
+ 		switch (prog_type) {
+ 		case BPF_PROG_TYPE_LSM:
+ 			if (prog->expected_attach_type == BPF_LSM_CGROUP)
+-				/* See below, can be 0 or 0-1 depending on hook. */
++				/* See return_retval_range, can be 0 or 0-1 depending on hook. */
+ 				break;
+ 			if (!prog->aux->attach_func_proto->type)
+ 				return 0;
+@@ -17877,101 +17988,14 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
+ 		return 0;
+ 	}
+ 
+-	switch (prog_type) {
+-	case BPF_PROG_TYPE_CGROUP_SOCK_ADDR:
+-		if (env->prog->expected_attach_type == BPF_CGROUP_UDP4_RECVMSG ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_UDP6_RECVMSG ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_UNIX_RECVMSG ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_INET4_GETPEERNAME ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_INET6_GETPEERNAME ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_UNIX_GETPEERNAME ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_INET4_GETSOCKNAME ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_INET6_GETSOCKNAME ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_UNIX_GETSOCKNAME)
+-			range = retval_range(1, 1);
+-		if (env->prog->expected_attach_type == BPF_CGROUP_INET4_BIND ||
+-		    env->prog->expected_attach_type == BPF_CGROUP_INET6_BIND)
+-			range = retval_range(0, 3);
+-		break;
+-	case BPF_PROG_TYPE_CGROUP_SKB:
+-		if (env->prog->expected_attach_type == BPF_CGROUP_INET_EGRESS) {
+-			range = retval_range(0, 3);
+-			enforce_attach_type_range = tnum_range(2, 3);
+-		}
+-		break;
+-	case BPF_PROG_TYPE_CGROUP_SOCK:
+-	case BPF_PROG_TYPE_SOCK_OPS:
+-	case BPF_PROG_TYPE_CGROUP_DEVICE:
+-	case BPF_PROG_TYPE_CGROUP_SYSCTL:
+-	case BPF_PROG_TYPE_CGROUP_SOCKOPT:
+-		break;
+-	case BPF_PROG_TYPE_RAW_TRACEPOINT:
+-		if (!env->prog->aux->attach_btf_id)
+-			return 0;
+-		range = retval_range(0, 0);
+-		break;
+-	case BPF_PROG_TYPE_TRACING:
+-		switch (env->prog->expected_attach_type) {
+-		case BPF_TRACE_FENTRY:
+-		case BPF_TRACE_FEXIT:
+-		case BPF_TRACE_FSESSION:
+-			range = retval_range(0, 0);
+-			break;
+-		case BPF_TRACE_RAW_TP:
+-		case BPF_MODIFY_RETURN:
+-			return 0;
+-		case BPF_TRACE_ITER:
+-			break;
+-		default:
+-			return -ENOTSUPP;
+-		}
+-		break;
+-	case BPF_PROG_TYPE_KPROBE:
+-		switch (env->prog->expected_attach_type) {
+-		case BPF_TRACE_KPROBE_SESSION:
+-		case BPF_TRACE_UPROBE_SESSION:
+-			range = retval_range(0, 1);
+-			break;
+-		default:
+-			return 0;
+-		}
+-		break;
+-	case BPF_PROG_TYPE_SK_LOOKUP:
+-		range = retval_range(SK_DROP, SK_PASS);
+-		break;
++	if (prog_type == BPF_PROG_TYPE_STRUCT_OPS && !ret_type)
++		return 0;
+ 
+-	case BPF_PROG_TYPE_LSM:
+-		if (env->prog->expected_attach_type != BPF_LSM_CGROUP) {
+-			/* no range found, any return value is allowed */
+-			if (!get_func_retval_range(env->prog, &range))
+-				return 0;
+-			/* no restricted range, any return value is allowed */
+-			if (range.minval == S32_MIN && range.maxval == S32_MAX)
+-				return 0;
+-			return_32bit = true;
+-		} else if (!env->prog->aux->attach_func_proto->type) {
+-			/* Make sure programs that attach to void
+-			 * hooks don't try to modify return value.
+-			 */
+-			range = retval_range(1, 1);
+-		}
+-		break;
++	if (prog_type == BPF_PROG_TYPE_CGROUP_SKB && (env->prog->expected_attach_type == BPF_CGROUP_INET_EGRESS))
++		enforce_attach_type_range = tnum_range(2, 3);
+ 
+-	case BPF_PROG_TYPE_NETFILTER:
+-		range = retval_range(NF_DROP, NF_ACCEPT);
+-		break;
+-	case BPF_PROG_TYPE_STRUCT_OPS:
+-		if (!ret_type)
+-			return 0;
+-		range = retval_range(0, 0);
+-		break;
+-	case BPF_PROG_TYPE_EXT:
+-		/* freplace program can return anything as its return value
+-		 * depends on the to-be-replaced kernel func or bpf program.
+-		 */
+-	default:
++	if (!return_retval_range(env, &range))
+ 		return 0;
+-	}
+ 
+ enforce_retval:
+ 	if (reg->type != SCALAR_VALUE) {
+@@ -17984,7 +18008,7 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
+ 	if (err)
+ 		return err;
+ 
+-	if (!retval_range_within(range, reg, return_32bit)) {
++	if (!retval_range_within(range, reg)) {
+ 		verbose_invalid_scalar(env, reg, range, exit_ctx, reg_name);
+ 		if (!is_subprog &&
+ 		    prog->expected_attach_type == BPF_LSM_CGROUP &&
 -- 
 2.49.0
 
