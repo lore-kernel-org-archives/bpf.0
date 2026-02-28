@@ -1,162 +1,127 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEFE1E98E3;
-	Sat, 28 Feb 2026 11:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9C942847C
+	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 12:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772279936; cv=none; b=ZQB/9OWDgLe/nh0hHx6tEcxMhnJHpJyUMxISxlziDo1pxuITGQrfX2nWR2N0xBYXufKdlUthHtzWNTzKasnJ0vlxbVY93NZOodY6giwQmFFWloHF82gRb6PQ+L3ptFL1Ns0xCp9zz6dUlukqkuFbAwkyT1ypl48ttD73FQkekhQ=
+	t=1772282333; cv=none; b=euViuSRvnkaG6Ev8whqwRD9WLlZfgQ0V2q2hucnx0t6utTa7GuqLr7FGTYBWNW/zdhNehi/2esD2QoFaH/h2Oge6xB57vKyvv62J2qFsEiJ9ukpkMNRS6HgGOPhJEs+Ae1Per33wkP/sbzjFLtlrZ+DLm0fvaaUJOOTM9UginXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772279936; c=relaxed/simple;
-	bh=SA4eviJ/yZpyCZ7RPvowxWRJiO91Y0GTqAPs96rzHJg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ujo2MJRPz4fCzC542bPAypthZHlNQEtBZ7zAickwP61uc3dHg/2Bx0JP2yuI2Xw7c2F3a8V7/ELcDFql6emkVVdLdtwZZrnskMNEoQ1Pb575uvuz7iqVejqkCLAvtha3ntcMwM0UFQNyVnOTWCnAcGryEvsG9ReIzhqgwXG7k7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fz3ojnSE; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772282333; c=relaxed/simple;
+	bh=PEA8vWjT5ovfF14s1Tw4RTm8694oQcfI75jIBt+A4lE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=uUFAQrMbznzquWfBXmUV4QaTCInnF2qcv0nJ6dnk11jYGFx7astD1BBJczG3kj8y43rK73NS0GwNSn1550Bk0gb/wWD8WPaTHqF2ApI9+KM2Tb5vbDIjC4RMK8pSd8673aUemne1x29g03zOvfcG37lECCWb19JxeVVjSIqcR/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Mx+suYO4; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fz3ojnSE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B19DAC116D0;
-	Sat, 28 Feb 2026 11:58:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772279936;
-	bh=SA4eviJ/yZpyCZ7RPvowxWRJiO91Y0GTqAPs96rzHJg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fz3ojnSEYFMcEgZJjq4mQUrWrDU3Tq7qRuMBtK0kB6Rt/zxOJel2Gu9YaosO6Ug6F
-	 8C8YvGmh+ZSlAKQb2mILbGWXAUW4ufmFh+fOsdtbbo5yStug7IZ6K3Yb1EKcPEYmEw
-	 FNFeGHA0YghHdjL48ZxJ7A8rk9Wk471f7TxTMEsiS7IwtvHtDN95LVNIpc5sx7258p
-	 5CD8U8wHZK+CFn7wViJEB/MA7QvNxhfBAdhA4cp1zY3rl4LY5mYmOXgOHnj0V8ZxoB
-	 CQ7Qkh3Lmfw81RRL6gVP4oSHtB2WR33hCgei/6GU08EPMPY9PFkvpyLNLGC1O3BAYe
-	 A2r8i7UILNcxw==
-Date: Sat, 28 Feb 2026 12:58:53 +0100
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Donald Hunter <donald.hunter@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Tony Nguyen <anthony.l.nguyen@intel.com>,
-	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jakub Sitnicki <jakub@cloudflare.com>, netdev@vger.kernel.org,
-	bpf@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 1/5] netlink: specs: Add XDP RX checksum
- capability to XDP metadata specs
-Message-ID: <aaLYfWnuuf_ne72u@lore-desk>
-References: <20260217-bpf-xdp-meta-rxcksum-v3-0-30024c50ba71@kernel.org>
- <20260217-bpf-xdp-meta-rxcksum-v3-1-30024c50ba71@kernel.org>
- <20260218174742.62a4074f@kernel.org>
- <aZbuWBnmh_SQJyVf@lore-desk>
- <20260219091344.1d8517f3@kernel.org>
- <aZyKWoxnywXKWth9@lore-desk>
- <20260223151845.06db43b0@kernel.org>
- <aaGaaExy63bGa7Or@lore-desk>
- <20260227153231.78d16b69@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Mx+suYO4"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-48372facfedso26100655e9.0
+        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 04:38:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772282330; x=1772887130; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mOaqhQImVlbU+bIaPkzVliN+MSpqLdHsMK4C5p4HbTE=;
+        b=Mx+suYO4WAm6Esi84MZAoAmYsEg+faHqpOo9+bFiEOnlJdfwT+vS7ye5q++/MXA6g4
+         mTIXqomnM6dz7b4tpK1KbP9UZmW5hzlb/wweLxY7zC8AbdZzTDy3F/KaN2VMw1wXsB66
+         IAC4aSt0G9xxuaODA2KLVyEhRLb0dYJmfeWOOZXWzZ3Tj7iGwN4DH5r8OirXx5emK83X
+         hFC6Ge2zWg/fc7qE1q3VrENHESF+g8ifwk+SOkHMggXufiEcnyLhtXrm+uV2F1gK9IJW
+         /vh/E8zN7TllRgrU9JQ7pdZHtwYv695+yKsE8ye6vRoR2MHRk0HW1MoBXpi7GyXxLEJ7
+         t7nw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772282330; x=1772887130;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mOaqhQImVlbU+bIaPkzVliN+MSpqLdHsMK4C5p4HbTE=;
+        b=F11D+7tb8NAqZVd3NJHa+Dx8gPSGL4Qzj8e/uwGT7/mu9f8Kf3mq6241Uat3ZCG+gE
+         Pe1jpnDd3wvf1yB1LedzOEb3TF+iUrnQVzNUedgG0QlKAnX06LADCQnR2/n+4PtBtYeJ
+         x8nG8LOmIYJsePehpPwmvKn7EKceHO3E28mybwQBtc/6GTjiStNzZADOhafiO3PRlqUG
+         iq8GCw10YokgwBreoYr6ypWEuMnV4orX1PYgsbg/lNXqg8Yjbj2ptmbjYdGZrUMu8Jxg
+         HS2J0RF2as83uST4s9Nm//ew22a/3JHUEuIb0d3E4BdBjzetsamt8yA+5UNHrCpTId9e
+         Kseg==
+X-Forwarded-Encrypted: i=1; AJvYcCXYU/Jdn3Rt5CCMt+7l50f8fatO3KWH3Z1Lb1FsDrKLlEIy1+wUooVCJFZbBanNBb/3YwE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxraV8vqRtlv/x4rpPwCrvNwCFuLzktBagy61SwQkgseVwSWO2k
+	oQYTpe/7UAzuBwqBJcYj3h014hDMqKG4pgmHoJH0VNHqorK9j/1JnlLatsUo24D//qwPxsgE9XV
+	6ROcq3LdX+59bgOPYIA==
+X-Received: from wmby19.prod.google.com ([2002:a05:600c:c053:b0:480:690c:88de])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:8b5b:b0:481:a662:b3f3 with SMTP id 5b1f17b1804b1-483c990c263mr116931775e9.7.1772282329804;
+ Sat, 28 Feb 2026 04:38:49 -0800 (PST)
+Date: Sat, 28 Feb 2026 12:38:48 +0000
+In-Reply-To: <20260227200848.114019-3-david@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="zJe+viDHT4x8TgXE"
-Content-Disposition: inline
-In-Reply-To: <20260227153231.78d16b69@kernel.org>
+Mime-Version: 1.0
+References: <20260227200848.114019-1-david@kernel.org> <20260227200848.114019-3-david@kernel.org>
+Message-ID: <aaLh2BxSgC9Jl5iS@google.com>
+Subject: Re: [PATCH v1 02/16] mm/memory: remove "zap_details" parameter from zap_page_range_single()
+From: Alice Ryhl <aliceryhl@google.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: linux-kernel@vger.kernel.org, 
+	"linux-mm @ kvack . org" <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, David Rientjes <rientjes@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=" <arve@android.com>, Todd Kjos <tkjos@android.com>, 
+	Christian Brauner <brauner@kernel.org>, Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>, 
+	H Hartley Sweeten <hsweeten@visionengravers.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Dimitri Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
+	linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="utf-8"
 
+On Fri, Feb 27, 2026 at 09:08:33PM +0100, David Hildenbrand (Arm) wrote:
+> Nobody except memory.c should really set that parameter to non-NULL. So
+> let's just drop it and make unmap_mapping_range_vma() use
+> zap_page_range_single_batched() instead.
+> 
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 
---zJe+viDHT4x8TgXE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> diff --git a/rust/kernel/mm/virt.rs b/rust/kernel/mm/virt.rs
+> index da21d65ccd20..b8e59e4420f3 100644
+> --- a/rust/kernel/mm/virt.rs
+> +++ b/rust/kernel/mm/virt.rs
+> @@ -124,7 +124,7 @@ pub fn zap_page_range_single(&self, address: usize, size: usize) {
+>          // sufficient for this method call. This method has no requirements on the vma flags. The
+>          // address range is checked to be within the vma.
+>          unsafe {
+> -            bindings::zap_page_range_single(self.as_ptr(), address, size, core::ptr::null_mut())
+> +            bindings::zap_page_range_single(self.as_ptr(), address, size)
+>          };
 
-> On Fri, 27 Feb 2026 14:21:44 +0100 Lorenzo Bianconi wrote:
-> > > > At the moment there is no way to store the csum value we got running
-> > > > bpf_xdp_metadata_rx_checksum() in order to be consumed during
-> > > > xdp_buff/xdp_frame to skb conversion (this info can just be consume=
-d in the
-> > > > ebpf program bound to the NIC) but =20
-> > >=20
-> > > I think the scope here is much narrower than the xdp_buf to xdp_frame
-> > > to skb conversion. We are just pass information between the program a=
-nd
-> > > driver which owns xdp_buff. Very similar to your new xmo.
-> > >=20
-> > > We could either tell the driver to discard the csum complete or even
-> > > add a helper to "adjust" the the csum value. Similar to the helper
-> > > we have to adjust the csum in TC / skb context. =20
-> >=20
-> > IIUC, for the CSUM_COMPLETE case, we want to add a kfunc used to update=
- (or
-> > invalidate) the checksum value (if the packet has been modified by the =
-eBPF
-> > program bounded to the NIC) and report the updated checksum to the driv=
-er if
-> > the XDP verdict is XDP_PASS. Correct?
-> >=20
-> > I guess we could have two approaches here:
-> > - Write the new checksum value into the xdp_metadata area (if available)
-> >   where the driver can load it and update the checksum value before
-> >   allocating the skb.
-> >   The main downside of this approach is we need modify each driver.
-> > - Add a new xmo callback used to set the checksum value and report it
-> >   from the eBPF program into a specific memory area provided by the dri=
-ver
-> >   (e.g. DMA descriptor) that is used to build the skb.
-> > =20
-> > What do you think?
->=20
-> Exactly. The invalidation is easier 'cause using a single bit in the
-> flags should be uncontroversial. If we want to be able to repair /
-> provide the csum complete then we have to pick one of the two options
-> you outlined. As you may suspect from previous discussions I favor=20
-> the latter. But we'd probably have to have a PoC with either one and
-> see where the consensus falls.
+Please run rustfmt on Rust changes. Here, rustfmt leads to this being
+formatted on a single line:
 
-ack, I will work on a PoC.
+unsafe { bindings::zap_page_range_single(self.as_ptr(), address, size) };
 
->=20
-> Actually, thinking about it more, I guess this is not just a
-> CSUM_COMPLETE issue. XDP_PASS will also risk reporting invalid
-> UNNECESSARY to the stack (e.g. when XDP stripped a UDP tunnel
-> which which the NIC compute the UNNECESSARY but the packet inside
-> the tunnel has an invalid csum).
->=20
-> > Moreover, since we already have this issue upstream, do you think
-> > this new feature must be part this series or can we do it with a
-> > follow-up patch/series?
->=20
-> We don't have to add the kfunc to adjust / invalidate the csum.
-> But we should document how the drivers are expected to behave until
-> such kfunc exists and we should add a selftest that checks the
-> documented expectation.
+with the above changed:
 
-I will add the required documentation and kselftest in the next iteration.
+Acked-by: Alice Ryhl <aliceryhl@google.com> # Rust and Binder
 
-Regards,
-Lorenzo
-
-
---zJe+viDHT4x8TgXE
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaaLYfQAKCRA6cBh0uS2t
-rK8NAQCa3BtPt0r6O4Rd1WSKMud4jYbuc+yFGRH5iD2pYIy4DQEAjp1slS4Z4kQg
-Efic0WsT4AYh9Xf0lUF6VupLvRIrWAE=
-=4fhS
------END PGP SIGNATURE-----
-
---zJe+viDHT4x8TgXE--
+Alice
