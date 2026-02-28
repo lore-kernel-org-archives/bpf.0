@@ -1,116 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB31120C463
-	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 03:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AFF28641F;
+	Sat, 28 Feb 2026 03:36:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772247859; cv=none; b=J1ayzkUcqgRwEfeZ2UXzf1hpPlzFqYyjcSIbr96nsRMGRmUs/8s3Obai5wbx54PkTY+CIOitPttqn0rxO30PQhxbKl0cmYE5VsPHU84UO+faFTXdnUOFajyqr24LWJvCJ7izBufGu6dedyGGKbdQI6/9OvQBEfpU1PbQKuokCxo=
+	t=1772249801; cv=none; b=NEXygAohRa0KAlMeCVai5HLO1G6bRsXzZXNoZMnwE1twfpRbKATfnpQ38eE0yifUL0i5aut0zl5Fn+Lvum1ULo4Zgl3937itNnotBzcrG74FkJHcAP2M5bczXZL8cljf5nPo7auwCWMxb9kwmI6aEaUlCTnhRrdeovZN1KiDtmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772247859; c=relaxed/simple;
-	bh=mgmRwwNpWXhgkOoz4NtVpsYVPE+VpdILYY4lLthMG3c=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=eanFLTQaYtTnL8jOY5kLAGn+FzUXi+i/ELBffJLtRfPBC+3v3tcmSfouHlGU6+Y7QfAG1oJnN3rfyATkoFP3C5/SGunyrJ9ct/arnqanhum8jZd6yKJYzET4cQSu5ZhCfC1ppwfjBIeozP4Iiq1oIdVo8jdNISuYpaDEXEuR9nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DbCYzAWH; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772249801; c=relaxed/simple;
+	bh=qGi3TBC4+ZZlUUd73EZcWgH044aOoOU3ydVwpDiZ2MQ=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=bjnTD6YfS02mgRbT9dnPjfQ6e3slRx6X9M+dzDJ54GAK6RrT27obt/YtqHP89fOZJ+WiGFr37U5uh1nQNZ7zAbOu1p/A9+2aI8IqEdrcvOB1XLSkcuUUwX4zyzVb9D0XRzoTi5es2RAzFOYvJ33NdrAkVVtDVtBMsYaAnoL2EG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qgSyo5Ec; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DbCYzAWH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1481C116C6;
-	Sat, 28 Feb 2026 03:04:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772247859;
-	bh=mgmRwwNpWXhgkOoz4NtVpsYVPE+VpdILYY4lLthMG3c=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=DbCYzAWHzIUGl6xwLIvzbq5k+9t+aab4zx7505na58fROR+tGyWE9O19FD7e+D+7L
-	 lqAiRObmHfTfFQ6mjY3KFMoEGIJv7pWggo7QM4xBmH/sw9rLUd2HCjGYhYR/CGzpY7
-	 fHOK1jrSJIbZ9ksq5WOkfp4R4EPJjkjRgz7stvI/FTl4SfHMtmPIOeH8d5auFSOZnJ
-	 QJpvWFK82QvJE3empXDFQs4cmhf68UkgIjSTZr5l4Mf0hqRDS3vxJpFmKSJZPfCHHA
-	 jtnx+2kR6dCuJVtLqC1C8quScXC9jx7Lo/j1sJpYMTAd+85NZuO2Y0Ld5Dq+2aM3EU
-	 ts3b02vJZnJRA==
-Content-Type: multipart/mixed; boundary="===============4168895131959537881=="
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qgSyo5Ec"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5a89fd3edd5e90ed47ff1189efdfa626f9b4610daa02da46a3a8fe4d5762796c@mail.kernel.org>
-In-Reply-To: <FFFA8066FE63B894+20260228022403.99235-1-xulang@uniontech.com>
-References: <FFFA8066FE63B894+20260228022403.99235-1-xulang@uniontech.com>
-Subject: Re: [PATCH bpf v3] bpf: fix: Race condition in bpf_trampoline_unlink_cgroup_shim
-From: bot+bpf-ci@kernel.org
-To: xulang@uniontech.com,martin.lau@linux.dev
-Cc: andrii@kernel.org,ast@kernel.org,bot+bpf-ci@kernel.org,bpf@vger.kernel.org,clm@meta.com,daniel@iogearbox.net,dddddd@hust.edu.cn,dzm91@hust.edu.cn,eddyz87@gmail.com,hust-os-kernel-patches@googlegroups.com,ihor.solodrai@linux.dev,kaiyanm@hust.edu.cn,martin.lau@kernel.org,sdf@fomichev.me,xulang@uniontech.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sat, 28 Feb 2026 03:04:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772249787;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uhExI+NlEqBzfbQcIfU9xl+aEEsBqnMjFmXS+IGjlNM=;
+	b=qgSyo5EcU3CTPjtNkkigPA69NE6f75rl5NuL+8ulHP3t4Hk2gdOA7dqo2JBJJPemmpJbHD
+	cQ7wkQK7EFVc5hMpGpf+l1dQsVuOGWKfEa6lw9MzCJtmdREnObQke26wz1StmKBtFIXxaN
+	Yb6qYrS+cBhwiuSBnI69gTGUbr6qRb0=
+Date: Sat, 28 Feb 2026 03:36:24 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: "Jiayuan Chen" <jiayuan.chen@linux.dev>
+Message-ID: <08041bd78c06981b18b3de90a95e0c951bf1623c@linux.dev>
+TLS-Required: No
+Subject: Re: [PATCH net v3 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+To: "Jay Vosburgh" <jv@jvosburgh.net>
+Cc: netdev@vger.kernel.org, jiayuna.chen@linux.dev, jiayuna.chen@shopee.com,
+ "Jiayuan Chen" <jiayuan.chen@shopee.com>,
+ syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com, "Andrew Lunn"
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "Jesper Dangaard Brouer"
+ <hawk@kernel.org>, "John Fastabend" <john.fastabend@gmail.com>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Andrii Nakryiko"
+ <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh"
+ <kpsingh@kernel.org>, "Hao Luo" <haoluo@google.com>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Shuah Khan" <shuah@kernel.org>, "Sebastian Andrzej
+ Siewior" <bigeasy@linutronix.de>, "Clark Williams"
+ <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>, "Jussi
+ Maki" <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-rt-devel@lists.linux.dev
+In-Reply-To: <999129.1772247707@famine>
+References: <20260228021918.141002-1-jiayuan.chen@linux.dev>
+ <20260228021918.141002-2-jiayuan.chen@linux.dev>
+ <999129.1772247707@famine>
+X-Migadu-Flow: FLOW_OUT
 
---===============4168895131959537881==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+February 28, 2026 at 11:01, "Jay Vosburgh" <jv@jvosburgh.net mailto:jv@jv=
+osburgh.net?to=3D%22Jay%20Vosburgh%22%20%3Cjv%40jvosburgh.net%3E > wrote:
 
-> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-> --- a/kernel/bpf/trampoline.c
-> +++ b/kernel/bpf/trampoline.c
 
-[ ... ]
+>=20
+>=20Jiayuan Chen <jiayuan.chen@linux.dev> wrote:
+>=20
+>=20>=20
+>=20> From: Jiayuan Chen <jiayuan.chen@shopee.com>
+> >=20
+>=20> bond_rr_gen_slave_id() dereferences bond->rr_tx_counter without a N=
+ULL
+> > check. rr_tx_counter is a per-CPU counter only allocated in bond_open=
+()
+> > when the bond mode is round-robin. If the bond device was never broug=
+ht
+> > up, rr_tx_counter remains NULL, causing a null-ptr-deref.
+> >=20
+>=20> The XDP redirect path can reach this code even when the bond is not=
+ up:
+> > bpf_master_redirect_enabled_key is a global static key, so when any b=
+ond
+> > device has native XDP attached, the XDP_TX -> xdp_master_redirect()
+> > interception is enabled for all bond slaves system-wide. This allows =
+the
+> > path xdp_master_redirect() -> bond_xdp_get_xmit_slave() ->
+> > bond_xdp_xmit_roundrobin_slave_get() -> bond_rr_gen_slave_id() to be
+> > reached on a bond that was never opened.
+> >=20
+>=20> The normal TX path (bond_xmit_roundrobin) is not affected because T=
+X
+> > requires the bond to be UP, which guarantees rr_tx_counter is allocat=
+ed.
+> > However, bond_xmit_get_slave() (ndo_get_xmit_slave) has the same code
+> > pattern via bond_xmit_roundrobin_slave_get() and could theoretically
+> > hit the same issue.
+> >=20
+>=20 As a practical matter, though, I don't think the
+> ndo_get_xmit_slave path can actually hit the issue, as that looks to
+> only be called from Infiniband, which is only supported in bonding for
+> active-backup mode.
+>=20
+>=20>=20
+>=20> Fix this by allocating rr_tx_counter unconditionally in bond_init()
+> > (ndo_init), which is called by register_netdevice() and covers both
+> > device creation paths (bond_create() and bond_newlink()). This also
+> > handles the case where bond mode is changed to round-robin after devi=
+ce
+> > creation. The conditional allocation in bond_open() is removed. Since
+> > bond_destructor() already unconditionally calls
+> > free_percpu(bond->rr_tx_counter), the lifecycle is clean: allocate at
+> > ndo_init, free at destructor.
+> >=20
+>=20> Fixes: 879af96ffd72 ("net, core: Add support for XDP redirection to=
+ slave device")
+> > Reported-by: syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com
+> > Closes: https://lore.kernel.org/all/698f84c6.a70a0220.2c38d7.00cc.GAE=
+@google.com/T/
+> > Signed-off-by: Jiayuan Chen <jiayuan.chen@shopee.com>
+> >=20
+>=20 My only concern is that this will waste a percpu u32 per bond
+> device for the majority of bonding use cases (which use modes other tha=
+n
+> balance-rr), which could be a few hundred bytes on a large machine.
+>=20
+>=20 Does everything work reliably if the rr_tx_counter allocation
+> happens conditionally on mode =3D=3D BOND_MODE_ROUNDROBIN in bond_setup=
+, as
+> well as in bond_option_mode_set?
+>=20
 
-> @@ -1003,12 +1004,13 @@ struct bpf_attach_target_info tgt_info = {};
+
+
+Hi=20Jay,
+
+Thanks for the review.
+
+bond_setup() is not suitable here as it is a void callback with no error =
+return path,
+so an alloc_percpu() failure cannot be propagated.
+
+An alternative would be to allocate conditionally in bond_init() (since t=
+he default mode is round-robin)
+and manage allocation/deallocation in bond_option_mode_set() when the mod=
+e changes.
+
+This is a trade-off between the added complexity of conditional alloc/fre=
+e across multiple code
+paths and saving a per-CPU u32 for non-round-robin bonds.
+
+For the per-CPU u32 overhead, it's only 4 extra bytes per CPU per bond de=
+vice =E2=80=94 and machines with
+that many CPUs tend to have plenty of memory to match.
+
+I don't have a strong preference either way.
+
+Thanks
+
+>  -J
+>=20
+>=20>=20
+>=20> ---
+> >  drivers/net/bonding/bond_main.c | 12 ++++++------
+> >  1 file changed, 6 insertions(+), 6 deletions(-)
+> >=20
+>=20> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/=
+bond_main.c
+> > index 78cff904cdc3..9f63f67d8418 100644
+> > --- a/drivers/net/bonding/bond_main.c
+> > +++ b/drivers/net/bonding/bond_main.c
+> > @@ -4279,12 +4279,6 @@ static int bond_open(struct net_device *bond_d=
+ev)
+> >  struct list_head *iter;
+> >  struct slave *slave;
+> >=20=20
+>=20> - if (BOND_MODE(bond) =3D=3D BOND_MODE_ROUNDROBIN && !bond->rr_tx_c=
+ounter) {
+> > - bond->rr_tx_counter =3D alloc_percpu(u32);
+> > - if (!bond->rr_tx_counter)
+> > - return -ENOMEM;
+> > - }
+> > -
+> >  /* reset slave->backup and slave->inactive */
+> >  if (bond_has_slaves(bond)) {
+> >  bond_for_each_slave(bond, slave, iter) {
+> > @@ -6411,6 +6405,12 @@ static int bond_init(struct net_device *bond_d=
+ev)
+> >  if (!bond->wq)
+> >  return -ENOMEM;
+> >=20=20
+>=20> + bond->rr_tx_counter =3D alloc_percpu(u32);
+> > + if (!bond->rr_tx_counter) {
+> > + destroy_workqueue(bond->wq);
+> > + return -ENOMEM;
+> > + }
+> > +
+> >  bond->notifier_ctx =3D false;
+> >=20=20
+>=20>  spin_lock_init(&bond->stats_lock);
+> > --=20
+>=20> 2.43.0
+> >=20
+>=20---
+>  -Jay Vosburgh, jv@jvosburgh.net
 >
->  	shim_link = cgroup_shim_find(tr, bpf_func);
->  	if (shim_link) {
-> -		/* Reusing existing shim attached by the other program. */
-> -		bpf_link_inc(&shim_link->link.link);
-> -
-> -		mutex_unlock(&tr->mutex);
-> -		bpf_trampoline_put(tr); /* bpf_trampoline_get above */
-> -		return 0;
-> +		link = &shim_link->link.link;
-> +		if (link == bpf_link_inc_not_zero(link)) {
-
-The other callers of bpf_link_inc_not_zero() check the return value
-using IS_ERR(), for example bpf_link_by_id():
-
-    link = bpf_link_inc_not_zero(link);
-
-and bpf_link_get_curr_or_next():
-
-    link = bpf_link_inc_not_zero(link);
-    if (IS_ERR(link)) {
-
-Should this use the same IS_ERR() pattern for consistency? Something
-like:
-
-    if (!IS_ERR(bpf_link_inc_not_zero(link))) {
-
-> +			/* Reusing existing shim attached by the other program. */
-> +			mutex_unlock(&tr->mutex);
-> +			bpf_trampoline_put(tr); /* bpf_trampoline_get above */
-> +			return 0;
-> +		}
->  	}
-
-This commit fixes a use-after-free introduced by commit 69fd337a975c
-("bpf: per-cgroup lsm flavor"), which added the bpf_link_inc() call
-that could resurrect a zero-refcount link. It appears to be missing
-a Fixes: tag. Martin KaFai Lau's review of v2 also expected this tag
-to be present.
-
-Suggested:
-
-    Fixes: 69fd337a975c ("bpf: per-cgroup lsm flavor")
-
-https://lore.kernel.org/bpf/cd99eba7-ac03-4b53-a79c-a6206abbddb6@linux.dev/
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22511586078
-
-AI-authorship-score: low
-AI-authorship-explanation: Human authorship patterns: references maintainer suggestion, informal testing description, iterative v1/v2/v3 development with reviewer feedback, addresses a bug reported by a different researcher.
-issues-found: 2
-issue-severity-score: low
-issue-severity-explanation: Missing Fixes: tag (requested by BPF maintainer) and non-standard bpf_link_inc_not_zero() return value comparison pattern; neither causes runtime problems.
-
---===============4168895131959537881==--
