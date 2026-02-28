@@ -1,63 +1,63 @@
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038BE248880
-	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 21:31:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703DC2DEA86
+	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 21:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772314266; cv=none; b=Fm+bpzpMJxWaYaim70PZMOhVItQE9rpkBm71Ia4rd7KEw8JsbXHEjn1NknExkqTPyrBO7PHvuWzZSqWKFaYrWHtqf4hg4Js8Qf8sBr5EQHzNLMO1Q1AzcT5Ie5133nbjQLzB/ozIFNoQekM9hFbyHaWVM3UabFr1BLmpTRusNgs=
+	t=1772315421; cv=none; b=rbsoX0Ryk7jJzsJWnaXWI6OHMFzzj94a/sPqFYHCUbZjeFUBiRIUuOP4wTyS6qKvcuSqR5C5wRl1jZ/qd5Go7sJNAPwCEidfq6vTf3WiTuQ72xL4ZgQi1mDA8QkcErTCjXYNsHRJ394a992dAC6W01QaYukIgLBVbSESTXPZN9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772314266; c=relaxed/simple;
-	bh=MNqlDapXdiHzTEmeLLtwBromOwc12WuSih/Ud7CnCsU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=JGqGqpHt49X8RDyTn0fM49ie7SApF0E3orFe8veqgNfPyWMaYHchNYW529ckQmeFZLr0RKNcylAcDbgSuvqkybecKgO0amhJXZBJkXFzYi4u6ctQd590755+KznvdA1iom7MMlfgzfGixPX18fXEtcQgWLdQjJ9w6NwNjyb6uDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=QJbhO3iJ; arc=none smtp.client-ip=209.85.219.43
+	s=arc-20240116; t=1772315421; c=relaxed/simple;
+	bh=jmfwJKfAR1jtQZJ+9zA6M6A9IQhwuA9QpgAiwX12Wu8=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:From:To:Cc:
+	 References:In-Reply-To; b=EIdnvCw1t20JWJYz5UQAt7nqpITYDCX93fWEZLTsG6WoP/wxmbVMK8d7obLL4FRhWQjJsn5KfGfvwQS8e4HNB7XzPFbGuBFyuY79AQQvAXUQs7DtYaTKXvFwiIdaLKWx4zmw+QllIy4wbKeh7PN1n/Lgao/Z9ZsXhkr1QXA+6Qc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=LM+oo9rT; arc=none smtp.client-ip=209.85.160.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="QJbhO3iJ"
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-896f82e5961so50342266d6.0
-        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 13:31:03 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="LM+oo9rT"
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-506a67282a0so33295921cf.0
+        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 13:50:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772314263; x=1772919063; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772315419; x=1772920219; darn=vger.kernel.org;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XswkprWZKrLKuM/yjjoFLV+zgozxncFY35B5DZOsTz8=;
-        b=QJbhO3iJva31rsYTY9kWFwenQh8gK0Jhl0SOG5Nt24HB2HuT2mOjSfu5syrVthdqbt
-         VfIeHtxxij2AjEd9+QUdvd4KGdupv2hwEkc7QLw9OkV/X2QCQTDP6dQmaazpYcI+cJkA
-         lC9i2uP0Usl99lODQD4xu5MoRbgxlSiSojVfX6hRnY82B/9a4YDBLaEVXLQJhCGiTssa
-         Wv1lTMboHWw3uTsrfs+KmpdFr5k1RgxkcVgVwXyalK7NqV0hqLItT7nAXhgmTB0vguuH
-         1Emps6NAOo8ae80vbQk/HBoYtKEJ9CTs6lnVVvDztj6CGAx938z/D2qsvDNSz1G/g7+b
-         NsNw==
+        bh=P+f8XonCm5/3C5EterxMhivO6MSQ1rxOv28So/EOBLI=;
+        b=LM+oo9rTgYwhOb46TcQS6IEmiF4HjyjrIeBK/6apJedTXFWNZlbdAGF7RIwt22Ic/p
+         5HHEfnGLRuiEZXjmnS7+Qg4DloYzh+KzDRiM97yW1yRbuGrbb6Mc/JDfUIsPW10MwzAg
+         WbqVz0lB8FqzYVhXbMC3ddgX3xhG/WZhJlZFx0dYM8SJHBVYdvnyoo7FaOHkT116+ooP
+         PS4ujBnJMG+8eOFYQYTJJ12v8s8KYgL5Z7yVqDIuFdqT7YVJkvEx+XR+21Dy+idPiqJ4
+         e1fR/vlviuJYXbfjeJL1N+VktYZ3joUfrZx4LQlBOpnFV88Dntme63dqQ+NEVUAtRY86
+         hsIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772314263; x=1772919063;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
+        d=1e100.net; s=20230601; t=1772315419; x=1772920219;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
          :content-transfer-encoding:mime-version:x-gm-gg:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XswkprWZKrLKuM/yjjoFLV+zgozxncFY35B5DZOsTz8=;
-        b=Qu7fbSYHOrKPh0tzjijcGhZw1wIfxbRHQvGoSpovpl5siWNAENAK+nXT08wUuM0V4l
-         t92iASjIEaLeACQClG1MGqHDhPcHtUTfB5i4ODTSZCf9GcI5BnXLv2RuHDwtU5ihspX1
-         CX31bWqQ+WVuBWGjqP03TTZlTdNDKmiVf6xnMDp9G/C2I5Of8IeQMVIzCroK8AUOhL0u
-         E591gZge+sW3/0mj6gIKTtONK0tN2Z/lSElnpoc2wsLbzeAVpZ8+H0pfWp68x8hX4CQs
-         zqL2wdD0vCg6M93ZJZd3pC3fJSauatfMV3Hz+WhW0xGMmGyOzoQyqW69d8FiyNYYdCAH
-         cjFw==
-X-Forwarded-Encrypted: i=1; AJvYcCVp0PFF2R1j5JwZK3dfIWeiLW86PvwMC7H7lEmWBzfCCwiD3KWLgPhAGVUSmAQZTKiLu8Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkgYt0IN0ArokUoAVr7A39nfVXoAomepZ6iABtttRS5cRk2sIg
-	7Tc4W1dYxLCyV6GiWn5ogm4dZhhZx8/zDatVAN10n6IlVZ0MLAMJLQt3WUlZ5RIIfbs=
-X-Gm-Gg: ATEYQzzeyCEL9p8n751UuY51KFEzqMOzFbzW9T6RIPPZcjGgpTmB4UTuIuVVLfL+B9L
-	2I4kzfT9VF6spHuw3xCTFO1TIpN3LG96CsQQAWgic35MGAcSUJ1RUbhH+1SWIyA099ttUhJtzDb
-	ZfH3xDr+OT3EJirUPZ3Cr9JtL7FAyrEPn+GrKadpUyDMhTrrhWY9y0fVI2hTJZb1HhJ/VKkbdyp
-	NSU8VKn+NJoCZHcpGiK8KfZ3zNhI86MWCjFbIZmNmL6BakNfyT4iB5ETDGqZvm6RedSyE2jqtNG
-	1K5b53zVfnyap2V1Y1zOk0uBTF8ROBIAOROm0k4Ff2+AK0qzxF+y6k13YmMksPtw7GywbhfVQO6
-	NhGcqrk90IHoLIxdSQ1EmBUc5iFvC/dmIjF3/dUkgNWYmbPUGUBom1guh1bbEsaVbDDpRcKWuMp
-	wre39aOhPIAsfkldZZHkmIwrg=
-X-Received: by 2002:a05:6214:ccc:b0:880:5bff:74b6 with SMTP id 6a1803df08f44-899d1d6ca5fmr106612076d6.7.1772314262776;
-        Sat, 28 Feb 2026 13:31:02 -0800 (PST)
+        bh=P+f8XonCm5/3C5EterxMhivO6MSQ1rxOv28So/EOBLI=;
+        b=PlI28LN2rrrpSJ4Ms7JiUrTzmN2/2UQDN5fdMwbCjb69ERCbv2tZtsoDfF2/CDa1+m
+         pIll/P7oyNktjZ2F5sXqdkkcNkJ6klLqGiLoldfbTLQjf07QPSvhypJMygdppH9/dK6i
+         eRcybIxbFKtbX+QTRxZIwCeIZVbMEB9b1Amt3uQQBFV1ljr7duoemB8HmegfvB/6y4cz
+         K2fBNZk2GBy/pc6FxJAVpCKb+yi0yhVZPqXnu6JKlnmAfMzhxX61CV98VOzVUV86ZWi1
+         +W2TaIvBQ71Esx/91rM2G99ktomFddwx1WexSQtkLHtXBnRIeXPqsPaI7fB7ZKbWksxr
+         kCuA==
+X-Forwarded-Encrypted: i=1; AJvYcCWIFNQtf+xXRxg/aTJ+fKcFKDzcitKjhD94CADKa0y9T8LrdChM93yzdZkmJM9+gsZ5UCE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBw/rgCLHUdhljCTCZJ4rbbL1Eucrd0hrsL9unLIdrPI9B2OCA
+	2s5NHSwmNXbeZ+pHObXeNQS1vyR4iakJLMe986x0CwjMoM8vaRfT0uiDH0rWAuS6/n0=
+X-Gm-Gg: ATEYQzzLOucEX25Pr8qiIz9vEtgeJUAllxaV8q0nWtn123EUMR+wSwk2OdwNKlVgg9l
+	A67HCsSMgsjlKn15tPMkRVwh+4QqDKqGbhOVHw2gbiGAspRugoIx9Ocp1pgdHHI9K3D+e54sae8
+	z2lvdo3BDK95ztjJxdKqBs7LkcG+q63HJBi8KII4c+azmURO4nMoZfBaJdPweIAdwLZgx7BxxES
+	iOjr2/YwaJ6LFy//VdTqQAela6TMrZ7KEpXM65lzulH7A6kmm3C1INpFu0tNMJamchIELcC4yTk
+	j3kwbYY6dQwNpwvDoEkEV3f8KBG2W4qhaBTROZmUon+NG6mLxZPSPAEv+5hC3F0FLQX6IcCRJwZ
+	PHYsddpBtGy01RNiFWn7cGsZGsrdkm8h3GnW2DjCxY1pILzlf+J3uIG/Fygd8q5iM+B4aKDCdcB
+	c76SGaYEMbMQlyc/vi5T85lVo=
+X-Received: by 2002:a05:622a:213:b0:4ee:17e9:999d with SMTP id d75a77b69052e-5075291190dmr102299771cf.34.1772315419311;
+        Sat, 28 Feb 2026 13:50:19 -0800 (PST)
 Received: from localhost ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-899c7158db9sm73834406d6.3.2026.02.28.13.31.01
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-507451cda0asm81287321cf.24.2026.02.28.13.50.18
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 Feb 2026 13:31:02 -0800 (PST)
+        Sat, 28 Feb 2026 13:50:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -66,11 +66,10 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Date: Sat, 28 Feb 2026 16:31:00 -0500
-Message-Id: <DGQWYZE6I292.1BN9TAIIVRK7T@etsalapatis.com>
-Cc: "Hui Zhu" <zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v3 2/3] bpf: Use bpf_core_enum_value for stats
- in cgroup_iter_memcg
+Date: Sat, 28 Feb 2026 16:50:14 -0500
+Message-Id: <DGQXDPH0QC4V.1LVX4WKVY8DWV@etsalapatis.com>
+Subject: Re: [PATCH bpf-next v3 3/3] selftests/bpf: Check
+ bpf_mem_cgroup_page_state return value
 From: "Emil Tsalapatis" <emil@etsalapatis.com>
 To: "Hui Zhu" <hui.zhu@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
  "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii Nakryiko"
@@ -83,67 +82,78 @@ To: "Hui Zhu" <hui.zhu@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
  <inwardvessel@gmail.com>, "Roman Gushchin" <roman.gushchin@linux.dev>,
  <bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
  <linux-kernel@vger.kernel.org>
+Cc: "Hui Zhu" <zhuhui@kylinos.cn>
 X-Mailer: aerc 0.20.1
 References: <cover.1772261955.git.zhuhui@kylinos.cn>
- <3a788ec239e9f9590897b43d21995e3a3532d916.1772261955.git.zhuhui@kylinos.cn>
-In-Reply-To: <3a788ec239e9f9590897b43d21995e3a3532d916.1772261955.git.zhuhui@kylinos.cn>
+ <fac266012001b88e2bd6e33578090627b919fd70.1772261955.git.zhuhui@kylinos.cn>
+In-Reply-To: <fac266012001b88e2bd6e33578090627b919fd70.1772261955.git.zhuhui@kylinos.cn>
 
 On Sat Feb 28, 2026 at 2:11 AM EST, Hui Zhu wrote:
 > From: Hui Zhu <zhuhui@kylinos.cn>
 >
-> Replace hardcoded enum values with bpf_core_enum_value() calls in
-> cgroup_iter_memcg test to improve portability across different
-> kernel versions.
+> When back-porting test_progs to different kernel versions, I encountered
+> an issue where the test_cgroup_iter_memcg test would falsely pass even
+> when bpf_mem_cgroup_page_state() failed.
 >
-> The change adds runtime enum value resolution for:
-> - node_stat_item: NR_ANON_MAPPED, NR_SHMEM, NR_FILE_PAGES,
->   NR_FILE_MAPPED
-> - memcg_stat_item: MEMCG_KMEM
-> - vm_event_item: PGFAULT
->
-> This ensures the BPF program can adapt to enum value changes
-> between kernel versions.
+> This patch adds explicit checks to ensure bpf_mem_cgroup_page_state()
+> doesn't return -1 before validating the actual statistics values.
 >
 > Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 
-Bot's comments aside:
-
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+I'm a bit confused, what is the exact scenario where we read -1 for
+these stats? AFAICT bpf_mem_cgroup_page_state has to return -1 for them,
+and it turn this is possible if the idx we're passing is not valid - but
+the ones we do always should be.=20
 
 > ---
->  .../selftests/bpf/progs/cgroup_iter_memcg.c     | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  .../selftests/bpf/prog_tests/cgroup_iter_memcg.c       | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c b/tool=
-s/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-> index 12f79a44133e..06a385c9d85b 100644
-> --- a/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-> +++ b/tools/testing/selftests/bpf/progs/cgroup_iter_memcg.c
-> @@ -26,11 +26,18 @@ int cgroup_memcg_query(struct bpf_iter__cgroup *ctx)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c b=
+/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> index 88fc3e83d2b7..9eadfbd3fdb9 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_memcg.c
+> @@ -53,6 +53,8 @@ static void test_anon(struct bpf_link *link, struct mem=
+cg_query *memcg_query)
+>  	if (!ASSERT_OK(read_stats(link), "read stats"))
+>  		goto cleanup;
 > =20
->  	bpf_mem_cgroup_flush_stats(memcg);
+> +	ASSERT_NEQ(memcg_query->nr_anon_mapped, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_page_state NR_ANON_MAPPED");
+>  	ASSERT_GT(memcg_query->nr_anon_mapped, 0, "final anon mapped val");
 > =20
-> -	memcg_query.nr_anon_mapped =3D bpf_mem_cgroup_page_state(memcg, NR_ANON=
-_MAPPED);
-> -	memcg_query.nr_shmem =3D bpf_mem_cgroup_page_state(memcg, NR_SHMEM);
-> -	memcg_query.nr_file_pages =3D bpf_mem_cgroup_page_state(memcg, NR_FILE_=
-PAGES);
-> -	memcg_query.nr_file_mapped =3D bpf_mem_cgroup_page_state(memcg, NR_FILE=
-_MAPPED);
-> -	memcg_query.pgfault =3D bpf_mem_cgroup_vm_events(memcg, PGFAULT);
-> +	memcg_query.nr_anon_mapped =3D bpf_mem_cgroup_page_state(
-> +		memcg,
-> +		bpf_core_enum_value(enum node_stat_item, NR_ANON_MAPPED));
-> +	memcg_query.nr_shmem =3D bpf_mem_cgroup_page_state(
-> +		memcg, bpf_core_enum_value(enum node_stat_item, NR_SHMEM));
-> +	memcg_query.nr_file_pages =3D bpf_mem_cgroup_page_state(
-> +		memcg, bpf_core_enum_value(enum node_stat_item, NR_FILE_PAGES));
-> +	memcg_query.nr_file_mapped =3D bpf_mem_cgroup_page_state(
-> +		memcg,
-> +		bpf_core_enum_value(enum node_stat_item, NR_FILE_MAPPED));
-> +	memcg_query.pgfault =3D bpf_mem_cgroup_vm_events(
-> +		memcg, bpf_core_enum_value(enum vm_event_item, PGFAULT));
+>  cleanup:
+> @@ -88,6 +90,10 @@ static void test_file(struct bpf_link *link, struct me=
+mcg_query *memcg_query)
+>  	if (!ASSERT_OK(read_stats(link), "read stats"))
+>  		goto cleanup_map;
 > =20
->  	bpf_put_mem_cgroup(memcg);
+> +	ASSERT_NEQ(memcg_query->nr_file_pages, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_page_state NR_FILE_PAGES");
+> +	ASSERT_NEQ(memcg_query->nr_file_mapped, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_page_state NR_FILE_MAPPED");
+>  	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
+>  	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
 > =20
+> @@ -119,6 +125,8 @@ static void test_shmem(struct bpf_link *link, struct =
+memcg_query *memcg_query)
+>  	if (!ASSERT_OK(read_stats(link), "read stats"))
+>  		goto cleanup;
+> =20
+> +	ASSERT_NEQ(memcg_query->nr_shmem, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_page_state NR_SHMEM");
+>  	ASSERT_GT(memcg_query->nr_shmem, 0, "final shmem value");
+> =20
+>  cleanup:
+> @@ -144,6 +152,8 @@ static void test_pgfault(struct bpf_link *link, struc=
+t memcg_query *memcg_query)
+>  	if (!ASSERT_OK(read_stats(link), "read stats"))
+>  		goto cleanup;
+> =20
+> +	ASSERT_NEQ(memcg_query->pgfault, (unsigned long)-1,
+> +		  "bpf_mem_cgroup_vm_events PGFAULT");
+>  	ASSERT_GT(memcg_query->pgfault, 0, "final pgfault val");
+> =20
+>  cleanup:
 
