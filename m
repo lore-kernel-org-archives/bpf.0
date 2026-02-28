@@ -1,63 +1,63 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7343B3CC9E5
-	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 18:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADD953CC9F0
+	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 18:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772304493; cv=none; b=AU5An4KDYVKDsnDeRqruuPf9n8Ze9lsqmFN1HxPPf81ISdTpAagsv6h+EbB/QD5cAnEuDkljJNBQLoJPZ/o4QKrvh3AZAb5dyj4IEk0jzJii1dESeT58/5+zGI5j+UNOy6buMuUw9U/luf5pN5FgNAlyBbJM3+D/xVRHq8gRICk=
+	t=1772304495; cv=none; b=ANZiaWH+QqHeLGnm7a/Btm4lhULW8d305X659S7KwEW1o0YwGG9DNKZB8T80Rc0DQxEI7xZa6mqKJvb9wFUCxGYpMjhjkkl5+57cHqx8+gadgA9tP78yOoC+1bA0KFT9dlMNCs4rs/2lgnZ5RIx8FGOGQzMSkliM0ahMYOpGm9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772304493; c=relaxed/simple;
-	bh=DI6+3oEAq0W7nFzM92FFhyHu2m6O4G4BDmHAkkyF9kI=;
+	s=arc-20240116; t=1772304495; c=relaxed/simple;
+	bh=ufnmS0984/p5wu3nfDJ0z0RE9P2jiZnA7BgBMK86XKk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=le63UVAtmOaFhFCqy8YG31+OZFtvLPT1m+KmGLF/EiJGKS3/l27XPpCS47lpAPUlzf4jsBgP62DHcCqPEENbscAH7tcFzrUW1SFMQxWXh2nF5D6E6GIhRHoMssR1Hfu1FsQdV7vBrbG8/CVJ1NJPhMWEJSCAiWYoZa5T0Uotr/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=oKs7VwDd; arc=none smtp.client-ip=209.85.160.169
+	 MIME-Version; b=l5MSkfZf1vw99UU7uD2vb+mkPLPFBWmpx3GokI9wU76FwAj9c9CLHt5dl00xJpgpsKBfF9dIMrM58BGUlYB4KUuaO3gCuPEKl4NsbZ8OtFhSPrwRnlpe/b8o/RvPWLXOIo/ZuzGCMwOGnyqa0H/U+F7BsJ+Jh3+CTbpt4cNmh5g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b=nSdGZyGj; arc=none smtp.client-ip=209.85.219.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="oKs7VwDd"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-506aa68065eso32566061cf.1
-        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 10:48:12 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20230601.gappssmtp.com header.i=@etsalapatis-com.20230601.gappssmtp.com header.b="nSdGZyGj"
+Received: by mail-qv1-f45.google.com with SMTP id 6a1803df08f44-899a9f445cbso41460866d6.0
+        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 10:48:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772304491; x=1772909291; darn=vger.kernel.org;
+        d=etsalapatis-com.20230601.gappssmtp.com; s=20230601; t=1772304493; x=1772909293; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FYH7AuX7gssCQMJp4a/mv/tCLfm0bArG2TuCBv3BYGI=;
-        b=oKs7VwDdlOt4Dqz9LBMS2Cpcma7SIAYS25e6WQnTFKZL19MzVgw/6HjTEiYX0rrCJ5
-         fMmVODwl78+ItqnemLWxyp21V4ixuHeWurYmw7Fg86o9HLQklYTiJ+FPkGOsKRN1jxP1
-         ObEjz973nAdi8ZH8N/JkQRIQeRJZ9oNP0ZnkmE+07/Q7vtR1/eAudb4lvLVqvv1y7qA/
-         ZZUqneBNJuaULsoFgakMic7PZ6AqCbjp3IMT6HHpVpz28UiTMIXrLi3Mmk+DLLeNxeUG
-         F2nZBxsyjDIU91crSpmSFp5xwIbSuhqBHwqjeTV1CXgXtU0XHngsruLFS/l961lt8r2k
-         RDJw==
+        bh=qFqTQMVrtJPqzL/BePS8P0TFU1hJNorLfMpqhHDX3s0=;
+        b=nSdGZyGjvspBtrTz6s6xqKQ1Z0Dku+JkAmaoQhtkwJH9HgZGkwrQhVRkvlolp7exOt
+         fJ16gbp90vdF0WwMNuAUJqaU8E/nYr2z9PrJ/IdEm4PAirF/lhnLMFs/BXyugQklRmEN
+         Q9Xen/iAYoG+xSabp6Dz6PtqONS6e2YRimbHXZ6BQpuTW8wBrVcOreBJLFzzD3LohO8u
+         ECOFLUcuu03qSz3yRG3nGhNYOKfEhvmMaGHUhVM6/q+b5DUz3p/Re7zATCKQ25NeuS6J
+         1I4TaWka0YSGoRcT60Of7+s+/UXJjIzJHrHFdBN09NHnrHlf+WNSjZ+vV4z4TTb+JRQv
+         uT8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772304491; x=1772909291;
+        d=1e100.net; s=20230601; t=1772304493; x=1772909293;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=FYH7AuX7gssCQMJp4a/mv/tCLfm0bArG2TuCBv3BYGI=;
-        b=PH7i+2vSDeX5AWOCG7J56dih10bMVaukhuNEy7Ar9CHQu0btVcBKw7zPrVwEl819Zd
-         zw5Eem+38RahKslbjm+GiInqpwd59H6AspK6R8PAgObM6TmAkFupDuJHrWtkJE8q3OQw
-         ++Lrx1+LlP/43Sgq5HY5x0okPMKv2FvjYSRhXkcJDMtgKseRBuPW9YLtT/83c+7gg4WY
-         ajWXIge82eCVjH0u+G079UbvyBvUdGMOwio+Zv6+c0RBLbAU1b3yFUVwIfHzCeqUxtzq
-         Ky4OGpaiRptHvUbrSSvTjVskEbCeppitoY3f5TT8v8R5qJEvUjsXk6hLNuxa88+T4cut
-         +Q4w==
-X-Gm-Message-State: AOJu0Yykd/Cyo+Se20Nfxpurx1piBdfTMXM4sm9eEmGIcFfZ7uz45J+9
-	youPIH7EmLvc9n0NZF3w5KgQAJvMog2znalDqM/ZHrlzPWOM1xk90TbdZeLRkkJPLLGN1lXDmBG
-	RE862ggU=
-X-Gm-Gg: ATEYQzxPYvbn8Dus/J5VFBaI6m9cXBwdHqs5gMz5eG+fsxjRVoHSk/UQ0pgjy3pLVyw
-	aFOzxoORP98+NBJa9dTyGAY7gmxriKuWaK26PCuRFbK9avMBPEIZPELUeKmATpyr/VKbG0ed0Vi
-	zhkavGRhyE10UVU0zrNcyJ+bnlzQymFuThYCV1yiCRKfSABDYtUEDwRNp4lGlBQanh6rySTY46U
-	aHfXC++qehg9TOAdNZtXoZyeQX1wt5uoFD52RKMyrwumEvLp1w+n0K2Vo1XNz8PSuZ4p5eUv3h1
-	qUne9wgvQIbELtn6n6LuVkRhhwQari/DfVNw/iWxj9bPvrFyw3FnnrA1+wCMSjTR4yVPtSRRQSi
-	2YopHKG6DAgFJs/TlScA3ON2IwQ77+RM4lb4EKjVvg+AnZ3tuC3uMizzRHd5sTWp3LEaROJsugB
-	C/CG8lLbGIIFVvxHGaCIVXqg==
-X-Received: by 2002:ac8:580d:0:b0:4ee:61f8:68d6 with SMTP id d75a77b69052e-50752879239mr99121551cf.6.1772304491396;
-        Sat, 28 Feb 2026 10:48:11 -0800 (PST)
+        bh=qFqTQMVrtJPqzL/BePS8P0TFU1hJNorLfMpqhHDX3s0=;
+        b=ifZYOldgip+9jXW5uhl4lnA8063StJh06PCY3qvucWaK5H69AqzckClhWfvBoGh8ZC
+         odSG72OjnbJrQ7oFMTRs00T15UKukQHphyBrJMqo/W9rTC2IPunheKgw3m6aiY23iyOf
+         j1nk8Bs0yBP8VTGxXTuh0Zhx0VfEv7bPHlYbPhUjvNzF5lCVb3z8uPGxFHMcfSNTeAxB
+         s5P8jb9V8CQxu1WKZIEyEabXAwVftPc3GeyA4dNKkLETizfHHNdvNyktVsuqFHjPSakk
+         NG1Mcnm4lUG3bCBOXH817RImPG+U11FPc3mQs8/QXDzMq3uHLiGB18uMwdU+ij3lX9zz
+         sNdg==
+X-Gm-Message-State: AOJu0YxAUfjN4q1op+zlqKGL69It+NPdI7qWaPVDkTDp+ysB1n2P6F2O
+	YMVCVNSSIjJgt0lpxkGaRGOWqk4njxOE6GybBrHoOF9OYWLRQ5XkMgRFIYPt77KYrTntwSShNMn
+	xUqQA
+X-Gm-Gg: ATEYQzx2jB0xcK1xDQ8DBuu8zXHwiOZu3YddxHb/TvWfsX02Cy+aVFCBd+cZPuo/2FH
+	j4X4AYjpTubGR13rv+G0gMy6PhCs3SUsAUDtce2AciZiGw9xQM+8O5wDx0x0xGzhDxOIcno8Tvk
+	8+3iXRQQRbtW5Umu90kGAFHz9FOVMHY7T0AFKdYOmQ7caRs24VPncgUn0uV1gC+FvaaLXNPIKcf
+	qdTYinWcVDabrxPjFHol6DA8/9XeV/3/8N1/9GOHlbtfYgZhEKA+84xvH/QrqfltQv9YzB0LfgV
+	iiX2dqUuqGrJWtQ3MXNzqhzNsY0F+jtGGUdgnt27z/3VuiKCM5tE3hjtXeVlnRwH9u2Q5t7fom2
+	muSrILjsoICYVQ4tdeJoYmXDJqagKFJCYyiWorg8gfF9UUiQoiMlHHHGwqqrdtDSbn08UYwxvx+
+	VAi+ZsLX6qFTiwY0hU9f823Q==
+X-Received: by 2002:a05:622a:190f:b0:4f1:b63f:a165 with SMTP id d75a77b69052e-5075299110fmr87841991cf.35.1772304492448;
+        Sat, 28 Feb 2026 10:48:12 -0800 (PST)
 Received: from boreas.. ([140.174.219.137])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744ab3d88sm76160561cf.21.2026.02.28.10.48.10
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-50744ab3d88sm76160561cf.21.2026.02.28.10.48.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Feb 2026 10:48:11 -0800 (PST)
+        Sat, 28 Feb 2026 10:48:12 -0800 (PST)
 From: Emil Tsalapatis <emil@etsalapatis.com>
 To: bpf@vger.kernel.org
 Cc: andrii@kernel.org,
@@ -69,9 +69,9 @@ Cc: andrii@kernel.org,
 	song@kernel.org,
 	yonghong.song@linux.dev,
 	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v6 3/5] bpf: extract check_global_subprog_return_code() for clarity
-Date: Sat, 28 Feb 2026 13:47:57 -0500
-Message-ID: <20260228184759.108145-4-emil@etsalapatis.com>
+Subject: [PATCH bpf-next v6 4/5] bpf: Allow void global functions in the verifier
+Date: Sat, 28 Feb 2026 13:47:58 -0500
+Message-ID: <20260228184759.108145-5-emil@etsalapatis.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20260228184759.108145-1-emil@etsalapatis.com>
 References: <20260228184759.108145-1-emil@etsalapatis.com>
@@ -83,136 +83,178 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Eduard Zingerman <eddyz87@gmail.com>
+Global subprogs are currently not allowed to return void. Adjust
+verifier logic to allow global functions with a void return type.
 
-From: Eduard Zingerman <eddyz87@gmail.com>
-
-Both main progs and subprogs use the same function in the verifier,
-check_return_code, to verify the type and value range of the register
-being returned. However, subprogs only need a subset of the logic in
-check_return_code. this also goes the way - check_return_code explicitly
-checks whether it is handling a subprogram in multiple places, complicating
-the logic. Separate the handling of the two into separate functions.
-
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Emil Tsalapatis <emil@etsalapatis.com>
 ---
- kernel/bpf/verifier.c | 62 ++++++++++++++++++++++++++++++-------------
- 1 file changed, 44 insertions(+), 18 deletions(-)
+ kernel/bpf/btf.c                              |  7 ++-
+ kernel/bpf/verifier.c                         | 61 ++++++++++++++++---
+ .../selftests/bpf/progs/exceptions_fail.c     |  2 +-
+ .../selftests/bpf/progs/test_global_func7.c   |  2 +-
+ 4 files changed, 60 insertions(+), 12 deletions(-)
 
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 4872d2a6c42d..09fcbb125155 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -7836,15 +7836,16 @@ int btf_prepare_func_args(struct bpf_verifier_env *env, int subprog)
+ 			tname, nargs, MAX_BPF_FUNC_REG_ARGS);
+ 		return -EINVAL;
+ 	}
+-	/* check that function returns int, exception cb also requires this */
++	/* check that function is void or returns int, exception cb also requires this */
+ 	t = btf_type_by_id(btf, t->type);
+ 	while (btf_type_is_modifier(t))
+ 		t = btf_type_by_id(btf, t->type);
+-	if (!btf_type_is_int(t) && !btf_is_any_enum(t)) {
++	if (!btf_type_is_void(t) && !btf_type_is_int(t) && !btf_is_any_enum(t)) {
+ 		if (!is_global)
+ 			return -EINVAL;
+ 		bpf_log(log,
+-			"Global function %s() doesn't return scalar. Only those are supported.\n",
++			"Global function %s() return value not void or scalar. "
++			"Only those are supported.\n",
+ 			tname);
+ 		return -EINVAL;
+ 	}
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 80b6fb821456..ebcca81ccdaf 100644
+index ebcca81ccdaf..786f6ab3e817 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -17943,17 +17943,14 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
- 	struct bpf_retval_range range = retval_range(0, 1);
- 	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
- 	struct bpf_func_state *frame = env->cur_state->frame[0];
--	const bool is_subprog = frame->subprogno;
- 	const struct btf_type *reg_type, *ret_type = NULL;
- 	int err;
- 
- 	/* LSM and struct_ops func-ptr's return type could be "void" */
--	if (!is_subprog || frame->in_exception_callback_fn) {
--		if (program_returns_void(env))
--			return 0;
--	}
-+	if (!frame->in_async_callback_fn && program_returns_void(env))
-+		return 0;
- 
--	if (!is_subprog && prog_type == BPF_PROG_TYPE_STRUCT_OPS) {
-+	if (prog_type == BPF_PROG_TYPE_STRUCT_OPS) {
- 		/* Allow a struct_ops program to return a referenced kptr if it
- 		 * matches the operator's return type and is in its unmodified
- 		 * form. A scalar zero (i.e., a null pointer) is also allowed.
-@@ -17987,15 +17984,6 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
- 		goto enforce_retval;
- 	}
- 
--	if (is_subprog && !frame->in_exception_callback_fn) {
--		if (reg->type != SCALAR_VALUE) {
--			verbose(env, "At subprogram exit the register R%d is not a scalar value (%s)\n",
--				regno, reg_type_str(env, reg->type));
--			return -EINVAL;
--		}
--		return 0;
--	}
--
- 	if (prog_type == BPF_PROG_TYPE_STRUCT_OPS && !ret_type)
- 		return 0;
- 
-@@ -18018,8 +18006,7 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
- 
- 	if (!retval_range_within(range, reg)) {
- 		verbose_invalid_scalar(env, reg, range, exit_ctx, reg_name);
--		if (!is_subprog &&
--		    prog->expected_attach_type == BPF_LSM_CGROUP &&
-+		if (prog->expected_attach_type == BPF_LSM_CGROUP &&
- 		    prog_type == BPF_PROG_TYPE_LSM &&
- 		    !prog->aux->attach_func_proto->type)
- 			verbose(env, "Note, BPF_LSM_CGROUP that attach to void LSM hooks can't modify return value!\n");
-@@ -18032,6 +18019,29 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
- 	return 0;
+@@ -444,6 +444,29 @@ static bool subprog_is_global(const struct bpf_verifier_env *env, int subprog)
+ 	return aux && aux[subprog].linkage == BTF_FUNC_GLOBAL;
  }
  
-+static int check_global_subprog_return_code(struct bpf_verifier_env *env)
++static bool subprog_returns_void(struct bpf_verifier_env *env, int subprog)
 +{
-+	struct bpf_reg_state *reg = reg_state(env, BPF_REG_0);
-+	int err;
++	const struct btf_type *type, *func, *func_proto;
++	const struct btf *btf = env->prog->aux->btf;
++	u32 btf_id;
 +
-+	err = check_reg_arg(env, BPF_REG_0, SRC_OP);
-+	if (err)
-+		return err;
++	btf_id = env->prog->aux->func_info[subprog].type_id;
 +
-+	if (is_pointer_value(env, BPF_REG_0)) {
-+		verbose(env, "R%d leaks addr as return value\n", BPF_REG_0);
-+		return -EACCES;
-+	}
++	func = btf_type_by_id(btf, btf_id);
++	if (verifier_bug_if(!func, env, "btf_id %u not found", btf_id))
++		return false;
 +
-+	if (reg->type != SCALAR_VALUE) {
-+		verbose(env, "At subprogram exit the register R0 is not a scalar value (%s)\n",
-+			reg_type_str(env, reg->type));
-+		return -EINVAL;
-+	}
++	func_proto = btf_type_by_id(btf, func->type);
++	if (!func_proto)
++		return false;
 +
-+	return 0;
++	type = btf_type_skip_modifiers(btf, func_proto->type, NULL);
++	if (!type)
++		return false;
++
++	return btf_type_is_void(type);
 +}
 +
- static void mark_subprog_changes_pkt_data(struct bpf_verifier_env *env, int off)
+ static const char *subprog_name(const struct bpf_verifier_env *env, int subprog)
  {
- 	struct bpf_subprog_info *subprog;
-@@ -20825,6 +20835,8 @@ static int process_bpf_exit_full(struct bpf_verifier_env *env,
- 				 bool *do_print_state,
- 				 bool exception_exit)
- {
-+	struct bpf_func_state *cur_frame = cur_func(env);
-+
- 	/* We must do check_reference_leak here before
- 	 * prepare_func_exit to handle the case when
- 	 * state->curframe > 0, it may be a callback function,
-@@ -20858,7 +20870,21 @@ static int process_bpf_exit_full(struct bpf_verifier_env *env,
- 		return 0;
- 	}
+ 	struct bpf_func_info *info;
+@@ -10848,9 +10871,11 @@ static int check_func_call(struct bpf_verifier_env *env, struct bpf_insn *insn,
+ 		subprog_aux(env, subprog)->called = true;
+ 		clear_caller_saved_regs(env, caller->regs);
  
--	err = check_return_code(env, BPF_REG_0, "R0");
-+	/*
-+	 * Return from a regular global subprogram differs from return
-+	 * from the main program or async/exception callback.
-+	 * Main program exit implies return code restrictions
-+	 * that depend on program type.
-+	 * Exit from exception callback is equivalent to main program exit.
-+	 * Exit from async callback implies return code restrictions
-+	 * that depend on async scheduling mechanism.
-+	 */
-+	if (cur_frame->subprogno &&
-+	    !cur_frame->in_async_callback_fn &&
-+	    !cur_frame->in_exception_callback_fn)
-+		err = check_global_subprog_return_code(env);
-+	else
-+		err = check_return_code(env, BPF_REG_0, "R0");
+-		/* All global functions return a 64-bit SCALAR_VALUE */
+-		mark_reg_unknown(env, caller->regs, BPF_REG_0);
+-		caller->regs[BPF_REG_0].subreg_def = DEF_NOT_SUBREG;
++		/* All non-void global functions return a 64-bit SCALAR_VALUE. */
++		if (!subprog_returns_void(env, subprog)) {
++			mark_reg_unknown(env, caller->regs, BPF_REG_0);
++			caller->regs[BPF_REG_0].subreg_def = DEF_NOT_SUBREG;
++		}
+ 
+ 		/* continue with next insn after call */
+ 		return 0;
+@@ -17915,7 +17940,7 @@ static bool return_retval_range(struct bpf_verifier_env *env, struct bpf_retval_
+ static bool program_returns_void(struct bpf_verifier_env *env)
+ {
+ 	const struct bpf_prog *prog = env->prog;
+-	enum bpf_prog_type prog_type = resolve_prog_type(prog);
++	enum bpf_prog_type prog_type = prog->type;
+ 
+ 	switch (prog_type) {
+ 	case BPF_PROG_TYPE_LSM:
+@@ -17928,6 +17953,16 @@ static bool program_returns_void(struct bpf_verifier_env *env)
+ 		if (!prog->aux->attach_func_proto->type)
+ 			return true;
+ 		break;
++	case BPF_PROG_TYPE_EXT:
++		/*
++		 * If the actual program is an extension, let it
++		 * return void - attaching will succeed only if the
++		 * program being replaced also returns void, and since
++		 * it has passed verification its actual type doesn't matter.
++		 */
++		if (subprog_returns_void(env, 0))
++			return true;
++		break;
+ 	default:
+ 		break;
+ 	}
+@@ -18022,8 +18057,12 @@ static int check_return_code(struct bpf_verifier_env *env, int regno, const char
+ static int check_global_subprog_return_code(struct bpf_verifier_env *env)
+ {
+ 	struct bpf_reg_state *reg = reg_state(env, BPF_REG_0);
++	struct bpf_func_state *cur_frame = cur_func(env);
+ 	int err;
+ 
++	if (subprog_returns_void(env, cur_frame->subprogno))
++		return 0;
++
+ 	err = check_reg_arg(env, BPF_REG_0, SRC_OP);
  	if (err)
  		return err;
- 	return PROCESS_BPF_EXIT;
+@@ -24523,10 +24562,18 @@ static int do_check_common(struct bpf_verifier_env *env, int subprog)
+ 
+ 		if (subprog_is_exc_cb(env, subprog)) {
+ 			state->frame[0]->in_exception_callback_fn = true;
+-			/* We have already ensured that the callback returns an integer, just
+-			 * like all global subprogs. We need to determine it only has a single
+-			 * scalar argument.
++
++			/*
++			 * Global functions are scalar or void, make sure
++			 * we return a scalar.
+ 			 */
++			if (subprog_returns_void(env, subprog)) {
++				verbose(env, "exception cb cannot return void\n");
++				ret = -EINVAL;
++				goto out;
++			}
++
++			/* Also ensure the callback only has a single scalar argument. */
+ 			if (sub->arg_cnt != 1 || sub->args[0].arg_type != ARG_ANYTHING) {
+ 				verbose(env, "exception cb only supports single integer argument\n");
+ 				ret = -EINVAL;
+diff --git a/tools/testing/selftests/bpf/progs/exceptions_fail.c b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+index 8a0fdff89927..d28ecc4ee2d0 100644
+--- a/tools/testing/selftests/bpf/progs/exceptions_fail.c
++++ b/tools/testing/selftests/bpf/progs/exceptions_fail.c
+@@ -51,7 +51,7 @@ __noinline int exception_cb_ok_arg_small(int a)
+ 
+ SEC("?tc")
+ __exception_cb(exception_cb_bad_ret_type)
+-__failure __msg("Global function exception_cb_bad_ret_type() doesn't return scalar.")
++__failure __msg("Global function exception_cb_bad_ret_type() return value not void or scalar.")
+ int reject_exception_cb_type_1(struct __sk_buff *ctx)
+ {
+ 	bpf_throw(0);
+diff --git a/tools/testing/selftests/bpf/progs/test_global_func7.c b/tools/testing/selftests/bpf/progs/test_global_func7.c
+index f182febfde3c..9e59625c1c92 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_func7.c
++++ b/tools/testing/selftests/bpf/progs/test_global_func7.c
+@@ -12,7 +12,7 @@ void foo(struct __sk_buff *skb)
+ }
+ 
+ SEC("tc")
+-__failure __msg("foo() doesn't return scalar")
++__success
+ int global_func7(struct __sk_buff *skb)
+ {
+ 	foo(skb);
 -- 
 2.49.0
 
