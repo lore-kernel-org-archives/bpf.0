@@ -1,162 +1,125 @@
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9226D3254A3
-	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 02:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772245582; cv=none; b=MGuEypVEllbEwilczu0NvB40ylz2IUbJ7MTgboGy82DScG5phtxQVS8dFR9V/DeTiLkP0fJUCaNJgDybcDKtgPqVX2dYYXC5HXsWOUm+8zzOf7k7rFo/o2Jqfpzxz3E8jVh3OWHxJ5fhZnzO/tlWWJcbNMwNGebvYDV6XxXtrxU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772245582; c=relaxed/simple;
-	bh=+WedI4SDPcAyOqs3Esa+dbDCFMV2GhorkTEI0NKRemM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FfCvhe0j54ZHIsT2AWeXT9pUyVDaBf4oUdZ0Ip3yQeoT/j3f2OOGsOwQr9ULp1Xa23w3XjlzZDEExVFPaiGcAAYL2kKjMBtHFIt9pQSlJpHpZNj1bm7hFY0za7Jh2qxQtCI1CaQ4Ujn4dQVNRlqb0uTqyhAVfr5bPrP7CrFPx40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=KJpB76+F; arc=none smtp.client-ip=52.59.177.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A0E3326927
+	for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 02:58:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.182
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772247528; cv=pass; b=exg4TfbYpejbwlqAD2XWJdYyZQZyP4GLAvvJ/5S9uQ97/H4LyzIU1ti7mXzM/3jcHvQAKKBcN7+ILdflkRY1pilTpSw1oXU/KYINphsAQkSfnU/HOt+KjBufAcuu4fUSorkSfdg25ujA61oOsciPOW1o9sf01caUyxS1Sy7jXJo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772247528; c=relaxed/simple;
+	bh=ysdqeISiySuqEph7vi8qMMTL7nfGjmC5pfX7MTnaBb8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ft3+T0TlDR8L6V7UXC6jON2MmX1c/U3iicVyyA2x4bxvOCKOVd4IykJmXeYnhwcBrmIfWwYZwmAlZZRdsQ4vuC1GA0oJtnPULCyCr/W9F5OsLEFafwTqhBL5yGovIZ8uw1AJ1UveqwnVrdgq5ZpObMcSJ5LisrvMRFe3DEin92o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nMBKa6au; arc=pass smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="KJpB76+F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1772245533;
-	bh=W580SusHpQxRbve0Xr47P2Q3tDjZ29+ojQpMZapetAA=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=KJpB76+FUUeYuWmlP4QDh5IyuEJYI9wH7iOtNROaIEowVrmRf2nADP47U/Ynt64qD
-	 wIVzUzIBZg/uXkFEXdp/Aie+gm1LyPvVLGEvjoP3G3w2Bk94Bwi2s3aPTOgAKdEHnC
-	 mzp9pQXJl+R4p7Vmv53+7syqH3uVzehdCESvSlZg=
-X-QQ-mid: zesmtpip4t1772245528t10951844
-X-QQ-Originating-IP: Z4lL1BVlpW/e1btHOm8ABmMBgFyVEgfv40QhRWlCLbg=
-Received: from xulang-PC ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sat, 28 Feb 2026 10:25:25 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 3126562635015746238
-EX-QQ-RecipientCnt: 17
-From: xulang <xulang@uniontech.com>
-To: martin.lau@linux.dev
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bot+bpf-ci@kernel.org,
-	bpf@vger.kernel.org,
-	clm@meta.com,
-	daniel@iogearbox.net,
-	dddddd@hust.edu.cn,
-	dzm91@hust.edu.cn,
-	eddyz87@gmail.com,
-	hust-os-kernel-patches@googlegroups.com,
-	ihor.solodrai@linux.dev,
-	kaiyanm@hust.edu.cn,
-	martin.lau@kernel.org,
-	sdf@fomichev.me,
-	xulang@uniontech.com,
-	yonghong.song@linux.dev
-Subject: [PATCH bpf v3] bpf: fix: Race condition in bpf_trampoline_unlink_cgroup_shim
-Date: Sat, 28 Feb 2026 10:24:03 +0800
-Message-ID: <FFFA8066FE63B894+20260228022403.99235-1-xulang@uniontech.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <cd99eba7-ac03-4b53-a79c-a6206abbddb6@linux.dev>
-References: <cd99eba7-ac03-4b53-a79c-a6206abbddb6@linux.dev>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nMBKa6au"
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-7986e0553b0so24999417b3.2
+        for <bpf@vger.kernel.org>; Fri, 27 Feb 2026 18:58:47 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772247526; cv=none;
+        d=google.com; s=arc-20240605;
+        b=LT8CFXalmtfkO+YeeM3k7mHL2qh37X7nA1x+tg8c+Ra3d6Pu4P/V/zMCYJGStiHjPL
+         WwvndA1BlczL38tC55IxF7WONEj0esgApC5oGqs+bZhp1ZR7g4gUEiM6vqyPKBkH7wi8
+         Mc3unan3Tq8WegXToZUvL00BaNgvkMfENnRSGtR77I/qQCCYONCzB83jhKvxMi5qkwsJ
+         cHHVKP6e+Zj11qJyIU37Lbbbg2rDp/iJtXTIDbCgkTyyBjsH8EQdNsJZ83oaogZShshr
+         ERoxwBnW6EDTUvj/AiGloUak2r9zM2Fsv9N7ScJy/y2r2GVkAjxUPa98aTEHWFX9Qbss
+         xZtA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=8J8++aM/qOXvTI7XL2hzcCosb8kXGfqH4Z9aH7ivo4Y=;
+        fh=m3X//x5/mNQaY2gYeoorhFYThPUSo3UkZPe2M/nolF8=;
+        b=BaJHCpIuifnFA8j5yNT+aEMSpAmuNgz0fp7tomYoPhF8FEZhRNuiIL3xtaS7Ru3Lnm
+         2as7v/KVGch1ehOOkWEuOwvHh5cUBRXynndFG4PIKVJ8DLnF8m8AeIPt4bvLxUCMtiF9
+         r0tXH04bkoeZR7r03xkTa1axCkfscd8lBpURqC8f5p8XaK84S8XulAfFBr72WsLuyCmT
+         mA+STsR3CaAw3qK4MRvVsj3XlIqgZ0UVCjL/k8tjqPcTnjl4LfIOfiHoqBG39WLoKKpU
+         7tHoKzEuoijnRKFpNi2MVQPANuJ08dYXtzkF7YuSPBWzqOXol7DJYxYEN8oWeI9E4jfH
+         EwpA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772247526; x=1772852326; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8J8++aM/qOXvTI7XL2hzcCosb8kXGfqH4Z9aH7ivo4Y=;
+        b=nMBKa6auNF7Zph6qHOOkCCKsBybYd6pIpvyXMfTuaG2NRZJvqLO+k4lwj9rjDItsDy
+         0f3bmiTVXrLsxYFEXfqSMEcY5+HB+X7YcswQT/C0AbO/MXm3kIFJRvfji5lDXf9NLSmt
+         l7MCnxueKSKTw3xa6ZKp9tiWywUvTRssm/95mcw3E40M+Rcm/wS+M22XIgql9W6Uy4UE
+         vIRPNqAagIDzLetVKAUDreXM5cNoCiw+FgCny9R+7G0vGUsAvPtGOyHecHFc9U2j8LPX
+         GGcoHxaf5agwJS4oC13ytE89Ubw8W+UwrRgWBm0ug1AZkgl4DRB345zGo/jWQpl6jL5S
+         I7XQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772247526; x=1772852326;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8J8++aM/qOXvTI7XL2hzcCosb8kXGfqH4Z9aH7ivo4Y=;
+        b=vVnf430bbbQpNDrGuuzoireLoCXm+uJrruwxsR/+iiLT5NQHxYBNx4YDwnaY7FLCM7
+         6U2ewTRr0AUISz6j29VfV1kpEpT4FhnVdsL0VgIGz6V+kV1Pbi2hJ2h3vnEOuIjwbHMv
+         JczbYQuPKGBWV6NzCaxZaS8Ljm0GIUNmyDFrGxbsB6Zax/CZhWB7hcpWdt0y4MMlhQF3
+         mC/sPI99JkxQXD/6J92HK9hkC5Wwwe5Hc0NHEHe+48pPb+oMqfS7soUTDuvx5PAXXttF
+         RJKEuy5Aq14wYQ+FvLozMZkxep8Rv9uAkWW6kL826toiuUoxJaaA1LYgXHiCmbpXdzQU
+         eBUA==
+X-Forwarded-Encrypted: i=1; AJvYcCXauiioMsiujwj3Tp9rE5jdN2fSOvRkpvBLMdBJnN3qcSdoireNk+nZdsHIxPUA5dDZ8CU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwpN8yS+mCO11f1jkZEqmobviDJuIx/htQqHGQhOfLh0Qy4YJn
+	TWj+QQIyAQ8W/7LxpGlwHaxgdvJ42pxh1fCvTblQDhFPqh0Pr6Rlq3nF3fHaQIiiqNfgKTZ2HMi
+	W5YSboxmnU7OdBIwEHc7n6O0JWJv9/2E=
+X-Gm-Gg: ATEYQzx6OF9Yx6OVscVHp4esrBKK2mP4Mt5mernohQc4NehTJBAvzgNpZMmaTLM+Uh2
+	DketGcjBH42z1w+XMGkfRPrZp+/XlOBJwB0F8jz6hMrmrHmaVEZbL0ftvBaE7i5EDv50s1/AUdr
+	vUavnGVLZapK1UoEBWSB2OI35vaDqWmbI7WX9HpGTH/U8zN3O3oqATUZ6GMfL3ljNLRy6SNLC23
+	kBtBo2fSthXfrYPGdF6idsUrhI4f0Qf5b+eLc2sJt3Kts17yS1UNgkDrKGydmw0mfP2jSRj8WvI
+	RLjA5B1Ada0NUT/M+Aw=
+X-Received: by 2002:a05:690c:6c0f:b0:798:599d:fded with SMTP id
+ 00721157ae682-79885591fb6mr47126697b3.35.1772247526508; Fri, 27 Feb 2026
+ 18:58:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrsz:qybglogicsvrsz3b-0
-X-QQ-XMAILINFO: MDqtQ4jGWXAGid+dzn3wo+k+l88CsHFLvju5NbskvPuFzAF94KXX1/kw
-	rSv/qtPSsGQBMqdCd+vfd0UFa4jp/vPDziegW2v1WP5WdYGhUJPdMA95msYDAdJntyA8Db1
-	8vgZWwfN7BwNUZUKKwJqCpW78/L1f8Ox4C0Oxpo5l/j2zokU+8EkXHLTa3Mi62B0mh13Rqd
-	kzb5dSaY4EJvu3dAwsCE9j6TPHmINP/pUvjWiNQWHp6AT+bjr5s2BfBJgUCTeu54kcW07p3
-	ipk00VIyty/8Oqa58rGWfSj6eoWfB82O4rq1eYhIrZDXismOix2gQFLDm10rXfA4TVNdYXk
-	zc9wKlLSrValukpUcdKbX5MU9Pw+vCD2pXwd9letw8ml///wXsmRGtEy1y6QBV4esGyF3oq
-	xk1B43bRgB8Ih9lpXt8MIat8wn4Q3GkiBJ3ZGVj8WBrPxLqC+ubGcnB5qo9ISfFVBA9PYaj
-	gArjvc1yQsjcqJi6YGkbQAU4KcPvMfpFY5bgbjco5skmIK8SO7pDwBPd8DZTnu3Irxi0DL2
-	nMDvgtGQnTh33DR2+3bcNb4odRSJordxio8vN14ZqbdZJs63FrN1O30tCa+r7pTGfOhJKQH
-	p4P9keXyROeo2bm2o/tFl9JDLzd6sAZ/0BnaooR4nxTS8CoX2uAzui0wqFxAHPMbHLYTX8C
-	bp/qBhaOpuHwD2kV/ynfNvRhSpIcG1gB2b9Q1KmoqbLJqm3tt/pdbEeBuahFnNZvwH25UhR
-	2JHXNL2/ERBA8hAuW0iBBYFjtWF+bWnhnhxbtuLneuZLlhnPDxmxvXwtH043pewX3nJwkwT
-	w6aoz3J0JcUsuWxDLWaJj3cwFyzmsAlgWp0l8hOErNt1hl/TscSoYIJCvLLqrzNgsuky3Gx
-	JoS++ke1kMuWmuJ2UP1EwVLX22oMAWbHMv4MMHjY1A2mOhPNkMjriDxMe6O6e7u8x179vU8
-	HJfkwyC3RqjzTy4JMtchMcyiumI//BxgHpT7vNPGWt9Md8snEREeqTxXHUz0GxAYvqL7HQO
-	75Dpd9mnbC4eL0mgEtD8hVImlOhho=
-X-QQ-XMRINFO: OD9hHCdaPRBwH5bRRRw8tsiH4UAatJqXfg==
-X-QQ-RECHKSPAM: 0
+References: <20260227164037.84110-1-sun.jian.kdev@gmail.com>
+ <20260227164037.84110-2-sun.jian.kdev@gmail.com> <CAADnVQLT8nEetXYDB1rFOqwgyBvowbafUzuz=7EBWUyVQw5G6Q@mail.gmail.com>
+In-Reply-To: <CAADnVQLT8nEetXYDB1rFOqwgyBvowbafUzuz=7EBWUyVQw5G6Q@mail.gmail.com>
+From: sun jian <sun.jian.kdev@gmail.com>
+Date: Sat, 28 Feb 2026 10:58:37 +0800
+X-Gm-Features: AaiRm51O9D60ynZRnlY1MPt6xcWTGaymJOzyTANVoFyjkqM8sWnaSB0KF_lBfl8
+Message-ID: <CABFUUZHfkxJrCzZk10cqdVJj0iz_cyg8Woh=1Y_bj-7x2+VBaQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests/bpf: bpf_cookie: skip kprobe_multi tests
+ without bpf_testmod
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Lang Xu <xulang@uniontech.com>
+On Sat, Feb 28, 2026 at 2:18=E2=80=AFAM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Fri, Feb 27, 2026 at 8:40=E2=80=AFAM Sun Jian <sun.jian.kdev@gmail.com=
+> wrote:
+> >
+> > The kprobe_multi subtests rely on bpf_testmod fentry ksyms.
+> >         attr.type =3D PERF_TYPE_SOFTWARE;
+> >         attr.config =3D PERF_COUNT_SW_CPU_CLOCK;
+> >         attr.sample_period =3D 100000;
+> > -       pfd =3D syscall(__NR_perf_event_open, &attr, -1, 0, -1, PERF_FL=
+AG_FD_CLOEXEC);
+> > +       pfd =3D syscall(__NR_perf_event_open, &attr, 0, -1, -1, PERF_FL=
+AG_FD_CLOEXEC);
+>
+> This part is not explained in the commit log.
+>
+> pw-bot: cr
+You are right: the perf_event_open() argument change is unrelated to
+the testmod skip patch
+and shouldn't have been in this patch. I'll respin as v2 and move it
+to the appropriate patch.
 
-Based on Martin KaFai Lau's suggestions, I have created a simple patch.
-
-The root cause of this bug is that when `bpf_link_put` reduces the
-refcount of `shim_link->link.link` to zero, the resource is considered
-released but may still be referenced via `tr->progs_hlist` in
-`cgroup_shim_find`. The actual cleanup of `tr->progs_hlist` in
-`bpf_shim_tramp_link_release` is deferred. During this window, another
-process can cause a use-after-free via `bpf_trampoline_link_cgroup_shim`.
-
-To fix this:
-   Add an atomic non-zero check in `bpf_trampoline_link_cgroup_shim`.
-   Only increment the refcount if it is not already zero.
-
-Optimized testing:
-   I used a non-rigorous method to verify the fix by adding a delay in
-   `bpf_shim_tramp_link_release` to make the bug easier to trigger:
-
-static void bpf_shim_tramp_link_release(struct bpf_link *link)
-{
-    ...
-    if (!shim_link->trampoline)
-        return;
-
-+   msleep(100);
-    WARN_ON_ONCE(bpf_trampoline_unlink_prog(&shim_link->link,
-        shim_link->trampoline, NULL));
-    bpf_trampoline_put(shim_link->trampoline);
-}
-
-Before the patch, running a PoC easily reproduced the crash(almost 100%)
-with a call trace similar to KaiyanM's report.
-After the patch, the bug no longer occurs even after millions of
-iterations.
-
-Signed-off-by: Lang Xu <xulang@uniontech.com>
----
- kernel/bpf/trampoline.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
-
-diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 976d89011b15..ac99725403ad 100644
---- a/kernel/bpf/trampoline.c
-+++ b/kernel/bpf/trampoline.c
-@@ -779,6 +779,7 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
- 	struct bpf_shim_tramp_link *shim_link = NULL;
- 	struct bpf_attach_target_info tgt_info = {};
- 	struct bpf_trampoline *tr;
-+	struct bpf_link *link;
- 	bpf_func_t bpf_func;
- 	u64 key;
- 	int err;
-@@ -801,12 +802,13 @@ int bpf_trampoline_link_cgroup_shim(struct bpf_prog *prog,
- 
- 	shim_link = cgroup_shim_find(tr, bpf_func);
- 	if (shim_link) {
--		/* Reusing existing shim attached by the other program. */
--		bpf_link_inc(&shim_link->link.link);
--
--		mutex_unlock(&tr->mutex);
--		bpf_trampoline_put(tr); /* bpf_trampoline_get above */
--		return 0;
-+		link = &shim_link->link.link;
-+		if (link == bpf_link_inc_not_zero(link)) {
-+			/* Reusing existing shim attached by the other program. */
-+			mutex_unlock(&tr->mutex);
-+			bpf_trampoline_put(tr); /* bpf_trampoline_get above */
-+			return 0;
-+		}
- 	}
- 
- 	/* Allocate and install new shim. */
--- 
-2.51.0
-
+Thanks,
+Sun Jian
