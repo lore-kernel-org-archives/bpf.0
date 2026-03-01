@@ -1,169 +1,71 @@
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AAAA22DFA4
-	for <bpf@vger.kernel.org>; Sun,  1 Mar 2026 18:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25008175A7D;
+	Sun,  1 Mar 2026 18:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772389779; cv=none; b=Oph2TvT45axTeCuK58X3uUb+kvLX3YWRteoLtw4AYoa0i+M9R9ZRC8IkvUinf034M4NrsQp5kdl1STCpzO8lC02CgrqroymSXNmRkn2QkT8LMf2TpHNkM98aOYQCFp7mavX2QahFwgWvrUmDMHq0QA6TVdcneE9m4ou8o7L7X5g=
+	t=1772389828; cv=none; b=L9KdzklrGWX2NaVzNdkiGVKm/f+tMU6O7p+CvrTGadKqML7wBP7wvTMVLjAlTJ7aJnOOpohCSHH23YrLg7/hXfX4vVEGCZPKAGXUYhU8NeY9aSfNn7l8WqhNBib6OWRbcRohGUowlOud2niJ3UbK8+LATyMG7xhIKZ6k3iNdVYg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772389779; c=relaxed/simple;
-	bh=FgPbbBcSM4lEV0NiVOq9t96d1nVWn65rLImgX3D41K8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BnXDOQyid2OCMozkSnMKv28P9mxYD/l+iE9Xlj2JftkDM7otW3cVBAAUm/d9Em10yxATsi3Z0RJn9cOgmUUiI0XbXFPZz4tbkFon4b2GfMIc6hLzjfmg8ffowImRmFfBfOA4JJ7KpZMMe/HfxwFpJ9utoolNjXOfx7Szw+o6/No=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=PLJUbMd2; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=NA1OOFEd; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=l+W0Tv5n; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=ONsUcLde; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1772389828; c=relaxed/simple;
+	bh=vGBT1CRkaStGJJvFrAHCByqOWl2Xsq8KpNcMMUGtREM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=syp1FnUtWWy06mQD7fmwhhLMDUK19Yeniwi8LzekaCwz0xP87WhFvA25WDar4peznT1hsHKc7Zti0a84kllW5qdeTQekXLfOcPH5wbJQRsUf25bWn1jQKndF9kJpSe4TwrVywCMQiQQ7Vnc3EHBT0pTDyKFMyFfsRVyAKzyExSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k1tj63Le; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="PLJUbMd2";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="NA1OOFEd";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="l+W0Tv5n";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="ONsUcLde"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 2FC213E772;
-	Sun,  1 Mar 2026 18:29:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772389776; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kXs1JgTTVr9rJVaJhuPxysezi0SuGZ4SajJ4SJVSrX8=;
-	b=PLJUbMd2S8YCQK1kdCpa6+6nJ6fbg+6XDzfZyUw/9iREaU5U22YrC+M23piOdrl38Dy1Kg
-	FzJIcjPghVSNKq6RfLLPWdJuHrWFSvLnIEbBBnJDMcDjaJEV6l/0a9/y3fD5KceUb+Vw0V
-	mWIGIDEhSOXutSx1i37ly3gmu2lAn6M=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772389776;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kXs1JgTTVr9rJVaJhuPxysezi0SuGZ4SajJ4SJVSrX8=;
-	b=NA1OOFEdk0nuMWPv1D+y5TJz91RJ9VE6QYW4TjOEvPDNY0pUWWJGyrto3KUlE8RF09/Wa5
-	AJNsnRf3CiUT91Bg==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=l+W0Tv5n;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=ONsUcLde
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1772389775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kXs1JgTTVr9rJVaJhuPxysezi0SuGZ4SajJ4SJVSrX8=;
-	b=l+W0Tv5nf0INOeMPpg58Fx07ys9EizjoRfDmwqWSGo7OIjduQRIf2CQXkJmruf7DNVyiyR
-	IH3y1n7JHX97w2ek9I1zrueZTu1hIieeyRc1MCiay/DOjo0T5TNokSo+Elf5mCTcIz/a9o
-	TPr43N/yThyrQPBf/Es0Xf72EgacTsc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1772389775;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kXs1JgTTVr9rJVaJhuPxysezi0SuGZ4SajJ4SJVSrX8=;
-	b=ONsUcLdevCxe5sSS/PQn66m6nTCej1s6JYXibL39/+6RUAspjL+U4ntgMMZIMthtBD8olj
-	+AHu7N6dybiqCKBQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CC8773EA69;
-	Sun,  1 Mar 2026 18:29:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 5831Lo2FpGnzEQAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Sun, 01 Mar 2026 18:29:33 +0000
-Message-ID: <2a2afbf1-acc5-449a-a4d8-83badd49fbab@suse.de>
-Date: Sun, 1 Mar 2026 19:29:29 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k1tj63Le"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F451C116C6;
+	Sun,  1 Mar 2026 18:30:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772389827;
+	bh=vGBT1CRkaStGJJvFrAHCByqOWl2Xsq8KpNcMMUGtREM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=k1tj63LetdqMY7WPcDH0WBVp+mGiFlaHWkFu+ZO/eUKLQJlecjS4dIpgN1NsJJ00E
+	 HeN/rI/nvTUK5+p8qbwUcquDiW8szvu7cPINpGUKmeIHO6RUp7nx+Rz/s3oxDp8CYT
+	 vqI0MfOd4RhaQmHKInBARPsvNoM87+/s55MIIlxW51D5IfWwghEO5iE/xMPCWy4O6c
+	 ibNgDUzS1SL1dTpahCDeKdP+S5hxNWu+vi6iOEf56dTy2Vg0R+wKzE4X8KTV1kMIA0
+	 nIulaYaayTW64Zh1QWhJ2JCRml49ux39r1Vg/D39dc+UX5Smo/8oxu5ri0UQLrIwt6
+	 /b4T8Ucjye0+g==
+Date: Sun, 1 Mar 2026 18:30:21 +0000
+From: Simon Horman <horms@kernel.org>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Felix Fietkau <nbd@nbd.name>, Sean Wang <sean.wang@mediatek.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Paolo Valerio <pvalerio@redhat.com>, netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, bpf@vger.kernel.org
+Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: Reset prog ptr to NULL
+ in case of error in mtk_xdp_setup()
+Message-ID: <aaSFvfXen4XnmPpP@horms.kernel.org>
+References: <20260227-mtk-xdp-prog-ptr-fix-v1-1-b73d7588b645@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net 0/3] {net,bpf}: nd_tbl fixes for when ipv6.disable=1
-To: =?UTF-8?Q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- David Ahern <dsahern@kernel.org>, Jay Vosburgh <jv@jvosburgh.net>,
- Andrew Lunn <andrew+netdev@lunn.ch>, Hangbin Liu <liuhangbin@gmail.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260228-net-nd_tbl_fixes-v1-0-2b2a274df9bb@suse.com>
-Content-Language: en-US
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-In-Reply-To: <20260228-net-nd_tbl_fixes-v1-0-2b2a274df9bb@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[26];
-	FREEMAIL_TO(0.00)[suse.com,linux.dev,iogearbox.net,gmail.com,fomichev.me,kernel.org,google.com,davemloft.net,redhat.com,jvosburgh.net,lunn.ch];
-	MIME_TRACE(0.00)[0:+];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from,2a07:de40:b281:106:10:150:64:167:received];
-	TAGGED_RCPT(0.00)[netdev];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_RATELIMIT(0.00)[to_ip_from(RLjnappfs4fazzqxz8xagywz8p)];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,suse.de:dkim,suse.de:mid,suse.com:email]
-X-Rspamd-Action: no action
-X-Spam-Flag: NO
-X-Spam-Score: -3.01
-X-Spam-Level: 
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 2FC213E772
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227-mtk-xdp-prog-ptr-fix-v1-1-b73d7588b645@kernel.org>
 
-On 2/28/26 6:46 PM, Ricardo B. Marlière wrote:
-> Hi,
+On Fri, Feb 27, 2026 at 04:52:11PM +0100, Lorenzo Bianconi wrote:
+> Reset eBPF prog pointer to NULL if mtk_open routine in mtk_xdp_setup()
+> fails.
 > 
-> In line with [1] [2], I'm sending these small fixes for similar crashes.
-> 
-> Thanks,
-> -	Ricardo.
-> 
-> [1] https://lore.kernel.org/netdev/20260227112701.3990-1-fmancera@suse.de
-> [2] https://lore.kernel.org/netdev/20260226234059.19402-1-fmancera@suse.de
->
-> Signed-off-by: Ricardo B. Marlière <rbm@suse.com>
-> ---
-> Ricardo B. Marlière (3):
->        bpf: bpf_out_neigh_v4: Fix nd_tbl NULL dereference when IPv6 is disabled
->        bpf: bpf_out_neigh_v6: Fix nd_tbl NULL dereference when IPv6 is disabled
->        net: bonding: Fix nd_tbl NULL dereference when IPv6 is disabled
-> 
->   drivers/net/bonding/bond_main.c | 4 ++++
->   net/core/filter.c               | 7 +++++++
->   2 files changed, 11 insertions(+)
-> ---
+> Fixes: 7c26c20da5d42 ("net: ethernet: mtk_eth_soc: add basic XDP support")
+> Suggested-by: Paolo Valerio <pvalerio@redhat.com>
+> Signed-off-by: Lorenzo Bianconi <lorenzo@kernel.org>
 
-Saving some time here for reviews: 
-https://lore.kernel.org/netdev/20260301155413.GA755501@shredder/ I guess 
-this feedback applies here too.
+Reviewed-by: Simon Horman <horms@kernel.org>
+
+...
