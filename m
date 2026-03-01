@@ -1,59 +1,94 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C3923C50A;
-	Sat, 28 Feb 2026 23:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72FA520C00C;
+	Sun,  1 Mar 2026 00:00:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772322622; cv=none; b=bBwyFAxeY7VYG8aFBUh4QtjqrolswKNbGMUE5L3Yhfsfx1k7sUl8Kr05EwbuGikWi8t27Y6kdmT0neyev0K9T5xo8XlZN6SAG0fqubt7LsPVwZzGQ0xwfWp/xGE+1vEMcVEVp4KHwAb+99egJvzYBrBLi5PWBoqwq/98SvFUL1I=
+	t=1772323209; cv=none; b=g3fDgKetC00R/YxxQG1R9JC4jj0hIlkVoNYdhtecyglz3BTEu09gj6iWTd/Gi25s9TWkFG3GszQowbtzS1R/wV6ZVfWEbBG8eGkb1H2RiA+uJY46vxfv3TMriM2PyCJQ3rgb/93ygkX6wMzWcPklU1VHMOP3lW2q3ZRvvAVVQG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772322622; c=relaxed/simple;
-	bh=nVlPNvjcp5bH3FHH4gSFEM25vu7Wj0UJtLOs5CcgAmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NL2LUdx/1G3PVm5adtC8XblMmF9AuzI6kDk+dUpOIcU1vX8EwrYOIDwFKFdYW+xuNEcAsrte4yUhAF9ky53o/WMkff/FCKS5ZxJ/morBCt/Rza6TQbvvfBNyEvIKc7NS+gQp4W7sVUU/PG3vxzUx0hBmK6+SZW1C6Eaie/xY+28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OyqTiH9r; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772323209; c=relaxed/simple;
+	bh=fh4ObmTqss74v05OBV7OE4CtGzCUPSuRoZCPcHg2JDs=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=k4RrIYsjLa+2Ewosq6/omRITXoWNroMhdzlEwUbh5ZZrSKpGe92sSFeixGH1I5hf+RHo7wYwdH0RoywGd2knN9sqU417gUjrkw86bny1rjp4hsZjrMRJfVY1ATei5tqIdhM/FNUc1ywniGjRodmIv1zHvVdbH7W01D/wmm2jeZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hY0ODin/; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OyqTiH9r"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE0A3C116D0;
-	Sat, 28 Feb 2026 23:50:21 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hY0ODin/"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB26C116D0;
+	Sun,  1 Mar 2026 00:00:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772322622;
-	bh=nVlPNvjcp5bH3FHH4gSFEM25vu7Wj0UJtLOs5CcgAmU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OyqTiH9rcOwH2NM3d0us8lnhjpGWEwpL9eT8h7L7vYWdy686PC/K+hP7Uium0c0Ig
-	 HFRAzcdD9S40OFcFxR2jUoe/za+brX3OFaNfk4wGLN9LPcki9rrJ2PrEJgEb0E/tFc
-	 CBqabPcX4cdQ35Bhsxv85QyMWzRv/M8I8cyuUbQeYF8ECnjTDtBXTCgABOqYKdyXs2
-	 /mbOqa5qmSw0Ifq/P7xed047OGIc7LNoLXodTSNW3KIDLDXlkhegzAa1rDkhMSuPtG
-	 E+kEA4n2mwCxeq9U+xPbpgsFG5kh3M70LVnIsnLbvMWlvwzcKJsVKRY4DEHm8FisjH
-	 gbMI+fhVibQ8A==
-Date: Sat, 28 Feb 2026 15:50:21 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Jakub Sitnicki <jakub@cloudflare.com>, Paolo Abeni <pabeni@redhat.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, bpf
- <bpf@vger.kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Network
- Development <netdev@vger.kernel.org>, kernel-team
- <kernel-team@cloudflare.com>
-Subject: Re: [PATCH RFC bpf-next 0/5] skb extension for BPF local storage
-Message-ID: <20260228155021.1dc9b127@kernel.org>
-In-Reply-To: <87wlzydk12.fsf@cloudflare.com>
-References: <20260226-skb-local-storage-v1-0-4ca44f0dd9d1@cloudflare.com>
-	<CAADnVQKVfyh3_OZshvYf7GJUF-ph2eMfmaQsxNgwBJd1AJgXTQ@mail.gmail.com>
-	<87wlzydk12.fsf@cloudflare.com>
+	s=k20201202; t=1772323209;
+	bh=fh4ObmTqss74v05OBV7OE4CtGzCUPSuRoZCPcHg2JDs=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=hY0ODin/CIvZI/1I+TVon084mg6B86qBhzUFDkAw69pxP4J3XoPLYPMRIgbzM3mQI
+	 pLqP3RQircubHKSUswGmFu9L+u4RSGr6OvRvUFDpfgFtwrQGD7/u45El2YJ7lhnfRI
+	 svCNwR7YofkhJQbynmSHW4t9yL8yefY71KpsYLhvIAFPXri9I8epHP2ONien4NKPL1
+	 EGsWcpN4PZP1I2A89YiVjb1+3CgZO5Gg82RoO+mZ0xeQwUS6LyicZpcpNSNBvKOI3s
+	 f4GKJZyrxVlafu5DDjD5ROrAdhmdmdY905q98Q+eClClos4zvxYFWp/AMADAwa1h4x
+	 ShhK/OwZr3XHA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7CFB339F2024;
+	Sun,  1 Mar 2026 00:00:13 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v5 0/5] net: sched: refactor qdisc drop reasons
+ into
+ dedicated tracepoint
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177232321230.3162700.9839449465077142615.git-patchwork-notify@kernel.org>
+Date: Sun, 01 Mar 2026 00:00:12 +0000
+References: <177211325634.3011628.9343837509740374154.stgit@firesoul>
+In-Reply-To: <177211325634.3011628.9343837509740374154.stgit@firesoul>
+To: Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: netdev@vger.kernel.org, eric.dumazet@gmail.com, davem@davemloft.net,
+ pabeni@redhat.com, toke@toke.dk, bpf@vger.kernel.org, kuba@kernel.org,
+ horms@kernel.org, jiri@resnulli.us, edumazet@google.com,
+ xiyou.wangcong@gmail.com, jhs@mojatatu.com, atenart@redhat.com,
+ carges@cloudflare.com, kernel-team@cloudflare.com
 
-On Fri, 27 Feb 2026 21:11:05 +0100 Jakub Sitnicki wrote:
-> So to exhaust all alternatives I gotta ask - would you and Jakub be open
-> to the idea of a plain byte buffer embedded in skb_ext and exposed as a
-> bpf_dynptr?
+Hello:
 
-I'm fine with that, but admittedly I (like you?) live in 
-the comfortable universe of controlling which .config options
-are suitable for the narrow use cases I care about.
-So I don't really trust my judgment. Adding Paolo..
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 26 Feb 2026 14:44:06 +0100 you wrote:
+> This series refactors qdisc drop reason handling by introducing a dedicated
+> enum qdisc_drop_reason and trace_qdisc_drop tracepoint, providing qdisc
+> layer drop diagnostics with direct qdisc context visibility.
+> 
+> Background:
+> -----------
+> Identifying which qdisc dropped a packet via skb_drop_reason is difficult.
+> Normally, the kfree_skb tracepoint caller "location" hints at the dropping
+> code, but qdisc drops happen at a central point (__dev_queue_xmit), making
+> this unusable. As a workaround, commits 5765c7f6e317 ("net_sched: sch_fq:
+> add three drop_reason") and a42d71e322a8 ("net_sched: sch_cake: Add drop
+> reasons") encoded qdisc names directly in the drop reason enums.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v5,1/5] net: sched: introduce qdisc-specific drop reason tracing
+    https://git.kernel.org/netdev/net-next/c/ff2998f29f39
+  - [net-next,v5,2/5] net: sched: sfq: convert to qdisc drop reasons
+    https://git.kernel.org/netdev/net-next/c/3e28f8ad478f
+  - [net-next,v5,3/5] net: sched: rename QDISC_DROP_FQ_* to generic names
+    https://git.kernel.org/netdev/net-next/c/f30d9073ec19
+  - [net-next,v5,4/5] net: sched: rename QDISC_DROP_CAKE_FLOOD to QDISC_DROP_FLOOD_PROTECTION
+    https://git.kernel.org/netdev/net-next/c/9d3e7f971898
+  - [net-next,v5,5/5] net: sched: sch_dualpi2: use qdisc_dequeue_drop() for dequeue drops
+    https://git.kernel.org/netdev/net-next/c/67713dff6398
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
