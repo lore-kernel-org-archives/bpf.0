@@ -1,246 +1,209 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E01CD22AE65
-	for <bpf@vger.kernel.org>; Sun,  1 Mar 2026 01:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2B62FFDD5;
+	Sun,  1 Mar 2026 02:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772329544; cv=none; b=T4fuf4t3Pd+WeJKi/iRwmV39rFtSH/K8e4EF9hC5AMAJL39zOgh/rqPcmr2Dm2LB9w51Xasddgfh3AqXcJUpHHtNuxtuvXfjZ5yRu6RpKgB1E+2rqSwPwMnF2mcBFRq882THu5mwACb0XFkZNG9MQ3IMkzjb2O/Nzwc+VEaUS0k=
+	t=1772330613; cv=none; b=HOJ91CxxplekZ7G70ZirQKBWnjLq8HnKCMkeBWWTsmn3KuLU3yzljh2OkoLqd6ZvaOwZZ2Mhx/ZszlKwZ90eQRU+UP8HD9P6/kowsvbW5VICMD9xAhIFDYmLUtno1KaiL6lnGlzZv3+pnR3EhEfTBU5fe1+U/MXSCVBv9YLvn5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772329544; c=relaxed/simple;
-	bh=TsnTw1uRE4krWhVzaSdXcDSrsnxr3Pa2llJobpWe04Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ept8v/vCISmpaW8XdYe53djhYvf+dYpZVujv/szEkj2MTaww8hOy/SQ6L7z9j10eBYNcfDOqImFtCjhbNZdxM6gAGKwXhqR2fjc0VKBEscttHxOWICWMIrpH4+XQqxuGsDQQ1m85wH8o0x8OOeu3m2J77Kle9OAVqupSvMAO3uw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DSR3xcxS; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772330613; c=relaxed/simple;
+	bh=KZzP/JecF27xHHiJFhTWIUfU3XREE4PimgnFsthN5/A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oNyKQOv6JLITYukvGLri9OydTFEd+LNlkJVmOfERG0h63Fp9dYUBumaZDMIWEvZGAMGu7O6MaiQTMG7T8MK/j14aKC4PZPcgwyj89XrsQSl261VE6p8zWICqQ2UYVIqtKRlDspXZoe4ugmdPSkdbIXi5LnVgigpCiFHrXeM6U/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RxjXn8St; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DSR3xcxS"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-354bc7c2c46so1869725a91.0
-        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 17:45:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772329542; x=1772934342; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1x8irSC5N2RVcDxwn8wxBrJTNT5pdYqDzOAzBNde5LU=;
-        b=DSR3xcxSgKyU41mh6fLOx+WfQXZsuzkjHjqdwwCTMdD4DUsmQdaxmR3t9utmFSaC5E
-         9Adwrpy04m9IziQnkoQ1Py+M/MTSWL9nqpMGHz/suhw4GjzpEOoLAsQt9Je17snh8KJ/
-         tXXxo+Co2okqrUn1BzvpJQKglVRJDpIDMxu9sMAmjvLqyx43uhdUcRh/RCNTKH7P7A3a
-         jznJU7sXL5RXgbeaV1oh13d/XpKkRbSQtWRCZGgCtFzE9BkgOMpsByfoQziLGvsoJTRB
-         wY9u4ly7KwmbYRAn7d2ukAshMMqBH8Bq13SmPGH9IQ03nz4LrxeozzSGV2Gs6O8H4pN4
-         fhFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772329542; x=1772934342;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1x8irSC5N2RVcDxwn8wxBrJTNT5pdYqDzOAzBNde5LU=;
-        b=u6Aa7oUfikA8JcZzfgRXTLTiY9elnQnIDjSO2fMhmuz6DnJvDYVgt3GIP+nDCou60d
-         CueS29zyIHEBLa6D8f4L2HUedu0G9VlltjqhIeA3r0wEhF31QVQB07y6icbTjgezTnMx
-         65mDMGHKmdtVBg9lT0NUyVd4cIwI81yUwM/CYsi5fgmPtBMMLecJisdsY1gqAJUAv0Q3
-         I9MmqCN6xnY1J62ZcRaU+u4cyodPEiTQatLkeyGXfQ2Frf72Qp5R6De9lBeOAmwqrqZj
-         Zzun6UQ7B1QYf2fcAAkiC+ouyhqXYISsIVtYK9l7F1qkmI2kHgo+ztkRFJnWejWnBTn4
-         1/Pg==
-X-Gm-Message-State: AOJu0YyouT/ykeZtGN61iM6P7But/+SEhtOUyl1xFvM3bJfhWF8WqqFm
-	EReEG7Nd92Q06jOUt4K9ozBPU8VxsEvxpFryOMi4FlHV9RztymBTK/y2WLaTQw==
-X-Gm-Gg: ATEYQzxehyQSGgbANEfEhVIQwwpFohES2BlrVlCJ63GKDMgcXFLdpgUZvQ5oXoWknhc
-	BJnqeUcjSb0fzi/0R2j5k6DvoXyQHLDau9whpGGw9sTrM9Gr09l2jzLkWDpqRS9uOyMXOPajXuP
-	GR1OwodPhjqPRUTFhi/lFqX0a1ZS43mWZ42LZLr6cEOGrIiMG/RaLwv/vGXi3fzcd/JuVauHkuJ
-	34euaO3qKQwUjMD/j81DltVdLriCLmDnq00EwnEiAZ71tL8cxaXJUSFXhpr3R9cUiCUdyfJnMHG
-	/ltIlMby+KmqWWi848txOFmWoUf96Xx6YQipEozRXmMEBQWDe0fKxsxYAPNcsgJKvr5B/2k8JO1
-	iiy7rvAaJuX/ZxvyXi71jXMYBvPPFeLFRi4lx6M3BDMiEbbRUNuPsOd8CSsJXCKkEeYZETeL60c
-	CDEBOGNc9/YfDF96tBpD4J4WcVTULWT09HPD7DeUBJd2TphyCqYtbfFs55nWA/frS+GzkOHndVx
-	ncPdlsJXy1YcNtN+ql4ePnJbEMbNuT850/NbYVq2VI5t9pXIaYp9oBAsHrDXQ==
-X-Received: by 2002:a17:90b:4d07:b0:353:6373:590b with SMTP id 98e67ed59e1d1-35965c27e71mr6750368a91.7.1772329542162;
-        Sat, 28 Feb 2026 17:45:42 -0800 (PST)
-Received: from localhost.localdomain ([2601:600:837f:c6b0:18cf:ab6c:cac0:3007])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-359834ac606sm956240a91.6.2026.02.28.17.45.40
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sat, 28 Feb 2026 17:45:40 -0800 (PST)
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@kernel.org
-Subject: [GIT PULL] BPF fixes for 7.0-rc2
-Date: Sat, 28 Feb 2026 17:45:38 -0800
-Message-ID: <20260301014538.39958-1-alexei.starovoitov@gmail.com>
-X-Mailer: git-send-email 2.50.1
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RxjXn8St"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772330611; x=1803866611;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KZzP/JecF27xHHiJFhTWIUfU3XREE4PimgnFsthN5/A=;
+  b=RxjXn8StrLonnm/3sngiG5MPJlLdX2lJFO2M8ldJkjvSiuMVGpUq2MSl
+   eh0VbHisBIa25X8qUxhUwIpK3QG6+v+ekHLrfXCae2Zi3MhiP/9KyNmAB
+   JyHlGP3osH1ycR54Wb9Hq3e27gOzgFrR2NEXWUn4dQ8T2zdmQVdyUlCmK
+   /dHgB3YPPFvNv2gzdVprv/WrjbsdwrUYzvUqWPqknNo6CpvHWG83DE53S
+   BUHSNzmeej2FCmnJnAoQrx3ODT4ruaEbH4gnarLRoFWw8OCha4v5G8bil
+   hSXvLqwaZMvEsBugJcTLvhrsoPZ2MPSFSe/9ugFzD/q8iqpnHZaJOSmVE
+   w==;
+X-CSE-ConnectionGUID: 2myQ6w4NRAOi2xSmH9U79g==
+X-CSE-MsgGUID: IlC7v/yNQ7us+e3Bjb7bBA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11715"; a="84012019"
+X-IronPort-AV: E=Sophos;i="6.21,317,1763452800"; 
+   d="scan'208";a="84012019"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 18:03:30 -0800
+X-CSE-ConnectionGUID: 2F9CqOx2TE6GYuD7zyqyCQ==
+X-CSE-MsgGUID: MU1ccFKrRu6sm8nt7mKVxw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,317,1763452800"; 
+   d="scan'208";a="220438890"
+Received: from lkp-server01.sh.intel.com (HELO 59784f1c7b2a) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 28 Feb 2026 18:03:26 -0800
+Received: from kbuild by 59784f1c7b2a with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vwW9S-000000000rZ-2a4w;
+	Sun, 01 Mar 2026 02:03:22 +0000
+Date: Sun, 1 Mar 2026 10:02:29 +0800
+From: kernel test robot <lkp@intel.com>
+To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
+	Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	"Dr. David Alan Gilbert" <linux@treblig.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	James.Bottomley@hansenpartnership.com, dhowells@redhat.com,
+	Fan Wu <wufan@kernel.org>, Ryan Foster <foster.ryan.r@gmail.com>,
+	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [PATCH v2 07/10] security: Hornet LSM
+Message-ID: <202603010957.7JUXdjTd-lkp@intel.com>
+References: <20260227233930.2418522-8-bboscaccy@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260227233930.2418522-8-bboscaccy@linux.microsoft.com>
 
-Hi Linus,
+Hi Blaise,
 
-The following changes since commit 7dff99b354601dd01829e1511711846e04340a69:
+kernel test robot noticed the following build errors:
 
-  Remove WARN_ALL_UNSEEDED_RANDOM kernel config option (2026-02-23 11:18:48 -0800)
+[auto build test ERROR on linus/master]
+[also build test ERROR on v7.0-rc1 next-20260227]
+[cannot apply to herbert-cryptodev-2.6/master herbert-crypto-2.6/master shuah-kselftest/next shuah-kselftest/fixes]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-are available in the Git repository at:
+url:    https://github.com/intel-lab-lkp/linux/commits/Blaise-Boscaccy/certs-break-out-pkcs7-check-into-its-own-function/20260228-074528
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20260227233930.2418522-8-bboscaccy%40linux.microsoft.com
+patch subject: [PATCH v2 07/10] security: Hornet LSM
+config: um-randconfig-r133-20260228 (https://download.01.org/0day-ci/archive/20260301/202603010957.7JUXdjTd-lkp@intel.com/config)
+compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260301/202603010957.7JUXdjTd-lkp@intel.com/reproduce)
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git tags/bpf-fixes
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202603010957.7JUXdjTd-lkp@intel.com/
 
-for you to fetch changes up to b9c0a5c48396aea4cde25fc701027ebbc5d78de1:
+All errors (new ones prefixed by >>):
 
-  Merge branch 'fix-invariant-violation-for-single-value-tnums' (2026-02-27 16:11:50 -0800)
+   In file included from security/hornet/hornet_lsm.c:10:
+   In file included from include/linux/lsm_hooks.h:29:
+   In file included from include/linux/security.h:35:
+   In file included from include/linux/bpf.h:32:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:27:
+   In file included from include/linux/kernel_stat.h:8:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from arch/um/include/asm/hardirq.h:24:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:12:
+   In file included from arch/um/include/asm/io.h:24:
+   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+         |                                                   ~~~~~~~~~~ ^
+>> security/hornet/hornet_lsm.c:183:8: error: call to undeclared function 'verify_pkcs7_signature'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     183 |         err = verify_pkcs7_signature(prog->insnsi, prog->len * sizeof(struct bpf_insn),
+         |               ^
+   security/hornet/hornet_lsm.c:183:8: note: did you mean 'bpf_verify_pkcs7_signature'?
+   include/linux/bpf.h:3624:5: note: 'bpf_verify_pkcs7_signature' declared here
+    3624 | int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
+         |     ^
+>> security/hornet/hornet_lsm.c:197:6: error: call to undeclared function 'validate_pkcs7_trust'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     197 |         if (validate_pkcs7_trust(msg, VERIFY_USE_SECONDARY_KEYRING)) {
+         |             ^
+   1 warning and 2 errors generated.
 
-----------------------------------------------------------------
-- Fix alignment of arm64 JIT buffer to prevent atomic tearing (Fuad Tabba)
 
-- Fix invariant violation for single value tnums in the verifier
-  (Harishankar Vishwanathan, Paul Chaignon)
+vim +/verify_pkcs7_signature +183 security/hornet/hornet_lsm.c
 
-- Fix a bunch of issues found by ASAN in selftests/bpf (Ihor Solodrai)
+   153	
+   154	static int hornet_check_program(struct bpf_prog *prog, union bpf_attr *attr,
+   155					struct bpf_token *token, bool is_kernel)
+   156	{
+   157		struct hornet_maps maps = {0};
+   158		bpfptr_t usig = make_bpfptr(attr->signature, is_kernel);
+   159		struct pkcs7_message *msg;
+   160		struct hornet_parse_context *ctx;
+   161		void *sig;
+   162		int err;
+   163		const void *authattrs;
+   164		size_t authattrs_len;
+   165	
+   166		if (!attr->signature)
+   167			return LSM_INT_VERDICT_UNSIGNED;
+   168	
+   169		ctx = kzalloc(sizeof(struct hornet_parse_context), GFP_KERNEL);
+   170		if (!ctx)
+   171			return -ENOMEM;
+   172	
+   173		maps.fd_array = make_bpfptr(attr->fd_array, is_kernel);
+   174		sig = kzalloc(attr->signature_size, GFP_KERNEL);
+   175		if (!sig) {
+   176			err = -ENOMEM;
+   177			goto out;
+   178		}
+   179		err = copy_from_bpfptr(sig, usig, attr->signature_size);
+   180		if (err != 0)
+   181			goto cleanup_sig;
+   182	
+ > 183		err = verify_pkcs7_signature(prog->insnsi, prog->len * sizeof(struct bpf_insn),
+   184					     sig, attr->signature_size, VERIFY_USE_SECONDARY_KEYRING,
+   185					     VERIFYING_BPF_SIGNATURE, NULL, NULL);
+   186		if (err < 0) {
+   187			err = LSM_INT_VERDICT_BADSIG;
+   188			goto cleanup_sig;
+   189		}
+   190	
+   191		msg = pkcs7_parse_message(sig, attr->signature_size);
+   192		if (IS_ERR(msg)) {
+   193			err = LSM_INT_VERDICT_BADSIG;
+   194			goto cleanup_sig;
+   195		}
+   196	
+ > 197		if (validate_pkcs7_trust(msg, VERIFY_USE_SECONDARY_KEYRING)) {
+   198			err = LSM_INT_VERDICT_PARTIALSIG;
+   199			goto cleanup_msg;
+   200		}
+   201		if (pkcs7_get_authattr(msg, OID_hornet_data,
+   202				       &authattrs, &authattrs_len) == -ENODATA) {
+   203			err = LSM_INT_VERDICT_PARTIALSIG;
+   204			goto cleanup_msg;
+   205		}
+   206	
+   207		err = asn1_ber_decoder(&hornet_decoder, ctx, authattrs, authattrs_len);
+   208		if (err < 0 || authattrs == NULL) {
+   209			err = LSM_INT_VERDICT_PARTIALSIG;
+   210			goto cleanup_msg;
+   211		}
+   212		err = hornet_verify_hashes(&maps, ctx, prog);
+   213	
+   214	cleanup_msg:
+   215		pkcs7_free_message(msg);
+   216	cleanup_sig:
+   217		kfree(sig);
+   218	out:
+   219		kfree(ctx);
+   220		return err;
+   221	}
+   222	
 
-- Fix race in devmpa and cpumap on PREEMPT_RT (Jiayuan Chen)
-
-- Fix show_fdinfo of kprobe_multi when cookies are not present (Jiri Olsa)
-
-- Fix race in freeing special fields in BPF maps to prevent
-  memory leaks (Kumar Kartikeya Dwivedi)
-
-- Fix OOB read in dmabuf_collector (T.J. Mercier)
-
-Signed-off-by: Alexei Starovoitov <ast@kernel.org>
-----------------------------------------------------------------
-Alexei Starovoitov (4):
-      Merge branch 'selftests-bpf-fixes-for-userspace-asan'
-      Merge branch 'close-race-in-freeing-special-fields-and-map-value'
-      Merge branch 'bpf-cpumap-devmap-fix-per-cpu-bulk-queue-races-on-preempt_rt'
-      Merge branch 'fix-invariant-violation-for-single-value-tnums'
-
-Fuad Tabba (1):
-      bpf, arm64: Force 8-byte alignment for JIT buffer to prevent atomic tearing
-
-Harishankar Vishwanathan (1):
-      bpf: Introduce tnum_step to step through tnum's members
-
-Ihor Solodrai (21):
-      selftests/bpf: Add simple strscpy() implementation
-      selftests/bpf: Replace strcpy() calls with strscpy()
-      selftests/bpf: Replace strncpy() with strscpy()
-      selftests/bpf: Use strscpy in bpftool_helpers.c
-      selftests/bpf: Use memcpy() for bounded non-NULL-terminated copies
-      selftests/bpf: Pass through build flags to bpftool and resolve_btfids
-      resolve_btfids: Fix memory leaks reported by ASAN
-      selftests/bpf: Add DENYLIST.asan
-      selftests/bpf: Refactor bpf_get_ksyms() trace helper
-      selftests/bpf: Fix memory leaks in tests
-      selftests/bpf: Fix cleanup in check_fd_array_cnt__fd_array_too_big()
-      veristat: Fix a memory leak for preset ENUMERATOR
-      selftests/bpf: Fix use-after-free in xdp_metadata test
-      selftests/bpf: Fix double thread join in uprobe_multi_test
-      selftests/bpf: Fix resource leaks caused by missing cleanups
-      selftests/bpf: Free bpf_object in test_sysctl
-      selftests/bpf: Fix array bounds warning in jit_disasm_helpers
-      selftests/bpf: Fix out-of-bounds array access bugs reported by ASAN
-      selftests/bpf: Check BPFTOOL env var in detect_bpftool_path()
-      selftests/bpf: Don't override SIGSEGV handler with ASAN
-      selftests/bpf: Fix a memory leak in xdp_flowtable test
-
-Jiayuan Chen (2):
-      bpf: Fix race in cpumap on PREEMPT_RT
-      bpf: Fix race in devmap on PREEMPT_RT
-
-Jiri Olsa (1):
-      bpf: Fix kprobe_multi cookies access in show_fdinfo callback
-
-Kohei Enju (1):
-      bpf: Fix stack-out-of-bounds write in devmap
-
-Kumar Kartikeya Dwivedi (5):
-      bpf: Register dtor for freeing special fields
-      bpf: Lose const-ness of map in map_check_btf()
-      bpf: Delay freeing fields in local storage
-      bpf: Retire rcu_trace_implies_rcu_gp() from local storage
-      selftests/bpf: Add tests for special fields races
-
-Paul Chaignon (3):
-      bpf: Improve bounds when tnum has a single possible value
-      selftests/bpf: Test refinement of single-value tnum
-      selftests/bpf: Avoid simplification of crafted bounds test
-
-T.J. Mercier (1):
-      selftests/bpf: Fix OOB read in dmabuf_collector
-
- arch/arm64/net/bpf_jit_comp.c                      |   2 +-
- include/linux/bpf.h                                |   4 +-
- include/linux/bpf_local_storage.h                  |   2 +-
- include/linux/bpf_mem_alloc.h                      |   6 +
- include/linux/tnum.h                               |   3 +
- kernel/bpf/arena.c                                 |   2 +-
- kernel/bpf/arraymap.c                              |   2 +-
- kernel/bpf/bloom_filter.c                          |   2 +-
- kernel/bpf/bpf_insn_array.c                        |   2 +-
- kernel/bpf/bpf_local_storage.c                     |  75 +++----
- kernel/bpf/cpumap.c                                |  17 +-
- kernel/bpf/devmap.c                                |  47 ++++-
- kernel/bpf/hashtab.c                               |  86 ++++++++
- kernel/bpf/local_storage.c                         |   2 +-
- kernel/bpf/lpm_trie.c                              |   2 +-
- kernel/bpf/memalloc.c                              |  58 ++++--
- kernel/bpf/syscall.c                               |   2 +-
- kernel/bpf/tnum.c                                  |  56 ++++++
- kernel/bpf/verifier.c                              |  30 +++
- kernel/trace/bpf_trace.c                           |   4 +-
- tools/bpf/resolve_btfids/Makefile                  |   7 +-
- tools/bpf/resolve_btfids/main.c                    |  81 +++++---
- tools/include/linux/args.h                         |   4 +
- tools/testing/selftests/bpf/DENYLIST.asan          |   3 +
- tools/testing/selftests/bpf/Makefile               |  13 +-
- tools/testing/selftests/bpf/benchs/bench_trigger.c |  14 +-
- tools/testing/selftests/bpf/bpf_util.h             |  45 +++--
- tools/testing/selftests/bpf/bpftool_helpers.c      |  25 ++-
- tools/testing/selftests/bpf/cgroup_helpers.c       |   2 +-
- tools/testing/selftests/bpf/jit_disasm_helpers.c   |  18 +-
- tools/testing/selftests/bpf/network_helpers.c      |   5 +-
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c  |   3 +-
- .../testing/selftests/bpf/prog_tests/bpf_tcp_ca.c  |   2 +-
- .../selftests/bpf/prog_tests/cgrp_local_storage.c  |   4 +-
- .../testing/selftests/bpf/prog_tests/ctx_rewrite.c |   6 +-
- tools/testing/selftests/bpf/prog_tests/dynptr.c    |   5 +-
- tools/testing/selftests/bpf/prog_tests/fd_array.c  |   4 +-
- .../selftests/bpf/prog_tests/flow_dissector.c      |   4 +-
- .../testing/selftests/bpf/prog_tests/htab_update.c |   1 +
- .../selftests/bpf/prog_tests/kmem_cache_iter.c     |   7 +-
- .../selftests/bpf/prog_tests/kprobe_multi_test.c   |  12 +-
- .../selftests/bpf/prog_tests/lwt_seg6local.c       |   2 +-
- .../selftests/bpf/prog_tests/map_kptr_race.c       | 218 +++++++++++++++++++++
- .../selftests/bpf/prog_tests/queue_stack_map.c     |   4 +-
- .../testing/selftests/bpf/prog_tests/reg_bounds.c  |   2 +-
- .../selftests/bpf/prog_tests/setget_sockopt.c      |   2 +-
- .../selftests/bpf/prog_tests/skc_to_unix_sock.c    |   2 +-
- .../selftests/bpf/prog_tests/sockmap_basic.c       |  28 +--
- .../selftests/bpf/prog_tests/sockmap_listen.c      |   2 +-
- .../testing/selftests/bpf/prog_tests/sockopt_sk.c  |   2 +-
- .../bpf/prog_tests/struct_ops_private_stack.c      |   4 +-
- .../selftests/bpf/prog_tests/task_local_data.h     |   2 +-
- tools/testing/selftests/bpf/prog_tests/tc_opts.c   |   6 +-
- .../testing/selftests/bpf/prog_tests/tc_redirect.c |   2 +-
- .../testing/selftests/bpf/prog_tests/test_sysctl.c |   3 +
- .../selftests/bpf/prog_tests/test_tc_tunnel.c      |   5 +-
- .../selftests/bpf/prog_tests/test_veristat.c       |   4 +-
- tools/testing/selftests/bpf/prog_tests/test_xsk.c  |  24 ++-
- .../selftests/bpf/prog_tests/uprobe_multi_test.c   |   6 +-
- .../selftests/bpf/prog_tests/verifier_log.c        |   2 +-
- .../selftests/bpf/prog_tests/xdp_flowtable.c       |   3 +-
- .../selftests/bpf/prog_tests/xdp_metadata.c        |   4 +-
- tools/testing/selftests/bpf/progs/dmabuf_iter.c    |   2 +-
- tools/testing/selftests/bpf/progs/map_kptr_race.c  | 197 +++++++++++++++++++
- .../testing/selftests/bpf/progs/verifier_bounds.c  | 137 +++++++++++++
- tools/testing/selftests/bpf/test_progs.c           |  38 ++--
- tools/testing/selftests/bpf/test_verifier.c        |   2 +-
- tools/testing/selftests/bpf/testing_helpers.c      |   1 +
- tools/testing/selftests/bpf/trace_helpers.c        |  23 +--
- tools/testing/selftests/bpf/trace_helpers.h        |  11 +-
- tools/testing/selftests/bpf/veristat.c             |   2 +
- tools/testing/selftests/bpf/xdp_features.c         |   3 +-
- tools/testing/selftests/bpf/xdp_hw_metadata.c      |   4 +-
- 73 files changed, 1180 insertions(+), 236 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/DENYLIST.asan
- create mode 100644 tools/testing/selftests/bpf/prog_tests/map_kptr_race.c
- create mode 100644 tools/testing/selftests/bpf/progs/map_kptr_race.c
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
