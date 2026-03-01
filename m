@@ -1,69 +1,71 @@
-Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+Received: from mail-dy1-f182.google.com (mail-dy1-f182.google.com [74.125.82.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8832212FAD
-	for <bpf@vger.kernel.org>; Sun,  1 Mar 2026 02:15:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D8425393E
+	for <bpf@vger.kernel.org>; Sun,  1 Mar 2026 02:32:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772331307; cv=none; b=a3T4ZUEt+3kNa4nUWtJzIm+zt7wAkW+mBoEMGlXGSGoEkFR4c1cNIxz5Ql+q3O+aNsSHC511NzVDiluP7vBxkXEme022cTUa3Qa1FjmHPl4Wo1mUa7U2PgME9oMSk7uLmhnrW3JJQCQqxrUVBSEbBLFTpJN5SFgyCFA2mad4Hss=
+	t=1772332353; cv=none; b=lFiXgOxsjGfr04z0WfSmKbA7ZoJr95mmdtEboU9qOxwnze4Hiee58MIDuZy1qFS6kozuGP66B0xBElaARnO5KIq3eRNpTSib50BVC1YBHyUTY+YJp29jBzvQuOty/lcaSRurI4tR1XZ4z7VKxOTFC5/zwjYKIJ1JwKD6i92UVx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772331307; c=relaxed/simple;
-	bh=DWIxK0/LtIGmi9vqyI6Q6hKZrwjUv+7OgQOMBi4wqJc=;
+	s=arc-20240116; t=1772332353; c=relaxed/simple;
+	bh=5tHPwb2e/izTj3Q493jmeFKidyfj9OfoL6YRqGJfV6w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I0SmTJxGkf/MCB1jwBCkCMcccSIvz5WPm24QSvDYsWslxUwQXBngfTH8ZT8XS6PRFHEtB7zWIXB2RIaOVP0muvJshYed72Oc5NruBdBVknDUKSpZc6rvu4p2Qvi7ytGuNoMqzqqH3fPSagsMhGqz6ER3G9ADSZ3iPMlORaPQ8cQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TpEAwAKd; arc=none smtp.client-ip=74.125.82.176
+	 Content-Type:Content-Disposition:In-Reply-To; b=dy9hwyh9SkAwiYRXBno2vwWM6rbgOFoLuv7vvcVmYS92kfZIz32uirBKsCUIfBTtfSLDIb20cPOtW06fPJQuMzDq3W7yo2KEkY5cA6NJhPk+O+S8AfdFELFE3zl6bInHcMsvE6SOay2UWs2uMkWW2+LpG5+1MCr3uNk9bWAkt6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W9ukLKBD; arc=none smtp.client-ip=74.125.82.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TpEAwAKd"
-Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2bdfc4b191fso300177eec.1
-        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 18:15:06 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W9ukLKBD"
+Received: by mail-dy1-f182.google.com with SMTP id 5a478bee46e88-2ba9c484e5eso3192518eec.1
+        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 18:32:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772331306; x=1772936106; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1772332351; x=1772937151; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q6EnI13eVrOOB49RugkPQuOhO7vpKFI831GwIhZKjD8=;
-        b=TpEAwAKdfGnQz8n0dKUG5phAJOKr+iCz0BCVg3RZTpa7haYIBdHaSsP34Ra+zd/Ilz
-         TwjOvrvCfK+tTqxsSbLWI8m1wLLgrzP9ityxaJll2rssl/HKnEMERUNL8y6NKKDXiIOn
-         M2cUFsD/uQBauf5V3faVdg8pqTOPI+LJbZVQVlNPk96ZR4tfnaMDK5UerGbnx+9eJ3Xc
-         2G/cdcD32G/c6buVBZv4SNDmhE0/PGsO/q3qYNkop3Hj4G5mEZdFMgDmrD3DUOjKVgR6
-         852pOcv8xRl9OmnOfQDD1L7cKEQu+46akOwNbAppmUBfs+96EH7mvn9TQ3aUFI8cFePE
-         f58w==
+        bh=HFmASH9t3VnZs3JmetqH7z59S6tUzpkAkdGYc5lgV0o=;
+        b=W9ukLKBDu6izz3XFVEmgT38hmAEk3V3DEvKmoWV1WcdgIDCjn9O3RLSPP/KU97+Bdv
+         lSck5blOK8zflSIKyatyD9xaW7uGLvYH5utI7H6tyAygGZ7wCgI9uw/8+2laiY2M4ZyT
+         QU7PbiyFeiKue2pROWZwLBvHSruAIs2E76PYv4Sy8RKENeU5+VuOh6RODl3SFSdLRxRH
+         5tva7My4xRvjluqQ2AVrO30m8lw0TeDJ4BNb54MAzpuY17CJ2pscVxL4Nv7IUGrebKtR
+         6o/0XNnEQktHCrx+haAGNRi7aM+zmvJGk5G2TPXXr5fkhWlzLrE1/eR5/vc1B9kGt+x5
+         wXSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772331306; x=1772936106;
+        d=1e100.net; s=20230601; t=1772332351; x=1772937151;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q6EnI13eVrOOB49RugkPQuOhO7vpKFI831GwIhZKjD8=;
-        b=Noln78jzqRWdYArObNIo5O36WNkh1Rvb1BSEMlJxlkxPD2yuK0npk63GPUkDaQt22K
-         vWVSlzKxNJy02FxPmM6Gs5KKsCKDiWofTW9hLbG7YRpZNR9d0asmnd9SVP03kjxr/ISb
-         ijzVHlXPwVHfGnNhgWL/Ot/bS0gLWXmFG1McidV5CS2UjH8zb4c6B1KnpDuPLl1QfFP9
-         CEFr4yWP25MqrIPfMsEflVRBrmDI8Wvxh3fkBrruijCydeHTnIzEXoBSoaAS24GHbuS8
-         +rlu6tWOTy6X6uoLADbluyovclcntSa+DuFEI8m5fzq1U3HOl94BjZtVRa3aChq1dKiZ
-         +qTw==
-X-Forwarded-Encrypted: i=1; AJvYcCWymXG6QXiBH8FaQnW+Y/om09eUCdjUkEl6jvZ5G3rKhGQH3agi9+LBDcTd5twYy/L66qU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHTO0euzT3Dynay4570zGFW+tNjhr1ImOA305ynozvJZ3FCO2X
-	aps7OCVNXfRQatkUjhxriB2JrYn9hpMnfClNPXx0nFr6rOi2hi6MJ6nny1kIUQ==
-X-Gm-Gg: ATEYQzyOP0Ppi6LTEIFnxw5bqyYvZ8dLT+fslH7ij9DRmfz9W6WlBzOIJm0nf4T3p3M
-	60tQVuMXIzKlZ8yJEr+wCOnb4sn9p8C9/+GH2hq9LedK+Nav/XoP3OWQTS8ffOvHenmuqQAFIoi
-	KXc87XsKVtMj4PF2v8B8K/g/m/K88fZ09jS5hD1ZXts+Iz1hwt5g8ZXFfcfg79+qWMV2Gs/2djh
-	Rj8a7ndC6J4n5TsZDO17z1HWiJBjJsl+zquZX19A0Ph1N87eAp/AxDscKxApCjCH3+J2iwIdnEz
-	JS07qujp6PAM1BT3crtTA8Rdl7ol6w3ZGcRK+jPWF2hDzTe/SBlKR7u2GGr8Uw5GFZJA6cqNHkx
-	lIMfNiuewjsvVrdDhapGvje0r8Z2epE/l91z66C8hzFecgqO0WaNGux1tCsWPDMDOSHc5tNTC6S
-	Rc/WHyJQuCASTrQvz6IYma30qo2jOlpw==
-X-Received: by 2002:a05:7301:2b06:b0:2ba:82ca:b19a with SMTP id 5a478bee46e88-2bde1d6c384mr2637938eec.28.1772331305577;
-        Sat, 28 Feb 2026 18:15:05 -0800 (PST)
+        bh=HFmASH9t3VnZs3JmetqH7z59S6tUzpkAkdGYc5lgV0o=;
+        b=J68hAc0qJQYfyt0TEUz1ZTe/Rmetzl31koOFjb5SDYRMy9InzuO03lo6+hA+WzmVgI
+         WmS57y4XdKMgxnLZHTpVLF9bLeMxnDk5uDNqH1lozzSi/CWlHmgPPO5hJFb5RXwgR/Mp
+         /V5zUTwYDKAYr5Hsq8G1ISXAfh6+EvA5jFKdSUoF8wHV3mgIGNH6WDkgd6dTDJL1/c+g
+         D6NEhetxpWF4pMB0R/RGRPHT8bHWGRaZptwgGFzSSsE6uyXYmIcSibObI75DzRWTqR+d
+         3hsdi9RvjjPUWN4hnqY91QkjDubbGl/oDT0NXGBvYWjKtsHp77mEMDgz/eRSmbm1H6Dn
+         aWtw==
+X-Forwarded-Encrypted: i=1; AJvYcCWZxRgKLVdgHnIFDuueINKkoEtk6Xdbn5a/XcBp8ymBYzjRv1x7Hd7x4gN2VuhhH/muY7c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlkHnXngt+R0wFJP0wCcqowkMvRoQOPN6V8QaenGdj7MaDX2eN
+	6Szf3AkwJX/3pGVbaSpJjEQDoSy+fYs/Yi+6/U1XYeAppQbZMGXj9cKZ
+X-Gm-Gg: ATEYQzwxhkn+f6bs+4EtN6XnmwKrNh0rw3yB+CMZVoL6IxPoiUMwYDeBLvCr2TR/6FI
+	jorZX2rM9ajmxRn9B4iZeOq8Dtk421d+nk0wL60PyTDp5e6mVC54+SR0x77cvbqn6mA4CygOIze
+	EN/xHtxCtjrrNfI/ZFiWbSIXeSi4Ck2Xz+24ubMKATO9HUse1FJNwrur8Gn+T9opqeHOFMS2j4J
+	icwl5AwRl8enY7/kBL0jUhUpkDGTuXOEMfiFGO2rU/uX4h6JOm0PI92UXN5J6kHoodfvmzOQwhd
+	wSzQjMCxLQ3aY2ay7rSmp9ex6iBqcBHN8JyR9ZqnjBpF+ZRuBUaj+GAoRRPygoelBTWzuT42wOo
+	MPVqirxOPkldnkTUB7zwa0EnXlFCnPGra86h1SEKCDu+Udn5S26RnTIgbv6kO9L1sFeZ7zf2ps2
+	V/iXyE+E0rvw5EA3grOJPIf1fFJbF5nA==
+X-Received: by 2002:a05:7301:1f05:b0:2bd:f5af:62bc with SMTP id 5a478bee46e88-2bdf5af6e2cmr1357800eec.25.1772332351517;
+        Sat, 28 Feb 2026 18:32:31 -0800 (PST)
 Received: from localhost ([2601:647:6802:dbc0:1e56:f0c4:e708:15be])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1cefd7esm7558733eec.9.2026.02.28.18.15.03
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1cefd7esm7589514eec.9.2026.02.28.18.32.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Feb 2026 18:15:04 -0800 (PST)
-Date: Sat, 28 Feb 2026 18:15:02 -0800
+        Sat, 28 Feb 2026 18:32:30 -0800 (PST)
+Date: Sat, 28 Feb 2026 18:32:29 -0800
 From: Cong Wang <xiyou.wangcong@gmail.com>
-To: Emil Tsalapatis <emil@etsalapatis.com>
-Cc: lsf-pc@lists.linux-foundation.org, bpf@vger.kernel.org
-Subject: Re: [LSF/MM/BPF TOPIC] BPF libarena Development and
-Message-ID: <aaOhJgqDmdGS+Jgs@pop-os.localdomain>
-References: <DG5I0HN5PK5E.226I37YS7YY2P@etsalapatis.com>
+To: Xiao Ni <xni@redhat.com>
+Cc: lsf-pc@lists.linux-foundation.org,
+	linux-block <linux-block@vger.kernel.org>, bpf@vger.kernel.org,
+	Ming Lei <ming.lei@redhat.com>
+Subject: Re: [LSF/MM/BPF TOPIC] User space RAID5 with ublk and io_uring BPF
+Message-ID: <aaOlPXCM/ecbrTj5@pop-os.localdomain>
+References: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -72,35 +74,38 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <DG5I0HN5PK5E.226I37YS7YY2P@etsalapatis.com>
+In-Reply-To: <CALTww28QMg=YXqKWpWLZrLO+xiqOe3LGyput8dx68-dnQsxg=g@mail.gmail.com>
 
-On Tue, Feb 03, 2026 at 12:21:43PM -0500, Emil Tsalapatis wrote:
-> Hello everyone,
+On Thu, Feb 19, 2026 at 01:38:46PM +0800, Xiao Ni wrote:
+> Hi all
 > 
->     I'd like to propose a session on the BPF libarena library under
-> development[1]. The details on how this library should be developed, 
-> managed, and provided to users are still open. The session would let 
-> us discuss those topics, along with sharing an overview of libarena 
-> itself.
+> I'm doing some work on user-space RAID recently. I'd like to propose a
+> topic for LSF/MM 2026 regarding the implementation of RAID5 in user
+> space using ublk and io_uring bpf[1], particularly focusing on the
+> challenges encountered and potential kernel improvements needed.
 > 
-> libarena is a collection of arena-based code that will live in 
-> tools/testing/selftests/bpf/libarena and will provide a runtime 
-> for arena-based programs. The library currently includes memory 
-> allocators and an ASAN runtime for BPF arena memory, and will
-> be expanded with arena-based implementations of data structures
-> for development like B-trees, RB-trees, and heaps. The end result
-> will look similar to the BPF arena library used by sched_ext[2].
-> Users will statically link the arena library into their code at 
-> compile time.
+> Ublk raid5 uses the ublk framework (tools/testing/selftests/ublk/),
+> with the goal of leveraging io_uring's zero-copy capabilities and
+> BPF[1] for performance optimization. The implementation includes:
+> * RAID5 stripe handling with configurable chunk sizes
+> * Multi-queue support via io_uring
+> * Degraded mode for single disk failure tolerance
+> * Integration with io_uring BPF struct_ops framework
 
-Interesting, I have prototyped similar concepts in KernelScript [1],
-the biggest difference is that they are built into the language [2], like
-how Python handles data structures naturally.
 
-1. https://github.com/multikernel/kernelscript
-2. https://github.com/multikernel/kernelscript/tree/linked_list
+This is very interesting.
 
-Hope this helps.
+Although technically different with RAID, how about user-space LVM?
+
+I need it for the multikernel use case:
+https://lpc.events/event/19/contributions/2074/attachments/1776/3957/Multikernel-LPC2025.pdf
+(slide #19)
+
+Relying on the in-kernel LVM is not ideal for provisioning since ublk is
+already there.
+
+Also, it does not need to be a complete replacement of existing LVM,
+a simple ublk-defined storage isolation is sufficient.
 
 Regards,
 Cong Wang
