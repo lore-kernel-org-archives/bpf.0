@@ -1,71 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dy1-f176.google.com (mail-dy1-f176.google.com [74.125.82.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2B62FFDD5;
-	Sun,  1 Mar 2026 02:03:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8832212FAD
+	for <bpf@vger.kernel.org>; Sun,  1 Mar 2026 02:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772330613; cv=none; b=HOJ91CxxplekZ7G70ZirQKBWnjLq8HnKCMkeBWWTsmn3KuLU3yzljh2OkoLqd6ZvaOwZZ2Mhx/ZszlKwZ90eQRU+UP8HD9P6/kowsvbW5VICMD9xAhIFDYmLUtno1KaiL6lnGlzZv3+pnR3EhEfTBU5fe1+U/MXSCVBv9YLvn5M=
+	t=1772331307; cv=none; b=a3T4ZUEt+3kNa4nUWtJzIm+zt7wAkW+mBoEMGlXGSGoEkFR4c1cNIxz5Ql+q3O+aNsSHC511NzVDiluP7vBxkXEme022cTUa3Qa1FjmHPl4Wo1mUa7U2PgME9oMSk7uLmhnrW3JJQCQqxrUVBSEbBLFTpJN5SFgyCFA2mad4Hss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772330613; c=relaxed/simple;
-	bh=KZzP/JecF27xHHiJFhTWIUfU3XREE4PimgnFsthN5/A=;
+	s=arc-20240116; t=1772331307; c=relaxed/simple;
+	bh=DWIxK0/LtIGmi9vqyI6Q6hKZrwjUv+7OgQOMBi4wqJc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oNyKQOv6JLITYukvGLri9OydTFEd+LNlkJVmOfERG0h63Fp9dYUBumaZDMIWEvZGAMGu7O6MaiQTMG7T8MK/j14aKC4PZPcgwyj89XrsQSl261VE6p8zWICqQ2UYVIqtKRlDspXZoe4ugmdPSkdbIXi5LnVgigpCiFHrXeM6U/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RxjXn8St; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=I0SmTJxGkf/MCB1jwBCkCMcccSIvz5WPm24QSvDYsWslxUwQXBngfTH8ZT8XS6PRFHEtB7zWIXB2RIaOVP0muvJshYed72Oc5NruBdBVknDUKSpZc6rvu4p2Qvi7ytGuNoMqzqqH3fPSagsMhGqz6ER3G9ADSZ3iPMlORaPQ8cQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TpEAwAKd; arc=none smtp.client-ip=74.125.82.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RxjXn8St"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772330611; x=1803866611;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KZzP/JecF27xHHiJFhTWIUfU3XREE4PimgnFsthN5/A=;
-  b=RxjXn8StrLonnm/3sngiG5MPJlLdX2lJFO2M8ldJkjvSiuMVGpUq2MSl
-   eh0VbHisBIa25X8qUxhUwIpK3QG6+v+ekHLrfXCae2Zi3MhiP/9KyNmAB
-   JyHlGP3osH1ycR54Wb9Hq3e27gOzgFrR2NEXWUn4dQ8T2zdmQVdyUlCmK
-   /dHgB3YPPFvNv2gzdVprv/WrjbsdwrUYzvUqWPqknNo6CpvHWG83DE53S
-   BUHSNzmeej2FCmnJnAoQrx3ODT4ruaEbH4gnarLRoFWw8OCha4v5G8bil
-   hSXvLqwaZMvEsBugJcTLvhrsoPZ2MPSFSe/9ugFzD/q8iqpnHZaJOSmVE
-   w==;
-X-CSE-ConnectionGUID: 2myQ6w4NRAOi2xSmH9U79g==
-X-CSE-MsgGUID: IlC7v/yNQ7us+e3Bjb7bBA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11715"; a="84012019"
-X-IronPort-AV: E=Sophos;i="6.21,317,1763452800"; 
-   d="scan'208";a="84012019"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2026 18:03:30 -0800
-X-CSE-ConnectionGUID: 2F9CqOx2TE6GYuD7zyqyCQ==
-X-CSE-MsgGUID: MU1ccFKrRu6sm8nt7mKVxw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,317,1763452800"; 
-   d="scan'208";a="220438890"
-Received: from lkp-server01.sh.intel.com (HELO 59784f1c7b2a) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 28 Feb 2026 18:03:26 -0800
-Received: from kbuild by 59784f1c7b2a with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1vwW9S-000000000rZ-2a4w;
-	Sun, 01 Mar 2026 02:03:22 +0000
-Date: Sun, 1 Mar 2026 10:02:29 +0800
-From: kernel test robot <lkp@intel.com>
-To: Blaise Boscaccy <bboscaccy@linux.microsoft.com>,
-	Jonathan Corbet <corbet@lwn.net>, Paul Moore <paul@paul-moore.com>,
-	James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	"Dr. David Alan Gilbert" <linux@treblig.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	James.Bottomley@hansenpartnership.com, dhowells@redhat.com,
-	Fan Wu <wufan@kernel.org>, Ryan Foster <foster.ryan.r@gmail.com>,
-	linux-security-module@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Linux Memory Management List <linux-mm@kvack.org>
-Subject: Re: [PATCH v2 07/10] security: Hornet LSM
-Message-ID: <202603010957.7JUXdjTd-lkp@intel.com>
-References: <20260227233930.2418522-8-bboscaccy@linux.microsoft.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TpEAwAKd"
+Received: by mail-dy1-f176.google.com with SMTP id 5a478bee46e88-2bdfc4b191fso300177eec.1
+        for <bpf@vger.kernel.org>; Sat, 28 Feb 2026 18:15:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772331306; x=1772936106; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q6EnI13eVrOOB49RugkPQuOhO7vpKFI831GwIhZKjD8=;
+        b=TpEAwAKdfGnQz8n0dKUG5phAJOKr+iCz0BCVg3RZTpa7haYIBdHaSsP34Ra+zd/Ilz
+         TwjOvrvCfK+tTqxsSbLWI8m1wLLgrzP9ityxaJll2rssl/HKnEMERUNL8y6NKKDXiIOn
+         M2cUFsD/uQBauf5V3faVdg8pqTOPI+LJbZVQVlNPk96ZR4tfnaMDK5UerGbnx+9eJ3Xc
+         2G/cdcD32G/c6buVBZv4SNDmhE0/PGsO/q3qYNkop3Hj4G5mEZdFMgDmrD3DUOjKVgR6
+         852pOcv8xRl9OmnOfQDD1L7cKEQu+46akOwNbAppmUBfs+96EH7mvn9TQ3aUFI8cFePE
+         f58w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772331306; x=1772936106;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q6EnI13eVrOOB49RugkPQuOhO7vpKFI831GwIhZKjD8=;
+        b=Noln78jzqRWdYArObNIo5O36WNkh1Rvb1BSEMlJxlkxPD2yuK0npk63GPUkDaQt22K
+         vWVSlzKxNJy02FxPmM6Gs5KKsCKDiWofTW9hLbG7YRpZNR9d0asmnd9SVP03kjxr/ISb
+         ijzVHlXPwVHfGnNhgWL/Ot/bS0gLWXmFG1McidV5CS2UjH8zb4c6B1KnpDuPLl1QfFP9
+         CEFr4yWP25MqrIPfMsEflVRBrmDI8Wvxh3fkBrruijCydeHTnIzEXoBSoaAS24GHbuS8
+         +rlu6tWOTy6X6uoLADbluyovclcntSa+DuFEI8m5fzq1U3HOl94BjZtVRa3aChq1dKiZ
+         +qTw==
+X-Forwarded-Encrypted: i=1; AJvYcCWymXG6QXiBH8FaQnW+Y/om09eUCdjUkEl6jvZ5G3rKhGQH3agi9+LBDcTd5twYy/L66qU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHTO0euzT3Dynay4570zGFW+tNjhr1ImOA305ynozvJZ3FCO2X
+	aps7OCVNXfRQatkUjhxriB2JrYn9hpMnfClNPXx0nFr6rOi2hi6MJ6nny1kIUQ==
+X-Gm-Gg: ATEYQzyOP0Ppi6LTEIFnxw5bqyYvZ8dLT+fslH7ij9DRmfz9W6WlBzOIJm0nf4T3p3M
+	60tQVuMXIzKlZ8yJEr+wCOnb4sn9p8C9/+GH2hq9LedK+Nav/XoP3OWQTS8ffOvHenmuqQAFIoi
+	KXc87XsKVtMj4PF2v8B8K/g/m/K88fZ09jS5hD1ZXts+Iz1hwt5g8ZXFfcfg79+qWMV2Gs/2djh
+	Rj8a7ndC6J4n5TsZDO17z1HWiJBjJsl+zquZX19A0Ph1N87eAp/AxDscKxApCjCH3+J2iwIdnEz
+	JS07qujp6PAM1BT3crtTA8Rdl7ol6w3ZGcRK+jPWF2hDzTe/SBlKR7u2GGr8Uw5GFZJA6cqNHkx
+	lIMfNiuewjsvVrdDhapGvje0r8Z2epE/l91z66C8hzFecgqO0WaNGux1tCsWPDMDOSHc5tNTC6S
+	Rc/WHyJQuCASTrQvz6IYma30qo2jOlpw==
+X-Received: by 2002:a05:7301:2b06:b0:2ba:82ca:b19a with SMTP id 5a478bee46e88-2bde1d6c384mr2637938eec.28.1772331305577;
+        Sat, 28 Feb 2026 18:15:05 -0800 (PST)
+Received: from localhost ([2601:647:6802:dbc0:1e56:f0c4:e708:15be])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2bdd1cefd7esm7558733eec.9.2026.02.28.18.15.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Feb 2026 18:15:04 -0800 (PST)
+Date: Sat, 28 Feb 2026 18:15:02 -0800
+From: Cong Wang <xiyou.wangcong@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+Cc: lsf-pc@lists.linux-foundation.org, bpf@vger.kernel.org
+Subject: Re: [LSF/MM/BPF TOPIC] BPF libarena Development and
+Message-ID: <aaOhJgqDmdGS+Jgs@pop-os.localdomain>
+References: <DG5I0HN5PK5E.226I37YS7YY2P@etsalapatis.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -74,136 +72,35 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260227233930.2418522-8-bboscaccy@linux.microsoft.com>
+In-Reply-To: <DG5I0HN5PK5E.226I37YS7YY2P@etsalapatis.com>
 
-Hi Blaise,
+On Tue, Feb 03, 2026 at 12:21:43PM -0500, Emil Tsalapatis wrote:
+> Hello everyone,
+> 
+>     I'd like to propose a session on the BPF libarena library under
+> development[1]. The details on how this library should be developed, 
+> managed, and provided to users are still open. The session would let 
+> us discuss those topics, along with sharing an overview of libarena 
+> itself.
+> 
+> libarena is a collection of arena-based code that will live in 
+> tools/testing/selftests/bpf/libarena and will provide a runtime 
+> for arena-based programs. The library currently includes memory 
+> allocators and an ASAN runtime for BPF arena memory, and will
+> be expanded with arena-based implementations of data structures
+> for development like B-trees, RB-trees, and heaps. The end result
+> will look similar to the BPF arena library used by sched_ext[2].
+> Users will statically link the arena library into their code at 
+> compile time.
 
-kernel test robot noticed the following build errors:
+Interesting, I have prototyped similar concepts in KernelScript [1],
+the biggest difference is that they are built into the language [2], like
+how Python handles data structures naturally.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v7.0-rc1 next-20260227]
-[cannot apply to herbert-cryptodev-2.6/master herbert-crypto-2.6/master shuah-kselftest/next shuah-kselftest/fixes]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+1. https://github.com/multikernel/kernelscript
+2. https://github.com/multikernel/kernelscript/tree/linked_list
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Blaise-Boscaccy/certs-break-out-pkcs7-check-into-its-own-function/20260228-074528
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20260227233930.2418522-8-bboscaccy%40linux.microsoft.com
-patch subject: [PATCH v2 07/10] security: Hornet LSM
-config: um-randconfig-r133-20260228 (https://download.01.org/0day-ci/archive/20260301/202603010957.7JUXdjTd-lkp@intel.com/config)
-compiler: clang version 20.1.8 (https://github.com/llvm/llvm-project 87f0227cb60147a26a1eeb4fb06e3b505e9c7261)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260301/202603010957.7JUXdjTd-lkp@intel.com/reproduce)
+Hope this helps.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202603010957.7JUXdjTd-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from security/hornet/hornet_lsm.c:10:
-   In file included from include/linux/lsm_hooks.h:29:
-   In file included from include/linux/security.h:35:
-   In file included from include/linux/bpf.h:32:
-   In file included from include/linux/memcontrol.h:13:
-   In file included from include/linux/cgroup.h:27:
-   In file included from include/linux/kernel_stat.h:8:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from arch/um/include/asm/hardirq.h:24:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:12:
-   In file included from arch/um/include/asm/io.h:24:
-   include/asm-generic/io.h:1209:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-    1209 |         return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-         |                                                   ~~~~~~~~~~ ^
->> security/hornet/hornet_lsm.c:183:8: error: call to undeclared function 'verify_pkcs7_signature'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     183 |         err = verify_pkcs7_signature(prog->insnsi, prog->len * sizeof(struct bpf_insn),
-         |               ^
-   security/hornet/hornet_lsm.c:183:8: note: did you mean 'bpf_verify_pkcs7_signature'?
-   include/linux/bpf.h:3624:5: note: 'bpf_verify_pkcs7_signature' declared here
-    3624 | int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_p,
-         |     ^
->> security/hornet/hornet_lsm.c:197:6: error: call to undeclared function 'validate_pkcs7_trust'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     197 |         if (validate_pkcs7_trust(msg, VERIFY_USE_SECONDARY_KEYRING)) {
-         |             ^
-   1 warning and 2 errors generated.
-
-
-vim +/verify_pkcs7_signature +183 security/hornet/hornet_lsm.c
-
-   153	
-   154	static int hornet_check_program(struct bpf_prog *prog, union bpf_attr *attr,
-   155					struct bpf_token *token, bool is_kernel)
-   156	{
-   157		struct hornet_maps maps = {0};
-   158		bpfptr_t usig = make_bpfptr(attr->signature, is_kernel);
-   159		struct pkcs7_message *msg;
-   160		struct hornet_parse_context *ctx;
-   161		void *sig;
-   162		int err;
-   163		const void *authattrs;
-   164		size_t authattrs_len;
-   165	
-   166		if (!attr->signature)
-   167			return LSM_INT_VERDICT_UNSIGNED;
-   168	
-   169		ctx = kzalloc(sizeof(struct hornet_parse_context), GFP_KERNEL);
-   170		if (!ctx)
-   171			return -ENOMEM;
-   172	
-   173		maps.fd_array = make_bpfptr(attr->fd_array, is_kernel);
-   174		sig = kzalloc(attr->signature_size, GFP_KERNEL);
-   175		if (!sig) {
-   176			err = -ENOMEM;
-   177			goto out;
-   178		}
-   179		err = copy_from_bpfptr(sig, usig, attr->signature_size);
-   180		if (err != 0)
-   181			goto cleanup_sig;
-   182	
- > 183		err = verify_pkcs7_signature(prog->insnsi, prog->len * sizeof(struct bpf_insn),
-   184					     sig, attr->signature_size, VERIFY_USE_SECONDARY_KEYRING,
-   185					     VERIFYING_BPF_SIGNATURE, NULL, NULL);
-   186		if (err < 0) {
-   187			err = LSM_INT_VERDICT_BADSIG;
-   188			goto cleanup_sig;
-   189		}
-   190	
-   191		msg = pkcs7_parse_message(sig, attr->signature_size);
-   192		if (IS_ERR(msg)) {
-   193			err = LSM_INT_VERDICT_BADSIG;
-   194			goto cleanup_sig;
-   195		}
-   196	
- > 197		if (validate_pkcs7_trust(msg, VERIFY_USE_SECONDARY_KEYRING)) {
-   198			err = LSM_INT_VERDICT_PARTIALSIG;
-   199			goto cleanup_msg;
-   200		}
-   201		if (pkcs7_get_authattr(msg, OID_hornet_data,
-   202				       &authattrs, &authattrs_len) == -ENODATA) {
-   203			err = LSM_INT_VERDICT_PARTIALSIG;
-   204			goto cleanup_msg;
-   205		}
-   206	
-   207		err = asn1_ber_decoder(&hornet_decoder, ctx, authattrs, authattrs_len);
-   208		if (err < 0 || authattrs == NULL) {
-   209			err = LSM_INT_VERDICT_PARTIALSIG;
-   210			goto cleanup_msg;
-   211		}
-   212		err = hornet_verify_hashes(&maps, ctx, prog);
-   213	
-   214	cleanup_msg:
-   215		pkcs7_free_message(msg);
-   216	cleanup_sig:
-   217		kfree(sig);
-   218	out:
-   219		kfree(ctx);
-   220		return err;
-   221	}
-   222	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Regards,
+Cong Wang
