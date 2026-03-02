@@ -1,101 +1,124 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABABA3D7D78
-	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 16:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42462836A0
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 17:32:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772470691; cv=none; b=SB5jZgJ22B0OdrU9eOd1JHjXtD7LEGoMzPsoJ78dNDknSuSgnQ/eYnQjr2O9gMxilI8n3XdAo1Xj8oZaowQ2FivdJ+bBceFZJsN+nlGDZvFv0dmYUYX0VDopbeqQRf3U+hUEf8lwvCqyll65N127ZusT/t8kUqEoTI1S/0Y6Q8Y=
+	t=1772472737; cv=none; b=ewWH60V5mnz5OCasmyELyiKK07y6bTVGAKDJHnvRgvIQijGoHX7gPzH5tmWayvIItBX7TFQfVLveQpuv5y9NJlvWxJV/MZNSpyWovjHLNl4w6YLQH1w9O79seBsIyPp1PfXNiAOGOtpEe1dfo9dFVB7g6EdvGIWWKTvqGpu6MUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772470691; c=relaxed/simple;
-	bh=74Kt8af8X17nNDiwZ+RL40z3PYF6hu5yzHkaiHYfSr4=;
+	s=arc-20240116; t=1772472737; c=relaxed/simple;
+	bh=5ZDTL0UhBj8FmMR3SQ/ZKg5/VvcJcVV2Vl99vYgOlG4=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=qjrZ/rmyYiEjPq/ArhluXr3UoN+CgZN/VwCzQyuIvhLl42ww3mYIlafuKQ6D6NIK+6Ut2MERhhjkRqzYzvOyOLioUHJcwFa6eugwiI6Xb7jxOHyV7h+rT1IfHiLEbLNRrGeqG9b6IhtiPmoGwiIs+v3hgnbrNKbV4lBV+h/GrCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g02XlDBL; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=SuxZlaVSdiBRcE1Uqp89OP8MD/ZjECpQShPpDLIxR5o8eqdnbh2TVmsaId53i0w8ZdYyNFP3xDyYMgHDSf8WUBaeosasd5SIYrgJRyXlWtYuXBKQuJJbATqP9pXHvMk4CXszaUGgOgcmmkGPo0j0HN8WOaiH6YBuFrx4CDnUuOk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lwrcP0rN; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g02XlDBL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 278DAC2BC9E;
-	Mon,  2 Mar 2026 16:58:11 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lwrcP0rN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F1BC19423;
+	Mon,  2 Mar 2026 17:32:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772470691;
-	bh=74Kt8af8X17nNDiwZ+RL40z3PYF6hu5yzHkaiHYfSr4=;
+	s=k20201202; t=1772472737;
+	bh=5ZDTL0UhBj8FmMR3SQ/ZKg5/VvcJcVV2Vl99vYgOlG4=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=g02XlDBLxL4bOTOCDiTOq+X3yPJjmrP7I4sdik5L6ursHv5P4p1CFkstf0ey0Mf8e
-	 x4eGyz239mPJYD9Hpyt/T2gxNkCVlXD1FQn/HK2I8JHt2NI3IjG522wusvXWDjUAPd
-	 e2GqXHtCCB062oNZu5dh+DSP/SsWskJRbhO1vUrSf22NaufHjHlb12mW03gsXL0Nqd
-	 hrQ0q6Jj3k1m9FKfrjYgUQcyVfmp7MhjBDQkWMxvdUZYnj2Epw+h8bpID+R3wxNyyu
-	 EbLsWn/fr1alWW/sK0LUdrtmx5UGvF3e6Jl7T4bPwuk9qKgIyf3gz6i54SAKtjeWZW
-	 VoQqXkWhHbS8A==
-Content-Type: multipart/mixed; boundary="===============3476856939668152110=="
+	b=lwrcP0rNcjYlEb0xnlez7a66uR+9tN14ELSXCzQcBjedJhK8oLR3RmpBAslip8tRo
+	 Vy6rURSNlrz/0sUKGZ4La7fpoAs8wv+SYrKGiz96Zrb4e7zraTYk/sfhbx5dJkqmtK
+	 3i9xvcZsnbp8NNzg130ZdN7Uxz48VBHBss5EJWz2pcSBGgDJ+LBKfj92Z0hQHQ03MM
+	 XMzYcnhZC6jnNKWyTojlSJRkRoR4T+J1D5Xn9nLdhPWAgVanuAx25K+hrjOYpzI/vq
+	 b+y4SvlyJLIrIMQ6wFgnN/yi7wpZWfxJgplpt2Gvo6AoBoENUXxz5E/D92Jy0EItRb
+	 tK91TIPn4Gg5A==
+Content-Type: multipart/mixed; boundary="===============2779274183918500010=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <fd5639328f651882b04bafb0686962d8d4d1981ec080279618e814423fc4f6db@mail.kernel.org>
-In-Reply-To: <20260302161736.156685-2-cupertino.miranda@oracle.com>
-References: <20260302161736.156685-2-cupertino.miranda@oracle.com>
-Subject: Re: [PATCH 1/2] bpf: detect non null pointer with register operand in JEQ/JNE.
+Message-Id: <e7be9da1d46a65e0646d157e7968171c1a8a7e12f8d99b203be1e6ca83d01ff5@mail.kernel.org>
+In-Reply-To: <20260302164846.36713-2-andrey.grodzovsky@crowdstrike.com>
+References: <20260302164846.36713-2-andrey.grodzovsky@crowdstrike.com>
+Subject: Re: [PATCH bpf-next v3 1/2] libbpf: Handle duplicate kprobe symbols in attach_kprobe_opts
 From: bot+bpf-ci@kernel.org
-To: cupertino.miranda@oracle.com,bpf@vger.kernel.org
-Cc: cupertino.miranda@oracle.com,david.faust@oracle.com,jose.marchesi@oracle.com,elena.zannoni@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  2 Mar 2026 16:58:11 +0000 (UTC)
+To: andrey.grodzovsky@crowdstrike.com,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,jolsa@kernel.org,emil@etsalapatis.com,linux-open-source@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  2 Mar 2026 17:32:17 +0000 (UTC)
 
---===============3476856939668152110==
+--===============2779274183918500010==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> bpf: detect non null pointer with register operand in JEQ/JNE.
->
-> This patch adds support to validate a pointer as not null when its
-> value is compared to a register which the verifiers knows to be null.
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
 
-"verifiers" looks like a typo for "verifier", and "which the verifier
-knows" should probably be "whose value the verifier knows".
+[ ... ]
 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index fc4ccd1de569..6e3fcdfa3643 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -17608,12 +17608,15 @@ static int check_cond_jmp_op(struct bpf_verifier_env *env,
->  	}
->
->  	/* detect if R == 0 where R is returned from bpf_map_lookup_elem().
-> +         * Also does the same detection for a register which the value is
-> +         * known to be 0.
+> @@ -11716,6 +11787,53 @@ struct find_kaddr_ctx kaddr_ctx = { .kaddr = 0 };
+> 			prog->name, retprobe ? "kretprobe" : "kprobe",
+> 			func_name, offset,
+> 			errstr(err));
+> +
+> +		if ((err == -EADDRNOTAVAIL || (legacy && err == -EINVAL)) && optional_func_name) {
 
-These two comment lines are indented with spaces instead of a tab.
-Same "which the value" grammar as the commit message -- should this
-be "whose value"?
+[ ... ]
 
-> -	if (!is_jmp32 && BPF_SRC(insn->code) == BPF_K &&
-> -	    insn->imm == 0 && (opcode == BPF_JEQ || opcode == BPF_JNE) &&
-> -	    type_may_be_null(dst_reg->type)) {
-> +        if (!is_jmp32 && (opcode == BPF_JEQ || opcode == BPF_JNE) &&
-> +            type_may_be_null(dst_reg->type) &&
-> +	    ((BPF_SRC(insn->code) == BPF_K && insn->imm == 0) ||
-> +             (BPF_SRC(insn->code) == BPF_X && register_is_null (src_reg)))) {
+> +			err = libbpf_kallsyms_parse(find_kaddr_cb, &kaddr_ctx, true);
+> +			if (err) {
+> +				pr_warn("failed to get addr for %s\n",
+> +					func_name);
+> +				goto err_out;
+> +			}
+> +
+> +			if (kaddr_ctx.kaddr) {
+> +				pr_debug("retrying %s using kaddr 0x%llx\n",
+> +					 func_name, kaddr_ctx.kaddr);
+> +
+> +				offset += kaddr_ctx.kaddr;
+> +				free(legacy_probe);
+> +				legacy_probe = NULL;
+> +				goto retry_create;
+> +			}
+> +
+> +			pr_warn("symbol '%s' not found in vmlinux\n",
+> +				func_name);
+> +		}
+> +
+> +		goto err_out;
 
-The if-statement and its continuation lines use a mix of spaces and
-tabs for indentation.  Are tabs intended throughout, matching the
-rest of check_cond_jmp_op()?
+When libbpf_kallsyms_parse() succeeds but the symbol is not found in
+vmlinux (kaddr_ctx.kaddr == 0), err has been overwritten to 0 by the
+successful libbpf_kallsyms_parse() return. The code then falls through
+to goto err_out, which does:
 
-Also, there is a space between register_is_null and the opening
-parenthesis.
+    return libbpf_err_ptr(err);    /* err == 0 */
+
+libbpf_err_ptr(0) sets errno = 0 and returns NULL. The caller gets a
+NULL link pointer with errno = 0, which is an incorrect error indication
+for a public API.
+
+This can happen in legacy mode when EINVAL comes from a cause other than
+duplicate symbols (the check matches any EINVAL, not only the duplicate-
+symbol case), or if the vmlinux symbol exists but has a type other than
+'T'/'t' (e.g. weak 'W' symbols), since find_kaddr_cb() only matches
+text section symbols.
+
+Would something like the following be appropriate here?
+
+    pr_warn("symbol '%s' not found in vmlinux\n",
+            func_name);
+    err = -ENOENT;
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22585365823
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22586644239
 
-AI-authorship-score: low
-AI-authorship-explanation: Grammar errors and mixed indentation are consistent with manual editing by a non-native English speaker, not AI generation.
-issues-found: 3
+AI-authorship-score: medium
+AI-authorship-explanation: Systematic bulleted commit message and descriptive naming suggest possible AI assistance, but iterative v1/v2/v3 refinement from reviewer feedback indicates genuine human engagement.
+issues-found: 1
 issue-severity-score: low
-issue-severity-explanation: All issues are coding style violations (mixed tabs/spaces, space before function call parenthesis) and comment/commit-message grammar errors; no functional or security regressions.
+issue-severity-explanation: Error value clobbered to zero on an uncommon fallback path causes incorrect errno reporting to callers, but does not cause crashes or data corruption.
 
---===============3476856939668152110==--
+--===============2779274183918500010==--
