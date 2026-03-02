@@ -1,117 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDDD636C584;
-	Mon,  2 Mar 2026 12:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B455437419A
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 12:40:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772453921; cv=none; b=UbHRLUz4rk+0HUP9y1kCGuIwGEGYAeEdk6o7ULe9G3XOELuxgdXurKyG1E1H2zi4HnOm1rBxHZsmWlFTHXm680Dcm6FyhCclNa4tQWFzzqZGKEOhPpmOR+k1JYQzkot6qfE6Z/wLh0+7Fxnj+iKsDF9CGh2hwH5cqSIzC2rL6F0=
+	t=1772455241; cv=none; b=IUaYZZHp+1+Gxp3UvOJ9ig/UDqNguvw1cYuBmfRy9LK2msO8toqC+RzC9f4yLeK22W1EXMGAlVxJX4aGuwdmDBGTSEhPJmR8bZjtXydSRWNUjKKmmBr+gvo3+pPCoGdW98C1toPSSFEiLXXy2vWTZK2tSm66kAom+FQn6rBFT/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772453921; c=relaxed/simple;
-	bh=asnzSp/+QW3JDPk3mQV4491FnH0+FXmumS+0zuGHkP4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=T8gOUSAbZQIGYDvMDABPjA7iowCgiS+sXn1yBH0UE4/65YIMgv5/yjKnlIkRqDrCAl7XA7QdGhPtJ5XKV92OSnm0pKN+YYMUsGCcM6+atGrBQSU7Ey3tRfK009JHIcyhktSdRtl7gWniGkA0og8Q3gEkS/Ive9wkyKt64Pe2VUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PgBF3KvB; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772455241; c=relaxed/simple;
+	bh=JMbovVkIHjyw1SkxJf+jyB5p2bx22jbBcT5wRY+P+dQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=swVjuDJDPfndPPoVgmUNzwE9KViTZMt5farx915a3Ms6OUIyJx1mX1qfkSLPXqn7IKJ4IiW8yRWdm4rxn2QbWlg5Oo2A0rLcpZcmRTbBEnELL2AShD00n1nnyUInfJW/+hEW16xpBSuyOg9VH1+PD+qquw4PFBhp9qE4NciXaQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YgFWjEzN; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PgBF3KvB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C01A5C19423;
-	Mon,  2 Mar 2026 12:18:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772453921;
-	bh=asnzSp/+QW3JDPk3mQV4491FnH0+FXmumS+0zuGHkP4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=PgBF3KvBWnItsKOE1A+a3fd0VIg04DY/cwE9omq6plFghukNzD49+FHNF3UvPHGe2
-	 ygKGdVFkDuW+oHKs4H2Uc0ychoXWg0S126g4ygTGceGRC1UEUTI4EHC0NGddUFbWFX
-	 htplSPkbSxiIuWGufkK6g61Xh3U5eNxZB6i4FrNS/L2XYgULyMtONj2DAgjgUzC4RU
-	 mFU/H5dlb7HETHeajjTYCsQP8KqMqj6IHxKe7/6kwo+rQng0Sxv9lQMzTzIcqTMd86
-	 F89N8A+swtXLVJ/+GQUzAzZioKP5bSUtP7OI5QbIv7fWRncywPjxb9xgPrE8O9Nts3
-	 b7e4HICPmeHvw==
-Content-Type: multipart/mixed; boundary="===============1072935580077873128=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YgFWjEzN"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ae56e68216so4693675ad.2
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 04:40:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772455240; x=1773060040; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEZZVDsX2jfTU9OZR6R9bxtazsvL2oFzaTbwqEvIxnU=;
+        b=YgFWjEzNFn6IhEs9pX8fFxIYZ8cotPD2pWWy1pdsBPLiy1z0Ax47HBrK+qnce+PNDf
+         633YtGqXjVYSuLdyfY+uF7GcrOQ3xu4/TDLSydQpzxOXZPP9anNwg21DsQyPWyE+nVRY
+         63SA0iSbxSFobsd7ap1ulhqtCFXIFOlDBwRsgmfwZiqOhe2RfBDL7hvtZb2q92hvgfXM
+         gjeUTJmOOGqN9jQ78hfs0BgDEQaV56KY0COfCnC2JeMfVdINq2jMbpTs+IAWxJrwc54e
+         6pr2B/ZLX4tMiO0FNkGTkdgN+QT6fGA/7I/lAf/xxcCCNXdJ0GS2o9nCwxTQlzVPrGLL
+         MHmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772455240; x=1773060040;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AEZZVDsX2jfTU9OZR6R9bxtazsvL2oFzaTbwqEvIxnU=;
+        b=LAO2KRG371CFZ5D1MPJhTNg9mZerPBZ5+OsQv6PTMYhORHnInrpTsV/GIZKOh9AMGb
+         YEZPx18giWHmumLy/mZfPJuylN25BFo8FfgTCeBOSDkId2Ny2etg7TRYnqAcnihNYw33
+         PM2dh/trdl9xsJVeql3lYTaiFxU1wYU7fSCasVG3foKw44qO7VigZeCtZlvz4G125j9r
+         kxMWe+AsqQn89rOUGi+Fz4RdCD5rx6EuAb1W7dLyAqEpnEc1pVN/H4Dg2+ren71aDrns
+         Lz2lSTh1fMHH17TjPu7mAxaKOIcPApuQNDg1eLSz0cL4XZvNjdM1sbBgDTETUUOyNv7Z
+         KpsQ==
+X-Gm-Message-State: AOJu0YzN2mv+rfbXLLlC4poYDtrQ0mWrPI4VHv6WBWdNOO4+99gPDvrd
+	CccREnPW5ADsgauWCS86qIReZkocLtcKiQM085oK8wIQSTp3xaZuMoqN
+X-Gm-Gg: ATEYQzzQleNY6DOErtmOV7f2vZxl/gLTB9znlzvFx3y+PFyRPDG+SjsKY000MPJE0ti
+	eEsh8zTXlohES8B+xlsmmce1nvBvd3++hYaBbH/zWcbrC/DGp36YwhOSGVu7LNwC8UrVRk1H2L5
+	dWAoW0TsQURvyvgg6KDmgy3zxUgSMp1rtMh1krw5lpDWAtkJ2pCA3hIkRbjy2lf2dpodWFn7j2v
+	G1KvltFhA7h2cZzHnJLKOQKCHlLnG4R1Rwzzj+ZtAkv9Z/TlHU+YpI8K2WF83e0GCwws6JM+26x
+	+tngLJpSS9oLI2rzV60pEY/HMGqpUYUnjttdf4VIWW5cUGxnUcRaNpBRP4mFUn9TBT0lTTwfnq0
+	4tdM4+Jm6I00BYw5r8bG/YDyF+y8a/r0lgTzQ0x0+7wTh3G6nHojjaMDocX0EyGWdcGF5lfChxN
+	0aKoO/d8hRqsWJJNqDXyPtRykbX4C9QEWGp5tt0QS2XrAjr1VFVFPdDw==
+X-Received: by 2002:a17:903:1110:b0:2a9:616c:1711 with SMTP id d9443c01a7336-2ae2e3f75fdmr136529535ad.42.1772455240071;
+        Mon, 02 Mar 2026 04:40:40 -0800 (PST)
+Received: from localhost.localdomain ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2ae3d1956absm67910225ad.14.2026.03.02.04.40.33
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Mon, 02 Mar 2026 04:40:39 -0800 (PST)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	chengkaitao@kylinos.cn,
+	linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/6] bpf: Extend the bpf_list family of APIs
+Date: Mon,  2 Mar 2026 20:40:22 +0800
+Message-ID: <20260302124028.82420-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <42a9f041ac450b0be216d4094dd7c3ca1ca63246db9e54bc4a39a6dbedbd7612@mail.kernel.org>
-In-Reply-To: <20260302114059.3697879-7-alan.maguire@oracle.com>
-References: <20260302114059.3697879-7-alan.maguire@oracle.com>
-Subject: Re: [PATCH v11 bpf-next 6/8] btf: support kernel parsing of BTF with layout info
-From: bot+bpf-ci@kernel.org
-To: alan.maguire@oracle.com,andrii@kernel.org,ast@kernel.org
-Cc: daniel@iogearbox.net,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,qmo@kernel.org,ihor.solodrai@linux.dev,mykyta.yatsenko5@gmail.com,dwarves@vger.kernel.org,bpf@vger.kernel.org,alan.maguire@oracle.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  2 Mar 2026 12:18:40 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============1072935580077873128==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> index 4872d2a6c42d..bda363a2592e 100644
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+In BPF, a list can only be used to implement a stack structure.
+Due to an incomplete API set, only FIFO or LIFO operations are
+supported. The patches enhance the BPF list API, making it more
+list-like.
 
-[ ... ]
+Five new kfuncs have been added:
+bpf_list_del: remove a node from the list
+bpf_list_add_impl: insert a node after a given list node
+bpf_list_is_first: check if a node is the first in the list
+bpf_list_is_last: check if a node is the last in the list
+bpf_list_empty: check if the list is empty
 
-> +static int btf_parse_layout_sec(struct btf_verifier_env *env)
-> +{
-> +	const struct btf_header *hdr = &env->btf->hdr;
-> +	struct btf *btf = env->btf;
-> +	void *start, *end;
-> +
-> +	if (hdr->hdr_len < sizeof(struct btf_header) ||
-> +	    hdr->layout_len == 0)
-> +		return 0;
-> +
-> +	/* Layout section must align to 4 bytes */
-> +	if (hdr->layout_off & (sizeof(u32) - 1)) {
-> +		btf_verifier_log(env, "Unaligned layout_off");
-> +		return -EINVAL;
-> +	}
-> +	start = btf->nohdr_data + hdr->layout_off;
-> +	end = start + hdr->layout_len;
-> +
-> +	if (hdr->layout_len % sizeof(struct btf_layout) != 0) {
-> +		btf_verifier_log(env, "layout_len is not multiple of %zu",
-> +				 sizeof(struct btf_layout));
-> +		return -EINVAL;
-> +	}
-> +	if (hdr->layout_len < sizeof(struct btf_layout)) {
-> +		btf_verifier_log(env, "Layout section is too small");
-> +		return -EINVAL;
-> +	}
+Changes in v3:
+- Add a new lock_rec member to struct bpf_reference_state for lock
+  holding detection.
+- Add test cases to verify that the verifier correctly restricts calls
+  to bpf_list_del when the spin_lock is not held.
 
-Is this "too small" check reachable? At this point layout_len is
-non-zero (the == 0 case returned above) and is a multiple of
-sizeof(struct btf_layout) which is 4.  A positive multiple of 4 is
-always >= 4, so this branch can never execute.
+Changes in v2:
+- Remove the head parameter from bpf_list_del
+- Add bpf_list_add/is_first/is_last/empty to API and test cases
 
-If the modulo check above it were removed or reordered in the
-future, this would become live again, but as written it appears
-to be dead code.
+Link to v2:
+https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
 
-> +	if (end > btf->data + btf->data_size) {
-> +		btf_verifier_log(env, "Layout section is too big");
-> +		return -EINVAL;
-> +	}
-> +	btf->layout = start;
-> +
-> +	return 0;
-> +}
+Link to v1:
+https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
 
-[ ... ]
+Kaitao Cheng (6):
+  bpf: Introduce the bpf_list_del kfunc.
+  selftests/bpf: Add test cases for bpf_list_del
+  bpf: add bpf_list_add_impl to insert node after a given list node
+  selftests/bpf: Add test case for bpf_list_add_impl
+  bpf: add bpf_list_is_first/last/empty kfuncs
+  selftests/bpf: Add test cases for bpf_list_is_first/is_last/empty
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+ include/linux/bpf_verifier.h                  |   4 +
+ kernel/bpf/btf.c                              |  33 +++-
+ kernel/bpf/helpers.c                          |  92 +++++++++++
+ kernel/bpf/verifier.c                         |  76 ++++++++-
+ .../testing/selftests/bpf/bpf_experimental.h  |  39 +++++
+ .../selftests/bpf/progs/refcounted_kptr.c     | 149 ++++++++++++++++++
+ 6 files changed, 385 insertions(+), 8 deletions(-)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22574705927
+-- 
+2.50.1 (Apple Git-155)
 
-AI-authorship-score: low
-AI-authorship-explanation: Part of a v10 series with 3 years of mailing list discussion, demonstrates deep BTF expertise, and the dead code is a characteristically human oversight from iteratively addressing review feedback.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Dead validation code in btf_parse_layout_sec that can never execute due to a preceding modulo check; no functional impact since the unreachable branch would only reject invalid input that is already rejected.
-
---===============1072935580077873128==--
