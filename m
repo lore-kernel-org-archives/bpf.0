@@ -1,151 +1,240 @@
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D3647DF92;
-	Mon,  2 Mar 2026 20:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE3647DFBE;
+	Mon,  2 Mar 2026 20:27:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772483244; cv=none; b=M91HjttXV59tU24QzS0oU5ppP7pWARybTxvgXJN7GYFq1Wmlk7ftpzn4nudmAJ2mTtwyZt1DR5aJh2QSRuOG9aFvx4uZtgVRcPeEGLhNl9C1BaEQn7LDAxPFoST2NXYr393qiPSkEZgIpuZbV5f3xQbGVRPaJIO1XO7e45IlE0g=
+	t=1772483244; cv=none; b=fzMhPMzmE4ggeAs5XsDBHGfJ8Z1VUaR2yk4KD9wbvJ2aJ8RTBlzf4e7aeQEmvc9s+4iTauLmOCfT92UXURLh+z8p0ATdMuVKJuvihTmvq6mAoJPPp/GikSLPOnP1G6tlUEvqmwDKocb7LNW03CW/Ch07j1QwML49pWhlnLiB0hs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1772483244; c=relaxed/simple;
-	bh=UGDN2VaVtu2aKo8GD1izDpM42AywCnl2krWVXYZK+JY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WAzQZnHhoJHbNJSmRwTMN9v+lzUMQvF53xF/dwaHc471dgmceguwvRFi/hzinjQyRbbgs8SEsrURAEbtb5fVWCV9vQ53r+fixjt5aK+eCYzT1nAr5w87dZ/mHZqyZROAWGG6l4K8g3mcRBV+j54cdAAGBG7zIEzfqJLSQMTnlHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id 481CA72C8F5;
-	Mon,  2 Mar 2026 23:27:20 +0300 (MSK)
-Received: from altlinux.org (unknown [193.43.10.9])
-	by imap.altlinux.org (Postfix) with ESMTPSA id 30A6536D00D3;
-	Mon,  2 Mar 2026 23:27:20 +0300 (MSK)
-Date: Mon, 2 Mar 2026 23:27:20 +0300
-From: Vitaly Chikunov <vt@altlinux.org>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, olsajiri@gmail.com, yatsenko@meta.com, 
-	alexis.lothore@bootlin.com, ameryhung@gmail.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel-team@meta.com, martin.lau@kernel.org, 
-	yonghong.song@linux.dev, clm@meta.com
-Subject: Re: [PATCH bpf v3 01/15] selftests/bpf: Pass through build flags to
- bpftool and resolve_btfids
-Message-ID: <aaXwaMCIm9UZUx9O@altlinux.org>
-References: <20260220222604.1155148-2-ihor.solodrai@linux.dev>
- <edac02ca77865be9cc18b013f5209a8fb0d8a4c443ce16dce8ad368a9ecefe05@mail.kernel.org>
- <789af3df-291c-410d-89d8-ee7b12479798@linux.dev>
- <aaWqMcK-2AQw5dx8@altlinux.org>
- <d6fda426-b59f-48d6-bbe7-b2069a7e352e@linux.dev>
+	bh=5VB+NzTxyTTbdILrjVS0CXpowNihfbF7KKD2ZGuki60=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=SV8sqZg3GmiSd2b1JQqz8vW4HC7C47An0Stq2CQaKsXjZ6wOxxCX0yZLuPw1lRW8ChxYwA/YowvvbUcQsKHYbCVs96GAaA/hmDeKGH/JN1fR1CLn6JtWaz9VXsgpIkAwfx6T/DQgEVX0VyZ3XtFpgQ7TiRFRiEIJ23SUzbqfT2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qfVHOdkd; arc=none smtp.client-ip=10.30.226.201
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qfVHOdkd"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53151C19425;
+	Mon,  2 Mar 2026 20:27:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772483244;
+	bh=5VB+NzTxyTTbdILrjVS0CXpowNihfbF7KKD2ZGuki60=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=qfVHOdkdt02CZl3KdunfN2VVSon3TWufr6tZYTCXdZ0hAm7kh4m0Q5yBErAai6J9Z
+	 URfmsEUOqNqbdTHs16kR25ycpZz+prweGn8en/42ThckoVrq2k1JsCqa7GRxU3k/t4
+	 79f2NED3SU9GeP7S8imZ7XOZxgUhSOgThefzv4gzy5IpRGUV6+dZBWkKvooE9YNn/m
+	 AaKp1YNGkS4BYgbI4ER5pVJ17dyz87CaA8fSOIqh9a+SxkAwzayLdtj16xCarl2naP
+	 KPVrSZ15CqavU8DoTC1nQMQaj6L2pFl4fNxOE+Y9XtPyk0Z7tXTQYTFPtJwiGz0ZmN
+	 nUkUGLjw0woCg==
+From: Jeff Layton <jlayton@kernel.org>
+Date: Mon, 02 Mar 2026 15:23:54 -0500
+Subject: [PATCH v2 010/110] lockd: use PRIino format for i_ino
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=koi8-r
-Content-Disposition: inline
-In-Reply-To: <d6fda426-b59f-48d6-bbe7-b2069a7e352e@linux.dev>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260302-iino-u64-v2-10-e5388800dae0@kernel.org>
+References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
+In-Reply-To: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
+To: Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+ Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Dan Williams <dan.j.williams@intel.com>, 
+ Matthew Wilcox <willy@infradead.org>, Eric Biggers <ebiggers@kernel.org>, 
+ "Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>, 
+ Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>, 
+ David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>, 
+ Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>, 
+ Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
+ Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+ Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
+ Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
+ Tom Talpey <tom@talpey.com>, Steve French <sfrench@samba.org>, 
+ Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+ Shyam Prasad N <sprasad@microsoft.com>, 
+ Bharath SM <bharathsm@microsoft.com>, 
+ Alexander Aring <alex.aring@gmail.com>, 
+ Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
+ Viacheslav Dubeyko <slava@dubeyko.com>, 
+ Eric Van Hensbergen <ericvh@kernel.org>, 
+ Latchesar Ionkov <lucho@ionkov.net>, 
+ Dominique Martinet <asmadeus@codewreck.org>, 
+ Christian Schoenebeck <linux_oss@crudebyte.com>, 
+ David Sterba <dsterba@suse.com>, Marc Dionne <marc.dionne@auristor.com>, 
+ Ian Kent <raven@themaw.net>, Luis de Bethencourt <luisbg@kernel.org>, 
+ Salah Triki <salah.triki@gmail.com>, 
+ "Tigran A. Aivazian" <aivazian.tigran@gmail.com>, 
+ Ilya Dryomov <idryomov@gmail.com>, Alex Markuze <amarkuze@redhat.com>, 
+ Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
+ Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, 
+ Amir Goldstein <amir73il@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+ Yangtao Li <frank.li@vivo.com>, 
+ Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, 
+ David Woodhouse <dwmw2@infradead.org>, Richard Weinberger <richard@nod.at>, 
+ Dave Kleikamp <shaggy@kernel.org>, 
+ Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, 
+ Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
+ Joseph Qi <joseph.qi@linux.alibaba.com>, 
+ Mike Marshall <hubcap@omnibond.com>, 
+ Martin Brandenburg <martin@omnibond.com>, 
+ Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>, 
+ Zhihao Cheng <chengzhihao1@huawei.com>, Damien Le Moal <dlemoal@kernel.org>, 
+ Naohiro Aota <naohiro.aota@wdc.com>, Johannes Thumshirn <jth@kernel.org>, 
+ John Johansen <john.johansen@canonical.com>, 
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+ "Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+ Roberto Sassu <roberto.sassu@huawei.com>, 
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+ Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
+ Stephen Smalley <stephen.smalley.work@gmail.com>, 
+ Ondrej Mosnacek <omosnace@redhat.com>, 
+ Casey Schaufler <casey@schaufler-ca.com>, 
+ Alex Deucher <alexander.deucher@amd.com>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+ Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>, 
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+ Arnaldo Carvalho de Melo <acme@kernel.org>, 
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+ Adrian Hunter <adrian.hunter@intel.com>, 
+ James Clark <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>, 
+ Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>, 
+ Joerg Reuter <jreuter@yaina.de>, Marcel Holtmann <marcel@holtmann.org>, 
+ Johan Hedberg <johan.hedberg@gmail.com>, 
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+ Oliver Hartkopp <socketcan@hartkopp.net>, 
+ Marc Kleine-Budde <mkl@pengutronix.de>, David Ahern <dsahern@kernel.org>, 
+ Neal Cardwell <ncardwell@google.com>, 
+ Steffen Klassert <steffen.klassert@secunet.com>, 
+ Herbert Xu <herbert@gondor.apana.org.au>, 
+ Remi Denis-Courmont <courmisch@gmail.com>, 
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, 
+ Xin Long <lucien.xin@gmail.com>, 
+ Magnus Karlsson <magnus.karlsson@intel.com>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
+ fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev, 
+ linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net, 
+ linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+ samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org, 
+ v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org, 
+ ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu, 
+ ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, 
+ ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org, 
+ linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
+ linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, 
+ selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
+ dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+ linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, 
+ linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org, 
+ linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
+ linux-x25@vger.kernel.org, audit@vger.kernel.org, 
+ linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org, 
+ linux-sctp@vger.kernel.org, bpf@vger.kernel.org, 
+ Jeff Layton <jlayton@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2560; i=jlayton@kernel.org;
+ h=from:subject:message-id; bh=5VB+NzTxyTTbdILrjVS0CXpowNihfbF7KKD2ZGuki60=;
+ b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBppfHxRIp/wSp+XA/WsU2UWjaucC6lZTxvCM0fM
+ 48TEkF4WjWJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCaaXx8QAKCRAADmhBGVaC
+ FU9tEACzae8Mk5amZ0VIj9ptrSq4/DkARwfOtgg0FBX48Yv+IIco33E1ItoDw1qU/+srG6Qf0cH
+ BXm/HrKitguKwL3fUhDn0ABgyXc6+k5cEyyrwpdqkZxoRjqefrGGaHnmb3FQe5OdINNUIlOj8AL
+ g+gXOVpRXyt5AYwOVaBkTxCU9xVIIjXPEU8hGDWuHpX8rNeBQi1BOGwVeNZ4Qjg9mHgoe/qH/xh
+ 4oBpMBPS+X2Jl0fzF+SD2RgsjHunuxqPKUzyahe10YYm1MCO0fwW9PFq4EhoUh5/Eqa1V+hCX1E
+ i4mOPjFxj1KoGOocZcDav2L+VBPFYIHT4uVVni9z/CjdRqBhyoYn1Q1BCeB00WPkGy/H1K6vO6a
+ zWDgOjPifip7WDVxoJrxR9LE5pxcVrqaZvKbI9eWWaDZA3mVr8/fZcxKiQdEhh1XX0sB6olH24u
+ 8twty75/dEezhiAtIKRFf9lDdDJn/9GnD4iFc4YoiuEKmioZWWs5SaFOeuIK6pzZjrzu5F4TH12
+ Y8r+DCaxc9KMimUq1mpiEDStKjW/9zryKoAdyeTmv4JqsIz+V3QyImJJNBWy4iSNoMVFUFedjqv
+ lrEpps4nQw71S49uyIOnYI5EiPzurtH1d2zrO+7g/k+IFA0vQu7fNstjjBEGC/4V0ll8PZcagLr
+ nFaaUgNOQ51LaIQ==
+X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
+ fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
 
-Ihor,
+Convert lockd i_ino format strings to use the PRIino format
+macro in preparation for the widening of i_ino via kino_t.
 
-On Mon, Mar 02, 2026 at 10:01:59AM -0800, Ihor Solodrai wrote:
-> On 3/2/26 7:22 AM, Vitaly Chikunov wrote:
-> > On Fri, Feb 20, 2026 at 08:23:51PM -0800, Ihor Solodrai wrote:
-> >> On 2/20/26 2:57 PM, bot+bpf-ci@kernel.org wrote:
-> >>>> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> >>>> index 1733a6e93a07..ef083602b73a 100644
-> >>>> --- a/tools/bpf/resolve_btfids/Makefile
-> >>>> +++ b/tools/bpf/resolve_btfids/Makefile
-> >>>> @@ -65,6 +65,9 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
-> >>>>  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> >>>>  LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
-> >>>>
-> >>>> +ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
-> >>>> +ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null || echo -lzstd)
-> >>>
-> >>> The "|| echo -lzstd" fallback makes zstd an unconditional link
-> >>> dependency. On systems where libzstd-dev is not installed, pkg-config
-> >>> fails and the fallback provides -lzstd, but the linker cannot find the
-> >>> library and the build fails.
-> >>>
-> >>> bpftool handles the same transitive dependency conditionally via a
-> >>> feature test:
-> >>>
-> >>> tools/bpf/bpftool/Makefile:
-> >>>     ifeq ($(feature-libelf-zstd),1)
-> >>>     LIBS += -lzstd
-> >>>     LIBS_BOOTSTRAP += -lzstd
-> >>>     endif
-> >>>
-> >>> Would it be safer to drop the fallback here so ZSTD_LIBS is empty
-> >>> when zstd is not available?
-> >>>
-> >>>     ZSTD_LIBS := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null)
-> >>>
-> >>> This would still link zstd when present (needed for the static linking
-> >>> case where libelf.a pulls in ZSTD symbols from elf_compress.o), but
-> >>> avoid breaking dynamic builds on systems without libzstd-dev.
-> >>
-> >> [...]
-> >>
-> >>
-> >> So, while AI may be technically correct that the build will fail if
-> >> libelf is installed and libzstd is not, it seems a far-fetched
-> >> situation, given that libelf depends on libzstd.
-> > 
-> > This is not far-fetched, and we have build failure for v7.0-rc2 due to
-> > this.
-> > 
-> >   ld: cannot find -lzstd: No such file or directory
-> > 
-> > Even though libelf is linked with libzstd, this does not imply
-> > libzstd-devel (with headers and so library) is there when building.
-> 
-> Does AI's suggestion make sense in your case then?
-> That is, make ZSTD_LIBS empty in case pkg-config didn't find libzstd?
-> 
-> I'm happy to fix this, the build shouldn't fail unless it must.
-> 
-> But I am curious how and why an environment building Linux with BTF
-> (requiring build and run of resolve_btfids), which needs libelf-dev
-> and presumably its dependencies, would exclude/avoid installing
-> libzstd-dev?
+Also correct signed format specifiers to unsigned, since inode
+numbers are unsigned values.
 
-Are you providing -lzstd just to link with libelf? I don't think you need to
-care about zstd in that case. libelf is already linked with libzstd. If you
-don't use libzstd functions yourself you don't need to link with -lzstd.
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ fs/lockd/svclock.c | 8 ++++----
+ fs/lockd/svcsubs.c | 2 +-
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
-Example build without -lzstd:
+diff --git a/fs/lockd/svclock.c b/fs/lockd/svclock.c
+index 255a847ca0b6b9f7ab5a99c3aaa6856044ac0535..2ee2c3d6e442e701dab29dafc23da8209306b84f 100644
+--- a/fs/lockd/svclock.c
++++ b/fs/lockd/svclock.c
+@@ -487,7 +487,7 @@ nlmsvc_lock(struct svc_rqst *rqstp, struct nlm_file *file,
+ 	int			async_block = 0;
+ 	__be32			ret;
+ 
+-	dprintk("lockd: nlmsvc_lock(%s/%ld, ty=%d, pi=%d, %Ld-%Ld, bl=%d)\n",
++	dprintk("lockd: nlmsvc_lock(%s/%" PRIino "u, ty=%d, pi=%d, %Ld-%Ld, bl=%d)\n",
+ 				inode->i_sb->s_id, inode->i_ino,
+ 				lock->fl.c.flc_type,
+ 				lock->fl.c.flc_pid,
+@@ -617,7 +617,7 @@ nlmsvc_testlock(struct svc_rqst *rqstp, struct nlm_file *file,
+ 	int			mode;
+ 	__be32			ret;
+ 
+-	dprintk("lockd: nlmsvc_testlock(%s/%ld, ty=%d, %Ld-%Ld)\n",
++	dprintk("lockd: nlmsvc_testlock(%s/%" PRIino "u, ty=%d, %Ld-%Ld)\n",
+ 				nlmsvc_file_inode(file)->i_sb->s_id,
+ 				nlmsvc_file_inode(file)->i_ino,
+ 				lock->fl.c.flc_type,
+@@ -676,7 +676,7 @@ nlmsvc_unlock(struct net *net, struct nlm_file *file, struct nlm_lock *lock)
+ {
+ 	int	error = 0;
+ 
+-	dprintk("lockd: nlmsvc_unlock(%s/%ld, pi=%d, %Ld-%Ld)\n",
++	dprintk("lockd: nlmsvc_unlock(%s/%" PRIino "u, pi=%d, %Ld-%Ld)\n",
+ 				nlmsvc_file_inode(file)->i_sb->s_id,
+ 				nlmsvc_file_inode(file)->i_ino,
+ 				lock->fl.c.flc_pid,
+@@ -716,7 +716,7 @@ nlmsvc_cancel_blocked(struct net *net, struct nlm_file *file, struct nlm_lock *l
+ 	int status = 0;
+ 	int mode;
+ 
+-	dprintk("lockd: nlmsvc_cancel(%s/%ld, pi=%d, %Ld-%Ld)\n",
++	dprintk("lockd: nlmsvc_cancel(%s/%" PRIino "u, pi=%d, %Ld-%Ld)\n",
+ 				nlmsvc_file_inode(file)->i_sb->s_id,
+ 				nlmsvc_file_inode(file)->i_ino,
+ 				lock->fl.c.flc_pid,
+diff --git a/fs/lockd/svcsubs.c b/fs/lockd/svcsubs.c
+index dd0214dcb69503006181a1533c440fc04a329d73..5e7b2a7967bd23365dae2817a0e11c50e4be7c83 100644
+--- a/fs/lockd/svcsubs.c
++++ b/fs/lockd/svcsubs.c
+@@ -47,7 +47,7 @@ static inline void nlm_debug_print_file(char *msg, struct nlm_file *file)
+ {
+ 	struct inode *inode = nlmsvc_file_inode(file);
+ 
+-	dprintk("lockd: %s %s/%ld\n",
++	dprintk("lockd: %s %s/%" PRIino "u\n",
+ 		msg, inode->i_sb->s_id, inode->i_ino);
+ }
+ #else
 
-  builder@x86_64:~/RPM/BUILD/kernel-image-7.0-rc2$ grep zstd tools/bpf/resolve_btfids/Makefile
-  ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null)
+-- 
+2.53.0
 
-  builder@x86_64:~/RPM/BUILD/kernel-image-7.0-rc2$ ldd ./tools/bpf/resolve_btfids/resolve_btfids
-	  linux-vdso.so.1 (0x00007ff8b2329000)
-	  libelf.so.1 => /lib64/libelf.so.1 (0x00007ff8b2287000)
-	  libz.so.1 => /lib64/libz.so.1 (0x00007ff8b2269000)
-	  libc.so.6 => /lib64/libc.so.6 (0x00007ff8b206e000)
-	  libzstd.so.1 => /lib64/libzstd.so.1 (0x00007ff8b1fc8000)
-	  /lib64/ld-linux-x86-64.so.2 (0x00007ff8b232b000)
-  builder@x86_64:~/RPM/BUILD/kernel-image-7.0-rc2$ rpm -q libzstd
-  libzstd-1.5.5-alt2.x86_64
-  builder@x86_64:~/RPM/BUILD/kernel-image-7.0-rc2$ rpm -q libzstd-devel
-  package libzstd-devel is not installed
-
-lib*-devel/-dev packages only required if your source is directly using the
-target lib, in other causes this is already handled.
-
-Thanks,
-
-> 
-> Thanks.
-> 
-> > 
-> > Thanks,
-> > 
-> >>
-> >> I think we can leave the default -lzstd to have an explicit
-> >> dependency in the Makefile.
-> >>
-> >>
-> >>>
-> >>> [ ... ]
-> 
