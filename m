@@ -1,110 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB83B42188D;
-	Mon,  2 Mar 2026 15:53:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772466793; cv=none; b=PWVBqwRefeF2Y0cRyCBEZ1eH8wt7nd4a6/f2USLe9ArMcXEBs9JCISZXgfI58nU5MX2S9jWDQ0wxlD1MF+OExb+ERlbMy989dP5hSJZM1d6upRNPJ0mqkUHouYiTLJml/PHdCRv/iifQTUmG6/8F7vxxhx6RdtTKxJ6G4O5/JFc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772466793; c=relaxed/simple;
-	bh=Ke8jQXU3J+29aY5FbS509phyVwX7VpZYTaFtOaKVIbU=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=bDZmip+Mdl7ho9KDSwy6pl+vABb5Z1s7zXPzlUOQPykxHFkLLNqarJcJOTySPv3zy4NmsphaTqpFhRmoBpScMzz42yKniPu6On1OSZPdG0PdtQ8qvn5w6Fp4vysU/z8dT7d0n5qEnjzald9nxT20f1VWdpu7YBpopRpMAwVsxpI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lSemX7Mh; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FA54326D75
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 15:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.221.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772467106; cv=pass; b=sgeas9bCqdQYNQ5oUEwQmH9Sz5NVDi5z7+Li1/iDRMIF/LBwnwmJBbVM7LzMVS76TcXXqAgoFFqGhVY5qzj9G3um83ljE/eWZu+IaemHv0DArZBjLqTvggY5XURR9X+hc0aN2Rtvk45yItpOaNjrHWwnXzpr3dpz4ebcsSvSV3s=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772467106; c=relaxed/simple;
+	bh=/TPjtAXjXkz2ScoCpqpIUeYNfC8HDnwi7bbiTfsh7Uc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VSci/YqFGvZji0iKbEErprRKFBxZGjGT2VM94jNVbWtfGSCFzyLy4IlQOrZRWqQQYrM977vdl4RB7wriVKAM5T6Rd9MNWSyJ5mAwKLWV2hoAEplhG61+ZjX2uMBMW2VRfJaBts6xzSZB5AnQPmPai0yp+f7sWtWKsQ0i1efrg4U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UfuPH7t0; arc=pass smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSemX7Mh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0594C2BCAF;
-	Mon,  2 Mar 2026 15:53:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772466793;
-	bh=Ke8jQXU3J+29aY5FbS509phyVwX7VpZYTaFtOaKVIbU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=lSemX7Mhwb7tWRnQ2XXqo4XH2ao/oQqPIKL7j72M0w9j0lV+/9TRuYXvdq9hjpUM8
-	 +bfji9dg+m7yPW16SaNpvUlT4UQInJa0Ms0IXJJSJnECRMQfMJEDa0D+JiPnwaVx12
-	 uAekXOg0iNiEu6yFlA937cWsf605ThboZiBYwus73KkXXYKMITxxQjN49lBpOhyijs
-	 WRI12WH8WP5rq/bccIEPAZFv8STqO3KfXZ2TUssMYhQP4Bty1/8Sn82f+0kY9nH7Vw
-	 jhx6aS4ipbPWs/wA552qwVTYFk9tRrvS1RUeKtrLKbV/+9aHL7UZzxRZw6pwrlLFk6
-	 Ky/cQ/UQ28SfQ==
-Content-Type: multipart/mixed; boundary="===============8515939307212125773=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UfuPH7t0"
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-439b6d9c981so849977f8f.1
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 07:58:23 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772467102; cv=none;
+        d=google.com; s=arc-20240605;
+        b=EYG3awaflTJf+5Jk2OAL/s/AZlDkQ9TI9nfSpFcY6l51toP/t4O0CKOntZMkAfuNUm
+         pZ6jOAWox8dANNgKwDgHKCQi+MQ+EiANBsJdVhgYjjzx2lYXO44GAsoU/KEqAO6FMBV0
+         qcEROmSSDTR/h7DeGtcQ46AErGrIYReN3XeWStah5eYxeTitEo5MoRdNO2aXab/Jlx8f
+         45f8b44DfmKIrKiOL/xu5dhzWBM1Cc5R69duj0ZoA+DS8uXsmWgrQlbeCIELaS37RWWh
+         VSDq9PEnE8vRa8y3cG4S4Mt5MiabTTUaOEjONMk4FTV4aeVcxgXUdm8rLvbjluuqQ/mR
+         E6OQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=/TPjtAXjXkz2ScoCpqpIUeYNfC8HDnwi7bbiTfsh7Uc=;
+        fh=1WHJdLqE+1nMz7AVQZ2NPa0v8mWNpr0bR1qaNquatbM=;
+        b=Glukh/476MF2CSrak19MtKpieGIzHHcCSDU55ykknoBnqveUFX4B0O5zwzjwfP29Im
+         E+22AbjiRbrV4gBt0wHQ6x56Hh4xd/HfHLiCnGzchtED/EaBm10qx/UNqsOJzsAcFE52
+         QPBQENq5XbcDwB+zztzDCMWaO/GK88i09b8zmIIcJjrXoNurmTFPHXGJKp1/vmd2uXV0
+         KCNF5xXDUgvRtyumHXp+dO2xrqLY2Je1d/fKR0nPhU9WVfSgBdZ8PGXgbvnceGm3uOa2
+         bDR5+FO6onPZeJq8CWgwKVpRQ044BI4ecraOnzDjxV620Kn2NeCBQuxpw8D5UUN2Ly+2
+         DTCg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772467102; x=1773071902; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/TPjtAXjXkz2ScoCpqpIUeYNfC8HDnwi7bbiTfsh7Uc=;
+        b=UfuPH7t0fBUoJU5kJwx/P8nMCN+9gGWkIdbsQDuXFVdN1K3pG88zzwz+9mtk69kUVn
+         3WcRJ2z6Dhlep+CH6JpCjGwGD5yW0HgfsSsLU3JktluhEo+XE8J8Ckm//B6iTdo465yr
+         u6J3l/HvP5ieEuovV3TNwb6893zFm1lXzL9GA+wLmlbToJs2wwm1SIGP+1hc8sH9F0Uw
+         aChdtDvhWCODglEd9nYI+EKaHkQU2foq60mW+ru2o9JHKkpskrwh1/+5wC2tPnXWADIo
+         e8xNComQwhKlX1WwD4Yz7KzkGMOfWY3lugL8YjU1bRsFBH13WlY3Uqq9NLoS+kFSnalb
+         RpXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772467102; x=1773071902;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=/TPjtAXjXkz2ScoCpqpIUeYNfC8HDnwi7bbiTfsh7Uc=;
+        b=dky06fLD/xtoj3KhubHgyHuCY9m5MRJCZ7HvkAPOugw9yP40y+wzyZgM/VvAgR+pQx
+         5vVI8A/u6iU1BC9uivsOB+7mAjFmi5t9h0VjGkeTmNMiys73/aXW2NMwqBWdHW1ShFAo
+         sxMicN6boSWqdsRZVS+tL+JdIE0re6WVaBb03hMz06tUld9ok0JDCqo2h5U7SamiAeAX
+         NviyP2q2Tadt7bXClz2azAcsV24XjV+3+1mwdbhj+AF5CtSjz75xZPIr7Poc21UK/Zcq
+         Lh+jVAKNmxUtSVdssN221JKGDCoU55kwOxs+bk0x5xicLaSH4300eiZiYyPuB6Y2Bmcs
+         7tew==
+X-Forwarded-Encrypted: i=1; AJvYcCWrAvzlqORxhhRJGfj0MpDksrJjzqap/10pbfXU+FTfZ+pYKvj/onLsl48lUVchhKeFfhA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkcuJCqrO2XxAM3WgxxVBMaeZIhbfBKGI7o61KxnRlw7ibgPNl
+	RKxtpKzKY1JglpuUkOOTZ1QNApneqXZS3gPR0Ktk5C3IvoHn+n2INg0lMju79VuQWKft6lnO54G
+	jYH6C/T1ECFCpgj6R7ynnOvfU0iuXyh3N5Q==
+X-Gm-Gg: ATEYQzxqAINkdM4ZPos/YSgSWdzMdhMIPun0z8DMKJ5PLpn76VDXQudHbb2Z3He4/Ky
+	o7Iblhtqvx/KhKYVz4ecmN33HqH03LSrjZrlSNUZHKpIazXRRa/2GV6+mEkt4YrbOHlF56tkWgA
+	+2zAkJ13jKuLxXutgY+5KlKLWuFYuqyiROOiEa8S/REWRGkiTEcj20Y96lFr+Ephe6y9i8tR/t9
+	7Sbi4yOJSL5RlqdXWBcMqMOUYYGwId6MKpJsQFuQI3DvgGlV7TWQ3lxGjjiTqOn3AmIDsHC4X4G
+	PTpuNVtBQX89fhT/lUkwSjLmSWPzSqFbW+2RIF2wi1sMX/K/oy6ru6iYIZuNghFNIe/meBq1HH4
+	/Qv0MVg==
+X-Received: by 2002:a05:6000:2411:b0:436:3761:583b with SMTP id
+ ffacd0b85a97d-43997204715mr29586238f8f.27.1772467102344; Mon, 02 Mar 2026
+ 07:58:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <d1728faa022db83c9e5ab0245579eb1b1d176495744953f9ab66e0864ed31025@mail.kernel.org>
-In-Reply-To: <20260302150342.55709-4-leon.hwang@linux.dev>
-References: <20260302150342.55709-4-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v2 3/6] bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx progs
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,leon.hwang@linux.dev,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,pulehui@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  2 Mar 2026 15:53:12 +0000 (UTC)
+References: <20260302081622.165713-1-jolsa@kernel.org>
+In-Reply-To: <20260302081622.165713-1-jolsa@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Mon, 2 Mar 2026 07:58:11 -0800
+X-Gm-Features: AaiRm52_d2IDD4Or5e6YvBC9gr4AV-b3oFE-DpqVFN7rfeGBIt28no9bc-gd-cs
+Message-ID: <CAADnVQKBx71HOwVcRFj7ja+y_NL83rpKQ0BRcismOwdCNx6pbA@mail.gmail.com>
+Subject: Re: [PATCH bpf] ftrace: Add missing ftrace_lock to update_ftrace_direct_add/del
+To: Jiri Olsa <jolsa@kernel.org>
+Cc: Steven Rostedt <rostedt@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Menglong Dong <menglong8.dong@gmail.com>, Song Liu <song@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
---===============8515939307212125773==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Mar 2, 2026 at 12:16=E2=80=AFAM Jiri Olsa <jolsa@kernel.org> wrote:
+>
+> Ihor and Kumar reported splat from ftrace_get_addr_curr [1], which happen=
+ed
+> because of the missing ftrace_lock in update_ftrace_direct_add/del functi=
+ons
+> allowing concurrent access to ftrace internals.
+>
+> The ftrace_update_ops function must be guarded by ftrace_lock, adding tha=
+t.
+>
+> Fixes: 05dc5e9c1fe1 ("ftrace: Add update_ftrace_direct_add function")
+> Fixes: 8d2c1233f371 ("ftrace: Add update_ftrace_direct_del function")
+> Reported-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Reported-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Closes: https://lore.kernel.org/bpf/1b58ffb2-92ae-433a-ba46-95294d6edea2@=
+linux.dev/
+> Tested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
+> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
 
-> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-> --- a/kernel/bpf/core.c
-> +++ b/kernel/bpf/core.c
+lgtm.
 
-[ ... ]
-
-> +enum bpf_map_owner_match_type {
-> +	BPF_MAP_OWNER_MATCH_FOR_INIT,
-> +	BPF_MAP_OWNER_MATCH_FOR_UPDATE,
-> +};
-> +
->  static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_prog *fp,
-> -				  enum bpf_prog_type prog_type)
-> +				  enum bpf_prog_type prog_type,
-> +				  enum bpf_map_owner_match_type match)
->  {
-
-[ ... ]
-
-> +	switch (match) {
-> +	case BPF_MAP_OWNER_MATCH_FOR_INIT:
-> +		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
-> +			return false;
-> +		break;
-> +
-> +	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
-> +		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
-> +			return false;
-> +		break;
-> +	}
-
-In the v1 review, Alexei Starovoitov asked for strict conformance
-both ways rather than one-directional validation:
-
-    "Don't be fancy. Require strict conformance both ways
-    in *all* patches."
-
-https://lore.kernel.org/bpf/CAADnVQ+-V0-1i8_+CYpK7G0CnV-2n8e9Szv43yM3Az197eL_0A@mail.gmail.com/
-
-The BPF_MAP_OWNER_MATCH_FOR_UPDATE case still uses one-directional
-matching, rejecting only !owner->kprobe_write_ctx && aux->kprobe_write_ctx
-but allowing the reverse. The v2 changelog lists other Alexei comments
-as addressed but does not mention this one.
-
-Was this an intentional design choice, and if so, should the changelog
-note the disagreement?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22582690876
-
-AI-authorship-score: medium
-AI-authorship-explanation: Confirmed LLM involvement in v1 development process (selftests called out by reviewer), but core code changes and v2 revisions appear human-authored with genuine design engagement.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Unaddressed maintainer review comment requesting symmetric matching in the UPDATE path; not a code bug or security concern.
-
---===============8515939307212125773==--
+Steven,
+should it land through ftrace tree?
