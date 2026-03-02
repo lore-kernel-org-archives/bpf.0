@@ -1,149 +1,123 @@
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEF43093D3
-	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 08:08:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02783387375;
+	Mon,  2 Mar 2026 08:10:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772438910; cv=none; b=Vhqf8YRIKqMcF0FIwd6qp/GJRruYHN9JBn7Sr7IgQwzMF/xPT4Z8AYYBni21AN1Xj5a/ZuH7QCFFpQnm8h1Jt6KVtfI55xPDOlxAEJ1nJ4YvmcMvxFVNQcK7iVgBBjS2bHzICH2MAtlRrMvUukzfnzHLedWhu95dykK8e+tFwxg=
+	t=1772439028; cv=none; b=t7rIfM8IR+kM7/ox1UBSNxQjFAaXzlzNXlbYtPIgDb1WcDjQova1GdcZmEOEC3Q8uxE7U8ld3a2fb93Wouyyo48LR/thUB84yg2AeXMhs0O+qF4Dg+wr54INWBgFqbk8vqhzu+0a+WZXstaubA8Xk4cTigCenIuyufmNGd9IfNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772438910; c=relaxed/simple;
-	bh=7dXyK6ozsmvSacmZBQXL9e0JKE9D+/u5o80S+8Bbcz0=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BqKVmqJi9FBzOpDFEYLuwkiby4zpxD3dw0307xt53+DWGsiDs3m/X98th6e3qS1+EgOSbKiAQBLddd+HUY3QcbdT+Yob550HpFATZ4zbNrkK1PpJvIe9q3fyeS3iYaH6KR2UQ5uSnRJ552JRKdSE+AzbgPS2q2RTYCUmwFGAtzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kgg9nmyh; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1772439028; c=relaxed/simple;
+	bh=ixwb2BfKeXCQX9PRIL0yEWU0kFZM8JpQv09X0+Nrxf8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KFMtTJv7zrxvucN35Hn5TuVOtPjQHWJzGuhIGNyzHUs/qv1FVsMb9r1xkG9HL5YUdjv4+oXbBfNqb8duoCFnNrh7EYTO2Dm82Ohj6SSFKK4zGlXMN4muTo/qJIljF0DTNPylFmW70LLxGT8bJlBYOlB2Rdg774we3j6FW8HKy24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=i0z5fL+d; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Frz5mpdt; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kgg9nmyh"
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-436e8758b91so2633076f8f.0
-        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 00:08:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772438908; x=1773043708; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aywtoeuxkfunv4Ek8XeTDfrALEqJk4nC+4MbytSvfC4=;
-        b=Kgg9nmyhwDp4M9HxRLZCuIzZA5/Uknb/21gXD8tW16u5VXQD4uOaRRjOMRLa+S0ln1
-         FYMh4hRMKsAw2/Wavl65DdBmEgXh1i3cWcRu+Cmn4RpXHC4nkqMS3rwi+XdnHfoYv8zd
-         Be63uF0qJAXsPox8RWRIf85ptWQamnaqYsPR8xf3lQxf0IMC2TKYwWM1T6woajuXyBp8
-         ZTn8y9u/6mPs6HszeDO6EyAHc4jGwoPOPmUkfXBMnUTChdsaM1TztplXdqOyI9fr475f
-         zCSwJ6ES3MA1JSGGMD4C25ZDEN27Fg3hXiGardbuEYDyMeuteGkTmUd2ccwlcj1hzPll
-         fMNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772438908; x=1773043708;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Aywtoeuxkfunv4Ek8XeTDfrALEqJk4nC+4MbytSvfC4=;
-        b=tiY7v20zjd+zQVP/XHhLmYDCOrX8SUijLb/25MJPUIxCCw87ocxLCttlmjPh1Dhk3m
-         IImvxbg0RweHv2iW3g9+RqC7y4dsz0NcWDFUeAJSd+rBrwXiWYsFKzRVeVx4eoal66k6
-         l2qX5pUEz93Ok5ltvUaHFFbE6dYxQH474obTDaPfw6eynf9SbpXAr3iFU9IDunljORut
-         w2YlpDCFjSqVTCH5Kx97mq2pECjsuBqHDm6082Bb+p0CKKzYIj87uVhXEm1elIPIxtH9
-         fDMcEIDKg5lbwL1kfHGO7osaLQw+qgXaetl7Nzadp7Pr+MTxff4QZ4srTHm7ReyT4un0
-         SM8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW4gKgyPlgGLYEwmPQYOAOvTuujzn8y2LGywNhZe2WCjnt41KNs3zw0kPBOX9BYAGTkHOs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwH6bc0w7ZLRtR/HHgCewOi9CYWAUE6ciGTocIFjunlojnh5MUA
-	Lfan/RCNnKOTdccFsvkXDPF2MeTVleKREpDvAjd2Z/LW6rWtBdgHpETPYDfwZ4OD
-X-Gm-Gg: ATEYQzxOdx5YrpE4Z82kNATTFM9UQ1ELeNARJIVMpeUj4tCDV0J0vTEBWCmGdw69X2p
-	esZxj0zScwKx+XtCkRnd4ouNR1VxoTSwKmWSL6Pfb2ivwja7h64JvqdiDTR62QyQ2CVfzkpOunG
-	Jj3d4e9U71xIAk2QmzaXCtWQY6qpKSf/DyX1CcDt0+LZy7FZ/4ipazgnKq4+gjVs/fCpKzadZV/
-	ZWxg+6O+put+AQ+iQDjQl/YsXGLdvbz5YToRxBG5fuiegUi6MGIDX7Ao3M6QsH7B1HKZ/C4Lrea
-	3cAvHKEuCVroTpY4STL+PpQLe8VaaQu91CdbJd2409s7gL1Uhf1pZBw2Ibm96Eqla9KTzPityfA
-	wuIgJyDjqWZxszsX57XUE/AlQ+fRrYY8BUXt1895sg0Dj4CrNVQwiEVM0kJFQe5UN06TWHE6x
-X-Received: by 2002:a05:6000:2404:b0:437:6e55:a736 with SMTP id ffacd0b85a97d-4399dde3046mr20509566f8f.7.1772438907722;
-        Mon, 02 Mar 2026 00:08:27 -0800 (PST)
-Received: from krava ([2a02:8308:a00c:e200::d99c])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4399c75a25dsm25282488f8f.21.2026.03.02.00.08.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 00:08:27 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Mon, 2 Mar 2026 09:08:25 +0100
-To: Steven Rostedt <rostedt@kernel.org>
-Cc: Jiri Olsa <olsajiri@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Florent Revest <revest@google.com>,
-	Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="i0z5fL+d";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Frz5mpdt"
+Date: Mon, 2 Mar 2026 09:10:21 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1772439023;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fP9PDZ0ex7zg1+9lEL3J8b+iUpbzj2YqlC1Ik3cqycM=;
+	b=i0z5fL+dPf4DSFLPFFGUMcS1Qpj4WciBpkpp0vjWjT557q69OmoTm++NPAZWE/ihdilmNm
+	O9VEs64vxnXGZelMsMZ/5iLDzM3jdyLMhPgjCKDTIAgJ3gcSB965tGbP78LEEsO3vIeqgv
+	SS09fSdQjwnFCrfOg3+dCKGh0Sw4l+TXCUPPOaxJAjTiOjXNAt+t7S80+6usOAw7NTVg9X
+	vCk0c+Iin5cHZm5TXaYiobySBxJ6IDIQshAFyixoyZKH/+8sYcKKvaHYn2i2WQFraWmQDB
+	dt55ls/rmSueX1es8uRgyfWGEeptvTB4BPRU3pZ3s+r7Vf22FiObLCzcc3sA1Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1772439023;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fP9PDZ0ex7zg1+9lEL3J8b+iUpbzj2YqlC1Ik3cqycM=;
+	b=Frz5mpdtnq0z0zW+g9iPn0htrzPFk03OgVA3INCawCilnQ/pPwwNwd47M8j0CcCwzfhhnT
+	O75Y2MIz3PiZRsDg==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Jay Vosburgh <jv@jvosburgh.net>, netdev@vger.kernel.org,
+	jiayuna.chen@linux.dev, jiayuna.chen@shopee.com,
+	Jiayuan Chen <jiayuan.chen@shopee.com>,
+	syzbot+80e046b8da2820b6ba73@syzkaller.appspotmail.com,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Menglong Dong <menglong8.dong@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Subject: Re: [PATCHv6 bpf-next 9/9] bpf,x86: Use single ftrace_ops for direct
- calls
-Message-ID: <aaVFeafZb76l9L0m@krava>
-References: <20251230145010.103439-1-jolsa@kernel.org>
- <20251230145010.103439-10-jolsa@kernel.org>
- <1b58ffb2-92ae-433a-ba46-95294d6edea2@linux.dev>
- <aaIAoBZGkP7RQrvc@krava>
- <aaILlSuEgaYDq41r@krava>
- <20260228153921.19cd42a6@fedora>
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Jussi Maki <joamaki@gmail.com>, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: Re: [PATCH net v3 1/2] bonding: fix null-ptr-deref in
+ bond_rr_gen_slave_id()
+Message-ID: <20260302081021.MiQQ_LQr@linutronix.de>
+References: <20260228021918.141002-1-jiayuan.chen@linux.dev>
+ <20260228021918.141002-2-jiayuan.chen@linux.dev>
+ <999129.1772247707@famine>
+ <08041bd78c06981b18b3de90a95e0c951bf1623c@linux.dev>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20260228153921.19cd42a6@fedora>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <08041bd78c06981b18b3de90a95e0c951bf1623c@linux.dev>
 
-On Sat, Feb 28, 2026 at 03:39:21PM -0500, Steven Rostedt wrote:
-> On Fri, 27 Feb 2026 22:24:37 +0100
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> > index 827fb9a0bf0d..e333749a5896 100644
-> > --- a/kernel/trace/ftrace.c
-> > +++ b/kernel/trace/ftrace.c
-> > @@ -6404,7 +6404,9 @@ int update_ftrace_direct_add(struct ftrace_ops *ops, struct ftrace_hash *hash)
-> >  			new_filter_hash = old_filter_hash;
-> >  		}
-> >  	} else {
-> 
-> As this looks to fix the issue, just add:
-> 
-> 		guard(mutex)(&ftrace_lock);
-> 
-> > +		mutex_lock(&ftrace_lock);
-> >  		err = ftrace_update_ops(ops, new_filter_hash, EMPTY_HASH);
-> > +		mutex_unlock(&ftrace_lock);
-> >  		/*
-> >  		 * new_filter_hash is dup-ed, so we need to release it anyway,
-> >  		 * old_filter_hash either stays on error or is already released
-> > @@ -6530,7 +6532,9 @@ int update_ftrace_direct_del(struct ftrace_ops *ops, struct ftrace_hash *hash)
-> >  			ops->func_hash->filter_hash = NULL;
-> >  		}
-> >  	} else {
-> 
-> And here too.
-> 
-> As there's nothing after the comment and before the end of the block.
+On 2026-02-28 03:36:24 [+0000], Jiayuan Chen wrote:
+> >  My only concern is that this will waste a percpu u32 per bond
+> > device for the majority of bonding use cases (which use modes other than
+> > balance-rr), which could be a few hundred bytes on a large machine.
+> >=20
+> >  Does everything work reliably if the rr_tx_counter allocation
+> > happens conditionally on mode =3D=3D BOND_MODE_ROUNDROBIN in bond_setup=
+, as
+> > well as in bond_option_mode_set?
+=E2=80=A6
+> An alternative would be to allocate conditionally in bond_init() (since t=
+he default mode is round-robin)
+> and manage allocation/deallocation in bond_option_mode_set() when the mod=
+e changes.
 
-ok, will do.. the original changes:
+This sounds reasonable.
 
-  05dc5e9c1fe1 ("ftrace: Add update_ftrace_direct_add function")
-  8d2c1233f371 ("ftrace: Add update_ftrace_direct_del function")
+> This is a trade-off between the added complexity of conditional alloc/fre=
+e across multiple code
+> paths and saving a per-CPU u32 for non-round-robin bonds.
+>=20
+> For the per-CPU u32 overhead, it's only 4 extra bytes per CPU per bond de=
+vice =E2=80=94 and machines with
+> that many CPUs tend to have plenty of memory to match.
 
-went through bpf tree, so I'll send the fix the same way,
-please let me know otherwise
+4 bytes is the minimum allocation for per-CPU memory. The memory is
+already "there" it is just not assigned. So for the 4 byte allocation it
+is needed to find a single area (the smallest allocation size).
+In case there no free block, a new block will be allocated and mapped
+for each CPU which the part that costs memory.
+That said, we should not waste memory but it is not _that_ expensive
+either for a bond device. Things change if here are hundreds of devices.
 
-thanks,
-jirka
+> Thanks
+>=20
+> >  -J
 
-
-> 
-> -- Steve
-> 
-> > +		mutex_lock(&ftrace_lock);
-> >  		err = ftrace_update_ops(ops, new_filter_hash, EMPTY_HASH);
-> > +		mutex_unlock(&ftrace_lock);
-> >  		/*
-> >  		 * new_filter_hash is dup-ed, so we need to release it anyway,
-> >  		 * old_filter_hash either stays on error or is already released
-> 
-> 
-> 
-> -- Steve
+Sebastian
