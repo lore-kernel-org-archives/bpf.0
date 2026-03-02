@@ -1,153 +1,147 @@
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D24741C315;
-	Mon,  2 Mar 2026 15:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DF0411622
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 15:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772465304; cv=none; b=Pdli/3us2wAo3dpMq9MeOzlTuai9bR2CuxoOCoAcFnGbHThRIAVqXYnNMZCK1mqdr5K620J4aj3jFEUZ6N55kDn1dO9kBetpG3g0ntchvYswbCTG/aTLB3jC8PSus2HRQsch/ioCDDus3B4stNwxBmbRxuOHEIGB0S6icq6Hki0=
+	t=1772466106; cv=none; b=cy+qDvjmPxes7es+KhJ1VpA8TNpCho8aFmerNns80xajv/EDsk//rt5PHmr98j6RTd7MMX/Zmw0hCZx75tE222Po9V+btZdYJv8/MICASEo8/gA6bUqw9/mDNaI9/XzLaiUP8ntHfRFlQMWKL0liSFa5aLcJWJPVzVb8g6iknQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772465304; c=relaxed/simple;
-	bh=cnXkDmiK4nEkXfkpUw2O+7yQ+cbRQCkc1IuPQRsmliA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MlPy6Pw0dOHk91WzpDZ+aaxfKNjA0R9wIbwe4N0QrjKa5vYjCY6b0Ib9VM0Znm5ZuR3QgLLIWNrmpi6XLSQv77mKaUtQxtUPPtqzkK/5ZtBIfM/u+9zQE3CttIQaG53Px/6gqNS8FlNgOhhHgxCKlcmxBQfP5B/mKXwu1p0+ZbQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id D85D772C8CC;
-	Mon,  2 Mar 2026 18:22:12 +0300 (MSK)
-Received: from pony.office.basealt.ru (unknown [193.43.10.9])
-	by imap.altlinux.org (Postfix) with ESMTPSA id D141436D00D3;
-	Mon,  2 Mar 2026 18:22:12 +0300 (MSK)
-Received: by pony.office.basealt.ru (Postfix, from userid 500)
-	id A1D68360D75C; Mon,  2 Mar 2026 18:22:12 +0300 (MSK)
-Date: Mon, 2 Mar 2026 18:22:12 +0300
-From: Vitaly Chikunov <vt@altlinux.org>
-To: Ihor Solodrai <ihor.solodrai@linux.dev>
-Cc: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org, 
-	daniel@iogearbox.net, eddyz87@gmail.com, olsajiri@gmail.com, yatsenko@meta.com, 
-	alexis.lothore@bootlin.com, ameryhung@gmail.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, kernel-team@meta.com, martin.lau@kernel.org, 
-	yonghong.song@linux.dev, clm@meta.com
-Subject: Re: [PATCH bpf v3 01/15] selftests/bpf: Pass through build flags to
- bpftool and resolve_btfids
-Message-ID: <aaWqMcK-2AQw5dx8@altlinux.org>
-References: <20260220222604.1155148-2-ihor.solodrai@linux.dev>
- <edac02ca77865be9cc18b013f5209a8fb0d8a4c443ce16dce8ad368a9ecefe05@mail.kernel.org>
- <789af3df-291c-410d-89d8-ee7b12479798@linux.dev>
+	s=arc-20240116; t=1772466106; c=relaxed/simple;
+	bh=V5eDYyeSzEe01Qy0X2d3YjmdmOm2DlobDKTfwH81yIk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=NUsio2EFPgOjY1KiADrTXK43zEWSZELS+uhK9+s/LVdjtEw7KI9iDtap/fCjWfMmAJKQaLUQloL4uADIpejBat9EP4bZphEEnEYVjmnSmXbLVeOy1gnlRy/0/4YZAMyuuIuvvhdAXSEbSPQNmtx5YwDurOh/EE3rPAZKDmc6/ZU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QWjdwuVb; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QWjdwuVb"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4830e7c6131so47836595e9.2
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 07:41:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772466104; x=1773070904; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvJ4Pj0Wo9ryI9xJ6mJ9OBJG9CVcmeBhutvadxQnZZs=;
+        b=QWjdwuVb/t9+sKGihwIsRzZQDdjSzN3dEVZ2BVMCVyX5gDMOi04WfO3EXDuLEIMYkq
+         b1MAAGH5I3wd8rBvw+Lr9FkpmDUYZCM+cXpNkpX0s7rDCX9DwnvMvZwRaBYUy8wQwFRY
+         DDvHt41DUSZ1y5jjTttZoVYJYX97nEilliRaIRQN/1UY9z764ENyKoNuCuQKRDksfn6j
+         e+ua+hTW50/m/OceVJWWgvRGey4+2Ut/i48x/0Ab8HM/0n4rsANdNxXZEaf7Sxu1LezT
+         eh7wLjRocsyXoqQxa0p1CEp6G7jqorXPsfB8Y0Q9TiVKehJYrXW5wbZUqzceF1OYOLFA
+         MSaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772466104; x=1773070904;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fvJ4Pj0Wo9ryI9xJ6mJ9OBJG9CVcmeBhutvadxQnZZs=;
+        b=aZE+H/RPyUW9BK6iKIomNnssCbYWOsi36Cc49GhZzMwUnqK8coYPqfp15l+xBhkhVm
+         54xsSrEQoonsmAf2DO71K+WSu4jLgS1lWu/Q4ige7QhQ/nfeVsmb4oEIpzek8tSPhXhm
+         BtIPvQKGrFsCyn4FGWfNxssw0A+OozdcanmeHb/RGxCjcJRqFQ5CnjfsO18qwAL8YdNV
+         SYbp2pOpHDIV/v0OtiPW5MQBOCHs8XmFlJTNBqsJZOkO5yv/icjFh9y9qYPMhEYffFNO
+         XFY5FHQrVIWeCUjMyNvNK6HDFF5EEl2NeDVXhQsnmA+Khoip3q5R8rFXEzHijFDJJ0ts
+         s5bA==
+X-Forwarded-Encrypted: i=1; AJvYcCX0OD57qx80W83EByBvD4+H3nJ22ewKT4B9234uie01j00IPGW7IQXeU3w6RkZXJs+sKYk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+/wJ2WVz9LyIMbgRD2VDud/vIRobf9VAeRW8LIL7YfHv/TK0E
+	nmxTroJ8JTzliTev8hnt4J/2hzwvVHXvnry4Q2uhqlsoX2+Yw/+JLQnFj9qRM7vpzNRDwGVxaVV
+	ayG5vyvG4RenwHHc+9A==
+X-Received: from wmby19.prod.google.com ([2002:a05:600c:c053:b0:480:690c:88de])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:3b18:b0:483:7432:a761 with SMTP id 5b1f17b1804b1-483c9bc558bmr213622465e9.24.1772466102970;
+ Mon, 02 Mar 2026 07:41:42 -0800 (PST)
+Date: Mon, 2 Mar 2026 15:41:42 +0000
+In-Reply-To: <5f8dcb7f-9e4f-4484-b160-3a9ce541d63c@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <789af3df-291c-410d-89d8-ee7b12479798@linux.dev>
+Mime-Version: 1.0
+References: <20260227200848.114019-1-david@kernel.org> <20260227200848.114019-3-david@kernel.org>
+ <aaLh2BxSgC9Jl5iS@google.com> <8a27e9ac-2025-4724-a46d-0a7c90894ba7@kernel.org>
+ <aaVf5gv4XjV6Ddt-@google.com> <f2f3a8a1-3dbf-4ef9-a89a-a6ec20791d1c@kernel.org>
+ <aaVnifbdxKhBddQp@google.com> <5f8dcb7f-9e4f-4484-b160-3a9ce541d63c@kernel.org>
+Message-ID: <aaWvtn48X8UizaaN@google.com>
+Subject: Re: [PATCH v1 02/16] mm/memory: remove "zap_details" parameter from zap_page_range_single()
+From: Alice Ryhl <aliceryhl@google.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: linux-kernel@vger.kernel.org, 
+	"linux-mm @ kvack . org" <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, David Rientjes <rientjes@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=" <arve@android.com>, Todd Kjos <tkjos@android.com>, 
+	Christian Brauner <brauner@kernel.org>, Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>, 
+	H Hartley Sweeten <hsweeten@visionengravers.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Dimitri Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
+	linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-Ihor,
-
-On Fri, Feb 20, 2026 at 08:23:51PM -0800, Ihor Solodrai wrote:
-> 
-> 
-> On 2/20/26 2:57 PM, bot+bpf-ci@kernel.org wrote:
-> >> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-> >> index 1733a6e93a07..ef083602b73a 100644
-> >> --- a/tools/bpf/resolve_btfids/Makefile
-> >> +++ b/tools/bpf/resolve_btfids/Makefile
-> >> @@ -65,6 +65,9 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
-> >>  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
-> >>  LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+On Mon, Mar 02, 2026 at 04:01:44PM +0100, David Hildenbrand (Arm) wrote:
+> On 3/2/26 11:33, Alice Ryhl wrote:
+> > On Mon, Mar 02, 2026 at 11:27:40AM +0100, David Hildenbrand (Arm) wrote:
+> >> On 3/2/26 11:01, Alice Ryhl wrote:
+> >>>
+> >>> Well, rustfmt comes with the compiler, and it would be ideal to build
+> >>> test changes before sending them :)
 > >>
-> >> +ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
-> >> +ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null || echo -lzstd)
+> >> At least on Ubuntu on my notebook where I do most of the coding+patch
+> >> submissions it's a separate package?
+> >>
+> >> I do all my builds on a different (more powerful) machine where the
+> >> whole rust machinery's in place. Further, build bots that run on my
+> >> private branches did not report any issues.
 > > 
-> > The "|| echo -lzstd" fallback makes zstd an unconditional link
-> > dependency. On systems where libzstd-dev is not installed, pkg-config
-> > fails and the fallback provides -lzstd, but the linker cannot find the
-> > library and the build fails.
+> > There are some build bots that check for rustfmt, though not all of
+> > them.
 > > 
-> > bpftool handles the same transitive dependency conditionally via a
-> > feature test:
+> >>> But no worries, I took care of testing it. Thanks for taking the time to
+> >>> update the Rust code as well.
+> >>
+> >> I just did an allyesconfig and it does not report any warnings.
+> >>
+> >> So apparently, rustfmt problems not result in the compiler complaining?
+> >>
+> >> Or something else is off here that rust/kernel/mm/virt.rs won't get
+> >> compiled on my machine, even with allyesconfig. I can definitely see
+> >> some RUSTC stuff happening in the logs, like
+> >>
+> >> 	RUSTC L rust/kernel.o
+> >>
+> >> Thanks for the review and for pointing out rustfmt!
 > > 
-> > tools/bpf/bpftool/Makefile:
-> >     ifeq ($(feature-libelf-zstd),1)
-> >     LIBS += -lzstd
-> >     LIBS_BOOTSTRAP += -lzstd
-> >     endif
-> > 
-> > Would it be safer to drop the fallback here so ZSTD_LIBS is empty
-> > when zstd is not available?
-> > 
-> >     ZSTD_LIBS := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null)
-> > 
-> > This would still link zstd when present (needed for the static linking
-> > case where libelf.a pulls in ZSTD symbols from elf_compress.o), but
-> > avoid breaking dynamic builds on systems without libzstd-dev.
+> > Similar to kerneldoc and other similar targets, formatting isn't checked
+> > in the normal build, but make can be invoked on the rustfmtcheck target
+> > to check it.
 > 
-> I tried to reproduce the situation like follows:
-> 
->   $ git remote -v
->   origin	git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git (fetch)
->   origin	git://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git (push)
-> 
->   $ git log --oneline -n1
->   8bf22c33e7a1 (HEAD -> master, origin/master, origin/HEAD) Merge tag 'net-7.0-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net
-> 
->   $ b4 shazam 20260220182011.802116-1-ihor.solodrai@linux.dev   # apply strscpy series
->   $ b4 shazam 20260220222604.1155148-1-ihor.solodrai@linux.dev  # apply ASAN series
-> 
->   $ podman pull debian:latest
->   $ podman run -it --rm -v $(pwd):/linux debian:latest /bin/bash
-> 
->   # in the container
->   $ apt update -y && apt install -y make gcc python3 libelf-dev
->   # note: no libzstd-dev
-> 
->   $ cd /linux/tools/bpf/resolve_btfids/
->   $ make -j8
->   # build is successful
-> 
->   $ ldd resolve_btfids
-> 	linux-vdso.so.1 (0x00007f3eecc81000)
-> 	libelf.so.1 => /lib/x86_64-linux-gnu/libelf.so.1 (0x00007f3eecbe2000)
-> 	libz.so.1 => /lib/x86_64-linux-gnu/libz.so.1 (0x00007f3eecbc2000)
-> 	libc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x00007f3eec9cd000)
-> 	libzstd.so.1 => /lib/x86_64-linux-gnu/libzstd.so.1 (0x00007f3eec903000)
-> 	/lib64/ld-linux-x86-64.so.2 (0x00007f3eecc83000)
-> 
-> 
-> So, while AI may be technically correct that the build will fail if
-> libelf is installed and libzstd is not, it seems a far-fetched
-> situation, given that libelf depends on libzstd.
+> Thanks adding that to my cross-compile chain.
 
-This is not far-fetched, and we have build failure for v7.0-rc2 due to
-this.
+Awesome, thanks!
 
-  ld: cannot find -lzstd: No such file or directory
+It's not relevant in this patch, but another thing that may be useful is
+to add CLIPPY=1 to the make invocation when building normally. This
+causes additional warnings to be checked using a tool called clippy.
 
-Even though libelf is linked with libzstd, this does not imply
-libzstd-devel (with headers and so library) is there when building.
-
-Thanks,
-
-> 
-> I think we can leave the default -lzstd to have an explicit
-> dependency in the Makefile.
-> 
-> 
-> > 
-> > [ ... ]
-> > 
-> > 
-> > ---
-> > AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> > See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> > 
-> > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22243753316
-> > 
-> > AI-authorship-score: low
-> > AI-authorship-explanation: Human-characteristic typo in commit message, natural lore discussion with incremental debugging, and standard Makefile pattern reuse all indicate human authorship.
-> > issues-found: 1
-> > issue-severity-score: low
-> > issue-severity-explanation: Unconditional zstd link fallback in resolve_btfids Makefile can break builds on systems without libzstd-dev, but the affected scenario is narrow and limited to the selftests build system.
-> 
+Alice
