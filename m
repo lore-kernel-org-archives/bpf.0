@@ -1,109 +1,135 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4063D1F1932;
-	Mon,  2 Mar 2026 09:46:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5776392C2D
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 10:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772444802; cv=none; b=B6p+db+pHjaL8+Xxau3rQPHPAgFNPrPBXv3F7OVUmclGfXrvpWWNYoHK2rhvOzlA+EQRNrcAzaQjkCFokQq6AKgJHoQIDEHnocSsFlB+vFo+Wy0c1oDgHE3H3AoFmFy+PnTZsbT4QeraEU4yKGD3cQYS+AhCj+EEDXgCGtQQQJ0=
+	t=1772445675; cv=none; b=MBuVgux7K+jy2RWdK3kEC/RH9ikraVNyRdtPqYa9tNlRdOPwtsW1MB5v5+/jtwi6imkKtmdrh3zrq+5ZPFn9x4qUKAOHqe9NQr9rw+zzyL7Ze88tzbCnjrKOY4nbROnJ/fjiQBOAE826bDxJIjpstehXNK14uybe5GIUKnV1fv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772444802; c=relaxed/simple;
-	bh=8wFnx3X4NMytZXbi1Mnp6003sE19tT03Vwn1QWGE/uY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q340G3OibYjNJHmRu97BhCbIj65J6Rq4DPqh72VbXkN1h3ovHdLxlI93/I83oVbkLnkuxR23XSyWC/xnHEBA4U28bO3W67Hg9JgkNOxXLYcgi42AfXn0Wek59U1bvKFrt10d1Z7/4imiMJIKGddeM7pNxt/w49ekw3/1a5mLRrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qlHx7zde; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772445675; c=relaxed/simple;
+	bh=XcDBiF+tm+FToq8gICWmU+m/nRh9Ny7buWewqeSSE5s=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=sUNRtkBRF7quAylRkJDJsCWMenZDNMjP3voZh/dljqtafnC7dTSbqMxexQlu6DlhMj1UAOmU3VYZjFRt1pN2DSmBP6cYSWguMuZ9mf9Yu4xlgV666Kh5Hc26moT7GpjGhN/Gwg8SCvSm+Ker/r7SkKb1lbbdHvZSbSru362p5GM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pKcMeK5z; arc=none smtp.client-ip=209.85.128.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qlHx7zde"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 423A6C19423;
-	Mon,  2 Mar 2026 09:46:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772444801;
-	bh=8wFnx3X4NMytZXbi1Mnp6003sE19tT03Vwn1QWGE/uY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qlHx7zdeQ/hBJTs6DoMfuclnuE7usfSzVkHN2qMzfRttktKjdSC6uPjYMwVduF9Xb
-	 gemQV9HWAfbzfCOwpxYx5urx2++PFZJB1kmrPqWVPTcWl9aVLQI/6CMdyQjdDAvmRz
-	 8X4u2jBKOaNsfttvy5Sd4mh8J8xRW5yTlT5MR6PnbpU9cRv0qNhDBh4NLbU8XereEu
-	 5HUXp4PftYXfpIX6ZnhFYH52qV+LFwb+dq3E9tKcz7wf1iKEgh+GzC7V2TA7c9EmdR
-	 P7jFLmAC5aszbn1J0/4Y7Ibh8invYfciKq3qp8Sbr7vIqFP9vk949Mkv5pWjVUUFd4
-	 +HaULYgIpdVjw==
-Date: Mon, 2 Mar 2026 10:46:36 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Song Liu <song@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Tejun Heo <tj@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	bpf@vger.kernel.org, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	Lennart Poettering <lennart@poettering.net>
-Subject: Re: [PATCH 1/4] ns: add bpf hooks
-Message-ID: <20260302-begehbar-kanister-9801d1198abf@brauner>
-References: <20260220-work-bpf-namespace-v1-0-866207db7b83@kernel.org>
- <20260220-work-bpf-namespace-v1-1-866207db7b83@kernel.org>
- <CAPhsuW63sEvK50ELaxo4LxjCS-2RdfxDzuMYhW59PDUHfF0-iQ@mail.gmail.com>
- <20260227-nullnummer-eisdiele-08db4c8fe99e@brauner>
- <CAPhsuW5GCK02OXvFeNQVW-QoX9eJ7CyiT=oEDsCYyht-Hve3sQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pKcMeK5z"
+Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4837f288194so31086145e9.2
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 02:01:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1772445672; x=1773050472; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tjS8FX592qmj/rFkafjn+lojx6cnlsSGWxK3ppaLTGU=;
+        b=pKcMeK5zFCeuyEDqN9uC2KaA70X8zgbgjnqAslsyyaFYEXtkS9V6COy+BZIyCzxSmQ
+         pOEovWK8dwfeI8hGnwiaqcOR0b2SAyvlou6AEigYeorhF6m2bin/+hJiFLV9gNI5yJ9X
+         5VbDb+pbUiHmxG/B6jxauf6w66cmYQoGlfDcBBhNz9g73G6Xfxxfk2cqgDlaiRQTKaSH
+         2TMAEi4ATjIBTiC2y3HnwO5ZQIREWjEyEayiTutzK8+3fCDcwXrIjy29bqj+MgfJewS+
+         TQdyTuXurfVHvukuPqLt4qL+/V7ElyQD1yki55tyknaGoKa4sg5MjKF7WPiUKOM217sF
+         9gCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772445672; x=1773050472;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tjS8FX592qmj/rFkafjn+lojx6cnlsSGWxK3ppaLTGU=;
+        b=Droar1czX1Ql/MnCsQ6lVZEx9pVwFKjx4ArUfeBKlHh6NIqNzaTBBqrqETOiGpO9nm
+         5M80TLtVXxlDgqfvNu/C2QXlhyQbF3hOD9U9s8xTgS0hcrrGpF+u2NcA1ZOTajuIIPSA
+         zP5UX4jHG3cudnJfzbgzlINvgbU7pDDhy+3UqJnS2dRVu0V153aadmEuNUuhg8ybjVLx
+         Duc9zZCqCVfK5qxloZGw2JZtMd7ubolSR6EJvqZ7xpw1XtKXODGjwZSlUWzdsnSrxWBQ
+         ut5HgUFPGcxCiGBm8K3bvxvetGhBI3dOiHUMp9K9YEWhA6ApDBjo+tnhJ/6JwT4LTZK9
+         3U2A==
+X-Forwarded-Encrypted: i=1; AJvYcCWPwK5r6bT6zNhj3nonQ5td2VAr4NPLLzvnoV8z2n5kK03pcaJADvG/7J+jP1fNM89JW24=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynFFxCdge7QIjtP5CpBp6CVDN9AZsXztLdgJwiHBuIeqAsgbBl
+	cHEeNYKRIo3+tD3UNPouvsV5/oQeTmg1EkGQaX4EN5weWK4VxDUXk00ulg8lKE6wryNQybnmfHG
+	7IXA8/a0Ze++WwNAOXQ==
+X-Received: from wmbg9.prod.google.com ([2002:a05:600c:a409:b0:483:7827:ade4])
+ (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:600c:3110:b0:480:2521:4d92 with SMTP id 5b1f17b1804b1-483c9c23ffbmr196674855e9.24.1772445671732;
+ Mon, 02 Mar 2026 02:01:11 -0800 (PST)
+Date: Mon, 2 Mar 2026 10:01:10 +0000
+In-Reply-To: <8a27e9ac-2025-4724-a46d-0a7c90894ba7@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPhsuW5GCK02OXvFeNQVW-QoX9eJ7CyiT=oEDsCYyht-Hve3sQ@mail.gmail.com>
+Mime-Version: 1.0
+References: <20260227200848.114019-1-david@kernel.org> <20260227200848.114019-3-david@kernel.org>
+ <aaLh2BxSgC9Jl5iS@google.com> <8a27e9ac-2025-4724-a46d-0a7c90894ba7@kernel.org>
+Message-ID: <aaVf5gv4XjV6Ddt-@google.com>
+Subject: Re: [PATCH v1 02/16] mm/memory: remove "zap_details" parameter from zap_page_range_single()
+From: Alice Ryhl <aliceryhl@google.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: linux-kernel@vger.kernel.org, 
+	"linux-mm @ kvack . org" <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
+	Pedro Falcato <pfalcato@suse.de>, David Rientjes <rientjes@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=" <arve@android.com>, Todd Kjos <tkjos@android.com>, 
+	Christian Brauner <brauner@kernel.org>, Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>, 
+	H Hartley Sweeten <hsweeten@visionengravers.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
+	Dimitri Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Eric Dumazet <edumazet@google.com>, 
+	Neal Cardwell <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
+	linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org, 
+	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, Feb 27, 2026 at 08:38:48AM -0800, Song Liu wrote:
-> On Fri, Feb 27, 2026 at 2:28 AM Christian Brauner <brauner@kernel.org> wrote:
-> [...]
-> > >
-> > > If we change the hook as
-> > >
-> > >    bpf_lsm_namespace_alloc(ns, inum);
-> > >
-> > > We can move it to the beginning of __ns_common_init().
-> > > This change allows blocking __ns_common_init() before
-> > > it makes any changes to the ns. Is this a better approach?
-> >
-> > I don't think it matters tbh. We have no control when exactly
-> > __ns_common_init() is called. That's up to the containing namespace. We
-> > can't rely on the namespace to have been correctly set up at this time.
-> > My main goal was to have struct ns_common to be fully initialized
-> > already so that direct access to it's field already makes sense.
+On Mon, Mar 02, 2026 at 09:18:45AM +0100, David Hildenbrand (Arm) wrote:
+> On 2/28/26 13:38, Alice Ryhl wrote:
+> > On Fri, Feb 27, 2026 at 09:08:33PM +0100, David Hildenbrand (Arm) wrote:
+> >> Nobody except memory.c should really set that parameter to non-NULL. So
+> >> let's just drop it and make unmap_mapping_range_vma() use
+> >> zap_page_range_single_batched() instead.
+> >>
+> >> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+> > 
+> >> diff --git a/rust/kernel/mm/virt.rs b/rust/kernel/mm/virt.rs
+> >> index da21d65ccd20..b8e59e4420f3 100644
+> >> --- a/rust/kernel/mm/virt.rs
+> >> +++ b/rust/kernel/mm/virt.rs
+> >> @@ -124,7 +124,7 @@ pub fn zap_page_range_single(&self, address: usize, size: usize) {
+> >>          // sufficient for this method call. This method has no requirements on the vma flags. The
+> >>          // address range is checked to be within the vma.
+> >>          unsafe {
+> >> -            bindings::zap_page_range_single(self.as_ptr(), address, size, core::ptr::null_mut())
+> >> +            bindings::zap_page_range_single(self.as_ptr(), address, size)
+> >>          };
+> > 
+> > Please run rustfmt on Rust changes. Here, rustfmt leads to this being
+> > formatted on a single line:
 > 
-> Good point on having ns_common initialized. Besides inum, we
-> should also pass ns_type and ops into the hook.
+> Having to run tooling I don't even have installed when removing a single
+> function parameter; did not expect that :)
 
-But why? The struct ns_common is already fully initialized when it is
-passed to bpf_lsm_namespace_alloc() including ops, inum, ns_type etc.
+Well, rustfmt comes with the compiler, and it would be ideal to build
+test changes before sending them :)
 
-> 
-> OTOH, shall we have the hook before proc_alloc_inum()? With
-> this change, the hook can block the operation before it causes
-> any contention on proc_inum_ida. IOW, how about we have:
+But no worries, I took care of testing it. Thanks for taking the time to
+update the Rust code as well.
 
-I think that contention is meaningless and I'd rather have struct
-ns_common fully set up so that all fields can be accessed.
+Documentation/rust/quick-start.rst has details for most distros.
 
-> 
-> @@ -71,6 +71,10 @@ int __ns_common_init(struct ns_common *ns, u32
-> ns_type, const struct proc_ns_ope
->         ns_debug(ns, ops);
->  #endif
-> 
-> +       ret = bpf_lsm_namespace_alloc(ns, inum);
-> +       if (ret)
-> +               return ret;
-> +
->         if (inum)
->                 ns->inum = inum;
->         else
-> 
-> With this change, ns is already initialized, except the inum.
-> 
-> WDYT?
-> 
-> Thanks,
-> Song
-> 
-> > The containing namespace my already have to rollback a bunch of stuff
-> > anyway.
+Alice
