@@ -1,145 +1,120 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1220F332916
-	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 10:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3C5C350A1F;
+	Mon,  2 Mar 2026 10:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772447631; cv=none; b=oFM1TujBJzJ56sGJxU6ToOT1AyAKeoE7CbMD2hsedHBA7EC+Z68yteSsJQsSdEeieUwCIH0ud9wfvBkH8NdJAtj9r55WhJRjd/4UZsrX+K6gO2hcT4fs4j5SieqoCnECwLAU4rVFF4MjxOG18OtOqF0Pd9vj/eG06pBPKIcmT1A=
+	t=1772448403; cv=none; b=FnKM1nC/cPzJtma+6XPkilSI2ZZURMC7GsCBSb7A9hothC786mBC2rXVPGC+1yh2VJXYGh1Go48lbOHZW+Di+5cv4fDyx8acxKj94tqDLgUMCCHT2PHw6gwUYevcJxvYUAdfNY/w6Xf5kO+yMvo+49KsGbIg5M5lHaKq8a8Rdzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772447631; c=relaxed/simple;
-	bh=QEn+El7Z+bL/DWqeCCzlYqCfrkxihEN+xIGAxOA2r98=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tjKDFGip67IkJYM0LPTLEKGtXbf8d/+r9pf+PP6QiBtiATrHLF3EwmuZkBRrqRtjOabCcxm80F3MgXOXMTi/aELXQ747TfnsaMT//lVVGC+XwZdiaQACz3PB7nzIX/SJS3Vsbj6FxHjpCmflEaz4W4DxAgQmIpxHf9mNrasKwEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rq4xdrlu; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1772448403; c=relaxed/simple;
+	bh=mRfUlHrS586k2FuQiBvSGHu6OuLzbXNHA5neBpISxiM=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=tTpUPS6P1USHXlzY2CBvOYyVqRV2bXTxb9tzYCJpCM1Qu98nWx/XZcqEfARrgT6cJh9zDEmphVQVLkJYSOHdTh9dM8MYLH0/uV5voBkmYOC6nMEpdHCeb6AILJwjBObxm8+8QP9A/cm43wVadC+cHJgkGH3nMU+TVFjBeJrcuhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WQQLhZbo; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rq4xdrlu"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4836bf1a920so45032815e9.3
-        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 02:33:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772447626; x=1773052426; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EnMgJMcaQgCDj7i00Uawlj/G1rJtXPwe1sCLwvhoFHI=;
-        b=rq4xdrlutDZNzchgca2LpBR52y6AVtdV4PS2i7Okgss3v9KH1sO1XKDitIIPzPn/hI
-         IIqBvmSXgRGHTGiuZ2XWX5Pua3XkiI1cc6lsjEoJf15THOIKyZkqFuCYgr+6DkhGcWbq
-         zmNhmcRRpDjeE4c/lOsqWaUl7ccq5LIpH087AwRE7M6mp8jAvMMQTC0dLUrRHa5N6j+y
-         qnQVaZXoQ+z5FqKmO3oODPKlACGy9IKYFof51fLeqJh/4dwg7jhlPr9QlqoUYGSz8FbL
-         yQAzPFa8B5RV1degHbdqhI7/iD092kEARW9Nm78z08vqGCxZw109+IAio3IZyqGc1FDw
-         0tZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772447626; x=1773052426;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EnMgJMcaQgCDj7i00Uawlj/G1rJtXPwe1sCLwvhoFHI=;
-        b=jSIOtZoSjUjjpXMeYEs9zP+IfioML7sk3lqeMHq2y7UNpM4BcxSqsCQSMOBgynZ4iT
-         bVZHUFaNPiS7vRxpzE+VG35OPrX2s1Ox08pzEP/As6gHW4ERjc/vA5f/aHVA6W47wSmc
-         ZgMTV+aoEGbtFjZxMRTycnp8ss/2WyBojjFAAA4SliOhsrMLu/Ht7QFZPnQNXIhQhfkV
-         IkhB0UsMB5qZT7btn0jNj7MkeYP4/3/wbb0MY/uwIkmBUGNfaVlrTTE31awovFnPhoec
-         /1Qe8Pbo7+NzQ1rBfa+xhqv5BYsq+Qf4Jmnlb4/wICY0c3OcywE0tPU0c0cYYGl2M/uy
-         elnA==
-X-Forwarded-Encrypted: i=1; AJvYcCXKmGdU0bUXKXQ1s0xdmZVZ62jRpvWFvMYe8IpwlRmxp5Jes312Sp4UzNaMD1+iFZM8PYw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz573Xcefk146z6UQRexbGc2zXfARrx8L5ctmAP0CF7QXtALlsZ
-	bkXWa4XXf3wnrcfKmD5uthZWHclu2K6tnOrrKGm5RnQyQ6gIJwxIY7uJhLvz6tnroYZH4bdCGBB
-	0WwB+R26vXUtmUpivtQ==
-X-Received: from wmdd1.prod.google.com ([2002:a05:600c:a201:b0:480:3227:a124])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:6383:b0:47d:3ead:7440 with SMTP id 5b1f17b1804b1-483c9bdb683mr186031315e9.32.1772447625915;
- Mon, 02 Mar 2026 02:33:45 -0800 (PST)
-Date: Mon, 2 Mar 2026 10:33:45 +0000
-In-Reply-To: <f2f3a8a1-3dbf-4ef9-a89a-a6ec20791d1c@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WQQLhZbo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30A53C19423;
+	Mon,  2 Mar 2026 10:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772448403;
+	bh=mRfUlHrS586k2FuQiBvSGHu6OuLzbXNHA5neBpISxiM=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=WQQLhZbo0Xgxn3IvHIU9hbySnqnUuWRbCx+Ts3KIxJM3/gYsRP1Tx9d6jBg2X++Eb
+	 eEMPO0rmguDM3XcBAXTmPyVTv2GxPAwxs0zInEwUXLTsRpA78uCMFLLS4mdufL3+bf
+	 osUSeG54d8M3Ecsn8FUdHGq6EKh+/jdULGbOIFoV2+BkvfHxcE88yvzmw8bzA/RsCS
+	 gscgRxbD/HcRfAkA+Ypxpgzwso5ulC1WmeIFSV9C8c22AOMKAQheH6258IfGXamQsC
+	 1p2LldK+SFZITq0rKRIo8UGCGOwggtZZzO6zF7ezKSEBLNu+5wUtjHvQ7LUDCYwWzo
+	 abiDzpTxQqJjA==
+Content-Type: multipart/mixed; boundary="===============2186911870242448320=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260227200848.114019-1-david@kernel.org> <20260227200848.114019-3-david@kernel.org>
- <aaLh2BxSgC9Jl5iS@google.com> <8a27e9ac-2025-4724-a46d-0a7c90894ba7@kernel.org>
- <aaVf5gv4XjV6Ddt-@google.com> <f2f3a8a1-3dbf-4ef9-a89a-a6ec20791d1c@kernel.org>
-Message-ID: <aaVnifbdxKhBddQp@google.com>
-Subject: Re: [PATCH v1 02/16] mm/memory: remove "zap_details" parameter from zap_page_range_single()
-From: Alice Ryhl <aliceryhl@google.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: linux-kernel@vger.kernel.org, 
-	"linux-mm @ kvack . org" <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
-	Pedro Falcato <pfalcato@suse.de>, David Rientjes <rientjes@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=" <arve@android.com>, Todd Kjos <tkjos@android.com>, 
-	Christian Brauner <brauner@kernel.org>, Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>, 
-	H Hartley Sweeten <hsweeten@visionengravers.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Dimitri Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Message-Id: <cae8a7cfe54f2f1f66bde10df2026eb2c1076998bef9e483b513abd3bb5722c3@mail.kernel.org>
+In-Reply-To: <20260302102726.1126019-2-xukuohai@huaweicloud.com>
+References: <20260302102726.1126019-2-xukuohai@huaweicloud.com>
+Subject: Re: [PATCH bpf-next v5 1/5] bpf: Move JIT for single-subprog programs to verifier
+From: bot+bpf-ci@kernel.org
+To: xukuohai@huaweicloud.com,bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-arm-kernel@lists.infradead.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,yonghong.song@linux.dev,puranjay@kernel.org,a.s.protopopov@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  2 Mar 2026 10:46:43 +0000 (UTC)
 
-On Mon, Mar 02, 2026 at 11:27:40AM +0100, David Hildenbrand (Arm) wrote:
-> On 3/2/26 11:01, Alice Ryhl wrote:
-> > On Mon, Mar 02, 2026 at 09:18:45AM +0100, David Hildenbrand (Arm) wrote:
-> >> On 2/28/26 13:38, Alice Ryhl wrote:
-> >>>
-> >>>
-> >>> Please run rustfmt on Rust changes. Here, rustfmt leads to this being
-> >>> formatted on a single line:
-> >>
-> >> Having to run tooling I don't even have installed when removing a single
-> >> function parameter; did not expect that :)
-> > 
-> > Well, rustfmt comes with the compiler, and it would be ideal to build
-> > test changes before sending them :)
-> 
-> At least on Ubuntu on my notebook where I do most of the coding+patch
-> submissions it's a separate package?
-> 
-> I do all my builds on a different (more powerful) machine where the
-> whole rust machinery's in place. Further, build bots that run on my
-> private branches did not report any issues.
+--===============2186911870242448320==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-There are some build bots that check for rustfmt, though not all of
-them.
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fc4ccd1de569..ab2bc0850770 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -26086,6 +26086,11 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+>  		convert_pseudo_ld_imm64(env);
+>  	}
+>
+> +	/* constants blinding in the JIT may increase prog->len */
+> +	len = env->prog->len;
+> +	if (env->subprog_cnt == 1)
+> +		env->prog = bpf_prog_select_jit(env->prog, &ret);
+> +
+>  	adjust_btf_func(env);
+>
+>  err_release_maps:
 
-> > But no worries, I took care of testing it. Thanks for taking the time to
-> > update the Rust code as well.
-> 
-> I just did an allyesconfig and it does not report any warnings.
-> 
-> So apparently, rustfmt problems not result in the compiler complaining?
-> 
-> Or something else is off here that rust/kernel/mm/virt.rs won't get
-> compiled on my machine, even with allyesconfig. I can definitely see
-> some RUSTC stuff happening in the logs, like
-> 
-> 	RUSTC L rust/kernel.o
-> 
-> Thanks for the review and for pointing out rustfmt!
+[ ... ]
 
-Similar to kerneldoc and other similar targets, formatting isn't checked
-in the normal build, but make can be invoked on the rustfmtcheck target
-to check it.
+> @@ -26111,7 +26116,7 @@ int bpf_check(struct bpf_prog **prog, union bpf_attr *attr, bpfptr_t uattr, __u3
+>  err_unlock:
+>  	if (!is_priv)
+>  		mutex_unlock(&bpf_verifier_lock);
+> -	clear_insn_aux_data(env, 0, env->prog->len);
+> +	clear_insn_aux_data(env, 0, len);
+>  	vfree(env->insn_aux_data);
 
-Alice
+Can the len variable be stale when reaching clear_insn_aux_data()
+through an error path?
+
+At the top of bpf_check(), len is first assigned as:
+
+    len = (*prog)->len;
+
+This original value is used to allocate insn_aux_data. Later,
+instruction rewriting passes like convert_ctx_accesses() and
+do_misc_fixups() can change env->prog->len and resize
+insn_aux_data to match via bpf_patch_insn_data().
+
+The second assignment added by this patch:
+
+    len = env->prog->len;
+
+is only reached on the success path, after all instruction
+rewriting and after the maps/btfs allocation. If an error occurs
+between the rewriting passes and this reassignment, for example
+bpf_vlog_finalize() returning an error, copy_to_bpfptr_offset()
+failing, or kmalloc for used_maps/used_btfs failing, the code
+jumps to err_release_maps and eventually reaches
+clear_insn_aux_data(env, 0, len) with the original program length
+rather than the current post-rewriting length.
+
+If rewriting increased env->prog->len (the common case for
+programs with context accesses), the iteration stops short of
+the actual insn_aux_data size, potentially leaking jt fields in
+the unvisited entries.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22571297111
+
+AI-authorship-score: low
+AI-authorship-explanation: Standard kernel refactoring by a known BPF contributor with non-native English patterns in the commit message.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: Stale len variable in bpf_check error paths can cause insn_aux_data jt field memory leaks when instruction rewriting changed prog->len before an error between rewriting and the len reassignment.
+
+--===============2186911870242448320==--
