@@ -1,51 +1,51 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF34042F543;
-	Mon,  2 Mar 2026 16:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82C3542F55D;
+	Mon,  2 Mar 2026 16:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772470190; cv=none; b=Fli1ePHkQQbHIDV4df1jFT87AIQE5ULcZWdOwqOuL1u2x7vpJAr4r3Lk3HveXxGquaJvRsoBSAvnJqWiuBHi719iAPPwHRIp9OmhmtMYeXa/6lVmdnBXeTVjuyB0tCLf/zLhhUMl3gsHYcH29dvY3opyBzcAIoWRrUrzarLTwxI=
+	t=1772470194; cv=none; b=qThes9Tb2/c/z1V7Sf59+S5DHbMwpQw6LeY7p+30g0JeEmUQqD8ty9E4KjoruPPc8i5UFE9l7hhUlkYVQ/i8xnNr1Cwvr6sAhzdBQKLK3Uuhlg7Zpy162RphbO5YsbaG6Fa9iG+8oVWPe7s/ZpD5KENDNvcqxBWRY0YWgis4Jr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772470190; c=relaxed/simple;
-	bh=srGfWqzOgOXsB5J9nVetuXI137SO4keXEnnAar/4AWw=;
+	s=arc-20240116; t=1772470194; c=relaxed/simple;
+	bh=TZEXOfIR3nqd7pS9W9oFFIwS02GXdOuLJMeGp51CQyU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZgrRT1QCZbHDj3ltV/2dmw+1j6GBa17CRBWwkC854cGpKsmE4aKPz2c+D73ER0mM/TVBeG1FRSruScd4FsGUIqrY/YL9KJjeIwaFzf7ZxBppICaJ2R/WNFAAehYl4mleuUGmYOMw7qwVUo1h62fK6omklQA/Ypo2CeR8H4ihsVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MCG93sgd; arc=none smtp.client-ip=192.198.163.13
+	 MIME-Version; b=Byt/Dv2oZuUxaeRzxaDzraiNNMmbAO+j/kAdwdxSASrusWjycyqIInoXPAfd+6jqsz6ebDL1h/uqstx+PL99UzBz1CrC2L52o3XAubaRXpKr2rtKDr4ECRmTC0ntvLGmZheVygmln+72N+4T6CC5uqKDVjr8BJeIP2ZMPwkw9Hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iyTVbwHy; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MCG93sgd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iyTVbwHy"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772470189; x=1804006189;
+  t=1772470193; x=1804006193;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=srGfWqzOgOXsB5J9nVetuXI137SO4keXEnnAar/4AWw=;
-  b=MCG93sgdAvCX8djoI3KfTIfzJC8meP+nYVALC0kshvGjc709uC32uAdA
-   uaQTiIzCR0UGMHdoS9K3SViDjgPGVwtExvNfNhz3yrP6uHEzuFk4Llwq4
-   esbko/SMUV8JIlfKaMPLOyILnqNNdDwuNL6h2PA9rod/TpAFEJHmvAgcW
-   e7yRtKa/SVLUKWUj1PzoaZJjbT08j1aT5tjpjzuJ9xZiqBf1H3lF1ux6z
-   sFL9GAGZ/whl5CG8a43CtvoZ9y6U2ibHMZSrrWKCOZYhDK5/BeVlQOUCg
-   tAoD0zO7DzYD4sNdRTkTG07xumF9xvV0hD4rEPboP26lzSIIbNqnU2/5t
-   g==;
-X-CSE-ConnectionGUID: eYqwVbk3ReaytleDB0gSiQ==
-X-CSE-MsgGUID: 8fmh92LISS20jRD5MqpQNg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="76087647"
+  bh=TZEXOfIR3nqd7pS9W9oFFIwS02GXdOuLJMeGp51CQyU=;
+  b=iyTVbwHys7c9V1AqylHQoVo4gQ/o4ZyyVHPNVAcvOwOaBk+fKgjko2JC
+   cavy/s/tW8Gz762U5o4STpRpHLVbL0uBbPkvmG+0F6JStnaM0JNm4vSiM
+   R0V0b/7gBwL3R5LdphLFc7prV5id+l7O0Sxdsok2ZMdslsg7ngDrJhcPi
+   xegGJd44WR7HIJAdo82DCmZ1/+Nrs1ehMKuzsW8OP4Bn9faZa+fJibTsP
+   +8lR49gNRRIM9ssgzF7o21TO/3zeeT1+rboV8mt1VbYaNUB7s1YXkjMvn
+   2WUvq1d5J7pWtDi+3fNjeGpa9EO/cWGLcK9OllaCbsMfeVshdKLBRsdnH
+   w==;
+X-CSE-ConnectionGUID: PHnmi9oNTmmfQRMtwgLmFw==
+X-CSE-MsgGUID: 1MtI3pUUQ8+a5ZrZz9KhKg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="76087676"
 X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
-   d="scan'208";a="76087647"
+   d="scan'208";a="76087676"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 08:49:48 -0800
-X-CSE-ConnectionGUID: 5gGNQrJ+R4qwgOfZEfzqCQ==
-X-CSE-MsgGUID: cM+9KMr4R7i/0c72Npdcrw==
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 08:49:52 -0800
+X-CSE-ConnectionGUID: SJ98PHtbQK+U+SbsOuJfjw==
+X-CSE-MsgGUID: CN47PHg/Sheu276XK0vF/g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
-   d="scan'208";a="216946953"
+   d="scan'208";a="216947054"
 Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orviesa010.jf.intel.com with ESMTP; 02 Mar 2026 08:49:40 -0800
+  by orviesa010.jf.intel.com with ESMTP; 02 Mar 2026 08:49:44 -0800
 Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 13385312C7;
-	Mon,  2 Mar 2026 16:49:37 +0000 (GMT)
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id E6C7F312CB;
+	Mon,  2 Mar 2026 16:49:40 +0000 (GMT)
 From: Larysa Zaremba <larysa.zaremba@intel.com>
 To: bpf@vger.kernel.org
 Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
@@ -91,9 +91,9 @@ Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
 	linux-kselftest@vger.kernel.org,
 	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
 	Dragos Tatulea <dtatulea@nvidia.com>
-Subject: [PATCH bpf v4 6/9] i40e: use xdp.frame_sz as XDP RxQ info frag_size
-Date: Mon,  2 Mar 2026 17:17:19 +0100
-Message-ID: <20260302161723.858616-7-larysa.zaremba@intel.com>
+Subject: [PATCH bpf v4 7/9] libeth, idpf: use truesize as XDP RxQ info frag_size
+Date: Mon,  2 Mar 2026 17:17:20 +0100
+Message-ID: <20260302161723.858616-8-larysa.zaremba@intel.com>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260302161723.858616-1-larysa.zaremba@intel.com>
 References: <20260302161723.858616-1-larysa.zaremba@intel.com>
@@ -107,63 +107,93 @@ Content-Transfer-Encoding: 8bit
 
 The only user of frag_size field in XDP RxQ info is
 bpf_xdp_frags_increase_tail(). It clearly expects whole buffer size instead
-of DMA write size. Different assumptions in i40e driver configuration lead
+of DMA write size. Different assumptions in idpf driver configuration lead
 to negative tailroom.
 
-Set frag_size to the same value as frame_sz in shared pages mode, use new
-helper to set frag_size when AF_XDP ZC is active.
+To make it worse, buffer sizes are not actually uniform in idpf when
+splitq is enabled, as there are several buffer queues, so rxq->rx_buf_size
+is meaningless in this case.
 
-Fixes: a045d2f2d03d ("i40e: set xdp_rxq_info::frag_size")
+Use truesize of the first bufq in AF_XDP ZC, as there is only one. Disable
+growing tail for regular splitq.
+
+Fixes: ac8a861f632e ("idpf: prepare structures to support XDP")
 Reviewed-by: Aleksandr Loktionov <aleksandr.loktionov@intel.com>
 Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/intel/idpf/xdp.c   | 6 +++++-
+ drivers/net/ethernet/intel/idpf/xsk.c   | 1 +
+ drivers/net/ethernet/intel/libeth/xsk.c | 1 +
+ include/net/libeth/xsk.h                | 3 +++
+ 4 files changed, 10 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 781ec5aa814b..1ef99ae819df 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -3567,6 +3567,7 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
- 	struct i40e_vsi *vsi = ring->vsi;
- 	u32 chain_len = vsi->back->hw.func_caps.rx_buf_chain_len;
- 	u16 pf_q = vsi->base_queue + ring->queue_index;
-+	u32 xdp_frame_sz = i40e_rx_pg_size(ring) / 2;
- 	struct i40e_hw *hw = &vsi->back->hw;
- 	struct i40e_hmc_obj_rxq rx_ctx;
- 	int err = 0;
-@@ -3585,11 +3586,12 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+diff --git a/drivers/net/ethernet/intel/idpf/xdp.c b/drivers/net/ethernet/intel/idpf/xdp.c
+index 6ac9c6624c2a..cbccd4546768 100644
+--- a/drivers/net/ethernet/intel/idpf/xdp.c
++++ b/drivers/net/ethernet/intel/idpf/xdp.c
+@@ -47,12 +47,16 @@ static int __idpf_xdp_rxq_info_init(struct idpf_rx_queue *rxq, void *arg)
+ {
+ 	const struct idpf_vport *vport = rxq->q_vector->vport;
+ 	const struct idpf_q_vec_rsrc *rsrc;
++	u32 frag_size = 0;
+ 	bool split;
+ 	int err;
  
- 	ring->xsk_pool = i40e_xsk_pool(ring);
- 	if (ring->xsk_pool) {
-+		xdp_frame_sz = xsk_pool_get_rx_frag_step(ring->xsk_pool);
- 		ring->rx_buf_len = xsk_pool_get_rx_frame_size(ring->xsk_pool);
- 		err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
- 					 ring->queue_index,
- 					 ring->q_vector->napi.napi_id,
--					 ring->rx_buf_len);
-+					 xdp_frame_sz);
- 		if (err)
- 			return err;
- 		err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
-@@ -3605,7 +3607,7 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
- 		err = __xdp_rxq_info_reg(&ring->xdp_rxq, ring->netdev,
- 					 ring->queue_index,
- 					 ring->q_vector->napi.napi_id,
--					 ring->rx_buf_len);
-+					 xdp_frame_sz);
- 		if (err)
- 			return err;
- 		err = xdp_rxq_info_reg_mem_model(&ring->xdp_rxq,
-@@ -3616,7 +3618,7 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
- 	}
++	if (idpf_queue_has(XSK, rxq))
++		frag_size = rxq->bufq_sets[0].bufq.truesize;
++
+ 	err = __xdp_rxq_info_reg(&rxq->xdp_rxq, vport->netdev, rxq->idx,
+ 				 rxq->q_vector->napi.napi_id,
+-				 rxq->rx_buf_size);
++				 frag_size);
+ 	if (err)
+ 		return err;
  
- skip:
--	xdp_init_buff(&ring->xdp, i40e_rx_pg_size(ring) / 2, &ring->xdp_rxq);
-+	xdp_init_buff(&ring->xdp, xdp_frame_sz, &ring->xdp_rxq);
+diff --git a/drivers/net/ethernet/intel/idpf/xsk.c b/drivers/net/ethernet/intel/idpf/xsk.c
+index 676cbd80774d..d95d3efdfd36 100644
+--- a/drivers/net/ethernet/intel/idpf/xsk.c
++++ b/drivers/net/ethernet/intel/idpf/xsk.c
+@@ -403,6 +403,7 @@ int idpf_xskfq_init(struct idpf_buf_queue *bufq)
+ 	bufq->pending = fq.pending;
+ 	bufq->thresh = fq.thresh;
+ 	bufq->rx_buf_size = fq.buf_len;
++	bufq->truesize = fq.truesize;
  
- 	rx_ctx.dbuff = DIV_ROUND_UP(ring->rx_buf_len,
- 				    BIT_ULL(I40E_RXQ_CTX_DBUFF_SHIFT));
+ 	if (!idpf_xskfq_refill(bufq))
+ 		netdev_err(bufq->pool->netdev,
+diff --git a/drivers/net/ethernet/intel/libeth/xsk.c b/drivers/net/ethernet/intel/libeth/xsk.c
+index 846e902e31b6..4882951d5c9c 100644
+--- a/drivers/net/ethernet/intel/libeth/xsk.c
++++ b/drivers/net/ethernet/intel/libeth/xsk.c
+@@ -167,6 +167,7 @@ int libeth_xskfq_create(struct libeth_xskfq *fq)
+ 	fq->pending = fq->count;
+ 	fq->thresh = libeth_xdp_queue_threshold(fq->count);
+ 	fq->buf_len = xsk_pool_get_rx_frame_size(fq->pool);
++	fq->truesize = xsk_pool_get_rx_frag_step(fq->pool);
+ 
+ 	return 0;
+ }
+diff --git a/include/net/libeth/xsk.h b/include/net/libeth/xsk.h
+index 481a7b28e6f2..82b5d21aae87 100644
+--- a/include/net/libeth/xsk.h
++++ b/include/net/libeth/xsk.h
+@@ -597,6 +597,7 @@ __libeth_xsk_run_pass(struct libeth_xdp_buff *xdp,
+  * @pending: current number of XSkFQEs to refill
+  * @thresh: threshold below which the queue is refilled
+  * @buf_len: HW-writeable length per each buffer
++ * @truesize: step between consecutive buffers, 0 if none exists
+  * @nid: ID of the closest NUMA node with memory
+  */
+ struct libeth_xskfq {
+@@ -614,6 +615,8 @@ struct libeth_xskfq {
+ 	u32			thresh;
+ 
+ 	u32			buf_len;
++	u32			truesize;
++
+ 	int			nid;
+ };
+ 
 -- 
 2.52.0
 
