@@ -1,100 +1,87 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0531A368287;
-	Mon,  2 Mar 2026 13:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8113ED11C;
+	Mon,  2 Mar 2026 13:32:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772458338; cv=none; b=NFiATnheDTet5Yu+WzcbYxz7okSd2ehk5fexdGzM5R6LLKagGqBFH/7s7MNCUq7BKnW15DBSRsTRsPBws/zyo/YWRm/L0QYLuxGlc37EfqZdto+sK+ImNF0JyB1oczY0TC/uXxbIsZ81hmrwtv9m56/rTmbpCRNw9oMiJviB9Gk=
+	t=1772458356; cv=none; b=ry6tllnqMMBcb64Pc+bYD3ZjZMPHf3uzTw/OcdpFNrZ1MhEDrIdzNdPPHoSf1WhMh3+OIauPjEvmM7JOO3OImnfj0/LQ5LlV0JvmT7j0zGSPyb4tmz74LW92qyVDwOiYYhW2/LeVQrxUawbRS47YJ5fV1kGBnCXFISbEK46UgHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772458338; c=relaxed/simple;
-	bh=8kIaLf3/mEO9V4y951FkdiQBN6lWp+r/3tEeh7UwbN8=;
+	s=arc-20240116; t=1772458356; c=relaxed/simple;
+	bh=MMO6QzhJTBpjIamFxQOPnoG0lDTOenIytlKAn/pj/E4=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=MOo4Szd5B3yJobNLFxVgB1z2jYx25Dq4t0PJEizrv6/Pd53e4yhjgKOHqjTH7GpbQjShxxe1T/orteK5jzHPSg2RCoQGjgAZBqcv1uCGv0lZJskr2GTA3REdvskrEpyNUxzATXEgtXNWfR2/+hNyu7h0EwqxDKYQsurCFTkAGG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z/bEBEHM; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=kGVnpRHOJ5g9uDKp/8dLcObeRF3KRaqAECu8g1PgyBPrRRonFsb9YuhUW/ThrGBTEudCJ0QYZ5TUHG7VeioYf3Ie8u9IdWMC0mW6xUErNhxtqdQqu+Q6f8wwlKKD8GQrQvEC4IRwpkD4AH+xTik24qkusez9z5B3kRmikGooHQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fEL+VDLf; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z/bEBEHM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3836AC19423;
-	Mon,  2 Mar 2026 13:32:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fEL+VDLf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F17BBC2BCAF;
+	Mon,  2 Mar 2026 13:32:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772458337;
-	bh=8kIaLf3/mEO9V4y951FkdiQBN6lWp+r/3tEeh7UwbN8=;
+	s=k20201202; t=1772458355;
+	bh=MMO6QzhJTBpjIamFxQOPnoG0lDTOenIytlKAn/pj/E4=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=Z/bEBEHMZYr5rf0HyvdEWT82281WFiwe1MDwFPQ9zUwcJKU8YlfQIv3Gpt4SrPO/F
-	 e2h48o2BhZBcaLBomzuKixyvA1HlkYSOgCQCi5jCxnuMEeTttvTsCdA+mBIUsoTgtp
-	 WA8wTecyHCqu3NLzl22aXBPYFo1dZnb1EuiQqg7GgZZ8TuN1RtNydR06T288AIp8jn
-	 UYmPu3gXSjxSbUHVjgzQHMVh8qaS5yYKm7+BBa0yTnPKaGI11V2TJGO9FnZKoHtvDF
-	 DQprzEXosikcXskEbdQi6gShZG2Ee6K06GSBmE5rfFdyIfdRTIIXKSuJWLtdH9Q8Rh
-	 YAC16fQOXsgjw==
-Content-Type: multipart/mixed; boundary="===============4771949766527131899=="
+	b=fEL+VDLfWgejB2UiD3yfu4w39ugAxlb20659+wBdunWi1Bmc39BavexRTwtcs+1l3
+	 sX93ULfh/tz4Vhr0v3imaxSkT35vp3EVg9Gy+LgXN+2mq96c3xiAwr/WyFIihORW9w
+	 BGpyRT/a1j1nBY0ZjXH/GPrvJyTo9mEc3DN+Xka8m1xkvcDYFegbdDh9ZTD8HmUkK0
+	 nxghDIgYeXQX0sbRhzs9+fSGH8XrM7dswPU2XpiF4ZdmAB25gPYcvE+LjIAqNBNgUi
+	 +UUD9qGbudgTDkVZ7YshLPbkpT5245i6bbuZy3My6iob9UzGq4b2JfAUxFrzM/2uTT
+	 vDicKTI56lTsw==
+Content-Type: multipart/mixed; boundary="===============7930476675043711056=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <a4316335c76275e884a40fd0b2d1a7b2b4e35fb6fb80944d45e2bbc1e5a29c70@mail.kernel.org>
-In-Reply-To: <20260302124028.82420-2-pilgrimtao@gmail.com>
-References: <20260302124028.82420-2-pilgrimtao@gmail.com>
-Subject: Re: [PATCH v3 1/6] bpf: Introduce the bpf_list_del kfunc.
+Message-Id: <b6c00e7ecc633ab02ee8689f5647ce9090cf72d75f5bf9f2cc2c09983d963b58@mail.kernel.org>
+In-Reply-To: <20260302-module-signature-uapi-v1-6-207d955e0d69@linutronix.de>
+References: <20260302-module-signature-uapi-v1-6-207d955e0d69@linutronix.de>
+Subject: Re: [PATCH 6/8] tools uapi headers: add linux/module_signature.h
 From: bot+bpf-ci@kernel.org
-To: pilgrimtao@gmail.com,martin.lau@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,chengkaitao@kylinos.cn,linux-kselftest@vger.kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  2 Mar 2026 13:32:17 +0000 (UTC)
+To: thomas.weissschuh@linutronix.de,dhowells@redhat.com,dwmw2@infradead.org,mcgrof@kernel.org,petr.pavlu@suse.com,da.gomez@kernel.org,samitolvanen@google.com,atomlin@atomlin.com,hca@linux.ibm.com,gor@linux.ibm.com,agordeev@linux.ibm.com,borntraeger@linux.ibm.com,svens@linux.ibm.com,zohar@linux.ibm.com,roberto.sassu@huawei.com,dmitry.kasatkin@gmail.com,eric.snowberg@oracle.com,paul@paul-moore.com,jmorris@namei.org,serge@hallyn.com,nathan@kernel.org,nsc@kernel.org,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org
+Cc: keyrings@vger.kernel.org,linux-kernel@vger.kernel.org,linux-modules@vger.kernel.org,linux-s390@vger.kernel.org,linux-integrity@vger.kernel.org,linux-security-module@vger.kernel.org,linux-kbuild@vger.kernel.org,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,thomas.weissschuh@linutronix.de,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  2 Mar 2026 13:32:34 +0000 (UTC)
 
---===============4771949766527131899==
+--===============7930476675043711056==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> --- a/kernel/bpf/btf.c
-> +++ b/kernel/bpf/btf.c
+> diff --git a/tools/include/uapi/linux/module_signature.h b/tools/include/uapi/linux/module_signature.h
+> --- /dev/null
+> +++ b/tools/include/uapi/linux/module_signature.h
 
 [ ... ]
 
-> @@ -4080,20 +4100,25 @@ int btf_check_and_fixup_fields(const struct btf *btf, struct btf_record *rec)
->  	int i;
->
->  	/* There are three types that signify ownership of some other type:
-> -	 *  kptr_ref, bpf_list_head, bpf_rb_root.
-> +	 *  kptr_ref, bpf_list_head/node, bpf_rb_root.
+> +enum module_signature_type {
+> +	MODULE_SIGNATURE_TYPE_PKCS7 = 2,	/* Signature in PKCS#7 message */
+> +	MODULE_SIGNATURE_TYPE_MERKLE = 3,	/* Merkle proof for modules */
+> +};
 
-Should "bpf_list_head/node" be just "bpf_list_head" here? bpf_list_node
-doesn't signify ownership of another type -- it is the type that is
-owned.
+The source UAPI header at include/uapi/linux/module_signature.h does not
+define MODULE_SIGNATURE_TYPE_MERKLE:
 
-The unmodified paragraph just below still says:
+include/uapi/linux/module_signature.h:
+    enum module_signature_type {
+        MODULE_SIGNATURE_TYPE_PKCS7 = 2,
+    };
 
-  "Hence we only need to ensure that bpf_{list_head,rb_root} ownership
-   does not form cycles."
+Was this value intentionally added here ahead of the kernel header?  It
+appears to come from the CONFIG_MODULE_HASHES series referenced in the
+cover letter, but no commit in this series adds it to the kernel UAPI
+header, so the tools copy diverges from its source at creation time.
 
-And further down in this same function:
-
-  "A type can only _own_ another type in user BTF if it has a
-   bpf_{list_head,rb_root}. Let's call these root types."
-
-Both correctly exclude nodes from the ownership types.
-
->  	 * kptr_ref only supports storing kernel types, which can't store
->  	 * references to program allocated local types.
->  	 *
->  	 * Hence we only need to ensure that bpf_{list_head,rb_root} ownership
->  	 * does not form cycles.
->  	 */
-
-[ ... ]
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22576595943
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22577240517
 
 AI-authorship-score: low
-AI-authorship-explanation: Slightly formal commit message phrasing is consistent with non-native English; code and multi-version iteration strongly suggest human authorship.
+AI-authorship-explanation: Straightforward mechanical UAPI header copy with terse commit message, consistent with experienced kernel developer style from a known Linutronix contributor.
 issues-found: 1
 issue-severity-score: low
-issue-severity-explanation: Inaccurate comment in btf_check_and_fixup_fields incorrectly describes bpf_list_node as signifying ownership, contradicting other comments within the same function; no runtime impact.
+issue-severity-explanation: The tools UAPI copy contains an enum value (MODULE_SIGNATURE_TYPE_MERKLE) not present in the kernel source header, creating a content mismatch that does not affect runtime behavior but violates the convention that tools copies mirror kernel UAPI headers.
 
---===============4771949766527131899==--
+--===============7930476675043711056==--
