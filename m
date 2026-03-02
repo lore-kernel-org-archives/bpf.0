@@ -1,370 +1,420 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB033909A8
-	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 22:12:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772489557; cv=none; b=Ojd6wYJl0K4lc9Sx8sq+Rn/uWKyJ9BKugIAD5+ey4qBTHtISjSvhhLwLKUV4PFUyGrf83Hv57FgpbIlNZInkIueQn04+bI9+tmVLDuoo4tFBixHAqvp74+y+JxUlCWBagI2gvMiDuMKQ4YOEXLpwB55uVdrIvuSC1I+m3LU2LIs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772489557; c=relaxed/simple;
-	bh=ucXZ2FRtxXVh7K3HTExxL4dSWi5+m59teo8B76UQPOM=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dRxl79mYVYE3bTDaKYkTKnzz8Uu1fmQzEyj/J0B72TpkIsd3ove3+LqmZdjMN/gjC7sQpsI1K4ZqB6m4SqmNoTfBfaeDMkdqFcXvsj4JHlPhQ7XpZo5YfX6/dYn2lCokAYosUNK2sMNBj+DSmJKDE/ubNTyvcKPyv6Z//IjdSmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=WyIIUe/q; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E6B1A6801;
+	Mon,  2 Mar 2026 22:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.156.1
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772490333; cv=fail; b=pOuktsXFKFTYAe59BfYsizax1A2jYshtGeuQHur6CavVIpnDPiJ63U0BWp+mXQsJO+cR00uc8dCF+p/Spmms5UUzY772GCJa6ugJEzb/tzC6bjKNidH2szq2skWKVVNneQonJTkJMu7VsWNqw8FDQy0J6ujTrA2wsusQ5xRzlcQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772490333; c=relaxed/simple;
+	bh=l0dcDC+O7W0aDklkK2cKVSi+A0+5Z+JWwv4GBK6THQA=;
+	h=From:To:CC:Date:Message-ID:References:In-Reply-To:Content-Type:
+	 MIME-Version:Subject; b=Swmkius5GzwBtqZsatIRDaMpwDmM4GkjHaZI0ciCaFViOHxYJ1HGmipbL46VoLLsLI9Sp6axyFd1Zr9El8nCsdv8ul9m0X57aBQpi9tVJJCo7LPW9F1RgNA0GeXxYxTRLOHOuQbQO4dHqCeD2xYYHuuHKrAchWpayvkcRkKZjh0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ibm.com; spf=pass smtp.mailfrom=ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ewGud6kx; arc=fail smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="WyIIUe/q"
-Received: from pps.filterd (m0354653.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 622IdfHp2582115;
-	Mon, 2 Mar 2026 22:12:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ewGud6kx"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 622FP1gm2104794;
+	Mon, 2 Mar 2026 22:24:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-id:content-transfer-encoding:content-type:date:from
 	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=0KkH43HEsDK2T1H0B8T27g0XPePiJ/NWxvIs0dFEJqc=; b=WyII
-	Ue/qe8XnVEwPVlamVJkcdNQ9to+j5xX7hHGNJCJX/AxLwL0KsQyDm47hVAhGr5pt
-	tj+VdjBhExQPj250wFv1HStXLZ6cGZXxTaj1IZjEbzVE/0oeXtn6l0e6wnymIWkk
-	eUr83qT/DxWgKs7T2U3iB3Bb/hGZa/SpyEJzOwLR+4r71gjqfUf0cl4sblNXZgXe
-	qC5wE3HIInosbLWJ+q89MYT23I0FxAl9bnrzPP6aJZpNotXR+ex4hL+5Wkb5zgt2
-	r3LWqUb7vRREoL15Bi9bh5Q5+1USCILSBxajs+6vmRyrIu8FSfnRYMfX0V8OZ0a7
-	1801KChGlzf3u+hv2Q==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cmbahpgm7-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Mar 2026 22:12:15 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 2 Mar 2026 22:12:14 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <jolsa@kernel.org>, <emil@etsalapatis.com>,
-        <linux-open-source@crowdstrike.com>
-Subject: [PATCH bpf-next v5 1/2] libbpf: Handle duplicate kprobe symbols in attach_kprobe_opts
-Date: Mon, 2 Mar 2026 17:12:06 -0500
-Message-ID: <20260302221207.409151-2-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260302221207.409151-1-andrey.grodzovsky@crowdstrike.com>
-References: <20260302221207.409151-1-andrey.grodzovsky@crowdstrike.com>
+	pp1; bh=l0dcDC+O7W0aDklkK2cKVSi+A0+5Z+JWwv4GBK6THQA=; b=ewGud6kx
+	0aArwU38lEu1ddfv0FNTb3PfvSNJVdNKkIp/x0uLTqQjJrHWSmUfw0hcl3baTqjp
+	AWAfXs+7iPA55faatm1OGR8RlPyrSRGprjmYu7NoqktBwMqVfARgM2v40Nj40gJ7
+	KSnx47ak7C0SccKgfjMGWuAar9TU4sjVpylE6bFtnHoTHqAGR4rcq2oajCCJBqQs
+	erF5BNeWjSjBceeLt9dys0wATXqs5Cu1ET2GgQfCG0OV1c2jCaIQUSlG9ZNCz14D
+	9+3eWDbPqSdbe+KVF24W00GUQ16MusdB6D/gzkpHZ5LIRKZe4q+HF6qca1XinkpE
+	HQCp40u9JQJ9wA==
+Received: from bl2pr02cu003.outbound.protection.outlook.com (mail-eastusazon11011053.outbound.protection.outlook.com [52.101.52.53])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4cksjd8prg-1
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+	Mon, 02 Mar 2026 22:24:48 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=T1CDRonlGTPJIPiIz3yA/iGJ0jITt7cOCIW4EgR3QhW7Yp7pNWpcWBRqJQMntR3ulxW7kGRxA7L9lqqQcmGhxdKvoaRk2eRUVVZRU6JYN8wJ/TlcFf/6/lOBMvZBg7cLpCgxufi1AKnQpbHnLoiY2gY/PwkuAn9LoCpp32Jo5ToD1MVYDN/ZPmanjGOIhXRkVz+lmKMsE7mI8lzKh5lFhPkRkdMKPFG02PmuezCRKmetBDEWP7D9Qf8sBa1GPbNX9VPN7Ggl3v4DQn7SmZfHYfMrJgYcrUYx3+5v7QxuOXuuueo6JAH+LRqqg4ajbU27pwRVFL/y79puheAfUXvcQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=l0dcDC+O7W0aDklkK2cKVSi+A0+5Z+JWwv4GBK6THQA=;
+ b=vZR88VwgS2HhAp2V8HTyweVQ039gzhWhv6iEoGH3rzY7Qkc1Eu3gV8TKJ+axUUzJL0XgaQ/xDFLfxgNb2VL9ciY5rQlaYIf1enJiICTnXwQR83ww8uXzGQ5fhVCDVQOzw5MglnFXZ70apG9UuT4vab2hMTKqeE1z4UpMpdbXn2euKmAdxvJ0jk37pdpdXqkUcdT2aRUWZ9I4u/wR1ulg59Y+Fxuc8FFVezlnFEfj+Ae76LuWKBwdJrmlkg03jK1/CkztGnzPABiPuRhDAkNAENwiLBPMfQrcf1NCUSXvT2iB/ul+MC8VZ90A0aInmLeCan7r+ST5bqlO74b776t1Pw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=ibm.com; dmarc=pass action=none header.from=ibm.com; dkim=pass
+ header.d=ibm.com; arc=none
+Received: from SA1PR15MB5819.namprd15.prod.outlook.com (2603:10b6:806:338::8)
+ by SJ0PR15MB4423.namprd15.prod.outlook.com (2603:10b6:a03:374::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.18; Mon, 2 Mar
+ 2026 22:24:36 +0000
+Received: from SA1PR15MB5819.namprd15.prod.outlook.com
+ ([fe80::920c:d2ba:5432:b539]) by SA1PR15MB5819.namprd15.prod.outlook.com
+ ([fe80::920c:d2ba:5432:b539%7]) with mapi id 15.20.9632.017; Mon, 2 Mar 2026
+ 22:24:36 +0000
+From: Viacheslav Dubeyko <Slava.Dubeyko@ibm.com>
+To: "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "jreuter@yaina.de" <jreuter@yaina.de>,
+        "Dai.Ngo@oracle.com" <Dai.Ngo@oracle.com>,
+        Ondrej Mosnacek
+	<omosnace@redhat.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dlemoal@kernel.org" <dlemoal@kernel.org>,
+        "trondmy@kernel.org"
+	<trondmy@kernel.org>,
+        "namhyung@kernel.org" <namhyung@kernel.org>,
+        "almaz.alexandrovich@paragon-software.com"
+	<almaz.alexandrovich@paragon-software.com>,
+        "miklos@szeredi.hu"
+	<miklos@szeredi.hu>,
+        "john.johansen@canonical.com"
+	<john.johansen@canonical.com>,
+        "stephen.smalley.work@gmail.com"
+	<stephen.smalley.work@gmail.com>,
+        "nico@fluxnic.net" <nico@fluxnic.net>,
+        "maciej.fijalkowski@intel.com" <maciej.fijalkowski@intel.com>,
+        Olga
+ Kornievskaia <okorniev@redhat.com>,
+        "amir73il@gmail.com"
+	<amir73il@gmail.com>,
+        "tom@talpey.com" <tom@talpey.com>,
+        "joseph.qi@linux.alibaba.com" <joseph.qi@linux.alibaba.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "asmadeus@codewreck.org"
+	<asmadeus@codewreck.org>,
+        "alexander.shishkin@linux.intel.com"
+	<alexander.shishkin@linux.intel.com>,
+        "mark@fasheh.com" <mark@fasheh.com>,
+        "linux_oss@crudebyte.com" <linux_oss@crudebyte.com>,
+        "alexander.deucher@amd.com" <alexander.deucher@amd.com>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "willy@infradead.org"
+	<willy@infradead.org>,
+        "ebiggers@kernel.org" <ebiggers@kernel.org>,
+        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
+        "bharathsm@microsoft.com"
+	<bharathsm@microsoft.com>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "sumit.semwal@linaro.org" <sumit.semwal@linaro.org>,
+        Eric Paris
+	<eparis@redhat.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "simona@ffwll.ch" <simona@ffwll.ch>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "james.clark@linaro.org"
+	<james.clark@linaro.org>,
+        "john.fastabend@gmail.com"
+	<john.fastabend@gmail.com>,
+        "dsterba@suse.com" <dsterba@suse.com>,
+        "kuniyu@google.com" <kuniyu@google.com>,
+        "hch@infradead.org"
+	<hch@infradead.org>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "dwmw2@infradead.org"
+	<dwmw2@infradead.org>,
+        "ncardwell@google.com" <ncardwell@google.com>,
+        "sprasad@microsoft.com" <sprasad@microsoft.com>,
+        "marcelo.leitner@gmail.com"
+	<marcelo.leitner@gmail.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "jack@suse.com" <jack@suse.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "frank.li@vivo.com"
+	<frank.li@vivo.com>,
+        "alex.aring@gmail.com" <alex.aring@gmail.com>,
+        "luisbg@kernel.org" <luisbg@kernel.org>,
+        "ms@dev.tdt.de" <ms@dev.tdt.de>, "jth@kernel.org" <jth@kernel.org>,
+        "jlbec@evilplan.org" <jlbec@evilplan.org>,
+        "aivazian.tigran@gmail.com" <aivazian.tigran@gmail.com>,
+        "anna@kernel.org"
+	<anna@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "willemb@google.com" <willemb@google.com>,
+        "eric.snowberg@oracle.com" <eric.snowberg@oracle.com>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "acme@kernel.org"
+	<acme@kernel.org>,
+        "ronniesahlberg@gmail.com" <ronniesahlberg@gmail.com>,
+        "jaharkes@cs.cmu.edu" <jaharkes@cs.cmu.edu>,
+        David Howells
+	<dhowells@redhat.com>,
+        "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "courmisch@gmail.com" <courmisch@gmail.com>,
+        "martin@omnibond.com"
+	<martin@omnibond.com>,
+        "christian.koenig@amd.com" <christian.koenig@amd.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "adilger.kernel@dilger.ca"
+	<adilger.kernel@dilger.ca>,
+        "idryomov@gmail.com" <idryomov@gmail.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "glaubitz@physik.fu-berlin.de" <glaubitz@physik.fu-berlin.de>,
+        "magnus.karlsson@intel.com" <magnus.karlsson@intel.com>,
+        "airlied@gmail.com"
+	<airlied@gmail.com>,
+        "coda@cs.cmu.edu" <coda@cs.cmu.edu>,
+        "casey@schaufler-ca.com" <casey@schaufler-ca.com>,
+        "raven@themaw.net"
+	<raven@themaw.net>,
+        "horms@kernel.org" <horms@kernel.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "kuba@kernel.org"
+	<kuba@kernel.org>,
+        "muchun.song@linux.dev" <muchun.song@linux.dev>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "mathieu.desnoyers@efficios.com"
+	<mathieu.desnoyers@efficios.com>,
+        "hubcap@omnibond.com"
+	<hubcap@omnibond.com>,
+        "jlayton@kernel.org" <jlayton@kernel.org>,
+        "sdf@fomichev.me" <sdf@fomichev.me>,
+        "roberto.sassu@huawei.com"
+	<roberto.sassu@huawei.com>,
+        Alex Markuze <amarkuze@redhat.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "mikulas@artax.karlin.mff.cuni.cz" <mikulas@artax.karlin.mff.cuni.cz>,
+        "ericvh@kernel.org" <ericvh@kernel.org>,
+        "salah.triki@gmail.com"
+	<salah.triki@gmail.com>,
+        "osalvador@suse.de" <osalvador@suse.de>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "sfrench@samba.org"
+	<sfrench@samba.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "wufan@kernel.org" <wufan@kernel.org>,
+        "al@alarsen.net" <al@alarsen.net>,
+        "pc@manguebit.org" <pc@manguebit.org>,
+        "ast@kernel.org" <ast@kernel.org>, "oleg@redhat.com" <oleg@redhat.com>,
+        "slava@dubeyko.com" <slava@dubeyko.com>,
+        "konishi.ryusuke@gmail.com" <konishi.ryusuke@gmail.com>,
+        "lucho@ionkov.net"
+	<lucho@ionkov.net>,
+        "dsahern@kernel.org" <dsahern@kernel.org>,
+        "shaggy@kernel.org" <shaggy@kernel.org>,
+        "richard@nod.at" <richard@nod.at>,
+        "marc.dionne@auristor.com" <marc.dionne@auristor.com>,
+        "neil@brown.name"
+	<neil@brown.name>,
+        "dan.j.williams@intel.com" <dan.j.williams@intel.com>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "david@kernel.org"
+	<david@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+        "jack@suse.cz"
+	<jack@suse.cz>, "code@tyhicks.com" <code@tyhicks.com>,
+        "steffen.klassert@secunet.com" <steffen.klassert@secunet.com>,
+        "naohiro.aota@wdc.com" <naohiro.aota@wdc.com>,
+        "zohar@linux.ibm.com"
+	<zohar@linux.ibm.com>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "irogers@google.com" <irogers@google.com>
+CC: "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "ecryptfs@vger.kernel.org" <ecryptfs@vger.kernel.org>,
+        "linux-unionfs@vger.kernel.org" <linux-unionfs@vger.kernel.org>,
+        "apparmor@lists.ubuntu.com" <apparmor@lists.ubuntu.com>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "autofs@vger.kernel.org" <autofs@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        "fsverity@lists.linux.dev" <fsverity@lists.linux.dev>,
+        "ntfs3@lists.linux.dev" <ntfs3@lists.linux.dev>,
+        "ocfs2-devel@lists.linux.dev" <ocfs2-devel@lists.linux.dev>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "samba-technical@lists.samba.org" <samba-technical@lists.samba.org>,
+        "linux-nilfs@vger.kernel.org" <linux-nilfs@vger.kernel.org>,
+        "audit@vger.kernel.org" <audit@vger.kernel.org>,
+        "selinux@vger.kernel.org"
+	<selinux@vger.kernel.org>,
+        "linaro-mm-sig@lists.linaro.org"
+	<linaro-mm-sig@lists.linaro.org>,
+        "linux-trace-kernel@vger.kernel.org"
+	<linux-trace-kernel@vger.kernel.org>,
+        "v9fs@lists.linux.dev"
+	<v9fs@lists.linux.dev>,
+        "linux-xfs@vger.kernel.org"
+	<linux-xfs@vger.kernel.org>,
+        "linux-x25@vger.kernel.org"
+	<linux-x25@vger.kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net"
+	<linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-bluetooth@vger.kernel.org"
+	<linux-bluetooth@vger.kernel.org>,
+        "nvdimm@lists.linux.dev"
+	<nvdimm@lists.linux.dev>,
+        "ceph-devel@vger.kernel.org"
+	<ceph-devel@vger.kernel.org>,
+        "jfs-discussion@lists.sourceforge.net"
+	<jfs-discussion@lists.sourceforge.net>,
+        "linux-mtd@lists.infradead.org"
+	<linux-mtd@lists.infradead.org>,
+        "devel@lists.orangefs.org"
+	<devel@lists.orangefs.org>,
+        "linux-afs@lists.infradead.org"
+	<linux-afs@lists.infradead.org>,
+        "linux-fscrypt@vger.kernel.org"
+	<linux-fscrypt@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org"
+	<linux-security-module@vger.kernel.org>,
+        "linux-cifs@vger.kernel.org"
+	<linux-cifs@vger.kernel.org>,
+        "linux-hams@vger.kernel.org"
+	<linux-hams@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "codalist@coda.cs.cmu.edu" <codalist@coda.cs.cmu.edu>,
+        "linux-mm@kvack.org"
+	<linux-mm@kvack.org>,
+        "netfs@lists.linux.dev" <netfs@lists.linux.dev>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>
+Thread-Topic: [EXTERNAL] [PATCH v2 023/110] ceph: use PRIino format for i_ino
+Thread-Index: AQHcqoXKM4Zi3kyuqUK+uAhoRZrmrLWb0aUA
+Date: Mon, 2 Mar 2026 22:24:35 +0000
+Message-ID: <da18663467d93a61e99cd4dfeadca88d25df739b.camel@ibm.com>
+References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
+	 <20260302-iino-u64-v2-23-e5388800dae0@kernel.org>
+In-Reply-To: <20260302-iino-u64-v2-23-e5388800dae0@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR15MB5819:EE_|SJ0PR15MB4423:EE_
+x-ms-office365-filtering-correlation-id: 28eda2af-4d03-402d-f7e4-08de78aa7c59
+x-ld-processed: fcf67057-50c9-4ad4-98f3-ffca64add9e9,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|10070799003|376014|7416014|38070700021|921020;
+x-microsoft-antispam-message-info:
+ MKmYxQnBkoDWsH9ac9qJ4KWzrYFzARTQvLQUqhVW/TOnH1N2seZ2NCni3Kp9pJvkfcU9YagaiYK850PBRrArS1QpF0Gadeo/DxEq0J3Mufs5cFBOzKQ2qboBImlYOVWvJCSm1CbLs0TEQxpijVRaIhPPD3FxDBbJFMLCFA8+saVLMKzDjQkbSNoBvH1xd7Ne8XOY7xOVxiTHBWUVUcwpgDn0TUaZa89W2HTZGMcfNd0lRp6m5Wn9g4aNVjmEPYoMmwTfAJM/aUfuWtvLKVLAuwbSY3E3XUb0LEKOFGxxAJI2t6H/5sm3G4CeRoBfxdl2RmW4Db634dgROLQz5UpCfIDF5muEv25+h1QzwhuTj+y1H4U5KVFjBPHz3G1Bqf0uBa6HOXkX3RBFf7ox9tToScqgWnHMhWX9EY1Tkn912mrc1ytmWq6x5H7shbUUW+xqUM3eB7/iTwI/DmQv3x+ssweEIZr3Orhrdld0oPb+0uMaCjvvlTYMwFewYxnDklOAy1A1vBH0iqnb4DkRehNEMmkZST5bMdrDNW/YgYdXp9n9FTDlKbDSXNBLdnRI19czAkkMDotJIarOecYAYxDKxWFFDG8X6gONvpe3ZEMMWD7rA0DRMhbFihviIRdaCkL9s/T2rIgYdc6oUTSCTK1JTTgKWZbcivSVyIaHVpu2LP+4Q/uoWlbV8Lkotlq5i33XmSA7M5d6Z1W0AKwz42uK42yPEmBDat4CB8K5BoAEwg+7JeWKAE6WadpaTnX/ntxVAg+kWbdVLQK6nCR9H43Q7AOqKZRYlpHRewyS51HhbuiET499oQ/eL/NowB/e0iD2
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5819.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(10070799003)(376014)(7416014)(38070700021)(921020);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?Zm1CT25ySGt5YWxyekNRVCt5R0txQXpzUmpiZS9ITkYrN1RSOEk5VUhncUhN?=
+ =?utf-8?B?YTRJUWlsZmt4RTBMR0N5TzQvaTZNazVMUDNPY3JXL0RiWS9Bb2dNbGlFcC9B?=
+ =?utf-8?B?cC96OUQrTUFjOWhmR0hObFNxUGdBTnZwbzVYRkdJZWNoaG9iNnFGNkRYdmh5?=
+ =?utf-8?B?NFF2dUxyYjNZVXVpZjJTTjVrL0N1MmpZN2FZTk4zcnAzUzhQUlk5ZExYK1do?=
+ =?utf-8?B?WXp5R3R5Q3RSWFNQWVBpcUNEK01rZWppWVJRTXVuVGF5VzdXclhtK2tKU2JQ?=
+ =?utf-8?B?bUZnMGkycUE5cjloOUhpdTAvWjh4bVJFdnFsSlhLQ2Q1c0VkOW16SjhycnpD?=
+ =?utf-8?B?RWZzQ1ltYWhTUk9YY2tzemh4U0w5YkxZZUtNNk82em9MWEp6MVpRMy8xK05t?=
+ =?utf-8?B?YlFrbUppbUd5YlhsK0VUV29hMVJQRkdNbkY0OC9ydWo2aEtkY2paY3dFNzda?=
+ =?utf-8?B?a3BMaTU1VmNxK1lJVFJ4SDV6eW5rZDVJU1QwRzB6dHQzSkFqbkF0cEROZFFo?=
+ =?utf-8?B?YlI3QXdVMXc1Z1ZFUmNkT0pmaHF3Yk5rTHoxb1o4Sm8rMEl4UFpCMVorbU84?=
+ =?utf-8?B?NkFJYk5GYlV4bzNmZEhsZE53OTJkMWYrNnhLbGFDYTNZS2V3OEZUbWlwU0FY?=
+ =?utf-8?B?bitlZ1dYaE1kV21DWVdrRkJNUVFIZmtQcXJFcjIrSDRaSXcwZXczbVE3a1hJ?=
+ =?utf-8?B?OU9Lb0hqc2FacWFvUzRGRjk5ODJtOFZKWGtETGRma2NNQ2QvVnVLL0svbit5?=
+ =?utf-8?B?SW04QzRvVWFFaURybDlDVWwzSlBsZSs3Y3BIbmE3WjFUc1ZwMlVRdm5SODRY?=
+ =?utf-8?B?b21ERTVzM1lyVEZzQW9RSStyNjllR0VBZS9jemNqRk1VOExvVlFmQktMLzA1?=
+ =?utf-8?B?VU9YUGN5R1lvR0VNL1VxWlZLM3grcVhXWHRsNUVnblB6VWZpNjFrWmpaaVRi?=
+ =?utf-8?B?MlN4K0FqZW9rNlM2bW16TkVVdDZKNHA4ZkNyQUZVZUpNc3c5T0dXaTdKZWZ4?=
+ =?utf-8?B?MWEvL2Q5cEZhMW9FYUlPaWVzMmlEckRScnlId3Zocm5qMXY1bXpBeHVESGR4?=
+ =?utf-8?B?N21tTXp2bEJwWEkwdFVLRUhEekdrOXR5T3gyZGRkQWNGaU1kTmluN05iaG5p?=
+ =?utf-8?B?MkRCK2tDT1JYeDNqaFhOckd5elV6TnZCd0h2QVNUaVg5SENIcVI2dzMvaWdq?=
+ =?utf-8?B?Q0VMbkRaUWJUTWhxNzYyMmkwZmlYLzZiUFdMdCtjT2V4RktNdDg2ZktscTY2?=
+ =?utf-8?B?OUxWNnlRclFoaWpLb0N5S2RrNG1WR2M3WlIzRHpiMlN4SStMa3dTVDY1TWxT?=
+ =?utf-8?B?K3FQUnQyVEJyWTY3cys4aHNIZFdmYlJqRWViSTBWektnZGN5aE1oN2dMVlN0?=
+ =?utf-8?B?d3BRaHhqYnMvRVJBWU83cEFuenRCWjhzZDlDbWZ6ajZhbmUvVjBmUWtJWDJ2?=
+ =?utf-8?B?THBvdERYbUxVTVMwbVR0VHR3SkowZ29Ia0xOdHRxTzRsTm90eWM3M2NRa24y?=
+ =?utf-8?B?MHlEcUxDTDFnL1RUclVMR0FQN1pmMTNjczUvYldyREV0UWlvL0FiVUhqdFFl?=
+ =?utf-8?B?ay8vd09LNFl4VGd6TVdHUXN3dldZSFNNc1NYNk0xOEx0ZVRES1FPUTlFZGwy?=
+ =?utf-8?B?bnhETkNFUFplL1VHWDdWT1dPU1pYZEpQZ2NiZGt2WDN5L1VHT2lFZkNDc1My?=
+ =?utf-8?B?NUtoWmNXWEpLeU84VkdkVVJIMXE1UkwxT0g3SkpXdG9wK3VweFhZQ05yRTdI?=
+ =?utf-8?B?ZnRVK01JakhrT0tHZEg0d2hIS2lWbG82azhPNUJ0K1VHaG9pKzF1cmdsMXJM?=
+ =?utf-8?B?T2RMcXRqVzJPRnhUbUJDUHA4UjRRQTJnWk9ud0dFcXRFdUQydis2d0hxdWNZ?=
+ =?utf-8?B?UGIzSjI3ZDI5angvMmdhK3Y5ZG0xUENYbm9BQlF0RHlmcXBpTUJXNHdwN2Zv?=
+ =?utf-8?B?VHExZDZDSld3eGZDTHVBWW9UTlErMGgwZWNSQXJONE9iTDZSa2F0bHFMU2ls?=
+ =?utf-8?B?TmlJeE5kK3lqYkdTWC9TREc0dTFXaDJ3ejZCVlpmdGQwS3kvbDl3Q2dPQUV6?=
+ =?utf-8?B?Tkd1RWgyU1Y2ZTJqcEd1UWtDZjV6ODRTMzY5SDhiVXpGMzlDdGtWTGlKNTJT?=
+ =?utf-8?B?OG52aDFkTUVkS0pHa01ZUXpQNjYyNFlId2RybXp4UVJRaW0zSkFjRytJd3hl?=
+ =?utf-8?B?OFFodFNBMlIzdWxYajZ1V0V2Z2haTUxBemJLWVlqQnlDUytpcWZtRDlmdHBD?=
+ =?utf-8?B?ZjhySXNKVVVvWHlmaFRIRUptTHQ4THpQSjkwNXFQUGx0RmVUNkk2bkN2V2kv?=
+ =?utf-8?B?QkxhQy9ZcGtjeHBoWWVoUWhaVVl5bjJWYnJ5eXpLOWlGTkFRV25ycFNWY3Fk?=
+ =?utf-8?Q?/vRuxHvx6GTIaaSFBVZKVJygB7ZnW2+3AqFFm?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <11372946878A2A48B4EADE11ED050B63@namprd15.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH010.crowdstrike.sys (10.100.11.80) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDE2NSBTYWx0ZWRfX61G6lYqAuXhd
- HXXd1z9ve7aq2xhKM80FLpWonGA0Laxwk/ISDvlscuTNsPY6wg/r0EUBiATjAIjHtQWr4Z/zCIz
- 6DhTCHD6Y8TQAFj4UOiLqxAfzVml4qx7kNezOx77oLnj8hzv9xsDJBIXv61cq0phV1dl1pXpfyK
- oCm3T+dMEtiZVLLQYKoo3lzlft6kTBCwfBrSU0djH5jEzGIegZ8WJBFSSW+ji7gXSZTMAVxldS6
- IK6iBM5s02n7tcJ+MM/2SJz6KQK3+mZC+pHopIjtgxQfDW62fbEeXYFV3MQCqFriZXxKo/sAphe
- YvwyE7enzFeOTUR7/ZcYkHH65JBeaWlhVKKCi/gVhVQXyS7ciIqm4iJxrQcLvhl8l+CmgOc8s/S
- M2hdIiuwWbk30WuHnsE0/QPlmsd73sqP66uS90AOm06SN2GBOZ+vktzi+YyoujbbsXZRiSy933v
- zEYxyN6dmCA8qW2sTIw==
-X-Authority-Analysis: v=2.4 cv=UNbQ3Sfy c=1 sm=1 tr=0 ts=69a60b3f cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=GCXdLZfFv8EKBZhKOxZ5:22 a=pl6vuDidAAAA:8
- a=mMzsp5G70WcS6UcmVugA:9
-X-Proofpoint-GUID: dtmOBhTYRGg6pp27OyYZydOWWFn3YJsc
-X-Proofpoint-ORIG-GUID: dtmOBhTYRGg6pp27OyYZydOWWFn3YJsc
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11717
- signatures=596818
+X-OriginatorOrg: ibm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5819.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28eda2af-4d03-402d-f7e4-08de78aa7c59
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Mar 2026 22:24:35.8976
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: fcf67057-50c9-4ad4-98f3-ffca64add9e9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qtcwvbh0BCd4YX5vIFR6um9LwUmyDlAt3ml/bIW1nWwu6/FHq7rKz5lBez9AnjDWaRGeT+bn4krqG3w/KfIuSg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR15MB4423
+X-Proofpoint-Reinject: loops=2 maxloops=12
+X-Authority-Analysis: v=2.4 cv=M9BA6iws c=1 sm=1 tr=0 ts=69a60e31 cx=c_pps
+ a=H9d2Io+6O/etw3jU54J+0Q==:117 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
+ a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
+ a=zr94bLkQGwJZMLBWZqwA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: PFWSAsnw0brlXo9EnpYfqsEcTE9Rpahr
+X-Proofpoint-GUID: BiQSWPEWufxgDqkR8Ie9RStlAR2IAwUE
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDE2NCBTYWx0ZWRfXzeNSYIxFouRI
+ iCJZJ6d4LU7s6ixWPqhKMK3FLnjZcXXOYlZb9NpKKjEWeFQ61W1q1h6OUh622kFoEeo/6ReJh+i
+ r6TabuSA4sMPRoYDA+Sydf/Jzc7aiQ3ei23ohABu8228FtN3VtMynWB++gCOyUVF03KEG6EKwNY
+ oI0jrGLmvwWW9YoZU189ievBzOo9TqcXX8a1xTV66mh4F5mOaJabejZ+HYzG6+gcm2R8HPx4Akl
+ /BA+d4guT4ulkae58tCq3fHXF3M6D9SrIbhR+DGqS+79Yjw6wLezIxoO51p53rTkNlirJ5bjH6y
+ bqqQDEQrm31YkOZkj4RF0Cs3GTMuZvZ0a13PkVMKtcsi4OuxUmQXSwA8igMAqpzgcU8MQyYEzul
+ JaX9pqGwaSNDXOHEvfHmtichL6KmKfLRJRVL6Om81laCf91R+dwsFVjCBy9KnLLikHDnBkyzJ80
+ sO3V7fMzLSzNsnOlEpQ==
+Subject: Re:  [PATCH v2 023/110] ceph: use PRIino format for i_ino
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
+ definitions=2026-03-02_05,2026-03-02_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 priorityscore=1501 impostorscore=0 malwarescore=0 phishscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 adultscore=0 clxscore=1015
+ clxscore=1011 priorityscore=1501 spamscore=0 adultscore=0 malwarescore=0
+ bulkscore=0 lowpriorityscore=0 impostorscore=0 phishscore=0 suspectscore=0
  classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603020165
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603020164
 
-When a kernel module exports a symbol with the same name as an existing
-vmlinux symbol, kprobe attachment via bpf_program__attach_kprobe_opts()
-fails with EADDRNOTAVAIL (perf_event_open path) or EINVAL (legacy
-tracefs path).
-
-Implement a fallback mechanism that, on such failures, resolves the
-vmlinux address through /proc/kallsyms - filtering out module symbols -
-and retries probe attachment using the absolute address, bypassing
-kernel symbol name validation.
-
-Changes:
-- Restructure libbpf_kallsyms_parse() to accept a bool skip_if_module
-  parameter that filters module symbols before invoking the callback.
-- Add find_kaddr_cb() callback and find_kaddr_ctx struct to resolve
-  vmlinux text symbol addresses from /proc/kallsyms.
-- Detect duplicate symbol errors (-EADDRNOTAVAIL for perf_event_open,
-  -EINVAL for legacy tracefs) and retry with resolved KADDR.
-- Fix NULL pointer in gen_probe_legacy_event_name() when using absolute
-  address by passing func_name instead of optional_func_name.
-- Fix NULL pointer in pr_warn() calls within
-  perf_event_kprobe_open_legacy() by using ternary fallback.
-- Fix memory leak of legacy_probe buffer on retry path.
-
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
----
- tools/lib/bpf/libbpf.c | 155 ++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 137 insertions(+), 18 deletions(-)
-
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0be7017800fe..64738d4bf3e0 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -8460,9 +8460,11 @@ static int bpf_object__sanitize_maps(struct bpf_object *obj)
- typedef int (*kallsyms_cb_t)(unsigned long long sym_addr, char sym_type,
- 			     const char *sym_name, void *ctx);
- 
--static int libbpf_kallsyms_parse(kallsyms_cb_t cb, void *ctx)
-+static int libbpf_kallsyms_parse(kallsyms_cb_t cb, void *ctx,
-+				bool skip_if_module)
- {
- 	char sym_type, sym_name[500];
-+	char module_name[128];
- 	unsigned long long sym_addr;
- 	int ret, err = 0;
- 	FILE *f;
-@@ -8475,21 +8477,39 @@ static int libbpf_kallsyms_parse(kallsyms_cb_t cb, void *ctx)
- 	}
- 
- 	while (true) {
--		ret = fscanf(f, "%llx %c %499s%*[^\n]\n",
--			     &sym_addr, &sym_type, sym_name);
--		if (ret == EOF && feof(f))
-+		int n = 0;
-+
-+		/*
-+		 * Format tries to match both vmlinux and module kallsyms
-+		 * entries in one call. Module entries have the form:
-+		 *   addr type name [module]
-+		 * %n fires only if the closing ']' literal is matched.
-+		 */
-+		ret = fscanf(f, "%llx %c %499s [%127[^] \t\n\r\v\f]] %n",
-+			     &sym_addr, &sym_type, sym_name, module_name, &n);
-+
-+		/* EOF or malformed line - handle after the loop */
-+		if (ret != 3 && ret != 4)
- 			break;
--		if (ret != 3) {
--			pr_warn("failed to read kallsyms entry: %d\n", ret);
--			err = -EINVAL;
-+
-+		/* ret == 4 && n == 0: scanset matched but ']' didn't */
-+		if (ret == 4 && n == 0)
- 			break;
--		}
-+
-+		if (ret == 4 && skip_if_module)
-+			continue;
- 
- 		err = cb(sym_addr, sym_type, sym_name, ctx);
- 		if (err)
- 			break;
- 	}
- 
-+	/* !err: don't overwrite callback errors with -EINVAL */
-+	if (!feof(f) && !err) {
-+		pr_warn("failed to read kallsyms entry: ret=%d\n", ret);
-+		err = -EINVAL;
-+	}
-+
- 	fclose(f);
- 	return err;
- }
-@@ -8529,7 +8549,7 @@ static int kallsyms_cb(unsigned long long sym_addr, char sym_type,
- 
- static int bpf_object__read_kallsyms_file(struct bpf_object *obj)
- {
--	return libbpf_kallsyms_parse(kallsyms_cb, obj);
-+	return libbpf_kallsyms_parse(kallsyms_cb, obj, false);
- }
- 
- static int find_ksym_btf_id(struct bpf_object *obj, const char *ksym_name,
-@@ -11527,10 +11547,20 @@ static void gen_probe_legacy_event_name(char *buf, size_t buf_sz,
- static int add_kprobe_event_legacy(const char *probe_name, bool retprobe,
- 				   const char *kfunc_name, size_t offset)
- {
--	return append_to_file(tracefs_kprobe_events(), "%c:%s/%s %s+0x%zx",
--			      retprobe ? 'r' : 'p',
--			      retprobe ? "kretprobes" : "kprobes",
--			      probe_name, kfunc_name, offset);
-+	/* When kfunc_name is NULL, use absolute address format (0xADDR),
-+	 * otherwise use symbol+offset format (SYMBOL+0xOFF)
-+	 */
-+	if (kfunc_name) {
-+		return append_to_file(tracefs_kprobe_events(), "%c:%s/%s %s+0x%zx",
-+				      retprobe ? 'r' : 'p',
-+				      retprobe ? "kretprobes" : "kprobes",
-+				      probe_name, kfunc_name, offset);
-+	} else {
-+		return append_to_file(tracefs_kprobe_events(), "%c:%s/%s 0x%zx",
-+				      retprobe ? 'r' : 'p',
-+				      retprobe ? "kretprobes" : "kprobes",
-+				      probe_name, offset);
-+	}
- }
- 
- static int remove_kprobe_event_legacy(const char *probe_name, bool retprobe)
-@@ -11559,7 +11589,7 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
- 	err = add_kprobe_event_legacy(probe_name, retprobe, kfunc_name, offset);
- 	if (err < 0) {
- 		pr_warn("failed to add legacy kprobe event for '%s+0x%zx': %s\n",
--			kfunc_name, offset,
-+			kfunc_name ? kfunc_name : "(abs_addr)", offset,
- 			errstr(err));
- 		return err;
- 	}
-@@ -11567,7 +11597,7 @@ static int perf_event_kprobe_open_legacy(const char *probe_name, bool retprobe,
- 	if (type < 0) {
- 		err = type;
- 		pr_warn("failed to determine legacy kprobe event id for '%s+0x%zx': %s\n",
--			kfunc_name, offset,
-+			kfunc_name ? kfunc_name : "(abs_addr)", offset,
- 			errstr(err));
- 		goto err_clean_legacy;
- 	}
-@@ -11651,6 +11681,44 @@ int probe_kern_syscall_wrapper(int token_fd)
- 	}
- }
- 
-+/* Context structure for finding vmlinux kernel symbol address */
-+struct find_kaddr_ctx {
-+	const char *func_name;
-+	unsigned long long kaddr;
-+};
-+
-+/* Callback to find vmlinux kernel text symbol address */
-+static int find_kaddr_cb(unsigned long long sym_addr, char sym_type,
-+			 const char *sym_name, void *ctx)
-+{
-+	struct find_kaddr_ctx *data = ctx;
-+
-+	/* Only match text section symbols ('T' or 't') */
-+	if (toupper(sym_type) != 'T')
-+		return 0;
-+
-+	/* Check if this is the symbol we're looking for */
-+	if (strcmp(sym_name, data->func_name) == 0) {
-+
-+		/*
-+		 * If we already have an address, we've encountered a
-+		 * duplicate symbol name. Reject such symbols to avoid
-+		 * ambiguous resolution.
-+		 */
-+		if (data->kaddr && data->kaddr != sym_addr) {
-+			pr_warn("kernel symbol '%s': resolution is ambiguous: 0x%llx or 0x%llx\n",
-+				sym_name, data->kaddr, sym_addr);
-+			return -EINVAL;
-+		}
-+
-+		data->kaddr = sym_addr;
-+		pr_debug("found kernel symbol %s at address 0x%llx\n",
-+			 sym_name, data->kaddr);
-+	}
-+
-+	return 0;
-+}
-+
- struct bpf_link *
- bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 				const char *func_name,
-@@ -11663,6 +11731,8 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 	size_t offset;
- 	bool retprobe, legacy;
- 	int pfd, err;
-+	const char *optional_func_name = func_name;
-+	struct find_kaddr_ctx kaddr_ctx = { .kaddr = 0 };
- 
- 	if (!OPTS_VALID(opts, bpf_kprobe_opts))
- 		return libbpf_err_ptr(-EINVAL);
-@@ -11693,9 +11763,10 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 		return libbpf_err_ptr(-EINVAL);
- 	}
- 
-+retry_create:
- 	if (!legacy) {
- 		pfd = perf_event_open_probe(false /* uprobe */, retprobe,
--					    func_name, offset,
-+					    optional_func_name, offset,
- 					    -1 /* pid */, 0 /* ref_ctr_off */);
- 	} else {
- 		char probe_name[MAX_EVENT_NAME_LEN];
-@@ -11707,7 +11778,7 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 		if (!legacy_probe)
- 			return libbpf_err_ptr(-ENOMEM);
- 
--		pfd = perf_event_kprobe_open_legacy(legacy_probe, retprobe, func_name,
-+		pfd = perf_event_kprobe_open_legacy(legacy_probe, retprobe, optional_func_name,
- 						    offset, -1 /* pid */);
- 	}
- 	if (pfd < 0) {
-@@ -11716,6 +11787,54 @@ bpf_program__attach_kprobe_opts(const struct bpf_program *prog,
- 			prog->name, retprobe ? "kretprobe" : "kprobe",
- 			func_name, offset,
- 			errstr(err));
-+
-+		/*
-+		 * If attachment fails with EADDRNOTAVAIL (or EINVAL in
-+		 * legacy mode) and we used non-NULL func_name, try to
-+		 * find function address in /proc/kallsyms and retry
-+		 * using KADDR instead of ambiguous symbol. Legacy
-+		 * tracefs API converts EADDRNOTAVAIL to EINVAL, so
-+		 * we need to check for both.
-+		 */
-+		if ((err == -EADDRNOTAVAIL || (legacy && err == -EINVAL)) && optional_func_name) {
-+			pr_debug("kallsyms lookup for %s\n",
-+				 func_name);
-+
-+			kaddr_ctx.func_name = func_name;
-+			kaddr_ctx.kaddr = 0;
-+
-+			/*
-+			 * Drop the function symbol and add the resolved
-+			 * KADDR to the offset.
-+			 * This avoids kallsyms validation for duplicate
-+			 * symbols in the kernel. See attr.config2 in
-+			 * perf_event_open_probe and kernel code in
-+			 * perf_kprobe_init/create_local_trace_kprobe.
-+			 */
-+			optional_func_name = NULL;
-+
-+			err = libbpf_kallsyms_parse(find_kaddr_cb, &kaddr_ctx, true);
-+			if (err) {
-+				pr_warn("failed to get addr for %s\n",
-+					func_name);
-+				goto err_out;
-+			}
-+
-+			if (kaddr_ctx.kaddr) {
-+				pr_debug("retrying %s using kaddr 0x%llx\n",
-+					 func_name, kaddr_ctx.kaddr);
-+
-+				offset += kaddr_ctx.kaddr;
-+				free(legacy_probe);
-+				legacy_probe = NULL;
-+				goto retry_create;
-+			}
-+
-+			pr_warn("symbol '%s' not found in vmlinux\n",
-+				func_name);
-+			err = -ENOENT;
-+		}
-+
- 		goto err_out;
- 	}
- 	link = bpf_program__attach_perf_event_opts(prog, pfd, &pe_opts);
-@@ -11931,7 +12050,7 @@ static int libbpf_available_kallsyms_parse(struct kprobe_multi_resolve *res)
- 	data.syms = syms;
- 	data.res = res;
- 	data.cnt = cnt;
--	libbpf_kallsyms_parse(avail_kallsyms_cb, &data);
-+	libbpf_kallsyms_parse(avail_kallsyms_cb, &data, false);
- 
- 	if (res->cnt == 0)
- 		err = -ENOENT;
--- 
-2.34.1
-
+T24gTW9uLCAyMDI2LTAzLTAyIGF0IDE1OjI0IC0wNTAwLCBKZWZmIExheXRvbiB3cm90ZToNCj4g
+Q29udmVydCBjZXBoIGlfaW5vIGZvcm1hdCBzdHJpbmdzIHRvIHVzZSB0aGUgUFJJaW5vIGZvcm1h
+dA0KPiBtYWNybyBpbiBwcmVwYXJhdGlvbiBmb3IgdGhlIHdpZGVuaW5nIG9mIGlfaW5vIHZpYSBr
+aW5vX3QuDQo+IA0KPiBBbHNvIGNvcnJlY3Qgc2lnbmVkIGZvcm1hdCBzcGVjaWZpZXJzIHRvIHVu
+c2lnbmVkLCBzaW5jZSBpbm9kZQ0KPiBudW1iZXJzIGFyZSB1bnNpZ25lZCB2YWx1ZXMuDQo+IA0K
+PiBTaWduZWQtb2ZmLWJ5OiBKZWZmIExheXRvbiA8amxheXRvbkBrZXJuZWwub3JnPg0KPiAtLS0N
+Cj4gIGZzL2NlcGgvY3J5cHRvLmMgfCA0ICsrLS0NCj4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2Vy
+dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZnMvY2VwaC9jcnlw
+dG8uYyBiL2ZzL2NlcGgvY3J5cHRvLmMNCj4gaW5kZXggZjNkZTQzY2NiNDcwZGRiZDc5NDU0MjZk
+NzlmOTAyNGFlNjE1YzEyNy4uNzE4YzE5NGJhNWQ4Y2UyMmM2YTVkMWRkNjg3ZWMzNzYxMjYzZTdl
+MSAxMDA2NDQNCj4gLS0tIGEvZnMvY2VwaC9jcnlwdG8uYw0KPiArKysgYi9mcy9jZXBoL2NyeXB0
+by5jDQo+IEBAIC0yNzIsNyArMjcyLDcgQEAgaW50IGNlcGhfZW5jb2RlX2VuY3J5cHRlZF9kbmFt
+ZShzdHJ1Y3QgaW5vZGUgKnBhcmVudCwgY2hhciAqYnVmLCBpbnQgZWxlbikNCj4gIAkvKiBUbyB1
+bmRlcnN0YW5kIHRoZSAyNDAgbGltaXQsIHNlZSBDRVBIX05PSEFTSF9OQU1FX01BWCBjb21tZW50
+cyAqLw0KPiAgCVdBUk5fT04oZWxlbiA+IDI0MCk7DQo+ICAJaWYgKGRpciAhPSBwYXJlbnQpIC8v
+IGxlYWRpbmcgXyBpcyBhbHJlYWR5IHRoZXJlOyBhcHBlbmQgXzxpbnVtPg0KPiAtCQllbGVuICs9
+IDEgKyBzcHJpbnRmKHAgKyBlbGVuLCAiXyVsZCIsIGRpci0+aV9pbm8pOw0KPiArCQllbGVuICs9
+IDEgKyBzcHJpbnRmKHAgKyBlbGVuLCAiXyUiIFBSSWlubyAidSIsIGRpci0+aV9pbm8pOw0KPiAg
+DQo+ICBvdXQ6DQo+ICAJa2ZyZWUoY3J5cHRidWYpOw0KPiBAQCAtMzc3LDcgKzM3Nyw3IEBAIGlu
+dCBjZXBoX2ZuYW1lX3RvX3Vzcihjb25zdCBzdHJ1Y3QgY2VwaF9mbmFtZSAqZm5hbWUsIHN0cnVj
+dCBmc2NyeXB0X3N0ciAqdG5hbWUsDQo+ICAJaWYgKCFyZXQgJiYgKGRpciAhPSBmbmFtZS0+ZGly
+KSkgew0KPiAgCQljaGFyIHRtcF9idWZbQkFTRTY0X0NIQVJTKE5BTUVfTUFYKV07DQo+ICANCj4g
+LQkJbmFtZV9sZW4gPSBzbnByaW50Zih0bXBfYnVmLCBzaXplb2YodG1wX2J1ZiksICJfJS4qc18l
+bGQiLA0KPiArCQluYW1lX2xlbiA9IHNucHJpbnRmKHRtcF9idWYsIHNpemVvZih0bXBfYnVmKSwg
+Il8lLipzXyUiIFBSSWlubyAidSIsDQo+ICAJCQkJICAgIG9uYW1lLT5sZW4sIG9uYW1lLT5uYW1l
+LCBkaXItPmlfaW5vKTsNCj4gIAkJbWVtY3B5KG9uYW1lLT5uYW1lLCB0bXBfYnVmLCBuYW1lX2xl
+bik7DQo+ICAJCW9uYW1lLT5sZW4gPSBuYW1lX2xlbjsNCg0KTG9va3MgZ29vZC4NCg0KUmV2aWV3
+ZWQtYnk6IFZpYWNoZXNsYXYgRHViZXlrbyA8U2xhdmEuRHViZXlrb0BpYm0uY29tPg0KDQpUaGFu
+a3MsDQpTbGF2YS4NCg==
