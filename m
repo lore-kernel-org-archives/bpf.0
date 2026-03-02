@@ -1,147 +1,116 @@
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DF0411622
-	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 15:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEC543ED101;
+	Mon,  2 Mar 2026 15:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772466106; cv=none; b=cy+qDvjmPxes7es+KhJ1VpA8TNpCho8aFmerNns80xajv/EDsk//rt5PHmr98j6RTd7MMX/Zmw0hCZx75tE222Po9V+btZdYJv8/MICASEo8/gA6bUqw9/mDNaI9/XzLaiUP8ntHfRFlQMWKL0liSFa5aLcJWJPVzVb8g6iknQk=
+	t=1772466791; cv=none; b=opZk/p73izoTUK6KMFNo+XsJxfvZNagYYsPpPMPU5RmDrK5N520zY7nlczIUEl0SLRGZIP4T4Xz7d+50vI9fNYtIpDIzZy7P4M20wpAYb/AAKO6VEKl9ZV6NoeD1hWyBcg4L0ULV9Y2XmsATFoJoTv/0g1wll/3kd/f9RV2c8eA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772466106; c=relaxed/simple;
-	bh=V5eDYyeSzEe01Qy0X2d3YjmdmOm2DlobDKTfwH81yIk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=NUsio2EFPgOjY1KiADrTXK43zEWSZELS+uhK9+s/LVdjtEw7KI9iDtap/fCjWfMmAJKQaLUQloL4uADIpejBat9EP4bZphEEnEYVjmnSmXbLVeOy1gnlRy/0/4YZAMyuuIuvvhdAXSEbSPQNmtx5YwDurOh/EE3rPAZKDmc6/ZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QWjdwuVb; arc=none smtp.client-ip=209.85.128.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--aliceryhl.bounces.google.com
+	s=arc-20240116; t=1772466791; c=relaxed/simple;
+	bh=akuNwk2L4Tn+oc6eO7tYHYsdIETv0qD02YiOi5S0QAk=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=URksePQQ7O0zlOo32ZQDaEQfhfQ//BVU9VzFspa3cwUndMJ1VzstqVk1tcFdjDovhl0tPebwaSc53paXcvd+gOb9Hdhryf0nhYRzEeKnHzJSCOHYXTtJ+sG0p0+1RJmIoKj/sInfJt5blT4m0D8cd17B6Klit6VXnScHAAiBMYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kfSgNZ2c; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QWjdwuVb"
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4830e7c6131so47836595e9.2
-        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 07:41:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1772466104; x=1773070904; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fvJ4Pj0Wo9ryI9xJ6mJ9OBJG9CVcmeBhutvadxQnZZs=;
-        b=QWjdwuVb/t9+sKGihwIsRzZQDdjSzN3dEVZ2BVMCVyX5gDMOi04WfO3EXDuLEIMYkq
-         b1MAAGH5I3wd8rBvw+Lr9FkpmDUYZCM+cXpNkpX0s7rDCX9DwnvMvZwRaBYUy8wQwFRY
-         DDvHt41DUSZ1y5jjTttZoVYJYX97nEilliRaIRQN/1UY9z764ENyKoNuCuQKRDksfn6j
-         e+ua+hTW50/m/OceVJWWgvRGey4+2Ut/i48x/0Ab8HM/0n4rsANdNxXZEaf7Sxu1LezT
-         eh7wLjRocsyXoqQxa0p1CEp6G7jqorXPsfB8Y0Q9TiVKehJYrXW5wbZUqzceF1OYOLFA
-         MSaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772466104; x=1773070904;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fvJ4Pj0Wo9ryI9xJ6mJ9OBJG9CVcmeBhutvadxQnZZs=;
-        b=aZE+H/RPyUW9BK6iKIomNnssCbYWOsi36Cc49GhZzMwUnqK8coYPqfp15l+xBhkhVm
-         54xsSrEQoonsmAf2DO71K+WSu4jLgS1lWu/Q4ige7QhQ/nfeVsmb4oEIpzek8tSPhXhm
-         BtIPvQKGrFsCyn4FGWfNxssw0A+OozdcanmeHb/RGxCjcJRqFQ5CnjfsO18qwAL8YdNV
-         SYbp2pOpHDIV/v0OtiPW5MQBOCHs8XmFlJTNBqsJZOkO5yv/icjFh9y9qYPMhEYffFNO
-         XFY5FHQrVIWeCUjMyNvNK6HDFF5EEl2NeDVXhQsnmA+Khoip3q5R8rFXEzHijFDJJ0ts
-         s5bA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0OD57qx80W83EByBvD4+H3nJ22ewKT4B9234uie01j00IPGW7IQXeU3w6RkZXJs+sKYk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+/wJ2WVz9LyIMbgRD2VDud/vIRobf9VAeRW8LIL7YfHv/TK0E
-	nmxTroJ8JTzliTev8hnt4J/2hzwvVHXvnry4Q2uhqlsoX2+Yw/+JLQnFj9qRM7vpzNRDwGVxaVV
-	ayG5vyvG4RenwHHc+9A==
-X-Received: from wmby19.prod.google.com ([2002:a05:600c:c053:b0:480:690c:88de])
- (user=aliceryhl job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:600c:3b18:b0:483:7432:a761 with SMTP id 5b1f17b1804b1-483c9bc558bmr213622465e9.24.1772466102970;
- Mon, 02 Mar 2026 07:41:42 -0800 (PST)
-Date: Mon, 2 Mar 2026 15:41:42 +0000
-In-Reply-To: <5f8dcb7f-9e4f-4484-b160-3a9ce541d63c@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kfSgNZ2c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE1DAC2BC86;
+	Mon,  2 Mar 2026 15:53:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772466791;
+	bh=akuNwk2L4Tn+oc6eO7tYHYsdIETv0qD02YiOi5S0QAk=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=kfSgNZ2cK9nDuVRxY8qczDvvWdZSz5onHG/DHIrmTfFCr/kbCdMxWECoyxrrjBagB
+	 ggdqD3nfCnQJbMktiLY1u53Bd8eC+EH8mPPdDWpTpPDaNRqqSWvwsQ7P6mvizX2lrr
+	 8ziO42b+hTazkWfzY7Ur4zERoEo2rHaHLhzc5/BCGVMctDMwARBgwg+4XKPR+YpJEI
+	 ULah02MSneAXpJUqtwGuqdp7bHHvm5F+3URLeK/OeiGH3aGX7IotuMnCalJQWg8iEC
+	 nPmU16CahP3t/P6bDph90Cl9TXppO88/CJ3WHXVxWuOn6rQqZuo+YGnobxEPMBF7TM
+	 KgVvIXCEyFOyA==
+Content-Type: multipart/mixed; boundary="===============5904675307736768806=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260227200848.114019-1-david@kernel.org> <20260227200848.114019-3-david@kernel.org>
- <aaLh2BxSgC9Jl5iS@google.com> <8a27e9ac-2025-4724-a46d-0a7c90894ba7@kernel.org>
- <aaVf5gv4XjV6Ddt-@google.com> <f2f3a8a1-3dbf-4ef9-a89a-a6ec20791d1c@kernel.org>
- <aaVnifbdxKhBddQp@google.com> <5f8dcb7f-9e4f-4484-b160-3a9ce541d63c@kernel.org>
-Message-ID: <aaWvtn48X8UizaaN@google.com>
-Subject: Re: [PATCH v1 02/16] mm/memory: remove "zap_details" parameter from zap_page_range_single()
-From: Alice Ryhl <aliceryhl@google.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: linux-kernel@vger.kernel.org, 
-	"linux-mm @ kvack . org" <linux-mm@kvack.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, 
-	Pedro Falcato <pfalcato@suse.de>, David Rientjes <rientjes@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Jarkko Sakkinen <jarkko@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Arve =?utf-8?B?SGrDuG5uZXbDpWc=?=" <arve@android.com>, Todd Kjos <tkjos@android.com>, 
-	Christian Brauner <brauner@kernel.org>, Carlos Llamas <cmllamas@google.com>, Ian Abbott <abbotti@mev.co.uk>, 
-	H Hartley Sweeten <hsweeten@visionengravers.com>, Jani Nikula <jani.nikula@linux.intel.com>, 
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Tvrtko Ursulin <tursulin@ursulin.net>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-	Dimitri Sivanich <dimitri.sivanich@hpe.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Andy Lutomirski <luto@kernel.org>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Eric Dumazet <edumazet@google.com>, 
-	Neal Cardwell <ncardwell@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	David Ahern <dsahern@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Miguel Ojeda <ojeda@kernel.org>, linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org, 
-	linux-s390@vger.kernel.org, linux-sgx@vger.kernel.org, 
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	linux-rdma@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	netdev@vger.kernel.org, rust-for-linux@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
+Message-Id: <abc5556bf4da9afc2d8100cd8937c41e9718f1a14b343d8a398499546157126c@mail.kernel.org>
+In-Reply-To: <20260302150342.55709-5-leon.hwang@linux.dev>
+References: <20260302150342.55709-5-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v2 4/6] bpf: Disallow !call_get_func_ip progs tail-calling call_get_func_ip progs
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,john.fastabend@gmail.com,kpsingh@kernel.org,sdf@fomichev.me,haoluo@google.com,jolsa@kernel.org,shuah@kernel.org,yangfeng@kylinos.cn,leon.hwang@linux.dev,menglong8.dong@gmail.com,puranjay@kernel.org,bjorn@kernel.org,pulehui@huawei.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,netdev@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  2 Mar 2026 15:53:10 +0000 (UTC)
 
-On Mon, Mar 02, 2026 at 04:01:44PM +0100, David Hildenbrand (Arm) wrote:
-> On 3/2/26 11:33, Alice Ryhl wrote:
-> > On Mon, Mar 02, 2026 at 11:27:40AM +0100, David Hildenbrand (Arm) wrote:
-> >> On 3/2/26 11:01, Alice Ryhl wrote:
-> >>>
-> >>> Well, rustfmt comes with the compiler, and it would be ideal to build
-> >>> test changes before sending them :)
-> >>
-> >> At least on Ubuntu on my notebook where I do most of the coding+patch
-> >> submissions it's a separate package?
-> >>
-> >> I do all my builds on a different (more powerful) machine where the
-> >> whole rust machinery's in place. Further, build bots that run on my
-> >> private branches did not report any issues.
-> > 
-> > There are some build bots that check for rustfmt, though not all of
-> > them.
-> > 
-> >>> But no worries, I took care of testing it. Thanks for taking the time to
-> >>> update the Rust code as well.
-> >>
-> >> I just did an allyesconfig and it does not report any warnings.
-> >>
-> >> So apparently, rustfmt problems not result in the compiler complaining?
-> >>
-> >> Or something else is off here that rust/kernel/mm/virt.rs won't get
-> >> compiled on my machine, even with allyesconfig. I can definitely see
-> >> some RUSTC stuff happening in the logs, like
-> >>
-> >> 	RUSTC L rust/kernel.o
-> >>
-> >> Thanks for the review and for pointing out rustfmt!
-> > 
-> > Similar to kerneldoc and other similar targets, formatting isn't checked
-> > in the normal build, but make can be invoked on the rustfmtcheck target
-> > to check it.
-> 
-> Thanks adding that to my cross-compile chain.
+--===============5904675307736768806==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Awesome, thanks!
+> diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
+> --- a/kernel/bpf/core.c
+> +++ b/kernel/bpf/core.c
 
-It's not relevant in this patch, but another thing that may be useful is
-to add CLIPPY=1 to the make invocation when building normally. This
-causes additional warnings to be checked using a tool called clippy.
+[ ... ]
 
-Alice
+> @@ -2422,11 +2423,17 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_prog *fp,
+>  	case BPF_MAP_OWNER_MATCH_FOR_INIT:
+>  		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
+>  			return false;
+> +		if (owner->call_get_func_ip != fp->call_get_func_ip)
+> +			return false;
+>  		break;
+>
+>  	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
+>  		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
+>  			return false;
+> +		if (bpf_prog_has_trampoline(fp)) {
+> +			if (!owner->call_get_func_ip && fp->call_get_func_ip)
+> +				return false;
+> +		}
+>  		break;
+
+The FOR_UPDATE path correctly guards the call_get_func_ip check with
+bpf_prog_has_trampoline(fp), since only trampoline-based programs
+rely on the func IP stored on the trampoline stack. Kprobe programs
+get func_ip from kprobe_running()->addr via bpf_get_func_ip_kprobe(),
+which is independent of the trampoline.
+
+Should the FOR_INIT path have the same bpf_prog_has_trampoline()
+guard? Without it, two kprobe programs that share a prog_array will
+be rejected if one calls bpf_get_func_ip() and the other does not,
+even though mixing is safe for kprobes.
+
+bpf_check_tail_call() calls this with BPF_MAP_OWNER_MATCH_FOR_INIT:
+
+    kprobe prog_a (call_get_func_ip=1) loads, references jmp_table
+      -> owner->call_get_func_ip = 1
+    kprobe prog_b (call_get_func_ip=0) loads, references same jmp_table
+      -> owner->call_get_func_ip != fp->call_get_func_ip
+      -> returns false, prog_b fails to load
+
+Something like this would match the FOR_UPDATE scoping:
+
+    case BPF_MAP_OWNER_MATCH_FOR_INIT:
+            if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
+                    return false;
+            if (bpf_prog_has_trampoline(fp)) {
+                    if (owner->call_get_func_ip != fp->call_get_func_ip)
+                            return false;
+            }
+            break;
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22582690876
+
+AI-authorship-score: medium
+AI-authorship-explanation: The v1 selftests carried Assisted-by Codex tags, and the kernel code follows a mechanical copy-paste pattern across commits; the v2 selftests were rewritten but the overall series structure suggests AI-assisted development.
+issues-found: 1
+issue-severity-score: low
+issue-severity-explanation: The FOR_INIT strict equality check on call_get_func_ip is missing a bpf_prog_has_trampoline() guard, causing unnecessary rejection of kprobe programs that share a prog_array with different call_get_func_ip values.
+
+--===============5904675307736768806==--
