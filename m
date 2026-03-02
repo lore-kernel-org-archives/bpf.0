@@ -1,124 +1,136 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A42462836A0
-	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 17:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E07B2836A0;
+	Mon,  2 Mar 2026 17:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772472737; cv=none; b=ewWH60V5mnz5OCasmyELyiKK07y6bTVGAKDJHnvRgvIQijGoHX7gPzH5tmWayvIItBX7TFQfVLveQpuv5y9NJlvWxJV/MZNSpyWovjHLNl4w6YLQH1w9O79seBsIyPp1PfXNiAOGOtpEe1dfo9dFVB7g6EdvGIWWKTvqGpu6MUk=
+	t=1772472762; cv=none; b=rtZ2pHGzqzTh5NpR3siXjhGlkTH8041UsiXrQGhEY+McfdVN9KYq6shX+qSqRxd5XzpCnXfN+zvCmq1cRSWgvNf7TFAudgCrJt7XHUGBid6tvMQsYx3PJMV36pfpfPswicrjTJhwoCNpYAgVDRS9EyDXxVhK+DlnK9yeN5XRpjY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772472737; c=relaxed/simple;
-	bh=5ZDTL0UhBj8FmMR3SQ/ZKg5/VvcJcVV2Vl99vYgOlG4=;
+	s=arc-20240116; t=1772472762; c=relaxed/simple;
+	bh=tnpn0LaJUMgqytRuDhKqOEYHDYHlXW9Sposq8jF6yqc=;
 	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=SuxZlaVSdiBRcE1Uqp89OP8MD/ZjECpQShPpDLIxR5o8eqdnbh2TVmsaId53i0w8ZdYyNFP3xDyYMgHDSf8WUBaeosasd5SIYrgJRyXlWtYuXBKQuJJbATqP9pXHvMk4CXszaUGgOgcmmkGPo0j0HN8WOaiH6YBuFrx4CDnUuOk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lwrcP0rN; arc=none smtp.client-ip=10.30.226.201
+	 Subject:From:To:Cc:Date; b=fZoj5tagoh5B0+RS+AItIaS/yBm8Dc5g5KECCz0/tpAk/wPztqSSV3MbwfgyCEeMKqijyIgGhdO3CTdCnivKC4rmyGHuz3uopL0aZB6CclQuWdx2DtBf32++4suIItUrOzFtNa2NvNAViia36KaPaxBRx25JL+oHTtBuOkvn748=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iOCI1e9j; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lwrcP0rN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12F1BC19423;
-	Mon,  2 Mar 2026 17:32:17 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iOCI1e9j"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05836C19423;
+	Mon,  2 Mar 2026 17:32:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772472737;
-	bh=5ZDTL0UhBj8FmMR3SQ/ZKg5/VvcJcVV2Vl99vYgOlG4=;
+	s=k20201202; t=1772472761;
+	bh=tnpn0LaJUMgqytRuDhKqOEYHDYHlXW9Sposq8jF6yqc=;
 	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=lwrcP0rNcjYlEb0xnlez7a66uR+9tN14ELSXCzQcBjedJhK8oLR3RmpBAslip8tRo
-	 Vy6rURSNlrz/0sUKGZ4La7fpoAs8wv+SYrKGiz96Zrb4e7zraTYk/sfhbx5dJkqmtK
-	 3i9xvcZsnbp8NNzg130ZdN7Uxz48VBHBss5EJWz2pcSBGgDJ+LBKfj92Z0hQHQ03MM
-	 XMzYcnhZC6jnNKWyTojlSJRkRoR4T+J1D5Xn9nLdhPWAgVanuAx25K+hrjOYpzI/vq
-	 b+y4SvlyJLIrIMQ6wFgnN/yi7wpZWfxJgplpt2Gvo6AoBoENUXxz5E/D92Jy0EItRb
-	 tK91TIPn4Gg5A==
-Content-Type: multipart/mixed; boundary="===============2779274183918500010=="
+	b=iOCI1e9j41WFatME/LLVC5T1+T/WcxsPTAnOYO9sprUHt1kELdT+C2dRHK4rFRust
+	 x+epksgA5XRcUa7gGWVY1MzYB8CPLAXW8KSCqSKlzgRlBw4D8icLQQuNcNNnLp8V6e
+	 +zKAVEaS5gK5BgGkBZ6OfWM6cZAhnkeqaNvkI1Ip0pRwugn9T0W0jJxILMq+QELrxn
+	 hcYnbvH3SPn+vWTxasUExKSAfkQlWAj0jl8rPu7QS7u96cKFuJIxCMJdHjOjirfa4L
+	 L0jicTT98m6eZAlrsniOazXvil57Ovsu1Bf9RdQCQM7BFSb58lKO0zAHdB+hAnRD7M
+	 PylBsJsJjSyVg==
+Content-Type: multipart/mixed; boundary="===============7315119925973411465=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <e7be9da1d46a65e0646d157e7968171c1a8a7e12f8d99b203be1e6ca83d01ff5@mail.kernel.org>
-In-Reply-To: <20260302164846.36713-2-andrey.grodzovsky@crowdstrike.com>
-References: <20260302164846.36713-2-andrey.grodzovsky@crowdstrike.com>
-Subject: Re: [PATCH bpf-next v3 1/2] libbpf: Handle duplicate kprobe symbols in attach_kprobe_opts
+Message-Id: <392614bc3c9c3a8b2c42e263181431dd0484f5cc41b0b9831e53d1bcdcb4b6ed@mail.kernel.org>
+In-Reply-To: <20260302161723.858616-7-larysa.zaremba@intel.com>
+References: <20260302161723.858616-7-larysa.zaremba@intel.com>
+Subject: Re: [PATCH bpf v4 6/9] i40e: use xdp.frame_sz as XDP RxQ info frag_size
 From: bot+bpf-ci@kernel.org
-To: andrey.grodzovsky@crowdstrike.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,jolsa@kernel.org,emil@etsalapatis.com,linux-open-source@crowdstrike.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  2 Mar 2026 17:32:17 +0000 (UTC)
+To: larysa.zaremba@intel.com,bpf@vger.kernel.org
+Cc: larysa.zaremba@intel.com,claudiu.manoil@nxp.com,vladimir.oltean@nxp.com,wei.fang@nxp.com,xiaoning.wang@nxp.com,andrew+netdev@lunn.ch,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,horms@kernel.org,shuah@kernel.org,aleksander.lobakin@intel.com,maciej.fijalkowski@intel.com,bastien.curutchet@bootlin.com,tushar.vyavahare@intel.com,kernelxing@tencent.com,rbm@suse.com,echaudro@redhat.com,lorenzo@kernel.org,toke@redhat.com,imx@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,intel-wired-lan@lists.osuosl.org,linux-kselftest@vger.kernel.org,aleksandr.loktionov@intel.com,dtatulea@nvidia.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon,  2 Mar 2026 17:32:41 +0000 (UTC)
 
---===============2779274183918500010==
+--===============7315119925973411465==
 Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-> --- a/tools/lib/bpf/libbpf.c
-> +++ b/tools/lib/bpf/libbpf.c
+> diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
+> +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
+> @@ -3567,6 +3567,7 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
+>  	struct i40e_vsi *vsi = ring->vsi;
+>  	u32 chain_len = vsi->back->hw.func_caps.rx_buf_chain_len;
+>  	u16 pf_q = vsi->base_queue + ring->queue_index;
+> +	u32 xdp_frame_sz = i40e_rx_pg_size(ring) / 2;
+>  	struct i40e_hw *hw = &vsi->back->hw;
 
-[ ... ]
+On PAGE_SIZE < 8192 systems, i40e_rx_pg_size() calls
+i40e_rx_pg_order() which checks ring->rx_buf_len:
 
-> @@ -11716,6 +11787,53 @@ struct find_kaddr_ctx kaddr_ctx = { .kaddr = 0 };
-> 			prog->name, retprobe ? "kretprobe" : "kprobe",
-> 			func_name, offset,
-> 			errstr(err));
-> +
-> +		if ((err == -EADDRNOTAVAIL || (legacy && err == -EINVAL)) && optional_func_name) {
+i40e_txrx.h:i40e_rx_pg_order() {
+    #if (PAGE_SIZE < 8192)
+        if (ring->rx_buf_len > (PAGE_SIZE / 2))
+            return 1;
+    #endif
+        return 0;
+}
 
-[ ... ]
+At this point in the function, ring->rx_buf_len still holds the
+value from the previous configuration. It is not updated until
+later in the function body:
 
-> +			err = libbpf_kallsyms_parse(find_kaddr_cb, &kaddr_ctx, true);
-> +			if (err) {
-> +				pr_warn("failed to get addr for %s\n",
-> +					func_name);
-> +				goto err_out;
-> +			}
-> +
-> +			if (kaddr_ctx.kaddr) {
-> +				pr_debug("retrying %s using kaddr 0x%llx\n",
-> +					 func_name, kaddr_ctx.kaddr);
-> +
-> +				offset += kaddr_ctx.kaddr;
-> +				free(legacy_probe);
-> +				legacy_probe = NULL;
-> +				goto retry_create;
-> +			}
-> +
-> +			pr_warn("symbol '%s' not found in vmlinux\n",
-> +				func_name);
-> +		}
-> +
-> +		goto err_out;
+i40e_main.c:i40e_configure_rx_ring() {
+    ...
+    u32 xdp_frame_sz = i40e_rx_pg_size(ring) / 2;  // stale rx_buf_len
+    ...
+    ring->rx_buf_len = vsi->rx_buf_len;  // updated here, after init
+    ...
+}
 
-When libbpf_kallsyms_parse() succeeds but the symbol is not found in
-vmlinux (kaddr_ctx.kaddr == 0), err has been overwritten to 0 by the
-successful libbpf_kallsyms_parse() return. The code then falls through
-to goto err_out, which does:
+Could this lead to a wrong xdp_frame_sz on 4K page systems when
+ring->rx_buf_len changes across the PAGE_SIZE/2 (2048) boundary
+between configurations?
 
-    return libbpf_err_ptr(err);    /* err == 0 */
+For example, after AF_XDP ZC teardown on a standard MTU interface,
+the previous rx_buf_len from XSK (~3840 with default 4K chunks) is
+above 2048, giving pg_order=1 and xdp_frame_sz=4096. But the new
+vsi->rx_buf_len for standard MTU is 1534, which would give
+pg_order=0 and the correct xdp_frame_sz=2048.
 
-libbpf_err_ptr(0) sets errno = 0 and returns NULL. The caller gets a
-NULL link pointer with errno = 0, which is an incorrect error indication
-for a public API.
+With frag_size set to 4096 but actual buffers only 2048 bytes,
+bpf_xdp_frags_increase_tail() would see frag_size > frame_sz and
+return -EOPNOTSUPP.
 
-This can happen in legacy mode when EINVAL comes from a cause other than
-duplicate symbols (the check matches any EINVAL, not only the duplicate-
-symbol case), or if the vmlinux symbol exists but has a type other than
-'T'/'t' (e.g. weak 'W' symbols), since find_kaddr_cb() only matches
-text section symbols.
+The previous code computed i40e_rx_pg_size(ring) / 2 at the skip
+label, after ring->rx_buf_len was already updated, so this ordering
+issue did not exist before.
 
-Would something like the following be appropriate here?
+Would it work to move the computation after the rx_buf_len
+assignment, for example:
 
-    pr_warn("symbol '%s' not found in vmlinux\n",
-            func_name);
-    err = -ENOENT;
+    ring->rx_buf_len = vsi->rx_buf_len;
+
+    xdp_frame_sz = i40e_rx_pg_size(ring) / 2;
+
+    if (ring->vsi->type != I40E_VSI_MAIN)
+        goto skip;
+
+> [ ... ]
+
+> @@ -3616,7 +3618,7 @@
+>  	}
+>
+>  skip:
+> -	xdp_init_buff(&ring->xdp, i40e_rx_pg_size(ring) / 2, &ring->xdp_rxq);
+> +	xdp_init_buff(&ring->xdp, xdp_frame_sz, &ring->xdp_rxq);
+
+> [ ... ]
+
 
 
 ---
 AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
 See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22586644239
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22586694870
 
-AI-authorship-score: medium
-AI-authorship-explanation: Systematic bulleted commit message and descriptive naming suggest possible AI assistance, but iterative v1/v2/v3 refinement from reviewer feedback indicates genuine human engagement.
+AI-authorship-score: low
+AI-authorship-explanation: The commit shows domain-specific driver knowledge, targeted fix with minimal changes, and a natural commit message style consistent with human kernel developers.
 issues-found: 1
 issue-severity-score: low
-issue-severity-explanation: Error value clobbered to zero on an uncommon fallback path causes incorrect errno reporting to callers, but does not cause crashes or data corruption.
+issue-severity-explanation: Variable initialization order causes wrong xdp_frame_sz on 4K page systems when rx_buf_len crosses the PAGE_SIZE/2 boundary between reconfigurations, leading to bpf_xdp_adjust_tail returning -EOPNOTSUPP incorrectly but no memory corruption.
 
---===============2779274183918500010==--
+--===============7315119925973411465==--
