@@ -1,136 +1,274 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E07B2836A0;
-	Mon,  2 Mar 2026 17:32:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772472762; cv=none; b=rtZ2pHGzqzTh5NpR3siXjhGlkTH8041UsiXrQGhEY+McfdVN9KYq6shX+qSqRxd5XzpCnXfN+zvCmq1cRSWgvNf7TFAudgCrJt7XHUGBid6tvMQsYx3PJMV36pfpfPswicrjTJhwoCNpYAgVDRS9EyDXxVhK+DlnK9yeN5XRpjY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772472762; c=relaxed/simple;
-	bh=tnpn0LaJUMgqytRuDhKqOEYHDYHlXW9Sposq8jF6yqc=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fZoj5tagoh5B0+RS+AItIaS/yBm8Dc5g5KECCz0/tpAk/wPztqSSV3MbwfgyCEeMKqijyIgGhdO3CTdCnivKC4rmyGHuz3uopL0aZB6CclQuWdx2DtBf32++4suIItUrOzFtNa2NvNAViia36KaPaxBRx25JL+oHTtBuOkvn748=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iOCI1e9j; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADEE93148A7
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 17:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772473081; cv=pass; b=GVEFvnhBjw4UDWK9KNz792L8HmW0EV0FzOWu2spkJqMXJQqhv82GJh0A6Vkyir9PUBSNysUYZ69s5buCeIr90cXeY7iDYyVejBysUSCtzclnDh33iNmQDdfWIJW2mNJEf2XJaIqY2Vffhztxbi9BEq0KKCdN60DW30c1/VBV/uU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772473081; c=relaxed/simple;
+	bh=QJ/PP+T0AGjAqo1m3nscVXD2bzphurhakxxs1FcbDFI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wc0h6Ag2YILemJiDQFbJX0GfNQdRhF6GWT9utVki0nzO/fzweTViLNaLPfXO+4tNjpVKQCZKJvxt/djLEd1B+oUNna4i4uK+UEoYIINEg1J7K+1jYsXkgdunVv4nhBbhLJoxn47O0aHiU5EYejdwXUXBD9zTmt/nWu1H6GlsRPY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=TZVLYdkD; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=nWgT8mQV; arc=pass smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iOCI1e9j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05836C19423;
-	Mon,  2 Mar 2026 17:32:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772472761;
-	bh=tnpn0LaJUMgqytRuDhKqOEYHDYHlXW9Sposq8jF6yqc=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
-	b=iOCI1e9j41WFatME/LLVC5T1+T/WcxsPTAnOYO9sprUHt1kELdT+C2dRHK4rFRust
-	 x+epksgA5XRcUa7gGWVY1MzYB8CPLAXW8KSCqSKlzgRlBw4D8icLQQuNcNNnLp8V6e
-	 +zKAVEaS5gK5BgGkBZ6OfWM6cZAhnkeqaNvkI1Ip0pRwugn9T0W0jJxILMq+QELrxn
-	 hcYnbvH3SPn+vWTxasUExKSAfkQlWAj0jl8rPu7QS7u96cKFuJIxCMJdHjOjirfa4L
-	 L0jicTT98m6eZAlrsniOazXvil57Ovsu1Bf9RdQCQM7BFSb58lKO0zAHdB+hAnRD7M
-	 PylBsJsJjSyVg==
-Content-Type: multipart/mixed; boundary="===============7315119925973411465=="
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="TZVLYdkD";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="nWgT8mQV"
+Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 622EsPJ1542577
+	for <bpf@vger.kernel.org>; Mon, 2 Mar 2026 17:37:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=IbAqDSv61OaxUm1HXMGYPokY8UuDzdZ8xwsXQb7ylvI=; b=TZVL
+	YdkDf2+cj+tii7kwO15XIv7LRLBql4BNqf20meaDGPMdGW272TnnJJrCfdrZJa3Q
+	xMOPJTwVicMAe/Zql0Rz9Yo4jMPOgyQCB1izdWTyPuhD6ImIT39Kd4WNaICV7q82
+	PPUJY2E4LZMHSj0C2Ij11U6Km+9Dj6xPAKXLBatke6IVUBfBwzwFj7cHZEqRaJ+Q
+	eqRqPY8HpGrRIT4CiCQryOJlMS3/FIymqbbLAojhVqiI+tX6ipkK0F6GdO+wxf2v
+	7T0ivR2p88OhC3yn6IgIcElpsmgOsqDkpU+kSkzAwR8Wk4imdT4a0jm9O0SgceOz
+	ziU7/9AwVLVBlHttkA==
+Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cmbkwdfec-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+	for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 17:37:53 +0000 (GMT)
+Received: from 04WPEXCH009.crowdstrike.sys (10.100.11.79) by
+ 04WPEXCH014.crowdstrike.sys (10.100.11.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Mon, 2 Mar 2026 17:37:52 +0000
+Received: from mail-yw1-f199.google.com (10.100.11.78) by
+ 04WPEXCH009.crowdstrike.sys (10.100.11.79) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Mon, 2 Mar 2026 17:37:52 +0000
+Received: by mail-yw1-f199.google.com with SMTP id 00721157ae682-794b74a8b2bso58436207b3.3
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 09:37:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; t=1772473071; cv=none;
+        d=google.com; s=arc-20240605;
+        b=lmQLcCOPlqovckuwC1A0Lujbfhh3UUVisuUkrJC04PF8rmtJtMEY4EHljXj6zr1Jwm
+         mFQ/WmJ8sU82ii7JPVApyipixJAhqAWNl5uiOTzoj9S1R2mc7N/Wlqj+BIYRA5GKmuqL
+         DVkpXR/ThIAV5RkOu9N6sXSujGHxxB/usy0suDK754O7FfCEuNkQqGvMKZ7ChmBG9fo8
+         K/0oZ+9IvczgWPk2fcfH+xOooE7MPsp5bAwRsCFAqgTGcdFqXydI063XFjEimD+wP/LW
+         4+ew/PLfeAEIg1L2lIzzyp9EcnW5ATuLSRPduOyBcRSP2OJuC0oTidC+QeBxV2z2fFEp
+         +FSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=IbAqDSv61OaxUm1HXMGYPokY8UuDzdZ8xwsXQb7ylvI=;
+        fh=7xasTfHfbCbrYnHh88Shab+OtmoyhYEmY1+u6ZgOUYE=;
+        b=B9hbBD0KZUHrD0OPPXivrCUQPXHDBiCiodqR0Ya2bc73afcu6oJjroyb0u6H1vLYn8
+         W+h20dV06Zkfzvf5N24QoVb2LYmYM3J41DWev05GjMIUTaWjS6iGAGiE5Dk0ZiBarh3O
+         oafjwOIhf0bsqTq/dIJyRKO33GLjply2YkyNiEP5g3T3L/q2p7x9IWo8hEuZBZhtmlZl
+         4xys7T0uOSdpFbdblaLOSCefvSIIhLc4HDATzOlaA2ZKz7XbBisd9Ah/kCPo7zsvZO0S
+         LNxj9mFhQDpCHDiC45JGYVxQ9w8KpTVRltkHYQsKhd5zfHVXoyurCGSuw9BLn8h+S+aj
+         Utbw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crowdstrike.com; s=google; t=1772473071; x=1773077871; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IbAqDSv61OaxUm1HXMGYPokY8UuDzdZ8xwsXQb7ylvI=;
+        b=nWgT8mQVaZ8bxwVyGUWTpWnAlWu2yXdfWselUpl80WxT/+3PJcVBxIscYLwuSMW49c
+         JHCaisckiTFXweGHHdMCZkZrzIIxnTH8X/b9XBNJ/uDZtP+0uszaPzIejCngI7niBGSf
+         ofwIDO/de3YRsvfaASxGBnWsAdacncfaxi+kXHI/fncReXoK1M9jr5ohtuTYjHNFzbLq
+         xQ7ttvWRKUcFPCduRenNp8mOrDtPq3uQzEiuG9Hpz0J7IdjhdYdWl0TISC0coza6mn+2
+         VqYxRi7zweAEmO21FhkLqWOTpzPngKs89Ub18qd7cd1caxYX+zs3rjJGmnURLga1K75G
+         POOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772473071; x=1773077871;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=IbAqDSv61OaxUm1HXMGYPokY8UuDzdZ8xwsXQb7ylvI=;
+        b=ffgUfVS8eQ02ZnHPhz+8AvnVJPocb+spFlaFjV4kQzPNq9OIIhlttV9rel6SXy0fsZ
+         DPOSuTq1gPKDd/eXUSLTDs/uz0JQ1nCFL5/eEG1sSmGNOIH/tAWd2cqLtBckkzjEmvEh
+         C0ZprxHvLh9OeCGLg02jquHjOa2yVUUCBsmQh7RmJuP2BukEHy4MuoPB2yU/LbNDqBtV
+         H4VLmjX14XrTPLvoQc3gzz79qW4O031Sj5DHU5XZF1P4UIgr23b7jNGhcqXG0I8EJ+B5
+         EiNs+oRI1rAMFKSyn1qgszLp490XREWj2F0/BYv+5TstrPm3JCpdzjlWHTzCkWj7mXwo
+         q4+g==
+X-Forwarded-Encrypted: i=1; AJvYcCUHWhFBLOG7+4kXzCMC+VgHWHpynX0hX2AI6LnEK2uADI0K3miXK+g7z0YCxrJHFjzcJzA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzqLMNV0zyPi5AMWz3HaoSBSJM0GO6vFHpdZnKjXBw42/eSULKU
+	hVWcBAZiLRRhfH9HvpWNq8EFMJaAyAmGcq0gfT3DEQ7OHAqSSSxQCqPO5KcO2cprQRZbfIXRk/P
+	G21cDz+EC0y6CHgC6J4+139Xif+4My7WtqpawjSIjSaM77bOLtPDVndxHevMDsWHs8fVKxaKjQM
+	7dc9bia71aCAGpJqHoQI5iCgqVkuNYJyT9lq2hyO6a21Y=
+X-Gm-Gg: ATEYQzyPiAKd0T7oE3jW3+GZ8wjuTeYBAeJuLjSuuQDT98bHuMgPJu7AZUKhg8YQQP1
+	twvXoShNxJ8HbtrS++drxVa9kdtlOFl50UkqjwQww9p0vRzuAWRQfIdU6rXykpfCGmwvQC3WYTI
+	GX578f4aJZtkuKSLnUUqIu44LVOg5EnmEXYdOIV+7oecUYpOf+r6r4KKSZqq7pvZTCkM4mVn/5m
+	Q0t
+X-Received: by 2002:a05:690c:10c:b0:798:6c28:dd68 with SMTP id 00721157ae682-798855c155bmr122475247b3.54.1772473071573;
+        Mon, 02 Mar 2026 09:37:51 -0800 (PST)
+X-Received: by 2002:a05:690c:10c:b0:798:6c28:dd68 with SMTP id
+ 00721157ae682-798855c155bmr122474807b3.54.1772473070960; Mon, 02 Mar 2026
+ 09:37:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <392614bc3c9c3a8b2c42e263181431dd0484f5cc41b0b9831e53d1bcdcb4b6ed@mail.kernel.org>
-In-Reply-To: <20260302161723.858616-7-larysa.zaremba@intel.com>
-References: <20260302161723.858616-7-larysa.zaremba@intel.com>
-Subject: Re: [PATCH bpf v4 6/9] i40e: use xdp.frame_sz as XDP RxQ info frag_size
-From: bot+bpf-ci@kernel.org
-To: larysa.zaremba@intel.com,bpf@vger.kernel.org
-Cc: larysa.zaremba@intel.com,claudiu.manoil@nxp.com,vladimir.oltean@nxp.com,wei.fang@nxp.com,xiaoning.wang@nxp.com,andrew+netdev@lunn.ch,davem@davemloft.net,edumazet@google.com,kuba@kernel.org,pabeni@redhat.com,anthony.l.nguyen@intel.com,przemyslaw.kitszel@intel.com,ast@kernel.org,daniel@iogearbox.net,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,song@kernel.org,yonghong.song@linux.dev,kpsingh@kernel.org,haoluo@google.com,jolsa@kernel.org,horms@kernel.org,shuah@kernel.org,aleksander.lobakin@intel.com,maciej.fijalkowski@intel.com,bastien.curutchet@bootlin.com,tushar.vyavahare@intel.com,kernelxing@tencent.com,rbm@suse.com,echaudro@redhat.com,lorenzo@kernel.org,toke@redhat.com,imx@lists.linux.dev,netdev@vger.kernel.org,linux-kernel@vger.kernel.org,intel-wired-lan@lists.osuosl.org,linux-kselftest@vger.kernel.org,aleksandr.loktionov@intel.com,dtatulea@nvidia.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon,  2 Mar 2026 17:32:41 +0000 (UTC)
+References: <20260227204052.725813-2-andrey.grodzovsky@crowdstrike.com>
+ <2d0e9de12b7bf49a0b5117da6d305b0e918785818b63798dfd85de1635b68e8b@mail.kernel.org>
+ <CAOu3gNgRpMd9poZYibhGg+UfQXiHpB3ucnhvghoT0TF1rFfmPQ@mail.gmail.com> <aaVtarHiOYPfe9Tu@krava>
+In-Reply-To: <aaVtarHiOYPfe9Tu@krava>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Mon, 2 Mar 2026 12:37:40 -0500
+X-Gm-Features: AaiRm50k8g-QJNyM5_HOsKYr3OetDVBYPg0kvJqT6keqfNnNaP0bQu_yTa6bKMA
+Message-ID: <CAOu3gNjPX_vf=5anZ-fhqR5S+P3uaqur3oc1T3yLqMs3anGHrA@mail.gmail.com>
+Subject: Re: [External] Re: [RFC PATCH bpf-next v3 1/3] libbpf: Optimize
+ kprobe.session attachment for exact function names
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bot+bpf-ci@kernel.org, yonghong.song@linux.dev, bpf@vger.kernel.org,
+        linux-open-source@crowdstrike.com, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, rostedt@goodmis.org,
+        linux-trace-kernel@vger.kernel.org, martin.lau@kernel.org,
+        eddyz87@gmail.com, clm@meta.com, ihor.solodrai@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Disclaimer: USA
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDE0MiBTYWx0ZWRfXx4cOPeoett0m
+ 0Gna8Ct5+3Lyaed80C9JFX1NZ2IV8GNZLJz30u0JJANvE3U+hHG6dmyV2wJ4dGyeNCcAir+NFlO
+ JLha4AdxGzcmWY3OHa0wFiWu5W23ohawOMQ6yUO4Qv4FVDD1fm3bOStkmt/0ROlE3alkf6JKJC6
+ 4adNcdHugSDS/+V9f2QYuc/+SzGTmRv0/fZiKRueexqsPioHCq7Fnw8Qq52LoYTxZvUMd8dJCYO
+ ynKunP3sUhogkwt7D8VgRmWdvS+fnwHrQgiyHUYK+8S0RumotE7eQ8uAUIELlku0w836p50RrN1
+ 05KLFJ6Ts7u94oF6F8OOlRcwBPzTRIjc/d6QPN999FrLtGijYXWqG5ig9zYB7AVd0McgOlVPqD8
+ 6x4NBh1PRreHKrRNIY+dqKvEdB9rJ/J06a4OOSAAEZjbmD+mti0jgxTaO1tb5h9h+2coYSMspCC
+ v4A+q9BEeto7Sm8g5kQ==
+X-Authority-Analysis: v=2.4 cv=M4RA6iws c=1 sm=1 tr=0 ts=69a5caf1 cx=c_pps
+ a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
+ a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=KZhmPCYDdY0A:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22 a=b3B37AjAgz0HnGB3MuNd:22
+ a=VwQbUJbxAAAA:8 a=iFABrAoMAAAA:20 a=NEAV23lmAAAA:8 a=pGLkceISAAAA:8
+ a=6aJR2x0Un_piba_x_FIA:9 a=QEXdDO2ut3YA:10 a=bA3UWDv6hWIuX7UZL3qL:22
+X-Proofpoint-GUID: Y0QRFGtNoi8rHl9_5ROCOBgThVXn_NL2
+X-Proofpoint-ORIG-GUID: Y0QRFGtNoi8rHl9_5ROCOBgThVXn_NL2
+X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11717
+ signatures=596818
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 adultscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
+ suspectscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 malwarescore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603020142
 
---===============7315119925973411465==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
-> diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-> --- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-> +++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-> @@ -3567,6 +3567,7 @@ static int i40e_configure_rx_ring(struct i40e_ring *ring)
->  	struct i40e_vsi *vsi = ring->vsi;
->  	u32 chain_len = vsi->back->hw.func_caps.rx_buf_chain_len;
->  	u16 pf_q = vsi->base_queue + ring->queue_index;
-> +	u32 xdp_frame_sz = i40e_rx_pg_size(ring) / 2;
->  	struct i40e_hw *hw = &vsi->back->hw;
-
-On PAGE_SIZE < 8192 systems, i40e_rx_pg_size() calls
-i40e_rx_pg_order() which checks ring->rx_buf_len:
-
-i40e_txrx.h:i40e_rx_pg_order() {
-    #if (PAGE_SIZE < 8192)
-        if (ring->rx_buf_len > (PAGE_SIZE / 2))
-            return 1;
-    #endif
-        return 0;
-}
-
-At this point in the function, ring->rx_buf_len still holds the
-value from the previous configuration. It is not updated until
-later in the function body:
-
-i40e_main.c:i40e_configure_rx_ring() {
-    ...
-    u32 xdp_frame_sz = i40e_rx_pg_size(ring) / 2;  // stale rx_buf_len
-    ...
-    ring->rx_buf_len = vsi->rx_buf_len;  // updated here, after init
-    ...
-}
-
-Could this lead to a wrong xdp_frame_sz on 4K page systems when
-ring->rx_buf_len changes across the PAGE_SIZE/2 (2048) boundary
-between configurations?
-
-For example, after AF_XDP ZC teardown on a standard MTU interface,
-the previous rx_buf_len from XSK (~3840 with default 4K chunks) is
-above 2048, giving pg_order=1 and xdp_frame_sz=4096. But the new
-vsi->rx_buf_len for standard MTU is 1534, which would give
-pg_order=0 and the correct xdp_frame_sz=2048.
-
-With frag_size set to 4096 but actual buffers only 2048 bytes,
-bpf_xdp_frags_increase_tail() would see frag_size > frame_sz and
-return -EOPNOTSUPP.
-
-The previous code computed i40e_rx_pg_size(ring) / 2 at the skip
-label, after ring->rx_buf_len was already updated, so this ordering
-issue did not exist before.
-
-Would it work to move the computation after the rx_buf_len
-assignment, for example:
-
-    ring->rx_buf_len = vsi->rx_buf_len;
-
-    xdp_frame_sz = i40e_rx_pg_size(ring) / 2;
-
-    if (ring->vsi->type != I40E_VSI_MAIN)
-        goto skip;
-
-> [ ... ]
-
-> @@ -3616,7 +3618,7 @@
->  	}
+On Mon, Mar 2, 2026 at 5:58=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrote=
+:
 >
->  skip:
-> -	xdp_init_buff(&ring->xdp, i40e_rx_pg_size(ring) / 2, &ring->xdp_rxq);
-> +	xdp_init_buff(&ring->xdp, xdp_frame_sz, &ring->xdp_rxq);
+> On Fri, Feb 27, 2026 at 05:28:05PM -0500, Andrey Grodzovsky wrote:
+> > On Fri, Feb 27, 2026 at 4:18=E2=80=AFPM <bot+bpf-ci@kernel.org> wrote:
+> > >
+> > > > diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> > > > --- a/tools/lib/bpf/libbpf.c
+> > > > +++ b/tools/lib/bpf/libbpf.c
+> > > > @@ -12041,7 +12041,15 @@ struct kprobe_multi_resolve res =3D {
+> > > >       if (addrs && syms)
+> > > >               return libbpf_err_ptr(-EINVAL);
+> > > >
+> > > > -     if (pattern) {
+> > > > +     /*
+> > > > +      * Exact function name (no wildcards): bypass kallsyms parsin=
+g
+> > > > +      * and pass the symbol directly to the kernel via syms[] arra=
+y.
+> > > > +      * The kernel's ftrace_lookup_symbols() resolves it efficient=
+ly.
+> > > > +      */
+> > > > +     if (pattern && !strpbrk(pattern, "*?")) {
+> > > > +             syms =3D &pattern;
+> > > > +             cnt =3D 1;
+> > > > +     } else if (pattern) {
+> > >
+> > > When the fast path is taken here, unique_match is never checked.
+> > > The unique_match validation is inside the "else if (pattern)"
+> > > branch:
+> > >
+> > >     if (unique_match && res.cnt !=3D 1) {
+> > >         pr_warn("prog '%s': failed to find a unique match ...");
+> > >         err =3D -EINVAL;
+> > >         goto error;
+> > >     }
+> > >
+> > > Before this change, a caller passing an exact function name with
+> > > unique_match =3D true would go through kallsyms parsing, which could
+> > > find multiple addresses for same-named static functions across
+> > > different translation units, and the unique_match check would
+> > > correctly return an error.
+> > >
+> > > With the fast path, the name goes directly to the kernel's
+> > > ftrace_lookup_symbols(), which resolves only the first match via
+> > > kallsyms_callback() skipping duplicates:
+> > >
+> > >     if (args->addrs[idx])
+> > >         return 0;
+> > >
+> > > Should the fast path condition also check unique_match, for
+> > > example:
+> > >
+> > >     if (pattern && !strpbrk(pattern, "*?") && !unique_match) {
+> > >
+> > > This would preserve the optimization for the common case while
+> > > falling back to the slow path when unique_match is explicitly
+> > > requested.
+> > >
+> >
+> > I am not sure this makes sense, according to the original patchset [1]
+> > this flag was specifically tailored for patterns with wildcards where
+> > this indeed
+> > makes sense. in our case, cnt =3D=3D 1 from the get go since no wildcar=
+ds so this
+> > check can't ever fail.
+>
+> I think the problem is that it could now pass for cases where
+> function name has multiple instances in kallsyms .. while before
+> it would be caught in libbpf_available_kallsyms_parse and fail
+>
+> jirka
 
-> [ ... ]
+Got you, you (and CI BOT originally) proposed  with the unique_match guard:
+fall back to slow path, preserving old behavior for this case.
 
+Wiil do.
 
+Andrey
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22586694870
-
-AI-authorship-score: low
-AI-authorship-explanation: The commit shows domain-specific driver knowledge, targeted fix with minimal changes, and a natural commit message style consistent with human kernel developers.
-issues-found: 1
-issue-severity-score: low
-issue-severity-explanation: Variable initialization order causes wrong xdp_frame_sz on 4K page systems when rx_buf_len crosses the PAGE_SIZE/2 boundary between reconfigurations, leading to bpf_xdp_adjust_tail returning -EOPNOTSUPP incorrectly but no memory corruption.
-
---===============7315119925973411465==--
+>
+>
+> >
+> > Andrii, Yonghong - any suggestions ?
+> >
+> > [1] - https://urldefense.com/v3/__https://lore.kernel.org/bpf/202412182=
+25246.3170300-1-yonghong.song@linux.dev/__;!!BmdzS3_lV9HdKG8!xk626jLDdORTgQ=
+machiRbRK_5oayjcFYNRm-SQS9q7EujjYI3PbN1x1jUehjPM_wsz6h8r0p9z39vc_VotgANU2nr=
+_H3$
+> >
+> > Andrey
+> >
+> >
+> > > > [ ... ]
+> > >
+> > >
+> > > ---
+> > > AI reviewed your patch. Please fix the bug or email reply why it's no=
+t a bug.
+> > > See: https://urldefense.com/v3/__https://github.com/kernel-patches/vm=
+test/blob/master/ci/claude/README.md__;!!BmdzS3_lV9HdKG8!z-aIXCz8YRZcraMmGI=
+2bmb4YrDgW0brRTcX_BaJCWYwj7xfmkZL6qka6aqqIwzDPUjR1TxUU-Mc50s9AAYQf-vQMuPuGl=
+VKW$
+> > >
+> > > CI run summary: https://urldefense.com/v3/__https://github.com/kernel=
+-patches/bpf/actions/runs/22503275616__;!!BmdzS3_lV9HdKG8!z-aIXCz8YRZcraMmG=
+I2bmb4YrDgW0brRTcX_BaJCWYwj7xfmkZL6qka6aqqIwzDPUjR1TxUU-Mc50s9AAYQf-vQMuGee=
+kJPd$
+> > >
+> > > AI-authorship-score: medium
+> > > AI-authorship-explanation: Comments are unusually verbose for a simpl=
+e optimization, and the commit message is well-structured with distinct sec=
+tions, but the iterative v1-v3 refinement following reviewer feedback is ty=
+pical of human development.
+> > > issues-found: 1
+> > > issue-severity-score: low
+> > > issue-severity-explanation: The fast path bypasses the unique_match c=
+heck, which could silently attach to the wrong function among same-named st=
+atics, but requires the uncommon combination of unique_match=3Dtrue with an=
+ exact name matching multiple kernel functions.
