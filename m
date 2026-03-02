@@ -1,166 +1,147 @@
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57EC93939D3;
-	Mon,  2 Mar 2026 10:02:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7DEC39527D
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 10:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772445723; cv=none; b=GqQwsvs6RKBeP07VgT+pchv+o69SjMyp93FdZ64oUOIne6lYlwElHVnNi4vyPzwrhVHdQvElqI1SE9ZEZWxmVdpd7wMXvwTgppJUAb542QvyO+KhLYcxoONvWDrUvUPhpyaa30zIsao+J2d2beZIET/f/UyF5O6JN7XK/rmXbwE=
+	t=1772445762; cv=none; b=Rybaya+UySbUm8oxPR96FzVUU9U/pOdfx7zYumb8iUJYFr1jNiiLLrv4Le/cp1SU2rVUqxd/0eA5+IsmjZG4S7r24qkYFb5BFU3dqCQ/kkgiMa6KomGlnIustLrpcIE4ykrYqGApvdBUaYrocRumPrEgFkLyr94C7xtIi7E8S1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772445723; c=relaxed/simple;
-	bh=O+p2NVXMnLMe9Do8deslWiQiT6Qh8ds7WRj+qTfpg/w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z10eZbcananmU4JpR4zz8jyuG3dYY9A67RTXUMPd2EV9a2EHbGme/KvO6SwTlV8w47j52BcxdxT6t8XDTJ6PD1AzjPQvVFRPoeCNP+Q4sIjCT6qcKv1XcsHujSQE4hezwUM6uIDzdf3n0470bPEzIQ6TplnjjEY4X++KiHA3wss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=none smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=45.249.212.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.19.163.198])
-	by dggsgout12.his.huawei.com (SkyGuard) with ESMTPS id 4fPZGM1J25zKHMXT;
-	Mon,  2 Mar 2026 18:01:47 +0800 (CST)
-Received: from mail02.huawei.com (unknown [10.116.40.128])
-	by mail.maildlp.com (Postfix) with ESMTP id CA94F40579;
-	Mon,  2 Mar 2026 18:01:49 +0800 (CST)
-Received: from k01.k01 (unknown [10.67.174.197])
-	by APP4 (Coremail) with SMTP id gCh0CgCXQvMKYKVpfu0vJQ--.22492S7;
-	Mon, 02 Mar 2026 18:01:49 +0800 (CST)
-From: Xu Kuohai <xukuohai@huaweicloud.com>
-To: bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
+	s=arc-20240116; t=1772445762; c=relaxed/simple;
+	bh=NIYHq2fI/Nnd6KvTmjKQB5oLNxpLVvK2ePSTu9K5RsQ=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=joe9GAMe+QHceF0wt9B+9hRdprpINdelEz6KVU9otNH3iqnU7zZK22xvvT2LF59W0BQbX9UggzqMnvWPbi72yeQdIYHhEfxs5pUmQJrsMZOw5b1ejsLa4cLIEMgUPUzmrtujgZio+EruGpR64gMVTKvwCxb3jnev0pszD8RwuGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aPCtahYx; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aPCtahYx"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48371119eacso53080625e9.2
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 02:02:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772445759; x=1773050559; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WZyBLvMkGew0ok4xTWt/X8AfGCSa7L5Et7GfpZ7AGBk=;
+        b=aPCtahYxPex/NOVZ9oeMaLGMs/Vo6GbaW81Fh/9xBrGhiCCcotI+eWOzqcT5Jluyjz
+         ySbPZyBfCKLQNm/KN4IGFnDSHDgKpBIVeeLTY1Cnt0/hJy39LNCtNKy2+3a7DL9O4/jx
+         cNbtEGd8BdWdu1H3nb3YNvqCF/xlBbcSCwoIva+aIUbdqYLooDvkA8Hk1ONYJGVLvzfb
+         Li/LMGTUacWdvlgu6X9NhG413doLlquQ1jAsDgf1j0xcjiNMjqz+1YLNeh/sqvWTgK+A
+         s1gYEMfRxFQD1dH9SlRjRe+aqPiC2+vXe2FmMSeE91Fdc8Eun9aeWFWaZ3m6P5SHQV26
+         /rKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772445759; x=1773050559;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WZyBLvMkGew0ok4xTWt/X8AfGCSa7L5Et7GfpZ7AGBk=;
+        b=eU1vWS/xA/Nm0djB3TVvtc22zAWweQoatdk7oNQvwObS4QOag6orwP1vCbcbzcgrpL
+         9AvgnqD6NVANpMrK7zhlpyNAWzX8Rvtb9/yGOPFlViVphtajCKGKmOdQMgvzJZcFj3gd
+         wjovWj2u7ijedfjSYrUQynuIL942Rk/NcRb6Iab1FD7qJb3a2A45QSWvFVw4wuNz8ITc
+         R5mOtSKZp1LuxZD0pEmsYXiWzWWmWVjcFMsa1BG9AtvhpNdOAtKRkVdrtrtyUOPUpwZv
+         6DeoBXGI580HuBF6MPJV1OBQONsROl5swAo9oT6/pvdd3I2sZMuu5QxL47njgBS7fPxD
+         kDhw==
+X-Forwarded-Encrypted: i=1; AJvYcCW6Q/vJ/WCJAbcXbbNC9G60QFvq9mLKhTvo/acGwbee39QvH9TrVMREYsDTvUmwtN7yIrA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKPfQsQ2ckRfmZZ0Y4kCPSWAR9yRTjb/03Jtvff1bxVB8rTDuD
+	4va6O1fbybqIE+NwbXQnNTxpeA08SdWTLOE1Kom6j0pYB1B6g8eqhb+u
+X-Gm-Gg: ATEYQzwPBmQdlorm3DWhUIYYch9fwSH1/vOenGp6PKzQaVAQSjl0bdsd8u9jJmuh/QD
+	qgB1OP1HPBpBkYeSmFN5jrle6aVyc+8HFoYImTD/rgtqQoyS7Fpv3iYSHslzrDy0mSJ3++oH/Dk
+	KAbsk2zRI0iaIM52dHWJwW8yZbpQilE5LBi6ZHOOT4JIyZGjSUSao21TxEYkMHaHgx2W7bw3BIJ
+	cv1JqUHCiataNNGrQvi4KkWh/sGBS11O0X1eDEfAnmE2odD18dXbybtt9RjXx+1CPsjfWmSvws4
+	vyeJkkFjQgyMlO0rJO4bYWbf42Pij+Pg7xz+qJvZe1JO1iC7yvrN4JQG3k1F5Su0QtLLcQ2Ww8n
+	Nn2MsOXm31cLwj7bkvw/i0iekqJFo0rB3xpDea8fEpyhZoi9SvcaOHbDWkVnHAqMZwMDJFcCBqn
+	gb6qmFDC0=
+X-Received: by 2002:a05:600c:1f95:b0:477:6374:6347 with SMTP id 5b1f17b1804b1-483c9c0bb23mr194470505e9.22.1772445758827;
+        Mon, 02 Mar 2026 02:02:38 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::d99c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-483bd750701sm418417725e9.11.2026.03.02.02.02.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2026 02:02:38 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 2 Mar 2026 11:02:36 +0100
+To: Sun Jian <sun.jian.kdev@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>,
 	Eduard Zingerman <eddyz87@gmail.com>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Puranjay Mohan <puranjay@kernel.org>,
-	Anton Protopopov <a.s.protopopov@gmail.com>
-Subject: [PATCH bpf-next v5 5/5] bpf, arm64: Emit BTI for indirect jump target
-Date: Mon,  2 Mar 2026 18:27:26 +0800
-Message-ID: <20260302102726.1126019-6-xukuohai@huaweicloud.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260302102726.1126019-1-xukuohai@huaweicloud.com>
-References: <20260302102726.1126019-1-xukuohai@huaweicloud.com>
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] selftests/bpf: bpf_cookie: skip kprobe_multi
+ tests without bpf_testmod
+Message-ID: <aaVgPM5quBz-H3Yb@krava>
+References: <20260228074555.122950-1-sun.jian.kdev@gmail.com>
+ <20260228074555.122950-2-sun.jian.kdev@gmail.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:gCh0CgCXQvMKYKVpfu0vJQ--.22492S7
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrW8trW5XF45Cw1rWw4Uurg_yoW5Zw1fpF
-	4DC3s0krW8Gr4jg3WDXayDAFyakF4kGFW3GFyFk3ySkrZ0qF98WF1UKF12kF93A3yrur1f
-	Za90kr1UW34xJrDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUmmb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
-	AFwI0_Jw0_GFylc7CjxVAKzI0EY4vE52x082I5MxAIw28IcxkI7VAKI48JMxC20s026xCa
-	FVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
-	Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I
-	6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r
-	1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1U
-	YxBIdaVFxhVjvjDU0xZFpf9x07j5CzZUUUUU=
-X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260228074555.122950-2-sun.jian.kdev@gmail.com>
 
-From: Xu Kuohai <xukuohai@huawei.com>
+On Sat, Feb 28, 2026 at 03:45:54PM +0800, Sun Jian wrote:
+> The kprobe_multi subtests rely on bpf_testmod fentry ksyms.
+> 
+> When bpf_testmod isn't available, libbpf fails to resolve
+> bpf_testmod_fentry_test* and skeleton load fails with -ESRCH, causing
+> false failures.
+> 
+> Skip these subtests when env.has_testmod is false.
+> 
+> Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
 
-On CPUs that support BTI, the indirect jump selftest triggers a kernel
-panic because there is no BTI instructions at the indirect jump targets.
+please include bpf-next in the subject, other than that:
 
-Fix it by emitting a BTI instruction for each indirect jump target.
+Acked-by: Jiri Olsa <jolsa@kernel.org>
 
-For reference, below is a sample panic log.
+thanks,
+jirka
 
-Internal error: Oops - BTI: 0000000036000003 [#1]  SMP
-...
-Call trace:
- bpf_prog_2e5f1c71c13ac3e0_big_jump_table+0x54/0xf8 (P)
- bpf_prog_run_pin_on_cpu+0x140/0x468
- bpf_prog_test_run_syscall+0x280/0x3b8
- bpf_prog_test_run+0x22c/0x2c0
-
-Fixes: f4a66cf1cb14 ("bpf: arm64: Add support for indirect jumps")
-Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
----
- arch/arm64/net/bpf_jit_comp.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
-
-diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
-index 823246c7ff5d..127e099d3d3a 100644
---- a/arch/arm64/net/bpf_jit_comp.c
-+++ b/arch/arm64/net/bpf_jit_comp.c
-@@ -1198,8 +1198,8 @@ static int add_exception_handler(const struct bpf_insn *insn,
-  * >0 - successfully JITed a 16-byte eBPF instruction.
-  * <0 - failed to JIT.
-  */
--static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
--		      bool extra_pass)
-+static int build_insn(const struct bpf_verifier_env *env, const struct bpf_insn *insn,
-+		      struct jit_ctx *ctx, bool extra_pass)
- {
- 	const u8 code = insn->code;
- 	u8 dst = bpf2a64[insn->dst_reg];
-@@ -1224,6 +1224,9 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	int ret;
- 	bool sign_extend;
- 
-+	if (bpf_insn_is_indirect_target(env, ctx->prog, i))
-+		emit_bti(A64_BTI_J, ctx);
-+
- 	switch (code) {
- 	/* dst = src */
- 	case BPF_ALU | BPF_MOV | BPF_X:
-@@ -1899,7 +1902,7 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx,
- 	return 0;
- }
- 
--static int build_body(struct jit_ctx *ctx, bool extra_pass)
-+static int build_body(struct bpf_verifier_env *env, struct jit_ctx *ctx, bool extra_pass)
- {
- 	const struct bpf_prog *prog = ctx->prog;
- 	int i;
-@@ -1918,7 +1921,7 @@ static int build_body(struct jit_ctx *ctx, bool extra_pass)
- 		int ret;
- 
- 		ctx->offset[i] = ctx->idx;
--		ret = build_insn(insn, ctx, extra_pass);
-+		ret = build_insn(env, insn, ctx, extra_pass);
- 		if (ret > 0) {
- 			i++;
- 			ctx->offset[i] = ctx->idx;
-@@ -2100,7 +2103,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 		goto out_off;
- 	}
- 
--	if (build_body(&ctx, extra_pass)) {
-+	if (build_body(env, &ctx, extra_pass)) {
- 		prog = orig_prog;
- 		goto out_off;
- 	}
-@@ -2152,7 +2155,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	/* Dont write body instructions to memory for now */
- 	ctx.write = false;
- 
--	if (build_body(&ctx, extra_pass)) {
-+	if (build_body(env, &ctx, extra_pass)) {
- 		prog = orig_prog;
- 		goto out_free_hdr;
- 	}
-@@ -2163,7 +2166,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	ctx.write = true;
- 
- 	/* Pass 3: Adjust jump offset and write final image */
--	if (build_body(&ctx, extra_pass) ||
-+	if (build_body(env, &ctx, extra_pass) ||
- 		WARN_ON_ONCE(ctx.idx != ctx.epilogue_offset)) {
- 		prog = orig_prog;
- 		goto out_free_hdr;
--- 
-2.47.3
-
+> 
+> ---
+> Changes in v2:
+> 
+> No functional change.
+> 
+> Drop the unrelated perf_event_open() argument change from this patch
+> (moved to patch 2/2).
+> 
+> v1: <https://lore.kernel.org/lkml/20260227164037.84110-1-sun.jian.kdev@gmail.com/>
+> ---
+>  tools/testing/selftests/bpf/prog_tests/bpf_cookie.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> index 75f4dff7d042..b7643a5bf7ad 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+> @@ -105,6 +105,11 @@ static void kprobe_multi_link_api_subtest(void)
+>  	unsigned long long addrs[8];
+>  	__u64 cookies[8];
+>  
+> +	if (!env.has_testmod) {
+> +		test__skip();
+> +		return;
+> +	}
+> +
+>  	if (!ASSERT_OK(load_kallsyms(), "load_kallsyms"))
+>  		goto cleanup;
+>  
+> @@ -192,6 +197,11 @@ static void kprobe_multi_attach_api_subtest(void)
+>  	};
+>  	__u64 cookies[8];
+>  
+> +	if (!env.has_testmod) {
+> +		test__skip();
+> +		return;
+> +	}
+> +
+>  	skel = kprobe_multi__open_and_load();
+>  	if (!ASSERT_OK_PTR(skel, "fentry_raw_skel_load"))
+>  		goto cleanup;
+> -- 
+> 2.43.0
+> 
+> 
