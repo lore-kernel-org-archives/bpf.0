@@ -1,85 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5DF317170;
-	Mon,  2 Mar 2026 18:00:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30FA2877C3
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 18:02:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772474444; cv=none; b=qC1oJ5w+0CHdW2P7Gdx71QLayl6ohXpIgHB5qvNWwLpYSg3BQR2DSP/qpxRbMIjEPuTz/68rCaTHsMItUvQOjftjXcWLnioBwd1XXtnWhWZAL6QMHoEAIgGr0SkeZbiDQupnw5jvWfjzmSXt3vOdDGOUoDlvaef1CklN/SQNQLc=
+	t=1772474530; cv=none; b=WABLcniiQVEcvg+DDxJhDwbzHdV3lO9Nu+gQcu7aQrhwdkOHuOYBxz9DQo0Am+j632jbsFup8J/pVmCtjgrHaC7xrS+6NTdC1ZJDawnJxD7/lNc6+kXeW2g9OleqjfkuZnh5vOljirP4PymeE20Brw5T0Gm3l0ecM17D7+qsk8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772474444; c=relaxed/simple;
-	bh=AAWR9gZY03nbOlbVMTbEKUl4nXa8dqWaMd25yAG8vMQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=SpR0TxWxFCLjcAUivS6i934ZxONr18U6YWI0TCFPqxfoOKiBNx7XPFqV4suMC8M6Z8vGnsRtmsr5IkUQYq+GxRNHz+nVAfu5iYYANROQWZcdtfLY8qy/OIiixKWb07Ne/YaJ4OBsJEo37JcjxdjTKL6syl4R8CKbTSyKl5bASKg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=icasvtPa; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772474530; c=relaxed/simple;
+	bh=cDjmIGXV9EOYKQpoAVCypqaRk57dKfqdg3E9Hq2diH4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YZK01EgQmq/Vi5fglKCJ9IBqSV11qW6U40+IMY1cqJxcx4HqXPn1OYsVuHIf9QYc9rds8iUqS5eVN+3hfyhkD3rDUj3726dqyUXGBIjV2Sl+wuh09m5ijpu3rw1q/BE8BKiNjpCa4QaB1z5nVi1b5XQ7KT4akIhkMLjOsKF0LXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kpGRcjNw; arc=none smtp.client-ip=91.218.175.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="icasvtPa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5DDC19423;
-	Mon,  2 Mar 2026 18:00:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772474443;
-	bh=AAWR9gZY03nbOlbVMTbEKUl4nXa8dqWaMd25yAG8vMQ=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=icasvtPaWk5jGAFIPUsrmqzB/YK9toz7kWucD/s0nvCBOdG8QSYFncz9bgSrUQZ7y
-	 0a5AAXdzkJmvWwSZQa/xhMr+giiU4dvy3wVfZxv2imeud7K+LiVa/bZQ4kWUPV4EB7
-	 S2ksegSyFyTjQYrM6vNBHA/oheyW5XuAm/IGZFnOEugFW0EW8poV+mL/SRUwW4Ua1M
-	 Gdvi113QkWbIJcxlY+grToX5kWmz9EaghxfmOfd+YBnIo4FlMyx0dVAsMkqY3bAZqx
-	 RqMQem6cgCefSIndbFU+QzoCf6GbiF1mAoW8c4ld4aoMWaOsjeMAZCZ7Iy8T7Xn6OD
-	 oNtSXzMtfy0qA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02E683809A80;
-	Mon,  2 Mar 2026 18:00:47 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kpGRcjNw"
+Message-ID: <d6fda426-b59f-48d6-bbe7-b2069a7e352e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1772474526;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zh0woySBZuOpgvtIn9Jxdj4IpifRv6eNLtbIgZFC5/M=;
+	b=kpGRcjNwLl++u0VFFylWfoMNj0w75gTEfaSQsP2qHbRh8RyGkUvm606Cjyajke+GuJp4tj
+	BpN6lAy+pl8hYOGY3vK1akJNTyGH+WlLLrDeFC4/oZPBEoxScZd+kZEshKltu/3Wrnm2xK
+	vNr7JJOuUwHIpgqlCwW3yPLtJaP54ag=
+Date: Mon, 2 Mar 2026 10:01:59 -0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf] ftrace: Add missing ftrace_lock to
- update_ftrace_direct_add/del
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <177247444580.428681.9651303937673098793.git-patchwork-notify@kernel.org>
-Date: Mon, 02 Mar 2026 18:00:45 +0000
-References: <20260302081622.165713-1-jolsa@kernel.org>
-In-Reply-To: <20260302081622.165713-1-jolsa@kernel.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: rostedt@kernel.org, ast@kernel.org, ihor.solodrai@linux.dev,
- memxor@gmail.com, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- menglong8.dong@gmail.com, song@kernel.org
+Subject: Re: [PATCH bpf v3 01/15] selftests/bpf: Pass through build flags to
+ bpftool and resolve_btfids
+To: Vitaly Chikunov <vt@altlinux.org>
+Cc: bot+bpf-ci@kernel.org, ast@kernel.org, andrii@kernel.org,
+ daniel@iogearbox.net, eddyz87@gmail.com, olsajiri@gmail.com,
+ yatsenko@meta.com, alexis.lothore@bootlin.com, ameryhung@gmail.com,
+ bpf@vger.kernel.org, linux-kernel@vger.kernel.org, kernel-team@meta.com,
+ martin.lau@kernel.org, yonghong.song@linux.dev, clm@meta.com
+References: <20260220222604.1155148-2-ihor.solodrai@linux.dev>
+ <edac02ca77865be9cc18b013f5209a8fb0d8a4c443ce16dce8ad368a9ecefe05@mail.kernel.org>
+ <789af3df-291c-410d-89d8-ee7b12479798@linux.dev>
+ <aaWqMcK-2AQw5dx8@altlinux.org>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <aaWqMcK-2AQw5dx8@altlinux.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hello:
-
-This patch was applied to bpf/bpf.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
-
-On Mon,  2 Mar 2026 09:16:22 +0100 you wrote:
-> Ihor and Kumar reported splat from ftrace_get_addr_curr [1], which happened
-> because of the missing ftrace_lock in update_ftrace_direct_add/del functions
-> allowing concurrent access to ftrace internals.
+On 3/2/26 7:22 AM, Vitaly Chikunov wrote:
+> Ihor,
 > 
-> The ftrace_update_ops function must be guarded by ftrace_lock, adding that.
+> On Fri, Feb 20, 2026 at 08:23:51PM -0800, Ihor Solodrai wrote:
+>>
+>>
+>> On 2/20/26 2:57 PM, bot+bpf-ci@kernel.org wrote:
+>>>> diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
+>>>> index 1733a6e93a07..ef083602b73a 100644
+>>>> --- a/tools/bpf/resolve_btfids/Makefile
+>>>> +++ b/tools/bpf/resolve_btfids/Makefile
+>>>> @@ -65,6 +65,9 @@ $(BPFOBJ): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
+>>>>  LIBELF_FLAGS := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
+>>>>  LIBELF_LIBS  := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
+>>>>
+>>>> +ZLIB_LIBS  := $(shell $(HOSTPKG_CONFIG) zlib --libs 2>/dev/null || echo -lz)
+>>>> +ZSTD_LIBS  := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null || echo -lzstd)
+>>>
+>>> The "|| echo -lzstd" fallback makes zstd an unconditional link
+>>> dependency. On systems where libzstd-dev is not installed, pkg-config
+>>> fails and the fallback provides -lzstd, but the linker cannot find the
+>>> library and the build fails.
+>>>
+>>> bpftool handles the same transitive dependency conditionally via a
+>>> feature test:
+>>>
+>>> tools/bpf/bpftool/Makefile:
+>>>     ifeq ($(feature-libelf-zstd),1)
+>>>     LIBS += -lzstd
+>>>     LIBS_BOOTSTRAP += -lzstd
+>>>     endif
+>>>
+>>> Would it be safer to drop the fallback here so ZSTD_LIBS is empty
+>>> when zstd is not available?
+>>>
+>>>     ZSTD_LIBS := $(shell $(HOSTPKG_CONFIG) libzstd --libs 2>/dev/null)
+>>>
+>>> This would still link zstd when present (needed for the static linking
+>>> case where libelf.a pulls in ZSTD symbols from elf_compress.o), but
+>>> avoid breaking dynamic builds on systems without libzstd-dev.
+>>
+>> [...]
+>>
+>>
+>> So, while AI may be technically correct that the build will fail if
+>> libelf is installed and libzstd is not, it seems a far-fetched
+>> situation, given that libelf depends on libzstd.
 > 
-> Fixes: 05dc5e9c1fe1 ("ftrace: Add update_ftrace_direct_add function")
-> Fixes: 8d2c1233f371 ("ftrace: Add update_ftrace_direct_del function")
-> Reported-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> Reported-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> Closes: https://lore.kernel.org/bpf/1b58ffb2-92ae-433a-ba46-95294d6edea2@linux.dev/
-> Tested-by: Ihor Solodrai <ihor.solodrai@linux.dev>
-> Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> This is not far-fetched, and we have build failure for v7.0-rc2 due to
+> this.
 > 
-> [...]
+>   ld: cannot find -lzstd: No such file or directory
+> 
+> Even though libelf is linked with libzstd, this does not imply
+> libzstd-devel (with headers and so library) is there when building.
 
-Here is the summary with links:
-  - [bpf] ftrace: Add missing ftrace_lock to update_ftrace_direct_add/del
-    https://git.kernel.org/bpf/bpf/c/3ebc98c1ae7e
+Does AI's suggestion make sense in your case then?
+That is, make ZSTD_LIBS empty in case pkg-config didn't find libzstd?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+I'm happy to fix this, the build shouldn't fail unless it must.
+
+But I am curious how and why an environment building Linux with BTF
+(requiring build and run of resolve_btfids), which needs libelf-dev
+and presumably its dependencies, would exclude/avoid installing
+libzstd-dev?
+
+Thanks.
+
+> 
+> Thanks,
+> 
+>>
+>> I think we can leave the default -lzstd to have an explicit
+>> dependency in the Makefile.
+>>
+>>
+>>>
+>>> [ ... ]
 
 
