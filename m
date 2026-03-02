@@ -1,274 +1,279 @@
-Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A191425CC3
-	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 16:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52DC9421F1C;
+	Mon,  2 Mar 2026 16:49:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772470161; cv=none; b=THc4d6Qn36NxV/Ibgwq+zQm8QJbPRPvzNartn6j+b9sIuvHwQEPAy2SUtYwJWD5Voa5x6LibDMBy1sxWSrvWQFjxsz3nxT/uLWLmx+D7e12bM5BScNLZ6XWnkeQFfLxpygyiJtOHmihGF6FzS92UC5dWeckJvampjrKmKqjLhTs=
+	t=1772470162; cv=none; b=fvzseBAyh2SLMg6P1+Q4opEJIjdWihpl4JqUjhqRWQ2O8gZ5XCLLyygf4EUFiBtTne8MOAgQ6EhqeuIh8mUONBDBhMs3YldLEpU1W+HjA+rscFvyfnXSJ2Cy7uVqRB237hJSqmz39YZyzsOs/oIL6uyKssjQkhZ+stXwMNybLhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772470161; c=relaxed/simple;
-	bh=CqVyYVe83yZ/J8/temgLe/uex1EJd6Z9u49I7+u+Tqo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oNAEol5Jg2MrqTuSq5GNgJBiGZZdioTTa0mIneT3bWkFv91zetCmHziFfssHNksUwtTkOMMWlUJGhvhxheA7qCZQQnLo0D7N6Nwqtcnkvb7/sAgpNGrxoyGSWfTA5l+6Qza0jFStnwWxqamXbChuGL1q0HzFq3jLRJZsIqD8dXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=OYjDof6y; arc=none smtp.client-ip=148.163.152.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
+	s=arc-20240116; t=1772470162; c=relaxed/simple;
+	bh=B3tDyMgffuJmH5gQ7dFcL8w2j8f7b70eCrsYpPRi7f0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Ai0ksGMvSPYhAiFCGl8MAB+MySR/4htJAyycrPTHgrZft6wPjDGi0qivVtbM0dq1IxxAOcQCsnaoSIcHoO1FXDs7cUFjD7Ulr3CVh42hiR0eZkEnd3Dc7POz8QZOoqpj3FalJkxVk+k3DndohnpKAOxoyxwnkiJXx+1lDcICpbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h/NAfuBy; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="OYjDof6y"
-Received: from pps.filterd (m0354654.ppops.net [127.0.0.1])
-	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 622E7mIw1677322;
-	Mon, 2 Mar 2026 16:48:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
-	 h=cc:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=P2vx71drpZ3Wi8z2rYYYVUzmSRlvhwfPJRBlP1kZ+Ec=; b=OYjD
-	of6yIGAIo8BDpWhmV8uq6tVQ/XPF7cP6Bfv/UxUtzwhjhFpF9O2moVT5lGQPJ6Of
-	1c++PtaBv0aErMdU+d04pQEKsc20UwTsl72CyHyImkhKUdjdHGZTJQbqlUCvNqiT
-	NkglxBLmBwYJB4BaUumIJBeuSqoe62ynNAdiexWS1T0Zkx6fNLQM/n7er57Wdld1
-	P7CMatTjeJSZqwLTeNgegTVVsEeXfE4ucOZ19h2Q3CWRCCv7hgTk0wiB1teKZBIs
-	VOK3St6m3ehXKZVVrTng4G2V+mK9vS8czmgY0/qRwZpc7zst1fYlgydZBbpYD0oN
-	zObInO9+uxvCJePcUw==
-Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cmb5uw755-3
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Mar 2026 16:48:50 +0000 (GMT)
-Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
- 04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 2 Mar 2026 16:48:49 +0000
-From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-To: <bpf@vger.kernel.org>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-        <jolsa@kernel.org>, <emil@etsalapatis.com>,
-        <linux-open-source@crowdstrike.com>
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add tests for duplicate kprobe symbol handling
-Date: Mon, 2 Mar 2026 11:48:46 -0500
-Message-ID: <20260302164846.36713-3-andrey.grodzovsky@crowdstrike.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260302164846.36713-1-andrey.grodzovsky@crowdstrike.com>
-References: <20260302164846.36713-1-andrey.grodzovsky@crowdstrike.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h/NAfuBy"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772470156; x=1804006156;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=B3tDyMgffuJmH5gQ7dFcL8w2j8f7b70eCrsYpPRi7f0=;
+  b=h/NAfuByI790oNbZFISoh40YectsQxSkTKfoHHexmqXFtTHKl1wrSXGm
+   o2OxdNfjCm17MrnkYKi2+QoP/o6QdOgv1SKDb/w+6D/dKvy00cAdWDO2X
+   xvYP9BO9ybqSpcyTTF9xYI4B2RN/cfFCu0ToZ2q5C8pbg2bLhmilEQw3+
+   OfXOm8gqhP7LN6xX5VagqoG/1tA+fRj+bDAiEqZXUUxDa4Pgj+pUiHtXY
+   ydcXM3zQHXJg14HsGwGrYC2KKqxwtPzbNtDLSOB089tK+xhjtU/4Zdl+j
+   ncNHU7MiSixGwhmL0Qnz5268RR59i9pA59c8PQYGira26JPxqGv97UBWk
+   A==;
+X-CSE-ConnectionGUID: MRfVop2gQpiIH6SiAZ8ueQ==
+X-CSE-MsgGUID: 07AQRgCpQHWvGxiHAl+aXg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="73450668"
+X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
+   d="scan'208";a="73450668"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2026 08:49:14 -0800
+X-CSE-ConnectionGUID: LWZqFXrzQiqL5DIPukUMbA==
+X-CSE-MsgGUID: UqWQqLOaR46VSdfyMx05QQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,320,1763452800"; 
+   d="scan'208";a="217620739"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by orviesa009.jf.intel.com with ESMTP; 02 Mar 2026 08:49:06 -0800
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id E97872FC7D;
+	Mon,  2 Mar 2026 16:49:02 +0000 (GMT)
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+To: bpf@vger.kernel.org
+Cc: Larysa Zaremba <larysa.zaremba@intel.com>,
+	Claudiu Manoil <claudiu.manoil@nxp.com>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Wei Fang <wei.fang@nxp.com>,
+	Clark Wang <xiaoning.wang@nxp.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Tony Nguyen <anthony.l.nguyen@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	"Bastien Curutchet (eBPF Foundation)" <bastien.curutchet@bootlin.com>,
+	Tushar Vyavahare <tushar.vyavahare@intel.com>,
+	Jason Xing <kernelxing@tencent.com>,
+	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re?= <rbm@suse.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Toke Hoiland-Jorgensen <toke@redhat.com>,
+	imx@lists.linux.dev,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	intel-wired-lan@lists.osuosl.org,
+	linux-kselftest@vger.kernel.org,
+	Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+	Dragos Tatulea <dtatulea@nvidia.com>
+Subject: [PATCH bpf v4 0/9] Address XDP frags having negative tailroom
+Date: Mon,  2 Mar 2026 17:17:13 +0100
+Message-ID: <20260302161723.858616-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: 04WPEXCH012.crowdstrike.sys (10.100.11.82) To
- 04WPEXCH006.crowdstrike.sys (10.100.11.70)
-X-Disclaimer: USA
-X-Proofpoint-GUID: 6UwOm2LEeefpzVMCnnRh8OpyCPVksm9-
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDEzOCBTYWx0ZWRfX4hwoY+nbq23o
- MD6J3beUSyVaitDjRDau1jyXRn88jzjJZQUQhMwp3K+JxIFhAkzDJ2zvBDJIochr0TqDQxKa1Vj
- yPyez/fctBP0vBJOMnF6jxHMM6DEXqXmiISuKj4V7durU+W7p5AdxmiKK1yN6Sa0J3O8wPLrfHu
- l7PbsxD+Z4d4/kDQJXh8UXLyJOYjODllS7jbjcWRGGMyk5gJt7qPesC61uCe0l7l8NyF5rpg0nz
- 7mQ4DDFyvv8UwqaDVNu8Au1P3+c+8/4WHrnZsh7RYPUdQI3A4bNPWBNRaO/gAD8XexLojcnXC+X
- g572FviiHteSk51869pejGdn3LtYaD/n85gAHWMEsTo6dJa8pCbQ6q6XtZZvGC8VWWLZhFSH9ds
- gkvVPWmny3FWrMi1FX1Ssyfsz/Ms3TuQhGiQk5CAmmosaFXM0FIAJF9VhxywDF0AFNdN8FVcej8
- ZYUUHC78ZMgZZHtjYyg==
-X-Authority-Analysis: v=2.4 cv=WN1yn3sR c=1 sm=1 tr=0 ts=69a5bf72 cx=c_pps
- a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
- a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=R_n4Uisa8axJ7jemP0ek:22 a=pl6vuDidAAAA:8
- a=CWErhr8FAAAA:8 a=hnS3fS_MpbIQOffReb4A:9 a=I-g_0vLIplkVOQ0FYkeP:22
-X-Proofpoint-ORIG-GUID: 6UwOm2LEeefpzVMCnnRh8OpyCPVksm9-
-X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11717
- signatures=596818
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 spamscore=0 phishscore=0 suspectscore=0 bulkscore=0
- adultscore=0 malwarescore=0 priorityscore=1501 clxscore=1015 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603020138
 
-Add bpf_testmod_dup_sym.ko test module that creates a duplicate
-nanosleep symbols to test kprobe attachment when a module exports
-a symbol with the same name as a vmlinux symbol.
+Aside from the issue described below, tailroom calculation does not account
+for pages being split between frags, e.g. in i40e, enetc and
+AF_XDP ZC with smaller chunks. These series address the problem by
+calculating modulo (skb_frag_off() % rxq->frag_size) in order to get
+data offset within a smaller block of memory. Please note, xskxceiver
+tail grow test passes without modulo e.g. in xdpdrv mode on i40e,
+because there is not enough descriptors to get to flipped buffers.
 
-Add test_attach_probe_dup_sym() to attach_probe tests that loads
-the duplicate symbol module and validates kprobe attachment across
-all four attach modes: auto-attach, explicit symbol, legacy with
-offset, and perf_event_open with offset.
+Many ethernet drivers report xdp Rx queue frag size as being the same as
+DMA write size. However, the only user of this field, namely
+bpf_xdp_frags_increase_tail(), clearly expects a truesize.
 
-Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
----
- tools/testing/selftests/bpf/Makefile          |  2 +-
- .../selftests/bpf/prog_tests/attach_probe.c   | 63 +++++++++++++++++++
- .../testing/selftests/bpf/test_kmods/Makefile |  2 +-
- .../bpf/test_kmods/bpf_testmod_dup_sym.c      | 48 ++++++++++++++
- 4 files changed, 113 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c
+Such difference leads to unspecific memory corruption issues under certain
+circumstances, e.g. in ixgbevf maximum DMA write size is 3 KB, so when
+running xskxceiver's XDP_ADJUST_TAIL_GROW_MULTI_BUFF, 6K packet fully uses
+all DMA-writable space in 2 buffers. This would be fine, if only
+rxq->frag_size was properly set to 4K, but value of 3K results in a
+negative tailroom, because there is a non-zero page offset.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 72a9ba41f95e..2915d46c74e0 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -121,7 +121,7 @@ TEST_PROGS_EXTENDED := \
- 	test_bpftool.py
- 
- TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
--	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
-+	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko bpf_testmod_dup_sym.ko
- TEST_KMOD_TARGETS = $(addprefix $(OUTPUT)/,$(TEST_KMODS))
- 
- # Compile but not part of 'make run_tests'
-diff --git a/tools/testing/selftests/bpf/prog_tests/attach_probe.c b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-index 9e77e5da7097..75c22af2f1b3 100644
---- a/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-+++ b/tools/testing/selftests/bpf/prog_tests/attach_probe.c
-@@ -4,6 +4,7 @@
- #include "test_attach_probe_manual.skel.h"
- #include "test_attach_probe.skel.h"
- #include "kprobe_write_ctx.skel.h"
-+#include "testing_helpers.h"
- 
- /* this is how USDT semaphore is actually defined, except volatile modifier */
- volatile unsigned short uprobe_ref_ctr __attribute__((unused)) __attribute((section(".probes")));
-@@ -123,6 +124,59 @@ static void test_attach_probe_manual(enum probe_attach_mode attach_mode)
- 	test_attach_probe_manual__destroy(skel);
- }
- 
-+/* Test kprobe attachment with duplicate symbols.
-+ * This test loads bpf_testmod_dup_sym.ko which creates a duplicate
-+ * __x64_sys_nanosleep symbol. The libbpf fix should prefer the vmlinux
-+ * symbol over the module symbol when attaching kprobes.
-+ */
-+static void test_attach_probe_dup_sym(enum probe_attach_mode attach_mode)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_kprobe_opts, kprobe_opts);
-+	struct bpf_link *kprobe_link, *kretprobe_link;
-+	struct test_attach_probe_manual *skel;
-+	int err;
-+
-+	/* Load module with duplicate symbol */
-+	err = load_module("bpf_testmod_dup_sym.ko", false);
-+	if (!ASSERT_OK(err, "load_bpf_testmod_dup_sym")) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = test_attach_probe_manual__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_dup_sym_open_and_load"))
-+		goto unload_module;
-+
-+	/* manual-attach kprobe/kretprobe with duplicate symbol present */
-+	kprobe_opts.attach_mode = attach_mode;
-+	kprobe_opts.retprobe = false;
-+	kprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kprobe,
-+						      SYS_NANOSLEEP_KPROBE_NAME,
-+						      &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kprobe_link, "attach_kprobe_dup_sym"))
-+		goto cleanup;
-+	skel->links.handle_kprobe = kprobe_link;
-+
-+	kprobe_opts.retprobe = true;
-+	kretprobe_link = bpf_program__attach_kprobe_opts(skel->progs.handle_kretprobe,
-+							 SYS_NANOSLEEP_KPROBE_NAME,
-+							 &kprobe_opts);
-+	if (!ASSERT_OK_PTR(kretprobe_link, "attach_kretprobe_dup_sym"))
-+		goto cleanup;
-+	skel->links.handle_kretprobe = kretprobe_link;
-+
-+	/* trigger & validate kprobe && kretprobe */
-+	usleep(1);
-+
-+	ASSERT_EQ(skel->bss->kprobe_res, 1, "check_kprobe_dup_sym_res");
-+	ASSERT_EQ(skel->bss->kretprobe_res, 2, "check_kretprobe_dup_sym_res");
-+
-+cleanup:
-+	test_attach_probe_manual__destroy(skel);
-+unload_module:
-+	unload_module("bpf_testmod_dup_sym", false);
-+}
-+
- /* attach uprobe/uretprobe long event name testings */
- static void test_attach_uprobe_long_event_name(void)
+We are supposed to return -EINVAL and be done with it in such case,
+but due to tailroom being stored as an unsigned int, it is reported to be
+somewhere near UINT_MAX, resulting in a tail being grown, even if the
+requested offset is too much(it is around 2K in the abovementioned test).
+This later leads to all kinds of unspecific calltraces.
+
+[ 7340.337579] xskxceiver[1440]: segfault at 1da718 ip 00007f4161aeac9d sp 00007f41615a6a00 error 6
+[ 7340.338040] xskxceiver[1441]: segfault at 7f410000000b ip 00000000004042b5 sp 00007f415bffecf0 error 4
+[ 7340.338179]  in libc.so.6[61c9d,7f4161aaf000+160000]
+[ 7340.339230]  in xskxceiver[42b5,400000+69000]
+[ 7340.340300]  likely on CPU 6 (core 0, socket 6)
+[ 7340.340302] Code: ff ff 01 e9 f4 fe ff ff 0f 1f 44 00 00 4c 39 f0 74 73 31 c0 ba 01 00 00 00 f0 0f b1 17 0f 85 ba 00 00 00 49 8b 87 88 00 00 00 <4c> 89 70 08 eb cc 0f 1f 44 00 00 48 8d bd f0 fe ff ff 89 85 ec fe
+[ 7340.340888]  likely on CPU 3 (core 0, socket 3)
+[ 7340.345088] Code: 00 00 00 ba 00 00 00 00 be 00 00 00 00 89 c7 e8 31 ca ff ff 89 45 ec 8b 45 ec 85 c0 78 07 b8 00 00 00 00 eb 46 e8 0b c8 ff ff <8b> 00 83 f8 69 74 24 e8 ff c7 ff ff 8b 00 83 f8 0b 74 18 e8 f3 c7
+[ 7340.404334] Oops: general protection fault, probably for non-canonical address 0x6d255010bdffc: 0000 [#1] SMP NOPTI
+[ 7340.405972] CPU: 7 UID: 0 PID: 1439 Comm: xskxceiver Not tainted 6.19.0-rc1+ #21 PREEMPT(lazy)
+[ 7340.408006] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.17.0-5.fc42 04/01/2014
+[ 7340.409716] RIP: 0010:lookup_swap_cgroup_id+0x44/0x80
+[ 7340.410455] Code: 83 f8 1c 73 39 48 ba ff ff ff ff ff ff ff 03 48 8b 04 c5 20 55 fa bd 48 21 d1 48 89 ca 83 e1 01 48 d1 ea c1 e1 04 48 8d 04 90 <8b> 00 48 83 c4 10 d3 e8 c3 cc cc cc cc 31 c0 e9 98 b7 dd 00 48 89
+[ 7340.412787] RSP: 0018:ffffcc5c04f7f6d0 EFLAGS: 00010202
+[ 7340.413494] RAX: 0006d255010bdffc RBX: ffff891f477895a8 RCX: 0000000000000010
+[ 7340.414431] RDX: 0001c17e3fffffff RSI: 00fa070000000000 RDI: 000382fc7fffffff
+[ 7340.415354] RBP: 00fa070000000000 R08: ffffcc5c04f7f8f8 R09: ffffcc5c04f7f7d0
+[ 7340.416283] R10: ffff891f4c1a7000 R11: ffffcc5c04f7f9c8 R12: ffffcc5c04f7f7d0
+[ 7340.417218] R13: 03ffffffffffffff R14: 00fa06fffffffe00 R15: ffff891f47789500
+[ 7340.418229] FS:  0000000000000000(0000) GS:ffff891ffdfaa000(0000) knlGS:0000000000000000
+[ 7340.419489] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 7340.420286] CR2: 00007f415bfffd58 CR3: 0000000103f03002 CR4: 0000000000772ef0
+[ 7340.421237] PKRU: 55555554
+[ 7340.421623] Call Trace:
+[ 7340.421987]  <TASK>
+[ 7340.422309]  ? softleaf_from_pte+0x77/0xa0
+[ 7340.422855]  swap_pte_batch+0xa7/0x290
+[ 7340.423363]  zap_nonpresent_ptes.constprop.0.isra.0+0xd1/0x270
+[ 7340.424102]  zap_pte_range+0x281/0x580
+[ 7340.424607]  zap_pmd_range.isra.0+0xc9/0x240
+[ 7340.425177]  unmap_page_range+0x24d/0x420
+[ 7340.425714]  unmap_vmas+0xa1/0x180
+[ 7340.426185]  exit_mmap+0xe1/0x3b0
+[ 7340.426644]  __mmput+0x41/0x150
+[ 7340.427098]  exit_mm+0xb1/0x110
+[ 7340.427539]  do_exit+0x1b2/0x460
+[ 7340.427992]  do_group_exit+0x2d/0xc0
+[ 7340.428477]  get_signal+0x79d/0x7e0
+[ 7340.428957]  arch_do_signal_or_restart+0x34/0x100
+[ 7340.429571]  exit_to_user_mode_loop+0x8e/0x4c0
+[ 7340.430159]  do_syscall_64+0x188/0x6b0
+[ 7340.430672]  ? __do_sys_clone3+0xd9/0x120
+[ 7340.431212]  ? switch_fpu_return+0x4e/0xd0
+[ 7340.431761]  ? arch_exit_to_user_mode_prepare.isra.0+0xa1/0xc0
+[ 7340.432498]  ? do_syscall_64+0xbb/0x6b0
+[ 7340.433015]  ? __handle_mm_fault+0x445/0x690
+[ 7340.433582]  ? count_memcg_events+0xd6/0x210
+[ 7340.434151]  ? handle_mm_fault+0x212/0x340
+[ 7340.434697]  ? do_user_addr_fault+0x2b4/0x7b0
+[ 7340.435271]  ? clear_bhb_loop+0x30/0x80
+[ 7340.435788]  ? clear_bhb_loop+0x30/0x80
+[ 7340.436299]  ? clear_bhb_loop+0x30/0x80
+[ 7340.436812]  ? clear_bhb_loop+0x30/0x80
+[ 7340.437323]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[ 7340.437973] RIP: 0033:0x7f4161b14169
+[ 7340.438468] Code: Unable to access opcode bytes at 0x7f4161b1413f.
+[ 7340.439242] RSP: 002b:00007ffc6ebfa770 EFLAGS: 00000246 ORIG_RAX: 00000000000000ca
+[ 7340.440173] RAX: fffffffffffffe00 RBX: 00000000000005a1 RCX: 00007f4161b14169
+[ 7340.441061] RDX: 00000000000005a1 RSI: 0000000000000109 RDI: 00007f415bfff990
+[ 7340.441943] RBP: 00007ffc6ebfa7a0 R08: 0000000000000000 R09: 00000000ffffffff
+[ 7340.442824] R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+[ 7340.443707] R13: 0000000000000000 R14: 00007f415bfff990 R15: 00007f415bfff6c0
+[ 7340.444586]  </TASK>
+[ 7340.444922] Modules linked in: rfkill intel_rapl_msr intel_rapl_common intel_uncore_frequency_common skx_edac_common nfit libnvdimm kvm_intel vfat fat kvm snd_pcm irqbypass rapl iTCO_wdt snd_timer intel_pmc_bxt iTCO_vendor_support snd ixgbevf virtio_net soundcore i2c_i801 pcspkr libeth_xdp net_failover i2c_smbus lpc_ich failover libeth virtio_balloon joydev 9p fuse loop zram lz4hc_compress lz4_compress 9pnet_virtio 9pnet netfs ghash_clmulni_intel serio_raw qemu_fw_cfg
+[ 7340.449650] ---[ end trace 0000000000000000 ]---
+
+The issue can be fixed in all in-tree drivers, but we cannot just trust OOT
+drivers to not do this. Therefore, make tailroom a signed int and produce a
+warning when it is negative to prevent such mistakes in the future.
+
+The issue can also be easily reproduced with ice driver, by applying
+the following diff to xskxceiver and enjoying a kernel panic in xdpdrv mode:
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+index 5af28f359cfd..042d587fa7ef 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
+@@ -2541,8 +2541,8 @@ int testapp_adjust_tail_grow_mb(struct test_spec *test)
  {
-@@ -417,6 +471,15 @@ void test_attach_probe(void)
- 	if (test__start_subtest("manual-link"))
- 		test_attach_probe_manual(PROBE_ATTACH_MODE_LINK);
- 
-+	if (test__start_subtest("dup-sym-default"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_DEFAULT);
-+	if (test__start_subtest("dup-sym-legacy"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_LEGACY);
-+	if (test__start_subtest("dup-sym-perf"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_PERF);
-+	if (test__start_subtest("dup-sym-link"))
-+		test_attach_probe_dup_sym(PROBE_ATTACH_MODE_LINK);
-+
- 	if (test__start_subtest("auto"))
- 		test_attach_probe_auto(skel);
- 	if (test__start_subtest("kprobe-sleepable"))
-diff --git a/tools/testing/selftests/bpf/test_kmods/Makefile b/tools/testing/selftests/bpf/test_kmods/Makefile
-index 63c4d3f6a12f..938c462a103b 100644
---- a/tools/testing/selftests/bpf/test_kmods/Makefile
-+++ b/tools/testing/selftests/bpf/test_kmods/Makefile
-@@ -8,7 +8,7 @@ Q = @
- endif
- 
- MODULES = bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
--	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
-+	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko bpf_testmod_dup_sym.ko
- 
- $(foreach m,$(MODULES),$(eval obj-m += $(m:.ko=.o)))
- 
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c
-new file mode 100644
-index 000000000000..0e12f68afe3a
---- /dev/null
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod_dup_sym.c
-@@ -0,0 +1,48 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 CrowdStrike */
-+/* Test module for duplicate kprobe symbol handling */
-+#include <linux/init.h>
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+
-+/* Duplicate symbol to test kprobe attachment with duplicate symbols.
-+ * This creates a duplicate of the syscall wrapper used in attach_probe tests.
-+ * The libbpf fix should handle this by preferring the vmlinux symbol.
-+ * This function should NEVER be called - kprobes should attach to vmlinux version.
-+ */
-+#ifdef __x86_64__
-+int __x64_sys_nanosleep(void);
-+noinline int __x64_sys_nanosleep(void)
-+#elif defined(__s390x__)
-+int __s390x_sys_nanosleep(void);
-+noinline int __s390x_sys_nanosleep(void)
-+#elif defined(__aarch64__)
-+int __arm64_sys_nanosleep(void);
-+noinline int __arm64_sys_nanosleep(void)
-+#elif defined(__riscv)
-+int __riscv_sys_nanosleep(void);
-+noinline int __riscv_sys_nanosleep(void)
-+#else
-+int sys_nanosleep(void);
-+noinline int sys_nanosleep(void)
-+#endif
-+{
-+	WARN_ONCE(1, "bpf_testmod_dup_sym: dummy nanosleep symbol called - this should never execute!\n");
-+	return -EINVAL;
-+}
-+
-+static int __init bpf_testmod_dup_sym_init(void)
-+{
-+	return 0;
-+}
-+
-+static void __exit bpf_testmod_dup_sym_exit(void)
-+{
-+}
-+
-+module_init(bpf_testmod_dup_sym_init);
-+module_exit(bpf_testmod_dup_sym_exit);
-+
-+MODULE_AUTHOR("Andrey Grodzovsky");
-+MODULE_DESCRIPTION("BPF selftest duplicate symbol module");
-+MODULE_LICENSE("GPL");
+        test->mtu = MAX_ETH_JUMBO_SIZE;
+        /* Grow by (frag_size - last_frag_Size) - 1 to stay inside the last fragment */
+-       return testapp_adjust_tail(test, (XSK_UMEM__MAX_FRAME_SIZE / 2) - 1,
+-                                  XSK_UMEM__LARGE_FRAME_SIZE * 2);
++       return testapp_adjust_tail(test, XSK_UMEM__MAX_FRAME_SIZE * 100,
++                                  6912);
+ }
+
+ int testapp_tx_queue_consumer(struct test_spec *test)
+
+If we print out the values involved in the tailroom calculation:
+
+tailroom = rxq->frag_size - skb_frag_size(frag) - skb_frag_off(frag);
+
+4294967040 = 3456 - 3456 - 256
+
+I personally reproduced and verified the issue in ice and i40e,
+aside from WiP ixgbevf implementation.
+
+v3->v4:
+* fix regression in ice, where changing ring size resulted in kernel oops
+* verify that the issue above does not affect i40e
+* correct commit message in "i40e: fix registering XDP RxQ info"
+
+v2->v3:
+* unregister XDP RxQ info for subfunction in ice
+* remove rx_buf_len variable in ice
+* add missing ifdefed empty definition xsk_pool_get_rx_frag_step()
+* move xsk_pool_get_rx_frag_step() call from idpf to libeth
+* simplify conditions when determining frag_size in idpf
+* correctly init xdp_frame_sz for non-main VSI in i40e
+
+v1->v2:
+* add modulo to calculate offset within chunk
+* add helper for AF_XDP ZC queues
+* fix the problem in ZC mode in i40e, ice and idpf
+* verify solution in i40e
+* fix RxQ info registering in i40e
+* fix splitq handling in idpf
+* do not use word truesize unless the value used is named trusize
+
+Larysa Zaremba (9):
+  xdp: use modulo operation to calculate XDP frag tailroom
+  xsk: introduce helper to determine rxq->frag_size
+  ice: fix rxq info registering in mbuf packets
+  ice: change XDP RxQ frag_size from DMA write length to xdp.frame_sz
+  i40e: fix registering XDP RxQ info
+  i40e: use xdp.frame_sz as XDP RxQ info frag_size
+  libeth, idpf: use truesize as XDP RxQ info frag_size
+  net: enetc: use truesize as XDP RxQ info frag_size
+  xdp: produce a warning when calculated tailroom is negative
+
+ drivers/net/ethernet/freescale/enetc/enetc.c |  2 +-
+ drivers/net/ethernet/intel/i40e/i40e_main.c  | 40 +++++++++++---------
+ drivers/net/ethernet/intel/i40e/i40e_txrx.c  |  5 ++-
+ drivers/net/ethernet/intel/ice/ice_base.c    | 33 +++++-----------
+ drivers/net/ethernet/intel/ice/ice_ethtool.c |  1 +
+ drivers/net/ethernet/intel/ice/ice_txrx.c    |  3 +-
+ drivers/net/ethernet/intel/ice/ice_xsk.c     |  3 ++
+ drivers/net/ethernet/intel/idpf/xdp.c        |  6 ++-
+ drivers/net/ethernet/intel/idpf/xsk.c        |  1 +
+ drivers/net/ethernet/intel/libeth/xsk.c      |  1 +
+ include/net/libeth/xsk.h                     |  3 ++
+ include/net/xdp_sock_drv.h                   | 10 +++++
+ net/core/filter.c                            |  6 ++-
+ 13 files changed, 67 insertions(+), 47 deletions(-)
+
 -- 
-2.34.1
+2.52.0
 
