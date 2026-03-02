@@ -1,215 +1,529 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012009.outbound.protection.outlook.com [40.93.195.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A963624A5;
-	Mon,  2 Mar 2026 11:42:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772451731; cv=none; b=TqdaWIfHDb+e/0AhihCkFeqBPzeDIbRHf8fzc3sD/NlEsQf3VbtwzWInahHAqVkoPpXMi3QXqn3hrfzNfk+t174x4cG1xfNO0gRtrZDYpN5kJEHDvi/4VRGMIYXsFvvM8O0jBHIsxomQeag5JjrYLEqhczuf2ZTq8Dtg3U+m3Ek=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772451731; c=relaxed/simple;
-	bh=HsRjcZX6YJ/7eJ/B9yp2IN11TEaSLV0uVParFrQpL6w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IDX6DuroFS4lHGGDEyEoSyfBloWHuMe/eXooEIpl+BqYWMlfaoORbxxGgn5bfrqzTMO0WO3oKmrG4pGo56tYmgXfy7liQpaBYhzpDs03ppay+0aEjeqQz6/ydAEYWA3FUM13acU4uv/ou8cDU8fNTGrqdC/mXafBQgCTD1RbHKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=lBKtYW9H; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B911D175A85;
+	Mon,  2 Mar 2026 11:56:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772452599; cv=fail; b=Xtc+kiZifNPVnu2bm9bNGWvkhlOhG2qGEAdza/KzBRdfcDb/miDCtglOtzJmL8FP7DxSBVlbFoP2QUf7VU7MvkHyXclU5gCRjcdLk9cfq0dA6Jct358ddcLQY54TgAdKDpIFZ7IeapDw3TvtgFqOAWpZFyguVi/nGf++MH7u+sE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772452599; c=relaxed/simple;
+	bh=JS7wMHCokfqXyf5xrkbcN3sFII4wsU39sbz5VnAv4Zc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=MJ6Wf+YfSxQJ42IA2slj/VVg95B63rMajokN92DLJL713CrlQDNXiXohFGq7Si/UnwLg8nSu911ijfn+NaqGg9eaxRxY31X3H26i5FLVRN/Pj+kzg3zXRoDq9CfDgHThmUgZ8IPm01/UYmTZnQO0NfpeV0NVzcKi/1ixsX6AZWk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=mMMGwqHd; arc=fail smtp.client-ip=40.93.195.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="lBKtYW9H"
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 622AwMXL878717;
-	Mon, 2 Mar 2026 11:41:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=Rgv0t
-	w6mRuAOfYOlVLgEzp6Jjpls3QLILxjVblDx98o=; b=lBKtYW9Hqj8I19LA+MeAc
-	z6i7972PDGvY6g11+pWjDDYArdvmaJ/+HXxjhDFRgU7i+3nqsprZt7l+oHnmzOYa
-	rLiXSCJCoYvAg5y56UHUsuQxQpSFIHwkUjDzLK+evoKMV/qF/ZQdms11xqMugoNs
-	fo1LVBZitOtqelt8bM3HUBsgSvNei7UUGMj/HYc5myJOqf8i0RUnaoTaOvL/jZQ0
-	qlILUL8D+gImGNZymxpeuVCM8PITh+iCBv1jzA6slXcWO0OT2HtEeijnSwAvleoS
-	XfXzhp8qCUG9RTpL4QL2MIHA9yKQS5RsVYxPv2VntvZzKAJ5vU0APDQp7PGPe9gb
-	A==
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4cn98v81tv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 02 Mar 2026 11:41:28 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 622BSbPK036944;
-	Mon, 2 Mar 2026 11:41:28 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4ckpt8jcxp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 02 Mar 2026 11:41:28 +0000
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 622BZCYp012507;
-	Mon, 2 Mar 2026 11:41:27 GMT
-Received: from bpf.uk.oracle.com (dhcp-10-154-59-97.vpn.oracle.com [10.154.59.97])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4ckpt8jcgy-7;
-	Mon, 02 Mar 2026 11:41:27 +0000
-From: Alan Maguire <alan.maguire@oracle.com>
-To: andrii@kernel.org, ast@kernel.org
-Cc: daniel@iogearbox.net, martin.lau@linux.dev, eddyz87@gmail.com,
-        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com,
-        jolsa@kernel.org, qmo@kernel.org, ihor.solodrai@linux.dev,
-        mykyta.yatsenko5@gmail.com, dwarves@vger.kernel.org,
-        bpf@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>
-Subject: [PATCH v11 bpf-next 6/8] btf: support kernel parsing of BTF with layout info
-Date: Mon,  2 Mar 2026 11:40:57 +0000
-Message-ID: <20260302114059.3697879-7-alan.maguire@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260302114059.3697879-1-alan.maguire@oracle.com>
-References: <20260302114059.3697879-1-alan.maguire@oracle.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="mMMGwqHd"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TGHKtZ8DTGrVFkaQQt6LpVxSuLh1CfPse/P1y00kGvRb3e9Z9Yrb2uzehxnZe4+OKA1kU9AbdYHldgUWMESyEhJyJQoIlCXkTqf4eaxVebZW8eb4TWAL++7OkTusmK0K5Vfb5Rb2IWNRXgcj9qf9uktDXFYKOfv44njbkPK63sUyw5grsnJ2GS9WKyVBRRwiVe0AHTnXaB22q9b/rxEUIkLoVw4fYdBm6CdTm8igEqQflzG3KTGlV/+qE501+WP+Z8/05DKhwnju/nI6s5LJQjVH26H6kx76eqpGWMFbismZuMeGtK0tLwgIJnrYIDCPUC147L+B4m2+ybfZf/5QOw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BtuXeW9FYK5X+hnA8QuatR0D9jjMzl+31IqdgwHghMg=;
+ b=nsQbmrF4d+iqWJHr83PWhDb3ym5B09o9GJ4IjRyBytOx0WF68W++yaSzXtMWZQoulEACTllWSwFnfdJGGcqM9MIiq33JDiv+P2BnkYAuzjDjxQ9rNxknFmZHiiTxw8LCATdDf5s4ubqgCrcQLa+fMxabb3QQ9bDIFZKVXhED1pk5YDd7riV0TS/I+ilRF0q1eZ3s6LLwOpX+cGHYZhlgmHU8O+Ipvct+DuCnjAfPByFr1y3xTS4+MDcZThw3pRy0ofu3YiLHXogbx1GAk805twovNexpeyoFOS/kFWgyf1g16+sFn4+n8qVzcsdKqg/iC8nIOU3t/lUILPyIbOyimA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=suse.cz smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BtuXeW9FYK5X+hnA8QuatR0D9jjMzl+31IqdgwHghMg=;
+ b=mMMGwqHdjsDCYhFXZN5KZLBbGGrbRHjDI44tMCyG6m2plEhI/0OHdSESHZAQRohnUP1DUFmS75nDHjT7jvLBwf+jm9E2GTVAH18LsztRsx/1qW+d//piCh2zfzaaxK3CvurNGjbAXUHmfDvs3ssphKKHbzkQrqnt875QO2uWkEo=
+Received: from DS7PR03CA0261.namprd03.prod.outlook.com (2603:10b6:5:3b3::26)
+ by SN7PR12MB7810.namprd12.prod.outlook.com (2603:10b6:806:34c::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9654.20; Mon, 2 Mar
+ 2026 11:56:30 +0000
+Received: from CY4PEPF0000EE3D.namprd03.prod.outlook.com
+ (2603:10b6:5:3b3:cafe::f3) by DS7PR03CA0261.outlook.office365.com
+ (2603:10b6:5:3b3::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.9654.20 via Frontend Transport; Mon,
+ 2 Mar 2026 11:56:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ CY4PEPF0000EE3D.mail.protection.outlook.com (10.167.242.15) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.9654.16 via Frontend Transport; Mon, 2 Mar 2026 11:56:29 +0000
+Received: from [10.252.200.216] (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.17; Mon, 2 Mar
+ 2026 05:56:15 -0600
+Message-ID: <df5a0dfd-01b7-48a9-8936-4d5e271e68e6@amd.com>
+Date: Mon, 2 Mar 2026 17:26:06 +0530
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-02_03,2026-02-27_03,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 suspectscore=0
- spamscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2602130000
- definitions=main-2603020097
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDA5NyBTYWx0ZWRfXzSEVZsnt6cD1
- 51OIayBT8Vh9D9tKOFx+ctBTF+sFPHcStE0TJ9x7EJI30Cb8GhTgQ9MGjT/N2Qr24Cd/htqEx2j
- 8NM+l6e/eY1YBTp5Ih/JK9WHCeoyXEv9rYhJ6ez4Ti/nJFdxWHJqppPjTnBe5y0UfQC8tPPFtnr
- aHs+JxOyRBWWGZ/l1GN4+OsaBFWqcpXPr225QzGUv0/s13MS7Mcjgxj8/skqME3Feqlag2TIb8D
- CiZnwVOZtlshdZCAdFJuESy3Aht0QWDAfqTEA72ysfngq1ZQRnXGEyJVwBYxJ6xmDGnLJavzw92
- bfzbLYf0kpbJvlq/jvApm8DSpUFTAQ3bfPnJQguomrofTz+Ze65aSwmy+y6yuiGnjOQEpgmKc8v
- Pdb7NbZnuSkzc9BEBejqH3XAkw8sqi+xKrZQv4xqxK3JuzpMnHiMro6J5yTMSq2MyYOalMSmjgr
- kV1POIAQX4XtQdKo6Sg==
-X-Authority-Analysis: v=2.4 cv=TY+bdBQh c=1 sm=1 tr=0 ts=69a57768 cx=c_pps
- a=XiAAW1AwiKB2Y8Wsi+sD2Q==:117 a=XiAAW1AwiKB2Y8Wsi+sD2Q==:17
- a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=7Gl3-_t3PgB9XO-mQDs3:22 a=yPCof4ZbAAAA:8 a=Jjk60jIoATpmH5dsjOcA:9
-X-Proofpoint-ORIG-GUID: 4FaS-fKbhEizLZk8Mnhyybcmlz9saAPL
-X-Proofpoint-GUID: 4FaS-fKbhEizLZk8Mnhyybcmlz9saAPL
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 08/22] slab: make percpu sheaves compatible with
+ kmalloc_nolock()/kfree_nolock()
+To: Vlastimil Babka <vbabka@suse.cz>, Harry Yoo <harry.yoo@oracle.com>, Petr
+ Tesarik <ptesarik@suse.com>, Christoph Lameter <cl@gentwo.org>, David
+ Rientjes <rientjes@google.com>, Roman Gushchin <roman.gushchin@linux.dev>
+CC: Hao Li <hao.li@linux.dev>, Andrew Morton <akpm@linux-foundation.org>,
+	Uladzislau Rezki <urezki@gmail.com>, "Liam R. Howlett"
+	<Liam.Howlett@oracle.com>, Suren Baghdasaryan <surenb@google.com>, Sebastian
+ Andrzej Siewior <bigeasy@linutronix.de>, Alexei Starovoitov <ast@kernel.org>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+	<linux-rt-devel@lists.linux.dev>, <bpf@vger.kernel.org>,
+	<kasan-dev@googlegroups.com>
+References: <20260123-sheaves-for-all-v4-0-041323d506f7@suse.cz>
+ <20260123-sheaves-for-all-v4-8-041323d506f7@suse.cz>
+Content-Language: en-US
+From: "D, Suneeth" <Suneeth.D@amd.com>
+In-Reply-To: <20260123-sheaves-for-all-v4-8-041323d506f7@suse.cz>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3D:EE_|SN7PR12MB7810:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9ec2235f-55b0-4e66-d47e-08de7852bdd2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|376014|7416014|13003099007;
+X-Microsoft-Antispam-Message-Info:
+	g0WLE3KVUQr2V3iJaIRw0Yvo6ynGEqKX64H3CxQ694BGGBXdZcqlqkIU4DmE//tNsnRI8osvZFffyvS9Gk+sy6axsYyvGFll3JtQvwOewN4o0gbtIfwDWVKDW+P75nPrUcML9PXnJ3xekBhxUBQyO3yQLbuJptcI0WJ1yQEUHlySB163zo+ln04xIS6IxYi3zSSWXAHP//9yYa6eHB3nnqxfMmagc5cRk2LCL3oFfi/Vc9Ccbb+T5KW0kxV4pd57+slsdZJidtlk3H87QS9youYApRsAoU7piLgywQfIbK2j9ggf0JUE3f9X3QXyc/ONdf1AEHrfmsWqk8Sp4QCvUJOxTHNND23jxUpP2S0FMTHzgfAN+MGcbdIBd2jkUXkHP6luzZBqO3LWp/69MtgH7rjQC+Pxp/KSk0q5YsiK2YFoR6eAbPKgAX98jHv7s2soXh4ezDH0ZyselEYCJmbDUpQ6ZtdT3CxG4WnBUgKcRZeQBAGRKI1onnAqzpbSIbLcSN8S5xX6jqVrbQ41yMqd+KdrYcGe77ysQo6+Vn0lyMDkhpRi7m8nx5v7sOQPe/hejA5YmD5Vf6CUzbhjywKnoYu0OiaEqr25Bpon1Z+V/sChhqR8YVmyvzHnnpczSHsxVfy9wWs5BPYaAW0VYyi6a3qaZIIx8ZqsAxNW2nn7RqpyKEQ/txGq3S2d9EYUQpKHT7Sx/8E0UOVXT1H63mS45jXunqeblgR+5P0Tr+zxgCD1eTjbWI7hLx8Mx9j+FHv05019ZozwmED4ItFG/JSzn3Cdk2wjqpYZJsZER7dUBtU9YFylqvDfHkfqfCvV8DR/KppzHT/ALoVyD1SLrCXzew==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014)(7416014)(13003099007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	LSuwd0lRbgCHY54iSRpOlq2qAroJiLptlxQwgIhpMmWONghmnizijH+3kgDzfE4kewXi3caRTTlidQWqZHZKpjVRRejGXx64X9g9X5EjeRg4K+f9GEbEP8ZQmo+uvusPGKjuzJ0g/mSgpD+31yuxGEMRLjBCGPWORFu5cilq2FsdIEg5RTZG5Y49BheYj2y6q9gHPEzse5fLcZAQW11vlVi8lDjvgOjXWVE0tbrtBmHthcmaiKy8r7nPlyFPFnMEnU+ksPc4OKwL/BVZenx+ApLbmzZGSIlCheinqkewJJ/MxMLG8C1R3/zbt2ChnrBnEuAjRqIcX4CMgvpcqbGM/djm7jYly2XziS4p6DEbOmQ9Q3bV52+ooftVQ/9xI/wI+6+KHQUpHyf3BJHJjRqTTp8rJSDebev5vw90eQRPE0dLr4W8fKsiIqFI3vZUbVIP
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Mar 2026 11:56:29.9654
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9ec2235f-55b0-4e66-d47e-08de7852bdd2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE3D.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7810
 
-Validate layout if present, but because the kernel must be
-strict in what it accepts, reject BTF with unsupported kinds,
-even if they are in the layout information.
+Hi Vlastimil Babka,
 
-Signed-off-by: Alan Maguire <alan.maguire@oracle.com>
----
- kernel/bpf/btf.c | 55 ++++++++++++++++++++++++++++++++++++++++++++----
- 1 file changed, 51 insertions(+), 4 deletions(-)
+On 1/23/2026 12:22 PM, Vlastimil Babka wrote:
+> Before we enable percpu sheaves for kmalloc caches, we need to make sure
+> kmalloc_nolock() and kfree_nolock() will continue working properly and
+> not spin when not allowed to.
+> 
+> Percpu sheaves themselves use local_trylock() so they are already
+> compatible. We just need to be careful with the barn->lock spin_lock.
+> Pass a new allow_spin parameter where necessary to use
+> spin_trylock_irqsave().
+> 
+> In kmalloc_nolock_noprof() we can now attempt alloc_from_pcs() safely,
+> for now it will always fail until we enable sheaves for kmalloc caches
+> next. Similarly in kfree_nolock() we can attempt free_to_pcs().
+> 
 
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 4872d2a6c42d..bda363a2592e 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -270,6 +270,7 @@ struct btf {
- 	struct btf_id_dtor_kfunc_tab *dtor_kfunc_tab;
- 	struct btf_struct_metas *struct_meta_tab;
- 	struct btf_struct_ops_tab *struct_ops_tab;
-+	struct btf_layout *layout;
- 
- 	/* split BTF support */
- 	struct btf *base_btf;
-@@ -5517,7 +5518,8 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
- 	start = btf->nohdr_data + hdr->str_off;
- 	end = start + hdr->str_len;
- 
--	if (end != btf->data + btf->data_size) {
-+	if (hdr->hdr_len < sizeof(struct btf_header) &&
-+	    end != btf->data + btf->data_size) {
- 		btf_verifier_log(env, "String section is not at the end");
- 		return -EINVAL;
- 	}
-@@ -5538,9 +5540,46 @@ static int btf_parse_str_sec(struct btf_verifier_env *env)
- 	return 0;
- }
- 
-+static int btf_parse_layout_sec(struct btf_verifier_env *env)
-+{
-+	const struct btf_header *hdr = &env->btf->hdr;
-+	struct btf *btf = env->btf;
-+	void *start, *end;
-+
-+	if (hdr->hdr_len < sizeof(struct btf_header) ||
-+	    hdr->layout_len == 0)
-+		return 0;
-+
-+	/* Layout section must align to 4 bytes */
-+	if (hdr->layout_off & (sizeof(u32) - 1)) {
-+		btf_verifier_log(env, "Unaligned layout_off");
-+		return -EINVAL;
-+	}
-+	start = btf->nohdr_data + hdr->layout_off;
-+	end = start + hdr->layout_len;
-+
-+	if (hdr->layout_len % sizeof(struct btf_layout) != 0) {
-+		btf_verifier_log(env, "layout_len is not multiple of %zu",
-+				 sizeof(struct btf_layout));
-+		return -EINVAL;
-+	}
-+	if (hdr->layout_len < sizeof(struct btf_layout)) {
-+		btf_verifier_log(env, "Layout section is too small");
-+		return -EINVAL;
-+	}
-+	if (end > btf->data + btf->data_size) {
-+		btf_verifier_log(env, "Layout section is too big");
-+		return -EINVAL;
-+	}
-+	btf->layout = start;
-+
-+	return 0;
-+}
-+
- static const size_t btf_sec_info_offset[] = {
- 	offsetof(struct btf_header, type_off),
- 	offsetof(struct btf_header, str_off),
-+	offsetof(struct btf_header, layout_off)
- };
- 
- static int btf_sec_info_cmp(const void *a, const void *b)
-@@ -5556,24 +5595,28 @@ static int btf_check_sec_info(struct btf_verifier_env *env,
- {
- 	struct btf_sec_info secs[ARRAY_SIZE(btf_sec_info_offset)];
- 	u32 total, expected_total, i;
-+	u32 nr_secs = ARRAY_SIZE(btf_sec_info_offset);
- 	const struct btf_header *hdr;
- 	const struct btf *btf;
- 
- 	btf = env->btf;
- 	hdr = &btf->hdr;
- 
-+	if (hdr->hdr_len < sizeof(struct btf_header) || hdr->layout_len == 0)
-+		nr_secs--;
-+
- 	/* Populate the secs from hdr */
--	for (i = 0; i < ARRAY_SIZE(btf_sec_info_offset); i++)
-+	for (i = 0; i < nr_secs; i++)
- 		secs[i] = *(struct btf_sec_info *)((void *)hdr +
- 						   btf_sec_info_offset[i]);
- 
--	sort(secs, ARRAY_SIZE(btf_sec_info_offset),
-+	sort(secs, nr_secs,
- 	     sizeof(struct btf_sec_info), btf_sec_info_cmp, NULL);
- 
- 	/* Check for gaps and overlap among sections */
- 	total = 0;
- 	expected_total = btf_data_size - hdr->hdr_len;
--	for (i = 0; i < ARRAY_SIZE(btf_sec_info_offset); i++) {
-+	for (i = 0; i < nr_secs; i++) {
- 		if (expected_total < secs[i].off) {
- 			btf_verifier_log(env, "Invalid section offset");
- 			return -EINVAL;
-@@ -5929,6 +5972,10 @@ static struct btf *btf_parse(const union bpf_attr *attr, bpfptr_t uattr, u32 uat
- 	if (err)
- 		goto errout;
- 
-+	err = btf_parse_layout_sec(env);
-+	if (err)
-+		goto errout;
-+
- 	err = btf_parse_type_sec(env);
- 	if (err)
- 		goto errout;
--- 
-2.39.3
+We run will-it-scale micro-benchmark as part of our weekly CI for Kernel 
+Performance Regression testing between a stable vs rc kernel. We 
+observed will-it-scale-thread-page_fault3 variant was regressing with 
+9-11% on AMD platforms (Turin and Bergamo)between the kernels v6.19 and 
+v7.0-rc1. Bisecting further landed me onto this commit
+f1427a1d64156bb88d84f364855c364af6f67a3b (slab: make percpu sheaves 
+compatible with kmalloc_nolock()/kfree_nolock()) as the first bad 
+commit. The following were the machines' configuration and test 
+parameters used:-
 
+Model name:           AMD EPYC 128-Core Processor [Bergamo]
+Thread(s) per core:   2
+Core(s) per socket:   64
+Socket(s):            1
+Total online memory:  256G
+
+Model name:           AMD EPYC 64-Core Processor [Turin]
+Thread(s) per core:   2
+Core(s) per socket:   64
+Socket(s):            2
+Total online memory:  258G
+
+Test params:
+------------
+      nr_task: [1 8 64 128 192 256]
+      mode: thread
+      test: page_fault3
+      kpi: per_thread_ops
+      cpufreq_governor: performance
+
+The following are the stats after bisection:-
+(the KPI used here is per_thread_ops)
+
+kernel_versions      					 per_thread_ops
+---------------      					 ---------------
+v6.19.0 (baseline)                                     - 2410188
+v7.0-rc1 	                                       - 2151474
+v6.19-rc5-f1427a1d6415                                 - 2263974
+v6.19-rc5-f3421f8d154c (one commit before culprit)     - 2323263
+
+Recreation steps:
+-----------------
+1) git clone https://github.com/antonblanchard/will-it-scale.git
+2) git clone https://github.com/intel/lkp-tests.git
+3) cd will-it-scale && git apply
+lkp-tests/programs/will-it-scale/pkg/will-it-scale.patch
+4) make
+5) python3 runtest.py page_fault3 25 thread 0 0 1 8 64 128 192 256
+
+NOTE: [5] is specific to machine's architecture. starting from 1 is the
+array of no.of tasks that you'd wish to run the testcase which here is
+no.cores per CCX, per NUMA node/ per Socket, nr_threads.
+
+I also ran the micro-benchmark with ./tools/testing/perf record and
+following is the diff collected:-
+
+# ./perf diff perf.data.old perf.data
+Warning:
+4 out of order events recorded.
+# Event 'cpu/cycles/P'
+#
+# Baseline  Delta Abs  Shared Object          Symbol
+# ........  .........  ..................... 
+...................................................
+#
+               +11.95%  [kernel.kallsyms]      [k] folio_pte_batch
+               +10.30%  [kernel.kallsyms]      [k] 
+native_queued_spin_lock_slowpath
+                +9.91%  [kernel.kallsyms]      [k] __block_write_begin_int
+      0.00%     +8.56%  [kernel.kallsyms]      [k] clear_page_erms
+      7.71%     -7.71%  [kernel.kallsyms]      [k] delay_halt
+                +6.84%  [kernel.kallsyms]      [k] block_dirty_folio
+      1.58%     +4.90%  [kernel.kallsyms]      [k] unmap_page_range
+      0.00%     +4.78%  [kernel.kallsyms]      [k] folio_remove_rmap_ptes
+      3.17%     -3.17%  [kernel.kallsyms]      [k] __vmf_anon_prepare
+      0.00%     +3.09%  [kernel.kallsyms]      [k] ext4_page_mkwrite
+                +2.32%  [kernel.kallsyms]      [k] ext4_dirty_folio
+      0.00%     +2.01%  [kernel.kallsyms]      [k] vm_normal_page
+      0.00%     +1.93%  [kernel.kallsyms]      [k] set_pte_range
+                +1.84%  [kernel.kallsyms]      [k] block_commit_write
+                +1.82%  [kernel.kallsyms]      [k] mod_node_page_state
+                +1.68%  [kernel.kallsyms]      [k] lruvec_stat_mod_folio
+                +1.56%  [kernel.kallsyms]      [k] mod_memcg_lruvec_state
+      1.40%     -1.39%  [kernel.kallsyms]      [k] mod_memcg_state
+                +1.38%  [kernel.kallsyms]      [k] folio_add_file_rmap_ptes
+      5.01%     -0.87%  page_fault3_threads    [.] testcase
+                +0.84%  [kernel.kallsyms]      [k] tlb_flush_rmap_batch
+                +0.83%  [kernel.kallsyms]      [k] mark_buffer_dirty
+      1.66%     -0.75%  [kernel.kallsyms]      [k] flush_tlb_mm_range
+                +0.72%  [kernel.kallsyms]      [k] css_rstat_updated
+      0.60%     -0.60%  [kernel.kallsyms]      [k] osq_unlock
+                +0.57%  [kernel.kallsyms]      [k] _raw_spin_unlock
+                +0.55%  [kernel.kallsyms]      [k] perf_iterate_ctx
+                +0.54%  [kernel.kallsyms]      [k] __rcu_read_lock
+      0.11%     +0.53%  [kernel.kallsyms]      [k] osq_lock
+                +0.46%  [kernel.kallsyms]      [k] finish_fault
+      0.46%     -0.46%  [kernel.kallsyms]      [k] do_wp_page
+                +0.45%  [kernel.kallsyms]      [k] pte_val
+      1.10%     -0.41%  [kernel.kallsyms]      [k] filemap_fault
+                +0.39%  [kernel.kallsyms]      [k] native_set_pte
+                +0.36%  [kernel.kallsyms]      [k] rwsem_spin_on_owner
+      0.28%     -0.28%  [kernel.kallsyms]      [k] mas_topiary_replace
+                +0.28%  [kernel.kallsyms]      [k] _raw_spin_lock_irqsave
+                +0.27%  [kernel.kallsyms]      [k] percpu_counter_add_batch
+                +0.27%  [kernel.kallsyms]      [k] memset
+      0.00%     +0.24%  [kernel.kallsyms]      [k] mas_walk
+      0.23%     -0.23%  [kernel.kallsyms]      [k] __pmd_alloc
+      0.23%     -0.22%  [kernel.kallsyms]      [k] rcu_core
+                +0.21%  [kernel.kallsyms]      [k] __rcu_read_unlock
+      0.04%     +0.19%  [kernel.kallsyms]      [k] ext4_da_get_block_prep
+                +0.19%  [kernel.kallsyms]      [k] lock_vma_under_rcu
+      0.01%     +0.19%  [kernel.kallsyms]      [k] prep_compound_page
+                +0.18%  [kernel.kallsyms]      [k] filemap_get_entry
+                +0.17%  [kernel.kallsyms]      [k] folio_mark_dirty
+
+Would be happy to help with further testing and providing additional 
+data if required.
+
+Thanks,
+Suneeth D
+
+> Reviewed-by: Suren Baghdasaryan <surenb@google.com>
+> Reviewed-by: Harry Yoo <harry.yoo@oracle.com>
+> Reviewed-by: Hao Li <hao.li@linux.dev>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+>   mm/slub.c | 82 ++++++++++++++++++++++++++++++++++++++++++++++-----------------
+>   1 file changed, 60 insertions(+), 22 deletions(-)
+> 
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 41e1bf35707c..4ca6bd944854 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -2889,7 +2889,8 @@ static void pcs_destroy(struct kmem_cache *s)
+>   	s->cpu_sheaves = NULL;
+>   }
+>   
+> -static struct slab_sheaf *barn_get_empty_sheaf(struct node_barn *barn)
+> +static struct slab_sheaf *barn_get_empty_sheaf(struct node_barn *barn,
+> +					       bool allow_spin)
+>   {
+>   	struct slab_sheaf *empty = NULL;
+>   	unsigned long flags;
+> @@ -2897,7 +2898,10 @@ static struct slab_sheaf *barn_get_empty_sheaf(struct node_barn *barn)
+>   	if (!data_race(barn->nr_empty))
+>   		return NULL;
+>   
+> -	spin_lock_irqsave(&barn->lock, flags);
+> +	if (likely(allow_spin))
+> +		spin_lock_irqsave(&barn->lock, flags);
+> +	else if (!spin_trylock_irqsave(&barn->lock, flags))
+> +		return NULL;
+>   
+>   	if (likely(barn->nr_empty)) {
+>   		empty = list_first_entry(&barn->sheaves_empty,
+> @@ -2974,7 +2978,8 @@ static struct slab_sheaf *barn_get_full_or_empty_sheaf(struct node_barn *barn)
+>    * change.
+>    */
+>   static struct slab_sheaf *
+> -barn_replace_empty_sheaf(struct node_barn *barn, struct slab_sheaf *empty)
+> +barn_replace_empty_sheaf(struct node_barn *barn, struct slab_sheaf *empty,
+> +			 bool allow_spin)
+>   {
+>   	struct slab_sheaf *full = NULL;
+>   	unsigned long flags;
+> @@ -2982,7 +2987,10 @@ barn_replace_empty_sheaf(struct node_barn *barn, struct slab_sheaf *empty)
+>   	if (!data_race(barn->nr_full))
+>   		return NULL;
+>   
+> -	spin_lock_irqsave(&barn->lock, flags);
+> +	if (likely(allow_spin))
+> +		spin_lock_irqsave(&barn->lock, flags);
+> +	else if (!spin_trylock_irqsave(&barn->lock, flags))
+> +		return NULL;
+>   
+>   	if (likely(barn->nr_full)) {
+>   		full = list_first_entry(&barn->sheaves_full, struct slab_sheaf,
+> @@ -3003,7 +3011,8 @@ barn_replace_empty_sheaf(struct node_barn *barn, struct slab_sheaf *empty)
+>    * barn. But if there are too many full sheaves, reject this with -E2BIG.
+>    */
+>   static struct slab_sheaf *
+> -barn_replace_full_sheaf(struct node_barn *barn, struct slab_sheaf *full)
+> +barn_replace_full_sheaf(struct node_barn *barn, struct slab_sheaf *full,
+> +			bool allow_spin)
+>   {
+>   	struct slab_sheaf *empty;
+>   	unsigned long flags;
+> @@ -3014,7 +3023,10 @@ barn_replace_full_sheaf(struct node_barn *barn, struct slab_sheaf *full)
+>   	if (!data_race(barn->nr_empty))
+>   		return ERR_PTR(-ENOMEM);
+>   
+> -	spin_lock_irqsave(&barn->lock, flags);
+> +	if (likely(allow_spin))
+> +		spin_lock_irqsave(&barn->lock, flags);
+> +	else if (!spin_trylock_irqsave(&barn->lock, flags))
+> +		return ERR_PTR(-EBUSY);
+>   
+>   	if (likely(barn->nr_empty)) {
+>   		empty = list_first_entry(&barn->sheaves_empty, struct slab_sheaf,
+> @@ -5008,7 +5020,8 @@ __pcs_replace_empty_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
+>   		return NULL;
+>   	}
+>   
+> -	full = barn_replace_empty_sheaf(barn, pcs->main);
+> +	full = barn_replace_empty_sheaf(barn, pcs->main,
+> +					gfpflags_allow_spinning(gfp));
+>   
+>   	if (full) {
+>   		stat(s, BARN_GET);
+> @@ -5025,7 +5038,7 @@ __pcs_replace_empty_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
+>   			empty = pcs->spare;
+>   			pcs->spare = NULL;
+>   		} else {
+> -			empty = barn_get_empty_sheaf(barn);
+> +			empty = barn_get_empty_sheaf(barn, true);
+>   		}
+>   	}
+>   
+> @@ -5165,7 +5178,8 @@ void *alloc_from_pcs(struct kmem_cache *s, gfp_t gfp, int node)
+>   }
+>   
+>   static __fastpath_inline
+> -unsigned int alloc_from_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
+> +unsigned int alloc_from_pcs_bulk(struct kmem_cache *s, gfp_t gfp, size_t size,
+> +				 void **p)
+>   {
+>   	struct slub_percpu_sheaves *pcs;
+>   	struct slab_sheaf *main;
+> @@ -5199,7 +5213,8 @@ unsigned int alloc_from_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
+>   			return allocated;
+>   		}
+>   
+> -		full = barn_replace_empty_sheaf(barn, pcs->main);
+> +		full = barn_replace_empty_sheaf(barn, pcs->main,
+> +						gfpflags_allow_spinning(gfp));
+>   
+>   		if (full) {
+>   			stat(s, BARN_GET);
+> @@ -5700,7 +5715,7 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node)
+>   	gfp_t alloc_gfp = __GFP_NOWARN | __GFP_NOMEMALLOC | gfp_flags;
+>   	struct kmem_cache *s;
+>   	bool can_retry = true;
+> -	void *ret = ERR_PTR(-EBUSY);
+> +	void *ret;
+>   
+>   	VM_WARN_ON_ONCE(gfp_flags & ~(__GFP_ACCOUNT | __GFP_ZERO |
+>   				      __GFP_NO_OBJ_EXT));
+> @@ -5731,6 +5746,12 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node)
+>   		 */
+>   		return NULL;
+>   
+> +	ret = alloc_from_pcs(s, alloc_gfp, node);
+> +	if (ret)
+> +		goto success;
+> +
+> +	ret = ERR_PTR(-EBUSY);
+> +
+>   	/*
+>   	 * Do not call slab_alloc_node(), since trylock mode isn't
+>   	 * compatible with slab_pre_alloc_hook/should_failslab and
+> @@ -5767,6 +5788,7 @@ void *kmalloc_nolock_noprof(size_t size, gfp_t gfp_flags, int node)
+>   		ret = NULL;
+>   	}
+>   
+> +success:
+>   	maybe_wipe_obj_freeptr(s, ret);
+>   	slab_post_alloc_hook(s, NULL, alloc_gfp, 1, &ret,
+>   			     slab_want_init_on_alloc(alloc_gfp, s), size);
+> @@ -6087,7 +6109,8 @@ static void __pcs_install_empty_sheaf(struct kmem_cache *s,
+>    * unlocked.
+>    */
+>   static struct slub_percpu_sheaves *
+> -__pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
+> +__pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs,
+> +			bool allow_spin)
+>   {
+>   	struct slab_sheaf *empty;
+>   	struct node_barn *barn;
+> @@ -6111,7 +6134,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
+>   	put_fail = false;
+>   
+>   	if (!pcs->spare) {
+> -		empty = barn_get_empty_sheaf(barn);
+> +		empty = barn_get_empty_sheaf(barn, allow_spin);
+>   		if (empty) {
+>   			pcs->spare = pcs->main;
+>   			pcs->main = empty;
+> @@ -6125,7 +6148,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
+>   		return pcs;
+>   	}
+>   
+> -	empty = barn_replace_full_sheaf(barn, pcs->main);
+> +	empty = barn_replace_full_sheaf(barn, pcs->main, allow_spin);
+>   
+>   	if (!IS_ERR(empty)) {
+>   		stat(s, BARN_PUT);
+> @@ -6133,7 +6156,8 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
+>   		return pcs;
+>   	}
+>   
+> -	if (PTR_ERR(empty) == -E2BIG) {
+> +	/* sheaf_flush_unused() doesn't support !allow_spin */
+> +	if (PTR_ERR(empty) == -E2BIG && allow_spin) {
+>   		/* Since we got here, spare exists and is full */
+>   		struct slab_sheaf *to_flush = pcs->spare;
+>   
+> @@ -6158,6 +6182,14 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
+>   alloc_empty:
+>   	local_unlock(&s->cpu_sheaves->lock);
+>   
+> +	/*
+> +	 * alloc_empty_sheaf() doesn't support !allow_spin and it's
+> +	 * easier to fall back to freeing directly without sheaves
+> +	 * than add the support (and to sheaf_flush_unused() above)
+> +	 */
+> +	if (!allow_spin)
+> +		return NULL;
+> +
+>   	empty = alloc_empty_sheaf(s, GFP_NOWAIT);
+>   	if (empty)
+>   		goto got_empty;
+> @@ -6200,7 +6232,7 @@ __pcs_replace_full_main(struct kmem_cache *s, struct slub_percpu_sheaves *pcs)
+>    * The object is expected to have passed slab_free_hook() already.
+>    */
+>   static __fastpath_inline
+> -bool free_to_pcs(struct kmem_cache *s, void *object)
+> +bool free_to_pcs(struct kmem_cache *s, void *object, bool allow_spin)
+>   {
+>   	struct slub_percpu_sheaves *pcs;
+>   
+> @@ -6211,7 +6243,7 @@ bool free_to_pcs(struct kmem_cache *s, void *object)
+>   
+>   	if (unlikely(pcs->main->size == s->sheaf_capacity)) {
+>   
+> -		pcs = __pcs_replace_full_main(s, pcs);
+> +		pcs = __pcs_replace_full_main(s, pcs, allow_spin);
+>   		if (unlikely(!pcs))
+>   			return false;
+>   	}
+> @@ -6333,7 +6365,7 @@ bool __kfree_rcu_sheaf(struct kmem_cache *s, void *obj)
+>   			goto fail;
+>   		}
+>   
+> -		empty = barn_get_empty_sheaf(barn);
+> +		empty = barn_get_empty_sheaf(barn, true);
+>   
+>   		if (empty) {
+>   			pcs->rcu_free = empty;
+> @@ -6453,7 +6485,7 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
+>   		goto no_empty;
+>   
+>   	if (!pcs->spare) {
+> -		empty = barn_get_empty_sheaf(barn);
+> +		empty = barn_get_empty_sheaf(barn, true);
+>   		if (!empty)
+>   			goto no_empty;
+>   
+> @@ -6467,7 +6499,7 @@ static void free_to_pcs_bulk(struct kmem_cache *s, size_t size, void **p)
+>   		goto do_free;
+>   	}
+>   
+> -	empty = barn_replace_full_sheaf(barn, pcs->main);
+> +	empty = barn_replace_full_sheaf(barn, pcs->main, true);
+>   	if (IS_ERR(empty)) {
+>   		stat(s, BARN_PUT_FAIL);
+>   		goto no_empty;
+> @@ -6719,7 +6751,7 @@ void slab_free(struct kmem_cache *s, struct slab *slab, void *object,
+>   
+>   	if (likely(!IS_ENABLED(CONFIG_NUMA) || slab_nid(slab) == numa_mem_id())
+>   	    && likely(!slab_test_pfmemalloc(slab))) {
+> -		if (likely(free_to_pcs(s, object)))
+> +		if (likely(free_to_pcs(s, object, true)))
+>   			return;
+>   	}
+>   
+> @@ -6980,6 +7012,12 @@ void kfree_nolock(const void *object)
+>   	 * since kasan quarantine takes locks and not supported from NMI.
+>   	 */
+>   	kasan_slab_free(s, x, false, false, /* skip quarantine */true);
+> +
+> +	if (likely(!IS_ENABLED(CONFIG_NUMA) || slab_nid(slab) == numa_mem_id())) {
+> +		if (likely(free_to_pcs(s, x, false)))
+> +			return;
+> +	}
+> +
+>   	do_slab_free(s, slab, x, x, 0, _RET_IP_);
+>   }
+>   EXPORT_SYMBOL_GPL(kfree_nolock);
+> @@ -7532,7 +7570,7 @@ int kmem_cache_alloc_bulk_noprof(struct kmem_cache *s, gfp_t flags, size_t size,
+>   		size--;
+>   	}
+>   
+> -	i = alloc_from_pcs_bulk(s, size, p);
+> +	i = alloc_from_pcs_bulk(s, flags, size, p);
+>   
+>   	if (i < size) {
+>   		/*
+>
