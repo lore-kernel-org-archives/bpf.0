@@ -1,32 +1,32 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E587407598;
-	Mon,  2 Mar 2026 15:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13AC43FD14B
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 15:04:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772463872; cv=none; b=Mn4vuP6Kgjtw87FsoNIGgctjKaFbqiA/upHTXjBDKeMW6cTMfZrGbAkvf21tctFVUQwhsyMRNMC5JZQVzgT9XVwuhwqgAOUJjxPr6YRh+iz3H8nL+OPKyEdTahSIrxSgFOFsAv0P/RaQ/740GYe+0Rn28GfwPuIgobfxwM41RrM=
+	t=1772463895; cv=none; b=jWd2So75AB7JBfdMVmHVNnkXyaPbMrzy4Br29yWrncaMPklFFa2clSZP0aXBMcvx5/SkRp1S7/tXNqLr2yIT0EbODUahbaUlVCyR+rldSYAHeh7VfYHzOSHAhC320AaSK5t8C4hwNxCf2bfqCLvehYetoFPMIe6wUw/XvXm5NLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772463872; c=relaxed/simple;
-	bh=wetn+BhjoCd6GaTj6qsiXs+0U3i59ctE0mLs/xexuPI=;
+	s=arc-20240116; t=1772463895; c=relaxed/simple;
+	bh=0L0CZRR5yaZjUnkGUuTJtr8n6o/HzHfEIlbHobJvreM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EEFt+XRG91/FH5ZNo9iA8b/cfp2BmJDNsa88VwHRDSTUdN7Hwv8as6VnE1jsdQB0wlnaOJXts5yXaw56anXYMfFYlLJLhICXOHdCgNeHIt0F6129ttKzFW+8Md4HsAa4+YuqU4YK72EFAk+cXJnQR+wxPD+re8bb4F2JeQgrkcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IBhDUvLg; arc=none smtp.client-ip=95.215.58.180
+	 MIME-Version; b=ZfMqxXxfGkgwtoXmxeFB5SbOWQTpyN3RMIwbFcxO9DI2KE6Lnmk/I7t/Ryim5EayIbx3n1CDPmEp8z8wOBsP5xl7ksn8DD50pXz994TqpHv8Oc85Fq5xfe7p+DxeeAVCUR67q3QTdsfLHOjYj4EtcZAW5RYvkyPCVt8RMKl34SI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aTpBTrrN; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IBhDUvLg"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aTpBTrrN"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772463868;
+	t=1772463891;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=pfTsEtc+4MDeNoDV9HupmgjRya/Vhl9qu21qBDHMts0=;
-	b=IBhDUvLgAnjupfk/5LeC5EY0ZnpODYNDk1UY4orVXPxHP20MMuRAUyGqloOEOpBdusKQZE
-	uL0IZ443w43enf4oiqlBzoKN7RPAJPcJkx6ln1Ob1q83D6Ot6SjVbNJyxQSr3KIePsi7AE
-	clu3NS2KpRsio7eO6ls4obSesmB0Qek=
+	bh=Q3gwaQ0eVXEyMgQ4Qe+myf5VQ4j4Q5VbSSpgZqEgTR8=;
+	b=aTpBTrrNFjTaFvIbBzdOLCJWm6Dx9XTMAfWNbsOmKnTKVEkf2xBX3Vf1mIuAHdsPxAl8Zv
+	wOkTDmTIXlqLiSbTlY2t4kzZxd+bkMprc/oiYGOYktdFhhSVFWT/LSenbCx+31zltiXXYw
+	enIf99xJopvWMF+8keEzmPhiF2vCkME=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -52,9 +52,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 2/6] bpf: Factor out bpf_map_owner_[init,matches]() helpers
-Date: Mon,  2 Mar 2026 23:03:38 +0800
-Message-ID: <20260302150342.55709-3-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 3/6] bpf: Disallow !kprobe_write_ctx progs tail-calling kprobe_write_ctx progs
+Date: Mon,  2 Mar 2026 23:03:39 +0800
+Message-ID: <20260302150342.55709-4-leon.hwang@linux.dev>
 In-Reply-To: <20260302150342.55709-1-leon.hwang@linux.dev>
 References: <20260302150342.55709-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -66,144 +66,161 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-When adding more attributes to validate in __bpf_prog_map_compatible(),
-both the if and else code blocks become harder to read.
+Uprobe programs that modify regs require different runtime assumptions
+than those that do not. Mixing !kprobe_write_ctx progs with
+kprobe_write_ctx progs via tail calls could break these assumptions.
 
-To improve readability, factor out bpf_map_owner_init() and
-bpf_map_owner_matches() helpers.
+To address this, reject the combination of !kprobe_write_ctx progs with
+kprobe_write_ctx progs in bpf_map_owner_matches(), which prevents the
+tail callee from modifying regs unexpectedly.
 
-No functional changes intended.
+Also reject kprobe_write_ctx mismatches during initialization to
+prevent bypassing the above restriction.
 
+Without this check, the above restriction can be bypassed as follows.
+
+struct {
+	__uint(type, BPF_MAP_TYPE_PROG_ARRAY);
+	__uint(max_entries, 1);
+	__uint(key_size, 4);
+	__uint(value_size, 4);
+} jmp_table SEC(".maps");
+
+SEC("?kprobe")
+int prog_a(struct pt_regs *regs)
+{
+	regs->ax = 0;
+	bpf_tail_call_static(regs, &jmp_table, 0);
+	return 0;
+}
+
+SEC("?kprobe")
+int prog_b(struct pt_regs *regs)
+{
+	bpf_tail_call_static(regs, &jmp_table, 0);
+	return 0;
+}
+
+The jmp_table is shared between prog_a and prog_b.
+
+* Load prog_a.
+  At this point, owner->kprobe_write_ctx=true.
+* Load prog_b.
+  At this point, prog_b passes the compatibility check.
+* Add prog_a to jmp_table.
+* Attach prog_b to a kernel function.
+
+When the kernel function runs, prog_a will unexpectedly modify regs.
+
+Fixes: 7384893d970e ("bpf: Allow uprobe program to change context registers")
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/core.c | 100 ++++++++++++++++++++++++++--------------------
- 1 file changed, 57 insertions(+), 43 deletions(-)
+ include/linux/bpf.h |  7 ++++---
+ kernel/bpf/core.c   | 30 +++++++++++++++++++++++++-----
+ 2 files changed, 29 insertions(+), 8 deletions(-)
 
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 05b34a6355b0..dbafed52b2ba 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -285,9 +285,10 @@ struct bpf_list_node_kern {
+  */
+ struct bpf_map_owner {
+ 	enum bpf_prog_type type;
+-	bool jited;
+-	bool xdp_has_frags;
+-	bool sleepable;
++	u32 jited:1;
++	u32 xdp_has_frags:1;
++	u32 sleepable:1;
++	u32 kprobe_write_ctx:1;
+ 	u64 storage_cookie[MAX_BPF_CGROUP_STORAGE_TYPE];
+ 	const struct btf_type *attach_func_proto;
+ 	enum bpf_attach_type expected_attach_type;
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 229c74f3d6ae..b24a613d99f2 100644
+index b24a613d99f2..121a697d4da5 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -2380,14 +2380,66 @@ static unsigned int __bpf_prog_ret0_warn(const void *ctx,
- 	return 0;
+@@ -2390,6 +2390,7 @@ static void bpf_map_owner_init(struct bpf_map_owner *owner, const struct bpf_pro
+ 	owner->jited = fp->jited;
+ 	owner->xdp_has_frags = aux->xdp_has_frags;
+ 	owner->sleepable = fp->sleepable;
++	owner->kprobe_write_ctx = aux->kprobe_write_ctx;
+ 	owner->expected_attach_type = fp->expected_attach_type;
+ 	owner->attach_func_proto = aux->attach_func_proto;
+ 	for_each_cgroup_storage_type(i)
+@@ -2397,8 +2398,14 @@ static void bpf_map_owner_init(struct bpf_map_owner *owner, const struct bpf_pro
+ 			aux->cgroup_storage[i]->cookie : 0;
  }
  
-+static void bpf_map_owner_init(struct bpf_map_owner *owner, const struct bpf_prog *fp,
-+			       enum bpf_prog_type prog_type)
-+{
-+	struct bpf_prog_aux *aux = fp->aux;
-+	enum bpf_cgroup_storage_type i;
++enum bpf_map_owner_match_type {
++	BPF_MAP_OWNER_MATCH_FOR_INIT,
++	BPF_MAP_OWNER_MATCH_FOR_UPDATE,
++};
 +
-+	owner->type  = prog_type;
-+	owner->jited = fp->jited;
-+	owner->xdp_has_frags = aux->xdp_has_frags;
-+	owner->sleepable = fp->sleepable;
-+	owner->expected_attach_type = fp->expected_attach_type;
-+	owner->attach_func_proto = aux->attach_func_proto;
-+	for_each_cgroup_storage_type(i)
-+		owner->storage_cookie[i] = aux->cgroup_storage[i] ?
-+			aux->cgroup_storage[i]->cookie : 0;
-+}
-+
-+static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_prog *fp,
-+				  enum bpf_prog_type prog_type)
-+{
-+	struct bpf_map_owner *owner = map->owner;
-+	struct bpf_prog_aux *aux = fp->aux;
-+	enum bpf_cgroup_storage_type i;
-+	u64 cookie;
-+
-+	if (owner->type  != prog_type ||
-+	    owner->jited != fp->jited ||
-+	    owner->xdp_has_frags != aux->xdp_has_frags ||
-+	    owner->sleepable != fp->sleepable)
-+		return false;
-+
-+	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY &&
-+	    owner->expected_attach_type != fp->expected_attach_type)
-+		return false;
-+
-+	for_each_cgroup_storage_type(i) {
-+		cookie = aux->cgroup_storage[i] ? aux->cgroup_storage[i]->cookie : 0;
-+		if (cookie && cookie != owner->storage_cookie[i])
+ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_prog *fp,
+-				  enum bpf_prog_type prog_type)
++				  enum bpf_prog_type prog_type,
++				  enum bpf_map_owner_match_type match)
+ {
+ 	struct bpf_map_owner *owner = map->owner;
+ 	struct bpf_prog_aux *aux = fp->aux;
+@@ -2411,6 +2418,18 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_pr
+ 	    owner->sleepable != fp->sleepable)
+ 		return false;
+ 
++	switch (match) {
++	case BPF_MAP_OWNER_MATCH_FOR_INIT:
++		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
 +			return false;
++		break;
++
++	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
++		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
++			return false;
++		break;
 +	}
 +
-+	if (owner->attach_func_proto != aux->attach_func_proto) {
-+		switch (prog_type) {
-+		case BPF_PROG_TYPE_TRACING:
-+		case BPF_PROG_TYPE_LSM:
-+		case BPF_PROG_TYPE_EXT:
-+		case BPF_PROG_TYPE_STRUCT_OPS:
-+			return false;
-+		default:
-+			break;
-+		}
-+	}
-+	return true;
-+}
-+
+ 	if (map->map_type == BPF_MAP_TYPE_PROG_ARRAY &&
+ 	    owner->expected_attach_type != fp->expected_attach_type)
+ 		return false;
+@@ -2436,7 +2455,8 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_pr
+ }
+ 
  static bool __bpf_prog_map_compatible(struct bpf_map *map,
- 				      const struct bpf_prog *fp)
+-				      const struct bpf_prog *fp)
++				      const struct bpf_prog *fp,
++				      enum bpf_map_owner_match_type match)
  {
  	enum bpf_prog_type prog_type = resolve_prog_type(fp);
--	struct bpf_prog_aux *aux = fp->aux;
--	enum bpf_cgroup_storage_type i;
  	bool ret = false;
--	u64 cookie;
- 
- 	if (fp->kprobe_override)
- 		return ret;
-@@ -2398,48 +2450,10 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
- 		map->owner = bpf_map_owner_alloc(map);
- 		if (!map->owner)
- 			goto err;
--		map->owner->type  = prog_type;
--		map->owner->jited = fp->jited;
--		map->owner->xdp_has_frags = aux->xdp_has_frags;
--		map->owner->sleepable = fp->sleepable;
--		map->owner->expected_attach_type = fp->expected_attach_type;
--		map->owner->attach_func_proto = aux->attach_func_proto;
--		for_each_cgroup_storage_type(i) {
--			map->owner->storage_cookie[i] =
--				aux->cgroup_storage[i] ?
--				aux->cgroup_storage[i]->cookie : 0;
--		}
-+		bpf_map_owner_init(map->owner, fp, prog_type);
+@@ -2453,7 +2473,7 @@ static bool __bpf_prog_map_compatible(struct bpf_map *map,
+ 		bpf_map_owner_init(map->owner, fp, prog_type);
  		ret = true;
  	} else {
--		ret = map->owner->type  == prog_type &&
--		      map->owner->jited == fp->jited &&
--		      map->owner->xdp_has_frags == aux->xdp_has_frags &&
--		      map->owner->sleepable == fp->sleepable;
--		if (ret &&
--		    map->map_type == BPF_MAP_TYPE_PROG_ARRAY &&
--		    map->owner->expected_attach_type != fp->expected_attach_type)
--			ret = false;
--		for_each_cgroup_storage_type(i) {
--			if (!ret)
--				break;
--			cookie = aux->cgroup_storage[i] ?
--				 aux->cgroup_storage[i]->cookie : 0;
--			ret = map->owner->storage_cookie[i] == cookie ||
--			      !cookie;
--		}
--		if (ret &&
--		    map->owner->attach_func_proto != aux->attach_func_proto) {
--			switch (prog_type) {
--			case BPF_PROG_TYPE_TRACING:
--			case BPF_PROG_TYPE_LSM:
--			case BPF_PROG_TYPE_EXT:
--			case BPF_PROG_TYPE_STRUCT_OPS:
--				ret = false;
--				break;
--			default:
--				break;
--			}
--		}
-+		ret = bpf_map_owner_matches(map, fp, prog_type);
+-		ret = bpf_map_owner_matches(map, fp, prog_type);
++		ret = bpf_map_owner_matches(map, fp, prog_type, match);
  	}
  err:
  	spin_unlock(&map->owner_lock);
+@@ -2470,7 +2490,7 @@ bool bpf_prog_map_compatible(struct bpf_map *map, const struct bpf_prog *fp)
+ 	if (bpf_prog_is_dev_bound(fp->aux))
+ 		return false;
+ 
+-	return __bpf_prog_map_compatible(map, fp);
++	return __bpf_prog_map_compatible(map, fp, BPF_MAP_OWNER_MATCH_FOR_UPDATE);
+ }
+ 
+ static int bpf_check_tail_call(const struct bpf_prog *fp)
+@@ -2485,7 +2505,7 @@ static int bpf_check_tail_call(const struct bpf_prog *fp)
+ 		if (!map_type_contains_progs(map))
+ 			continue;
+ 
+-		if (!__bpf_prog_map_compatible(map, fp)) {
++		if (!__bpf_prog_map_compatible(map, fp, BPF_MAP_OWNER_MATCH_FOR_INIT)) {
+ 			ret = -EINVAL;
+ 			goto out;
+ 		}
 -- 
 2.52.0
 
