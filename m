@@ -1,50 +1,50 @@
-Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
+Received: from mx0b-00206402.pphosted.com (mx0b-00206402.pphosted.com [148.163.152.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6B030DD1B;
-	Mon,  2 Mar 2026 20:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.148.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE7D30DD1B;
+	Mon,  2 Mar 2026 20:09:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.152.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772482163; cv=none; b=UK14Y2QSZpCHyjOO2yRZNEhW/Y9WgqB3i7Y/Uebnhfz8ft+BlrNxmw+D/rdIbx3THpaJO4lugbFoNvVEh/lUUkDxpOwoUiYYH8U8bQXJ+PtcnAxsR5Sn4y3Fl/mjWDHB3RKwbN+4x8A+1KwQVuf9JjmnEW/9X3LOCffcrny0tW0=
+	t=1772482167; cv=none; b=hM1atg/XN3ylebIei8bduECRD8d7SjFPkMUBkGNrvYbS4/IPlNya4KfJwWhYGdAwV3HOdsRg4lQUbMkFiN/4CA7dXJRlzqQMNj8bkwgA/7jf2XhK3O2MidHCev+LJjro/S94eE7Gr0ZSdKIU4OIV4EMT+IpxVZDrc/8McPAQbaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772482163; c=relaxed/simple;
-	bh=mnOmN3ksr0eINg6+BkRedgoTyM0+rJpFzyqPlSJLSPc=;
+	s=arc-20240116; t=1772482167; c=relaxed/simple;
+	bh=qecaczRx59iev9ZlNxkzN7qLhX4m/YEsK+zTFHlJFFU=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=s9fA/1Nql3pyiK7ZW/zm1ISAlUAWgw3NEP9Bd/E7EvqDkWDF1w2qKkpW1a1ENYQg+rXZHRszcVE1JC91tY/znCBX/WL/zMO36caPg2ywEZMwCZRT77uPmEpqKkRqxo5pLRNBtSzZCI2totidII+fpc39iQodGMli2CjboL1yshc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=aCC5no0n; arc=none smtp.client-ip=148.163.148.77
+	 MIME-Version:Content-Type; b=h7orOI261HZ/lyJ24LdvA5PPxVE0sg4q+L1y5bBlMOUOm4YyAhIHwEFYR+vHry5iOkEnNXV2eNPzLAA2errevM3YUXdHh8u+v+/1u5bxF1EV4tNILcf4DrWh49K9gjNbV2PKlJJm1QqoOTnjXcdlEUBraSUNHQhA+s+JVK8zH64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=vuqM9+F0; arc=none smtp.client-ip=148.163.152.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="aCC5no0n"
-Received: from pps.filterd (m0354650.ppops.net [127.0.0.1])
-	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 622JgOZL3867169;
-	Mon, 2 Mar 2026 20:08:41 GMT
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="vuqM9+F0"
+Received: from pps.filterd (m0354655.ppops.net [127.0.0.1])
+	by mx0b-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 622GqjqS3120457;
+	Mon, 2 Mar 2026 20:08:43 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
 	 h=cc:content-transfer-encoding:content-type:date:from
 	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	default; bh=mAzjvIUM87VnhoblX9RBNH0pu68ZDgIXq+PJP44Vz3A=; b=aCC5
-	no0n2E6sjv9PYXQjSFPcchDFLrb4gpF9LRsTwsld02OwvS2U6csG0XgrLICF/1Nh
-	nQiyIX/scFYtra50LeDuuAn2NlVprsQu3rNoyb7nEXvli33Dj+fiRlIMR7FNxyz9
-	fTXESs94eDFHWz5N+DJoKLep7MVtRYkH304AIoOjsbKU0+ck08TedWtgAmT7awOG
-	HnOS1tbUShphAKn7N9mXO36RB6Ye5g2EVFXSXMPGNLgTLypeehbl5gDK59QJe8LM
-	CbWW3nlACiizIbZechODKdzGqrnVPzmRLFk8R7xALmL/bjkjjet6JVJ60kQ9nP4f
-	VPiLxmfnc2ObBs89jQ==
+	default; bh=hWZ12R86R04xykDYYhwyA0mgdUpPBiwyjwMcGTsvgTc=; b=vuqM
+	9+F0GkFDyqI51X/wGSX3TecY69O4+XoqnRfkrWXdQAKIZdlMHeleWo24UGBjmLLW
+	cInYxPPpb0zoh39pBaYu4BUme4GII1nr+x97pkBOdoDyI7/y3CRTwCmdUIvViKUs
+	DQXSqbXPrqs1mo9cg2blBlQQw7hlXIiY/pE52E5mbdpAaloxonbLt8u6CeUVGeBL
+	+jlRSYHNt/j2pmB625c2sDrKtRXvi0YO4gjgXFkx8Tjga/GspSSRP3mf5yi/oPCs
+	wGIkwPfNrKtbSOgniGn8nE+X0oIMEO3/KbTe7byCr7ouxhGfvkH+GftZI2nVv+kI
+	oq5FSdTGd90CwrTmpg==
 Received: from mail.crowdstrike.com (dragosx.crowdstrike.com [208.42.231.60] (may be forged))
-	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4cmcu95xr9-5
+	by mx0b-00206402.pphosted.com (PPS) with ESMTPS id 4cmcm95us1-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 02 Mar 2026 20:08:41 +0000 (GMT)
+	Mon, 02 Mar 2026 20:08:43 +0000 (GMT)
 Received: from LL-DJCZ134.crowdstrike.sys (10.100.11.122) by
  04WPEXCH006.crowdstrike.sys (10.100.11.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.35; Mon, 2 Mar 2026 20:08:39 +0000
+ 15.2.2562.35; Mon, 2 Mar 2026 20:08:41 +0000
 From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 To: <bpf@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>
 CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
         <jolsa@kernel.org>, <rostedt@goodmis.org>,
         <linux-open-source@crowdstrike.com>
-Subject: [PATCH bpf-next v4 1/3] libbpf: Optimize kprobe.session attachment for exact function names
-Date: Mon, 2 Mar 2026 15:08:35 -0500
-Message-ID: <20260302200837.317907-2-andrey.grodzovsky@crowdstrike.com>
+Subject: [PATCH bpf-next v4 3/3] selftests/bpf: add tests for kprobe.session optimization
+Date: Mon, 2 Mar 2026 15:08:37 -0500
+Message-ID: <20260302200837.317907-4-andrey.grodzovsky@crowdstrike.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260302200837.317907-1-andrey.grodzovsky@crowdstrike.com>
 References: <20260302200837.317907-1-andrey.grodzovsky@crowdstrike.com>
@@ -59,87 +59,120 @@ Content-Type: text/plain
 X-ClientProxiedBy: 04WPEXCH014.crowdstrike.sys (10.100.11.87) To
  04WPEXCH006.crowdstrike.sys (10.100.11.70)
 X-Disclaimer: USA
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDE1NSBTYWx0ZWRfX/+gKHEqtrDyq
- NsaRWNvSOyikqhKcQvMnnm4lgT/enC1nd53RgZu6yOLTZ/7pRUKntxLlHOY/hI/8XOB3SOKMN1I
- Ueg8VFDKdY1aXQTfO5wXBtw0JuqiUOWz9FdUvQg2OYXmEKMO4tbsd70cW/a+inaEgrYxRcKOfwT
- T9L0V1xDdAX8gbTSIHqWpyGzxSgl590SAvCTp/QWibuqR0zkOhpvzST2EC2C48SJhNHF1Xb2sec
- yvVKyVCyPLLBsFMnHl/nBbaCE3QpWZeAhq7tMTbSBk8+rqREQC0bDBMg+75E0YUl4ZllNSI6YTA
- tbWG/nB8T7zT2eHXq+uO2qyb2tQ8ThWuSo3Wdm3UAea82KAD6pfQkJwvCUuQTuSaMHtubNe7l42
- Ay9yvkAB3GSdFTBx39nX0wNc0Q3YXpWJbMufXbmb36L/BxfomkjVlS0nC2Yoxey1hYb7ePNB1xf
- iyEHus246YErGud6tBQ==
-X-Proofpoint-GUID: eqzJmpVke77K3PmsGmoHPU1uy7mmn6sT
-X-Proofpoint-ORIG-GUID: eqzJmpVke77K3PmsGmoHPU1uy7mmn6sT
-X-Authority-Analysis: v=2.4 cv=Nr/cssdJ c=1 sm=1 tr=0 ts=69a5ee49 cx=c_pps
+X-Authority-Analysis: v=2.4 cv=crWWUl4i c=1 sm=1 tr=0 ts=69a5ee4b cx=c_pps
  a=1d8vc5iZWYKGYgMGCdbIRA==:117 a=1d8vc5iZWYKGYgMGCdbIRA==:17
  a=EjBHVkixTFsA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=T2KQ53IYiC3MXPrxx8bB:22 a=t04HzT_fAfAF5W-3wVZy:22 a=pl6vuDidAAAA:8
- a=VpqhlCfQX1L-8fIZS4AA:9
+ a=T2KQ53IYiC3MXPrxx8bB:22 a=vDKVRhTs-M86Ea50iKLw:22 a=pl6vuDidAAAA:8
+ a=1RrSYoAmGP-V0Qkg3bQA:9
+X-Proofpoint-GUID: sF6HX1Yjou4NtZKOXXPM1WKCGmtXWxVQ
+X-Proofpoint-ORIG-GUID: sF6HX1Yjou4NtZKOXXPM1WKCGmtXWxVQ
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAyMDE1NSBTYWx0ZWRfX6FiMyavwldD3
+ unmWC1cCKodnEZZqdK5LPfrcyrwXKaNQQk1Ql97Cwnfm2ixvUvwPqYZEXngAYLJGmabLU0IBbjA
+ bYhVaaCTSUbp1mGb29ZPEkmmXWNlDTgJfMvHXovyqOrSX3rUB88+Fn/svoys1HGY2kUA2ytKJzy
+ x7cdaD4BgowLJxVFVhi15wsMw1+Yz9GyHxczCfVG4c8u7BXffdsmuR5y2mNwmnpiblDJFdO2cI7
+ RdZScLxvjm7j1KpEuhu4c0G3tNnctx3d1YTZT4kCP5Ds1x+7MmglYp6eVKnA6urblirCho9oAPg
+ e8XMQ2AKgWCD06xuo3C498A8kheokcBwSqdYRd+lek5twyfpzNAl8kbpGwFX+tjzXSvLsWPuMQR
+ 5M4tN6mIFBit/E/qaDDKOIc8c7SsIYx+kiXEJwET2om1NIJui7e7p/7Ygf9TOUeEy1Z7pcaj2+M
+ KrPOWCdJGKRAGwkEPow==
 X-Proofpoint-Virus-Version: vendor=nai engine=6800 definitions=11717
  signatures=596818
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- lowpriorityscore=0 bulkscore=0 adultscore=0 priorityscore=1501 spamscore=0
- impostorscore=0 suspectscore=0 clxscore=1015 malwarescore=0 phishscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603020155
+ phishscore=0 suspectscore=0 spamscore=0 malwarescore=0 clxscore=1015
+ bulkscore=0 lowpriorityscore=0 adultscore=0 priorityscore=1501
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2602130000
+ definitions=main-2603020155
 
-Detect exact function names (no wildcards) in
-bpf_program__attach_kprobe_multi_opts() and bypass kallsyms parsing,
-passing the symbol directly to the kernel via syms[] array.  This
-benefits all callers, not just kprobe.session.
+Extend existing kprobe_multi_test subtests to validate the
+kprobe.session exact function name optimization:
 
-When the pattern contains no '*' or '?' characters, set syms to point
-directly at the pattern string and cnt to 1, skipping the expensive
-/proc/kallsyms or available_filter_functions parsing (~150ms per
-function).
+In kprobe_multi_session.c, add test_kprobe_syms which attaches a
+kprobe.session program to an exact function name (bpf_fentry_test1)
+exercising the fast syms[] path that bypasses kallsyms parsing.  It
+calls session_check() so bpf_fentry_test1 is hit by both the wildcard
+and exact probes, and test_session_skel_api validates
+kprobe_session_result[0] == 4 (entry + return from each probe).
 
-Error code normalization: the fast path returns ESRCH from kernel's
-ftrace_lookup_symbols(), while the slow path returns ENOENT from
-userspace kallsyms parsing.  Convert ESRCH to ENOENT in the
-bpf_link_create error path to maintain API consistency - both paths
-now return identical error codes for "symbol not found".
+In test_attach_api_fails, add fail_7 and fail_8 verifying error code
+consistency between the wildcard pattern path (slow, parses kallsyms)
+and the exact function name path (fast, uses syms[] array).  Both
+paths must return -ENOENT for non-existent functions.
 
 Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
 ---
- tools/lib/bpf/libbpf.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+ .../bpf/prog_tests/kprobe_multi_test.c        | 33 +++++++++++++++++--
+ .../bpf/progs/kprobe_multi_session.c          | 10 ++++++
+ 2 files changed, 41 insertions(+), 2 deletions(-)
 
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 0be7017800fe..0662d72bad20 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -12041,7 +12041,16 @@ bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
- 	if (addrs && syms)
- 		return libbpf_err_ptr(-EINVAL);
+diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+index f81dcd609ee9..78c974d4ea33 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
++++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+@@ -327,6 +327,30 @@ static void test_attach_api_fails(void)
+ 	if (!ASSERT_EQ(saved_error, -E2BIG, "fail_6_error"))
+ 		goto cleanup;
  
--	if (pattern) {
++	/* fail_7 - non-existent wildcard pattern (slow path) */
++	LIBBPF_OPTS_RESET(opts);
++
++	link = bpf_program__attach_kprobe_multi_opts(skel->progs.test_kprobe_manual,
++						     "__nonexistent_func_xyz_*",
++						     &opts);
++	saved_error = -errno;
++	if (!ASSERT_ERR_PTR(link, "fail_7"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(saved_error, -ENOENT, "fail_7_error"))
++		goto cleanup;
++
++	/* fail_8 - non-existent exact name (fast path), same error as wildcard */
++	link = bpf_program__attach_kprobe_multi_opts(skel->progs.test_kprobe_manual,
++						     "__nonexistent_func_xyz_123",
++						     &opts);
++	saved_error = -errno;
++	if (!ASSERT_ERR_PTR(link, "fail_8"))
++		goto cleanup;
++
++	if (!ASSERT_EQ(saved_error, -ENOENT, "fail_8_error"))
++		goto cleanup;
++
+ cleanup:
+ 	bpf_link__destroy(link);
+ 	kprobe_multi__destroy(skel);
+@@ -355,8 +379,13 @@ static void test_session_skel_api(void)
+ 	ASSERT_OK(err, "test_run");
+ 	ASSERT_EQ(topts.retval, 0, "test_run");
+ 
+-	/* bpf_fentry_test1-4 trigger return probe, result is 2 */
+-	for (i = 0; i < 4; i++)
 +	/*
-+	 * Exact function name (no wildcards) without unique_match:
-+	 * bypass kallsyms parsing and pass the symbol directly to the
-+	 * kernel via syms[] array.  When unique_match is set, fall
-+	 * through to the slow path which detects duplicate symbols.
++	 * bpf_fentry_test1 is hit by both the wildcard probe and the exact
++	 * name probe (test_kprobe_syms), so entry + return fires twice: 4.
++	 * bpf_fentry_test2-4 are hit only by the wildcard probe: 2.
 +	 */
-+	if (pattern && !strpbrk(pattern, "*?") && !unique_match) {
-+		syms = &pattern;
-+		cnt = 1;
-+	} else if (pattern) {
- 		if (has_available_filter_functions_addrs())
- 			err = libbpf_available_kprobes_parse(&res);
- 		else
-@@ -12084,6 +12093,14 @@ bpf_program__attach_kprobe_multi_opts(const struct bpf_program *prog,
- 	link_fd = bpf_link_create(prog_fd, 0, attach_type, &lopts);
- 	if (link_fd < 0) {
- 		err = -errno;
-+		/*
-+		 * Normalize error code: when exact name bypasses kallsyms
-+		 * parsing, kernel returns ESRCH from ftrace_lookup_symbols().
-+		 * Convert to ENOENT for API consistency with the pattern
-+		 * matching path which returns ENOENT from userspace.
-+		 */
-+		if (err == -ESRCH)
-+			err = -ENOENT;
- 		pr_warn("prog '%s': failed to attach: %s\n",
- 			prog->name, errstr(err));
- 		goto error;
++	ASSERT_EQ(skel->bss->kprobe_session_result[0], 4, "kprobe_session_result");
++	for (i = 1; i < 4; i++)
+ 		ASSERT_EQ(skel->bss->kprobe_session_result[i], 2, "kprobe_session_result");
+ 
+ 	/* bpf_fentry_test5-8 trigger only entry probe, result is 1 */
+diff --git a/tools/testing/selftests/bpf/progs/kprobe_multi_session.c b/tools/testing/selftests/bpf/progs/kprobe_multi_session.c
+index bd8b7fb7061e..d52a65b40bbf 100644
+--- a/tools/testing/selftests/bpf/progs/kprobe_multi_session.c
++++ b/tools/testing/selftests/bpf/progs/kprobe_multi_session.c
+@@ -76,3 +76,13 @@ int test_kprobe(struct pt_regs *ctx)
+ {
+ 	return session_check(ctx);
+ }
++
++/*
++ * Exact function name (no wildcards) - exercises the fast syms[] path
++ * in bpf_program__attach_kprobe_multi_opts() which bypasses kallsyms parsing.
++ */
++SEC("kprobe.session/bpf_fentry_test1")
++int test_kprobe_syms(struct pt_regs *ctx)
++{
++	return session_check(ctx);
++}
 -- 
 2.34.1
 
