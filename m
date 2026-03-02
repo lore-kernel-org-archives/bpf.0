@@ -1,149 +1,149 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53EEC319871
-	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 07:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEF43093D3
+	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 08:08:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772435696; cv=none; b=PLmB08Fnsd4hvhtwiObEOaepwiPjrV64LfYQZZ4Mte+3Fn+IqsL2b96rgL8EOVZ9lgGSrx/QTnWUVtaq70CXOVT0CM9H1v0Wz1C3kq2JIB7Rnxh8aGk5YV7G6tWNT4SvMhcFm78vr8MCadyWaj4xE6shm9x8kLK5GYQqsmV0hGQ=
+	t=1772438910; cv=none; b=Vhqf8YRIKqMcF0FIwd6qp/GJRruYHN9JBn7Sr7IgQwzMF/xPT4Z8AYYBni21AN1Xj5a/ZuH7QCFFpQnm8h1Jt6KVtfI55xPDOlxAEJ1nJ4YvmcMvxFVNQcK7iVgBBjS2bHzICH2MAtlRrMvUukzfnzHLedWhu95dykK8e+tFwxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772435696; c=relaxed/simple;
-	bh=IqIHegnKM2HEYo0MpRxqsAMyp5aspxcpxaEEy/gmTyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fUQgKE2czzECkLOnvBpkF/vxkbNG6Bb9n9SwM8qQaPmQ0JZgf6rtBgXPJSzuB2q3s4gvU+IfPCoEmbP8He9vnLExqvvMr5ScSgobuVYN0mpm7bGCUNV7y430dMrBZxLz7Gn+DAx55aC/HuVgquVM09o9AIXiSI7Rf4WnF7NkrcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VcNGxVgd; arc=none smtp.client-ip=209.85.167.181
+	s=arc-20240116; t=1772438910; c=relaxed/simple;
+	bh=7dXyK6ozsmvSacmZBQXL9e0JKE9D+/u5o80S+8Bbcz0=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BqKVmqJi9FBzOpDFEYLuwkiby4zpxD3dw0307xt53+DWGsiDs3m/X98th6e3qS1+EgOSbKiAQBLddd+HUY3QcbdT+Yob550HpFATZ4zbNrkK1PpJvIe9q3fyeS3iYaH6KR2UQ5uSnRJ552JRKdSE+AzbgPS2q2RTYCUmwFGAtzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kgg9nmyh; arc=none smtp.client-ip=209.85.221.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VcNGxVgd"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-4638a18efc2so3131441b6e.3
-        for <bpf@vger.kernel.org>; Sun, 01 Mar 2026 23:14:55 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kgg9nmyh"
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-436e8758b91so2633076f8f.0
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 00:08:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772435694; x=1773040494; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qx9IFITrMKLlkT1svVa6s0PRctPgUnyk1fnGEcICs8I=;
-        b=VcNGxVgdjWhfMnCnYrF+n2JyqEAbhhLuu39zn+/iCshka7PuUK1jegg9Yd7ituNwUU
-         zXCxulUA6TLaz31OlVAAd+ev42Ok3PVa+ZePEA6u+VSX1OzkTVUu4XKxnHO7w1VSP31R
-         KSFHRwAlHMnjlcCUiRZ5rSr9PVzbrn2A7eSSyjdq7srWTEiXHKNRoaI+i/b+Yl9HUfSN
-         AQzfx8aDnATnMaUFlCAHNFwjF+UnzS1aBiOlTSa64rPGv1E5Hqe68JiTYVq5ntbNRuWE
-         SbfPdrqp2bqpvz1YKwZNc5p5n73mCnd0a+ifbljEPcLoc6XeBMXSFvRSDLYVTFdRgXTi
-         Zohg==
+        d=gmail.com; s=20230601; t=1772438908; x=1773043708; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Aywtoeuxkfunv4Ek8XeTDfrALEqJk4nC+4MbytSvfC4=;
+        b=Kgg9nmyhwDp4M9HxRLZCuIzZA5/Uknb/21gXD8tW16u5VXQD4uOaRRjOMRLa+S0ln1
+         FYMh4hRMKsAw2/Wavl65DdBmEgXh1i3cWcRu+Cmn4RpXHC4nkqMS3rwi+XdnHfoYv8zd
+         Be63uF0qJAXsPox8RWRIf85ptWQamnaqYsPR8xf3lQxf0IMC2TKYwWM1T6woajuXyBp8
+         ZTn8y9u/6mPs6HszeDO6EyAHc4jGwoPOPmUkfXBMnUTChdsaM1TztplXdqOyI9fr475f
+         zCSwJ6ES3MA1JSGGMD4C25ZDEN27Fg3hXiGardbuEYDyMeuteGkTmUd2ccwlcj1hzPll
+         fMNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772435694; x=1773040494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qx9IFITrMKLlkT1svVa6s0PRctPgUnyk1fnGEcICs8I=;
-        b=ffsMjqclf/rYeLPgzOaRYph4LwHZrmiz/cAlwnppZ0oW1NeTdWN4YensXNULAP10u3
-         g+CPXjuN1PzfF2aOZfZJWctYpcfg8mdkYIsINiroGd3Epu38+Rif8oIBqSjblskCgO0J
-         iMd4h4GsKyVxgw5HqIITx+V9fkJIj8yJJqlf7o0fdtToeq539NvIZ32AO6MBgfdx0D2V
-         KMoQTOwK+OcNH03CeUVDTjkTeJNv3caGfvSXy8oDVk/pwJqG6wUOro0vCsMU/ogp1bKg
-         K4ayI96orDvjxdzmWdTGHj/D9UroELKtuvEeBTuUWX9jJ83b47yeKolN7TEZceQ00W5n
-         lwEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWfzxyxb5aeylN06IUS0pn9IoWDhts7poQx8WkVvwTvGtZRg2J3sedz+CpFegWFREQzTWg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz90sOg2RWbb6lFGpqy6CF37jx22+PRy7f6pLT+DYJcPIWvVPl4
-	w/XgLYlm4fLqbLm/Ay2iph3UH94v8MuxoKpgrRvjUNN7p3fuF0x7nGYS
-X-Gm-Gg: ATEYQzzbQ7nGHfyMh0NsfGSRV3n8fn2NIyztDnMakG4BWiqFZ74U1tV1t3YTjxwf3bl
-	N068DrNPUqnXJzMbPTraTCK36wCSkhQQXUW9dNgK/PtgfmrPBo63hkPuk3/yMlI8+bRyBMruvTD
-	ykfRZ9ivxNpwmUWlAZ8xc64cGG7t5Usq+S8MBCOVvnuUhRaYstcZ6HSsniDuqJA6iesmM8k/QXu
-	c4sqmKM7SAeE6s7X9Oi/SBvFQ/PldiQ/2W/tUp7JEwV8eETOp53sDD5bUnw8e5WJIv+7tZvIhYt
-	qWJPI9XVYGSpcB9NDVRDPzxwhxqEa7sfAUCwGEXBJ2Z0YC8uf955KouE1xjm7IdIrvVIDGKuTQK
-	X6blanxTngKqXIeP4tJK/FHHWB+1jdyRbcmteOHhISm9dmhPod/0GgSLVjqErEKAGbUUSjmcYiP
-	7hwOp9SbfWRB9RUX5Goq1nl6iWZiu4y8liO7Q3Y0kRsXrGW5245d30NEC3Pm1dvyZRsJwZrmAmw
-	4LjFJfcqS7sAUiilmd6ivaXBs+GjIH1PCUaTL59LAjHA9LU46s=
-X-Received: by 2002:a05:6808:1391:b0:45e:6cac:92c9 with SMTP id 5614622812f47-464be9fb4c3mr7130460b6e.27.1772435694139;
-        Sun, 01 Mar 2026 23:14:54 -0800 (PST)
-Received: from localhost.localdomain (108-214-96-168.lightspeed.sntcca.sbcglobal.net. [108.214.96.168])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-464bb3ab494sm6867919b6e.8.2026.03.01.23.14.48
+        d=1e100.net; s=20230601; t=1772438908; x=1773043708;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Aywtoeuxkfunv4Ek8XeTDfrALEqJk4nC+4MbytSvfC4=;
+        b=tiY7v20zjd+zQVP/XHhLmYDCOrX8SUijLb/25MJPUIxCCw87ocxLCttlmjPh1Dhk3m
+         IImvxbg0RweHv2iW3g9+RqC7y4dsz0NcWDFUeAJSd+rBrwXiWYsFKzRVeVx4eoal66k6
+         l2qX5pUEz93Ok5ltvUaHFFbE6dYxQH474obTDaPfw6eynf9SbpXAr3iFU9IDunljORut
+         w2YlpDCFjSqVTCH5Kx97mq2pECjsuBqHDm6082Bb+p0CKKzYIj87uVhXEm1elIPIxtH9
+         fDMcEIDKg5lbwL1kfHGO7osaLQw+qgXaetl7Nzadp7Pr+MTxff4QZ4srTHm7ReyT4un0
+         SM8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW4gKgyPlgGLYEwmPQYOAOvTuujzn8y2LGywNhZe2WCjnt41KNs3zw0kPBOX9BYAGTkHOs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwH6bc0w7ZLRtR/HHgCewOi9CYWAUE6ciGTocIFjunlojnh5MUA
+	Lfan/RCNnKOTdccFsvkXDPF2MeTVleKREpDvAjd2Z/LW6rWtBdgHpETPYDfwZ4OD
+X-Gm-Gg: ATEYQzxOdx5YrpE4Z82kNATTFM9UQ1ELeNARJIVMpeUj4tCDV0J0vTEBWCmGdw69X2p
+	esZxj0zScwKx+XtCkRnd4ouNR1VxoTSwKmWSL6Pfb2ivwja7h64JvqdiDTR62QyQ2CVfzkpOunG
+	Jj3d4e9U71xIAk2QmzaXCtWQY6qpKSf/DyX1CcDt0+LZy7FZ/4ipazgnKq4+gjVs/fCpKzadZV/
+	ZWxg+6O+put+AQ+iQDjQl/YsXGLdvbz5YToRxBG5fuiegUi6MGIDX7Ao3M6QsH7B1HKZ/C4Lrea
+	3cAvHKEuCVroTpY4STL+PpQLe8VaaQu91CdbJd2409s7gL1Uhf1pZBw2Ibm96Eqla9KTzPityfA
+	wuIgJyDjqWZxszsX57XUE/AlQ+fRrYY8BUXt1895sg0Dj4CrNVQwiEVM0kJFQe5UN06TWHE6x
+X-Received: by 2002:a05:6000:2404:b0:437:6e55:a736 with SMTP id ffacd0b85a97d-4399dde3046mr20509566f8f.7.1772438907722;
+        Mon, 02 Mar 2026 00:08:27 -0800 (PST)
+Received: from krava ([2a02:8308:a00c:e200::d99c])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4399c75a25dsm25282488f8f.21.2026.03.02.00.08.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Mar 2026 23:14:53 -0800 (PST)
-From: Sun Jian <sun.jian.kdev@gmail.com>
-To: andrii@kernel.org,
-	eddyz87@gmail.com
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Sun Jian <sun.jian.kdev@gmail.com>
-Subject: [PATCH] selftests/bpf: skip verif_scale_pyperf600 on -E2BIG jump complexity limit
-Date: Mon,  2 Mar 2026 15:14:34 +0800
-Message-ID: <20260302071434.311395-1-sun.jian.kdev@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Mon, 02 Mar 2026 00:08:27 -0800 (PST)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 2 Mar 2026 09:08:25 +0100
+To: Steven Rostedt <rostedt@kernel.org>
+Cc: Jiri Olsa <olsajiri@gmail.com>, Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Florent Revest <revest@google.com>,
+	Mark Rutland <mark.rutland@arm.com>, bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Menglong Dong <menglong8.dong@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Subject: Re: [PATCHv6 bpf-next 9/9] bpf,x86: Use single ftrace_ops for direct
+ calls
+Message-ID: <aaVFeafZb76l9L0m@krava>
+References: <20251230145010.103439-1-jolsa@kernel.org>
+ <20251230145010.103439-10-jolsa@kernel.org>
+ <1b58ffb2-92ae-433a-ba46-95294d6edea2@linux.dev>
+ <aaIAoBZGkP7RQrvc@krava>
+ <aaILlSuEgaYDq41r@krava>
+ <20260228153921.19cd42a6@fedora>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260228153921.19cd42a6@fedora>
 
-verif_scale_pyperf600 loads pyperf600.bpf.o, a large scale case produced
-by partial LLVM unrolling.
+On Sat, Feb 28, 2026 at 03:39:21PM -0500, Steven Rostedt wrote:
+> On Fri, 27 Feb 2026 22:24:37 +0100
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> > index 827fb9a0bf0d..e333749a5896 100644
+> > --- a/kernel/trace/ftrace.c
+> > +++ b/kernel/trace/ftrace.c
+> > @@ -6404,7 +6404,9 @@ int update_ftrace_direct_add(struct ftrace_ops *ops, struct ftrace_hash *hash)
+> >  			new_filter_hash = old_filter_hash;
+> >  		}
+> >  	} else {
+> 
+> As this looks to fix the issue, just add:
+> 
+> 		guard(mutex)(&ftrace_lock);
+> 
+> > +		mutex_lock(&ftrace_lock);
+> >  		err = ftrace_update_ops(ops, new_filter_hash, EMPTY_HASH);
+> > +		mutex_unlock(&ftrace_lock);
+> >  		/*
+> >  		 * new_filter_hash is dup-ed, so we need to release it anyway,
+> >  		 * old_filter_hash either stays on error or is already released
+> > @@ -6530,7 +6532,9 @@ int update_ftrace_direct_del(struct ftrace_ops *ops, struct ftrace_hash *hash)
+> >  			ops->func_hash->filter_hash = NULL;
+> >  		}
+> >  	} else {
+> 
+> And here too.
+> 
+> As there's nothing after the comment and before the end of the block.
 
-On some kernel/toolchain combinations, the verifier rejects it with -E2BIG:
+ok, will do.. the original changes:
 
-  The sequence of 8193 jumps is too complex.
+  05dc5e9c1fe1 ("ftrace: Add update_ftrace_direct_add function")
+  8d2c1233f371 ("ftrace: Add update_ftrace_direct_del function")
 
-This hits the verifier jump sequence complexity limit (8192).
+went through bpf tree, so I'll send the fix the same way,
+please let me know otherwise
 
-Treat -E2BIG for this test as SKIP rather than FAIL. Other pyperf600
-variants are unaffected.
+thanks,
+jirka
 
-Signed-off-by: Sun Jian <sun.jian.kdev@gmail.com>
----
- .../bpf/prog_tests/bpf_verif_scale.c          | 22 ++++++++++++++++++-
- 1 file changed, 21 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-index 73f669014b69..181acdddea1c 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_verif_scale.c
-@@ -112,13 +112,33 @@ void test_verif_scale_pyperf180()
- 
- void test_verif_scale_pyperf600()
- {
-+	libbpf_print_fn_t old_print_fn = NULL;
-+	int err;
-+
- 	/* partial unroll. llvm will unroll loop ~150 times.
- 	 * C loop count -> 600.
- 	 * Asm loop count -> 4.
- 	 * 16k insns in loop body.
- 	 * Total of 5 such loops. Total program size ~82k insns.
- 	 */
--	scale_test("pyperf600.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT, false);
-+
-+	if (env.verifier_stats) {
-+		test__force_log();
-+		old_print_fn = libbpf_set_print(libbpf_debug_print);
-+	}
-+
-+	err = check_load("pyperf600.bpf.o", BPF_PROG_TYPE_RAW_TRACEPOINT);
-+
-+	if (env.verifier_stats)
-+		libbpf_set_print(old_print_fn);
-+
-+	if (err == -E2BIG) {
-+		test__skip();
-+		return;
-+	}
-+
-+	ASSERT_OK(err, "expect_success");
-+
- }
- 
- void test_verif_scale_pyperf600_bpf_loop(void)
-
-base-commit: 11439c4635edd669ae435eec308f4ab8a0804808
--- 
-2.43.0
-
+> 
+> -- Steve
+> 
+> > +		mutex_lock(&ftrace_lock);
+> >  		err = ftrace_update_ops(ops, new_filter_hash, EMPTY_HASH);
+> > +		mutex_unlock(&ftrace_lock);
+> >  		/*
+> >  		 * new_filter_hash is dup-ed, so we need to release it anyway,
+> >  		 * old_filter_hash either stays on error or is already released
+> 
+> 
+> 
+> -- Steve
