@@ -1,32 +1,32 @@
 Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14113E7144
-	for <bpf@vger.kernel.org>; Mon,  2 Mar 2026 15:05:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C6A041161B;
+	Mon,  2 Mar 2026 15:05:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772463906; cv=none; b=DapziCEvXh5yWelVN+Br+7KAoczziUrj2A/RZX4CIoGDnrgV7y6HHEquI+4fJDstk74wpHFdDJp6qqUISgaGxteG9AZMY7qjojywOy9LGvEuGZ/L3M6OKP7jdmoXusDICGMoQHCsJ59trEes5z/ZPtkqHQXgGlEtKCo31kgRMMw=
+	t=1772463913; cv=none; b=suTWKNQxhC5Ww/XAKPrXprI1xWwKcL7pTcAEDI+g3KLWDnzvSvkrhlE98bDiqPFKb9NdUbezBLKEa1sdWK6fe7kv9HFxD7kMlrgRdLMRko+4J/TNdrvL7Wlx6+pGkpavJuCkoM4Ii9cjw6WyVo3rPNx/BcnOWCE0mExYaw9/h60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772463906; c=relaxed/simple;
-	bh=g8iFQt8PutO9ez9QZhPdi2ZlJazN1/pZxoozXBn3C6Y=;
+	s=arc-20240116; t=1772463913; c=relaxed/simple;
+	bh=nEWKuoSdePm95rFgEKVllhx1pMSJsEpr7/UWYSW+dXA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=baoWRvYuVdbz8UtfwITHZtIHdv0GcoC90jKN9/sUIdOQ8YjInuKCDgkkuJ4gFw28rsk8cQuB5kB0UxH92Q7PHmrBGc0Fx4aI2WdCKFObDh1ffoL9j8lRQtsFYNDHlYLRaNG7UCR2jBNQHYbDBFDLFIlpdsTsGEmlNaoNz9DObUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LtiQJZDB; arc=none smtp.client-ip=91.218.175.188
+	 MIME-Version; b=qp2NYC2+jdPeyXdWwrCfPxk4B6hrwjoCYsAQwUVlz+m0Xj8RioRxriRkmiROHcJgJ85bkr4i8gTsAKcaad7IOscJ1KqnGHnazJ5caTg/EpWIskpiDHU0++pIRIpAypdPcE1GBFB3d1Ml2FwWX2F3zu8Nq4c89CDty8wOmCwSmzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WJCIV5j0; arc=none smtp.client-ip=91.218.175.188
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LtiQJZDB"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WJCIV5j0"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772463901;
+	t=1772463909;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=P+PWWkwazjgxzegEXu2v7YMpb7U2FHOXq8Nh1mdAOFE=;
-	b=LtiQJZDBVu1SJwdRRouZ70fq6wxNk92yLmHsbbZ+531nmHWqAS5Vuy9FtkOVQq/fEJPjt/
-	GvdbEkqNLGv0ovEBqlw88Tu+fPMfKPVIqxoGA4h3/LjH9oIJsxylPoQpvVV/rueIIauCIe
-	lilecwkNCo6/TixA2a9GJJoCvK9HMVs=
+	bh=hNJfA3Xf+e4vt84NatwltvsAO0vxWfNT/RjgAWRYZ18=;
+	b=WJCIV5j0PMJLfL1brDaqfMtiYBDrrsR6JwkwcQCZU/6iorBSLDg/kAXFoLPWuxnh+C0RhW
+	e5HKOSiuUd+4MW3QTZu/Z6L/MHlTnWcg+zP0dwBURxC+7ifJv18cWP5RlgXmp43jAy924/
+	mc4stwme4HLtCpuW7gY2geNMQkv45MY=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -52,9 +52,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	kernel-patches-bot@fb.com
-Subject: [PATCH bpf-next v2 4/6] bpf: Disallow !call_get_func_ip progs tail-calling call_get_func_ip progs
-Date: Mon,  2 Mar 2026 23:03:40 +0800
-Message-ID: <20260302150342.55709-5-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v2 5/6] bpf: Disallow !call_session_cookie progs tail-calling call_session_cookie progs
+Date: Mon,  2 Mar 2026 23:03:41 +0800
+Message-ID: <20260302150342.55709-6-leon.hwang@linux.dev>
 In-Reply-To: <20260302150342.55709-1-leon.hwang@linux.dev>
 References: <20260302150342.55709-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -66,15 +66,16 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Trampoline-based tracing programs that call bpf_get_func_ip() rely on
-the func IP stored on the stack. Mixing !call_get_func_ip progs with
-call_get_func_ip progs via tail calls could break this assumption.
+Fsession progs that call bpf_session_cookie() kfunc depend on
+consistent session metadata stored on the stack. Mixing
+!call_session_cookie progs with call_session_cookie progs via tail
+calls could break this assumption.
 
-To address this, reject the combination of !call_get_func_ip progs with
-call_get_func_ip progs in bpf_map_owner_matches(), which prevents the
-tail callee from getting a bogus func IP.
+To address this, reject the combination of !call_session_cookie progs
+with call_session_cookie progs in bpf_map_owner_matches(), which
+prevents the tail callee from accessing a bogus session cookie.
 
-Also reject call_get_func_ip mismatches during initialization to
+Also reject call_session_cookie mismatches during initialization to
 prevent bypassing the above restriction.
 
 Without this check, the above restriction can be bypassed as follows.
@@ -86,15 +87,17 @@ struct {
 	__uint(value_size, sizeof(__u32));
 } jmp_table SEC(".maps");
 
-SEC("?fentry")
+SEC("?fsession")
 int BPF_PROG(prog_a)
 {
-	bpf_printk("FUNC IP: 0x%llx\n", bpf_get_func_ip());
+	u64 *cookie = bpf_session_cookie(ctx);
+
+        *cookie = 42;
 	bpf_tail_call_static(ctx, &jmp_table, 0);
 	return 0;
 }
 
-SEC("?fentry")
+SEC("?fsession")
 int BPF_PROG(prog_b)
 {
 	bpf_tail_call_static(ctx, &jmp_table, 0);
@@ -104,64 +107,65 @@ int BPF_PROG(prog_b)
 The jmp_table is shared between prog_a and prog_b.
 
 * Load prog_a first.
-  At this point, owner->call_get_func_ip=true.
+  At this point, owner->call_session_cookie=true.
 * Load prog_b next.
   At this point, prog_b passes the compatibility check.
 * Add prog_a to jmp_table.
 * Attach prog_b to a kernel function.
 
-When the kernel function runs, prog_a will get a bogus func IP because
-no func IP is prepared on the trampoline stack.
+When the kernel function runs, prog_a will get a u64 pointer to the
+first arg slot on the trampoline stack, and will modify the arg via this
+pointer.
 
-Fixes: 1e37392cccde ("bpf: Enable BPF_TRAMP_F_IP_ARG for trampolines with call_get_func_ip")
+Fixes: eeee4239dbb1 ("bpf: support fsession for bpf_session_cookie")
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
  include/linux/bpf.h | 1 +
- kernel/bpf/core.c   | 7 +++++++
- 2 files changed, 8 insertions(+)
+ kernel/bpf/core.c   | 5 +++++
+ 2 files changed, 6 insertions(+)
 
 diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index dbafed52b2ba..fb978650b169 100644
+index fb978650b169..3931fdbca3a7 100644
 --- a/include/linux/bpf.h
 +++ b/include/linux/bpf.h
-@@ -289,6 +289,7 @@ struct bpf_map_owner {
- 	u32 xdp_has_frags:1;
+@@ -290,6 +290,7 @@ struct bpf_map_owner {
  	u32 sleepable:1;
  	u32 kprobe_write_ctx:1;
-+	u32 call_get_func_ip:1;
+ 	u32 call_get_func_ip:1;
++	u32 call_session_cookie:1;
  	u64 storage_cookie[MAX_BPF_CGROUP_STORAGE_TYPE];
  	const struct btf_type *attach_func_proto;
  	enum bpf_attach_type expected_attach_type;
 diff --git a/kernel/bpf/core.c b/kernel/bpf/core.c
-index 121a697d4da5..1b88878fe5c5 100644
+index 1b88878fe5c5..03d2d8f244c8 100644
 --- a/kernel/bpf/core.c
 +++ b/kernel/bpf/core.c
-@@ -2391,6 +2391,7 @@ static void bpf_map_owner_init(struct bpf_map_owner *owner, const struct bpf_pro
- 	owner->xdp_has_frags = aux->xdp_has_frags;
+@@ -2392,6 +2392,7 @@ static void bpf_map_owner_init(struct bpf_map_owner *owner, const struct bpf_pro
  	owner->sleepable = fp->sleepable;
  	owner->kprobe_write_ctx = aux->kprobe_write_ctx;
-+	owner->call_get_func_ip = fp->call_get_func_ip;
+ 	owner->call_get_func_ip = fp->call_get_func_ip;
++	owner->call_session_cookie = fp->call_session_cookie;
  	owner->expected_attach_type = fp->expected_attach_type;
  	owner->attach_func_proto = aux->attach_func_proto;
  	for_each_cgroup_storage_type(i)
-@@ -2422,11 +2423,17 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_pr
- 	case BPF_MAP_OWNER_MATCH_FOR_INIT:
- 		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
+@@ -2425,6 +2426,8 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_pr
  			return false;
-+		if (owner->call_get_func_ip != fp->call_get_func_ip)
+ 		if (owner->call_get_func_ip != fp->call_get_func_ip)
+ 			return false;
++		if (owner->call_session_cookie != fp->call_session_cookie)
 +			return false;
  		break;
  
  	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
- 		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
- 			return false;
-+		if (bpf_prog_has_trampoline(fp)) {
-+			if (!owner->call_get_func_ip && fp->call_get_func_ip)
+@@ -2433,6 +2436,8 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_pr
+ 		if (bpf_prog_has_trampoline(fp)) {
+ 			if (!owner->call_get_func_ip && fp->call_get_func_ip)
+ 				return false;
++			if (!owner->call_session_cookie && fp->call_session_cookie)
 +				return false;
-+		}
+ 		}
  		break;
  	}
- 
 -- 
 2.52.0
 
