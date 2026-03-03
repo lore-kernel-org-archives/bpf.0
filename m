@@ -1,196 +1,187 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058A92C0F84
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 11:58:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772539138; cv=pass; b=uwoQMfvQaHyKYay2pmPlAt5LZLw1VVqwuFJeseXPCyk6Kba2kXv3H8+OMIJatlIpp0YhPPuiRoDs0yzGRTwEcQSxRrbn2znj+dPuyMbBoHyL70J9cXOl8kmhvj7zHhcy2L62js0GBvJ12BQRT1VZpm3VYwF4I163xnJUCwiu9us=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772539138; c=relaxed/simple;
-	bh=xfJlsDitPFNINo6PdvW9xIIO5tUhmZ1J+GBfu8WBap4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WPmKCU8B/kJwE6k+RenV78GElONQRujTCJedJSFQJOAGdrOJMnp5M6FoXKf5thtl87AmA/lcU7blwHq3MsZH4eThopMvsTpnLyKnh7Q/nEX5NS2Bzxa/LSFV5ijtUnLHeVOnPhJKNqxO2IXOwZCeIfzoaJKxJeGeB3fBPsU5weI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iEKhwcxB; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=hlZ5ZX6F; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D3F233F8B8;
+	Tue,  3 Mar 2026 12:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.189.157.229
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772540094; cv=none; b=W9lMdJrNUdzDWV+VZFSxsK42d60SfXOVJtIUn0LyJ7bbFKwvskF66jxmaF/UZ5vhdeVTHekw5LDgbSXQlmEcAe3x0fSexFH9heRdEok6Jc+z3zC1GBhOZvtYg17s90/qgBYn/dFMlhWIuFtUTijaumVUO4uld/EG5+82kjc+9JQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772540094; c=relaxed/simple;
+	bh=4gqUQYdXZBfhJ6Y1LdTjX7uZzevwVLYzBnZ178wNSt8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UBeMmEPaf18pdJ+G+Ohs1PxIc3a13vlSmJhiHD4hvs3HyMgc3bcamR27/cPIT6NdkD9WOJXutoXb8kfL7X9mqebspjZm6sbP6wB4iL7s/503e3TQJB/R6PZ7YzuG+y+enNlbKLbRNT/bMCZh4WcsmWIT45t2RWN6ONuwT5zpLag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crudebyte.com; spf=pass smtp.mailfrom=crudebyte.com; dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b=HqDnIkLb; arc=none smtp.client-ip=5.189.157.229
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=crudebyte.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crudebyte.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iEKhwcxB";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="hlZ5ZX6F"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772539136;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=o4CtqcFVzp3mF5EfycFswotSYwJN7isvCXXnUa2seYY=;
-	b=iEKhwcxBNxa7MlUsJzK397tIv1BnG3FjFr+EcTr0zRJe+QNwPgLXOuIlkT75QErvV15xTV
-	O0Qltw1dSDZY7q4wAqYqsFSe+WCN+A0OD2RINz177ofbVwqi+0pKCPbyqpyQmynlsOE4OY
-	lk3+g+QyRQ8BHbZ+ARExFlGccMydWZU=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-526-T2zUWZGDMvqvd2GrFVc_UA-1; Tue, 03 Mar 2026 06:58:55 -0500
-X-MC-Unique: T2zUWZGDMvqvd2GrFVc_UA-1
-X-Mimecast-MFC-AGG-ID: T2zUWZGDMvqvd2GrFVc_UA_1772539134
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-b936bda5ff3so573177466b.1
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 03:58:54 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772539134; cv=none;
-        d=google.com; s=arc-20240605;
-        b=Zv5WhJXeroCAuLQ89B6hsGzsxr5hIDI8JqwLTmVS2sAP1jMIbC4/xdn+GHQynGvIlc
-         l6DruBWjx/spTUiSdmUjFsOw7uNCqlulESoNv/maoM+/RAd0J/zzQJ6kLIbUp3ICzycK
-         keU6Z7hUtj4DuUFlPKDL+ThuMAed3PwFi3QRmud85iJYJh3O8OGgxK66wh0lmE4ZKyIG
-         Rd8cnz+EV3BGCQxLRiX9FBQesvzhAU9Ud+oRCBkX+5ipnrCEPtXE3UyZRhP/hE3kEUJZ
-         2YIaa5TDGR1g2lvwoERNcsfnibyD0VfjRwKYZemxQjULc3m6ABPl00fcrsXRif2+1h3d
-         Yj6g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=o4CtqcFVzp3mF5EfycFswotSYwJN7isvCXXnUa2seYY=;
-        fh=I7g8BM5J4zGDS3MYd1saLRbuOIqoVEHTjhLlXS02hnc=;
-        b=Xxw5Hxt7SNVYXrZmCDL8byw96ybnsTupVKFsn8pKvUciV0WSXIsicoZC2BiH3TdsuE
-         RVloYVyR3SAA4qJB5p7DRiM7u/Ok7TDU4Ar5gXCewG1LyZioIAXHykG8qblMRd4Fz7Pj
-         OD2no88NWnwUfePQSWvjeJJ9pcOHIv0VcmLtmBkh9CjpeEOrMONiKq+DV9exyXB21/3T
-         0YueYv6RaX9Tzs7sD4DjNHIDqy3kqDBtxSk8rwdHMXq+ykssK1XxSIDzuR6ftQM4zt+G
-         Zj4dra8xIvd1Vb+GIFcxUrMVBKivODdnQQZZOKqbnreF2AJN3hai25313+IRiWvvGu+Q
-         XQig==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1772539134; x=1773143934; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=o4CtqcFVzp3mF5EfycFswotSYwJN7isvCXXnUa2seYY=;
-        b=hlZ5ZX6Fkp9qIRsMco1/ln3C62Pv4Z1QB4hPr2ZPn3mc5kZxCaTS4eUAYoXOcIM8ju
-         BCnpE89rYna0lkt/66X7FwC0r7LEYfUJtaSyEKvDyXdoWvi2HMkVYQbugU+EF2YOBSaw
-         mqX5pXbfwSota1kiDB7jmR3HVtzh/wzyyEn+QN58PN29ixjL2uVQk715sdVRWCaUa5QE
-         cqkdNDzOCIIMVdHeS0nwKqNmucpGCx1ig9ElrHiI2HV+9dtfU/owydWmhrgXmJux6u8V
-         Pa4KGGgZPbM4BqG16zHqIJi9+8UwqFhSZV6xaL+Hhvnh4T4IxsZC689Erw3xEDlxNZ0c
-         447g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772539134; x=1773143934;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=o4CtqcFVzp3mF5EfycFswotSYwJN7isvCXXnUa2seYY=;
-        b=vPFeI/EmpjQuB3Vcr0+9xcUJ3q55cTd5DxK0HA9AVaWF/OvRrv0jje/cl7Kh6kgRBy
-         M2KB0Za7hfJd1evrC4eNc0hOgG3Yx076YE6na5OWPp1NdWy66op2Nn2B9Mm2SJ1TtsYJ
-         V6ZItvG+aESFQFv/ssZxDKeyoeNFG+WJ55Cw3R+LVqOLjFxRk2+RnK1/5UMlfL63Ekux
-         bt/PXcngVRwdp2GPuLHLp2HYt7iDmpOhpFuCipLcJ52DgNWUS3ffLjvBd6xpXNWPFSID
-         yAKjwx9pxSNlhIc3+SYu6qyZF77y+Shf6+VSubBl5EQl3TqBI6hflqTB+lU5Mp3VWATq
-         mEvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWhgsNHuqsJEyYbf7kICVQiU9BlxhuCNRGKcI53a9eiH6w2fvafKwvAw5jBY1egg1oAXK0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGdkK/RhGkeG12EAAN8LQt0x7raQQZIP6aY6QOF5tVHqj3kecc
-	8Js9lF4b72EC7xiOUQtuSmiQDZ8iYY0NLXRoQwX+tHHHc49OZHbB2xSSXqz2d0maxY0iDCK1zOE
-	pyWMZou7E6n3ML6PQ6Ic5uLWBEkXhYfmPY6Gc92pPhLXKaRzeTfWt4o4jeU+xL8vlycCIp7+6jY
-	JexdbS42T29GRvDXlzP6SCTsplMdOm
-X-Gm-Gg: ATEYQzwKdpEJu8AjXA/AnpnUC7z/Kodgn1OmcKBGHyb2o8oK15+g9kkqviyFIS0iNNQ
-	5Yy3qBFnNhakKaxJ/v4wAGCwzm5uSzWsAPC0ca8zG7H3KeOx1b0c5xe+I0dMkO9e6zsfwSinfa8
-	7SdHNI7yTLIaDC8y8+rc017V/H4tTqp+DIQtT13Uc5WN4rOrBpCsMe10zCB5A7+zY9Wyzm36z+C
-	P5LcA==
-X-Received: by 2002:a17:907:9710:b0:b8f:8cf4:adf9 with SMTP id a640c23a62f3a-b937636b784mr942091466b.6.1772539133652;
-        Tue, 03 Mar 2026 03:58:53 -0800 (PST)
-X-Received: by 2002:a17:907:9710:b0:b8f:8cf4:adf9 with SMTP id
- a640c23a62f3a-b937636b784mr942088666b.6.1772539133148; Tue, 03 Mar 2026
- 03:58:53 -0800 (PST)
+	dkim=pass (4096-bit key) header.d=crudebyte.com header.i=@crudebyte.com header.b="HqDnIkLb"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+	Content-ID:Content-Description;
+	bh=6morsqL1rf2svzHpl7Mgcq7P7Za1rjxSr9X2GzDxJdQ=; b=HqDnIkLb9g/Hsc8NjMh6Jj9WuM
+	MzJbEDxoSbJB6oNviZ4lhLElZSwdxUq+F82IhdhMr3/l3EIr7ekENzTfWw1alK0l7gFMBknTTbllK
+	rQiTpC5jrJRp5O9Y1BXau586rPz904ODCjVtDrL/S+fcUwcyE3KQHYPQE7yHCQgEDc8jdW2FFMvnt
+	8BFo41dQEnn19Baat6muvD8WHIuTeXI5DV3hJWIvjJJnnIbJ9NBNkEHuffv8Z0iXv2/2WH2/hxxuH
+	bQk7qyA82VKBDS4IWm4WLmrZDk/8F2VTqK9lWDvGIID23xeCtmOUbbOU5nkyVR/RcS3L+8d3GznDt
+	Co3UvqraJhe1cjvRT3F0oMQn4owK/B7J/FhwdoT/TARifEt06mcA+ESiihNW/SIasrPSJHOjZxjau
+	19CUACfNAgbx8938xysaW9hCoTK95R7R5EP2KKkB7w4xq+Xr5QZHTBanCME4DOR0egc7lmc8Iwow+
+	6QdiLyA9W5tnh0qszmpT1je2sF3FDWXPdKIW8B5OWRyh6mmktdJOqx2KnWKFBZUmJIRSr0SYCgoEj
+	OXekGpcPmr2OGrtA46WUBXf4g/mM8I/cnPWeWBCwtWVWaywFhrbuiZs4N+cAgdTRI0a7P2lT1kapU
+	+AuwoWhfJXGO+AHTpCpSIxdbyzli+byB6v/wTaiSQ=;
+From: Christian Schoenebeck <linux_oss@crudebyte.com>
+To: Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Dan Williams <dan.j.williams@intel.com>,
+ Matthew Wilcox <willy@infradead.org>, Eric Biggers <ebiggers@kernel.org>,
+ "Theodore Y. Ts'o" <tytso@mit.edu>, Muchun Song <muchun.song@linux.dev>,
+ Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@kernel.org>,
+ David Howells <dhowells@redhat.com>, Paulo Alcantara <pc@manguebit.org>,
+ Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>,
+ Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+ Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>,
+ Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
+ Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>,
+ Tom Talpey <tom@talpey.com>, Steve French <sfrench@samba.org>,
+ Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+ Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>,
+ Alexander Aring <alex.aring@gmail.com>,
+ Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+ Viacheslav Dubeyko <slava@dubeyko.com>,
+ Eric Van Hensbergen <ericvh@kernel.org>, Latchesar Ionkov <lucho@ionkov.net>,
+ Dominique Martinet <asmadeus@codewreck.org>, David Sterba <dsterba@suse.com>,
+ Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>,
+ Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>,
+ "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+ Ilya Dryomov <idryomov@gmail.com>, Alex Markuze <amarkuze@redhat.com>,
+ Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
+ Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>,
+ Amir Goldstein <amir73il@gmail.com>, Christoph Hellwig <hch@infradead.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Yangtao Li <frank.li@vivo.com>,
+ Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+ David Woodhouse <dwmw2@infradead.org>, Richard Weinberger <richard@nod.at>,
+ Dave Kleikamp <shaggy@kernel.org>,
+ Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+ Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
+ Joseph Qi <joseph.qi@linux.alibaba.com>, Mike Marshall <hubcap@omnibond.com>,
+ Martin Brandenburg <martin@omnibond.com>, Miklos Szeredi <miklos@szeredi.hu>,
+ Anders Larsen <al@alarsen.net>, Zhihao Cheng <chengzhihao1@huawei.com>,
+ Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>,
+ Johannes Thumshirn <jth@kernel.org>,
+ John Johansen <john.johansen@canonical.com>,
+ Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+ "Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+ Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>,
+ Stephen Smalley <stephen.smalley.work@gmail.com>,
+ Ondrej Mosnacek <omosnace@redhat.com>,
+ Casey Schaufler <casey@schaufler-ca.com>,
+ Alex Deucher <alexander.deucher@amd.com>,
+ Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Eric Dumazet <edumazet@google.com>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ Willem de Bruijn <willemb@google.com>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ James Clark <james.clark@linaro.org>, "Darrick J. Wong" <djwong@kernel.org>,
+ Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>,
+ Joerg Reuter <jreuter@yaina.de>, Marcel Holtmann <marcel@holtmann.org>,
+ Johan Hedberg <johan.hedberg@gmail.com>,
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+ Oliver Hartkopp <socketcan@hartkopp.net>,
+ Marc Kleine-Budde <mkl@pengutronix.de>, David Ahern <dsahern@kernel.org>,
+ Neal Cardwell <ncardwell@google.com>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ Remi Denis-Courmont <courmisch@gmail.com>,
+ Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+ Xin Long <lucien.xin@gmail.com>, Magnus Karlsson <magnus.karlsson@intel.com>,
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>, Jeff Layton <jlayton@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+ fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev,
+ linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+ linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+ samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org,
+ v9fs@lists.linux.dev, linux-afs@lists.infradead.org, autofs@vger.kernel.org,
+ ceph-devel@vger.kernel.org, codalist@coda.cs.cmu.edu,
+ ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org,
+ jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev,
+ ocfs2-devel@lists.linux.dev, devel@lists.orangefs.org,
+ linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com,
+ linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org,
+ selinux@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+ linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org,
+ linux-perf-users@vger.kernel.org, linux-fscrypt@vger.kernel.org,
+ linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org,
+ linux-x25@vger.kernel.org, audit@vger.kernel.org,
+ linux-bluetooth@vger.kernel.org, linux-can@vger.kernel.org,
+ linux-sctp@vger.kernel.org, bpf@vger.kernel.org,
+ Jeff Layton <jlayton@kernel.org>
+Subject:
+ Re: [PATCH v2 069/110] 9p: replace PRIino with %llu/%llx format strings
+Date: Tue, 03 Mar 2026 13:12:51 +0100
+Message-ID: <13960165.uLZWGnKmhe@weasel>
+In-Reply-To: <20260302-iino-u64-v2-69-e5388800dae0@kernel.org>
+References:
+ <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
+ <20260302-iino-u64-v2-69-e5388800dae0@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115163650.118910-1-wander@redhat.com> <20260115163650.118910-4-wander@redhat.com>
-In-Reply-To: <20260115163650.118910-4-wander@redhat.com>
-From: Tomas Glozar <tglozar@redhat.com>
-Date: Tue, 3 Mar 2026 12:58:42 +0100
-X-Gm-Features: AaiRm5063jBEqkXltmA3PT-me9_BDiQPgb3Y2Uz23cyuYoxnZQPISFkwvAHn7aA
-Message-ID: <CAP4=nvTcKc+=usb0N_Te+dR+1+Zt0d6edaQD+xbyBXq_TC4LQw@mail.gmail.com>
-Subject: Re: [PATCH v3 03/18] rtla: Simplify argument parsing
-To: Wander Lairson Costa <wander@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Crystal Wood <crwood@redhat.com>, 
-	Ivan Pravdin <ipravdin.official@gmail.com>, Costa Shulyupin <costa.shul@redhat.com>, 
-	John Kacur <jkacur@redhat.com>, Haiyong Sun <sunhaiyong@loongson.cn>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Daniel Wagner <dwagner@suse.de>, 
-	Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-trace-kernel@vger.kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-kernel@vger.kernel.org>, 
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-=C4=8Dt 15. 1. 2026 v 18:25 odes=C3=ADlatel Wander Lairson Costa
-<wander@redhat.com> napsal:
->
-> The actions_parse() function uses open-coded logic to extract arguments
-> from a string. This includes manual length checks and strncmp() calls,
-> which can be verbose and error-prone.
->
-> To simplify and improve the robustness of argument parsing, introduce a
-> new extract_arg() helper macro. This macro extracts the value from a
-> "key=3Dvalue" pair, making the code more concise and readable.
->
-> Also, introduce STRING_LENGTH() and strncmp_static() macros to
-> perform compile-time calculations of string lengths and safer string
-> comparisons.
->
-> Refactor actions_parse() to use these new helpers, resulting in
-> cleaner and more maintainable code.
->
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
+On Monday, 2 March 2026 21:24:53 CET Jeff Layton wrote:
+> Now that i_ino is u64 and the PRIino format macro has been removed,
+> replace all uses in 9p with the concrete format strings.
+> 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 > ---
->  tools/tracing/rtla/src/actions.c | 57 +++++++++++++++++++++++---------
->  tools/tracing/rtla/src/utils.h   | 14 ++++++--
->  2 files changed, 54 insertions(+), 17 deletions(-)
->
+>  fs/9p/vfs_addr.c       | 4 ++--
+>  fs/9p/vfs_inode.c      | 6 +++---
+>  fs/9p/vfs_inode_dotl.c | 6 +++---
+>  3 files changed, 8 insertions(+), 8 deletions(-)
 
-Suggestion in case you will be sending a v4 of the patchset: the
-commit description could be more descriptive, something like,
-"rtla/actions: Simplify argument parsing", or "rtla: Simply action
-argument parsing", to make it clear this affects *action* arguments,
-not command-line argument parsing in general.
+9p uses the following macro to convert the 9p network protocol's QID path from
+u64 (all platforms) to ino_t. The 32-bit path of this macro should be dropped
+after this change, as it would unnecessarily truncate the value to 32-bit now
+[fs/9p/v9fs_vfs.h]:
 
-> diff --git a/tools/tracing/rtla/src/utils.h b/tools/tracing/rtla/src/util=
-s.h
-> index e29c2eb5d569d..8323c999260c2 100644
-> --- a/tools/tracing/rtla/src/utils.h
-> +++ b/tools/tracing/rtla/src/utils.h
-> @@ -14,8 +14,18 @@
->  #define MAX_NICE               20
->  #define MIN_NICE               -19
->
-> -#define container_of(ptr, type, member)({                      \
-> -       const typeof(((type *)0)->member) *__mptr =3D (ptr);      \
+#if (BITS_PER_LONG == 32)
+#define QID2INO(q) ((ino_t) (((q)->path+2) ^ (((q)->path) >> 32)))
+#else
+#define QID2INO(q) ((ino_t) ((q)->path+2))
+#endif
 
-As Crystal pointed out already [1], this part removes container_of,
-only to restore it (see below).
+You are not breaking anything, if you happen to send a v3, that would be nice
+to be dropped, otherwise we'll handle that on our end later on:
 
-[1] https://lore.kernel.org/linux-trace-kernel/301c25518ff81dc967187497a057=
-7f8ee2fb2e29.camel@redhat.com/
+Reviewed-by: Christian Schoenebeck <linux_oss@crudebyte.com>
 
-> +#ifndef ARRAY_SIZE
-> +#define ARRAY_SIZE(x) (sizeof(x) / sizeof(*(x)))
-> +#endif
-> +
-> +/* Calculate string length at compile time (excluding null terminator) *=
-/
-> +#define STRING_LENGTH(s) (ARRAY_SIZE(s) - sizeof(*(s)))
-> +
-> +/* Compare string with static string, length determined at compile time =
-*/
-> +#define strncmp_static(s1, s2) strncmp(s1, s2, ARRAY_SIZE(s2))
-> +
-> +#define container_of(ptr, type, member)({                              \
-> +       const typeof(((type *)0)->member) * __mptr =3D (ptr);            =
- \
->         (type *)((char *)__mptr - offsetof(type, member)) ; })
->
+I wonder whether that exceeded Claude's context size, or if that's in line
+with the prompt specified by you.
 
-...here, container_of is restored, only with one more tab which is
-unnecessary - that is why Git includes it into the diff. If you remove
-one tab and update the commit, the change should be dropped.
+/Christian
 
-Otherwise, looks good!
-
-Tomas
 
