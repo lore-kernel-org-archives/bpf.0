@@ -1,173 +1,233 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35F18372EE2
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 14:27:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=170.10.133.124
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772548074; cv=pass; b=Gfv/sW8EGxYWE2ZVMmc7PL/1IuJJgLo6q47UKx3SLdpWD4fYci/RFBhU79fl5drYg9o4y99zxe9nIwm2e4CcTCOSa30fX6subMKEMPgJU1D+uzkQXeeBmN/6imn1UmUkaOlVYNW94fHSTHh7GyzUHCeI1anGdT5Jos4uJGGrFIw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772548074; c=relaxed/simple;
-	bh=egMEBqKWfAr8CtNnm+dE/tXlDActJ7B5VMObkcMEQkQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Gh2Y3hf2aWrtkS73BCBJZJusSDJ+uiF95X7WJu9knb20++mAuW45YqHjSVwqFaGyBvVsEenBe/UEdNdNf7TnhipW+B/rwRIZc+z+7ZxrkQa3MoKM2i8BvuhReTYIaEh4BlGKLJFfgAgkmiQ4MP5zRAjPnLcu2QWkgbMEGAbEIrI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LCzeU4/F; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=cgTHoZjW; arc=pass smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AA13A8732;
+	Tue,  3 Mar 2026 14:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1772548296; cv=none; b=E0ek4jLYU/iIi5uCypyUahJUslsed2dyqRCLzBnXTAunniI1BL58zGs0eEJmGHlByh/rmwp2x1hYUv4fZKp7zTjWxreWqbDj2kB8DBQXPT7Tz4hBsny8J4oAwtzIJvJE72zOfUPDgnxyWL/al2qLQbBIBGZlZfN9rEPI6UDb7Rk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1772548296; c=relaxed/simple;
+	bh=Fz5KSEt2JdUDAxYeRXF2qsARCi47vI+UkFanERJHSIo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BLwtDsPTTn46+qh4nFN8B7HHfToqpvfV0aFplotltKnVXHapUCbRBDt6BgTo8jqfxrGVBzreA6og7wvu0/3Ld+HKaE13Du3I70U2o3GZT9zh0THFwYKshXUE7fHwTZ+rIYJlnQGQJM0VZd9wq4G8jhl1rMmWIV+vemUB1+MbLOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Lcd6Fno+; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bombadil.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LCzeU4/F";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="cgTHoZjW"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1772548072;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0pzsSwi5adWCRovilNghDM/wCo/ieqebuXIEWNF2uf4=;
-	b=LCzeU4/F0Atm4hSLZpxEoV8otTBcTjsfioqyvJFGE6yu5QMULnuwhSkrNcEgL6gmtOCIH1
-	BQNqh2D7Ffof2csdAu0P6uonWt/0LwwfiL8BZPSzNCVhuk5e5viBoNvj5HGYqjfyHo/K2K
-	ogQPPIoz8iIIpCcfEPgRGP45ZuLVmdI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-392-9Y3QYL8VN8aQVYQcozhB_g-1; Tue, 03 Mar 2026 09:27:48 -0500
-X-MC-Unique: 9Y3QYL8VN8aQVYQcozhB_g-1
-X-Mimecast-MFC-AGG-ID: 9Y3QYL8VN8aQVYQcozhB_g_1772548068
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-65fa9f433bdso7218436a12.3
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 06:27:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1772548067; cv=none;
-        d=google.com; s=arc-20240605;
-        b=kxEcZDO0K0et30KOVJO6BWomdPtDHvahRgtxxwb3TvF2kHjj4qz2yhQbZimH6RipQe
-         gixWw3mpe9G3th9x+3mzAJrO03kHmWeHoDlPnZg6FQsf6Nj7XcQw65ryE0/bdCiK2/pz
-         noF+CsNJTK+QGYpjrlgwGEZC44mjBTmlFgvzv8DAKyrgZ9aRaTlOEpVyg8Ll7PEuVu33
-         JmOTV1bCC/PNU0qG+cdAKDXy17rstU144h/kFG14HCKcOY/Ax6H2wg2A2UJTzLprmR8B
-         IDOgUq7/ikE1W3ERVN4//fLVf+1mvxKYz79/rxRd5IucyF0RdV6gM0HEu5aprTxujRtI
-         g6ew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=0pzsSwi5adWCRovilNghDM/wCo/ieqebuXIEWNF2uf4=;
-        fh=ChK+JUF0FLLgj+vqA4LESc68YoX560XzFMJtGcSe980=;
-        b=RlLSIIZ36Huv2QQK7lyZEUjxt+RG0DK6RgXWFlhzLA+Lz7VlNAHO8OV7wieSBnjHoA
-         4UAH4Na5hgjnJqxPD8NiPwCAxavWzFqTBuOsOUvsxDJ5+G955ag7LrZDJK5rFdmwYjts
-         6jocGue5dYEgV/kRhkmMcxa0zJlKnvREQa2MgLFeJdFZ4QuePVgFyZPlRvRRrl6drKpo
-         hcSj2PzgBpZ+4sezb0D9ueRkmhHpaCnNBwx9PxERzk85mxQodPQ1LIrbKlSmfURdkpzz
-         g4bbWxOLxDNG5MH0EFMIlwkGRw9NcXi8S7tHkM3fprQsYSvaY/YlnSL52aFpdwSwAFBY
-         /yWA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1772548067; x=1773152867; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0pzsSwi5adWCRovilNghDM/wCo/ieqebuXIEWNF2uf4=;
-        b=cgTHoZjWIdxx0/KSoPiF9linUj167OV98FX1GlScUJsBntRVBe20HA4GshXC2VGWeI
-         8wSH4Mms/1h6bv0/LxaHKU/HR9iIUSVwhFR1JJw9Ol21SxSb/sqSTXn51mNvY6GOHulg
-         EeULyrxiydsqHFLAd88u3ZSjuSnLu9FdwSEoexXeyxqLIM88WEpT8Xco86HeYAmnHVjH
-         Zd2y3jHTKITdXi0yP/ebg69oGUiUwnzbf3fvpHSFS6nnNsxD5X/VbvqjsJxw1JEs8ZD+
-         oUWNiC3aVqNWa5W+10nbTsisO99kI/0sH7YlXNAcOjgkb9Y7qXiDEPlkKShhZ1tsWJw8
-         SOdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772548067; x=1773152867;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0pzsSwi5adWCRovilNghDM/wCo/ieqebuXIEWNF2uf4=;
-        b=eQAnMztwrMGrKHnNcjRP2uEVeED/jULNFwyoChP8pt/XOJzjb+EtZfUR6hRaJeizd9
-         EjhvlDrctJgfHC0TK0xWHxET8rVZk/PuS6ULOZVZWwrkqyjUR0WS3BC1BIPbsDkqoOqk
-         elGrnAPc4XrlJp953zP888Gmq5YSLjdR+rl13x3RKfxbE6UI+/uuk6Dyd9+boMawQokJ
-         E+a+STgYJAKXrtus4zMH5zSrwcfoIODtIQ3Mmep0jx3PqyqyO6uSERjm2cMfMmjsT2m6
-         vJm4cJ27a8cU3K/QvkEZTUgxlONyUjr2a4q+S9ET06GOElFvFtMF1dryMXykyJKBPkLV
-         vF/w==
-X-Forwarded-Encrypted: i=1; AJvYcCUzH/0Y/YG985/hPTwu5NJLBNSHpylhoV+oHb2LBV3tyGxN/FT7pYsg085BUOyp7GH12vo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmFWhSku5yjX3jORKtAErNzF7UtTvpWHvcavewnxqDqdQ2YbPb
-	PJ0DCUoNSlR4YmJJrNMD58uStbUeTTb3qk3Sk/3ipcJhztB6nZeVbmGHBdCPhapCxZ1MIjfc8jJ
-	nSFkrpuCwt/NrDcsWFvp2bz3MycXtGxLS1a+E/CyNQcmzdIYeGjFUwtVq4uPTU60fwjMOv9uI0+
-	CzHaf/PaWEwVNmkUv3nTy8WDBYrvyp
-X-Gm-Gg: ATEYQzz2prLh6WepudXrw4u6dZZr3hN9Gqu8xUdMi5lejBnd52EzAH8w8WgvuAGNWaP
-	n9HRGXHSCmvpcBymoS3AdEuD8kqR7FlWAtgKpkeFrbtiIG2OwV8pQXg4tRDX/aTn9xWhu41ekqV
-	DsZxAIUJlDjVEb5O/F1Bllpr548m+Rp/PTOBGqi1X49tGtUafrNf4Zvx22lYkdEkMOb5Xxlsrl2
-	piUcg==
-X-Received: by 2002:a17:907:9288:b0:b8f:7c0a:f955 with SMTP id a640c23a62f3a-b93763b77d3mr1103360066b.21.1772548067552;
-        Tue, 03 Mar 2026 06:27:47 -0800 (PST)
-X-Received: by 2002:a17:907:9288:b0:b8f:7c0a:f955 with SMTP id
- a640c23a62f3a-b93763b77d3mr1103358166b.21.1772548067100; Tue, 03 Mar 2026
- 06:27:47 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Lcd6Fno+"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+	:References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=FVGHEap2/y4lqrOlTw4I1PUuJRk8gJ1LY6chx54er5w=; b=Lcd6Fno+d5UFOYRjzgSXS/STDW
+	OnOCNUozkxsQY4gAaLcG3UD8bgmPzX/hQhnp+XRh93wE//HqWrx6I2tY3mKjuf2IaREQRwDMg25PG
+	3rHjoEyH4eWTjWo2to2N4q8xFIulCCjw+wnruiylvrdWjofeIWtF3V0P9I2qdnWzQ6TL3ZQvvH61Z
+	rPO9WUDLhEIV5cHVRy7B8ebSHdIsWTUbMNRXqGGAPCL3AhrpvrHgan/jOnhq5S2sES5qYdDusKr5g
+	aSpySF1dCrXtiFPjIQCZRSsvuPR6BM2kGpXN99BQqvFof3+8ottSE9BRZ+7Avp/LETtYrw8IHT+HY
+	hmdbkK9g==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vxQlS-0000000FKdJ-46fW;
+	Tue, 03 Mar 2026 14:30:23 +0000
+Date: Tue, 3 Mar 2026 06:30:22 -0800
+From: Christoph Hellwig <hch@infradead.org>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>,
+	"Darrick J. Wong" <djwong@kernel.org>, Theodore Tso <tytso@mit.edu>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	David Hildenbrand <david@kernel.org>,
+	David Howells <dhowells@redhat.com>,
+	Paulo Alcantara <pc@manguebit.org>,
+	Andreas Dilger <adilger.kernel@dilger.ca>, Jan Kara <jack@suse.com>,
+	Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+	Steve French <sfrench@samba.org>,
+	Ronnie Sahlberg <ronniesahlberg@gmail.com>,
+	Shyam Prasad N <sprasad@microsoft.com>,
+	Bharath SM <bharathsm@microsoft.com>,
+	Alexander Aring <alex.aring@gmail.com>,
+	Ryusuke Konishi <konishi.ryusuke@gmail.com>,
+	Viacheslav Dubeyko <slava@dubeyko.com>,
+	Eric Van Hensbergen <ericvh@kernel.org>,
+	Latchesar Ionkov <lucho@ionkov.net>,
+	Dominique Martinet <asmadeus@codewreck.org>,
+	Christian Schoenebeck <linux_oss@crudebyte.com>,
+	David Sterba <dsterba@suse.com>,
+	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>,
+	Luis de Bethencourt <luisbg@kernel.org>,
+	Salah Triki <salah.triki@gmail.com>,
+	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+	Ilya Dryomov <idryomov@gmail.com>,
+	Alex Markuze <amarkuze@redhat.com>,
+	Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu,
+	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>,
+	Amir Goldstein <amir73il@gmail.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Yangtao Li <frank.li@vivo.com>,
+	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Dave Kleikamp <shaggy@kernel.org>,
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+	Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
+	Joseph Qi <joseph.qi@linux.alibaba.com>,
+	Mike Marshall <hubcap@omnibond.com>,
+	Martin Brandenburg <martin@omnibond.com>,
+	Miklos Szeredi <miklos@szeredi.hu>, Anders Larsen <al@alarsen.net>,
+	Zhihao Cheng <chengzhihao1@huawei.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Naohiro Aota <naohiro.aota@wdc.com>,
+	Johannes Thumshirn <jth@kernel.org>,
+	John Johansen <john.johansen@canonical.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	Roberto Sassu <roberto.sassu@huawei.com>,
+	Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>,
+	Stephen Smalley <stephen.smalley.work@gmail.com>,
+	Ondrej Mosnacek <omosnace@redhat.com>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Alex Deucher <alexander.deucher@amd.com>,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Willem de Bruijn <willemb@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Simon Horman <horms@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	James Clark <james.clark@linaro.org>,
+	Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>,
+	Joerg Reuter <jreuter@yaina.de>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Johan Hedberg <johan.hedberg@gmail.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Oliver Hartkopp <socketcan@hartkopp.net>,
+	Marc Kleine-Budde <mkl@pengutronix.de>,
+	David Ahern <dsahern@kernel.org>,
+	Neal Cardwell <ncardwell@google.com>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Remi Denis-Courmont <courmisch@gmail.com>,
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+	Xin Long <lucien.xin@gmail.com>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+	fsverity@lists.linux.dev, linux-mm@kvack.org, netfs@lists.linux.dev,
+	linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+	linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org,
+	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org,
+	v9fs@lists.linux.dev, linux-afs@lists.infradead.org,
+	autofs@vger.kernel.org, ceph-devel@vger.kernel.org,
+	codalist@telemann.coda.cs.cmu.edu, ecryptfs@vger.kernel.org,
+	linux-mtd@lists.infradead.org, jfs-discussion@lists.sourceforge.net,
+	ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev,
+	devel@lists.orangefs.org, linux-unionfs@vger.kernel.org,
+	apparmor@lists.ubuntu.com, linux-security-module@vger.kernel.org,
+	linux-integrity@vger.kernel.org, selinux@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+	netdev@vger.kernel.org, linux-perf-users@vger.kernel.org,
+	linux-fscrypt@vger.kernel.org, linux-xfs@vger.kernel.org,
+	linux-hams@vger.kernel.org, linux-x25@vger.kernel.org,
+	audit@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	linux-can@vger.kernel.org, linux-sctp@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH v2 001/110] vfs: introduce kino_t typedef and PRIino
+ format macro
+Message-ID: <aabwflLfe2HcGv7X@infradead.org>
+References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
+ <20260302-iino-u64-v2-1-e5388800dae0@kernel.org>
+ <20260303012556.GA6520@macsyma-wired.lan>
+ <20260303042546.GF13868@frogsfrogsfrogs>
+ <33228005140684201de2ca0c157441d3b6a06413.camel@kernel.org>
+ <aabkBadGzo7IZpSU@infradead.org>
+ <19e4e79a59dcfc4c61c8cf263af345d0d7026fc8.camel@kernel.org>
+ <aabpPQxCTweoTp8Z@infradead.org>
+ <1310fc5c09cce52ec00344b936275fe584c88dea.camel@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115163650.118910-1-wander@redhat.com> <20260115163650.118910-13-wander@redhat.com>
-In-Reply-To: <20260115163650.118910-13-wander@redhat.com>
-From: Tomas Glozar <tglozar@redhat.com>
-Date: Tue, 3 Mar 2026 15:27:35 +0100
-X-Gm-Features: AaiRm52--PTPvTJjr7o8z065WWcwDMjy1s-ZrskhLMDXhoPN5incdHmTOca6bdY
-Message-ID: <CAP4=nvQ6EeecMggeVciOaW_-=sa2QJ2r9DX0Xifzgsv5JBhAAg@mail.gmail.com>
-Subject: Re: [PATCH v3 12/18] rtla: Enforce exact match for time unit suffixes
-To: Wander Lairson Costa <wander@redhat.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Crystal Wood <crwood@redhat.com>, 
-	Ivan Pravdin <ipravdin.official@gmail.com>, Costa Shulyupin <costa.shul@redhat.com>, 
-	John Kacur <jkacur@redhat.com>, Tiezhu Yang <yangtiezhu@loongson.cn>, 
-	Daniel Wagner <dwagner@suse.de>, Daniel Bristot de Oliveira <bristot@kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-trace-kernel@vger.kernel.org>, 
-	"open list:Real-time Linux Analysis (RTLA) tools" <linux-kernel@vger.kernel.org>, 
-	"open list:BPF [MISC]:Keyword:(?:b|_)bpf(?:b|_)" <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1310fc5c09cce52ec00344b936275fe584c88dea.camel@kernel.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 
-=C4=8Dt 15. 1. 2026 v 18:28 odes=C3=ADlatel Wander Lairson Costa
-<wander@redhat.com> napsal:
->
-> The parse_ns_duration() function currently uses prefix matching for
-> detecting time units. This approach is problematic as it silently
-> accepts malformed strings such as "100nsx" or "100us_invalid" by
-> ignoring the trailing characters, leading to potential configuration
-> errors.
->
-> Switch to using strcmp() for suffix comparison to enforce exact matches.
-> This ensures that the parser strictly validates the time unit and
-> rejects any input containing invalid trailing characters, thereby
-> improving the robustness of the configuration parsing.
->
+On Tue, Mar 03, 2026 at 09:19:42AM -0500, Jeff Layton wrote:
+> On Tue, 2026-03-03 at 05:59 -0800, Christoph Hellwig wrote:
+> > On Tue, Mar 03, 2026 at 08:43:15AM -0500, Jeff Layton wrote:
+> > > On Tue, 2026-03-03 at 05:37 -0800, Christoph Hellwig wrote:
+> > > > On Tue, Mar 03, 2026 at 05:53:39AM -0500, Jeff Layton wrote:
+> > > > > Like I said to Ted, this is just temporary scaffolding for the change.
+> > > > > The PRIino macro is removed in the end. Given that, perhaps you can
+> > > > > overlook the bikeshed's color in this instance?
+> > > > 
+> > > > So why add it in the first place?  
+> > > 
+> > > Bisectability. The first version I did of this would have broken the
+> > > ability to bisect properly across these changes. I don't love the
+> > > "churn" here either, but this should be cleanly bisectable.
+> > 
+> > What do you need to bisect in format string changes?  Splitting
+> > every variable type change outside of the main i_ino out - sure.
+> > But bisecting that "change to u64 in ext4" really broke ext4 and
+> > not "change to u64" is not very useful.  Commits should do one
+> > well defined thing.  Adding a weird transition layer for a format
+> > thing that just gets dropped is not one well defined thing.
+> 
+> In the middle stages of the series, you will get warnings or errors on
+> 32-bit hosts when i_ino's type doesn't match what the format string
+> expects.
+> 
+> There are really only three options here:
+> 
+> 1/ Do (almost) all of the changes in one giant patch
+> 
+> 2/ Accept that the build may break during the interim stages
+> 
+> 3/ This series: using a typedef and macro to work around the breakage
+> until the type can be changed, at the expense of some extra churn in
+> the codebase
+> 
+> 3 seems like the lesser evil.
 
-Why not use your strncmp_static() helper to protect from overrun?
-
-> Signed-off-by: Wander Lairson Costa <wander@redhat.com>
-> ---
->  tools/tracing/rtla/src/utils.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/tracing/rtla/src/utils.c b/tools/tracing/rtla/src/util=
-s.c
-> index 486d96e8290fb..b029fe5970c31 100644
-> --- a/tools/tracing/rtla/src/utils.c
-> +++ b/tools/tracing/rtla/src/utils.c
-> @@ -211,15 +211,15 @@ long parse_ns_duration(char *val)
->         t =3D strtol(val, &end, 10);
->
->         if (end) {
-> -               if (!strncmp(end, "ns", 2)) {
-> +               if (strcmp(end, "ns") =3D=3D 0) {
->                         return t;
-> -               } else if (!strncmp(end, "us", 2)) {
-> +               } else if (strcmp(end, "us") =3D=3D 0) {
->                         t *=3D 1000;
->                         return t;
-> -               } else if (!strncmp(end, "ms", 2)) {
-> +               } else if (strcmp(end, "ms") =3D=3D 0) {
->                         t *=3D 1000 * 1000;
->                         return t;
-> -               } else if (!strncmp(end, "s", 1)) {
-> +               } else if (strcmp(end, "s") =3D=3D 0) {
->                         t *=3D 1000 * 1000 * 1000;
->                         return t;
->                 }
-> --
-> 2.52.0
->
-
-Tomas
+No, 1 is by far the least evil.  Note that it's not really almost all,
+as all the local variables can easily and sanely be split out.  It's
+all of the format strings, and that makes sense.  The only "regressions"
+there are incorrect format strings which have good warnings and can
+be fixed easily.
 
