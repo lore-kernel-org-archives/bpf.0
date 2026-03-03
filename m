@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D51370D5B;
-	Tue,  3 Mar 2026 16:40:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 529ED3264D9;
+	Tue,  3 Mar 2026 16:40:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772556023; cv=none; b=nFDxVZahvxSUPMtDPVj7dX/e2Az+QHPHvz819ygGp1BX+LCYdbrQC0emwK1t13n7ap27eM4HZw9WSMyjyewplPIu3LZBp9IjMsj7tcGpJp1rFyq7uzMLoKq3+lmkAVpU44kovkKpG2gp3k7fQlrJgUVxQypss1KxfuagLBgPYTU=
+	t=1772556025; cv=none; b=Sw1BR/bBqiguEDdIJC6qFMylD3uHEVcENOZHL+PpvRjp1uyoGF3mH8C5skdDGzRD2Xo4uazOoTaugT3IAQKWzkIscfADAjIqOuYs6k1cXdPrCSsYyib7ElByR3HKuFuIFVw/mi95YMXUXnTg2qbFU/u3A70igAVoMahSxCc7RU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772556023; c=relaxed/simple;
-	bh=LvBjiaqoRxIb2MgnS7x0QRUA73mjeEFgkzfoey0ZNwo=;
+	s=arc-20240116; t=1772556025; c=relaxed/simple;
+	bh=hkQzVbVFAY0Lw+KXpTeChxTqQv9wnktZibMANBna5X0=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=SDH01WIVACpR6NPT5QQ+XiN/W3l808gFLuwj9jsuKlV7L9gA84fPzTsoKXiNJ8QtVDxmda6XKg3EJrEKg9NGsUCDxn1JN8gWKZvYfOAK+jmDxA7FemyTrGqhg6AR6h4RHMyFpCKqCG20E+Mos9ziw9brLD2Ct7RqGNKSKnlVuzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BWSbAfb7; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=i40SEFP7o4gFtFqcTZUiLReMoq1sBM/8VjP1l0MHnOcETcZAsDL5i5NyajJ/Dlp98HZOFvfsJYrCnROybNcOlBHdBLSlZuxVGi4yTBUz3IoUSoYlqF0iBawClPBQNz8UMDmB7ihYxfeQmHyE1Bx4shaXlQd82UsnnhgwMqZPTSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LsmX74jt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BWSbAfb7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 723EDC116C6;
-	Tue,  3 Mar 2026 16:40:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LsmX74jt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECA46C116C6;
+	Tue,  3 Mar 2026 16:40:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772556023;
-	bh=LvBjiaqoRxIb2MgnS7x0QRUA73mjeEFgkzfoey0ZNwo=;
+	s=k20201202; t=1772556025;
+	bh=hkQzVbVFAY0Lw+KXpTeChxTqQv9wnktZibMANBna5X0=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=BWSbAfb7bbE5LctDvD5vZJHbyy22Fyh4I+jywv0WZc5pgtp2qWl0a4eNEXXWEcwhp
-	 TRzQ5zpR5HtIeRujshs8QB0MY+S5zdhzsenmR3+YXPKTpkzc9UGanyR5ns5qdq5Aqz
-	 NmmarAwGSnOfcD22+dM8vkpOqqaXANU3k4Kd7C0MZHbP2UGlrFI0sZecXMtbv09wob
-	 doZPyYs1hrfcUcSY5wfiz1XT/wgvvqkbXjd/tQpV4PHyzziOHvW3caW9zWExApiFiK
-	 +WdlHUaTfWFs58i8iejpkosLK1AcramJVrWdgZCWoPIiH1qpFe/n+Xunp0hMPXI3wF
-	 xxCK+Pu70xBlw==
+	b=LsmX74jtlFjI1TECLe2oIukB884C9yoFtki+N9gYhIctupO4b4ns9NxgEbGT34Ozq
+	 qIjcvbskuKh/r37YiL8/jvN24wxbZooaryAvv9rxU17JPf1MPwHR9oS4TENPhLkZ/g
+	 GXXvTTQDMfq2w5/aRXBJL0kkSX2nimO3QDj9N9GvcvrUtuF4QHCOdSRmlfbRN1Ttuw
+	 pPpPRnH8RkjBfreHIozBPbo5+tU+BmpMSzwDuWsuXEjH+zIfjx41vqxGGe3CM9SW/h
+	 I0kagDq1uaiLfksDxlz+WQHdZPkuOfmcHlHTlIutlFfdgJW3P9Pk0u5wVJSbhabROZ
+	 9e1OnEAL4UsPQ==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 02EA93808200;
-	Tue,  3 Mar 2026 16:40:26 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 7D0743808200;
+	Tue,  3 Mar 2026 16:40:27 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
@@ -37,46 +37,43 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCHv5 bpf-next 0/5] libbpf: Make optimized uprobes backward
- compatible
+Subject: Re: [PATCH v3] bpf: cpumap: add missing XDP_ABORTED handling in xdp
+ prog
+ runner
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <177255602454.1378092.12576640235442871997.git-patchwork-notify@kernel.org>
-Date: Tue, 03 Mar 2026 16:40:24 +0000
-References: <20260224103915.1369690-1-jolsa@kernel.org>
-In-Reply-To: <20260224103915.1369690-1-jolsa@kernel.org>
-To: Jiri Olsa <jolsa@kernel.org>
-Cc: andrii@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com
+ <177255602606.1378092.6497646158888477308.git-patchwork-notify@kernel.org>
+Date: Tue, 03 Mar 2026 16:40:26 +0000
+References: <20260218042924.42931-1-anandkrshawheritage@gmail.com>
+In-Reply-To: <20260218042924.42931-1-anandkrshawheritage@gmail.com>
+To: Anand Kumar Shaw <anandkrshawheritage@gmail.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org, kuba@kernel.org,
+ ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+ john.fastabend@gmail.com, sdf@fomichev.me, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, haoluo@google.com,
+ jolsa@kernel.org, linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to bpf/bpf-next.git (master)
+This patch was applied to bpf/bpf-next.git (master)
 by Alexei Starovoitov <ast@kernel.org>:
 
-On Tue, 24 Feb 2026 11:39:10 +0100 you wrote:
-> hi,
-> we can currently optimize uprobes on top of nop5 instructions,
-> so application can define USDT_NOP to nop5 and use USDT macro
-> to define optimized usdt probes.
+On Wed, 18 Feb 2026 09:59:24 +0530 you wrote:
+> cpu_map_bpf_prog_run_xdp() handles XDP_PASS, XDP_REDIRECT, and
+> XDP_DROP but is missing an XDP_ABORTED case. Without it, XDP_ABORTED
+> falls into the default case which logs a misleading "invalid XDP
+> action" warning instead of tracing the abort via trace_xdp_exception().
 > 
-> This works fine on new kernels, but could have performance penalty
-> on older kernels, that do not have the support to optimize and to
-> emulate nop5 instruction.
+> Add the missing XDP_ABORTED case with trace_xdp_exception(), matching
+> the handling already present in the skb path (cpu_map_bpf_prog_run_skb),
+> devmap (dev_map_bpf_prog_run), and the generic XDP path (do_xdp_generic).
 > 
 > [...]
 
 Here is the summary with links:
-  - [PATCHv5,bpf-next,1/5] libbpf: Add uprobe syscall feature detection
-    https://git.kernel.org/bpf/bpf-next/c/05738da0efa1
-  - [PATCHv5,bpf-next,2/5] libbpf: Add support to detect nop,nop5 instructions combo for usdt probe
-    https://git.kernel.org/bpf/bpf-next/c/41a5c7df4466
-  - [PATCHv5,bpf-next,3/5] selftests/bpf: Emit nop,nop5 instructions combo for x86_64 arch
-    https://git.kernel.org/bpf/bpf-next/c/0c178e9debc8
-  - [PATCHv5,bpf-next,4/5] selftests/bpf: Add test for checking correct nop of optimized usdt
-    https://git.kernel.org/bpf/bpf-next/c/304841967c55
-  - [PATCHv5,bpf-next,5/5] selftests/bpf: Add usdt trigger bench
-    https://git.kernel.org/bpf/bpf-next/c/0c4fc6bd6105
+  - [v3] bpf: cpumap: add missing XDP_ABORTED handling in xdp prog runner
+    https://git.kernel.org/bpf/bpf-next/c/39948c2d42b5
 
 You are awesome, thank you!
 -- 
