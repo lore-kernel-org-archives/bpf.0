@@ -1,160 +1,185 @@
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31442342CB1
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 10:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4444D390C83
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 10:05:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772532289; cv=none; b=tj47vAopjLuHPKG516X30xJ36I/FH5xjG9fnaZiRV27n2oWeK1UAHH0bwXQ3Tnphyspb4yBMM9dh/SVKXIjBTUKuhANP7Wu4Mk3lFal2gK7hzfvB2Cb5d42zmKBSly3+paHfpmfZ6hisc/QJjQHIcPJpxH98tCxsoHOq1ANPPLw=
+	t=1772532315; cv=none; b=AJChdUz5qhvZlP/2JA2l+Uw2XevljhCeHRVyf/PqZ8MWTZrIKphJfIYbVhQyMuYJOFOJhnpgS5LU++iYgPHdUaZvF0gPhXdZT0+6Y0DbeywzjJMDSO4kL1sU4O4saA64nJOPosGj3s1xHDVSaPOu8rEEcel9UTNgy+m/c1DCxbU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772532289; c=relaxed/simple;
-	bh=j8x8rSyHICY5qcHKtJbgh2Wkn2gcq92t1omfvouCwNY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rq3JOwxuecZg/PR2FoTuDTS8BF1JfEjYaj3nHvQKeMTWhINW+mDgg1BC7QGNPkSgRIvrC1n1XUfwNYs1jyOh3g06VLqwj8wleVh/lKMKPhyuGm6/NgcgO5wRLjFF6ORBe0eRjDtWzMR4BFzL3UoV1hlfcgfpQKq9ItJa6QhWTl0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zp3LHtWE; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zp3LHtWE"
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ae50a33ff8so16140615ad.3
-        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 02:04:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1772532287; x=1773137087; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UfAHCrUtdxDkRhQeZ2MUII7KbpuuMok/pw78xOx4c/E=;
-        b=Zp3LHtWEy5JRZlPE3D/tWYPg0dJztNAv2cZuWiNM+sC5ZXdDR3thyjofDAwC8uogeH
-         ltlzDBS9Rk9XX2gxJqbUlciYSjDfYsZpfyvIvX3jyQEQszcV6t6vQldfaJi9a04mRGpQ
-         g+IqbZtoedBfHGsj6CXHuEphXP0qEQENY8FDQOKIUr6NPbTqi9SlT2utpV9kdFpiIXH7
-         Serl/WejCaRVQECECjn1fqAwXV/OWqc93B3j4tNpeMH6qbJx3FIz3Ek1nmuGtaj1hwyX
-         2/rKfUqntNQdNHYplhxzLoNQ2H4JrAGMcLjFolrawycNCy58IFT242BZU0VJLRZG5pZO
-         NOwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772532287; x=1773137087;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UfAHCrUtdxDkRhQeZ2MUII7KbpuuMok/pw78xOx4c/E=;
-        b=POU6KL5Dn+I/oY2zMS81zz23Jw1AU0xV5UaHdCilsq4Pnkzr06ibvE+Wyz1H8zdri/
-         XHqgM1L1a5tTmFiu3t0kZVkE8hIJK2sIAw51IFFpEaVQcmcG2tr/CsUJii/bpVQdji8S
-         lFRUXT4kIvVTdreRhPNm6o4rx0o1ok/EAwjXwuygjL5ywYFIPOsGicWn+PpeZonhdpU5
-         uiAUxSvDYXgEb0cG7WqvTPKDxPA7/fqvBRiYcul088ETYxowDntBLlzllUEIqEqYMYie
-         I3f903eK0+/rriKqXp7+QEpBTmqYPU/Q8//5aWir99M0H1veC7GVY54UUp/O4bR4Nj2K
-         /eJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWqyF1cfZlCBdUGaJfumR+J04YY/HlqJ4h5NwWXASXBoqObw0h/lZQU5Z1/3UZ/ZQYT66Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZXg0BGHtMQL8ImMSpCqzhsTbg5p3q6qieUoHVqWf0gx5Vs+Vy
-	JabTcuyWSQYk0wJPsn83xnJrC7nqI4uwCcrcO3mWofYUxI+HFzCmc6eG
-X-Gm-Gg: ATEYQzyyBZx9AJu99cQvEoUrTISpEEVYUGjNDwhJGKPb2Q6unO3gnFP/PLKO+8ZEdNm
-	xh/g6cO2gixDpRPMxh+PXovLlQeJ43nr6b7virIHQoCcFa/glbqPzmopgBvS4TdZBJG+IjyKPvu
-	ANL5olLyC2/jXr8GJDYQakH5xLguHXIwdmpsTvnIg9xJ8WZrLrgikvIFllN2HJJn+xp5V6vNxhB
-	l1DoHhL+qVMgbc+GCToX6UzrX5frg+jAmpaGp8WqK2HpH3t4A5d/AwwAKoKpV7RgqwtIItYdvR1
-	RdNjddMUpXMT4ngyYk7GEr+i3o0k3ksuUwFLoaTR6y8RfFeASixU+UEkKPvZMRqQfu6RgaKf19n
-	8ZGKtgrxYaN5RVJBmHMkGZiKula8CFWL0HNNKakxHz3R2lqFSvoPqD0rb67eK/f2K9bvV0s09rr
-	oxDSVC17nhkdZCCrzieX1aCXngkO3Vn0pxGxMlWWlm/8eYYFK2TZ+Hdj9KUL5JD37VKr5KAK1VU
-	gAVoyPhk1y+
-X-Received: by 2002:a17:902:c951:b0:2a0:fb1c:144c with SMTP id d9443c01a7336-2ae2e3e3e93mr154800025ad.5.1772532287501;
-        Tue, 03 Mar 2026 02:04:47 -0800 (PST)
-Received: from dpc2500057.. (fsb6a9315e.tkyc502.ap.nuro.jp. [182.169.49.94])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2adfb6b5813sm166283095ad.63.2026.03.03.02.04.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Mar 2026 02:04:47 -0800 (PST)
-From: Keita Morisaki <kmta1236@gmail.com>
-To: Eric Dumazet <edumazet@google.com>,
-	Neal Cardwell <ncardwell@google.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	David Ahern <dsahern@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Kuniyuki Iwashima <kuniyu@google.com>,
-	Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Keita Morisaki <kmta1236@gmail.com>
-Subject: [PATCH net-next v2] tcp: shrink per-packet memset in __tcp_transmit_skb()
-Date: Tue,  3 Mar 2026 19:04:39 +0900
-Message-Id: <20260303100439.3172296-1-kmta1236@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1772532315; c=relaxed/simple;
+	bh=KGFR6GPIehO6zIdn2CFtuE4synSr/5rzwVcLZPCowm8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QM7pa0QGiWu6c1Tyvk0YU0T8TiKYzLA5iSsn4M9PldwtfG2Gx9CW53zXg5Yxnxey+GqdYq27DdEyWxB3kiQOU6Y3kt+mB2WYA7mw8jO9xiIgCHKAuJ3c02yrJqatRvRsTkPLlAgE3mhNdGMWRo3R4fI/YPgr7Q/aGxCGcCc+9Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vxMbU-0007do-3e; Tue, 03 Mar 2026 11:03:48 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1vxMbP-003Wd9-0b;
+	Tue, 03 Mar 2026 11:03:44 +0100
+Received: from pengutronix.de (p4ffb2dc6.dip0.t-ipconnect.de [79.251.45.198])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 23B2F4F64B1;
+	Tue, 03 Mar 2026 10:03:43 +0000 (UTC)
+Date: Tue, 3 Mar 2026 11:03:42 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Jeff Layton <jlayton@kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Dan Williams <dan.j.williams@intel.com>, Matthew Wilcox <willy@infradead.org>, 
+	Eric Biggers <ebiggers@kernel.org>, "Theodore Y. Ts'o" <tytso@mit.edu>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	David Hildenbrand <david@kernel.org>, David Howells <dhowells@redhat.com>, 
+	Paulo Alcantara <pc@manguebit.org>, Andreas Dilger <adilger.kernel@dilger.ca>, 
+	Jan Kara <jack@suse.com>, Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>, 
+	Trond Myklebust <trondmy@kernel.org>, Anna Schumaker <anna@kernel.org>, 
+	Chuck Lever <chuck.lever@oracle.com>, NeilBrown <neil@brown.name>, 
+	Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, 
+	Steve French <sfrench@samba.org>, Ronnie Sahlberg <ronniesahlberg@gmail.com>, 
+	Shyam Prasad N <sprasad@microsoft.com>, Bharath SM <bharathsm@microsoft.com>, 
+	Alexander Aring <alex.aring@gmail.com>, Ryusuke Konishi <konishi.ryusuke@gmail.com>, 
+	Viacheslav Dubeyko <slava@dubeyko.com>, Eric Van Hensbergen <ericvh@kernel.org>, 
+	Latchesar Ionkov <lucho@ionkov.net>, Dominique Martinet <asmadeus@codewreck.org>, 
+	Christian Schoenebeck <linux_oss@crudebyte.com>, David Sterba <dsterba@suse.com>, 
+	Marc Dionne <marc.dionne@auristor.com>, Ian Kent <raven@themaw.net>, 
+	Luis de Bethencourt <luisbg@kernel.org>, Salah Triki <salah.triki@gmail.com>, 
+	"Tigran A. Aivazian" <aivazian.tigran@gmail.com>, Ilya Dryomov <idryomov@gmail.com>, 
+	Alex Markuze <amarkuze@redhat.com>, Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu, 
+	Nicolas Pitre <nico@fluxnic.net>, Tyler Hicks <code@tyhicks.com>, 
+	Amir Goldstein <amir73il@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Yangtao Li <frank.li@vivo.com>, 
+	Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>, David Woodhouse <dwmw2@infradead.org>, 
+	Richard Weinberger <richard@nod.at>, Dave Kleikamp <shaggy@kernel.org>, 
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>, 
+	Joseph Qi <joseph.qi@linux.alibaba.com>, Mike Marshall <hubcap@omnibond.com>, 
+	Martin Brandenburg <martin@omnibond.com>, Miklos Szeredi <miklos@szeredi.hu>, 
+	Anders Larsen <al@alarsen.net>, Zhihao Cheng <chengzhihao1@huawei.com>, 
+	Damien Le Moal <dlemoal@kernel.org>, Naohiro Aota <naohiro.aota@wdc.com>, 
+	Johannes Thumshirn <jth@kernel.org>, John Johansen <john.johansen@canonical.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Mimi Zohar <zohar@linux.ibm.com>, 
+	Roberto Sassu <roberto.sassu@huawei.com>, Dmitry Kasatkin <dmitry.kasatkin@gmail.com>, 
+	Eric Snowberg <eric.snowberg@oracle.com>, Fan Wu <wufan@kernel.org>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Casey Schaufler <casey@schaufler-ca.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	Eric Dumazet <edumazet@google.com>, Kuniyuki Iwashima <kuniyu@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Willem de Bruijn <willemb@google.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Simon Horman <horms@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	"Darrick J. Wong" <djwong@kernel.org>, Martin Schiller <ms@dev.tdt.de>, Eric Paris <eparis@redhat.com>, 
+	Joerg Reuter <jreuter@yaina.de>, Marcel Holtmann <marcel@holtmann.org>, 
+	Johan Hedberg <johan.hedberg@gmail.com>, Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+	Oliver Hartkopp <socketcan@hartkopp.net>, David Ahern <dsahern@kernel.org>, 
+	Neal Cardwell <ncardwell@google.com>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Remi Denis-Courmont <courmisch@gmail.com>, 
+	Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>, Xin Long <lucien.xin@gmail.com>, 
+	Magnus Karlsson <magnus.karlsson@intel.com>, Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, nvdimm@lists.linux.dev, fsverity@lists.linux.dev, 
+	linux-mm@kvack.org, netfs@lists.linux.dev, linux-ext4@vger.kernel.org, 
+	linux-f2fs-devel@lists.sourceforge.net, linux-nfs@vger.kernel.org, linux-cifs@vger.kernel.org, 
+	samba-technical@lists.samba.org, linux-nilfs@vger.kernel.org, v9fs@lists.linux.dev, 
+	linux-afs@lists.infradead.org, autofs@vger.kernel.org, ceph-devel@vger.kernel.org, 
+	codalist@coda.cs.cmu.edu, ecryptfs@vger.kernel.org, linux-mtd@lists.infradead.org, 
+	jfs-discussion@lists.sourceforge.net, ntfs3@lists.linux.dev, ocfs2-devel@lists.linux.dev, 
+	devel@lists.orangefs.org, linux-unionfs@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	linux-security-module@vger.kernel.org, linux-integrity@vger.kernel.org, selinux@vger.kernel.org, 
+	amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org, 
+	linaro-mm-sig@lists.linaro.org, netdev@vger.kernel.org, linux-perf-users@vger.kernel.org, 
+	linux-fscrypt@vger.kernel.org, linux-xfs@vger.kernel.org, linux-hams@vger.kernel.org, 
+	linux-x25@vger.kernel.org, audit@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+	linux-can@vger.kernel.org, linux-sctp@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2 004/110] net: change sock.sk_ino and sock_i_ino() to
+ u64
+Message-ID: <20260303-tall-fictional-tench-7c5f66-mkl@pengutronix.de>
+X-AI: stop_reason: "refusal"
+References: <20260302-iino-u64-v2-0-e5388800dae0@kernel.org>
+ <20260302-iino-u64-v2-4-e5388800dae0@kernel.org>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="w7xntzjnabubqe7a"
+Content-Disposition: inline
+In-Reply-To: <20260302-iino-u64-v2-4-e5388800dae0@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: bpf@vger.kernel.org
 
-Use struct_group() to group the three fields in tcp_out_options that are
-read unconditionally by tcp_options_write() and bpf_skops_write_hdr_opt()
-(mss, bpf_opt_len, num_sack_blocks), then replace the full-struct memset
-with a targeted memset of only that group.
 
-struct tcp_out_options is 40 bytes without MPTCP and 96 bytes with
-CONFIG_MPTCP=y (typical distro config). Every remaining field is either
-assigned before first use by tcp_established_options()/tcp_syn_options(),
-or gated behind its OPTION_* flag in tcp_options_write(). This memset
-runs on every transmitted TCP packet, so shrinking it from 96 (or 40)
-bytes to 4 bytes reduces per-packet overhead on the hot path.
+--w7xntzjnabubqe7a
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 004/110] net: change sock.sk_ino and sock_i_ino() to
+ u64
+MIME-Version: 1.0
 
-Assembly comparison (x86-64, GCC 13, CONFIG_MPTCP=y):
+On 02.03.2026 15:23:48, Jeff Layton wrote:
+> inode->i_ino is being converted to a u64. sock.sk_ino (which caches the
+> inode number) must also be widened to avoid truncation on 32-bit
+> architectures where unsigned long is only 32 bits.
+>
+> Change sk_ino from unsigned long to u64, and update the return type
+> of sock_i_ino() to match. Fix all format strings that print the
+> result of sock_i_ino() (%lu -> %llu), and widen the intermediate
+> variables and function parameters in the diag modules that were
+> using int to hold the inode number.
+>
+> Note that the UAPI socket diag structures (inet_diag_msg.idiag_inode,
+> unix_diag_msg.udiag_ino, etc.) are all __u32 and cannot be changed
+> without breaking the ABI. The assignments to those fields will
+> silently truncate, which is the existing behavior.
+>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  net/can/bcm.c                | 2 +-
 
-  Before: rep stos zeroing 96 bytes (5 instructions, 12 8-byte stores)
-  After:  movl $0x0 zeroing 4 bytes (1 instruction, 1 store)
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for net/can
 
-Also add opts->options = 0 at the top of tcp_syn_options(), which
-already used |= without a prior clear. tcp_established_options() already
-clears opts->options at its top.
+regards,
+Marc
 
-Signed-off-by: Keita Morisaki <kmta1236@gmail.com>
----
- net/ipv4/tcp_output.c | 15 +++++++++++----
- 1 file changed, 11 insertions(+), 4 deletions(-)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index 326b58ff1118d..63ee037f46e50 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -429,14 +429,19 @@ static void smc_options_write(__be32 *ptr, u16 *options)
- }
- 
- struct tcp_out_options {
-+	/* Following group is cleared in __tcp_transmit_skb() */
-+	struct_group(cleared,
-+		u16 mss;		/* 0 to disable */
-+		u8 bpf_opt_len;		/* length of BPF hdr option */
-+		u8 num_sack_blocks;	/* number of SACK blocks to include */
-+	);
-+
-+	/* Caution: following fields are not cleared in __tcp_transmit_skb() */
- 	u16 options;		/* bit field of OPTION_* */
--	u16 mss;		/* 0 to disable */
- 	u8 ws;			/* window scale, 0 to disable */
--	u8 num_sack_blocks;	/* number of SACK blocks to include */
- 	u8 num_accecn_fields:7,	/* number of AccECN fields needed */
- 	   use_synack_ecn_bytes:1; /* Use synack_ecn_bytes or not */
- 	u8 hash_size;		/* bytes in hash_location */
--	u8 bpf_opt_len;		/* length of BPF hdr option */
- 	__u8 *hash_location;	/* temporary pointer, overloaded */
- 	__u32 tsval, tsecr;	/* need to include OPTION_TS */
- 	struct tcp_fastopen_cookie *fastopen_cookie;	/* Fast open cookie */
-@@ -965,6 +970,8 @@ static unsigned int tcp_syn_options(struct sock *sk, struct sk_buff *skb,
- 	struct tcp_fastopen_request *fastopen = tp->fastopen_req;
- 	bool timestamps;
- 
-+	opts->options = 0;
-+
- 	/* Better than switch (key.type) as it has static branches */
- 	if (tcp_key_is_md5(key)) {
- 		timestamps = false;
-@@ -1549,7 +1556,7 @@ static int __tcp_transmit_skb(struct sock *sk, struct sk_buff *skb,
- 
- 	inet = inet_sk(sk);
- 	tcb = TCP_SKB_CB(skb);
--	memset(&opts, 0, sizeof(opts));
-+	memset(&opts.cleared, 0, sizeof(opts.cleared));
- 
- 	tcp_get_current_key(sk, &key);
- 	if (unlikely(tcb->tcp_flags & TCPHDR_SYN)) {
+--w7xntzjnabubqe7a
+Content-Type: application/pgp-signature; name="signature.asc"
 
-base-commit: af4e9ef3d78420feb8fe58cd9a1ab80c501b3c08
--- 
-2.34.1
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYKAB0WIQSl+MghEFFAdY3pYJLMOmT6rpmt0gUCaaax+QAKCRDMOmT6rpmt
+0hl7AQCzPgPTWe6ol8KwtKBDfHnqkx4Ku1cIiwlQY4Hnx5jz1wD5ASVd5abGOb50
+lF4hQNIazRvyjJwKRF+va5JwX/SN2go=
+=y8vr
+-----END PGP SIGNATURE-----
+
+--w7xntzjnabubqe7a--
