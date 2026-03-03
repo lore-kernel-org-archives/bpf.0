@@ -1,115 +1,66 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6763E38C427;
-	Tue,  3 Mar 2026 09:25:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 784AA30B517
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 09:28:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772529949; cv=none; b=cl0MyZaQ7D3fhVrR8Ph+ruKEol/bOyE2VlWKTYro+qmRjGi7u98EElob9GbBCA0q/dhJNyxq0yje/jghp3kYYLcOHh9ikbPFtP8DktpDyQj4Lj/2PIUoL3nHmU1ghetepqYmVndXx5rueuuDbDtWdDNsnEID4xD3OPTTHvWJZ9E=
+	t=1772530117; cv=none; b=A9+XFLOm5aSMll7+N0f3Fpy7zBHbh4f/KBCo2MJAiR/6zAx4tGslALgh9YG33j1MnlDiN4MlyDLLRn/yfMs/uXvIN0cLNaceX14wg3CoCVP8/2g8rfA3tRsM2Gy5jVIEnwWZ+JTQEFQpDo8b1iIN+l4ZBTvff7ofRmt+Ynt2lCo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772529949; c=relaxed/simple;
-	bh=2z8ZSyC5A7LLCOOWT8EV9tuw/GmjD3s5IHXtdve+8Ug=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=P8TrYe1l4Rqzw6e+FGY5lYwGRNtIjL6PQScOe4Of3Ck4x0sDbryzihBjHyBnpstSC1XxX+QPTTeA5AzEUc9crfM8MYtQN8b0y1VHGfsqbh2e4T59NW5mVYyYu/2ZFlaeyr1g5+zC+iS8EibhmskNrrpBrMPy2uHWFkl4boqJZXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZeyjEFQM; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1772530117; c=relaxed/simple;
+	bh=R1R1fQrIrSyavfFFKN8R4ZuBgs0ZJQl9FGfoSBPnZm0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Jr1hOR5IHfUTmzF6QLFJsoywhu8To1RZIACWIXDbnFC2DJ/k47C5XcxW7+p1gVBd0ixRoafqCLEJ6pfp9Z27rHsDActE8BYJjRtxUadC6nFBKlgrmybGpT/KGOyfCRdKuaYC8hj4mNE70kfbIOV7HvelAikpeEQNrEqVIJxif/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nAdP+e3n; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZeyjEFQM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56996C2BC87;
-	Tue,  3 Mar 2026 09:25:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nAdP+e3n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0322DC116C6;
+	Tue,  3 Mar 2026 09:28:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772529948;
-	bh=2z8ZSyC5A7LLCOOWT8EV9tuw/GmjD3s5IHXtdve+8Ug=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZeyjEFQMukw3TU8d5tOoDLzd3ODMTrHFhlOmHqLJBRHk1ybfs/HzLXRzD8+RhvdyS
-	 EIcansrNtvHYscxkbudam4Ys/cs/RV0zLEi9KxRvWw8kk5gGWe+GcVCvChwK3EOfs6
-	 RAK2QT394GtuMA4811HyKgLz7/60l9UPzRKs6xxDBjej/YaRRdlAB+fM+gUx8gHe2V
-	 YceWVCmdeOuRCGLYI07ztlafMcO2Lt766kX5V99XTMKJZAO1E8OQ/YclLqWthx++6F
-	 ifn/8lgvE0DIc256/bKLBh2/wLPLecfGmWkVzxUP7d3HN5wb83KcKnd08caPKt2nk+
-	 5ejoQlh/diXAg==
-Date: Tue, 3 Mar 2026 10:25:46 +0100
-From: Lorenzo Bianconi <lorenzo@kernel.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Felix Fietkau <nbd@nbd.name>, Sean Wang <sean.wang@mediatek.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Paolo Valerio <pvalerio@redhat.com>, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, bpf@vger.kernel.org
-Subject: Re: [PATCH net] net: ethernet: mtk_eth_soc: Reset prog ptr to NULL
- in case of error in mtk_xdp_setup()
-Message-ID: <aaapGn50iQ54jl8t@lore-desk>
-References: <20260227-mtk-xdp-prog-ptr-fix-v1-1-b73d7588b645@kernel.org>
- <20260302182909.06de1942@kernel.org>
+	s=k20201202; t=1772530117;
+	bh=R1R1fQrIrSyavfFFKN8R4ZuBgs0ZJQl9FGfoSBPnZm0=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date:From;
+	b=nAdP+e3n0VacGX0ggvA2daOJEB5e+2bW95K4pdLFQ7c/S1vGKsRpCAszHoLeAEWw9
+	 7+NcG4+Tpb/WXQVGv1WaPkA4xnGXjfMVs9RPPnw9+Z/ty4+nnoNar3FGbgbJcyt8rh
+	 Dv1KGk86ZuRxk6snz4TALsqwCP3YwsqD0ZO9xcsWT0XhLViz8JyIXhsp02EH09RsgB
+	 0/a9QehnNk3Yq/E6CGr+HIYMdNr7qrOCuWbat4i+hbgA3+cGyzLqTQ4imdFFs74qO7
+	 5V/XlWyADueCmHUAXtjVTtF8NswzHzV+yG+y2sWPjnTcFJcmLOHjOl0Rhbc/UxMMk2
+	 oIgTs/risX/MA==
+Content-Type: multipart/mixed; boundary="===============0783967128459916217=="
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yCyu0DIjJWfjcGTH"
-Content-Disposition: inline
-In-Reply-To: <20260302182909.06de1942@kernel.org>
+Message-Id: <73e7c1b535284b3b65b44534db868fd5d8cee5530821278c07b8c64a46ce79dc@mail.kernel.org>
+In-Reply-To: <851F26B7D9E91336+20260303083626.1107524-1-xulang@uniontech.com>
+References: <851F26B7D9E91336+20260303083626.1107524-1-xulang@uniontech.com>
+Subject: Re: [PATCH bpf v4] bpf: fix: Race condition in bpf_trampoline_unlink_cgroup_shim
+From: bot+bpf-ci@kernel.org
+To: xulang@uniontech.com,martin.lau@linux.dev
+Cc: andrii@kernel.org,ast@kernel.org,bot+bpf-ci@kernel.org,bpf@vger.kernel.org,clm@meta.com,daniel@iogearbox.net,dddddd@hust.edu.cn,dzm91@hust.edu.cn,eddyz87@gmail.com,hust-os-kernel-patches@googlegroups.com,ihor.solodrai@linux.dev,kaiyanm@hust.edu.cn,martin.lau@kernel.org,sdf@fomichev.me,xulang@uniontech.com,yonghong.song@linux.dev,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue,  3 Mar 2026 09:28:37 +0000 (UTC)
 
+--===============0783967128459916217==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
---yCyu0DIjJWfjcGTH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> bpf: fix: Race condition in bpf_trampoline_unlink_cgroup_shim
 
-> On Fri, 27 Feb 2026 16:52:11 +0100 Lorenzo Bianconi wrote:
-> > --- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-> > +++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-> > @@ -3751,8 +3751,16 @@ static int mtk_xdp_setup(struct net_device *dev,=
- struct bpf_prog *prog,
-> >  	if (old_prog)
-> >  		bpf_prog_put(old_prog);
-> > =20
-> > -	if (netif_running(dev) && need_update)
-> > -		return mtk_open(dev);
-> > +	if (netif_running(dev) && need_update) {
-> > +		int err;
-> > +
-> > +		err =3D mtk_open(dev);
-> > +		if (err) {
-> > +			rcu_assign_pointer(eth->prog, NULL);
-> > +
-> > +			return err;
-> > +		}
-> > +	}
-> > =20
-> >  	return 0;
->=20
-> Maybe there's something special here, not obvious without context,
-> but why are we setting eth->prog to NULL rather than old_prog?
-> At the very least the commit message needs to explain..
+The subject references bpf_trampoline_unlink_cgroup_shim, but the
+change is in bpf_trampoline_link_cgroup_shim. The commit body
+correctly identifies the fix location:
 
-Reviewing the code I agree, we can just restore the old program, moving
-bpf_prog_put() below the error condition. I will fix it in v2.
+> To fix this:
+>    Add an atomic non-zero check in `bpf_trampoline_link_cgroup_shim`.
 
-Regards,
-Lorenzo
+Should the subject say bpf_trampoline_link_cgroup_shim instead?
 
-> --=20
-> pw-bot: cr
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
---yCyu0DIjJWfjcGTH
-Content-Type: application/pgp-signature; name=signature.asc
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCaaapGgAKCRA6cBh0uS2t
-rIStAP4k8YfdaIeG/OvYD60XFhFefPws3OFtIzDTK6JLsChQ5AD/eA9wJQv6eO5c
-T2X7PaXMz/PBi9Y7g9wayveHv1am8gc=
-=ljTC
------END PGP SIGNATURE-----
-
---yCyu0DIjJWfjcGTH--
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22615516146
+--===============0783967128459916217==--
