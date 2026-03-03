@@ -1,80 +1,35 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76A39387584;
-	Tue,  3 Mar 2026 23:12:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCBA351C11
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 23:30:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772579532; cv=none; b=PZc1cG1LNPWDydkwcvdIKtPg1u6fn3i1z2Y9aoMNuwnJ5tFp1gQgahwtS3ow1sQVTchRnObAE2S/aznuA7OY5o2bXYY/mnKibTX2vPwSg5JLHGTofdn1Dlm4KG+XTyCik7uhqDq2mD7pThdFT0KvTUKx65eQw2gG+tv9v/8naQo=
+	t=1772580605; cv=none; b=oaPdRIZ5syIyGzq3yiSGfxt6KSWm45+NqTROu6OrLWTOhPgr9Ce2wTWqzb7vN+2WhUQPAKncqm2RVVIEwUw3FWw0ZgpKTFihJhFj3aNQ3jbw5vgKmzqvnbH0n3CJiIbDCGMmosXnqq3RKwzDPaGaqH5vpardcCywMWVeVtbdLaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772579532; c=relaxed/simple;
-	bh=Wq6z70rDqWKXpei+tfRZs6qyswbQ1EF6TzjhqWkJwME=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hBy3O/w6oYPoVW3B3fmaehsI0T+Nbz/bGQoQrofqXDj5L0BDv5xy+0UbJ0491NTQMHDAKRqu3P86KbRkskfPtlHnqTIsAbZxHNd7VMNGGx4P3DAoCyu7qdq8OXffrrKK6wXFI3TKl4lZibg2BHMOyEKWHHlhrFqWBv/HtO0R+5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ktl4iUwS; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1772580605; c=relaxed/simple;
+	bh=h1+DZye/6A7Rm2G6LemtJuFPGjO+0U/hnnGySl+Qvnk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=KfH8pL1De1LXuDmlXdQLYwMKEBWugtx9IVvuqG+/GR830xc/WgHUd86/UtIhOsburDTpD6SquW7NZPFJUM8QitoYui6JNFBzPArR6YlT8DK2bSCwqWCM1e+CE37linMYjqq143YBh9rn2FKYKzJQhJPlYf02wL7rCbAO8/HcjmA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ilBnIauH; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ktl4iUwS"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1772579528; x=1804115528;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Wq6z70rDqWKXpei+tfRZs6qyswbQ1EF6TzjhqWkJwME=;
-  b=Ktl4iUwSZa4lbrb/KGtvG1NXr9W+ZE0aVF32FojUsRej8FaM0eOPqohQ
-   lgXeXCTFJJeTVLuLPG8GJjG3yzLnL262ZHdLuTRPdNwGt6gPqnXDhFml0
-   fFiIyNcDf3HZ9q6WlR7jDw455gtj3ohF7sczVLylvtQgx6iZQGWX4qrpq
-   wEYn23jGiuyCCtfED852gdpUETQso2ImsWcoc5M1Kvxe/+nSOtUQSwNnH
-   iKsNhR6zps1hafUC5x2MKvTa9+Yh+A2DktILS5o2ZoNsYY0J/1QJ/a2zB
-   LQCWNtt8ZxkTFeBQu+LhkfEER5BXzo9rGE/kZ/OXZ1p9J+EsaPOc9OSVO
-   w==;
-X-CSE-ConnectionGUID: mGddAIymQqWvKFBJDuAdIA==
-X-CSE-MsgGUID: XJoWs3teSXmEOd0xJT+C3Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11718"; a="77238846"
-X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="77238846"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 15:12:00 -0800
-X-CSE-ConnectionGUID: OyNcPQ9BS8qZgKlMEkH+hg==
-X-CSE-MsgGUID: KEogq1ZMRwagKDey1SA2KA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.21,322,1763452800"; 
-   d="scan'208";a="248633822"
-Received: from anguy11-upstream.jf.intel.com ([10.166.9.133])
-  by orviesa002.jf.intel.com with ESMTP; 03 Mar 2026 15:12:00 -0800
-From: Tony Nguyen <anthony.l.nguyen@intel.com>
-To: davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	andrew+netdev@lunn.ch,
-	netdev@vger.kernel.org
-Cc: Vivek Behera <vivek.behera@siemens.com>,
-	anthony.l.nguyen@intel.com,
-	vitaly.lifshits@intel.com,
-	dima.ruinskiy@intel.com,
-	vinicius.gomes@intel.com,
-	maciej.fijalkowski@intel.com,
-	magnus.karlsson@intel.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	sdf@fomichev.me,
-	bpf@vger.kernel.org,
-	richardcochran@gmail.com,
-	Jacob Keller <jacob.keller@intel.com>,
-	Aleksandr loktinov <aleksandr.loktionov@intel.com>,
-	Piotr Kwapulinski <piotr.kwapulinski@intel.com>,
-	Song Yoong Siang <yoong.siang.song@intel.com>,
-	Avigail Dahan <avigailx.dahan@intel.com>
-Subject: [PATCH net 8/8] igc: Fix trigger of incorrect irq in igc_xsk_wakeup function
-Date: Tue,  3 Mar 2026 15:11:54 -0800
-Message-ID: <20260303231155.2895065-9-anthony.l.nguyen@intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20260303231155.2895065-1-anthony.l.nguyen@intel.com>
-References: <20260303231155.2895065-1-anthony.l.nguyen@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ilBnIauH"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EED3BC116C6;
+	Tue,  3 Mar 2026 23:30:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772580605;
+	bh=h1+DZye/6A7Rm2G6LemtJuFPGjO+0U/hnnGySl+Qvnk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=ilBnIauH4+07l09L+yvVjTGSplMnfC9a0tR1i8ZMygexlb2BEmc11TR/B280RtlHM
+	 FAfMkib2mCv+LWN5g1aOzdy6UWX2rFKOnC9nESKd82El/Dy0hGD6e/Ioq419EUlO+Q
+	 9hC4z5UQ4deHrPMmF7WjmAEuWC1KMeWB6tF5w03N4atYPQpXqSyFR+aVez1JJiDd+t
+	 kPsvyRgaAJLsp30inaAXaSQ6dWuz2BcELA6bG3WM9LW6rZRN44yf81nkhgBuoIU0UF
+	 c6BqCDX8JpY7+OMvYD3o7c1cpDcby6htGQtGyX/LvEA87jdrkJsMh2aclvy8XGMXUj
+	 Ky/NO/l9AyEwg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 3FE5B3808200;
+	Tue,  3 Mar 2026 23:30:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -82,114 +37,46 @@ List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v4] bpf: fix: Race condition in
+ bpf_trampoline_unlink_cgroup_shim
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <177258060605.1514859.8771485378779224297.git-patchwork-notify@kernel.org>
+Date: Tue, 03 Mar 2026 23:30:06 +0000
+References: <851F26B7D9E91336+20260303083626.1107524-1-xulang@uniontech.com>
+In-Reply-To: <851F26B7D9E91336+20260303083626.1107524-1-xulang@uniontech.com>
+To: xulang <xulang@uniontech.com>
+Cc: martin.lau@linux.dev, andrii@kernel.org, ast@kernel.org,
+ bot+bpf-ci@kernel.org, bpf@vger.kernel.org, clm@meta.com,
+ daniel@iogearbox.net, dddddd@hust.edu.cn, dzm91@hust.edu.cn,
+ eddyz87@gmail.com, hust-os-kernel-patches@googlegroups.com,
+ ihor.solodrai@linux.dev, kaiyanm@hust.edu.cn, martin.lau@kernel.org,
+ sdf@fomichev.me, yonghong.song@linux.dev
 
-From: Vivek Behera <vivek.behera@siemens.com>
+Hello:
 
-This patch addresses the issue where the igc_xsk_wakeup function
-was triggering an incorrect IRQ for tx-0 when the i226 is configured
-with only 2 combined queues or in an environment with 2 active CPU cores.
-This prevented XDP Zero-copy send functionality in such split IRQ
-configurations.
+This patch was applied to bpf/bpf.git (master)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-The fix implements the correct logic for extracting q_vectors saved
-during rx and tx ring allocation and utilizes flags provided by the
-ndo_xsk_wakeup API to trigger the appropriate IRQ.
+On Tue,  3 Mar 2026 16:36:26 +0800 you wrote:
+> From: Lang Xu <xulang@uniontech.com>
+> 
+> The root cause of this bug is that when `bpf_link_put` reduces the
+> refcount of `shim_link->link.link` to zero, the resource is considered
+> released but may still be referenced via `tr->progs_hlist` in
+> `cgroup_shim_find`. The actual cleanup of `tr->progs_hlist` in
+> `bpf_shim_tramp_link_release` is deferred. During this window, another
+> process can cause a use-after-free via `bpf_trampoline_link_cgroup_shim`.
+> 
+> [...]
 
-Fixes: fc9df2a0b520 ("igc: Enable RX via AF_XDP zero-copy")
-Fixes: 15fd021bc427 ("igc: Add Tx hardware timestamp request for AF_XDP zero-copy packet")
-Signed-off-by: Vivek Behera <vivek.behera@siemens.com>
-Reviewed-by: Jacob Keller <jacob.keller@intel.com>
-Reviewed-by: Aleksandr loktinov <aleksandr.loktionov@intel.com>
-Reviewed-by: Piotr Kwapulinski <piotr.kwapulinski@intel.com>
-Reviewed-by: Song Yoong Siang <yoong.siang.song@intel.com>
-Tested-by: Avigail Dahan <avigailx.dahan@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
----
- drivers/net/ethernet/intel/igc/igc_main.c | 34 ++++++++++++++++-------
- drivers/net/ethernet/intel/igc/igc_ptp.c  |  3 +-
- 2 files changed, 26 insertions(+), 11 deletions(-)
+Here is the summary with links:
+  - [bpf,v4] bpf: fix: Race condition in bpf_trampoline_unlink_cgroup_shim
+    https://git.kernel.org/bpf/bpf/c/56145d237385
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index 27e5c2109138..b2e8d0c0f827 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -6906,28 +6906,29 @@ static int igc_xdp_xmit(struct net_device *dev, int num_frames,
- 	return nxmit;
- }
- 
--static void igc_trigger_rxtxq_interrupt(struct igc_adapter *adapter,
--					struct igc_q_vector *q_vector)
-+static u32 igc_sw_irq_prep(struct igc_q_vector *q_vector)
- {
--	struct igc_hw *hw = &adapter->hw;
- 	u32 eics = 0;
- 
--	eics |= q_vector->eims_value;
--	wr32(IGC_EICS, eics);
-+	if (!napi_if_scheduled_mark_missed(&q_vector->napi))
-+		eics = q_vector->eims_value;
-+
-+	return eics;
- }
- 
- int igc_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
- {
- 	struct igc_adapter *adapter = netdev_priv(dev);
--	struct igc_q_vector *q_vector;
-+	struct igc_hw *hw = &adapter->hw;
- 	struct igc_ring *ring;
-+	u32 eics = 0;
- 
- 	if (test_bit(__IGC_DOWN, &adapter->state))
- 		return -ENETDOWN;
- 
- 	if (!igc_xdp_is_enabled(adapter))
- 		return -ENXIO;
--
-+	/* Check if queue_id is valid. Tx and Rx queue numbers are always same */
- 	if (queue_id >= adapter->num_rx_queues)
- 		return -EINVAL;
- 
-@@ -6936,9 +6937,22 @@ int igc_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
- 	if (!ring->xsk_pool)
- 		return -ENXIO;
- 
--	q_vector = adapter->q_vector[queue_id];
--	if (!napi_if_scheduled_mark_missed(&q_vector->napi))
--		igc_trigger_rxtxq_interrupt(adapter, q_vector);
-+	if (flags & XDP_WAKEUP_RX)
-+		eics |= igc_sw_irq_prep(ring->q_vector);
-+
-+	if (flags & XDP_WAKEUP_TX) {
-+		/* If IGC_FLAG_QUEUE_PAIRS is active, the q_vector
-+		 * and NAPI is shared between RX and TX.
-+		 * If NAPI is already running it would be marked as missed
-+		 * from the RX path, making this TX call a NOP
-+		 */
-+		ring = adapter->tx_ring[queue_id];
-+		eics |= igc_sw_irq_prep(ring->q_vector);
-+	}
-+
-+	if (eics)
-+		/* Cause software interrupt */
-+		wr32(IGC_EICS, eics);
- 
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/intel/igc/igc_ptp.c b/drivers/net/ethernet/intel/igc/igc_ptp.c
-index 7aae83c108fd..44ee19386766 100644
---- a/drivers/net/ethernet/intel/igc/igc_ptp.c
-+++ b/drivers/net/ethernet/intel/igc/igc_ptp.c
-@@ -550,7 +550,8 @@ static void igc_ptp_free_tx_buffer(struct igc_adapter *adapter,
- 		tstamp->buffer_type = 0;
- 
- 		/* Trigger txrx interrupt for transmit completion */
--		igc_xsk_wakeup(adapter->netdev, tstamp->xsk_queue_index, 0);
-+		igc_xsk_wakeup(adapter->netdev, tstamp->xsk_queue_index,
-+			       XDP_WAKEUP_TX);
- 
- 		return;
- 	}
+You are awesome, thank you!
 -- 
-2.47.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
