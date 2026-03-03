@@ -1,155 +1,156 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009CF29A2;
-	Tue,  3 Mar 2026 07:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC8E3803D6
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 07:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772523953; cv=none; b=miiqKOB5JmsEtNQiVywhXbGRlGGxPtQKnSxb239gJ8Saz8SFpniu2QckQ94Fy+ejcyao7L7/Lb4co+P29BHxdJjMadRGU2P3KqANGyAmCyWiCacohFL1/SO9VXOP63MUnPCbuKEMUY9MPkAQru6SXOF7gUnqVrzf9o7WMxXfiaE=
+	t=1772524143; cv=none; b=ACEzLbktnkHp4VpTFMgkLVydpypUaWfQ7QRfOzGo0BOluK5foKHTpe924DS/l+1E8GwuNL9DlAiP2iEdyud4B0mYWuhL0CuNj/+JmE53OYQjSuJp0L3YV35V4By0/Ji/4TXZLYYQAG+hy8sEA0jtEp6LjAQVrjIowZUwS7OYfg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772523953; c=relaxed/simple;
-	bh=B9KK+5v5qrWO0rkxw5Wv/C37WTrWF8ca7NsgsFukjUQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fmVKE4mpg+ZmUvTrSYPeP1j07i82xQfM9qgsdVFoSwaByzgvjm2BmGs/xHWFCcoAaspJGCA3sKOV5S2eXwX63g8rJ/L2JKITWeRPyKXUjUGc4veqg8FkbY4QEDRE8p3FmO/zLcHHrjP5nz3/AU6UMdo779/WkIo9ZLlvep6nbbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=cYqVJvzD; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1772524143; c=relaxed/simple;
+	bh=/EwBHS+MulbJHdk14Rvjdo5dRfJFU8A5WHKgAg3MG3Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=d2mfnf1Em9JaWDZ5J6cshfzhOwSIIZROgYxqktKvDYoyAvr32XwxLln5bXGVPA/OsGcPxRfSO83PMoFcIer2Pmx5UkitV2ud07tf+b+nY5AyNyaN8hNq3Feh3PIFVj/h2DFyeB3AHtOawSczJc5jsxUTr0IYUIy9KdDDKpqxW0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QV4mZsgC; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="cYqVJvzD"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=oy
-	8MJl1zCIP4TUwaFErabER2ZVFoaj+u6/XpWLhh5Xs=; b=cYqVJvzDKLJi72s+8i
-	FsUdN3c6xP88AZllnpdlK06xxEB5QgQa3cH4IsKHqfKkCOiOvnnshtR1rvczVECx
-	k+ammi9qriQq2cCTkrW5pAHy0+rkUwTlwHzcI0eyuhUHMqgHsXTJpAcTankfhvFE
-	mQgxx52NAg1zT4eijugStum0g=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAXXjhXkaZpm2IBPA--.46718S3;
-	Tue, 03 Mar 2026 15:44:27 +0800 (CST)
-From: Feng Yang <yangfeng59949@163.com>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	posk@google.com,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com
-Cc: bpf@vger.kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QV4mZsgC"
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-c6e3e4e7388so2121165a12.1
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 23:49:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772524140; x=1773128940; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NB1o9BGlkqLq/oNw4ApXQsql6klhqpWH7aXO0uKuMWk=;
+        b=QV4mZsgCQdV46iKkv1BlcLaK/yjp4NrlUHot2tFGC6OorwWR9zecipTBUVSx/K3aut
+         NpUo27OwOOgCsy+G/C8/Z9KzOe3bUAGPEQhVDY4epzN/ZGoOY70wdnFsQomDgmVW3ZjF
+         BfP4mg9xloQ5lWEMJW0jnYNIntEs18GWyoZm79T6BdtWHfVnLnaS3K3JJ5XzpOIuhCT4
+         FymccYK1GOpjbgHHa/iiP+T009Vp/lOjDEbpAkVibvoxbHzUfp1CH9csotTUL2tN48k8
+         mJVskD2y6o6DcfyzjgT1lMX/oob2lyCgAvJUvOCThGffBSCyBeIAjzA1KaeCLYrdaGTT
+         VIqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772524140; x=1773128940;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NB1o9BGlkqLq/oNw4ApXQsql6klhqpWH7aXO0uKuMWk=;
+        b=YoaIqh1vZ/yJusHM20/pYWZdhKsdnk7j8zBFdQfk42DAtHAbt+WR7sL5QtITOouPFN
+         OWsVvWHEPxxhlSqV+zkSl5jf2zlSnwJPTe0YPXBPIgCM6QAz8ZpHeC8rpLbreWF2orJ2
+         k9n9/J/W9ITt0Qum0y6LRmGw/kTXEdNvainY/RYR7ZpvWyExF0cVyoeH/gfK/qyhqXko
+         /psvUTob4S0G2KWqZjzwX3zU3bF3O/mJHcezUBsy7Sg8A/whyVIJROqaxQWMeY+QcPUW
+         9AP4y7BTRcKPTBL5F3sad+a5dcNyJfZDIU4RsqkQ2j4qhGNtXtgIrSgas8nYwgtyjq2v
+         Sy3g==
+X-Forwarded-Encrypted: i=1; AJvYcCVE7Q6kg7LrVmbMG8JaonwRjyBNbIy4KHozEWXXeh39V0o+moXkM8qwd3EZ8zeOpdw3hd4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywc5u13eW+0RKRA8dfcntwuaikukKMjKqORPgE1sk2eeVRUnT1E
+	5MPkqbwgxYHd9KS80lwuYmEZqqWnv/euBYsnHtkE+WhY6Ivob+L6tgMH
+X-Gm-Gg: ATEYQzwx2UMtUFzkF65YlZcMG5wEJt8G4oG6C1+rGxRuueT10ueMMkU8oB5TCTK3htJ
+	INSRorWffVS0ZQ7EQgVbKjauEXHdp5wxbeHJiCAMN2NKhp1IR+3PO1eB6k1SyJZBrXPJFhSOZbq
+	5iS+FDTm87v5aAU/pQbMnpSLIFZcnvjNrc7rMYLLgGkbS/VEOJFtD4jZyYItuc9fgP031xdx3k+
+	as9uf+Odd6X/Aa6gwFV+X2eON3w4RHCGy//R98O10GmxMpTf4l3ydncBgGFaJuMEYFclsL0JyeR
+	apGViDsVUli45COI7e0asPhV70HofUchtOOc0zQVTLacGwVV8sKkLiWWPgnnELHHPyfEPSQMo1f
+	pRf42ovPMYg73DwCe9em+RBgRgyR0gY0DZ2Yedm7P4pnVmO6u42mtia51wXJ59szFJK2Yt0WkD3
+	o9IpkrIN2gXLj1SYesAYwtmxYGAzX3V+5KvbaTVqaBgIxNHf9znk/Azw0/3PDdVTIqFvSGnRotE
+	O8RH2hxZ7HO
+X-Received: by 2002:a05:6a21:1bc3:b0:38d:efcb:2e99 with SMTP id adf61e73a8af0-395c3a4a2a8mr14271672637.22.1772524140121;
+        Mon, 02 Mar 2026 23:49:00 -0800 (PST)
+Received: from dpc2500057.. (fsb6a9315e.tkyc502.ap.nuro.jp. [182.169.49.94])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa806295sm13731037a12.16.2026.03.02.23.48.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Mar 2026 23:48:59 -0800 (PST)
+From: Keita Morisaki <kmta1236@gmail.com>
+To: Eric Dumazet <edumazet@google.com>,
+	Neal Cardwell <ncardwell@google.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>
+Cc: Kuniyuki Iwashima <kuniyu@google.com>,
+	Simon Horman <horms@kernel.org>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	yangfeng59949@163.com
-Subject: [PATCH v9 bpf-next 1/2] bpf: test_run: Fix the null pointer dereference issue in bpf_lwt_xmit_push_encap
-Date: Tue,  3 Mar 2026 15:44:22 +0800
-Message-Id: <20260303074423.172680-2-yangfeng59949@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260303074423.172680-1-yangfeng59949@163.com>
-References: <20260303074423.172680-1-yangfeng59949@163.com>
+	bpf@vger.kernel.org,
+	Keita Morisaki <kmta1236@gmail.com>
+Subject: [PATCH net-next] tcp: replace per-packet memset in __tcp_transmit_skb()
+Date: Tue,  3 Mar 2026 16:48:47 +0900
+Message-Id: <20260303074847.2814835-1-kmta1236@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAXXjhXkaZpm2IBPA--.46718S3
-X-Coremail-Antispam: 1Uf129KBjvJXoWxAF4UWFy5ZF1Utr1UWryfZwb_yoWrWw1UpF
-	WUtrWFgrs5A340qF48Jr4UXw1YvFWvyFW5Xr1avw1jqF1jqr17Xr1ftF4jqrZ8Ar45uF4x
-	J34Ut3Z7tr1UJaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piTmhrUUUUU=
-X-CM-SenderInfo: p1dqww5hqjkmqzuzqiywtou0bp/xtbC0Bt+9mmmkVts3gAA30
 
-From: Feng Yang <yangfeng@kylinos.cn>
+Replace memset(&opts, 0, sizeof(opts)) with targeted initialization of
+only the three fields read unconditionally by tcp_options_write() and
+bpf_skops_write_hdr_opt(): mss, num_sack_blocks, and bpf_opt_len.
 
-The bpf_lwt_xmit_push_encap helper needs to access skb_dst(skb)->dev to
-calculate the needed headroom:
+struct tcp_out_options is 40 bytes without MPTCP and 96 bytes with
+CONFIG_MPTCP=y (typical distro config). Every remaining field is either
+assigned before first use by tcp_established_options()/tcp_syn_options(),
+or gated behind its OPTION_* flag in tcp_options_write(). This memset
+runs on every transmitted TCP packet, so removing it reduces per-packet
+overhead on the hot path.
 
-	err = skb_cow_head(skb,
-			   len + LL_RESERVED_SPACE(skb_dst(skb)->dev));
+Assembly comparison (x86-64, GCC 13, CONFIG_MPTCP=n):
 
-But skb->_skb_refdst may not be initialized when the skb is set up by
-bpf_prog_test_run_skb function. Executing bpf_lwt_push_ip_encap function
-in this scenario will trigger null pointer dereference, causing a kernel
-crash as Yinhao reported:
+  Before: 5 store instructions zeroing 40 bytes
+  After:  3 store instructions zeroing 4 bytes
 
-[  105.186365] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[  105.186382] #PF: supervisor read access in kernel mode
-[  105.186388] #PF: error_code(0x0000) - not-present page
-[  105.186393] PGD 121d3d067 P4D 121d3d067 PUD 106c83067 PMD 0
-[  105.186404] Oops: 0000 [#1] PREEMPT SMP NOPTI
-[  105.186412] CPU: 3 PID: 3250 Comm: poc Kdump: loaded Not tainted 6.19.0-rc5 #1
-[  105.186423] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2 04/01/2014
-[  105.186427] RIP: 0010:bpf_lwt_push_ip_encap+0x1eb/0x520
-[  105.186443] Code: 0f 84 de 01 00 00 0f b7 4a 04 66 85 c9 0f 85 47 01 00 00 31 c0 5b 5d 41 5c 41 5d 41 5e c3 cc cc cc cc 48 8b 73 58 48 83 e6 fe <48> 8b 36 0f b7 be ec 00 00 00 0f b7 b6 e6 00 00 00 01 fe 83 e6 f0
-[  105.186449] RSP: 0018:ffffbb0e0387bc50 EFLAGS: 00010246
-[  105.186455] RAX: 000000000000004e RBX: ffff94c74e036500 RCX: ffff94c74874da00
-[  105.186460] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff94c74e036500
-[  105.186463] RBP: 0000000000000001 R08: 0000000000000002 R09: 0000000000000000
-[  105.186467] R10: ffffbb0e0387bd50 R11: 0000000000000000 R12: ffffbb0e0387bc98
-[  105.186471] R13: 0000000000000014 R14: 0000000000000000 R15: 0000000000000002
-[  105.186484] FS:  00007f166aa4d680(0000) GS:ffff94c8b7780000(0000) knlGS:0000000000000000
-[  105.186490] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  105.186494] CR2: 0000000000000000 CR3: 000000015eade001 CR4: 0000000000770ee0
-[  105.186499] PKRU: 55555554
-[  105.186502] Call Trace:
-[  105.186507]  <TASK>
-[  105.186513]  bpf_lwt_xmit_push_encap+0x2b/0x40
-[  105.186522]  bpf_prog_a75eaad51e517912+0x41/0x49
-[  105.186536]  ? kvm_clock_get_cycles+0x18/0x30
-[  105.186547]  ? ktime_get+0x3c/0xa0
-[  105.186554]  bpf_test_run+0x195/0x320
-[  105.186563]  ? bpf_test_run+0x10f/0x320
-[  105.186579]  bpf_prog_test_run_skb+0x2f5/0x4f0
-[  105.186590]  __sys_bpf+0x69c/0xa40
-[  105.186603]  __x64_sys_bpf+0x1e/0x30
-[  105.186611]  do_syscall_64+0x59/0x110
-[  105.186620]  entry_SYSCALL_64_after_hwframe+0x76/0xe0
-[  105.186649] RIP: 0033:0x7f166a97455d
+With CONFIG_MPTCP=y the savings are larger: 12 stores (96 bytes) become
+3 stores (4 bytes).
 
-Temporarily add the setting of skb->_skb_refdst before bpf_test_run to resolve the issue.
+A BUILD_BUG_ON guards against future field additions: if the struct size
+changes, the assertion fires and forces the developer to audit whether
+the new field needs explicit zeroing.
 
-Fixes: 52f278774e79 ("bpf: implement BPF_LWT_ENCAP_IP mode in bpf_lwt_push_encap")
-Reported-by: Yinhao Hu <dddddd@hust.edu.cn>
-Reported-by: Kaiyan Mei <M202472210@hust.edu.cn>
-Closes: https://groups.google.com/g/hust-os-kernel-patches/c/8-a0kPpBW2s
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
-Signed-off-by: Feng Yang <yangfeng@kylinos.cn>
-Tested-by: syzbot@syzkaller.appspotmail.com
+Also add opts->options = 0 at the top of tcp_syn_options(), which
+already used |= without a prior clear. tcp_established_options() already
+clears opts->options at its top.
+
+Signed-off-by: Keita Morisaki <kmta1236@gmail.com>
 ---
- net/bpf/test_run.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+ net/ipv4/tcp_output.c | 16 ++++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 178c4738e63b..a086cee1ac6a 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -1156,6 +1156,23 @@ int bpf_prog_test_run_skb(struct bpf_prog *prog, const union bpf_attr *kattr,
- 		skb->ip_summed = CHECKSUM_COMPLETE;
- 	}
- 
-+	if (prog->type == BPF_PROG_TYPE_LWT_XMIT) {
-+		ret = -EOPNOTSUPP;
+diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
+index 326b58ff1118d..ae04c697dbacc 100644
+--- a/net/ipv4/tcp_output.c
++++ b/net/ipv4/tcp_output.c
+@@ -965,6 +965,8 @@ static unsigned int tcp_syn_options(struct sock *sk, struct sk_buff *skb,
+ 	struct tcp_fastopen_request *fastopen = tp->fastopen_req;
+ 	bool timestamps;
+
++	opts->options = 0;
 +
-+#if IS_ENABLED(CONFIG_IPV6)
-+		if (ipv6_bpf_stub) {
-+			dst_hold(&net->ipv6.ip6_null_entry->dst);
-+			skb_dst_set(skb, &net->ipv6.ip6_null_entry->dst);
-+		} else {
-+			pr_warn_once("Please test this program with the IPv6 module loaded\n");
-+			goto out;
-+		}
-+#else
-+		pr_warn_once("Please test this program with the IPv6 module enabled\n");
-+		goto out;
-+#endif
-+	}
-+
- 	ret = bpf_test_run(prog, skb, repeat, &retval, &duration, false);
- 	if (ret)
- 		goto out;
--- 
+ 	/* Better than switch (key.type) as it has static branches */
+ 	if (tcp_key_is_md5(key)) {
+ 		timestamps = false;
+@@ -1549,7 +1551,20 @@ static int __tcp_transmit_skb(struct sock *sk, struct sk_buff *skb,
+
+ 	inet = inet_sk(sk);
+ 	tcb = TCP_SKB_CB(skb);
+-	memset(&opts, 0, sizeof(opts));
++	/* Only zero fields read unconditionally by tcp_options_write()
++	 * or bpf_skops_write_hdr_opt(). Other fields are set by
++	 * tcp_established_options()/tcp_syn_options() before use, or
++	 * gated behind their OPTION_* flag.
++	 *
++	 * If you add a field to tcp_out_options, this will fire —
++	 * audit whether the new field needs zeroing here.
++	 */
++	BUILD_BUG_ON(sizeof(opts) !=
++		     sizeof(struct mptcp_out_options) + 40);
++	opts.mss = 0;
++	opts.num_sack_blocks = 0;
++	opts.bpf_opt_len = 0;
+
+ 	tcp_get_current_key(sk, &key);
+ 	if (unlikely(tcb->tcp_flags & TCPHDR_SYN)) {
+
+
+base-commit: 7dff99b354601e04378b4490e1b1b5765a3c3a88
+--
 2.43.0
-
