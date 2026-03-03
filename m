@@ -1,223 +1,141 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32DE126A0A7
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 13:46:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C2D03563F4
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 13:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772545605; cv=none; b=st+HW6/Uv4txRIo5pvhUEUt8kF0ZV1wNQUuY1vXJosNCdQiqwWPp7LzkqqXqEZm3qcFRrhyw/9gHWLAiTXiav0m9o46YoNG9QILutXEbMYMVk9j5KM8CG5jf1sH3Vz4u6ODnv0FFa9cICaaCZ2xRjO/BtcQC/ewhTzv7PgYOOnY=
+	t=1772545957; cv=none; b=c+YK0W5iqvlP2FNxJx7GMOg0DjWZeYECs3bx81pB/u5d4S6MPuBvw0vNhSsHWvZYOSB8By6IYEr4pr4DlGIuX7bo+m9f8gHIJ15SukzteLWOY2ponpX/nZGa0+De8dnr0HQQ+cHcBbhtRYKGjnyglVB6XO/S+lPYTy8dVedujGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772545605; c=relaxed/simple;
-	bh=JiVzCQ3VT1eTRYp+HJOQbUr3e+XLdT57r05TVAJp974=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cfGnuoeF2VkhqeQI/pimr5iR+r21IU2UUgwAuOX8ILzKB45eXo4mw3PV/ckUj2P/lVl0e5CghvOw+3EKrbKLOKfkxxoscOIFXQ3OFesQ/6qWZpOCv5gkqOoG7uAt2sq5kLYv4foaC61rc7hyx3+LyTY3YrUPptPITgMkyCcKGfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JKUv0IT1; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1772545957; c=relaxed/simple;
+	bh=Nkf8JlPVeJXLKi0iPhGG4eo4Fcm0ni1f811PWvrmEF4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=scydbk5F/Cf9wgMjGlKy4GVdrz8AxnlfE7TVbeMLnzYJ6mEWISzRB1PVmb5heD0x1VmdoNq94ciclDmE0z31B8jt4jaqtVVQ3aw1THHlNLngkTrh3FLeLBUwXolFpCSQbavW1bUp6C/NSpWQUVBOH0X5PmV8rWBLjrSFGz3FWxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lk6hJbzb; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JKUv0IT1"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 62363ILB2080896;
-	Tue, 3 Mar 2026 13:46:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=asy+th
-	lMkMBwcQz4UGE0S+RGOlnm/ut2DPcQvsToO1Y=; b=JKUv0IT1QAaSv4S3o5fR8E
-	FZvIefQMcvMmufl2o5oieEyvhQOiO8MGhlkFDMHEz546ZAeJ4FdaBkxYv1gbzS1Y
-	PaN0Nd3Rsrj56dXxRYYfqdrzOAWkrM6eBCd02TxV+BE7zKKkTVLoJo32vplMqzQP
-	YpflQprcEMs0bZuegYgDHdP4/BlTy3S0/kTEiYFJaMc1P9CTutOIbMdd8dnkbuOB
-	Ah8jtNdnIxByykgRW0kXM2vJNP5gsWM/dj70jFhx1mvJ06vAMq49Z8zpdCbfDOh8
-	q1ED54KRrp8PtOh4CoJaNVX5v4gOk49EtuJassq3VgZTwpIahGON+SS92ULvLOZg
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4ckssmjxaw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 13:46:26 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 623Aw4O6027704;
-	Tue, 3 Mar 2026 13:46:26 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4cmcwja807-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 03 Mar 2026 13:46:26 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 623DkMix49283430
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 3 Mar 2026 13:46:22 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5DF532004F;
-	Tue,  3 Mar 2026 13:46:22 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C0A5420040;
-	Tue,  3 Mar 2026 13:46:20 +0000 (GMT)
-Received: from [9.78.106.17] (unknown [9.78.106.17])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  3 Mar 2026 13:46:20 +0000 (GMT)
-Message-ID: <0183a042-01c1-4d6d-aa6d-9724cef74978@linux.ibm.com>
-Date: Tue, 3 Mar 2026 19:16:20 +0530
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lk6hJbzb"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c2af7d09533so3534302a12.1
+        for <bpf@vger.kernel.org>; Tue, 03 Mar 2026 05:52:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1772545956; x=1773150756; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gDqgDDKpTGV+mlW/ZuWopljs3ZXh/rIIG37HcjmrN4U=;
+        b=lk6hJbzbrEk7UGgTG8JwNxbKqqi4AsDHcXs03ynCVlm0uixiZyHiAUW5ymmAGkwJDA
+         MilnL1Mu60aTM/IOePHSQBK9/KtEjcM50m76wIdLkPXzwByoFo8DXY3SrS7ZTwt0Z/0p
+         JQy6ePBpT1Gyd9NEJdOvpK/T83CxVzfyb4hqkBjXmqh06C//OYJzwreiufZQIYqOWhyA
+         uVlemrz3RGDvIHpBa0joL5608qZ45XCes7iabR/ThrTv5u6JukqA9u3gaeY1f2+oBaWV
+         i7+FnszbxQxBi/bvfkYAblSj9uupvTbERwv7meVBfUsEAbevXdzIE9h8ZKsawL8YTDyM
+         9E3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772545956; x=1773150756;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gDqgDDKpTGV+mlW/ZuWopljs3ZXh/rIIG37HcjmrN4U=;
+        b=Dt/XSh0atfH8Na24k4bE2ndzjGZbui9RzrN+d3ByeyN9A/S4pq2VKO2j8LN3UCtkL7
+         ZEM4sJRyfYlu404SieUtV0ERz2WeIzw1r02djXTk0rP9eDl2X6ZgcPItA5a56SNSkFof
+         QvL/CbQIvUUGOqWHV/bAUfDBbf4HSUHSkVrIx7a96DqvG/Zbkh0mTt0FYIdZDXtnpuKn
+         1qJyCWsfL7aoc7PBL5+VSr7FCPosb06mQmsjPBmdFtNiadoOM/ITWEUPENLoiq7u/zJ1
+         VmG+L97g1hxJFLqCuN3ppGUeZqmNlcZq75WhjDcfmQGRaSJOFtT67/W6B2RWR+xs1Qnv
+         cxlA==
+X-Gm-Message-State: AOJu0Yy0jxQ2wbXsIv5pVpQNNVPEtJVLMIenfBmVZaYTtHH08f4BW6zc
+	EsR16JLgbb8pmecpBokpVNm8bn0tC6mMRqSS9LO3w1XUF2OB2ofML+cE
+X-Gm-Gg: ATEYQzzozAsgp7JSV4uN/915DIhYCeySweHcsJMs9dqiM/bAxJuK/0bJmmQUag9RYFS
+	kb5yNnkXQKxOhXxlzypwQMPJFWyjxewDisrh089xlzpiM6eWoGacG+7Gk6xFuPDFnFdNnh1NnJr
+	xLlwHqytZ3TLBLzl8guZektvggzdPuaeR+msGollHzmNmMwI2W66mjlcwF+13tLcWRHNmSWay6G
+	N9Tm+mJt0+ClsAuF+UtjWMh1c1UMkWIXgXZLz7CUUlNndvZMlUPSrYmrMWu8q43raJYQeYUZK+f
+	1this/f3yXcazH04l1AkYWin3+xCkg1FHVrdjYKyYzzt9hx9fYSscBdl9+g3ou8uJ3IzWoPL2/Y
+	mpK6d7ddkLAQ/VM106Rb0DeBi31wmeg71sU+/Q1bb6j1E8m3c+DwOscAKWlV3fDthCeDqK0TEtD
+	v+K4Q0rgWgImwi7Gh20GGDcOJXo+ukKqwS56P/RG6mnyeq8UQz
+X-Received: by 2002:a17:902:c943:b0:2ae:5426:da3f with SMTP id d9443c01a7336-2ae5426dccemr63203185ad.28.1772545955680;
+        Tue, 03 Mar 2026 05:52:35 -0800 (PST)
+Received: from localhost.localdomain ([113.218.252.129])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c70fa62147esm14689782a12.12.2026.03.03.05.52.25
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 03 Mar 2026 05:52:35 -0800 (PST)
+From: Chengkaitao <pilgrimtao@gmail.com>
+To: martin.lau@linux.dev,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	chengkaitao@kylinos.cn,
+	linux-kselftest@vger.kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/6] bpf: Extend the bpf_list family of APIs
+Date: Tue,  3 Mar 2026 21:52:13 +0800
+Message-ID: <20260303135219.33726-1-pilgrimtao@gmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] powerpc64/bpf: fix handling of BPF stack in
- exception callback
-To: adubey <adubey@linux.ibm.com>
-Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, bpf@vger.kernel.org,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Saket Kumar Bhaskar <skb99@linux.ibm.com>,
-        Venkat Rao Bagalkote <venkat88@linux.ibm.com>, bot+bpf-ci@kernel.org
-References: <20260220063933.196141-1-hbathini@linux.ibm.com>
- <20260220063933.196141-6-hbathini@linux.ibm.com>
- <7be71e61b6e9c522b03f96b1c4158b53@linux.ibm.com>
-Content-Language: en-US
-From: Hari Bathini <hbathini@linux.ibm.com>
-In-Reply-To: <7be71e61b6e9c522b03f96b1c4158b53@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzAzMDEwOCBTYWx0ZWRfX4M3we9Vg0yum
- wyMRObApQkFbZGRFcx7jEnQ1E5a12/R5+Z9B/Pl5mdwVwqD7B8Xolu6BVoqwncQpxwQQ9m6+qqs
- 6uEGtWugCiLl0Yh9BmfLkg2OeJTYie2XNZTCwTnQCs4MllihAGEhKWngh1/leGqiIJ+kROkNLMI
- 29wG49z/7z8V6a8RuQn0n5m5gtYiOAKjbdrbnwPr6mGQFMsIt7AAtoj69/dUNKfwt09sUKrGve+
- 5fV8eFtpVYmlLgpn0/0j4ltX83a2YjIF2Rx6GiVDPPguxsuB8BniKvc5EiMbxkYA1d/8yLu59rz
- mq7PLyYW0yTV03CHDkqYuueP60PmETgxDV8au5imjWzcp6ONk9xlYaAT9C+4XiyJxIEAIw+Qjq4
- MhjWxtHwasD4oc+WIt1U1PMuWb8cfo0Kr9cW6Gg3EjaGXtkauw3JNLs+Wj0X8RFBAHp5qLQGIoC
- FJe09iDl24UD15KPFLw==
-X-Proofpoint-ORIG-GUID: AwiqV9rMivse3059pViol0b0l3Up0otx
-X-Proofpoint-GUID: AwiqV9rMivse3059pViol0b0l3Up0otx
-X-Authority-Analysis: v=2.4 cv=AobjHe9P c=1 sm=1 tr=0 ts=69a6e632 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=Yq5XynenixoA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=FE_IyaicahEbgNOQyFYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-02_05,2026-03-03_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0 malwarescore=0
- spamscore=0 clxscore=1015 suspectscore=0 adultscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603030108
 
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
+In BPF, a list can only be used to implement a stack structure.
+Due to an incomplete API set, only FIFO or LIFO operations are
+supported. The patches enhance the BPF list API, making it more
+list-like.
 
-On 23/02/26 2:33 pm, adubey wrote:
-> On 2026-02-20 12:09, Hari Bathini wrote:
->> Exception callback reuses the stack frame of exception boundary. When
->> exception boundary and exception callback programs have different BPF
->> stack depth, the current stack unwind in exception callback will fail.
->> Adjust the stack frame size of exception callback, in its prologue,
->> if its BPF stack depth is different from that of exception boundary.
->>
->> Reported-by: bot+bpf-ci@kernel.org
->> Closes:
->> https://lore.kernel.org/ 
->> bpf/2a310e86a59eb4c44c3ac9e5647814469d9c955580c9c0f1b3d9ca4a44717a34@mail.kernel.org/
->> Fixes: 11d45eee9f42 ("powerpc64/bpf: Additional NVR handling for 
->> bpf_throw")
->> Signed-off-by: Hari Bathini <hbathini@linux.ibm.com>
->> ---
->>
->> Changes since v1:
->> * Fixed incorrect use of PPC_RAW_SUB() as pointed out by
->>   bot+bpf-ci@kernel.org.
->>
->>
->>  arch/powerpc/net/bpf_jit_comp64.c | 30 ++++++++++++++++++++++--------
->>  1 file changed, 22 insertions(+), 8 deletions(-)
->>
->> diff --git a/arch/powerpc/net/bpf_jit_comp64.c
->> b/arch/powerpc/net/bpf_jit_comp64.c
->> index 5d4d2bb23cef..33b2a7fd9067 100644
->> --- a/arch/powerpc/net/bpf_jit_comp64.c
->> +++ b/arch/powerpc/net/bpf_jit_comp64.c
->> @@ -32,14 +32,15 @@
->>   *
->>   *        [    prev sp        ] <-------------
->>   *        [    tail_call_info    ] 8        |
->> - *        [   nv gpr save area    ] 6*8 + (12*8)    |
->> + *        [   nv gpr save area    ] 6*8        |
->> + *        [ addl. nv gpr save area] (12*8)    | <--- exception 
->> boundary/callback program
->>   *        [    local_tmp_var    ] 24        |
->>   * fp (r31) -->    [   ebpf stack space    ] upto 512    |
->>   *        [     frame header    ] 32/112    |
->>   * sp (r1) --->    [    stack pointer    ] --------------
->>   *
->>   * Additional (12*8) in 'nv gpr save area' only in case of
->> - * exception boundary.
->> + * exception boundary/callback.
->>   */
->>
->>  /* BPF non-volatile registers save area size */
->> @@ -128,12 +129,13 @@ static inline bool bpf_has_stack_frame(struct
->> codegen_context *ctx)
->>   *        [      ...           ]         |
->>   * sp (r1) --->    [    stack pointer    ] --------------
->>   *        [    tail_call_info    ] 8
->> - *        [   nv gpr save area    ] 6*8 + (12*8)
->> + *        [   nv gpr save area    ] 6*8
->> + *        [ addl. nv gpr save area] (12*8) <--- exception boundary/ 
->> callback program
->>   *        [    local_tmp_var    ] 24
->>   *        [   unused red zone    ] 224
->>   *
->>   * Additional (12*8) in 'nv gpr save area' only in case of
->> - * exception boundary.
->> + * exception boundary/callback.
->>   */
->>  static int bpf_jit_stack_local(struct codegen_context *ctx)
->>  {
->> @@ -240,10 +242,6 @@ void bpf_jit_build_prologue(u32 *image, struct
->> codegen_context *ctx)
->>
->>      if (bpf_has_stack_frame(ctx) && !ctx->exception_cb) {
->>          /*
->> -         * exception_cb uses boundary frame after stack walk.
->> -         * It can simply use redzone, this optimization reduces
->> -         * stack walk loop by one level.
->> -         *
->>           * We need a stack frame, but we don't necessarily need to
->>           * save/restore LR unless we call other functions
->>           */
->> @@ -287,6 +285,22 @@ void bpf_jit_build_prologue(u32 *image, struct
->> codegen_context *ctx)
->>           * program(main prog) as third arg
->>           */
->>          EMIT(PPC_RAW_MR(_R1, _R5));
->> +        /*
->> +         * Exception callback reuses the stack frame of exception 
->> boundary.
->> +         * But BPF stack depth of exception callback and exception 
->> boundary
->> +         * don't have to be same. If BPF stack depth is different, 
->> adjust the
->> +         * stack frame size considering BPF stack depth of exception 
->> callback.
->> +         * The non-volatile register save area remains unchanged. 
->> These non-
->> +         * volatile registers are restored in exception callback's 
->> epilogue.
->> +         */
->> +        EMIT(PPC_RAW_LD(bpf_to_ppc(TMP_REG_1), _R5, 0));
->> +        EMIT(PPC_RAW_SUB(bpf_to_ppc(TMP_REG_2), 
->> bpf_to_ppc(TMP_REG_1), _R1));
->> +        EMIT(PPC_RAW_ADDI(bpf_to_ppc(TMP_REG_2), bpf_to_ppc(TMP_REG_2),
->> +            -BPF_PPC_EXC_STACKFRAME));
->> +        EMIT(PPC_RAW_CMPLDI(bpf_to_ppc(TMP_REG_2), ctx->stack_size));
->> +        PPC_BCC_CONST_SHORT(COND_EQ, 12);
-> Can we avoid resizing when boundary_stack is greater? I think it's safe, 
-> NVR will be intact anyway and any reference within bounds of larger size.
-> Any corner case possible?
+Five new kfuncs have been added:
+bpf_list_del: remove a node from the list
+bpf_list_add_impl: insert a node after a given list node
+bpf_list_is_first: check if a node is the first in the list
+bpf_list_is_last: check if a node is the last in the list
+bpf_list_empty: check if the list is empty
 
-Did think about it but went with this approach to keep the tearing down
-of the stack consistent for all cases. Addressed the other comments
-and posted v3.
+Changes in v4:
+- [patch v3 1/6] Revert to version v1
+- Change the parameters of bpf_list_add_impl to (head, new, prev, ...)
 
-- Hari
+Changes in v3:
+- Add a new lock_rec member to struct bpf_reference_state for lock
+  holding detection.
+- Add test cases to verify that the verifier correctly restricts calls
+  to bpf_list_del when the spin_lock is not held.
+
+Changes in v2:
+- Remove the head parameter from bpf_list_del
+- Add bpf_list_add/is_first/is_last/empty to API and test cases
+
+Link to v3:
+https://lore.kernel.org/all/20260302124028.82420-1-pilgrimtao@gmail.com/
+
+Link to v2:
+https://lore.kernel.org/all/20260225092651.94689-1-pilgrimtao@gmail.com/
+
+Link to v1:
+https://lore.kernel.org/all/20260209025250.55750-1-pilgrimtao@gmail.com/
+
+Kaitao Cheng (6):
+  bpf: Introduce the bpf_list_del kfunc.
+  selftests/bpf: Add test cases for bpf_list_del
+  bpf: add bpf_list_add_impl to insert node after a given list node
+  selftests/bpf: Add test case for bpf_list_add_impl
+  bpf: add bpf_list_is_first/last/empty kfuncs
+  selftests/bpf: Add test cases for bpf_list_is_first/is_last/empty
+
+ kernel/bpf/helpers.c                          |  87 +++++++++
+ kernel/bpf/verifier.c                         |  29 ++-
+ .../testing/selftests/bpf/bpf_experimental.h  |  42 ++++
+ .../selftests/bpf/progs/refcounted_kptr.c     | 182 ++++++++++++++++++
+ 4 files changed, 336 insertions(+), 4 deletions(-)
+
+-- 
+2.50.1 (Apple Git-155)
+
