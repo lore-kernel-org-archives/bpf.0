@@ -1,41 +1,41 @@
-Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
+Received: from out-171.mta0.migadu.com (out-171.mta0.migadu.com [91.218.175.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D244E2144D7
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 01:45:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B808335BA8
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 01:47:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772502321; cv=none; b=m5MD5EPhVzDm0nqNPJJWC+t2jwKLXsa5KBPqmLx+B7yLp23Rw0DodhgZlu+ydGBde4CFXEh+Fn8/1qSgwmof+5ErxC2do1ciSccW4rIarZ18Y331id+iEP4/y35ekgN1aH/Erfpu7IkAs83cMRZe5yXyQ6XKAaB2Gc4FKZsGN7s=
+	t=1772502477; cv=none; b=B2lsQgVQCgRa6DYR7s/Vt7ZdSURgufIwGC1gYfizjH88WsMx3D6yarWx6ZHeyzfS9qzlDnIZDfsRfWS6vYfgFe47dq4eupPlLwNS9rTsB4DLUe+yYd+/OqpvU3/t4zmvskSkUu4u73FEfKCW5RX+eQl0v/x/235KOLrUfV8A2z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772502321; c=relaxed/simple;
-	bh=6gqYdMhM9B31nCogOBCyxHeugaSB0gydR+5zFw2F5v0=;
+	s=arc-20240116; t=1772502477; c=relaxed/simple;
+	bh=aoMEVQ5LUbx119Jr5j4ceub8JG6Junu39T7U3pDYlsU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j9kLXeb83xHSPrrgls/sQlQ//K5nox+y1rCNJyoKUWMq4KHQ9e/qcYFOSDS0Yz7BRVawEx5jV5DVxbyBVZMX03NjFawCeAYiOBu7UVnNgWEVe7Y58qPPrEqMnn/M6GOccHWl9UG8IvgRZuXM87Y2SOpughSCzFl9+VxNDHPWU6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z+qyzfx0; arc=none smtp.client-ip=91.218.175.186
+	 In-Reply-To:Content-Type; b=rUIL1lO8sCN6a/iT7KMvzkeWZ7UXQhaVh1Nf6z73hdeg0W6zeADWvGvZOjO/lsLKX/wsgfuLjFygnvbQHklaTQuKtFrjUeJcYlhpBr8uS06gdeTl0z+kQuT3CE2ofJhL0KvwMgjYpUZ/LA4AialelKjbQCWU8uIRaVfa9lFMmgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=p9h32Ka7; arc=none smtp.client-ip=91.218.175.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z+qyzfx0"
-Message-ID: <6d7b89fc-994b-41c8-b545-630d4e2f884f@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="p9h32Ka7"
+Message-ID: <2b6fd20c-83e5-4152-b28a-fed55c4e2d4f@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1772502315;
+	t=1772502474;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=w7EbhjGk5ygqAWAHSwgdvk9K0e2jlW2xVYMwCYcwC2E=;
-	b=Z+qyzfx0f2KC2pD215nfcWflWvEJpwA+zUd/mTGYRRLfPGd8BEyvfW1GN96CRoO3m+wX2B
-	9CwAzRWC3qahIzeFPnCgFi9dNTqjpcYrDU2kvU7d3Io72EMsefygrVv/Rl83yyQoqpdP27
-	CocWnSPye4FrbLgHOIITR7EzooiDsMQ=
-Date: Tue, 3 Mar 2026 09:44:54 +0800
+	bh=I7CIzyP9wR0VJBHipYkJvXUaV4HJEK+fjwhplqHqBos=;
+	b=p9h32Ka7qR+MFuTWRhB2htAsqJHjiblMVnZ8TfbDKKoWyTo7pXsUGxXJ2q5LKasQWwkgme
+	ZYSIuz070uiSe6Ubj4fbVtVmehthHzFHQbeMWRRzC+A821z7Bg/4MGeWUbN68FWdNDJDEG
+	Lgx8dPosVGRI+UNCapqO5NixVXA0/c0=
+Date: Tue, 3 Mar 2026 09:47:39 +0800
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
 List-Subscribe: <mailto:bpf+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 3/6] bpf: Disallow !kprobe_write_ctx progs
- tail-calling kprobe_write_ctx progs
+Subject: Re: [PATCH bpf-next v2 4/6] bpf: Disallow !call_get_func_ip progs
+ tail-calling call_get_func_ip progs
 Content-Language: en-US
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
@@ -47,11 +47,11 @@ Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
  linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
  kernel-patches-bot@fb.com, martin.lau@kernel.org, clm@meta.com,
  ihor.solodrai@linux.dev
-References: <20260302150342.55709-4-leon.hwang@linux.dev>
- <d1728faa022db83c9e5ab0245579eb1b1d176495744953f9ab66e0864ed31025@mail.kernel.org>
+References: <20260302150342.55709-5-leon.hwang@linux.dev>
+ <abc5556bf4da9afc2d8100cd8937c41e9718f1a14b343d8a398499546157126c@mail.kernel.org>
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <d1728faa022db83c9e5ab0245579eb1b1d176495744953f9ab66e0864ed31025@mail.kernel.org>
+In-Reply-To: <abc5556bf4da9afc2d8100cd8937c41e9718f1a14b343d8a398499546157126c@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
@@ -65,54 +65,59 @@ On 2/3/26 23:53, bot+bpf-ci@kernel.org wrote:
 > 
 > [ ... ]
 > 
->> +enum bpf_map_owner_match_type {
->> +	BPF_MAP_OWNER_MATCH_FOR_INIT,
->> +	BPF_MAP_OWNER_MATCH_FOR_UPDATE,
->> +};
->> +
->>  static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_prog *fp,
->> -				  enum bpf_prog_type prog_type)
->> +				  enum bpf_prog_type prog_type,
->> +				  enum bpf_map_owner_match_type match)
->>  {
-> 
-> [ ... ]
-> 
->> +	switch (match) {
->> +	case BPF_MAP_OWNER_MATCH_FOR_INIT:
->> +		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
+>> @@ -2422,11 +2423,17 @@ static bool bpf_map_owner_matches(const struct bpf_map *map, const struct bpf_prog *fp,
+>>  	case BPF_MAP_OWNER_MATCH_FOR_INIT:
+>>  		if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
+>>  			return false;
+>> +		if (owner->call_get_func_ip != fp->call_get_func_ip)
 >> +			return false;
->> +		break;
->> +
->> +	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
->> +		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
->> +			return false;
->> +		break;
->> +	}
+>>  		break;
+>>
+>>  	case BPF_MAP_OWNER_MATCH_FOR_UPDATE:
+>>  		if (!owner->kprobe_write_ctx && aux->kprobe_write_ctx)
+>>  			return false;
+>> +		if (bpf_prog_has_trampoline(fp)) {
+>> +			if (!owner->call_get_func_ip && fp->call_get_func_ip)
+>> +				return false;
+>> +		}
+>>  		break;
 > 
-> In the v1 review, Alexei Starovoitov asked for strict conformance
-> both ways rather than one-directional validation:
+> The FOR_UPDATE path correctly guards the call_get_func_ip check with
+> bpf_prog_has_trampoline(fp), since only trampoline-based programs
+> rely on the func IP stored on the trampoline stack. Kprobe programs
+> get func_ip from kprobe_running()->addr via bpf_get_func_ip_kprobe(),
+> which is independent of the trampoline.
 > 
->     "Don't be fancy. Require strict conformance both ways
->     in *all* patches."
+> Should the FOR_INIT path have the same bpf_prog_has_trampoline()
+> guard? Without it, two kprobe programs that share a prog_array will
+> be rejected if one calls bpf_get_func_ip() and the other does not,
+> even though mixing is safe for kprobes.
 > 
-> https://lore.kernel.org/bpf/CAADnVQ+-V0-1i8_+CYpK7G0CnV-2n8e9Szv43yM3Az197eL_0A@mail.gmail.com/
+> bpf_check_tail_call() calls this with BPF_MAP_OWNER_MATCH_FOR_INIT:
 > 
-> The BPF_MAP_OWNER_MATCH_FOR_UPDATE case still uses one-directional
-> matching, rejecting only !owner->kprobe_write_ctx && aux->kprobe_write_ctx
-> but allowing the reverse. The v2 changelog lists other Alexei comments
-> as addressed but does not mention this one.
+>     kprobe prog_a (call_get_func_ip=1) loads, references jmp_table
+>       -> owner->call_get_func_ip = 1
+>     kprobe prog_b (call_get_func_ip=0) loads, references same jmp_table
+>       -> owner->call_get_func_ip != fp->call_get_func_ip
+>       -> returns false, prog_b fails to load
 > 
-> Was this an intentional design choice, and if so, should the changelog
-> note the disagreement?
+> Something like this would match the FOR_UPDATE scoping:
+> 
+>     case BPF_MAP_OWNER_MATCH_FOR_INIT:
+>             if (owner->kprobe_write_ctx != aux->kprobe_write_ctx)
+>                     return false;
+>             if (bpf_prog_has_trampoline(fp)) {
+>                     if (owner->call_get_func_ip != fp->call_get_func_ip)
+>                             return false;
+>             }
+>             break;
 > 
 
-This was intentional design choice.
+Correct.
 
-My explanation in v1 should address his concern.
+The FOR_INIT path should have the same bpf_prog_has_trampoline() guard.
 
-As his disagreement was not part of the patch series, should I note it
-in changelog?
+I'll do it in the next revision.
 
 Thanks,
 Leon
@@ -125,8 +130,8 @@ Leon
 > CI run summary: https://github.com/kernel-patches/bpf/actions/runs/22582690876
 > 
 > AI-authorship-score: medium
-> AI-authorship-explanation: Confirmed LLM involvement in v1 development process (selftests called out by reviewer), but core code changes and v2 revisions appear human-authored with genuine design engagement.
+> AI-authorship-explanation: The v1 selftests carried Assisted-by Codex tags, and the kernel code follows a mechanical copy-paste pattern across commits; the v2 selftests were rewritten but the overall series structure suggests AI-assisted development.
 > issues-found: 1
 > issue-severity-score: low
-> issue-severity-explanation: Unaddressed maintainer review comment requesting symmetric matching in the UPDATE path; not a code bug or security concern.
+> issue-severity-explanation: The FOR_INIT strict equality check on call_get_func_ip is missing a bpf_prog_has_trampoline() guard, causing unnecessary rejection of kprobe programs that share a prog_array with different call_get_func_ip values.
 
