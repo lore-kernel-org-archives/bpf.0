@@ -1,84 +1,89 @@
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E51F158535
-	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 02:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56189375F94
+	for <bpf@vger.kernel.org>; Tue,  3 Mar 2026 02:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772505945; cv=none; b=Onr9XTmy6o7k6ZmF+6tX8nA3KZkOy2qD0PYvaJzi3cDve/srKe0aWCqt+PMQKftgF99drf9z8CP2DpoEO+pLtfQkH/B7Z8tuK5RtOZatFNoZttk0Zz9+A7g+FRH6hn0oLDBVLxs5+3Q7Gy/rDAtiMSe5gMjl56jLkONwqqT3r6E=
+	t=1772505948; cv=none; b=hcB0tDV7s3yQoz+L7KW7yatX3AT20g1/zdqcakwwckyrmo0+xv+YK+llf+5WBCrEqkbFbu/eOXVKwCfT70qdCk4EAUq+ojhiaiP/Iy4tYktRNG7eJ9eem0kdZ7tY303tiEHEQCKZvGSiaKblSJZMEzlnh3Zsus6XKjXgRt5iNVI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772505945; c=relaxed/simple;
-	bh=b+0Ff/pUDhFe+rGVzYVSp1+4DBYWUSZiCFvSNbPgMUE=;
+	s=arc-20240116; t=1772505948; c=relaxed/simple;
+	bh=N3ZN/577J6T3HfUZPetTc7LoqcDuy41jvH2ej5cM8aU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KncHVstCkMWWJ3myi99/EwtsLVuu8HFOh+RBYcs7ZukyswuXmgKGdkSQqQkLyeKXo1qi3Bw9vPAURYDT0TB45xVQiJw2j+U3ODdjFSCGa1vmJ5D1/BPqTEgUqcbUsktGSKR4tnUxqemxVEQ6Im/JenqM0bB3lwYTvjvVI3RD01U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=ffauuUDS; arc=none smtp.client-ip=209.85.161.53
+	 MIME-Version; b=Tcl1i2GJB/2YawWRFRL80xOA4WF+HnIkChfrWo26Q/Oj+2lUy7GebQ4ac9Yq4fz8Wa5k4XM2qrpDg83fCnpAa/z+XCZIbjkWqcMxElhu2ElPavtktylMSvKsunUBmDFaE0F14Auv4UEKHTWoUTZT9H7+CXiOnBkeoD36/Z1d8tU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=D8qAL9Ua; arc=none smtp.client-ip=209.85.161.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="ffauuUDS"
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6786b13984fso4051444eaf.2
-        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 18:45:44 -0800 (PST)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="D8qAL9Ua"
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-662f91bba0fso5028583eaf.0
+        for <bpf@vger.kernel.org>; Mon, 02 Mar 2026 18:45:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1772505943; x=1773110743; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1772505946; x=1773110746; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zopse3Rf+kKizvyvuRBVQ7DWejIScda9vW//LITHTBk=;
-        b=ffauuUDSI18B5wnMPdSGdU34iEGOz3MV9NTaBrYmFZQytzq9TwRiYF3qyJy01YcGEO
-         hj8xnqHi0yn44h9z0SIR38OkwrjqSWc+lzkdNVJevrxhiFCrRRqq7xKMpMc9JM6x+tiN
-         J1sXlXbbBWcSejDNxFwpNVcUeTO3TpP4/pAXGgC9+33p/w5mayIYgE6QRlavGE95TcK/
-         thzEIZAoiB5tASvqVyq3tz6tjGd8k4FBzcLkOK4MU8/ryhdTuuGHH2EPGMTH0UKY5HWL
-         qc+R5Fily8rvV4GpMyZwOZViUViuIgmYxITCY8xZVBq56QWYx9mM0CpLgO2IgGdlB9wc
-         AHfw==
+        bh=2gWuEUywlHiJAdc+KzkRLmXtzIjty9yNKhswxVvxm90=;
+        b=D8qAL9UaSLcyWJzTeHdhCPq167JmApTGtFoAayPDqGtEyT9nvNQqZVVS7mQKhOa6JQ
+         +CW6XXELqbYgsK1fP+Va+RvOx/hBE4ZGThqNOfs73BnK+5zpmpdA5/VVxZA3fOed9RsG
+         LUhoJLFoadP6aeJOJ9tWAmeR8N8HB7LqOu46L1MExSFBOw74CZzQu8uUso3UiGCv21/0
+         Z7nTfundpYVO9Z24j6rYzyLPtg7/3uFRIwIejqB00kk2D6RBad97ay4vPdg/LDoheXvY
+         eDdVHxd3whBsLzIUCULq7zCaF6F9f4IRFUT5wC9A4Pm6XZbwmHDOBtX0UN5bak521mXO
+         dx8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772505943; x=1773110743;
+        d=1e100.net; s=20230601; t=1772505946; x=1773110746;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=zopse3Rf+kKizvyvuRBVQ7DWejIScda9vW//LITHTBk=;
-        b=PwK9aO+YEzitMC6gxDbrUcczfMey9gxEJUGPBNnO6y4Mm2OjRp3Se23ByGSKIPNQ7/
-         IKT/QgPvJBCND1/Qphg2VS+hdFnO17g39MMvFgr2UCF6AedIuUAuftgUF/nG/ZuLcPH6
-         uWvm+YuCKtnTTxmyt8rHej7SdNkuLHdFxpTbh84lxqvuZIKIB6DRsmZrSbL6FfeTg+me
-         hm4M7rG+1uVX+4t79GmN99jIDlS9laCICy8Al4YpWUmMsUMCBbEQxRTi0FjAWeCSIlBB
-         YPNTQs0Powfu7KE/6FTJca6VXrDKZlv4MPxqkCRKtiTMe0trg1+SOqORHGTIWhVIgukf
-         lAGw==
-X-Forwarded-Encrypted: i=1; AJvYcCWqBfnJMh7VDigMJoLd6Q4IWHH7wNHb4TBaf/UfMjGVHOubl1E1dUd48oD89Tn9HQwY5uc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHe586H7FN/0zWC+p46xbHsiCWZaExNT/R1SF+snu14w2RAL+d
-	mdjAlNsm/gHTCA6fJHEsV1b0bzRTjMDjvZ3lVQfygpbQJFItcg/qYYWzObNCXFJ8uLc=
-X-Gm-Gg: ATEYQzy5FgEKAmGP78ZgHesh/I/TQBCU+Z4/OkDneKEZSIAUg9EH34sLK0JpK8jOIju
-	h3bW1seODCUEim89/yeTOJNdUeHg8F74ym5RoowxSWeyRLbOyb65QNo7fHan/AzG6wQsakuTewH
-	I50JfJ8qvn4/GIOoU2zPgJPufG0D25fthAsZbykH5dlcSK5AX2C9wH0kVnlaOXGY6Ce3wtpgVmn
-	G+a43Rmb8y0u7m8RLhKox8R0XStlA6r8PjYOHFH+2LeXUHhS5oSczSDu0c+t4B56zkiD9P6JSJH
-	2VEzoG8dS+RwuFPa0tsCLFayPpURtwecsPr5e4seu6P+C421VSM1nFcAz3Hp2OP4igHBd0TUq3A
-	fkRdgsp7c1sHY6ofWvwfT0mxq8/PdkazBiWmTDLxD8o7Za7Rs7HMQ6tiYf9cgkYMwBpXk7DGqQ3
-	qNbkKSzl0=
-X-Received: by 2002:a05:6820:1747:b0:677:e78d:223b with SMTP id 006d021491bc7-679faefa6dfmr9051694eaf.36.1772505943148;
-        Mon, 02 Mar 2026 18:45:43 -0800 (PST)
+        bh=2gWuEUywlHiJAdc+KzkRLmXtzIjty9yNKhswxVvxm90=;
+        b=rJavbRfMVLiV1RlilSCipNFfEyDdBxljv+LQsO82i/yFkp85hzpu/QYwLc4G4oUWUX
+         37qt95rXVe2wMyCOz6VKlqM0RhF1wsNt1UnrUgx0/osvdt4ZoMTak0p2k3IvG6MSH9Ys
+         XQWeb7jMZIxsPjH9keanrfdS04dljrHhQbK5ojeUjLgeWe/+8bZEiV4zBHIbSZXPprdU
+         2p0uNe1WduU73YprTsHIhv7k2T4ioA1PNWWi60eLh7dYNdZEN+Y1l/39NAKOzhYBHSE7
+         UuvtJjQQKag71oXZL5OsU7zj9ewQws1MvnMoDQL94bnb11vuYurweBR50dlx6FOxgVXy
+         /+/A==
+X-Forwarded-Encrypted: i=1; AJvYcCWtCnTH8O5/XI+D868I5kLhEfU9I8b7jOuz9YjtZ7lhQD+GzdKt/COGxAmA7fJeHrStdfA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz5ru6XdSSgs/PiP2PT9mK/cvCEEdxVqUSaVe3R2tfC9tnbM4vy
+	lTiVnaPPwTf0/NRlkR11Vl5hczY1uMlcN77fQWQdQxfyOD8D3FQBHdre3IzYZz7cdcs=
+X-Gm-Gg: ATEYQzyLAcJpoQ3FmdEBG2GZLGkvllWMSe2OlttGxw+pZ90ghOXDLhLV+i7k2akR/Iy
+	+AWbycW2j7pw+bfWJ/0rdOV/kZKQO6vfgTwODg1F7SWtKWU92htel8eiitklz9AaT6lkZG0y4A1
+	mKd1ZXYp5GBMcLtroF8Op7qE/2h9tW1GE58xAo8mpi3k5QlLhKQ/B45V4N2yjNYsuABysNWlp/8
+	SUWnw/m2y7ArJbKTCdQ7fd95/kWVH5EzpWKJ9HMU90OdN6gt91HdrXBrMBsVYKklGaE+fN/hgPw
+	LUDyUlbMzFtjt3IghzI1a8l2B/Vcc521pN55jhmdQ47i8Idnkp1slinQ6P0Y8dqp1Ucc9uQoMZ5
+	65ZkDX16Ru2SF+T9Ivj0ohtUIhtvW5EBXhMEqHPO7KlLxFCntN8Hq7rOkVR8sTcQj62+QbvYLHC
+	9CvwB2x6c=
+X-Received: by 2002:a05:6820:2d4a:b0:67a:1d18:6f64 with SMTP id 006d021491bc7-67a1dac2a7emr452503eaf.34.1772505946199;
+        Mon, 02 Mar 2026 18:45:46 -0800 (PST)
 Received: from 20HS2G4.. ([2a09:bac1:76c0:540::a2:70])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-679f2d84dacsm10205642eaf.9.2026.03.02.18.45.40
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-679f2d84dacsm10205642eaf.9.2026.03.02.18.45.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Mar 2026 18:45:42 -0800 (PST)
+        Mon, 02 Mar 2026 18:45:45 -0800 (PST)
 From: Chris J Arges <carges@cloudflare.com>
 To: michael.chan@broadcom.com,
 	pavan.chebbi@broadcom.com,
 	joe@dama.to,
 	kuba@kernel.org,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	John Fastabend <john.fastabend@gmail.com>,
 	Stanislav Fomichev <sdf@fomichev.me>
 Cc: kernel-team@cloudflare.com,
 	Chris J Arges <carges@cloudflare.com>,
 	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: [PATCH net-next v2 0/4] bnxt_en: add XDP RSS hash metadata support
-Date: Mon,  2 Mar 2026 20:43:48 -0600
-Message-ID: <20260303024510.644962-1-carges@cloudflare.com>
+Subject: [PATCH net-next v2 1/4] bnxt_en: use bnxt_xdp_buff for xdp context
+Date: Mon,  2 Mar 2026 20:43:49 -0600
+Message-ID: <20260303024510.644962-2-carges@cloudflare.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260213192449.1294830-1-carges@cloudflare.com>
+In-Reply-To: <20260303024510.644962-1-carges@cloudflare.com>
 References: <20260213192449.1294830-1-carges@cloudflare.com>
+ <20260303024510.644962-1-carges@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: bpf@vger.kernel.org
 List-Id: <bpf.vger.kernel.org>
@@ -87,48 +92,111 @@ List-Unsubscribe: <mailto:bpf+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series adds XDP RSS hash metadata extraction support for the bnxt_en
-driver and includes selftests to validate the functionality. I was able
-to test this on a BCM57414 NIC.
+This adds bnxt_xdp_buff which embeds the xdp_buff struct and stores
+pointers to hardware RX completion descriptors (rx_cmp and rx_cmp_ext)
+along with the completion type.
 
-The driver changes introduce a bnxt_xdp_buff wrapper that carries
-hardware RX completion descriptors alongside the xdp_buff, then use it
-to implement bpf_xdp_metadata_rx_hash().
+Signed-off-by: Chris J Arges <carges@cloudflare.com>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt.c     | 25 +++++++++++--------
+ drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  7 ++++++
+ 2 files changed, 22 insertions(+), 10 deletions(-)
 
-The selftest changes refactor common XDP/BPF helpers into a shared
-library and add a new xdp_metadata test that verifies RSS hash
-extraction for TCP and UDP traffic via device-bound XDP programs.
-
-Changes from v1:
-- selftests: moved tests into net/hw
-- selftests: fix pylinter errors
-- selftests: add check for no error count
-- bnxt_xdp: followed RCT for variable declaration
-- rebased on net-next 
-
-Chris J Arges (4):
-  bnxt_en: use bnxt_xdp_buff for xdp context
-  bnxt_en: Implement XDP RSS hash metadata extraction
-  selftests: net: move common xdp.py functions into lib
-  selftests: drv-net: xdp: Add rss_hash metadata tests
-
- drivers/net/ethernet/broadcom/bnxt/bnxt.c     |  30 ++--
- drivers/net/ethernet/broadcom/bnxt/bnxt.h     |   2 +
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.c |  47 +++++
- drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h |  10 ++
- .../testing/selftests/drivers/net/hw/Makefile |   1 +
- .../drivers/net/hw/lib/py/__init__.py         |   2 +
- .../selftests/drivers/net/hw/xdp_metadata.py  | 146 ++++++++++++++++
- .../selftests/drivers/net/lib/py/__init__.py  |   2 +
- tools/testing/selftests/drivers/net/xdp.py    |  95 +++-------
- .../testing/selftests/net/lib/py/__init__.py  |   2 +
- tools/testing/selftests/net/lib/py/bpf.py     |  68 ++++++++
- .../selftests/net/lib/xdp_metadata.bpf.c      | 163 ++++++++++++++++++
- 12 files changed, 486 insertions(+), 82 deletions(-)
- create mode 100644 tools/testing/selftests/drivers/net/hw/xdp_metadata.py
- create mode 100644 tools/testing/selftests/net/lib/py/bpf.py
- create mode 100644 tools/testing/selftests/net/lib/xdp_metadata.bpf.c
-
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt.c b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+index c982aac714d1..ab73aad40593 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt.c
+@@ -2118,7 +2118,7 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 	bool xdp_active = false;
+ 	dma_addr_t dma_addr;
+ 	struct sk_buff *skb;
+-	struct xdp_buff xdp;
++	struct bnxt_xdp_buff bnxt_xdp;
+ 	u32 flags, misc;
+ 	u32 cmpl_ts;
+ 	void *data;
+@@ -2231,9 +2231,13 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 	dma_addr = rx_buf->mapping;
+ 
+ 	if (bnxt_xdp_attached(bp, rxr)) {
+-		bnxt_xdp_buff_init(bp, rxr, cons, data_ptr, len, &xdp);
++		bnxt_xdp.rxcmp = rxcmp;
++		bnxt_xdp.rxcmp1 = rxcmp1;
++		bnxt_xdp.cmp_type = cmp_type;
++
++		bnxt_xdp_buff_init(bp, rxr, cons, data_ptr, len, &bnxt_xdp.xdp);
+ 		if (agg_bufs) {
+-			u32 frag_len = bnxt_rx_agg_netmems_xdp(bp, cpr, &xdp,
++			u32 frag_len = bnxt_rx_agg_netmems_xdp(bp, cpr, &bnxt_xdp.xdp,
+ 							       cp_cons,
+ 							       agg_bufs,
+ 							       false);
+@@ -2245,12 +2249,12 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 	}
+ 
+ 	if (xdp_active) {
+-		if (bnxt_rx_xdp(bp, rxr, cons, &xdp, data, &data_ptr, &len, event)) {
++		if (bnxt_rx_xdp(bp, rxr, cons, &bnxt_xdp.xdp, data, &data_ptr, &len, event)) {
+ 			rc = 1;
+ 			goto next_rx;
+ 		}
+-		if (xdp_buff_has_frags(&xdp)) {
+-			sinfo = xdp_get_shared_info_from_buff(&xdp);
++		if (xdp_buff_has_frags(&bnxt_xdp.xdp)) {
++			sinfo = xdp_get_shared_info_from_buff(&bnxt_xdp.xdp);
+ 			agg_bufs = sinfo->nr_frags;
+ 		} else {
+ 			agg_bufs = 0;
+@@ -2261,7 +2265,7 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 		if (!xdp_active)
+ 			skb = bnxt_copy_skb(bnapi, data_ptr, len, dma_addr);
+ 		else
+-			skb = bnxt_copy_xdp(bnapi, &xdp, len, dma_addr);
++			skb = bnxt_copy_xdp(bnapi, &bnxt_xdp.xdp, len, dma_addr);
+ 		bnxt_reuse_rx_data(rxr, cons, data);
+ 		if (!skb) {
+ 			if (agg_bufs) {
+@@ -2269,7 +2273,7 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 					bnxt_reuse_rx_agg_bufs(cpr, cp_cons, 0,
+ 							       agg_bufs, false);
+ 				else
+-					bnxt_xdp_buff_frags_free(rxr, &xdp);
++					bnxt_xdp_buff_frags_free(rxr, &bnxt_xdp.xdp);
+ 			}
+ 			goto oom_next_rx;
+ 		}
+@@ -2293,10 +2297,11 @@ static int bnxt_rx_pkt(struct bnxt *bp, struct bnxt_cp_ring_info *cpr,
+ 			if (!skb)
+ 				goto oom_next_rx;
+ 		} else {
+-			skb = bnxt_xdp_build_skb(bp, skb, agg_bufs, rxr, &xdp);
++			skb = bnxt_xdp_build_skb(bp, skb, agg_bufs,
++						 rxr, &bnxt_xdp.xdp);
+ 			if (!skb) {
+ 				/* we should be able to free the old skb here */
+-				bnxt_xdp_buff_frags_free(rxr, &xdp);
++				bnxt_xdp_buff_frags_free(rxr, &bnxt_xdp.xdp);
+ 				goto oom_next_rx;
+ 			}
+ 		}
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h
+index 8933a0dec09a..8c66698bde11 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_xdp.h
+@@ -12,6 +12,13 @@
+ 
+ DECLARE_STATIC_KEY_FALSE(bnxt_xdp_locking_key);
+ 
++struct bnxt_xdp_buff {
++	struct xdp_buff xdp;
++	struct rx_cmp *rxcmp;
++	struct rx_cmp_ext *rxcmp1;
++	u8 cmp_type;
++};
++
+ struct bnxt_sw_tx_bd *bnxt_xmit_bd(struct bnxt *bp,
+ 				   struct bnxt_tx_ring_info *txr,
+ 				   dma_addr_t mapping, u32 len,
 -- 
 2.43.0
 
